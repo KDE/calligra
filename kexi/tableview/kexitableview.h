@@ -41,6 +41,7 @@
 #include "kexitablerm.h"
 #include "kexitableviewdata.h"
 #include "kexitableedit.h"
+#include "tristate.h"
 
 class KPopupMenu;
 class KPrinter;
@@ -76,26 +77,6 @@ public:
 //	virtual void initActions(KActionCollection *col);
 
 	KexiTableViewData *data() const { return m_data; }
-
-	/*! Sets data for this table view. if \a owner is true, the table view will own 
-	 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
-	 not owned by the widget. 
-	 If widget already has _different_ data object assigned (and owns this data),
-	 old data is destroyed before new assignment.
-	 */
-	void setData( KexiTableViewData *data, bool owner = true );
-
-	/*! Clears internal table data and its visible representation. 
-	 Does not clear columns information.
-	 Does not destroy KexiTableViewData object (if present) but only clears its contents.
-	 Repaints widget if \a repaint is true. */
-	void clearData(bool repaint = true);
-
-	/*! Clears columns information.and thus 
-	 all internal table data and its visible representation (using clearData()).
-	 Repaints widget if \a repaint is true.
-	 */
-	void clearColumns(bool repaint = true);
 
 	/*! \return string displayed for column's header \a colNum */
 	QString columnCaption(int colNum) const;
@@ -170,7 +151,8 @@ public:
 	 Note, that if inserting is disabled, this flag is ignored. */
 	void setEmptyRowInsertingEnabled(bool set);
 
-	/*! \return true if row deleting is enabled.
+	/*! \return true if row deleting is enabled. 
+	 Equal to deletionPolicy() != NoDelete && !isReadOnly()).
 	*/
 	bool isDeleteEnabled() const;
 
@@ -202,6 +184,9 @@ public:
 	 - enables inserting empty row; see setEmptyRowInsertingEnabled() */
 	void setSpreadSheetMode();
 
+	/*! \return true id "spreadSheetMode" is enabled. It's false by default. */
+	bool spreadSheetMode() const;
+
 	/*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
 	bool scrollbarToolTipsEnabled() const;
 
@@ -218,34 +203,34 @@ public:
 	KexiTableItem *selectedItem() const;
 
 	/*! \return number of rows in this view. */
-	int		rows() const;
+	int rows() const;
 
 	/*! \return number of visible columns in this view. */
-	int		columns() const;
+	int columns() const;
 
-	QRect		cellGeometry(int row, int col) const;
-	int		columnWidth(int col) const;
-	int		rowHeight() const;
-	int		columnPos(int col) const;
-	int		rowPos(int row) const;
-	int		columnAt(int pos) const;
-	int		rowAt(int pos, bool ignoreEnd=false) const;
+	QRect cellGeometry(int row, int col) const;
+	int columnWidth(int col) const;
+	int rowHeight() const;
+	int columnPos(int col) const;
+	int rowPos(int row) const;
+	int columnAt(int pos) const;
+	int rowAt(int pos, bool ignoreEnd=false) const;
 
 	/*! \return true if currently selected row is edited. */
 	bool rowEditing() const;
 
 	/*! Redraws specified cell. */
-	void	updateCell(int row, int col);
+	void updateCell(int row, int col);
 	/*! Redraws all cells of specified row. */
-	void	updateRow(int row);
+	void updateRow(int row);
 
 	// properties
-	bool		backgroundAltering() const;
-	void		setBackgroundAltering(bool altering);
-	bool		editableOnDoubleClick() const;
-	void		setEditableOnDoubleClick(bool set);
-	QColor		emptyAreaColor() const;
-	void		setEmptyAreaColor(const QColor& c);
+	bool backgroundAltering() const;
+	void setBackgroundAltering(bool altering);
+	bool editableOnDoubleClick() const;
+	void setEditableOnDoubleClick(bool set);
+	QColor emptyAreaColor() const;
+	void setEmptyAreaColor(const QColor& c);
 
 	/*! \return true if this table view has full-row-selection mode set,
 	 what mean that all cells of the current row are always selected, instead of single cell.
@@ -275,9 +260,9 @@ public:
 #endif
 
 	// reimplemented for internal reasons
-	virtual QSizePolicy	sizePolicy() const;
-	virtual QSize		sizeHint() const;
-	virtual QSize		minimumSizeHint() const;
+	virtual QSizePolicy sizePolicy() const;
+	virtual QSize sizeHint() const;
+	virtual QSize minimumSizeHint() const;
 
 	/*! Reimplemented to update cached fonts and row sizes for the painter. */
 	void setFont(const QFont &f);
@@ -308,19 +293,20 @@ public:
 
 	enum DeletionPolicy
 	{
-		NoDelete,
-		AskDelete,
-		ImmediateDelete,
-		SignalDelete
+		NoDelete = 0,
+		AskDelete = 1,
+		ImmediateDelete = 2,
+		SignalDelete = 3
 	};
 
 //	virtual void	setInsertionPolicy(InsertionPolicy policy);
 //	/*! \return deletion policy for the table view. The default (after allocating) is AutoInsert. */
 //	InsertionPolicy	insertionPolicy() const;
 
-	virtual void	setDeletionPolicy(DeletionPolicy policy);
+	virtual void setDeletionPolicy(DeletionPolicy policy);
+
 	/*! \return deletion policy for the table view. The default (after allocating) is AskDelete. */
-	DeletionPolicy	deletionPolicy() const;
+	DeletionPolicy deletionPolicy() const;
 
 	//! single shot after 1ms for contents updatinh
 	void triggerUpdate();
@@ -352,7 +338,33 @@ public:
 	/*! Inserts newItem at \a row. -1 means current row. Used by insertEmptyRow(). */
 	void insertItem(KexiTableItem *newItem, int row = -1);
 
+	/*! Clears internal table data, its visible representation 
+	 and deletes data at database backend (if this is db-aware table view). 
+	 Does not clear columns information.
+	 Does not destroy KexiTableViewData object (if present) but only clears its contents.
+	 Displays confirmation dialog if \a ask is true (the default is false).
+	 Repaints widget if \a repaint is true (the default). 
+	 For empty tables, true is returned immediately.
+	 If isDeleteEnabled() is false, false is returned.
+	 For spreadsheet mode all current rows are just replaced by empty rows.
+	 \return true on success, false on failure, and cancelled if user cancelled deletion.
+	 */
+	tristate deleteAllRows(bool ask = false, bool repaint = true);
+
 public slots:
+	/*! Sets data for this table view. if \a owner is true, the table view will own 
+	 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
+	 not owned by the widget. 
+	 If widget already has _different_ data object assigned (and owns this data),
+	 old data is destroyed before new assignment.
+	 */
+	void setData( KexiTableViewData *data, bool owner = true );
+
+	/*! Clears columns information and thus all internal table data and its visible representation.
+	 Repaints widget if \a repaint is true.
+	 */
+	void clearColumns(bool repaint = true);
+
 	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
 	//! this will dont work if sorting is disabled with setSortingEnabled()
 	void setSorting(int col, bool ascending=true);
@@ -684,6 +696,7 @@ protected:
 	void setupNavigator();
 	void setNavRowNumber(int newrow);
 	void setNavRowCount(int newrows);
+	void updateNavPanelGeometry();
 
 	//! used to update info about row count after a change
 	void updateRowCountInfo();

@@ -178,6 +178,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 
 		bool deleteRow(RowData& data);
 
+		bool deleteAllRows();
+
 		/*! \return a code of last executed operation's result at the server side.
 		 This code is engine dependent and may be even engine-version dependent.
 		 It can be visible in applications mainly after clicking a "Details>>" button
@@ -267,7 +269,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 			Otherwise do nothing. For reimplementing. Default implementation does nothing. */
 		virtual void drv_clearBuffer() {}
 
-		//! Internal: clears buffer with reimplemented drv_clearBuffer(). */
+		//! @internal clears buffer with reimplemented drv_clearBuffer(). */
 		void clearBuffer();
 
 		/*! Clears an internal member that is used to storing last result code, 

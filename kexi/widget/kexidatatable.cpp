@@ -137,6 +137,8 @@ void KexiDataTable::reloadActions()
 */
 	m_view->popup()->clear();
 
+	unplugSharedAction("edit_clear_table");
+	plugSharedAction("edit_clear_table", this, SLOT(deleteAllRows()));
 
 	if (m_view->isEmptyRowInsertingEnabled()) {
 		unplugSharedAction("edit_insert_empty_row");
@@ -199,14 +201,19 @@ void KexiDataTable::slotCellSelected(int /*col*/, int row)
 	slotUpdateRowActions(row);
 }
 
+void KexiDataTable::deleteAllRows()
+{
+	m_view->deleteAllRows(true/*ask*/, true/*repaint*/);
+}
+
 void KexiDataTable::slotUpdateRowActions(int row)
 {
 	setAvailable("edit_delete", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()));
-	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
+	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isDeleteEnabled() && row==m_view->rows()) );
 	setAvailable("edit_insert_empty_row", !m_view->isReadOnly() && m_view->isEmptyRowInsertingEnabled());
+	setAvailable("edit_clear_table", !m_view->isReadOnly() && m_view->isDeleteEnabled() && m_view->rows()>0);
 	setAvailable("data_save_row", m_view->rowEditing());
 	setAvailable("data_cancel_row_changes", m_view->rowEditing());
-
 	setAvailable("data_sort_az", m_view->isSortingEnabled());
 	setAvailable("data_sort_za", m_view->isSortingEnabled());
 }

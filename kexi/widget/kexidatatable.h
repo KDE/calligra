@@ -56,15 +56,18 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 
 		~KexiDataTable();
 
-		/*! Sets data. Only works for db-aware table. */
-		void setData(KexiDB::Cursor *cursor);
-
 		virtual QWidget* mainWidget();
 
 		KexiTableView* tableView() const { return m_view; }
 
 		virtual QSize minimumSizeHint() const;
 		virtual QSize sizeHint() const;
+
+	public slots:
+		/*! Sets data. Only works for db-aware table. */
+		void setData(KexiDB::Cursor *cursor);
+
+		void deleteAllRows();
 
 	protected slots:
 		/*! Updates shared actions related to currently selected row. 

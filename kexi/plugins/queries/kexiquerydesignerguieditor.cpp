@@ -212,7 +212,8 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 
 void KexiQueryDesignerGuiEditor::initTableRows()
 {
-	d->data->clear();
+//	d->data->clear();
+	d->data->deleteAllRows();
 	const int columns = d->data->columnsCount();
 	for (int i=0; i<(int)d->buffers->size(); i++) {
 //		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
@@ -253,8 +254,10 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 	d->data->deleteRows( rowsToDelete );
 
 	//update 'table' and 'field' columns
-	d->tablesColumnData->clear();
-	d->fieldColumnData->clear();
+	d->tablesColumnData->deleteAllRows();
+	d->fieldColumnData->deleteAllRows();
+//	d->tablesColumnData->clear();
+//	d->fieldColumnData->clear();
 
 	for (QStringList::Iterator it = sortedTableNames.begin(); it!=sortedTableNames.end(); ++it) {
 		//table

@@ -834,6 +834,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		bool deleteRow(QuerySchema &query, RowData& data);
 
+		bool deleteAllRows(QuerySchema &query);
+
 		/*! Allocates all needed table KexiDB system objects for kexi__* KexiDB liblary's
 		 system tables schema.
 		 These objects are used internally in this connection

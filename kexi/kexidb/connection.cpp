@@ -717,59 +717,6 @@ QValueList<int> Connection::objectIds(int objType)
 	return list;*/
 }
 
-#if 0
-inline QString Connection::internal_valueToSQL( Field::Type ftype, const QVariant& v )
-{
-	if (v.isNull())
-		return "NULL";
-	switch (ftype) {
-		case Field::Byte:
-		case Field::ShortInteger:
-		case Field::Integer:
-		case Field::Float:
-		case Field::Double:
-		case Field::BigInteger:
-			return v.toString();
-//TODO: here special encoding method needed
-		case Field::Boolean:
-			return QString::number(v.toInt()); //0 or 1
-		case Field::Time:
-			return QString("\"")+v.toTime().toString(Qt::ISODate)+"\"";
-		case Field::Date:
-			return QString("\"")+v.toDate().toString(Qt::ISODate)+"\"";
-		case Field::DateTime:
-			return QString("\"")+v.toDateTime().toString(Qt::ISODate)+"\"";
-		case Field::Text:
-		case Field::LongText: {
-			QString s = v.toString();
-//js: TODO: for sqlite we use single ' chars, what with other engines?
-			return QString("'")+s.replace( '"', "\\\"" ) + "'"; 
-		}
-		case Field::BLOB:
-//TODO: here special encoding method needed
-			return QString("'")+v.toString()+"'";
-		case Field::InvalidType:
-			return "!INVALIDTYPE!";
-		default:
-			KexiDBDbg << "Connection_valueToSQL(): UNKNOWN!" << endl;
-			return QString::null;
-	}
-	return QString::null;
-}
-
-QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
-{
-//	kdDebug() << "valueToSQL(" << (m_driver ? m_driver->sqlTypeName(ftype) : "??") << ", " << Connection_valueToSQL( ftype, v ) <<")" << endl;
-	return Connection_valueToSQL( ftype, v );
-}
-
-QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
-{
-//	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
-	return Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v );
-}
-#endif
-
 QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
 {
 // Each SQL identifier needs to be escaped in the generated query.	
@@ -2173,20 +2120,20 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
 // Each SQL identifier needs to be escaped in the generated query.
-	KexiDBDrvDbg << "Connection::updateRow.." << endl;
+	KexiDBDbg << "Connection::updateRow.." << endl;
 	clearError();
 	//--get PKEY
 	if (buf.dbBuffer().isEmpty()) {
-		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
+		KexiDBDbg << " -- NO CHANGES DATA!" << endl;
 		return true;
 	}
 	if (!query.parentTable()) {
-		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
+		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
 		return false;
 	}
 	IndexSchema *pkey = query.parentTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty()) {
-		KexiDBDrvDbg << " -- NO PARENT TABLE's PKEY!" << endl;
+		KexiDBWarn << " -- NO PARENT TABLE's PKEY!" << endl;
 //js TODO: hmm, perhaps we can try to update without using PKEY?
 		return false;
 	}
@@ -2219,11 +2166,9 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		}
 	}
 	m_sql += (sqlset + " WHERE " + sqlwhere);
-	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
+	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = executeSQL(m_sql);
-
-	if (!res) {
+	if (!executeSQL(m_sql)) {
 		setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));
 		return false;
 	}
@@ -2232,27 +2177,26 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
-
-	return res;
+	return true;
 }
 
 bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
 // Each SQL identifier needs to be escaped in the generated query.
-	KexiDBDrvDbg << "Connection::updateRow.." << endl;
+	KexiDBDbg << "Connection::updateRow.." << endl;
 	clearError();
 	//--get PKEY
 	/*disabled: there may be empty rows (with autoinc) 
 	if (buf.dbBuffer().isEmpty()) {
-		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
+		KexiDBDbg << " -- NO CHANGES DATA!" << endl;
 		return true; }*/
 	if (!query.parentTable()) {
-		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
+		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
 		return false;
 	}
 	IndexSchema *pkey = query.parentTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
-		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
+		KexiDBWarn << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 
 	QString sqlcols, sqlvals;
 	sqlcols.reserve(1024);
@@ -2264,7 +2208,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 
 	if (buf.dbBuffer().isEmpty()) {
 		if (!pkey || pkey->fields()->isEmpty()) {
-			KexiDBDrvDbg << " -- WARNING: PARENT TABLE REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
+			KexiDBWarn << " -- WARNING: PARENT TABLE REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
 			return false;
 		}
 		//at least one value is needed for VALUES section: find it and set to NULL:
@@ -2288,7 +2232,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		}
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
-	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
+	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
 	bool res = executeSQL(m_sql);
 
@@ -2337,15 +2281,15 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 bool Connection::deleteRow(QuerySchema &query, RowData& data)
 {
 // Each SQL identifier needs to be escaped in the generated query.
-	KexiDBDrvDbg << "Connection::deleteRow.." << endl;
+	KexiDBWarn << "Connection::deleteRow.." << endl;
 	clearError();
 	if (!query.parentTable()) {
-		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
+		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
 		return false;
 	}
 	IndexSchema *pkey = query.parentTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
-		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
+		KexiDBWarn << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 	
 	//update the record:
 	m_sql = "DELETE FROM " + escapeIdentifier(query.parentTable()->name()) + " WHERE ";
@@ -2368,16 +2312,35 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 		}
 	}
 	m_sql += sqlwhere;
-	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
+	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = executeSQL(m_sql);
-
-	if (!res) {
+	if (!executeSQL(m_sql)) {
 		setError(ERR_DELETE_SERVER_ERROR, i18n("Row deleting on the server failed."));
 		return false;
 	}
+	return true;
+}
 
-	return res;
+bool Connection::deleteAllRows(QuerySchema &query)
+{
+	clearError();
+	if (!query.parentTable()) {
+		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
+		return false;
+	}
+	IndexSchema *pkey = query.parentTable()->primaryKey();
+	if (!pkey || pkey->fields()->isEmpty())
+		KexiDBWarn << "Connection::deleteAllRows -- WARNING: NO PARENT TABLE's PKEY" << endl;
+
+	m_sql = "DELETE FROM " + escapeIdentifier(query.parentTable()->name());
+	
+	KexiDBDbg << " -- SQL == " << m_sql << endl;
+
+	if (!executeSQL(m_sql)) {
+		setError(ERR_DELETE_SERVER_ERROR, i18n("Rows deleting on the server failed."));
+		return false;
+	}
+	return true;
 }
 
 #include "connection.moc"

@@ -33,7 +33,7 @@ namespace KexiDB {
 }
 
 /**
- * database aware table widget
+ * Database aware table widget.
  */
 class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 {
@@ -55,8 +55,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 
 //		virtual void initActions(KActionCollection *col);
 
-		/*! Fills table view with data using \a cursor. \return true on success.
-		*/
+		/*! Fills table view with data using \a cursor. \return true on success. */
 		bool setData(KexiDB::Cursor *cursor);
 
 		/*! \return cursor used as data source for this table view, 
@@ -68,38 +67,23 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 		 * @note not all of the records have to be processed
 		 */
 		int recordCount() { return m_data->count(); }
-//js		int		records() { return m_records; }
-
-		bool readOnly();
 
 		#ifndef KEXI_NO_PRINT
 //		virtual void print(KPrinter &printer);
 		#endif
 
 	protected:
-		void		init();
-//		virtual QSize	tableSize() const;
-//js		void		appendInsertItem();
+		void init();
 
 		/*! Reimplemented: called by deleteItem() - we are deleting data associated with \a item. */
 //		virtual bool beforeDeleteItem(KexiTableItem *item);
 
 	protected slots:
-//		void		recordInsertFinished(KexiDBUpdateRecord*);
-//js		void		slotMoving(int);
-//js		void		insertNext();
-
-//js		void		slotItemChanged(KexiTableItem*, int, QVariant);
+//		void slotClearData();
 
 	private:
 		//db stuff
 		KexiDB::Cursor	*m_cursor;
-
-//		KXMLGUIClient *m_guiClient;
-//		bool		m_first;
-//use m_record->database() instead:		KexiDB		*m_db;
-//js		int		m_maxRecord;
-//js		int		m_records;
 
 //		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
 };

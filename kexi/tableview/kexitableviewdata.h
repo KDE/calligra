@@ -170,19 +170,11 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
 
-/*! Reimplements QPtrList to allow configurable sorting.
+/*! Reimplements QPtrList to allow configurable sorting and more.
 	Original author: Till Busch.
 	Reimplemented by Jaroslaw Staniek.
-
-	Notes:
-	- use QPtrList::inSort ( const type * item ) to insert an item if you want 
-		to maintain sorting (it is very slow!)
-	- An alternative, especially if you have lots of items, is to simply QPtrList::append() 
-		or QPtrList::insert() them and then use single sort().
-
-	\sa QPtrList.
 */
-class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, public KexiTableViewDataBase
+class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, protected KexiTableViewDataBase
 {
 	Q_OBJECT
 
@@ -221,25 +213,31 @@ public:
 
 	/*! \return the column number by which the data is sorted, 
 	 or -1 if sorting is disabled. */
-	int sortedColumn() const { return m_key; }
+	inline int sortedColumn() const { return m_key; }
 
 	/*! \return true if ascending sort order is set, or false if sorting is descending.
 	 This is independant of whether data is sorted now.
 	*/
-	bool sortingAscending() const { return m_order == 1; }
+	inline bool sortingAscending() const { return m_order == 1; }
 
 	/*! Adds column \a col. 
 	 Warning: \a col will be owned by this object, and deleted on its destruction. */
 	void addColumn( KexiTableViewColumn* col );
 
-	int globalColumnID(int visibleID) { return m_globalColumnsIDs.at( visibleID ); }
-	int visibleColumnID(int globalID) { return m_visibleColumnsIDs.at( globalID ); }
+	inline int globalColumnID(int visibleID) { return m_globalColumnsIDs.at( visibleID ); }
+	inline int visibleColumnID(int globalID) { return m_visibleColumnsIDs.at( globalID ); }
 
-	virtual bool isDBAware();
+	/*virtual?*/
+	/*! \return true if this db-aware data set. */
+	inline bool isDBAware() { return m_cursor!=0; }
+
+	/*! For db-aware data set only: table name is returned;
+	 equivalent to cursor()->query()->parentTable()->name(). */
+	QString dbTableName() const;
 
 	inline KexiDB::Cursor* cursor() const { return m_cursor; }
 
-	uint columnsCount() const { return columns.count(); }
+	inline uint columnsCount() const { return columns.count(); }
 
 	inline KexiTableViewColumn* column(uint c) { return columns.at(c); }
 
@@ -263,7 +261,8 @@ public:
 	virtual void setInsertingEnabled(bool set);
 
 	/*! Clears and initializes internal row edit buffer for incoming editing. 
-	 Creates buffer using KexiDB::RowEditBuffer(false) (false means not db-aware type) id our data is not db-aware,
+	 Creates buffer using KexiDB::RowEditBuffer(false) (false means not db-aware type) 
+	 if our data is not db-aware,
 	 or db-aware buffer if data is db-aware (isDBAware()==true).
 	 \sa KexiDB::RowEditBuffer
 	*/
@@ -291,8 +290,26 @@ public:
 	bool deleteRow(KexiTableItem& item, bool repaint = false);
 
 	/*! Deletes rows (by number) passed with \a rowsToDelete. 
-	 Currently, this method is only for non data-aware tables */
+	 Currently, this method is only for non data-aware tables. */
 	void deleteRows( const QValueList<int> &rowsToDelete, bool repaint = false );
+
+	/*! Deletes all rows. Works either for db-aware and non db-aware tables.
+	 Column's definition is not changed.
+	 For db-aware version, all rows are removed from a database.
+	 Row-edit buffer is cleared.
+
+	 If \a repaint is true, refreshRequested() signal 
+	 is emitted after deleting (if at least one row was deleted), 
+	 so presenters can repaint their contents. 
+
+	 \return true on success. */
+	virtual bool deleteAllRows(bool repaint = false);
+
+	/*! @internal method, used mostly by specialized classes like KexiTableView.
+	 Clears internal row structures. Row-edit buffer is cleared. 
+	 Does not touch data @ database backend.
+	 Use deleteAllRows() to safely delete all rows. */
+	virtual void clearInternal();
 
 	/*! Inserts new \a item at index \a index. 
 	 \a item will be owned by this data object.
@@ -302,14 +319,25 @@ public:
 /*TODO: add this as well? 
 	void insertRow(KexiTableItem& item, KexiTableItem& aboveItem); */
 
-	/*! Clears data without clearing column's definition.
-	 refreshRequested() signal is emitted. */
-	virtual void clear();
-
 	//! \return index of autoincremented column. The result is cached.
 //! \todo what about multiple autoinc columns?
 //! \todo what about changing column order?
 	int autoIncrementedColumn();
+
+	//! Emits refreshRequested() signal to refresh presenters.
+	void refresh() { emit refreshRequested(); }
+
+	inline KexiTableItem* at( uint index ) { return KexiTableViewDataBase::at(index); }
+	inline virtual uint count() const { return KexiTableViewDataBase::count(); }
+	inline KexiTableItem* first() { return KexiTableViewDataBase::first(); }
+	inline KexiTableItem* last() { return KexiTableViewDataBase::last(); }
+	inline int findRef( const KexiTableItem* item ) { return KexiTableViewDataBase::findRef(item); }
+	inline void sort() { KexiTableViewDataBase::sort(); }
+	inline bool removeFirst() { return KexiTableViewDataBase::removeFirst(); }
+	inline bool removeLast() { return KexiTableViewDataBase::removeLast(); }
+	inline void append( const KexiTableItem* item ) { KexiTableViewDataBase::append(item); }
+	inline void prepend( const KexiTableItem* item ) { KexiTableViewDataBase::prepend(item); }
+	inline QPtrListIterator<KexiTableItem> iterator() { return QPtrListIterator<KexiTableItem>(*this); }
 
 signals:
 	void destroying();

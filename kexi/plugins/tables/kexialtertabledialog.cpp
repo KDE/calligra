@@ -155,7 +155,8 @@ KexiAlterTableDialog::~KexiAlterTableDialog()
 void KexiAlterTableDialog::initData()
 {
 	//add column data
-	d->data->clear();
+//	d->data->clear();
+	d->data->deleteAllRows();
 	int tableFieldCount = 0;
 	d->primaryKeyExists = false;
 	if (tempData()->table) {

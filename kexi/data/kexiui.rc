@@ -45,8 +45,8 @@
     <Separator/>
     <Action name="edit_delete"/>
     <Action name="edit_delete_row"/>
+    <ActionList name="edit_clear_table"/>
     <ActionList name="edit_insert_empty_row"/>
-    <!-- Action name="edit_insert_empty_row"/ -->
     <DefineGroup name="edit_find"/>
     <Merge/>
   </Menu>

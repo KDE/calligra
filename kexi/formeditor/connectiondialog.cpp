@@ -276,7 +276,7 @@ ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant, KexiDB
 void
 ConnectionDialog::updateSlotList(KexiTableItem *item)
 {
-	m_slotsColumnData->clear();
+	m_slotsColumnData->deleteAllRows();
 	QString widget = (*item)[1].toString();
 	QString signal = (*item)[2].toString();
 
@@ -314,7 +314,7 @@ ConnectionDialog::updateSignalList(KexiTableItem *item)
 	if(!tree || !tree->widget())
 		return;
 
-	m_signalsColumnData->clear();
+	m_signalsColumnData->deleteAllRows();
 	QStrList signalList = tree->widget()->metaObject()->signalNames(true);
 	QStrListIterator it(signalList);
 	for(; it.current() != 0; ++it)

@@ -149,7 +149,7 @@ class KexiMainWindowImpl::Private
 			*action_edit_cut, *action_edit_copy, *action_edit_paste,
 			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row,
-			*action_edit_edititem;
+			*action_edit_edititem, *action_edit_clear_table;
 
 		// view menu
 		KAction *action_view_nav, *action_view_propeditor;
@@ -519,11 +519,17 @@ KexiMainWindowImpl::initActions()
 
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
 		CTRL+Key_Delete, "edit_delete_row");
-	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table."));
+	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table"));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
 
+	d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"), "clear_table_contents",
+		0, "edit_clear_table");
+	d->action_edit_clear_table->setToolTip(i18n("Clear table contents"));
+	d->action_edit_clear_table->setWhatsThis(i18n("Clears table contents."));
+	setActionVolatile( d->action_edit_clear_table, true );
+
 	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, Key_F2, "edit_edititem");
-	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item."));
+	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
 	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
@@ -2604,7 +2610,8 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	}
 
 	if (!d->prj->removeObject(this, *item)) {
-		//TODO(js) some msg
+		//TODO(js) better msg
+		showSorryMessage( i18n("Could not remove object.") );
 		return false;
 	}
 	return true;

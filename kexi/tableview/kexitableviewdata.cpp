@@ -183,13 +183,6 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 KexiTableViewData::KexiTableViewData()
 	: QObject()
 	, KexiTableViewDataBase()
-	, m_key(0)
-	, m_order(1)
-	, m_type(1)
-	, m_pRowEditBuffer(0)
-	, m_cursor(0)
-	, m_readOnly(false)
-	, m_insertingEnabled(true)
 {
 	init();
 }
@@ -197,23 +190,15 @@ KexiTableViewData::KexiTableViewData()
 KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	: QObject()
 	, KexiTableViewDataBase()
-	, m_key(0)
-	, m_order(1)
-	, m_type(1)
-	, m_pRowEditBuffer(0)
-	, m_cursor(c)
-	, m_readOnly(false)
-	, m_insertingEnabled(true)
 {
 	init();
+	m_cursor = c;
 
-	uint i = 0;
-//	QValueList<bool> detailedVisibility;
-//	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded(&detailedVisibility);
 	KexiDB::QueryColumnInfo::Vector vector 
 		= m_cursor->query()->fieldsExpanded();
 	KexiTableViewColumn* col;
-	for (i=0;i<vector.count();i++) {
+	const uint count = vector.count();
+	for (uint i=0;i<count;i++) {
 		KexiDB::QueryColumnInfo *fi = vector[i];
 		if (fi->visible) {
 			col=new KexiTableViewColumn(*m_cursor->query(), *fi);
@@ -237,6 +222,11 @@ KexiTableViewData::KexiTableViewData(
 {
 	const QValueList<QVariant> empty;
 	init(empty, empty, keyType, valueType);
+}
+
+KexiTableViewData::~KexiTableViewData()
+{
+	emit destroying();
 }
 
 void KexiTableViewData::init(
@@ -280,13 +270,16 @@ KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols)
 	columns.setAutoDelete(true);
 }*/
 
-KexiTableViewData::~KexiTableViewData()
-{
-	emit destroying();
-}
-
 void KexiTableViewData::init()
 {
+	m_key = 0;
+	m_order = 1;
+	m_type = 1;
+	m_pRowEditBuffer = 0;
+	m_cursor = 0;
+	m_readOnly = false;
+	m_insertingEnabled = true;
+
 	setAutoDelete(true);
 	columns.setAutoDelete(true);
 	m_visibleColumnsCount=0;
@@ -326,6 +319,13 @@ void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 {
 	field->isQueryAsterisk
 }*/
+
+QString KexiTableViewData::dbTableName() const
+{
+	if (m_cursor && m_cursor->query() && m_cursor->query()->parentTable())
+		return m_cursor->query()->parentTable()->name();
+	return QString::null;
+}
 
 void KexiTableViewData::setSorting(int column, bool ascending)
 {
@@ -423,14 +423,10 @@ void KexiTableViewData::clearRowEditBuffer()
 		m_pRowEditBuffer->clear();
 }
 
-bool KexiTableViewData::isDBAware()
+/*bool KexiTableViewData::isDBAware()
 {
 	return m_cursor!=0;
-/*	if (columns.count()==0)
-		return false;
-	else
-		return columns.first()->isDBAware;*/
-}
+}*/
 
 bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item, 
 	int colnum, QVariant newval, bool allowSignals)
@@ -473,7 +469,7 @@ bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item,
 //get a new value (of present in the buffer), or the old one, otherwise
 //(taken here for optimization)
 #define GET_VALUE if (!val) { \
-	val = dbaware ? rowEditBuffer()->at( *it_f.current()->fieldinfo ) : rowEditBuffer()->at( *f ); \
+	val = m_cursor ? rowEditBuffer()->at( *it_f.current()->fieldinfo ) : rowEditBuffer()->at( *f ); \
 	if (!val) \
 		val = &(*it_r); /* get old value */ \
 	}
@@ -483,8 +479,6 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 {
 	if (!m_pRowEditBuffer)
 		return true; //nothing to do
-
-	const bool dbaware = isDBAware();
 
 	//check constraints:
 	//-check if every NOT NULL and NOT EMPTY field is filled
@@ -520,7 +514,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 		}
 	}
 
-	if (dbaware) {
+	if (m_cursor) {//db-aware
 		if (insert) {
 			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
 				m_result.msg = i18n("Row inserting failed.") + "\n\n" + KexiValidator::msgYouCanImproveData();
@@ -598,7 +592,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item, bool repaint)
 	if (!m_result.success)
 		return false;
 
-	if (isDBAware()) {
+	if (m_cursor) {//db-aware
 		m_result.success = false;
 		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) )) {
 			m_result.msg = i18n("Row deleting failed.");
@@ -643,10 +637,26 @@ void KexiTableViewData::insertRow(KexiTableItem& item, uint index, bool repaint)
 	emit rowInserted(&item, index, repaint);
 }
 
-void KexiTableViewData::clear()
+//void KexiTableViewData::clear()
+void KexiTableViewData::clearInternal()
 {
+	clearRowEditBuffer();
 	KexiTableViewDataBase::clear();
-	emit refreshRequested();
+}
+
+bool KexiTableViewData::deleteAllRows(bool repaint)
+{
+	clearInternal();
+
+	bool res = true;
+	if (m_cursor) {
+		//db-aware
+		res = m_cursor->deleteAllRows();
+	}
+
+	if (repaint)
+		emit refreshRequested();
+	return res;
 }
 
 int KexiTableViewData::autoIncrementedColumn()

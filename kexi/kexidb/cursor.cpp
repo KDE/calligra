@@ -373,12 +373,12 @@ bool Cursor::getNextRecord()
 				if (!m_buffering_completed) {
 					//retrieve record only if we are not after 
 					//the last buffer's item (i.e. when buffer is not fully filled):
-//					KexiDBDrvDbg<<"==== buffering: drv_getNextRecord() ===="<<endl;
+//					KexiDBDbg<<"==== buffering: drv_getNextRecord() ===="<<endl;
 					drv_getNextRecord();
 				}
 				if (m_result != FetchOK) {//there is no record
 					m_buffering_completed = true; //no more records for buffer
-//					KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;
+//					KexiDBDbg<<"m_result != FetchOK ********"<<endl;
 					m_validRecord = false;
 					m_afterLast = true;
 //js					m_at = m_records_in_buf;
@@ -399,10 +399,10 @@ bool Cursor::getNextRecord()
 	}
 	else {//we are after last retrieved record: we need to physically fetch next record:
 		if (!m_readAhead) {//we have no record that was read ahead
-//			KexiDBDrvDbg<<"==== no prefetched record ===="<<endl;
+//			KexiDBDbg<<"==== no prefetched record ===="<<endl;
 			drv_getNextRecord();
 			if (m_result != FetchOK) {//there is no record
-//				KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;
+//				KexiDBDbg<<"m_result != FetchOK ********"<<endl;
 				m_validRecord = false;
 				m_afterLast = true;
 				m_at = -1;
@@ -421,9 +421,9 @@ bool Cursor::getNextRecord()
 	
 //	if (m_data->curr_colname && m_data->curr_coldata)
 //		for (int i=0;i<m_data->curr_cols;i++) {
-//			KexiDBDrvDbg<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
+//			KexiDBDbg<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
 //		}
-//	KexiDBDrvDbg<<"m_at == "<<(long)m_at<<endl;
+//	KexiDBDbg<<"m_at == "<<(long)m_at<<endl;
 
 	m_validRecord = true;
 	return true;
@@ -454,6 +454,15 @@ bool Cursor::deleteRow(RowData& data)
 	if (!m_query)
 		return false;
 	return m_conn->deleteRow(*m_query, data);
+}
+
+bool Cursor::deleteAllRows()
+{
+//TODO: doesn't update cursor's buffer YET!
+	clearError();
+	if (!m_query)
+		return false;
+	return m_conn->deleteAllRows(*m_query);
 }
 
 QString Cursor::debugString() const

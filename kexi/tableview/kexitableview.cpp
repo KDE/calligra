@@ -313,7 +313,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	connect(d->pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 	
 //	horizontalScrollBar()->show();
-//	updateScrollBars();
+	updateScrollBars();
 //	resize(sizeHint());
 //	updateContents();
 //	setMinimumHeight(horizontalScrollBar()->height() + d->rowHeight + topMargin());
@@ -346,35 +346,36 @@ void KexiTableView::setupNavigator()
 	updateScrollBars();
 	
 	d->navPanel = new QFrame(this, "navPanel");
-	d->navPanel->setFrameStyle(QFrame::Panel|QFrame::Raised);
-	d->navPanel->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
+	d->navPanel->setFrameStyle(QFrame::NoFrame);//Panel|QFrame::Raised);
+	d->navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 	QHBoxLayout *navPanelLyr = new QHBoxLayout(d->navPanel,0,0,"nav_lyr");
-	navPanelLyr->setAutoAdd(true);
+//	navPanelLyr->setAutoAdd(true);
 
-	new QLabel(QString(" ")+i18n("Row:")+" ",d->navPanel);
-	
+	navPanelLyr->addWidget( new QLabel(QString(" ")+i18n("Row:")+" ",d->navPanel) );
+		
 	int bw = 6+SmallIcon("navigator_first").width(); //QMIN( horizontalScrollBar()->height(), 20);
 	QFont f = d->navPanel->font();
 	f.setPixelSize((bw > 12) ? 12 : bw);
 	QFontMetrics fm(f);
 	d->nav1DigitWidth = fm.width("8");
 
-	d->navBtnFirst = new QToolButton(d->navPanel);
-	d->navBtnFirst->setMaximumWidth(bw);
+	navPanelLyr->addWidget( d->navBtnFirst = new QToolButton(d->navPanel) );
+	d->navBtnFirst->setFixedWidth(bw);
 	d->navBtnFirst->setFocusPolicy(NoFocus);
 	d->navBtnFirst->setIconSet( SmallIconSet("navigator_first") );
 	QToolTip::add(d->navBtnFirst, i18n("First row"));
 	
-	d->navBtnPrev = new QToolButton(d->navPanel);
-	d->navBtnPrev->setMaximumWidth(bw);
+	navPanelLyr->addWidget( d->navBtnPrev = new QToolButton(d->navPanel) );
+	d->navBtnPrev->setFixedWidth(bw);
 	d->navBtnPrev->setFocusPolicy(NoFocus);
 	d->navBtnPrev->setIconSet( SmallIconSet("navigator_prev") );
 	QToolTip::add(d->navBtnPrev, i18n("Previous row"));
 	
-	QWidget *spc = new QFrame(d->navPanel);
-	spc->setFixedWidth(6);
+//	QWidget *spc = new QFrame(d->navPanel);
+//	spc->setFixedWidth(6);
+	navPanelLyr->addSpacing( 6 );
 	
-	d->navRowNumber = new KLineEdit(d->navPanel);
+	navPanelLyr->addWidget( d->navRowNumber = new KLineEdit(d->navPanel) );
 	d->navRowNumber->setAlignment(AlignRight | AlignVCenter);
 	d->navRowNumber->setFocusPolicy(ClickFocus);
 //	d->navRowNumber->setFixedWidth(fw);
@@ -390,8 +391,9 @@ void KexiTableView::setupNavigator()
 	lbl_of->setLineWidth(0);
 	lbl_of->setFocusPolicy(NoFocus);
 	lbl_of->setAlignment(AlignCenter);
+	navPanelLyr->addWidget( lbl_of );
 	
-	d->navRowCount = new KLineEdit(d->navPanel);
+	navPanelLyr->addWidget( d->navRowCount = new KLineEdit(d->navPanel) );
 //	d->navRowCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	d->navRowCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 //	d->navRowCount->setMaximumWidth(fw);
@@ -405,29 +407,33 @@ void KexiTableView::setupNavigator()
 	d->navRowCount->setFont(f);
 	d->navPanel->setFont(f);
 
-	d->navBtnNext = new QToolButton(d->navPanel);
-	d->navBtnNext->setMaximumWidth(bw);
+	navPanelLyr->addWidget( d->navBtnNext = new QToolButton(d->navPanel) );
+	d->navBtnNext->setFixedWidth(bw);
 	d->navBtnNext->setFocusPolicy(NoFocus);
 	d->navBtnNext->setIconSet( SmallIconSet("navigator_next") );
 	QToolTip::add(d->navBtnNext, i18n("Next row"));
 	
-	d->navBtnLast = new QToolButton(d->navPanel);
-	d->navBtnLast->setMaximumWidth(bw);
+	navPanelLyr->addWidget( d->navBtnLast = new QToolButton(d->navPanel) );
+	d->navBtnLast->setFixedWidth(bw);
 	d->navBtnLast->setFocusPolicy(NoFocus);
 	d->navBtnLast->setIconSet( SmallIconSet("navigator_last") );
 	QToolTip::add(d->navBtnLast, i18n("Last row"));
 	
-	spc = new QWidget(d->navPanel);
-	spc->setFixedWidth(6);
-	d->navBtnNew = new QToolButton(d->navPanel);
-	d->navBtnNew->setMaximumWidth(bw);
+//	spc = new QWidget(d->navPanel);
+//	spc->setFixedWidth(6);
+	navPanelLyr->addSpacing( 6 );
+	navPanelLyr->addWidget( d->navBtnNew = new QToolButton(d->navPanel) );
+	d->navBtnNew->setFixedWidth(bw);
 	d->navBtnNew->setFocusPolicy(NoFocus);
 	d->navBtnNew->setIconSet( SmallIconSet("navigator_new") );
 	QToolTip::add(d->navBtnNew, i18n("New row"));
 	d->navBtnNext->setEnabled(isInsertingEnabled());
 	
-	spc = new QFrame(d->navPanel);
-	spc->setFixedWidth(6);
+//	spc = new QFrame(d->navPanel);
+//	spc->setFixedWidth(6);
+	navPanelLyr->addSpacing( 6 );
+
+	navPanelLyr->addStretch(10);
 
 	connect(d->navRowNumber,SIGNAL(returnPressed(const QString&)),
 		this,SLOT(navRowNumber_ReturnPressed(const QString&)));
@@ -468,9 +474,23 @@ void KexiTableView::setNavRowCount(int newrows)
 	const QString & n = QString::number(newrows);
 	if (d->navRowCount->text().length() != n.length()) {//resize
 		d->navRowCount->setFixedWidth(d->nav1DigitWidth*n.length()+6);
+		
+		if (horizontalScrollBar()->isVisible()) {
+			//+width of the delta
+			d->navPanel->resize(
+				d->navPanel->width()+(n.length()-d->navRowCount->text().length())*d->nav1DigitWidth,
+				d->navPanel->height());
+//			horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+		}
 	}
+
 	d->navRowCount->setText(n);
 	d->navRowCount->deselect();
+
+//	if (horizontalScrollBar()->isVisible()) {
+//	}
+//	updateNavPanelGeometry();
+	updateScrollBars();
 }
 
 void KexiTableView::setData( KexiTableViewData *data, bool owner )
@@ -538,14 +558,16 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	}
 
 	if (!data) {
-		clearData();
+//		clearData();
+		cancelRowEdit();
+		m_data->clearInternal();
 	}
 
 	if (!d->pInsertItem) {//first setData() call - add 'insert' item
-		d->pInsertItem = new KexiTableItem(columns());
+		d->pInsertItem = new KexiTableItem(m_data->columns.count());
 	}
 	else {//just reinit
-		d->pInsertItem->init(columns());
+		d->pInsertItem->init(m_data->columns.count());
 	}
 
 	//update gui mode
@@ -817,7 +839,7 @@ KexiTableItem *KexiTableView::insertEmptyRow(int row)
 		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
 		return 0;
 
-	KexiTableItem *newItem = new KexiTableItem(columns());
+	KexiTableItem *newItem = new KexiTableItem(m_data->columns.count());
 	insertItem(newItem, row);
 	return newItem;
 }
@@ -858,25 +880,57 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 	*/
 }
 
-void KexiTableView::clearData(bool repaint)
+tristate KexiTableView::deleteAllRows(bool ask, bool repaint)
 {
-	CHECK_DATA_;
+	CHECK_DATA(true);
+	if (m_data->count()<1)
+		return true;
+
+	if (ask) {
+		QString tableName = m_data->dbTableName();
+		if (!tableName.isEmpty()) {
+			tableName.prepend(" \"");
+			tableName.append("\"");
+		}
+		if (KMessageBox::No == KMessageBox::questionYesNo(this, 
+				i18n("Do you want to clear table's%1 contents?").arg(tableName),
+				0, KGuiItem(i18n("&Clear contents")), KStdGuiItem::no()))
+			return cancelled;
+	}
+
 	cancelRowEdit();
 //	acceptRowEdit();
 //	d->pVerticalHeader->clear();
-	m_data->clear();
+	const bool repaintLater = repaint && d->spreadSheetMode;
+	const int oldRows = rows();
+
+	bool res = m_data->deleteAllRows(repaint && !repaintLater);
+
+	if (res) {
+		if (d->spreadSheetMode) {
+			const uint columns = m_data->columns.count();
+			for (int i=0; i<oldRows; i++) {
+				m_data->append(new KexiTableItem(columns));
+			}
+		}
+	}
+	if (repaintLater)
+		m_data->refresh();
 
 //	d->clearVariables();
 //	d->pVerticalHeader->setCurrentRow(-1);
 
 //	d->pUpdateTimer->start(1,true);
-	if (repaint)
-		viewport()->repaint();
+//	if (repaint)
+//		viewport()->repaint();
+	return res;
 }
 
 void KexiTableView::clearColumns(bool repaint)
 {
-	clearData(false);
+	cancelRowEdit();
+	m_data->clearInternal();
+
 	while(d->pTopHeader->count()>0)
 		d->pTopHeader->removeLabel(0);
 
@@ -927,6 +981,8 @@ void KexiTableView::slotRefreshRequested()
 	else
 		d->initDataContentsOnShow = true;
 	d->pVerticalHeader->addLabels(m_data->count());
+
+	updateScrollBars();
 }
 
 #if 0 //todo
@@ -1029,6 +1085,7 @@ void KexiTableView::slotUpdate()
 //	viewport()->setUpdatesEnabled(true);
 
 	updateContents();
+	updateNavPanelGeometry();
 
 //	updateContents(0, contentsY()+clipper()->height()-2*d->rowHeight, clipper()->width(), d->rowHeight*3);
 	
@@ -1326,7 +1383,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 		rowp = rowPos(r); // 'insert' row's position
 	}
 	else {
-		QPtrListIterator<KexiTableItem> it(*m_data);
+		QPtrListIterator<KexiTableItem> it = m_data->iterator();
 		it += rowfirst;//move to 1st row
 		rowp = rowPos(rowfirst); // row position 
 		for (r = rowfirst;r <= rowlast; r++, ++it, rowp+=d->rowHeight) {
@@ -1606,8 +1663,19 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 	contentsToViewport2( cx, cy, cx, cy );
 	QRegion reg( QRect( cx, cy, cw, ch ) );
 
+//kdDebug() << "---cy-- " << contentsY() << endl;
+
 	// Subtract the table from it
-	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,d->navPanel->isVisible() ? d->navPanel->height() : 0) ) );
+//	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,d->navPanel->isVisible() ? d->navPanel->height() : 0) ) );
+	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts
+		-QSize(0,QMAX((d->navPanel ? d->navPanel->height() : 0), horizontalScrollBar()->sizeHint().height())
+			- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height()/2 : 0)
+			+ (horizontalScrollBar()->isVisible() ? 0 : horizontalScrollBar()->sizeHint().height()/2)
+			+ contentsY()
+//			- (verticalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height()/2 : 0)
+			)
+		) );
+//	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts ) );
 
 	// And draw the rectangles (transformed inc contents coordinates as needed)
 	QMemArray<QRect> r = reg.rects();
@@ -2409,20 +2477,14 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 	QScrollView::resizeEvent(e);
 	//updateGeometries();
 	
-	if (d->navPanel) {
-		QRect g = d->navPanel->geometry();
-//		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
-		d->navPanel->setGeometry(
-			frameWidth(),
-			height() - horizontalScrollBar()->sizeHint().height()-frameWidth(),
-			d->navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
-			horizontalScrollBar()->sizeHint().height()
-		);
+	updateNavPanelGeometry();
 
 	if ((contentsHeight() - e->size().height()) <= d->rowHeight) {
 		slotUpdate();
 		triggerUpdate();
 	}
+//	d->pTopHeader->repaint();
+
 
 /*		d->navPanel->setGeometry(
 			frameWidth(),
@@ -2435,9 +2497,48 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 //		updateContents();
 //		d->navPanel->setGeometry(1,horizontalScrollBar()->pos().y(),
 	//		d->navPanel->width(), horizontalScrollBar()->height());
-	}
 //	updateContents(0,0,2000,2000);//js
 //	erase(); repaint();
+}
+
+void KexiTableView::updateNavPanelGeometry()
+{
+	if (!d->navPanel)
+		return;
+	d->navPanel->updateGeometry();
+//	QRect g = d->navPanel->geometry();
+//		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
+	int navWidth;
+	if (horizontalScrollBar()->isVisible()) {
+		navWidth = d->navPanel->sizeHint().width();
+	}
+	else {
+		navWidth = leftMargin() + clipper()->width();
+	}
+	
+	d->navPanel->setGeometry(
+		frameWidth(),
+		height() - horizontalScrollBar()->sizeHint().height()-frameWidth(),
+		navWidth,
+		horizontalScrollBar()->sizeHint().height()
+	);
+
+//	horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+
+//	horizontalScrollBar()->hide();
+//	updateGeometry();
+	updateScrollBars();
+//	horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+#if 0 //prev impl.
+	QRect g = d->navPanel->geometry();
+//		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
+	d->navPanel->setGeometry(
+		frameWidth(),
+		height() - horizontalScrollBar()->sizeHint().height()-frameWidth(),
+		d->navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
+		horizontalScrollBar()->sizeHint().height()
+	);
+#endif
 }
 
 void KexiTableView::viewportResizeEvent( QResizeEvent *e )
@@ -2474,6 +2575,7 @@ void KexiTableView::showEvent(QShowEvent *e)
 		ensureCellVisible( d->ensureCellVisibleOnShow.x(), d->ensureCellVisibleOnShow.y() );
 		d->ensureCellVisibleOnShow = QPoint(-1,-1); //reset the flag
 	}
+	updateNavPanelGeometry();
 }
 
 bool KexiTableView::dropsAtRowEnabled() const
@@ -2621,6 +2723,8 @@ void KexiTableView::slotColumnWidthChanged( int, int, int )
 		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
 	}
 	updateGeometries();
+	updateScrollBars();
+	updateNavPanelGeometry();
 }
 
 void KexiTableView::slotSectionHandleDoubleClicked( int section )
@@ -2714,15 +2818,25 @@ QSize KexiTableView::tableSize() const
 //		kdDebug()<< d->navPanel->isVisible() <<" "<<d->navPanel->height()<<" "
 //		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
 
-		return QSize( 
+		QSize s( 
 			columnPos( columns() - 1 ) + columnWidth( columns() - 1 ),
-			rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
-//			+ QMAX( d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
-			+ (d->navPanel->isVisible() ? QMAX( d->navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
+//			+ verticalScrollBar()->sizeHint().width(),
+			rowPos( rows()-1+(isInsertingEnabled()?1:0) ) + d->rowHeight
+			+ (horizontalScrollBar()->isVisible() ? 0 : horizontalScrollBar()->sizeHint().height())
+			+ horizontalScrollBar()->sizeHint().height()/2
+//			+ QMAX( (d->navPanel && d->navPanel->isVisible()) ? d->navPanel->height() : 0, 
+//				horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() : 0)
+
+//			+ (d->navPanel->isVisible() 
+//				? QMAX( d->navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
+
 //			- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() :0 )
 			+ margin() 
 //-2*d->rowHeight
 		);
+
+//		kdDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (d->rowEditing?1:0) << " " <<  s << endl;
+		return s;
 //			+horizontalScrollBar()->sizeHint().height() + margin() );
 	}
 	return QSize(0,0);
@@ -2767,7 +2881,9 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 
 	QPoint pcenter = r.center();
 	ensureVisible(pcenter.x(), pcenter.y(), r.width()/2, r.height()/2);
-	slotUpdate();
+//	updateContents();
+//	updateNavPanelGeometry();
+//	slotUpdate();
 }
 
 void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
@@ -3422,7 +3538,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 //	KexiDB::Field *f = m_data->column( colNum )->field;
 	if (ed) {
 //		KexiDB::Field *f = m_data->column(colNum)->field;
-		for (QPtrListIterator<KexiTableItem> it( *m_data ); it.current(); ++it) {
+		for (QPtrListIterator<KexiTableItem> it = m_data->iterator(); it.current(); ++it) {
 			maxw = QMAX( maxw, ed->widthForValue( it.current()->at( colNum ), fm ) );
 //			maxw = QMAX( maxw, item->widthForValue( *f, it.current()->at( colNum ), fm ) );
 		}
@@ -3583,7 +3699,7 @@ void KexiTableView::setHorizontalHeaderVisible(bool set)
 
 void KexiTableView::triggerUpdate()
 {
-	kdDebug(44021) << "KexiTableView::triggerUpdate()" << endl;
+//	kdDebug(44021) << "KexiTableView::triggerUpdate()" << endl;
 //	if (!d->pUpdateTimer->isActive())
 		d->pUpdateTimer->start(20, true);
 //		d->pUpdateTimer->start(200, true);
@@ -3659,7 +3775,7 @@ void KexiTableView::setEmptyRowInsertingEnabled(bool set)
 
 bool KexiTableView::isDeleteEnabled() const
 {
-	return d->deletionPolicy != NoDelete;
+	return d->deletionPolicy != NoDelete && !isReadOnly();
 }
 
 bool KexiTableView::rowEditing() const
@@ -3718,12 +3834,18 @@ bool KexiTableView::filteringEnabled() const
 
 void KexiTableView::setSpreadSheetMode()
 {
+	d->spreadSheetMode = true;
 	setNavigatorEnabled( false );
 	setSortingEnabled( false );
 	setInsertingEnabled( false );
 	setAcceptsRowEditAfterCellAccepting( true );
 	setFilteringEnabled( false );
 	setEmptyRowInsertingEnabled( true );
+}
+
+bool KexiTableView::spreadSheetMode() const
+{
+	return d->spreadSheetMode;
 }
 
 bool KexiTableView::scrollbarToolTipsEnabled() const
@@ -3843,6 +3965,13 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			keyPressEvent(ke);
 			if (ke->isAccepted())
 				return true;
+		}
+	}
+	else if (o==horizontalScrollBar()) {
+		if ((e->type()==QEvent::Show && !horizontalScrollBar()->isVisible()) 
+			|| (e->type()==QEvent::Hide && horizontalScrollBar()->isVisible())) {
+			QSize s(tableSize());
+			resizeContents(s.width(), s.height());
 		}
 	}
 /*	else if (e->type()==QEvent::FocusOut && o->inherits("QWidget")) {

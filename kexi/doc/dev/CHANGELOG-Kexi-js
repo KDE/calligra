@@ -368,26 +368,27 @@ CCPASTEUR:
 -add newly created table to tables list in query designer
 -installer: add checking for existing kexi version
 
-TableView
-- record navigator
--- update width when number of digits in row count changes
--- on row inserting, enable "next" button
--- on row inserting, do nothing when "add" button is clicked 
-   when we're editing autonumber field and it's empty
-- disable "delete row" action on row editing
-- add and enable "cancel row editing" action on row editing
 
 CCMAIL: dkite@shaw.ca
 
-===================== Kexi 0.1 Beta 5 "Helloween" =====================
+===================== Kexi 0.1 Beta 5 "Halloween" =====================
 
-2004-10-25
+2004-10-25..26
 - defines moved from Makefile.global
 - minor compile fixes and some warnings removed
 TableView
 - datatimeedit hack disabled for !win32
 I18N
 - pl translation updated
+Forms
+- fixed crash in connection editor
+TableView
+- "edit_clear_table" action added
+- KexiTableViewDataBase made protected in KexiTableViewData for safety
+- on row inserting, enable "next" button
+- record navigator
+-- now takes full width, painting fixed
+-- update width when number of digits in rows counter changes
 
 2004-10-22
 TableView

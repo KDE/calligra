@@ -93,6 +93,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
  : autonumberIcon( qembed_findData("autonumber.png") )
 {
 	clearVariables();
+	pInsertItem = 0;
 
 //	numCols = 0;
 	editOnDoubleClick = true;
@@ -128,6 +129,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	cursorPositionSetExplicityBeforeShow = false;
 	pVerticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
+	spreadSheetMode = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
@@ -138,7 +140,8 @@ KexiTableViewPrivate::~KexiTableViewPrivate()
 	delete scrollBarTip;
 }
 
-void KexiTableViewPrivate::clearVariables() {
+void KexiTableViewPrivate::clearVariables()
+{
 	// Initialize variables
 	pEditor = 0;
 //	numRows = 0;
@@ -146,7 +149,7 @@ void KexiTableViewPrivate::clearVariables() {
 	curCol = -1;
 	pCurrentItem=0;
 	pRowEditBuffer=0;
-	pInsertItem = 0;
+//	pInsertItem = 0;
 	rowEditing = false;
 	newRowEditing = false;
 //	sortedColumn = -1;

@@ -180,6 +180,10 @@ class KexiTableViewPrivate
 	 in KexiTableView::createEditor(). */
 	bool pVerticalHeaderAlreadyAdded : 1;
 
+	/*! true if spreadSheetMode is enabled. False by default.
+	 @see KexiTableView::setSpreadSheetMode() */
+	bool spreadSheetMode : 1;
+
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
 	 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
