@@ -28,6 +28,8 @@
 #include "koDocumentChild.h"
 #include "koChild.h"
 
+#include <klocale.h>
+
 class KAction;
 class KActionCollection;
 class QCustomEvent;
@@ -216,6 +218,11 @@ public:
    */
   KoViewChild *child( KoDocument *document );
 
+public slots:
+
+    virtual void newView();
+    virtual void closeAllViews();
+
 protected:
   /**
    * This method handles two events: @ref KParts::PartActivateEvent and @ref KParts::PartSelectEvent.
@@ -234,6 +241,11 @@ protected:
    * your view to allow/disallow editing of the document.
    */
   virtual void updateReadWrite( bool readwrite ) = 0;
+
+  virtual void setupGlobalActions( void );
+
+  KAction *actionNewView;
+  KAction *actionCloseAllViews;
 
 signals:
   void activated( bool active );

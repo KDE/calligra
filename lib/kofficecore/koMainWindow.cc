@@ -125,7 +125,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
-    KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
     (void) new KAction( i18n( "Document Information..." ), 0,
 			this, SLOT( slotDocumentInfo() ),

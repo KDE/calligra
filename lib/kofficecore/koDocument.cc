@@ -145,13 +145,17 @@ KoDocument::~KoDocument()
   kdDebug(30003) << "KoDocument::~KoDocument() " << this << endl;
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
+kdDebug(30003) << "KoDocument::1 " << endl;
 
   QListIterator<KoView> it( d->m_views );
+kdDebug(30003) << "KoDocument::2 " << endl;
   for (; it.current(); ++it )
     disconnect( it.current(), SIGNAL( destroyed() ),
 		this, SLOT( slotViewDestroyed() ) );
 
+kdDebug(30003) << "KoDocument::3 " << endl;
   delete d;
+kdDebug(30003) << "KoDocument::4 " << endl;
 }
 
 bool KoDocument::singleViewMode() const
