@@ -300,7 +300,7 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     {
         m_base=new KoPictureClipart();
     }
-    else if (mode=="eps")
+    else if ( (mode=="eps") || (mode=="epsi") || (mode=="epsf") )
     {
         m_base=new KoPictureEps();
     }
