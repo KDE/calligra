@@ -18,6 +18,7 @@
 */
 
 #include <koFilterManager.h>
+#include <qfile.h>
 #ifndef USE_QFD
 #include <koFilterManager.moc>
 #endif
@@ -132,9 +133,9 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     unsigned i, j;
     QString service;
-    
+
     config=QString::null;   // reset the config string
-    
+
     if ( direction == Import )
         service = "Export == '";
     else
@@ -276,7 +277,7 @@ void KoFilterManager::cleanUp() {
 const int KoFilterManager::findWidget(const QString &ext) const {
 
     QMap<QString, int>::Iterator it=dialogMap.find(ext);
-    
+
     if(it!=dialogMap.end())
         return it.data();
     else
@@ -284,10 +285,13 @@ const int KoFilterManager::findWidget(const QString &ext) const {
 }
 #endif
 
-const QString KoFilterManager::import( const QString & file, const char *_native_format,
+const QString KoFilterManager::import( const QString & _file, const char *_native_format,
 				       KoDocument *document )
 {
-    KURL url( file );
+    QString path( _file );
+    KURL::encode( path ); // Encode local paths before creating a KURL from them
+    KURL url( path );
+    QCString file = QFile::encodeName( _file ); // The 8bit version of the filename
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QCString mimeType;
@@ -302,7 +306,7 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 
     if ( mimeType == _native_format )
     {
-        return file;
+        return _file;
     }
 
     QString constr = "Export == '";
@@ -322,7 +326,7 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 
     unsigned int i=0;
     bool ok=false;
-    QString tempfname;
+    QCString tempfname;
     // just in case that there are more than one filters
     while(i<vec.count() && !ok) {
 	KoFilter* filter = vec[i].createFilter();
@@ -333,11 +337,11 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 	    KTempFile tempFile; // create with default file prefix, extension and mode
 	    if (tempFile.status() != 0)
 		return "";
-	    tempfname = tempFile.name();
+	    tempfname = QFile::encodeName(tempFile.name());
 #ifndef USE_QFD
-	    ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format), config );
+	    ok=filter->filter( file, tempfname, mimeType, _native_format, config );
 #else
-	    ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
+	    ok=filter->filter( file, tempfname, mimeType, _native_format );
 #endif
 	}
 	else if(vec[i].implemented.lower()=="qdom" &&                // As long as some parts use KOML we have to make
@@ -347,23 +351,25 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 		 strcmp(document->className(), "KImageDocument")==0)) {
 	    kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
 	    QDomDocument qdoc;
-	    ok=filter->I_filter(QCString(file), QCString(mimeType), qdoc, QCString(_native_format), config);
+	    ok=filter->I_filter( file, mimeType, qdoc, _native_format, config);
 	    if(ok) {
 		ok=document->loadXML(qdoc);
+                if (!ok)
+                  kdWarning(30003) << "loadXML FAILED !" << endl;
 		document->changedByFilter();
 	    }
 	}
 	else if(vec[i].implemented.lower()=="kodocument") {
 	    kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
-	    ok=filter->I_filter(QCString(file), document, QCString(mimeType), QCString(_native_format), config);
+	    ok=filter->I_filter( file, document, mimeType, _native_format, config);
 	    if(ok)
 		document->changedByFilter();
 	}
         delete filter;
         ++i;
     }
-    if(vec[i-1].implemented.lower()=="file")
-	return ok ? tempfname : QString("");
+    if(ok && vec[i-1].implemented.lower()=="file")
+	return QFile::decodeName(tempfname);
     return "";
 }
 
@@ -527,7 +533,7 @@ void PreviewStack::filterChanged(const QString &filter) {
     }
     // do we have a dialog for that extension? (0==we don't have one)
     unsigned short id=mgr->findWidget(ext);
-    
+
     if(id==0) {
         if(!hidden) {
             hide();

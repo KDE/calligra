@@ -548,25 +548,25 @@ bool KoDocument::openFile()
 
   // Launch a filter if we need one for this url ?
   QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType(), this );
-  
+
   kdDebug(30003) << QString("KoDocument::openFile - importedFile %1").arg( importedFile ) << endl;
-  
+
   QApplication::restoreOverrideCursor();
 
-  // The filter, if any, has been applied. It's all native format now.
-  bool loadFile = !importedFile.isEmpty(); // Empty = an error occured in the filter
+  bool ok = true;
 
-  if (loadFile)
+  if (!importedFile.isEmpty()) // Something to load (tmp or native file) ?
   {
+    // The filter, if any, has been applied. It's all native format now.
     if ( !loadNativeFormat( importedFile ) )
     {
-      loadFile = false;
+      ok = false;
       KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
     }
   }
   else {
-      if(d->m_changed)
-	  loadFile=true;
+    // The filter did it all. Ok if it changed something...
+    ok=d->m_changed;
   }
 
   if ( importedFile != m_file )
@@ -575,17 +575,17 @@ bool KoDocument::openFile()
     // Set document URL to empty - we don't want to save in /tmp !
     m_url = KURL();
     // and remove temp file
-    if(!d->m_changed)
-	unlink( importedFile.ascii() );
+    if(!importedFile.isEmpty())
+      unlink( importedFile.ascii() );
   }
 
-  if ( loadFile && d->m_bSingleViewMode )
+  if ( ok && d->m_bSingleViewMode )
   {
     QWidget *view = createView( d->m_wrapperWidget );
     view->show();
   }
 
-  return loadFile;
+  return ok;
 }
 
 bool KoDocument::loadNativeFormat( const QString & file )
@@ -731,6 +731,7 @@ void KoDocument::setModified( bool _mod )
 
 void KoDocument::changedByFilter( bool changed ) const
 {
+    kdDebug(30003) << "KoDocument::changedByFilter " << (changed ? "true" : "false") << ")" << endl;
     d->m_changed=changed;
 }
 

@@ -134,10 +134,14 @@ public:
 
     /**
      * Import a file by applying a filter
-     * @return the file name, either "" (error, QDomDocument, or KoDocument),
+     * @param url The URL of the file to load
+     * @param native_format The Native Format supported by our application
+     * @param document ...
+     * @return the file name to load, either QString::null (error, QDomDocument, or KoDocument),
      * _url (no conversion) or a /tmp file (conversion)
      */
-    const QString import( const QString &_url, const char *_native_format, KoDocument *document );
+    const QString import( const QString & url, const char * native_format, KoDocument * document );
+
     /**
      * Export a file using a filter - don't call this one it's automatically
      * called by KoMainWindow::saveDocument()

@@ -194,12 +194,12 @@ public:
    *  to be saved or not before deleting it.
    */
   virtual void setModified( bool _mod );
-    
+
   /**
    *  Did a filter change this document?
    */
   virtual void changedByFilter( bool changed=true ) const;
-  
+
   /**
    *  @return true if the document is empty.
    */
@@ -232,7 +232,7 @@ public:
    * @param url An internal url, like tar:/1/2
    */
   virtual bool loadFromStore( KoStore* store, const KURL& url );
-    
+
   /**
    *  This method is needed for the new filter API. You have to
    *  reimplement it to load XML if you want to support filters
@@ -341,7 +341,7 @@ protected:
    *  @return              Loading was successful or not.
    */
   virtual bool loadXML( KOMLParser& _parser, KoStore* _store );
-    
+
   /**
    *  You need to overload this function if your document may contain
    *  embedded documents. This function is called to load embedded documents.

@@ -46,11 +46,12 @@ public:
      * @param file 	The filename of the input file
      * @param from 	Mimetype of the input file
      * @param to 	Mimetype of the output file
+     * @param doc	The empty document, for the filter to fill in
      * @param config   	A String which can be used to pass configure information
-     * @return 		A ptr to the QDomDocument you created.
+     * @return 		If the method returns true the filtering was successful
      */
     virtual const bool I_filter(const QCString &file, const QCString &from,
-				QDomDocument &, const QCString &to,
+				QDomDocument &doc, const QCString &to,
 				const QString &config=QString::null);
 
     /**
