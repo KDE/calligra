@@ -1094,8 +1094,8 @@ FormManager::alignWidgetsToGrid()
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 	{
-		tmpx = int( (float)w->x() / ((float)gridX) + 0.5 );
-		tmpy = int( (float)w->y() / ((float)gridY) + 0.5 );
+		tmpx = int( (float)w->x() / ((float)gridX) + 0.5 ) * gridX;
+		tmpy = int( (float)w->y() / ((float)gridY) + 0.5 ) * gridY;
 
 		if((tmpx != w->x()) || (tmpy != w->y()))
 			w->move(tmpx, tmpy);

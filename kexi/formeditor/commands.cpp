@@ -536,11 +536,14 @@ DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
 			widg = list.next();
 	}
 
+	FormIO::setCurrentForm(m_form);
+
 	for(QWidget *w = list.first(); w; w = list.next())
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
 		if (!item)
 			return;
+		FormIO::setCurrentItem(item);
 		// We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
 		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
 		m_parents.insert(item->name(), item->parent()->name());
@@ -548,10 +551,14 @@ DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
 		form->connectionBuffer()->saveAllConnectionsForWidget(w->name(), m_domDoc);
 	}
 
+	FormIO::setCurrentForm(0);
+	FormIO::setCurrentItem(0);
 	// remove includehints element not needed
 	if(!parent.namedItem("includehints").isNull())
 		parent.removeChild(parent.namedItem("includehints"));
-	// and ensure images is at the end
+	// and ensure images and connection are at the end
+	if(!parent.namedItem("connections").isNull())
+		parent.insertAfter(parent.namedItem("connections"), QDomNode());
 	if(!parent.namedItem("images").isNull())
 		parent.insertAfter(parent.namedItem("images"), QDomNode());
 }
