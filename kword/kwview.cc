@@ -1872,7 +1872,7 @@ void KWView::tableDelete()
     }
     else
     {
-        //gui->canvasWidget()->deleteTable( grpMgr );
+        gui->canvasWidget()->deleteTable( grpMgr );
     }
 }
 
