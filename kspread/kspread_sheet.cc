@@ -6635,6 +6635,7 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         if ( str.contains( "formulas" ) )
         {
             //todo it's not implemented
+            m_bShowFormula = true;
         }
         if ( str.contains( "zero-values" ) )
         {
