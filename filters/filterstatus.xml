@@ -321,7 +321,7 @@
             <filter id="karbon_svg">
                 <title xml:lang="en_us">SVG</title>
                 <note xml:lang="en_us">Scaleable Vector Graphics (W3C)</note>
-                <stat import="onestar" export="onestar"/>
+                <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="karbon_wmf">
                 <title xml:lang="en_us">WMF</title>
