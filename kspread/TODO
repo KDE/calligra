@@ -5,14 +5,14 @@ Improvement :
 -------------
 -Add different formats (date, scientific etc...)
 -Insert commentary in a cell
--Improved position in a cell (top, bottom ) when we increase size
+-DONE Improved position in a cell (top, bottom ) when we increase size
 -Add zoom
 -create an script editor for execute script
  (Use KWrite)
 
 Bug fix :
 ---------
--When you write a bad table name in a cell =>kspread crash
+-DONE When you write a bad table name in a cell =>kspread crash
 for example =Tablle!A1  =>crash
 -bug when we sort number (sort by string but not by number )
 

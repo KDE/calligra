@@ -1191,6 +1191,17 @@ void KSpreadBorderButton::setUndefined()
  setPenWidth(1);
  setColor(Qt::gray);
 }
+
+
+void KSpreadBorderButton::unselect()
+{
+setOn(false);
+setPenWidth(1);
+setPenStyle(Qt::NoPen);
+setColor( Qt::black );
+setChanged(true);
+}
+
 KSpreadBord::KSpreadBord( QWidget *parent, const char *_name ) :QFrame(parent)
 {
 }
@@ -1275,6 +1286,24 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   horizontal=new KSpreadBorderButton(this,"horizontal");
   horizontal->setGeometry(25,165,25,25);
   loadIcon("borderhorizontal.png",horizontal);
+
+  tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
+  tmpQGroupBox->setGeometry( 15 , 220, 115, 50 );
+  tmpQGroupBox->setFrameStyle( 49 );
+  tmpQGroupBox->setTitle( i18n("Preselect") );
+  tmpQGroupBox->setAlignment( 1 );
+
+  outline=new KSpreadBorderButton(this,"outline");
+  outline->setGeometry(95,240,25,25);
+  loadIcon("borderoutline.png",outline);
+
+  remove=new KSpreadBorderButton(this,"remove");
+  remove->setGeometry(25,240,25,25);
+  loadIcon("borderremove.png",remove);
+
+  all=new KSpreadBorderButton(this,"all");
+  all->setGeometry(60,240,25,25);
+  loadIcon("borderinside.png",all);
 
   tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
   tmpQGroupBox->setGeometry( 215, 10, 140, 230 );
@@ -1597,6 +1626,13 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   connect( vertical, SIGNAL( clicked(KSpreadBorderButton *) ),
 	   this, SLOT( changeState(KSpreadBorderButton *) ) );
 
+  connect( all, SIGNAL( clicked(KSpreadBorderButton *) ),
+	   this, SLOT( preselect(KSpreadBorderButton *) ) );
+  connect( remove, SIGNAL( clicked(KSpreadBorderButton *) ),
+	   this, SLOT( preselect(KSpreadBorderButton *) ) );
+  connect( outline, SIGNAL( clicked(KSpreadBorderButton *) ),
+	   this, SLOT( preselect(KSpreadBorderButton *) ) );
+
   connect( area ,SIGNAL( redraw()),this,SLOT(draw()));
   pattern1->slotSelect();
   selectedPattern=pattern1;
@@ -1769,6 +1805,76 @@ void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
 	pattern10->slotUnselect();
 
 }
+
+void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
+{
+_p->setOn(false);
+if(_p==remove)
+        {
+         if(left->isOn())
+                 left->unselect();
+
+         if(right->isOn())
+                 right->unselect();
+
+          if(top->isOn())
+	         top->unselect();
+
+          if(bottom->isOn())
+	         bottom->unselect();
+
+          if(fallDiagonal->isOn())
+	         fallDiagonal->unselect();
+
+         if(goUpDiagonal->isOn())
+                 goUpDiagonal->unselect();
+
+          if(vertical->isOn())
+                 vertical->unselect();
+
+          if(horizontal->isOn())
+                 horizontal->unselect();
+        }
+if(_p==outline)
+        {
+        top->setOn(true);
+        top->setPenWidth(selectedPattern->getPenWidth());
+        top->setPenStyle(selectedPattern->getPenStyle());
+        top->setColor( currentColor );
+        top->setChanged(true);
+        bottom->setOn(true);
+        bottom->setPenWidth(selectedPattern->getPenWidth());
+        bottom->setPenStyle(selectedPattern->getPenStyle());
+        bottom->setColor( currentColor );
+        bottom->setChanged(true);
+        left->setOn(true);
+        left->setPenWidth(selectedPattern->getPenWidth());
+        left->setPenStyle(selectedPattern->getPenStyle());
+        left->setColor( currentColor );
+        left->setChanged(true);
+        right->setOn(true);
+        right->setPenWidth(selectedPattern->getPenWidth());
+        right->setPenStyle(selectedPattern->getPenStyle());
+        right->setColor( currentColor );
+        right->setChanged(true);
+        }
+if(_p==all)
+        {
+        vertical->setOn(true);
+        vertical->setPenWidth(selectedPattern->getPenWidth());
+        vertical->setPenStyle(selectedPattern->getPenStyle());
+        vertical->setColor( currentColor );
+        vertical->setChanged(true);
+        horizontal->setOn(true);
+        horizontal->setPenWidth(selectedPattern->getPenWidth());
+        horizontal->setPenStyle(selectedPattern->getPenStyle());
+        horizontal->setColor( currentColor );
+        horizontal->setChanged(true);
+
+        }
+area->repaint();
+}
+
 void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
 {
   _p->setChanged(true);

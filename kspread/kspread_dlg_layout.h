@@ -253,6 +253,7 @@ public:
     bool isChanged() { return changed; }
     void setChanged(bool _changed ) { changed=_changed;}
     void setUndefined();
+    void unselect();
  signals:
     void clicked(KSpreadBorderButton *);
  protected:
@@ -274,6 +275,7 @@ public:
 
 public slots:
     void changeState(KSpreadBorderButton *_this);
+    void preselect( KSpreadBorderButton *_this);
     void draw();
     void slotSetColorButton( const QColor &_color );
     void slotUnselect2( KSpreadPatternSelect *_select );
@@ -288,6 +290,9 @@ protected:
     KSpreadBorderButton *horizontal;
     KSpreadBorderButton *fallDiagonal;
     KSpreadBorderButton *goUpDiagonal;
+    KSpreadBorderButton *remove;
+    KSpreadBorderButton *all;
+    KSpreadBorderButton *outline;
     KSpreadPatternSelect* pattern1;
     KSpreadPatternSelect* pattern2;
     KSpreadPatternSelect* pattern3;
