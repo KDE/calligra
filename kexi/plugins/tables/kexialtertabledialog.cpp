@@ -335,7 +335,7 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 		//primary key is set, remove old pkey if exists
 		KexiPropertyBuffer *b = 0;
 		int i;
-		const count = (int)d->buffers->size();
+		const int count = (int)d->buffers->size();
 		for (i=0; i<count; i++) {
 			b = d->buffers->at(i);
 			if (b && b!=&buf && (*b)["primaryKey"].value().toBool())
