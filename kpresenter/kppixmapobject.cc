@@ -91,7 +91,7 @@ void KPPixmapObject::resizeBy( double _dx, double _dy )
 }
 
 /*================================================================*/
-void KPPixmapObject::setPixmap( const KPImageKey & key, const KoSize &/*_size*/ )
+void KPPixmapObject::setPixmap( const KPImageKey & key /*, const KoSize &_size*/ )
 {
     image = imageCollection->findImage( key );
 #if 0

@@ -194,8 +194,4 @@ enum ToolEditMode {
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
-const KoSize orig_size( -1, -1 );
-
-#undef SHOW_INFO
-
 #endif //GLOBAL_H

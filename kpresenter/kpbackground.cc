@@ -438,7 +438,6 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         switch ( backView )
         {
         case BV_ZOOM:
-            backImage.scale(ext); // ## temporary, needs fix in KoImage
             backImage.draw( *_painter, crect.x(), crect.y(), ext.width(), ext.height(),
                             crect.x(), crect.y(), crect.width(), crect.height() );
             break;

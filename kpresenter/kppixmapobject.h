@@ -59,10 +59,10 @@ public:
     QSize originalSize() const
     { return image.originalSize(); }
 
-    void setPixmap( const KPImageKey & key, const KoSize &_size = orig_size );
+    void setPixmap( const KPImageKey & key );
 
     void reload()
-    { setPixmap( image.key(), ext ); }
+    { setPixmap( image.key() ); }
 
     virtual ObjType getType() const
     { return OT_PICTURE; }
