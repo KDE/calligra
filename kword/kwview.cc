@@ -2783,11 +2783,14 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
     }
 }
 
-void KWView::insertInlinePicture()
+bool KWView::insertInlinePicture()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if(edit)
     {
+        if ( edit->textFrameSet()->textObject()->protectContent() )
+            return false;
+
         m_doc->addFrameSet( fsInline, false ); // done first since the frame number is stored in the undo/redo
 #if 0
         KWFrame *frame = new KWFrame( fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
@@ -2806,6 +2809,7 @@ void KWView::insertInlinePicture()
         fsInline=0L;
         updateFrameStatusBarItem();
     }
+    return true;
 }
 
 void KWView::displayFrameInlineInfo()

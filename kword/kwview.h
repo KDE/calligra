@@ -160,7 +160,7 @@ public:
 
     static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWordText, bool &providesKWord, bool &providesFormula );
 
-    void insertInlinePicture();
+    bool insertInlinePicture();
 
     void displayFrameInlineInfo();
 

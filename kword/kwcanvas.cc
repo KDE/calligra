@@ -537,7 +537,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if(m_frameInlineType==FT_TABLE)
                     inlineCreated = insertInlineTable();
                 else if(m_frameInlineType==FT_PICTURE)
-                    m_gui->getView()->insertInlinePicture();
+                    inlineCreated = m_gui->getView()->insertInlinePicture();
                 if ( inlineCreated)
                     m_frameInline=false;
                 else
