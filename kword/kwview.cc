@@ -4484,7 +4484,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
 	kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
 	KWCollectFramesetsVisitor visitor;
 	currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all KWFrameSet-objects in the selection
-	QPtrList<KWFrameSet> frameset = visitor.frameSets();
+	const QPtrList<KWFrameSet>& frameset = visitor.frameSets();
 	for (QPtrListIterator<KWFrameSet> it( frameset ); it.current(); ++it )
 	{
 	  if ( it.current()->type() == FT_TABLE)

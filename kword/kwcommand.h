@@ -878,9 +878,9 @@ protected:
 class KWCollectFramesetsVisitor : public KoParagVisitor // see kotextdocument.h
 {
   public:
-    KWCollectFramesetsVisitor(): KoParagVisitor() {;}
+    KWCollectFramesetsVisitor() : KoParagVisitor() {}
     bool visit( KoTextParag *parag, int start, int end );
-    QPtrList<KWFrameSet> frameSets(){return m_framesets;};
+    const QPtrList<KWFrameSet>& frameSets() const { return m_framesets; }
   private:
     QPtrList<KWFrameSet> m_framesets;
 };
