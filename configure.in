@@ -51,6 +51,7 @@ AC_OUTPUT(Makefile \
 	kpresenter/autoforms/Connections/Makefile \
 	kpresenter/pics/Makefile \
 	kpresenter/toolbar/Makefile \
+	kpresenter/templates/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
 	kchart/ui/Makefile
