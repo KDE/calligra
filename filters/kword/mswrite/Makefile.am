@@ -16,5 +16,6 @@ METASOURCES = AUTO
 service_DATA = kword_mswrite_import.desktop
 servicedir = $(kde_servicesdir)
 
-kdemime_DATA = x-mswrite.desktop
-kdemimedir = $(kde_mimedir)/application
+# moved to kdelibs/mimetypes/application
+#kdemime_DATA = x-mswrite.desktop
+#kdemimedir = $(kde_mimedir)/application
