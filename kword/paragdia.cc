@@ -972,7 +972,7 @@ void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
                ||(m_rightBorder.style!=Border::getStyle(cStyle->currentText()) )) && bRight->isOn() )
         {
             m_rightBorder.ptWidth = cWidth->currentText().toInt();
-            m_rightBorder.color = QColor( bColor->color() );
+            m_rightBorder.color = bColor->color();
             m_rightBorder.style=Border::getStyle(cStyle->currentText());
             prev3->setRightBorder( m_rightBorder );
         }
@@ -1002,7 +1002,7 @@ void KWParagBorderWidget::brdLeftToggled( bool _on )
         m_leftBorder.ptWidth = 0;
     else {
         m_leftBorder.ptWidth = cWidth->currentText().toInt();
-        m_leftBorder.color = QColor( bColor->color() );
+        m_leftBorder.color = bColor->color();
         m_leftBorder.style= Border::getStyle( cStyle->currentText() );
     }
     prev3->setLeftBorder( m_leftBorder );
@@ -1014,7 +1014,7 @@ void KWParagBorderWidget::brdRightToggled( bool _on )
         m_rightBorder.ptWidth = 0;
     else {
         m_rightBorder.ptWidth = cWidth->currentText().toInt();
-        m_rightBorder.color = QColor( bColor->color() );
+        m_rightBorder.color = bColor->color();
         m_rightBorder.style= Border::getStyle( cStyle->currentText() );
     }
     prev3->setRightBorder( m_rightBorder );
@@ -1026,7 +1026,7 @@ void KWParagBorderWidget::brdTopToggled( bool _on )
         m_topBorder.ptWidth = 0;
     else {
         m_topBorder.ptWidth = cWidth->currentText().toInt();
-        m_topBorder.color = QColor( bColor->color() );
+        m_topBorder.color = bColor->color();
         m_topBorder.style= Border::getStyle( cStyle->currentText() );
     }
     prev3->setTopBorder( m_topBorder );
@@ -1038,7 +1038,7 @@ void KWParagBorderWidget::brdBottomToggled( bool _on )
         m_bottomBorder.ptWidth = 0;
     else {
         m_bottomBorder.ptWidth = cWidth->currentText().toInt();
-        m_bottomBorder.color = QColor( bColor->color() );
+        m_bottomBorder.color = bColor->color();
         m_bottomBorder.style=Border::getStyle(cStyle->currentText());
     }
     prev3->setBottomBorder( m_bottomBorder );

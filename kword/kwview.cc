@@ -945,10 +945,14 @@ void KWView::clipboardDataChanged()
         actionEditPaste->setEnabled(true);
         return;
     }
-    // Is there kword XML in the clipboard ?
     QMimeSource *data = QApplication::clipboard()->data();
-    actionEditPaste->setEnabled( ( edit && KWTextDrag::canDecode( data ) )
-                                 || KWDrag::canDecode( data ) );
+    // Is there an image in the clipboard ?
+    if ( QImageDrag::canDecode( data ) )
+        actionEditPaste->setEnabled( true );
+    else
+        // Is there kword XML in the clipboard ?
+        actionEditPaste->setEnabled( ( edit && KWTextDrag::canDecode( data ) )
+                                     || KWDrag::canDecode( data ) );
 
 }
 
@@ -1330,6 +1334,12 @@ void KWView::editPaste()
     QMimeSource *data = QApplication::clipboard()->data();
     if ( data->provides( KWDrag::selectionMimeType() ) )
         m_gui->canvasWidget()->pasteFrames();
+    else if ( QImageDrag::canDecode( data ) )
+    {
+
+        KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+        m_gui->canvasWidget()->pasteImage( data, docPoint );
+    }
     else
     {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();

@@ -1861,18 +1861,7 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     if ( m_imageDrag )
     {
-        QImage i;
-        QImageDrag::decode(e, i);
-        KTempFile tmpFile( QString::null, ".png");
-        tmpFile.setAutoDelete( true );
-        i.save(tmpFile.name(), "PNG");
-        // Prepare things for mrCreatePixmap
-        m_pictureFilename = tmpFile.name();
-        m_isClipart = false;
-        m_pixmapSize = i.size();
-        m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
-        m_keepRatio = true;
-        mrCreatePixmap();
+        pasteImage( e, docPoint );
     }
     else if ( m_currentFrameSetEdit )
     {
@@ -1880,6 +1869,22 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     }
     m_mousePressed = false;
     m_imageDrag = false;
+}
+
+void KWCanvas::pasteImage( QMimeSource *e, const KoPoint &docPoint )
+{
+    QImage i;
+    QImageDrag::decode(e, i);
+    KTempFile tmpFile( QString::null, ".png");
+    tmpFile.setAutoDelete( true );
+    i.save(tmpFile.name(), "PNG");
+    // Prepare things for mrCreatePixmap
+    m_pictureFilename = tmpFile.name();
+    m_isClipart = false;
+    m_pixmapSize = i.size();
+    m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
+    m_keepRatio = true;
+    mrCreatePixmap();
 }
 
 void KWCanvas::doAutoScroll()

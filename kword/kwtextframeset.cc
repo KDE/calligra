@@ -1210,7 +1210,6 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
     QDomElement paragraph = attributes.firstChild().toElement();
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
-        //QDomElement paragraph = listParagraphs.item( item ).toElement();
         if ( paragraph.tagName() == "PARAGRAPH" )
         {
             KWTextParag *parag = new KWTextParag( textdoc, lastParagraph );

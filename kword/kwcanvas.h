@@ -127,6 +127,7 @@ public:
 
     void insertPicture( const QString &filename, bool isClipart, QSize pixmapSize, bool _keepRatio );
     void insertPart( const KoDocumentEntry &entry );
+    void pasteImage( QMimeSource *e, const KoPoint &docPoint );
 
     void updateCurrentFormat();
 
