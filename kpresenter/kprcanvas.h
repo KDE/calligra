@@ -437,6 +437,9 @@ private:
 
     KPTextObject* textUnderMouse( const QPoint & point );
     bool checkCurrentTextEdit( KPTextObject * textObj );
+
+    QPtrList<KPTextObject> listOfTextObjs() const;
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }

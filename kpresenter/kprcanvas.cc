@@ -6906,52 +6906,40 @@ KoRect KPrCanvas::zoomAllObject()
     return objBoundingRect;
 }
 
+QPtrList<KPTextObject>  KPrCanvas::listOfTextObjs() const
+{
+    QPtrList<KPTextObject> lst;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if (  it.current()->getType() == OT_TEXT )
+            lst.append( static_cast<KPTextObject*>( it.current() ) );
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_TEXT )
+        {
+            if ( objectIsAHeaderFooterHidden(it.current()))
+                continue;
+            else
+                lst.append( static_cast<KPTextObject*>( it.current() ));
+        }
+    }
+    return lst;
+}
+
 KPTextObject * KPrCanvas::textObjectByPos( int pos )
 {
     if ( pos < 0 )
         return 0L;
-    QPtrList<KPTextObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( ; it.current(); ++it ) {
-        if (  it.current()->getType() == OT_TEXT )
-            lst.append( static_cast<KPTextObject*>( it.current() ) );
-    }
-    //get sticky obj
-    it=m_view->kPresenterDoc()->stickyPage()->objectList();
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->getType() == OT_TEXT )
-        {
-            if ( objectIsAHeaderFooterHidden(it.current()))
-                continue;
-            else
-                lst.append( static_cast<KPTextObject*>( it.current() ));
-        }
-    }
-    return lst.at( pos );
+    return listOfTextObjs().at( pos );
 }
 
 int KPrCanvas::textObjectNum( KPTextObject * obj ) const
 {
-    QPtrList<KPTextObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( ; it.current(); ++it ) {
-        if (  it.current()->getType() == OT_TEXT )
-            lst.append( static_cast<KPTextObject*>( it.current() ) );
-    }
-    //get sticky obj
-    it=m_view->kPresenterDoc()->stickyPage()->objectList();
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->getType() == OT_TEXT )
-        {
-            if ( objectIsAHeaderFooterHidden(it.current()))
-                continue;
-            else
-                lst.append( static_cast<KPTextObject*>( it.current() ));
-        }
-    }
-
     int num = 0;
-    QPtrListIterator<KPTextObject> it2( lst );
+    QPtrList<KPTextObject> obj2 = listOfTextObjs();
+    QPtrListIterator<KPTextObject> it2(obj2 );
     for ( ; it2.current() ; ++it2, num++ ) {
         if ( it2.current() == obj )
         {
@@ -6963,25 +6951,8 @@ int KPrCanvas::textObjectNum( KPTextObject * obj ) const
 
 KPTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
 {
-    QPtrList<KPTextObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( ; it.current(); ++it ) {
-        if (  it.current()->getType() == OT_TEXT )
-            lst.append( static_cast<KPTextObject*>( it.current() ) );
-    }
-    //get sticky obj
-    it=m_view->kPresenterDoc()->stickyPage()->objectList();
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->getType() == OT_TEXT )
-        {
-            if ( objectIsAHeaderFooterHidden(it.current()))
-                continue;
-            else
-                lst.append( static_cast<KPTextObject*>( it.current() ));
-        }
-    }
-
-    QPtrListIterator<KPTextObject> it2( lst );
+    QPtrList<KPTextObject> obj = listOfTextObjs();
+    QPtrListIterator<KPTextObject> it2(obj );
     for ( ; it2.current() ; ++it2 ) {
         QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRect( it2.current()->getRect()) );
         if ( outerRect.contains( point) )
