@@ -29,6 +29,7 @@
 /*========================== draw a figure =======================*/
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,int  _w, float angle, KoZoomHandler*_zoomHandler)
 {
+    painter->save();
     painter->setPen( Qt::NoPen );
     painter->setBrush( Qt::NoBrush );
 
@@ -38,20 +39,16 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     {
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
-        painter->save();
-        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
+	painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->fillRect( _zoomHandler->zoomItX(-3 - _w / 2),_zoomHandler->zoomItY( -3 - _h / 2),_zoomHandler->zoomItX( 6 + _w),_zoomHandler->zoomItY( 6 + _h), color );
-        painter->restore();
     } break;
     case L_CIRCLE:
     {
-        painter->save();
-        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
+	painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
         painter->setBrush( color );
         painter->drawEllipse( _zoomHandler->zoomItX(-3 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2),_zoomHandler->zoomItX( 6 + _w), _zoomHandler->zoomItY(6 + _w) );
-        painter->restore();
     } break;
     case L_ARROW:
     {
@@ -63,16 +60,15 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
         pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
 
-        painter->save();
-        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+	painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->setBrush( color );
         painter->drawPolygon( pArray );
-        painter->restore();
     } break;
     default: break;
     }
+    painter->restore();
 }
 //todo used kozoomhandled
 /*================== get bounding with of figure =================*/
