@@ -23,6 +23,7 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split"/>
+  <Action name="view_showsidebar"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_page"/>

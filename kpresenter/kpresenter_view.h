@@ -66,6 +66,7 @@ class QToolButton;
 class SideBar;
 
 class KAction;
+class KToggleAction;
 
 class PageBase : public QWidget
 {
@@ -128,6 +129,9 @@ public slots:
     virtual void editDelPage();
     virtual void editFind();
     virtual void editHeaderFooter();
+
+    // view menu
+    void viewShowSideBar();
 
     // insert menu
     virtual void insertPage();
@@ -461,6 +465,8 @@ protected:
     KAction *actionEditDelPage;
     KAction *actionEditFind;
     KAction *actionEditHeaderFooter;
+
+    KToggleAction *actionViewShowSideBar;
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;

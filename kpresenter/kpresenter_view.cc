@@ -1758,6 +1758,13 @@ void KPresenterView::setupActions()
 					  this, SLOT( editHeaderFooter() ),
 					  actionCollection(), "edit_headerfooter" );
 
+    // ---------------- View actions
+
+    actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), 0,
+                                               this, SLOT( viewShowSideBar() ),
+                                               actionCollection(), "view_showsidebar" );
+    actionViewShowSideBar->setChecked(true);
+
     // ---------------- insert actions
 
     actionInsertPage = new KAction( i18n( "&Page..." ), "newslide", Key_F2,
@@ -3067,4 +3074,12 @@ void KPresenterView::updateSideBarItem( int pagenr )
 {
     //kdDebug() << "KPresenterView::updateSideBarItem " << pagenr << endl;
     sidebar->updateItem( pagenr );
+}
+
+void KPresenterView::viewShowSideBar()
+{
+    if ( sidebar->isVisible() )
+        sidebar->hide();
+    else
+        sidebar->show();
 }
