@@ -326,22 +326,22 @@ protected:
     void saveRecentFiles();
 
     /**
-     * Returns whether or not the current slotFileOpen() or openDocument()
-     * call is actually an import operation (like File --> Import).
-     *
-     * If this is true, you must call KoDocument::import() instead of
-     * KoDocument::openURL(), in any reimplementation of openDocument() or
-     * openDocumentInternal().
-     */
-    bool isExporting() const;
-
-    /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
      * call is actually an export operation (like File --> Export).
      *
      * If this is true, you must call KoDocument::export() instead of
      * KoDocument::save() or KoDocument::saveAs(), in any reimplementation of
      * saveDocument().
+     */
+    bool isExporting() const;
+
+    /**
+     * Returns whether or not the current slotFileOpen() or openDocument()
+     * call is actually an import operation (like File --> Import).
+     *
+     * If this is true, you must call KoDocument::import() instead of
+     * KoDocument::openURL(), in any reimplementation of openDocument() or
+     * openDocumentInternal().
      */
     bool isImporting() const;
 
