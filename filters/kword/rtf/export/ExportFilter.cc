@@ -600,7 +600,7 @@ bool RTFWorker::doOpenDocument(void)
 
     // Note: we use \\ansicpg1252 because 1200 is not supposed to be supported
     // Note2: we assume using \\ansicpg1252 in RTFWorker::escapeRtfText
-    *m_streamOut << "{\\rtf1\\ansi\\ansicpg1252\\uc0\\deff0" << m_eol;
+    *m_streamOut << "{\\rtf1\\ansi\\ansicpg1252\\uc1\\deff0" << m_eol;
 
     // Default color table
     m_colorList
@@ -871,7 +871,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
 			// encode this as decimal unicode
 			escapedText += "\\u";
             escapedText += QString::number ( ch, 10 );
-            escapedText += " ";
+            escapedText += "?"; // The \uc1 dummy character.
         }
         else
             escapedText += QCh ;
