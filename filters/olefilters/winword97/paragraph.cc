@@ -278,17 +278,14 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         sprmSDxaColWidth = 0xF203,
         sprmSDxaColSpacing = 0xF204
     } opcodes;
-    union
+    MsWord::U16 opcodeValue;
+    struct
     {
-        MsWord::U16 value;
-        struct
-        {
-            MsWord::U16 ispmd: 9;
-            MsWord::U16 fSpec: 1;
-            MsWord::U16 sgc: 3;
-            MsWord::U16 spra: 3;
-        } bits;
-    } opcode;
+        MsWord::U16 ispmd: 9;
+        MsWord::U16 fSpec: 1;
+        MsWord::U16 sgc: 3;
+        MsWord::U16 spra: 3;
+    } opcodeBits;
     unsigned operandSize;
     unsigned operandSizes[8] =
     {
@@ -310,7 +307,7 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
     {
         if (m_document.m_fib.nFib > MsWord::s_maxWord6Version)
         {
-            bytes += MsWordGenerated::read(in + bytes, &opcode.value);
+            bytes += MsWordGenerated::read(in + bytes, &opcodeValue);
         }
         else
         {
@@ -322,484 +319,492 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
             switch (sprm)
             {
             case 2:
-                opcode.value = sprmPIstd;
+                opcodeValue = sprmPIstd;
                 break;
             case 3:
-                opcode.value = sprmPIstdPermute;
+                opcodeValue = sprmPIstdPermute;
                 break;
             case 4:
-                opcode.value = sprmPIncLvl;
+                opcodeValue = sprmPIncLvl;
                 break;
             case 5:
-                opcode.value = sprmPJc;
+                opcodeValue = sprmPJc;
                 break;
             case 6:
-                opcode.value = sprmPFSideBySide;
+                opcodeValue = sprmPFSideBySide;
                 break;
             case 7:
-                opcode.value = sprmPFKeep;
+                opcodeValue = sprmPFKeep;
                 break;
             case 8:
-                opcode.value = sprmPFKeepFollow;
+                opcodeValue = sprmPFKeepFollow;
                 break;
             case 9:
-                opcode.value = sprmPFPageBreakBefore;
+                opcodeValue = sprmPFPageBreakBefore;
                 break;
             case 10:
-                opcode.value = sprmPBrcl;
+                opcodeValue = sprmPBrcl;
                 break;
             case 11:
-                opcode.value = sprmPBrcp;
+                opcodeValue = sprmPBrcp;
                 break;
             case 12:
-                opcode.value = sprmPAnld;
+                opcodeValue = sprmPAnld;
                 break;
             case 13:
-                opcode.value = sprmPIlvl;
+                opcodeValue = sprmPIlvl;
                 break;
             case 14:
-                opcode.value = sprmPFNoLineNumb;
+                opcodeValue = sprmPFNoLineNumb;
                 break;
             case 15:
-                opcode.value = sprmPChgTabsPapx;
+                opcodeValue = sprmPChgTabsPapx;
                 break;
             case 16:
-                opcode.value = sprmPDxaRight;
+                opcodeValue = sprmPDxaRight;
                 break;
             case 17:
-                opcode.value = sprmPDxaLeft;
+                opcodeValue = sprmPDxaLeft;
                 break;
             case 18:
-                opcode.value = sprmPNest;
+                opcodeValue = sprmPNest;
                 break;
             case 19:
-                opcode.value = sprmPDxaLeft1;
+                opcodeValue = sprmPDxaLeft1;
                 break;
             case 20:
-                opcode.value = sprmPDyaLine;
+                opcodeValue = sprmPDyaLine;
                 break;
             case 21:
-                opcode.value = sprmPDyaBefore;
+                opcodeValue = sprmPDyaBefore;
                 break;
             case 22:
-                opcode.value = sprmPDyaAfter;
+                opcodeValue = sprmPDyaAfter;
                 break;
             case 23:
-                opcode.value = sprmPChgTabs;
+                opcodeValue = sprmPChgTabs;
                 break;
             case 24:
-                opcode.value = sprmPFInTable;
+                opcodeValue = sprmPFInTable;
                 break;
             case 25:
-                opcode.value = sprmPFTtp;
+                opcodeValue = sprmPFTtp;
                 break;
             case 26:
-                opcode.value = sprmPDxaAbs;
+                opcodeValue = sprmPDxaAbs;
                 break;
             case 27:
-                opcode.value = sprmPDyaAbs;
+                opcodeValue = sprmPDyaAbs;
                 break;
             case 28:
-                opcode.value = sprmPDxaWidth;
+                opcodeValue = sprmPDxaWidth;
                 break;
             case 29:
-                opcode.value = sprmPPc;
+                opcodeValue = sprmPPc;
                 break;
             case 30:
-                opcode.value = sprmPBrcTop10;
+                opcodeValue = sprmPBrcTop10;
                 break;
             case 31:
-                opcode.value = sprmPBrcLeft10;
+                opcodeValue = sprmPBrcLeft10;
                 break;
             case 32:
-                opcode.value = sprmPBrcBottom10;
+                opcodeValue = sprmPBrcBottom10;
                 break;
             case 33:
-                opcode.value = sprmPBrcRight10;
+                opcodeValue = sprmPBrcRight10;
                 break;
             case 34:
-                opcode.value = sprmPBrcBetween10;
+                opcodeValue = sprmPBrcBetween10;
                 break;
             case 35:
-                opcode.value = sprmPBrcBar10;
+                opcodeValue = sprmPBrcBar10;
                 break;
             case 36:
-                opcode.value = sprmPDxaFromText10;
+                opcodeValue = sprmPDxaFromText10;
                 break;
             case 37:
-                opcode.value = sprmPWr;
+                opcodeValue = sprmPWr;
                 break;
             case 38:
-                opcode.value = sprmPBrcTop;
+                opcodeValue = sprmPBrcTop;
                 break;
             case 39:
-                opcode.value = sprmPBrcLeft;
+                opcodeValue = sprmPBrcLeft;
                 break;
             case 40:
-                opcode.value = sprmPBrcBottom;
+                opcodeValue = sprmPBrcBottom;
                 break;
             case 41:
-                opcode.value = sprmPBrcRight;
+                opcodeValue = sprmPBrcRight;
                 break;
             case 42:
-                opcode.value = sprmPBrcBetween;
+                opcodeValue = sprmPBrcBetween;
                 break;
             case 43:
-                opcode.value = sprmPBrcBar;
+                opcodeValue = sprmPBrcBar;
                 break;
             case 44:
-                opcode.value = sprmPFNoAutoHyph;
+                opcodeValue = sprmPFNoAutoHyph;
                 break;
             case 45:
-                opcode.value = sprmPWHeightAbs;
+                opcodeValue = sprmPWHeightAbs;
                 break;
             case 46:
-                opcode.value = sprmPDcs;
+                opcodeValue = sprmPDcs;
                 break;
             case 47:
-                opcode.value = sprmPShd;
+                opcodeValue = sprmPShd;
                 break;
             case 48:
-                opcode.value = sprmPDyaFromText;
+                opcodeValue = sprmPDyaFromText;
                 break;
             case 49:
-                opcode.value = sprmPDxaFromText;
+                opcodeValue = sprmPDxaFromText;
                 break;
             case 50:
-                opcode.value = sprmPFLocked;
+                opcodeValue = sprmPFLocked;
                 break;
             case 51:
-                opcode.value = sprmPFWidowControl;
+                opcodeValue = sprmPFWidowControl;
                 break;
             case 52:
-                opcode.value = sprmPRuler;
+                opcodeValue = sprmPRuler;
                 break;
             case 65:
-                opcode.value = sprmCFRMarkDel;
+                opcodeValue = sprmCFRMarkDel;
                 break;
             case 66:
-                opcode.value = sprmCFRMark;
+                opcodeValue = sprmCFRMark;
                 break;
             case 67:
-                opcode.value = sprmCFFldVanish;
+                opcodeValue = sprmCFFldVanish;
                 break;
             case 68:
-                opcode.value = sprmCPicLocation;
+                opcodeValue = sprmCPicLocation;
                 break;
             case 69:
-                opcode.value = sprmCIbstRMark;
+                opcodeValue = sprmCIbstRMark;
                 break;
             case 70:
-                opcode.value = sprmCDttmRMark;
+                opcodeValue = sprmCDttmRMark;
                 break;
             case 71:
-                opcode.value = sprmCFData;
+                opcodeValue = sprmCFData;
                 break;
             case 72:
-                opcode.value = sprmCIdslRMark;
+                opcodeValue = sprmCIdslRMark;
                 break;
             case 73:
-                opcode.value = sprmCChs;
+                opcodeValue = sprmCChs;
                 break;
             case 74:
-                opcode.value = sprmCSymbol;
+                opcodeValue = sprmCSymbol;
                 break;
             case 75:
-                opcode.value = sprmCFOle2;
+                opcodeValue = sprmCFOle2;
                 break;
             case 80:
-                opcode.value = sprmCIstd;
+                opcodeValue = sprmCIstd;
                 break;
             case 81:
-                opcode.value = sprmCIstdPermute;
+                opcodeValue = sprmCIstdPermute;
                 break;
             case 82:
-                opcode.value = sprmCDefault;
+                opcodeValue = sprmCDefault;
                 break;
             case 83:
-                opcode.value = sprmCPlain;
+                opcodeValue = sprmCPlain;
                 break;
             case 85:
-                opcode.value = sprmCFBold;
+                opcodeValue = sprmCFBold;
                 break;
             case 86:
-                opcode.value = sprmCFItalic;
+                opcodeValue = sprmCFItalic;
                 break;
             case 87:
-                opcode.value = sprmCFStrike;
+                opcodeValue = sprmCFStrike;
                 break;
             case 88:
-                opcode.value = sprmCFOutline;
+                opcodeValue = sprmCFOutline;
                 break;
             case 89:
-                opcode.value = sprmCFShadow;
+                opcodeValue = sprmCFShadow;
                 break;
             case 90:
-                opcode.value = sprmCFSmallCaps;
+                opcodeValue = sprmCFSmallCaps;
                 break;
             case 91:
-                opcode.value = sprmCFCaps;
+                opcodeValue = sprmCFCaps;
                 break;
             case 92:
-                opcode.value = sprmCFVanish;
+                opcodeValue = sprmCFVanish;
                 break;
             case 93:
-                opcode.value = sprmCRgFtc0;
+                opcodeValue = sprmCRgFtc0;
                 break;
             case 94:
-                opcode.value = sprmCKul;
+                opcodeValue = sprmCKul;
                 break;
             case 95:
-                opcode.value = sprmCSizePos;
+                opcodeValue = sprmCSizePos;
                 break;
             case 96:
-                opcode.value = sprmCDxaSpace;
+                opcodeValue = sprmCDxaSpace;
                 break;
             case 97:
-                opcode.value = sprmCLid;
+                opcodeValue = sprmCLid;
                 break;
             case 98:
-                opcode.value = sprmCIco;
+                opcodeValue = sprmCIco;
                 break;
             case 99:
-                opcode.value = sprmCHps;
+                opcodeValue = sprmCHps;
                 break;
             case 100:
-                opcode.value = sprmCHpsInc;
+                opcodeValue = sprmCHpsInc;
                 break;
             case 101:
-                opcode.value = sprmCHpsPos;
+                opcodeValue = sprmCHpsPos;
                 break;
             case 102:
-                opcode.value = sprmCHpsPosAdj;
+                opcodeValue = sprmCHpsPosAdj;
                 break;
             case 103:
-                opcode.value = sprmCMajority;
+                opcodeValue = sprmCMajority;
                 break;
             case 104:
-                opcode.value = sprmCIss;
+                opcodeValue = sprmCIss;
                 break;
             case 105:
-                opcode.value = sprmCHpsNew50;
+                opcodeValue = sprmCHpsNew50;
                 break;
             case 106:
-                opcode.value = sprmCHpsInc1;
+                opcodeValue = sprmCHpsInc1;
                 break;
             case 107:
-                opcode.value = sprmCHpsKern;
+                opcodeValue = sprmCHpsKern;
                 break;
             case 108:
-                opcode.value = sprmCMajority50;
+                opcodeValue = sprmCMajority50;
                 break;
             case 109:
-                opcode.value = sprmCHpsMul;
+                opcodeValue = sprmCHpsMul;
                 break;
             case 110:
-                opcode.value = sprmCYsri;
+                opcodeValue = sprmCYsri;
                 break;
             case 117:
-                opcode.value = sprmCFSpec;
+                opcodeValue = sprmCFSpec;
                 break;
             case 118:
-                opcode.value = sprmCFObj;
+                opcodeValue = sprmCFObj;
                 break;
             case 119:
-                opcode.value = sprmPicBrcl;
+                opcodeValue = sprmPicBrcl;
                 break;
             case 120:
-                opcode.value = sprmPicScale;
+                opcodeValue = sprmPicScale;
                 break;
             case 121:
-                opcode.value = sprmPicBrcTop;
+                opcodeValue = sprmPicBrcTop;
                 break;
             case 122:
-                opcode.value = sprmPicBrcLeft;
+                opcodeValue = sprmPicBrcLeft;
                 break;
             case 123:
-                opcode.value = sprmPicBrcBottom;
+                opcodeValue = sprmPicBrcBottom;
                 break;
             case 124:
-                opcode.value = sprmPicBrcRight;
+                opcodeValue = sprmPicBrcRight;
                 break;
             case 131:
-                opcode.value = sprmScnsPgn;
+                opcodeValue = sprmScnsPgn;
                 break;
             case 132:
-                opcode.value = sprmSiHeadingPgn;
+                opcodeValue = sprmSiHeadingPgn;
                 break;
             case 133:
-                opcode.value = sprmSOlstAnm;
+                opcodeValue = sprmSOlstAnm;
                 break;
             case 136:
-                opcode.value = sprmSDxaColWidth;
+                opcodeValue = sprmSDxaColWidth;
                 break;
             case 137:
-                opcode.value = sprmSDxaColSpacing;
+                opcodeValue = sprmSDxaColSpacing;
                 break;
             case 138:
-                opcode.value = sprmSFEvenlySpaced;
+                opcodeValue = sprmSFEvenlySpaced;
                 break;
             case 139:
-                opcode.value = sprmSFProtected;
+                opcodeValue = sprmSFProtected;
                 break;
             case 140:
-                opcode.value = sprmSDmBinFirst;
+                opcodeValue = sprmSDmBinFirst;
                 break;
             case 141:
-                opcode.value = sprmSDmBinOther;
+                opcodeValue = sprmSDmBinOther;
                 break;
             case 142:
-                opcode.value = sprmSBkc;
+                opcodeValue = sprmSBkc;
                 break;
             case 143:
-                opcode.value = sprmSFTitlePage;
+                opcodeValue = sprmSFTitlePage;
                 break;
             case 144:
-                opcode.value = sprmSCcolumns;
+                opcodeValue = sprmSCcolumns;
                 break;
             case 145:
-                opcode.value = sprmSDxaColumns;
+                opcodeValue = sprmSDxaColumns;
                 break;
             case 146:
-                opcode.value = sprmSFAutoPgn;
+                opcodeValue = sprmSFAutoPgn;
                 break;
             case 147:
-                opcode.value = sprmSNfcPgn;
+                opcodeValue = sprmSNfcPgn;
                 break;
             case 148:
-                opcode.value = sprmSDyaPgn;
+                opcodeValue = sprmSDyaPgn;
                 break;
             case 149:
-                opcode.value = sprmSDxaPgn;
+                opcodeValue = sprmSDxaPgn;
                 break;
             case 150:
-                opcode.value = sprmSFPgnRestart;
+                opcodeValue = sprmSFPgnRestart;
                 break;
             case 151:
-                opcode.value = sprmSFEndnote;
+                opcodeValue = sprmSFEndnote;
                 break;
             case 152:
-                opcode.value = sprmSLnc;
+                opcodeValue = sprmSLnc;
                 break;
             case 153:
-                opcode.value = sprmSGprfIhdt;
+                opcodeValue = sprmSGprfIhdt;
                 break;
             case 154:
-                opcode.value = sprmSNLnnMod;
+                opcodeValue = sprmSNLnnMod;
                 break;
             case 155:
-                opcode.value = sprmSDxaLnn;
+                opcodeValue = sprmSDxaLnn;
                 break;
             case 156:
-                opcode.value = sprmSDyaHdrTop;
+                opcodeValue = sprmSDyaHdrTop;
                 break;
             case 157:
-                opcode.value = sprmSDyaHdrBottom;
+                opcodeValue = sprmSDyaHdrBottom;
                 break;
             case 158:
-                opcode.value = sprmSLBetween;
+                opcodeValue = sprmSLBetween;
                 break;
             case 159:
-                opcode.value = sprmSVjc;
+                opcodeValue = sprmSVjc;
                 break;
             case 160:
-                opcode.value = sprmSLnnMin;
+                opcodeValue = sprmSLnnMin;
                 break;
             case 161:
-                opcode.value = sprmSPgnStart;
+                opcodeValue = sprmSPgnStart;
                 break;
             case 162:
-                opcode.value = sprmSBOrientation;
+                opcodeValue = sprmSBOrientation;
                 break;
             case 163:
-                opcode.value = sprmSBCustomize;
+                opcodeValue = sprmSBCustomize;
                 break;
             case 164:
-                opcode.value = sprmSXaPage;
+                opcodeValue = sprmSXaPage;
                 break;
             case 165:
-                opcode.value = sprmSYaPage;
+                opcodeValue = sprmSYaPage;
                 break;
             case 166:
-                opcode.value = sprmSDxaLeft;
+                opcodeValue = sprmSDxaLeft;
                 break;
             case 167:
-                opcode.value = sprmSDxaRight;
+                opcodeValue = sprmSDxaRight;
                 break;
             case 168:
-                opcode.value = sprmSDyaTop;
+                opcodeValue = sprmSDyaTop;
                 break;
             case 169:
-                opcode.value = sprmSDyaBottom;
+                opcodeValue = sprmSDyaBottom;
                 break;
             case 170:
-                opcode.value = sprmSDzaGutter;
+                opcodeValue = sprmSDzaGutter;
                 break;
             case 171:
-                opcode.value = sprmSDmPaperReq;
+                opcodeValue = sprmSDmPaperReq;
                 break;
             case 182:
-                opcode.value = sprmTJc;
+                opcodeValue = sprmTJc;
                 break;
             case 183:
-                opcode.value = sprmTDxaLeft;
+                opcodeValue = sprmTDxaLeft;
                 break;
             case 184:
-                opcode.value = sprmTDxaGapHalf;
+                opcodeValue = sprmTDxaGapHalf;
                 break;
             case 185:
-                opcode.value = sprmTFCantSplit;
+                opcodeValue = sprmTFCantSplit;
                 break;
             case 186:
-                opcode.value = sprmTTableHeader;
+                opcodeValue = sprmTTableHeader;
                 break;
             case 187:
-                opcode.value = sprmTTableBorders;
+                opcodeValue = sprmTTableBorders;
                 break;
             case 188:
-                opcode.value = sprmTDefTable10;
+                opcodeValue = sprmTDefTable10;
                 break;
             case 189:
-                opcode.value = sprmTDyaRowHeight;
+                opcodeValue = sprmTDyaRowHeight;
                 break;
             case 190:
-                opcode.value = sprmTDefTable;
+                opcodeValue = sprmTDefTable;
                 break;
             case 191:
-                opcode.value = sprmTDefTableShd;
+                opcodeValue = sprmTDefTableShd;
                 break;
             case 192:
-                opcode.value = sprmTTlp;
+                opcodeValue = sprmTTlp;
                 break;
             case 193:
-                opcode.value = sprmTSetBrc;
+                opcodeValue = sprmTSetBrc;
                 break;
             case 194:
-                opcode.value = sprmTInsert;
+                opcodeValue = sprmTInsert;
                 break;
             case 195:
-                opcode.value = sprmTDelete;
+                opcodeValue = sprmTDelete;
                 break;
             case 196:
-                opcode.value = sprmTDxaCol;
+                opcodeValue = sprmTDxaCol;
                 break;
             case 197:
-                opcode.value = sprmTMerge;
+                opcodeValue = sprmTMerge;
                 break;
             case 198:
-                opcode.value = sprmTSplit;
+                opcodeValue = sprmTSplit;
                 break;
             case 199:
-                opcode.value = sprmTSetBrc10;
+                opcodeValue = sprmTSetBrc10;
                 break;
             case 200:
-                opcode.value = sprmTSetShd;
+                opcodeValue = sprmTSetShd;
                 break;
             default:
-                opcode.value = sprm;
+                opcodeValue = sprm;
             }
         }
-        operandSize = operandSizes[opcode.bits.spra];
+
+        // Convert the opcode into its bitsfiled equivalent in an endian-safe
+        // manner.
+
+        opcodeBits.ispmd = opcodeValue >> 0;
+        opcodeBits.fSpec = opcodeValue >> 9;
+        opcodeBits.sgc = opcodeValue >> 10;
+        opcodeBits.spra = opcodeValue >> 13;
+        operandSize = operandSizes[opcodeBits.spra];
         if (!operandSize)
         {
             MsWord::U8 t8;
@@ -807,7 +812,7 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
 
             // Get length of variable size operand.
 
-            switch (opcode.value)
+            switch (opcodeValue)
             {
             case sprmPChgTabs:
                 bytes += MsWordGenerated::read(in + bytes, &t8);
@@ -831,43 +836,43 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
 
         MsWord::U8 tmp;
 
-        //kdDebug(s_area) << "Paragraph::apply: opcode:" << opcode.value << endl;
-        switch (opcode.value)
+        //kdDebug(s_area) << "Paragraph::apply: opcode:" << opcodeValue << endl;
+        switch (opcodeValue)
         {
         case sprmPJc: // 0x2403
             MsWordGenerated::read(in + bytes, &m_pap.jc);
             break;
         case sprmPFSideBySide: // 0x2404
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fSideBySide = tmp;
+            m_pap.fSideBySide = tmp == 1;
             break;
         case sprmPFKeep:
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fKeep = tmp;
+            m_pap.fKeep = tmp == 1;
             break;
         case sprmPFKeepFollow:
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fKeepFollow = tmp;
+            m_pap.fKeepFollow = tmp == 1;
             break;
         case sprmPFPageBreakBefore: // 0x2407
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fPageBreakBefore = tmp;
+            m_pap.fPageBreakBefore = tmp == 1;
             break;
         case sprmPFInTable: // 0x2416
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fInTable = tmp;
+            m_pap.fInTable = tmp == 1;
             break;
         case sprmPFTtp: // 0x2417
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fTtp = tmp;
+            m_pap.fTtp = tmp == 1;
             break;
         case sprmPFLocked: // 0x2430
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fLocked = tmp;
+            m_pap.fLocked = tmp == 1;
             break;
         case sprmPFWidowControl: // 0x2431
             MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fWidowControl = tmp;
+            m_pap.fWidowControl = tmp == 1;
             break;
         case sprmPIlvl: // 0x260a
             MsWordGenerated::read(in + bytes, &m_pap.ilvl);
@@ -969,13 +974,13 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         default:
             if (!(m_document.m_fib.nFib > MsWord::s_maxWord6Version) &&
                 (bytes == count) &&
-                (opcode.value == 0))
+                (opcodeValue == 0))
             {
                 // The last byte of a Word6 grpprl can be a zero padding byte.
             }
             else
             {
-                kdWarning(MsWord::s_area) << "Paragraph::apply: unsupported opcode:" << opcode.value << endl;
+                kdWarning(MsWord::s_area) << "Paragraph::apply: unsupported opcode:" << opcodeValue << endl;
             }
             break;
         }
@@ -1079,28 +1084,51 @@ void Paragraph::apply(MsWord::PHE &layout)
 
 void Paragraph::apply(MsWord::STD &style)
 {
-    if (style.sgc != 1)
-    {
-        kdError(MsWord::s_area) << "Paragraph::apply: not a paragraph style: " << style.sgc << endl;
-        return;
-    }
-
     const MsWord::U8 *grpprl;
     MsWord::U16 cbUpx;
-
-    // Align to an even-byte position.
+    unsigned cupx = style.cupx;
 
     grpprl = style.grupx;
-    if ((int)grpprl & 1)
-        grpprl++;
-    grpprl += MsWordGenerated::read(grpprl, &cbUpx);
+    if (style.sgc == 1)
+    {
+        // Align to an even-byte position.
 
-    // Record the style index.
+        if ((int)grpprl & 1)
+            grpprl++;
+        grpprl += MsWordGenerated::read(grpprl, &cbUpx);
+        if (cbUpx)
+        {
+            // Record the style index.
 
-    grpprl += MsWordGenerated::read(grpprl, &m_pap.istd);
+            grpprl += MsWordGenerated::read(grpprl, &m_pap.istd);
 
-    // Build the base PAP then walk the grpprl.
+            // Build the base PAP then walk the grpprl.
 
-    apply(m_pap.istd);
-    apply(grpprl, cbUpx - 2);
+            apply(m_pap.istd);
+            apply(grpprl, cbUpx - 2);
+            grpprl += cbUpx - 2;
+        }
+        cupx--;
+    }
+    if ((style.sgc == 1) ||
+        (style.sgc == 2))
+    {
+        // Align to an even-byte position.
+
+        if ((int)grpprl & 1)
+            grpprl++;
+        grpprl += MsWordGenerated::read(grpprl, &cbUpx);
+        if (cbUpx)
+        {
+            // Apply the grpprl to the base CHP.
+            //apply(grpprl + 1, cbUpx - 1);
+            grpprl += cbUpx;
+        }
+        cupx--;
+    }
+
+    // If things went unexpectedly wrong...
+
+    if (cupx != 0)
+        kdError(MsWord::s_area) << "Paragraph::apply: unexpected cupx: " << style.cupx << endl;
 }
