@@ -187,6 +187,23 @@ void KPrPage::pasteObjs( const QByteArray & data )
     m_doc->setModified(true);
 }
 
+KPTextObject * KPrPage::textFrameSet ( unsigned int _num)
+{
+    int i=0;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType()==OT_TEXT)
+        {
+            if(i==_num)
+                return static_cast<KPTextObject*>(it.current());
+            i++;
+        }
+    }
+    return 0L;
+
+}
+
 int KPrPage::numSelected() const
 {
     int num = 0;
@@ -195,6 +212,20 @@ int KPrPage::numSelected() const
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
+            num++;
+    }
+
+    return num;
+}
+
+int KPrPage::numTextObject() const
+{
+    int num = 0;
+
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType()==OT_TEXT)
             num++;
     }
 

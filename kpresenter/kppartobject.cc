@@ -220,7 +220,6 @@ void KPPartObject::deactivate()
 /*================================================================*/
 QDomDocumentFragment KPPartObject::save( QDomDocument& doc, int offset )
 {
-    // ### FIXME
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement("EFFECTS");
     elem.setAttribute("effect", static_cast<int>( effect ));

@@ -20,6 +20,7 @@
 #include "KPresenterPageIface.h"
 
 #include "kprpage.h"
+#include "kptextobject.h"
 #include "kpresenter_view.h"
 #include "kpbackground.h"
 #include <kapplication.h>
@@ -32,13 +33,28 @@ KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
    m_page = _page;
 }
 
-DCOPRef KPresenterPageIface::getObject( int num )
+DCOPRef KPresenterPageIface::textObject( int num )
+{
+    KPTextObject * textObj=m_page->textFrameSet(num);
+    if(textObj)
+        return DCOPRef( kapp->dcopClient()->appId(),
+                        textObj->dcopObject()->objId() );
+    return DCOPRef();
+}
+
+int KPresenterPageIface::numTextObject() const
+{
+    return m_page->numTextObject();
+}
+
+
+DCOPRef KPresenterPageIface::object( int num )
 {
     return DCOPRef( kapp->dcopClient()->appId(),
 		    m_page->getObject(num)->dcopObject()->objId() );
 }
 
-QString KPresenterPageIface::getManualTitle()const
+QString KPresenterPageIface::manualTitle()const
 {
     return m_page->getManualTitle();
 }
@@ -60,7 +76,7 @@ void KPresenterPageIface::setNoteText( const QString &_text )
     m_page->setNoteText(_text);
 }
 
-QString KPresenterPageIface::getNoteText( )const
+QString KPresenterPageIface::noteText( )const
 {
     return m_page->getNoteText();
 }

@@ -35,6 +35,7 @@ class KoPageLayout;
 class KCommand;
 class KoPointArray;
 class DCOPObject;
+class KPTextObject;
 
 class KPrPage
 {
@@ -77,6 +78,9 @@ public:
     }
 
     unsigned int objNums() const { return m_objectList.count(); }
+
+    int numTextObject() const;
+    KPTextObject *textFrameSet ( unsigned int _num);
 
     void deleteObjs( bool _add=true );
     int numSelected() const;

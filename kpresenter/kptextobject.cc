@@ -41,6 +41,8 @@
 #include <kotextformatter.h>
 #include <kotextformat.h>
 #include <kozoomhandler.h>
+#include "KPTextViewIface.h"
+#include "KPTextObjectIface.h"
 
 #include <qfont.h>
 
@@ -99,6 +101,8 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     : KP2DObject()
 {
     m_doc=doc;
+    dcop=0;
+    //dcopObject(); // build it
 
     KPrTextDocument * textdoc = new KPrTextDocument( this ,
                                                      new KoTextFormatCollection( doc->defaultFont() ));
@@ -127,7 +131,17 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
 KPTextObject::~KPTextObject()
 {
+    delete dcop;
 }
+
+DCOPObject* KPTextObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPTextObjectIface( this );
+
+    return dcop;
+}
+
 
 QBrush KPTextObject::getBrush() const
 {
@@ -1020,6 +1034,15 @@ KPTextView::~KPTextView()
     }
 #endif
 }
+
+KoTextViewIface* KPTextView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPTextViewIface( this );
+
+    return dcop;
+}
+
 
 void KPTextView::terminate()
 {

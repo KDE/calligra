@@ -34,14 +34,19 @@ public:
     KPresenterPageIface( KPrPage *_page );
 
 k_dcop:
-    virtual DCOPRef getObject( int num );
+    virtual DCOPRef object( int num );
 
-    virtual QString getManualTitle()const;
+    virtual DCOPRef textObject( int num );
+
+    virtual int numTextObject() const;
+
+
+    virtual QString manualTitle()const;
     virtual void insertManualTitle(const QString & title);
     virtual QString pageTitle( const QString &_title ) const;
 
     virtual void setNoteText( const QString &_text );
-    virtual QString getNoteText( )const;
+    virtual QString noteText( )const;
 
     virtual unsigned int objNums() const;
     virtual int numSelected() const;

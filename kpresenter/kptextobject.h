@@ -40,6 +40,7 @@ class KoPoint;
 class KoVariable;
 class KPrTextDrag;
 class KPrTextDocument;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -51,6 +52,8 @@ class KPTextObject :  public QObject, public KP2DObject
 public:
     KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject();
+
+    virtual DCOPObject* dcopObject();
 
     virtual void setSize( double _width, double _height );
     virtual void resizeBy( double _dx, double _dy );
@@ -147,6 +150,7 @@ private:
     KPresenterDoc *m_doc;
     bool drawEditRect, drawEmpty;
     KoParagLayout m_paragLayout;
+    DCOPObject *dcop;
 };
 
 
@@ -156,6 +160,9 @@ Q_OBJECT
 public:
     KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas );
     virtual ~KPTextView();
+
+    virtual KoTextViewIface* dcopObject();
+
     KoTextView * textView() { return this; }
     KPTextObject * kpTextObject() { return m_kptextobj; }
 
