@@ -568,7 +568,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   else if ( xpos > maxX )
   {
     double horzScrollBarValue = xOffset() + xpos - maxX;
-    double horzScrollBarValueMax = table->sizeMaxX() - width();
+    double horzScrollBarValueMax = table->sizeMaxX() * zoom() - width();
 
     //We don't want to display any area > KS_colMax widths
     if ( horzScrollBarValue > horzScrollBarValueMax )
@@ -585,7 +585,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   else if ( ypos > maxY )
   {
     double vertScrollBarValue = yOffset() + ypos - maxY;
-    double vertScrollBarValueMax = table->sizeMaxY() - height();
+    double vertScrollBarValueMax = table->sizeMaxY() * zoom() - height();
 
     //We don't want to display any area > KS_rowMax heights
     if ( vertScrollBarValue > vertScrollBarValueMax )
@@ -679,7 +679,7 @@ void KSpreadCanvas::slotMaxColumn( int _max_column )
   double xpos = activeTable()->dblColumnPos( QMIN( KS_colMax, _max_column + 10 ), this );
 
   //Don't go beyond the maximum column range (KS_colMax)
-  double sizeMaxX = activeTable()->sizeMaxX();
+  double sizeMaxX = activeTable()->sizeMaxX() * zoom();
   if ( xpos > sizeMaxX - xOffset() - width() )
     xpos = sizeMaxX - xOffset() - width();
 
@@ -691,7 +691,7 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
   double ypos = activeTable()->dblRowPos( QMIN( KS_rowMax, _max_row + 10 ), this );
 
   //Don't go beyond the maximum row range (KS_rowMax)
-  double sizeMaxY = activeTable()->sizeMaxY();
+  double sizeMaxY = activeTable()->sizeMaxY() * zoom();
   if ( ypos > sizeMaxY - yOffset() - height() )
     ypos = sizeMaxY - yOffset() - height();
 
