@@ -31,7 +31,6 @@ public:
     KPresenterShell( QWidget* parent = 0, const char* name = 0 );
     ~KPresenterShell();
 
-    QString nativeFormatMimeType() const { return "application/x-kpresenter"; }
     QString nativeFormatPattern() const { return "*.kpr"; }
     QString nativeFormatName() const { return "KPresenter"; }
 

@@ -29,7 +29,6 @@ public:
     KSpreadShell( QWidget* parent = 0, const char* name = 0 );
     ~KSpreadShell();
 
-    QString nativeFormatMimeType() const { return "application/x-kspread"; }
     QString nativeFormatPattern() const { return "*.ksp"; }
     QString nativeFormatName() const { return "KSpread"; }
 

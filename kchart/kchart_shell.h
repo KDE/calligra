@@ -32,7 +32,6 @@ public:
     /**
      * Change these according to your native mimetype.
      */
-    QString nativeFormatMimeType() const { return "application/x-kchart"; }
     QString nativeFormatPattern() const { return "*.chrt"; }
     QString nativeFormatName() const { return "KChart"; }
 

@@ -50,7 +50,6 @@ public:
 */  
   virtual QString configFile() const;
 
-  virtual QString nativeFormatMimeType() const { return QString::null; }
   virtual QString nativeFormatPattern() const { return QString::null; }
   virtual QString nativeFormatName() const { return QString::null; }
   

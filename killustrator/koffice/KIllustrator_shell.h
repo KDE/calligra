@@ -29,7 +29,6 @@ public:
     KIllustratorShell( QWidget* parent = 0, const char* name = 0 );
     ~KIllustratorShell();
 
-    QString nativeFormatMimeType() const { return "application/x-killustrator"; }
     QString nativeFormatPattern() const { return "*.kil"; }
     QString nativeFormatName() const { return "killustrator"; }
 

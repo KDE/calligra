@@ -32,7 +32,6 @@ public:
     /**
      * Change these according to your native mimetype.
      */
-    QString nativeFormatMimeType() const { return "application/x-example"; }
     QString nativeFormatPattern() const { return "*.xmpl"; }
     QString nativeFormatName() const { return "Example"; }
 

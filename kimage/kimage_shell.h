@@ -33,7 +33,6 @@ public:
   /**
    * Change these according to your native mimetype.
    */
-  QString nativeFormatMimeType() const { return "application/x-kimage"; }
   QString nativeFormatPattern() const { return "*.kim"; }
   QString nativeFormatName() const { return "KImage"; }
 

@@ -33,7 +33,6 @@ public:
     /**
      * Change these according to your native mimetype.
      */
-    QString nativeFormatMimeType() const { return "application/x-kimageshop"; }
     QString nativeFormatPattern() const { return "*.kis"; }
     QString nativeFormatName() const { return "KImageShop"; }
 

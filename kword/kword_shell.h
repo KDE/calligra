@@ -35,7 +35,6 @@ public:
     KWordShell( QWidget* parent = 0, const char* name = 0 );
     ~KWordShell();
 
-    QString nativeFormatMimeType() const { return "application/x-kword"; }
     QString nativeFormatPattern() const { return "*.kwd"; }
     QString nativeFormatName() const { return "KWord"; }
 
