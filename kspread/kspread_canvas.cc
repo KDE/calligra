@@ -745,8 +745,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     m_strAnchor = anchor;
   }
 
-  if( selectionHandle.contains( QPoint( doc()->zoomItX( ev_PosX ), 
-                                        doc()->zoomItY( ev_PosY ) ) ) )
+  if( selectionHandle.contains( QPoint( doc()->zoomItX( ev_PosX + xOffset() ), 
+                                        doc()->zoomItY( ev_PosY + yOffset() ) ) ) )
     setCursor( sizeFDiagCursor );
   else if ( !m_strAnchor.isEmpty() )
     setCursor( KCursor::handCursor() );
