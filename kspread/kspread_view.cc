@@ -1725,7 +1725,6 @@ void KSpreadView::initView()
       this, SLOT( popupTabBarMenu( const QPoint& ) ) );
     QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
       this, SLOT( slotRename() ) );
-
       
     d->viewLayout->setColStretch( 1, 10 );  
     d->viewLayout->setRowStretch( 2, 10 );  
@@ -3606,20 +3605,19 @@ void KSpreadView::sheetProperties()
 
     if( dlg->exec() )
     {
-        d->activeSheet->setLayoutDirection( dlg->layoutDirection() );
-        d->activeSheet->setAutoCalc( dlg->autoCalc() );
-        d->activeSheet->setShowGrid( dlg->showGrid() );
-        d->activeSheet->setShowPageBorders( dlg->showPageBorders() );
-        d->activeSheet->setShowFormula( dlg->showFormula() );
-        d->activeSheet->setHideZero( dlg->hideZero() );
-        d->activeSheet->setShowFormulaIndicator( dlg->showFormulaIndicator() );
-        d->activeSheet->setShowColumnNumber( dlg->columnAsNumber() );
-        d->activeSheet->setLcMode( dlg->lcMode() );
-        d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );
-
-        d->doc->addDamage( new SheetDamage( d->activeSheet, SheetDamage::PropertiesChanged ) );
-
-        // FIXME create command & undo object
+        SheetPropertiesCommand* command = new SheetPropertiesCommand( d->doc, d->activeSheet );
+        command->setLayoutDirection( dlg->layoutDirection() );
+        command->setAutoCalc( dlg->autoCalc() );
+        command->setShowGrid( dlg->showGrid() );
+        command->setShowPageBorders( dlg->showPageBorders() );
+        command->setShowFormula( dlg->showFormula() );
+        command->setHideZero( dlg->hideZero() );
+        command->setShowFormulaIndicator( dlg->showFormulaIndicator() );
+        command->setColumnAsNumber( dlg->columnAsNumber() );
+        command->setLcMode( dlg->lcMode() );
+        command->setCapitalizeFirstLetter( dlg->capitalizeFirstLetter() );
+        d->doc->addCommand( command );
+        command->execute();
     }
 
     delete dlg;
@@ -6649,6 +6647,9 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
                     b = damagedSheet->nextCellBinding() )
                         b->cellChanged( 0 );
 
+                d->activeSheet->setRegionPaintDirty( QRect(QPoint(0,0), 
+                    QPoint(KS_colMax, KS_rowMax)));
+                    
                 paintUpdates();
                 refreshView();
             }
