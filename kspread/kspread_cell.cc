@@ -5327,7 +5327,97 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     QDomElement element = table()->doc()->loadingInfo()->validation( validationName);
     d->extra()->validity = new KSpreadValidity;
     if ( element.hasAttribute( "table:condition" ) )
-        kdDebug()<<" element.attribute( table:condition ) "<<element.attribute( "table:condition" )<<endl;
+    {
+        QString valExpression = element.attribute( "table:condition" );
+        kdDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
+        //TrueCondition ::= GetFunction | cell-content() Operator Value
+        //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+        //ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        //Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
+        //Value ::= NumberValue | String | Formula
+        //A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for more information.
+        //A String comprises one or more characters surrounded by quotation marks.
+        //A NumberValue is a whole or decimal number. It must not contain comma separators for numbers of 1000 or greater.
+
+        //ExtendedTrueCondition
+        if ( valExpression.contains( "cell-content-text-length()" ) )
+        {
+            //"cell-content-text-length()>45"
+            valExpression = valExpression.remove("cell-content-text-length()" );
+            kdDebug()<<" valExpression = :"<<valExpression<<endl;
+            d->extra()->validity->m_allow = Allow_TextLength;
+            if ( valExpression.contains( "<" ) )
+            {
+                QString value = valExpression.remove( "<" );
+                kdDebug()<<" value :"<<value<<endl;
+                d->extra()->validity->m_cond = Inferior;
+                d->extra()->validity->valMin = value.toDouble();
+            }
+            else if(valExpression.contains( ">" ) )
+            {
+                QString value = valExpression.remove( ">" );
+                kdDebug()<<" value :"<<value<<endl;
+                d->extra()->validity->m_cond = Superior;
+                d->extra()->validity->valMin = value.toDouble();
+            }
+            else if (valExpression.contains( "<=" ) )
+            {
+                QString value = valExpression.remove( "<=" );
+                kdDebug()<<" value :"<<value<<endl;
+                d->extra()->validity->m_cond = InferiorEqual;
+                d->extra()->validity->valMin = value.toDouble();
+            }
+            else if (valExpression.contains( ">=" ) )
+            {
+                QString value = valExpression.remove( ">=" );
+                kdDebug()<<" value :"<<value<<endl;
+                d->extra()->validity->m_cond = SuperiorEqual;
+                d->extra()->validity->valMin = value.toDouble();
+            }
+            else if (valExpression.contains( "=" ) )
+            {
+                QString value = valExpression.remove( "=" );
+                kdDebug()<<" value :"<<value<<endl;
+                d->extra()->validity->m_cond = Equal;
+                d->extra()->validity->valMin = value.toDouble();
+            }
+            else if (valExpression.contains( "!=" ) )
+            {
+                //not implemented into kspread !!!!!!!!!!!!
+                QString value = valExpression.remove( "!=" );
+                kdDebug()<<" value :"<<value<<endl;
+                d->extra()->validity->m_cond = Different;
+                d->extra()->validity->valMin = value.toDouble();
+            }
+            else
+                kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+        }
+        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
+        {
+            d->extra()->validity->m_cond = Between;
+            valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            QStringList listVal = QStringList::split( valExpression, "," );
+            d->extra()->validity->valMin = listVal[0].toDouble();
+            d->extra()->validity->valMax = listVal[1].toDouble();
+
+        }
+        else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
+        {
+            d->extra()->validity->m_cond = Different;
+            valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            QStringList listVal = QStringList::split( valExpression, "," );
+            d->extra()->validity->valMin = listVal[0].toDouble();
+            d->extra()->validity->valMax = listVal[1].toDouble();
+        }
+    }
     if ( element.hasAttribute( "table:allow-empty-cell" ) )
     {
         //todo implement it into kspread
