@@ -13,6 +13,7 @@ $currentText="";
 $currentTextType=0;
 while (<INPUT>)
 {
+  study;  # This speeds up the whole RE stuff because Perl creates some hash for the string
   if (/<DOC/)
     {
       # store the url because this is a prart of the "path" for the images
@@ -93,7 +94,7 @@ while (<INPUT>)
 	  s/\/>//;
 	  chomp;
 	  # Append all attributes
-	  $currentText = $currentText . $_;
+	  $currentText .= $_;  # the same as $currentText = $currentText . $_, but faster
 	}
       elsif (/<COLOR/ && !$currentTextType) # normal text
 	{
@@ -101,7 +102,7 @@ while (<INPUT>)
 	  $green=$1 if (m/green=\"([0-9]+)\"/);
 	  $blue=$1 if (m/blue=\"([0-9]+)\"/);
 	  # Convert color to HTML representation
-	  $currentText = $currentText . sprintf(" color=\"#%02x%02x%02x\"", $red, $green, $blue );
+	  $currentText .= sprintf(" color=\"#%02x%02x%02x\"", $red, $green, $blue );
 	}
       elsif (m/<TEXT>(.*)<\/TEXT>/)
 	{
@@ -117,9 +118,9 @@ while (<INPUT>)
 		      # Replace & by &amp; but only if not in an entity
 		      s/\&/\&amp;/g;
 		    }
-		  $text = $text . $_;
+		  $text .= $_;
 		}
-	      $currentText = $currentText . ">" . $text;
+	      $currentText .= ">" . $text;
 	    }
 	  else
 	    {
@@ -141,6 +142,7 @@ while (<INPUT>)
         {
           # Okay - plain old kpresenter magic...
           $key=$1;
+          study($key); # should be faster ;)
           # Note: The .*? is needed because it would be too greedy otherwise
           $filename=$1 if($key =~ /filename=\"(.*?)\"/);
           # Get the values - really straightforward
