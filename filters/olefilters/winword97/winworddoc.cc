@@ -194,7 +194,7 @@ const bool WinWordDoc::convert()
         }
         newstr.append(m_body);
         newstr.append(
-            "  </FRAMESETS>\n");
+            " </FRAMESETS>\n");
 
         // Do we have any images?
 
@@ -306,7 +306,6 @@ void WinWordDoc::generateFormats(Attributes &attributes)
                     image->type,
                     image->length,
                     image->data);
-kdError() << "found picture:" << ourKey<< " as " << uid << endl;
 
             formats.append("<FORMAT id=\"2\" pos=\"");
             formats.append(QString::number(image->start));
@@ -331,21 +330,18 @@ kdError() << "found picture:" << ourKey<< " as " << uid << endl;
             QString ourKey;
             QString uid;
             QString mimeType;
+            QString filterArgs;
 
             // Send the picture to the outside world and get back the UID.
 
             ourKey = "vectorGraphic" + QString::number(vectorGraphic->id) + "." + vectorGraphic->type;
-    QString filterArgs;
-//    KTempFile delayFile(QString::null, "." + vectorGraphic->type);
-
-//    delayFile.file()->writeBlock((const char *)vectorGraphic->delay, vectorGraphic->delayLength);
-//    delayFile.close();
-    filterArgs = "shape-id=";
-    filterArgs += QString::number(vectorGraphic->id);
-    filterArgs += ";delay-stream=";
-    filterArgs += QString::number((unsigned long)vectorGraphic->delay);
-kdDebug() << "WinWordDoc: IMPORT MSOD: " << filterArgs << endl;
-
+            if (vectorGraphic->type == "msod")
+            {
+                filterArgs = "shape-id=";
+                filterArgs += QString::number(vectorGraphic->id);
+                filterArgs += ";delay-stream=";
+                filterArgs += QString::number((unsigned long)vectorGraphic->delay);
+            }
             emit signalSavePart(
                     ourKey,
                     uid,
@@ -354,8 +350,6 @@ kdDebug() << "WinWordDoc: IMPORT MSOD: " << filterArgs << endl;
                     filterArgs,
                     vectorGraphic->length,
                     vectorGraphic->data);
-//    unlink(delayFile.name().local8Bit());
-kdDebug() << "WinWordDoc: **************saved:" <<mimeType<< endl;
 
             // Add an entry to the list of embedded objects too. TBD: fix
             // RECT and FRAME settings.
