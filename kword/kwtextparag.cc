@@ -353,6 +353,16 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->shadowText()) );
     }
+    if( !refFormat || curFormat->offsetFromBaseLine() != refFormat->offsetFromBaseLine())
+    {
+        if ( curFormat->offsetFromBaseLine() != 0)
+        {
+            elem = doc.createElement( "OFFSETFROMBASELINE" );
+            formatElem.appendChild( elem );
+            elem.setAttribute( "value", curFormat->offsetFromBaseLine() );
+        }
+    }
+
     return formatElem;
 }
 
@@ -590,6 +600,10 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "SHADOWTEXT" ).toElement();
     if ( !elem.isNull() )
         format.setShadowText( elem.attribute("value").toInt());
+
+    elem = formatElem.namedItem( "OFFSETFROMBASELINE" ).toElement();
+    if ( !elem.isNull() )
+        format.setOffsetFromBaseLine( elem.attribute("value").toInt());
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;

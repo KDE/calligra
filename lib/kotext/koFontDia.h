@@ -74,6 +74,8 @@ public:
     double getRelativeTextSize()const;
     void setRelativeTextSize(double _size);
 
+    int getOffsetFromBaseLine()const;
+    void setOffsetFromBaseLine(int _offset);
 
     int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
@@ -91,6 +93,7 @@ protected slots:
     void slotChangeStrikeOutType( int );
     void slotShadowClicked();
     void slotRelativeSizeChanged( int );
+    void slotOffsetFromBaseLineChanged( int );
 private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
@@ -130,6 +133,7 @@ public:
                KoTextFormat::StrikeOutLineType _strikeOutType,
                KoTextFormat::StrikeOutLineStyle _strikeOutLine,
                double _relativeSize,
+               int _offsetFromBaseLine,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
@@ -146,7 +150,7 @@ public:
     bool getShadowText()const{ return m_chooser->getShadowText();}
     double getRelativeTextSize()const{ return m_chooser->getRelativeTextSize();}
 
-
+    int getOffsetFromBaseLine() const {return m_chooser->getOffsetFromBaseLine();}
     int changedFlags() const { return m_chooser->changedFlags(); }
 
 protected slots:
@@ -171,6 +175,7 @@ private:
     KoTextFormat::StrikeOutLineType m_strikeOutType;
     bool m_shadowText;
     double m_relativeSize;
+    int m_offsetBaseLine;
 };
 
 #endif

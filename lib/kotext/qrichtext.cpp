@@ -6018,6 +6018,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setSpellCheckingLanguage(nf.spellCheckingLanguage());
     if( flags & KoTextFormat::ShadowText)
         setShadowText(nf.shadowText());
+    if( flags & KoTextFormat::OffsetFromBaseLine)
+        setOffsetFromBaseLine(nf.offsetFromBaseLine());
 
     //////
     update();

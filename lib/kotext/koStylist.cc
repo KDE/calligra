@@ -559,6 +559,8 @@ void KoStyleFontTab::update()
     m_chooser->setStrikeOutlineType(m_style->format().strikeOutLineType());
     m_chooser->setShadowText( m_style->format().shadowText());
     m_chooser->setRelativeTextSize( m_style->format().relativeTextSize());
+    m_chooser->setOffsetFromBaseLine( m_style->format().offsetFromBaseLine());
+
 }
 
 void KoStyleFontTab::save()
@@ -583,6 +585,7 @@ void KoStyleFontTab::save()
     m_style->format().setStrikeOutLineType (m_chooser->getStrikeOutLineType());
     m_style->format().setShadowText(m_chooser->getShadowText());
     m_style->format().setRelativeTextSize( m_chooser->getRelativeTextSize());
+    m_style->format().setOffsetFromBaseLine( m_chooser->getOffsetFromBaseLine());
 
 }
 

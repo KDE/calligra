@@ -559,6 +559,8 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
 
     if ( !lastFormat->shadowText() )
         element.setAttribute("shadowtext", false);
+    if ( lastFormat->offsetFromBaseLine()!=0 )
+        element.setAttribute( "offsetfrombaseline" , lastFormat->offsetFromBaseLine());
 }
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
@@ -856,6 +858,9 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         format.setShadowText( static_cast<int>(n.attribute("shadowtext").toInt() ) );
     if ( n.hasAttribute("relativetextsize") )
         format.setRelativeTextSize( n.attribute("relativetextsize").toDouble() ) ;
+    if ( n.hasAttribute("offsetfrombaseline") )
+        format.setOffsetFromBaseLine( static_cast<int>(n.attribute("offsetfrombaseline").toInt() ) );
+
 
     //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;
     return format;

@@ -41,6 +41,7 @@ public:
     QCheckBox *m_shadow;
     KIntNumInput *m_relativeSize;
     QLabel *m_lRelativeSize;
+    KIntNumInput *m_offsetBaseLine;
 };
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
@@ -91,6 +92,15 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     d->m_relativeSize-> setRange(1, 100, 1,false);
     d->m_relativeSize->setSuffix("%");
 
+    QLabel *lab = new QLabel ( i18n("Offset from baseline:"), grp);
+    grid->addWidget(lab,1,1);
+
+    d->m_offsetBaseLine= new KIntNumInput( grp );
+    grid->addWidget(d->m_offsetBaseLine,1,2);
+
+    d->m_relativeSize-> setRange(-9, 9, 1,false);
+    d->m_relativeSize->setSuffix("pt");
+
     if(!_withSubSuperScript)
     {
         m_subScript->setEnabled(false);
@@ -116,6 +126,11 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
 
     connect( m_chooseFont, SIGNAL( fontSelected( const QFont & )),
              this, SLOT( slotFontChanged(const QFont &) ) );
+
+    connect( d->m_relativeSize, SIGNAL( valueChanged(int) ), this, SLOT( slotRelativeSizeChanged( int )));
+    connect( d->m_offsetBaseLine, SIGNAL( valueChanged(int) ), this, SLOT( slotOffsetFromBaseLineChanged( int )));
+
+    updatePositionButton();
 
 }
 
@@ -183,8 +198,6 @@ void KoFontChooser::setupTab2()
     connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
-    connect( d->m_relativeSize, SIGNAL( valueChanged(int) ), this, SLOT( slotRelativeSizeChanged( int )));
-    updatePositionButton();
 }
 
 void KoFontChooser::updatePositionButton()
@@ -212,6 +225,16 @@ double KoFontChooser::getRelativeTextSize()const
 void KoFontChooser::setRelativeTextSize(double _size)
 {
     d->m_relativeSize->setValue( (int)(_size * 100) );
+}
+
+int KoFontChooser::getOffsetFromBaseLine()const
+{
+    return d->m_offsetBaseLine->value();
+}
+
+void KoFontChooser::setOffsetFromBaseLine(int _offset)
+{
+    d->m_offsetBaseLine->setValue( _offset );
 }
 
 void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
@@ -287,6 +310,11 @@ void KoFontChooser::slotSuperScriptClicked()
 void KoFontChooser::slotRelativeSizeChanged( int )
 {
    m_changedFlags |= KoTextFormat::VAlign;
+}
+
+void KoFontChooser::slotOffsetFromBaseLineChanged( int )
+{
+    m_changedFlags |= KoTextFormat::OffsetFromBaseLine;
 }
 
 void KoFontChooser::slotShadowClicked()
@@ -552,6 +580,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       KoTextFormat::StrikeOutLineType _strikeOutType,
                       KoTextFormat::StrikeOutLineStyle _strikeOutLine,
                       double _relativeSize,
+                      int _offsetFromBaseLine,
                       bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
@@ -566,7 +595,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_strikeOutLineStyle( _strikeOutLine ),
       m_strikeOutType( _strikeOutType),
       m_shadowText( _shadowText),
-      m_relativeSize( _relativeSize )
+      m_relativeSize( _relativeSize ),
+      m_offsetBaseLine( _offsetFromBaseLine)
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
@@ -602,6 +632,7 @@ void KoFontDia::slotReset()
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
     m_chooser->setShadowText( m_shadowText);
     m_chooser->setRelativeTextSize( m_relativeSize);
+    m_chooser->setOffsetFromBaseLine( m_offsetBaseLine );
     m_chooser->updatePositionButton();
 }
 

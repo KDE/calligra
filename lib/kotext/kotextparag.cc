@@ -546,7 +546,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
 	if ( lastFormat->vAlign() == KoTextFormat::AlignNormal ) {
-	    painter.drawText( startX, lastY + baseLine, str, start, len, dir );
+	    painter.drawText( startX, lastY + baseLine - lastFormat->offsetFromBaseLine(), str, start, len, dir );
 #ifdef BIDI_DEBUG
 	    painter.save();
 	    painter.setPen ( Qt::red );
@@ -562,9 +562,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.restore();
 #endif
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
-	    painter.drawText( startX, lastY + baseLine - ( painter.fontMetrics().height() / 2 ), str, start, len, dir );
+	    painter.drawText( startX, lastY + baseLine - ( painter.fontMetrics().height() / 2 )-lastFormat->offsetFromBaseLine(), str, start, len, dir );
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSubScript ) {
-	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 ), str, start, len, dir );
+	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 )-lastFormat->offsetFromBaseLine(), str, start, len, dir );
 	}
     }
     if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {

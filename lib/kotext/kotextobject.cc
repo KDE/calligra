@@ -2244,7 +2244,7 @@ QString KoTextFormatInterface::spellCheckingLanguage() const
     return currentFormat()->spellCheckingLanguage();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2257,6 +2257,7 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setStrikeOutLineType ( _strikeOutType );
     format.setShadowText( _shadowText);
     format.setRelativeTextSize( _relativeTextSize);
+    format.setOffsetFromBaseLine( _offsetFromBaseLine);
     if(!_subscript)
     {
         if(!_superscript)
@@ -2330,7 +2331,7 @@ KCommand *KoTextFormatInterface::setRelativeTextSizeCommand( double _size )
     return setFormatCommand( &format, KoTextFormat::VAlign );
 }
 
-KCommand *KoTextFormatInterface::setOffsetFromBaseLine( int _offset )
+KCommand *KoTextFormatInterface::setOffsetFromBaseLineCommand( int _offset )
 {
     KoTextFormat format( *currentFormat() );
     format.setOffsetFromBaseLine( _offset );
