@@ -30,6 +30,9 @@
 namespace wvWare {
     class Style;
     class Parser;
+    namespace Word97 {
+        class PAP;
+    }
 }
 
 class KWordCharacterHandler : public wvWare::SpecialCharHandler
@@ -51,7 +54,7 @@ public:
     virtual void sectionStart();
     virtual void sectionEnd();
 
-    virtual void paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap );
+    virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );
     virtual void paragraphEnd();
     virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
 
@@ -75,7 +78,7 @@ private:
     int m_index;
     int m_sectionNumber;
     const wvWare::Style* m_paragStyle;
-    wvWare::SharedPtr<const wvWare::Word97::PAP> m_pap;
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     KWordCharacterHandler* m_charHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
 };
