@@ -92,6 +92,10 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
         stackItem->elementType = ElementTypeEmpty;
         return true;
     }
+    else if ( stackItem->elementType == ElementTypeIgnore )
+    {
+        return true;
+    }
     else
     {
         kdError(30520) << "Wrong parents for FORMAT property: " << name << endl;
@@ -102,7 +106,11 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
 bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem)
 {
     // ### TODO: check status
-    if ( m_currentLayout )
+    if ( stackItem->elementType == ElementTypeIgnore )
+    {
+        return true;
+    }
+    else if ( m_currentLayout )
     {
         for (int i = 0; i < attributes.count(); ++i )
         {
@@ -432,6 +440,12 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
          || ( name == "FOOTNOTESETTINGS" ) || ( name == "ENDNOTESETTINGS" ) )
     {
         success = startElementDocumentAttributes( name, attributes, stackItem, ElementTypeDocument, ElementTypeEmpty );
+    }
+    else if ( name == "FRAMESTYLE" )
+    {
+        // ### TODO, but some of the <STYLE> children are also children of <FRAMESTYLE>, so we have to set it to "ignore"
+        stackItem->elementType = ElementTypeIgnore;
+        success = true;
     }
     else
     {
