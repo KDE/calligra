@@ -1758,6 +1758,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         }
     }
 
+#if 0
     if(drawPreviewLines) {
         painter.setPen( minsizeLinePen );
         for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
@@ -1773,6 +1774,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             }
         }
     }
+#endif
 
     painter.restore();
 }
