@@ -19,11 +19,15 @@ Boston, MA 02111-1307, USA.
 
 #include <qvaluelist.h>
 #include <qvariant.h>
+#include <qtextedit.h>
 
 #include <qsinterpreter.h>
 #include <qsproject.h>
+#include <qseditor.h>
+
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koApplication.h>
 
@@ -38,7 +42,7 @@ KexiQSAHost::KexiQSAHost(KexiScriptHandler *parent, const char *name)
 	m_parent = parent;
 
 	m_project = QSInterpreter::defaultInterpreter()->project();
-//	m_project->open(QByteArray());
+
 //	m_project->open("/home/luci/db/kexi.qsa");
 	m_interpreter = QSInterpreter::defaultInterpreter();
 //	m_interpreter->setProject(m_project);
@@ -49,7 +53,14 @@ KexiQSAHost::KexiQSAHost(KexiScriptHandler *parent, const char *name)
 void
 KexiQSAHost::createFile(KexiView *view, const QString &name)
 {
-	KexiQSAEditor *editorView = new KexiQSAEditor(m_project, name, view, "editor");
+	if(scriptFiles().isEmpty())
+		m_project->open(QByteArray(), "kexi");
+
+	m_project->addSource(i18n("// code here!\n"), name + ".qs");
+
+	KexiQSAEditor *editorView = new KexiQSAEditor(m_project, name + ".qs", view, "editor");
+
+	editorView->editor()->textEdit()->setModified(true);
 	editorView->show();
 	m_editors.append(editorView);
 }
@@ -73,11 +84,14 @@ KexiQSAHost::scriptFiles() const
 bool
 KexiQSAHost::projectChanged()
 {
-	for(KexiQSAEditor *it = m_editors.first(); it; it = m_editors.next())
+	QPtrListIterator<QSEditor> it(*m_project->editors());
+
+	for(; it.current(); ++it)
 	{
-		if(it->changed())
+		if(it.current()->textEdit()->isModified())
 			return true;
 	}
+	return false;
 }
 
 
@@ -86,6 +100,7 @@ KexiQSAHost::projectChanged()
 QByteArray
 KexiQSAHost::getProjectData()
 {
+	kdDebug() << "KexiQSAHost::getProjectData() editors: " << m_project->editors()->count() << endl;
 	for(KexiQSAEditor *it = m_editors.first(); it; it = m_editors.next())
 	{
 		it->save();

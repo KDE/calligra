@@ -102,8 +102,8 @@ KexiScriptHandler::load(KoStore *store)
 		for(QStringList::Iterator it = files.begin(); it != files.end(); ++it)
 		{
 			kdDebug() << "KexiScriptHandler::load(): subfiles: " << *it << endl;
-			KexiProjectHandlerItem *i = new KexiProjectHandlerItem(this, (*it), "kexi/script", "kexi/form" + (*it));
-			items()->insert("kexi/form" + (*it), i);
+			KexiProjectHandlerItem *i = new KexiProjectHandlerItem(this, (*it), "kexi/script",(*it));
+			items()->insert("kexi/script/" + (*it), i);
 			emit itemListChanged(this);
 		}
 	}

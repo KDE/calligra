@@ -47,7 +47,7 @@ class KexiFormBase : public KexiDialogBase
 	public: 
 		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0, const QString &data=QString::null, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
-		
+
                 virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
@@ -63,6 +63,7 @@ class KexiFormBase : public KexiDialogBase
 		KexiDBWidgetContainer *topLevelEditor;
 		QString m_source;
 		KexiProject *m_project;
+		KexiFormHandlerItem *m_item;
 
 	protected slots:
 		void slotWidgetLabel();

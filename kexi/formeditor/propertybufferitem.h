@@ -29,6 +29,7 @@ class PropertyBufferItem
 {
 	public:
 		PropertyBufferItem(QObject *o, const QString &name, QVariant value);
+//		PropertyBufferItem();
 		~PropertyBufferItem();
 
 		QObject		*object() { return m_object; }

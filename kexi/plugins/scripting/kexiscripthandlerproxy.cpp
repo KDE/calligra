@@ -61,8 +61,8 @@ KexiScriptHandlerProxy::slotCreate()
 	QString name = KLineEditDlg::getText(i18n("New Code"), i18n("Sourcefile name:"), "", &ok, kexiView());
 	if(ok)
 	{
-		KexiProjectHandlerItem *i = new KexiProjectHandlerItem(part(), name + ".qs", "kexi/script", "kexi/form" + name);
-		part()->items()->insert(name, i);
+		KexiProjectHandlerItem *i = new KexiProjectHandlerItem(part(), name + ".qs", "kexi/script", name + ".qs");
+		part()->items()->insert("kexi/script/" + name + ".qs", i);
 		emit m_scriptHandler->itemListChanged(part());
 		m_host->createFile(kexiView(), name);
 	}
@@ -75,6 +75,7 @@ KexiScriptHandlerProxy::slotOpen(const QString &identifier)
 
 	KexiProjectHandlerItem *i = part()->items()->find(identifier);
 	kdDebug() << "KexiScriptHandlerProxy::slotOpen(): item: " << i << endl;
+//	kdDebug() << "KexiScriptHandlerProxy::slotOpen(): item: " << i->name() << endl;
 
 	if(i)
 		m_host->openFile(kexiView(), i->name());

@@ -20,20 +20,23 @@
 #include <qmetaobject.h>
 
 #include <kdebug.h>
+#include <klocale.h>
+#include <qheader.h>
 
 #include "eventeditoritem.h"
 #include "eventeditor.h"
 
-EventEditor::EventEditor(QWidget *parent, const char *name=0)
+EventEditor::EventEditor(QWidget *parent, const char *name)
  : PropertyEditor(parent, name)
 {
-
+	header()->setLabel(0, i18n("Event"));
+	header()->setLabel(1, i18n("Handler"));
 }
 
 void
 EventEditor::setObject(QObject *o)
 {
-	clear();
+	reset();
 
 	kdDebug() << "EventEditor::setObject()" << endl;
 
@@ -49,11 +52,13 @@ EventEditor::setObject(QObject *o)
 	}
 }
 
+/*
 void
 EventEditor::setReceivers(WidgetList *receivers)
 {
 
 }
+*/
 
 void
 EventEditor::appendFake(const QString &name, FakeHandler *h)

@@ -6,8 +6,6 @@ TODO:
 	+ gui
 	
 	+ project
-		- support for storing fileDB references in projectfile
-		- dbhandler ?
 
 	+ table
 	+ kexiDB
@@ -20,7 +18,6 @@ TODO:
 		- devide gui and meta
 
 	+ relationeditor
-		- store relations and sync views
 
 	+ general
 		- add from / to XML

@@ -22,6 +22,7 @@
 
 #include "propertybuffer.h"
 
+#include <qwidget.h>
 #include <qpixmap.h>
 
 /**
@@ -50,7 +51,7 @@ namespace KFormEditor
 			void addInteractive(QWidget *widget);
 			void registerSubContainer(WidgetContainer *cont);
 
-			void setWidgetList(WidgetList *wl);
+//			void setWidgetList(WidgetList *wl);
 			void setPropertyBuffer(PropertyBuffer *pb);
 
 			void setEditMode(bool e);
@@ -96,7 +97,7 @@ namespace KFormEditor
 
 		private:
 			QWidget		*m_pendingWidget;
-			WidgetList	*m_widgetList;
+//			WidgetList	*m_widgetList;
 			PropertyBuffer	*m_propertyBuffer;
 			bool		m_editing;
 

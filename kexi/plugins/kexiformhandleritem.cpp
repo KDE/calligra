@@ -21,12 +21,14 @@
 #include "kexiformhandler.h"
 #include "kexiformhandleritem.h"
 #include "kexiprojecthandler.h"
+#include "formeditor/widgetwatcher.h"
 
 KexiFormHandlerItem::KexiFormHandlerItem(KexiProjectHandler *parent, const QString &name, const QString &identifier)
  : KexiProjectHandlerItem(parent, name, "kexi/form", identifier)
 {
-	m_propertyBuffer = new PropertyBuffer();
-	m_widgetList = new WidgetList();
+	m_propertyBuffer = new PropertyBuffer(this, "pb");
+//	m_widgetList = new WidgetList();
+	m_widgetWatcher = new KFormEditor::WidgetWatcher(this);
 }
 
 KexiFormHandlerItem::~KexiFormHandlerItem()

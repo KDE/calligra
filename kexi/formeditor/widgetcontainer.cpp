@@ -63,7 +63,7 @@ namespace KFormEditor {
 		m_activeWidget=0;
 		m_activeMoveWidget=0;
 		m_resizeHandleSet=0;
-		m_widgetList = 0;
+//		m_widgetList = 0;
 		m_propertyBuffer = 0;
 
 		m_editing = true;
@@ -99,11 +99,6 @@ namespace KFormEditor {
 		{
 			m_pendingWidget=widget;
 			m_widgetRectRequested=true;
-
-			if(m_widgetList)
-			{
-				m_widgetList->append(widget);
-			}
 		}
 	}
 
@@ -446,7 +441,7 @@ namespace KFormEditor {
 		return false;
 	}
 
-	void WidgetContainer::setWidgetList(WidgetList *wl)
+/*	void WidgetContainer::setWidgetList(WidgetList *wl)
 	{
 		m_widgetList = wl;
 		WidgetContainer *c;
@@ -456,6 +451,7 @@ namespace KFormEditor {
 		}
 
 	}
+*/
 
 	void WidgetContainer::setPropertyBuffer(PropertyBuffer *pb)
 	{

@@ -61,7 +61,7 @@ class EventEditor : public PropertyEditor
 
 	public slots:
 		void	setObject(QObject *o);
-		void	setReceivers(WidgetList *receivers);
+//		void	setReceivers(WidgetList *receivers);
 
 	private:
 		Fakes	m_fakes;

@@ -57,6 +57,7 @@
 #include "formeditor/container_tabwidget.h"
 #include "formeditor/propertyeditor.h"
 #include "formeditor/eventeditor.h"
+#include "formeditor/widgetwatcher.h"
 
 #include "kexidbwidgetcontainer.h"
 #include "kexidbwidgets.h"
@@ -161,6 +162,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 
 	m_source = s;
 	m_project = view->project();
+	m_item = item;
 
 	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
 
@@ -172,7 +174,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);
 	topLevelEditor=new KexiDBWidgetContainer(this,"foo","bar");
-	topLevelEditor->setWidgetList(item->widgetList());
+//	topLevelEditor->setWidgetList(item->widgetList());
 	topLevelEditor->setPropertyBuffer(item->propertyBuffer());
 	topLevelEditor->setDataSource(s);
 
@@ -240,33 +242,45 @@ void KexiFormBase::deactivateActions()
 
 void KexiFormBase::slotWidgetLabel()
 {
-	topLevelEditor->addInteractive(new KexiDBLabel(topLevelEditor, "label"));
+	QWidget *w = new KexiDBLabel(topLevelEditor, "label");
+	w->setName(m_item->widgetWatcher()->genName("label").latin1());
+	topLevelEditor->addInteractive(w);
 }
 
 void KexiFormBase::slotWidgetLineEdit()
 {
 	kdDebug() << "add line edit widget at " << this << endl;
-	topLevelEditor->addInteractive(new KexiDBLineEdit(topLevelEditor));
+	KexiDBLineEdit *w = new KexiDBLineEdit(topLevelEditor);
+	w->setName(m_item->widgetWatcher()->genName("lineedit").latin1());
+	topLevelEditor->addInteractive(w);
 }
 
 void KexiFormBase::slotWidgetPushButton()
 {
-	topLevelEditor->addInteractive(new QPushButton(i18n("Push button"),topLevelEditor));
+	QPushButton *w = new QPushButton(i18n("Push button"), topLevelEditor);
+	w->setName(m_item->widgetWatcher()->genName("button").latin1());
+	topLevelEditor->addInteractive(w);
 }
 
 void KexiFormBase::slotWidgetFrame()
 {
-	topLevelEditor->addInteractive(new KFormEditor::container_Frame(topLevelEditor,"frame"));
+	QWidget *w = new KFormEditor::container_Frame(topLevelEditor,"frame");
+	w->setName(m_item->widgetWatcher()->genName("frame").latin1());
+	topLevelEditor->addInteractive(w);
 }
 
 void KexiFormBase::slotWidgetTabWidget()
 {
-	topLevelEditor->addInteractive(new KFormEditor::container_TabWidget(topLevelEditor,"tabwidget"));
+	QWidget *w = new KFormEditor::container_TabWidget(topLevelEditor,"tabwidget");
+	w->setName(m_item->widgetWatcher()->genName("tabwidget").latin1());
+	topLevelEditor->addInteractive(w);
 }
 
 void KexiFormBase::slotWidgetURLRequester()
 {
-	topLevelEditor->addInteractive(new KURLRequester("urlrequest",topLevelEditor));
+	QWidget *w = new KURLRequester("urlrequest",topLevelEditor);
+	w->setName(m_item->widgetWatcher()->genName("urlrequest").latin1());
+	topLevelEditor->addInteractive(w);
 }
 
 void KexiFormBase::slotToggleFormMode(bool state)
@@ -283,6 +297,8 @@ void KexiFormBase::slotToggleFormMode(bool state)
 
 void KexiFormBase::slotWidgetInserted(QObject *o)
 {
+	char *n = o->name();
+	m_item->widgetWatcher()->insert(n, o);
 	KexiProjectHandler *sh = m_project->handlerForMime("kexi/script");
 	if(sh)
 	{

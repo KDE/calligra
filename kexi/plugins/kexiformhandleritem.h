@@ -26,6 +26,11 @@
 class KexiFormHanlder;
 class KexiPrjeectHandler;
 
+namespace KFormEditor
+{
+	class WidgetWatcher;
+}
+
 class KexiFormHandlerItem : public KexiProjectHandlerItem
 {
 	Q_OBJECT
@@ -35,10 +40,12 @@ class KexiFormHandlerItem : public KexiProjectHandlerItem
 		~KexiFormHandlerItem();
 
 		PropertyBuffer	*propertyBuffer() { return m_propertyBuffer; }
-		WidgetList	*widgetList() { return m_widgetList; }
+//		WidgetList	*widgetList() { return m_widgetList; }
+		KFormEditor::WidgetWatcher	*widgetWatcher() { return m_widgetWatcher; }
 
 	private:
 		PropertyBuffer	*m_propertyBuffer;
-		WidgetList	*m_widgetList;
+//		WidgetList	*m_widgetList;
+		KFormEditor::WidgetWatcher	*m_widgetWatcher;
 };
 #endif

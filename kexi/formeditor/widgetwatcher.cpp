@@ -23,7 +23,7 @@ namespace KFormEditor {
 
 WidgetWatcher::WidgetWatcher(QObject *parent, const char *name)
  : QObject(parent, name),
-   QMap<char *, QWidget *>()
+   QMap<char *, QObject *>()
 {
 }
 

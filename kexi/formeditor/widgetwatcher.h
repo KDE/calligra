@@ -29,7 +29,7 @@ typedef QMap<QString, int> NameCounter;
 
 namespace KFormEditor
 {
-	class WidgetWatcher : public QObject, public QMap<char *, QWidget *>
+	class WidgetWatcher : public QObject, public QMap<char *, QObject *>
 	{
 		Q_OBJECT
 

@@ -36,6 +36,8 @@ class PropertyEditor : public KListView
 		PropertyEditor(QWidget *parent=0, const char *name=0);
 		~PropertyEditor();
 
+		void	reset();
+
 	public slots:
 		void	setObject(QObject *o);
 		void	slotClicked(QListViewItem *i);
@@ -44,6 +46,8 @@ class PropertyEditor : public KListView
 		void	slotEditorAccept(PropertyEditorEditor *editor);
 		void	slotEditorReject(PropertyEditorEditor *editor);
 		void	slotValueChanged(PropertyEditorEditor *editor);
+
+		void	slotColumnSizeChanged(int section, int oldS, int newS);
 
 	protected:
 		void	createEditor(PropertyEditorItem *i, const QRect &geometry);

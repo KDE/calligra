@@ -20,6 +20,7 @@
 #include <qstrlist.h>
 #include <qmetaobject.h>
 #include <qlineedit.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -41,17 +42,13 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
 	m_currentEditor = 0;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
+	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
 }
 
 void
 PropertyEditor::setObject(QObject *object)
 {
-	clear();
-	if(m_currentEditor)
-	{
-		delete m_currentEditor;
-		m_currentEditor = 0;
-	}
+	reset();
 
 	QStrList pList = object->metaObject()->propertyNames(true);
 
@@ -155,6 +152,33 @@ void
 PropertyEditor::slotEditorReject(PropertyEditorEditor *editor)
 {
 	editor->hide();
+}
+
+void
+PropertyEditor::slotColumnSizeChanged(int section, int, int newS)
+{
+	if(m_currentEditor)
+	{
+		if(section == 0)
+		{
+			m_currentEditor->move(newS, m_currentEditor->y());
+		}
+		else
+		{
+			m_currentEditor->resize(newS, m_currentEditor->height());
+		}
+	}
+}
+
+void
+PropertyEditor::reset()
+{
+	clear();
+	if(m_currentEditor)
+	{
+		delete m_currentEditor;
+		m_currentEditor = 0;
+	}
 }
 
 PropertyEditor::~PropertyEditor()

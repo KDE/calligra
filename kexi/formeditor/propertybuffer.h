@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -20,13 +20,25 @@
 #ifndef PROPERTYBUFFER_H
 #define PROPERTYBUFFER_H
 
-#include <qmap.h>
 #include <qptrlist.h>
-#include <qwidget.h>
+#include <qobject.h>
 
-#include "propertybufferitem.h"
+class PropertyBufferItem;
 
-typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
-typedef QPtrList<QWidget> WidgetList;
+//typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
+
+class PropertyBuffer : public QObject, public QPtrList<PropertyBufferItem>
+{
+	Q_OBJECT
+
+	public:
+		PropertyBuffer(QObject *parent, const char *name=0);
+		~PropertyBuffer();
+
+		void	changeProperty(QObject *o, const char *property, const QVariant &value);
+
+	signals:
+		void	propertyChanged(QObject *o, const char *property, const QVariant &value);
+};
 
 #endif

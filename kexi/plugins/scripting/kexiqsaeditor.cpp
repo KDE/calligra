@@ -28,13 +28,8 @@ KexiQSAEditor::KexiQSAEditor(QSProject *project, const QString &file, KexiView *
  : KexiDialogBase(view, 0, name)
 {
 	m_editor = new QSEditor(project, this, "embedded");
-	connect(m_editor, SIGNAL(textChanged()), this, SLOT(slotEditorChanged()));
-	m_changed = false;
-
-	m_project = project;
-	m_file = file;
-
 	m_editor->setSource(file);
+	setFocusProxy(m_editor);
 
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->addWidget(m_editor);
@@ -47,13 +42,6 @@ void
 KexiQSAEditor::save()
 {
 	m_editor->save();
-//	m_project->addSource(m_editor->text(), m_file);
-}
-
-void
-KexiQSAEditor::slotEditorChanged()
-{
-	m_changed = true;
 }
 
 KexiQSAEditor::~KexiQSAEditor()

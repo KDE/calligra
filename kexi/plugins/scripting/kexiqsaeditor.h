@@ -36,18 +36,10 @@ class KexiQSAEditor : public KexiDialogBase
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
 		void		save();
-
-		bool		changed() { return m_changed; }
 		QSEditor	*editor() { return m_editor; }
 
-	protected slots:
-		void		slotEditorChanged();
-
 	private:
-		bool		m_changed;
 		QSEditor	*m_editor;
-		QSProject	*m_project;
-		QString		m_file;
 };
 
 #endif
