@@ -329,7 +329,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         kdError(30003) << "KoPictureEps::load: could not find bounding box!" << endl;
         return false;
     }
-    QRegExp exp("([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)");
+    QRegExp exp("(\-?[0-9]+\\.?[0-9]*)\\s(\-?[0-9]+\\.?[0-9]*)\\s(\-?[0-9]+\\.?[0-9]*)\\s(\-?[0-9]+\\.?[0-9]*)");
     exp.search(lineBox);
     kdDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
     rect.setLeft((int)exp.cap(1).toDouble());
