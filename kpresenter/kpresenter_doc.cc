@@ -243,6 +243,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     saveOnlyPage = -1;
     m_maxRecentFiles = 10;
 
+    initConfig();
+
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
@@ -503,6 +505,20 @@ QDomDocument KPresenterDoc::saveXML()
     element.appendChild( saveHelpLines( doc ));
     presenter.appendChild(element);
 
+    if ( saveOnlyPage == -1 )
+    {
+        if( !m_spellListIgnoreAll.isEmpty() )
+        {
+            QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
+            presenter.appendChild( spellCheckIgnore );
+            for ( QStringList::Iterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+            {
+                QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
+                spellCheckIgnore.appendChild( spellElem );
+                spellElem.setAttribute( "word", *it );
+            }
+        }
+    }
 
     if ( saveOnlyPage == -1 )
         emit sigProgress( 20 );
@@ -862,7 +878,6 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     }
     if(_clean)
     {
-        initConfig();
         setModified(false);
         startBackgroundSpellCheck();
     }
@@ -896,7 +911,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     m_clipartMap = NULL;
     lastObj = -1;
     bool allSlides = false;
-
+    m_spellListIgnoreAll.clear();
     // clean
     if ( _clean ) {
         //KoPageLayout __pgLayout;
@@ -1070,6 +1085,18 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 loadHelpLines( elem );
             }
+        }else if( elem.tagName()=="SPELLCHECKIGNORELIST"){
+            QDomElement spellWord=elem.toElement();
+            spellWord=spellWord.firstChild().toElement();
+            while ( !spellWord.isNull() )
+            {
+                if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
+                {
+                    m_spellListIgnoreAll.append(spellWord.attribute("word"));
+                }
+                spellWord=spellWord.nextSibling().toElement();
+            }
+            m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
         }else if(elem.tagName()=="ATTRIBUTES") {
             if(elem.hasAttribute("activePage"))
                 activePage=elem.attribute("activePage").toInt();
