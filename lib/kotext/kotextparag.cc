@@ -30,6 +30,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <assert.h>
 
 //#define DEBUG_PAINT
@@ -2019,7 +2020,8 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
     if ( !whichFormattingChars )
         return;
     painter.save();
-    QPen pen( cg.color( QColorGroup::Highlight ) );
+    //QPen pen( cg.color( QColorGroup::Highlight ) );
+    QPen pen( KGlobalSettings::linkColor() ); // #101820
     painter.setPen( pen );
     //kdDebug() << "KWTextParag::drawFormattingChars start=" << start << " len=" << len << " length=" << length() << endl;
     if ( start + len == length() && ( whichFormattingChars & FormattingEndParag ) )
