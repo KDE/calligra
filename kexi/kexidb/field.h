@@ -31,6 +31,7 @@ namespace KexiDB {
 */
 
 class TableSchema;
+class FieldList;
 
 class KEXI_DB_EXPORT Field
 {
@@ -55,7 +56,11 @@ class KEXI_DB_EXPORT Field
 			LongText = 12,     /*! other name: Memo. More than 200 bytes*/
 			BLOB = 13,         /*! large binary object */
 
-			LastType = 14	//! This line should be at the end of the enum!
+			LastType = 15,     /*! This line should be at the end of the enum! */
+			
+			Asterisk = 128     /*! type used in QueryAsterisk subclass objects only,
+			                       not used in table definitions,
+			                       but only in query definitions */
 		};
 
 		const int defaultTextLength() { return 200; }
@@ -199,12 +204,22 @@ class KEXI_DB_EXPORT Field
 		void setForeignKey(bool f);
 		void setNotNull(bool n);
 
+		/*! There can be added asterisks (QueryAsterisk objects) 
+		 to query schemas' field list. QueryAsterisk subclasses Field class,
+		 and to check if the given object (pointed by Field*) 
+		 is asterisk or just ordinary field definition,
+		 you can call this method. This is just effective version of QObject::isA().
+		 Every QueryAsterisk object returns true here,
+		 and every Field object returns false.
+		*/
+		bool isQueryAsterisk() const { return m_type == Asterisk; }
+		
 		//! \return string for for debugging purposes.
-		QString debugString() const;
+		virtual QString debugString() const;
 
-	private:
-//		QString m_table;
-		TableSchema *m_table;
+	protected:
+		FieldList *m_parent; //!< In most cases this points to a TableSchema 
+		                     //!< object that field is assigned.
 		QString m_name;
 //		QString m_reference;
 		Type m_type;
@@ -212,7 +227,6 @@ class KEXI_DB_EXPORT Field
 		int m_length;
 		int m_precision;
 		int m_options;
-//		bool m_binary;
 		QVariant m_defaultValue;
 		QString m_caption;
 		QString m_help;

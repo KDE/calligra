@@ -31,38 +31,34 @@
 using namespace KexiDB;
 
 Field::Field()
+	:m_parent(0)
+	,m_name("")
+	,m_type(InvalidType)
+	,m_length(0)
+	,m_precision(0)
+	,m_options(NoOptions)
+	,m_defaultValue( QVariant(QString::null) )
 {
-	m_table = 0;
-	m_name = "";
 	setConstraints(NoConstraints);
-//	m_reference = "";
-	m_type = InvalidType;
-	m_length = 0;
-	m_precision = 0;
-	m_options = NoOptions;
-//	m_unsigned = false;
-//	m_binary = false;
-	m_defaultValue = QVariant(QString::null);
 }
 
 
 Field::Field(TableSchema *tableSchema)
+	:m_parent(tableSchema)
+	,m_name("")
+	,m_type(InvalidType)
+	,m_length(0)
+	,m_precision(0)
+	,m_options(NoOptions)
+	,m_defaultValue( QVariant(QString::null) )
 {
-	m_table = tableSchema;
-	m_name = "";
 	setConstraints(NoConstraints);
-//	m_reference = "";
-	m_type = InvalidType;
-	m_length = 0;
-	m_precision = 0;
-	m_options = NoOptions;
-	m_defaultValue = QVariant(QString::null);
 }
 
 Field::Field(const QString& name, Type ctype,
  int cconst, int options, int length, int precision,
  QVariant defaultValue)
-	: m_table(0)
+	: m_parent(0)
 	,m_name(name)
 	,m_type(ctype)
 	,m_length(length)
@@ -201,7 +197,7 @@ Field::name() const
 TableSchema*
 Field::table() const
 {
-	return m_table;
+	return static_cast<TableSchema*>(m_parent);
 }
 
 QVariant::Type
@@ -267,7 +263,7 @@ Field::binary() const
 void
 Field::setTable(TableSchema *tableSchema)
 {
-	m_table = tableSchema;
+	m_parent = tableSchema;
 }
 
 void
@@ -505,7 +501,7 @@ Field::setNotNull(bool n)
 
 QString Field::debugString() const
 {
-	KexiDB::Connection *conn = m_table ? m_table->connection() : 0;
+	KexiDB::Connection *conn = table() ? table()->connection() : 0;
 	QString dbg = m_name + " ";
 	if (m_options & Field::Unsigned)
 		dbg += " UNSIGNED ";

@@ -58,9 +58,14 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! Adds \a field to 
 		 Added field will not be owned by this QuerySchema object,
 		 but still by corresponding TableSchema. 
+		 
+		 As \a field object you can also pass KexiDB::QueryAsterisk,
+		 (see QueryAsterisk class description).
+		 
 		 Note: After adding a field, corresponding table will be automatically 
 		 added to query's tables list if it is not present there (see tables()).
-		 Field bust have its table assigned. */
+		 Field bust have its table assigned. 
+		 */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
 //		int id() { return m_id; }
@@ -97,8 +102,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		void setParentTable(TableSchema *table);
 		
 		/*! \return list of tables used in a query. 
-		 This also includes parent table. \sa parentTable() */
-		const TableSchema::List* tables() const { return &m_tables; }
+		 This also includes parent table. 
+		 \sa parentTable() */
+		TableSchema::List* tables() { return &m_tables; }
 
 		/*! Adds \a table schema as one of tables used in a query. */
 		void addTable(TableSchema *table);
@@ -123,9 +129,12 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 or if there is no such field in the query defined, false is returned. */
 		bool hasAlias(Field *field) const { return !m_aliases[field].isEmpty(); }
 
-		/* Sets \a alias for \a field within the query. 
+		/*! Sets \a alias for \a field within the query. 
 		 Passing empty sting to \a alias clears alias for given field. */
 		void setAlias(Field *field, const QString& alias);
+		
+		/*! \return list of QueryAsterisk objects defined for this query */
+		Field::List* asterisks() { return &m_asterisks; }
 
 	protected:
 //		/*! Automatically retrieves query schema via connection. */
@@ -144,12 +153,79 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 			If null, query's records cannot be modified. */
 		TableSchema *m_parent_table;
 		
-		/*! List of tables used in a query */
+		/*! List of tables used in this query */
 		TableSchema::List m_tables;
 		
+		/*! Used to mapping Fields to its aliases for this query */
 		QMap<Field*, QString> m_aliases;
+		
+		/*! List of asterisks defined for this query  */
+		Field::List m_asterisks;
 
 	friend class Connection;
+};
+
+/*! This class encapsulates information about single asterisk in query definition.
+ There are two types of query asterisks:
+ 
+ 1. "Single-table" asterisk, that references all fields of given table used in the query.
+ Example SQL statement: 
+ \code
+ SELECT staff.*, cars.model from staff, cars WHERE staff.car = cars.number;
+ \endcode
+ The "staff.*" element is our "single-table" asterisk;
+ this tells us that we want to get all fields of table "staff".
+ 
+ 2. "All-tables" asterisk, that references all fields of all tables used in the query.
+ Example SQL statement: 
+ \code
+ SELECT * from staff, cars WHERE staff.car = cars.number;
+ \endcode
+ The "*" is our "all-tables" asterisk;
+ this tells us that we want to get all fields of all used tables (here: "staff" and "cars").
+ 
+ There can be many asterisks of 1st type defined for given single query.
+ There can be one asterisk of 2nd type defined for given single query.
+*/
+
+class KEXI_DB_EXPORT QueryAsterisk : protected Field
+{
+	public:
+		/*! Constructs query asterisk definition object.
+		 Pass table schema to \a table if this asterisk should be 
+		 of type "single-table", otherwise (if you want to define 
+		 "all-tables" type asterisk), omit this parameter. 
+		 
+		 QueryAsterisk objects are owned by QuerySchema object
+		 (not by TableSchema object like for ordinary Field objects)
+		 for that the QueryAsterisk object was added (using QuerySchema::addField()).
+		 */
+		QueryAsterisk( QuerySchema *query, TableSchema *table = 0 );
+		
+		virtual ~QueryAsterisk();
+
+		/*! \return query object for that this asterisk object is defined */
+		QuerySchema *query() const { return static_cast<QuerySchema*>(m_parent); }
+
+		/*! \return table schema for this asterisk 
+		 if it has "single-table" type (1st type) 
+		 or NULL if it has "all-tables" type (2nd type) defined. */
+		TableSchema* table() const { return m_table; }
+
+		/*! This is convenience method that returns true 
+		 if the asterisk has "all-tables" type (2nd type).*/
+		bool isSingleTableAsterisk() const { return m_table!=NULL; }
+		
+		/*! This is convenience method that returns true 
+		 if the asterisk has "single-tables" type (2nd type).*/
+		bool isAllTableAsterisk() const { return m_table==NULL; }
+		
+		//! \return string for for debugging purposes.
+		virtual QString debugString() const;
+	
+	protected:
+		/*! Table schema for this asterisk */
+		TableSchema* m_table;
 };
 
 } //namespace KexiDB

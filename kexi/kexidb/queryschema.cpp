@@ -35,6 +35,7 @@ QuerySchema::QuerySchema()
 {
 	m_type = KexiDB::QueryObjectType;
 	m_tables.setAutoDelete(false);
+	m_asterisks.setAutoDelete(true);
 }
 
 QuerySchema::QuerySchema(TableSchema* tableSchema)
@@ -45,6 +46,7 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 {
 	m_type = KexiDB::QueryObjectType;
 	m_tables.setAutoDelete(false);
+	m_asterisks.setAutoDelete(true);
 	assert(m_parent_table);
 	if (!m_parent_table) {
 		m_name = QString::null;
@@ -57,13 +59,6 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	m_caption = m_parent_table->caption();
 }
 
-/*QuerySchema::QuerySchema(Connection *conn)
-	: FieldList(false)
-	, m_conn( conn )
-{
-	assert(conn);
-}*/
-
 QuerySchema::~QuerySchema()
 {
 }
@@ -73,6 +68,7 @@ void QuerySchema::clear()
 	FieldList::clear();
 	SchemaData::clear();
 	m_aliases.clear();
+	m_asterisks.clear();
 	m_parent_table = 0;
 	m_tables.clear();
 //	m_conn = 0;
@@ -80,13 +76,22 @@ void QuerySchema::clear()
 
 KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
-	if (!field || !field->table())
-		return;
+	if (!field || (!field->isQueryAsterisk() && !field->table()))
+		return *this;
 	FieldList::addField(field);
-	//add a table to list if not exists there
-	if (m_tables.find(field->table())==-1)
-		m_tables.append(field->table());
-
+	if (field->isQueryAsterisk()) {
+		m_asterisks.append(field);
+		//if this is single-table asterisk,
+		//add a table to list if not exists there:
+		if (field->table() && (m_tables.find(field->table())==-1))
+			m_tables.append(field->table());
+	}
+	else {
+		//add a table to list if not exists there:
+		if (m_tables.find(field->table())==-1)
+			m_tables.append(field->table());
+	}
+	
 	return *this;
 }
 
@@ -103,8 +108,9 @@ void QuerySchema::debug()
 	TableSchema *table;
 	QString table_names;
     for ( table = m_tables.first(); table; table = m_tables.next() ) {
+		if (!table_names.isEmpty())
+			table_names += ", ";
 		table_names += table->name();
-		table_names += ", ";
 	}
 	KexiDBDbg << "  TABLES: " << table_names << endl;
 	QMap<Field*, QString>::Iterator it;
@@ -151,4 +157,40 @@ void QuerySchema::setAlias(Field *field, const QString& alias)
 		return;
 	}
 	m_aliases[field] = alias;
+}
+
+//---------------------------------------------------
+
+QueryAsterisk::QueryAsterisk( QuerySchema *query, TableSchema *table )
+	:Field()
+	,m_table(table)
+{
+	assert(query);
+	m_parent = query;
+	m_type = Field::Asterisk;
+}
+
+QueryAsterisk::~QueryAsterisk()
+{
+}
+
+QString QueryAsterisk::debugString() const
+{
+	QString dbg;
+	if (isAllTableAsterisk()) {
+		dbg += "ALL-TABLES ASTERISK (*) ON TABLES(";
+		TableSchema *table;
+		QString table_names;
+		TableSchema::List *tables = query()->tables();
+    	for ( table = tables->first(); table; table = tables->next() ) {
+			if (!table_names.isEmpty())
+				table_names += ", ";
+			table_names += table->name();
+		}
+		dbg += (table_names + ")");
+	}
+	else {
+		dbg += ("SINGLE-TABLE ASTERISK (*." + table()->name() + ")");
+	}
+	return dbg;
 }

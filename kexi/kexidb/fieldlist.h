@@ -68,13 +68,11 @@ class KEXI_DB_EXPORT FieldList
 
 		/*! Shows debug information about all fields in the list. */
 		virtual void debug() const;
+	
 	protected:
 
-	//js	QStringList m_primaryKeys;
-//		QString m_name;
 		Field::List m_fields;
 
-//	friend class Connection;
 };
 
 } //namespace KexiDB
