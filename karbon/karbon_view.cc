@@ -176,6 +176,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	selectTool();
 	zoomChanged();
+	selectionChanged();
 }
 
 KarbonView::~KarbonView()
@@ -391,6 +392,7 @@ void
 KarbonView::groupSelection()
 {
 	m_part->addCommand( new VGroupCmd( &m_part->document() ), true );
+	selectionChanged();
 }
 
 void
@@ -408,6 +410,7 @@ KarbonView::ungroupSelection()
 		}
 	}
 */
+	selectionChanged();
 }
 
 // TODO: remove this one someday:
