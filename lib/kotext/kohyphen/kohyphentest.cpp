@@ -22,7 +22,7 @@ int main (int argc, char ** argv)
 
     KoHyphenator * hypher = 0L;
     try {
-        hypher = new KoHyphenator();
+        hypher = KoHyphenator::self();
     }
     catch (KoHyphenatorException &e)
     {
@@ -45,8 +45,6 @@ int main (int argc, char ** argv)
                hypher->hyphenate((*it), "en").latin1());
         ++it;
     }
-
-    delete hypher;
 
     return 0;
 }
