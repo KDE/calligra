@@ -151,7 +151,7 @@ void LayerView::inverseVisibility( int _index )
   m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
   m_doc->compositeImage( m_doc->layerList().at( _index )->imageExtents() );
-  m_doc->slotUpdateViews(m_doc->layerList().at( _index )->imageExtents());
+  m_doc->slotUpdateViews( m_doc->layerList().at( _index )->imageExtents() );
 }
 
 void LayerView::inverseLinking( int _index )
@@ -257,17 +257,25 @@ void LayerView::slotRemoveLayer()
 void LayerView::slotUpperLayer()
 {
   m_doc->upperLayer( m_selected );
-  updateCell( m_selected, 0 );
-  if( m_selected > 0 )
-    updateCell( m_selected - 1, 0 );
+  repaint();
+
+  m_doc->compositeImage( m_doc->layerList().at( m_selected )->imageExtents() );
+  m_doc->compositeImage( m_doc->layerList().at( m_selected - 1 )->imageExtents() );
+
+  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected )->imageExtents() );
+  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected - 1 )->imageExtents() );
 }
 
 void LayerView::slotLowerLayer()
 {
   m_doc->lowerLayer( m_selected );
-    updateCell( m_selected, 0 );
-  if( m_selected < ( m_doc->layerList().count() - 1 ) )
-    updateCell( m_selected + 1, 0 );
+  repaint();
+
+  m_doc->compositeImage( m_doc->layerList().at( m_selected )->imageExtents() );
+  m_doc->compositeImage( m_doc->layerList().at( m_selected + 1 )->imageExtents() );
+
+  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected )->imageExtents() );
+  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected + 1 )->imageExtents() );
 }
 
 #include "layerview.moc"
