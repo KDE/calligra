@@ -267,7 +267,6 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
   //  ElapsedTime et( "      initDoc        " );
 
-    setInitDocFlags(flags);
     QString f;
 
     if (flags==KoDocument::InitDocEmpty)
