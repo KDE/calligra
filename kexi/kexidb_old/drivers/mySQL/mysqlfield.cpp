@@ -137,6 +137,18 @@ MySqlField::sqlType()
 	return KexiDBField::SQLInvalid;
 }
 
+QVariant 
+MySqlField::defaultValue()
+{
+	return QVariant(m_field->def);
+}
+
+int 
+MySqlField::length()
+{
+	return m_field->length;
+}
+
 MySqlField::~MySqlField()
 {
 }

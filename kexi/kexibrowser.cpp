@@ -37,7 +37,7 @@
 #include "kexiworkspace.h"
 #include "kexibrowseritem.h"
 #include "kexidatatable.h"
-
+#include "kexialtertable.h"
 
 KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
@@ -114,6 +114,11 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 			case KexiBrowserItem::Table:
 			{
 				m->insertItem(i18n("Create Table"), this, SLOT(slotCreateTable()));
+				
+				if ( r->type() == KexiBrowserItem::Child )
+				{
+					m->insertItem(i18n("Alter Table"), this, SLOT(slotAlterTable()));
+				}
 				break;
 			}
 			
@@ -202,6 +207,17 @@ void KexiBrowser::slotEdit()
 
 void KexiBrowser::slotCreateTable()
 {
+}
+
+void KexiBrowser::slotAlterTable()
+{
+	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
+	
+	if ( r->type() == KexiBrowserItem::Child )
+	{
+		KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow(), r->text(0), "alterTable");
+		kat->show();
+	}
 }
 
 KexiBrowser::~KexiBrowser(){

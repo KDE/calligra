@@ -113,6 +113,18 @@ KexiDBField::sqlType()
 	return SQLInvalid;
 }
 
+QVariant 
+KexiDBField::defaultValue()
+{
+	return QVariant::Invalid;
+}
+
+int 
+KexiDBField::length()
+{
+	return 0;
+}
+
 KexiDBField::~KexiDBField()
 {
 }

@@ -71,6 +71,8 @@ class KexiDBField
 
 		virtual QVariant::Type	type();
 		virtual ColumnType	sqlType();
+		virtual QVariant defaultValue();
+		virtual int length();
 };
 
 #endif
