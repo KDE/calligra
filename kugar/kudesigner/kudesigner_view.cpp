@@ -24,10 +24,13 @@
 #include <qpainter.h>
 #include <qiconset.h>
 #include <qinputdialog.h>
+
 #include <kaction.h>
 #include <kstdaction.h>
 #include <klocale.h>
 #include <kdebug.h>
+
+#include <koMainWindow.h>
 
 #include <cv.h>
 
@@ -37,6 +40,7 @@
 #include "cline.h"
 #include "cspecialfield.h"
 #include "mycanvas.h"
+#include "propertyeditor.h"
 
 KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
@@ -53,6 +57,13 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
     rc->viewport()->setFocusProxy(rc);
     rc->viewport()->setFocusPolicy(WheelFocus);
     rc->setFocus();
+
+    if (shell())
+    {
+        pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
+        shell()->addDockWindow(pe, DockRight);
+        pe->show();
+    }
 
     rc->itemToInsert = 0;
 

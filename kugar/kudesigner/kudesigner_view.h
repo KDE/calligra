@@ -30,6 +30,7 @@ class KudesignerPart;
 
 class ReportCanvas;
 class CanvasReportItem;
+class PropertyEditor;
 
 class KudesignerView : public KoView
 {
@@ -66,6 +67,7 @@ protected:
 
 private:
     ReportCanvas *rc;
+    PropertyEditor *pe;
 
     KAction* sectionsReportHeader;
     KAction* sectionsReportFooter;

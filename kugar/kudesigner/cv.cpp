@@ -67,7 +67,11 @@ void SelectionRect::draw(QPainter & painter)
     }
     qDebug("drawing");*/
 //    painter.drawRect(rect());
-    QCanvasRectangle::draw(painter);
+    QPen pen(QColor(0,0,0), 0, Qt::DotLine);
+    painter.setPen(pen);
+    painter.setBrush(QBrush(NoBrush));
+    painter.drawRect(rect());
+//  QCanvasRectangle::draw(painter);
 }
 
 
@@ -269,6 +273,18 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
     moving = 0;
     resizing = 0;
     selectionStarted = 0;
+
+    // ????
+    unselectAll();
+    canvas()->update();
+
+
+/*    CanvasBox *b;
+    qWarning("Selected items:");
+    for (b = selected.first(); b; b = selected.next())
+        qWarning("%s", b->props["Text"].first.latin1());
+
+  */  
     switch (e->button())
     {
         case LeftButton:
@@ -372,13 +388,38 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
         QCanvasItemList l = canvas()->collisions(selectionRect->rect());
         for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
         {
+            QRect r;
+            int left = selectionRect->rect().left();
+            int right = selectionRect->rect().right();
+            int top = selectionRect->rect().top();
+            int bottom = selectionRect->rect().bottom();
+            r.setLeft(left<right ? left : right);
+            r.setRight(left<right ? right : left);
+            r.setTop(top<bottom ? top : bottom);
+            r.setBottom(top<bottom ? bottom : top);
+
+            if ( ((*it)->rtti() > 2001) &&
+                (r.contains(((CanvasBox*)(*it))->rect())) )
+            {
+                selectItem((CanvasBox*)(*it));
+                canvas()->update();
+            }
+        }
+
+
+/*        selectionRect->setSize(e->pos().x() - selectionRect->x(),
+            e->pos().y() - selectionRect->y());
+        unselectAll();
+        QCanvasItemList l = canvas()->collisions(selectionRect->rect());
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+        {
             if ( ((*it)->rtti() > 2001) &&
                 (selectionRect->rect().contains(((CanvasBox*)(*it))->rect())) )
             {
                 selectItem((CanvasBox*)(*it));
                 canvas()->update();
             }
-        }
+        }*/
     }
 }
 
