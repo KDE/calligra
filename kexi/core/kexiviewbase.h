@@ -57,8 +57,29 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		void addChildView( KexiViewBase* childView );
 
+		/*! True if contents (data) of the view is dirty and need to be saved
+		 This may or not be used, depending if changes in the dialog 
+		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
+		 (e.g. like in alter-table dialog).
+		 "Dirty" flag is reused by KexiDialogBase::dirty().
+		 Default implementation just uses internal m_dirty flag, that is false by default.
+		 Reimplement this if you e.g. want reuse other "dirty" 
+		 flag from internal structures that may be changed. */
+		virtual bool dirty() const { return m_dirty; }
+
 	public slots:
 		virtual void setFocus();
+
+		/*! Call this in your view's implementation whenever current property buffer 
+		 (returned by propertyBuffer()) is switched to other,
+		 so property editor contents need to be completely replaced. */
+		void propertyBufferSwitched();
+
+		/*! \sets dirty flag on or off. It the flag changes, 
+		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
+		 to inform the world about that. 
+		 Always use this function to update 'dirty' flag information. */
+		void setDirty(bool set = true);
 
 	signals:
 		//! emitted when the view is about to close
@@ -85,31 +106,10 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		*/
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
-		/*! True if contents (data) of the view is dirty and need to be saved
-		 This may or not be used, depending if changes in the dialog 
-		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
-		 (e.g. like in alter-table dialog).
-		 "Dirty" flag is reused by KexiDialogBase::dirty().
-		 Default implementation just uses internal m_dirty flag, that is false by default.
-		 Reimplement this if you e.g. want reuse other "dirty" 
-		 flag from internal structures that may be changed. */
-		virtual bool dirty() const { return m_dirty; }
-
-		/*! \sets dirty flag on or off. It the flag changes, 
-		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
-		 to inform the world about that. 
-		 Always use this function to update 'dirty' flag information. */
-		void setDirty(bool set = true);
-
 		virtual void closeEvent( QCloseEvent * e );
 
 		/*! \return a property buffer for this view. For reimplementation. By default returns NULL. */
 		virtual KexiPropertyBuffer *propertyBuffer();
-
-		/*! Call this in your view's implementation whenever current property buffer 
-		 (returned by propertyBuffer()) is switched to other,
-		 so property editor contents need to be completely replaced. */
-		void propertyBufferSwitched();
 
 		/*! Call this in your view's implementation whenever current property buffer 
 		 is changed that few properties are now visible and/or few other are invisible,

@@ -356,8 +356,10 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		setChanged(false);
 	}
 
-	if (!m_buf.isNull())
+	if (!m_buf.isNull()) {
 		emit m_buf->propertyChanged(*m_buf, *this);
+		emit m_buf->propertyChanged();
+	}
 
 	if (!updateChildren)
 		return;

@@ -23,6 +23,8 @@
 
 #include <qobject.h>
 #include <qdict.h>
+#include <qptrvector.h>
+
 #include "kexiproperty.h"
 
 /** This class is a QDict<KexiProperty> which holds properties to be shown in
@@ -35,6 +37,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 	Q_OBJECT
 
 	public:
+		typedef QPtrVector<KexiPropertyBuffer> Vector;
 
 		/*! Creates an empty KexiPropertyBuffer, i.e. a QMap<QString, KexiProperty>.
 		 \a type_name means a name of this property buffer type. See typeName() description
@@ -79,6 +82,10 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		   (i.e. when changeProperty() was called).
 		*/
 		void propertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);//const QString &property, const QVariant &value);
+
+		/*! Parameterless version of the above method. */
+		void propertyChanged();
+		
 		void propertyReset(KexiPropertyBuffer &buf, KexiProperty &property);
 
 		void destroying();
