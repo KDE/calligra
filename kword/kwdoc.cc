@@ -2166,6 +2166,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs, KWDocument::CURRENT_SYNTAX_VERSION );
                 frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 +nb ); // make sure it's on top
+                frame->setSelected(TRUE);
                 nb++;
                 fs->addFrame( frame, false );
                 if ( macroCmd )
