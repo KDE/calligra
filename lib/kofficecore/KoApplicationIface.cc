@@ -17,16 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KoApplicationIface.h"
-#include "koApplication.h"
-#include "koDocument.h"
-#include "koMainWindow.h"
-#include "koView.h"
-#include "koQueryTrader.h"
-#include "KoDocumentIface.h"
+
 #include <dcopclient.h>
 #include <kdebug.h>
-#include <stdlib.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+
+#include "koApplication.h"
+#include "KoApplicationIface.h"
+#include "koDocument.h"
+#include "KoDocumentIface.h"
+#include "koMainWindow.h"
+#include "koQueryTrader.h"
+#include "koView.h"
 
 KoApplicationIface::KoApplicationIface()
  : DCOPObject( "KoApplicationIface" )
@@ -42,8 +45,8 @@ DCOPRef KoApplicationIface::createDocument( const QString &nativeFormat )
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
     if ( entry.isEmpty() )
     {
-        kdError(30003) << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
-        ::exit(1);
+        KMessageBox::questionYesNo( 0, i18n( "Unknown KOffice MimeType %s. Check your installation !" ).arg( nativeFormat ) );
+        return DCOPRef();
     }
     KoDocument* doc = entry.createDoc( 0 );
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
