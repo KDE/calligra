@@ -190,6 +190,7 @@ public slots:
     /**
      * Actions
      */
+    void createTemplate();
     void transformPart();
     void copySelection();
     void cutSelection();
@@ -558,6 +559,8 @@ private:
     KAction* m_decreaseIndent;
     KAction* m_sortList;
     KAction* m_spellChecking;
+
+    KAction* m_createTemplate;
 
     KAction* m_insertChartFrame;
 

@@ -34,6 +34,8 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
+#include <ktempfile.h>
+#include <kstandarddirs.h>
 #include <tkcoloractions.h>
 
 #include <dcopclient.h>
@@ -42,6 +44,8 @@
 #include <koReplace.h>
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
+#include <koTemplateCreateDia.h>
+
 #include <kparts/partmanager.h>
 
 
@@ -662,6 +666,9 @@ void KSpreadView::initializeGlobalOperationActions()
                                SLOT( paperLayoutDlg() ), actionCollection(),
                                "paperLayout" );
   m_paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));
+
+  m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this, 
+                                  SLOT( createTemplate() ), actionCollection(), "createTemplate" ); 
 }
 
 
@@ -1848,6 +1855,24 @@ void KSpreadView::updateReadWrite( bool readwrite )
   // m_oszi->setEnabled( true );
 }
 
+void KSpreadView::createTemplate()
+{
+  int width = 60;
+  int height = 60;
+  QPixmap pix = m_pDoc->generatePreview(QSize(width, height));
+   
+  KTempFile tempFile( QString::null, ".kst" );
+  tempFile.setAutoDelete(true);
+   
+  m_pDoc->saveNativeFormat( tempFile.name() );
+   
+  KoTemplateCreateDia::createTemplate( "kspread_template", KSpreadFactory::global(),
+                                           tempFile.name(), pix, this );
+   
+  KSpreadFactory::global()->dirs()->addResourceType("kspread_template",
+                                                       KStandardDirs::kde_default( "data" ) +
+                                                       "kspread/templates/");
+}
 
 void KSpreadView::tableFormat()
 {

@@ -87,7 +87,7 @@ kdelnkdir = $(kde_appsdir)/Office
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc
 
-SUBDIRS =  . plugins pics dtd toolbar extensions tablestyles
+SUBDIRS =  . plugins pics dtd toolbar extensions tablestyles templates
 
 parser:
 	flex lex.l

@@ -81,6 +81,10 @@ KInstance* KSpreadFactory::global()
     if ( !s_global )
     {
       s_global = new KInstance(aboutData());
+
+      s_global->dirs()->addResourceType( "kspread_template",
+                                          KStandardDirs::kde_default("data") + "kspread/templates/");
+
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "kspread/extensions/");

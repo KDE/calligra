@@ -25,6 +25,7 @@
 #include <pwd.h>
 
 #include <qregexp.h>
+#include <qfileinfo.h>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -131,7 +132,8 @@ bool KSpreadDoc::initDoc()
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f, "application/x-kspread",
-                                       "*.ksp", i18n("KSpread"), KoTemplateChooseDia::NoTemplates );
+                                       "*.ksp", i18n("KSpread"), 
+                                        KoTemplateChooseDia::Everything, "kspread_template");
 
     if ( ret == KoTemplateChooseDia::File )
     {
@@ -160,6 +162,18 @@ bool KSpreadDoc::initDoc()
 	setEmpty();
 	initConfig();
 	return true;
+    }
+
+    if ( ret == KoTemplateChooseDia::Template )
+    {
+        QFileInfo fileInfo( f );
+        QString fileName( fileInfo.dirPath( true ) + "/" +
+            fileInfo.baseName() + ".kst" );
+        resetURL();
+        loadNativeFormat( fileName );
+        setEmpty();
+        initConfig();
+        return true;
     }
 
     return false;
