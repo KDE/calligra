@@ -682,7 +682,7 @@ static bool kspreadfunc_stddev( KSContext& context )
 
   if ( number == 0 )
       return false;
-  
+
   if ( b )
   {
     avera=result/number;
@@ -1593,7 +1593,7 @@ per year and year */
   double interest = args[1]->doubleValue();
   double periods = args[2]->doubleValue();
   double years = args[3]->doubleValue();
-  
+
   context.setValue( new KSValue( principal * pow(1+(interest/periods),
 periods*years)));
 
@@ -1603,7 +1603,7 @@ periods*years)));
 static bool kspreadfunc_continuous( KSContext& context )
 {
     // TODO: Torben: I dont understand what this one does!
-    
+
 /* Returns value after continuous compounding of interest, given prinicpal,
 rate and years */
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1686,7 +1686,7 @@ static bool kspreadfunc_pv_annuity( KSContext& context )
     {
 	result = ( future - amount * ( interest - pow( interest, periods+1 ) ) / ( 1 - interest ) ) / pow( interest, periods );
     }
-  
+
   context.setValue( new KSValue( result ) );
 
   return true;
@@ -1730,9 +1730,9 @@ static bool kspreadfunc_fv_annuity( KSContext& context )
     {
 	result = initial * pow( interest, periods ) + amount * ( interest - pow( interest, periods + 1 ) ) / ( 1 - interest );
     }
-    
+
     context.setValue( new KSValue( result ) );
-  
+
     return true;
 }
 
@@ -1752,9 +1752,9 @@ static bool kspreadfunc_effective( KSContext& context )
     return false;
   double nominal = args[0]->doubleValue();
   double periods = args[1]->doubleValue();
-  
+
   context.setValue( new KSValue(  pow( 1 + nominal, periods )- 1 ) );
-  
+
   return true;
 }
 
@@ -1779,7 +1779,7 @@ static bool kspreadfunc_nominal( KSContext& context )
       return false;
 
   context.setValue( new KSValue(  pow( 1 + effective, 1 / periods ) - 1 ) );
-		    
+		
   return true;
 }
 
@@ -2209,18 +2209,19 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
 KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QList<KSpreadDepend>& depends )
 {
-  // Create the parse tree.
-  KSParser parser;
-  if ( !parser.parse( formula.local8Bit(), KSCRIPT_EXTENSION_KSPREAD ) )
-  {
-    context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
-    return 0;
-  }
+    // Create the parse tree.
+    KSParser parser;
+    // Tell the parser the locale so that it can parse localized numbers.
+    if ( !parser.parse( formula.local8Bit(), KSCRIPT_EXTENSION_KSPREAD, table->doc()->locale() ) )
+    {
+	context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
+	return 0;
+    }
 
-  KSParseNode* n = parser.donateParseTree();
-  makeDepends( context, n, table->map(), table, depends );
+    KSParseNode* n = parser.donateParseTree();
+    makeDepends( context, n, table->map(), table, depends );
 
-  return n;
+    return n;
 }
 
 bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadTable* table )

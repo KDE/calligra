@@ -47,6 +47,7 @@ class QDomDocument;
 #include <kcompletion.h>
 
 #include "kspread_interpreter.h"
+#include "kspread_locale.h"
 
 #include <koscript_context.h>
 
@@ -95,6 +96,11 @@ public:
 
   KSpreadMap *map() const { return m_pMap; }
 
+  /**
+   * @return the locale which was used for creating this document.
+   */
+  KLocale* locale() { return &m_locale; }
+    
   /**
    * @return the printable width of the paper in millimeters.
    */
@@ -455,6 +461,8 @@ protected:
 
   QValueList<Reference> m_refs;
   KCompletion listCompletion;
+    
+  KSpreadLocale m_locale;
 };
 
 #endif

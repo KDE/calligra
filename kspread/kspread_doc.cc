@@ -214,6 +214,9 @@ QDomDocument KSpreadDoc::saveXML()
     right.appendChild( doc.createTextNode( footRight() ) );
   }
 
+  QDomElement locale = m_locale.save( doc );
+  spread.appendChild( locale );
+  
   QDomElement e = m_pMap->save( doc );
   spread.appendChild( e );
 
@@ -246,6 +249,11 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     return false;
   }
 
+  // <locale>
+  QDomElement locale = spread.namedItem( "locale" ).toElement();
+  if ( !locale.isNull() )
+      m_locale.load( locale );
+  
   // <paper>
   QDomElement paper = spread.namedItem( "paper" ).toElement();
   if ( !paper.isNull() )
@@ -887,12 +895,5 @@ void KSpreadDoc::addStringCompletion(QString stringCompletion)
    if(listCompletion.items().contains(stringCompletion)==0)
            listCompletion.addItem(stringCompletion);
 }
-/* obsolete - done in the libs now (Werner)
-void KSpreadDoc::newView()
-{
-    KoMainWindow* shell = createShell();
-    shell->setRootDocument( this );
-    shell->show();
-}
-*/
+
 #include "kspread_doc.moc"
