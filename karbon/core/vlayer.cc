@@ -50,8 +50,13 @@ VLayer::draw( VPainter* painter, const KoRect& rect ) const
 }
 
 void
-VLayer::bringToFront( const VObject& /*object*/ )
+VLayer::bringToFront( const VObject& object )
 {
+	if( m_objects.getLast() == &object ) return;
+
+	m_objects.remove( &object );
+
+	m_objects.append( &object );
 }
 
 void

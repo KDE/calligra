@@ -237,7 +237,7 @@ public:
 		{ return m_nodeSelected[--index]; }
 
 	bool edited( uint index ) const
-		{ return m_nodeEdited[--index]; }
+		{ return m_nodeEdited[index]; }
 
 	/**
 	 * Returns true if at least one node is selected.

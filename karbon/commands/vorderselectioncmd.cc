@@ -22,28 +22,44 @@ VOrderSelectionCmd::~VOrderSelectionCmd()
 void
 VOrderSelectionCmd::execute()
 {
-	if( m_state == sendtoback || m_state == bringtofront )
+	if( m_state == sendtoback )
 	{
-	VObjectListIterator itr( m_doc->selection()->objects() );
-	for ( ; itr.current() ; ++itr )
-	{
-		// remove from old layer
-		VObjectList objects;
-		VLayerListIterator litr( m_doc->layers() );
-
-		for ( ; litr.current(); ++litr )
+		VObjectListIterator itr( m_doc->selection()->objects() );
+		for ( itr.toLast() ; itr.current() ; --itr )
 		{
-			objects = litr.current()->objects();
-			VObjectListIterator itr2( objects );
-			for ( ; itr2.current(); ++itr2 )
-				if( itr2.current() == itr.current() )
-				{
-					litr.current()->sendToBack( *itr2.current() );
-				}
+			// remove from old layer
+			VObjectList objects;
+			VLayerListIterator litr( m_doc->layers() );
+
+			for ( ; litr.current(); ++litr )
+			{
+				objects = litr.current()->objects();
+				VObjectListIterator itr2( objects );
+				for ( ; itr2.current(); ++itr2 )
+					if( itr2.current() == itr.current() )
+						litr.current()->sendToBack( *itr2.current() );
+			}
 		}
 	}
-	}
+	else if( m_state == bringtofront )
+	{
+		VObjectListIterator itr( m_doc->selection()->objects() );
+		for ( ; itr.current() ; ++itr )
+		{
+			// remove from old layer
+			VObjectList objects;
+			VLayerListIterator litr( m_doc->layers() );
 
+			for ( ; litr.current(); ++litr )
+			{
+				objects = litr.current()->objects();
+				VObjectListIterator itr2( objects );
+				for ( ; itr2.current(); ++itr2 )
+					if( itr2.current() == itr.current() )
+						litr.current()->bringToFront( *itr2.current() );
+			}
+		}
+	}
 }
 
 void

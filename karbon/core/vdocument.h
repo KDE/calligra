@@ -87,8 +87,6 @@ public:
 
 	// move up/down within layer
 // TODO: move these functions into a command:
-	void moveSelectionToTop();
-	void moveSelectionToBottom();
 	void moveSelectionDown();
 	void moveSelectionUp();
 

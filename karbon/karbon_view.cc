@@ -331,15 +331,13 @@ KarbonView::selectionMoveToTop()
 void
 KarbonView::selectionMoveUp()
 {
-	m_part->document().moveSelectionUp();
-	m_part->repaintAllViews();
+	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::up ), true );
 }
 
 void
 KarbonView::selectionMoveDown()
 {
-	m_part->document().moveSelectionDown();
-	m_part->repaintAllViews();
+	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::down ), true );
 }
 
 void
