@@ -442,6 +442,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     // Determine header and footer type
+    // ### FIXME: hType==1 mode is missing (first, odd and even all different.)
     int hType = facingPages ? 3 : (state.section.titlePage ? 2 : 0);
     bool hasHeader = !evenPagesHeader.node.isEmpty() ||
 		     (hType == 3 && !oddPagesHeader.node.isEmpty()) ||
@@ -454,7 +455,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     DomNode mainDoc( "DOC" );
       mainDoc.setAttribute( "mime", "application/x-kword" );
       mainDoc.setAttribute( "syntaxVersion", "2" );
-      mainDoc.setAttribute( "editor", "KWord" );
+      mainDoc.setAttribute( "editor", "KWord's RTF Import Filter" );
       mainDoc.addNode( "PAPER" );
 	mainDoc.setAttribute( "format", 6 );
 	mainDoc.setAttribute( "columns", 1 );
