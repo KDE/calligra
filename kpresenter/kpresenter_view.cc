@@ -3981,7 +3981,7 @@ void KPresenterView::doAutomaticScreenPres()
         return;
     else if ( !continuePres && kPresenterDoc()->spInfiniteLoop() ) {
         continuePres = true;
-        m_canvas->gotoPage( 1 ); // return to first page.
+        m_canvas->presGotoFirstPage(); // return to first page.
         setCurrentTimer( 1 );
         m_canvas->setNextPageTimer( true );
     }
@@ -5953,7 +5953,7 @@ void KPresenterView::setPresentationDuration( int _pgNum )
     if ( kPresenterDoc()->presentationDuration() )
     {
         // kdDebug(33001) << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
-        *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
+        *m_presentationDurationList.at( _pgNum ) += getPresentationDuration();
         restartPresentationDuration();
     }
 }

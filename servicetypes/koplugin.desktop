@@ -1,0 +1,51 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KOfficePlugin
+Comment=KOffice Plugin
+Comment[af]=Koffice Inplak
+Comment[bg]=Приставка за KOffice
+Comment[ca]=Connector per a KOffice
+Comment[cs]=KOffice plugin
+Comment[da]=KOffice-plugin
+Comment[de]=KOffice-Plugin
+Comment[el]=Πρόσθετο του KOffice
+Comment[eo]=instalebla komponento por KOficejo
+Comment[es]=Plugin de KOffice
+Comment[et]=KOffice'i plugin
+Comment[fa]=KOffice متصل کننده
+Comment[fi]=KOffice laajennus
+Comment[fr]=Module externe de KOffice
+Comment[he]=תוסף של KOffice
+Comment[hu]=KOffice bővítőmodul
+Comment[it]=Plugin di KOffice
+Comment[ja]=KOfficeプラグイン
+Comment[lo]=ປັກອິນຂອງໂປຣແກມຊຸດສໍານັກງານ K
+Comment[mt]=Plagin KOffice
+Comment[nb]=KOffice-programtillegg
+Comment[nn]=KOffice-modul
+Comment[pl]=Wtyczka KOffice
+Comment[pt]=Módulo para o KOffice
+Comment[pt_BR]=Plugin do KOffice
+Comment[ru]=Модуль KOffice
+Comment[se]=KOffice-moduvla
+Comment[sk]=Zásuvný modul Koffice
+Comment[sl]=Vstavek za KOffice
+Comment[sr]=KOffice-ов додатак
+Comment[sv]=Insticksprogram till Koffice
+Comment[tg]=Дарҷ кардани KOffice
+Comment[th]=ปลั๊กอินของโปรแกรมชุดสำนักงาน K
+Comment[tr]=KOffice Eklentisi
+Comment[uz]=KOffice плагини
+Comment[ven]=Plugin ya ofisi ya K
+Comment[xh]=Iplagi efakiweyo ye KOffice
+Comment[zh_CN]=KOffice 插件
+Comment[zh_TW]=KOffice 外掛程式
+Comment[zu]=Iplagi efakiweyo ye KOffice
+
+[PropertyDef::MenuEntries]
+Type=QStringList
+
+[PropertyDef::ToolBarEntries]
+Type=QStringList
+

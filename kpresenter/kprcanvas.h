@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +28,8 @@
 #include <qpicture.h>
 #include <qvaluelist.h>
 #include <qpixmap.h>
+#include <qpointarray.h>
+#include <qvaluevector.h>
 
 #include <koRuler.h>
 #include <koQueryTrader.h>
@@ -148,9 +151,61 @@ public:
     void setAutoForm( const QString &_autoform )
         { autoform = _autoform; }
 
-    void drawPageInPix( QPixmap&, int pgnum, int zoom, bool forceRealVariableValue = false );
+    /**
+    \brief Draw page into QPixmap.
+
+    Draws page pgnum of the currently open presentation into a QPixmap
+    using the specified zoom factor (or fixed width/height dimensions, resp.)
+
+    Set forceWidth and/or forceHeight to override the zoom factor
+    and obtain a pixmap of the specified width and/or height.
+    By omitting one of them you make sure that the aspect ratio
+    of your page is used for the resulting image.
+
+    \sa exportPage
+    */
+    void drawPageInPix( QPixmap&, int pgnum, int zoom,
+                        bool forceRealVariableValue = false,
+                        int forceWidth  = 0,
+                        int forceHeight = 0 );
+
+    /**
+    \brief Save page to bitmap file.
+
+    Export a page of the currently open presentation to disk
+    using a bitmap format like e.g. PNG.
+    This method uses a QPixmap::save() call.
+
+    \param nPage the internally used <b>0-based</b> page number
+    \param nWidth the desired image width in px
+    \param nHeight the desired image height in px
+    \param fileURL the URL of the image file to be created: if this
+       does not point to a local file a KTempFile is created by QPixmap::save()
+       which is then copied over to the desired location.
+    \param format the format of the image file (see QPixmap::save())
+    \param quality the quality of the image (see QPixmap::save())
+
+    example:
+\verbatim
+exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
+\endverbatim
+    \returns True if the file was written successfully.
+
+    \sa drawPageInPix, KPresenterViewIface::exportPage
+    */
+    bool exportPage( int nPage, int nWidth, int nHeight,
+                     const KURL& fileURL,
+                     const char* format,
+                     int quality = -1 );
 
     void gotoPage( int pg );
+
+    /**
+     * Go to first slide of presentation.
+     * Used in presentation mode.
+     */
+    void presGotoFirstPage();
+
 
     KPrPage* activePage() const;
 
@@ -517,7 +572,10 @@ private:
     bool drawContour;
     double startAngle;
     ModifyType modType;
-    unsigned int oldMx, oldMy;
+    /**
+     * Saves the last mouse position during mouse move events.
+     */
+    QPoint m_savedMousePos;
 
     KPObject *resizeObjNum, *editNum, *rotateNum;
 
@@ -525,6 +583,20 @@ private:
     KPresenterView *m_view;
     bool editMode, goingBack, drawMode;
     bool drawLineInDrawMode;
+    
+    /**
+     * Save the lines drawed in drawMode. 
+     * This is used for paint events.
+     * Used in drawing mode.
+     */
+    QValueVector<QPointArray> m_drawModeLines;
+
+    /**
+     * Index into the QPointArray for the next point of the line in draw mode.
+     * Used in drawing mode.
+     */
+    int m_drawModeLineIndex;
+    
     bool mouseSelectedObject;
     unsigned int currPresPage, currPresStep, subPresStep;
     unsigned int oldPresPage, oldPresStep, oldSubPresStep;

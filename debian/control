@@ -2,7 +2,7 @@ Source: koffice
 Section: kde
 Priority: optional
 Maintainer: Ben Burton <bab@debian.org>
-Build-Depends: automake1.7, debhelper (>= 4.0.0), flex, kdelibs4-dev, libaspell-dev, libfontconfig1-dev, libmagick++-dev, libmysqlclient-dev, libwv2-dev (>= 0.1.9-0), libxml2-dev, libxslt1-dev, postgresql-dev, python2.3-dev
+Build-Depends: automake1.7, debhelper (>= 4.0.0), flex, kdelibs4-dev (>= 4:3.2.0), libaspell-dev, libfontconfig1-dev, libmagick++6-dev, libmysqlclient-dev, libwv2-dev (>= 0.1.9-0), libxml2-dev, libxslt1-dev, postgresql-dev, python2.3-dev
 Standards-Version: 3.6.1
 
 Package: koffice
@@ -20,7 +20,7 @@ Description: KDE Office Suite
 Package: koffice-doc-html
 Architecture: all
 Section: doc
-Suggests: www-browser, koffice
+Suggests: konqueror | www-browser, koffice
 Conflicts: koffice-libs (<< 1:1.1.0-0), koshell (<< 1:1.1.0-0), kpresenter (<< 1:1.1.0-0), kspread (<< 1:1.1.0-0), kugar (<< 1:1.1.0-0), kword (<< 1:1.1.0-0)
 Replaces: koffice-libs (<< 1:1.1.0-0), koshell (<< 1:1.1.0-0), kpresenter (<< 1:1.1.0-0), kspread (<< 1:1.1.0-0), kugar (<< 1:1.1.0-0), kword (<< 1:1.1.0-0)
 Description: KDE Office Suite documentation in HTML format
@@ -66,7 +66,7 @@ Description: a chart drawing program for the KDE Office Suite
 Package: kformula
 Architecture: any
 Section: kde
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, latex-xft-fonts
 Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Replaces: koffice-libs (<< 1:1.1-20010404-0)
@@ -172,7 +172,7 @@ Package: koffice-libs
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, koffice-data (= ${Source-Version})
-Recommends: kghostview (>= 4:3.0.1-0)
+Recommends: kghostview (>= 4:3.0.1-0), latex-xft-fonts
 Suggests: wordnet, tetex-extra
 Conflicts: koffice (<< 2.1-beta2-1), kword (<< 1:1.2.90-0)
 Replaces: koffice (<< 2.1-beta2-1), kword (<< 1:1.2.90-0)

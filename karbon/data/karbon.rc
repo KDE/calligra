@@ -109,4 +109,7 @@
 		<Action name="object_align_vertical_center"/>
 		<Action name="object_align_vertical_bottom"/>
 	</ToolBar>
+	<ToolBar name="Plugins" hidden="true" fullWidth="false">
+		<Text>Plugins</Text>
+	</ToolBar>
 </kpartgui>

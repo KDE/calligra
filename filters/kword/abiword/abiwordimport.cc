@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /* This file is part of the KDE project
    Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
@@ -1610,7 +1610,8 @@ bool StructureParser::fatalError (const QXmlParseException& exception)
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     m_fatalerror=true;
     KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
-        .arg(exception.lineNumber()).arg(exception.columnNumber()).arg(i18n(exception.message().utf8())),
+        .arg(exception.lineNumber()).arg(exception.columnNumber())
+        .arg( i18n( "QXml", exception.message().utf8() ) ),
         i18n("AbiWord Import Filter"),0);
     return false; // Stop parsing now, we do not need further errors.
 }
@@ -1632,7 +1633,7 @@ void StructureParser :: createDocument(void)
     elementDoc.setAttribute("xmlns","http://www.koffice.org/DTD/kword");
     elementDoc.setAttribute("editor","AbiWord Import Filter");
     elementDoc.setAttribute("mime","application/x-kword");
-    elementDoc.setAttribute("syntaxVersion",2);
+    elementDoc.setAttribute("syntaxVersion",3);
     mainDocument.appendChild(elementDoc);
 
     QDomElement element;

@@ -2,6 +2,7 @@
 
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,7 +55,7 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0)
+    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 )
 {
 }
 
@@ -65,30 +66,41 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
     return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
 }
 
-
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
-// We need not only to escape the classical XML stuff but also take care of spaces and tabs.
+// We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
+// Also we must take care about not falling into the rules in XML about white space between 2 opening tags or between 2 closing tags
 {
     QString strReturn;
     QChar ch;
-    int spaceNumber=-1; // How many spaces are *still* to write (-1 == none; 0 == we had just one space, not any further needed)
+    int spaceNumber = 0; // How many spaces should be written
+    uint spaceSequenceStart = 9999; // Where does the space sequence start (start value must be non-null)
 
     for (uint i=0; i<strText.length(); i++)
     {
-        ch=strText[i]; // ###TODO: would it be not better to define a QCharRef instead? (no need to copy anymore.)
+        ch=strText[i];
 
         if (ch!=' ')
         {
-            // The next character is not a space anymore
-            if (spaceNumber>1)
+            // The next character is not a space (anymore)
+            if ( spaceNumber > 0 )
             {
-                strReturn+="<text:s text:c=\"";
-                strReturn+=QString::number(spaceNumber);
-                strReturn+="\"/>";
+                if ( spaceSequenceStart )
+                {   // Generate a real space only if we are not at start
+
+                    strReturn += ' ';
+                    --spaceNumber;
+                }
+                if ( spaceNumber > 1 )
+                {
+                    strReturn += "<text:s text:c=\"";
+                    strReturn += QString::number( spaceNumber );
+                    strReturn += "\"/>";
+                }
             }
-            spaceNumber=-1;
+            spaceNumber = 0;
         }
 
+        // ### TODO: would be switch/case or if/elseif the best?
         switch (ch.unicode())
         {
         case 9: // Tab
@@ -103,14 +115,14 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             }
         case 32: // Space
             {
-                if (spaceNumber>=0)
+                if ( spaceNumber > 0 )
                 {
-                    spaceNumber++;
+                    ++spaceNumber;
                 }
                 else
                 {
-                    strReturn+=' '; // The first one has to be written
-                    spaceNumber=0;
+                    spaceNumber = 1;
+                    spaceSequenceStart = i;
                 }
                 break;
             }
@@ -139,6 +151,21 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 strReturn+="&apos;";
                 break;
             }
+        case 1: // (Non-XML-compatible) replacement character from KWord 0.8
+            {
+                strReturn += '#'; //use KWord 1.[123] replacement character instead
+                break;
+            }
+        // Following characters are not allowed in XML (but some files from KWord 0.8 have some of them.)
+        case  0: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case 11: case 12:
+        case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23:
+        case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31:
+            {
+                kdWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
+                strReturn += '?';
+                break;
+            }
+        case 13: // ### TODO: what to do with it?
         default:
             {
                 strReturn+=ch;
@@ -147,9 +174,10 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         }
     }
 
-    if (spaceNumber>1)
+    if ( spaceNumber > 0 )
     {
         // The last characters were spaces
+        // We do not care about writing a real space (also to avoid to have <tag> </tag>)
         strReturn+="<text:s text:c=\"";
         strReturn+=QString::number(spaceNumber);
         strReturn+="\"/>";
@@ -575,22 +603,77 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     if ( force || ( formatOrigin.underline != formatData.underline )
         || ( formatOrigin.underlineColor != formatData.underlineColor )
-         )
+        || ( formatOrigin.underlineValue != formatData.underlineValue )
+        || ( formatOrigin.underlineStyle != formatData.underlineStyle ) )
     {
         strElement+="style:text-underline=\"";
         if ( formatData.underline )
         {
-            strElement+="single";
-            key += 'S';
+            QString underlineValue ( formatData.underlineValue );
+            QString underlineStyle ( formatData.underlineStyle );
+
+            if ( underlineStyle.isEmpty() )
+                underlineStyle = "solid";
+            if  ( underlineValue == "1" )
+                underlineValue = "single";
+
+            if ( underlineValue == "single" )
+            {
+                if ( underlineStyle == "dash" )
+                {
+                    strElement += "dash";
+                    key += "DA";
+                }
+                else if ( underlineStyle == "dot" )
+                {
+                    strElement += "dotted";
+                    key += "DO";
+                }
+                else if ( underlineStyle == "dashdot" )
+                {
+                    strElement += "dot-dash";
+                    key += "DDA";
+                }
+                else if ( underlineStyle == "dashdotdot" )
+                {
+                    strElement += "dot-dot-dash";
+                    key += "DDDA";
+                }
+                else
+                {
+                    strElement += "single";
+                    key += "1";
+                }
+            }
+            else if ( underlineValue == "double" )
+            {
+                strElement += "double";
+                key += "2";
+            }
+            else if ( underlineValue == "single-bold" )
+            {
+                strElement += "bold";
+                key += "BL";
+            }
+            else if ( underlineValue == "wave" )
+            {
+                strElement += "wave";
+                key += "WV";
+            }
+            else
+            {
+                strElement += "single";
+                key += "?";
+            }
         }
-         else
+        else
         {
             strElement+="none";
             key += 'N';
         }
         strElement += "\" ";
 
-        if ( formatData.underlineColor.isValid() )
+        if ( formatData.underline && formatData.underlineColor.isValid() )
         {
             const QString colorName( formatData.underlineColor.name() );
             strElement += "style:text-underline-color=\"";
@@ -603,13 +686,28 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     key += ',';
 
-    if ( force || (formatOrigin.strikeout != formatData.strikeout ) )
+    if ( force
+        || (formatOrigin.strikeout != formatData.strikeout )
+        || (formatOrigin.strikeoutType != formatData.strikeoutType ) )
     {
+        // OOWriter can only do single, double, thick (and slash and X that KWord cannot do.)
+        //  So no dash, dot and friends.
+
         strElement+="style:text-crossing-out=\"";
-        if ( formatData.strikeout )
+        if ( ( formatData.strikeoutType == "single" ) || ( formatData.strikeoutType == "1" ) )
         {
             strElement+="single-line";
-            key += "SL";
+            key += "1";
+        }
+        else if ( formatData.strikeoutType == "double" )
+        {
+            strElement+="double-line";
+            key += "2";
+        }
+        else if ( formatData.strikeoutType == "single-bold" )
+        {
+            strElement+="thick";
+            key += "T";
         }
         else
         {
@@ -693,23 +791,150 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
+#define ALLOW_TABLE
+
+QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
-#if 0
-    *m_streamOut << "</abiword:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
-    *m_streamOut << "<table:table>\n";
-    // ### TODO: table:column
-    // ### TODO: automatic styles
+#ifdef ALLOW_TABLE
+    const FrameData& frame = cell.frame;
+    QString properties;
 
-    QValueList<TableCell>::ConstIterator itCell;
-
-    for (itCell=anchor.table.cellList.begin();
-        itCell!=anchor.table.cellList.end(); itCell++)
+    key += "!L"; // left border
+    key += frame.lColor.name();
+    key += ",";
+    key += QString::number( frame.lWidth );
+    properties += " fo:border-left=\"";
+    if ( frame.lColor.isValid() && frame.lWidth > 0.0 )
     {
-        // ### TODO: rowspan, colspan
+        properties += QString::number( frame.lWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.lColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
 
-        // AbiWord seems to work by attaching to the cell borders
-        *m_streamOut << "<table:table-cell Table:value-type=\"string\">\n";
+    key += "!R"; // right border
+    key += frame.rColor.name();
+    key += ",";
+    key += QString::number( frame.rWidth );
+    properties += " fo:border-right=\"";
+    if ( frame.rColor.isValid() && frame.rWidth > 0.0 )
+    {
+        properties += QString::number( frame.rWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.rColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!T"; // top border
+    key += frame.tColor.name();
+    key += ",";
+    key += QString::number( frame.tWidth );
+    properties += " fo:border-top=\"";
+    if ( frame.tColor.isValid() && frame.tWidth > 0.0 )
+    {
+        properties += QString::number( frame.tWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.tColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!B"; // bottom border
+    key += frame.bColor.name();
+    key += ",";
+    key += QString::number( frame.bWidth );
+    properties += " fo:border-bottom=\"";
+    if ( frame.bColor.isValid() && frame.bWidth > 0.0 )
+    {
+        properties += QString::number( frame.bWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.bColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    return properties;
+#else
+    return QString::null;
+#endif
+}
+
+bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table, int firstRowNumber )
+{
+#ifdef ALLOW_TABLE
+    *m_streamOut << "<table:table-row>\n";
+    int rowCurrent = firstRowNumber;
+
+    ulong cellNumber = 0L;
+
+    QMap<QString,QString> mapCellStyleKeys;
+
+    for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
+        itCell != table.cellList.end(); ++itCell)
+    {
+        // ### TODO: rows
+        if ( rowCurrent != (*itCell).row )
+        {
+            rowCurrent = (*itCell).row;
+            *m_streamOut << "</table:table-row>\n";
+            *m_streamOut << "<table:table-row>\n";
+        }
+
+        QString key;
+        const QString props ( cellToProperties( (*itCell), key ) );
+
+        QString automaticCellStyle;
+        QMap<QString,QString>::ConstIterator it ( mapCellStyleKeys.find( key ) );
+        if ( it == mapCellStyleKeys.end() )
+        {
+            automaticCellStyle = makeAutomaticStyleName( tableName + ".Cell", cellNumber );
+            mapCellStyleKeys [ key ] = automaticCellStyle;
+            kdDebug(30518) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            m_contentAutomaticStyles += "  <style:style";
+            m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+            m_contentAutomaticStyles += " style:family=\"table-cell\"";
+            m_contentAutomaticStyles += ">\n";
+            m_contentAutomaticStyles += "   <style:properties ";
+            m_contentAutomaticStyles += props;
+            m_contentAutomaticStyles += "/>\n";
+            m_contentAutomaticStyles += "  </style:style>\n";
+        }
+        else
+        {
+            automaticCellStyle = it.data();
+            kdDebug(30518) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+        }
+
+        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
+            << escapeOOText( automaticCellStyle)
+            << "\"";
+
+#if 0
+        // More than one column width?
+        {
+            *m_streamOut << " table:number-columns-spanned=\"" << (*itCell).m_cols << "\"";
+        }
+#endif
+
+        *m_streamOut << ">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
@@ -717,10 +942,248 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
         }
 
         *m_streamOut << "</table:table-cell>\n";
+    
+#if 0
+        if ( (*itCell).m_cols > 1 )
+        {
+            // We need to add some placeholder for the "covered" cells
+            for (int i = 1; i < (*itCell).m_cols; ++i)
+            {
+                *m_streamOut << "<table:covered-table-cell/>";
+            }
+        }
+#endif
     }
 
+    *m_streamOut << "</table:table-row>\n";
+    return true;
+#else
+    return false;
+#endif
+}
+
+#ifdef ALLOW_TABLE
+static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
+{
+    bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
+    uint currentColumn = 0;
+    int tryingRow = firstRowNumber; // We are trying the first row
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell = table.cellList.begin();
+        itCell != table.cellList.end(); ++itCell )
+    {
+        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+
+        if ( (*itCell).row != tryingRow )
+        {
+            if ( uniqueColumns )
+            {
+                 // We had a full row without any horizontally spanned cell, so we have the needed data
+                return currentColumn;
+            }
+            else
+            {
+                // No luck in the previous row, so now try this new one
+                tryingRow = (*itCell).row;
+                uniqueColumns = true;
+                currentColumn = 0;
+            }
+        }
+
+#if 0
+        if ( (*itCell).m_cols > 1 )
+        {
+            // We have a horizontally spanned cell
+            uniqueColumns = false;
+            // Do not waste the time to calculate the width
+            continue;
+        }
+#endif
+
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left );
+
+        if ( currentColumn >= widthArray.size() )
+            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+
+        widthArray.at( currentColumn ) = width;
+        ++currentColumn;
+    }
+
+    // If we are here, it can be:
+    // - the table is either empty or there is not any row without horizontally spanned cells
+    // - we have needed the last row for getting something usable
+
+    return uniqueColumns ? currentColumn : 0;
+}
+#endif
+
+#ifdef ALLOW_TABLE
+static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
+// Get the column widths only by the first row.
+// This is used when all table rows have horizontally spanned cells.
+{
+    uint currentColumn = 0;
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell = table.cellList.begin();
+        itCell != table.cellList.end(); ++itCell )
+    {
+        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        if ( (*itCell).row != firstRowNumber )
+            break; // We have finished the first row
+
+#if 0
+        int cols = (*itCell).m_cols;
+        if ( cols < 1)
+            cols = 1;
+#else
+        const int cols = 1;
+#endif
+
+        // ### FIXME: the columns behind a larger cell do not need to be symmetrical
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
+
+        if ( currentColumn + cols > widthArray.size() )
+            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+
+        for ( int i = 0; i < cols; ++i )
+        {
+            widthArray.at( currentColumn ) = width;
+            ++currentColumn;
+        }
+    }
+    return currentColumn;
+}
+#endif
+
+bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
+{
+#ifdef ALLOW_TABLE
+
+    // Be careful that while being similar the following 5 strings have different purposes
+    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) ); // It also increases m_tableNumber
+    const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
+    const QString translatedName( QString( "Table %1").arg( m_tableNumber ) );
+    const QString automaticFrameStyle ( makeAutomaticStyleName( "TableFrame", m_textBoxNumber ) ); // It also increases m_textBoxNumber
+    const QString translatedFrameName( QString( "Table Frame %1").arg( m_textBoxNumber ) );
+
+    kdDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
+
+    const QValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
+
+    if ( firstCell == anchor.table.cellList.end() )
+    {
+        kdError(30518) << "Table has not any cell!" << endl;
+        return false;
+    }
+
+    const int firstRowNumber = (*firstCell).row;
+    kdDebug(30518) << "First row: " << firstRowNumber << endl;
+
+    QMemArray<double> widthArray(4);
+
+    uint numberColumns = getColumnWidths( anchor.table, widthArray, firstRowNumber );
+
+    if ( numberColumns <= 0 )
+    {
+        kdDebug(30518) << "Could not get correct column widths, so approximating" << endl;
+        // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
+        numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
+        if ( numberColumns <= 0 )
+        {
+            // Still not right? Then it is an error!
+            kdError(30518) << "Cannot get column widths of table " << anchor.key.toString() << endl;
+            return false;
+        }
+    }
+
+    kdDebug(30518) << "Number of columns: " << numberColumns << endl;
+
+
+    double tableWidth = 0.0; // total width of table
+    uint i; // We need the loop variable 2 times
+    for ( i=0; i < numberColumns; ++i )
+    {
+        tableWidth += widthArray.at( i );
+    }
+    kdDebug(30518) << "Table width: " << tableWidth << endl;
+
+    // An inlined table, is an "as-char" text-box
+    *m_streamOut << "<draw:text-box";
+    *m_streamOut << " style:name=\"" << escapeOOText( automaticFrameStyle ) << "\"";
+    *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
+    *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
+    //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the KWord table frames)
+    *m_streamOut << ">\n";
+    
+    *m_streamOut << "<table:table table:name=\""
+        << escapeOOText( translatedName )
+        << "\" table:style-name=\""
+        << escapeOOText( automaticTableStyle )
+        << "\" >\n";
+
+
+    // Now we have enough information to generate the style for the table and its frame
+    
+    kdDebug(30518) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
+    m_contentAutomaticStyles += "  <style:style"; // for frame
+    m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
+    m_contentAutomaticStyles += " style:family=\"graphics\"";
+    m_contentAutomaticStyles += " style:parent-style-name=\"Frame\""; // ### TODO: parent style needs to be correctly defined
+    m_contentAutomaticStyles += ">\n";
+    m_contentAutomaticStyles += "   <style:properties "; // ### TODO
+    m_contentAutomaticStyles += " text:anchor-type=\"as-char\""; // ### TODO: needed?
+    m_contentAutomaticStyles += " fo:padding=\"0pt\" fo:border=\"none\"";
+    m_contentAutomaticStyles += " fo:margin-left=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-top=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-bottom=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-right=\"0pt\"";
+    m_contentAutomaticStyles += "/>\n";
+    m_contentAutomaticStyles += "  </style:style>\n";
+    
+    kdDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+    m_contentAutomaticStyles += "  <style:style"; // for table
+    m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
+    m_contentAutomaticStyles += " style:family=\"table\"";
+    m_contentAutomaticStyles += ">\n";
+    m_contentAutomaticStyles += "   <style:properties ";
+    m_contentAutomaticStyles += " style:width=\"" + QString::number( tableWidth ) + "pt\" ";
+    m_contentAutomaticStyles += "/>\n";
+    m_contentAutomaticStyles += "  </style:style>\n";
+
+    QValueList<TableCell>::ConstIterator itCell;
+
+    ulong columnNumber = 0L;
+
+    for ( i=0; i < numberColumns; ++i )
+    {
+        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
+        kdDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
+
+        m_contentAutomaticStyles += "  <style:style";
+        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
+        m_contentAutomaticStyles += " style:family=\"table-column\"";
+        m_contentAutomaticStyles += ">\n";
+        m_contentAutomaticStyles += "   <style:properties ";
+        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
+        //  and/or the relative variant: style:rel-column-width
+        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( widthArray.at( i ) ) + "pt\" ";
+        m_contentAutomaticStyles += "/>\n";
+        m_contentAutomaticStyles += "  </style:style>\n";
+
+        // ### TODO: find a way how to use table:number-columns-repeated for more that one cell's column(s)
+        *m_streamOut << "<table:table-column table:style-name=\""
+            << escapeOOText( automaticColumnStyle )
+            << "\" table:number-columns-repeated=\"1\"/>\n";
+    }
+
+    makeTableRows( tableName, anchor.table, firstRowNumber );
+
     *m_streamOut << "</table:table>\n";
-    *m_streamOut << "<abiword:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    
+    *m_streamOut << "</draw:text-box>"; // End of inline
+    
 #endif
     return true;
 }
@@ -1076,37 +1539,80 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     styleKey += ',';
 
-    // ### TODO: add support of at least, multiple...
-    if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+    if (force
+        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
+        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
     {
-        // Do nothing!
-    }
-    else if (!layout.lineSpacingType)
-    {
-        // We have a custom line spacing (in points)
-        props += QString("fo:line-height=\"%1pt\" ").arg(layout.lineSpacing);
-        styleKey += QString::number(layout.lineSpacing);
-    }
-    // ### FIXME: it seems that it should be fo:line-height="normal"
-    else if ( 10==layout.lineSpacingType  )
-    {
-        styleKey += "100%"; // One
-    }
-    else if ( 15==layout.lineSpacingType  )
-    {
-        props += "fo:line-height=\"150%\" "; // One-and-half
-        styleKey += "150%";
-    }
-    else if ( 20==layout.lineSpacingType  )
-    {
-        props += "fo:line-height=\"200%\" "; // Two
-        styleKey += "200%";
-    }
-    else
-    {
-        kdWarning(30518) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        switch ( layout.lineSpacingType )
+        {
+        case LayoutData::LS_CUSTOM:
+            {
+                // We have a custom line spacing (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                props += "style:line-spacing=\"";
+                props += height;
+                props += "pt\" ";
+                styleKey += height;
+                styleKey += 'C';
+                break;
+            }
+        case LayoutData::LS_SINGLE:
+            {
+                props += "fo:line-height=\"normal\" "; // One
+                styleKey += "100%"; // One
+                break;
+            }
+        case LayoutData::LS_ONEANDHALF:
+            {
+                props += "fo:line-height=\"150%\" "; // One-and-half
+                styleKey += "150%";
+                break;
+            }
+        case LayoutData::LS_DOUBLE:
+            {
+                props += "fo:line-height=\"200%\" "; // Two
+                styleKey += "200%";
+                break;
+            }
+        case LayoutData::LS_MULTIPLE:
+            {
+                // OOWriter 1.1 only allows up to 200%
+                const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
+                props += "fo:line-height=\"";
+                props += mult;
+                props += "%\" ";
+                styleKey += mult;
+                styleKey += "%";
+                break;
+            }
+        case LayoutData::LS_FIXED:
+            {
+                // We have a fixed line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                props += "fo:line-height=\"";
+                props += height;
+                props += "pt\" ";
+                styleKey += height;
+                styleKey += 'F';
+                break;
+            }
+        case LayoutData::LS_ATLEAST:
+            {
+                // We have a at-least line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                props += "style:line-height-at-least=\"";
+                props += height;
+                props += "pt\" ";
+                styleKey += height;
+                styleKey += 'A';
+                break;
+            }
+        default:
+            {
+                kdWarning(30518) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                break;
+            }
+        }
     }
 
     styleKey += ',';
@@ -1257,9 +1763,12 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
-    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Grpahics is a normal style
+    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Graphics is a normal style
     m_styles += "   <style:properties/>";
     m_styles += "  </style:style>";
+    m_styles += "  <style:style style:name=\"Frame\" style:family=\"graphics\">\n"; // ### TODO: what if Frame is a normal style
+    m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
+    m_styles += "  </style:style>\n";
     return true;
 }
 
