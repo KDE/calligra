@@ -231,14 +231,3 @@ KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map )
   return r;
 }
 
-void util_testDir( const char *_name ) // copy of testDir2 in kfm
-{
-    DIR *dp;
-    QString c = kapp->localkdedir().copy();
-    c += _name;
-    dp = opendir( c.data() );
-    if ( dp == NULL )
-        ::mkdir( c.data(), S_IRWXU );
-    else
-        closedir( dp );
-}

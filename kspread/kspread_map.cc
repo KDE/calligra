@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include <komlWriter.h>
+#include <userpaths.h>
 
 int KSpreadMap::s_mapId = 0L;
 QIntDict<KSpreadMap>* KSpreadMap::s_mapMaps;
@@ -319,10 +320,10 @@ bool KSpreadMap::movePythonCodeToFile()
 {
     if ( m_bPythonCodeInFile )
 	return TRUE;
-    util_testDir( "/share" );
-    util_testDir( "/share/apps" );
-    util_testDir( "/share/apps/kspread" );
-    util_testDir( "/share/apps/kspread/tmp" );
+    UserPaths::testLocalDir( "/share" );
+    UserPaths::testLocalDir( "/share/apps" );
+    UserPaths::testLocalDir( "/share/apps/kspread" );
+    UserPaths::testLocalDir( "/share/apps/kspread/tmp" );
     m_strPythonCodeFile.sprintf( "%s/share/apps/kspread/tmp/script%i.py", 
                                  kapp->localkdedir().data(), time( 0L ) );
     
