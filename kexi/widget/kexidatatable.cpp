@@ -102,7 +102,7 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::initActions()
 {
-//	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
+	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
 	m_view->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
 	plugSharedAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
