@@ -18,182 +18,56 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
-#include <qvbuttongroup.h>
 #include <qlabel.h>
+#include <qlayout.h>
+#include <qwidget.h>
 
 #include <klocale.h>
 #include <koMainWindow.h>
-
-#include "koUnitWidgets.h"
+#include <koUnitWidgets.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vreference.h"
 
 #include "vtransformdocker.h"
 
-// Translate widget for this dialog...
-VTranslateWidget::VTranslateWidget( QWidget* parent ) : QWidget ( parent )
-{
-	QVBoxLayout* mainLayout = new QVBoxLayout( this );
-
-	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Position" ), this );
-	new QLabel( i18n( "H:" ), groupBox );
-	new QLabel( i18n( "V:" ), groupBox );
-	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mainLayout->addWidget( groupBox );
-	
-	mRelative = new QCheckBox( i18n( "Relative position" ), this );
-	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
-	mainLayout->addWidget( mRelative );
-	
-	mReference = new VReference( this );
-	mainLayout->addWidget( mReference );
-	
-	mButtonGroup = new QVButtonGroup( this );
-	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
-	mButtonGroup->insert( button, tr_Duplicate );
-	button = new QPushButton( i18n( "Apply" ), mButtonGroup ); 
-	mButtonGroup->insert( button, tr_Apply );
-	mainLayout->addWidget( mButtonGroup );
-	
-	mainLayout->activate();
-}
-
-// Rotation widget for this dialog...
-VRotateWidget::VRotateWidget( QWidget* parent ) : QWidget ( parent )
-{
-	QVBoxLayout* mainLayout = new QVBoxLayout( this );
-
-	QGroupBox* groupBox = new QGroupBox( 3, Vertical, i18n( "Rotation" ), this );
-	new QLabel( i18n( "Angle:" ), groupBox );
-	new QLabel( i18n( "H:" ), groupBox );
-	new QLabel( i18n( "V:" ), groupBox );
-	/*mAngle = new KoUnitDoubleSpinBox( groupBox, -359.99, 359.99, 1.0 );
-	mAngle->setDecimals(2);
-	mAngle->setMinValue( -359.99 );
-	mAngle->setMaxValue( 359.99 );
-	mAngle->setLineStep(1.00);
-	mAngle->setSuffix( i18n( "deg" ) );*/
-	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mainLayout->addWidget( groupBox );
-	
-	mRelative = new QCheckBox( i18n( "Relative center" ), this );
-	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
-	mainLayout->addWidget( mRelative );
-	
-	mReference = new VReference( this );
-	mainLayout->addWidget( mReference );
-	
-	mButtonGroup = new QVButtonGroup( this );
-	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
-	mButtonGroup->insert( button, tr_Duplicate );
-	button = new QPushButton( i18n( "Apply" ), mButtonGroup ); 
-	mButtonGroup->insert( button, tr_Apply );
-	mainLayout->addWidget( mButtonGroup );
-	
-	mainLayout->activate();
-}
-
-// Shear widget for this dialog...
-VShearWidget::VShearWidget( QWidget* parent ) : QWidget ( parent )
-{
-	QVBoxLayout* mainLayout = new QVBoxLayout( this );
-	
-	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Shear" ), this );
-	new QLabel( i18n( "H:" ), groupBox );
-	new QLabel( i18n( "V:" ), groupBox );
-	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mainLayout->addWidget( groupBox );
-	
-	mReference = new VReference( this );
-	mainLayout->addWidget( mReference );
-	
-	mButtonGroup = new QVButtonGroup( this );
-	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
-	mButtonGroup->insert( button, tr_Duplicate );
-	button = new QPushButton( i18n( "Apply" ), mButtonGroup ); 
-	mButtonGroup->insert( button, tr_Apply );
-	mainLayout->addWidget( mButtonGroup );
-	
-	mainLayout->activate();
-}
-
-// Scale widget for this dialog...
-VScaleWidget::VScaleWidget( QWidget* parent ) : QWidget ( parent )
-{
-	QVBoxLayout* mainLayout = new QVBoxLayout( this );
-
-	QGroupBox* groupBox = new QGroupBox( 2, Vertical, i18n( "Size" ), this );
-	new QLabel( i18n( "H:" ), groupBox );
-	new QLabel( i18n( "V:" ), groupBox );
-	mHSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mVSpinBox = new KoUnitDoubleSpinBox( groupBox, 0.0, 1000.0, 1.0 );
-	mainLayout->addWidget( groupBox );
-	
-	mRelative = new QCheckBox( i18n( "Non-proportional" ), this );
-	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
-	mainLayout->addWidget( mRelative );
-	
-	mReference = new VReference( this );
-	mainLayout->addWidget( mReference );
-	
-	mButtonGroup = new QVButtonGroup( this );
-	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
-	mButtonGroup->insert( button, tr_Duplicate );
-	button = new QPushButton( i18n( "Apply" ), mButtonGroup ); 
-	mButtonGroup->insert( button, tr_Apply );
-	mainLayout->addWidget( mButtonGroup );
-	
-	mainLayout->activate();
-}
-
-// The Dialog...
 VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
 	setCaption( i18n( "Transform" ) );
 	setCloseMode( QDockWindow::Always );
 
-	mTabWidget = new QTabWidget( this );
-	
-	mTranslateWidget = new VTranslateWidget( mTabWidget );
-	mTabWidget->addTab( mTranslateWidget, i18n( "TR" ) ); //TODO: Put the icon instead of text
-	
-	mRotateWidget = new VRotateWidget( mTabWidget );
-	mTabWidget->addTab( mRotateWidget, i18n( "RO" ) ); //TODO: Put the icon instead of text
-	
-	mShearWidget = new VShearWidget( mTabWidget );
-	mTabWidget->addTab( mShearWidget, i18n( "SH" ) ); //TODO: Put the icon instead of text
-	
-	mScaleWidget = new VScaleWidget( mTabWidget );
-	mTabWidget->addTab( mScaleWidget, i18n( "SC" ) ); //TODO: Put the icon instead of text
-	
-	setWidget( mTabWidget );
-}
+	mainWidget = new QWidget( this );
+	QGridLayout *mainLayout = new QGridLayout( mainWidget, 4, 4 );
 
-void VTransformDocker::setTab( TabChoice m_tabChoice )
-{
-	switch( m_tabChoice ) {
-		case Translate:
-			mTabWidget->showPage( mTranslateWidget );
-		case Rotate:
-			mTabWidget->showPage( mRotateWidget );
-		case Shear:
-			mTabWidget->showPage( mShearWidget );
-		case Scale:
-			mTabWidget->showPage( mScaleWidget );
-	}
-}
+	//X: (TODO: Set 5000 limit to real Karbon14 limit, make unit type (PT...) work)
+	QLabel* xLabel = new QLabel( i18n ( "X:" ), mainWidget );
+	mainLayout->addWidget( xLabel, 0, 0 );
+	m_x = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, KoUnit::U_PT, 1 );
+	mainLayout->addWidget( m_x, 1, 0 );
 
+	//Y: (TODO: Set 5000 limit to real Karbon14 limit, make unit type (PT...) work)
+	QLabel* yLabel = new QLabel( i18n ( "Y:" ), mainWidget );
+	mainLayout->addWidget( yLabel, 0, 1 );
+	m_y = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, KoUnit::U_PT, 1 );
+	mainLayout->addWidget( m_y, 1, 1 );
+
+	//Width: (TODO: Set 5000 limit to real Karbon14 limit, make unit type (PT...) work)
+	QLabel* wLabel = new QLabel( i18n ( "W:" ), mainWidget );
+	mainLayout->addWidget( wLabel, 2, 0 );
+	m_width = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, KoUnit::U_PT, 1 );
+	mainLayout->addWidget( m_width, 3, 0 );
+
+	//Height: (TODO: Set 5000 limit to real Karbon14 limit, make unit type (PT...) work)
+	QLabel* hLabel = new QLabel( i18n ( "H:" ), mainWidget );
+	mainLayout->addWidget( hLabel, 2, 1 );
+	m_height = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, KoUnit::U_PT, 1 );
+	mainLayout->addWidget( m_height, 3, 1 );
+
+	//TODO: Add Scale, Rotation, Shear
+
+	setWidget( mainWidget );
+}
 
 #include "vtransformdocker.moc"
 

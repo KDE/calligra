@@ -566,45 +566,11 @@ KarbonView::dummyForTesting()
 }
 
 void
-KarbonView::objectTrafoTranslate()
+KarbonView::objectTransform()
 {
 	if( m_TransformDocker->isVisible() == false )
 	{
 		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
-		m_TransformDocker->setTab( Translate );
-		m_TransformDocker->show();
-	}
-}
-
-void
-KarbonView::objectTrafoScale()
-{
-	if( m_TransformDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
-		m_TransformDocker->setTab( Scale );
-		m_TransformDocker->show();
-	}
-}
-
-void
-KarbonView::objectTrafoRotate()
-{
-	if( m_TransformDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
-		m_TransformDocker->setTab( Rotate );
-		m_TransformDocker->show();
-	}
-}
-
-void
-KarbonView::objectTrafoShear()
-{
-	if( m_TransformDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_TransformDocker, DockRight );
-		m_TransformDocker->setTab( Shear );
 		m_TransformDocker->show();
 	}
 }
@@ -862,47 +828,46 @@ KarbonView::initActions()
 
 	new KAction(
 		i18n( "Align Left" ), "aoleft", 0, this,
-		SLOT( selectionAlignHorizontalLeft() ), actionCollection(), "object_align_horizontal_left" );
+		SLOT( selectionAlignHorizontalLeft() ),
+		actionCollection(), "object_align_horizontal_left" );
 	new KAction(
 		i18n( "Align Center (Horizontal)" ), "aocenterh", 0, this,
-		SLOT( selectionAlignHorizontalCenter() ), actionCollection(), "object_align_horizontal_center" );
+		SLOT( selectionAlignHorizontalCenter() ),
+		actionCollection(), "object_align_horizontal_center" );
 	new KAction(
 		i18n( "Align Right" ), "aoright", 0, this,
-		SLOT( selectionAlignHorizontalRight() ), actionCollection(), "object_align_horizontal_right" );
+		SLOT( selectionAlignHorizontalRight() ),
+		actionCollection(), "object_align_horizontal_right" );
 	new KAction(
 		i18n( "Align Top" ), "aotop", 0, this,
-		SLOT( selectionAlignVerticalTop() ), actionCollection(), "object_align_vertical_top" );
+		SLOT( selectionAlignVerticalTop() ),
+		actionCollection(), "object_align_vertical_top" );
 	new KAction(
 		i18n( "Align Center (Vertical)" ), "aocenterv", 0, this,
-		SLOT( selectionAlignVerticalCenter() ), actionCollection(), "object_align_vertical_center" );
+		SLOT( selectionAlignVerticalCenter() ),
+		actionCollection(), "object_align_vertical_center" );
 	new KAction(
 		i18n( "Align Bottom" ), "aobottom", 0, this,
-		SLOT( selectionAlignVerticalBottom() ), actionCollection(), "object_align_vertical_bottom" );
+		SLOT( selectionAlignVerticalBottom() ),
+		actionCollection(), "object_align_vertical_bottom" );
 
 	m_showRulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_show_ruler" );
 	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
 	m_showRulerAction->setChecked( true );
 	m_groupObjects = new KAction(
-						 i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
-						 SLOT( groupSelection() ), actionCollection(), "selection_group" );
+		i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
+		SLOT( groupSelection() ), actionCollection(), "selection_group" );
 	m_ungroupObjects = new KAction(
-						   i18n( "&Ungroup Objects" ), "14_ungroup", QKeySequence( "Ctrl+U" ), this,
-						   SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
-	new KAction(
-		i18n( "&Translate" ), "14_translate", 0, this,
-		SLOT( objectTrafoTranslate() ), actionCollection(), "object_trafo_translate" );
-	new KAction(
-		i18n( "&Rotate" ), "14_rotate", 0, this,
-		SLOT( objectTrafoRotate() ), actionCollection(), "object_trafo_rotate" );
-	new KAction(
-		i18n( "S&hear" ), "14_shear", 0, this,
-		SLOT( objectTrafoShear() ), actionCollection(), "object_trafo_shear" );
+		i18n( "&Ungroup Objects" ), "14_ungroup", QKeySequence( "Ctrl+U" ), this,
+		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	// object <-----
-
 
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
+	new KAction(
+		i18n( "&Transform" ), "14_transform", 0, this,
+		SLOT( objectTransform() ), actionCollection(), "view_transform_docker" );
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
@@ -923,16 +888,16 @@ KarbonView::initActions()
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
 
 	m_configureAction = new KAction(
-							i18n( "Configure Karbon..." ), "configure", 0, this,
-							SLOT( configure() ), actionCollection(), "configure" );
+				i18n( "Configure Karbon..." ), "configure", 0, this,
+				SLOT( configure() ), actionCollection(), "configure" );
 
-	new KAction( i18n( "Configure Page &Layout..." ), 0, this, SLOT( pageLayout() ), actionCollection(), "page_layout" );
+	new KAction( i18n( "Configure Page &Layout..." ), 0, this,
+			SLOT( pageLayout() ), actionCollection(), "page_layout" );
 	m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
 }
 
 void
-KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
-							 bool /*transparent*/ )
+KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
 	kdDebug() << "view->paintEverything()" << endl;
 }

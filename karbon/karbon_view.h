@@ -70,8 +70,7 @@ public:
 
 	virtual DCOPObject* dcopObject();
 
-	virtual void paintEverything( QPainter &p, const QRect &rect,
-								  bool transparent = false );
+	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
 
 	bool mouseEvent( QMouseEvent* event, const KoPoint & );
 	bool keyEvent( QEvent* event );
@@ -150,10 +149,7 @@ public slots:
 
 protected slots:
 	// Object related operations.
-	void objectTrafoTranslate();
-	void objectTrafoScale();
-	void objectTrafoRotate();
-	void objectTrafoShear();
+	void objectTransform();
 
 	// View.
 	void viewModeChanged();
@@ -186,40 +182,40 @@ protected:
 private:
 	void initActions();
 
-	VCanvas					*m_canvas;
-	KoRuler					*m_horizRuler;
-	KoRuler					*m_vertRuler;
+	VCanvas			*m_canvas;
+	KoRuler			*m_horizRuler;
+	KoRuler			*m_vertRuler;
 
-	VPainterFactory			*m_painterFactory;
-	VStrokeFillPreview		*m_strokeFillPreview;
+	VPainterFactory		*m_painterFactory;
+	VStrokeFillPreview	*m_strokeFillPreview;
 
-	VToolBox				*m_toolbox;
+	VToolBox		*m_toolbox;
 
-	KAction					*m_groupObjects;
-	KAction					*m_ungroupObjects;
+	KAction			*m_groupObjects;
+	KAction			*m_ungroupObjects;
 
 	// actions:
-	KSelectAction			*m_zoomAction;
-	KSelectAction			*m_viewAction;
-	KAction					*m_configureAction;
-	KToggleAction			*m_showRulerAction;
-	KoContextHelpAction		*m_contextHelpAction;
+	KSelectAction		*m_zoomAction;
+	KSelectAction		*m_viewAction;
+	KAction			*m_configureAction;
+	KToggleAction		*m_showRulerAction;
+	KoContextHelpAction	*m_contextHelpAction;
 	// line width
 	KoUnitDoubleSpinComboBox *m_setLineWidth;
 
 	//dockers
-	VColorDocker			*m_ColorManager;
-	VDocumentDocker			*m_documentDocker;
-	VStrokeDocker			*m_strokeDocker;
-	VStyleDocker			*m_styleDocker;
-	VTransformDocker		*m_TransformDocker;
+	VColorDocker		*m_ColorManager;
+	VDocumentDocker		*m_documentDocker;
+	VStrokeDocker		*m_strokeDocker;
+	VStyleDocker		*m_styleDocker;
+	VTransformDocker	*m_TransformDocker;
 
-	VSelectToolBar			*m_selectToolBar;
-	QLabel					*m_status;
-	QLabel					*m_cursorCoords;
+	VSelectToolBar		*m_selectToolBar;
+	QLabel			*m_status;
+	QLabel			*m_cursorCoords;
 
 	// dcop
-	DCOPObject				*m_dcop;
+	DCOPObject		*m_dcop;
 };
 
 #endif

@@ -23,95 +23,25 @@
 
 #include <vdocker.h>
 
-class QCheckBox;
-class QTabWidget;
-class QVButtonGroup;
-
-class KoMainWindow;
+class KarbonPart;
+class KarbonView;
 class KoUnitDoubleSpinBox;
 
-class KarbonView;
-class KarbonPart;
-
-class VReference;
-
-enum ButtonChoice { tr_Duplicate, tr_Apply };
-
-enum TabChoice { Translate, Rotate, Shear, Scale }; //<--- For quickjumping to a certain tab - useful for quick shortcuts
-
-// Translate widget for this dialog...
-class VTranslateWidget : public QWidget
-{
-	Q_OBJECT
-public:
-	VTranslateWidget( QWidget* parent = 0L);
-private:
-	QCheckBox* mRelative;
-	QVButtonGroup* mButtonGroup;
-	KoUnitDoubleSpinBox* mHSpinBox;
-	KoUnitDoubleSpinBox* mVSpinBox;
-	VReference* mReference;
-};
-
-// Rotation widget for this dialog...
-class VRotateWidget : public QWidget
-{
-	Q_OBJECT
-public:
-	VRotateWidget( QWidget* parent = 0L );
-private:
-	QCheckBox* mRelative;
-	QVButtonGroup* mButtonGroup;
-	KoUnitDoubleSpinBox* mAngle;
-	KoUnitDoubleSpinBox* mHSpinBox;
-	KoUnitDoubleSpinBox* mVSpinBox;
-	VReference* mReference;
-};
-
-// Shear widget for this dialog...
-class VShearWidget : public QWidget
-{
-	Q_OBJECT
-public:
-	VShearWidget( QWidget* parent = 0L );
-private:
-	QVButtonGroup* mButtonGroup;
-	KoUnitDoubleSpinBox* mHSpinBox;
-	KoUnitDoubleSpinBox* mVSpinBox;
-	VReference* mReference;
-};
-
-// Scale widget for this dialog...
-class VScaleWidget : public QWidget
-{
-	Q_OBJECT
-public:
-	VScaleWidget( QWidget* parent = 0L );
-private:
-	QCheckBox* mRelative;
-	QVButtonGroup* mButtonGroup;
-	KoUnitDoubleSpinBox* mHSpinBox;
-	KoUnitDoubleSpinBox* mVSpinBox;
-	VReference* mReference;
-};
-
-// The docker ...
 class VTransformDocker : public VDocker
 {
 	Q_OBJECT
 
 public:
 	VTransformDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
-	void setTab( TabChoice m_tabChoice );
-  
+
 private:
-	QTabWidget* mTabWidget;
-	VTranslateWidget* mTranslateWidget;
-	VRotateWidget* mRotateWidget;
-	VShearWidget* mShearWidget;
-	VScaleWidget* mScaleWidget;
 	KarbonPart *m_part;
 	KarbonView *m_view;
+	KoUnitDoubleSpinBox *m_x;
+	KoUnitDoubleSpinBox *m_y;
+	KoUnitDoubleSpinBox *m_width;
+	KoUnitDoubleSpinBox *m_height;
+	QWidget *mainWidget;
 };
 
 #endif

@@ -23,14 +23,6 @@
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>
-		<Menu name="object_transform">
-			<text>&amp;Transform</text>
-			<Action name="object_trafo_translate"/>
-			<Action name="object_trafo_scale"/>
-			<Action name="object_trafo_rotate"/>
-			<Action name="object_trafo_shear"/>
-		</Menu>
-		<Separator/>
 		<Menu name="object_order">
 			<text>&amp;Order</text>
 			<Action name="object_move_totop"/>
@@ -69,6 +61,8 @@
 	<Action name="view_context_help"/>
 	<Action name="view_stroke_docker"/>
 	<Action name="view_style_docker"/>
+	<Action name="view_transform_docker"/>
+	<Separator/>
 	<Action name="view_show_ruler"/>
 	</Menu>
 	 <Menu name="settings"><text>&amp;Settings</text>
