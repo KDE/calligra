@@ -66,7 +66,7 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
 {
     if ( backType != BT_PICTURE )
         return;
-    
+
     if ( !_lastModified.isValid() )
     {
         QFileInfo inf( _filename );
@@ -182,7 +182,7 @@ void KPBackGround::save( ostream& out )
     out << indent << "<BCTYPE value=\"" << static_cast<int>( bcType ) << "\"/>" << endl;
 
     if ( backPix && backType == BT_PICTURE )
-        out << indent << "<BACKPIXKEY " << key << endl;
+        out << indent << "<BACKPIXKEY " << key << " />" << endl;
 
     if ( !backClipFilename.isEmpty() && backType == BT_CLIPART )
         out << indent << "<BACKCLIP filename=\"" << backClipFilename.ascii() << "\"/>" << endl;
