@@ -155,3 +155,4 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
         }
 }
 
+#include "kugar_part.moc"
