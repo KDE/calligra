@@ -15,6 +15,21 @@
 #include "karbon_part.h"
 #include <kdebug.h>
 
+#define FILL_TOPX		15.0
+#define FILL_TOPY		20.0
+#define FILL_BOTTOMX	45.0
+#define FILL_BOTTOMY	50.0
+
+#define STROKE_TOPX		5.0
+#define STROKE_TOPY		10.0
+#define STROKE_BOTTOMX	35.0
+#define STROKE_BOTTOMY	40.0
+
+#define STROKE_TOPX_INNER		STROKE_TOPX + 4
+#define STROKE_TOPY_INNER		STROKE_TOPY + 4
+#define STROKE_BOTTOMX_INNER	STROKE_BOTTOMX - 4
+#define STROKE_BOTTOMY_INNER	STROKE_BOTTOMY - 4
+
 VStrokeFillPreview::VStrokeFillPreview( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L )
 	: QFrame( parent, name ), m_part( part )
 {
@@ -70,6 +85,9 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->begin();
 	m_painter->clear( paletteBackgroundColor().rgb() );
 
+	VStroke stroke;
+	stroke.setLineWidth( 2.0 );
+
 	m_painter->setPen( Qt::NoPen );
 	if( s.type() != stroke_none )
 	{
@@ -94,18 +112,52 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			m_painter->setBrush( s.color() );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 5.0, 10.0 ) );
-		m_painter->lineTo( KoPoint( 35.0, 10.0 ) );
-		m_painter->lineTo( KoPoint( 35.0, 40.0 ) );
-		m_painter->lineTo( KoPoint( 5.0, 40.0 ) );
-		m_painter->lineTo( KoPoint( 5.0, 10.0 ) );
-		m_painter->moveTo( KoPoint( 9.0, 14.0 ) );
-		m_painter->lineTo( KoPoint( 31.0, 14.0 ) );
-		m_painter->lineTo( KoPoint( 31.0, 36.0 ) );
-		m_painter->lineTo( KoPoint( 9.0, 36.0 ) );
-		m_painter->lineTo( KoPoint( 9.0, 14.0 ) );
+		m_painter->moveTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
+
+		m_painter->moveTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
 		m_painter->fillPath();
 	}
+
+	// show 3D outline of stroke part
+	stroke.setColor( Qt::white.rgb() );
+	m_painter->setPen( stroke );
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_TOPY - 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
+	m_painter->strokePath();
+
+	stroke.setColor( Qt::black.rgb() );
+	m_painter->setPen( stroke );
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_BOTTOMY + 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
+	m_painter->strokePath();
+
+	stroke.setColor( Qt::black.rgb() );
+	m_painter->setPen( stroke );
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_TOPY_INNER + 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
+	m_painter->strokePath();
+
+	stroke.setColor( Qt::white.rgb() );
+	m_painter->setPen( stroke );
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_BOTTOMY_INNER - 1 ) );
+	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
+	m_painter->strokePath();
 
 	if( f.type() != fill_none )
 	{
@@ -129,28 +181,31 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			m_painter->setBrush( f.color() );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 15.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 45.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 45.0, 50.0 ) );
-		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
-		m_painter->lineTo( KoPoint( 15.0, 20.0 ) );
+		m_painter->moveTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY) );
 		m_painter->fillPath();
-
 	}
-		m_painter->setBrush( Qt::NoBrush );
-		m_painter->setPen( Qt::white );
-		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 45.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 15.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
-		m_painter->strokePath();
+	// show 3D outline of fill part
+	m_painter->setBrush( Qt::NoBrush );
+	stroke.setColor( Qt::white.rgb() );
+	m_painter->setPen( stroke );
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
+	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+	m_painter->strokePath();
 
-		m_painter->setPen( Qt::black );
-		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 45.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 45.0, 50.0 ) );
-		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
-		m_painter->strokePath();
+	stroke.setColor( Qt::black.rgb() );
+	m_painter->setPen( stroke );
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+	m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
+	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+	m_painter->strokePath();
+
 	m_painter->end();
 
 	repaint();
