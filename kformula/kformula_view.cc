@@ -31,13 +31,13 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
   QWidget( _parent, _name ), KoViewIf( _doc ), OPViewIf( _doc ), KFormula::View_skel()
 {
   setWidget( this );
-  
-  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus ); 
+
+  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
   setBackgroundColor( white );
-  
+
   m_pDoc = _doc;
-    
+
   mn_indexList = new QPopupMenu();
   mn_indexList->insertItem(ICON("index0.xpm"),0);
   mn_indexList->insertSeparator();
@@ -48,13 +48,13 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
   mn_indexList->insertItem(ICON("index3.xpm"),3);
   mn_indexList->setMouseTracking(true);
   mn_indexList->setCheckable(false);
-  
+
   QObject::connect(mn_indexList,SIGNAL(activated(int)),this,SLOT(insertIndex(int)));
 
-  QObject::connect( m_pDoc, SIGNAL( sig_modified() ), 
+  QObject::connect( m_pDoc, SIGNAL( sig_modified() ),
 		    this, SLOT( slotModified() ) );
 
-  QObject::connect( m_pDoc, 
+  QObject::connect( m_pDoc,
 		    SIGNAL(sig_changeType(const BasicElement *)    ),
 		    this, SLOT( slotTypeChanged(const BasicElement *)    ) );
 }
@@ -66,7 +66,7 @@ void KFormulaView::init()
    ******************************************************/
 
   cerr << "Registering menu as " << id() << endl;
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
@@ -81,7 +81,7 @@ void KFormulaView::init()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->registerClient( id(), this );
   else
-    cerr << "Did not get a tool bar manager" << endl;  
+    cerr << "Did not get a tool bar manager" << endl;
 }
 
 KFormulaView::~KFormulaView()
@@ -101,12 +101,12 @@ void KFormulaView::cleanUp()
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->unregisterClient( id() );
-  
+
   m_pDoc->removeView( this );
 
   KoViewIf::cleanUp();
 }
-  
+
 void KFormulaView::paintEvent( QPaintEvent *_ev )
 {
   m_pDoc->paintEvent(_ev, this);
@@ -132,13 +132,13 @@ CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 					 const char* pictname,
 					 const char* tooltip,
 					 const char* func,
-					 CORBA::Long _id ) 
+					 CORBA::Long _id )
 {
     OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(pictname) );
-   
-    CORBA::Long id = 
-	toolbar->insertButton2( pix, _id, 
-				SIGNAL( clicked() ), this, func, true, 
+
+    CORBA::Long id =
+	toolbar->insertButton2( pix, _id,
+				SIGNAL( clicked() ), this, func, true,
 				tooltip, -1 );
 
     return id;
@@ -147,16 +147,16 @@ CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 bool KFormulaView::event( const char* _event, const CORBA::Any& _value )
 {
     cerr << "CALLED" << endl;
-  
+
        EVENT_MAPPER( _event, _value );
-     
+
     MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
     MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
-    
+
     END_EVENT_MAPPER;
-   
+
     cerr << "CALLE2D" << endl;
-    
+
     return false;
 }
 
@@ -169,31 +169,31 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 	m_vMenuHelp = 0L;
 	return true;
     }
-    
+
     cerr << "START --------------- MENU -------------------" << endl;
-    
+
     // View
     _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
-    
+
     m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "&New View" ), this, "newView", 0 );
     m_idMenuView_FontToolbar = m_vMenuView->insertItem( i18n( "Font Toolbar" ), this, "newView", 0 );
     m_idMenuView_TextToolbar = m_vMenuView->insertItem( i18n( "Text Toolbar" ), this, "newView", 0 );
     m_idMenuView_TypeToolbar = m_vMenuView->insertItem( i18n( "Type Toolbar" ), this, "newView", 0 );
-    
+
     // Element
     _menubar->insertMenu( i18n( "&Element" ), m_vMenuElement, -1, -1 );
-    
+
     m_vMenuElement->insertItem8( i18n( "&Add Index" ), m_vMenuElement_AddIndex, -1, -1 );
-    
+
     OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("index0.xpm"));
     m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top left" ), this, "addTopLeftIndex", 0, -1, -1 );
-    
+
     pix = OPUIUtils::convertPixmap(ICON("index1.xpm") );
     m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom left" ), this, "addBottomLeftIndex", 0, -1, -1 );
-    
+
     pix = OPUIUtils::convertPixmap(ICON("index2.xpm") );
     m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top right" ), this, "addTopRightIndex", 0, -1, -1 );
-  
+
   pix = OPUIUtils::convertPixmap(ICON("index3.xpm") );
   m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom right" ), this, "addBottomRightIndex", 0, -1, -1 );
 
@@ -216,7 +216,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuElement_Remove = m_vMenuElement->insertItem( i18n( "Remove element" ), this, "remove", 0 );
 
   m_vMenuElement->insertSeparator( -1 );
-       
+
   m_vMenuElement->insertItem8( i18n( "&Text" ), m_vMenuElement_Text, -1, -1 );	
 
   m_idMenuElement_Text_Font = m_vMenuElement_Text->insertItem( i18n( "Set font" ), this, "textFont", 0 );
@@ -275,7 +275,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuElement->insertItem8( i18n( "&Decoration" ), m_vMenuElement_Decoration, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Symbol" ), m_vMenuElement_Symbol, -1, -1 );
-	    
+	
   // Formula
   _menubar->insertMenu( i18n( "&Formula" ), m_vMenuFormula, -1, -1 );
 
@@ -290,7 +290,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     _menubar->insertSeparator( -1 );
     _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
   }
-    
+
   // m_idMenuHelp_About = m_vMenuHelp->insertItem( i18n( "&About" ), this, "helpAbout", 0 );
   m_idMenuHelp_Using = m_vMenuHelp->insertItem( i18n( "&Using KFormula" ), this, "helpUsing", 0 );
 
@@ -302,7 +302,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
   cerr << "bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
-  
+
   if ( CORBA::is_nil( _factory ) )
   {
     cerr << "Setting to nil" << endl;
@@ -316,12 +316,12 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   // Formula
   m_vToolBarFormula = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-  m_idButtonFormula_0 = addToolButton(m_vToolBarFormula, "mini-xy.xpm", 
+  m_idButtonFormula_0 = addToolButton(m_vToolBarFormula, "mini-xy.xpm",
 				      i18n( "Add/change to simple text" ),
 				      "addText", 0 );
 
 
-  m_idButtonFormula_1 = addToolButton(m_vToolBarFormula, "mini-root.xpm", 
+  m_idButtonFormula_1 = addToolButton(m_vToolBarFormula, "mini-root.xpm",
 				      i18n( "Add/change to root" ), "addRoot", 1 );
 
   m_idButtonFormula_2 = addToolButton(m_vToolBarFormula, "mini-frac.xpm",
@@ -342,7 +342,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_idButtonFormula_6 = addToolButton(m_vToolBarFormula, "matrix.xpm",
 				      i18n( "Add/change matrix" ), "addMatrix", 7  );
     	
-  m_idButtonFormula_7 = addToolButton(m_vToolBarFormula, "index.xpm", 
+  m_idButtonFormula_7 = addToolButton(m_vToolBarFormula, "index.xpm",
 				      i18n( "Add an index at position..." ), "indexList", 8 );
 
 
@@ -355,7 +355,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   fonts[1] = CORBA::string_dup( "symbol" );
   fonts[2] = CORBA::string_dup( "(default)" );
 
-  m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts,   0, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts,   0, false, SIGNAL( activated( const QString & ) ), this,
 							    "fontSelected", true, i18n("Font Family"),
 							    120, -1, OpenPartsUI::AtBottom );
   m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontFamily, 0 );
@@ -363,7 +363,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   OpenPartsUI::StrList sizelist;
 //  int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
   // Why  only these size ?
-  
+
   sizelist.length( 100 );
   for( unsigned int i = 0; i < 100; i++ )
   {
@@ -371,14 +371,14 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     sprintf( buffer, "%i", i+1 );
     sizelist[i] = CORBA::string_dup( buffer );
   }
-  m_idComboFont_FontSize = m_vToolBarFont->insertCombo( sizelist,  1, true, SIGNAL( activated( const char* ) ),
+  m_idComboFont_FontSize = m_vToolBarFont->insertCombo( sizelist,  1, true, SIGNAL( activated( const QString & ) ),
 							    this, "sizeSelected", true,
 							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
   m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontSize, 2  );
 
   m_idButtonFont_Bold = addToolButton(m_vToolBarFont, "bold.xpm",
 				      i18n( "Bold" ), "fontSwitch", 2 );
-      
+
   m_idButtonFont_Italic = addToolButton(m_vToolBarFont, "italic.xpm",
 					i18n( "Italic" ),"fontSwitch", 3 );
 
@@ -388,8 +388,8 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     warning("provo1");
 //     m_vToolBarFont->insertSeparator(   6  );
  //  warning("provo");
- // 
- 
+ //
+
   sizelist.length( 16 );
   for( unsigned int i = 1; i <= 10; i++ )
   {
@@ -404,7 +404,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     sizelist[ 10 + i - 1 ] = CORBA::string_dup( buffer );
   }
 
-   m_idComboFont_ScaleMode = m_vToolBarFont->insertCombo( sizelist,  5    ,true, SIGNAL( activated( const char* ) ),
+   m_idComboFont_ScaleMode = m_vToolBarFont->insertCombo( sizelist,  5    ,true, SIGNAL( activated( const QString & ) ),
 					                 this, "sizeSelected", true,
 	  						    i18n( "Font scale mode" ), 80, -1, OpenPartsUI::AtBottom );
 
@@ -418,10 +418,10 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 				   i18n( "Increase the fontSize" ), "enlarge", 7 );
 
 //m_vToolBarFont->insertSeparator( -1 );
- 
+
   m_idButtonFont_2 = addToolButton(m_vToolBarFont, "elementsw.xpm",
 				   i18n( "Reduce/Increase active element fontSize" ),"fontSwitch", 8 );
-      
+
   m_idButtonFont_3 = addToolButton(m_vToolBarFont, "indexsw.xpm",
 				   i18n( "Reduce/Increase indexes fontSize" ),"fontSwitch",  9 );
 
@@ -438,28 +438,28 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_vToolBarFont->setToggle( m_idButtonFont_3, true );
   m_vToolBarFont->setToggle( m_idButtonFont_4, true );
   m_vToolBarFont->setToggle( m_idButtonFont_5, true );
-	    
+	
   m_vToolBarFont->setButton( m_idButtonFont_2, true );
   m_vToolBarFont->setButton( m_idButtonFont_3, true );
   m_vToolBarFont->setButton( m_idButtonFont_4, true );
   m_vToolBarFont->setButton( m_idButtonFont_5, false );
-	    
+	
 warning("Fine ");
   // Type
   m_vToolBarType = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-  
+
   // ************************* Text *********************
-  m_idButtonType_Spl = addToolButton(m_vToolBarType, "split.xpm", 
+  m_idButtonType_Spl = addToolButton(m_vToolBarType, "split.xpm",
 				     i18n( "Split text into 2 elment" ), "textSplit", 0 );
 //m_vToolBarType->insertSeparator(  -1);
   // ************************** Root ********************
-  m_idButtonType_RIn = addToolButton(m_vToolBarType, "rootindex.xpm", 
+  m_idButtonType_RIn = addToolButton(m_vToolBarType, "rootindex.xpm",
 				     i18n( "Add root index (i.e. Top Left index)" ), "addTopLeftIndex",  1 );
 
-  // ************************** Brackets ********************	  
+  // ************************** Brackets ********************	
  //m_vToolBarType->insertSeparator(  -1);
 
-  //    m_idButtonType_Del = addToolButton(m_vToolBarType, "delimiter.xpm", 
+  //    m_idButtonType_Del = addToolButton(m_vToolBarType, "delimiter.xpm",
   //				     i18n( "Set delimiter type" ), "bracketType" );
 
   fonts.length( 9 );
@@ -472,7 +472,7 @@ warning("Fine ");
   fonts[6] = CORBA::string_dup("]");
   fonts[7] = CORBA::string_dup(">");
   fonts[8] = CORBA::string_dup("|");
-  m_idComboType_DelLeft = m_vToolBarType->insertCombo( fonts, 2 ,false, SIGNAL( activated( const char* ) ), this,
+  m_idComboType_DelLeft = m_vToolBarType->insertCombo( fonts, 2 ,false, SIGNAL( activated( const QString & ) ), this,
 						       "delimiterLeft", true, i18n("Left delimiter"),
 						       40, -1, OpenPartsUI::AtBottom );
 
@@ -485,70 +485,70 @@ warning("Fine ");
   fonts[6] = CORBA::string_dup("[");
   fonts[7] = CORBA::string_dup("<");
   fonts[8] = CORBA::string_dup("|");
-  m_idComboType_DelRight = m_vToolBarType->insertCombo( fonts, 3, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboType_DelRight = m_vToolBarType->insertCombo( fonts, 3, false, SIGNAL( activated( const QString & ) ), this,
 							"delimiterRight", true, i18n("Right delimiter"),
 							40, -1, OpenPartsUI::AtBottom );
 //m_vToolBarType->insertSeparator(  7 );
 
   // ************************** Fraction ********************
-  m_idButtonType_MAl = addToolButton(m_vToolBarType, "midalign.xpm", 
+  m_idButtonType_MAl = addToolButton(m_vToolBarType, "midalign.xpm",
 				     i18n( "Align fraction to midline" ), "fractionAlignM", 4 );
 
-  m_idButtonType_UAl = addToolButton(m_vToolBarType, "upalign.xpm", 
+  m_idButtonType_UAl = addToolButton(m_vToolBarType, "upalign.xpm",
 				     i18n( "Align fraction to numerator" ), "fractionAlignU", 5 );
 
-  m_idButtonType_DAl = addToolButton(m_vToolBarType, "downalign.xpm", 
+  m_idButtonType_DAl = addToolButton(m_vToolBarType, "downalign.xpm",
 				     i18n( "Align fraction to denominator" ), "fractionAlignD",6  );
 
-  m_idButtonType_CAl = addToolButton(m_vToolBarType, "centralign.xpm", 
+  m_idButtonType_CAl = addToolButton(m_vToolBarType, "centralign.xpm",
 				     i18n( "Align center" ), "fractionAlignC", 7 );
-  
-  m_idButtonType_LAl = addToolButton(m_vToolBarType, "leftalign.xpm", 
+
+  m_idButtonType_LAl = addToolButton(m_vToolBarType, "leftalign.xpm",
 				     i18n( "Align left" ), "fractionAlignL", 8 );
 
-  m_idButtonType_RAl = addToolButton(m_vToolBarType, "rightalign.xpm", 
+  m_idButtonType_RAl = addToolButton(m_vToolBarType, "rightalign.xpm",
 				     i18n( "Align Right" ), "fractionAlignR",  9 );
 
-  m_idButtonType_Les = addToolButton(m_vToolBarType, "near.xpm", 
+  m_idButtonType_Les = addToolButton(m_vToolBarType, "near.xpm",
 				     i18n( "Reduce element vertical distance" ), "fractionDistLess", 10 );
 
-  m_idButtonType_Mor = addToolButton(m_vToolBarType, "far.xpm", 
+  m_idButtonType_Mor = addToolButton(m_vToolBarType, "far.xpm",
 				     i18n( "Increase element vertical distance" ), "fractionDistMore", 11 );
 
-  m_idButtonType_Mid = addToolButton(m_vToolBarType, "midline.xpm", 
+  m_idButtonType_Mid = addToolButton(m_vToolBarType, "midline.xpm",
 				     i18n( "Toggle fraction line" ), "toggleMidline", 12 );
 
 //m_vToolBarType->insertSeparator( 17 );
 
   // *******************  Integral **************************+
-  m_idButtonType_AddH = addToolButton(m_vToolBarType, "Ihigher.xpm", 
+  m_idButtonType_AddH = addToolButton(m_vToolBarType, "Ihigher.xpm",
 				      i18n( "Add higher limit" ), "integralHigher", 13 );
 
-  m_idButtonType_AddL = addToolButton(m_vToolBarType, "Ilower.xpm", 
+  m_idButtonType_AddL = addToolButton(m_vToolBarType, "Ilower.xpm",
 				      i18n( "Add lower limit" ), "integralLower", 14 );
 
 //m_vToolBarType->insertSeparator( 20 );
 
   // *********************** Matrix *************************
-  m_idButtonType_SetM = addToolButton(m_vToolBarType, "matrix.xpm", 
+  m_idButtonType_SetM = addToolButton(m_vToolBarType, "matrix.xpm",
 				      i18n( "Set matrix dimension" ), "matrixSet", 15 );
 
-  m_idButtonType_InR = addToolButton(m_vToolBarType, "insrow.xpm", 
+  m_idButtonType_InR = addToolButton(m_vToolBarType, "insrow.xpm",
 				     i18n( "Insert a row" ), "matrixInsRow", 16 );
 
-  m_idButtonType_InC = addToolButton(m_vToolBarType, "inscol.xpm", 
+  m_idButtonType_InC = addToolButton(m_vToolBarType, "inscol.xpm",
 				     i18n( "Insert a column" ), "matrixInsCol",17  );
 
-  m_idButtonType_ReR = addToolButton(m_vToolBarType, "remrow.xpm", 
+  m_idButtonType_ReR = addToolButton(m_vToolBarType, "remrow.xpm",
 				     i18n( "Remove a row" ), "matrixRemRow", 18 );
 
-  m_idButtonType_ReC = addToolButton(m_vToolBarType, "remcol.xpm", 
+  m_idButtonType_ReC = addToolButton(m_vToolBarType, "remcol.xpm",
 				     i18n( "Remove a column" ), "matrixRemCol", 19 );
 
 //m_vToolBarType->insertSeparator( 26 );
 
   // *********************** General *************************
-       m_idButtonType_Pix = addToolButton(m_vToolBarType, "remcol.xpm", 
+       m_idButtonType_Pix = addToolButton(m_vToolBarType, "remcol.xpm",
   				     i18n( "Toggle pixmap use" ), "togglePixmap", 20 );
 warning("vai");
   m_vToolBarType->setToggle( m_idButtonType_UAl, true );
@@ -558,7 +558,7 @@ warning("vai");
   m_vToolBarType->setToggle( m_idButtonType_LAl, true );
   m_vToolBarType->setToggle( m_idButtonType_RAl, true );
   m_vToolBarType->setToggle( m_idButtonType_Mid, true );
-	    
+	
   slotTypeChanged(0);
 
   m_vToolBarFormula->enable( OpenPartsUI::Show );
@@ -566,77 +566,77 @@ warning("vai");
   m_vToolBarType->enable( OpenPartsUI::Show );
 
   cerr << "-------------------------------- TOOL --------------" << endl;
-  
+
   return true;
 }
 
 
 void KFormulaView::slotTypeChanged( const BasicElement *elm)
-{  
+{
     bool isText, isBracket, isFraction, isPrefixed, isMatrix, isRoot;
     if (elm) {
 	const type_info& type = typeid(*elm);
 	isText = type == typeid(TextElement);
 	isBracket = type == typeid(BracketElement);
 	isFraction = type == typeid(FractionElement);
-	isPrefixed = type == typeid(PrefixedElement);        
+	isPrefixed = type == typeid(PrefixedElement);
 	isMatrix = type == typeid(MatrixElement);
 	isRoot = type == typeid(RootElement);
     } else {
-	isRoot = isMatrix = isPrefixed = 
+	isRoot = isMatrix = isPrefixed =
 	    isFraction = isBracket = isText = false;
     }
 
     m_vToolBarType->setItemEnabled(m_idButtonType_Spl,isText);
 
-// It remains deactivated !!!    
+// It remains deactivated !!!
 //    m_rMenuBar->setItemEnabled(m_idMenuElement_Fraction,isFraction);
-    
+
     m_vToolBarType->setItemEnabled(m_idComboType_DelLeft,isBracket);
     m_vToolBarType->setItemEnabled(m_idComboType_DelRight,isBracket);
     m_vToolBarType->setItemEnabled(m_idButtonType_RIn,isRoot);
     m_vToolBarType->setItemEnabled(m_idButtonType_UAl,isFraction);
-    m_vToolBarType->setItemEnabled(m_idButtonType_DAl,isFraction); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_MAl,isFraction);  
-    m_vToolBarType->setItemEnabled(m_idButtonType_Mid,isFraction); 
-    
-    m_vToolBarType->setItemEnabled(m_idButtonType_CAl,isFraction||isMatrix); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_LAl,isFraction||isMatrix); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_RAl,isFraction||isMatrix);  
-    
-    m_vToolBarType->setItemEnabled(m_idButtonType_Les,isFraction); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_Mor,isFraction); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_AddH,isPrefixed); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_AddL,isPrefixed); 
-    m_vToolBarType->setItemEnabled(m_idButtonType_SetM,isMatrix);  
+    m_vToolBarType->setItemEnabled(m_idButtonType_DAl,isFraction);
+    m_vToolBarType->setItemEnabled(m_idButtonType_MAl,isFraction);
+    m_vToolBarType->setItemEnabled(m_idButtonType_Mid,isFraction);
+
+    m_vToolBarType->setItemEnabled(m_idButtonType_CAl,isFraction||isMatrix);
+    m_vToolBarType->setItemEnabled(m_idButtonType_LAl,isFraction||isMatrix);
+    m_vToolBarType->setItemEnabled(m_idButtonType_RAl,isFraction||isMatrix);
+
+    m_vToolBarType->setItemEnabled(m_idButtonType_Les,isFraction);
+    m_vToolBarType->setItemEnabled(m_idButtonType_Mor,isFraction);
+    m_vToolBarType->setItemEnabled(m_idButtonType_AddH,isPrefixed);
+    m_vToolBarType->setItemEnabled(m_idButtonType_AddL,isPrefixed);
+    m_vToolBarType->setItemEnabled(m_idButtonType_SetM,isMatrix);
     m_vToolBarType->setItemEnabled(m_idButtonType_InC,isMatrix);
     m_vToolBarType->setItemEnabled(m_idButtonType_InR,isMatrix);
-    m_vToolBarType->setItemEnabled(m_idButtonType_ReC,isMatrix);    
+    m_vToolBarType->setItemEnabled(m_idButtonType_ReC,isMatrix);
     m_vToolBarType->setItemEnabled(m_idButtonType_ReR,isMatrix);
 
-    if (elm)              
+    if (elm)
     m_vToolBarFont->setCurrentComboItem(m_idComboFont_FontSize, elm->getNumericFont()-1);
 
-    if (isFraction) { 
+    if (isFraction) {
 	QString content=elm->getContent();
-	m_vToolBarType->setButton(m_idButtonType_UAl,content[1]=='U'); 
-	m_vToolBarType->setButton(m_idButtonType_DAl,content[1]=='D'); 
-	m_vToolBarType->setButton(m_idButtonType_MAl,content[1]=='M'); 
-	m_vToolBarType->setButton(m_idButtonType_CAl,content[2]=='C'); 
-	m_vToolBarType->setButton(m_idButtonType_LAl,content[2]=='L'); 
-	m_vToolBarType->setButton(m_idButtonType_RAl,content[2]=='R'); 
-	m_vToolBarType->setButton(m_idButtonType_Mid,content[0]=='F'); 
+	m_vToolBarType->setButton(m_idButtonType_UAl,content[1]=='U');
+	m_vToolBarType->setButton(m_idButtonType_DAl,content[1]=='D');
+	m_vToolBarType->setButton(m_idButtonType_MAl,content[1]=='M');
+	m_vToolBarType->setButton(m_idButtonType_CAl,content[2]=='C');
+	m_vToolBarType->setButton(m_idButtonType_LAl,content[2]=='L');
+	m_vToolBarType->setButton(m_idButtonType_RAl,content[2]=='R');
+	m_vToolBarType->setButton(m_idButtonType_Mid,content[0]=='F');
     }
     if(isMatrix)
     {
     	QString content=elm->getContent();
-    	m_vToolBarType->setButton(m_idButtonType_CAl,content[2]=='C'); 
-	m_vToolBarType->setButton(m_idButtonType_LAl,content[2]=='L'); 
-	m_vToolBarType->setButton(m_idButtonType_RAl,content[2]=='R'); 
+    	m_vToolBarType->setButton(m_idButtonType_CAl,content[2]=='C');
+	m_vToolBarType->setButton(m_idButtonType_LAl,content[2]=='L');
+	m_vToolBarType->setButton(m_idButtonType_RAl,content[2]=='R');
 
     }
     if (isPrefixed)
-    { 
+    {
       QString content=elm->getContent();
 
       OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(content.left(1) + "higher.xpm" ));
@@ -652,7 +652,7 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
 
 
 void KFormulaView::slotModified()
-{ 
+{
   update();
 }
 
@@ -674,7 +674,7 @@ void KFormulaView::addText()
 }
 
 void KFormulaView::addRoot()
-{ 
+{
     debug("adding Root");
     m_pDoc->addRootElement();
 }
@@ -704,7 +704,7 @@ void KFormulaView::addMatrix()
     MatrixSetupWidget *ms=new MatrixSetupWidget();
     ms->setString("MCC002002001006NNNNNN");
     QObject::connect(ms,SIGNAL(returnString(QString)),this,SLOT(createMatrix(QString)));
-    ms->show();    
+    ms->show();
 
 }
 
@@ -713,17 +713,17 @@ void KFormulaView::createMatrix(QString str)
  if(str!="")
     m_pDoc->addMatrixElement(str);
  update();
-} 
+}
 void KFormulaView::modifyMatrix(QString str)
 {
  int x,y,old;
  BasicElement *el=m_pDoc->activeElement();
-  if (el==0) 
+  if (el==0)
    return;
  MatrixElement *elm = dynamic_cast<MatrixElement*>(el);
     if (elm==0)
-	return; 
- 
+	return;
+
  QString oldc=elm->getContent();
  x=atoi(oldc.mid(3,3));
  y=atoi(oldc.mid(6,3));
@@ -732,14 +732,14 @@ void KFormulaView::modifyMatrix(QString str)
  y=atoi(str.mid(6,3));
  elm->setChildrenNumber(x*y);
  for(int i=old;i<x*y;i++)
-  elm->setChild(new BasicElement(m_pDoc,elm,i+4),i);	  
+  elm->setChild(new BasicElement(m_pDoc,elm,i+4),i);	
  for(int i=x*y;i<old;i++)	
   delete    elm->getChild(i); //code to remove unused children...
 
-  
+
  elm->setContent(str);
  update();
-} 
+}
 
 void KFormulaView::addIntegral()
 {
@@ -757,7 +757,7 @@ void KFormulaView::reduce()
 {
     if(m_pDoc->activeElement()==0) return;
     int level;
-    level= FN_REDUCE | FN_P43; 
+    level= FN_REDUCE | FN_P43;
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_2)) level=level | FN_ELEMENT;
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_3)) level=level | FN_INDEXES;
     if(m_vToolBarFont->isButtonOn(m_idButtonFont_4)) level=level | FN_CHILDREN;
@@ -786,7 +786,7 @@ void KFormulaView::enlarge()
 
 
 void KFormulaView::fractionAlignM()
-{ 
+{
     QString content=m_pDoc->activeElement()->getContent();
     content[1]='M';
     m_pDoc->activeElement()->setContent(content);
@@ -913,7 +913,7 @@ void KFormulaView::indexList()
 {
     debug("index");
     QPoint pnt(QCursor::pos());
-    mn_indexList->popup(pnt);  
+    mn_indexList->popup(pnt);
 }
 void KFormulaView::insertIndex(int i)
 {
@@ -926,7 +926,7 @@ void KFormulaView::sizeSelected(const char *size)
 
     BasicElement *el=m_pDoc->activeElement();
     if (el==0) return;
-    el->setNumericFont(atoi(size)); 
+    el->setNumericFont(atoi(size));
     warning(size);
     update();
 }
@@ -934,7 +934,7 @@ void KFormulaView::fontSelected(const char *font)
 {
     BasicElement *el=m_pDoc->activeElement();
 
-    if (el==0) 
+    if (el==0)
 	return;
 
     TextElement *te = dynamic_cast<TextElement*>(el);
@@ -942,9 +942,9 @@ void KFormulaView::fontSelected(const char *font)
     if (te==0)
 	return;
 
-    if (font == "(default)") 
+    if (font == "(default)")
 	font="";
-    
+
     te->changeFontFamily(font);
     warning(font);
     update();
@@ -955,29 +955,29 @@ void KFormulaView::modeSelected(const char *)
     warning("mode");
 }
 void KFormulaView::textFont()
-{ 
+{
     warning("Slot textFont");
 }
 void KFormulaView::textSplit()
-{ 
+{
     warning("Slot textSplit");
 
     BasicElement *el=m_pDoc->activeElement();
 
-    if (el==0) 
+    if (el==0)
 	return;
 
     TextElement *te = dynamic_cast<TextElement*>(el);
 
     if (te==0)
 	return;
-    
+
     te->split(-1);
     update();
 
 }
 void KFormulaView::togglePixmap()
-{ 
+{
     warning("Slot togglePixmap");
 }
 void KFormulaView::integralLower()
@@ -986,44 +986,44 @@ void KFormulaView::integralLower()
     m_pDoc->addChild(2);
 }
 void KFormulaView::integralHigher()
-{ 
+{
     warning("Slot integralHigher");
     m_pDoc->addChild(1);
 }
 void KFormulaView::bracketType()
-{ 
+{
     warning("Slot bracketType");
 }
 void KFormulaView::matrixSet()
-{ 
+{
     MatrixSetupWidget *ms=new MatrixSetupWidget();
-    ms->setString(m_pDoc->activeElement()->getContent()); 
+    ms->setString(m_pDoc->activeElement()->getContent());
         QObject::connect(ms,SIGNAL(returnString(QString)),this,SLOT(modifyMatrix(QString)));
-    ms->show();    
+    ms->show();
 
 }
 void KFormulaView::matrixRemRow()
-{ 
+{
     warning("Slot matrixRemRow");
 }
 void KFormulaView::matrixRemCol()
-{ 
+{
     warning("Slot matrixRemCol");
 }
 void KFormulaView::matrixInsRow()
-{ 
+{
     warning("Slot matrixInsRow");
 }
 void KFormulaView::matrixInsCol()
-{ 
+{
     warning("Slot matrixInsCol");
 }
 void KFormulaView::fractionHAlign()
-{ 
+{
     warning("Slot fractionHAlign");
 }
 void KFormulaView::toggleMidline()
-{ 
+{
 
     warning("Slot toggleMidline");
     QString content=m_pDoc->activeElement()->getContent();
@@ -1032,31 +1032,31 @@ void KFormulaView::toggleMidline()
     update();
 }
 void KFormulaView::symbolType()
-{ 
+{
     warning("Slot sybolType");
 }
 void KFormulaView::DecorationType()
-{ 
+{
     warning("Slot decorationType");
 }
 void KFormulaView::remove()
-{ 
+{
     warning("Slot remove");
 }
 void KFormulaView::elementColor()
-{ 
+{
     warning("Slot elementColor");
 }
 void KFormulaView::generalColor()
-{ 
+{
     warning("Slot generalColor");
 }
 void KFormulaView::generalFont()
-{ 
+{
     warning("Slot generalFont");
 }
 void KFormulaView::delimiterLeft(const char *left)
-{ 
+{
     QString content=m_pDoc->activeElement()->getContent();
     warning(content);
     content[0]=left[0];
@@ -1066,14 +1066,14 @@ void KFormulaView::delimiterLeft(const char *left)
 }
 
 void KFormulaView::delimiterRight(const char *right)
-{ 
+{
     QString content=m_pDoc->activeElement()->getContent();
     warning(content);
     content[1]=right[0];
     warning(content);
     m_pDoc->activeElement()->setContent(content);
     update();
-}        
+}
 
 #include "kformula_view.moc"
 
