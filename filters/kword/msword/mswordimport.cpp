@@ -134,66 +134,6 @@ void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mai
     frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
     mainFramesetElement.appendChild(frameElementOut);
-
-    QDomElement elementStylesPlural=mainDocument.createElement("STYLES");
-    elementDoc.appendChild(elementStylesPlural);
-
-    QDomElement elementStyleStandard=mainDocument.createElement("STYLE");
-    elementStylesPlural.appendChild(elementStyleStandard);
-
-    element=mainDocument.createElement("NAME");
-    element.setAttribute("value","Standard");
-    elementStyleStandard.appendChild(element);
-
-    element=mainDocument.createElement("FOLLOWING");
-    element.setAttribute("name","Standard");
-    elementStyleStandard.appendChild(element);
-
-    QDomElement elementFormat=mainDocument.createElement("FORMAT");
-    elementStyleStandard.appendChild(elementFormat);
-
-    // Use QFontInfo, as it does not give back -1 as point size.
-    QFontInfo defaultFontInfo(KoGlobal::defaultFont());
-
-    element=mainDocument.createElement("FONT");
-    element.setAttribute("name",defaultFontInfo.family());
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("SIZE");
-    element.setAttribute("value",defaultFontInfo.pointSize());
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("ITALIC");
-    element.setAttribute("value",0);
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("WEIGHT");
-    element.setAttribute("value",50);
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("UNDERLINE");
-    element.setAttribute("value",0);
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("STRIKEOUT");
-    element.setAttribute("value",0);
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("VERTALIGN");
-    element.setAttribute("value",0);
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("COLOR");
-    element.setAttribute("red",  0);
-    element.setAttribute("green",0);
-    element.setAttribute("blue", 0);
-    elementFormat.appendChild(element);
-
-    element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
-    element.setAttribute("red",  255);
-    element.setAttribute("green",255);
-    element.setAttribute("blue", 255);
-    elementFormat.appendChild(element);
 }
 
 #include <mswordimport.moc>

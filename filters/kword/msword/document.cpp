@@ -21,6 +21,7 @@
 #include "conversion.h"
 
 #include <kdebug.h>
+#include <styles.h>
 #include <ustring.h>
 #include <word97_generated.h>
 #include <parser.h>
@@ -49,15 +50,58 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
       m_charHandler( new KWordCharacterHandler ), m_parser( wvWare::ParserFactory::createParser( fileName ) )
 {
-    if ( m_parser ) {
+    if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
         m_parser->setSpecialCharacterHandler( m_charHandler );
         m_parser->setBodyTextHandler( this );
+        processStyles();
     }
 }
 
 Document::~Document()
 {
     delete m_charHandler;
+}
+
+void Document::processStyles()
+{
+    QDomElement stylesElem = m_mainDocument.createElement( "STYLES" );
+    m_mainDocument.documentElement().appendChild( stylesElem );
+
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    unsigned int count = styles.size();
+    kdDebug() << k_funcinfo << "count=" << count << endl;
+    for ( unsigned int i = 0; i < count ; ++i )
+    {
+        const wvWare::Style* style = styles.styleByIndex( i );
+        Q_ASSERT( style );
+        kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        if ( style && style->type() == wvWare::Style::sgcPara )
+        {
+            QDomElement styleElem = m_mainDocument.createElement("STYLE");
+            stylesElem.appendChild( styleElem );
+
+            QConstString name = Conversion::string( style->name() );
+            QDomElement element = m_mainDocument.createElement("NAME");
+            element.setAttribute( "value", name.string() );
+            styleElem.appendChild( element );
+
+            kdDebug() << k_funcinfo << "Style: " << name.string() << endl;
+
+            const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
+            if ( followingStyle && followingStyle != style )
+            {
+                QConstString followingName = Conversion::string( followingStyle->name() );
+                element = m_mainDocument.createElement("FOLLOWING");
+                element.setAttribute( "name", followingName.string() );
+                styleElem.appendChild( element );
+            }
+
+            writeLayout( styleElem, &style->pap(), 0L /*all of it, no ref pap*/ );
+
+            writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0 );
+        }
+        // KWord doesn't support character styles yet
+    }
 }
 
 bool Document::parse()
@@ -81,18 +125,21 @@ void Document::paragraphEnd()
 
 void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
-    QConstString newTextStr( reinterpret_cast<const QChar*>( text.data() ), text.length() );
-    QString newText = newTextStr.string();
-    kdDebug() << "runOfText: " << newText << endl;
-    Conversion::encodeText( newText );
+    QConstString newText( Conversion::string( text ) );
+    kdDebug() << "runOfText: " << newText.string() << endl;
+    m_paragraph += newText.string();
 
-    m_paragraph += newText;
+    writeFormat( m_formats, chp, 0L /*TODO*/, m_index, text.length() );
 
+    m_index += text.length();
+}
 
+void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* /*refChp TODO*/, int pos, int len )
+{
     QDomElement format( m_mainDocument.createElement( "FORMAT" ) );
     format.setAttribute( "id", 1 );
-    format.setAttribute( "pos", m_index );
-    format.setAttribute( "len", text.length() );
+    format.setAttribute( "pos", pos );
+    format.setAttribute( "len", len );
 
     // TODO: change the if()s below, to add attributes if different from paragraph format
     // (not if different from 'plain text')
@@ -203,9 +250,7 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     // ## Problem with fShadow. Char property in MSWord, parag property in KWord at the moment....
 
     if ( !format.firstChild().isNull() ) // Don't save an empty format tag
-        m_formats.appendChild( format );
-
-    m_index += text.length();
+        parentElement.appendChild( format );
 }
 
 //#define FONT_DEBUG
@@ -219,7 +264,7 @@ QString Document::getFont(unsigned fc) const
         return QString::null;
     const wvWare::Word97::FFN& ffn ( m_parser->font( fc ) );
 
-    QConstString fontName( reinterpret_cast<const QChar*>( ffn.xszFfn.data() ), ffn.xszFfn.length() );
+    QConstString fontName( Conversion::string( ffn.xszFfn ) );
     QString font = fontName.string();
 
 //#ifdef FONT_DEBUG
@@ -295,78 +340,9 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
     nameElement.setAttribute("value", styleName);
     layoutElement.appendChild(nameElement);
 
-    if ( m_pap ) {
-        QDomElement flowElement = m_mainDocument.createElement("FLOW");
-        QString alignment = Conversion::alignment( m_pap->jc );
-        flowElement.setAttribute("align",alignment);
-        layoutElement.appendChild(flowElement);
-
-        //kdDebug() << k_funcinfo << " dxaLeft1=" << m_pap->dxaLeft1 << " dxaLeft=" << m_pap->dxaLeft << " dxaRight=" << m_pap->dxaRight << " dyaBefore=" << m_pap->dyaBefore << " dyaAfter=" << m_pap->dyaAfter << " lspd=" << m_pap->lspd.dyaLine << "/" << m_pap->lspd.fMultLinespace << endl;
-
-        if ( m_pap->dxaLeft1 || m_pap->dxaLeft || m_pap->dxaRight )
-        {
-            QDomElement indentsElement = m_mainDocument.createElement("INDENTS");
-            // 'first' is relative to 'left' in both formats
-            indentsElement.setAttribute( "first", (double)m_pap->dxaLeft1 / 20.0 );
-            indentsElement.setAttribute( "left", (double)m_pap->dxaLeft / 20.0 );
-            indentsElement.setAttribute( "right", (double)m_pap->dxaRight / 20.0 );
-            layoutElement.appendChild( indentsElement );
-        }
-        if ( m_pap->dyaBefore || m_pap->dyaAfter )
-        {
-            QDomElement offsetsElement = m_mainDocument.createElement("OFFSETS");
-            offsetsElement.setAttribute( "before", (double)m_pap->dyaBefore / 20.0 );
-            offsetsElement.setAttribute( "after", (double)m_pap->dyaAfter / 20.0 );
-            layoutElement.appendChild( offsetsElement );
-        }
-
-        // Linespacing
-        QString lineSpacing = Conversion::lineSpacing( m_pap->lspd );
-        if ( lineSpacing != "0" ) // ##
-        {
-            QDomElement lineSpacingElem = m_mainDocument.createElement( "LINESPACING" );
-            lineSpacingElem.setAttribute("value", lineSpacing );
-            layoutElement.appendChild( lineSpacingElem );
-        }
-
-        if ( m_pap->fKeep || m_pap->fKeepFollow || m_pap->fPageBreakBefore )
-        {
-            QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
-            pageBreak.setAttribute("linesTogether", m_pap->fKeep ? "true" : "false");
-            pageBreak.setAttribute("hardFrameBreak", m_pap->fPageBreakBefore ? "true" : "false");
-            pageBreak.setAttribute("keepWithNext", m_pap->fKeepFollow ? "true" : "false");
-            layoutElement.appendChild( pageBreak );
-        }
-
-        if ( m_pap->brcTop.brcType )
-        {
-            QDomElement borderElement = m_mainDocument.createElement( "TOPBORDER" );
-            Conversion::setBorderAttributes( borderElement, m_pap->brcTop );
-            layoutElement.appendChild( borderElement );
-        }
-        if ( m_pap->brcBottom.brcType )
-        {
-            QDomElement borderElement = m_mainDocument.createElement( "BOTTOMBORDER" );
-            Conversion::setBorderAttributes( borderElement, m_pap->brcBottom );
-            layoutElement.appendChild( borderElement );
-        }
-        if ( m_pap->brcLeft.brcType )
-        {
-            QDomElement borderElement = m_mainDocument.createElement( "LEFTBORDER" );
-            Conversion::setBorderAttributes( borderElement, m_pap->brcLeft );
-            layoutElement.appendChild( borderElement );
-        }
-        if ( m_pap->brcRight.brcType )
-        {
-            QDomElement borderElement = m_mainDocument.createElement( "RIGHTBORDER" );
-            Conversion::setBorderAttributes( borderElement, m_pap->brcRight );
-            layoutElement.appendChild( borderElement );
-        }
-
-        // TODO: COUNTER
-        // TODO: FORMAT - unless it all comes from the style
-        // TODO: SHADOW [it comes from the text runs...]
-        // TODO: TABULATORs itbdMac? (why "Mac"?) rgdxaTab[] rgtbd[]
+    if ( m_pap )
+    {
+        writeLayout( layoutElement, m_pap, 0L /*TODO*/ );
     }
 
     textElement.appendChild(m_mainDocument.createTextNode(text));
@@ -376,4 +352,110 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
     m_paragraph = QString( "" );
     m_index = 0;
     m_oldLayout = layoutElement; // Keep a reference to the old layout for some hacks
+}
+
+void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP* pap, const wvWare::Word97::PAP* /*refPap TODO*/ )
+{
+    QDomElement flowElement = m_mainDocument.createElement("FLOW");
+    QString alignment = Conversion::alignment( pap->jc );
+    flowElement.setAttribute("align",alignment);
+    parentElement.appendChild(flowElement);
+
+    //kdDebug() << k_funcinfo << " dxaLeft1=" << pap->dxaLeft1 << " dxaLeft=" << pap->dxaLeft << " dxaRight=" << pap->dxaRight << " dyaBefore=" << pap->dyaBefore << " dyaAfter=" << pap->dyaAfter << " lspd=" << pap->lspd.dyaLine << "/" << pap->lspd.fMultLinespace << endl;
+
+    if ( pap->dxaLeft1 || pap->dxaLeft || pap->dxaRight )
+    {
+        QDomElement indentsElement = m_mainDocument.createElement("INDENTS");
+        // 'first' is relative to 'left' in both formats
+        indentsElement.setAttribute( "first", (double)pap->dxaLeft1 / 20.0 );
+        indentsElement.setAttribute( "left", (double)pap->dxaLeft / 20.0 );
+        indentsElement.setAttribute( "right", (double)pap->dxaRight / 20.0 );
+        parentElement.appendChild( indentsElement );
+    }
+    if ( pap->dyaBefore || pap->dyaAfter )
+    {
+        QDomElement offsetsElement = m_mainDocument.createElement("OFFSETS");
+        offsetsElement.setAttribute( "before", (double)pap->dyaBefore / 20.0 );
+        offsetsElement.setAttribute( "after", (double)pap->dyaAfter / 20.0 );
+        parentElement.appendChild( offsetsElement );
+    }
+
+    // Linespacing
+    QString lineSpacing = Conversion::lineSpacing( pap->lspd );
+    if ( lineSpacing != "0" ) // ##
+    {
+        QDomElement lineSpacingElem = m_mainDocument.createElement( "LINESPACING" );
+        lineSpacingElem.setAttribute("value", lineSpacing );
+        parentElement.appendChild( lineSpacingElem );
+    }
+
+    if ( pap->fKeep || pap->fKeepFollow || pap->fPageBreakBefore )
+    {
+        QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
+        pageBreak.setAttribute("linesTogether", pap->fKeep ? "true" : "false");
+        pageBreak.setAttribute("hardFrameBreak", pap->fPageBreakBefore ? "true" : "false");
+        pageBreak.setAttribute("keepWithNext", pap->fKeepFollow ? "true" : "false");
+        parentElement.appendChild( pageBreak );
+    }
+
+    // Borders
+    if ( pap->brcTop.brcType )
+    {
+        QDomElement borderElement = m_mainDocument.createElement( "TOPBORDER" );
+        Conversion::setBorderAttributes( borderElement, pap->brcTop );
+        parentElement.appendChild( borderElement );
+    }
+    if ( pap->brcBottom.brcType )
+    {
+        QDomElement borderElement = m_mainDocument.createElement( "BOTTOMBORDER" );
+        Conversion::setBorderAttributes( borderElement, pap->brcBottom );
+        parentElement.appendChild( borderElement );
+    }
+    if ( pap->brcLeft.brcType )
+    {
+        QDomElement borderElement = m_mainDocument.createElement( "LEFTBORDER" );
+        Conversion::setBorderAttributes( borderElement, pap->brcLeft );
+        parentElement.appendChild( borderElement );
+    }
+    if ( pap->brcRight.brcType )
+    {
+        QDomElement borderElement = m_mainDocument.createElement( "RIGHTBORDER" );
+        Conversion::setBorderAttributes( borderElement, pap->brcRight );
+        parentElement.appendChild( borderElement );
+    }
+
+#if 0 // needs rgtbd to be a TBD in wv2
+    // Tabulators
+    if ( pap->itbdMac )
+    {
+        for ( int i = 0 ; i < pap->itbdMac ; ++i )
+        {
+            QDomElement tabElement = m_mainDocument.createElement( "TABULATOR" );
+            tabElement.setAttribute( "ptpos", (double)pap->rgdxaTab[i] / 20.0 );
+            // Wow, lucky here. The type enum matches. Only, MSWord has 4=bar,
+            // which kword doesn't support. We map it to 0 with a clever '%4' :)
+            tabElement.setAttribute( "type", pap->rgtbd[i].jc % 4 );
+            int filling = 0;
+            double width = 0.5; // default kword value, see koparaglayout.cc
+            switch ( pap->rgtbd[i].tlc ) {
+            case 1: // dots
+            case 2: // hyphenated
+                filling = 1; // KWord: dots
+                break;
+            case 3: // single line
+                filling = 2; // KWord: line
+                break;
+            case 4: // heavy line
+                filling = 2; // KWord: line
+                width = 2; // make it heavy. To be tested.
+            }
+            tabElement.setAttribute( "filling", filling );
+            tabElement.setAttribute( "width", width );
+            parentElement.appendChild( tabElement );
+        }
+    }
+#endif
+    // TODO: COUNTER
+    // TODO? FORMAT - unless it all comes from the style, or is all specified for all chars
+    // TODO? SHADOW [it comes from the text runs...]
 }

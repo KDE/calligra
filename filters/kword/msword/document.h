@@ -55,7 +55,12 @@ public:
 
 private:
     QString getFont(unsigned fc) const;
+    void processStyles();
     void writeOutParagraph( const QString& styleName, const QString& text );
+    // Write a <FORMAT> tag from the given CHP
+    void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len );
+    // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given PAP
+    void writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP* pap, const wvWare::Word97::PAP* refPap );
 
     QString m_paragraph;
     QDomDocument& m_mainDocument;

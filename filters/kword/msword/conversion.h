@@ -20,6 +20,7 @@
 #ifndef CONVERSION_H
 #define CONVERSION_H
 
+#include <ustring.h>
 #include <qstring.h>
 #include <qcolor.h>
 
@@ -36,6 +37,13 @@ namespace wvWare {
 
 namespace Conversion
 {
+    // UString -> QConstString conversion. Use .string() to get the QString.
+    // Always store the QConstString into a variable first, to avoid a deep copy.
+    inline QConstString string( const wvWare::UString& str ) {
+        // Let's hope there's no copying of the QConstString happening...
+        return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
+    }
+
     // Prepare text for inclusion in XML
     void encodeText(QString &text);
 
