@@ -853,7 +853,6 @@ void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData )
 {
   double _a, _l, _x, _y, _w, _h, defWidth, defHeight;
-  double lineWidth;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -875,12 +874,10 @@ void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData 
   _a = m_zoomHandler->zoomItX(pPoint->x());
   _l = m_zoomHandler->zoomItY(pPoint->y());
 
-  lineWidth = pShapeData->lineStyle()->width();
-
   painter = pData->painter;
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   switch( pShapeData->fillStyle()->colorStyle() )
   {
@@ -936,9 +933,9 @@ void KivioSMLStencil::drawBezier( KivioShape *pShape, KivioIntraStencilData *pDa
     _yoff + m_zoomHandler->zoomItY((pPoint4->y()/defHeight)*m_h));
 
   painter = pData->painter;
+  painter->setLineStyle(pShapeData->lineStyle());
   double lineWidth = pShapeData->lineStyle()->width();
   painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
-  painter->setFGColor( pShapeData->lineStyle()->color() );
 
   painter->drawBezier( controlPoints );
 }
@@ -968,9 +965,9 @@ void KivioSMLStencil::drawOpenPath( KivioShape *pShape, KivioIntraStencilData *p
   }
 
   painter = pData->painter;
+  painter->setLineStyle(pShapeData->lineStyle());
   double lineWidth = pShapeData->lineStyle()->width();
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
-  painter->setFGColor( pShapeData->lineStyle()->color() );
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   painter->drawOpenPath( pNewPoints );
 
@@ -982,7 +979,6 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
   KivioPainter *painter;
   KivioShapeData *pShapeData = pShape->shapeData();
   KivioPoint *pPoint, *pNewPoint;
-  double lineWidth;
 
   double defWidth = m_pSpawner->defWidth();
   double defHeight = m_pSpawner->defHeight();
@@ -1003,10 +999,9 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
   }
 
   painter = pData->painter;
-  lineWidth = pShapeData->lineStyle()->width();
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   switch( pShapeData->fillStyle()->colorStyle() )
   {
@@ -1037,7 +1032,7 @@ void KivioSMLStencil::drawPie( KivioShape *, KivioIntraStencilData * )
 
 void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, _w, _h, defWidth, defHeight, lineWidth;
+  double _x, _y, _w, _h, defWidth, defHeight;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1054,12 +1049,10 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
-
-  lineWidth = pShapeData->lineStyle()->width();
   painter = pData->painter;
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   switch( pShapeData->fillStyle()->colorStyle() )
   {
@@ -1115,9 +1108,9 @@ void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *
   }
 
   painter = pData->painter;
+  painter->setLineStyle(pShapeData->lineStyle());
   double lineWidth = pShapeData->lineStyle()->width();
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   painter->drawLineArray( arr );
 }
@@ -1125,7 +1118,6 @@ void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *
 void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *pData )
 {
   double _x, _y, _w, _h, defWidth, defHeight;
-  double lineWidth;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1142,12 +1134,9 @@ void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
-
-  lineWidth = pShapeData->lineStyle()->width();
-
   painter = pData->painter;
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
   painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   switch( pShapeData->fillStyle()->colorStyle() )
@@ -1173,7 +1162,6 @@ void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *
 void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilData *pData )
 {
   double _rx, _ry, _x, _y, _w, _h, defWidth, defHeight;
-  double lineWidth;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1195,12 +1183,10 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
   _rx = m_zoomHandler->zoomItX(pPoint->x());
   _ry = m_zoomHandler->zoomItY(pPoint->y());
 
-  lineWidth = pShapeData->lineStyle()->width();
-
   painter = pData->painter;
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   switch( pShapeData->fillStyle()->colorStyle() )
   {
@@ -1225,7 +1211,7 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
 
 void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, defWidth, defHeight, lineWidth;
+  double _x, _y, defWidth, defHeight;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   QPtrList <KivioPoint> *pList;
@@ -1258,10 +1244,9 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
   }
 
   painter = pData->painter;
-  lineWidth = pShapeData->lineStyle()->width();
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   switch( pShapeData->fillStyle()->colorStyle() )
   {
@@ -1287,7 +1272,7 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
 
 void KivioSMLStencil::drawPolyline( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, defWidth, defHeight, lineWidth;
+  double _x, _y, defWidth, defHeight;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   QPtrList <KivioPoint> *pList;
@@ -1318,10 +1303,9 @@ void KivioSMLStencil::drawPolyline( KivioShape *pShape, KivioIntraStencilData *p
   }
 
   painter = pData->painter;
-  lineWidth = pShapeData->lineStyle()->width();
-
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-  painter->setLineWidth( m_zoomHandler->zoomItY(lineWidth) );
+  painter->setLineStyle(pShapeData->lineStyle());
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
 
   painter->drawPolyline(arr);
 }
