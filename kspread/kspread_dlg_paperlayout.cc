@@ -21,6 +21,7 @@
 #include <kspread_doc.h>
 #include "kspread_map.h"
 #include "kspread_sheet.h"
+#include "kspread_sheetprint.h"
 #include <kspread_undo.h>
 #include <kspread_util.h>
 #include <kspread_view.h>
@@ -53,23 +54,25 @@ KSpreadPaperLayout::KSpreadPaperLayout( QWidget * parent, const char * name,
 
 void KSpreadPaperLayout::initTab()
 {
+    KSpreadSheetPrint* print = m_pSheet->print();
+
     QWidget *tab = addPage(i18n( "Options" ));
     QGridLayout *grid = new QGridLayout( tab, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     pApplyToAll = new QCheckBox ( i18n( "&Apply to all sheets" ), tab );
-    pApplyToAll->setChecked( m_pSheet->getPrintGrid() );
+    pApplyToAll->setChecked( print->printGrid() );
     grid->addWidget( pApplyToAll, 0, 0 );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), tab );
-    pPrintGrid->setChecked( m_pSheet->getPrintGrid() );
+    pPrintGrid->setChecked( print->printGrid() );
     grid->addWidget( pPrintGrid, 1, 0 );
 
     pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), tab );
-    pPrintCommentIndicator->setChecked( m_pSheet->getPrintCommentIndicator() );
+    pPrintCommentIndicator->setChecked( print->printCommentIndicator() );
     grid->addWidget( pPrintCommentIndicator, 2, 0 );
 
     pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), tab );
-    pPrintFormulaIndicator->setChecked( m_pSheet->getPrintFormulaIndicator() );
+    pPrintFormulaIndicator->setChecked( print->printFormulaIndicator() );
     grid->addWidget( pPrintFormulaIndicator, 3, 0 );
 
     QLabel *pPrintRange = new QLabel ( i18n("Print range:"), tab );
@@ -77,27 +80,27 @@ void KSpreadPaperLayout::initTab()
 
     ePrintRange = new QLineEdit( tab );
     grid->addWidget( ePrintRange, 4, 1 );
-    ePrintRange->setText( util_rangeName( m_pSheet->printRange() ) );
+    ePrintRange->setText( util_rangeName( print->printRange() ) );
 
     QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
     grid->addWidget( pRepeatCols, 5, 0 );
 
     eRepeatCols = new QLineEdit( tab );
     grid->addWidget( eRepeatCols, 5, 1 );
-    if ( m_pSheet->printRepeatColumns().first != 0 )
-        eRepeatCols->setText( util_encodeColumnLabelText( m_pSheet->printRepeatColumns().first ) +
+    if ( print->printRepeatColumns().first != 0 )
+        eRepeatCols->setText( util_encodeColumnLabelText( print->printRepeatColumns().first ) +
                               ":" +
-                              util_encodeColumnLabelText( m_pSheet->printRepeatColumns().second ) );
+                              util_encodeColumnLabelText( print->printRepeatColumns().second ) );
 
     QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
     grid->addWidget( pRepeatRows, 6, 0 );
 
     eRepeatRows = new QLineEdit( tab );
     grid->addWidget( eRepeatRows, 6, 1 );
-    if ( m_pSheet->printRepeatRows().first != 0 )
-        eRepeatRows->setText( QString().setNum( m_pSheet->printRepeatRows().first ) +
+    if ( print->printRepeatRows().first != 0 )
+        eRepeatRows->setText( QString().setNum( print->printRepeatRows().first ) +
                               ":" +
-                              QString().setNum( m_pSheet->printRepeatRows().second ) );
+                              QString().setNum( print->printRepeatRows().second ) );
 
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pApplyToAll->width() );
@@ -153,18 +156,20 @@ void KSpreadPaperLayout::slotOk()
     m_pView->doc()->emitBeginOperation( false );
     while ( sheet )
     {
+      KSpreadSheetPrint *print = sheet->print();
+
       KoPageLayout pl = getLayout();
       KoHeadFoot hf = getHeadFoot();
       KoUnit::Unit unit = sheet->doc()->getUnit();
-      sheet->setPrintGrid( pPrintGrid->isChecked() );
-      sheet->setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
-      sheet->setPrintFormulaIndicator( pPrintFormulaIndicator->isChecked() );
+      print->setPrintGrid( pPrintGrid->isChecked() );
+      print->setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
+      print->setPrintFormulaIndicator( pPrintFormulaIndicator->isChecked() );
       QString tmpPrintRange = ePrintRange->text();
       QString tmpRepeatCols = eRepeatCols->text();
       QString tmpRepeatRows = eRepeatRows->text();
       if ( tmpPrintRange.isEmpty() )
       {
-        sheet->setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
+        print->setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
       }
       else
       {
@@ -179,7 +184,7 @@ void KSpreadPaperLayout::slotOk()
                 if ( point2.isValid() )
                 {
                     error = false;
-                    sheet->setPrintRange ( QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
+                    print->setPrintRange ( QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
                                                           QMIN( point1.pos.y(), point2.pos.y() ) ),
                                                   QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
                                                           QMAX( point1.pos.y(), point2.pos.y() ) ) ) );
@@ -192,7 +197,7 @@ void KSpreadPaperLayout::slotOk()
 
       if ( tmpRepeatCols.isEmpty() )
       {
-        sheet->setPrintRepeatColumns( qMakePair( 0, 0 ) );
+        print->setPrintRepeatColumns( qMakePair( 0, 0 ) );
       }
       else
       {
@@ -207,7 +212,7 @@ void KSpreadPaperLayout::slotOk()
                 if ( col2 > 0 && col2 <= KS_colMax )
                 {
                     error = false;
-                    sheet->setPrintRepeatColumns ( qMakePair( col1, col2 ) );
+                    print->setPrintRepeatColumns ( qMakePair( col1, col2 ) );
                 }
             }
         }
@@ -218,7 +223,7 @@ void KSpreadPaperLayout::slotOk()
 
       if ( tmpRepeatRows.isEmpty() )
       {
-        sheet->setPrintRepeatRows ( qMakePair( 0, 0 ) );
+        print->setPrintRepeatRows ( qMakePair( 0, 0 ) );
       }
       else
       {
@@ -233,7 +238,7 @@ void KSpreadPaperLayout::slotOk()
                 if ( row2 > 0 && row2 <= KS_rowMax )
                 {
                     error = false;
-                    sheet->setPrintRepeatRows ( qMakePair( row1, row2 ) );
+                    print->setPrintRepeatRows ( qMakePair( row1, row2 ) );
                 }
             }
         }
@@ -245,18 +250,20 @@ void KSpreadPaperLayout::slotOk()
 
       if ( pl.format == PG_CUSTOM )
       {
-        sheet->setPaperWidth( qRound( POINT_TO_MM( pl.ptWidth ) *1000 ) / 1000 );
-        sheet->setPaperHeight( qRound( POINT_TO_MM( pl.ptHeight ) *1000 ) / 1000 );
+        print->setPaperWidth( qRound( POINT_TO_MM( pl.ptWidth ) *1000 ) / 1000 );
+        print->setPaperHeight( qRound( POINT_TO_MM( pl.ptHeight ) *1000 ) / 1000 );
       }
 
-      sheet->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
+      print->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop),
+                             POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom),
+                             pl.format, pl.orientation );
 
-      sheet->setHeadFootLine( sheet->delocalizeHeadFootLine( hf.headLeft  ),
-                              sheet->delocalizeHeadFootLine( hf.headMid   ),
-                              sheet->delocalizeHeadFootLine( hf.headRight ),
-                              sheet->delocalizeHeadFootLine( hf.footLeft  ),
-                              sheet->delocalizeHeadFootLine( hf.footMid   ),
-                              sheet->delocalizeHeadFootLine( hf.footRight ) );
+      print->setHeadFootLine( print->delocalizeHeadFootLine( hf.headLeft  ),
+                              print->delocalizeHeadFootLine( hf.headMid   ),
+                              print->delocalizeHeadFootLine( hf.headRight ),
+                              print->delocalizeHeadFootLine( hf.footLeft  ),
+                              print->delocalizeHeadFootLine( hf.footMid   ),
+                              print->delocalizeHeadFootLine( hf.footRight ) );
 
       sheet->doc()->setUnit( unit );
 

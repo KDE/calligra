@@ -25,6 +25,7 @@
 
 #include "kspread_dlg_preference.h"
 #include "kspread_sheet.h"
+#include "kspread_sheetprint.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
@@ -923,13 +924,13 @@ void configureLayoutPage::apply()
   {
      unsigned int sizePage = defaultSizePage->currentItem();
      config->writeEntry( "Default size page", sizePage );
-     m_pView->activeTable()->setPaperFormat( (KoFormat)sizePage );
+     m_pView->activeTable()->print()->setPaperFormat( (KoFormat)sizePage );
   }
   if( orientation != defaultOrientationPage->currentItem() )
   {
      unsigned int orientationPage = defaultOrientationPage->currentItem();
      config->writeEntry( "Default orientation page", orientationPage );
-     m_pView->activeTable()->setPaperOrientation( (KoOrientation)orientationPage );
+     m_pView->activeTable()->print()->setPaperOrientation( (KoOrientation)orientationPage );
   }
   if( unit != defaultUnit->currentItem() )
   {

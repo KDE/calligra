@@ -20,6 +20,7 @@
 #include "kspread_global.h"
 #include "kspread_canvas.h"
 #include "kspread_sheet.h"
+#include "kspread_sheetprint.h"
 #include "kspread_doc.h"
 #include "KSpreadRowIface.h"
 #include "KSpreadColumnIface.h"
@@ -2107,8 +2108,8 @@ void RowFormat::setDblHeight( double _h, const KSpreadCanvas *_canvas )
 
   // Rise maximum size by new height
   _table->adjustSizeMaxY ( dblHeight() );
-  _table->updatePrintRepeatRowsHeight();
-  _table->updateNewPageListY ( row() );
+  _table->print()->updatePrintRepeatRowsHeight();
+  _table->print()->updateNewPageListY ( row() );
 
   UPDATE_END;
 }
@@ -2343,8 +2344,8 @@ void ColumnFormat::setDblWidth( double _w, const KSpreadCanvas *_canvas )
 
   // Rise maximum size by new width
   _table->adjustSizeMaxX ( dblWidth() );
-  _table->updatePrintRepeatColumnsWidth();
-  _table->updateNewPageListX ( column() );
+  _table->print()->updatePrintRepeatColumnsWidth();
+  _table->print()->updateNewPageListX ( column() );
 
   UPDATE_END;
 }

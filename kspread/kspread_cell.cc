@@ -31,6 +31,7 @@
 #include "kspread_map.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
+#include "kspread_sheetprint.h"
 
 #include <kspread_value.h>
 
@@ -1948,9 +1949,9 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
   if ( !isObscured() )
     /* don't paint content if this cell is obscured */
   {
-    if ( !painter.device()->isExtDev() || m_pTable->getPrintCommentIndicator() )
+    if ( !painter.device()->isExtDev() || m_pTable->print()->printCommentIndicator() )
       paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
-    if ( !painter.device()->isExtDev() || m_pTable->getPrintFormulaIndicator() )
+    if ( !painter.device()->isExtDev() || m_pTable->print()->printFormulaIndicator() )
       paintFormulaIndicator( painter, cellRect, backgroundColor );
 
     paintMoreTextIndicator( painter, cellRect, backgroundColor );
@@ -2371,7 +2372,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
   if( !comment( cellRef.x(), cellRef.y() ).isEmpty() &&
       cellRect.width() > 10.0 &&
       cellRect.height() > 10.0 &&
-      ( table()->getPrintCommentIndicator() ||
+      ( table()->print()->printCommentIndicator() ||
         ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) )
   {
     QColor penColor = Qt::red;
@@ -2703,23 +2704,27 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
   if ( painter.device()->isExtDev() )
     return;
 
+  KSpreadSheetPrint* print = m_pTable->print();
+
   // Draw page borders
   if( m_pTable->isShowPageBorders() )
-  { 
-    if( cellRef.x() >= table()->printRange().left() &&
-        cellRef.x() <= table()->printRange().right()+1 &&
-        cellRef.y() >= table()->printRange().top() &&
-        cellRef.y() <= table()->printRange().bottom()+1 )
+  {
+    if( cellRef.x() >= print->printRange().left() &&
+        cellRef.x() <= print->printRange().right() + 1 &&
+        cellRef.y() >= print->printRange().top() &&
+        cellRef.y() <= print->printRange().bottom() + 1 )
     {
       KSpreadDoc* doc = table()->doc();
-      if ( m_pTable->isOnNewPageX( cellRef.x() ) && ( cellRef.y() <= table()->printRange().bottom() ) )
+      if ( print->isOnNewPageX( cellRef.x() ) &&
+           ( cellRef.y() <= print->printRange().bottom() ) )
       {
         painter.setPen( table()->doc()->pageBorderColor() );
         painter.drawLine( doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
                           doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.bottom() ) );
       }
 
-      if ( m_pTable->isOnNewPageY( cellRef.y() ) && ( cellRef.x() <= table()->printRange().right() ) )
+      if ( print->isOnNewPageY( cellRef.y() ) &&
+           ( cellRef.x() <= print->printRange().right() ) )
       {
         painter.setPen( table()->doc()->pageBorderColor() );
         painter.drawLine( doc->zoomItX( cellRect.x() ),     doc->zoomItY( cellRect.y() ),
@@ -2728,7 +2733,8 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 
       if( paintBorderRight )
       {
-        if ( m_pTable->isOnNewPageX( cellRef.x()+1 ) && ( cellRef.y() <= table()->printRange().bottom() ) )
+        if ( print->isOnNewPageX( cellRef.x() + 1 ) &&
+             ( cellRef.y() <= print->printRange().bottom() ) )
         {
           painter.setPen( table()->doc()->pageBorderColor() );
           painter.drawLine( doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ),
@@ -2738,7 +2744,8 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 
       if( paintBorderBottom )
       {
-        if ( m_pTable->isOnNewPageY( cellRef.y()+1 ) && ( cellRef.x() <= table()->printRange().right() ) )
+        if ( print->isOnNewPageY( cellRef.y() + 1 ) &&
+             ( cellRef.x() <= print->printRange().right() ) )
         {
           painter.setPen( table()->doc()->pageBorderColor() );
           painter.drawLine( doc->zoomItX( cellRect.x() ),     doc->zoomItY( cellRect.bottom() ),

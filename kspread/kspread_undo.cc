@@ -22,6 +22,7 @@
 #include "kspread_doc.h"
 #include "kspread_map.h"
 #include "kspread_util.h"
+#include "kspread_sheetprint.h"
 
 /****************************************************************************
  *
@@ -172,9 +173,9 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadSheet
     name=i18n("Remove Columns");
     m_tableName = _table->tableName();
     m_iColumn= _column;
-    m_iNbCol=_nbCol;
-    m_printRange=_table->printRange();
-    m_printRepeatColumns = _table->printRepeatColumns();
+    m_iNbCol = _nbCol;
+    m_printRange = _table->print()->printRange();
+    m_printRepeatColumns = _table->print()->printRepeatColumns();
     QRect selection;
     selection.setCoords( _column, 1, _column+m_iNbCol, KS_rowMax );
     QDomDocument doc = _table->saveCellRect( selection );
@@ -213,8 +214,8 @@ void KSpreadUndoRemoveColumn::undo()
     table->paste( m_data, QRect( pastePoint, pastePoint ) );
     if(table->getAutoCalc()) table->recalc();
 
-    table->setPrintRange( m_printRange );
-    table->setPrintRepeatColumns( m_printRepeatColumns );
+    table->print()->setPrintRange( m_printRange );
+    table->print()->setPrintRepeatColumns( m_printRepeatColumns );
 
     doc()->undoBuffer()->unlock();
 }
@@ -287,8 +288,8 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadSheet *_tab
     m_tableName = _table->tableName();
     m_iRow = _row;
     m_iNbRow=  _nbRow;
-    m_printRange=_table->printRange();
-    m_printRepeatRows = _table->printRepeatRows();
+    m_printRange=_table->print()->printRange();
+    m_printRepeatRows = _table->print()->printRepeatRows();
 
     QRect selection;
     selection.setCoords( 1, _row, KS_colMax, _row+m_iNbRow );
@@ -333,8 +334,8 @@ void KSpreadUndoRemoveRow::undo()
     QPoint pastePoint( 1, m_iRow );
     table->paste( m_data, QRect(pastePoint, pastePoint) );
 
-    table->setPrintRange( m_printRange );
-    table->setPrintRepeatRows( m_printRepeatRows );
+    table->print()->setPrintRange( m_printRange );
+    table->print()->setPrintRepeatRows( m_printRepeatRows );
 
     if(table->getAutoCalc()) table->recalc();
 
@@ -637,15 +638,15 @@ KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *
     name=i18n("Set Paper Layout");
     m_tableName = _table->tableName();
 
-    m_pl = _table->getPaperLayout();
-    m_hf = _table->getHeadFootLine();
+    m_pl = _table->print()->paperLayout();
+    m_hf = _table->print()->headFootLine();
     m_unit = doc()->getUnit();
-    m_printGrid = _table->getPrintGrid();
-    m_printCommentIndicator = _table->getPrintCommentIndicator();
-    m_printFormulaIndicator = _table->getPrintFormulaIndicator();
-    m_printRange = _table->printRange();
-    m_printRepeatColumns = _table->printRepeatColumns();
-    m_printRepeatRows = _table->printRepeatRows();
+    m_printGrid = _table->print()->printGrid();
+    m_printCommentIndicator = _table->print()->printCommentIndicator();
+    m_printFormulaIndicator = _table->print()->printFormulaIndicator();
+    m_printRange = _table->print()->printRange();
+    m_printRepeatColumns = _table->print()->printRepeatColumns();
+    m_printRepeatRows = _table->print()->printRepeatRows();
 }
 
 KSpreadUndoPaperLayout::~KSpreadUndoPaperLayout()
@@ -656,39 +657,40 @@ void KSpreadUndoPaperLayout::undo()
 {
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
-	return;
+        return;
+    KSpreadSheetPrint* print = table->print();
 
     doc()->undoBuffer()->lock();
 
-    m_plRedo = table->getPaperLayout();
-    table->setPaperLayout( m_pl.ptLeft,  m_pl.ptTop,
+    m_plRedo = print->paperLayout();
+    print->setPaperLayout( m_pl.ptLeft,  m_pl.ptTop,
                            m_pl.ptRight, m_pl.ptBottom,
                            m_pl.format,  m_pl.orientation );
 
-    m_hfRedo = table->getHeadFootLine();
-    table->setHeadFootLine( m_hf.headLeft, m_hf.headMid, m_hf.headRight,
+    m_hfRedo = print->headFootLine();
+    print->setHeadFootLine( m_hf.headLeft, m_hf.headMid, m_hf.headRight,
                             m_hf.footLeft, m_hf.footMid, m_hf.footRight );
 
     m_unitRedo = doc()->getUnit();
     doc()->setUnit( m_unit );
 
-    m_printGridRedo = table->getPrintGrid();
-    table->setPrintGrid( m_printGrid );
+    m_printGridRedo = print->printGrid();
+    print->setPrintGrid( m_printGrid );
 
-    m_printCommentIndicatorRedo = table->getPrintCommentIndicator();
-    table->setPrintCommentIndicator( m_printCommentIndicator );
+    m_printCommentIndicatorRedo = print->printCommentIndicator();
+    print->setPrintCommentIndicator( m_printCommentIndicator );
 
-    m_printFormulaIndicatorRedo = table->getPrintFormulaIndicator();
-    table->setPrintFormulaIndicator( m_printFormulaIndicator );
+    m_printFormulaIndicatorRedo = print->printFormulaIndicator();
+    print->setPrintFormulaIndicator( m_printFormulaIndicator );
 
-    m_printRangeRedo = table->printRange();
-    table->setPrintRange( m_printRange );
+    m_printRangeRedo = print->printRange();
+    print->setPrintRange( m_printRange );
 
-    m_printRepeatColumnsRedo = table->printRepeatColumns();
-    table->setPrintRepeatColumns( m_printRepeatColumns );
+    m_printRepeatColumnsRedo = print->printRepeatColumns();
+    print->setPrintRepeatColumns( m_printRepeatColumns );
 
-    m_printRepeatRowsRedo = table->printRepeatRows();
-    table->setPrintRepeatRows( m_printRepeatRows );
+    m_printRepeatRowsRedo = print->printRepeatRows();
+    print->setPrintRepeatRows( m_printRepeatRows );
 
     doc()->undoBuffer()->unlock();
 }
@@ -697,25 +699,26 @@ void KSpreadUndoPaperLayout::redo()
 {
     KSpreadSheet* table = doc()->map()->findTable( m_tableName );
     if ( !table )
-	return;
+        return;
+    KSpreadSheetPrint* print = table->print();
 
     doc()->undoBuffer()->lock();
-    table->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop,
+    print->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop,
                            m_plRedo.ptRight, m_plRedo.ptBottom,
                            m_plRedo.format, m_plRedo.orientation );
 
-    table->setHeadFootLine( m_hfRedo.headLeft, m_hfRedo.headMid, m_hfRedo.headRight,
+    print->setHeadFootLine( m_hfRedo.headLeft, m_hfRedo.headMid, m_hfRedo.headRight,
                             m_hfRedo.footLeft, m_hfRedo.footMid, m_hfRedo.footRight );
 
     doc()->setUnit( m_unitRedo );
 
-    table->setPrintGrid( m_printGridRedo );
-    table->setPrintCommentIndicator( m_printCommentIndicatorRedo );
-    table->setPrintFormulaIndicator( m_printFormulaIndicatorRedo );
+    print->setPrintGrid( m_printGridRedo );
+    print->setPrintCommentIndicator( m_printCommentIndicatorRedo );
+    print->setPrintFormulaIndicator( m_printFormulaIndicatorRedo );
 
-    table->setPrintRange( m_printRangeRedo );
-    table->setPrintRepeatColumns( m_printRepeatColumnsRedo );
-    table->setPrintRepeatRows( m_printRepeatRowsRedo );
+    print->setPrintRange( m_printRangeRedo );
+    print->setPrintRepeatColumns( m_printRepeatColumnsRedo );
+    print->setPrintRepeatRows( m_printRepeatRowsRedo );
 
     doc()->undoBuffer()->unlock();
 }
@@ -733,7 +736,7 @@ KSpreadUndoDefinePrintRange::KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpr
     name=i18n("Set Paper Layout");
     m_tableName = _table->tableName();
 
-    m_printRange = _table->printRange();
+    m_printRange = _table->print()->printRange();
 }
 
 KSpreadUndoDefinePrintRange::~KSpreadUndoDefinePrintRange()
@@ -747,8 +750,8 @@ void KSpreadUndoDefinePrintRange::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    m_printRangeRedo = table->printRange();
-    table->setPrintRange( m_printRange );
+    m_printRangeRedo = table->print()->printRange();
+    table->print()->setPrintRange( m_printRange );
     doc()->undoBuffer()->unlock();
 }
 
@@ -759,7 +762,7 @@ void KSpreadUndoDefinePrintRange::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->setPrintRange( m_printRangeRedo );
+    table->print()->setPrintRange( m_printRangeRedo );
     doc()->undoBuffer()->unlock();
 }
 

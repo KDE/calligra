@@ -42,6 +42,7 @@
 #include "kspread_undo.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
+#include "kspread_sheetprint.h"
 
 #include "koDocumentInfo.h"
 
@@ -269,57 +270,57 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadSheet* firstTable = m_pMap->firstTable();
+        KSpreadSheetPrint* printObject = m_pMap->firstTable()->print();
 
         QDomElement paper = doc.createElement( "paper" );
-        paper.setAttribute( "format", firstTable->paperFormatString() );
-        paper.setAttribute( "orientation", firstTable->orientationString() );
+        paper.setAttribute( "format", printObject->paperFormatString() );
+        paper.setAttribute( "orientation", printObject->orientationString() );
         spread.appendChild( paper );
         QDomElement borders = doc.createElement( "borders" );
-        borders.setAttribute( "left", firstTable->leftBorder() );
-        borders.setAttribute( "top", firstTable->topBorder() );
-        borders.setAttribute( "right", firstTable->rightBorder() );
-        borders.setAttribute( "bottom", firstTable->bottomBorder() );
+        borders.setAttribute( "left", printObject->leftBorder() );
+        borders.setAttribute( "top", printObject->topBorder() );
+        borders.setAttribute( "right", printObject->rightBorder() );
+        borders.setAttribute( "bottom", printObject->bottomBorder() );
         paper.appendChild( borders );
         QDomElement head = doc.createElement( "head" );
         paper.appendChild( head );
-        if ( !firstTable->headLeft().isEmpty() )
+        if ( !printObject->headLeft().isEmpty() )
         {
             QDomElement left = doc.createElement( "left" );
             head.appendChild( left );
-            left.appendChild( doc.createTextNode( firstTable->headLeft() ) );
+            left.appendChild( doc.createTextNode( printObject->headLeft() ) );
         }
-        if ( !firstTable->headMid().isEmpty() )
+        if ( !printObject->headMid().isEmpty() )
         {
             QDomElement center = doc.createElement( "center" );
             head.appendChild( center );
-            center.appendChild( doc.createTextNode( firstTable->headMid() ) );
+            center.appendChild( doc.createTextNode( printObject->headMid() ) );
         }
-        if ( !firstTable->headRight().isEmpty() )
+        if ( !printObject->headRight().isEmpty() )
         {
             QDomElement right = doc.createElement( "right" );
             head.appendChild( right );
-            right.appendChild( doc.createTextNode( firstTable->headRight() ) );
+            right.appendChild( doc.createTextNode( printObject->headRight() ) );
         }
         QDomElement foot = doc.createElement( "foot" );
         paper.appendChild( foot );
-        if ( !firstTable->footLeft().isEmpty() )
+        if ( !printObject->footLeft().isEmpty() )
         {
             QDomElement left = doc.createElement( "left" );
             foot.appendChild( left );
-            left.appendChild( doc.createTextNode( firstTable->footLeft() ) );
+            left.appendChild( doc.createTextNode( printObject->footLeft() ) );
         }
-        if ( !firstTable->footMid().isEmpty() )
+        if ( !printObject->footMid().isEmpty() )
         {
             QDomElement center = doc.createElement( "center" );
             foot.appendChild( center );
-            center.appendChild( doc.createTextNode( firstTable->footMid() ) );
+            center.appendChild( doc.createTextNode( printObject->footMid() ) );
         }
-        if ( !firstTable->footRight().isEmpty() )
+        if ( !printObject->footRight().isEmpty() )
         {
             QDomElement right = doc.createElement( "right" );
             foot.appendChild( right );
-            right.appendChild( doc.createTextNode( firstTable->footRight() ) );
+            right.appendChild( doc.createTextNode( printObject->footRight() ) );
         }
     }
 
@@ -460,7 +461,8 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
           QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
           for( ; it.current(); ++it )
           {
-            it.current()->setPaperLayout( left, top, right, bottom, format, orientation );
+            it.current()->print()->setPaperLayout( left, top, right, bottom,
+                                                   format, orientation );
           }
       }
 
@@ -505,7 +507,8 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
       for( ; it.current(); ++it )
       {
-        it.current()->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+        it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
+                                                fleft, fcenter, fright);
       }
     }
 

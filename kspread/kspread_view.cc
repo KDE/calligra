@@ -44,6 +44,10 @@
 #include <dcopclient.h>
 #include <dcopref.h>
 
+#include <kdebug.h>
+#include <kstatusbar.h>
+#include <kapplication.h>
+#include <kconfig.h>
 #include <kfind.h>
 #include <kreplace.h>
 #include <kfinddialog.h>
@@ -54,7 +58,7 @@
 
 #include <kparts/partmanager.h>
 
-
+#include "kspread_sheetprint.h"
 #include "kspread_map.h"
 #include "kspread_dlg_scripts.h"
 #include "kspread_dlg_csv.h"
@@ -91,14 +95,10 @@
 #include "kspread_dlg_showColRow.h"
 #include "kspread_dlg_list.h"
 #include "kspread_undo.h"
-#include <kconfig.h>
 #include "handler.h"
 #include "digest.h"
 
 #include "KSpreadViewIface.h"
-#include <kdebug.h>
-#include <kstatusbar.h>
-#include <kapplication.h>
 #include "kspread_dlg_paperlayout.h"
 
 /*****************************************************************************
@@ -2876,6 +2876,7 @@ void KSpreadView::addTable( KSpreadSheet *_t )
 
     // Connect some signals
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
+    QObject::connect( _t->print(), SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet *, const QRect& ) ),
                       SLOT( slotUpdateView( KSpreadSheet*, const QRect& ) ) );
     QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadSheet * ) ),
@@ -3708,13 +3709,14 @@ void KSpreadView::insertFromClipboard()
 
 void KSpreadView::setupPrinter( KPrinter &prt )
 {
+    KSpreadSheetPrint* print = m_pTable->print();
 
     //apply page layout parameters
-    KoFormat pageFormat = m_pTable->paperFormat();
+    KoFormat pageFormat = print->paperFormat();
 
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
-    if ( m_pTable->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
+    if ( print->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
@@ -3725,6 +3727,8 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 
 void KSpreadView::print( KPrinter &prt )
 {
+    KSpreadSheetPrint* print = m_pTable->print();
+
     if ( m_pCanvas->editor() )
     {
       m_pCanvas->deleteEditor( true ); // save changes
@@ -3756,7 +3760,7 @@ void KSpreadView::print( KPrinter &prt )
     m_pDoc->newZoomAndResolution( false, true /* for printing*/ );
 
     //store the current setting in a temporary variable
-    KoOrientation _orient =  m_pTable->orientation();
+    KoOrientation _orient = print->orientation();
 
     QPainter painter;
 
@@ -3765,18 +3769,18 @@ void KSpreadView::print( KPrinter &prt )
     //use the current orientation from print dialog
     if ( prt.orientation() == KPrinter::Landscape )
     {
-        m_pTable->setPaperOrientation( PG_LANDSCAPE );
+        print->setPaperOrientation( PG_LANDSCAPE );
     }
     else
     {
-        m_pTable->setPaperOrientation( PG_PORTRAIT );
+        print->setPaperOrientation( PG_PORTRAIT );
     }
 
     painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
                    (double)metrics.logicalDpiY() / (double)dpiY );
 
     // Print the table and tell that m_pDoc is NOT embedded.
-    m_pTable->print( painter, &prt );
+    print->print( painter, &prt );
 
     m_pDoc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     m_pDoc->newZoomAndResolution( false, false );
@@ -3784,7 +3788,7 @@ void KSpreadView::print( KPrinter &prt )
     painter.end();
 
     //Restore original orientation
-    m_pTable->setPaperOrientation( _orient );
+    print->setPaperOrientation( _orient );
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
@@ -5132,42 +5136,45 @@ void KSpreadView::paperLayoutDlg()
     {
         m_pCanvas->deleteEditor( true ); // save changes
     }
+    KSpreadSheetPrint* print = m_pTable->print();
 
     KoPageLayout pl;
-    pl.format = m_pTable->paperFormat();
-    pl.orientation = m_pTable->orientation();
+    pl.format = print->paperFormat();
+    pl.orientation = print->orientation();
 
-    pl.ptWidth = MM_TO_POINT( m_pTable->paperWidth() );
-    pl.ptHeight = MM_TO_POINT( m_pTable->paperHeight() );
-    pl.ptLeft = MM_TO_POINT( m_pTable->leftBorder() );
-    pl.ptRight = MM_TO_POINT(  m_pTable->rightBorder() );
-    pl.ptTop = MM_TO_POINT(  m_pTable->topBorder() );
-    pl.ptBottom = MM_TO_POINT(  m_pTable->bottomBorder() );
+    pl.ptWidth =  MM_TO_POINT( print->paperWidth() );
+    pl.ptHeight = MM_TO_POINT( print->paperHeight() );
+    pl.ptLeft =   MM_TO_POINT( print->leftBorder() );
+    pl.ptRight =  MM_TO_POINT( print->rightBorder() );
+    pl.ptTop =    MM_TO_POINT( print->topBorder() );
+    pl.ptBottom = MM_TO_POINT( print->bottomBorder() );
 
     KoHeadFoot hf;
-    hf.headLeft  = m_pTable->localizeHeadFootLine( m_pTable->headLeft()  );
-    hf.headRight = m_pTable->localizeHeadFootLine( m_pTable->headRight() );
-    hf.headMid   = m_pTable->localizeHeadFootLine( m_pTable->headMid()   );
-    hf.footLeft  = m_pTable->localizeHeadFootLine( m_pTable->footLeft()  );
-    hf.footRight = m_pTable->localizeHeadFootLine( m_pTable->footRight() );
-    hf.footMid   = m_pTable->localizeHeadFootLine( m_pTable->footMid()   );
+    hf.headLeft  = print->localizeHeadFootLine( print->headLeft()  );
+    hf.headRight = print->localizeHeadFootLine( print->headRight() );
+    hf.headMid   = print->localizeHeadFootLine( print->headMid()   );
+    hf.footLeft  = print->localizeHeadFootLine( print->footLeft()  );
+    hf.footRight = print->localizeHeadFootLine( print->footRight() );
+    hf.footMid   = print->localizeHeadFootLine( print->footMid()   );
 
     KoUnit::Unit unit = doc()->getUnit();
 
-    KSpreadPaperLayout *dlg=new KSpreadPaperLayout( this, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, m_pTable, this);
+    KSpreadPaperLayout *dlg =
+        new KSpreadPaperLayout( this, "PageLayout", pl, hf,
+                                FORMAT_AND_BORDERS | HEADER_AND_FOOTER,
+                                unit, m_pTable, this );
     dlg->show();
     // dlg destroys itself
-
 }
 
 void KSpreadView::definePrintRange()
 {
-    m_pTable->definePrintRange(selectionInfo());
+    m_pTable->print()->definePrintRange( selectionInfo() );
 }
 
 void KSpreadView::resetPrintRange()
 {
-    m_pTable->resetPrintRange();
+    m_pTable->print()->resetPrintRange();
 }
 
 void KSpreadView::multiRow( bool b )

@@ -5,6 +5,7 @@
 
 
 #include "kspread_sheet.h"
+#include "kspread_sheetprint.h"
 #include "kspread_util.h"
 #include "kspread_doc.h"
 
@@ -243,104 +244,104 @@ void KSpreadSheetIface::setShowPageBorders( bool b )
 
 float KSpreadSheetIface::paperHeight()const
 {
-    return m_table->paperHeight();
+    return m_table->print()->paperHeight();
 }
 
 float KSpreadSheetIface::paperWidth()const
 {
-    return m_table->paperWidth();
+    return m_table->print()->paperWidth();
 }
 
 float KSpreadSheetIface::leftBorder()const
 {
-    return m_table->leftBorder();
+    return m_table->print()->leftBorder();
 }
 
 float KSpreadSheetIface::rightBorder()const
 {
-    return m_table->rightBorder();
+    return m_table->print()->rightBorder();
 }
 
 float KSpreadSheetIface::topBorder()const
 {
-    return m_table->topBorder();
+    return m_table->print()->topBorder();
 }
 
 float KSpreadSheetIface::bottomBorder()const
 {
-    return m_table->bottomBorder();
+    return m_table->print()->bottomBorder();
 }
 
 QString KSpreadSheetIface::paperFormatString() const
 {
-    return m_table->paperFormatString();
+    return m_table->print()->paperFormatString();
 }
 
 QString KSpreadSheetIface::headLeft()const
 {
-    return m_table->headLeft();
+    return m_table->print()->headLeft();
 }
 
 QString KSpreadSheetIface::headMid()const
 {
-    return m_table->headMid();
+    return m_table->print()->headMid();
 }
 
 QString KSpreadSheetIface::headRight()const
 {
-    return m_table->headRight();
+    return m_table->print()->headRight();
 }
 
 QString KSpreadSheetIface::footLeft()const
 {
-    return m_table->footLeft();
+    return m_table->print()->footLeft();
 }
 
 QString KSpreadSheetIface::footMid()const
 {
-    return m_table->footMid();
+    return m_table->print()->footMid();
 }
 
 QString KSpreadSheetIface::footRight()const
 {
-    return m_table->footRight();
+    return m_table->print()->footRight();
 }
 
 void KSpreadSheetIface::setHeaderLeft(const QString & text)
 {
-    m_table->setHeadFootLine( text,headMid(), headRight(),
-                              footLeft(), footMid(),footRight() );
+    m_table->print()->setHeadFootLine( text,       headMid(), headRight(),
+                                       footLeft(), footMid(), footRight() );
 }
 
 void KSpreadSheetIface::setHeaderMiddle(const QString & text)
 {
-    m_table->setHeadFootLine( headLeft(),text, headRight(),
-                              footLeft(), footMid(),footRight() );
+    m_table->print()->setHeadFootLine( headLeft(), text,      headRight(),
+                                       footLeft(), footMid(), footRight() );
 
 }
 
 void KSpreadSheetIface::setHeaderRight(const QString & text)
 {
-    m_table->setHeadFootLine( headLeft(),headMid(), text,
-                              footLeft(), footMid(),footRight() );
+    m_table->print()->setHeadFootLine( headLeft(), headMid(), text,
+                                       footLeft(), footMid(), footRight() );
 }
 
 void KSpreadSheetIface::setFooterLeft(const QString & text)
 {
-    m_table->setHeadFootLine( headLeft(),headMid(), headRight(),
-                              text, footMid(),footRight() );
+    m_table->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
+                                       text,       footMid(), footRight() );
 }
 
 void KSpreadSheetIface::setFooterMiddle(const QString & text)
 {
-    m_table->setHeadFootLine( headLeft(),headMid(), headRight(),
-                              footLeft(), text,footRight() );
+    m_table->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
+                                       footLeft(), text,      footRight() );
 }
 
 void KSpreadSheetIface::setFooterRight(const QString & text)
 {
-    m_table->setHeadFootLine( headLeft(),headMid(), headRight(),
-                              footLeft(), footMid(),text );
+    m_table->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
+                                       footLeft(), footMid(), text );
 }
 
 bool KSpreadSheetIface::isProtected() const
