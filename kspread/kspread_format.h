@@ -40,6 +40,7 @@ class KoOasisStyles;
 class KLocale;
 class KSpreadCurrency;
 class KSpreadStyle;
+class KoStyleStack;
 
 /**
  */
@@ -104,7 +105,7 @@ public:
 
     /**
      * don't pass in 0 for _style: only if you copy another format on this directly after...
-     */ 
+     */
     KSpreadFormat( KSpreadSheet * _sheet, KSpreadStyle * _style );
     virtual ~KSpreadFormat();
 
@@ -123,8 +124,8 @@ public:
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
-    virtual bool loadOasisStyleProperties( const QDomElement & property, const KoOasisStyles& oasisStyles );
-    bool loadFontOasisStyle( const QDomElement * font );
+    virtual bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
+    bool loadFontOasisStyle( KoStyleStack & font );
     QPen loadOasisBorder( const QString & borderDef );
     ////////////////////////////////
     //
@@ -367,7 +368,7 @@ public:
     virtual bool isHideFormula( int col, int row) const;
     virtual bool isProtected( int col, int row ) const;
 
-    KSpreadStyle * kspreadStyle() const { return m_pStyle; } 
+    KSpreadStyle * kspreadStyle() const { return m_pStyle; }
     KSpreadSheet* table() { return m_pTable; }
     const KSpreadSheet* table() const { return m_pTable; }
 

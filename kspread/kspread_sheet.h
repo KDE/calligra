@@ -36,6 +36,7 @@ class KSpreadCanvas;
 class KSpreadDoc;
 class KSpreadUndoInsertRemoveAction;
 class KoDocumentEntry;
+class KoStyleStack;
 
 class QStingList;
 class QWidget;
@@ -1167,7 +1168,7 @@ protected:
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
     bool loadCellsOasis( const QDomElement &element, const KoOasisStyles& oasisStyles );
-    bool loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex, const KoOasisStyles& oasisStyles, bool isLast );
+    bool loadRowFormat( const QDomElement& row, KoStyleStack & styleStack, int &rowIndex, const KoOasisStyles& oasisStyles, bool isLast );
 
     void insertChild( KSpreadChild *_child );
 

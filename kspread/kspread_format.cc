@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <float.h>
 #include <koGlobal.h>
+#include <koStyleStack.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -704,37 +705,35 @@ bool KSpreadFormat::load( const QDomElement & f, PasteMode pm, bool paste )
 }
 
 
-bool KSpreadFormat::loadFontOasisStyle( const QDomElement * font )
+bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 {
-  if ( !font )
-    return false;
 
-  kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
+    //kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
-  if ( font->hasAttribute( "fo:font-family" ) )
-    setTextFontFamily( font->attribute( "fo:font-family" ) );
-  if ( font->hasAttribute( "fo:color" ) )
-    setTextColor( QColor( font->attribute( "fo:color" ) ) );
+  if ( font.hasAttribute( "fo:font-family" ) )
+    setTextFontFamily( font.attribute( "fo:font-family" ) );
+  if ( font.hasAttribute( "fo:color" ) )
+    setTextColor( QColor( font.attribute( "fo:color" ) ) );
 #if 0 //fixme
-  if ( font->hasAttribute( "fo:size" ) )
-    setTextFontSize( getFontSize( font->attribute( "fo:size" ) ) );
+  if ( font.hasAttribute( "fo:size" ) )
+    setTextFontSize( getFontSize( font.attribute( "fo:size" ) ) );
   else
     setTextFontSize( 10 );
 #endif
-  if ( font->hasAttribute( "fo:font-style" ) )
+  if ( font.hasAttribute( "fo:font-style" ) )
   {
     kdDebug(30518) << "italic" << endl;
     setTextFontItalic( true ); // only thing we support
   }
-  if ( font->hasAttribute( "fo:font-weight" ) )
+  if ( font.hasAttribute( "fo:font-weight" ) )
     setTextFontBold( true ); // only thing we support
-  if ( font->hasAttribute( "fo:font-weight" ) )
+  if ( font.hasAttribute( "fo:font-weight" ) )
     setTextFontBold( true ); // only thing we support
-  if ( font->hasAttribute( "fo:text-underline" ) || font->hasAttribute( "style:text-underline" ) )
+  if ( font.hasAttribute( "fo:text-underline" ) || font.hasAttribute( "style:text-underline" ) )
     setTextFontUnderline( true ); // only thing we support
-  if ( font->hasAttribute( "style:text-crossing-out" ) )
+  if ( font.hasAttribute( "style:text-crossing-out" ) )
     setTextFontStrike( true ); // only thing we support
-  if ( font->hasAttribute( "style:font-pitch" ) )
+  if ( font.hasAttribute( "style:font-pitch" ) )
   {
     // TODO: possible values: fixed, variable
   }
@@ -743,25 +742,28 @@ bool KSpreadFormat::loadFontOasisStyle( const QDomElement * font )
   return true;
 }
 
-bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, const KoOasisStyles& oasisStyles )
+bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisStyles& oasisStyles )
 {
     kdDebug() << "*** Loading style properties *****" << endl;
 
-    if ( property.hasAttribute( "style:decimal-places" ) )
+    if ( styleStack.hasAttribute( "style:decimal-places" ) )
     {
         bool ok = false;
-        int p = property.attribute( "style:decimal-places" ).toInt( &ok );
+        int p = styleStack.attribute( "style:decimal-places" ).toInt( &ok );
         if (ok )
             setPrecision( p );
     }
 
-    if ( property.hasAttribute( "style:font-name" ) )
+    if ( styleStack.hasAttribute( "style:font-name" ) )
     {
-        QDomElement * font = oasisStyles.styles()[ property.attribute( "style:font-name" ) ];
-        loadFontOasisStyle( font ); // generell font style
+        QDomElement * font = oasisStyles.styles()[ styleStack.attribute( "style:font-name" ) ];
+        styleStack.save();
+        styleStack.push( *font );
+        loadFontOasisStyle( styleStack ); // generell font style
+        styleStack.restore();
     }
 
-    loadFontOasisStyle( &property ); // specific font style
+    loadFontOasisStyle( styleStack ); // specific font style
 
     // TODO:
     //   diagonal: fall + goup
@@ -773,18 +775,18 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
     //   style:condition="cell-content()=15"
     //     => style:apply-style-name="Result" style:base-cell-address="Sheet6.A5"/>
 
-    if ( property.hasAttribute( "style:rotation-angle" ) )
+    if ( styleStack.hasAttribute( "style:rotation-angle" ) )
     {
         bool ok = false;
-        int a = property.attribute( "style:rotation-angle" ).toInt( &ok );
+        int a = styleStack.attribute( "style:rotation-angle" ).toInt( &ok );
         if ( ok )
             setAngle( -a + 1 );
     }
 
-    kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<property.hasAttribute( "fo:text-align" )<<endl;
-    if ( property.hasAttribute( "fo:text-align" ) )
+    kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttribute( "fo:text-align" )<<endl;
+    if ( styleStack.hasAttribute( "fo:text-align" ) )
     {
-        QString s = property.attribute( "fo:text-align" );
+        QString s = styleStack.attribute( "fo:text-align" );
         if ( s == "center" )
             setAlign( KSpreadFormat::Center );
         else if ( s == "end" )
@@ -795,19 +797,19 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
             setAlign( KSpreadFormat::Center );
     }
 
-    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<property.hasAttribute( "fo:background-color" )<<endl;
+    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttribute( "fo:background-color" )<<endl;
 
-    if ( property.hasAttribute( "fo:background-color" ) )
-        setBgColor( QColor( property.attribute( "fo:background-color" ) ) );
+    if ( styleStack.hasAttribute( "fo:background-color" ) )
+        setBgColor( QColor( styleStack.attribute( "fo:background-color" ) ) );
 
-    if ( property.hasAttribute( "style:print-content" ) )
+    if ( styleStack.hasAttribute( "style:print-content" ) )
     {
-        if ( property.attribute( "style:print-content" ) == "false" )
+        if ( styleStack.attribute( "style:print-content" ) == "false" )
             setDontPrintText( false );
     }
-    if ( property.hasAttribute( "style:cell-protect" ) )
+    if ( styleStack.hasAttribute( "style:cell-protect" ) )
     {
-        QString prot( property.attribute( "style:cell-protect" ) );
+        QString prot( styleStack.attribute( "style:cell-protect" ) );
         if ( prot == "none" )
         {
             setNotProtected( true );
@@ -847,14 +849,14 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
         kdDebug(30518) << "Cell " << prot << endl;
     }
 
-    if ( property.hasAttribute( "fo:padding-left" ) )
-        setIndent(  KoUnit::parseValue(property.attribute( "fo:padding-left" ) ) );
+    if ( styleStack.hasAttribute( "fo:padding-left" ) )
+        setIndent(  KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) ) );
 
-    kdDebug()<<"property.hasAttribute( fo:vertical-align ) :"<<property.hasAttribute( "fo:vertical-align" )<<endl;
+    kdDebug()<<"styleStack.hasAttribute( fo:vertical-align ) :"<<styleStack.hasAttribute( "fo:vertical-align" )<<endl;
 
-    if ( property.hasAttribute( "fo:vertical-align" ) )
+    if ( styleStack.hasAttribute( "fo:vertical-align" ) )
     {
-        QString s = property.attribute( "fo:vertical-align" );
+        QString s = styleStack.attribute( "fo:vertical-align" );
         if ( s == "middle" )
             setAlignY( KSpreadFormat::Middle );
         else if ( s == "bottom" )
@@ -863,7 +865,7 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
             setAlignY( KSpreadFormat::Top );
     }
 
-    if ( property.hasAttribute( "fo:wrap-option" ) )
+    if ( styleStack.hasAttribute( "fo:wrap-option" ) )
     {
         setMultiRow( true );
 
@@ -873,33 +875,33 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
            layout->setMultiRow( true );
         */
     }
-    if ( property.hasAttribute( "fo:border-bottom" ) )
+    if ( styleStack.hasAttribute( "fo:border-bottom" ) )
     {
-        setBottomBorderPen( loadOasisBorder( property.attribute( "fo:border-bottom" ) ) );
+        setBottomBorderPen( loadOasisBorder( styleStack.attribute( "fo:border-bottom" ) ) );
         // TODO: style:border-line-width-bottom if double!
     }
 
-    if ( property.hasAttribute( "fo:border-right" ) )
+    if ( styleStack.hasAttribute( "fo:border-right" ) )
     {
-        setRightBorderPen( loadOasisBorder(  property.attribute( "fo:border-right" ) ) );
+        setRightBorderPen( loadOasisBorder(  styleStack.attribute( "fo:border-right" ) ) );
         // TODO: style:border-line-width-right
     }
 
-    if ( property.hasAttribute( "fo:border-top" ) )
+    if ( styleStack.hasAttribute( "fo:border-top" ) )
     {
-        setTopBorderPen( loadOasisBorder(  property.attribute( "fo:border-top" ) ) );
+        setTopBorderPen( loadOasisBorder(  styleStack.attribute( "fo:border-top" ) ) );
         // TODO: style:border-line-width-top
     }
 
-    if ( property.hasAttribute( "fo:border-left" ) )
+    if ( styleStack.hasAttribute( "fo:border-left" ) )
     {
-        setLeftBorderPen( loadOasisBorder( property.attribute( "fo:border-left" ) ) );
+        setLeftBorderPen( loadOasisBorder( styleStack.attribute( "fo:border-left" ) ) );
         // TODO: style:border-line-width-left
     }
 
-    if ( property.hasAttribute( "fo:border" ) )
+    if ( styleStack.hasAttribute( "fo:border" ) )
     {
-        QPen pen = loadOasisBorder( property.attribute( "fo:border" ) );
+        QPen pen = loadOasisBorder( styleStack.attribute( "fo:border" ) );
         setLeftBorderPen( pen );
         setRightBorderPen( pen );
         setTopBorderPen( pen );

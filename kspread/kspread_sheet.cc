@@ -46,6 +46,7 @@
 #include <koDocumentInfo.h>
 #include <koOasisStyles.h>
 #include <koUnit.h>
+#include <koStyleStack.h>
 
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
@@ -6342,15 +6343,17 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         if( !rowElement.isNull() )
         {
 
+            KoStyleStack styleStack;
             if ( rowElement.hasAttribute( "table:style-name" ) )
             {
                 QString str = rowElement.attribute( "table:style-name" );
                 kdDebug()<<"style row !!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<str<<endl;
                 style = oasisStyles.styles()[str];
+                styleStack.push( *style );
                 kdDebug()<<" style :"<<style<<endl;
             }
             rowNode = rowNode.nextSibling();
-            loadRowFormat( rowElement, style, rowIndex, oasisStyles, rowNode.isNull() );
+            loadRowFormat( rowElement, styleStack, rowIndex, oasisStyles, rowNode.isNull() );
 
             if( rowElement.tagName() == "table:table-row" )
             {
@@ -6427,31 +6430,19 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     return true;
 }
 
-bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
+bool KSpreadSheet::loadRowFormat( const QDomElement& row, KoStyleStack & styleStack, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
 {
-    QDomNode rowNode;
-    if ( rowStyle )
-        rowNode= rowStyle->firstChild();
     double height = -1.0;
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
 
-    while ( !rowNode.isNull() )
+    if ( styleStack.hasAttribute( "style:row-height" ) )
     {
-        QDomElement property = rowNode.toElement();
-        if ( !property.isNull() && property.tagName() == "style:properties" )
-        {
-            if ( property.hasAttribute( "style:row-height" ) )
-            {
-                kdDebug()<<" properties style:row-height!!!!!!!!!!!!!!!!!!\n";
-                height = KoUnit::parseValue( property.attribute( "style:row-height" ) , -1 );
-                kdDebug()<<" height :"<<height<<endl;
-            }
-
-        }
-        layout.loadOasisStyleProperties( property, oasisStyles );
-
-        rowNode = rowNode.nextSibling();
+        kdDebug()<<" properties style:row-height!!!!!!!!!!!!!!!!!!\n";
+        height = KoUnit::parseValue( styleStack.attribute( "style:row-height" ) , -1 );
+        kdDebug()<<" height :"<<height<<endl;
     }
+    layout.loadOasisStyleProperties( styleStack, oasisStyles );
+
     int number = 1;
     if ( row.hasAttribute( "table:number-rows-repeated" ) )
     {

@@ -32,6 +32,7 @@
 #include <qapplication.h>
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
+#include <koStyleStack.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -5101,6 +5102,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         QString str = element.attribute( "table:style-name" );
         QDomElement * style = oasisStyles.styles()[str];
         kdDebug()<<" style :"<<style<<endl;
+        KoStyleStack styleStack;
+        styleStack.push( *style );
+        loadOasisStyleProperties( styleStack, oasisStyles );
 //todo load format
     }
     QDomElement textP = element.namedItem( "text:p" ).toElement();
