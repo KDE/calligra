@@ -19,6 +19,8 @@
 kugar \- a business report maker for the KDE Office Suite
 .SH SYNOPSIS
 .B kugar
+-d xml_data_file
+[ -r xml_report_template_URL ]
 .SH DESCRIPTION
 This manual page documents briefly the
 .I kugar
@@ -34,6 +36,17 @@ be viewed and printed.  It includes a standalone report viewer and a
 KPart report viewer.  The latter means that any KDE application can
 embed the report viewing functionality and that reports can be viewed
 using the Konqueror browser.
+.PP
+Kugar will create a report for the data stored in the data file xml_data_file.
+The data will be displayed according to the layout described in the template
+file xml_report_template_URL.
+If this template file is omitted then any template specified in the data
+file will be used.
+.PP
+Note that simply clicking on the data file in Konqueror will cause Kugar
+to create a report (using a template specified in the data file).
+Data files typically end in \fB.kud\fP and template files typically
+end in \fB.kut\fP.
 .PP
 This application is part of the KDE Office Suite.
 .PP
