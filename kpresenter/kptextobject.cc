@@ -1532,9 +1532,10 @@ KCommand * KPTextObject::textContentsToHeight()
         {
             int y, h, baseLine;
             parag->lineInfo( line, y, h, baseLine );
-            lineSpacingEqual = (oldLineSpacing == parag->lineSpacing( line ));
-            oldLineSpacing = parag->lineSpacing( line );
-            textHeightLU += h - parag->lineSpacing( line );
+            int ls = parag->lineSpacing( line );
+            lineSpacingEqual = (oldLineSpacing == ls);
+            oldLineSpacing = ls;
+            textHeightLU += h - ls;
         }
     }
 
@@ -1552,7 +1553,7 @@ KCommand * KPTextObject::textContentsToHeight()
         return 0L;
     // Apply the new linespacing to the whole object
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
-    KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing,KoParagLayout::LS_CUSTOM, KoTextDocument::Temp );
+    KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing, KoParagLayout::LS_CUSTOM, KoTextDocument::Temp );
     m_textobj->textDocument()->removeSelection( KoTextDocument::Temp );
     return cmd;
 }
