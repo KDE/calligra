@@ -23,6 +23,7 @@
 #include <qdom.h>
 
 #include "vglobal.h"
+#include "vpainter.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
@@ -99,6 +100,23 @@ VSegment::VSegment( const VSegment& segment )
 	m_type = segment.m_type;
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
 	m_smooth = segment.m_smooth;
+}
+
+void
+VSegment::draw( VPainter* painter ) const
+{
+	if( type() == curve )
+	{
+		painter->curveTo( ctrlPoint1(), ctrlPoint2(), knot() );
+	}
+	else if( type() == line )
+	{
+		painter->lineTo( knot() );
+	}
+	else
+	{
+		painter->moveTo( knot() );
+	}
 }
 
 bool

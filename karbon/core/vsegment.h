@@ -29,7 +29,7 @@
 #include "vglobal.h"
 
 class QDomElement;
-
+class VPainter;
 
 /**
  * A class representing lines and beziers. We waste some KoPoints, if we
@@ -69,6 +69,8 @@ public:
 
 	VSegment( VSegmentType type = begin );
 	VSegment( const VSegment& segment );
+
+	void draw( VPainter* painter ) const;
 
 	VSegmentType type() const
 		{ return m_type; }

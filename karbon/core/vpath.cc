@@ -135,17 +135,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
-				if( jtr.current()->type() == VSegment::curve  )
-					painter->curveTo(
-						jtr.current()->ctrlPoint1(),
-						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot() );
-				else if( jtr.current()->type() == VSegment::line )
-				{
-					painter->lineTo( jtr.current()->knot() );
-				}
-				else
-					painter->moveTo( jtr.current()->knot() );
+				jtr.current()->draw( painter );
 			}
 		}
 
@@ -186,17 +176,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
-				if( jtr.current()->type() == VSegment::curve  )
-					painter->curveTo(
-						jtr.current()->ctrlPoint1(),
-						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot() );
-				else if( jtr.current()->type() == VSegment::line )
-				{
-					painter->lineTo( jtr.current()->knot() );
-				}
-				else
-					painter->moveTo( jtr.current()->knot() );
+				jtr.current()->draw( painter );
 			}
 
 			painter->strokePath();
