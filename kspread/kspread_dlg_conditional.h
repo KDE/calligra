@@ -38,11 +38,11 @@ class KSpreadWidgetconditional : public QWidget
   Q_OBJECT
 public:
   KSpreadWidgetconditional(QWidget *_parent, const QString &name);
-  double getBackFirstValue();
-  double getBackSecondValue();
-  QFont getFont(){return font;}
-  QColor getColor();
-  Conditional typeOfCondition();
+  double getBackFirstValue()const;
+  double getBackSecondValue()const;
+  QFont getFont()const {return font;}
+  QColor getColor()const;
+  Conditional typeOfCondition()const;
   void init(KSpreadConditional tmp);
 public slots:
   void changeLabelFont();

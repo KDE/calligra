@@ -27,6 +27,13 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
+#include <qcombobox.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <qmultilineedit.h>
+
+
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
         :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,i18n("&OK"),i18n("Clear &All"))
 

@@ -46,12 +46,12 @@ public:
     QString getSuccessor( int _no, double _delta );
     QString getPredecessor( int _no, double _delta );
 
-    Type getType() { return m_Type; }
-    int getIValue() { return m_IValue; }
-    double getDValue() { return m_DValue; }
-    QString getString() { return m_String; }
-    int getIOtherEnd() {return m_OtherEnd; }
-    int getIOtherBegin() {return m_OtherBegin; }
+    Type getType()const { return m_Type; }
+    int getIValue()const { return m_IValue; }
+    double getDValue()const { return m_DValue; }
+    QString getString()const { return m_String; }
+    int getIOtherEnd()const {return m_OtherEnd; }
+    int getIOtherBegin()const {return m_OtherBegin; }
     static QStringList *other;
     static QStringList *month;
     static QStringList *day;
@@ -71,7 +71,7 @@ class AutoFillSequence
 public:
     AutoFillSequence( KSpreadCell *_obj );
 
-    int count() { return sequence.count(); }
+    int count()const { return sequence.count(); }
 
     AutoFillSequenceItem* getFirst() { return sequence.first(); }
     AutoFillSequenceItem* getNext() { return sequence.next(); }
@@ -90,7 +90,7 @@ public:
     AutoFillDeltaSequence( AutoFillSequence *_first, AutoFillSequence *_next );
     ~AutoFillDeltaSequence();
 
-    bool isOk() { return m_ok; }
+    bool isOk()const { return m_ok; }
 
     bool equals( AutoFillDeltaSequence *_delta );
 

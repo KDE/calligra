@@ -21,16 +21,15 @@
 #ifndef __kspread_dlg_validity__
 #define __kspread_dlg_validity__
 
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
 #include "kspread_cell.h"
 #include <kdialogbase.h>
-#include <qmultilineedit.h>
 class KSpreadView;
 class KSpreadTable;
-
+class QLabel;
+class QLineEdit;
+class QMultiLineEdit;
+class QComboBox;
+class QPushButton;
 
 
 class KSpreadDlgValidity : public KDialogBase

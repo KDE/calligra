@@ -229,26 +229,26 @@ else
         }
 }
 
-double KSpreadWidgetconditional::getBackFirstValue()
+double KSpreadWidgetconditional::getBackFirstValue()const
 {
   QString tmp;
   tmp = edit1->text();
   return (tmp.toDouble());
 }
 
-double KSpreadWidgetconditional::getBackSecondValue()
+double KSpreadWidgetconditional::getBackSecondValue()const
 {
   QString tmp;
   tmp = edit2->text();
   return( tmp.toDouble());
 }
 
-QColor KSpreadWidgetconditional::getColor()
+QColor KSpreadWidgetconditional::getColor()const
 {
   return color->color();
 }
 
-Conditional KSpreadWidgetconditional::typeOfCondition()
+Conditional KSpreadWidgetconditional::typeOfCondition()const
 {
   Conditional result=None;
   switch(  choose->currentItem())
