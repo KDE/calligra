@@ -119,15 +119,17 @@ void KPrPgNumVariable::slotChangeSubType()
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
-        setVariableSubType( variableSubType(*it) );
-        KPrChangePgNumVariableValue *cmd=new KPrChangePgNumVariableValue(
-                                                i18n( "Change Page Number Variable" ),
-                                                m_doc, oldvalue, m_subtype, this );
-        m_doc->addCommand(cmd);
-        paragraph()->invalidate( 0 );
-        paragraph()->setChanged( true );
-        m_doc->recalcVariables(VT_PGNUM);
-
+        if ( oldvalue != variableSubType(*it) )
+        {
+            setVariableSubType( variableSubType(*it) );
+            KPrChangePgNumVariableValue *cmd=new KPrChangePgNumVariableValue(
+                i18n( "Change Page Number Variable" ),
+                m_doc, oldvalue, m_subtype, this );
+            m_doc->addCommand(cmd);
+            paragraph()->invalidate( 0 );
+            paragraph()->setChanged( true );
+            m_doc->recalcVariables(VT_PGNUM);
+        }
     }
 }
 
@@ -171,15 +173,17 @@ void KPrFieldVariable::slotChangeSubType()
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
-        setVariableSubType( variableSubType(*it) );
-        KPrChangeFieldVariableSubType *cmd=new KPrChangeFieldVariableSubType(
-                                                i18n( "Change Field Variable" ),
-                                                m_doc, oldvalue, m_subtype, this );
-        m_doc->addCommand(cmd);
-        paragraph()->invalidate( 0 );
-        paragraph()->setChanged( true );
-        m_doc->recalcVariables(VT_FIELD);
-
+        if ( oldvalue != variableSubType(*it))
+        {
+            setVariableSubType( variableSubType(*it) );
+            KPrChangeFieldVariableSubType *cmd=new KPrChangeFieldVariableSubType(
+                i18n( "Change Field Variable" ),
+                m_doc, oldvalue, m_subtype, this );
+            m_doc->addCommand(cmd);
+            paragraph()->invalidate( 0 );
+            paragraph()->setChanged( true );
+            m_doc->recalcVariables(VT_FIELD);
+        }
     }
 }
 
@@ -241,15 +245,17 @@ void KPrDateVariable::slotChangeSubType()
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
-        setVariableSubType( variableSubType(*it) );
-        KPrChangeDateVariableSubType *cmd=new KPrChangeDateVariableSubType(
-                                                i18n( "Change Date Variable Type" ),
-                                                m_doc, oldvalue, m_subtype, this );
-        m_doc->addCommand(cmd);
-        paragraph()->invalidate( 0 );
-        paragraph()->setChanged( true );
-        m_doc->recalcVariables(VT_DATE);
-
+        if (oldvalue != variableSubType(*it) )
+        {
+            setVariableSubType( variableSubType(*it) );
+            KPrChangeDateVariableSubType *cmd=new KPrChangeDateVariableSubType(
+                i18n( "Change Date Variable Type" ),
+                m_doc, oldvalue, m_subtype, this );
+            m_doc->addCommand(cmd);
+            paragraph()->invalidate( 0 );
+            paragraph()->setChanged( true );
+            m_doc->recalcVariables(VT_DATE);
+        }
     }
 }
 
@@ -263,15 +269,17 @@ void KPrDateVariable::slotChangeFormat()
     {
         KoVariableDateFormat *frm = static_cast<KoVariableDateFormat *>(variableFormat());
         QString oldvalue = frm->m_strFormat;
-        frm->m_strFormat = (*it).format;
-        KPrChangeDateVariableFormat *cmd=new KPrChangeDateVariableFormat(
-                                                i18n( "Change Date Variable Format" ),
-                                                m_doc, oldvalue, frm->m_strFormat, this );
-        m_doc->addCommand(cmd);
-        paragraph()->invalidate( 0 );
-        paragraph()->setChanged( true );
-        m_doc->recalcVariables(VT_DATE);
-
+        if ( oldvalue != (*it).format)
+        {
+            frm->m_strFormat = (*it).format;
+            KPrChangeDateVariableFormat *cmd=new KPrChangeDateVariableFormat(
+                i18n( "Change Date Variable Format" ),
+                m_doc, oldvalue, frm->m_strFormat, this );
+            m_doc->addCommand(cmd);
+            paragraph()->invalidate( 0 );
+            paragraph()->setChanged( true );
+            m_doc->recalcVariables(VT_DATE);
+        }
     }
 }
 
@@ -333,15 +341,17 @@ void KPrTimeVariable::slotChangeSubType()
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
-        setVariableSubType( variableSubType(*it) );
-        KPrChangeTimeVariableSubType *cmd=new KPrChangeTimeVariableSubType(
-                                                i18n( "Change Time Variable Type" ),
-                                                m_doc, oldvalue, m_subtype, this );
-        m_doc->addCommand(cmd);
-        paragraph()->invalidate( 0 );
-        paragraph()->setChanged( true );
-        m_doc->recalcVariables(VT_TIME);
-
+        if ( oldvalue != variableSubType(*it))
+        {
+            setVariableSubType( variableSubType(*it) );
+            KPrChangeTimeVariableSubType *cmd=new KPrChangeTimeVariableSubType(
+                i18n( "Change Time Variable Type" ),
+                m_doc, oldvalue, m_subtype, this );
+            m_doc->addCommand(cmd);
+            paragraph()->invalidate( 0 );
+            paragraph()->setChanged( true );
+            m_doc->recalcVariables(VT_TIME);
+        }
     }
 }
 
@@ -355,13 +365,16 @@ void KPrTimeVariable::slotChangeFormat()
     {
         KoVariableTimeFormat *frm = static_cast<KoVariableTimeFormat *>(variableFormat());
         QString oldvalue = frm->m_strFormat;
-        frm->m_strFormat = (*it).format;
-        KPrChangeTimeVariableFormat *cmd=new KPrChangeTimeVariableFormat(
-                                                i18n( "Change Time Variable Format" ),
-                                                m_doc, oldvalue, frm->m_strFormat, this );
-        m_doc->addCommand(cmd);
-        paragraph()->invalidate( 0 );
-        paragraph()->setChanged( true );
-        m_doc->recalcVariables(VT_TIME);
+        if ( oldvalue != (*it).format )
+        {
+            frm->m_strFormat = (*it).format;
+            KPrChangeTimeVariableFormat *cmd=new KPrChangeTimeVariableFormat(
+                i18n( "Change Time Variable Format" ),
+                m_doc, oldvalue, frm->m_strFormat, this );
+            m_doc->addCommand(cmd);
+            paragraph()->invalidate( 0 );
+            paragraph()->setChanged( true );
+            m_doc->recalcVariables(VT_TIME);
+        }
     }
 }
