@@ -3169,7 +3169,10 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
         // ## not sure why we do this. I'd prefer leaving the selection unchanged...
         // but then it'd need adjustements in the offsets etc.
         if ( textdoc->removeSelection( QTextDocument::Standard ) )
+        {
+            selectionChangedNotify();
             emit repaintChanged( this );
+        }
     }
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
