@@ -167,20 +167,18 @@ KontourImport::convert()
 			*/
 			QDomElement point = b.firstChild().toElement();
 			VComposite *path = new VComposite( &m_document );
-			int x, y;
-			x = point.attribute( "x" ).toInt();
-			y = point.attribute( "y" ).toInt();
+			double x, y;
+			x = point.attribute( "x" ).toDouble();
+			y = point.attribute( "y" ).toDouble();
 			path->moveTo( KoPoint( x, y ) );
 			point = point.nextSibling().toElement();
-			for( ; !point.isNull(); point = point.nextSibling().toElement() )
+			for( ; point.tagName() != "gobject"; point = point.nextSibling().toElement() )
 			{
-				x = point.attribute( "x" ).toInt();
-				y = point.attribute( "y" ).toInt();
+				x = point.attribute( "x" ).toDouble();
+				y = point.attribute( "y" ).toDouble();
 				path->lineTo( KoPoint( x, y ) );
 			}
-			path->close();
-			QDomElement object = b.namedItem( "gobject" ).toElement();
-			parseGObject( path, object );
+			parseGObject( path, point );
 			m_document.append( path );	
 		}
 		else if( b.tagName() == "polygon" )
@@ -198,8 +196,8 @@ KontourImport::convert()
 				y = point.attribute( "y" ).toDouble();
 				path->lineTo( KoPoint( x, y ) );
 			}
-			// back to first point
 			path->lineTo( KoPoint( firstx, firsty ) );
+			// back to first point
 			parseGObject( path, point );
 			m_document.append( path );	
 		}
