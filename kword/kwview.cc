@@ -2883,8 +2883,14 @@ void KWView::backgroundColor()
     // This action is disabled when no frame is selected.
     // So here we know that a frame is selected.
     QColor backColor = actionBackgroundColor->color();
-    if ( m_gui )
-        m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
+    KWTextFrameSetEdit *edit = currentTextEdit();
+    if ( m_gui)
+    {
+        if(edit)
+            edit->setTextBackgroundColor(backColor);
+        else
+            m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
+    }
 }
 
 void KWView::borderSet()
@@ -3426,7 +3432,7 @@ void KWView::frameSelectedChanged()
             }
         }
     }
-    actionBackgroundColor->setEnabled( frameDifferentOfPart );
+    //actionBackgroundColor->setEnabled( frameDifferentOfPart );
     if ( frameDifferentOfPart ) {
         KWFrame *frame = m_doc->getFirstSelectedFrame();
 
