@@ -624,7 +624,7 @@ void VHistoryTab::removeLastCommand()
 		else
 		{
 			VHistoryGroupItem* group = (VHistoryGroupItem*)last;
-			last = m_history->firstChild();
+			last = group->firstChild();
 			while ( last && last->nextSibling() )
 				last = last->nextSibling();
 			delete last; 
