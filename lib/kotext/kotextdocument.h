@@ -331,9 +331,11 @@ protected:
      * for special tags no handled by kotext (bookmarks, image, textbox, link, footnotes etc.)
      * This method is here instead of in KoTextParag because it's easier to derive from
      * KoTextDocument.
-     * @return true (and optionally @p textData) if @p tag was handled.
+     * @return true (and optionally @p textData and @p customItem) if @p tag was handled.
      */
-    virtual bool loadSpanTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/, QString& /*textData*/ ) {
+    virtual bool loadSpanTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
+                              KoTextParag* /*parag*/, int /*pos*/,
+                              QString& /*textData*/, KoTextCustomItem* & /*customItem*/ ) {
         return false;
     }
 

@@ -746,15 +746,6 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     else if ( afterText == "variable-set"
               || afterText == "user-defined" )
     {
-        // We treat both the same. For OO the difference is that
-        // - variable-set is related to variable-decls (defined in <body>);
-        //                 its value can change in the middle of the document.
-        // - user-defined is related to meta::user-defined in meta.xml
-#if 0
-        QDomElement customElem = doc.createElement( "CUSTOM" );
-        customElem.setAttribute( "name", elem.attribute( "text:name" ) );
-        customElem.setAttribute( "value", elem.text() );
-#endif
         key = "STRING";
         type = VT_CUSTOM;
     }
@@ -766,7 +757,6 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
 // TODO afterText == "page-variable-get", "initial-creator" and many more
 // TODO VT_MAILMERGE
 
-//    const int type = typeElem.attribute( "type" ).toInt();
     KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.latin1() );
     // If varFormat is 0 (no key specified), the default format will be used.
 
@@ -1249,7 +1239,7 @@ void KoTimeVariable::load( QDomElement& elem )
     }
 }
 
-void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     const QString tagName( elem.tagName() );
     Q_ASSERT( tagName == "text:time" ); // caller checked for it
@@ -1392,6 +1382,20 @@ void KoCustomVariable::load( QDomElement& elem )
     }
 }
 
+void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    const QCString tagName( elem.tagName().latin1() );
+    // We treat both the same. For OO the difference is that
+    // - variable-set is related to variable-decls (defined in <body>);
+    //                 its value can change in the middle of the document.
+    // - user-defined is related to meta::user-defined in meta.xml
+    if ( tagName == "text:variable-set"
+         || tagName == "text:user-defined" ) {
+        m_varValue = elem.attribute( "text:name" );
+        setValue( elem.text() );
+    }
+}
+
 QString KoCustomVariable::value() const
 {
     return m_varColl->getVariableValue( m_varValue.toString() );
@@ -1512,7 +1516,7 @@ void KoPgNumVariable::load( QDomElement& elem )
             m_varValue = QVariant(pgNumElem.attribute("value"));
     }
 }
-void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     const QCString afterText( elem.tagName().latin1() + 5 );
     if (afterText == "page-number") {
@@ -1661,7 +1665,7 @@ void KoFieldVariable::load( QDomElement& elem )
         kdWarning() << "FIELD element not found !" << endl;
 }
 
-void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     const QCString afterText( elem.tagName().latin1() + 5 );
     if (afterText == "file-name") {
@@ -1731,7 +1735,7 @@ void KoFieldVariable::recalc()
         case VST_DIRECTORYNAME:
             value = m_doc->url().directory();
             break;
-	    case VST_PATHFILENAME:
+        case VST_PATHFILENAME:
             value=m_doc->url().path();
             break;
         case VST_FILENAMEWITHOUTEXTENSION:
@@ -2060,22 +2064,17 @@ void KoPgNumVariable::setSectionTitle( const QString& _title )
     m_varValue = QVariant( title );
 }
 
-void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     // TODO
 }
 
-void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     // TODO
 }
 
-void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
-{
-    // TODO
-}
-
-void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     // TODO
 }

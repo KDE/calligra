@@ -1709,7 +1709,9 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             }
             else
             {
-                bool handled = textDocument()->loadSpanTag( ts, context, textData );
+                bool handled = textDocument()->loadSpanTag( ts, context,
+                                                            this, pos,
+                                                            textData, customItem );
                 if ( !handled )
                 {
                     kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
