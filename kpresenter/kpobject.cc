@@ -167,7 +167,7 @@ void KPObject::zoom(float _fakt)
   ext.setWidth(static_cast<int>(static_cast<float>(ext.width()) * presFakt));
   ext.setHeight(static_cast<int>(static_cast<float>(ext.height()) * presFakt));
 
-  if (getType() != OT_PART) setSize(ext);
+  setSize(ext);
   setOrig(orig);
 }
 

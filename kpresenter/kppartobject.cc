@@ -150,7 +150,9 @@ void KPPartObject::deactivate()
 void KPPartObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
-  child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
+
+  if (!zoomed)
+    child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
 
   if (move) return;
 
@@ -166,7 +168,9 @@ void KPPartObject::setSize(int _width,int _height)
 void KPPartObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
-  child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
+
+  if (!zoomed)
+    child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
 
   if (move) return;
 
