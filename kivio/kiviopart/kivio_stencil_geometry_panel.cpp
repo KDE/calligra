@@ -113,6 +113,8 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
 
     grid->addWidget( lh, 3, 0 );
     grid->addWidget( m_pH, 3, 1 );
+
+    m_unit = KoUnit::U_PT;
 }
 
 KivioStencilGeometryPanel::~KivioStencilGeometryPanel()
@@ -125,37 +127,38 @@ void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
     m_pY->setUnit(m);
     m_pW->setUnit(m);
     m_pH->setUnit(m);
+    m_unit = m;
 }
 
 void KivioStencilGeometryPanel::xChange( double d )
 {
-    emit positionChanged( d, m_pY->value() );
+    emit positionChanged( KoUnit::ptFromUnit(d, m_unit), KoUnit::ptFromUnit(m_pY->value(), m_unit) );
 }
 
 void KivioStencilGeometryPanel::yChange( double d )
 {
-    emit positionChanged( m_pX->value(), d );
+    emit positionChanged( KoUnit::ptFromUnit(m_pX->value(), m_unit), KoUnit::ptFromUnit(d, m_unit) );
 }
 
 void KivioStencilGeometryPanel::wChange( double d )
 {
-    emit sizeChanged( d, m_pH->value() );
+    emit sizeChanged( KoUnit::ptFromUnit(d, m_unit), KoUnit::ptFromUnit(m_pH->value(), m_unit) );
 }
 
 void KivioStencilGeometryPanel::hChange( double d )
 {
-    emit sizeChanged( m_pW->value(), d );
+    emit sizeChanged( KoUnit::ptFromUnit(m_pW->value(), m_unit), KoUnit::ptFromUnit(d, m_unit) );
 }
 
 void KivioStencilGeometryPanel::setPosition( double x, double y )
 {
-    m_pX->setValue(x);
-    m_pY->setValue(y);
+    m_pX->setValue(KoUnit::ptToUnit(x, m_unit));
+    m_pY->setValue(KoUnit::ptToUnit(y, m_unit));
 }
 
 void KivioStencilGeometryPanel::setSize( double w, double h )
 {
-    m_pW->setValue(w);
-    m_pH->setValue(h);
+    m_pW->setValue(KoUnit::ptToUnit(w, m_unit));
+    m_pH->setValue(KoUnit::ptToUnit(h, m_unit));
 }
 #include "kivio_stencil_geometry_panel.moc"
