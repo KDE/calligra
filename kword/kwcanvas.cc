@@ -2277,7 +2277,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit );
                     if ( edit )
                     {
-                        if ( !edit->textFrameSet()->textObject()->protectContent() )
+                        if ( !edit->textFrameSet()->textObject()->protectContent() || (keyev->text().length() == 0))
                             m_currentFrameSetEdit->keyPressEvent( keyev );
                         else if(keyev->text().length() > 0)
                             KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted."));
