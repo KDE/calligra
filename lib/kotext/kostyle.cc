@@ -394,9 +394,9 @@ QString KoStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QString
     // TODO: check that this is correct
     if ( m_paragLayout.counter && m_paragLayout.counter->depth() ) {
         if ( m_bOutline )
-            gs.addAttribute( "style:default-outline-level", m_paragLayout.counter->depth() );
+            gs.addAttribute( "style:default-outline-level", (int)m_paragLayout.counter->depth() );
         else
-            gs.addAttribute( "style:default-level", m_paragLayout.counter->depth() );
+            gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() );
     }
 
     m_paragLayout.saveOasis( gs );
