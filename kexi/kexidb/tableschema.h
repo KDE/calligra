@@ -81,6 +81,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 //		int m_id; //! unique identifier used in kexi__tables for this table
 
 		Connection *m_conn;
+		
+		IndexSchema *m_pkey;
 
 	friend class Connection;
 };

@@ -35,6 +35,8 @@ TableSchema::TableSchema(const QString& name)
 {
 	m_name = name;
 	m_indices.setAutoDelete( true );
+	m_pkey = new IndexSchema(this);
+	m_indices.append(m_pkey);
 }
 
 TableSchema::TableSchema()
@@ -43,6 +45,8 @@ TableSchema::TableSchema()
 	, m_conn(0)
 {
 	m_indices.setAutoDelete( true );
+	m_pkey = new IndexSchema(this);
+	m_indices.append(m_pkey);
 }
 
 // used by Conenction
@@ -54,6 +58,8 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 	assert(conn);
 	m_name = name;
 	m_indices.setAutoDelete( true );
+	m_pkey = new IndexSchema(this);
+	m_indices.append(m_pkey);
 }
 
 TableSchema::~TableSchema()
@@ -136,11 +142,17 @@ Connection* TableSchema::connection()
 	return m_conn;
 }
 
+IndexSchema* TableSchema::primaryKey() const
+{
+	return m_pkey;
+}
+
 void TableSchema::debug() const
 {
 	KexiDBDbg << "TABLE " << schemaDataDebugString() << endl;
 	FieldList::debug();
 }
+
 
 //----------------------------------------------------
 
