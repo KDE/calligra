@@ -57,6 +57,10 @@ public:
     virtual void setEffect3( Effect3 _effect3);
     virtual void setAppearTimer( int _appearTimer );
     virtual void setDisappearTimer( int _disappearTimer );
+    virtual void setAppearSoundEffect( bool b );
+    virtual void setDisappearSoundEffect( bool b );
+    virtual void setAppearSoundEffectFileName( QString _a_fileName );
+    virtual void setDisappearSoundEffectFileName( QString _d_fileName );
 
     virtual ObjType getType() const
     { return OT_GROUP; }

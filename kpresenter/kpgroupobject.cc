@@ -442,3 +442,51 @@ void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->doSpecificEffects( _specEffects, _onlyCurrStep );
 }
+
+/*================================================================*/
+void KPGroupObject::setAppearSoundEffect( bool b )
+{
+    KPObject::setAppearSoundEffect( b );
+
+    if ( !updateObjs )
+        return;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->setAppearSoundEffect( b );
+}
+
+/*================================================================*/
+void KPGroupObject::setDisappearSoundEffect( bool b )
+{
+    KPObject::setDisappearSoundEffect( b );
+
+    if ( !updateObjs )
+        return;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->setDisappearSoundEffect( b );
+}
+
+/*================================================================*/
+void KPGroupObject::setAppearSoundEffectFileName( QString _a_fileName )
+{
+    KPObject::setAppearSoundEffectFileName( _a_fileName );
+
+    if ( !updateObjs )
+        return;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->setAppearSoundEffectFileName( _a_fileName );
+}
+
+/*================================================================*/
+void KPGroupObject::setDisappearSoundEffectFileName( QString _d_fileName )
+{
+    KPObject::setDisappearSoundEffectFileName( _d_fileName );
+
+    if ( !updateObjs )
+        return;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->setDisappearSoundEffectFileName( _d_fileName );
+}

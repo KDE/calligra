@@ -152,7 +152,7 @@ QString NoteBar::getAllNoteTextForPrinting()
     bool firstText = true;
     int pageCount = 1;
     QStringList lists = doc->getNoteTextList();
-    QStringList::iterator it;
+    QStringList::Iterator it;
     for ( it = lists.begin(); it != lists.end(); ++it ) {
         if ( !firstText )
             allText += QString("\n\n");
