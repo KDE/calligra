@@ -71,6 +71,8 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool getShowColHeader READ getShowColHeader )
   Q_PROPERTY( int getIndentValue READ getIndentValue WRITE setIndentValue )
   Q_PROPERTY( bool getShowMessageError READ getShowMessageError WRITE setShowMessageError)
+  Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
+  Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
 
 public:
   KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
