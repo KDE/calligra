@@ -23,6 +23,7 @@
 #include <qpainter.h>
 
 #include <kapp.h>
+#include <kdebug.h>
 //#include <klocale.h>
 //#include <kstdaction.h>
 
@@ -68,9 +69,16 @@ void KFormulaWidget::setReadOnly(bool ro)
 
 void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
+    // Always repaint the buffer. This is not so much more work
+    // than it seems to be as each cursor movement requires a repaint.
+    QPainter p( &buffer );
+    //p.translate( -fr.x(), -fr.y() );
+    formulaView.draw( p, event->rect(), colorGroup() );
+
     QPainter painter;
     painter.begin(this);
-    formulaView.draw(painter, event->rect(), colorGroup());
+    painter.drawPixmap( event->rect().x(), event->rect().y(),
+                        buffer, event->rect().x(), event->rect().y(), event->rect().width(), event->rect().height() );
     painter.end();
 }
 
@@ -119,8 +127,9 @@ void KFormulaWidget::slotFormulaChanged(int width, int height)
 {
     // Magic numbers just to see the cursor.
     resize(width + 5, height + 5);
+    buffer.resize(width + 5, height + 5);
     // repaint is needed even if the size doesn't change.
-    update();
+    //update();
 }
 
 /**
@@ -148,6 +157,12 @@ void KFormulaWidget::slotSelectAll()
 void KFormulaWidget::slotCursorChanged(bool visible, bool selecting)
 {
     emit cursorChanged(visible, selecting);
+//     kdDebug( 40000 ) << "KFormulaWidget::slotCursorChanged "
+//                      << formulaView.getDirtyArea().x() << " "
+//                      << formulaView.getDirtyArea().y() << " "
+//                      << formulaView.getDirtyArea().width() << " "
+//                      << formulaView.getDirtyArea().height() << " "
+//                      << endl;
     update(formulaView.getDirtyArea());
 }
 

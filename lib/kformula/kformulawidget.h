@@ -22,6 +22,7 @@
 #define KFORMULAWIDGET_H
 
 #include <qdom.h>
+#include <qpixmap.h>
 #include <qpoint.h>
 #include <qwidget.h>
 
@@ -111,6 +112,8 @@ private:
      * This widget is a wrapper around the actual view.
      */
     View formulaView;
+
+    QPixmap buffer;
 };
 
 #endif // KFORMULAWIDGET_H

@@ -21,6 +21,8 @@
 #include <iostream>
 #include <qpainter.h>
 
+#include <kdebug.h>
+
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -66,6 +68,7 @@ void FormulaElement::changed()
  */
 void FormulaElement::calcSizes( ContextStyle& context )
 {
+    //kdDebug( 40000 ) << "FormulaElement::calcSizes" << endl;
     context.setBaseSize( getBaseSize() );
     inherited::calcSizes( context, context.getBaseTextStyle(),
                           ContextStyle::normal );
@@ -77,6 +80,7 @@ void FormulaElement::calcSizes( ContextStyle& context )
 void FormulaElement::draw( QPainter& painter, const QRect& r,
                            ContextStyle& context )
 {
+    //kdDebug( 40000 ) << "FormulaElement::draw" << endl;
     context.setBaseSize( getBaseSize() );
     inherited::draw( painter, r, context, context.getBaseTextStyle(),
                      ContextStyle::normal, LuPixelPoint() );

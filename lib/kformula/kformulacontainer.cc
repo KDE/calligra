@@ -212,7 +212,7 @@ void Container::recalc()
                          context.layoutUnitToPixelY( rootElement()->getHeight() ) );
     emit formulaChanged( context.layoutUnitPtToPt( context.pixelXToPt( rootElement()->getWidth() ) ),
                          context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getHeight() ) ) );
-    emit cursorChanged( activeCursor() );
+    //emit cursorChanged( activeCursor() );
     emit cursorMoved( activeCursor() );
 }
 
@@ -584,7 +584,7 @@ void Container::compactExpression()
     cursor->moveEnd();
     cursor->moveRight();
 
-    emit cursorChanged( cursor );
+    //emit cursorChanged( cursor );
     emit cursorMoved( cursor );
 }
 

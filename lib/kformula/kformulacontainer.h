@@ -238,7 +238,7 @@ signals:
     /**
      * The cursor has been moved because of a change at the formula.
      */
-    void cursorChanged(FormulaCursor* cursor);
+    //void cursorChanged(FormulaCursor* cursor);
 
     /**
      * The formula has changed and needs to be redrawn.

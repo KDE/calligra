@@ -21,9 +21,9 @@
 #include <iostream>
 
 #include <qpainter.h>
-#include <qpixmap.h>
 
 #include <kapp.h>
+#include <kdebug.h>
 
 #include "basicelement.h"
 #include "formulacursor.h"
@@ -46,10 +46,6 @@ struct View::View_Impl {
                 view, SLOT(slotFormulaLoaded(FormulaElement*)));
         connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
-        connect(document, SIGNAL(cursorChanged(FormulaCursor*)),
-                view, SLOT(slotCursorChanged(FormulaCursor*)));
-        connect( document, SIGNAL( formulaChanged( int, int ) ),
-                 view, SLOT( slotFormulaChanged( int, int ) ) );
 
         cursor = document->createCursor();
     }
@@ -90,8 +86,6 @@ struct View::View_Impl {
      * Out cursor.
      */
     FormulaCursor* cursor;
-
-    QPixmap buffer;
 };
 
 
@@ -108,8 +102,6 @@ View::View(Container* doc)
 {
     impl = new View_Impl(doc, this);
     cursor()->calcCursorSize( contextStyle(), smallCursor() );
-    QRect r = doc->boundingRect();
-    slotFormulaChanged( r.width(), r.height() );
 }
 
 View::~View()
@@ -131,25 +123,12 @@ void View::setReadOnly(bool ro)
 
 void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 {
-    //cerr << "View::draw: " << rect.x() << " " << rect.y() << " "
-    //     << rect.width() << " " << rect.height() << endl;
-
-    QRect formulaRect = container()->boundingRect();
-    formulaRect.setWidth(formulaRect.width()+5);
-    formulaRect.setHeight(formulaRect.height()+5);
-    QPainter p( &impl->buffer );
-    p.translate(-formulaRect.x(), -formulaRect.y());
-
-    container()->draw( p, rect, cg );
+//     kdDebug( 40000 ) << "View::draw: " << rect.x() << " " << rect.y() << " "
+//                      << rect.width() << " " << rect.height() << endl;
+    container()->draw( painter, rect, cg );
     if ( cursorVisible() ) {
-        cursor()->draw( p, contextStyle(), smallCursor() );
+        cursor()->draw( painter, contextStyle(), smallCursor() );
     }
-    int sx = static_cast<int>( QMAX(0, rect.x() - formulaRect.x()) );
-    int sy = static_cast<int>( QMAX(0, rect.y() - formulaRect.y()) );
-    int sw = static_cast<int>( QMIN(formulaRect.width() - sx, rect.width()) );
-    int sh = static_cast<int>( QMIN(formulaRect.height() - sy, rect.height()) );
-    painter.drawPixmap(QMAX(formulaRect.x(), rect.x()), QMAX(formulaRect.y(), rect.y()),
-                       impl->buffer, sx, sy, sw, sh);
 }
 
 void View::keyPressEvent( QKeyEvent* event )
@@ -306,12 +285,12 @@ void View::slotCursorMoved(FormulaCursor* c)
     }
 }
 
-void View::slotCursorChanged(FormulaCursor* c)
-{
-    if ( c == cursor() ) {
-        c->calcCursorSize( contextStyle(), smallCursor() );
-    }
-}
+// void View::slotCursorChanged(FormulaCursor* c)
+// {
+//     if ( c == cursor() ) {
+//         C->calcCursorSize( contextStyle(), smallCursor() );
+//     }
+// }
 
 void View::slotFormulaLoaded(FormulaElement* formula)
 {
@@ -321,11 +300,6 @@ void View::slotFormulaLoaded(FormulaElement* formula)
 void View::slotElementWillVanish(BasicElement* element)
 {
     cursor()->elementWillVanish(element);
-}
-
-void View::slotFormulaChanged( int width, int height )
-{
-    impl->buffer.resize( width+5, height+5 );
 }
 
 void View::slotSelectAll()
