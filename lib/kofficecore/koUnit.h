@@ -55,9 +55,11 @@ public:
         U_INCH = 2,
         U_CM = 3,
         U_DM = 4,
-        U_PI = 5,
-        U_DD = 6,
-        U_CC = 7
+        U_PI = 5, // pica
+        U_DD = 6, // didot
+        U_CC = 7, // cicero
+        U_LASTUNIT = U_CC // update when adding a new unit
+        // when adding a new unit, make sure to implement support for it in koRuler too
     };
 
     // Prepare ptValue to be displayed in pt
@@ -93,19 +95,19 @@ public:
         // "pi" values are rounded to 0.00001 inches
         return qRound( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
     }
-    
+
     // Prepare ptValue to be displayed in didot
     static double toDD( double ptValue ) {
         // "dd" values are rounded to 0.00001 inches
         return qRound( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
     }
-    
+
     // Prepare ptValue to be displayed in cicero
     static double toCC( double ptValue ) {
         // "cc" values are rounded to 0.00001 inches
         return qRound( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
     }
-    
+
     // This method is the one to use to display a value in a dialog
     // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
     static double ptToUnit( double ptValue, Unit unit );
