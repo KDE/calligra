@@ -341,17 +341,17 @@ QString KSpreadCell::columnName( int column )
     QString str;
     unsigned digits = 1;
     unsigned offset = 0;
-  
+
     column--;
-  
+
     if( column > 4058115285 ) return  QString("@@@");
-  
+
     for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
         offset += limit;
-      
+
     for( unsigned c = column - offset; digits; --digits, c/=26 )
         str.prepend( QChar( 'A' + (c%26) ) );
-    
+
     return str;
 }
 
@@ -5190,19 +5190,19 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     saveOasisAnnotation( xmlwriter );
     if ( d->value.isBoolean() )
     {
-        xmlwriter.addAttribute( "table:value-type", "boolean" );
-        xmlwriter.addAttribute( "table:boolean-value", ( d->value.asBoolean() ? "true" : "false" ) );
+        xmlwriter.addAttribute( "office:value-type", "boolean" );
+        xmlwriter.addAttribute( "office:boolean-value", ( d->value.asBoolean() ? "true" : "false" ) );
     }
     else if ( d->value.isNumber() )
     {
       KSpreadFormat::FormatType type = formatType();
 
       if ( type == KSpreadFormat::Percentage )
-        xmlwriter.addAttribute( "table:value-type", "percentage" );
+        xmlwriter.addAttribute( "office:value-type", "percentage" );
       else
-        xmlwriter.addAttribute( "table:value-type", "float" );
+        xmlwriter.addAttribute( "office:value-type", "float" );
 
-      xmlwriter.addAttribute( "table:value", QString::number( d->value.asFloat() ) );
+      xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
     }
     else
     {
@@ -5393,12 +5393,12 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         kdDebug()<<" Cel has a validation :"<<element.attribute( "table:validation-name" )<<endl;
         loadOasisValidation( element.attribute( "table:validation-name" ) );
     }
-    if( element.hasAttribute( "table:value-type" ) )
+    if( element.hasAttribute( "office:value-type" ) )
     {
-        QString valuetype = element.attribute( "table:value-type" );
+        QString valuetype = element.attribute( "office:value-type" );
         if( valuetype == "boolean" )
         {
-            QString val = element.attribute( "table:boolean-value" );
+            QString val = element.attribute( "office:boolean-value" );
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
@@ -5411,7 +5411,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         else if( valuetype == "float" )
         {
             bool ok = false;
-            double value = element.attribute( "table:value" ).toDouble( &ok );
+            double value = element.attribute( "office:value" ).toDouble( &ok );
             if ( !isFormula )
                 if( ok )
                     setValue( value );
@@ -5421,19 +5421,19 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         else if( valuetype == "currency" )
         {
             bool ok = false;
-            double value = element.attribute( "table:value" ).toDouble( &ok );
+            double value = element.attribute( "office:value" ).toDouble( &ok );
             if( ok )
             {
                 if ( !isFormula )
                     setValue( value );
-                setCurrency( 1, element.attribute( "table:currency" ) );
+                setCurrency( 1, element.attribute( "office:currency" ) );
                 setFormatType( KSpreadFormat::Money );
             }
         }
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double value = element.attribute( "table:value" ).toDouble( &ok );
+            double value = element.attribute( "office:value" ).toDouble( &ok );
             if( ok )
             {
                 if ( !isFormula )
@@ -5443,9 +5443,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
         else if ( valuetype == "date" )
         {
-            QString value = element.attribute( "table:value" );
+            QString value = element.attribute( "office:value" );
             if ( value.isEmpty() )
-                value = element.attribute( "table:date-value" );
+                value = element.attribute( "office:date-value" );
             kdDebug() << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
@@ -5479,9 +5479,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
         else if ( valuetype == "time" )
         {
-            QString value = element.attribute( "table:value" );
+            QString value = element.attribute( "office:value" );
             if ( value.isEmpty() )
-                value = element.attribute( "table:time-value" );
+                value = element.attribute( "office:time-value" );
             kdDebug() << "Type: time: " << value << endl;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
