@@ -215,7 +215,7 @@ InsertWidgetCommand::execute()
 		return;
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	if(m_name.isEmpty()) // we have to use the same name every time, so we don't recreate it if we already have one
-		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->displayName(m_class));
+		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->namePrefix(m_class));
 
 	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name.latin1(), m_container);
 

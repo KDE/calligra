@@ -183,6 +183,29 @@ WidgetLibrary::displayName(const QString &classname)
 }
 
 QString
+WidgetLibrary::namePrefix(const QString &classname)
+{
+	if(m_widgets.find(classname))
+		return m_widgets[classname]->namePrefix();
+	else
+		return i18n("Form");
+}
+
+QString
+WidgetLibrary::textForWidgetName(const QString &name, const QString &className)
+{
+	Widget *widget = m_widgets[className];
+	if(!widget)
+		return QString::null;
+
+	QString newName = name;
+	newName.remove(widget->namePrefix());
+	newName = widget->name() + " " + newName;
+	return newName;
+
+}
+
+QString
 WidgetLibrary::checkAlternateName(const QString &classname)
 {
 	if(m_widgets.find(classname))

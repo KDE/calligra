@@ -100,6 +100,8 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 
 		QString  displayName(const QString &classname);
+		QString  namePrefix(const QString &classname);
+		QString  textForWidgetName(const QString &name, const QString &className);
 		/*! Checks if the \a classname is an alternate classname, and return the good classname. If \a classname is not alternate, it is returned. */
 		QString  checkAlternateName(const QString &classname);
 		QString  icon(const QString &classname);

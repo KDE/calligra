@@ -63,8 +63,11 @@ class KFORMEDITOR_EXPORT Widget
 		 */
 		virtual QString	className() { return m_class; }
 
+		/* \return the name used to name widget, that will appear eg in scripts (must not contain spaces
+		  nor non-latin1 characters) */
+		virtual QString	namePrefix() { return m_prefixName; }
 		/**
-		 * returns the real name e.g. 'Line Edit'
+		 * returns the real name e.g. 'Line Edit', showed eg in ObjectTreeView
 		 */
 		virtual QString	name() { return m_name; }
 
@@ -79,6 +82,7 @@ class KFORMEDITOR_EXPORT Widget
 		void		setPixmap(const QString &p) { m_pixmap = p; }
 		void		setClassName(const QString &s) { m_class = s; }
 		void		setName(const QString &n) { m_name = n; }
+		void		setNamePrefix(const QString &n) { m_prefixName = n; }
 		void		setDescription(const QString &desc) { m_desc = desc;}
 		/*! Sets the C++ include file corresponding to this class, that uic will need to add when creating the file. */
 		void		setInclude(const QString &include) { m_include = include;}
@@ -90,6 +94,7 @@ class KFORMEDITOR_EXPORT Widget
 		QString		m_pixmap;
 		QString		m_class;
 		QString		m_name;
+		QString		m_prefixName;
 		QString		m_desc;
 		QString		m_include;
 		QString		m_alternate;

@@ -222,6 +222,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName(i18n("Button Group"));
+	wBtnGroup->setNamePrefix(i18n("ButtonGroup"));
 	wBtnGroup->setDescription(i18n("A simple container to group buttons"));
 	m_classes.append(wBtnGroup);
 
@@ -233,6 +234,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	#endif
 	wTabWidget->setInclude("ktabwidget.h");
 	wTabWidget->setName(i18n("Tab Widget"));
+	wTabWidget->setNamePrefix(i18n("TabWidget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	m_classes.append(wTabWidget);
 
@@ -240,6 +242,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wWidget->setPixmap("widget");
 	wWidget->setClassName("QWidget");
 	wWidget->setName(i18n("Basic container"));
+	wWidget->setNamePrefix(i18n("BasicContainer"));
 	wWidget->setDescription(i18n("An empty container with no frame"));
 	m_classes.append(wWidget);
 
@@ -247,6 +250,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wGroupBox->setPixmap("groupbox");
 	wGroupBox->setClassName("QGroupBox");
 	wGroupBox->setName(i18n("Group Box"));
+	wGroupBox->setNamePrefix(i18n("GroupBox"));
 	wGroupBox->setDescription(i18n("A container to group some widgets"));
 	m_classes.append(wGroupBox);
 
@@ -254,6 +258,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wFrame->setPixmap("frame");
 	wFrame->setClassName("QFrame");
 	wFrame->setName(i18n("Frame"));
+	wFrame->setNamePrefix(i18n("Frame"));
 	wFrame->setDescription(i18n("A very simple container"));
 	m_classes.append(wFrame);
 
@@ -261,6 +266,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wWidgetStack->setPixmap("widgetstack");
 	wWidgetStack->setClassName("QWidgetStack");
 	wWidgetStack->setName(i18n("Widget Stack"));
+	wWidgetStack->setNamePrefix(i18n("WidgetStack"));
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
 	m_classes.append(wWidgetStack);
 
@@ -268,6 +274,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wHBox->setPixmap("frame");
 	wHBox->setClassName("HBox");
 	wHBox->setName(i18n("Horizontal Box"));
+	wHBox->setNamePrefix(i18n("HorizontalBox"));
 	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
 	m_classes.append(wHBox);
 
@@ -275,6 +282,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wVBox->setPixmap("frame");
 	wVBox->setClassName("VBox");
 	wVBox->setName(i18n("Vertical Box"));
+	wVBox->setNamePrefix(i18n("VerticalBox"));
 	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
 	m_classes.append(wVBox);
 
@@ -282,6 +290,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wGrid->setPixmap("frame");
 	wGrid->setClassName("Grid");
 	wGrid->setName(i18n("Grid Box"));
+	wGrid->setNamePrefix(i18n("GridBox"));
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
 	m_classes.append(wGrid);
 }
@@ -305,7 +314,8 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 
 	if(c == "QButtonGroup")
 	{
-		QButtonGroup *w = new QButtonGroup(i18n("Button Group"), p, n);
+		QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+		QButtonGroup *w = new QButtonGroup(/*i18n("Button Group")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
@@ -338,7 +348,8 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	}
 	else if(c == "QGroupBox")
 	{
-		QGroupBox *w = new QGroupBox(i18n("Group Box"), p, n);
+		QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
+		QGroupBox *w = new QGroupBox(/*i18n("Group Box")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
