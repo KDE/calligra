@@ -21,6 +21,7 @@
 #include "kexidialogbase.h"
 #include "kexicontexthelp_p.h"
 
+#include <kdebug.h>
 #include <kapplication.h>
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
@@ -29,7 +30,9 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
 	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;
 	setInstance(parent->instance());
+	m_docID = -1;
 }
+
 
 KexiDialogBase::~KexiDialogBase()
 {
@@ -49,6 +52,14 @@ bool KexiDialogBase::isRegistered(){
 
 KXMLGUIClient *KexiDialogBase::guiClient() {
 	return this;
+}
+
+void
+KexiDialogBase::setDocID(int id)
+{
+	kdDebug() << "KexiDialogBase::setDocID(): id = " << id << endl;
+	m_docID = id;
+	m_parentWindow->registerChild(this);
 }
 
 void KexiDialogBase::setContextHelp(const QString& caption, const QString& text, const QString& iconName) {

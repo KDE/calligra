@@ -46,10 +46,10 @@ class KEXICORE_EXPORT Item
 		Item();
 		~Item();
 
-		int		identifier() { return m_id; }
-		QString		mime() { return m_mime; }
-		QString		name() { return m_name; }
-		QString		caption() { return m_caption; }
+		int identifier() const { return m_id; }
+		QString	mime() const { return m_mime; }
+		QString	name() const { return m_name; }
+		QString	caption() const { return m_caption; }
 
 
 

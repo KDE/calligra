@@ -22,6 +22,8 @@
 #define KEXIMAINWINDOW_H
 
 #include <kmdimainfrm.h>
+#include <qintdict.h>
+
 
 //#include <kmdidefines.h>
 
@@ -35,6 +37,8 @@ namespace KexiDB {
 	class Object;
 	class ConnectionData;
 }
+
+typedef QIntDict<KexiDialogBase> WidgetDict;
 
 /**
  * @short Kexi's main window
@@ -57,6 +61,13 @@ class KexiMainWindow : public KMdiMainFrm
 		 * registers a dialog for watching and adds it to the view
 		 */
 		void		registerChild(KexiDialogBase *dlg);
+
+		/**
+		 * activates a window by it's document identifier
+		 * @returns false if doc couldn't be raised or isn't opened
+		 */
+		bool		activateWindow(int id);
+
 
 		void startup(KexiProjectData* pdata);
 
@@ -141,7 +152,7 @@ class KexiMainWindow : public KMdiMainFrm
 	private:
 		KexiProject	*m_project;
 		KexiBrowser	*m_browser;
-		
+		WidgetDict	m_docs;
 
 		KXMLGUIClient   *m_currentDocumentGUIClient;
 

@@ -28,6 +28,8 @@ namespace KexiPart
 {
 
 	class Info;
+	class Item;
+
 /**
  * the main class for kexi frontend parts like tables, queries, relations
  */
@@ -40,7 +42,7 @@ class Part : public QObject
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
-		virtual void	execute(KexiMainWindow *win, const QString &oname)=0;
+		virtual void	execute(KexiMainWindow *win, const Item &i)=0;
 		virtual void	createGUIClient(KexiMainWindow *win)=0;
 		
 		Info		*info() { return m_info; }

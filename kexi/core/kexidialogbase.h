@@ -37,6 +37,10 @@ class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 		bool isRegistered();
 		virtual KXMLGUIClient* guiClient();
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
+
+		void	setDocID(int id);
+		int	docID() { return m_docID; }
+
 	signals:
 		void updateContextHelp();
 	protected:
@@ -46,6 +50,7 @@ class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
 		KexiContextHelpInfo *m_contextHelpInfo;
+		int m_docID;
 };
 
 #endif

@@ -161,12 +161,21 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *, const QPoint &)
 }
 
 void
-KexiBrowser::slotExecuteItem(QListViewItem *item)
+KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 {
 	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
-	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
+
+	if(m_parent->activateWindow(it->identifier()))
+		return;
+
 	if(!it || it->info())
 		return;
+
+	KexiPart::Item item;
+	item.setName(it->name());
+	item.setIdentifier(it->identifier());
+	item.setMime(it->mime());
 
 	kdDebug() << "KexiBrowser::slotExecuteItem() searching stuff for mime: " << it->mime() << endl;
 //	KexiPart::Info *info = m_parent->project()->partManager()->info(it->mime());
@@ -181,7 +190,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 		return;
 
 //	info->instance()->execute(m_parent, it->name());
-	part->execute(m_parent, it->name());
+	part->execute(m_parent, item);
 }
 
 #include "kexibrowser.moc"

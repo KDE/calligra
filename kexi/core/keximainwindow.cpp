@@ -396,7 +396,9 @@ KexiMainWindow::registerChild(KexiDialogBase *dlg)
 {
 	kdDebug() << "KexiMainWindow::registerChild()" << endl;
 	connect(dlg, SIGNAL(activated(KMdiChildView *)), this, SLOT(activeWindowChanged(KMdiChildView *)));
-	kdDebug() << "KexiMainWindow::registerChild()" << endl;
+	if(dlg->docID() != -1)
+		m_docs.insert(dlg->docID(), dlg);
+	kdDebug() << "KexiMainWindow::registerChild() docID = " << dlg->docID() << endl;
 }
 
 void
@@ -413,6 +415,18 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 		if (client) guiFactory()->addClient(client);
 	}
 	m_currentDocumentGUIClient=client;
+}
+
+bool
+KexiMainWindow::activateWindow(int id)
+{
+	kdDebug() << "KexiMainWindow::activateWindow()" << endl;
+	KexiDialogBase *dlg = m_docs[id];
+	if(!dlg)
+		return false;
+
+	dlg->activate();
+	return true;
 }
 
 void
