@@ -18,6 +18,9 @@ Bugfixes:
 - Fix #44628 (Grave): 1.1 document not read with 1.2 - circular references
 - Fix #40150 (Normal): Precision problem in calculations
 - Fix #29524:  KSpread Formula editors tooltip should be changed
+- Fix #18083: KSpread rounding error
+- Fix #46530: crash on selecting validity
+- Fix #45395: Save as HTML is called "mime type"
 
 Until RC1:
 ----------
