@@ -632,7 +632,13 @@ bool KexiMainWindowImpl::closeProject()
 	if (!d->prj)
 		return true;
 		
-	//TODO: ask if user wants to close if project was changed
+	//close each window, optionally asking if user wants to close (if data changed)
+	while (d->curDialog) {
+		if (!closeDialog( d->curDialog )) {
+			return false;
+		}
+	}
+
 	delete d->prj;
 	d->prj=0;
 	return true;
@@ -855,8 +861,11 @@ void
 KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 {
 	storeSettings();
-	
-	closeProject();
+
+	if (!closeProject()) {
+		ev->ignore();
+		return;
+	}
 	
 	ev->accept();
 }
@@ -1454,12 +1463,15 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 	showErrorMessage(msg, details);
 }
 
-void
-KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
+void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
-	if (!pWnd)
-		return;
-	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(pWnd);
+	closeDialog(static_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
+}
+
+bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
+{
+	if (!dlg)
+		return true;
 	bool remove_on_closing = dlg->partItem()->neverSaved();
 	if (dlg->dirty()) {
 		//dialog's data is dirty:
@@ -1470,7 +1482,7 @@ KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 			KStdGuiItem::save(),
 			KStdGuiItem::discard());
 		if (res==KMessageBox::Cancel)
-			return;
+			return false;
 		if (res==KMessageBox::Yes) {
 			//save it
 			//TODO
@@ -1482,7 +1494,8 @@ KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 		//we won't save this object, and it was never saved -remove it
 		if (!removeObject( dlg->partItem() )) {
 			//msg?
-			return;
+			//TODO: ask if we'd continue and return true/false
+			return false;
 		}
 	}
 
@@ -1504,14 +1517,15 @@ KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 		}
 	}
 
-	d->dialogs.take(dlg->docID()); //no remove
-	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
+	d->dialogs.take(dlg->docID()); //don't remove -KMDI will do that
+	KMdiMainFrm::closeWindow(dlg, layoutTaskBar);
 
 	//focus navigator if nothing else available
 	if (d->dialogs.isEmpty())
 		d->nav->setFocus();
 
 	invalidateActions();
+	return true;
 }
 
 /*

@@ -95,8 +95,15 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
     	virtual void saveGlobalProperties( KConfig* sessionConfig );
 
 	public slots:
-		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
-		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
+		/*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
+			Just calls closeDialog(). Use closeDialog() if you need, not this one. */
+		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true);
+
+		/*! Closes dialog \a dlg. It dialog's data (see KexiDialoBase::dirty()) is unsaved,
+		 used will be asked if saving should be perforemed.
+		 \return true on successull closing or false on closing error 
+		 (or if user pressed Cancel button on question). */
+		bool closeDialog(KexiDialogBase *dlg, bool layoutTaskBar = true);
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
