@@ -394,14 +394,6 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         }
     }
 
-    if ( format.hasAttribute( "format" ) )
-    {
-        int fo = format.attribute( "format" ).toInt( &ok );
-        if ( ! ok )
-            return false;
-        m_formatType = ( FormatType ) fo;
-        m_featuresSet |= SFormatType;
-    }
     if ( format.hasAttribute( "custom" ) )
     {
         m_strFormat = format.attribute( "custom" );
@@ -479,17 +471,6 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     {
         m_textPen = util_toPen( pen );
         m_featuresSet |= STextPen;
-    }
-
-    if ( format.hasAttribute( "prefix" ) )
-    {
-        m_prefix = format.attribute( "prefix" );
-        m_featuresSet |= SPrefix;
-    }
-    if ( format.hasAttribute( "postfix" ) )
-    {
-        m_postfix = format.attribute( "postfix" );
-        m_featuresSet |= SPostfix;
     }
 
     return true;
@@ -985,15 +966,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         style.addProperty( "style:rotation-angle", "0" );
     }
 #if 0
-    if ( featureSet( SPrecision ) )
-        format.setAttribute( "precision", m_precision );
-
-    if ( featureSet( SPrefix ) && !prefix().isEmpty() )
-        format.setAttribute( "prefix", m_prefix );
-
-    if ( featureSet( SPostfix ) && !postfix().isEmpty() )
-        format.setAttribute( "postfix", m_postfix );
-
     if ( featureSet( SFloatFormat ) )
         format.setAttribute( "float", (int) m_floatFormat );
 
@@ -1075,8 +1047,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
 
         if ( ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-bottom", convertOasisPenToString( m_bottomBorderPen ) );
-
-        //todo add diagonal
     }
     if ( ( m_fallDiagonalPen.width() != 0 ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) )
     {
@@ -1086,7 +1056,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         style.addProperty("style:diagonal-bl-tr", convertOasisPenToString(m_goUpDiagonalPen ) );
     }
-
 
 #if 0
     if ( featureSet( SFontFamily ) )
@@ -1108,7 +1077,19 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
     }
 #endif
-    return saveOasisStyleNumeric( mainStyles, m_formatType, prefix(), postfix(),precision() );
+
+    QString _prefix;
+    QString _postfix;
+    int _precision = -1;
+    if ( featureSet( SPrefix ) && !prefix().isEmpty() )
+        _prefix = m_prefix;
+
+    if ( featureSet( SPostfix ) && !postfix().isEmpty() )
+        _postfix = m_postfix;
+    if ( featureSet( SPrecision ) )
+        _precision =  m_precision;
+
+    return saveOasisStyleNumeric( mainStyles, m_formatType, _prefix, _postfix, _precision );
 }
 
 
