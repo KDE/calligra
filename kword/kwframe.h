@@ -304,7 +304,7 @@ public:
     // constructor
     KWFrameSet( KWDocument *doc );
     // destructor
-    virtual ~KWFrameSet() {}
+    virtual ~KWFrameSet();
 
     virtual FrameType getFrameType() { return FT_BASE; }
     FrameInfo getFrameInfo() { return frameInfo; }

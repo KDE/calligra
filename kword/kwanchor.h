@@ -34,7 +34,7 @@ class KWAnchor : public QTextCustomItem
 {
 public:
     KWAnchor( KWTextDocument *textdoc, KWFrame * m_frame );
-    ~KWAnchor() {}
+    ~KWAnchor();
 
     // The frame related to this anchor.
     KWFrame * frame() const { return m_frame; }

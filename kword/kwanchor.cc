@@ -29,6 +29,11 @@ KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
     resize();
 }
 
+KWAnchor::~KWAnchor()
+{
+    kdDebug() << "KWAnchor::~KWAnchor" << endl;
+}
+
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
 {
     if ( placement() != PlaceInline ) {
@@ -37,13 +42,13 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     int paragy = paragraph()->rect().y();
-    kdDebug() << "KWAnchor::draw " << x << "," << y << "  paragy=" << paragy << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << "  paragy=" << paragy << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
     KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
     QPoint cPoint;
     if ( fs->internalToContents( QPoint( x, y+paragy ), cPoint ) )
     {
-        kdDebug() << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
+        //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
         // Move the frame to position x,y.
         m_frame->moveTopLeft( KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }
@@ -76,4 +81,3 @@ KWTextDocument * KWAnchor::textDocument() const
 {
     return static_cast<KWTextDocument *>( parent );
 }
-

@@ -721,6 +721,7 @@ void KWCreateFrameCommand::unexecute()
     ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
     ASSERT( frame );
+    kdDebug() << "KWCreateFrameCommand::unexecute delFrame " << frameIndex.m_iFrameIndex << endl;
     frameSet->delFrame( frameIndex.m_iFrameIndex );
 
     m_pDoc->frameChanged( frame );

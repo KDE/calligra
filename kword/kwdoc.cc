@@ -2400,6 +2400,7 @@ bool KWDocument::isOutOfPage( KoRect & r, int page ) const
 
 void KWDocument::addCommand( KCommand * cmd )
 {
+    kdDebug() << "KWDocument::addCommand " << cmd->name() << endl;
     m_commandHistory->addCommand( cmd, false );
     setModified( true );
 }

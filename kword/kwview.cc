@@ -1588,6 +1588,9 @@ void KWView::formatPage()
         tmpNewLayout._cl=cl;
         tmpNewLayout._hf=kwhf;
 
+        KWTextFrameSetEdit *edit = currentTextEdit();
+        if (edit)
+            edit->textFrameSet()->clearUndoRedoInfo();
         KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
         doc->addCommand(cmd);
 
@@ -1766,10 +1769,11 @@ void KWView::toolsFormula()
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
-        KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Insert Formula"), doc, frame);
-        doc->addCommand(cmd);
         edit->insertFloatingFrameSet( frameset );
         doc->addFrameSet( frameset ); // last since it triggers a redraw
+        edit->textFrameSet()->clearUndoRedoInfo();
+        KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Insert Formula"), doc, frame);
+        doc->addCommand(cmd);
     }
 }
 
@@ -2437,7 +2441,10 @@ void KWView::newPageLayout( KoPageLayout _layout )
     tmpNewLayout._cl=cl;
     tmpNewLayout._hf=hf;
 
-    KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
+    KWTextFrameSetEdit *edit = currentTextEdit();
+    if (edit)
+        edit->textFrameSet()->clearUndoRedoInfo();
+    KWPageLayoutCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
     doc->addCommand(cmd);
 
     doc->updateRuler();

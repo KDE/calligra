@@ -211,7 +211,6 @@ QCursor KWFrame::getMouseCursor( double mx, double my, bool table )
     return Qt::arrowCursor;
 }
 
-/*================================================================*/
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
     KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), getRunAround(), getRunAroundGap() );
@@ -303,7 +302,6 @@ QRect KWFrame::outerRect() const
 /* Class: KWFrameSet                                              */
 /******************************************************************/
 
-/*================================================================*/
 KWFrameSet::KWFrameSet( KWDocument *doc )
     : frames(), removeableHeader( false ), visible( true )
 {
@@ -320,7 +318,12 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
     m_anchorIndex = 0;
 }
 
-/*================================================================*/
+KWFrameSet::~KWFrameSet()
+{
+    if ( isFloating() )
+        deleteAnchors();
+}
+
 void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 {
     if ( frames.findRef( _frame ) != -1 )
@@ -330,13 +333,18 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
     _frame->setFrameSet(this);
     if(recalc)
         updateFrames();
+    if ( isFloating() )
+        updateAnchors();
 }
 
-/*================================================================*/
 void KWFrameSet::delFrame( unsigned int _num )
 {
+    if ( isFloating() )
+        deleteAnchors();
     KWFrame *frm = frames.at( _num );
     delFrame(frm,true);
+    if ( isFloating() )
+        updateAnchors();
 }
 
 /*================================================================*/
@@ -346,19 +354,8 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     if ( _num == -1 )
         return;
 
-    //KWFrame *f;
-
-    // This check is totally irrelevant since we allready check
-    // for duplicate occurences on addFrame (TZ)
-/*
-    bool del = true;
-    int i = 0;
-    for ( f = frames.first(); f != 0; f = frames.next(), i++ ) {
-        if ( f == frm && i != _num ) {
-            del = false;
-            break;
-        }
-    } */
+    if ( isFloating() )
+        deleteAnchors();
 
     frm->setFrameSet(0L);
     if ( !remove )
@@ -368,6 +365,9 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
         frames.remove( _num );
 
     updateFrames();
+
+    if ( isFloating() )
+        updateAnchors();
 }
 
 /*================================================================*/
@@ -505,6 +505,7 @@ void KWFrameSet::setFixed()
 
 void KWFrameSet::updateAnchors()
 {
+    kdDebug() << "KWFrameSet::updateAnchors" << endl;
     int index = m_anchorIndex;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
@@ -525,9 +526,17 @@ void KWFrameSet::updateAnchors()
 
 void KWFrameSet::deleteAnchors()
 {
+    kdDebug() << "KWFrameSet::deleteAnchors" << endl;
+    int index = m_anchorIndex;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
-        frameIt.current()->deleteAnchor();
+        if (  frameIt.current()->anchor() )
+        {
+            // Anchor this frame, after the previous one
+            m_anchorParag->at( index )->loseCustomItem();
+            m_anchorParag->remove( index, 1 );
+            frameIt.current()->deleteAnchor();
+        }
 }
 
 KWFrame * KWFrameSet::getFrame( double _x, double _y )
