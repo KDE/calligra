@@ -268,14 +268,33 @@ util_dateFormat(KLocale * locale, QDate m_Date,
 
 QString util_columnLabel(int column)
 {
-    if (column <= 26)
-	return QString("%1").arg((char) ('A' + column - 1));
+    int tmp;
 
-    if (column <= 26 * 26)
-	return QString("%1%2").arg((char)('A' + ((column - 1) / 26) - 1)).arg((char)('A' +
-								      ((column - 1) % 26)));
+    /* we start with zero */
+    tmp = column - 1;
 
-    /* limit is 26*26 */
+    if (tmp < 26) /* A-Z */
+	return QString("%1").arg((char) ('A' + tmp));
+
+    tmp -= 26;
+    if (tmp < 26*26) /* AA-ZZ */
+	return QString("%1%2").arg( (char) ('A' + tmp / 26) )
+			      .arg( (char) ('A' + tmp % 26) );
+
+    tmp -= 26*26;
+    if (tmp < 26 * 26 * 26 ) /* AAA-ZZZ */
+	return QString("%1%2%3").arg( (char) ('A' + tmp / (26 * 26)) )
+				.arg( (char) ('A' + (tmp / 26) % 26 ) )
+				.arg( (char) ('A' + tmp % 26) );
+
+    tmp -= 26*26*26;
+    if (tmp < 26 * 26 * 26 * 26) /* AAAA-ZZZZ */
+	return QString("%1%2%3%4").arg( (char) ('A' + (tmp / (26 * 26 * 26 )      ) ))
+				  .arg( (char) ('A' + (tmp / (26 * 26      ) % 26 ) ))
+				  .arg( (char) ('A' + (tmp / (26           ) % 26 ) ))
+				  .arg( (char) ('A' + (tmp                   % 26 ) ));
+
+    /* limit is currently 26^4 + 26^3 + 26^2 + 26^1 = 475254 */
     kdDebug(36001) << "invalid column\n";
     return QString("@@@");
 }

@@ -7,9 +7,10 @@ class RowLayout;
 
 class QPoint;
 
-#define KSPREAD_CLUSTER_LEVEL1 100
-#define KSPREAD_CLUSTER_LEVEL2 100
-#define KSPREAD_CLUSTER_MAX (100*100)
+#define KSPREAD_CLUSTER_LEVEL1 256
+#define KSPREAD_CLUSTER_LEVEL2 128
+/* KSPREAD_CLUSTER_MAX is CURRENTLY 2^15 only, so it's 256*256 divided by 2 */
+#define KSPREAD_CLUSTER_MAX (256*256/2)
 
 class KSpreadCluster
 {

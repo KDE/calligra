@@ -302,6 +302,7 @@ void KSpreadCell::unobscure()
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
+
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -872,7 +873,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // Determine the correct font
     //
     KSpreadConditional condition;
-    if( conditions.GetCurrentCondition(condition) && 
+    if( conditions.GetCurrentCondition(condition) &&
 	!m_pTable->getShowFormula() )
     {
         _painter.setFont( condition.fontcond );
@@ -1316,7 +1317,7 @@ void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
 {
     KSpreadConditional condition;
 
-    if( conditions.GetCurrentCondition(condition) && 
+    if( conditions.GetCurrentCondition(condition) &&
 	!m_pTable->getShowFormula() )
     {
         _paint.setFont( condition.fontcond );
@@ -1435,7 +1436,7 @@ bool KSpreadCell::calc()
   {
     return true;
   }
- 
+
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
   m_bCalcDirtyFlag = false;
@@ -1724,7 +1725,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         _painter.save();
         m_pObscuringCell->paintCell( _rect, _painter,
-                                     m_pObscuringCell->column(), 
+                                     m_pObscuringCell->column(),
 				     m_pObscuringCell->row(), _prect );
         _painter.restore();
         m_bLayoutDirtyFlag = FALSE;
@@ -2105,7 +2106,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         // #### Torben: This looks like duplication to me
 	KSpreadConditional condition;
 
-        if(conditions.GetCurrentCondition(condition) && 
+        if(conditions.GetCurrentCondition(condition) &&
 	   !m_pTable->getShowFormula())
         {
             _painter.setFont( condition.fontcond );
@@ -2459,7 +2460,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
  {
    if( formatType()!=Scientific)
    {
-     int p = (precision(column(),row())  == -1) ? 8 : 
+     int p = (precision(column(),row())  == -1) ? 8 :
        precision(column(),row());
      double value =valueDouble() * factor(column(),row());
      int pos=0;
@@ -2468,16 +2469,16 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
      {
        localizedNumber=localizedNumber.replace(pos,1,decimal_point);
      }
-     if( floatFormat( column(), row() ) == 
+     if( floatFormat( column(), row() ) ==
 	 KSpreadCell::AlwaysSigned && value >= 0 )
-       
+
      {
        if(locale()->positiveSign().isEmpty())
        {
 	 localizedNumber='+'+localizedNumber;
        }
      }
-     if ( precision(column(),row()) == -1 && 
+     if ( precision(column(),row()) == -1 &&
 	  localizedNumber.find(decimal_point) >= 0 )
      {
        //duplicate code it's not good I know I will fix it
@@ -2488,7 +2489,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
        }
        int i = localizedNumber.length()-start;
        bool bFinished = FALSE;
-       
+
        while ( !bFinished && i > 0 )
        {
 	 QChar ch = localizedNumber[ i - 1 ];
@@ -3098,15 +3099,15 @@ bool KSpreadCell::testValidity()
     if( m_Validity != NULL )
     {
       if( isNumeric() &&
-	  (m_Validity->m_allow == Allow_Number || 
-	   (m_Validity->m_allow == Allow_Integer && 
+	  (m_Validity->m_allow == Allow_Number ||
+	   (m_Validity->m_allow == Allow_Integer &&
 	    valueDouble() == ceil(valueDouble()))))
       {
 	switch( m_Validity->m_cond)
 	{
 	  case Equal:
 	    valid = ( valueDouble() - m_Validity->valMin < DBL_EPSILON
-		      && valueDouble() - m_Validity->valMin > 
+		      && valueDouble() - m_Validity->valMin >
 		      (0.0 - DBL_EPSILON));
 	    break;
           case Superior:
@@ -3122,11 +3123,11 @@ bool KSpreadCell::testValidity()
 	    valid = (valueDouble() <= m_Validity->valMin);
 	    break;
 	  case Between:
-	    valid = ( valueDouble() >= m_Validity->valMin && 
+	    valid = ( valueDouble() >= m_Validity->valMin &&
 		      valueDouble() <= m_Validity->valMax);
 	    break;
 	  case Different:
-	    valid = (valueDouble() < m_Validity->valMin || 
+	    valid = (valueDouble() < m_Validity->valMin ||
 		     valueDouble() > m_Validity->valMax);
 	    break;
 	  default :
@@ -3198,11 +3199,11 @@ bool KSpreadCell::testValidity()
 	    valid = (valueTime() <= m_Validity->timeMin);
 	    break;
 	  case Between:
-	    valid = (valueTime() >= m_Validity->timeMin && 
+	    valid = (valueTime() >= m_Validity->timeMin &&
 		     valueTime() <= m_Validity->timeMax);
 	    break;
   	  case Different:
-	    valid = (valueTime() < m_Validity->timeMin || 
+	    valid = (valueTime() < m_Validity->timeMin ||
 		     valueTime() > m_Validity->timeMax);
 	    break;
 	  default :
@@ -3230,11 +3231,11 @@ bool KSpreadCell::testValidity()
 	    valid = (valueDate() <= m_Validity->dateMin);
 	    break;
 	  case Between:
-	    valid = (valueDate() >= m_Validity->dateMin && 
+	    valid = (valueDate() >= m_Validity->dateMin &&
 		     valueDate() <= m_Validity->dateMax);
 	    break;
 	  case Different:
-	    valid = (valueDate() < m_Validity->dateMin || 
+	    valid = (valueDate() < m_Validity->dateMin ||
 		     valueDate() > m_Validity->dateMax);
 	    break;
 	  default :
@@ -3317,7 +3318,7 @@ void KSpreadCell::updateDepending()
   }
 
   kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
-    
+
   KSpreadDependency* d = NULL;
 
   m_bUpdatingDeps = true;
@@ -3370,7 +3371,7 @@ void KSpreadCell::setCalcDirtyFlag()
   if ( m_content != Formula )
   {
     /* we set it temporarily to true to handle recursion (although that shouldn't happen if it's not a
-       formula - we might as well be safe).  
+       formula - we might as well be safe).
     */
     m_bCalcDirtyFlag = false;
   }
@@ -3694,7 +3695,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
 
 
     QDomElement conditionElement = conditions.SaveConditions(doc);
-    
+
     if ( !conditionElement.isNull() )
     {
       cell.appendChild( conditionElement );
@@ -4442,7 +4443,7 @@ void KSpreadCell::NotifyDepending( int col, int row, KSpreadTable* table, bool i
 void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending)
 {
   KSpreadDependency *d = NULL;
-  
+
   for (d = lst.first(); d != NULL; d = lst.next())
   {
     for (int c = d->Left(); c <= d->Right(); c++)

@@ -274,7 +274,7 @@ int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
     while ( x < _xpos )
     {
         // Should never happen
-        if ( col == 0x10000 )
+        if ( col == 0x8000 )
             return 1;
         _left += columnLayout( col )->width( _canvas );
         col++;
@@ -294,8 +294,8 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
     while ( x < _xpos )
     {
         // Should never happen
-        if ( col == 0x10000 )
-            return 0x10000;
+        if ( col == 0x8000 )
+            return 0x8000;
         x += columnLayout( col )->width( _canvas );
         col++;
     }
@@ -318,7 +318,7 @@ int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
     while ( y < _ypos )
     {
         // Should never happen
-        if ( row == 0x10000 )
+        if ( row == 0x8000 )
             return 1;
         _top += rowLayout( row )->height( _canvas );
         row++;
@@ -338,8 +338,8 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
     while ( y < _ypos )
     {
         // Should never happen
-        if ( row == 0x10000 )
-            return 0x10000;
+        if ( row == 0x8000 )
+            return 0x8000;
         y += rowLayout( row )->height( _canvas );
         row++;
     }
@@ -355,7 +355,7 @@ int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
     for ( int col = 1; col < _col; col++ )
     {
         // Should never happen
-        if ( col == 0x10000 )
+        if ( col == 0x8000 )
             return x;
 
         x += columnLayout( col )->width( _canvas );
@@ -372,7 +372,7 @@ int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
     for ( int row = 1 ; row < _row ; row++ )
     {
         // Should never happen
-        if ( row == 0x10000 )
+        if ( row == 0x8000 )
             return y;
 
         y += rowLayout( row )->height( _canvas );
@@ -5039,7 +5039,7 @@ bool KSpreadTable::isOnNewPageX( int _column )
     while ( col <= _column )
     {
         // Should never happen
-        if ( col == 0x10000 )
+        if ( col == 0x8000 )
             return FALSE;
 
         if ( x > m_pDoc->printableWidth() )
@@ -5064,7 +5064,7 @@ bool KSpreadTable::isOnNewPageY( int _row )
     while ( row <= _row )
     {
         // Should never happen
-        if ( row == 0x10000 )
+        if ( row == 0x8000 )
             return FALSE;
 
         if ( y > m_pDoc->printableHeight() )

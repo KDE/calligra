@@ -2239,8 +2239,8 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     QRect uni = old_sel.unite( new_sel ).unite( old_outer ).unite( old_marker ).unite( new_marker );
 
     // Limit the number of cells
-    uni.rBottom() = QMIN( 9999, uni.bottom() );
-    uni.rRight() = QMIN( 9999, uni.right() );
+    uni.rBottom() = QMIN( 0x7FFF, uni.bottom() );
+    uni.rRight() = QMIN( 0x7FFF, uni.right() );
 
     //qDebug("UNI left/top :%i/%i right/bottom :%i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
 
