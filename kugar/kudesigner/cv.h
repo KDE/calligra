@@ -20,6 +20,7 @@
 #include <qcanvas.h>
 #include <kglobalsettings.h>
 #include <qpainter.h>
+#include <qptrlist.h>
 
 class CanvasReportItem;
 class QMouseEvent;
@@ -55,7 +56,13 @@ protected:
     void placeItem(QCanvasItemList &l, QMouseEvent *e);
     void editItem(QCanvasItemList &l);
     void deleteItem(QCanvasItemList &l);
-    void selectItem(QCanvasItemList &l);
+    void selectItemFromList(QCanvasItemList &l);
+
+    void unselectAll();
+    void selectAll();
+    void selectItem(CanvasBox *it, bool addToSelection = true);
+    void unselectItem(CanvasBox *it);
+
 private:
     CanvasReportItem *moving;
     QPoint moving_start;
@@ -66,7 +73,7 @@ private:
     
     RequestType request;
 
-    CanvasBox *selected;
+    QPtrList<CanvasBox> selected;
 signals: // Signals
   /** Emitted when user clicks on the canvas, so a button
 or a menu item assosiated with the selected item should

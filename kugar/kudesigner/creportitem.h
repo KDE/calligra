@@ -30,8 +30,8 @@ public:
     CanvasReportItem(int x, int y, int width, int height, QCanvas * canvas):
 	    CanvasBox(x, y, width, height, canvas)
     {
-	setZ(20);
-	parentSection = 0;
+        setZ(20);
+        parentSection = 0;
     }
     virtual int rtti() const { return RttiCanvasReportItem; }
     

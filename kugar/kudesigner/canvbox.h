@@ -36,7 +36,7 @@ public:
     CanvasBox(int x, int y, int width, int height, QCanvas * canvas):
 	    QCanvasRectangle(x, y, width, height, canvas)
     {
-        selected = false;
+        setSelected(false);
     }
 
     virtual int rtti() const { return RttiCanvasBox; }
@@ -56,17 +56,12 @@ public:
 		      << probably_key_value << ... -- values
     */
     std::map<QString, std::pair<QString, QStringList> > props;
-
-    virtual bool isSelected();
-    virtual void setSelected(bool s);
-protected:
-    bool selected;
 };
 
 class CanvasSection: public CanvasBox{
 public:
     CanvasSection(int x, int y, int width, int height, QCanvas * canvas):
-	    CanvasBox(x, y, width, height, canvas) {}
+	    CanvasBox(x, y, width, height, canvas) { }
     virtual QString getXml() { return ""; }
     virtual void draw(QPainter &painter);
     virtual int rtti() const { return RttiCanvasSection; }

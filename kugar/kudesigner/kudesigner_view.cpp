@@ -55,6 +55,9 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
     rc->setFocus();
 
     rc->itemToInsert = 0;
+
+    connect(rc, SIGNAL(selectedActionProcessed()), this, SLOT(unselectItemAction()));
+    connect(rc, SIGNAL(modificationPerformed()), part, SLOT(setModified()));
 }
 
 void KudesignerView::paintEvent( QPaintEvent* ev )
@@ -299,6 +302,10 @@ void KudesignerView::slotAddItemLine(){
 	    CanvasLine *l = new CanvasLine(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
     	rc->itemToInsert = l;
     }
+}
+
+void KudesignerView::unselectItemAction(){
+    itemsNothing->setChecked(true);
 }
 
 #include "kudesigner_view.moc"

@@ -79,7 +79,7 @@ ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name
     moving = 0;
     resizing = 0;
     selectionStarted = 0;
-    selected = 0;
+    selected.setAutoDelete(false);
     request = RequestNone;
     selectionRect = new SelectionRect(0, 0, 0, 0, canvas);
 }
@@ -154,26 +154,27 @@ void ReportCanvas::editItem(QCanvasItemList &l)
     }*/
 }
 
-void ReportCanvas::selectItem(QCanvasItemList &l)
+void ReportCanvas::selectItemFromList(QCanvasItemList &l)
 {
     //display editor for report items or sections
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
-        if ((*it)->rtti() >= 1800) //for my own report items
+        if ((*it)->rtti() > 2001) //for report items but not bands
         {
-            CanvasBox *l = (CanvasBox*)(*it);
-            if (l != selected)
+            CanvasBox *b = (CanvasBox*)(*it);
+            if (!selected.containsRef(b))
             {
-                selected->setSelected(false);
-                l->setSelected(true);
-                selected = l;
+                selectItem(b, false);
+                canvas()->update();
+//                qWarning("selected item set");
+//                selected->drawHolders();
+                return;
             }
-            break;
+            if (selected.containsRef(b)) return;
         }
     }
-    if (selected)
-        selected->setSelected(false);
-    selected = 0;
+    unselectAll();
+//    qWarning("unselect");
 }
 
 
@@ -188,6 +189,9 @@ void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
             itemToInsert->setY(e->y());
             itemToInsert->setSection((CanvasBand *)(*it));
             itemToInsert->updateGeomProps();
+
+            selectItem(itemToInsert, false);
+
             itemToInsert->show();
             ((CanvasBand *)(*it))->items.append(itemToInsert);
             used = true;
@@ -245,6 +249,9 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     //if there is a request for properties or for delete operation
     //perform that and do not take care about mouse buttons
+
+//    qWarning("mouse press");
+
     switch (request)
     {
         case RequestProps:
@@ -261,15 +268,19 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     moving = 0;
     resizing = 0;
+    selectionStarted = 0;
     switch (e->button())
     {
         case LeftButton:
             if (itemToInsert)
             {
+//                qWarning("placing item");
                 placeItem(l, e);
             }
             else
             {
+//                qWarning("starting move or resize");
+                selectItemFromList(l);
                 startMoveOrResizeOrSelectItem(l, e, p);
             }
             break;
@@ -290,8 +301,9 @@ void ReportCanvas::contentsMouseReleaseEvent(QMouseEvent* e)
 
     switch (e->button())
     {
-        case LeftButton:
+/*        case LeftButton:
             selectItem(l);
+            break;*/
         case MidButton:
             deleteItem(l);
             break;
@@ -356,6 +368,17 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
             moving_start.y(), e->pos().x(), e->pos().y());*/
         selectionRect->setSize(e->pos().x() - selectionRect->x(),
             e->pos().y() - selectionRect->y());
+        unselectAll();
+        QCanvasItemList l = canvas()->collisions(selectionRect->rect());
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+        {
+            if ( ((*it)->rtti() > 2001) &&
+                (selectionRect->rect().contains(((CanvasBox*)(*it))->rect())) )
+            {
+                selectItem((CanvasBox*)(*it));
+                canvas()->update();
+            }
+        }
     }
 }
 
@@ -392,5 +415,38 @@ bool ReportCanvas::requested()
     else
 	return true;
 }
-    
+
+void ReportCanvas::unselectAll()
+{
+    CanvasBox *b;
+
+    for (b = selected.first(); b; b = selected.next())
+        unselectItem(b);
+}
+
+void ReportCanvas::selectAll()
+{
+    for (QCanvasItemList::Iterator it=canvas()->allItems().begin(); it!=canvas()->allItems().end(); ++it)
+    {
+        if ((*it)->rtti() > 2001)
+        {
+            selectItem((CanvasBox*)(*it));
+        }
+    }
+}
+
+void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
+{
+    if (!addToSelection)
+        unselectAll();
+    selected.append(it);
+    it->setSelected(true);
+}
+
+void ReportCanvas::unselectItem(CanvasBox *it)
+{
+    selected.remove(it);
+    it->setSelected(false);
+}
+
 #include "cv.moc"

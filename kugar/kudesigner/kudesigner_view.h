@@ -53,7 +53,7 @@ protected slots:
     void slotAddItemSpecial();
     void slotAddItemField();
     void slotAddItemLabel();
-
+    void unselectItemAction();
 
 
 protected:
