@@ -20,7 +20,6 @@
 #ifndef __ko_app_h__
 #define __ko_app_h__
 
-#include <kstartparams.h>
 #include <kapp.h>
 
 #define KOAPP ((KoApplication *)KApplication::kApplication())
