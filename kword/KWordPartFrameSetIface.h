@@ -33,11 +33,11 @@ class KWordPartFrameSetIface : public KWordFrameSetIface
 {
     K_DCOP
 public:
-    KWordPartFrameSetIface( KWPartFrameSet *_frame );
+    KWordPartFrameSetIface( KWPartFrameSet *fs );
 k_dcop:
-    DCOPRef startEditing();
+    void startEditing();
 private:
-    KWPartFrameSet *m_part;
+    KWPartFrameSet *m_partFrameSet;
 };
 
 #endif

@@ -423,7 +423,9 @@ public:
 
     ProcessingType processingType()const { return m_processingType;  }
 
-    QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
+    MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState, KWFrame** pFrame = 0L );
+    // The cursor for the current 'mouse click meaning'
+    QCursor getMouseCursor( const QPoint& nPoint, int keyState );
     QPtrList<KWFrame> getSelectedFrames() const;
     KWFrame *getFirstSelectedFrame() const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }

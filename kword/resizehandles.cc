@@ -179,7 +179,11 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     oldY = e->y();
     QPoint vPoint( x() + e->x(), y() + e->y() );
     QPoint nPoint = m_canvas->viewMode()->viewToNormal( vPoint );
-    m_canvas->mpEditFrame( 0, nPoint );
+
+    MouseMeaning meaning = doc->getMouseMeaning( nPoint, e->state() );
+    Q_ASSERT( meaning >= MEANING_TOPLEFT ); // had be better be about resizing...
+
+    m_canvas->mpEditFrame( 0, nPoint, meaning );
 }
 
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )

@@ -19,25 +19,32 @@
 
 #include "KWordPartFrameSetIface.h"
 #include "kwdoc.h"
-#include "kwframe.h"
-#include <kapplication.h>
-#include <dcopclient.h>
+#include "kwpartframeset.h"
 #include "kwview.h"
 #include "kwcanvas.h"
 
-KWordPartFrameSetIface::KWordPartFrameSetIface( KWPartFrameSet *_frame )
-    : KWordFrameSetIface( _frame)
+#include <kapplication.h>
+#include <kparts/partmanager.h>
+#include <dcopclient.h>
+
+KWordPartFrameSetIface::KWordPartFrameSetIface( KWPartFrameSet *fs )
+    : KWordFrameSetIface( fs )
 {
-   m_part = _frame;
+   m_partFrameSet = fs;
 }
 
-DCOPRef KWordPartFrameSetIface::startEditing()
+void KWordPartFrameSetIface::startEditing()
 {
-    if ( m_part->isDeleted() )
-        return DCOPRef();
-    KWDocument *doc=m_part->kWordDocument();
-    QPtrList <KWView> lst=doc->getAllViews();
-    lst.at(0)->getGUI()->canvasWidget()->editFrameSet(m_part );
-    return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWPartFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
+    if ( m_partFrameSet->isDeleted() )
+        return; // DCOPRef();
+    KWDocument *doc = m_partFrameSet->kWordDocument();
+    QPtrList <KWView> lst = doc->getAllViews();
+    KWView* view = lst.getFirst();
+    KoDocument* part = m_partFrameSet->getChild()->document();
+    if ( !part || !view )
+        return;
+    view->partManager()->addPart( part, false );
+    view->partManager()->setActivePart( part, view );
+    /* return DCOPRef( kapp->dcopClient()->appId(),
+		    (static_cast<KWPartFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() ); */
 }

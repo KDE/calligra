@@ -11,7 +11,7 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
 		kwview.cc  \
                 kwviewmode.cc \
 		kwtextparag.cc kwtextdocument.cc \
-		kwtextframeset.cc \
+		kwtextframeset.cc kwpartframeset.cc \
                 kwtableframeset.cc kwtextimage.cc kwanchor.cc \
                 kwdrag.cc kwconfig.cc \
 		kwvariable.cc \
@@ -36,7 +36,6 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
 		KWordPictureFrameSetIface.skel KWordPictureFrameSetIface.cc \
 		KWordTableFrameSetIface.skel KWordTableFrameSetIface.cc \
 		KWordPartFrameSetIface.skel KWordPartFrameSetIface.cc \
-		KWordPartFrameSetEditIface.skel KWordPartFrameSetEditIface.cc \
 		kwbgspellcheck.cc resizetabledia.cc kwframelayout.cc \
 		configfootnotedia.cc kwcreatebookmarkdia.cc kwimportstyledia.cc \
 		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \

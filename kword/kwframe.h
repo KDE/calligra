@@ -116,7 +116,7 @@ public:
     void setSelected( bool _selected );
     bool isSelected()const { return m_selected; }
 
-    QCursor getMouseCursor( const KoPoint& docPoint, bool table, QCursor defaultCursor );
+    MouseMeaning getMouseMeaning( const KoPoint& docPoint, bool table, MouseMeaning defaultCursor );
 
     double runAroundGap()const { return m_runAroundGap; }
     void setRunAroundGap( double gap ) { m_runAroundGap = gap; }
@@ -412,7 +412,7 @@ protected:
  * The different types of content are implemented in the different
  * types of frameSet implementations (see below)
  * @see KWTextFrameSet, KWPartFrameSet, KWPictureFrameSet,
- *      KWPartFrameSet, KWFormulaFrameSet
+ *      KWFormulaFrameSet, KWTableFrameSet
  */
 class KWFrameSet : public QObject
 {
@@ -636,7 +636,7 @@ public:
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );
 
-    virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor );
+    virtual MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
 
     /** Show a popup menu - called when right-clicking inside a frame of this frameset.
      * The default implementation shows "frame_popup".
@@ -884,98 +884,6 @@ protected:
     bool m_keepAspectRatio;
     /// Cache the finalSize parameter of the method resizeFrame for drawFrame
     bool m_finalSize;
-};
-
-/******************************************************************/
-/* Class: KWPartFrameSet                                          */
-/******************************************************************/
-
-class KWPartFrameSet : public KWFrameSet
-{
-    Q_OBJECT
-public:
-    KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
-    virtual ~KWPartFrameSet();
-
-    virtual KWordFrameSetIface* dcopObject();
-
-
-    /** The type of frameset. Use this to differentiate between different instantiations of
-     *  the framesets. Each implementation will return a different frameType.
-     */
-    virtual FrameSetType type() { return FT_PART; }
-
-    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
-
-    KWChild *getChild()const { return m_child; }
-
-    void updateChildGeometry( KWViewMode* viewMode );
-
-    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
-                                    const QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                                    KWFrameSetEdit * edit, KWViewMode *viewMode );
-
-    // Embedded parts can be transparent
-    virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
-
-    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes, bool loadFrames = true );
-
-    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
-    void startEditing();
-    void endEditing();
-
-    /**
-     * Move the frame 'frameNum' to the given position and
-     * move the document child window with it
-     * This is called when the frame is anchored and the anchor moves (see KWAnchor).
-    */
-    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-
-#ifndef NDEBUG
-    virtual void printDebug();
-#endif
-
-    /**
-    *   Delete a frame from the set of frames this frameSet has.
-    *   @param num The frameNumber to be removed.
-    *   @param remove passing true means that there can not be an undo of the action.
-    *   @param recalc do an updateFrames()
-    */
-    void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
-
-    void setDeleted( bool on = true );
-
-private:
-    KWChild *m_child;
-    KWFramePartMoveCommand *m_cmdMoveChild;
-
-private slots:
-    void slotChildChanged();
-};
-
-class KWPartFrameSetEdit :  public QObject, public KWFrameSetEdit
-{
-    Q_OBJECT
-public:
-    KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas );
-    virtual ~KWPartFrameSetEdit();
-
-    virtual DCOPObject* dcopObject();
-
-
-    KWPartFrameSet * partFrameSet() const
-    {
-        return static_cast<KWPartFrameSet*>(frameSet());
-    }
-
-    // Events forwarded by the canvas (when being in "edit" mode)
-    //virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
-    //virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
-private slots:
-    void slotChildActivated(bool);
-private:
-    DCOPObject *m_dcop;
 };
 
 /******************************************************************/

@@ -23,6 +23,7 @@
 #include "docstruct.h"
 #include "docstruct.moc"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 #include <koparagcounter.h>
 #include "kwtextdocument.h"
 

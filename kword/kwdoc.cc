@@ -42,21 +42,23 @@
 #include <unistd.h>
 #include <math.h>
 
-#include "kwtableframeset.h"
-#include "kwdoc.h"
-#include "kwcanvas.h"
-#include "defs.h"
-#include "mailmerge.h"
-#include "kwview.h"
-#include "kwviewmode.h"
-#include "kwcommand.h"
-#include "kwtextimage.h"
-#include "kwbgspellcheck.h"
 #include "KWordDocIface.h"
-#include "kwvariable.h"
+#include "defs.h"
+#include "kwbgspellcheck.h"
+#include "kwcanvas.h"
+#include "kwcommand.h"
+#include "kwdoc.h"
 #include "kwframelayout.h"
+#include "kwpartframeset.h"
+#include "kwtableframeset.h"
 #include "kwtablestyle.h"
 #include "kwtabletemplate.h"
+#include "kwtextimage.h"
+#include "kwvariable.h"
+#include "kwview.h"
+#include "kwviewmode.h"
+#include "mailmerge.h"
+
 #include <X11/Xlib.h>
 #include <kglobalsettings.h>
 #include "kocommandhistory.h"
@@ -92,11 +94,15 @@ KWChild::~KWChild()
 KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
 {
     Q_ASSERT( m_partFrameSet );
-    if ( isDeleted() )
+    if ( isDeleted() ) {
+        //kdDebug() << k_funcinfo << "is deleted!" << endl;
         return 0L;
+    }
     // Only activate when it's already selected.
-    if ( !m_partFrameSet->frame(0)->isSelected() )
+    if ( !m_partFrameSet->frame(0)->isSelected() ) {
+        //kdDebug() << k_funcinfo << " is not selected" << endl;
         return 0L;
+    }
     // And only if CTRL isn't pressed.
 
     Window root;
@@ -3086,7 +3092,7 @@ KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool 
 #ifdef DEBUG_FRAMESELECT
     kdDebug(32001) << "KWDocument::frameUnderMouse nPoint=" << nPoint << " firstNonSelected=" << firstNonSelected << endl;
 #endif
-    KWFrame *candidate=topFrameUnderMouse(nPoint,border);
+    KWFrame *candidate = topFrameUnderMouse(nPoint, border);
     if (!firstNonSelected)
         return candidate;
     KWFrame *goDeeper=candidate;
@@ -3109,23 +3115,64 @@ KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool 
     return candidate;
 }
 
-
-QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
+MouseMeaning KWDocument::getMouseMeaning( const QPoint &nPoint, int keyState, KWFrame** pFrame )
 {
-    bool border=true;
-
+    if ( pFrame )
+        *pFrame = 0L;
     if (positionToSelectRowcolTable(nPoint) != TABLE_POSITION_NONE)
-        return KCursor::handCursor();
+        return MEANING_MOUSE_SELECT;
 
-    KWFrame *frameundermouse = frameUnderMouse(nPoint, &border );
-
+    bool border=true;
+    KWFrame *frameundermouse = frameUnderMouse(nPoint, &border);
     if (frameundermouse) {
-        QCursor cursor;
         KWFrameSet *frameSet = frameundermouse->frameSet();
-        if ( frameSet->getMouseCursor(nPoint, controlPressed, cursor))
-            return cursor;
+        if ( pFrame )
+            *pFrame = frameundermouse;
+        return frameSet->getMouseMeaning(nPoint, keyState);
     }
-    return ibeamCursor;
+    return MEANING_NONE;
+}
+
+QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
+{
+    KWFrame* frame = 0L;
+    MouseMeaning meaning = getMouseMeaning( nPoint, keyState, &frame );
+    KWFrameSet* frameSet = frame ? frame->frameSet() : 0L;
+    switch ( meaning ) {
+    case MEANING_NONE:
+        return Qt::ibeamCursor; // default cursor in margins
+    case MEANING_MOUSE_INSIDE:
+        return QCursor(); // default cursor !?!?
+    case MEANING_MOUSE_INSIDE_TEXT:
+        return Qt::ibeamCursor;
+    case MEANING_MOUSE_MOVE:
+        return Qt::sizeAllCursor;
+    case MEANING_MOUSE_SELECT:
+        return KCursor::handCursor();
+    case MEANING_ACTIVATE_PART:
+        return KCursor::handCursor();
+    case MEANING_TOPLEFT:
+    case MEANING_BOTTOMRIGHT:
+        if ( frameSet->isProtectSize() )
+            return Qt::forbiddenCursor;
+        return Qt::sizeFDiagCursor;
+    case MEANING_LEFT:
+    case MEANING_RIGHT:
+        if ( frameSet->isProtectSize() )
+            return Qt::forbiddenCursor;
+        return Qt::sizeHorCursor;
+    case MEANING_BOTTOMLEFT:
+    case MEANING_TOPRIGHT:
+        if ( frameSet->isProtectSize() )
+            return Qt::forbiddenCursor;
+        return Qt::sizeBDiagCursor;
+    case MEANING_TOP:
+    case MEANING_BOTTOM:
+        if ( frameSet->isProtectSize() )
+            return Qt::forbiddenCursor;
+        return Qt::sizeVerCursor;
+    }
+    return QCursor(); // default cursor !?!?
 }
 
 QString KWDocument::generateFramesetName( const QString & templateName )
@@ -3303,8 +3350,8 @@ void KWDocument::updateFramesOnTopOrBelow( int _pageNum /* -1 == all */ )
     if ( viewMode() && !viewMode()->hasFrames() )
         return;
 
-    kdDebug() << "KWDocument::updateFramesOnTopOrBelow  pageNum=" << _pageNum << endl;
 #ifdef DEBUG_SPEED
+    kdDebug() << "KWDocument::updateFramesOnTopOrBelow  pageNum=" << _pageNum << endl;
     QTime dt;
     dt.start();
     int numberAdded = 0;
@@ -3916,6 +3963,9 @@ void KWDocument::deleteFrame( KWFrame * frame )
     case FT_PART:
         cmdName=i18n("Delete Object Frame");
         docItem=Embedded;
+        break;
+    case FT_HORZLINE:
+        cmdName=i18n("Delete Horizontal Line");
         break;
     case FT_TABLE:
     case FT_BASE:

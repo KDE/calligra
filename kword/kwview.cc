@@ -60,6 +60,7 @@
 #include "kweditpersonnalexpressiondia.h"
 #include "kwinsertpicdia.h"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 #include "kwview.h"
 #include "kwviewmode.h"
 #include "searchdia.h"
@@ -7187,6 +7188,24 @@ void KWView::slotCorrectWord()
     }
 }
 
+void KWView::slotChildActivated( bool a )
+{
+  // Same hack as in KoView
+  KoViewChild* ch = child( (KoView*)sender() );
+  if ( !ch )
+    return;
+  KWChild* kwchild = static_cast<KWChild *>( ch->documentChild() );
+  KWPartFrameSet* fs = kwchild->partFrameSet();
+  //kdDebug() << "KWView::slotChildActivated fs=" << fs << endl;
+  Q_ASSERT( fs );
+  if ( fs ) {
+      if ( a )
+          fs->startEditing();
+      else
+          fs->endEditing();
+  }
+  KoView::slotChildActivated( a );
+}
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
@@ -7674,6 +7693,5 @@ bool KWStatisticsDialog::docHasSelection()
     }
     return false;
 }
-
 
 #include "kwview.moc"

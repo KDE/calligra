@@ -24,6 +24,7 @@
 #include "kwtablestyle.h"
 #include "kwtabletemplate.h"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
 #include "koVariable.h"

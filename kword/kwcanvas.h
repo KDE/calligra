@@ -98,7 +98,7 @@ public:
     void pasteFrames();
 
     // Mouse press
-    void mpEditFrame( QMouseEvent *e, const QPoint& nPoint );
+    void mpEditFrame( QMouseEvent *e, const QPoint& nPoint, MouseMeaning meaning );
     void mpCreate( const QPoint& normalPoint );
     void mpCreatePixmap( const QPoint& normalPoint );
     // Mouse move
@@ -293,6 +293,7 @@ private:
 
     // Frame stuff
     MouseMode m_mouseMode;
+    MouseMeaning m_mouseMeaning; // set by mousePress, used by mouseMove
     KoRect m_resizedFrameInitialSize; // when resizing a frame
     KoRect m_insRect;  // when creating a new frame
     KoRect m_boundingRect; // when moving frame(s)

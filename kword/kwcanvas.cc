@@ -19,6 +19,7 @@
 
 #include "kwcanvas.h"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwviewmode.h"
@@ -49,6 +50,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
 {
     m_gui = lGui;
     m_currentFrameSetEdit = 0L;
+    m_mouseMeaning = MEANING_NONE;
     m_mousePressed = false;
     m_imageDrag = false;
     m_frameInline = false;
@@ -333,10 +335,11 @@ void KWCanvas::switchViewMode( KWViewMode * newViewMode )
     m_viewMode = newViewMode;
 }
 
-void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse press in edit-frame mode
+void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning meaning ) // mouse press in edit-frame mode
 // This can be called by KWResizeHandle::mousePressEvent
 {
     KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
+    m_mouseMeaning = meaning;
     m_mousePressed = true;
     m_frameMoved = false;
     m_frameResized = false;
@@ -379,9 +382,13 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             {
                 if ( e->state() & ShiftButton )
                     selectFrame( frame, FALSE );
-                else if ( viewport()->cursor().shape() != SizeAllCursor ) {
-                    selectAllFrames( FALSE );
-                    selectFrame( frame, TRUE );
+                else {
+                    // Resizing?
+                    if ( m_mouseMeaning >= MEANING_TOPLEFT /*hack*/ ) {
+                        // We can only resize one frame at a time
+                        selectAllFrames( FALSE );
+                        selectFrame( frame, TRUE );
+                    }
                 }
             }
         }
@@ -441,7 +448,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
         cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
     }
 
-    viewport()->setCursor( m_doc->getMouseCursor( nPoint, e && e->state() & ControlButton ) );
+    viewport()->setCursor( m_doc->getMouseCursor( nPoint, e ? e->state() : 0 ) );
 
     m_deleteMovingRect = false;
 }
@@ -512,20 +519,18 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     case MM_EDIT:
     {
         // See if we clicked on a frame's border
-        bool border = false;
-        KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
-        bool selectedFrame = m_doc->getFirstSelectedFrame() != 0L;
-        // Frame border, or pressing Control or pressing Shift and a frame has already been selected
-        // [We must keep shift+click for selecting text, when no frame is selected]
-        if ( ( frame && border )
-             || e->state() & ControlButton
-             || ( ( e->state() & ShiftButton ) && selectedFrame ) )
+        KWFrame* frame;
+        m_mouseMeaning = m_doc->getMouseMeaning( normalPoint, e->state(), &frame );
+        kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
+        Q_ASSERT( m_mouseMeaning < MEANING_TOPLEFT ); // during resizing, the resizehandles are supposed to get the events
+        if ( m_mouseMeaning == MEANING_MOUSE_MOVE )
         {
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
-            mpEditFrame( e, normalPoint );
+            mpEditFrame( e, normalPoint, m_mouseMeaning );
         }
-        else
+        else if ( m_mouseMeaning == MEANING_MOUSE_INSIDE || m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT
+                  || m_mouseMeaning == MEANING_ACTIVATE_PART )
         {
             if ( selectAllFrames( false ) )
                 emit frameSelectedChanged();
@@ -534,6 +539,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             bool emitChanged = false;
             if ( fs )
             {
+                // Clicked inside a frame - start editing it
                 KWTableFrameSet *table = fs->getGroupManager();
                 emitChanged = checkCurrentEdit( table ? table : fs );
             }
@@ -545,14 +551,14 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 emit currentFrameSetEditChanged();
             emit updateRuler();
 
-            if( m_frameInline)
+            if ( m_frameInline )
             {
                 bool inlineCreated = true;
                 if(m_frameInlineType==FT_TABLE)
                     inlineCreated = insertInlineTable();
                 else if(m_frameInlineType==FT_PICTURE)
                     inlineCreated = m_gui->getView()->insertInlinePicture();
-                if ( inlineCreated)
+                if (inlineCreated)
                     m_frameInline=false;
                 else
                     KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted"));
@@ -1131,8 +1137,10 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                     m_currentFrameSetEdit->mouseMoveEvent( e, normalPoint, docPoint );
                 else if ( m_doc->isReadWrite() )
                 {
-                    if ( viewport()->cursor().shape() == SizeAllCursor )
+                    if ( m_mouseMeaning == MEANING_MOUSE_MOVE )
                         mmEditFrameMove( normalPoint, e->state() & ShiftButton );
+                    // mousemove during resizing is handled by the resizehandles directly
+                    // (since they are widgets. The canvas doesn't get the event).
                 }
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
@@ -1426,8 +1434,10 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             case MM_EDIT:
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseReleaseEvent( e, normalPoint, docPoint );
-                else
+                else {
                     mrEditFrame( e, normalPoint );
+                    m_mouseMeaning = MEANING_NONE;
+                }
                 break;
             case MM_CREATE_TEXT:
                 mrCreateText();

@@ -48,8 +48,6 @@
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
 #include "KWordPictureFrameSetIface.h"
-#include "KWordPartFrameSetIface.h"
-#include "KWordPartFrameSetEditIface.h"
 #include "KWordHorizontalLineFrameSetIface.h"
 
 //#define DEBUG_DRAW
@@ -148,77 +146,42 @@ int KWFrame::pageNum( KWDocument* doc ) const
     //return QMIN( page, doc->numPages()-1 );
 }
 
-QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
+MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, bool table, MouseMeaning defaultPosition )
 {
     if ( !m_selected && !table )
-        return defaultCursor;
+        return defaultPosition;
 
     double mx = docPoint.x();
     double my = docPoint.y();
 
     if ( !table ) {
         if ( mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6 )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeFDiagCursor;
-        }
+            return MEANING_TOPLEFT;
         if ( mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3 )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeHorCursor;
-        }
+            return MEANING_LEFT;
         if ( mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height() )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeBDiagCursor;
-        }
+            return MEANING_BOTTOMLEFT;
         if ( mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6 )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeVerCursor;
-        }
+            return MEANING_TOP;
         if ( mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 &&
              my <= y() + height() )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeVerCursor;
-        }
+            return MEANING_BOTTOM;
         if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6 )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeBDiagCursor;
-        }
+            return MEANING_TOPRIGHT;
         if ( mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() &&
              my <= y() + height() / 2 + 3 )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeHorCursor;
-        }
+            return MEANING_RIGHT;
         if ( mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
-        {
-            if ( frameSet()->isProtectSize() )
-                return Qt::forbiddenCursor;
-            return Qt::sizeFDiagCursor;
-        }
-        //if ( m_selected )
-        //    return Qt::sizeAllCursor;
+            return MEANING_BOTTOMRIGHT;
     } else { // Tables
         // ### TODO move to KWTableFrameSet
         if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + height() )
-            return Qt::sizeHorCursor;
+            return MEANING_RIGHT;
         if ( mx >= x() && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
-            return Qt::sizeVerCursor;
-        //return Qt::sizeAllCursor;
+            return MEANING_BOTTOM;
     }
 
-    return defaultCursor;
+    return defaultPosition;
 }
 
 KWFrame *KWFrame::getCopy() {
@@ -1376,28 +1339,33 @@ bool KWFrameSet::contains( double mx, double my )
     return false;
 }
 
-bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor )
+MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
 {
     bool canMove = isMoveable();
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-    QCursor defaultCursor = ( canMove && !isFloating() ) ? Qt::sizeAllCursor : KCursor::handCursor();
+    MouseMeaning defaultCursor = ( canMove && !isFloating() ) ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
     // See if we're over a frame border
     KWFrame * frame = frameByBorder( nPoint );
     if ( frame )
     {
-        cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, defaultCursor );
-        return true;
+        return frame->getMouseMeaning( docPoint, grpMgr ? true : false, defaultCursor );
     }
 
     frame = frameAtPos( docPoint.x(), docPoint.y() );
     if ( frame == 0L )
-        return false;
+        return MEANING_NONE;
 
-    if ( controlPressed )
-        cursor = defaultCursor;
-    else
-        cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, Qt::ibeamCursor );
-    return true;
+    // Found a frame under the cursor
+    // Ctrl -> move or select
+    if ( keyState & ControlButton )
+        return defaultCursor;
+
+    // Shift _and_ at least a frame is selected already
+    // (shift + no frame selected is used to select text)
+    if ( (keyState & ShiftButton) && (m_doc->getFirstSelectedFrame() != 0L) )
+        return defaultCursor;
+
+    return frame->getMouseMeaning( docPoint, grpMgr ? true : false, MEANING_MOUSE_INSIDE_TEXT );
 }
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
@@ -1948,268 +1916,6 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     {
         kdDebug(32001) << "Image: key=" << m_picture.getKey().toString() << endl;
     }
-}
-#endif
-
-/******************************************************************/
-/* Class: KWPartFrameSet                                          */
-/******************************************************************/
-KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name )
-    : KWFrameSet( _doc )
-{
-    m_child = _child;
-    m_child->setPartFrameSet( this );
-    kdDebug(32001) << "KWPartFrameSet::KWPartFrameSet" << endl;
-    if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
-    else
-        m_name = name;
-    m_cmdMoveChild=0L;
-    QObject::connect( m_child, SIGNAL( changed( KoChild * ) ),
-                      this, SLOT( slotChildChanged() ) );
-}
-
-KWPartFrameSet::~KWPartFrameSet()
-{
-}
-
-KWordFrameSetIface* KWPartFrameSet::dcopObject()
-{
-    if ( !m_dcop )
-	m_dcop = new KWordPartFrameSetIface( this );
-
-    return m_dcop;
-}
-
-
-void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, const QRect & /*crect TODO*/,
-                                        const QColorGroup &, bool onlyChanged, bool,
-                                        KWFrameSetEdit *, KWViewMode * )
-{
-    if (!onlyChanged)
-    {
-        if ( !m_child || !m_child->document() )
-        {
-            kdDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " aborting. child=" << m_child << " child->document()=" << m_child->document() << endl;
-            return;
-        }
-
-        // We have to define better what the rect that we pass, means. Does it include zooming ? (yes I think)
-        // Does it define the area to be repainted only ? (here it doesn't, really, but it should)
-        QRect rframe( 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ),
-                      kWordDocument()->zoomItY( frame->innerHeight() ) );
-        //kdDebug(32001) << "rframe=" << rframe << endl;
-
-        m_child->document()->paintEverything( *painter, rframe, true, 0L,
-                                            kWordDocument()->zoomedResolutionX(), kWordDocument()->zoomedResolutionY() );
-
-    } //else kdDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " onlychanged=true!" << endl;
-}
-
-void KWPartFrameSet::updateChildGeometry( KWViewMode* viewMode )
-{
-    if( frames.isEmpty() ) // Deleted frameset
-        return;
-    if ( viewMode ) {
-        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
-        QRect r = m_doc->zoomRect( *frames.first() ); // in normal coordinates.
-        KoRect childGeom = m_doc->unzoomRect( viewMode->normalToView( r ) );
-        m_child->setGeometry( childGeom.toQRect() ); // rounding problems. TODO: port KoChild to KoRect.
-        //m_child->setGeometry( viewMode->normalToView( m_doc->zoomRect( *frames.first() ) ) );
-    } else
-        m_child->setGeometry( frames.first()->toQRect() );
-}
-
-void KWPartFrameSet::slotChildChanged()
-{
-    // This is called when the KoDocumentChild is resized (using the KoFrame)
-    // We need to react on it in KWPartFrameSetEdit because the view-mode has to be taken into account
-    QPtrListIterator<KWFrame> listFrame = frameIterator();
-    KWFrame *frame = listFrame.current();
-    if ( frame )
-    {
-        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
-        KoRect childGeom = KoRect::fromQRect( getChild()->geometry() );
-        // r is the rect in normal coordinates
-        QRect r(m_doc->viewMode()->viewToNormal( m_doc->zoomRect( childGeom ) ) );
-        frame->setLeft( r.left() / m_doc->zoomedResolutionX() );
-        frame->setTop( r.top() / m_doc->zoomedResolutionY() );
-        frame->setWidth( r.width() / m_doc->zoomedResolutionX() );
-        frame->setHeight( r.height() / m_doc->zoomedResolutionY() );
-        // ## TODO an undo/redo command (move frame)
-
-        //kdDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << getChild()->geometry()
-        //               << " frame set to " << *frame << endl;
-        m_doc->frameChanged( frame );
-        frame->updateResizeHandles();
-        //there is just a frame
-        if(m_cmdMoveChild)
-            m_cmdMoveChild->listFrameMoved().sizeOfEnd = frame->normalize();
-    }
-    else
-        kdDebug(32001) << "Frame not found!" << endl;
-}
-
-QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
-{
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return QDomElement();
-    KWFrameSet::saveCommon( parentElem, saveFrames );
-    // Ok, this one is a bit hackish. KWDocument calls us for saving our stuff into
-    // the SETTINGS element, which it creates for us. So our save() doesn't really have
-    // the same behaviour as a normal KWFrameSet::save()....
-    return QDomElement();
-}
-
-void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
-{
-    KWFrameSet::load( attributes, loadFrames );
-}
-
-bool KWPartFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
-{
-    // For parts, just like for pictures, there is nothing to do when clicking
-    // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    // A second click will edit it.
-    return KWFrameSet::isFrameAtPos( frame, nPoint, false );
-}
-
-void KWPartFrameSet::startEditing()
-{
-    kdDebug() << k_funcinfo << endl;
-    //create undo/redo move command
-    KWFrame* frame = frames.first();
-    if (!frame)
-        return;
-    FrameIndex index( frame );
-    FrameResizeStruct tmpMove;
-    tmpMove.sizeOfBegin = frame->normalize();
-    tmpMove.sizeOfEnd = KoRect();
-
-    if(!m_cmdMoveChild)
-        m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move Frame"), index, tmpMove );
-}
-
-void KWPartFrameSet::endEditing()
-{
-    kdDebug() << k_funcinfo << endl;
-    if( m_cmdMoveChild && m_cmdMoveChild->frameMoved() )
-        m_doc->addCommand(m_cmdMoveChild);
-    else
-        delete m_cmdMoveChild;
-    m_cmdMoveChild=0L;
-
-}
-
-void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
-{
-    //kdDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y()<<endl;
-    KWFrame * frame = frames.at( frameNum );
-    if ( frame )
-    {
-        KWFrameSet::moveFloatingFrame( frameNum, position );
-        m_child->setGeometry( frame->toQRect(), true /* avoid circular events */ );
-    }
-}
-
-KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
-{
-    return new KWPartFrameSetEdit( this, canvas );
-}
-#ifndef NDEBUG
-void KWPartFrameSet::printDebug()
-{
-    KWFrameSet::printDebug();
-    kdDebug() << " +-- Object Document: " << endl;
-    if ( getChild() )
-    {
-        if ( getChild()->document() )
-            kdDebug() << "     Url : " << getChild()->document()->url().url()<<endl;
-        else
-            kdWarning() << "NO DOCUMENT" << endl;
-        kdDebug() << "     Rectangle : " << getChild()->geometry().x() << "," << getChild()->geometry().y() << " " << getChild()->geometry().width() << "x" << getChild()->geometry().height() << endl;
-    } else
-        kdWarning() << "NO CHILD" << endl;
-}
-
-#endif
-
-void KWPartFrameSet::setDeleted( bool on)
-{
-    m_child->setDeleted( on );
-}
-
-void KWPartFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
-{
-    KWFrameSet::delFrame( _num, remove, recalc );
-    if ( frames.isEmpty() )         // then the whole frameset and thus the child is deleted
-        m_child->setDeleted();
-}
-
-
-
-KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
-    : KWFrameSetEdit( fs, canvas )
-{
-    m_dcop=0L;
-    fs->startEditing();
-    QObject::connect( m_canvas->gui()->getView(), SIGNAL( activated( bool ) ),
-                      this, SLOT( slotChildActivated( bool ) ) );
-}
-
-KWPartFrameSetEdit::~KWPartFrameSetEdit()
-{
-    kdDebug(32001) << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
-    delete m_dcop;
-}
-
-DCOPObject* KWPartFrameSetEdit::dcopObject()
-{
-    if ( !m_dcop )
-	m_dcop = new KWordPartFrameSetEditIface( this );
-    return m_dcop;
-}
-
-void KWPartFrameSetEdit::slotChildActivated(bool b)
-{
-    kdDebug() << "KWPartFrameSetEdit::slotChildActivated " << b << endl;
-    //we store command when we deactivate the child.
-    if( !b )
-        partFrameSet()->endEditing();
-
-}
-
-#if 0
-void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & )
-{
-    if ( e->button() != Qt::LeftButton )
-        return;
-
-    kdDebug() << "KWPartFrameSetEdit::mousePressEvent " << kdBacktrace() << endl;
-    // activate child part
-    partFrameSet()->updateFrames();
-    QPtrListIterator<KWFrame>listFrame = partFrameSet()->frameIterator();
-    KWFrame *frame = listFrame.current();
-    // Set the child geometry from the frame geometry, applying the viewmode
-    // (the child is in unzoomed view coords!)
-    QRect r( m_canvas->viewMode()->normalToView( frameSet()->kWordDocument()->zoomRect( *frame ) ) );
-    partFrameSet()->getChild()->setGeometry( frameSet()->kWordDocument()->unzoomRect( r ).toQRect() );
-    kdDebug(32001) << "KWPartFrameSetEdit: activating. child set to " << partFrameSet()->getChild()->geometry() << endl;
-
-    KoDocument* part = partFrameSet()->getChild()->document();
-    if ( !part )
-        return;
-    KWView * view = m_canvas->gui()->getView();
-    kdDebug(32001) << "Child activated. part=" << part << " child=" << partFrameSet()->getChild() << endl;
-    view->partManager()->addPart( part, false );
-    view->partManager()->setActivePart( part, view );
-    partFrameSet()->startEditing();
-}
-
-void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
-{
-    /// ## Pretty useless since single-click does it now...
-    //activate( m_canvas->gui()->getView() );
 }
 #endif
 

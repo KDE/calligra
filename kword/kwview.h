@@ -413,6 +413,7 @@ public slots:
     void deleteFrameSet();
 
 protected slots:
+    virtual void slotChildActivated( bool a ); // from KoView
     void slotSetInitialPosition();
 
     void spellCheckerReady();
