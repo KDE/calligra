@@ -41,7 +41,6 @@
 
 #include "kwdoc.h"
 #include <koVariableDlgs.h>
-#include <koUtils.h>
 #include "defs.h"
 #include "mailmerge_interface.h"
 
