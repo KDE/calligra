@@ -2504,18 +2504,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
 void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression )
 {
     QString value;
-
-    if ( valExpression.contains( "<" ) )
-    {
-        value = valExpression.remove( "<" );
-        val->m_cond = Inferior;
-    }
-    else if(valExpression.contains( ">" ) )
-    {
-        value = valExpression.remove( ">" );
-        val->m_cond = Superior;
-    }
-    else if (valExpression.contains( "<=" ) )
+    if (valExpression.contains( "<=" ) )
     {
         value = valExpression.remove( "<=" );
         val->m_cond = InferiorEqual;
@@ -2525,16 +2514,26 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
         value = valExpression.remove( ">=" );
         val->m_cond = SuperiorEqual;
     }
-    else if (valExpression.contains( "=" ) )
-    {
-        value = valExpression.remove( "=" );
-        val->m_cond = Equal;
-    }
     else if (valExpression.contains( "!=" ) )
     {
         //add Differentto attribute
         //value = valExpression.remove( "!=" );
         //val->m_cond = DifferentTo;
+    }
+    else if ( valExpression.contains( "<" ) )
+    {
+        value = valExpression.remove( "<" );
+        val->m_cond = Inferior;
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        value = valExpression.remove( ">" );
+        val->m_cond = Superior;
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        value = valExpression.remove( "=" );
+        val->m_cond = Equal;
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
@@ -2615,7 +2614,7 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QCString const & from, QCStr
     kdWarning(30518) << "document isn't a KSpreadDoc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
   }
-  
+
   if ( ( from != "application/vnd.sun.xml.calc" && from != "application/vnd.sun.xml.calc.template") || to != "application/x-kspread" )
   {
     kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
