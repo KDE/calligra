@@ -42,7 +42,7 @@ public:
 	virtual bool isExecuted() { return m_executed; }
 
 protected:
-	VTransformCmd( VDocument *doc, const QString& name );
+	VTransformCmd( VDocument *doc, const QString& name, const QString& icon );
 
 	VSelection* m_selection;
 
