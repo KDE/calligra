@@ -24,6 +24,7 @@
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
+#include <qwidget.h>
 
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -47,7 +48,8 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 
 	setCloseMode( QDockWindow::Always );
 
-	mTabWidget = new QTabWidget( this );
+	mainWidget = new QWidget( this );
+	mTabWidget = new QTabWidget( mainWidget );
 	
 	/* ##### RGB WIDGET ##### */
 	mRGBWidget = new QWidget( mTabWidget );
@@ -67,31 +69,13 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mBlueSlider = new VColorSlider( i18n( "B:" ), QColor( "blue" ), QColor( "black" ), 0, 255, 0, cgroupbox );
 	mainLayout->addWidget( cgroupbox, 1, 0 );
 
-	//Opacity
-	QGroupBox* ogroupbox = new QGroupBox( 1, Horizontal, i18n( "Opacity" ), mRGBWidget );
-	mRGBOpacity = new KIntNumInput( 100, ogroupbox );
-	mRGBOpacity->setRange( 0, 100, 1, true );
-	mainLayout->addWidget( ogroupbox, 2, 0 );
-	
 	//Connections for Sliders
-	connect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
-	connect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
-	connect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );                                                                                              
-	connect( mRGBOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
+	connect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
+	connect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
+	connect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );                                                                                              
 	
-	//Buttons
-	QPushButton *button;
-	mRGBButtonGroup = new QHButtonGroup( mRGBWidget );
-	button = new QPushButton( i18n( "Stroke" ), mRGBButtonGroup );
-	mRGBButtonGroup->insert( button, Outline);
-	button = new QPushButton( i18n( "Fill" ), mRGBButtonGroup );
-	mRGBButtonGroup->insert( button, Fill );
-	mainLayout->addWidget( mRGBButtonGroup, 3, 0 );
 	mainLayout->activate();
-	mTabWidget->addTab( mRGBWidget, i18n("RGB") );
-	
-	//Button Connections
-	connect( mRGBButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
+	mTabWidget->addTab( mRGBWidget, i18n( "RGB" ) );
 	
 	/* ##### CMYK WIDGET ##### */
 	mCMYKWidget = new QWidget( mTabWidget );
@@ -113,28 +97,10 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mainCMYKLayout->addWidget( csgroupbox, 1, 0 );
 	
 	//Connections for Sliders
-	connect( mCyanSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYKColorPreview() ) );
-	connect( mMagentaSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYKColorPreview() ) );
-	connect( mYellowSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYKColorPreview() ) );
-	connect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYKColorPreview() ) );
-	
-	//Opacity
-	QGroupBox* cogroupbox = new QGroupBox( 1, Horizontal, i18n( "Opacity" ), mCMYKWidget );
-	mCMYKOpacity = new KIntNumInput( 100, cogroupbox );
-	mCMYKOpacity->setRange( 0, 100, 1, true );
-	mainCMYKLayout->addWidget( cogroupbox, 2, 0 );
-	connect( mCMYKOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYKColorPreview() ) );
-	
-	//Buttons
-	mCMYKButtonGroup = new QHButtonGroup( mCMYKWidget );
-	button = new QPushButton( i18n( "Stroke" ), mCMYKButtonGroup );
-	mCMYKButtonGroup->insert( button, Outline);
-	button = new QPushButton( i18n( "Fill" ), mCMYKButtonGroup );
-	mCMYKButtonGroup->insert( button, Fill );
-	mainCMYKLayout->addWidget( mCMYKButtonGroup, 3, 0 );
-	
-	//Button Connections
-	connect( mCMYKButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
+	connect( mCyanSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mMagentaSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mYellowSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
 	
 	mainCMYKLayout->activate();
 	mTabWidget->addTab( mCMYKWidget, i18n("CMYK") );
@@ -159,31 +125,37 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mS = new KIntSpinBox( 0, 255, 1, 0, 10, h3groupbox );
 	mB = new KIntSpinBox( 0, 255, 1, 0, 10, h3groupbox );
 	mainHSBLayout->addWidget( h2groupbox, 1, 0 );
-	connect( mHSSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
-	connect( mH, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
-	connect( mS, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
-	connect( mB, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
 	
-	//Opacity
-	QGroupBox* h4groupbox = new QGroupBox( 1, Horizontal, i18n( "Opacity" ), mHSBWidget );
-	mHSBOpacity = new KIntNumInput( 100, h4groupbox );
-	mHSBOpacity->setRange( 0, 100, 1, true );
-	mainHSBLayout->addWidget( h4groupbox, 2, 0 );
-	connect( mHSBOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
+	connect( mHSSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
+	connect( mH, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSB() ) );
+	connect( mS, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSB() ) );
+	connect( mB, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSB() ) );
+		
+	mainHSBLayout->activate();
+	mTabWidget->addTab( mHSBWidget, i18n( "HSB" ) );
 	
 	//Buttons
-	mHSBButtonGroup = new QHButtonGroup( mHSBWidget );
-	button = new QPushButton( i18n( "Stroke" ), mHSBButtonGroup );
-	mHSBButtonGroup->insert( button, Outline);
-	button = new QPushButton( i18n( "Fill" ), mHSBButtonGroup );
-	mHSBButtonGroup->insert( button, Fill );
-	mainHSBLayout->addWidget( mHSBButtonGroup, 3, 0 );
-	connect( mHSBButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
+	mButtonGroup = new QHButtonGroup( mainWidget );
+	QPushButton *button = new QPushButton( i18n( "Stroke" ), mButtonGroup );
+	mButtonGroup->insert( button, Outline);
+	button = new QPushButton( i18n( "Fill" ), mButtonGroup );
+	mButtonGroup->insert( button, Fill );
+	mainLayout->addWidget( mButtonGroup, 3, 0 );
+	connect( mButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
 	
-	mainHSBLayout->activate();
-	mTabWidget->addTab( mHSBWidget, i18n("HSB") );
+	//Opacity
+	QGroupBox* opGroupBox = new QGroupBox( 1, Horizontal, i18n( "Opacity" ), mainWidget );
+	mOpacity = new KIntNumInput( 100, opGroupBox );
+	mOpacity->setRange( 0, 100, 1, true );
+	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	
-	setWidget( mTabWidget );
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
+	mainWidgetLayout->addWidget( mTabWidget );
+	mainWidgetLayout->addWidget( opGroupBox );
+	mainWidgetLayout->addWidget( mButtonGroup );
+	mainWidgetLayout->activate();
+	
+	setWidget( mainWidget );
 	
 	m_Color = new VColor();
 }
@@ -208,36 +180,42 @@ void VColorDlg::slotHSChanged( int h, int s )
 	mS->setValue( s );
 }
 
-void VColorDlg::updateRGBColorPreview()
+void VColorDlg::updateRGB()
 {
 	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
-	float op = mRGBOpacity->value() / 100.0;
 	m_Color->setColorSpace( VColor::rgb );
 	m_Color->setValues( &r, &g, &b, 0L );
-	m_Color->setOpacity( op );
-	mRGBColorPreview->setColor( m_Color->toQColor() );
+	updateColorPreviews();
 }
 
-void VColorDlg::updateCMYKColorPreview()
+void VColorDlg::updateCMYK()
 {
 	float c = mCyanSlider->value() / 100.0, m = mMagentaSlider->value() / 100.0, y = mYellowSlider->value() / 100.0;
 	float k = mBlackSlider->value() / 100.0;
-	float op = mCMYKOpacity->value() / 100.0;
 	m_Color->setColorSpace( VColor::cmyk );
 	m_Color->setValues( &c, &m, &y, &k );
-	m_Color->setOpacity( op );
-	mCMYKColorPreview->setColor( m_Color->toQColor() );
+	updateColorPreviews();
 }
 
-void VColorDlg::updateHSBColorPreview()
+void VColorDlg::updateHSB()
 {
 	float h = mH->value() / 359.0, s = mS->value() / 255.0, b = mB->value() / 255.0;
-	float op = mHSBOpacity->value() / 100.0;
 	m_Color->setColorSpace( VColor::hsb );
 	m_Color->setValues( &h, &s, &b, 0L );
-	m_Color->setOpacity( op );
-	mHSBColorPreview->setColor( m_Color->toQColor() );
+	updateColorPreviews();
 }
 
+void VColorDlg::updateOpacity()
+{
+	float op = mOpacity->value() / 100.0;
+	m_Color->setOpacity( op );
+}
+
+void VColorDlg::updateColorPreviews()
+{
+	mRGBColorPreview->setColor( m_Color->toQColor() );
+	mCMYKColorPreview->setColor( m_Color->toQColor() );
+	mHSBColorPreview->setColor( m_Color->toQColor() );
+}
 #include "vcolordlg.moc"
 
