@@ -37,11 +37,14 @@ KexiProjectProperties::KexiProjectProperties(QWidget *parent, KexiDBConnection *
 
 	QLabel *lEnc = new QLabel(i18n("Encoding:"), dbFrame);
 	m_encoding = new QComboBox(dbFrame);
-	m_encoding->insertItem("Latin 1");
-	m_encoding->insertItem("Utf8");
-	m_encoding->insertItem("Local 8 Bit");
-	m_encoding->insertItem("ASCII");
+	m_encoding->insertItem( i18n("Latin 1") );
+	m_encoding->insertItem( i18n("UTF-8 (8-Byte Unicode)") );
+	m_encoding->insertItem( i18n("Locale-specific 8 Bit") );
+	m_encoding->insertItem( i18n("ASCII") );
 
+//TODO(js)	KexiFactory::global()->config()->setGroup("....");
+//	KexiFactory::global()->config()->readEntry(  )
+	
 	QSpacerItem *vSpace = new QSpacerItem(20, 60);
 	QGridLayout *g = new QGridLayout(dbFrame);
 	g->addWidget(lEnc,	0, 0);

@@ -43,7 +43,8 @@ KexiDBConnection::KexiDBConnection()
 {
 	m_connected = false;
 	m_type = KexiDB::NoDB;
-	m_encoding = KexiDB::Latin1;
+//(js)	m_encoding = KexiDB::Latin1;
+	m_encoding = KexiDB::Local8Bit; //TODO: read default from Kexi defaults
 }
 
 KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, const QString &dbname,
@@ -61,7 +62,8 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, c
 
 	m_persistant = false;
 	m_createDb = create;
-	m_encoding = KexiDB::Latin1;
+//(js)	m_encoding = KexiDB::Latin1;
+	m_encoding = KexiDB::Local8Bit; //TODO: read default from Kexi defaults
 }
 
 KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file, bool persistant)
@@ -73,7 +75,8 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file, b
 	m_engine = engine;
 	m_file = file;
 	m_persistant = persistant;
-	m_encoding = KexiDB::Latin1;
+//(js)	m_encoding = KexiDB::Latin1;
+	m_encoding = KexiDB::Local8Bit; //TODO: read default from Kexi defaults
 }
 
 KexiDB*
