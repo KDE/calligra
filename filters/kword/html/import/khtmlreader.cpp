@@ -97,6 +97,7 @@ void KHTMLReader::completed() {
 	DOM::Node docbody=doc.getElementsByTagName("BODY").item(0);
 	parseNode(docbody);
 	_writer->cleanUpParagraph(state()->paragraph);
+	
         _it_worked=_writer->writeDoc();
 }
 

@@ -62,6 +62,31 @@ KWDWriter::KWDWriter(KoStore *store){
     QDomElement rootframeset = addFrameSet(framesets);
     QDomElement mainframe= addFrame(rootframeset);
 
+    QDomElement styles=_doc->createElement("STYLES");
+    kwdoc.appendChild(styles);
+
+    QDomElement standard=_doc->createElement("STYLE");
+    styles.appendChild(standard);
+
+    QDomElement  tmp;
+    	tmp=_doc->createElement("NAME");
+    	tmp.setAttribute("value","Standard");
+    	standard.appendChild(tmp);
+    	
+    	tmp=_doc->createElement("FOLLOWING");
+    	tmp.setAttribute("name","Standard");
+    	standard.appendChild(tmp);
+    	QDomElement fmt;
+    	
+    	fmt=_doc->createElement("FORMAT");
+    	fmt.setAttribute("id","1");
+    	standard.appendChild(fmt);
+    	
+    	tmp=_doc->createElement("SIZE");
+    	tmp.setAttribute("value","12"); // HACK !
+    	fmt.appendChild(tmp);
+
+
 }
 
 int KWDWriter::createTable() {
@@ -281,6 +306,7 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph) {
         if (paragraph.isNull()) { qWarning("startFormat on empty paragraph"); exit(0); }
 	QDomElement format=_doc->createElement("FORMAT");
 	paragraph.elementsByTagName("FORMATS").item(0).appendChild(format);
+	formatAttribute(paragraph,"SIZE","VALUE","12"); // FIXME hack hack hack
 	return format;
 }
 
@@ -362,7 +388,7 @@ bool KWDWriter::writeDoc() {
 
 
 QDomElement KWDWriter::currentFrameset() {
-	return docroot().lastChild().lastChild().toElement();
+	return _doc->elementsByTagName("FRAMESETS").item(0).lastChild().toElement();
 }
 
 
