@@ -33,12 +33,8 @@
 
 		Attributes:
 
-		format:			integer value for the page format
-		width:			width in millimeters
-		height:			height in millimeters
-		orientation:	0 for landscape, 1 for portrait
-		columns:		the number of columns (only in wordprocessing mode)
-		columnspacing:	the gap between the columns (only in wordprocessing mode)
+		format:			page format, e.g. "A4", "Letter", "Executive" etc.
+		orientation:		"Landscape" or "Portrait"
 -->
 <!ELEMENT PAPER (BORDERS|HEAD|FOOT)*>
 <!ATTLIST PAPER format CDATA #REQUIRED
