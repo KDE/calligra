@@ -152,18 +152,13 @@ void KFormulaDoc::dele()
     kdDebug(39001) <<"delete()\n";
 }
 
-void KFormulaDoc::print(QPrinter *thePrt)
-{
-}
-
-
 bool KFormulaDoc::initDoc()
 {
     // If nothing is loaded, do initialize here
     return TRUE;
 }
 
-void KFormulaDoc::paintContent( QPainter& painter, const QRect& /*rect*/, bool /*transparent*/ )
+void KFormulaDoc::paintContent(QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/)
 {
     // ####### handle transparency
 

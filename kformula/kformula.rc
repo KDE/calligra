@@ -19,7 +19,8 @@
   <Action name="addvspace"/>
   <Action name="addbra"/>
   <Action name="addintegral"/>
-  <Action name="addsymbol"/>
+  <Action name="addsum"/>
+  <Action name="addproduct"/>
   <Action name="addmatrix"/>
   <Action name="rootindex"/>
   <Action name="ihigher"/>
@@ -52,6 +53,7 @@
   </Menu>
 
   <Action name="fracmidline"/>
+  <Action name="removeenclosing"/>
  </Menu>
  <Menu name="Font"><text>Font</text>
   <Action name="textfont"/>
@@ -85,7 +87,8 @@
   <Action name="addvspace"/>
   <Action name="addbra"/>
   <Action name="addintegral"/>
-  <Action name="addsymbol"/>
+  <Action name="addsum"/>
+  <Action name="addproduct"/>
   <Action name="addmatrix"/>
   <Action name="addupperleft"/>
   <Action name="addlowerleft"/>

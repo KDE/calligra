@@ -62,8 +62,6 @@ public:
 
     KFormulaContainer* getFormula() { return formula; }
     
-    void print(QPrinter *thePrt);
-
 public slots:
 
     void enlarge();

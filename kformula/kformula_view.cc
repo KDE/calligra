@@ -68,31 +68,36 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
     // elements
     addIntegralAction = new KAction(i18n("Add/change to integral"),
                                     "mini-integral",
-                                    CTRL + Key_6 ,
+                                    CTRL + Key_6,
                                     this, SLOT(addIntegral()),
                                     actionCollection(), "addintegral");
-    addSumAction      = new KAction(i18n("Add/change to symbol"),
-                                    "mini-symbol",
-                                    CTRL + Key_7 ,
+    addSumAction      = new KAction(i18n("Add/change to sum"),
+                                    "mini-sum",
+                                    CTRL + Key_7,
                                     this, SLOT(addSum()),
-                                    actionCollection(), "addsymbol");
+                                    actionCollection(), "addsum");
+    addProductAction  = new KAction(i18n("Add/change to product"),
+                                    "mini-product",
+                                    CTRL + Key_4,
+                                    this, SLOT(addProduct()),
+                                    actionCollection(), "addproduct");
     addRootAction     = new KAction(i18n("Add/change to root"),
                                     "mini-root",
-                                    CTRL + Key_2 ,
+                                    CTRL + Key_2,
                                     this, SLOT(addRoot()),
                                     actionCollection(), "addroot");
     addFractionAction = new KAction(i18n("Add/change to fraction"),
                                     "mini-frac",
-                                    CTRL + Key_3 ,
+                                    CTRL + Key_3,
                                     this, SLOT(addFraction()),
                                     actionCollection(), "addfrac");
     addBracketAction  = new KAction(i18n("Add/change to bracket"),
                                     "mini-bra",
-                                    CTRL + Key_5 ,
+                                    CTRL + Key_5,
                                     this, SLOT(addBracket()),
                                     actionCollection(),"addbra");
 
-    addMatrixAction   = new KAction(i18n("Add/change to matrix"),
+    addMatrixAction   = new KAction(i18n("Add matrix"),
                                     "matrix",
                                     CTRL + Key_8,
                                     this, SLOT(addMatrix()),
@@ -127,6 +132,11 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
                                       CTRL + Key_L,
                                       this, SLOT(addLowerIndex()),
                                       actionCollection(), "addlowerindex");
+
+    removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
+                                        CTRL + Key_R,
+                                        this, SLOT(removeEnclosing()),
+                                        actionCollection(), "removeenclosing");
 
     mn_indexList = new QPopupMenu();
     mn_indexList->insertItem(BarIcon("index0"),0);
@@ -405,6 +415,9 @@ void KFormulaView::setEnabled(bool enabled)
     addLowerLeftAction->setEnabled(enabled);
     addUpperRightAction->setEnabled(enabled);
     addLowerRightAction->setEnabled(enabled);
+    addGenericUpperAction->setEnabled(enabled);
+    addGenericLowerAction->setEnabled(enabled);
+    removeEnclosingAction->setEnabled(enabled);
 }
 
 void KFormulaView::resizeEvent( QResizeEvent * )
@@ -930,15 +943,13 @@ void KFormulaView::delimiterRight()
     formulaWidget->setRightBracket(right.at(0).latin1());
 }
 
-bool KFormulaView::printDlg()
+void KFormulaView::setupPrinter(QPrinter&)
 {
-    QPrinter thePrt;
-    //  thePrt.setMinMax(1,1);
-    if (thePrt.setup(this)) {
-        if(m_pDoc!=0L)
-            m_pDoc->print(&thePrt);
-    }
-    return true;
+}
+
+void KFormulaView::print(QPrinter& printer)
+{
+    m_pDoc->getFormula()->print(printer);
 }
 
 void KFormulaView::cut()
@@ -964,6 +975,11 @@ void KFormulaView::addIntegral()
 void KFormulaView::addSum()
 {
     m_pDoc->getFormula()->addSum();
+}
+
+void KFormulaView::addProduct()
+{
+    m_pDoc->getFormula()->addProduct();
 }
 
 void KFormulaView::addRoot()
@@ -1019,10 +1035,17 @@ void KFormulaView::addLowerIndex()
     m_pDoc->getFormula()->addGenericLowerIndex();
 }
 
+void KFormulaView::removeEnclosing()
+{
+    m_pDoc->getFormula()->replaceElementWithMainChild();
+}
+
 void KFormulaView::cursorChanged(bool visible, bool selecting)
 {
     cutAction->setEnabled(visible && selecting);
     copyAction->setEnabled(visible && selecting);
+
+    removeEnclosingAction->setEnabled(!selecting);
 
     if (visible) {
         int x = formulaWidget->getCursorPoint().x();

@@ -45,7 +45,8 @@ public:
     KFormulaView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
     virtual ~KFormulaView();
 
-    virtual bool printDlg();
+    virtual void setupPrinter( QPrinter &printer );
+    virtual void print( QPrinter &printer );
     
 public slots:
 
@@ -107,6 +108,7 @@ protected slots:
 
     void addIntegral();
     void addSum();
+    void addProduct();
     void addRoot();
     void addFraction();
     void addBracket();
@@ -117,6 +119,7 @@ protected slots:
     void addLowerRight();
     void addUpperIndex();
     void addLowerIndex();
+    void removeEnclosing();
 
     void cursorChanged(bool visible, bool selecting);
 
@@ -141,6 +144,7 @@ private:
     KAction* addFractionAction;
     KAction* addRootAction;
     KAction* addSumAction;
+    KAction* addProductAction;
     KAction* addIntegralAction;
     KAction* addMatrixAction;
     KAction* addUpperLeftAction;
@@ -149,6 +153,7 @@ private:
     KAction* addLowerRightAction;
     KAction* addGenericUpperAction;
     KAction* addGenericLowerAction;
+    KAction* removeEnclosingAction;
     
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;
