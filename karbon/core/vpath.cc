@@ -63,15 +63,18 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	// paint fill:
 	if( state() == normal || state() == selected )
 	{
+		m_fill.begin_draw( painter, zoomFactor );
+
 		// draw outline:
-		m_fill.draw( painter, zoomFactor, m_segments );
+		m_fill.draw( m_segments );
 
 		// draw holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
-kdDebug() << "fill yes" << endl;
-			m_fill.draw( painter, zoomFactor, *( holeItr.current() ), true );
+			m_fill.draw( *( holeItr.current() ) );
 		}
+
+		m_fill.end_draw();
 	}
 
 	// paint contour:

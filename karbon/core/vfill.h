@@ -14,8 +14,9 @@ class VFill : public VSegmentListTraverser
 public:
 	VFill();
 
-	void draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
-		bool hole = false );
+	void begin_draw( QPainter& painter, const double zoomFactor );
+	void draw( const VSegmentList& list );
+	void end_draw();
 
 	virtual bool begin( const KoPoint& p );
 	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
@@ -28,8 +29,8 @@ public:
 		{ return lineTo( p ); }
 
 private:
-
 	// stuff for painting:
+	QPainter* m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;
 };

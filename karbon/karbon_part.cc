@@ -48,11 +48,18 @@ KarbonPart::initDoc()
 	VCCmdEllipse e( this, 100, 100, 250, 250 );
 	VPath* elly = e.createPath();
 
-	VCCmdEllipse r( this, 150, 150, 200, 200 );
+	VCCmdEllipse r( this, 120, 120, 150, 150 );
 	VPath* rect = r.createPath();
 
 	elly->combine( *rect );
 	delete( rect );
+/*
+	VCCmdEllipse s( this, 160, 160, 180, 180 );
+	rect = s.createPath();
+
+	elly->combine( *rect );
+	delete( rect );
+*/
 
 	insertObject( elly );
 //	insertObject( rect );

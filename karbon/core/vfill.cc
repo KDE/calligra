@@ -13,17 +13,25 @@ VFill::VFill()
 }
 
 void
-VFill::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
-	bool hole )
+VFill::begin_draw( QPainter& painter, const double zoomFactor )
 {
+	m_painter = &painter;
 	m_zoomFactor = zoomFactor;
-
 	m_pa.resize( 0 );
-	VSegment::traverse( list, *this );
+}
 
-	painter.setPen( Qt::NoPen );
-	painter.setBrush( QColor( 210, 210, 210 ) );
-	painter.drawPolygon( m_pa, !hole );
+void
+VFill::draw( const VSegmentList& list )
+{
+	VSegment::traverse( list, *this );
+}
+
+void
+VFill::end_draw()
+{
+	m_painter->setPen( Qt::NoPen );
+	m_painter->setBrush( QColor( 210, 210, 210 ) );
+	m_painter->drawPolygon( m_pa );
 }
 
 bool
