@@ -20,7 +20,7 @@
 #include "kdatabase_view.h"
 #include "kdatabase_factory.h"
 #include "kdatabase_part.h"
-#include "maindlg.h"
+#include "maindlg2.h"
 
 #include <qpainter.h>
 #include <qiconset.h>
@@ -37,7 +37,7 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     KStdAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     KStdAction::paste(this, SLOT( paste() ), actionCollection(), "paste" );
-    myMainDlg = new MainDlg(this,name);
+    myMainDlg = new MainDlg2(this,name);
     myMainDlg->initStruct(part->getKDBFile());
     myMainDlg->show();
 

@@ -78,7 +78,7 @@ public:
     QString* executeSQL(QString *sSQL, bool returnXML);
 
 private:
-    QDomNode* myKDBNode;
+    QDomDocument* myKDBNode;
 };
 
 #endif

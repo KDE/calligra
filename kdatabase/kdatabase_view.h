@@ -21,7 +21,7 @@
 #define KDATABASE_VIEW
 
 #include <koView.h>
-#include "maindlg.h"
+#include "maindlg2.h"
 #include "clstbldesigner.h"
 
 class KAction;
@@ -47,7 +47,7 @@ protected:
 
 private:
     //KAction* m_cut;
-    MainDlg* myMainDlg;
+    MainDlg2* myMainDlg;
 };
 
 #endif

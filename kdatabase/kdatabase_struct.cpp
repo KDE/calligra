@@ -42,11 +42,11 @@ bool KDBStruct::createReport(QString* reportName, QString reportSQL){
 QPtrList<QString> KDBStruct::getTables(){
 
     QPtrList<QString> tableList;
-    kdDebug() << "myKDBNode.nodeValue=" << myKDBNode->namedItem("STRUCTURE").toElement().tagName() << endl;
+    kdDebug() << "myKDBNode.toString=" << myKDBNode->toString() << endl;
     if(myKDBNode->isNull()) {
        kdDebug() << "KDBNode is already null" << endl;
       }
-    QDomNode myTablesNode = myKDBNode->namedItem("STRUCTURE");
+    QDomNode myTablesNode = myKDBNode->documentElement().namedItem("STRUCTURE");
     if(myTablesNode.isNull()) {
        kdDebug() << "myTablesNode is already null" << endl;
       }
