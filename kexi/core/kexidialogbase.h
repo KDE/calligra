@@ -47,7 +47,22 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 {
 	public:
 	KexiDialogTempData(QObject* parent)
-	 : QObject(parent, "KexiDialogTempData") {}
+	 : QObject(parent, "KexiDialogTempData") 
+	 , proposeOpeningInTextViewModeBecauseOfProblems(false)
+	{}
+	/*! Initially false, KexiPart::Part implementation can set this to true 
+	 on data loading (e.g. in loadSchemaData()), to indicate that TextView mode 
+	 could be used instead of DataView or DesignView, because there are problems 
+	 with opening object. 
+
+	 For example, in KexiQueryPart::loadSchemaData() query statement can be invalid,
+	 and thus could not be displayed in DesignView mode or executed for DataView.
+	 So, this flag is set to true and user is asked for confirmation for switching 
+	 to TextView (SQL Editor).
+
+	 After switching to TextView, this flag is cleared.
+	 */
+	bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
 };
 
 //! Base class for child window of Kexi's main application window.
@@ -177,8 +192,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		/*! Used by KexiViewBase subclasses. \return temporary data shared between views */
 		KexiDialogTempData *tempData() const { return m_tempData; }
 
-		/*! Used by KexiViewBase subclasses. Sets temporary data shared between views. */
-		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
+//		/*! Used by KexiViewBase subclasses. Sets temporary data shared between views. */
+//		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
 
 		/*! Called primarily by KexiMainWindowImpl to activate dialog. 
 		 Selected view (if present) is also informed about activation. */

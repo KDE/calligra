@@ -30,6 +30,7 @@
 class KexiMainWindow;
 class KActionCollection;
 class KexiDialogBase;
+class KexiDialogTempData;
 class KexiViewBase;
 class KAction;
 class KShortcut;
@@ -99,6 +100,12 @@ class KEXICORE_EXPORT Part : public QObject
 			const QString& /*newName*/)
 			{ return true; }
 
+		/*! Creates and returns a new temporary data for a dialog \a dialog. 
+		 This method is called on openInstance() once per dialog.
+		 Reimplement this to return KexiDialogTempData subclass instance.
+		 Default implemention just returns empty KexiDialogTempData object. */
+		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
 		 used inside \a dialog. */
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
@@ -164,7 +171,7 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
 
 		bool loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID = QString::null);
 

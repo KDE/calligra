@@ -45,15 +45,12 @@ class KexiTablePart : public KexiPart::Part
 		virtual tristate rename(KexiMainWindow *win, KexiPart::Item &item, 
 			const QString& newName);
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
-
 		virtual KexiPart::DataSource *dataSource();
 
 		class TempData : public KexiDialogTempData
 		{
 			public:
-				TempData(QObject* parent, KexiDB::TableSchema *sch);
+				TempData(QObject* parent);
 				KexiDB::TableSchema *table;
 				/*! true, if \a table member has changed in previous view. Used on view switching.
 				 We're checking this flag to see if we should refresh data for DataViewMode. */
@@ -61,10 +58,15 @@ class KexiTablePart : public KexiPart::Part
 		};
 
 	protected:
+		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-	virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
+	virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
 };
 
 class KexiTableDataSource : public KexiPart::DataSource

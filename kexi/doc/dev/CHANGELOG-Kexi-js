@@ -412,8 +412,14 @@ KexiDB
 Core
 - Kexi::setWaitCursor(), Kexi::removeWaitCursor() do nothing for non-GUI-aware apps.
 - KexiGUIMessageHandler now calls Kexi::removeWaitCursor()
+- If an object could not be opened in design/data view, 
+  user is asked to let it to be opened in text mode (if available)
+- KexiDialogBase: temp data handling improved
 Main
 - "Open in Text View" added to the Browser
+Query Designer
+- SQL Editor is now able to open also invalid SQL statements,
+  so user can now open (and probably fix) statements.
 
 2004-11-03
 KexiSQLite 2, 3

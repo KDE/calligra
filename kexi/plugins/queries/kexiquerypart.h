@@ -48,9 +48,6 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
-
 //		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
 
 		virtual KexiPart::DataSource *dataSource();
@@ -67,13 +64,18 @@ class KexiQueryPart : public KexiPart::Part
 		};
 
 	protected:
+		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+
 //		virtual void initPartActions( KActionCollection *col );
 //		virtual void initInstanceActions( int mode, KActionCollection *col );
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
 };
 
 class KexiQueryDataSource : public KexiPart::DataSource

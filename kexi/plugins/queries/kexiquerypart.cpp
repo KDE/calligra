@@ -46,14 +46,17 @@ KexiQueryPart::~KexiQueryPart()
 {
 }
 
+KexiDialogTempData* 
+KexiQueryPart::createTempData(KexiDialogBase* dialog)
+{
+	return new KexiQueryPart::TempData(dialog);
+}
+
 KexiViewBase*
 KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
 	kdDebug() << "KexiQueryPart::createView()" << endl;
 
-	if (!dialog->tempData()) {
-		dialog->setTempData( new KexiQueryPart::TempData(dialog) );
-	}
 	if (viewMode == Kexi::DataViewMode) {
 		return new KexiQueryView(dialog->mainWin(), parent, "dataview");
 	}
@@ -128,7 +131,7 @@ void KexiQueryPart::initInstanceActions()
 }
 
 KexiDB::SchemaData*
-KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata)
+KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode)
 {
 	KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(dlg->tempData());
 	QString sqlText;
@@ -140,6 +143,14 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 	KexiDB::QuerySchema *query = parser->query();
 	//error?
 	if (!query) {
+		if (viewMode==Kexi::TextViewMode) {
+			//for SQL view, no parsing is initially needed:
+			//-just make a copy:
+			return KexiPart::Part::loadSchemaData(dlg, sdata, viewMode);
+		}
+		/* set this to true on data loading loadSchemaData() to indicate that TextView mode could be used
+		   instead of DataView or DesignView, because there are problems with opening object. */
+		temp->proposeOpeningInTextViewModeBecauseOfProblems = true;
 		//todo
 		return 0;
 	}

@@ -64,6 +64,11 @@ void KexiTablePart::initInstanceActions()
 	a->setWhatsThis(i18n("Sets or removes primary key for currently selected field."));
 }
 
+KexiDialogTempData* KexiTablePart::createTempData(KexiDialogBase* dialog)
+{
+	return new KexiTablePart::TempData(dialog);
+}
+
 KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog, 
 	KexiPart::Item &item, int viewMode)
 {
@@ -71,11 +76,11 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
-	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(item.name());
-	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
 
-	if (!dialog->tempData()) {
-		dialog->setTempData( new KexiTablePart::TempData(dialog, sch) );
+	KexiTablePart::TempData *temp = static_cast<KexiTablePart::TempData*>(dialog->tempData());
+	if (!temp->table) {
+		temp->table = win->project()->dbConnection()->tableSchema(item.name());
+		kdDebug() << "KexiTablePart::execute(): schema is " << temp->table << endl;
 	}
 
 	if (viewMode == Kexi::DesignViewMode) {
@@ -83,7 +88,7 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 		return t;
 	}
 	else if (viewMode == Kexi::DataViewMode) {
-		if(!sch)
+		if(!temp->table)
 			return 0; //todo: message
 		//we're not setting table schema here -it will be forced to set 
 		// in KexiAlterTable_DataView::afterSwitchFrom()
@@ -119,7 +124,7 @@ tristate KexiTablePart::rename(KexiMainWindow *win, KexiPart::Item & item,
 }
 
 KexiDB::SchemaData*
-KexiTablePart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata)
+KexiTablePart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode)
 {
 	return dlg->mainWin()->project()->dbConnection()->tableSchema( sdata.name() );
 }
@@ -157,9 +162,9 @@ KexiTableDataSource::cursor(KexiProject * /*project*/,
 
 //----------------
 
-KexiTablePart::TempData::TempData(QObject* parent, KexiDB::TableSchema *sch)
+KexiTablePart::TempData::TempData(QObject* parent)
  : KexiDialogTempData(parent)
- , table(sch)
+ , table(0)
  , tableSchemaChangedInPreviousView(true /*to force reloading on startup*/ )
 {
 }

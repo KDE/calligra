@@ -36,6 +36,7 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 namespace KexiPart {
 class PartPrivate
@@ -220,12 +221,36 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //	if (dlg->mainWidget())
 //		dlg->mainWidget()->setIcon( *dlg->icon() );
 	dlg->stack()->setIcon( *dlg->icon() );
+	dlg->m_tempData = createTempData(dlg);
 
 	if (!item.neverSaved()) {
 		//we have to load schema data for this dialog
-		dlg->m_schemaData = loadSchemaData(dlg, sdata);
+		dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
 		if (!dlg->m_schemaData) {
-			m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
+			//last chance:
+			if (viewMode != Kexi::TextViewMode
+				&& dlg->m_supportedViewModes & Kexi::TextViewMode 
+				&& dlg->tempData()->proposeOpeningInTextViewModeBecauseOfProblems)
+			{
+				//ask
+//TODO: use message handler for this to enable non-gui apps
+				if (KMessageBox::No==KMessageBox::questionYesNo(0, 
+					((viewMode == Kexi::DesignViewMode) 
+					 ? i18n("Object \"%1\" could not be opened in Design View.")
+					 : i18n("Object could not be opened in Data View.")).arg(item.name())+"\n"
+					+ i18n("Do you want to open it in Text View?"), 0, 
+					KStdGuiItem::open(), KStdGuiItem::cancel()))
+				{
+					dlg->close(); //this will destroy dlg
+					return 0;
+				}
+				viewMode = Kexi::TextViewMode;
+				dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
+			}
+		}
+		if (!dlg->m_schemaData) {
+			m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
+				i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
 			dlg->close(); //this will destroy dlg
 			return 0;
 		}
@@ -264,7 +289,7 @@ void Part::slotCreate()
 	emit newObjectRequest( m_info );
 }
 
-KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB::SchemaData& sdata)
+KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB::SchemaData& sdata, int viewMode)
 {
 	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
 	*new_schema = sdata;
@@ -295,6 +320,11 @@ bool Part::remove(KexiMainWindow *win, KexiPart::Item &item)
 		return false;
 	KexiDB::Connection *conn = win->project()->dbConnection();
 	return conn->removeObject( item.identifier() );
+}
+
+KexiDialogTempData* Part::createTempData(KexiDialogBase* dialog)
+{
+	return new KexiDialogTempData(dialog);
 }
 
 //-------------------------------------------------------------------------

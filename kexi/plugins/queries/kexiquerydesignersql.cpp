@@ -264,18 +264,25 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 //	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
 	KexiQueryPart::TempData * temp = tempData();
-	KexiDB::QuerySchema *query;
-	query = temp->query;
-	if (!temp->query) //try to just get saved schema, instead of temporary one
-		query = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+	KexiDB::QuerySchema *query = temp->query;
+	if (!query) //try to just get saved schema, instead of temporary one
+		query = dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
 
-	if (!query) {
+	if (mode!=0/*failure only if it is switching from prev. view*/ && !query) {
 		//TODO msg
 		return false;
 	}
-	d->origStatement = mainWin()->project()->dbConnection()->selectStatement( *query ).stripWhiteSpace();
-	d->editor->setText( d->origStatement );
 
+	if (!query) {
+		//no valid query schema delivered: just load sql text, no matter if it's valid
+		if (!loadDataBlock( d->origStatement, "sql" ))
+			return false;
+	}
+	else {
+		d->origStatement = mainWin()->project()->dbConnection()->selectStatement( *query ).stripWhiteSpace();
+	}
+
+	d->editor->setText( d->origStatement );
 	return true;
 }
 
@@ -394,7 +401,7 @@ void KexiQueryDesignerSQLView::slotSelectQuery()
 KexiQueryPart::TempData *
 KexiQueryDesignerSQLView::tempData() const
 {	
-	return static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+	return dynamic_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
 }
 
 KexiDB::SchemaData*
@@ -455,24 +462,26 @@ tristate KexiQueryDesignerSQLView::storeData()
 	if (~res)
 		return res;
 	if (res) {
+		res = storeDataBlock( d->editor->text(), "sql" );
+#if 0
 		bool queryOK = slotCheckQuery();
 		if (queryOK) {
 			res = storeDataBlock( d->editor->text(), "sql" );
 		}
 		else {
-#if 0
 			//query is not ok
 			//TODO: allow saving invalid queries
 			//TODO: just ask this question:
-#else
 			res = false;
-#endif
 		}
+#endif
 	}
 	if (res) {
 		QString empty_xml;
 		res = storeDataBlock( empty_xml, "query_layout" ); //clear
 	}
+	if (!res)
+		setDirty(true);
 	return res;
 }
 
