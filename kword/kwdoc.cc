@@ -96,6 +96,60 @@ KoDocument *KWChild::hitTest( const QPoint &, const QWMatrix & )
   return 0L;
 }
 
+// This is duplicated from KoDocumentChild, because it uses lowercase tags
+// and we use uppercase tags :(
+bool KWChild::load( const QDomElement& element )
+{
+    m_tmpURL = element.attribute("url");
+    m_tmpMimeType = element.attribute("mime");
+
+    if ( m_tmpURL.isEmpty() )
+    {
+        kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
+        return false;
+    }
+    if ( m_tmpMimeType.isEmpty() )
+    {
+        kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
+        return false;
+    }
+
+    // <RECT>
+    QDomElement rectElem = element.namedItem( "RECT" ).toElement();
+    if ( !rectElem.isNull() )
+    {
+        m_tmpGeometry = QRect(
+            KWDocument::getAttribute( rectElem, "x", 0 ),
+            KWDocument::getAttribute( rectElem, "y", 0 ),
+            KWDocument::getAttribute( rectElem, "w", 1 ),
+            KWDocument::getAttribute( rectElem, "h", 1 ) );
+        setGeometry( m_tmpGeometry );
+    }
+    else
+    {
+        kdDebug(30003) << "Missing RECT in OBJECT" << endl;
+        return false;
+    }
+
+    return true;
+}
+
+QDomElement KWChild::save( QDomDocument& doc )
+{
+    assert( document() );
+    QDomElement e = doc.createElement( "OBJECT" );
+    e.setAttribute( "url", document()->url().url() );
+    e.setAttribute( "mime", document()->nativeFormatMimeType() );
+    QDomElement rect = doc.createElement( "RECT" );
+    rect.setAttribute( "x", geometry().left() );
+    rect.setAttribute( "y", geometry().top() );
+    rect.setAttribute( "w", geometry().width() );
+    rect.setAttribute( "h", geometry().height() );
+    e.appendChild(rect);
+    return e;
+}
+
+
 /******************************************************************/
 /* Class: KWDocument                                      */
 /******************************************************************/
@@ -1015,7 +1069,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWPartFrameSet *fs = 0;
         QRect r;
 
-        QDomElement object = embedded.namedItem( "object" ).toElement(); // leave that lowercase, kofficelib writes it out
+        QDomElement object = embedded.namedItem( "OBJECT" ).toElement();
         if ( !object.isNull() )
         {
             ch->load( object );
@@ -1032,7 +1086,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             else
                 kdError() << "No <SETTINGS> tag in EMBEDDED" << endl;
         } else
-            kdError() << "No <object> tag in EMBEDDED" << endl;
+            kdError() << "No <OBJECT> tag in EMBEDDED" << endl;
     }
 
     emit sigProgress(95);
