@@ -2379,6 +2379,71 @@ void KWTextFrameSetEdit::ensureCursorVisible()
 
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
+    // Handle moving into formula frames.
+    if ( !( e->state() & ControlButton ) && !( e->state() & ShiftButton ) ) {
+        switch ( e->key() ) {
+        case Key_Left: {
+            KoTextCursor* cursor = textView()->cursor();
+            KoTextParag* parag = cursor->parag();
+            int index = cursor->index();
+            if ( index > 0 ) {
+                KoTextStringChar* ch = parag->at( index-1 );
+                if ( ch->isCustom() ) {
+                    KoTextCustomItem* customItem = ch->customItem();
+                    KWAnchor* anchor = dynamic_cast<KWAnchor*>( customItem );
+                    if ( anchor ) {
+                        KWFrameSet* frameSet = anchor->frameSet();
+                        if ( frameSet->type() == FT_FORMULA ) {
+                            KWCanvas* canvas = m_canvas;
+
+                            // this will "delete this"!
+                            canvas->editFrame( frameSet->frame( 0 ) );
+
+                            // Is it okay to assume success here?
+                            KWFrameSetEdit* edit = canvas->currentFrameSetEdit();
+                            static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
+
+                            // A FormulaFrameSetEdit looks a little different from
+                            // a FormulaFrameSet. (Colors)
+                            static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
+                            canvas->repaintChanged( frameSet, true );
+                            return;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case Key_Right: {
+            KoTextCursor* cursor = textView()->cursor();
+            KoTextParag* parag = cursor->parag();
+            int index = cursor->index();
+            if ( index < parag->length() ) {
+                KoTextStringChar* ch = parag->at( index );
+                if ( ch->isCustom() ) {
+                    KoTextCustomItem* customItem = ch->customItem();
+                    KWAnchor* anchor = dynamic_cast<KWAnchor*>( customItem );
+                    if ( anchor ) {
+                        KWFrameSet* frameSet = anchor->frameSet();
+                        if ( frameSet->type() == FT_FORMULA ) {
+                            KWCanvas* canvas = m_canvas;
+
+                            // this will "delete this"!
+                            canvas->editFrame( frameSet->frame( 0 ) );
+
+                            // A FormulaFrameSetEdit looks a little different from
+                            // a FormulaFrameSet. (Colors)
+                            static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
+                            canvas->repaintChanged( frameSet, true );
+                            return;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        }
+    }
     textView()->handleKeyPressEvent( e );
 }
 
