@@ -46,7 +46,7 @@ idl_DATA = kspread.idl
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
-kdemime_DATA = x-kspread.kdelnk
+kdemime_DATA = x-kspread.desktop
 kdemimedir = $(kde_mimedir)/application
 
 SUBDIRS =  . pics dtd toolbar filters
