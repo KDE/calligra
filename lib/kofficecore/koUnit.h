@@ -35,7 +35,12 @@
 #define INCH_TO_POINT(inch) ((inch)*72.0)
 #define MM_TO_INCH(mm) ((mm)*0.039370147)
 #define INCH_TO_MM(inch) ((inch)*25.399956)
-
+#define POINT_TO_PI(px)((px)*0.083333333)
+#define POINT_TO_DD(px)((px)*0.93457196)
+#define POINT_TO_CC(px)((px)*0.077880997)
+#define PI_TO_POINT(pi)((pi)*12)
+#define DD_TO_POINT(dd)((dd)*154.08124)
+#define CC_TO_POINT(cc)((cc)*12.840103)
 /**
  * KWord stores everthing in pt (using "double") internally.
  * When displaying a value to the user, the value is converted to the user's unit
@@ -49,7 +54,10 @@ public:
         U_PT = 1,
         U_INCH = 2,
         U_CM = 3,
-        U_DM = 4
+        U_DM = 4,
+        U_PI = 5,
+        U_DD = 6,
+        U_CC = 7
     };
 
     // Prepare ptValue to be displayed in pt
@@ -80,6 +88,24 @@ public:
         return qRound( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
 
+    // Prepare ptValue to be displayed in pica
+    static double toPI( double ptValue ) {
+        // "pi" values are rounded to 0.00001 inches
+        return qRound( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
+    }
+    
+    // Prepare ptValue to be displayed in didot
+    static double toDD( double ptValue ) {
+        // "dd" values are rounded to 0.00001 inches
+        return qRound( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
+    }
+    
+    // Prepare ptValue to be displayed in cicero
+    static double toCC( double ptValue ) {
+        // "cc" values are rounded to 0.00001 inches
+        return qRound( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
+    }
+    
     // This method is the one to use to display a value in a dialog
     // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
     static double ptToUnit( double ptValue, Unit unit );
@@ -103,6 +129,9 @@ public:
         if ( _unitName == QString::fromLatin1( "dm" ) ) return U_DM;
         if ( _unitName == QString::fromLatin1( "in" )
             || _unitName == QString::fromLatin1("inch") /*compat*/ ) return U_INCH;
+        if ( _unitName == QString::fromLatin1( "pi" ) ) return U_PI;
+        if ( _unitName == QString::fromLatin1( "dd" ) ) return U_DD;
+        if ( _unitName == QString::fromLatin1( "cc" ) ) return U_CC;
         return U_PT;
     }
     // Get the name of a unit
@@ -111,6 +140,9 @@ public:
         if ( _unit == U_CM ) return QString::fromLatin1( "cm" );
         if ( _unit == U_DM ) return QString::fromLatin1( "dm" );
         if ( _unit == U_INCH ) return QString::fromLatin1( "in" );
+        if ( _unit == U_PI ) return QString::fromLatin1( "pi" );
+        if ( _unit == U_DD ) return QString::fromLatin1( "dd" );
+        if ( _unit == U_CC ) return QString::fromLatin1( "cc" );
         return QString::fromLatin1( "pt" );
     }
     // Get the full (translated) description of a unit

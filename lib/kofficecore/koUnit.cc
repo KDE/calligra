@@ -34,6 +34,12 @@ QString KoUnit::unitDescription( Unit _unit )
         return i18n("Decimeters (dm)");
     case KoUnit::U_INCH:
         return i18n("Inches (in)");
+    case KoUnit::U_PI:
+        return i18n("Pica (pi)");
+    case KoUnit::U_DD:
+        return i18n("Didot (dd)");
+    case KoUnit::U_CC:
+        return i18n("Cicero (cc)");
     case KoUnit::U_PT:
         return i18n("Points (pt)" );
     default:
@@ -52,6 +58,12 @@ double KoUnit::ptToUnit( double ptValue, Unit unit )
         return toDM( ptValue );
     case U_INCH:
         return toInch( ptValue );
+    case U_PICA:
+        return toPI( ptValue );
+    case U_DD:
+        return toDD( ptValue );
+    case U_CC:
+        return toCC( ptValue );
     case U_PT:
     default:
         return toPoint( ptValue );
@@ -74,6 +86,12 @@ double KoUnit::ptFromUnit( double value, Unit unit )
         return DM_TO_POINT( value );
     case U_INCH:
         return INCH_TO_POINT( value );
+    case U_PI:
+        return PI_TO_POINT( value );
+    case U_DD:
+        return DD_TO_POINT( value );
+    case U_CC:
+        return CC_TO_POINT( value );
     case U_PT:
     default:
         return value;
