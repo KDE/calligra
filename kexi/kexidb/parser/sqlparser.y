@@ -436,13 +436,13 @@
 #include <limits.h>
 //TODO OK?
 #ifndef LLONG_MAX
-# define LLONG_MAX     0x7fffffffffffffff
+# define LLONG_MAX     0x7fffffffffffffffLL
 #endif
 #ifndef LLONG_MIN
-# define LLONG_MIN     0x8000000000000000
+# define LLONG_MIN     0x8000000000000000LL
 #endif
 #ifndef LLONG_MAX
-# define ULLONG_MAX    0xffffffffffffffff
+# define ULLONG_MAX    0xffffffffffffffffLL
 #endif
 
 #ifdef _WIN32
