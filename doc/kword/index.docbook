@@ -46,7 +46,7 @@
 
 <book lang="&language;">
 <bookinfo>
-<title>The &kword; Users Manual</title>
+<title>The &kword; Users' Manual</title>
 <authorgroup>
 <author>
 <firstname>Mike</firstname>
@@ -710,7 +710,7 @@ and some formatting information will be lost.  For more details please refer to 
 <para>Can I save my &kword; document as a &Microsoft; Word file?</para>
 </question>
 <answer>
-<para>At the moment, &kword; doesn't yet provide support for exporting to &Microsoft; Word 
+<para>At the moment, &kword; does not yet provide support for exporting to &Microsoft; Word 
 documents. If you need to exchange documents with MS Word, 
 you should use <link linkend="filters-rtf">Rich Text Format</link> as an intermediate file format.  
 Rich Text Format files 
@@ -730,7 +730,7 @@ are converted well by both &Microsoft; Word and &kword;,</para>
 
 <qandaentry>
 <question id="exchangedoc">
-<para>I have to exchange documents with a friend who doesn't have &kword;. What's 
+<para>I have to exchange documents with a friend who does not have &kword;; what is 
 the best way to do this ?</para>
 </question>
 <answer>
@@ -840,7 +840,7 @@ in the &koffice; package which can be obtained from <ulink
 url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
 main ftp site of the &kde; project. </para>
 
-<para>Many distributions offer precompiled binaries on their ftp sites.  Please check your distributions web sites for more information.</para>
+<para>Many distributions offer precompiled binaries on their ftp sites.  Please check your distribution's web sites for more information.</para>
 
 <para>If you want to compile &kword; from source, then you should read through the next few sections for help on compilation.</para>
 
@@ -872,7 +872,7 @@ url="http://www.kde.org">&kde; web page.</ulink></para>
 
 <listitem>
 <para>&GNU; c++ compiler or any c++ compiler that supports exceptions.  For help on obtaining this, please refer to
-your distributions web site.</para>
+your distribution's web site.</para>
 </listitem>
 
 <listitem>
@@ -1017,9 +1017,9 @@ format than AmiPro. Therefore, if you want to read WordPro documents from
 
 <sect2 id="filters-applixword"><title>Applix Word</title>
 
-<para>&kword; can read ApplixWord documents quite good. However, there's limitations 
-because text formatting, colors, paragraph, and special characters are 
-supported. Styles and inline images will be lost during conversion.</para>
+<para>&kword; can read ApplixWord documents quite well; however, there are limitations: 
+text formatting, colors, paragraphs, and special characters are 
+supported; styles and inline images, though, will be lost during the conversion.</para>
 
 <para> For more detailed information see the 
 <ulink url="http://www.koffice.org/filters/1.2/kword/applixword.phtml">Applix Word filter table</ulink></para>
@@ -1040,7 +1040,7 @@ and italic) are supported. Pictures are saved into a sub-directory.</para>
 <sect2 id="filters-hancom"><title>Hancom Word</title>
 
 <para>&kword; can read HancomWord document produced with HancomWord 5.2 or 6. However, 
-&kword; doesn't yet recognize text formatting inside the document, hence the 
+&kword; does not yet recognize text formatting inside the document, hence the 
 text will be imported but without formatting at all.</para>
 
 <para> For more detailed information see the 
@@ -1069,7 +1069,7 @@ formatting, and it is intended for exporting only the document structure.</para>
 <para>The <emphasis>Normal</emphasis> mode supports common formatting of text. </para>
  
 <para>The <emphasis>Enhanced</emphasis> mode is the most 
-complete mode and uses also CSS2. Therefore styles and more advanced formating are 
+complete mode and uses also CSS2; hence, styles and more-advanced formatting are 
 supported.</para>
 
 
@@ -1120,7 +1120,7 @@ the document to &Microsoft; Write format.</para>
 Palm-compatible device. </para>
 
 <para>&kword; is able to read and write PalmDoc files, even with compression. The PalmDoc
-format doesn't specify text formatting, so all character formatting (bold, italics, etc) is lost when exporting to 
+format does not specify text formatting, so all character formatting (bold, italics, etc) is lost when exporting to 
 this format.</para>
 
 <note><para>In order to read PalmDoc files on your handheld, you will need a reader.  Three common readers are the 
@@ -1649,8 +1649,9 @@ linkend="variables">Inserting Variables</link>.</para>
 <glossentry id="defdeb">
 <glossterm>DEB</glossterm>
 <glossdef>
-<para>This is a binary file format that is used by Debian and Debian
-based distributions.  This will be the suffix of a file specifically for
+<para>This is a binary file format that is used by Debian and Debian-based
+distributions.  This will be the suffix of a file 
+specifically for
 these distributions.  An example would be
 <filename>koffice-1.2.deb</filename>. For more information on installing
 these files, refer to the <ulink url="http://www.debian.org">Debian Web
@@ -1683,7 +1684,7 @@ document).</para>
 <para>Stands for <emphasis>Frequently Asked Questions</emphasis> and
 normally means a document, where questions that arise many times are answered. If you
 have a question to the developers of &koffice;, you should always have a
-look at the <acronym>FAQ</acronym> first. You'll find the latest version
+look at the <acronym>FAQ</acronym> first; you can find the latest version
 <ulink
 url="http://koffice.kde.org/faq">here</ulink>.</para>
 </glossdef>
@@ -1745,7 +1746,7 @@ of your document. Frames can be moved, resized, deleted etc.</para>
 <glossterm>Frameset</glossterm>
 <glossdef>
 <para>A frame-set is a group of frames which are connected together. If
-you're writing text that doesn't fit into the first frame of a frame-set,
+you are writing text that does not fit into the first frame of a frame-set,
 it will continue in the next frame belonging to that frame-set.</para>
 </glossdef>
 </glossentry>
@@ -1753,9 +1754,9 @@ it will continue in the next frame belonging to that frame-set.</para>
 <glossentry id="defftp">
 <glossterm>&FTP;</glossterm>
 <glossdef>
-<para>&FTP; is the <emphasis>File Transfer Protocol</emphasis>. It's an
+<para>&FTP; is the <emphasis>File Transfer Protocol</emphasis>; it is an
 Internet protocol that allows you to retrieve files from so-called &FTP;
-servers. If you want to download &koffice; from the Internet, you'll
+servers. If you want to download &koffice; from the Internet, you will
 probably use &FTP;.</para>
 </glossdef>
 </glossentry>
@@ -1926,9 +1927,9 @@ binary code, before use.</para>
 <glossdef>
 <para>Tar is a tool used for the archiving of files in so-called
 <emphasis>tar-files</emphasis> which you recognize by their suffix
-<literal role="extension">.tar</literal>.  You'll find &koffice; source
+<literal role="extension">.tar</literal>.  You can find &koffice; source
 and binary distributions as <glossterm linkend="deftgz">gzipped
-tar-files</glossterm>. However, you shouldn't use them if there are special
+tar-files</glossterm>; however, you should not use them if there are special
 packages for your system and package manager. See <glossterm
 linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</para>
 </glossdef>
@@ -1948,8 +1949,8 @@ linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</
 <literal role="extension">.tgz</literal> are <glossterm
 linkend="deftar">tar-files</glossterm> compressed with the
 <command>gzip</command> program.  This makes the tar files smaller and
-quicker to download.  You'll find &koffice; source and binary
-distributions in this format. However, you shouldn't use them if there
+quicker to download.  You can find &koffice; source and binary
+distributions in this format; however, you should not use them if there
 are special packages for your system and package manager. See <glossterm
 linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</para>
 </glossdef>
