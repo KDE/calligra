@@ -1,9 +1,13 @@
 #include "qlayout.h"
 #include "qlistbox.h"
 #include "qpushbutton.h"
+#include "qstringlist.h"
 
 #include "klocale.h"
+#include "kglobal.h"
+#include "kstddirs.h"
 
+#include "gradientview.h"
 #include "gradienteditordlg.h"
 #include "kimageshop_doc.h"
 
@@ -33,9 +37,8 @@ GradientEditorDialog::GradientEditorDialog( KImageShopDoc *_doc, QWidget *_paren
   QPushButton *refreshButton = new QPushButton( i18n( "Refresh" ), area, "RefreshButton" );
   layout->addWidget( refreshButton, 3, 1 );
 
-  QWidget *gradient = new QWidget( area, "GradientView" );
-  gradient->setBackgroundColor( red );
-  layout->addMultiCellWidget( gradient, 5, 5, 0, 1 );
+  m_pGradient = new GradientView( area, "GradientView" );
+  layout->addMultiCellWidget( m_pGradient, 5, 5, 0, 1 );
 
   QScrollBar *scroll = new QScrollBar( Horizontal, area, "GradientViewScrollBar" );
   layout->addMultiCellWidget( scroll, 6, 6, 0, 1 );
@@ -47,13 +50,16 @@ GradientEditorDialog::GradientEditorDialog( KImageShopDoc *_doc, QWidget *_paren
   layout->setRowStretch( 2, 0 );
   layout->setRowStretch( 3, 0 );
 
-  // read filnames
-  // QStringList
-  listbox->insertItem( "Test 1" );
-  listbox->insertItem( "Test 2" );
-  listbox->insertItem( "Test 3" );
-  listbox->insertItem( "Test 4" );
-  listbox->insertItem( "Test 5" );
+  // reading GIMP gradient filenames
+
+  KGlobal::dirs()->addResourceDir( "kis_gradients", "/usr/share/gimp/gradients" );
+  QStringList gradientFilenames = KGlobal::dirs()->findAllResources( "kis_gradients" );
+
+  QStringList::Iterator it = gradientFilenames.begin();
+  for( ; it != gradientFilenames.end(); it++ )
+  {
+    listbox->insertItem( *it );
+  }
 }
 
 GradientEditorDialog::~GradientEditorDialog()
@@ -61,6 +67,7 @@ GradientEditorDialog::~GradientEditorDialog()
 }
 
 #include "gradienteditordlg.moc"
+
 
 
 

@@ -3,6 +3,7 @@
 
 #include "kfloatingdialog.h"
 
+class GradientView;
 class KImageShopDoc;
 
 class GradientEditorDialog : public KFloatingDialog
@@ -16,9 +17,13 @@ public:
 
 private:
 
+  GradientView* m_pGradient;
   KImageShopDoc *m_pDoc;
 };
 
 #endif
+
+
+
 
 
