@@ -36,7 +36,7 @@
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
-#include "kowmfpaint.h"
+#include <kowmfpaint.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -702,7 +702,7 @@ public:
 
 		// normally we must write zeros if we seek past EOF
 		// but we know that won't happen :)
-      bool seek (const long offset, const int whence)
+		bool seek (const long offset, const int whence)
 		{
 			long absoffset;
 			switch (whence)
@@ -736,7 +736,7 @@ public:
 			return true;
 		}
 
-      long tell (void)
+		long tell (void)
 		{
 			return long (m_buffer->at ());
 		}
