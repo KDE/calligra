@@ -325,6 +325,8 @@ don't put a </?xml...> at the end of the file!).
                             5...footer for even pages (user-wise, i.e. with pages starting at 1)
                             6...footer for odd pages (user-wise, i.e. with pages starting at 1)
                             7...footnote
+                            When the document uses the same headers on even and odd pages (hType=0,2),
+                            the header being used is the one for odd pages (frameInfo=3).
 
             removable:      Whether the header-frame is removable or not:
                             Used in tables where header cells on new pages are
