@@ -28,7 +28,6 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qfiledialog.h>
-#include <qmessagebox.h>
 #include <cassert>
 
 #include "backdia.h"
@@ -2889,5 +2888,5 @@ void KPresenterView::search()
         return;
     QString txt = searchDialog->lineEdit->text();
     if ( !txtObj->find( txt, searchDialog->cs, searchDialog->wo, !searchDialog->back ) )
-        QMessageBox::information( this, i18n( "Find" ), i18n( "%1 not found!" ).arg( txt ) );
+        KMessageBox::information( this, i18n( "%1 not found!" ).arg( txt ), i18n( "Find" ) );
 }
