@@ -2256,20 +2256,36 @@ void KSpreadCanvas::doAutoScroll()
         return;
     }
 
+    bool select = false;
+
     QPoint pos( mapFromGlobal( QCursor::pos() ) );
     if ( pos.y() < 0 )
+    {
         vertScrollBar()->setValue(vertScrollBar()->value() - 20);
+        select = true;
+    }
     else if ( pos.y() > height() )
+    {
         vertScrollBar()->setValue(vertScrollBar()->value() + 20);
+        select = true;
+    }
     
     if ( pos.x() < 0 )
-        horzScrollBar()->setValue(horzScrollBar()->value() - 20);
-    else if ( pos.x() > width() )
-        horzScrollBar()->setValue(horzScrollBar()->value() + 20);
-    
-    if (m_bChoose)
     {
-        
+        horzScrollBar()->setValue(horzScrollBar()->value() - 20);
+        select = true;
+    }
+    else if ( pos.x() > width() )
+    {
+        horzScrollBar()->setValue(horzScrollBar()->value() + 20);
+        select = true;
+    }
+
+    if (select)
+    {
+        QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos, 0, 0);
+        mouseMoveEvent(event);
+        delete event;
     }
 }
 
