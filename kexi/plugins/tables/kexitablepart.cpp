@@ -86,6 +86,7 @@ KexiTablePart::getTables()
 {
 	m_tableNames.clear();
 	m_tableNames = kexiProject()->db()->tables();
+	kdDebug() << "KexiTablePart::getTables(): kexiProject()->db()->tables()" << endl;
 	ItemList *list=items();
 	list->clear();
 

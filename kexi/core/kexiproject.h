@@ -48,6 +48,7 @@ public:
 
 struct Credentials
 {
+	KexiDB::DBType type;
 	QString host,
 		database,
 		port,
@@ -84,7 +85,7 @@ public:
 
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
-	bool initFileConnection(const QString driver, const QString file);
+	bool initFileConnection(const QString driver, const QString ref=QString::null);
 
 	void clear();
 

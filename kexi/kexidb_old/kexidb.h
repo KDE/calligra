@@ -37,6 +37,15 @@ class KexiDB : public QObject
 	Q_OBJECT
 
 	public:
+
+		enum DBType
+		{
+			NoDB,
+			RemoteDB,
+			LocalDirectoryDB,
+			LocalFileDB
+		};
+
 		KexiDB(QObject *parent=0, const char *name=0);
 		~KexiDB();
 
@@ -48,6 +57,7 @@ class KexiDB : public QObject
 		//now driver related functions
 
 		virtual QString driverName();
+		virtual DBType dbType() { return NoDB; }
 
 		virtual KexiDBRecord* queryRecord(QString query, bool buffer=false);
 

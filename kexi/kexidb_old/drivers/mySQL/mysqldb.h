@@ -52,7 +52,8 @@ class MySqlDB : public KexiDB
 //					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
 
 		QString		driverName();
-
+		KexiDB::DBType	dbType() { return KexiDB::RemoteDB; }
+		
 		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
 
 		bool		connect(QString host, QString user, QString password, QString socket, QString port);

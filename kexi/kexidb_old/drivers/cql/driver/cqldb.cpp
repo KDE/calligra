@@ -35,18 +35,6 @@ CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
  : KexiDB(parent, name)
 {
 	kdDebug() << "CqlDB::CqlDB()" << endl;
-
-	try
-	{
-		m_db = new SqlHandle(0);
-	}
-	catch(CqlException& ex)
-	{
-		cerr << ex << endl;
-		m_db = 0;
-	}
-
-	kdDebug() << "CqlDB::CqlDB(): handle:" << m_db << endl;
 }
 
 QString
@@ -55,18 +43,33 @@ CqlDB::driverName()
 	return QString("cql");
 }
 
+KexiDB::DBType
+CqlDB::dbType()
+{
+	return LocalDirectoryDB;
+}
+
 bool
 CqlDB::load(QString file)
 {
+	char *dir = file.latin1();
 	kdDebug() << "CqlDB::load()" << endl;
-
-	if(!m_db)
-		return false;
+	try
+	{
+		kdDebug() << "CqlDB::load() directory set to:" << dir << endl;
+		m_db = new SqlHandle(dir);
+	}
+	catch(CqlException& ex)
+	{
+		cerr << ex << endl;
+		m_db = 0;
+	}
 
 	kdDebug() << "CqlDB::load(): proceeding" << endl;
 
 	try
 	{
+		m_db->optionCurrentDirectory(dir);
 		m_db->connect("PUBLIC");
 	}
 	catch(CqlException& ex)
@@ -154,19 +157,19 @@ CqlDB::alterField(const QString& table, const QString& field, const QString& new
 
 // cql->kexi
 
-QString
+static QString
 CqlDB::cqlString(const CqlString &str)
 {
 	return QString(str.text());
 }
 
-QString
+static QString
 CqlDB::cqlFixedString(const CqlFixedLengthString &str)
 {
 	return QString(str.text());
 }
 
-QString
+static QString
 CqlDB::errorText(CqlException &ex)
 {
 	return cqlString(ex.errorText());

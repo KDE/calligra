@@ -27,9 +27,10 @@ Boston, MA 02111-1307, USA.
 #include "cqldb.h"
 #include "cqlrecord.h"
 
-CqlRecord::CqlRecord(SqlHandle *handle, const QString statement)
+CqlRecord::CqlRecord(SqlHandle *handle, const QString statement, bool force)
  : KexiDBRecord()
 {
+	m_force = force;
 	try
 	{
 		m_cursor = handle->declareCursor(statement.latin1());
@@ -42,6 +43,7 @@ CqlRecord::CqlRecord(SqlHandle *handle, const QString statement)
 		catch(CqlException &err)
 		{
 			cerr << err << endl;
+			throw KexiDBError(0, CqlDB::errorText(err));
 		}
 	}
 	catch(CqlException &err)
@@ -156,6 +158,9 @@ CqlRecord::gotoRecord(unsigned int record)
 unsigned int
 CqlRecord::fieldCount()
 {
+	if(!m_cursor && m_force)
+		return 0;
+
 	return m_fieldCount;
 }
 

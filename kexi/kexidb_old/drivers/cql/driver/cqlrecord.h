@@ -41,7 +41,7 @@ typedef QValueVector<bool> NullVector;
 class CqlRecord : public KexiDBRecord
 {
 	public:
-		CqlRecord(SqlHandle *handle, const QString statement);
+		CqlRecord(SqlHandle *handle, const QString statement, bool force=true);
 		~CqlRecord();
 
 		bool		readOnly();
@@ -88,6 +88,7 @@ class CqlRecord : public KexiDBRecord
 		RecordSet	m_data;
 		DataVector	m_datavector;
 		NullVector	m_nullvector;
+		bool		m_force;
 };
 
 #endif

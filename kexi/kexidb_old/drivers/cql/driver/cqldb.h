@@ -34,6 +34,7 @@ class CqlDB : public KexiDB
 		~CqlDB();
 
 		QString		driverName();
+		KexiDB::DBType	dbType();
 
 		bool		load(QString file);
 

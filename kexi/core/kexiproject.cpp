@@ -18,6 +18,24 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <qpainter.h>
+#include <qdir.h>
+
+#include <kdebug.h>
+#include <kpassdlg.h>
+#include <klocale.h>
+#include <kparts/componentfactory.h>
+#include <kstandarddirs.h>
+
+#include <koStore.h>
+#include <koTemplateChooseDia.h>
+
+#include <kexiDB/kexidberror.h>
+
+#include "KexiProjectIface.h"
 #include "kexiproject.h"
 #include "kexiproject.moc"
 #include "kexi_factory.h"
@@ -26,18 +44,6 @@
 #include "kexirelation.h"
 #include "kexiprojecthandler.h"
 
-#include <koStore.h>
-
-#include <kdebug.h>
-#include <kpassdlg.h>
-#include <klocale.h>
-#include <kparts/componentfactory.h>
-
-#include <qpainter.h>
-#include <koTemplateChooseDia.h>
-#include "KexiProjectIface.h"
-
-#include <kexiDB/kexidberror.h>
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
@@ -217,12 +223,35 @@ QDomDocument KexiProject::saveXML()
 
 void KexiProject::loadConnectionSettings(QDomElement &rootElement)
 {
+	QDomElement locationElement = rootElement.namedItem("type").toElement();
 	QDomElement engineElement = rootElement.namedItem("engine").toElement();
 	QDomElement hostElement = rootElement.namedItem("host").toElement();
 	QDomElement nameElement = rootElement.namedItem("name").toElement();
 	QDomElement userElement = rootElement.namedItem("user").toElement();
 	QDomElement passElement = rootElement.namedItem("password").toElement();
 	QDomElement savePassElement = rootElement.namedItem("savePassword").toElement();
+
+	KexiDB::DBType type;
+	if(locationElement.text() == "")
+	{
+		kdDebug() << "KexiProject::loadConnectionSettings(): no location" << endl;
+		type = KexiDB::RemoteDB;
+	}
+	if(locationElement.text() == "RemoteDB")
+	{
+		kdDebug() << "KexiProject::loadConnectionSettings(): remote" << endl;
+		type = KexiDB::RemoteDB;
+	}
+	if(locationElement.text() == "LocalDir")
+	{
+		kdDebug() << "KexiProject::loadConnectionSettings(): dir" << endl;
+		type = KexiDB::LocalDirectoryDB;
+	}
+	if(locationElement.text() == "LocalFile")
+	{
+		kdDebug() << "KexiProject::loadConnectionSettings(): file" << endl;
+		type = KexiDB::LocalFileDB;
+	}
 
 	Credentials parsedCred;
 	parsedCred.driver   = engineElement.text();
@@ -252,9 +281,9 @@ void KexiProject::loadConnectionSettings(QDomElement &rootElement)
 		}
 	}
 
+
 	initDbConnection(parsedCred);
         setModified( isModified() | mod );
-
 }
 
 
@@ -385,7 +414,7 @@ KexiProject::initHostConnection(const Credentials &cred)
 }
 
 bool
-KexiProject::initFileConnection(const QString driver, const QString file)
+KexiProject::initFileConnection(const QString driver, const QString ref)
 {
 	kdDebug() << "KexiProject::initFileConnection()" << endl;
 
@@ -397,9 +426,16 @@ KexiProject::initFileConnection(const QString driver, const QString file)
 
 //	if(m_db->load(file))
 //	{
+
+	QString tmpfile(KGlobal::dirs()->resourceDirs("tmp").first() + "kexi-" + QString::number(getpid()));
+//	QString tmpfile(locate("tmp", "kexi-2345325"));
+	kdDebug() << "KexiProject::initFileConnection() tmp: " << tmpfile << endl;
+	QDir tempdir(tmpfile);
+	tempdir.mkdir(tmpfile);
+
 	try
 	{
-		m_db->load(file);
+		m_db->load(tmpfile);
 	}
 	catch(KexiDBError *err)
 	{

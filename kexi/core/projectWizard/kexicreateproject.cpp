@@ -139,7 +139,7 @@ KexiCreateProject::accept()
 	if(m_pageEngine->data("location").toString() != "RemoteDB")
 	{
 		kdDebug() << "KexiCreateProject::accept(): local engine..." << endl;
-		project()->initFileConnection(m_pageEngine->data("engine").toString(), "/tmp/kexidb");
+		project()->initFileConnection(m_pageEngine->data("engine").toString(), QString::null);
 	}
 	else
 	{
