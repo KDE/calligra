@@ -1449,9 +1449,7 @@ void KSpreadView::startKSpell()
     if(m_pDoc->getKSpellConfig())
     {
         m_pDoc->getKSpellConfig()->setIgnoreList(m_pDoc->spellListIgnoreAll());
-#if KDE_VERSION >= 305
         m_pDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
-#endif
 
     }
     m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
@@ -1480,9 +1478,7 @@ void KSpreadView::startKSpell()
   QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                     this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
-#if KDE_VERSION >= 305
   QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-#endif
 
 }
 
@@ -1590,9 +1586,7 @@ void KSpreadView::spellCleanup()
   m_spell.firstSpellTable   = 0L;
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
-#if KDE_VERSION >= 305
   m_spell.replaceAll.clear();
-#endif
 
 
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
@@ -1738,9 +1732,7 @@ void KSpreadView::spellCheckerDone( const QString & )
             }
         }
     }
-#if KDE_VERSION >= 305
     m_spell.replaceAll.clear();
-#endif
 
     if(m_spell.macroCmdSpellCheck)
     {
@@ -1758,9 +1750,7 @@ void KSpreadView::spellCheckerFinished()
   m_spell.kspell->cleanUp();
   delete m_spell.kspell;
   m_spell.kspell = 0L;
-#if KDE_VERSION >= 305
   m_spell.replaceAll.clear();
-#endif
 
   bool kspellNotConfigured=false;
 

@@ -740,9 +740,7 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
   QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
 
   gridColor = new KColorButton( _gridColor,
-#if KDE_VERSION >= 305
                                 Qt::lightGray,
-#endif
                                 tmpQGroupBox );
 
   label->setBuddy(gridColor);
@@ -757,9 +755,7 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
   QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox, "label21" );
 
   pageBorderColor = new KColorButton( _pbColor,
-#if KDE_VERSION >= 305
                                 Qt::red,
-#endif
                                 tmpQGroupBox );
 
 
