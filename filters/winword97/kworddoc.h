@@ -1,24 +1,15 @@
 #ifndef KWORDDOC_H
 #define KWORDDOC_H
 
-#include <qobject.h>
 #include <qstring.h>
 
-class KWordDoc : public QObject {
-
-    Q_OBJECT
+class KWordDoc {
 
 public:
     KWordDoc();
     ~KWordDoc();
     const QString kwdFile();
 
-signals:
-    void signalFilterError();
-
-public slots:
-    void slotFilterError();
-    
 private:
     QString kwd;
     bool success;

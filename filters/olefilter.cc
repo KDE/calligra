@@ -228,13 +228,13 @@ void OLEFilter::convert(const QString &dirname) {
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {
 
-    connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
-            const unsigned int, char **)), this, SLOT(slotSavePic(const char *,
-            const char *, const unsigned int, char **)));
-    connect(*myFilter, SIGNAL(signalPart(const char *, const char *, char **)),
-            this, SLOT(slotPart(const char *, const char *, char **)));
-    connect(*myFilter, SIGNAL(signalGetStream(const long &, myFile &)), this,
-            SLOT(slotGetStream(const long &, myFile &)));
-    connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
-            SLOT(slotGetStream(const QString &, myFile &)));
+    QObject::connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
+                     const unsigned int, char **)), this, SLOT(slotSavePic(const char *,
+                     const char *, const unsigned int, char **)));
+    QObject::connect(*myFilter, SIGNAL(signalPart(const char *, const char *, char **)),
+                     this, SLOT(slotPart(const char *, const char *, char **)));
+    QObject::connect(*myFilter, SIGNAL(signalGetStream(const long &, myFile &)), this,
+                     SLOT(slotGetStream(const long &, myFile &)));
+    QObject::connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
+                     SLOT(slotGetStream(const QString &, myFile &)));
 }

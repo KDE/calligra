@@ -9,11 +9,9 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
 
     myDoc=0L;
     myDoc=new WinWordDoc(mainStream, table0Stream, table1Stream, dataStream);
-    connect(myDoc, SIGNAL(signalFilterError()), this, SLOT(slotFilterError()));
 
     myKwd=0L;
     myKwd=new KWordDoc();
-    connect(myKwd, SIGNAL(signalFilterError()), this, SLOT(slotFilterError()));
 }
 
 WordFilter::~WordFilter() {

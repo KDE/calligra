@@ -2,30 +2,26 @@
 #define WINWORDDOC_H
 
 #include <string.h>
-#include <qobject.h>
 #include "klaola.h"
 #include "myfile.h"
 #include "fib.h"
+#include <kdebug.h>
 
 
-class WinWordDoc : public QObject {
-
-    Q_OBJECT
+class WinWordDoc {
 
 public:
     WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                const myFile &table1Stream, const myFile &dataStream);
     ~WinWordDoc();
 
-signals:
-    void signalFilterError();
-
-public slots:
-    void slotFilterError();
-    
 private:
+    void readFIB();
+    inline const unsigned short read16(const unsigned char *d);
+    inline const unsigned long read32(const unsigned char *d);
+
     bool success;
     FIB *fib;
-    myFile main, table0, table1, data;
+    myFile main, table, data;
 };
 #endif // WINWORDDOC_H
