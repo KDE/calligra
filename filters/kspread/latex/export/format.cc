@@ -174,7 +174,8 @@ void Format::generate(QTextStream& out, Column* col, Row* row)
 			out << "}";
 		}
 	}
-	out << "m{" << col->getWidth() << "pt}";
+        if ( col != NULL )
+            out << "m{" << col->getWidth() << "pt}";
 	if(hasRightBorder())
 		out << "|";
 }
@@ -187,7 +188,7 @@ void Format::generateTextFormat(QTextStream& out, QString text)
 		float green = ((float) getPenColor().green()) / 255;
 		float blue  = ((float) getPenColor().blue()) / 255;
 
-		out << "\\textcolor[rgb]{"<< red << ", " << green << 
+		out << "\\textcolor[rgb]{"<< red << ", " << green <<
 				", " << blue << "}{" << text << "}" << endl;
 	}
 }
@@ -200,7 +201,7 @@ void Format::generateColor(QTextStream& out)
 		float green = ((float) getBrushColor().green()) / 255;
 		float blue  = ((float) getBrushColor().blue()) / 255;
 
-		out << "[rgb]{" << red << ", " << green << 
+		out << "[rgb]{" << red << ", " << green <<
 				", " << blue << "}%" << endl;
 	}
 }
