@@ -161,12 +161,12 @@ public:
     virtual GObject *instantiate(const QDomElement &element) const = 0;
 
     const GObject *parent() const { return m_parent; }
-    void setParent(GObject *parent);               // parent==0L - no parent, parent==this - illegal
+    void setParent(GObject *parent) const;   // parent==0L - no parent, parent==this - illegal
 
     // These two methods are only implemented for "complex" objetcs!
     // The child is inserted at GObject::Position
     virtual const bool plugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
-    virtual const bool unplugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
+    virtual const bool unplugChild(GObject */*child*/) { return false; }
 
     // These methods are used to access the object's children
     // Implemented via QListIterator - Leaf classes don't override
@@ -263,7 +263,7 @@ protected:
 
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
-    GObject *m_parent;
+    mutable GObject *m_parent;
     int m_zoom;                                  // zoom value 100 -> 100% -> 1
     double m_angle;			         // angle (radians!)
 

@@ -32,8 +32,13 @@ GGroup::GGroup(const GGroup &rhs) : GObject(rhs), m_iterator(0L) {
 
     m_iterator=new QListIterator<GObject>(m_members);
 
-    for(const GObject *object=rhs.firstChild(); object!=0L; object=rhs.nextChild())
-	m_members.append(object->clone());
+    for(const GObject *object=rhs.firstChild(); object!=0L; object=rhs.nextChild()) {
+	const GObject *cloned=object->clone();
+	if(cloned!=0L) {
+	    cloned->setParent(this);
+	    m_members.append(cloned);
+	}
+    }
 }
 
 GGroup::GGroup(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()),
@@ -42,13 +47,20 @@ GGroup::GGroup(const QDomElement &element) : GObject(element.namedItem("gobject"
 	return;
 
     m_iterator=new QListIterator<GObject>(m_members);
+    static QString tagChildren=QString::fromLatin1("children");
 
-    QDomElement children=element.namedItem("children").toElement();
+    QDomElement children=element.namedItem(tagChildren).toElement();
+    if(children.isNull()) {
+	m_ok=false;
+	return;
+    }
     QDomElement e=children.firstChild().toElement();
     for( ; !e.isNull(); e=children.nextSibling().toElement()) {
 	const GObject *object=GObjectFactory::self()->create(e);
-	if(object->isOk())
+	if(object!=0L && object->isOk()) {
+	    object->setParent(this);
 	    m_members.append(object);
+	}
     }
 }
 
@@ -84,14 +96,35 @@ GObject *GGroup::instantiate(const QDomElement &element) const {
     return new GGroup(element);
 }
 
-const bool GGroup::plugChild(GObject */*child*/, const Position &/*pos*/) {
-    // TODO
-    return false;
+const bool GGroup::plugChild(GObject *child, const Position &pos) {
+
+    if(child==0L)
+	return false;
+
+    child->setParent(this);
+
+    if(pos==GObject::First)
+	m_members.prepend(child);
+    else if(pos==GObject::Last)
+	m_members.append(child);
+    else {
+	int index=m_members.findRef(m_iterator->current());
+	if(index!=-1)	
+	    m_members.insert(index, child);
+	else
+	    m_members.append(child);
+    }
+    m_boundingRectDirty=true;
+    return true;
 }
 
-const bool GGroup::unplugChild(GObject */*child*/, const Position &/*pos*/) {
-    // TODO
-    return false;
+const bool GGroup::unplugChild(GObject *child) {
+
+    if(child==0L)
+	return false;
+    child->setParent(0L);
+    m_boundingRectDirty=true;
+    return m_members.removeRef(child);
 }
 
 const GObject *GGroup::firstChild() const {
@@ -116,96 +149,227 @@ const GObject *GGroup::current() const {
     return m_iterator->current();
 }
 
-QDomElement GGroup::save(QDomDocument &/*doc*/) const {
-    // TODO - "children" !
-    return QDomElement();
+QDomElement GGroup::save(QDomDocument &doc) const {
+
+    QDomElement element=doc.createElement("ggroup");
+    QDomElement children=doc.createElement("children");
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	children.appendChild(it.current()->save(doc));
+
+    element.appendChild(children);
+    element.appendChild(GObject::save(doc));
+    return element;
 }
 
-void GGroup::draw(QPainter &/*p*/, QRegion &/*reg*/, const bool /*toPrinter*/) {
-    // TODO
+void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->draw(p, reg, toPrinter);	
 }
 
 void GGroup::drawHandles(QPainter &/*p*/) {
     // TODO
 }
 
-void GGroup::setZoom(const short &/*zoom*/) {
-    // TODO
+void GGroup::setZoom(const short &zoom) {
+
+    if(m_zoom==zoom)
+	return;
+    m_zoom=zoom;
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setZoom(zoom);
 }
 
-const GObject *GGroup::hit(const QPoint &/*p*/) const {
-    // TODO
+const GObject *GGroup::hit(const QPoint &p) const {
+
+    QListIterator<GObject> it(m_members);
+    it.toLast();
+    for( ; it!=0L; --it) {
+	if(it.current()->hit(p))
+	    return it.current();
+    }
+    if(boundingRect().contains(p))
+	return this;
     return 0L;
 }
 
-const bool GGroup::intersects(const QRect &/*r*/) const {
-    // TODO
+const bool GGroup::intersects(const QRect &r) const {
+
+    if(r.intersects(boundingRect()))
+	return true;
     return false;
 }
 
 const QRect &GGroup::boundingRect() const {
-    // TODO
+
+    if(!m_boundingRectDirty)
+	return m_boundingRect;
+
+    QListIterator<GObject> it(m_members);
+    m_boundingRect=it.current()->boundingRect();
+    ++it;
+    for( ; it!=0L; ++it) {
+	QRect r=it.current()->boundingRect();
+	if(r.top()<m_boundingRect.top())
+	    m_boundingRect.setTop(r.top());
+	if(r.left()<m_boundingRect.left())
+	    m_boundingRect.setLeft(r.left());
+	if(r.bottom()>m_boundingRect.bottom())
+	    m_boundingRect.setBottom(r.bottom());
+	if(r.right()>m_boundingRect.right())
+	    m_boundingRect.setRight(r.right());
+    }
+    m_boundingRectDirty=false;
     return m_boundingRect;
 }
 
 GObjectM9r *GGroup::createM9r(const GObjectM9r::Mode &/*mode*/) {
-    // TODO
+    // TODO - also the M9r :)
     return 0L;
 }
 
 const QPoint GGroup::origin() const {
-    // TODO
-    return m_boundingRect.topLeft();
+    return boundingRect().topLeft();
 }
 
-void GGroup::setOrigin(const QPoint &/*origin*/) {
-    // TODO
+void GGroup::setOrigin(const QPoint &o) {
+
+    int dx=o.x()-origin().x();
+    int dy=o.y()-origin().y();
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->move(dx, dy);
+    m_boundingRectDirty=true;
 }
 
-void GGroup::moveX(const int &/*dx*/) {
-    // TODO
+void GGroup::moveX(const int &dx) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->moveX(dx);
+    m_boundingRectDirty=true;
 }
 
-void GGroup::moveY(const int &/*dy*/) {
-    // TODO
+void GGroup::moveY(const int &dy) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->moveY(dy);
+    m_boundingRectDirty=true;
 }
 
-void GGroup::move(const int &/*dx*/, const int &/*dy*/) {
-    // TODO
+void GGroup::move(const int &dx, const int &dy) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->move(dx, dy);
+    m_boundingRectDirty=true;
 }
 
-void GGroup::rotate(const QPoint &/*center*/, const double &/*angle*/) {
-    // TODO
+void GGroup::rotate(const QPoint &center, const double &angle) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->rotate(center, angle);
+    m_angle+=angle;
+    m_boundingRectDirty=true;
 }
 
-void GGroup::setAngle(const double &/*angle*/) {
-    // TODO
+void GGroup::setAngle(const double &angle) {
+
+    if(m_angle==angle)
+	return;
+
+    m_angle=angle;
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setAngle(angle);
+    m_boundingRectDirty=true;
 }
 
-void GGroup::scale(const QPoint &/*origin*/, const double &/*xfactor*/, const double &/*yfactor*/) {
-    // TODO
+void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->scale(origin, xfactor, yfactor);
+    m_boundingRectDirty=true;
 }
 
-void GGroup::resize(const QRect &/*boundingRect*/) {
-    // TODO
+void GGroup::resize(const QRect &brect) {
+
+    int dx=brect.width()-boundingRect().width();
+    int dy=brect.height()-boundingRect().height();
+    double xfactor=static_cast<double>(dx)/static_cast<double>(boundingRect().width());
+    double yfactor=static_cast<double>(dy)/static_cast<double>(boundingRect().height());
+    scale(origin(), xfactor, yfactor);
+    move(dx, dy);
 }
 
-void GGroup::setState(const State /*state*/) {
-    // TODO
+void GGroup::setState(const State state) {
+
+    if(m_state==state)
+	return;
+    m_state=state;
+    if(state==GObject::Handles || state==GObject::Rot_Handles)
+	return;
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setState(state);
 }
 
-void GGroup::setFillStyle(const FillStyle &/*fillStyle*/) {
-    // TODO
+void GGroup::setFillStyle(const FillStyle &fillStyle) {
+
+    if(m_fillStyle==fillStyle)
+	return;
+    m_fillStyle=fillStyle;
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setFillStyle(fillStyle);
 }
 
-void GGroup::setBrush(const QBrush &/*brush*/) {
-    // TODO
+void GGroup::setBrush(const QBrush &brush) {
+
+    if(m_brush==brush)
+	return;
+    m_brush=brush;
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setBrush(brush);
 }
 
-void GGroup::setGradient(const Gradient &/*gradient*/) {
-    // TODO
+void GGroup::setGradient(const Gradient &gradient) {
+
+    if(m_gradient.ca==gradient.ca &&
+       m_gradient.cb==gradient.cb &&
+       m_gradient.type==gradient.type &&
+       m_gradient.xfactor==gradient.xfactor &&
+       m_gradient.yfactor==gradient.yfactor &&
+       m_gradient.ncols==gradient.ncols)
+	return;
+
+    m_gradient.ca=gradient.ca;
+    m_gradient.cb=gradient.cb;
+    m_gradient.type=gradient.type;
+    m_gradient.xfactor=gradient.xfactor;
+    m_gradient.yfactor=gradient.yfactor;
+    m_gradient.ncols=gradient.ncols;
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setGradient(gradient);
 }
 
-void GGroup::setPen(const QPen &/*pen*/) {
-    // TODO
+void GGroup::setPen(const QPen &pen) {
+    
+    if(m_pen==pen)
+	return;
+    m_pen=pen;
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setPen(pen);
 }

@@ -28,7 +28,7 @@ class GGroup : public GObject {
 
 public:
     GGroup(const QString &name=QString::null);
-    // Note: copying changes the iterator!
+    // Note: copying changes the iterator for both objects!
     GGroup(const GGroup &rhs);
     GGroup(const QDomElement &element);
 
@@ -41,7 +41,7 @@ public:
     virtual GObject *instantiate(const QDomElement &element) const;
 
     virtual const bool plugChild(GObject *child, const Position &pos=Current);
-    virtual const bool unplugChild(GObject *child, const Position &pos=Current);
+    virtual const bool unplugChild(GObject *child);
 
     virtual const GObject *firstChild() const;
     virtual const GObject *nextChild() const;

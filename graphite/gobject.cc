@@ -156,7 +156,7 @@ QDomElement GObject::save(QDomDocument &doc) const {
     return e;
 }
 
-void GObject::setParent(GObject *parent) {
+void GObject::setParent(GObject *parent) const {
 
     if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
 	m_parent=parent;
