@@ -2,7 +2,7 @@
  <PAPER format="5" width="240" height="180" orientation="0">
   <PAPERBORDERS left="0" top="0" right="0" bottom="0"/>
  </PAPER>
- <BACKGROUND rastX="10" rastY="10" xRnd="20" yRnd="20" bred="255" bgreen="255" bblue="255" sred="192" sgreen="192" sblue="192">
+ <BACKGROUND rastX="10" rastY="10" bred="255" bgreen="255" bblue="255">
   <PAGE>
    <BACKTYPE value="0"/>
    <BACKVIEW value="1"/>

@@ -20,7 +20,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
 	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
-	confpiedia.cc spacingdia.cc \
+	confpiedia.cc spacingdia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc \
@@ -29,7 +29,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
-	rotatecmd.cc lowraicmd.cc pievaluecmd.cc \
+	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc \
 	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
@@ -39,7 +39,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \
-		delpagedia.h inspagedia.h confpiedia.h spacingdia.h \
+		delpagedia.h inspagedia.h confpiedia.h spacingdia.h confrectdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h \
@@ -48,7 +48,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
-		rotatecmd.h lowraicmd.h pievaluecmd.h \
+		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h \
 		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
@@ -57,7 +57,8 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
-		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc spacingdia.moc \
+		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc \
+		spacingdia.moc confrectdia.moc \
 		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
 		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
 		kppixmapobject.moc kppieobject.moc \
@@ -66,7 +67,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
 		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
 		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc shadowcmd.moc \
-		rotatecmd.moc lowraicmd.moc pievaluecmd.moc \
+		rotatecmd.moc lowraicmd.moc pievaluecmd.moc rectvaluecmd.moc \
 		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
@@ -121,6 +122,7 @@ delpagedia.cc: delpagedia.moc
 inspagedia.cc: inspagedia.moc
 confpiedia.cc: confpiedia.moc
 spacingdia.cc: spacingdia.moc
+confrectdia.cc: confrectdia.moc
 
 kpobject.cc: kpobject.moc
 kplineobject.cc: kplineobject.moc
@@ -154,4 +156,5 @@ shadowcmd.cc: shadowcmd.moc
 rotatecmd.cc: rotatecmd.moc
 lowraicmd.cc: lowraicmd.moc
 pievaluecmd.cc: pievaluecmd.moc
+rectvaluecmd.cc: rectvaluecmd.moc
 commandhistory.cc: commandhistory.moc

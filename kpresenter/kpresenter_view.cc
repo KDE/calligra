@@ -69,6 +69,7 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   delPageDia = 0;
   insPageDia = 0;
   confPieDia = 0;
+  confRectDia = 0;
   spacingDia = 0;
   xOffset = 0;
   yOffset = 0;
@@ -92,6 +93,8 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   searchFirst = true;
   continuePres = false;
   exitPres = false;
+  rndX = 0;
+  rndY = 0;
 
   m_pKPresenterDoc = _doc;
   m_bKPresenterModified = true;
@@ -455,18 +458,8 @@ void KPresenterView::toolsLine()
 /*===================== insert rectangle ========================*/
 void KPresenterView::toolsRectangle()
 {
-  page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
-
-  KPoint pnt(QCursor::pos());
-
-  rb_rect->popup(pnt);
-
-//   QEvent ev(Event_Leave);
-//   QMouseEvent mev(Event_MouseButtonRelease,
-// 		  QCursor::pos(),LeftButton,LeftButton);
-//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Rectangle),&ev);
-//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Rectangle),&mev);
+  page->setToolEditMode(INS_RECT);
 }
 
 /*===================== insert circle or ellipse ================*/
@@ -573,6 +566,27 @@ void KPresenterView::extraConfigPie()
   QObject::connect(confPieDia,SIGNAL(confPieDiaOk()),this,SLOT(confPieOk()));
   page->setToolEditMode(TEM_MOUSE);
   confPieDia->show();
+}
+
+/*===============================================================*/
+void KPresenterView::extraConfigRect()
+{
+  if (confRectDia)
+    {
+      QObject::disconnect(confRectDia,SIGNAL(confRectDiaOk()),this,SLOT(confRectOk()));
+      confRectDia->close();
+      delete confRectDia;
+      confRectDia = 0;
+    }
+
+  confRectDia = new ConfRectDia(0,"ConfRectDia");
+  confRectDia->setMaximumSize(confRectDia->width(),confRectDia->height());
+  confRectDia->setMinimumSize(confRectDia->width(),confRectDia->height());
+  confRectDia->setRnds(m_pKPresenterDoc->getRndX(rndX),m_pKPresenterDoc->getRndY(rndY));
+  confRectDia->setCaption(i18n("KPresenter - Configure Rectangle"));
+  QObject::connect(confRectDia,SIGNAL(confRectDiaOk()),this,SLOT(confRectOk()));
+  page->setToolEditMode(TEM_MOUSE);
+  confRectDia->show();
 }
 
 /*========================== extra raise ========================*/
@@ -712,9 +726,6 @@ void KPresenterView::extraOptions()
   optionDia->setRastX(kPresenterDoc()->getRastX());
   optionDia->setRastY(kPresenterDoc()->getRastY());
   optionDia->setBackCol(kPresenterDoc()->getTxtBackCol());
-  optionDia->setSelCol(kPresenterDoc()->getTxtSelCol());
-  optionDia->setRndX(kPresenterDoc()->getRndX());
-  optionDia->setRndY(kPresenterDoc()->getRndY());
   optionDia->show();
 }
 
@@ -1575,12 +1586,6 @@ void KPresenterView::optionOk()
   kPresenterDoc()->setRasters(optionDia->getRastX(),optionDia->getRastY(),false);
 
   kPresenterDoc()->setTxtBackCol(optionDia->getBackCol());
-  kPresenterDoc()->setTxtSelCol(optionDia->getSelCol());
-  if (optionDia->getRndX() < 1)
-    optionDia->setRndX(1);
-  if (optionDia->getRndY() < 1)
-    optionDia->setRndY(1);
-  kPresenterDoc()->setRnds(optionDia->getRndX(),optionDia->getRndY(),false);
 
   kPresenterDoc()->replaceObjs();
   kPresenterDoc()->repaint(false);
@@ -1717,6 +1722,16 @@ void KPresenterView::confPieOk()
 }
 
 /*================================================================*/
+void KPresenterView::confRectOk()
+{
+  if (!m_pKPresenterDoc->setRectSettings(confRectDia->getRndX(),confRectDia->getRndY()))
+    {
+      rndX = confRectDia->getRndX();
+      rndY = confRectDia->getRndY();
+    }
+}
+
+/*================================================================*/
 void KPresenterView::spacingOk(int _lineSpacing,int _distBefore,int _distAfter)
 {
   if (page->kTxtObj())
@@ -1831,22 +1846,6 @@ void KPresenterView::alignChanged(TxtParagraph::HorzAlign align)
 	default: break;
 	}
     }
-}
-
-/*===================== insert normal rect  =====================*/
-void KPresenterView::toolsNormRect()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_NRECT);
-  //m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,fillType,gColor1,gColor2,gType,xOffset,yOffset);
-}
-
-/*===================== insert round rect =======================*/
-void KPresenterView::toolsRoundRect()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_RRECT);
-  //m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*======================== set pres pen width 1 =================*/
@@ -2209,22 +2208,6 @@ void KPresenterView::presPen10idl()
 void KPresenterView::presPenColoridl()
 {
   presPenColor();
-}
-
-/*===================== insert normal rect  =====================*/
-void KPresenterView::toolsNormRectidl()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_NRECT);
-  //m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,fillType,gColor1,gColor2,gType,xOffset,yOffset);
-}
-
-/*===================== insert round rect =======================*/
-void KPresenterView::toolsRoundRectidl()
-{
-  page->deSelectAllObj();
-  page->setToolEditMode(INS_RRECT);
-  //m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*=========================== search =============================*/
@@ -2674,17 +2657,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/rectangle.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_vMenuTools->insertItem12( pix, i18n("&Rectangle"), m_vMenuTools_Rectangle, -1, -1 );
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/rectangle2.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_RectangleNormal = m_vMenuTools_Rectangle->insertItem2(pix, this,"toolsNormRectidl", 0);
-
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/rectangleRound.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_RectangleRound = m_vMenuTools_Rectangle->insertItem2(pix, this,"toolsRoundRectidl", 0);
+  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix, i18n("&Rectangle"), this,"toolsRectangle", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/circle.xpm";
@@ -2707,7 +2680,6 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", 0, -1, -1 );
 
   m_vMenuTools->setCheckable( true );
-  m_vMenuTools_Rectangle->setCheckable( true );
 
   // MENU Text
   _menubar->insertMenu( i18n( "T&ext" ), m_vMenuText, -1, -1 );
@@ -2782,6 +2754,11 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   tmp += "/kpresenter/toolbar/edit_pie.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Pie = m_vMenuExtra->insertItem6(pix, i18n("&Configure Pie/Arc/Chord..."), this,"extraConfigPie", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle2.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuExtra_Rect = m_vMenuExtra->insertItem6(pix, i18n("C&onfigure Rectangle..."), this,"extraConfigRect", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/raise.xpm";
@@ -2966,17 +2943,6 @@ void KPresenterView::setupPopupMenus()
   QString pixdir;
   QPixmap pixmap;
   pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");  
-
-  // create right button rectangle menu
-  rb_rect = new QPopupMenu();
-  CHECK_PTR(rb_rect);
-  pixmap.load(pixdir+"rectangle2.xpm");
-  rb_rect->insertItem(pixmap,this,SLOT(toolsNormRect()));
-  rb_rect->insertSeparator( -1 );
-  pixmap.load(pixdir+"rectangleRound.xpm");
-  rb_rect->insertItem(pixmap,this,SLOT(toolsRoundRect()));
-  rb_rect->setMouseTracking(true);
-  rb_rect->setCheckable(false);
 
   // create right button pen menu
   rb_pen_width = new QPopupMenu();
@@ -3393,7 +3359,14 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/edit_pie.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonExtra_Style = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigPie", true, i18n("Configure Pie"), -1 );
+  m_idButtonExtra_Pie = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigPie", true, i18n("Configure Pie"), -1 );
+
+  // rect
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle2.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true, 
+							 i18n("Configure Rectangle"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
 
   // raise
@@ -3644,13 +3617,11 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 
   m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Line,false);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Rectangle,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Circle,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Pie,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Text,false);
   m_vMenuTools->setItemChecked(m_idMenuTools_Part,false);
-
-  m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleNormal,false);
-  m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleRound,false);
 
   switch (toolEditMode)
     {
@@ -3664,14 +3635,9 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 	m_vMenuTools->setItemChecked(m_idMenuTools_Line,true);
 	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
       } break;
-    case INS_NRECT: 
+    case INS_RECT: 
       {
-	m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleNormal,true);
-	m_vToolBarTools->setButton(ID_TOOL_RECT,true);
-      } break;
-    case INS_RRECT:
-      {
-	m_vMenuTools_Rectangle->setItemChecked(m_idMenuTools_RectangleRound,true);
+	m_vMenuTools->setItemChecked(m_idMenuTools_Rectangle,true);
 	m_vToolBarTools->setButton(ID_TOOL_RECT,true);
       } break;
     case INS_ELLIPSE:

@@ -54,28 +54,20 @@ public:
   void setRastX(int rx) {eRastX->setText(QString().setNum(rx));}
   void setRastY(int ry) {eRastY->setText(QString().setNum(ry));}
   void setBackCol(const QColor &c) {bBackCol->setColor(c);}
-  void setSelCol(const QColor &c) {bSelCol->setColor(c);}
-  void setRndX(int rx) {eRndX->setText(QString().setNum(rx));}
-  void setRndY(int ry) {eRndY->setText(QString().setNum(ry));}
 
   // get values
   int getRastX() {return QString(eRastX->text()).toInt();}
   int getRastY() {return QString(eRastY->text()).toInt();}
   QColor getBackCol() {return bBackCol->color();}
-  QColor getSelCol() {return bSelCol->color();}
-  int getRndX() {return QString(eRndX->text()).toInt();}
-  int getRndY() {return QString(eRndY->text()).toInt();}
-
 
 private:
 
   // dialog objecsts
   QWidget *general,*objects;
-  QLabel *lRastX,*lRastY,*lBackCol,*lSelCol;
-  QLabel *lRndX,*lRndY;
-  KRestrictedLine *eRastX,*eRastY,*eRndX,*eRndY;
-  QGroupBox *txtObj,*rect;
-  KColorButton *bBackCol,*bSelCol;
+  QLabel *lRastX,*lRastY,*lBackCol;
+  KRestrictedLine *eRastX,*eRastY;
+  QGroupBox *txtObj;
+  KColorButton *bBackCol;
 
 };
 #endif //OPTIONDIA_H

@@ -79,6 +79,7 @@ class Page;
 #include "setbackcmd.h"
 #include "pgconfcmd.h"
 #include "confpiedia.h"
+#include "confrectdia.h"
 #include "spacingdia.h"
 #include "pglayoutcmd.h"
 #include "shadowcmd.h"
@@ -168,12 +169,10 @@ public:
   virtual void toolsText();
   virtual void toolsObject();
 
-  virtual void toolsNormRectidl();
-  virtual void toolsRoundRectidl();
-
   // extra menu
   virtual void extraPenBrush();
   virtual void extraConfigPie();
+  virtual void extraConfigRect();
   virtual void extraRaise();
   virtual void extraLower();
   virtual void extraRotate();
@@ -310,6 +309,9 @@ public:
 
   void setTool(ToolEditMode toolEditMode);
 
+  int getRndX() { return rndX; }
+  int getRndY() { return rndY; }
+
 public slots:
 
   // Document signals
@@ -336,6 +338,7 @@ protected slots:
   void delPageOk(int,DelPageMode);
   void insPageOk(int,InsPageMode,InsertPos);
   void confPieOk();
+  void confRectOk();
   void spacingOk(int,int,int);
 
   // scrolling
@@ -347,8 +350,6 @@ protected slots:
   void colorChanged(QColor*);
   void alignChanged(TxtParagraph::HorzAlign);
 
-  void toolsNormRect();
-  void toolsRoundRect();
   void extraLineBeginNormal();
   void extraLineBeginArrow();
   void extraLineBeginRect();
@@ -465,9 +466,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuTools;
   CORBA::Long m_idMenuTools_Mouse;
   CORBA::Long m_idMenuTools_Line;
-  OpenPartsUI::Menu_var m_vMenuTools_Rectangle;
-  CORBA::Long m_idMenuTools_RectangleNormal;
-  CORBA::Long m_idMenuTools_RectangleRound;
+  CORBA::Long m_idMenuTools_Rectangle;
   CORBA::Long m_idMenuTools_Circle;
   CORBA::Long m_idMenuTools_Pie;
   CORBA::Long m_idMenuTools_Text;
@@ -493,6 +492,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuExtra;
   CORBA::Long m_idMenuExtra_PenBrush;
   CORBA::Long m_idMenuExtra_Pie;
+  CORBA::Long m_idMenuExtra_Rect;
   CORBA::Long m_idMenuExtra_Raise;
   CORBA::Long m_idMenuExtra_Lower;
   CORBA::Long m_idMenuExtra_Rotate;
@@ -541,7 +541,7 @@ protected:
   CORBA::Long m_idMenuHelp_Contents;
 
   // right button popup menus
-  QPopupMenu *rb_rect,*rb_pen,*rb_pen_width,*rb_oalign,*rb_lbegin,*rb_lend;
+  QPopupMenu *rb_pen,*rb_pen_width,*rb_oalign,*rb_lbegin,*rb_lend;
 
   int W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,P_COL;
 
@@ -593,6 +593,7 @@ protected:
   OpenPartsUI::ToolBar_var m_vToolBarExtra;
   CORBA::Long m_idButtonExtra_Style;
   CORBA::Long m_idButtonExtra_Pie;
+  CORBA::Long m_idButtonExtra_Rect;
   CORBA::Long m_idButtonExtra_Raise;
   CORBA::Long m_idButtonExtra_Lower;
   CORBA::Long m_idButtonExtra_Rotate;
@@ -637,6 +638,7 @@ protected:
   DelPageDia *delPageDia;
   InsPageDia *insPageDia;
   ConfPieDia *confPieDia;
+  ConfRectDia *confRectDia;
   SpacingDia *spacingDia;
 
   // default pen and brush
@@ -649,6 +651,7 @@ protected:
   FillType fillType;
   PieType pieType;
   int pieLength,pieAngle;
+  int rndX,rndY;
 
   // the page
   Page *page;

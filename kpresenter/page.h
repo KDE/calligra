@@ -162,7 +162,6 @@ protected:
   unsigned int rastX() {return view->kPresenterDoc()->rastX();}
   unsigned int rastY() {return view->kPresenterDoc()->rastY();}
   QColor txtBackCol() {return view->kPresenterDoc()->txtBackCol();}
-  QColor txtSelCol() {return view->kPresenterDoc()->txtSelCol();}
   bool spInfinitLoop() {return view->kPresenterDoc()->spInfinitLoop();}
   bool spManualSwitch() {return view->kPresenterDoc()->spManualSwitch();}
   KRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true) 
@@ -187,8 +186,7 @@ protected:
   void insertLineV(KRect);
   void insertLineD1(KRect);
   void insertLineD2(KRect);
-  void insertNRect(KRect);
-  void insertRRect(KRect);
+  void insertRect(KRect);
   void insertEllipse(KRect);
   void insertPie(KRect);
   void insertObject(KRect);
@@ -196,7 +194,7 @@ protected:
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4,*alignMenu5;
-  QPopupMenu *pageMenu,*pieMenu;
+  QPopupMenu *pageMenu,*pieMenu,*rectMenu,*alignMenu6;
   bool mousePressed;              
   ModifyType modType;                    
   unsigned int oldMx,oldMy;                
@@ -229,6 +227,7 @@ private slots:
   void toAlignChanged(TxtParagraph::HorzAlign a) { emit alignChanged(a); } 
   void objProperties();
   void objConfigPie() {view->extraConfigPie();}
+  void objConfigRect() {view->extraConfigRect();}
   void assignEffect() {view->screenAssignEffect();}
   void drawingMode()
     {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}

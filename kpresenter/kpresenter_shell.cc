@@ -101,6 +101,7 @@ void KPresenterShell::setDocument( KPresenterDoc *_doc )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 }
 
 bool KPresenterShell::newDocument()
@@ -141,6 +142,7 @@ bool KPresenterShell::newDocument()
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 
   cerr << "*2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
@@ -186,6 +188,7 @@ bool KPresenterShell::openDocument( const char *_url, const char *_format )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 
   m_pDoc->setURL(_url);
   

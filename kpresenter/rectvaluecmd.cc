@@ -10,20 +10,20 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Pie Value Command                                      */
+/* Module: Rect Value Command                                     */
 /******************************************************************/
 
 #include "kpresenter_doc.h"
-#include "pievaluecmd.h"
-#include "pievaluecmd.moc"
+#include "rectvaluecmd.h"
+#include "rectvaluecmd.moc"
 
 /******************************************************************/
-/* Class: PieValueCmd                                             */
+/* Class: RectValueCmd                                            */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-PieValueCmd::PieValueCmd(QString _name,QList<PieValues> &_oldValues,PieValues _newValues,
-			 QList<KPObject> &_objects,KPresenterDoc *_doc)
+RectValueCmd::RectValueCmd(QString _name,QList<RectValues> &_oldValues,RectValues _newValues,
+			   QList<KPObject> &_objects,KPresenterDoc *_doc)
   : Command(_name), oldValues(_oldValues), objects(_objects)
 {
   objects.setAutoDelete(false);
@@ -36,7 +36,7 @@ PieValueCmd::PieValueCmd(QString _name,QList<PieValues> &_oldValues,PieValues _n
 }
 
 /*======================== destructor ============================*/
-PieValueCmd::~PieValueCmd()
+RectValueCmd::~RectValueCmd()
 {
   for (unsigned int i = 0;i < objects.count();i++)
     objects.at(i)->decCmdRef();
@@ -45,25 +45,19 @@ PieValueCmd::~PieValueCmd()
 }
 
 /*====================== execute =================================*/
-void PieValueCmd::execute()
+void RectValueCmd::execute()
 {
   for (unsigned int i = 0;i < objects.count();i++)
-    {
-      dynamic_cast<KPPieObject*>(objects.at(i))->setPieType(newValues.pieType);
-      dynamic_cast<KPPieObject*>(objects.at(i))->setPieAngle(newValues.pieAngle);
-      dynamic_cast<KPPieObject*>(objects.at(i))->setPieLength(newValues.pieLength);
-    }
+    dynamic_cast<KPRectObject*>(objects.at(i))->setRnds(newValues.xRnd,newValues.yRnd);
+
   doc->repaint(false);
 }
 
 /*====================== unexecute ===============================*/
-void PieValueCmd::unexecute()
+void RectValueCmd::unexecute()
 {
   for (unsigned int i = 0;i < objects.count();i++)
-    {
-      dynamic_cast<KPPieObject*>(objects.at(i))->setPieType(oldValues.at(i)->pieType);
-      dynamic_cast<KPPieObject*>(objects.at(i))->setPieAngle(oldValues.at(i)->pieAngle);
-      dynamic_cast<KPPieObject*>(objects.at(i))->setPieLength(oldValues.at(i)->pieLength);
-    }
+    dynamic_cast<KPRectObject*>(objects.at(i))->setRnds(oldValues.at(i)->xRnd,oldValues.at(i)->yRnd);
+
   doc->repaint(false);
 }

@@ -75,6 +75,7 @@ class KPresenterView;
 #include "chgpixcmd.h"
 #include "lowraicmd.h"
 #include "pievaluecmd.h"
+#include "rectvaluecmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>
@@ -208,6 +209,7 @@ public:
   bool setLineBegin(LineEnd);
   bool setLineEnd(LineEnd);
   bool setPieSettings(PieType,int,int);
+  bool setRectSettings(int,int);
   void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);
   BackView getBackView(unsigned int);
@@ -226,6 +228,8 @@ public:
   QColor getGColor2(QColor);
   BCType getGType(BCType);
   PieType getPieType(PieType);
+  int getRndX(int);
+  int getRndY(int);
   int getPieLength(int);
   int getPieAngle(int);
 
@@ -239,7 +243,7 @@ public:
   void changePicture(QString,int,int);
   void changeClipart(QString,int,int);
   void insertLine(KRect,QPen,LineEnd,LineEnd,LineType,int,int);
-  void insertRectangle(KRect,QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
+  void insertRectangle(KRect,QPen,QBrush,FillType,QColor,QColor,BCType,int,int,int,int);
   void insertCircleOrEllipse(KRect,QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
   void insertPie(KRect,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
@@ -259,16 +263,12 @@ public:
 
   // get - set options for editmodi
   QColor txtBackCol() {return _txtBackCol;}
-  QColor txtSelCol() {return _txtSelCol;}
   QColor getTxtBackCol() {return _txtBackCol;}
-  QColor getTxtSelCol() {return _txtSelCol;}
   void setTxtBackCol(QColor c) {_otxtBackCol = _txtBackCol; _txtBackCol = c;}
-  void setTxtSelCol(QColor c) {_otxtSelCol = _txtSelCol; _txtSelCol = c;}
 
   // get - set roundedness
   unsigned int getRndX() {return _xRnd;}
   unsigned int getRndY() {return _yRnd;}
-  void setRnds(unsigned int rx,unsigned int ry,bool _replace = true);
 
   // get values for screenpresentations
   bool spInfinitLoop() {return _spInfinitLoop;}
@@ -410,14 +410,12 @@ protected:
 
   // options for editmode
   QColor _txtBackCol;
-  QColor _txtSelCol;
   QColor _otxtBackCol;
-  QColor _otxtSelCol;
 
   bool _clean;
   int objStartY,objStartNum;
 
-  int _orastX,_orastY,_oxRnd,_oyRnd;
+  int _orastX,_orastY;
   PresSpeed presSpeed;
 
   QPen _presPen;

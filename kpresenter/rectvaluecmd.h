@@ -10,50 +10,50 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Set options Command (header)                           */
+/* Module: Rect Value Command (header)                            */
 /******************************************************************/
 
-#ifndef setoptionscmd_h
-#define setoptionscmd_h
+#ifndef rectvaluecmd_h
+#define rectvaluecmd_h
 
-#include <kpoint.h>
-#include <krect.h>
-#include <ksize.h>
+#include <qlist.h>
 #include <qcolor.h>
 
 #include "command.h"
 #include "kpobject.h"
+#include "kppieobject.h"
 
 class KPresenterDoc;
 
 /******************************************************************/
-/* Class: SetOptionsCmd                                           */
+/* Class: RectValueCmd                                            */
 /******************************************************************/
 
-class SetOptionsCmd : public Command
+class RectValueCmd : public Command
 {
   Q_OBJECT
 
 public:
-  SetOptionsCmd(QString _name,QList<KPoint> &_diffs,QList<KPObject> &_objects,
-		int _rastX,int _rastY,int _orastX,int _orastY,
-		QColor _txtBackCol,QColor _otxtBackCol,KPresenterDoc *_doc);
-  ~SetOptionsCmd();
+  struct RectValues
+  {
+    int xRnd,yRnd;
+  };
+
+  RectValueCmd(QString _name,QList<RectValues> &_oldValues,RectValues _newValues,
+	       QList<KPObject> &_objects,KPresenterDoc *_doc);
+  ~RectValueCmd();
   
   virtual void execute();
   virtual void unexecute();
 
 protected:
-  SetOptionsCmd()
+  RectValueCmd()
     {;}
 
-  QList<KPoint> diffs;
-  QList<KPObject> objects;
-  int rastX,rastY;
-  int orastX,orastY;
   KPresenterDoc *doc;
-  QColor txtBackCol;
-  QColor otxtBackCol;
+  QList<RectValues> oldValues;
+  QList<KPObject> objects;
+  RectValues newValues;
 
 };
 

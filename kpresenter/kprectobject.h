@@ -31,7 +31,7 @@ class KPRectObject : public KPObject
 
 public:
   KPRectObject();
-  KPRectObject(QPen _pen,QBrush _brush,RectType _rectType,FillType _fillType,
+  KPRectObject(QPen _pen,QBrush _brush,FillType _fillType,
 	       QColor _gColor1,QColor _gColor2,BCType _gType,int _xRnd,int _yRnd);
   ~KPRectObject()
     { if (gradient) delete gradient; }
@@ -43,8 +43,6 @@ public:
     { pen = _pen; }
   virtual void setBrush(QBrush _brush)
     { brush = _brush; }
-  virtual void setRectType(RectType _rectType)
-    { rectType = _rectType; }
   virtual void setRnds(int _xRnd,int _yRnd)
     { xRnd = _xRnd; yRnd = _yRnd; }
   virtual void setFillType(FillType _fillType);
@@ -61,8 +59,6 @@ public:
     { return pen; } 
   virtual QBrush getBrush()
     { return brush; } 
-  virtual RectType getRectType()
-    { return rectType; }
   virtual void getRnds(int &_xRnd,int &_yRnd)
     { _xRnd = xRnd; _yRnd = yRnd; }
   virtual FillType getFillType()
@@ -84,7 +80,6 @@ protected:
 
   QPen pen;
   QBrush brush;
-  RectType rectType;
   int xRnd,yRnd;
   QColor gColor1,gColor2;
   BCType gType;

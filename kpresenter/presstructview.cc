@@ -327,6 +327,8 @@ void PresStructViewer::setupToolBar()
   toolbar->insertButton(QPixmap(pixdir + "delete.xpm"),B_DELETE,SIGNAL(clicked()),this,SLOT(slotDelete()),false,i18n("Delete"));
   toolbar->insertButton(QPixmap(pixdir + "edit_text.xpm"),B_EDIT,SIGNAL(clicked()),this,SLOT(slotEdit()),false,i18n("Edit Text"));
   toolbar->insertButton(QPixmap(pixdir + "edit_pie.xpm"),B_EDIT_PIE,SIGNAL(clicked()),this,SLOT(slotEditPie()),false,i18n("Configure Pie"));
+  toolbar->insertButton(QPixmap(pixdir + "rectangle2.xpm"),B_EDIT_RECT,SIGNAL(clicked()),this,SLOT(slotEditRect()),
+			false,i18n("Configure Rectangle"));
   toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/fileopen.xpm"),B_CFILEN,
 			SIGNAL(clicked()),this,SLOT(slotChangeFilename()),false,i18n("Change Filename"));
 
@@ -503,19 +505,16 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 				 list->count() - 1,1);
 	  }
 
-	if (dynamic_cast<KPRectObject*>(_obj)->getRectType() == RT_ROUND)
-	  {
-	    int rndx,rndy;
-	    dynamic_cast<KPRectObject*>(_obj)->getRnds(rndx,rndy);
+	int rndx,rndy;
+	dynamic_cast<KPRectObject*>(_obj)->getRnds(rndx,rndy);
 	    
-	    list->appendItem(i18n("Roundedness X"));
-	    str.sprintf("%d",rndx);
-	    list->changeItemPart(str,list->count() - 1,1);
+	list->appendItem(i18n("Roundedness X"));
+	str.sprintf("%d",rndx);
+	list->changeItemPart(str,list->count() - 1,1);
 	    
-	    list->appendItem(i18n("Roundedness Y"));
-	    str.sprintf("%d",rndy);
-	    list->changeItemPart(str,list->count() - 1,1);
-	  }
+	list->appendItem(i18n("Roundedness Y"));
+	str.sprintf("%d",rndy);
+	list->changeItemPart(str,list->count() - 1,1);
       } break;
     case OT_ELLIPSE:
       {
@@ -736,6 +735,8 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
     toolbar->setItemEnabled(B_STYLE,true);
   if (_obj->getType() == OT_PIE)
     toolbar->setItemEnabled(B_EDIT_PIE,true);
+  if (_obj->getType() == OT_RECT)
+    toolbar->setItemEnabled(B_EDIT_RECT,true);
 
   toolbar->setItemEnabled(B_ROTATE,true);
   toolbar->setItemEnabled(B_SHADOW,true);
@@ -853,6 +854,12 @@ void PresStructViewer::slotEditPie()
 }
 
 /*================================================================*/
+void PresStructViewer::slotEditRect()
+{
+  view->extraConfigRect();
+}
+
+/*================================================================*/
 void PresStructViewer::slotBackground()
 {
   view->extraBackground();
@@ -893,4 +900,5 @@ void PresStructViewer::disableAllFunctions()
   toolbar->setItemEnabled(B_CPAGES,false);
   toolbar->setItemEnabled(B_CFILEN,false);
   toolbar->setItemEnabled(B_EDIT_PIE,false);
+  toolbar->setItemEnabled(B_EDIT_RECT,false);
 }

@@ -294,6 +294,16 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  mousePressed = false;
 		  modType = MT_NONE;
 		}
+	      else if (kpobject->getType() == OT_RECT)
+		{
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
+		    deSelectAllObj();
+		  selectObj(kpobject);
+		  KPoint pnt = QCursor::pos();
+		  rectMenu->popup(pnt);
+		  mousePressed = false;
+		  modType = MT_NONE;
+		}
 	      else
 		{
 		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
@@ -613,11 +623,8 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	      insertLineD2(insRect.normalize());
 	  }
       } break;
-    case INS_NRECT:
-      if (insRect.width() > 0 && insRect.height() > 0) insertNRect(insRect);
-      break;
-    case INS_RRECT:
-      if (insRect.width() > 0 && insRect.height() > 0) insertRRect(insRect);
+    case INS_RECT:
+      if (insRect.width() > 0 && insRect.height() > 0) insertRect(insRect);
       break;
     case INS_ELLIPSE:
       if (insRect.width() > 0 && insRect.height() > 0) insertEllipse(insRect);
@@ -771,7 +778,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		oldMx = e->x();
 		oldMy = e->y();
 	      } break;
-	    case INS_TEXT: case INS_NRECT: case INS_OBJECT:
+	    case INS_TEXT: case INS_OBJECT:
 	      {
 		QPainter p(this);
 		p.setPen(QPen(black,1,SolidLine));
@@ -797,17 +804,17 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		p.drawEllipse(insRect);
 		p.end();
 	      } break;
-	    case INS_RRECT:
+	    case INS_RECT:
 	      {
 		QPainter p(this);
 		p.setPen(QPen(black,1,SolidLine));
 		p.setBrush(NoBrush);
 		p.setRasterOp(NotROP);
 		if (insRect.width() != 0 && insRect.height() != 0)
-		  p.drawRoundRect(insRect,view->kPresenterDoc()->getRndX(),view->kPresenterDoc()->getRndY());
+		  p.drawRoundRect(insRect,view->getRndX(),view->getRndY());
 		insRect.setRight(((e->x() + diffx()) / rastX()) * rastX() - diffx());
 		insRect.setBottom(((e->y() + diffy()) / rastY()) * rastY() - diffy());
-		p.drawRoundRect(insRect,view->kPresenterDoc()->getRndX(),view->kPresenterDoc()->getRndY());
+		p.drawRoundRect(insRect,view->getRndX(),view->getRndY());
 		p.end();
 	      } break;
 	    case INS_LINE:
@@ -1180,6 +1187,29 @@ void Page::setupMenus()
   alignMenu5->setMouseTracking(true);
   alignMenu5->setCheckable(false);
 
+  pixdir = KApplication::kde_datadir();
+  alignMenu6 = new QPopupMenu();
+  CHECK_PTR(alignMenu6);
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoleft.xpm");
+  alignMenu6->insertItem(pixmap,this,SLOT(alignObjLeft()));
+  alignMenu6->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterh.xpm");
+  alignMenu6->insertItem(pixmap,this,SLOT(alignObjCenterH()));
+  alignMenu6->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoright.xpm");
+  alignMenu6->insertItem(pixmap,this,SLOT(alignObjRight()));
+  alignMenu6->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aotop.xpm");
+  alignMenu6->insertItem(pixmap,this,SLOT(alignObjTop()));
+  alignMenu6->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterv.xpm");
+  alignMenu6->insertItem(pixmap,this,SLOT(alignObjCenterV()));
+  alignMenu6->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aobottom.xpm");
+  alignMenu6->insertItem(pixmap,this,SLOT(alignObjBottom()));
+  alignMenu6->setMouseTracking(true);
+  alignMenu6->setCheckable(false);
+
   pixdir = KApplication::kde_toolbardir();
 
   // create right button graph menu 
@@ -1209,6 +1239,36 @@ void Page::setupMenus()
   pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
   graphMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu1);
   graphMenu->setMouseTracking(true);
+
+  // create right button rect menu 
+  rectMenu = new QPopupMenu();
+  CHECK_PTR(rectMenu);
+  pixmap.load(pixdir+"/editcut.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
+  pixmap.load(pixdir+"/editcopy.xpm");
+  rectMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
+//   pixmap.load(pixdir+"/editpaste.xpm");
+//   rectMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+  pixdir = KApplication::kde_datadir();
+  pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
+  rectMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/shadow.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Shadow..."),this,SLOT(shadowObjs()));
+  rectMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/style.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Properties..."),this,SLOT(objProperties()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/rectangle2.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Configure Rectangle..."),this,SLOT(objConfigRect()));
+  rectMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  rectMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
+  rectMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu6);
+  rectMenu->setMouseTracking(true);
 
   // create right button pie menu 
   pieMenu = new QPopupMenu();
@@ -2631,19 +2691,11 @@ void Page::insertLineD2(KRect _r)
 }
 
 /*================================================================*/
-void Page::insertNRect(KRect _r)
+void Page::insertRect(KRect _r)
 {
-  view->kPresenterDoc()->insertRectangle(_r,view->getPen(),view->getBrush(),RT_NORM,
-					 view->getFillType(),view->getGColor1(),view->getGColor2(),
-					 view->getGType(),diffx(),diffy());
-}
-
-/*================================================================*/
-void Page::insertRRect(KRect _r)
-{
-  view->kPresenterDoc()->insertRectangle(_r,view->getPen(),view->getBrush(),RT_ROUND,
-					 view->getFillType(),view->getGColor1(),view->getGColor2(),
-					 view->getGType(),diffx(),diffy());
+  view->kPresenterDoc()->insertRectangle(_r,view->getPen(),view->getBrush(),view->getFillType(),
+					 view->getGColor1(),view->getGColor2(),view->getGType(),view->getRndX(),view->getRndY(),
+					 diffx(),diffy());
 }
 
 /*================================================================*/

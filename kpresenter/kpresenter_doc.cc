@@ -73,12 +73,8 @@ KPresenterDoc::KPresenterDoc()
   _yRnd = 20;
   _orastX = 10;
   _orastY = 10;
-  _oxRnd = 20;
-  _oyRnd = 20;
   _txtBackCol = lightGray;
-  _txtSelCol = black;
   _otxtBackCol = lightGray;
-  _otxtSelCol = black;
   _pageLayout.format = PG_SCREEN;
   _pageLayout.orientation = PG_PORTRAIT;
   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -103,58 +99,6 @@ KPresenterDoc::KPresenterDoc()
 
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
-
-/*====================== constructor =============================*/
-// KPresenterDoc::KPresenterDoc(const CORBA::BOA::ReferenceData &_refdata)
-//   : KPresenter::KPresenterDocument_skel(_refdata), _pixmapCollection(), _gradientCollection(), _commands()
-// {
-//   ADD_INTERFACE("IDL:OPParts/Print:1.0")
-//   // Use CORBA mechanism for deleting views
-//   m_lstViews.setAutoDelete(false);
-//   m_lstChildren.setAutoDelete(true);
-
-//   m_bModified = false;
-
-//   // init
-//   _objectList.setAutoDelete(false);
-//   _backgroundList.setAutoDelete(true);
-//   _spInfinitLoop = false;
-//   _spManualSwitch = true;
-//   _rastX = 20;
-//   _rastY = 20;
-//   _xRnd = 20;
-//   _yRnd = 20;
-//   _orastX = 10;
-//   _orastY = 10;
-//   _oxRnd = 20;
-//   _oyRnd = 20;
-//   _txtBackCol = white;
-//   _txtSelCol = lightGray;
-//   _otxtBackCol = white;
-//   _otxtSelCol = lightGray;
-//   _pageLayout.format = PG_SCREEN;
-//   _pageLayout.orientation = PG_PORTRAIT;
-//   _pageLayout.width = PG_SCREEN_WIDTH;
-//   _pageLayout.height = PG_SCREEN_HEIGHT;
-//   _pageLayout.left = 0;
-//   _pageLayout.right = 0;
-//   _pageLayout.top = 0;
-//   _pageLayout.bottom = 0;
-//   _pageLayout.unit = PG_MM;
-//   _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
-//   _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
-//   _pageLayout.ptLeft = 0;
-//   _pageLayout.ptRight = 0;
-//   _pageLayout.ptTop = 0;
-//   _pageLayout.ptBottom = 0;
-//   setPageLayout(_pageLayout,0,0);
-//   objStartY = 0;
-//   insertNewTemplate(0,0,true);
-//   _presPen = QPen(red,3,SolidLine);
-//   presSpeed = PS_NORMAL;
-
-//   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
-// }
 
 /*====================== destructor ==============================*/
 KPresenterDoc::~KPresenterDoc()
@@ -243,9 +187,7 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
   out << etag << "</PAPER>" << endl;
   
   out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\""
-      << _rastY << "\" xRnd=\"" << _xRnd << "\" yRnd=\"" << _yRnd << "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\""
-      << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\" sred=\"" << _txtSelCol.red() << "\" sgreen=\""
-      << _txtSelCol.green() << "\" sblue=\"" << _txtSelCol.blue() << "\">" << endl;
+      << "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" << endl;
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
 
@@ -372,7 +314,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       _xRnd = 20;
       _yRnd = 20;
       _txtBackCol = white;
-      _txtSelCol = lightGray;
     }
 
   // DOC
@@ -501,15 +442,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      else if ((*it).m_strName == "bblue")
 		_txtBackCol.setRgb(_txtBackCol.red(),_txtBackCol.green(),
 				   atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "sred")
-		_txtSelCol.setRgb(atoi((*it).m_strValue.c_str()),
-				   _txtSelCol.green(),_txtSelCol.blue());
-	      else if ((*it).m_strName == "sgreen")
-		_txtSelCol.setRgb(_txtSelCol.red(),atoi((*it).m_strValue.c_str()),
-				   _txtSelCol.blue());
-	      else if ((*it).m_strName == "sblue")
-		_txtSelCol.setRgb(_txtSelCol.red(),_txtSelCol.green(),
-				   atoi((*it).m_strValue.c_str()));
 	      else
 		cerr << "Unknown attrib BACKGROUND:'" << (*it).m_strName << "'" << endl;
 	    }
@@ -635,8 +567,8 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    case OT_RECT:
 	      {
 		KPRectObject *kprectobject = new KPRectObject();
-		kprectobject->load(parser,lst);
 		kprectobject->setRnds(_xRnd,_yRnd);
+		kprectobject->load(parser,lst);
 		_objectList->append(kprectobject);
 	      } break;
 	    case OT_ELLIPSE:
@@ -1115,6 +1047,52 @@ bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
   return ret;
 }
 
+/*================================================================*/
+bool KPresenterDoc::setRectSettings(int _rx,int _ry)
+{
+  bool ret = false;
+
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<RectValueCmd::RectValues> _oldValues;
+  RectValueCmd::RectValues _newValues,*tmp;
+  
+  _objects.setAutoDelete(false);
+  _oldValues.setAutoDelete(false);
+  
+  _newValues.xRnd = _rx;
+  _newValues.yRnd = _ry;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->getType() == OT_RECT)
+	{
+	  tmp = new RectValueCmd::RectValues;
+	  dynamic_cast<KPRectObject*>(kpobject)->getRnds(tmp->xRnd,tmp->yRnd);
+	  _oldValues.append(tmp);
+	  if (kpobject->isSelected())
+	    _objects.append(kpobject);
+	  ret = true;
+	}
+    }
+  
+  if (!_objects.isEmpty())
+    {
+      RectValueCmd *rectValueCmd = new RectValueCmd(i18n("Change Rectangle values"),_oldValues,_newValues,_objects,this);
+      commands()->addCommand(rectValueCmd);
+      rectValueCmd->execute();
+    }
+  else
+    {
+      _oldValues.setAutoDelete(true);
+      _oldValues.clear();
+    }
+
+  m_bModified = true;
+  return ret;
+}
+
 /*=================== get background type ========================*/
 BackType KPresenterDoc::getBackType(unsigned int pageNum)
 {
@@ -1485,6 +1463,44 @@ int KPresenterDoc::getPieAngle(int pieAngle)
   return pieAngle;
 }
 
+/*================================================================*/
+int KPresenterDoc::getRndX(int _rx)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_RECT)
+	{
+	  int tmp;
+	  dynamic_cast<KPRectObject*>(kpobject)->getRnds(_rx,tmp);
+	  return _rx;
+	}
+    }
+
+  return _rx;
+}
+
+/*================================================================*/
+int KPresenterDoc::getRndY(int _ry)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_RECT)
+	{
+	  int tmp;
+	  dynamic_cast<KPRectObject*>(kpobject)->getRnds(tmp,_ry);
+	  return _ry;
+	}
+    }
+
+  return _ry;
+}
+
 /*======================== lower objects =========================*/
 void KPresenterDoc::lowerObjs(int diffx,int diffy)
 {
@@ -1632,10 +1648,10 @@ void KPresenterDoc::insertLine(KRect r,QPen pen,LineEnd lb,LineEnd le,LineType l
 }
 
 /*===================== insert a rectangle =======================*/
-void KPresenterDoc::insertRectangle(KRect r,QPen pen,QBrush brush,RectType rt,FillType ft,QColor g1,QColor g2,
-				    BCType gt,int diffx,int diffy)
+void KPresenterDoc::insertRectangle(KRect r,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+				    BCType gt,int rndX,int rndY,int diffx,int diffy)
 {
-  KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,ft,g1,g2,gt,getRndX(),getRndY());
+  KPRectObject *kprectobject = new KPRectObject(pen,brush,ft,g1,g2,gt,rndX,rndY);
   kprectobject->setOrig(r.x() + diffx,r.y() + diffy);
   kprectobject->setSize(r.width(),r.height());
   kprectobject->setSelected(true);
@@ -1708,16 +1724,6 @@ void KPresenterDoc::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,F
   _commands.addCommand(insertCmd);
 
   m_bModified = true;
-}
-
-/*======================= set rnds ==============================*/
-void KPresenterDoc::setRnds(unsigned int rx,unsigned int ry,bool _replace = true)
-{
-  _oxRnd = _xRnd;
-  _oyRnd = _yRnd;
-  _xRnd = rx; 
-  _yRnd = ry; 
-  if (_replace) replaceObjs();
 }
 
 /*======================= set rasters ===========================*/
@@ -2096,9 +2102,8 @@ void KPresenterDoc::replaceObjs()
       _objects.append(kpobject);
     }
 
-  SetOptionsCmd *setOptionsCmd = new SetOptionsCmd(i18n("Set new options"),_diffs,_objects,_xRnd,_yRnd,_rastX,_rastY,
-						   _oxRnd,_oyRnd,_orastX,_orastY,_txtBackCol,_txtSelCol,_otxtBackCol,
-						   _otxtSelCol,this);
+  SetOptionsCmd *setOptionsCmd = new SetOptionsCmd(i18n("Set new options"),_diffs,_objects,_rastX,_rastY,
+						   _orastX,_orastY,_txtBackCol,_otxtBackCol,this);
   _commands.addCommand(setOptionsCmd);
   setOptionsCmd->execute();
 

@@ -24,9 +24,8 @@
 KPRectObject::KPRectObject()
   : KPObject(), pen(), brush(), gColor1(red), gColor2(green)
 {
-  rectType = RT_NORM;
-  xRnd = 20;
-  yRnd = 20;
+  xRnd = 0;
+  yRnd = 0;
   gradient = 0;
   fillType = FT_BRUSH;
   gType = BCT_GHORZ;
@@ -34,11 +33,10 @@ KPRectObject::KPRectObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPRectObject::KPRectObject(QPen _pen,QBrush _brush,RectType _rectType,FillType _fillType,
+KPRectObject::KPRectObject(QPen _pen,QBrush _brush,FillType _fillType,
 			   QColor _gColor1,QColor _gColor2,BCType _gType,int _xRnd,int _yRnd)
   : KPObject(), pen(_pen), brush(_brush), gColor1(_gColor1), gColor2(_gColor2)
 {
-  rectType = _rectType;
   xRnd = _xRnd;
   yRnd = _yRnd;
   gType = _gType;
@@ -99,7 +97,7 @@ void KPRectObject::save(ostream& out)
       << "\" style=\"" << static_cast<int>(pen.style()) << "\"/>" << endl;
   out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
       << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>(brush.style()) << "\"/>" << endl;
-  out << indent << "<RECTTYPE value=\"" << static_cast<int>(rectType) << "\"/>" << endl;
+  out << indent << "<RNDS x=\"" << xRnd << "\" y=\"" << yRnd << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
   out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
@@ -114,6 +112,11 @@ void KPRectObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
+
+  int tmpRndX = xRnd;
+  int tmpRndY = yRnd;
+
+  setRnds(0,0);
 
   while (parser.open(0L,tag))
     {
@@ -130,6 +133,35 @@ void KPRectObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		orig.setX(atoi((*it).m_strValue.c_str()));
 	      if ((*it).m_strName == "y")
 		orig.setY(atoi((*it).m_strValue.c_str()));
+	    }
+	}
+
+      // recttype
+      else if (name == "RNDS")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "x")
+		xRnd = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "y")
+		yRnd = atoi((*it).m_strValue.c_str());
+	    }
+	}
+
+      // recttype
+      else if (name == "RECTTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		{
+		  if (static_cast<RectType>(atoi((*it).m_strValue.c_str())) == RT_ROUND)
+		    setRnds(tmpRndX,tmpRndY);
+		}
 	    }
 	}
 
@@ -203,18 +235,6 @@ void KPRectObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		pen.setStyle((PenStyle)atoi((*it).m_strValue.c_str()));
 	    }
 	  setPen(pen);
-	}
-      
-      // rectType
-      else if (name == "RECTTYPE")
-	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for(;it != lst.end();it++)
-	    {
-	      if ((*it).m_strName == "value")
-		rectType = (RectType)atoi((*it).m_strValue.c_str());
-	    }
 	}
       
       // brush
@@ -423,7 +443,7 @@ void KPRectObject::paint(QPainter* _painter)
   _painter->setPen(pen);
   int pw = pen.width();
   _painter->setBrush(brush);
-  if (rectType == RT_NORM)
+  if (xRnd == 0 && yRnd == 0)
     _painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
   else
     _painter->drawRoundRect(pw,pw,ow - 2 * pw,oh - 2 * pw,xRnd,yRnd);
@@ -436,14 +456,14 @@ void KPRectObject::paint(QPainter* _painter)
       _painter->setPen(pen);
       int pw = pen.width();
       _painter->setBrush(brush);
-      if (rectType == RT_NORM)
+      if (xRnd == 0 && yRnd == 0)
 	_painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
       else
 	_painter->drawRoundRect(pw,pw,ow - 2 * pw,oh - 2 * pw,xRnd,yRnd);
     }
   else
     {
-      if (rectType == RT_NORM)
+      if (xRnd == 0 && yRnd == 0)
 	{
 	  int ow = ext.width();
 	  int oh = ext.height();

@@ -59,7 +59,7 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   lRastX->resize(lRastX->width(),eRastX->height());
   lRastY->resize(lRastY->width(),eRastY->height());
 
-  //general->resize(col1+toolPres->x()+toolPres->width(),col1+toolPres->y()+toolPres->height());
+  general->resize(20 + eRastX->x() + eRastX->width(),20 + eRastY->y() + eRastY->height());
 
   /* Tab: Objects */
   objects = new QWidget(this,"objects");
@@ -70,58 +70,17 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   lBackCol = new QLabel(txtObj,"lBackCol");
   lBackCol->setText(i18n("Backgroud color:"));
   lBackCol->move(10,20);
- 
-  lSelCol = new QLabel(txtObj,"lSelCol");
-  lSelCol->setText(i18n("Selection color:"));
-  lSelCol->move(10,lBackCol->y()+lBackCol->height()+10);
-
-  dummy = max(lBackCol->sizeHint().width(),lSelCol->sizeHint().width());
-  lBackCol->resize(dummy,lBackCol->height());
-  lSelCol->resize(dummy,lSelCol->height());
-
+  lBackCol->resize(lBackCol->sizeHint());
+  
   bBackCol = new KColorButton(white,txtObj,"bBackCol");
-  bBackCol->setGeometry(lBackCol->x()+lBackCol->width()+10,lBackCol->y(),100,25);
+  bBackCol->setGeometry(lBackCol->x() + lBackCol->width() + 10,lBackCol->y(),100,25);
 
-  bSelCol = new KColorButton(lightGray,txtObj,"bSelCol");
-  bSelCol->setGeometry(lSelCol->x()+lSelCol->width()+10,lSelCol->y(),100,25);
+  txtObj->resize(bBackCol->x() + bBackCol->width() + 20,bBackCol->y() + bBackCol->height() + 10);
 
-  txtObj->resize(20+bBackCol->x()+bBackCol->width(),20+bSelCol->y()+bSelCol->height());
+  objects->resize(txtObj->width() + 40,txtObj->height() + 40);
 
-  rect = new QGroupBox(i18n("Rounded Rectangles"),objects,"rect");
-  rect->move(col1,txtObj->y()+txtObj->height()+20);
-
-  lRndX = new QLabel(rect,"lRndX");
-  lRndX->setText(i18n("Roundedness X:"));
-  lRndX->move(10,20);
-
-  lRndY = new QLabel(rect,"lRndY");
-  lRndY->setText(i18n("Roundedness Y:"));
-  lRndY->move(10,lRndX->y()+lRndX->height()+10);
-
-  dummy = max(lRndX->sizeHint().width(),lRndY->sizeHint().width());
-  lRndX->resize(dummy,lRndX->height());
-  lRndY->resize(dummy,lRndY->height());
-
-  eRndX = new KRestrictedLine(rect,"eRndX","0123456789");
-  eRndX->move(lRndX->x()+lRndX->width()+10,lRndX->y());
-  eRndX->setMaxLength(2);
-  eRndX->resize(eRndX->sizeHint().width()/2,eRndX->sizeHint().height());
-
-  eRndY = new KRestrictedLine(rect,"eRndY","0123456789");
-  eRndY->move(lRndY->x()+lRndY->width()+10,lRndY->y());
-  eRndY->setMaxLength(2);
-  eRndY->resize(eRndY->sizeHint().width()/2,eRndY->sizeHint().height());
-
-  lRndX->resize(lRndX->width(),eRndX->height());
-  lRndY->resize(lRndY->width(),eRndY->height());
-
-  rect->resize(txtObj->width(),20+eRndY->y()+eRndY->height());
-
-  objects->resize(col1+rect->x()+rect->width(),
-		  col1+rect->y()+rect->height());
-
-  w = objects->width();
-  h = objects->height();
+  w = max(objects->width(),general->width());
+  h = max(objects->height(),general->height());
 
   general->resize(w,h);
   general->setMinimumSize(general->width(),general->height());

@@ -35,11 +35,9 @@ module KPresenter
       slot void toolsText();
       slot void toolsObject();
 
-      slot void toolsNormRectidl();
-      slot void toolsRoundRectidl();
-
       slot void extraPenBrush();
       slot void extraConfigPie();
+      slot void extraConfigRect();
       slot void extraRaise();
       slot void extraLower();
       slot void extraRotate();

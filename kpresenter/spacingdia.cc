@@ -56,8 +56,11 @@ SpacingDia::SpacingDia(QWidget* parent,int _lineSpacing,int _distBefore,int _dis
   str.sprintf("%d",_distAfter);
   eDistAfter->setText(str);
 
-  eLineSpacing->move(eDistBefore->x(),eLineSpacing->y());
-  eDistAfter->move(eDistBefore->x(),eDistAfter->y());
+  int m = max(max(eDistBefore->x(),eDistAfter->x()),eLineSpacing->x());
+
+  eLineSpacing->move(m,eLineSpacing->y());
+  eDistBefore->move(m,eDistBefore->y());
+  eDistAfter->move(m,eDistAfter->y());
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText(i18n("Cancel"));

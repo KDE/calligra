@@ -131,6 +131,7 @@ protected slots:
   void slotDelete();
   void slotEdit();
   void slotEditPie();
+  void slotEditRect();
   void slotBackground();
   void slotConfigPages();
   void slotChangeFilename();
@@ -142,19 +143,20 @@ protected:
     KTreeListItem *item;
   };
 
-  static const int B_STYLE    = 1;
-  static const int B_ROTATE   = 2;
-  static const int B_SHADOW   = 3;
-  static const int B_ALIGN    = 4;
-  static const int B_EFFECT   = 5;
-  static const int B_LOWER    = 6;
-  static const int B_RAISE    = 7;
-  static const int B_DELETE   = 8;
-  static const int B_EDIT     = 9;
-  static const int B_EDIT_PIE = 10;
-  static const int B_BACK     = 11;
-  static const int B_CPAGES   = 12;
-  static const int B_CFILEN   = 13;
+  static const int B_STYLE     = 1;
+  static const int B_ROTATE    = 2;
+  static const int B_SHADOW    = 3;
+  static const int B_ALIGN     = 4;
+  static const int B_EFFECT    = 5;
+  static const int B_LOWER     = 6;
+  static const int B_RAISE     = 7;
+  static const int B_DELETE    = 8;
+  static const int B_EDIT      = 9;
+  static const int B_EDIT_PIE  = 10;
+  static const int B_EDIT_RECT = 11;
+  static const int B_BACK      = 12;
+  static const int B_CPAGES    = 13;
+  static const int B_CFILEN    = 14;
   
   void resizeEvent(QResizeEvent *e);
   void closeEvent(QCloseEvent *e);
