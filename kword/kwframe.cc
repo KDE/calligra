@@ -1500,32 +1500,8 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         // This breaks when a frame is under another one, it still appears if !onlyChanged.
         // cvs log says this is about frame borders... hmm.
         /// ### if ( onlyChanged )
-
-        // clip inline frames against their 'parent frames' (=the frame containing the anchor of the frame.)
-        KWFrameSet *parentFrameset= this;
-        KWFrame *parentFrame=frame;
-        while (parentFrameset->isFloating()) {
-	    // FIXME: this doesnt clip enough yet when the given crect
-            // doesn't overlap with any parent frame.
-            parentFrameset=parentFrameset->anchorFrameset();
-            KWFrame *oldParentFrame = parentFrame;
-	    KoRect searchRect = *parentFrame;
-	    if (searchRect.intersects(clipKoRect))
-	    	searchRect = searchRect.intersect(clipKoRect);
-	    else {
-	    	kdDebug(32002) << "WARNING: searchRect doesnt intersect with clipKoRect. clipping will go wrong" << endl;
-	    }
-            parentFrame=parentFrameset->frameAtPos(searchRect.x(), searchRect.y());
-            if( parentFrame)
-            {
-                QRect r = painter->xForm( viewMode->normalToView( doc->zoomRect(parentFrame->innerRect()) ) );
-                reg &= r;
-            } else {
-                parentFrame = oldParentFrame;
-            }
-        }
-
-        QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
+	        
+	QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
         for ( ; fIt.current() ; ++fIt )
         {
             QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
