@@ -48,6 +48,7 @@ FormPrivate::FormPrivate()
 	toplevel = 0;
 	topTree = 0;
 	cursors = 0;
+	widget = 0;
 	resizeHandles.setAutoDelete(true);
 	dirty = false;
 	interactive = true;
@@ -87,8 +88,8 @@ Form::widget() const
 		return d->topTree->widget();
 	else if(d->toplevel)
 		return d->toplevel->widget();
-	else
-		return 0;
+	else // peview form
+		return d->widget;
 }
 
 
@@ -208,6 +209,7 @@ Form::setDesignMode(bool design)
 			d->manager->lib()->previewWidget(it.current()->widget()->className(), it.current()->widget(), d->toplevel);
 		delete dict;
 
+		d->widget = d->topTree->widget();
 		delete (d->topTree);
 		d->topTree = 0;
 		delete (d->toplevel);

@@ -72,6 +72,7 @@ class FormPrivate
 		FormManager  *manager;
 		QGuardedPtr<Container>  toplevel;
 		ObjectTree  *topTree;
+		QWidget *widget;
 
 		WidgetList  selected;
 		ResizeHandleSet::Dict resizeHandles;

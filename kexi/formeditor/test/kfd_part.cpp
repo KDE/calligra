@@ -399,7 +399,7 @@ KFormDesignerPart::slotNoFormSelected()
 	ENABLE_ACTION("pixmap_collection", false);
 	ENABLE_ACTION("form_connections", false);
 	ENABLE_ACTION("taborder", false);
-	ENABLE_ACTION("change_style", false);
+	ENABLE_ACTION("change_style", m_manager->activeForm());
 
 	// Disable items in 'File'
 	ENABLE_ACTION("file_save", false);

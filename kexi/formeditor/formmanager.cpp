@@ -404,10 +404,39 @@ FormManager::windowChanged(QWidget *w)
 			m_active = form;
 
 			emit  dirty(form, form->isModified());
-			if(!m_active->objectTree()) // ie preview form
-				emit noFormSelected();
-			else
-				m_active->emitActionSignals();
+			m_active->emitActionSignals();
+			return;
+		}
+	}
+
+	for(form = m_preview.first(); form; form = m_preview.next())
+	{
+		kdDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->name() << endl;
+
+		if(m_collection)
+		{
+			// update the 'style' action
+			KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+			const QString currentStyle = form->widget()->style().name();
+			const QStringList styles = m_style->items();
+
+			int idx = 0;
+			for (QStringList::ConstIterator it = styles.begin(); it != styles.end(); ++it, ++idx)
+			{
+				if ((*it).lower() == currentStyle) {
+					kdDebug() << "Updating the style to " << currentStyle << endl;
+					m_style->setCurrentItem(idx);
+					break;
+				}
+			}
+
+			if((form != previousActive) && isCreatingConnection())
+				resetCreatedConnection();
+
+			m_active = form;
+
+			emit dirty(form, false);
+			emit noFormSelected();
 			return;
 		}
 	}
