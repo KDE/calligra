@@ -19,9 +19,12 @@
 
 #include <qlayout.h>
 #include <qdom.h>
+#include <qwidgetstack.h>
+#include <qcstring.h>
 
 #include <klocale.h>
 #include <kaction.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 #include <koStore.h>
@@ -36,6 +39,8 @@
 #include "kexidatatable.h"
 #include "kexitableview.h"
 #include "kexitableitem.h"
+#include "kexitablelist.h"
+#include "kmultitabbar.h"
 #include "kexiquerydesigner.h"
 
 class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
@@ -44,8 +49,8 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 		EditGUIClient():KXMLGUIClient()
 		{
 			m_actionEdit = new KToggleAction(i18n("Edit"), "state_edit", Key_F5, actionCollection(), "stateEdit");
-			m_actionSQL  = new KToggleAction(i18n("SQL"), "state_sql", Key_F5, actionCollection(), "stateSQL");
-			m_actionView = new KToggleAction(i18n("View"), "state_view", Key_F5, actionCollection(), "stateView");
+			m_actionSQL  = new KToggleAction(i18n("SQL"), "state_sql", Key_F6, actionCollection(), "stateSQL");
+			m_actionView = new KToggleAction(i18n("View"), "state_view", Key_F7, actionCollection(), "stateView");
 
 			setXMLFile("kexiquerydesignerui.rc");
 		}
@@ -79,12 +84,18 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 	setCaption(i18n("Query"));
 	registerAs(DocumentWindow);
 
-	m_editor = new KexiQueryDesignerGuiEditor(this);
+	QVBoxLayout *l=new QVBoxLayout(this);
+
+	m_widgetStack=new QWidgetStack(this);
+	m_widgetStack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+
+	l->addWidget(m_widgetStack);
+	m_widgetStack->addWidget(m_editor = new KexiQueryDesignerGuiEditor(m_widgetStack,this));
 	
 	m_sqlDoc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
-	m_sqlView = m_sqlDoc->createView(this, 0L);
+	m_widgetStack->addWidget(m_sqlView = m_sqlDoc->createView(this, 0L));
 
-	m_view = new KexiDataTable(this, "query", "query-result", true);
+	m_widgetStack->addWidget(m_view = new KexiDataTable(this, "query", "query-result", true));
 
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_sqlDoc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
@@ -97,18 +108,18 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 		i++;
 	}
 
-	m_editor->show();
-	m_sqlView->hide();
-	m_view->hide();
+	m_widgetStack->raiseWidget(m_editor);
 
+        KMultiTabBar *tb=new KMultiTabBar(this,KMultiTabBar::Horizontal);
+	tb->showActiveTabTexts(true);
+        tb->insertTab(SmallIcon("state_edit"),-1,"Graphical Designer");
+        tb->insertTab(SmallIcon("state_sql"),-1,"Sql Editor");
+        tb->insertTab(SmallIcon("state_view"),-1,"Result");
+	l->addWidget(tb);
+	l->activate();
 //	activateActions();
 //	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));
 	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
-
-	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(m_editor,	0,	0);
-	g->addWidget(m_sqlView,	0,	0);
-	g->addWidget(m_view,	0,	0);
 }
 
 KXMLGUIClient *KexiQueryDesigner::guiClient()
@@ -145,9 +156,7 @@ KexiQueryDesigner::slotEditState()
 	m_editGUIClient->m_actionView->setChecked(false);
 	m_editGUIClient->m_actionSQL->setChecked(false);
 
-	m_editor->show();
-	m_sqlView->hide();
-	m_view->hide();
+	m_widgetStack->raiseWidget(m_editor);
 
 	m_currentPart = EditorPart;
 }
@@ -158,9 +167,7 @@ KexiQueryDesigner::slotSQLState()
 	m_editGUIClient->m_actionEdit->setChecked(false);
 	m_editGUIClient->m_actionView->setChecked(false);
 
-	m_editor->hide();
-	m_sqlView->show();
-	m_view->hide();
+	m_widgetStack->raiseWidget(m_sqlView);
 	
 	m_currentPart = SqlPart;
 }
@@ -171,10 +178,8 @@ KexiQueryDesigner::slotViewState()
 	m_editGUIClient->m_actionEdit->setChecked(false);
 	m_editGUIClient->m_actionSQL->setChecked(false);
 
-	m_editor->hide();
-	
-	m_sqlView->hide();
-	m_view->show();
+	kdDebug()<<"Raising view"<<endl;
+	m_widgetStack->raiseWidget(m_view);
 
 	switch(m_currentPart)
 	{
@@ -217,28 +222,63 @@ KexiQueryDesigner::slotSave(KoStore *store)
 
 		kdDebug() << "KexiQueryDesigner::slotSave() have to process " << m_editor->table()->rows() << "items" << endl;
 
+		KexiTableList *designContent = m_editor->table()->contents();
+		if(!designContent)
+			return;
 
-		for(int i=0; m_editor->table()->rows(); i++)
+
+		for(KexiTableItem *it=designContent->first(); it; it = designContent->next())
 		{
-			KexiTableItem *it = m_editor->table()->itemAt(i);
-//			KexiTableItem *it = new KexiTableItem(m_editor->table());
-			
 			if(!it)
 				return;
-			
+
 			if(!it->isInsertItem())
 			{
 				QDomElement table = domDoc.createElement("table");
 				itemsElement.appendChild(table);
-				QDomText tTable = domDoc.createTextNode(it->getValue(1).toString());
+				int tableIndex = it->getValue(0).toInt();
+				QDomText tTable = domDoc.createTextNode((*m_editor->sourceList().at(tableIndex)));
 				table.appendChild(tTable);
-			}
 
-			i++;
+				QDomElement field = domDoc.createElement("field");
+				itemsElement.appendChild(field);
+				QDomText tField = domDoc.createTextNode(it->getValue(1).toString());
+				field.appendChild(tField);
+				
+				QDomElement shown = domDoc.createElement("shown");
+				itemsElement.appendChild(shown);
+				QDomText tShown = domDoc.createTextNode(it->getValue(2).toString());
+				shown.appendChild(tShown);
+
+				QDomElement andC = domDoc.createElement("andC");
+				itemsElement.appendChild(andC);
+				QDomText tandC = domDoc.createTextNode(it->getValue(3).toString());
+				andC.appendChild(tandC);
+
+				QDomElement orC = domDoc.createElement("orC");
+				itemsElement.appendChild(orC);
+				QDomText torC = domDoc.createTextNode(it->getValue(4).toString());
+				orC.appendChild(torC);
+				
+			}
 		}
 
-		kdDebug() << "KexiQueryDesigner::slotSave() XML:\n" << domDoc.toString() << endl;
+		QDomElement preparsed = domDoc.createElement("preparsed");
+		domDoc.appendChild(preparsed);
+		QDomText tPreparsed = domDoc.createTextNode(m_editor->getQuery());
+		preparsed.appendChild(tPreparsed);
 
+//		kdDebug() << "KexiQueryDesigner::slotSave() XML:\n" << domDoc.toString() << endl;
+
+		QByteArray data = domDoc.toCString();
+		data.resize(data.size()-1);
+
+		if(store)
+		{
+			store->open("/query/" + m_identifier + ".xml");
+			store->write(data);
+			store->close();
+		}
 	}
 }
 

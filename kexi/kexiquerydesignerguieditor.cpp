@@ -33,11 +33,11 @@
 #include "kexiquerydesignerguieditor.h"
 #include "kexirelation.h"
 
-KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent, const char *name)
+KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiQueryDesigner *myparent, const char *name)
  : QWidget(parent, name)
 {
 	m_db = kexi->project()->db();
-	m_parent = parent;
+	m_parent = myparent;
 
 	m_tables = new KexiRelation(this, "querytables", true);
 
@@ -218,8 +218,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 						isSrcTable = false;
 						
 						JoinField jf;
-//						jf.sourceField = (*itRel).srcField;
-						jf.sourceField = (*itRel).rcvTable;
+						jf.sourceField = (*itRel).srcField;
 						jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
 						jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
 						joinFields.append(jf);
@@ -242,18 +241,12 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	for(JoinFields::Iterator itJ = joinFields.begin(); itJ != joinFields.end(); itJ++)
 	{
-		QStringList leftList = QStringList::split(".", (*itJ).eqLeft);
-		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): left: " << (*itJ).eqLeft << endl;
-		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): current master: " << (*leftList.first()) << endl;
-		if(leftList.first() == maxTable)
-		{
-			query += " LEFT JOIN ";
-			query += (*itJ).sourceField;
-			query += " ON ";
-			query += (*itJ).eqLeft;
-			query += " = ";
-			query += (*itJ).eqRight;
-		}
+		query += " LEFT JOIN ";
+		query += (*itJ).sourceField;
+		query += " ON ";
+		query += (*itJ).eqLeft;
+		query += " = ";
+		query += (*itJ).eqRight;
 	}
 
 	int conditionCount = 0;

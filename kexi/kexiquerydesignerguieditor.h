@@ -65,11 +65,13 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	Q_OBJECT
 	
 	public:
-		KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent, const char *name=0);
+		KexiQueryDesignerGuiEditor(QWidget *parent, KexiQueryDesigner *myparent, const char *name=0);
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
 		KexiTableView		*table() { return m_designTable; };
+
+		QStringList		sourceList() { return m_sourceList; };
 
 	protected slots:
 		void			slotDropped(QDropEvent *ev);

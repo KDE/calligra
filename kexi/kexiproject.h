@@ -53,6 +53,9 @@ public:
 	bool saveProject();
 	bool saveProjectAs(const QString& url);
 	bool loadProject(const QString& url);
+
+	void addFileReference(QString path);
+
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
 	void clear();
@@ -72,12 +75,13 @@ protected:
 	void setCurrentDB(){} ;
 	
 private:
-	KexiDoc* m_settings;
-	KexiDB* m_db;
-	KexiFormManager *m_formManager;
-	Credentials m_cred;
-	QString m_url;
-	bool m_modified;
+	KexiDoc*	m_settings;
+	KexiDB*		m_db;
+	KexiFormManager	*m_formManager;
+	Credentials	m_cred;
+	QString		m_url;
+	bool		m_modified;
+	QStringList	m_fileReferences;
 };
 
 #endif

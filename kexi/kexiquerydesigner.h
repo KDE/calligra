@@ -29,6 +29,7 @@ class KAction;
 class KoStore;
 class KexiQueryDesignerGuiEditor;
 class KexiDataTable;
+class QWidgetStack;
 
 class KexiQueryDesigner : public KexiDialogBase
 {
@@ -62,6 +63,7 @@ class KexiQueryDesigner : public KexiDialogBase
 		KTextEditor::Document	*m_sqlDoc;
 		KTextEditor::View	*m_sqlView;
 		KexiDataTable		*m_view;
+		QWidgetStack		*m_widgetStack;
 
 		QString			m_query;
 

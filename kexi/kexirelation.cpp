@@ -49,7 +49,7 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 	QHBox *hbox = new QHBox(this);
 	
 	m_tableCombo = new QComboBox(hbox);
-	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+//	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 	m_tableCombo->insertStringList(kexi->project()->db()->tables());
 	m_tableCombo->show();
 

@@ -84,6 +84,21 @@ KexiProject::saveProject()
 	QDomElement passElement = domDoc.createElement("password");
 	projectElement.appendChild(passElement);
 	
+//	QDomText tPass = domDoc.createTextNode(m_cred.password);
+//	passElement.appendChild(tPass);
+
+	for(QStringList::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
+	{
+		QDomElement refs = domDoc.createElement("references");
+		projectElement.appendChild(refs);
+
+		QDomElement ref = domDoc.createElement("embedded");
+		refs.appendChild(ref);
+
+		QDomText tref = domDoc.createTextNode((*it));
+		ref.appendChild(tref);
+	}
+	
 	QDomText tPass;
 	
 	if(m_cred.savePassword)
@@ -273,6 +288,13 @@ KexiProject::clear()
 	m_url = "";
 	m_modified = false;
 }
+
+void
+KexiProject::addFileReference(QString path)
+{
+	m_fileReferences.append(path);
+}
+
 
 QString
 KexiProject::boolToString(bool b)

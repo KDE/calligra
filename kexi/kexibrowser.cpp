@@ -87,6 +87,7 @@ void KexiBrowser::generateView()
 
 	setOpen(m_database, true);
 	setOpen(m_tables, true);
+	setOpen(m_queries, true);
 }
 
 
@@ -246,7 +247,9 @@ void KexiBrowser::slotCreateQuery()
 
 	if(ok && name.length() > 0)
 	{
-		KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), "query");
+		KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), name, "query");
+		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
+		kexi->project()->addFileReference("/query/" + name + ".xml");
 		kqd->show();
 	}
 }
