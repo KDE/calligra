@@ -1,4 +1,7 @@
 INCLUDES= $(all_includes) -I.. 
+EXTRA_DIST = prolog.ps fontmap
+
+datadir = $(kde_datadir)/killustrator
 
 noinst_LIBRARIES = libkillu.a
 
@@ -28,11 +31,12 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 ToolButton.h Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h koPageLayoutDia.h \
 		 MainView.h PStateManager.h OptionDialog.h \
-		 Preview.h
+		 Preview.h units.h UnitBox.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
-			  GText.cc GGroup.cc Tool.cc PolylineTool.cc FreeHandTool.cc \
+			  GText.cc GGroup.cc Tool.cc PolylineTool.cc \
+			  FreeHandTool.cc \
 			  RectangleTool.cc OvalTool.cc TextTool.cc \
 			  SelectionTool.cc PolygonTool.cc ToolController.cc \
 			  EditPointTool.cc BezierTool.cc ZoomTool.cc \
@@ -58,7 +62,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  ToolButton.cc Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
 			  PStateManager.cc OptionDialog.cc \
-			  Preview.cc
+			  Preview.cc units.cc UnitBox.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
@@ -75,9 +79,27 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		Ruler.moc AboutDialog.moc \
 		ToolButton.moc PolygonPreview.moc \
 		TransformationDialog.moc koPageLayoutDia.moc \
-		PStateManager.moc OptionDialog.moc
+		PStateManager.moc OptionDialog.moc UnitBox.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
+
+
+# just install datas here. Use install-exec-data for scripts and etc.
+# the binary itself is already installed from automake
+# use mkinstalldirs, not "install -d"
+# don't install a list of file. Just one file per install.
+# if you have more of them, create a subdirectory with an extra Makefile 
+install-data-local: prolog.ps
+	$(INSTALL_DATA) prolog.ps $(datadir) 
+	$(INSTALL_DATA) fontmap $(datadir)
+
+# remove ALL you have installed in install-data-local or install-exec-local
+uninstall-local:
+	rm -f $(datadir)/prolog.ps
+	rm -f $(datadir)/fontmap
+
+prolog.ps: prolog.ps.in
+	perl ../cleanup_ps < prolog.ps.in > prolog.ps
 
 # add a dependency for every moc file to be full portable
 # I've added a key binding to emacs for this. 
@@ -248,4 +270,8 @@ PStateManager.moc: PStateManager.h
 OptionDialog.cc: OptionDialog.moc
 OptionDialog.moc: OptionDialog.h
 	$(MOC) OptionDialog.h -o OptionDialog.moc
+
+UnitBox.cc: UnitBox.moc
+UnitBox.moc: UnitBox.h
+	$(MOC) UnitBox.h -o UnitBox.moc
 
