@@ -47,7 +47,7 @@ void DomNode::clear( int level )
     close();
     array.truncate( 0 );
     setBuffer( array );
-    open( IO_WriteOnly | IO_Truncate );
+    open( IO_WriteOnly ); // do *not* use IO_Truncate (QT 3.1.x resize QBuffer to 1)
     documentLevel	= level;
     hasChildren		= true;
     hasAttributes	= false;
