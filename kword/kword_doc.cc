@@ -1420,9 +1420,12 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	    format = "JPEG";
 	if ( QImage::outputFormats().find( format ) == -1 )
 	    format = "BMP";
-	
+        QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+        if ( !isStoredExtern() )
+          pictureName.prepend( m_strURL + "/" );
+
 	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() 
-	    << "\" name=\"" << QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() ).latin1()
+	    << "\" name=\"" << pictureName.latin1()
 	    << "\"/>" << endl;
 	keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
@@ -1463,6 +1466,8 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 
 	QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
 	QString mime = "image/" + format.lower();
+        if ( !isStoredExtern() )
+          u2.prepend( m_strURL + "/" );
 	
 	if ( _store->open( u2, mime.lower() ) ) {
 	    ostorestream out( _store );
