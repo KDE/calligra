@@ -1,0 +1,6 @@
+Kivio 1.2beta1 -> 1.2 beta 2
+----------------------------
+- Improve dcop interface : add page/layer dcop interface
+- Add undo/redo feature (undo/redo insert/remove page, insert/remove stencil
+change page name etc.... )
+
