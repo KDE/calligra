@@ -1659,6 +1659,8 @@ void KWCanvas::pasteFrames()
             rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
             KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
             frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+            QString newName=i18n("Copy-%1").arg(fs->getName());
+            fs->setName(m_doc->generateFramesetName( (newName+" %1")));
             fs->addFrame( frame );
 
             KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
