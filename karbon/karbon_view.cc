@@ -1079,7 +1079,7 @@ KarbonView::initActions()
 		i18n( "&Tool options" ), "tooloptions", 0, this,
 		SLOT( viewToolOptions() ), actionCollection(), "view_tool_options" );
 	new KAction(
-		i18n( "Context &Help" ), "help", 0, this,
+		i18n( "Context &Help" ), "helpdocker", 0, this,
 		SLOT( viewContextHelp() ), actionCollection(), "view_context_help" );
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
