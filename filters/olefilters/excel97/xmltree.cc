@@ -690,8 +690,6 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 			case 0x01:  // ptgExpr
 				Q_UINT16 sfrow, sfcol;
 				rgce >> sfrow >> sfcol;
-				sfrow++;
-				sfcol++;
 				
 				kdDebug(s_area) << "WARNING: ptgExpr formula not supported, yet. Requested in Row " << row << " Col " << column << " !" << endl;
 				kdDebug(s_area) << "Taking formula from Row " << sfrow << " Col " << sfcol << " !" << endl;
