@@ -8,8 +8,8 @@ data_DATA = kformula2-1.xpm mini-symbols.xpm enlarge.xpm \
     mini-bra.xpm mini-rootindex.xpm reduceall.xpm greek.xpm enlargeall.xpm \
     enlargenext.xpm par1.xbm par2.xbm par3.xbm index0.xpm index1.xpm index2.xpm \
     index3.xpm index.xpm indexsw.xpm nextsw.xpm childrensw.xpm elementsw.xpm \
-    split.xpm matrix.xpm lower.xpm higher.xpm upalign.xpm downalign.xpm midalign.xpm\
+    split.xpm matrix.xpm Ilower.xpm Ihigher.xpm upalign.xpm downalign.xpm midalign.xpm\
     midline.xpm delimiter.xpm insrow.xpm inscol.xpm remrow.xpm remcol.xpm rootindex.xpm\
     bold.xpm italic.xpm underl.xpm near.xpm far.xpm leftalign.xpm rightalign.xpm centralign.xpm \
-    pixmap.xpm
+    pixmap.xpm Slower.xpm Shigher.xpm
     

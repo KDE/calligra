@@ -39,7 +39,7 @@ class KFormulaView : public QWidget,
 public slots:
     // Document signals
     void slotModified();
-    void slotTypeChanged(const BasicElement *elm);
+    void slotTypeChanged(  BasicElement *elm);
 
 protected:
     virtual void cleanUp();

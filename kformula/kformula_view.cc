@@ -16,6 +16,7 @@
 #include "TextElement.h"
 #include "FractionElement.h"
 #include "MatrixElement.h"
+#include "PrefixedElement.h"
 
 /**********************************************************
  *
@@ -124,6 +125,7 @@ void KFormulaView::createGUI()
     QPixmap pix;
     QString tmp = KApplication::kde_datadir().copy();
     tmp += "/kformula/pics/";
+    
     mn_indexList = new QPopupMenu();
     pix.load(tmp+"index0.xpm");
     mn_indexList->insertItem(pix,0);
@@ -288,12 +290,12 @@ void KFormulaView::createGUI()
 				    m_idMenuElement_Integral,
 				    this, "togglePixmap" );	    
 	m_idMenuElement_Integral_Higher = 
-	    m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"higher.xpm" )),
+	    m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"Ihigher.xpm" )),
 				    i18n( "Add higher limit" ),
 				    m_idMenuElement_Integral,
 				    this, "addHigher" );
 	m_idMenuElement_Integral_Lower = 
-	    m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"lower.xpm" )),
+	    m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"Ilower.xpm" )),
 				    i18n( "Add lower limit" ),
 				    m_idMenuElement_Integral,
 				    this, "addLower" );	
@@ -396,13 +398,13 @@ void KFormulaView::createGUI()
 	    
 	    m_idComboFont_FontSize = m_rToolBarFont->insertCombo(true,CORBA::string_dup(i18n("Font Size of active Element")),60,
 								 this,CORBA::string_dup("sizeSelected"));
-	    for(unsigned int i = 4;i <= 100;i++)
+	    for(unsigned int i = 1;i <= FN_MAX;i++)
 		{
 		    char buffer[10];
 		    sprintf(buffer,"%i",i);
 		    m_rToolBarFont->insertComboItem(m_idComboFont_FontSize,CORBA::string_dup(buffer),-1);
 		}
-	    m_rToolBarFont->setCurrentComboItem(m_idComboFont_FontSize,28);
+	    m_rToolBarFont->setCurrentComboItem(m_idComboFont_FontSize,31);
 
 	    m_idButtonFont_Bold = addToolButton(m_rToolBarFont, "bold.xpm",
 						i18n( "Bold" ),"fontSwitch");
@@ -539,10 +541,10 @@ void KFormulaView::createGUI()
 					       i18n( "Toggle fraction line" ), "toggleMidline" );
             m_rToolBarType->insertSeparator();
 	    // *******************  Integral **************************+
-	    m_idButtonType_AddH = addToolButton(m_rToolBarType, "higher.xpm", 
+	    m_idButtonType_AddH = addToolButton(m_rToolBarType, "Ihigher.xpm", 
 						i18n( "Add higher limit" ), "integralHigher" );
 
-	    m_idButtonType_AddL = addToolButton(m_rToolBarType, "lower.xpm", 
+	    m_idButtonType_AddL = addToolButton(m_rToolBarType, "Ilower.xpm", 
 						i18n( "Add lower limit" ), "integralLower" );
             m_rToolBarType->insertSeparator();
 	    // *********************** Matrix *************************
@@ -576,21 +578,20 @@ void KFormulaView::createGUI()
 }
 
 
-void KFormulaView::slotTypeChanged(const BasicElement *elm)
+void KFormulaView::slotTypeChanged(      BasicElement *elm)
 {  
-    bool isText, isBracket, isFraction, isIntegral, isMatrix, isRoot;
+    bool isText, isBracket, isFraction, isPrefixed, isMatrix, isRoot;
     if (elm) {
 	const type_info& type = typeid(*elm);
 	
 	isText = type == typeid(TextElement);
 	isBracket = type == typeid(BracketElement);
 	isFraction = type == typeid(FractionElement);
-	// isIntegral = type == typeid(IntegralElement);
-	isIntegral = false;
+	isPrefixed = type == typeid(PrefixedElement);        
 	isMatrix = type == typeid(MatrixElement);
 	isRoot = type == typeid(RootElement);
     } else {
-	isRoot = isMatrix = isIntegral = 
+	isRoot = isMatrix = isPrefixed = 
 	    isFraction = isBracket = isText = false;
     }
 
@@ -607,16 +608,19 @@ void KFormulaView::slotTypeChanged(const BasicElement *elm)
     m_rToolBarType->setItemEnabled(m_idButtonType_RAl,isFraction);  
     m_rToolBarType->setItemEnabled(m_idButtonType_Les,isFraction); 
     m_rToolBarType->setItemEnabled(m_idButtonType_Mor,isFraction); 
-    m_rToolBarType->setItemEnabled(m_idButtonType_AddH,isIntegral); 
-    m_rToolBarType->setItemEnabled(m_idButtonType_AddL,isIntegral); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_AddH,isPrefixed); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_AddL,isPrefixed); 
     m_rToolBarType->setItemEnabled(m_idButtonType_SetM,isMatrix);  
     m_rToolBarType->setItemEnabled(m_idButtonType_InC,isMatrix);
     m_rToolBarType->setItemEnabled(m_idButtonType_InR,isMatrix);
     m_rToolBarType->setItemEnabled(m_idButtonType_ReC,isMatrix);    
     m_rToolBarType->setItemEnabled(m_idButtonType_ReR,isMatrix);
 
+    if (elm)              
+    m_rToolBarFont->setCurrentComboItem(m_idComboFont_FontSize, elm->getNumericFont()-1 );
+
     if (isFraction) { 
-	QString content=m_pDoc->activeElement()->getContent();
+	QString content=elm->getContent();
 	m_rToolBarType->setButton(m_idButtonType_UAl,content[1]=='U'); 
 	m_rToolBarType->setButton(m_idButtonType_DAl,content[1]=='D'); 
 	m_rToolBarType->setButton(m_idButtonType_MAl,content[1]=='M'); 
@@ -624,6 +628,13 @@ void KFormulaView::slotTypeChanged(const BasicElement *elm)
 	m_rToolBarType->setButton(m_idButtonType_LAl,content[2]=='L'); 
 	m_rToolBarType->setButton(m_idButtonType_RAl,content[2]=='R'); 
 	m_rToolBarType->setButton(m_idButtonType_Mid,content[0]=='F'); 
+    }
+  if (isPrefixed) { 
+	QString content=elm->getContent();
+    QString tmp = KApplication::kde_datadir().copy();
+    tmp += "/kformula/pics/";
+	m_rToolBarType->setButtonPixmap(m_idButtonType_AddH,CORBA::string_dup(loadPixmap(tmp+content.left(1)+"higher.xpm"  )));                 
+	m_rToolBarType->setButtonPixmap(m_idButtonType_AddL ,CORBA::string_dup(loadPixmap(tmp+content.left(1)+"lower.xpm"  )));                 
     }
     debug("Type Changed");
     update();
@@ -698,7 +709,7 @@ void KFormulaView::addIntegral()
 void KFormulaView::addSymbol()
 {
     debug("##adding Symbol");
-    m_pDoc->addPrefixedElement("IF050");
+    m_pDoc->addPrefixedElement("IF06" );
 }
 
 void KFormulaView::reduce()
@@ -875,6 +886,7 @@ void KFormulaView::sizeSelected(const char *size)
     if (el==0) return;
     el->setNumericFont(atoi(size)); 
     warning(size);
+    update();
 }
 void KFormulaView::fontSelected(const char *font)
 {
