@@ -334,30 +334,22 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
   }
 
 
-  if( pStencil->isSelected() )
-  {
+  if(pStencil->isSelected()) {
     // If we are clicking an already selected stencil, and the control
     // key down, then unselect this stencil
-    if( m_controlKey==true )
-    {
-      m_pCustomDraggingStencil = NULL;
-      pPage->unselectStencil( pStencil );
+    if(m_controlKey) {
+      pPage->unselectStencil(pStencil);
     }
-    else
-      m_pCustomDraggingStencil = pStencil;
-
-    // Otherwise, it means we are just moving
-  }
-  else
-  {
+  } else {
     // Clicking a new stencil, and the control key is not down
-    if( !m_controlKey )
+    if(!m_controlKey) {
       pPage->unselectAllStencils();
-
-    m_pCustomDraggingStencil = pStencil;
+    }
 
     pPage->selectStencil( pStencil );
   }
+
+  m_pCustomDraggingStencil = pStencil;
 
   // Set the mode
   m_mode = stmCustomDragging;
