@@ -21,15 +21,14 @@
 #define __SVGPATHPARSER_H__
 
 class QString;
-class KoPoint;
 
 class SVGPathParser
 {
 public:
 	void parseSVG( const QString & );
-	virtual void svgMoveTo( const KoPoint & ) = 0;
-	virtual void svgLineTo( const KoPoint & ) = 0;
-	virtual void svgCurveTo( const KoPoint &, const KoPoint &, const KoPoint & ) = 0;
+	virtual void svgMoveTo( double x1, double y1 ) = 0;
+	virtual void svgLineTo( double x1, double y1 ) = 0;
+	virtual void svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 ) = 0;
 	virtual void svgClosePath() = 0;
 
 private:

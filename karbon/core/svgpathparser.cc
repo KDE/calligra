@@ -20,7 +20,6 @@
 #include "svgpathparser.h"
 #include <math.h>
 #include <qregexp.h>
-#include <koPoint.h>
 
 // parses the coord into number and forwards to the next token
 const char *
@@ -101,7 +100,7 @@ SVGPathParser::parseSVG( const QString &s )
 		const char *end = d.latin1() + d.length() + 1;
 
 		double contrlx, contrly, curx, cury, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
-		KoPoint p1, p2, p3;
+		double px1, py1, px2, py2, px3, py3;
 		bool relative;
 		char command = *(ptr++), lastCommand = ' ';
 
@@ -128,7 +127,7 @@ SVGPathParser::parseSVG( const QString &s )
 
 					//if( lastCommand == 'z' || lastCommand == 'Z' )
 					//	path->close();
-					svgMoveTo( KoPoint( curx, cury ) );
+					svgMoveTo( curx, cury );
 					break;
 				}
 				case 'l':
@@ -141,35 +140,35 @@ SVGPathParser::parseSVG( const QString &s )
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 
-					svgLineTo( KoPoint( curx, cury ) );
+					svgLineTo( curx, cury );
 					break;
 				}
 				case 'h':
 				{
 					ptr = getCoord( ptr, tox );
 					curx = curx + tox;
-					svgLineTo( KoPoint( curx, cury ) );
+					svgLineTo( curx, cury );
 					break;
 				}
 				case 'H':
 				{
 					ptr = getCoord( ptr, tox );
 					curx = tox;
-					svgLineTo( KoPoint( curx, cury ) );
+					svgLineTo( curx, cury );
 					break;
 				}
 				case 'v':
 				{
 					ptr = getCoord( ptr, toy );
 					cury = cury + toy;
-					svgLineTo( KoPoint( curx, cury ) );
+					svgLineTo( curx, cury );
 					break;
 				}
 				case 'V':
 				{
 					ptr = getCoord( ptr, toy );
 					cury = toy;
-					svgLineTo( KoPoint( curx, cury ) );
+					svgLineTo( curx, cury );
 					break;
 				}
 				case 'z':
@@ -192,14 +191,14 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					p1.setX( relative ? curx + x1 : x1 );
-					p1.setY( relative ? cury + y1 : y1 );
-					p2.setX( relative ? curx + x2 : x2 );
-					p2.setY( relative ? cury + y2 : y2 );
-					p3.setX( relative ? curx + tox : tox );
-					p3.setY( relative ? cury + toy : toy );
+					px1 = relative ? curx + x1 : x1;
+					py1 = relative ? cury + y1 : y1;
+					px2 = relative ? curx + x2 : x2;
+					py2 = relative ? cury + y2 : y2;
+					px3 = relative ? curx + tox : tox;
+					py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( p1, p2, p3 );
+					svgCurveTo( px1, py1, px2, py2, px3, py3 );
 
 					contrlx = relative ? curx + x2 : x2;
 					contrly = relative ? cury + y2 : y2;
@@ -217,14 +216,14 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					p1.setX( 2 * curx - contrlx );
-					p1.setY( 2 * cury - contrly );
-					p2.setX( relative ? curx + x2 : x2 );
-					p2.setY( relative ? cury + y2 : y2 );
-					p3.setX( relative ? curx + tox : tox );
-					p3.setY( relative ? cury + toy : toy );
+					px1 = 2 * curx - contrlx;
+					py1 = 2 * cury - contrly;
+					px2 = relative ? curx + x2 : x2;
+					py2 = relative ? cury + y2 : y2;
+					px3 = relative ? curx + tox : tox;
+					py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( p1, p2, p3 );
+					svgCurveTo( px1, py1, px2, py2, px3, py3 );
 
 					contrlx = relative ? curx + x2 : x2;
 					contrly = relative ? cury + y2 : y2;
@@ -241,14 +240,14 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					p1.setX( relative ? (curx + 2 * (x1 + curx)) * (1.0 / 3.0) : (curx + 2 * x1) * (1.0 / 3.0) );
-					p1.setY( relative ? (cury + 2 * (y1 + cury)) * (1.0 / 3.0) : (cury + 2 * y1) * (1.0 / 3.0) );
-					p2.setX( relative ? ((curx + tox) + 2 * (x1 + curx)) * (1.0 / 3.0) : (tox + 2 * x1) * (1.0 / 3.0) );
-					p2.setY( relative ? ((cury + toy) + 2 * (y1 + cury)) * (1.0 / 3.0) : (toy + 2 * y1) * (1.0 / 3.0) );
-					p3.setX( relative ? curx + tox : tox );
-					p3.setY( relative ? cury + toy : toy );
+					px1 = relative ? (curx + 2 * (x1 + curx)) * (1.0 / 3.0) : (curx + 2 * x1) * (1.0 / 3.0);
+					py1 = relative ? (cury + 2 * (y1 + cury)) * (1.0 / 3.0) : (cury + 2 * y1) * (1.0 / 3.0);
+					px2 = relative ? ((curx + tox) + 2 * (x1 + curx)) * (1.0 / 3.0) : (tox + 2 * x1) * (1.0 / 3.0);
+					py2 = relative ? ((cury + toy) + 2 * (y1 + cury)) * (1.0 / 3.0) : (toy + 2 * y1) * (1.0 / 3.0);
+					px3 = relative ? curx + tox : tox;
+					py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( p1, p2, p3 );
+					svgCurveTo( px1, py1, px2, py2, px3, py3 );
 
 					contrlx = relative ? curx + x1 : (tox + 2 * x1) * (1.0 / 3.0);
 					contrly = relative ? cury + y1 : (toy + 2 * y1) * (1.0 / 3.0);
@@ -266,14 +265,14 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord(ptr, tox);
 					ptr = getCoord(ptr, toy);
 
-					p1.setX( relative ? (curx + 2 * xc) * (1.0 / 3.0) : (curx + 2 * xc) * (1.0 / 3.0) );
-					p1.setY( relative ? (cury + 2 * yc) * (1.0 / 3.0) : (cury + 2 * yc) * (1.0 / 3.0) );
-					p2.setX( relative ? ((curx + tox) + 2 * xc) * (1.0 / 3.0) : (tox + 2 * xc) * (1.0 / 3.0) );
-					p2.setY( relative ? ((cury + toy) + 2 * yc) * (1.0 / 3.0) : (toy + 2 * yc) * (1.0 / 3.0) );
-					p3.setX( relative ? curx + tox : tox );
-					p3.setY( relative ? cury + toy : toy );
+					px1 = relative ? (curx + 2 * xc) * (1.0 / 3.0) : (curx + 2 * xc) * (1.0 / 3.0);
+					py1 = relative ? (cury + 2 * yc) * (1.0 / 3.0) : (cury + 2 * yc) * (1.0 / 3.0);
+					px2 = relative ? ((curx + tox) + 2 * xc) * (1.0 / 3.0) : (tox + 2 * xc) * (1.0 / 3.0);
+					py2 = relative ? ((cury + toy) + 2 * yc) * (1.0 / 3.0) : (toy + 2 * yc) * (1.0 / 3.0);
+					px3 = relative ? curx + tox : tox;
+					py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( p1, p2, p3 );
+					svgCurveTo( px1, py1, px2, py2, px3, py3 );
 
 					contrlx = xc;
 					contrly = yc;
