@@ -36,10 +36,12 @@ public:
     /// Look into @p doc for styles and remember them
     void createStyleMap( const QDomDocument& doc );
 
-    /// Contains *all* styles, hashed by name
+    /// @return all styles (with tag "style:style", "style:page-layout" or "style:presentation-page-layout")
+    /// hashed by name
     const QDict<QDomElement>& styles() const { return m_styles; }
 
-    /// Contains the sub-set of "user styles", i.e. those from office:styles
+    /// @return the style:styles that are "user styles", i.e. those from office:styles
+    /// styles() is used for lookup. userStyles() is used to load all user styles upfront.
     QValueVector<QDomElement> userStyles() const;
 
     /// @return the default style
