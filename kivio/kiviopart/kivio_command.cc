@@ -364,3 +364,29 @@ void KivioChangeStencilVAlignmentCommand::unexecute()
     m_stencil->setHTextAlign( oldAlign );
     m_page->doc()->updateView(m_page);
 }
+
+
+KivioChangeStencilFontCommand::KivioChangeStencilFontCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QFont &_oldFont,  const QFont & _newFont)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldFont( _oldFont),
+     newFont( _newFont)
+{
+}
+
+KivioChangeStencilFontCommand::~KivioChangeStencilFontCommand()
+{
+}
+
+void KivioChangeStencilFontCommand::execute()
+{
+    m_stencil->setTextFont( newFont );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioChangeStencilFontCommand::unexecute()
+{
+    m_stencil->setTextFont( oldFont );
+    m_page->doc()->updateView(m_page);
+}

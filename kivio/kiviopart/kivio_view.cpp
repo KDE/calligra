@@ -971,14 +971,18 @@ void KivioView::setFontFamily( const QString &str )
       return;
 
     QFont f;
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Stencil Font"));
     while( pStencil )
     {
         f = pStencil->textFont();
         f.setFamily( str );
+        KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
         pStencil->setTextFont( f );
 
         pStencil = m_pActivePage->selectedStencils()->next();
+        macro->addCommand( cmd );
     }
+    m_pDoc->addCommand( macro  );
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -990,14 +994,20 @@ void KivioView::setFontSize(const QString &str )
 
     QFont f;
     int size = str.toInt();
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Stencil Font"));
     while( pStencil )
     {
         f = pStencil->textFont();
         f.setPointSize( size );
+        KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
+
         pStencil->setTextFont( f );
 
         pStencil = m_pActivePage->selectedStencils()->next();
+        macro->addCommand( cmd );
+
     }
+    m_pDoc->addCommand( macro   );
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1008,14 +1018,21 @@ void KivioView::toggleFontBold(bool b)
       return;
 
     QFont f;
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Stencil Font"));
+
     while( pStencil )
     {
         f = pStencil->textFont();
         f.setBold(b);
+        KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
+
         pStencil->setTextFont( f );
 
         pStencil = m_pActivePage->selectedStencils()->next();
+        macro->addCommand( cmd );
+
     }
+    m_pDoc->addCommand( macro );
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1026,14 +1043,19 @@ void KivioView::toggleFontItalics(bool b)
       return;
 
     QFont f;
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Stencil Font"));
     while( pStencil )
     {
         f = pStencil->textFont();
         f.setItalic(b);
+        KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
+
         pStencil->setTextFont( f );
 
         pStencil = m_pActivePage->selectedStencils()->next();
+        macro->addCommand( cmd );
     }
+    m_pDoc->addCommand( macro );
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1042,16 +1064,20 @@ void KivioView::toggleFontUnderline( bool b)
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Stencil Font"));
     QFont f;
     while( pStencil )
     {
         f = pStencil->textFont();
         f.setUnderline(b);
+        KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
+
         pStencil->setTextFont( f );
 
         pStencil = m_pActivePage->selectedStencils()->next();
+        macro->addCommand( cmd );
     }
+    m_pDoc->addCommand( macro );
     m_pDoc->updateView(m_pActivePage);
 }
 

@@ -21,6 +21,7 @@
 #define kiviocommand_h
 
 #include <kcommand.h>
+#include <qfont.h>
 #include "kivio_rect.h"
 #include "tkpagelayout.h"
 class KivioPage;
@@ -253,6 +254,22 @@ protected:
     int newAlign;
 };
 
+
+class KivioChangeStencilFontCommand : public KNamedCommand
+{
+public:
+    KivioChangeStencilFontCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QFont & _oldFont,  const QFont & _newFont);
+    ~KivioChangeStencilFontCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    QFont oldFont;
+    QFont newFont;
+};
 
 #endif
 
