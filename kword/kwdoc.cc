@@ -455,6 +455,12 @@ void KWDocument::initConfig()
       m_lastViewMode= "ModeNormal";
 
   m_viewMode = KWViewMode::create( m_lastViewMode, this );
+
+  if(config->hasGroup("Expression Path" ) )
+  {
+      config->setGroup( "Expression Path" );
+      m_personalExpressionPath=config->readListEntry( "path");
+  }
 }
 
 void KWDocument::saveConfig()

@@ -21,12 +21,10 @@
 #include "kwdoc.h"
 #include <qvbox.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlistbox.h>
-#include <kmessagebox.h>
-#include "kwcommand.h"
 #include "kweditpath.h"
+#include <kfiledialog.h>
 
 KWEditPathDia::KWEditPathDia( const QString & _path, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
@@ -62,7 +60,7 @@ QString KWEditPathDia::newPath()const
     {
         if ( i!=0)
             tmp +=";";
-        tmp = m_listpath->text( i );
+        tmp += m_listpath->text( i );
     }
     return tmp;
 }
@@ -77,7 +75,11 @@ void KWEditPathDia::slotSelectionChanged()
 
 void KWEditPathDia::slotAddPath()
 {
-    //todo
+    QString path = KFileDialog::getExistingDirectory();
+    if ( !path.isEmpty())
+    {
+        m_listpath->insertItem( path );
+    }
 }
 
 void KWEditPathDia::slotDeletePath()

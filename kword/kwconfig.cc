@@ -902,7 +902,10 @@ void ConfigurePathPage::apply()
     QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
     {
-        m_pView->kWordDocument()->setPersonalExpressionPath(QStringList::split(QString(";"), item->text(1)));
+        QStringList lst = QStringList::split(QString(";"), item->text(1));
+        m_pView->kWordDocument()->setPersonalExpressionPath(lst);
+        config->setGroup( "Expression Path" );
+        config->writeEntry( "path", lst);
     }
 }
 
