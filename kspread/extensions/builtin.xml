@@ -1253,6 +1253,25 @@ parameters. You can multiply values given by a range multiply(A1:B5) or list of 
     </Function>
 
     <Function>
+      <Name>RANDBETWEEN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Bottom value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Top value</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDBETWEEN() function returns a pseudo-random number between bottom and top value. If bottom > top this function returns Err.</Text>
+	<Syntax>RANDBETWEEN(bottom;top)</Syntax>
+	<Example>RANDBETWEEN(12;78) equals for example 61.0811...</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>ROUNDUP</Name>
       <Type>Float</Type>
       <Parameter>

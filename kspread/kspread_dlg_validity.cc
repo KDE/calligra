@@ -66,6 +66,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     listType+=i18n("Text");
     listType+=i18n("Date");
     listType+=i18n("Time");
+    listType+=i18n("Text length");
     chooseType->insertStringList(listType);
     chooseType->setCurrentItem(0);
 
@@ -194,6 +195,7 @@ switch(_index)
                         }
                 break;
         case 2:
+        case 6:
                 val_min->setEnabled(true);
                 edit1->setEnabled(true);
                 choose->setEnabled(true);
@@ -290,7 +292,8 @@ switch(_index)
         case 3:
         case 4:
                 val_max->setEnabled(false);
-                if(chooseType->currentItem()==1 ||chooseType->currentItem()==2)
+                if(chooseType->currentItem()==1 ||chooseType->currentItem()==2
+                ||chooseType->currentItem()==6)
                         edit1->setText(i18n("Number :"));
                 else if( chooseType->currentItem()==3)
                         edit1->setText("");
@@ -306,7 +309,8 @@ switch(_index)
                 val_max->setEnabled(true);
                 edit2->setEnabled(true);
                 edit1->setEnabled(true);
-                if(chooseType->currentItem()==1 || chooseType->currentItem()==2)
+                if(chooseType->currentItem()==1 || chooseType->currentItem()==2
+                || chooseType->currentItem()==6)
                         {
                         edit1->setText(i18n("Minimum : " ));
                         edit2->setText(i18n("Maximum : " ));
@@ -352,6 +356,12 @@ void KSpreadDlgValidity::init()
                         break;
                 case Allow_Integer:
                         chooseType->setCurrentItem(2);
+                        if(tmpValidity->m_cond >=5 )
+                                val_max->setText(tmp.setNum(tmpValidity->valMax));
+                        val_min->setText(tmp.setNum(tmpValidity->valMin));
+                        break;
+                case Allow_TextLength:
+                        chooseType->setCurrentItem(6);
                         if(tmpValidity->m_cond >=5 )
                                 val_max->setText(tmp.setNum(tmpValidity->valMax));
                         val_min->setText(tmp.setNum(tmpValidity->valMin));
@@ -443,7 +453,7 @@ if( chooseType->currentItem()==1)
                 return;
                 }
         }
-else if( chooseType->currentItem()==2)
+else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
         {
         QString tmp;
         bool ok;
@@ -529,6 +539,10 @@ else
                 case 5:
                         result.m_allow=Allow_Time;
                         break;
+                case 6:
+                        result.m_allow=Allow_TextLength;
+                        break;
+
                 default :
                         break;
                 }
@@ -593,7 +607,7 @@ else
                         result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
                         }
                 }
-        else if( chooseType->currentItem()==2)
+        else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
                 {
                 if(choose->currentItem()  <5)
                         {

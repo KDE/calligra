@@ -1135,6 +1135,26 @@ static bool kspreadfunc_rand( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_randbetween( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 2, "RANDBETWEEN", true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+        return false;
+    if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+        return false;
+    if(args[0]->intValue()>args[1]->intValue())
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return true;
+        }
+    context.setValue( new KSValue((double)(((double)args[1]->intValue())*rand()/(RAND_MAX+((double)args[0]->intValue())))));
+    return true;
+}
+
+
 static bool kspreadfunc_REPT( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -3822,6 +3842,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "DELTA", new KSValue( new KSBuiltinFunction( module, "DELTA", kspreadfunc_delta ) ) );
   module->addObject( "EVEN", new KSValue( new KSBuiltinFunction( module, "EVEN", kspreadfunc_even ) ) );
   module->addObject( "ODD", new KSValue( new KSBuiltinFunction( module, "ODD", kspreadfunc_odd ) ) );
+  module->addObject( "RANDBETWEEN", new KSValue( new KSBuiltinFunction( module, "RANDBETWEEN", kspreadfunc_randbetween ) ) );
   return module;
 }
 

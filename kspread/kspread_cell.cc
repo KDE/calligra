@@ -3653,6 +3653,47 @@ if(m_Validity!=0)
                  if(!isValue() && !isBool() && !isDate() && !isTime())
                         valid=true;
                 }
+        else if(m_Validity->m_allow==Allow_TextLength)
+                {
+                 if(!isValue() && !isBool() && !isDate() && !isTime())
+                        {
+                        int len=m_strOutText.length();
+                        switch( m_Validity->m_cond)
+                                {
+                                case Equal:
+                                        if(len ==m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Superior:
+                                        if(len >m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Inferior:
+                                        if(len <m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case SuperiorEqual:
+                                        if(len >=m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case InferiorEqual:
+                                        if(len <=m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Between:
+                                        if(len >=m_Validity->valMin && len <=m_Validity->valMax)
+                                                valid=true;
+                                        break;
+                                case Different:
+                                        if(len <m_Validity->valMin || len >m_Validity->valMax)
+                                                valid=true;
+                                        break;
+                                default :
+                                        break;
+                                }
+                        }
+                }
+
         else if(m_Validity->m_allow==Allow_Time)
                 {
                  if(isTime())

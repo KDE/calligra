@@ -1100,3 +1100,6 @@ Add new functions ISEVEN, ISODD, ODD, EVEN, DELTA
 2000-12-03-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 Now you can validate on integer
+Now you can validate on text length ( when value is a string)
+Add RANDBETWEEN function
+
