@@ -144,6 +144,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_doc, SIGNAL( sig_refreshMenuCustomVariable()),
              this, SLOT( refreshCustomMenu()));
 
+    connect( m_doc, SIGNAL(sig_frameSelectedChanged()),
+             this, SLOT( frameSelectedChanged()));
+
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 

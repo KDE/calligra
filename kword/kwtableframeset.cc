@@ -1114,42 +1114,45 @@ void KWTableFrameSet::group()
    m_active = true;
 }
 
-bool KWTableFrameSet::joinCells() {
-    unsigned int colBegin, rowBegin, colEnd,rowEnd;
-    if ( !getFirstSelected( rowBegin, colBegin ) )
-        return false;
-    kdDebug()<<"rowBegin :"<<rowBegin<< " colBegin :"<<colBegin<<endl;
-
+bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
     Cell *firstCell = getCell(rowBegin, colBegin);
-    colEnd=colBegin+firstCell->m_cols-1;
-    rowEnd=rowBegin+firstCell->m_rows-1;
+    if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
+    {
 
-    while(colEnd+1 <getCols()) { // count all horizontal selected cells
-        Cell *cell = getCell(rowEnd,colEnd+1);
-        if(cell->getFrame(0)->isSelected()) {
-            colEnd+=cell->m_cols;
-        } else
-            break;
-    }
+        if ( !getFirstSelected( rowBegin, colBegin ) )
+            return false;
+        kdDebug()<<"rowBegin :"<<rowBegin<< " colBegin :"<<colBegin<<endl;
 
-    while(rowEnd+1 < getRows()) { // count all vertical selected cells
-        Cell *cell = getCell(rowEnd+1, colBegin);
-        if(cell->getFrame(0)->isSelected()) {
-            for(unsigned int j=1; j <= cell->m_rows; j++) {
-                for(unsigned int i=colBegin; i<=colEnd; i++) {
-                    if(! getCell(rowEnd+j,i)->getFrame(0)->isSelected())
-                        return false; // can't use this selection..
+        firstCell = getCell(rowBegin, colBegin);
+        colEnd=colBegin+firstCell->m_cols-1;
+        rowEnd=rowBegin+firstCell->m_rows-1;
+
+        while(colEnd+1 <getCols()) { // count all horizontal selected cells
+            Cell *cell = getCell(rowEnd,colEnd+1);
+            if(cell->getFrame(0)->isSelected()) {
+                colEnd+=cell->m_cols;
+            } else
+                break;
+        }
+
+        while(rowEnd+1 < getRows()) { // count all vertical selected cells
+            Cell *cell = getCell(rowEnd+1, colBegin);
+            if(cell->getFrame(0)->isSelected()) {
+                for(unsigned int j=1; j <= cell->m_rows; j++) {
+                    for(unsigned int i=colBegin; i<=colEnd; i++) {
+                        if(! getCell(rowEnd+j,i)->getFrame(0)->isSelected())
+                            return false; // can't use this selection..
+                    }
                 }
-            }
-            rowEnd+=cell->m_rows;
-        } else
-            break;
+                rowEnd+=cell->m_rows;
+            } else
+                break;
+        }
+        // if just one cell selected for joining; exit.
+        if(rowBegin == rowEnd && colBegin == colEnd ||
+           getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd))
+            return false;
     }
-    // if just one cell selected for joining; exit.
-    if(rowBegin == rowEnd && colBegin == colEnd ||
-            getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd))
-        return false;
-
     double bottom=getCell(rowEnd, colBegin)->getFrame(0)->bottom();
     double right=getCell(rowEnd, colEnd)->getFrame(0)->right();
 

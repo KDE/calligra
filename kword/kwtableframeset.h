@@ -198,7 +198,7 @@ public:
     bool isActive() { return m_active; }
 
     /** merge cells to one cell. Will loose all text not in top-left cell */
-    bool joinCells();
+    bool joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
     /** split selected cell into a number of cells */
     bool splitCell(unsigned int intoRows, unsigned int intoCols);
 

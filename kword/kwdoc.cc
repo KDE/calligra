@@ -2840,4 +2840,9 @@ void KWDocument::refreshMenuExpression()
         it.current()->refreshMenuExpression();
 }
 
+void KWDocument::frameSelectedChanged()
+{
+    emit sig_frameSelectedChanged();
+}
+
 #include "kwdoc.moc"

@@ -903,6 +903,7 @@ void KWInsertColumnCommand::unexecute()
         }
     }
     doc->terminateEditing(m_pTable);
+    doc->frameSelectedChanged();
     m_pTable->deleteCol( m_colPos);
     doc->updateAllFrames();
     doc->layout();
@@ -944,6 +945,7 @@ void KWInsertRowCommand::unexecute()
     }
     doc->terminateEditing(m_pTable);
     m_pTable->deleteRow( m_rowPos);
+    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -979,6 +981,7 @@ void KWRemoveRowCommand::execute()
     }
 
     m_pTable->deleteRow( m_rowPos);
+    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -1022,7 +1025,7 @@ void KWRemoveColumnCommand::execute()
     }
 
     m_pTable->deleteCol( m_colPos);
-
+    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
