@@ -289,7 +289,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
         }
 
-    if( !refFormat || curFormat->isAnchor() != refFormat->isAnchor())
+    if( (!refFormat || curFormat->isAnchor() != refFormat->isAnchor()) &&!curFormat->anchorName().isEmpty() && !curFormat->anchorHref().isEmpty() )
     {
         elem = doc.createElement( "LINK" );
         formatElem.appendChild( elem );
