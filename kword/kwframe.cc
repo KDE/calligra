@@ -51,7 +51,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       selected( false ),
       mostRight( false ),
       m_pageNum( 0 ),
-      backgroundColor(),
+      backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), Border::SOLID, 0 ),
       brd_right( QColor(), Border::SOLID, 0 ),
       brd_top( QColor(), Border::SOLID, 0 ),
@@ -1004,6 +1004,8 @@ void KWFrameSet::printDebug()
         kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
         kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;
         kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
+        QColor col = frame->getBackgroundColor().color();
+        kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
         kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
         if(frame->isSelected())
             kdDebug() << " *   Page "<< frame->pageNum() << endl;
