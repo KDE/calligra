@@ -2453,9 +2453,6 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 	painter->translate( -ir.x(), -ir.y() );
     }
 
-    /* ### To be made optionnal (to be discussed with Reggie)
-       Needed to comment it out in KWord for the "view formatting characters" option,
-       and will also need this out if we go for a document-wide 'parag border'. */
     if ( parag->rect().x() + parag->rect().width() < parag->document()->x() + parag->document()->width() ) {
 	p->fillRect( parag->rect().x() + parag->rect().width(), parag->rect().y(),
 		     ( parag->document()->x() + parag->document()->width() ) -
@@ -2507,7 +2504,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	    QRect pr( parag->rect() );
 	    pr.setWidth( parag->document()->width() );
 	    if ( pr.intersects( QRect( cx, cy, cw, ch ) ) )
-		p->fillRect( pr.intersect( QRect( cx, cy, cw, ch ) ), cg.brush( QColorGroup::Base ) );
+                p->fillRect( pr.intersect( QRect( cx, cy, cw, ch ) ), cg.brush( QColorGroup::Base ) );
 	    if ( parag->rect().y() > cy + ch ) {
 		tmpCursor = 0;
 		if ( buf_pixmap && buf_pixmap->height() > 300 ) {
