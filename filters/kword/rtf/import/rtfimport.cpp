@@ -283,8 +283,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     table	= 0;
-    clipart	= 0;
-    pixmap	= 0;
+    pictureNumber	= 0;
 
     // Document-formatting properties
     paperWidth	= 12240;
@@ -301,8 +300,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     // Create main document
     frameSets.clear( 2 );
-    pixmaps.clear( 2 );
-    cliparts.clear( 2 );
+    pictures.clear( );
     bodyText.node.clear( 3 );
     firstPageHeader.node.clear( 3 );
     oddPagesHeader.node.clear( 3 );
@@ -514,14 +512,11 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    mainDoc.closeNode( "FRAMESET" );
 	}
 	mainDoc.appendNode( frameSets );
-      mainDoc.closeNode( "FRAMESETS" );
-      mainDoc.addNode( "PIXMAPS" );
-	mainDoc.appendNode( pixmaps );
-      mainDoc.closeNode( "PIXMAPS" );
-      mainDoc.addNode( "CLIPARTS" );
-	mainDoc.appendNode( cliparts );
-      mainDoc.closeNode( "CLIPARTS" );
-      mainDoc.addNode( "STYLES" );
+        mainDoc.closeNode( "FRAMESETS" );
+        mainDoc.addNode( "PICTURES" );
+        mainDoc.appendNode( pictures );
+        mainDoc.closeNode( "PICTURES" );
+        mainDoc.addNode( "STYLES" );
 	kwFormat.id  = 1;
 	kwFormat.pos = 0;
 	kwFormat.len = 0;
@@ -538,7 +533,9 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    {
 		if (styleSheet[k].layout.style == style.next)
 		{
-		    mainDoc.setAttribute( "FOLLOWING", (const char *)styleSheet[k].name );
+                mainDoc.addNode( "FOLLOWING" );
+                mainDoc.setAttribute( "name", (const char *)styleSheet[k].name );
+                mainDoc.closeNode( "FOLLOWING");
 		    break;
 		}
 	    }
@@ -1171,69 +1168,59 @@ void RTFImport::parsePicture( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
-	char pictName[64];
-	char frameName[64];
-	bool isClipart = (picture.type == RTFPicture::WMF ||
-			  picture.type == RTFPicture::EMF);
+        char pictName[64];
+        char frameName[64];
+        const char *ext;
 
-	// Store picture or clipart
-	if (isClipart)
-	{
-	    int id = clipart++;
-	    sprintf( pictName, "cliparts/clipart%d.svg", id );
-	    sprintf( frameName, "Clipart %d", id );
+        // Select file extension based on picture type
+        switch (picture.type)
+        {
+        case RTFPicture::WMF:
+        case RTFPicture::EMF:
+            ext="wmf";
+            break;
+        case RTFPicture::BMP:
+            ext = "bmp";
+            break;
+        case RTFPicture::MacPict:
+            ext = "pict";
+            break;
+        case RTFPicture::JPEG:
+            ext = "jpg";
+            break;
+        case RTFPicture::PNG:
+        default:
+            ext = "png";
+            break;
+        }
+        int id = pictureNumber++;
+        sprintf( pictName, "pictures/picture%d.%s", id, ext );
+        sprintf( frameName, "Picture %d", id );
 
-	    // Store clipart in SVG format
-	    writeOutMetafile( pictName, picture.bits );
-	}
-	else
-	{
-	    const char *ext;
+        // Store picture
+        writeOutPart( pictName, picture.bits );
 
-	    // Select file extension based on picture type
-	    switch (picture.type)
-	    {
-	    case RTFPicture::BMP:
-		ext = "bmp";
-		break;
-	    case RTFPicture::MacPict:
-		ext = "pict";
-		break;
-	    case RTFPicture::JPEG:
-		ext = "jpg";
-		break;
-	    case RTFPicture::PNG:
-	    default:
-		ext = "png";
-		break;
-	    }
-	    int id = pixmap++;
-	    sprintf( pictName, "pictures/picture%d.%s", id, ext );
-	    sprintf( frameName, "Picture %d", id );
+        // Add anchor to rich text destination
+        addAnchor( frameName );
 
-	    // Store picture
-	    writeOutPart( pictName, picture.bits );
-	}
+        // It is safe, as we call currentDateTime only once for each picture
+        QDateTime dt(QDateTime::currentDateTime());
 
-	// Add anchor to rich text destination
-	addAnchor( frameName );
+        // Add pixmap or clipart (key)
+        pictures.addKey( dt, pictName, pictName );
 
-	// Add pixmap or clipart (key)
-	if (isClipart)
-	    cliparts.addKey( pictName, pictName );
-	else
-	    pixmaps.addKey( pictName, pictName );
-
-	// Add picture or clipart frameset
-	frameSets.addFrameSet( frameName, (isClipart ? 5 : 2), 0 );
-	  frameSets.addFrame( 0, 0,
-		    (picture.desiredWidth  * picture.scalex) /100,
-		    (picture.desiredHeight * picture.scaley) /100, 0, 1, 0 );
-	  frameSets.closeNode( "FRAME" );
-	  frameSets.addNode( isClipart ? "CLIPART" : "IMAGE" );
-	    frameSets.addKey( pictName );
-	  frameSets.closeNode( isClipart ? "CLIPART" : "IMAGE" );
-	frameSets.closeNode( "FRAMESET" );
+        // Add picture or clipart frameset
+        frameSets.addFrameSet( frameName, 2, 0 );
+        kdDebug() << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
+        kdDebug() << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
+        frameSets.addFrame( 0, 0,
+                (picture.desiredWidth  * picture.scalex) /100 ,
+                (picture.desiredHeight * picture.scaley) /100 , 0, 1, 0 );
+        frameSets.closeNode( "FRAME" );
+        frameSets.addNode( "PICTURE" );
+        frameSets.addKey( dt, pictName );
+        frameSets.closeNode( "PICTURE" );
+        frameSets.closeNode( "FRAMESET" );
     }
 }
 
@@ -2052,32 +2039,4 @@ void RTFImport::writeOutPart( const char *name, QByteArray &array )
     KoStoreDevice* dev = m_chain->storageFile( name, KoStore::Write );
     if ( dev )
 	dev->writeBlock( array.data(), array.size() );
-}
-
-/**
- * Write out Windows Metafile in SVG format.
- * @param name the internal name of the part
- * @param array the data to write
- */
-void RTFImport::writeOutMetafile( const char *name, QByteArray &array )
-{
-    QWinMetaFile wmf;
-    QPicture pic;
-    QBuffer buf( array );
-
-    buf.open( IO_ReadOnly );
-
-    if (wmf.load( buf ))
-	wmf.paint( &pic );
-
-    buf.close();
-
-    array.truncate( 0 );
-    buf.setBuffer( array );
-    buf.open( IO_WriteOnly );
-    pic.save( &buf, "svg" );
-    buf.close();
-
-    // Store clipart
-    writeOutPart( name, array );
 }

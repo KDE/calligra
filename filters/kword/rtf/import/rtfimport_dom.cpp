@@ -144,14 +144,14 @@ void DomNode::addRect( int left, int top, int right, int bottom )
 
 /**
  * Add pixmap or clipart key.
+ * @param dt date/time
  * @param filename the filename of the image
  * @param name the relative path to the image in the store (optional)
  */
-void DomNode::addKey( const char *filename, const char *name )
+void DomNode::addKey( QDateTime dt, const char *filename, const char *name )
 {
-    QDateTime dateTime = QDateTime::currentDateTime();
-    QDate date = dateTime.date();
-    QTime time = dateTime.time();
+    QDate date = dt.date();
+    QTime time = dt.time();
 
     addNode( "KEY" );
     setAttribute( "filename", filename );

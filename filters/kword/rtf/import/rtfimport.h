@@ -243,13 +243,11 @@ public:
     void addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt=0);
     void finishTable();
     void writeOutPart( const char *name, QByteArray &array );
-    void writeOutMetafile( const char *name, QByteArray &array );
 
 
     RTFTokenizer token;
     DomNode frameSets;
-    DomNode pixmaps;
-    DomNode cliparts;
+    DomNode pictures;
     DomNode author, company, title, doccomm;
     RTFTextState bodyText;
     QPtrList<RTFTextState> footnotes; //list of footnotes
@@ -270,7 +268,7 @@ public:
     RTFTableCell emptyCell;
     KWFormat kwFormat;
     QAsciiDict<RTFProperty> properties;
-    uint table, clipart, pixmap;
+    uint table, pictureNumber;
 
     // Color table and document-formatting properties
     int red, green, blue;
