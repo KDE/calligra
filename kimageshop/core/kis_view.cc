@@ -168,14 +168,14 @@ void KisView::setupScrollBars()
 
 void KisView::setupRulers()
 {
-  m_pHRuler = new KRuler(KRuler::horizontal, this);
-  m_pVRuler = new KRuler(KRuler::vertical, this);
+  m_pHRuler = new KRuler(Qt::Horizontal, this);
+  m_pVRuler = new KRuler(Qt::Vertical, this);
 
   m_pHRuler->setGeometry(20, 0, width()-20, 20);
   m_pVRuler->setGeometry(0, 20, 20, height()-20);
 
-  m_pVRuler->setRulerStyle(KRuler::pixel);
-  m_pHRuler->setRulerStyle(KRuler::pixel);
+  m_pVRuler->setRulerMetricStyle(KRuler::Pixel);
+  m_pHRuler->setRulerMetricStyle(KRuler::Pixel);
 
   m_pVRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
   m_pHRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);

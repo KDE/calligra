@@ -23,6 +23,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 
 #include "kis_config.h"
@@ -147,11 +148,11 @@ void KisConfig::saveAll()
 void KisConfig::loadGlobalSettings()
 {
   // read some fonts
-  QFont font = KGlobal::generalFont();
+  QFont font = KGlobalSettings::generalFont();
   font.setPointSize( 10 );
   m_smallFont = kc->readFontEntry( "Small Font", &font );
 
-  font = KGlobal::generalFont();
+  font = KGlobalSettings::generalFont();
   font.setPointSize( 8 );
   m_tinyFont = kc->readFontEntry( "Tiny Font", &font );
 
