@@ -23,6 +23,24 @@
 #include <pagelayoutdia.h>
 #include <graphiteglobal.h>
 
+class PreviewWidget : public QWidget {
+
+    Q_OBJECT
+
+public:
+    PreviewWidget(Graphite::PageLayout &layout, QWidget *parent=0, const char *name=0);
+    virtual ~PreviewWidget() {}
+
+    virtual QSize minimumSizeHint() const { return QSize(50, 50); }
+
+protected:
+    void paintEvent(QPaintEvent *e);
+
+private:
+    Graphite::PageLayout &m_layout;
+};
+
+
 class PageLayoutDiaImpl : public PageLayoutDia {
 
     Q_OBJECT
@@ -34,13 +52,23 @@ public:
 
     static void pageLayoutDia(Graphite::PageLayout &layout, QWidget *parent=0);
 
+signals:
+    void updatePreview();
+
 private slots:
     void unitChanged(int);
+    void formatChanged(int);
+    void orientationChanged(int);
+    void heightChanged(double);
+    void widthChanged(double);
+    void topBorderChanged(double);
+    void leftBorderChanged(double);
+    void rightBorderChanged(double);
+    void bottomBorderChanged(double);
+    void saveAsDefault();
+    void restoreDefaults();
 
 private:
-    void saveAsDefault();
-    void restoreDefault();
-
     Graphite::PageLayout &m_layout;
 };
 

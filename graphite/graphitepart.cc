@@ -43,7 +43,7 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     setInstance(GraphiteFactory::global());
     m_history=new KCommandHistory(actionCollection());
 
-    KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
+    KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut");
 
     // Settings -> Configure... (nice dialog to configure e.g. units)
 }

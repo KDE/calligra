@@ -63,7 +63,9 @@ private:
     GCanvas *m_canvas;
     Ruler *m_vert, *m_horiz;
     int m_oldX, m_oldY;
+
     KSelectAction *m_zoomAction;
+    KAction *file_pageLayout;
 };
 
 #endif

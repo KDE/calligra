@@ -47,6 +47,7 @@ protected:
 
     virtual void viewportPaintEvent(QPaintEvent *e);
 
+    // ### don't forget to e->accept() key, dnd, and wheel events!!!
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
     // Here we should tell the document not to draw the handles
