@@ -90,7 +90,7 @@ bool KivioShape::loadXML( const QDomElement &e )
     if( m_shapeData.name().isEmpty() ||
         m_shapeData.shapeType() == -1 )
     {
-       kdWarning() << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
+       kdWarning(43000) << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
        return false;
     }
 

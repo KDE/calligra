@@ -46,7 +46,7 @@ KivioPyStencil::KivioPyStencil()
    static bool first_time = true;
    if ( first_time ) {
      Py_Initialize();  // initialize python only once
-	 //qDebug("init kivioc");
+	 //kdDebug(43000) << "init kivioc" << endl;
      initkivioc();
      first_time = false;
    }
@@ -537,7 +537,7 @@ int KivioPyStencil::runPython(QString code)
     //const char *ccode = code.local8Bit().data();
 	const char *ccode = code.latin1();
 
-    //qDebug( "code to run:\n%s", ccode );
+    //kdDebug(43000) << "code to run:" << endl << ccode << endl;
 
     PyObject *v = PyRun_String( const_cast<char*>(ccode) , Py_file_input, globals, vars );
 
@@ -858,7 +858,7 @@ QColor KivioPyStencil::readColor( PyObject *color )
 
 void KivioPyStencil::PyDebug( PyObject * o )
 {
-    qDebug( "py_debug : %s",  PyString_AsString(PyObject_Str(o)) );
+    kdDebug(43000) << "py_debug: " <<  PyString_AsString(PyObject_Str(o)) << endl;
 }
 
 

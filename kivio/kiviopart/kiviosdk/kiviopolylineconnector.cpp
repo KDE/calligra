@@ -225,7 +225,7 @@ namespace Kivio {
     int index = data->id - (kctCustom + 1);
     
     if((index < 0) || index >= m_points.count()) {
-      kdDebug() << "PolyLineConnector::customDrag: Index out of range! Index = " << index << endl;
+      kdDebug(43000) << "PolyLineConnector::customDrag: Index out of range! Index = " << index << endl;
     }
     
     KoPoint pos(data->x, data->y);

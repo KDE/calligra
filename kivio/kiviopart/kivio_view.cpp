@@ -1990,7 +1990,7 @@ void KivioView::showAlign( int align )
 {
   switch ( align ) {
     case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
-      kdWarning() << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
+      kdWarning(43000) << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
       // fallthrough
     case Qt::AlignLeft:
       m_textAlignLeft->setChecked( true );

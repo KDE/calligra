@@ -230,7 +230,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         }
         else
         {
-	   kdWarning() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
+	   kdWarning(43000) << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);

@@ -51,7 +51,7 @@ K_EXPORT_COMPONENT_FACTORY( straight_connector, KGenericFactory<KivioConnectorFa
 KivioConnectorFactory::KivioConnectorFactory(QObject *parent, const char* name, const QStringList& args) :
 	KivioStencilFactory(parent, name, args)
 {
-	kdDebug() << "new straight line connector factory: " << endl;
+	kdDebug(43000) << "new straight line connector factory: " << endl;
 }
 
 KivioStencil *KivioConnectorFactory::NewStencil()
