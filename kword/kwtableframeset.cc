@@ -893,7 +893,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSe
         }
         newCell->m_cols=colSpan;
         newCell->setIsRemoveableHeader( isAHeader );
-        newCell->addFrame( frame, _recalc );
+        newCell->addFrame( frame, /*_recalc*/false );
         nCells.append( newCell );
         newCell->m_cols = getCell(copyFromRow,i)->m_cols;
 
@@ -979,7 +979,7 @@ void KWTableFrameSet::insertCol( unsigned int col,QList<KWFrameSet> listFrameSet
         {
             frame=listFrame.at(i);
         }
-        newCell->addFrame( frame );
+        newCell->addFrame( frame,false );
         if(cell->m_rows >1) {
             newCell->m_rows = cell->m_rows;
             i+=cell->m_rows -1;
@@ -1322,12 +1322,12 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 frame->setRunAround( KWFrame::RA_NO );
                 frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
                 frame->setNewFrameBehaviour(KWFrame::NoFollowup);
-                lastFrameSet->addFrame( frame );
+                lastFrameSet->addFrame( frame,false );
             }
             else
             {
                 frame=listFrame.at(i);
-                lastFrameSet->addFrame( frame );
+                lastFrameSet->addFrame( frame,false );
             }
             i++;
 
@@ -1430,7 +1430,7 @@ void KWTableFrameSet::validate()
                 KWFrame *frame = new KWFrame(_frameSet, x, y, width, height, KWFrame::RA_NO );
                 frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
                 frame->setNewFrameBehaviour(KWFrame::NoFollowup);
-                _frameSet->addFrame( frame );
+                _frameSet->addFrame( frame,false );
                 _frameSet->m_rows = 1;
                 _frameSet->m_cols = 1;
             }
