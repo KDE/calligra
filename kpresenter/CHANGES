@@ -142,3 +142,4 @@ Changes after KPresenter 1.2
 - Use kocommandhistory
 - Add support for global language
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
+- Use new kospell API
