@@ -27,7 +27,7 @@ public:
 
 	// Beziers need the previous segment's lastpoint to calculate all their QPoints
 	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
-		const double& zoomFactor ) const;
+		const double& zoomFactor ) const { return QPointArray(); }
 
 	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) const
 		{ return 0L; }
@@ -36,7 +36,7 @@ public:
  	const VPoint* lastPoint() const { return &m_lastPoint; }
 
 /* gxpath2.c */
-	virtual const VSegment revert( const VSegment& prevSeg );
+	virtual const VSegment revert( const VSegment& prevSeg ) {};
 
 	virtual void transform( const VAffineMap& affmap );
 
