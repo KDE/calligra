@@ -317,16 +317,15 @@ void KWFrame::setSelected( bool _selected )
 
 QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
-    KWDocument *doc = frameSet()->kWordDocument();
+    KWDocument *doc = m_frameSet->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
     bool isFrameVisible = viewMode && viewMode->drawFrameBorders();
-    if (frameSet() && frameSet()->getGroupManager())
-        isFrameVisible = false;
-    if ( isFrameVisible ) {
-        outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.width(), doc, 1 );
-        outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.width(), doc, 1 );
-        outerRect.rRight() += KoBorder::zoomWidthX( brd_right.width(), doc, 1 );
-        outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.width(), doc, 1 );
+    if ( isFrameVisible && !m_frameSet->getGroupManager() ) {
+        KWFrame* settingsFrame = m_frameSet->settingsFrame( this );
+        outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, 1 );
+        outerRect.rTop() -= KoBorder::zoomWidthY( settingsFrame->topBorder().width(), doc, 1 );
+        outerRect.rRight() += KoBorder::zoomWidthX( settingsFrame->rightBorder().width(), doc, 1 );
+        outerRect.rBottom() += KoBorder::zoomWidthY( settingsFrame->bottomBorder().width(), doc, 1 );
     }
     return outerRect;
 }
@@ -334,11 +333,12 @@ QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 KoRect KWFrame::outerKoRect() const
 {
     KoRect outerRect = *this;
-    KWDocument *doc = frameSet()->kWordDocument();
-    outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.width(), doc, 1 ) / doc->zoomedResolutionX();
-    outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.width(), doc, 1 ) / doc->zoomedResolutionY();
-    outerRect.rRight() += KoBorder::zoomWidthX( brd_right.width(), doc, 1 ) / doc->zoomedResolutionX();
-    outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.width(), doc, 1 ) / doc->zoomedResolutionY();
+    KWDocument *doc = m_frameSet->kWordDocument();
+    KWFrame* settingsFrame = m_frameSet->settingsFrame( this );
+    outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rTop() -= KoBorder::zoomWidthY( settingsFrame->topBorder().width(), doc, 1 ) / doc->zoomedResolutionY();
+    outerRect.rRight() += KoBorder::zoomWidthX( settingsFrame->rightBorder().width(), doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rBottom() += KoBorder::zoomWidthY( settingsFrame->bottomBorder().width(), doc, 1 ) / doc->zoomedResolutionY();
     return outerRect;
 }
 
@@ -1031,21 +1031,21 @@ int KWFrameSet::frameFromPtr( KWFrame *frame )
     return frames.findRef( frame );
 }
 
-KWFrame * KWFrameSet::settingsFrame(KWFrame* frame)
+KWFrame * KWFrameSet::settingsFrame( const KWFrame* frame )
 {
     QPtrListIterator<KWFrame> frameIt( frame->frameSet()->frameIterator() );
     if ( !frame->isCopy() )
-        return frame;
+        return const_cast<KWFrame *>( frame );
     KWFrame* lastRealFrame=0L;
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *curFrame = frameIt.current();
         if( curFrame == frame )
-            return lastRealFrame ? lastRealFrame : frame;
+            return lastRealFrame ? lastRealFrame : const_cast<KWFrame *>( frame );
         if ( !lastRealFrame || !curFrame->isCopy() )
             lastRealFrame = curFrame;
     }
-    return frame; //fallback, should never happen
+    return const_cast<KWFrame *>( frame ); //fallback, should never happen
 }
 
 void KWFrameSet::updateFrames( int flags )
