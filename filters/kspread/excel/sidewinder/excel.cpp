@@ -3008,8 +3008,8 @@ public:
   // color table (from Palette record)
   std::vector<Color> colorTable;
   
-  // mapping from XF index to Sidewinder::Format
-  std::map<unsigned,Format> formatCache;
+  // mapping from font index to Sidewinder::FormatFont
+  std::map<unsigned,FormatFont> fontCache;
 };
 
 ExcelReader::ExcelReader(): Reader()
@@ -3616,27 +3616,32 @@ static Pen convertBorderStyle( unsigned style )
 // big task: convert Excel XFormat into Sidewinder::Format
 Format ExcelReader::convertFormat( unsigned xfIndex )
 {
-  if( xfIndex >= d->xfTable.size() ) return Format();
+  Format format;
 
+  if( xfIndex >= d->xfTable.size() ) return format;
+
+  XFRecord xf = d->xfTable[ xfIndex ];
+    
   // speed-up trick: check in the cache first  
-  Format format = d->formatCache[ xfIndex ];
-  if( !format.isNull() ) return format;
-  
-  XFRecord xf = d->xfTable[ xfIndex ];  
   unsigned fontIndex = xf.fontIndex();
-  
-  if( fontIndex < d->fontTable.size() )
+  FormatFont font = d->fontCache[ fontIndex ];
+  if( font.isNull() && ( fontIndex < d->fontTable.size() ))
   {
     FontRecord fr = d->fontTable[ fontIndex ];
-    format.font().setFontSize( fr.height() / 20.0 );
-    format.font().setFontFamily( fr.fontName() );
-    format.font().setBold( fr.boldness() > 500 );
-    format.font().setItalic( fr.italic() );
-    format.font().setStrikeout( fr.strikeout() );    
-    format.font().setSubscript( fr.script() == FontRecord::Subscript );
-    format.font().setSuperscript( fr.script() == FontRecord::Superscript );
-    format.font().setUnderline( fr.underline() != FontRecord::None );
-  }
+    font.setFontSize( fr.height() / 20.0 );
+    font.setFontFamily( fr.fontName() );
+    font.setBold( fr.boldness() > 500 );
+    font.setItalic( fr.italic() );
+    font.setStrikeout( fr.strikeout() );    
+    font.setSubscript( fr.script() == FontRecord::Subscript );
+    font.setSuperscript( fr.script() == FontRecord::Superscript );
+    font.setUnderline( fr.underline() != FontRecord::None );
+    
+    // put in the cache for further use
+    d->fontCache[ fontIndex ] = font;    
+  }  
+  
+  format.font() = font;
 
   switch( xf.horizontalAlignment() )
   {
@@ -3667,9 +3672,6 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   pen = convertBorderStyle( xf.bottomBorderStyle() );
   pen.color = convertColor( xf.bottomBorderColor() );
   format.borders().setBottomBorder( pen );
-  
-  // put in the cache for further use
-  d->formatCache[ xfIndex ] = format;
 
   return format;
 }
