@@ -134,7 +134,7 @@ void GPart::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("y", oldGeom.y ());
   xml.addAttribute ("width", oldGeom.width ());
   xml.addAttribute ("height", oldGeom.height ());
-  xml.addAttribute ("url", child->url().latin1() );
+  xml.addAttribute ("url", child->url().url().latin1() );
   xml.addAttribute ("mime", child->document()->mimeType ());
   xml.closeTag (true);
 
