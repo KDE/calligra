@@ -656,6 +656,8 @@ void KPWebPresentationWizard::setupPage3()
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
              SLOT( slideTitleChanged( QListViewItem * ) ) );
     slideTitles->setSorting( -1 );
+    slideTitles->setAllColumnsShowFocus( true );
+    slideTitles->setResizeMode( QListView::LastColumn );
     slideTitles->header()->setMovingEnabled( false );
 
     QValueList<KPWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
