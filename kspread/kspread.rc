@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="20">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="21">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -189,6 +189,12 @@
  <Action name="autoSum"/>
  <Action name="insertMathExpr"/>
  <Action name="formulaSelection"/>
+</ToolBar>
+<ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
+ <Action name="firstTable"/>
+ <Action name="previousTable"/>
+ <Action name="nextTable"/>
+ <Action name="lastTable"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="fontPropertyToolBar"><text>Format</text>
  <Action name="selectFont"/>
