@@ -423,8 +423,38 @@ void KPBackGround::drawBackPix(QPainter *_painter)
 	  _painter->drawTiledPixmap(0,0,ext.width(),ext.height(),*backPix);
 	  break;
 	case BV_CENTER:
-	  _painter->drawPixmap((ext.width() - backPix->width()) / 2,(ext.height() - backPix->height()) / 2,
-			       *backPix);
+	  {
+	    QPixmap *pix = new QPixmap(ext.width(),ext.height());
+	    bool delPix = true;
+	    int _x = 0,_y = 0;
+
+	    if (backPix->width() > pix->width() && backPix->height() > pix->height())
+	      bitBlt(pix,0,0,backPix,backPix->width() - pix->width(),backPix->height() - pix->height(),
+		     pix->width(),pix->height());
+	    else if (backPix->width() > pix->width())
+	      {
+		bitBlt(pix,0,0,backPix,backPix->width() - pix->width(),0,
+		       pix->width(),backPix->height());
+		_y = (pix->height() - backPix->height()) / 2;
+	      }
+	    else if (backPix->height() > pix->height())
+	      {	      
+		bitBlt(pix,0,0,backPix,0,backPix->height() - pix->height(),
+		       backPix->width(),pix->height());
+		_x = (pix->width() - backPix->width()) / 2;
+	      }
+	    else
+	      {
+		_x = (pix->width() - backPix->width()) / 2;
+		_y = (pix->height() - backPix->height()) / 2;
+		delPix = false;
+		delete pix;
+		pix = backPix;
+	      }
+
+	    _painter->drawPixmap(_x,_y,*pix);
+	    if (delPix) delete pix;
+	  }
 	  break;
 	}
     }
