@@ -58,7 +58,9 @@ KImageShopDoc::KImageShopDoc( KoDocument* parent, const char* name )
 
 bool KImageShopDoc::initDoc()
 {
-  newImage();
+  QString name;
+  name.sprintf("image %d", m_Images.count()+1);
+  newImage(name, 512, 512, RGB, WHITE);
   
   return true;
 }
@@ -163,16 +165,34 @@ QSize KImageShopDoc::size()
   return QSize(0, 0);
 }
 
-KImageShopImage* KImageShopDoc::newImage()
+KImageShopImage* KImageShopDoc::newImage(const QString& _name, int w, int h, int colorModel, int backgroundMode)
 {
-  QString name;
-  name.sprintf("image %d", m_Images.count()+1);
-  
-  KImageShopImage *img = new KImageShopImage( name, 512, 512 );
+  KImageShopImage *img = new KImageShopImage( _name, w, h );
   m_Images.append(img);
   setCurrentImage(img);
   emit imageAdded(img->name());
   return img;
+}
+
+void KImageShopDoc::removeImage( KImageShopImage *img )
+{
+  m_Images.remove(img);
+  delete img;
+}
+
+void KImageShopDoc::slotRemoveImage( const QString& _name )
+{
+  KImageShopImage *img = m_Images.first();
+  
+  while (img)
+    {
+      if (img->name() == _name)
+	{
+	  removeImage(img);
+	  return;
+	}
+      img = m_Images.next();
+    }
 }
 
 void KImageShopDoc::saveImage( const QString& file, KImageShopImage *img )
@@ -187,7 +207,22 @@ void KImageShopDoc::loadImage( const QString& file )
 
 void KImageShopDoc::slotNewImage()
 {
-  newImage();
+  if (!m_pNewDialog)
+    m_pNewDialog = new NewDialog();
+  m_pNewDialog->show();
+  
+  if(!m_pNewDialog->result() == QDialog::Accepted)
+    return 0;
+
+  int w = m_pNewDialog->newwidth();
+  int h = m_pNewDialog->newheight();
+  int bg = m_pNewDialog->background();
+  int cm = m_pNewDialog->colorModel();
+
+  QString name;
+  name.sprintf("image %d", m_Images.count()+1);
+
+  newImage(name, w, h, bg, cm);
 }
 
 void KImageShopDoc::slotLoadImage()

@@ -205,23 +205,13 @@ void KImageShopTabBar::setActiveTab( const QString& _text )
 
 void KImageShopTabBar::slotRemove( )
 {
-  /*
-  if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
+  int ret = QMessageBox::warning( this, i18n("Remove table"),
+				  i18n("You are going to remove the active image.\nDo you want to continue?"),
+				  i18n("Yes"), i18n("No"), QString::null, 1, 1);
+  if ( ret == 0 ) 
     {
-      QApplication::beep();
-      QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
-      return;
+      // FIXME
     }
-  QApplication::beep();
-  int ret = QMessageBox::warning( this, i18n("Remove table"), i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
-  if ( ret == 0 )
-    {
-        KImageShopTable *tbl = m_pView->activeTable();
-        m_pView->doc()->map()->removeTable( tbl );
-		m_pView->removeTable(tbl);
-        delete tbl;
-    }
-  */
 }
 
 
@@ -232,7 +222,7 @@ void KImageShopTabBar::slotRename()
 
 void KImageShopTabBar::slotAdd()
 {
-  m_pDoc->newImage();
+  m_pDoc->slotNewImage();
 }
 
 void KImageShopTabBar::paintEvent( QPaintEvent* )

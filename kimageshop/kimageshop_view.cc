@@ -485,6 +485,8 @@ void KImageShopView::canvasGotPaintEvent( QPaintEvent*e )
   int yt = yPaintOffset() + ur.y() - m_pVert->value();
 
   p.translate(xt, yt);
+  
+  ur.
 
   // let the document draw the image
   part()->paintEverything( p, ur, FALSE, this );

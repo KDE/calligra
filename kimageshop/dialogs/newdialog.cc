@@ -19,9 +19,9 @@
  */
 
 const int MAXIMAGEWIDTH = 32767;
-const int INITIALWIDTH = 400;
+const int INITIALWIDTH = 512;
 const int MAXIMAGEHEIGHT = 32767;
-const int INITIALHEIGHT = 400;
+const int INITIALHEIGHT = 512;
 
 #include "newdialog.h"
 
@@ -65,8 +65,11 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     cmodel[RGB] = new QRadioButton( "&RGB", model );
     cmodel[RGB]->setChecked( TRUE );
     cmodel[CMYK] = new QRadioButton( "CM&YK", model );
+    cmodel[CMYK]->setEnabled(false);
     cmodel[LAB] = new QRadioButton( "&LAB", model );
+    cmodel[LAB]->setEnabled(false);
     cmodel[GREYSCALE] = new QRadioButton( "&Greyscale", model );
+    cmodel[GREYSCALE]->setEnabled(false);
 
     layout->addWidget( model );
 

@@ -30,9 +30,11 @@
 #include <qstringlist.h>
 
 #include "layer.h"
+#include "newdialog.h"
 #include "kimageshop_image.h"
 
 class Brush;
+class NewDialog;
 
 
 class KImageShopDoc : public KoDocument
@@ -40,6 +42,9 @@ class KImageShopDoc : public KoDocument
     Q_OBJECT
 
 public:
+    enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
+    enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
+
     KImageShopDoc( KoDocument* parent = 0, const char* name = 0 );
     ~KImageShopDoc();
 
@@ -95,9 +100,11 @@ public:
     void mergeLinkedLayers();
     void mergeLayers(QList<Layer>);
 
-    KImageShopImage* newImage();
+    KImageShopImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
     void saveImage( const QString& file, KImageShopImage *img );
     void loadImage( const QString& file );
+    void removeImage( KImageShopImage *img );
+    void slotRemoveImage( const QString& name );
 
     QString currentImage();
 
@@ -132,6 +139,7 @@ protected:
 private:
   QList <KImageShopImage> m_Images;
   KImageShopImage *m_pCurrent;
+  NewDialog       *m_pNewDialog;
 };
 
 #endif
