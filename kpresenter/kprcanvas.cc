@@ -4807,6 +4807,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         QCursor c = cursor();
         setCursor( waitCursor );
         m_activePage->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y()  );
+        picViewOriginalSize();
         setCursor( c );
 
         e->accept();
@@ -5221,7 +5222,6 @@ void KPrCanvas::picViewOrig1600x1200()
 void KPrCanvas::picViewOrigHelper(int x, int y)
 {
   KPPixmapObject *obj = 0;
-
   KoSize origSize;
   KoSize currentSize;
 
@@ -5232,7 +5232,6 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
 
   if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
       return;
-
   KoSize pgSize = m_activePage->getPageRect().size();
 
   if ( x == -1 && y == -1 ) {

@@ -572,7 +572,7 @@ void KPresenterView::editPaste()
             QCursor c = cursor();
             setCursor( waitCursor );
             m_canvas->activePage()->insertPicture( tmpFile.name() );
-            //m_canvas->picViewOrigHelper(-1, -1);
+            m_canvas->picViewOriginalSize();
             setCursor( c );
         }
     } else {
