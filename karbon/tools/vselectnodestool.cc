@@ -59,12 +59,8 @@ VSelectNodesTool::activate()
 void
 VSelectNodesTool::draw()
 {
-/*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
-
-	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
 	double tolerance = 1.0 / view()->zoom();
 
@@ -72,8 +68,8 @@ VSelectNodesTool::draw()
 		m_state != dragging &&
 		( m_state == moving || view()->part()->document().selection()->pathNode(
 			KoRect(
-				lp.x() - tolerance,
-				lp.y() - tolerance,
+				last().x() - tolerance,
+				last().y() - tolerance,
 				2 * tolerance + 1.0,
 				2 * tolerance + 1.0 ) ) ) )
 	{
@@ -82,8 +78,8 @@ VSelectNodesTool::draw()
 			double tolerance = 1.0 / view()->zoom();
 			view()->part()->document().selection()->append(
 				KoRect(
-					fp.x() - tolerance,
-					fp.y() - tolerance,
+					first().x() - tolerance,
+					first().y() - tolerance,
 					2 * tolerance + 1.0,
 					2 * tolerance + 1.0 ).normalize(),
 				false );
@@ -92,8 +88,8 @@ VSelectNodesTool::draw()
 
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( m_lp.x() - fp.x() ) / view()->zoom(),
-						( m_lp.y() - fp.y() ) / view()->zoom() );
+		mat.translate(	( last().x() - first().x() ) / view()->zoom(),
+						( last().y() - first().y() ) / view()->zoom() );
 
 		VTransformNodes op( mat );
 
@@ -113,9 +109,7 @@ VSelectNodesTool::draw()
 			itr2.current()->setState( VObject::edit );
 			op.visit( *itr2.current() );
 
-			itr2.current()->draw(
-				painter,
-				itr2.current()->boundingBox() );
+			itr2.current()->draw( painter, &itr2.current()->boundingBox() );
 		}
 
 		painter->setZoomFactor( 1.0 );
@@ -124,18 +118,17 @@ VSelectNodesTool::draw()
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
-		painter->moveTo( KoPoint( m_fp.x(), m_fp.y() ) );
-		painter->lineTo( KoPoint( m_lp.x(), m_fp.y() ) );
-		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
-		painter->lineTo( KoPoint( m_fp.x(), m_lp.y() ) );
-		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
+		painter->moveTo( KoPoint( first().x(), first().y() ) );
+		painter->lineTo( KoPoint( last().x(), first().y() ) );
+		painter->lineTo( KoPoint( last().x(), last().y() ) );
+		painter->lineTo( KoPoint( first().x(), last().y() ) );
+		painter->lineTo( KoPoint( first().x(), first().y() ) );
 		painter->strokePath();
 
 		m_state = dragging;
 	}
 
 	view()->painterFactory()->painter()->end();
-*/
 }
 
 void
@@ -161,35 +154,32 @@ VSelectNodesTool::setCursor() const
 void
 VSelectNodesTool::mouseDragRelease()
 {
-/*
 	if( m_state == moving )
 	{
 		m_state = normal;
 
 		VTranslateCmd *cmd = new VTranslateCmd(
 				&view()->part()->document(),
-				qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
-				qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) );
+				qRound( ( last().x() - first().x() ) * ( 1.0 / view()->zoom() ) ),
+				qRound( ( last().y() - first().y() ) * ( 1.0 / view()->zoom() ) ) );
 		view()->part()->addCommand( cmd, true );
 
 //			view()->part()->repaintAllViews();
 	}
 	else
 	{
-		fp.setX( fp.x() / view()->zoom() );
-		fp.setY( fp.y() / view()->zoom() );
-		lp.setX( lp.x() / view()->zoom() );
-		lp.setY( lp.y() / view()->zoom() );
+		KoPoint fp = first();
+		KoPoint lp = last();
 
-		if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
+		if ( (fabs(lp.x() - fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
 		{
 			// AK - should take the middle point here
-			fp = lp - KoPoint(8.0, 8.0);
-			lp = lp + KoPoint(8.0, 8.0);
+			fp = last() - KoPoint(8.0, 8.0);
+			lp = last() + KoPoint(8.0, 8.0);
 		}
 
 		// erase old object:
-		drawTemporaryObject();
+		draw();
 
 		view()->part()->document().selection()->clear();
 		view()->part()->document().selection()->append(
@@ -200,5 +190,4 @@ VSelectNodesTool::mouseDragRelease()
 		view()->part()->repaintAllViews();
 		m_state = normal;
 	}
-*/
 }
