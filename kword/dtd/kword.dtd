@@ -38,14 +38,14 @@ Encoding (for advanced users)
 
 KWord's document are encoded as UTF-8 by definition. Please use this encoding
 whenever possible. (Remember: ASCII is UTF-8 too and you could use numerical 
-character refences like &#8164; to keep your document ASCII-clean.)
+character references like &#8164; to keep your document ASCII-clean.)
 
 If you find that writing in UTF-8 is too difficult on the system that you plan
 to use, then please use ISO-10646-UCS2 (also known as UTF-16.)
 
 Please write publicly available KWord documents only in one of these two encodings!
 
-Of course, if you do not use UTF-8, replace any occurence of UTF-8 in the text below by the
+Of course, if you do not use UTF-8, replace any occurrence of UTF-8 in the text below by the
 encoding that you have chosen. And please be sure to correctly define the XML declaration <?xml
 
 (Sorry, ISO-10646-UCS4 is not available, as QT cannot handle it.)
