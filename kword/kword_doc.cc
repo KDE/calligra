@@ -1329,7 +1329,8 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     QDomDocument doc( "DOC" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     QDomElement word = doc.createElement( "DOC" );
-
+    doc.appendChild( word );
+    
     word.setAttribute( "author", "Reginald Stadlbauer and Torben Weis" );
     word.setAttribute( "email", "reggie@kde.org and weis@kde.org" );
     word.setAttribute( "editor", "KWord" );
