@@ -4,7 +4,8 @@ libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 	kexidockbase.cpp kexiactionproxy.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \
-	kexiprojectdata.cpp kexistatusbar.cpp kexicontexthelp.cpp kexirelationpart.cpp kexidragobjects.cpp
+	kexiprojectdata.cpp kexistatusbar.cpp kexicontexthelp.cpp kexirelationpart.cpp \
+	kexidragobjects.cpp kexiproperty.cpp kexipropertybuffer.cpp
 
 # kexiprojectconnectiondata.cpp
 

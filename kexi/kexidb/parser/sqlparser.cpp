@@ -819,7 +819,7 @@
 
 	void parseData(KexiDB::Parser *p, const char *data)
 	{
-		dummy = new KexiDB::TableSchema();
+		dummy = new KexiDB::TableSchema("__dummy");
 		parser = p;
 		field = 0;
 		fieldList.clear();

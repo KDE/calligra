@@ -1,12 +1,16 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-lib_LTLIBRARIES = libkexiextendedwidgets.la
-libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp kexiquerydesignersqleditor.cpp
-# kexirecordnavigator.cpp kexifilterdlg.cpp kexiquerydesignersqleditor.cpp
-libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ../tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
+lib_LTLIBRARIES = libkexipropertyeditor.la
 
-SUBDIRS = propertyeditor
+libkexipropertyeditor_la_SOURCES = kexipropertyeditor.cpp kexipropertyeditoritem.cpp \
+	kexipropertysubeditor.cpp propertyeditorfile.cpp \
+	propertyeditorfont.cpp propertyeditorinput.cpp propertyeditorlist.cpp
+libkexipropertyeditor_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexipropertyeditor_la_LIBADD = $(LIB_KIO) ../../core/libkexicore.la
+
+kexiproperties_la_METASOURCES = AUTO
+
+SUBDIRS = . #test
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
@@ -28,10 +32,6 @@ SUBDIRS = propertyeditor
 # kde_styledir        Where Qt/KDE widget styles should go to (new in KDE 3).
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
-# set the include path for X, qt and KDE - all_includes must remain last!
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/tableview \
-	$(LIB_KEXI_KMDI_INCLUDES) \
-	-I$(top_srcdir)/kexi/core $(all_includes)
-
-METASOURCES = AUTO
+# set the include path for X, qt and KDE
+INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/properties -I$(top_srcdir)/kexi/core $(all_includes)
 
