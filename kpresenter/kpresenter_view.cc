@@ -80,7 +80,6 @@
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
 #include <koUIUtils.h>
-#include <koIcons.h>
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <kaction.h>
