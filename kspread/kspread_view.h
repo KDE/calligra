@@ -119,12 +119,17 @@ public:
     void removeTable( KSpreadTable *_t );
     void removeAllTables();
 
+    enum PType {TXT_COLOR, FRAME_COLOR, BACK_COLOR};
+    QString colorToPixString( QColor c, PType _type );
+    void setTextColor(QColor c );
+    void setbgColor(QColor c );
     void setActiveTable( KSpreadTable *_t );
 
     KSpreadTable* activeTable() { return m_pTable; }
 
     void openPopupMenu( const QPoint &_global );
-
+    void set_bg_color(QColor _bgcolor) { bgColor=_bgcolor;}
+    void set_text_color(QColor _tbcolor) { tbColor=_tbcolor;}
     void PopupMenuRow(const QPoint & _point ) ;
     void PopupMenuColumn( const QPoint & _point);
     /**
@@ -339,6 +344,9 @@ public:
 
     void formulaselection( const CORBA::WChar *_math );
 
+    void TextColor();
+    void BackgroundColor();
+
     virtual void cleanUp();
 
 protected slots:
@@ -398,6 +406,7 @@ protected slots:
     void slotInsertColumn();
 
     void slotRemoveColumn();
+
 
 public slots:
     // Document signals
@@ -462,6 +471,7 @@ protected:
     KSpreadTabBar *m_pTabBar;
     QLabel *m_pPosWidget;
 
+
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
     CORBA::Long m_idButtonEdit_Copy;
     CORBA::Long m_idButtonEdit_Paste;
@@ -484,6 +494,8 @@ protected:
     CORBA::Long m_idButtonLayout_PrecMinus;
     CORBA::Long m_idButtonLayout_PrecPlus;
     CORBA::Long m_idButtonLayout_Chart;
+    CORBA::Long m_idButtonLayout_Text_Color;
+    CORBA::Long m_idButtonLayout_bg_Color;
 
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;
@@ -529,6 +541,9 @@ protected:
 
     QPopupMenu *m_pPopupRow;
     QPopupMenu *m_pPopupColumn;
+
+     QColor tbColor;
+     QColor bgColor;
     /**
      * Tells wether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you

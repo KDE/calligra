@@ -581,6 +581,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   //desactivate EditWidget when you click on a table
   m_pEditWidget->setActivate(false);
   setEditorActivate(false);
+
   if ( !table )
     return;
 
@@ -761,6 +762,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     QPoint p = mapToGlobal( _ev->pos() );
     m_pView->openPopupMenu( p );
   }
+  m_pView->setTextColor( cell-> textColor());
+  m_pView->setbgColor(cell-> bgColor() );
 }
 
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )

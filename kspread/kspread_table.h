@@ -359,6 +359,9 @@ public:
     void setSelectionPrecision( const QPoint &_marker, int _delta );
     void setSelectionPercent( const QPoint &_marker );
     void setSelectionMultiRow( const QPoint &_marker );
+
+    void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
+    void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );

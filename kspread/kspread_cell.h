@@ -280,7 +280,9 @@ public:
      * @return the background color.
      */
     const QColor& bgColor( int _col, int _row );
-
+    
+    const QColor& bgColor() { return m_bgColor; }
+    
     Style style() { return m_style; }
     QString action() { return m_strAction; }
 

@@ -370,6 +370,8 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 	else
 	    editWidget()->setText( "" );
 
+	setbgColor(cell-> bgColor() );
+	setTextColor( cell-> textColor());
 	break;
 
     case Key_Up:	
@@ -409,6 +411,8 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 	else
 	    editWidget()->setText( "" );
 
+	setbgColor(cell->bgColor() );
+        setTextColor( cell->textColor());
 	break;
 
     case Key_Left:
@@ -447,7 +451,9 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 	    editWidget()->setText( cell->text() );
 	else
 	    editWidget()->setText( "" );
-
+	
+        setbgColor(cell-> bgColor() );
+	setTextColor( cell-> textColor());
 	break;
 
     case Key_Right:
@@ -494,6 +500,8 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 	else
 	    editWidget()->setText( "" );
 
+	setbgColor(cell-> bgColor() );
+	setTextColor( cell-> textColor());
 	break;
 
     case Key_Escape:
@@ -505,6 +513,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 	  else
 	    editWidget()->setText( "" );
 	}
+	
 	break;
     }
 
@@ -654,6 +663,27 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   pix = OPUIUtils::convertPixmap( BarIcon("chart") );
   m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, ( wstr = Q2C( i18n( "Insert Chart" ) ) ), -1 );
+
+  m_vToolBarLayout->insertSeparator( -1 );
+  //pix.data = CORBA::string_dup( colorToPixString( _format.getColor(), TXT_COLOR ) );
+  //m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
+  // color
+
+  tbColor = black;
+  OpenPartsUI::Pixmap* colpix = new OpenPartsUI::Pixmap;
+  colpix->data = CORBA::string_dup( colorToPixString( tbColor, TXT_COLOR ) );
+  pix = colpix;
+
+  m_idButtonLayout_Text_Color = m_vToolBarLayout->insertButton2( pix, 14 , SIGNAL( clicked() ), this, "TextColor",
+							  true, (wstr=Q2C( i18n( "Text Color" ))), -1 );
+
+  bgColor = white;
+  //OpenPartsUI::Pixmap* colpix = new OpenPartsUI::Pixmap;
+  colpix->data = CORBA::string_dup( colorToPixString( bgColor,  BACK_COLOR) );
+  pix = colpix;
+
+  m_idButtonLayout_bg_Color = m_vToolBarLayout->insertButton2( pix, 15 , SIGNAL( clicked() ), this, "BackgroundColor",
+							  true, (wstr=Q2C( i18n( "Background Color" ))), -1 );
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
   //laurent
@@ -817,6 +847,136 @@ void KSpreadView::setFocus( CORBA::Boolean _mode )
     resizeEvent( 0L );
 }
 */
+void KSpreadView::setTextColor(QColor c )
+{
+set_text_color(c);
+OpenPartsUI::Pixmap pix;
+pix.data = CORBA::string_dup( colorToPixString( c, TXT_COLOR ) );
+m_vToolBarLayout->setButtonPixmap( 14, pix );
+}
+
+void KSpreadView::TextColor()
+{
+
+if ( m_pTable != 0L )
+	{
+	if ( KColorDialog::getColor( tbColor ) )
+    		{
+		OpenPartsUI::Pixmap pix;
+		pix.data = CORBA::string_dup( colorToPixString( tbColor, TXT_COLOR ) );
+        	m_vToolBarLayout->setButtonPixmap( 14, pix );
+		m_pTable->setSelectionTextColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), tbColor );
+    		}
+    }
+}
+
+void KSpreadView::setbgColor(QColor c )
+{
+set_bg_color(c);
+OpenPartsUI::Pixmap pix;
+pix.data = CORBA::string_dup( colorToPixString( c, BACK_COLOR ) );
+m_vToolBarLayout->setButtonPixmap( 15, pix );
+}
+
+void KSpreadView::BackgroundColor()
+{
+if ( m_pTable != 0L )
+	{
+	if ( KColorDialog::getColor( bgColor ) )
+    		{
+		OpenPartsUI::Pixmap pix;
+		pix.data = CORBA::string_dup( colorToPixString( bgColor, BACK_COLOR ) );
+        	m_vToolBarLayout->setButtonPixmap( 15, pix );
+		m_pTable->setSelectionbgColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), bgColor );
+    		}
+    }
+}
+QString KSpreadView::colorToPixString( QColor c, PType _type )
+{
+    int r, g, b;
+    QString pix;
+    QString line;
+
+    c.rgb( &r, &g, &b );
+
+    pix = "/* XPM */\n";
+
+    pix += "static char * text_xpm[] = {\n";
+
+    switch ( _type )
+    {
+    case TXT_COLOR:
+    {
+	pix += "\"20 20 11 1\",\n";
+	pix += "\"h c #c0c000\",\n";
+	pix += "\"g c #808000\",\n";
+	pix += "\"f c #c0c0ff\",\n";
+	pix += "\"a c #000000\",\n";
+	pix += "\"d c #ff8000\",\n";
+	pix += "\". c none\",\n";
+	pix += "\"e c #0000c0\",\n";
+	pix += "\"i c #ffff00\",\n";
+	line.sprintf( "\"# c #%02X%02X%02X \",\n", r, g, b );
+	pix += line.copy();
+	pix += "\"b c #c00000\",\n";
+	pix += "\"c c #ff0000\",\n";
+	pix += "\"....................\",\n";
+	pix += "\"....................\",\n";
+	pix += "\"....................\",\n";
+	pix += "\"........#...........\",\n";
+	pix += "\"........#a..........\",\n";
+	pix += "\".......###..........\",\n";
+	pix += "\".......###a.........\",\n";
+	pix += "\"......##aa#.........\",\n";
+	pix += "\"......##a.#a........\",\n";
+	pix += "\".....##a...#........\",\n";
+	pix += "\".....#######a.......\",\n";
+	pix += "\"....##aaaaaa#.......\",\n";
+	pix += "\"....##a.....aaaaaaaa\",\n";
+	pix += "\"...####....#abbccdda\",\n";
+	pix += "\"....aaaa....abbccdda\",\n";
+	pix += "\"............aee##ffa\",\n";
+	pix += "\"............aee##ffa\",\n";
+	pix += "\"............agghhiia\",\n";
+	pix += "\"............agghhiia\",\n";
+	pix += "\"............aaaaaaaa\"};\n";
+
+    } break;
+    case BACK_COLOR:
+    {
+	pix += "\" 20 20 3 1 \",\n";
+
+	pix += "\"  c none \",\n";
+	pix += "\". c red \",\n";
+	line.sprintf( "\"+ c #%02X%02X%02X \",\n", r, g, b );
+	pix += line.copy();
+
+	pix += "\"                     \",\n";
+	pix += "\"                     \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"                     \",\n";
+	pix += "\"                     \";\n";
+    } break;
+    }
+
+    return QString( pix );
+}
+
 
 void KSpreadView::helpUsing()
 {

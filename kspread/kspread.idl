@@ -94,6 +94,8 @@ module KSpread
 		slot void fontSelected( in wstring font );
 		slot void formulaselection( in wstring math );
 		slot void consolidate();
+		slot void TextColor();
+		slot void BackgroundColor();
 
 		Book book();
 
