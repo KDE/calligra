@@ -39,10 +39,11 @@ class SHA1 {
      virtual int process(unsigned char *block, int len) = 0;
      
      /*
-      *  Return the digest.
+      *  Return the digest as a 20 byte array reference.
+      *  Calling this makes readyToGo() == false.
       */
-     virtual 
-     
+     virtual const unsigned char *const& getHash();
+
      /*
       *  Reset the digest so a new one can be calculated.
       */
@@ -55,7 +56,7 @@ class SHA1 {
      long _h0, _h1, _h2, _h3, _h4;
      long _nblocks;
      int _count;
-     unsigned char *_buf;
+     unsigned char _buf[64];
      void transform(unsigned char *data);
 };
 

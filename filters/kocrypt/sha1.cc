@@ -19,6 +19,7 @@
 */
 
 #include "sha1.h"
+#include <string.h>
 
 // FIXME: check 64bit compatibility
 
@@ -194,6 +195,8 @@ bool SHA1::readyToGo() {
 
 
 int SHA1::process(unsigned char *block, int len) {
+if (!_init) return -1;
+
   int cnt = 0;
   // Flush the buffer before proceeding
   if (_count == 64) {
@@ -225,4 +228,75 @@ int SHA1::process(unsigned char *block, int len) {
 
   return cnt;
 }
+
+
+const unsigned char *const& SHA1::getHash() {
+unsigned int t, msb, lsb;
+unsigned char *p;
+
+   process(0, 0);
+
+   msb = 0;
+   t = _nblocks;
+
+   if ((lsb = t << 6) < t)
+      msb++;
+
+   msb += t >> 26;
+   t = lsb;
+
+   if ((lsb = t + _count) < t)
+      msb++;
+
+   t = lsb;
+
+   if ((lsb = t << 3) < t)
+      msb++;
+
+   msb += t >> 29;
+
+   if (_count < 56) {
+      _buf[_count++] = 0x80;
+      while (_count < 56)
+         _buf[_count++] = 0;
+   } else {
+      _buf[_count++] = 0x80;
+      while (_count < 64)
+         _buf[_count++] = 0;
+      process(0, 0);
+      memset(_buf, 0, 56);
+   }
+
+   _buf[56] = msb >> 24;
+   _buf[57] = msb >> 16;
+   _buf[58] = msb >>  8;
+   _buf[59] = msb;
+   _buf[60] = msb >> 24;
+   _buf[61] = msb >> 16;
+   _buf[62] = msb >>  8;
+   _buf[63] = msb;
+
+   transform(_buf);
+
+   p = _buf;
+
+#ifdef WORDS_BIGENDIAN
+   #define X(a) do { *(unsigned long *)p = _h##a; p += 4; } while (0)
+#else
+   #define X(a) do { *p++ = _h##a >> 24;  *p++ = _h##a >> 16;             \
+                     *p++ = _h##a >>  8;  *p++ = _h##a;        } while (0)
+#endif
+
+   X(0);
+   X(1);
+   X(2);
+   X(3);
+   X(4);
+
+#undef X
+
+return _buf;
+}
+
+
 
