@@ -183,7 +183,9 @@ void KexiStartupFileDialog::accept()
 	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
 		m_lastUrl=KURL();
 		kdDebug() << "m_lastUrl==currentURL()" << endl;
+#ifdef Q_WS_WIN
 		return;
+#endif
 	}
 	kdDebug() << "KexiStartupFileDialog::accept(): url = " << currentURL().path() << " " << endl;
 	if ( checkURL() ) {
