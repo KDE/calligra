@@ -108,7 +108,10 @@ VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 		VSelectObjects op( m_objects, rect );
 
 		if( op.visit( *static_cast<VDocument*>( parent() ) ) )
+		{
+			selectNodes();
 			success = true;
+		}
 	}
 	else
 	{
