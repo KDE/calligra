@@ -1317,6 +1317,7 @@ void KPTextView::paste()
         if ( !text.isEmpty() )
             textObject()->pasteText( cursor(), text, currentFormat(), true );
     }
+    kpTextObject()->layout();
 }
 
 void KPTextView::updateUI( bool updateFormat, bool force  )
