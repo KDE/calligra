@@ -27,7 +27,7 @@ Boston, MA 02111-1307, USA.
 is an objectLocation, which must not be empty. the object location is something like kexi/table.
 objectID is an UUID which can be converted into a string like: 8e716b12-cd72-4c85-955b-9cee77832478. */
 
-class KexiIdentifier {
+class KEXICORE_EXPORT KexiIdentifier {
 public:
 	KexiIdentifier(const QString& location, const KexiUUID& id);
 	KexiIdentifier(const QString& location, const QString& id=QString());

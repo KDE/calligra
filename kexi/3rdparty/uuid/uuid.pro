@@ -1,9 +1,12 @@
 
 TEMPLATE = lib
 
-TARGET = kexiuuid
+win32:DEFINES += MAKE_KEXIUUID_LIB
 
 include( $(KEXI)/common.pro )
+
+TARGET = kexiuuid$$KDEBUG
+
 
 SOURCES = \
 clear.c \

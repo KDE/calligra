@@ -22,7 +22,7 @@ Boston, MA 02111-1307, USA.
 
 #include <qstring.h>
 
-class KexiUUID {
+class KEXICORE_EXPORT KexiUUID {
 public:
 	/* generates new uuid */
 	KexiUUID();
