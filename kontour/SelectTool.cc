@@ -78,11 +78,12 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
   bool shiftFlag = e->state() & Qt::ShiftButton;
   if(state == S_Init)
   {
+    //TODO * zoom factor....
     GObject *obj = page->findContainingObject(e->x() - canvas->xOffset(), e->y() - canvas->yOffset());
     if(obj)
     {
       /* an object will be selected */
-      state = S_Pick;
+//      state = S_Pick;
       if(!shiftFlag)
         page->unselectAllObjects();
       /* add the object to the selection */

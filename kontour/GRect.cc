@@ -80,7 +80,7 @@ void GRect::type(Type t)
 void GRect::startPoint(const KoPoint &p)
 {
   sPoint = p;
-  updateRegion();
+  calcBoundingBox();
 }
 
 void GRect::endPoint(const KoPoint &p)
@@ -103,8 +103,8 @@ void GRect::endPoint(const KoPoint &p)
       }
   }
   else*/
-    ePoint = p;
-  updateRegion();
+  ePoint = p;
+  calcBoundingBox();
 }
 
 QString GRect::typeName() const
@@ -200,26 +200,6 @@ void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
 void GRect::calcBoundingBox()
 {
   calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
-/*  double x, y;
-
-  Rect r (sPoint, ePoint);
-  r.normalize ();
-  double a = r.width () / 2.0;
-  double b = r.height () / 2.0;
-
-  double angle = sAngle * M_PI / 180.0;
-  x = a * cos (angle) + r.left () + a;
-  y = b * sin (angle) + r.top () + b;
-
-  segPoint[0].x (x);
-  segPoint[0].y (y);
-
-  angle = eAngle * M_PI / 180.0;
-  x = a * cos (angle) + r.left () + a;
-  y = b * sin (angle) + r.top () + b;
-
-  segPoint[1].x (x);
-  segPoint[1].y (y);*/
 }
 
 int GRect::getNeighbourPoint(const KoPoint &p)
@@ -331,12 +311,12 @@ bool GRect::contains(const KoPoint &p)
       y2 = ePoint.y();
     }
 
-    kdDebug(38000) << "Rect: X1 = " << x1 << endl;
-    kdDebug(38000) << "Rect: X2 = " << x2 << endl;
-    kdDebug(38000) << "Rect: Y1 = " << y1 << endl;
-    kdDebug(38000) << "Rect: Y2 = " << y2 << endl;
-    kdDebug(38000) << "Rect: px = " << pp.x() << endl;
-    kdDebug(38000) << "Rect: py = " << pp.y() << endl;
+//    kdDebug(38000) << "Rect: X1 = " << x1 << endl;
+//    kdDebug(38000) << "Rect: X2 = " << x2 << endl;
+//    kdDebug(38000) << "Rect: Y1 = " << y1 << endl;
+//    kdDebug(38000) << "Rect: Y2 = " << y2 << endl;
+//    kdDebug(38000) << "Rect: px = " << pp.x() << endl;
+//    kdDebug(38000) << "Rect: py = " << pp.y() << endl;
 
     if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1 && (pp.x() == x1 || pp.x() == x2 || pp.y() == y1 || pp.y() == y2))
       return true;

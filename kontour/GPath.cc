@@ -85,12 +85,54 @@ void GLine::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 
 KoRect GLine::boundingBox()
 {
-
+  return KoRect(points[0], points[1]);
 }
 
 bool GLine::contains(const KoPoint &p)
 {
+  double x1, x2, y1, y2;
 
+  x1 = points[0].x();
+  x2 = points[1].x();
+  if(x2 <= x1)
+  {
+    /* swap the points */
+    x2 = x1;
+    x1 = points[1].x();
+    y2 = points[0].y();
+    y1 = points[1].y();
+  }
+  else
+  {
+    y1 = points[0].y();
+    y2 = points[1].y();
+  }
+    if (x1 - 3 <= p.x () && p.x () <= x2 + 3) {
+      if (abs (int (x1 - x2)) < 5) {
+        if ((y1 <= p.y () && p.y () <= y2) ||
+            (y2 <= p.y () && p.y () <= y1))
+            return true;
+      }
+      else {
+        double xp, yp, m, n;
+
+        // y = m * x + n;
+        m = (y2 - y1) / (x2 - x1);
+        n = y1 - m * x1;
+
+        if (m > 1) {
+          xp = ((double) p.y () - n) / m;
+          if (xp - 5 <= p.x () && p.x () <= xp + 5)
+            return true;
+        }
+        else {
+          yp = m * p.x () + n;
+
+          if (yp - 5 <= p.y () && p.y () <= yp + 5)
+            return true;
+        }
+      }
+    }
 }
 
 QPointArray GLine::getPoints() const
@@ -173,35 +215,6 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
     }
   }
   return seg;
-}
-
-GSegment::GSegment(const QDomElement &element)
-{
-
-    skind = (GSegment::Kind)element.attribute("kind").toInt();
-    int i=0;
-    Coord p;
-    QDomElement point = element.firstChild().toElement();
-    for( ; !point.isNull() && i<(skind==0 ? 2 : 4); point = point.nextSibling().toElement(), ++i ) {
-        p.x(point.attribute("x").toFloat());
-        p.y(point.attribute("y").toFloat());
-        setPoint(i, p);
-    }
-}
-
-const Coord& GSegment::pointAt (int i) const {
-  assert (i >= 0 && ((skind == sk_Bezier && i < 4) ||
-                     (skind == sk_Line && i < 2)));
-  return points[i];
-}
-
-void GSegment::setPoint (int i, const Coord& c) {
-  assert (i >= 0 && ((skind == sk_Bezier && i < 4) ||
-                     (skind == sk_Line && i < 2)));
-  points[i] = c;
-  if (skind == sk_Bezier) {
-    bpoints.setPoint (i, qRound (c.x ()), qRound (c.y ()));
-  }
 }
 
 bool GSegment::contains (const Coord& p) {
@@ -389,15 +402,6 @@ void GPath::draw (QPainter& p, bool withBasePoints, bool outline, bool) {
   p.restore ();
 }
 
-bool GPath::contains (const Coord& p) {
-  Coord pp = p.transform (iMatrix);
-  if (box.contains (pp)) {
-    return (containingSegment (pp) != segments.end ());
-  }
-  else
-    return false;
-}
-
 void GPath::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
   int pidx = 0;
   QValueList<GSegment>::Iterator i;
@@ -469,23 +473,6 @@ GObject* GPath::create (GDocument *doc, const QDomElement &element)
 }
 
 void GPath::getPath (QValueList<Coord>& ) {
-}
-
-void GPath::calcBoundingBox () {
-  QValueList<GSegment>::Iterator i = segments.begin ();
-  if (i == segments.end ()) {
-    box = Rect ();
-    return;
-  }
-
-  Rect r = (*i).boundingBox ();
-  ++i;
-  while (i != segments.end ()) {
-    Rect r2 = (*i).boundingBox ();
-    r = r.unite (r2);
-    ++i;
-  }
-  box = r.transform (tmpMatrix);
 }
 
 void GPath::setClosed (bool flag) {
@@ -639,14 +626,6 @@ QColor GPath::blendColors (const QColor& c1, const QColor& c2, int step,
   }
 }
 
-QValueList<GSegment>::Iterator GPath::containingSegment (const Coord& p) {
-  QValueList<GSegment>::Iterator i;
-  for (i = segments.begin (); i != segments.end (); ++i)
-    if ((*i).contains (p))
-      return i;
-  return segments.end ();
-}
-
 void GPath::updatePath ()
 {
   if (! closed)
@@ -691,6 +670,7 @@ void GPath::moveTo(const double x, const double y)
 {
   endx = x;
   endy = y;
+  calcBoundingBox();
 }
 
 void GPath::lineTo(const double x, const double y)
@@ -701,6 +681,7 @@ void GPath::lineTo(const double x, const double y)
   segments.append(seg);
   endx = x;
   endy = y;
+  calcBoundingBox();
 }
 
 QString GPath::typeName() const
@@ -737,7 +718,7 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
   {
     for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
     {
-      GSegment *s = (*seg);
+      GSegment *s = *seg;
       s->draw(p, withBasePoints, outline);
     }
   }
@@ -758,6 +739,16 @@ void GPath::removePoint(int idx, bool update = true)
 
 bool GPath::contains(const KoPoint &p)
 {
+  KoPoint pp = p.transform(iMatrix);
+  if(box.contains(pp))
+  {
+    for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+      if((*seg)->contains(pp))
+        return true;
+    return false;
+  }
+  else
+    return false;
 }
 
 bool GPath::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
@@ -766,6 +757,22 @@ bool GPath::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 
 void GPath::calcBoundingBox()
 {
+  QPtrListIterator<GSegment> seg(segments);
+  if(!seg.current())
+  {
+    box = KoRect();
+    return;
+  }
+
+  KoRect r = (*seg)->boundingBox();
+  ++seg;
+  for(; seg.current(); ++seg)
+  {
+    KoRect rr = (*seg)->boundingBox();
+    r = r.unite(rr);
+  }
+  box = r;
+//  box = r.transform(tmpMatrix);
 }
 
 GPath *GPath::convertToPath() const

@@ -268,12 +268,10 @@ void GPage::insertObject(GObject *obj)
 
 void GPage::deleteObject(GObject *obj)
 {
-  bool selected = false;
-
   GLayer *layer = obj->layer();
   if(layer->isEditable())
   {
-    selected = obj->isSelected();
+    bool selected = obj->isSelected();
     if(selected)
       selection.removeRef(obj);
     layer->deleteObject(obj);
@@ -283,11 +281,7 @@ void GPage::deleteObject(GObject *obj)
     {
       selBoxIsValid = false;
       updateHandle();
-//      if(autoUpdate)
-//        emit selectionChanged();
     }
-//    if(autoUpdate)
-//      emit changed();
   }
 }
 
@@ -333,7 +327,7 @@ void GPage::selectObject(GObject *obj)
     /* object isn't yet in selection list */
     obj->select(true);
     selection.append(obj);
-    selBoxIsValid = true;
+    selBoxIsValid = false;
     updateHandle();
   }
 }
@@ -346,7 +340,7 @@ void GPage::unselectObject(GObject *obj)
     /* remove object from the selection list */
     obj->select(false);
     selection.remove(i);
-    selBoxIsValid = false;
+//    selBoxIsValid = false;
     updateHandle();
   }
 }
@@ -441,17 +435,17 @@ KoRect GPage::boundingBoxForSelection()
 {
   if(!selBoxIsValid)
   {
-    if (! selectionIsEmpty ())
+    if(!selectionIsEmpty())
     {
       QPtrListIterator<GObject> i(selection);
-      mSelBox = (*i)->boundingBox ();
+      mSelBox = (*i)->boundingBox();
       ++i;
-      for (; i.current(); ++i)
-        mSelBox = mSelBox.unite ((*i)->boundingBox ());
+      for(; i.current(); ++i)
+        mSelBox = mSelBox.unite((*i)->boundingBox ());
     }
     else
     {
-      mSelBox = KoRect ();
+      mSelBox = KoRect();
     }
     selBoxIsValid = true;
   }
@@ -630,12 +624,16 @@ void GPage::updateHandle()
 {
   kdDebug(38000) << "Update handle" << endl;
   KoRect r = mSelBox;
-  r = r.unite(boundingBoxForSelection());
   if(selectionIsEmpty())
     mHandle.show(false);
   else
   {
-    mHandle.box(r);
+    KoRect rr = boundingBoxForSelection();
+    mHandle.box(rr);
+    mHandle.show();
+    kdDebug(38000) << "L=" << r.left() << endl;
+    kdDebug(38000) << "R=" << r.right() << endl;
+    r = r.unite(rr);
     document()->emitChanged(r, true);
   }
 }

@@ -95,15 +95,6 @@ void RectTool::processEvent(QEvent *e)
 //    float xpos = me->x (), ypos = me->y ();
 //    canvas->snapPositionToGrid (xpos, ypos);
 
-/*    bool flag = me->state () & Qt::ControlButton;
-    rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
-
-    rect->addPoint (0, Coord (xpos, ypos));
-    rect->addPoint (1, Coord (xpos, ypos));
-    rect->addPoint (2, Coord (xpos, ypos));
-    rect->addPoint (3, Coord (xpos, ypos));
-    doc->activePage()->insertObject (rect);
-    m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));*/
   }
   else if(e->type() == QEvent::MouseMove)
   {

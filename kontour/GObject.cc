@@ -219,6 +219,10 @@ void GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &
     r.setRight(QMAX(p[i].x(), r.right()));
     r.setBottom(QMAX(p[i].y(), r.bottom()));
   }
+  kdDebug(38000) << "Rect: L = " << r.left() << endl;
+  kdDebug(38000) << "Rect: T = " << r.top() << endl;
+  kdDebug(38000) << "Rect: R = " << r.right() << endl;
+  kdDebug(38000) << "Rect: B = " << r.bottom() << endl;
   updateBoundingBox(r);
 }
 
