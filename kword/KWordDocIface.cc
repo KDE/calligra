@@ -488,14 +488,14 @@ bool KWordDocIface::configAutoNumberStyle() const
     return doc->getAutoFormat()->getConfigAutoNumberStyle();
 }
 
-void KWordDocIface::setConfigAutoCompletion( bool b )
+void KWordDocIface::setConfigCompletion( bool b )
 {
-    doc->getAutoFormat()->configAutoCompletion( b );
+    doc->getAutoFormat()->configCompletion( b );
 }
 
-bool KWordDocIface::configAutoCompletion() const
+bool KWordDocIface::configCompletion() const
 {
-    return doc->getAutoFormat()->getConfigAutoCompletion();
+    return doc->getAutoFormat()->getConfigCompletion();
 }
 
 void KWordDocIface::setConfigAppendSpace( bool b)

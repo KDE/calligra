@@ -340,7 +340,7 @@ protected:
     // Reimplemented from KoTextView
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
-    virtual void doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
+    virtual void doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
 
     virtual void startDrag();
     KWTextDrag * newDrag( QWidget * parent ) const;

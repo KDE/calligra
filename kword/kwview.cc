@@ -861,6 +861,11 @@ void KWView::setupActions()
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
 
+    actionConfigureCompletion = new KAction( i18n( "&Configure completion..." ), 0,
+                        this, SLOT( configureCompletion() ),
+                        actionCollection(), "configure_completion" );
+
+
     // ------------------- Actions with a key binding and no GUI item
     KAction* actNbsp = new KAction( i18n( "Insert non-breaking space" ), CTRL+Key_Space,
                         this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
@@ -869,7 +874,7 @@ void KWView::setupActions()
     KAction* actLineBreak = new KAction( i18n( "Line break" ), SHIFT+Key_Return,
                         this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
-    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
+    KAction* actComplete = new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotCompletion() ), actionCollection(), "completition" );
 
     // Necessary for the actions that are not plugged anywhere
     // ----- is it still necessary? The current kaction/kaccel stuff is supposed to do this automatically.
@@ -878,7 +883,7 @@ void KWView::setupActions()
     // HUH? accel = new KAccel( this ); // needed ?
     actSoftHyphen->plugAccel( accel );
     actLineBreak->plugAccel( accel );
-    actAutoComplete->plugAccel( accel );
+    actComplete->plugAccel( accel );
 
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
@@ -4622,11 +4627,11 @@ void KWView::slotAllowAutoFormat()
     m_doc->setAllowAutoFormat( state );
 }
 
-void KWView::slotAutoComplete()
+void KWView::slotCompletion()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->autoCompletion();
+        edit->completion();
 }
 
 void KWView::updateHeaderFooterButton()
@@ -4676,6 +4681,13 @@ void KWView::removeComment()
     {
         edit->removeComment();
     }
+}
+
+void KWView::configureCompletion()
+{
+    m_doc->getAutoFormat()->readConfig();
+    KoCompletionDia dia( this, 0, m_doc->getAutoFormat() );
+    dia.exec();
 }
 
 /******************************************************************/

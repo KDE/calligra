@@ -2215,13 +2215,13 @@ void KWTextFrameSetEdit::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag,
     }
 }
 
-void KWTextFrameSetEdit::doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+void KWTextFrameSetEdit::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
         KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
         if( autoFormat )
-            autoFormat->doAutoCompletion(  cursor, parag, index, textObject());
+            autoFormat->doCompletion(  cursor, parag, index, textObject());
     }
 }
 

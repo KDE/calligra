@@ -261,6 +261,7 @@ public slots:
     void showFormulaToolbar( bool show );
 
     void configure();
+    void configureCompletion();
 
     void newPageLayout( KoPageLayout _layout );
     void newLeftIndent( double _leftIndent);
@@ -320,7 +321,7 @@ public slots:
 
     void slotAllowAutoFormat();
 
-    void slotAutoComplete();
+    void slotCompletion();
 
     // end of public slots
 
@@ -489,6 +490,9 @@ private:
     KAction *actionEditPersonnalExpr;
 
     KAction *actionConfigure;
+
+    KAction *actionConfigureCompletion;
+
 
     KAction *actionChangePicture;
     KAction *actionChangeClipart;

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="39">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="40">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -110,6 +110,7 @@
   <Separator/>
   <Action name="enable_autocorrection"/>
   <Action name="configure_autocorrection"/>
+  <Action name="configure_completion"/>
   <Action name="change_case"/>
   <Action name="personal_expr"/>
   <ActionList name="datatools"/>
