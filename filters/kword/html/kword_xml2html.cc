@@ -975,6 +975,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
     zItalic = (char *)malloc(4);
     zItalicEnd = (char *)malloc(5);
     if(egObject == HTML_Text) {
+        fprintf(Outfile,"<p   >"); // Let's start a paragraph
         while(pHTMLTree){
             char align[6];
             switch(pHTMLTree->u.TextStruct.iFontFlow-1) {
@@ -1100,6 +1101,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                         fprintf(Outfile,"<li>\n");
                     }
                 }
+                fprintf(Outfile,"<p>");
+                iParagraph = 1;
 #ifdef SPARTAN
                 /* If we want a spartan output (no fancy color, font, etc..
                 ** markups, then don't print out the default alignment "left".
@@ -1156,13 +1159,10 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                         Scratch[1]='\0';
                         if(iBlankLine==1) {
                             iPutPre = 1;
-                            fprintf(Outfile,"<p><pre>");
-                            iParagraph = 1;
+                            fprintf(Outfile,"<pre>");
                         }
                         else {
-                            fprintf(Outfile,"<p>");
                             iBlankLine = 1;
-                            iParagraph = 1;
                         }
                     }
                 }
@@ -1442,9 +1442,11 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                 }
             }
             if(pHTMLTree&&(pHTMLTree->ObjectType!=HTML_Text)) {
+                fprintf(Outfile,"</p>\n");
                 return pHTMLTree;
             }
         }
+        fprintf(Outfile,"</p>\n");
         return pHTMLTree;
     }
     else {
