@@ -17,6 +17,7 @@ kformula_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kformula_la_LIBADD = $(LIB_KOFFICECORE)
 
 bin_PROGRAMS =
+lib_LTLIBRARIES =
 
 noinst_HEADERS =  kformula_doc.h \
 		  kformula_view.h kformula_factory.h \
