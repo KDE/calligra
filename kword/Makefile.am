@@ -17,7 +17,7 @@ libkwordpart_la_SOURCES =  kwfactory.cc kwdoc.cc \
 		framedia.cc footnotedia.cc \
                 kwframestyle.cc kwframestylemanager.cc \
                 kwtablestyle.cc kwtablestylemanager.cc \
-                tabledia.cc \
+                kwtabletemplate.cc kwtabletemplateselector.cc tabledia.cc \
                 insdia.cc deldia.cc docstruct.cc \
                 contents.cc kwstylemanager.cc searchdia.cc \
                 resizehandles.cc kwcommand.cc \
@@ -78,6 +78,9 @@ framestyle_DATA = framestyles.xml
 
 tablestyledir = $(kde_datadir)/kword
 tablestyle_DATA = tablestyles.xml
+
+tabletemplatedir = $(kde_datadir)/kword
+tabletemplate_DATA = tabletemplates.xml
 
 SUBDIRS = . mailmerge toolbar templates dtd pics expression
 

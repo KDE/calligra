@@ -22,6 +22,7 @@
 #include "kwview.h"
 #include "kwcommand.h"
 #include "kwtablestyle.h"
+#include "kwtabletemplate.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
@@ -472,9 +473,76 @@ void KWTableStyleCommand::unexecute()
         m_fsc->unexecute();
     if (m_sc)
         m_sc->unexecute();
-
+    
     m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
+
+KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFrameSet *_table, KWTableTemplate *_tt ) :
+    KNamedCommand( name )
+{
+    m_table = _table;
+    m_tt = _tt;
+    
+    // No need for i18n because it will never be displayed.
+    m_tableCommands = new KMacroCommand( "Apply tablestyles to table" );
+    
+
+    KWTableStyle *cell = 0L;
+    unsigned int rows = m_table->getRows();
+    unsigned int cols = m_table->getCols();
+    
+    for ( unsigned int i = 0; i < rows; i++ )
+    {
+        for ( unsigned int j = 0; j < cols; j++ )
+        {
+            if ( (i==0) && (j==0) ) // TOP LEFT CORNER
+                cell = m_tt->pTopLeftCorner();
+            else
+            if ( (i==0) && ( j==(cols-1) ) ) // TOP RIGHT CORNER
+                cell = m_tt->pTopRightCorner();
+            else
+            if ( ( i==(rows-1) ) && (j==0) ) // BOTTOM LEFT CORNER
+                cell = m_tt->pBottomLeftCorner();
+            else
+            if ( ( i==(rows-1) ) && ( j==(cols-1) ) ) // BOTTOM RIGHT CORNER
+                cell = m_tt->pBottomRightCorner();
+            else
+            if ( ( i==0 ) && ( j>0 ) && ( j<(cols-1) ) ) // FIRST ROW
+                cell = m_tt->pFirstRow();
+            else
+            if ( ( j==0 ) && ( i>0 ) && ( i<(rows-1) ) ) // FIRST COL
+                cell = m_tt->pFirstCol();
+            else
+            if ( ( i==(rows-1) ) && ( j>0 ) && ( j<(cols-1) ) )  // LAST ROW
+                cell = m_tt->pLastRow();
+            else
+            if ( ( j==(cols-1) ) && ( i>0 ) && ( i<(rows-1) ) ) // LAST COL
+                cell = m_tt->pLastCol();
+            else
+            if ( (i>0) && (j>0) && (i<(rows-1)) && (j<(cols-1)) ) // BODY
+                cell = m_tt->pBodyCell();
+            
+            m_tableCommands->addCommand( new KWTableStyleCommand( "Apply tablestyle to cell", m_table->getCell(i,j)->frame(0),cell ) );
+        }
+    }
+}
+
+KWTableTemplateCommand::~KWTableTemplateCommand()
+{
+    if (m_tableCommands)
+        delete m_tableCommands;
+}
+
+void KWTableTemplateCommand::execute()
+{
+    m_tableCommands->execute();
+}
+
+void KWTableTemplateCommand::unexecute()
+{
+    m_tableCommands->unexecute();
+}
+
 
 KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) :
     KNamedCommand(name),

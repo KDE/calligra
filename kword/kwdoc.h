@@ -33,6 +33,7 @@ class KWPartFrameSet;
 class KoStyle;
 class KWFrameStyle;
 class KWTableStyle;
+class KWTableTemplate;
 #define KWStyle KoStyle
 class KWFrame;
 class KWView;
@@ -53,9 +54,8 @@ class KWBgSpellCheck;
 class KoStyleCollection;
 class KWFrameStyleCollection;
 class KWTableStyleCollection;
+class KWTableTemplateCollection;
 class KWFootNoteVariable;
-class KWTableStyleCollection;
-
 class DCOPObject;
 
 class QFont;
@@ -314,6 +314,7 @@ public:
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
     KWFrameStyleCollection * frameStyleCollection()const  { return m_frameStyleColl;}
     KWTableStyleCollection * tableStyleCollection()const  { return m_tableStyleColl;}
+    KWTableTemplateCollection * tableTemplateCollection()const  { return m_tableTemplateColl;}
 
     QFont defaultFont() const { return m_defaultFont; }
 
@@ -721,6 +722,7 @@ protected:
     void loadDefaultFrameStyleTemplates();
     void loadTableStyleTemplates( const QDomElement &styles );
     void loadDefaultTableStyleTemplates();
+    void loadDefaultTableTemplates();
 
 private:
     //private helper functions for frameUnderMouse
@@ -827,6 +829,7 @@ private:
     KoStyleCollection *m_styleColl;
     KWFrameStyleCollection *m_frameStyleColl;
     KWTableStyleCollection *m_tableStyleColl;
+    KWTableTemplateCollection *m_tableTemplateColl;
 
 
     SeparatorLinePos m_footNoteSeparatorLinePos;

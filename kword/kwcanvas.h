@@ -45,6 +45,7 @@ class QTimer;
 class KWGUI;
 class KWStyle;
 class KWAnchor;
+class KWTableTemplate;
 
 /**
  * Class: KWCanvas
@@ -145,7 +146,8 @@ public:
 
     void createTable( unsigned int rows, unsigned int cols,
                       int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
-                      bool isFloating );
+                      bool isFloating,
+                      KWTableTemplate *tt=0L );
     KWTableFrameSet * getTable();
 
     KWTableFrameSet *getCurrentTable()const { return curTable; }
@@ -231,6 +233,7 @@ signals:
     void docStructChanged(int _type);
 
     void updateRuler();
+
 private slots:
     void slotContentsMoving( int, int );
     void slotNewContentsSize();
@@ -294,6 +297,7 @@ private:
         int /*KWTableFrameSet::CellSize*/ width;
         int /*KWTableFrameSet::CellSize*/ height;
         bool floating;
+        KWTableTemplate *tt;
     } m_table;
     KWTableFrameSet *curTable;
     KWFrameMoveCommand *cmdMoveFrame;

@@ -32,6 +32,7 @@
 
 class KWFrameSet;
 class KWTableStyle;
+class KWTableTemplate;
 class KWTableFrameSet;
 class KWDocument;
 class KoCustomVariable;
@@ -165,6 +166,25 @@ protected:
     KWFrameStyleCommand * m_fsc;
     KCommand * m_sc;
 };
+
+/**
+ * Command created when applying a tabletemplate
+ */
+class KWTableTemplateCommand : public KNamedCommand
+{
+public:
+    KWTableTemplateCommand( const QString &name, KWTableFrameSet *_table, KWTableTemplate *_tt );
+    ~ KWTableTemplateCommand();
+
+    void execute();
+    void unexecute();
+
+protected:
+    KWTableFrameSet *m_table;
+    KWTableTemplate * m_tt;
+    KMacroCommand * m_tableCommands;
+};
+
 /**
  * Command created when a frame is resized
  */

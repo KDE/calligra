@@ -28,6 +28,20 @@
       <RIGHTBORDER red="0" green="0" blue="0" style="0" width="3"/>
       <LEFTBORDER red="0" green="0" blue="0" style="0" width="3"/>
   </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Row"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="0"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Column"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
   <FRAMESTYLE red="211" green="211" blue="211">
       <NAME value="Light grey"/>
       <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>

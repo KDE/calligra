@@ -55,6 +55,7 @@
 #include "kwvariable.h"
 #include "kwframelayout.h"
 #include "kwtablestyle.h"
+#include "kwtabletemplate.h"
 
 //#define DEBUG_PAGES
 
@@ -188,7 +189,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_styleColl=new KoStyleCollection();
     m_frameStyleColl = new KWFrameStyleCollection();
     m_tableStyleColl = new KWTableStyleCollection();
-
+    m_tableTemplateColl = new KWTableTemplateCollection();
+    
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10.0;
@@ -299,8 +301,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
 
     // And let's do the same for tablestyles
-    m_tableStyleColl->addTableStyleTemplate( new KWTableStyle( "Plain", standardStyle, standardFrameStyle ) );
-
+    KWTableStyle *standardTableStyle = new KWTableStyle( "Plain", standardStyle, standardFrameStyle );
+    m_tableStyleColl->addTableStyleTemplate( standardTableStyle );
+    
     if ( name )
         dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
@@ -339,6 +342,7 @@ KWDocument::~KWDocument()
     delete m_styleColl;
     delete m_frameStyleColl;
     delete m_tableStyleColl;
+    delete m_tableTemplateColl;
     delete m_pKSpellConfig;
 }
 
@@ -1098,7 +1102,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     else // load default styles
         loadDefaultFrameStyleTemplates();
 
-    emit sigProgress(19);
+    emit sigProgress(18);
 
     QDomElement tableStylesElem = word.namedItem( "TABLESTYLES" ).toElement();
     if ( !tableStylesElem.isNull() )
@@ -1106,6 +1110,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     else // load default styles
         loadDefaultTableStyleTemplates();
 
+    emit sigProgress(19);
+    
+    loadDefaultTableTemplates();
+    
     emit sigProgress(20);
 
     QDomElement bookmark = word.namedItem( "BOOKMARKS" ).toElement();
@@ -1558,6 +1566,69 @@ void KWDocument::loadDefaultTableStyleTemplates()
         m_tableStyleColl->addTableStyleTemplate( sty );
     }
 }
+
+void KWDocument::loadDefaultTableTemplates()
+{
+    KURL fsfile;
+
+    if ( ! QFile::exists(locate("appdata", "tabletemplates.xml")) )
+    {
+        if (!m_tableTemplateColl->findTableTemplate("Plain")) {
+            KWTableTemplate * standardTableTemplate = new KWTableTemplate( "Plain" );
+            standardTableTemplate->setFirstRow(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setLastRow(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setFirstCol(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setLastCol(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setBodyCell(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setTopLeftCorner(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setTopRightCorner(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setBottomLeftCorner(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setBottomRightCorner(tableStyleCollection()->findTableStyle("Plain"));
+            m_tableTemplateColl->addTableTemplate( standardTableTemplate );
+        }
+        return;
+    }
+
+    fsfile.setPath( locate("appdata", "tabletemplates.xml") );
+
+    // Open file and parse it
+    QFile in( fsfile.path() );
+    if ( !in.open( IO_ReadOnly ) )
+    {
+        //i18n( "Couldn't open the file for reading (check read permissions)" );
+        return;
+    }
+    in.at(0);
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    QDomDocument doc;
+    if ( doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) ) {
+    }
+    else
+    {
+        kdError (30003) << "Parsing Error! Aborting! (in KWDocument::readTableTemplates())" << endl
+                        << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                        << "  Message: " << errorMsg << endl;
+    }
+    in.close();
+
+    // Start adding framestyles
+    QDomElement templatesElem = doc.documentElement();
+
+    QDomNodeList listTemplates = templatesElem.elementsByTagName( "TABLETEMPLATE" );
+    if( listTemplates.count() > 0) {
+        KWTableTemplate *s = m_tableTemplateColl->findTableTemplate("Plain");
+        if(s)
+            m_tableTemplateColl->removeTableTemplate(s);
+    }
+    for (unsigned int item = 0; item < listTemplates.count(); item++) {
+        QDomElement templateElem = listTemplates.item( item ).toElement();
+
+        KWTableTemplate *temp = new KWTableTemplate( templateElem, this );
+        m_tableTemplateColl->addTableTemplate( temp );
+    }
+}    
 
 void KWDocument::progressItemLoaded()
 {

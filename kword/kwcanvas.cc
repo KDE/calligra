@@ -25,6 +25,7 @@
 #include "kwdrag.h"
 #include "framedia.h"
 #include "kwcommand.h"
+#include "kwtabletemplate.h"
 
 #include <qtimer.h>
 #include <qclipboard.h>
@@ -58,6 +59,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     m_table.width = KWTableFrameSet::TblAuto;
     m_table.height = KWTableFrameSet::TblAuto;
     m_table.floating = true;
+    m_table.tt = 0L;
 
     m_tableSplit.nbRows=1;
     m_tableSplit.nbCols=1;
@@ -514,6 +516,10 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             bool emitChanged = false;
             if ( fs )
             {
+                if ( m_currentFrameSetEdit )
+                    terminateCurrentEdit();
+                mpEditFrame( e, normalPoint );
+                
                 KWTableFrameSet *table = fs->getGroupManager();
                 emitChanged = checkCurrentEdit( table ? table : fs );
             }
@@ -524,7 +530,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             if ( emitChanged ) // emitted after mousePressEvent [for tables]
                 emit currentFrameSetEditChanged();
             emit updateRuler();
-
 
             if( m_frameInline)
             {
@@ -623,7 +628,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 // Called by KWTableDia
 void KWCanvas::createTable( unsigned int rows, unsigned int cols,
                             int wid, int hei,
-                            bool isFloating )
+                            bool isFloating,
+                            KWTableTemplate *tt )
 {
     // Remember for next time in any case
     m_table.rows = rows;
@@ -631,6 +637,7 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     m_table.width = wid;
     m_table.height = hei;
     m_table.floating = isFloating;
+    m_table.tt = tt;
 
     if ( isFloating  )
     {
@@ -655,6 +662,13 @@ void KWCanvas::insertInlineTable()
         m_doc->addFrameSet( table, false );
         edit->insertFloatingFrameSet( table, i18n("Insert Inline Table") );
         table->finalize();
+
+        if (m_table.tt) {
+            KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( "Apply template to inline table", table, m_table.tt );
+            m_doc->addCommand(ttCmd);
+            ttCmd->execute();
+        }
+        
         m_doc->updateAllFrames();
         m_doc->refreshDocStructure(Tables);
     }
@@ -1290,9 +1304,17 @@ void KWCanvas::mrCreateTable()
         }
         else {
             KWTableFrameSet * table = createTable();
-            KWCreateTableCommand *cmd=new KWCreateTableCommand( i18n("Create Table"), table );
-            m_doc->addCommand(cmd);
-            cmd->execute();
+            KMacroCommand *macroCmd = new KMacroCommand( i18n("Create Table") );
+            
+            KWCreateTableCommand *cmd=new KWCreateTableCommand( "Create table", table );
+            macroCmd->addCommand(cmd);
+            if (m_table.tt) {
+                KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( "Apply template to table", table, m_table.tt );
+                macroCmd->addCommand(ttCmd);
+            }
+            m_doc->addCommand(macroCmd);
+            macroCmd->execute();
+            
             emit docStructChanged(Tables);
         }
         m_doc->updateAllFrames();

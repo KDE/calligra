@@ -21,6 +21,8 @@
 #include "tabledia.h"
 #include "tabledia.moc"
 
+#include "kwtabletemplateselector.h"
+
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
@@ -67,9 +69,9 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KW
     doc = _doc;
 
     setupTab1( rows, cols, wid, hei, floating );
-    //setupTab2();
+    setupTab2();
 
-    setInitialSize( QSize(500, 400) );
+    setInitialSize( QSize(500, 450) );
 }
 
 void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating )
@@ -162,65 +164,14 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 
 void KWTableDia::setupTab2()
 {
-    readTableStyles();
+    QWidget *tab2 = addPage( i18n("Templates"));
 
-    tab2 = addPage( i18n("Properties"));
-    QGridLayout *grid = new QGridLayout( tab2, 4, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab2, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    lStyles = new QLabel( i18n( "Styles" ), tab2 );
-    grid->addWidget( lStyles, 0, 0 );
-
-    lbStyles = new QListBox( tab2 );
-    grid->addWidget( lbStyles, 1, 0 );
-
-    preview2 = new QWidget( tab2 );
-    preview2->setBackgroundColor( white );
-    grid->addMultiCellWidget( preview2, 1, 1, 1, 2 );
-
-    bgHeader = new QButtonGroup( i18n( "Apply for Header" ), tab2 );
-    grid->addWidget( bgHeader, 2, 0 );
-
-    bgFirstCol = new QButtonGroup( i18n( "Apply for First Column" ), tab2 );
-    grid->addWidget( bgFirstCol, 2, 1 );
-
-    bgBody = new QButtonGroup( i18n( "Apply for Body" ), tab2 );
-    grid->addWidget( bgBody, 2, 2 );
-
-    cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, "
-					      "copy header to the top of each page." ), tab2 );
-    grid->addMultiCellWidget( cbHeaderOnAllPages, 3, 3, 0, 2 );
-
-    grid->addRowSpacing( 0, lStyles->height() );
-    grid->addRowSpacing( 1, lbStyles->height() );
-    grid->addRowSpacing( 1, 200 );
-    grid->addRowSpacing( 2, bgHeader->height() );
-    grid->addRowSpacing( 2, bgFirstCol->height() );
-    grid->addRowSpacing( 2, bgBody->height() );
-    grid->addRowSpacing( 3, cbHeaderOnAllPages->height() );
-    grid->setRowStretch( 0, 0 );
-    grid->setRowStretch( 1, 1 );
-    grid->setRowStretch( 2, 0 );
-    grid->setRowStretch( 3, 0 );
-
-    grid->addColSpacing( 0, lStyles->width() );
-    grid->addColSpacing( 0, lbStyles->width() );
-    grid->addColSpacing( 0, bgHeader->width() );
-    grid->addColSpacing( 1, 100 );
-    grid->addColSpacing( 1, bgFirstCol->width() );
-    grid->addColSpacing( 2, 100 );
-    grid->addColSpacing( 2, bgBody->width() );
-    grid->setColStretch( 0, 1 );
-    grid->setColStretch( 1, 1 );
-    grid->setColStretch( 2, 1 );
+    tableTemplateSelector = new KWTableTemplateSelector( doc, tab2 );
+    grid->addWidget(tableTemplateSelector, 0, 0);
 
     grid->activate();
-}
-
-void KWTableDia::readTableStyles()
-{
-#ifdef __GNUC__
-#warning TODO
-#endif
 }
 
 void KWTableDia::slotOk()
@@ -228,7 +179,8 @@ void KWTableDia::slotOk()
     canvas->createTable( nRows->value(), nCols->value(),
                          cWid->currentItem(),
                          cHei->currentItem(),
-                         cbIsFloating->isChecked() );
+                         cbIsFloating->isChecked(),
+                         tableTemplateSelector->getTableTemplate() );
     KDialogBase::slotOk();
 }
 

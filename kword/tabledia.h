@@ -28,6 +28,8 @@
 
 class KWCanvas;
 class KWDocument;
+class KWTableTemplateSelector;
+
 class QGridLayout;
 class QLabel;
 class QListBox;
@@ -72,40 +74,19 @@ public:
 		int rows, int cols, CellSize wid, CellSize hei, bool floating );
 
 protected:
-    void readTableStyles();
     void setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating );
     void setupTab2();
 
     QWidget *tab1;
     QLabel *lRows, *lCols, *lWid, *lHei;
+    QComboBox *cHei, *cWid;
     QSpinBox *nRows, *nCols;
     KWTablePreview *preview;
     QCheckBox *cbIsFloating;
 
-    QWidget *tab2;
-    QWidget *preview2;
-    QComboBox *cWid, *cHei;
-    QLabel *lStyles;
-    QListBox *lbStyles;
-    QCheckBox *cbHeaderOnAllPages;
-    QButtonGroup *bgHeader, *bgFirstCol, *bgBody;
-    QCheckBox *cbHBorder, *cbHBack, *cbHFormat;
-    QCheckBox *cbFCBorder, *cbFCBack, *cbFCFormat;
-    QCheckBox *cbBodyBorder, *cbBodyBack, *cbBodyFormat;
-
-    struct TableStyle {
-        bool hasHeader, hasFirstCol;
-
-        KoBorder hTop, hBottom, hRight, hLeft;
-        QBrush hBack;
-        KoBorder frTop, frBottom, frRigfrt, frLeft;
-        QBrush frBack;
-        KoBorder bTop, bBottom, bRigbt, bLeft;
-        QBrush bBack;
-    };
-
-    QPtrList<TableStyle> tableStyles;
-
+    QGridLayout *grid;
+    KWTableTemplateSelector *tableTemplateSelector;
+    
     KWCanvas *canvas;
     KWDocument *doc;
 
