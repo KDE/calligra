@@ -482,9 +482,10 @@ void KWView::setupActions()
     actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame." ) ); // #### there can be more than one frame selected (DF)
     actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame." ) );
 
-    actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "file_statistics" );
-    actionCreateLinkedFrame->setToolTip( ... );
-    actionCreateLinkedFrame->setWhatsThis( ... );
+    // TODO
+    //actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "file_statistics" );
+    //actionCreateLinkedFrame->setToolTip( ... );
+    //actionCreateLinkedFrame->setWhatsThis( ... );
 
     actionRaiseFrame = new KAction( i18n( "Ra&ise Frame" ), "raise",
                                     CTRL +SHIFT+ Key_R, this, SLOT( raiseFrame() ),
