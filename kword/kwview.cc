@@ -5230,7 +5230,7 @@ void KWView::startKSpell()
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
     QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-    QObject::connect( m_spell.kospell, SIGNAL( addAutoCorrect (const QString & originalword, const QString & newword)), this, SLOT( spellAddAutoCorrect( const QString &  ,  const QString & )));
+    QObject::connect( m_spell.kospell, SIGNAL( addAutoCorrect (const QString &, const QString &)), this, SLOT( spellAddAutoCorrect( const QString &  ,  const QString & )));
     spellCheckerReady();
 #else
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
@@ -5332,7 +5332,7 @@ void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, u
 
 void KWView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
-    //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
     pos += m_spell.selectionStartPos;
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     Q_ASSERT( fs );
@@ -5366,8 +5366,8 @@ void KWView::spellCheckerDone( const QString & )
     int result;
 #if HAVE_LIBASPELL
     result= m_spell.kospell->dlgResult();
-    delete m_spell.kospell;
-    m_spell.kospell = 0;
+    //delete m_spell.kospell;
+    //m_spell.kospell = 0;
 #else
     result= m_spell.kspell->dlgResult();
 
@@ -5375,6 +5375,7 @@ void KWView::spellCheckerDone( const QString & )
     delete m_spell.kspell;
     m_spell.kspell = 0;
 #endif
+    kdDebug()<<" result != KS_CANCEL :"<<(result != KS_CANCEL)<<" result != KS_STOP :"<<(result != KS_STOP)<<endl;
     if ( result != KS_CANCEL && result != KS_STOP )
     {
         if ( m_spell.bSpellSelection )
@@ -5387,8 +5388,12 @@ void KWView::spellCheckerDone( const QString & )
         }
         else
         {
+#if HAVE_LIBASPELL
+            spellCheckerReady();
+#else
             // Try to check another frameset
             startKSpell();
+#endif
         }
     }
     else
