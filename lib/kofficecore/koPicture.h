@@ -144,7 +144,7 @@ protected:
      * @internal
      * Creare the shared data if needed
      */
-    void KoPicture::createSharedData(void);
+    void createSharedData(void);
 
 protected:
     KoPictureKey m_key;
