@@ -146,7 +146,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     _smart->setChecked(true);
     QWhatsThis::add(_smart,
                     i18n("Removes returns and hyphens at end of line. "
-                         "Also tries to compute the paragraph alignment."
+                         "Also tries to compute the paragraph alignment. "
                          "Note that the layout of some pages can "
                          "get messed up."));
     top->addWidget(_smart);
