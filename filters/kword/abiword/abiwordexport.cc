@@ -32,9 +32,6 @@
    License version 2.
 */
 
-#include <abiwordexport.h>
-#include <abiwordexport.moc>
-
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qdom.h>
@@ -49,24 +46,164 @@
 #include <TagProcessing.h>
 #include <KWEFBaseClass.h>
 #include <ProcessDocument.h>
-
+#include <KWEFBaseWorker.h>
+#include <KWEFKWordLeader.h>
 
 #include "kqiodevicegzip.h"
+#include <abiwordexport.h>
+#include <abiwordexport.moc>
 
-ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
-}
-
-// In KWord's AbiWord export filter, the class ClassExportFilterBase is more
-//  a dummy for compatibility with KWord's HTML export filter.
-class ClassExportFilterBase : public KWEFBaseClass
+class AbiWordWorker : public KWEFBaseWorker
 {
 public:
-    ClassExportFilterBase(void) {}
-    virtual ~ClassExportFilterBase(void) {}
+    AbiWordWorker(void) : m_ioDevice(NULL), m_streamOut(NULL) { }
+    virtual ~AbiWordWorker(void) { }
+public:
+    virtual bool doOpenFile(const QString& filenameOut, const QString& to);
+    virtual bool doCloseFile(void); // Close file in normal conditions
+    virtual bool doOpenDocument(void);
+    virtual bool doCloseDocument(void);
+    virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+    virtual bool doOpenTextFrameSet(void); // AbiWord's <section>
+    virtual bool doCloseTextFrameSet(void); // AbiWord's </section>
+    virtual bool doFullPaperFormat(const int format,
+        const double width, const double height, const int orientation); // Calc AbiWord's <papersize>
+    virtual bool doCloseHead(void); // Write <papersize>
+private:
+    void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
+    QString FormatDataToAbiProps(FormatData& formatData);
+private:
+    QIODevice* m_ioDevice;
+    QTextStream* m_streamOut;
+    QString m_pagesize; // Buffer for the <pagesize> tag
 };
 
-static QString FormatDataToAbiProps(FormatData& formatData)
+bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
+{
+    //Find the last extension
+    QString strExt;
+    const int result=filenameOut.findRev('.');
+    if (result>=0)
+    {
+        strExt=filenameOut.mid(result);
+    }
+
+    QString strMime; // Mime type of the compressor (default: unknown)
+
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
+    {
+        // Compressed with gzip
+        kdDebug(30506) << "Compression: gzip" << endl;
+        // FIXME: Use KQIODeviceGZip, as KFilterDev seems to produce huge gzipped files (WHY?)
+# if 1
+        m_ioDevice = new KQIODeviceGZip(filenameOut);
+# else
+        m_ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-gzip");
+# endif
+    }
+    else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
+        ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
+    {
+        // Compressed with bzip2 (TODO: activate me in the .desktop file and test me!)
+        kdDebug(30506) << "Compression: bzip2" << endl;
+        m_ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-bzip2");
+    }
+    else
+    {
+        // Uncompressed, we cannot use KFiterDev
+        //   KFilterBase is uncooperative for writing uncompressed files
+        //   (as it defaults to "application/x-gzip" if no filter is found)
+        kdDebug(30506) << "No compression" << endl;
+        m_ioDevice = new QFile(filenameOut);
+    }
+
+    if (!m_ioDevice)
+    {
+        kdError(30506) << "No output file! Aborting!" << endl;
+        return false;
+    }
+
+    if ( !m_ioDevice->open (IO_WriteOnly) )
+    {
+        kdError(30506) << "Unable to open output file!" << endl;
+        return false;
+    }
+
+    m_streamOut=new QTextStream(m_ioDevice);
+    if (!m_ioDevice)
+    {
+        kdError(30506) << "Could not create output stream! Aborting!" << endl;
+        m_ioDevice->close();
+        return false;
+    }
+
+    // TODO: ask the user for the encoding!
+    m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
+    return true;
+}
+
+bool AbiWordWorker::doCloseFile(void)
+{
+    if (m_ioDevice)
+        m_ioDevice->close();
+    return (m_ioDevice);
+}
+
+bool AbiWordWorker::doOpenDocument(void)
+{
+    // Make the file header
+
+    // First the XML header in UTF-8 version
+    // (AbiWord and QT handle UTF-8 well, so we stay with this encoding!)
+    *m_streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
+    // TODO/FIXME: newest AbiWord versions ahve a new DOCTYPE!
+    *m_streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
+    *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
+
+    // First magic: "<abiword"
+    *m_streamOut << "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
+    // Second magic: "<!-- This file is an AbiWord document."
+    *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
+    // We have chosen NOT to have the full comment header that AbiWord files normally have.
+    *m_streamOut << "\n";
+
+    // Put the rest of the information in the way AbiWord puts its debug info!
+
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    *m_streamOut << "<!-- KWord_Export_Filter_Version =";
+
+    QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
+    *m_streamOut << strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+
+    *m_streamOut << " -->\n\n";
+
+    return true;
+}
+
+bool AbiWordWorker::doCloseDocument(void)
+{
+    *m_streamOut << "</abiword>\n"; //Close the file for XML
+    return true;
+}
+
+bool AbiWordWorker::doOpenTextFrameSet(void)
+{
+    *m_streamOut << "<section>\n";
+    return true;
+}
+
+bool AbiWordWorker::doCloseTextFrameSet(void)
+{
+    *m_streamOut << "</section>\n";
+    return true;
+}
+
+QString AbiWordWorker::FormatDataToAbiProps(FormatData& formatData)
 {
     QString strElement; // TODO: rename this variable
 
@@ -175,15 +312,12 @@ static QString FormatDataToAbiProps(FormatData& formatData)
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-static void ProcessParagraphData ( QString &paraText,
-    ValueListFormatData &paraFormatDataList, QString &outputText,
-    KWEFBaseClass* )
+void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
+    ValueListFormatData &paraFormatDataList)
 {
     if ( paraText.length () > 0 )
     {
-        CreateMissingFormatData(paraText,paraFormatDataList);
-
-        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+        ValueListFormatData::Iterator  paraFormatDataIt;
 
         QString partialText;
 
@@ -199,7 +333,7 @@ static void ProcessParagraphData ( QString &paraText,
             if ((*paraFormatDataIt).missing)
             {
                 // It's just normal text, so we do not need a <c> element!
-                outputText += partialText;
+                *m_streamOut << partialText;
             }
             else
             { // Text with properties, so use a <c> element!
@@ -215,120 +349,104 @@ static void ProcessParagraphData ( QString &paraText,
                     abiprops.remove(result,2);
                 }
 
-                outputText += "<c props=\"";
-                outputText += abiprops;
-                outputText += "\">";
-                outputText += partialText;
-                outputText += "</c>";
+                *m_streamOut << "<c props=\"" << abiprops << "\">";
+                *m_streamOut << partialText << "</c>";
             }
        }
-
     }
-
 }
 
-static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter )
+bool AbiWordWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
 {
-    AllowNoAttributes (myNode);
+    QString props;
+    QString style;
 
-    QString paraText;
-    ValueListFormatData paraFormatDataList;
-    LayoutData paraLayout;
-    QValueList<TagProcessing> tagProcessingList;
-    bool hardbreak=false; // Have we an hard break?
-
-    tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
-    tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
-    tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-    QString style; // Style attribute for <p> element
-    QString props; // Props attribute for <p> element
-
-#if 1
-    style=paraLayout.styleName;
+// TODO: re-implement styles
+#if 0
+    style=layout.styleName;
 #else
-    if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
+    if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
     {
-        const int depth = paraLayout.counter.depth + 1;
+        const int depth = layout.counter.depth + 1;
         // Note: .arg(strParaText) must remain last,
         //  as strParaText may contain an unwanted % + number sequence
         style = QString("Heading %1").arg(depth);
     }
     else
     {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
-        // TODO: use AbiWord's full style capacity
         style = "Normal";
     }
 #endif
 
     // Check if the current alignment is a valid one for AbiWord.
-    if ( (paraLayout.alignment == "left") || (paraLayout.alignment == "right")
-        || (paraLayout.alignment == "center")  || (paraLayout.alignment == "justify"))
+    if ( (layout.alignment == "left") || (layout.alignment == "right")
+        || (layout.alignment == "center")  || (layout.alignment == "justify"))
     {
         props += "text-align:";
-        props += paraLayout.alignment;
+        props += layout.alignment;
         props += "; ";
     }
     else
     {
-        kdWarning(30506) << "Unknown alignment: " << paraLayout.alignment << endl;
+        kdWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
     }
 
-    if ( !paraLayout.tabulator.isEmpty())
-        props +="tabstops:"+paraLayout.tabulator+"; ";
-
-    if ( paraLayout.indentLeft!=0.0 )
+    if ( !layout.tabulator.isEmpty() )
     {
-        props += QString("margin-left:%1pt; ").arg(paraLayout.indentLeft);
+        props += "tabstops:";
+        props += layout.tabulator;
+        props += "; ";
     }
 
-    if ( paraLayout.indentRight!=0.0 )
+    if ( layout.indentLeft!=0.0 )
     {
-        props += QString("margin-right:%1pt; ").arg(paraLayout.indentRight);
+        props += QString("margin-left:%1pt; ").arg(layout.indentLeft);
     }
 
-    if ( paraLayout.indentFirst!=0.0 )
+    if ( layout.indentRight!=0.0 )
     {
-        props += QString("text-indent:%1pt; ").arg(paraLayout.indentFirst);
+        props += QString("margin-right:%1pt; ").arg(layout.indentRight);
     }
 
-    if( paraLayout.marginBottom!=0.0)
+    if ( layout.indentFirst!=0.0 )
     {
-       props += QString("margin-bottom:%1pt; ").arg(paraLayout.marginBottom);
-    }
-    if( paraLayout.marginTop!=0.0  )
-    {
-       props += QString("margin-top:%1pt; ").arg(paraLayout.marginTop);
+        props += QString("text-indent:%1pt; ").arg(layout.indentFirst);
     }
 
-    if ( !paraLayout.lineSpacingType )
+    if( layout.marginBottom!=0.0)
+    {
+       props += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
+    }
+    if( layout.marginTop!=0.0  )
+    {
+       props += QString("margin-top:%1pt; ").arg(layout.marginTop);
+    }
+
+    if ( !layout.lineSpacingType )
     {
         // We have a custom line spacing (in points)
-        props += QString("line-height:%1pt; ").arg(paraLayout.lineSpacing);
+        props += QString("line-height:%1pt; ").arg(layout.lineSpacing);
     }
-    else if ( 15==paraLayout.lineSpacingType  )
+    else if ( 15==layout.lineSpacingType  )
     {
         props += "line-height:1.5; "; // One-and-half
     }
-    else if ( 20==paraLayout.lineSpacingType  )
+    else if ( 20==layout.lineSpacingType  )
     {
         props += "line-height:2.0; "; // Two
     }
-    else if ( paraLayout.lineSpacingType!=10  )
+    else if ( layout.lineSpacingType!=10  )
     {
-        kdWarning(30506) << "Curious lineSpacingType: " << paraLayout.lineSpacingType << " (Ignoring!)" << endl;
+        kdWarning(30506) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
-    props += FormatDataToAbiProps(paraLayout.formatData);
+    props += FormatDataToAbiProps(layout.formatData);
 
-    outputText += "<p";
+    *m_streamOut << "<p";
     if (!style.isEmpty())
     {
-        outputText += " style=\"";
-        outputText += style;
-        outputText += "\"";
+        *m_streamOut << " style=\"" << EscapeXmlText(style) << "\"";
     }
     if (!props.isEmpty())
     {
@@ -341,69 +459,32 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
             props.remove(result,2);
         }
 
-        outputText += " props=\"";
-        outputText += props;
-        outputText += "\"";
+        *m_streamOut << " props=\"" << props << "\"";
     }
-    outputText += ">";  //Warning: No trailing white space or else it's in the text!!!
+    *m_streamOut << ">";  //Warning: No trailing white space or else it's in the text!!!
 
     // Before processing the text, test if we have a page break
-    if (paraLayout.pageBreakBefore)
+    if (layout.pageBreakBefore)
     {
         // We have a page break before the paragraph
-        outputText += "<pbr/>";
+        *m_streamOut << "<pbr/>";
     }
 
-    ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
+    ProcessParagraphData ( paraText, paraFormatDataList );
 
     // Before closing the paragraph, test if we have a page break
-    if (paraLayout.pageBreakAfter)
+    if (layout.pageBreakAfter)
     {
         // We have a page break after the paragraph
-        outputText += "<pbr/>";
+        *m_streamOut << "<pbr/>";
     }
 
-    outputText += "</p>\n";
+    *m_streamOut << "</p>\n";
+    return true;
 }
 
-
-static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter )
-{
-    int frameType=-1;
-    int frameInfo=-1;
-
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "frameType", "int", (void*) &frameType ) );
-    attrProcessingList.append ( AttrProcessing ( "frameInfo", "int", (void*) &frameInfo) );
-    attrProcessingList.append ( AttrProcessing ( "removable", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "visible",   "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "name",      "", NULL ) );
-    ProcessAttributes (myNode, attrProcessingList);
-
-    if ((1==frameType) && (0==frameInfo))
-    {   //Main text
-        outputText+="<section>\n";
-
-        QValueList<TagProcessing> tagProcessingList;
-        tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
-        tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
-        ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-        outputText+="</section>\n";
-    }
-    //TODO: Treat the other types of frames (frameType)
-}
-
-
-static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter )
-{
-    AllowNoAttributes (myNode);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "FRAMESET", ProcessFramesetTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-}
-
+// TODO: re-implement styles!
+#if 0
 static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEFBaseClass* exportFilter )
 {
     kdDebug(30506) << "Entering ProcessStyleTag" << endl;
@@ -464,31 +545,12 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText
         outputText+="</styles>\n";
     }
 }
+#endif
 
-static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWEFBaseClass*)
+bool AbiWordWorker::doFullPaperFormat(const int format,
+            const double width, const double height, const int orientation)
 {
-
-    int format=-1;
-    int orientation=-1;
-    double width=-1.0;
-    double height=-1.0;
-
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "format",          "int", (void*) &format ) );
-    attrProcessingList.append ( AttrProcessing ( "width",           "double", (void*) &width ) );
-    attrProcessingList.append ( AttrProcessing ( "height",          "double", (void*) &height ) );
-    attrProcessingList.append ( AttrProcessing ( "orientation",     "int", (void*) &orientation ) );
-    attrProcessingList.append ( AttrProcessing ( "columns",         "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "columnspacing",   "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "hType",           "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "fType",           "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "spHeadBody",      "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "spFootBody",      "", NULL ) );
-    ProcessAttributes (myNode, attrProcessingList);
-
-    AllowNoSubtags (myNode);
-
-    outputText += "<pagesize ";
+    QString outputText = "<pagesize ";
 
     switch (format)
     {
@@ -622,194 +684,56 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWE
     outputText += "\" ";
 
     outputText += "page-scale=\"1.0\"/>\n"; // KWord has no page scale, so assume 100%
-}
 
-static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, KWEFBaseClass* exportFilter)
-{
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
-    ProcessAttributes (myNode, attrProcessingList);
-    // TODO: verify syntax version and perhaps mime
-
-
-    // We process the tag in some groups to have the order
-    //  like the AbiWord file format wants it.
-
-    QValueList<TagProcessing> tagProcessingList;
-
-    // <styles>
-    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-    // TODO: list
-
-    // <paper>
-    tagProcessingList.clear();
-    tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-    // the rest: <FRAMESETS> give <section>
-    tagProcessingList.clear();
-    tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-
-    // TODO: <data>
-}
-
-bool ABIWORDExport::filter(const QString  &filenameIn,
-                           const QString  &filenameOut,
-                           const QString  &from,
-                           const QString  &to,
-                           const QString  &         )
-{
-    if ((from != "application/x-kword") || (to != "application/x-abiword"))
-    {
-        return false;
-    }
-
-    KoStore koStoreIn (filenameIn, KoStore::Read);
-
-    if ( !koStoreIn.open ( "root" ) )
-    {
-        koStoreIn.close ();
-
-        kdError(30506) << "Unable to open input file!" << endl;
-        return false;
-    }
-
-    QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
-    koStoreIn.close ();
-
-    //
-    // Create a QIODevice for writing
-    // TODO: replace it with KFilterDev
-    //
-    QIODevice* ioDevice=NULL;
-
-    //Find the last extension
-    QString strExt;
-    const int result=filenameOut.findRev('.');
-    if (result>=0)
-    {
-        strExt=filenameOut.mid(result);
-    }
-
-    QString strMime; // Mime type of the compressor (default: unknown)
-
-    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
-        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
-    {
-        // Compressed with gzip
-        kdDebug(30506) << "Compression: gzip" << endl;
-        // FIXME: Use KQIODeviceGZip, as KFilterDev seems to produce huge gzipped files (WHY?)
-# if 1
-        ioDevice = new KQIODeviceGZip(filenameOut);
-# else
-        ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-gzip");
-# endif
-    }
-    else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
-        ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
-    {
-        // Compressed with bzip2 (TODO: activate me in the .desktop file and test me!)
-        kdDebug(30506) << "Compression: bzip2" << endl;
-        ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-bzip2");
-    }
-    else
-    {
-        // Uncompressed, we cannot use KFiterDev
-        //   KFilterBase is uncooperative for writing uncompressed files
-        //   (as it defaults to "application/x-gzip" if no filter is found)
-        kdDebug(30506) << "No compression" << endl;
-        ioDevice = new QFile(filenameOut);
-    }
-
-    if (!ioDevice)
-    {
-        kdError(30506) << "Could not create QIODevice! Aborting!" << endl;
-        return false;
-    }
-
-    // Open the
-    if ( !ioDevice->open (IO_WriteOnly) )
-    {
-        kdError(30506) << "Unable to open output file! Aborting!" << endl;
-        return false;
-    }
-
-    // Now that we have a QIODevice, make a QTextStream
-    QTextStream streamOut(ioDevice);
-    streamOut.setEncoding( QTextStream::UnicodeUTF8 );
-
-    QDomDocument qDomDocumentIn;
-
-    // let parse the buffer just read from the file
-    qDomDocumentIn.setContent(byteArrayIn);
-
-    QDomNode docNodeIn = qDomDocumentIn.documentElement ();
-
-    // Create export filter (more a dummy for now!)
-    ClassExportFilterBase* exportFilter=new ClassExportFilterBase;
-    if (!exportFilter)
-    {
-        kdError(30506) << "No AbiWord filter created! Aborting! (Memory problem?)" << endl;
-        return false;
-    }
-
-    // Make the file header
-
-    // First the XML header in UTF-8 version
-    // (AbiWord and QT handle UTF-8 well, so we stay with this encoding!)
-    streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
-    streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
-    streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
-
-    // First magic: "<abiword"
-    streamOut << "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
-    // Second magic: "<!-- This file is an AbiWord document."
-    streamOut << "<!-- This file is an AbiWord document. -->\n";
-    // We have chosen NOT to have the full comment header that AbiWord files normally have.
-    streamOut << "\n";
-
-    // Put the rest of the information in the way AbiWord puts its debug info!
-
-    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    streamOut << "<!-- KWord_Export_Filter_Version =";
-    QString strVersion("$Revision$");
-    // Eliminate the dollar signs
-    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    streamOut << strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
-    streamOut << " -->\n\n";
-
-#if 1
-    // Some "security" to see if I have forgotten to run "make install"
-    // (Can be deleted when the filter will be stable.)
-    kdDebug(30506) << "abiwordexport.cc " << __DATE__ " " __TIME__ << " " << strVersion << endl;
-#endif
-
-    QString stringBufOut;
-    // Now that we have the header, we can do the real work!
-    ProcessDocTag (docNodeIn, NULL, stringBufOut, exportFilter);
-    streamOut << stringBufOut;
-
-    // Add the tail of the file
-    streamOut << "</abiword>\n"; //Close the file for XML
-
-    // At the end, close the output file
-
-    ioDevice->close();
-
-    delete exportFilter;
-    delete ioDevice;
-
+    m_pagesize=outputText;
     return true;
 }
 
+bool AbiWordWorker::doCloseHead(void)
+{
+    if (!m_pagesize.isEmpty())
+    {
+        *m_streamOut << m_pagesize;
+    }
+    return true;
+}
+
+ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
+                     KoFilter(parent, name) {
+}
+
+bool ABIWORDExport::filter ( const QString  &filenameIn,
+                             const QString  &filenameOut,
+                             const QString  &from,
+                             const QString  &to,
+                             const QString  &param )
+{
+    if ( to != "application/x-abiword" || from != "application/x-kword" )
+    {
+        return false;
+    }
+
+    AbiWordWorker* worker=new AbiWordWorker();
+
+    if (!worker)
+    {
+        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
+        return false;
+    }
+
+    KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
+
+    if (!leader)
+    {
+        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
+        delete worker;
+        return false;
+    }
+
+    bool flag=leader->filter(filenameIn,filenameOut,from,to,param);
+
+    delete leader;
+    delete worker;
+
+    return flag;
+}
