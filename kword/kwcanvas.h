@@ -101,7 +101,7 @@ public:
     void mpCreatePixmap( int mx, int my );
     // Mouse move
     void mmEdit( int /*mx*/, int /*my*/ );  // mouse move in edit mode (with button pressed)
-    void mmEditFrameResize( bool top, bool bottom, bool left, bool right );
+    void mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid );
     void mmEditFrameMove( int mx, int my );
     void mmCreate( int mx, int my );
     // Mouse release

@@ -66,35 +66,36 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
     show();
 }
 
-void KWResizeHandle::mouseMoveEvent( QMouseEvent * )
+void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
 {
     if ( !mousePressed )
         return;
 
+    bool shiftPressed = e->state() & ShiftButton;
     switch ( direction ) {
     case LeftUp:
-        m_canvas->mmEditFrameResize( true, false, true, false );
+        m_canvas->mmEditFrameResize( true, false, true, false, shiftPressed );
         break;
     case Up:
-        m_canvas->mmEditFrameResize( true, false, false, false);
+        m_canvas->mmEditFrameResize( true, false, false, false, shiftPressed );
         break;
     case RightUp:
-        m_canvas->mmEditFrameResize( true, false, false, true );
+        m_canvas->mmEditFrameResize( true, false, false, true, shiftPressed );
         break;
     case Right:
-        m_canvas->mmEditFrameResize( false, false, false, true );
+        m_canvas->mmEditFrameResize( false, false, false, true, shiftPressed );
         break;
     case RightDown:
-        m_canvas->mmEditFrameResize( false, true, false, true );
+        m_canvas->mmEditFrameResize( false, true, false, true, shiftPressed );
         break;
     case Down:
-        m_canvas->mmEditFrameResize( false, true, false, false );
+        m_canvas->mmEditFrameResize( false, true, false, false, shiftPressed );
         break;
     case LeftDown:
-        m_canvas->mmEditFrameResize( false, true, true, false );
+        m_canvas->mmEditFrameResize( false, true, true, false, shiftPressed );
         break;
     case Left:
-        m_canvas->mmEditFrameResize( false, false, true, false);
+        m_canvas->mmEditFrameResize( false, false, true, false, shiftPressed );
         break;
     }
 }

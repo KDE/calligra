@@ -540,7 +540,7 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
         setMouseMode( MM_CREATE_TABLE );
 }
 
-void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
+void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid )
 {
     //kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
     //          << top << "," << bottom << "," << left << "," << right << endl;
@@ -560,11 +560,16 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
     mousep = m_viewMode->viewToNormal( mousep );
 
-    // Apply the grid
-    int rastX = doc->gridX();
-    int rastY = doc->gridY();
-    int mx = ( mousep.x() / rastX ) * rastX ;
-    int my = ( mousep.y() / rastY ) * rastY;
+    int mx = mousep.x();
+    int my = mousep.y();
+    // Apply the grid, unless Shift is pressed
+    if ( !noGrid )
+    {
+        int rastX = doc->gridX();
+        int rastY = doc->gridY();
+        mx = ( mx / rastX ) * rastX ;
+        my = ( my / rastY ) * rastY;
+    }
     double x = mx / doc->zoomedResolutionX();
     double y = my / doc->zoomedResolutionY();
     int page = static_cast<int>( y / doc->ptPaperHeight() );
@@ -877,8 +882,13 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 {
                     if ( viewport()->cursor().shape() == SizeAllCursor )
                     {
-                        int mx = ( normalPoint.x() / doc->gridX() ) * doc->gridX();
-                        int my = ( normalPoint.y() / doc->gridY() ) * doc->gridY();
+                        int mx = normalPoint.x();
+                        int my = normalPoint.y();
+                        if ( !( e->state() & ShiftButton ) ) // Shift disables the grid
+                        {
+                            mx = ( mx / doc->gridX() ) * doc->gridX();
+                            my = ( my / doc->gridY() ) * doc->gridY();
+                        }
                         mmEditFrameMove( mx, my );
                     }
                 }
