@@ -60,15 +60,13 @@ double KWord13OasisGenerator::numberOrNull( const QString& str ) const
 }
 
 // Inspired from KoParagLayout::saveOasis but we have not the same data to start with.
-void KWord13OasisGenerator::fillGenStyleWithLayout( KoGenStyle& gs, const bool style ) const
+void KWord13OasisGenerator::fillGenStyleWithLayout( const KWord13Layout& layout, KoGenStyle& gs, const bool style ) const
 {
     // ### TODO syntaxVersion < 3
 
-    // ### FIXME: of course layout properties are *not* document properties
-    
     QString str; // Help string to store each KWord 1.3 layout property
    
-    str = m_kwordDocument->getProperty( "FLOW:align" );
+    str = layout.getProperty( "FLOW:align" );
     if ( str.isEmpty() && ! style)
     {
         // Nothing to do!
@@ -82,7 +80,7 @@ void KWord13OasisGenerator::fillGenStyleWithLayout( KoGenStyle& gs, const bool s
         gs.addProperty( "fo:text-align", "start" ); // i.e. direction-dependent
     }
 
-    str = m_kwordDocument->getProperty( "FLOW:dir" );
+    str = layout.getProperty( "FLOW:dir" );
     if ( str == "R" ) // ### TODO: check the right value
     {
             gs.addProperty( "style:writing-mode", "rl-tb" ); // right-to-left, top-to-bottom
@@ -93,11 +91,11 @@ void KWord13OasisGenerator::fillGenStyleWithLayout( KoGenStyle& gs, const bool s
     }
 
     // ### TODO: do not define if it does not exist and ! style
-    gs.addPropertyPt( "fo:margin-left", numberOrNull( m_kwordDocument->getProperty( "INDENTS:left" ) ) );
-    gs.addPropertyPt( "fo:margin-right", numberOrNull( m_kwordDocument->getProperty( "INDENTS:right" ) ) );
-    gs.addPropertyPt( "fo:text-indent", numberOrNull( m_kwordDocument->getProperty( "INDENTS:first" ) ) );
-    gs.addPropertyPt( "fo:margin-top", numberOrNull( m_kwordDocument->getProperty( "OFFSETS:before" ) ) );
-    gs.addPropertyPt( "fo:margin-bottom", numberOrNull( m_kwordDocument->getProperty( "OFFSETS:after" ) ) );
+    gs.addPropertyPt( "fo:margin-left", numberOrNull( layout.getProperty( "INDENTS:left" ) ) );
+    gs.addPropertyPt( "fo:margin-right", numberOrNull( layout.getProperty( "INDENTS:right" ) ) );
+    gs.addPropertyPt( "fo:text-indent", numberOrNull( layout.getProperty( "INDENTS:first" ) ) );
+    gs.addPropertyPt( "fo:margin-top", numberOrNull( layout.getProperty( "OFFSETS:before" ) ) );
+    gs.addPropertyPt( "fo:margin-bottom", numberOrNull( layout.getProperty( "OFFSETS:after" ) ) );
 
 #if 0
     switch ( lineSpacingType ) {

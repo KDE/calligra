@@ -27,6 +27,9 @@ public:
      * This key helps to categorize the automatic styles
      */
     QString key( void ) const;
+    
+    
+    QString KWord13Layout::getProperty( const QString& name ) const;
 
 public:
     KWord13FormatOne m_format; ///< Character format properties

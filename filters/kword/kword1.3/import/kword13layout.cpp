@@ -60,3 +60,18 @@ QString KWord13Layout::key( void ) const
     
     return strKey;
 }
+
+QString KWord13Layout::getProperty( const QString& name ) const
+{
+    QMap<QString,QString>::ConstIterator it ( m_layoutProperties.find( name ) );
+    if ( it == m_layoutProperties.end() )
+    {
+        // Property does not exist
+        return QString::null;
+    }
+    else
+    {
+        return it.data();
+    }
+}
+
