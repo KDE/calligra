@@ -30,7 +30,7 @@ DESCRIPTION
 #include <qpointarray.h>
 
 typedef KGenericFactory<MSODImport, KoFilter> MSODImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "msodimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "karbonmsodimport" ) );
 
 const int MSODImport::s_area = 30505;
 
@@ -48,7 +48,7 @@ MSODImport::~MSODImport()
 
 KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCString& to )
 {
-    if (to != "application/x-kontour" || from != "image/x-msod")
+    if (to != "application/x-karbon" || from != "image/x-msod")
         return KoFilter::NotImplemented;
 
     // Get configuration data: the shape id, and any delay stream that we were given.
@@ -84,25 +84,19 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
         }
     }
 */
-    m_text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    m_text += "<!DOCTYPE kontour>\n";
-    m_text += "<kontour mime=\"application/x-kontour\" version=\"1\" editor=\"MSOD import filter\">\n";
-    m_text += " <head cpn=\"2\">\n";
-    m_text += "  <grid dx=\"20\" dy=\"20\" color=\"#c0c0c0\" align=\"0\" />\n";
-    m_text += "  <helplines show=\"1\" align=\"0\"/>\n";
-    m_text += "  <stylelist>\n";
-    m_text += "   <style oopacity=\"100\" width=\"1\" ocolor=\"#000000\" pattern=\"1\" join=\"128\" ftype=\"0\" id=\"default\" cap=\"32\" stroked=\"1\" fcolor=\"#ffffff\" />\n";
-    m_text += "  </stylelist>\n";
-    m_text += " </head>\n";
-    m_text += " <page id=\"Page 1\">\n";
-    m_text += "  <layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
-    m_text += "  <layer>\n";
+    // doc header
+    m_text = "";
+    m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    m_text += "<!DOCTYPE DOC>\n";
+    m_text += "<DOC mime=\"application/x-karbon\" syntaxVersion=\"0.1\" editor=\"WMF import filter\">\n";
+    m_text += "  <LAYER name=\"Layer\" visible=\"1\">\n";
 
     if (!parse(shapeId, m_chain->inputFile(), delayStream))
         return KoFilter::WrongFormat;
-    m_text += "  </layer>\n";
-    m_text += " </page>\n";
-    m_text += "</kontour>\n";
+
+    // close doc
+    m_text += "  </LAYER>\n";
+    m_text += "</DOC>\n";
 
     emit sigProgress(100);
 
@@ -112,20 +106,22 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
         kdError(s_area) << "Cannot open output file" << endl;
         return KoFilter::StorageCreationError;
     }
-    QCString cstring = m_text.utf8();
+    QCString cstring ( m_text.utf8() );
     dev->writeBlock(cstring.data(), cstring.size()-1);
 
     return KoFilter::OK;
 }
 
 void MSODImport::gotEllipse(
-    const DrawContext &dc,
-    QString type,
-    QPoint topLeft,
-    QSize halfAxes,
-    unsigned startAngle,
-    unsigned stopAngle)
+    const DrawContext &/*dc*/,
+    QString /*type*/,
+    QPoint /*topLeft*/,
+    QSize /*halfAxes*/,
+    unsigned /*startAngle*/,
+    unsigned /*stopAngle*/)
 {
+// ### TODO
+#if 0
     m_text += "<ellipse angle1=\"" + QString::number(startAngle) +
                 "\" angle2=\"" + QString::number(stopAngle) +
                 "\" x=\"" + QString::number(topLeft.x()) +
@@ -143,6 +139,14 @@ void MSODImport::gotEllipse(
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
     m_text += " </gobject>\n";
     m_text += "</ellipse>\n";
+#endif
+}
+
+static void toRGB(int c, double &r, double &g, double &b)
+{
+	r = (c >> 16) / 255.0;
+	g = ((c >> 8) & 0xFF) / 255.0;
+	b = (c & 0xFF) / 255.0;
 }
 
 void MSODImport::gotPicture(
@@ -151,6 +155,8 @@ void MSODImport::gotPicture(
     unsigned length,
     const char *data)
 {
+// ### TODO
+#if 0
     kdDebug() << "##########################################MSODImport::gotPicture" << endl;
     kdDebug() << "MSODImport::gotPicture -- " << extension << endl;
     if ((extension == "wmf") ||
@@ -199,31 +205,37 @@ void MSODImport::gotPicture(
 
         // Note that we cannot delete the file...
     }
+#endif
 }
 
 void MSODImport::gotPolygon(
     const DrawContext &dc,
     const QPointArray &points)
 {
-    QRect bounds = points.boundingRect();
+    kdDebug(s_area) << "MSODImport::gotPolygon" << endl;
+    kdDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
+    kdDebug(s_area) << dc.m_penStyle << endl;
+    m_text += "<COMPOSITE>\n";
+    if( dc.m_penWidth > 0 )
+    {
+        m_text += "<STROKE lineWidth=\"1\">\n";// + QString::number(dc.m_penWidth, 16) + "\">\n";
+        double r, g, b;
+        toRGB(dc.m_penColour, r, g, b);
+        m_text += "<COLOR v1=\"" + QString::number(r) + "\" v2=\"" + QString::number(g) + "\"  v3=\"" + QString::number(b) + "\" opacity=\"1\" colorSpace=\"0\"  />\n";
+    m_text += "</STROKE>\n";
+    }
+    else
+        m_text += "<STROKE lineWidth=\"1\" />\n";
+    m_text += "<FILL fillRule=\"" + QString::number(dc.m_winding) + "\">\n";
+    double r, g, b;
+    toRGB(dc.m_brushColour, r, g, b);
+    m_text += "<COLOR v1=\"" + QString::number(r) + "\" v2=\"" + QString::number(g) + "\"  v3=\"" + QString::number(b) + "\" opacity=\"1\" colorSpace=\"0\"  />\n";
+    m_text += "</FILL>\n";
 
-    m_text += "<polygon width=\"" + QString::number(bounds.width()) +
-                "\" x=\"" + QString::number(bounds.x()) +
-                "\" y=\"" + QString::number(bounds.y()) +
-                "\" height=\"" + QString::number(bounds.height()) +
-                "\" rounding=\"0\">\n";
-    m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
+    m_text += "<PATH isClosed=\"1\" >\n";
     pointArray(points);
-    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
-                "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
-                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
-                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
-                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
-                "\">\n";
-    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
-    m_text += " </gobject>\n";
-    m_text += "</polyline>\n";
-    m_text += "</polygon>\n";
+    m_text += "</PATH>\n";
+    m_text += "</COMPOSITE>\n";
 }
 
 
@@ -231,22 +243,23 @@ void MSODImport::gotPolyline(
     const DrawContext &dc,
     const QPointArray &points)
 {
-    m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
+	kdDebug(s_area) << "MSODImport::gotPolyline" << endl;
+	return; // ### TODO
+    m_text += "<COMPOSITE>\n";
+    m_text += "<STROKE lineWidth=\"" + QString::number(dc.m_penWidth) + "\">\n";
+    m_text += "</STROKE>\n";
+    m_text += "<PATH isClosed=\"1\" >\n";
     pointArray(points);
-    m_text += " <gobject fillstyle=\"" + QString::number(1 /*m_winding*/) +
-                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
-                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
-                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
-                "\">\n";
-    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
-    m_text += " </gobject>\n";
-    m_text += "</polyline>\n";
+    m_text += "</PATH>\n";
+    m_text += "</COMPOSITE>\n";
 }
 
 void MSODImport::gotRectangle(
     const DrawContext &dc,
     const QPointArray &points)
 {
+// ### TODO
+#if 0
     QRect bounds = points.boundingRect();
 
     m_text += "<rectangle width=\"" + QString::number(bounds.width()) +
@@ -266,6 +279,7 @@ void MSODImport::gotRectangle(
     m_text += " </gobject>\n";
     m_text += "</polyline>\n";
     m_text += "</rectangle>\n";
+#endif
 }
 
 void MSODImport::savePartContents( QIODevice* file )
@@ -278,12 +292,22 @@ void MSODImport::pointArray(
     const QPointArray &points)
 {
 
-    for (unsigned i = 0; i < points.count(); i++)
+    m_text += "<MOVE x=\"" + QString::number(points.point(0).x()) +
+                "\" y=\"" + QString::number(points.point(0).y()) +
+                "\" />\n";
+    kdDebug(s_area) << "\n<MOVE x=\"" + QString::number(points.point(0).x()) +
+                            "\" y=\"" + QString::number(points.point(0).y()) +
+                                        "\" />" << endl;
+    for (unsigned int i = 1; i < points.count(); i++)
     {
-        m_text += "<point x=\"" + QString::number(points.point(i).x()) +
+        m_text += "<LINE x=\"" + QString::number(points.point(i).x()) +
                     "\" y=\"" + QString::number(points.point(i).y()) +
-                     "\"/>\n";
+                    "\" />\n";
+        kdDebug(s_area) << "<LINE x=\"" + QString::number(points.point(i).x()) +
+                            "\" y=\"" + QString::number(points.point(i).y()) +
+                                            "\" />" << endl;
     }
+
 }
 
 #include <msodimport.moc>

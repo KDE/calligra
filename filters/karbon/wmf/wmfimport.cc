@@ -71,8 +71,8 @@ KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCStr
 		return KoFilter::StorageCreationError;
 	}
 	//kdDebug(s_area) << "m_text : " << m_text.latin1() << endl;
-	QCString cstring = m_text.latin1();
-	out->writeBlock( (const char*)cstring, cstring.size() - 1 );
+	QCString cstring ( m_text.utf8() );
+	out->writeBlock( cstring.data(), cstring.size() - 1 );
 	return KoFilter::OK;
 }
 
@@ -84,17 +84,20 @@ void WMFImport::gotEllipse(
     unsigned /*startAngle*/,
     unsigned /*stopAngle*/)
 {
-    //m_text += "<ellipse angle1=\"" + QString::number(startAngle) +
-     //           "\" angle2=\"" + QString::number(stopAngle) +
-     //           "\" x=\"" + QString::number(topLeft.x()) +
-//                "\" y=\"" + QString::number(topLeft.y()) +
-//                "\" kind=\"" + type +
-//                "\" rx=\"" + QString::number(halfAxes.width()) +
-//                "\" ry=\"" + QString::number(halfAxes.height()) +
-//                "\">\n";
+// ### TODO
+#if 0
+   m_text += "<ellipse angle1=\"" + QString::number(startAngle) +
+                "\" angle2=\"" + QString::number(stopAngle) +
+                "\" x=\"" + QString::number(topLeft.x()) +
+                "\" y=\"" + QString::number(topLeft.y()) +
+                "\" kind=\"" + type +
+                "\" rx=\"" + QString::number(halfAxes.width()) +
+                "\" ry=\"" + QString::number(halfAxes.height()) +
+                "\">\n";
+#endif
 }
 
-void toRGB(int c, double &r, double &g, double &b)
+static void toRGB(int c, double &r, double &g, double &b)
 {
 	r = (c >> 16) / 255.0;
 	g = ((c >> 8) & 0xFF) / 255.0;
@@ -137,7 +140,7 @@ void WMFImport::gotPolyline(
     const QPointArray &points)
 {
 	kdDebug(s_area) << "WMFImport::gotPolyline" << endl;
-	return;
+	return; // ### TODO
     m_text += "<COMPOSITE>\n";
     m_text += "<STROKE lineWidth=\"" + QString::number(dc.m_penWidth) + "\">\n";
     m_text += "</STROKE>\n";
@@ -165,7 +168,7 @@ void WMFImport::pointArray(
 	kdDebug(s_area) << "\n<MOVE x=\"" + QString::number(points.point(0).x()) +
 			                "\" y=\"" + QString::number(points.point(0).y()) +
 						                 "\" />" << endl;
-    for (unsigned i = 1; i < points.count(); i++)
+    for (unsigned int i = 1; i < points.count(); i++)
     {
         m_text += "<LINE x=\"" + QString::number(points.point(i).x()) +
                     "\" y=\"" + QString::number(points.point(i).y()) +

@@ -1,2 +1,2 @@
-SUBDIRS = eps ai svg png wmf kontour xcf
+SUBDIRS = eps ai svg png wmf kontour xcf msod
 

@@ -1,18 +1,18 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KWMF_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes)
-libmsodimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
-libmsodimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+libkarbonmsodimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
+libkarbonmsodimport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
-kde_module_LTLIBRARIES = libmsodimport.la
+kde_module_LTLIBRARIES = libkarbonmsodimport.la
 
-libmsodimport_la_SOURCES = msodimport.cc msod.cc
+libkarbonmsodimport_la_SOURCES = msodimport.cc msod.cc
 
 noinst_HEADERS = msodimport.h msod.h
 
 METASOURCES = AUTO
 
-service_DATA = kontour_msod_import.desktop
+service_DATA = karbon_msod_import.desktop
 servicedir = $(kde_servicesdir)
