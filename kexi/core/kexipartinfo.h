@@ -39,42 +39,42 @@ class KEXICORE_EXPORT Info
 		~Info();
 
 		/**
-		 * @returns a i18n'ed group name e.g. "Tables"
+		 * @return a i18n'ed group name e.g. "Tables"
 		 */
-		const QString 		groupName();
+		QString 		groupName();
 
 		/**
-		 * @returns the internal mime of this part
+		 * @return the internal mime of this part
 		 */
-		const QString		mime();
+		QString		mime();
 
 		/**
-		 * @returns the icon for groups
+		 * @return the icon for groups
 		 */
-		const QString 		groupIcon();
+		QString 		groupIcon();
 
 		/**
-		 * @returns the icon for a item
+		 * @return the icon for a item
 		 */
-		const QString 		itemIcon();
+		QString 		itemIcon();
 
 		/**
-		 * @returns the name object name associated with this part (e.g. "tables")
+		 * @return the object name associated with this part (e.g. "table")
 		 */
-		const QString 		objectName();
+		QString 		objectName();
 
 		/**
-		 * @returns the project-part-id
+		 * @return the project-part-id
 		 */
 		int 			projectPartID();
 
 		/**
-		 * @returns the KService::Ptr associated with this part
+		 * @return the KService::Ptr associated with this part
 		 */
 		KService::Ptr 		ptr() { return m_ptr; }
 
 		/**
-		 * @returns true if loading was tried but failed
+		 * @return true if loading was tried but failed
 		 */
 		bool 			broken() { return m_broken; }
 

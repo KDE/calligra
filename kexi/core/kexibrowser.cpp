@@ -22,6 +22,7 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kexi.h"
 #include "kexipart.h"
@@ -33,15 +34,17 @@
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
 
-KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part, const char *name )
- : KListView(parent,name)
+KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
+ : KListView(parent,"KexiBrowser")
 {
 	m_mime = mime;
 	m_part = part;
 	m_parent = parent;
 
-	header()->hide();
+	setCaption(i18n("Navigator"));
+	setIcon(*parent->icon());
 
+	header()->hide();
 	addColumn("");
 	setShowToolTips(true);
 	setRootIsDecorated(true);
@@ -51,7 +54,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *p
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
-	connect(this, SIGNAL(executed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
+	connect(this, SIGNAL(doubleClicked(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
+	connect(this, SIGNAL(returnPressed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
 
 	if(part)
 	{

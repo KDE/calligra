@@ -67,12 +67,16 @@ class KexiMainWindow::Private
 		KActionMenu *action_open_recent, *action_show_other;
 		KAction *action_open_recent_more;
 		int action_open_recent_more_id;
+		KAction *action_view_nav;
 		// view menu
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
+
+		KMdiToolViewAccessor* navToolWindow;
 	Private()
 	{
+		navToolWindow=0;
 	}
 };
 
@@ -109,6 +113,7 @@ KexiMainWindow::KexiMainWindow()
 			menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
 	}
 
+	m_pTaskBar->setCaption(i18n("Task bar"));	//js TODO: move this to KMDIlib
 //	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
 }
 
@@ -120,11 +125,11 @@ KexiMainWindow::~KexiMainWindow()
 
 void KexiMainWindow::setWindowMenu(QPopupMenu *menu)
 {
-    if (m_pWindowMenu)
-        delete m_pWindowMenu;
-    m_pWindowMenu = menu;
-    m_pWindowMenu->setCheckable(TRUE);
-    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
+	if (m_pWindowMenu)
+		delete m_pWindowMenu;
+	m_pWindowMenu = menu;
+	m_pWindowMenu->setCheckable(TRUE);
+	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
 void
@@ -175,6 +180,8 @@ KexiMainWindow::initActions()
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
 	//VIEW MENU
+	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
+		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 
 #ifndef KEXI_NO_CTXT_HELP
 //	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
@@ -329,8 +336,8 @@ KexiMainWindow::initNavigator()
 	if(!m_nav)
 	{
 		m_nav = new KexiBrowser(this, "kexi/db", 0);
-		m_nav->setCaption(i18n("Navigator"));
-		addToolWindow(m_nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
+		m_nav->installEventFilter(this);
+		d->navToolWindow = addToolWindow(m_nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 	}
 
 	if(m_project->isConnected())
@@ -343,9 +350,11 @@ KexiMainWindow::initNavigator()
 			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;
 			m_nav->addGroup(it);
 			KexiPart::Part *p=Kexi::partManager().part(it);
-			if (p) p->createGUIClient(this);
+			if (p)
+				p->createGUIClient(this);
 		}
 	}
+	m_nav->setFocus();
 	
 //	d->action_show_nav->setChecked(m_nav->isVisible());
 //TODO	m_nav->plugToggleAction(m_actionBrowser);
@@ -385,17 +394,19 @@ KexiMainWindow::restoreSettings()
 	{
 		case KMdi::ToplevelMode:
 			switchToToplevelMode();
+			m_pTaskBar->switchOn(true);
 			break;
 		case KMdi::ChildframeMode:
 			switchToChildframeMode();
+			m_pTaskBar->switchOn(true);
 			break;
 		case KMdi::IDEAlMode:
 			switchToIDEAlMode();
 			break;
-    case KMdi::TabPageMode:
+		case KMdi::TabPageMode:
 			switchToTabPageMode();
 			break;
-    default:;//-1
+		default:;//-1
 	}
 
 //	setGeometry(config->readRectEntry("Geometry", new QRect(150, 150, 400, 500)));
@@ -438,21 +449,35 @@ KexiMainWindow::registerChild(KexiDialogBase *dlg)
 	if(dlg->docID() != -1)
 		m_docs.insert(dlg->docID(), dlg);
 	kdDebug() << "KexiMainWindow::registerChild() docID = " << dlg->docID() << endl;
+
+	if (m_mdiMode==KMdi::ToplevelMode || m_mdiMode==KMdi::ChildframeMode) {//kmdi fix
+		//js TODO: check if taskbar is switched in menu
+		if (!m_pTaskBar->isSwitchedOn())
+			m_pTaskBar->switchOn(true);
+	}
+	//KMdiChildFrm *frm = dlg->mdiParent();
+	//if (frm) {
+//		dlg->setMargin(20);
+		//dlg->setLineWidth(20);
+	//}
 }
 
 void
 KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 {
-	kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
-
-	if (dlg && (!dlg->isRegistered())) return;
+	if (!dlg || !dlg->isRegistered())
+		return;
 	KXMLGUIClient *client=dlg->guiClient();
-	if (client!=m_currentDocumentGUIClient) {
-		if (m_currentDocumentGUIClient) guiFactory()->removeClient(m_currentDocumentGUIClient);
-		if (client) guiFactory()->addClient(client);
-	}
+	if (client==m_currentDocumentGUIClient)
+		return;
+
+	kdDebug() << "KexiMainWindow::activeWindowChanged(): from = " << m_currentDocumentGUIClient << endl;
+	kdDebug() << "KexiMainWindow::activeWindowChanged(): to = " << dlg->guiClient() << endl;
+	if (m_currentDocumentGUIClient)
+		guiFactory()->removeClient(m_currentDocumentGUIClient);
+	if (client)
+		guiFactory()->addClient(client);
 	m_currentDocumentGUIClient=client;
 }
 
@@ -474,6 +499,10 @@ KexiMainWindow::childClosed(KMdiChildView *v)
 	kdDebug() << "KexiMainWindow::unregisterWindow()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	m_docs.remove(dlg->docID());
+
+	//focus navigator if nothing else available
+	if (m_docs.isEmpty())
+		m_nav->setFocus();
 }
 
 void
@@ -643,6 +672,21 @@ KexiMainWindow::slotQuit()
 	close();
 }
 
+void KexiMainWindow::slotViewNavigator()
+{
+	if (!m_nav || !d->navToolWindow)
+		return;
+	if (!m_nav->isVisible())
+		makeWidgetDockVisible(m_nav);
+//		makeDockVisible(dynamic_cast<KDockWidget*>(d->navToolWindow->wrapperWidget()));
+//		d->navToolWindow->wrapperWidget()->show();
+//		d->navToolWindow->show(KDockWidget::DockLeft, getMainDockWidget());
+
+	d->navToolWindow->wrapperWidget()->raise();
+//
+	m_nav->setFocus();
+}
+
 void
 KexiMainWindow::slotShowErrorMessageFor(const QString &title, KexiDB::Object *obj)
 {
@@ -676,8 +720,32 @@ KexiMainWindow::slotShowErrorMessageFor(const QString &title, KexiDB::Object *ob
 void
 KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
-	m_currentDocumentGUIClient=0;
+	if (!pWnd)
+		return;
+	KXMLGUIClient *client = static_cast<KexiDialogBase *>(pWnd)->guiClient();
+	if (m_currentDocumentGUIClient==client) {
+		m_currentDocumentGUIClient=0;
+	}
+	guiFactory()->removeClient(client);
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
+}
+
+void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
+{
+	KMdiMainFrm::detachWindow(pWnd,bShow);
+	pWnd->setIcon( QPixmap(*pWnd->icon()) );
+}
+
+
+bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
+{
+//	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
+	//keep focus in main window:
+	if (obj==m_nav && e->type()==QEvent::Hide) {
+		setFocus();
+	}
+	return false;
+//	return KMdiMainFrm::eventFilter(obj,e);
 }
 
 #include "keximainwindow.moc"

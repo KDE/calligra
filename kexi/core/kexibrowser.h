@@ -48,7 +48,7 @@ class KEXICORE_EXPORT KexiBrowser : public KListView
 	Q_OBJECT
 
 	public:
-		KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part, const char *name=0);
+		KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part);
 
 	public slots:
 		void		addGroup(KexiPart::Info *info);

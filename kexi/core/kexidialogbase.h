@@ -26,25 +26,40 @@
 class KexiMainWindow;
 class KActionCollection;
 class KexiContextHelpInfo;
+namespace KexiPart {
+	class Part;
+}
 
 class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 {
 	Q_OBJECT
 
 	public:
-		KexiDialogBase(KexiMainWindow *parent, const QString &title);
+		KexiDialogBase(KexiMainWindow *parent, const QString &caption);
 		~KexiDialogBase();
 		bool isRegistered();
 		virtual KXMLGUIClient* guiClient();
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
+		/*! \return main (top level) widget inside this dialog.
+		 This widget is used for e.g. determining minimum size hint and size hint. */
+		virtual QWidget* mainWidget() = 0;
+
+		/*! reimplemented: minimum size hint is inherited from mainWidget() */
+//		virtual QSize minimumSizeHint() const;
+		/*! reimplemented: size hint is inherited from mainWidget() */
+//		virtual QSize sizeHint() const;
+
 		void	setDocID(int id);
 		int	docID() { return m_docID; }
+
+	public slots:
 
 	signals:
 		void updateContextHelp();
 	protected:
 		friend class KexiMainWindow;
+		friend class KexiPart::Part;
 		void registerDialog();
 	private:
 		KexiMainWindow *m_parentWindow;

@@ -24,8 +24,8 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
- : KMdiChildView(title, parent), KXMLGUIClient(),m_isRegistered(false)
+KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
+ : KMdiChildView(caption, parent, "KexiDialogBase"), KXMLGUIClient(),m_isRegistered(false)
 {
 	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;
@@ -34,12 +34,16 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
 }
 
 
+KexiDialogBase::~KexiDialogBase()
+{
+}
+
 
 void KexiDialogBase::registerDialog() {
 	m_parentWindow->registerChild(this);
+	m_isRegistered=true;
 	m_parentWindow->addWindow((KMdiChildView *)this);
 	show();
-	m_isRegistered=true;
 	m_parentWindow->activeWindowChanged(this);
 }
 
@@ -56,7 +60,7 @@ KexiDialogBase::setDocID(int id)
 {
 	kdDebug() << "KexiDialogBase::setDocID(): id = " << id << endl;
 	m_docID = id;
-	m_parentWindow->registerChild(this);
+//	m_parentWindow->registerChild(this);
 }
 
 void KexiDialogBase::setContextHelp(const QString& caption, const QString& text, const QString& iconName) {
@@ -67,9 +71,6 @@ void KexiDialogBase::setContextHelp(const QString& caption, const QString& text,
 
 }
 
-KexiDialogBase::~KexiDialogBase()
-{
-}
 
 #include "kexidialogbase.moc"
 

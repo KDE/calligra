@@ -74,6 +74,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
 
+		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 	protected:
 		//! reimplementation of events
 		virtual void	closeEvent(QCloseEvent *);
@@ -119,6 +120,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 		void setWindowMenu(QPopupMenu *menu);
 
+		virtual bool eventFilter( QObject *obj, QEvent * e );
+
 	protected slots:
 
 		/**
@@ -147,6 +150,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void slotShowErrorMessageFor(const QString&,KexiDB::Object *obj);
 
+		void slotViewNavigator();
 		void slotShowSettings();
 		void slotConfigureKeys();
 		void slotConfigureToolbars();

@@ -19,6 +19,12 @@
 
 #include "kexipart.h"
 
+#include "kexipartinfo.h"
+#include "kexipartitem.h"
+#include "kexidialogbase.h"
+
+#include <kiconloader.h>
+
 using namespace KexiPart;
 
 Part::Part(QObject *parent, const char *name, const QStringList &)
@@ -29,6 +35,20 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 
 Part::~Part()
 {
+}
+
+KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
+{
+	KexiDialogBase *dlg = createInstance(win,item);
+	if (!dlg)
+		return 0;
+	dlg->resize(dlg->sizeHint());
+	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
+
+	dlg->setIcon( SmallIcon( info()->itemIcon() ) );
+	dlg->setDocID(item.identifier());
+	dlg->registerDialog();
+	return dlg;
 }
 
 #include "kexipart.moc"

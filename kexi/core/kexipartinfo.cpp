@@ -34,31 +34,31 @@ Info::~Info()
 {
 }
 
-const QString
+QString
 Info::groupName()
 {
 	return m_ptr->name();
 }
 
-const QString
+QString
 Info::mime()
 {
 	return m_ptr->property("X-Kexi-TypeMime").toString();
 }
 
-const QString
+QString
 Info::groupIcon()
 {
 	return m_ptr->property("X-Kexi-GroupIcon").toString();
 }
 
-const QString
+QString
 Info::itemIcon()
 {
 	return m_ptr->property("X-Kexi-ItemIcon").toString();
 }
 
-const QString
+QString
 Info::objectName()
 {
 	return m_ptr->property("X-Kexi-TypeName").toString();
@@ -67,6 +67,7 @@ Info::objectName()
 int
 Info::projectPartID()
 {
+	//! @todo (js)..... now it's hardcoded!
 	if(objectName() == "table")
 		return KexiDB::TableObjectType;
 	else if(objectName() == "query")

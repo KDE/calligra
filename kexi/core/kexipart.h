@@ -23,6 +23,7 @@
 #include <qobject.h>
 
 class KexiMainWindow;
+class KexiDialogBase;
 
 namespace KexiPart
 {
@@ -42,8 +43,17 @@ class KEXICORE_EXPORT Part : public QObject
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
-		virtual void	execute(KexiMainWindow *win, const Item &i)=0;
+		KexiDialogBase* execute(KexiMainWindow *win, const KexiPart::Item &item);
+
+		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item) = 0;
+
+//		virtual void	execute(KexiMainWindow *win, const Item &i)=0;
 		virtual void	createGUIClient(KexiMainWindow *win)=0;
+
+		/*! i18n'd iunstance name usable for displaying in gui.
+		 @todo move this to Info class when the name could be moved as localised property 
+		 to service's .desktop file. */
+		virtual QString instanceName() const = 0;
 		
 		Info		*info() { return m_info; }
 
