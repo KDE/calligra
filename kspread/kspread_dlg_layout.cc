@@ -1029,7 +1029,10 @@ void CellLayoutPageFloat::slotChangeState()
     else if(percent->isChecked())
         listFormat->setEnabled(false);
     else if(money->isChecked())
+    {
         listFormat->setEnabled(false);
+        precision->setValue(2);
+    }
     else if(scientific->isChecked())
         listFormat->setEnabled(false);
     else if(date->isChecked())
@@ -2361,7 +2364,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     width->setPrecision ( 2 );
     width->setValue ( KoUnit::ptToUnit( dlg->widthSize, dlg->getTable()->doc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
-    dlg->widthSize = KoUnit::ptFromUnit( width->value(), dlg->getTable()->doc()->getUnit() ); 
+    dlg->widthSize = KoUnit::ptFromUnit( width->value(), dlg->getTable()->doc()->getUnit() );
 
     if( dlg->isRowSelected )
         width->setEnabled(false);
@@ -2382,8 +2385,8 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     height->setPrecision( 2 );
     height->setValue( KoUnit::ptToUnit( dlg->heigthSize, dlg->getTable()->doc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
-    dlg->heigthSize = KoUnit::ptFromUnit( height->value(), dlg->getTable()->doc()->getUnit() ); 
-    
+    dlg->heigthSize = KoUnit::ptFromUnit( height->value(), dlg->getTable()->doc()->getUnit() );
+
     if( dlg->isColumnSelected )
         height->setEnabled(false);
 

@@ -1140,6 +1140,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       }
     }
     clearFlag(Flag_LayoutDirty);
+
+    return;
 }
 
 QString KSpreadCell::createFormat( double value, int _col, int _row )
