@@ -164,10 +164,10 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
         if ( underscore > -1 ) {
             lang.truncate( underscore );
             if (encodings.find(lang) == encodings.end())
-                throw KoHyphenatorException(i18n("No dictionary"));
+                throw KoHyphenatorException(i18n("No dictionary for %1").arg(lang));
         }
         else
-            throw KoHyphenatorException(i18n("No dictionary"));
+            throw KoHyphenatorException(i18n("No dictionary for %1").arg(lang));
     }
     if (dicts.find(lang) == dicts.end())
     {
