@@ -908,8 +908,8 @@ else if(time->isChecked())
         format->setEnabled(false);
         listFormat->setEnabled(true);
 
-        list+=KGlobal::locale()->formatTime(QTime::currentTime(),false);
-        list+=KGlobal::locale()->formatTime(QTime::currentTime(),true);
+        list+=i18n("System : ")+KGlobal::locale()->formatTime(QTime::currentTime(),false);
+        list+=i18n("System : ")+KGlobal::locale()->formatTime(QTime::currentTime(),true);
         QString tmp;
         list+=tmp.setNum(10)+":"+tmp.setNum(35) +" " + i18n("PM");
         list+=tmp.setNum(10)+":"+tmp.setNum(35)+":"+tmp.setNum(25)+" " + i18n("PM");
@@ -1040,8 +1040,8 @@ void CellLayoutPageFloat::init()
 QStringList list;
 QString tmp;
 QString tmp2;
-list+=KGlobal::locale()->formatDate(QDate::currentDate(),true);
-list+=KGlobal::locale()->formatDate(QDate::currentDate(),false);
+list+=i18n("System : ")+KGlobal::locale()->formatDate(QDate::currentDate(),true);
+list+=i18n("System : ")+KGlobal::locale()->formatDate(QDate::currentDate(),false);
 /*18-Feb-00*/
 tmp=tmp2.setNum(18);
 tmp+="-"+KGlobal::locale()->monthName(2, true)+"-";
