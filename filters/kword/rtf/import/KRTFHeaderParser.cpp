@@ -24,7 +24,7 @@ bool KRTFHeaderParser::parse()
 	qWarning( "Wrong version of RTF file, this reader can only read RTF 1.x files" );
 	return false;
     }
-    
+
     // PENDING(kalle): Understand the keywords that are possible here, like \ansi
 
     // skip over unknown keywords until we find the fonttbl group
@@ -33,7 +33,7 @@ bool KRTFHeaderParser::parse()
 	token = _tokenizer->nextToken();
     }
 
-    
+
     // If there are group here, check whether it is one that we know of
     bool done = false;
     token2 = token;
@@ -74,6 +74,11 @@ bool KRTFHeaderParser::parse()
     _tokenizer->pushBack( token2 );
 
     // kervel: basic document header.
+    // @kervel: I don't think that using QDomDocument that way makes any sense
+    // here. It won't work if you mix setContent and "real" dom node creation.
+    // Therefore I suggest either just use QDomDocument and really create nodes and stuff
+    // or just pass around a string. (Werner)
+    /*
     QString str;
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n";
     str += "<DOC  editor=\"KWord\" mime=\"application/x-kword\">\n";
@@ -86,6 +91,8 @@ bool KRTFHeaderParser::parse()
     str += "<FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" />\n";
     str += "</FRAMESET></FRAMESETS></DOC>\n";
     _dom->setContent(str);
+    */
+
     // the currently read token should already be the end of the header,
     // no need to overread anything
 

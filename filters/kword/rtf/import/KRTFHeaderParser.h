@@ -15,13 +15,14 @@ class KRTFHeaderParser : public KRTFParser
 {
 public:
     KRTFHeaderParser( KRTFTokenizer* tokenizer, KoStore *store, QDomDocument *dom ) {
-	_tokenizer = tokenizer;
+        _tokenizer = tokenizer;
         _store = store;
+        _dom = dom;
     }
 
     bool parse();
     QDomDocument *_dom;
-    
+
 private:
 };
 
