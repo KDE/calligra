@@ -76,7 +76,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     resize( 600, 400 ); // Try to show as much as possible of the table view
     setMainWidget(m_dialog);
 
-    m_dialog->m_table->setSelectionMode(QTable::NoSelection);
+    m_dialog->m_table->setSelectionMode( QTable::Multi );
 
     connect(m_dialog->m_formatBox, SIGNAL(clicked(int)),
             this, SLOT(formatClicked(int)));
@@ -479,7 +479,19 @@ void CSVDialog::formatClicked(int id)
         break;
     }
 
+#if 1
+    for ( int i = 0; i < m_dialog->m_table->numSelections(); ++i )
+    {
+        QTableSelection select ( m_dialog->m_table->selection( i ) );
+        for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
+        {
+            m_dialog->m_table->horizontalHeader()->setLabel( j, header );
+            
+        }
+    }
+#else    
     m_dialog->m_table->horizontalHeader()->setLabel(m_dialog->m_table->currentColumn(), header);
+#endif
 }
 
 void CSVDialog::delimiterClicked(int id)
