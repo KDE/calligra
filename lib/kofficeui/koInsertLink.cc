@@ -454,6 +454,9 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   }
   else
       recentFile->insertStringList( lst);
+  
+  recentFile->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+  
   connect( recentFile , SIGNAL(highlighted ( const QString &)), this,  SLOT( slotSelectRecentFile( const QString & )));
 
   tmpQLabel = new QLabel( this);
