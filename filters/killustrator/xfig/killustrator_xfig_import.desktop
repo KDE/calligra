@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KIllustrator XFig Import Filter
+Export=application/x-killustrator
+Import=image/x-xfig
+Implemented=kodocument
+X-KDE-Library=libxfigimport
+ServiceTypes=KOfficeFilter
