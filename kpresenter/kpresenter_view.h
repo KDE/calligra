@@ -553,6 +553,7 @@ protected slots:
     void changeHelpLinePosition();
 
     void addHelpLine();
+    void refreshRuler( bool state );
 
 
 // end of protected slots

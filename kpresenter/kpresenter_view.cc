@@ -5204,23 +5204,7 @@ void KPresenterView::slotUpdateRuler()
     }
     else
     {
-        if( getHRuler() && kPresenterDoc()->showHelplines() )
-        {
-            if( kPresenterDoc()->showHelplines())
-                getHRuler()->changeFlags(KoRuler::F_HELPLINES);
-            else
-                getHRuler()->changeFlags( 0 );
-            getHRuler()->repaint();
-        }
-        if( getVRuler())
-        {
-            if( kPresenterDoc()->showHelplines())
-                getVRuler()->changeFlags(KoRuler::F_HELPLINES);
-            else
-                getVRuler()->changeFlags(0);
-            getVRuler()->repaint();
-        }
-
+        refreshRuler( kPresenterDoc()->showHelplines() );
         updateRuler();
     }
 }
@@ -5740,6 +5724,7 @@ void KPresenterView::viewHelpLines()
 {
     bool state=actionViewShowHelpLine->isChecked();
     m_pKPresenterDoc->setShowHelplines( state );
+    refreshRuler( state );
     m_canvas->repaint(false);
 }
 
@@ -5762,7 +5747,11 @@ void KPresenterView::updateHelpLineButton()
 {
     bool state = m_pKPresenterDoc->showHelplines();
     actionViewShowHelpLine->setChecked( state );
+    refreshRuler( state );
+}
 
+void KPresenterView::refreshRuler( bool state )
+{
     if( getHRuler() )
     {
 
@@ -5781,6 +5770,7 @@ void KPresenterView::updateHelpLineButton()
             getVRuler()->changeFlags(0);
         getVRuler()->repaint();
     }
+
 }
 
 void KPresenterView::removeHelpLine()
