@@ -24,6 +24,7 @@
  <Action name="hilochart"/>
  <Action name="ringchart"/>
  <Action name="polarchart"/>
+ <Action name="bwchart"/>
 </ToolBar>
 <Menu name="action_popup">
  <Action name="config"/>
