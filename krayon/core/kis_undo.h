@@ -21,22 +21,25 @@
 #ifndef __kis_undo_h__
 #define __kis_undo_h__
 
-#include <koUndo.h>
+#include <qstring.h>
+#include <kcommand.h>
 
 class KisDoc;
-class KisCommand : public KoCommand
-{
+
+class KisCommand : public KCommand {
 public:
+	KisCommand(const QString& name, KisDoc *doc);
+	virtual ~KisCommand();
 
-  KisCommand( const QString& name, KisDoc* doc );
-  virtual ~KisCommand();
-
-  virtual void execute() = 0;
-  virtual void unexecute() = 0;
+	virtual void execute() = 0;
+	virtual void unexecute() = 0;
+	virtual QString name() const;
 
 protected:
+	KisDoc *m_pDoc;
 
-  KisDoc *m_pDoc;
+private:
+	QString m_name;
 };
 
 #endif

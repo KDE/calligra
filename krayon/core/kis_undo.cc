@@ -18,17 +18,21 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <kcommand.h>
 #include <klocale.h>
-
-#include <koUndo.h>
-
 #include "kis_undo.h"
 
-KisCommand::KisCommand( const QString& name, KisDoc* doc )
-  : KoCommand( name )
-  , m_pDoc( doc )
+KisCommand::KisCommand(const QString& name, KisDoc *doc)
+  : KCommand(), m_pDoc(doc), m_name(name)
 {
 }
 
-KisCommand::~KisCommand(){}
+KisCommand::~KisCommand()
+{
+}
+
+QString KisCommand::name() const
+{
+	return m_name;
+}
 
