@@ -22,7 +22,6 @@
 #include "kivio_map.h"
 #include "kivio_view.h"
 #include "kivio_doc.h"
-#include "kivio_tabbar.h"
 
 #include "kivio_icon_view.h"
 #include "kivio_stencil.h"
@@ -43,6 +42,7 @@
 #include <koSize.h>
 #include <koRuler.h>
 #include <koPoint.h>
+#include <kotabbar.h>
 #include <kapplication.h>
 
 #include <assert.h>
