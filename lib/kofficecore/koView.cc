@@ -40,22 +40,19 @@ public:
     m_manager = 0L;
     m_tempActiveWidget = 0L;
     m_dcopObject = 0;
+    m_registered=false;  // are we registered at the part manager?
   }
   ~KoViewPrivate()
   {
   }
 
   KoDocument *m_doc;
-
   QGuardedPtr<KParts::PartManager> m_manager;
-
   double m_zoom;
-
   QList<KoViewChild> m_children;
-
   QWidget *m_tempActiveWidget;
-
   KoViewIface *m_dcopObject;
+  bool m_registered;
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
@@ -89,7 +86,7 @@ KoView::~KoView()
   delete d->m_dcopObject;
   if ( !koDocument()->isSingleViewMode() )
   {
-    if ( d->m_manager )
+    if ( d->m_manager && d->m_registered )  // if we aren't registered we mustn't unregister :)
       d->m_manager->removePart( koDocument() );
     d->m_doc->removeView(this);
   }
@@ -110,8 +107,14 @@ bool KoView::hasDocumentInWindow( KoDocument *doc )
 void KoView::setPartManager( KParts::PartManager *manager )
 {
   d->m_manager = manager;
-  if ( !koDocument()->isSingleViewMode() )
-    d->m_manager->addPart( koDocument(), false );
+  if ( !koDocument()->isSingleViewMode() &&
+       manager->parts()->containsRef( koDocument() ) == 0 ) // is there another view registered?
+  {
+    d->m_registered = true; // no, so we have to register now and ungregister again in the DTOR
+    manager->addPart( koDocument(), false );
+  }
+  else
+    d->m_registered = false;  // There is already another view registered for that part...
 }
 
 KParts::PartManager *KoView::partManager() const
