@@ -94,11 +94,13 @@ public:
 class KWCharVariable : public KWCharFormat
 {
 public:
-  KWCharVariable(KWordDocument *_doc,KWVariable *_var) : KWCharFormat() { classId = ID_KWCharVariable; var = _var; }
+  KWCharVariable(KWVariable *_var) : KWCharFormat() { classId = ID_KWCharVariable; var = _var; }
   ~KWCharVariable() { if (var) delete var; if (format) format->decRef(); format = 0L; }
 
   QString getText() { return var->getText(); }
 
+  KWVariable *getVar() { return var; }
+  
 protected:
   KWVariable *var;
 

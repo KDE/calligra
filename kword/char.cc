@@ -422,6 +422,14 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 		KWCharTab *f = new KWCharTab();
 		__data[i].attrib = f;
 	      } break;
+	    case ID_KWCharVariable:
+	      {
+		KWCharFormat *attrib = dynamic_cast<KWCharVariable*>(_data[i].attrib);
+		attrib->getFormat()->incRef();
+		KWCharVariable *f = new KWCharVariable(dynamic_cast<KWCharVariable*>(_data[i].attrib)->getVar()->copy());
+		f->setFormat(attrib->getFormat());
+		__data[i].attrib = f;
+	      } break;
 	    }
 	}
       else __data[i].attrib = 0L;

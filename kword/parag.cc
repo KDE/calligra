@@ -183,7 +183,7 @@ void KWParag::insertText( unsigned int _pos,QString _text)
 
 void KWParag::insertVariable(unsigned int _pos,KWVariable *_var)
 {
-  KWCharVariable *v = new KWCharVariable(document,_var);
+  KWCharVariable *v = new KWCharVariable(_var);
   text.insert(_pos,v);
 }
 
@@ -220,7 +220,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 
   for (unsigned int i = 0;i < _len;i++)
     {
-      if (text.data()[_pos + i].c == 0) 
+      if (text.data()[_pos + i].c == 0)
 	{
 	  switch (text.data()[_pos + i].attrib->getClassId())
 	    {

@@ -538,6 +538,8 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	    case ID_KWCharVariable:
 	      {
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[pos].attrib);
+		v->getVar()->setInfo(frameSet,frame,doc->getPageNum(ptY + document->getPTPaperHeight()),parag);
+		v->getVar()->recalc();
 		apply(*v->getFormat());
 		ptPos += displayFont->getPTWidth(v->getText());
 		pos++;
@@ -696,6 +698,8 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 	case ID_KWCharVariable:
 	  {
 	    KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[pos].attrib);
+	    v->getVar()->setInfo(frameSet,frame,doc->getPageNum(ptY + document->getPTPaperHeight()),parag);
+	    v->getVar()->recalc();
 	    apply(*v->getFormat());
 	    ptPos += displayFont->getPTWidth(v->getText());
 	    pos++;
@@ -999,6 +1003,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	      case ID_KWCharVariable:
 		{
 		  KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[textPos].attrib);
+		  v->getVar()->setInfo(frameSet,frame,doc->getPageNum(ptY + document->getPTPaperHeight()),parag);
+		  v->getVar()->recalc();
 		  apply(*v->getFormat());
 		  ptPos += displayFont->getPTWidth(v->getText());
 		  textPos++;
@@ -1248,7 +1254,7 @@ void KWFormatContext::makeCounterLayout(QPainter &_painter)
 void KWFormatContext::apply( KWFormat &_format )
 {
   if (compare_formats && _format == *((KWFormat*)this)) return;
-  
+
   KWFormat::apply(_format);
   if (_format.getVertAlign() != VA_NORMAL)
     displayFont = document->findDisplayFont(userFont,(2 * _format.getPTFontSize()) / 3,_format.getWeight(),

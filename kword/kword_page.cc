@@ -2347,7 +2347,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 /*================================================================*/
 void KWPage::resizeEvent(QResizeEvent *)
 {
-  buffer.resize(width(),height());
+  buffer.resize(width() < doc->getPTPaperWidth() + 20 ? width() : doc->getPTPaperWidth() + 20,
+		height());
   buffer.fill(white);
   calcVisiblePages();
 }
@@ -3916,11 +3917,23 @@ void KWPage::insertVariable(VariableType type)
 	fc->getParag()->insertVariable(fc->getTextPos(),var);
 	fc->getParag()->setFormat(fc->getTextPos(),1,format);
       } break;
+    case VT_DATE_VAR:
+      {
+	KWDateVariable *var = new KWDateVariable(doc,false,QDate::currentDate());
+	var->setVariableFormat(doc->getVarFormats().find(static_cast<int>(type)));
+	fc->getParag()->insertVariable(fc->getTextPos(),var);
+	fc->getParag()->setFormat(fc->getTextPos(),1,format);
+      } break;
+    case VT_PGNUM:
+      {
+	KWPgNumVariable *var = new KWPgNumVariable(doc);
+	var->setVariableFormat(doc->getVarFormats().find(static_cast<int>(type)));
+	fc->getParag()->insertVariable(fc->getTextPos(),var);
+	fc->getParag()->setFormat(fc->getTextPos(),1,format);
+      } break;
     default: break;
     }
 
   recalcPage(0L);
   recalcCursor(true);
-
-  debug("void KWPage::insertVariable(VariableType type) ... successful");
 }

@@ -14,6 +14,32 @@
 /******************************************************************/
 
 #include "variable.h"
+#include "parag.h"
+
+/******************************************************************/
+/* Class: KWVariablePgNumFormat                                   */
+/******************************************************************/
+
+/*================================================================*/
+void KWVariablePgNumFormat::setFormat(QString _format)
+{
+  KWVariableFormat::setFormat(_format);
+}
+
+/*================================================================*/
+QString KWVariablePgNumFormat::convert(KWVariable *_var)
+{
+  if (_var->getType() != VT_PGNUM)
+    {
+      warning("Can't convert variable of type %d to a page num!!!",_var->getType());
+      return QString();
+    }
+
+  // for now...
+  QString str;
+  str.setNum(dynamic_cast<KWPgNumVariable*>(_var)->getPgNum());
+  return QString(str);
+}
 
 /******************************************************************/
 /* Class: KWVariableDateFormat                                    */
@@ -28,12 +54,12 @@ void KWVariableDateFormat::setFormat(QString _format)
 /*================================================================*/
 QString KWVariableDateFormat::convert(KWVariable *_var)
 {
-  if (_var->getType() != VT_DATE_FIX)
+  if (_var->getType() != VT_DATE_FIX && _var->getType() != VT_DATE_VAR)
     {
       warning("Can't convert variable of type %d to a date!!!",_var->getType());
       return QString();
     }
-  
+
   // for now...
   return dynamic_cast<KWDateVariable*>(_var)->getDate().toString();
 }

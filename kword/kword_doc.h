@@ -392,6 +392,8 @@ public:
 
   QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
 
+  long int getPageNum(int bottom);
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -493,7 +495,7 @@ protected:
   KWCommandHistory history;
 
   QIntDict<KWVariableFormat> varFormats;
-  
+
 };
 
 #endif

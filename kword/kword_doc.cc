@@ -1121,6 +1121,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     {
       varFormats.insert(VT_DATE_FIX,new KWVariableDateFormat());
       varFormats.insert(VT_DATE_VAR,new KWVariableDateFormat());
+      varFormats.insert(VT_PGNUM,new KWVariablePgNumFormat());
       // ... and so on ...
     }
 
@@ -1766,7 +1767,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[_fc.getTextPos()].attrib);
 		
 		if (_drawVarBack)
-		  _painter.fillRect(tmpPTPos - xOffset,_fc.getPTY(),
+		  _painter.fillRect(tmpPTPos - xOffset,_fc.getPTY() - yOffset,
 				    _painter.fontMetrics().width(v->getText()),_fc.getLineHeight(),gray);
 		
 		_painter.drawText(tmpPTPos - xOffset,
@@ -3342,4 +3343,19 @@ void KWordDocument::updateTableHeaders(QList<KWGroupManager> &grpMgrs)
 
   for (grpMgr = grpMgrs.first();grpMgr != 0;grpMgr = grpMgrs.next())
     grpMgr->updateTempHeaders();
+}
+
+/*================================================================*/
+long int KWordDocument::getPageNum(int bottom)
+{
+  int num = 0;
+  while (true)
+    {
+      if (bottom < (num + 1) * getPTPaperHeight())
+	return num;
+ 
+      num++;
+    }
+  
+  return num;
 }

@@ -21,6 +21,7 @@
 
 class KWordDocument;
 class KWVariable;
+class KWParag;
 
 enum VariableType {VT_DATE_FIX = 0,VT_DATE_VAR = 1,VT_TIME_FIX = 2,VT_TIME_VAR = 3,VT_PGNUM = 4,VT_NUMPAGES = 5,VT_NONE};
 enum VariableFormatType {VFT_DATE = 0,VFT_TIME = 1,VFT_PGNUM = 2,VFT_NUMPAGES = 3};
@@ -77,6 +78,10 @@ public:
   virtual VariableFormatType getType()
   { return VFT_PGNUM; }
 
+  virtual void setFormat(QString _format);
+
+  virtual QString convert(KWVariable *_var);
+
 };
 
 /******************************************************************/
@@ -89,6 +94,13 @@ public:
   KWVariable(KWordDocument *_doc) : text() { varFormat = 0L; doc = _doc; }
   virtual ~KWVariable() {}
 
+  virtual KWVariable *copy() { 
+    KWVariable *v = new KWVariable(doc); 
+    v->setVariableFormat(varFormat);
+    v->setInfo(frameSetNum,frameNum,pageNum,parag);
+    return v; 
+  }
+  
   virtual VariableType getType()
   { return VT_NONE; }
 
@@ -100,8 +112,8 @@ public:
   QString getText()
   { return varFormat->convert(this); }
 
-  virtual void setInfo(int _frameSetNum,int _frameNum,int _pageNum,int _paragNum)
-  { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; paragNum = _pageNum; }
+  virtual void setInfo(int _frameSetNum,int _frameNum,int _pageNum,KWParag *_parag)
+  { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag; }
 
   virtual void recalc() {}
 
@@ -109,8 +121,9 @@ protected:
   KWordDocument *doc;
   KWVariableFormat *varFormat;
   QString text;
-  int frameSetNum,frameNum,paragNum,pageNum;
-
+  int frameSetNum,frameNum,pageNum;
+  KWParag *parag;
+  
 };
 
 /******************************************************************/
@@ -120,13 +133,22 @@ protected:
 class KWPgNumVariable : public KWVariable
 {
 public:
-  KWPgNumVariable(KWordDocument *_doc) : KWVariable(_doc) {}
+  KWPgNumVariable(KWordDocument *_doc) : KWVariable(_doc) { pgNum = 0; }
+
+  virtual KWVariable *copy() { 
+    KWPgNumVariable *var = new KWPgNumVariable(doc); 
+    var->setVariableFormat(varFormat);
+    var->setInfo(frameSetNum,frameNum,pageNum,parag);
+    return var; 
+  }
 
   virtual VariableType getType()
   { return VT_PGNUM; }
 
-  virtual void recalc() {}
-
+  virtual void recalc() { pgNum = pageNum; }
+  long unsigned int getPgNum() { return pgNum; }
+  
+  
 protected:
   long unsigned int pgNum;
 
@@ -139,7 +161,14 @@ protected:
 class KWDateVariable : public KWVariable
 {
 public:
-  KWDateVariable(KWordDocument *_doc,bool _fixx,QDate _date);
+  KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date);
+
+  virtual KWVariable *copy() { 
+    KWDateVariable *var = new KWDateVariable(doc,fix,date); 
+    var->setVariableFormat(varFormat);
+    var->setInfo(frameSetNum,frameNum,pageNum,parag);
+    return var; 
+  }
 
   virtual VariableType getType()
   { return fix ? VT_DATE_FIX : VT_DATE_VAR; }
@@ -147,6 +176,7 @@ public:
   virtual void recalc();
 
   QDate getDate() { return date; }
+  void setDate(QDate _date) { date = _date; }
   
 protected:
   QDate date;

@@ -58,7 +58,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 {
   setWidget(this);
 
-  KoViewIf::setFocusPolicy( OpenParts::Part::ClickFocus);
+  KoViewIf::setFocusPolicy(OpenParts::Part::ClickFocus);
 
   m_pKWordDoc = 0L;
   m_bUnderConstruction = true;
@@ -109,6 +109,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   QObject::connect(m_pKWordDoc,SIGNAL(sig_updateChildGeometry(KWordChild*)),
 		   this,SLOT(slotUpdateChildGeometry(KWordChild*)));
 
+
+  setKeyCompression(true);
 }
 
 /*================================================================*/
@@ -784,41 +786,34 @@ void KWordView::insertFrameBreak()
 /*===============================================================*/
 void KWordView::insertVariableDateFix()
 {
-  debug("KWordView::insertVariableDateFix()");
-
   gui->getPaperWidget()->insertVariable(VT_DATE_FIX);
 }
 
 /*===============================================================*/
 void KWordView::insertVariableDateVar()
 {
-  debug("KWordView::insertVariableDateVar()");
-
   gui->getPaperWidget()->insertVariable(VT_DATE_VAR);
 }
 
 /*===============================================================*/
 void KWordView::insertVariableTimeFix()
 {
-  debug("KWordView::insertVariableTimeFix()");
 }
 
 /*===============================================================*/
 void KWordView::insertVariableTimeVar()
 {
-  debug("KWordView::insertVariableTimeVar()");
 }
 
 /*===============================================================*/
 void KWordView::insertVariablePageNum()
 {
-  debug("KWordView::insertVariablePageNum()");
+  gui->getPaperWidget()->insertVariable(VT_PGNUM);
 }
 
 /*===============================================================*/
 void KWordView::insertVariableOther()
 {
-  debug("KWordView::insertVariableOther()");
 }
 
 /*===============================================================*/
@@ -1179,7 +1174,7 @@ void KWordView::textSizeSelected(const char *size)
   format.setPTFontSize(atoi(size));
   gui->getPaperWidget()->formatChanged(format);
   //gui->getPaperWidget()->setFocus();
-}
+}	
 
 /*======================= text font selected  ===================*/
 void KWordView::textFontSelected(const char *font)
@@ -1491,7 +1486,8 @@ void KWordView::resizeEvent(QResizeEvent *e)
 /*================================================================*/
 void KWordView::keyPressEvent(QKeyEvent *e)
 {
-  if (gui) gui->keyEvent(e);
+  QApplication::sendEvent(gui,e);
+  //if (gui) gui->keyEvent(e);
 }
 
 /*================================================================*/
@@ -2730,6 +2726,9 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   paperWidget->forceFullUpdate();
   panner->setAbsSeparatorPos(0,true);
   connect(panner,SIGNAL(pannerResized()),this,SLOT(reorganize()));
+
+  setKeyCompression(true);
+  setFocusPolicy(QWidget::StrongFocus);
 }
 
 /*================================================================*/
@@ -2790,7 +2789,8 @@ void KWordGUI::resizeEvent(QResizeEvent *e)
 /*================================================================*/
 void KWordGUI::keyPressEvent(QKeyEvent* e)
 {
-  kapp->notify(paperWidget,e);
+  //kapp->notify(paperWidget,e);
+  QApplication::sendEvent(paperWidget,e);
 }
 
 /*================================================================*/

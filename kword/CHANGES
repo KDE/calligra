@@ -878,3 +878,14 @@ Reggie, 1.3.1999:
 - Implemented date variable and date variable format
 - Implemented inserting variables (works with date variables)
 - Some fixes in formatting text
+
+Reggie, 2.3 - 6.3 1999:
+------------------
+- Porting to Qt 2.0 and lots of fixes for that
+
+Reggie, 7.3.1999:
+-----------------
+- Never make the pixmap for double buffering larger than necessary
+- Some fixes with events and key compression
+- Implemented inserting variable date vars and page num vars
+- Lots of fixes in variables
