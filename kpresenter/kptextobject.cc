@@ -574,7 +574,7 @@ KoTextDocument * KPTextObject::textDocument() const
 KPTextView::KPTextView( KPTextObject * txtObj )
     : KoTextView( txtObj->textObject() )
 {
-    kdDebug()<<"KPTextView::KPTextView( KPTextObject * txtObj )********\n";
+    kdDebug()<<"KPTextView::KPTextView( KPTextObject * txtObj )\n";
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
@@ -640,4 +640,9 @@ void KPTextView::pgDownKeyPressed()
 {
     kdDebug()<<"KPTextView::pgDownKeyPressed()\n";
     //todo
+}
+
+void KPTextView::keyPressEvent( QKeyEvent *e )
+{
+    handleKeyPressEvent(e);
 }

@@ -65,11 +65,6 @@ public:
     virtual bool getDrawEmpty() const
     { return drawEmpty; }
 
-#if 0
-    virtual KTextEdit* getKTextObject()
-    { return &ktextobject; }
-#endif
-
     virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load(const QDomElement &element);
 
@@ -103,9 +98,7 @@ protected:
 
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawParags( QPainter *p, int from, int to );
-#if 0
-    KTextEdit ktextobject;
-#endif
+
     bool drawEditRect, drawEmpty;
 
 private:

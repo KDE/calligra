@@ -1105,12 +1105,13 @@ void Page::keyPressEvent( QKeyEvent *e )
     } else if ( editNum != -1 ) {
 	if ( e->key() == Key_Escape ) {
             exitEditMode();
-	} else if ( m_currentTextObjectView/*objectList()->at( editNum )->getType() == OT_TEXT*/ )
+	}
+        else if ( m_currentTextObjectView )
         {
             kdDebug()<<"m_currentTextObjectView :"<<m_currentTextObjectView<<endl;
-            //m_currentTextObjectView->keyPressEvent( e );
-            dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->handleKeyPressEvent( e );
-                //QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
+            m_currentTextObjectView->keyPressEvent( e );
+            //dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->handleKeyPressEvent( e );
+            //QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
         }
     } else if ( mouseSelectedObject ) {
 	if ( e->state() & ControlButton ) {
@@ -3144,9 +3145,15 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     repaint( false );
 }
 
+
+//laurent this function is unused.
+#if 0
+
 /*================================================================*/
 void Page::editSelectedTextArea()
 {
+    kdDebug()<<"Page::editSelectedTextArea() \n";
+
     KPObject *kpobject = 0;
 
     if ( (int)objectList()->count() - 1 >= 0 ) {
@@ -3157,11 +3164,9 @@ void Page::editSelectedTextArea()
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
                     m_currentTextObjectView=kptextobject->textObjectView();
-                    kdDebug()<<"editSelectedTextArea() :"<<m_currentTextObjectView<<endl;
                     Q_ASSERT(m_currentTextObjectView);
 		    //kpobject->activate( this, diffx(), diffy() );
 		    setTextBackground( kptextobject );
-#if 0
 		    connect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
 			     this, SLOT( toFontChanged( const QFont & ) ) );
 		    connect( kptextobject->textObjectView(), SIGNAL( currentColorChanged( const QColor & ) ),
@@ -3170,7 +3175,6 @@ void Page::editSelectedTextArea()
 			     this, SLOT( toAlignChanged( int ) ) );
 		    connect( kptextobject->textObjectView(), SIGNAL( exitEditMode() ),
 			     this, SLOT( exitEditMode() ) );
-#endif
 		    editNum = i;
 		    break;
 		}
@@ -3178,6 +3182,8 @@ void Page::editSelectedTextArea()
 	}
     }
 }
+
+#endif
 
 /*================================================================*/
 void Page::insertText( QRect _r )

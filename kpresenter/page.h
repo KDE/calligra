@@ -109,7 +109,11 @@ public:
 
     void print( QPainter*, KPrinter*, float, float );
 
+    //laurent this function is unused
+#if 0
     void editSelectedTextArea();
+#endif
+
     void setPartEntry( KoDocumentEntry& _e )
     { partEntry = _e; }
     void setToolEditMode( ToolEditMode _m, bool updateView = true );
