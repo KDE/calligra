@@ -437,7 +437,7 @@ VPath::save( QDomElement& element ) const
 		me.setAttribute( "closed", m_closed );
 
 		// outline:
-		QDomElement outline = element.ownerDocument().createElement( "OUTLINE" );
+		QDomElement outline = element.ownerDocument().createElement( "CONTOUR" );
 		me.appendChild( outline );
 
 		VSegmentListIterator itr( m_segments );
