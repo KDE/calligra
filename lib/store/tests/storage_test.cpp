@@ -1,0 +1,224 @@
+/* This file is part of the KDE project
+   Copyright (C) 2002 Werner Trobin <trobin@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include <qfile.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
+
+#include <koStore.h>
+#include <kdebug.h>
+
+#include <string.h>
+
+namespace {
+    const char* const testFile = "test.tgz";
+    const char* const test1 = "This test checks whether we're able to write to some arbitrary directory.\n";
+    const char* const testDir = "0";
+    const char* const testDirResult = "0/";
+    const char* const test2 = "This time we try to append the given relative path to the current dir.\n";
+    const char* const test3 = "<xml>Hello World</xml>";
+    const char* const testDir2 = "test2/with/a";
+    const char* const testDir2Result = "0/test2/with/a/";
+    const char* const test4 = "<xml>Heureka, it works</xml>";
+}
+
+int main( int argc, char **argv )
+{
+    KCmdLineArgs::init( argc, argv, "storage_test", "A test for the KoStore classes", "1" );
+    KApplication app( argc, argv );
+
+    if ( QFile::exists( testFile ) )
+        QFile::remove( testFile );
+
+    kdDebug() << "===========================================================" << endl;
+    KoStore* store = new KoStore( testFile, KoStore::Write );
+    if ( store->bad() ) {
+        kdError() << "Ooops, bad storage???" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
+        for ( int i = 0; i < 100; ++i )
+            store->write( test1, strlen( test1 ) );
+        store->close();
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    store->enterDirectory( testDir );
+    if ( store->currentPath() != QString( testDirResult ) ) {
+        kdError() << "Path handling broken!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "test2/with/a/relative/dir.txt" ) ) {
+        for ( int i = 0; i < 100; ++i )
+            store->write( test2, strlen( test2 ) );
+        store->close();
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "root" ) ) {
+        store->write( test3, strlen( test3 ) );
+        store->close();
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    store->enterDirectory( testDir2 );
+    if ( store->currentPath() != QString( testDir2Result ) ) {
+        kdError() << "Path handling broken!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "root" ) ) {
+        store->write( test4, strlen( test4 ) );
+        store->close();
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->isOpen() )
+        store->close();
+    delete store;
+
+    kdDebug() << "===========================================================" << endl;
+
+    store = new KoStore( testFile, KoStore::Read );
+    if ( store->bad() ) {
+        kdError() << "Ooops, bad storage???" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
+        QIODevice* dev = store->device();
+        int i = 0,  lim = strlen( test1 ),  count = 0;
+        while ( static_cast<char>( dev->getch() ) == test1[i++] ) {
+            if ( i == lim ) {
+                i = 0;
+                ++count;
+            }
+        }
+        store->close();
+        if ( count != 100 ) {
+            kdError() << "Couldn't read stream back!" << endl;
+            delete store;
+            return 1;
+        }
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    store->enterDirectory( testDir );
+    if ( store->currentPath() != QString( testDirResult ) ) {
+        kdError() << "Path handling broken!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "test2/with/a/relative/dir.txt" ) ) {
+        QIODevice* dev = store->device();
+        int i = 0,  lim = strlen( test2 ),  count = 0;
+        while ( static_cast<char>( dev->getch() ) == test2[i++] ) {
+            if ( i == lim ) {
+                i = 0;
+                ++count;
+            }
+        }
+        store->close();
+        if ( count != 100 ) {
+            kdError() << "Couldn't read stream back!" << endl;
+            delete store;
+            return 1;
+        }
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "root" ) && store->size() == 22 ) {
+        QIODevice* dev = store->device();
+        unsigned int i = 0;
+        while ( static_cast<char>( dev->getch() ) == test3[i++] );
+        store->close();
+        if ( ( i - 1 ) != strlen( test3 ) ) {
+            kdError() << "Couldn't read stream back!" << endl;
+            delete store;
+            return 1;
+        }
+    }
+    else {
+        kdError() << "Couldn't open storage (or wrong size)!" << endl;
+        delete store;
+        return 1;
+    }
+
+    store->enterDirectory( testDir2 );
+    if ( store->currentPath() != QString( testDir2Result ) ) {
+        kdError() << "Path handling broken!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->open( "root" ) ) {
+        char buf[29];
+        store->read( buf, 28 );
+        buf[28] = '\0';
+        store->close();
+        if ( strncmp( buf, test4, 28 ) != 0 ) {
+            kdError() << "Couldn't read stream back!" << endl;
+            delete store;
+            return 1;
+        }
+    }
+    else {
+        kdError() << "Couldn't open storage!" << endl;
+        delete store;
+        return 1;
+    }
+
+    if ( store->isOpen() )
+        store->close();
+    delete store;
+
+    kdDebug() << "===========================================================" << endl;
+    return 0;
+}
