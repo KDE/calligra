@@ -32,11 +32,20 @@
 
 class QWidgetStack;
 class KexiMainWindow;
+class KexiViewBase;
 class KActionCollection;
 class KexiContextHelpInfo;
 namespace KexiPart {
 	class Part;
 }
+
+class KexiDialogData : public QObject
+{
+	Q_OBJECT
+	public:
+		KexiDialogData();
+		virtual ~KexiDialogData();
+};
 
 class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
 {
@@ -47,16 +56,17 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		virtual ~KexiDialogBase();
 		bool isRegistered();
 
-		//! Adds \a view for the dialog. It will be the only view (of unspecified mode) for the dialog
-		void addView(QWidget *view);
+		//! Adds \a view for the dialog. It will be the _only_ view (of unspecified mode) for the dialog
+		void addView(KexiViewBase *view);
 
 		/*! \return main (top level) widget inside this dialog.
 		 This widget is used for e.g. determining minimum size hint and size hint. */
 //		virtual QWidget* mainWidget() = 0;
 
-		/*! reimplemented: minimum size hint is inherited from mainWidget() */
+		/*! reimplemented: minimum size hint is inherited from currently visible view. */
 		virtual QSize minimumSizeHint() const;
-		/*! reimplemented: size hint is inherited from mainWidget() */
+
+		/*! reimplemented: size hint is inherited from currently visible view. */
 		virtual QSize sizeHint() const;
 
 		KexiMainWindow	*mainWin() { return m_parentWindow; }
@@ -122,10 +132,6 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		int m_supportedViewModes;
 		int m_currentViewMode;
 
-		/*! Adds \a view for the dialog. It will be the view for mode \a viewMode.
-		 \a viewMode value is one from Kexi::ViewMode enum. */
-		void addView(QWidget *view, int viewMode);
-
 		inline QWidgetStack * stack() const { return m_stack; }
 
 	private:
@@ -142,6 +148,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		friend class KexiMainWindow;
 		friend class KexiPart::Part;
+		friend class KexiInternalPart;
 };
 
 #endif

@@ -32,32 +32,39 @@
 #include "kexirelationwidget.h"
 #include "kexirelationview.h"
 
-KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
- : KexiDialogBase(win, i18n("Relations"))
+KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+ : KexiViewBase(mainWin, parent, name)
 {
 	kdDebug() << "KexiRelationMainDlg()" << endl;
-	setIcon(SmallIcon("relation"));
-	setDocID( win->generatePrivateDocID() );
+//	setIcon(SmallIcon("relation"));
+	m_defaultIconName = "relation";
+	setCaption( i18n("Relations") );
+//	setDocID( win->generatePrivateDocID() );
 
-	m_view = new KexiRelationWidget(win, this);
+	m_rel = new KexiRelationWidget(mainWin, this);
 	//the view can receive some our actions
-	addActionProxyChild( m_view );
+	addActionProxyChild( m_rel );
 //	addActionProxyChild( m_view->relationView() );
 	
 	QVBoxLayout *g = new QVBoxLayout(this);
-	g->addWidget(m_view);
+	g->addWidget(m_rel);
 
-	registerDialog();
+//	registerDialog();
 }
 
 KexiRelationMainDlg::~KexiRelationMainDlg()
 {
 }
 
+QSize KexiRelationMainDlg::sizeHint() const
+{	
+	return QSize(600,300);
+}
+
 QWidget*
 KexiRelationMainDlg::mainWidget()
 {
-	return m_view;
+	return m_rel;
 }
 
 QString KexiRelationMainDlg::itemIcon()

@@ -18,8 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "keximainwindow.h"
 #include "kexidialogbase.h"
+
+#include "keximainwindow.h"
+#include "kexiviewbase.h"
 #include "kexicontexthelp_p.h"
 #include "kexipart.h"
 #include "kexipartinfo.h"
@@ -55,14 +57,10 @@ KexiDialogBase::~KexiDialogBase()
 {
 }
 
-void KexiDialogBase::addView(QWidget *view)
+void KexiDialogBase::addView(KexiViewBase *view)
 {
 	m_stack->addWidget(view, 0);
-}
-
-void KexiDialogBase::addView(QWidget *view, int viewMode)
-{
-	m_stack->addWidget(view, viewMode);
+	addActionProxyChild( view );
 }
 
 QSize KexiDialogBase::minimumSizeHint() const
@@ -154,8 +152,12 @@ bool KexiDialogBase::dirty()
 
 QString KexiDialogBase::itemIcon()
 {
-	if (!m_part || !m_part->info())
+	if (!m_part || !m_part->info()) {
+		if (m_stack->visibleWidget() && m_stack->visibleWidget()->inherits("KexiViewBase")) {
+			return static_cast<KexiViewBase*>(m_stack->visibleWidget())->m_defaultIconName;
+		}
 		return QString::null;
+	}
 	return m_part->info()->itemIcon();
 }
 
@@ -166,18 +168,23 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 	if (!supportsViewMode(viewMode))
 		return false;
 
-	QWidget *view = m_stack->widget(viewMode);
-	if (!view) {
+	QWidget *widget = m_stack->widget(viewMode);
+	if (!widget) {
 		//ask the part to create view for the new mode
-		view = m_part->createView(m_stack, this, *m_item, viewMode);
-		if (!view) {
+		widget = m_part->createView(m_stack, this, *m_item, viewMode);
+		if (!widget) {
 			//js TODO error?
 			return false;
 		}
-		addView(view, viewMode);
+		m_stack->addWidget(widget, viewMode);
 	}
+	if (!widget->inherits("KexiViewBase"))
+		return false;
+	KexiViewBase *view = static_cast<KexiViewBase*>(widget);
+	view->beforeSwitch();
 	m_stack->raiseWidget(view);
 	m_currentViewMode = viewMode;
+	view->afterSwitch();
 	return true;
 }
 

@@ -41,6 +41,15 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 	signals:
 
 	protected:
+		/*! called by KexiDialogBase::switchToViewMode() right before dialog is switched to new mode
+		 By default does nothing. Reimplement this if you need to do something 
+		 before switching to this view. */
+		virtual void beforeSwitch();
+
+		/*! called by KexiDialogBase::switchToViewMode() right after dialog is switched to new mode
+		 By default does nothing. Reimplement this if you need to do something 
+		 after switching to this view. */
+		virtual void afterSwitch();
 
 		/*! True if contents (data) of the view is dirty and need to be saved
 		 This may or not be used, depending if changes in the dialog 
@@ -50,9 +59,13 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 flag from internal structures that may be changed. */
 		virtual bool dirty();
 
+		QString m_defaultIconName;
+
 	private:
+
 		KexiMainWindow *m_mainWin;
 
+	friend class KexiDialogBase;
 };
 
 #endif

@@ -25,6 +25,7 @@
 
 class KexiMainWindow;
 class KexiDialogBase;
+class KexiViewBase;
 class QWidget;
 
 /**
@@ -81,11 +82,13 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* /*mainWin*/, 
 		 QWidget * /*parent*/, const char * /*objName*/ =0) { return 0; }
 		
-		//! Reimplement this if your internal part has to return dialogs
-		virtual KexiDialogBase *createDialog(KexiMainWindow* /*mainWin*/, 
-		 const char * /*objName*/ =0)
-		 { return 0; }
+//		//! Reimplement this if your internal part has to return dialogs
+//		virtual KexiDialogBase *createDialog(KexiMainWindow* /*mainWin*/, 
+//		 const char * /*objName*/ =0)
+//		 { return 0; }
 		
+		virtual KexiViewBase *createView(KexiMainWindow* mainWin, QWidget *parent,
+		 const char *objName=0) { return 0; }
 		
 		//! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
 		QGuardedPtr<KexiDialogBase> m_dialog; 

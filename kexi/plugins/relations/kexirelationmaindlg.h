@@ -20,25 +20,27 @@
 #ifndef KEXIRELATIONMAINDLG_H
 #define KEXIRELATIONMAINDLG_H
 
-#include <kexidialogbase.h>
+#include <kexiviewbase.h>
 
 class KexiMainWindow;
 class KexiRelationWidget;
 
-class KexiRelationMainDlg : public KexiDialogBase
+class KexiRelationMainDlg : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationMainDlg(KexiMainWindow *win);
+		KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiRelationMainDlg();
+
+		virtual QSize sizeHint() const;
 
 		virtual QWidget* mainWidget();
 
 		virtual QString itemIcon();
 
 	private:
-		KexiRelationWidget	*m_view;
+		KexiRelationWidget	*m_rel;
 };
 
 #endif

@@ -32,10 +32,10 @@ class KexiRelationPartImpl : public KexiInternalPart
 		virtual ~KexiRelationPartImpl();
 	
 	protected:
-		virtual QWidget *createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
-		 QWidget *parent, const char *objName=0);
+//		virtual QWidget *createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
+//		 QWidget *parent, const char *objName=0);
 		
-		virtual KexiDialogBase *createDialog(KexiMainWindow* mainWin,
+		virtual KexiViewBase *createView(KexiMainWindow* mainWin, QWidget *parent,
 		 const char *objName=0);
 
 		//virtual KexiDialogBase *createWindow(KexiMainWindow *parent);

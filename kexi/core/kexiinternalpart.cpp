@@ -20,11 +20,14 @@
 #include "kexiinternalpart.h"
 
 #include <kexidialogbase.h>
+#include <kexiviewbase.h>
+#include <keximainwindow.h>
 
 #include <qasciidict.h>
 
 #include <kdebug.h>
 #include <klibloader.h>
+#include <klocale.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 
@@ -89,9 +92,23 @@ KexiDialogBase* KexiInternalPart::findOrCreateDialog(KexiMainWindow* mainWin,
 {
 	if (m_uniqueDialog && !m_dialog.isNull())
 		return m_dialog;
-	KexiDialogBase *dlg = createDialog(mainWin, objName);
+//	KexiDialogBase *dlg = createDialog(mainWin, objName);
+	KexiDialogBase * dlg = new KexiDialogBase(mainWin, "");
+	KexiViewBase *view = createView(mainWin, 0, objName);
+	if (!view)
+		return 0;
+
+//	dlg->show();
+	
 	if (m_uniqueDialog)
 		m_dialog = dlg; //recall unique!
+	dlg->addView(view);
+	dlg->setCaption( view->caption() );
+	dlg->setTabCaption( view->caption() );
+	dlg->resize(view->sizeHint());
+	dlg->setMinimumSize(view->minimumSizeHint().width(),view->minimumSizeHint().height());
+	dlg->setDocID( mainWin->generatePrivateDocID() );
+	dlg->registerDialog();
 	return dlg;
 }
 

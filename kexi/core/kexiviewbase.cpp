@@ -37,6 +37,13 @@ bool KexiViewBase::dirty()
 	return false;
 }
 
+void KexiViewBase::beforeSwitch()
+{
+}
+
+void KexiViewBase::afterSwitch()
+{
+}
 
 #include "kexiviewbase.moc"
 
