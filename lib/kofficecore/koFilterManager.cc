@@ -127,12 +127,11 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
         {
             if ( !ret.isEmpty() )
                 ret += "\n";
-            ret += "*.*|";
+            ret += "*|";
             if ( direction == Import )
                 ret += vec[i].importDescription;
             else
                 ret += vec[i].exportDescription;
-            ret += " (*.*)";
         }
     }
 
@@ -140,8 +139,8 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
     {
         if ( !ret.isEmpty() )
             ret += "\n";
-        ret += "*.*|";
-        ret += i18n( "All files (*.*)" );
+        ret += "*|";
+        ret += i18n( "All files" );
     }
 
     return ret;
