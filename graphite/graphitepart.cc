@@ -29,9 +29,11 @@
 
 #include <pagelayoutdia_impl.h>
 
+// testing
+#include <gprimitivecmds.h>
 #include <gline.h>
 
-// uncomment that to see some more colorls and a line by default
+// uncomment that to see some more colors and a line by default
 //#define GRAPHITE_TEST 1
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
@@ -55,6 +57,14 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     GLine *line=new GLine(FxPoint(QPoint(100, 100)), FxPoint(QPoint(200, 200)));
     line->setPen(Qt::green);
     m_nodeZero->plugChild(line);
+    line=new GLine(FxPoint(QPoint(300, 100)), FxPoint(QPoint(200, 200)));
+    line->setPen(Qt::black);
+    GGroup *group=new GGroup(QString::fromLatin1("fooooo"));
+    group->plugChild(line);
+    GMoveCmd *gc=new GMoveCmd(group, QString::fromLatin1("test it, baby"),
+                              FxPoint(QPoint(100, 100)), FxPoint(QPoint(150, 10)));
+    m_history.addCommand(gc);
+    m_nodeZero->plugChild(group);
 #endif
 }
 
@@ -218,7 +228,7 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
     if(manager) {
         setGlobalZoom(view->zoom());
         QRect dirty;
-        // ### doesn't matter whether it returns true or false?
+        // ### does it matter whether it returns true or false?
         manager->mouseMoveEvent(e, dirty);
         // ### clean up, TODO
         return;
@@ -273,29 +283,34 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
 
     setGlobalZoom(view->zoom());
     m_mouse.lbPressed=true;
-    // test
     m_mouse.startSelectionX=e->x();
     m_mouse.startSelectionY=e->y();
-    GObjectM9r *manager=m_m9rMap[view];
 
-    // ### different mouse modes (tool/normal)
-    do {
+    GObjectM9r *manager=m_m9rMap[view];
+    int count=0;
+    while(count < 2) {
         if(manager==0) {
             const GObject *hit=m_nodeZero->hit(e->pos());
-            if(hit==0)  // noone hit -> get outta here
-                break;
-            manager=hit->createM9r(this, view);
-            //m_m9rMap.insert(view, manager);
+            if(hit==0)  // noone hit -> ciao
+                return;
+            manager=hit->createM9r(this, view);  // we take ownership!
+            m_m9rMap.insert(view, manager);
         }
+
         QRect dirty;
         if(manager->mousePressEvent(e, dirty)) {
-            // ### erase, update,...
-            break;
+            kdDebug() << "GraphitePart::mousePressEvent -- manager accepted" << endl;
+            // ### erase and rewind :)
+            return;
         }
-        else
-            break; // for now
-            //manager=0;  // we need a hit test
-    } while(1);  // we "break" out of the loop
+        else {
+            kdDebug() << "GraphitePart::mousePressEvent  --- false" << endl;
+            m_m9rMap.remove(view);
+            delete manager;
+            manager=0;
+            ++count;
+        }
+    }
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {

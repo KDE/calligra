@@ -30,49 +30,35 @@ class FxRect;
 class QBrush;
 class QPen;
 
-
-class GMoveCmd : public KCommand {
+template<class Property, void (GObject::* Function) (const Property &)> class GenericCmd : public KCommand {
 
 public:
-    GMoveCmd(GObject *object, const QString &name);
-    GMoveCmd(GObject *object, const QString &name, const FxPoint &from,
-             const FxPoint &to);
-    virtual ~GMoveCmd() {}
+    GenericCmd(GObject *object, const QString &name) : KCommand(name), m_object(object) {}
+    GenericCmd(GObject *object, const QString &name,
+               const Property &oldProperty, const Property &newProperty) : KCommand(name),
+        m_object(object), m_oldProperty(oldProperty), m_newProperty(newProperty) {}
+    virtual ~GenericCmd() {}
 
-    virtual void execute();
-    virtual void unexecute();
+    virtual void execute() { if(m_object) (m_object->*Function)(m_newProperty); }
+    virtual void unexecute() { if(m_object) (m_object->*Function)(m_oldProperty); }
 
-    void setFrom(const FxPoint &from) { m_from=from; }
-    const FxPoint &from() const { return m_from; }
-    void setTo(const FxPoint &to) { m_to=to; }
-    const FxPoint &to() const { return m_to; }
+    void setOldProperty(const Property &oldProperty) { m_oldProperty=oldProperty; }
+    const Property &oldProperty() const { return m_oldProperty; }
+    void setNewProperty(const Property &newProperty) { m_newProperty=newProperty; }
+    const Property &newProperty() const { return m_newProperty; }
 
 private:
     GObject *m_object;
-    FxPoint m_from, m_to;
+    Property m_oldProperty, m_newProperty;
 };
 
-
-class GResizeCmd : public KCommand {
-
-public:
-    GResizeCmd(GObject *object, const QString &name);
-    GResizeCmd(GObject *object, const QString &name,
-               const FxRect &oldSize, const FxRect &newSize);
-    virtual ~GResizeCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-    void setOldSize(const FxRect &oldSize) { m_old=oldSize; }
-    const FxRect &oldSize() const { return m_old; }
-    void setNewSize(const FxRect &newSize) { m_new=newSize; }
-    const FxRect &newSize() const { return m_new; }
-
-private:
-    GObject *m_object;
-    FxRect m_old, m_new;
-};
+typedef GenericCmd<FxPoint, &GObject::setOrigin> GMoveCmd;
+typedef GenericCmd<FxRect, &GObject::resize> GResizeCmd;
+typedef GenericCmd<QBrush, &GObject::setBrush> GSetBrushCmd;
+typedef GenericCmd<QPen, &GObject::setPen> GSetPenCmd;
+typedef GenericCmd<QString, &GObject::setName> GSetNameCmd;
+typedef GenericCmd<GObject::FillStyle, &GObject::setFillStyle> GSetFillStyleCmd;
+typedef GenericCmd<Gradient, &GObject::setGradient> GSetGradientCmd;
 
 
 class GRotateCmd : public KCommand {
@@ -120,117 +106,6 @@ private:
     GObject *m_object;
     FxPoint m_origin;
     double m_xfactor, m_yfactor;
-};
-
-
-class GSetBrushCmd : public KCommand {
-
-public:
-    GSetBrushCmd(GObject *object, const QString &name);
-    GSetBrushCmd(GObject *object, const QString &name, const QBrush &oldBrush,
-                 const QBrush &newBrush);
-    virtual ~GSetBrushCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-    void setOldBrush(const QBrush &oldBrush) { m_old=oldBrush; }
-    const QBrush &oldBrush() const { return m_old; }
-    void setNewBrush(const QBrush &newBrush) { m_new=newBrush; }
-    const QBrush &newBrush() const { return m_new; }
-
-private:
-    GObject *m_object;
-    QBrush m_old, m_new;
-};
-
-
-class GSetPenCmd : public KCommand {
-
-public:
-    GSetPenCmd(GObject *object, const QString &name);
-    GSetPenCmd(GObject *object, const QString &name, const QPen &oldPen,
-               const QPen &newPen);
-    virtual ~GSetPenCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-    void setOldPen(const QPen &oldPen) { m_old=oldPen; }
-    const QPen &oldPen() const { return m_old; }
-    void setNewPen(const QPen &newPen) { m_new=newPen; }
-    const QPen &newPen() const { return m_new; }
-
-private:
-    GObject *m_object;
-    QPen m_old, m_new;
-};
-
-
-class GSetNameCmd : public KCommand {
-
-public:
-    GSetNameCmd(GObject *object, const QString &name);
-    GSetNameCmd(GObject *object, const QString &name, const QString &oldName,
-                const QString &newName);
-    virtual ~GSetNameCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-    void setOldName(const QString &oldName) { m_old=oldName; }
-    QString oldName() const { return m_old; }
-    void setNewName(const QString &newName) { m_new=newName; }
-    QString newName() const { return m_new; }
-
-private:
-    GObject *m_object;
-    QString m_old, m_new;
-};
-
-
-class GSetFillStyleCmd : public KCommand {
-
-public:
-    GSetFillStyleCmd(GObject *object, const QString &name);
-    GSetFillStyleCmd(GObject *object, const QString &name,
-                     const GObject::FillStyle &oldFillStyle,
-                     const GObject::FillStyle &newFillStyle);
-    virtual ~GSetFillStyleCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-    void setOldFillStyle(const GObject::FillStyle &oldFillStyle) { m_old=oldFillStyle; }
-    const GObject::FillStyle &oldFillStyle() const { return m_old; }
-    void setNewFillStyle(const GObject::FillStyle &newFillStyle) { m_new=newFillStyle; }
-    const GObject::FillStyle &newFillStyle() const { return m_new; }
-
-private:
-    GObject *m_object;
-    GObject::FillStyle m_old, m_new;
-};
-
-
-class GSetGradientCmd : public KCommand {
-
-public:
-    GSetGradientCmd(GObject *object, const QString &name);
-    GSetGradientCmd(GObject *object, const QString &name,
-                    const Gradient &oldGradient, const Gradient &newGradient);
-    virtual ~GSetGradientCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-    void setOldGradient(const Gradient &oldGradient) { m_old=oldGradient; }
-    const Gradient &oldGradient() const { return m_old; }
-    void setNewGradient(const Gradient &newGradient) { m_new=newGradient; }
-    const Gradient &newGradient() const { return m_new; }
-
-private:
-    GObject *m_object;
-    Gradient m_old, m_new;
 };
 
 #endif // gprimitivecmds_h

@@ -35,7 +35,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name) : QWidget(parent, name) {
     QGroupBox* b1 = new QVGroupBox(QString::fromLatin1("MySpinBox"), this);
 
     sbox = new MySpinBox(b1, "spinbox1");
-    sbox->setValue(123.4);
+    sbox->setValue(42.0);
     l->addWidget(b1);
 }
 
