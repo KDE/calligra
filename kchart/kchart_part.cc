@@ -11,12 +11,12 @@
 #include "kchart_view.h"
 #include "kchart_shell.h"
 #include "kchart_factory.h"
+#include "kchartWizard.h"
 #include <kstddirs.h>
 
 #include <engine.h>
 #include <kchartparams.h>
 #include <kglobal.h>
-//#include <iostream> // only for cerr?
 #include <kdebug.h> // "ported" to kdDebug(35001)
 
 using namespace std;
@@ -36,7 +36,8 @@ using namespace std;
 
 KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-    _params( 0 )
+    _params( 0 ),
+    _parentWidget( parentWidget )
 {
   m_bLoading = false;
   kdDebug(35001) << "Contstructor started!" << endl;
@@ -143,7 +144,7 @@ void KChartPart::setPart( const KChartData& data )
 
 void KChartPart::showWizard()
 {
-  KChartWizard* wizard = new KChardWizard( this, this );
+  KChartWizard* wizard = new KChartWizard( this, _parentWidget, "wizard" );
   int ret = wizard->exec();
   if( ret == QDialog::Accepted ) {
   }
@@ -213,20 +214,20 @@ QDomDocument KChartPart::saveXML() {
   data.setAttribute("rows", currentData.rows());
   data.setAttribute("cols", currentData.cols());
   for (unsigned int row = 0;row < currentData.rows();row++) {
-      for (unsigned int col = 0;col < currentData.cols();col++) {
-	// later we need a value
-	kdDebug(35001) << "Row " << row << endl;
-	KChartValue t = currentData.cell(row, col);
-	QDomElement e = doc.createElement("cell");
-        e.setAttribute("hide", (int)_params->missing[currentData.cols()*col+row]);
-        e.setAttribute("dist", _params->explode[currentData.cols()*col+row]);
-        e.setAttribute("value", t.value.toDouble());
-        	  /*
-	  if ( e.isNull() )
-	      return e;
-	  */
-	data.appendChild(e);
-      }
+    for (unsigned int col = 0;col < currentData.cols();col++) {
+      // later we need a value
+      kdDebug(35001) << "Row " << row << endl;
+      KChartValue t = currentData.cell(row, col);
+      QDomElement e = doc.createElement("cell");
+      e.setAttribute("hide", (int)_params->missing[currentData.cols()*col+row]);
+      e.setAttribute("dist", _params->explode[currentData.cols()*col+row]);
+      e.setAttribute("value", t.value.toDouble());
+      /*
+	if ( e.isNull() )
+	return e;
+      */
+      data.appendChild(e);
+    }
   }
   // now save the parameters
   chart.appendChild(data);
@@ -237,58 +238,49 @@ QDomDocument KChartPart::saveXML() {
   params.setAttribute("subtype",(int)_params->stack_type);
   params.setAttribute("hlc_style",(int)_params->hlc_style);
 
-  if(!_params->title.isEmpty())
-        {
-        QDomElement title = doc.createElement( "title" );
-        title.appendChild( doc.createTextNode( _params->title ) );
-        params.appendChild( title );
-        QDomElement titlefont = doc.createElement("titlefont");
-        params.appendChild(titlefont);
-        titlefont.appendChild( createElement( "font", _params->titleFont(), doc ) );
+  if(!_params->title.isEmpty())  {
+    QDomElement title = doc.createElement( "title" );
+    title.appendChild( doc.createTextNode( _params->title ) );
+    params.appendChild( title );
+    QDomElement titlefont = doc.createElement("titlefont");
+    params.appendChild(titlefont);
+    titlefont.appendChild( createElement( "font", _params->titleFont(), doc ) );
+  }
 
-        }
+  if(!_params->xtitle.isEmpty())  {
+    QDomElement xtitle = doc.createElement( "xtitle" );
+    xtitle.appendChild( doc.createTextNode( _params->xtitle ) );
+    params.appendChild( xtitle );
+    QDomElement xtitlefont = doc.createElement("xtitlefont");
+    xtitlefont.appendChild( createElement( "font", _params->xTitleFont(), doc  ) );
+    params.appendChild(xtitlefont);
+  }
+  if(!_params->ytitle.isEmpty()) {
+    QDomElement ytitle = doc.createElement( "ytitle" );
+    ytitle.appendChild( doc.createTextNode( _params->ytitle ) );
+    params.appendChild( ytitle );
+    QDomElement ytitlefont = doc.createElement("ytitlefont");
+    ytitlefont.appendChild( createElement( "font", _params->yTitleFont(), doc ) );
+    params.appendChild(ytitlefont);
+  }
+  if(!_params->ytitle2.isEmpty()) {
+    QDomElement ytitle2 = doc.createElement( "ytitle2" );
+    ytitle2.appendChild( doc.createTextNode( _params->ytitle2 ) );
+    params.appendChild( ytitle2 );
+  }
+  if((!_params->ylabel_fmt.isEmpty())||(!_params->ylabel2_fmt.isEmpty())) {
+    if(!_params->ylabel_fmt.isEmpty()) {
+      QDomElement ylabelfmt = doc.createElement( "ylabelfmt" );
+      ylabelfmt.appendChild( doc.createTextNode( _params->ylabel_fmt ) );
+      params.appendChild( ylabelfmt );
+    }
+    if(!_params->ylabel2_fmt.isEmpty()) {
+      QDomElement ylabel2fmt = doc.createElement( "ylabel2fmt" );
+      ylabel2fmt.appendChild( doc.createTextNode( _params->ylabel2_fmt ) );
+      params.appendChild( ylabel2fmt );
+    }
+  }
 
-
-  if(!_params->xtitle.isEmpty())
-        {
-        QDomElement xtitle = doc.createElement( "xtitle" );
-        xtitle.appendChild( doc.createTextNode( _params->xtitle ) );
-        params.appendChild( xtitle );
-        QDomElement xtitlefont = doc.createElement("xtitlefont");
-        xtitlefont.appendChild( createElement( "font", _params->xTitleFont(), doc  ) );
-        params.appendChild(xtitlefont);
-        }
-  if(!_params->ytitle.isEmpty())
-        {
-        QDomElement ytitle = doc.createElement( "ytitle" );
-        ytitle.appendChild( doc.createTextNode( _params->ytitle ) );
-        params.appendChild( ytitle );
-        QDomElement ytitlefont = doc.createElement("ytitlefont");
-        ytitlefont.appendChild( createElement( "font", _params->yTitleFont(), doc ) );
-        params.appendChild(ytitlefont);
-        }
-  if(!_params->ytitle2.isEmpty())
-        {
-        QDomElement ytitle2 = doc.createElement( "ytitle2" );
-        ytitle2.appendChild( doc.createTextNode( _params->ytitle2 ) );
-        params.appendChild( ytitle2 );
-        }
-   if((!_params->ylabel_fmt.isEmpty())||(!_params->ylabel2_fmt.isEmpty()))
-        {
-        if(!_params->ylabel_fmt.isEmpty())
-                {
-                QDomElement ylabelfmt = doc.createElement( "ylabelfmt" );
-                ylabelfmt.appendChild( doc.createTextNode( _params->ylabel_fmt ) );
-                params.appendChild( ylabelfmt );
-                }
-        if(!_params->ylabel2_fmt.isEmpty())
-                {
-                QDomElement ylabel2fmt = doc.createElement( "ylabel2fmt" );
-                ylabel2fmt.appendChild( doc.createTextNode( _params->ylabel2_fmt ) );
-                params.appendChild( ylabel2fmt );
-                }
-
-        }
   QDomElement labelfont = doc.createElement("labelfont");
   labelfont.appendChild( createElement( "font", _params->labelFont(), doc ) );
   params.appendChild(labelfont);
@@ -349,47 +341,43 @@ QDomDocument KChartPart::saveXML() {
   graphcolor.setAttribute( "ylabel2color", _params->YLabel2Color.name() );
   params.appendChild(graphcolor);
 
-  if(_params->annotation)
-        {
-        QDomElement annotation = doc.createElement("annotation");
-        annotation.setAttribute("color", _params->annotation->color.name());
-        annotation.setAttribute("point",(int)_params->annotation->point);
-        params.appendChild(annotation);
+  if(_params->annotation) {
+    QDomElement annotation = doc.createElement("annotation");
+    annotation.setAttribute("color", _params->annotation->color.name());
+    annotation.setAttribute("point",(int)_params->annotation->point);
+    params.appendChild(annotation);
 
-        QDomElement note = doc.createElement( "note" );
-        note.appendChild( doc.createTextNode( _params->annotation->note ) );
-        params.appendChild( note );
-        }
+    QDomElement note = doc.createElement( "note" );
+    note.appendChild( doc.createTextNode( _params->annotation->note ) );
+    params.appendChild( note );
+  }
 
   QDomElement legend = doc.createElement("legend");
   chart.appendChild(legend);
   legend.setAttribute("number",_params->legend.count());
-  for(QStringList::Iterator it = _params->legend.begin();it  != _params->legend.end();++it)
-        {
-        QDomElement name = doc.createElement( "name" );
-        name.appendChild( doc.createTextNode( *it ) );
-        legend.appendChild(name);
-        }
+  for(QStringList::Iterator it = _params->legend.begin();it  != _params->legend.end();++it) {
+    QDomElement name = doc.createElement( "name" );
+    name.appendChild( doc.createTextNode( *it ) );
+    legend.appendChild(name);
+  }
 
   QDomElement xlbl = doc.createElement("xlbl");
   chart.appendChild(xlbl);
   xlbl.setAttribute("number",_params->xlbl.count());
-  for(QStringList::Iterator it = _params->xlbl.begin();it  != _params->xlbl.end();++it)
-        {
-        QDomElement label = doc.createElement( "label" );
-        label.appendChild( doc.createTextNode( *it ) );
-        xlbl.appendChild(label);
-        }
+  for(QStringList::Iterator it = _params->xlbl.begin();it  != _params->xlbl.end();++it) {
+    QDomElement label = doc.createElement( "label" );
+    label.appendChild( doc.createTextNode( *it ) );
+    xlbl.appendChild(label);
+  }
 
   QDomElement extColor = doc.createElement("extcolor");
   chart.appendChild(extColor);
   extColor.setAttribute("number",_params->ExtColor.count());
-  for(unsigned int i=0;i<_params->ExtColor.count();i++)
-        {
-        QDomElement color = doc.createElement( "color" );
-        color.setAttribute( "name", _params->ExtColor.color(i).name() );
-        extColor.appendChild(color);
-        }
+  for(unsigned int i=0;i<_params->ExtColor.count();i++) {
+    QDomElement color = doc.createElement( "color" );
+    color.setAttribute( "name", _params->ExtColor.color(i).name() );
+    extColor.appendChild(color);
+  }
 
 
   kdDebug(35001) << "Ok, till here!!!" << endl;
@@ -891,6 +879,9 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.43  2000/07/18 22:12:26  kalle
+ * added showWizard()
+ *
  * Revision 1.42  2000/07/18 21:48:59  kalle
  * renamed kchartWizard* to KChartWizard* for consistency with the rest
  *
