@@ -448,7 +448,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             bottomCell->frame(0)->setHeight(bottomCell->frame(0)->minFrameHeight() +
                     minHeightOtherCols - minHeightMyCol);
 	    // ### RECURSE ###
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+            kdDebug(32004) << "Entering recursion " << __FILE__ << ":" << __LINE__ << endl;
             recalcRows(bottomCell->firstCol(), bottomCell->firstRow());
+            kdDebug(32004) << "Leaving recursion " << __FILE__ << ":" << __LINE__ << endl;
+#else
+            recalcRows(bottomCell->firstCol(), bottomCell->firstRow());
+#endif
         }
         if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
             activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
@@ -612,15 +618,25 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 #endif
 
             double topOfPage = m_doc->ptPaperHeight() * pageNumber + m_doc->ptTopBorder();
+            
             QValueList<double>::iterator tmp = m_rowPositions.at(breakRow);
             diff += topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+            kdDebug(32004) << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
+
+#else
 //kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
+#endif
             lineNumber++;
             m_rowPositions.insert(j, topOfPage);
 
             // insert new pageBound. It points to last LINE on previous page
             pageBound = m_pageBoundaries.insert(pageBound, breakRow);
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+            kdDebug(32004) << "inserting new pageBound: " << breakRow  << " at " << m_rowPositions[breakRow] << endl;
+#else
             //kdDebug(32004) << "inserting new pageBound: " << breakRow  << " at " << m_rowPositions[breakRow] << endl;
+#endif
             pageBound++;
             if(!hugeRow) {
                 // add header-rij toe. (en zet bool) TODO
@@ -646,11 +662,28 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             }
 #endif
         }
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+        if(diff > 0)
+        {
+            kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
+            (*j) += diff;
+        }
+#else
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
         if(diff > 0)
             (*j) = (*j) + diff;
-
+#endif
         lineNumber++;
+        
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+        // Note: produces much ouput!
+        int i = 1; // DEBUG
+        for ( QValueList<double>::iterator itDebug = m_rowPositions.begin(); itDebug != m_rowPositions.end(); ++itDebug, ++i )
+        {
+            kdDebug(32004) << "m_rowPosition[" << i << "]= " << (*itDebug) << endl;
+        }
+#endif    
+    
     }
 #if 0
 { QValueList<unsigned int>::iterator pb = m_pageBoundaries.begin();
