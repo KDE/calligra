@@ -270,7 +270,8 @@ void Canvas::mouseMoveEvent (QMouseEvent* e)
   propagateMouseEvent (e);
  }
 
-void Canvas::propagateMouseEvent (QMouseEvent *e) {
+void Canvas::propagateMouseEvent (QMouseEvent *e)
+{
   // transform position of the mouse pointer according to current
   // zoom factor
   QPoint new_pos (qRound (float(e->x() - mXOffset) / zoomFactor),
@@ -280,7 +281,8 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
   emit mousePositionChanged (new_ev.x(), new_ev.y());
 
   // ensure visibility
-  if (ensureVisibilityFlag) {
+  if (ensureVisibilityFlag)
+  {
     if (e->type () == QEvent::MouseButtonPress && e->button () == LeftButton)
       dragging = true;
     else if (e->type () == QEvent::MouseButtonRelease && e->button () == LeftButton)
