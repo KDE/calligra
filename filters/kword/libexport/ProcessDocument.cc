@@ -594,6 +594,7 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     attrProcessingList << AttrProcessing ( "righttext",     "QString", (void *) &counter->righttext       );
     attrProcessingList << AttrProcessing ( "bulletfont",    "QString", (void *) &counter->customFont      );
     attrProcessingList << AttrProcessing ( "customdef",     "",        (void *) NULL                      );
+    attrProcessingList << AttrProcessing ( "text",          "QString", (void *) &counter->text            );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);

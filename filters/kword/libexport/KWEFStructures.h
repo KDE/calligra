@@ -294,6 +294,8 @@ public:
     int /*QChar*/ customCharacter;
     QString customFont;
     //QString custom;
+
+    QString text;   // text at the time of saving (no formatting info though)
 };
 
 

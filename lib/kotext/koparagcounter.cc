@@ -312,6 +312,8 @@ void KoParagCounter::save( QDomElement & element )
         element.setAttribute( "customdef", m_custom );
     if ( m_restartCounter )
         element.setAttribute( "restart", "true" );
+    if ( !m_cache.text.isEmpty() )
+        element.setAttribute( "text", m_cache.text );
 }
 
 void KoParagCounter::setCustom( QString c )
@@ -458,13 +460,22 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         ////// TODO
         tmp.setNum( m_cache.number );
         break;
+
+    // --- these are used in export filters but get drawn over by the paragraph renderer  ---
     case KoParagCounter::STYLE_DISCBULLET:
+        tmp = '*';
+        break;
     case KoParagCounter::STYLE_SQUAREBULLET:
+        tmp = '#';
+        break;
     case KoParagCounter::STYLE_BOXBULLET:
+        tmp = '=';  // think up a better character
+        break;
     case KoParagCounter::STYLE_CIRCLEBULLET:
+        tmp = 'O';
+        break;
     case KoParagCounter::STYLE_CUSTOMBULLET:
-        // Allow space for bullet!
-        tmp = ' ';
+        tmp = m_customBullet.character;
         break;
     }
     // We want the '.' to be before the number in a RTL parag,

@@ -842,6 +842,10 @@ don't put a </?xml...> at the end of the file!).
         restart
                 If "true" or "1", this paragraph is numbered as specified by start.
                 Otherwise (default) it will extend the current list (with equal type and depth).
+
+        text    The text shown by the counter in the document when it was saved.
+                This is redundant information, unused by KWord upon loading, but useful
+                for export filters.
 -->
 <!ELEMENT COUNTER
     EMPTY>
@@ -855,7 +859,8 @@ don't put a </?xml...> at the end of the file!).
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
     customdef CDATA #IMPLIED
-    restart CDATA #IMPLIED>
+    restart CDATA #IMPLIED
+    text CDATA #IMPLIED>
 
 <!--
         The space to be added between two consecutive lines in a given paragraph.

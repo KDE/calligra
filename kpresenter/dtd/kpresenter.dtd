@@ -380,8 +380,11 @@
         restart
                 If "true" or "1", this paragraph is numbered as specified by start.
                 Otherwise (default) it will extend the current list (with equal type and depth).
--->
 
+        text    The text shown by the counter in the document when it was saved.
+                This is redundant information, unused by KPresenter upon loading, but useful
+                for export filters.
+-->
 <!ELEMENT COUNTER
     EMPTY>
 <!ATTLIST COUNTER
@@ -394,7 +397,8 @@
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
     customdef CDATA #IMPLIED
-    restart CDATA #IMPLIED>
+    restart CDATA #IMPLIED
+    text CDATA #IMPLIED>
 
 <!-- INDENTS
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph
