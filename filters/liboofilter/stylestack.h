@@ -32,30 +32,24 @@ public:
     StyleStack();
     virtual ~StyleStack();
 
+    enum Marks { PageMark = 0, ObjectMark, ParagraphMark };
+
     /**
      * Clears the complete stack.
      */
     void clear();
 
     /**
-     * Keep only the page styles on the stack.
+     * Keep only the styles up to the given mark.
+     * For instance popToMark( PageMark ) keeps only the page styles on the stack,
+     * popToMark( ObjectMark ) keeps page and object styles on the stack, etc.
      */
-    void clearPageMark();
+    void popToMark( int mark );
 
     /**
      * Set the mark (stores the index of the object on top of the stack).
      */
-    void setPageMark();
-
-    /**
-     * Keep page and object styles on the stack.
-     */
-    void clearObjectMark();
-
-    /**
-     * Set the mark (stores the index of the object on top of the stack).
-     */
-    void setObjectMark();
+    void setMark( int mark );
 
     /**
      * Removes the style on top of the stack.
@@ -89,8 +83,21 @@ public:
      */
     QDomNode childNode(const QString & name) const;
 
+    /**
+     * Special case for the current font size, due to special handling of fo:font-size="115%".
+     */
+    double fontSize() const;
+
+    /**
+     * Return the name of the style specified by the user,
+     * i.e. not an auto style
+     */
+    QString userStyleName() const;
+
 private:
-    uint m_pageMark, m_objectMark;
+    // We use QMemArray<uint> instead of uint[3] so that we can support
+    // application-defined marks.
+    QMemArray<int> m_marks;
 
     // We use QValueList instead of QValueStack because we need access to all styles
     // not only the top one.

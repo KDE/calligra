@@ -67,7 +67,7 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
 
 void OoUtils::importIndents( QDomElement& parentElement, const StyleStack& styleStack )
 {
-    if ( styleStack.hasAttribute( "fo:margin-left" ) ||
+    if ( styleStack.hasAttribute( "fo:margin-left" ) || // 3.11.19
          styleStack.hasAttribute( "fo:margin-right" ) )
          // *text-indent must always be bound to either margin-left or margin-right
     {
@@ -98,7 +98,8 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
 {
     if( styleStack.hasAttribute("fo:line-height") )
     {
-        QString value = styleStack.attribute( "fo:line-height" );
+        // Fixed line height
+        QString value = styleStack.attribute( "fo:line-height" ); // 3.11.1
         if ( value != "normal" )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
@@ -120,7 +121,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         }
     }
     // Line-height-at-least is mutually exclusive with line-height
-    else if ( styleStack.hasAttribute("style:line-height-at-least") )
+    else if ( styleStack.hasAttribute("style:line-height-at-least") ) // 3.11.2
     {
         QString value = styleStack.attribute( "style:line-height-at-least" );
         // kotext has "atleast" but that's for the linespacing, not for the entire line height!
@@ -134,7 +135,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         parentElement.appendChild(lineSpacing);
     }
     // Line-spacing is mutually exclusive with line-height and line-height-at-least
-    else if ( styleStack.hasAttribute("style:line-spacing") )
+    else if ( styleStack.hasAttribute("style:line-spacing") ) // 3.11.3
     {
         double value = KoUnit::parseValue( styleStack.attribute( "style:line-spacing" ) );
         if ( value != 0.0 )
@@ -150,7 +151,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
 
 void OoUtils::importTopBottomMargin( QDomElement& parentElement, const StyleStack& styleStack )
 {
-    if( styleStack.hasAttribute("fo:margin-top") ||
+    if( styleStack.hasAttribute("fo:margin-top") || // 3.11.22
         styleStack.hasAttribute("fo:margin-bottom"))
     {
         double mtop = KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) );
@@ -169,9 +170,10 @@ void OoUtils::importTopBottomMargin( QDomElement& parentElement, const StyleStac
 
 void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& styleStack )
 {
-    if ( !styleStack.hasChildNode( "style:tab-stops" ) )
+    if ( !styleStack.hasChildNode( "style:tab-stops" ) ) // 3.11.10
         return;
     QDomElement tabStops = styleStack.childNode( "style:tab-stops" ).toElement();
+    //kdDebug() << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
     for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
         QDomElement tabStop = it.toElement();
@@ -198,8 +200,24 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
 
         // TODO Convert leaderChar's unicode value to the KOffice enum
         // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
-        //QString leaderChar = tabStop.attribute( "style:leader-char" ); // single character
-        //elem.setAttribute( "filling", 0 );
+        QString leaderChar = tabStop.attribute( "style:leader-char" ); // single character
+        if ( !leaderChar.isEmpty() )
+        {
+            int filling = 0;
+            QChar ch = leaderChar[0];
+            switch (ch.latin1()) {
+            case '.':
+                filling = 1; break;
+            case '-':
+            case '_':  // TODO in KWord: differenciate --- and ___
+                filling = 2; break;
+            default:
+                // KWord doesn't have support for "any char" as filling.
+                // Instead it has dash-dot and dash-dot-dot - but who uses that in a tabstop?
+                break;
+            }
+            elem.setAttribute( "filling", filling );
+        }
         parentElement.appendChild( elem );
     }
 
