@@ -2737,7 +2737,7 @@ void KPresenterView::setupActions()
                                         actionCollection(), "tools_pie" );
     actionToolsPie->setExclusiveGroup( "tools" );
 
-    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", 0,
+    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Key_F10, // same shortcut as KWord
                                          this, SLOT( toolsText() ),
                                          actionCollection(), "tools_text" );
     actionToolsText->setExclusiveGroup( "tools" );
