@@ -37,6 +37,7 @@ class QPrinter;
 #include "image.h"
 #include "char.h"
 #include "frame.h"
+#include "kword_undo.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -378,6 +379,12 @@ public:
 
   int &getNumParags() { return numParags; }
 
+  void saveParagInUndoBuffer(QList<KWParag> parags,int frameset,KWFormatContext *_fc);
+  void saveParagInUndoBuffer(KWParag *parag,int frameset,KWFormatContext *_fc);
+
+  void undo();
+  void redo();
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -472,6 +479,8 @@ protected:
 
   QString unit;
   int numParags;
+
+  KWCommandHistory history;
   
 };
 

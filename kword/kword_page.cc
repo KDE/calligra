@@ -1041,7 +1041,9 @@ void KWPage::recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_f
   unsigned int pos = _fc->getTextPos();
   if (_pos != -1) pos = static_cast<unsigned int>(_pos);
 
-  _fc->init(_fc->getParag(),_painter,false,false);
+  _fc->init(_fc->getParag()->getPrev() ? _fc->getParag()->getPrev()->getNext() : 
+	    dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(_fc->getFrameSet() - 1))->getFirstParag(),
+	    _painter,false,false);
 
   _fc->gotoStartOfParag(_painter);
   _fc->cursorGotoLineStart(_painter);
@@ -3755,7 +3757,7 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 	if (editMode != EM_DELETE)
 	  {
 	    editMode = EM_DELETE;
-	    //debug("edit mode changed");
+	    doc->saveParagInUndoBuffer(fc->getParag(),fc->getFrameSet() - 1,fc);
 	    return true;
 	  }
       } break;
@@ -3764,7 +3766,7 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 	if (editMode != EM_BACKSPACE)
 	  {
 	    editMode = EM_BACKSPACE;
-	    //debug("edit mode changed");
+	    doc->saveParagInUndoBuffer(fc->getParag(),fc->getFrameSet() - 1,fc);
 	    return true;
 	  }
       } break;
@@ -3773,7 +3775,7 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 	if (editMode != EM_RETURN)
 	  {
 	    editMode = EM_RETURN;
-	    //debug("edit mode changed");
+	    doc->saveParagInUndoBuffer(fc->getParag(),fc->getFrameSet() - 1,fc);
 	    return true;
 	  }
       } break;
@@ -3784,7 +3786,7 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 	    if (editMode != EM_INSERT)
 	      {
 		editMode = EM_INSERT;
-		//debug("edit mode changed");
+		doc->saveParagInUndoBuffer(fc->getParag(),fc->getFrameSet() - 1,fc);
 		return true;
 	      }
 	  }
@@ -3793,7 +3795,6 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 	    if (editMode != EM_NONE)
 	      {
 		editMode = EM_NONE;
-		//debug("edit mode changed");
 		return true;
 	      }
 	  }

@@ -21,9 +21,12 @@
 #include <qobject.h>
 
 #include "parag.h"
+#include "fc.h"
 
 enum KWCommandType {TEXT_CHANGE};
 #define MAX_UNDO_REDO 100
+
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWCommand                                               */
@@ -54,7 +57,8 @@ protected:
 class KWTextChangeCommand : public KWCommand
 {
 public:
-  KWTextChangeCommand(QString _name) : KWCommand(_name) {}
+  KWTextChangeCommand(QString _name,KWordDocument *_doc,KWFormatContext *_fc,unsigned int _textPos) 
+    : KWCommand(_name) { doc = _doc; fc = _fc; textPos = _textPos; }
 
   virtual KWCommandType getType() { return TEXT_CHANGE; }
 
@@ -65,13 +69,15 @@ public:
   void setBefore(QString _before) { before = _before; }
   void setAfter(QString _after) { after = _after; }
 
-  void setFrameSetNum(int _num) { frameset = _num; }
-  void setFrameNum(int _num) { frame = _num; }
+  void setFrameSet(int _num) { frameset = _num; }
 
 protected:
   QList<KWParag> parags;
   QString before,after;
-  int frameset,frame;
+  int frameset;
+  KWordDocument *doc;
+  KWFormatContext *fc;
+  unsigned int textPos;
 
 };
 

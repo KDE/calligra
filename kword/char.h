@@ -128,6 +128,8 @@ public:
   ~KWString() 
     { free(_data_,_len_); delete [] _data_; }
 
+  KWString &operator=(const KWString &_string);
+
   unsigned int size() 
     { return _len_; }
   unsigned int max()

@@ -34,9 +34,18 @@ KWString::KWString(QString _str)
 
 KWString::KWString(const KWString &_string)
 {
-  _data_ = copy(static_cast<KWString>(_string).data(),static_cast<KWString>(_string).size());
-  _len_ = static_cast<KWString>(_string).size();
-  _max_ = static_cast<KWString>(_string).max();
+  _data_ = copy(_string._data_,_string._len_);
+  _len_ = _string._len_;
+  _max_ = _string._max_;
+}
+
+KWString &KWString::operator=(const KWString &_string)
+{
+  _data_ = copy(_string._data_,_string._len_);
+  _len_ = _string._len_;
+  _max_ = _string._max_;
+
+  return *this;
 }
 
 KWChar* KWString::alloc( unsigned int _len )

@@ -3233,3 +3233,41 @@ void KWordDocument::setFrameCoords(unsigned int x,unsigned int y,unsigned int w,
     }
 }
 
+/*================================================================*/
+void KWordDocument::saveParagInUndoBuffer(QList<KWParag> parags,int frameset,KWFormatContext *_fc)
+{
+}
+
+/*================================================================*/
+void KWordDocument::saveParagInUndoBuffer(KWParag *parag,int frameset,KWFormatContext *_fc)
+{
+  KWTextChangeCommand *cmd = new KWTextChangeCommand(i18n("Text changed"),this,_fc,_fc->getTextPos());
+  cmd->addParag(*parag);
+
+  if (parag->getPrev())
+    cmd->setBefore(parag->getPrev()->getParagName());
+  else
+    cmd->setBefore("");
+
+  if (parag->getNext())
+    cmd->setAfter(parag->getNext()->getParagName());
+  else
+    cmd->setAfter("");
+
+  cmd->setFrameSet(frameset);
+
+  history.addCommand(cmd);
+}
+
+/*================================================================*/
+void KWordDocument::undo()
+{
+  history.undo();
+}
+
+/*================================================================*/
+void KWordDocument::redo()
+{
+  history.redo();
+}
+

@@ -15,6 +15,8 @@
 
 #include "kword_undo.h"
 #include "kword_undo.moc"
+#include "kword_doc.h"
+#include "frame.h"
 
 /******************************************************************/
 /* Class: KWTextChangeCommand                                     */
@@ -28,6 +30,65 @@ void KWTextChangeCommand::execute()
 /*================================================================*/
 void KWTextChangeCommand::unexecute()
 {
+  QList<KWParag> old;
+
+  KWParag *parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
+
+  KWParag *parag1 = 0L,*parag2 = 0L,*tmp = 0L;
+
+  while (parag)
+    {
+      if (parag->getParagName() == before)
+	parag1 = parag;
+      
+      if (parag->getParagName() == after)
+	parag2 = parag;
+
+      if (parag1 && parag2) break;
+      
+      parag = parag->getNext();
+    }
+
+  if (!parag1 && !parag2)
+    dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
+  
+  else if (!parag1 && parag2)
+    {
+      parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
+      while (parag != parag2)
+	{
+	  tmp = parag;
+	  parag = tmp->getNext();
+	}
+      dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
+      parag2->setPrev(parags.last());
+    }
+  
+  else if (parag1 && !parag2)
+    {
+      parag = parag1->getNext();
+      while (parag)
+	{
+	  tmp = parag;
+	  parag = tmp->getNext();
+	}
+      parag1->setNext(parags.first());
+    }
+
+  if (parag1 && parag2)
+    {
+      parag = parag1->getNext();
+      while (parag != parag2)
+	{
+	  tmp = parag;
+	  parag = tmp->getNext();
+	}
+
+      parag1->setNext(parags.first());
+      parag2->setPrev(parags.last());
+    }
+
+  fc->setTextPos(textPos);
 }
 
 /******************************************************************/
@@ -86,7 +147,7 @@ void KWCommandHistory::undo()
 /*================================================================*/
 void KWCommandHistory::redo()
 {
-  if (current < static_cast<int>(history.count()))
+  if (current < static_cast<int>(history.count()) && current > -1)
     {
       history.at(current)->execute();
       current++;
@@ -106,7 +167,7 @@ QString KWCommandHistory::getUndoName()
 /*================================================================*/
 QString KWCommandHistory::getRedoName()
 {
-  if (current < static_cast<int>(history.count()))
+  if (current < static_cast<int>(history.count()) && current > -1)
     return history.at(current)->getName();
   else
     return QString();

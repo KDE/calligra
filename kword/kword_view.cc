@@ -642,11 +642,15 @@ void KWordView::updateStyleList()
 /*===============================================================*/
 void KWordView::editUndo()
 {
+  m_pKWordDoc->undo();
+  gui->getPaperWidget()->recalcWholeText(true);
 }
 
 /*===============================================================*/
 void KWordView::editRedo()
 {
+  m_pKWordDoc->redo();
+  gui->getPaperWidget()->recalcWholeText(true);
 }
 
 /*===============================================================*/
@@ -1475,11 +1479,11 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this, "editUndo", CTRL + Key_Z, -1, -1 );
-  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
+  //m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("No Redo possible"), this, "editRedo", 0, -1, -1 );
-  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
+  //m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
   m_vMenuEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
@@ -1649,12 +1653,12 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   // undo
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
   m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
-  m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
+  //m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
 
   // redo
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
   m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1);
-  m_vToolBarEdit->setItemEnabled(ID_REDO,false);
+  //m_vToolBarEdit->setItemEnabled(ID_REDO,false);
   
   m_vToolBarEdit->insertSeparator( -1 );
 

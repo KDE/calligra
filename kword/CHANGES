@@ -829,3 +829,8 @@ Reggie, 11.2.1999:
 ------------------
 - Started with undo/redo
 - Added copy constructor for KWParag
+
+Reggie, 16.2.1999:
+------------------
+- Undo/Redo starts working
+- Some fixes with formatting 

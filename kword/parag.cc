@@ -11,7 +11,8 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
+KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next, 
+		 KWParagLayout* _paragLayout )
 {
   prev = _prev;
   next = _next;
@@ -63,6 +64,11 @@ KWParag::KWParag(const KWParag& _parag)
   // I'm not sure if this is correct. Perhaps we should use the
   // name of _parag too?
   paragName.sprintf("%d",++(document->getNumParags()));
+
+  counterData = _parag.counterData;
+  counterWidth = _parag.counterWidth;
+
+  text = _parag.text;
 }
 
 KWParag::~KWParag()
