@@ -168,14 +168,18 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
 Thesaurus::~Thesaurus()
 {
-    if( m_dialog ) {
-        delete m_dialog;
-    }
+    // FIXME?: this hopefully fixes the problem of a wrong cursor
+    // and a crash (when closing e.g. konqueror) when the thesaurus dialog 
+    // gets close while it was still working and showing the wait cursor
+    QApplication::restoreOverrideCursor();
     if( m_thesproc ) {
         delete m_thesproc;
     }
     if( m_wnproc ) {
         delete m_wnproc;
+    }
+    if( m_dialog ) {
+        delete m_dialog;
     }
 }
 
