@@ -122,6 +122,12 @@ enum StackItemElementType{
     ElementTypeContent      // <c>
 };
 
+struct ListTabulator
+{
+    QString type;
+    double ptPos;
+};
+
 class StackItem
 {
 public:
@@ -140,7 +146,7 @@ public:
         textBgGreen=0;
         textBgBlue=0;
         leftMargin=0;
-	rightMargin=0;   
+	rightMargin=0;
 	textIndent=0;
 	margin_bottom=0;
         margin_top=0;
@@ -172,6 +178,7 @@ public:
     double      textIndent;
     double      margin_bottom;
     double      margin_top;
+    QValueList<ListTabulator> TabulatorList;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
@@ -234,6 +241,12 @@ static inline double InchesToPoints(const double d)
     return d * 72.0;
 }
 
+static inline double PicaToPoints(const double d)
+{
+    // 1 pica = 12 pt
+    return d*12;
+}
+
 static inline double IndentPos( QString _str)
 {
   double d=0;
@@ -261,7 +274,13 @@ static inline double IndentPos( QString _str)
       _str=_str.left (_str.length()-pos  );
       d=_str.toDouble();
     }
-  else 
+  else if((pos=_str.contains("pi")))
+  {
+      _str=_str.left (_str.length()-pos  );
+      d=_str.toDouble();
+      d=PicaToPoints(d);
+  }
+  else
     {
       bool b=false;
       d=_str.toDouble(&b);
@@ -331,7 +350,7 @@ void PopulateProperties(StackItem* stackItem,
     QString strColour=abiPropsMap["color"].getValue();
     if (!strColour.isEmpty())
     {
-      QColor col(strColour);      
+      QColor col(strColour);
       stackItem->red  =col.red();
       stackItem->green=col.green();
       stackItem->blue =col.blue();
@@ -401,6 +420,22 @@ void PopulateProperties(StackItem* stackItem,
       {
 	stackItem->margin_top=IndentPos(strTopMargin);
       }
+    QString strTab=abiPropsMap["tabstops"].getValue();
+    if(!strTab.isEmpty())
+    {
+        QStringList listTab=QStringList::split(",",strTab);
+        for ( QStringList::Iterator it = listTab.begin(); it != listTab.end(); ++it )
+        {
+            QStringList tab=QStringList::split("/",*it);
+            ListTabulator tmp;
+            tmp.ptPos=IndentPos(tab[0]);
+            tmp.type=tab[1];
+            kdDebug()<<"tmp.type :"<<tmp.type <<" tmp.ptPos :"<<tmp.ptPos<<endl;
+            stackItem->TabulatorList.append(tmp);
+        }
+
+    }
+
 
 }
 
@@ -629,6 +664,28 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
             }
         }
         layoutElement.appendChild(element);
+    }
+
+
+    if(stackItem->TabulatorList.count()>0)
+    {
+        QValueList<ListTabulator>::iterator it;
+        for ( it = stackItem->TabulatorList.begin(); it !=stackItem->TabulatorList .end(); ++it )
+        {
+            element=mainDocument.createElement("TABULATOR");
+            element.setAttribute("ptpos",(*it).ptPos);
+            int type=0;
+            if((*it).type=="L0")
+                type=0;
+            else if( (*it).type=="C0")
+                type=1;
+            else if( (*it).type=="R0")
+                type=2;
+            else if((*it).type=="D0")
+                type=3;
+            element.setAttribute("type",type);
+            layoutElement.appendChild(element);
+        }
     }
 
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");
