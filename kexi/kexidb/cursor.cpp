@@ -167,7 +167,7 @@ bool Cursor::moveFirst()
 			if (m_records_in_buf==0 && m_buffering_completed)
 				return false; //buffering completed and there is no records!
 			if (m_records_in_buf>0) {
-				//set state as we would before first:
+				//set state as we would be before first rec:
 				m_at_buffer = false;
 				m_at = 0;
 				//..and move to next, ie. 1st record
@@ -178,6 +178,10 @@ bool Cursor::moveFirst()
 		}
 		if (!reopen())
 			return false;
+	}
+	else {
+		//we have a record already read-ahead: we now point @ that:
+		m_at = 1;
 	}
 //	if (!m_atFirst) { //cursor isn't @ first record now: reopen
 //		reopen();

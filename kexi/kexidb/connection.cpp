@@ -1383,7 +1383,8 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 	}*/
 	//not found: retrieve schema
 	RecordData data;
-	if (!querySingleRecord(QString("select * from kexi__objects where o_name='%1'").arg(m_tableName), data))
+	if (!querySingleRecord(QString("select * from kexi__objects where o_name='%1' and o_type=%2")
+			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 	
 	return setupTableSchema(data);//cursor);
@@ -1396,7 +1397,7 @@ TableSchema* Connection::tableSchema( const int tableId )
 		return t;
 	//not found: retrieve schema
 	RecordData data;
-	if (!querySingleRecord(QString("select * from kexi__objects where o_id='%1'").arg(tableId), data))
+	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(tableId), data))
 		return 0;
 	
 	return setupTableSchema(data);
@@ -1410,7 +1411,7 @@ QuerySchema* Connection::querySchema( const int queryId )
 	//not found: retrieve schema
 	RecordData queryobject_data, querydata_data;
 
-	if (!querySingleRecord(QString("select * from kexi__objects where o_id='%1'").arg(queryId), queryobject_data))
+	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(queryId), queryobject_data))
 		return 0;
 
 	q = new QuerySchema();

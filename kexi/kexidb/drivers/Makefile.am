@@ -7,5 +7,5 @@ endif
 #pgsql_dir=pgsql
 #endif
 
-SUBDIRS =  sqlite #$(mysql_dir) # $(pgsql_dir)
+SUBDIRS =  sqlite pqxx #$(mysql_dir) # $(pgsql_dir)
 
