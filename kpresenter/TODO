@@ -35,12 +35,10 @@ KOffice in general:
 KPresenter after koffice 1.3
 ============================
 Todo:
-
 - Hide/show header/footer by page (allow by oasis format)
-- Add custom slide show
 
 In Progress:
--> implement custom slide show
+-> implement custom slide show (save/change works), load doesn't work and we don't use it for the moment
 -> copy/paste element as oasis format
 	-> duplicate page (DONE)
 	-> copy page (DONE)

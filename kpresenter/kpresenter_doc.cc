@@ -1267,14 +1267,20 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
 
 void KPresenterDoc::loadOasisPresentationSettings( QDomNode &settingsDoc )
 {
-    kdDebug()<<"presentation:settings ********************************************* \n";
+    //kdDebug()<<"presentation:settings ********************************************* \n";
     QDomElement settings( settingsDoc.toElement() );
-    kdDebug()<<"settings.attribute(presentation:endless) :"<<settings.attribute("presentation:endless")<<endl;
+    //kdDebug()<<"settings.attribute(presentation:endless) :"<<settings.attribute("presentation:endless")<<endl;
     if (settings.attribute("presentation:endless")=="true")
         _spInfiniteLoop = true;
 
     if (settings.attribute("presentation:force-manual")=="true")
         _spManualSwitch = true;
+    loadOasisPresentationCustomSlideShow( settingsDoc );
+}
+
+void KPresenterDoc::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
+{
+    //todo
 }
 
 void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )

@@ -573,6 +573,8 @@ protected:
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
     void loadOasisPresentationSettings( QDomNode &settingsDoc );
     void saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter );
+    void loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc );
+
     void saveOasisHeaderFooter( KoXmlWriter &stickyTmpWriter , KoSavingContext& context );
     void loadOasisHeaderFooter( QDomNode & drawPage, KoOasisContext & context);
 
