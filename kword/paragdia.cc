@@ -627,6 +627,7 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
 
     double _spacing = lay.lineSpacing;
     str = QString::null;
+    eSpacing->setEnabled(false);
     if ( _spacing == 0 )
         cSpacing->setCurrentItem( 0 );
     else if ( _spacing == KWParagLayout::LS_ONEANDHALF )
@@ -636,6 +637,7 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
     else
     {
         cSpacing->setCurrentItem( 3 );
+        eSpacing->setEnabled(true);
         str = QString::number( KWUnit::userValue( _spacing, m_unit ) );
     }
     eSpacing->setText( str );
