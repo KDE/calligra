@@ -156,14 +156,14 @@ VShearTool::recalc()
 	else if( m_activeNode == node_mt )
 	{
 		m_s1 = 0;
-		m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
+		m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) );
 	}
 	else if( m_activeNode == node_rt )
 	{
 	}
 	else if( m_activeNode == node_rm)
 	{
-		m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
+		m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) );
 		m_s2 = 0;
 	}
 	else if( m_activeNode == node_rb )
@@ -172,14 +172,14 @@ VShearTool::recalc()
 	else if( m_activeNode == node_mb )
 	{
 		m_s1 = 0;
-		m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
+		m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) );
 	}
 	else if( m_activeNode == node_lb )
 	{
 	}
 	else if( m_activeNode == node_lm )
 	{
-		m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
+		m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) );
 		m_s2 = 0;
 	}
 
