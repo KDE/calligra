@@ -75,11 +75,7 @@ void KPPartObject::setSize( int _width, int _height )
 /*======================== draw ==================================*/
 void KPPartObject::setOrig( QPoint _point )
 {
-    KPObject::setOrig( _point );
-
-    child->setGeometry( QRect( orig, ext ) );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                                     getOrig().y() + getSize().height() / 2 ) );
+    setOrig(_point.x(), _point.y());
 }
 
 /*======================== draw ==================================*/
@@ -96,11 +92,7 @@ void KPPartObject::setOrig( int _x, int _y )
 /*======================== draw ==================================*/
 void KPPartObject::moveBy( QPoint _point )
 {
-    KPObject::moveBy( _point );
-
-    child->setGeometry( QRect( orig, ext ) );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                                     getOrig().y() + getSize().height() / 2 ) );
+    moveBy(_point.x(), _point.y());
 }
 
 /*======================== draw ==================================*/
