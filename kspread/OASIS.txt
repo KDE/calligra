@@ -33,6 +33,7 @@ Format
    [x] Numeric format
    [ ] Borders
    [ ] Border shadow
+   [ ] Font color
 
 Sheet
    [x] Sheet name
