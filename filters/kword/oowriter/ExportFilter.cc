@@ -34,6 +34,7 @@
 
 #include <qmap.h>
 #include <qiodevice.h>
+#include <qbuffer.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
@@ -43,6 +44,7 @@
 
 #include <koPageLayout.h>
 #include <koPictureKey.h>
+#include <koPicture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -844,12 +846,13 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
     return true;
 }
 
-bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
+
+bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType anchorType )
 {
     kdDebug(30518) << "New picture: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
-    QString koStoreName(anchor.picture.koStoreName);
+    const QString koStoreName(anchor.picture.koStoreName);
 
     QByteArray image;
 
@@ -896,8 +899,44 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
 
     kdDebug(30518) << "Picture loaded: " << koStoreName << endl;
 
-    const double height=anchor.frame.bottom - anchor.frame.top;
-    const double width =anchor.frame.right  - anchor.frame.left;
+    double height = 0.0;
+    double width = 0.0;
+
+    if ( anchorType == AnchorTextImage )
+    {
+        // Text image have no frameset, so the only size information is in the picture itself.
+        QBuffer buffer( image.copy() ); // Be more safe than sorry and do not allow shallow copy
+        KoPicture pic;
+        buffer.open( IO_ReadOnly );
+        if ( pic.load( &buffer, strExtension ) )
+        {
+            const QSize size ( pic.getOriginalSize() );
+            height = size.height();
+            width = size.width();
+        }
+        else
+        {
+            kdWarning(30518) << "Could not load KoPicture: " << koStoreName << endl;
+        }
+        buffer.close();
+    }
+    else
+    {
+        // Use frame size
+        height=anchor.frame.bottom - anchor.frame.top;
+        width =anchor.frame.right  - anchor.frame.left;
+    }
+
+    if ( height < 1.0 )
+    {
+        kdWarning(30518) << "Silly height for " << koStoreName << " : "  << height << endl;
+        height = 72.0;
+    }
+    if ( width < 1.0 )
+    {
+        kdWarning(30518) << "Silly width for " << koStoreName << " : "  << width << endl;
+        width = 72.0;
+    }
 
      // We need a 32 digit hex value of the picture number
      // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)
@@ -916,7 +955,15 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<draw:image draw:name=\"" << anchor.picture.key.filename() << "\"";
     *m_streamOut << " draw:style-name=\"Graphics\""; // ### TODO: should be an automatic "graphic" style name instead
-    *m_streamOut << " text:anchor-type=\"paragraph\"";
+    if ( anchorType == AnchorNonInlined )
+    {
+        // ### TODO: correctly set a OOWriter frame positioned on the page
+        *m_streamOut << " text:anchor-type=\"paragraph\"";
+    }
+    else
+    {
+        *m_streamOut << " text:anchor-type=\"as-char\"";
+    }
     *m_streamOut << " svg:height=\"" << height << "pt\" svg:width=\"" << width << "pt\"";
     *m_streamOut << " draw:z-index=\"0\" xlink:href=\"#" << ooName << "\"";
     *m_streamOut << " xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"";
@@ -925,7 +972,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     if (m_zip)
     {
 #if 0
-        // ### FIXME Why is the following line not working? (It makes unzip having problems with meta.xml)
+        // ### FIXME Why is the following line not working (at least with KDE 3.1)? (It makes unzip having problems with meta.xml)
         m_zip->writeFile(ooName,QString::null, QString::null, image.size(), image.data());
 #else
         zipPrepareWriting(ooName);
@@ -1115,11 +1162,11 @@ void OOWriterWorker::processAnchor ( const QString&,
     const TextFormatting& /*formatLayout*/, //TODO
     const FormatData& formatData)
 {
-    // We have an image or a table
+    // We have a picture or a table
     if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
         || (5==formatData.frameAnchor.type) ) // <CLIPART>
     {
-        makePicture(formatData.frameAnchor);
+        makePicture( formatData.frameAnchor, AnchorInlined );
     }
     else if (6==formatData.frameAnchor.type)
     {
@@ -1130,6 +1177,14 @@ void OOWriterWorker::processAnchor ( const QString&,
         kdWarning(30518) << "Unsupported anchor type: "
             << formatData.frameAnchor.type << endl;
     }
+}
+
+void OOWriterWorker::processTextImage ( const QString&,
+    const TextFormatting& /*formatLayout*/,
+    const FormatData& formatData)
+{
+    kdDebug(30518) << "Text Image: " << formatData.frameAnchor.key.toString() << endl;
+    makePicture( formatData.frameAnchor, AnchorTextImage );
 }
 
 void OOWriterWorker::processParagraphData ( const QString &paraText,
@@ -1147,6 +1202,15 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
             if (1==(*paraFormatDataIt).id)
             {
                 processNormalText(paraText, formatLayout, (*paraFormatDataIt));
+            }
+            else if (2==(*paraFormatDataIt).id)
+            {
+                processTextImage(paraText, formatLayout, (*paraFormatDataIt));
+            }
+            else if ( 3 == (*paraFormatDataIt).id )
+            {
+                // Just a (KWord 0.8) tab stop, nothing else to do!
+                *m_streamOut << "<text:tab-stop/>";
             }
             else if (4==(*paraFormatDataIt).id)
             {

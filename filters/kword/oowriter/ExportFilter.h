@@ -57,6 +57,15 @@ class OOWriterWorker : public KWEFBaseWorker
 public:
     OOWriterWorker(void);
     virtual ~OOWriterWorker(void) { delete m_streamOut; }
+ public:
+    /// What is the type of the frameset anchor
+    enum AnchorType
+    {
+        AnchorUnknown = 0, // ### TODO: is this really needed?
+        AnchorInlined, ///< The frameset is inlined
+        AnchorNonInlined, ///< the frameset is not inlined
+        AnchorTextImage ///< This is a text image (KWord 0.8; inlined; only for pictures)
+    };
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
@@ -88,6 +97,9 @@ private:
     void processAnchor ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);
+    void processTextImage ( const QString&,
+        const TextFormatting& formatLayout,
+        const FormatData& formatData);
     QString textFormatToStyle(const TextFormatting& formatOrigin,
         const TextFormatting& formatData, const bool force, QString& key);
     QString layoutToParagraphStyle(const LayoutData& layoutOrigin,
@@ -95,7 +107,7 @@ private:
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
-    bool makePicture(const FrameAnchor& anchor);
+    bool makePicture( const FrameAnchor& anchor, const AnchorType anchorType );
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void declareFont(const QString& fontName);
     void writeFontDeclaration(void);
