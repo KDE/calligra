@@ -38,6 +38,7 @@ public:
   const char* inputFileName () const;
 
   virtual bool setup (GDocument* doc, const char* format) = 0;
+  virtual bool installed () { return true; }
   virtual bool importFromFile (GDocument *doc) = 0;
 
 protected:

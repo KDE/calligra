@@ -31,6 +31,7 @@ class GDocument;
 class GPolyline;
 
 class SplitLineCmd : public Command {
+  Q_OBJECT
 public:
   SplitLineCmd (GDocument* doc, GPolyline* o, int idx);
 

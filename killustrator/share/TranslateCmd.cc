@@ -23,6 +23,7 @@
 */
 
 #include "TranslateCmd.h"
+#include "TranslateCmd.moc"
 #include <klocale.h>
 #include <kapp.h>
 

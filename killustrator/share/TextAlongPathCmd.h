@@ -31,6 +31,7 @@ class GDocument;
 class GText;
 
 class TextAlongPathCmd : public Command {
+  Q_OBJECT
 public:
   TextAlongPathCmd (GDocument* doc, GText* obj, GObject* path);
 

@@ -23,6 +23,7 @@
 */
 
 #include "DuplicateCmd.h"
+#include "DuplicateCmd.moc"
 
 #include <iostream.h>
 #include <qclipboard.h>
@@ -32,6 +33,10 @@
 #include "GDocument.h"
 #include "GObject.h"
 #include "PStateManager.h"
+
+bool DuplicateCmd::repeatCmd = false;
+float DuplicateCmd::repOffX = 0.0;
+float DuplicateCmd::repOffY = 0.0;
 
 DuplicateCmd::DuplicateCmd (GDocument* doc) 
   : Command(i18n("Duplicate"))
@@ -54,9 +59,17 @@ DuplicateCmd::~DuplicateCmd () {
 }
 
 void DuplicateCmd::execute () {
-  float xoff = PStateManager::instance ()->duplicateXOffset ();
-  float yoff = PStateManager::instance ()->duplicateYOffset ();
+  float xoff;
+  float yoff;
 
+  if (repeatCmd) {
+    xoff = repOffX;
+    yoff = repOffY;
+  }
+  else {
+    xoff = PStateManager::instance ()->duplicateXOffset ();
+    yoff = PStateManager::instance ()->duplicateYOffset ();
+  }
   QWMatrix m;
   m.translate (xoff, yoff);
 
@@ -80,4 +93,15 @@ void DuplicateCmd::unexecute () {
   for (it = objects.begin (); it != objects.end (); it++)
       document->selectObject (*it);
 }
+
+void DuplicateCmd::resetRepetition () {
+  repeatCmd = false;
+}
+
+void DuplicateCmd::setRepetitionOffset (float dx, float dy) {
+  repOffX = dx + PStateManager::instance ()->duplicateXOffset ();
+  repOffY = dy + PStateManager::instance ()->duplicateYOffset ();
+  repeatCmd = true;
+}
+
 

@@ -23,6 +23,7 @@
 */
 
 #include "InsertPointCmd.h"
+#include "InsertPointCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

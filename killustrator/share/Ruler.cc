@@ -95,8 +95,10 @@ void Ruler::recalculateSize (QResizeEvent *) {
     buffer = 0L;
   }
 
+  /*
   if (! isVisible ())
     return;
+  */
 
   int w, h;
   

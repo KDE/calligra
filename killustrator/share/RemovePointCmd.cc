@@ -23,6 +23,7 @@
 */
 
 #include "RemovePointCmd.h"
+#include "RemovePointCmd.moc"
 #include <klocale.h>
 #include <kapp.h>
 

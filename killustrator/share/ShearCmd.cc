@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "ShearCmd.h"
+#include "ShearCmd.moc"
 #include <klocale.h>
 #include <kapp.h>
 

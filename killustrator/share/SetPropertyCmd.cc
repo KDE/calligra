@@ -23,6 +23,7 @@
 */
 
 #include "SetPropertyCmd.h"
+#include "SetPropertyCmd.moc"
 #include <klocale.h>
 #include <kapp.h>
 

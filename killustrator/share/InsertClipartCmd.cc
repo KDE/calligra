@@ -23,6 +23,7 @@
 */
 
 #include "InsertClipartCmd.h"
+#include "InsertClipartCmd.moc"
 #include "qwmf.h"
 #include "GClipart.h"
 #include <klocale.h>

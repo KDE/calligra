@@ -23,6 +23,7 @@
 */
 
 #include "PasteCmd.h"
+#include "PasteCmd.moc"
 
 #include <iostream.h>
 #include <strstream.h>

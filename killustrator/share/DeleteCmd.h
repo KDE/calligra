@@ -33,6 +33,7 @@ class GDocument;
 class GObject;
 
 class DeleteCmd : public Command {
+  Q_OBJECT
 public:
   DeleteCmd (GDocument* doc);
   ~DeleteCmd ();

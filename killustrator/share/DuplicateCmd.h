@@ -32,6 +32,7 @@ class GDocument;
 class GObject;
 
 class DuplicateCmd : public Command {
+  Q_OBJECT
 public:
   DuplicateCmd (GDocument* doc);
   ~DuplicateCmd ();
@@ -39,9 +40,15 @@ public:
   void execute ();
   void unexecute ();
 
+  static void resetRepetition ();
+  static void setRepetitionOffset (float dx, float dy);
+
 private:
   GDocument* document;
   list<GObject*> objects, new_objects;
+
+  static bool repeatCmd; // repeat command with given offsets
+  static float repOffX, repOffY; // offset for repetition
 };
 
 #endif

@@ -80,6 +80,7 @@ class FilterManager;
 class KAction;
 class KToggleAction;
 class KColorBarAction;
+class KSelectAction;
 
 class KIllustratorView : public KoView, public MainView
 {
@@ -265,13 +266,13 @@ private slots:
     void slotSplitLine( bool );
     void slotLayers();
     void slotDocumentInfo();
+  void slotViewZoom (const QString&);
 
 protected:
   KIllustratorDocument *m_pDoc;
   EditPointTool *editPointTool;
   InsertPartTool *insertPartTool;
   QPopupMenu *objMenu;
-  QArray<float> zFactors;
 
   bool m_bShowGUI;
   bool m_bShowRulers;
@@ -343,7 +344,7 @@ protected:
     KToggleAction* m_newNode;
     KToggleAction* m_deleteNode;
     KToggleAction* m_splitLine;
-
+  KSelectAction* m_viewZoom;
     QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
 	    lastExportDir, lastImportDir, lastPaletteDir;
     QString lastExport;

@@ -31,7 +31,8 @@
 
 class GDocument;
 
-class Command {
+class Command : public QObject {
+  Q_OBJECT
 protected:
   Command (const QString& n) { name = n; }
 
@@ -52,6 +53,7 @@ private:
 };
 
 class ObjectManipCmd : public Command {
+  Q_OBJECT
 protected:
   ObjectManipCmd (GDocument* doc, const QString& name);
   ObjectManipCmd (GObject* obj, const QString& name);

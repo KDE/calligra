@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreatePolygonCmd.h"
+#include "CreatePolygonCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

@@ -32,6 +32,7 @@ class GObject;
 class GGroup;
 
 class GroupCmd : public Command {
+  Q_OBJECT
 public:
   GroupCmd (GDocument* doc);
   ~GroupCmd ();

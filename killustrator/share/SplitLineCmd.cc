@@ -23,6 +23,7 @@
 */
 
 #include "SplitLineCmd.h"
+#include "SplitLineCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

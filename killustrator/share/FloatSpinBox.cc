@@ -35,7 +35,7 @@
 #endif
 
 FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name, 
-			    int align) : QSpinBox (parent, name/*, align*/) {
+			    int) : QSpinBox (parent, name/*, align*/) {
   minval = 1;
   maxval = 10;
   step = 1;

@@ -31,6 +31,7 @@ class GDocument;
 class GText;
 
 class CreateTextCmd : public Command {
+  Q_OBJECT
 public:
   CreateTextCmd (GDocument* doc, GText* obj);
   CreateTextCmd (GDocument* doc, const Coord& p, const char* str);

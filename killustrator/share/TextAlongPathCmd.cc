@@ -23,6 +23,7 @@
 */
 
 #include "TextAlongPathCmd.h"
+#include "TextAlongPathCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

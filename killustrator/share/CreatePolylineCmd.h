@@ -33,6 +33,7 @@ class GDocument;
 class GPolyline;
 
 class CreatePolylineCmd : public Command {
+  Q_OBJECT
 public:
   CreatePolylineCmd (GDocument* doc, GPolyline* line);
   CreatePolylineCmd (GDocument* doc, const QList<Coord>& pts);

@@ -31,6 +31,7 @@ class GDocument;
 class GPolygon;
 
 class CreateRectangleCmd : public Command {
+  Q_OBJECT
 public:
   CreateRectangleCmd (GDocument* doc, GPolygon* obj);
   CreateRectangleCmd (GDocument* doc, const Coord& p0, const Coord& p1, 

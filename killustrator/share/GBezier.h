@@ -70,6 +70,7 @@ public:
   void initBasePoint (int idx);
   void setWorkingSegment (int seg);
   void setClosed (bool flag);
+  bool isClosed () const { return closed; }
 
   virtual void getPath (vector<Coord>& path);
 

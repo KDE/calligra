@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreateBezierCmd.h"
+#include "CreateBezierCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

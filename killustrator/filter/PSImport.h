@@ -22,32 +22,22 @@
 
 */
 
-#ifndef AddLineSegmentCmd_h_
-#define AddLineSegmentCmd_h_
+#ifndef PSImport_h_
+#define PSImport_h_
 
-#include "Command.h"
+#include "GDocument.h"
+#include "ImportFilter.h"
 
-#include <qlist.h>
-
-class GDocument;
-class GPolyline;
-
-class AddLineSegmentCmd : public Command {
-  Q_OBJECT
+class PSImport : public ImportFilter {
 public:
-  AddLineSegmentCmd (GDocument* doc, GPolyline* obj, int idx,
-                     QList<Coord>& pnts);
+  PSImport ();
+  ~PSImport ();
 
-  ~AddLineSegmentCmd ();
-
-  void execute ();
-  void unexecute ();
-
+  bool setup (GDocument* doc, const char* format);
+  bool importFromFile (GDocument *doc);
+  bool installed ();
 private:
-  GDocument* document;
-  GPolyline* line;
-  int index;
-  QList<Coord> points;
+  QString fullPath;
 };
-
+  
 #endif

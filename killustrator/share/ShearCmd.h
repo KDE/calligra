@@ -33,6 +33,7 @@
  * and <tt>y</tt>.
  */
 class ShearCmd : public ObjectManipCmd {
+  Q_OBJECT
 public:
   ShearCmd (GDocument* doc, const Coord& center, float x, float y);
 

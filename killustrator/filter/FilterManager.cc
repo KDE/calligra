@@ -35,6 +35,8 @@
 #include "filter/KilluImport.h"
 #include "filter/XfigImport.h"
 #include "filter/CmxImport.h"
+#include "filter/PSImport.h"
+#include "filter/SVGExport.h"
 
 #include <qstrlist.h>
 
@@ -46,28 +48,30 @@ FilterManager::FilterManager () {
 
 void FilterManager::installDefaultFilters () {
   ImageExport* filter = new ImageExport ();
+  if (filter->installed ()) {
 #ifdef HAVE_QIMGIO
-  filters.insert ("JPEG", new FilterInfo (FilterInfo::FKind_Export,
-					  "JPEG Image Format", "jpg",
-					  "Kai-Uwe Sattler",
-					  "1.0", 0L, filter));
-  filters.insert ("PNG", new FilterInfo (FilterInfo::FKind_Export,
-					  "PNG Image Format", "png",
-					  "Kai-Uwe Sattler",
-					  "1.0", 0L, filter));
+    filters.insert ("JPEG", new FilterInfo (FilterInfo::FKind_Export,
+					    "JPEG Image Format", "jpg",
+					    "Kai-Uwe Sattler",
+					    "1.0", 0L, filter));
+    filters.insert ("PNG", new FilterInfo (FilterInfo::FKind_Export,
+					   "PNG Image Format", "png",
+					   "Kai-Uwe Sattler",
+					   "1.0", 0L, filter));
 #endif
-  filters.insert ("PPM", new FilterInfo (FilterInfo::FKind_Export,
-					  "PPM Image Format", "ppm",
-					  "Kai-Uwe Sattler",
-					  "1.0", 0L, filter));
-  filters.insert ("XPM", new FilterInfo (FilterInfo::FKind_Export,
-					  "XPM Image Format", "xpm",
-					  "Kai-Uwe Sattler",
-					  "1.0", 0L, filter));
-  filters.insert ("GIF", new FilterInfo (FilterInfo::FKind_Export,
-					  "GIF Image Format", "gif",
-					  "Kai-Uwe Sattler",
-					  "1.0", 0L, filter));
+    filters.insert ("PPM", new FilterInfo (FilterInfo::FKind_Export,
+					   "PPM Image Format", "ppm",
+					   "Kai-Uwe Sattler",
+					   "1.0", 0L, filter));
+    filters.insert ("XPM", new FilterInfo (FilterInfo::FKind_Export,
+					   "XPM Image Format", "xpm",
+					   "Kai-Uwe Sattler",
+					   "1.0", 0L, filter));
+    filters.insert ("GIF", new FilterInfo (FilterInfo::FKind_Export,
+					   "GIF Image Format", "gif",
+					   "Kai-Uwe Sattler",
+					   "1.0", 0L, filter));
+  }
   KilluImport* killuFilter = new KilluImport ();
   filters.insert ("KIllustrator", new FilterInfo (FilterInfo::FKind_Import,
 						  "KIllustrator Document", 
@@ -84,6 +88,11 @@ void FilterManager::installDefaultFilters () {
 					  "Encapsulated PostScript", "eps",
 					  "Kai-Uwe Sattler",
 					  "0.1", 0L, epsFilter));
+  SVGExport* svgFilter = new SVGExport ();
+  filters.insert ("SVG", new FilterInfo (FilterInfo::FKind_Export,
+					  "Scalable Vector Graphics", "svg",
+					  "Kai-Uwe Sattler",
+					  "0.1", 0L, svgFilter));
 #if not_yet
   CmxImport* cmxFilter = new CmxImport ();
   filters.insert ("CMX", new FilterInfo (FilterInfo::FKind_Import,
@@ -91,6 +100,12 @@ void FilterManager::installDefaultFilters () {
 						  "Kai-Uwe Sattler",
 						  "0.1", cmxFilter, 0L));
 #endif
+  PSImport* psFilter = new PSImport ();
+  if (psFilter->installed ())
+    filters.insert ("PS", new FilterInfo (FilterInfo::FKind_Import,
+					  "Postscript", "ps",
+					  "Kai-Uwe Sattler",
+					  "0.1", psFilter, 0L));
 }
 
 QString FilterManager::importFilters () {

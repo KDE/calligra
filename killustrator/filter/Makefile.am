@@ -9,7 +9,8 @@ noinst_HEADERS = FilterManager.h \
 	EPSExport.h \
 	KilluImport.h \
 	XfigImport.h \
-	CmxImport.h
+	SVGExport.h \
+	PSImport.h
 
 libfilter_la_SOURCES = FilterManager.cc \
 	ImageExport.cc \
@@ -17,4 +18,5 @@ libfilter_la_SOURCES = FilterManager.cc \
 	EPSExport.cc \
 	KilluImport.cc \
 	XfigImport.cc \
-	CmxImport.cc
+	SVGExport.cc \
+	PSImport.cc

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "DeleteCmd.h"
+#include "DeleteCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

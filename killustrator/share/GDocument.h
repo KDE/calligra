@@ -101,12 +101,19 @@ public:
   // delete the given layer as well as all contained objects
   void deleteLayer (GLayer *layer);
 
+  // return helpline layer
+  GLayer* layerForHelplines ();
+  bool helplineLayerIsActive ();
+
   void insertObject (GObject* obj);
   void selectObject (GObject* obj);
   void unselectObject (GObject* obj);
   void unselectAllObjects ();
   void selectAllObjects ();
-  
+
+  void selectNextObject ();
+  void selectPrevObject ();
+
   GObject* lastObject () { return last; }
   void setLastObject (GObject* obj);
 
@@ -168,6 +175,7 @@ public slots:
   void objectChanged ();
   void objectChanged (const Rect& r);
   void layerChanged ();
+  void helplineStatusChanged ();
 
 signals:
   void changed ();

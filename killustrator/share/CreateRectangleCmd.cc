@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreateRectangleCmd.h"
+#include "CreateRectangleCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

@@ -92,7 +92,7 @@ public:
   void addBezierSegment (const Coord& p1, const Coord& p2,
 			 const Coord& p3, const Coord& p4);
   void addSegment (const GSegment& s);
-
+  const GSegment& getSegment (int idx);
   int numOfSegments () const { return segments.size (); }
 
   void setClosed (bool flag);

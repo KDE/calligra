@@ -127,6 +127,13 @@ void GDocument::initialize () {
       delete *i;
     layers.clear ();
   }
+  // add layer for Helplines
+  GLayer *l = addLayer ();
+  l->setInternal ();
+  l->setName (I18N("Helplines"));
+  connect (l, SIGNAL(propertyChanged ()), 
+	   this, SLOT(helplineStatusChanged ()));
+
   active_layer = addLayer ();
 
   selBoxIsValid = false;
@@ -156,7 +163,7 @@ void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
-    if (layer->isVisible ()) {
+    if (! layer->isInternal () && layer->isVisible ()) {
       const list<GObject*>& contents = layer->objects ();
       for (list<GObject*>::const_iterator oi = contents.begin ();
 	   oi != contents.end (); oi++)
@@ -170,7 +177,7 @@ void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
-    if (layer->isVisible ()) {
+    if (! layer->isInternal () && layer->isVisible ()) {
       const list<GObject*>& contents = layer->objects ();
       for (list<GObject*>::const_iterator oi = contents.begin ();
 	   oi != contents.end (); oi++) {
@@ -309,7 +316,7 @@ Rect GDocument::boundingBoxForAllObjects () {
   for (vector<GLayer*>::iterator li = layers.begin (); 
        li != layers.end (); li++) {
     GLayer* layer = *li;
-    if (layer->isEditable ()) {
+    if (! layer->isInternal () && layer->isEditable ()) {
       list<GObject*>& contents = layer->objects ();
       list<GObject*>::iterator oi = contents.begin ();
       if (! init) {
@@ -354,6 +361,7 @@ void GDocument::deleteObject (GObject* obj) {
     if (selected) 
       selection.remove (obj);
     last = 0L;
+    setModified ();
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
     disconnect (obj, SIGNAL(changed(const Rect&)), 
 		this, SLOT(objectChanged (const Rect&)));
@@ -549,9 +557,12 @@ bool GDocument::saveToXml (ostream& os) {
 
   xml.endTag (); // </head>
 
-  bool save_layer_info = (layers.size () > 1);
+  bool save_layer_info = (layers.size () > 2);
   for (vector<GLayer*>::iterator li = layers.begin (); 
        li != layers.end (); li++) {
+    if ((*li)->isInternal ())
+      continue;
+
     if (save_layer_info) {
       int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
 	  ((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
@@ -892,11 +903,9 @@ bool GDocument::readFromXml (istream& is) {
       }
       if ((*first).name () == "comment") {//TB: Note This is not unicode!
 	strComment =  (*first).stringValue().c_str();
-	debug(":"+strComment+":");
       }
       if ((*first).name () == "keywords") { //TB: Note this isn't unicode!
         strKeywords = (*first).stringValue().c_str();
-	debug(":"+strKeywords+":");
       }
       first++;
     }
@@ -910,6 +919,9 @@ bool GDocument::readFromXml (istream& is) {
   do {
     if (! xml.readElement (elem))
       return false;
+
+    kapp->processEvents (500);
+
     if (elem.tag () == "layout") {
       // setup layout 
       list<XmlAttribute>::const_iterator first = 
@@ -1106,6 +1118,9 @@ GLayer* GDocument::activeLayer () {
  * Raise the given layer
  */
 void GDocument::raiseLayer (GLayer *layer) {
+  if (layer->isInternal ())
+    return;
+
   if (layer == layers.back ())
     // layer is already on top
     return;
@@ -1125,6 +1140,9 @@ void GDocument::raiseLayer (GLayer *layer) {
  * Lower the given layer
  */
 void GDocument::lowerLayer (GLayer *layer) {
+  if (layer->isInternal ())
+    return;
+
   if (layer == layers.front ())
     // layer is already at bottom
     return;
@@ -1154,6 +1172,9 @@ GLayer* GDocument::addLayer () {
  * Delete the given layer as well as all contained objects
  */
 void GDocument::deleteLayer (GLayer *layer) {
+  if (layer->isInternal ())
+    return;
+
   if (layers.size () == 1)
     // we need at least one layer
     return;
@@ -1188,6 +1209,14 @@ void GDocument::deleteLayer (GLayer *layer) {
   emit changed ();
 }
 
+GLayer *GDocument::layerForHelplines () {
+  return layers[0];
+}
+
+bool GDocument::helplineLayerIsActive () {
+  return (active_layer->isInternal ());
+}
+ 
 void GDocument::printInfo (QString& s) {
     ostrstream os;
     int n = 0;
@@ -1244,6 +1273,11 @@ void GDocument::getHelplines (vector<float>& hlines, vector<float>& vlines,
   snap = snapToHelplines;
 }
 
+// called from internal layer when visible flag was changed
+void GDocument::helplineStatusChanged () {
+  emit gridChanged ();
+}
+
 void GDocument::setComment(QString s){
   comment = s;
 }
@@ -1259,3 +1293,31 @@ void GDocument::setKeywords(QString s){
 void GDocument::getKeywords(QString &s){
   s = keywords;
 }
+
+void GDocument::selectNextObject () {
+  GObject *newSel = 0L;
+
+  if (selectionIsEmpty ()) {
+    newSel = active_layer->objects ().front ();
+
+  }
+  else {
+    GObject *oldSel = selection.front ();
+    unsigned int idx = findIndexOfObject (oldSel);
+    if (++idx >= active_layer->objects ().size ()) 
+      idx = 0;
+    newSel = active_layer->objectAtIndex (idx);
+  }
+  setAutoUpdate (false);
+  unselectAllObjects ();
+
+  setAutoUpdate (true);
+  if (newSel) {
+    handle ().show (true);
+    selectObject (newSel);
+  }
+}
+
+void GDocument::selectPrevObject () {
+}
+

@@ -23,6 +23,7 @@
 */
 
 #include "SetTextCmd.h"
+#include "SetTextCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "DistributeCmd.h"
+#include "DistributeCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

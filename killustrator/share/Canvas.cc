@@ -44,15 +44,29 @@
 #include "version.h"
 #include <kconfig.h>
 
-QArray<float> Canvas::zoomFactors;
+#include "GPolyline.h" // for NEAR_DISTANCE
+#include "SelectionTool.h"
+
+//QArray<float> Canvas::zoomFactors;
 
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
 		const char* name) : QWidget (parent, name) {
+  zoomFactors.push_back (0.5);
+  zoomFactors.push_back (1.0);
+  zoomFactors.push_back (1.5);
+  zoomFactors.push_back (2.0);
+  zoomFactors.push_back (4.0);
+  zoomFactors.push_back (6.0);
+  zoomFactors.push_back (8.0);
+  zoomFactors.push_back (10.0);
+
   document = doc;
   resolution = res;
   zoomFactor = 1.0;
   drawBasePoints = false;
   viewport = vp;
+
+  installEventFilter (this);
 
   connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
   connect (document, SIGNAL (changed (const Rect&)),
@@ -107,10 +121,11 @@ void Canvas::calculateSize () {
   emit sizeChanged ();
 }
 
+/*
 void Canvas::initZoomFactors (QArray<float>& factors) {
   zoomFactors.duplicate (factors);
 }
-
+*/
 
 void Canvas::setZoomFactor (float factor) {
   zoomFactor = factor;
@@ -649,20 +664,42 @@ void Canvas::printDocument () {
 }
 
 void Canvas::zoomIn (int x, int y) {
-  int pos = zoomFactors.find (getZoomFactor ());
-  assert (pos != -1);
-  if (pos < (int) zoomFactors.size () - 1) {
-    setZoomFactor (zoomFactors[pos + 1]);
-    viewport->centerOn (x, y);
-    emit zoomFactorChanged (zoomFactors[pos + 1]);
+  for (unsigned int i = 0; i < zoomFactors.size (); i++) {
+    if (zoomFactors[i] == getZoomFactor ()) {
+      setZoomFactor (zoomFactors[i + 1]);
+      viewport->centerOn (x, y);
+      emit zoomFactorChanged (zoomFactors[i + 1]);
+      break;
+    }
   }
 }
 
 void Canvas::zoomOut () {
-  int pos = zoomFactors.find (getZoomFactor ());
-  assert (pos != -1);
-  if (pos > 0)
-    setZoomFactor (zoomFactors[pos - 1]);
+  for (unsigned int i = 0; i < zoomFactors.size (); i++) {
+    if (zoomFactors[i] == getZoomFactor ()) {
+      setZoomFactor (zoomFactors[i - 1]);
+      break;
+    }
+  }
+}
+
+int Canvas::insertZoomFactor (float z) {
+  vector<float>::iterator i;
+  int pos = 0;
+  for (i = zoomFactors.begin (); i != zoomFactors.end (); i++, pos++) {
+    if (*i == z) {
+      setZoomFactor (z);
+      return pos;
+    }
+    else if (*i > z) {
+      // insert at position i
+      zoomFactors.insert (i, z);
+      setZoomFactor (z);
+      return pos;
+    }
+  }
+  zoomFactors.push_back (z);
+  return zoomFactors.size ();
 }
 
 void Canvas::readGridProperties () {
@@ -683,6 +720,7 @@ void Canvas::readGridProperties () {
   config->setGroup ("Helplines");
   helplinesAreOn = config->readBoolEntry ("showHelplines");
   helplinesSnapIsOn = config->readBoolEntry ("snapTopHelplines");
+  document->layerForHelplines ()->setVisible (helplinesAreOn);
 
   config->setGroup (oldgroup);
 }
@@ -722,6 +760,8 @@ void Canvas::drawTmpHelpline (int x, int y, bool horizH) {
     pos = (float) x / zoomFactor - this->x ();
     tmpVertHelpline = pos;
   }
+  // it makes no sense to hide helplines yet
+  showHelplines (true);
   if (helplinesAreOn)
     updateView ();
 }
@@ -790,6 +830,7 @@ bool Canvas::alignToHelplines () {
 void Canvas::showHelplines (bool flag) {
   if (helplinesAreOn != flag) {
     helplinesAreOn = flag;
+    document->layerForHelplines ()->setVisible (helplinesAreOn);
     updateView ();
     emit gridStatusChanged ();
     saveGridProperties ();
@@ -800,9 +841,61 @@ bool Canvas::showHelplines () {
   return helplinesAreOn;
 }
 
+int Canvas::indexOfHorizHelpline (float pos) {
+  for (int i = 0; i < horizHelplines.size (); i++) {
+    if (pos - NEAR_DISTANCE < horizHelplines[i] && 
+	pos + NEAR_DISTANCE > horizHelplines[i])
+      return i;
+  }
+  return -1;
+}
+
+int Canvas::indexOfVertHelpline (float pos) {
+  for (unsigned int i = 0; i < vertHelplines.size (); i++) {
+    if (pos - NEAR_DISTANCE < vertHelplines[i] && 
+	pos + NEAR_DISTANCE > vertHelplines[i])
+      return i;
+  }
+  return -1;
+}
+
+void Canvas::updateHorizHelpline (int idx, float pos) {
+  horizHelplines[idx] = pos;
+  updateView ();
+}
+
+void Canvas::updateVertHelpline (int idx, float pos) {
+  vertHelplines[idx] = pos;
+  updateView ();
+}
+
+void Canvas::updateHelplines () {
+  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+}
+
 void Canvas::updateGridInfos () {
   document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
   document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-  saveGridProperties ();
-  emit gridStatusChanged ();
+  if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
+    showHelplines (document->layerForHelplines ()->isVisible ());
+  else {
+    saveGridProperties ();
+    emit gridStatusChanged ();
+  }
+}
+
+bool Canvas::eventFilter (QObject *o, QEvent *e) {
+  if (e->type () == QEvent::KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Tab) {
+      if (toolController->getActiveTool ()->isA ("SelectionTool"))
+	((SelectionTool *) 
+	 toolController->getActiveTool ())->processTabKeyEvent (document, 
+								this);
+    }
+    else
+      keyPressEvent (ke);
+    return true;
+  }
+  return false;
 }

@@ -26,6 +26,7 @@
 #include <strstream.h>
 #include <qclipboard.h>
 #include "CutCmd.h"
+#include "CutCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

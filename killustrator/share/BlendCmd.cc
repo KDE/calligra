@@ -23,6 +23,7 @@
 */
 
 #include "BlendCmd.h"
+#include "BlendCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

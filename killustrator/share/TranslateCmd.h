@@ -31,11 +31,15 @@
  * Translates the selected objects of the given document <tt>doc</tt>
  * by the values of <tt>x</tt> and <tt>y</tt>.
  */
-class TranslateCmd : public ObjectManipCmd {
+class TranslateCmd : public ObjectManipCmd { 
+  Q_OBJECT
 public:
   TranslateCmd (GDocument* doc, float x, float y);
 
   void execute ();
+
+  float xOffset () const { return dx; }
+  float yOffset () const { return dy; }
 
 private:
   float dx, dy;

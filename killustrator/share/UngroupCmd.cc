@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "UngroupCmd.h"
+#include "UngroupCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

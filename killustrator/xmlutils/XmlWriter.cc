@@ -31,8 +31,22 @@ XmlWriter::XmlWriter (ostream& os)
   strm << "<?xml version=\"1.0\"?>" << endl;
 }
 
+XmlWriter::XmlWriter (ostream& os, bool standalone) 
+  : strm (os.rdbuf ()) {
+  strm << "<?xml version=\"1.0\" standalone=\"";
+  if (standalone)
+    strm << "yes";
+  else
+    strm << "no";
+  strm << "\" ?>" << endl;
+}
+
 XmlWriter::~XmlWriter () {
   flush ();
+}
+
+void XmlWriter::docType (const char *str) {
+  strm << "<!DOCTYPE " << str << ">" << endl;
 }
 
 void XmlWriter::startTag (const char* id, bool closeIt, bool empty) {

@@ -32,6 +32,7 @@ class GDocument;
 class GPolyline;
 
 class RemovePointCmd : public Command {
+  Q_OBJECT
 public:
   RemovePointCmd (GDocument* doc, GPolyline* o, int idx);
 

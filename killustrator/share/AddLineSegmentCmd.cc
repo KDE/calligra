@@ -23,6 +23,7 @@
 */
 
 #include "AddLineSegmentCmd.h"
+#include "AddLineSegmentCmd.moc"
 #include <klocale.h>
 
 #include "GPolyline.h"

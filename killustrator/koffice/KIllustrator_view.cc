@@ -113,18 +113,6 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
   // restore default settings
   PStateManager::instance ();
 
-  zFactors.resize (8);
-  zFactors[0] = 0.5;
-  zFactors[1] = 1.0;
-  zFactors[2] = 1.5;
-  zFactors[3] = 2.0;
-  zFactors[4] = 4.0;
-  zFactors[5] = 6.0;
-  zFactors[6] = 8.0;
-  zFactors[7] = 10.0;
-
-  Canvas::initZoomFactors (zFactors);
-
   cout << "connect doc" << endl;
   /*
   QObject::connect (m_pDoc,
@@ -214,6 +202,24 @@ void KIllustratorView::createGUI()
     // Extras menu
     m_options = new KAction( i18n("Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
 
+    //
+    m_viewZoom = new KSelectAction (i18n ("Zoom"), 0, actionCollection (), 
+				    "view_zoom");
+    QStringList zooms;
+    zooms << "50%";
+    zooms << "100%";
+    zooms << "150%";
+    zooms << "200%";
+    zooms << "400%";
+    zooms << "600%";
+    zooms << "800%";
+    zooms << "1000%";
+
+    ((KSelectAction *) m_viewZoom)->setItems (zooms);
+    ((KSelectAction *) m_viewZoom)->setCurrentItem (2);
+    connect (((KSelectAction *) m_viewZoom), 
+	     SIGNAL(activated(const QString &)), 
+             this, SLOT(slotViewZoom(const QString &))); 
     // Colorbar action
 
     QValueList<QColor> colorList;
@@ -1194,6 +1200,15 @@ void KIllustratorView::slotLayers()
 
 void KIllustratorView::slotDocumentInfo () {
   DocumentInfo::showInfo (m_pDoc->gdoc ());
+}
+
+void KIllustratorView::slotViewZoom (const QString& s) {
+  QString z (s);
+  z = z.replace (QRegExp ("%"), "");
+  z = z.simplifyWhiteSpace ();
+  float zoom = z.toFloat () / 100.0;
+  if (zoom != canvas->getZoomFactor ())
+    canvas->setZoomFactor (zoom);
 }
 
 #include "KIllustrator_view.moc"

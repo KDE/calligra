@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "RotateCmd.h"
+#include "RotateCmd.moc"
 #include <klocale.h>
 #include <kapp.h>
 

@@ -33,11 +33,12 @@
 
 using namespace std;
 
-int GLayer::lastID = 1;
+int GLayer::lastID = 0;
 
 GLayer::GLayer (GDocument* doc, const char* text) : 
   visibleFlag (true), printableFlag (true), 
-  editableFlag (true), wasEditable (true), document (doc) {
+  editableFlag (true), wasEditable (true), internalFlag (false),
+  document (doc) {
   if (text == 0L) {
     char buf[20];
 
@@ -80,6 +81,9 @@ void GLayer::setVisible (bool flag) {
 }
 
 void GLayer::setPrintable (bool flag) {
+  if (isInternal ())
+    return;
+
   if (printableFlag != flag) {
     printableFlag = flag;
     emit propertyChanged ();
@@ -94,6 +98,11 @@ void GLayer::setEditable (bool flag) {
     wasEditable = editableFlag;
     emit propertyChanged ();
   }
+}
+
+void GLayer::setInternal () {
+  internalFlag = true;
+  printableFlag = false;
 }
 
 void GLayer::insertObject (GObject* obj) {
@@ -128,9 +137,12 @@ int GLayer::findIndexOfObject (GObject *obj) {
   if (i == contents.end ())
     return -1;
   else {
+    /* Coolo: That's not the same !!!!
     int n;
     distance(contents.begin (), i, n);
     return n;
+    */
+    return  distance (contents.begin (), i);
   }
 }
 
@@ -140,6 +152,16 @@ void GLayer::insertObjectAtIndex (GObject* obj, unsigned int idx) {
   contents.insert (i, obj);
   obj->setLayer (this);
 }
+
+GObject *GLayer::objectAtIndex (unsigned int idx) {
+  list<GObject*>::iterator i = contents.begin ();
+  advance (i, idx);
+  if (i != contents.end ())
+    return *i;
+  else
+    return 0L;
+}
+
 
 void GLayer::moveObjectToIndex (GObject* obj, unsigned int idx) {
   list<GObject*>::iterator i = find (contents.begin (), contents.end (), obj);

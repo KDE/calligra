@@ -63,6 +63,11 @@ public:
   bool alignToHelplines ();
   void showHelplines (bool flag);
   bool showHelplines ();
+  int indexOfHorizHelpline (float pos);
+  int indexOfVertHelpline (float pos);
+  void updateHorizHelpline (int idx, float pos);
+  void updateVertHelpline (int idx, float pos);
+  void updateHelplines ();
 
   void showGrid (bool flag);
   bool showGrid () const { return gridIsOn; }
@@ -93,9 +98,13 @@ public:
 
   float scaleFactor () const;
 
-  static void initZoomFactors (QArray<float>& factors);
+  const vector<float>& getZoomFactors () const { return zoomFactors; }
+  //  static void initZoomFactors (QArray<float>& factors);
+  int insertZoomFactor (float z);
 
 protected:
+  bool eventFilter (QObject *, QEvent *);
+
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
 
@@ -163,7 +172,8 @@ private:
   bool helplinesAreOn, helplinesSnapIsOn;
   float tmpHorizHelpline, tmpVertHelpline;
 
-  static QArray<float> zoomFactors;
+  // static QArray<float> zoomFactors;
+  vector<float> zoomFactors;
 };
 
 #endif

@@ -31,6 +31,7 @@ class GDocument;
 class GOval;
 
 class CreateOvalCmd : public Command {
+  Q_OBJECT
 public:
   CreateOvalCmd (GDocument* doc, GOval* oval);
   CreateOvalCmd (GDocument* doc, const Coord& p0, const Coord& p1, 

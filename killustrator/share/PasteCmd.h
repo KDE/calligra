@@ -32,6 +32,7 @@ class GDocument;
 class GObject;
 
 class PasteCmd : public Command {
+  Q_OBJECT
 public:
   PasteCmd (GDocument* doc);
   ~PasteCmd ();

@@ -23,6 +23,7 @@
 */
 
 #include "InsertPixmapCmd.h"
+#include "InsertPixmapCmd.moc"
 #include "GPixmap.h"
 #include <klocale.h>
 

@@ -23,6 +23,7 @@
 */
 
 #include "ToCurveCmd.h"
+#include "ToCurveCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreateOvalCmd.h"
+#include "CreateOvalCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

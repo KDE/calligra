@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "InsertObjCmd.h"
+#include "InsertObjCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

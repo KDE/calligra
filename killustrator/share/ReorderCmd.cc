@@ -23,6 +23,7 @@
 */
 
 #include "ReorderCmd.h"
+#include "ReorderCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

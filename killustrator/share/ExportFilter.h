@@ -40,6 +40,7 @@ public:
 
   virtual bool setup (GDocument* doc, const char* format) = 0;
   virtual bool exportToFile (GDocument *doc) = 0;
+  virtual bool installed () { return true; }
 
 protected:
   QString filename;

@@ -47,10 +47,12 @@ public:
   bool isVisible () const { return visibleFlag; }
   bool isPrintable () const { return printableFlag; }
   bool isEditable () const { return editableFlag; }
+  bool isInternal () const { return internalFlag; }
 
   void setVisible (bool flag);
   void setPrintable (bool flag);
   void setEditable (bool flag);
+  void setInternal ();
 
   /*
    * Content management
@@ -64,6 +66,7 @@ public:
   int findIndexOfObject (GObject *obj);
   void insertObjectAtIndex (GObject* obj, unsigned int idx);
   void moveObjectToIndex (GObject* obj, unsigned int idx);
+  GObject *objectAtIndex (unsigned int idx);
 
 signals:
   void propertyChanged ();
@@ -74,7 +77,8 @@ private:
   bool visibleFlag, // layer is visible
     printableFlag,  // layer is printable
     editableFlag,   // layer is editable
-    wasEditable;    // layer was editable before the change to unvisible
+    wasEditable,    // layer was editable before the change to unvisible
+    internalFlag;   // layer used for helplines
 
   std::list<GObject*> contents; // the list of objects
   GDocument* document;

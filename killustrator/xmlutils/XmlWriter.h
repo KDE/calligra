@@ -64,6 +64,7 @@ public:
    * @param os       The open output stream for writing.
    */
   XmlWriter (ostream& os);
+  XmlWriter (ostream& os, bool standalone);
 
   /**
    * Desctructor.
@@ -176,6 +177,8 @@ public:
    * Get the raw output stream.
    */
   ostream& stream () { return strm; }
+
+  void docType (const char *str);
 
 private:
     std::stack<std::string, std::vector<std::string> > lastTags;

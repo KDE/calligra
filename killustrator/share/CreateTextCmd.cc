@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreateTextCmd.h"
+#include "CreateTextCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

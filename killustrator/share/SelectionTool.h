@@ -42,6 +42,8 @@ public:
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
   virtual void activate (GDocument* doc, Canvas*);
   virtual void deactivate (GDocument*, Canvas*);
+
+  void processTabKeyEvent (GDocument*, Canvas*);
   
   void rotate (GDocument* doc, float dx, float dy, float xp, float yp,
 	       bool permanent = false);
@@ -61,6 +63,14 @@ signals:
 
 private:
   void processKeyPressEvent (QKeyEvent* e, GDocument* doc, Canvas* canvas);
+
+  void processButtonPressForHelpline (QMouseEvent* e, GDocument* doc, 
+				      Canvas* canvas);
+  void processMouseMoveForHelpline (QMouseEvent* e, GDocument* doc, 
+				    Canvas* canvas);
+  void processButtonReleaseForHelpline (QMouseEvent* e, GDocument* doc, 
+					Canvas* canvas);
+
   void processButtonPressEvent (QMouseEvent* e, GDocument* doc, 
 				Canvas* canvas);
   void processMouseMoveEvent (QMouseEvent* e, GDocument* doc, Canvas* canvas);
@@ -70,7 +80,7 @@ private:
   enum State { S_Init, S_Pick, S_Intermediate1, S_Intermediate2, 
 	       S_Translate, S_Scale, S_Rubberband, S_RotateSelect,
 	       S_Rotate, S_Shear, S_MoveRotCenter, S_Inactive };
-  enum CursorType { C_Arrow, C_Size, C_Move, C_Rotate };
+  enum CursorType { C_Arrow, C_Size, C_Move, C_Rotate, C_Horiz, C_Vert };
   State state;
   CursorType ctype;
   Coord firstpos;
@@ -78,6 +88,7 @@ private:
   int oldmask;
   Coord selPoint[2];
   Coord rotCenter;
+  int dragHorizHelpline, dragVertHelpline;
 };
 
 #endif

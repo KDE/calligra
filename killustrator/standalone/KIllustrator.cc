@@ -132,16 +132,6 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
 
   psm = PStateManager::instance ();
 
-  zFactors.resize (8);
-  zFactors[0] = 0.5;
-  zFactors[1] = 1.0;
-  zFactors[2] = 1.5;
-  zFactors[3] = 2.0;
-  zFactors[4] = 4.0;
-  zFactors[5] = 6.0;
-  zFactors[6] = 8.0;
-  zFactors[7] = 10.0;
-
   canvas = 0L;
   scriptDialog = 0L;
   layerDialog = 0L;
@@ -163,7 +153,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   //  connect (dropZone, SIGNAL(dropAction (KDNDDropZone *)),
   //	   this, SLOT (dropActionSlot (KDNDDropZone *)));
 
-  Canvas::initZoomFactors (zFactors);
+  //  Canvas::initZoomFactors (zFactors);
 
   setCaption ("KIllustrator");
 
@@ -377,16 +367,22 @@ void KIllustrator::initToolBars () {
   /* main toolbar */
   toolbar = new KToolBar (this);
 
-  toolbar->insertButton (MainBarIcon ("filenew2"), ID_FILE_NEW, true,
+  toolbar->insertButton (MainBarIcon ("filenew"), ID_FILE_NEW, true,
 			 i18n ("New Document"));
   toolbar->insertButton (MainBarIcon ("fileopen"), ID_FILE_OPEN, true,
 			 i18n ("Open Document"));
-  toolbar->insertButton (MainBarIcon ("filefloppy"), ID_FILE_SAVE,
+  toolbar->insertButton (MainBarIcon ("filesave"), ID_FILE_SAVE,
 			 true, i18n ("Save Document"));
   toolbar->insertSeparator ();
   toolbar->insertButton (MainBarIcon ("fileprint"), ID_FILE_PRINT,
 			 true, i18n ("Print Document"));
   toolbar->insertSeparator ();
+  toolbar->insertButton (MainBarIcon ("undo.xpm"), ID_EDIT_UNDO, true,
+			 i18n ("Undo"));
+  toolbar->insertButton (MainBarIcon ("redo.xpm"), ID_EDIT_REDO, true,
+			 i18n ("Redo"));
+  toolbar->insertSeparator ();
+
   toolbar->insertButton (MainBarIcon ("editcopy"), ID_EDIT_COPY, true,
 			 i18n ("Copy"));
   toolbar->insertButton (MainBarIcon ("editpaste"), ID_EDIT_PASTE,
@@ -396,20 +392,23 @@ void KIllustrator::initToolBars () {
   toolbar->insertSeparator ();
 
   QStrList zoomStrList;
+  const vector<float>& zFactors = canvas->getZoomFactors ();
   for (int i = 0; i < (int) zFactors.size (); i++) {
     char buf[8];
     sprintf (buf, "%3.0f%%", zFactors[i] * 100);
     zoomStrList.append (buf);
   }
 
-  toolbar->insertCombo (&zoomStrList, 10, false, SIGNAL(activated(int)),
+  toolbar->insertCombo (&zoomStrList, 10, true, SIGNAL(activated(int)),
 			this, SLOT(zoomFactorSlot (int)),
 			true, QSTR_NULL,
 			85);
   QComboBox* combo = toolbar->getCombo (10);
-
+  QDoubleValidator *val = new QDoubleValidator (combo);
+  val->setRange (0.0, 1000.0, 1); 
+  combo->setValidator (val);
   for (int i = 0; i < (int) zFactors.size (); i++) {
-    if (zFactors[i] == 1) {
+    if (zFactors[i] == 1.0) {
       combo->setCurrentItem (i);
       break;
     }
@@ -701,8 +700,8 @@ void KIllustrator::initMenu () {
   effects->insertItem (i18n ("Blend..."), ID_EFFECTS_BLEND);
   connect (effects, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
-  //  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
-  //  extras->insertSeparator ();
+  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
+  extras->insertSeparator ();
   extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
   //  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
   //  extras->insertItem (i18n ("Dump History"), ID_HISTORY_DUMP);
@@ -745,7 +744,7 @@ void KIllustrator::initMenu () {
 
   // Save position of menubar
   restoreMenubarStatus ();
-  connect (menubar, SIGNAL (moved (menuPosition)), SLOT (saveMenubarStatus ()));
+  //  connect (menubar, SIGNAL (moved (menuPosition)), SLOT (saveMenubarStatus ()));
   connect (popupMenu, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 }
 
@@ -1475,13 +1474,33 @@ void KIllustrator::about (int id) {
 
 void KIllustrator::zoomFactorSlot (int idx) {
   if (canvas) {
-    canvas->setZoomFactor (zFactors[idx]);
-    // set focus to the canvas
-    canvas->setFocus ();
+    const vector<float>& zFactors = canvas->getZoomFactors ();
+    if (idx >= zFactors.size ()) {
+      QComboBox* combo = toolbar->getCombo (10);
+      float value = atof (combo->text (idx));
+      int pos = canvas->insertZoomFactor (value / 100.0);
+      // update combo box
+      combo->clear ();
+      QStrList zoomStrList;
+      for (int i = 0; i < (int) zFactors.size (); i++) {
+	char buf[8];
+	sprintf (buf, "%3.0f%%", zFactors[i] * 100);
+	zoomStrList.append (buf);
+      }
+      combo->clear ();
+      combo->insertStrList (&zoomStrList);
+      combo->setCurrentItem (pos);
+    }
+    else {
+      canvas->setZoomFactor (zFactors[idx]);
+      // set focus to the canvas
+      canvas->setFocus ();
+    }
   }
 }
 
 void KIllustrator::updateZoomFactor (float zFactor) {
+  const vector<float>& zFactors = canvas->getZoomFactors ();
   QComboBox* combo = toolbar->getCombo (10);
   for (int i = 0; i < (int) zFactors.size (); i++) {
     if (zFactors[i] == zFactor) {

@@ -74,6 +74,8 @@
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
+  <Action name="view_zoom"/>
+  <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
 </ToolBar>

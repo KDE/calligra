@@ -28,6 +28,9 @@
 #include "CommandHistory.moc"
 #include "version.h"
 
+#include "TranslateCmd.h"
+#include "DuplicateCmd.h"
+
 #define MAX_HISTSIZE 1000
 
 CommandHistory::CommandHistory () {
@@ -43,6 +46,16 @@ void CommandHistory::addCommand (Command *cmd, bool exec) {
   for (unsigned int i = index; i < num; i++)
     history.remove (index);
 
+  // special treatment of translation of duplicated objects
+  if (cmd->isA ("TranslateCmd")) {
+    if (history.count () > 0 && 
+	history.getLast ()->isA ("DuplicateCmd")) {
+      TranslateCmd* tcmd = (TranslateCmd *) cmd;
+      DuplicateCmd::setRepetitionOffset (tcmd->xOffset (), tcmd->yOffset ());
+    }
+    else
+      DuplicateCmd::resetRepetition ();
+  }
   history.append (cmd);
   if (history.count () > MAX_HISTSIZE)
     history.removeFirst ();

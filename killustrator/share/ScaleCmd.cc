@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "ScaleCmd.h"
+#include "ScaleCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

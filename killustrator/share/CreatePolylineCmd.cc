@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include "CreatePolylineCmd.h"
+#include "CreatePolylineCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

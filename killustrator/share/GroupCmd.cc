@@ -23,6 +23,7 @@
 */
 
 #include "GroupCmd.h"
+#include "GroupCmd.moc"
 #include <klocale.h>
 #include <map>
 

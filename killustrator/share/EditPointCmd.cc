@@ -23,6 +23,7 @@
 */
 
 #include "EditPointCmd.h"
+#include "EditPointCmd.moc"
 #include <klocale.h>
 
 #include "GDocument.h"

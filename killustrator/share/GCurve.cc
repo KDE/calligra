@@ -32,14 +32,11 @@
 #include "version.h"
 #include <math.h>
 
-// defined in GText.cc too
-#ifndef KDE_USE_FINAL
 static float seg_length (const Coord& p1, const Coord& p2) {
   float dx = p2.x () - p1.x ();
   float dy = p2.y () - p1.y ();
   return sqrt (dx * dx + dy * dy);
 }
-#endif
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier 
@@ -471,6 +468,12 @@ void GCurve::addSegment (const GSegment& s) {
   updateRegion (true);
 }
 
+const GSegment& GCurve::getSegment (int idx) {
+  list<GSegment>::iterator i = segments.begin ();
+  advance (i, idx);
+  return *i;
+}
+
 void GCurve::removePoint (int idx, bool update) {
   int pidx = 0;
   list<GSegment>::iterator i;
@@ -501,6 +504,8 @@ void GCurve::removePoint (int idx, bool update) {
 GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
   GCurve *res = new GCurve ();
   // TODO: Attribute setzen
+  res->outlineInfo = start->outlineInfo;
+  res->fillInfo = start->fillInfo;
 
   list<GSegment>::iterator si, ei;
   si = start->segments.begin ();
