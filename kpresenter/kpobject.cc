@@ -358,6 +358,29 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
         }
     }
 #endif
+
+// draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="visible" draw:move-protect="true" draw:size-protect="true"
+    //kpresenter doesn't have two attribute for protect move and protect size perhaps create two argument for 1.4
+    if ( styleStack.hasAttribute("draw:move-protect" ) )
+    {
+        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attribute("draw:move-protect" )<<endl;
+        protect = ( styleStack.attribute("draw:move-protect" ) == "true" );
+    }
+    if ( styleStack.hasAttribute("draw:size-protect" ) )
+    {
+        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attribute("draw:size-protect" )<<endl;
+        protect = ( styleStack.attribute("draw:size-protect" ) == "true" );
+    }
+
+    //not supported into kpresenter
+    if ( styleStack.hasAttribute("draw:textarea-vertical-align" ) )
+    {
+        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attribute("draw:textarea-vertical-align" )<<endl;
+    }
+    if ( styleStack.hasAttribute("draw:textarea-horizontal-align" ) )
+    {
+        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attribute("draw:textarea-horizontal-align" )<<endl;
+    }
     if ( styleStack.hasAttribute( "draw:shadow" ) &&
               styleStack.attribute( "draw:shadow" ) == "visible" )
     {
