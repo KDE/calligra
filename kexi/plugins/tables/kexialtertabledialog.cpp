@@ -105,13 +105,13 @@ void KexiAlterTableDialog::init()
 		if (slist.count()>1) {//there is more than 1 type name
 			buff->add(new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
 		}
-		
-		buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+
 		int len = field->length();
 		if(len == 0)
 			len = field->precision();
-
 		buff->add(new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
+
+		buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 
 		m_fields.insert(i, buff);
 	}
@@ -208,47 +208,55 @@ void KexiAlterTableDialog::slotCellSelected(int, int row)
 //	m_properties->setBuffer(m_constraints.at(row));
 }
 
-bool KexiAlterTableDialog::beforeSwitchTo(int)
+bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 {
-	KexiDB::TableSchema *nt = new KexiDB::TableSchema(m_table->name());
-	nt->setCaption(m_table->caption());
-
-	KexiTableViewData *data = m_view->data();
-	int i=0;
-	for(KexiTableItem *it = data->first(); it; it = data->next())
-	{
-		KexiProperty *prop = (*m_fields.at(i))["pkey"];
-		if (prop && !it->at(0).toString().isEmpty())
-		{
-			KexiDB::Field *f = new KexiDB::Field(nt);
-			f->setName(it->at(0).toString());
-			f->setType((KexiDB::Field::Type)it->at(1).toInt());
-			f->setPrimaryKey(prop->value().toBool());
-
-			nt->addField(f);
-		}
-		i++;
+	if (mode==Kexi::DesignViewMode) {
+		//todo
 	}
+	else if (mode==Kexi::DataViewMode) {
+		//todo
+		KexiDB::TableSchema *nt = new KexiDB::TableSchema(m_table->name());
+		nt->setCaption(m_table->caption());
 
-	KexiDB::TableSchema *s = mainWin()->project()->dbConnection()->tableSchema(m_table->name());
-	if(!s)
-	{
-		KexiDB::TableSchema *ts = mainWin()->project()->dbConnection()->tableSchema("kexi__objects");
-		mainWin()->project()->dbConnection()->dropTable(m_table->name());
-		mainWin()->project()->dbConnection()->createTable(nt);
-	}
-/*	else
-	{
-		KexiDB::Cursor *cursor = mainWin()->project()->dbConnection()->executeQuery(*s, KexiDB::Cursor::Buffered);
-		mainWin()->project()->dbConnection()->dropTable(m_table->name());
-		mainWin()->project()->dbConnection()->createTable(nt);
-		for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
+		KexiTableViewData *data = m_view->data();
+		int i=0;
+		for(KexiTableItem *it = data->first(); it; it = data->next(), i++)
 		{
-			
-		}
-		mainWin()->project()->dbConnection()->deleteCursor(cursor);
-	}*/
+			if (!(*it)[0].toString().isEmpty()) {//for nonempty names:
+				KexiProperty *prop = (*m_fields.at(i))["pkey"];
+				if (prop && !it->at(0).toString().isEmpty())
+				{
+					KexiDB::Field *f = new KexiDB::Field(nt);
+					f->setName(it->at(0).toString());
+					f->setType((KexiDB::Field::Type)it->at(1).toInt());
+					f->setPrimaryKey(prop->value().toBool());
 
+					nt->addField(f);
+				}
+			}
+		}
+
+#if 0 //js
+		KexiDB::TableSchema *s = mainWin()->project()->dbConnection()->tableSchema(m_table->name());
+		if(!s)
+		{
+			KexiDB::TableSchema *ts = mainWin()->project()->dbConnection()->tableSchema("kexi__objects");
+			mainWin()->project()->dbConnection()->dropTable(m_table->name());
+			mainWin()->project()->dbConnection()->createTable(nt);
+		}
+#endif 
+	/*	else
+		{
+			KexiDB::Cursor *cursor = mainWin()->project()->dbConnection()->executeQuery(*s, KexiDB::Cursor::Buffered);
+			mainWin()->project()->dbConnection()->dropTable(m_table->name());
+			mainWin()->project()->dbConnection()->createTable(nt);
+			for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
+			{
+				
+			}
+			mainWin()->project()->dbConnection()->deleteCursor(cursor);
+		}*/
+	}
 	return true;
 }
 
