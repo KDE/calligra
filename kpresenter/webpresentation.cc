@@ -513,7 +513,7 @@ void KPWebPresentationWizard::setupPage1()
     email = new KLineEdit( webPres.getEmail(), row3 );
 
     path=new KURLRequester( row4 );
-    path->fileDialog()->setMode( KFile::Directory);
+    path->setMode( KFile::Directory);
     path->lineEdit()->setText(webPres.getPath());
     connect(path, SIGNAL(textChanged(const QString&)),
            this,SLOT(slotChoosePath(const QString&)));
