@@ -6453,6 +6453,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
       table.setAttribute( "showFormula", (int)d->showFormula);
     table.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
     table.setAttribute( "lcmode", (int)d->lcMode);
+    table.setAttribute( "autoCalc", (int)d->autoCalc);
     table.setAttribute( "borders1.2", 1);
     if ( !d->password.isNull() )
     {
@@ -7553,6 +7554,7 @@ void KSpreadSheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings 
     d->showFormulaIndicator = items.parseConfigItemBool("ShowFormulaIndicator" );
     d->showPageBorders = items.parseConfigItemBool( "ShowPageBorders" );
     d->lcMode = items.parseConfigItemBool( "lcmode" );
+    d->autoCalc = items.parseConfigItemBool( "autoCalc" );
     d->showColumnNumber = items.parseConfigItemBool( "ShowPageBorders" );
     d->firstLetterUpper = items.parseConfigItemBool( "FirstLetterUpper" );
 }
@@ -7574,6 +7576,7 @@ void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint&
     settingsWriter.addConfigItem( "ShowFormulaIndicator", d->showFormulaIndicator );
     settingsWriter.addConfigItem( "ShowPageBorders",d->showPageBorders );
     settingsWriter.addConfigItem( "lcmode", d->lcMode );
+    settingsWriter.addConfigItem( "autoCalc", d->autoCalc );
     settingsWriter.addConfigItem( "ShowPageNumber", d->showColumnNumber );
     settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper );
 }
@@ -7828,6 +7831,11 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     if( table.hasAttribute( "lcmode" ) )
     {
         d->lcMode = (int)table.attribute("lcmode").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if ( table.hasAttribute( "autoCalc" ) )
+    {
+        d->autoCalc = ( int )table.attribute( "autoCalc" ).toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "columnnumber" ) )

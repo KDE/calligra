@@ -211,6 +211,7 @@
                 printPageLimitX        adjust zoom to limit of pages in x direction, 0 = no limit
                 printPageLimitY        adjust zoom to limit of pages in y direction, 0 = no limit
                 lcmode                 write on LxCx area selected
+                autoCalc	       Autorecalc formula
 -->
 <!ELEMENT table (paper|cell|chart|column|row|printrange-rect|printrepeatcolumns|printrepeatrows)*>
 <!ATTLIST table  name                   CDATA #REQUIRED
@@ -229,7 +230,8 @@
                  printPageLimitX        CDATA #REQUIRED
                  printPageLimitY        CDATA #REQUIRED
                  lcmode                 CDATA #REQUIRED
-                 borders1.2             CDATA #REQUIRED>
+                 borders1.2             CDATA #REQUIRED
+                 autoCalc		CDATA #REQUIRED>
 
 
 <!--	Describes one cell including contents.
