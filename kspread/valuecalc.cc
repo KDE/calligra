@@ -24,19 +24,19 @@
 #include <math.h>
 
 #include <kdebug.h>
+#include <kstaticdeleter.h>
 
 using namespace KSpread;
 
 KLocale *ValueCalc::locale = 0;
 
+static KStaticDeleter<ValueCalc> sd;
 ValueCalc* ValueCalc::_self = 0;
 
 ValueCalc * ValueCalc::self ()
 {
   if (!_self)
-  {
-    _self = new ValueCalc;
-  }
+    sd.setObject( _self, new ValueCalc() );
   return _self;
 }
 
