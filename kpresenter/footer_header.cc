@@ -383,6 +383,7 @@ void KPFooterHeaderEditor::slotCloseDia()
 /*================================================================*/
 void KPFooterHeaderEditor::slotHeaderPenBrush()
 {
+#if 0
     KPTextObject *header = doc->header();
     int flags = 0;
     flags = flags | StyleDia::SdPen;
@@ -418,11 +419,13 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 
     delete styleDia;
     slotUpdatePage();
+#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotFooterPenBrush()
 {
+#if 0
     KPTextObject *footer = doc->footer();
     int flags = 0;
     flags = flags | StyleDia::SdPen;
@@ -457,6 +460,7 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
 
     delete styleDia;
     slotUpdatePage();
+#endif
 }
 
 /*================================================================*/

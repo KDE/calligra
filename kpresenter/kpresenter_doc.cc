@@ -195,12 +195,13 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     ignoreSticky = TRUE;
     m_pixmapMap = 0L;
     raiseAndLowerObject = false;
+
     _header = new KPTextObject( this );
-    _header->setDrawEditRect( false );
+    _header->setDrawEditRect( true );
     _footer = new KPTextObject( this );
     _footer->setDrawEditRect( false );
     _footer->setDrawEmpty( false );
-    _header->setDrawEmpty( false );
+    _header->setDrawEmpty( true );
 
     headerFooterEdit = new KPFooterHeaderEditor( this );
     headerFooterEdit->setCaption( i18n( "KPresenter - Header/Footer Editor" ) );
@@ -2106,10 +2107,14 @@ void KPresenterDoc::recalcPageNum()
         page->recalcPageNum();
     //specific sticky page recalc
     QPtrListIterator<KPObject> it( m_stickyPage->objectList() );
-    for ( ; it.current() ; ++it )
+    //test for load file, activepage doesn't exist during loading
+    if(m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage())
     {
-	if ( it.current()->getType() == OT_TEXT )
-	    ( (KPTextObject*)it.current() )->recalcPageNum( this, m_kpresenterView->getCanvas()->activePage() );
+        for ( ; it.current() ; ++it )
+        {
+            if ( it.current()->getType() == OT_TEXT )
+                ( (KPTextObject*)it.current() )->recalcPageNum( this, m_kpresenterView->getCanvas()->activePage() );
+        }
     }
 }
 
