@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Master Text Document
+MimeType=application/vnd.sun.xml.writer.master
+Type=MimeType
+Icon=wordprocessing
+Patterns=*.sxg;*.SXG;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sxg
