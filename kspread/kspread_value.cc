@@ -38,7 +38,8 @@ class KSpreadValueData: public QShared
     QString s;
 
     // create empty data
-    KSpreadValueData(): QShared(), type( KSpreadValue::Empty ) { };
+    KSpreadValueData(): QShared(), type( KSpreadValue::Empty ),
+      b( false ), i( 0 ), f( 0.0 ) { };
 
     // destroys data
     ~KSpreadValueData(){ if( this == s_null ){ s_null = 0; } }
