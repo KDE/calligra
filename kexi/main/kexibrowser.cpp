@@ -307,7 +307,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 {
 	if (o==m_list->renameLineEdit()) {
 		if (e->type()==QEvent::Hide) 
-            itemRenameDone();
+			itemRenameDone();
 	}
 	else if (e->type()==QEvent::AccelOverride) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -321,7 +321,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 			if (ke->state()==ControlButton) {
 				slotDesignObject();
 			}
-			else if (ke->state()==0) {
+			else if (ke->state()==0 && !m_list->renameLineEdit()->isVisible()) {
 				QListViewItem *it = m_list->selectedItem();
 				if (it)
 					slotExecuteItem(it);
