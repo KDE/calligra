@@ -309,6 +309,12 @@ HOT TODO:
 
 CC_MAIL: dkite@shaw.ca
 
+2004-06-14
+Core/Parts
+- Por all parts: Instance GUI Clients are now splitted for per-view 
+  GUI clients (switched on view switching) and common GUI client 
+  (not switched within given dialog).
+
 2004-06-10
 2004-06-12
 KFormDesigner

@@ -113,7 +113,8 @@ class KexiMainWindowImpl::Private
 		QGuardedPtr<KexiPropertyBuffer> propBuffer;
 
 		KexiDialogDict dialogs;
-		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
+		KXMLGUIClient *curDialogGUIClient, *curDialogViewGUIClient,
+			*closedDialogGUIClient, *closedDialogViewGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
 
 		KexiNameDialog *nameDialog;
@@ -188,7 +189,9 @@ class KexiMainWindowImpl::Private
 		navToolWindow=0;
 		prj = 0;
 		curDialogGUIClient=0;
+		curDialogViewGUIClient=0;
 		closedDialogGUIClient=0;
+		closedDialogViewGUIClient=0;
 		nameDialog=0;
 		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
@@ -915,7 +918,7 @@ void KexiMainWindowImpl::slotPartLoaded(KexiPart::Part* p)
 		return;
 	connect(p, SIGNAL(newObjectRequest(KexiPart::Info*)),
 		this, SLOT(newObject(KexiPart::Info*)));
-	p->createGUIClient(this);
+	p->createGUIClients(this);
 }
 
 //! internal
@@ -1215,29 +1218,60 @@ KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 }
 
 void
+KexiMainWindowImpl::updateDialogViewGUIClient(KXMLGUIClient *viewClient)
+{
+	if (viewClient!=d->curDialogViewGUIClient) {
+		//view clients differ
+		kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old view gui client:"
+			<<d->curDialogViewGUIClient<<" new view gui client: "<<viewClient<<endl;
+		if (d->curDialogViewGUIClient) {
+			guiFactory()->removeClient(d->curDialogViewGUIClient);
+		}
+		if (viewClient) {
+			if (d->closedDialogViewGUIClient) {
+				//ooh, there is a client which dialog is already closed -- BUT it is the same client as our
+				//so: give up
+			}
+			else {
+				guiFactory()->addClient(viewClient);
+			}
+		}
+	}
+}
+
+void
 KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 {
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	kdDebug() << "KexiMainWindowImpl::activeWindowChanged() to = " << (dlg ? dlg->caption() : "<none>") << endl;
 
-	KXMLGUIClient *client=0;
+	KXMLGUIClient *client=0; //common for all views
+	KXMLGUIClient *viewClient=0; //specific for current dialog's view
 
 	if (!dlg)
 		client=0;
 	else if ( dlg->isRegistered()) {
-		client=dlg->guiClient();
+//		client=dlg->guiClient();
+		client=dlg->commonGUIClient();
+		viewClient=dlg->guiClient();
 		if (d->closedDialogGUIClient) {
 			if (client!=d->closedDialogGUIClient) {
 				//ooh, there is a client which dialog is already closed -- and we don't want it
 				guiFactory()->removeClient(d->closedDialogGUIClient);
 				d->closedDialogGUIClient=0;
 			}
-			else {
-//				d->closedDialogGUIClient=0;
+		}
+		if (d->closedDialogViewGUIClient) {
+			if (viewClient!=d->closedDialogViewGUIClient) {
+				//ooh, there is a client which dialog is already closed -- and we don't want it
+				guiFactory()->removeClient(d->closedDialogViewGUIClient);
+				d->closedDialogViewGUIClient=0;
 			}
 		}
 		if (client!=d->curDialogGUIClient) {
-			kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
+			//clients differ
+			kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old gui client:"
+				<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
 			if (d->curDialogGUIClient) {
 				guiFactory()->removeClient(d->curDialogGUIClient);
 				d->curDialog->detachFromGUIClient();
@@ -1253,6 +1287,7 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 				dlg->attachToGUIClient();
 			}
 		} else {
+			//clients are the same
 			if ((KexiDialogBase*)d->curDialog!=dlg) {
 				if (d->curDialog)
 					d->curDialog->detachFromGUIClient();
@@ -1260,12 +1295,35 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 					dlg->attachToGUIClient();
 			}
 		}
+		updateDialogViewGUIClient(viewClient);
+/*		if (viewClient!=d->curDialogViewGUIClient) {
+			//view clients differ
+			kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old view gui client:"
+				<<d->curDialogViewGUIClient<<" new view gui client: "<<viewClient<<endl;
+			if (d->curDialogViewGUIClient) {
+				guiFactory()->removeClient(d->curDialogViewGUIClient);
+			}
+			if (viewClient) {
+				if (d->closedDialogViewGUIClient) {
+					//ooh, there is a client which dialog is already closed -- BUT it is the same client as our
+					//so: give up
+				}
+				else {
+					guiFactory()->addClient(viewClient);
+				}
+			}
+		}*/
 	}
 	bool update_dlg_caption = dlg && dlg!=(KexiDialogBase*)d->curDialog && dlg->mdiParent();
 
 	if (d->curDialogGUIClient && !client)
 		guiFactory()->removeClient(d->curDialogGUIClient);
 	d->curDialogGUIClient=client;
+
+	if (d->curDialogViewGUIClient && !viewClient)
+		guiFactory()->removeClient(d->curDialogViewGUIClient);
+	d->curDialogViewGUIClient=viewClient;
+
 	bool dialogChanged = ((KexiDialogBase*)d->curDialog)!=dlg;
 	d->curDialog=dlg;
 
@@ -1598,6 +1656,14 @@ void KexiMainWindowImpl::switchToViewMode(Kexi::ViewMode mode)
 		d->toggleLastCheckedMode();
 		return;
 	}
+
+	//view changed: switch to this view's gui client
+	KXMLGUIClient *viewClient=d->curDialog->guiClient();
+	updateDialogViewGUIClient(viewClient);
+	if (d->curDialogViewGUIClient && !viewClient)
+		guiFactory()->removeClient(d->curDialogViewGUIClient);
+	d->curDialogViewGUIClient=viewClient; //remember
+
 	invalidateSharedActions();
 }
 
@@ -1847,9 +1913,13 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 
 	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
 
-	KXMLGUIClient *client = dlg->guiClient();
+	KXMLGUIClient *client = dlg->commonGUIClient();
+	KXMLGUIClient *viewClient = dlg->guiClient();
 	if (d->curDialogGUIClient==client) {
 		d->curDialogGUIClient=0;
+	}
+	if (d->curDialogViewGUIClient==viewClient) {
+		d->curDialogViewGUIClient=0;
 	}
 	if (client) {
 		//sanity: ouch, it is not removed yet? - do it now
@@ -1862,6 +1932,19 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		else {
 			//remember this - and MAYBE remove later, if needed
 			d->closedDialogGUIClient=client;
+		}
+	}
+	if (viewClient) {
+		//sanity: ouch, it is not removed yet? - do it now
+		if (d->closedDialogViewGUIClient && d->closedDialogViewGUIClient!=viewClient)
+			guiFactory()->removeClient(d->closedDialogViewGUIClient);
+		if (d->dialogs.isEmpty()) {//now there is no dialogs - remove client RIGHT NOW!
+			d->closedDialogViewGUIClient=0;
+			guiFactory()->removeClient(viewClient);
+		}
+		else {
+			//remember this - and MAYBE remove later, if needed
+			d->closedDialogViewGUIClient=viewClient;
 		}
 	}
 
@@ -2073,6 +2156,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	if (!d->prj || !item)
 		return 0;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
+	bool needsUpdateViewGUIClient = true;
 	if (dlg) {
 		dlg->activate();
 		if (dlg->currentViewMode()!=viewMode) {
@@ -2084,15 +2168,27 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 			}
 			if (cancelled)
 				return 0;
+			needsUpdateViewGUIClient = false;
 		}
 	}
 	else {
 		dlg = d->prj->openObject(this, *item, viewMode);
 	}
-	if (!activateWindow(dlg)) {
+
+	if (!dlg || !activateWindow(dlg)) {
 		//js TODO: add error msg...
 		return 0;
 	}
+
+	if (needsUpdateViewGUIClient) {
+		//view changed: switch to this view's gui client
+		KXMLGUIClient *viewClient=dlg->guiClient();
+		updateDialogViewGUIClient(viewClient);
+		if (d->curDialogViewGUIClient && !viewClient)
+			guiFactory()->removeClient(d->curDialogViewGUIClient);
+		d->curDialogViewGUIClient=viewClient; //remember
+	}
+	
 	invalidateViewModeActions();
 	invalidateSharedActions();
 	return dlg;

@@ -73,10 +73,14 @@ void KexiTablePart::initPartActions(KActionCollection *)
 	//TODO
 }
 
-void KexiTablePart::initInstanceActions( KActionCollection *col )
+void KexiTablePart::initInstanceActions( int mode, KActionCollection *col )
 {
-	//TODO
-	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
+	if (mode==Kexi::AllViewModes) {
+	}
+	else if (mode==Kexi::DataViewMode) {
+		new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
+		//TODO
+	}
 }
 
 #if 0

@@ -34,6 +34,7 @@ namespace Kexi
 {
 	/*! Modes of view for the dialogs. Used mostly for parts and KexiDialogBase. */
 	enum ViewMode { 
+		AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
 		DataViewMode = 1,
 		DesignViewMode = 2,
 		TextViewMode = 4 //!< Also known as SQL View Mode

@@ -46,7 +46,7 @@ Part::~Part()
 {
 }
 
-void Part::createGUIClient(KexiMainWindow *win)
+void Part::createGUIClients(KexiMainWindow *win)
 {
 	if (!m_guiClient) {
 		//create part's gui client
@@ -59,14 +59,25 @@ void Part::createGUIClient(KexiMainWindow *win)
 //		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").latin1());
 		//let init specific actions for parts
 		initPartActions( m_guiClient->actionCollection() );
-		win->guiFactory()->addClient(m_guiClient); //this client is added premanently
+		win->guiFactory()->addClient(m_guiClient); //this client is added permanently
 
 		//create part instance's gui client
-		m_instanceGuiClient = new GUIClient(win, this, true);
+//		m_instanceGuiClient = new GUIClient(win, this, true);
+
 		//default actions for part instance's gui client:
 		//NONE
 		//let init specific actions for part instances
-		initInstanceActions( m_instanceGuiClient->actionCollection() );
+		for (int mode = 1; mode <= 0x01000; mode <<= 1) {
+			if (m_supportedViewModes & mode) {
+				GUIClient *instanceGuiClient = new GUIClient(win, this, true);
+				m_instanceGuiClients.insert(mode, instanceGuiClient);
+				initInstanceActions( mode, instanceGuiClient->actionCollection() );
+			}
+		}
+		// also add an instance common for all modes (mode==0)
+		GUIClient *instanceGuiClient = new GUIClient(win, this, true);
+		m_instanceGuiClients.insert(0, instanceGuiClient);
+		initInstanceActions( 0 , instanceGuiClient->actionCollection() );
 	}
 }
 

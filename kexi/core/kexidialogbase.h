@@ -94,8 +94,13 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		//! \return Kexi part item used to create this window
 		KexiPart::Item *partItem() const { return m_item; }
 
-		//! Kexi part's gui client
-		inline KexiPart::GUIClient* guiClient() const { return m_part ? m_part->instanceGuiClient() : 0; }
+		//! Kexi dialog's gui COMMON client. 
+		//! It's obtained by querying part object for this dialog.
+		KexiPart::GUIClient* commonGUIClient() const;
+
+		//! Kexi dialog's gui client for currently selected view.
+		//! It's obtained by querying part object for this dialog.
+		KexiPart::GUIClient* guiClient() const;
 
 		/*! Tries to close the dialog. \return true if closing is accepted 
 		 (sometimes, user may not want to close the dialog by pressing cancel). 

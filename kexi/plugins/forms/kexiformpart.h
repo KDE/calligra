@@ -83,7 +83,7 @@ class KexiFormPart : public KexiPart::Part
 
 	protected:
 		virtual void initPartActions( KActionCollection *col );
-		virtual void initInstanceActions( KActionCollection *col );
+		virtual void initInstanceActions( int mode, KActionCollection *col );
 
 	private:
 		KFormDesigner::FormManager *m_manager;

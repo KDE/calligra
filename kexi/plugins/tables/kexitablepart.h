@@ -54,7 +54,7 @@ class KexiTablePart : public KexiPart::Part
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		virtual void initPartActions( KActionCollection *col );
-		virtual void initInstanceActions( KActionCollection *col );
+		virtual void initInstanceActions( int mode, KActionCollection *col );
 };
 
 class KexiTableDataSource : public KexiPart::DataSource

@@ -120,6 +120,14 @@ KexiQueryPart::dataSource()
 	return new KexiQueryDataSource(this);
 }
 
+void KexiQueryPart::initPartActions( KActionCollection *col )
+{
+}
+
+void KexiQueryPart::initInstanceActions( int mode, KActionCollection *col )
+{
+}
+
 //----------------
 
 KexiQueryPart::TempData::TempData(QObject* parent)

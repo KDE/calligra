@@ -214,6 +214,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/*! Helper: switches to view \a mode. */
 		void switchToViewMode(Kexi::ViewMode mode);
 
+		/*! Helper. Removed and/or adds GUI client for current dialog's view;
+		 on switching to other dialog (activeWindowChanged()) 
+		 or on switching to other view within the same dialog (switchToViewMode()). */
+		void updateDialogViewGUIClient(KXMLGUIClient *viewClient);
+
 	protected slots:
 
 		/**

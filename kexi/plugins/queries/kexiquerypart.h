@@ -64,6 +64,10 @@ class KexiQueryPart : public KexiPart::Part
 			KexiDB::QuerySchema *query;
 		};
 
+	protected:
+		virtual void initPartActions( KActionCollection *col );
+		virtual void initInstanceActions( int mode, KActionCollection *col );
+
 	private:
 		QueryData		m_data;
 };

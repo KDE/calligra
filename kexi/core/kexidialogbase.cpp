@@ -201,6 +201,20 @@ QString KexiDialogBase::itemIcon()
 	return m_part->info()->itemIcon();
 }
 
+KexiPart::GUIClient* KexiDialogBase::guiClient() const
+{
+	if (!m_part || m_currentViewMode<1)
+		return 0;
+	return m_part->instanceGuiClient(m_currentViewMode);
+}
+
+KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
+{
+	if (!m_part)
+		return 0;
+	return m_part->instanceGuiClient(0);
+}
+
 bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 {
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;

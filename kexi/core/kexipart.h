@@ -70,7 +70,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 		inline GUIClient *guiClient() const { return m_guiClient; }
 
-		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
+		inline GUIClient *instanceGuiClient(int mode = 0) const { return m_instanceGuiClients[mode]; }
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
@@ -90,12 +90,13 @@ class KEXICORE_EXPORT Part : public QObject
 	protected:
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
-		//! Creates GUICLient for this part, attached to \a win
+		//! Creates GUICLients for this part, attached to \a win
 		//! This method is called from KexiMainWindow
-		void createGUIClient(KexiMainWindow *win);
+		void createGUIClients(KexiMainWindow *win);
 
 		virtual void initPartActions( KActionCollection * ) {};
-		virtual void initInstanceActions( KActionCollection * ) {};
+//		virtual void initInstanceActions( KActionCollection * ) {};
+		virtual void initInstanceActions( int mode, KActionCollection * ) {};
 
 		inline void setInfo(Info *info) { m_info = info; }
 
@@ -116,7 +117,8 @@ class KEXICORE_EXPORT Part : public QObject
 	private:
 		Info *m_info;
 		GUIClient *m_guiClient;
-		GUIClient *m_instanceGuiClient;
+//		GUIClient *m_instanceGuiClient;
+		QIntDict<GUIClient> m_instanceGuiClients;
 
 	friend class Manager;
 	friend class KexiMainWindow;
