@@ -41,7 +41,6 @@ PasteTool::PasteTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 	m_dragdist = 0;
 	m_pCanvas = canvas;
 	m_Cursor = KisCursor::crossCursor();
-	m_pView = doc -> currentView();
 }
 
 PasteTool::~PasteTool() 

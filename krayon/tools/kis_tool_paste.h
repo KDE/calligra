@@ -54,7 +54,6 @@ protected:
 	   This will also contain effects and raster operations to
 	   be performed on selection and/or area pasted to */
 
-	KisView     *m_pView;
 	KisCanvas   *m_pCanvas;
 	QImage      clipImage;
 	QPixmap     clipPix;   
