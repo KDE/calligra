@@ -526,7 +526,10 @@ public:
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      */
     virtual void drawContents(QPainter*, const QRect&,
-                              QColorGroup&, bool /*onlyChanged*/);
+                              QColorGroup&, bool onlyChanged);
+
+    void drawContents(QPainter*, const QRect&,
+                      QColorGroup&, bool onlyChanged, KFormulaView* formulaView);
 
     virtual void activate( QWidget *_widget );
     virtual void deactivate();
@@ -567,7 +570,7 @@ public:
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
      */
     virtual void drawContents(QPainter*, const QRect&,
-                              QColorGroup&, bool /*onlyChanged*/);
+                              QColorGroup&, bool onlyChanged);
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent(QKeyEvent*);

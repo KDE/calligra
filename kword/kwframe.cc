@@ -1053,10 +1053,29 @@ QPicture *KWFormulaFrameSet::getPicture()
 }
 #endif
 
-void KWFormulaFrameSet::drawContents(QPainter* painter, const QRect&,
+void KWFormulaFrameSet::drawContents(QPainter* painter, const QRect& crect,
                                      QColorGroup&, bool /*onlyChanged*/)
 {
-    formula->draw(*painter);
+    QRegion reg = frameClipRegion(painter, frames.first(), crect);
+    if (!reg.isEmpty()) {
+        painter->save();
+        painter->setClipRegion(reg);
+        formula->draw(*painter);
+        painter->restore();
+    }
+}
+
+void KWFormulaFrameSet::drawContents(QPainter* painter, const QRect& crect,
+                                     QColorGroup&, bool,
+                                     KFormulaView* formulaView)
+{
+    QRegion reg = frameClipRegion(painter, frames.first(), crect);
+    if (!reg.isEmpty()) {
+        painter->save();
+        painter->setClipRegion(reg);
+        formulaView->draw(*painter, reg.boundingRect());
+        painter->restore();
+    }
 }
 
 /*================================================================*/
@@ -1133,9 +1152,17 @@ void KWFormulaFrameSet::create( QWidget */*parent*/ )
     updateFrames();
 }
 
-void KWFormulaFrameSet::slotFormulaChanged(int /*width*/, int /*height*/)
+void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
 {
     //kdDebug(32001) << "KWFormulaFrameSet::slotFormulaChanged" << endl;
+
+    // This is obvious not the way to do it.
+    // Anyway, the formula knows the space it needs. I would like to
+    // resize the frames accordingly.
+    for (QListIterator<KWFrame> iter = frameIterator(); iter.current() != 0; ++iter) {
+        iter.current()->setWidth(width);
+        iter.current()->setHeight(height);
+    }
     updateFrames();
     emit repaintChanged();
 }
@@ -1146,6 +1173,8 @@ void KWFormulaFrameSet::updateFrames()
     KWFrameSet::updateFrames();
     if ( !formula )
         return;
+
+    // This is buggy. Who knows how to fix?
     formula->moveTo(frames.at(0)->x(), frames.at(0)->y());
 #if 0
     if ( pic )
@@ -1224,7 +1253,6 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
     connect(fs, SIGNAL(repaintChanged()), this, SLOT(repaintChanged()));
-    //formulaView = new KFormulaView(fs->getFormula(), canvas->gui()->getView());
     formulaView = new KFormulaView(fs->getFormula(), canvas->viewport());
 
     focusInEvent();
@@ -1248,10 +1276,10 @@ void KWFormulaFrameSetEdit::repaintChanged()
  * Paint this frameset in "has focus" mode (e.g. with a cursor)
  */
 void KWFormulaFrameSetEdit::drawContents(QPainter* painter, const QRect& rect,
-                                         QColorGroup&, bool /*onlyChanged*/)
+                                         QColorGroup& gc, bool onlyChanged)
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::drawContents" << endl;
-    formulaView->draw(*painter, rect);
+    formulaFrameSet()->drawContents(painter, rect, gc, onlyChanged, formulaView);
 }
 
 /*================================================================*/
