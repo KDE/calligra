@@ -19,8 +19,37 @@
 
 #include "kexitableedit.h"
 
+KexiTableEdit::KexiTableEdit(QWidget* parent, const char* name)
+	: QWidget(parent, name)
+{
+	installEventFilter(this);
+}
+
 void KexiTableEdit::resize(int w, int h)
 {
 	QWidget::resize(w, h);
 	m_view->resize(w, h);
+}
+
+bool
+KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
+{
+	if(watched == this)
+	{
+		if(e->type() == QEvent::KeyPress)
+		{
+			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+
+			if(ev->key() == Key_Escape)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	return QWidget::eventFilter(watched, e);
 }

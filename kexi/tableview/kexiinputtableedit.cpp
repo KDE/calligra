@@ -86,7 +86,6 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 		if(e->type() == QEvent::KeyPress)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-			kdDebug() << "KeyPress = " << ev->text() << endl;
 
 			switch(m_type)
 			{
