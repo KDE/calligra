@@ -37,9 +37,11 @@ public:
                         const QString &from, const QString &to,
                         const QString &config = QString::null);
 protected:
-    void convert( const QDomDocument & inpdoc );
-    void writeParag( const QString & text );
+    void convert();
+    QDomDocument inpdoc;
     QDomDocument outdoc;
     QDomElement frameset;
+    QString titleStyleName;
+    QString aFont;
 };
 #endif // KPRKWORD_H
