@@ -163,3 +163,10 @@ bool KPresenterDocIface::setCustomVariableValue(const QString & varname, const Q
         return false;
     return true;
 }
+
+QString KPresenterDocIface::customVariableValue(const QString & varname)const
+{
+    if(doc->getVariableCollection()->customVariableExist(varname))
+        return doc->getVariableCollection()->getVariableValue( varname );
+    return QString::null;
+}
