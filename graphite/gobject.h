@@ -136,7 +136,6 @@ protected:
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
     GraphitePart *m_part;  // we need that for the history
-    GraphiteView *m_view;
     QList<QRect> *m_handles;  // contains all the handle rects
     bool m_changed;      // true, if the Apply btn is active
     bool m_created;      // dia created?
@@ -144,6 +143,7 @@ protected:
 private:
     QString m_type;        // Type of object
     QLineEdit *m_line;      // line ed. for the name
+    GraphiteView *m_view;
 };
 
 
