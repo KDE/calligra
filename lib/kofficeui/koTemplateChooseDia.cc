@@ -217,7 +217,7 @@ void KoTemplateChooseDia::setupDialog()
         QString groupName = grp.readEntry( "TemplateTab" );
         if ( groupName.isEmpty() ) { // Nothing in config file, use default group
             defaultGroup = d->tree->defaultGroup();
-            groupName = defaultGroup->name();
+            groupName = defaultGroup ? defaultGroup->name() : "" ;
         }
         else                       // Found name in config file, lookup the group
             defaultGroup = d->tree->find( groupName );
