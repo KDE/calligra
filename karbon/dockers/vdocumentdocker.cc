@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +42,7 @@
 #include "vlayer.h"
 #include "vlayercmd.h"
 #include "vdeletecmd.h"
+#include "vzordercmd.h"
 #include "vselection.h"
 #include "vstroke.h"
 #include "vcanvas.h"
@@ -519,13 +519,23 @@ VLayersTab::addLayer()
 void
 VLayersTab::raiseLayer()
 {
-	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
-	if( !layerItem || !layerItem->layer() )
-		return;
-	if ( m_document->canRaiseLayer( layerItem->layer()))
+	VCommand *cmd = 0L;
+	VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
+	if( layerItem )
 	{
-		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
-		                                layerItem->layer(), VLayerCmd::raiseLayer );
+		VLayer *layer = layerItem->layer();
+		if( layer && m_document->canRaiseLayer( layer ) )
+			VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
+			                                layerItem->layer(), VLayerCmd::raiseLayer );
+	}
+	else
+	{
+		VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
+		if( item )
+			cmd = new VZOrderCmd( m_document, item->object(), VZOrderCmd::up );
+	}
+	if( cmd )
+	{
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
 	}
@@ -534,13 +544,22 @@ VLayersTab::raiseLayer()
 void
 VLayersTab::lowerLayer()
 {
-	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
-	if( !layerItem || !layerItem->layer() )
-		return;
-	VLayer *layer = layerItem->layer();
-	if ( m_document->canLowerLayer( layer))
+	VCommand *cmd = 0L;
+	VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
+	if( layerItem )
 	{
-		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Lower Layer" ), layer, VLayerCmd::lowerLayer );
+		VLayer *layer = layerItem->layer();
+		if( layer && m_document->canLowerLayer( layer ) )
+			cmd = new VLayerCmd( m_document, i18n( "Lower Layer" ), layer, VLayerCmd::lowerLayer );
+	}
+	else
+	{
+		VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
+		if( item )
+			cmd = new VZOrderCmd( m_document, item->object(), VZOrderCmd::down );
+	}
+	if( cmd )
+	{
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
 	}

@@ -30,6 +30,13 @@ VZOrderCmd::VZOrderCmd( VDocument *doc, VOrder state )
 	m_selection = document()->selection()->clone();
 }
 
+VZOrderCmd::VZOrderCmd( VDocument *doc, VObject *obj, VOrder state )
+	: VCommand( doc, i18n( "Order Selection" ) ), m_state( state )
+{
+	m_selection = new VSelection();
+	m_selection->append( obj );
+}
+
 VZOrderCmd::~VZOrderCmd()
 {
 	delete( m_selection );
@@ -84,7 +91,7 @@ VZOrderCmd::execute()
 	}
 	else if( m_state == up || m_state == down )
 	{
-		VSelection selection = *document()->selection();
+		VSelection selection = *m_selection;
 
 		VObjectList objects;
 
@@ -110,6 +117,7 @@ VZOrderCmd::execute()
 						}
 					}
 				}
+				kdDebug() << "todo.count() : " << todo.count() << endl;
 
 				// we have found the affected vobjects in this vlayer
 				VObjectListIterator itr3( todo );

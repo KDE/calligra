@@ -40,6 +40,7 @@ public:
 	};
 
 	VZOrderCmd( VDocument* doc, VOrder );
+	VZOrderCmd( VDocument* doc, VObject *obj, VOrder );
 	virtual ~VZOrderCmd();
 
 	virtual void execute();
