@@ -37,25 +37,17 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection )
-    : KPObject()
+    : KP2DObject()
 {
     imageCollection = _imageCollection;
     brush = Qt::NoBrush;
-    gradient = 0L;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
     pen = QPen( Qt::black, 1, Qt::NoPen );
-    gColor1 = Qt::red;
-    gColor2 = Qt::green;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
 }
 
 /*================== overloaded constructor ======================*/
 KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const QString &_filename,
                                 QDateTime _lastModified )
-    : KPObject()
+    : KP2DObject()
 {
     imageCollection = _imageCollection;
 
@@ -67,22 +59,9 @@ KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const QStri
 
     ext = orig_size;
     brush = Qt::NoBrush;
-    gradient = 0L;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
     pen = QPen( Qt::black, 1, Qt::NoPen );
-    gColor1 = Qt::red;
-    gColor2 = Qt::green;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
 
     setPixmap( _filename, _lastModified );
-}
-
-/*================================================================*/
-KPPixmapObject::~KPPixmapObject()
-{
 }
 
 /*================================================================*/
@@ -139,29 +118,10 @@ void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModifie
 
 }
 
-/*================================================================*/
-void KPPixmapObject::setFillType( FillType _fillType )
-{
-    fillType = _fillType;
-
-    if ( fillType == FT_BRUSH && gradient )
-    {
-        delete gradient;
-        gradient = 0;
-    }
-    if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
-}
-
 /*========================= save =================================*/
 QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc);
-    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
-    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
-                                                         unbalanced, xfactor, yfactor, doc));
-    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
-    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
+    QDomDocumentFragment fragment=KP2DObject::save(doc);
     QDomElement elem=doc.createElement("KEY");
     image.key().setAttributes(elem);
     fragment.appendChild(elem);
@@ -171,27 +131,8 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc )
 /*========================== load ================================*/
 void KPPixmapObject::load(const QDomElement &element)
 {
-    KPObject::load(element);
-    QDomElement e=element.namedItem("PEN").toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    e=element.namedItem("BRUSH").toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    e=element.namedItem("FILLTYPE").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setFillType(static_cast<FillType>(tmp));
-    }
-    e=element.namedItem("GRADIENT").toElement();
-    if(!e.isNull()) {
-        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-        if(gradient)
-            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-    }
-    e=element.namedItem("KEY").toElement();
+    KP2DObject::load(element);
+    QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KPImageKey key;
         key.loadAttributes(e, imageCollection->tmpDate(), imageCollection->tmpTime());

@@ -35,12 +35,12 @@ class KPGradient;
 /* Class: KPPartObject                                            */
 /******************************************************************/
 
-class KPPartObject : public QObject, public KPObject
+class KPPartObject : public QObject, public KP2DObject
 {
     Q_OBJECT
 public:
     KPPartObject( KPresenterChild *_child );
-    virtual ~KPPartObject();
+    virtual ~KPPartObject() {}
 
     KPPartObject &operator=( const KPPartObject & );
 
@@ -55,44 +55,8 @@ public:
     virtual void moveBy( int _dx, int _dy );
     virtual void resizeBy( int _dx, int _dy );
 
-    virtual void setPen( QPen _pen )
-    { pen = _pen; }
-    virtual void setBrush( QBrush _brush )
-    { brush = _brush; }
-    virtual void setFillType( FillType _fillType );
-    virtual void setGColor1( QColor _gColor1 )
-    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
-    virtual void setGColor2( QColor _gColor2 )
-    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
-    virtual void setGType( BCType _gType )
-    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
-    virtual void setGUnbalanced( bool b )
-    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
-    virtual void setGXFactor( int f )
-    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
-    virtual void setGYFactor( int f )
-    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
-
     virtual ObjType getType() const
     { return OT_PART; }
-    virtual QPen getPen() const
-    { return pen; }
-    virtual QBrush getBrush() const
-    { return brush; }
-    virtual FillType getFillType() const
-    { return fillType; }
-    virtual QColor getGColor1() const
-    { return gColor1; }
-    virtual QColor getGColor2() const
-    { return gColor2; }
-    virtual BCType getGType() const
-    { return gType; }
-    virtual bool getGUnbalanced() const
-    { return unbalanced; }
-    virtual int getGXFactor() const
-    { return xfactor; }
-    virtual int getGYFactor() const
-    { return yfactor; }
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
@@ -107,19 +71,9 @@ public slots:
     void slot_changed(KoChild *child);
 
 protected:
-    void paint( QPainter *_painter );
+    virtual void paint( QPainter *_painter );
 
-    QPen pen;
-    QBrush brush;
-    QColor gColor1, gColor2;
-    BCType gType;
-    FillType fillType;
-    bool unbalanced;
-    int xfactor, yfactor;
-
-    KPGradient *gradient;
     bool _enableDrawing;
-
     KPresenterChild *child;
 
 };

@@ -41,28 +41,14 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
-    : KPObject(), ktextobject( doc, this, 0, "" )
+    : KP2DObject(), ktextobject( doc, this, 0, "" )
 {
     ktextobject.hide();
     brush = Qt::NoBrush;
-    gradient = 0;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
     pen = QPen( Qt::black, 1, Qt::NoPen );
-    gColor1 = Qt::red;
-    gColor2 = Qt::green;
     drawEditRect = true;
     drawEmpty = true;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
 }
-
-/*================================================================*/
-//KPTextObject &KPTextObject::operator=( const KPTextObject & )
-//{
-//    return *this;
-//}
 
 /*======================= set size ===============================*/
 void KPTextObject::setSize( int _width, int _height )
@@ -97,29 +83,10 @@ void KPTextObject::resizeBy( int _dx, int _dy )
         gradient->setSize( getSize() );
 }
 
-/*================================================================*/
-void KPTextObject::setFillType( FillType _fillType )
-{
-    fillType = _fillType;
-
-    if ( fillType == FT_BRUSH && gradient )
-    {
-        delete gradient;
-        gradient = 0;
-    }
-    if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
-}
-
 /*========================= save =================================*/
 QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc);
-    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
-    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
-                                                         unbalanced, xfactor, yfactor, doc));
-    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
-    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
+    QDomDocumentFragment fragment=KP2DObject::save(doc);
     fragment.appendChild(saveKTextObject( doc ));
     return fragment;
 }
@@ -127,28 +94,8 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
 /*========================== load ================================*/
 void KPTextObject::load(const QDomElement &element)
 {
-    KPObject::load(element);
-
-    QDomElement e=element.namedItem("PEN").toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    e=element.namedItem("BRUSH").toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    e=element.namedItem("FILLTYPE").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setFillType(static_cast<FillType>(tmp));
-    }
-    e=element.namedItem("GRADIENT").toElement();
-    if(!e.isNull()) {
-        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-        if(gradient)
-            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-    }
-    e=element.namedItem("TEXTOBJ").toElement();
+    KP2DObject::load(element);
+    QDomElement e=element.namedItem("TEXTOBJ").toElement();
     if(!e.isNull()) {
         ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
         ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );

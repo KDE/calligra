@@ -35,30 +35,18 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPEllipseObject::KPEllipseObject()
-    : KPObject(), pen(), brush(), gColor1( Qt::red ), gColor2( Qt::green ), pix()
+    : KP2DObject()
 {
-    gradient = 0;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
-    drawShadow = false;
     redrawPix = false;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
 }
 
 /*================== overloaded constructor ======================*/
 KPEllipseObject::KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
                                   QColor _gColor1, QColor _gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor)
-    : KPObject(), pen( _pen ), brush( _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
+    : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
-    gType = _gType;
-    fillType = _fillType;
     redrawPix = false;
-    unbalanced = _unbalanced;
-    xfactor = _xfactor;
-    yfactor = _yfactor;
 
     if ( fillType == FT_GRADIENT )
     {
@@ -68,7 +56,6 @@ KPEllipseObject::KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
     }
     else
         gradient = 0;
-    drawShadow = false;
 }
 
 /*================================================================*/
@@ -121,140 +108,6 @@ void KPEllipseObject::setFillType( FillType _fillType )
         redrawPix = true;
         pix.resize( getSize() );
     }
-}
-
-/*========================= save =================================*/
-QDomDocumentFragment KPEllipseObject::save( QDomDocument& doc )
-{
-    QDomDocumentFragment fragment=KPObject::save(doc);
-    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
-    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
-                                                         unbalanced, xfactor, yfactor, doc));
-    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
-    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
-    return fragment;
-}
-
-/*========================== load ================================*/
-void KPEllipseObject::load(const QDomElement &element)
-{
-    KPObject::load(element);
-    QDomElement e=element.namedItem("PEN").toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    e=element.namedItem("BRUSH").toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    e=element.namedItem("FILLTYPE").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setFillType(static_cast<FillType>(tmp));
-    }
-    e=element.namedItem("GRADIENT").toElement();
-    if(!e.isNull()) {
-        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-        if(gradient)
-            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-    }
-}
-
-/*========================= draw =================================*/
-void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
-{
-    if ( move )
-    {
-        KPObject::draw( _painter, _diffx, _diffy );
-        return;
-    }
-
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
-    int ow = ext.width();
-    int oh = ext.height();
-
-    _painter->save();
-
-    if ( shadowDistance > 0 )
-    {
-        drawShadow = true;
-        QPen tmpPen( pen );
-        pen.setColor( shadowColor );
-        QBrush tmpBrush( brush );
-        brush.setColor( shadowColor );
-
-        if ( angle == 0 )
-        {
-            int sx = ox;
-            int sy = oy;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-
-            _painter->translate( sx, sy );
-            paint( _painter );
-        }
-        else
-        {
-            _painter->translate( ox, oy );
-
-            QRect br = QRect( 0, 0, ow, oh );
-            int pw = br.width();
-            int ph = br.height();
-            QRect rr = br;
-            int yPos = -rr.y();
-            int xPos = -rr.x();
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-            int sx = 0;
-            int sy = 0;
-            getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-
-            QWMatrix m, mtx, m2;
-            mtx.rotate( angle );
-            m.translate( pw / 2, ph / 2 );
-            m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
-            m = m2 * mtx * m;
-
-            _painter->setWorldMatrix( m, true );
-            paint( _painter );
-        }
-
-        pen = tmpPen;
-        brush = tmpBrush;
-    }
-
-    _painter->restore();
-
-    _painter->save();
-    _painter->translate( ox, oy );
-
-    drawShadow = false;
-
-    if ( angle == 0 )
-        paint( _painter );
-    else
-    {
-        QRect br = QRect( 0, 0, ow, oh );
-        int pw = br.width();
-        int ph = br.height();
-        QRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-        QWMatrix m, mtx, m2;
-        mtx.rotate( angle );
-        m.translate( pw / 2, ph / 2 );
-        m2.translate( rr.left() + xPos, rr.top() + yPos );
-        m = m2 * mtx * m;
-
-        _painter->setWorldMatrix( m, true );
-        paint( _painter );
-    }
-
-    _painter->restore();
-
-    KPObject::draw( _painter, _diffx, _diffy );
 }
 
 /*======================== paint =================================*/

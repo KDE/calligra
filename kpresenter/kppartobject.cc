@@ -33,25 +33,12 @@ using namespace std;
 
 /*======================== constructor ===========================*/
 KPPartObject::KPPartObject( KPresenterChild *_child )
-    : KPObject()
+    : KP2DObject()
 {
     child = _child;
     brush = Qt::NoBrush;
-    gradient = 0;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
     pen = QPen( Qt::black, 1, Qt::NoPen );
-    gColor1 = Qt::red;
-    gColor2 = Qt::green;
     _enableDrawing = true;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
-}
-
-/*================================================================*/
-KPPartObject::~KPPartObject()
-{
 }
 
 /*================================================================*/
@@ -252,68 +239,9 @@ void KPPartObject::deactivate()
 }
 
 /*================================================================*/
-/* void KPPartObject::setSize( int _width, int _height )
-{
-    KPObject::setSize( _width, _height );
-
-    if ( !zoomed )
-        child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
-
-    if ( move ) return;
-
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
-
-    getNewPic = true;
-    } */
-
-/*================================================================*/
-/* void KPPartObject::resizeBy( int _dx, int _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    if ( !zoomed )
-        child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
-
-    if ( move ) return;
-
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
-
-    getNewPic = true;
-    } */
-
-/*================================================================*/
-/* void KPPartObject::setOrig( int _x, int _y )
-{
-    KPObject::setOrig( _x, _y );
-    child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
-    } */
-
-/*================================================================*/
-/* void KPPartObject::moveBy( int _dx, int _dy )
-{
-    KPObject::moveBy( _dx, _dy );
-    child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
-    } */
-
-/*================================================================*/
-void KPPartObject::setFillType( FillType _fillType )
-{
-    fillType = _fillType;
-
-    if ( fillType == FT_BRUSH && gradient )
-    {
-        delete gradient;
-        gradient = 0;
-    }
-    if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
-}
-
-/*================================================================*/
 QDomDocumentFragment KPPartObject::save( QDomDocument& doc )
 {
+    // ### FIXME
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement("EFFECTS");
     elem.setAttribute("effect", static_cast<int>( effect ));

@@ -33,39 +33,21 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection )
-    : KPObject()
+    : KP2DObject()
 {
-    brush = Qt::NoBrush;
-    gradient = 0;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
-    redrawPix = false;
-    pen = QPen( Qt::black, 1, Qt::NoPen );
-    gColor1 = Qt::red;
-    gColor2 = Qt::green;
     clipartCollection = _clipartCollection;
+    pen = QPen( Qt::black, 1, Qt::NoPen );
+    brush = Qt::NoBrush;
     picture = 0L;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
 }
 
 /*================== overloaded constructor ======================*/
 KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection, const QString &_filename, QDateTime _lastModified )
-    : KPObject()
+    : KP2DObject()
 {
-    brush = Qt::NoBrush;
-    gradient = 0;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
-    redrawPix = false;
-    pen = QPen( Qt::black, 1, Qt::NoPen );
-    gColor1 = Qt::red;
-    gColor2 = Qt::green;
     clipartCollection = _clipartCollection;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
+    pen = QPen( Qt::black, 1, Qt::NoPen );
+    brush = Qt::NoBrush;
 
     if ( !_lastModified.isValid() )
     {
@@ -99,71 +81,20 @@ void KPClipartObject::setFileName( const QString &_filename, QDateTime _lastModi
     picture = clipartCollection->findClipart( key );
 }
 
-/*================================================================*/
-void KPClipartObject::setFillType( FillType _fillType )
-{
-    fillType = _fillType;
-
-    if ( fillType == FT_BRUSH && gradient )
-    {
-        delete gradient;
-        gradient = 0;
-    }
-    if ( fillType == FT_GRADIENT && !gradient )
-    {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
-}
-
-/*================================================================*/
-void KPClipartObject::setSize( int _width, int _height )
-{
-    KPObject::setSize( _width, _height );
-    if ( move ) return;
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
-}
-
-/*================================================================*/
-void KPClipartObject::resizeBy( int _dx, int _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
-}
-
 /*========================= save =================================*/
 QDomDocumentFragment KPClipartObject::save( QDomDocument& doc )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc);
+    QDomDocumentFragment fragment=KP2DObject::save(doc);
     QDomElement elem=doc.createElement("KEY");
     key.setAttributes(elem);
     fragment.appendChild(elem);
-    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
-    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
-                                                         unbalanced, xfactor, yfactor, doc));
-    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
-    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
     return fragment;
 }
 
 /*========================== load ================================*/
 void KPClipartObject::load(const QDomElement &element)
 {
-    KPObject::load(element);
+    KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull())
         key.loadAttributes(e, clipartCollection->tmpDate(), clipartCollection->tmpTime());
@@ -176,25 +107,6 @@ void KPClipartObject::load(const QDomElement &element)
             key.lastModified.setDate( clipartCollection->tmpDate() );
             key.lastModified.setTime( clipartCollection->tmpTime() );
         }
-    }
-    e=element.namedItem("PEN").toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    e=element.namedItem("BRUSH").toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    e=element.namedItem("FILLTYPE").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setFillType(static_cast<FillType>(tmp));
-    }
-    e=element.namedItem("GRADIENT").toElement();
-    if(!e.isNull()) {
-        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-        if(gradient)
-            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
     }
 }
 
@@ -292,7 +204,3 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     KPObject::draw( _painter, _diffx, _diffy );
 }
-
-
-
-
