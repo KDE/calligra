@@ -104,6 +104,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	}
 	
 	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
+	throw KexiDBError(0, mysql_error(m_mysql));
 	return false;
 }
 
@@ -111,11 +112,19 @@ bool
 MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port, QString db, bool create)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
+	kdDebug() << "   host: " << host << endl;
+	kdDebug() << "   user: " << user << endl;
+	kdDebug() << "   pass: " << password << endl;
+	kdDebug() << "   socket: " << socket << endl;
+	kdDebug() << "   port: " << port << endl;
+	kdDebug() << "   db: " << db << endl;
+
+
 	if(m_connected && host == m_host && user == m_user && password == m_password && socket == m_socket
 		&& port.toUInt() == m_port)
 	{
 		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
-		
+
 		//create new database if needed
 		if(create)
 		{
@@ -125,7 +134,10 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		query("use "+db);
 		kdDebug() << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
 		if(mysql_errno(m_mysql) != 0)
+		{
+			throw KexiDBError(0, mysql_error(m_mysql));
 			return false;
+		}
 		m_connectedDB = true;
 		return true;
 	}
@@ -139,14 +151,15 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 			{
 				query("create database " + db);
 			}
-			
+
 			query("use "+db);
 			m_connectedDB = true;
 			return true;
 		}
-		
+
 	}
 
+	throw KexiDBError(0, mysql_error(m_mysql));
 	return false;
 }
 

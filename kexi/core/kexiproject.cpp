@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <kpassdlg.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kparts/componentfactory.h>
 #include <kstandarddirs.h>
 
@@ -286,8 +287,10 @@ KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 
 	m_dbconnection = connection;
 	m_db = connection->connectDB(m_db, store);
+	kdDebug() << "KexiProject::initDBConnection()" << endl;
 	if(m_db)
 	{
+		kdDebug() << "KexiProject::initDBConnection(): succeeded" << endl;
 		setModified( false );
 		emit dbAvaible();
 		m_dbAvaible = true;
@@ -296,7 +299,11 @@ KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 		return true;
 	}
 	else
+	{
+		kdDebug() << "KexiProject::initDBConnection(): faild" << endl;
+//		KMessageBox::error(0, i18n("connection to database faild"), i18n("Database Connection"));
 		return false;
+	}
 }
 
 void

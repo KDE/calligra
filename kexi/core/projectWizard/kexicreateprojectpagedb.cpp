@@ -137,20 +137,11 @@ bool
 KexiCreateProjectPageDB::connectDB()
 {
 	QString database = data("database").toString();
-//	if(project()->initDbConnection(m_cred, data("create").toBool()))
-//	{
-//		emit project()->updateBrowsers();
-#if 0
-                kexi->mainWindow()->browser()->generateView();
-#endif
-//                return true;
-
-//	}
-
-	KexiDBConnection *c = new KexiDBConnection(m_host, m_user, m_pass, m_socket, m_port, m_dbname);
+	KexiDBConnection *c = new KexiDBConnection(m_driver, m_host, database, m_user, m_pass, m_socket, m_port);
 	if(project()->initDBConnection(c))
-	        return true;
-
+	{
+		return true;
+	}
 	return false;
 }
 

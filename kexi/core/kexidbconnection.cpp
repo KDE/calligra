@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <koStore.h>
 
 #include<kexiDB/kexidb.h>
@@ -70,7 +72,10 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 
 	KexiDB *addDB = parent->add(m_engine);
 	if(!addDB)
+	{
+		KMessageBox::detailedError(0, i18n("Error in databaseconnection"), i18n("kexi couldn't ditermine engine-type"), i18n("Database Connection"));
 		return 0;
+	}
 
 	kdDebug() << "KexiDBConnection::connectDB(): engine loaded" << endl;
 
@@ -81,13 +86,16 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 			try
 			{
 				if(addDB->connect(m_host, m_user, m_pass, m_socket, m_port, m_dbname, false))
+				{
 					return addDB;
+				}
 
 				kdDebug() << "KexiDBConnection::connectDB(): remote = " << addDB << endl;
 			}
 			catch(KexiDBError err)
 			{
-				err.toUser(0);
+				KMessageBox::detailedError(0, i18n("Error in databaseconnection"), err.message(), i18n("Database Connection"));
+				return 0;
 			}
 
 			return addDB;
@@ -113,6 +121,7 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 		}
 		default:
 		{
+			KMessageBox::detailedError(0, i18n("Error in databaseconnection"), i18n("kexi couldn't ditermine engine-type"), i18n("Database Connection"));
 			return 0;
 		}
 	}
