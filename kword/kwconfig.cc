@@ -137,6 +137,24 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
         m_bShowRuler=config->readBoolEntry("Rulers",true);
         oldAutoSaveValue=config->readNumEntry("AutoSave",1);
     }
+
+
+    showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
+    showRuler->setChecked(m_bShowRuler);
+    lay1->addWidget(showRuler);
+
+    autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox , 10);
+    autoSave->setRange(0, 60, 1);
+    autoSave->setLabel(i18n("Auto save (min):"));
+    autoSave->setSpecialValueText(i18n("No auto save"));
+    autoSave->setSuffix(i18n("min"));
+    lay1->addWidget(autoSave);
+
+    recentFiles=new KIntNumInput(oldNbRecentFiles, tmpQGroupBox , 10);
+    recentFiles->setRange(1, 20, 1);
+    recentFiles->setLabel(i18n("Number of recent file:"));
+    lay1->addWidget(recentFiles);
+
     gridX=new KIntNumInput(m_iGridX, tmpQGroupBox , 10);
     gridX->setRange(1, 50, 1);
     gridX->setLabel(i18n("X grid space"));
@@ -167,22 +185,6 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     indent->setRange(1, 50, 1);
     indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
     lay1->addWidget(indent);
-
-    recentFiles=new KIntNumInput(oldNbRecentFiles, tmpQGroupBox , 10);
-    recentFiles->setRange(1, 20, 1);
-    recentFiles->setLabel(i18n("Number of recent file:"));
-    lay1->addWidget(recentFiles);
-
-    showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
-    showRuler->setChecked(m_bShowRuler);
-    lay1->addWidget(showRuler);
-
-    autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox , 10);
-    autoSave->setRange(0, 60, 1);
-    autoSave->setLabel(i18n("Auto save (min):"));
-    autoSave->setSpecialValueText(i18n("No auto save"));
-    autoSave->setSuffix(i18n("min"));
-    lay1->addWidget(autoSave);
 
     box->addWidget( tmpQGroupBox);
 }

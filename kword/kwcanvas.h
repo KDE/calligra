@@ -108,6 +108,7 @@ public:
     // TODO Mouse double-click
 
     void setMouseMode( MouseMode _mm );
+    MouseMode getMouseMode(){return m_mouseMode;}
     void setPixmapFilename( const QString & f ) { m_PixmapName = f; }
     void setPartEntry( const KoDocumentEntry & e ) { m_partEntry = e; }
 

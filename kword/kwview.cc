@@ -226,6 +226,13 @@ void KWView::initGui()
     QString zoomStr=QString::number(doc->zoom())+'%';
     actionViewZoom->setCurrentItem(list.findIndex(zoomStr)  );
 
+    MouseMode mouseMode=gui->canvasWidget()->getMouseMode();
+    gui->canvasWidget()->setMouseMode( mouseMode );
+    //setTool(mouseMode);
+    if(mouseMode!=MM_EDIT_FRAME)
+        doc->deSelectAllFrames();
+
+
     showFormulaToolbar( FALSE );
 
     if(statusBar())
