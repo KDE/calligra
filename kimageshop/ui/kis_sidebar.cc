@@ -197,8 +197,8 @@ TopTitleFrame::TopTitleFrame( QWidget* parent, const char* name )
     setLineWidth(1);
 
     // setup buttons
-    m_pHideButton = new KisFrameButton("(*)", this);
-    m_pTitleButton = new KisFrameButton("Krayon Box", this);    
+    m_pHideButton = new KisFrameButton(i18n("(*)"), this);
+    m_pTitleButton = new KisFrameButton(i18n("Krayon Box"), this);    
 
     QFont font = KGlobalSettings::generalFont();
     font.setPointSize( 8 );
@@ -343,7 +343,7 @@ TopColorFrame::TopColorFrame( QWidget* parent, const char* name )
     setLineWidth(1);
 
     // setup buttons
-    m_pHideButton = new KisFrameButton("(*)", this);
+    m_pHideButton = new KisFrameButton(i18n("(*)"), this);
     m_pLABButton = new KisFrameButton(i18n("LAB"), this);    
     m_pCMYKButton = new KisFrameButton(i18n("CMYK"), this);
     m_pHSBButton = new KisFrameButton(i18n("HSB"), this);    
