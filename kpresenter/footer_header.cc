@@ -300,19 +300,19 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->insertSeparator();
 
     f_aleft = 5;
-    ftool2->insertButton( BarIcon( "alignLeft" ), f_aleft,
+    ftool2->insertButton( BarIcon( "text_left" ), f_aleft,
                           SIGNAL( clicked() ), this,
                           SLOT( footerAlignLeft() ), true, i18n( "Align Left" ) );
     ftool2->setToggle( f_aleft, true );
 
     f_acenter = 6;
-    ftool2->insertButton( BarIcon( "alignCenter" ), f_acenter,
+    ftool2->insertButton( BarIcon( "text_center" ), f_acenter,
                           SIGNAL( clicked() ), this,
                           SLOT( footerAlignCenter() ), true, i18n( "Align Center" ) );
     ftool2->setToggle( f_acenter, true );
 
     f_aright = 7;
-    ftool2->insertButton( BarIcon( "alignRight" ), f_aright,
+    ftool2->insertButton( BarIcon( "text_right" ), f_aright,
                           SIGNAL( clicked() ), this,
                           SLOT( footerAlignRight() ), true, i18n( "Align Right" ) );
     ftool2->setToggle( f_aright, true );
