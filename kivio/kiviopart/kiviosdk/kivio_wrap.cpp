@@ -1066,7 +1066,7 @@ static PyObject *_wrap_KivioStencil_setText(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static char * KivioStencil_text(KivioStencil *self) { return self->text().latin1(); }
+static char * KivioStencil_text(KivioStencil *self) { return (char*) self->text().latin1(); }
 static PyObject *_wrap_KivioStencil_text(PyObject *self, PyObject *args) {
     PyObject  *_resultobj,*_argo0=0;
     char  *_result;
@@ -1080,7 +1080,7 @@ static PyObject *_wrap_KivioStencil_text(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static char * KivioStencil_textColor(KivioStencil *self) { return self->textColor().name().latin1(); }
+static char * KivioStencil_textColor(KivioStencil *self) { return (char*) self->textColor().name().latin1(); }
 static PyObject *_wrap_KivioStencil_textColor(PyObject *self, PyObject *args) {
     PyObject  *_resultobj,*_argo0=0;
     char  *_result;
@@ -1109,7 +1109,7 @@ static PyObject *_wrap_KivioStencil_setTextColor(PyObject *self, PyObject *args)
     return _resultobj;
 }
 
-static char * KivioStencil_fgColor(KivioStencil *self) { return self->fgColor().name().latin1(); }
+static char * KivioStencil_fgColor(KivioStencil *self) { return (char*) self->fgColor().name().latin1(); }
 static PyObject *_wrap_KivioStencil_fgColor(PyObject *self, PyObject *args) {
     PyObject  *_resultobj,*_argo0=0;
     char  *_result;
@@ -1138,7 +1138,7 @@ static PyObject *_wrap_KivioStencil_setFGColor(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static char * KivioStencil_bgColor(KivioStencil *self) { return self->bgColor().name().latin1(); }
+static char * KivioStencil_bgColor(KivioStencil *self) { return (char*) self->bgColor().name().latin1(); }
 static PyObject *_wrap_KivioStencil_bgColor(PyObject *self, PyObject *args) {
     PyObject  *_resultobj,*_argo0=0;
     char  *_result;
