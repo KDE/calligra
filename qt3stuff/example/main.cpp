@@ -8,18 +8,16 @@
 **
 *****************************************************************************/
 
-#include "richtext.h"
 #include <qapplication.h>
+#include "textedit.h"
 
-int main( int argc, char **argv )
+int main( int argc, char ** argv ) 
 {
     QApplication a( argc, argv );
-
-    MyRichText richtext;
-    richtext.resize( 450, 350 );
-    richtext.setCaption( "Fortune" );
-    a.setMainWidget( &richtext );
-    richtext.show();
-
+    TextEdit * mw = new TextEdit();
+    mw->setCaption( "Richtext Editor" );
+    mw->resize( 640, 800 );
+    mw->show();
+    a.connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
     return a.exec();
 }
