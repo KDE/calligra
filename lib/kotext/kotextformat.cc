@@ -329,6 +329,7 @@ int KoTextFormat::minRightBearing() const
 void KoTextFormat::generateKey()
 {
     k = fn.key();
+    k += '/';
     if ( col.isValid() ) // just to shorten the key in the common case
         k += QString::number( (uint)col.rgb() );
     k += '/';
