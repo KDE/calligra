@@ -28,7 +28,6 @@ VDeleteCmd::VDeleteCmd( VDocument* doc )
 	: VCommand( doc, i18n( "Delete Objects" ) )
 {
 	m_selection = document()->selection()->clone();
-
 	document()->selection()->clear();
 
 	if( m_selection->objects().count() == 1 )
