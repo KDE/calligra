@@ -192,7 +192,8 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     KoTextFormat *format = static_cast<KoTextFormat *>( at( 0 )->format() ); // paragFormat();
     p->save();
 
-    QColor textColor( format->color() );
+    //QColor textColor( format->color() );
+    QColor textColor( textDocument()->drawingShadow() ? shadowColor():format->color());
     if ( !textColor.isValid() ) // Resolve the color at this point
         textColor = KoTextFormat::defaultTextColor( p );
     p->setPen( QPen( textColor ) );
