@@ -236,6 +236,9 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 
 		gc->stroke.dashPattern().setArray( array );
 	}
+	if( !e.attribute( "stroke-dashoffset" ).isEmpty() )
+		gc->stroke.dashPattern().setOffset( e.attribute( "stroke-dashoffset" ).toFloat() );
+
 	// handle opacity
 	if( !e.attribute( "stroke-opacity" ).isEmpty() )
 		strokecolor.setOpacity( e.attribute( "stroke-opacity" ).toFloat() );
@@ -311,6 +314,9 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 
 			gc->stroke.dashPattern().setArray( array );
 		}
+		if( command == "stroke-dashoffset" )
+			gc->stroke.dashPattern().setOffset( params.toFloat() );
+
 		// handle opacity
 		else if( command == "stroke-opacity" )
 			strokecolor.setOpacity( params.toFloat() );
