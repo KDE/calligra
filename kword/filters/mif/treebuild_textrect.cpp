@@ -9,7 +9,7 @@
 #include "unitconv.h"
 #include "treebuild_general.h"
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 TextRect::TextRect(TextRectElementList * elements)
 {

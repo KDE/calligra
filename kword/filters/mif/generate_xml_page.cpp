@@ -9,7 +9,7 @@
 #include "treebuild_page.h"
 #include "treebuild_textrect.h"
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 TextRect* generate_xml_page::find_text_rect( int textrectid )
 {
