@@ -10,7 +10,7 @@ bool KWCollectFramesetsVisitor::visit( KoTextParag *parag, int start, int end )
     if ( ch.isCustom() )
     {
       KoTextCustomItem *customitem = ch.customItem();
-      KWAnchor *anchor = static_cast<KWAnchor *>(customitem);
+      KWAnchor *anchor = dynamic_cast<KWAnchor *>(customitem);
       if (anchor)
       {
 	m_framesets.append(anchor->frameSet());
