@@ -149,6 +149,8 @@ public slots:
 	void showGrid();
 	void snapToGrid();
 
+	void showSelectionPopupMenu( const QPoint &pos );
+
 protected slots:
 	// Object related operations.
 	void objectTransform();

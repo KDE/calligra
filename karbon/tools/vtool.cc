@@ -92,7 +92,10 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 		m_firstPoint.setX( canvasCoordinate.x() );
 		m_firstPoint.setY( canvasCoordinate.y() );
 
-		mouseButtonPress();
+		if( mouseEvent->state() == QEvent::RightButton )
+			rightMouseButtonPress();
+		else
+			mouseButtonPress();
 
 		m_mouseButtonIsDown = true;
 
@@ -124,7 +127,10 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 			m_isDragging = false;
 		}
 		else if( m_mouseButtonIsDown )	// False if canceled.
-			mouseButtonRelease();
+			if( mouseEvent->state() == QEvent::RightButton )
+				rightMouseButtonRelease();
+			else
+				mouseButtonRelease();
 
 		m_mouseButtonIsDown = false;
 

@@ -104,11 +104,13 @@ protected:
 	 * Mouse button press.
 	 */
 	virtual void mouseButtonPress() {}
+	virtual void rightMouseButtonPress() {}
 
 	/**
 	 * Mouse button release. The mouse wasn't moved.
 	 */
 	virtual void mouseButtonRelease() {}
+	virtual void rightMouseButtonRelease() {}
 
 	/**
 	 * Mouse button double click.

@@ -197,6 +197,16 @@ VSelectTool::mouseDrag()
 }
 
 void
+VSelectTool::rightMouseButtonRelease()
+{
+	if( part()->document().selection()->objects().count() > 0 )
+	{
+		view()->showSelectionPopupMenu( QCursor::pos() );
+		m_state = normal;
+	}
+}
+
+void
 VSelectTool::mouseButtonRelease()
 {
 	if( m_state == normal )

@@ -64,6 +64,7 @@ protected:
 
 	virtual void mouseButtonPress();
 	virtual void mouseButtonRelease();
+	virtual void rightMouseButtonRelease();
 	virtual void mouseDrag();
 	virtual void mouseDragRelease();
 	virtual void mouseDragCtrlPressed();

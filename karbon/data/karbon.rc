@@ -112,4 +112,13 @@
 		<Action name="object_align_vertical_center"/>
 		<Action name="object_align_vertical_bottom"/>
 	</ToolBar>
+	<Menu name="selection_popup">
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+		<Action name="edit_delete"/>
+		<Separator/>
+		<Action name="object_move_up"/>
+		<Action name="object_move_down"/>
+	</Menu>
 </kpartgui>

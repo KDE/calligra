@@ -23,6 +23,7 @@
 #include <qiconset.h>
 #include <qapplication.h>
 #include <qclipboard.h>
+#include <qpopupmenu.h>
 
 #include <kaction.h>
 #include <kcolordrag.h>
@@ -1003,6 +1004,12 @@ void
 KarbonView::snapToGrid()
 {
 	m_part->document().grid().isSnap = m_snapGridAction->isChecked();
+}
+
+void
+KarbonView::showSelectionPopupMenu( const QPoint &pos )
+{
+	((QPopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
 }
 
 void
