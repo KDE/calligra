@@ -65,7 +65,6 @@ binary-arch: build install
 		rm $$i ;\
 		ln -s ../common $$i ;\
 	done
-	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
 	for i in `find debian/tmp/usr/bin | sed -e 's#^debian/tmp/usr/bin/##'  | grep -v "debian/tmp"`; do \
 		echo "$$i.1" >> debian/undocumented ;\
 	done
@@ -74,6 +73,8 @@ binary-arch: build install
 	done
 	dh_undocumented
 	dh_movefiles
+	#-rm -rf debian/tmp/usr debian/tmp/etc
+	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
 	dh_installdocs
 	dh_installmenu
 	dh_installchangelogs -ptask-koffice
