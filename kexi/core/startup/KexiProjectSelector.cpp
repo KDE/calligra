@@ -77,7 +77,7 @@ public:
 		
 			QString conn;
 			if (!cdata->connName.isEmpty())
-				conn = cdata->name + ": ";
+				conn = cdata->connName + ": ";
 			conn += cdata->serverInfoString();
 			setText(3, conn + "  ");
 		}
