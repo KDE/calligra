@@ -1753,6 +1753,8 @@ bool KSpreadCell::calc(bool delay)
     KSpreadDependency * d = 0;
     KSpreadCell *cell = 0;
     // Every cell that references us must calculate with this new value
+
+    // first set them all calcdirty
     for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
     {
       for (int c = d->Left(); c <= d->Right(); c++)
@@ -1762,6 +1764,21 @@ bool KSpreadCell::calc(bool delay)
             cell = d->Table()->cellAt( c, r );
             cell->clearAllErrors();
             cell->setFlag( Flag_CalcDirty );
+        }
+      }
+    }
+
+    // then calculate them all
+    /* setting calcdirty and calculation is done as a separate step to
+       help prevent massive amounts of duplicated calculation
+    */
+    for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
+    {
+      for (int c = d->Left(); c <= d->Right(); c++)
+      {
+        for (int r = d->Top(); r <= d->Bottom(); r++)
+        {
+            cell = d->Table()->cellAt( c, r );
             cell->calc();
         }
       }
@@ -3631,7 +3648,7 @@ void KSpreadCell::updateDepending()
 
   setFlag(Flag_UpdatingDeps);
 
-  KSpreadCell * cell; 
+  KSpreadCell * cell;
   // Every cell that references us must calculate with this new value
   for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
   {
