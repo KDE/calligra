@@ -4495,12 +4495,18 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
 
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 {
-    textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
+    if(textFrameSet()->hasSelection() )
+        frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection(  cursor, _c, QTextDocument::Standard , i18n("Insert Special Char")));
+    else
+        textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
 void  KWTextFrameSetEdit::insertExpression(const QString &_c)
 {
-    textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Expression") );
+    if(textFrameSet()->hasSelection() )
+        frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection(  cursor, _c, QTextDocument::Standard , i18n("Insert Expression")));
+    else
+       textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Expression") );
 }
 
 void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
