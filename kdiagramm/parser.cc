@@ -19,7 +19,7 @@ ParsedArray::ParsedArray( int row, int col )
     numRows = row;
     current = 0;
 }
-    
+
 ParsedArray::~ParsedArray()
 {
     delete[] data;
@@ -102,24 +102,24 @@ QString ParsedArray::calc( int row, int col, bool *ok )
 }
 
 
-char ParsedArray::get_c() 
-{ 
-    while ( index<(int)current->text.length() && 
-	    isspace( current->text[index] ) ) 
+char ParsedArray::get_c()
+{
+    while ( index<(int)current->text.length() &&
+	    isspace( QChar(current->text[index]) ) )
 	index++;
 
     if ( index<(int)current->text.length() ) {
 	//debug ("get_c %d,%c,%d", index, contents[index], contents[index]);
-	return current->text[index++];
+	return QChar(current->text[index++]);
     } else {
 	//debug("get_c EOS %d",index);
 	return 0;
     }
 }
 
-void ParsedArray::putback() 
-{ 
-    if (index>0) index--; 
+void ParsedArray::putback()
+{
+    if (index>0) index--;
 }
 
 
@@ -171,7 +171,7 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
 	    if ( x != 0 )
 		res /= x;
 	    else
-		return Error; 
+		return Error;
     }
     return Number;
 }
@@ -214,14 +214,14 @@ ParsedArray::Type ParsedArray::parseInt( int &res )
     char ch = get_c();
     if ( !isdigit(ch) )
 	return String;
-    do { 
+    do {
 	res = res*10 + ch - '0';
     } while (isdigit(ch=get_c()));
     if (ch)
 	putback();
     return Number;
 }
-   
+
 
 ParsedArray::Type ParsedArray::parseRef( double &res )
 {
