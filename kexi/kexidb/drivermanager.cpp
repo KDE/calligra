@@ -43,6 +43,9 @@
 
 using namespace KexiDB;
 
+DriverManagerInternal* DriverManagerInternal::s_self = 0L;
+
+
 DriverManagerInternal::DriverManagerInternal() /* protected */
 	: QObject( 0, "KexiDB::DriverManager" )
 	, Object()
@@ -102,9 +105,11 @@ bool DriverManagerInternal::lookupDrivers()
 		QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 		if (srv_name.isEmpty()) {
 			KexiDBWarning << "DriverManagerInternal::lookupDrivers(): X-Kexi-DriverName must be set for KexiDB driver \"" << ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
+			delete ptr;
 			continue;
 		}
 		if (m_services_lcase.contains(srv_name.lower())) {
+			delete ptr;
 			continue;
 		}
 		m_services.insert(srv_name, ptr);
@@ -195,8 +200,6 @@ void DriverManagerInternal::decRefCount()
 //		deleteLater();
 //	}
 }
-
-DriverManagerInternal* DriverManagerInternal::s_self = 0L;
 
 void DriverManagerInternal::aboutDelete( Driver* drv )
 {

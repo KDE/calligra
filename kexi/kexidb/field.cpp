@@ -540,7 +540,7 @@ void Field::setIndexed(bool s)
 QString Field::debugString()
 {
 	KexiDB::Connection *conn = table() ? table()->connection() : 0;
-	QString dbg = m_name + " ";
+	QString dbg = (m_name.isEmpty() ? "<NONAME> " : m_name + " ");
 	if (m_options & Field::Unsigned)
 		dbg += " UNSIGNED ";
 	dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
@@ -561,6 +561,8 @@ QString Field::debugString()
 		dbg += " NOTNULL";
 	if (m_constraints & Field::NotEmpty)
 		dbg += " NOTEMPTY";
+	if (m_expr)
+		dbg += " EXPRESSION=" + m_expr->debugString();
 	return dbg;
 }
 

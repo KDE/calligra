@@ -274,6 +274,10 @@ QString BinaryExpr::toString()
 	if (m_type==BITWISE_SHIFT_LEFT)
 		return INFIX("<<");
 	// other relational operations: <= >= <> (or !=) LIKE IN
+	if (m_type==NOT_EQUAL)
+		return INFIX("<>");
+	if (m_type==NOT_EQUAL2)
+		return INFIX("!=");
 	if (m_type==LESS_OR_EQUAL)
 		return INFIX("<=");
 	if (m_type==GREATER_OR_EQUAL)
@@ -283,6 +287,10 @@ QString BinaryExpr::toString()
 	if (m_type==SQL_IN)
 		return INFIX("IN");
 	// other logical operations: OR (or ||) AND (or &&) XOR
+	if (m_type==SIMILAR_TO)
+		return INFIX("SIMILAR TO");
+	if (m_type==NOT_SIMILAR_TO)
+		return INFIX("NOT SIMILAR TO");
 	if (m_type==OR)
 		return INFIX("OR");
 	if (m_type==AND)
@@ -496,12 +504,28 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 }
 
 //=========================================
+static QValueList<QCString> FunctionExpr_builtIns;
+static const char* FunctionExpr_builtIns_[] = 
+{"SUM", "MIN", "MAX", "AVG", "COUNT", "STD", "STDDEV", "VARIANCE", 0 };
+
+QValueList<QCString> FunctionExpr::builtInAggregates()
+{
+	if (FunctionExpr_builtIns.isEmpty()) {
+		for (const char **p = FunctionExpr_builtIns_; *p; p++)
+			FunctionExpr_builtIns << *p;
+	}
+	return FunctionExpr_builtIns;
+}
+
 FunctionExpr::FunctionExpr( const QString& _name, NArgExpr* args_ )
  : BaseExpr( 0/*undefined*/ )
  , name(_name)
  , args(args_)
 {
-	m_cl = KexiDBExpr_Function;
+	if (isBuiltInAggregate(name.latin1()))
+		m_cl = KexiDBExpr_Aggregation;
+	else
+		m_cl = KexiDBExpr_Function;
 	args->setParent( this );
 }
 
@@ -525,7 +549,12 @@ bool FunctionExpr::validate(ParseInfo& parseInfo)
 	if (!BaseExpr::validate(parseInfo))
 		return false;
 
-	return true;
+	return args->validate(parseInfo);
+}
+
+bool FunctionExpr::isBuiltInAggregate(const QCString& fname)
+{
+	return builtInAggregates().find(fname.upper())!=FunctionExpr_builtIns.end();
 }
 
 #if 0

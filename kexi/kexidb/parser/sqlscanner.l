@@ -49,11 +49,18 @@ decimal			(({digit}*\.{digit}+)|({digit}+\.{digit}*))
 real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
 /* todo: support for real numbers */
 
+
 %%
 
-("<>"|"!=") {
+
+"<>" {
 	ECOUNT;
 	return NOT_EQUAL;
+}
+
+"!=" {
+	ECOUNT;
+	return NOT_EQUAL2;
 }
 
 "==" {
@@ -145,6 +152,26 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return LIKE;
 }
 
+"NOT"{whitespace}+"SIMILAR"{whitespace}+"TO" {
+	ECOUNT;
+	return NOT_SIMILAR_TO;
+}
+
+"SIMILAR"{whitespace}+"TO" {
+	ECOUNT;
+	return SIMILAR_TO;
+}
+
+"IS"{whitespace}+"NOT"{whitespace}+"NULL" {
+	ECOUNT;
+	return SQL_IS_NOT_NULL;
+}
+
+"IS"{whitespace}+"NULL" {
+	ECOUNT;
+	return SQL_IS_NULL;
+}
+
 "NOT" {
 	ECOUNT;
 	return NOT;
@@ -198,11 +225,6 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 "SELECT" {
 	ECOUNT;
 	return SELECT;
-}
-
-"SIMILAR" {
-	ECOUNT;
-	return SIMILAR;
 }
 
 "TABLE" {

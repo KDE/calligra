@@ -104,7 +104,7 @@ public:
 
 /*! A base class for binary operation
  - arithmetic operations: + - / * % << >> & | ||
- - relational operations: = (or ==) < > <= >= <> (or !=) LIKE IN
+ - relational operations: = (or ==) < > <= >= <> (or !=) LIKE IN 'SIMILAR TO' 'NOT SIMILAR TO'
  - logical operations: OR (or ||) AND (or &&) XOR
  - SpecialBinary "pseudo operators": 
     * e.g. "f1 f2" : type == 0
@@ -181,6 +181,9 @@ public:
 	virtual QString debugString();
 	virtual QString toString();
 	virtual bool validate(ParseInfo& parseInfo);
+
+	static QValueList<QCString> builtInAggregates();
+	static bool isBuiltInAggregate(const QCString& fname);
 
 	QString name;
 	NArgExpr* args;

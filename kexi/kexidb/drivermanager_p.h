@@ -67,10 +67,10 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 
 		static KexiDB::DriverManagerInternal* s_self;
 
-		KexiDB::DriverManager::ServicesMap m_services; //! services map
-		KexiDB::DriverManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
-		KexiDB::DriverManager::ServicesMap m_services_by_mimetype;
-		KexiDB::Driver::InfoMap m_driversInfo; //! used to store drivers information
+		DriverManager::ServicesMap m_services; //! services map
+		DriverManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
+		DriverManager::ServicesMap m_services_by_mimetype;
+		Driver::InfoMap m_driversInfo; //! used to store drivers information
 		QAsciiDict<KexiDB::Driver> m_drivers;
 		ulong m_refCount;
 

@@ -50,149 +50,149 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     SQL_TYPE = 258,
-     SQL_ABS = 259,
-     ACOS = 260,
-     AMPERSAND = 261,
-     SQL_ABSOLUTE = 262,
-     ADA = 263,
-     ADD = 264,
-     ADD_DAYS = 265,
-     ADD_HOURS = 266,
-     ADD_MINUTES = 267,
-     ADD_MONTHS = 268,
-     ADD_SECONDS = 269,
-     ADD_YEARS = 270,
-     ALL = 271,
-     ALLOCATE = 272,
-     ALTER = 273,
-     AND = 274,
-     ANY = 275,
-     ARE = 276,
-     AS = 277,
-     ASIN = 278,
-     ASC = 279,
-     ASCII = 280,
-     ASSERTION = 281,
-     ATAN = 282,
-     ATAN2 = 283,
-     AUTHORIZATION = 284,
-     AUTO_INCREMENT = 285,
-     AVG = 286,
-     BEFORE = 287,
-     SQL_BEGIN = 288,
-     BETWEEN = 289,
-     BIGINT = 290,
-     BINARY = 291,
-     BIT = 292,
-     BIT_LENGTH = 293,
-     BITWISE_SHIFT_LEFT = 294,
-     BITWISE_SHIFT_RIGHT = 295,
-     BREAK = 296,
-     BY = 297,
-     CASCADE = 298,
-     CASCADED = 299,
-     CASE = 300,
-     CAST = 301,
-     CATALOG = 302,
-     CEILING = 303,
-     CENTER = 304,
-     SQL_CHAR = 305,
-     CHAR_LENGTH = 306,
-     CHARACTER_STRING_LITERAL = 307,
-     CHECK = 308,
-     CLOSE = 309,
-     COALESCE = 310,
-     COBOL = 311,
-     COLLATE = 312,
-     COLLATION = 313,
-     COLUMN = 314,
-     COMMIT = 315,
-     COMPUTE = 316,
-     CONCAT = 317,
-     CONCATENATION = 318,
-     CONNECT = 319,
-     CONNECTION = 320,
-     CONSTRAINT = 321,
-     CONSTRAINTS = 322,
-     CONTINUE = 323,
-     CONVERT = 324,
-     CORRESPONDING = 325,
-     COS = 326,
-     COT = 327,
-     COUNT = 328,
-     CREATE = 329,
-     CURDATE = 330,
-     CURRENT = 331,
-     CURRENT_DATE = 332,
-     CURRENT_TIME = 333,
-     CURRENT_TIMESTAMP = 334,
-     CURTIME = 335,
-     CURSOR = 336,
-     DATABASE = 337,
-     SQL_DATE = 338,
-     DATE_FORMAT = 339,
-     DATE_REMAINDER = 340,
-     DATE_VALUE = 341,
-     DAY = 342,
-     DAYOFMONTH = 343,
-     DAYOFWEEK = 344,
-     DAYOFYEAR = 345,
-     DAYS_BETWEEN = 346,
-     DEALLOCATE = 347,
-     DEC = 348,
-     DECLARE = 349,
-     DEFAULT = 350,
-     DEFERRABLE = 351,
-     DEFERRED = 352,
-     SQL_DELETE = 353,
-     DESC = 354,
-     DESCRIBE = 355,
-     DESCRIPTOR = 356,
-     DIAGNOSTICS = 357,
-     DICTIONARY = 358,
-     DIRECTORY = 359,
-     DISCONNECT = 360,
-     DISPLACEMENT = 361,
-     DISTINCT = 362,
-     DOMAIN_TOKEN = 363,
-     SQL_DOUBLE = 364,
-     DOUBLE_QUOTED_STRING = 365,
-     DROP = 366,
-     ELSE = 367,
-     END = 368,
-     END_EXEC = 369,
-     EQUAL = 370,
-     ESCAPE = 371,
-     EXCEPT = 372,
-     SQL_EXCEPTION = 373,
-     EXEC = 374,
-     EXECUTE = 375,
-     EXISTS = 376,
-     EXP = 377,
-     EXPONENT = 378,
-     EXTERNAL = 379,
-     EXTRACT = 380,
-     SQL_FALSE = 381,
-     FETCH = 382,
-     FIRST = 383,
-     SQL_FLOAT = 384,
-     FLOOR = 385,
-     FN = 386,
-     FOR = 387,
-     FOREIGN = 388,
-     FORTRAN = 389,
-     FOUND = 390,
-     FOUR_DIGITS = 391,
-     FROM = 392,
-     FULL = 393,
-     GET = 394,
-     GLOBAL = 395,
-     GO = 396,
-     GOTO = 397,
-     GRANT = 398,
-     GREATER_OR_EQUAL = 399,
-     GREATER_THAN = 400,
+     UMINUS = 258,
+     SQL_TYPE = 259,
+     SQL_ABS = 260,
+     ACOS = 261,
+     AMPERSAND = 262,
+     SQL_ABSOLUTE = 263,
+     ADA = 264,
+     ADD = 265,
+     ADD_DAYS = 266,
+     ADD_HOURS = 267,
+     ADD_MINUTES = 268,
+     ADD_MONTHS = 269,
+     ADD_SECONDS = 270,
+     ADD_YEARS = 271,
+     ALL = 272,
+     ALLOCATE = 273,
+     ALTER = 274,
+     AND = 275,
+     ANY = 276,
+     ARE = 277,
+     AS = 278,
+     ASIN = 279,
+     ASC = 280,
+     ASCII = 281,
+     ASSERTION = 282,
+     ATAN = 283,
+     ATAN2 = 284,
+     AUTHORIZATION = 285,
+     AUTO_INCREMENT = 286,
+     AVG = 287,
+     BEFORE = 288,
+     SQL_BEGIN = 289,
+     BETWEEN = 290,
+     BIGINT = 291,
+     BINARY = 292,
+     BIT = 293,
+     BIT_LENGTH = 294,
+     BITWISE_SHIFT_LEFT = 295,
+     BITWISE_SHIFT_RIGHT = 296,
+     BREAK = 297,
+     BY = 298,
+     CASCADE = 299,
+     CASCADED = 300,
+     CASE = 301,
+     CAST = 302,
+     CATALOG = 303,
+     CEILING = 304,
+     CENTER = 305,
+     SQL_CHAR = 306,
+     CHAR_LENGTH = 307,
+     CHARACTER_STRING_LITERAL = 308,
+     CHECK = 309,
+     CLOSE = 310,
+     COALESCE = 311,
+     COBOL = 312,
+     COLLATE = 313,
+     COLLATION = 314,
+     COLUMN = 315,
+     COMMIT = 316,
+     COMPUTE = 317,
+     CONCAT = 318,
+     CONCATENATION = 319,
+     CONNECT = 320,
+     CONNECTION = 321,
+     CONSTRAINT = 322,
+     CONSTRAINTS = 323,
+     CONTINUE = 324,
+     CONVERT = 325,
+     CORRESPONDING = 326,
+     COS = 327,
+     COT = 328,
+     COUNT = 329,
+     CREATE = 330,
+     CURDATE = 331,
+     CURRENT = 332,
+     CURRENT_DATE = 333,
+     CURRENT_TIME = 334,
+     CURRENT_TIMESTAMP = 335,
+     CURTIME = 336,
+     CURSOR = 337,
+     DATABASE = 338,
+     SQL_DATE = 339,
+     DATE_FORMAT = 340,
+     DATE_REMAINDER = 341,
+     DATE_VALUE = 342,
+     DAY = 343,
+     DAYOFMONTH = 344,
+     DAYOFWEEK = 345,
+     DAYOFYEAR = 346,
+     DAYS_BETWEEN = 347,
+     DEALLOCATE = 348,
+     DEC = 349,
+     DECLARE = 350,
+     DEFAULT = 351,
+     DEFERRABLE = 352,
+     DEFERRED = 353,
+     SQL_DELETE = 354,
+     DESC = 355,
+     DESCRIBE = 356,
+     DESCRIPTOR = 357,
+     DIAGNOSTICS = 358,
+     DICTIONARY = 359,
+     DIRECTORY = 360,
+     DISCONNECT = 361,
+     DISPLACEMENT = 362,
+     DISTINCT = 363,
+     DOMAIN_TOKEN = 364,
+     SQL_DOUBLE = 365,
+     DOUBLE_QUOTED_STRING = 366,
+     DROP = 367,
+     ELSE = 368,
+     END = 369,
+     END_EXEC = 370,
+     EQUAL = 371,
+     ESCAPE = 372,
+     EXCEPT = 373,
+     SQL_EXCEPTION = 374,
+     EXEC = 375,
+     EXECUTE = 376,
+     EXISTS = 377,
+     EXP = 378,
+     EXPONENT = 379,
+     EXTERNAL = 380,
+     EXTRACT = 381,
+     SQL_FALSE = 382,
+     FETCH = 383,
+     FIRST = 384,
+     SQL_FLOAT = 385,
+     FLOOR = 386,
+     FN = 387,
+     FOR = 388,
+     FOREIGN = 389,
+     FORTRAN = 390,
+     FOUND = 391,
+     FOUR_DIGITS = 392,
+     FROM = 393,
+     FULL = 394,
+     GET = 395,
+     GLOBAL = 396,
+     GO = 397,
+     GOTO = 398,
+     GRANT = 399,
+     GREATER_OR_EQUAL = 400,
      HAVING = 401,
      HOUR = 402,
      HOURS_BETWEEN = 403,
@@ -224,38 +224,38 @@
      LEFT = 429,
      LENGTH = 430,
      LESS_OR_EQUAL = 431,
-     LESS_THAN = 432,
-     LEVEL = 433,
-     LIKE = 434,
-     LINE_WIDTH = 435,
-     LOCAL = 436,
-     LOCATE = 437,
-     LOG = 438,
-     SQL_LONG = 439,
-     LOWER = 440,
-     LTRIM = 441,
-     LTRIP = 442,
-     MATCH = 443,
-     SQL_MAX = 444,
-     MICROSOFT = 445,
-     SQL_MIN = 446,
-     MINUS = 447,
-     MINUTE = 448,
-     MINUTES_BETWEEN = 449,
-     MOD = 450,
-     MODIFY = 451,
-     MODULE = 452,
-     MONTH = 453,
-     MONTHS_BETWEEN = 454,
-     MUMPS = 455,
-     NAMES = 456,
-     NATIONAL = 457,
-     NCHAR = 458,
-     NEXT = 459,
-     NODUP = 460,
-     NONE = 461,
-     NOT = 462,
-     NOT_EQUAL = 463,
+     LEVEL = 432,
+     LIKE = 433,
+     LINE_WIDTH = 434,
+     LOCAL = 435,
+     LOCATE = 436,
+     LOG = 437,
+     SQL_LONG = 438,
+     LOWER = 439,
+     LTRIM = 440,
+     LTRIP = 441,
+     MATCH = 442,
+     SQL_MAX = 443,
+     MICROSOFT = 444,
+     SQL_MIN = 445,
+     MINUS = 446,
+     MINUTE = 447,
+     MINUTES_BETWEEN = 448,
+     MOD = 449,
+     MODIFY = 450,
+     MODULE = 451,
+     MONTH = 452,
+     MONTHS_BETWEEN = 453,
+     MUMPS = 454,
+     NAMES = 455,
+     NATIONAL = 456,
+     NCHAR = 457,
+     NEXT = 458,
+     NODUP = 459,
+     NONE = 460,
+     NOT = 461,
+     NOT_EQUAL = 462,
+     NOT_EQUAL2 = 463,
      NOW = 464,
      SQL_NULL = 465,
      SQL_IS = 466,
@@ -318,227 +318,226 @@
      SET = 523,
      SHOWOPT = 524,
      SIGN = 525,
-     SIMILAR = 526,
-     SIMILAR_TO = 527,
-     NOT_SIMILAR_TO = 528,
-     INTEGER_CONST = 529,
-     REAL_CONST = 530,
-     SIN = 531,
-     SQL_SIZE = 532,
-     SMALLINT = 533,
-     SOME = 534,
-     SPACE = 535,
-     SQL = 536,
-     SQL_TRUE = 537,
-     SQLCA = 538,
-     SQLCODE = 539,
-     SQLERROR = 540,
-     SQLSTATE = 541,
-     SQLWARNING = 542,
-     SQRT = 543,
-     STDEV = 544,
-     SUBSTRING = 545,
-     SUM = 546,
-     SYSDATE = 547,
-     SYSDATE_FORMAT = 548,
-     SYSTEM = 549,
-     TABLE = 550,
-     TAN = 551,
-     TEMPORARY = 552,
-     THEN = 553,
-     THREE_DIGITS = 554,
-     TIME = 555,
-     TIMESTAMP = 556,
-     TIMEZONE_HOUR = 557,
-     TIMEZONE_MINUTE = 558,
-     TINYINT = 559,
-     TO = 560,
-     TO_CHAR = 561,
-     TO_DATE = 562,
-     TRANSACTION = 563,
-     TRANSLATE = 564,
-     TRANSLATION = 565,
-     TRUNCATE = 566,
-     GENERAL_TITLE = 567,
-     TWO_DIGITS = 568,
-     UCASE = 569,
-     UNION = 570,
-     UNIQUE = 571,
-     SQL_UNKNOWN = 572,
-     UPDATE = 573,
-     UPPER = 574,
-     USAGE = 575,
-     USER = 576,
-     IDENTIFIER = 577,
-     IDENTIFIER_DOT_ASTERISK = 578,
-     ERROR_DIGIT_BEFORE_IDENTIFIER = 579,
-     USING = 580,
-     VALUE = 581,
-     VALUES = 582,
-     VARBINARY = 583,
-     VARCHAR = 584,
-     VARYING = 585,
-     VENDOR = 586,
-     VIEW = 587,
-     WEEK = 588,
-     WHEN = 589,
-     WHENEVER = 590,
-     WHERE = 591,
-     WHERE_CURRENT_OF = 592,
-     WITH = 593,
-     WORD_WRAPPED = 594,
-     WORK = 595,
-     WRAPPED = 596,
-     XOR = 597,
-     YEAR = 598,
-     YEARS_BETWEEN = 599,
-     __LAST_TOKEN = 600,
-     ILIKE = 601
+     SIMILAR_TO = 526,
+     NOT_SIMILAR_TO = 527,
+     INTEGER_CONST = 528,
+     REAL_CONST = 529,
+     SIN = 530,
+     SQL_SIZE = 531,
+     SMALLINT = 532,
+     SOME = 533,
+     SPACE = 534,
+     SQL = 535,
+     SQL_TRUE = 536,
+     SQLCA = 537,
+     SQLCODE = 538,
+     SQLERROR = 539,
+     SQLSTATE = 540,
+     SQLWARNING = 541,
+     SQRT = 542,
+     STDEV = 543,
+     SUBSTRING = 544,
+     SUM = 545,
+     SYSDATE = 546,
+     SYSDATE_FORMAT = 547,
+     SYSTEM = 548,
+     TABLE = 549,
+     TAN = 550,
+     TEMPORARY = 551,
+     THEN = 552,
+     THREE_DIGITS = 553,
+     TIME = 554,
+     TIMESTAMP = 555,
+     TIMEZONE_HOUR = 556,
+     TIMEZONE_MINUTE = 557,
+     TINYINT = 558,
+     TO = 559,
+     TO_CHAR = 560,
+     TO_DATE = 561,
+     TRANSACTION = 562,
+     TRANSLATE = 563,
+     TRANSLATION = 564,
+     TRUNCATE = 565,
+     GENERAL_TITLE = 566,
+     TWO_DIGITS = 567,
+     UCASE = 568,
+     UNION = 569,
+     UNIQUE = 570,
+     SQL_UNKNOWN = 571,
+     UPDATE = 572,
+     UPPER = 573,
+     USAGE = 574,
+     USER = 575,
+     IDENTIFIER = 576,
+     IDENTIFIER_DOT_ASTERISK = 577,
+     ERROR_DIGIT_BEFORE_IDENTIFIER = 578,
+     USING = 579,
+     VALUE = 580,
+     VALUES = 581,
+     VARBINARY = 582,
+     VARCHAR = 583,
+     VARYING = 584,
+     VENDOR = 585,
+     VIEW = 586,
+     WEEK = 587,
+     WHEN = 588,
+     WHENEVER = 589,
+     WHERE = 590,
+     WHERE_CURRENT_OF = 591,
+     WITH = 592,
+     WORD_WRAPPED = 593,
+     WORK = 594,
+     WRAPPED = 595,
+     XOR = 596,
+     YEAR = 597,
+     YEARS_BETWEEN = 598,
+     __LAST_TOKEN = 599,
+     ILIKE = 600
    };
 #endif
-#define SQL_TYPE 258
-#define SQL_ABS 259
-#define ACOS 260
-#define AMPERSAND 261
-#define SQL_ABSOLUTE 262
-#define ADA 263
-#define ADD 264
-#define ADD_DAYS 265
-#define ADD_HOURS 266
-#define ADD_MINUTES 267
-#define ADD_MONTHS 268
-#define ADD_SECONDS 269
-#define ADD_YEARS 270
-#define ALL 271
-#define ALLOCATE 272
-#define ALTER 273
-#define AND 274
-#define ANY 275
-#define ARE 276
-#define AS 277
-#define ASIN 278
-#define ASC 279
-#define ASCII 280
-#define ASSERTION 281
-#define ATAN 282
-#define ATAN2 283
-#define AUTHORIZATION 284
-#define AUTO_INCREMENT 285
-#define AVG 286
-#define BEFORE 287
-#define SQL_BEGIN 288
-#define BETWEEN 289
-#define BIGINT 290
-#define BINARY 291
-#define BIT 292
-#define BIT_LENGTH 293
-#define BITWISE_SHIFT_LEFT 294
-#define BITWISE_SHIFT_RIGHT 295
-#define BREAK 296
-#define BY 297
-#define CASCADE 298
-#define CASCADED 299
-#define CASE 300
-#define CAST 301
-#define CATALOG 302
-#define CEILING 303
-#define CENTER 304
-#define SQL_CHAR 305
-#define CHAR_LENGTH 306
-#define CHARACTER_STRING_LITERAL 307
-#define CHECK 308
-#define CLOSE 309
-#define COALESCE 310
-#define COBOL 311
-#define COLLATE 312
-#define COLLATION 313
-#define COLUMN 314
-#define COMMIT 315
-#define COMPUTE 316
-#define CONCAT 317
-#define CONCATENATION 318
-#define CONNECT 319
-#define CONNECTION 320
-#define CONSTRAINT 321
-#define CONSTRAINTS 322
-#define CONTINUE 323
-#define CONVERT 324
-#define CORRESPONDING 325
-#define COS 326
-#define COT 327
-#define COUNT 328
-#define CREATE 329
-#define CURDATE 330
-#define CURRENT 331
-#define CURRENT_DATE 332
-#define CURRENT_TIME 333
-#define CURRENT_TIMESTAMP 334
-#define CURTIME 335
-#define CURSOR 336
-#define DATABASE 337
-#define SQL_DATE 338
-#define DATE_FORMAT 339
-#define DATE_REMAINDER 340
-#define DATE_VALUE 341
-#define DAY 342
-#define DAYOFMONTH 343
-#define DAYOFWEEK 344
-#define DAYOFYEAR 345
-#define DAYS_BETWEEN 346
-#define DEALLOCATE 347
-#define DEC 348
-#define DECLARE 349
-#define DEFAULT 350
-#define DEFERRABLE 351
-#define DEFERRED 352
-#define SQL_DELETE 353
-#define DESC 354
-#define DESCRIBE 355
-#define DESCRIPTOR 356
-#define DIAGNOSTICS 357
-#define DICTIONARY 358
-#define DIRECTORY 359
-#define DISCONNECT 360
-#define DISPLACEMENT 361
-#define DISTINCT 362
-#define DOMAIN_TOKEN 363
-#define SQL_DOUBLE 364
-#define DOUBLE_QUOTED_STRING 365
-#define DROP 366
-#define ELSE 367
-#define END 368
-#define END_EXEC 369
-#define EQUAL 370
-#define ESCAPE 371
-#define EXCEPT 372
-#define SQL_EXCEPTION 373
-#define EXEC 374
-#define EXECUTE 375
-#define EXISTS 376
-#define EXP 377
-#define EXPONENT 378
-#define EXTERNAL 379
-#define EXTRACT 380
-#define SQL_FALSE 381
-#define FETCH 382
-#define FIRST 383
-#define SQL_FLOAT 384
-#define FLOOR 385
-#define FN 386
-#define FOR 387
-#define FOREIGN 388
-#define FORTRAN 389
-#define FOUND 390
-#define FOUR_DIGITS 391
-#define FROM 392
-#define FULL 393
-#define GET 394
-#define GLOBAL 395
-#define GO 396
-#define GOTO 397
-#define GRANT 398
-#define GREATER_OR_EQUAL 399
-#define GREATER_THAN 400
+#define UMINUS 258
+#define SQL_TYPE 259
+#define SQL_ABS 260
+#define ACOS 261
+#define AMPERSAND 262
+#define SQL_ABSOLUTE 263
+#define ADA 264
+#define ADD 265
+#define ADD_DAYS 266
+#define ADD_HOURS 267
+#define ADD_MINUTES 268
+#define ADD_MONTHS 269
+#define ADD_SECONDS 270
+#define ADD_YEARS 271
+#define ALL 272
+#define ALLOCATE 273
+#define ALTER 274
+#define AND 275
+#define ANY 276
+#define ARE 277
+#define AS 278
+#define ASIN 279
+#define ASC 280
+#define ASCII 281
+#define ASSERTION 282
+#define ATAN 283
+#define ATAN2 284
+#define AUTHORIZATION 285
+#define AUTO_INCREMENT 286
+#define AVG 287
+#define BEFORE 288
+#define SQL_BEGIN 289
+#define BETWEEN 290
+#define BIGINT 291
+#define BINARY 292
+#define BIT 293
+#define BIT_LENGTH 294
+#define BITWISE_SHIFT_LEFT 295
+#define BITWISE_SHIFT_RIGHT 296
+#define BREAK 297
+#define BY 298
+#define CASCADE 299
+#define CASCADED 300
+#define CASE 301
+#define CAST 302
+#define CATALOG 303
+#define CEILING 304
+#define CENTER 305
+#define SQL_CHAR 306
+#define CHAR_LENGTH 307
+#define CHARACTER_STRING_LITERAL 308
+#define CHECK 309
+#define CLOSE 310
+#define COALESCE 311
+#define COBOL 312
+#define COLLATE 313
+#define COLLATION 314
+#define COLUMN 315
+#define COMMIT 316
+#define COMPUTE 317
+#define CONCAT 318
+#define CONCATENATION 319
+#define CONNECT 320
+#define CONNECTION 321
+#define CONSTRAINT 322
+#define CONSTRAINTS 323
+#define CONTINUE 324
+#define CONVERT 325
+#define CORRESPONDING 326
+#define COS 327
+#define COT 328
+#define COUNT 329
+#define CREATE 330
+#define CURDATE 331
+#define CURRENT 332
+#define CURRENT_DATE 333
+#define CURRENT_TIME 334
+#define CURRENT_TIMESTAMP 335
+#define CURTIME 336
+#define CURSOR 337
+#define DATABASE 338
+#define SQL_DATE 339
+#define DATE_FORMAT 340
+#define DATE_REMAINDER 341
+#define DATE_VALUE 342
+#define DAY 343
+#define DAYOFMONTH 344
+#define DAYOFWEEK 345
+#define DAYOFYEAR 346
+#define DAYS_BETWEEN 347
+#define DEALLOCATE 348
+#define DEC 349
+#define DECLARE 350
+#define DEFAULT 351
+#define DEFERRABLE 352
+#define DEFERRED 353
+#define SQL_DELETE 354
+#define DESC 355
+#define DESCRIBE 356
+#define DESCRIPTOR 357
+#define DIAGNOSTICS 358
+#define DICTIONARY 359
+#define DIRECTORY 360
+#define DISCONNECT 361
+#define DISPLACEMENT 362
+#define DISTINCT 363
+#define DOMAIN_TOKEN 364
+#define SQL_DOUBLE 365
+#define DOUBLE_QUOTED_STRING 366
+#define DROP 367
+#define ELSE 368
+#define END 369
+#define END_EXEC 370
+#define EQUAL 371
+#define ESCAPE 372
+#define EXCEPT 373
+#define SQL_EXCEPTION 374
+#define EXEC 375
+#define EXECUTE 376
+#define EXISTS 377
+#define EXP 378
+#define EXPONENT 379
+#define EXTERNAL 380
+#define EXTRACT 381
+#define SQL_FALSE 382
+#define FETCH 383
+#define FIRST 384
+#define SQL_FLOAT 385
+#define FLOOR 386
+#define FN 387
+#define FOR 388
+#define FOREIGN 389
+#define FORTRAN 390
+#define FOUND 391
+#define FOUR_DIGITS 392
+#define FROM 393
+#define FULL 394
+#define GET 395
+#define GLOBAL 396
+#define GO 397
+#define GOTO 398
+#define GRANT 399
+#define GREATER_OR_EQUAL 400
 #define HAVING 401
 #define HOUR 402
 #define HOURS_BETWEEN 403
@@ -570,38 +569,38 @@
 #define LEFT 429
 #define LENGTH 430
 #define LESS_OR_EQUAL 431
-#define LESS_THAN 432
-#define LEVEL 433
-#define LIKE 434
-#define LINE_WIDTH 435
-#define LOCAL 436
-#define LOCATE 437
-#define LOG 438
-#define SQL_LONG 439
-#define LOWER 440
-#define LTRIM 441
-#define LTRIP 442
-#define MATCH 443
-#define SQL_MAX 444
-#define MICROSOFT 445
-#define SQL_MIN 446
-#define MINUS 447
-#define MINUTE 448
-#define MINUTES_BETWEEN 449
-#define MOD 450
-#define MODIFY 451
-#define MODULE 452
-#define MONTH 453
-#define MONTHS_BETWEEN 454
-#define MUMPS 455
-#define NAMES 456
-#define NATIONAL 457
-#define NCHAR 458
-#define NEXT 459
-#define NODUP 460
-#define NONE 461
-#define NOT 462
-#define NOT_EQUAL 463
+#define LEVEL 432
+#define LIKE 433
+#define LINE_WIDTH 434
+#define LOCAL 435
+#define LOCATE 436
+#define LOG 437
+#define SQL_LONG 438
+#define LOWER 439
+#define LTRIM 440
+#define LTRIP 441
+#define MATCH 442
+#define SQL_MAX 443
+#define MICROSOFT 444
+#define SQL_MIN 445
+#define MINUS 446
+#define MINUTE 447
+#define MINUTES_BETWEEN 448
+#define MOD 449
+#define MODIFY 450
+#define MODULE 451
+#define MONTH 452
+#define MONTHS_BETWEEN 453
+#define MUMPS 454
+#define NAMES 455
+#define NATIONAL 456
+#define NCHAR 457
+#define NEXT 458
+#define NODUP 459
+#define NONE 460
+#define NOT 461
+#define NOT_EQUAL 462
+#define NOT_EQUAL2 463
 #define NOW 464
 #define SQL_NULL 465
 #define SQL_IS 466
@@ -664,88 +663,87 @@
 #define SET 523
 #define SHOWOPT 524
 #define SIGN 525
-#define SIMILAR 526
-#define SIMILAR_TO 527
-#define NOT_SIMILAR_TO 528
-#define INTEGER_CONST 529
-#define REAL_CONST 530
-#define SIN 531
-#define SQL_SIZE 532
-#define SMALLINT 533
-#define SOME 534
-#define SPACE 535
-#define SQL 536
-#define SQL_TRUE 537
-#define SQLCA 538
-#define SQLCODE 539
-#define SQLERROR 540
-#define SQLSTATE 541
-#define SQLWARNING 542
-#define SQRT 543
-#define STDEV 544
-#define SUBSTRING 545
-#define SUM 546
-#define SYSDATE 547
-#define SYSDATE_FORMAT 548
-#define SYSTEM 549
-#define TABLE 550
-#define TAN 551
-#define TEMPORARY 552
-#define THEN 553
-#define THREE_DIGITS 554
-#define TIME 555
-#define TIMESTAMP 556
-#define TIMEZONE_HOUR 557
-#define TIMEZONE_MINUTE 558
-#define TINYINT 559
-#define TO 560
-#define TO_CHAR 561
-#define TO_DATE 562
-#define TRANSACTION 563
-#define TRANSLATE 564
-#define TRANSLATION 565
-#define TRUNCATE 566
-#define GENERAL_TITLE 567
-#define TWO_DIGITS 568
-#define UCASE 569
-#define UNION 570
-#define UNIQUE 571
-#define SQL_UNKNOWN 572
-#define UPDATE 573
-#define UPPER 574
-#define USAGE 575
-#define USER 576
-#define IDENTIFIER 577
-#define IDENTIFIER_DOT_ASTERISK 578
-#define ERROR_DIGIT_BEFORE_IDENTIFIER 579
-#define USING 580
-#define VALUE 581
-#define VALUES 582
-#define VARBINARY 583
-#define VARCHAR 584
-#define VARYING 585
-#define VENDOR 586
-#define VIEW 587
-#define WEEK 588
-#define WHEN 589
-#define WHENEVER 590
-#define WHERE 591
-#define WHERE_CURRENT_OF 592
-#define WITH 593
-#define WORD_WRAPPED 594
-#define WORK 595
-#define WRAPPED 596
-#define XOR 597
-#define YEAR 598
-#define YEARS_BETWEEN 599
-#define __LAST_TOKEN 600
-#define ILIKE 601
+#define SIMILAR_TO 526
+#define NOT_SIMILAR_TO 527
+#define INTEGER_CONST 528
+#define REAL_CONST 529
+#define SIN 530
+#define SQL_SIZE 531
+#define SMALLINT 532
+#define SOME 533
+#define SPACE 534
+#define SQL 535
+#define SQL_TRUE 536
+#define SQLCA 537
+#define SQLCODE 538
+#define SQLERROR 539
+#define SQLSTATE 540
+#define SQLWARNING 541
+#define SQRT 542
+#define STDEV 543
+#define SUBSTRING 544
+#define SUM 545
+#define SYSDATE 546
+#define SYSDATE_FORMAT 547
+#define SYSTEM 548
+#define TABLE 549
+#define TAN 550
+#define TEMPORARY 551
+#define THEN 552
+#define THREE_DIGITS 553
+#define TIME 554
+#define TIMESTAMP 555
+#define TIMEZONE_HOUR 556
+#define TIMEZONE_MINUTE 557
+#define TINYINT 558
+#define TO 559
+#define TO_CHAR 560
+#define TO_DATE 561
+#define TRANSACTION 562
+#define TRANSLATE 563
+#define TRANSLATION 564
+#define TRUNCATE 565
+#define GENERAL_TITLE 566
+#define TWO_DIGITS 567
+#define UCASE 568
+#define UNION 569
+#define UNIQUE 570
+#define SQL_UNKNOWN 571
+#define UPDATE 572
+#define UPPER 573
+#define USAGE 574
+#define USER 575
+#define IDENTIFIER 576
+#define IDENTIFIER_DOT_ASTERISK 577
+#define ERROR_DIGIT_BEFORE_IDENTIFIER 578
+#define USING 579
+#define VALUE 580
+#define VALUES 581
+#define VARBINARY 582
+#define VARCHAR 583
+#define VARYING 584
+#define VENDOR 585
+#define VIEW 586
+#define WEEK 587
+#define WHEN 588
+#define WHENEVER 589
+#define WHERE 590
+#define WHERE_CURRENT_OF 591
+#define WITH 592
+#define WORD_WRAPPED 593
+#define WORK 594
+#define WRAPPED 595
+#define XOR 596
+#define YEAR 597
+#define YEARS_BETWEEN 598
+#define __LAST_TOKEN 599
+#define ILIKE 600
 
 
 
 
 /* Copy the first part of user declarations.  */
-#line 423 "sqlparser.y"
+#line 428 "sqlparser.y"
 
 #include <stdio.h>
 #include <string.h>
@@ -762,7 +760,6 @@
 #include <klocale.h>
 #include <qptrlist.h>
 #include <qcstring.h>
-#include <qregexp.h>
 
 #include <connection.h>
 #include <queryschema.h>
@@ -773,6 +770,8 @@
 #include "parser_p.h"
 #include "sqltypes.h"
 
+int yylex();
+
 //	using namespace std;
 using namespace KexiDB;
 
@@ -780,508 +779,6 @@ using namespace KexiDB;
 #define YYSTACK_USE_ALLOCA 1
 #define YYMAXDEPTH 255
 
-Parser *parser;
-Field *field;
-bool requiresTable;
-QPtrList<Field> fieldList;
-//	QPtrList<TableSchema> tableList;
-//	QDict<TableSchema> tableDict;
-//	TableSchema *dummy = 0;
-int current = 0;
-QString ctoken = "";
-
-int yyparse();
-int yylex();
-void tokenize(const char *data);
-
-void yyerror(const char *str)
-{
-	kdDebug() << "error: " << str << endl;
-	kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
-	parser->setOperation(Parser::OP_Error);
-
-	const bool otherError = (qstrnicmp(str, "other error", 11)==0);
-	
-	if (parser->error().type().isEmpty() 
-		&& (strlen(str)==0 
-		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0)
-		|| otherError)
-	{
-		kdDebug() << parser->statement() << endl;
-		QString ptrline = "";
-		for(int i=0; i < current; i++)
-			ptrline += " ";
-
-		ptrline += "^";
-
-		kdDebug() << ptrline << endl;
-
-		//lexer may add error messages
-		QString lexerErr = parser->error().error();
-
-		QString errtypestr(str);
-		if (lexerErr.isEmpty()) {
-			if (errtypestr.startsWith("parse error, unexpected ")) {
-				//something like "parse error, unexpected IDENTIFIER, expecting ',' or ')'"
-				QString e = errtypestr.mid(24);
-				kdDebug() << e <<endl;
-				QString token = "IDENTIFIER";
-				if (e.startsWith(token)) {
-					QRegExp re("'.'");
-					int pos=0;
-					pos = re.search(e, pos);
-					QStringList captured=re.capturedTexts();
-					if (captured.count()>=2) {
-						kdDebug() << "**" << captured[1] << endl;
-						kdDebug() << "**" << captured[2] << endl;
-					}
-				}
-					
-					
-					
-//			 IDENTIFIER, expecting '")) {
-				e = errtypestr.mid(47);
-				kdDebug() << e <<endl;
-//				,' or ')'
-//		lexerErr i18n("identifier was expected");
-				
-			} else if (errtypestr.startsWith("parse error, expecting `IDENTIFIER'"))
-				lexerErr = i18n("identifier was expected");
-		}
-		
-		if (!otherError) {
-			if (!lexerErr.isEmpty())
-				lexerErr.prepend(": ");
-
-			if (parser->isReservedKeyword(ctoken.latin1()))
-				parser->setError( ParserError(i18n("Syntax Error"), 
-					i18n("\"%1\" is a reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
-			else
-				parser->setError( ParserError(i18n("Syntax Error"), 
-					i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );
-		}
-	}
-}
-
-void setError(const QString& errName, const QString& errDesc)
-{
-	parser->setError( ParserError(errName, errDesc, ctoken, current) );
-	yyerror(errName.latin1());
-}
-
-void setError(const QString& errDesc)
-{
-	setError("other error", errDesc);
-}
-
-/* this is better than assert() */
-#define IMPL_ERROR(errmsg) setError("Implementation error", errmsg)
-
-bool parseData(Parser *p, const char *data)
-{
-/* todo: remove dummy */
-//		if (!dummy)
-			//dummy = new TableSchema();
-/* todo: make this REENTRANT */
-	parser = p;
-	parser->clear();
-	field = 0;
-	fieldList.clear();
-	requiresTable = false;
-
-	if (!data) {
-		ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
-		parser->setError(err);
-		yyerror("");
-		parser = 0;
-		return false;
-	}
-
-	tokenize(data);
-	if (!parser->error().type().isEmpty()) {
-		parser = 0;
-		return false;
-	}
-	yyparse();
-
-	bool ok = true;
-	if(parser->operation() == Parser::OP_Select)
-	{
-		kdDebug() << "parseData(): ok" << endl;
-//			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
-/*			TableSchema *ts;
-			for(QDictIterator<TableSchema> it(tableDict); TableSchema *s = tableList.first(); s; s = tableList.next())
-			{
-				kdDebug() << "  " << s->name() << endl;
-			}*/
-/*removed
-			Field::ListIterator it = parser->select()->fieldsIterator();
-			for(Field *item; (item = it.current()); ++it)
-			{
-				if(tableList.findRef(item->table()) == -1)
-				{
-					ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list").arg(item->table()->name()), ctoken, current);
-					parser->setError(err);
-
-					yyerror("fieldlisterror");
-					ok = false;
-				}
-			}*/
-			//take the dummy table out of the query
-//			parser->select()->removeTable(dummy);
-	}
-	else {
-		ok = false;
-	}
-
-//		tableDict.clear();
-	parser = 0;
-	return ok;
-}
-
-	
-/* Adds \a column to \a querySchema. \a column can be in a form of
- table.field, tableAlias.field or field
-*/
-bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
-{
-	if (!columnExpr->validate(parseInfo)) {
-		setError(parseInfo.errMsg, parseInfo.errDescr);
-		return false;
-	}
-
-	VariableExpr *v_e = dynamic_cast<VariableExpr*>(columnExpr);
-	if (columnExpr->exprClass() == KexiDBExpr_Variable && v_e) {
-		//it's a variable:
-		if (v_e->name=="*") {//all tables asterisk
-			if (parseInfo.querySchema->tables()->isEmpty()) {
-				setError(i18n("\"*\" could not be used if no tables are specified"));
-				return false;
-			}
-			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
-		}
-		else if (v_e->tableForQueryAsterisk) {//one-table asterisk
-			parseInfo.querySchema->addAsterisk( 
-				new QueryAsterisk(parseInfo.querySchema, v_e->tableForQueryAsterisk) );
-		}
-		else if (v_e->field) {//"table.field" or "field" (bound to a table or not)
-			parseInfo.querySchema->addField(v_e->field, v_e->tablePositionForField);
-		}
-		else {
-			IMPL_ERROR("addColumn(): unknown case!");
-			return false;
-		}
-		return true;
-	}
-
-	//it's complex expression
-	Field *field = new Field(parseInfo.querySchema, columnExpr);
-	parseInfo.querySchema->addField(field);
-
-#if 0
-	kdDebug() << "found variable name: " << varName << endl;
-	int dotPos = varName.find('.');
-	QString tableName, fieldName;
-//TODO: shall we also support db name?
-	if (dotPos>0) {
-		tableName = varName.left(dotPos);
-		fieldName = varName.mid(dotPos+1);
-	}
-	if (tableName.isEmpty()) {//fieldname only
-		fieldName = varName;
-		if (fieldName=="*") {
-			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
-		}
-		else {
-			//find first table that has this field
-			Field *firstField = 0;
-			for (TableSchema::ListIterator it(*parseInfo.querySchema->tables()); it.current(); ++it) {
-				Field *f = it.current()->field(fieldName);
-				if (f) {
-					if (!firstField) {
-						firstField = f;
-					} else if (f->table()!=firstField->table()) {
-						//ambiguous field name
-						setError(i18n("Ambiguous field name"), 
-							i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-								"Use \"<tableName>.%4\" notation to specify table name.")
-								.arg(firstField->table()->name()).arg(f->table()->name())
-								.arg(fieldName).arg(fieldName));
-						return false;
-					}
-				}
-			}
-			if (!firstField) {
-					setError(i18n("Field not found"), 
-						i18n("Table containing \"%1\" field not found").arg(fieldName));
-					return false;
-			}
-			//ok
-			parseInfo.querySchema->addField(firstField);
-		}
-	}
-	else {//table.fieldname or tableAlias.fieldname
-		tableName = tableName.lower();
-		TableSchema *ts = parseInfo.querySchema->table( tableName );
-		if (ts) {//table.fieldname
-			//check if "table" is covered by an alias
-			const QValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
-			QValueList<int>::ConstIterator it = tPositions.begin();
-			QCString tableAlias;
-			bool covered = true;
-			for (; it!=tPositions.end() && covered; ++it) {
-				tableAlias = parseInfo.querySchema->tableAlias(*it);
-				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
-					covered = false; //uncovered
-				kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
-			}
-			if (covered) {
-				setError(i18n("Could not access the table directly using its name"), 
-					i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-					"you can write \"%3\"").arg(tableName)
-					.arg(tableName+"."+fieldName).arg(tableAlias+"."+fieldName.latin1()));
-				return false;
-			}
-		}
-		
-		int tablePosition = -1;
-		if (!ts) {//try to find tableAlias
-			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
-			if (tablePosition>=0) {
-				ts = parseInfo.querySchema->tables()->at(tablePosition);
-				if (ts)
-					kdDebug() << " --it's a tableAlias.name" << endl;
-			}
-		}
-
-
-		if (ts) {
-			QValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
-			if (!positionsList) {
-				IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
-				return false;
-			}
-
-			if (fieldName=="*") {
-				if (positionsList->count()>1) {
-					setError(i18n("Ambiguous \"%1.*\" expression").arg(tableName),
-						i18n("More than one \"%1\" table or alias defined").arg(tableName));
-					return false;
-				}
-				parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema, ts) );
-			}
-			else {
-				kdDebug() << " --it's a table.name" << endl;
-				Field *realField = ts->field(fieldName);
-				if (realField) {
-					// check if table or alias is used twice and both have the same column
-					// (so the column is ambiguous)
-					int numberOfTheSameFields = 0;
-					for (QValueList<int>::iterator it = positionsList->begin();
-						it!=positionsList->end();++it)
-					{
-						TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
-						if (otherTS->field(fieldName))
-							numberOfTheSameFields++;
-						if (numberOfTheSameFields>1) {
-							setError(i18n("Ambiguous \"%1.%2\" expression").arg(tableName).arg(fieldName),
-								i18n("More than one \"%1\" table or alias defined containing \"%2\" field").arg(tableName).arg(fieldName));
-							return false;
-						}
-					}
-
-					parseInfo.querySchema->addField(realField, tablePosition);
-				}
-				else {
-					setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
-						.arg(tableName).arg(fieldName));
-					return false;
-				}
-			}
-		}
-		else {
-			tableNotFoundError(tableName);
-			return false;
-		}
-	}
-#endif
-	return true;
-}
-
-QuerySchema* parseSelect( 
-	QuerySchema* querySchema, NArgExpr* colViews,	NArgExpr * tablesList )
-{
-	ParseInfo parseInfo(querySchema);
-	
-	//-------tables list
-//	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
-
-	uint columnNum = 0;
-/*TODO: use this later if there are columns that use database fields, 
-        e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
-	//used to collect information about first repeated table name or alias:
-//	QDict<char> tableNamesAndTableAliases(997, false);
-//	QString repeatedTableNameOrTableAlias;
-	if (tablesList) {
-		for (int i=0; i<tablesList->args(); i++, columnNum++) {
-			BaseExpr *e = tablesList->arg(i);
-			VariableExpr* t_e = 0;
-			QCString aliasString;
-			if (e->exprClass() == KexiDBExpr_SpecialBinary) {
-				BinaryExpr* t_with_alias = dynamic_cast<BinaryExpr*>(e);
-				assert(t_with_alias);
-				assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
-				assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
-					&& (t_with_alias->type()==AS || t_with_alias->type()==0));
-				t_e = dynamic_cast<VariableExpr*>(t_with_alias->left());
-				aliasString = dynamic_cast<VariableExpr*>(t_with_alias->right())->name.latin1();
-			}
-			else {
-				t_e = dynamic_cast<VariableExpr*>(e);
-			}
-			assert(t_e);
-			QCString tname = t_e->name.latin1();
-			TableSchema *s = parser->db()->tableSchema(tname);
-			if(!s) {
-				setError(//i18n("Field List Error"), 
-					i18n("Table \"%1\" does not exist").arg(tname));
-	//			yyerror("fieldlisterror");
-				return 0;
-			}
-			QCString tableOrAliasName;
-			if (!aliasString.isEmpty()) {
-				tableOrAliasName = aliasString;
-				kdDebug() << "- add alias for table: " << aliasString << endl;
-			} else {
-				tableOrAliasName = tname;
-			}
-			// 1. collect information about first repeated table name or alias
-			//    (potential ambiguity)
-			QValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
-			if (list) {
-				//another table/alias with the same name
-				list->append( i );
-				kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
-			}
-			else {
-				list = new QValueList<int>();
-				list->append( i );
-				parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
-				kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
-			}
-	/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
-				if (tableNamesAndTableAliasestname)
-					repeatedTableNameOrTableAlias=tname;
-				else
-					tableNamesAndTableAliases.insert(tname, (const char*)1);
-			}
-			if (!aliasString.isEmpty()) {
-				kdDebug() << "- add alias for table: " << aliasString << endl;
-	//			querySchema->setTableAlias(columnNum, aliasString);
-				//2. collect information about first repeated table name or alias
-				//   (potential ambiguity)
-				if (repeatedTableNameOrTableAlias.isEmpty()) {
-					if (tableNamesAndTableAliasesaliasString)
-						repeatedTableNameOrTableAlias=aliasString;
-					else
-						tableNamesAndTableAliases.insert(aliasString, (const char*)1);
-				}
-			}*/
-			kdDebug() << "addTable: " << tname << endl;
-			querySchema->addTable( s, aliasString );
-		}
-	}
-
-	/* set parent table if there's only one */
-//	if (parser->select()->tables()->count()==1)
-	if (querySchema->tables()->count()==1)
-		querySchema->setParentTable(querySchema->tables()->first());
-
-	//-------add fields
-	if (colViews) {
-		BaseExpr *e;
-		columnNum = 0;
-		for (BaseExpr::ListIterator it(colViews->list); (e = it.current()); columnNum++)
-		{
-			bool moveNext = true; //used to avoid ++it when an item is taken from the list
-			BaseExpr *columnExpr = e;
-			VariableExpr* aliasVariable = 0;
-			if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-				&& (e->type()==AS || e->type()==0))
-			{
-				//KexiDBExpr_SpecialBinary: with alias
-				columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
-	//			isFieldWithAlias = true;
-				aliasVariable = dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
-				if (!aliasVariable) {
-					setError(i18n("Invalid column alias definition")); //ok?
-					return 0;
-				}
-			}
-	
-			const int c = columnExpr->exprClass();
-			const bool isExpressionField = 
-					c == KexiDBExpr_Const
-				|| c == KexiDBExpr_Unary
-				|| c == KexiDBExpr_Arithm
-				|| c == KexiDBExpr_Logical
-				|| c == KexiDBExpr_Relational
-				|| c == KexiDBExpr_Const
-				|| c == KexiDBExpr_Function;
-	
-			if (c == KexiDBExpr_Variable) {
-				//just a variable, do nothing, addColumn() will handle this
-			}
-			else if (isExpressionField) {
-				//expression object will be reused, take, will be owned, do not destroy
-				colViews->list.take();
-				moveNext = false;
-			}
-			else if (aliasVariable) {
-				//take first (left) argument of the special binary expr, will be owned, do not destroy
-				dynamic_cast<BinaryExpr*>(e)->list.take(0);
-			}
-			else {
-				setError(i18n("Invalid column definition")); //ok?
-				return 0;
-			}
-	
-			if (!addColumn( parseInfo, columnExpr ))
-				return 0;
-			
-			if (aliasVariable) {
-				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-					<< columnNum << endl;
-				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-			}
-	/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-				&& (e->type()==AS || e->type()==0))
-			{
-				//also add alias
-				VariableExpr* aliasVariable =
-					dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
-				if (!aliasVariable) {
-					setError(i18n("Invalid column alias definition")); //ok?
-					return 0;
-				}
-				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-					<< columnNum << endl;
-				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-			}*/
-	
-			if (moveNext)
-				++it;
-		}
-	}
-	kdDebug() << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
-		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
-	
-	delete colViews; //no longer needed
-	delete tablesList; //no longer needed
-	
-	return querySchema;
-}
-	
 	extern "C"
 	{
 		int yywrap()
@@ -1314,7 +811,7 @@ QuerySchema* parseSelect(
 #endif
 
 #ifndef YYSTYPE
-#line 977 "sqlparser.y"
+#line 481 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;
@@ -1327,7 +824,7 @@ typedef union {
 	KexiDB::QuerySchema *querySchema;
 } yystype;
 /* Line 193 of /usr/share/bison/yacc.c.  */
-#line 1331 "sqlparser.tab.c"
+#line 828 "sqlparser.tab.c"
 # define YYSTYPE yystype
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
@@ -1348,7 +845,7 @@ typedef struct yyltype
 
 
 /* Line 213 of /usr/share/bison/yacc.c.  */
-#line 1352 "sqlparser.tab.c"
+#line 849 "sqlparser.tab.c"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -1446,20 +943,20 @@ union yyalloc
 
 /* YYFINAL -- State number of the termination state. */
 #define YYFINAL  10
-#define YYLAST   331
+#define YYLAST   330
 
 /* YYNTOKENS -- Number of terminals. */
-#define YYNTOKENS  368
+#define YYNTOKENS  369
 /* YYNNTS -- Number of nonterminals. */
 #define YYNNTS  31
 /* YYNRULES -- Number of rules. */
-#define YYNRULES  90
+#define YYNRULES  92
 /* YYNRULES -- Number of states. */
 #define YYNSTATES  152
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   601
+#define YYMAXUTOK   600
 
 #define YYTRANSLATE(X) \
   ((unsigned)(X) <= YYMAXUTOK ? yytranslate[X] : YYUNDEFTOK)
@@ -1470,16 +967,16 @@ static const unsigned short yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,   354,   349,   365,   358,
-     355,   356,   348,   347,   352,   346,   353,   359,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,   351,
-       2,   360,     2,   357,   350,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,   353,   348,   366,   357,
+     354,   355,   347,   346,   351,   345,   352,   358,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,   350,
+     360,   359,   361,   356,   349,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,   363,     2,   364,   362,     2,     2,     2,     2,     2,
+       2,   364,     2,   365,   363,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,   366,     2,   367,     2,     2,     2,
+       2,     2,     2,     2,   367,     2,   368,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1527,7 +1024,7 @@ static const unsigned short yytranslate[] =
      315,   316,   317,   318,   319,   320,   321,   322,   323,   324,
      325,   326,   327,   328,   329,   330,   331,   332,   333,   334,
      335,   336,   337,   338,   339,   340,   341,   342,   343,   344,
-     345,   361
+     362
 };
 
 #if YYDEBUG
@@ -1537,63 +1034,64 @@ static const unsigned short yyprhs[] =
 {
        0,     0,     3,     5,     9,    11,    14,    16,    18,    19,
       27,    31,    33,    36,    40,    43,    45,    48,    51,    53,
-      55,    60,    65,    66,    69,    73,    76,    80,    85,    87,
-      90,    92,    96,   100,   104,   106,   110,   114,   116,   120,
-     124,   128,   132,   134,   138,   142,   146,   148,   152,   156,
-     160,   164,   166,   170,   174,   178,   183,   189,   191,   195,
-     200,   202,   205,   208,   211,   214,   216,   221,   225,   227,
-     229,   231,   233,   237,   241,   242,   245,   249,   251,   253,
-     256,   260,   264,   266,   268,   270,   274,   277,   279,   284,
-     286
+      55,    60,    65,    66,    69,    73,    76,    80,    85,    89,
+      91,    94,    96,   100,   104,   108,   110,   114,   118,   120,
+     124,   128,   132,   136,   138,   142,   146,   150,   152,   156,
+     160,   164,   168,   172,   174,   178,   182,   186,   190,   194,
+     198,   200,   203,   206,   208,   211,   214,   217,   220,   222,
+     226,   228,   230,   232,   234,   236,   240,   243,   247,   249,
+     251,   254,   258,   262,   264,   266,   268,   272,   275,   277,
+     282,   287,   289
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS. */
 static const short yyrhs[] =
 {
-     369,     0,    -1,   370,    -1,   371,   351,   370,    -1,   371,
-      -1,   371,   351,    -1,   372,    -1,   379,    -1,    -1,    74,
-     295,   322,   373,   355,   374,   356,    -1,   374,   352,   375,
-      -1,   375,    -1,   322,   378,    -1,   322,   378,   376,    -1,
-     376,   377,    -1,   377,    -1,   239,   170,    -1,   207,   210,
-      -1,    30,    -1,     3,    -1,     3,   355,   274,   356,    -1,
-     329,   355,   274,   356,    -1,    -1,   380,   395,    -1,   380,
-     395,   392,    -1,   380,   392,    -1,   380,   395,   381,    -1,
-     380,   395,   392,   381,    -1,   265,    -1,   336,   382,    -1,
-     383,    -1,   384,    19,   383,    -1,   384,   224,   383,    -1,
-     384,   342,   383,    -1,   384,    -1,   385,    39,   384,    -1,
-     385,    40,   384,    -1,   385,    -1,   386,   347,   385,    -1,
-     386,   346,   385,    -1,   386,   365,   385,    -1,   386,   366,
-     385,    -1,   386,    -1,   387,   359,   386,    -1,   387,   348,
-     386,    -1,   387,   349,   386,    -1,   387,    -1,   388,   145,
-     387,    -1,   388,   144,   387,    -1,   388,   177,   387,    -1,
-     388,   176,   387,    -1,   388,    -1,   389,   208,   388,    -1,
-     389,   179,   388,    -1,   389,   153,   388,    -1,   389,   271,
-     305,   388,    -1,   389,   207,   271,   305,   388,    -1,   389,
-      -1,   389,   211,   210,    -1,   389,   211,   207,   210,    -1,
-     390,    -1,   346,   390,    -1,   347,   390,    -1,   367,   390,
-      -1,   207,   390,    -1,   322,    -1,   322,   355,   391,   356,
-      -1,   322,   353,   322,    -1,   210,    -1,    52,    -1,   274,
-      -1,   275,    -1,   355,   382,   356,    -1,   391,   352,   382,
-      -1,    -1,   137,   393,    -1,   393,   352,   394,    -1,   394,
-      -1,   322,    -1,   322,   322,    -1,   322,    22,   322,    -1,
-     395,   352,   396,    -1,   396,    -1,   397,    -1,   398,    -1,
-     397,    22,   322,    -1,   397,   322,    -1,   382,    -1,   107,
-     355,   397,   356,    -1,   348,    -1,   322,   353,   348,    -1
+     370,     0,    -1,   371,    -1,   372,   350,   371,    -1,   372,
+      -1,   372,   350,    -1,   373,    -1,   380,    -1,    -1,    75,
+     294,   321,   374,   354,   375,   355,    -1,   375,   351,   376,
+      -1,   376,    -1,   321,   379,    -1,   321,   379,   377,    -1,
+     377,   378,    -1,   378,    -1,   239,   170,    -1,   206,   210,
+      -1,    31,    -1,     4,    -1,     4,   354,   273,   355,    -1,
+     328,   354,   273,   355,    -1,    -1,   381,   396,    -1,   381,
+     396,   393,    -1,   381,   393,    -1,   381,   396,   382,    -1,
+     381,   396,   393,   382,    -1,   381,   393,   382,    -1,   265,
+      -1,   335,   383,    -1,   384,    -1,   385,    20,   384,    -1,
+     385,   224,   384,    -1,   385,   341,   384,    -1,   385,    -1,
+     386,    40,   385,    -1,   386,    41,   385,    -1,   386,    -1,
+     387,   346,   386,    -1,   387,   345,   386,    -1,   387,   366,
+     386,    -1,   387,   367,   386,    -1,   387,    -1,   388,   358,
+     387,    -1,   388,   347,   387,    -1,   388,   348,   387,    -1,
+     388,    -1,   389,   361,   388,    -1,   389,   145,   388,    -1,
+     389,   360,   388,    -1,   389,   176,   388,    -1,   389,   359,
+     388,    -1,   389,    -1,   390,   207,   389,    -1,   390,   208,
+     389,    -1,   390,   178,   389,    -1,   390,   153,   389,    -1,
+     390,   271,   389,    -1,   390,   272,   389,    -1,   390,    -1,
+     390,   212,    -1,   390,   213,    -1,   391,    -1,   345,   391,
+      -1,   346,   391,    -1,   368,   391,    -1,   206,   391,    -1,
+     321,    -1,   321,   352,   321,    -1,   210,    -1,    53,    -1,
+     273,    -1,   274,    -1,   392,    -1,   354,   383,   355,    -1,
+     138,   394,    -1,   394,   351,   395,    -1,   395,    -1,   321,
+      -1,   321,   321,    -1,   321,    23,   321,    -1,   396,   351,
+     397,    -1,   397,    -1,   398,    -1,   399,    -1,   398,    23,
+     321,    -1,   398,   321,    -1,   383,    -1,   321,   354,   396,
+     355,    -1,   108,   354,   398,   355,    -1,   347,    -1,   321,
+     352,   347,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
-       0,  1039,  1039,  1049,  1054,  1055,  1064,  1069,  1077,  1075,
-    1084,  1085,  1090,  1100,  1114,  1115,  1120,  1126,  1131,  1138,
-    1144,  1151,  1157,  1165,  1173,  1178,  1184,  1191,  1200,  1210,
-    1221,  1226,  1232,  1236,  1240,  1245,  1250,  1254,  1259,  1265,
-    1269,  1273,  1277,  1282,  1287,  1291,  1295,  1300,  1305,  1309,
-    1313,  1317,  1322,  1327,  1331,  1335,  1339,  1343,  1348,  1353,
-    1357,  1362,  1368,  1372,  1376,  1380,  1393,  1399,  1410,  1417,
-    1425,  1433,  1438,  1445,  1451,  1457,  1498,  1504,  1511,  1547,
-    1556,  1569,  1576,  1584,  1594,  1599,  1611,  1625,  1664,  1672,
-    1682
+       0,   545,   545,   555,   560,   561,   570,   575,   583,   581,
+     590,   591,   596,   606,   620,   621,   626,   632,   637,   644,
+     650,   657,   663,   671,   679,   684,   690,   696,   702,   710,
+     720,   727,   732,   738,   742,   746,   751,   756,   760,   765,
+     771,   775,   779,   783,   788,   793,   797,   801,   806,   811,
+     815,   819,   823,   827,   832,   837,   842,   846,   850,   854,
+     858,   863,   868,   872,   877,   883,   887,   891,   895,   914,
+     925,   932,   940,   948,   953,   958,   986,  1027,  1033,  1040,
+    1076,  1085,  1098,  1105,  1113,  1123,  1128,  1140,  1154,  1159,
+    1198,  1206,  1216
 };
 #endif
 
@@ -1602,72 +1100,72 @@ static const unsigned short yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals. */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "SQL_TYPE", "SQL_ABS", "ACOS", "AMPERSAND", 
-  "SQL_ABSOLUTE", "ADA", "ADD", "ADD_DAYS", "ADD_HOURS", "ADD_MINUTES", 
-  "ADD_MONTHS", "ADD_SECONDS", "ADD_YEARS", "ALL", "ALLOCATE", "ALTER", 
-  "AND", "ANY", "ARE", "AS", "ASIN", "ASC", "ASCII", "ASSERTION", "ATAN", 
-  "ATAN2", "AUTHORIZATION", "AUTO_INCREMENT", "AVG", "BEFORE", 
-  "SQL_BEGIN", "BETWEEN", "BIGINT", "BINARY", "BIT", "BIT_LENGTH", 
-  "BITWISE_SHIFT_LEFT", "BITWISE_SHIFT_RIGHT", "BREAK", "BY", "CASCADE", 
-  "CASCADED", "CASE", "CAST", "CATALOG", "CEILING", "CENTER", "SQL_CHAR", 
-  "CHAR_LENGTH", "CHARACTER_STRING_LITERAL", "CHECK", "CLOSE", "COALESCE", 
-  "COBOL", "COLLATE", "COLLATION", "COLUMN", "COMMIT", "COMPUTE", 
-  "CONCAT", "CONCATENATION", "CONNECT", "CONNECTION", "CONSTRAINT", 
-  "CONSTRAINTS", "CONTINUE", "CONVERT", "CORRESPONDING", "COS", "COT", 
-  "COUNT", "CREATE", "CURDATE", "CURRENT", "CURRENT_DATE", "CURRENT_TIME", 
-  "CURRENT_TIMESTAMP", "CURTIME", "CURSOR", "DATABASE", "SQL_DATE", 
-  "DATE_FORMAT", "DATE_REMAINDER", "DATE_VALUE", "DAY", "DAYOFMONTH", 
-  "DAYOFWEEK", "DAYOFYEAR", "DAYS_BETWEEN", "DEALLOCATE", "DEC", 
-  "DECLARE", "DEFAULT", "DEFERRABLE", "DEFERRED", "SQL_DELETE", "DESC", 
-  "DESCRIBE", "DESCRIPTOR", "DIAGNOSTICS", "DICTIONARY", "DIRECTORY", 
-  "DISCONNECT", "DISPLACEMENT", "DISTINCT", "DOMAIN_TOKEN", "SQL_DOUBLE", 
-  "DOUBLE_QUOTED_STRING", "DROP", "ELSE", "END", "END_EXEC", "EQUAL", 
-  "ESCAPE", "EXCEPT", "SQL_EXCEPTION", "EXEC", "EXECUTE", "EXISTS", "EXP", 
-  "EXPONENT", "EXTERNAL", "EXTRACT", "SQL_FALSE", "FETCH", "FIRST", 
-  "SQL_FLOAT", "FLOOR", "FN", "FOR", "FOREIGN", "FORTRAN", "FOUND", 
-  "FOUR_DIGITS", "FROM", "FULL", "GET", "GLOBAL", "GO", "GOTO", "GRANT", 
-  "GREATER_OR_EQUAL", "GREATER_THAN", "HAVING", "HOUR", "HOURS_BETWEEN", 
-  "IDENTITY", "IFNULL", "SQL_IGNORE", "IMMEDIATE", "SQL_IN", "INCLUDE", 
-  "INDEX", "INDICATOR", "INITIALLY", "INNER", "INPUT", "INSENSITIVE", 
-  "INSERT", "INTEGER", "INTERSECT", "INTERVAL", "INTO", "IS", "ISOLATION", 
-  "JOIN", "JUSTIFY", "KEY", "LANGUAGE", "LAST", "LCASE", "LEFT", "LENGTH", 
-  "LESS_OR_EQUAL", "LESS_THAN", "LEVEL", "LIKE", "LINE_WIDTH", "LOCAL", 
-  "LOCATE", "LOG", "SQL_LONG", "LOWER", "LTRIM", "LTRIP", "MATCH", 
-  "SQL_MAX", "MICROSOFT", "SQL_MIN", "MINUS", "MINUTE", "MINUTES_BETWEEN", 
-  "MOD", "MODIFY", "MODULE", "MONTH", "MONTHS_BETWEEN", "MUMPS", "NAMES", 
-  "NATIONAL", "NCHAR", "NEXT", "NODUP", "NONE", "NOT", "NOT_EQUAL", "NOW", 
-  "SQL_NULL", "SQL_IS", "SQL_IS_NULL", "SQL_IS_NOT_NULL", "NULLIF", 
-  "NUMERIC", "OCTET_LENGTH", "ODBC", "OF", "SQL_OFF", "SQL_ON", "ONLY", 
-  "OPEN", "OPTION", "OR", "ORDER", "OUTER", "OUTPUT", "OVERLAPS", "PAGE", 
-  "PARTIAL", "SQL_PASCAL", "PERSISTENT", "CQL_PI", "PLI", "POSITION", 
-  "PRECISION", "PREPARE", "PRESERVE", "PRIMARY", "PRIOR", "PRIVILEGES", 
-  "PROCEDURE", "PRODUCT", "PUBLIC", "QUARTER", "QUIT", "RAND", 
-  "READ_ONLY", "REAL", "REFERENCES", "REPEAT", "REPLACE", "RESTRICT", 
-  "REVOKE", "RIGHT", "ROLLBACK", "ROWS", "RPAD", "RTRIM", "SCHEMA", 
-  "SCREEN_WIDTH", "SCROLL", "SECOND", "SECONDS_BETWEEN", "SELECT", 
-  "SEQUENCE", "SETOPT", "SET", "SHOWOPT", "SIGN", "SIMILAR", "SIMILAR_TO", 
-  "NOT_SIMILAR_TO", "INTEGER_CONST", "REAL_CONST", "SIN", "SQL_SIZE", 
-  "SMALLINT", "SOME", "SPACE", "SQL", "SQL_TRUE", "SQLCA", "SQLCODE", 
-  "SQLERROR", "SQLSTATE", "SQLWARNING", "SQRT", "STDEV", "SUBSTRING", 
-  "SUM", "SYSDATE", "SYSDATE_FORMAT", "SYSTEM", "TABLE", "TAN", 
-  "TEMPORARY", "THEN", "THREE_DIGITS", "TIME", "TIMESTAMP", 
-  "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TINYINT", "TO", "TO_CHAR", 
-  "TO_DATE", "TRANSACTION", "TRANSLATE", "TRANSLATION", "TRUNCATE", 
-  "GENERAL_TITLE", "TWO_DIGITS", "UCASE", "UNION", "UNIQUE", 
+  "$end", "error", "$undefined", "UMINUS", "SQL_TYPE", "SQL_ABS", "ACOS", 
+  "AMPERSAND", "SQL_ABSOLUTE", "ADA", "ADD", "ADD_DAYS", "ADD_HOURS", 
+  "ADD_MINUTES", "ADD_MONTHS", "ADD_SECONDS", "ADD_YEARS", "ALL", 
+  "ALLOCATE", "ALTER", "AND", "ANY", "ARE", "AS", "ASIN", "ASC", "ASCII", 
+  "ASSERTION", "ATAN", "ATAN2", "AUTHORIZATION", "AUTO_INCREMENT", "AVG", 
+  "BEFORE", "SQL_BEGIN", "BETWEEN", "BIGINT", "BINARY", "BIT", 
+  "BIT_LENGTH", "BITWISE_SHIFT_LEFT", "BITWISE_SHIFT_RIGHT", "BREAK", 
+  "BY", "CASCADE", "CASCADED", "CASE", "CAST", "CATALOG", "CEILING", 
+  "CENTER", "SQL_CHAR", "CHAR_LENGTH", "CHARACTER_STRING_LITERAL", 
+  "CHECK", "CLOSE", "COALESCE", "COBOL", "COLLATE", "COLLATION", "COLUMN", 
+  "COMMIT", "COMPUTE", "CONCAT", "CONCATENATION", "CONNECT", "CONNECTION", 
+  "CONSTRAINT", "CONSTRAINTS", "CONTINUE", "CONVERT", "CORRESPONDING", 
+  "COS", "COT", "COUNT", "CREATE", "CURDATE", "CURRENT", "CURRENT_DATE", 
+  "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURTIME", "CURSOR", "DATABASE", 
+  "SQL_DATE", "DATE_FORMAT", "DATE_REMAINDER", "DATE_VALUE", "DAY", 
+  "DAYOFMONTH", "DAYOFWEEK", "DAYOFYEAR", "DAYS_BETWEEN", "DEALLOCATE", 
+  "DEC", "DECLARE", "DEFAULT", "DEFERRABLE", "DEFERRED", "SQL_DELETE", 
+  "DESC", "DESCRIBE", "DESCRIPTOR", "DIAGNOSTICS", "DICTIONARY", 
+  "DIRECTORY", "DISCONNECT", "DISPLACEMENT", "DISTINCT", "DOMAIN_TOKEN", 
+  "SQL_DOUBLE", "DOUBLE_QUOTED_STRING", "DROP", "ELSE", "END", "END_EXEC", 
+  "EQUAL", "ESCAPE", "EXCEPT", "SQL_EXCEPTION", "EXEC", "EXECUTE", 
+  "EXISTS", "EXP", "EXPONENT", "EXTERNAL", "EXTRACT", "SQL_FALSE", 
+  "FETCH", "FIRST", "SQL_FLOAT", "FLOOR", "FN", "FOR", "FOREIGN", 
+  "FORTRAN", "FOUND", "FOUR_DIGITS", "FROM", "FULL", "GET", "GLOBAL", 
+  "GO", "GOTO", "GRANT", "GREATER_OR_EQUAL", "HAVING", "HOUR", 
+  "HOURS_BETWEEN", "IDENTITY", "IFNULL", "SQL_IGNORE", "IMMEDIATE", 
+  "SQL_IN", "INCLUDE", "INDEX", "INDICATOR", "INITIALLY", "INNER", 
+  "INPUT", "INSENSITIVE", "INSERT", "INTEGER", "INTERSECT", "INTERVAL", 
+  "INTO", "IS", "ISOLATION", "JOIN", "JUSTIFY", "KEY", "LANGUAGE", "LAST", 
+  "LCASE", "LEFT", "LENGTH", "LESS_OR_EQUAL", "LEVEL", "LIKE", 
+  "LINE_WIDTH", "LOCAL", "LOCATE", "LOG", "SQL_LONG", "LOWER", "LTRIM", 
+  "LTRIP", "MATCH", "SQL_MAX", "MICROSOFT", "SQL_MIN", "MINUS", "MINUTE", 
+  "MINUTES_BETWEEN", "MOD", "MODIFY", "MODULE", "MONTH", "MONTHS_BETWEEN", 
+  "MUMPS", "NAMES", "NATIONAL", "NCHAR", "NEXT", "NODUP", "NONE", "NOT", 
+  "NOT_EQUAL", "NOT_EQUAL2", "NOW", "SQL_NULL", "SQL_IS", "SQL_IS_NULL", 
+  "SQL_IS_NOT_NULL", "NULLIF", "NUMERIC", "OCTET_LENGTH", "ODBC", "OF", 
+  "SQL_OFF", "SQL_ON", "ONLY", "OPEN", "OPTION", "OR", "ORDER", "OUTER", 
+  "OUTPUT", "OVERLAPS", "PAGE", "PARTIAL", "SQL_PASCAL", "PERSISTENT", 
+  "CQL_PI", "PLI", "POSITION", "PRECISION", "PREPARE", "PRESERVE", 
+  "PRIMARY", "PRIOR", "PRIVILEGES", "PROCEDURE", "PRODUCT", "PUBLIC", 
+  "QUARTER", "QUIT", "RAND", "READ_ONLY", "REAL", "REFERENCES", "REPEAT", 
+  "REPLACE", "RESTRICT", "REVOKE", "RIGHT", "ROLLBACK", "ROWS", "RPAD", 
+  "RTRIM", "SCHEMA", "SCREEN_WIDTH", "SCROLL", "SECOND", 
+  "SECONDS_BETWEEN", "SELECT", "SEQUENCE", "SETOPT", "SET", "SHOWOPT", 
+  "SIGN", "SIMILAR_TO", "NOT_SIMILAR_TO", "INTEGER_CONST", "REAL_CONST", 
+  "SIN", "SQL_SIZE", "SMALLINT", "SOME", "SPACE", "SQL", "SQL_TRUE", 
+  "SQLCA", "SQLCODE", "SQLERROR", "SQLSTATE", "SQLWARNING", "SQRT", 
+  "STDEV", "SUBSTRING", "SUM", "SYSDATE", "SYSDATE_FORMAT", "SYSTEM", 
+  "TABLE", "TAN", "TEMPORARY", "THEN", "THREE_DIGITS", "TIME", 
+  "TIMESTAMP", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TINYINT", "TO", 
+  "TO_CHAR", "TO_DATE", "TRANSACTION", "TRANSLATE", "TRANSLATION", 
+  "TRUNCATE", "GENERAL_TITLE", "TWO_DIGITS", "UCASE", "UNION", "UNIQUE", 
   "SQL_UNKNOWN", "UPDATE", "UPPER", "USAGE", "USER", "IDENTIFIER", 
   "IDENTIFIER_DOT_ASTERISK", "ERROR_DIGIT_BEFORE_IDENTIFIER", "USING", 
   "VALUE", "VALUES", "VARBINARY", "VARCHAR", "VARYING", "VENDOR", "VIEW", 
   "WEEK", "WHEN", "WHENEVER", "WHERE", "WHERE_CURRENT_OF", "WITH", 
   "WORD_WRAPPED", "WORK", "WRAPPED", "XOR", "YEAR", "YEARS_BETWEEN", 
   "__LAST_TOKEN", "'-'", "'+'", "'*'", "'%'", "'@'", "';'", "','", "'.'", 
-  "'$'", "'('", "')'", "'?'", "'''", "'/'", "'='", "ILIKE", "'^'", "'['", 
-  "']'", "'&'", "'|'", "'~'", "$accept", "TopLevelStatement", 
-  "StatementList", "Statement", "CreateTableStatement", "@1", "ColDefs", 
-  "ColDef", "ColKeys", "ColKey", "ColType", "SelectStatement", "Select", 
-  "WhereClause", "aExpr", "aExpr2", "aExpr3", "aExpr4", "aExpr5", 
-  "aExpr6", "aExpr7", "aExpr8", "aExpr9", "aExprList", "Tables", 
-  "FlatTableList", "FlatTable", "ColViews", "ColItem", "ColExpression", 
-  "ColWildCard", 0
+  "'$'", "'('", "')'", "'?'", "'''", "'/'", "'='", "'<'", "'>'", "ILIKE", 
+  "'^'", "'['", "']'", "'&'", "'|'", "'~'", "$accept", 
+  "TopLevelStatement", "StatementList", "Statement", 
+  "CreateTableStatement", "@1", "ColDefs", "ColDef", "ColKeys", "ColKey", 
+  "ColType", "SelectStatement", "Select", "WhereClause", "aExpr", 
+  "aExpr2", "aExpr3", "aExpr4", "aExpr5", "aExpr6", "aExpr7", "aExpr8", 
+  "aExpr9", "aExpr10", "Tables", "FlatTableList", "FlatTable", "ColViews", 
+  "ColItem", "ColExpression", "ColWildCard", 0
 };
 #endif
 
@@ -1710,25 +1208,25 @@ static const unsigned short yytoknum[] =
      565,   566,   567,   568,   569,   570,   571,   572,   573,   574,
      575,   576,   577,   578,   579,   580,   581,   582,   583,   584,
      585,   586,   587,   588,   589,   590,   591,   592,   593,   594,
-     595,   596,   597,   598,   599,   600,    45,    43,    42,    37,
-      64,    59,    44,    46,    36,    40,    41,    63,    39,    47,
-      61,   601,    94,    91,    93,    38,   124,   126
+     595,   596,   597,   598,   599,    45,    43,    42,    37,    64,
+      59,    44,    46,    36,    40,    41,    63,    39,    47,    61,
+      60,    62,   600,    94,    91,    93,    38,   124,   126
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const unsigned short yyr1[] =
 {
-       0,   368,   369,   370,   370,   370,   371,   371,   373,   372,
-     374,   374,   375,   375,   376,   376,   377,   377,   377,   378,
-     378,   378,   378,   379,   379,   379,   379,   379,   380,   381,
-     382,   383,   383,   383,   383,   384,   384,   384,   385,   385,
-     385,   385,   385,   386,   386,   386,   386,   387,   387,   387,
-     387,   387,   388,   388,   388,   388,   388,   388,   389,   389,
-     389,   390,   390,   390,   390,   390,   390,   390,   390,   390,
-     390,   390,   390,   391,   391,   392,   393,   393,   394,   394,
-     394,   395,   395,   396,   396,   396,   396,   397,   397,   398,
-     398
+       0,   369,   370,   371,   371,   371,   372,   372,   374,   373,
+     375,   375,   376,   376,   377,   377,   378,   378,   378,   379,
+     379,   379,   379,   380,   380,   380,   380,   380,   380,   381,
+     382,   383,   384,   384,   384,   384,   385,   385,   385,   386,
+     386,   386,   386,   386,   387,   387,   387,   387,   388,   388,
+     388,   388,   388,   388,   389,   389,   389,   389,   389,   389,
+     389,   390,   390,   390,   391,   391,   391,   391,   391,   391,
+     391,   391,   391,   391,   391,   392,   393,   394,   394,   395,
+     395,   395,   396,   396,   397,   397,   397,   397,   398,   398,
+     398,   399,   399
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -1736,14 +1234,14 @@ static const unsigned char yyr2[] =
 {
        0,     2,     1,     3,     1,     2,     1,     1,     0,     7,
        3,     1,     2,     3,     2,     1,     2,     2,     1,     1,
-       4,     4,     0,     2,     3,     2,     3,     4,     1,     2,
-       1,     3,     3,     3,     1,     3,     3,     1,     3,     3,
-       3,     3,     1,     3,     3,     3,     1,     3,     3,     3,
-       3,     1,     3,     3,     3,     4,     5,     1,     3,     4,
-       1,     2,     2,     2,     2,     1,     4,     3,     1,     1,
-       1,     1,     3,     3,     0,     2,     3,     1,     1,     2,
-       3,     3,     1,     1,     1,     3,     2,     1,     4,     1,
-       3
+       4,     4,     0,     2,     3,     2,     3,     4,     3,     1,
+       2,     1,     3,     3,     3,     1,     3,     3,     1,     3,
+       3,     3,     3,     1,     3,     3,     3,     1,     3,     3,
+       3,     3,     3,     1,     3,     3,     3,     3,     3,     3,
+       1,     2,     2,     1,     2,     2,     2,     2,     1,     3,
+       1,     1,     1,     1,     1,     3,     2,     3,     1,     1,
+       2,     3,     3,     1,     1,     1,     3,     2,     1,     4,
+       4,     1,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -1751,20 +1249,20 @@ static const unsigned char yyr2[] =
    means the default is an error.  */
 static const unsigned char yydefact[] =
 {
-       0,     0,    28,     0,     2,     4,     6,     7,     0,     0,
-       1,     5,    69,     0,     0,     0,    68,    70,    71,    65,
-       0,     0,    89,     0,     0,    87,    30,    34,    37,    42,
-      46,    51,    57,    60,    25,    23,    82,    83,    84,     8,
-       3,     0,    78,    75,    77,    65,    64,     0,    74,    61,
-      62,     0,    63,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    29,     0,     2,     4,     6,     7,     0,     0,
+       1,     5,    71,     0,     0,     0,    70,    72,    73,    68,
+       0,     0,    91,     0,     0,    88,    31,    35,    38,    43,
+      47,    53,    60,    63,    74,    25,    23,    83,    84,    85,
+       8,     3,     0,    79,    76,    78,    68,    67,     0,     0,
+      64,    65,     0,    66,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    26,    24,     0,
-      86,     0,     0,     0,    79,     0,     0,    67,    90,     0,
-      72,    31,    32,    33,    35,    36,    39,    38,    40,    41,
-      44,    45,    43,    48,    47,    50,    49,    54,    53,     0,
-      52,     0,    58,     0,    29,    81,    27,    85,     0,    88,
-      80,    76,     0,    66,     0,    59,    55,    22,     0,    11,
-      73,    56,    19,     0,    12,     0,     9,     0,     0,    18,
+       0,     0,     0,     0,     0,    61,    62,     0,     0,     0,
+      28,     0,    26,    24,     0,    87,     0,    68,     0,     0,
+      80,     0,     0,    69,    92,     0,    75,    32,    33,    34,
+      36,    37,    40,    39,    41,    42,    45,    46,    44,    49,
+      51,    52,    50,    48,    57,    56,    54,    55,    58,    59,
+      30,    82,    27,    86,     0,    90,    81,    77,    89,    22,
+       0,    11,    19,     0,    12,     0,     9,     0,     0,    18,
        0,     0,    13,    15,    10,     0,     0,    17,    16,    14,
       20,    21
 };
@@ -1772,42 +1270,42 @@ static const unsigned char yydefact[] =
 /* YYDEFGOTO[NTERM-NUM]. */
 static const short yydefgoto[] =
 {
-      -1,     3,     4,     5,     6,    81,   128,   129,   142,   143,
-     134,     7,     8,    77,    25,    26,    27,    28,    29,    30,
-      31,    32,    33,    89,    34,    43,    44,    35,    36,    37,
-      38
+      -1,     3,     4,     5,     6,    86,   130,   131,   142,   143,
+     134,     7,     8,    80,    25,    26,    27,    28,    29,    30,
+      31,    32,    33,    34,    35,    44,    45,    36,    37,    38,
+      39
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -328
+#define YYPACT_NINF -331
 static const short yypact[] =
 {
-     -67,  -282,  -328,    26,  -328,  -295,  -328,  -328,   -50,  -284,
-    -328,   -67,  -328,  -296,  -256,   -36,  -328,  -328,  -328,  -323,
-     -36,   -36,  -328,   -36,   -36,  -328,  -328,   -18,    34,  -326,
-    -325,  -126,  -143,  -328,  -328,  -133,  -328,   -19,  -328,  -328,
-    -328,   -40,   -14,  -275,  -328,  -293,  -328,  -313,  -328,  -328,
-    -328,  -278,  -328,   -36,   -36,   -36,   -36,   -36,   -36,   -36,
-     -36,   -36,   -36,   -36,   -36,   -36,   -36,   -36,   -36,   -36,
-     -36,  -192,   -36,  -158,  -225,   -36,   -46,  -328,  -255,  -240,
-    -328,  -272,  -271,  -238,  -328,  -256,  -236,  -328,  -328,  -327,
-    -328,  -328,  -328,  -328,  -328,  -328,  -328,  -328,  -328,  -328,
-    -328,  -328,  -328,  -328,  -328,  -328,  -328,  -328,  -328,  -217,
-    -328,  -121,  -328,   -36,  -328,  -328,  -328,  -328,  -232,  -328,
-    -328,  -328,   -36,  -328,   -36,  -328,  -328,    -3,  -319,  -328,
-    -328,  -328,  -264,  -263,   -25,  -232,  -328,  -181,  -180,  -328,
-    -115,   -74,   -25,  -328,  -328,  -259,  -258,  -328,  -328,  -328,
-    -328,  -328
+     -66,  -272,  -331,    26,  -331,  -314,  -331,  -331,   -51,  -292,
+    -331,   -66,  -331,  -288,  -259,   -38,  -331,  -331,  -331,  -321,
+     -38,   -38,  -331,   -38,   -38,  -331,  -331,   -19,     4,  -329,
+    -328,  -142,  -143,  -331,  -331,  -268,  -127,  -331,   -17,  -331,
+    -331,  -331,   -45,   -16,  -273,  -331,  -271,  -331,  -308,   -48,
+    -331,  -331,  -270,  -331,   -38,   -38,   -38,   -38,   -38,   -38,
+     -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,
+     -38,   -38,   -38,   -38,   -38,  -331,  -331,   -38,   -38,   -38,
+    -331,   -48,  -331,  -268,  -241,  -331,  -266,  -275,  -269,  -239,
+    -331,  -259,  -238,  -331,  -331,  -330,  -331,  -331,  -331,  -331,
+    -331,  -331,  -331,  -331,  -331,  -331,  -331,  -331,  -331,  -331,
+    -331,  -331,  -331,  -331,  -331,  -331,  -331,  -331,  -331,  -331,
+    -331,  -331,  -331,  -331,  -237,  -331,  -331,  -331,  -331,    -4,
+    -323,  -331,  -265,  -264,   -27,  -237,  -331,  -182,  -181,  -331,
+    -117,   -76,   -27,  -331,  -331,  -260,  -258,  -331,  -331,  -331,
+    -331,  -331
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const short yypgoto[] =
 {
-    -328,  -328,    88,  -328,  -328,  -328,  -328,   -35,  -328,   -41,
-    -328,  -328,  -328,    24,   -12,     0,    19,   -17,     8,   -20,
-     -55,  -328,     7,  -328,    68,  -328,    20,  -328,    28,    65,
-    -328
+    -331,  -331,    85,  -331,  -331,  -331,  -331,   -37,  -331,   -43,
+    -331,  -331,  -331,   -22,   -11,    17,     1,    -6,    11,   -18,
+     -31,  -331,     3,  -331,    64,  -331,    10,    53,    22,    62,
+    -331
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -1817,100 +1315,100 @@ static const short yypgoto[] =
 #define YYTABLE_NINF -1
 static const unsigned char yytable[] =
 {
-     132,    53,    12,    79,    14,   139,    12,     1,    83,    87,
-      69,    51,    12,     9,   107,   108,    12,   110,    65,    66,
-      58,    59,    46,    62,    63,   122,    10,    49,    50,   123,
-      47,    52,    48,   135,    64,    88,    70,   136,    39,    60,
-      61,    96,    97,    98,    99,   103,   104,   105,   106,   111,
-      67,    68,   112,    91,    92,    93,    11,    13,   126,    41,
-      86,    13,    48,   114,    71,    72,    42,    13,    73,   131,
-     100,   101,   102,    56,    57,    94,    95,    85,    90,   109,
-     113,    75,   117,   118,   120,   119,    87,    14,   124,   125,
-     127,   137,   138,   145,   146,   147,   148,   150,   151,    40,
-     144,   149,   116,    78,   115,   121,    82,     0,     0,     0,
-     130,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    74,     0,
+     132,    54,    12,    66,   139,    12,    84,    89,    12,     1,
+      71,    14,    52,    93,    82,    12,    59,    60,    47,    63,
+      64,    81,     9,    50,    51,   128,    10,    53,   135,    40,
+      65,    48,   136,    49,    67,    72,    11,    61,    62,    94,
+     114,   115,   116,   117,    57,    58,   118,   119,   109,   110,
+     111,   112,   113,   102,   103,   104,   105,    13,   100,   101,
+      13,   122,    43,    13,    73,    74,    42,    79,   120,    75,
+      76,    97,    98,    99,   106,   107,   108,    92,    91,    49,
+     123,    92,   126,    93,   129,    96,   125,    14,   124,   137,
+     138,   145,   146,   147,   148,   150,    41,   151,   144,   149,
+      83,   127,    95,   121,    88,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    77,    78,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    15,     0,     0,
-      16,    15,     0,     0,    16,     0,     0,    15,     0,     0,
-      16,    15,     0,     0,    16,     0,     0,     0,     0,     0,
-       0,     0,   140,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     2,     0,
-       0,     0,     0,    75,     0,     0,    54,     0,     0,     0,
-       0,     0,     0,     0,   141,     0,     0,     0,     0,    76,
-       0,     0,     0,     0,    17,    18,     0,     0,    17,    18,
-       0,     0,     0,     0,    17,    18,     0,     0,    17,    18,
+       0,     0,     0,     0,     0,    15,     0,     0,    15,    16,
+       0,    15,    16,     0,     0,    16,     0,     0,    15,     0,
+       0,     0,    16,     0,     0,     0,     0,     0,     0,   140,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     2,
+       0,     0,     0,     0,     0,    55,     0,     0,    79,     0,
+       0,     0,   141,     0,     0,     0,     0,    68,    69,    70,
+       0,     0,    17,    18,    81,    17,    18,     0,    17,    18,
+       0,     0,     0,     0,     0,    17,    18,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    19,     0,     0,     0,    19,     0,     0,     0,
-       0,     0,    45,     0,     0,     0,    45,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,    20,    21,    22,     0,
-      20,    21,    22,    80,     0,    23,    20,    21,    84,    23,
-      20,    21,     0,     0,     0,    23,     0,    24,     0,    23,
-       0,    24,     0,     0,    55,     0,   133,    24,     0,     0,
-       0,    24
+      19,     0,     0,    19,     0,     0,    87,     0,     0,     0,
+       0,     0,     0,    46,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,    20,    21,    22,    20,    21,    22,
+      20,    21,     0,    23,    85,    90,    23,    20,    21,    23,
+       0,     0,     0,     0,     0,     0,    23,    24,     0,     0,
+      24,     0,    56,    24,   133,     0,     0,     0,     0,     0,
+      24
 };
 
 static const short yycheck[] =
 {
-       3,    19,    52,    22,   137,    30,    52,    74,    22,   322,
-     153,    23,    52,   295,    69,    70,    52,    72,   144,   145,
-     346,   347,    15,   348,   349,   352,     0,    20,    21,   356,
-     353,    24,   355,   352,   359,   348,   179,   356,   322,   365,
-     366,    58,    59,    60,    61,    65,    66,    67,    68,   207,
-     176,   177,   210,    53,    54,    55,   351,   107,   113,   355,
-     353,   107,   355,    75,   207,   208,   322,   107,   211,   124,
-      62,    63,    64,    39,    40,    56,    57,   352,   356,   271,
-     305,   336,   322,   355,   322,   356,   322,   137,   305,   210,
-     322,   355,   355,   274,   274,   210,   170,   356,   356,    11,
-     135,   142,    78,    35,    76,    85,    41,    -1,    -1,    -1,
-     122,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   271,    -1,
+       4,    20,    53,   145,    31,    53,    23,    23,    53,    75,
+     153,   138,    23,   321,    36,    53,   345,   346,    15,   347,
+     348,   351,   294,    20,    21,   355,     0,    24,   351,   321,
+     358,   352,   355,   354,   176,   178,   350,   366,   367,   347,
+      71,    72,    73,    74,    40,    41,    77,    78,    66,    67,
+      68,    69,    70,    59,    60,    61,    62,   108,    57,    58,
+     108,    83,   321,   108,   207,   208,   354,   335,    79,   212,
+     213,    54,    55,    56,    63,    64,    65,   352,   351,   354,
+     321,   352,   321,   321,   321,   355,   355,   138,   354,   354,
+     354,   273,   273,   210,   170,   355,    11,   355,   135,   142,
+      36,    91,    49,    81,    42,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   271,   272,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,   207,    -1,    -1,
-     210,   207,    -1,    -1,   210,    -1,    -1,   207,    -1,    -1,
-     210,   207,    -1,    -1,   210,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,   207,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   265,    -1,
-      -1,    -1,    -1,   336,    -1,    -1,   224,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,   239,    -1,    -1,    -1,    -1,   352,
-      -1,    -1,    -1,    -1,   274,   275,    -1,    -1,   274,   275,
-      -1,    -1,    -1,    -1,   274,   275,    -1,    -1,   274,   275,
+      -1,    -1,    -1,    -1,    -1,   206,    -1,    -1,   206,   210,
+      -1,   206,   210,    -1,    -1,   210,    -1,    -1,   206,    -1,
+      -1,    -1,   210,    -1,    -1,    -1,    -1,    -1,    -1,   206,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   265,
+      -1,    -1,    -1,    -1,    -1,   224,    -1,    -1,   335,    -1,
+      -1,    -1,   239,    -1,    -1,    -1,    -1,   359,   360,   361,
+      -1,    -1,   273,   274,   351,   273,   274,    -1,   273,   274,
+      -1,    -1,    -1,    -1,    -1,   273,   274,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,   322,    -1,    -1,    -1,   322,    -1,    -1,    -1,
-      -1,    -1,   322,    -1,    -1,    -1,   322,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,   346,   347,   348,    -1,
-     346,   347,   348,   322,    -1,   355,   346,   347,   322,   355,
-     346,   347,    -1,    -1,    -1,   355,    -1,   367,    -1,   355,
-      -1,   367,    -1,    -1,   342,    -1,   329,   367,    -1,    -1,
-      -1,   367
+     321,    -1,    -1,   321,    -1,    -1,   321,    -1,    -1,    -1,
+      -1,    -1,    -1,   321,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,   345,   346,   347,   345,   346,   347,
+     345,   346,    -1,   354,   321,   321,   354,   345,   346,   354,
+      -1,    -1,    -1,    -1,    -1,    -1,   354,   368,    -1,    -1,
+     368,    -1,   341,   368,   328,    -1,    -1,    -1,    -1,    -1,
+     368
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const unsigned short yystos[] =
 {
-       0,    74,   265,   369,   370,   371,   372,   379,   380,   295,
-       0,   351,    52,   107,   137,   207,   210,   274,   275,   322,
-     346,   347,   348,   355,   367,   382,   383,   384,   385,   386,
-     387,   388,   389,   390,   392,   395,   396,   397,   398,   322,
-     370,   355,   322,   393,   394,   322,   390,   353,   355,   390,
-     390,   382,   390,    19,   224,   342,    39,    40,   346,   347,
-     365,   366,   348,   349,   359,   144,   145,   176,   177,   153,
-     179,   207,   208,   211,   271,   336,   352,   381,   392,    22,
-     322,   373,   397,    22,   322,   352,   353,   322,   348,   391,
-     356,   383,   383,   383,   384,   384,   385,   385,   385,   385,
-     386,   386,   386,   387,   387,   387,   387,   388,   388,   271,
-     388,   207,   210,   305,   382,   396,   381,   322,   355,   356,
-     322,   394,   352,   356,   305,   210,   388,   322,   374,   375,
-     382,   388,     3,   329,   378,   352,   356,   355,   355,    30,
-     207,   239,   376,   377,   375,   274,   274,   210,   170,   377,
-     356,   356
+       0,    75,   265,   370,   371,   372,   373,   380,   381,   294,
+       0,   350,    53,   108,   138,   206,   210,   273,   274,   321,
+     345,   346,   347,   354,   368,   383,   384,   385,   386,   387,
+     388,   389,   390,   391,   392,   393,   396,   397,   398,   399,
+     321,   371,   354,   321,   394,   395,   321,   391,   352,   354,
+     391,   391,   383,   391,    20,   224,   341,    40,    41,   345,
+     346,   366,   367,   347,   348,   358,   145,   176,   359,   360,
+     361,   153,   178,   207,   208,   212,   213,   271,   272,   335,
+     382,   351,   382,   393,    23,   321,   374,   321,   398,    23,
+     321,   351,   352,   321,   347,   396,   355,   384,   384,   384,
+     385,   385,   386,   386,   386,   386,   387,   387,   387,   388,
+     388,   388,   388,   388,   389,   389,   389,   389,   389,   389,
+     383,   397,   382,   321,   354,   355,   321,   395,   355,   321,
+     375,   376,     4,   328,   379,   351,   355,   354,   354,    31,
+     206,   239,   377,   378,   376,   273,   273,   210,   170,   378,
+     355,   355
 };
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -2461,7 +1959,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 1041 "sqlparser.y"
+#line 547 "sqlparser.y"
     {
 //todo: multiple statements
 //todo: not only "select" statements
@@ -2471,35 +1969,35 @@ yyreduce:
     break;
 
   case 3:
-#line 1051 "sqlparser.y"
+#line 557 "sqlparser.y"
     {
 //todo: multiple statements
 }
     break;
 
   case 5:
-#line 1056 "sqlparser.y"
+#line 562 "sqlparser.y"
     {
 	yyval.querySchema = yyvsp[-1].querySchema;
 }
     break;
 
   case 6:
-#line 1066 "sqlparser.y"
+#line 572 "sqlparser.y"
     {
 YYACCEPT;
 }
     break;
 
   case 7:
-#line 1070 "sqlparser.y"
+#line 576 "sqlparser.y"
     {
 	yyval.querySchema = yyvsp[0].querySchema;
 }
     break;
 
   case 8:
-#line 1077 "sqlparser.y"
+#line 583 "sqlparser.y"
     {
 	parser->setOperation(Parser::OP_CreateTable);
 	parser->createTable(yyvsp[0].stringValue);
@@ -2507,13 +2005,13 @@ YYACCEPT;
     break;
 
   case 11:
-#line 1086 "sqlparser.y"
+#line 592 "sqlparser.y"
     {
 }
     break;
 
   case 12:
-#line 1092 "sqlparser.y"
+#line 598 "sqlparser.y"
     {
 	kdDebug() << "adding field " << yyvsp[-1].stringValue << endl;
 	field->setName(yyvsp[-1].stringValue);
@@ -2525,7 +2023,7 @@ YYACCEPT;
     break;
 
   case 13:
-#line 1101 "sqlparser.y"
+#line 607 "sqlparser.y"
     {
 	kdDebug() << "adding field " << yyvsp[-2].stringValue << endl;
 	field->setName(yyvsp[-2].stringValue);
@@ -2540,13 +2038,13 @@ YYACCEPT;
     break;
 
   case 15:
-#line 1116 "sqlparser.y"
+#line 622 "sqlparser.y"
     {
 }
     break;
 
   case 16:
-#line 1122 "sqlparser.y"
+#line 628 "sqlparser.y"
     {
 	field->setPrimaryKey(true);
 	kdDebug() << "primary" << endl;
@@ -2554,7 +2052,7 @@ YYACCEPT;
     break;
 
   case 17:
-#line 1127 "sqlparser.y"
+#line 633 "sqlparser.y"
     {
 	field->setNotNull(true);
 	kdDebug() << "not_null" << endl;
@@ -2562,7 +2060,7 @@ YYACCEPT;
     break;
 
   case 18:
-#line 1132 "sqlparser.y"
+#line 638 "sqlparser.y"
     {
 	field->setAutoIncrement(true);
 	kdDebug() << "ainc" << endl;
@@ -2570,7 +2068,7 @@ YYACCEPT;
     break;
 
   case 19:
-#line 1140 "sqlparser.y"
+#line 646 "sqlparser.y"
     {
 	field = new Field();
 	field->setType(yyvsp[0].colType);
@@ -2578,7 +2076,7 @@ YYACCEPT;
     break;
 
   case 20:
-#line 1145 "sqlparser.y"
+#line 651 "sqlparser.y"
     {
 	kdDebug() << "sql + length" << endl;
 	field = new Field();
@@ -2588,7 +2086,7 @@ YYACCEPT;
     break;
 
   case 21:
-#line 1152 "sqlparser.y"
+#line 658 "sqlparser.y"
     {
 	field = new Field();
 	field->setPrecision(yyvsp[-1].integerValue);
@@ -2597,7 +2095,7 @@ YYACCEPT;
     break;
 
   case 22:
-#line 1158 "sqlparser.y"
+#line 664 "sqlparser.y"
     {
 	// SQLITE compatibillity
 	field = new Field();
@@ -2606,17 +2104,17 @@ YYACCEPT;
     break;
 
   case 23:
-#line 1167 "sqlparser.y"
+#line 673 "sqlparser.y"
     {
 	kdDebug() << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
 
-	if (!(yyval.querySchema = parseSelect( yyvsp[-1].querySchema, yyvsp[0].exprList, 0 )))
+	if (!(yyval.querySchema = parseSelect( yyvsp[-1].querySchema, yyvsp[0].exprList )))
 		return 0;
 }
     break;
 
   case 24:
-#line 1174 "sqlparser.y"
+#line 680 "sqlparser.y"
     {
 	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, yyvsp[-1].exprList, yyvsp[0].exprList )))
 		return 0;
@@ -2624,7 +2122,7 @@ YYACCEPT;
     break;
 
   case 25:
-#line 1179 "sqlparser.y"
+#line 685 "sqlparser.y"
     {
 	kdDebug() << "Select ColViews Tables" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-1].querySchema, 0, yyvsp[0].exprList )))
@@ -2633,27 +2131,34 @@ YYACCEPT;
     break;
 
   case 26:
-#line 1185 "sqlparser.y"
+#line 691 "sqlparser.y"
     {
 	kdDebug() << "Select ColViews Conditions" << endl;
-	//TODO
-//	if (!($$ = parseSelect( , , 0,  )))
-//		return 0;
+	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, yyvsp[-1].exprList, 0, yyvsp[0].expr )))
+		return 0;
 }
     break;
 
   case 27:
-#line 1192 "sqlparser.y"
+#line 697 "sqlparser.y"
     {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
-	//TODO
-//	if (!($$ = parseSelect( , , ,  )))
-//		return 0;
+	if (!(yyval.querySchema = parseSelect( yyvsp[-3].querySchema, yyvsp[-2].exprList, yyvsp[-1].exprList, yyvsp[0].expr )))
+		return 0;
 }
     break;
 
   case 28:
-#line 1202 "sqlparser.y"
+#line 703 "sqlparser.y"
+    {
+	kdDebug() << "Select Tables Conditions" << endl;
+	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, 0, yyvsp[-1].exprList, yyvsp[0].expr )))
+		return 0;
+}
+    break;
+
+  case 29:
+#line 712 "sqlparser.y"
     {
 	kdDebug() << "SELECT" << endl;
 //	parser->createSelect();
@@ -2662,206 +2167,220 @@ YYACCEPT;
 }
     break;
 
-  case 29:
-#line 1212 "sqlparser.y"
+  case 30:
+#line 722 "sqlparser.y"
     {
 	yyval.expr = yyvsp[0].expr;
 }
     break;
 
-  case 31:
-#line 1228 "sqlparser.y"
+  case 32:
+#line 734 "sqlparser.y"
     {
 //	kdDebug() << "AND " << .debugString() << endl;
 	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
 }
     break;
 
-  case 32:
-#line 1233 "sqlparser.y"
+  case 33:
+#line 739 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, OR, yyvsp[0].expr );
 }
     break;
 
-  case 33:
-#line 1237 "sqlparser.y"
+  case 34:
+#line 743 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr( KexiDBExpr_Arithm, yyvsp[-2].expr, XOR, yyvsp[0].expr );
 }
     break;
 
-  case 35:
-#line 1247 "sqlparser.y"
+  case 36:
+#line 753 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_LEFT, yyvsp[0].expr);
 }
     break;
 
-  case 36:
-#line 1251 "sqlparser.y"
+  case 37:
+#line 757 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_RIGHT, yyvsp[0].expr);
 }
     break;
 
-  case 38:
-#line 1261 "sqlparser.y"
+  case 39:
+#line 767 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '+', yyvsp[0].expr);
 	yyval.expr->debug();
 }
     break;
 
-  case 39:
-#line 1266 "sqlparser.y"
+  case 40:
+#line 772 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '-', yyvsp[0].expr);
 }
     break;
 
-  case 40:
-#line 1270 "sqlparser.y"
+  case 41:
+#line 776 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '&', yyvsp[0].expr);
 }
     break;
 
-  case 41:
-#line 1274 "sqlparser.y"
+  case 42:
+#line 780 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '|', yyvsp[0].expr);
 }
     break;
 
-  case 43:
-#line 1284 "sqlparser.y"
+  case 44:
+#line 790 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '/', yyvsp[0].expr);
 }
     break;
 
-  case 44:
-#line 1288 "sqlparser.y"
+  case 45:
+#line 794 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '*', yyvsp[0].expr);
 }
     break;
 
-  case 45:
-#line 1292 "sqlparser.y"
+  case 46:
+#line 798 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '%', yyvsp[0].expr);
 }
     break;
 
-  case 47:
-#line 1302 "sqlparser.y"
+  case 48:
+#line 808 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_THAN, yyvsp[0].expr);
+	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '>', yyvsp[0].expr);
 }
     break;
 
-  case 48:
-#line 1306 "sqlparser.y"
+  case 49:
+#line 812 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_OR_EQUAL, yyvsp[0].expr);
 }
     break;
 
-  case 49:
-#line 1310 "sqlparser.y"
+  case 50:
+#line 816 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_THAN, yyvsp[0].expr);
+	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '<', yyvsp[0].expr);
 }
     break;
 
-  case 50:
-#line 1314 "sqlparser.y"
+  case 51:
+#line 820 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_OR_EQUAL, yyvsp[0].expr);
 }
     break;
 
   case 52:
-#line 1324 "sqlparser.y"
+#line 824 "sqlparser.y"
+    {
+	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '=', yyvsp[0].expr);
+}
+    break;
+
+  case 54:
+#line 834 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL, yyvsp[0].expr);
 }
     break;
 
-  case 53:
-#line 1328 "sqlparser.y"
+  case 55:
+#line 839 "sqlparser.y"
+    {
+	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL2, yyvsp[0].expr);
+}
+    break;
+
+  case 56:
+#line 843 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LIKE, yyvsp[0].expr);
 }
     break;
 
-  case 54:
-#line 1332 "sqlparser.y"
+  case 57:
+#line 847 "sqlparser.y"
     {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SQL_IN, yyvsp[0].expr);
 }
     break;
 
-  case 55:
-#line 1336 "sqlparser.y"
-    {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-3].expr, SIMILAR_TO, yyvsp[0].expr);
-}
-    break;
-
-  case 56:
-#line 1340 "sqlparser.y"
-    {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-4].expr, NOT_SIMILAR_TO, yyvsp[0].expr);
-}
-    break;
-
   case 58:
-#line 1350 "sqlparser.y"
+#line 851 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( SQL_IS_NULL, yyvsp[-2].expr );
+	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SIMILAR_TO, yyvsp[0].expr);
 }
     break;
 
   case 59:
-#line 1354 "sqlparser.y"
+#line 855 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( SQL_IS_NOT_NULL, yyvsp[-3].expr );
+	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_SIMILAR_TO, yyvsp[0].expr);
 }
     break;
 
   case 61:
-#line 1365 "sqlparser.y"
+#line 865 "sqlparser.y"
+    {
+	yyval.expr = new UnaryExpr( SQL_IS_NULL, yyvsp[-1].expr );
+}
+    break;
+
+  case 62:
+#line 869 "sqlparser.y"
+    {
+	yyval.expr = new UnaryExpr( SQL_IS_NOT_NULL, yyvsp[-1].expr );
+}
+    break;
+
+  case 64:
+#line 880 "sqlparser.y"
     {
 	yyval.expr = new UnaryExpr( '-', yyvsp[0].expr );
 }
     break;
 
-  case 62:
-#line 1369 "sqlparser.y"
+  case 65:
+#line 884 "sqlparser.y"
     {
 	yyval.expr = new UnaryExpr( '+', yyvsp[0].expr );
 }
     break;
 
-  case 63:
-#line 1373 "sqlparser.y"
+  case 66:
+#line 888 "sqlparser.y"
     {
 	yyval.expr = new UnaryExpr( '~', yyvsp[0].expr );
 }
     break;
 
-  case 64:
-#line 1377 "sqlparser.y"
+  case 67:
+#line 892 "sqlparser.y"
     {
 	yyval.expr = new UnaryExpr( NOT, yyvsp[0].expr );
 }
     break;
 
-  case 65:
-#line 1381 "sqlparser.y"
+  case 68:
+#line 896 "sqlparser.y"
     {
 	yyval.expr = new VariableExpr( QString::fromLatin1(yyvsp[0].stringValue) );
 	
@@ -2872,20 +2391,12 @@ YYACCEPT;
 //	$$->setTable(dummy);
 
 //	parser->select()->addField(field);
-	requiresTable = true;
+//	requiresTable = true;
 }
     break;
 
-  case 66:
-#line 1394 "sqlparser.y"
-    {
-	kdDebug() << "  + function: " << yyvsp[-3].stringValue << "(" << yyvsp[-1].exprList->debugString() << ")" << endl;
-	yyval.expr = new FunctionExpr(yyvsp[-3].stringValue, yyvsp[-1].exprList);
-}
-    break;
-
-  case 67:
-#line 1400 "sqlparser.y"
+  case 69:
+#line 915 "sqlparser.y"
     {
 	yyval.expr = new VariableExpr( QString::fromLatin1(yyvsp[-2].stringValue) + "." + QString::fromLatin1(yyvsp[0].stringValue) );
 	kdDebug() << "  + identifier.identifier: " << yyvsp[0].stringValue << "." << yyvsp[-2].stringValue << endl;
@@ -2898,8 +2409,8 @@ YYACCEPT;
 }
     break;
 
-  case 68:
-#line 1411 "sqlparser.y"
+  case 70:
+#line 926 "sqlparser.y"
     {
 	yyval.expr = new ConstExpr( SQL_NULL, QVariant() );
 	kdDebug() << "  + NULL" << endl;
@@ -2908,8 +2419,8 @@ YYACCEPT;
 }
     break;
 
-  case 69:
-#line 1418 "sqlparser.y"
+  case 71:
+#line 933 "sqlparser.y"
     {
 	yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, yyvsp[0].stringValue );
 //	$$ = new Field();
@@ -2919,8 +2430,8 @@ YYACCEPT;
 }
     break;
 
-  case 70:
-#line 1426 "sqlparser.y"
+  case 72:
+#line 941 "sqlparser.y"
     {
 	yyval.expr = new ConstExpr( INTEGER_CONST, yyvsp[0].integerValue );
 //	$$ = new Field();
@@ -2930,62 +2441,47 @@ YYACCEPT;
 }
     break;
 
-  case 71:
-#line 1434 "sqlparser.y"
+  case 73:
+#line 949 "sqlparser.y"
     {
 	yyval.expr = new ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
 	kdDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
 }
     break;
 
-  case 72:
-#line 1439 "sqlparser.y"
+  case 75:
+#line 960 "sqlparser.y"
     {
 	kdDebug() << "(expr)" << endl;
 	yyval.expr = new UnaryExpr('(', yyvsp[-1].expr);
 }
     break;
 
-  case 73:
-#line 1447 "sqlparser.y"
-    {
-	yyvsp[-2].exprList->add( yyvsp[0].expr );
-	yyval.exprList = yyvsp[-2].exprList;
-}
-    break;
-
-  case 74:
-#line 1452 "sqlparser.y"
-    {
-	yyval.exprList = new NArgExpr(0, 0/*unknown*/);
-}
-    break;
-
-  case 75:
-#line 1459 "sqlparser.y"
+  case 76:
+#line 988 "sqlparser.y"
     {
 	yyval.exprList = yyvsp[0].exprList;
 }
     break;
 
-  case 76:
-#line 1500 "sqlparser.y"
+  case 77:
+#line 1029 "sqlparser.y"
     {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add(yyvsp[0].expr);
 }
     break;
 
-  case 77:
-#line 1505 "sqlparser.y"
+  case 78:
+#line 1034 "sqlparser.y"
     {
 	yyval.exprList = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
 	yyval.exprList->add(yyvsp[0].expr);
 }
     break;
 
-  case 78:
-#line 1513 "sqlparser.y"
+  case 79:
+#line 1042 "sqlparser.y"
     {
 	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
 
@@ -3022,8 +2518,8 @@ YYACCEPT;
 }
     break;
 
-  case 79:
-#line 1548 "sqlparser.y"
+  case 80:
+#line 1077 "sqlparser.y"
     {
 	//table + alias
 	yyval.expr = new BinaryExpr(
@@ -3034,8 +2530,8 @@ YYACCEPT;
 }
     break;
 
-  case 80:
-#line 1557 "sqlparser.y"
+  case 81:
+#line 1086 "sqlparser.y"
     {
 	//table + alias
 	yyval.expr = new BinaryExpr(
@@ -3046,8 +2542,8 @@ YYACCEPT;
 }
     break;
 
-  case 81:
-#line 1571 "sqlparser.y"
+  case 82:
+#line 1100 "sqlparser.y"
     {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add( yyvsp[0].expr );
@@ -3055,8 +2551,8 @@ YYACCEPT;
 }
     break;
 
-  case 82:
-#line 1577 "sqlparser.y"
+  case 83:
+#line 1106 "sqlparser.y"
     {
 	yyval.exprList = new NArgExpr(0,0);
 	yyval.exprList->add( yyvsp[0].expr );
@@ -3064,8 +2560,8 @@ YYACCEPT;
 }
     break;
 
-  case 83:
-#line 1586 "sqlparser.y"
+  case 84:
+#line 1115 "sqlparser.y"
     {
 //	$$ = new Field();
 //	dummy->addField($$);
@@ -3076,16 +2572,16 @@ YYACCEPT;
 }
     break;
 
-  case 84:
-#line 1595 "sqlparser.y"
+  case 85:
+#line 1124 "sqlparser.y"
     {
 	yyval.expr = yyvsp[0].expr;
 	kdDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
 }
     break;
 
-  case 85:
-#line 1600 "sqlparser.y"
+  case 86:
+#line 1129 "sqlparser.y"
     {
 //	$$ = new Field();
 //	$$->setExpression(  );
@@ -3099,8 +2595,8 @@ YYACCEPT;
 }
     break;
 
-  case 86:
-#line 1612 "sqlparser.y"
+  case 87:
+#line 1141 "sqlparser.y"
     {
 //	$$ = new Field();
 //	$$->setExpression(  );
@@ -3114,15 +2610,22 @@ YYACCEPT;
 }
     break;
 
-  case 87:
-#line 1627 "sqlparser.y"
+  case 88:
+#line 1156 "sqlparser.y"
     {
 	yyval.expr = yyvsp[0].expr;
 }
     break;
 
-  case 88:
-#line 1665 "sqlparser.y"
+  case 89:
+#line 1160 "sqlparser.y"
+    {
+	yyval.expr = new FunctionExpr( yyvsp[-3].stringValue, yyvsp[-1].exprList );
+}
+    break;
+
+  case 90:
+#line 1199 "sqlparser.y"
     {
 	yyval.expr = yyvsp[-1].expr;
 //TODO
@@ -3130,8 +2633,8 @@ YYACCEPT;
 }
     break;
 
-  case 89:
-#line 1674 "sqlparser.y"
+  case 91:
+#line 1208 "sqlparser.y"
     {
 	yyval.expr = new VariableExpr("*");
 	kdDebug() << "all columns" << endl;
@@ -3142,8 +2645,8 @@ YYACCEPT;
 }
     break;
 
-  case 90:
-#line 1683 "sqlparser.y"
+  case 92:
+#line 1217 "sqlparser.y"
     {
 	QString s = QString::fromLatin1(yyvsp[-2].stringValue);
 	s+=".*";
@@ -3156,7 +2659,7 @@ YYACCEPT;
     }
 
 /* Line 1016 of /usr/share/bison/yacc.c.  */
-#line 3160 "sqlparser.tab.c"
+#line 2663 "sqlparser.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -3375,7 +2878,7 @@ yyreturn:
 }
 
 
-#line 1697 "sqlparser.y"
+#line 1231 "sqlparser.y"
 
 
 

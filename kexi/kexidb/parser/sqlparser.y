@@ -18,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+%token UMINUS
+
 %token SQL_TYPE
 %token SQL_ABS
 %token ACOS
@@ -161,7 +163,7 @@
 %token GOTO
 %token GRANT
 %token GREATER_OR_EQUAL
-%token GREATER_THAN
+//%token GREATER_THAN
 //conflict %token GROUP
 %token HAVING
 %token HOUR
@@ -194,7 +196,7 @@
 %token LEFT
 %token LENGTH
 %token LESS_OR_EQUAL
-%token LESS_THAN
+//%token LESS_THAN
 %token LEVEL
 %token LIKE
 %token LINE_WIDTH
@@ -225,7 +227,8 @@
 %token NODUP
 %token NONE
 %token NOT
-%token NOT_EQUAL
+%token NOT_EQUAL //<>
+%token NOT_EQUAL2 //!=
 %token NOW
 %token SQL_NULL
 %token SQL_IS
@@ -288,7 +291,7 @@
 %token SET
 %token SHOWOPT
 %token SIGN
-%token SIMILAR
+//%token SIMILAR
 %token SIMILAR_TO /* helper */
 %token NOT_SIMILAR_TO /* helper */
 %token INTEGER_CONST
@@ -403,7 +406,9 @@
 %type <expr> aExpr7
 %type <expr> aExpr8
 %type <expr> aExpr9
+%type <expr> aExpr10
 %type <exprList> aExprList
+%type <exprList> aExprList2
 %type <expr> WhereClause
 %type <expr> FlatTable
 %type <exprList> Tables
@@ -436,7 +441,6 @@
 #include <klocale.h>
 #include <qptrlist.h>
 #include <qcstring.h>
-#include <qregexp.h>
 
 #include <connection.h>
 #include <queryschema.h>
@@ -447,6 +451,8 @@
 #include "parser_p.h"
 #include "sqltypes.h"
 
+int yylex();
+
 //	using namespace std;
 using namespace KexiDB;
 
@@ -454,508 +460,6 @@ using namespace KexiDB;
 #define YYSTACK_USE_ALLOCA 1
 #define YYMAXDEPTH 255
 
-Parser *parser;
-Field *field;
-bool requiresTable;
-QPtrList<Field> fieldList;
-//	QPtrList<TableSchema> tableList;
-//	QDict<TableSchema> tableDict;
-//	TableSchema *dummy = 0;
-int current = 0;
-QString ctoken = "";
-
-int yyparse();
-int yylex();
-void tokenize(const char *data);
-
-void yyerror(const char *str)
-{
-	kdDebug() << "error: " << str << endl;
-	kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
-	parser->setOperation(Parser::OP_Error);
-
-	const bool otherError = (qstrnicmp(str, "other error", 11)==0);
-	
-	if (parser->error().type().isEmpty() 
-		&& (strlen(str)==0 
-		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0)
-		|| otherError)
-	{
-		kdDebug() << parser->statement() << endl;
-		QString ptrline = "";
-		for(int i=0; i < current; i++)
-			ptrline += " ";
-
-		ptrline += "^";
-
-		kdDebug() << ptrline << endl;
-
-		//lexer may add error messages
-		QString lexerErr = parser->error().error();
-
-		QString errtypestr(str);
-		if (lexerErr.isEmpty()) {
-			if (errtypestr.startsWith("parse error, unexpected ")) {
-				//something like "parse error, unexpected IDENTIFIER, expecting ',' or ')'"
-				QString e = errtypestr.mid(24);
-				kdDebug() << e <<endl;
-				QString token = "IDENTIFIER";
-				if (e.startsWith(token)) {
-					QRegExp re("'.'");
-					int pos=0;
-					pos = re.search(e, pos);
-					QStringList captured=re.capturedTexts();
-					if (captured.count()>=2) {
-						kdDebug() << "**" << captured[1] << endl;
-						kdDebug() << "**" << captured[2] << endl;
-					}
-				}
-					
-					
-					
-//			 IDENTIFIER, expecting '")) {
-				e = errtypestr.mid(47);
-				kdDebug() << e <<endl;
-//				,' or ')'
-//		lexerErr i18n("identifier was expected");
-				
-			} else if (errtypestr.startsWith("parse error, expecting `IDENTIFIER'"))
-				lexerErr = i18n("identifier was expected");
-		}
-		
-		if (!otherError) {
-			if (!lexerErr.isEmpty())
-				lexerErr.prepend(": ");
-
-			if (parser->isReservedKeyword(ctoken.latin1()))
-				parser->setError( ParserError(i18n("Syntax Error"), 
-					i18n("\"%1\" is a reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
-			else
-				parser->setError( ParserError(i18n("Syntax Error"), 
-					i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );
-		}
-	}
-}
-
-void setError(const QString& errName, const QString& errDesc)
-{
-	parser->setError( ParserError(errName, errDesc, ctoken, current) );
-	yyerror(errName.latin1());
-}
-
-void setError(const QString& errDesc)
-{
-	setError("other error", errDesc);
-}
-
-/* this is better than assert() */
-#define IMPL_ERROR(errmsg) setError("Implementation error", errmsg)
-
-bool parseData(Parser *p, const char *data)
-{
-/* todo: remove dummy */
-//		if (!dummy)
-			//dummy = new TableSchema();
-/* todo: make this REENTRANT */
-	parser = p;
-	parser->clear();
-	field = 0;
-	fieldList.clear();
-	requiresTable = false;
-
-	if (!data) {
-		ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
-		parser->setError(err);
-		yyerror("");
-		parser = 0;
-		return false;
-	}
-
-	tokenize(data);
-	if (!parser->error().type().isEmpty()) {
-		parser = 0;
-		return false;
-	}
-	yyparse();
-
-	bool ok = true;
-	if(parser->operation() == Parser::OP_Select)
-	{
-		kdDebug() << "parseData(): ok" << endl;
-//			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
-/*			TableSchema *ts;
-			for(QDictIterator<TableSchema> it(tableDict); TableSchema *s = tableList.first(); s; s = tableList.next())
-			{
-				kdDebug() << "  " << s->name() << endl;
-			}*/
-/*removed
-			Field::ListIterator it = parser->select()->fieldsIterator();
-			for(Field *item; (item = it.current()); ++it)
-			{
-				if(tableList.findRef(item->table()) == -1)
-				{
-					ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list").arg(item->table()->name()), ctoken, current);
-					parser->setError(err);
-
-					yyerror("fieldlisterror");
-					ok = false;
-				}
-			}*/
-			//take the dummy table out of the query
-//			parser->select()->removeTable(dummy);
-	}
-	else {
-		ok = false;
-	}
-
-//		tableDict.clear();
-	parser = 0;
-	return ok;
-}
-
-	
-/* Adds \a column to \a querySchema. \a column can be in a form of
- table.field, tableAlias.field or field
-*/
-bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
-{
-	if (!columnExpr->validate(parseInfo)) {
-		setError(parseInfo.errMsg, parseInfo.errDescr);
-		return false;
-	}
-
-	VariableExpr *v_e = dynamic_cast<VariableExpr*>(columnExpr);
-	if (columnExpr->exprClass() == KexiDBExpr_Variable && v_e) {
-		//it's a variable:
-		if (v_e->name=="*") {//all tables asterisk
-			if (parseInfo.querySchema->tables()->isEmpty()) {
-				setError(i18n("\"*\" could not be used if no tables are specified"));
-				return false;
-			}
-			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
-		}
-		else if (v_e->tableForQueryAsterisk) {//one-table asterisk
-			parseInfo.querySchema->addAsterisk( 
-				new QueryAsterisk(parseInfo.querySchema, v_e->tableForQueryAsterisk) );
-		}
-		else if (v_e->field) {//"table.field" or "field" (bound to a table or not)
-			parseInfo.querySchema->addField(v_e->field, v_e->tablePositionForField);
-		}
-		else {
-			IMPL_ERROR("addColumn(): unknown case!");
-			return false;
-		}
-		return true;
-	}
-
-	//it's complex expression
-	Field *field = new Field(parseInfo.querySchema, columnExpr);
-	parseInfo.querySchema->addField(field);
-
-#if 0
-	kdDebug() << "found variable name: " << varName << endl;
-	int dotPos = varName.find('.');
-	QString tableName, fieldName;
-//TODO: shall we also support db name?
-	if (dotPos>0) {
-		tableName = varName.left(dotPos);
-		fieldName = varName.mid(dotPos+1);
-	}
-	if (tableName.isEmpty()) {//fieldname only
-		fieldName = varName;
-		if (fieldName=="*") {
-			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
-		}
-		else {
-			//find first table that has this field
-			Field *firstField = 0;
-			for (TableSchema::ListIterator it(*parseInfo.querySchema->tables()); it.current(); ++it) {
-				Field *f = it.current()->field(fieldName);
-				if (f) {
-					if (!firstField) {
-						firstField = f;
-					} else if (f->table()!=firstField->table()) {
-						//ambiguous field name
-						setError(i18n("Ambiguous field name"), 
-							i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-								"Use \"<tableName>.%4\" notation to specify table name.")
-								.arg(firstField->table()->name()).arg(f->table()->name())
-								.arg(fieldName).arg(fieldName));
-						return false;
-					}
-				}
-			}
-			if (!firstField) {
-					setError(i18n("Field not found"), 
-						i18n("Table containing \"%1\" field not found").arg(fieldName));
-					return false;
-			}
-			//ok
-			parseInfo.querySchema->addField(firstField);
-		}
-	}
-	else {//table.fieldname or tableAlias.fieldname
-		tableName = tableName.lower();
-		TableSchema *ts = parseInfo.querySchema->table( tableName );
-		if (ts) {//table.fieldname
-			//check if "table" is covered by an alias
-			const QValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
-			QValueList<int>::ConstIterator it = tPositions.begin();
-			QCString tableAlias;
-			bool covered = true;
-			for (; it!=tPositions.end() && covered; ++it) {
-				tableAlias = parseInfo.querySchema->tableAlias(*it);
-				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
-					covered = false; //uncovered
-				kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
-			}
-			if (covered) {
-				setError(i18n("Could not access the table directly using its name"), 
-					i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-					"you can write \"%3\"").arg(tableName)
-					.arg(tableName+"."+fieldName).arg(tableAlias+"."+fieldName.latin1()));
-				return false;
-			}
-		}
-		
-		int tablePosition = -1;
-		if (!ts) {//try to find tableAlias
-			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
-			if (tablePosition>=0) {
-				ts = parseInfo.querySchema->tables()->at(tablePosition);
-				if (ts)
-					kdDebug() << " --it's a tableAlias.name" << endl;
-			}
-		}
-
-
-		if (ts) {
-			QValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
-			if (!positionsList) {
-				IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
-				return false;
-			}
-
-			if (fieldName=="*") {
-				if (positionsList->count()>1) {
-					setError(i18n("Ambiguous \"%1.*\" expression").arg(tableName),
-						i18n("More than one \"%1\" table or alias defined").arg(tableName));
-					return false;
-				}
-				parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema, ts) );
-			}
-			else {
-				kdDebug() << " --it's a table.name" << endl;
-				Field *realField = ts->field(fieldName);
-				if (realField) {
-					// check if table or alias is used twice and both have the same column
-					// (so the column is ambiguous)
-					int numberOfTheSameFields = 0;
-					for (QValueList<int>::iterator it = positionsList->begin();
-						it!=positionsList->end();++it)
-					{
-						TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
-						if (otherTS->field(fieldName))
-							numberOfTheSameFields++;
-						if (numberOfTheSameFields>1) {
-							setError(i18n("Ambiguous \"%1.%2\" expression").arg(tableName).arg(fieldName),
-								i18n("More than one \"%1\" table or alias defined containing \"%2\" field").arg(tableName).arg(fieldName));
-							return false;
-						}
-					}
-
-					parseInfo.querySchema->addField(realField, tablePosition);
-				}
-				else {
-					setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
-						.arg(tableName).arg(fieldName));
-					return false;
-				}
-			}
-		}
-		else {
-			tableNotFoundError(tableName);
-			return false;
-		}
-	}
-#endif
-	return true;
-}
-
-QuerySchema* parseSelect( 
-	QuerySchema* querySchema, NArgExpr* colViews,	NArgExpr * tablesList )
-{
-	ParseInfo parseInfo(querySchema);
-	
-	//-------tables list
-//	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
-
-	uint columnNum = 0;
-/*TODO: use this later if there are columns that use database fields, 
-        e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
-	//used to collect information about first repeated table name or alias:
-//	QDict<char> tableNamesAndTableAliases(997, false);
-//	QString repeatedTableNameOrTableAlias;
-	if (tablesList) {
-		for (int i=0; i<tablesList->args(); i++, columnNum++) {
-			BaseExpr *e = tablesList->arg(i);
-			VariableExpr* t_e = 0;
-			QCString aliasString;
-			if (e->exprClass() == KexiDBExpr_SpecialBinary) {
-				BinaryExpr* t_with_alias = dynamic_cast<BinaryExpr*>(e);
-				assert(t_with_alias);
-				assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
-				assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
-					&& (t_with_alias->type()==AS || t_with_alias->type()==0));
-				t_e = dynamic_cast<VariableExpr*>(t_with_alias->left());
-				aliasString = dynamic_cast<VariableExpr*>(t_with_alias->right())->name.latin1();
-			}
-			else {
-				t_e = dynamic_cast<VariableExpr*>(e);
-			}
-			assert(t_e);
-			QCString tname = t_e->name.latin1();
-			TableSchema *s = parser->db()->tableSchema(tname);
-			if(!s) {
-				setError(//i18n("Field List Error"), 
-					i18n("Table \"%1\" does not exist").arg(tname));
-	//			yyerror("fieldlisterror");
-				return 0;
-			}
-			QCString tableOrAliasName;
-			if (!aliasString.isEmpty()) {
-				tableOrAliasName = aliasString;
-				kdDebug() << "- add alias for table: " << aliasString << endl;
-			} else {
-				tableOrAliasName = tname;
-			}
-			// 1. collect information about first repeated table name or alias
-			//    (potential ambiguity)
-			QValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
-			if (list) {
-				//another table/alias with the same name
-				list->append( i );
-				kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
-			}
-			else {
-				list = new QValueList<int>();
-				list->append( i );
-				parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
-				kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
-			}
-	/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
-				if (tableNamesAndTableAliases[tname])
-					repeatedTableNameOrTableAlias=tname;
-				else
-					tableNamesAndTableAliases.insert(tname, (const char*)1);
-			}
-			if (!aliasString.isEmpty()) {
-				kdDebug() << "- add alias for table: " << aliasString << endl;
-	//			querySchema->setTableAlias(columnNum, aliasString);
-				//2. collect information about first repeated table name or alias
-				//   (potential ambiguity)
-				if (repeatedTableNameOrTableAlias.isEmpty()) {
-					if (tableNamesAndTableAliases[aliasString])
-						repeatedTableNameOrTableAlias=aliasString;
-					else
-						tableNamesAndTableAliases.insert(aliasString, (const char*)1);
-				}
-			}*/
-			kdDebug() << "addTable: " << tname << endl;
-			querySchema->addTable( s, aliasString );
-		}
-	}
-
-	/* set parent table if there's only one */
-//	if (parser->select()->tables()->count()==1)
-	if (querySchema->tables()->count()==1)
-		querySchema->setParentTable(querySchema->tables()->first());
-
-	//-------add fields
-	if (colViews) {
-		BaseExpr *e;
-		columnNum = 0;
-		for (BaseExpr::ListIterator it(colViews->list); (e = it.current()); columnNum++)
-		{
-			bool moveNext = true; //used to avoid ++it when an item is taken from the list
-			BaseExpr *columnExpr = e;
-			VariableExpr* aliasVariable = 0;
-			if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-				&& (e->type()==AS || e->type()==0))
-			{
-				//KexiDBExpr_SpecialBinary: with alias
-				columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
-	//			isFieldWithAlias = true;
-				aliasVariable = dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
-				if (!aliasVariable) {
-					setError(i18n("Invalid column alias definition")); //ok?
-					return 0;
-				}
-			}
-	
-			const int c = columnExpr->exprClass();
-			const bool isExpressionField = 
-					c == KexiDBExpr_Const
-				|| c == KexiDBExpr_Unary
-				|| c == KexiDBExpr_Arithm
-				|| c == KexiDBExpr_Logical
-				|| c == KexiDBExpr_Relational
-				|| c == KexiDBExpr_Const
-				|| c == KexiDBExpr_Function;
-	
-			if (c == KexiDBExpr_Variable) {
-				//just a variable, do nothing, addColumn() will handle this
-			}
-			else if (isExpressionField) {
-				//expression object will be reused, take, will be owned, do not destroy
-				colViews->list.take();
-				moveNext = false;
-			}
-			else if (aliasVariable) {
-				//take first (left) argument of the special binary expr, will be owned, do not destroy
-				dynamic_cast<BinaryExpr*>(e)->list.take(0);
-			}
-			else {
-				setError(i18n("Invalid column definition")); //ok?
-				return 0;
-			}
-	
-			if (!addColumn( parseInfo, columnExpr ))
-				return 0;
-			
-			if (aliasVariable) {
-				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-					<< columnNum << endl;
-				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-			}
-	/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-				&& (e->type()==AS || e->type()==0))
-			{
-				//also add alias
-				VariableExpr* aliasVariable =
-					dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
-				if (!aliasVariable) {
-					setError(i18n("Invalid column alias definition")); //ok?
-					return 0;
-				}
-				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-					<< columnNum << endl;
-				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-			}*/
-	
-			if (moveNext)
-				++it;
-		}
-	}
-	kdDebug() << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
-		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
-	
-	delete colViews; //no longer needed
-	delete tablesList; //no longer needed
-	
-	return querySchema;
-}
-	
 	extern "C"
 	{
 		int yywrap()
@@ -1000,10 +504,11 @@ QuerySchema* parseSelect(
 //%nonassoc	'<' '>'
 //%nonassoc '=' '<' '>' "<=" ">=" "<>" ":=" LIKE ILIKE SIMILAR
 //%nonassoc '=' LESS_THAN GREATER_THAN LESS_OR_EQUAL GREATER_OR_EQUAL NOT_EQUAL
-%nonassoc '=' LESS_THAN GREATER_THAN 
+%nonassoc '=' '<' '>'
+//LESS_THAN GREATER_THAN 
 %nonassoc LESS_OR_EQUAL GREATER_OR_EQUAL 
-%nonassoc NOT_EQUAL
-%nonassoc SQL_IN LIKE ILIKE SIMILAR
+%nonassoc NOT_EQUAL NOT_EQUAL2
+%nonassoc SQL_IN LIKE ILIKE SIMILAR_TO NOT_SIMILAR_TO
 //%nonassoc	LIKE ILIKE SIMILAR
 //%nonassoc	ESCAPE
 //%nonassoc	OVERLAPS
@@ -1017,6 +522,7 @@ QuerySchema* parseSelect(
 %left		'+' '-'
 %left		'*' '/' '%'
 %left		'^'
+%left UMINUS
 // Unary Operators 
 //%left		AT ZONE			// sets precedence for AT TIME ZONE
 //%right		UMINUS
@@ -1167,7 +673,7 @@ Select ColViews
 {
 	kdDebug() << "Select ColViews=" << $2->debugString() << endl;
 
-	if (!($$ = parseSelect( $1, $2, 0 )))
+	if (!($$ = parseSelect( $1, $2 )))
 		return 0;
 }
 | Select ColViews Tables
@@ -1184,16 +690,20 @@ Select ColViews
 | Select ColViews WhereClause
 {
 	kdDebug() << "Select ColViews Conditions" << endl;
-	//TODO
-//	if (!($$ = parseSelect( $1, $2, 0, $4 )))
-//		return 0;
+	if (!($$ = parseSelect( $1, $2, 0, $3 )))
+		return 0;
 }
 | Select ColViews Tables WhereClause
 {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
-	//TODO
-//	if (!($$ = parseSelect( $1, $2, $3, $4 )))
-//		return 0;
+	if (!($$ = parseSelect( $1, $2, $3, $4 )))
+		return 0;
+}
+| Select Tables WhereClause
+{
+	kdDebug() << "Select Tables Conditions" << endl;
+	if (!($$ = parseSelect( $1, 0, $2, $3 )))
+		return 0;
 }
 ;
 
@@ -1212,10 +722,6 @@ WHERE aExpr
 {
 	$$ = $2;
 }
-/*|
-{
-	$$ = NULL;
-}*/
 ;
 
 aExpr:
@@ -1262,7 +768,7 @@ aExpr5 '+' aExpr4
 	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
 	$$->debug();
 }
-| aExpr5 '-' aExpr4
+| aExpr5 '-' %prec UMINUS aExpr4
 {
 	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);
 }
@@ -1298,21 +804,25 @@ aExpr6
 
 /* relational op precedence */
 aExpr6:
-aExpr7 GREATER_THAN %prec GREATER_OR_EQUAL aExpr6
+aExpr7 '>' %prec GREATER_OR_EQUAL aExpr6
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, GREATER_THAN, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '>', $3);
 }
 | aExpr7 GREATER_OR_EQUAL aExpr6
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, GREATER_OR_EQUAL, $3);
 }
-| aExpr7 LESS_THAN %prec LESS_OR_EQUAL aExpr6
+| aExpr7 '<' %prec LESS_OR_EQUAL aExpr6
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LESS_THAN, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '<', $3);
 }
 | aExpr7 LESS_OR_EQUAL aExpr6
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LESS_OR_EQUAL, $3);
+}
+| aExpr7 '=' aExpr6
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '=', $3);
 }
 |
 aExpr7
@@ -1324,6 +834,11 @@ aExpr8 NOT_EQUAL aExpr7
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL, $3);
 }
+|
+aExpr8 NOT_EQUAL2 aExpr7
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL2, $3);
+}
 | aExpr8 LIKE aExpr7
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
@@ -1332,13 +847,13 @@ aExpr8 NOT_EQUAL aExpr7
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
 }
-| aExpr8 SIMILAR TO aExpr7
+| aExpr8 SIMILAR_TO aExpr7
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SIMILAR_TO, $4);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SIMILAR_TO, $3);
 }
-| aExpr8 NOT SIMILAR TO aExpr7
+| aExpr8 NOT_SIMILAR_TO aExpr7
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_SIMILAR_TO, $5);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_SIMILAR_TO, $3);
 }
 |
 aExpr8
@@ -1346,11 +861,11 @@ aExpr8
 
 /* --- unary logical right --- */
 aExpr8:
-aExpr8 SQL_IS SQL_NULL
+aExpr8 SQL_IS_NULL
 {
 	$$ = new UnaryExpr( SQL_IS_NULL, $1 );
 }
-| aExpr8 SQL_IS NOT SQL_NULL
+| aExpr8 SQL_IS_NOT_NULL
 {
 	$$ = new UnaryExpr( SQL_IS_NOT_NULL, $1 );
 }
@@ -1388,12 +903,12 @@ aExpr9:
 //	$$->setTable(dummy);
 
 //	parser->select()->addField(field);
-	requiresTable = true;
+//	requiresTable = true;
 }
-| IDENTIFIER '(' aExprList ')'
+| IDENTIFIER aExprList
 {
-	kdDebug() << "  + function: " << $1 << "(" << $3->debugString() << ")" << endl;
-	$$ = new FunctionExpr($1, $3);
+	kdDebug() << "  + function: " << $1 << "(" << $2->debugString() << ")" << endl;
+	$$ = new FunctionExpr($1, $2);
 }
 /*TODO: shall we also support db name? */
 | IDENTIFIER '.' IDENTIFIER
@@ -1435,7 +950,13 @@ aExpr9:
 	$$ = new ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
 	kdDebug() << "  + real constant: " << $1.integer << "." << $1.fractional << endl;
 }
-| '(' aExpr ')'
+|
+aExpr10
+;
+
+
+aExpr10:
+'(' aExpr ')'
 {
 	kdDebug() << "(expr)" << endl;
 	$$ = new UnaryExpr('(', $2);
@@ -1443,15 +964,23 @@ aExpr9:
 ;
 
 aExprList:
-aExprList ',' aExpr
+'(' aExprList ')'
 {
-	$1->add( $3 );
-	$$ = $1;
+//	$$ = new NArgExpr(0, 0);
+//	$$->add( $1 );
+//	$$->add( $3 );
 }
-|/* EMPTY */
+;
+
+aExprList2:
+aExpr ',' aExprList2
 {
-	$$ = new NArgExpr(0, 0/*unknown*/);
 }
+/*| aExpr
+{
+	$$ = new NArgExpr(0, 0);
+	$$->add( $1 );
+}*/
 ;
 
 Tables:
@@ -1627,9 +1156,14 @@ aExpr
 {
 	$$ = $1;
 }
+| IDENTIFIER '(' ColViews ')'
+{
+	$$ = new FunctionExpr( $1, $3 );
+}
 /*
 | SUM '(' ColExpression ')'
 {
+	FunctionExpr(
 //	$$ = new AggregationExpr( SUM,  );
 //TODO
 //	$$->setName("SUM(" + $3->name() + ")");

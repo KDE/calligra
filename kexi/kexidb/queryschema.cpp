@@ -20,6 +20,7 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
+#include <kexidb/expression.h>
 
 #include <assert.h>
 
@@ -48,6 +49,7 @@ class QuerySchemaPrivate
 		 , pkeyFieldsOrder(0)
 		 , tablesBoundToColumns(64, -1)
 		 , tablePositionsForAliases(67, false)
+		 , whereExpr(0)
 		{
 			aliases.setAutoDelete(true);
 			tableAliases.setAutoDelete(true);
@@ -62,6 +64,7 @@ class QuerySchemaPrivate
 			delete autoincFields;
 			delete fieldsOrder;
 			delete pkeyFieldsOrder;
+			delete whereExpr;
 		}
 
 		void clearCachedData()
@@ -147,8 +150,11 @@ class QuerySchemaPrivate
 		*/
 		QValueVector<int> tablesBoundToColumns;
 		
-		/* Collects table positions for aliases: used in tablePositionsForAlias(). */
+		/*! Collects table positions for aliases: used in tablePositionsForAlias(). */
 		QAsciiDict<int> tablePositionsForAliases;
+
+		/*! WHERE expression */
+		BaseExpr *whereExpr;
 };
 }
 
@@ -207,10 +213,8 @@ void QuerySchema::clear()
 	d->parent_table = 0;
 	d->tables.clear();
 	d->clearCachedData();
-	if (d->pkeyFieldsOrder) {
-		delete d->pkeyFieldsOrder;
-		d->pkeyFieldsOrder=0;
-	}
+	delete d->pkeyFieldsOrder;
+	d->pkeyFieldsOrder=0;
 	d->visibility.fill(false);
 	d->tablesBoundToColumns = QValueVector<int>(64,-1);
 	d->tablePositionsForAliases.clear();
@@ -357,9 +361,9 @@ QString QuerySchema::debugString()
 	dbg.reserve(1024);
 	//fields
 	dbg = QString("QUERY ") + schemaDataDebugString() + "\n"
-		+ "-PARENT_TABLE=" + (d->parent_table ? d->parent_table->name() :"(NULL)")
+		+ "-PARENT_TABLE=" + (d->parent_table ? d->parent_table->name() :"<NULL>")
 		+ "\n-COLUMNS:\n"
-		+ FieldList::debugString();
+		+ ((fieldCount()>0) ? FieldList::debugString() : "<NONE>") + "\n";
 
 	//bindings
 	QString dbg2;
@@ -421,6 +425,9 @@ QString QuerySchema::debugString()
 		}
 	}
 	dbg += QString("-TABLE ALIASES:\n" + aliases);
+	QString where = d->whereExpr->debugString();
+	if (!where.isEmpty())
+		dbg += QString("\n-WHERE EXPRESSION:\n" + where);
 	return dbg;
 }
 
@@ -783,6 +790,18 @@ QString QuerySchema::autoIncrementSQLFieldsList(Driver *driver)
 	}
 	return d->autoIncrementSQLFieldsList;
 }
+
+void QuerySchema::setWhereExpression(BaseExpr *expr)
+{
+	delete d->whereExpr;
+	d->whereExpr = expr;
+}
+
+BaseExpr *QuerySchema::whereExpression() const
+{
+	return d->whereExpr;
+}
+
 
 /*
 	new field1, Field *field2

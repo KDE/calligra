@@ -331,7 +331,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return a preset statement (if any). */
 		QString statement() const;
 
-		//! forces a query statement (i.e. no statement is composed from QuerySchema's content)
+		/*! Forces a query statement (i.e. no statement is composed from QuerySchema's content) */
 		void setStatement(const QString &s);
 
 		/*! \return a string that is a result of concatenating all column names 
@@ -349,7 +349,15 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return cached sql list created using sqlColumnsList() on a list returned
 		 by autoIncrementFields(). */
 		QString autoIncrementSQLFieldsList(Driver *driver);
-		
+
+		/*! Sets a WHERE expression \a exp. It will be owned by this query, 
+		 so you can forget about it. Previously set WHERE expression will be deleted.
+		 You can pass 0 to remove expresssion. */
+		void setWhereExpression(BaseExpr *expr);
+
+		/*! \return WHERE expression or 0 if this query has no WHERE expression */
+		BaseExpr *whereExpression() const;
+
 	protected:
 		void init();
 

@@ -1022,7 +1022,6 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 	bool wasWhere = false; //for later use
 	for (Relationship::ListIterator it(*querySchema.relationships()); (rel = it.current()); ++it) {
 		if (s_where.isEmpty()) {
-			s_where = QString::fromLatin1(" WHERE ");
 			wasWhere = true;
 		}
 		else
@@ -1043,8 +1042,18 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		}
 		s_where += s_where_sub;
 	}
-
-	sql += s_where;
+	//EXPLICITY SPECIFIER WHERE EXPRESION
+	if (querySchema.whereExpression()) {
+		if (wasWhere) {
+//TODO: () are not always needed
+			s_where = "(" + s_where + ") AND (" + querySchema.whereExpression()->toString() + ")";
+		}
+		else {
+			s_where = querySchema.whereExpression()->toString();
+		}
+	}
+	if (!s_where.isEmpty())
+		sql += QString::fromLatin1(" WHERE ") + s_where;
 //! \todo (js) add WHERE and other sql parts
 	//(use wasWhere here)
 
