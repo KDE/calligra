@@ -448,7 +448,8 @@ void KWFootNoteVariable::resize()
     // zoom to LU
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
-    //kdDebug() << "KWFootNoteVariable::resize text=" << txt << " width=" << width << endl;
+    m_ascent = fmt->ascent();
+    //kdDebug() << "KWFootNoteVariable::resize text=" << txt << " width=" << width << " height=" << height << endl;
 }
 
 void KWFootNoteVariable::setDeleted( bool del )
