@@ -22,7 +22,7 @@
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388    
 
-#define MAX_UNDO_REDO 128
+#define MAX_UNDO_REDO 100
 
 // types
 enum BackType {BT_COLOR,BT_PICTURE,BT_CLIPART};

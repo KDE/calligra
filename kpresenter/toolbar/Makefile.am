@@ -8,7 +8,9 @@ toolbar_DATA = 121.xpm alignCenter.xpm alignLeft.xpm alignRight.xpm \
 	rectangle.xpm rectangle2.xpm rectangleRound.xpm rotate.xpm \
 	screen.xpm start.xpm stop.xpm style.xpm text.xpm underl.xpm \
 	unsortedList.xpm shadow.xpm shadowLU.xpm shadowU.xpm shadowRU.xpm \
-	shadowR.xpm shadowRB.xpm shadowB.xpm shadowLB.xpm shadowL.xpm
+	shadowR.xpm shadowRB.xpm shadowB.xpm shadowLB.xpm shadowL.xpm \
+	undo.xpm redo.xpm aoleft.xpm aoright.xpm aotop.xpm aobottom.xpm \
+	aocenterh.xpm aocenterv.xpm alignobjs.xpm
 
 toolbardir = $(kde_datadir)/kpresenter/toolbar
 

@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd(QString _name,QPoint _diff,QList<KPObject> _objects,KPresenterDocument_impl *_doc)
+MoveByCmd::MoveByCmd(QString _name,QPoint _diff,QList<KPObject> &_objects,KPresenterDocument_impl *_doc)
   : Command(_name), diff(_diff), objects(_objects)
 {
   objects.setAutoDelete(false);
@@ -61,6 +61,58 @@ void MoveByCmd::unexecute()
     {
       oldRect = objects.at(i)->getBoundingRect(0,0);
       objects.at(i)->moveBy(-diff.x(),-diff.y());
+      doc->repaint(oldRect);
+      doc->repaint(objects.at(i));
+    }
+}
+
+/******************************************************************/
+/* Class: MoveByCmd2                                              */
+/******************************************************************/
+
+/*======================== constructor ===========================*/
+MoveByCmd2::MoveByCmd2(QString _name,QList<QPoint> &_diffs,QList<KPObject> &_objects,KPresenterDocument_impl *_doc)
+  : Command(_name), diffs(_diffs), objects(_objects)
+{
+  objects.setAutoDelete(false);
+  diffs.setAutoDelete(true);
+  doc = _doc;
+  for (unsigned int i = 0;i < objects.count();i++)
+    objects.at(i)->incCmdRef();
+}
+
+/*======================== destructor ============================*/
+MoveByCmd2::~MoveByCmd2()
+{
+  for (unsigned int i = 0;i < objects.count();i++)
+    objects.at(i)->decCmdRef();
+
+  diffs.clear();
+}
+
+/*====================== execute =================================*/
+void MoveByCmd2::execute()
+{
+  QRect oldRect;
+
+  for (unsigned int i = 0;i < objects.count();i++)
+    {
+      oldRect = objects.at(i)->getBoundingRect(0,0);
+      objects.at(i)->moveBy(*diffs.at(i));
+      doc->repaint(oldRect);
+      doc->repaint(objects.at(i));
+    }
+}
+
+/*====================== unexecute ===============================*/
+void MoveByCmd2::unexecute()
+{
+  QRect oldRect;
+
+  for (unsigned int i = 0;i < objects.count();i++)
+    {
+      oldRect = objects.at(i)->getBoundingRect(0,0);
+      objects.at(i)->moveBy(-diffs.at(i)->x(),-diffs.at(i)->y());
       doc->repaint(oldRect);
       doc->repaint(objects.at(i));
     }

@@ -41,10 +41,18 @@ module KPresenter
       slot void extraLower();
       slot void extraRotate();
       slot void extraShadow();
+      slot void extraAlignObj();
       slot void extraBackground();
       slot void extraLayout();
       slot void extraOptions();
 
+      slot void extraAlignObjLeftidl();
+      slot void extraAlignObjCenterHidl();
+      slot void extraAlignObjRightidl();
+      slot void extraAlignObjTopidl();
+      slot void extraAlignObjCenterVidl();
+      slot void extraAlignObjBottomidl();
+      
       slot void screenConfigPages();
       slot void screenAssignEffect();
       slot void screenStart();

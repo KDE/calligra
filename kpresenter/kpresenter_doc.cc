@@ -1534,6 +1534,80 @@ void KPresenterDocument_impl::deSelectAllObj()
     }
 }
 
+/*======================== align objects left ===================*/
+void KPresenterDocument_impl::alignObjsLeft()
+{
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
+
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  _objects.append(kpobject);
+	  _diffs.append(new QPoint(getPageSize(1,0,0).x() - kpobject->getOrig().x(),0));
+	}
+    }
+
+  MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) left"),_diffs,_objects,this);
+  _commands.addCommand(moveByCmd2);
+  moveByCmd2->execute();
+}
+
+/*==================== align objects center h ===================*/
+void KPresenterDocument_impl::alignObjsCenterH()
+{
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
+  int _w = getPageSize(1,0,0).x() + getPageSize(1,0,0).width();
+
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  _objects.append(kpobject);
+	  _diffs.append(new QPoint((_w - kpobject->getSize().width()) / 2 - kpobject->getOrig().x(),0));
+	}
+    }
+
+  MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) centered (horizontal)"),_diffs,_objects,this);
+  _commands.addCommand(moveByCmd2);
+  moveByCmd2->execute();
+}
+
+/*==================== align objects right ======================*/
+void KPresenterDocument_impl::alignObjsRight()
+{
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
+  int _w = getPageSize(1,0,0).x() + getPageSize(1,0,0).width();
+
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  _objects.append(kpobject);
+	  _diffs.append(new QPoint((_w - kpobject->getSize().width()) - kpobject->getOrig().x(),0));
+	}
+    }
+
+  MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) right"),_diffs,_objects,this);
+  _commands.addCommand(moveByCmd2);
+  moveByCmd2->execute();
+}
+
 /*================= undo redo changed ===========================*/
 void KPresenterDocument_impl::slotUndoRedoChanged(QString _undo,QString _redo)
 {

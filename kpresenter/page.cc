@@ -579,8 +579,102 @@ void Page::deSelectAllObj()
 /*======================== setup menus ===========================*/
 void Page::setupMenus()
 {
-  QString pixdir;
+  QString pixdir;;
   QPixmap pixmap;
+
+  // create right button object align menu
+  pixdir = KApplication::kde_datadir();
+  alignMenu1 = new QPopupMenu();
+  CHECK_PTR(alignMenu1);
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoleft.xpm");
+  alignMenu1->insertItem(pixmap,this,SLOT(alignObjLeft()));
+  alignMenu1->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterh.xpm");
+  alignMenu1->insertItem(pixmap,this,SLOT(alignObjCenterH()));
+  alignMenu1->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoright.xpm");
+  alignMenu1->insertItem(pixmap,this,SLOT(alignObjRight()));
+  alignMenu1->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aotop.xpm");
+  alignMenu1->insertItem(pixmap,this,SLOT(alignObjTop()));
+  alignMenu1->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterv.xpm");
+  alignMenu1->insertItem(pixmap,this,SLOT(alignObjCenterV()));
+  alignMenu1->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aobottom.xpm");
+  alignMenu1->insertItem(pixmap,this,SLOT(alignObjBottom()));
+  alignMenu1->setMouseTracking(true);
+  alignMenu1->setCheckable(false);
+
+  pixdir = KApplication::kde_datadir();
+  alignMenu2 = new QPopupMenu();
+  CHECK_PTR(alignMenu2);
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoleft.xpm");
+  alignMenu2->insertItem(pixmap,this,SLOT(alignObjLeft()));
+  alignMenu2->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterh.xpm");
+  alignMenu2->insertItem(pixmap,this,SLOT(alignObjCenterH()));
+  alignMenu2->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoright.xpm");
+  alignMenu2->insertItem(pixmap,this,SLOT(alignObjRight()));
+  alignMenu2->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aotop.xpm");
+  alignMenu2->insertItem(pixmap,this,SLOT(alignObjTop()));
+  alignMenu2->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterv.xpm");
+  alignMenu2->insertItem(pixmap,this,SLOT(alignObjCenterV()));
+  alignMenu2->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aobottom.xpm");
+  alignMenu2->insertItem(pixmap,this,SLOT(alignObjBottom()));
+  alignMenu2->setMouseTracking(true);
+  alignMenu2->setCheckable(false);
+
+  pixdir = KApplication::kde_datadir();
+  alignMenu3 = new QPopupMenu();
+  CHECK_PTR(alignMenu3);
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoleft.xpm");
+  alignMenu3->insertItem(pixmap,this,SLOT(alignObjLeft()));
+  alignMenu3->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterh.xpm");
+  alignMenu3->insertItem(pixmap,this,SLOT(alignObjCenterH()));
+  alignMenu3->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoright.xpm");
+  alignMenu3->insertItem(pixmap,this,SLOT(alignObjRight()));
+  alignMenu3->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aotop.xpm");
+  alignMenu3->insertItem(pixmap,this,SLOT(alignObjTop()));
+  alignMenu3->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterv.xpm");
+  alignMenu3->insertItem(pixmap,this,SLOT(alignObjCenterV()));
+  alignMenu3->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aobottom.xpm");
+  alignMenu3->insertItem(pixmap,this,SLOT(alignObjBottom()));
+  alignMenu3->setMouseTracking(true);
+  alignMenu3->setCheckable(false);
+
+  pixdir = KApplication::kde_datadir();
+  alignMenu4 = new QPopupMenu();
+  CHECK_PTR(alignMenu4);
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoleft.xpm");
+  alignMenu4->insertItem(pixmap,this,SLOT(alignObjLeft()));
+  alignMenu4->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterh.xpm");
+  alignMenu4->insertItem(pixmap,this,SLOT(alignObjCenterH()));
+  alignMenu4->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoright.xpm");
+  alignMenu4->insertItem(pixmap,this,SLOT(alignObjRight()));
+  alignMenu4->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aotop.xpm");
+  alignMenu4->insertItem(pixmap,this,SLOT(alignObjTop()));
+  alignMenu4->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterv.xpm");
+  alignMenu4->insertItem(pixmap,this,SLOT(alignObjCenterV()));
+  alignMenu4->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aobottom.xpm");
+  alignMenu4->insertItem(pixmap,this,SLOT(alignObjBottom()));
+  alignMenu4->setMouseTracking(true);
+  alignMenu4->setCheckable(false);
+
   pixdir = KApplication::kde_toolbardir();
 
   // create right button graph menu 
@@ -606,6 +700,9 @@ void Page::setupMenus()
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
   graphMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  graphMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
+  graphMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu1);
   graphMenu->setMouseTracking(true);
 
   // create right button picture menu
@@ -632,6 +729,9 @@ void Page::setupMenus()
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
   picMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  picMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
+  picMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu2);
   picMenu->setMouseTracking(true);
 
   // create right button clipart menu 
@@ -658,6 +758,9 @@ void Page::setupMenus()
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
   clipMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  clipMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
+  clipMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu3);
   clipMenu->setMouseTracking(true);
 
   // create right button text menu 
@@ -681,6 +784,9 @@ void Page::setupMenus()
   txtMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
   txtMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  txtMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
+  txtMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu4);
   txtMenu->setMouseTracking(true);
 
   // create right button presentation menu 

@@ -166,9 +166,17 @@ public:
   virtual void extraLower();
   virtual void extraRotate();
   virtual void extraShadow();
+  virtual void extraAlignObj();
   virtual void extraBackground();
   virtual void extraLayout();
   virtual void extraOptions();
+
+  virtual void extraAlignObjLeftidl();
+  virtual void extraAlignObjCenterHidl();
+  virtual void extraAlignObjRightidl();
+  virtual void extraAlignObjTopidl();
+  virtual void extraAlignObjCenterVidl();
+  virtual void extraAlignObjBottomidl();
 
   // screen menu
   virtual void screenConfigPages();
@@ -323,6 +331,20 @@ protected slots:
 
   void stopPres() {continuePres = false;}
 
+  // align objs
+  void extraAlignObjLeft()
+    { extraAlignObjLeftidl(); }
+  void extraAlignObjCenterH()
+    { extraAlignObjCenterHidl(); }
+  void extraAlignObjRight()
+    { extraAlignObjRightidl(); }
+  void extraAlignObjTop()
+    { extraAlignObjTopidl(); }
+  void extraAlignObjCenterV()
+    { extraAlignObjCenterVidl(); }
+  void extraAlignObjBottom()
+    { extraAlignObjBottomidl(); }
+
 protected:
 
   // ********* functions ***********
@@ -419,6 +441,13 @@ protected:
   CORBA::Long m_idMenuExtra_Lower;
   CORBA::Long m_idMenuExtra_Rotate;
   CORBA::Long m_idMenuExtra_Shadow;
+  CORBA::Long m_idMenuExtra_AlignObj;
+  CORBA::Long m_idMenuExtra_AlignObj_Left;
+  CORBA::Long m_idMenuExtra_AlignObj_CenterH;
+  CORBA::Long m_idMenuExtra_AlignObj_Right;
+  CORBA::Long m_idMenuExtra_AlignObj_Top;
+  CORBA::Long m_idMenuExtra_AlignObj_CenterV;
+  CORBA::Long m_idMenuExtra_AlignObj_Bottom;
   CORBA::Long m_idMenuExtra_Background;
   CORBA::Long m_idMenuExtra_Layout;
   CORBA::Long m_idMenuExtra_Options;
@@ -458,7 +487,7 @@ protected:
   CORBA::Long m_idMenuHelp_AboutKDE;
 
   // right button popup menus
-  QPopupMenu *rb_line,*rb_rect,*rb_pen,*rb_pen_width;
+  QPopupMenu *rb_line,*rb_rect,*rb_pen,*rb_pen_width,*rb_oalign;
 
   int W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,P_COL;
 
@@ -467,6 +496,8 @@ protected:
 
   // edit toolbar
   ToolBar_ref m_rToolBarEdit;
+  CORBA::Long m_idButtonEdit_Undo;
+  CORBA::Long m_idButtonEdit_Redo;
   CORBA::Long m_idButtonEdit_Cut;
   CORBA::Long m_idButtonEdit_Copy;
   CORBA::Long m_idButtonEdit_Paste;
@@ -505,6 +536,7 @@ protected:
   CORBA::Long m_idButtonExtra_Lower;
   CORBA::Long m_idButtonExtra_Rotate;
   CORBA::Long m_idButtonExtra_Shadow;
+  CORBA::Long m_idButtonExtra_Align;
 
   // screen toolbar
   ToolBar_ref m_rToolBarScreen;

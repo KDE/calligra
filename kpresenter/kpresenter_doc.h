@@ -65,6 +65,7 @@ class KPresenterView_impl;
 #include "kppixmapcollection.h"
 #include "kpgradientcollection.h"
 
+#include "movecmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>
@@ -290,6 +291,10 @@ public:
 
   CommandHistory *commands()
     { return &_commands; }
+
+  void alignObjsLeft();
+  void alignObjsCenterH();
+  void alignObjsRight();
 
 signals:
 

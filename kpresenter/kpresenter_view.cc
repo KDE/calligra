@@ -473,6 +473,20 @@ void KPresenterView_impl::extraShadow()
     }
 }
 
+/*========================== extra align obj ====================*/
+void KPresenterView_impl::extraAlignObj()
+{
+  QPoint pnt(QCursor::pos());
+
+  rb_oalign->popup(pnt);
+
+//   QEvent ev(Event_Leave);
+//   QMouseEvent mev(Event_MouseButtonRelease,
+// 		  QCursor::pos(),LeftButton,LeftButton);
+//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
+//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
+}
+
 /*====================== extra background =======================*/
 void KPresenterView_impl::extraBackground()
 {
@@ -1011,6 +1025,39 @@ void KPresenterView_impl::textUnsortList()
 void KPresenterView_impl::textNormalText()
 {
   if (page->kTxtObj()) page->kTxtObj()->setObjType(KTextObject::PLAIN);
+}
+
+/*======================= align object left =====================*/
+void KPresenterView_impl::extraAlignObjLeftidl()
+{
+  KPresenterDoc()->alignObjsLeft();
+}
+
+/*======================= align object center h =================*/
+void KPresenterView_impl::extraAlignObjCenterHidl()
+{
+  KPresenterDoc()->alignObjsCenterH();
+}
+
+/*======================= align object right ====================*/
+void KPresenterView_impl::extraAlignObjRightidl()
+{
+  KPresenterDoc()->alignObjsRight();
+}
+
+/*======================= align object top ======================*/
+void KPresenterView_impl::extraAlignObjTopidl()
+{
+}
+
+/*======================= align object center v =================*/
+void KPresenterView_impl::extraAlignObjCenterVidl()
+{
+}
+
+/*======================= align object bottom ===================*/
+void KPresenterView_impl::extraAlignObjBottomidl()
+{
 }
 
 /*======================= set document ==========================*/
@@ -2109,11 +2156,13 @@ void KPresenterView_impl::changeUndo(QString _text,bool _enable)
       QString str;
       str.sprintf(i18n("Undo: %s"),_text.data());
       m_rMenuBar->changeItem(str,m_idMenuEdit_Undo);
+      m_rToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,true);
     }
   else
     {    
-      m_rMenuBar->changeItem(i18n("Undo"),m_idMenuEdit_Undo);
+      m_rMenuBar->changeItem(i18n("No Undo possible"),m_idMenuEdit_Undo);
       m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,false);
+      m_rToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,false);
     }
 }
 
@@ -2126,11 +2175,13 @@ void KPresenterView_impl::changeRedo(QString _text,bool _enable)
       QString str;
       str.sprintf(i18n("Redo: %s"),_text.data());
       m_rMenuBar->changeItem(str,m_idMenuEdit_Redo);
+      m_rToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,true);
     }
   else
     {
-      m_rMenuBar->changeItem(i18n("Undo"),m_idMenuEdit_Redo);
+      m_rMenuBar->changeItem(i18n("No Redo possible"),m_idMenuEdit_Redo);
       m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,false);
+      m_rToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,false);
     }
 }
 
@@ -2160,10 +2211,10 @@ void KPresenterView_impl::setupMenu()
       QString tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcut.xpm";
       QString pix = loadPixmap(tmp);
-      m_idMenuEdit_Undo = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Undo")),m_idMenuEdit,
+      m_idMenuEdit_Undo = m_rMenuBar->insertItem(CORBA::string_dup(i18n("No Undo possible")),m_idMenuEdit,
 						 this,CORBA::string_dup("editUndo"));
       m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,false);
-      m_idMenuEdit_Redo = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Redo")),m_idMenuEdit,
+      m_idMenuEdit_Redo = m_rMenuBar->insertItem(CORBA::string_dup(i18n("No Redo possible")),m_idMenuEdit,
 						 this,CORBA::string_dup("editRedo"));
       m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,false);
       m_rMenuBar->insertSeparator(m_idMenuEdit);
@@ -2381,7 +2432,56 @@ void KPresenterView_impl::setupMenu()
       m_idMenuExtra_Shadow = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						     CORBA::string_dup(i18n("&Shadow object(s)...")),m_idMenuExtra,
 						     this,CORBA::string_dup("extraShadow"));
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/alignobjs.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),CORBA::string_dup(i18n("Align object(s)")),
+							  m_idMenuExtra);
+
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/aoleft.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj_Left = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							    CORBA::string_dup(i18n("Align &Left")),m_idMenuExtra_AlignObj,
+							    this,CORBA::string_dup("extraAlignObjLeftidl"));
+      m_rMenuBar->insertSeparator(m_idMenuExtra_AlignObj);
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/aocenterh.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj_CenterH = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							       CORBA::string_dup(i18n("Align Center (&horizontal)")),
+							       m_idMenuExtra_AlignObj,
+							       this,CORBA::string_dup("extraAlignObjCenterHidl"));
+      m_rMenuBar->insertSeparator(m_idMenuExtra_AlignObj);
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/aoright.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj_Right = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							     CORBA::string_dup(i18n("Align &Right")),m_idMenuExtra_AlignObj,
+							     this,CORBA::string_dup("extraAlignObjRightidl"));
+      m_rMenuBar->insertSeparator(m_idMenuExtra_AlignObj);
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/aotop.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj_Top = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							   CORBA::string_dup(i18n("Align &Top")),m_idMenuExtra_AlignObj,
+							   this,CORBA::string_dup("extraAlignObjTopidl"));
+      m_rMenuBar->insertSeparator(m_idMenuExtra_AlignObj);
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/aocenterv.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj_CenterV = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							       CORBA::string_dup(i18n("Align Center (&vertical)")),m_idMenuExtra_AlignObj,
+							       this,CORBA::string_dup("extraAlignObjCenterVidl"));
+      m_rMenuBar->insertSeparator(m_idMenuExtra_AlignObj);
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/aobottom.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_AlignObj_Bottom = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+							      CORBA::string_dup(i18n("Align &Bottom")),m_idMenuExtra_AlignObj,
+							      this,CORBA::string_dup("extraAlignObjBottomidl"));
       m_rMenuBar->insertSeparator(m_idMenuExtra);
+
       m_idMenuExtra_Background = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Page &Background...")),m_idMenuExtra,
 							this,CORBA::string_dup("extraBackground"));
       m_idMenuExtra_Layout = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pa&ge Layout...")),m_idMenuExtra,
@@ -2561,6 +2661,29 @@ void KPresenterView_impl::setupPopupMenus()
   P_COL = rb_pen->insertItem(pix,i18n("Pen color..."),this,SLOT(presPenColor()));
   rb_pen->setMouseTracking(true);
   rb_pen->setCheckable(false);
+
+  // create right button object align menu
+  rb_oalign = new QPopupMenu();
+  CHECK_PTR(rb_oalign);
+  pixmap.load(pixdir + "aoleft.xpm");
+  rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjLeft()));
+  rb_oalign->insertSeparator();
+  pixmap.load(pixdir + "aocenterh.xpm");
+  rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjCenterH()));
+  rb_oalign->insertSeparator();
+  pixmap.load(pixdir + "aoright.xpm");
+  rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjRight()));
+  rb_oalign->insertSeparator();
+  pixmap.load(pixdir + "aotop.xpm");
+  rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjTop()));
+  rb_oalign->insertSeparator();
+  pixmap.load(pixdir + "aocenterv.xpm");
+  rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjCenterV()));
+  rb_oalign->insertSeparator();
+  pixmap.load(pixdir + "aobottom.xpm");
+  rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjBottom()));
+  rb_oalign->setMouseTracking(true);
+  rb_oalign->setCheckable(false);
 }
 
 /*======================= setup edit toolbar ===================*/
@@ -2573,10 +2696,28 @@ void KPresenterView_impl::setupEditToolbar()
       m_rToolBarEdit = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Edit")));
       m_rToolBarEdit->setFullWidth(false);
 
-      // cut
-      QString tmp = kapp->kde_toolbardir().copy();
-      tmp += "/editcut.xpm";
+      // undo
+      QString tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/undo.xpm";
       QString pix = loadPixmap(tmp);
+      m_idButtonEdit_Undo = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Undo")),
+							 this,CORBA::string_dup("editUndo"));
+      m_rToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,false);
+
+      // redo
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/redo.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonEdit_Redo = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Redo")),
+							 this,CORBA::string_dup("editRedo"));
+      m_rToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,false);
+
+      m_rToolBarEdit->insertSeparator();
+
+      // cut
+      tmp = kapp->kde_toolbardir().copy();
+      tmp += "/editcut.xpm";
+      pix = loadPixmap(tmp);
       m_idButtonEdit_Cut = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Cut")),
 							this,CORBA::string_dup("editCut"));
 
@@ -2855,6 +2996,15 @@ void KPresenterView_impl::setupExtraToolbar()
       m_idButtonExtra_Shadow = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
 							     CORBA::string_dup(i18n("Shadow object(s)")),
 							     this,CORBA::string_dup("extraShadow"));
+      m_rToolBarExtra->insertSeparator();
+
+      // align
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/alignobjs.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonExtra_Align = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
+							    CORBA::string_dup(i18n("Align object(s)")),
+							    this,CORBA::string_dup("extraAlignObj"));
     }
 }
 
@@ -2968,6 +3118,7 @@ void KPresenterView_impl::setupScrollbars()
 void KPresenterView_impl::setupAccelerators()
 {
   // edit menu
+  m_rMenuBar->setAccel(CTRL + Key_Z,m_idMenuEdit_Undo);
   m_rMenuBar->setAccel(CTRL + Key_X,m_idMenuEdit_Cut);
   m_rMenuBar->setAccel(CTRL + Key_C,m_idMenuEdit_Copy);
   m_rMenuBar->setAccel(CTRL + Key_V,m_idMenuEdit_Paste);

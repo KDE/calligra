@@ -36,6 +36,13 @@ CommandHistory::~CommandHistory()
 /*====================== add command =============================*/
 void CommandHistory::addCommand(Command *_command)
 {
+  // remove commands which are after present in the history
+  if (present < commands.count())
+    {
+      for (unsigned int i = present;i < commands.count();i++)
+	commands.remove(i);
+    }
+
   commands.insert(present++,_command);
   emit undoRedoChanged(getUndoName(),getRedoName());
   if (commands.count() > MAX_UNDO_REDO)

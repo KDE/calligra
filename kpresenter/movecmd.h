@@ -19,6 +19,7 @@
 #include <qpoint.h>
 #include <qlist.h>
 #include <qrect.h>
+#include <qpoint.h>
 
 #include "command.h"
 #include "kpobject.h"
@@ -34,7 +35,7 @@ class MoveByCmd : public Command
   Q_OBJECT
 
 public:
-  MoveByCmd(QString _name,QPoint _diff,QList<KPObject> _objects,KPresenterDocument_impl *_doc);
+  MoveByCmd(QString _name,QPoint _diff,QList<KPObject> &_objects,KPresenterDocument_impl *_doc);
   ~MoveByCmd();
   
   virtual void execute();
@@ -45,6 +46,31 @@ protected:
     {;}
 
   QPoint diff;
+  QList<KPObject> objects;
+  KPresenterDocument_impl *doc;
+
+};
+
+/******************************************************************/
+/* Class: MoveByCmd2                                              */
+/******************************************************************/
+
+class MoveByCmd2 : public Command
+{
+  Q_OBJECT
+
+public:
+  MoveByCmd2(QString _name,QList<QPoint> &_diffs,QList<KPObject> &_objects,KPresenterDocument_impl *_doc);
+  ~MoveByCmd2();
+  
+  virtual void execute();
+  virtual void unexecute();
+
+protected:
+  MoveByCmd2()
+    {;}
+
+  QList<QPoint> diffs;
   QList<KPObject> objects;
   KPresenterDocument_impl *doc;
 

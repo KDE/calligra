@@ -2411,7 +2411,7 @@ void KTextObject::enableComposerMode(QColor quoted_color,QFont quoted_font,QColo
 }
 
 /*======================= enable regexp mode =====================*/
-void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> regList)
+void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> &regList)
 {
   if (!regExpList.isEmpty())
     regExpList.clear();
@@ -2424,7 +2424,7 @@ void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> regList)
 }
 
 /*====================== set auto replacement ====================*/
-void KTextObject::setAutoReplacement(QList<AutoReplace> aReplace)
+void KTextObject::setAutoReplacement(QList<AutoReplace> &aReplace)
 {
   if (!autoReplace.isEmpty())
     autoReplace.clear();

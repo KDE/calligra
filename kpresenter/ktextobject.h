@@ -1216,7 +1216,7 @@ public:
    * };
    * </pre>
    */
-  void enableRegExpMode(QList<TxtParagraph::RegExpMode>);
+  void enableRegExpMode(QList<TxtParagraph::RegExpMode>&);
 
   /**
    * Disable RegExpMode.
@@ -1234,7 +1234,7 @@ public:
    * };
    * </pre>
    */
-  void setAutoReplacement(QList<AutoReplace>);
+  void setAutoReplacement(QList<AutoReplace>&);
 
   /**
    * Returns a part of the text.

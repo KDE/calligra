@@ -169,6 +169,7 @@ protected:
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
+  QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4;
   bool mousePressed;              
   ModifyType modType;                    
   unsigned int oldMx,oldMy;                
@@ -196,6 +197,18 @@ private slots:
     {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}
   void switchingMode()
     {presMenu->setItemChecked(PM_DM,false);presMenu->setItemChecked(PM_SM,true);drawMode = false;setCursor(blankCursor);}
+  void alignObjLeft()
+    {view->extraAlignObjLeftidl();}
+  void alignObjCenterH()
+    {view->extraAlignObjCenterHidl();}
+  void alignObjRight()
+    {view->extraAlignObjRightidl();}
+  void alignObjTop()
+    {view->extraAlignObjTopidl();}
+  void alignObjCenterV()
+    {view->extraAlignObjCenterVidl();}
+  void alignObjBottom()
+    {view->extraAlignObjBottomidl();}
  
 signals:
 
