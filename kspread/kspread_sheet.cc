@@ -6347,10 +6347,9 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             if ( rowElement.hasAttribute( "table:style-name" ) )
             {
                 QString str = rowElement.attribute( "table:style-name" );
-                kdDebug()<<"style row !!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<str<<endl;
                 style = oasisStyles.styles()[str];
                 styleStack.push( *style );
-                kdDebug()<<" style :"<<style<<endl;
+                kdDebug()<<" style :"<<style<<"style name : "<<str<<endl;
             }
             rowNode = rowNode.nextSibling();
             loadRowFormat( rowElement, styleStack, rowIndex, oasisStyles, rowNode.isNull() );
