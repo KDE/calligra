@@ -138,8 +138,6 @@ public:
     /// Check if node par can be linked to node child.
     bool legalToLink(KPTNode *par, KPTNode *child);
 
-    KPTTask &defaultTask() { return m_defaultTask; }
-    
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
@@ -147,7 +145,6 @@ protected:
     QPtrList<KPTCalendar> m_calendars;
 
     KPTStandardWorktime *m_standardWorktime;
-    KPTTask m_defaultTask;
         
     KPTDateTime calculateForward(int use);
     KPTDateTime calculateBackward(int use);

@@ -27,7 +27,9 @@
 
 #include <qpainter.h>
 #include <qfileinfo.h>
+
 #include <kdebug.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -54,10 +56,14 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
     
+    loadConfig();
 }
 
 
 KPTPart::~KPTPart() {
+    if(isReadWrite())
+        saveConfig();
+
     delete m_project;
     delete m_projectDialog;
 }
@@ -276,6 +282,41 @@ void KPTPart::setCommandType(int type) {
     else if (type == 1)
         m_calculate = true;
 }
+
+void KPTPart::loadConfig() {
+    KConfig *config = KPTFactory::global()->config();
+    if( config->hasGroup("Task defaults"))
+    {
+        config->setGroup("Task defaults");
+        defaultTask().setLeader(config->readEntry("Leader"));
+        defaultTask().setDescription(config->readEntry("Description"));
+        defaultTask().setConstraint((KPTNode::ConstraintType)config->readNumEntry("ConstraintType"));
+        defaultTask().setConstraintStartTime(config->readDateTimeEntry("ConstraintStartTime"));
+        defaultTask().setConstraintEndTime(config->readDateTimeEntry("ConstraintEndTime"));
+        defaultTask().effort()->setType((KPTEffort::Type)config->readNumEntry("EffortType"));
+        defaultTask().effort()->set(KPTDuration((Q_INT64)config->readNumEntry("ExpectedEffort")));
+        defaultTask().effort()->setPessimisticRatio(config->readNumEntry("PessimisticEffort"));
+        defaultTask().effort()->setOptimisticRatio(config->readNumEntry("OptimisticEffort"));
+    }
+}
+
+void KPTPart::saveConfig() {
+    if (isEmbedded() || !isReadWrite())
+        return;
+    
+    KConfig *config = KPTFactory::global()->config();
+    config->setGroup("Task defaults");
+    config->writeEntry("Leader", defaultTask().leader());
+    config->writeEntry("Description", defaultTask().description());
+    config->writeEntry("ConstraintType", defaultTask().constraint());
+    config->writeEntry("ConstraintStartTime", defaultTask().constraintStartTime());
+    config->writeEntry("ConstraintEndTime", defaultTask().constraintEndTime());
+    config->writeEntry("EffortType", defaultTask().effort()->type());
+    config->writeEntry("ExpectedEffort", defaultTask().effort()->expected().seconds()); //FIXME
+    config->writeEntry("PessimisticEffort", defaultTask().effort()->pessimisticRatio());
+    config->writeEntry("OptimisticEffort", defaultTask().effort()->optimisticRatio());
+}
+
 
 }  //KPlato namespace
 
