@@ -101,6 +101,7 @@
   <Action name="extra_autocorrection"/>
   <Action name="change_case"/>
   <Action name="personal_expr"/>
+  <ActionList name="datatools"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="configure" group="settings_configure"/>
