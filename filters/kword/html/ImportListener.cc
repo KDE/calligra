@@ -38,13 +38,14 @@
 class HtmlListener : public HtmlBaseListener
 {
 public:
-    HtmlListener(QTextStream& streamIn,QDomElement node) : HtmlBaseListener(streamIn)
+    HtmlListener(QTextStream& streamIn,QDomDocument doc)
+     : HtmlBaseListener(streamIn),mainDocument(doc)
     {
+        createMainFramesetElement();
         structureStack.setAutoDelete(true);
-        mainFramesetElement=node;
         StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
         stackItem->elementType=ElementTypeBottom;
-        stackItem->stackNode=node;
+        stackItem->stackNode=mainFramesetElement;
         structureStack.push(stackItem); //Security item (not to empty the stack)
     }
     virtual ~HtmlListener(void) { }
@@ -52,9 +53,12 @@ public:
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
     virtual bool doEndElement(const QString& tagName);
     virtual bool doCharacters(const QString& strChars);
+protected:
+    void createMainFramesetElement(void);
 private:
     QString indent; // DEBUG
     QStack<StackItem> structureStack;
+    QDomDocument mainDocument;
     QDomElement mainFramesetElement;
     MapTag mapTag;
 };
@@ -224,28 +228,28 @@ bool HtmlListener :: doCharacters ( const QString & ch )
     return success;
 }
 
-static QDomElement DoCreateMainFramesetElement(QDomDocument& qDomDocumentOut)
+void HtmlListener::createMainFramesetElement(void)
 {
-    QDomElement framesetsPluralElementOut=qDomDocumentOut.createElement("FRAMESETS");
-    qDomDocumentOut.documentElement().appendChild(framesetsPluralElementOut);
+    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
+    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
 
-    QDomElement framesetElementOut=qDomDocumentOut.createElement("FRAMESET");
-    framesetElementOut.setAttribute("frameType",1);
-    framesetElementOut.setAttribute("frameInfo",0);
-    framesetElementOut.setAttribute("autoCreateNewFrame",1);
-    framesetElementOut.setAttribute("removable",0);
+    //As we have a new AbiWord <section>, we think we have a KWord <FRAMESET>
+    mainFramesetElement=mainDocument.createElement("FRAMESET");
+    mainFramesetElement.setAttribute("frameType",1);
+    mainFramesetElement.setAttribute("frameInfo",0);
+    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
+    mainFramesetElement.setAttribute("removable",0);
     //Todo?  attribute "name"
-    framesetsPluralElementOut.appendChild(framesetElementOut);
+    framesetsPluralElementOut.appendChild(mainFramesetElement);
 
-    QDomElement frameElementOut=qDomDocumentOut.createElement("FRAME");
+    QDomElement frameElementOut=mainDocument.createElement("FRAME");
     frameElementOut.setAttribute("left",28);
     frameElementOut.setAttribute("top",42);
     frameElementOut.setAttribute("bottom",566);
     frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
-    framesetElementOut.appendChild(frameElementOut);
+    mainFramesetElement.appendChild(frameElementOut);
 
-    return framesetElementOut; // return the main <FRAMESET> where the body text will be under.
 }
 
 QString FindCharset(const QString &fileIn)
@@ -293,6 +297,7 @@ bool HtmlFilter(const QString &fileIn, QDomDocument& qDomDocumentOut)
 
     //Initiate QDomDocument (TODO: is there are better way?)
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    // TODO: syntaxversion 2
     strHeader+="<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\" >\n";
     strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
     strHeader+="<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
@@ -303,7 +308,7 @@ bool HtmlFilter(const QString &fileIn, QDomDocument& qDomDocumentOut)
 
     qDomDocumentOut.setContent(strHeader);
 
-    HtmlListener* listener=new HtmlListener(streamIn,DoCreateMainFramesetElement(qDomDocumentOut));
+    HtmlListener* listener=new HtmlListener(streamIn,qDomDocumentOut);
 
     if (!listener)
     {
