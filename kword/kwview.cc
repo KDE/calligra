@@ -86,6 +86,7 @@
 
 #include <KWordViewIface.h>
 #include <kstatusbar.h>
+#include <kstdaccel.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -825,7 +826,7 @@ void KWView::setupActions()
     KAction* actLineBreak = new KAction( i18n( "Line break" ), SHIFT+Key_Return,
                         this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
-    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), CTRL+Key_T,this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
+    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
 
     // Necessary for the actions that are not plugged anywhere
     KAccel * accel = new KAccel( this );
