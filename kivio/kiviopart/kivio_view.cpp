@@ -476,7 +476,7 @@ void KivioView::setupActions()
   connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
   //--
 
-  m_viewZoom = new KoZoomAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "view_zoom" );
+  m_viewZoom = new KoZoomAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom" );
   m_viewZoom->setWhatsThis(i18n("This allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
   connect(m_viewZoom, SIGNAL(zoomChanged(const QString&)), SLOT(viewZoom(const QString&)));
 
