@@ -52,48 +52,6 @@ KexiPropertySubEditor::eventFilter(QObject* /*watched*/, QEvent* e)
 			if (!list)
 				return false; //for sanity
 			return list->handleKeyPress(ev);
-/*			if (ev->state()==NoButton 
-			&& (ev->key()==Key_Up || ev->key()==Key_Down || ev->key()==Key_Home || ev->key()==Key_End))
-		{
-			//selection moving
-			KListView *list = dynamic_cast<KListView*>( parentWidget()->parentWidget() );
-			if (!list)
-				return false; //for sanity
-			QListViewItem *item = list->itemAt(mapToParent(QPoint(2,2)));
-		
-			if(ev->key()==Key_Up) {
-				//find prev visible
-				item = item ? item->itemAbove() : 0;
-				while (item && (!item->isSelectable() || !item->isVisible()))
-					item = item->itemAbove();
-			}
-			else if(ev->key()==Key_Down) {
-				//find next visible
-				item = item ? item->itemBelow() : 0;
-				while (item && (!item->isSelectable() || !item->isVisible()))
-					item = item->itemBelow();
-			}
-			else if(ev->key()==Key_Home) {
-				//find 1st visible
-				item = list->firstChild();
-				while (item && (!item->isSelectable() || !item->isVisible()))
-					item = item->itemBelow();
-			}
-			else if(ev->key()==Key_End) {
-				//find last visible
-				QListViewItem *lastVisible = item;
-				while (item) { // && (!item->isSelectable() || !item->isVisible()))
-					item = item->itemBelow();
-					if (item && item->isSelectable() && item->isVisible())
-						lastVisible = item;
-				}
-				item = lastVisible;
-			}
-			if(item) {
-				list->ensureItemVisible(item);
-				list->setSelected(item, true);
-			}
-			return true;*/
 		}
 	}
 	return false;
