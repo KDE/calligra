@@ -47,6 +47,10 @@ namespace Conversion
 
     // Convert numbering format (for a list) to a kword counter type
     int importCounterType( const QString& numFormat );
+
+    // Header-footer helpers
+    QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd );
+    int headerTypeToFrameInfo( const QString& tagName, bool hasEvenOdd );
 }
 
 #endif

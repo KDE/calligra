@@ -72,6 +72,7 @@ private:
     QString appendTextBox( QDomDocument& doc, const QDomElement& object );
     void appendTOC( QDomDocument& doc, const QDomElement& toc );
     void importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText );
+    void importHeaderFooter( QDomDocument& doc, const QDomElement& headerFooter, bool isHeader );
     void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
     void appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
@@ -99,6 +100,8 @@ private:
     bool m_insideOrderedList;
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
     bool m_hasTOC;
+    bool m_hasHeader;
+    bool m_hasFooter;
     int m_restartNumbering;
     QString m_currentMasterPage;
     QDomElement m_currentFrameset; // set by parseBodyOrSimilar

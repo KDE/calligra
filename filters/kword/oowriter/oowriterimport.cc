@@ -54,7 +54,7 @@ K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriteri
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
   : KoFilter(),
     m_insideOrderedList( false ), m_nextItemIsListItem( false ),
-    m_hasTOC( false ), m_restartNumbering( -1 ),
+    m_hasTOC( false ), m_hasHeader( false ), m_hasFooter( false ), m_restartNumbering( -1 ),
     m_pictureNumber(0), m_zip(NULL)
 {
     m_styles.setAutoDelete( true );
@@ -214,6 +214,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
 
 void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
 {
+    QDomElement oldCurrentFrameset = m_currentFrameset;
     m_currentFrameset = currentFramesetElement;
     Q_ASSERT( !m_currentFrameset.isNull() );
     for ( QDomNode text (parent.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -294,6 +295,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
             currentFramesetElement.appendChild( e );
         m_styleStack.restore(); // remove the styles added by the paragraph or list
     }
+    m_currentFrameset = oldCurrentFrameset; // in case of recursive invokations
 }
 
 void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )
@@ -320,6 +322,8 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     double width, height;
     KoFormat paperFormat;
     double marginLeft, marginTop, marginRight, marginBottom;
+    bool hasEvenOddHeader = false;
+    bool hasEvenOddFooter = false;
 
     QDomElement* masterPage = m_masterPages[ masterPageName ];
     Q_ASSERT( masterPage );
@@ -358,6 +362,31 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
             // Not in KWord: color, distance before and after separator
             // Not in OOo: line type of separator (solid, dot, dash etc.)
         }
+
+
+        // Header/Footer
+        QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
+        if ( !headerLeftElem.isNull() ) {
+            kdDebug() << "Found header-left" << endl;
+            hasEvenOddHeader = true;
+            importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader );
+        }
+        QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
+        if ( !headerElem.isNull() ) {
+            kdDebug() << "Found header" << endl;
+            importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader );
+        }
+        QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
+        if ( !footerLeftElem.isNull() ) {
+            kdDebug() << "Found footer-left" << endl;
+            importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter );
+        }
+        QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
+        if ( !footerElem.isNull() ) {
+            kdDebug() << "Found footer" << endl;
+            importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter );
+        }
+
     }
     else
     {
@@ -379,8 +408,8 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     elementPaper.setAttribute("format", paperFormat);
     elementPaper.setAttribute("columns",1); // TODO
     elementPaper.setAttribute("columnspacing",2); // TODO
-    elementPaper.setAttribute("hType",0);
-    elementPaper.setAttribute("fType",0);
+    elementPaper.setAttribute("hType", hasEvenOddHeader ? 3 : 0); // ### no support for first-page
+    elementPaper.setAttribute("fType", hasEvenOddFooter ? 3 : 0); // ### no support for first-page
     elementPaper.setAttribute("spHeadBody",9); // where is this in OOo?
     elementPaper.setAttribute("spFootBody",9); // ?
     elementPaper.setAttribute("zoom",100);
@@ -1168,10 +1197,13 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         // Detected a change in the master page -> this means we have to use a new page layout
         // and insert a frame break if not on the first paragraph.
         // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
-        if ( m_currentMasterPage.isEmpty() )
+        if ( m_currentMasterPage.isEmpty() ) {
+            m_currentMasterPage = masterPageName; // before writePageLayout to avoid recursion
             writePageLayout( doc, masterPageName );
+        }
         else
         {
+            m_currentMasterPage = masterPageName;
             QDomElement pageBreakElem = layoutElement.namedItem( "PAGEBREAKING" ).toElement();
             if ( !pageBreakElem.isNull() )  {
                 pageBreakElem = doc.createElement( "PAGEBREAKING" );
@@ -1180,7 +1212,6 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
             pageBreakElem.setAttribute( "hardFrameBreak", "true" );
             // We have no way to store the new page layout, KWord doesn't have sections.
         }
-        m_currentMasterPage = masterPageName;
     }
 
     return p;
@@ -2334,8 +2365,21 @@ void OoWriterImport::finishDocumentContent( QDomDocument& mainDocument )
     QDomElement docElement = mainDocument.documentElement();
     docElement.appendChild( attributes );
     attributes.setAttribute( "hasTOC", m_hasTOC ? 1 : 0 );
-    // TODO hasHeader, hasFooter, unit?, tabStopValue
+    attributes.setAttribute( "hasHeader", m_hasHeader );
+    attributes.setAttribute( "hasFooter", m_hasFooter );
+    // TODO unit?, tabStopValue
     // TODO activeFrameset, cursorParagraph, cursorIndex
+
+    // Done at the end: write the type of headers/footers,
+    // depending on which kind of headers and footers we received.
+    QDomElement paperElement = docElement.namedItem("PAPER").toElement();
+    Q_ASSERT ( !paperElement.isNull() ); // writePageLayout should have been called!
+    if ( !paperElement.isNull() )
+    {
+        //kdDebug(30513) << k_funcinfo << "m_headerFooters=" << m_headerFooters << endl;
+        //paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
+        //paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
+    }
 }
 
 QString OoWriterImport::kWordStyleName( const QString& ooStyleName )
@@ -2346,6 +2390,27 @@ QString OoWriterImport::kWordStyleName( const QString& ooStyleName )
     } else {
         return ooStyleName;
     }
+}
+
+// OOo SPEC: 2.3.3 p59
+void OoWriterImport::importHeaderFooter( QDomDocument& doc, const QDomElement& headerFooter, bool hasEvenOdd )
+{
+    const QString tagName = headerFooter.tagName();
+    QDomElement framesetElement = doc.createElement("FRAMESET");
+    QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
+    framesetElement.setAttribute( "frameType", 1 /* text */);
+    framesetElement.setAttribute( "frameInfo", Conversion::headerTypeToFrameInfo( tagName, hasEvenOdd ) );
+    framesetElement.setAttribute( "name", Conversion::headerTypeToFramesetName( tagName, hasEvenOdd ) );
+    framesetsPluralElement.appendChild(framesetElement);
+
+    bool isHeader = tagName.startsWith( "style:header" );
+    if ( isHeader )
+        m_hasHeader = true;
+    else
+        m_hasFooter = true;
+    createInitialFrame( framesetElement, 29, 798, isHeader?0:567, isHeader?41:567+41, true, Copy );
+
+    parseBodyOrSimilar( doc, headerFooter, framesetElement );
 }
 
 #include "oowriterimport.moc"

@@ -1,5 +1,6 @@
 #include "conversion.h"
 #include <kdebug.h>
+#include <klocale.h>
 
 QString Conversion::importAlignment( const QString& align )
 {
@@ -99,3 +100,35 @@ int Conversion::importCounterType( const QString& numFormat )
     return 0;
 }
 
+QString Conversion::headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
+{
+    if ( tagName == "style:header" )
+        return hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
+    if ( tagName == "style:header-left" )
+        return i18n("Even Pages Header");
+    if ( tagName == "style:footer" )
+        return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
+    if ( tagName == "style:footer-left" )
+        return i18n("Even Pages Footer");
+    kdWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
+    // ######
+    //return i18n("First Page Header");
+    //return i18n("First Page Footer");
+    return QString::null;
+}
+
+int Conversion::headerTypeToFrameInfo( const QString& tagName, bool /*hasEvenOdd*/ )
+{
+    if ( tagName == "style:header" )
+        return 3; // odd headers
+    if ( tagName == "style:header-left" )
+        return 2; // even headers
+    if ( tagName == "style:footer" )
+        return 6; // odd footers
+    if ( tagName == "style:footer-left" )
+        return 5; // even footers
+
+    // ### return 1; // first header
+    // ### return 4; // first footer
+    return 0;
+}
