@@ -20,7 +20,6 @@
 #include <KPresenterObjectIface.h>
 
 #include <kpobject.h>
-#include <kptextobject.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -550,23 +549,6 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 
     _painter->setRasterOp( Qt::NotROP );
 
-    if ( getType() == OT_TEXT && dynamic_cast<KPTextObject*>( this )->getDrawEditRect()
-        && dynamic_cast<KPTextObject*>( this )->getPen().style() == Qt::NoPen )
-    {
-        _painter->save();
-
-        if ( angle != 0 )
-        {
-            rotateObject(_painter,_zoomHandler);
-        }
-
-        _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ext.width()), _zoomHandler->zoomItY( ext.height()) );
-
-        _painter->restore();
-    }
-
     _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
     _painter->setBrush( Qt::black );
 
@@ -842,18 +824,11 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
         brush = tmpBrush;
     }
 
-    _painter->restore();
-
-    _painter->save();
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
-    if ( angle == 0 )
-        paint( _painter,_zoomHandler, false );
-    else
-    {
+    if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
-        paint( _painter, _zoomHandler, false );
-    }
+    paint( _painter, _zoomHandler, false );
 
     _painter->restore();
 

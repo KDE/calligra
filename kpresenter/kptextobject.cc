@@ -225,75 +225,67 @@ double KPTextObject::load(const QDomElement &element)
     return offset;
 }
 
-/*========================= draw =================================*/
-void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+// Standard paint method for KP2DObjects.
+void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawingShadow )
 {
-    draw( _painter,_zoomHandler, false, 0L, true, drawSelection );
+    paint( _painter, _zoomHandler, false, 0L, true, drawingShadow );
 }
 
-void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                         bool onlyChanged, QTextCursor* cursor, bool resetChanged,
-                         bool drawSelection )
+// Special method for drawing a text object that is being edited
+void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
+                         bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
-#if 0 //FIXME
-    setupClipRegion( _painter, getBoundingRect(  ) );
-#endif
-    double ox = orig.x();// - _diffx;
-    double oy = orig.y();// - _diffy;
+    _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
+
+    if ( angle != 0 )
+        rotateObject(_painter,_zoomHandler);
+    paint( _painter, _zoomHandler, onlyChanged, cursor, resetChanged, false );
+    _painter->restore();
+}
+
+// Common functionality for the above 2 methods
+void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+                         bool onlyChanged, QTextCursor* cursor, bool resetChanged,
+                         bool drawingShadow )
+{
+    _painter->save();
+    //kdDebug() << "KPTextObject::paint cliprect:" << DEBUGRECT(_zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) )) << endl;
+    //setupClipRegion( _painter, _zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) ) );
     //kdDebug() << "Painting text object at " << ox << "," << oy << ":" << m_textobj->textDocument()->text() << endl;
-    double ow = ext.width();
-    double oh = ext.height();
-    QSize size( _zoomHandler->zoomSize( ext ) );
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
     // Handle the rotation, draw the background/border, then call drawText()
-    // ### Why not use KP2DObject's draw() code for all this ??
     int penw = pen.width() / 2;
-    _painter->translate( _zoomHandler->zoomItX(ox),_zoomHandler->zoomItY( oy) );
-    if ( angle == 0 )
-    {
-      if ( fillType == FT_BRUSH || !gradient )
-          _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
-      else {
-          gradient->setSize( size );
-          _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
-      }
-      drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
+    if ( fillType == FT_BRUSH || !gradient ) {
+        /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
+        // (so that the border gets drawn OUTSIDE of the object area)
+        _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
     }
-    else
-    {
-      KoRect br = KoRect( 0, 0, ow, oh );
-      double pw = br.width();
-      double ph = br.height();
-      KoRect rr = br;
-      double yPos = -rr.y();
-      double xPos = -rr.x();
-      br.moveTopLeft( KoPoint( -br.width() / 2, -br.height() / 2 ) );
-      rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-      QWMatrix m;
-      m.translate( pw / 2, ph / 2 );
-      m.rotate( angle );
-
-      _painter->setWorldMatrix( m, true );
-
-
-      if ( fillType == FT_BRUSH || !gradient )
-        _painter->drawRect( _zoomHandler->zoomItX(rr.left() + xPos + penw), _zoomHandler->zoomItY(rr.top() + yPos + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
-      else {
-          gradient->setSize( size );
-          _painter->drawPixmap( _zoomHandler->zoomItX( rr.left() + xPos + penw ), _zoomHandler->zoomItY( rr.top() + yPos + penw ), gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
-      }
-
-      _painter->translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY( rr.top() + yPos) );
-      drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
+    else if ( !drawingShadow ) {
+        QSize size( _zoomHandler->zoomSize( ext ) );
+        gradient->setSize( size );
+        _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ext.width() - 2 * penw ), _zoomHandler->zoomItY( ext.height() - 2 * penw ) );
     }
+    drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, drawSelection );
+
+    // And now draw the border for text objects.
+    // When they are drawn outside of the object, this can be moved to the standard paint() method,
+    // so that we don't have to do it while editing the object, maybe.
+    if ( getDrawEditRect() && getPen().style() == Qt::NoPen )
+    {
+        _painter->save();
+
+        _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+        _painter->setBrush( Qt::NoBrush );
+        _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ext.width()), _zoomHandler->zoomItY( ext.height()) );
+
+        _painter->restore();
+    }
 }
 
 // This method simply draws the paragraphs in the given painter
@@ -861,11 +853,13 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
-    kdDebug() << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
+    //kdDebug() << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
     KoZoomHandler *zh = m_doc->zoomHandler();
     QPoint origPix = zh->zoomPoint( orig );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
+    if ( angle != 0 )
+        rotateObject( p, zh );
     KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
 
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords

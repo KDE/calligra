@@ -335,9 +335,13 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
             {
                 KPTextObject* textObject = static_cast<KPTextObject*>( it.current() );
                 if ( m_currentTextObjectView->kpTextObject() == textObject ) // This is the object we are editing
-                    textObject->draw( painter,m_view->zoomHandler(),
-                                      false /*onlyChanged. Pass as param ?*/,
-                                      m_currentTextObjectView->cursor(), true /* idem */, drawSelection );
+                {
+                    textObject->paintEdited( painter,m_view->zoomHandler(),
+                                             false /*onlyChanged. Pass as param ?*/,
+                                             m_currentTextObjectView->cursor(), true /* idem */ );
+                }
+                else
+                    it.current()->draw( painter, m_view->zoomHandler(), drawSelection );
             }
             else
             {

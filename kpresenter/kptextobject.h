@@ -82,8 +82,11 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
-    void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged, bool drawSelection );
+    virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawingShadow );
+    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged, bool drawingShadow );
+    void paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
+                      bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
     virtual void extendObject2Contents( KPresenterView *view = 0 );
