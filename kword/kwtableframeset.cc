@@ -2818,6 +2818,7 @@ void KWTableFrameSetEdit::showPopup( KWFrame *frame, KWView *view, const QPoint 
         Q_ASSERT( fse ); // For now: m_currentCell always KWTextFrameSetEdit
         if ( fse )
         {
+            view->plugActionList( "tableactions", view->tableActions() );
             fse->showPopup( frame, view, point );
         }
     }

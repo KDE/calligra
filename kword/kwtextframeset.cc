@@ -3804,7 +3804,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 #endif
     QString word = wordUnderCursor( *cursor() );
 
-    // Removed previous stuff
+    // Remove previous stuff
     view->unplugActionList( "datatools" );
     view->unplugActionList( "variable_action" );
     view->unplugActionList( "spell_result_action" );
@@ -3837,7 +3837,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     }
     else
     {
-        kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
+        kdDebug() << "showPopup: plugging actionlist with " << actionList.count() << " actions" << endl;
         if(refLink().isNull())
         {
             QPopupMenu * popup;

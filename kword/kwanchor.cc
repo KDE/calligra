@@ -27,6 +27,8 @@
 #include <kdebugclasses.h>
 #endif
 
+//#define DEBUG_DRAWING
+
 KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int frameNum )
     : KoTextCustomItem( textDocument),
       m_frameset( frameset ),
@@ -66,8 +68,6 @@ void KWAnchor::finalize()
         kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x()+paragx << ", " << y()+paragy << endl;
     }
 }
-
-//#define DEBUG_DRAWING
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {

@@ -168,6 +168,7 @@ public:
 
     QPtrList<KAction> &dataToolActionList() { return m_actionList; }
     QPtrList<KAction> &variableActionList() { return m_variableActionList; }
+    QPtrList<KAction> &tableActions() { return m_tableActionList; }
 
     static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWordText, bool &providesKWord, bool &providesFormula );
 
@@ -724,6 +725,7 @@ private:
 
     QPtrList<KAction> m_actionList; // for the kodatatools
     QPtrList<KAction> m_variableActionList;
+    QPtrList<KAction> m_tableActionList;
 
     int m_currentPage; // 0-based current page number
 

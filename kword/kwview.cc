@@ -275,6 +275,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 
 KWView::~KWView()
 {
+    delete m_tableActionList.first(); // the first one is the separator.
     clearSpellChecker();
 
     delete m_searchEntry;
@@ -1205,6 +1206,14 @@ void KWView::setupActions()
                                             this, SLOT( embeddedStoreInternal() ),
                                             actionCollection(), "embedded_store_internal" );
 
+    // For RMB inside a cell, see KWTableFrameSetEdit::showPopup
+    // This isn't a dynamic list; it's only plugged/unplugged depending on the context.
+    // If you change the contents of that list, check ~KWView.
+    m_tableActionList.append( new KActionSeparator(actionCollection()) );
+    m_tableActionList.append( actionTableInsertRow );
+    m_tableActionList.append( actionTableDelRow );
+    m_tableActionList.append( actionTableInsertCol );
+    m_tableActionList.append( actionTableDelCol );
 }
 
 void KWView::refreshMenuExpression()
@@ -1980,8 +1989,6 @@ void KWView::showMouseMode( int _mouseMode )
     actionTableSplitCells->setEnabled( FALSE );
     actionTableProtectCells->setEnabled( false );
     actionFormatFrameSet->setEnabled(FALSE);
-    actionTableDelRow->setEnabled( false );
-    actionTableDelCol->setEnabled( false );
     actionTablePropertiesMenu->setEnabled( false );
     actionConvertTableToText->setEnabled( false );
 }
@@ -5201,11 +5208,11 @@ QPopupMenu * KWView::popupMenu( const QString& name )
 
 void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
 {
-    kdDebug() << "Entering KWView::openPopupMenuInsideFrame" << endl;
     KWFrameSetEdit *fse = m_gui->canvasWidget()->currentFrameSetEdit();
     kdDebug() << (void*) fse << " in KWView::openPopupMenuInsideFrame" << endl;
+    unplugActionList( "tableactions" ); // will be plugged again by KWTableFrameSetEdit
     if (fse)
-        fse->showPopup(frame,this,_point);
+        fse->showPopup( frame, this, _point );
     else
         frame->frameSet()->showPopup( frame, this, _point );
 }
@@ -5779,15 +5786,25 @@ void KWView::updateTableActions( int nbFramesSelected )
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFramesSelected>1));
-    actionConvertTableToText->setEnabled( table && table->isFloating());
+    actionConvertTableToText->setEnabled( table && table->isFloating() );
 
     bool oneCellSelected = (table && nbFramesSelected==1);
     actionTableSplitCells->setEnabled( oneCellSelected ); // TODO also allow to split current cell
 
-    actionTableInsertRow->setEnabled( table );
-    actionTableInsertCol->setEnabled( table );
-    actionTableDelRow->setEnabled( table );
-    actionTableDelCol->setEnabled( table );
+    // cellEdited: true if the cursor is in a table cell
+    bool cellEdited = table && ( m_gui->canvasWidget()->currentTableRow() > -1 );
+    // rowKnown: true if cellEdited or if entire row(s) selected
+    bool rowKnown = table && ( cellEdited || table->isRowsSelected() );
+    actionTableInsertRow->setEnabled( rowKnown );
+    actionTableDelRow->setEnabled( rowKnown );
+    // colKnown: true if cellEdited or if entire col(s) selected
+    bool colKnown = table && ( cellEdited || table->isColsSelected() );
+    actionTableInsertCol->setEnabled( colKnown );
+    actionTableDelCol->setEnabled( colKnown );
+    // TODO (after msg freeze) : update text of actionTableDelCol to
+    // either "Delete Current Column" or "Delete Selected Columns".
+    // Same with actionTableDelRow.
+
     actionTableResizeCol->setEnabled( table );
     actionTableDelete->setEnabled( table );
     actionTablePropertiesMenu->setEnabled( table );

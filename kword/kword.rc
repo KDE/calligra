@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="93">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="94">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -311,6 +311,7 @@
  <Action name="edit_copy"/>
  <Action name="edit_paste"/>
  <ActionList name="datatools"/>
+ <ActionList name="tableactions"/>
 </Menu>
 <Menu name="text_popup_spell">
  <Action name="text_default"/>
@@ -325,6 +326,7 @@
  <ActionList name="datatools"/>
  <Action name="ignore_all"/>
  <Action name="add_word_to_dictionary"/>
+ <ActionList name="tableactions"/>
 </Menu>
 <Menu name="text_popup_spell_with_result">
  <Action name="text_default"/>
@@ -339,6 +341,7 @@
  <ActionList name="datatools"/>
  <Action name="ignore_all"/>
  <Action name="add_word_to_dictionary"/>
+ <ActionList name="tableactions"/>
  <Separator/>
  <Menu name="check_spell_list"><text>Spell Check Result</text>
    <ActionList name="spell_result_action"/>
