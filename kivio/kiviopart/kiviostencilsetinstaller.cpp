@@ -53,6 +53,7 @@ namespace Kivio {
     resize(400, 10);
     connect( m_url->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotUrlChanged( const QString & ) ) );
     slotUrlChanged( m_url->lineEdit()->text() );
+    m_url->setFocus();
   }
 
   StencilSetInstaller::~StencilSetInstaller()
