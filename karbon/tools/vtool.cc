@@ -30,7 +30,7 @@
 #include "vtooloptionsdocker.h"
 
 
-VTool::VTool( KarbonView *view, const char* name ) : m_view( view )
+VTool::VTool( KarbonView *view, const char* ) : m_view( view )
 {
 	m_mouseButtonIsDown = false;
 	m_isDragging = false;
@@ -51,7 +51,8 @@ VTool::registerTool( VTool *tool )
 void VTool::activateAll()
 {
 	view()->toolOptionsDocker()->manageTool( this );
-	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &BarIcon( icon() ) );
+	QPixmap Icon = BarIcon( icon() );
+	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &Icon );
 
 	activate();
 }
