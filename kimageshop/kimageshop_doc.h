@@ -91,7 +91,11 @@ public:
     void mergeVisibleLayers();
     void mergeLinkedLayers();
     void mergeLayers(QList<Layer>);
-       
+
+    KImageShopImage* newImage();
+    void saveImage( const QString& file, KImageShopImage *img );
+    void loadImage( const QString& file );
+    
 public slots:
   void slotUndoRedoChanged( QString _undo, QString _redo );
   void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
@@ -101,6 +105,10 @@ public slots:
   void slotImageUpdated( const QRect& rect );
   void slotLayersUpdated();
 
+  void slotNewImage();
+  void slotLoadImage();
+  void slotSaveCurrentImage();
+ 
 signals:
   void docUpdated();
   void docUpdated( const QRect& rect );

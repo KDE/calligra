@@ -104,6 +104,35 @@ QSize KImageShopDoc::size()
   return QSize(0, 0);
 }
 
+KImageShopImage* KImageShopDoc::newImage()
+{
+  
+}
+
+void KImageShopDoc::saveImage( const QString& file, KImageShopImage *img )
+{
+  
+}
+
+void KImageShopDoc::loadImage( const QString& file )
+{
+  
+}
+
+void KImageShopDoc::slotNewImage()
+{
+  newImage();
+}
+
+void KImageShopDoc::slotLoadImage()
+{
+  // FIXME: KFileDialog -> loadImage( file );
+}
+
+void KImageShopDoc::slotSaveCurrentImage()
+{
+  // FIXME: KFileDialog -> saveImage(file, m_pCurrent);
+}
 
 bool KImageShopDoc::loadFromURL( const QString& _url )
 {

@@ -39,6 +39,7 @@ class LayerDialog;
 
 class KImageShopDoc;
 class KImageShopCanvas;
+class KImageShopTabBar;
 class QScrollBar;
 class KRuler;
 
@@ -51,6 +52,7 @@ class PenTool;
 class ZoomTool;
 class GradientTool;
 class ColorPicker;
+class QButton;
 
 class KImageShopView : public ContainerView
 {
@@ -69,6 +71,10 @@ class KImageShopView : public ContainerView
 
   void slotSetFGColor(const KColor&);
   void slotSetBGColor(const KColor&);
+  void slotScrollToFirstTab();
+  void slotScrollToLeftTab();
+  void slotScrollToRightTab();
+  void slotScrollToLastTab();
 
  signals:
   void canvasMousePressEvent( QMouseEvent * );
@@ -131,6 +137,7 @@ class KImageShopView : public ContainerView
   void setupTools();
   void setupDialogs();
   void setupActions();
+  void setupTabBar();
 
   void activateTool(Tool*);
 
@@ -176,6 +183,9 @@ class KImageShopView : public ContainerView
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
   KColor                m_fg, m_bg;
+
+  KImageShopTabBar     *m_pTabBar;
+  QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 };
 
 #endif

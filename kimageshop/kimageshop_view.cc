@@ -25,6 +25,7 @@
 #include "kimageshop_global.h"
 #include "kimageshop_doc.h"
 #include "kimageshop_canvas.h"
+#include "kimageshop_tabbar.h"
 
 #include "colordialog.h"
 #include "layerdlg.h"
@@ -50,6 +51,7 @@
 #include <kaction.h>
 #include <qscrollbar.h>
 #include <qevent.h>
+#include <qbutton.h>
 
 KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char* name )
   : ContainerView( doc, parent, name )
@@ -69,7 +71,7 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   setupActions();
   setupDialogs();
   setupTools();
- 
+  setupTabBar();
 }
 
 void KImageShopView::setupCanvas()
@@ -120,6 +122,31 @@ void KImageShopView::setupRulers()
 
   m_pVRuler->setRulerStyle(KRuler::pixel);
   m_pHRuler->setRulerStyle(KRuler::pixel);
+}
+
+void KImageShopView::setupTabBar()
+{
+  // tabbar
+  m_pTabBar = new KImageShopTabBar(this, m_pDoc);
+  m_pTabBar->addTab("image 1");
+  m_pTabBar->setActiveTab("image 1");
+
+  // tabbar control buttons
+  m_pTabFirst = new QPushButton( this );
+  m_pTabFirst->setPixmap( QPixmap( KImageShopBarIcon( "tab_first" ) ) );
+  QObject::connect( m_pTabFirst, SIGNAL( clicked() ), this, SLOT( slotScrollToFirstTab() ) );
+
+  m_pTabLeft = new QPushButton( this );
+  m_pTabLeft->setPixmap( QPixmap( KImageShopBarIcon( "tab_left" ) ) );
+  QObject::connect( m_pTabLeft, SIGNAL( clicked() ), this, SLOT( slotScrollToLeftTab() ) );
+
+  m_pTabRight = new QPushButton( this );
+  m_pTabRight->setPixmap( QPixmap( KImageShopBarIcon( "tab_right" ) ) );
+  QObject::connect( m_pTabRight, SIGNAL( clicked() ), this, SLOT( slotScrollToRightTab() ) );
+
+  m_pTabLast = new QPushButton( this );
+  m_pTabLast->setPixmap( QPixmap( KImageShopBarIcon( "tab_last" ) ) );
+  QObject::connect( m_pTabLast, SIGNAL( clicked() ), this, SLOT( slotScrollToLastTab() ) );
 }
 
 void KImageShopView::setupTools()
@@ -281,13 +308,18 @@ void KImageShopView::resizeEvent(QResizeEvent*)
 
   // ruler geometry
   m_pHRuler->setGeometry(20, 0, width()-20, 20);
-  m_pVRuler->setGeometry(0, 20, 20, height()-20);
+  m_pVRuler->setGeometry(0, 20, 20, height()-36);
+
+  // tabbar control buttons
+  m_pTabFirst->setGeometry(0, height()-16, 16, 16);
+  m_pTabLeft->setGeometry(16, height()-16, 16, 16);
+  m_pTabRight->setGeometry(32, height()-16, 16, 16);
+  m_pTabLast->setGeometry(48, height()-16, 16, 16);
 
   // KImageShopView heigth/width - ruler heigth/width
-
   int canH = m_pCanvas->height();
   int canW = m_pCanvas->width();
-  int viewH = height() - 20;
+  int viewH = height() - 20 - 16;
   int viewW = width() - 20;
   int docH = docHeight();
   int docW = docWidth();
@@ -300,24 +332,27 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pVert->setValue(0);
       m_pHorz->setValue(0);
       m_pCanvas->setGeometry(20, 20, viewW, viewH);
+      m_pTabBar->setGeometry(64, height() - 16 , width() - 64, 16);
     }
   else if (docH <= canH) // we need a horizontal scrollbar
     {
       m_pVert->hide();
       m_pVert->setValue(0);
       m_pHorz->setRange(0, docW - canW);
-      m_pHorz->setGeometry(20, height()-16, width()-16, 16);
+      m_pHorz->setGeometry(64  + (width()-64)/2, height()-16, (width()-64)/2, 16);
       m_pHorz->show();
-      m_pCanvas->setGeometry(20, 20, viewW, viewH-16);
+      m_pCanvas->setGeometry(20, 20, viewW, viewH);
+      m_pTabBar->setGeometry(64, height() - 16 , (width()-64)/2, 16);
     }
   else if(docW <= canW) // we need a vertical scrollbar
     {
       m_pHorz->hide();
       m_pHorz->setValue(0);
       m_pVert->setRange(0, docH - canH);
-      m_pVert->setGeometry(width()-16, 20, 16, height()-16);
+      m_pVert->setGeometry(width()-16, 20, 16, height()-36);
       m_pVert->show();
       m_pCanvas->setGeometry(20, 20, viewW-16, viewH);
+      m_pTabBar->setGeometry(64, height() - 16 , width() - 64, 16);
     }
   else // we need both scrollbars
     {
@@ -325,9 +360,10 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pVert->setGeometry(width()-16, 20, 16, height()-36);
       m_pVert->show();
       m_pHorz->setRange(0, docW - canW);
-      m_pHorz->setGeometry(20, height()-16, width()-36, 16);
+      m_pHorz->setGeometry(64  + (width()-80)/2, height()-16, (width()-80)/2, 16);
       m_pHorz->show();
-      m_pCanvas->setGeometry(20, 20, viewW-16, viewH-16);
+      m_pCanvas->setGeometry(20, 20, viewW-16, viewH);
+      m_pTabBar->setGeometry(64, height() - 16 , (width()-80)/2, 16);
     }
 
   // ruler ranges
@@ -625,6 +661,9 @@ int KImageShopView::docHeight()
 
 int KImageShopView::xPaintOffset()
 {
+  #warning "Make this configurable."
+  return 0;
+
   int v = static_cast<int>((m_pCanvas->width() - docWidth())/2);
   if (v < 0)
     v = 0;
@@ -633,6 +672,9 @@ int KImageShopView::xPaintOffset()
 
 int KImageShopView::yPaintOffset()
 {
+  #warning "Make this configurable."
+  return 0;
+
   int v = static_cast<int>((m_pCanvas->height() - docHeight())/2);
   if (v < 0)
     v = 0;
@@ -657,4 +699,25 @@ void KImageShopView::slotSetBGColor(const KColor& c)
 {
   m_bg = c;
 }
+
+void KImageShopView::slotScrollToFirstTab()
+{
+  m_pTabBar->scrollFirst();
+}
+
+void KImageShopView::slotScrollToLeftTab()
+{
+  m_pTabBar->scrollLeft();
+}
+
+void KImageShopView::slotScrollToRightTab()
+{
+  m_pTabBar->scrollRight();
+}
+
+void KImageShopView::slotScrollToLastTab()
+{
+  m_pTabBar->scrollLast();
+}
+
 #include "kimageshop_view.moc"
