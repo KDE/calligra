@@ -2988,6 +2988,8 @@ void QTextParag::invalidate( int chr )
 	invalid = QMIN( invalid, chr );
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
 	i->ypos = -1;
+    if ( chr == 0 ) // invalidate margins (DF)
+        bm = tm = lm = rm = -1;
 }
 
 void QTextParag::insert( int index, const QString &s )
