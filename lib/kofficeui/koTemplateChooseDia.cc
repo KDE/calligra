@@ -143,7 +143,7 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
 	const QCString &format, const QString &nativePattern,
 	const QString &nativeName, const DialogType &dialogType,
 	const QCString& templateType) :
-KDialogBase(parent, name, true, i18n("Open a Document"), KDialogBase::Ok | KDialogBase::Cancel,
+KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
 	KDialogBase::Ok) {
 
     d = new KoTemplateChooseDiaPrivate(
@@ -281,7 +281,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     layout->addWidget(d->m_jwidget,0,0);	
 
     d->boxdescription = new QVGroupBox(
-	    i18n("Selected Template : Empty Document"),
+	    i18n("Selected Template: Empty Document"),
 	    widgetbase,
 	    "boxdescription");
     layout->addWidget(d->boxdescription, 1, 0 );
@@ -407,13 +407,13 @@ void KoTemplateChooseDia::setupDialog()
 	// new document
 	d->newTab = new QWidget( d->tabWidget, "newTab" );
 	d->tabWidget->insertTab( d->newTab, "" );
-	d->tabWidget->changeTab( d->newTab, i18n( "Create a Document" ) );
+	d->tabWidget->changeTab( d->newTab, i18n( "Create Document" ) );
 	QGridLayout * newTabLayout = new QGridLayout( d->newTab, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
 	// existing document
 	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
 	d->tabWidget->insertTab( d->existingTab, "" );
-	d->tabWidget->changeTab( d->existingTab, i18n( "Open an Existing Document" ) );
+	d->tabWidget->changeTab( d->existingTab, i18n( "Open Existing Document" ) );
 	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab, 1, 1, 0, 6);
 
 	setupTemplateDialog(d->newTab, newTabLayout);
@@ -435,7 +435,7 @@ void KoTemplateChooseDia::setupDialog()
 	// create a new document from a template
 	if (d->m_dialogType == OnlyTemplates)
 	{
-	    setCaption(i18n( "Create a Document" ));
+	    setCaption(i18n( "Create Document" ));
 	    setupTemplateDialog(d->m_mainwidget, maingrid);
 	}
     }
@@ -450,7 +450,7 @@ void KoTemplateChooseDia::currentChanged( QIconViewItem * item)
 	QIconView* canvas =  item->iconView();
 
 	// set text in the textarea
-	d->boxdescription->setTitle(  i18n("Selected template: %1").arg(item->text()) );
+	d->boxdescription->setTitle(  i18n("Selected Template: %1").arg(item->text()) );
 	d->textedit->setText( ((KoTCDIconViewItem *) item)->getDescr() );
 
 	// set the icon in the canvas selected
