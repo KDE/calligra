@@ -6911,24 +6911,6 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         m_printRange = QRect( QPoint( left, top ), QPoint( right, bottom ) );
       }
 
-      // load print repeat columns
-      QDomElement printrepeatcolumns = table.namedItem( "printrepeatcolumns" ).toElement();
-      if ( !printrepeatcolumns.isNull() )
-      {
-        int left = printrepeatcolumns.attribute( "left" ).toInt();
-        int right = printrepeatcolumns.attribute( "right" ).toInt();
-        setPrintRepeatColumns( qMakePair( left, right ) );
-      }
-
-      // load print repeat rows
-      QDomElement printrepeatrows = table.namedItem( "printrepeatrows" ).toElement();
-      if ( !printrepeatrows.isNull() )
-      {
-        int top = printrepeatrows.attribute( "top" ).toInt();
-        int bottom = printrepeatrows.attribute( "bottom" ).toInt();
-        setPrintRepeatRows( qMakePair( top, bottom ) );
-      }
-
     // Load the cells
     QDomNode n = table.firstChild();
     while( !n.isNull() )
@@ -6975,7 +6957,25 @@ bool KSpreadTable::loadXML( const QDomElement& table )
                 delete ch;
         }
 
-    n = n.nextSibling();
+        n = n.nextSibling();
+    }
+
+    // load print repeat columns
+    QDomElement printrepeatcolumns = table.namedItem( "printrepeatcolumns" ).toElement();
+    if ( !printrepeatcolumns.isNull() )
+    {
+        int left = printrepeatcolumns.attribute( "left" ).toInt();
+        int right = printrepeatcolumns.attribute( "right" ).toInt();
+        setPrintRepeatColumns( qMakePair( left, right ) );
+    }
+
+    // load print repeat rows
+    QDomElement printrepeatrows = table.namedItem( "printrepeatrows" ).toElement();
+    if ( !printrepeatrows.isNull() )
+    {
+        int top = printrepeatrows.attribute( "top" ).toInt();
+        int bottom = printrepeatrows.attribute( "bottom" ).toInt();
+        setPrintRepeatRows( qMakePair( top, bottom ) );
     }
 
     if( !table.hasAttribute( "borders1.2" ) )
@@ -7650,7 +7650,7 @@ void KSpreadTable::paperLayoutDlg()
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored.\nMust be in format column:column (i.e. 2:3)" ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored.\nMust be in format column:column (eg. 2:3)" ) );
         }
 
         if ( tmpRepeatRows.isEmpty() )
@@ -7675,7 +7675,7 @@ void KSpreadTable::paperLayoutDlg()
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (i.e. B:D)" ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. B:D)" ) );
         }
         m_pDoc->setModified( true );
     }
