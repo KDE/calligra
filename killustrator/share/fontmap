@@ -1,3 +1,5 @@
+# Mapping from Qt fonts to Postscript fonts
+# for KIllustrator
 times /Times
 times.bold /Times-Bold
 times.italic /Times-Italic
