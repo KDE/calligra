@@ -181,6 +181,8 @@ void AFChoose::chosen()
         {
             if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty())
                 emit formChosen(grpPtr->entries[grpPtr->loadWid->getCurrent()]);
+            else
+                emit afchooseCanceled();
         }
     }
 }
