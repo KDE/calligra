@@ -174,16 +174,17 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     QString grpMgr;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "frameType", "int",     (void *) &frameType )
+    attrProcessingList << AttrProcessing ( "name",      "QString", (void *) &name      )
+                       << AttrProcessing ( "frameType", "int",     (void *) &frameType )
                        << AttrProcessing ( "frameInfo", "int",     (void *) &frameInfo )
                        << AttrProcessing ( "removable", "",        NULL                )
                        << AttrProcessing ( "visible",   "",        NULL                )
-                       << AttrProcessing ( "col",       "int",     (void *) &col       )
-                       << AttrProcessing ( "row",       "int",     (void *) &row       )
-                       << AttrProcessing ( "cols",      "int",     (void *) &cols      )
-                       << AttrProcessing ( "rows",      "int",     (void *) &rows      )
                        << AttrProcessing ( "grpMgr",    "QString", (void *) &grpMgr    )
-                       << AttrProcessing ( "name",      "QString", (void *) &name      );
+                       << AttrProcessing ( "row",       "int",     (void *) &row       )
+                       << AttrProcessing ( "col",       "int",     (void *) &col       )
+                       << AttrProcessing ( "rows",      "int",     (void *) &rows      )
+                       << AttrProcessing ( "cols",      "int",     (void *) &cols      )
+                        ;
     ProcessAttributes (myNode, attrProcessingList);
 
     switch ( frameType )
@@ -460,36 +461,43 @@ static void ProcessDocTag ( QDomNode         myNode,
                        << AttrProcessing ( "mime",          "", NULL )
                        << AttrProcessing ( "syntaxVersion", "", NULL );
     ProcessAttributes (myNode, attrProcessingList);
+
     // TODO: verify syntax version and perhaps mime
-
-    QValueList<ParaData> paraList;
-
-    QValueList<TagProcessing> tagProcessingList;
 
     leader->doOpenHead();
 
     // At first, process <PAPER>, even if mostly the output will need to be delayed.
-    tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, leader);
+    QDomNode nodePaper=myNode.namedItem("PAPER");
+    if ( nodePaper.isNull () )
+        kdWarning (30508) << "No <PAPER>" << endl;
+    else
+        ProcessPaperTag (nodePaper, NULL, leader);
 
     // Then we process the styles
-    tagProcessingList.clear();
-    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, leader);
+    QDomNode nodeStyles=myNode.namedItem("STYLES");
+    if ( nodeStyles.isNull () )
+        kdWarning (30508) << "No <STYLES>" << endl;
+    else
+        ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
     leader->doCloseHead();
     leader->doOpenBody();
 
-    tagProcessingList.clear();
-    // TODO: do all those tags still exist in KWord 1.2?
+    QValueList<TagProcessing> tagProcessingList;
+    QValueList<ParaData> paraList;
+
     tagProcessingList << TagProcessing ( "PAPER",       NULL,                   NULL               ) // Already done
                       << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL               )
-                      << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               )
+                      << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    (void *) &paraList )
                       << TagProcessing ( "STYLES",      NULL,                   NULL               ) // Already done
-                      << TagProcessing ( "SERIALL",     NULL,                   NULL               )
-                      << TagProcessing ( "CLIPARTS",    NULL,                   NULL               )
                       << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
-                      << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    (void *) &paraList );
+                      << TagProcessing ( "EMBEDDED",    NULL,                   NULL               )
+                      ;
+// TODO: delete (they do not exist anymore in KOffice 1.2)
+// tagProcessingList << TagProcessing ( "SERIALL",     NULL,                   NULL               );
+// tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
+// tagProcessingList << TagProcessing ( "CLIPARTS",    NULL,                   NULL               );
+
     ProcessSubtags (myNode, tagProcessingList, leader);
 
     leader->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
@@ -507,7 +515,7 @@ static void ProcessDocTag ( QDomNode         myNode,
 void KWEFKWordLeader::setWorker ( KWEFBaseWorker *newWorker )
 {
     m_worker = newWorker;
-    
+
     if (newWorker)
         newWorker->registerKWordLeader(this);
 }

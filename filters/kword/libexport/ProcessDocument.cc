@@ -319,18 +319,19 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
                 LinkData linkData;
 
                 QValueList<TagProcessing> tagProcessingList;
-                // TODO: delete CHARSET (does not exist anymore in KOffice 1.2)
-                tagProcessingList << TagProcessing ( "CHARSET",             NULL,                   NULL                        )
+                tagProcessingList 
+                                  << TagProcessing ( "COLOR",               ProcessColorAttrTag,    (void *) &fgColor           )
+                                  << TagProcessing ( "FONT",                ProcessStringNameTag,   (void *) &fontName          )
+                                  << TagProcessing ( "SIZE",                ProcessIntValueTag,     (void *) &fontSize          )
+                                  << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     (void *) &weight            )
                                   << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, (void *) &italic            )
                                   << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, (void *) &underline         )
                                   << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, (void *) &strikeout         )
-                                  << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     (void *) &weight            )
-                                  << TagProcessing ( "SIZE",                ProcessIntValueTag,     (void *) &fontSize          )
-                                  << TagProcessing ( "FONT",                ProcessStringNameTag,   (void *) &fontName          )
-                                  << TagProcessing ( "COLOR",               ProcessColorAttrTag,    (void *) &fgColor           )
+                                  << TagProcessing ( "CHARSET",             NULL,                   NULL                        )
                                   << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     (void *) &verticalAlignment )
                                   << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    (void *) &bgColor           )
-                                  << TagProcessing ( "LINK",                ProcessLinkTag,         (void *) &linkData          );
+                                  << TagProcessing ( "LINK",                ProcessLinkTag,         (void *) &linkData          )
+                                  ;
                 ProcessSubtags (myNode, tagProcessingList, leader);
 
                 (*formatDataList) << FormatData ( formatPos, formatLen,
@@ -398,14 +399,15 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     CounterData *counter = (CounterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "numberingtype", "int",     (void *) &counter->numbering       );
     attrProcessingList << AttrProcessing ( "type",          "int",     (void *) &counter->style           );
     attrProcessingList << AttrProcessing ( "depth",         "int",     (void *) &counter->depth           );
+    attrProcessingList << AttrProcessing ( "bullet",        "int",     (void *) &counter->customCharacter );
     attrProcessingList << AttrProcessing ( "start",         "int",     (void *) &counter->start           );
+    attrProcessingList << AttrProcessing ( "numberingtype", "int",     (void *) &counter->numbering       );
     attrProcessingList << AttrProcessing ( "lefttext",      "QString", (void *) &counter->lefttext        );
     attrProcessingList << AttrProcessing ( "righttext",     "QString", (void *) &counter->righttext       );
-    attrProcessingList << AttrProcessing ( "bullet",        "int",     (void *) &counter->customCharacter );
     attrProcessingList << AttrProcessing ( "bulletfont",    "QString", (void *) &counter->customFont      );
+    attrProcessingList << AttrProcessing ( "customdef",     "",        (void *) NULL                      );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode);
@@ -511,9 +513,6 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
     tagProcessingList << TagProcessing ( "FOLLOWING",    NULL,                        NULL                         );
-    tagProcessingList << TagProcessing ( "COUNTER",      ProcessCounterTag,           (void *) &layout->counter    );
-    tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            (void *) &formatDataList     );
-    tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   (void *) &layout->tabulator  );
     tagProcessingList << TagProcessing ( "FLOW",         ProcessStringAlignTag,       &layout->alignment           );
     tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           (void *) layout              );
     tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      (void *) layout              );
@@ -523,6 +522,10 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "RIGHTBORDER",  NULL,                        NULL                         );
     tagProcessingList << TagProcessing ( "TOPBORDER",    NULL,                        NULL                         );
     tagProcessingList << TagProcessing ( "BOTTOMBORDER", NULL,                        NULL                         );
+    tagProcessingList << TagProcessing ( "COUNTER",      ProcessCounterTag,           (void *) &layout->counter    );
+    tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            (void *) &formatDataList     );
+    tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   (void *) &layout->tabulator  );
+    tagProcessingList << TagProcessing ( "SHADOW",       NULL,                        NULL                         );
     ProcessSubtags (myNode, tagProcessingList, leader);
 
 
