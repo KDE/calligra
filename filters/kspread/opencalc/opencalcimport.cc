@@ -599,7 +599,8 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           {
             if ( !isFormula )
               cell->setValue( dv );
-            cell->setFactor( 100 );
+            //TODO fixme
+			//cell->setFactor( 100 );
             // TODO: replace with custom...
             cell->setFormatType( Percentage_format );
           }

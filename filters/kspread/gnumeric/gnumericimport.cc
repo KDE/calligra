@@ -849,7 +849,8 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
   if (formatString[l - 1] == '%')
   {
     kspread_cell->setFormatType(Percentage_format);
-    kspread_cell->setFactor(100);
+	//TODO fixme !!!!!!
+    //kspread_cell->setFactor(100);
   }
   else if (formatString[0] == '$')
   {
