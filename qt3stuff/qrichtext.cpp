@@ -5826,7 +5826,7 @@ static QCleanupHandler<QPixmap> qrt_cleanup_pixmap;
 static void qrt_createSelectionPixmap( const QColorGroup &cg )
 {
     qrt_selection = new QPixmap( 2, 2 );
-    qrt_cleanup_pixmap.add( &qrt_selection );
+    qrt_cleanup_pixmap.add( qrt_selection );
     qrt_selection->fill( Qt::color0 );
     QBitmap m( 2, 2 );
     m.fill( Qt::color1 );
