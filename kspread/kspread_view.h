@@ -406,6 +406,8 @@ protected:
     void activateFormulaEditor();
 
     virtual void updateReadWrite( bool readwrite );
+    
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
 private:
     // GUI stuff

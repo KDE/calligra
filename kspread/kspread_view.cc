@@ -475,12 +475,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
     m_findOptions = 0;
-
-    if ( statusBar() )
-    {
-        statusBar()->insertItem( QString(" ")+i18n("Sum: %1").arg(0)+' ', statusCalc );
-        connect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-    }
 }
 
 KSpreadView::~KSpreadView()
@@ -3347,6 +3341,23 @@ int KSpreadView::canvasXOffset() const
 int KSpreadView::canvasYOffset() const
 {
   return canvasWidget()->yOffset();
+}
+
+
+void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    if ( ev->activated() )
+    {
+        if ( statusBar() )
+        {
+            statusBar()->removeItem(statusCalc);
+            statusBar()->insertItem( QString(" ")+i18n("Sum: %1").arg(0)+' ', statusCalc );
+            connect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+            resultOfCalc();
+        }
+    }
+
+    KoView::guiActivateEvent( ev );
 }
 
 #include "kspread_view.moc"
