@@ -186,8 +186,8 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 		if (m_tableCombo->count()>0) {
 			if (oi>=m_tableCombo->count()) {
 				oi=m_tableCombo->count()-1;
-				m_tableCombo->setCurrentItem(oi);
 			}
+			m_tableCombo->setCurrentItem(oi);
 		}
 		else {
 			m_tableCombo->setEnabled(false);
