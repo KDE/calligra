@@ -21,7 +21,7 @@
 
 #include <kmsgbox.h>
 #include <klocale.h>
-#include <kapp.h>
+#include <kglobal.h>
 #include <kcolorbtn.h>
 #include <kbuttonbox.h>
 
@@ -634,7 +634,7 @@ void KWSearchDia::slotCheckFamily()
     else
     {
         cmFamily->setEnabled( false );
-        eSearch->setFont( kapp->generalFont() );
+        eSearch->setFont( KGlobal::generalFont() );
     }
 }
 
@@ -722,7 +722,7 @@ void KWSearchDia::slotFamily( const QString & family )
     searchEntry->family = qstrdup( family );
     view->setSearchEntry( searchEntry );
 
-    QFont f = QFont( kapp->generalFont() );
+    QFont f = QFont( KGlobal::generalFont() );
     f.setFamily( qstrdup( family ) );
     eSearch->setFont( f );
 }
@@ -898,7 +898,7 @@ void KWSearchDia::rslotCheckFamily()
     else
     {
         rcmFamily->setEnabled( false );
-        eReplace->setFont( kapp->generalFont() );
+        eReplace->setFont( KGlobal::generalFont() );
     }
 }
 
@@ -986,7 +986,7 @@ void KWSearchDia::rslotFamily( const QString & family )
     replaceEntry->family = qstrdup( family );
     view->setReplaceEntry( replaceEntry );
 
-    QFont f = QFont( kapp->generalFont() );
+    QFont f = QFont( KGlobal::generalFont() );
     f.setFamily( qstrdup( family ) );
     eReplace->setFont( f );
 }

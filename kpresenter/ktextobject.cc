@@ -2557,7 +2557,7 @@ void KTextObject::openASCII( QString filename )
         f.close();
     }
 
-    addText( s, kapp->generalFont(), colorGroup().text(), false, TxtParagraph::LEFT, false );
+    addText( s, KGlobal::generalFont(), colorGroup().text(), false, TxtParagraph::LEFT, false );
 
     doRepaints = true;
 
