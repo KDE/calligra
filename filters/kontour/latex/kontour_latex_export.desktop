@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Kontour LATEX Export Filter
+Name[cs]=Exportní filtr LaTeX pro Kontour
+Name[lv]=Kontour LATEX Eksporta Filtrs
+Name[no_NY]=LaTeX-eksportfilter for Kontour
+Name[pt_BR]=Filtro de Exportação de LaTeX do Kontour
+Name[pt]=Filtro de Exportação de LaTeX do Kontour
+Export=text/x-tex
+Import=application/x-kontour
+Implemented=file
+X-KDE-Library=libtexgraphexport
+ServiceTypes=KOfficeFilter
