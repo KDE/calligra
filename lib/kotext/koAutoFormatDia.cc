@@ -664,6 +664,7 @@ void KoAutoFormatDia::slotChangeTextFormatEntry()
         KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_pListView->currentItem()->text(0));
         KoSearchContext *tmpFormat = entry->formatEntryContext();
         bool createNewFormat = false;
+
         if ( !tmpFormat )
         {
             tmpFormat = new KoSearchContext();
@@ -673,7 +674,9 @@ void KoAutoFormatDia::slotChangeTextFormatEntry()
         KoFormatDia *dia = new KoFormatDia( this, i18n("Change Text Format"), tmpFormat ,  0L);
         if ( dia->exec())
         {
+            dia->ctxOptions( );
             entry->setFormatEntryContext( tmpFormat );
+
         }
         else
         {
