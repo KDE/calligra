@@ -2366,7 +2366,8 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 
     painter->translate( -( ir.x() - parag->rect().x() ),
 		       -( ir.y() - parag->rect().y() ) );
-    parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE, cx, cy, cw, ch );
+    parag->paint( *painter, cg, drawCursor ? cursor : 0, painter->device()->devType() != QInternal::Printer,
+		  cx, cy, cw, ch );
     if ( !flow()->isEmpty() ) {
 	painter->translate( 0, -parag->rect().y() );
 	QRect cr( cx, cy, cw, ch );
