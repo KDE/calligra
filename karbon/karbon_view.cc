@@ -1064,6 +1064,8 @@ KarbonView::pageLayout()
 		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
 								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
 		part()->repaintAllViews();
+
+		emit pageLayoutChanged();
 	}
 }
 

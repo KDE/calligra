@@ -178,6 +178,7 @@ protected slots:
 signals:
 	void zoomChanged( double );
 	void selectionChange();
+	void pageLayoutChanged();
 
 protected:
 	virtual void updateReadWrite( bool ) {}

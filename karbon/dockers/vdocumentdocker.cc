@@ -190,7 +190,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		p1 = m_view->canvasWidget()->toContents( p1 );
 		KoPoint p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
 		p2 = m_view->canvasWidget()->toContents( p2 );
-		p.drawRect( p1.x(), p1.y(), p2.x() - p1.x(), p2.y() - p1.y() );
+		p.drawRect( int( p1.x() ), int( p1.y() ), int( p2.x() - p1.x() ), int( p2.y() - p1.y() ) );
 	}
 
 	QPainter pw( &pixmap );
@@ -242,7 +242,8 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
-	connect( view, SIGNAL( zoomChanged( double ) ), this, SLOT( slotZoomChanged( double ) ) );
+	connect( view, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+	connect( view, SIGNAL( pageLayoutChanged() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view->canvasWidget(), SIGNAL( viewportChanged() ), this, SLOT( slotViewportChanged() ) );
 
 	updateDocumentInfo();

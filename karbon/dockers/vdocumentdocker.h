@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -251,12 +250,6 @@ class VDocumentDocker : public VDocker
 	public:
 		VDocumentDocker( KarbonView* view );
 		~VDocumentDocker();
-
-		// It would be great to get rid of these methods by providing 
-		// appropriate signals in the KarbonPart instead of direct calls...
-		VDocumentTab* documentTab() { return m_documentTab; }
-		VLayersTab*   layersTab()   { return m_layersTab; }
-		VHistoryTab*  historyTab()  { return m_historyTab; }
 
 	protected:
 		VDocumentTab* m_documentTab;
