@@ -107,19 +107,9 @@ public:
   QStringList import;
 
   /**
-   *  Comment regarding the imported data format.
-   */
-  QStringList importDescription;
-
-  /**
    *    The exported mimetype.
    */
   QStringList export_;
-
-  /**
-   *  Comment regarding the exported data format.
-   */
-  QStringList exportDescription;
 
   /**
    *  Which one of the filter methods is implemented?
@@ -171,19 +161,9 @@ public:
   QStringList import;
 
   /**
-   *  Comment regarding the imported data format of the matching filter.
-   */
-  QStringList importDescription;
-
-  /**
    *    The exported mimetype of the matching filter.
    */
   QStringList export_;
-
-  /**
-   *  Comment regarding the exported data format of the matching filter.
-   */
-  QStringList exportDescription;
 
   /**
    *  This function will query KDED to find all available filter dialogs.

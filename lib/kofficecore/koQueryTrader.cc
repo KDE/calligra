@@ -125,9 +125,7 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
   : m_service( service )
 {
   import = service->property( "Import" ).toStringList();
-  importDescription = service->property( "ImportDescription" ).toStringList();
   export_ = service->property( "Export" ).toStringList();
-  exportDescription = service->property( "ExportDescription" ).toStringList();
   implemented = service->property( "Implemented" ).toString();
 }
 
@@ -181,9 +179,7 @@ KoFilterDialogEntry::KoFilterDialogEntry( KService::Ptr service )
   : m_service( service )
 {
   import = service->property( "Import" ).toStringList();
-  importDescription = service->property( "ImportDescription" ).toStringList();
   export_ = service->property( "Export" ).toStringList();
-  exportDescription = service->property( "ExportDescription" ).toStringList();
 }
 
 QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _constr )

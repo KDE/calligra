@@ -111,25 +111,16 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
     for( unsigned int i = 0; i < vec.count(); ++i )
     {
         KMimeType::Ptr t;
-        QStringList mimes, descriptions;
+        QStringList mimes;
         if ( direction == Import )
-        {
             mimes = vec[i].import;
-            descriptions = vec[i].importDescription;
-        }
         else
-        {
             mimes = vec[i].export_;
-            descriptions = vec[i].exportDescription;
-        }
 
         kdDebug() << "KoFilterManager::fileSelectorList mimes=" << mimes.join("-") << endl;
-        kdDebug() << "KoFilterManager::fileSelectorList descriptions=" << descriptions.join("-") << endl;
-        ASSERT( mimes.count() == descriptions.count() );
 
         QStringList::ConstIterator it = mimes.begin();
-        QStringList::ConstIterator descrit = descriptions.begin();
-        for ( ; it != mimes.end() ; ++it, ++descrit )
+        for ( ; it != mimes.end() ; ++it )
         {
             QString mime ( *it );
             t = KMimeType::mimeType( mime );
@@ -143,18 +134,18 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
                     QString patterns = t->patterns().join(" ");
                     ret += patterns;
                     ret += "|";
-                    ret += *descrit;
+                    ret += t->comment();
                     ret += " (";
                     ret += patterns;
                     ret += ")";
                 }
             }
-            else
+            else // The filter desktop file talks about an unknown mimetype... This shouldn't happen.
             {
                 if ( !ret.isEmpty() )
                     ret += "\n";
                 ret += "*|";
-                ret += *descrit;
+                ret += "Unknown mimetype " + mime;
                 ret += " (*)";
             }
         }
