@@ -555,11 +555,11 @@ void KSpreadView::initializeAreaOperationActions()
 
 void KSpreadView::initializeGlobalOperationActions()
 {
-  m_recalc_workbook = new KAction( i18n("Recalculate All Tables"), Key_F9, this,
+  m_recalc_workbook = new KAction( i18n("Recalculate Workbook"), Key_F9, this,
                                    SLOT( RecalcWorkBook() ), actionCollection(),
                                    "RecalcWorkBook" );
 
-  m_recalc_worksheet = new KAction( i18n("Recalculate Current Table"), SHIFT + Key_F9,
+  m_recalc_worksheet = new KAction( i18n("Recalculate Worksheet"), SHIFT + Key_F9,
                                     this, SLOT( RecalcWorkSheet() ),
                                     actionCollection(), "RecalcWorkSheet" );
 
