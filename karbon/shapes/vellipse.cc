@@ -47,8 +47,11 @@ void
 VEllipse::init()
 {
 	// to radials
-	uint nsegs = ( m_endAngle - m_startAngle ) / 90.0;
-	int i = m_startAngle / 90.0;
+	int nsegs;
+	if( m_startAngle < m_endAngle )
+	    nsegs = floor( ( m_endAngle - m_startAngle ) / 90.0 );
+	else
+	    nsegs = 4 - floor( ( m_startAngle - m_endAngle ) / 90.0 );
 	double origEndAngle = m_endAngle;
 	double startAngle = VGlobal::pi_2 * ( m_startAngle / 90.0 );
 	double endAngle   = VGlobal::pi_2 * ( m_endAngle / 90.0 );
@@ -58,9 +61,8 @@ VEllipse::init()
 	moveTo( KoPoint( start.x(), start.y() ) );
 	KoPoint current;
 	double midAngle = -startAngle - VGlobal::pi_2 / 2.0;
-	while( i < nsegs )
+	for( int i = 0;i < nsegs;i++ )
 	{
-		i = ++i % 4;
 		current = KoPoint( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) );
 		currentAngle -= VGlobal::pi_2;
 		midAngle -= VGlobal::pi_2;
@@ -79,11 +81,11 @@ VEllipse::init()
 	rest = ( rest / 90.0 ) * VGlobal::pi_2;
 	KoPoint end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
 	//arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( rest ) ), -sin( midAngle ) * ( 0.5 / cos( rest ) ) ), end, 0.5 );
-	//lineTo( end );
-	arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ),
-					-sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) ), end, 0.5 );
-	kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
-	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
+	lineTo( end );
+	//arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ),
+	//				-sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) ), end, 0.5 );
+	//kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
+	//kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
 	kdDebug() << "rest : " << rest << endl;
 	kdDebug() << "endAngle : " << endAngle << endl;
 	kdDebug() << "currentAngle : " << currentAngle << endl;
