@@ -1,6 +1,7 @@
 1.3.2 to 1.3.3
 ==============
-- fix "Expense Report" template (#86732)
+- Fix "Expense Report" template (#86732)
+- Fix #74091 (Fix special paste from cell with formula)
 
 after 1.3
 =========
