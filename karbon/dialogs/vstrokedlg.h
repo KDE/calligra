@@ -13,6 +13,7 @@ class QVButtonGroup;
 
 class KarbonPart;
 class TKUFloatSpinBox;
+class VStroke;
 
 class VStrokeDlg : public KDialogBase
 {
@@ -22,16 +23,15 @@ public:
 	VStrokeDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 private:
-	
 	KarbonPart *m_part;
 	TKUFloatSpinBox *m_setLineWidth;
 	QComboBox *m_styleCombo;
 	QVButtonGroup *m_typeOption;
 	QVButtonGroup *m_capOption;
 	QVButtonGroup *m_joinOption;
-	int m_type;
-	int m_cap;
-	int m_join;
+
+protected:
+	VStroke m_stroke;
 
 signals:
 	void strokeChanged( const VStroke & );
@@ -41,6 +41,7 @@ private slots:
 	void slotCapChanged( int ID );
 	void slotJoinChanged( int ID );
 	void slotOKClicked();
+	void slotUpdateDialog();
 
 };
 

@@ -78,6 +78,17 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	mainLayout->addWidget( m_joinOption );
 	connect( m_joinOption, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 	
+	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
+	{
+		m_stroke.setType ( part->document().selection()->objects().getFirst()->stroke()->type() );
+		m_stroke.setColor ( part->document().selection()->objects().getFirst()->stroke()->color() );
+		m_stroke.setLineWidth ( part->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+		m_stroke.setLineCap ( part->document().selection()->objects().getFirst()->stroke()->lineCap() );   
+		m_stroke.setLineJoin ( part->document().selection()->objects().getFirst()->stroke()->lineJoin() );
+		m_stroke.setMiterLimit ( part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
+	}
+	
+	slotUpdateDialog(); //Put the values of selected objects (or default)
 	mainLayout->activate();
 	setMainWidget( mainWidget );
 	disableResize();
@@ -86,57 +97,80 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 
 void VStrokeDlg::slotTypeChanged( int ID )
 {
-	m_type = ID;
+	switch ( ID ) {
+	case 1:
+		m_stroke.setType ( stroke_stroke ); break;
+	case 2:
+		m_stroke.setType ( stroke_gradient ); break;
+	default:
+		m_stroke.setType ( stroke_none );
+	}
 }
 
 void VStrokeDlg::slotCapChanged( int ID )
 {
-	m_cap = ID;
+	switch ( ID ) {
+	case 1:
+		m_stroke.setLineCap ( cap_round ); break;
+	case 2:
+		m_stroke.setLineCap ( cap_square ); break;
+	default:
+		m_stroke.setLineCap ( cap_butt );
+	}
 }
 
 void VStrokeDlg::slotJoinChanged( int ID )
 {
-	m_join = ID;
+	switch ( ID ) {
+	case 1:
+		m_stroke.setLineJoin ( join_round ); break;
+	case 2:
+		m_stroke.setLineJoin ( join_bevel ); break;
+	default:
+		m_stroke.setLineJoin ( join_miter );
+	}
 }
 
 void VStrokeDlg::slotOKClicked()
 {
-	VStroke stroke;
-	
-	switch ( m_type ) {
-	case 1:
-		stroke.setType ( stroke_stroke ); break;
-	case 2:
-		stroke.setType ( stroke_gradient ); break;
-	default:
-		stroke.setType ( stroke_none );
-	}
-
-	switch ( m_cap ) {
-	case 1:
-		stroke.setLineCap ( cap_round ); break;
-	case 2:
-		stroke.setLineCap ( cap_square ); break;
-	default:
-		stroke.setLineCap ( cap_butt );
-	}
-
-	switch ( m_join ) {
-	case 1:
-		stroke.setLineJoin ( join_round ); break;
-	case 2:
-		stroke.setLineJoin ( join_bevel ); break;
-	default:
-		stroke.setLineJoin ( join_miter );
-	}
-
-	float w = m_setLineWidth->value();
-	stroke.setLineWidth ( w );
+	m_stroke.setLineWidth ( m_setLineWidth->value() );
 
 	if( m_part )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), stroke ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_stroke ), true );
 
-	emit strokeChanged( VStroke( stroke ) );
+	emit strokeChanged( VStroke( m_stroke ) );
+}
+
+void VStrokeDlg::slotUpdateDialog()
+{
+	switch ( m_stroke.type() ){
+	case stroke_stroke:
+		m_typeOption->setButton(1); break;
+	case stroke_gradient:
+		m_typeOption->setButton(2); break;
+	default:
+		m_typeOption->setButton(0);
+	}
+	
+	switch ( m_stroke.lineCap() ){
+	case cap_round:
+		m_capOption->setButton(1); break;
+	case cap_square:
+		m_capOption->setButton(2); break;
+	default:
+		m_capOption->setButton(0);
+	}
+	
+	switch ( m_stroke.lineJoin() ){
+	case join_round:
+		m_joinOption->setButton(1); break;
+	case join_bevel:
+		m_joinOption->setButton(2); break;
+	default:
+		m_joinOption->setButton(0);
+	}
+	
+	m_setLineWidth->setValue( ( m_stroke.lineWidth() ) );
 }
 
 /*void VStrokeDlg::slotApplyButtonPressed()
