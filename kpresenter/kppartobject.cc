@@ -65,36 +65,30 @@ void KPPartObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
     if ( move ) return;
-#if 0 //FIXME
-    child->setGeometry( QRect( orig, ext ) );
+    child->setGeometry( KoRect( orig, ext ).toQRect() );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
-#endif
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize().toQSize() );
 }
 
 /*======================== draw ==================================*/
-void KPPartObject::setOrig( KoPoint _point )
+void KPPartObject::setOrig( const KoPoint &_point )
 {
-#if 0 //FIXME
     setOrig(_point.x(), _point.y());
-#endif
 }
 
 /*======================== draw ==================================*/
 void KPPartObject::setOrig( double _x, double _y )
 {
     KPObject::setOrig( _x, _y );
-#if 0 //FIXME
-    child->setGeometry( QRect( orig, ext ) );
+    child->setGeometry( KoRect( orig, ext ).toQRect() );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
-#endif
 }
 
 /*======================== draw ==================================*/
-void KPPartObject::moveBy( KoPoint _point )
+void KPPartObject::moveBy( const KoPoint &_point )
 {
     moveBy(_point.x(), _point.y());
 }
@@ -103,11 +97,9 @@ void KPPartObject::moveBy( KoPoint _point )
 void KPPartObject::moveBy( double _dx, double _dy )
 {
     KPObject::moveBy( _dx, _dy );
-#if 0 //FIXME
-    child->setGeometry( QRect( orig, ext ) );
+    child->setGeometry( KoRect( orig, ext ).toQRect() );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
-#endif
 }
 
 /*======================== draw ==================================*/
@@ -115,11 +107,9 @@ void KPPartObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
-#if 0
-    child->setGeometry( QRect( orig, ext ) );
+    child->setGeometry( KoRect( orig, ext ).toQRect() );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
-#endif
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize().toQSize() );
 }
@@ -135,8 +125,8 @@ void KPPartObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
 
 //     int ox = orig.x() - _diffx;
 //     int oy = orig.y() - _diffy;
-    int ow = ext.width();
-    int oh = ext.height();
+    double ow = ext.width();
+    double oh = ext.height();
 
     int penw = pen.width() / 2;
 
@@ -151,7 +141,7 @@ void KPPartObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( penw, penw, _zoomhandler->zoomItX( ext.width() - 2 * penw), _zoomhandler->zoomItY( ext.height() - 2 * penw) );
         else
-            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, _zoomhandler->zoomItX(ow - 2 * penw), _zoomhandler->zoomItY(oh - 2 * penw) );
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
@@ -216,7 +206,7 @@ void KPPartObject::paint( QPainter *_painter,KoZoomHandler*_zoomHandler )
 
     // ######### Torben: Care about zooming
     if ( child && child->document() )
-        child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize().toQSize() ), true, 0 );
+        child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ),QPoint(_zoomHandler->zoomItX( getSize().width()),_zoomHandler->zoomItY( getSize().height()) )), true, 0 );
 }
 
 /*================================================================*/
