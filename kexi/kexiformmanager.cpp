@@ -70,7 +70,7 @@ void KexiFormManager::showForm(const QString& name, Mode, KexiView *view)
 	if (!item) return;
 	if (item->form.isNull())
 	{
-        	item->form = new KexiFormBase(view,view->workspaceWidget(), "form",name);
+        	item->form = new KexiFormBase(view,0, "form",name);
                 view->workspace()->addItem(item->form);
                 item->form->show();
 	}

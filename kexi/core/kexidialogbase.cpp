@@ -61,6 +61,18 @@ KexiView *KexiDialogBase::kexiView()const
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
+	if (wt==ToolWindow)
+	{
+		QDockWindow *w=new QDockWindow(m_view->mainWindow());
+		w->setResizeEnabled(true);
+		w->setCloseMode(QDockWindow::Always);
+		 reparent(w,QPoint(0,0),true);
+		w->setWidget(this);
+	      	m_view->mainWindow()->moveDockWindow(w, DockLeft);
+		return;
+	}
+	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
+
 //	showMaximized();
 	return;
 #if 0

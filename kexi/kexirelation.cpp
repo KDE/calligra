@@ -109,7 +109,7 @@ void KexiRelation::storeRelations(KoStore *store)
 
         if(store)
         {
-                store->open(m_parent->url().url()+"/relations.xml");
+                store->open("relations.xml");
                 store->write(data);
                 store->close();
         }
@@ -123,7 +123,7 @@ void KexiRelation::storeRelations(KoStore *store)
 void KexiRelation::loadRelations(KoStore *store)
 {
 	m_relationList.clear();	
-        if(!store->open(m_parent->url().url()+"/relations.xml"))
+        if(!store->open("relations.xml"))
         return;
 
         QDomDocument inBuf;

@@ -95,8 +95,9 @@ signals:
 */
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
-
+	virtual KoView* createViewInstance( QWidget* parent, const char* name );
+	virtual bool completeSaving( KoStore* store );
+	virtual bool completeLoading( KoStore* store );
         void setCurrentDB(){} ;
 	bool saveProject();
 	bool saveProjectAs(const QString&);

@@ -236,7 +236,7 @@ KexiView::slotSettings()
 void
 KexiView::slotShowRelations()
 {
-	KexiRelationDialog *r = new KexiRelationDialog(this,workspaceWidget(), "relations");
+	KexiRelationDialog *r = new KexiRelationDialog(this,0, "relations");
 	r->show();
 }
 

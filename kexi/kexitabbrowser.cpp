@@ -37,7 +37,8 @@
 #include <kexiview.h>
 
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
-	: QDockWindow(view->mainWindow(), name)
+	: KexiDialogBase(view,parent,name)
+//	: QDockWindow(view->mainWindow(), name)
 {
 	setCaption(i18n("Project"));
 	m_project = view->project();
@@ -45,24 +46,24 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser()" << endl;
 	//QBoxLayout *layout = boxLayout();  that one changes the orientation dynamically :(
 
-	setResizeEnabled(true);
-	setCloseMode(Always);
+//	setResizeEnabled(true);
+//	setCloseMode(Always);
 
-	QWidget *box=new QWidget(this);
-	QGridLayout *layout=new QGridLayout(box);
-	m_tabBar = new KMultiTabBar(box, KMultiTabBar::Vertical);
+//	QWidget *box=new QWidget(this);
+	QGridLayout *layout=new QGridLayout(this);
+	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
 	m_tabBar->setPosition(KMultiTabBar::Left);
 	m_tabBar->showActiveTabTexts(true);
 
-	m_stack = new QWidgetStack(box);
+	m_stack = new QWidgetStack(this);
 
         layout->addWidget(m_tabBar,     0,      0);
         layout->addWidget(m_stack,      0,      1);
         layout->setColStretch(1, 1);
-	box->show();
+//	box->show();
 	m_stack->show();
 	m_tabBar->show();
-	setWidget(box);
+//	setWidget(box);
 
 
 	m_activeTab = -1;
@@ -83,13 +84,15 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 //	layout->addWidget(m_stack);
 	
 	
-	view->mainWindow()->moveDockWindow(this, DockLeft);
+//	view->mainWindow()->moveDockWindow(this, DockLeft);
 
 	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
 	kdDebug() << "KexiTabBrowser::KexiTabBrowser(): connecting to " << kexiProject() << endl;
 
 	if(kexiProject()->dbIsAvaible())
 		generateView();
+
+	registerAs(KexiDialogBase::ToolWindow);
 }
 
 void

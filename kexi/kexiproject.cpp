@@ -64,6 +64,18 @@ DCOPObject* KexiProject::dcopObject()
     return dcop;
 }
 
+bool KexiProject::completeSaving( KoStore* store )
+{
+	m_relationManager->storeRelations(store);
+	return true;
+}
+
+bool KexiProject::completeLoading( KoStore* store )
+{
+	m_relationManager->loadRelations(store);
+	return true;
+}
+
 
 bool KexiProject::initDoc()
 {

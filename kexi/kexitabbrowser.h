@@ -36,8 +36,8 @@ class QWidgetStack;
 class KMultiTabBar;
 class KexiBrowser;
 
-//class KexiTabBrowser : public KexiDialogBase
-class KexiTabBrowser : public QDockWindow 
+class KexiTabBrowser : public KexiDialogBase
+//class KexiTabBrowser : public QDockWindow 
 {
 	Q_OBJECT
 

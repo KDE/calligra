@@ -189,7 +189,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child )
 			{
-				KexiDataTable *kt = new KexiDataTable(m_view,m_view->workspaceWidget(), r->text(0), "table");
+				KexiDataTable *kt = new KexiDataTable(m_view,0, r->text(0), "table");
 				if(kt->executeQuery("select * from " + r->text(0)))
 				{
 					kt->show();
@@ -206,7 +206,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child )
 			{
-				KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, m_view->workspaceWidget(),r->text(0), "oq");
+				KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, 0,r->text(0), "oq");
 				kqd->show();
 			}
 			break;
@@ -244,7 +244,7 @@ void KexiBrowser::slotCreateTable()
 	{
 		if(m_view->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
 		{
-			KexiAlterTable* kat = new KexiAlterTable(m_view, m_view->workspaceWidget(),name, "alterTable");
+			KexiAlterTable* kat = new KexiAlterTable(m_view, 0,name, "alterTable");
 			kat->show();
 			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, name);
 			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
@@ -258,7 +258,7 @@ void KexiBrowser::slotAlterTable()
 
 	if ( r->type() == KexiBrowserItem::Child )
 	{
-		KexiAlterTable* kat = new KexiAlterTable(m_view, m_view->workspaceWidget(),r->text(0), "alterTable");
+		KexiAlterTable* kat = new KexiAlterTable(m_view,0,r->text(0), "alterTable");
 		kat->show();
 	}
 }
@@ -270,7 +270,7 @@ void KexiBrowser::slotCreateQuery()
 
 	if(ok && name.length() > 0)
 	{
-		KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, m_view->workspaceWidget(),name, "query");
+		KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, 0,name, "query");
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
 //		kexi->project()->addFileReference("/query/" + name + ".query");
 
