@@ -30,9 +30,9 @@ namespace KFormDesigner {
 
 
 class ObjectTreeItem;
+class Container;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 typedef QDict<ObjectTreeItem> TreeDict;
-typedef QMap<QString, QVariant> PropertyMap;
 typedef QMap<QString, int> Names;
 
 /**
@@ -44,7 +44,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 {
 	
 	public:
-		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget);
+		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *container=0);
 		virtual ~ObjectTreeItem();
 
 		QString		name() const { return m_name; }
@@ -54,6 +54,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeC*	children() { return &m_children; }
 		//PropertyMap	properties() { return m_properties; }
 		QStringList*	modifProp() { return &m_props;}
+		Container*	container() { return m_container;}
 		
 		void		setWidget(QWidget *w) { m_widget = w; }
 		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
@@ -70,7 +71,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QString		m_className;
 		QString		m_name;
 		ObjectTreeC	m_children;
-		//PropertyMap	m_properties;
+		Container*	m_container;
 		QStringList	m_props;
 		ObjectTreeItem* m_parent;
 		QWidget*	m_widget;
@@ -80,7 +81,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0);
+		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0, Container *container=0);
 		virtual ~ObjectTree();
 
 		/**

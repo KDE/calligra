@@ -70,7 +70,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 		
 		if(attach)
 		{
-			ObjectTreeItem *it = new ObjectTreeItem(widget()->className(), widget()->name(), widget());
+			ObjectTreeItem *it = new ObjectTreeItem(widget()->className(), widget()->name(), widget(), this);
 			setObjectTree(it);
 			const QString pn = parent->name();
 			ObjectTreeItem *parent = form()->objectTree()->lookup(pn);
@@ -84,7 +84,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 			}
 			else
 			{
-				ObjectTreeItem *it = new ObjectTreeItem(widget()->className(), widget()->name(), widget());
+				ObjectTreeItem *it = new ObjectTreeItem(widget()->className(), widget()->name(), widget(), this);
 				setObjectTree(it);
 				form()->objectTree()->addChild(pc->tree(), it);
 			}
@@ -309,7 +309,7 @@ Container::setEditingMode(bool)
 void
 Container::registerChild(Container *t)
 {
-	ObjectTreeItem *it = new ObjectTreeItem(t->widget()->className(), t->widget()->name(), t->widget());
+	ObjectTreeItem *it = new ObjectTreeItem(t->widget()->className(), t->widget()->name(), t->widget(), t);
 	t->setObjectTree(it);
 
 	form()->objectTree()->addChild(it);
@@ -355,13 +355,14 @@ Container::slotPrepareInsert( const QString &classname)
 	m_prepare = true;
 
 	m_insertClass = classname;
+	emit prepareInsert(classname);
 
 }
 
 void
 Container::stopInsert()
 {
-	if(!m_toplevel)
+//	if(!m_toplevel)
 		emit insertStop();
 
 	m_prepare = false;

@@ -31,7 +31,6 @@ namespace KFormDesigner {
 
 class Container;
 class ObjectPropertyBuffer;
-class FormIO;
 
 /**
  * This class provides the base for accessing KFormDesigner over an "forign" api
@@ -95,10 +94,12 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		
 		QWidget*		selectedWidget()  {return m_selWidget;}
 		void			setSelectedWidget(QWidget *w);
+		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
 		
 		void			preparePaste(QWidget*w, bool cut)  {m_copiedw = w; m_cut=cut; }
 		QWidget*		copiedWidget()  {return m_copiedw;}
 		bool			isCutting() { return m_cut;}
+		bool			interactiveMode() { return m_inter; }
 
 
 	public slots:
@@ -112,10 +113,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ObjectTree		*m_topTree;
 		QWidget			*m_selWidget;
 		ObjectPropertyBuffer	*m_buffer;
-		FormIO			*m_formio;
 		
 		QWidget 		*m_copiedw;
 		bool			m_cut;
+		bool			m_inter;
 };
 
 }

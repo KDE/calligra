@@ -41,8 +41,8 @@ Form::Form(QObject *parent, const char *name, WidgetLibrary *lib, ObjectProperty
 	m_selWidget = 0;
 	m_topTree = 0;
 	m_buffer = buffer;
-	m_formio = new FormIO(this, buffer, 0);
-	
+	m_inter = true;
+
 	connect(buffer, SIGNAL(nameChanged(const char*, const QString&)), this, SLOT(changeName(const char*, const QString&)));
 }
 
@@ -57,6 +57,7 @@ Form::createToplevel(QWidget *container)
 	m_toplevel->setForm(this);
 	
 	m_topTree->setWidget(container);
+	m_topTree->addModProperty("caption");
 
 	connect(m_widgetLib, SIGNAL(prepareInsert(const QString&)), this,
 	 SLOT(insertWidget(const QString&)));
@@ -122,7 +123,9 @@ Form::changeName(const char *oldname, const QString &newname)
 void
 Form::saveForm()
 {
-	m_formio->saveForm(this);
+	if(m_buffer)
+		m_buffer->checkModifiedProp();
+	FormIO::saveForm(this);
 }
 
 

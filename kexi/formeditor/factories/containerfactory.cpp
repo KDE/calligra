@@ -22,6 +22,7 @@
 #include "containerfactory.h"
 #include "container.h"
 #include "form.h"
+#include "objecttree.h"
 
 ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
@@ -70,9 +71,12 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(c, n, tab));
 		tab->installEventFilter(container);
 		
-		m_widget=tab;
-		m_container=container;
-		AddTabPage();
+		if(container->form()->interactiveMode())
+		{
+			m_widget=tab;
+			m_container=container;
+			AddTabPage();
+		}
 
 		return tab;
 	}
@@ -117,7 +121,8 @@ void ContainerFactory::AddTabPage()
 	tab->addTab(page,n);
 	tab->showPage(page);
 
-	kdDebug() << "Tab Page added\n";
+	KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(name);
+	item->addModProperty("title");
 }
 
 void ContainerFactory::chTitle()

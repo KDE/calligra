@@ -34,6 +34,13 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	wLineEdit->setName("Line Edit");
 //	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
+	
+	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
+	wWidget->setPixmap(SmallIcon("widget"));
+	wWidget->setClassName("QWidget");
+	wWidget->setName("Empty Widget");
+//	wLabel->setDescription(i18n("A widget to display text or pixmaps"));
+	m_classes.append(wWidget);
 }
 
 QString
@@ -57,13 +64,18 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	{
 		QWidget *w = new QLabel("Label", p, n);
 		w->installEventFilter(container);
-
 		return w;
 	}
 	else if(c == "QLineEdit")
 	{
 		QWidget *w = new QLineEdit(p, n);
 		((QLineEdit *)w)->setReadOnly(true);
+		w->installEventFilter(container);
+		return w;
+	}
+	else if(c == "QWidget")
+	{
+		QWidget *w = new QWidget(p, n);
 		w->installEventFilter(container);
 		return w;
 	}
@@ -84,6 +96,9 @@ StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	{
 	menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
 	return;
+	}
+	else if(classname == "QWidget")
+	{
 	}
 	return;
 }

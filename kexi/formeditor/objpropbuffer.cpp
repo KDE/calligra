@@ -52,9 +52,7 @@ ObjectPropertyBuffer::changeProperty(const char *property, const QVariant &value
 		QStrList list;
 		QStringList StrList(value.toStringList());
 		for(QStringList::iterator it = StrList.begin(); it != StrList.end(); ++it)
-		{
 			list.append((*it).latin1());
-		}
 		int count = m_object->metaObject()->findProperty(property, true);
 		const QMetaProperty *meta = m_object->metaObject()->property(count, true);
 		QVariant val = meta->keysToValue(list);

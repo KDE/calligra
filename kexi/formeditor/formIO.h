@@ -25,6 +25,7 @@
 
 class QString;
 class QDomElement;
+class QDomNode;
 class QDomDocument;
 class QVariant;
 
@@ -33,29 +34,31 @@ namespace KFormDesigner {
 class ObjectPropertyBuffer;
 class Form;
 class ObjectTreeItem;
+class Container;
+class WidgetLibrary;
 
 class KEXIPROPERTYEDITOR_EXPORT FormIO : public QObject
 {
 	Q_OBJECT
 	
 	public:
-		FormIO(QObject *parent, ObjectPropertyBuffer *buffer, const char *name);
+		FormIO(QObject *parent, const char *name);
 		~FormIO(){;}
 		
-		int saveForm(Form *form, const QString &filename=QString::null);
-		int loadForm(Form *form, const QString &filename);
-		
-		void setPropertyBuffer(ObjectPropertyBuffer *buff) { m_buffer = buff;}
+		static int saveForm(Form *form, const QString &filename=QString::null);
+		static int loadForm(Form *form, QWidget *parent, const QString &filename=QString::null);
 
 	protected:
-		QDomElement  prop(QDomDocument &parent, const char *name, const QVariant &value);
-		QDomElement  enumProp(QDomDocument &parent, const char *name, const QVariant &value);
-		void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
-		QString      saveImage(QDomDocument &domDoc, const QPixmap &pixmap);
+		static QDomElement  prop(QDomDocument &parent, const char *name, const QVariant &value, QWidget *w);
+		static QVariant     readProp(QDomNode node, QObject *obj, const QString &name);
+		static void         readAttribute(QDomNode node, QObject *obj, const QString &name);
+		
+		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
+		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
+		static void         createToplevelWidget(Form *form, QWidget *parent, QDomElement &element);
 
-	private:
-		ObjectPropertyBuffer	*m_buffer;
-		int			m_count;
+		static QString      saveImage(QDomDocument &domDoc, const QPixmap &pixmap);
+		static QPixmap      loadImage(QDomDocument domDoc, QString name);
 };
 
 }

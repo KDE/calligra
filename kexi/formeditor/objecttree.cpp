@@ -32,11 +32,12 @@ namespace KFormDesigner
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget)
+ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, Container *container)
 {
 	m_className = classn;
 	m_name = name;
 	m_widget = widget;
+	m_container = container;
 }
 
 bool
@@ -94,8 +95,8 @@ ObjectTreeItem::addModProperty(const QString &property)
 ///                      ObjectTree                                             /////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widget)
- : ObjectTreeItem(classn, name, widget)
+ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widget, Container *container)
+ : ObjectTreeItem(classn, name, widget, container)
 {
 }
 

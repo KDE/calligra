@@ -15,6 +15,7 @@
 #include <kdebug.h>
 #include <kstdaction.h>
 
+#include "formIO.h"
 #include "objecttree.h"
 #include "widgetlibrary.h"
 #include "container.h"
@@ -22,25 +23,19 @@
 #include "kexipropertyeditor.h"
 #include "objpropbuffer.h"
 
+
 #include "kfmview.h"
 
 KFMView::KFMView()
  : KMainWindow()
 {
-	KFormDesigner::WidgetLibrary *l = new KFormDesigner::WidgetLibrary();
-//	l->createActions(actionCollection());
-//	plugActionList("library_widgets", l->createActions(actionCollection()));
+	l = new KFormDesigner::WidgetLibrary();
 
-
-	//setXML(l->createXML(), true);
-
-//	l->createActions(actionCollection(), toolBar("widgets"));
-
-	QWorkspace *w = new QWorkspace(this);
+	w = new QWorkspace(this);
 	setCentralWidget(w);
 	w->show();
 
-	KFormDesigner::ObjectPropertyBuffer *buff = new KFormDesigner::ObjectPropertyBuffer(this, 0);
+	buff = new KFormDesigner::ObjectPropertyBuffer(this, 0);
 	KexiPropertyEditor *editor = new KexiPropertyEditor(0, true, 0);
 	buff->setList(editor);
 
@@ -58,6 +53,7 @@ KFMView::KFMView()
 
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), this, SLOT(debugTree()), actionCollection(), "dtree");
 	KStdAction::save(m_form, SLOT(saveForm()), actionCollection());
+	KStdAction::open(this, SLOT(loadForm()), actionCollection());
 
 
 	m_form->createActions(actionCollection());
@@ -71,15 +67,16 @@ KFMView::KFMView()
 }
 
 void
-KFMView::slotWidget()
-{
-	kdDebug() << "KFMView::slotWidget()" << endl;
-}
-
-void
 KFMView::debugTree()
 {
 	m_form->objectTree()->debug();
+}
+
+void
+KFMView::loadForm()
+{
+	m_form = new KFormDesigner::Form(this, "form2", l, buff);
+	KFormDesigner::FormIO::loadForm(m_form, w);
 }
 
 KFMView::~KFMView()
