@@ -323,7 +323,7 @@ bool KSpreadMap::movePythonCodeToFile()
     util_testDir( "/share/apps" );
     util_testDir( "/share/apps/kspread" );
     util_testDir( "/share/apps/kspread/tmp" );
-    m_strPythonCodeFile.sprintf( "%s/share/apps/kspread/tmp/script%i", 
+    m_strPythonCodeFile.sprintf( "%s/share/apps/kspread/tmp/script%i.py", 
                                  kapp->localkdedir().data(), time( 0L ) );
     
     FILE *f = fopen( m_strPythonCodeFile, "w" );
