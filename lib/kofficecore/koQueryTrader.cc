@@ -31,7 +31,7 @@
 #include <opApplication.h>
 #include <k2config.h>
 #include <kglobal.h>
-#include <kiconloader.h>
+#include <kstddirs.h>
 #include <kded_instance.h>
 #include <ktrader.h>
 #include <kactivator.h>
@@ -70,8 +70,17 @@ KoComponentEntry koParseComponentProperties( KTrader::ServicePtr service )
   e.comment = service->comment();
   e.exec = service->CORBAExec();
   e.activationMode = service->activationMode();
-//  e.miniIcon = ICON( service->miniIcon() );
-  e.icon = ICON( service->icon() );
+
+  QStringList lst = KGlobal::dirs()->getResourceDirs("icon");
+  QStringList::ConstIterator it = lst.begin();
+  while (!e.icon.load( *it + "/" + service->icon() ) && it != lst.end() )
+    it++;
+  
+  lst = KGlobal::dirs()->getResourceDirs("mini");
+  it = lst.begin();
+  while (!e.miniIcon.load( *it + "/" + service->icon() ) && it != lst.end() )
+    it++;
+  
   e.repoID = service->repoIds();
 
   return e;
@@ -90,16 +99,7 @@ vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
   KTrader *trader = KdedInstance::self()->ktrader();
   KActivator *activator = KdedInstance::self()->kactivator();
 
-  cerr << "querying for KoDoc with constr " << _constr << endl;
-
   KTrader::OfferList offers = trader->query( "KOfficeDocument", _constr );
-
-  // DEBUG
-  if ( offers.count() != 0 )
-    cout << "Got " <<  offers.count() << " results" << endl;
-  else
-    kdebug( KDEBUG_INFO, 30003, "Got no results" );
-  // END DEBUG
 
   lst.reserve( offers.count() );
   
@@ -167,13 +167,6 @@ vector<KoFilterEntry> koQueryFilters( const char *_constr, int _count )
 
   KTrader::OfferList offers = trader->query( "KOfficeFilter", _constr );
   
-  // DEBUG
-  if ( offers.count() != 0 )
-    cout << "Got " <<  offers.count() << " results" << endl;
-  else
-    kdebug( KDEBUG_INFO, 30003, "Got no results" );
-  // END DEBUG
-
   lst.reserve( offers.count() );
   
   KTrader::OfferList::ConstIterator it = offers.begin();
