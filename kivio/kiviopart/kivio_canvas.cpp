@@ -197,11 +197,11 @@ void KivioCanvas::wheelEvent( QWheelEvent* ev )
   //QPoint p = ev->pos();
   if( (ev->delta()>0))
   {
-     m_pVertScrollBar->subtractPage();
+     m_pVertScrollBar->setValue(m_pVertScrollBar->value() - 30);
   }
   else
   {
-     m_pVertScrollBar->addPage();
+     m_pVertScrollBar->setValue(m_pVertScrollBar->value() + 30);
   }
 }
 
