@@ -45,7 +45,8 @@
 KexiTableImportForm::KexiTableImportForm(KexiFilterManager *filterManager,KexiImportWizard *wiz,
 		const QString& dialogFilter, QMap<QString,QString> mimePluginMapping):
 	KexiImportWizardFormBase(),m_filterManager(filterManager),m_dialogFilter(dialogFilter),
-	m_mimePluginMapping(mimePluginMapping), m_filter(0),m_initializing(true),m_insertingPages(false) {
+	m_mimePluginMapping(mimePluginMapping), m_filter(0),m_initializing(true),m_insertingPages(false),
+	m_deleting(false) {
 	
 	QVBoxLayout *layout=(new QVBoxLayout(openFilePage));
 	layout->setAutoAdd(false);
@@ -68,6 +69,8 @@ KexiTableImportForm::KexiTableImportForm(KexiFilterManager *filterManager,KexiIm
 }
 
 KexiTableImportForm::~KexiTableImportForm() {
+	m_deleting=true;
+	delete m_filter;
 	kdDebug()<<"KexiTableImportForm:~KexiTableIImportForm"<<endl;
 }
 
@@ -171,6 +174,7 @@ void KexiTableImportForm::pageSelected(const QString &) {
 	
 	kdDebug()<<"KexiTableImportForm::pageSelection"<<endl;
 	if (m_insertingPages) return;
+	if (m_deleting) return;
 	if (m_previousPage==currentPage()) return;
 	if (m_sourceWidgets.containsRef(m_previousPage) ||
 		m_sourceWidgets.containsRef(currentPage())) {

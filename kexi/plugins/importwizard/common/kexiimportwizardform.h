@@ -48,6 +48,7 @@ private:
 	QWidget *m_openWidget;
 	bool m_initializing;
 	bool m_insertingPages;
+	bool m_deleting;
 	QPtrList<QWidget> m_sourceWidgets;
 
 	void initDestChoice();
