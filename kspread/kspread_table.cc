@@ -4994,7 +4994,7 @@ void KSpreadTable::update()
   {
       if ( c->isFormula() )
           c->makeFormula();
-      if ( c->calcDirtyFlag() )
+      //if ( c->calcDirtyFlag() )
           c->update();
   }
 }
@@ -5377,6 +5377,17 @@ bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
     return TRUE;
 }
 
+
+void KSpreadTable::updateLocale()
+{
+  KSpreadCell* c = m_cells.firstCell();
+  for( ;c; c = c->nextCell() )
+  {
+      QString _text = c->text();
+      c->setDisplayText( _text, false/* no recalc deps for each, done independently */ );
+  }
+  recalc(true);
+}
 
 #ifndef NDEBUG
 void KSpreadTable::printDebug()

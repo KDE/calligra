@@ -76,3 +76,26 @@ QDomElement KSpreadLocale::save( QDomDocument& doc ) const
 
     return element;
 }
+
+void KSpreadLocale::defaultSystemConfig( )
+{
+    KLocale locale("kspread");
+    setWeekStartsMonday( locale.weekStartsMonday());
+    setDecimalSymbol( locale.decimalSymbol());
+    setThousandsSeparator( locale.thousandsSeparator() );
+    setCurrencySymbol( locale.currencySymbol() );
+    setMonetaryDecimalSymbol( locale.monetaryDecimalSymbol() );
+    setMonetaryThousandsSeparator( locale.monetaryThousandsSeparator());
+    setPositiveSign( locale.positiveSign() );
+    setNegativeSign( locale.negativeSign() );
+    setFracDigits( locale.fracDigits() );
+    setPositivePrefixCurrencySymbol( locale.positivePrefixCurrencySymbol() );
+    setNegativePrefixCurrencySymbol( locale.negativePrefixCurrencySymbol() );
+    setPositiveMonetarySignPosition( locale.positiveMonetarySignPosition() );
+    setNegativeMonetarySignPosition( locale.negativeMonetarySignPosition() );
+    setTimeFormat( locale.timeFormat() );
+    setDateFormat( locale.dateFormat() );
+    setDateFormatShort( locale.dateFormatShort() );
+
+}
+

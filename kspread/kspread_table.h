@@ -843,6 +843,8 @@ public:
     const QBrush& emptyBrush() const { return m_emptyBrush; }
     const QColor& emptyColor() const { return m_emptyColor; }
 
+    void updateLocale();
+
 private slots:
 
     void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );

@@ -13,6 +13,7 @@ public:
     
     void load( const QDomElement& element );
     QDomElement save( QDomDocument& doc ) const;
+    void defaultSystemConfig();
 };
 
 #endif

@@ -3546,7 +3546,7 @@ void KSpreadCell::update()
 
     updateDepending();
 
-    if ( !b_update_begin && m_bDisplayDirtyFlag )
+    if ( /*!b_update_begin &&*/ m_bDisplayDirtyFlag )
         m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 

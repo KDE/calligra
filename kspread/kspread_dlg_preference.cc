@@ -46,7 +46,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
   QVBox *page2=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
-  parameterLocale *_ParamLocal=new parameterLocale(parent,page2 );
+ _localePage=new parameterLocale(parent,page2 );
 
   QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
   _configure = new  configure(parent,page3 );
@@ -74,6 +74,7 @@ void KSpreadpreference::slotApply()
   _colorParameter->apply();
   _layoutPage->apply();
   _spellPage->apply();
+  _localePage->apply();
   m_pView->doc()->refreshInterface();
 }
 
@@ -188,6 +189,8 @@ void preference::apply()
 parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
+    m_pView = _view;
+    m_bUpdateLocale=false;
   QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Parameters"));
 
@@ -195,27 +198,50 @@ parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
   lay1->addSpacing( 10 );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
+  KLocale* locale=_view->doc()->locale();
 
-  QLabel *label=new QLabel( tmpQGroupBox,"label");
-  label->setText( i18n("Language: %1").arg( _view->doc()->locale()->language() ));
-  lay1->addWidget(label);
-  label=new QLabel( tmpQGroupBox,"label6");
-  label->setText( i18n("Number: %1").arg( _view->doc()->locale()->formatNumber(12.55) ));
-  lay1->addWidget(label);
-  label=new QLabel( tmpQGroupBox,"label1");
-  label->setText( i18n("Date: %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23)) ));
-  lay1->addWidget(label);
-  label=new QLabel( tmpQGroupBox,"label5");
-  label->setText( i18n("Short date: %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23),true) ));
-  lay1->addWidget(label);
-  label=new QLabel( tmpQGroupBox,"label2");
-  label->setText( i18n("Time: %1").arg( _view->doc()->locale()->formatTime(QTime(15,10,53)) ));
-  lay1->addWidget(label);
-  label=new QLabel( tmpQGroupBox,"label3");
-  label->setText( i18n("Money: %1").arg( _view->doc()->locale()->formatMoney(12.55) ));
-  lay1->addWidget(label);
+  m_language=new QLabel( tmpQGroupBox,"label");
+  m_language->setText( i18n("Language: %1").arg( locale->language() ));
+  lay1->addWidget(m_language);
+  m_number=new QLabel( tmpQGroupBox,"label6");
+  m_number->setText( i18n("Number: %1").arg( locale->formatNumber(12.55) ));
+  lay1->addWidget(m_number);
+  m_date=new QLabel( tmpQGroupBox,"label1");
+  m_date->setText( i18n("Date: %1").arg( locale->formatDate(QDate(2000,10,23)) ));
+  lay1->addWidget(m_date);
+  m_shortDate=new QLabel( tmpQGroupBox,"label5");
+  m_shortDate->setText( i18n("Short date: %1").arg( locale->formatDate(QDate(2000,10,23),true) ));
+  lay1->addWidget(m_shortDate);
+  m_time=new QLabel( tmpQGroupBox,"label2");
+  m_time->setText( i18n("Time: %1").arg( locale->formatTime(QTime(15,10,53)) ));
+  lay1->addWidget(m_time);
+  m_money=new QLabel( tmpQGroupBox,"label3");
+  m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
+  lay1->addWidget(m_money);
+
+  m_updateButton=new QPushButton ( i18n("Update to locale system"), tmpQGroupBox);
+  lay1->addWidget(m_updateButton);
+  connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
 
+void parameterLocale::apply()
+{
+    if (m_bUpdateLocale)
+        m_pView->doc()->refreshLocale();
+}
+
+void parameterLocale::updateDefaultSystemConfig()
+{
+    m_bUpdateLocale=true;
+    static_cast<KSpreadLocale*>(m_pView->doc()->locale())->defaultSystemConfig( );
+    KLocale* locale=m_pView->doc()->locale();
+    m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
+    m_time->setText( i18n("Time: %1").arg( locale->formatTime(QTime(15,10,53)) ));
+    m_shortDate->setText( i18n("Short date: %1").arg( locale->formatDate(QDate(2000,10,23),true) ));
+    m_date->setText( i18n("Date: %1").arg( locale->formatDate(QDate(2000,10,23)) ));
+    m_number->setText( i18n("Number: %1").arg( locale->formatNumber(12.55) ));
+    m_language->setText( i18n("Language: %1").arg( locale->language() ));
+}
 
 configure::configure( KSpreadView* _view, QVBox *box , char *name )
  :QObject ( box->parent(),name)

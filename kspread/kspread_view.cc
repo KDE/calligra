@@ -194,6 +194,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( slotRefreshLocale()));
+
     // Handler for moving and resizing embedded parts
     ContainerHandler* h = new ContainerHandler( this, m_pCanvas );
     connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
@@ -563,6 +565,16 @@ void KSpreadView::RecalcWorkBook(){
 
     //    slotUpdateView( activeTable() );
 
+}
+
+void KSpreadView::slotRefreshLocale()
+{
+    kdDebug()<<"KSpreadView::slotRefreshLocale()***************\n";
+    KSpreadTable *tbl;
+    for ( tbl = m_pDoc->map()->firstTable();
+	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
+      tbl->updateLocale();
+    }
 }
 
 void KSpreadView::RecalcWorkSheet(){

@@ -341,6 +341,7 @@ public:
   void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
 
   void initConfig();
+  void refreshLocale();
 
 public slots:
   /**
@@ -368,7 +369,10 @@ signals:
   *  Emitted if all interfaces have to be updated.
   */
   void sig_refreshView();
-
+  /** 
+   * Emitted if we update to locale system
+   */
+  void sig_refreshLocale();
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
 

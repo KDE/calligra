@@ -366,7 +366,7 @@ public slots:
     void slotTableRemoved( KSpreadTable*_table );
     void slotTableActivated( KSpreadTable* table );
     void slotRefreshView( );
-
+    void slotRefreshLocale();
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;

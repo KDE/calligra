@@ -947,6 +947,10 @@ void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setClient(_kspell.client());
 }
 
+void KSpreadDoc::refreshLocale()
+{
+    emit sig_refreshLocale();
+}
 
 #include "kspread_doc.moc"
 

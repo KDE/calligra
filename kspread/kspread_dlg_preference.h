@@ -31,6 +31,7 @@ class KDoubleNumInput;
 class KSpellConfig;
 class QCheckBox;
 class QComboBox;
+class QPushButton;
 
 
 class preference : public QObject
@@ -54,8 +55,17 @@ protected:
 
 class parameterLocale :  public QObject
 {
+ Q_OBJECT
 public:
    parameterLocale( KSpreadView* _view,QVBox *box, char *name = 0);
+ void apply();
+public slots:
+   void updateDefaultSystemConfig();
+ protected:
+   QLabel *m_shortDate,*m_time,*m_money,*m_date,*m_language,*m_number;
+   QPushButton *m_updateButton;
+   KSpreadView* m_pView;	
+   bool m_bUpdateLocale;
 };
 
 class configure : public QObject
@@ -171,6 +181,7 @@ private :
   colorParameters *_colorParameter;
   configureLayoutPage *_layoutPage;
   configureSpellPage *_spellPage;
+  parameterLocale *_localePage;
 };
 
 
