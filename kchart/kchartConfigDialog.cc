@@ -26,8 +26,10 @@
 #include <kdebug.h>
 
 #include <qradiobutton.h>
+#include <qbrush.h>
 
 #include "kdchart/KDChartParams.h"
+#include "kdchart/KDFrame.h"
 
 KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
 					QWidget* parent,KoChart::Data *dat ) :
@@ -119,8 +121,38 @@ void KChartConfigDialog::apply()
 
     // color page
 
+    // background color
+    const QColor backColor( _colorpage->backgroundColor() );
+    //
+    // temp. hack: the background is removed if set to 230,222,222.
+    //
+    //             For KOffice 1.2 this is to be removed by a checkbox.
+    //                                                (khz, 10.12.2001)
+    if( 230 == backColor.red() && 222 == backColor.green() && 222 == backColor.blue() ){
+        bool bFound; 
+        const KDChartParams::KDChartFrameSettings * innerFrame =
+            _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
+        if( bFound ) {
+            KDFrame& frame( (KDFrame&)innerFrame->frame() );
+            frame.setBackground();
+        }
+    }
+    else
+        _params->setSimpleFrame( KDChartEnums::AreaInnermost,
+                                 0,0,  0,0,
+                             true,
+                             true,
+                             KDFrame::FrameFlat,
+                             1,
+                             0,
+                             QPen( Qt::NoPen ),
+                             QBrush( _colorpage->backgroundColor() ) );
+/*
+                             &pixUSD,
+                             KDFrame::PixStretched ); // enum: PixCentered, PixScaled, PixStretched
+*/
+
     // PENDING(kalle) Replace with equivalents
-    //     _params->BGColor = _colorpage->backgroundColor();
     //     _params->PlotColor = _colorpage->plotColor();
     //_params->EdgeColor = _colorpage->edgeColor();
     //     _params->VolColor = _colorpage->volColor();
@@ -199,6 +231,24 @@ void KChartConfigDialog::defaults()
       _params->headerFooterColor( KDChartParams::HdFtPosHeader2 ) );
     _colorpage->setHdFtColor(     KDChartParams::HdFtPosFooter,
       _params->headerFooterColor( KDChartParams::HdFtPosFooter ) );
+
+    bool bFound; 
+    const KDChartParams::KDChartFrameSettings * innerFrame =
+      _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
+    if( bFound )
+    {
+         const QPixmap* backPixmap;
+         KDFrame::BackPixmapMode backPixmapMode;
+         const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
+         if( ! backPixmap || backPixmap->isNull() ) {
+            _colorpage->setBackgroundColor( background.color() );
+         }
+         // pending KHZ
+         // else
+         //     ..  // set the background pixmap
+    }
+    else
+        _colorpage->setBackgroundColor( QColor(230, 222, 222) );
 
     _colorpage->setLineColor( _params->outlineDataColor() );
     KDChartAxisParams leftparams( _params->axisParams( KDChartAxisParams::AxisPosLeft ) );

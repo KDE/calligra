@@ -203,7 +203,6 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
         _plotCB->setEnabled(false);
         _volCB->setEnabled(false);
 
-        _backgroundCB->setEnabled(false);
 
 
 
