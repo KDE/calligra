@@ -20,7 +20,7 @@ class Report : public KMainWindow
 	Q_OBJECT
   
 public:
-	Report(); 
+	Report(QWidget* parent=0, const char* name=0); 
 	~Report();
 
 	void renderReport();
@@ -38,6 +38,11 @@ private slots:
   
 private:
 	KReportViewer *rptviewer;	// The viewer widget.
+	
+	KAction *goFirstPage;
+	KAction *goPriorPage;
+	KAction *goNextPage;
+	KAction *goLastPage;
 };
 
 #endif 

@@ -23,7 +23,8 @@
 
 // The ctor.
 
-Report::Report() : KMainWindow(0L)
+Report::Report(QWidget* parent, const char* name)
+	:KMainWindow(0, name)
 {
 	// Create the viewer widget.
 
@@ -39,10 +40,10 @@ Report::Report() : KMainWindow(0L)
 	KStdAction::print(this,SLOT(slotPrint()),actionCollection());
 	KStdAction::quit(this,SLOT(slotFileQuit()),actionCollection());
 
-	KStdAction::firstPage(rptviewer,SLOT(slotFirstPage()),actionCollection());
-	KStdAction::prior(rptviewer,SLOT(slotPrevPage()),actionCollection());
-	KStdAction::next(rptviewer,SLOT(slotNextPage()),actionCollection());
-	KStdAction::lastPage(rptviewer,SLOT(slotLastPage()),actionCollection());
+	goFirstPage = KStdAction::firstPage(rptviewer,SLOT(slotFirstPage()),actionCollection());
+	goPriorPage = KStdAction::prior(rptviewer,SLOT(slotPrevPage()),actionCollection());
+	goNextPage = KStdAction::next(rptviewer,SLOT(slotNextPage()),actionCollection());
+	goLastPage = KStdAction::lastPage(rptviewer,SLOT(slotLastPage()),actionCollection());
 	
 //	KStdAction::home(rptviewer,SLOT(slotFirstPage()),actionCollection());
 

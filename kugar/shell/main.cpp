@@ -61,7 +61,11 @@ int main(int argc,char **argv)
 	opt = args -> getOption("r");
 
 	if (!opt.isNull())
+	{
+	    if (opt.find('/') == -1)
+		opt.prepend("./");
 		report->setReportTemplate(opt);
+	}
 
 	args -> clear();
 
