@@ -79,7 +79,7 @@ public:
   void setKind (GPolygon::Kind k);
   GPolygon::Kind getKind () { return kind; }
 
-  virtual GPolyline* splitAt (unsigned int idx);
+  virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);
 
 protected:
   void calcBoundingBox ();

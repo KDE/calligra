@@ -76,6 +76,8 @@ public:
   virtual bool intersects (const Rect& r);
   virtual const Rect& redrawBox () const { return rbox; }
 
+  virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);
+
 protected:
   void calcBoundingBox ();
 

@@ -559,8 +559,9 @@ bool GPolygon::isValid () {
     return false;
 }
 
-GPolyline* GPolygon::splitAt (unsigned int idx) {
-  // create and return a new line starting with point at #idx
+bool GPolygon::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
+  bool result = false;
+
   if (idx >= 0 && idx < points.count ()) {
     GPolyline* other = new GPolyline (* ((GPolyline *) this));
     other->removeAllPoints ();
@@ -571,8 +572,10 @@ GPolyline* GPolygon::splitAt (unsigned int idx) {
       other->_addPoint (other->numOfPoints (), *points.at (i));
 
     other->calcBoundingBox ();
-    return other;
+    obj1 = other;
+    obj2 = 0L;
+    result = true;
   }
-  return 0L;
+  return result;
 }
 

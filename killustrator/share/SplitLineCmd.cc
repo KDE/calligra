@@ -28,50 +28,40 @@ SplitLineCmd::SplitLineCmd (GDocument* doc, GPolyline* o, int idx)
   : Command(i18n("Split Line"))
 {
   document = doc;
-  obj1 = o;
-  obj1->ref ();
-  obj2 = 0L;
+  obj = o;
+  obj->ref ();
+  obj1 = obj2 = 0L;
   index = idx;
+  pos = 0;
 }
 
 SplitLineCmd::~SplitLineCmd () {
-  obj1->unref ();
-  if (obj2)
-    obj2->unref ();
+  obj->unref ();
+  if (obj1) obj1->unref ();
+  if (obj2) obj2->unref ();
 }
 
 void SplitLineCmd::execute () {
-  if (obj2)
-    obj2->unref ();
+  if (obj1) obj1->unref ();
+  if (obj2) obj2->unref ();
+  obj1 = obj2 = 0L;
 
-  obj2 = obj1->splitAt (index);
-  if (! obj2)
-    return;
-
-  if (obj1->isA ("GPolygon")) {
-    // we have splitted a polygon -> replace the current object
-    unsigned pos = document->findIndexOfObject (obj1);
-    document->deleteObject (obj1);
-    document->insertObjectAtIndex (obj2, pos);
-    document->selectObject (obj2);
-  }
-  else {
-    obj2->ref ();
-    unsigned pos = document->findIndexOfObject (obj1);
-    document->insertObjectAtIndex (obj2, pos + 1);
-    document->selectObject (obj2);
+  if (obj->splitAt (index, obj1, obj2)) {
+    pos = document->findIndexOfObject (obj);
+    document->deleteObject (obj);
+    document->unselectAllObjects ();
+    document->insertObjectAtIndex (obj1, pos);
+    document->selectObject (obj1);
+    if (obj2) {
+      document->insertObjectAtIndex (obj2, pos + 1);
+      document->selectObject (obj2);
+    }
   }
 }
 
 void SplitLineCmd::unexecute () {
-  if (obj1->isA ("GPolygon")) {
-    unsigned pos = document->findIndexOfObject (obj2);
-    document->deleteObject (obj2);
-    document->insertObjectAtIndex (obj1, pos);
-    document->selectObject (obj1);
-  }
-  else if (obj2) {
-    obj1->joinWith (obj2);
-    document->deleteObject (obj2);
-  }
+  if (obj1) document->deleteObject (obj1);
+  if (obj2) document->deleteObject (obj2);
+  document->insertObjectAtIndex (obj, pos);
+  document->selectObject (obj);
 }

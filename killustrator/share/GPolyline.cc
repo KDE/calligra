@@ -472,32 +472,23 @@ void GPolyline::removeAllPoints () {
   points.clear ();
 }
 
-GPolyline* GPolyline::splitAt (unsigned int idx) {
-  // create and return a new line starting with point at #idx
+bool GPolyline::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
+  bool result = false;
+
   if (idx > 0 && idx < points.count ()) {
-    GPolyline* other = (GPolyline *) this->copy ();
+    GPolyline* other1 = (GPolyline *) this->copy ();
     unsigned int i, num = points.count ();
     for (i = idx + 1; i < num; i++) 
-      points.remove (idx + 1);
-    updateRegion (true);
+      other1->points.remove (idx + 1);
+    other1->calcBoundingBox ();
 
+    GPolyline* other2 = (GPolyline *) this->copy ();
     for (i = 0; i < idx; i++)
-      other->points.remove ((unsigned int) 0);
-    other->calcBoundingBox ();
-    return other;
+      other2->points.remove ((unsigned int) 0);
+    other2->calcBoundingBox ();
+    result = true;
+    obj1 = other1;
+    obj2 = other2;
   }
-  return 0L;
-}
-
-// This is not a general line join routine. Instead it combines
-// both lines at the last point of "this" and the first point of 
-// "other".
-void GPolyline::joinWith (GPolyline* other) {
-  if (other->isA ("GPolyline")) {
-    for (unsigned int i = 1; i < other->points.count (); i++) {
-      const Coord* pi = other->points.at (i);
-      addPoint (points.count (), pi->transform (other->tMatrix), false);
-    }
-    updateRegion (true);
-  }
+  return result;
 }

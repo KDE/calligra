@@ -40,7 +40,9 @@ public:
 
 private:
   GDocument* document;
-  GPolyline *obj1, *obj2;
+  GPolyline *obj; 
+  GObject *obj1, *obj2;
+  unsigned int pos;
   int index;
 };
 

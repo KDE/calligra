@@ -32,7 +32,7 @@
 #include <kiconloader.h>
 #include "version.h"
 
-#define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998\n\
+#define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998-99\n\
 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\n\
 Contributions by\n\
 Steffen Thorhauer, Stefan Taferner\n\

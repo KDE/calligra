@@ -657,3 +657,39 @@ bool GBezier::intersects (const Rect& r) {
   //  return GObject::intersects (r);
 }
 
+bool GBezier::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
+  bool result = false;
+
+  if (isEndPoint (idx)) {
+    if (closed) {
+      GBezier* other = new GBezier (*this);
+      other->closed = false;
+      other->removeAllPoints ();
+      unsigned int i, num = points.count ();
+      for (i = idx - 1; i < num; i++) 
+	other->points.append (new Coord (*points.at (i)));
+      for (i = 0; i <= idx + 1; i++)
+	other->points.append (new Coord (*points.at (i)));
+      other->calcBoundingBox ();
+      result = true;
+      obj1 = other;
+      obj2 = 0L;
+    }
+    else if (idx > 1 && idx < points.count () - 1) {
+      GBezier* other1 = (GBezier *) this->copy ();
+      unsigned int i, num = points.count ();
+      for (i = idx + 2; i < num; i++) 
+	other1->points.remove (idx + 2);
+      other1->calcBoundingBox ();
+      
+      GBezier* other2 = (GBezier *) this->copy ();
+      for (i = 0; i < idx - 1; i++)
+	other2->points.remove ((unsigned int) 0);
+      other2->calcBoundingBox ();
+      result = true;
+      obj1 = other1;
+      obj2 = other2;
+    }
+  }
+  return result;
+}

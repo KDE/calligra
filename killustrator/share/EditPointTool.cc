@@ -210,9 +210,17 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     }
     else if (mode == Split) {
       if (pointIdx != -1) {
-	GPolyline *pline = (GPolyline *) obj;
-	SplitLineCmd *cmd = new SplitLineCmd (doc, pline, pointIdx);
-	history->addCommand (cmd, true);
+	bool removable = true;
+
+	if (obj->isA ("GBezier"))
+	  // we cannot remove control points of bezier curves
+	  removable = ((GBezier *) obj)->isEndPoint (pointIdx);
+
+	if (removable) {
+	  GPolyline *pline = (GPolyline *) obj;
+	  SplitLineCmd *cmd = new SplitLineCmd (doc, pline, pointIdx);
+	  history->addCommand (cmd, true);
+	}
       }
     }
 

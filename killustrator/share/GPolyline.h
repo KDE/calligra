@@ -81,8 +81,8 @@ public:
 
   virtual void getPath (vector<Coord>& path);
 
-  virtual GPolyline* splitAt (unsigned int idx);
-  virtual void joinWith (GPolyline* other);
+  virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);
+
   void calcBoundingBox ();
 
 protected:
