@@ -183,6 +183,37 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
         strElement+="; ";
     }
 
+    if (force || (formatOrigin.fontAttribute!=formatData.fontAttribute))
+    {
+        bool smallcaps=false;
+        strElement+="text-transform: ";
+        if ( formatData.fontAttribute=="uppercase" )
+        {
+            strElement+="uppercase";
+        }
+        else if ( formatData.fontAttribute=="lowercase" )
+        {
+            strElement+="lowercase";
+        }
+        else if ( formatData.fontAttribute=="smallcaps" )
+        {
+            strElement+="none";
+            smallcaps=true;
+        }
+        else
+        {
+            strElement+="none";
+        }
+        strElement+="; ";
+        // ### TODO: mostly issuing font-variant is not necessary.
+        strElement+="font-variant:";
+        if (smallcaps)
+            strElement+="small-caps";
+        else
+            strElement+="none";
+        strElement+="; ";
+    }
+
     // TODO: As this is the last property, do not put a semi-colon
 
     return strElement;
