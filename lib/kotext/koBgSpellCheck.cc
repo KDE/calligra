@@ -54,19 +54,22 @@ void KoBgSpellCheck::enableBackgroundSpellCheck( bool b )
 
 void KoBgSpellCheck::setIgnoreUpperWords( bool b)
 {
+    stopSpellChecking();
     m_bDontCheckUpperWord = b;
+    startBackgroundSpellCheck();
 }
 
 void KoBgSpellCheck::setIgnoreTitleCase( bool b)
 {
+    stopSpellChecking();
     m_bDontCheckTitleCase = b;
+    startBackgroundSpellCheck();
 }
 
 void KoBgSpellCheck::addIgnoreWordAll( const QString & word)
 {
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
-    m_spellListIgnoreAll.clear();
     stopSpellChecking();
     spellConfig()->setIgnoreList( m_spellListIgnoreAll );
     startBackgroundSpellCheck();
@@ -83,7 +86,7 @@ void KoBgSpellCheck::addIgnoreWordAllList( const QStringList & list)
 void KoBgSpellCheck::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
-    startBackgroundSpellCheck();
+    stopSpellChecking();
     spellConfig()->setIgnoreList( m_spellListIgnoreAll );
     startBackgroundSpellCheck();
 }

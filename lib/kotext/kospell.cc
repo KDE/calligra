@@ -432,16 +432,19 @@ void KoSpell::check2(KProcIO *)
         int pos=0;
         QString word;
         Spelling spelling = parseLine(line, word, pos);
-        if(d->m_bIgnoreTitleCase && word==word.upper())
-            spelling=SpellingDone;
-        if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
+        if(word.length()>1 && d->m_bIgnoreTitleCase && word==word.upper())
+        {
+            spelling=SpellingIgnore;
+        }
+
+        if(word.length()>1 && d->m_bIgnoreUpperWords && word[0]==word[0].upper())
         {
             QString text=word[0]+word.right(word.length()-1).lower();
             if(text==word)
-                spelling=SpellingDone;
+                spelling=SpellingIgnore;
         }
         if (ignorelist.findIndex(word.lower())!=-1)
-            spelling=SpellingDone;
+            spelling=SpellingIgnore;
 
         switch(spelling)
         {
@@ -472,7 +475,8 @@ void KoSpell::check2(KProcIO *)
             m_buffer.pop_front();
             emit done();
             break;
-
+        case SpellingIgnore:
+            break;
         default:
             kdDebug() << "KoSpell::check2() ERROR" << endl;
             break;
@@ -491,7 +495,7 @@ KoSpell:: ~KoSpell ()
 
 KSpellConfig KoSpell::ksConfig () const
 {
-    //ksconfig->setIgnoreList(ignorelist);
+    ksconfig->setIgnoreList(ignorelist);
   return *ksconfig;
 }
 
