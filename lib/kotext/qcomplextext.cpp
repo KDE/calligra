@@ -761,12 +761,12 @@ QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str, in
 
 // transforms one line of the paragraph to visual order
 // the caller is responisble to delete the returned list of QTextRuns.
-QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QString &text, int start, int len )
+QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QString &text, int start, int len )
 {
     int last = start + len - 1;
     //printf("doing BiDi reordering from %d to %d!\n", start, last);
 
-    QList<QTextRun> *runs = new QList<QTextRun>;
+    QPtrList<QTextRun> *runs = new QPtrList<QTextRun>;
     runs->setAutoDelete(TRUE);
 
     QBidiContext *context = control->context;
@@ -1208,7 +1208,7 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 #ifdef BIDI_DEBUG
     cout << "reorderLine: lineLow = " << (uint)levelLow << ", lineHigh = " << (uint)levelHigh << endl;
     cout << "logical order is:" << endl;
-    QListIterator<QTextRun> it2(*runs);
+    QPtrListIterator<QTextRun> it2(*runs);
     QTextRun *r2;
     for ( ; (r2 = it2.current()); ++it2 )
 	cout << "    " << r2 << "  start=" << r2->start << "  stop=" << r2->stop << "  level=" << (uint)r2->level << endl;
@@ -1245,7 +1245,7 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 
 #ifdef BIDI_DEBUG
     cout << "visual order is:" << endl;
-    QListIterator<QTextRun> it3(*runs);
+    QPtrListIterator<QTextRun> it3(*runs);
     QTextRun *r3;
     for ( ; (r3 = it3.current()); ++it3 )
     {
@@ -1277,7 +1277,7 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
 	    ch++;
 	    lineEnd++;
 	}
-	QList<QTextRun> *runs = bidiReorderLine( control, str, lineStart, lineEnd - lineStart );
+	QPtrList<QTextRun> *runs = bidiReorderLine( control, str, lineStart, lineEnd - lineStart );
 
 	// reorder the content of the line, and output to visual
 	QTextRun *r = runs->first();

@@ -650,7 +650,7 @@ void KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
     }
 
     //resize all variables after applying the style
-    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+    QPtrListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
         static_cast<KoTextCustomItem *>( cit.current() )->resize();
 

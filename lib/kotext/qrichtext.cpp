@@ -6776,7 +6776,7 @@ void QTextTable::adjustToPainter( QPainter* p)
 
 void QTextTable::adjustCells( int y , int shift )
 {
-    QListIterator<QTextTableCell> it( cells );
+    QPtrListIterator<QTextTableCell> it( cells );
     QTextTableCell* cell;
     bool enlarge = FALSE;
     while ( ( cell = it.current() ) ) {

@@ -51,7 +51,7 @@
 
 #ifndef QT_H
 #include "qstring.h"
-#include "qlist.h"
+#include "qptrlist.h"
 #include "qrect.h"
 #include "qfontmetrics.h"
 #include "qintdict.h"
@@ -67,7 +67,7 @@
 #include "qtextstream.h"
 #include "qpixmap.h"
 #include "qstylesheet.h"
-#include "qvector.h"
+#include "qptrvector.h"
 #include "qpainter.h"
 #include "qlayout.h"
 #include "qobject.h"
@@ -808,7 +808,7 @@ public:
 
     void registerCustomItem( QTextCustomItem *i, QTextParag *p );
     void unregisterCustomItem( QTextCustomItem *i, QTextParag *p );
-    const QList<QTextCustomItem> & allCustomItems() const { return customItems; }
+    const QPtrList<QTextCustomItem> & allCustomItems() const { return customItems; }
 
     void setFlow( QTextFlow *f );
     void takeFlow();
