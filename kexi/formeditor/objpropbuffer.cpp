@@ -25,6 +25,9 @@
 
 #include "objpropbuffer.h"
 #include "kexipropertyeditor.h"
+#include "kexipropertyeditoritem.h"
+
+namespace KFormDesigner {
 
 ObjectPropertyBuffer::ObjectPropertyBuffer(QObject *parent, const char *name)
  : KexiPropertyBuffer(parent, name)
@@ -40,7 +43,7 @@ ObjectPropertyBuffer::changeProperty(const char *property, const QVariant &value
 	KexiPropertyBuffer::changeProperty(property, value);
 	
 	if(qstrcmp(property, "name")==0)
-		emit nameChanged(m_object, value.toString());
+		emit nameChanged(m_object->name(), value.toString());
 
 	if(value.type() == QVariant::StringList)
 	{
@@ -62,10 +65,14 @@ ObjectPropertyBuffer::changeProperty(const char *property, const QVariant &value
 void
 ObjectPropertyBuffer::setObject(QObject *obj)
 {
+	if(obj==m_object)
+		return;
+	if(m_object)
+		m_object->removeEventFilter(this);
+
 	if(m_list)
 		m_list->reset(false);
 	clear();
-	kdDebug() << "setObject " << obj << obj->className() << endl; 
 
 	m_object = obj;
 	QStrList pList = obj->metaObject()->propertyNames(true);
@@ -78,12 +85,13 @@ ObjectPropertyBuffer::setObject(QObject *obj)
 		const QMetaProperty *meta = obj->metaObject()->property(count, true);
 		if(meta->designable(obj))
 		{
+			if(!showProperty(obj, meta->name()))
+				continue;
 			QStrList keys = meta->enumKeys();
 			if(meta->isEnumType())
 			{
 			  if(meta->isSetType())
 			  {
-			  kdDebug() << "creating set property" << endl;
 			  add(KexiProperty(meta->name(), QStringList::fromStrList(meta->valueToKeys(obj->property(meta->name()).toInt()))
 				, QStringList::fromStrList(keys)));
 			  }
@@ -96,7 +104,8 @@ ObjectPropertyBuffer::setObject(QObject *obj)
 	}
 	if(m_list)
 		m_list->setBuffer(this);
-	count = 0;
+		
+	obj->installEventFilter(this);
 }
 
 void
@@ -105,8 +114,53 @@ ObjectPropertyBuffer::setList(KexiPropertyEditor *list)
 	m_list = list;
 }
 
+bool
+ObjectPropertyBuffer::showProperty(QObject *obj, const char *property)
+{
+	QWidget *w = (QWidget*)obj;
+	if(!isTopWidget(w))
+	{
+		QStringList list;
+		list << "caption" << "icon" << "sizeIncrement" << "iconText";
+		if(!(list.grep(property)).isEmpty())
+			return false;
+	}
+	return true;
+}
+
+bool
+ObjectPropertyBuffer::isTopWidget(QWidget *w)
+{
+	return((w->inherits("QDialog"))||(w->inherits("QMainWindow"))); 
+}
+
+bool
+ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
+{
+	if(o==m_object)
+	{
+	if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
+	{
+		if((*this)["geometry"].value() == o->property("geometry")) // to avoid infinite recursion
+			return false;
+
+		(*this)["geometry"].setValue(((QWidget*)o)->geometry());
+		if(m_list)
+		{
+			QListViewItem *it = m_list->findItem("geometry", 0, Qt::ExactMatch);
+			KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
+			item->setValue(((QWidget*)o)->geometry());
+			item->updateChildValue();
+		}
+	}
+	}
+	return false;
+}
+
 ObjectPropertyBuffer::~ObjectPropertyBuffer()
 {
+}
+
 }
 
 #include "objpropbuffer.moc"

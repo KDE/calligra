@@ -9,7 +9,6 @@
  ***************************************************************************/
 
 #include <qworkspace.h>
-#include <qtabwidget.h>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -40,7 +39,7 @@ KFMView::KFMView()
 	setCentralWidget(w);
 	w->show();
 
-	ObjectPropertyBuffer *buff = new ObjectPropertyBuffer(this, 0);
+	KFormDesigner::ObjectPropertyBuffer *buff = new KFormDesigner::ObjectPropertyBuffer(this, 0);
 	KexiPropertyEditor *editor = new KexiPropertyEditor(0, true, 0);
 	buff->setList(editor);
 

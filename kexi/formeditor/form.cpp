@@ -40,6 +40,8 @@ Form::Form(QObject *parent, const char *name, WidgetLibrary *lib, ObjectProperty
 	m_selWidget = 0;
 	m_topTree = new ObjectTree("QWidget", "main", 0);
 	m_buffer = buffer;
+	
+	connect(buffer, SIGNAL(nameChanged(const char*, const QString&)), this, SLOT(changeName(const char*, const QString&)));
 }
 
 void
@@ -106,6 +108,12 @@ Form::setSelectedWidget(QWidget *w)
 	m_selWidget = w;
 	if(w)
 		m_buffer->setObject(w);
+}
+
+void
+Form::changeName(const char *oldname, const QString &newname)
+{
+	m_topTree->rename(oldname, newname);
 }
 
 Form::~Form()

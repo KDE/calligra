@@ -24,6 +24,8 @@
 
 class KexiPropertyEditor;
 
+namespace KFormDesigner {
+
 class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 {
 	Q_OBJECT
@@ -35,15 +37,22 @@ class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void	changeProperty(const char *property, const QVariant &value);
 		void	setObject(QObject *obj);
 		void	setList(KexiPropertyEditor *list);
+		bool    eventFilter(QObject *o, QEvent *ev);
 		
 	signals:
-		void	nameChanged(QObject *obj, const QString &name);
+		void	nameChanged(const char *oldname, const QString &newname);
 		void	propertyChanged(QObject *, const char *property, const QVariant &v);
 
+	protected:
+		bool    isTopWidget(QWidget *w);
+		bool    showProperty(QObject *obj, const char *property);
+	
 	private:
 		QObject		*m_object;
 		KexiPropertyEditor	*m_list;
 };
+
+}
 
 #endif
 

@@ -26,11 +26,11 @@
 #include "widgetlibrary.h"
 
 class QWidget;
-class ObjectPropertyBuffer;
 
 namespace KFormDesigner {
 
 class Container;
+class ObjectPropertyBuffer;
 
 /**
  * This class provides the base for accessing KFormDesigner over an "forign" api
@@ -102,6 +102,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 	public slots:
 		void			insertWidget(const QString &c);
+		void			changeName(const char *oldname, const QString &newname);
 
 	private:
 		Container		*m_toplevel;
