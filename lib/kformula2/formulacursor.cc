@@ -69,9 +69,9 @@ void FormulaCursor::draw(QPainter& painter)
 }
 
 
-void FormulaCursor::handleSelectState(int state)
+void FormulaCursor::handleSelectState(int flag)
 {
-    if (state & SelectMovement) {
+    if (flag & SelectMovement) {
         if (!isSelection()) {
             setMark(getPos());
             setSelection(true);

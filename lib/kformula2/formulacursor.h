@@ -54,9 +54,9 @@ public:
     /**
      * Flag for movement functions.
      * Select means move selecting the text (usually Shift key)
-     * Word means move by whole words  (usuallu Control key)
+     * Word means move by whole words  (usually Control key)
      */
-    enum MoveFlag { SelectMovement = 1, WordMovement = 2  };
+    enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
     
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
@@ -93,13 +93,13 @@ public:
     
     // simple cursor movement.
     
-    void moveLeft(int flag);
-    void moveRight(int flag);
-    void moveUp(int flag);
-    void moveDown(int flag);
+    void moveLeft(int flag = NormalMovement);
+    void moveRight(int flag = NormalMovement);
+    void moveUp(int flag = NormalMovement);
+    void moveDown(int flag = NormalMovement);
 
-    void moveHome(int flag);
-    void moveEnd(int flag);
+    void moveHome(int flag = NormalMovement);
+    void moveEnd(int flag = NormalMovement);
 
     /**
      * Moves the cursor inside the element. Selection is turned off.
@@ -236,7 +236,7 @@ private:
     /**
      * Sets the selection according to the shift key.
      */
-    void handleSelectState(int state);
+    void handleSelectState(int flag);
 
     
     /**
