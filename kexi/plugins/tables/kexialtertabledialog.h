@@ -63,8 +63,9 @@ class KexiAlterTableDialog : public KexiViewBase
 		void initActions();
 
 		/*! Creates a new property buffer for \a field. 
-		 The buffer will be asigned to \a row, and owned by this dialog. */
-		void createPropertyBuffer( int row, KexiDB::Field *field );
+		 The buffer will be asigned to \a row, and owned by this dialog. 
+		 \return newly created property buffer. */
+		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field );
 
 		virtual bool beforeSwitchTo(int mode);
 
@@ -100,8 +101,8 @@ class KexiAlterTableDialog : public KexiViewBase
 		const KexiDB::TableSchema *m_table; //!< original table schema
 		KexiDB::TableSchema *m_newTable; //!< new table schema
 //		KexiPropertyEditor *m_properties;
-		FieldsBuffer m_fields;
-		int m_row;
+		FieldsBuffer m_fields; //!< buffer
+		int m_row; //!< used to know if a new row is selected in slotCellSelected()
 		bool m_dirty : 1;
 };
 

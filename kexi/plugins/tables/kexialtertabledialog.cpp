@@ -45,6 +45,8 @@
 
 #include "kexitableview.h"
 
+#define MAX_FIELDS 101 //nice prime number
+
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema &table, const char *name)
  : KexiViewBase(win, parent, name)
@@ -52,7 +54,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	m_dirty = false;
 	m_table = &table; //orig table
 	m_newTable = new KexiDB::TableSchema(*m_table); //deep copy of the original table
-	m_fields.resize(101);
+	m_fields.resize(MAX_FIELDS);
 	m_row = -99;
 	init();
 }
@@ -102,7 +104,7 @@ void KexiAlterTableDialog::init()
 	}
 
 	//add empty space
-	for (int i=m_newTable->fieldCount(); i<int(m_newTable->fieldCount()+30); i++) {
+	for (int i=m_newTable->fieldCount(); i<MAX_FIELDS; i++) {
 //		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 //		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 //		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
@@ -154,7 +156,7 @@ void KexiAlterTableDialog::init()
 	initActions();
 }
 
-void 
+KexiPropertyBuffer *
 KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 {
 	QString typeName = "KexiDB::Field::" + field->typeGroupString();
@@ -192,6 +194,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 
 	m_fields.insert(row, buff);
+	return buff;
 }
 
 void
@@ -380,7 +383,11 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 		kdDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field->debugString() << endl;
 
 		//create new property buffer:
-		createPropertyBuffer( m_view->currentRow(), field );
+		KexiPropertyBuffer *newbuff = createPropertyBuffer( m_view->currentRow(), field );
+		//add a special property indicating that this is brand new buffer, 
+		//not just old-changed
+		newbuff->add( new KexiProperty("newrow", QVariant()) );
+
 //js TODO:
 		//add this field to the list of new fields
 
