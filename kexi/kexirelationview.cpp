@@ -54,6 +54,8 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelatio
 void
 KexiRelationView::addTable(const QString &table, QStringList columns)
 {
+	kdDebug() << "KexiRelationView::addTable(): " << table << endl;
+
 	if(m_tables.contains(table))
 		return;
 

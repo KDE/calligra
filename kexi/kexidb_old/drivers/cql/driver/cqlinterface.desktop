@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name = cql
+Comment = cql is a slim engine, which is shipped with kexi and can be stored into the projectfile
+X-KDE-Library = kexicqlinterface
+ServiceTypes = KexiDB/Interface
+Type= Service
+InitialPreference=8
+MimeType=text/plain
+X-Kexi-Location = LocalDB
