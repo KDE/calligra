@@ -1327,11 +1327,9 @@ bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node, bool oasisFormat )
 
 
 MathML2KFormula::MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool _oasisFormat )
-    : context( contextStyle )
+    : m_error( false ), origdoc( mmldoc ), context( contextStyle ),  oasisFormat( _oasisFormat )
 {
     done = false;
-    origdoc = mmldoc;
-    oasisFormat = _oasisFormat;
 }
 
 QDomDocument MathML2KFormula::getKFormulaDom()
@@ -1344,16 +1342,19 @@ QDomDocument MathML2KFormula::getKFormulaDom()
 void MathML2KFormula::startConversion()
 {
     //TODO:let it be async
+    //kdDebug() << origdoc.toString() << endl;
     done = false;
     formuladoc = QDomDocument( "KFORMULA" );
     impl = new MathML2KFormulaPrivate( this, context, formuladoc );
     QDomElement element = origdoc.documentElement();
     if ( element.tagName() == "math" ) {
         impl->math( element );
+        m_error = false;
     }
     else {
         kdError() << "Not a MathML document!" << endl;
         KMessageBox::error( 0, i18n( "The document does not seem to be MathML" ), i18n( "MathML Import Error" ) );
+        m_error = true;
     }
     done = true;
 }

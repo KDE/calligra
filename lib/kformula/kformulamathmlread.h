@@ -59,6 +59,10 @@ public:
 public slots:
     virtual void startConversion();
 
+public:
+    /// Has an error happened while converting?
+    bool m_error;
+
 private:
 
     bool processElement( QDomNode node, QDomDocument doc,

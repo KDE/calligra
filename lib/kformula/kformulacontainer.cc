@@ -542,6 +542,9 @@ bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )
     const ContextStyle& context = document()->getContextStyle();
     MathML2KFormula filter( doc, context, oasisFormat );
     filter.startConversion();
+    if (filter.m_error) {
+        return false;
+    }
 
     if ( load( filter.getKFormulaDom().documentElement() ) ) {
         getHistory()->clear();
