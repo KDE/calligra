@@ -547,19 +547,19 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
     // Borders
     if ( context.styleStack().hasAttribute("fo:border","left") )
-        layout.leftBorder = KoBorder::loadFoBorder( context.styleStack().attribute("fo:border","left") );
+        layout.leftBorder.loadFoBorder( context.styleStack().attribute("fo:border","left") );
     else
         layout.leftBorder.setPenWidth(0);
     if ( context.styleStack().hasAttribute("fo:border","right") )
-        layout.rightBorder = KoBorder::loadFoBorder( context.styleStack().attribute("fo:border","right") );
+        layout.rightBorder.loadFoBorder( context.styleStack().attribute("fo:border","right") );
     else
         layout.rightBorder.setPenWidth(0);
     if ( context.styleStack().hasAttribute("fo:border","top") )
-        layout.topBorder = KoBorder::loadFoBorder( context.styleStack().attribute("fo:border","top") );
+        layout.topBorder.loadFoBorder( context.styleStack().attribute("fo:border","top") );
     else
         layout.topBorder.setPenWidth(0);
     if ( context.styleStack().hasAttribute("fo:border","bottom") )
-        layout.bottomBorder = KoBorder::loadFoBorder( context.styleStack().attribute("fo:border","bottom") );
+        layout.bottomBorder.loadFoBorder( context.styleStack().attribute("fo:border","bottom") );
     else
         layout.bottomBorder.setPenWidth(0);
 

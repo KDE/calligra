@@ -25,35 +25,35 @@
 #include "korichtext.h" // for KoTextFormat
 
 KoBorder::KoBorder()
-    : color(), style( SOLID )
+    : color(), m_style( SOLID )
 {
     setPenWidth( 1 );
 }
 
 KoBorder::KoBorder( const QColor & c, BorderStyle s, double width )
-    : color( c ), style( s )
+    : color( c ), m_style( s )
 {
     setPenWidth( width );
 }
 
 bool KoBorder::operator==( const KoBorder _brd ) const {
-    return ( style == _brd.style && color == _brd.color && ptPenWidth == _brd.ptPenWidth );
+    return ( m_style == _brd.m_style && color == _brd.color && ptPenWidth == _brd.ptPenWidth );
 }
 
 bool KoBorder::operator!=( const KoBorder _brd ) const {
-    return ( style != _brd.style || color != _brd.color || ptPenWidth != _brd.ptPenWidth );
+    return ( m_style != _brd.m_style || color != _brd.color || ptPenWidth != _brd.ptPenWidth );
 }
 
 void KoBorder::setStyle(BorderStyle _style)
 {
-    style = _style;
+    m_style = _style;
     setPenWidth(ptPenWidth);
 }
 
 void KoBorder::setPenWidth(double _w)
 {
     ptPenWidth = _w;
-    if ( style==KoBorder::DOUBLE_LINE)
+    if ( m_style==KoBorder::DOUBLE_LINE)
     {
         ptWidth = 2 * ptPenWidth + 1;
     }
@@ -67,7 +67,7 @@ QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor 
     if ( !_brd.color.isValid() )
         pen.setColor( defaultColor );
 
-    switch ( _brd.style ) {
+    switch ( _brd.m_style ) {
     case KoBorder::SOLID:
     case KoBorder::DOUBLE_LINE:
         pen.setStyle( SolidLine );
@@ -99,45 +99,42 @@ KoBorder KoBorder::loadBorder( const QDomElement & elem )
         int b = elem.attribute("blue").toInt();
         bd.color.setRgb( r, g, b );
     }
-    bd.style = static_cast<BorderStyle>( elem.attribute("style").toInt() );
+    bd.m_style = static_cast<BorderStyle>( elem.attribute("style").toInt() );
     bd.setPenWidth( elem.attribute("width").toDouble() );
     return bd;
 }
 
-KoBorder KoBorder::loadFoBorder( const QString& border )
+void KoBorder::loadFoBorder( const QString& border )
 {
-    KoBorder bd;
     //string like "0.088cm solid #800000"
 
     if (border.isEmpty() || border=="none" || border=="hidden") // in fact no border
-        return bd;
+        return;
 
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
     QString _style = border.section(' ', 1, 1);
     QString _color = border.section(' ', 2, 2);
 
-   bd.setPenWidth( KoUnit::parseValue( _width, 1.0 ) );
+    setPenWidth( KoUnit::parseValue( _width, 1.0 ) );
 
     if ( _style == "dashed" )
-        bd.style = DASH;
+        m_style = DASH;
     else if ( _style == "dotted" )
-        bd.style = DOT;
+        m_style = DOT;
     else if ( _style == "dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
-        bd.style = DASH_DOT;
+        m_style = DASH_DOT;
     else if ( _style == "dot-dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
-        bd.style = DASH_DOT_DOT;
+        m_style = DASH_DOT_DOT;
     else if ( _style == "double" )
-        bd.style = DOUBLE_LINE;
+        m_style = DOUBLE_LINE;
     else
-        bd.style = SOLID;
+        m_style = SOLID;
 
     if ( _color.isEmpty() )
-        bd.color = QColor();
+        color = QColor();
     else
-        bd.color.setNamedColor( _color );
-
-    return bd;
+        color.setNamedColor( _color );
 }
 
 void KoBorder::save( QDomElement & elem ) const
@@ -147,7 +144,7 @@ void KoBorder::save( QDomElement & elem ) const
         elem.setAttribute("green", color.green());
         elem.setAttribute("blue", color.blue());
     }
-    elem.setAttribute("style", static_cast<int>( style ));
+    elem.setAttribute("style", static_cast<int>( m_style ));
     elem.setAttribute("width", ptPenWidth);
 }
 
@@ -233,7 +230,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         else
             painter.setPen( defaultPen );
         int y = rect.top() - topBorderWidth + topBorderPenWidth/2;
-        if ( topBorder.style==KoBorder::DOUBLE_LINE)
+        if ( topBorder.m_style==KoBorder::DOUBLE_LINE)
         {
             painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+2*(rightBorderPenWidth+lastPixelAdj), y );
             y += topBorderPenWidth + 1;
@@ -253,7 +250,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
 	//kdDebug(32500) << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
         int y = rect.bottom() + bottomBorderPenWidth/2 + 1;
 	//kdDebug(32500) << "   -> bottom=" << rect.bottom() << " y=" << y << endl;
-        if ( bottomBorder.style==KoBorder::DOUBLE_LINE)
+        if ( bottomBorder.m_style==KoBorder::DOUBLE_LINE)
         {
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth+lastPixelAdj, y );
             y += bottomBorderPenWidth + 1;
@@ -271,7 +268,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         else
             painter.setPen( defaultPen );
         int x = rect.left() - leftBorderWidth + leftBorderPenWidth/2;
-        if ( leftBorder.style==KoBorder::DOUBLE_LINE)
+        if ( leftBorder.m_style==KoBorder::DOUBLE_LINE)
         {
             painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+2*(bottomBorderPenWidth+lastPixelAdj) );
             x += leftBorderPenWidth + 1;
@@ -295,7 +292,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
             painter.setPen( defaultPen );
         int x = rect.right() + rightBorderPenWidth/2 + 1;
         //kdDebug(32500) << "Drawing right border at x=" << x << endl;
-        if ( rightBorder.style==KoBorder::DOUBLE_LINE)
+        if ( rightBorder.m_style==KoBorder::DOUBLE_LINE)
         {
             painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth+lastPixelAdj );
             x += rightBorderPenWidth + 1;

@@ -40,7 +40,9 @@ public:
     QColor color;
     void setPenWidth(double _w);
     void setStyle(BorderStyle _style);
-    BorderStyle getStyle() const {return style;}
+    // deprecated
+    BorderStyle getStyle() const {return m_style;}
+    BorderStyle style() const {return m_style;}
     double penWidth() const{ return ptPenWidth;}
     double width() const { return ptWidth; }
 
@@ -49,7 +51,7 @@ public:
 
     // Load from XML
     static KoBorder loadBorder( const QDomElement & elem );
-    static KoBorder loadFoBorder( const QString& border );
+    void loadFoBorder( const QString& border );
     // Save to XML
     void save( QDomElement & elem ) const;
 
@@ -74,7 +76,17 @@ public:
 private:
     double ptWidth;
     double ptPenWidth;
-    BorderStyle style;
+    BorderStyle m_style;
 };
+
+/******************************
+  kdDebug support
+*******************************/
+#include <kdebug.h>
+
+inline kdbgstream operator<<( kdbgstream str, const KoBorder & b )  {
+    str << "[ color:" << b.color << " width:" << b.width() << " penWidth:" << b.penWidth() << " style:" << KoBorder::getStyle( b.getStyle() ) << "]"; return str;
+}
+inline kndbgstream operator<<( kndbgstream str, const KoBorder & )  { return str; }
 
 #endif
