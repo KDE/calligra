@@ -62,6 +62,7 @@ protected:
 	void parsePA( GraphicsContext *, const QString &, const QString & );
 	void parseGradient( const QDomElement & );
 	void parseColorStops( VGradient *, const QDomElement & );
+	double parseUnit( const QString & );
 	QWMatrix parseTransform( const QString & );
 	VColor parseColor( const QString & );
 	QDomDocument inpdoc;

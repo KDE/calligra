@@ -125,6 +125,22 @@ SvgImport::convert()
 	outdoc = m_document.saveXML();
 }
 
+#define DPI 90
+
+double
+SvgImport::parseUnit( const QString &unit )
+{
+	bool ok = false;
+	double value = unit.toDouble( &ok );
+
+	if( !ok )
+	{
+		if( unit.right( 2 ) == "pt" )
+			value = (value / 72.0) * DPI;
+	}
+	return value;
+}
+
 VColor
 SvgImport::parseColor( const QString &s )
 {
@@ -339,7 +355,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		gc->font.setFamily( family );
 	}
 	else if( command == "font-size" )
-		gc->font.setPointSize( params.toUInt() );
+		gc->font.setPointSize( parseUnit( params ) );
 
 	if( gc->fill.type() == VFill::solid )
 		gc->fill.setColor( fillcolor );
