@@ -167,7 +167,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
     QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
     _painter->drawPolyline( pointArray );
 
-    if ( lineBegin != L_NORMAL && !drawContour ) {
+    if ( lineBegin != L_NORMAL && !drawContour && !isClosed()) {
         QPoint startPoint;
         bool first = true;
         QPointArray::ConstIterator it1;
@@ -187,7 +187,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
         }
     }
 
-    if ( lineEnd != L_NORMAL && !drawContour ) {
+    if ( lineEnd != L_NORMAL && !drawContour &&!isClosed()) {
         QPoint endPoint;
         bool last = true;
         QPointArray::ConstIterator it2 = pointArray.end();
