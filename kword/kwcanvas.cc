@@ -208,7 +208,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
     if ( painter->device()->devType() != QInternal::Printer ) // except when printing
     {
         QRegion emptySpaceRegion( crect );
-        m_doc->createEmptyRegion( emptySpaceRegion, m_viewMode );
+        m_doc->createEmptyRegion( crect, emptySpaceRegion, m_viewMode );
         m_viewMode->drawPageBorders( painter, crect, emptySpaceRegion );
     }
 }

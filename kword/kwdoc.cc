@@ -1858,7 +1858,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     if (!transparent)
     {
         QRegion emptyRegion( rect );
-        createEmptyRegion( emptyRegion, viewMode );
+        createEmptyRegion( rect, emptyRegion, viewMode );
         eraseEmptySpace( &painter, emptyRegion, cg.brush( QColorGroup::Base ) );
     }
 
@@ -1873,14 +1873,14 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     delete viewMode;
 }
 
-void KWDocument::createEmptyRegion( QRegion & emptyRegion, KWViewMode * viewMode )
+void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameset = fit.current();
         if ( frameset->isVisible() )
-            frameset->createEmptyRegion( emptyRegion, viewMode );
+            frameset->createEmptyRegion( crect, emptyRegion, viewMode );
     }
 }
 

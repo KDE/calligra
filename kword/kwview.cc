@@ -171,9 +171,12 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setFocusProxy( m_gui->canvasWidget() );
 
     KStatusBar * sb = statusBar();
-    ASSERT(sb);
-    m_sbPageLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-    addStatusBarItem( m_sbPageLabel, 0 );
+    m_sbPageLabel = 0L;
+    if ( sb ) // No statusbar in e.g. konqueror
+    {
+        m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
+        addStatusBarItem( m_sbPageLabel, 0 );
+    }
     m_sbFramesLabel = 0L; // Only added when frames are selected
 }
 

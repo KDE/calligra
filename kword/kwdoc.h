@@ -133,7 +133,7 @@ public:
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
      */
-    void createEmptyRegion( QRegion & emptyRegion, KWViewMode * viewMode );
+    void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode );
     /**
      * Erase the empty space defined by @p emptySpaceRegion.
      * Usually used to clear the space where there is no frame (e.g. page margins).

@@ -323,7 +323,7 @@ public:
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
      */
-    virtual void createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode );
+    virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
 
     /**
      * Paint the borders for one frame of this frameset.

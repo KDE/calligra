@@ -289,13 +289,15 @@ void KWFrameSet::deleteAllCopies()
     }
 }
 
-void KWFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
+void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
-        emptyRegion = emptyRegion.subtract( outerRect );
+        outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
+        if ( !outerRect.isEmpty() )
+            emptyRegion = emptyRegion.subtract( outerRect );
     }
 }
 

@@ -93,7 +93,7 @@ public:
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
      */
-    virtual void createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode );
+    virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
     void drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged,

@@ -1344,13 +1344,15 @@ bool KWTableFrameSet::contains( double mx, double my ) {
     return false;
 }
 
-void KWTableFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
+void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
-        emptyRegion = emptyRegion.subtract( outerRect );
+        outerRect &= crect;
+        if ( !outerRect.isEmpty() )
+            emptyRegion = emptyRegion.subtract( outerRect );
     }
 }
 
