@@ -108,7 +108,7 @@ class KWordView : public QWidget,
 
 public:
   // C++
-  KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
+  KWordView(QWidget *_parent,const char *_name,KWordDocument *_doc);
   virtual ~KWordView();
 
   void setShell(KWordShell *_shell) { shell = _shell; }
@@ -211,7 +211,7 @@ public:
   virtual void frameBorderStyle(const char *style);
   virtual void frameBackColor();
 
-  virtual void setMode( KOffice::View::Mode _mode);
+  virtual void setMode(KOffice::View::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
 
   // C++
@@ -247,8 +247,8 @@ public:
 public slots:
   void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
   void slotUpdateChildGeometry(KWordChild *_child);
-  void slotGeometryEnd( KoFrame*);
-  void slotMoveEnd( KoFrame*);
+  void slotGeometryEnd(KoFrame*);
+  void slotMoveEnd(KoFrame*);
   void paragDiaOk();
   void styleManagerOk();
   void openPageLayoutDia()
@@ -267,10 +267,10 @@ protected:
   // C++
   virtual void init();
   // IDL
-  virtual bool event( const char* _event, const CORBA::Any& _value );
+  virtual bool event(const char* _event,const CORBA::Any& _value);
   // C++
-  bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-  bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+  bool mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar);
+  bool mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory);
 
   virtual void cleanUp();
 
@@ -555,14 +555,14 @@ class KWordGUI : public QWidget
   Q_OBJECT
 
 public:
-  KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView *_view );
+  KWordGUI(QWidget *parent,bool __show,KWordDocument *_doc,KWordView *_view);
 
   KWordDocument *getDocument()
     { return doc; }
 
   void showGUI(bool __show);
 
-  void setDocument( KWordDocument *_doc )
+  void setDocument(KWordDocument *_doc)
     { doc = _doc; paperWidget->setDocument(doc); }
 
   QScrollBar *getVertScrollBar()

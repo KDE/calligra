@@ -98,6 +98,8 @@ public:
   QString getParag() { return parag; }
 
   void updateDescription(int _start);
+
+  void destroy();
   
 protected:
   void makeText();

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -32,6 +32,10 @@ class KWordView;
 #include <qtimer.h>
 #include <qstring.h>
 
+/******************************************************************/
+/* Class: KWordShell                                              */
+/******************************************************************/
+
 class KWordShell : public KoMainWindow
 {
   Q_OBJECT
@@ -42,12 +46,12 @@ public:
 
   // C++
   virtual void cleanUp();
-  void setDocument( KWordDocument *_doc );
+  void setDocument(KWordDocument *_doc);
 
   // C++
   virtual bool newDocument();
-  virtual bool openDocument( const char *_filename, const char* _format );
-  virtual bool saveDocument( const char *_file, const char *_format );
+  virtual bool openDocument(const char *_filename,const char* _format);
+  virtual bool saveDocument(const char *_file,const char *_format);
   virtual bool closeDocument();
   virtual bool closeAllDocuments();
 
@@ -73,7 +77,7 @@ protected:
   bool requestClose();
 
   void releaseDocument();
-  
+
   KWordDocument* m_pDoc;
   KWordView* m_pView;
 

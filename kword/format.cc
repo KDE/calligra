@@ -15,59 +15,59 @@
 KWFormat::KWFormat(KWordDocument *_doc,const QColor& _color,KWUserFont *_font = 0L,int _font_size = -1,int _weight = -1,
 		   char _italic = -1,char _underline = -1,VertAlign _vertAlign = VA_NORMAL,char _math = -1,char _direct = -1)
 {
-    doc = _doc;
-    color = _color;
-    userFont = _font;
-    ptFontSize = _font_size;
-    weight = _weight;
-    italic = _italic;
-    underline = _underline;
-    vertAlign = _vertAlign;
-    math = _math;
-    direct = _direct;
-    ref = 0;
+  doc = _doc;
+  color = _color;
+  userFont = _font;
+  ptFontSize = _font_size;
+  weight = _weight;
+  italic = _italic;
+  underline = _underline;
+  vertAlign = _vertAlign;
+  math = _math;
+  direct = _direct;
+  ref = 0;
 }
 
 /*================================================================*/
 KWFormat::KWFormat(KWordDocument *_doc)
 {
-    doc = _doc;
-    setDefaults(_doc);
-    ref = 0;
+  doc = _doc;
+  setDefaults(_doc);
+  ref = 0;
 }
 
 /*================================================================*/
 KWFormat::KWFormat(KWordDocument *_doc,const KWFormat &_format)
 {
-    userFont = _format.getUserFont();
-    ptFontSize = _format.getPTFontSize();
-    weight = _format.getWeight();
-    italic = _format.getItalic();
-    underline = _format.getUnderline();
-    vertAlign = _format.getVertAlign();
-    color = _format.getColor();
-    math = -1;
-    direct = -1;
-    ref = 0;
-    doc = _doc;
+  userFont = _format.getUserFont();
+  ptFontSize = _format.getPTFontSize();
+  weight = _format.getWeight();
+  italic = _format.getItalic();
+  underline = _format.getUnderline();
+  vertAlign = _format.getVertAlign();
+  color = _format.getColor();
+  math = -1;
+  direct = -1;
+  ref = 0;
+  doc = _doc;
 }
 
 /*================================================================*/
 KWFormat& KWFormat::operator=(const KWFormat& _format)
 {
-    userFont = _format.getUserFont();
-    ptFontSize = _format.getPTFontSize();
-    weight = _format.getWeight();
-    italic = _format.getItalic();
-    underline = _format.getUnderline();
-    vertAlign = _format.getVertAlign();
-    color = _format.getColor();
-    math = -1;
-    direct = -1;
-    ref = 0;
-    if (!doc) doc = const_cast<KWFormat>(_format).getDocument();
-
-    return *this;
+  userFont = _format.getUserFont();
+  ptFontSize = _format.getPTFontSize();
+  weight = _format.getWeight();
+  italic = _format.getItalic();
+  underline = _format.getUnderline();
+  vertAlign = _format.getVertAlign();
+  color = _format.getColor();
+  math = -1;
+  direct = -1;
+  ref = 0;
+  if (!doc) doc = const_cast<KWFormat>(_format).getDocument();
+  
+  return *this;
 }
 
 /*================================================================*/
@@ -97,15 +97,15 @@ bool KWFormat::operator!=(const KWFormat & _format)
 /*================================================================*/
 void KWFormat::setDefaults(KWordDocument *_doc)
 {
-    userFont = _doc->getDefaultUserFont();
-    ptFontSize = 12;
-    weight = QFont::Normal;
-    italic = 0;
-    underline = 0;
-    color = Qt::black;
-    vertAlign = VA_NORMAL;
-    math = -1;
-    direct = -1;
+  userFont = _doc->getDefaultUserFont();
+  ptFontSize = 12;
+  weight = QFont::Normal;
+  italic = 0;
+  underline = 0;
+  color = Qt::black;
+  vertAlign = VA_NORMAL;
+  math = -1;
+  direct = -1;
 }
 
 /*================================================================*/
@@ -118,25 +118,25 @@ KWDisplayFont* KWFormat::loadFont(KWordDocument *_doc)
 /*================================================================*/
 void KWFormat::apply(KWFormat &_format)
 {
-    if ( _format.getUserFont() )
-	userFont = _format.getUserFont();
+  if (_format.getUserFont())
+    userFont = _format.getUserFont();
 
-    if ( _format.getPTFontSize() != -1 )
-	ptFontSize = _format.getPTFontSize();
+  if (_format.getPTFontSize() != -1)
+    ptFontSize = _format.getPTFontSize();
 
-    if ( _format.getWeight() != -1 )
-	weight = _format.getWeight();
+  if (_format.getWeight() != -1)
+    weight = _format.getWeight();
 
-    if ( _format.getItalic() != -1 )
-	italic = _format.getItalic();
+  if (_format.getItalic() != -1)
+    italic = _format.getItalic();
 
-    if ( _format.getUnderline() != -1 )
-	underline = _format.getUnderline();
+  if (_format.getUnderline() != -1)
+    underline = _format.getUnderline();
 
-    if ( _format.getColor().isValid() )
-	color = _format.getColor();
+  if (_format.getColor().isValid())
+    color = _format.getColor();
 
-    vertAlign = _format.getVertAlign();
+  vertAlign = _format.getVertAlign();
 }
 
 /*================================================================*/

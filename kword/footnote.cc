@@ -129,7 +129,27 @@ void KWFootNoteManager::removeFootNote(KWFootNote *fn)
 {
   int n = footNotes.findRef(fn);
   if (n != -1)
-    footNotes.take(n);
+    {
+      if (n == 0)
+	{
+	  if (footNotes.count() > 1)
+	    {
+	      firstParag = footNotes.at(1)->getParag();
+	      KWParag *p = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0))->getLastParag();
+
+	      while (p && p->getParagName() != firstParag)
+		p = p->getPrev();
+
+	      if (p)
+		p->setHardBreak(true);
+	    }
+	  else
+	    firstParag = QString::null;
+	}
+      
+      fn->destroy();
+      footNotes.take(n);
+    }
   recalc();
 }
 
@@ -137,41 +157,46 @@ void KWFootNoteManager::removeFootNote(KWFootNote *fn)
 void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
 {
   bool hardBreak = false;
-  
+
   if (firstParag.isEmpty())
     {
       hardBreak = true;
     }
-  
+
   KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0));
   KWParag *parag = frameSet->getLastParag();
-
-//   if (!firstParag.isEmpty())
-//     {
-//       while (parag && parag->getParagName() != firstParag)
-// 	parag->getPrev();
-      
-//       int i = start;
-//       while (parag && i < fn->getStart())
-// 	{
-// 	  parag = parag->getNext();
-// 	  i++;
-// 	}
-//     }
+  KWParag *next = 0L;
   
-  KWParag *parag2 = new KWParag(frameSet,doc,parag,0L,doc->findParagLayout("Standard"));
+  if (!firstParag.isEmpty())
+    {
+      while (parag && parag->getParagName() != firstParag)
+	parag = parag->getPrev();
+
+      int i = start;
+      while (parag && i < fn->getStart() - 1)
+	{
+	  parag = parag->getNext();
+	  i++;
+	}
+
+      next = parag->getNext();
+    }
+
+  KWParag *parag2 = new KWParag(frameSet,doc,parag,next,doc->findParagLayout("Standard"));
   parag2->setHardBreak(hardBreak);
-  parag2->insertText(0,fn->getText());
+  QString txt = fn->getText();
+  txt += " ";
+  parag2->insertText(0,txt);
   KWFormat format(doc);
   format.setDefaults(doc);
-  parag2->setFormat(0,fn->getText().length(),format);
+  parag2->setFormat(0,fn->getText().length() + 1,format);
   parag2->setInfo(KWParag::PI_FOOTNOTE);
-  
+
   fn->setParag(parag2);
-  
+
   if (firstParag.isEmpty())
     firstParag = parag2->getParagName();
-  
+
 }
 
 /******************************************************************/
@@ -250,12 +275,12 @@ void KWFootNote::updateDescription(int _start)
 {
   if (parag.isEmpty())
     return;
-  
+
   KWParag *p = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0))->getLastParag();
-  
+
   while (p && p->getParagName() != parag)
     p = p->getPrev();
-  
+
   if (p)
     {
       p->deleteText(0,text.length());
@@ -265,6 +290,33 @@ void KWFootNote::updateDescription(int _start)
       KWFormat format(doc);
       format.setDefaults(doc);
       p->setFormat(0,text.length(),format);
+    }
+  else
+    warning(i18n("Footnote couldn't find the parag with the footnote description"));
+}
+
+/*================================================================*/
+void KWFootNote::destroy()
+{
+  if (parag.isEmpty())
+    return;
+
+  KWParag *p = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0))->getLastParag();
+
+  while (p && p->getParagName() != parag)
+    p = p->getPrev();
+
+  if (p)
+    {
+      KWParag *prev = p->getPrev();
+      KWParag *next = p->getNext();
+      
+      if (prev)
+	prev->setNext(next);
+      if (next)
+	next->setPrev(prev);
+      
+      delete p;
     }
   else
     warning(i18n("Footnote couldn't find the parag with the footnote description"));

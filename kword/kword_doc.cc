@@ -147,7 +147,7 @@ CORBA::Boolean KWordDocument::init()
 bool KWordDocument::loadTemplate(const char *_url)
 {
   KURL u(_url);
-  
+
   if (u.isMalformed())
     return false;
 
@@ -167,10 +167,10 @@ bool KWordDocument::loadTemplate(const char *_url)
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
 
-  if ( !loadXML( parser, 0L ) )
+  if (!loadXML(parser,0L))
     return false;
 
-  setModified( true );
+  setModified(true);
 
   _loaded = false;
   return true;
@@ -634,7 +634,7 @@ void KWordDocument::cleanUp()
 {
   if (m_bIsClean) return;
 
-  assert( m_lstViews.count() == 0 );
+  assert(m_lstViews.count() == 0);
 
   m_lstChildren.clear();
 
@@ -650,7 +650,7 @@ bool KWordDocument::hasToWriteMultipart()
 }
 
 /*================================================================*/
-bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
+bool KWordDocument::loadChildren(KOStore::Store_ptr _store)
 {
   cerr << "bool KWordDocument::loadChildren( OPParts::MimeMultipartDict_ptr _dict )" << endl;
 
@@ -658,7 +658,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
   for(;it.current();++it)
     {
       cerr << "Loading child" << endl;
-      if (!it.current()->loadDocument( _store, it.current()->mimeType() ) )
+      if (!it.current()->loadDocument(_store,it.current()->mimeType()))
 	return false;
     }
 
@@ -668,7 +668,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
 {
   _loaded = true;
 
@@ -794,7 +794,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       return false;
     }
 
-  KOMLParser::parseTag( tag.c_str(), name, lst );
+  KOMLParser::parseTag(tag.c_str(),name,lst);
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for(;it != lst.end();it++)
     {
@@ -1264,7 +1264,7 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 }
 
 /*================================================================*/
-bool KWordDocument::save( ostream &out, const char* /* _format */ )
+bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
   out << "<?xml version=\"1.0\"?>" << endl;
   //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
@@ -1317,7 +1317,7 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
   // Write "OBJECT" tag for every child
   QListIterator<KWordChild> chl(m_lstChildren);
   for(;chl.current();++chl)
-    chl.current()->save( out );
+    chl.current()->save(out);
 
   out << etag << "</DOC>" << endl;
 
@@ -1337,7 +1337,7 @@ void KWordDocument::enableEmbeddedParts(bool f)
 }
 
 /*================================================================*/
-void KWordDocument::makeChildListIntern( KOffice::Document_ptr _doc,const char *_path)
+void KWordDocument::makeChildListIntern(KOffice::Document_ptr _doc,const char *_path)
 {
   cerr << "void KWordDocument::makeChildList( OPParts::Document_ptr _doc, const char *_path )" << endl;
 
@@ -1369,13 +1369,14 @@ QStrList KWordDocument::inputFormats()
   return QStrList();
 }
 
+/*================================================================*/
 KOffice::MainWindow_ptr KWordDocument::createMainWindow()
 {
   KWordShell* shell = new KWordShell;
   shell->show();
-  shell->setDocument( this );
+  shell->setDocument(this);
 
-  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+  return KOffice::MainWindow::_duplicate(shell->koInterface());
 }
 
 /*================================================================*/
@@ -1408,9 +1409,9 @@ void KWordDocument::removeView(KWordView *_view)
 /*================================================================*/
 KWordView* KWordDocument::createWordView()
 {
-  KWordView *p = new KWordView( 0L, 0L, this );
+  KWordView *p = new KWordView(0L,0L,this);
   //p->QWidget::show();
-  m_lstViews.append( p );
+  m_lstViews.append(p);
 
   return p;
 }
@@ -1418,13 +1419,13 @@ KWordView* KWordDocument::createWordView()
 /*================================================================*/
 OpenParts::View_ptr KWordDocument::createView()
 {
-  return OpenParts::View::_duplicate( createWordView() );
+  return OpenParts::View::_duplicate(createWordView());
 }
 
 /*================================================================*/
 void KWordDocument::insertObject(const KRect& _rect, KoDocumentEntry& _e, int diffx, int diffy )
 {
-  KOffice::Document_var doc = imr_createDoc( _e );
+  KOffice::Document_var doc = imr_createDoc(_e);
   if (CORBA::is_nil(doc))
     return;
 
@@ -1720,7 +1721,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
     }
 
   // paint it character for character. Provisionally! !!HACK!!
-  _fc.cursorGotoLineStart( _painter );
+  _fc.cursorGotoLineStart(_painter);
 
   // Init font and style
   _painter.setFont( *_fc.loadFont( this ) );
@@ -1747,7 +1748,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	  return false;
 	}
 
-      buffer[i] = text[ _fc.getTextPos() ].c;
+      buffer[i] = text[_fc.getTextPos()].c;
 
       if ( buffer[i] == 0 )
 	{
@@ -1763,35 +1764,35 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	      {
 		_painter.drawImage(KPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset +
 					  ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt())
-					   - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
-				   *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
-		_fc.cursorGotoNextChar( _painter );
+					   - ((KWCharImage*)text[_fc.getTextPos()].attrib)->getImage()->height())),
+				   *((KWCharImage*)text[_fc.getTextPos()].attrib)->getImage());
+		_fc.cursorGotoNextChar(_painter);
 	      } break;
 	    case ID_KWCharVariable:
 	      {
-		KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
-		_fc.apply( *f->getFormat() );
+		KWCharFormat *f = (KWCharFormat*)text[_fc.getTextPos()].attrib;
+		_fc.apply(*f->getFormat());
 		// Change the painter
 		if (_fc.getVertAlign() == KWFormat::VA_NORMAL)
 		  {
-		    _painter.setFont( *_fc.loadFont( this ) );
+		    _painter.setFont(*_fc.loadFont(this));
 		    plus = 0;
 		  }
 		else if (_fc.getVertAlign() == KWFormat::VA_SUB)
 		  {
-		    QFont _font = *_fc.loadFont( this );
+		    QFont _font = *_fc.loadFont(this);
 		    _font.setPointSize((2 * _font.pointSize()) / 3);
 		    _painter.setFont(_font);
 		    plus = _font.pointSize() / 2;
 		  }
 		else if (_fc.getVertAlign() == KWFormat::VA_SUPER)
 		  {
-		    QFont _font = *_fc.loadFont( this );
+		    QFont _font = *_fc.loadFont(this);
 		    _font.setPointSize((2 * _font.pointSize()) / 3);
 		    _painter.setFont(_font);
 		    plus = - _fc.getPTAscender() + _font.pointSize() / 2;
 		  }
-		_painter.setPen( _fc.getColor() );
+		_painter.setPen(_fc.getColor());
 
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[_fc.getTextPos()].attrib);
 		
@@ -1803,7 +1804,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
 				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,v->getText());
 		
-		_fc.cursorGotoNextChar( _painter );
+		_fc.cursorGotoNextChar(_painter);
 	      } break;
 	    case ID_KWCharFootNote:
 	      {
@@ -1813,40 +1814,40 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 // 		  _painter.fillRect(tmpPTPos - xOffset,_fc.getPTY() - yOffset,
 // 				    _painter.fontMetrics().width(v->getText()),_fc.getLineHeight(),gray);
 		
-		KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
-		_fc.apply( *f->getFormat() );
+		KWCharFormat *f = (KWCharFormat*)text[_fc.getTextPos()].attrib;
+		_fc.apply(*f->getFormat());
 		// Change the painter
 		if (_fc.getVertAlign() == KWFormat::VA_NORMAL)
 		  {
-		    _painter.setFont( *_fc.loadFont( this ) );
+		    _painter.setFont(*_fc.loadFont(this));
 		    plus = 0;
 		  }
 		else if (_fc.getVertAlign() == KWFormat::VA_SUB)
 		  {
-		    QFont _font = *_fc.loadFont( this );
+		    QFont _font = *_fc.loadFont(this);
 		    _font.setPointSize((2 * _font.pointSize()) / 3);
 		    _painter.setFont(_font);
 		    plus = _font.pointSize() / 2;
 		  }
 		else if (_fc.getVertAlign() == KWFormat::VA_SUPER)
 		  {
-		    QFont _font = *_fc.loadFont( this );
+		    QFont _font = *_fc.loadFont(this);
 		    _font.setPointSize((2 * _font.pointSize()) / 3);
 		    _painter.setFont(_font);
 		    plus = - _fc.getPTAscender() + _font.pointSize() / 2;
 		  }
-		_painter.setPen( _fc.getColor() );
+		_painter.setPen(_fc.getColor());
 
 		_painter.drawText(tmpPTPos - xOffset,
 				  _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
 				  _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,fn->getText());
 		
-		_fc.cursorGotoNextChar( _painter );
+		_fc.cursorGotoNextChar(_painter);
 	      } break;
 	    case ID_KWCharTab:
 	      {
 		lastPTPos = _fc.getPTPos();
-		_fc.cursorGotoNextChar( _painter );
+		_fc.cursorGotoNextChar(_painter);
 		QPen _pen = QPen(_painter.pen());
 		_painter.setPen(QPen(blue,1,DotLine));
 		if (_viewFormattingChars)
@@ -1858,45 +1859,46 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	}
       else
 	{
-	  if ( text[ _fc.getTextPos() ].attrib != 0L )
+	  if (text[_fc.getTextPos()].attrib != 0L)
 	    {
 	      // Change text format here
-	      assert( text[ _fc.getTextPos() ].attrib->getClassId() == ID_KWCharFormat );
-	      KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
-	      _fc.apply( *f->getFormat() );
+	      assert(text[_fc.getTextPos()].attrib->getClassId() == ID_KWCharFormat);
+	      KWCharFormat *f = (KWCharFormat*)text[_fc.getTextPos()].attrib;
+	      _fc.apply(*f->getFormat());
 	      // Change the painter
 	      if (_fc.getVertAlign() == KWFormat::VA_NORMAL)
 		{
-		  _painter.setFont( *_fc.loadFont( this ) );
+		  _painter.setFont(*_fc.loadFont(this));
 		  plus = 0;
 		}
 	      else if (_fc.getVertAlign() == KWFormat::VA_SUB)
 		{
-		  QFont _font = *_fc.loadFont( this );
+		  QFont _font = *_fc.loadFont(this);
 		  _font.setPointSize((2 * _font.pointSize()) / 3);
 		  _painter.setFont(_font);
 		  plus = _font.pointSize() / 2;
 		}
 	      else if (_fc.getVertAlign() == KWFormat::VA_SUPER)
 		{
-		  QFont _font = *_fc.loadFont( this );
+		  QFont _font = *_fc.loadFont(this);
 		  _font.setPointSize((2 * _font.pointSize()) / 3);
 		  _painter.setFont(_font);
 		  plus = - _fc.getPTAscender() + _font.pointSize() / 2;
 		}
-	      _painter.setPen( _fc.getColor() );
+	      _painter.setPen(_fc.getColor());
 	    }
 	
 	  // Test next character.
 	  i++;
-	  if ( _fc.cursorGotoNextChar( _painter ) != 1 || (text[_fc.getTextPos()].c == ' ' && _fc.getParag()->getParagLayout()->getFlow() == KWParagLayout::BLOCK) || i >= 199 )
+	  if (_fc.cursorGotoNextChar( _painter ) != 1 || (text[_fc.getTextPos()].c == ' ' && 
+							  _fc.getParag()->getParagLayout()->getFlow() == KWParagLayout::BLOCK) || i >= 199)
 	    {
 	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print
 	      // what we have so far
 	      buffer[i] = '\0';
-	      _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
+	      _painter.drawText(tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
 				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
-				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,buffer );
+				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,buffer);
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all - but we have to underline it in some cases

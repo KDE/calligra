@@ -66,8 +66,8 @@ class QPrinter;
 class KWordChild : public KoDocumentChild
 {
 public:
-  KWordChild( KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc,int diffx,int diffy);
-  KWordChild( KWordDocument *_wdoc);
+  KWordChild(KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc,int diffx,int diffy);
+  KWordChild(KWordDocument *_wdoc);
   ~KWordChild();
 
   KWordDocument* parent()
@@ -115,9 +115,9 @@ public:
   virtual CORBA::Boolean init();
 
   // C++
-  virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
-  virtual bool loadChildren( KOStore::Store_ptr _store );
-  virtual bool save( ostream& out, const char *_format );
+  virtual bool loadXML(KOMLParser& parser,KOStore::Store_ptr _store);
+  virtual bool loadChildren(KOStore::Store_ptr _store);
+  virtual bool save(ostream& out,const char *_format);
 
   virtual bool loadTemplate(const char *_url);
 
@@ -138,7 +138,7 @@ public:
   virtual KOffice::MainWindow_ptr createMainWindow();
 
   // C++
-  virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
+  virtual void setModified(bool _c) { m_bModified = _c; if (_c) m_bEmpty = false; }
   virtual bool isEmpty() { return m_bEmpty; }
 
   unsigned int viewCount() { return m_lstViews.count(); }
@@ -491,7 +491,7 @@ protected:
   KWParagLayout *cParagLayout;
 
   bool _needRedraw;
-  
+
   QString unit;
   int numParags;
 

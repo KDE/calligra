@@ -1059,3 +1059,9 @@ Reggie, 8.4.1999:
   - Adding the footnote description for endnotes works quite well now
     (only in the sorting is a bug...)
 - Some fixes and cleanups
+
+Reggie, 10.4.1999:
+------------------
+- Cleanups
+- Footnote/Endnote descriptions are sorted correctly now
+- Implemented correct behavior when deleting a footnote/endnote

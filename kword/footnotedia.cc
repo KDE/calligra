@@ -48,7 +48,12 @@ void KWFootNoteDia::setupTab1()
   tab1 = new QWidget(this);
 
   addTab(tab1,i18n("Configure Footnote/Endnote"));
-  
+
+  QLabel *l = new QLabel(i18n("Currently there is nothing to configure for\n"
+			      "footnotes/endnotes. Click ok to insert one!"),tab1);
+  l->resize(l->sizeHint());
+  l->move(5,5);
+			 
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(insertFootNote()));
 
   resize(minimumSize());
