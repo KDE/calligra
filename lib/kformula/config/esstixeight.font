@@ -3,10 +3,8 @@
 # Unicode mapping for the esstixeight font. You can find it at
 # ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
 #
-# The first line contains the fonts name. All remaining
-# lines consist of a char position and its unicode value.
+# Each line consist of a char position and its unicode value.
 #
-name = esstixeight
 33, 0xE201
 37, 0xE205
 99, 0x2321
@@ -25,9 +23,9 @@ name = esstixeight
 85, 0xF8FE
 78, 0xF8FB
 83, 0xF8FC
+77, 0xF8FA
 74, 0xF8EF
 73, 0xF8EE
 92, 0xF8ED
 91, 0xF8EC
 90, 0xF8EB
-77, 0xF8FA

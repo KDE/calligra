@@ -3,16 +3,12 @@
 # Unicode mapping for the esstixone font. You can find it at
 # ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
 #
-# The first line contains the fonts name. All remaining
-# lines consist of a char position and its unicode value.
+# Each line consist of a char position and its unicode value.
 #
-name = esstixone
 75, 0x219B
 70, 0x219A
 44, 0x219D
 56, 0x219E
-71, 0x21CD
-80, 0x21CE
 97, 0x2198
 99, 0x2199
 47, 0x2192
@@ -27,17 +23,21 @@ name = esstixone
 59, 0x21A2
 60, 0x21A3
 57, 0x21A0
+38, 0x21A9
 73, 0x21AC
 45, 0x21AA
 43, 0x21AD
 106, 0x21C8
 37, 0x21C4
+36, 0x21C6
+46, 0x21C0
+72, 0x21C1
 88, 0x21C2
 87, 0x21C3
-46, 0x21C0
 171, 0x22EE
+71, 0x21CD
+80, 0x21CE
 76, 0x21CF
-33, 0x21CB
 69, 0x21BD
 105, 0x21D5
 53, 0x21D4
@@ -45,10 +45,8 @@ name = esstixone
 42, 0x21D0
 90, 0x21D3
 48, 0x21D2
-38, 0x21A9
-36, 0x21C6
-72, 0x21C1
 107, 0x21CA
+33, 0x21CB
 35, 0x21CC
 40, 0x21BC
 93, 0x21BF

@@ -33,6 +33,7 @@ class KConfig;
 
 KFORMULA_NAMESPACE_BEGIN
 
+class ContextStyle;
 
 /**
  * What we know about a unicode char. The char value itself
@@ -106,7 +107,7 @@ public:
     /**
      * Reads the unicode / font tables.
      */
-    void init();
+    void init( ContextStyle* context );
 
     bool contains( QString name ) const;
 
@@ -137,6 +138,16 @@ public:
      */
     QStringList allNames() const;
 
+    /**
+     * Fills the map with (font name, file name) pairs one for
+     * each font available.
+     */
+    void findAvailableFonts( QMap<QString, QString>* fontMap ) const;
+
+    typedef QMap<QChar, CharTableEntry> UnicodeTable;
+    typedef QMap<QString, QChar> EntryTable;
+    typedef QValueVector<QFont> FontTable;
+
 private:
 
     void defaultInitUnicode();
@@ -145,18 +156,18 @@ private:
     /**
      * The chars from unicode.
      */
-    QMap<QChar, CharTableEntry> unicodeTable;
+    UnicodeTable unicodeTable;
 
     /**
      * Name -> unicode mapping.
      */
-    QMap<QString, QChar> entries;
+    EntryTable entries;
 
     /**
      * Symbol fonts in use.
      * There must not be more than 256 fonts.
      */
-    QValueVector<QFont> fontTable;
+    FontTable fontTable;
 
     /**
      * Basic symbol font support.

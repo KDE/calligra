@@ -3,13 +3,11 @@
 # Unicode mapping for the esstixseven font. You can find it at
 # ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
 #
-# The first line contains the fonts name. All remaining
-# lines consist of a char position and its unicode value.
+# Each line consist of a char position and its unicode value.
 #
-name = esstixseven
 61, 0x0028
-67, 0x2329
 62, 0x0029
+67, 0x2329
 68, 0x232A
 66, 0x007D
 75, 0x007C

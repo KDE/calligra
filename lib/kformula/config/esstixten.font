@@ -3,10 +3,8 @@
 # Unicode mapping for the esstixten font. You can find it at
 # ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
 #
-# The first line contains the fonts name. All remaining
-# lines consist of a char position and its unicode value.
+# Each line consist of a char position and its unicode value.
 #
-name = esstixten
 118, 0x2202
 86, 0x2207
 120, 0x03BE
@@ -14,6 +12,7 @@ name = esstixten
 91, 0x2127
 108, 0x03BB
 107, 0x03BA
+111, 0x00F8
 105, 0x03B9
 113, 0x03B8
 104, 0x03B7
@@ -23,14 +22,12 @@ name = esstixten
 103, 0x03B3
 98, 0x03B2
 97, 0x03B1
-111, 0x00F8
 88, 0x039E
 76, 0x039B
 81, 0x0398
 68, 0x0394
 71, 0x0393
 119, 0x03D1
-52, 0x03D5
 54, 0x03D6
 101, 0xE629
 109, 0x03BC
@@ -52,3 +49,4 @@ name = esstixten
 99, 0x03C7
 106, 0x03C8
 117, 0x03C9
+52, 0x03D5

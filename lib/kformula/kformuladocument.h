@@ -225,6 +225,7 @@ public slots:
 private:
 
     void lazyInit();
+    void initSymbolNamesAction();
 
     /**
      * Creates the standard formula actions and puts them into

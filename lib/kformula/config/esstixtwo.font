@@ -3,10 +3,8 @@
 # Unicode mapping for the esstixtwo font. You can find it at
 # ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
 #
-# The first line contains the fonts name. All remaining
-# lines consist of a char position and its unicode value.
+# Each line consist of a char position and its unicode value.
 #
-name = esstixtwo
 100, 0x2203
 99, 0x2200
 102, 0x2201
@@ -23,6 +21,7 @@ name = esstixtwo
 56, 0x22B3
 43, 0x2605
 59, 0x25BE
+121, 0x2306
 60, 0x25B6
 54, 0x25B5
 167, 0x2118

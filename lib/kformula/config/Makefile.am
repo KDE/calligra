@@ -16,6 +16,12 @@ scripts_DATA = unicode.tbl \
 	esstixthirteen.font \
 	esstixthree.font \
 	esstixtwelve.font \
-	esstixtwo.font
+	esstixtwo.font \
+	mt%20extra.font \
+	mt%20symbol.font \
+	euclid%20math%20one.font \
+	euclid%20math%20two.font \
+	euclid%20symbol.font \
+	symbol.font
 
 scriptsdir = $(kde_datadir)/kformula

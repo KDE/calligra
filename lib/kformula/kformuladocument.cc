@@ -242,26 +242,29 @@ void Document::lazyInit()
         impl->firstTime = false;
         impl->contextStyle.init();
 
-        if ( impl->actionsCreated ) {
-            const SymbolTable& st = impl->contextStyle.symbolTable();
+        initSymbolNamesAction();
+    }
+}
 
-            QStringList names = st.allNames();
-            QValueList<QFont> fonts;
-            QMemArray<uchar> chars( names.count() );
+void Document::initSymbolNamesAction()
+{
+    if ( impl->actionsCreated ) {
+        const SymbolTable& st = impl->contextStyle.symbolTable();
 
-            int i = 0;
-            for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it, ++i ) {
-                QString name = *it;
-                QChar ch = st.unicode( name );
+        QStringList names = st.allNames();
+        QValueList<QFont> fonts;
+        QMemArray<uchar> chars( names.count() );
 
-                fonts.append( st.font( ch ) );
-                chars[ i ] = st.character( ch );
-                //kdDebug( DEBUGID ) << "Document::lazyInit: " << name << " " << st.font( ch ).family() << " " << QString( ch ) << endl;
-            }
-            impl->symbolNamesAction->setSymbols( names, fonts, chars );
-            // impl->symbolNamesAction->setItems(names);
-            impl->selectedName = names[0];
+        int i = 0;
+        for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it, ++i ) {
+            QChar ch = st.unicode( *it );
+
+            fonts.append( st.font( ch ) );
+            chars[ i ] = st.character( ch );
+            //kdDebug( DEBUGID ) << "Document::lazyInit: " << *it << " " << st.font( ch ).family() << " " << QString( ch ) << endl;
         }
+        impl->symbolNamesAction->setSymbols( names, fonts, chars );
+        impl->selectedName = names[0];
     }
 }
 
@@ -957,6 +960,7 @@ void Document::recalc()
 void Document::updateConfig()
 {
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
+    initSymbolNamesAction();
     recalc();
 }
 

@@ -48,6 +48,7 @@ class Form1(QWidget):
         return list
     
     def setFont(self, fontName, font):
+        fontName = fontName.replace("%20", " ")
         self.fontName = fontName
         for i in self.chars:
             charLabel, number, latexName, charClass = self.chars[i]
@@ -160,7 +161,11 @@ class ContentGenerator(handler.ContentHandler):
             if not self.currentFont:
                 raise "entry must belong to a font"
             for (name, value) in attrs.items():
-                if name == "key": key = int(value)
+                if name == "key":
+                    if len(value) > 1 and value[:2] == "0x":
+                        key = int(value[2:], 16)
+                    else:
+                        key = int(value)
                 elif name == "number": number = value
                 elif name == "name": latexName = value
                 elif name == "class": charClass = value

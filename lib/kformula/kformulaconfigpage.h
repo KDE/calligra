@@ -22,6 +22,7 @@
 #define kfconfigpages_h
 
 #include <qfont.h>
+#include <qvaluevector.h>
 
 #include <kdialogbase.h>
 
@@ -33,11 +34,13 @@ class QGridLayout;
 class QLabel;
 class QPushButton;
 class QSpinBox;
+class QStringList;
 class QWidget;
 
 class KColorButton;
 class KConfig;
-
+class KListView;
+class KPushButton;
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -92,6 +95,44 @@ private:
     KColorButton* emptyColorBtn;
     KColorButton* errorColorBtn;
     QCheckBox* syntaxHighlighting;
+};
+
+
+class MathFontsConfigurePage : public QObject
+{
+    Q_OBJECT
+public:
+
+    MathFontsConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name = 0 );
+    void apply();
+    void slotDefault();
+
+    QValueVector<QString>::iterator findUsedFont( QString name );
+
+protected slots:
+
+    void slotAddFont();
+    void slotRemoveFont();
+    void slotMoveUp();
+    void slotMoveDown();
+
+private:
+
+    void setupLists( const QStringList& usedFonts );
+
+    Document* m_document;
+    QWidget* m_view;
+    KConfig* m_config;
+
+    KListView* availableFonts;
+    KListView* requestedFonts;
+
+    KPushButton* addFont;
+    KPushButton* removeFont;
+    KPushButton* moveUp;
+    KPushButton* moveDown;
+
+    QValueVector<QString> usedFontList;
 };
 
 

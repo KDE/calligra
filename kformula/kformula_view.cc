@@ -59,8 +59,8 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     scrollview->viewport()->setFocusProxy( scrollview );
     scrollview->viewport()->setFocusPolicy( WheelFocus );
-    scrollview->setFocus();
-    //formulaWidget->setFocus();
+    //scrollview->setFocus();
+    formulaWidget->setFocus();
 
     // Nice parts start in read only mode.
     formulaWidget->setReadOnly(true);

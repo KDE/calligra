@@ -3,10 +3,8 @@
 # Unicode mapping for the esstixfour font. You can find it at
 # ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
 #
-# The first line contains the fonts name. All remaining
-# lines consist of a char position and its unicode value.
+# Each line consist of a char position and its unicode value.
 #
-name = esstixfour
 56, 0x2291
 77, 0x2290
 72, 0x220B
@@ -31,10 +29,10 @@ name = esstixfour
 81, 0x228B
 61, 0x228A
 55, 0x228F
+53, 0xE304
 75, 0xE305
 162, 0x223C
 121, 0x2245
-53, 0xE304
 54, 0x22D0
 76, 0x22D1
 49, 0x22F1

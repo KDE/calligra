@@ -58,8 +58,8 @@ ContextStyle::ContextStyle()
 
 void ContextStyle::init()
 {
-    table.init();
     setup();
+    table.init( this );
 }
 
 void ContextStyle::readConfig( KConfig* config )
@@ -73,10 +73,34 @@ void ContextStyle::readConfig( KConfig* config )
     numberFont.fromString( fontName );
     fontName = config->readEntry( "operatorFont", "Times,12,-1,5,50,0,0,0,0,0" );
     operatorFont.fromString( fontName );
-    //fontName = config->readEntry( "symbolFont", "times,12,-1,5,50,0,0,0,0,0" );
-    //symbolFont.fromString( fontName );
     QString baseSize = config->readEntry( "baseSize", "20" );
     m_baseSize = baseSize.toDouble();
+
+    m_requestedFonts = config->readListEntry( "usedMathFonts" );
+    if ( m_requestedFonts.size() == 0 ) {
+        m_requestedFonts.push_back( "esstixone" );
+        m_requestedFonts.push_back( "esstixtwo" );
+        m_requestedFonts.push_back( "esstixthree" );
+        m_requestedFonts.push_back( "esstixfour" );
+        m_requestedFonts.push_back( "esstixfive" );
+        m_requestedFonts.push_back( "esstixsix" );
+        m_requestedFonts.push_back( "esstixseven" );
+        m_requestedFonts.push_back( "esstixeight" );
+        m_requestedFonts.push_back( "esstixnine" );
+        m_requestedFonts.push_back( "esstixten" );
+        m_requestedFonts.push_back( "esstixeleven" );
+        m_requestedFonts.push_back( "esstixtwelve" );
+        m_requestedFonts.push_back( "esstixthirteen" );
+        m_requestedFonts.push_back( "esstixfourteen" );
+        m_requestedFonts.push_back( "esstixfifteen" );
+        m_requestedFonts.push_back( "esstixsixteen" );
+        m_requestedFonts.push_back( "esstixseventeen" );
+//         m_requestedFonts.push_back( "mt extra" );
+//         m_requestedFonts.push_back( "mt symbol" );
+//         m_requestedFonts.push_back( "euclid math one" );
+//         m_requestedFonts.push_back( "euclid math two" );
+//         m_requestedFonts.push_back( "euclid symbol" );
+    }
 
     config->setGroup( "kformula Color" );
     defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
@@ -147,6 +171,17 @@ void ContextStyle::setErrorColor( const QColor& color )
 void ContextStyle::setEmptyColor( const QColor& color )
 {
     emptyColor = color;
+}
+
+const QStringList& ContextStyle::requestedFonts() const
+{
+    return m_requestedFonts;
+}
+
+void ContextStyle::setRequestedFonts( const QStringList& list )
+{
+    m_requestedFonts = list;
+    table.init( this );
 }
 
 double ContextStyle::getReductionFactor( TextStyle tstyle ) const

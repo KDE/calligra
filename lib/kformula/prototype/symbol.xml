@@ -164,7 +164,7 @@
     <entry key="118" number="0x22BB" name="veebar" class="RELATION"/>
     <entry key="119" number="0x22BC" name="barwedge" class="RELATION"/>
     <entry key="120" number="" name="" class="RELATION"/>
-    <entry key="121" number="" name="doublebarwedge" class="RELATION"/>
+    <entry key="121" number="0x2306" name="doublebarwedge" class="RELATION"/>
     <entry key="167" number="0x2118" name="wp" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="symbol">
@@ -178,10 +178,10 @@
     <entry key="39" number="0x220D" name="ni" class="RELATION"/>
     <entry key="40" number="0x0028" name="" class="ORDINARY"/>
     <entry key="41" number="0x0029" name="" class="ORDINARY"/>
-    <entry key="42" number="0x2217" name="" class="BINOP"/>
+    <entry key="42" number="0x2217" name="ast" class="BINOP"/>
     <entry key="43" number="0x002B" name="" class="BINOP"/>
     <entry key="44" number="0x002C" name="" class="PUNCTUATION"/>
-    <entry key="45" number="0x2212" name="" class="BINOP"/>
+    <entry key="45" number="0x2212" name="minus" class="BINOP"/>
     <entry key="46" number="0x002E" name="" class="PUNCTUATION"/>
     <entry key="47" number="0x002F" name="" class="ORDINARY"/>
     <entry key="48" number="0x0030" name="" class="ORDINARY"/>
@@ -194,11 +194,11 @@
     <entry key="55" number="0x0037" name="" class="ORDINARY"/>
     <entry key="56" number="0x0038" name="" class="ORDINARY"/>
     <entry key="57" number="0x0039" name="" class="ORDINARY"/>
-    <entry key="58" number="0x003A" name="" class="PUNCTUATION"/>
+    <entry key="58" number="0x003A" name="colon" class="PUNCTUATION"/>
     <entry key="59" number="0x003B" name="" class="PUNCTUATION"/>
-    <entry key="60" number="0x003C" name="" class="RELATION"/>
+    <entry key="60" number="0x003C" name="less" class="RELATION"/>
     <entry key="61" number="0x003D" name="" class="RELATION"/>
-    <entry key="62" number="0x003E" name="" class="RELATION"/>
+    <entry key="62" number="0x003E" name="greater" class="RELATION"/>
     <entry key="63" number="0x003F" name="" class="ORDINARY"/>
     <entry key="64" number="0x2245" name="cong" class="RELATION"/>
     <entry key="65" number="0x0391" name="" class="ORDINARY"/>
@@ -227,9 +227,9 @@
     <entry key="88" number="0x039E" name="Xi" class="ORDINARY"/>
     <entry key="89" number="0x03A8" name="Psi" class="ORDINARY"/>
     <entry key="90" number="0x0396" name="" class="ORDINARY"/>
-    <entry key="91" number="0x005B" name="" class="ORDINARY"/>
+    <entry key="91" number="0x005B" name="lbrack" class="ORDINARY"/>
     <entry key="92" number="0x2234" name="therefore" class="BINOP"/>
-    <entry key="93" number="0x005D" name="" class="ORDINARY"/>
+    <entry key="93" number="0x005D" name="rbrack" class="ORDINARY"/>
     <entry key="94" number="0x22A5" name="" class="ORDINARY"/>
     <entry key="95" number="0x005F" name="" class="ORDINARY"/>
     <entry key="96" number="0xF8E5" name="" class="ORDINARY"/>
@@ -259,9 +259,9 @@
     <entry key="120" number="0x03BE" name="xi" class="ORDINARY"/>
     <entry key="121" number="0x03C8" name="psi" class="ORDINARY"/>
     <entry key="122" number="0x03B6" name="zeta" class="ORDINARY"/>
-    <entry key="123" number="0x007B" name="" class="ORDINARY"/>
+    <entry key="123" number="0x007B" name="lbrace" class="ORDINARY"/>
     <entry key="124" number="0x007C" name="mid" class="ORDINARY"/>
-    <entry key="125" number="0x007D" name="" class="ORDINARY"/>
+    <entry key="125" number="0x007D" name="rbrace" class="ORDINARY"/>
     <entry key="126" number="0x223C" name="sim" class="RELATION"/>
     <entry key="127" number="" name="" class="ORDINARY"/>
     <entry key="128" number="" name="" class="ORDINARY"/>
@@ -298,9 +298,9 @@
     <entry key="159" number="" name="" class="ORDINARY"/>
     <entry key="160" number="" name="" class="ORDINARY"/>
     <entry key="161" number="0x03D2" name="Upsilon" class="ORDINARY"/>
-    <entry key="162" number="0x2032" name="" class="ORDINARY"/>
+    <entry key="162" number="0x2032" name="prime" class="ORDINARY"/>
     <entry key="163" number="0x2264" name="leq" class="RELATION"/>
-    <entry key="164" number="0x2244" name="" class="ORDINARY"/>
+    <entry key="164" number="0x2244" name="nsime" class="ORDINARY"/>
     <entry key="165" number="0x221E" name="infty" class="ORDINARY"/>
     <entry key="166" number="0x0192" name="" class="ORDINARY"/>
     <entry key="167" number="0x2663" name="clubsuit" class="ORDINARY"/>
@@ -312,7 +312,7 @@
     <entry key="173" number="0x2191" name="uparrow" class="RELATION"/>
     <entry key="174" number="0x2192" name="rightarrow" class="RELATION"/>
     <entry key="175" number="0x2193" name="downarrow" class="RELATION"/>
-    <entry key="176" number="0x00B0" name="" class="ORDINARY"/>
+    <entry key="176" number="0x00B0" name="degree" class="ORDINARY"/>
     <entry key="177" number="0x00B1" name="pm" class="BINOP"/>
     <entry key="178" number="0x2033" name="" class="ORDINARY"/>
     <entry key="179" number="0x2265" name="geq" class="RELATION"/>
@@ -327,7 +327,7 @@
     <entry key="188" number="0x2026" name="ldots" class="ORDINARY"/>
     <entry key="189" number="0xF8E6" name="" class="RELATION"/>
     <entry key="190" number="0xF8E7" name="" class="ORDINARY"/>
-    <entry key="191" number="0x21B5" name="" class="ORDINARY"/>
+    <entry key="191" number="0x21B5" name="carriagereturn" class="ORDINARY"/>
     <entry key="192" number="0x2135" name="aleph" class="ORDINARY"/>
     <entry key="193" number="0x2111" name="Im" class="ORDINARY"/>
     <entry key="194" number="0x211C" name="Re" class="ORDINARY"/>
@@ -339,11 +339,11 @@
     <entry key="200" number="0x222A" name="cup" class="BINOP"/>
     <entry key="201" number="0x2283" name="supset" class="RELATION"/>
     <entry key="202" number="0x2287" name="supseteq" class="RELATION"/>
-    <entry key="203" number="0x2284" name="" class="RELATION"/>
+    <entry key="203" number="0x2284" name="nsubset" class="RELATION"/>
     <entry key="204" number="0x2282" name="subset" class="RELATION"/>
     <entry key="205" number="0x2286" name="subseteq" class="RELATION"/>
     <entry key="206" number="0x2208" name="in" class="RELATION"/>
-    <entry key="207" number="0x2209" name="" class="RELATION"/>
+    <entry key="207" number="0x2209" name="notin" class="RELATION"/>
     <entry key="208" number="0x2220" name="angle" class="ORDINARY"/>
     <entry key="209" number="0x2207" name="nabla" class="ORDINARY"/>
     <entry key="210" number="0x00AE" name="" class="ORDINARY"/>
@@ -361,7 +361,7 @@
     <entry key="222" number="0x21D2" name="Rightarrow" class="RELATION"/>
     <entry key="223" number="0x21D3" name="Downarrow" class="RELATION"/>
     <entry key="224" number="0x26C4" name="Diamond" class="ORDINARY"/>
-    <entry key="225" number="0x2329" name="" class="ORDINARY"/>
+    <entry key="225" number="0x2329" name="langle" class="ORDINARY"/>
     <entry key="226" number="0xF8E8" name="" class="ORDINARY"/>
     <entry key="227" number="0xF8E9" name="" class="ORDINARY"/>
     <entry key="228" number="0xF8EA" name="" class="ORDINARY"/>
@@ -377,7 +377,7 @@
     <entry key="238" number="0xF8F3" name="" class="ORDINARY"/>
     <entry key="239" number="0xF8F4" name="" class="ORDINARY"/>
     <entry key="240" number="" name="" class="ORDINARY"/>
-    <entry key="241" number="0x232A" name="" class="ORDINARY"/>
+    <entry key="241" number="0x232A" name="rangle" class="ORDINARY"/>
     <entry key="242" number="0x222B" name="int" class="ORDINARY"/>
     <entry key="243" number="0x2320" name="" class="ORDINARY"/>
     <entry key="244" number="0xF8F5" name="" class="ORDINARY"/>
@@ -429,6 +429,147 @@
     <entry key="121" number="0x2245" name="cong" class="RELATION"/>
     <entry key="162" number="0x223C" name="sim" class="RELATION"/>
   </unicodetable>
+  <unicodetable font="euclid%20math%20two">
+    <entry key="33" number="0x25B3" name="bigtriangleup" class="ORDINARY"/>
+    <entry key="34" number="0x25BD" name="bigtriangledown" class="ORDINARY"/>
+    <entry key="35" number="0x25B2" name="" class="ORDINARY"/>
+    <entry key="36" number="0x25BC" name="" class="ORDINARY"/>
+    <entry key="37" number="0x25B6" name="blacktriangleright" class="ORDINARY"/>
+    <entry key="38" number="0x25C0" name="blacktriangleleft" class="ORDINARY"/>
+    <entry key="39" number="0x22B5" name="trianglerighteq" class="ORDINARY"/>
+    <entry key="40" number="0x22B4" name="trianglelefteq" class="ORDINARY"/>
+    <entry key="41" number="0x22EB" name="ntriangleright" class="ORDINARY"/>
+    <entry key="42" number="0x22EA" name="ntriangleleft" class="ORDINARY"/>
+    <entry key="43" number="0x22ED" name="ntrianglerighteq" class="ORDINARY"/>
+    <entry key="44" number="0x22EC" name="ntrianglelefteq" class="ORDINARY"/>
+    <entry key="65" number="0xF080" name="" class="ORDINARY"/>
+    <entry key="66" number="0xF081" name="" class="ORDINARY"/>
+    <entry key="67" number="0x2102" name="" class="ORDINARY"/>
+    <entry key="68" number="0xF083" name="" class="ORDINARY"/>
+    <entry key="69" number="0xF084" name="" class="ORDINARY"/>
+    <entry key="70" number="0xF085" name="" class="ORDINARY"/>
+    <entry key="71" number="0xF086" name="" class="ORDINARY"/>
+    <entry key="72" number="0x210D" name="" class="ORDINARY"/>
+    <entry key="73" number="0xF088" name="" class="ORDINARY"/>
+    <entry key="74" number="0xF089" name="" class="ORDINARY"/>
+    <entry key="75" number="0xF08A" name="" class="ORDINARY"/>
+    <entry key="76" number="0xF08B" name="" class="ORDINARY"/>
+    <entry key="77" number="0xF08C" name="" class="ORDINARY"/>
+    <entry key="78" number="0x2115" name="" class="ORDINARY"/>
+    <entry key="79" number="0xF08E" name="" class="ORDINARY"/>
+    <entry key="80" number="0x2119" name="" class="ORDINARY"/>
+    <entry key="81" number="0x211A" name="" class="ORDINARY"/>
+    <entry key="82" number="0x211D" name="" class="ORDINARY"/>
+    <entry key="83" number="0xF092" name="" class="ORDINARY"/>
+    <entry key="84" number="0xF093" name="" class="ORDINARY"/>
+    <entry key="85" number="0xF094" name="" class="ORDINARY"/>
+    <entry key="86" number="0xF095" name="" class="ORDINARY"/>
+    <entry key="87" number="0xF096" name="" class="ORDINARY"/>
+    <entry key="88" number="0xF097" name="" class="ORDINARY"/>
+    <entry key="89" number="0xF098" name="" class="ORDINARY"/>
+    <entry key="90" number="0x2124" name="" class="ORDINARY"/>
+    <entry key="107" number="0xF0A4" name="" class="ORDINARY"/>
+    <entry key="128" number="0x22D6" name="lessdot" class="ORDINARY"/>
+    <entry key="129" number="0x22D7" name="gtrdot" class="ORDINARY"/>
+    <entry key="130" number="0x22DC" name="eqless" class="ORDINARY"/>
+    <entry key="131" number="0x22DD" name="eqgtr" class="ORDINARY"/>
+    <entry key="132" number="0x2264" name="leq" class="ORDINARY"/>
+    <entry key="133" number="0x2265" name="geq" class="ORDINARY"/>
+    <entry key="134" number="0x2266" name="leqq" class="ORDINARY"/>
+    <entry key="135" number="0x2267" name="geqq" class="ORDINARY"/>
+    <entry key="136" number="0x2272" name="lesssim" class="ORDINARY"/>
+    <entry key="137" number="0x2273" name="gtrsim" class="ORDINARY"/>
+    <entry key="138" number="0xE932" name="" class="ORDINARY"/>
+    <entry key="139" number="0xE933" name="" class="ORDINARY"/>
+    <entry key="140" number="0x22D8" name="lll" class="ORDINARY"/>
+    <entry key="141" number="0x22D9" name="ggg" class="ORDINARY"/>
+    <entry key="142" number="0x226E" name="nless" class="ORDINARY"/>
+    <entry key="143" number="0x226F" name="ngtr" class="ORDINARY"/>
+    <entry key="144" number="0xEA34" name="" class="ORDINARY"/>
+    <entry key="145" number="0xEA35" name="" class="ORDINARY"/>
+    <entry key="146" number="0x2270" name="nleq" class="ORDINARY"/>
+    <entry key="147" number="0x2271" name="ngeq" class="ORDINARY"/>
+    <entry key="148" number="0xEA10" name="" class="ORDINARY"/>
+    <entry key="149" number="0xEA0E" name="" class="ORDINARY"/>
+    <entry key="150" number="0x2270" name="nleq" class="ORDINARY"/>
+    <entry key="151" number="0x2271" name="ngeq" class="ORDINARY"/>
+    <entry key="152" number="0x2268" name="" class="ORDINARY"/>
+    <entry key="153" number="0x2269" name="" class="ORDINARY"/>
+    <entry key="154" number="0x2268" name="" class="ORDINARY"/>
+    <entry key="155" number="0x2269" name="" class="ORDINARY"/>
+    <entry key="156" number="0xEA06" name="" class="ORDINARY"/>
+    <entry key="157" number="0xEA07" name="" class="ORDINARY"/>
+    <entry key="158" number="0x22E6" name="lnsim" class="ORDINARY"/>
+    <entry key="159" number="0x22E7" name="gnsim" class="ORDINARY"/>
+    <entry key="160" number="0x00A0" name="" class="ORDINARY"/>
+    <entry key="161" number="0xEA32" name="" class="ORDINARY"/>
+    <entry key="162" number="0xEA33" name="" class="ORDINARY"/>
+    <entry key="163" number="0x2276" name="lessgtr" class="ORDINARY"/>
+    <entry key="164" number="0x2277" name="gtrless" class="ORDINARY"/>
+    <entry key="165" number="0x22DA" name="lesseqgtr" class="ORDINARY"/>
+    <entry key="166" number="0x22DB" name="gtreqless" class="ORDINARY"/>
+    <entry key="167" number="0xE922" name="" class="ORDINARY"/>
+    <entry key="168" number="0xE92D" name="" class="ORDINARY"/>
+    <entry key="169" number="0x22BB" name="veebar" class="ORDINARY"/>
+    <entry key="170" number="0x22BC" name="barwedge" class="ORDINARY"/>
+    <entry key="171" number="0x2306" name="doublebarwedge" class="ORDINARY"/>
+    <entry key="176" number="0x227C" name="preccurlyeq" class="ORDINARY"/>
+    <entry key="177" number="0x227D" name="succcurlyeq" class="ORDINARY"/>
+    <entry key="178" number="0x22DE" name="curlyeqprec" class="ORDINARY"/>
+    <entry key="179" number="0x22DF" name="curlyeqsucc" class="ORDINARY"/>
+    <entry key="180" number="0x227C" name="preccurlyeq" class="ORDINARY"/>
+    <entry key="181" number="0x227D" name="succcurlyeq" class="ORDINARY"/>
+    <entry key="182" number="0x227E" name="precsim" class="ORDINARY"/>
+    <entry key="183" number="0x227F" name="succsim" class="ORDINARY"/>
+    <entry key="184" number="0xE93A" name="" class="ORDINARY"/>
+    <entry key="185" number="0xE93B" name="" class="ORDINARY"/>
+    <entry key="186" number="0x2280" name="nprec" class="ORDINARY"/>
+    <entry key="187" number="0x2281" name="nsucc" class="ORDINARY"/>
+    <entry key="188" number="0xEA3C" name="" class="ORDINARY"/>
+    <entry key="189" number="0xEA3D" name="" class="ORDINARY"/>
+    <entry key="190" number="0x22E0" name="" class="ORDINARY"/>
+    <entry key="191" number="0x22E1" name="" class="ORDINARY"/>
+    <entry key="192" number="0xEA3E" name="" class="ORDINARY"/>
+    <entry key="193" number="0xEA3F" name="" class="ORDINARY"/>
+    <entry key="194" number="0x22E0" name="" class="ORDINARY"/>
+    <entry key="195" number="0x22E1" name="" class="ORDINARY"/>
+    <entry key="196" number="0xEA40" name="" class="ORDINARY"/>
+    <entry key="197" number="0xEA41" name="" class="ORDINARY"/>
+    <entry key="198" number="0x22E8" name="precnsim" class="ORDINARY"/>
+    <entry key="199" number="0x22E9" name="succnsim" class="ORDINARY"/>
+    <entry key="200" number="0xEA3A" name="" class="ORDINARY"/>
+    <entry key="201" number="0xEA3B" name="" class="ORDINARY"/>
+    <entry key="202" number="0x22CF" name="curlywedge" class="ORDINARY"/>
+    <entry key="203" number="0x22CE" name="curlyvee" class="ORDINARY"/>
+    <entry key="208" number="0x22D0" name="Subset" class="ORDINARY"/>
+    <entry key="209" number="0x22D1" name="Supset" class="ORDINARY"/>
+    <entry key="210" number="0x22D3" name="Cup" class="ORDINARY"/>
+    <entry key="211" number="0x22D2" name="Cap" class="ORDINARY"/>
+    <entry key="212" number="0xE90C" name="" class="ORDINARY"/>
+    <entry key="213" number="0xE90B" name="" class="ORDINARY"/>
+    <entry key="214" number="0x228A" name="subsetneq" class="ORDINARY"/>
+    <entry key="215" number="0x228B" name="supsetneq" class="ORDINARY"/>
+    <entry key="216" number="0xEA42" name="" class="ORDINARY"/>
+    <entry key="217" number="0xEA43" name="" class="ORDINARY"/>
+    <entry key="218" number="0x2288" name="nsubseteq" class="ORDINARY"/>
+    <entry key="219" number="0x2289" name="nsupseteq" class="ORDINARY"/>
+    <entry key="220" number="0xEA44" name="" class="ORDINARY"/>
+    <entry key="221" number="0xEA45" name="" class="ORDINARY"/>
+    <entry key="222" number="0xEA46" name="" class="ORDINARY"/>
+    <entry key="223" number="0xEA47" name="" class="ORDINARY"/>
+    <entry key="224" number="0xEA0C" name="" class="ORDINARY"/>
+    <entry key="225" number="0xEA0B" name="" class="ORDINARY"/>
+    <entry key="226" number="0x228E" name="uplus" class="ORDINARY"/>
+    <entry key="227" number="0x22D4" name="pitchfork" class="ORDINARY"/>
+    <entry key="228" number="0x2208" name="" class="ORDINARY"/>
+    <entry key="229" number="0x220B" name="ni" class="ORDINARY"/>
+    <entry key="240" number="0x228F" name="sqsubset" class="ORDINARY"/>
+    <entry key="241" number="0x2290" name="sqsupset" class="ORDINARY"/>
+    <entry key="242" number="0x2294" name="sqcup" class="ORDINARY"/>
+    <entry key="243" number="0x2293" name="sqcap" class="ORDINARY"/>
+    <entry key="244" number="0x2291" name="sqsubseteq" class="ORDINARY"/>
+    <entry key="245" number="0x2292" name="sqsupseteq" class="ORDINARY"/>
+  </unicodetable>
   <unicodetable font="esstixsix">
     <entry key="33" number="0x222B" name="int" class="ORDINARY"/>
     <entry key="35" number="0x222E" name="oint" class="ORDINARY"/>
@@ -462,11 +603,311 @@
     <entry key="85" number="" name="unlhd" class="BINOP"/>
     <entry key="86" number="" name="unrhd" class="BINOP"/>
   </unicodetable>
+  <unicodetable font="mt%20extra">
+    <entry key="35" number="0x0300" name="grave" class="ORDINARY"/>
+    <entry key="36" number="0x0302" name="hat" class="ORDINARY"/>
+    <entry key="37" number="0x0303" name="" class="ORDINARY"/>
+    <entry key="38" number="0x0307" name="" class="ORDINARY"/>
+    <entry key="40" number="0x2323" name="" class="ORDINARY"/>
+    <entry key="41" number="0x2322" name="" class="ORDINARY"/>
+    <entry key="49" number="0xEC00" name="" class="ORDINARY"/>
+    <entry key="50" number="0xEC01" name="" class="ORDINARY"/>
+    <entry key="51" number="0xEC02" name="" class="ORDINARY"/>
+    <entry key="52" number="0xEC03" name="" class="ORDINARY"/>
+    <entry key="53" number="0xEC0B" name="" class="ORDINARY"/>
+    <entry key="54" number="0xEC04" name="" class="ORDINARY"/>
+    <entry key="55" number="0xEC05" name="" class="ORDINARY"/>
+    <entry key="56" number="0xEC06" name="" class="ORDINARY"/>
+    <entry key="58" number="0x223C" name="" class="ORDINARY"/>
+    <entry key="59" number="0x2243" name="simeq" class="RELATION"/>
+    <entry key="60" number="0x22B2" name="vartriangleleft" class="RELATION"/>
+    <entry key="61" number="0x226A" name="ll" class="RELATION"/>
+    <entry key="62" number="0x22B3" name="vartriangleright" class="RELATION"/>
+    <entry key="63" number="0x226B" name="gg" class="RELATION"/>
+    <entry key="64" number="0x225C" name="triangleq" class="RELATION"/>
+    <entry key="65" number="0x2259" name="wedgeq" class="RELATION"/>
+    <entry key="66" number="0x2250" name="doteq" class="RELATION"/>
+    <entry key="67" number="0x2210" name="coprod" class="ORDINARY"/>
+    <entry key="68" number="0x019B" name="lambdabar" class="ORDINARY"/>
+    <entry key="69" number="0xEC0E" name="" class="ORDINARY"/>
+    <entry key="70" number="0xEC0F" name="" class="ORDINARY"/>
+    <entry key="71" number="0xEC10" name="" class="ORDINARY"/>
+    <entry key="72" number="0xEC11" name="" class="ORDINARY"/>
+    <entry key="73" number="0x2229" name="cap" class="ORDINARY"/>
+    <entry key="74" number="0x2127" name="mho" class="ORDINARY"/>
+    <entry key="75" number="0x2026" name="dots" class="ORDINARY"/>
+    <entry key="76" number="0x22EF" name="cdots" class="ORDINARY"/>
+    <entry key="77" number="0x22EE" name="vdots" class="ORDINARY"/>
+    <entry key="78" number="0x22F0" name="adots" class="ORDINARY"/>
+    <entry key="79" number="0x22F1" name="ddots" class="ORDINARY"/>
+    <entry key="80" number="0x2225" name="" class="ORDINARY"/>
+    <entry key="81" number="0x2235" name="because" class="BINOP"/>
+    <entry key="82" number="0x2221" name="measuredangle" class="ORDINARY"/>
+    <entry key="83" number="0x2222" name="" class="ORDINARY"/>
+    <entry key="85" number="0x222A" name="cup" class="ORDINARY"/>
+    <entry key="86" number="0x25B3" name="bigtriangleup" class="ORDINARY"/>
+    <entry key="87" number="0x25A1" name="" class="ORDINARY"/>
+    <entry key="88" number="0x25AD" name="" class="ORDINARY"/>
+    <entry key="89" number="0x25B1" name="" class="ORDINARY"/>
+    <entry key="90" number="0x2197" name="nearrow" class="ORDINARY"/>
+    <entry key="91" number="0x2199" name="swarrow" class="ORDINARY"/>
+    <entry key="92" number="0xEB05" name="" class="ORDINARY"/>
+    <entry key="93" number="0x2198" name="searrow" class="ORDINARY"/>
+    <entry key="94" number="0x2196" name="nwarrow" class="ORDINARY"/>
+    <entry key="95" number="0xEB06" name="" class="ORDINARY"/>
+    <entry key="96" number="0x2035" name="backprime" class="ORDINARY"/>
+    <entry key="97" number="0x21A6" name="mapsto" class="ORDINARY"/>
+    <entry key="98" number="0x2195" name="updownarrow" class="ORDINARY"/>
+    <entry key="99" number="0x21D5" name="Updownarrow" class="ORDINARY"/>
+    <entry key="100" number="0x25CB" name="bigcirc" class="ORDINARY"/>
+    <entry key="101" number="0x2299" name="odot" class="ORDINARY"/>
+    <entry key="102" number="0x227B" name="succ" class="ORDINARY"/>
+    <entry key="103" number="0xE98F" name="" class="ORDINARY"/>
+    <entry key="104" number="0x210F" name="" class="ORDINARY"/>
+    <entry key="105" number="0xEE00" name="" class="ORDINARY"/>
+    <entry key="106" number="0xEE01" name="" class="ORDINARY"/>
+    <entry key="108" number="0x2113" name="" class="ORDINARY"/>
+    <entry key="109" number="0x2213" name="mp" class="ORDINARY"/>
+    <entry key="110" number="0xFFFD" name="" class="ORDINARY"/>
+    <entry key="111" number="0x2218" name="circ" class="ORDINARY"/>
+    <entry key="112" number="0x227A" name="prec" class="ORDINARY"/>
+    <entry key="113" number="0xEB1A" name="" class="ORDINARY"/>
+    <entry key="114" number="0x20D7" name="vec" class="ORDINARY"/>
+    <entry key="115" number="0x20D6" name="overleftarrow" class="ORDINARY"/>
+    <entry key="116" number="0x20E1" name="overleftrightarrow" class="ORDINARY"/>
+    <entry key="117" number="0xEB00" name="" class="ORDINARY"/>
+    <entry key="118" number="0x20D1" name="rightharpoonaccent" class="ORDINARY"/>
+    <entry key="119" number="0x20D0" name="leftharpoonaccent" class="ORDINARY"/>
+    <entry key="120" number="0xEB19" name="" class="ORDINARY"/>
+    <entry key="123" number="0xFE38" name="" class="ORDINARY"/>
+    <entry key="124" number="0xEC0C" name="" class="ORDINARY"/>
+    <entry key="125" number="0xFE37" name="" class="ORDINARY"/>
+    <entry key="126" number="0xEC0D" name="" class="ORDINARY"/>
+    <entry key="128" number="0x21C4" name="rightleftarrows" class="ORDINARY"/>
+    <entry key="129" number="0xEB01" name="" class="ORDINARY"/>
+    <entry key="130" number="0xEB02" name="" class="ORDINARY"/>
+    <entry key="131" number="0x21CC" name="rightleftharpoons" class="ORDINARY"/>
+    <entry key="132" number="0xEB03" name="" class="ORDINARY"/>
+    <entry key="133" number="0xEB04" name="" class="ORDINARY"/>
+    <entry key="134" number="0x21C0" name="rightharpoonup" class="ORDINARY"/>
+    <entry key="135" number="0x21BD" name="leftharpoondown" class="ORDINARY"/>
+    <entry key="136" number="0xF8E7" name="" class="ORDINARY"/>
+    <entry key="161" number="0x211D" name="" class="ORDINARY"/>
+    <entry key="162" number="0x2124" name="" class="ORDINARY"/>
+    <entry key="163" number="0x2102" name="" class="ORDINARY"/>
+    <entry key="164" number="0x211A" name="" class="ORDINARY"/>
+    <entry key="165" number="0x2115" name="" class="ORDINARY"/>
+    <entry key="167" number="0x301A" name="" class="ORDINARY"/>
+    <entry key="168" number="0x301B" name="" class="ORDINARY"/>
+    <entry key="169" number="0xEC22" name="" class="ORDINARY"/>
+    <entry key="170" number="0xEC23" name="" class="ORDINARY"/>
+    <entry key="171" number="0xEC24" name="" class="ORDINARY"/>
+    <entry key="172" number="0xEC25" name="" class="ORDINARY"/>
+    <entry key="173" number="0xEC26" name="" class="ORDINARY"/>
+    <entry key="174" number="0xEC27" name="" class="ORDINARY"/>
+    <entry key="176" number="0xEE04" name="" class="ORDINARY"/>
+    <entry key="177" number="0xEE05" name="" class="ORDINARY"/>
+    <entry key="178" number="0xEE06" name="" class="ORDINARY"/>
+    <entry key="181" number="0xEE07" name="" class="ORDINARY"/>
+    <entry key="182" number="0xEE08" name="" class="ORDINARY"/>
+    <entry key="183" number="0xEE09" name="" class="ORDINARY"/>
+    <entry key="186" number="0xEE0A" name="" class="ORDINARY"/>
+    <entry key="187" number="0xEE0B" name="" class="ORDINARY"/>
+    <entry key="188" number="0xEE0C" name="" class="ORDINARY"/>
+    <entry key="192" number="0xEE0D" name="" class="ORDINARY"/>
+    <entry key="193" number="0xEE0E" name="" class="ORDINARY"/>
+    <entry key="194" number="0xEE0F" name="" class="ORDINARY"/>
+    <entry key="195" number="0xEE10" name="" class="ORDINARY"/>
+    <entry key="209" number="0xEE11" name="" class="ORDINARY"/>
+    <entry key="210" number="0xEE12" name="" class="ORDINARY"/>
+    <entry key="211" number="0xEE13" name="" class="ORDINARY"/>
+    <entry key="213" number="0xEE15" name="" class="ORDINARY"/>
+    <entry key="214" number="0xEE16" name="" class="ORDINARY"/>
+    <entry key="231" number="0xF8FF" name="" class="ORDINARY"/>
+    <entry key="232" number="0x0160" name="" class="ORDINARY"/>
+    <entry key="233" number="0x00DD" name="" class="ORDINARY"/>
+    <entry key="234" number="0x00DE" name="" class="ORDINARY"/>
+    <entry key="235" number="0x00D0" name="" class="ORDINARY"/>
+    <entry key="236" number="0x0161" name="" class="ORDINARY"/>
+    <entry key="237" number="0x00FD" name="" class="ORDINARY"/>
+    <entry key="238" number="0x00FE" name="" class="ORDINARY"/>
+    <entry key="239" number="0x00F0" name="" class="ORDINARY"/>
+    <entry key="240" number="0xFB01" name="" class="ORDINARY"/>
+    <entry key="241" number="0xFB02" name="" class="ORDINARY"/>
+    <entry key="242" number="0x0131" name="" class="ORDINARY"/>
+    <entry key="243" number="0x00B9" name="" class="ORDINARY"/>
+    <entry key="244" number="0x00B2" name="" class="ORDINARY"/>
+    <entry key="245" number="0x00B3" name="" class="ORDINARY"/>
+    <entry key="246" number="0x00BD" name="" class="ORDINARY"/>
+    <entry key="247" number="0x00BC" name="" class="ORDINARY"/>
+    <entry key="248" number="0x00BE" name="" class="ORDINARY"/>
+    <entry key="249" number="0x2044" name="" class="ORDINARY"/>
+    <entry key="250" number="0x00A6" name="" class="ORDINARY"/>
+    <entry key="251" number="0x02DD" name="" class="ORDINARY"/>
+    <entry key="252" number="0x02D8" name="" class="ORDINARY"/>
+    <entry key="253" number="0x02C7" name="" class="ORDINARY"/>
+    <entry key="254" number="0x02DA" name="" class="ORDINARY"/>
+    <entry key="255" number="0x02DB" name="" class="ORDINARY"/>
+  </unicodetable>
   <unicodetable font="esstixtwelve">
   </unicodetable>
   <unicodetable font="esstixnine">
   </unicodetable>
   <unicodetable font="esstixseventeen">
+  </unicodetable>
+  <unicodetable font="euclid%20math%20one">
+    <entry key="32" number="0x0020" name="" class="ORDINARY"/>
+    <entry key="33" number="0x2296" name="ominus" class="ORDINARY"/>
+    <entry key="34" number="0x229A" name="circledcirc" class="ORDINARY"/>
+    <entry key="35" number="0x229B" name="circledast" class="ORDINARY"/>
+    <entry key="36" number="0x2296" name="ominus" class="ORDINARY"/>
+    <entry key="37" number="0x2298" name="oslash" class="ORDINARY"/>
+    <entry key="38" number="0x24C8" name="circledS" class="ORDINARY"/>
+    <entry key="39" number="0x229F" name="boxminus" class="ORDINARY"/>
+    <entry key="40" number="0x229E" name="boxplus" class="ORDINARY"/>
+    <entry key="41" number="0x22A0" name="boxtimes" class="ORDINARY"/>
+    <entry key="42" number="0x22A1" name="boxdot" class="ORDINARY"/>
+    <entry key="43" number="0x25A0" name="" class="ORDINARY"/>
+    <entry key="44" number="0x25A1" name="" class="ORDINARY"/>
+    <entry key="45" number="0x25AA" name="" class="ORDINARY"/>
+    <entry key="48" number="0x0030" name="" class="ORDINARY"/>
+    <entry key="49" number="0x0031" name="" class="ORDINARY"/>
+    <entry key="50" number="0x0032" name="" class="ORDINARY"/>
+    <entry key="51" number="0x0033" name="" class="ORDINARY"/>
+    <entry key="52" number="0x0034" name="" class="ORDINARY"/>
+    <entry key="53" number="0x0035" name="" class="ORDINARY"/>
+    <entry key="54" number="0x0036" name="" class="ORDINARY"/>
+    <entry key="55" number="0x0037" name="" class="ORDINARY"/>
+    <entry key="56" number="0x0038" name="" class="ORDINARY"/>
+    <entry key="57" number="0x0039" name="" class="ORDINARY"/>
+    <entry key="65" number="0xF100" name="" class="ORDINARY"/>
+    <entry key="66" number="0x212C" name="" class="ORDINARY"/>
+    <entry key="67" number="0xF102" name="" class="ORDINARY"/>
+    <entry key="68" number="0xF103" name="" class="ORDINARY"/>
+    <entry key="69" number="0x2130" name="" class="ORDINARY"/>
+    <entry key="70" number="0x2131" name="" class="ORDINARY"/>
+    <entry key="71" number="0xF106" name="" class="ORDINARY"/>
+    <entry key="72" number="0x210B" name="" class="ORDINARY"/>
+    <entry key="73" number="0x2110" name="" class="ORDINARY"/>
+    <entry key="74" number="0xF109" name="" class="ORDINARY"/>
+    <entry key="75" number="0xF10A" name="" class="ORDINARY"/>
+    <entry key="76" number="0x2112" name="" class="ORDINARY"/>
+    <entry key="77" number="0x2133" name="" class="ORDINARY"/>
+    <entry key="78" number="0xF10D" name="" class="ORDINARY"/>
+    <entry key="79" number="0xF10E" name="" class="ORDINARY"/>
+    <entry key="80" number="0x2118" name="wp" class="ORDINARY"/>
+    <entry key="81" number="0xF110" name="" class="ORDINARY"/>
+    <entry key="82" number="0x211B" name="" class="ORDINARY"/>
+    <entry key="83" number="0xF112" name="" class="ORDINARY"/>
+    <entry key="84" number="0xF113" name="" class="ORDINARY"/>
+    <entry key="85" number="0xF114" name="" class="ORDINARY"/>
+    <entry key="86" number="0xF115" name="" class="ORDINARY"/>
+    <entry key="87" number="0xF116" name="" class="ORDINARY"/>
+    <entry key="88" number="0xF117" name="" class="ORDINARY"/>
+    <entry key="89" number="0xF118" name="" class="ORDINARY"/>
+    <entry key="90" number="0xF119" name="" class="ORDINARY"/>
+    <entry key="128" number="0xFE68" name="" class="ORDINARY"/>
+    <entry key="129" number="0x005C" name="backslash" class="ORDINARY"/>
+    <entry key="130" number="0x2216" name="" class="ORDINARY"/>
+    <entry key="131" number="0x2215" name="slash" class="ORDINARY"/>
+    <entry key="132" number="0x231C" name="ulcorner" class="ORDINARY"/>
+    <entry key="133" number="0x231E" name="llcorner" class="ORDINARY"/>
+    <entry key="134" number="0x231D" name="urcorner" class="ORDINARY"/>
+    <entry key="135" number="0x231F" name="lrcorner" class="ORDINARY"/>
+    <entry key="136" number="0xE92E" name="" class="ORDINARY"/>
+    <entry key="137" number="0xE92F" name="" class="ORDINARY"/>
+    <entry key="138" number="0xEA2E" name="" class="ORDINARY"/>
+    <entry key="139" number="0xEA2F" name="" class="ORDINARY"/>
+    <entry key="140" number="0x2224" name="" class="ORDINARY"/>
+    <entry key="141" number="0x2226" name="" class="ORDINARY"/>
+    <entry key="144" number="0x22A2" name="" class="ORDINARY"/>
+    <entry key="145" number="0x22A8" name="vDash" class="ORDINARY"/>
+    <entry key="146" number="0x22A9" name="Vdash" class="ORDINARY"/>
+    <entry key="147" number="0x22AA" name="Vvdash" class="ORDINARY"/>
+    <entry key="148" number="0x22A3" name="dashv" class="ORDINARY"/>
+    <entry key="149" number="0x22A4" name="top" class="ORDINARY"/>
+    <entry key="150" number="0x22AC" name="nvdash" class="ORDINARY"/>
+    <entry key="151" number="0x22AD" name="nvDash" class="ORDINARY"/>
+    <entry key="152" number="0x22AE" name="nVdash" class="ORDINARY"/>
+    <entry key="153" number="0x22AF" name="nVDash" class="ORDINARY"/>
+    <entry key="160" number="0x00A0" name="" class="ORDINARY"/>
+    <entry key="161" number="0x2257" name="circeq" class="ORDINARY"/>
+    <entry key="162" number="0x2256" name="eqcirc" class="ORDINARY"/>
+    <entry key="163" number="0x2253" name="risingdotseq" class="ORDINARY"/>
+    <entry key="164" number="0x2251" name="Doteq" class="ORDINARY"/>
+    <entry key="165" number="0x2252" name="fallingdotseq" class="ORDINARY"/>
+    <entry key="166" number="0x224F" name="bumpeq" class="ORDINARY"/>
+    <entry key="167" number="0x224E" name="Bumpeq" class="ORDINARY"/>
+    <entry key="168" number="0x22B8" name="multimap" class="ORDINARY"/>
+    <entry key="169" number="0x224D" name="asymp" class="ORDINARY"/>
+    <entry key="170" number="0x2240" name="wr" class="ORDINARY"/>
+    <entry key="171" number="0x2242" name="eqsim" class="ORDINARY"/>
+    <entry key="172" number="0x224A" name="approxeq" class="ORDINARY"/>
+    <entry key="173" number="0x2241" name="" class="ORDINARY"/>
+    <entry key="174" number="0x2247" name="ncong" class="ORDINARY"/>
+    <entry key="176" number="0x21A3" name="rightarrowtail" class="ORDINARY"/>
+    <entry key="177" number="0x21A2" name="leftarrowtail" class="ORDINARY"/>
+    <entry key="178" number="0x21A0" name="twoheadrightarrow" class="ORDINARY"/>
+    <entry key="179" number="0x219E" name="twoheadleftarrow" class="ORDINARY"/>
+    <entry key="180" number="0x21BC" name="leftharpoonup" class="ORDINARY"/>
+    <entry key="181" number="0x21BD" name="leftharpoondown" class="ORDINARY"/>
+    <entry key="182" number="0x21C0" name="rightharpoonup" class="ORDINARY"/>
+    <entry key="183" number="0x21C1" name="rightharpoondown" class="ORDINARY"/>
+    <entry key="184" number="0x21BE" name="upharpoonright" class="ORDINARY"/>
+    <entry key="185" number="0x21C2" name="downharpoonright" class="ORDINARY"/>
+    <entry key="186" number="0x21BF" name="upharpoonleft" class="ORDINARY"/>
+    <entry key="187" number="0x21C3" name="downharpoonleft" class="ORDINARY"/>
+    <entry key="188" number="0x219A" name="nleftarrow" class="ORDINARY"/>
+    <entry key="189" number="0x219B" name="nrightarrow" class="ORDINARY"/>
+    <entry key="190" number="0x21CD" name="nLeftarrow" class="ORDINARY"/>
+    <entry key="191" number="0x21CF" name="nRightarrow" class="ORDINARY"/>
+    <entry key="192" number="0x21AE" name="" class="ORDINARY"/>
+    <entry key="193" number="0x21CE" name="nLeftrightarrow" class="ORDINARY"/>
+    <entry key="194" number="0x21C7" name="leftleftarrows" class="ORDINARY"/>
+    <entry key="195" number="0x21C9" name="rightrightarrows" class="ORDINARY"/>
+    <entry key="196" number="0x21C8" name="upuparrows" class="ORDINARY"/>
+    <entry key="197" number="0x21CA" name="downdownarrows" class="ORDINARY"/>
+    <entry key="198" number="0x21C6" name="leftrightarrows" class="ORDINARY"/>
+    <entry key="199" number="0x21CB" name="leftrightharpoons" class="ORDINARY"/>
+    <entry key="200" number="0x21DB" name="Rrightarrow" class="ORDINARY"/>
+    <entry key="201" number="0x21DA" name="Lleftarrow" class="ORDINARY"/>
+    <entry key="202" number="0x21B1" name="Rsh" class="ORDINARY"/>
+    <entry key="203" number="0x21B0" name="Lsh" class="ORDINARY"/>
+    <entry key="204" number="0x21AC" name="looparrowright" class="ORDINARY"/>
+    <entry key="205" number="0x21AB" name="looparrowleft" class="ORDINARY"/>
+    <entry key="206" number="0x21DD" name="rightzigzagarrow" class="ORDINARY"/>
+    <entry key="207" number="0x21AD" name="" class="ORDINARY"/>
+    <entry key="208" number="0x21B7" name="curvearrowright" class="ORDINARY"/>
+    <entry key="209" number="0x21B6" name="curvearrowleft" class="ORDINARY"/>
+    <entry key="210" number="0x21BB" name="cwopencirclearrow" class="ORDINARY"/>
+    <entry key="211" number="0x21BA" name="acwopencirclearrow" class="ORDINARY"/>
+    <entry key="224" number="0x22CB" name="leftthreetimes" class="ORDINARY"/>
+    <entry key="225" number="0x22CC" name="rightthreetimes" class="ORDINARY"/>
+    <entry key="226" number="0x22C9" name="ltimes" class="ORDINARY"/>
+    <entry key="227" number="0x22CA" name="rtimes" class="ORDINARY"/>
+    <entry key="228" number="0x2720" name="maltese" class="ORDINARY"/>
+    <entry key="229" number="0x22C6" name="star" class="ORDINARY"/>
+    <entry key="230" number="0x22C7" name="divideontimes" class="ORDINARY"/>
+    <entry key="231" number="0x266D" name="flat" class="ORDINARY"/>
+    <entry key="232" number="0x266E" name="natural" class="ORDINARY"/>
+    <entry key="233" number="0x266F" name="sharp" class="ORDINARY"/>
+    <entry key="234" number="0x2214" name="dotplus" class="ORDINARY"/>
+    <entry key="240" number="0x2201" name="complement" class="ORDINARY"/>
+    <entry key="241" number="0x03F1" name="varrho" class="ORDINARY"/>
+    <entry key="242" number="0x03B5" name="varepsilon" class="ORDINARY"/>
+    <entry key="243" number="0x2204" name="nexists" class="ORDINARY"/>
+    <entry key="244" number="0x03DC" name="" class="ORDINARY"/>
+    <entry key="245" number="0x2132" name="Finv" class="ORDINARY"/>
+    <entry key="246" number="0xED01" name="" class="ORDINARY"/>
+    <entry key="247" number="0x0131" name="" class="ORDINARY"/>
+    <entry key="248" number="0xED02" name="" class="ORDINARY"/>
+    <entry key="249" number="0x03F0" name="varkappa" class="ORDINARY"/>
+    <entry key="250" number="0x22BA" name="intercal" class="ORDINARY"/>
+    <entry key="251" number="0x2136" name="beth" class="ORDINARY"/>
+    <entry key="252" number="0x2137" name="gimel" class="ORDINARY"/>
+    <entry key="253" number="0x2138" name="daleth" class="ORDINARY"/>
+    <entry key="254" number="0x00F0" name="" class="ORDINARY"/>
+    <entry key="255" number="0x210F" name="" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="esstixeight">
     <entry key="33" number="0xE201" name="longleftarrow" class="RELATION"/>
@@ -590,12 +1031,464 @@
     <entry key="45" number="" name="" class="ORDINARY"/>
     <entry key="61" number="0x0028" name="" class="ORDINARY"/>
     <entry key="62" number="0x0029" name="" class="ORDINARY"/>
-    <entry key="63" number="0x005B" name="" class="ORDINARY"/>
-    <entry key="64" number="0x005D" name="" class="ORDINARY"/>
-    <entry key="65" number="0x007B" name="" class="ORDINARY"/>
-    <entry key="66" number="0x007D" name="" class="ORDINARY"/>
+    <entry key="63" number="0x005B" name="lbrack" class="ORDINARY"/>
+    <entry key="64" number="0x005D" name="rbrack" class="ORDINARY"/>
+    <entry key="65" number="0x007B" name="lbrace" class="ORDINARY"/>
+    <entry key="66" number="0x007D" name="rbrace" class="ORDINARY"/>
     <entry key="67" number="0x2329" name="langle" class="ORDINARY"/>
     <entry key="68" number="0x232A" name="rangle" class="ORDINARY"/>
-    <entry key="75" number="0x007C" name="" class="ORDINARY"/>
+    <entry key="75" number="0x007C" name="vert" class="ORDINARY"/>
+  </unicodetable>
+  <unicodetable font="euclid%20symbol">
+    <entry key="32" number="0x0020" name="" class="ORDINARY"/>
+    <entry key="33" number="0x0021" name="" class="ORDINARY"/>
+    <entry key="34" number="0x2200" name="forall" class="ORDINARY"/>
+    <entry key="35" number="0x0023" name="sharp" class="ORDINARY"/>
+    <entry key="36" number="0x2203" name="exists" class="ORDINARY"/>
+    <entry key="37" number="0x0025" name="" class="ORDINARY"/>
+    <entry key="38" number="0x0026" name="" class="ORDINARY"/>
+    <entry key="39" number="0x220D" name="ni" class="RELATION"/>
+    <entry key="40" number="0x0028" name="" class="ORDINARY"/>
+    <entry key="41" number="0x0029" name="" class="ORDINARY"/>
+    <entry key="42" number="0x2217" name="ast" class="BINOP"/>
+    <entry key="43" number="0x002B" name="" class="BINOP"/>
+    <entry key="44" number="0x002C" name="" class="PUNCTUATION"/>
+    <entry key="45" number="0x2212" name="minus" class="BINOP"/>
+    <entry key="46" number="0x002E" name="" class="PUNCTUATION"/>
+    <entry key="47" number="0x002F" name="" class="ORDINARY"/>
+    <entry key="48" number="0x0030" name="" class="ORDINARY"/>
+    <entry key="49" number="0x0031" name="" class="ORDINARY"/>
+    <entry key="50" number="0x0032" name="" class="ORDINARY"/>
+    <entry key="51" number="0x0033" name="" class="ORDINARY"/>
+    <entry key="52" number="0x0034" name="" class="ORDINARY"/>
+    <entry key="53" number="0x0035" name="" class="ORDINARY"/>
+    <entry key="54" number="0x0036" name="" class="ORDINARY"/>
+    <entry key="55" number="0x0037" name="" class="ORDINARY"/>
+    <entry key="56" number="0x0038" name="" class="ORDINARY"/>
+    <entry key="57" number="0x0039" name="" class="ORDINARY"/>
+    <entry key="58" number="0x003A" name="colon" class="PUNCTUATION"/>
+    <entry key="59" number="0x003B" name="" class="PUNCTUATION"/>
+    <entry key="60" number="0x003C" name="less" class="RELATION"/>
+    <entry key="61" number="0x003D" name="" class="RELATION"/>
+    <entry key="62" number="0x003E" name="greater" class="RELATION"/>
+    <entry key="63" number="0x003F" name="" class="ORDINARY"/>
+    <entry key="64" number="0x2245" name="cong" class="RELATION"/>
+    <entry key="65" number="0x0391" name="" class="ORDINARY"/>
+    <entry key="66" number="0x0392" name="" class="ORDINARY"/>
+    <entry key="67" number="0x03A7" name="" class="ORDINARY"/>
+    <entry key="68" number="0x0394" name="Delta" class="ORDINARY"/>
+    <entry key="69" number="0x0395" name="" class="ORDINARY"/>
+    <entry key="70" number="0x03A6" name="Phi" class="ORDINARY"/>
+    <entry key="71" number="0x0393" name="Gamma" class="ORDINARY"/>
+    <entry key="72" number="0x0397" name="" class="ORDINARY"/>
+    <entry key="73" number="0x0399" name="" class="ORDINARY"/>
+    <entry key="74" number="0x03D1" name="vartheta" class="ORDINARY"/>
+    <entry key="75" number="0x039A" name="" class="ORDINARY"/>
+    <entry key="76" number="0x039B" name="Lambda" class="ORDINARY"/>
+    <entry key="77" number="0x039C" name="" class="ORDINARY"/>
+    <entry key="78" number="0x039D" name="" class="ORDINARY"/>
+    <entry key="79" number="0x039F" name="" class="ORDINARY"/>
+    <entry key="80" number="0x03A0" name="Pi" class="ORDINARY"/>
+    <entry key="81" number="0x0398" name="Theta" class="ORDINARY"/>
+    <entry key="82" number="0x03A1" name="" class="ORDINARY"/>
+    <entry key="83" number="0x03A3" name="Sigma" class="ORDINARY"/>
+    <entry key="84" number="0x03A4" name="" class="ORDINARY"/>
+    <entry key="85" number="0x03A5" name="" class="ORDINARY"/>
+    <entry key="86" number="0x03C2" name="" class="ORDINARY"/>
+    <entry key="87" number="0x03A9" name="Omega" class="ORDINARY"/>
+    <entry key="88" number="0x039E" name="Xi" class="ORDINARY"/>
+    <entry key="89" number="0x03A8" name="Psi" class="ORDINARY"/>
+    <entry key="90" number="0x0396" name="" class="ORDINARY"/>
+    <entry key="91" number="0x005B" name="lbrack" class="ORDINARY"/>
+    <entry key="92" number="0x2234" name="therefore" class="BINOP"/>
+    <entry key="93" number="0x005D" name="rbrack" class="ORDINARY"/>
+    <entry key="94" number="0x22A5" name="" class="ORDINARY"/>
+    <entry key="95" number="0x005F" name="" class="ORDINARY"/>
+    <entry key="96" number="0xF8E5" name="" class="ORDINARY"/>
+    <entry key="97" number="0x03B1" name="alpha" class="ORDINARY"/>
+    <entry key="98" number="0x03B2" name="beta" class="ORDINARY"/>
+    <entry key="99" number="0x03C7" name="chi" class="ORDINARY"/>
+    <entry key="100" number="0x03B4" name="delta" class="ORDINARY"/>
+    <entry key="101" number="0x03B5" name="varepsilon" class="ORDINARY"/>
+    <entry key="102" number="0x03C6" name="phi" class="ORDINARY"/>
+    <entry key="103" number="0x03B3" name="gamma" class="ORDINARY"/>
+    <entry key="104" number="0x03B7" name="eta" class="ORDINARY"/>
+    <entry key="105" number="0x03B9" name="iota" class="ORDINARY"/>
+    <entry key="106" number="0x03D5" name="varphi" class="ORDINARY"/>
+    <entry key="107" number="0x03BA" name="kappa" class="ORDINARY"/>
+    <entry key="108" number="0x03BB" name="lambda" class="ORDINARY"/>
+    <entry key="109" number="0x03BC" name="mu" class="ORDINARY"/>
+    <entry key="110" number="0x03BD" name="nu" class="ORDINARY"/>
+    <entry key="111" number="0x03BF" name="o" class="ORDINARY"/>
+    <entry key="112" number="0x03C0" name="pi" class="ORDINARY"/>
+    <entry key="113" number="0x03B8" name="theta" class="ORDINARY"/>
+    <entry key="114" number="0x03C1" name="rho" class="ORDINARY"/>
+    <entry key="115" number="0x03C3" name="sigma" class="ORDINARY"/>
+    <entry key="116" number="0x03C4" name="tau" class="ORDINARY"/>
+    <entry key="117" number="0x03C5" name="upsilon" class="ORDINARY"/>
+    <entry key="118" number="0x03D6" name="varpi" class="ORDINARY"/>
+    <entry key="119" number="0x03C9" name="omega" class="ORDINARY"/>
+    <entry key="120" number="0x03BE" name="xi" class="ORDINARY"/>
+    <entry key="121" number="0x03C8" name="psi" class="ORDINARY"/>
+    <entry key="122" number="0x03B6" name="zeta" class="ORDINARY"/>
+    <entry key="123" number="0x007B" name="lbrace" class="ORDINARY"/>
+    <entry key="124" number="0x007C" name="mid" class="ORDINARY"/>
+    <entry key="125" number="0x007D" name="rbrace" class="ORDINARY"/>
+    <entry key="126" number="0x223C" name="sim" class="RELATION"/>
+    <entry key="127" number="" name="" class="ORDINARY"/>
+    <entry key="128" number="" name="" class="ORDINARY"/>
+    <entry key="129" number="" name="" class="ORDINARY"/>
+    <entry key="130" number="" name="" class="ORDINARY"/>
+    <entry key="131" number="" name="" class="ORDINARY"/>
+    <entry key="132" number="" name="" class="ORDINARY"/>
+    <entry key="133" number="" name="" class="ORDINARY"/>
+    <entry key="134" number="" name="" class="ORDINARY"/>
+    <entry key="135" number="" name="" class="ORDINARY"/>
+    <entry key="136" number="" name="" class="ORDINARY"/>
+    <entry key="137" number="" name="" class="ORDINARY"/>
+    <entry key="138" number="" name="" class="ORDINARY"/>
+    <entry key="139" number="" name="" class="ORDINARY"/>
+    <entry key="140" number="" name="" class="ORDINARY"/>
+    <entry key="141" number="" name="" class="ORDINARY"/>
+    <entry key="142" number="" name="" class="ORDINARY"/>
+    <entry key="143" number="" name="" class="ORDINARY"/>
+    <entry key="144" number="" name="" class="ORDINARY"/>
+    <entry key="145" number="" name="" class="ORDINARY"/>
+    <entry key="146" number="" name="" class="ORDINARY"/>
+    <entry key="147" number="" name="" class="ORDINARY"/>
+    <entry key="148" number="" name="" class="ORDINARY"/>
+    <entry key="149" number="" name="" class="ORDINARY"/>
+    <entry key="150" number="" name="" class="ORDINARY"/>
+    <entry key="151" number="" name="" class="ORDINARY"/>
+    <entry key="152" number="" name="" class="ORDINARY"/>
+    <entry key="153" number="" name="" class="ORDINARY"/>
+    <entry key="154" number="" name="" class="ORDINARY"/>
+    <entry key="155" number="" name="" class="ORDINARY"/>
+    <entry key="156" number="" name="" class="ORDINARY"/>
+    <entry key="157" number="" name="" class="ORDINARY"/>
+    <entry key="158" number="" name="" class="ORDINARY"/>
+    <entry key="159" number="" name="" class="ORDINARY"/>
+    <entry key="160" number="" name="" class="ORDINARY"/>
+    <entry key="161" number="0x03D2" name="Upsilon" class="ORDINARY"/>
+    <entry key="162" number="0x2032" name="prime" class="ORDINARY"/>
+    <entry key="163" number="0x2264" name="leq" class="RELATION"/>
+    <entry key="164" number="0x2244" name="nsime" class="ORDINARY"/>
+    <entry key="165" number="0x221E" name="infty" class="ORDINARY"/>
+    <entry key="166" number="0x0192" name="" class="ORDINARY"/>
+    <entry key="167" number="0x2663" name="clubsuit" class="ORDINARY"/>
+    <entry key="168" number="0x2666" name="diamondsuit" class="ORDINARY"/>
+    <entry key="169" number="0x2665" name="heartsuit" class="ORDINARY"/>
+    <entry key="170" number="0x2660" name="spadesuit" class="ORDINARY"/>
+    <entry key="171" number="0x2194" name="leftrightarrow" class="RELATION"/>
+    <entry key="172" number="0x2190" name="leftarrow" class="RELATION"/>
+    <entry key="173" number="0x2191" name="uparrow" class="RELATION"/>
+    <entry key="174" number="0x2192" name="rightarrow" class="RELATION"/>
+    <entry key="175" number="0x2193" name="downarrow" class="RELATION"/>
+    <entry key="176" number="0x00B0" name="degree" class="ORDINARY"/>
+    <entry key="177" number="0x00B1" name="pm" class="BINOP"/>
+    <entry key="178" number="0x2033" name="" class="ORDINARY"/>
+    <entry key="179" number="0x2265" name="geq" class="RELATION"/>
+    <entry key="180" number="0x00D7" name="times" class="BINOP"/>
+    <entry key="181" number="0x221D" name="propto" class="RELATION"/>
+    <entry key="182" number="0x2202" name="partial" class="ORDINARY"/>
+    <entry key="183" number="0x2022" name="bullet" class="BINOP"/>
+    <entry key="184" number="0x00F7" name="div" class="BINOP"/>
+    <entry key="185" number="0x2260" name="neq" class="RELATION"/>
+    <entry key="186" number="0x2261" name="equiv" class="RELATION"/>
+    <entry key="187" number="0x2248" name="approx" class="RELATION"/>
+    <entry key="188" number="0x2026" name="ldots" class="ORDINARY"/>
+    <entry key="189" number="0xF8E6" name="" class="RELATION"/>
+    <entry key="190" number="0xF8E7" name="" class="ORDINARY"/>
+    <entry key="191" number="0x21B5" name="carriagereturn" class="ORDINARY"/>
+    <entry key="192" number="0x2135" name="aleph" class="ORDINARY"/>
+    <entry key="193" number="0x2111" name="Im" class="ORDINARY"/>
+    <entry key="194" number="0x211C" name="Re" class="ORDINARY"/>
+    <entry key="195" number="0x2118" name="wp" class="ORDINARY"/>
+    <entry key="196" number="0x2297" name="otimes" class="BINOP"/>
+    <entry key="197" number="0x2295" name="oplus" class="BINOP"/>
+    <entry key="198" number="0x2205" name="oslash" class="BINOP"/>
+    <entry key="199" number="0x2229" name="cap" class="BINOP"/>
+    <entry key="200" number="0x222A" name="cup" class="BINOP"/>
+    <entry key="201" number="0x2283" name="supset" class="RELATION"/>
+    <entry key="202" number="0x2287" name="supseteq" class="RELATION"/>
+    <entry key="203" number="0x2284" name="nsubset" class="RELATION"/>
+    <entry key="204" number="0x2282" name="subset" class="RELATION"/>
+    <entry key="205" number="0x2286" name="subseteq" class="RELATION"/>
+    <entry key="206" number="0x2208" name="in" class="RELATION"/>
+    <entry key="207" number="0x2209" name="notin" class="RELATION"/>
+    <entry key="208" number="0x2220" name="angle" class="ORDINARY"/>
+    <entry key="209" number="0x2207" name="nabla" class="ORDINARY"/>
+    <entry key="210" number="0x00AE" name="" class="ORDINARY"/>
+    <entry key="211" number="0x00A9" name="" class="ORDINARY"/>
+    <entry key="212" number="0x2122" name="" class="ORDINARY"/>
+    <entry key="213" number="0x220F" name="prod" class="ORDINARY"/>
+    <entry key="214" number="0x221A" name="surd" class="ORDINARY"/>
+    <entry key="215" number="0x22C5" name="cdot" class="BINOP"/>
+    <entry key="216" number="0x00AC" name="neg" class="ORDINARY"/>
+    <entry key="217" number="0x2227" name="wedge" class="BINOP"/>
+    <entry key="218" number="0x2228" name="vee" class="BINOP"/>
+    <entry key="219" number="0x21D4" name="Leftrightarrow" class="RELATION"/>
+    <entry key="220" number="0x21D0" name="Leftarrow" class="RELATION"/>
+    <entry key="221" number="0x21D1" name="Uparrow" class="RELATION"/>
+    <entry key="222" number="0x21D2" name="Rightarrow" class="RELATION"/>
+    <entry key="223" number="0x21D3" name="Downarrow" class="RELATION"/>
+    <entry key="224" number="0x26C4" name="Diamond" class="ORDINARY"/>
+    <entry key="225" number="0x2329" name="langle" class="ORDINARY"/>
+    <entry key="226" number="0xF8E8" name="" class="ORDINARY"/>
+    <entry key="227" number="0xF8E9" name="" class="ORDINARY"/>
+    <entry key="228" number="0xF8EA" name="" class="ORDINARY"/>
+    <entry key="229" number="0x2211" name="sum" class="ORDINARY"/>
+    <entry key="230" number="0xF8EB" name="" class="ORDINARY"/>
+    <entry key="231" number="0xF8EC" name="" class="ORDINARY"/>
+    <entry key="232" number="0xF8ED" name="" class="ORDINARY"/>
+    <entry key="233" number="0xF8EE" name="" class="ORDINARY"/>
+    <entry key="234" number="0xF8EF" name="" class="ORDINARY"/>
+    <entry key="235" number="0xF8F0" name="" class="ORDINARY"/>
+    <entry key="236" number="0xF8F1" name="" class="ORDINARY"/>
+    <entry key="237" number="0xF8F2" name="" class="ORDINARY"/>
+    <entry key="238" number="0xF8F3" name="" class="ORDINARY"/>
+    <entry key="239" number="0xF8F4" name="" class="ORDINARY"/>
+    <entry key="240" number="" name="" class="ORDINARY"/>
+    <entry key="241" number="0x232A" name="rangle" class="ORDINARY"/>
+    <entry key="242" number="0x222B" name="int" class="ORDINARY"/>
+    <entry key="243" number="0x2320" name="" class="ORDINARY"/>
+    <entry key="244" number="0xF8F5" name="" class="ORDINARY"/>
+    <entry key="245" number="0x2321" name="" class="ORDINARY"/>
+    <entry key="246" number="0xF8F6" name="" class="ORDINARY"/>
+    <entry key="247" number="0xF8F7" name="" class="ORDINARY"/>
+    <entry key="248" number="0xF8F8" name="" class="ORDINARY"/>
+    <entry key="249" number="0xF8F9" name="" class="ORDINARY"/>
+    <entry key="250" number="0xF8FA" name="" class="ORDINARY"/>
+    <entry key="251" number="0xF8FB" name="" class="ORDINARY"/>
+    <entry key="252" number="0xF8FC" name="" class="ORDINARY"/>
+    <entry key="253" number="0xF8FD" name="" class="ORDINARY"/>
+    <entry key="254" number="0xF8FE" name="" class="ORDINARY"/>
+    <entry key="255" number="" name="" class="ORDINARY"/>
+  </unicodetable>
+  <unicodetable font="mt%20symbol">
+    <entry key="32" number="0x0020" name="" class="ORDINARY"/>
+    <entry key="33" number="0x0021" name="" class="ORDINARY"/>
+    <entry key="34" number="0x2200" name="forall" class="ORDINARY"/>
+    <entry key="35" number="0x0023" name="sharp" class="ORDINARY"/>
+    <entry key="36" number="0x2203" name="exists" class="ORDINARY"/>
+    <entry key="37" number="0x0025" name="" class="ORDINARY"/>
+    <entry key="38" number="0x0026" name="" class="ORDINARY"/>
+    <entry key="39" number="0x220D" name="ni" class="RELATION"/>
+    <entry key="40" number="0x0028" name="" class="ORDINARY"/>
+    <entry key="41" number="0x0029" name="" class="ORDINARY"/>
+    <entry key="42" number="0x2217" name="ast" class="BINOP"/>
+    <entry key="43" number="0x002B" name="" class="BINOP"/>
+    <entry key="44" number="0x002C" name="" class="PUNCTUATION"/>
+    <entry key="45" number="0x2212" name="minus" class="BINOP"/>
+    <entry key="46" number="0x002E" name="" class="PUNCTUATION"/>
+    <entry key="47" number="0x002F" name="" class="ORDINARY"/>
+    <entry key="48" number="0x0030" name="" class="ORDINARY"/>
+    <entry key="49" number="0x0031" name="" class="ORDINARY"/>
+    <entry key="50" number="0x0032" name="" class="ORDINARY"/>
+    <entry key="51" number="0x0033" name="" class="ORDINARY"/>
+    <entry key="52" number="0x0034" name="" class="ORDINARY"/>
+    <entry key="53" number="0x0035" name="" class="ORDINARY"/>
+    <entry key="54" number="0x0036" name="" class="ORDINARY"/>
+    <entry key="55" number="0x0037" name="" class="ORDINARY"/>
+    <entry key="56" number="0x0038" name="" class="ORDINARY"/>
+    <entry key="57" number="0x0039" name="" class="ORDINARY"/>
+    <entry key="58" number="0x003A" name="colon" class="PUNCTUATION"/>
+    <entry key="59" number="0x003B" name="" class="PUNCTUATION"/>
+    <entry key="60" number="0x003C" name="less" class="RELATION"/>
+    <entry key="61" number="0x003D" name="" class="RELATION"/>
+    <entry key="62" number="0x003E" name="greater" class="RELATION"/>
+    <entry key="63" number="0x003F" name="" class="ORDINARY"/>
+    <entry key="64" number="0x2245" name="cong" class="RELATION"/>
+    <entry key="65" number="0x0391" name="" class="ORDINARY"/>
+    <entry key="66" number="0x0392" name="" class="ORDINARY"/>
+    <entry key="67" number="0x03A7" name="" class="ORDINARY"/>
+    <entry key="68" number="0x0394" name="Delta" class="ORDINARY"/>
+    <entry key="69" number="0x0395" name="" class="ORDINARY"/>
+    <entry key="70" number="0x03A6" name="Phi" class="ORDINARY"/>
+    <entry key="71" number="0x0393" name="Gamma" class="ORDINARY"/>
+    <entry key="72" number="0x0397" name="" class="ORDINARY"/>
+    <entry key="73" number="0x0399" name="" class="ORDINARY"/>
+    <entry key="74" number="0x03D1" name="vartheta" class="ORDINARY"/>
+    <entry key="75" number="0x039A" name="" class="ORDINARY"/>
+    <entry key="76" number="0x039B" name="Lambda" class="ORDINARY"/>
+    <entry key="77" number="0x039C" name="" class="ORDINARY"/>
+    <entry key="78" number="0x039D" name="" class="ORDINARY"/>
+    <entry key="79" number="0x039F" name="" class="ORDINARY"/>
+    <entry key="80" number="0x03A0" name="Pi" class="ORDINARY"/>
+    <entry key="81" number="0x0398" name="Theta" class="ORDINARY"/>
+    <entry key="82" number="0x03A1" name="" class="ORDINARY"/>
+    <entry key="83" number="0x03A3" name="Sigma" class="ORDINARY"/>
+    <entry key="84" number="0x03A4" name="" class="ORDINARY"/>
+    <entry key="85" number="0x03A5" name="" class="ORDINARY"/>
+    <entry key="86" number="0x03C2" name="" class="ORDINARY"/>
+    <entry key="87" number="0x03A9" name="Omega" class="ORDINARY"/>
+    <entry key="88" number="0x039E" name="Xi" class="ORDINARY"/>
+    <entry key="89" number="0x03A8" name="Psi" class="ORDINARY"/>
+    <entry key="90" number="0x0396" name="" class="ORDINARY"/>
+    <entry key="91" number="0x005B" name="lbrack" class="ORDINARY"/>
+    <entry key="92" number="0x2234" name="therefore" class="BINOP"/>
+    <entry key="93" number="0x005D" name="rbrack" class="ORDINARY"/>
+    <entry key="94" number="0x22A5" name="" class="ORDINARY"/>
+    <entry key="95" number="0x005F" name="" class="ORDINARY"/>
+    <entry key="96" number="0xF8E5" name="" class="ORDINARY"/>
+    <entry key="97" number="0x03B1" name="alpha" class="ORDINARY"/>
+    <entry key="98" number="0x03B2" name="beta" class="ORDINARY"/>
+    <entry key="99" number="0x03C7" name="chi" class="ORDINARY"/>
+    <entry key="100" number="0x03B4" name="delta" class="ORDINARY"/>
+    <entry key="101" number="0x03B5" name="varepsilon" class="ORDINARY"/>
+    <entry key="102" number="0x03C6" name="phi" class="ORDINARY"/>
+    <entry key="103" number="0x03B3" name="gamma" class="ORDINARY"/>
+    <entry key="104" number="0x03B7" name="eta" class="ORDINARY"/>
+    <entry key="105" number="0x03B9" name="iota" class="ORDINARY"/>
+    <entry key="106" number="0x03D5" name="varphi" class="ORDINARY"/>
+    <entry key="107" number="0x03BA" name="kappa" class="ORDINARY"/>
+    <entry key="108" number="0x03BB" name="lambda" class="ORDINARY"/>
+    <entry key="109" number="0x03BC" name="mu" class="ORDINARY"/>
+    <entry key="110" number="0x03BD" name="nu" class="ORDINARY"/>
+    <entry key="111" number="0x03BF" name="o" class="ORDINARY"/>
+    <entry key="112" number="0x03C0" name="pi" class="ORDINARY"/>
+    <entry key="113" number="0x03B8" name="theta" class="ORDINARY"/>
+    <entry key="114" number="0x03C1" name="rho" class="ORDINARY"/>
+    <entry key="115" number="0x03C3" name="sigma" class="ORDINARY"/>
+    <entry key="116" number="0x03C4" name="tau" class="ORDINARY"/>
+    <entry key="117" number="0x03C5" name="upsilon" class="ORDINARY"/>
+    <entry key="118" number="0x03D6" name="varpi" class="ORDINARY"/>
+    <entry key="119" number="0x03C9" name="omega" class="ORDINARY"/>
+    <entry key="120" number="0x03BE" name="xi" class="ORDINARY"/>
+    <entry key="121" number="0x03C8" name="psi" class="ORDINARY"/>
+    <entry key="122" number="0x03B6" name="zeta" class="ORDINARY"/>
+    <entry key="123" number="0x007B" name="lbrace" class="ORDINARY"/>
+    <entry key="124" number="0x007C" name="mid" class="ORDINARY"/>
+    <entry key="125" number="0x007D" name="rbrace" class="ORDINARY"/>
+    <entry key="126" number="0x223C" name="sim" class="RELATION"/>
+    <entry key="127" number="" name="" class="ORDINARY"/>
+    <entry key="128" number="" name="" class="ORDINARY"/>
+    <entry key="129" number="" name="" class="ORDINARY"/>
+    <entry key="130" number="" name="" class="ORDINARY"/>
+    <entry key="131" number="" name="" class="ORDINARY"/>
+    <entry key="132" number="" name="" class="ORDINARY"/>
+    <entry key="133" number="" name="" class="ORDINARY"/>
+    <entry key="134" number="" name="" class="ORDINARY"/>
+    <entry key="135" number="" name="" class="ORDINARY"/>
+    <entry key="136" number="" name="" class="ORDINARY"/>
+    <entry key="137" number="" name="" class="ORDINARY"/>
+    <entry key="138" number="" name="" class="ORDINARY"/>
+    <entry key="139" number="" name="" class="ORDINARY"/>
+    <entry key="140" number="" name="" class="ORDINARY"/>
+    <entry key="141" number="" name="" class="ORDINARY"/>
+    <entry key="142" number="" name="" class="ORDINARY"/>
+    <entry key="143" number="" name="" class="ORDINARY"/>
+    <entry key="144" number="" name="" class="ORDINARY"/>
+    <entry key="145" number="" name="" class="ORDINARY"/>
+    <entry key="146" number="" name="" class="ORDINARY"/>
+    <entry key="147" number="" name="" class="ORDINARY"/>
+    <entry key="148" number="" name="" class="ORDINARY"/>
+    <entry key="149" number="" name="" class="ORDINARY"/>
+    <entry key="150" number="" name="" class="ORDINARY"/>
+    <entry key="151" number="" name="" class="ORDINARY"/>
+    <entry key="152" number="" name="" class="ORDINARY"/>
+    <entry key="153" number="" name="" class="ORDINARY"/>
+    <entry key="154" number="" name="" class="ORDINARY"/>
+    <entry key="155" number="" name="" class="ORDINARY"/>
+    <entry key="156" number="" name="" class="ORDINARY"/>
+    <entry key="157" number="" name="" class="ORDINARY"/>
+    <entry key="158" number="" name="" class="ORDINARY"/>
+    <entry key="159" number="" name="" class="ORDINARY"/>
+    <entry key="160" number="" name="" class="ORDINARY"/>
+    <entry key="161" number="0x03D2" name="Upsilon" class="ORDINARY"/>
+    <entry key="162" number="0x2032" name="prime" class="ORDINARY"/>
+    <entry key="163" number="0x2264" name="leq" class="RELATION"/>
+    <entry key="164" number="0x2244" name="nsime" class="ORDINARY"/>
+    <entry key="165" number="0x221E" name="infty" class="ORDINARY"/>
+    <entry key="166" number="0x0192" name="" class="ORDINARY"/>
+    <entry key="167" number="0x2663" name="clubsuit" class="ORDINARY"/>
+    <entry key="168" number="0x2666" name="diamondsuit" class="ORDINARY"/>
+    <entry key="169" number="0x2665" name="heartsuit" class="ORDINARY"/>
+    <entry key="170" number="0x2660" name="spadesuit" class="ORDINARY"/>
+    <entry key="171" number="0x2194" name="leftrightarrow" class="RELATION"/>
+    <entry key="172" number="0x2190" name="leftarrow" class="RELATION"/>
+    <entry key="173" number="0x2191" name="uparrow" class="RELATION"/>
+    <entry key="174" number="0x2192" name="rightarrow" class="RELATION"/>
+    <entry key="175" number="0x2193" name="downarrow" class="RELATION"/>
+    <entry key="176" number="0x00B0" name="degree" class="ORDINARY"/>
+    <entry key="177" number="0x00B1" name="pm" class="BINOP"/>
+    <entry key="178" number="0x2033" name="" class="ORDINARY"/>
+    <entry key="179" number="0x2265" name="geq" class="RELATION"/>
+    <entry key="180" number="0x00D7" name="times" class="BINOP"/>
+    <entry key="181" number="0x221D" name="propto" class="RELATION"/>
+    <entry key="182" number="0x2202" name="partial" class="ORDINARY"/>
+    <entry key="183" number="0x2022" name="bullet" class="BINOP"/>
+    <entry key="184" number="0x00F7" name="div" class="BINOP"/>
+    <entry key="185" number="0x2260" name="neq" class="RELATION"/>
+    <entry key="186" number="0x2261" name="equiv" class="RELATION"/>
+    <entry key="187" number="0x2248" name="approx" class="RELATION"/>
+    <entry key="188" number="0x2026" name="ldots" class="ORDINARY"/>
+    <entry key="189" number="0xF8E6" name="" class="RELATION"/>
+    <entry key="190" number="0xF8E7" name="" class="ORDINARY"/>
+    <entry key="191" number="0x21B5" name="carriagereturn" class="ORDINARY"/>
+    <entry key="192" number="0x2135" name="aleph" class="ORDINARY"/>
+    <entry key="193" number="0x2111" name="Im" class="ORDINARY"/>
+    <entry key="194" number="0x211C" name="Re" class="ORDINARY"/>
+    <entry key="195" number="0x2118" name="wp" class="ORDINARY"/>
+    <entry key="196" number="0x2297" name="otimes" class="BINOP"/>
+    <entry key="197" number="0x2295" name="oplus" class="BINOP"/>
+    <entry key="198" number="0x2205" name="oslash" class="BINOP"/>
+    <entry key="199" number="0x2229" name="cap" class="BINOP"/>
+    <entry key="200" number="0x222A" name="cup" class="BINOP"/>
+    <entry key="201" number="0x2283" name="supset" class="RELATION"/>
+    <entry key="202" number="0x2287" name="supseteq" class="RELATION"/>
+    <entry key="203" number="0x2284" name="nsubset" class="RELATION"/>
+    <entry key="204" number="0x2282" name="subset" class="RELATION"/>
+    <entry key="205" number="0x2286" name="subseteq" class="RELATION"/>
+    <entry key="206" number="0x2208" name="in" class="RELATION"/>
+    <entry key="207" number="0x2209" name="notin" class="RELATION"/>
+    <entry key="208" number="0x2220" name="angle" class="ORDINARY"/>
+    <entry key="209" number="0x2207" name="nabla" class="ORDINARY"/>
+    <entry key="210" number="0x00AE" name="" class="ORDINARY"/>
+    <entry key="211" number="0x00A9" name="" class="ORDINARY"/>
+    <entry key="212" number="0x2122" name="" class="ORDINARY"/>
+    <entry key="213" number="0x220F" name="prod" class="ORDINARY"/>
+    <entry key="214" number="0x221A" name="surd" class="ORDINARY"/>
+    <entry key="215" number="0x22C5" name="cdot" class="BINOP"/>
+    <entry key="216" number="0x00AC" name="neg" class="ORDINARY"/>
+    <entry key="217" number="0x2227" name="wedge" class="BINOP"/>
+    <entry key="218" number="0x2228" name="vee" class="BINOP"/>
+    <entry key="219" number="0x21D4" name="Leftrightarrow" class="RELATION"/>
+    <entry key="220" number="0x21D0" name="Leftarrow" class="RELATION"/>
+    <entry key="221" number="0x21D1" name="Uparrow" class="RELATION"/>
+    <entry key="222" number="0x21D2" name="Rightarrow" class="RELATION"/>
+    <entry key="223" number="0x21D3" name="Downarrow" class="RELATION"/>
+    <entry key="224" number="0x26C4" name="Diamond" class="ORDINARY"/>
+    <entry key="225" number="0x2329" name="langle" class="ORDINARY"/>
+    <entry key="226" number="0xF8E8" name="" class="ORDINARY"/>
+    <entry key="227" number="0xF8E9" name="" class="ORDINARY"/>
+    <entry key="228" number="0xF8EA" name="" class="ORDINARY"/>
+    <entry key="229" number="0x2211" name="sum" class="ORDINARY"/>
+    <entry key="230" number="0xF8EB" name="" class="ORDINARY"/>
+    <entry key="231" number="0xF8EC" name="" class="ORDINARY"/>
+    <entry key="232" number="0xF8ED" name="" class="ORDINARY"/>
+    <entry key="233" number="0xF8EE" name="" class="ORDINARY"/>
+    <entry key="234" number="0xF8EF" name="" class="ORDINARY"/>
+    <entry key="235" number="0xF8F0" name="" class="ORDINARY"/>
+    <entry key="236" number="0xF8F1" name="" class="ORDINARY"/>
+    <entry key="237" number="0xF8F2" name="" class="ORDINARY"/>
+    <entry key="238" number="0xF8F3" name="" class="ORDINARY"/>
+    <entry key="239" number="0xF8F4" name="" class="ORDINARY"/>
+    <entry key="240" number="" name="" class="ORDINARY"/>
+    <entry key="241" number="0x232A" name="rangle" class="ORDINARY"/>
+    <entry key="242" number="0x222B" name="int" class="ORDINARY"/>
+    <entry key="243" number="0x2320" name="" class="ORDINARY"/>
+    <entry key="244" number="0xF8F5" name="" class="ORDINARY"/>
+    <entry key="245" number="0x2321" name="" class="ORDINARY"/>
+    <entry key="246" number="0xF8F6" name="" class="ORDINARY"/>
+    <entry key="247" number="0xF8F7" name="" class="ORDINARY"/>
+    <entry key="248" number="0xF8F8" name="" class="ORDINARY"/>
+    <entry key="249" number="0xF8F9" name="" class="ORDINARY"/>
+    <entry key="250" number="0xF8FA" name="" class="ORDINARY"/>
+    <entry key="251" number="0xF8FB" name="" class="ORDINARY"/>
+    <entry key="252" number="0xF8FC" name="" class="ORDINARY"/>
+    <entry key="253" number="0xF8FD" name="" class="ORDINARY"/>
+    <entry key="254" number="0xF8FE" name="" class="ORDINARY"/>
+    <entry key="255" number="" name="" class="ORDINARY"/>
   </unicodetable>
 </table>

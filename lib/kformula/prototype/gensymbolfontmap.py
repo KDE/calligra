@@ -114,7 +114,7 @@ def make_font_table(font):
     f = open('../config/' + font + '.font', 'w')
     for line in header:
         print >> f, line
-    print >> f, "name = " + font
+    #print >> f, "name = " + font
     for key in unicodetable:
         latexName, charClass = unicodetable[key]
         pos = fontkey(font, key)
@@ -124,8 +124,7 @@ def make_font_table(font):
 
 def make_all_font_tables():
     for font in fonttable:
-        if font != "symbol":
-            make_font_table(font)
+        make_font_table(font)
         
 if __name__ == '__main__':
     parser = make_parser()

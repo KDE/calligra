@@ -25,6 +25,7 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qstring.h>
+#include <qstringlist.h>
 
 //KDE Include
 #include <kconfig.h>
@@ -123,6 +124,8 @@ public:
     void setNumberFont( QFont f )   { numberFont = f; }
     void setOperatorFont( QFont f ) { operatorFont = f; }
 
+    const QStringList& requestedFonts() const;
+    void setRequestedFonts( const QStringList& list );
 
     double getReductionFactor( TextStyle tstyle ) const;
 
@@ -228,6 +231,8 @@ private:
     QFont numberFont;
     QFont operatorFont;
     QFont symbolFont;
+
+    QStringList m_requestedFonts;
 
     QColor defaultColor;
     QColor numberColor;

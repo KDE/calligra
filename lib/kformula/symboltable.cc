@@ -19,6 +19,7 @@
 */
 
 #include <qfile.h>
+#include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
@@ -29,6 +30,7 @@
 #include <kstandarddirs.h>
 
 #include "symboltable.h"
+#include "contextstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -145,49 +147,39 @@ bool UnicodeReader::parseLine( QString line )
 
 class FontReader : public ConfigReader {
 public:
-    FontReader( QMap<QChar, CharTableEntry>* t, QValueVector<QFont>* f )
-        : ConfigReader(), table( t ), fontTable( f ), nameRead( false ) {}
+    FontReader( SymbolTable::UnicodeTable* t, SymbolTable::FontTable* f )
+        : ConfigReader(), table( t ), fontTable( f ) {}
+
+    bool read( QFile& file, QString fontName );
 
 protected:
 
     virtual bool parseLine( QString line );
 
 private:
-    QMap<QChar, CharTableEntry>* table;
-    QValueVector<QFont>* fontTable;
-    bool nameRead;
+    SymbolTable::UnicodeTable* table;
+    SymbolTable::FontTable* fontTable;
     uint index;
 };
 
+
+bool FontReader::read( QFile& file, QString fontName )
+{
+    index = fontTable->size();
+    fontTable->push_back( QFont( fontName ) );
+    return ConfigReader::read( file );
+}
+
 bool FontReader::parseLine( QString line )
 {
-    if ( !nameRead ) {
-        QString fontName = parseAssignment( line, "name" );
-        if ( !fontName.isNull() ) {
-            nameRead = true;
-            QFont f( fontName );
-            QStringList fields = QStringList::split( '-', f.rawName() );
-            //if ( ( ( fields.size() == 13 ) && ( fields[1].upper() == fontName.upper() ) ) ||
-            //     ( ( fields.size() == 3 ) && ( fields[0].upper() == fontName.upper() ) ) ) {
-            if ( ( fields.size() > 1 ) &&
-                 ( ( fields[1].upper() == fontName.upper() ) ||
-                   ( fields[0].upper() == fontName.upper() ) ) ) {
-                index = fontTable->size();
-                fontTable->push_back( f );
-            }
-            else {
-                kdDebug( DEBUGID ) << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
-                return false;
-            }
-        }
-    }
-    else {
-        QStringList fields = QStringList::split( ',', line );
-        if ( fields.size() == 2 ) {
-            int pos = parseInt( fields[ 0 ] );
-            int id = parseInt( fields[ 1 ] );
+    QStringList fields = QStringList::split( ',', line );
+    if ( fields.size() == 2 ) {
+        bool posOk = false;
+        int pos = parseInt( fields[ 0 ], &posOk );
+        bool idOk = false;
+        int id = parseInt( fields[ 1 ], &idOk );
+        if ( posOk && idOk )
             ( *table )[id].setFontChar( static_cast<char>( index ), static_cast<uchar>( pos ) );
-        }
     }
     return true;
 }
@@ -231,8 +223,47 @@ SymbolTable::SymbolTable()
 {
 }
 
-void SymbolTable::init()
+
+bool fontAvailable( QString fontName )
 {
+    QFont f( fontName );
+    QStringList fields = QStringList::split( '-', f.rawName() );
+    //if ( ( ( fields.size() == 13 ) && ( fields[1].upper() == fontName.upper() ) ) ||
+    //     ( ( fields.size() == 3 ) && ( fields[0].upper() == fontName.upper() ) ) ) {
+    if ( ( fields.size() > 1 ) &&
+         ( ( fields[1].upper() == fontName.upper() ) ||
+           ( fields[0].upper() == fontName.upper() ) ) ) {
+        return true;
+    }
+    else {
+        kdDebug( DEBUGID ) << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
+        return false;
+    }
+}
+
+void SymbolTable::findAvailableFonts( QMap<QString, QString>* fontMap ) const
+{
+    QStringList fontFiles = KGlobal::dirs()->findAllResources( "data", "kformula/*.font" );
+    for ( QStringList::Iterator it = fontFiles.begin(); it != fontFiles.end(); ++it ) {
+        QString fileName = *it;
+        int sepPos = fileName.findRev( '/' );
+        if ( sepPos > -1 ) {
+            fileName = fileName.right( fileName.length() - sepPos - 1 );
+        }
+        QString fontName = fileName.left( fileName.length() - 5 ).replace( QRegExp( "%20" ), " " );
+        //kdDebug() << "SymbolTable::init fontName=" << fontName << endl;
+        if ( fontAvailable( fontName ) ) {
+            ( *fontMap )[fontName] = *it;
+        }
+    }
+}
+
+void SymbolTable::init( ContextStyle* context )
+{
+    unicodeTable.clear();
+    entries.clear();
+    fontTable.clear();
+
     QString filename = KGlobal::dirs()->findResource( "data", "kformula/unicode.tbl" );
     if ( QFile::exists( filename ) ) {
         QFile file( filename );
@@ -253,19 +284,33 @@ void SymbolTable::init()
     // We expect to have a working symbol font.
     defaultInitFont();
 
-    QStringList fontFiles = KGlobal::dirs()->findAllResources( "data", "kformula/*.font" );
-    if ( fontFiles.size() > 0 ) {
+    QMap<QString, QString> availableFonts;
+    findAvailableFonts( &availableFonts );
+
+    if ( availableFonts.size() > 0 ) {
         bool anySuccess = false;
-        for ( QStringList::Iterator it = fontFiles.begin(); it != fontFiles.end(); ++it ) {
-            //kdDebug() << "SymbolTable::defaultInitUnicode " << *it << endl;
-            QFile file( *it );
-            if ( file.open( IO_ReadOnly ) ) {
-                FontReader reader( &unicodeTable, &fontTable );
-                if ( reader.read( file ) )
-                    anySuccess = true;
+        for ( QStringList::ConstIterator it = context->requestedFonts().begin();
+              it != context->requestedFonts().end();
+              ++it ) {
+            if ( availableFonts.find( *it ) != availableFonts.end() ) {
+                QString fileName = availableFonts[ *it ];
+                //kdDebug() << "SymbolTable::init requested Font=" << *it << " " << fileName << endl;
+                QFile file( fileName );
+                if ( file.open( IO_ReadOnly ) ) {
+                    FontReader reader( &unicodeTable, &fontTable );
+                    if ( reader.read( file, *it ) ) {
+                        anySuccess = true;
+                    }
+                    else {
+                        kdWarning( DEBUGID ) << "Reading font file '" << fileName.latin1() << "' failed." << endl;
+                    }
+                }
+                else {
+                    kdWarning( DEBUGID ) << "Error opening file '" << fileName.latin1() << "'." << endl;
+                }
             }
             else {
-                kdWarning( DEBUGID ) << "Error opening file '" << ( *it ).latin1() << "'." << endl;
+                kdWarning( DEBUGID ) << "Font '" << ( *it ).latin1() << "' not available." << endl;
             }
         }
         if ( !anySuccess ) {
@@ -273,7 +318,7 @@ void SymbolTable::init()
         }
     }
     else {
-        kdWarning( DEBUGID ) << "No font files found. Using defaults." << endl;
+        kdWarning( DEBUGID ) << "No available fonts found. Using defaults." << endl;
     }
 }
 
@@ -290,9 +335,10 @@ void SymbolTable::defaultInitUnicode()
 
 void SymbolTable::defaultInitFont()
 {
+    uint index = fontTable.size();
     fontTable.push_back( QFont( "symbol" ) );
     for ( uint i = 0; symbolFontMap[ i ].unicode != 0; i++ ) {
-        unicodeTable[ symbolFontMap[ i ].unicode ].setFontChar( 0, symbolFontMap[ i ].pos );
+        unicodeTable[ symbolFontMap[ i ].unicode ].setFontChar( index, symbolFontMap[ i ].pos );
     }
 }
 
