@@ -29,15 +29,12 @@ KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
     , m_params( argc, argv )
     , m_bWithGUI( true )
 {
-    KGlobal::locale()->insertCatalogue("koffice");
-    KGlobal::iconLoader()->insertDirectory(0, kde_datadir() + 
+  KGlobal::locale()->insertCatalogue("koffice");
+  KGlobal::iconLoader()->insertDirectory(0, kde_datadir() + 
 				     "/koffice/toolbar");
-    KGlobal::iconLoader()->insertDirectory(3, localkdedir() + 
+  KGlobal::iconLoader()->insertDirectory(3, localkdedir() + 
 				     "/share/apps/koffice/toolbar");
-}
-
-KoApplication::~KoApplication()
-{
+  
   // checking wether start the app as server or not
   QStringList::Iterator it;
   if( m_params.find( "--server", "-s", true, it ) )
@@ -45,6 +42,10 @@ KoApplication::~KoApplication()
     m_bWithGUI = false;
     m_params.del( it );
   }
+}
+
+KoApplication::~KoApplication()
+{
 }
     
 void KoApplication::start()
