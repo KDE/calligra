@@ -1677,7 +1677,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.secondElementType=type_double;
         tmp.thirdElementType=type_double;
         tmp.fourElementType=type_double;
-        tmp.fiveElementType=type_double;
+        tmp.fiveElementType=type_logic;
     }
     else if(m_funcName=="compound" )
     {

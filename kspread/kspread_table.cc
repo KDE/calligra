@@ -1911,6 +1911,14 @@ KSpreadCell* c = m_cells.firstCell();
                 return;
         }
   }
+  //refresh chart when there is a chart and you remove
+  //all cells
+  if(c==0L)
+        {
+        CellBinding *bind=firstCellBinding();
+        if(bind!=0L)
+                bind->cellChanged( 0 );
+        }
 }
 
 void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
@@ -3675,6 +3683,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    else
               if ( needInsert )
 		insertCell( cell );
+            cell->updateChart();
 	}
     }
 
