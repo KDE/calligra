@@ -640,7 +640,7 @@ void KWDocument::recalcFrames()
         for (int m = getNumFrameSets() - 1; m > 0; m-- )
         {
             KWFrameSet *fs=frameSet(m);
-            if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() )
+            if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() && !fs->isFloating())
             {
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
@@ -702,7 +702,7 @@ void KWDocument::recalcFrames()
     } else {
         double height=0;
         for (QPtrListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
-            if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY) {
+            if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY && !fit.current()->isFloating()) {
                 KWFrameSet * fs = fit.current();
                 for (QPtrListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
                     height=QMAX(height, f.current()->bottom());
