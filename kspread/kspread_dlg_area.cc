@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999,2000,2001 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,17 +22,15 @@
 
 #include "kspread_dlg_area.h"
 #include "kspread_view.h"
-#include "kspread_canvas.h"
-#include "kspread_tabbar.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
+
 #include <kapp.h>
 #include <klocale.h>
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
-#include <qstrlist.h>
-#include <qlist.h>
+
 #include <kmessagebox.h>
 
 KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker )

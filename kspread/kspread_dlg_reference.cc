@@ -23,19 +23,15 @@
 #include "kspread_dlg_reference.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
-#include "kspread_tabbar.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_map.h"
 #include <kapp.h>
-#include <klocale.h>
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
-#include <qstrlist.h>
-#include <qlist.h>
 
 
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
@@ -101,9 +97,9 @@ void KSpreadreference::slotHighlighted(QListBoxItem * )
 	  break;
 	}
     }
-  
+
   tmpName=i18n("area: %1").arg(tmpName);
-			   
+
   rangeName->setText(tmpName);
 }
 
@@ -116,16 +112,16 @@ void KSpreadreference::slotRemove()
 {
   if(list->currentItem()==-1)
     return;
-  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this area name?")); 
+  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this area name?"));
   if(ret==4) // reponse = No
     return;
-  
+
   QString textRemove;
   if( list->currentItem()!=-1)
         {
 	  QString textRemove=list->text(list->currentItem());
 	  m_pView->doc()->removeArea(textRemove );
-	  
+
 	  list->clear();
 	  QString text;
 	  QValueList<Reference>::Iterator it;
@@ -136,7 +132,7 @@ void KSpreadreference::slotRemove()
 	      list->insertItem(text);
 	    }
 	  KSpreadTable *tbl;
-	  
+
 	  for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
 	    {
 	      tbl->refreshRemoveAreaName(textRemove);

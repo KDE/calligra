@@ -21,13 +21,10 @@
 
 #include "kspread_dlg_insert.h"
 #include "kspread_view.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
 #include "kspread_table.h"
-#include "kspread_map.h"
+
 #include <qlayout.h>
 #include <kapp.h>
-#include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 #include <kdebug.h>

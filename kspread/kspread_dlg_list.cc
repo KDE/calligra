@@ -22,14 +22,12 @@
 #include "kspread_dlg_list.h"
 #include "kspread_view.h"
 #include "kspread_table.h"
-#include "kspread_undo.h"
 #include "kspread_doc.h"
 #include "kspread_autofill.h"
 
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 #include <kapp.h>
-#include <klocale.h>
 
 #include <qstringlist.h>
 #include <qlayout.h>
@@ -40,24 +38,24 @@
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
 {
-  QGridLayout *grid1 = new QGridLayout(this,10,3,15,7);  
+  QGridLayout *grid1 = new QGridLayout(this,10,3,15,7);
   setCaption( i18n("Sort lists") );
 
   QLabel *lab=new QLabel(this);
-  lab->setText(i18n("List:" ));    
+  lab->setText(i18n("List:" ));
   grid1->addWidget(lab,0,0);
 
   list=new QListBox(this);
   grid1->addMultiCellWidget(list,1,8,0,0);
-  
+
 
   lab=new QLabel(this);
-  lab->setText(i18n("Entry:" ));    
+  lab->setText(i18n("Entry:" ));
   grid1->addWidget(lab,0,1);
-  
+
   entryList=new QMultiLineEdit(this);
   grid1->addMultiCellWidget(entryList,1,8,1,1);
-  
+
   m_pRemove=new QPushButton(i18n("Remove"),this);
   grid1->addWidget(m_pRemove,3,2);
 
@@ -81,9 +79,9 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   grid1->addWidget(bb,9,1);
-  
+
   m_pAdd->setEnabled(false);
-  
+
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
@@ -103,12 +101,12 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 
 void KSpreadList::init()
 {
-  config = KSpreadFactory::global()->config(); 
+  config = KSpreadFactory::global()->config();
   config->setGroup( "Parameters" );
   QStringList other=config->readListEntry("Other list");
   QString tmp;
   QStringList lst;
-  for ( QStringList::Iterator it = other.begin(); it != other.end();++it ) 
+  for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
     {
       if((*it)!="\\")
 	tmp+=(*it)+", ";
@@ -119,7 +117,7 @@ void KSpreadList::init()
 	  tmp="";
 	}
     }
-  list->insertStringList(lst);  
+  list->insertStringList(lst);
 }
 
 void KSpreadList::slotDoubleClicked(QListBoxItem *)
@@ -128,7 +126,7 @@ void KSpreadList::slotDoubleClicked(QListBoxItem *)
   entryList->setText("");
   QStringList result=result.split(", ",tmp);
   int index=0;
-  for ( QStringList::Iterator it = result.begin(); it != result.end();++it ) 
+  for ( QStringList::Iterator it = result.begin(); it != result.end();++it )
     {
       entryList->insertLine((*it),index);
       index++;
@@ -165,7 +163,7 @@ void KSpreadList::slotNew()
 {
   m_pAdd->setEnabled(true);
   list->setEnabled(false);
-  entryList->setText(""); 
+  entryList->setText("");
   entryList->setEnabled(true);
   entryList->setFocus();
 }
@@ -174,7 +172,7 @@ void KSpreadList::slotRemove()
 {
   if(list->currentItem()==-1)
     return;
-  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this list?")); 
+  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this list?"));
   if(ret==4) // reponse = No
     return;
   list->removeItem(list->currentItem ());
@@ -188,7 +186,7 @@ void KSpreadList::slotOk()
 {
   if(!entryList->text().isEmpty())
     {
-      int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want continue?")); 
+      int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want continue?"));
       if(ret==4) // reponse = No
 	return;
     }
@@ -214,7 +212,7 @@ void KSpreadList::slotOk()
 
 void KSpreadList::slotModify()
 {
-  
+
   if(list->currentItem ()!=-1 && !entryList->text().isEmpty())
     {
       QString tmp;
@@ -233,18 +231,18 @@ void KSpreadList::slotModify()
 
 
       entryList->setText("");
-      
+
     }
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
-  
+
 }
 
 void KSpreadList::slotCopy()
 {
   if(list->currentItem()!=-1)
     {
-      list->insertItem(list->currentText(),list->count()); 
+      list->insertItem(list->currentText(),list->count());
     }
 }
 

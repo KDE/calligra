@@ -23,12 +23,10 @@
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
-#include "kspread_util.h"
 #include "kspread_map.h"
 
 #include <kbuttonbox.h>
 #include <kapp.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
 #include <qlayout.h>

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999,2000,2001 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,13 +22,10 @@
 
 #include "kspread_dlg_sort.h"
 #include "kspread_view.h"
-#include "kspread_doc.h"
 #include "kspread_table.h"
 #include "kspread_util.h"
 #include <qlayout.h>
 #include <kapp.h>
-#include <klocale.h>
-#include <qrect.h>
 #include <kdebug.h>
 #include <kbuttonbox.h>
 
@@ -37,7 +34,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView* parent, const char* name)
 	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
-  
+
   setCaption( i18n("Sort") );
 
   QVBoxLayout *lay1 = new QVBoxLayout( this );
@@ -83,7 +80,7 @@ void KSpreadSortDlg::init()
     {
 	rb_row->setEnabled(false);
 	rb_column->setChecked(true);
-	
+
 	for(int i=r.left();i<=r.right();i++)
 	    list_column += i18n("Column %1").arg(util_columnLabel(i));
     }
@@ -94,7 +91,7 @@ void KSpreadSortDlg::init()
 	rb_row->setChecked(true);
 
 	for(int i=r.top();i<=r.bottom();i++)
-	    list_row += i18n("Row %1").arg(i);    
+	    list_row += i18n("Row %1").arg(i);
     }
     else
     {
@@ -121,7 +118,7 @@ void KSpreadSortDlg::init()
 	for(int i=r.top();i<=r.bottom();i++)
 	    list_row += i18n("Row %1").arg(i);
     }
-    
+
     // Initialize the combo box
     if ( rb_row->isChecked() )
 	slotpress(0);
@@ -150,7 +147,7 @@ void KSpreadSortDlg::slotpress(int id)
 void KSpreadSortDlg::slotOk()
 {
     QRect r = m_pView->activeTable()-> selectionRect();
-    
+
     if( rb_row->isChecked())
     {
 	if(!decrease->isChecked())

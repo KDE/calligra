@@ -1467,7 +1467,7 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
 
 void KSpreadTable::setSelectionPercent( const QPoint &_marker, bool b )
 {
-    SetSelectionTextColorWorker w( b );
+    SetSelectionPercentWorker w( b );
     workOnCells( _marker, w );
 }
 

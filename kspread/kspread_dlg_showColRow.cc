@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2000,2001 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,17 +21,12 @@
 
 #include "kspread_dlg_showColRow.h"
 #include "kspread_view.h"
-#include "kspread_canvas.h"
-#include "kspread_tabbar.h"
 #include "kspread_table.h"
 #include "kspread_util.h"
 #include <kapp.h>
-#include <klocale.h>
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
-#include <qstrlist.h>
-#include <qlist.h>
 #include <qtl.h>
 
 KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type )
@@ -134,7 +129,7 @@ void KSpreadShowColRow::slotOk()
     {
       if(listSelected.count()!=0)
 	m_pView->activeTable()->showRow(0,-1,listSelected);
-    } 
+    }
   accept();
 }
 

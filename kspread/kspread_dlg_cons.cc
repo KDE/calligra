@@ -27,11 +27,9 @@
 #include "kspread_table.h"
 
 #include <kapp.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <qlayout.h>
 #include <assert.h>
-//#include <stdio.h>
 
 #include <kdebug.h>
 
@@ -265,7 +263,7 @@ void KSpreadConsolidate::slotOk()
 	  formel += buffer;
 	  dbl /= (double)h;
 	}
-	
+
 	if ( m_pCopy->isChecked() )
 	  formel.sprintf( "%f", dbl );
         if(!novalue)

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2000 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2000,2001 Montel Laurent <lmontel@mandrakesoft.com>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -22,16 +22,13 @@
 #include "kspread_dlg_pasteinsert.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
-#include "kspread_doc.h"
 #include "kspread_table.h"
-#include "kspread_map.h"
+
 #include <qlayout.h>
 #include <kapp.h>
-#include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
 
 KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,const QRect &_rect)
 	: QDialog( parent, name, TRUE )

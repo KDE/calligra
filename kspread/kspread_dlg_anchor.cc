@@ -30,7 +30,6 @@
 #include <qlabel.h>
 #include <qvbox.h>
 #include <kapp.h>
-#include <klocale.h>
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 #include <kdialogbase.h>
@@ -87,7 +86,7 @@ void KSpreadLinkDlg::slotOk()
 void KSpreadLinkDlg::setCellText(const QString &_text)
 {
   KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),m_pView->canvasWidget()->markerRow() );
- 
+
     if( !cell->isDefault() )
       {
 	int ret = KMessageBox::warningYesNo( this, i18n("Cell is not empty.\nDo you want to continue?"));
@@ -97,7 +96,7 @@ void KSpreadLinkDlg::setCellText(const QString &_text)
 	    return;
 	  }
       }
-    
+
     //refresh editWidget
     if(!_text.isEmpty())
       {
@@ -182,7 +181,7 @@ QString internetAnchor::createLink()
     {
       link+=text->text()+"</a>";
     }
-  
+
     return link;
 }
 
@@ -258,7 +257,7 @@ QString mailAnchor::createLink()
     {
       link+=text->text()+"</a>";
     }
-  
+
     return link;
 }
 
@@ -339,7 +338,7 @@ QString fileAnchor::createLink()
     {
       link+=text->text()+"</a>";
     }
-  
+
     return link;
 }
 
@@ -390,7 +389,7 @@ QString cellAnchor::apply()
       return QString();
     }
    return createLink();
-  
+
 }
 
 QString cellAnchor::createLink()

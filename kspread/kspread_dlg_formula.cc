@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000,2001  Montel Laurent <lmontel@mandrakesoft.com>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -35,7 +35,6 @@
 
 #include <kapp.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kbuttonbox.h>
 #include <knumvalidator.h>
 #include <kdialog.h>
@@ -358,7 +357,7 @@ QString KSpreadDlgFormula::createFormula()
 
     if ( !m_desc )
 	return QString::null;
-    
+
     bool first = TRUE;
 
     int count = m_desc->params();
@@ -412,26 +411,26 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 
     if ( !m_desc )
 	return QString( "" );
-    
+
     QString text;
 
     KSpreadParameterType elementType = m_desc->param( param ).type();
-	
+
     switch( elementType )
     {
     case KSpread_String:
-	{			
+	{
 	    // Does the text start with quotes?
 	    if ( _text[0] == '"' )
 	    {
 		text = "\"";
-	
+
 		// Escape quotes
 		QString tmp = _text;
 		int pos;
 		while( ( pos = tmp.find( '"', 1 ) ) != -1 )
 		    tmp.replace( pos, 1, "\\\"" );
-	
+
 		text += tmp;
 		text += "\"";
 	    }
@@ -442,13 +441,13 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 		if( !p.isValid() && !r.isValid() )
 		{
 		    text = "\"";
-	
+
 		    // Escape quotes
 		    QString tmp = _text;
 		    int pos;
 		    while( ( pos = tmp.find( '"', 1 ) ) != -1 )
 			tmp.replace( pos, 1, "\\\"" );
-	
+
 		    text += tmp;
 		    text += "\"";
 		}
@@ -474,11 +473,11 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescription* desc, int param )
 {
     edit->show();
-    
+
     label->setText( desc->param( param ).helpText() );
     label->show();
     KSpreadParameterType elementType = desc->param( param ).type();
-	
+
     switch( elementType )
     {
     case KSpread_String:
@@ -506,7 +505,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 	m_browser->setText( "" );
 	return;
     }
-    
+
     m_focus = 0;
     int old_length = result->text().length();
 
@@ -514,7 +513,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     m_browser->setText( m_desc->toQML() );
     m_tabwidget->setTabEnabled( m_input, TRUE );
     m_tabwidget->setCurrentPage( 1 );
-	
+
     //
     // Show as many QLineEdits as needed.
     //
@@ -522,7 +521,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     {
         m_focus = firstElement;
         firstElement->setFocus();
-	
+
 	showEntry( firstElement, label1, m_desc, 0 );
     }
     else
@@ -540,7 +539,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 	label2->hide();
 	secondElement->hide();
     }
-	
+
     if( m_desc->params() > 2 )
     {
 	showEntry( thirdElement, label3, m_desc, 2 );
@@ -599,7 +598,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     {
 	label1->show();
 	label1->setText( i18n("This function has no parameters.") );
-			 
+
         result->setFocus();
         result->setCursorPosition(pos+functions->text(functions->currentItem()).length()+2);
     }
@@ -613,7 +612,7 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 	m_browser->setText( "" );
 	return;
     }
-	
+
     if( functions->currentItem() !=- 1 )
         selectFunction->setEnabled( TRUE );
 
@@ -622,15 +621,15 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 
     m_funcName = function;
     m_desc = desc;
-    
+
     // Set the help text
     m_browser->setText( m_desc->toQML() );
-    
+
     m_focus=0;
 
     m_tabwidget->setCurrentPage( 0 );
     m_tabwidget->setTabEnabled( m_input, FALSE );
-	
+
     // Unlock
     refresh_result=true;
 }
@@ -666,7 +665,7 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
 	lst = m_repo.functionNames();
     else
 	lst = m_repo.functionNames( category );
-    
+
     functions->clear();
     functions->insertStringList( lst );
     listFunct.setItems( lst );
