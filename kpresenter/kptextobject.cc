@@ -861,6 +861,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
+    kdDebug() << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
     KoZoomHandler *zh = m_doc->zoomHandler();
     QPoint origPix = zh->zoomPoint( orig );
     // Painter is already translated for diffx/diffy, but not for the object yet
@@ -873,15 +874,19 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
     int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
     QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
                    topLeft.y() - cursor->totalOffsetY() + lineY );
-    iPoint = zh->layoutUnitToPixel( iPoint );
+    iPoint = zh->layoutUnitToPixel( iPoint ); // ## var name is wrong then
 
-    QPoint vPoint = iPoint + origPix;
+    QPoint vPoint = iPoint; // vPoint and iPoint are the same currently
+                            // do not simplify this, will be useful with viewmodes.
     int xadj = parag->at( cursor->index() )->pixelxadj;
     iPoint.rx() += xadj;
     vPoint.rx() += xadj;
     // very small clipping around the cursor
     QRect clip( vPoint.x() - 5, vPoint.y() - canvas->diffy(), 10, cursorHeight );
     setupClipRegion( p, clip );
+
+    // for debug only!
+    //p->fillRect( clip, Qt::blue );
 
     QPixmap *pix = 0;
     QColorGroup cg = QApplication::palette().active();
