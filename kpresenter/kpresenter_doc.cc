@@ -43,7 +43,7 @@
 
 #include <kurl.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
+#include <koGlobal.h>
 #include <kapp.h>
 #include <kurldrag.h>
 #include <ktempfile.h>
@@ -123,7 +123,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_standardStyle = new KoStyle( "Standard" );
 
-    m_defaultFont = KGlobalSettings::generalFont();
+    m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
     m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
     m_zoomHandler = new KoZoomHandler;

@@ -512,10 +512,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 #endif
             KoParagLayout paragLayout = loadParagLayout(e);
             //compatibility
-            kdDebug()<<"type====================================== :"<<type<<endl;
             if(type!=-1)
             {
-                kdDebug()<<"type====================================== :"<<type<<endl;
                 if(!paragLayout.counter)
                 {
                     paragLayout.counter = new KoParagCounter;

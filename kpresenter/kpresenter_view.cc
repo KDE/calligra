@@ -259,6 +259,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     connect( h_ruler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), this,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
+
+    setAcceptDrops( TRUE );
 }
 
 /*=============================================================*/

@@ -31,7 +31,7 @@
 #include <qsizepolicy.h>
 
 #include <klocale.h>
-#include <kglobalsettings.h>
+#include <koGlobal.h>
 #include <kbuttonbox.h>
 #include <knuminput.h>
 
@@ -54,7 +54,7 @@ RotatePreview::RotatePreview( QWidget* parent, const char* name )
 /*====================== draw contents ===========================*/
 void RotatePreview::drawContents( QPainter* painter )
 {
-    QFont font(KGlobalSettings::generalFont().family(), 20, QFont::Bold);
+    QFont font(KoGlobal::defaultFont().family(), 20, QFont::Bold);
     QFontMetrics fm( font );
 
     QRect br = fm.boundingRect( "KOffice" );

@@ -24,7 +24,7 @@
 #include <qspinbox.h>
 #include <kcolorbutton.h>
 #include <kglobal.h>
-#include <kglobalsettings.h>
+#include <koGlobal.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -50,7 +50,7 @@ ShadowPreview::ShadowPreview( QWidget* parent, const char* name )
 /*====================== draw contents ===========================*/
 void ShadowPreview::drawContents( QPainter* painter )
 {
-    QFont font(KGlobalSettings::generalFont().family(), 30, QFont::Bold);
+    QFont font(KoGlobal::defaultFont().family(), 30, QFont::Bold);
     QFontMetrics fm( font );
 
     QRect br = fm.boundingRect( "KOffice" );
