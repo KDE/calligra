@@ -614,7 +614,6 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
     
     m_focus=0;
 
-    printf("FUUUUUUUUUUUUUUUUUUUCCCCCCCCCKKKKKKKK\n");
     m_tabwidget->setCurrentPage( 0 );
     m_tabwidget->setTabEnabled( m_input, FALSE );
 	
