@@ -126,8 +126,8 @@ don't put a </?xml...> at the end of the file!).
             fType:          footer style:
 
                                 0...same on all pages
-                                1...different on first and other pages
-                                2...different on even and odd pages
+                                2...different on first and other pages
+                                3...different on even and odd pages
 
             spHeadBody:     distance (in pt) between headers and the text body (only in
                             wordprocessing mode).
