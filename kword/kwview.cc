@@ -4523,6 +4523,11 @@ void KWView::slotFrameSetEditChanged()
     slotUpdateRuler();
 }
 
+void KWView::changeFootNoteMenuItem( bool _footnote)
+{
+    actionEditFootEndNote->setText( _footnote? i18n("Edit FootNote"): i18n("Edit EndNote"));
+}
+
 void KWView::slotUpdateRuler()
 {
     KWCanvas* canvas = m_gui->canvasWidget();

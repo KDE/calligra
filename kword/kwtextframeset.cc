@@ -3093,7 +3093,10 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
             else if( varCustom )
                 popup = view->popupMenu("custom_var_popup");
             else if ( varFootNote )
+            {
+                view->changeFootNoteMenuItem( varFootNote->noteType() == FootNote );
                 popup = view->popupMenu("footnote_popup");
+            }
             else
                 popup = view->popupMenu("text_popup");
             Q_ASSERT(popup);
@@ -3112,6 +3115,20 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 }
 
 //////
+
+bool KWFootNoteFrameSet::isFootNote() const
+{
+    Q_ASSERT( m_footNoteVar );
+    return (m_footNoteVar->noteType()==FootNote );
+}
+
+bool KWFootNoteFrameSet::isEndNote() const
+{
+    Q_ASSERT( m_footNoteVar );
+    return (m_footNoteVar->noteType()==EndNote );
+}
+
+
 
 void KWFootNoteFrameSet::createInitialFrame( int pageNum )
 {

@@ -169,6 +169,7 @@ public:
     void updateFooter();
     void updateHeader();
     void switchModeView();
+    void changeFootNoteMenuItem( bool b);
 public slots:
     void fileStatistics();
     void editCut();

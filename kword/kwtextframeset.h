@@ -389,6 +389,9 @@ public:
      */
     void setCounterText( const QString& text );
 
+    virtual bool isFootNote() const;
+    virtual bool isEndNote() const;
+
 private:
     KWFootNoteVariable* m_footNoteVar;
 };
