@@ -5508,7 +5508,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     if( m_boundingRect.topLeft() == boundingRect.topLeft() )
         return; // nothing happende (probably due to the grid)
 
-    scrollCanvas();
+    scrollCanvas(boundingRect);
 
     KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
     KMacroCommand *macro=new KMacroCommand(i18n( "Move object(s)" ));
@@ -5979,31 +5979,36 @@ KPrPage *KPrCanvas::stickyPage()
     return m_view->kPresenterDoc()->stickyPage();
 }
 
-void KPrCanvas::scrollCanvas()
+void KPrCanvas::scrollCanvas(const KoRect & oldPos)
 {
+    QRect rect=m_view->zoomHandler()->zoomRect(oldPos);
     KoRect visiblePage=m_view->zoomHandler()->unzoomRect(visibleRect());
     double tmpdiffx=m_view->zoomHandler()->unzoomItY(diffx());
     double tmpdiffy=m_view->zoomHandler()->unzoomItY(diffy());
     if( m_boundingRect.bottom()>(visiblePage.bottom()+tmpdiffy))
     {
+        m_view->kPresenterDoc()->repaint(rect);
         int y=m_view->zoomHandler()->zoomItY(m_boundingRect.bottom())-(m_view->zoomHandler()->zoomItY(visiblePage.bottom()+tmpdiffy));
         m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+y);
     }
     else if( m_boundingRect.top()<visiblePage.top()+tmpdiffy)
     {
+        m_view->kPresenterDoc()->repaint(rect);
         int y=(m_view->zoomHandler()->zoomItY(visiblePage.top()+tmpdiffy))-m_view->zoomHandler()->zoomItY(m_boundingRect.top());
         m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()-y);
     }
 
     if( m_boundingRect.left()<(visiblePage.left()+tmpdiffx))
     {
+        m_view->kPresenterDoc()->repaint(rect);
         int x=m_view->zoomHandler()->zoomItX(visiblePage.left()+tmpdiffx) - m_view->zoomHandler()->zoomItX(m_boundingRect.left());
         m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()-x);
     }
     else if ( m_boundingRect.right()>(visiblePage.right()+tmpdiffx))
     {
+        m_view->kPresenterDoc()->repaint(rect);
+
         int x=m_view->zoomHandler()->zoomItX(m_boundingRect.right())-(m_view->zoomHandler()->zoomItX(visiblePage.right()+tmpdiffy));
         m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+x);
     }
-
 }
