@@ -2154,7 +2154,7 @@ void KWView::updateFrameStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        
+
         // The list lst was created (unsorted) from the frame style collection, so we have still the same order.
         KWFrameStyle *tmp = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( tmp )
@@ -4708,7 +4708,8 @@ void KWView::slotCounterStyleSelected()
             // (same for custom bullet char etc.)
 
             // 68927: restart numbering, by default, if last parag wasn't numbered
-            if ( currentTextEdit() ) {
+            // (and if we're not applying this to a selection)
+            if ( currentTextEdit() && !currentTextEdit()->textFrameSet()->hasSelection() ) {
                 KoTextParag* parag = currentTextEdit()->cursor()->parag();
                 if ( parag->prev() && !parag->prev()->counter() )
                     c.setRestartCounter(true);
