@@ -69,9 +69,10 @@ class EditPointTool;
 #define ID_EDIT_CUT            202
 #define ID_EDIT_COPY           203
 #define ID_EDIT_PASTE          204
-#define ID_EDIT_DELETE         205
-#define ID_EDIT_SELECT_ALL     206
-#define ID_EDIT_PROPERTIES     207
+#define ID_EDIT_DUPLICATE      205
+#define ID_EDIT_DELETE         206
+#define ID_EDIT_SELECT_ALL     207
+#define ID_EDIT_PROPERTIES     208
 
 #define ID_INSERT_BITMAP       211
 #define ID_INSERT_CLIPART      212
@@ -124,6 +125,8 @@ class EditPointTool;
 #define ID_TOOL_EP_DEL        1102
 #define ID_TOOL_EP_JOIN       1103
 #define ID_TOOL_EP_SPLIT      1104
+
+#define ID_HISTORY_DUMP      20000
 
 class KIllustrator : public KTMainWindow, public MainView {
   Q_OBJECT

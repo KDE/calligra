@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits.h>
+#include <math.h>
 #include <qpainter.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
@@ -77,7 +78,8 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
 }
 
 Canvas::~Canvas () {
-  delete pixmap;
+  if (pixmap != 0L)
+    delete pixmap;
 }
 
 void Canvas::ensureVisibility (bool flag) {
@@ -93,8 +95,9 @@ void Canvas::calculateSize () {
 
   if (pixmap != 0L)
     delete pixmap;
-  pixmap = new QPixmap (width, height);
-  //  pixmap->fill (white);
+  pixmap = 0L;
+  if (zoomFactor < 3.0)
+    pixmap = new QPixmap (width, height);
   updateView ();
   emit sizeChanged ();
 }
@@ -139,6 +142,7 @@ void Canvas::setGridDistance (float hdist, float vdist) {
 
 void Canvas::snapPositionToGrid (int& x, int& y) {
   if (gridSnapIsOn) {
+#if 0
     int p, m, n;
     int h = qRound (hGridDistance);
     int v = qRound (vGridDistance);
@@ -156,6 +160,19 @@ void Canvas::snapPositionToGrid (int& x, int& y) {
     if (m > v / 2)
       n += v;
     y = n;
+#else
+    int n = (int) ((float) x / hGridDistance);
+    float r = fmod ((float) x, hGridDistance);
+    if (r > (hGridDistance / 2.0))
+      n++;
+    x = qRound (hGridDistance * (float) n);
+
+    n = (int) ((float) y / vGridDistance);
+    r = fmod ((float) y, vGridDistance);
+    if (r > (vGridDistance / 2.0))
+      n++;
+    y = qRound (vGridDistance * (float) n);
+#endif
   }
 }
 
@@ -234,8 +251,14 @@ void Canvas::keyPressEvent (QKeyEvent* e) {
 
 void Canvas::paintEvent (QPaintEvent* e) {
   const QRect& rect = e->rect ();
-  bitBlt (this, rect.x (), rect.y (), pixmap, 
-	  rect.x (), rect.y (), rect.width (), rect.height ());
+  if (pixmap != 0L)
+    bitBlt (this, rect.x (), rect.y (), pixmap, 
+	    rect.x (), rect.y (), rect.width (), rect.height ());
+  else
+    // For large zoom levels there is now pixmap to copy. So we
+    // have to redraw the whole document, but without to call
+    // repaint !!!
+    redrawView (false);
 }
 
 void Canvas::moveEvent (QMoveEvent *e) {
@@ -268,18 +291,27 @@ float Canvas::scaleFactor () const {
 }
 
 void Canvas::updateView () {
+  redrawView (true);
+}
+
+void Canvas::redrawView (bool repaintFlag) {
+  QPaintDevice *pdev;
   pendingRedraws = 0;
 
   Painter p;
   float s = scaleFactor ();
 
   // setup the painter  
-  p.begin (pixmap);
+  pdev = (pixmap ? pixmap : this);
+  p.begin (pdev);
   p.setBackgroundColor (white);
-  pixmap->fill (backgroundColor ());
+  if (pixmap)
+    pixmap->fill (backgroundColor ());
+
+  p.scale (s, s);
 
   p.setPen (black);
-  p.drawRect (0, 0, width - 2, height - 2);
+  //  p.drawRect (0, 0, width - 2, height - 2);
   p.setPen (QPen (darkGray, 2));
   p.moveTo (width - 1, 2);
   p.lineTo (width - 1, height - 1);
@@ -287,8 +319,7 @@ void Canvas::updateView () {
   p.setPen (black);
 
   // clear the canvas
-  p.scale (s, s);
-  p.translate (1, 1);
+  //  p.translate (1, 1);
   p.eraseRect (0, 0, document->getPaperWidth (),
 	       document->getPaperHeight ());
 
@@ -304,7 +335,9 @@ void Canvas::updateView () {
     document->handle ().draw (p);
 
   p.end ();
-  repaint ();
+  // Don't repaint if called form paintEvent () !!
+  if (repaintFlag)
+    repaint ();
 }
 
 void Canvas::retryUpdateRegion () {
@@ -342,7 +375,8 @@ void Canvas::updateRegion (const Rect& reg) {
   QRect clip = m.map (QRect (int (r.left ()), int (r.top ()), 
 			     int (r.width ()), int (r.height ())));
 
-  if (pixmap->paintingActive ()) {
+  QPaintDevice *pdev = (pixmap ? pixmap : this);
+  if (pdev->paintingActive ()) {
     // this occurs only in KOffice, when a embedded part tries
     // to draw in our canvas
     region = reg;
@@ -351,7 +385,7 @@ void Canvas::updateRegion (const Rect& reg) {
   }
 
   // setup the painter  
-  p.begin (pixmap);
+  p.begin (pdev);
   p.setBackgroundColor (white);
   // setup the clip region
   if (clip.x () <= 1) clip.setX (1);
@@ -372,7 +406,7 @@ void Canvas::updateRegion (const Rect& reg) {
 
   // clear the canvas
   p.scale (s, s);
-  p.translate (1, 1);
+  //  p.translate (1, 1);
   p.eraseRect (r.left (), r.top (), r.width (), r.height ());
 
   // draw the grid

@@ -22,40 +22,25 @@
 
 */
 
-#ifndef CommandHistory_h_
-#define CommandHistory_h_
+#ifndef DuplicateCmd_h_
+#define DuplicateCmd_h_
 
+#include <list>
+#include "GDocument.h"
+#include "GObject.h"
 #include "Command.h"
 
-#include <qlist.h>
-
-class CommandHistory : public QObject {
-  Q_OBJECT
-
+class DuplicateCmd : public Command {
 public:
-  CommandHistory ();
-  ~CommandHistory() {};
+  DuplicateCmd (GDocument* doc);
+  ~DuplicateCmd ();
 
-  void addCommand (Command *cmd, bool exec = false);
-  void undo ();
-  void redo ();
-
-  void reset ();
-
-  bool isUndoPossible() const { return (index > 0); } 
-  bool isRedoPossible() const { return (index < history.count()); }
-
-  QString getUndoName(); 
-  QString getRedoName();
-
-  void dump ();
-
-signals:
-  void changed(bool undoPossible, bool redoPossible);
+  void execute ();
+  void unexecute ();
 
 private:
-  QList<Command> history;
-  unsigned int index;
+  GDocument* document;
+  list<GObject*> objects, new_objects;
 };
 
 #endif

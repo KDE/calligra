@@ -164,8 +164,9 @@ void GDocument::drawContentsInRegion (Painter& p, const Rect& r,
 	   oi != contents.end (); oi++) {
 	// draw the object only if its bounding box 
 	// intersects the active region 
-	const Rect& bbox = (*oi)->boundingBox ();
-	if (r.intersects (bbox))
+	//	const Rect& bbox = (*oi)->boundingBox ();
+	//	if (r.intersects (bbox))
+        if ((*oi)->intersects (r))
 	  (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
       }
     }

@@ -82,6 +82,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       if (line)
         doc->setLastObject (line);
       line = 0L; last = 0;
+      emit operationDone ();
     }
   }
   else if (e->type () == Event_MouseButtonPress) {

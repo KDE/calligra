@@ -22,7 +22,10 @@
 
 */
 
+#include <iostream.h>
+
 #include "CommandHistory.h"
+#include "CommandHistory.moc"
 
 #define MAX_HISTSIZE 100
 
@@ -32,11 +35,12 @@ CommandHistory::CommandHistory () {
 }
 
 void CommandHistory::addCommand (Command *cmd, bool exec = false) {
+  //  cout << "add command: " << cmd->getName () << endl;
   if (exec)
     cmd->execute ();
   // remove all command objects "behind" the current command
-  for (unsigned int i = index; i <= history.count () - index; i++)
-    history.remove ();
+  for (unsigned int i = index; i < history.count (); i++)
+    history.remove (i);
 
   history.append (cmd);
   if (history.count () > MAX_HISTSIZE)
@@ -91,4 +95,9 @@ QString CommandHistory::getRedoName()
     return 0;
 }
 
-#include "CommandHistory.moc"
+void CommandHistory::dump () {
+  QListIterator<Command> it (history);
+  for (it += (index - 1); it.current (); --it)
+    cout << it.current ()->getName () << "\n";
+  cout << "index = " << index << endl;
+}

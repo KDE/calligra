@@ -81,6 +81,11 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     doc->setLastObject (obj);
     obj = 0L;
   }
+  else if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape)
+      emit operationDone ();
+  }
   return;
 }
 

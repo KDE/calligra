@@ -28,7 +28,7 @@
 #include <qobject.h>
 #include <qevent.h>
 
-#include <koScanParts.h>
+//#include <koScanParts.h>
 #include <koQueryTypes.h>
 #include "Tool.h"
 

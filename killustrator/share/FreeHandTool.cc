@@ -164,6 +164,11 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       }
       line = 0L; last = 0;
     }
+  else if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape)
+      emit operationDone ();
+  }
   return;
 }
 

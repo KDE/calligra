@@ -19,7 +19,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 TranslateCmd.h ScaleCmd.h RotateCmd.h \
 		 CreateOvalCmd.h CreatePolylineCmd.h \
 		 CreateTextCmd.h CreateRectangleCmd.h \
-		 GroupCmd.h UngroupCmd.h DeleteCmd.h \
+		 GroupCmd.h UngroupCmd.h DeleteCmd.h DuplicateCmd.h \
 		 CutCmd.h CopyCmd.h PasteCmd.h SetTextCmd.h \
 		 SetPropertyCmd.h ReorderCmd.h \
 		 AddLineSegmentCmd.h EditPointCmd.h \
@@ -50,7 +50,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  Coord.cc PropertyEditor.cc FloatSpinBox.cc \
                           ColorComboBox.cc FontSelector.cc AlignmentDialog.cc \
 			  PolygonConfigDialog.cc PolygonPreview.cc \
-			  GridDialog.cc Command.cc \
+			  GridDialog.cc Command.cc DuplicateCmd.cc \
                           AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc \
 			  TranslateCmd.cc ScaleCmd.cc RotateCmd.cc \
 			  CreateOvalCmd.cc CreatePolylineCmd.cc \

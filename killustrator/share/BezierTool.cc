@@ -117,6 +117,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       if (curve)
 	curve->setWorkingSegment (-1);
       curve = 0L; last = 0;
+      emit operationDone ();
     }
   }
   else if (e->type () == Event_MouseButtonPress) {

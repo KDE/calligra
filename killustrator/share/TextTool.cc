@@ -88,9 +88,23 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
   }
   else if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape) {
+      // Cancel editing
+      if (text != 0L) {
+	if (origState == 0L) {
+	  // new text -> remove it
+	  doc->deleteObject (text);
+	}
+	else {
+	  // undo modifications
+	  text->restoreState (origState);
+	}
+      }
+      emit operationDone ();
+    }
     if (text == NULL)
       return; 
-    QKeyEvent *ke = (QKeyEvent *) e;
     int x = text->cursorX (), y = text->cursorY ();
     bool changed = false;
     if (ke->key () == Key_Left) {

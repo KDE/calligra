@@ -27,6 +27,7 @@
 #include <qstrlist.h>
 #include <qfileinfo.h>
 #include <qframe.h>
+#include <qclipboard.h>
 #include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
@@ -62,6 +63,7 @@
 #include "CutCmd.h"
 #include "CopyCmd.h"
 #include "PasteCmd.h"
+#include "DuplicateCmd.h"
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
 #include "InsertPixmapCmd.h"
@@ -95,14 +97,6 @@
 QList<KIllustrator> KIllustrator::windows;
 bool KIllustrator::previewHandlerRegistered = false;
 
-/*
-static const QColor cpalette[] = { white, red, green, blue, cyan, 
-				   magenta, yellow,
-				   darkRed, darkGreen, darkBlue, darkCyan,
-				   darkMagenta, darkYellow, white, lightGray,
-				   gray, darkGray, black };
-*/
-
 KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   windows.setAutoDelete (false);
   windows.append (this);
@@ -113,12 +107,15 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
 
   psm = PStateManager::instance ();
 
-  zFactors.resize (5);
+  zFactors.resize (8);
   zFactors[0] = 0.5;
   zFactors[1] = 1.0;
   zFactors[2] = 1.5;
   zFactors[3] = 2.0;
   zFactors[4] = 4.0;
+  zFactors[5] = 6.0;
+  zFactors[6] = 8.0;
+  zFactors[7] = 10.0;
 
   canvas = 0L;
   scriptDialog = 0L;
@@ -246,42 +243,69 @@ void KIllustrator::setupMainView () {
 			     tool = new SelectionTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+
   tcontroller->registerTool (ID_TOOL_EDITPOINT, 
 			     editPointTool = new EditPointTool (&cmdHistory));
   connect (editPointTool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (editPointTool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_FREEHAND, 
 			     tool = new FreeHandTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_LINE, 
 			     tool = new PolylineTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_BEZIER, 
 			     tool = new BezierTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_RECTANGLE, 
 			     tool = new RectangleTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_POLYGON, 
 			     tool = new PolygonTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_ELLIPSE, 
 			     tool = new OvalTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_TEXT, 
 			     tool = new TextTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
+
   tcontroller->registerTool (ID_TOOL_ZOOM, 
 			     tool = new ZoomTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
 
   tcontroller->registerTool (ID_TOOL_PATHTEXT, 
 			     tool = new PathTextTool (&cmdHistory));
@@ -324,7 +348,7 @@ void KIllustrator::initToolBars () {
   toolbar->insertSeparator ();
 
   QStrList zoomStrList;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < (int) zFactors.size (); i++) {
     char buf[8];
     sprintf (buf, "%3.0f%%", zFactors[i] * 100);
     zoomStrList.append (buf);
@@ -531,6 +555,8 @@ void KIllustrator::initMenu () {
   edit->insertItem (i18n ("C&ut"), ID_EDIT_CUT);
   edit->setAccel (CTRL + Key_X, ID_EDIT_CUT);
   edit->insertSeparator ();
+  edit->insertItem (i18n ("D&uplicate"), ID_EDIT_DUPLICATE);
+  edit->setAccel (CTRL + Key_D, ID_EDIT_DUPLICATE);
   edit->insertItem (i18n ("&Delete"), ID_EDIT_DELETE);
   edit->setAccel (Key_Delete, ID_EDIT_DELETE);
   edit->insertSeparator ();
@@ -597,6 +623,7 @@ void KIllustrator::initMenu () {
   //  extras->insertSeparator ();
   extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
   //  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
+  //  extras->insertItem (i18n ("Dump History"), ID_HISTORY_DUMP);
   connect (extras, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   help->insertItem (i18n ("&Help..."), ID_HELP_HELP);
@@ -673,6 +700,9 @@ void KIllustrator::updateSettings () {
 
 void KIllustrator::menuCallback (int item) {
   switch (item) {
+  case ID_HISTORY_DUMP:
+    cmdHistory.dump ();
+    break;
   case ID_FILE_NEW:
     if (askForSave ()) {
       document->initialize ();
@@ -735,16 +765,24 @@ void KIllustrator::menuCallback (int item) {
     resetTools ();
     break;
   case ID_EDIT_CUT:
-    cmdHistory.addCommand (new CutCmd (document), true);
+    if (!document->selectionIsEmpty ())
+      cmdHistory.addCommand (new CutCmd (document), true);
     break;
   case ID_EDIT_COPY:
-    cmdHistory.addCommand (new CopyCmd (document), true);
+    if (!document->selectionIsEmpty ())
+      cmdHistory.addCommand (new CopyCmd (document), true);
     break;
   case ID_EDIT_PASTE:
-    cmdHistory.addCommand (new PasteCmd (document), true);
+    if (::strlen (QApplication::clipboard ()->text ()))
+      cmdHistory.addCommand (new PasteCmd (document), true);
+    break;
+  case ID_EDIT_DUPLICATE:
+    if (!document->selectionIsEmpty ())
+      cmdHistory.addCommand (new DuplicateCmd (document), true);
     break;
   case ID_EDIT_DELETE:
-    cmdHistory.addCommand (new DeleteCmd (document), true);
+    if (!document->selectionIsEmpty ())
+      cmdHistory.addCommand (new DeleteCmd (document), true);
     break;
   case ID_EDIT_SELECT_ALL:
     document->selectAllObjects ();
@@ -1007,9 +1045,8 @@ bool KIllustrator::askForSave () {
     int result = 
       KMsgBox::yesNoCancel (this, "Message", 
 			    i18n ("This Document has been modified.\nWould you like to save it ?"),
-			    KMsgBox::QUESTION, i18n ("Yes"), 
-			    i18n ("No"), 
-			    i18n ("Cancel"));
+			    KMsgBox::QUESTION | KMsgBox::DB_FIRST, 
+			    i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
     if (result == 1)
       saveFile ();
 

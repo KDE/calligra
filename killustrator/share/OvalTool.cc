@@ -107,6 +107,12 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     oval = NULL;
   }
+  else if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape)
+      emit operationDone ();
+  }
+
   return;
 }
 

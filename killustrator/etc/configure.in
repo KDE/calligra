@@ -9,7 +9,7 @@ dnl the argument
 AM_CONFIG_HEADER(config.h)
 AC_CHECK_COMPILERS
 
-AM_INIT_AUTOMAKE(killustrator, 0.6)
+AM_INIT_AUTOMAKE(killustrator, 0.6.1)
 
 dnl make $KDEDIR the default for the installation
 AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})

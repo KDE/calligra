@@ -73,6 +73,8 @@ public:
 
   virtual void getPath (vector<Coord>& path);
 
+  virtual bool intersects (const Rect& r);
+
 protected:
   void calcBoundingBox ();
 

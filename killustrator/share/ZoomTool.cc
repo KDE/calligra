@@ -39,6 +39,7 @@ void ZoomTool::processEvent (QEvent* e, GDocument *doc,
   if (e->type () == Event_MouseButtonRelease) {
     QMouseEvent *me = (QMouseEvent *) e;
     canvas->zoomIn (me->x (), me->y ());
+    emit operationDone ();
   }
 }
 

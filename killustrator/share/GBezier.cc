@@ -648,3 +648,7 @@ void GBezier::getPath (vector<Coord>& path) {
   }
 }
 
+bool GBezier::intersects (const Rect& r) {
+  return GObject::intersects (r);
+}
+

@@ -577,6 +577,8 @@ void TransformationDialog::update () {
   horizRotCenter->setValue (r.center ().x ());
   vertRotCenter->setValue (r.center ().y ());
   relativeRotCenter->setChecked (false);
+  setActiveWindow ();
+  raise ();
 }
 
 void TransformationDialog::updateProportionalDimension (float value) {

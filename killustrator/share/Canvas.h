@@ -114,6 +114,7 @@ private:
   void propagateMouseEvent (QMouseEvent *e);
   void propagateKeyEvent (QKeyEvent *e);
   void drawGrid (Painter& p);
+  void redrawView (bool repaintFlag = true);
 
   QwViewport* viewport;
   QPixmap* pixmap;

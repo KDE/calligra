@@ -324,6 +324,8 @@ public:
    */
   virtual bool contains (const Coord& p);
 
+  virtual bool intersects (const Rect& r);
+
   /**
    * Create a new object with identical properties.
    * NOTE: This method has to be implemented in every subclass.

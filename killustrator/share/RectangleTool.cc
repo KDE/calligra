@@ -79,6 +79,11 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     doc->setLastObject (rect);
     rect = NULL;
   }
+  else if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape)
+      emit operationDone ();
+  }
 }
 
 void RectangleTool::activate (GDocument* doc, Canvas* canvas) {

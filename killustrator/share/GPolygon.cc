@@ -38,7 +38,7 @@
 static const int xfactors[] = { 0, 1, -1, 0, 0, -1, 1, 0 };
 static const int yfactors[] = { 1, 0, 0, 1, -1, 0, 0, -1 };
 
-static bool intersects (const Coord& p11, const Coord& p12,
+static bool line_intersects (const Coord& p11, const Coord& p12,
 	const Coord& p21, const Coord& p22) {
   float x11, x12, y11, y12, x21, x22, y21, y22;
   float m1, m2, n1, n2;
@@ -356,13 +356,13 @@ bool GPolygon::inside_polygon (const Coord& p) {
 
   p1 = points.first ();
   while (! ready) {
-    if (! intersects (*p1, *p1, t1, t2)) {
+    if (! line_intersects (*p1, *p1, t1, t2)) {
       p2 = points.next ();
       if (p2 == 0L) {
         p2 = points.first ();
         ready = true;
       }
-      if (intersects (*p1, *p2, t1, t2)) 
+      if (line_intersects (*p1, *p2, t1, t2)) 
         counter++;
       p1 = p2;
     }

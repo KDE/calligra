@@ -314,6 +314,10 @@ bool GObject::contains (const Coord& p) {
   return box.contains (p);
 }
 
+bool GObject::intersects (const Rect& r) {
+  return r.intersects (box);
+}
+
 void GObject::setLayer (GLayer* l) {
   layer = l;
   if (l == 0L)
