@@ -146,10 +146,10 @@ KoRect
 VCanvas::boundingBox() const
 {
 	KoPoint p1( 0, 0 );
-    p1 = toContents( p1 );
-    KoPoint p2( width(), height() );
-    p2 = toContents( p2 );
-    return KoRect( p1, p2 ).normalize();
+	p1 = toContents( p1 );
+	KoPoint p2( width(), height() );
+	p2 = toContents( p2 );
+	return KoRect( p1, p2 ).normalize();
 }
 
 void
@@ -231,8 +231,8 @@ VCanvas::setViewportRect( const KoRect &r )
 	viewport()->setUpdatesEnabled( false );
 	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
 	double zoomY = m_view->zoom() * ( ( visibleHeight() / m_view->zoom() ) / r.height() );
-	double centerX = double( r.center().x() * m_view->zoom() ) / double( contentsWidth() );
-	double centerY = double( r.center().y() * m_view->zoom() ) / double( contentsHeight() );
+	double centerX = double( ( r.center().x() + 20 ) * m_view->zoom() ) / double( contentsWidth() );
+	double centerY = double( ( r.center().y() + 40 ) * m_view->zoom() ) / double( contentsHeight() );
 	double zoom = zoomX < zoomY ? zoomX : zoomY;
 	resizeContents( int( ( zoom / m_view->zoom() ) * contentsWidth() ),
 					int( ( zoom / m_view->zoom() ) * contentsHeight() ) );
