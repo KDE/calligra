@@ -108,6 +108,21 @@
     </Function>
 
     <Function>
+      <Name>ISREF</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISREF() function returns True if the parameter refers to a reference. Otherwise it returns False</Text>
+	<Syntax>ISREF(x)</Syntax>
+	<Example>ISREF(A12) returns true</Example>
+	<Example>ISREF("hello") returns false</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>ISTEXT</Name>
       <Type>Boolean</Type>
       <Parameter>
