@@ -637,6 +637,8 @@ KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadTable *
     m_hf = _table->getHeadFootLine();
     m_unit = doc()->getUnit();
     m_printGrid = _table->getPrintGrid();
+    m_printCommentIndicator = _table->getPrintCommentIndicator();
+    m_printFormulaIndicator = _table->getPrintFormulaIndicator();
     m_printRange = _table->printRange();
     m_printRepeatColumns = _table->printRepeatColumns();
     m_printRepeatRows = _table->printRepeatRows();
@@ -669,6 +671,12 @@ void KSpreadUndoPaperLayout::undo()
     m_printGridRedo = table->getPrintGrid();
     table->setPrintGrid( m_printGrid );
 
+    m_printCommentIndicatorRedo = table->getPrintCommentIndicator();
+    table->setPrintCommentIndicator( m_printCommentIndicator );
+
+    m_printFormulaIndicatorRedo = table->getPrintFormulaIndicator();
+    table->setPrintFormulaIndicator( m_printFormulaIndicator );
+
     m_printRangeRedo = table->printRange();
     table->setPrintRange( m_printRange );
 
@@ -698,6 +706,8 @@ void KSpreadUndoPaperLayout::redo()
     doc()->setUnit( m_unitRedo );
 
     table->setPrintGrid( m_printGridRedo );
+    table->setPrintCommentIndicator( m_printCommentIndicatorRedo );
+    table->setPrintFormulaIndicator( m_printFormulaIndicatorRedo );
 
     table->setPrintRange( m_printRangeRedo );
     table->setPrintRepeatColumns( m_printRepeatColumnsRedo );

@@ -1792,8 +1792,10 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   if (!isObscured())
     /* don't paint content if this cell is obscured */
   {
-    paintCommentIndicator(painter, corner, cellRef);
-    paintFormulaIndicator(painter, corner, cellRef);
+    if ( !painter.device()->isExtDev() || m_pTable->getPrintCommentIndicator() )
+      paintCommentIndicator(painter, corner, cellRef);
+    if ( !painter.device()->isExtDev() || m_pTable->getPrintFormulaIndicator() )
+      paintFormulaIndicator(painter, corner, cellRef);
     paintMoreTextIndicator(painter, corner, cellRef);
 
   /**
@@ -2107,9 +2109,11 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
 
-  if( !comment(cellRef.x(),cellRef.y()).isEmpty() && rowLayout->height() > 2 &&
-      colLayout->width() > 10 && !painter.device()->isExtDev() &&
-      table()->doc()->getShowCommentIndicator())
+  if( !comment(cellRef.x(),cellRef.y()).isEmpty() && 
+      rowLayout->height() > 2 &&
+      colLayout->width() > 10 &&
+      ( table()->getPrintCommentIndicator() ||  
+        ( !painter.device()->isExtDev() && table()->doc()->getShowCommentIndicator() ) ) )
   {
     QPointArray point( 3 );
     point.setPoint( 0, corner.x() + width - 10, corner.y() );

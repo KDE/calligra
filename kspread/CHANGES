@@ -7,7 +7,7 @@ Until beta2:
 - bug fixes
 - perfomance enhancements
 - print functions:
-    - added show/hide grid on printout option
+    - added option for print grid, comment indicator and formula indicator
     - added print range definiton
     - added repeat columns & rows on printout
 - paper layout now a property of sheet (not the whole workbook)

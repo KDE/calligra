@@ -257,6 +257,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   setHidden( false );
   m_bShowGrid=true;
   m_bPrintGrid=false;
+  m_bPrintCommentIndicator=false;
+  m_bPrintFormulaIndicator=false;
   m_bShowFormula=false;
   m_bShowFormulaIndicator=true;
   m_bLcMode=false;
@@ -6616,8 +6618,10 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", m_strName );
-    table.setAttribute( "grid", (int)m_bShowGrid);
-    table.setAttribute( "printGrid", (int)m_bPrintGrid);
+    table.setAttribute( "grid", (int)m_bShowGrid );
+    table.setAttribute( "printGrid", (int)m_bPrintGrid );
+    table.setAttribute( "printCommentIndicator", (int)m_bPrintCommentIndicator );
+    table.setAttribute( "printFormulaIndicator", (int)m_bPrintFormulaIndicator );
     table.setAttribute( "hide", (int)m_bTableHide);
     table.setAttribute( "formular", (int)m_bShowFormula);
     table.setAttribute( "borders", (int)m_bShowPageBorders);
@@ -6802,6 +6806,16 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     if( table.hasAttribute( "printGrid" ) )
     {
         m_bPrintGrid = (int)table.attribute("printGrid").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if( table.hasAttribute( "printCommentIndicator" ) )
+    {
+        m_bPrintGrid = (int)table.attribute("printCommentIndicator").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if( table.hasAttribute( "printFormulaIndicator" ) )
+    {
+        m_bPrintGrid = (int)table.attribute("printFormulaIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "hide" ) )
@@ -7533,34 +7547,42 @@ void KSpreadTable::paperLayoutDlg()
 
     // ------------- options ---------------
     QWidget *tab = dlg.addPage(i18n( "Options" ));
-    QGridLayout *grid = new QGridLayout( tab, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QCheckBox *pPrintGrid = new QCheckBox ( i18n("Print &grid"), tab );
     pPrintGrid->setChecked( getPrintGrid() );
     grid->addWidget( pPrintGrid, 0, 0 );
 
+    QCheckBox *pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), tab );
+    pPrintCommentIndicator->setChecked( getPrintCommentIndicator() );
+    grid->addWidget( pPrintCommentIndicator, 1, 0 );
+
+    QCheckBox *pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), tab );
+    pPrintFormulaIndicator->setChecked( getPrintFormulaIndicator() );
+    grid->addWidget( pPrintFormulaIndicator, 2, 0 );
+
     QLabel *pPrintRange = new QLabel ( i18n("Print range:"), tab );
-    grid->addWidget( pPrintRange, 1, 0 );
+    grid->addWidget( pPrintRange, 3, 0 );
 
     QLineEdit *ePrintRange = new QLineEdit( tab );
-    grid->addWidget( ePrintRange, 1, 1 );
+    grid->addWidget( ePrintRange, 3, 1 );
     ePrintRange->setText( util_rangeName( m_printRange ) );
 
     QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
-    grid->addWidget( pRepeatCols, 3, 0 );
+    grid->addWidget( pRepeatCols, 4, 0 );
 
     QLineEdit *eRepeatCols = new QLineEdit( tab );
-    grid->addWidget( eRepeatCols, 3, 1 );
+    grid->addWidget( eRepeatCols, 4, 1 );
     if ( m_printRepeatColumns.first != 0 )
         eRepeatCols->setText( util_encodeColumnLabelText( m_printRepeatColumns.first ) +
                               ":" +
                               util_encodeColumnLabelText( m_printRepeatColumns.second ) );
 
     QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
-    grid->addWidget( pRepeatRows, 2, 0 );
+    grid->addWidget( pRepeatRows, 5, 0 );
 
     QLineEdit *eRepeatRows = new QLineEdit( tab );
-    grid->addWidget( eRepeatRows, 2, 1 );
+    grid->addWidget( eRepeatRows, 5, 1 );
     if ( m_printRepeatRows.first != 0 )
         eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) +
                               ":" +
@@ -7568,6 +7590,8 @@ void KSpreadTable::paperLayoutDlg()
 
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pPrintGrid->width() );
+    grid->addColSpacing( 0, pPrintCommentIndicator->width() );
+    grid->addColSpacing( 0, pPrintFormulaIndicator->width() );
     grid->addColSpacing( 0, pPrintRange->width() );
     grid->addColSpacing( 0, pRepeatRows->width() );
     grid->addColSpacing( 0, pRepeatCols->width() );
@@ -7576,13 +7600,15 @@ void KSpreadTable::paperLayoutDlg()
     grid->addColSpacing( 1, eRepeatCols->width() );
 
     grid->addRowSpacing( 0, pPrintGrid->height() );
-    grid->addRowSpacing( 1, pPrintRange->height() );
-    grid->addRowSpacing( 1, ePrintRange->height() );
-    grid->addRowSpacing( 2, pRepeatRows->height() );
-    grid->addRowSpacing( 2, eRepeatRows->height() );
-    grid->addRowSpacing( 3, pRepeatCols->height() );
-    grid->addRowSpacing( 3, eRepeatCols->height() );
-    grid->setRowStretch( 4, 1 );
+    grid->addRowSpacing( 1, pPrintCommentIndicator->height() );
+    grid->addRowSpacing( 2, pPrintFormulaIndicator->height() );
+    grid->addRowSpacing( 3, pPrintRange->height() );
+    grid->addRowSpacing( 3, ePrintRange->height() );
+    grid->addRowSpacing( 4, pRepeatRows->height() );
+    grid->addRowSpacing( 4, eRepeatRows->height() );
+    grid->addRowSpacing( 5, pRepeatCols->height() );
+    grid->addRowSpacing( 5, eRepeatCols->height() );
+    grid->setRowStretch( 6, 1 );
 
     int result = dlg.exec();
     if ( result == QDialog::Accepted )
@@ -7597,6 +7623,8 @@ void KSpreadTable::paperLayoutDlg()
         hf = dlg.getHeadFoot();
         unit = dlg.unit();
         setPrintGrid( pPrintGrid->isChecked() );
+        setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
+        setPrintFormulaIndicator( pPrintFormulaIndicator->isChecked() );
         QString tmpPrintRange = ePrintRange->text();
         QString tmpRepeatCols = eRepeatCols->text();
         QString tmpRepeatRows = eRepeatRows->text();
@@ -8027,6 +8055,24 @@ void KSpreadTable::setPrintGrid( bool _printGrid )
     return;
 
   m_bPrintGrid = _printGrid;
+  m_pDoc->setModified( true );
+}
+
+void KSpreadTable::setPrintCommentIndicator( bool _printCommentIndicator )
+{
+  if ( m_bPrintCommentIndicator == _printCommentIndicator )
+    return;
+
+  m_bPrintCommentIndicator = _printCommentIndicator;
+  m_pDoc->setModified( true );
+}
+
+void KSpreadTable::setPrintFormulaIndicator( bool _printFormulaIndicator )
+{
+  if ( m_bPrintFormulaIndicator == _printFormulaIndicator )
+    return;
+
+  m_bPrintFormulaIndicator = _printFormulaIndicator;
   m_pDoc->setModified( true );
 }
 

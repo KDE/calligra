@@ -1495,6 +1495,25 @@ public:
      */
     void setPrintGrid( bool _printGrid );
 
+    /**
+     * Returns, if the comment rect shall be shown on printouts
+     */
+    bool getPrintCommentIndicator() const { return m_bPrintCommentIndicator; }
+
+    /**
+     * Sets, if the comment rect shall be shown on printouts
+     */
+    void setPrintCommentIndicator( bool _printCommentIndicator );
+
+    /**
+     * Returns, if the formula rect shall be shown on printouts
+     */
+    bool getPrintFormulaIndicator() const { return m_bPrintFormulaIndicator; }
+
+    /**
+     * Sets, if the formula Rect shall be shown on printouts
+     */
+    void setPrintFormulaIndicator( bool _printFormulaIndicator );
 
 public slots:
     /**
@@ -1613,6 +1632,16 @@ protected:
      * Show the grid when making printout
      */
     bool m_bPrintGrid;
+
+    /**
+     * Show the formula rect when making printout
+     */
+    bool m_bPrintFormulaIndicator;
+
+    /**
+     * Show the comment rect when making printout
+     */
+    bool m_bPrintCommentIndicator;
 
     /**
      * Width of repeated columns in mm, stored for perfomance reasons

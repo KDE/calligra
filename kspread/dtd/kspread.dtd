@@ -177,29 +177,34 @@
 
 		Attributes:
 
-		name	          the name of the table
-                columnnumber      display column header as number
-                borders           show/hide page border (hide = "0", show = "1") 
-                hide              hide/show table (hide ="1", show="0")
-                hidezero          don't show zero value (hide="1",show="0")
-                firstletterupper  Upper first letter (upper="1",nothing="0")
-                grid              show/hide grid on screen (hide="1", show="0")
-                printGrid         show/hide grid on printout (hide="1", show="0")
-                formular          show/hide formular
-                lcmode            write on LxCx area selected 
+		name	               the name of the table
+                columnnumber           display column header as number
+                borders                show/hide page border (hide = "0", show = "1") 
+                hide                   hide/show table (hide ="1", show="0")
+                hidezero               don't show zero value (hide="1",show="0")
+                firstletterupper       Upper first letter (upper="1",nothing="0")
+                grid                   show/hide grid on screen (hide="1", show="0")
+                printGrid              show/hide grid on printout (hide="1", show="0")
+                printCommentIndicator  show/hide comment indicator on printout (hide="1", show="0")
+                printFormulaIndicator  show/hide formula indicator on printout (hide="1", show="0")
+                printGrid              show/hide grid on printout (hide="1", show="0")
+                formular               show/hide formular
+                lcmode                 write on LxCx area selected 
 -->
 <!ELEMENT table (paper|cell|chart|column|row|printrange-rect|printrepeatcolumns|printrepeatrows)*>
-<!ATTLIST table  name               CDATA #REQUIRED
-                 columnnumber       CDATA #REQUIRED
-                 borders            CDATA #REQUIRED     
-                 hide               CDATA #REQUIRED 
-                 hidezero           CDATA #REQUIRED
-                 firstletterupper   CDATA #REQUIRED
-                 grid               CDATA #REQUIRED
-                 printGrid          CDATA #REQUIRED
-                 formular           CDATA #REQUIRED
-                 lcmode             CDATA #REQUIRED
-		 borders1.2         CDATA #REQUIRED>
+<!ATTLIST table  name                   CDATA #REQUIRED
+                 columnnumber           CDATA #REQUIRED
+                 borders                CDATA #REQUIRED     
+                 hide                   CDATA #REQUIRED 
+                 hidezero               CDATA #REQUIRED
+                 firstletterupper       CDATA #REQUIRED
+                 grid                   CDATA #REQUIRED
+                 printGrid              CDATA #REQUIRED
+                 printCommentIndicator  CDATA #REQUIRED
+                 printFormulaIndicator  CDATA #REQUIRED
+                 formular               CDATA #REQUIRED
+                 lcmode                 CDATA #REQUIRED
+		 borders1.2             CDATA #REQUIRED>
 
 
 <!--	Describes one cell including contents.

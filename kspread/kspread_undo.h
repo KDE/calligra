@@ -277,6 +277,10 @@ protected:
     KoUnit::Unit m_unitRedo;
     bool m_printGrid;
     bool m_printGridRedo;
+    bool m_printCommentIndicator;
+    bool m_printCommentIndicatorRedo;
+    bool m_printFormulaIndicator;
+    bool m_printFormulaIndicatorRedo;
     QRect m_printRange;
     QRect m_printRangeRedo;
     QPair<int, int> m_printRepeatColumns;
