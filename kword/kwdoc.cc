@@ -1431,7 +1431,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
         KWStyle *sty = new KWStyle( QString::null );
         // Load the paraglayout from the <STYLE> element
-        KoParagLayout lay = KWTextParag::loadParagLayout( styleElem, this, false );
+        KoParagLayout lay = KoStyle::loadStyle( styleElem,syntaxVersion() );
         // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
         lay.style = sty;
         sty->paragLayout() = lay;
@@ -1974,14 +1974,7 @@ void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem )
     QDomElement styleElem = doc.createElement( "STYLE" );
     parentElem.appendChild( styleElem );
 
-    KWTextParag::saveParagLayout( sty->paragLayout(), styleElem );
-
-    if ( sty->followingStyle() )
-    {
-        QDomElement element = doc.createElement( "FOLLOWING" );
-        styleElem.appendChild( element );
-        element.setAttribute( "name", sty->followingStyle()->name() );
-    }
+    KoStyle::saveStyle( sty->paragLayout(), sty->followingStyle() ,styleElem );
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
     styleElem.appendChild( formatElem );
