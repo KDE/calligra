@@ -91,14 +91,14 @@ const int USE_NEW_STUFF = 64;
  *  Represents the paper format a document shall be printed on.
  */
 enum KoFormat {
-    PG_DIN_A3 = 0, 
-    PG_DIN_A4 = 1, 
-    PG_DIN_A5 = 2, 
-    PG_US_LETTER = 3, 
-    PG_US_LEGAL = 4, 
-    PG_SCREEN = 5, 
-    PG_CUSTOM = 6, 
-    PG_DIN_B5 = 7, 
+    PG_DIN_A3 = 0,
+    PG_DIN_A4 = 1,
+    PG_DIN_A5 = 2,
+    PG_US_LETTER = 3,
+    PG_US_LEGAL = 4,
+    PG_SCREEN = 5,
+    PG_CUSTOM = 6,
+    PG_DIN_B5 = 7,
     PG_US_EXECUTIVE = 8
 };
 
@@ -106,7 +106,7 @@ enum KoFormat {
  *  Represents the orientation of a printed document.
  */
 enum KoOrientation {
-    PG_PORTRAIT = 0, 
+    PG_PORTRAIT = 0,
     PG_LANDSCAPE = 1
 };
 
@@ -115,14 +115,14 @@ enum KoOrientation {
  *  Possible values are for millimeter, points and inches.
  */
 enum KoUnit {
-    PG_MM = 0, 
-    PG_PT = 1, 
+    PG_MM = 0,
+    PG_PT = 1,
     PG_INCH = 2
 };
 
 enum KoHFType {
-    HF_SAME = 0, 
-    HF_FIRST_DIFF = 2, 
+    HF_SAME = 0,
+    HF_FIRST_DIFF = 2,
     HF_EO_DIFF = 3
 };
 
@@ -161,24 +161,38 @@ struct KoPageLayout
     float inchRight;
     float inchBottom;
 
-//   bool operator==( const KoPageLayout _l ) {
-//     return ( _l.format == format &&
-//	    _l.orientation == orientation &&
-//	    _l.width == width &&
-//	    _l.height == height &&
-//	    _l.left == left && _l.right == right &&
-//	    _l.top == top && _l.bottom == bottom &&
-//	    _l.unit == unit );
-//   }
-//   bool operator!=( const KoPageLayout _l ) {
-//     return ( _l.format != format &&
-//	    _l.orientation != orientation ||
-//	    _l.width != width ||
-//	    _l.height != height ||
-//	    _l.left != left || _l.right != right ||
-//	    _l.top != top || _l.bottom != bottom ||
-//	    _l.unit != unit );
-//   }
+    bool operator==( const KoPageLayout& l ) const {
+	if ( unit != l.unit )
+	    return FALSE;
+	switch( unit ) {
+	case PG_PT: {
+	    return ( ptWidth == l.ptWidth &&
+		     ptHeight == l.ptHeight &&
+		     ptLeft == l.ptLeft &&
+		     ptRight == l.ptHeight &&
+		     ptTop == l.ptTop &&
+		     ptBottom == l.ptBottom );
+	}
+	case PG_MM: {
+	    return ( mmWidth == l.mmWidth &&
+		     mmHeight == l.mmHeight &&
+		     mmLeft == l.mmLeft &&
+		     mmRight == l.mmHeight &&
+		     mmTop == l.mmTop &&
+		     mmBottom == l.mmBottom );
+	}
+	case PG_INCH: {
+	    return ( inchWidth == l.inchWidth &&
+		     inchHeight == l.inchHeight &&
+		     inchLeft == l.inchLeft &&
+		     inchRight == l.inchHeight &&
+		     inchTop == l.inchTop &&
+		     inchBottom == l.inchBottom );
+	}
+	}
+	return FALSE;
+	
+    }
 };
 
 // structure for header-footer
@@ -256,7 +270,7 @@ protected:
 };
 
 /**
- *  With this dialog the user can specify the layout of this papaer during printing. 
+ *  With this dialog the user can specify the layout of this papaer during printing.
  */
 class KoPageLayoutDia : public QTabDialog
 {
@@ -286,7 +300,7 @@ public:
      *  @param kwheadfoot The KWord header and footer.
      *  @param tabs       The number of tabs.
      */
-    KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout layout, KoHeadFoot headfoot, 
+    KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout layout, KoHeadFoot headfoot,
 		    KoColumns columns, KoKWHeaderFooter kwheadfoot, int tabs );
 
     /**
