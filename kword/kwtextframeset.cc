@@ -2090,7 +2090,7 @@ void KWTextFrameSetEdit::setBold( bool on ) {
     QTextFormat format( *currentFormat );
     format.setBold( on );
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Bold );
-    kdDebug() << "KWTextFrameSetEdit::setBold new currentFormat " << currentFormat << " " << currentFormat->key() << endl;
+   //kdDebug() << "KWTextFrameSetEdit::setBold new currentFormat " << currentFormat << " " << currentFormat->key() << endl;
 }
 
 void KWTextFrameSetEdit::setItalic( bool on ) {

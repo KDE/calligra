@@ -2014,13 +2014,6 @@ void KWView::textUnsortList()
 /*===============================================================*/
 void KWView::textSuperScript()
 {
-#if 0
-    if ( actionFormatSuper->isChecked() )
-        vertAlign = KWFormat::VA_SUPER;
-    else
-        vertAlign = KWFormat::VA_NORMAL;
-    format.setVertAlign( vertAlign );
-#endif
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setTextSuperScript(actionFormatSuper->isChecked());
@@ -2029,14 +2022,6 @@ void KWView::textSuperScript()
 /*===============================================================*/
 void KWView::textSubScript()
 {
-#if 0
-    if ( actionFormatSub->isChecked() )
-        vertAlign = KWFormat::VA_SUB;
-    else
-        vertAlign = KWFormat::VA_NORMAL;
-    format.setVertAlign( vertAlign );
-    gui->canvasWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
-#endif
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setTextSubScript(actionFormatSub->isChecked());
@@ -2079,9 +2064,6 @@ void KWView::textBorderLeft()
 				       actionFormatBrdTop->isChecked()&&
 				       actionFormatBrdBottom->isChecked());
 
-#if 0
-    gui->canvasWidget()->setParagLeftBorder( left );
-#endif
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setBorders( left, right, bottom, top );
@@ -2100,9 +2082,6 @@ void KWView::textBorderRight()
 				       actionFormatBrdTop->isChecked()&&
 				       actionFormatBrdBottom->isChecked());
 
-#if 0
-    gui->canvasWidget()->setParagRightBorder( right );
-#endif
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setBorders( left, right, bottom, top );
@@ -2121,9 +2100,6 @@ void KWView::textBorderTop()
 				       actionFormatBrdTop->isChecked()&&
 				       actionFormatBrdBottom->isChecked());
 
-#if 0
-    gui->canvasWidget()->setParagTopBorder( top );
-#endif
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setBorders( left, right, bottom, top );
@@ -2142,9 +2118,6 @@ void KWView::textBorderBottom()
 				       actionFormatBrdTop->isChecked()&&
 				       actionFormatBrdBottom->isChecked());
 
-#if 0
-    gui->canvasWidget()->setParagBottomBorder( bottom );
-#endif
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setBorders( left, right, bottom, top );
