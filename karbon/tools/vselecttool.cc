@@ -145,8 +145,8 @@ VSelectTool::draw()
 void
 VSelectTool::setCursor() const
 {
-	if( m_state != normal ) return;
-	switch( view() && view()->part()->document().selection()->handleNode( last() ) )
+	if( m_state != normal || !view() ) return;
+	switch( view()->part()->document().selection()->handleNode( last() ) )
 	{
 		case node_lt:
 		case node_rb:
