@@ -629,3 +629,19 @@ int KPresenterPageIface::rndX()
     return ret;
 
 }
+
+void KPresenterPageIface::deSelectAllObj()
+{
+    m_page->deSelectAllObj();
+}
+
+bool KPresenterPageIface::oneObjectTextExist() const
+{
+    return m_page->oneObjectTextExist();
+}
+
+bool KPresenterPageIface::isOneObjectSelected() const
+{
+    return m_page->isOneObjectSelected();
+}
+

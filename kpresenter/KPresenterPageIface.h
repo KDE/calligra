@@ -120,7 +120,10 @@ k_dcop:
     DCOPRef insertPicture( const QString & file,int x,int y, int h, int w );
     DCOPRef insertClipart( const QString & file,int x,int y, int h, int w );
 
+    void deSelectAllObj();
 
+    bool oneObjectTextExist() const ;
+    bool isOneObjectSelected() const;
 
 private:
     KPrPage *m_page;

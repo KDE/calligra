@@ -3022,7 +3022,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
     return objects;
 }
 
-bool KPrPage::oneObjectTextExist()
+bool KPrPage::oneObjectTextExist() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3035,7 +3035,7 @@ bool KPrPage::oneObjectTextExist()
     return false;
 }
 
-bool KPrPage::isOneObjectSelected()
+bool KPrPage::isOneObjectSelected() const
 {
     QPtrListIterator<KPObject> oIt( m_objectList );
     for (; oIt.current(); ++oIt )
@@ -3045,7 +3045,7 @@ bool KPrPage::isOneObjectSelected()
     return false;
 }
 
-bool KPrPage::haveASelectedPictureObj()
+bool KPrPage::haveASelectedPictureObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3056,7 +3056,7 @@ bool KPrPage::haveASelectedPictureObj()
     return false;
 }
 
-bool KPrPage::haveASelectedPartObj()
+bool KPrPage::haveASelectedPartObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current(); ++it ) {
@@ -3066,7 +3066,7 @@ bool KPrPage::haveASelectedPartObj()
     return false;
 }
 
-bool KPrPage::haveASelectedGroupObj()
+bool KPrPage::haveASelectedGroupObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current(); ++it ) {
