@@ -227,9 +227,11 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool update
     m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
     m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
     m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
-    kdDebug() << "KWDocument::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
-              << " m_resolutionX=" << m_resolutionX << " m_zoomedResolutionX=" << m_zoomedResolutionX
-              << " m_resolutionY=" << m_resolutionY << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
+    kdDebug(32002) << "KWDocument::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
+                   << " m_resolutionX=" << m_resolutionX
+                   << " m_zoomedResolutionX=" << m_zoomedResolutionX
+                   << " m_resolutionY=" << m_resolutionY
+                   << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
 
     getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
@@ -369,7 +371,7 @@ double KWDocument::ptColumnWidth() const
 /* append headers and footers if needed, and create enough pages for all the existing frames */
 void KWDocument::recalcFrames()
 {
-    kdDebug() << "KWDocument::recalcFrames" << endl;
+    kdDebug(32002) << "KWDocument::recalcFrames" << endl;
     if ( frames.isEmpty() )
         return;
 
@@ -798,7 +800,7 @@ bool KWDocument::loadChildren( KoStore *_store )
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 {
     emit sigProgress( 0 );
-    kdDebug() << "KWDocument::loadXML" << endl;
+    kdDebug(32001) << "KWDocument::loadXML" << endl;
     pixmapKeys.clear();
     pixmapNames.clear();
     imageRequests.clear();
@@ -1021,13 +1023,13 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
             if ( !settings.isNull() )
             {
-                kdDebug() << "KWDocument::loadXML loading embedded object" << endl;
+                kdDebug(32001) << "KWDocument::loadXML loading embedded object" << endl;
                 fs->load( settings );
             }
             else
-                kdError() << "No <SETTINGS> tag in EMBEDDED" << endl;
+                kdError(32001) << "No <SETTINGS> tag in EMBEDDED" << endl;
         } else
-            kdError() << "No <OBJECT> tag in EMBEDDED" << endl;
+            kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
     }
 
     emit sigProgress(95);
@@ -1071,11 +1073,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     if ( !_first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
-        kdDebug() << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
+        kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameInfo( FI_FIRST_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        kdDebug() << "KWDocument::loadXML KWFrame created " << frame << endl;
+        kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
         frame->setFrameBehaviour(Ignore);
         fs->addFrame( frame );
         frames.append( fs );
@@ -1209,7 +1211,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     updateAllFrames();
 
 #if 0 // If KWCanvas calls updateViewArea right, this is not needed anymore
-    kdDebug() << "KWDocument::loadXML starting formatting" << endl;
+    kdDebug(32002) << "KWDocument::loadXML starting formatting" << endl;
     // So now we can start formatting
     fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1224,7 +1226,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     repaintAllViews( true );     // in case any view exists already
 
-    kdDebug() << "KWDocument::loadXML done" << endl;
+    kdDebug(32001) << "KWDocument::loadXML done" << endl;
 
     setModified( false );
 
@@ -1241,7 +1243,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem );
-        //kdDebug() << "KWDocument::addStyleTemplate style's name is " << sty->name() << endl;
+        //kdDebug(32001) << "KWDocument::addStyleTemplate style's name is " << sty->name() << endl;
         addStyleTemplate( sty );
     }
 }
@@ -1320,7 +1322,7 @@ void KWDocument::progressItemLoaded()
     unsigned int perc = 70 * m_itemsLoaded / m_nrItemsToLoad;
     if ( perc != 70 * (m_itemsLoaded-1) / m_nrItemsToLoad ) // only emit if different from previous call
     {
-        //kdDebug() << m_itemsLoaded << " items loaded. %=" << perc + 15 << endl;
+        //kdDebug(32001) << m_itemsLoaded << " items loaded. %=" << perc + 15 << endl;
         emit sigProgress( perc + 15 );
     }
 }
@@ -1488,7 +1490,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     QMapIterator<QString,KWTextImage *> it2 = imageRequests.begin();
     for ( ; it2 != imageRequests.end(); ++it2 )
     {
-        kdDebug() << "KWDocument::completeLoading loading image " << it2.key() << endl;
+        kdDebug(32001) << "KWDocument::completeLoading loading image " << it2.key() << endl;
         it2.data()->setImage( m_imageCollection.findImage( it2.key() ) );
     }
     imageRequests.clear();
@@ -1885,12 +1887,6 @@ KWStyle* KWDocument::findStyle( const QString & _name, bool noFallback )
 }
 
 /*================================================================*/
-bool KWDocument::isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos )
-{
-    return frames.at( _frameSet )->isPTYInFrame( _frame, _ypos );
-}
-
-/*================================================================*/
 /* Update all views of this document, area can be cleared
    before redrawing with the _erase flag. (false implied)
    All views EXCEPT the argument _view are updated ( 0L = all )
@@ -1908,7 +1904,7 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 /*================================================================*/
 void KWDocument::updateAllViewportSizes()
 {
-    //kdDebug() << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << paperWidth() << "x" << paperHeight() * m_pages << endl;
+    //kdDebug(32002) << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << paperWidth() << "x" << paperHeight() * m_pages << endl;
     emit sig_newContentsSize( paperWidth(), paperHeight() * m_pages );
 }
 
@@ -1959,7 +1955,7 @@ void KWDocument::repaintAllViews( bool erase )
 void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
 {
     int thisPageNum = m_pages-1;
-    kdDebug() << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
+    kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
     emit pageNumChanged();
 
@@ -1982,8 +1978,8 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            //kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
-            //kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
+            //kdDebug(32002) << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
+            //kdDebug(32002) << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
             if ( (frame->pageNum() == thisPageNum ||
                   (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
                  (frame->getNewFrameBehaviour()==Reconnect ||
@@ -1991,7 +1987,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
 
                 switch(frameSet->getFrameType()) {
                     case FT_TEXT:  {
-                        //kdDebug() << "KWDocument::appendPage, copying text frame" << endl;
+                        //kdDebug(32002) << "KWDocument::appendPage, copying text frame" << endl;
                         // make a new frame.
                         KWFrame *frm = frame->getCopy();
                         frm->moveBy( 0, ptPaperHeight() );
@@ -2199,7 +2195,7 @@ KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
 /*================================================================*/
 void KWDocument::updateAllFrames()
 {
-    kdDebug() << "KWDocument::updateAllFrames" << endl;
+    kdDebug(32002) << "KWDocument::updateAllFrames" << endl;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->updateFrames();

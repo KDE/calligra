@@ -704,11 +704,11 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
 
 void KWTextParag::printRTDebug()
 {
-    static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
     /*
+    static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
     QVector<QStyleSheetItem> vec = styleSheetItems();
     for ( uint i = 0 ; i < vec.size() ; ++i )
     {

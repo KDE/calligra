@@ -443,7 +443,7 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="NORA (through)" visible="1" >
-   <FRAME right="335" left="105" bottom="190" runaroundGap="0" top="113" />
+   <FRAME right="401" left="171" bottom="204" runaroundGap="0" top="127" />
    <PARAGRAPH>
     <TEXT>Run through (RA_NO)</TEXT>
     <LAYOUT>
@@ -464,7 +464,7 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="RunAround rect" visible="1" >
-   <FRAME runaround="1" right="295" left="89" bottom="400" runaroundGap="0" top="302" />
+   <FRAME runaround="1" right="303" left="97" bottom="400" runaroundGap="0" top="302" />
    <PARAGRAPH>
     <TEXT>Runaround rect (RA_BOUNDINGRECT)</TEXT>
     <LAYOUT>
@@ -485,7 +485,7 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="H" visible="1" >
-   <FRAME runaround="2" right="418" left="90" bottom="696" runaroundGap="0" top="570" />
+   <FRAME runaround="2" right="418" left="90" bottom="605" runaroundGap="0" top="479" />
    <PARAGRAPH>
     <TEXT>No runaround (RA_SKIP)</TEXT>
     <LAYOUT>

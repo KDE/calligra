@@ -51,8 +51,6 @@ public:
     /** reshuffle frames so text is always displayed from top-left down and then right. */
     virtual void updateFrames();
 
-    virtual bool isPTYInFrame( unsigned int _frame, unsigned int _ypos );
-
     // Convert the @p in the contents coordinates (those visible to the user)
     // into a point in the internal qtextdoc coordinates.
     // If @p onlyY is true, the X coordinate isn't taken into account - but should be 0
@@ -170,6 +168,7 @@ protected:
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
     QTextFormat * zoomFormatFont( const QTextFormat * f );
+    bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
 
 private:
     /**

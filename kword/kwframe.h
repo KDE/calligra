@@ -315,9 +315,6 @@ public:
     int getFrameFromPtr( KWFrame *frame );
     unsigned int getNumFrames() { return frames.count(); }
 
-    virtual bool isPTYInFrame( unsigned int /*_frame*/, unsigned int /*_ypos */ )
-        { return true; }
-
     /** Create a framesetedit object to edit this frameset in @p canvas */
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0L; }
 

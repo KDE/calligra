@@ -166,10 +166,11 @@ public:
 
     unsigned int getColumns() const { return m_pageColumns.columns; }
 
-    bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
-    // Returns 0-based page number where rect is (in real pt coordinates) (in fact its topleft corner).
+    // Returns 0-based page number where rect is (in real pt coordinates)
+    // (in fact its topleft corner).
     // Use isOutOfPage to check that the rectangle is fully contained in that page.
     int getPageOfRect( QRect & _rect ) const;
+
     // Return true if @p r (in real pt coordinates) is out of the page @p page
     bool isOutOfPage( QRect & r, int page ) const;
 
