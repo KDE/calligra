@@ -326,7 +326,7 @@ void KoDocument::insertChild( const KoDocumentChild *child )
   connect( child, SIGNAL( destroyed() ),
            this, SLOT( slotChildDestroyed() ) );
 
-  if ( manager() )
+  if ( manager() && !isSingleViewMode() )
     manager()->addPart( child->document(), false );
 }
 
