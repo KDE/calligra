@@ -84,3 +84,18 @@ QString Conversion::exportOverflowBehavior( const QString& kwordAutoCreateNewFra
     }
 }
 
+int Conversion::importCounterType( const QString& numFormat )
+{
+    if ( numFormat == "1" )
+        return 1;
+    if ( numFormat == "a" )
+        return 2;
+    if ( numFormat == "A" )
+        return 3;
+    if ( numFormat == "i" )
+        return 4;
+    if ( numFormat == "I" )
+        return 5;
+    return 0;
+}
+

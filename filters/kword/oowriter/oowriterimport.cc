@@ -52,9 +52,14 @@ K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriteri
 
 
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
-  : KoFilter(), m_pictureNumber(0), m_zip(NULL)
+  : KoFilter(),
+    m_insideOrderedList( false ), m_nextItemIsListItem( false ),
+    m_restartNumbering( -1 ),
+    m_pictureNumber(0), m_zip(NULL)
 {
     m_styles.setAutoDelete( true );
+    m_masterPages.setAutoDelete( true );
+    m_listStyles.setAutoDelete( true );
 }
 
 OoWriterImport::~OoWriterImport()
@@ -200,16 +205,35 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
         QString name = t.tagName();
 
         QDomElement e;
-        if ( name == "text:p" ) // text paragraph
+        if ( name == "text:p" ) {  // text paragraph
+            fillStyleStack( t, "text:style-name" );
             e = parseParagraph( doc, t );
+        }
         else if ( name == "text:h" ) // heading
         {
+            fillStyleStack( t, "text:style-name" );
+            int level = t.attribute( "text:level" ).toInt();
+            bool listOK = false;
+            // ######## what to do in case of
+            //    <text:ordered-list text:style-name="Numbering 1">
+            //      <text:list-item text:start-value="5">
+            //        <text:h text:style-name="P2" text:level="4">Five</text:h>
+            // where P2 has list-style-name="something else"?
+            // Current hack: list items pre-empts outline style:
+            if ( !m_nextItemIsListItem )
+                listOK = pushListLevelStyle( "<outline-style>", m_outlineStyle, level );
+            m_nextItemIsListItem = true;
+            if ( t.hasAttribute( "text:start-value" ) )
+                 // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+                 m_restartNumbering = t.attribute( "text:start-value" ).toInt();
             e = parseParagraph( doc, t );
-            // TODO parse text:level, the level of the heading
+            if ( listOK )
+                m_listStyleStack.pop();
         }
         else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // list
         {
-            currentFramesetElement.appendChild( parseList( doc, t ) );
+            parseList( doc, t, currentFramesetElement );
+            m_styleStack.restore();
             continue;
         }
         else if ( name == "text:section" ) // Provisory support (###TODO)
@@ -255,7 +279,7 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
         return;
     }
 
-    parseBodyOrSimilar( doc, body, mainFramesetElement);
+    parseBodyOrSimilar( doc, body, mainFramesetElement );
 }
 
 void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString& masterPageName )
@@ -543,47 +567,6 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   QDomNode fixedStyles = docElement.namedItem( "office:styles" );
 
-  kdDebug(30518) << "Reading in default styles" << endl;
-
-  QDomNode def = fixedStyles.namedItem( "style:default-style" );
-  while ( !def.isNull() )
-  {
-    QDomElement e = def.toElement();
-    kdDebug(30518) << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
-
-    if ( e.nodeName() != "style:default-style" )
-    {
-      def = def.nextSibling();
-      continue;
-    }
-
-    if ( !e.isNull() )
-    {
-      kdDebug(30518) << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
-
-      //m_defaultStyles.insert( e.attribute( "style:family" ) + "default", layout );
-    }
-    def = def.nextSibling();
-  }
-
-  QDomElement defs = fixedStyles.namedItem( "style:style" ).toElement();
-  while ( !defs.isNull() )
-  {
-    if ( defs.nodeName() != "style:style" )
-      break; // done
-
-    if ( !defs.hasAttribute( "style:name" ) )
-    {
-      // ups...
-      defs = defs.nextSibling().toElement();
-      continue;
-    }
-
-    //m_defaultStyles.insert( defs.attribute( "style:name" ), layout );
-
-    defs = defs.nextSibling().toElement();
-  }
-
   if ( !fixedStyles.isNull() )
     insertStyles( fixedStyles.toElement() );
 
@@ -599,15 +582,33 @@ void OoWriterImport::insertStyles( const QDomElement& styles )
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-
-        if ( !e.hasAttribute( "style:name" ) )
-            continue;
+        QString tagName = e.tagName();
 
         QString name = e.attribute( "style:name" );
-        QDomElement* ep = new QDomElement( e );
-        m_styles.insert( name, ep );
-
-        kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
+        if ( tagName == "style:style"
+             || tagName == "style:page-master"
+             || tagName == "style:font-decl" )
+        {
+            QDomElement* ep = new QDomElement( e );
+            m_styles.insert( name, ep );
+            kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
+        } else if ( tagName == "style:default-style" ) {
+            m_defaultStyle = e;
+        } else if ( tagName == "text:list-style" ) {
+            QDomElement* ep = new QDomElement( e );
+            m_listStyles.insert( name, ep );
+            kdDebug(30518) << "List style: '" << name << "' loaded " << endl;
+        } else if ( tagName == "text:outline-style" ) {
+            m_outlineStyle = e;
+        } else if ( tagName == "text:footnotes-configuration" ) {
+            // TODO
+        } else if ( tagName == "text:endnotes-configuration" ) {
+            // TODO
+        } else if ( tagName == "text:linenumbering-configuration" ) {
+            // Not implemented in KWord
+        } else {
+            kdWarning(30518) << "Unknown element " << e.tagName() << " in styles" << endl;
+        }
     }
 }
 
@@ -621,64 +622,120 @@ void OoWriterImport::fillStyleStack( const QDomElement& object, const QString& a
 
 void OoWriterImport::addStyles( const QDomElement* style )
 {
-    // this function is necessary as parent styles can have parents themself
+    // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttribute( "style:parent-style-name" ) )
         addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
+    else if ( !m_defaultStyle.isNull() ) // on top of all, the default style
+        m_styleStack.push( m_defaultStyle );
 
     //kdDebug(30518) << "pushing style " << style->attribute( "style:name" ) << endl;
     m_styleStack.push( *style );
 }
 
-QDomDocumentFragment OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list )
+void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const QDomElement& paragraph )
+{
+    // Spec: see 3.3.5 p137
+    if ( m_listStyleStack.hasListStyle() && m_nextItemIsListItem ) {
+        bool heading = paragraph.tagName() == "text:h";
+        m_nextItemIsListItem = false;
+        const QDomElement listStyle = m_listStyleStack.currentListStyle();
+        QDomElement counter = doc.createElement( "COUNTER" );
+        counter.setAttribute( "numberingtype", heading ? 1 : 0 );
+        int level = heading ? paragraph.attribute( "text:level" ).toInt() : m_listStyleStack.level();
+        counter.setAttribute( "depth", level - 1 ); // "depth" starts at 0
+
+        //kdDebug(30518) << "Numbered parag. heading=" << heading << " level=" << level
+        //               << " m_restartNumbering=" << m_restartNumbering << endl;
+
+        if ( m_insideOrderedList || heading ) {
+            counter.setAttribute( "type", Conversion::importCounterType( listStyle.attribute( "style:num-format" ) ) );
+            counter.setAttribute( "lefttext", listStyle.attribute( "style:num-prefix" ) );
+            counter.setAttribute( "righttext", listStyle.attribute( "style:num-suffix" ) );
+            QString dl = listStyle.attribute( "text:display-levels" );
+            if ( dl.isEmpty() )
+                dl = "1";
+            counter.setAttribute( "display-levels", dl );
+            if ( m_restartNumbering != -1 ) {
+                counter.setAttribute( "start", m_restartNumbering );
+                counter.setAttribute( "restart", "true" );
+            } else {
+                // useful?
+                counter.setAttribute( "start", listStyle.attribute( "text:start-value" ) );
+            }
+        }
+        else // TODO bullets, see 3.3.6 p138
+            counter.setAttribute( "type", 10 ); // a disc bullet
+
+        layoutElement.appendChild(counter);
+    }
+}
+
+static QDomElement findListLevelStyle( QDomElement& fullListStyle, int level )
+{
+    for ( QDomNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+       const QDomElement listLevelItem = n.toElement();
+       if ( listLevelItem.attribute( "text:level" ).toInt() == level )
+           return listLevelItem;
+    }
+    return QDomElement();
+}
+
+bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, int level )
+{
+    QDomElement* fullListStyle = m_listStyles[listStyleName];
+    if ( !fullListStyle ) {
+        kdWarning(30518) << "List style " << listStyleName << " not found!" << endl;
+        return false;
+    }
+    else
+        return pushListLevelStyle( listStyleName, *fullListStyle, level );
+}
+
+bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for debug only
+                                         QDomElement& fullListStyle, int level )
+{
+    // Find applicable list-level-style for level
+    int i = level;
+    QDomElement listLevelStyle;
+    while ( i > 0 && listLevelStyle.isNull() ) {
+        listLevelStyle = findListLevelStyle( fullListStyle, i );
+        --i;
+    }
+    if ( listLevelStyle.isNull() ) {
+        kdWarning(30518) << "List level style for level " << level << " in list style " << listStyleName << " not found!" << endl;
+        return false;
+    }
+    kdDebug(30518) << "Pushing list-level-style from list-style " << listStyleName << " level " << level << endl;
+    m_listStyleStack.push( listLevelStyle );
+    return true;
+}
+
+void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement )
 {
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
-    bool isOrdered;
-    if ( list.tagName() == "text:ordered-list" )
-        isOrdered = true;
-    else
-        isOrdered = false;
+    m_insideOrderedList = ( list.tagName() == "text:ordered-list" );
+    const QString listStyleName = list.attribute( "text:style-name" );
+    bool listOK = !listStyleName.isEmpty();
+    const int level = m_listStyleStack.level() + 1;
+    if ( listOK )
+        listOK = pushListLevelStyle( listStyleName, level );
 
-    QDomDocumentFragment fragment = doc.createDocumentFragment();
-
-    // take care of nested lists
-    // ### DF: I think this doesn't take care of them the right way. We need to save/parse-whole-list/restore.
-    QDomElement e;
-    uint listCounter = 1;
+    // Iterate over list items
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        e = n.firstChild().toElement();
-
-        //kdDebug(30518) << k_funcinfo << "Got tag: " << e.tagName() << endl;
-
-        // parse the list-properties
-        fillStyleStack( e, "text:style-name" );
-        QDomElement p = parseParagraph( doc, e );
-
-        QDomElement counter = doc.createElement( "COUNTER" );
-        counter.setAttribute( "numberingtype", 0 );
-        counter.setAttribute( "depth", 0 );
-
-        if ( isOrdered ) {
-            counter.setAttribute("type", 1); // an arabic number
-            counter.setAttribute("righttext", ".");
-            counter.setAttribute("text", listCounter);
-            counter.setAttribute("align", 0);
-        }
-        else
-            counter.setAttribute( "type", 10 ); // a disc bullet
-
-        QDomElement layout (p.namedItem("LAYOUT").toElement());
-        if (layout.isNull())
-            kdWarning(30518) << "Cannot find <LAYOUT> in KWord paragraph." << endl;
-        else
-            layout.appendChild(counter);
-
-        fragment.appendChild(p);
-        listCounter++;
+        QDomElement listItem = n.toElement();
+        // It's either list-header (normal text on top of list) or list-item
+        m_nextItemIsListItem = ! ( listItem.tagName() == "text:list-header" );
+        m_restartNumbering = -1;
+        if ( listItem.hasAttribute( "text:start-value" ) )
+            m_restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        parseBodyOrSimilar( doc, listItem, currentFramesetElement );
+        m_restartNumbering = -1;
     }
-
-    return fragment;
+    if ( listOK )
+        m_listStyleStack.pop();
 }
 
 void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
@@ -795,18 +852,13 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 {
     QDomElement p = doc.createElement( "PARAGRAPH" );
 
-    // parse the paragraph-properties
-    fillStyleStack( paragraph, "text:style-name" );
-
     QDomElement formats = doc.createElement( "FORMATS" );
 
     QString paragraphText;
     uint pos = 0;
 
-    m_styleStack.save();
     // parse every child node of the paragraph
     parseSpanOrSimilar( doc, paragraph, p, formats, paragraphText, pos);
-    m_styleStack.restore(); // remove possible garbage (should not be needed)
 
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraphText ) );
@@ -829,6 +881,8 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 
     writeLayout( doc, layoutElement );
     writeFormat( doc, layoutElement, 1, 0, 0 ); // paragraph format, useful for empty parags
+
+    applyListStyle( doc, layoutElement, paragraph );
 
     QDomElement* paragraphStyle = m_styles[paragraph.attribute( "text:style-name" )];
     QString masterPageName = paragraphStyle ? paragraphStyle->attribute( "style:master-page-name" ) : QString::null;
