@@ -940,7 +940,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile );
+    KoXmlWriter contentTmpWriter( tmpFile, 1 );
 
 
     contentTmpWriter.startElement( "office:body" );
@@ -976,18 +976,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentWriter.endElement(); // office:automatic-styles
 
     // And now we can copy over the contents from the tempfile to the real one
-    contentDev.writeBlock( "\n", 1 );
     tmpFile->close();
-    bool openOk = tmpFile->open( IO_ReadOnly );
-    Q_ASSERT( openOk );
-    static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
-    QByteArray buffer(MAX_CHUNK_SIZE);
-    while ( !tmpFile->atEnd() ) {
-        Q_LONG len = tmpFile->readBlock( buffer.data(), buffer.size() );
-        if ( len <= 0 ) // e.g. on error
-            break;
-        contentDev.writeBlock( buffer.data(), len );
-    }
+    contentWriter.addCompleteElement( tmpFile );
     contentTmpFile.close();
 
     contentWriter.endElement(); // root element

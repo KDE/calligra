@@ -20,6 +20,7 @@
 #include "koxmlwriter.h"
 #include <kglobal.h> // kMin
 #include <kdebug.h>
+#include <qiodevice.h>
 #include <float.h>
 
 static const int s_indentBufferLength = 100;
@@ -135,6 +136,24 @@ void KoXmlWriter::addCompleteElement( const char* cstr )
 {
     prepareForChild();
     writeCString( cstr );
+}
+
+
+void KoXmlWriter::addCompleteElement( QIODevice* indev )
+{
+    prepareForChild();
+    bool openOk = indev->open( IO_ReadOnly );
+    Q_ASSERT( openOk );
+    if ( !openOk )
+        return;
+    static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
+    QByteArray buffer(MAX_CHUNK_SIZE);
+    while ( !indev->atEnd() ) {
+        Q_LONG len = indev->readBlock( buffer.data(), buffer.size() );
+        if ( len <= 0 ) // e.g. on error
+            break;
+        m_dev->writeBlock( buffer.data(), len );
+    }
 }
 
 void KoXmlWriter::endElement()

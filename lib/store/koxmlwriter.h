@@ -20,9 +20,9 @@
 #ifndef XMLWRITER_H
 #define XMLWRITER_H
 
-#include <qiodevice.h>
 #include <qstring.h>
 #include <qvaluestack.h>
+class QIODevice;
 
 /**
  * A class for writing out XML (to any QIODevice), with a special attention on performance.
@@ -150,6 +150,15 @@ public:
      */
     void addCompleteElement( const char* cstr );
 
+    /**
+     * This is quite a special-purpose method, not for everyday use.
+     * It adds a complete element (with its attributes and child elements)
+     * as a child of the current element. The iodevice is supposed to be escaped
+     * for XML already, so it will usually come from another KoXmlWriter.
+     * This is usually used with KTempFile.
+     */
+    void addCompleteElement( QIODevice* dev );
+
     // #### Maybe we want to subclass KoXmlWriter for manifest files.
     /**
      * Special helper for writing "manifest" files
@@ -207,7 +216,11 @@ private:
     QValueStack<Tag> m_tags;
     int m_baseIndentLevel;
 
-    char* m_indentBuffer; // TODO make it static, but then it needs a KStaticDeleter
+    class Private;
+    Private *d;
+
+    char* m_indentBuffer; // maybe make it static, but then it needs a KStaticDeleter,
+                          // and would eat 1K all the time... Maybe refcount it :)
     char* m_escapeBuffer; // can't really be static if we want to be thread-safe
     static const int s_escapeBufferLen = 10000;
 
