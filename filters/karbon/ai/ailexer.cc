@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <ctype.h>
 #include <qstringlist.h>
 #include "ailexer.h"
 
@@ -77,92 +78,92 @@ typedef struct {
 } Transition;
 
 static Transition transitions[] = {
-  { State_Start, '%', State_Comment, Action_Ignore},
-  { State_Start, CATEGORY_DIGIT, State_Integer, Action_Copy},
-  { State_Start, '-', State_Integer, Action_Copy},
-  { State_Start, '+', State_Integer, Action_Copy},
-  { State_Start, '.', State_Float, Action_Copy},
-  { State_Start, '/', State_Reference, Action_Ignore },
-  { State_Start, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy},
-  { State_Start, CATEGORY_ALPHA, State_Token, Action_Copy},
-  { State_Start, CATEGORY_SPECIAL, State_Token, Action_Copy},
-  { State_Start, '(', State_String, Action_Ignore},
-  { State_Start, CATEGORY_WHITESPACE, State_Start, Action_Output},
-  { State_Start, '{', State_BlockStart, Action_Copy},
-  { State_Start, '}', State_BlockEnd, Action_Copy},
-  { State_Start, '[', State_ArrayStart, Action_Copy},
-  { State_Start, ']', State_ArrayEnd, Action_Copy},
-  { State_Start, '<', State_ByteArray, Action_Ignore},
-  { State_Start, CATEGORY_ANY, State_Start, Action_Abort},
-//  { State_Array, CATEGORY_ALPHA, State_Array, Action_Copy},
-//  { State_Array, CATEGORY_DIGIT, State_Array, Action_Copy},
-//  { State_Array, ' ', State_Array, Action_Copy},
   { State_Comment, '\n', State_Start, Action_Output},
   { State_Comment, '\r', State_Start, Action_Output},
   { State_Comment, '\\', State_CommentEncodedChar, Action_InitTemp},
   { State_Comment, CATEGORY_ANY, State_Comment, Action_Copy},
   { State_Integer, CATEGORY_DIGIT, State_Integer, Action_Copy},
   { State_Integer, CATEGORY_WHITESPACE, State_Start, Action_Output},
-  { State_Integer, ']', State_Start, Action_OutputUnget},
   { State_Integer, '.', State_Float, Action_Copy},
+  { State_Integer, ']', State_Start, Action_OutputUnget},
   { State_Integer, '}', State_Start, Action_OutputUnget},
   { State_Integer, '#', State_Byte, Action_Copy },
   { State_Integer, '/', State_Start, Action_OutputUnget },
   { State_Integer, '{', State_Start, Action_OutputUnget },
+  { State_Integer, '%', State_Start, Action_OutputUnget },
   { State_Integer, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy },
   { State_Integer, CATEGORY_INTTOOLONG, State_ByteArray2, Action_Copy },
-  { State_Integer, '%', State_Start, Action_OutputUnget },
   { State_Integer, CATEGORY_ANY, State_Start, Action_Abort},
   { State_Float, CATEGORY_DIGIT, State_Float, Action_Copy},
   { State_Float, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_Float, ']', State_Start, Action_OutputUnget},
   { State_Float, '}', State_Start, Action_OutputUnget},
   { State_Float, CATEGORY_ANY, State_Start, Action_Abort},
-  { State_String, ')', State_Start, Action_Output},
-  { State_String, '\\', State_StringEncodedChar, Action_InitTemp},
-  { State_String, CATEGORY_ANY, State_String, Action_Copy},
-  { State_Token, CATEGORY_DIGIT, State_Token, Action_Copy},
   { State_Token, CATEGORY_ALPHA, State_Token, Action_Copy},
+  { State_Token, CATEGORY_DIGIT, State_Token, Action_Copy},
   { State_Token, CATEGORY_SPECIAL, State_Token, Action_Copy},
   { State_Token, '}', State_Start, Action_OutputUnget},
   { State_Token, ']', State_Start, Action_OutputUnget},
-  { State_Token, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_Token, '{', State_BlockStart, Action_Output},
   { State_Token, '}', State_BlockEnd, Action_Output},
   { State_Token, '/', State_Start, Action_OutputUnget},
+  { State_Token, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_Token, CATEGORY_ANY, State_Start, Action_Abort},
+  { State_String, ')', State_Start, Action_Output},
+  { State_String, '\\', State_StringEncodedChar, Action_InitTemp},
+  { State_String, CATEGORY_ANY, State_String, Action_Copy},
+//  { State_Array, CATEGORY_ALPHA, State_Array, Action_Copy},
+//  { State_Array, CATEGORY_DIGIT, State_Array, Action_Copy},
+//  { State_Array, ' ', State_Array, Action_Copy},
   { State_BlockStart, CATEGORY_ANY, State_Start, Action_OutputUnget },
   { State_BlockEnd, CATEGORY_ANY, State_Start, Action_OutputUnget },
   { State_ArrayStart, CATEGORY_ANY, State_Start, Action_OutputUnget },
   { State_ArrayEnd, CATEGORY_ANY, State_Start, Action_OutputUnget },
+  { State_Reference, '#', State_Reference, Action_Copy },
   { State_Reference, CATEGORY_ALPHA, State_Reference, Action_Copy },
   { State_Reference, CATEGORY_DIGIT, State_Reference, Action_Copy },
   { State_Reference, CATEGORY_SPECIAL, State_Reference, Action_Copy },
-  { State_Reference, '#', State_Reference, Action_Copy },
   { State_Reference, CATEGORY_ANY, State_Start, Action_OutputUnget },
+  { State_Byte, '/', State_Start, Action_OutputUnget },
   { State_Byte, CATEGORY_DIGIT, State_Byte, Action_Copy},
   { State_Byte, CATEGORY_ALPHA, State_Byte, Action_Copy},
   { State_Byte, CATEGORY_WHITESPACE, State_Start, Action_Output},
-  { State_Byte, '/', State_Start, Action_OutputUnget },
+  { State_ByteArray, '>', State_Start, Action_Output },
   { State_ByteArray, CATEGORY_ALPHA, State_ByteArray, Action_Copy },
   { State_ByteArray, CATEGORY_DIGIT, State_ByteArray, Action_Copy },
   { State_ByteArray, CATEGORY_WHITESPACE, State_ByteArray, Action_Ignore },
-  { State_ByteArray, '>', State_Start, Action_Output },
   { State_ByteArray, CATEGORY_ANY, State_Start, Action_Abort },
-  { State_StringEncodedChar, CATEGORY_DIGIT, State_StringEncodedChar, Action_CopyTemp},
   { State_StringEncodedChar, '\\', State_String, Action_Copy},
+  { State_StringEncodedChar, CATEGORY_DIGIT, State_StringEncodedChar, Action_CopyTemp},
   { State_StringEncodedChar, CATEGORY_ANY, State_String, Action_DecodeUnget},
-  { State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
   { State_CommentEncodedChar, '\\', State_Comment, Action_Copy},
+  { State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
   { State_CommentEncodedChar, CATEGORY_ANY, State_Comment, Action_DecodeUnget},
   { State_ByteArray2, '\n', State_Start, Action_Output},
   { State_ByteArray2, '\r', State_Start, Action_Output},
+  { State_ByteArray2, '}', State_Start, Action_ByteArraySpecial},
   { State_ByteArray2, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_ByteArray2, CATEGORY_DIGIT, State_ByteArray2, Action_Copy},
   { State_ByteArray2, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy},
   { State_ByteArray2, CATEGORY_ALPHA, State_Token, Action_Copy},
-  { State_ByteArray2, '}', State_Start, Action_ByteArraySpecial},
   { State_ByteArray2, CATEGORY_ANY, State_Start, Action_Abort},
+  { State_Start, '%', State_Comment, Action_Ignore},
+  { State_Start, CATEGORY_DIGIT, State_Integer, Action_Copy},
+  { State_Start, '-', State_Integer, Action_Copy},
+  { State_Start, '+', State_Integer, Action_Copy},
+  { State_Start, '.', State_Float, Action_Copy},
+  { State_Start, '/', State_Reference, Action_Ignore },
+  { State_Start, '(', State_String, Action_Ignore},
+  { State_Start, '{', State_BlockStart, Action_Copy},
+  { State_Start, '}', State_BlockEnd, Action_Copy},
+  { State_Start, '[', State_ArrayStart, Action_Copy},
+  { State_Start, ']', State_ArrayEnd, Action_Copy},
+  { State_Start, '<', State_ByteArray, Action_Ignore},
+  { State_Start, CATEGORY_ALPHA, State_Token, Action_Copy},
+  { State_Start, CATEGORY_WHITESPACE, State_Start, Action_Output},
+  { State_Start, CATEGORY_SPECIAL, State_Token, Action_Copy},
+  { State_Start, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy},
+  { State_Start, CATEGORY_ANY, State_Start, Action_Abort},
   { State_Start, STOP, State_Start, Action_Abort}
 };
 
@@ -174,7 +175,7 @@ AILexer::~AILexer(){
 bool AILexer::parse (QIODevice& fin){
   char c;
 
-  m_buffer = "";
+  m_buffer.clear();
   m_curState = State_Start;
 
   parsingStarted();
@@ -193,10 +194,10 @@ bool AILexer::parse (QIODevice& fin){
     switch (action)
     {
       case Action_Copy :
-        m_buffer += c;
+        m_buffer.append (c);
         break;
       case Action_CopyOutput :
-        m_buffer += c;
+        m_buffer.append (c);
         doOutput();
         break;
       case Action_Output :
@@ -215,13 +216,13 @@ bool AILexer::parse (QIODevice& fin){
         return false;
         break;
       case Action_InitTemp :
-        m_temp = "";
+        m_temp.clear();
         break;
       case Action_CopyTemp :
-        m_temp += c;
+        m_temp.append (c);
         break;
       case Action_DecodeUnget :
-        m_buffer += decode();
+        m_buffer.append (decode());
         fin.ungetch(c);
         break;
       // in Postscript Quelltext: Kombination F}
@@ -289,7 +290,7 @@ void AILexer::doOutput ()
       qWarning ( "unknown state: %d", m_curState );
   }
 
-  m_buffer = "";
+  m_buffer.clear();
 }
 
 void AILexer::gotComment (const char *value) {
@@ -374,12 +375,11 @@ void AILexer::nextStep (char c, State *newState, Action *newAction) {
 
     bool found = false;
 
-    QChar ch(c);
     if (trans.oldState == m_curState) {
       switch (trans.c) {
-        case CATEGORY_WHITESPACE : found = ch.isSpace(); break;
-        case CATEGORY_ALPHA : found = ch.isLetter(); break;
-        case CATEGORY_DIGIT : found = ch.isNumber(); break;
+        case CATEGORY_WHITESPACE : found = isspace(c); break;
+        case CATEGORY_ALPHA : found = isalpha(c); break;
+        case CATEGORY_DIGIT : found = isdigit(c); break;
         case CATEGORY_SPECIAL : found = isspecial(c); break;
         case CATEGORY_LETTERHEX : found = isletterhex(c); break;
         case CATEGORY_INTTOOLONG : found = m_buffer.length() > MAX_INTLEN; break;
@@ -409,7 +409,6 @@ void AILexer::doHandleByteArray ()
     return;
   }
 
-
   uint strIdx = 0;
   uint arrayIdx = 0;
 
@@ -431,7 +430,7 @@ uchar AILexer::getByte()
 {
 //  qDebug ("convert string to byte (%s)", m_buffer.latin1());
 
-  QStringList list = QStringList::split ("#", m_buffer);
+  QStringList list = QStringList::split ("#", m_buffer.toString());
   int radix = list[0].toShort();
   uchar value = list[1].toShort (NULL, radix);
 
@@ -440,9 +439,75 @@ uchar AILexer::getByte()
 
 uchar AILexer::decode()
 {
-  QString str (m_temp);
-  uchar value = str.toShort(NULL, 8);
+  uchar value = m_temp.toString().toShort(NULL, 8);
 //  qDebug ("got encoded char %c",value);
   return value;
 }
 
+/* StringBuffer implementation */
+
+int initialSize = 20;
+int addSize = 10;
+
+StringBuffer::StringBuffer () {
+  m_buffer = (char*)calloc (initialSize, sizeof(char));
+  m_length = 0;
+  m_capacity = initialSize;
+}
+
+StringBuffer::~StringBuffer (){
+  free(m_buffer);
+}
+
+void StringBuffer::append (char c){
+  ensureCapacity(m_length + 1);
+  m_buffer[m_length] = c;
+  m_length++;
+}
+
+void StringBuffer::clear(){
+  for (uint i=0; i<m_length; i++) m_buffer[i] = '\0';
+  m_length = 0;
+}
+
+QString StringBuffer::toString() const {
+  QString ret(m_buffer);
+  return ret;
+}
+
+void StringBuffer::ensureCapacity (int p_capacity) {
+  if (m_capacity >= p_capacity) return;
+
+  int newSize = m_capacity + addSize;
+  if (p_capacity > newSize) newSize = p_capacity;
+
+  char* oldBuffer = m_buffer;
+  char *newBuffer = (char*)calloc (newSize, sizeof(char));
+  strcpy (newBuffer, m_buffer);
+  free(oldBuffer);
+  m_buffer = newBuffer;
+  m_capacity = newSize;
+}
+
+uint StringBuffer::length() {
+  return m_length;
+}
+
+double StringBuffer::toFloat() {
+  QString data = toString();
+  return data.toFloat();
+}
+
+int StringBuffer::toInt() {
+  QString data = toString();
+  return data.toInt();
+}
+
+const char *StringBuffer::latin1() {
+  return m_buffer;
+}
+
+QString StringBuffer::mid( uint index, uint len=0xffffffff) const {
+  QString data = toString();
+  return data.mid(index,len);
+}

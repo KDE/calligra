@@ -185,7 +185,7 @@ static CommentOperationMapping commentMappings[] = {
   { NULL, CO_Other }
 };
 
-AIParserBase::AIParserBase() : m_ignoring(false), m_debug(false), m_sink (DS_Other), m_continuationMode(CM_None)
+AIParserBase::AIParserBase() : m_debug(false), m_ignoring(false), m_sink (DS_Other), m_continuationMode(CM_None)
  {
   m_gstateHandler = NULL;
   m_structureHandler = NULL;

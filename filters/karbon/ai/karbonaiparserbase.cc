@@ -22,12 +22,13 @@
 #include <core/vcolor.h>
 #include <core/vlayer.h>
 #include <core/vgroup.h>
+#include <core/vclipgroup.h>
 #include "aicolor.h"
 
 const void pottoa (PathOutputType &data);
 
 // generic
-KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output), m_emptyStroke(), m_emptyFill()
+KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output), m_emptyFill(), m_emptyStroke()
 /* , m_strokeColor(), m_fillColor() */ {
 
   // A4, 70 dpi
@@ -271,11 +272,20 @@ void KarbonAIParserBase::gotWindingOrder (int val)
   m_windingOrder = val;
 }
 
-void KarbonAIParserBase::gotBeginGroup (bool /*clipping*/)
+void KarbonAIParserBase::gotBeginGroup (bool clipping)
 {
 //  qDebug ("start begin group");
-  VGroup *group = new VGroup( 0L );
-  m_groupStack.push (group);
+  if (clipping)
+  {
+    VClipGroup *group = new VClipGroup( 0L );
+    m_groupStack.push (group);
+  }
+  else
+  {
+    VGroup *group = new VGroup( 0L );
+    m_groupStack.push (group);
+  }
+
 //  qDebug ("end begin group");
 
 }
@@ -374,7 +384,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 /*      VFill fill;
       fill.setColor (toKarbonColor (m_fillColor));
       m_curKarbonPath->setFill(fill); */
-      qDebug ("set filled");
+//      qDebug ("set filled");
       m_curKarbonPath->setFill(m_fill);
     }
 
@@ -383,7 +393,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 /*      VStroke stroke;
       stroke.setColor (toKarbonColor (m_strokeColor));
       m_curKarbonPath->setStroke (stroke); */
-      qDebug ("set stroked");
+//      qDebug ("set stroked");
       m_curKarbonPath->setStroke (m_stroke);
     }
   }

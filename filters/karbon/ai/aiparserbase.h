@@ -375,7 +375,6 @@ class PathHandlerBase {
     virtual void gotIgnorePath (bool closed, bool reset) {}
     virtual void gotClipPath (bool closed) {}
     virtual void gotFillMode (FillMode fm) {}
-
 };
 
 class MiscGStateHandlerBase {

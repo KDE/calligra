@@ -58,6 +58,27 @@ typedef enum {
   Action_ByteArraySpecial
 } Action;
 
+class StringBuffer {
+public:
+  StringBuffer ();
+  virtual ~StringBuffer ();
+
+  void append (char c);
+  void clear();
+  QString toString() const;
+  uint length();
+  double toFloat();
+  int toInt();
+  const char *latin1();
+  QString mid( uint index, uint len=0xffffffff) const;
+private:
+  char *m_buffer;
+  uint m_length;
+  int m_capacity;
+
+  void ensureCapacity (int p_capacity);
+};
+
 class AILexer {
 public: 
 	AILexer();
@@ -66,8 +87,8 @@ public:
   virtual bool parse (QIODevice& fin);
 private:
   State m_curState;
-  QString m_buffer;
-  QString m_temp;
+  StringBuffer m_buffer;
+  StringBuffer m_temp;
 
 /*  State nextState (char c);
   Action nextAction (char c);  */
@@ -96,7 +117,6 @@ protected:
   virtual void gotArrayEnd ();
   virtual void gotByte (uchar value);
   virtual void gotByteArray (const QByteArray &data);
-
 };
 
 #endif
