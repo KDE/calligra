@@ -3,6 +3,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 SUBDIRS = $(TOPSUBDIRS)
+COMPILE_FIRST = lib
 COMPILE_LAST = filters
 DISTCLEANFILES = inst-apps
 
