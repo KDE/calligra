@@ -102,7 +102,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
         return;
     }
     // if params is 0, initDoc() has not been called
-    ASSERT( _params != 0 );
+    Q_ASSERT( _params != 0 );
 
     // ####### handle transparency
     if( !transparent )
