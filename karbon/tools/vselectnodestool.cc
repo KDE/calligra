@@ -66,7 +66,7 @@ VSelectNodesTool::draw()
 	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
-	double tolerance = 1.0 / view()->zoom();
+	double tolerance = 2.0 / view()->zoom();
 
 	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
 					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
@@ -119,7 +119,7 @@ VSelectNodesTool::setCursor() const
 {
 	if( m_state == moving ) return;
 
-	double tolerance = 1.0 / view()->zoom();
+	double tolerance = 2.0 / view()->zoom();
 
 	if( view()->part()->document().selection()->getSegments(
 		KoRect(

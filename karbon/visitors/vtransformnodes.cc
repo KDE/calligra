@@ -34,15 +34,8 @@ VTransformNodes::visitVPath( VPath& path )
 	path.first();
 	while( path.current() )
 	{
-		if( path.current()->knotIsSelected() )
+		if( path.current()->knotIsSelected() || path.current()->type() == VSegment::curve )
 			path.current()->transform( m_matrix );
-		else if( path.current()->type() == VSegment::curve )
-		{
-			//if( path.current()->pointIsSelected( 1 ) )
-			//	path.current()->transform( QWMatrix( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(), -m_matrix.dx(), -m_matrix.dy() ) );
-			//else 
-				path.current()->transform( m_matrix );
-		}
 
 		if( !success() )
 			setSuccess();
