@@ -3,13 +3,13 @@
 	<Type>
     		<TypeName>Personal</TypeName>
 			<Expression>
-				<Text>hi !</Text>
+				<Text>Hi!</Text>
 			</Expression>
 			<Expression>
-				<Text>Hello !</Text>
+				<Text>Hello!</Text>
 			</Expression>	
 			<Expression>
-				<Text>Bye !</Text>
+				<Text>Bye!</Text>
 			</Expression>
 			<Expression>
 				<Text>Good bye</Text>
