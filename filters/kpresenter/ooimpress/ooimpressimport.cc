@@ -913,7 +913,7 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
         {
             QDomElement indent = doc.createElement( "INDENTS" );
             indent.setAttribute( "left", toPoint( m_styleStack.attribute( "fo:margin-left" ) ) );
-            p.appendChild( indent );
+            p.insertBefore( indent, QDomNode() ); // don't 'appendChild()'!
         }
 
     QDomElement counter = doc.createElement( "COUNTER" );
@@ -925,7 +925,10 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     else
         counter.setAttribute( "type", 10 );
 
-    p.appendChild( counter );
+    // Don't 'appendChild()'! Text elements have to be the last children of the
+    // paragraph element otherwise kpresenter will cut off the last character of
+    // every item!
+    p.insertBefore( counter, QDomNode() );
 
     return p;
 }
