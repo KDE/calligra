@@ -103,7 +103,7 @@ AC_ARG_WITH(pqxxlibdir,
 AC_HELP_STRING([--with-pqxxslibdir=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
 [
   ac_pqxx_libdir=$withval
-], ac_pqxx_libdir=/usr/local/pqxx/lib
+], ac_pqxx_libdir=/usr/local/lib
 )
 
 dnl ========================================
