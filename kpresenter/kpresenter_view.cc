@@ -1498,6 +1498,19 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         m_canvas->setPaletteBackgroundColor( Qt::white );
         m_canvas->showFullScreen();
         m_canvas->setFocusPolicy( QWidget::StrongFocus );
+
+        //tz
+        if ( !kPresenterDoc()->spManualSwitch() )
+        {
+             m_autoPresStop = false;
+             m_pKPresenterDoc->repaint( false );
+
+             if ( ! m_autoPresTimerConnected ) {
+                 connect( &m_autoPresTimer, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
+                 m_autoPresTimerConnected = true;
+             }
+        }
+
         m_canvas->startScreenPresentation( _presFakt, pgNum );
 
         actionScreenStart->setEnabled( false );
@@ -1509,19 +1522,6 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
             for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
                 m_presentationDurationList.append( 0 ); // initialization
         }
-
-        if ( !kPresenterDoc()->spManualSwitch() ) {
-            m_autoPresStop = false;
-            m_pKPresenterDoc->repaint( false );
-
-            if ( ! m_autoPresTimerConnected ) {
-                connect( &m_autoPresTimer, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
-                setAutoPresTimer( 1 );
-                m_autoPresTimerConnected = true;
-            }
-            else
-                restartAutoPresTimer();
-        }
     }
 }
 
@@ -1529,7 +1529,6 @@ void KPresenterView::screenStop()
 {
     if ( presStarted ) {
         m_autoPresStop = true;
-        m_canvas->setNextPageTimer( true );
         m_canvas->stopSound();
         m_canvas->showNormal();
         m_canvas->hide();
@@ -1600,20 +1599,8 @@ void KPresenterView::screenPrev()
         return;
 
     if ( presStarted ) {
-        if ( !kPresenterDoc()->spManualSwitch() ) {
-            setAutoPresTimer( 1 );
-            m_canvas->setNextPageTimer( true );
-        }
-#if KDE_IS_VERSION(3,1,90)
-        QRect desk = KGlobalSettings::desktopGeometry(this);
-#else
-        QRect desk = QApplication::desktop()->screenGeometry(this);
-#endif
-        if ( m_canvas->pPrev( true ) ) {
-            m_canvas->setFocus();
-        } else {
-            m_canvas->setFocus();
-        }
+        m_canvas->pPrev( true );
+        m_canvas->setFocus();
     }
     else
         prevPage();
@@ -1623,24 +1610,13 @@ void KPresenterView::screenNext()
 {
     if ( m_canvas->currentTextObjectView() )
         return;
-    if ( presStarted ) {
-
-#if KDE_IS_VERSION(3,1,90)
-        QRect desk = KGlobalSettings::desktopGeometry(this);
-#else
-        QRect desk = QApplication::desktop()->screenGeometry(this);
-#endif
-        if ( m_canvas->pNext( true ) ) {
-            m_canvas->setFocus();
-
-            if ( !kPresenterDoc()->spManualSwitch() ) {
-                setAutoPresTimer( 1 );
-                m_canvas->setNextPageTimer( true );
-            }
-        } else {
-            m_canvas->setFocus();
-        }
-    } else {
+    if ( presStarted ) 
+    {
+        m_canvas->pNext( true );
+        m_canvas->setFocus();
+    } 
+    else 
+    {
         nextPage();
     }
 }
@@ -3891,8 +3867,6 @@ void KPresenterView::doAutomaticScreenPres()
     else if ( m_autoPresRestart && kPresenterDoc()->spInfiniteLoop() ) {
         m_autoPresRestart = false;
         m_canvas->presGotoFirstPage(); // return to first page.
-        setAutoPresTimer( 1 );
-        m_canvas->setNextPageTimer( true );
     }
     else
         screenNext();
@@ -4616,13 +4590,14 @@ void KPresenterView::restartAutoPresTimer()
 {
     m_autoPresTime.start();
     m_autoPresElapsedTime = 0;
-    m_autoPresTimer.changeInterval( m_autoPresTimerValue );
+    m_autoPresTimer.start( m_autoPresTimerValue, true );
 }
 
 void KPresenterView::continueAutoPresTimer()
 {
     m_autoPresTime.restart();
-    m_autoPresTimer.changeInterval( m_autoPresTimerValue - m_autoPresElapsedTime );
+    //m_autoPresTimer.changeInterval( m_autoPresTimerValue - m_autoPresElapsedTime );
+    m_autoPresTimer.start( m_autoPresTimerValue - m_autoPresElapsedTime, true );
 }
 
 void KPresenterView::stopAutoPresTimer()

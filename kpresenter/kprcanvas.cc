@@ -86,6 +86,7 @@
 #include "kprcanvas.moc"
 
 #include "effecthandler.h"
+#include "pageeffects.h"
 #include <unistd.h>
 
 
@@ -136,7 +137,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_keepRatio = false;
         mouseSelectedObject = false;
         selectedObjectPosition = -1;
-        nextPageTimer = true;
+        m_setPageTimer = true;
         m_drawLineInDrawMode = false;
         soundPlayer = 0;
         m_drawPolyline = false;
@@ -145,6 +146,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_oldCubicBezierPointArray.putPoints( 0, 4, 0.0, 0.0, 0.0, 0.0,
                                               0.0, 0.0, 0.0, 0.0 );
         m_effectHandler = 0;
+        m_pageEffect = 0;
     } else {
         m_view = 0;
         hide();
@@ -266,6 +268,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
     if ( isUpdatesEnabled() )
     {
+        kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
         QPainter bufPainter;
         bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
         bufPainter.translate( -diffx(), -diffy() );
@@ -1135,6 +1138,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             if ( !m_drawMode && !spManualSwitch() )
             {
                 finishObjectEffects();
+                finishPageEffect();
                 m_view->stopAutoPresTimer();
             }
 
@@ -2102,11 +2106,13 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
         case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
             setSwitchingMode( false );
             finishObjectEffects();
+            finishPageEffect( true );
             m_view->screenPrev();
             break;
         case Key_Escape: case Key_Q: case Key_X:
             setSwitchingMode( false );
             finishObjectEffects();
+            finishPageEffect( true );
             m_view->screenStop();
             break;
         case Key_G:
@@ -2120,7 +2126,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             presGotoFirstPage();
             if ( !spManualSwitch() ) {
                 m_view->setAutoPresTimer( 1 );
-                setNextPageTimer( true );
+                m_setPageTimer = true;
             }
             break;
         case Key_End:  // go to last page
@@ -2129,7 +2135,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                 gotoPage( *(--m_presentationSlides.end()) );
                 if ( !spManualSwitch() ) {
                     m_view->setAutoPresTimer( 1 );
-                    setNextPageTimer( true );
+                    m_setPageTimer = true;
                 }
             }
             break;
@@ -3145,6 +3151,11 @@ bool KPrCanvas::pNext( bool )
 {
     goingBack = false;
 
+    bool objectEffectFinished = finishObjectEffects();
+
+    if ( finishPageEffect() )
+      return false;
+
     // clear drawed lines
     m_drawModeLines.clear();
 
@@ -3193,18 +3204,24 @@ bool KPrCanvas::pNext( bool )
         return false;
     }
 
+    /*
+     * don't go to next slide if we have finished an object effect
+     * so that we can see the hole slide before going to the next
+     */
+    if ( objectEffectFinished )
+        return false;
+
     // No more steps in this page, try to go to the next page
     QValueList<int>::ConstIterator test(  m_presentationSlidesIterator );
     if ( ++test != m_presentationSlides.end() )
     {
-        if ( !spManualSwitch() && nextPageTimer ) {
-            QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
-            m_view->setAutoPresTimer( doc->pageList().at((*it) - 1 )->getPageTimer() / doc->getPresSpeed() );
-
-            nextPageTimer = false;
-
+        if ( !spManualSwitch() && m_setPageTimer )
+        {
+            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / doc->getPresSpeed() );
+            m_setPageTimer = false;
             return false;
         }
+        m_setPageTimer = true;
 
 #if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
@@ -3218,7 +3235,6 @@ bool KPrCanvas::pNext( bool )
 
         m_step.m_pageNumber = *( ++m_presentationSlidesIterator ) - 1;
         m_step.m_subStep = 0;
-        //kdDebug(33001) << "Page::pNext going to page " << m_step.m_pageNumber << endl;
 
         doc->displayActivePage( doc->pageList().at( m_step.m_pageNumber ) );
 
@@ -3236,10 +3252,8 @@ bool KPrCanvas::pNext( bool )
 
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
-
-        if ( !spManualSwitch() )
-            m_view->stopAutoPresTimer();
-
+        
+        //tz
         KPBackGround * backtmp=doc->pageList().at( ( *it ) - 1 )->background();
         PageEffect _pageEffect = backtmp->getPageEffect();
 
@@ -3251,19 +3265,27 @@ bool KPrCanvas::pNext( bool )
             playSound( _soundFileName );
         }
 
-        kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
+        //kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
 
+        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, m_view->kPresenterDoc()->getPresSpeed() );
+        if ( m_pageEffect->doEffect() )
+        {
+            delete m_pageEffect;
+            m_pageEffect = 0;
 
-        if ( !spManualSwitch() )
-            m_view->restartAutoPresTimer();
+            doObjEffects( true );
+        }
+        else
+        {
+            connect( &m_pageEffectTimer, SIGNAL( timeout() ), SLOT( slotDoPageEffect() ) );
+            m_pageEffectTimer.start( 50, true );
+        }
 
-        doObjEffects();
         return true;
     }
 
     //kdDebug(33001) << "Page::pNext last slide -> End of presentation" << endl;
 
-    finishObjectEffects();
     // When we are in manual mode or in automatic mode with no infinite loop
     // we display the 'End of presentation' slide.
     if ( ( spManualSwitch() || !spInfiniteLoop() ) && !showingLastSlide )
@@ -3296,6 +3318,7 @@ bool KPrCanvas::pNext( bool )
     {
         m_view->setPageDuration( m_step.m_pageNumber );
         emit restartPresentation(); // tells automatic mode to restart
+        m_view->setAutoPresTimer( 1 );
     }
 
     return false;
@@ -3504,7 +3527,7 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step )
     setActivePage( saveActivePage );
 }
 
-void KPrCanvas::doObjEffects()
+void KPrCanvas::doObjEffects( bool isAllreadyPainted )
 {
     if ( m_effectHandler )
     {
@@ -3519,7 +3542,7 @@ void KPrCanvas::doObjEffects()
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
 
     // YABADABADOOOOOOO.... That's a hack :-)
-    if ( m_step.m_subStep == 0 )
+    if ( m_step.m_subStep == 0 && !isAllreadyPainted )
     {
         //kdDebug(33001) << "Page::doObjEffects - in the strange hack" << endl;
         QPainter p;
@@ -3576,8 +3599,27 @@ void KPrCanvas::slotDoEffect()
 }
 
 
-void KPrCanvas::finishObjectEffects()
+void KPrCanvas::slotDoPageEffect()
 {
+    if ( m_pageEffect->doEffect() )
+    {
+        m_pageEffectTimer.stop();
+        QObject::disconnect( &m_pageEffectTimer, SIGNAL( timeout() ), this, SLOT( slotDoPageEffect() ) );
+        delete m_pageEffect;
+        m_pageEffect = 0;
+
+        doObjEffects( true );
+    }
+    else
+    {
+        m_pageEffectTimer.start( 50, true );
+    }
+}
+
+
+bool KPrCanvas::finishObjectEffects()
+{
+    bool finished = false;
     if ( m_effectHandler )
     {
         m_effectTimer.stop();
@@ -3585,7 +3627,37 @@ void KPrCanvas::finishObjectEffects()
         m_effectHandler->finish();
         delete m_effectHandler;
         m_effectHandler = 0;
+        finished = true;
     }
+    return finished;
+}
+
+
+bool KPrCanvas::finishPageEffect( bool cancel )
+{
+    bool finished = false;
+    if ( m_pageEffect )
+    {
+        m_pageEffectTimer.stop();
+        QObject::disconnect( &m_pageEffectTimer, SIGNAL( timeout() ), this, SLOT( slotDoPageEffect() ) );
+        if ( !cancel )
+            m_pageEffect->finish();
+        delete m_pageEffect;
+        m_pageEffect = 0;
+        
+        if ( !cancel )
+        {
+            doObjEffects( true );
+        }
+        else if ( !spManualSwitch() )
+        {
+            m_view->setAutoPresTimer( 1 );
+            m_setPageTimer = true;
+        }
+
+        finished = true;
+    }
+    return finished;
 }
 
 
@@ -4279,7 +4351,7 @@ void KPrCanvas::slotGotoPage()
 
     if ( !spManualSwitch() ) {
         m_view->setAutoPresTimer( 1 );
-        setNextPageTimer( true );
+        m_setPageTimer = true;
     }
 }
 

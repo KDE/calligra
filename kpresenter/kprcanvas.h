@@ -72,6 +72,7 @@ class KPTextView;
 class KPPartObject;
 class KCommand;
 class EffectHandler;
+class KPPageEffects;
 /**
  * Class KPCanvas - There is a single instance of this class for a given view.
  *
@@ -146,7 +147,6 @@ public:
      * Go back one step in the presentation.
      */
     bool pPrev( bool );
-    void setNextPageTimer( bool _nextPageTimer ) { nextPageTimer = _nextPageTimer; }
 
     /// returns the current page of the presentation 1 based
     unsigned int presPage() const { return m_step.m_pageNumber + 1; }
@@ -534,7 +534,9 @@ protected:
      * This shown the last step of the effect. It stops the effect timer and 
      * disconnect it and the effect handler deleted.
      */
-    void finishObjectEffects();
+    bool finishObjectEffects();
+
+    bool finishPageEffect( bool cancel = false );
 
     QRect getOldBoundingRect( const KPObject *obj );
 
@@ -584,7 +586,7 @@ protected:
     /**
      * This method animates the objects in the presentation.
      */
-    void doObjEffects();
+    void doObjEffects( bool isAllreadyPainted = false );
 
     KPPartObject *insertObject( const QRect& );
     void insertAutoform( const QRect&, bool );
@@ -641,7 +643,13 @@ private:
     void lowerObject();
     int selectedObjectPosition;
 
-    bool nextPageTimer;
+    /**
+     * This is used in automatic presentation mode.
+     * If it is set to true and we are in automatic presentation
+     * mode the timer of the page will be activated after the last 
+     * effect has been shown.
+     */
+    bool m_setPageTimer;
 
     void drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint );
 
@@ -696,6 +704,8 @@ private slots:
      * deleted.
      */
     void slotDoEffect();
+
+    void slotDoPageEffect();
 
 private:
     // variables
@@ -752,8 +762,14 @@ private:
     QValueList<int>::Iterator m_presentationSlidesIterator;
     /// EffectHandler for object effects
     EffectHandler *m_effectHandler;
+
+    KPPageEffects *m_pageEffect;
+
     /// EffectTimer
     QTimer m_effectTimer;
+    
+    QTimer m_pageEffectTimer;
+
     /// menu identifier for draw mode
     int PM_DM;
     int firstX, firstY;
