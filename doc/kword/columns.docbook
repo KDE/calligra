@@ -5,49 +5,17 @@
 a user controlled space in between each column.</para>
 
 <note>
-<para>This feature is only available in Word processing Templates.</para>
+<para>This feature is only available in Text Oriented documents.</para>
 
-<para>If you are working in a <acronym>DTP</acronym> Template, you can
+<para>If you are working in a Page Layout document, you can
 build up several columns using a different frame for each column.</para>
 </note>
 
-<para>To change the number and width of columns:</para>
-
-<procedure>
-<step>
-<para>First, you must be in Frame Edit Mode.  If you are not currently
-in frame edit mode, you can change to Frame Edit Mode, in one of three
-ways:</para>
-
-<itemizedlist>
-<listitem>
-<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit
-Frames</guimenuitem></menuchoice> from the Menu bar</para>
-</listitem>
-<listitem>
-<para>You can use the keyboard shortcut:
-<keycombo><keycap>F5</keycap></keycombo></para>
-</listitem>
-<listitem>
-<para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject> on
-the tool-bar.</para>
-</listitem>
-</itemizedlist>
-</step>
-
-<step>
-<para>Place the mouse cursor inside the frame you want to move, and
-click once with the <mousebutton>left</mousebutton> mouse button. This
-selects this frame as the current frame.</para>
-</step>
-
-<step>
-<para>Select <menuchoice>
+<para>To change the number and width of columns select <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Page</guimenuitem></menuchoice>
-from the Menu bar.</para>
+from the menubar.</para>
 
-<para>This will bring up a dialog box</para>
+<para>This will bring up a dialog box.</para>
 
 <screenshot>
 <mediaobject>
@@ -55,32 +23,23 @@ from the Menu bar.</para>
 <imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-</step>
-<step>
-<para>Click on the table labeled <guilabel>Columns</guilabel>.</para>
+<para>Click on the tab labeled <guilabel>Columns</guilabel>.</para>
 
-<para>This will change the dialog panel.</para>
+<para>This will change the dialog box.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject><imagedata fileref="wpfmtpg2.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-</step>
 
-<step>
-<para>You can now select the number of columns, and the spacing in
-between.</para>
+<para>You can now select the number of columns in the spin box labeled <guilabel>Columns</guilabel>, and the spacing
+between columns in the text box labeled <guilabel>Column Spacing</guilabel>.</para>
 
-<para>The preview box shows you what you can expect.</para>
-</step>
+<para>The preview box shows you what your page will look like.</para>
 
-<step>
 <para>Click <guibutton>OK</guibutton> when you are done.</para>
-</step>
 
-<step>
 <para>Click <guibutton>Cancel</guibutton> to abort changes.</para>
-</step>
-</procedure>
+
 </sect1>

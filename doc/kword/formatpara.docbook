@@ -1,24 +1,43 @@
 <sect1 id="format-para">
 <title>Formatting Paragraphs</title>
 
-<para>This section will detail all the options available to format your
-paragraphs.</para>
+<para>This section will detail all the options available to format paragraphs.</para>
 
-<para>Before you start formatting a paragraph, ensure your cursor is
-currently located in the paragraph you want to format.</para>
+<para>To format a paragraph, place the cursor in the paragraph.  To format more than
+one paragraph at a time, simply <link linkend="select">select the paragraphs with the mouse or keyboard</link>.</para>
 
-<para>The formatting paragraphs dialog consists of 5 tabbed sections
-labeled <link linkend="indents-and-spaces">Indent and spacing</link>, <link
+<para>You can format one or more paragraphs one of three ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+from the menubar</para>
+</listitem>
+
+<listitem><para>Type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo></para></listitem>
+
+<listitem>
+<para>Place the mouse pointer in the paragraph and click once
+with the &RMB;.  A small menu
+will appear.  Select <guimenuitem>Paragraph</guimenuitem>.</para>
+</listitem>
+
+</itemizedlist>
+<para>A dialog will appear.</para>
+
+<para>The <guilabel>Paragraph Settings</guilabel> dialog consists of six tabbed sections
+labeled <link linkend="indents-and-spaces">Indent and Spacing</link>, <link
 linkend="para-aligns">Aligns</link>, <link linkend="para-borders">Borders</link>,
 <link linkend="para-bullets-and-numbers">Bullets/Numbering</link>, 
 <link linkend="tab-stops">Tabulators</link>, and <link
-linkend="para-shadow">Shadows</link>.</para>
+linkend="para-shadow">Shadow</link>.</para>
 
 <sect2 id="indents-and-spaces">
 <title>Indents and Spaces</title>
 
-<para>This dialog box allows you to set the paragraph margins, the
-spacing between lines, and the spacing between paragraphs.</para>
+<para>With this dialog box the
+spacing between lines, and the spacing between paragraphs can be specified.</para>
 
 <screenshot>
 <mediaobject>
@@ -34,42 +53,44 @@ spacing between lines, and the spacing between paragraphs.</para>
 <varlistentry>
 <term><guilabel>Left</guilabel></term>
 <listitem>
-<para>You can indent all the lines of a paragraph by entering a value in
-this box. The first line is unaffected by this box.  If you want to
-alter the first line, you must specify that separately.</para>
+<para>Enter a value in this box to indent the lines of the selected paragraphs away from the left margin.  
+The first line is unaffected by this box.  To
+alter the first line, specify that value in the text box labeled <guilabel>First Line</guilabel>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Right</guilabel></term>
 <listitem>
-<para>Entering a non-zero number here causes all lines of the paragraph
-(including the first line) to be moved away from the right
+<para>Enter a value in this box to indent all lines of the selected paragraph
+(including the first line) away from the right
 margin.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>First Line</guilabel></term>
-<listitem><para>Any non-zero value entered in this text box, will shift
-the left margin of the first line.</para></listitem>
+<listitem><para>Enter a number in this box to indent the first line of a paragraph away from the left
+margin.</para></listitem>
 </varlistentry>
 </variablelist>
 
-<para>The next section controls how &kword; divides paragraphs when they
-occur over a page or frame edge.</para>
+<para>The next section controls how &kword; divides paragraphs when a 
+paragraph will not fit entirely within the current frame or page.</para>
 
 <para>The first option is labeled <guilabel>Keep lines
 together</guilabel>.  If this option is selected, then all of the lines
 of the paragraph will remain on the same page.  If this is not selected,
-&kword; may choose to move to a new page or frame while in the middle of
-the paragraph.  For most work, this option is usually left
+&kword; may choose to move part of a paragrah to a new page or frame.  
+For most work, this option is usually left
 unchecked.</para>
 
-<para>The option labeled <guilabel>Keep lines together</guilabel>, works
-as follows.  When this option is checked, and the paragraph moves to the
+<para>The next two options are labeled <guilabel>Insert Break Before Paragraph</guilabel>
+ and <guilabel>Insert Break After Paragraph</guilabel>.
+When one of these options is checked, and the paragraph moves to the
 next frame in the frame set, a hard frame break will be inserted in front
-of the current paragraph. This will serve to keep the paragraph in the
+of the current paragraph or after the previous paragraph (depending on the option selected).
+This will serve to keep the paragraph in the
 next frame, even if text prior to that frame is deleted.  This option is
 often used in conjunction with <guilabel>Keep lines together</guilabel>,
 to ensure that the paragraph does not creep back onto the page during
@@ -82,17 +103,18 @@ consists of two elements:</para>
 <varlistentry>
 <term>Drop-down box</term>
 <listitem>
-<para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para>
+<para>The drop down box determines the spacing between lines.  There are three predefinded line spacing choices:
+<guilabel>Single</guilabel>, <guilabel>1.5 lines.</guilabel> and <guilabel>Double</guilabel>.  You can
+also select <guilabel>Custom</guilabel> which will allow you to enter a specific line spacing.</para>
+<para>The values selected here will be applied to all lines within the selected paragraphs.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Text box</term>
 <listitem>
-<para>By entering a value in here, you can adjust the spacing between
-lines from the default.  If you enter a positive number, you will
-increase the spacing between lines.  If, on the other hand, you enter a
-negative number, you will decrease the spacing between lines.</para>
+<para>Enter a value in this text box to specify the spacing between paragraphs.  
+This value only changes the spacing when <guilabel>Custom</guilabel> is selected in the drop-down box to the left.</para>
 
 <note>
 <para>Changes to this entry do <emphasis>not</emphasis> affect the line
@@ -109,22 +131,14 @@ It consists of two entries:</para>
 <varlistentry>
 <term><guilabel>Before</guilabel></term>
 <listitem>
-<para>By entering a value in here, you can adjust the spacing before
-each paragraph from the default spacing.  If you enter a positive
-number, you will increase the spacing before a paragraph.  If, on the
-other hand, you enter a negative number, you will decrease the spacing
-before each paragraph.</para>
+<para>By entering a value here, additional spacing is added before each paragraph.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>After</guilabel></term>
 <listitem>
-<para>By entering a value in here, you can adjust the spacing after each
-paragraph from the default spacing.  If you enter a positive number, you
-will increase the spacing after a paragraph.  If, on the other hand, you
-enter a negative number, you will decrease the spacing after each
-paragraph.</para>
+<para>By entering a value here, additional spacing is added after each paragraph.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -150,18 +164,33 @@ this as <emphasis>Alignment</emphasis>, or
 </mediaobject>
 </screenshot>
 
-<para>As you can see, there are only 4 choices.</para>
+<para>There are only 4 choices.</para>
 
-<para>If you choose <guilabel>Left</guilabel>,
-<guilabel>Right</guilabel> or <guilabel>Center</guilabel>, the text will
+<para>If <guilabel>Left</guilabel>,
+<guilabel>Right</guilabel> or <guilabel>Center</guilabel> are selected, the text will
 be moved on the line so that it aligns with the left margin, aligns with
 the right margin, or is centered between the margins
 respectively.</para>
 
-<para>If you choose <guilabel>Justify</guilabel>, &kword; will increase
+<para>If <guilabel>Justify</guilabel> is selected, &kword; will increase
 the space <emphasis>between</emphasis> words, so that each line (with
 the exception of the last line in a paragraph), reaches both the left
 and right margins.</para>
+
+<tip><para>You can use toolbar buttons to quickly change the justification of one or more paragraphs</para>
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Left Align </entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Center  Align </entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Right  Align </entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Justify Text </entry></row>
+</tbody></tgroup>
+</informaltable>
+</tip>
 
 <para>On the right of the dialog box, is a preview box, which will
 <emphasis>approximate</emphasis> the final layout of your
@@ -182,24 +211,18 @@ around your paragraphs.</para>
 </mediaobject>
 </screenshot>
 
-<para>You can tell &kword; to surround (on some or all sides) a
+<para>&kword; can surround (on some or all sides) a
 paragraph with a border.  This border can be solid or not, of any color
-and of any size.  You use this dialog panel to adjust the
+and of any size.  This dialog panel is used to adjust the
 borders.</para>
-
-<para>To define some borders for a paragraph, you first determine how
-the borders should appear on the document.  Then you select which
-paragraph borders should be used.  You can mix and match styles, weights
-and colors of paragraph borders for maximum flexibility in you
-document.</para>
 
 <variablelist>
 <varlistentry>
 <term><guilabel>Style</guilabel></term>
 <listitem>
-<para>You can use this drop-down box to select the overall type
+<para>Use this drop-down box to select the overall type
 of the new border. </para>
-<para>Your choices are previewed in each selection.</para>
+<para>The choices are previewed in each selection.</para>
 </listitem>
 </varlistentry>
 
@@ -207,21 +230,20 @@ of the new border. </para>
 <term><guilabel>Width</guilabel></term>
 <listitem>
 <para>This will determine how wide the resulting border will be.  It is
-measured in points.</para>  
+measured in points.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Color</guilabel></term>
 <listitem>
-<para>Clicking on the color bar will allow you to <link
-linkend="select-colors">select a color using a new dialog
-box</link></para>
+<para>Clicking on the color bar will allow you to select a color using the <link
+linkend="select-colors">color selection dialog
+box</link>.</para>
 </listitem></varlistentry>
 </variablelist>
 
-<para>Now that you have determined how the borders should look, you need
-to tell &kword; which edges of the paragraphs need borders.</para>
+<para>Now that it is determined how the borders should look, specify which edges of the paragraphs need borders.</para>
 
 <informaltable frame="none">
 <tgroup cols="2">
@@ -261,6 +283,12 @@ Clicking a second time will remove the bottom paragraph border.</entry>
 </tgroup>
 </informaltable>
 
+<tip><para>It is possible to mix and match border styles, widths and colors in one paragraph.</para>
+<para>Simply determine the border style, width and color for one border edge, and select the border 
+using the border buttons.  Now alter the style width or color to create a new border look and select the new border button.</para>
+</tip>
+
+
 <para>The <guilabel>Preview</guilabel> window will show you how your
 paragraph borders will look.</para>
 
@@ -270,13 +298,13 @@ paragraph borders will look.</para>
 <title>Bullets and Numbering</title>
 
 <para>A very common element of a document, is a list of items.  The list
-contains several elements.  These elements may be numbered, for easy
+contains several elements which may be numbered, for easy
 reference.  Alternatively, the list elements may be simply set off from
-the rest of the text with a special character.  These special characters
+the rest of the text with a special character preceeding each element.  These special characters
 are called bullets.</para>
 
-<para>You can use this dialog box to define your bullets or the
-numbering method of your list.</para>
+<para>This dialog box is used to define your bullets or the
+numbering method of lists in the document..  This dialog box can also be used to number chapters and sections.</para>
 
 <screenshot>
 <mediaobject>
@@ -285,12 +313,21 @@ numbering method of your list.</para>
 </mediaobject>
 </screenshot>
 
-<para>The first thing you may notice about this dialog box, is the large
-preview window on the right side of the box.  This can be used to
-<emphasis>approximate</emphasis> the final look of your list.</para>
+<para>The top section of the dialog box has three options:  <guilabel>None</guilabel>, <guilabel>List</guilabel>
+and <guilabel>Chapter</guilabel>.</para>
 
-<para>Along the left side, the top section of the dialog box is divided
-has three options.</para>
+<para>If <guilabel>None</guilabel> is selected, the text is not marked as 
+either a list or a chapter.  No other features of this dialog
+box will alter the text when this option is chosen.</para>
+
+<para><guilabel>List</guilabel> is used to create
+lists in the document.  These lists are
+automatically numbered and formatted to appear similar.  
+For more information on lists, see the section entitled <link linkend="lists">Lists</link>.</para>
+
+<para><guilabel>Chapter</guilabel> is used to
+number chapters and sections of a document.  For more information on chapter numbering, see the section entitled
+<link linkend="chapter-number">Chapter numbering</link>.</para>
 
 </sect2>
 
@@ -319,5 +356,16 @@ see <link linkend="tab-stops">Using Tab Stops</link>.</para>
 </imageobject>
 </mediaobject>
 </screenshot>
+
+<para>This tab is used to create an artificial shadow of the text in the paragraph.</para>
+<para>On the right of the dialog is a preview box.  This box can be used to <emphasis>approximate</emphasis> the final look of 
+the text.</para>
+<para>The color of the shadow can be adjusted by clicking on the button labeled <guilabel>Color</guilabel>.  
+&kword; will use the
+<link linkend="select-colors">color selection dialog box</link> to change the color of the shadow.</para>
+<para>Use the spinbox labeled <guilabel>Distance</guilabel> to select the distance the shadow moves away from the text.  A
+distance of zero will hide the shadow behind the original text.</para>
+<para>Select one of the 8 direction buttons to determine which direction the shadow will move in.</para>
+<para>When you are happy with your selections, click <guibutton>OK</guibutton> to apply your changes.</para>
 </sect2>
 </sect1>

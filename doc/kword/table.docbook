@@ -1,18 +1,20 @@
 <sect1 id="tables">
 <title>Tables</title>
 
-<para>&kword; has the built in ability to generate simple tables.</para>
+<para>&kword; has the built in ability to generate tables for the display of data.</para>
 
-<para>!!!!Need to add  more here -- Table formatting not implemented
-well!!!</para>
+<para>These tables can consist of up to 128 rows and 128 columns,
+with text centered or justified differently in different cells.  Text flows easily around in the 
+table and cells are resized (if specified by the user) automatcially to fit comfortably around the data.</para>
 
-<para>If you need more complicated functionality or you want more
-control over the look of your table, you can <link
-linkend="kparts">Embed a &kspread; Table</link> in your
-document.</para>
+<para>Tables in &kword; are for the display of data only.  No calculations can be performed.</para>
+
+<tip><para>Remember, if you need the functions of a spreadsheet, you can <link
+linkend="kparts">embed a &kspread; Table</link> in your
+document.</para></tip>
 
 <para>This section of the document will cover the formatting of tables
-<emphasis>created in &kword;</emphasis></para>
+<emphasis>created in &kword;</emphasis> only.</para>
 
 <sect2 id="table-new"><title>Adding a new Table</title>
 
@@ -21,12 +23,12 @@ document.</para>
 <itemizedlist>
 
 <listitem>
-<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Create
-Table</guimenuitem></menuchoice> from the Menu bar</para>
+<para>Select <menuchoice> <guimenu>Insert</guimenu>
+<guimenuitem>Table</guimenuitem></menuchoice> from the menubar.</para>
 </listitem>
 <listitem> 
 <para>You can use the keyboard shortcut: <keycombo
-action="simul"><keycap>F9</keycap></keycombo></para> 
+action="simul"><keycap>F5</keycap></keycombo></para>
 </listitem>
 
 <listitem>
@@ -50,17 +52,17 @@ on the tool-bar.</para>
 
 <para>The right half of the dialog box provides you a quick visual guide
 to how many rows and columns will be created in the table.  This is
-useful for <quote>counting</quote> out your table.  You can not edit
+useful for laying out your table.  You can not edit
 your table layout here.</para>
 
 <para>The left half of the dialog box consists of two drop down boxes,
 and two number selection boxes.</para>
 
-<para>The number selection box labeled <guilabel>Number of
+<para>The spin box labeled <guilabel>Number of
 Rows</guilabel>, allows you to specify from 1 to 128 rows in the
 table.</para>
 
-<para>The number selection box labeled <guilabel>Number of
+<para>The spin box labeled <guilabel>Number of
 Columns</guilabel>, allows you to specify from 1 to 128 columns in the
 table.</para>
 
@@ -127,18 +129,22 @@ inches wide.</para>
 </varlistentry>
 </variablelist>
 
-<para>To change the properties of the table, click on the tab labeled
-<guilabel>Properties</guilabel>.</para>
+<para>Tables can be inserted into a document as either <emphasis>framed</emphasis> or <emphasis>inline</emphasis> tables.</para>
 
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="instab2.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
+<para>Framed tables are tables that have a frame around them.  The frame around a table functions
+exactly the same as a frame around text.  It contains the table and determines the size and shape of the table.</para>
 
-<para>!!!Not implemented yet!!!</para>
+<para>An inline table has frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
+frame. If text is inserted in front of the table, the table travels down the frame just like any text would.  This means the table will
+stay in the same area of the page as the text that surrounds it.</para>
 
+<para>Framed tables, on the other hand, need to be moved by hand on the page.  </para>
+
+<para>The check box labled <guilabel>The table is inline</guilabel> is used to determine 
+which type of table is inserted.  If there is a mark in the checkbox, the table is inserted inline.  If not, the table is 
+given a frame of its own.</para>
+<para>Click <guibutton>OK</guibutton> to insert the table.</para>
+<para>Click <guibutton>Cancel</guibutton> to cancel this action and return to editing your document.</para>
 </sect2>
 
 <sect2 id="table-delete">
@@ -146,21 +152,16 @@ inches wide.</para>
 
 <para>To delete a table in &kword;:</para>
 
-<procedure>
-<step>
-<para>Place the text cursor within any cell of the table you want to
-delete.</para>
+<para>Place the mouse cursor over the frame of any cell of the table you want to
+delete and click once with the &LMB;.</para>
 <warning>
 <para>Be sure you have selected the correct table before continuing.
 &kword; will not ask for confirmation.</para>
 </warning>
-</step>
 
-<step>
 <para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
-Table</guimenuitem></menuchoice> from the Menu bar</para>
-</step>
-</procedure>
+Table</guimenuitem></menuchoice> from the menubar</para>
+
 
 <para>The table will be immediately deleted.</para>
 </sect2>
@@ -172,24 +173,18 @@ Table</guimenuitem></menuchoice> from the Menu bar</para>
 
 <para>To insert a row into a table:</para>
 
-<procedure>
-<step>
-<para>Place the text cursor within any cell of the table you want to add
-a row to.</para>
-</step>
-
-<step>
-<para>Select either:</para>
+<para>Place the mouse cursor over the border of any cell of the table you want to add
+a row to.  Select either:</para>
 
 <itemizedlist>
 <listitem>
 <para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert
-Row</guimenuitem></menuchoice> from the Menu bar</para>
+Row</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
 fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> on the
-tool-bar.</para>
+toolbar.</para>
 </listitem>
 </itemizedlist>
 
@@ -200,24 +195,18 @@ tool-bar.</para>
 <imageobject><imagedata fileref="insrowdlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-</step>
 
-<step>
-<para>The number selection box labeled <guilabel>Row</guilabel>, allows
+<para>The spin box labeled <guilabel>Row</guilabel>, allows
 you to select any row within the table.  This number selection box
 limits you to the rows currently in the table.</para>
 <para>Select the row you want to use as a reference.</para>
-</step>
 
-<step>
 <para>Now select either <guilabel>Before</guilabel> or
 <guilabel>After</guilabel>" as is appropriate.</para>
-</step>
 
-<step>
 <para>Click <guibutton>OK</guibutton> to add the row or click
 <guibutton>Cancel</guibutton> to not add any rows.</para>
-</step></procedure>
+
 </sect2>
 
 <sect2 id="table-insert-column">
@@ -225,19 +214,13 @@ limits you to the rows currently in the table.</para>
 
 <para>To insert a column into a table:</para>
 
-<procedure>
-<step>
-<para>Place the text cursor within any cell of the table you want to add
-a row to.</para>
-</step>
-
-<step>
-<para>Select either:</para>
+<para>Place the mouse cursor over the border of any cell of the table you want to add
+a column to.  Select either:</para>
 
 <itemizedlist>
 <listitem>
 <para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert
-Column</guimenuitem></menuchoice> from the Menu bar</para>
+Column</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
@@ -254,26 +237,19 @@ tool-bar.</para>
 <imagedata fileref="inscoldlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-</step>
 
-<step>
 <para>The number selection box labeled <guilabel>Column</guilabel>,
 allows you to select any column within the table.  This number selection
 box limits you to the columns currently in the table.</para>
 
 <para>Select the column you want to use as a reference.</para>
-</step>
 
-<step>
 <para>Now select either <guilabel>Before</guilabel> or
 <guilabel>After</guilabel> as is appropriate.</para>
-</step>
 
-<step>
 <para>Click <guibutton>OK</guibutton> to add the column or click
 <guibutton>Cancel</guibutton> to not add any columns.</para>
-</step>
-</procedure>
+
 </sect2>
 
 <sect2 id="table-delete-row">
@@ -281,20 +257,13 @@ box limits you to the columns currently in the table.</para>
 
 <para>To delete a row from a table:</para>
 
-<procedure>
-<step>
-<para>Place the text cursor within any cell of the table you want to
-delete the row from.</para>
-</step>
-
-<step>
-<para>Select either:
-</para>
+<para>Place the mouse cursor over the border of any cell of the table you want to
+remove a row from.  Select either:</para>
 
 <itemizedlist>
 <listitem>
 <para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
-row</guimenuitem></menuchoice> from the Menu bar</para>
+row</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
@@ -302,16 +271,7 @@ fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject> on the
 tool-bar.</para>
 </listitem>
 </itemizedlist>
-<para>This will bring up a dialog box.</para>
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="delrowdlg.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-</step>
-<step>
-<para>Select the row you want to delete in the number selection
+<para>This will bring up a dialog box..  Select the row you want to delete in the number selection
 dialog.</para>
 
 <warning>
@@ -320,33 +280,23 @@ continuing.</para>
 <para>&kword; will not ask for verification before deleting the
 row.</para>
 </warning>
-</step>
-
-<step>
 <para>Click <guibutton>OK</guibutton> to delete the row, or click <guibutton>Cancel</guibutton> to not
 delete any rows.</para>
-</step>
-</procedure>
 
 </sect2>
+
 <sect2 id="table-delete-column">
 <title>Delete Column in Table</title>
 
 <para>To delete a column from a table:</para>
 
-<procedure>
-<step>
-<para>Place the text cursor within any cell of the table you want to
-delete the column from.</para>
-</step>
-
-<step>
-<para>Select either:</para>
+<para>Place the mouse cursor over the border of any cell of the table you want to
+remove a column from.  Select either:</para>
 
 <itemizedlist>
 <listitem>
 <para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
-Column</guimenuitem></menuchoice> from the Menu bar</para>
+Column</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
@@ -355,18 +305,7 @@ tool-bar.</para>
 </listitem>
 </itemizedlist>
 
-<para>This will bring up a dialog box.</para>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="delcoldlg.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-</step>
-
-<step>
-<para>Select the column you want to delete in the number selection
+<para>This will bring up a dialog box.  Select the column you want to delete in the number selection
 dialog.</para>
 
 <warning>
@@ -375,13 +314,10 @@ continuing.</para>
 <para>&kword; will not ask for verification before deleting the
 column</para>
 </warning>
-</step>
 
-<step>
 <para>Click <guibutton>OK</guibutton> to delete the column, or click
 <guibutton>Cancel</guibutton> to not delete any column.</para>
-</step>
-</procedure>
+
 </sect2>
 
 <sect2 id="table-join-cells">
@@ -393,7 +329,7 @@ equal sized cells throughout the table.</para>
 <para>Sometimes you would like to spread text out over several cells in
 a table.  This is especially common with titles.</para>
 
-<para>&kword; allows you to do this by <quote>Joining</quote> two (or
+<para>&kword; allows you to do this by <emphasis>Joining</emphasis> two (or
 more) adjacent cells of a table together.</para> 
 
 <screenshot>
@@ -409,44 +345,9 @@ a table.</para>
 <para>You can join cells vertically, as well as horizontally.</para>
 </tip>
 
-<para>To <quote>join</quote> several cells:</para>
-
-<procedure>
-
-<step>
-<para>You must be in Frame Edit Mode. To change to Frame Edit Mode, you
-can:</para>
-
-<itemizedlist>
-<listitem>
-<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit
-Frames</guimenuitem></menuchoice> from the Menu bar</para>
-</listitem>
-<listitem>
-<para>You can use the keyboard shortcut:
-<keycombo><keycap>F5</keycap></keycombo></para>
-</listitem>
-<listitem>
-<para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject> on
-the tool-bar.</para>
-</listitem>
-</itemizedlist>
-</step>
-
-<step>
-<para>Now select one of the two (or more) cells you want to join into
-one.  You can do this by clicking once in the cell with the
-<mousebutton>left</mousebutton> mouse button.</para>
-</step>
-
-<step>
-<para>Select another cell you want <quote>joined</quote>", by holding
-down the &Ctrl; key and clicking with the
-<mousebutton>left</mousebutton> mouse button.</para>
-
-<para>Continue to select additional cells, until you have selected all
-the cells necessary.</para>
+<para>To join several cells you must first select the cells.  To select the cells, click once with the &LMB;
+on the frame border of a cell.  Now hold down the &Ctrl; key and click on the next cell with the &LMB;.  Coninue
+this until you have selected all the cells you want to join together.</para>
 
 <tip>
 <para>If you have a number of cells in a row that you want to select,
@@ -456,13 +357,11 @@ you can select them in two quick steps:</para>
 end of the row or column you want to join.</para>
 <para>All cells between these two cells will be selected.</para>
 </tip>
-</step>
 
-<step>
-<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Join
-Cells</guimenuitem></menuchoice> from the Menu bar</para>
-</step>
-</procedure>
+
+<para>Once you have selected all the cells you want to join, 
+select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Join
+Cells</guimenuitem></menuchoice> from the menubar</para>
 
 <para>The cells will now be joined.</para>
 
@@ -480,39 +379,10 @@ way action.</para>
 be joined any longer, you can "split" them back into individual cells
 again.</para>
 
-<para>To split previously joined cells: you must be in Frame Edit
-Mode.</para>
-
-<procedure>
-<step>
-<para>You must be in Frame Edit Mode. To change to Frame Edit Mode, you
-can:</para>
-
-<itemizedlist>
-<listitem>
-<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit
-Frames</guimenuitem></menuchoice> from the Menu bar</para>
-</listitem>
-<listitem>
-<para>You can use the keyboard shortcut:
-<keycombo><keycap>F5</keycap></keycombo></para>
-</listitem>
-<listitem>
-<para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject> on
-the tool-bar.</para>
-</listitem>
-</itemizedlist>
-</step>
-<step>
-<para>Select the cell you want to split by clicking on it with the
-<mousebutton>left</mousebutton> mouse button.</para>
-</step>
-<step>
-<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Split
-Cells</guimenuitem></menuchoice> from the Menu bar</para>
-</step>
-</procedure>
+<para>To split previously joined cells, select the cell you want to split by 
+clicking on it with the
+&LMB;.  Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Split
+Cells</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>The cells will be restored to their previous state.  Any text in
 the original cell will be relocated to the rightmost cell.</para>
@@ -522,14 +392,23 @@ the original cell will be relocated to the rightmost cell.</para>
 <sect2 id="table-ungroup">
 <title>Ungroup a Table</title>
 
-<para>!!!Causes a crash at this point!!!</para>
+<para>If you select <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Ungroup Table</guimenuitem></menuchoice> from the menubar, &kword; will convert each cell in your table 
+into an individual frame.  You can then move these frames around independently on the page.</para>
 
 </sect2>
 
 <sect2 id="table-format">
-<title>Format a Table</title>
+<title>Formating a Table</title>
 
-<para>!!!Not implemented!!!</para>
+<para>A table is a group of frames all connected together in a larger frame.
+To format your table, simply use the same tools and techniques used to
+format the rest of the text in the document.</para>
+
+<para>For information of formatting text see <link linkend="change-font">Format characters</link>.</para>
+<para>For information on formatting borders between frames, see <link linkend="para-borders">Format Paragraphs</link></para>
+<para>For information on formatting background color, see <link linkend="format-frame-background">Format Frames</link></para>
+
 
 </sect2>
 

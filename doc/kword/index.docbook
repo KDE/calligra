@@ -28,6 +28,7 @@
   <!ENTITY misc SYSTEM "insertmisc.docbook">
   <!ENTITY parts SYSTEM "kparts.docbook">
   <!ENTITY formulas SYSTEM "formulas.docbook">
+  <!ENTITY lists SYSTEM "lists.docbook">
   
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
@@ -54,7 +55,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-17-04</date>
+<date>2002-20-04</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -371,6 +372,7 @@ and footers in a document.</para>
 &formatcharacters;
 &styles;
 &columns;
+&lists;
 &tabls;
 &headersfooters;
 &templatecreation;
@@ -413,6 +415,7 @@ If any document variables were changed, &kword; will update their values through
 
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
+<sect1 id="chapter-number"><title>Chapter numbering</title><para></para></sect1>
 <sect1 id="mail-merge"><title>Mail Merge</title><para></para></sect1>
 <sect1 id="doc-structure"><title>Document Structure</title><para></para></sect1>
 </chapter>
@@ -547,6 +550,9 @@ onto any website.</para>
 <title>How do I re-order the frames in a frameset</title>
 <para></para>
 </sect1>
+
+
+
 </chapter>
 
 <!-- **************************************************************************************************** -->
@@ -762,7 +768,44 @@ find more help on the other command line options.</para>
 
 <appendix id="filters">
 <title>Import/Export Filters</title>
+<sect1 id="filter-intro"><title>Introduction to Filters</title>
+<para>&kword; has the ability (with varying success) to load data 
+from foriegn (non-&koffice;) data files.  &kword; also has the ability to
+save data too non-&koffice; data files.  This is provided to help users 
+of &kword; to interact more seamlessly with people who use other
+operating systems and wordprocessors.</para>
 
+<para>&kword; does this by loading a non-&koffice; datafile into 
+memory and passing the data through a <emphasis>filter</emphasis>
+to extract as much information as possible from the data file.  Some 
+formatting information will be lost or changed by the filter in the
+attempt.</para>
+
+<para>When &kword; reads data <emphasis>into</emphasis>
+&kword; from a non-&koffice; file format, it is
+<emphasis>importing</emphasis> the data</para>
+
+
+<para>When &kword; saves a &kword; document as a non-&koffice;
+file format, it is <emphasis>exporting</emphasis> the data.</para>
+
+<para>The purpose of this appendix is to detail for the user which filters exist, what they can do, and what their current limitations are.</para>
+<para>&kword; comes with the following filters.</para>
+
+<informaltable>
+<tgroup cols="3">
+<thead><row><entry>Application</entry><entry>Import Filter</entry><entry>Export Filter</entry></row></thead>
+<tbody>
+<row><entry><link linkend="filter-abiword">Abiword</link></entry><entry><link linkend="abiimport">Yes</link></entry><entry><link linkend="abi-export">Yes</link></entry></row>
+<row><entry><link linkend="filter-ami">AmiPro</link></entry><entry><link linkend="ami-import">Yes</link></entry><entry><link linkend="ami-export">Yes</link></entry></row>
+
+
+
+
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
 <sect1 id="filter-abiword">
 <title><application>Abiword</application> Filter</title>
 
@@ -793,6 +836,17 @@ url="http://www.abisource.com">http://www.abisource.com</ulink></para>
 
 <sect2 id="abiimport">
 <title>Import <application>Abiword</application> files into &kword;</title>
+
+<para>Use:  Some <application>Abiword</application> files will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="abiimport.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Do not let this alarm you.  <application>Abiword</application> uses an &XML; format.  Simply accept the default values.</para>
 
 <informaltable>
 <tgroup cols="2">
@@ -832,6 +886,7 @@ documents.</para></listitem>
 <sect2 id="abi-export">
 <title>Export &kword; files into <application>Abiword</application> files</title>
 
+<para>Use: No configuration options</para>
 <informaltable>
 <tgroup cols="2">
 <tbody>

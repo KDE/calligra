@@ -55,12 +55,13 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>Formatting the Page </entry><entry>Checked (April 7, 2002)</entry></row>
 <row><entry></entry><entry>Working with Frames </entry><entry>Checked (April 7, 2002)</entry></row>
 <row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry>Needs Updates-Pending Questions.</entry></row>
-<row><entry></entry><entry>Formatting paragraph </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Formatting paragraph </entry><entry>Checked (April 20, 2002)</entry></row>
 <row><entry></entry><entry>Using Tab Stops </entry><entry>Checked (March 24, 2002)</entry></row>
-<row><entry></entry><entry>Formatting Characters </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Styles </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Columns </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Tables </entry><entry>Unstable-Needs Updates</entry></row>
+<row><entry></entry><entry>Formatting Characters </entry><entry>Checked (April 20, 2002)</entry></row>
+<row><entry></entry><entry>Styles </entry><entry>Checked (April 20, 2002)</entry></row>
+<row><entry></entry><entry>Columns </entry><entry>Checked (April 20, 2002)</entry></row>
+<row><entry></entry><entry>Lists </entry><entry>Checked (April 20, 2002)</entry></row>
+<row><entry></entry><entry>Tables </entry><entry>Checked (April 20, 2002)</entry></row>
 <row><entry></entry><entry>Headers/Footers </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
@@ -79,6 +80,7 @@ as of the date included in the note.</para>
 <row><entry></entry></row>
 
 <row><entry>Advanced Topics </entry><entry></entry><entry></entry></row>
+<row><entry></entry><entry>Chapter Numbering </entry><entry>Not Written</entry></row>
 <row><entry></entry><entry>Mail Merge </entry><entry>Not Written</entry></row>
 <row><entry></entry><entry>Document structure </entry><entry>Not Written</entry></row>
 <row><entry></entry></row>
@@ -156,7 +158,6 @@ as of the date included in the note.</para>
 
 <row><entry>Sections to be added</entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Thesaurus</entry><entry></entry></row>
-<row><entry></entry><entry>Chapter Numbers</entry><entry></entry></row>
 
 </tbody>
 </tgroup>
@@ -168,6 +169,7 @@ as of the date included in the note.</para>
 of button, depending on development (Feb 20)</para>
 <para>"NL", "CR", "Unicode point", and "ASCII/Latin-1 Character" pattern matching (Feb 20)</para>
 <para>Add info for autospellcheck..</para>
+<para>Is Sidehead frames functional?</para>
 
 </sect1>
 </chapter>

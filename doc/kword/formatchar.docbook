@@ -1,19 +1,21 @@
 <sect1 id="format-characters">
 <title>Formatting Characters</title>
 
-<para>This section will cover the changes you can make to individual or
+<para>This section will cover the changes that can be made to individual characters or
 blocks of characters including:</para>
 
 <itemizedlist>
 <listitem><para><link linkend="change-font">Size</link></para></listitem>
 <listitem><para><link linkend="change-font">Font</link></para></listitem>
 <listitem><para><link linkend="change-font">Font Style</link></para></listitem>
-<listitem><para><link linkend="change-font">Character Set</link></para></listitem>
-<listitem><para><link linkend="change-font-color">Character Color</link></para></listitem>
+<listitem><para><link linkend="change-font">Underlines, superscript, subscript, strikeout, etc.</link></para></listitem>
+<listitem><para><link linkend="change-font">Character Color/Background Color.</link></para></listitem>
+<listitem><para><link linkend="change-font-case">Character case.</link></para></listitem>
+
 </itemizedlist>
 
 <sect2 id="change-font">
-<title>Changing Size, Font, Font Style and Character Set</title>
+<title>Changing Size, Font, Font Style, Text color and Background Colors</title>
 
 <sect3 id="change-font-keyboard">
 <title>Using the Keyboard or Tool-bars</title>
@@ -38,10 +40,15 @@ Button</entry><entry align="center">Key Combo</entry></row>
 <row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
 <row><entry align="right">Italics</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
 <row><entry align="right">Underline</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+<row><entry align="right">Strikethrough</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Superscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Subscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Text Background Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bdcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+
 </tbody></tgroup></informaltable>
 
 <note>
-<para>You cannot change the Character Set using the keyboard or the
+<para>You cannot change the Character Set or add double underlines using the keyboard or the
 tool-bar, you must <link linkend="change-font-dialog">use the dialog
 box</link>.</para>
 </note>
@@ -54,19 +61,25 @@ box</link>.</para>
 <para>If you have many changes to make, you can also use a dialog box to
 set these same attributes.</para>
 
-<para>You can open the Character Formatting Dialog box in one of two
+<para>You can open the Character Formatting Dialog box in one of three
 ways:</para>
 
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Font</guimenuitem></menuchoice>
-from the Menu bar</para>
+from the menubar.</para>
 </listitem>
 
 <listitem>
+<para>Click on the selected text with the &RMB;.  A small menu will appear.  Select <guimenuitem>Font</guimenuitem> from the
+menu.</para>
+</listitem>
+
+
+<listitem>
 <para>You can use the keyboard shortcut:
-<keycombo><keycap>Alt</keycap><keycap>F</keycap></keycombo></para>
+<keycombo><keycap>&Ctrl;&Alt;</keycap><keycap>F</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
 
@@ -80,10 +93,27 @@ from the Menu bar</para>
 </screenshot>
 
 <para>Using this dialog box, you can select the font, size, character
-set, italics and boldface options.</para>
+set, italics and boldface options from the top three list boxes.</para>
 
-<para>The preview box along the bottom, will show you how your current
+<para>The preview box along the middle of the dialog, will show you how your current
 settings will appear.</para>
+
+<tip><para>If the default preview string is not appropriate, you can change it by clicking once
+inside the preview box with the &LMB;.  A text cursor will appear. You can edit the text to suit your needs.</para>
+<para>The sample sentence will revert to the default the next time you
+open this dialog.</para>
+</tip>
+
+<para>Using the checkboxes located below the preview box, you can select superscript, subscript, strikeout, underline,
+ and double underline.</para>
+
+<para>Clicking the button labeled <guibutton>Change Color...</guibutton>
+will allow you to change the color of the text using the
+<link linkend="select-colors">color selection dialog box</link>.</para>
+
+<para>Clicking the button labeled <guibutton>Change Background Color...</guibutton>
+will allow you to change the color of the background using the
+<link linkend="select-colors">color selection dialog box</link>.</para>
 
 <para>Clicking <guibutton>OK</guibutton> will commit your changes to the
 document.</para>
@@ -91,55 +121,51 @@ document.</para>
 <para>Clicking <guibutton>Cancel</guibutton> will abort all changes
 made.</para>
 
-<note>
-<para>The default sentence for the preview box is <quote>The Quick Brown
-Fox Jumps Over The Lazy Dog</quote>.</para>
-
-<para>You can change this sentence by clicking once within the sentence.
-You can then change the sample sentence to anything you want.</para>
-
-<para>This can be especially useful if you need to view numbers, special
-characters, or non-arabic characters</para>
-
-<para>The sample sentence will revert to the default the next time you
-open this dialog.</para>
-</note>
-
 </sect3>
 </sect2>
 
-<sect2 id="change-font-color">
-<title>Changing Font Color</title>
-
-<para>The <quote>Change Font Color</quote> command can be invoked 3
-ways:</para>
-
-<itemizedlist>
-<listitem>
-<para>By selecting <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Font
-Color</guimenuitem></menuchoice> from the Menu bar</para>
-</listitem>
-<listitem>
-<para>You can use the keyboard shortcut:
-<keycombo>&Ctrl;&Alt;<keycap>C</keycap></keycombo></para>
-</listitem>
-<listitem>
-<para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject> on
-the 
-tool-bar.</para>
-</listitem>
-</itemizedlist>
-
-<para>You can now choose a color for the selected text using the <link
-linkend="select-colors">Color Selection Dialog Box</link>.</para>
-
-</sect2>
 <sect2 id="change-font-case">
 <title>Changing Font Case</title>
 
-<para></para>
+<para>&kword; can change the case (uppercase or lowercase) of large blocks of text to one of 4 pre-defined styles.  
+Begin by selecting the block of text you want changed.  Select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Change Case...</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>A small dialog box will appear with four options:</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Uppercase</guilabel></term>
+<listitem><para>Will convert all characters to uppercase.</para>
+<para>Example: KWORD WILL AUTOMATICALLY CHANGE CASES.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Lowercase</guilabel></term>
+<listitem><para>Will convert all characters to lowercase.</para>
+<para>Example: kword will automatically change cases.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Title Case</guilabel></term>
+<listitem><para>Will capitalize every word.</para>
+<para>Example: Kword Will Automatically Change Cases.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Toggle Case</guilabel></term>
+<listitem><para>Converts all lowercase letters to uppercase <emphasis>and</emphasis> 
+converts all upppercase letters to lowercase.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>When you have selected the option you like.  Click <guibutton>OK</guibutton> and &kword; will make the changes.</para>
+
+
+
 </sect2>
 
 
