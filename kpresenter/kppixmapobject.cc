@@ -919,16 +919,16 @@ void KPPixmapObject::flip( bool horizontal )
         switch ( mirrorType )
         {
             case PM_NORMAL:
-                mirrorType = PM_VERTICAL;
+                mirrorType = PM_HORIZONTAL;
                 break;
             case PM_HORIZONTAL:
-                mirrorType = PM_HORIZONTALANDVERTICAL;
-                break;
-            case PM_VERTICAL:
                 mirrorType = PM_NORMAL;
                 break;
+            case PM_VERTICAL:
+                mirrorType = PM_HORIZONTALANDVERTICAL;
+                break;
             case PM_HORIZONTALANDVERTICAL:
-                mirrorType = PM_HORIZONTAL;
+                mirrorType = PM_VERTICAL;
                 break;
         }
     }
@@ -937,16 +937,16 @@ void KPPixmapObject::flip( bool horizontal )
         switch ( mirrorType )
         {
             case PM_NORMAL:
-                mirrorType = PM_HORIZONTAL;
+                mirrorType = PM_VERTICAL;
                 break;
             case PM_HORIZONTAL:
-                mirrorType = PM_NORMAL;
-                break;
-            case PM_VERTICAL:
                 mirrorType = PM_HORIZONTALANDVERTICAL;
                 break;
+            case PM_VERTICAL:
+                mirrorType = PM_NORMAL;
+                break;
             case PM_HORIZONTALANDVERTICAL:
-                mirrorType = PM_VERTICAL;
+                mirrorType = PM_HORIZONTAL;
                 break;
         }
     }
