@@ -89,10 +89,11 @@ private:
     QDomElement framesetsPluralElement; // <FRAMESETS>
     QDomElement mainFramesetElement;    // The main <FRAMESET> where the body text will be under.
     QDomElement pixmapsElement;         // <PIXMAPS>
+    QDomElement clipartsElement;        // <CLIPARTS>
     StyleDataMap styleDataMap;
     KoFilterChain* m_chain;
-    uint pictureNumber;
-    uint pictureFrameNumber;
+    uint pictureNumber;                 // unique: increment *before* use
+    uint pictureFrameNumber;            // unique: increment *before* use
 };
 
 // Element <c>
@@ -489,10 +490,6 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     // TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
 
-    QDomElement imageElement=mainDocument.createElement("IMAGE");
-    imageElement.setAttribute("keepAspectRatio","true");
-    framesetElement.appendChild(imageElement);
-
     QDomElement key=mainDocument.createElement("KEY");
     // No name attribute!
     key.setAttribute("filename",strDataId); // AbiWord's data id
@@ -504,7 +501,20 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     key.setAttribute("minute",0);
     key.setAttribute("second",0);
     key.setAttribute("msec",0);
-    imageElement.appendChild(key);
+    
+    if (true) // TODO: find a way to tell if it is an image or a clipart
+    {
+        QDomElement imageElement=mainDocument.createElement("IMAGE");
+        imageElement.setAttribute("keepAspectRatio","true");
+        framesetElement.appendChild(imageElement);
+        imageElement.appendChild(key);
+    }
+    else
+    {
+        QDomElement clipartElement=mainDocument.createElement("CLIPART");
+        framesetElement.appendChild(clipartElement);
+        clipartElement.appendChild(key);
+    }
 
     // Now use the image's frame set
     QDomElement elementText=stackItem->stackElementText;
@@ -572,7 +582,8 @@ static bool CharactersElementD (StackItem* stackItem, QDomDocument& /*mainDocume
 }
 
 static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
-     uint& pictureNumber, QDomDocument& mainDocument, QDomElement& pixmapsElement)
+     uint& pictureNumber, QDomDocument& mainDocument,
+     QDomElement& pixmapsElement, QDomElement& clipartsElement)
 {
     if (!stackItem->elementType==ElementTypeRealData)
     {
@@ -585,17 +596,28 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
         return false;
     }
 
-    QString strStoreName="pictures/picture";
-    strStoreName+=QString::number(++pictureNumber);
+    bool isImage=true;
+    QString strStoreName;
 
     // stackItem->strTemp1 contains the mime type
     if (stackItem->strTemp1=="image/png")
     {
+        strStoreName="pictures/picture";
+        strStoreName+=QString::number(++pictureNumber);
         strStoreName+=".png";
     }
     else if (stackItem->strTemp1=="image/jpeg")
     {
+        strStoreName="pictures/picture";
+        strStoreName+=QString::number(++pictureNumber);
         strStoreName+=".jpeg";
+    }
+    else if (stackItem->strTemp1=="image/svg-xml") //Yes it is - not +
+    {
+        strStoreName="cliparts/clipart";
+        strStoreName+=QString::number(++pictureNumber); // For now, we use the picture number
+        strStoreName+=".svg";
+        isImage=false;
     }
     else
     {
@@ -615,7 +637,15 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     key.setAttribute("minute",0);
     key.setAttribute("second",0);
     key.setAttribute("msec",0);
-    pixmapsElement.appendChild(key);
+
+    if (isImage)
+    {
+        pixmapsElement.appendChild(key);
+    }
+    else
+    {
+        clipartsElement.appendChild(key);
+    }
 
     KoStoreDevice* out=chain->storageFile(strStoreName, KoStore::Write);
     if(!out)
@@ -1054,7 +1084,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     }
     else if (name=="d")
     {
-        success=EndElementD(stackItem, m_chain, pictureNumber, mainDocument, pixmapsElement);
+        success=EndElementD(stackItem, m_chain, pictureNumber, mainDocument, pixmapsElement, clipartsElement);
     }
     else
     {
@@ -1217,9 +1247,11 @@ void StructureParser :: createMainFramesetElement(void)
     // TODO: a few attributes are missing
     mainFramesetElement.appendChild(frameElementOut);
 
-    // As we are manipulating the document, create the PIXMAPS element
+    // As we are manipulating the document, create the PIXMAPS and CLIPARTS element
     pixmapsElement=mainDocument.createElement("PIXMAPS");
     mainDocument.documentElement().appendChild(pixmapsElement);
+    clipartsElement=mainDocument.createElement("CLIPARTS");
+    mainDocument.documentElement().appendChild(clipartsElement);
 }
 
 bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
