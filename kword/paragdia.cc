@@ -161,11 +161,15 @@ void KWPagePreview2::drawContents(QPainter* p)
 /******************************************************************/
 
 /*================================================================*/
-KWParagDia::KWParagDia(QWidget* parent,const char* name)
+KWParagDia::KWParagDia(QWidget* parent,const char* name,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS)
   : QTabDialog(parent,name,true)
 {
-  setupTab1();
-  setupTab2();
+  flags = _flags;
+
+  if (_flags & PD_SPACING)
+    setupTab1();
+  if (_flags & PD_FLOW)
+    setupTab2();
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));

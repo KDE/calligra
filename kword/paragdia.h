@@ -100,8 +100,14 @@ class KWParagDia : public QTabDialog
   Q_OBJECT
 
 public:
-  KWParagDia(QWidget*,const char*);
+  const int PD_SPACING = 1;
+  const int PD_FLOW = 2;
+  const int PD_BORDERS = 4;
+
+  KWParagDia(QWidget*,const char*,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS);
   ~KWParagDia();              
+
+  int getFlags() { return flags; }
 
   void setLeftIndent(float _left);
   void setFirstLineIndent(float _first);
@@ -123,6 +129,7 @@ public:
     { return atoi(eSpacing->text()); } 
 
   KWParagLayout::Flow getFlow();
+  int flags;
   
 
 protected:

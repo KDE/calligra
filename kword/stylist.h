@@ -22,11 +22,18 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
+#include <qfont.h>
+#include <qcolor.h>
+#include <qlineedit.h>
+#include <qlabel.h>
+#include <qpainter.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
+#include <kfontdialog.h>
+#include <kcolordlg.h>
 
-#include "paraglayout.h"
+#include "paragdia.h"
 
 class KWordDocument;
 class KWStyleEditor;
@@ -70,8 +77,13 @@ class KWStylePreview : public QGroupBox
   Q_OBJECT
 
 public:
-  KWStylePreview(const char *title,QWidget *parent = 0) : QGroupBox(title,parent,"")
-    {}
+  KWStylePreview(const char *title,QWidget *parent = 0,KWParagLayout *_style) : QGroupBox(title,parent,"")
+    { style = _style; }
+
+protected:
+  void drawContents(QPainter *painter);
+
+  KWParagLayout *style;
 
 };
 
@@ -84,23 +96,39 @@ class KWStyleEditor : public QTabDialog
   Q_OBJECT
 
 public:
-  KWStyleEditor(QWidget *_parent,KWParagLayout *_style);
+  KWStyleEditor(QWidget *_parent,KWParagLayout *_style,KWordDocument *_doc);
 
 protected:
   void setupTab1();
 
-  QWidget *tab1;
-  QGridLayout *grid1;
+  QWidget *tab1,*nwid;
+  QGridLayout *grid1,*grid2;
   QPushButton *bFont,*bColor,*bSpacing,*bAlign,*bBorders,*bNumbering;
   KButtonBox *bButtonBox;
   KWStylePreview *preview;
-  
+  QLabel *lName;
+  QLineEdit *eName;
+
   KWParagLayout *style;
+  KWordDocument *doc;
+  KWParagDia *paragDia;
 
 signals:
   void updateStyles();
 
+protected slots:
+  void changeFont();
+  void changeColor();
+  void changeSpacing();
+  void changeAlign();
+  void changeBorders();
+  void changeNumbering();
+  void paragDiaOk();
+
 };
 
 #endif
+
+
+
 
