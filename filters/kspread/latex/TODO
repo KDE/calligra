@@ -2,8 +2,17 @@
 EXPORT FILTER :
 
 VERSION 1
+	- border											DONE
+	- multirow										DONE
+	- cell color									
+	- text font										
+	- use params from the dialog	
+VERSION 2
+	- formula											
+	- column format								
+	- row format									
 
 IMPORT FILTER :
-	- lexical parser 				DONE
-	- syntax. parser 				DONE
-	- import filter in kword
+	- lexical parser 							DONE
+	- syntax. parser 							DONE
+	- import filter in kspread		
