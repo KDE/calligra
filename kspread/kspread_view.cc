@@ -1162,7 +1162,7 @@ void KSpreadView::verticalText(bool b)
 
 void KSpreadView::insertFormula()
 {
-    // ####
+    activateFormulaEditor();
 }
 
 void KSpreadView::insertMathExpr()
