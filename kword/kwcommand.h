@@ -325,4 +325,22 @@ protected:
     FrameIndex frameIndex;
     QDomDocument saveFormula;
 };
+
+/**
+ * Command created when you delete a textframeset
+ */
+class KWPictureFrameCommand : public KCommand
+{
+public:
+    KWPictureFrameCommand( const QString &name,KWDocument *_doc,const QDomDocument& _saveImage,FrameIndex _frameIndex) ;
+    ~KWPictureFrameCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    FrameIndex frameIndex;
+    QDomDocument saveImage;
+};
+
 #endif

@@ -1639,11 +1639,24 @@ void KWCanvas::deleteFrame()
         }
         else if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
         {
-            QDomDocument domDoc( "PARAGRAPHS" );
-            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+            QDomDocument domDoc( "FORMULA" );
+            QDomElement elem = domDoc.createElement( "FORMULA" );
             domDoc.appendChild( elem );
             theFrame->getFrameSet()->save(elem);
             KWFormulaFrameCommand *cmd = new KWFormulaFrameCommand(i18n("Delete formula frame"),doc,domDoc,index);
+            doc->addCommand(cmd);
+             //don't remove frameset Otherwise undo/redo text doesn't work
+            //as discuted with david faure
+            //doc->delFrameSet( theFrame->getFrameSet() );
+            theFrame->getFrameSet()->delFrame( theFrame );
+        }
+        else if(theFrame->getFrameSet()->getFrameType() == FT_PICTURE )
+        {
+            QDomDocument domDoc( "IMAGE" );
+            QDomElement elem = domDoc.createElement( "IMAGE" );
+            domDoc.appendChild( elem );
+            theFrame->getFrameSet()->save(elem);
+            KWPictureFrameCommand *cmd = new KWPictureFrameCommand(i18n("Delete picture frame"),doc,domDoc,index);
             doc->addCommand(cmd);
              //don't remove frameset Otherwise undo/redo text doesn't work
             //as discuted with david faure

@@ -277,7 +277,7 @@ void KWDocStructRootItem::setupArrangement()
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
+        if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
         {
             item = new QListViewItem( this, frameset->getName() );
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
@@ -340,7 +340,7 @@ void KWDocStructRootItem::setupTextFrames()
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
+        if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
         {
             item = new QListViewItem( this, frameset->getName() );
 
@@ -388,7 +388,8 @@ void KWDocStructRootItem::setupFormulaFrames()
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_FORMULA )
+        if ( frameset->getFrameType() == FT_FORMULA &&
+            frameset->getNumFrames()>0  )
         {
             _name=i18n("Formula frame %1").arg(QString::number(++j));
             child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
@@ -455,7 +456,7 @@ void KWDocStructRootItem::setupPictures()
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_PICTURE )
+        if ( frameset->getFrameType() == FT_PICTURE && frameset->getNumFrames()>0)
         {
             _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->image().key()).arg(++j);
             child = new KWDocStructPictureItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
@@ -495,7 +496,7 @@ void KWDocStructRootItem::setupEmbedded()
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_PART )
+        if ( frameset->getFrameType() == FT_PART && frameset->getNumFrames()>0)
         {
             _name=i18n( "Embedded Object %1" ).arg(QString::number( ++j ));
             child = new KWDocStructPartItem( this, _name, dynamic_cast<KWPartFrameSet*>( frameset ), gui );
