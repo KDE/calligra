@@ -18,6 +18,7 @@
 */
 
 #include "config.h"
+#include <qfile.h>
 #include <dcopclient.h>
 #include <koApplication.h>
 #include <KoApplicationIface.h>
@@ -30,6 +31,8 @@
 #include <kcmdlineargs.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kdesktopfile.h>
+#include <kmessagebox.h>
 #include <stdlib.h>
 
 void qt_generate_epsf( bool b );
@@ -37,6 +40,7 @@ void qt_generate_epsf( bool b );
 static const KCmdLineOptions options[]=
 {
 	{"print", I18N_NOOP("Only print and exit"),0},
+	{"template", I18N_NOOP("Open a new document with a template"), 0},
 	{0,0,0}
 };
 
@@ -57,7 +61,7 @@ KoApplication::KoApplication()
     // Prepare a DCOP interface
     m_appIface=new KoApplicationIface();  // avoid the leak
     dcopClient()->setDefaultObject( m_appIface->objId() );
-    
+
     //m_starting = 1;
 }
 
@@ -100,7 +104,7 @@ bool KoApplication::start()
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         doc->addShell( shell ); // for initDoc to fill in the recent docs list
-        
+
 	if ( doc->checkAutoSaveFile() || doc->initDoc() )
         {
             doc->removeShell( shell ); // setRootDocument will redo it
@@ -113,6 +117,7 @@ bool KoApplication::start()
     } else {
         KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
         bool print = koargs->isSet("print");
+	bool doTemplate = koargs->isSet("template");
         koargs->clear();
 
         // Loop through arguments
@@ -128,14 +133,54 @@ bool KoApplication::start()
                 KoMainWindow *shell = new KoMainWindow( doc->instance() );
                 if (!print)
                     shell->show();
+		// are we just trying to open a template?
+		if ( doTemplate ) {
+		  QStringList paths;
+		  if ( args->url(i).isLocalFile() && QFile::exists(args->url(i).path()) )
+		  {
+		    paths << QString(args->url(i).path());
+		    kdDebug(3003) << "using full path..." << endl;
+		  } else {
+		     QString desktopName(args->arg(i));
+		     QString appName = KGlobal::instance()->instanceName();
+
+		     paths = KGlobal::dirs()->findAllResources("data", appName +"/templates/*/" + desktopName );
+		     if ( paths.isEmpty()) {
+			   paths = KGlobal::dirs()->findAllResources("data", appName +"/templates/" + desktopName );
+	             }
+		     if ( paths.isEmpty()) {
+		        KMessageBox::error(0L, i18n("No template found for: %1 ").arg(desktopName) );
+		        delete shell;
+		     } else if ( paths.count() > 1 ) {
+		        KMessageBox::error(0L,  i18n("Too many templates found for: %1").arg(desktopName) );
+		        delete shell;
+		     }
+		  }
+
+                  if ( !paths.isEmpty() ) {
+		     KURL templateBase;
+		     templateBase.setPath(paths[0]);
+		     KDesktopFile templateInfo(paths[0]);
+
+		     QString templateName = templateInfo.readURL();
+		     KURL templateURL;
+		     templateURL.setPath( templateBase.directory() + "/" + templateName );
+		     if ( shell->openDocument(doc, templateURL )) {
+		       doc->resetURL();
+		       doc->setEmpty();
+		       kdDebug(3003) << "Template loaded..." << endl;
+		       n++;
+		     } else {
+		        KMessageBox::error(0L, i18n("Template %1 failed to load.").arg(templateURL.prettyURL()) );
+ 		        delete shell;
+		     }
+		  }
                 // now try to load
-                if ( shell->openDocument( doc, args->url(i) ) ) {
+                } else if ( shell->openDocument( doc, args->url(i) ) ) {
                     if ( print ) {
                         shell->print(false /*we want to get the dialog*/);
                         delete shell;
-                    }
-                    else
-                    {
+		    } else {
                         // Normal case, success
                         n++;
                     }
