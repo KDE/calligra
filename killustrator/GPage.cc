@@ -709,6 +709,59 @@ bool GPage::readFromXml (const QDomElement &page)
   return result;
 }
 
+bool GPage::readFromXmlV2 (const QDomElement &page)
+{
+  setAutoUpdate (false);
+  QDomElement head=page.namedItem("head").toElement();
+  
+  QDomElement layout=head.namedItem("layout").toElement();
+  QString tmp=layout.attribute("format");
+  if (tmp == "a3")
+    pLayout.format = PG_DIN_A3;
+  else
+    if (tmp == "a4")
+      pLayout.format = PG_DIN_A4;
+    else
+      if (tmp == "a5")
+        pLayout.format = PG_DIN_A5;
+      else
+      if (tmp == "usletter")
+        pLayout.format = PG_US_LETTER;
+      else
+        if (tmp == "uslegal")
+          pLayout.format = PG_US_LEGAL;
+        else
+	  if (tmp == "custom")
+            pLayout.format = PG_CUSTOM;
+          else
+            pLayout.format = PG_DIN_A4;
+
+  tmp=layout.attribute("orientation");
+  if (tmp == "portrait")
+    pLayout.orientation = PG_PORTRAIT;
+  else
+    if (tmp == "landscape")
+      pLayout.orientation = PG_LANDSCAPE;
+    else
+      pLayout.orientation = PG_PORTRAIT;
+
+  pLayout.mmWidth=layout.attribute("width").toFloat();
+  pLayout.mmHeight=layout.attribute("height").toFloat();
+  pLayout.mmLeft=layout.attribute("lmargin").toFloat();
+  pLayout.mmRight=layout.attribute("rmargin").toFloat();
+  pLayout.mmBottom=layout.attribute("bmargin").toFloat();
+  pLayout.mmTop=layout.attribute("tmargin").toFloat();
+ 
+// update page layout
+  setPageLayout (pLayout);
+
+  QList<GObject> dummy;
+  bool result = parseBody (page, dummy, false);
+
+//  setModified (false);
+  return result;
+}
+
 unsigned int GPage::findIndexOfObject (GObject *obj)
 {
   assert (obj->getLayer () != 0L);

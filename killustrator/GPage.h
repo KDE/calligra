@@ -134,6 +134,7 @@ public:
 */
   QDomElement saveToXml(QDomDocument &document);
   bool readFromXml (const QDomElement &page);
+  bool readFromXmlV2 (const QDomElement &page);
   bool insertFromXml (const QDomDocument &document, QList<GObject>& newObjs);
 
   Handle& handle () { return selHandle; }

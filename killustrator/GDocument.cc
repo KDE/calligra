@@ -241,51 +241,86 @@ bool GDocument::readFromXml (const  QDomDocument &document)
   QDomElement killustrator = document.documentElement();
   if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
     return false;
-  if( killustrator.attribute("version")!="3")
+  if( killustrator.attribute("version")=="3")
   {
-    kdError(38000) << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
-    return false;
-  }
+    QDomElement head=killustrator.namedItem("head").toElement();
+    setAutoUpdate (false);
+    curPageNum = head.attribute("currentpagenum").toInt();
 
-  QDomElement head=killustrator.namedItem("head").toElement();
-  setAutoUpdate (false);
-  curPageNum = head.attribute("currentpagenum").toInt();
+    QDomElement grid=head.namedItem("grid").toElement();
+    gridx=grid.attribute("dx").toFloat();
+    gridy=grid.attribute("dy").toFloat();
+    snapToGrid=(grid.attribute("align").toInt()==1);
 
-  QDomElement grid=head.namedItem("grid").toElement();
-  gridx=grid.attribute("dx").toFloat();
-  gridy=grid.attribute("dy").toFloat();
-  snapToGrid=(grid.attribute("align").toInt()==1);
+    QDomElement helplines=grid.namedItem("helplines").toElement();
+    snapToHelplines=(helplines.attribute("align").toInt()==1);
 
-  QDomElement helplines=grid.namedItem("helplines").toElement();
-  snapToHelplines=(helplines.attribute("align").toInt()==1);
-
-  QDomElement l=helplines.firstChild().toElement();
-  for( ; !l.isNull(); l=helplines.nextSibling().toElement())
-  {
-    if(l.tagName()=="hl")
-      hHelplines.append(l.attribute("pos").toFloat());
-    else
-      if(l.tagName()=="vl")
-        vHelplines.append(l.attribute("pos").toFloat());
-  }
-
-  pages.clear ();
-  QDomNode n = killustrator.firstChild();
-  while(!n.isNull())
-  {
-    QDomElement pe=n.toElement();
-    kdDebug(0) << "Tag=" << pe.tagName() << endl;
-    if (pe.tagName() == "page")
+    QDomElement l=helplines.firstChild().toElement();
+    for( ; !l.isNull(); l=helplines.nextSibling().toElement())
     {
-      GPage *page = addPage();
-      page->readFromXml(pe);
+      if(l.tagName()=="hl")
+        hHelplines.append(l.attribute("pos").toFloat());
+      else
+        if(l.tagName()=="vl")
+          vHelplines.append(l.attribute("pos").toFloat());
     }
-    n=n.nextSibling();
-  }
 
-  setModified (false);
-  emit gridChanged ();
-  return true;
+    pages.clear ();
+    QDomNode n = killustrator.firstChild();
+    while(!n.isNull())
+    {
+      QDomElement pe=n.toElement();
+      kdDebug(0) << "Tag=" << pe.tagName() << endl;
+      if (pe.tagName() == "page")
+      {
+        GPage *page = addPage();
+        page->readFromXml(pe);
+      }
+      n=n.nextSibling();
+    }
+
+    setModified (false);
+    emit gridChanged ();
+    return true;
+  }
+  if( killustrator.attribute("version")=="2")
+  {
+    QDomElement head=killustrator.namedItem("head").toElement();
+    setAutoUpdate (false);
+    
+    QDomElement grid=head.namedItem("grid").toElement();
+    gridx=grid.attribute("dx").toFloat();
+    gridy=grid.attribute("dy").toFloat();
+    snapToGrid=(grid.attribute("align").toInt()==1);
+
+    QDomElement helplines=grid.namedItem("helplines").toElement();
+    snapToHelplines=(helplines.attribute("align").toInt()==1);
+
+    QDomElement l=helplines.firstChild().toElement();
+    for( ; !l.isNull(); l=helplines.nextSibling().toElement())
+    {
+      if(l.tagName()=="hl")
+        hHelplines.append(l.attribute("pos").toFloat());
+      else
+        if(l.tagName()=="vl")
+          vHelplines.append(l.attribute("pos").toFloat());
+    }
+
+    pages.clear ();
+    
+    GPage *page = addPage();
+    page->readFromXmlV2(killustrator);
+    
+    page->setName(i18n("Page %1").arg(1));
+    curPageNum = 2;
+    
+    setModified (false);
+    emit gridChanged ();
+    return true;
+  }
+  
+  kdError(38000) << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
+  return false;
 }
 
 void GDocument::setGrid (float dx, float dy, bool snap)
