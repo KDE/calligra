@@ -2626,6 +2626,17 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
     QPixmap *doubleBuffer = 0;
     QPainter painter;
     QRect crect( cx, cy, cw, ch );
+
+    // Space above first parag
+    if ( parag && cy + ch <= parag->rect().y() && parag->rect().y() > 0 ) {
+        QRect r( 0, 0,
+                 parag->document()->x() + parag->document()->width(),
+                 parag->rect().y() );
+        r &= crect;
+        if ( !r.isEmpty() )
+            p->fillRect( r, cg.brush( QColorGroup::Base ) );
+    }
+
     while ( parag ) {
 	lastFormatted = parag;
 	if ( !parag->isValid() )
@@ -3434,7 +3445,7 @@ void QTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    //qDebug("QTextParag::format id=%d invalid, formatting (moving after previous parag)",paragId());
+    //qDebug("QTextParag::format id=%d invalid, formatting", paragId());
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( p )
