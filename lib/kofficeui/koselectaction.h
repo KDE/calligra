@@ -26,7 +26,7 @@ class QPoint;
 
 /** An action that provides a menu with items that can be selected.
  * The main difference between this action and a KSelectAction is that
- * it is pluged into a toolbar as a dropdown menu and not a combobox.
+ * it is plugged into a toolbar as a dropdown menu and not as a combobox.
  */
 class KoSelectAction : public KAction
 {
