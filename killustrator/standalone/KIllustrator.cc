@@ -98,6 +98,7 @@
 #include "version.h"
 
 #ifdef NEWKDE
+#include <kmessagebox.h>
 #include <kstddirs.h>
 #include <kio/job.h>
 #include <kglobal.h>
@@ -805,15 +806,23 @@ void KIllustrator::menuCallback (int item) {
   case ID_FILE_OPEN:
     {
       if (askForSave ()) {
-	QString fname =
 #ifdef USE_QFD
-          QFileDialog::getOpenFileName((const char *) lastOpenDir,
+        QString fname = QFileDialog::getOpenFileName((const char *) lastOpenDir,
 					     i18n("*.kil | KIllustrator File"),
 					     this);
 #else
-	  KFileDialog::getOpenFileName((const char *) lastOpenDir,
+#ifdef NEWKDE
+	KURL url = KFileDialog::getOpenURL(lastOpenDir,
 					     i18n("*.kil | KIllustrator File"),
 					     this);
+       if (!url.isLocalFile())
+         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+        QString fname = url.path();
+#else
+        QString name = KFileDialog::getOpenFileName((const char *) lastOpenDir,
+                                             i18n("*.kil | KIllustrator File"),
+                                             this);
+#endif
 #endif
 	if (! fname.isEmpty ()) {
           KURL u (fname);
@@ -902,6 +911,18 @@ void KIllustrator::menuCallback (int item) {
 	         "*.xpm | X11 Pixmaps"),
 	     this);
 #else
+#ifdef NEWKDE
+     KURL url = KFileDialog::getOpenURL
+             (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+                 "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+                 "*.png | PNG Images\n"
+                 "*.xbm | X11 Bitmaps\n"
+                 "*.xpm | X11 Pixmaps"),
+             this);
+     if (!url.isLocalFile())
+         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+     QString fname = url.path(); 
+#else
      QString fname = KFileDialog::getOpenFileName
 	     ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
@@ -909,6 +930,7 @@ void KIllustrator::menuCallback (int item) {
 	         "*.xbm | X11 Bitmaps\n"
 	         "*.xpm | X11 Pixmaps"),
 	     this);
+#endif
 #endif
        if (! fname.isEmpty ()) {
          QFileInfo finfo (fname);
@@ -926,9 +948,17 @@ void KIllustrator::menuCallback (int item) {
 	      ((const char *) lastClipartDir,
 	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #else
+#ifdef NEWKDE
+     KURL url = KFileDialog::getOpenURL( lastClipartDir,
+             i18n("*.wmf *.WMF | Windows Metafiles"), this);
+     if (!url.isLocalFile())
+         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+     QString fname = url.path();
+#else
       QString fname = KFileDialog::getOpenFileName
 	      ((const char *) lastClipartDir,
 	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
+#endif
 #endif
       if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
@@ -1268,8 +1298,15 @@ void KIllustrator::saveAsFile () {
   QString fname = QFileDialog::getSaveFileName ((const char *)
 						lastSaveDir, "*.kil", this);
 #else
+#ifdef NEWKDE
+  KURL url = KFileDialog::getSaveURL( lastSaveDir, "*.kil", this );
+  if (!url.isLocalFile())
+    KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+  QString fname = url.path();
+#else
   QString fname = KFileDialog::getSaveFileName ((const char *)
 						lastSaveDir, "*.kil", this);
+#endif
 #endif
   if (fname.right (4) != ".kil")
     fname += ".kil";
@@ -1472,7 +1509,14 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
     QString filename;
 
     if (dlg->exec() == QDialog::Accepted) {
+#ifdef NEWKDE
+      KURL url = dlg->selectedURL ();
+      if (!url.isLocalFile())
+         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+      filename = url.path();
+#else
       filename = dlg->selectedFile ();
+#endif
       QFileInfo finfo (filename);
       lastExportDir = finfo.dirPath ();
     }
@@ -1515,13 +1559,19 @@ void KIllustrator::importFromFile () {
   FilterManager* filterMgr = FilterManager::instance ();
   QString filter = filterMgr->importFilters ();
 
-  QString fname =
 #ifdef USE_QFD
-    QFileDialog::getOpenFileName ((const char *) lastImportDir,
+  QString fname = QFileDialog::getOpenFileName ((const char *) lastImportDir,
 					 (const char *) filter, this);
 #else
-    KFileDialog::getOpenFileName ((const char *) lastImportDir,
+#ifdef NEWKDE
+  KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
+  if (!url.isLocalFile())
+      KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+  QString fname = url.path();
+#else
+  QString fname = KFileDialog::getOpenFileName ((const char *) lastImportDir,
 					 (const char *) filter, this);
+#endif
 #endif
   if (! fname.isEmpty ()) {
     QFileInfo finfo ((const char *) fname);
@@ -1819,7 +1869,17 @@ bool KIllustrator::parseColorPalette (const char* fname,
 }
 
 void KIllustrator::loadPalette () {
-  QString pfile = KFileDialog::getOpenFileName ((const char *) lastPaletteDir);
+#ifdef NEWKDE
+  KURL url = KFileDialog::getOpenURL (lastPaletteDir);
+  if (!url.isLocalFile())
+  {
+    KMessageBox::sorry( 0L, i18n("Remote URLs not supported") );
+    return;
+  }
+  QString pfile = url.path();
+#else
+  QString pfile = QFileDialog::getOpenFileName( lastPaletteDir );
+#endif
   QFileInfo finfo (pfile);
   lastPaletteDir = finfo.dirPath ();
   if (! pfile.isEmpty ()) {
