@@ -48,6 +48,32 @@ QString UndoWrapperCommand::name() const
   return undoAction->getName();
 }
 
+// ----- RenameSheetCommand -----
+
+RenameSheetCommand::RenameSheetCommand( KSpreadSheet* s, QString name )
+{
+  sheet = s;
+  if( s ) oldName = s->tableName();
+  newName = name;
+}
+
+QString RenameSheetCommand::name() const
+{
+  return i18n("Rename Sheet");
+}
+
+void RenameSheetCommand::execute()
+{
+  if( sheet )
+    sheet->setTableName( newName );
+}
+
+void RenameSheetCommand::unexecute()
+{
+  if( sheet )
+    sheet->setTableName( oldName );
+}
+
 // ----- HideSheetCommand -----
 
 HideSheetCommand::HideSheetCommand( KSpreadSheet* sheet )

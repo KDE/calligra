@@ -46,6 +46,27 @@ protected:
   KSpreadUndoAction* undoAction;
 };
 
+/**
+ * Class RenameSheetCommand implements a command for renaming a sheet.
+ *
+ * \sa KSpreadSheet::setTableName
+ */
+
+class RenameSheetCommand : public KCommand
+{
+public:
+  RenameSheetCommand( KSpreadSheet* sheet, QString name );
+  
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+  
+protected:
+  KSpreadSheet* sheet;
+  QString oldName;
+  QString newName;
+};
+
 class HideSheetCommand : public KCommand
 {
 public:
