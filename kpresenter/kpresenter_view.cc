@@ -2427,6 +2427,7 @@ void KPresenterView::objectSelectedChanged()
     actionTextBold->setEnabled(isText);
     actionTextItalic->setEnabled(isText);
     actionTextUnderline->setEnabled(isText);
+    actionFormatStrikeOut->setEnabled(isText);
     actionFormatSuper->setEnabled(isText);
     actionFormatSub->setEnabled(isText);
     actionEditFind->setEnabled(isText && page->kTxtObj());

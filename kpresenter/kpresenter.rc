@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="12">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="13">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -183,6 +183,7 @@
   <Action name="text_bold"/>
   <Action name="text_italic"/>
   <Action name="text_underline"/>
+  <Action name="format_strike"/>
   <Separator/>
   <Action name="text_alignleft"/>
   <Action name="text_aligncenter"/>
