@@ -777,7 +777,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activePart = 0L;
   }
   setUpdatesEnabled( true );
-  updateRects();
 }
 
 QLabel * KoMainWindow::statusBarLabel() const
