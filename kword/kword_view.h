@@ -58,6 +58,7 @@ class KWStyleManager;
 class KWTableDia;
 class KWDocStruct;
 class KSpell;
+class QScrollView;
 
 /******************************************************************/
 /* Class: KWordFrame                                              */
@@ -557,10 +558,6 @@ public:
 
     void setDocument( KWordDocument *_doc );
 
-    QScrollBar *getVertScrollBar()
-    { return s_vert; }
-    QScrollBar *getHorzScrollBar()
-    { return s_horz; }
     KWordView *getView()
     { return view; }
     KWPage *getPaperWidget()
@@ -576,20 +573,12 @@ public:
 
     void showDocStruct( bool __show );
 
-    void setOffset( int _x, int _y )
-    { xOffset = _x; yOffset = _y; }
-
     void keyEvent( QKeyEvent *e )
     { keyPressEvent( e ); }
 
-    void setRanges();
-
-    void scrollTo( int _x, int _y )
-    { if ( _x != xOffset ) scrollH( _x ); if ( _y != yOffset ) scrollV( _y ); }
+    void scrollTo( int _x, int _y );
 
 protected slots:
-    void scrollH( int );
-    void scrollV( int );
     void unitChanged( QString );
     void reorganize();
 
@@ -602,9 +591,7 @@ protected:
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
 
-    int xOffset, yOffset;
     bool _show;
-    QScrollBar *s_vert, *s_horz;
     KoRuler *r_vert, *r_horz;
     KWPage *paperWidget;
     KWordDocument *doc;

@@ -5,8 +5,6 @@ class KWFormatContext;
 class KWordDocument;
 class KWCharAttribute;
 
-#include <qpainter.h>
-
 #include "format.h"
 #include "parag.h"
 
@@ -34,23 +32,23 @@ public:
     KWFormatContext( KWordDocument *_doc, unsigned int _frameSet );
     ~KWFormatContext();
 
-    void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true,
+    void init( KWParag *_parag, bool _fromStart = true,
                int _frame = -1, int _page = -1 );
-    void enterNextParag( QPainter &_painter, bool _updateCounters = true );
-    void skipCurrentParag( QPainter &_painter );
-    void gotoStartOfParag( QPainter &_painter );
-    void cursorGotoLine( unsigned int _textpos, QPainter &_painter );
+    void enterNextParag();
+    void skipCurrentParag();
+    void gotoStartOfParag();
+    void cursorGotoLine( unsigned int _textpos );
     /**
      * Assumes that '_textpos' is in the current line. It sets the cursor
      * to this position.
      */
-    void cursorGotoPos( unsigned int _textpos, QPainter &_painter );
+    void cursorGotoPos( unsigned int _textpos );
     /**
      * Move cursor to 'mx' and 'my' whis is given in pixels.
      */
-    void cursorGotoPixelLine( unsigned int mx, unsigned int my, QPainter &_painter );
-    void cursorGotoPixelInLine( unsigned int mx, unsigned int my, QPainter &_painter );
-    KWCharAttribute* getObjectType( unsigned int mx, unsigned int my, QPainter &_painter );
+    void cursorGotoPixelLine( unsigned int mx, unsigned int my );
+    void cursorGotoPixelInLine( unsigned int mx, unsigned int my );
+    KWCharAttribute* getObjectType( unsigned int mx, unsigned int my );
     /**
      * Move the cursor to the next character very fast. Return -1 if the next character
      * is a special object like an image or such, returns 0 if there is a character
@@ -59,13 +57,13 @@ public:
      *
      * This function does not leave the current line.
      */
-    int cursorGotoNextChar( QPainter &_painter );
-    void cursorGotoRight( QPainter &_painter );
-    void cursorGotoRight( QPainter &_painter, int _pos );
-    void cursorGotoLeft( QPainter &_painter );
-    void cursorGotoUp( QPainter &_painter );
-    void cursorGotoDown( QPainter &_painter );
-    void cursorGotoLineStart( QPainter &_painter );
+    int cursorGotoNextChar();
+    void cursorGotoRight();
+    void cursorGotoRight( int _pos );
+    void cursorGotoLeft();
+    void cursorGotoUp();
+    void cursorGotoDown();
+    void cursorGotoLineStart();
     /**
      * Sets the cursor BEHIND the last character of the current line
      * if the line is the last one of the current paragrph.
@@ -74,12 +72,12 @@ public:
      * that is longer then an entire line. In these cases the cursor
      * is positioned BEHIN the last character, too.
      */
-    void cursorGotoLineEnd( QPainter &_painter );
-    void cursorGotoNextLine( QPainter &_painter );
-    void cursorGotoPrevLine( QPainter &_painter );
-    bool makeNextLineLayout( QPainter &_painter );
-    bool makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true );
-    void makeCounterLayout( QPainter &_painter );
+    void cursorGotoLineEnd();
+    void cursorGotoNextLine();
+    void cursorGotoPrevLine();
+    bool makeNextLineLayout();
+    bool makeLineLayout( bool _checkIntersects = true, bool _checkTabs = true );
+    void makeCounterLayout();
 
     bool isCursorAtParagStart();
     bool isCursorAtLineStart();
@@ -171,7 +169,7 @@ public:
 
     void apply( KWFormat &_format );
 
-    bool selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2, QPainter &painter );
+    bool selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2 );
 
     void setFrameSet( unsigned int _frameSet ) { frameSet = _frameSet; }
 

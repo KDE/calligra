@@ -637,7 +637,7 @@ void KWFrameDia::applyChanges()
             _frameSet->addFrame( frame );
             _frameSet->setAutoCreateNewFrame( false );
             doc->addFrameSet( _frameSet );
-            page->repaint( false );
+            page->viewport()->repaint( false );
             _frameSet->setAutoCreateNewFrame( true );
             return;
         }
@@ -708,7 +708,7 @@ void KWFrameDia::applyChanges()
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
-    page->repaint( false );
+    page->viewport()->repaint( false );
 }
 
 /*================================================================*/

@@ -386,7 +386,7 @@ public:
     void init( unsigned int x, unsigned int y, unsigned int width, unsigned int height );
     void init();
     void recalcCols();
-    void recalcRows( QPainter &_painter );
+    void recalcRows();
 
     unsigned int getRows() { return rows; }
     unsigned int getCols() { return cols; }
@@ -410,10 +410,10 @@ public:
     void selectUntil( KWFrameSet *fs );
     bool isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned int &col );
 
-    void insertRow( unsigned int _idx, QPainter &_painter, bool _recalc = true, bool _removeable = false );
+    void insertRow( unsigned int _idx, bool _recalc = true, bool _removeable = false );
     void insertCol( unsigned int _idx );
 
-    void deleteRow( unsigned int _idx, QPainter &_painter, bool _recalc = true );
+    void deleteRow( unsigned int _idx, bool _recalc = true );
     void deleteCol( unsigned int _idx );
 
     void setShowHeaderOnAllPages( bool s )
@@ -428,8 +428,8 @@ public:
 
     bool isActive() { return active; }
 
-    bool joinCells( QPainter &_painter );
-    bool splitCell( QPainter &_painter );
+    bool joinCells();
+    bool splitCell();
 
 protected:
     QList<Cell> cells;

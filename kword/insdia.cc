@@ -126,15 +126,10 @@ void KWInsertDia::setupTab1()
 /*================================================================*/
 void KWInsertDia::doInsert()
 {
-    QPainter p;
-    p.begin( page );
-
     if ( type == ROW )
-        grpMgr->insertRow( value->value() - ( rBefore->isChecked() ? 1 : 0 ), p );
+        grpMgr->insertRow( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
     else
         grpMgr->insertCol( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
-
-    p.end();
 
     doc->recalcFrames();
     doc->updateAllFrames();

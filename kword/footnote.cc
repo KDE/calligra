@@ -60,7 +60,7 @@ void KWFootNoteManager::recalc()
 }
 
 /*================================================================*/
-int KWFootNoteManager::findStart( KWFormatContext *_fc, QPainter &p )
+int KWFootNoteManager::findStart( KWFormatContext *_fc )
 {
     if ( _fc->getFrameSet() > 1 )
         return -1;
@@ -69,7 +69,7 @@ int KWFootNoteManager::findStart( KWFormatContext *_fc, QPainter &p )
         return start;
 
     KWFormatContext fc( doc, _fc->getFrameSet() );
-    fc.init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( _fc->getFrameSet() - 1 ) )->getFirstParag(), p );
+    fc.init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( _fc->getFrameSet() - 1 ) )->getFirstParag() );
     int curr = start;
     KWParag *parag = fc.getParag();
     unsigned int found = 0;

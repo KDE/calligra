@@ -156,7 +156,7 @@ public:
     unsigned int getNumFrameSets()
     { return frames.count(); }
     void addFrameSet( KWFrameSet *f )
-    { frames.append(f); updateAllRanges(); updateAllFrames(); /*updateAllViews(0L);*/ }
+    { frames.append(f); updateAllFrames(); /*updateAllViews(0L);*/ }
     void delFrameSet( KWFrameSet *f )
     { frames.remove( f ); }
 
@@ -250,10 +250,10 @@ public:
     void drawMarker( KWFormatContext &_fc, QPainter *_painter, int xOffset, int yOffset );
 
     void updateAllViews( KWordView *_view, bool _clear = false );
+    void updateAllViewportSizes();
     void setUnitToAll();
-    void updateAllRanges();
     void updateAllCursors();
-    void drawAllBorders( QPainter *_painter = 0 );
+    void drawAllBorders();
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
     void hideAllFrames();
@@ -261,7 +261,7 @@ public:
     int getPages() { return pages; }
 
     void setPages( int _pages )
-    { pages = _pages; updateAllRanges(); }
+    { pages = _pages; }
 
     KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
@@ -273,24 +273,24 @@ public:
     void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
     KWFormatContext *getSelStart()
-    { return &selStart; emit selectionOnOff(); }
+    { return &selStart; }
     void setSelEnd( KWFormatContext &_fc )
-    { selEnd = _fc; emit selectionOnOff(); }
+    { selEnd = _fc; }
     KWFormatContext *getSelEnd()
     { return &selEnd; }
     void drawSelection( QPainter &_painter, int xOffset, int yOffset );
     void setSelection( bool _has )
-    { hasSelection = _has; emit selectionOnOff(); }
+    { hasSelection = _has; }
     bool has_selection()
     { return hasSelection; }
 
-    void deleteSelectedText( KWFormatContext *_fc, QPainter &_painter );
+    void deleteSelectedText( KWFormatContext *_fc );
     void copySelectedText();
     void setFormat( KWFormat &_format );
 
     void paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format = 0L, const QString &_mime = "text/plain" );
 
-    void appendPage( unsigned int _page, QPainter &_painter );
+    void appendPage( unsigned int _page );
 
     ProcessingType getProcessingType()
     { return processingType; }
@@ -388,6 +388,9 @@ public:
 
     KWAutoFormat &getAutoFormat() { return autoFormat; }
 
+    void emitSelectioOnOff()
+    { emit selectionOnOff(); }
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );

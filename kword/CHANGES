@@ -1258,3 +1258,21 @@ Reggie, 6.6.1999:
 -----------------
 - Checking some values to avoid crashes in
   KWFormatContext::selectWord()
+
+Reggie, 7.6 - 9.6 1999
+----------------------
+- As quite some code of KWord was real a mess, I 
+  started with a big cleanup:
+  - KWPage is now a QScrollView (no scrolling magic in KWord anymore :-)
+  - No double buffering for painting anymore (this was too slow and
+    used too much memory). But most of the painting stuff is already
+    quite flicker-free, although it's painted directly without double 
+    bufferning - but I'll work on that a bit more
+  - No open QPainters are passed around in the KWFormatContext anymore,
+    as these painters were not needed anymore since a long time now => I
+    could remove the hacks to avoid two opened painters at one paint device
+  - Reorganized/Rewrite some code in KWPage => no doubled code there anymore
+  - Selecting text flickers not that much anymore (I'll also work on that more)
+
+BUTTTTHH (tm): I didn't test it lot yet, so many things are for sure broken. I'll do
+testing + fixing + more cleanups from now on

@@ -651,8 +651,8 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
         }
     }
 
+    updateAllViewportSizes();
     recalcWholeText( _cursor, _fast );
-    updateAllRanges();
 }
 
 /*================================================================*/
@@ -1861,7 +1861,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     }
 
     // paint it character for character. Provisionally! !!HACK!!
-    _fc.cursorGotoLineStart( _painter );
+    _fc.cursorGotoLineStart();
 
     // Init font and style
     _painter.setFont( *_fc.loadFont( this ) );
@@ -1906,7 +1906,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                                             ( ( _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt() )
                                               - ( ( KWCharImage* )text[ _fc.getTextPos() ].attrib )->getImage()->height() ) ),
                                     *( ( KWCharImage* )text[ _fc.getTextPos() ].attrib )->getImage() );
-                _fc.cursorGotoNextChar( _painter );
+                _fc.cursorGotoNextChar();
             } break;
             case ID_KWCharVariable:
             {
@@ -1944,7 +1944,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                                    _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
                                    _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus, v->getText() );
 
-                _fc.cursorGotoNextChar( _painter );
+                _fc.cursorGotoNextChar();
             } break;
             case ID_KWCharFootNote:
             {
@@ -1982,12 +1982,12 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                                    _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
                                    _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus, fn->getText() );
 
-                _fc.cursorGotoNextChar( _painter );
+                _fc.cursorGotoNextChar();
             } break;
             case ID_KWCharTab:
             {
                 lastPTPos = _fc.getPTPos();
-                _fc.cursorGotoNextChar( _painter );
+                _fc.cursorGotoNextChar();
                 QPen _pen = QPen( _painter.pen() );
                 _painter.setPen( QPen( blue, 1, DotLine ) );
                 if ( _viewFormattingChars )
@@ -2030,8 +2030,8 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 
             // Test next character.
             i++;
-            if ( _fc.cursorGotoNextChar( _painter ) != 1 || ( text[ _fc.getTextPos() ].c == ' ' &&
-                                                              _fc.getParag()->getParagLayout()->getFlow() == KWParagLayout::BLOCK ) || i >= 199 )
+            if ( _fc.cursorGotoNextChar() != 1 || ( text[ _fc.getTextPos() ].c == ' ' &&
+                                                    _fc.getParag()->getParagLayout()->getFlow() == KWParagLayout::BLOCK ) || i >= 199 )
             {
                 // there was a blank _or_ there will be a font switch _or_ a special object next, so print
                 // what we have so far
@@ -2061,7 +2061,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                                 int ly = _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
                                     _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus + fm.underlinePos() + fm.lineWidth() / 2;
                                 int lx1 = _fc.getPTPos();
-                                _fc.cursorGotoNextChar( _painter );
+                                _fc.cursorGotoNextChar();
                                 goneForward = true;
                                 int lx2 = _fc.getPTPos();
                                 _painter.drawLine( lx1, ly, lx2, ly );
@@ -2070,7 +2070,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 
                     }
                     lastPTPos = _fc.getPTPos();
-                    if ( !goneForward ) _fc.cursorGotoNextChar( _painter );
+                    if ( !goneForward ) _fc.cursorGotoNextChar();
                     if ( _viewFormattingChars )
                         _painter.fillRect( lastPTPos + ( _fc.getPTPos() - lastPTPos ) / 2, _fc.getPTY() + _fc.getPTMaxAscender() / 2, 1, 1, blue );
                 }
@@ -2204,9 +2204,24 @@ void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
                 if ( viewPtr != _view )
                 {
                     if ( _clear ) viewPtr->getGUI()->getPaperWidget()->clear();
-                    viewPtr->getGUI()->getPaperWidget()->repaint( false );
+                    viewPtr->getGUI()->getPaperWidget()->viewport()->repaint( false );
                 }
             }
+        }
+    }
+}
+
+/*================================================================*/
+void KWordDocument::updateAllViewportSizes()
+{
+    KWordView *viewPtr;
+
+    if ( !m_lstViews.isEmpty() )
+    {
+        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        {
+            if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
+                viewPtr->getGUI()->getPaperWidget()->resizeContents( getPTPaperWidth(), getPTPaperHeight() * pages );
         }
     }
 }
@@ -2232,24 +2247,6 @@ void KWordDocument::setUnitToAll()
             {
                 viewPtr->getGUI()->getHorzRuler()->setUnit( getUnit() );
                 viewPtr->getGUI()->getVertRuler()->setUnit( getUnit() );
-            }
-        }
-    }
-}
-
-/*================================================================*/
-void KWordDocument::updateAllRanges()
-{
-    KWordView *viewPtr;
-
-    if ( !m_lstViews.isEmpty() )
-    {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        {
-            if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
-            {
-                if ( viewPtr->getGUI() )
-                    viewPtr->getGUI()->setRanges();
             }
         }
     }
@@ -2294,8 +2291,9 @@ void KWordDocument::updateAllStyleLists()
 }
 
 /*================================================================*/
-void KWordDocument::drawAllBorders( QPainter *_painter  )
+void KWordDocument::drawAllBorders()
 {
+    QPainter *_painter = 0L;
     KWordView *viewPtr;
     QPainter p;
 
@@ -2400,12 +2398,12 @@ void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset 
     {
         _painter.drawRect( tmpFC1.getPTPos() - xOffset, tmpFC1.getPTY() - yOffset,
                            tmpFC1.getPTLeft() + tmpFC1.getPTWidth() - tmpFC1.getPTPos(), tmpFC1.getLineHeight() );
-        tmpFC1.makeNextLineLayout( _painter );
+        tmpFC1.makeNextLineLayout();
 
         while ( tmpFC1.getPTY() < tmpFC2.getPTY() || tmpFC1.getFrame() != tmpFC2.getFrame() )
         {
             _painter.drawRect( tmpFC1.getPTLeft() - xOffset, tmpFC1.getPTY() - yOffset, tmpFC1.getPTWidth(), tmpFC1.getLineHeight() );
-            tmpFC1.makeNextLineLayout( _painter );
+            tmpFC1.makeNextLineLayout();
         }
 
         _painter.drawRect( tmpFC2.getPTLeft() - xOffset, tmpFC2.getPTY() - yOffset, tmpFC2.getPTPos() - tmpFC2.getPTLeft(), tmpFC2.getLineHeight() );
@@ -2416,7 +2414,7 @@ void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset 
 }
 
 /*================================================================*/
-void KWordDocument::deleteSelectedText( KWFormatContext *_fc, QPainter &_painter )
+void KWordDocument::deleteSelectedText( KWFormatContext *_fc )
 {
     KWFormatContext tmpFC2( this, selStart.getFrameSet() - 1 );
     KWFormatContext tmpFC1( this, selStart.getFrameSet() - 1 );
@@ -2446,13 +2444,13 @@ void KWordDocument::deleteSelectedText( KWFormatContext *_fc, QPainter &_painter
             {
                 parag = _fc->getParag()->getNext();
                 dynamic_cast<KWTextFrameSet*>( frames.at( _fc->getFrameSet() - 1 ) )->deleteParag( _fc->getParag() );
-                _fc->init( parag, _painter );
+                _fc->init( parag );
             }
             else if ( _fc->getParag()->getPrev() )
             {
                 parag = _fc->getParag()->getPrev();
                 dynamic_cast<KWTextFrameSet*>( frames.at( _fc->getFrameSet() - 1 ) )->deleteParag( _fc->getParag() );
-                _fc->init( parag, _painter );
+                _fc->init( parag );
             }
         }
         _fc->setTextPos( tmpFC1.getTextPos() );
@@ -2487,7 +2485,7 @@ void KWordDocument::deleteSelectedText( KWFormatContext *_fc, QPainter &_painter
         tmpFC2.getParag()->deleteText( 0, tmpFC2.getTextPos() );
 
         dynamic_cast<KWTextFrameSet*>( frames.at( _fc->getFrameSet() - 1 ) )->joinParag( tmpFC1.getParag(), tmpFC2.getParag() );
-        _fc->init( tmpFC1.getParag(), _painter );
+        _fc->init( tmpFC1.getParag() );
         _fc->setTextPos( tmpFC1.getTextPos() );
 
         if ( _fc->getParag()->getTextLen() == 0 )
@@ -2496,13 +2494,13 @@ void KWordDocument::deleteSelectedText( KWFormatContext *_fc, QPainter &_painter
             {
                 parag = _fc->getParag()->getNext();
                 dynamic_cast<KWTextFrameSet*>( frames.at( _fc->getFrameSet() - 1 ) )->deleteParag( _fc->getParag() );
-                _fc->init( parag, _painter );
+                _fc->init( parag );
             }
             else if ( _fc->getParag()->getPrev() )
             {
                 parag = _fc->getParag()->getPrev();
                 dynamic_cast<KWTextFrameSet*>( frames.at( _fc->getFrameSet() - 1 ) )->deleteParag( _fc->getParag() );
-                _fc->init( parag, _painter );
+                _fc->init( parag );
             }
         }
         _fc->setTextPos( tmpFC1.getTextPos() );
@@ -2766,7 +2764,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < len; j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
                 delete format;
             }
@@ -2779,7 +2777,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
 
                 delete firstParag;
@@ -2805,7 +2803,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j <= len; j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
@@ -2818,7 +2816,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < len; j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
                 delete format;
             }
@@ -2830,7 +2828,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
@@ -2842,7 +2840,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
 
                 delete firstParag->getNext();
@@ -2868,15 +2866,15 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < len; j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
                 _page->keyPressEvent( &ev );
 
                 painter.begin( _page );
-                _fc->cursorGotoLeft( painter );
-                _fc->cursorGotoLeft( painter );
+                _fc->cursorGotoLeft();
+                _fc->cursorGotoLeft();
                 painter.end();
                 KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
 
@@ -2902,14 +2900,14 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 
                 painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-                    _fc->cursorGotoRight( painter );
+                    _fc->cursorGotoRight();
                 painter.end();
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
                 _page->keyPressEvent( &ev );
 
                 painter.begin( _page );
-                _fc->cursorGotoLeft( painter );
-                _fc->cursorGotoLeft( painter );
+                _fc->cursorGotoLeft();
+                _fc->cursorGotoLeft();
                 painter.end();
 
                 KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
@@ -2935,12 +2933,12 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
         calcParag = _fc->getParag();
     if ( calcParag->getPrev() )
         calcParag = calcParag->getPrev();
-    
+
     recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
 }
 
 /*================================================================*/
-void KWordDocument::appendPage( unsigned int _page, QPainter &_painter )
+void KWordDocument::appendPage( unsigned int _page )
 {
     pages++;
     QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
@@ -2988,17 +2986,12 @@ void KWordDocument::appendPage( unsigned int _page, QPainter &_painter )
 
         frameList.clear();
     }
-    updateAllRanges();
-    drawAllBorders( &_painter );
+    drawAllBorders();
     updateAllFrames();
+    updateAllViewportSizes();
 
     if ( hasHeader() || hasFooter() )
-    {
-        QPaintDevice *pd = _painter.device();
-        _painter.end();
         recalcFrames( false, true );
-        _painter.begin( pd );
-    }
 }
 
 /*================================================================*/
@@ -3171,7 +3164,7 @@ KWFrameSet *KWordDocument::getFirstSelectedFrameSet()
 
 /*================================================================*/
 void KWordDocument::print( QPainter *painter, QPrinter *printer,
-			   float /*left_margin*/, float /*top_margin*/ )
+                           float /*left_margin*/, float /*top_margin*/ )
 {
     QList<KWFormatContext> fcList;
     fcList.setAutoDelete( true );
@@ -3185,7 +3178,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
         {
             frames.at( i )->setCurrent( 0 );
             fc = new KWFormatContext( this, i + 1 );
-            fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( i ) )->getFirstParag(), *painter, false, true );
+            fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( i ) )->getFirstParag(), true );
             fcList.append( fc );
         }
     }
@@ -3292,18 +3285,18 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
                         default: break;
                         }
                     }
-                    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( j ) )->getFirstParag(), *painter, true, true,
+                    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( j ) )->getFirstParag(), true,
                               frames.at( j )->getCurrent() + 1, i + 1 );
                     if ( static_cast<int>( frames.at( j )->getNumFrames() - 1 ) > static_cast<int>( frames.at( j )->getCurrent() ) )
                         frames.at( j )->setCurrent( frames.at( j )->getCurrent() + 1 );
                     reinit = false;
                 }
                 if ( reinit )
-                    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( fc->getFrameSet() - 1 ) )->getFirstParag(), *painter, false, true );
+                    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( fc->getFrameSet() - 1 ) )->getFirstParag(), true );
                 while ( !bend )
                 {
                     printLine( *fc, *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight(), false, false );
-                    bend = !fc->makeNextLineLayout( *painter );
+                    bend = !fc->makeNextLineLayout();
                 }
             } break;
             default: minus++; break;

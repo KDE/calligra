@@ -45,7 +45,7 @@ public:
 
     void recalc();
 
-    int findStart( KWFormatContext *_fc, QPainter &p );
+    int findStart( KWFormatContext *_fc );
 
     bool showFootNotesSuperscript() { return superscript; }
     void setShowFootNotesSuperscript( bool _s ) { superscript = _s; }

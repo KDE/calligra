@@ -96,15 +96,15 @@ void KWDeleteDia::doDelete()
     p.begin( page );
 
     if ( type == ROW )
-        grpMgr->deleteRow( value->value() - 1, p );
+        grpMgr->deleteRow( value->value() - 1 );
     else
         grpMgr->deleteCol( value->value() - 1 );
 
     page->getCursor()->setFrameSet( doc->getFrameSetNum( grpMgr->getFrameSet( 0, 0 ) ) + 1 );
-    doc->drawMarker( *page->getCursor(), &p, page->getXOffset(), page->getYOffset() );
-    page->getCursor()->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( page->getCursor()->getFrameSet() - 1 ) )->getFirstParag(), p, true, true );
-    page->getCursor()->gotoStartOfParag( p );
-    page->getCursor()->cursorGotoLineStart( p );
+    doc->drawMarker( *page->getCursor(), &p, page->contentsX(), page->contentsY() );
+    page->getCursor()->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( page->getCursor()->getFrameSet() - 1 ) )->getFirstParag(), true );
+    page->getCursor()->gotoStartOfParag();
+    page->getCursor()->cursorGotoLineStart();
     p.end();
 
     doc->recalcFrames();

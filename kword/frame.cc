@@ -1645,14 +1645,14 @@ void KWGroupManager::recalcCols()
 }
 
 /*================================================================*/
-void KWGroupManager::recalcRows( QPainter &_painter )
+void KWGroupManager::recalcRows()
 {
     // remove atomatically added headers
     for ( unsigned int j = 0; j < rows; j++ )
     {
         if ( getFrameSet( j, 0 )->isRemoveableHeader() )
         {
-            deleteRow( j, _painter, false );
+            deleteRow( j, false );
             j--;
         }
     }
@@ -1697,7 +1697,7 @@ void KWGroupManager::recalcRows( QPainter &_painter )
                  static_cast<int>( ( doc->getFrameSet( 0 )->getFrame( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) * doc->getColumns() )->bottom() ) ) )
             {
                 if ( doc->getPages() < getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 2 )
-                    doc->appendPage( doc->getPages() - 1, _painter );
+                    doc->appendPage( doc->getPages() - 1 );
                 {
                     _addRow = true;
                     y = doc->getFrameSet( 0 )->getFrame( ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * doc->getColumns() )->y();
@@ -1708,7 +1708,7 @@ void KWGroupManager::recalcRows( QPainter &_painter )
         if ( _addRow && showHeaderOnAllPages )
         {
             hasTmpHeaders = true;
-            insertRow( j, _painter, false, true );
+            insertRow( j, false, true );
         }
 
         for ( i = 0; i < cols; i++ )
@@ -1731,7 +1731,7 @@ void KWGroupManager::recalcRows( QPainter &_painter )
 
     if ( getBoundingRect().y() + getBoundingRect().height() >
          static_cast<int>( doc->getPTPaperHeight() * doc->getPages() ) )
-        doc->appendPage( doc->getPages() - 1, _painter );
+        doc->appendPage( doc->getPages() - 1 );
 
   // Reggie: UHHHHHHHHHHHH: Ugly and slow but it helps for now
     Cell *c;
@@ -1893,7 +1893,7 @@ bool KWGroupManager::isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned 
 }
 
 /*================================================================*/
-void KWGroupManager::insertRow( unsigned int _idx, QPainter &_painter, bool _recalc, bool _removeable )
+void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeable )
 {
     unsigned int i = 0;
     unsigned int _rows = rows;
@@ -1940,7 +1940,7 @@ void KWGroupManager::insertRow( unsigned int _idx, QPainter &_painter, bool _rec
     }
 
     if ( _recalc )
-        recalcRows( _painter );
+        recalcRows();
 }
 
 /*================================================================*/
@@ -1993,7 +1993,7 @@ void KWGroupManager::insertCol( unsigned int _idx )
 }
 
 /*================================================================*/
-void KWGroupManager::deleteRow( unsigned int _idx, QPainter &_painter, bool _recalc )
+void KWGroupManager::deleteRow( unsigned int _idx, bool _recalc )
 {
     for ( unsigned int i = 0; i < cells.count(); i++ )
     {
@@ -2011,7 +2011,7 @@ void KWGroupManager::deleteRow( unsigned int _idx, QPainter &_painter, bool _rec
     rows--;
 
     if ( _recalc )
-        recalcRows( _painter );
+        recalcRows();
 }
 
 /*================================================================*/
@@ -2054,11 +2054,11 @@ void KWGroupManager::updateTempHeaders()
                 p.begin( &pic );
 
                 KWFormatContext fc( doc, doc->getFrameSetNum( fs ) + 1 );
-                fc.init( dynamic_cast<KWTextFrameSet*>( fs )->getFirstParag(), p, true, true );
+                fc.init( dynamic_cast<KWTextFrameSet*>( fs )->getFirstParag(), true );
 
                 bool bend = false;
                 while ( !bend )
-                    bend = !fc.makeNextLineLayout( p );
+                    bend = !fc.makeNextLineLayout();
 
                 p.end();
             }
@@ -2079,7 +2079,7 @@ void KWGroupManager::ungroup()
 }
 
 /*================================================================*/
-bool KWGroupManager::joinCells( QPainter &_painter )
+bool KWGroupManager::joinCells()
 {
     enum Orientation {Vertical, Horizontal};
 
@@ -2203,7 +2203,7 @@ bool KWGroupManager::joinCells( QPainter &_painter )
                 cell->frameSet->setVisible( false );
                 cell->rows = 0;
             }
-            recalcRows( _painter );
+            recalcRows();
         } break;
         }
 
@@ -2214,7 +2214,7 @@ bool KWGroupManager::joinCells( QPainter &_painter )
 }
 
 /*================================================================*/
-bool KWGroupManager::splitCell( QPainter &_painter )
+bool KWGroupManager::splitCell()
 {
     unsigned int col, row;
     if ( !isOneSelected( 0L, row, col ) ) return false;
@@ -2228,7 +2228,7 @@ bool KWGroupManager::splitCell( QPainter &_painter )
             getCell( i + cell->row, col )->rows = 1;
             getCell( i + cell->row, col )->frameSet->setVisible( true );
         }
-        recalcRows( _painter );
+        recalcRows();
 
         return true;
     }

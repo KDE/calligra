@@ -22,9 +22,12 @@
 #include "paraglayout.h"
 #include "searchdia.h"
 
-#include <qwidget.h>
+#include <qscrollview.h>
 #include <qpixmap.h>
 #include <qtimer.h>
+#include <qstringlist.h>
+
+#include <X11/Xlib.h>
 
 class KWordGUI;
 class KWordDocument;
@@ -39,7 +42,7 @@ class KWFrameDia;
 /* Class: KWPage                                                  */
 /******************************************************************/
 
-class KWPage : public QWidget
+class KWPage : public QScrollView
 {
     Q_OBJECT
 
@@ -51,40 +54,19 @@ public:
     { doc = _doc; }
     void init();
 
-    void mousePressEvent( QMouseEvent* e );
-    void mouseMoveEvent( QMouseEvent* e );
-    void mouseReleaseEvent( QMouseEvent* e );
-    void mouseDoubleClickEvent( QMouseEvent *e );
-    void paintEvent( QPaintEvent* e );
+    void viewportMousePressEvent( QMouseEvent* e );
+    void viewportMouseMoveEvent( QMouseEvent* e );
+    void viewportMouseReleaseEvent( QMouseEvent* e );
+    void viewportMouseDoubleClickEvent( QMouseEvent *e );
+    void viewportPaintEvent( QPaintEvent *e );
     void keyPressEvent( QKeyEvent * e );
-    void resizeEvent( QResizeEvent *e );
 
-    /**
-     * @return 0 if the cursor is visible with respect to the
-     *         y-coordinate. Mention that the cursor may be never the less
-     *         invisible because of its x-coordinate. 1 is returned if the cursor
-     *         is under the visible area and -1 if the cursor is above.
-     *
-     * @see #isCursorXVisible
-     */
     int isCursorYVisible( KWFormatContext &_fc );
-    /**
-     * @see #isCursorYVisible
-     */
     int isCursorXVisible( KWFormatContext &_fc );
 
     void scrollToCursor( KWFormatContext &_fc );
     void scrollToParag( KWParag *_parag );
     void scrollToOffset( int _x, int _y, KWFormatContext &_fc );
-
-    void setXOffset( int _x )
-    { xOffset = _x; calcVisiblePages(); }
-    void setYOffset( int _y )
-    { yOffset = _y; calcVisiblePages(); }
-    int getXOffset() { return xOffset; }
-    int getYOffset() { return yOffset; }
-
-    void scroll( int dx, int dy );
 
     void formatChanged( KWFormat &_format, bool _redraw = true );
     void setFlow( KWParagLayout::Flow _flow );
@@ -162,8 +144,6 @@ public:
 
     void setPartEntry( KoDocumentEntry e ) { partEntry = e; }
 
-    void clear() { buffer.fill( white ); drawBuffer(); }
-
     bool find( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
                bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
     bool findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
@@ -188,6 +168,11 @@ public:
 
     void insertVariable( VariableType type );
     void insertFootNote( KWFootNote *fn );
+
+    void clear();
+
+    virtual void resizeContents( int w, int h );
+    virtual void setContentsPos( int x, int y );
 
 public slots:
     void newLeftIndent( int _left );
@@ -219,6 +204,7 @@ protected slots:
     void startBlinkCursor();
     void blinkCursor();
     void stopBlinkCursor();
+    void contentsWillMove( int, int );
 
 protected:
     unsigned int ptLeftBorder();
@@ -236,21 +222,8 @@ protected:
     void focusOutEvent( QFocusEvent * );
     void keyReleaseEvent( QKeyEvent *e );
 
-    /**
-     * Looks at 'yOffset' and 'paperHeight' and calculates the first and
-     * last visible pages. The values are stored in 'firstVisiblePage' and
-     * 'lastVisiblePages'.
-     *
-     * @see #yOffset
-     * @see #paperHeight
-     * @see #firstVisiblePage
-     * @see #lastVisiblePage
-     */
     void calcVisiblePages();
 
-    void drawBuffer();
-    void drawBuffer( QRect _rect );
-    void copyBuffer();
     void setupMenus();
     void mmUncheckAll();
 
@@ -263,42 +236,69 @@ protected:
     void repaintTableHeaders( KWGroupManager *grpMgr );
 
     void startDrag();
-    virtual void dragEnterEvent( QDragEnterEvent *e );
-    virtual void dragMoveEvent( QDragMoveEvent *e );
-    virtual void dragLeaveEvent( QDragLeaveEvent *e );
-    virtual void dropEvent( QDropEvent *e );
+    virtual void viewportDragEnterEvent( QDragEnterEvent *e );
+    virtual void viewportDragMoveEvent( QDragMoveEvent *e );
+    virtual void viewportDragLeaveEvent( QDragLeaveEvent *e );
+    virtual void viewportDropEvent( QDropEvent *e );
+    virtual void viewportResizeEvent( QResizeEvent *e );
     bool isInSelection( KWFormatContext *_fc );
+
+    void startProcessKeyEvent();
+    void stopProcessKeyEvent();
+    bool kInsertTableRow();
+    bool kContinueSelection( QKeyEvent *e );
+    bool kHome( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kEnd( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kRight( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kLeft( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kUp( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kDown( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kDelete( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kBackspace( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kTab( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+    bool kDefault( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
+
+    void vmmEdit( unsigned int mx, unsigned int my );
+    void vmmEditFrameSizeAll( unsigned int mx, unsigned int my );
+    void vmmEditFrameSizeVert( unsigned int mx, unsigned int my );
+    void vmmEditFrameSizeHorz( unsigned int mx, unsigned int my );
+    void vmmEditFrameFDiag( unsigned int mx, unsigned int my );
+    void vmmEditFrameBDiag( unsigned int mx, unsigned int my );
+    void vmmCreate( unsigned int mx, unsigned int my );
+    bool vmpEdit( unsigned int mx, unsigned int my );
+    void vmpEditFrame( QMouseEvent *e, unsigned int mx, unsigned int my );
+    void vmpCreate( unsigned int mx, unsigned int my );
+    void vmpCreatePixmap( unsigned int mx, unsigned int my );
+    void vmpMidButton();
+    void vmpRightButton( QMouseEvent *e, unsigned int mx, unsigned int my );
+    void vmrEdit();
+    void vmrEditFrame( unsigned int mx, unsigned int my );
+    void vmrCreateText();
+    void vmrCreatePixmap();
+    void vmrCreatePartAnSoOn();
+    void vmrCreateTable();
+    void vmdEdit( unsigned int mx, unsigned int my );
+    void vmdEditFrame( unsigned int mx, unsigned int my );
+
+    void paintPicture( QPainter &painter, int i );
+    void paintPart( QPainter &painter, int i );
+    void paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPaintEvent *e );
+    void finishPainting( QPaintEvent *e, QPainter &painter );
+
+    void repaintScreen( bool erase );
+    bool allowBreak1( KWFormatContext *paintfc, unsigned int i );
+    void repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASAP = true );
 
     KWordDocument *doc;
     bool markerIsVisible;
-    bool paint_directly, has_to_copy;
 
-    /**
-     * The xOffset in zoomed pixels.
-     */
-    unsigned int xOffset;
-    /**
-     * The yOffset in zoomed pixels.
-     */
-    unsigned int yOffset;
-
-    /**
-     * The first ( partial? ) visible page.
-     *
-     * @see #calcVisiblePages
-     */
     unsigned int firstVisiblePage;
-    /**
-     * The last ( partial? ) visible page.
-     *
-     * @see #calcVisiblePages
-     */
     unsigned int lastVisiblePage;
 
     KWFormatContext *fc;
 
     KWordGUI *gui;
-    QPixmap buffer;
     KWFormat format;
 
     bool mousePressed;
@@ -318,7 +318,7 @@ protected:
     KWFrameDia *frameDia;
     QRect insRect;
 
-    bool redrawAllWhileScrolling, doRaster;
+    bool doRaster;
     QString pixmap_name;
 
     KoDocumentEntry partEntry;
@@ -340,6 +340,13 @@ protected:
 
     QTimer blinkTimer;
     bool cursorIsVisible;
+
+    XKeyboardControl kbdc;
+    XKeyboardState kbds;
+    bool keyboardRepeat, continueSelection, redrawAllWhileScrolling;
+
+    KWParag *cachedParag;
+    QStringList cachedLines;
 
 };
 

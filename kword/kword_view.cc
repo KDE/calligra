@@ -20,10 +20,10 @@
 #include <qkeycode.h>
 #include <qpixmap.h>
 #include <qevent.h>
-#include <qscrollbar.h>
 #include <qmessagebox.h>
 #include <qclipboard.h>
 #include <qdropsite.h>
+#include <qscrollview.h>
 
 #include "kword_view.h"
 #include "kword_doc.h"
@@ -844,7 +844,7 @@ void KWordView::viewFormattingChars()
 {
     m_vMenuView->setItemChecked( m_idMenuView_FormattingChars, !m_vMenuView->isItemChecked( m_idMenuView_FormattingChars ) );
     _viewFormattingChars = m_vMenuView->isItemChecked( m_idMenuView_FormattingChars );
-    gui->getPaperWidget()->repaint( false );
+    gui->getPaperWidget()->viewport()->repaint( false );
 
     sendFocusEvent();
 }
@@ -854,7 +854,7 @@ void KWordView::viewFrameBorders()
 {
     m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, !m_vMenuView->isItemChecked( m_idMenuView_FrameBorders ) );
     _viewFrameBorders = m_vMenuView->isItemChecked( m_idMenuView_FrameBorders );
-    gui->getPaperWidget()->repaint( false );
+    gui->getPaperWidget()->viewport()->repaint( false );
 
     sendFocusEvent();
 }
@@ -864,7 +864,7 @@ void KWordView::viewTableGrid()
 {
     m_vMenuView->setItemChecked( m_idMenuView_TableGrid, !m_vMenuView->isItemChecked( m_idMenuView_TableGrid ) );
     _viewTableGrid = m_vMenuView->isItemChecked( m_idMenuView_TableGrid );
-    gui->getPaperWidget()->repaint( false );
+    gui->getPaperWidget()->viewport()->repaint( false );
 
     sendFocusEvent();
 }
@@ -1014,10 +1014,7 @@ void KWordView::insertVariableOther()
 /*===============================================================*/
 void KWordView::insertFootNoteEndNote()
 {
-    QPainter p;
-    p.begin( gui->getPaperWidget() );
-    int start = m_pKWordDoc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor(), p );
-    p.end();
+    int start = m_pKWordDoc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor() );
 
     if ( start == -1 )
         QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Currently you can only insert footnotes or\n"
@@ -1401,11 +1398,11 @@ void KWordView::tableJoinCells()
     {
         QPainter painter;
         painter.begin( gui->getPaperWidget() );
-        if ( !grpMgr->joinCells( painter ) )
+        if ( !grpMgr->joinCells() )
             QMessageBox::critical( 0L, i18n( "Error" ), i18n( "You have to select some cells which are next to each other\n"
                                                               "and are not already joined." ), i18n( "OK" ) );
         painter.end();
-        gui->getPaperWidget()->repaint( false );
+        gui->getPaperWidget()->viewport()->repaint( false );
     }
 
     sendFocusEvent();
@@ -1423,11 +1420,11 @@ void KWordView::tableSplitCells()
     {
         QPainter painter;
         painter.begin( gui->getPaperWidget() );
-        if ( !grpMgr->splitCell( painter ) )
+        if ( !grpMgr->splitCell() )
             QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Currently it's only possible to split a joined cell.\n"
                                                               "So, you have to selecte a joined cell." ), i18n( "OK" ) );
         painter.end();
-        gui->getPaperWidget()->repaint( false );
+        gui->getPaperWidget()->viewport()->repaint( false );
     }
 
     sendFocusEvent();
@@ -1447,7 +1444,7 @@ void KWordView::tableUngroupTable()
                                                                 "Do you really want to do that?" ), i18n( "Yes" ), i18n( "No" ) ) == 0 )
         {
             grpMgr->ungroup();
-            gui->getPaperWidget()->repaint( false );
+            gui->getPaperWidget()->viewport()->repaint( false );
         }
     }
 
@@ -3255,18 +3252,6 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     panner->activate( docStruct, left );
     panner->setSeparatorPos( 0 );
 
-    s_vert = new QScrollBar( QScrollBar::Vertical, left );
-    s_horz = new QScrollBar( QScrollBar::Horizontal, left );
-    QObject::connect( s_vert, SIGNAL( valueChanged( int ) ), this, SLOT( scrollV( int ) ) );
-    QObject::connect( s_horz, SIGNAL( valueChanged( int ) ), this, SLOT( scrollH( int ) ) );
-    s_vert->setValue(s_vert->maxValue());
-    s_horz->setValue(s_horz->maxValue());
-    s_vert->setValue(s_vert->minValue());
-    s_horz->setValue(s_horz->minValue());
-
-    s_horz->hide();
-    s_vert->hide();
-
     KoPageLayout layout;
     KoColumns cols;
     KoKWHeaderFooter hf;
@@ -3274,8 +3259,8 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 
     tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
 
-    r_horz = new KoRuler( left, paperWidget, KoRuler::HORIZONTAL, layout, KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
-    r_vert = new KoRuler( left, paperWidget, KoRuler::VERTICAL, layout, 0 );
+    r_horz = new KoRuler( left, paperWidget->viewport(), KoRuler::HORIZONTAL, layout, KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+    r_vert = new KoRuler( left, paperWidget->viewport(), KoRuler::VERTICAL, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     connect( r_horz, SIGNAL( newLeftIndent( int ) ), paperWidget, SLOT( newLeftIndent( int ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( int ) ), paperWidget, SLOT( newFirstIndent( int ) ) );
@@ -3310,16 +3295,9 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     r_horz->hide();
     r_vert->hide();
 
-    xOffset = 0;
-    yOffset = 0;
-
     //setFocusProxy( paperWidget );
     paperWidget->show();
     //paperWidget->setFocusPolicy( QWidget::StrongFocus );
-    scrollH( 0 );
-    scrollV( 0 );
-    paperWidget->setXOffset( xOffset );
-    paperWidget->setYOffset( yOffset );
     docStruct->show();
 
     reorganize();
@@ -3332,10 +3310,6 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     {
         QKeyEvent e( static_cast<QEvent::Type>( 6 ) /*QEvent::KeyPress*/ , Key_Delete, 0 ,0 );
         paperWidget->keyPressEvent( &e );
-        scrollH( 0 );
-        scrollV( 0 );
-        paperWidget->setXOffset( xOffset );
-        paperWidget->setYOffset( yOffset );
     }
 
     connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), paperWidget, SLOT( tabListChanged( QList<KoTabulator>* ) ) );
@@ -3354,47 +3328,6 @@ void KWordGUI::showGUI( bool __show )
 {
     _show = __show;
     reorganize();
-}
-
-/*================================================================*/
-void KWordGUI::setRanges()
-{
-    if ( s_vert && s_horz && doc && paperWidget )
-    {
-        int wid = doc->getPTPaperWidth();
-        int hei = doc->getPTPaperHeight();
-        int range;
-
-        s_vert->setSteps( 10, hei );
-        range = ( hei * doc->getPages() - paperWidget->height() );
-        s_vert->setRange( 0, range > 0 ? range : 0 );
-
-        s_horz->setSteps( 10, wid );
-        range = wid - paperWidget->width();
-        s_horz->setRange( 0, range > 0 ? range : 0 );
-    }
-}
-
-/*================================================================*/
-void KWordGUI::scrollH( int _value )
-{
-    int xo = xOffset;
-
-    xOffset = _value;
-    paperWidget->scroll( xo - _value, 0 );
-    if ( r_horz )
-        r_horz->setOffset( xOffset, 0 );
-}
-
-/*================================================================*/
-void KWordGUI::scrollV( int _value )
-{
-    int yo = yOffset;
-
-    yOffset = _value;
-    paperWidget->scroll( 0, yo - _value );
-    if ( r_vert )
-        r_vert->setOffset( 0, -paperWidget->getVertRulerPos() );
 }
 
 /*================================================================*/
@@ -3446,8 +3379,6 @@ void KWordGUI::reorganize()
     disconnect( panner, SIGNAL( pannerResized() ), this, SLOT( reorganize() ) );
     if ( _show )
     {
-        s_vert->show();
-        s_horz->show();
         r_vert->show();
         r_horz->show();
         tabChooser->show();
@@ -3457,25 +3388,19 @@ void KWordGUI::reorganize()
         if ( !_showStruct || _showStruct && panner->absSeparatorPos() == 0 )
             panner->setAbsSeparatorPos( _showStruct ? ( width() / 100 ) * 20 : 0, true );
         panner->setGeometry( 0, 0, width(), height() );
-        paperWidget->setGeometry( 20, 20, left->width() - 36, left->height() - 36 );
-        r_horz->setGeometry( 20, 0, left->width() - 36, 20 );
-        r_vert->setGeometry( 0, 20, 20, left->height() - 36 );
-        s_horz->setGeometry( 0, left->height() - 16, left->width() - 16, 16 );
-        s_vert->setGeometry( left->width() - 16, 0, 16, left->height() - 16 );
-
-        setRanges();
+        paperWidget->setGeometry( 20, 20, left->width() - 20, left->height() - 20 );
+        r_horz->setGeometry( 20, 0, left->width() - 20, 20 );
+        r_vert->setGeometry( 0, 20, 20, left->height() - 20 );
     }
     else
     {
-        s_vert->hide();
-        s_horz->hide();
         r_vert->hide();
         r_horz->hide();
         tabChooser->hide();
 
         panner->setAbsSeparatorPos( 0, true );
         panner->setGeometry( 0, 0, width(), height() );
-        paperWidget->setGeometry( 20, 20, left->width() - 36, left->height() - 36 );
+        paperWidget->setGeometry( 20, 20, left->width() - 20, left->height() - 20 );
 
     }
     connect( panner, SIGNAL( pannerResized() ), this, SLOT( reorganize() ) );
@@ -3508,3 +3433,8 @@ void KWordGUI::setDocument( KWordDocument *_doc )
     paperWidget->setDocument( doc );
 }
 
+/*================================================================*/
+void KWordGUI::scrollTo( int _x, int _y )
+{
+    paperWidget->setContentsPos( _x, _y );
+}
