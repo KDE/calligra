@@ -373,6 +373,22 @@ CCMAIL: dkite@shaw.ca
 
 ===================== Kexi 0.1 Beta 5 "Halloween" =====================
 
+2004-10-27
+Kexi
+- a little speedup: QValueList::Iterator changed to QValueList::ConstIterator
+TableView
+- never-ending-story: fixed repaint of "insert row" for empty tables;
+  fixed setting contents size based on tableSize() on table view creation
+  (delayed slotUpdate() is used)
+- setBottomMarginInternal() added e.g. for popups
+- Appearance class introduced: defines table view's detailed appearance settings
+- "row highlighting" option added, comboboxpopup uses it
+- fixed doubled empty row inserting (edit_insert_empty_row action)
+- ensureCellVisible() fixed when record navigator is hidden
+- many improvements in combo box editor and popup
+Query Designer
+- "*" are better handled on schema building
+
 2004-10-25..26
 - defines moved from Makefile.global
 - minor compile fixes and some warnings removed

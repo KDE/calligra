@@ -1,5 +1,5 @@
 -----------------------------------------------------------
-Settings stored in kexirc
+Settings stored in 'kexirc' config file
 
 This is official list.
 All other settings are unofficial and are subject to change.
@@ -23,3 +23,5 @@ Group: Startup
 -OpenExistingType [File|Server]
 -ShowStartupDialog [bool]
 
+Group: TableView
+TODO: -add default values for KexiTableView::Appearance

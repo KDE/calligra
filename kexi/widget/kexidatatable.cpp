@@ -121,6 +121,9 @@ KexiDataTable::initActions()
 		plugSharedAction("data_sort_az", m_view, SLOT(sortAscending()));
 		plugSharedAction("data_sort_za", m_view, SLOT(sortDescending()));
 	}
+
+	m_view->plugSharedAction(sharedAction("edit_insert_empty_row")); //for proper shortcut
+
 	setAvailable("data_sort_az", m_view->isSortingEnabled());
 	setAvailable("data_sort_za", m_view->isSortingEnabled());
 //! \todo 	plugSharedAction("data_filter", this, SLOT(???()));

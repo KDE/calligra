@@ -82,9 +82,15 @@ void KexiComboBoxPopup::init()
 	d->tv = new KexiTableView(0, this, "KexiComboBoxPopup_tv");
 	d->tv->setReadOnly( true );
 	d->tv->setLineWidth( 0 );
-	d->tv->setNavigatorEnabled( false );
-	d->tv->setFullRowSelectionEnabled( true );
-	d->tv->setBackgroundAltering( false ); //TODO add option??
+//	d->tv->setBackgroundAltering( false ); 
+	KexiTableView::Appearance a(d->tv->appearance());
+	a.navigatorEnabled = false;
+	a.backgroundAltering = false; //TODO add option??
+	a.fullRowSelection = true;
+	a.rowHighlightingEnabled = true;
+	a.rowHighlightingColor = colorGroup().highlight();
+	a.rowHighlightingTextColor = colorGroup().highlightedText();
+	d->tv->setAppearance(a);
 	d->tv->setInsertingEnabled( false );
 	d->tv->setSortingEnabled( false );
 	d->tv->setVerticalHeaderVisible( false );
@@ -93,6 +99,7 @@ void KexiComboBoxPopup::init()
 	d->tv->setContextMenuEnabled( false );
 	d->tv->setScrollbarToolTipsEnabled( false );
 	d->tv->installEventFilter(this);
+	d->tv->setBottomMarginInternal( - d->tv->horizontalScrollBar()->sizeHint().height() );
 	installEventFilter(this);
 	
 	connect(d->tv, SIGNAL(itemReturnPressed(KexiTableItem*,int,int)),
@@ -145,7 +152,7 @@ void KexiComboBoxPopup::setDataInternal( KexiTableViewData *data, bool owner )
 	updateSize();
 }
 
-void KexiComboBoxPopup::updateSize()
+void KexiComboBoxPopup::updateSize(int minWidth)
 {
 	d->tv->setColumnStretchEnabled( true, -1 );
 //	d->tv->adjustColumnWidthToContents( -1 ); //TODO: not only for column 0, if there are more columns!
@@ -158,7 +165,8 @@ void KexiComboBoxPopup::updateSize()
 	KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
 	const int width = QMAX( d->tv->tableSize().width(), 
 		(te ? te->totalSize().width() : parentWidget()->width()/*sanity*/) );
-	resize( width, d->tv->rowHeight() * rows +2 );
+//	resize( QMAX(minWidth, width), d->tv->rowHeight() * rows +2 );
+	resize( QMAX(minWidth, width), d->tv->rowHeight() * rows +1 );
 
 //	resize( d->tv->columnWidth( 0 ), d->tv->rowHeight() * QMIN( d->max_rows, d->tv->rows() ) +2 );
 }

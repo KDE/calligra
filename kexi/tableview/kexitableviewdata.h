@@ -179,6 +179,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, protected KexiTab
 	Q_OBJECT
 
 public: 
+	typedef QPtrListIterator<KexiTableItem> Iterator;
+
 	//! not db-aware version
 	KexiTableViewData();
 
@@ -329,6 +331,7 @@ public:
 
 	inline KexiTableItem* at( uint index ) { return KexiTableViewDataBase::at(index); }
 	inline virtual uint count() const { return KexiTableViewDataBase::count(); }
+	inline bool isEmpty () const { return KexiTableViewDataBase::isEmpty(); }
 	inline KexiTableItem* first() { return KexiTableViewDataBase::first(); }
 	inline KexiTableItem* last() { return KexiTableViewDataBase::last(); }
 	inline int findRef( const KexiTableItem* item ) { return KexiTableViewDataBase::findRef(item); }
@@ -337,7 +340,7 @@ public:
 	inline bool removeLast() { return KexiTableViewDataBase::removeLast(); }
 	inline void append( const KexiTableItem* item ) { KexiTableViewDataBase::append(item); }
 	inline void prepend( const KexiTableItem* item ) { KexiTableViewDataBase::prepend(item); }
-	inline QPtrListIterator<KexiTableItem> iterator() { return QPtrListIterator<KexiTableItem>(*this); }
+	inline Iterator iterator() { return Iterator(*this); }
 
 signals:
 	void destroying();

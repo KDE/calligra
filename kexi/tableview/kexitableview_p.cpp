@@ -89,18 +89,18 @@ static const QByteArray& qembed_findData( const char* name )
 
 //---------------
 
-KexiTableViewPrivate::KexiTableViewPrivate()
- : autonumberIcon( qembed_findData("autonumber.png") )
+KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
+ : appearance(t)
+ , autonumberIcon( qembed_findData("autonumber.png") )
 {
 	clearVariables();
+	tv = t;
 	pInsertItem = 0;
 
-//	numCols = 0;
 	editOnDoubleClick = true;
 	pBufferPm = 0;
 //	deletionPolicy = KexiTableView::NoDelete;
 	deletionPolicy = KexiTableView::AskDelete;
-//	insertionPolicy = KexiTableView::AutoInsert;
 	disableDrawContents = false;
 	readOnly = -1; //don't know
 	insertingEnabled = -1; //don't know
@@ -117,7 +117,6 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	navRowNumber = 0;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
-	fullRowSelectionEnabled = false;
 	inside_acceptEditor = false;
 	internal_acceptsRowEditAfterCellAccepting = false;
 	acceptsRowEditAfterCellAccepting = false;
@@ -130,6 +129,8 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	pVerticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
 	spreadSheetMode = false;
+	internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;
+	highlightedRow = -1;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

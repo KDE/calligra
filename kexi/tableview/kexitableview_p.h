@@ -49,21 +49,23 @@ class KexiTableEdit;
 class QLabel;
 class TableViewHeader;
 
+/*! KexiTableView internal data
+ @internal */
 class KexiTableViewPrivate 
 {
 	public:
 
-	KexiTableViewPrivate();
+	KexiTableViewPrivate(KexiTableView* t);
 	~KexiTableViewPrivate();
+
 	void clearVariables();
 
-	bool editOnDoubleClick : 1;
-//	bool recordIndicator : 1;
+	KexiTableView *tv;
 
 	//! cursor position
 	int curRow;
 	int curCol;
-	KexiTableItem	*pCurrentItem;
+	KexiTableItem *pCurrentItem;
 
 	//! when (current or new) row is edited - changed field values are temporary stored here
 	KexiDB::RowEditBuffer *pRowEditBuffer; 
@@ -76,13 +78,8 @@ class KexiTableViewPrivate
 	//! editors: one for each column (indexed by KexiTableViewColumn)
 	QPtrDict<KexiTableEdit> editors;
 
-//	int numRows;
-//	int numCols;
 	int rowHeight;
-//	int sortedColumn;
-//	bool sortOrder;
 
-//	KexiTableView::InsertionPolicy insertionPolicy;
 	KexiTableView::DeletionPolicy deletionPolicy;
 
 	QPixmap *pBufferPm;
@@ -100,15 +97,11 @@ class KexiTableViewPrivate
 #endif
 	KexiTableItem *pInsertItem;
 	
-//	QStringList	dropFilters;
-
 	KexiTableView::ScrollDirection scrollDirection;
 
-	bool needAutoScroll : 1;
+	bool editOnDoubleClick : 1;
 
-	bool bgAltering : 1;
-	
-	bool fullRowSelectionEnabled : 1;
+	bool needAutoScroll : 1;
 
 	bool disableDrawContents : 1;
 
@@ -151,7 +144,7 @@ class KexiTableViewPrivate
 	 eg. when we're calling acceptRowEdit() during cell accepting phase. */
 	bool inside_acceptEditor : 1;
 
-	/*! Internal: if true, this table view automatically accepts 
+	/*! @internal if true, this table view automatically accepts 
 	 row editing (using acceptRowEdit()) on accepting any cell's edit 
 	 (i.e. after acceptEditor()). */
 	bool internal_acceptsRowEditAfterCellAccepting : 1;
@@ -193,7 +186,7 @@ class KexiTableViewPrivate
 	/*! like for readOnly: 1 if inserting is enabled */
 	int insertingEnabled;
 
-	QColor emptyAreaColor;
+	KexiTableView::Appearance appearance;
 	
 	/*! Navigation widgets, used if navigationPanelEnabled is true. */
 	QFrame *navPanel; //!< main navigation widget
@@ -207,8 +200,8 @@ class KexiTableViewPrivate
 	QTimer scrollBarTipTimer;
 	uint scrollBarTipTimerCnt; //!< helper for timeout counting
 	
-	//! colors, brushes, fonts
-	QColor baseColor, textColor, altColor, grayColor;
+	//! brushes, fonts
+//	QColor baseColor, textColor, altColor, grayColor;
 	QBrush diagonalGrayPattern;
 	QFont autonumberFont;
 	int autonumberTextWidth;
@@ -236,6 +229,13 @@ class KexiTableViewPrivate
 	/*! Used for delayed call of ensureCellVisible() after show().
 	 It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */
 	QPoint ensureCellVisibleOnShow;
+
+	/*! @internal Changes bottom margin settings, in pixels. 
+	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
+	int internal_bottomMargin;
+
+	/*! Helper for "highlighted row" effect. */
+	int highlightedRow;
 };
 
 #endif

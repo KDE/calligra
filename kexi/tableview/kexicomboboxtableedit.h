@@ -41,6 +41,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 	public:
 		KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		virtual ~KexiComboBoxTableEdit();
 
 		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set
 		virtual QVariant value(bool &ok);
@@ -76,7 +77,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual void show();
 
 		/*! \return total size of this editor, including popup button. */
-		virtual QSize totalSize() { return m_totalSize; }
+		virtual QSize totalSize() const;
 
 	protected slots:
 		void slotButtonClicked();
@@ -94,14 +95,8 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
-//		KComboBox *m_combo;
-//		KLineEdit *m_lineedit; //!< the same as m_view
-		KPushButton *m_button;
-
-		KexiComboBoxPopup *m_popup;
-		int m_parentRightMargin;
-
-		QSize m_totalSize;
+		class Private;
+		Private *d;
 };
 
 class KexiComboBoxEditorFactoryItem : public KexiCellEditorFactoryItem

@@ -70,9 +70,63 @@ class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
 {
 Q_OBJECT
 public:
+
+	/*! Defines table view's detailed appearance settings. */
+	class KEXIDATATABLE_EXPORT Appearance {
+	public:
+		Appearance(QWidget *widget = 0);
+
+		/*! base color for cells, default is "Base" color for application's 
+		 current active palette */
+		QColor baseColor;
+
+		/*! text color for cells, default is "Text" color for application's 
+		 current active palette */
+		QColor textColor;
+
+		/*! border color for cells, default is QColor(200,200,200) */
+		QColor borderColor;
+
+		/*! empty area color, default is "Base" color for application's 
+		 current active palette */
+		QColor emptyAreaColor;
+
+		/*! alternate background color, default is KGlobalSettings::alternateBackgroundColor() */
+		QColor alternateBackgroundColor;
+
+		/*! true if background altering should be enabled, true by default */
+		bool backgroundAltering : 1;
+
+		/*! true if full-row-selection mode is set,
+		 what means that all cells of the current row are always selected, instead of single cell.
+		 This mode is usable for read-only table views, when we're interested only in navigating
+		 by rows. False by default, even for read-only table views.
+		*/
+		bool fullRowSelection : 1;
+
+		/*! true if "row highlight" behaviour is enabled. False by default. */
+		bool rowHighlightingEnabled : 1;
+
+		/*! color for row highlight, default is intermediate between
+		 KGlobalSettings::alternateBackgroundColor() and base color. */
+		QColor rowHighlightingColor;
+		
+		/*! color for text under row highlight, default is the same as textColor. */
+		QColor rowHighlightingTextColor;
+
+		/*! \if the navigation panel is enabled (visible) for the view.
+		 True by default. */
+		bool navigatorEnabled;
+	};
 	
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
 	~KexiTableView();
+
+	/*! \return current appearance settings */
+	Appearance appearance() const;
+
+	/*! Sets appearance settings. Table view is updated automatically. */
+	void setAppearance(const Appearance& a);
 
 //	virtual void initActions(KActionCollection *col);
 
@@ -156,13 +210,6 @@ public:
 	*/
 	bool isDeleteEnabled() const;
 
-	/*! \return true if the navigation panel is enabled (visible) for the view.
-	  True by default. */
-	bool navigatorEnabled() const;
-	
-	/*! Enables or disables the navigation panel visibility for the view. */
-	void setNavigatorEnabled(bool set);
-
 	/*! \return true if the context menu is enabled (visible) for the view.
 	  True by default. */
 	bool contextMenuEnabled() const;
@@ -208,6 +255,10 @@ public:
 	/*! \return number of visible columns in this view. */
 	int columns() const;
 
+	/*! \return maximum number of rows that can be displayed per one "page" 
+	 for current table view's size. */
+	int rowsPerPage() const;
+
 	QRect cellGeometry(int row, int col) const;
 	int columnWidth(int col) const;
 	int rowHeight() const;
@@ -224,23 +275,8 @@ public:
 	/*! Redraws all cells of specified row. */
 	void updateRow(int row);
 
-	// properties
-	bool backgroundAltering() const;
-	void setBackgroundAltering(bool altering);
 	bool editableOnDoubleClick() const;
 	void setEditableOnDoubleClick(bool set);
-	QColor emptyAreaColor() const;
-	void setEmptyAreaColor(const QColor& c);
-
-	/*! \return true if this table view has full-row-selection mode set,
-	 what mean that all cells of the current row are always selected, instead of single cell.
-	 This mode is usable for read-only table views, when we're interested only in navigating
-	 by rows. This property is false by default, even for read-only table views.
-	*/
-	bool fullRowSelectionEnabled() const;
-
-	//! Specifies if this table view has full-row-selection mode set. \sa fullRowSelectionEnabled()
-	void setFullRowSelectionEnabled(bool set);
 
 	//! \return true if the vertical header is visible
 	bool verticalHeaderVisible() const;
@@ -269,27 +305,11 @@ public:
 
 	virtual QSize tableSize() const;
 
-//js: NOT ENOUGH GENERIC 	void		addDropFilter(const QString &filter);
-
-//	void		inserted();
-
 	void		emitSelected();
 
-//	KexiTableRM	*recordMarker() const;
 	KexiTableRM *verticalHeader() const;
 
 	KPopupMenu* popup() const;
-
-//	void		takeInsertItem();
-//	void		setInsertItem(KexiTableItem *i);
-//	KexiTableItem	*insertItem() const;
-
-/*	enum InsertionPolicy
-	{
-		NoInsert,
-		AutoInsert,
-		SignalInsert
-	};*/
 
 	enum DeletionPolicy
 	{
@@ -338,7 +358,7 @@ public:
 	/*! Inserts newItem at \a row. -1 means current row. Used by insertEmptyRow(). */
 	void insertItem(KexiTableItem *newItem, int row = -1);
 
-	/*! Clears internal table data, its visible representation 
+	/*! Clears entire table data, its visible representation 
 	 and deletes data at database backend (if this is db-aware table view). 
 	 Does not clear columns information.
 	 Does not destroy KexiTableViewData object (if present) but only clears its contents.
@@ -347,9 +367,34 @@ public:
 	 For empty tables, true is returned immediately.
 	 If isDeleteEnabled() is false, false is returned.
 	 For spreadsheet mode all current rows are just replaced by empty rows.
-	 \return true on success, false on failure, and cancelled if user cancelled deletion.
+	 \return true on success, false on failure, and cancelled if user cancelled deletion 
+	 (only possible if \a ask is true).
 	 */
 	tristate deleteAllRows(bool ask = false, bool repaint = true);
+
+	/*! \return true, if this table view automatically accepts 
+	 row editing (using acceptRowEdit()) on accepting any cell's edit 
+	 (i.e. after acceptEditor()). 
+	 By default this flag is set to false.
+	 Not that if the query for this table has given constraints defined,
+	 like NOT NULL / NOT EMPTY for more than one field - editing a record would 
+	 be impossible for the flag set to true, because of constraints violation.
+	 However, setting this flag to true can be usefull especially for not-db-aware
+	 data set (it's used e.g. in Kexi Alter Table's field editor). */
+	bool acceptsRowEditAfterCellAccepting() const;
+
+	/*! \return true, if this table accepts dropping data on the rows. 
+	*/
+	bool dropsAtRowEnabled() const;
+
+	/*! \return highlighted row number or -1 if no row is highlighted. 
+	 Makes sense if row highlighting is enabled.
+	 @see Appearance::rowHighlightingEnabled setHighlightedRow() */
+	int highlightedRow() const;
+
+	/*! @internal Changes bottom margin settings, in pixels. 
+	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
+	void setBottomMarginInternal(int pixels);
 
 public slots:
 	/*! Sets data for this table view. if \a owner is true, the table view will own 
@@ -431,6 +476,11 @@ public slots:
 	void selectFirstRow();
 	void selectLastRow();
 
+	/*! Sets highlighted row number or -1 if no row has to be highlighted. 
+	 Makes sense if row highlighting is enabled.
+	 @see Appearance::rowHighlightingEnabled */
+	void setHighlightedRow(int row);
+
 	/*! Ensures that cell at \a row and \a col is visible. 
 	 If \a col is -1, current column number is used. \a row and \a col (if not -1) must 
 	 be between 0 and rows() (or cols() accordingly). */
@@ -461,35 +511,20 @@ public slots:
 	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
 	void deleteAndStartEditCurrentCell();
 
+	/*! Cancels row editing All changes made to the editing 
+	 row during this current session will be undone. */
+	void cancelRowEdit();
+
 	/*! Accepts row editing. All changes made to the editing 
 	 row during this current session will be accepted (saved). 
 	 \return true if accepting was successfull, false otherwise 
 	 (e.g. when current row contain data that does not meet given constraints). */
 	bool acceptRowEdit();
 
-	/*! Cancels row editing All changes made to the editing 
-	 row during this current session will be undone. */
-	void cancelRowEdit();
-
-	/*! \return true, if this table view automatically accepts 
-	 row editing (using acceptRowEdit()) on accepting any cell's edit 
-	 (i.e. after acceptEditor()). 
-	 By default this flag is set to false.
-	 Not that if the query for this table has given constraints defined,
-	 like NOT NULL / NOT EMPTY for more than one field - editing a record would 
-	 be impossible for the flag set to true, because of constraints violation.
-	 However, setting this flag to true can be usefull especially for not-db-aware
-	 data set (it's used e.g. in Kexi Alter Table's field editor). */
-	bool acceptsRowEditAfterCellAccepting() const;
-
 	/*! Specifies, if this table view automatically accepts 
 	 row editing (using acceptRowEdit()) on accepting any cell's edit 
 	 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
 	void setAcceptsRowEditAfterCellAccepting(bool set);
-
-	/*! \return true, if this table accepts dropping data on the rows. 
-	*/
-	bool dropsAtRowEnabled() const;
 
 	/*! Specifies, if this table accepts dropping data on the rows. 
 	 If enabled:
@@ -608,6 +643,7 @@ protected slots:
 
 	//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
 	void slotRowInserted(KexiTableItem *item, bool repaint);
+
 	//! Like above, not db-aware version
 	void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
@@ -636,13 +672,13 @@ protected:
 	virtual void keyPressEvent(QKeyEvent*);
 	virtual void focusInEvent(QFocusEvent*);
 	virtual void focusOutEvent(QFocusEvent*);
-//	virtual bool event ( QEvent * e );
 	virtual void resizeEvent(QResizeEvent *);
 	virtual void viewportResizeEvent( QResizeEvent *e );//js
 	virtual void showEvent(QShowEvent *e);
 	virtual void contentsDragMoveEvent(QDragMoveEvent *e);
 	virtual void contentsDropEvent(QDropEvent *ev);
 	virtual void viewportDragLeaveEvent( QDragLeaveEvent * );
+	virtual void paletteChange( const QPalette & );
 	
 	/*! Internal: creates editor structure without filling it with data.
 	 Used in createEditor() and few places to be able to display cell contents 
