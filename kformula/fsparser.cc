@@ -306,7 +306,9 @@ void FunctionNode::buildXML( QDomDocument doc, QDomElement element )
     else if ( ( m_name->primary() == "prod" ) && ( m_args.count() > 0 ) ) {
         buildSymbolXML( doc, element, KFormula::Product );
     }
-    else if ( ( ( m_name->primary() == "int" ) || ( m_name->primary() == "integrate" ) )
+    else if ( ( ( m_name->primary() == "int" ) ||
+                ( m_name->primary() == "integrate" ) ||
+                ( m_name->primary() == "quad" ) )
               && ( m_args.count() > 0 ) ) {
         buildSymbolXML( doc, element, KFormula::Integral );
     }
