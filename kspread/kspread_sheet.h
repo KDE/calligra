@@ -357,7 +357,7 @@ public:
      * @return a non default KSpreadCell for the position.
      */
     KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false );
-    KSpreadCell* nonDefaultCell( QPoint cellRef, bool scroll = false )
+    KSpreadCell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
       { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
 
     KSpreadCell* defaultCell()const { return m_pDefaultCell; }
@@ -993,7 +993,7 @@ public:
    * needs repainted.  This is not a flag on the cell itself since quite
    * often this needs set on a default cell
    */
-  void setRegionPaintDirty(QRect region);
+  void setRegionPaintDirty(QRect const & region);
 
   /**
    * Remove all records of 'paint dirty' cells
@@ -1003,7 +1003,7 @@ public:
   /**
    * Test whether a cell needs repainted
    */
-  bool cellIsPaintDirty(QPoint cell);
+  bool cellIsPaintDirty(QPoint const & cell);
 
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction
@@ -1130,7 +1130,7 @@ protected:
      * When you change name table Table1 -> Price
      * for all cell which refere to Table1, this function changes the name.
      */
-    void changeCellTabName(QString old_name,QString new_name);
+    void changeCellTabName( QString const & old_name,QString const & new_name );
 
     void insertChild( KSpreadChild *_child );
 

@@ -1882,12 +1882,17 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
   Q_ASSERT(!(((cellRef.x() != m_iColumn) || (cellRef.y() != m_iRow)) &&
            !isDefault()));
 
+  double left = coordinate.x();
 
   ColumnFormat* colFormat = m_pTable->columnFormat( cellRef.x() );
   RowFormat* rowFormat = m_pTable->rowFormat( cellRef.y() );
   double width = m_iExtraXCells ? m_dExtraWidth : colFormat->dblWidth();
   double height = m_iExtraYCells ? m_dExtraHeight : rowFormat->dblHeight();
-  const KoRect cellRect = KoRect( coordinate.x(), coordinate.y(), width, height );
+
+  if ( m_pTable->isRightToLeft() && view && view->canvasWidget() )
+    left = view->canvasWidget()->width() - coordinate.x() - width;
+
+  const KoRect cellRect = KoRect( left, coordinate.y(), width, height );
   bool selected = false;
 
   if ( view != NULL )
@@ -1900,7 +1905,6 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
                         view->marker().y() + cell->extraYCells() );
     QRect markerArea( view->marker(), bottomRight );
     selected = selected && !( markerArea.contains( cellRef ) );
-
 
     // Dont draw any selection when printing.
     if ( painter.device()->isExtDev() || !drawCursor )
@@ -2235,6 +2239,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
+
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
@@ -2248,7 +2253,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     {
       painter.drawLine( doc->zoomItX( cellRect.x() ),
                         doc->zoomItY( cellRect.y() + dt ),
-                        doc->zoomItX( cellRect.x() ),
+                          doc->zoomItX( cellRect.x() ),
                         doc->zoomItY( cellRect.bottom() - db ) );
     }
   }

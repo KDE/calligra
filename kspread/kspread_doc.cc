@@ -710,9 +710,9 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     // painter.eraseRect( rect );
 
     double xpos;
-    double ypos;
-    int left_col = table->leftColumn( unzoomItX( rect.x() ), xpos );
-    int right_col = table->rightColumn( unzoomItX( rect.right() ) );
+    double ypos;   
+    int left_col  = table->leftColumn( unzoomItX( rect.x() ), xpos );
+    int right_col = table->rightColumn( unzoomItX( rect.right() ) ); 
     int top_row = table->topRow( unzoomItY( rect.y() ), ypos );
     int bottom_row = table->bottomRow( unzoomItY( rect.bottom() ) );
 
@@ -727,6 +727,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
                                 right_col - left_col + 1,
                                 bottom_row - top_row + 1) );
 
+    kdDebug() << "PaintCellRegions" << endl;
     paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
 }
 

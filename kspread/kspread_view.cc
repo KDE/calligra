@@ -4705,19 +4705,20 @@ void KSpreadView::refreshView()
 
   m_pFrame->show();
 
-  left = 0;
   if ( !table->isRightToLeft() )
-    left = widthRowHeader;
+    m_pCanvas->setGeometry( widthRowHeader, heightColHeader,
+                            m_pFrame->width() - widthRowHeader, m_pFrame->height() - heightColHeader );
+  else
+    m_pCanvas->setGeometry( 0, heightColHeader,
+                          m_pFrame->width() - widthRowHeader - 1.0, m_pFrame->height() - heightColHeader );
 
-  m_pCanvas->setGeometry( left, heightColHeader,
-                          m_pFrame->width() - widthRowHeader, m_pFrame->height() - heightColHeader );
   m_pCanvas->updatePosWidget();
 
   left = 0;
   if ( table->isRightToLeft() )
   {
     m_pHBorderWidget->setGeometry( 1.0, 0,
-                                   m_pFrame->width() - widthRowHeader, heightColHeader );
+                                   m_pFrame->width() - widthRowHeader + 2.0, heightColHeader );
 
     left = width() - widthRowHeader - widthVScrollbar;
   }

@@ -1879,7 +1879,7 @@ void KSpreadSheet::refreshChangeAreaName(const QString & _areaName)
   }
 }
 
-void KSpreadSheet::changeCellTabName(QString old_name,QString new_name)
+void KSpreadSheet::changeCellTabName( QString const & old_name, QString const & new_name )
 {
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -6054,7 +6054,7 @@ void KSpreadSheet::checkContentDirection( QString const & name )
   bool rtl = m_bRightToLeft;
 
   kdDebug() << "name[0].direction(): " << name[0].direction() << ", RTL: " << rtl << endl;    
-  if ( name.left(3) == "rtl" ) // for testing...
+  if ( ( name[0].direction() == QChar::DirR ) || ( name.left(3) == "rtl" ) ) // for testing...
   {
     kdDebug() << "Table direction set to right to left" << endl;
     m_bRightToLeft = true;
@@ -6778,7 +6778,7 @@ void KSpreadSheet::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-void KSpreadSheet::setRegionPaintDirty(QRect region)
+void KSpreadSheet::setRegionPaintDirty(QRect const & region)
 {
   QValueList<QRect>::iterator it = m_paintDirtyList.begin();
 
@@ -6799,7 +6799,7 @@ void KSpreadSheet::clearPaintDirtyData()
   m_paintDirtyList.clear();
 }
 
-bool KSpreadSheet::cellIsPaintDirty(QPoint cell)
+bool KSpreadSheet::cellIsPaintDirty(QPoint const & cell)
 {
   QValueList<QRect>::iterator it;
   bool found = false;
