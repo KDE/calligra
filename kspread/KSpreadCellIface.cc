@@ -15,25 +15,28 @@ void KSpreadCellIface::setCell( KSpreadSheet* table, const QPoint& point )
 
 bool KSpreadCellIface::isDefault() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->isDefault();
 }
 
-
 QString KSpreadCellIface::text() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->value().asString();
 }
 
 void KSpreadCellIface::setText( const QString& text )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setCellText( text );
 }
 
-QString KSpreadCellIface::visibleContentAsString() const 
+QString KSpreadCellIface::visibleContentAsString() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if (cell->isEmpty()) return QString::null;
     QString ret;
@@ -48,12 +51,14 @@ QString KSpreadCellIface::visibleContentAsString() const
 
 QString KSpreadCellIface::comment() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->comment(m_point.x(), m_point.y());
 }
 
 void KSpreadCellIface::setComment( const QString& comment )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setComment( comment);
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -61,24 +66,28 @@ void KSpreadCellIface::setComment( const QString& comment )
 
 void KSpreadCellIface::setValue( int value )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setValue( (double)value );
 }
 
 void KSpreadCellIface::setValue( double value )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setValue( value );
 }
 
 double KSpreadCellIface::value() const
 {
+    if( !m_table ) return 0.0;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->value().asFloat();
 }
 
 void KSpreadCellIface::setBgColor(const QString& _c)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(_c);
     cell->setBgColor(c);
@@ -87,6 +96,7 @@ void KSpreadCellIface::setBgColor(const QString& _c)
 
 void KSpreadCellIface::setBgColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setBgColor(c);
@@ -95,18 +105,21 @@ void KSpreadCellIface::setBgColor(int r,int g,int b)
 
 QString KSpreadCellIface::bgColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->bgColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::textColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->textColor( m_point.x(), m_point.y() ).name();
 }
 
 void KSpreadCellIface::setTextColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setTextColor(c);
@@ -115,6 +128,7 @@ void KSpreadCellIface::setTextColor(int r,int g,int b)
 
 void KSpreadCellIface::setTextColor(const QString& _c)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(_c);
     cell->setTextColor(c);
@@ -123,6 +137,7 @@ void KSpreadCellIface::setTextColor(const QString& _c)
 
 void KSpreadCellIface::setAngle(int angle)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setAngle(angle);
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -130,12 +145,14 @@ void KSpreadCellIface::setAngle(int angle)
 
 int  KSpreadCellIface::angle() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getAngle(m_point.x(), m_point.y());
 }
 
 void KSpreadCellIface::setVerticalText(bool _vertical)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setVerticalText(_vertical);
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -143,6 +160,7 @@ void KSpreadCellIface::setVerticalText(bool _vertical)
 
 bool KSpreadCellIface::verticalText() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->verticalText( m_point.x(), m_point.y() );
 }
@@ -150,6 +168,7 @@ bool KSpreadCellIface::verticalText() const
 
 void KSpreadCellIface::setMultiRow(bool _multi)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setMultiRow( _multi );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -157,12 +176,14 @@ void KSpreadCellIface::setMultiRow(bool _multi)
 
 bool KSpreadCellIface::multiRow() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->multiRow( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setAlign( const QString& _Align )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     KSpreadCell::Align Align;
     if(_Align=="Left")
@@ -179,6 +200,7 @@ void KSpreadCellIface::setAlign( const QString& _Align )
 
 QString KSpreadCellIface::align() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString alignString;
     switch( cell->align( m_point.x(), m_point.y() ) )
@@ -201,6 +223,7 @@ QString KSpreadCellIface::align() const
 
 void KSpreadCellIface::setAlignY( const QString& _AlignY )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     KSpreadCell::AlignY AlignY;
     if(_AlignY=="Top")
@@ -217,6 +240,7 @@ void KSpreadCellIface::setAlignY( const QString& _AlignY )
 
 QString KSpreadCellIface::alignY() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString alignString;
     switch( cell->alignY( m_point.x(), m_point.y() ) )
@@ -236,6 +260,7 @@ QString KSpreadCellIface::alignY() const
 
 void KSpreadCellIface::setPostfix(const QString &_postfix)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setPostfix( _postfix );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -243,12 +268,14 @@ void KSpreadCellIface::setPostfix(const QString &_postfix)
 
 QString KSpreadCellIface::prefix() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->prefix( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setPrefix(const QString &_prefix)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setPrefix( _prefix );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -256,12 +283,15 @@ void KSpreadCellIface::setPrefix(const QString &_prefix)
 
 QString KSpreadCellIface::postfix() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->postfix( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setFormatType(const QString &_formatType)
 {
+    if( !m_table ) return;
+
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     KSpreadCell::FormatType format;
     cell->setFactor( 1.0);
@@ -313,6 +343,8 @@ void KSpreadCellIface::setFormatType(const QString &_formatType)
 
 QString KSpreadCellIface::getFormatType() const
 {
+    if( !m_table ) return QString::null;
+
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString stringFormat;
     switch( cell->getFormatType(m_point.x(), m_point.y()))
@@ -415,6 +447,7 @@ QString KSpreadCellIface::getFormatType() const
 
 void KSpreadCellIface::setPrecision(int _p)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setPrecision( _p );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -422,12 +455,14 @@ void KSpreadCellIface::setPrecision(int _p)
 
 int KSpreadCellIface::precision() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->precision( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setTextFontBold(bool _b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTextFontBold( _b );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -435,12 +470,14 @@ void KSpreadCellIface::setTextFontBold(bool _b)
 
 bool KSpreadCellIface::textFontBold() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontBold( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setTextFontItalic(bool _b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTextFontItalic( _b );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -448,6 +485,7 @@ void KSpreadCellIface::setTextFontItalic(bool _b)
 
 bool KSpreadCellIface::textFontItalic() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontItalic( m_point.x(), m_point.y() );
 }
@@ -455,6 +493,7 @@ bool KSpreadCellIface::textFontItalic() const
 
 void KSpreadCellIface::setTextFontUnderline(bool _b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTextFontUnderline( _b );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -462,12 +501,14 @@ void KSpreadCellIface::setTextFontUnderline(bool _b)
 
 bool KSpreadCellIface::textFontUnderline() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontUnderline( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setTextFontStrike(bool _b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTextFontStrike( _b );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -475,12 +516,14 @@ void KSpreadCellIface::setTextFontStrike(bool _b)
 
 bool KSpreadCellIface::textFontStrike() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontStrike( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setTextFontSize( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTextFontSize( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -488,12 +531,14 @@ void KSpreadCellIface::setTextFontSize( int _size )
 
 int KSpreadCellIface::textFontSize() const
 {
+    if( !m_table ) return 10;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontSize( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setTextFontFamily( const QString& _font )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTextFontFamily( _font );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -501,12 +546,14 @@ void KSpreadCellIface::setTextFontFamily( const QString& _font )
 
 QString KSpreadCellIface::textFontFamily() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontFamily( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setFaktor( double _factor )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setFactor( _factor );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -514,6 +561,7 @@ void KSpreadCellIface::setFaktor( double _factor )
 
 double KSpreadCellIface::faktor() const
 {
+    if( !m_table ) return 1.0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->factor( m_point.x(), m_point.y() );
 }
@@ -521,6 +569,7 @@ double KSpreadCellIface::faktor() const
 //border left
 void KSpreadCellIface::setLeftBorderStyle( const QString& _style )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
         cell->setLeftBorderStyle(Qt::DotLine);
@@ -540,14 +589,17 @@ void KSpreadCellIface::setLeftBorderStyle( const QString& _style )
 
 void KSpreadCellIface::setLeftBorderColor(const QString& _c)
 {
+    if( !m_table ) return;
     QColor c(_c);
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setLeftBorderColor(c );
     m_table->setRegionPaintDirty(cell->cellRect());
 
 }
+
 void KSpreadCellIface::setLeftBorderColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setLeftBorderColor(c );
@@ -556,27 +608,30 @@ void KSpreadCellIface::setLeftBorderColor(int r,int g,int b)
 
 void KSpreadCellIface::setLeftBorderWidth( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setLeftBorderWidth( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
-
 }
 
 
 int  KSpreadCellIface::leftBorderWidth() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->leftBorderWidth(m_point.x(), m_point.y());
 }
 
 QString KSpreadCellIface::leftBorderColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->leftBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::leftBorderStyle() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     Qt::PenStyle penStyle=cell->leftBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
@@ -598,6 +653,7 @@ QString KSpreadCellIface::leftBorderStyle() const
 //border right
 void KSpreadCellIface::setRightBorderStyle( const QString& _style )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
         cell->setRightBorderStyle(Qt::DotLine);
@@ -617,6 +673,7 @@ void KSpreadCellIface::setRightBorderStyle( const QString& _style )
 
 void KSpreadCellIface::setRightBorderColor(const QString& _c)
 {
+    if( !m_table ) return;
     QColor c(_c);
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setRightBorderColor(c );
@@ -625,6 +682,7 @@ void KSpreadCellIface::setRightBorderColor(const QString& _c)
 }
 void KSpreadCellIface::setRightBorderColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setRightBorderColor(c );
@@ -633,6 +691,7 @@ void KSpreadCellIface::setRightBorderColor(int r,int g,int b)
 
 void KSpreadCellIface::setRightBorderWidth( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setRightBorderWidth( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -641,18 +700,21 @@ void KSpreadCellIface::setRightBorderWidth( int _size )
 
 int  KSpreadCellIface::rightBorderWidth() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->rightBorderWidth(m_point.x(), m_point.y());
 }
 
 QString KSpreadCellIface::rightBorderColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->rightBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::rightBorderStyle() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     Qt::PenStyle penStyle=cell->rightBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
@@ -674,6 +736,7 @@ QString KSpreadCellIface::rightBorderStyle() const
 //border top
 void KSpreadCellIface::setTopBorderStyle( const QString& _style )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
         cell->setTopBorderStyle(Qt::DotLine);
@@ -693,6 +756,7 @@ void KSpreadCellIface::setTopBorderStyle( const QString& _style )
 
 void KSpreadCellIface::setTopBorderColor(const QString& _c)
 {
+    if( !m_table ) return;
     QColor c(_c);
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTopBorderColor(c );
@@ -701,6 +765,7 @@ void KSpreadCellIface::setTopBorderColor(const QString& _c)
 }
 void KSpreadCellIface::setTopBorderColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setTopBorderColor(c );
@@ -709,6 +774,7 @@ void KSpreadCellIface::setTopBorderColor(int r,int g,int b)
 
 void KSpreadCellIface::setTopBorderWidth( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setTopBorderWidth( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -716,18 +782,21 @@ void KSpreadCellIface::setTopBorderWidth( int _size )
 
 int  KSpreadCellIface::topBorderWidth() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->topBorderWidth(m_point.x(), m_point.y());
 }
 
 QString KSpreadCellIface::topBorderColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->topBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::topBorderStyle() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     Qt::PenStyle penStyle=cell->topBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
@@ -749,6 +818,7 @@ QString KSpreadCellIface::topBorderStyle() const
 //border bottom
 void KSpreadCellIface::setBottomBorderStyle( const QString& _style )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
         cell->setBottomBorderStyle(Qt::DotLine);
@@ -768,6 +838,7 @@ void KSpreadCellIface::setBottomBorderStyle( const QString& _style )
 
 void KSpreadCellIface::setBottomBorderColor(const QString& _c)
 {
+    if( !m_table ) return;
     QColor c(_c);
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setBottomBorderColor(c );
@@ -776,6 +847,7 @@ void KSpreadCellIface::setBottomBorderColor(const QString& _c)
 }
 void KSpreadCellIface::setBottomBorderColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setBottomBorderColor(c );
@@ -784,6 +856,7 @@ void KSpreadCellIface::setBottomBorderColor(int r,int g,int b)
 
 void KSpreadCellIface::setBottomBorderWidth( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setBottomBorderWidth( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -791,18 +864,21 @@ void KSpreadCellIface::setBottomBorderWidth( int _size )
 
 int  KSpreadCellIface::bottomBorderWidth() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->bottomBorderWidth(m_point.x(), m_point.y());
 }
 
 QString KSpreadCellIface::bottomBorderColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->bottomBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::bottomBorderStyle() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     Qt::PenStyle penStyle=cell->bottomBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
@@ -824,6 +900,7 @@ QString KSpreadCellIface::bottomBorderStyle() const
 //fall back diagonal
 void KSpreadCellIface::setFallDiagonalStyle( const QString& _style )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
         cell->setFallDiagonalStyle(Qt::DotLine);
@@ -843,6 +920,7 @@ void KSpreadCellIface::setFallDiagonalStyle( const QString& _style )
 
 void KSpreadCellIface::setFallDiagonalColor(const QString& _c)
 {
+    if( !m_table ) return;
     QColor c(_c);
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setFallDiagonalColor(c );
@@ -851,6 +929,7 @@ void KSpreadCellIface::setFallDiagonalColor(const QString& _c)
 }
 void KSpreadCellIface::setFallDiagonalColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setFallDiagonalColor(c );
@@ -859,6 +938,7 @@ void KSpreadCellIface::setFallDiagonalColor(int r,int g,int b)
 
 void KSpreadCellIface::setFallDiagonalWidth( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setFallDiagonalWidth( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -866,18 +946,21 @@ void KSpreadCellIface::setFallDiagonalWidth( int _size )
 
 int  KSpreadCellIface::fallDiagonalWidth() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->fallDiagonalWidth(m_point.x(), m_point.y());
 }
 
 QString KSpreadCellIface::fallDiagonalColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->fallDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::fallDiagonalStyle() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     Qt::PenStyle penStyle=cell->fallDiagonalStyle( m_point.x(), m_point.y() );
     QString tmp;
@@ -900,6 +983,7 @@ QString KSpreadCellIface::fallDiagonalStyle() const
 //GoUpDiagonal
 void KSpreadCellIface::setGoUpDiagonalStyle( const QString& _style )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
         cell->setGoUpDiagonalStyle(Qt::DotLine);
@@ -919,6 +1003,7 @@ void KSpreadCellIface::setGoUpDiagonalStyle( const QString& _style )
 
 void KSpreadCellIface::setGoUpDiagonalColor(const QString& _c)
 {
+    if( !m_table ) return;
     QColor c(_c);
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setGoUpDiagonalColor(c );
@@ -927,6 +1012,7 @@ void KSpreadCellIface::setGoUpDiagonalColor(const QString& _c)
 }
 void KSpreadCellIface::setGoUpDiagonalColor(int r,int g,int b)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setGoUpDiagonalColor(c );
@@ -935,6 +1021,7 @@ void KSpreadCellIface::setGoUpDiagonalColor(int r,int g,int b)
 
 void KSpreadCellIface::setGoUpDiagonalWidth( int _size )
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setGoUpDiagonalWidth( _size );
     m_table->setRegionPaintDirty(cell->cellRect());
@@ -942,18 +1029,21 @@ void KSpreadCellIface::setGoUpDiagonalWidth( int _size )
 
 int  KSpreadCellIface::goUpDiagonalWidth() const
 {
+    if( !m_table ) return 0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->goUpDiagonalWidth(m_point.x(), m_point.y());
 }
 
 QString KSpreadCellIface::goUpDiagonalColor() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->goUpDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::goUpDiagonalStyle() const
 {
+    if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->cellAt( m_point );
     Qt::PenStyle penStyle=cell->goUpDiagonalStyle( m_point.x(), m_point.y() );
     QString tmp;
@@ -974,6 +1064,7 @@ QString KSpreadCellIface::goUpDiagonalStyle() const
 
 void KSpreadCellIface::setIndent(double indent)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     if( indent >= 0.0 )
         cell->setIndent( indent );
@@ -984,18 +1075,21 @@ void KSpreadCellIface::setIndent(double indent)
 
 double KSpreadCellIface::getIndent() const
 {
+    if( !m_table ) return 0.0;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getIndent( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setDontPrintText ( bool _print)
 {
+    if( !m_table ) return;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setDontPrintText ( _print);
 }
 
 bool KSpreadCellIface::getDontprintText() const
 {
+    if( !m_table ) return false;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getDontprintText(m_point.x(), m_point.y());
 }
