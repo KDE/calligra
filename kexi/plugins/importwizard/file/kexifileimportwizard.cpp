@@ -78,4 +78,4 @@ KexiFilter *KexiFileImportWizard::openPageLeft(QWidget *widget, const QMap<QStri
 	fileDialog->initiateLoading();
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexifileimport, KGenericFactory<KexiFileImportWizard> )
+K_EXPORT_COMPONENT_FACTORY( kexifileimport, KGenericFactory<KexiFileImportWizard>("kexifileimport") )

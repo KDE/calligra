@@ -180,7 +180,7 @@ KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
 
 //----------------
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
+K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart>("kexihandler_query") )
 
 #include "kexiquerypart.moc"
 

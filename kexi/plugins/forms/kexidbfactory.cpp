@@ -160,6 +160,6 @@ KexiDBFactory::~KexiDBFactory()
 {
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>)
+K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>("kexidbwidgets"))
 
 #include "kexidbfactory.moc"

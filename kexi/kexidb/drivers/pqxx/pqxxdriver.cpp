@@ -25,17 +25,11 @@
 #include "pqxxconnection.h"
 #include <string>
 
-//#include <qfile.h>
-//#include <qdir.h>
-
-#include <kgenericfactory.h>
 #include <kdebug.h>
-
-//K_EXPORT_COMPONENT_FACTORY(kexidb_pqxxsqldriver, KGenericFactory<KexiDB::pqxxSqlDriver>( "kexidb_pqxxsqldriver" ));
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql, "pqxxsql" );
+KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql );
 
 //==================================================================================
 //

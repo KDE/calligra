@@ -77,7 +77,7 @@ KexiRelationPartImpl::createView(KexiMainWindow* mainWin, QWidget *parent, const
 }
 
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, KGenericFactory<KexiRelationPartImpl>("relationplugin") )
+K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, KGenericFactory<KexiRelationPartImpl>("kexihandler_relation") )
 
 #include "kexirelationpartimpl.moc"
 

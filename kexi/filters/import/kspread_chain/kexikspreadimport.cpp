@@ -111,6 +111,6 @@ KexiKSpreadImport::~KexiKSpreadImport()
 	}
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexikspreadimport, KGenericFactory<KexiKSpreadImport>)
+K_EXPORT_COMPONENT_FACTORY(kexikspreadimport, KGenericFactory<KexiKSpreadImport>("kexikspreadimport"))
 
 #include "kexikspreadimport.moc"

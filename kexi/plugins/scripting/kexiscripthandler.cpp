@@ -118,6 +118,6 @@ KexiScriptHandler::hookIntoView(KexiView *view)
 	insertIntoViewProxyMap(view, prx);
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_script, KGenericFactory<KexiScriptHandler>)
+K_EXPORT_COMPONENT_FACTORY(kexihandler_script, KGenericFactory<KexiScriptHandler>("kexihandler_script"))
 
 #include "kexiscripthandler.moc"

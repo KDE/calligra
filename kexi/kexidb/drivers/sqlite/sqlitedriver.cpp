@@ -27,18 +27,14 @@
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 
-#include <qfile.h>
-#include <qdir.h>
-
-#include <kgenericfactory.h>
 #include <kdebug.h>
 
 using namespace KexiDB;
 
 #ifdef SQLITE2
-KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite2, "sqlite2" );
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite2 );
 #else
-KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite3, "sqlite3" );
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite3 );
 #endif
 
 //! driver specific private data

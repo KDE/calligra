@@ -159,7 +159,7 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 	KexiBrowserItem *item = new KexiBrowserItem(m_list, info);
 	m_baseItems.insert(info->mime().lower(), item);
 
-	kdDebug() << "KexiBrowser::addGroup()" << endl;
+//	kdDebug() << "KexiBrowser::addGroup()" << endl;
 }
 
 void
@@ -171,7 +171,7 @@ KexiBrowser::addItem(KexiPart::Item *item)
 	KexiBrowserItem *parent = m_baseItems.find(item->mime().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
-	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
+//	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
 	
 	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
 	m_normalItems.insert(item->identifier(), bitem);
@@ -237,7 +237,7 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 void
 KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 {
-	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
+//	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
 
 	if (!it->item())
@@ -292,7 +292,7 @@ void KexiBrowser::installEventFilter ( const QObject * filterObj )
 
 void KexiBrowser::slotRemove()
 {
-	kdDebug() << "KexiBrowser::slotRemove()" << endl;
+//	kdDebug() << "KexiBrowser::slotRemove()" << endl;
 	if (!isAvailable("edit_delete"))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
@@ -303,7 +303,7 @@ void KexiBrowser::slotRemove()
 
 void KexiBrowser::slotNewObject()
 {
-	kdDebug() << "KexiBrowser::slotNewObject()" << endl;
+//	kdDebug() << "KexiBrowser::slotNewObject()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->info())
 		return;
@@ -312,7 +312,7 @@ void KexiBrowser::slotNewObject()
 
 void KexiBrowser::slotOpenObject()
 {
-	kdDebug() << "KexiBrowser::slotOpenObject()" << endl;
+//	kdDebug() << "KexiBrowser::slotOpenObject()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
 		return;
@@ -321,7 +321,7 @@ void KexiBrowser::slotOpenObject()
 
 void KexiBrowser::slotDesignObject()
 {
-	kdDebug() << "KexiBrowser::slotDesignObject()" << endl;
+//	kdDebug() << "KexiBrowser::slotDesignObject()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
 		return;

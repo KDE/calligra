@@ -55,6 +55,7 @@
 KInstance *KFDFactory::m_instance = 0L;
 
 KFDFactory::KFDFactory()
+: KParts::Factory(0, "libkformdesigner_kdev_part")
 {}
 
 KFDFactory::~KFDFactory()

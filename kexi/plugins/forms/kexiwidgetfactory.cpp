@@ -76,7 +76,7 @@ KexiWidgetFactory::~KexiWidgetFactory()
 {
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexiwidgets, KGenericFactory<KexiWidgetFactory>)
+K_EXPORT_COMPONENT_FACTORY(kexiwidgets, KGenericFactory<KexiWidgetFactory>("kexiwidgets"))
 
 #include "kexiwidgetfactory.moc"
 

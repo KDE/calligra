@@ -235,7 +235,7 @@ void KexiKugarHandler::load (KoStore *ks)
     }
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_kugar, KGenericFactory<KexiKugarHandler> )
+K_EXPORT_COMPONENT_FACTORY( kexihandler_kugar, KGenericFactory<KexiKugarHandler>("kexihandler_kugar") )
 
 
 #include "kexikugarhandler.moc"

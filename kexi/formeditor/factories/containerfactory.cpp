@@ -710,6 +710,6 @@ ContainerFactory::~ContainerFactory()
 {
 }
 
-K_EXPORT_COMPONENT_FACTORY(containers, KGenericFactory<ContainerFactory>)
+K_EXPORT_COMPONENT_FACTORY(containers, KGenericFactory<ContainerFactory>("containers"))
 
 #include "containerfactory.moc"

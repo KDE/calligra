@@ -350,4 +350,4 @@ void KuKexi::modifyItemPropertyOnLoad(CanvasReportItem *item,const PropPtr &p,QS
 }
 
 
-K_EXPORT_COMPONENT_FACTORY( kudesigner_kexiplugin, KGenericFactory<KuKexi> )
+K_EXPORT_COMPONENT_FACTORY( kudesigner_kexiplugin, KGenericFactory<KuKexi>("kudesigner_kexiplugin") )

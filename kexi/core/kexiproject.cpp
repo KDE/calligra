@@ -260,7 +260,7 @@ KexiProject::items(KexiPart::Info *i)
 	KexiDB::Cursor *cursor = m_connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
 		+ QString::number(i->projectPartID()));//, KexiDB::Cursor::Buffered);
-	kdDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
+//	kdDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
 	if(!cursor)
 		return 0;
 
@@ -280,11 +280,11 @@ KexiProject::items(KexiPart::Info *i)
 			it->setCaption(cursor->value(2).toString());
 		}
 		dict->insert(it->identifier(), it);
-		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
+//		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
 	}
 
 	m_connection->deleteCursor(cursor);
-	kdDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
+//	kdDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
 	m_itemDictsCache.insert( i->projectPartID(), dict );
 	return dict;
 }

@@ -824,7 +824,7 @@ StdWidgetFactory::~StdWidgetFactory()
 {
 }
 
-K_EXPORT_COMPONENT_FACTORY(stdwidgets, KGenericFactory<StdWidgetFactory>)
+K_EXPORT_COMPONENT_FACTORY(stdwidgets, KGenericFactory<StdWidgetFactory>("stdwidgets"))
 
 #include "stdwidgetfactory.moc"
 

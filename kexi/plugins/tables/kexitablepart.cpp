@@ -158,7 +158,27 @@ KexiTablePart::TempData::TempData(QObject* parent, KexiDB::TableSchema *sch)
 
 //----------------
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )
+/**
+TODO
+*/
+/*
+AboutData( const char *programName,
+	const char *version,
+	const char *i18nShortDescription = 0,
+	int licenseType = License_Unknown,
+	const char *i18nCopyrightStatement = 0,
+	const char *i18nText = 0,
+	const char *homePageAddress = 0,
+	const char *bugsEmailAddress = "submit@bugs.kde.org"
+);
+
+#define KEXIPART_EXPORT_FACTORY( libname, partClass, aboutData ) \
+	static KexiPart::AboutData * libname ## updateAD(KexiPart::AboutData *ad) \
+	{ ad->setAppName( #libname ); return ad; } \
+	K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(libname ## updateAD(#libname)) )
+*/
+
+K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart>("kexihandler_table") )
 
 #include "kexitablepart.moc"
 

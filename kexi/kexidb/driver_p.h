@@ -29,6 +29,8 @@
 #include <qptrdict.h>
 #include <qvariant.h>
 
+#include <kgenericfactory.h>
+
 namespace KexiDB {
 
 /*! Detailed definition of driver's default behaviour.
@@ -174,9 +176,9 @@ class DriverPrivate
 
 //! driver's static version information (impementation), 
 //! with KLibFactory symbol declaration
-#define KEXIDB_DRIVER_INFO( class_name, internal_name, internal_string ) \
+#define KEXIDB_DRIVER_INFO( class_name, internal_name ) \
 	int class_name::versionMajor() const { return KEXIDB_VERSION_MAJOR; } \
 	int class_name::versionMinor() const { return KEXIDB_VERSION_MINOR; } \
-	K_EXPORT_COMPONENT_FACTORY(kexidb_ ## internal_name ## driver, KGenericFactory<KexiDB::class_name>( "kexidb_" internal_string "driver" ))
+	K_EXPORT_COMPONENT_FACTORY(kexidb_ ## internal_name ## driver, KGenericFactory<KexiDB::class_name>( "kexidb_" #internal_name ))
 
 #endif

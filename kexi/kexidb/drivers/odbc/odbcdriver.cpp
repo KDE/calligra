@@ -24,7 +24,6 @@
 #include <qcstring.h>
 
 //KDE Includes
-#include <kgenericfactory.h>
 #include <kdebug.h>
 
 //Kexi Includes
@@ -37,11 +36,9 @@
 #include "odbcdriver.h"
 #include "odbcconnection.h"
 
-//K_EXPORT_COMPONENT_FACTORY(kexidb_odbcdriver, KGenericFactory<KexiDB::ODBCDriver>( "kexidb_odbcdriver" ))
-
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( ODBCDriver, odbc, "odbc" );
+KEXIDB_DRIVER_INFO( ODBCDriver, odbc );
 
 ODBCDriver::ODBCDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )

@@ -196,6 +196,14 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - Access -> Kexi migration tool
 - scripting
 
+=== Kexi Parts TODO ===
+- kexipart.h: add KexiPart::AboutData : public KAboutData
+  and 
+  #define KEXIPART_EXPORT_COMPONENT_FACTORY( libname, partClass, aboutData ) \
+    K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(aboutData) )
+- add gui for viewing full part information
+
+
 === PropertyEditor TODO: ==========
 -for each row (proerty) allow to define double-click-action dependent on property type,
  * e.g. bool editor: toggle true/false,
@@ -203,14 +211,6 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
  * fire selection dialog for filename editor, color editor, pixmap editor, etc.
  * expand children for cells of type like "Rect"
  * other types- by default: just move cursor to editor
-
-Detailed TODO for Beta3:
- 1. Finish Startup Framework (see above: MOST RECENT TODO)
-+2. Make alter table GUI (and KexiDB layer) workable
- 3. Make all 3 query views workable (@ GUI and KexiDB layer)
- 4. Make database relations workable (@ GUI and KexiDB layer)
-
-TODO: fix lucijan's hack, with part loading (29 feb)
 
 === USABILITY TODO ===
 -string2Identifier(): convert national chars like 'ó³¿æ' to similar latin-1, instead of '_'
@@ -363,6 +363,8 @@ Core, Plugins
 - SPEEDUP OF STARTUP: 
   Part::initActions() splitted to Part::initPartActions() (default one)
   and Part::initInstanceActions() (lazy one)
+Kexi
+- name argument is now passed to KGenericFactory to avoid runtime warnings
 
 2004-10-14
 Kexi

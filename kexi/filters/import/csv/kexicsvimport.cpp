@@ -103,6 +103,6 @@ KexiCSVImport::~KexiCSVImport()
 	}
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexicsvimport, KGenericFactory<KexiCSVImport>)
+K_EXPORT_COMPONENT_FACTORY(kexicsvimport, KGenericFactory<KexiCSVImport>("kexicsvimport"))
 
 #include "kexicsvimport.moc"
