@@ -93,7 +93,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resi
   m_pSize2->setRange( KoUnit::ptToUnit( 2, m_pView->doc()->getUnit() ), KoUnit::ptToUnit( 400, m_pView->doc()->getUnit() ), KoUnit::ptToUnit( 1, m_pView->doc()->getUnit() ) );
   m_pSize2->setLabel( label );
   m_pSize2->setPrecision( 2 );
-  m_pSize2->setValue( KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ) );
+  m_pSize2->setValue( KoUnit::ptToUnit( size/m_pView->canvasWidget()->zoom(), m_pView->doc()->getUnit() ) );
   //store the visible value, for later check for changes
   size = KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
   m_pSize2->setSuffix( m_pView->doc()->getUnitName() );
@@ -122,7 +122,7 @@ void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->selection() );
 
-    double new_size = KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
+    double new_size = KoUnit::ptFromUnit( m_pSize2->value()*m_pView->canvasWidget()->zoom(), m_pView->doc()->getUnit() );
     if ( int( size ) != int( new_size ) )
     {
         if ( !m_pView->doc()->undoBuffer()->isLocked() )
