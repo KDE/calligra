@@ -2,7 +2,7 @@ kde_module_LTLIBRARIES = libkexipart.la
 libkexipart_la_SOURCES = kexipart.cpp
 
 libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lkpath core/libkexicore.la
+libkexipart_la_LIBADD = $(LIB_KOFFICEUI) core/libkexicore.la
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kexi.la
