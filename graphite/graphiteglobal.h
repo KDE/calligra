@@ -26,6 +26,10 @@
 
 #include <math.h>
 
+#ifndef DBL_MIN
+#define DBL_MIN          4.94065645841246544e-324
+#endif
+
 class QPoint;
 class QPen;
 class QDomDocument;
