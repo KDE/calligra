@@ -4,6 +4,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+   Copyright (C) 2001 Michael Johnson <mikej@xnet.com>
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
@@ -28,7 +29,7 @@
            /home/kde/koffice/filters/kword/ascii/asciiexport.cc
         and breaking the code into two new files:
            /home/kde/koffice/filters/kword/abiword/processors.cc 
-	   /home/kde/koffice/filters/kword/abiword/processors.h
+          /home/kde/koffice/filters/kword/abiword/processors.h
 
    19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
         New functions ending with Dom
@@ -185,6 +186,10 @@ void ProcessAttributes ( QDomNode                     myNode,
                         else if ( (*attrProcessingIt).type == "int" )
                         {
                             *((int *) (*attrProcessingIt).data) = myAttrib.value ().toInt ();
+                        }
+                        else if ( (*attrProcessingIt).type == "double" )
+                        {
+                            *((double *) (*attrProcessingIt).data) =  myAttrib.value ().toDouble ();
                         }
                         else
                         {
