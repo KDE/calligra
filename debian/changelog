@@ -1,8 +1,10 @@
-koffice-cvs (2.0-20000223-1.0) experimental; urgency=low
+koffice-cvs (2.0-20000302-1.0) experimental; urgency=low
 
   * new CVS version
+  * Adding in build-depends
+  * Fixing problem with depending on the -dev package
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 23 Feb 2000 18:00:06 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 02 Mar 2000 22:00:00 -0700
 
 koffice-cvs (2.0-19990930-1) experimental; urgency=low
 

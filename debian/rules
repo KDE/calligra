@@ -51,13 +51,14 @@ binary-arch: build
 	dh_clean -k
 	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp/
 	perl -w admin/debianrules
-	dh_movefiles -pkoffice-dev-cvs $(kde_libdir)/lib*.so $(kde_libdir)/lib*.a $(kde_libdir)/lib*.la  $(kde_includedir)
+	dh_movefiles -pkoffice-dev-cvs $(kde_libdir)/lib*.so $(kde_libdir)/lib*.a $(kde_includedir)
 	-mv `find debian/koffice-dev-cvs/$(kde_libdir) -type f -name "*.so"` debian/tmp/$(kde_libdir)/
 	dh_undocumented
 	dh_installdocs
 	dh_installmenu
 	dh_installchangelogs
 	dh_strip
+	dh_perl
 	dh_compress
 	dh_fixperms
 	dh_suidregister

@@ -9,3 +9,5 @@ koshell x11 Apps/KOffice
 kpresenter x11 Apps/KOffice
 kspread x11 Apps/KOffice
 kword x11 Apps/KOffice
+example x11 none
+kgraph x11 Apps/KOffice

@@ -1,8 +1,9 @@
 Source: koffice-cvs
+Build-Depends: automake, debhelper, libqt2.1-dev, kdelibs3-dev-cvs, kdebase-dev-cvs
 Section: x11
 Priority: extra
 Maintainer: Stephan Kulow <coolo@kde.org>
-Standards-Version: 3.0.1
+Standards-Version: 3.1.0
 
 Package: koffice-cvs
 Architecture: any
