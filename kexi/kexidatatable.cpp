@@ -26,6 +26,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "kexiapplication.h"
 
@@ -37,17 +38,20 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 	setCaption(i18n(caption + " - table"));
 }
 
-void
+bool
 KexiDataTable::executeQuery(QString queryStatement)
 {
 	QSqlDatabase *db = kexi->project()->db();
 	QSqlQuery query(queryStatement);
+
 	QSqlRecord record = db->record(query);
 
-	QSqlError error = db->lastError();
+	QSqlError error = query.lastError();
 	if(error.type() != QSqlError::None)
 	{
-		kdDebug() << "ERROR!" << endl;
+		QString errorText = error.databaseText();
+		KMessageBox::sorry(this, i18n("<qt>Error in your sql-statement:<br><br><b>" + errorText + "</b>"), i18n("Query satement"));
+		return false; 
 	}
 
 	kdDebug() << record.count() << " column(s) to execute" << endl;
@@ -68,6 +72,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 			it->setText(i, query.value(i).toString());
 		}
 	}
+	return true;
 }
 
 KexiDataTable::~KexiDataTable()

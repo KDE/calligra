@@ -32,7 +32,7 @@ class KexiDataTable : public KexiTableView
 		KexiDataTable(QWidget *parent, QString content, const char *name=0);
 		~KexiDataTable();
 		
-		void executeQuery(QString query);
+		bool executeQuery(QString query);
 };
  
 #endif

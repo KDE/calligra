@@ -143,8 +143,14 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 			if ( r->type() == KexiBrowserItem::Child )
 			{
 				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow()->workspace(), r->text(0), "table");
-				kt->executeQuery("select * from " + r->text(0)); 
-				kt->show(); 
+				if(kt->executeQuery("select * from " + r->text(0)))
+				{
+					kt->show();
+				}
+				else
+				{
+					delete kt;
+				} 
 			}
 			break;
 		}
