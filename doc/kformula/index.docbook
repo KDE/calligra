@@ -1108,6 +1108,8 @@ In order to print &PostScript; files from &kformula;, you need to get
 the Esstix fonts. These fonts can be obtained from 
 <ulink url="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">
 ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink>
+or <ulink url="http://www.w3.org/Amaya/Distribution/esstix.tar.gz">
+http://www.w3.org/Amaya/Distribution/esstix.tar.gz</ulink>
 </para>
 
 <sect1>
