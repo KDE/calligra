@@ -24,7 +24,9 @@
 */
 
 #include <errno.h>
+#ifdef __linux__
 #include <iconv.h>
+#endif
 #include <kdebug.h>
 #include <msword.h>
 #include <paragraph.h>
