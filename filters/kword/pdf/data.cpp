@@ -117,7 +117,6 @@ QDomElement Data::createFrameset(FramesetType type, const QString &n)
                 : QString("Picture %1")).arg(index);
     frameset.setAttribute("name", name);
     frameset.setAttribute("frameInfo", 0);
-    _framesets.appendChild(frameset);
 
 //    kdDebug(30516) << "new frameset " << index << (text ? " text" : " image")
 //                   << endl;
@@ -145,7 +144,8 @@ QDomElement Data::createFrame(FramesetType type, const DRect &r,
     return frame;
 }
 
-void Data::initPage(const QValueVector<DRect> &rects)
+void Data::initPage(const QValueVector<DRect> &rects,
+                    const QValueList<QDomElement> &pictures)
 {
     for (uint i=0; i<Nb_ParagraphTypes; i++) {
 //        kdDebug(30516) << "page #" << pageIndex << " rect #" << i
@@ -157,6 +157,10 @@ void Data::initPage(const QValueVector<DRect> &rects)
         QDomElement frame = createFrame(Text, rects[i], true);
         _textFramesets[i].appendChild(frame);
     }
+
+    QValueList<QDomElement>::const_iterator it;
+    for (it = pictures.begin(); it!=pictures.end(); ++it)
+        _framesets.appendChild(*it);
 
     // page bookmark
     QDomElement element = createElement("BOOKMARKITEM");

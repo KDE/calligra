@@ -142,14 +142,14 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     _images = new QCheckBox(i18n("Import images"), plainPage());
     _images->setChecked(true);
     top->addWidget(_images);
-    _returns = new QCheckBox(i18n("\"Smart\" mode"), plainPage());
-    QWhatsThis::add(_returns,
-                    i18n("The import filter will remove returns and"
-                         "hyphens at end of line. It will also try"
-                         "to compute the paragraph alignment."
+    _smart = new QCheckBox(i18n("\"Smart\" mode"), plainPage());
+    _smart->setChecked(true);
+    QWhatsThis::add(_smart,
+                    i18n("Removes returns and hyphens at end of line. "
+                         "Also tryto compute the paragraph alignment."
                          "Note that the layout of some pages can "
-                         "be more or less messed up."));
-    top->addWidget(_returns);
+                         "get messed up."));
+    top->addWidget(_smart);
 
     // passwords
     gbox = new QVGroupBox(i18n("Passwords"), plainPage());
@@ -184,7 +184,7 @@ Options Dialog::options() const
     o.ownerPassword = _owner->text();
     o.userPassword = _user->text();
     o.importImages = _images->isChecked();
-    o.removeReturns = _returns->isChecked();
+    o.smart = _smart->isChecked();
     return o;
 }
 

@@ -104,22 +104,31 @@ TextBlock *Page::block(TextLine *line, int index)
 }
 
 //-----------------------------------------------------------------------------
-bool Page::isLastParagraphLine(TextLine *line)
+bool Page::isLastParagraphLine(TextLine *line, const Paragraph &par)
 {
+    // last line of page
     if ( line->next==0 ) return true;
     double dy = line->next->yMin - line->yMax;
     double ndy = line->next->yMax - line->next->yMin;
     String *str = static_cast<String *>(line->blocks->strings);
     String *nStr = static_cast<String *>(line->next->blocks->strings);
-    if ( dy>0.5*ndy || str->frameIndex()!=nStr->frameIndex() ) return true;
+    // next line far below
+    if ( dy>0.5*ndy ) return true;
+    // image displayed before next line (?)
+    if ( str->frameIndex()!=nStr->frameIndex() ) return true;
+    if ( line->blocks==0 ) return false; // should not happen
+    // if contains one or more inside tabs
+    if (line->blocks->next) return true;
+    if ( line->next && line->next->blocks==0 ) return false;//should not happen
+    // if next line contains one or more inside tabs
+    if ( line->next && line->next->blocks->next ) return true;
     TextBlock *b = block(line, -1);
-    if ( b==0 || b->len==0 ) return false;
+    if ( b==0 || b->len==0 ) return false; // should not happen
     QChar c = QChar(b->text[b->len-1]);
+    // last line char is not '.' or ':'
     if ( c!='.' && c!=':' ) return false;
-    b = line->next->blocks;
-    if ( b==0 || b->len==0 ) return false;
-    c = QChar(b->text[0]);
-    return ( c.category()==QChar::Letter_Uppercase );
+    // if at line end and block aligned : same paragraph
+    return ( !equal(b->xMax, par.rect().right()) );
 }
 
 void Page::createParagraphs()
@@ -128,8 +137,8 @@ void Page::createParagraphs()
     uint nbLines = 0;
     for (TextLine *line = lines; line; line = line->next) {
         nbLines++;
-        if ( isLastParagraphLine(line) ) {
-            Paragraph par(first, nbLines);
+        Paragraph par(first, nbLines);
+        if ( isLastParagraphLine(line, par) ) {
             _pars.push_back(par);
             nbLines = 0;
             first = line->next;
@@ -213,76 +222,66 @@ void Page::endPage()
 //-----------------------------------------------------------------------------
 void Page::initParagraph(Paragraph &par) const
 {
-    bool rightAligned = true, centered = true, justified = true;
+    bool rightAligned = true, centered = true, leftAligned = true;
+    const double pleft = _rects[par.type].left();
+    const double pright = _rects[par.type].right();
+    const double pmean = (pleft + pright) / 2;
+
     QValueList<TextLine *>::const_iterator it;
     for (it = par.lines().begin(); it!=par.lines().end(); ++it) {
-        // compute alignment
-        double xMin = (*it)->blocks->xMin;
-//            QString text;
-//            for (int i=0; i<kMin(4, line->blocks->len); i++)
-//                text += QChar(line->blocks->text[i]);
-//        kdDebug(30516) << text << "  /// par=" << _pars.size() << " line="
-//                       << par.nbLines << endl;
-        if ( !par.isLast(*it) ) {
-            double nxMin = (*it)->next->blocks->xMin;
-            double xMax = block(*it, -1)->xMax;
-            double nxMax = block((*it)->next, -1)->xMax;
-            double xMean = (xMin + xMax) / 2;
-            double nxMean = (nxMin + nxMax) / 2;
-//            kdDebug(30516) << " xMax=" << xMax << " nxMax=" << nxMax
-//                           << " equal=" << equal(xMax, nxMax)
-//                           << " xMin=" << xMin << " nxMin=" << nxMin
-//                           << " equal=" << equal(xMin, nxMin)
-//                           << " equal=" << equal(xMean, nxMean) << endl;
-            if ( centered && !equal(xMean, nxMean) ) centered = false;
-            if ( rightAligned && !equal(xMax, nxMax) ) rightAligned = false;
-            if ( justified && !equal(xMin, nxMin) ) justified = false;
-            if ( justified && !par.isLast((*it)->next)
-                 && !equal(xMax, nxMax) )
-                justified = false;
-        }
-
-        // compute indents
-        xMin -= _rects[par.type].left();
-        if ( par.isFirst(*it) ) {
-            par.firstIndent = xMin;
-            par.leftIndent = xMin;
-        } else par.leftIndent = kMin(par.leftIndent, xMin);
-
         // compute tabulations
         for (TextBlock *blk = (*it)->blocks; blk; blk = blk->next) {
-            double epsilon = 0.1 * ((*it)->yMax - (*it)->yMin);
             double xMin = blk->xMin - _rects[par.type].left();
-            int res = par.findTab(xMin, epsilon, par.hasOneLine());
+            int res = par.findTab(xMin, *it);
             if ( res==-1 ) par.tabs.push_back(xMin);
         }
         qHeapSort2(par.tabs);
+
+        // compute indents
+        double left = (*it)->blocks->xMin - pleft;
+        if ( par.isFirst(*it) ) {
+            par.firstIndent = left;
+            par.leftIndent = left;
+        } else if ( par.isSecond(*it) ) par.leftIndent = left;
+        else par.leftIndent = kMin(par.leftIndent, left);
+    }
+
+    // compute alignment
+    for (it = par.lines().begin(); it!=par.lines().end(); ++it) {
+        double left = (*it)->blocks->xMin;
+        double right = block(*it, -1)->xMax;
+        double mean = (left + right) / 2;
+//        QString text;
+//        for (int i=0; i<kMin(4, (*it)->blocks->len); i++)
+//            text += QChar((*it)->blocks->text[i]);
+//        kdDebug(30516) << text << " left=" << left
+//                       << " pleft=" << pleft + par.leftIndent
+//                       << " indent=" << par.leftIndent
+//                       << " findent=" << par.firstIndent << endl;
+        if ( centered && !equal(mean, pmean) ) centered = false;
+        if ( leftAligned && (!par.isFirst(*it) || par.hasOneLine())
+             && !equal(left, pleft + par.leftIndent, 0.05) ) {
+            kdDebug(30516) << "not left aligned" << endl;
+            leftAligned = false;
+        }
+        if ( rightAligned && (!par.isLast(*it) || par.hasOneLine())
+             && !equal(right, pright, 0.05) ) {
+            kdDebug(30516) << "not right aligned" << endl;
+            rightAligned = false;
+        }
     }
 
     // finalize alignment
-    if ( !par.hasOneLine() ) {
-        if (justified) par.align = AlignBlock;
-        else if (centered) par.align = AlignCenter;
-        else if (rightAligned) par.align = AlignRight;
-    } else {
-        double mean = (par.rect().left() + par.rect().right())/2;
-        double bmean = (_rects[par.type].left() + _rects[par.type].right())/2;
-//        kdDebug(30516) << "mean: " << mean << " bmean: " << bmean
-//                       << " " << equal(mean, bmean)
-//                   << " " << !equal(par.rect().left(), _rects[par.type].left())
-//                       << endl;
-        if ( equal(mean, bmean)
-             && !equal(par.rect().left(), _rects[par.type].left()) )
-            par.align = AlignCenter;
-    }
+    if (rightAligned) par.align = (leftAligned ? AlignBlock : AlignRight);
+    else if (centered) par.align = AlignCenter;
 }
 
 void Page::fillParagraph(Paragraph &par, double &offset) const
 {
     par.offset = par.lines().first()->yMin - offset;
-    kdDebug(30516) << "offset=" << offset
-                   << " yMin=" << par.lines().first()->yMin
-                   << " paroffset=" << par.offset << endl;
+//    kdDebug(30516) << "offset=" << offset
+//                   << " yMin=" << par.lines().first()->yMin
+//                   << " paroffset=" << par.offset << endl;
     if ( par.offset>0 ) offset += par.offset;
 
     QValueList<TextLine *>::const_iterator it;
@@ -290,7 +289,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
         // end of previous line (inside a paragraph)
         if ( !par.isFirst(*it) ) {
             bool hyphen = false;
-            if (_data.options().removeReturns) {
+            if (_data.options().smart) {
                 // check hyphen
                 uint bi, pbi;
                 int si = par.charFromEnd(0, bi);
@@ -315,7 +314,12 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
             }
             if ( !hyphen ) {
                 Block b;
-                b.text = (_data.options().removeReturns ? ' ' : '\n');
+                bool remove = _data.options().smart;
+                if ( remove && par.align!=AlignBlock ) {
+                    double pright = _rects[par.type].right();
+                    remove = ( par.rect().right()>0.9*pright );
+                }
+                b.text = (remove ? ' ' : '\n');
                 b.font = static_cast<String *>((*it)->blocks->strings)->font();
                 par.blocks.push_back(b);
             }
@@ -326,9 +330,8 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
         for (TextBlock *blk = (*it)->blocks; blk; blk = blk->next) {
 
             // tabulations
-            double epsilon = 0.1 * ((*it)->yMax - (*it)->yMin);
             double xMin = blk->xMin - _rects[par.type].left();
-            int res = par.findTab(xMin, epsilon, par.isFirst(*it));
+            int res = par.findTab(xMin, *it);
             if ( res>=0 ) {
                 if (prevBlk) {
                     double xMax = prevBlk->xMax - _rects[par.type].left();
@@ -336,7 +339,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                 } else res++;
                 // no tabs for first block in AlignCenter and AlignRight
                 // if smart mode
-                if ( prevBlk || !_data.options().removeReturns
+                if ( prevBlk || !_data.options().smart
                      || (par.align!=AlignCenter && par.align!=AlignRight) ) {
                     for (uint k=0; k<uint(res); k++) {
                         Block b;
@@ -458,8 +461,17 @@ void Page::prepare()
     TIME_END;
 
     TIME_START("init paragraphs");
-    for (uint i=0; i<_pars.size(); i++)
+    for (uint i=0; i<_pars.size(); i++) {
         initParagraph(_pars[i]);
+
+        // special case for wide and centered one liner without tab
+        if ( _pars[i].align==AlignBlock && _pars[i].hasOneLine()
+             && _pars[i].tabs.size()==0
+             && (_pars.size()==1
+                 || (i!=0 && _pars[i-1].align==AlignCenter)
+                 || ((i+1)!=_pars.size() && _pars[i+1].align==AlignCenter)) )
+            _pars[i].align = AlignCenter;
+    }
     TIME_END;
 
     TIME_START("fill paragraphs");
@@ -516,8 +528,7 @@ void Page::dump(const Paragraph &par)
     }
 
     // indents
-    if ( !_data.options().removeReturns
-         || (par.align!=AlignCenter && par.align!=AlignRight) ) {
+    if ( !_data.options().smart || par.align!=AlignCenter ) {
         QDomElement element = _data.createElement("INDENTS");
         element.setAttribute("left", par.leftIndent);
         double delta = par.firstIndent - par.leftIndent;
@@ -533,9 +544,9 @@ void Page::dump(const Paragraph &par)
     }
 
     // flow
-    if (_data.options().removeReturns) {
+    if (_data.options().smart) {
         QString flow;
-        kdDebug(30516) << "flow=" << par.align << endl;
+//        kdDebug(30516) << "flow=" << par.align << endl;
         switch (par.align) {
         case AlignLeft: break;
         case AlignRight: flow = "right"; break;

@@ -58,7 +58,8 @@ public:
 
     QDomElement pictureFrameset(const DRect &);
 
-    void initPage(const QValueVector<DRect> &);
+    void initPage(const QValueVector<DRect> &,
+                  const QValueList<QDomElement> &pictures);
     void endDump();
 
 public:

@@ -57,11 +57,13 @@ public:
     bool hasOneLine() const { return _lines.count()==1; }
     const QValueList<TextLine *> lines() const { return _lines; }
     bool isFirst(const TextLine *line) const { return line==_lines.first();}
+    bool isSecond(const TextLine* line) const
+        { return (_lines.count()>1 && line==_lines.first()->next); }
     bool isLast(const TextLine *line) const { return line==_lines.last(); }
 
-    int findTab(double xMin, double epsilon, bool firstLine) const;
+    int findTab(double xMin, const TextLine *) const;
     uint findNbTabs(uint i, double prevXMax) const;
-    int charFromEnd(uint dec, uint &blockIndex);
+    int charFromEnd(uint dec, uint &blockIndex) const;
 
 public:
     ParagraphType        type;

@@ -53,9 +53,10 @@ Paragraph::Paragraph(TextLine *first, uint nbLines)
         }
 }
 
-int Paragraph::findTab(double xMin, double epsilon, bool firstLine) const
+int Paragraph::findTab(double xMin, const TextLine *line) const
 {
-    double dx = xMin - (firstLine ? firstIndent : leftIndent);
+    double epsilon = 0.1 * (line->yMax - line->yMin);
+    double dx = xMin - (isFirst(line) ? firstIndent : leftIndent);
     if ( fabs(dx)<epsilon ) return -2;
     for (uint i=0; i<tabs.size(); i++)
         if ( fabs(xMin-tabs[i])<epsilon ) return i;
@@ -71,7 +72,7 @@ uint Paragraph::findNbTabs(uint i, double prevXMax) const
     return i-k+1;
 }
 
-int Paragraph::charFromEnd(uint dec, uint &bi)
+int Paragraph::charFromEnd(uint dec, uint &bi) const
 {
     uint k = 0;
     for (uint i=blocks.size(); i>0; i--) {

@@ -5,7 +5,7 @@ Small things:
 - correctly detect and layout list bullets.
 - correctly layout superscript characters.
 - complete "latexsymbol" conversion table (?)
-- complete accent+letter conversion table.
+- complete accent+letter conversion table and detect above/below accents.
 - check below/above accent+letter combination.
 - check "..." symbol and replace it with dots (?)
 - treat lots of "......" as tab with '.' filling

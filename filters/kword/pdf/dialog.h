@@ -73,7 +73,7 @@ public:
 public:
     SelectionRange range;
     QString        ownerPassword, userPassword;
-    bool           importImages, removeReturns;
+    bool           importImages, smart;
 };
 
 class Dialog : public KDialogBase
@@ -93,7 +93,7 @@ private:
     QRadioButton *_allButton, *_rangeButton;
     QButtonGroup *_group;
     KLineEdit    *_range, *_owner, *_user;
-    QCheckBox    *_images, *_returns;
+    QCheckBox    *_images, *_smart;
 };
 
 }; // namespace

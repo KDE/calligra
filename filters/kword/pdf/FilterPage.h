@@ -54,10 +54,13 @@ public:
     // second pass
     void dump();
 
+public:
+    QValueList<QDomElement> pictures;
+
 private:
     FontFamily checkSpecial(QChar &, const Font &) const;
     static TextBlock *block(TextLine *, int index);
-    static bool isLastParagraphLine(TextLine *);
+    static bool isLastParagraphLine(TextLine *, const Paragraph &);
 
     // first pass
     void createParagraphs();

@@ -100,6 +100,7 @@ private:
     void clear();
     static DPathVector convertPath(GfxState *);
     void doFill(const DPathVector &);
+    Page *current() const { return _pages.getLast(); }
 
 private:
     Data &_data;

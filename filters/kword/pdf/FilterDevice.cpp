@@ -67,25 +67,29 @@ void Device::init()
     for (Page *page = _pages.first(); page; page = _pages.next()) {
         const DRect &hr = page->rects()[Header];
         const DRect &br = page->rects()[Body];
+        const DRect &fr = page->rects()[Footer];
         if ( hr.isValid() ) {
             maxHeaderBottom = kMax(maxHeaderBottom, hr.bottom());
-            minHeaderBodyDelta =
-                kMin(minHeaderBodyDelta, br.top() - hr.bottom());
+            if ( br.isValid() )
+                minHeaderBodyDelta =
+                    kMin(minHeaderBodyDelta, br.top() - hr.bottom());
+            minLeft = kMin(minLeft, hr.left());
+            maxRight = kMax(maxRight, hr.right());
         }
-        minBodyTop = kMin(minBodyTop, br.top());
-        const DRect &fr = page->rects()[Footer];
         if ( fr.isValid() ) {
             minFooterTop = kMin(minFooterTop, fr.top());
-            minBodyFooterDelta =
-                kMin(minBodyFooterDelta, fr.top() - br.bottom());
+            if ( br.isValid() )
+                minBodyFooterDelta =
+                    kMin(minBodyFooterDelta, fr.top() - br.bottom());
+            minLeft = kMin(minLeft, fr.left());
+            maxRight = kMax(maxRight, fr.right());
         }
-        maxBodyBottom = kMax(maxBodyBottom, br.bottom());
-        minLeft = kMin(minLeft, br.left());
-        minLeft = kMin(minLeft, hr.left());
-        minLeft = kMin(minLeft, fr.left());
-        maxRight = kMax(maxRight, br.right());
-        maxRight = kMax(maxRight, hr.right());
-        maxRight = kMax(maxRight, fr.right());
+        if ( br.isValid() ) {
+            minBodyTop = kMin(minBodyTop, br.top());
+            maxBodyBottom = kMax(maxBodyBottom, br.bottom());
+            minLeft = kMin(minLeft, br.left());
+            maxRight = kMax(maxRight, br.right());
+        }
     }
 
     // set minimal top and maximal bottom to body frame
@@ -116,7 +120,7 @@ void Device::init()
 void Device::dumpPage(uint i)
 {
     Page *page = _pages.at(i);
-    _data.initPage(page->rects());
+    _data.initPage(page->rects(), page->pictures);
     page->dump();
 }
 
@@ -128,31 +132,31 @@ void Device::startPage(int, GfxState *)
 void Device::endPage()
 {
     if ( !_currentImage.image.isNull() ) addImage();
-    _pages.getLast()->endPage();
+    current()->endPage();
     clear();
     kdDebug(30516) << "-- end page --------------------------" << endl;
 }
 
 void Device::updateFont(GfxState *state)
 {
-    _pages.getLast()->updateFont(state);
+    current()->updateFont(state);
 }
 
 void Device::beginString(GfxState *state, GString *)
 {
-    _pages.getLast()->beginString(state, state->getCurX(), state->getCurY());
+    current()->beginString(state, state->getCurX(), state->getCurY());
 }
 
 void Device::endString(GfxState *)
 {
-    _pages.getLast()->endString();
+    current()->endString();
 }
 
 void Device::drawChar(GfxState *state, double x, double y,
                             double dx, double dy, double, double,
                             CharCode, Unicode *u, int uLen)
 {
-    _pages.getLast()->addChar(state, x, y, dx, dy, u, uLen);
+    current()->addChar(state, x, y, dx, dy, u, uLen);
 }
 
 void Device::drawLink(::Link* link, Catalog *cat)
@@ -166,7 +170,7 @@ void Device::drawLink(::Link* link, Catalog *cat)
 
     DRect r(kMin(ux1, ux2), kMax(ux1, ux2), kMin(uy1, uy2), kMax(uy1, uy2));
     Link *l = new Link(r, *link->getAction(), *cat);
-    _pages.getLast()->addLink(l);
+    current()->addLink(l);
 }
 
 void Device::addImage()
@@ -192,6 +196,7 @@ void Device::addImage()
     // add image
     QString name = QString("pictures/picture%1.png").arg(_data.imageIndex());
     QDomElement frameset = _data.pictureFrameset(_currentImage.rect);
+    current()->pictures.append(frameset);
     QDomElement picture = _data.createElement("PICTURE");
     picture.setAttribute("keepAspectRatio", "false");
     frameset.appendChild(picture);
