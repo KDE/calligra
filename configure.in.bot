@@ -1,8 +1,6 @@
 dnl put here things which have to be done as very last part of configure
 dnl Ripped off from the kdelibs version (Werner)
 
-all_tests=fine
-
 if test -z "$LIBFREETYPE_LIBS"; then
   echo ""
   echo "You're missing libfreetype. karbon will be compiled without text support."
@@ -12,24 +10,14 @@ if test -z "$LIBFREETYPE_LIBS"; then
   all_tests=bad
 fi
 
-if test -z "$LIBMAGICK_LIBS"; then
-  echo ""
-  echo "You're missing ImageMagick. krita will not be compiled."
-  echo "You can download ImageMagick from"
-  echo "http://www.imagemagick.org/"
-  echo ""
-  all_tests=bad
-fi
-
-if test "$all_tests" = "fine"; then
-  echo ""
-  echo "Good - your configure finished. Start make now"
-  echo ""
-fi
-
 if test "$all_tests" = "bad"; then
   echo ""
   echo "Please remove the file config.cache after installing any libraries"
   echo "so that configure will find them next time."
   echo ""
+else
+  echo ""
+  echo "Good - your configure finished. Start make now"
+  echo ""
 fi
+
