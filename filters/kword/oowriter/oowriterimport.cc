@@ -170,7 +170,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
 
     // store preview
     
-    if ( thumbnail.isNull() )
+    if ( ! thumbnail.isNull() )
     {
         // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy KOffice previews have no alpha channel
         // Legacy KOffice previews are 256x256x8 instead of 128x128x32
