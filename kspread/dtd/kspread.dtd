@@ -298,7 +298,7 @@
                         family           CDATA #REQUIRED
                         weight           CDATA #REQUIRED>
 
-<!ELEMENT validity  (param,title,message,timemin,timemax)>
+<!ELEMENT validity  (param,title,message,timemin,timemax,inputtitle,inputmessage)>
 
 <!--	Describes validate format.
 
@@ -308,6 +308,9 @@
                         valmax  Maximal value of the validate condition
                         allow   type of value allows (ALL, NUmber etc...)
                         action  Action executes when it's not validate (Error, warning etc...)
+			displaymessage display or not error alert
+                        displayvalidationinformation display or not input help
+                        allowemptycell allow to have an empty cell
 
 -->
 <!ELEMENT param EMPTY>
@@ -315,7 +318,10 @@
                         cond             CDATA #REQUIRED
                         valmax           CDATA #REQUIRED
                         allow            CDATA #REQUIRED
-                        action           CDATA #REQUIRED>
+                        action           CDATA #REQUIRED
+			displaymessage   CDATA #REQUIRED
+                        displayvalidationinformation CDATA #REQUIRED
+                        allowemptycell   CDATA #REQUIRED>
 
 <!ELEMENT title (#PCDATA)>
 
@@ -324,6 +330,10 @@
 <!ELEMENT timemin (#PCDATA)>
 
 <!ELEMENT timemax (#PCDATA)>
+
+<!ELEMENT inputmessage (#PCDATA)>
+
+<!ELEMENT inputtitle (#PCDATA)>
 
 <!--   Describes conditional cell attribut format.
 -->

@@ -4372,6 +4372,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         param.setAttribute("valmin",d->extra()->validity->valMin);
         param.setAttribute("valmax",d->extra()->validity->valMax);
         param.setAttribute("displaymessage",d->extra()->validity->displayMessage);
+        param.setAttribute("displayvalidationinformation",d->extra()->validity->displayValidationInformation);
+        param.setAttribute("allowemptycell",d->extra()->validity->allowEmptyCell);
         validity.appendChild(param);
         QDomElement title = doc.createElement( "title" );
         title.appendChild( doc.createTextNode( d->extra()->validity->title ) );
@@ -4379,6 +4381,16 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         QDomElement message = doc.createElement( "message" );
         message.appendChild( doc.createCDATASection( d->extra()->validity->message ) );
         validity.appendChild( message );
+
+        QDomElement inputTitle = doc.createElement( "inputtitle" );
+        inputTitle.appendChild( doc.createTextNode( d->extra()->validity->titleInfo ) );
+        validity.appendChild( inputTitle );
+
+        QDomElement inputMessage = doc.createElement( "inputmessage" );
+        inputMessage.appendChild( doc.createTextNode( d->extra()->validity->messageInfo ) );
+        validity.appendChild( inputMessage );
+
+
 
         QString tmp;
         if ( d->extra()->validity->timeMin.isValid() )
@@ -5476,7 +5488,26 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           {
               d->extra()->validity->displayMessage = ( bool )param.attribute("displaymessage").toInt();
           }
+          if ( param.hasAttribute( "displayvalidationinformation" ) )
+          {
+              d->extra()->validity->displayValidationInformation = ( bool )param.attribute("displayvalidationinformation").toInt();
+          }
+          if ( param.hasAttribute( "allowemptycell" ) )
+          {
+              d->extra()->validity->allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
+          }
         }
+        QDomElement inputTitle = validity.namedItem( "inputtitle" ).toElement();
+        if (!inputTitle.isNull())
+        {
+            d->extra()->validity->titleInfo = inputTitle.text();
+        }
+        QDomElement inputMessage = validity.namedItem( "inputmessage" ).toElement();
+        if (!inputMessage.isNull())
+        {
+            d->extra()->validity->messageInfo = inputMessage.text();
+        }
+
         QDomElement title = validity.namedItem( "title" ).toElement();
         if (!title.isNull())
         {
