@@ -32,44 +32,53 @@ pqxxSqlConnection::~pqxxSqlConnection()
 }
 
 //==================================================================================
-//
+//Return a new query based on a query statment
 Cursor* pqxxSqlConnection::prepareQuery( const QString& statement,  uint cursor_options)
 {
-    return new pqxxSqlCursor(this, statement, cursor_options);
+    return new pqxxSqlCursor(this, statement, 1); //Always used buffered cursor
+}
+
+//==================================================================================
+//Return a new query based on a query object
+Cursor* pqxxSqlConnection::prepareQuery( QuerySchema& query, uint cursor_options)
+{
+    return new pqxxSqlCursor(this, query, 1);//Always used buffered cursor
 }
 
 //==================================================================================
 //
-Cursor* pqxxSqlConnection::prepareQuery( QuerySchema& query, uint cursor_options)
-{}
-
-//==================================================================================
-//
 void pqxxSqlConnection::escapeString( const QString& str, char *target )
-{}
+{
+#warning TODO: need to implement string escaping
+}
 
 //==================================================================================
 //
 QString pqxxSqlConnection::escapeString( const QString& str) const
-    {}
+{
+#warning TODO: need to implement string escaping
+}
 
 //==================================================================================
 //
 QCString pqxxSqlConnection::escapeString( const QCString& str) const
-    {}
+{
+#warning TODO: need to implement string escaping
+}
 
 //==================================================================================
-//
+//Properly escaped a database object name
 QString pqxxSqlConnection::escapeName(const QString &name) const
 {
     return QString("\"" + name + "\"");
 }
 
+//==================================================================================
 //Made this a noop
 //We tell kexi we are connected, but we wont actually connect until we use a database!
 bool pqxxSqlConnection::drv_connect()
 {
-    kdDebug() << "pqxxSqlConnection::drv_connect" << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_connect" << endl;
     return true;
 }
 
@@ -78,27 +87,16 @@ bool pqxxSqlConnection::drv_connect()
 //We tell kexi wehave disconnected, but it is actually handled by closeDatabse
 bool pqxxSqlConnection::drv_disconnect()
 {
-    kdDebug() << "pqxxSqlConnection::drv_disconnect: " << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_disconnect: " << endl;
     return true;
 }
 
 //==================================================================================
-//We need to check if we are connected...most likely we will have to open a connection to template1
-//to get the list of databases
+//Return a list of database names
 bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
 {
-    kdDebug() << "pqxxSqlConnection::drv_getDatabaseList" << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
 
-    /*
-    if(!isConnected())
-    {
-        kdDebug() << "pqxxSqlConnection::drv_getDatabaseList: Not connected" << endl;
-        if (!drv_useDatabase("template1"))
-        {
-            return false;
-        }
-    }
-*/
     if (drv_executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
     {
         std::string N;
@@ -116,10 +114,10 @@ bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
 }
 
 //==================================================================================
-//
+//Create a new database
 bool pqxxSqlConnection::drv_createDatabase( const QString &dbName )
 {
-    kdDebug() << "pqxxSqlConnection::drv_createDatabase: " << dbName << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_createDatabase: " << dbName << endl;
 
     if (drv_executeSQL("CREATE DATABASE " + escapeName(dbName)))
         return true;
@@ -128,27 +126,15 @@ bool pqxxSqlConnection::drv_createDatabase( const QString &dbName )
 }
 
 //==================================================================================
-//Use this as out connection instead of connect
+//Use this as our connection instead of connect
 bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
 {
-    kdDebug() << "pqxxSqlConnection::drv_useDatabase: " << dbName << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_useDatabase: " << dbName << endl;
 
     QString conninfo;
     QString socket;
     QStringList sockets;
 
-    //I'll trust that kexi wont try and use if already in use
-    /*
-    if (isConnected())
-    {
-    if(!drv_closeDatabase())
-    {
-        	setError(ERR_ALREADY_CONNECTED,i18n("Connection has already been opened and couldnt disconnect"));
-        	return false;
-    }
-    }
-
-    */
     if (m_data.hostName.isEmpty() || m_data.hostName == "localhost")
     {
         if (m_data.fileName().isEmpty())
@@ -196,7 +182,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
     }
     catch(const std::exception &e)
     {
-        kdDebug() << "pqxxSqlConnection::drv_useDatabase:exception - " << e.what() << endl;
+        KexiDBDrvDbg << "pqxxSqlConnection::drv_useDatabase:exception - " << e.what() << endl;
         setError(ERR_DB_SPECIFIC,e.what());
 
     }
@@ -207,7 +193,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
 //Here we close the database connection
 bool pqxxSqlConnection::drv_closeDatabase()
 {
-    kdDebug() << "pqxxSqlConnection::drv_closeDatabase" << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_closeDatabase" << endl;
     if (isConnected())
     {
         delete m_pqxxsql;
@@ -225,7 +211,7 @@ bool pqxxSqlConnection::drv_closeDatabase()
 //Drops the given database
 bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
 {
-    kdDebug() << "pqxxSqlConnection::drv_dropDatabase: " << dbName << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_dropDatabase: " << dbName << endl;
 
     //FIXME Maybe should check that dbname is no the currentdb
     if (drv_executeSQL("DROP DATABASE " + escapeName(dbName)))
@@ -238,7 +224,7 @@ bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
 //Execute an SQL statement
 bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 {
-    kdDebug() << "pqxxSqlConnection::drv_executeSQL: " << statement << endl;
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: " << statement << endl;
     bool ok;
 
     ok = false;
@@ -263,10 +249,21 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
     {
         //If an error ocurred then put the error description into _dbError
         setError(ERR_DB_SPECIFIC,e.what());
-        kdDebug() << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
+        KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
     }
-    kdDebug() << "EXECUTE SQL OK: OID was " <<m_res->inserted_oid() << endl;
+    KexiDBDrvDbg << "EXECUTE SQL OK: OID was " <<m_res->inserted_oid() << endl;
     return ok;
+}
+
+//==================================================================================
+//Return true if currently connected to a database, ignoring the m_is_connected falg.
+bool pqxxSqlConnection::drv_isDatabaseUsed() const
+{
+    if (m_pqxxsql->is_open())
+    {
+        return true;
+    }
+    return false;
 }
 
 //Private Functions I Need
@@ -307,17 +304,6 @@ Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
     {
         return 0;
     }
-}
-
-//==================================================================================
-//Return true if currently connected to a database, ignoring the m_is_connected falg.
-bool pqxxSqlConnection::drv_isDatabaseUsed() const
-{
-    if (m_pqxxsql->is_open())
-    {
-        return true;
-    }
-    return false;
 }
 
 #include "pqxxconnection.moc"
