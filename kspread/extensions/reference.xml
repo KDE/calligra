@@ -32,7 +32,7 @@
 	<Text>Absolute number specifies the type of reference: 1 or omitted = Absolute, 2 = Absolute row, relative column,  3 = Relative row; absolute column and 4 = Relative.</Text>
 	<Text>A1 Style specifies the style of the address to return. If A1 is set to TRUE (default) the address is returned in A1 style if it is set to FALSE in R1C1 style.</Text>
 	<Text>Sheet name is the text specifying the name of the sheet.</Text>
-       <Syntax>ADDRESS(row; col; absolue; style; sheet name)</Syntax>
+       <Syntax>ADDRESS(row; col; absolute; style; sheet name)</Syntax>
        <Example>ADDRESS(6; 4) returns $D$6</Example>
        <Example>ADDRESS(6; 4; 2) returns D$6</Example>
        <Example>ADDRESS(6; 4; 2; FALSE; "Sheet1") returns Sheet1!R6C[4]</Example>

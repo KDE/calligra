@@ -127,8 +127,8 @@ bool kspreadfunc_address( KSContext & context )
     return false;
 
   QString result;
-  int col = args[0]->intValue();
-  int row = args[1]->intValue();
+  int row = args[0]->intValue();
+  int col = args[1]->intValue();
 
   if ( !tableName.isEmpty() )
   {
@@ -311,7 +311,7 @@ bool kspreadfunc_choose( KSContext & context )
           }
           ++count;
           ++listIter;
-        }        
+        }
       }
       else if ( count == index )
       {
@@ -509,7 +509,7 @@ bool kspreadfunc_indirect( KSContext & context )
   if ( !p.isValid() )
     return false;
 
-  KSpreadCell * cell = sheet->cellAt( p.pos.x(), p.pos.y() );
+  KSpreadCell * cell = p.cell();
   if ( cell )
   {
     if ( cell->value().isString() )
