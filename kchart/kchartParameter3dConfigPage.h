@@ -9,7 +9,8 @@
 
 #include <qwidget.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
+//#include <qlineedit.h>
+#include <knuminput.h>
 
 #include "kchartparams.h"
 
@@ -24,9 +25,9 @@ public:
 
 private:
     KChartParameters* _params;
-    QLineEdit* angle3d;
-    QLineEdit* depth;
-    QLineEdit* bar_width;
+    KIntNumInput* angle3d;
+    KDoubleNumInput* depth;
+    KIntNumInput* bar_width;
 };
 
 #endif
