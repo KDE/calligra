@@ -1235,6 +1235,8 @@ void KexiMainWindowImpl::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 
 void KexiMainWindowImpl::slotLastChildFrmClosed()
 {
+	if (m_pDocumentViews->count()>0) //a fix for KMDI bug (will be fixed in KDE 3.4)
+		return;
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
 }

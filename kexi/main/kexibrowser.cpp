@@ -179,7 +179,7 @@ KexiBrowser::addItem(KexiPart::Item *item)
 	if (!item)
 		return;
 	//part object for this item
-	KexiBrowserItem *parent = m_baseItems.find(item->mime().lower());
+	KexiBrowserItem *parent = item->mime().isEmpty() ? 0 : m_baseItems.find(item->mime().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 //	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
