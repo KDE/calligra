@@ -604,10 +604,17 @@ KarbonView::setZoom( double zoom )
 	KoView::setZoom( zoom );
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
 	QStringList stl = m_zoomAction->items();
-	stl.prepend( i18n( zoomText.latin1() ) );
-
-	m_zoomAction->setItems( stl );
-	m_zoomAction->setCurrentItem( 0 );
+	if( stl.first() == "    25%" )
+	{
+		stl.prepend( i18n( zoomText.latin1() ) );
+		m_zoomAction->setItems( stl );
+		m_zoomAction->setCurrentItem( 0 );
+	}
+	else
+	{
+		m_zoomAction->setCurrentItem( 0 );
+		m_zoomAction->changeItem( m_zoomAction->currentItem(), zoomText.latin1() );
+	}
 	zoomChanged();
 }
 
