@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qdatastream.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <qlist.h>
 #include <qcstring.h> 
 #include <qarray.h>
 #include <qdom.h>
