@@ -118,7 +118,7 @@ public:
     // Called by KWFrame*'s loading code to emit correct progress info
     void progressItemLoaded();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );

@@ -109,7 +109,7 @@ public:
    */
   bool isLoading() { return m_bLoading; }
 
-  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
 
   void printContent( KPrinter& prn );

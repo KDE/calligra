@@ -1738,7 +1738,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 }
 
 /*================================================================*/
-void KWDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
+void KWDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
     // TODO !
 }

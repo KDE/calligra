@@ -377,7 +377,7 @@ bool KivioDoc::completeLoading( KoStore* )
 
 KivioPage* KivioDoc::createPage()
 {
-  QString s( i18n("Page%1") );	
+  QString s( i18n("Page%1") );
   s = s.arg( m_iPageId++ );
 
   KivioPage* t = new KivioPage(m_pMap,s.ascii());	//lukas: FIXME
@@ -393,8 +393,9 @@ void KivioDoc::addPage( KivioPage* page )
   emit sig_addPage(page);
 }
 
-void KivioDoc::paintContent( QPainter&, const QRect&, bool )
+void KivioDoc::paintContent( QPainter&, const QRect&, bool transparent, double zoomX, double zoomY )
 {
+    // ## TODO - otherwise kivio isn't embeddable
 //  KivioPage* page = m_pMap->activePage();
 //  if ( !page )
 //    return;
@@ -721,7 +722,7 @@ KivioStencilSpawner* KivioDoc::findStencilSpawner( const QString& setId, const Q
     {
         return m_pInternalSet->find(stencilId);
     }
-    
+
     return NULL;
 }
 
@@ -734,7 +735,7 @@ void KivioDoc::setUnits(int unit)
 {
   if (m_units == unit)
     return;
-  
+
   m_units = unit;
   emit unitsChanged(unit);
 }

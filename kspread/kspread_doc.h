@@ -104,7 +104,7 @@ public:
    * @return the locale which was used for creating this document.
    */
   KLocale* locale() { return &m_locale; }
-    
+
   /**
    * @return the printable width of the paper in millimeters.
    */
@@ -157,7 +157,7 @@ public:
    * @return the unit paper
    */
   KoUnit paperUnit() { return m_paperUnit; }
-  
+
   void setPaperFormat(KoFormat _format) {m_paperFormat=_format;}
 
   void setPaperOrientation(KoOrientation _orient) { m_orientation=_orient;}
@@ -257,7 +257,7 @@ public:
   void setDefaultGridPen( const QPen& );
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
-  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
 
   virtual DCOPObject* dcopObject();
@@ -327,9 +327,9 @@ public:
    */
   void setShowTabBar(bool _tabbar) {  m_bShowTabBar=_tabbar;}
   bool getShowTabBar() { return  m_bShowTabBar;}
-  
+
   void changeDefaultGridPenColor( QColor &_col){m_defaultGridPen.setColor(_col);}
-  
+
   /**
    * show/hide comment indicator
    */
@@ -350,7 +350,7 @@ public:
 
   /**
    * show/hide status bar
-   */ 
+   */
   void setShowStatusBar(bool _statusBar) { m_bShowStatusBar=_statusBar;}
   bool getShowStatusBar() { return  m_bShowStatusBar;}
 
@@ -440,7 +440,7 @@ protected:
    */
   KoFormat m_paperFormat;
 
-  KoUnit m_paperUnit; 
+  KoUnit m_paperUnit;
 
   /**
    * The paper width in millimeters. Dont change this value, it is calculated by
@@ -593,7 +593,7 @@ protected:
 
 
   bool m_bShowError;
-  
+
   MethodOfCalc m_EMethodOfCalc;
 
   bool m_bShowTabBar;

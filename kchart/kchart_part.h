@@ -19,7 +19,7 @@ class KChartPart : public KoChart::Part
   KChartPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KChartPart();
 
-  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
   virtual bool initDoc();
 

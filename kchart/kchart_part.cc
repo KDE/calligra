@@ -93,7 +93,7 @@ KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
   return new KChartView( this, parent, name );
 }
 
-void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent )
+void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
 {
   if (isLoading()) {
     kdDebug(35001) << "Loading... Do not paint!!!..." << endl;
@@ -105,6 +105,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
   // ####### handle transparency
   if( !transparent )
     painter.eraseRect( rect );
+
+  // ## TODO: support zooming
 
   // kdDebug(35001) << "KChartPart::paintContent called, rows = "
   //                << currentData.usedRows() << ", cols = "
@@ -962,6 +964,13 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.53  2001/04/11 09:36:33  mlaurent
+   * Apply patch from Toshitaka Fujioka <toshitaka@kde.gr.jp>
+   * Now you can see legend in top-left.
+   * Thanks a lot.
+   *
+   * Fix load none image in kchartBackgroundPixmapConfigPage.cc
+   *
    * Revision 1.52  2000/10/20 07:20:38  kalle
    * Fixes bug that you cannot have more than 4x4 charts when entering data in the data editor
    * (I wonder whether this is important enough to go into 2.0.1, can anybody help me decide?)

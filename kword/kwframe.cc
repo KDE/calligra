@@ -816,7 +816,7 @@ bool KWFrameSet::isVisible()
 
 void KWFrameSet::finalize()
 {
-    kdDebug() << "KWFrameSet::finalize" << endl;
+    //kdDebug() << "KWFrameSet::finalize" << endl;
     updateFrames();
     zoom();
 }

@@ -835,12 +835,13 @@ void KSpreadDoc::paperLayoutDlg()
     setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent )
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
 {
     KSpreadTable* table = m_pMap->firstTable();
     if ( !table )
         return;
 
+    // ### TODO support zooming
     paintContent( painter, rect, transparent, table );
 }
 

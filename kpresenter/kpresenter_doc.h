@@ -88,7 +88,7 @@ public:
     ~KPresenterDoc();
 
     // Drawing
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
     // save
     virtual QDomDocument saveXML();
