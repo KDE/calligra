@@ -41,13 +41,12 @@ include_HEADERS = handler.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
 	koPictureKey.h koPicture.h koPictureCollection.h kofficeversion.h koOasisStyles.h \
-	koStyleStack.h koGenStyles.h koOasisSettings.h koPageLayout.h koxmlns.h kodom.h koversiondialog.h
+	koStyleStack.h koGenStyles.h koOasisSettings.h koPageLayout.h koxmlns.h kodom.h koversiondialog.h \
+	kofficemacros.h
 
 noinst_HEADERS = koDocument_p.h koFilterManager_p.h \
 	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h \
 	koPictureEps.h koPictureWmf.h
-
-include_HEADERS = kofficemacros.h
 
 kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
 kodocinfopropspage_la_LIBADD = ./libkofficecore.la
