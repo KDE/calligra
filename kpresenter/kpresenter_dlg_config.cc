@@ -57,6 +57,7 @@
 #include <kfontdialog.h>
 #include <klineedit.h>
 #include <koRect.h>
+#include <kmessagebox.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -368,7 +369,10 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
 
 void ConfigureSpellPage::slotClearIgnoreAllHistory()
 {
-    m_pView->kPresenterDoc()->clearIgnoreWordAll();
+    int ret = KMessageBox::warningContinueCancel(0L,
+                                                 i18n("Be carefull,you go to erase all the Ignore word history."));
+    if (ret == KMessageBox::Continue)
+        m_pView->kPresenterDoc()->clearIgnoreWordAll();
 }
 
 void ConfigureSpellPage::apply()
