@@ -73,16 +73,7 @@ kdelnkdir = $(kde_appsdir)/Office
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc
 
-framestyledir = $(kde_datadir)/kword
-framestyle_DATA = framestyles.xml
-
-tablestyledir = $(kde_datadir)/kword
-tablestyle_DATA = tablestyles.xml
-
-tabletemplatedir = $(kde_datadir)/kword
-tabletemplate_DATA = tabletemplates.xml
-
-SUBDIRS = . mailmerge toolbar templates dtd pics expression
+SUBDIRS = . mailmerge toolbar templates dtd pics expression data
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc
