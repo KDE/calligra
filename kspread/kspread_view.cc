@@ -288,7 +288,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   fonts[2] = CORBA::string_dup( "Symbol" );
   fonts[3] = CORBA::string_dup( "Times" );
 
-  m_idComboLayout_Font = m_vToolBarLayout->insertCombo( fonts, 1, false, SIGNAL( activated() ), this,
+  m_idComboLayout_Font = m_vToolBarLayout->insertCombo( fonts, 1, false, SIGNAL( activated( const char* ) ), this,
 							"fontSelected", true, i18n("Font"),
 							120, -1, OpenPartsUI::AtBottom );
 
@@ -301,7 +301,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     sprintf( buffer, "%i", sizes[i] );
     sizelist[i] = CORBA::string_dup( buffer );
   }
-  m_idComboLayout_FontSize = m_vToolBarLayout->insertCombo( sizelist, 2, true, SIGNAL( activated() ),
+  m_idComboLayout_FontSize = m_vToolBarLayout->insertCombo( sizelist, 2, true, SIGNAL( activated( const char* ) ),
 							    this, "fontSizeSelected", true,
 							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
 
@@ -416,7 +416,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::loadPixmap( path );
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, "&Paste", this, "paste", CTRL + Key_N, -1, -1 );
     
-  _menubar->insertSeparator( -1 );
+  m_vMenuEdit->insertSeparator( -1 );
 
   m_vMenuEdit->insertItem8( i18n( "&Insert" ), m_vMenuEdit_Insert, -1, -1 );
   m_idMenuEdit_Insert_Table = m_vMenuEdit_Insert->insertItem( i18n( "&Table" ), this, "insertTable", 0 );

@@ -2752,8 +2752,8 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuHelp_Contents = m_vMenuHelp->insertItem( i18n( "&Contents" ), this, "helpContents", 0 );
 
   // Torben: Reggie, Check/uncheck all checked menu items to their actual value in this function
-  m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Left,true);
-  m_vMenuScreen->setItemChecked(m_idMenuScreen_PenW3,true);
+  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,true);
+  m_vMenuScreen_PenWidth->setItemChecked(m_idMenuScreen_PenW3,true);
 
   setupAccelerators();
 
