@@ -26,7 +26,8 @@
 #include <kdebug.h>
 #include <koxmlns.h>
 #include <kodom.h>
-
+#include "kptextobject.h"
+#include "kprpage.h"
 
 KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting, KoVariableFormatCollection* coll)
     : KoVariableCollection(_setting, coll)
@@ -123,60 +124,54 @@ void KPrStatisticVariable::recalc()
     ulong lines = 0L;
     ulong syllables = 0L;
     bool frameInfo = ( m_subtype == VST_STATISTIC_NB_WORD ||
-                        m_subtype == VST_STATISTIC_NB_SENTENCE ||
-                        m_subtype == VST_STATISTIC_NB_LINES ||
-                        m_subtype == VST_STATISTIC_NB_CHARACTERE);
-#if 0 //TODO
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-    //TODO chnage int to ulong
-    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
+                       m_subtype == VST_STATISTIC_NB_SENTENCE ||
+                       m_subtype == VST_STATISTIC_NB_LINES ||
+                       m_subtype == VST_STATISTIC_NB_CHARACTERE);
+    KPrPage *page = m_doc->activePage();
+    QPtrListIterator<KPObject> objIt( page->objectList() );
+
+    for ( objIt.toFirst(); objIt.current(); ++objIt )
     {
-        KWFrameSet *frameSet = framesetIt.current();
-        if ( frameSet->isVisible() )
+        KPObject *obj = objIt.current();
+        if ( m_subtype == VST_STATISTIC_NB_FRAME )
+            ++nb;
+        else if( m_subtype == VST_STATISTIC_NB_PICTURE && obj->getType() == OT_PICTURE)
         {
-            if ( m_subtype == VST_STATISTIC_NB_FRAME )
-                ++nb;
-            else if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE)
-            {
-                ++nb;
-            }
-            else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE)
-            {
-                ++nb;
-            }
-            else if( m_subtype == VST_STATISTIC_NB_EMBEDDED && frameSet->type() == FT_PART )
-            {
-                ++nb;
-            }
-            if ( frameInfo )
-            {
-            if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
-                frameSet->statistics( 0L, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, false );
-            }
+            ++nb;
+        }
+        else if( m_subtype == VST_STATISTIC_NB_EMBEDDED && obj->getType() == OT_PART )
+        {
+            ++nb;
         }
         if ( frameInfo )
         {
-            if( m_subtype == VST_STATISTIC_NB_WORD )
-            {
-                nb = words;
-            }
-            else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
-            {
-                nb = sentences;
-            }
-            else if( m_subtype == VST_STATISTIC_NB_LINES )
-            {
-                nb = lines;
-            }
-            else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
-            {
-                nb = charsWithSpace;
-            }
-            else
-                nb = 0;
+            KPTextObject *textObj = dynamic_cast<KPTextObject *>( obj );
+            if ( textObj )
+                textObj->textObject()->statistics( 0L, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, false );
         }
     }
-#endif
+    if ( frameInfo )
+    {
+        if( m_subtype == VST_STATISTIC_NB_WORD )
+        {
+            nb = words;
+        }
+        else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
+        {
+            nb = sentences;
+        }
+        else if( m_subtype == VST_STATISTIC_NB_LINES )
+        {
+                nb = lines;
+        }
+        else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
+        {
+            nb = charsWithSpace;
+        }
+        else
+            nb = 0;
+    }
+
     m_varValue = QVariant(nb);
     resize();
     if ( width == -1 )
