@@ -6282,17 +6282,22 @@ void KSpreadSheet::dissociateCell( const QPoint &cellRef )
   if(!cell->isForceExtraCells())
     return;
 
-    int x = cell->extraXCells() + 1;
-    if( x == 0 )
-        x = 1;
-    int y = cell->extraYCells() + 1;
-    if( y == 0 )
-        y = 1;
+  int x = cell->extraXCells() + 1;
+  if( x == 0 )
+    x = 1;
+  int y = cell->extraYCells() + 1;
+  if( y == 0 )
+    y = 1;
 
-    cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
-    QRect selection( marker.x(), marker.y(), x, y );
-    refreshMergedCell();
-    emit sig_updateView( this, selection );
+  cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
+  QRect selection( marker.x(), marker.y(), x, y );
+  refreshMergedCell();
+
+  // Must be called, because the call to refreshMergedCell() doesn't
+  // set this flag on the cell itself.
+  cell->setLayoutDirtyFlag(true);
+
+  emit sig_updateView( this, selection );
 }
 
 bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
