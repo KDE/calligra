@@ -2332,8 +2332,10 @@ void KWCanvas::pasteImage( QMimeSource *e, const KoPoint &docPoint )
     // Prepare things for mrCreatePixmap
     KoPictureKey key;
     key.setKeyFromFile( tmpFile.name() );
-    m_kopicture.setKey( key );
-    m_kopicture.loadFromFile( tmpFile.name() );
+    KoPicture newKoPicture;
+    newKoPicture.setKey( key );
+    newKoPicture.loadFromFile( tmpFile.name() );
+    m_kopicture = newKoPicture;
     m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
     m_keepRatio = true;
     mrCreatePixmap();
