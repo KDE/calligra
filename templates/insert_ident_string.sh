@@ -11,16 +11,17 @@ if [ ! -e "$file" ]; then
 fi
 
 # Remove documentinfo.xml
-#mv $file $file.gz && gunzip $file.gz && tar --delete documentinfo.xml -f $file
-#gzip -n $file && mv -f $file.gz $file || exit 1
+mv $file $file.gz && gunzip $file.gz && tar --delete documentinfo.xml -f $file
+gzip -n $file && mv -f $file.gz $file || exit 1
 
 tmpfile=$file.tmp
 echo -e -n '\x01f\x8b\x8\x8\x0\x0\x0\x0\x0\x3' > $tmpfile
 echo -n "KOffice $mime" >> $tmpfile
 echo -e -n '\x04\x06\x00' >> $tmpfile
-outsize=`stat $tmpfile | grep 'Size:' | gawk '{print $2;}'`
-dd if=$file of=$tmpfile bs=1 skip=10 seek=$outsize
+#outsize=`stat $tmpfile | grep 'Size:' | gawk '{print $2;}'`
+#dd if=$file of=$tmpfile bs=1 skip=10 seek=$outsize
 #cut -b 11- $file --output-delimiter="" >> $tmpfile
+tail --bytes=+11 $file >> $tmpfile
 
 echo "Checking ident string:"
 file $tmpfile
