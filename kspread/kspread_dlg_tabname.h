@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kspread_dlg_cons__
-#define __kspread_dlg_cons__
+#ifndef __kspread_dlg_tabname__
+#define __kspread_dlg_tabname__
 
 #include <qdialog.h>
 #include <qpushbutton.h>
