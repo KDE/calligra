@@ -43,6 +43,7 @@ class KPPresStructView;
 class ConfPieDia;
 class ConfRectDia;
 class ConfPolygonDia;
+class ConfPictureDia;
 class KPPresDurationDia;
 class QToolButton;
 class SideBar;
@@ -197,6 +198,7 @@ public slots:
     void extraConfigPie();
     void extraConfigRect();
     void extraConfigPolygon();
+    void extraConfigPicture();
     void extraRaise();
     void extraLower();
     void extraRotate();
@@ -496,6 +498,12 @@ public:
     int getCornersValue() const { return cornersValue; }
     int getSharpnessValue() const { return sharpnessValue; }
 
+    // for Picture Object
+    PictureMirrorType getPictureMirrorType() const { return mirrorType; }
+    int getPictureDepth() const { return depth; }
+    bool getPictureSwapRGB() const { return swapRGB; }
+    int getPictureBright() const { return bright; }
+
     int getPresentationDuration() const;
     void setPresentationDuration( int _pgNum );
     void restartPresentationDuration();
@@ -520,6 +528,7 @@ protected slots:
     void confPieOk();
     void confRectOk();
     void confPolygonOk();
+    void confPictureOk();
     void pddClosed();
 
     // scrolling
@@ -657,6 +666,7 @@ private:
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
     ConfPolygonDia *confPolygonDia;
+    ConfPictureDia *confPictureDia;
     KPPresDurationDia *presDurationDia;
 
     // default pen and brush
@@ -678,6 +688,12 @@ private:
     bool checkConcavePolygon;
     int cornersValue;
     int sharpnessValue;
+
+    // for Picture Object
+    PictureMirrorType mirrorType;
+    int depth;
+    bool swapRGB;
+    int bright;
 
     // the page
     KPrCanvas *m_canvas;
@@ -776,6 +792,7 @@ private:
     KAction *actionExtraConfigPie;
     KAction *actionExtraConfigRect;
     KAction *actionExtraConfigPolygon;
+    KAction *actionExtraConfigPicture;
     KAction *actionExtraRaise;
     KAction *actionExtraLower;
     KAction *actionExtraRotate;

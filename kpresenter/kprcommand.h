@@ -609,6 +609,36 @@ protected:
 };
 
 /******************************************************************/
+/* Class: PictureSettingCmd                                       */
+/******************************************************************/
+
+class PictureSettingCmd : public KNamedCommand
+{
+public:
+    struct PictureSettings
+    {
+        PictureMirrorType mirrorType;
+        int depth;
+        bool swapRGB;
+        int bright;
+    };
+
+    PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
+                       PictureSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~PictureSettingCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KPresenterDoc *doc;
+    QPtrList<PictureSettings> oldSettings;
+    QPtrList<KPObject> objects;
+    PictureSettings newSettings;
+
+};
+
+/******************************************************************/
 /* Class: RectValueCmd                                            */
 /******************************************************************/
 

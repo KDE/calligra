@@ -225,6 +225,13 @@ enum ToolEditMode {
     TEM_ZOOM = 19
 };
 
+enum PictureMirrorType {
+    PM_NORMAL = 0,
+    PM_HORIZONTAL = 1,
+    PM_VERTICAL = 2,
+    PM_HORIZONTALANDVERTICAL = 3
+};
+
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 

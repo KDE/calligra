@@ -98,6 +98,7 @@
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
   <Action name="extra_configpolygon"/>
+  <Action name="extra_configpicture"/>
  </Menu>
  <Menu name="Text"><text>Te&amp;xt</text>
   <Action name="text_default"/>
@@ -207,6 +208,7 @@
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
   <Action name="extra_configpolygon"/>
+  <Action name="extra_configpicture"/>
 </ToolBar>
 <ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
   <Action name="extra_linebegin"/>
@@ -489,6 +491,8 @@
    <Action name="pic_1280_1024"/>
    <Action name="pic_1600_1200"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_configpicture"/>
 </Menu>
 <Menu name="sidebarmenu_popup">
   <Action name="insert_page"/>

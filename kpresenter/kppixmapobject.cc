@@ -28,6 +28,8 @@
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qdom.h>
+#include <qimage.h>
+
 #include <kdebug.h>
 #include <koSize.h>
 #include <kozoomhandler.h>
@@ -45,6 +47,10 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     imageCollection = _imageCollection;
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
+    mirrorType = PM_NORMAL;
+    depth = 0;
+    swapRGB = false;
+    bright = 0;
 }
 
 /*================== overloaded constructor ======================*/
@@ -56,6 +62,10 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     ext = KoSize(); // invalid size means unset
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
+    mirrorType = PM_NORMAL;
+    depth = 0;
+    swapRGB = false;
+    bright = 0;
 
     setPixmap( key );
 }
@@ -87,6 +97,16 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     QDomElement elem=doc.createElement("KEY");
     image.getKey().saveAttributes(elem);
     fragment.appendChild(elem);
+
+    QDomElement elemSettings = doc.createElement( "PICTURESETTINGS" );
+
+    elemSettings.setAttribute( "mirrorType", static_cast<int>( mirrorType ) );
+    elemSettings.setAttribute( "depth", depth );
+    elemSettings.setAttribute( "swapRGB", static_cast<int>( swapRGB ) );
+    elemSettings.setAttribute( "bright", bright );
+
+    fragment.appendChild( elemSettings );
+
     return fragment;
 }
 
@@ -142,6 +162,35 @@ double KPPixmapObject::load(const QDomElement &element)
             }
         }
     }
+
+    e = element.namedItem( "PICTURESETTINGS" ).toElement();
+    if ( !e.isNull() ) {
+        PictureMirrorType _mirrorType = PM_NORMAL;
+        int _depth = 0;
+        bool _swapRGB = false;
+        int _bright = 0;
+
+        if ( e.hasAttribute( "mirrorType" ) )
+            _mirrorType = static_cast<PictureMirrorType>( e.attribute( "mirrorType" ).toInt() );
+        if ( e.hasAttribute( "depth" ) )
+            _depth = e.attribute( "depth" ).toInt();
+        if ( e.hasAttribute( "swapRGB" ) )
+            _swapRGB = static_cast<bool>( e.attribute( "swapRGB" ).toInt() );
+        if ( e.hasAttribute( "bright" ) )
+            _bright = e.attribute( "bright" ).toInt();
+
+        mirrorType = _mirrorType;
+        depth = _depth;
+        swapRGB = _swapRGB;
+        bright = _bright;
+    }
+    else {
+        mirrorType = PM_NORMAL;
+        depth = 0;
+        swapRGB = false;
+        bright = 0;
+    }
+
     return offset;
 }
 
@@ -244,11 +293,14 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         if ( !drawContour ) {
             QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
             QPixmap _pixmap = image.generatePixmap( _pixSize );
+
+            QPixmap tmpPix = changePictureSettings( _pixmap );
+
             _painter->drawPixmap( QRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
                                          (int)( _zoomHandler->zoomItY( oy ) + penw ),
                                          (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
                                          (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) ),
-                                  _pixmap );
+                                  tmpPix );
 	}
 
         // Draw border - TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
@@ -295,10 +347,13 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         if ( !drawContour ) {
             QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
             QPixmap _pixmap = image.generatePixmap( _pixSize );
+
+            QPixmap tmpPix = changePictureSettings( _pixmap );
+
             _painter->drawPixmap( QRect( (int)penw, (int)penw,
                                          (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
                                          (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) ),
-                                  _pixmap );
+                                  tmpPix );
 	}
 
         _painter->setPen( pen2 );
@@ -311,4 +366,104 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->restore();
 
     KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
+}
+
+QPixmap KPPixmapObject::getOrignalPixmap()
+{
+    QSize _pixSize = image.getOriginalSize();
+    QPixmap _pixmap = image.generatePixmap( _pixSize );
+
+    return _pixmap;
+}
+
+void KPPixmapObject::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright )
+{
+    mirrorType = _mirrorType;
+    depth = _depth;
+    swapRGB = _swapRGB;
+    bright = _bright;
+}
+
+void KPPixmapObject::getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright )
+{
+    *_mirrorType = mirrorType;
+    *_depth = depth;
+    *_swapRGB = swapRGB;
+    *_bright = bright;
+}
+
+QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
+{
+    QImage _tmpImage = _tmpPixmap.convertToImage();
+    bool _horizontal = false;
+    bool _vertical = false;
+    if ( mirrorType == PM_HORIZONTAL )
+        _horizontal = true;
+    else if ( mirrorType == PM_VERTICAL )
+        _vertical = true;
+    else if ( mirrorType == PM_HORIZONTALANDVERTICAL ) {
+        _horizontal = true;
+        _vertical = true;
+    }
+
+    _tmpImage = _tmpImage.mirror( _horizontal, _vertical );
+
+    if ( depth != 0 ) {
+        QImage tmpImg = _tmpImage.convertDepth( depth );
+        if ( !tmpImg.isNull() )
+            _tmpImage = tmpImg;
+    }
+
+    if ( swapRGB )
+        _tmpImage = _tmpImage.swapRGB();
+
+    if ( bright != 0 ) {
+        if ( depth == 1 || depth == 8 ) {
+            for ( int i = 0; i < _tmpImage.numColors(); ++i ) {
+                QRgb rgb = _tmpImage.color( i );
+                QColor c( rgb );
+
+                if ( bright > 0 )
+                    rgb = c.light( 100 + bright ).rgb();
+                else
+                    rgb = c.dark( 100 + abs( bright ) ).rgb();
+
+                _tmpImage.setColor( i, rgb );
+            }
+        }
+        else {
+            int _width = _tmpImage.width();
+            int _height = _tmpImage.height();
+            int _x = 0;
+            int _y = 0;
+
+            for ( _x = 0; _x < _width; ++_x ) {
+                for ( _y = 0; _y < _height; ++_y ) {
+                    if ( _tmpImage.valid( _x, _y ) ) {
+                        QRgb rgb = _tmpImage.pixel( _x, _y );
+                        QColor c( rgb );
+
+                        if ( bright > 0 )
+                            rgb = c.light( 100 + bright ).rgb();
+                        else
+                            rgb = c.dark( 100 + abs( bright ) ).rgb();
+
+                        _tmpImage.setPixel( _x, _y, rgb );
+                    }
+                }
+            }
+        }
+    }
+
+    _tmpPixmap.convertFromImage( _tmpImage );
+
+    QPixmap tmpPix( _tmpPixmap.size() );
+    tmpPix.fill( Qt::white );
+
+    QPainter _p;
+    _p.begin( &tmpPix );
+    _p.drawPixmap( 0, 0, _tmpPixmap );
+    _p.end();
+
+    return tmpPix;
 }

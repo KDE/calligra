@@ -47,6 +47,7 @@
 #include <confpiedia.h>
 #include <confrectdia.h>
 #include <confpolygondia.h>
+#include <confpicturedia.h>
 #include <presdurationdia.h>
 #include <kppartobject.h>
 #include <sidebar.h>
@@ -216,6 +217,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     confPieDia = 0;
     confRectDia = 0;
     confPolygonDia = 0;
+    confPictureDia = 0;
     presDurationDia = 0;
     v_ruler = 0;
     h_ruler = 0;
@@ -259,6 +261,11 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     tbAlign = Qt::AlignLeft;
     tbFont = font();
     tbColor = black;
+
+    mirrorType = PM_NORMAL;
+    depth = 0;
+    swapRGB = false;
+    bright = 0;
 
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
@@ -1038,6 +1045,48 @@ void KPresenterView::extraConfigPolygon()
     QObject::disconnect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
     delete confPolygonDia;
     confPolygonDia = 0;
+}
+
+/*===============================================================*/
+void KPresenterView::extraConfigPicture()
+{
+    PictureMirrorType _mirrorType;
+    int _depth;
+    bool _swapRGB;
+    int _bright;
+    QPixmap _origPixmap;
+
+    if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_bright, &_origPixmap ) ) {
+        _mirrorType = mirrorType;
+        _depth = depth;
+        _swapRGB= swapRGB;
+        _bright = bright;
+        _origPixmap = QPixmap();
+    }
+
+    if ( _origPixmap.isNull() )
+        return;
+
+    if ( confPictureDia ) {
+        delete confPictureDia;
+        confPictureDia = 0;
+    }
+
+
+    confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _bright, _origPixmap );
+    confPictureDia->setMaximumSize( confPictureDia->width(), confPictureDia->height() );
+    confPictureDia->setMinimumSize( confPictureDia->width(), confPictureDia->height() );
+    confPictureDia->setCaption( i18n( "KPresenter - Configure Picture" ) );
+
+    QObject::connect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
+
+    m_canvas->setToolEditMode( TEM_MOUSE );
+
+    confPictureDia->exec();
+
+    QObject::disconnect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
+    delete confPictureDia;
+    confPictureDia = 0;
 }
 
 /*===============================================================*/
@@ -2714,6 +2763,11 @@ void KPresenterView::setupActions()
                                             this, SLOT( extraConfigPolygon() ),
                                             actionCollection(), "extra_configpolygon" );
 
+    actionExtraConfigPolygon = new KAction( i18n( "Configure P&icture..." ),
+                                            "edit_picture", 0,
+                                            this, SLOT( extraConfigPicture() ),
+                                            actionCollection(), "extra_configpicture" );
+
     actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
@@ -3160,7 +3214,8 @@ void KPresenterView::objectSelectedChanged()
     }
     actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
-    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
+    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedClipartObj()
+                                  && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
 
     actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
@@ -3174,6 +3229,7 @@ void KPresenterView::objectSelectedChanged()
     actionEditDelete->setEnabled(state);
     actionExtraRaise->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
     actionExtraLower->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
+    //actionExtraConfigPicture->setEnabled( state && m_canvas->haveASelectedPixmapObj() );
     //actionBrushColor->setEnabled(state);
     //actionPenColor->setEnabled(state);
     //actionExtraPenStyle->setEnabled(state);
@@ -3542,6 +3598,39 @@ void KPresenterView::confPolygonOk()
         checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
         cornersValue = confPolygonDia->getCornersValue();
         sharpnessValue = confPolygonDia->getSharpnessValue();
+        delete macro;
+    }
+}
+
+/*================================================================*/
+void KPresenterView::confPictureOk()
+{
+    bool createMacro = false;
+    KMacroCommand *macro = new KMacroCommand( i18n( "Change Picture Settings" ) );
+    KCommand *cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+                                                                confPictureDia->getPictureDepth(),
+                                                                confPictureDia->getPictureSwapRGB(),
+                                                                confPictureDia->getPictureBright() );
+    if ( cmd ) {
+        macro->addCommand( cmd );
+        createMacro = true;
+    }
+    cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+                                            confPictureDia->getPictureDepth(),
+                                            confPictureDia->getPictureSwapRGB(),
+                                            confPictureDia->getPictureBright() );
+    if ( cmd ) {
+        macro->addCommand( cmd );
+        createMacro = true;
+    }
+    if ( createMacro )
+        kPresenterDoc()->addCommand( macro );
+    else {
+        mirrorType = confPictureDia->getPictureMirrorType();
+        depth = confPictureDia->getPictureDepth();
+        swapRGB = confPictureDia->getPictureSwapRGB();
+        bright = confPictureDia->getPictureBright();
+
         delete macro;
     }
 }
@@ -4084,6 +4173,10 @@ void KPresenterView::updatePageParameter()
         rndX = page->getRndX( rndX );
         rndY = page->getRndY( rndY );
         page->getPolygonSettings( &checkConcavePolygon, &cornersValue, &sharpnessValue );
+
+        QPixmap tmpPix;
+        page->getPictureSettingsAndPixmap( &mirrorType, &depth, &swapRGB, &bright, &tmpPix );
+
         lineBegin=page->getLineEnd( lineBegin );
         lineEnd=page->getLineBegin( lineEnd );
         gUnbalanced=page->getBackUnbalanced();

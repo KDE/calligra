@@ -69,7 +69,7 @@ KPConfig::KPConfig( KPresenterView* parent )
     _miscPage=new ConfigureMiscPage(parent, page);
 
     page = addVBoxPage( i18n("Document"), i18n("Document Settings"),
-                        BarIcon("documentdefaults", KIcon::SizeMedium) );
+                        BarIcon("document", KIcon::SizeMedium) );
 
     _defaultDocPage=new ConfigureDefaultDocPage(parent, page);
 

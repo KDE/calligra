@@ -171,9 +171,10 @@ public:
 
     void setMouseSelectedObject(bool b);
 
-    bool haveASelectedPictureObj() const;
+    bool haveASelectedClipartObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
+    bool haveASelectedPixmapObj() const;
 
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 

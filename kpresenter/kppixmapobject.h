@@ -72,12 +72,23 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 		       SelectionMode selectionMode, bool drawContour = FALSE );
 
+    QPixmap getOrignalPixmap();
+    void setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright );
+    void getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright );
+
 protected:
     KPPixmapObject() {}
+
+    QPixmap changePictureSettings( QPixmap _tmpPixmap );
 
     KoPictureCollection *imageCollection;
     KoPicture image;
     KPGradient *gradient;
+
+    PictureMirrorType mirrorType;
+    int depth;
+    bool swapRGB;
+    int bright;
 };
 
 #endif

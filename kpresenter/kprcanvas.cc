@@ -2546,10 +2546,10 @@ void KPrCanvas::printRTDebug( int info )
 }
 #endif
 
-bool KPrCanvas::haveASelectedPictureObj() const
+bool KPrCanvas::haveASelectedClipartObj() const
 {
-    return m_activePage->haveASelectedPictureObj() ||
-	stickyPage()->haveASelectedPictureObj();
+    return m_activePage->haveASelectedClipartObj() ||
+	stickyPage()->haveASelectedClipartObj();
 }
 
 bool KPrCanvas::haveASelectedPartObj() const
@@ -2562,6 +2562,12 @@ bool KPrCanvas::haveASelectedGroupObj() const
 {
     return m_activePage->haveASelectedGroupObj() ||
 	stickyPage()->haveASelectedGroupObj();
+}
+
+bool KPrCanvas::haveASelectedPixmapObj() const
+{
+    return m_activePage->haveASelectedPixmapObj() ||
+	stickyPage()->haveASelectedPixmapObj();
 }
 
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const

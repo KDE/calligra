@@ -101,6 +101,7 @@ public:
     void raiseObjs();
     void lowerObjs();
     bool getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
+    bool getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright, QPixmap *_origPixmap );
     int getRndY( int _ry );
     int getRndX( int _rx );
     int getPieAngle( int pieAngle );
@@ -159,6 +160,7 @@ public:
     KCommand* setPieSettings( PieType pieType, int angle, int len );
     KCommand* setRectSettings( int _rx, int _ry );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright );
     KCommand* setPenColor( const QColor &c, bool fill );
     KCommand* setBrushColor( const QColor &c, bool fill );
 
@@ -221,9 +223,10 @@ public:
 
     bool oneObjectTextExist() const ;
     bool isOneObjectSelected() const;
-    bool haveASelectedPictureObj() const;
+    bool haveASelectedClipartObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
+    bool haveASelectedPixmapObj() const;
 
     KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc);
 

@@ -1438,6 +1438,66 @@ void PolygonSettingCmd::unexecute()
 }
 
 /******************************************************************/
+/* Class: PictureSettingCmd                                       */
+/******************************************************************/
+
+/*======================== constructor ===========================*/
+PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
+                                      PictureSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+    : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
+{
+    objects.setAutoDelete( false );
+    oldSettings.setAutoDelete( false );
+    doc = _doc;
+    newSettings = _newSettings;
+
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
+}
+
+/*======================== destructor ============================*/
+PictureSettingCmd::~PictureSettingCmd()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+    oldSettings.setAutoDelete( true );
+    oldSettings.clear();
+}
+
+/*====================== execute =================================*/
+void PictureSettingCmd::execute()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
+        if ( obj ) {
+            obj->setPictureSettings( newSettings.mirrorType,
+                                     newSettings.depth,
+                                     newSettings.swapRGB,
+                                     newSettings.bright );
+	}
+    }
+    doc->repaint( false );
+}
+
+/*====================== unexecute ===============================*/
+void PictureSettingCmd::unexecute()
+{
+    for ( unsigned int i = 0; i < objects.count(); ++i ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
+        if ( obj ) {
+            obj->setPictureSettings( oldSettings.at( i )->mirrorType,
+                                     oldSettings.at( i )->depth,
+                                     oldSettings.at( i )->swapRGB,
+                                     oldSettings.at( i )->bright );
+	}
+    }
+    doc->repaint( false );
+}
+
+/******************************************************************/
 /* Class: RectValueCmd                                            */
 /******************************************************************/
 

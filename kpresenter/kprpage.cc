@@ -870,6 +870,31 @@ bool KPrPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue
     return false;
 }
 
+bool KPrPage::getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright, QPixmap *_origPixmap )
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it ) {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE ) {
+            PictureMirrorType tmp_mirrorType;
+            int tmp_depth;
+            bool tmp_swapRGB;
+            int tmp_bright;
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj ) {
+                obj->getPictureSettings( &tmp_mirrorType, &tmp_depth, &tmp_swapRGB, &tmp_bright );
+                *_mirrorType = tmp_mirrorType;
+                *_depth = tmp_depth;
+                *_swapRGB = tmp_swapRGB;
+                *_bright = tmp_bright;
+                *_origPixmap = obj->getOrignalPixmap();
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 /*======================== lower objects =========================*/
 void KPrPage::lowerObjs()
 {
@@ -2106,6 +2131,57 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
     return polygonSettingCmd;
 }
 
+KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright )
+{
+    bool changed = false;
+    PictureSettingCmd *pictureSettingCmd = 0L;
+    QPtrList<KPObject> _objects;
+    QPtrList<PictureSettingCmd::PictureSettings> _oldSettings;
+    PictureSettingCmd::PictureSettings _newSettings, *tmp;
+
+    _objects.setAutoDelete( false );
+    _oldSettings.setAutoDelete( false );
+
+    _newSettings.mirrorType = _mirrorType;
+    _newSettings.depth = _depth;
+    _newSettings.swapRGB = _swapRGB;
+    _newSettings.bright = _bright;
+
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_PICTURE ) {
+            if ( it.current()->isSelected() ) {
+                tmp = new PictureSettingCmd::PictureSettings;
+                dynamic_cast<KPPixmapObject*>( it.current() )->getPictureSettings( &tmp->mirrorType,
+                                                                                   &tmp->depth,
+                                                                                   &tmp->swapRGB,
+                                                                                   &tmp->bright );
+                _oldSettings.append( tmp );
+                _objects.append( it.current() );
+
+                if( !changed && ( tmp->mirrorType != _newSettings.mirrorType
+                                  || tmp->depth != _newSettings.depth
+                                  || tmp->swapRGB != _newSettings.swapRGB
+                                  || tmp->bright != _newSettings.bright ) )
+                    changed = true;
+            }
+        }
+    }
+
+    if ( !_objects.isEmpty() && changed ) {
+        pictureSettingCmd = new PictureSettingCmd( i18n( "Change Picture Settings" ), _oldSettings, _newSettings, _objects, m_doc );
+        pictureSettingCmd->execute();
+    }
+    else {
+        _oldSettings.setAutoDelete( true );
+        _oldSettings.clear();
+    }
+
+    m_doc->setModified( true );
+
+    return pictureSettingCmd;
+}
+
 KCommand* KPrPage::setPenColor( const QColor &c, bool fill )
 {
     KPObject *kpobject = 0;
@@ -3045,7 +3121,7 @@ bool KPrPage::isOneObjectSelected() const
     return false;
 }
 
-bool KPrPage::haveASelectedPictureObj() const
+bool KPrPage::haveASelectedClipartObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3071,6 +3147,16 @@ bool KPrPage::haveASelectedGroupObj() const
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_GROUP )
+            return true;
+    }
+    return false;
+}
+
+bool KPrPage::haveASelectedPixmapObj() const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
             return true;
     }
     return false;
