@@ -400,7 +400,7 @@ KOSpellConfig::setNoRootAffix (bool b)
   bnorootaffix=b;
 
   if(cb1)
-	  cb1->setChecked(b);
+      cb1->setChecked(b);
 }
 
 void
@@ -409,7 +409,7 @@ KOSpellConfig::setRunTogether(bool b)
   bruntogether=b;
 
   if(cb2)
-	  cb2->setChecked(b);
+      cb2->setChecked(b);
 }
 
 void
