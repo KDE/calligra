@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KTextObject - (c) by Reginald Stadlbauer 1998                  */
-/* Version: 0.0.3                                                 */
+/* Version: 0.0.4                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -64,7 +64,7 @@ class KTextObject;
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for managing a textcursor.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.3
+ * @version 0.0.4
  */
 
 class TxtCursor
@@ -285,7 +285,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a single object in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.3
+ * @version 0.0.4
  */
 
 class TxtObj
@@ -448,7 +448,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a text line in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.3
+ * @version 0.0.4
  */
 
 class TxtLine
@@ -646,7 +646,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a text paragraph in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.3
+ * @version 0.0.4
  */
 
 class TxtParagraph 
@@ -850,7 +850,7 @@ protected:
  * Default is dynamically linebreaking.
  * @short A widget for editing rich text.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.3
+ * @version 0.0.4
  */
 
 class KTextObject : public QTableView
