@@ -418,13 +418,13 @@ void KWTableStyleManager::addStyle()
 void KWTableStyleManager::importFromFile()
 {
     QStringList lst;
-    for ( int i = 0; i<m_stylesList->count();i++)
+    for (unsigned int i = 0; i<m_stylesList->count();i++)
     {
         lst << m_stylesList->text(i );
     }
 
     KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::TableStyle, this, 0 );
-    if ( dia.exec() ) {
+    if ( dia.listOfTableStyleImported().count() > 0 && dia.exec() ) {
         QPtrList<KWTableStyle> list = dia.listOfTableStyleImported();
         addStyle( list);
     }
@@ -644,10 +644,12 @@ void KWTableStyleManager::updateAllStyleCombos()
     // Problems:
     // - 1. Count is the same, but the user has delete the same number as he added
     // - 2. Old name is not in new list, old index is wrong index in new list
-    if ( ( m_style->count()!=m_doc->styleCollection()->styleList().count() ) && ( m_style->listBox()->findItem( oldS ) ) ) {
+    if ( ( static_cast<unsigned int>(m_style->count())!=m_doc->styleCollection()->styleList().count() ) && 
+            ( m_style->listBox()->findItem( oldS ) ) ) {
         oldSindex = m_style->listBox()->index( m_style->listBox()->findItem( oldS ) );
     }
-    if ( ( m_frameStyle->count()!=m_doc->frameStyleCollection()->frameStyleList().count() ) && ( m_frameStyle->listBox()->findItem( oldFS ) ) ) {
+    if ( ( static_cast<unsigned int>(m_frameStyle->count())!=m_doc->frameStyleCollection()->frameStyleList().count() ) && 
+            ( m_frameStyle->listBox()->findItem( oldFS ) ) ) {
         oldFSindex = m_frameStyle->listBox()->index( m_frameStyle->listBox()->findItem( oldFS ) );
     }
 
