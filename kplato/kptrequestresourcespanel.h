@@ -45,7 +45,7 @@ public:
     void insert(QTable *table, int row);
     void ok(KPTResourceGroupRequest *group);
 
-    int numRequests() { return m_checked ? 1 : 0; }
+    int numRequests() const { return m_checked ? 1 : 0; }
 
     KPTResource *m_resource;
     int m_units;
