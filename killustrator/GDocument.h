@@ -106,11 +106,20 @@ public:
   float vertGridDistance () const { return gridy; }
 
 //  Helplines
-  void setHelplines (const QValueList<float>& hlines,
-                     const QValueList<float>& vlines,
-                     bool snap);
-  void getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
-                     bool& snap);
+  void setHorizHelplines(const QValueList<float>& lines);
+  void setVertHelplines(const QValueList<float>& lines);
+  QValueList<float>& horizHelplines () { return hHelplines;};
+  QValueList<float>& vertHelplines () { return vHelplines;};
+  void alignToHelplines (bool flag);
+  bool alignToHelplines () { return helplinesSnapIsOn;};
+  void showHelplines (bool flag);
+  bool showHelplines () { return helplinesAreOn;};
+  int indexOfHorizHelpline (float pos);
+  int indexOfVertHelpline (float pos);
+  void updateHorizHelpline (int idx, float pos);
+  void updateVertHelpline (int idx, float pos);
+  void addHorizHelpline (float pos);
+  void addVertHelpline (float pos);
 
 public slots:
   void setModified (bool flag = true);
@@ -132,6 +141,8 @@ signals:
 
 protected:
   KIllustratorDocument *doc;
+  QList<GPage> pages;            // the array of all pages
+  GPage *active_page;            // the current page
 
   /*Grid settings*/
   QColor mGridColor;
@@ -139,17 +150,17 @@ protected:
   bool gridSnapIsOn;
   bool gridIsOn;
 
+  /*Helplines settings*/
+  QValueList<float> hHelplines, vHelplines;
+  bool helplinesSnapIsOn;
+  bool helplinesAreOn;
+
   int curPageNum;
   bool autoUpdate;
   bool modifyFlag; 
   QString filename;
-  int paperWidth, paperHeight; // pt
-  QList<GPage> pages; // the array of all pages
-  GPage *active_page;     // the current page
   Rect selBox;
   bool selBoxIsValid;
-  bool snapToHelplines;
-  QValueList<float> hHelplines, vHelplines;
 };
 
 #endif

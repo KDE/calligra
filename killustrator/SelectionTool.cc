@@ -93,19 +93,19 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
     processKeyPressEvent ((QKeyEvent *) e, doc, canvas);
 }
 
-void SelectionTool::processButtonReleaseForHelpline(QMouseEvent *,GDocument *, Canvas* canvas)
+void SelectionTool::processButtonReleaseForHelpline(QMouseEvent *,GDocument *doc, Canvas* canvas)
 {
 
    if (dragHorizHelpline != -1)
    {
-      canvas->updateHelplines ();
+//      doc->updateHelplines ();
       dragHorizHelpline = -1;
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
    }
    else if (dragVertHelpline != -1)
    {
-      canvas->updateHelplines ();
+//      doc->updateHelplines ();
       dragVertHelpline = -1;
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
@@ -113,11 +113,11 @@ void SelectionTool::processButtonReleaseForHelpline(QMouseEvent *,GDocument *, C
   state = S_Inactive;
 }
 
-void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
-  GDocument *, Canvas* canvas) {
+void SelectionTool::processButtonPressForHelpline (QMouseEvent *me, GDocument *doc, Canvas* canvas)
+{
   float xpos = me->x();
   float ypos = me->y();
-  dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
+  dragHorizHelpline = doc->indexOfHorizHelpline (ypos);
   if (dragHorizHelpline != -1) {
     if (ctype != C_Vert) {
       canvas->setCursor(Qt::sizeVerCursor);
@@ -126,7 +126,7 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
     dragVertHelpline = -1;
   }
   else {
-    dragVertHelpline = canvas->indexOfVertHelpline (xpos);
+    dragVertHelpline = doc->indexOfVertHelpline (xpos);
     if (dragVertHelpline != -1 && ctype != C_Horiz) {
       canvas->setCursor(Qt::sizeHorCursor);
       ctype = C_Horiz;
@@ -134,24 +134,28 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
   }
 }
 
-void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
-  GDocument *, Canvas* canvas) {
+void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me, GDocument *doc, Canvas* canvas)
+{
   float xpos = me->x();
   float ypos = me->y();
 
-  if (dragHorizHelpline != -1) {
-    canvas->updateHorizHelpline (dragHorizHelpline, ypos);
+  if (dragHorizHelpline != -1)
+  {
+    doc->updateHorizHelpline (dragHorizHelpline, ypos);
   }
-  else if (dragVertHelpline != -1) {
-    canvas->updateVertHelpline (dragVertHelpline, xpos);
+  else
+  if (dragVertHelpline != -1)
+  {
+    doc->updateVertHelpline (dragVertHelpline, xpos);
   }
-  else if (canvas->indexOfHorizHelpline (ypos) != -1) {
+  else if (doc->indexOfHorizHelpline (ypos) != -1)
+  {
     if (ctype != C_Vert) {
       canvas->setCursor (Qt::sizeVerCursor);
       ctype = C_Vert;
     }
   }
-  else if (canvas->indexOfVertHelpline (xpos) != -1) {
+  else if (doc->indexOfVertHelpline (xpos) != -1) {
     if (ctype != C_Horiz) {
       canvas->setCursor (Qt::sizeHorCursor);
       ctype = C_Horiz;
@@ -169,7 +173,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me, GDocument *doc, 
 {
   if (dragHorizHelpline != -1)
    {
-      canvas->updateHelplines ();
+//      canvas->updateHelplines ();
       dragHorizHelpline = -1;
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
@@ -177,7 +181,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me, GDocument *doc, 
    }
    else if (dragVertHelpline != -1)
    {
-      canvas->updateHelplines ();
+//      canvas->updateHelplines ();
       dragVertHelpline = -1;
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
@@ -355,21 +359,21 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
   float xpos = me->x (), ypos = me->y ();
 
   if (dragHorizHelpline != -1) {
-    canvas->updateHorizHelpline (dragHorizHelpline, ypos);
+    doc->updateHorizHelpline (dragHorizHelpline, ypos);
     return;
   }
   else if (dragVertHelpline != -1) {
-    canvas->updateVertHelpline (dragVertHelpline, xpos);
+    doc->updateVertHelpline (dragVertHelpline, xpos);
     return;
   }
-  else if (canvas->indexOfHorizHelpline (ypos) != -1) {
+  else if (doc->indexOfHorizHelpline (ypos) != -1) {
     if (ctype != C_Vert) {
       canvas->setCursor (Qt::sizeVerCursor);
       ctype = C_Vert;
     }
     return;
   }
-  else if (canvas->indexOfVertHelpline (xpos) != -1) {
+  else if (doc->indexOfVertHelpline (xpos) != -1) {
     if (ctype != C_Horiz) {
       canvas->setCursor (Qt::sizeHorCursor);
       ctype = C_Horiz;
@@ -606,7 +610,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   //  canvas->snapPositionToGrid (xpos, ypos);
 
   /*****[HELPLINES]*****/
-  dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
+  dragHorizHelpline = doc->indexOfHorizHelpline (ypos);
   if (dragHorizHelpline != -1)
   {
     if (ctype != C_Vert)
@@ -619,7 +623,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   }
   else
   {
-    dragVertHelpline = canvas->indexOfVertHelpline (xpos);
+    dragVertHelpline = doc->indexOfVertHelpline (xpos);
     if (dragVertHelpline != -1)
     {
       if(ctype != C_Horiz)

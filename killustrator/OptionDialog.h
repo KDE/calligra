@@ -48,6 +48,9 @@ protected:
   void createHorizLineWidget (QWidget* parent);
   void createVertLineWidget (QWidget* parent);
 
+protected slots:
+  void slotOk();
+
 private:
   GDocument *doc;
  

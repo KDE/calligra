@@ -79,6 +79,9 @@ void GDocument::initialize ()
   gridIsOn = false;
   mGridColor = blue;
 
+  helplinesSnapIsOn = false;
+  helplinesAreOn = true;
+
   modifyFlag = false;
   filename = i18n("<unnamed>");
 
@@ -234,15 +237,15 @@ QDomDocument GDocument::saveToXml ()
   head.appendChild(grid);
 
   QDomElement helplines=document.createElement("helplines");
-  helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
+  helplines.setAttribute ("align", helplinesSnapIsOn ? 1 : 0);
   QValueList<float>::Iterator hi;
-  for(hi = hHelplines.begin(); hi!=hHelplines.end(); ++hi)
+  for(hi = hHelplines.begin(); hi != hHelplines.end(); ++hi)
   {
     QDomElement hl=document.createElement("hl");
     hl.setAttribute ("pos", (*hi));
     helplines.appendChild(hl);
   }
-  for(hi = vHelplines.begin(); hi!=vHelplines.end(); ++hi)
+  for(hi = vHelplines.begin(); hi != vHelplines.end(); ++hi)
   {
     QDomElement vl=document.createElement("vl");
     vl.setAttribute ("pos", (*hi));
@@ -263,7 +266,7 @@ QDomDocument GDocument::saveToXml ()
 
 bool GDocument::readFromXml (const  QDomDocument &document)
 {
-  kdDebug()<<"GDocument::readFromXml()"<<endl;
+  kdDebug(38000)<<"GDocument::readFromXml()"<<endl;
   if ( document.doctype().name() != "killustrator" )
     return false;
   QDomElement killustrator = document.documentElement();
@@ -281,7 +284,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     gridSnapIsOn = (grid.attribute("align").toInt()==1);
 
     QDomElement helplines=grid.namedItem("helplines").toElement();
-    snapToHelplines=(helplines.attribute("align").toInt()==1);
+    helplinesSnapIsOn = (helplines.attribute("align").toInt()==1);
 
     QDomElement l=helplines.firstChild().toElement();
     for( ; !l.isNull(); l=helplines.nextSibling().toElement())
@@ -311,26 +314,26 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     emit gridChanged ();
     return true;
   }
-  if( killustrator.attribute("version")=="2")
+  if( killustrator.attribute("version") == "2")
   {
-    QDomElement head=killustrator.namedItem("head").toElement();
+    QDomElement head = killustrator.namedItem("head").toElement();
     setAutoUpdate (false);
 
-    QDomElement grid=head.namedItem("grid").toElement();
-    gridx=grid.attribute("dx").toFloat();
-    gridy=grid.attribute("dy").toFloat();
-    gridSnapIsOn = (grid.attribute("align").toInt()==1);
+    QDomElement grid = head.namedItem("grid").toElement();
+    gridx = grid.attribute("dx").toFloat();
+    gridy = grid.attribute("dy").toFloat();
+    gridSnapIsOn = (grid.attribute("align").toInt() == 1);
 
     QDomElement helplines=grid.namedItem("helplines").toElement();
-    snapToHelplines=(helplines.attribute("align").toInt()==1);
+    helplinesSnapIsOn = (helplines.attribute("align").toInt()==1);
 
-    QDomElement l=helplines.firstChild().toElement();
+    QDomElement l = helplines.firstChild().toElement();
     for( ; !l.isNull(); l=helplines.nextSibling().toElement())
     {
-      if(l.tagName()=="hl")
+      if(l.tagName() == "hl")
         hHelplines.append(l.attribute("pos").toFloat());
       else
-        if(l.tagName()=="vl")
+        if(l.tagName() == "vl")
           vHelplines.append(l.attribute("pos").toFloat());
     }
 
@@ -351,27 +354,80 @@ bool GDocument::readFromXml (const  QDomDocument &document)
   return false;
 }
 
-void GDocument::setHelplines (const QValueList<float>& hlines,
-                              const QValueList<float>& vlines,
-                              bool snap)
-{
-  hHelplines = hlines;
-  vHelplines = vlines;
-  snapToHelplines = snap;
-}
-
-void GDocument::getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
-                              bool& snap)
-{
-  hlines = hHelplines;
-  vlines = vHelplines;
-  snap = snapToHelplines;
-}
-
 // called from internal layer when visible flag was changed
 void GDocument::helplineStatusChanged ()
 {
   emit gridChanged ();
+}
+
+/****************[Helplines]*****************/
+
+void GDocument::setHorizHelplines (const QValueList<float>& lines)
+{
+  hHelplines = lines;
+  if (helplinesAreOn);
+}
+
+void GDocument::setVertHelplines (const QValueList<float>& lines)
+{
+  vHelplines = lines;
+  if (helplinesAreOn);
+}
+
+void GDocument::alignToHelplines (bool flag)
+{
+  if (helplinesSnapIsOn != flag)
+  {
+    helplinesSnapIsOn = flag;
+  }
+}
+
+void GDocument::showHelplines (bool flag)
+{
+  if (helplinesAreOn != flag)
+  {
+    helplinesAreOn = flag;
+  }
+}
+
+int GDocument::indexOfHorizHelpline (float pos)
+{
+  int ret=0;
+  for (QValueList<float>::Iterator i = hHelplines.begin(); i!=hHelplines.end(); ++i, ++ret)
+    if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
+      return ret;
+  return -1;
+}
+
+int GDocument::indexOfVertHelpline (float pos)
+{
+  int ret=0;
+  for (QValueList<float>::Iterator i = vHelplines.begin(); i!=vHelplines.end(); ++i, ++ret)
+    if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
+      return ret;
+  return -1;
+}
+
+void GDocument::updateHorizHelpline (int idx, float pos)
+{
+  hHelplines[idx] = pos;
+}
+
+void GDocument::updateVertHelpline (int idx, float pos)
+{
+  vHelplines[idx] = pos;
+}
+
+void GDocument::addHorizHelpline(float pos)
+{
+  hHelplines.append(pos);
+  if (helplinesAreOn);
+}
+
+void GDocument::addVertHelpline(float pos)
+{
+  vHelplines.append(pos);
+  if (helplinesAreOn);
 }
 
 /****************[Grid]**********************/

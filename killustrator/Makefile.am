@@ -49,7 +49,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	Canvas.cc GDocument.cc \
 	Coord.cc PropertyEditor.cc AlignmentDialog.cc \
 	PolygonConfigDialog.cc PolygonPreview.cc \
-	GridDialog.cc Command.cc DuplicateCmd.cc \
+	Command.cc DuplicateCmd.cc \
 	AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc \
 	TranslateCmd.cc ScaleCmd.cc RotateCmd.cc \
 	CreateOvalCmd.cc CreatePolylineCmd.cc \
@@ -72,7 +72,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	GLayer.cc LayerView.cc \
 	Gradient.cc GradientShape.cc \
 	BrushCells.cc EllipseConfigDialog.cc \
-	HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
+	GCurve.cc ToCurveCmd.cc \
 	BlendDialog.cc BlendCmd.cc stencilbarmovemanager.cc \
 	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
 

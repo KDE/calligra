@@ -54,8 +54,6 @@
 #include <InsertPartTool.h>
 #include <PropertyEditor.h>
 #include <AlignmentDialog.h>
-#include <GridDialog.h>
-#include <HelplineDialog.h>
 #include <TransformationDialog.h>
 #include <PStateManager.h>
 #include <ExportFilter.h>
@@ -235,7 +233,6 @@ void KIllustratorView::createMyGUI()
 
     // Layout menu
     new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
-    m_setupHelplines=new KAction( i18n("&Helplines..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
 
     m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
@@ -319,8 +316,8 @@ void KIllustratorView::createMyGUI()
     
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
-    m_showHelplines->setChecked(canvas->showHelplines());
-    m_alignToHelplines->setChecked(canvas->alignToHelplines());
+    m_showHelplines->setChecked(activeDocument()->showHelplines());
+    m_alignToHelplines->setChecked(activeDocument()->alignToHelplines());
     m_showGrid->setChecked(activeDocument()->showGrid());
     m_alignToGrid->setChecked(activeDocument()->snapToGrid());
     m_selectTool->setChecked( true );
@@ -913,9 +910,9 @@ void KIllustratorView::slotShowGrid( bool b )
 
 void KIllustratorView::slotShowHelplines( bool b )
 {
-   if (b!=canvas->showHelplines())
+   if (b!=activeDocument()->showHelplines())
    {
-      canvas->showHelplines( b );
+      activeDocument()->showHelplines( b );
    }
 }
 
@@ -928,13 +925,6 @@ void KIllustratorView::slotPage()
         m_pDoc->gdoc()->activePage()->setPageLayout (pLayout);
 }
 
-void KIllustratorView::slotHelplines()
-{
-    HelplineDialog::setup (canvas);
-    m_alignToHelplines->setChecked(canvas->alignToHelplines());
-    m_showHelplines->setChecked(canvas->showHelplines());
-}
-
 void KIllustratorView::slotAlignToGrid( bool b )
 {
    if (b!=activeDocument()->snapToGrid())
@@ -943,8 +933,8 @@ void KIllustratorView::slotAlignToGrid( bool b )
 
 void KIllustratorView::slotAlignToHelplines( bool b )
 {
-   if (b!=canvas->alignToHelplines())
-      canvas->alignToHelplines( b );
+   if (b!=activeDocument()->alignToHelplines())
+     activeDocument()->alignToHelplines( b );
 }
 
 void KIllustratorView::slotTransformPosition()

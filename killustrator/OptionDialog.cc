@@ -22,8 +22,6 @@
 
 */
 
-#include <OptionDialog.h>
-
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvgroupbox.h>
@@ -36,6 +34,9 @@
 
 #include <UnitBox.h>
 #include <PStateManager.h>
+
+#include "OptionDialog.h"
+#include "GDocument.h"
 
 OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::TreeList, i18n("Option"),
@@ -137,44 +138,45 @@ void OptionDialog::createEditWidget (QWidget* parent)
     bigStep->setValue (psm->bigStepSize ());
 }
 
-void OptionDialog::createGridWidget (QWidget* parent) {
+void OptionDialog::createGridWidget (QWidget* parent)
+{
+  QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-    QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  QGroupBox *box=new QGroupBox(i18n("Distance"), parent);
+  layout->addMultiCellWidget(box, 0, 0, 0, 1);
 
-    QGroupBox *box=new QGroupBox(i18n("Distance"), parent);
-    layout->addMultiCellWidget(box, 0, 0, 0, 1);
+  QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  vboxlayout->addSpacing(box->fontMetrics().height()/2);
+  QGridLayout *grid=new QGridLayout(vboxlayout, 2, 2);
+  QLabel* label = new QLabel(i18n("Horizontally"), box);
+  grid->addWidget(label, 0, 0);
 
-    QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
-    vboxlayout->addSpacing(box->fontMetrics().height()/2);
-    QGridLayout *grid=new QGridLayout(vboxlayout, 2, 2);
-    QLabel* label = new QLabel(i18n("Horizontally"), box);
-    grid->addWidget(label, 0, 0);
+  hspinbox = new UnitBox(box);
+  hspinbox->setFormatString ("%-3.3f");
+  hspinbox->setEditable (true);
+  hspinbox->setRange (0, 1000);
+  grid->addWidget(hspinbox, 0, 1);
 
-    hspinbox = new UnitBox(box);
-    hspinbox->setFormatString ("%-3.3f");
-    hspinbox->setEditable (true);
-    hspinbox->setRange (0, 1000);
-    grid->addWidget(hspinbox, 0, 1);
+  label = new QLabel(i18n("Vertically"), box);
+  grid->addWidget(label, 1, 0);
 
-    label=new QLabel(i18n("Vertically"), box);
-    grid->addWidget(label, 1, 0);
+  vspinbox = new UnitBox (box);
+  vspinbox->setFormatString ("%-3.3f");
+  vspinbox->setEditable (true);
+  vspinbox->setRange (0, 1000);
+  grid->addWidget(vspinbox, 1, 1);
 
-    vspinbox = new UnitBox (box);
-    vspinbox->setFormatString ("%-3.3f");
-    vspinbox->setEditable (true);
-    vspinbox->setRange (0, 1000);
-    grid->addWidget(vspinbox, 1, 1);
+  gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
+  layout->addWidget(gbutton, 1, 0);
 
-    gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
-    layout->addWidget(gbutton, 1, 0);
+  sbutton = new QCheckBox(i18n("Show Grid"), parent);
+  layout->addWidget(sbutton, 1, 1);
 
-    sbutton = new QCheckBox(i18n("Show Grid"), parent);
-    layout->addWidget(sbutton, 1, 1);
-    
-    cbutton = new KColorButton(parent);
-    QLabel* clabel = new QLabel(i18n("Grid Color"), parent);
-    layout->addWidget(cbutton, 2, 1);
-    layout->addWidget(clabel, 2, 0);
+  cbutton = new KColorButton(parent);
+  cbutton->setColor(doc->gridColor());
+  QLabel* clabel = new QLabel(i18n("Grid Color"), parent);
+  layout->addWidget(cbutton, 2, 1);
+  layout->addWidget(clabel, 2, 0);
 }
 
 void OptionDialog::createHorizLineWidget (QWidget* parent)
@@ -245,6 +247,17 @@ void OptionDialog::createVertLineWidget (QWidget* parent)
     connect (button, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
     right->addWidget(button);
     right->addStretch();
+}
+
+void OptionDialog::slotOk()
+{
+  /*Grid*/
+  doc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
+  doc->showGrid (gbutton->isOn());
+  doc->snapToGrid (sbutton->isOn());
+  doc->gridColor(cbutton->color());
+  
+  KDialogBase::slotOk();
 }
 
 int OptionDialog::setup (GDocument *adoc)

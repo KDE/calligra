@@ -63,9 +63,7 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
 ,document(doc)
 ,pendingRedraws(0)
 ,tmpHorizHelpline(-1.0)
-,tmpVertHelpline(-1.)
-,helplinesSnapIsOn(false)
-,helplinesAreOn(false)
+,tmpVertHelpline(-1.0)
 ,dragging(false)
 ,ensureVisibilityFlag(false)
 ,drawBasePoints(false)
@@ -90,11 +88,11 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (docSizeChanged()));
 
   connect (document, SIGNAL (handleChanged ()), this, SLOT (repaint ()));
-  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
+//  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   buffer = new QPixmap();
 
-  updateGridInfos ();
+//  updateGridInfos ();
 
   setFocusPolicy (StrongFocus);
   setMouseTracking (true);
@@ -367,7 +365,7 @@ void Canvas::paintEvent (QPaintEvent* e)
   p.restore();
 
   // draw the help lines
-  if (helplinesAreOn)
+  if (document->showHelplines())
     drawHelplines (p);
 
   p.end ();
@@ -487,12 +485,12 @@ void Canvas::moveEvent(QMoveEvent */*e*/)
 
 
 void Canvas::setDocument(GDocument* doc)
- {
+{
   document = doc;
-  updateGridInfos ();
+  //updateGridInfos ();
   connect (document, SIGNAL (changed ()), this, SLOT (repaint ()));
-  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
- }
+//  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
+}
 
 void Canvas::showBasePoints (bool flag) {
   drawBasePoints = flag;
@@ -593,7 +591,7 @@ void Canvas::updateRegion (const Rect& reg)
 
 
   // draw the help lines
-//  if (helplinesAreOn)
+//  if (document->showHelplines())
 //    drawHelplines (p);
 
   // next the document contents
@@ -634,7 +632,7 @@ void Canvas::print( KPrinter &printer )
 Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
   float x1, x2, y1, y2;
 
-  if (helplinesSnapIsOn || document->snapToGrid())
+  if (document->alignToHelplines() || document->snapToGrid())
   {
     x1 = snapXPositionToGrid (r.left ());
     x2 = snapXPositionToGrid (r.right ());
@@ -660,7 +658,7 @@ Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
 Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
   float x1, x2, y1, y2;
 
-  if (helplinesSnapIsOn || document->snapToGrid())
+  if (document->alignToHelplines() || document->snapToGrid())
    {
     x1 = snapXPositionToGrid (r.left ());
     x2 = snapXPositionToGrid (r.right ());
@@ -685,10 +683,12 @@ Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
 float Canvas::snapXPositionToGrid (float pos) {
   bool snap = false;
 
-  if (helplinesSnapIsOn) {
+  if (document->alignToHelplines())
+  {
     // try to snap to help lines
     QValueList<float>::Iterator i;
-    for (i = vertHelplines.begin (); i != vertHelplines.end (); ++i) {
+    for (i = document->vertHelplines().begin (); i != document->vertHelplines().end (); ++i)
+    {
       if (fabs (*i - pos) <= 10.0) {
         pos = *i;
         snap = true;
@@ -710,10 +710,11 @@ float Canvas::snapYPositionToGrid (float pos)
  {
   bool snap = false;
 
-  if (helplinesSnapIsOn) {
+  if (document->alignToHelplines())
+  {
     // try to snap to help lines
     QValueList<float>::Iterator i;
-    for (i = horizHelplines.begin (); i != horizHelplines.end (); ++i) {
+    for (i = document->horizHelplines().begin (); i != document->horizHelplines().end (); ++i) {
       if (fabs (*i - pos) <= 10.0) {
         pos = *i;
         snap = true;
@@ -732,21 +733,27 @@ float Canvas::snapYPositionToGrid (float pos)
   return pos;
  }
 
-void Canvas::snapPositionToGrid (float& x, float& y) {
+void Canvas::snapPositionToGrid (float& x, float& y)
+{
   bool snap = false;
 
-  if (helplinesSnapIsOn) {
+  if (document->alignToHelplines())
+  {
     // try to snap to help lines
     QValueList<float>::Iterator i;
-    for (i = horizHelplines.begin (); i != horizHelplines.end (); ++i) {
-      if (fabs (*i - y) <= 10.0) {
+    for (i = document->horizHelplines().begin (); i != document->horizHelplines().end (); ++i)
+    {
+      if (fabs (*i - y) <= 10.0)
+      {
         y = *i;
         snap = true;
         break;
       }
     }
-    for (i = vertHelplines.begin (); i != vertHelplines.end (); ++i) {
-      if (fabs (*i - x) <= 10.0) {
+    for (i = document->vertHelplines().begin (); i != document->vertHelplines().end (); ++i)
+    {
+      if (fabs (*i - x) <= 10.0)
+      {
         x = *i;
         snap = true;
         break;
@@ -771,232 +778,120 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
 
 void Canvas::drawGrid (QPainter& p)
 {
-   QPen pen1 (document->gridColor(), 0);
-   p.save ();
-   p.setPen (pen1);
+  QPen pen (document->gridColor(), 0);
+  p.save ();
+  p.setPen (pen);
 
-   //the vertical lines
-   float hd = document->horizGridDistance() * zoomFactor;
-   while(hd < MIN_GRID_DIST)
-     hd *= 2.0;
-   int tmp=m_visibleArea.left()/(int)hd;
-   if (m_visibleArea.left()>0) tmp++;
-   float h=tmp*int(hd)-m_visibleArea.left();
-   for (; h < width(); h += hd)
-   {
-      int hi = qRound (h);
-      p.drawLine (hi, 0, hi, height());
-   }
+  //the vertical lines
+  float hd = document->horizGridDistance() * zoomFactor;
+  while(hd < MIN_GRID_DIST)
+    hd *= 2.0;
+  int tmp = m_visibleArea.left()/(int)hd;
+  if (m_visibleArea.left()>0) tmp++;
+  float h=tmp*int(hd)-m_visibleArea.left();
+  for (; h < width(); h += hd)
+  {
+    int hi = qRound (h);
+    p.drawLine (hi, 0, hi, height());
+  }
 
-   //the horizontal lines
-   //correct grid, aleXXX
-   float vd = document->horizGridDistance() * zoomFactor;
-   while(vd < MIN_GRID_DIST)
-     vd *= 2.0;
-   /* example:   vd = 20
-    top = 49
-    -> v=11 = 60 -49
+  //the horizontal lines
+  //correct grid, aleXXX
+  float vd = document->horizGridDistance() * zoomFactor;
+  while(vd < MIN_GRID_DIST)
+    vd *= 2.0;
+  /* example:   vd = 20
+  top = 49
+  -> v=11 = 60 -49
 
-    top=-49
-    -> v=9 = -40- (-49)  */
-   tmp=m_visibleArea.top()/(int)vd;
-   if (m_visibleArea.top()>0) tmp++;
-   float v=tmp*int(vd)-m_visibleArea.top();
+  top=-49
+  -> v=9 = -40- (-49)  */
+  tmp=m_visibleArea.top()/(int)vd;
+  if (m_visibleArea.top()>0) tmp++;
+  float v = tmp*int(vd)-m_visibleArea.top();
 
-   for (; v < height() ; v += vd)
-   {
-      int vi = qRound (v);
-      p.drawLine (0, vi, width(), vi);
-   }
+  for (; v < height() ; v += vd)
+  {
+    int vi = qRound (v);
+    p.drawLine (0, vi, width(), vi);
+  }
 
-   p.restore ();
-}
-
-void Canvas::updateGridInfos ()
-{
-   document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+  p.restore ();
 }
 
 /***************************HELPLINES********************/
 
 void Canvas::drawHelplines (QPainter& p)
- {
-  QPen pen (blue, 0);//, DashLine);
-
+{
+  QPen pen (blue, 0);
   p.save ();
   p.setPen (pen);
   QValueList<float>::Iterator i;
-  for (i=horizHelplines.begin(); i!=horizHelplines.end(); ++i) {
+  
+  for (i=document->horizHelplines().begin(); i!=document->horizHelplines().end(); ++i)
+  {
     int hi = qRound (*i * zoomFactor) + m_relativePaperArea.top();
     p.drawLine (0, hi, width(), hi);
   }
-  for (i = vertHelplines.begin(); i!=vertHelplines.end(); ++i) {
+  
+  for (i = document->vertHelplines().begin(); i != document->vertHelplines().end(); ++i)
+  {
     int vi = qRound (*i * zoomFactor) + m_relativePaperArea.left();
     p.drawLine (vi, 0, vi, height());
   }
 
-  if (tmpHorizHelpline != -1) {
+  if (tmpHorizHelpline != -1)
+  {
     int hi = qRound (tmpHorizHelpline * zoomFactor) + m_relativePaperArea.top();
     p.drawLine (0, hi, width(), hi);
   }
 
-  if (tmpVertHelpline != -1) {
+  if (tmpVertHelpline != -1)
+  {
     int vi = qRound (tmpVertHelpline * zoomFactor) + m_relativePaperArea.left();
     p.drawLine (vi, 0, vi, height());
   }
+  
   p.restore ();
- }
+}
 
 void Canvas::drawTmpHelpline (int x, int y, bool horizH)
- {
+{
   float pos = -1;
   // convert into document coordinates
   // and add helpline
   if(horizH)
-   {
+  {
     pos = float(y - m_relativePaperArea.top()) / zoomFactor;
     tmpHorizHelpline = pos;
-   }
+  }
   else
-   {
+  {
     pos = float(x - m_relativePaperArea.left()) / zoomFactor;
     tmpVertHelpline = pos;
-   }
+  }
   // it makes no sense to hide helplines yet
-  showHelplines (true);
-  if(helplinesAreOn)
-   repaint();
- }
+  document->showHelplines (true);
+  if(document->showHelplines())
+    repaint();
+}
 
 void Canvas::addHelpline (int x, int y, bool horizH)
- {
+{
   float pos = -1;
   tmpHorizHelpline = tmpVertHelpline = -1;
   // convert into document coordinates
   // and add helpline
-  if (horizH)
-   {
+  if(horizH)
+  {
     pos = float(y - m_relativePaperArea.top()) / zoomFactor;
-    addHorizHelpline (pos);
-   }
+    document->addHorizHelpline (pos);
+  }
   else
-   {
+  {
     pos = float(x - m_relativePaperArea.left()) / zoomFactor;
-    addVertHelpline (pos);
-   }
- }
-
-void Canvas::addHorizHelpline(float pos)
- {
-  horizHelplines.append(pos);
-  if (helplinesAreOn)
-   repaint();
-  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
- }
-
-void Canvas::addVertHelpline(float pos)
- {
-  vertHelplines.append(pos);
-  if (helplinesAreOn)
-   repaint();
-  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
- }
-
-void Canvas::setHorizHelplines (const QValueList<float>& lines) {
-  horizHelplines = lines;
-  if (helplinesAreOn)
-    repaint();
-  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+    document->addVertHelpline (pos);
+  }
 }
-
-void Canvas::setVertHelplines (const QValueList<float>& lines)
-{
-  vertHelplines = lines;
-  if (helplinesAreOn)
-    repaint();
-  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-}
-
-const QValueList<float>& Canvas::getHorizHelplines () const 
-{
-  return horizHelplines;
-}
-
-const QValueList<float>& Canvas::getVertHelplines () const
-{
-  return vertHelplines;
-}
-
-void Canvas::alignToHelplines (bool flag)
-{
-   if (helplinesSnapIsOn!=flag)
-   {
-      helplinesSnapIsOn = flag;
-      //emit gridStatusChanged ();
-      document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-   };
-}
-
-bool Canvas::alignToHelplines () {
-  return helplinesSnapIsOn;
-}
-
-void Canvas::showHelplines (bool flag)
-{
-   if (helplinesAreOn != flag)
-   {
-      helplinesAreOn = flag;
-//      document->activePage()->layerForHelplines ()->setVisible (helplinesAreOn);
-      repaint();
-      //emit gridStatusChanged ();
-      //saveGridProperties ();
-   }
-}
-
-bool Canvas::showHelplines ()
-{
-   return helplinesAreOn;
-}
-
-int Canvas::indexOfHorizHelpline (float pos)
-{
-    int ret=0;
-    for (QValueList<float>::Iterator i = horizHelplines.begin(); i!=horizHelplines.end(); ++i, ++ret)
-    {
-        if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
-            return ret;
-    }
-    return -1;
-}
-
-int Canvas::indexOfVertHelpline (float pos)
-{
-    int ret=0;
-    for (QValueList<float>::Iterator i = vertHelplines.begin(); i!=vertHelplines.end(); ++i, ++ret)
-    {
-        if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
-            return ret;
-    }
-    return -1;
-}
-
-void Canvas::updateHorizHelpline (int idx, float pos)
-{
-  horizHelplines[idx] = pos;
-  repaint();
-}
-
-void Canvas::updateVertHelpline (int idx, float pos)
-{
-  vertHelplines[idx] = pos;
-  repaint();
-}
-
-void Canvas::updateHelplines ()
-{
-  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-}
-
-
 
 #include <Canvas.moc>

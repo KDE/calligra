@@ -81,26 +81,6 @@ public:
   //it changes when scrolling, zooming, resizing and changing the paper size, alex
   QRect relativePaperArea()     {return m_relativePaperArea;};
 
-/*
-  Helplines
-*/ 
-  void setHorizHelplines(const QValueList<float>& lines);
-  void setVertHelplines(const QValueList<float>& lines);
-  const QValueList<float>& getHorizHelplines () const;
-  const QValueList<float>& getVertHelplines () const;
-  void alignToHelplines (bool flag);
-  bool alignToHelplines ();
-  void showHelplines (bool flag);
-  bool showHelplines ();
-  int indexOfHorizHelpline (float pos);
-  int indexOfVertHelpline (float pos);
-  void updateHorizHelpline (int idx, float pos);
-  void updateVertHelpline (int idx, float pos);
-  void updateHelplines (); 
-
-/*
-    GRID
-*/
   void snapPositionToGrid (float& x, float& y);
   Rect snapTranslatedBoxToGrid (const Rect& r);
   Rect snapScaledBoxToGrid (const Rect& r, int hmask);
@@ -142,9 +122,6 @@ protected:
   void moveEvent (QMoveEvent *e);
   void resizeEvent (QResizeEvent *e);
   
-  void addHorizHelpline (float pos);
-  void addVertHelpline (float pos);
-
 signals:
   void rightButtonAtObjectClicked (int x, int y, GObject *obj);
   void rightButtonAtSelectionClicked (int x, int y);
@@ -160,8 +137,6 @@ public slots:
   void updateRegion (const Rect& r);
   void ensureVisibility (bool flag);
   void docSizeChanged();
-  void updateGridInfos ();
-  
   
   void addHelpline (int x, int y, bool horizH);
   void drawTmpHelpline (int x, int y, bool horizH);
@@ -171,6 +146,9 @@ private slots:
   void scroll();
 
 private:
+  GDocument *document;
+  
+  
   void propagateMouseEvent (QMouseEvent *e);
   void drawGrid (QPainter& p);
   void drawHelplines (QPainter& p);
@@ -183,16 +161,13 @@ private:
   int xPaper, yPaper;
   float resolution;
   float zoomFactor;
-  GDocument *document;
   ToolController *toolController;
   int pendingRedraws;
   Rect regionForUpdate, region;
 
-  QValueList<float> horizHelplines, vertHelplines;
   float tmpHorizHelpline, tmpVertHelpline;
 
-  bool helplinesSnapIsOn;
-  bool helplinesAreOn:1;
+  
   bool dragging:1;
   bool ensureVisibilityFlag:1;
   bool drawBasePoints:1;
