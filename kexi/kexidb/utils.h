@@ -21,6 +21,8 @@
 #ifndef KEXIDB_UTILS_H
 #define KEXIDB_UTILS_H
 
+#include <qvaluelist.h>
+
 #include <kexidb/connection.h>
 
 namespace KexiDB
@@ -30,6 +32,13 @@ namespace KexiDB
 	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, const QString &keyname, int keyval);
 	KEXI_DB_EXPORT bool replaceRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype);
 
+	typedef QValueList<uint> TypeGroupList;
+
+	/*! \return list of types for a given \a typeGroup. */
+	KEXI_DB_EXPORT const TypeGroupList typesForGroup(KexiDB::Field::TypeGroup typeGroup);
+
+	/*! \return list of type i18n'd names for a given \a typeGroup. */
+	KEXI_DB_EXPORT QStringList typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup);
 }
 
 #endif

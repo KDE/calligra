@@ -20,6 +20,8 @@
 #include <kexidb/utils.h>
 #include <kexidb/driver.h>
 
+#include <qmap.h>
+
 using namespace KexiDB;
 
 bool KexiDB::deleteRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval)
@@ -37,5 +39,41 @@ bool KexiDB::replaceRow(Connection &conn, TableSchema *table, const QString &key
 	if (!table || !KexiDB::deleteRow(conn, table, keyname, keyval))
 		return false;
 	return conn.drv_executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
+}
+
+//! Cache
+QMap< uint, TypeGroupList > tlist;
+QMap< uint, QStringList > slist;
+
+inline void initList()
+{
+	if (!tlist.isEmpty())
+		return
+
+	for (uint t=0; t<=KexiDB::Field::LastType; t++) {
+		const uint tg = KexiDB::Field::typeGroup( t );
+		TypeGroupList list;
+		QStringList str_list;
+		if (tlist.find( tg )!=tlist.end()) {
+			list = tlist[ tg ];
+			str_list = slist[ tg ];
+		}
+		list+= t;
+		str_list += KexiDB::Field::typeName( t );
+		tlist[ tg ] = list;
+		slist[ tg ] = str_list;
+	}
+}
+
+const TypeGroupList KexiDB::typesForGroup(KexiDB::Field::TypeGroup typeGroup)
+{
+	initList();
+	return tlist[ typeGroup ];
+}
+
+QStringList KexiDB::typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup)
+{
+	initList();
+	return slist[ typeGroup ];
 }
 
