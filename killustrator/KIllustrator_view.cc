@@ -176,8 +176,8 @@ void KIllustratorView::createMyGUI()
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
-    new KAction( i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
-    new KAction( i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
+    m_zoomIn=new KAction( i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
+    m_zoomOut=new KAction( i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
 
     m_outline = new KToggleAction( i18n("Ou&tline"), 0,
                                    this, SLOT( slotOutline() ),
@@ -1269,16 +1269,23 @@ void KIllustratorView::slotViewZoom (const QString& s)
        return;
    //if (zoom != canvas->getZoomFactor ())
    canvas->setZoomFactor (zoom);
+   m_zoomIn->setEnabled(zoom!=100);
+   m_zoomOut->setEnabled(zoom>=0.06);
 }
 
 void KIllustratorView::slotZoomIn()
 {
    mZoomTool->zoomIn(getCanvas());
+   bool state=canvas->getZoomFactor()!=100;
+   m_zoomIn->setEnabled(state);
+   m_zoomOut->setEnabled(true);
 }
 
 void KIllustratorView::slotZoomOut()
 {
    mZoomTool->zoomOut(getCanvas());
+   m_zoomOut->setEnabled(canvas->getZoomFactor()>=0.06);
+   m_zoomIn->setEnabled(true);
 }
 
 //when we get here, the canvas is already zoomed

@@ -226,6 +226,8 @@ protected:
 
     ZoomTool *mZoomTool;
 
+    KAction* m_zoomIn;
+    KAction* m_zoomOut;
     KAction* m_copy;
     KAction* m_cut;
     KAction* m_duplicate;
