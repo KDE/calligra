@@ -35,7 +35,7 @@ module KoHTML
 	{
 		slot void editCopy();
 		slot void editHTMLCode();
-		slot void editPreferences();
+		slot void editSettings();
 		
 		slot void viewToolBar();
 		slot void viewStatusBar();

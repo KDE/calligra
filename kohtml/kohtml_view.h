@@ -79,7 +79,7 @@ public:
 
   virtual void editCopy();
   virtual void editHTMLCode();
-  virtual void editPreferences();
+  virtual void editSettings();
   
   virtual void viewToolBar();
   virtual void viewStatusBar();
@@ -146,15 +146,15 @@ protected:
   CORBA::Long m_idMenuEdit_Copy;
   CORBA::Long m_idMenuEdit_HTMLCode;
   CORBA::Long m_idMenuEdit_Insert_Object;
-  CORBA::Long m_idMenuEdit_Preferences;
 
   OpenPartsUI::Menu_var m_vMenuBookmarks;
   CORBA::Long m_idMenuBookmarks_Add;
   CORBA::Long m_idMenuBookmarks_Edit;
 
-  OpenPartsUI::Menu_var m_vMenuView;
-  CORBA::Long m_idMenuView_ToolBar;
-  CORBA::Long m_idMenuView_StatusBar;
+  OpenPartsUI::Menu_var m_vMenuOptions;
+  CORBA::Long m_idMenuOptions_Settings;
+  CORBA::Long m_idMenuOptions_View_ToolBar;
+  CORBA::Long m_idMenuOptions_View_StatusBar;
 
   OpenPartsUI::ToolBar_var m_vMainToolBar;
   CORBA::Long m_idBack;
@@ -177,20 +177,20 @@ protected:
   bool m_bToolBarVisible;
   bool m_bStatusBarVisible;
 
-  static const int ID_EDIT_COPY = 1;
-  static const int ID_EDIT_INSERT_OBJECT = 2;
-  static const int ID_EDIT_HTMLCODE = 3;
-  static const int ID_EDIT_PREFERENCES = 4;
-  static const int ID_VIEW_TOOLBAR = 5;
-  static const int ID_VIEW_STATUSBAR = 6;
-  static const int ID_LOCATION = 7;
-  static const int ID_BOOKMARKS_ADD = 8;
-  static const int ID_BOOKMARKS_EDIT = 9;
-  static const int ID_BACK = 10;
-  static const int ID_FORWARD = 11;
-  static const int ID_HOME = 12;
-  static const int ID_RELOAD = 13;
-  static const int ID_STOP = 14;
+  static const int ID_EDIT_COPY              = 1;
+  static const int ID_EDIT_INSERT_OBJECT     = 2;
+  static const int ID_EDIT_HTMLCODE          = 3;
+  static const int ID_OPTIONS_SETTINGS       = 4;
+  static const int ID_OPTIONS_VIEW_TOOLBAR   = 5;
+  static const int ID_OPTIONS_VIEW_STATUSBAR = 6;
+  static const int ID_LOCATION               = 7;
+  static const int ID_BOOKMARKS_ADD          = 8;
+  static const int ID_BOOKMARKS_EDIT         = 9;
+  static const int ID_BACK                   = 10;
+  static const int ID_FORWARD                = 11;
+  static const int ID_HOME                   = 12;
+  static const int ID_RELOAD                 = 13;
+  static const int ID_STOP                   = 14;
 
   KoHTMLDoc *m_pDoc;
   

@@ -314,7 +314,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_vMainToolBar->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("configure.xpm"));
-  m_idConfigure = m_vMainToolBar->insertButton2(pix, ID_EDIT_PREFERENCES, SIGNAL(clicked()), this, "editPreferences", true, i18n("Preferences"), -1);
+  m_idConfigure = m_vMainToolBar->insertButton2(pix, ID_OPTIONS_SETTINGS, SIGNAL(clicked()), this, "editSettings", true, i18n("Settings"), -1);
 
   m_vMainToolBar->insertSeparator(-1);
   
@@ -353,12 +353,10 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
        m_vMenuBar->disconnect("highlighted", this, "statusCallback");
        m_vMenuBar->disconnect("activated", this, "slotBookmarkSelected");
 
-//       m_vMenuBookmarks->disconnect("activated", this, "slotBookmarkSelected");
-  
        m_vMenuBar = 0L;
        m_vMenuEdit = 0L;
        m_vMenuEdit_Insert = 0L;
-       m_vMenuView = 0L;
+       m_vMenuOptions = 0L;
      
        return true;
      }
@@ -382,14 +380,8 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   
   m_vMenuEdit->insertItem4(i18n("Edit HTML code"), this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
 
-  m_vMenuEdit->insertSeparator(-1);
-  
-  pix = OPUIUtils::convertPixmap(ICON("configure.xpm"));
-  m_idMenuEdit_Preferences = m_vMenuEdit->insertItem6(pix, i18n("Preferences..."), this, "editPreferences", 0, ID_EDIT_PREFERENCES, -1);
-
   menuBar->insertMenu(i18n("Bookmarks"), m_vMenuBookmarks, -1, -1);
   
-//  m_vMenuBookmarks->connect("activated", this, "slotBookmarkSelected");
   m_vMenuBar->connect("activated", this, "slotBookmarkSelected");
 
   m_vMenuBookmarks->insertItem4(i18n("Add Bookmark"), this, "addBookmark", 0, ID_BOOKMARKS_ADD, -1);
@@ -400,13 +392,18 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   bdir += "/share/apps/kfm/bookmarks";
   scanBookmarks( m_vMenuBookmarks, bdir );  
 
-  menuBar->insertMenu(i18n("&View"), m_vMenuView, -1, -1);
+  menuBar->insertMenu(i18n("&Options"), m_vMenuOptions, -1, -1);
 
-  m_idMenuView_ToolBar = m_vMenuView->insertItem4(i18n("Tool&bar"), this, "viewToolBar", 0, ID_VIEW_TOOLBAR, -1);
-  m_idMenuView_StatusBar = m_vMenuView->insertItem4(i18n("&Statusbar"), this, "viewStatusBar", 0, ID_VIEW_STATUSBAR, -1);
+  pix = OPUIUtils::convertPixmap(ICON("configure.xpm"));
+  m_idMenuOptions_Settings = m_vMenuOptions->insertItem6(pix, i18n("Settings..."), this, "editSettings", 0, ID_OPTIONS_SETTINGS, -1);
 
-  m_vMenuView->setItemChecked(m_idMenuView_ToolBar, m_bToolBarVisible);
-  m_vMenuView->setItemChecked(m_idMenuView_StatusBar, m_bStatusBarVisible);
+  m_vMenuOptions->insertSeparator(-1);
+
+  m_idMenuOptions_View_ToolBar = m_vMenuOptions->insertItem4(i18n("Show/Hide Tool&bar"), this, "viewToolBar", 0, ID_OPTIONS_VIEW_TOOLBAR, -1);
+  m_idMenuOptions_View_StatusBar = m_vMenuOptions->insertItem4(i18n("Show/Hide &Statusbar"), this, "viewStatusBar", 0, ID_OPTIONS_VIEW_STATUSBAR, -1);
+
+  m_vMenuOptions->setItemChecked(m_idMenuOptions_View_ToolBar, m_bToolBarVisible);
+  m_vMenuOptions->setItemChecked(m_idMenuOptions_View_StatusBar, m_bStatusBarVisible);
 
   return true;
 }
@@ -531,7 +528,7 @@ void KoHTMLView::editHTMLCode()
      m_pDoc->feedData(i18n("meta:/(manually edited code)"), htmlEditDlg.getText());
 }
 
-void KoHTMLView::editPreferences()
+void KoHTMLView::editSettings()
 {
   SettingsDlg settingsDlg;
   
@@ -559,8 +556,8 @@ void KoHTMLView::viewToolBar()
 	  }
      }
 
-  if (m_vMenuView) m_vMenuView->setItemChecked(m_idMenuView_ToolBar, m_bToolBarVisible);
-     
+  if (!CORBA::is_nil( m_vMenuOptions )) 
+    m_vMenuOptions->setItemChecked(m_idMenuOptions_View_ToolBar, m_bToolBarVisible);
 }
 
 void KoHTMLView::viewStatusBar()
@@ -573,9 +570,9 @@ void KoHTMLView::viewStatusBar()
        else m_vStatusBar->enable(OpenPartsUI::Hide);
      }
 
-  if (m_vMenuView) m_vMenuView->setItemChecked(m_idMenuView_StatusBar, m_bStatusBarVisible);
-     
-}
+  if (!CORBA::is_nil( m_vMenuOptions )) 
+    m_vMenuOptions->setItemChecked(m_idMenuOptions_View_StatusBar, m_bStatusBarVisible);
+}     
 
 void KoHTMLView::slotStatusMsg(const char *text)
 {
@@ -590,20 +587,20 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
 {
   switch (ID)
     {
-      case ID_EDIT_COPY          : slotStatusMsg(i18n("Copies the selected section to the clipboard")); break;
-      case ID_EDIT_INSERT_OBJECT : slotStatusMsg(i18n("Inserts an embedded object into the document")); break;
-      case ID_EDIT_HTMLCODE      : slotStatusMsg(i18n("Edit the current html code")); break;
-      case ID_EDIT_PREFERENCES   : slotStatusMsg(i18n("Change user preferences")); break;
-      case ID_VIEW_TOOLBAR       : slotStatusMsg(i18n("Enables / disables the toolbar")); break;
-      case ID_VIEW_STATUSBAR     : slotStatusMsg(i18n("Enables / disables the statusbar")); break;
-      case ID_BOOKMARKS_ADD      : slotStatusMsg(i18n("Add the current url to the bookmark list")); break;
-      case ID_BOOKMARKS_EDIT     : slotStatusMsg(i18n("Edit the bookmark list")); break;
-      case ID_BACK		 : slotStatusMsg(i18n("Load the previous document in the history")); break;
-      case ID_FORWARD            : slotStatusMsg(i18n("Load the next document in the history")); break;
-      case ID_HOME		 : slotStatusMsg(i18n("Load the start document")); break;
-      case ID_RELOAD		 : slotStatusMsg(i18n("Reload the current document")); break;      
-      case ID_STOP		 : slotStatusMsg(i18n("Stop loading the current document")); break;
-      default                    : slotStatusMsg(i18n("Ready."));
+      case ID_EDIT_COPY              : slotStatusMsg(i18n("Copies the selected section to the clipboard")); break;
+      case ID_EDIT_INSERT_OBJECT     : slotStatusMsg(i18n("Inserts an embedded object into the document")); break;
+      case ID_EDIT_HTMLCODE          : slotStatusMsg(i18n("Edit the current html code")); break;
+      case ID_OPTIONS_SETTINGS       : slotStatusMsg(i18n("Change user settings")); break;
+      case ID_OPTIONS_VIEW_TOOLBAR   : slotStatusMsg(i18n("Enables / disables the toolbar")); break;
+      case ID_OPTIONS_VIEW_STATUSBAR : slotStatusMsg(i18n("Enables / disables the statusbar")); break;
+      case ID_BOOKMARKS_ADD          : slotStatusMsg(i18n("Add the current url to the bookmark list")); break;
+      case ID_BOOKMARKS_EDIT         : slotStatusMsg(i18n("Edit the bookmark list")); break;
+      case ID_BACK		     : slotStatusMsg(i18n("Load the previous document in the history")); break;
+      case ID_FORWARD                : slotStatusMsg(i18n("Load the next document in the history")); break;
+      case ID_HOME		     : slotStatusMsg(i18n("Load the start document")); break;
+      case ID_RELOAD		     : slotStatusMsg(i18n("Reload the current document")); break;      
+      case ID_STOP		     : slotStatusMsg(i18n("Stop loading the current document")); break;
+      default                        : slotStatusMsg(i18n("Ready."));
     }
 }
 

@@ -36,6 +36,7 @@ class KoHTMLDoc;
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <qlist.h>
+#include <qcache.h>
 #include <krect.h>
 
 #include <kurl.h>
@@ -54,7 +55,7 @@ class KoHTMLDoc;
 #include "kohtmljob.h"
 
 #define MIME_TYPE "application/x-kohtml"
-#define EDITOR "IDL:KoHTML/Document:1.0"
+// #define EDITOR "IDL:KoHTML/Document:1.0"
 
 class KoHTMLChild : public KoDocumentChild
 {
@@ -196,6 +197,9 @@ private:
   
   QString m_strCurrentURL;
 
+  int m_htmlDocumentCounter; // number of frame documents or
+                             // 1 if document is no frameset
+
   KoHTML::KoHTMLDocument::SaveLoadMode m_eSaveLoadMode;
 
   KHTMLView_Patched *m_pInternalView;
@@ -204,6 +208,7 @@ private:
   QList<KoHTMLChild> m_lstChildren;
   QList<KHTMLView> m_lstHTMLViews;
   QList<KoHTMLJob> m_lstJobs;
+  QCache<QString> m_DocumentCache;
 };
 
 #endif		 
