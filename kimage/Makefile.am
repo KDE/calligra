@@ -4,15 +4,15 @@ INCLUDES  = $(all_includes) $(MICO_INCLUDES) -I$(idldir) \
 LDFLAGS =   $(all_libraries)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \
-	../lib/koml/libkoml.la -lkfile -lkfm -lkdeui -lkdecore \
-	-lqt $(LIBMICO) -lXext -lX11 -lkom -lop 
+	../lib/koml/libkoml.la -lkfile -lkfm -lkom -lop -lkdeui -lkdecore \
+	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET)
 
 ####### Files
 
-bin_PROGRAMS = img.bin
-bin_SCRIPTS = img
+bin_PROGRAMS = kimage.bin
+bin_SCRIPTS = kimage
 
-img_bin_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
+kimage_bin_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
 noinst_HEADERS = img_main.h img_doc.h img_view.h img.h img_shell.h
 SRCMETA =	img_main.moc img_view.moc img_doc.moc img_shell.moc
 

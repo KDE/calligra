@@ -5,7 +5,7 @@ LDFLAGS =  $(all_libraries)
 LDADD =  ../../lib/kofficeui/libkofficeui.la \
 	../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la \
 	-lkdecore -lkdeui -lqt -lm -lXext -lX11 -lop -lkom \
-	-lkfile -lkfm $(LIBMICO)
+	-lkfile -lkfm $(LIBMICO) $(LIBSOCKET)
 
 bin_PROGRAMS = kautoformEdit
 

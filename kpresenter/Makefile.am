@@ -4,8 +4,8 @@ LDFLAGS	=	$(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	-lkdeui -lkdecore -lkfm $(LIBMICO) -lXext -lX11 -lkom -lop \
-	-ljpeg -lkfile -lqt 
+	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
+	-lkom  -ljpeg $(LIBSOCKET)
 
 ####### Files
 
