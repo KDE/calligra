@@ -793,6 +793,7 @@ void Page::startScreenPresentation(bool zoom)
     {
       kpbackground = backgroundList()->at(i);
       kpbackground->setSize(getPageSize(i,_presFakt).width(),getPageSize(i,_presFakt).height());
+      kpbackground->restore();
     }
   
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
@@ -834,6 +835,7 @@ void Page::stopScreenPresentation()
     {
       kpbackground = backgroundList()->at(i);
       kpbackground->setSize(getPageSize(i).width(),getPageSize(i).height());
+      kpbackground->restore();
     }
 
   goingBack = false;
