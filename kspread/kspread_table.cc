@@ -796,7 +796,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
     // create cells in rows if complete columns selected
-    if ( !worker.type_B && selected && m_rctSelection.bottom() == 0x7FFF )
+    if ( !worker.type_B && selected && isColumnSelected() )
     {
 	for ( RowLayout* rw =m_rows.first(); rw; rw = rw->next() )
 	{
@@ -826,7 +826,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
     }
 
     // complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( selected && isRowSelected() )
     {
 	for ( KSpreadCell* cell = m_cells.firstCell(); cell; cell = cell->nextCell() )
 	{
@@ -856,7 +856,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	return CompleteRows;
     }
     // complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    else if ( selected && isColumnSelected() )
     {
 	for ( KSpreadCell* cell = m_cells.firstCell(); cell; cell = cell->nextCell() )
 	{
@@ -1977,7 +1977,7 @@ KSpreadCell* c = m_cells.firstCell();
 QRect KSpreadTable::selectionCellMerged(const QRect &_sel)
 {
 QRect selection(_sel);
-if(selection.bottom()==0x7FFF ||selection.right()==0x7FFF)
+if( isColumnSelected() || isRowSelected() )
         return selection;
 else
   {
@@ -2129,11 +2129,11 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options, KSp
         bool selectionValid = ( m_rctSelection.left() != 0 );
 
         // Complete rows selected ?
-        if ( selectionValid && m_rctSelection.right() == 0x7FFF )
+        if ( isRowSelected() )
         {
         }
         // Complete columns selected ?
-        else if ( selectionValid && m_rctSelection.bottom() == 0x7FFF )
+        else if ( isColumnSelected() )
         {
         }
         else
@@ -2193,11 +2193,11 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
         bool selectionValid = ( m_rctSelection.left() != 0 );
 
         // Complete rows selected ?
-        if ( selectionValid && m_rctSelection.right() == 0x7FFF )
+        if ( isRowSelected() )
         {
         }
         // Complete columns selected ?
-        else if ( selectionValid && m_rctSelection.bottom() == 0x7FFF )
+        else if ( isColumnSelected() )
         {
         }
         else
@@ -2259,14 +2259,13 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
 
 void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
 {
-    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
     QPen pen( _color,1,SolidLine);
 
         // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
@@ -2293,7 +2292,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
       return;
     }
     // Complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    else if ( isColumnSelected() )
     {
       //nothing
       return;
@@ -2320,7 +2319,6 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
 
 void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 {
-    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left() == 0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2328,13 +2326,13 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 
     QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
       //nothing
       return;
     }
     // Complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    else if ( isColumnSelected() )
     {
 
     RowLayout* rw =m_rows.first();
@@ -2418,7 +2416,6 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 
 void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 {
-    bool selected = ( m_rctSelection.left() != 0 );
     QString title=i18n("Change border");
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
@@ -2427,7 +2424,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 
     QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
     QRect rect;
     rect.setCoords(r.left(),r.top(),1,r.bottom());
@@ -2448,7 +2445,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     return;
     }
     // Complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    else if ( isColumnSelected() )
     {
     RowLayout* rw =m_rows.first();
     for( ; rw; rw = rw->next() )
@@ -2528,14 +2525,13 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 
 void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
 {
-    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
     QString title=i18n("Change border");
     QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
@@ -2561,7 +2557,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
       return;
     }
     // Complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    else if ( isColumnSelected() )
     {
     QRect rect;
     rect.setCoords(r.left(),r.top(),r.right(),1);
@@ -2603,7 +2599,6 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
 
 void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
 {
-    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2616,7 +2611,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
         }
     QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
@@ -2651,7 +2646,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
       return;
     }
     // Complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    else if ( isColumnSelected() )
     {
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
@@ -2867,7 +2862,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     Q_ASSERT( mode == Increase || mode == Decrease );
 
     // It may not happen that entire columns are selected.
-    Q_ASSERT( r.right() != 0x7fff );
+    Q_ASSERT( isRowSelected() == FALSE );
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2875,7 +2870,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
     // Are entire rows selected ?
-    if ( r.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
         r.setLeft( 0x7fff );
         r.setRight( 0 );
@@ -2970,10 +2965,10 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
     // It may not happen that entire rows are selected.
-    Q_ASSERT( r.right() != 0x7fff );
+    Q_ASSERT( isRowSelected() == FALSE );
 
     // Are entire columns selected ?
-    if ( r.bottom() == 0x7FFF )
+    if ( isColumnSelected() )
     {
         r.setTop( 0x7fff );
         r.setBottom( 0 );
@@ -3104,7 +3099,7 @@ bool KSpreadTable::areaIsEmpty()
     bool selected = ( m_rctSelection.left() != 0 );
 
     // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    if ( isRowSelected() )
     {
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
@@ -3117,7 +3112,8 @@ bool KSpreadTable::areaIsEmpty()
         }
       }
     }
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    // Complete columns selected ?
+    else if ( isColumnSelected() )
     {
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
@@ -3429,7 +3425,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
     int long_max=0;
     if( _col == -1 )
     {
-        if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
+        if ( isColumnSelected() )
         {
             KSpreadCell* c = m_cells.firstCell();
             for( ;c; c = c->nextCell() )
@@ -3473,7 +3469,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
             r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
         }
 
-        if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
+        if ( isColumnSelected() )
         {
             KSpreadCell* c = m_cells.firstCell();
             for( ;c; c = c->nextCell() )
@@ -3555,7 +3551,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
     int long_max=0;
     if(_row==-1)
     {
-        if ( m_rctSelection.left() != 0 && m_rctSelection.right() == 0x7FFF )
+        if ( isRowSelected() )
         {
             KSpreadCell* c = m_cells.firstCell();
             for( ;c; c = c->nextCell() )
@@ -3584,7 +3580,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
             r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
         }
 
-        if ( m_rctSelection.left() != 0 && m_rctSelection.right() == 0x7FFF )
+        if ( isRowSelected() )
         {
             KSpreadCell* c = m_cells.firstCell();
             for( ;c; c = c->nextCell() )
@@ -3643,6 +3639,43 @@ struct ClearTextSelectionWorker : public KSpreadTable::CellWorker {
 	cell->setCellText( "" );
     }
 };
+
+
+bool KSpreadTable::isRowSelected (){
+//selectionRect() contains a QRect with the current selection
+    if ( isRowSelected( selectionRect() ) ){
+	return TRUE;
+    }
+    return FALSE;
+}
+
+
+bool KSpreadTable::isRowSelected (const QRect &_rect){
+//If a row is selected, then it must have a selection area from left 1 to right 0x7FFF
+    if ( (_rect.left() == 1) && (_rect.right() == 0x7FFF) ){
+	return TRUE;
+    }
+    return FALSE;
+}
+
+
+bool KSpreadTable::isColumnSelected (){
+//selectionRect() contains a QRect with the current selection
+    if ( isColumnSelected( selectionRect() ) ){
+	return TRUE;
+    }
+    return FALSE;
+}
+
+
+bool KSpreadTable::isColumnSelected (const QRect &_rect){
+//If a column is selected, then it must have a selection area from top 1 to bottom 0x7FFF
+    if ( (_rect.top() == 1) && (_rect.bottom() == 0x7FFF) ){
+	return TRUE;
+    }
+    return FALSE;
+}
+
 
 void KSpreadTable::clearTextSelection( const QPoint &_marker )
 {
@@ -4010,10 +4043,10 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
     // find size of rectangle that we want to paste to (either clipboard size or current selection)
     const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
-                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() )
+                             isRowSelected() == FALSE && e.namedItem( "rows" ).toElement().isNull() )
         ? selectionRect().width() : columnsInClpbrd;
     const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
-                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() )
+                              isColumnSelected() == FALSE && e.namedItem( "columns" ).toElement().isNull() )
         ? selectionRect().height() : rowsInClpbrd;
     //kdDebug(36001) << "loadSelection: paste area has size " << pasteHeight << " rows * "
     //               << pasteWidth << " columns " << endl;
@@ -4137,10 +4170,10 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
     // find rect that we paste to
     const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
-                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() )
+                             isRowSelected() == FALSE && e.namedItem( "rows" ).toElement().isNull() )
         ? selectionRect().width() : columnsInClpbrd;
     const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
-                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() )
+                              isColumnSelected() == FALSE && e.namedItem( "columns" ).toElement().isNull() )
         ? selectionRect().height() : rowsInClpbrd;
     QRect rect;
     if ( !e.namedItem( "columns" ).toElement().isNull() )
@@ -4311,7 +4344,7 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
         }
 
     // Entire rows selected ?
-    if ( r.right() == 0x7fff )
+    if ( isRowSelected() )
     {
         for( int i = r.top(); i <= r.bottom(); ++i )
         {
@@ -4322,7 +4355,7 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
         emit sig_updateVBorder( this );
     }
     // Entire columns selected ?
-    else if ( r.bottom() == 0x7fff )
+    else if ( isColumnSelected() )
     {
         for( int i = r.left(); i <= r.right(); ++i )
         {
@@ -4749,7 +4782,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     //
     // Entire rows selected ?
     //
-    if ( _rect.right() == 0x7fff )
+    if ( isRowSelected( _rect ) )
     {
         QDomElement rows = doc.createElement("rows");
         rows.setAttribute( "count", _rect.bottom() - _rect.top() + 1 );
@@ -4786,7 +4819,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     //
     // Entire columns selected ?
     //
-    if ( _rect.bottom() == 0x7fff )
+    if ( isColumnSelected( _rect ) )
     {
         QDomElement columns = doc.createElement("columns");
         columns.setAttribute( "count", _rect.right() - _rect.left() + 1 );

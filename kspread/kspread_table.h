@@ -522,6 +522,24 @@ public:
     int adjustRow( const QPoint &_marker, int _row = -1 );
 
     /**
+    * Check wether an entire row is selected in the current selection
+    */
+    bool isRowSelected ();
+    /**
+    * Check wether an entire row is selected in the selection rect of the argument
+    */
+    bool isRowSelected (const QRect &_rect);
+    /**
+    * Check wether an entire column is selected in the current selection
+    */
+    bool isColumnSelected ();
+    /**
+    * Check wether the entire column is selected in the selection rect of the argument
+    */
+    bool isColumnSelected (const QRect &_rect);
+
+
+    /**
      * Install borders
      */
     void borderLeft( const QPoint &_marker,const QColor &_color );

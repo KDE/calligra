@@ -767,7 +767,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     // Find out where the little "corner" (in lower right direction) is.
     QRect corner;
     // No selection or just complete rows/columns ?
-    if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
+    if ( selection.left() == 0 || table->isRowSelected() || table->isColumnSelected() )
     {
         int x = table->columnPos( markerColumn(), this );
         int y = table->rowPos( markerRow(), this );
@@ -973,7 +973,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
         // No selection or complete rows/columns are selected
         if ( selection.left() == 0 ||
-             selection.right() == 0x7fff || selection.bottom() == 0x7fff )
+	     table->isRowSelected() || table->isColumnSelected() )
         {
             xpos = table->columnPos( markerColumn(), this );
             ypos = table->rowPos( markerRow(), this );
@@ -1006,7 +1006,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
             {
                 m_eMouseAction = AutoFill;
                 // Do we have a selection already ?
-                if ( selection.left() != 0 && selection.right() != 0x7fff && selection.bottom() != 0x7fff )
+                if ( selection.left() != 0 && table->isRowSelected() == FALSE && table->isColumnSelected() == FALSE)
                 { /* Selection is ok */
                     m_rctAutoFillSrc = selection;
                 }
@@ -1492,9 +1492,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      {
 	      case KSpread::Bottom :
 		  {
-		      if ( !m_bChoose && markerRow() == 0xFFFF )
+		      if ( !m_bChoose && markerRow() == 0x7FFF )
 			  return;
-		      if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+		      if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
 			  return;
 
 		      if ( m_bChoose )
