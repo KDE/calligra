@@ -124,6 +124,7 @@ public:
   virtual void cleanUp();
   
   // ------ IDL ------
+  virtual CORBA::Boolean printDlg();
   // edit menu
   virtual void editCut();
   virtual void editCopy();
@@ -232,6 +233,10 @@ public:
 
   QPen getPen() {return pen;} 
   void presentParts(float,QPainter*,QRect,int,int);
+  void hideParts();
+  void showParts();
+
+  Page* getPage() {return page;}
 
 public slots:
 
@@ -305,10 +310,6 @@ protected:
   void mouseMoveEvent(QMouseEvent*);
   void keyPressEvent(QKeyEvent*);
   
-  // screen presentation
-  void hideParts();
-  void showParts();
-
   // ********** variables **********
 
   // document

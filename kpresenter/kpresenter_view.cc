@@ -12,6 +12,7 @@
 /* Module: KPresenter View                                        */
 /******************************************************************/
 
+#include <qprinter.h>
 #include <kfiledialog.h>
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
@@ -95,6 +96,67 @@ void KPresenterView_impl::cleanUp()
   m_vToolBarFactory = 0L;
 
   View_impl::cleanUp();
+}
+
+/*=========================== file print =======================*/
+CORBA::Boolean KPresenterView_impl::printDlg()
+{
+  QPrinter prt;
+  prt.setMinMax(1,m_pKPresenterDoc->getPageNums());
+  bool makeLandscape = false;
+
+  switch (m_pKPresenterDoc->pageLayout().format)
+    {
+    case PG_DIN_A4: prt.setPageSize(QPrinter::A4);
+      break;
+    case PG_US_LETTER: prt.setPageSize(QPrinter::Letter);
+      break;
+    case PG_US_LEGAL: prt.setPageSize(QPrinter::Legal);
+      break;
+    case PG_US_EXECUTIVE: prt.setPageSize(QPrinter::Executive);
+      break;
+    case PG_DIN_B5: prt.setPageSize(QPrinter::B5);
+      break;
+    case PG_SCREEN:
+      {
+	warning(i18n("You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!"));
+	prt.setPageSize(QPrinter::A4);
+	makeLandscape = true;
+      }	break;
+    default:
+      {
+	warning(i18n("The used page layout is not supported by QPrinter. I set it to DIN A4."));
+	prt.setPageSize(QPrinter::A4);
+      } break;
+    }
+
+  switch (m_pKPresenterDoc->pageLayout().orientation)
+    {
+    case PG_PORTRAIT: prt.setOrientation(QPrinter::Portrait);
+      break;
+    case PG_LANDSCAPE: prt.setOrientation(QPrinter::Landscape);
+      break;
+    }
+
+  float left_margin = 0.0;
+  float top_margin = 0.0;
+
+  if (makeLandscape) 
+    {
+      prt.setOrientation(QPrinter::Landscape);
+      left_margin = 28.5;
+      top_margin = 15.0;
+    }
+
+  if (prt.setup(this))
+    {    
+      page->deSelectAllObj();
+      QPainter painter;
+      painter.begin(&prt);
+      page->print(&painter,&prt,left_margin,top_margin);
+      painter.end();
+    }
+  return true;
 }
 
 /*========================== edit cut ===========================*/
@@ -1333,8 +1395,7 @@ void KPresenterView_impl::presentParts(float _presFakt,QPainter* _painter,QRect 
 {
   QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
   QRect child_geometry;
-  int diff_w,diff_h;
-  float scale_w,scale_h,scale_w_back,scale_h_back;
+  float scale_w,scale_h;
 
   for(;chl.current();++chl)
     {
@@ -1344,22 +1405,11 @@ void KPresenterView_impl::presentParts(float _presFakt,QPainter* _painter,QRect 
       child_geometry.setRight(chl.current()->_geometry().right());
       child_geometry.setBottom(chl.current()->_geometry().bottom());
 
-//       diff_w = (int)((float)chl.current()->_geometry().width() * _presFakt) - 
-// 	chl.current()->_geometry().width();
       scale_w = (float)chl.current()->_geometry().width() * _presFakt / 
 	(float)chl.current()->_geometry().width();
-//       scale_w_back = (float)chl.current()->_geometry().width() /
-// 	(float)chl.current()->_geometry().width() * _presFakt;
 
-//       diff_h = (int)((float)chl.current()->_geometry().height() * _presFakt) - 
-// 	chl.current()->_geometry().height();
       scale_h = (float)chl.current()->_geometry().height() * _presFakt / 
 	(float)chl.current()->_geometry().height();
-//       scale_h_back = (float)chl.current()->_geometry().height() / 
-// 	(float)chl.current()->_geometry().height() * _presFakt;
-
-//       child_geometry.setLeft(child_geometry.left() + diff_w / 2);
-//       child_geometry.setTop(child_geometry.top() + diff_h / 2);
 
       _painter->translate((float)child_geometry.left() - (float)_diffx,
 			  (float)child_geometry.top() - (float)_diffy);
@@ -1371,10 +1421,6 @@ void KPresenterView_impl::presentParts(float _presFakt,QPainter* _painter,QRect 
       _painter->drawPicture(*pic);
  
       _painter->resetXForm();
-      //_painter->scale(scale_w_back,scale_h_back);
-      //_painter->translate(-child_geometry.left(),
-      //		  -child_geometry.top());
-
     }
 }
 

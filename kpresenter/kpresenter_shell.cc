@@ -61,9 +61,9 @@ bool KPresenterShell_impl::openDocument(const char *_filename)
   m_rDoc = OPParts::Document::_duplicate(new KPresenterDocument_impl);
   if (!m_rDoc->open(_filename)) return false;
   
-  OPParts::View_var view = m_rDoc->createView();
-  view->setPartShell(this);
-  setRootPart(view);
+  m_vView = m_rDoc->createView();
+  m_vView->setPartShell(this);
+  setRootPart(m_vView);
 
   m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
   m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
@@ -138,4 +138,12 @@ void KPresenterShell_impl::cleanUp()
 void KPresenterShell_impl::helpAbout()
 {
   KoAboutDia::about(KoAboutDia::KPresenter,"0.0.1");
+}
+
+/*========================= file print ===========================*/
+bool KPresenterShell_impl::printDlg()
+{
+  assert(!CORBA::is_nil(m_vView));
+
+  return m_vView->printDlg();
 }

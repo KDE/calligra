@@ -15,6 +15,7 @@
 #include <kfiledialog.h>
 #include "kpresenter_doc.h"
 #include "kpresenter_doc.moc"
+#include "page.h"
 
 /******************************************************************/
 /* class BackPic                                                  */
@@ -56,7 +57,7 @@ QPicture* BackPic::getPic()
 /*====================== constructor =============================*/
 KPresenterChild::KPresenterChild(KPresenterDocument_impl *_kpr, const QRect& _rect,OPParts::Document_ptr _doc,
 				 int _diffx,int _diffy)
-  : KoDocumentChild( _rect, _doc )
+  : KoDocumentChild(_rect,_doc)
 {
   m_pKPresenterDoc = _kpr;
   m_rDoc = OPParts::Document::_duplicate(_doc);
@@ -84,6 +85,7 @@ KPresenterChild::~KPresenterChild()
 /*====================== constructor =============================*/
 KPresenterDocument_impl::KPresenterDocument_impl()
 {
+  ADD_INTERFACE("IDL:OPParts/Print:1.0")
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete(false);
   m_lstChildren.setAutoDelete(true);
@@ -123,6 +125,7 @@ KPresenterDocument_impl::KPresenterDocument_impl()
 KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData &_refdata)
   : KPresenter::KPresenterDocument_skel(_refdata)
 {
+  ADD_INTERFACE("IDL:OPParts/Print:1.0")
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete(false);
   m_lstChildren.setAutoDelete(true);
@@ -166,6 +169,22 @@ KPresenterDocument_impl::~KPresenterDocument_impl()
   _pageList.clear();
   cleanUp();
   edeb("...KPresenterDocument_impl::~KPresenterDocument_impl() %i\n",_refcnt());
+}
+
+/*======================== draw contents as QPicture =============*/
+void KPresenterDocument_impl::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
+{
+  debug("DRAW");
+  if (m_lstViews.count() > 0)
+    {
+      debug("DRAW do it");
+      QPainter painter;
+      painter.begin(_dev);
+     
+      m_lstViews.at(0)->getPage()->draw(QRect(0,0,_width,_height),&painter);
+      
+      painter.end();
+    }
 }
 
 /*======================= clean up ===============================*/
@@ -421,8 +440,8 @@ bool KPresenterDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict
   return true;
 }
 
-/*
-bool KPresenterDocument_impl::load(const char *_url)
+/*========================= load a template =====================*/
+bool KPresenterDocument_impl::load_template(const char *_url)
 {
   KURL u(_url);
   if (u.isMalformed())
@@ -441,44 +460,14 @@ bool KPresenterDocument_impl::load(const char *_url)
       return false;
     }
 
-  KOMLStreamFeed feed( in );
+  KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
-  
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-  
-  // DOC
-  if (!parser.open("DOC",tag))
-    {
-      cerr << "Missing DOC" << endl;
-      return false;
-    }
-  
-  KOMLParser::parseTag(tag.c_str(),name,lst);
-  vector<KOMLAttrib>::const_iterator it = lst.begin();
-  for (;it != lst.end();it++)
-    {
-      if ((*it).m_strName == "mime")
-	{
-	  if ((*it).m_strValue != "application/x-kpresenter")
-	    {
-	      cerr << "Unknown mime type" << (*it).m_strValue << endl;
-	      return false;
-	    }
-	}
-    }
   
   if (!load(parser))
     return false;
   
-  parser.close(tag);
-  
-  m_strFileURL = _url;
-  
   return true;
 }
-*/
 
 /*========================== load ===============================*/
 bool KPresenterDocument_impl::load(KOMLParser& parser)
@@ -537,11 +526,12 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
       
-      if ( name == "OBJECT" )
+      if (name == "OBJECT")
 	{
-	  KPresenterChild *ch = new KPresenterChild( this );
-	  ch->load( parser, lst );
-	  insertChild( ch );
+	  KPresenterChild *ch = new KPresenterChild(this);
+	  ch->load(parser,lst);
+	  insertChild(ch);
+	  ch->_setGeometry(ch->geometry());
 	}
       else if (name == "PAPER")
 	{
@@ -678,6 +668,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   pixCache.clear();
   setPageLayout(__pgLayout,0,0);
   //repaint(true);
+
   return true;
 }
 
@@ -1520,7 +1511,7 @@ unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool
   _clean = clean;
   objStartY = getPageSize(_pageList.count(),0,0).y() + getPageSize(_pageList.count(),0,0).height();
   objStartNum = _objList.count();
-  if (!file.isEmpty()) open(file);
+  if (!file.isEmpty()) load_template(file);
   objStartNum = 0;
   objStartY = 0;
   _clean = true;
@@ -2223,9 +2214,9 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
   int wid = (int)(_pageLayout.width * fact * 100)/100,hei = (int)(_pageLayout.height * fact * 100)/100;
   
   pw = wid*(int)(MM_TO_POINT * 100) / 100 - 
-    (bl + br);
+    (bl + br) * (int)(MM_TO_POINT * 100) / 100;
   ph = hei*(int)(MM_TO_POINT * 100) / 100 -
-    (bt + bb);
+    (bt + bb) * (int)(MM_TO_POINT * 100) / 100;
 
   pw = (int)((float)pw * fakt);
   ph = (int)((float)ph * fakt);

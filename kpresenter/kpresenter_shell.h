@@ -55,6 +55,7 @@ public:
   virtual void cleanUp();
 
   virtual void helpAbout();
+  virtual bool printDlg();
   
 protected:
 

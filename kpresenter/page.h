@@ -72,6 +72,7 @@ public:
   ~Page(); 
   
   // public functions
+  void draw(QRect,QPainter*);
   void selectAllObj();
   void deSelectAllObj();
   void selectObj(int num);      
@@ -97,6 +98,8 @@ public:
   bool canAssignEffect(int&,int&);
 
   void keyPressEvent(QKeyEvent *e);
+
+  void print(QPainter*,QPrinter*,float,float);
 
 public slots:
 
@@ -160,8 +163,8 @@ protected:
   void _repaint(int _x,int _y,int _w,int _h,bool erase=true)
     {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,false);}
 
-  // changing pages with effects
   void drawPageInPix(QPixmap&,int);
+  void drawPageInPainter(QPainter*,int,QRect);
   void changePages(QPixmap,QPixmap,PageEffect);
   void doObjEffects();
   void drawObject(PageObjects*,QPixmap*,int,int,int,int,int,int);
@@ -177,6 +180,7 @@ protected:
   unsigned int oldMx,oldMy;                
   unsigned int resizeObjNum,editNum;
   bool drawBack;                  
+  bool fillBlack;
   GraphObj *graphPtr;
   KPresenterView_impl *view;
   bool editMode,goingBack,drawMode;

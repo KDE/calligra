@@ -45,6 +45,7 @@ class KPresenterView_impl;
 #include <koPageLayoutDia.h>
 #include <koIMR.h>
 #include <koDocument.h>
+#include <koPrintExt.h>
 
 #include <kurl.h>
 
@@ -124,6 +125,7 @@ protected:
 /*****************************************************************/
 class KPresenterDocument_impl : public QObject,
 				virtual public KoDocument,
+				virtual public KoPrintExt,
 				virtual public KPresenter::KPresenterDocument_skel
 {
   Q_OBJECT
@@ -143,6 +145,7 @@ public:
   virtual bool save(ostream&);
 
   // load
+  virtual bool load_template(const char *_url);
   virtual bool load(KOMLParser&);
   virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
 
@@ -314,6 +317,8 @@ protected:
    *              then false is returned.
    */
   virtual bool hasToWriteMultipart();
+
+  virtual void draw(QPaintDevice*,CORBA::Long,CORBA::Long);
 
   void saveBackground(ostream&);
   void saveObjects(ostream&);

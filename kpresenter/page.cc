@@ -13,6 +13,9 @@
 /* Module: Page                                                   */
 /******************************************************************/
 
+#include <qprinter.h>
+#include <qprogdlg.h>
+#include <qprogbar.h>
 #include "page.h"
 #include "page.moc"
 
@@ -46,6 +49,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       drawMode = false;
       presPen.operator=(QPen(red,3,SolidLine));
       picCache.setAutoDelete(true);
+      fillBlack = true;
     }
   else 
     {
@@ -57,6 +61,16 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
 /*======================== destructor ============================*/
 Page::~Page()
 {
+}
+
+/*============================ draw contents ====================*/
+void Page::draw(QRect _rect,QPainter *p)
+{
+  view->hideParts();
+  paintBackground(p,_rect);  
+  paintObjects(p,_rect);
+  view->presentParts(1.0,p,_rect,diffx(),diffy());
+  view->showParts();
 }
 
 /*======================== paint event ===========================*/
@@ -89,7 +103,7 @@ void Page::paintBackground(QPainter *painter,QRect rect)
   int i,j,pw,ph;
 
   painter->setPen(NoPen);
-  if (editMode)
+  if (editMode || !editMode && !fillBlack)
     painter->setBrush(white);
   else
     painter->setBrush(black);
@@ -190,7 +204,7 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 	  r = painter->viewport();
 	}
       painter->setPen(NoPen);
-      if (editMode)
+      if (editMode || !editMode && !fillBlack)
 	painter->setBrush(white);
       else
 	painter->setBrush(black);
@@ -207,7 +221,7 @@ void Page::paintBackground(QPainter *painter,QRect rect)
     {
       unsigned int num = pageList()->count();
       painter->setPen(NoPen);
-      if (editMode)
+      if (editMode || !editMode && !fillBlack)
 	painter->setBrush(white);
       else
 	painter->setBrush(black);
@@ -644,7 +658,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
       oldMy = e->y();
       p.end();
     }
-  if (!editMode && !drawMode && !presMenu->isVisible())
+  if (!editMode && !drawMode && !presMenu->isVisible() && fillBlack)
     setCursor(blankCursor);
 }
 
@@ -1687,6 +1701,19 @@ void Page::drawPageInPix(QPixmap &_pix,int __diffy)
   view->setDiffY(_yOffset);
 }
 
+/*==================== draw a page in a pixmap ===================*/ 
+void Page::drawPageInPainter(QPainter* painter,int __diffy,QRect _rect)
+{
+  int _yOffset = view->getDiffY();
+  view->setDiffY(__diffy);
+
+  paintBackground(painter,_rect);
+  painter->resetXForm();
+  if (!objList()->isEmpty()) paintObjects(painter,_rect);
+  
+  view->setDiffY(_yOffset);
+}
+
 /*=========================== change pages =======================*/
 void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 {
@@ -2254,3 +2281,68 @@ int Page::isInPicCache(int num,int _subPresStep)
   return -1;
 }
 
+/*======================== print =================================*/
+void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin)
+{
+  repaint(false);
+  kapp->processEvents();
+
+  editMode = false;
+  fillBlack = false;
+  _presFakt = 1.0;
+
+  int _xOffset = view->getDiffX();
+  int _yOffset = view->getDiffY();
+
+  currPresStep = 1000;
+  subPresStep = 1000;
+
+  view->setDiffX(-(view->KPresenterDoc()->pageLayout().left - 5 + left_margin) * (int)(MM_TO_POINT * 100) / 100);
+  view->setDiffY(10);
+  view->setDiffY(diffy() - ((view->KPresenterDoc()->pageLayout().top - 5 + top_margin) * (int)(MM_TO_POINT * 100) / 100));
+
+  QColor c = kapp->winStyleHighlightColor();
+  kapp->setWinStyleHighlightColor(kapp->selectColor);
+
+  QProgressBar progBar;
+
+  QProgressDialog progress(i18n("Printing..."),i18n("Cancel"),printer->toPage() - printer->fromPage() + 2,this);
+  int j = 0;
+  progress.setProgress(0);
+
+  for (int i = printer->fromPage();i <= printer->toPage();i++)
+    {
+      progress.setProgress(++j);
+      kapp->processEvents();
+
+      if (progress.wasCancelled())
+	break;
+
+      currPresPage = i;
+      if (i > printer->fromPage()) printer->newPage();
+
+      painter->resetXForm();
+      painter->fillRect(getPageSize(i),white);
+
+      drawPageInPainter(painter,view->getDiffY(),getPageSize(i));
+      kapp->processEvents();
+
+      painter->resetXForm();
+      view->presentParts(1.0,painter,getPageSize(i),diffx(),diffy());
+      kapp->processEvents();
+
+      view->setDiffY(diffy() + getPageSize(i).height() + 10);
+    }
+
+  setCursor(arrowCursor);
+  view->setDiffX(_xOffset);
+  view->setDiffY(_yOffset);
+  
+  progress.setProgress(printer->toPage() - printer->fromPage() + 2);
+  kapp->setWinStyleHighlightColor(c);
+
+  _presFakt = 1.0;
+  fillBlack = true;
+  editMode = true;
+  repaint(false);
+}
