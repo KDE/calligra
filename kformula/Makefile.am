@@ -8,9 +8,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
-bin_PROGRAMS = kformula.bin
+bin_PROGRAMS = kformula
 
-kformula_bin_SOURCES =  kformula_shell.cc  kformula_view.cc matrixwidget.cc \
+kformula_SOURCES =  kformula_shell.cc  kformula_view.cc matrixwidget.cc \
 	kformula_main.cc kformula_doc.cc kformula.cc BasicElement.cc \
 	RootElement.cc TextElement.cc BracketElement.cc FractionElement.cc\
 	MatrixElement.cc PrefixedElement.cc formula_container.cc
@@ -34,16 +34,11 @@ picsdir = $(kde_icondir)
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
-uninstall-local:
-	-rm $(bindir)/kformula
-
 ####### Implicit rules
 
 ####### Build rules
 
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kformula $(bindir)/kformula
-
+kformula.cc: kformula.h
 kformula.h: kformula.idl $(micodir)/include/CORBA.h
 	rm -f kformula.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kformula.idl
@@ -51,7 +46,6 @@ kformula.h: kformula.idl $(micodir)/include/CORBA.h
 messages:
 	$(XGETTEXT) -C -ki18n -kklocale -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformula.pot
 
-kformula.cc: kformula.h
 kformula_view.h: kformula.h
 kformula_shell.h: kformula.h
 $(srcdir)/kformula_main.cc: kformula_view.h kformula.h

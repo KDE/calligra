@@ -5,9 +5,9 @@ LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIBQIMGIO) $(LIB
 
 ####### Files
 
-bin_PROGRAMS = kpresenter.bin
+bin_PROGRAMS = kpresenter
 
-kpresenter_bin_SOURCES = kpresenter_view.cc kpresenter_main.cc \
+kpresenter_SOURCES = kpresenter_view.cc kpresenter_main.cc \
 	kpresenter_doc.cc kpresenter_shell.cc kpresenter.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	formats.cc qwmf.cc kenumlistdia.cc \
@@ -71,12 +71,6 @@ SUBDIRS = autoformEdit autoforms pics toolbar templates dtd slideshow
 ####### Implicit rules
 
 ####### Build rules
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kpresenter $(bindir)/kpresenter
-
-uninstall-local:
-	-rm -f $(bindir)/kpresenter
 
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot

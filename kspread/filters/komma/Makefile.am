@@ -6,9 +6,9 @@ LDADD = $(LIB_KOFFICEUI) $(LIBPYTHON)
 
 ####### Files
 
-bin_PROGRAMS = kspread_filter.bin
+bin_PROGRAMS = kspread_filter
 
-kspread_filter_bin_SOURCES = main.cc
+kspread_filter_SOURCES = main.cc
 
 noinst_HEADERS = main.h
 
@@ -28,12 +28,6 @@ datas_DATA = komma.py
 ####### Implicit rules
 
 ####### Build rules
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kspread_filter $(bindir)/kspread_filter
-
-uninstall-local:
-	-rm -f $(bindir)/kspread_filter
 
 messages: 
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot

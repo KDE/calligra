@@ -5,9 +5,9 @@ LDADD = $(LIB_KOFFICEUI)
 
 ####### Files
 
-bin_PROGRAMS = koshell.bin
+bin_PROGRAMS = koshell
 
-koshell_bin_SOURCES = koshell_main.cc koshell_shell.cc
+koshell_SOURCES = koshell_main.cc koshell_shell.cc
 
 noinst_HEADERS = koshell_main.h koshell_shell.h
 
@@ -26,12 +26,6 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 ####### Build rules
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/koshell $(bindir)/koshell
-
-uninstall-local:
-	-rm -f $(bindir)/koshell
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/koshell.pot

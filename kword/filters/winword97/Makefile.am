@@ -6,9 +6,9 @@ LDADD = $(LIB_KOFFICECORE)
 
 ####### Files
 
-bin_PROGRAMS = kword_winword97.bin
+bin_PROGRAMS = kword_winword97
 
-kword_winword97_bin_SOURCES = main.cc
+kword_winword97_SOURCES = main.cc
 
 noinst_HEADERS = main.h
 

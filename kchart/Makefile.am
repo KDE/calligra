@@ -9,9 +9,9 @@ LDADD =  $(LIB_KOFFICEUI)
 
 ####### Files
 
-bin_PROGRAMS = kchart.bin
+bin_PROGRAMS = kchart
 
-kchart_bin_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.cc kchart_shell.cc chart.cc \
+kchart_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.cc kchart_shell.cc chart.cc \
 		sheet.cc sheetdlg.cc table.cc parser.cc
 noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.h chart.h \
 		sheet.h sheetdlg.h table.h parser.h
@@ -31,9 +31,6 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 ####### Implicit rules
 
 ####### Build rules
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kchart $(bindir)/kchart
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cpp && mv messages.po ../po/kchart.pot

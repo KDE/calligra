@@ -22,16 +22,13 @@ kdelnkdir = $(kde_datadir)/koffice/toollnk
 
 ####### Build rules
 
-install-exec-local:
-	$(INSTALL_SCRIPT) spell_tool $(bindir)/spell_tool
-
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../po/spell_tool.pot
 
+datatools.cc: datatools.h
 datatools.h: $(idldir)/datatools.idl
 	rm -f datatools.h
 	rm -f datatools.cc
 	$(IDL) --query-server-for-narrow --relative-paths --any -I$(idldir) $(idldir)/datatools.idl
 
 main.cc: main.h
-datatools.cc: datatools.h

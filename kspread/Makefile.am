@@ -4,9 +4,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la -lkformula $(LIBPYTHON)
 
 ####### Files
 
-bin_PROGRAMS = kspread.bin
+bin_PROGRAMS = kspread
 
-kspread_bin_SOURCES = kspread.cc kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
+kspread_SOURCES = kspread.cc kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_python.cc kspread_autofill.cc \
@@ -59,12 +59,6 @@ parser:
 	bison -p dep -b dep -d yacc.dep.y 
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kspread $(bindir)/kspread
-
-uninstall-local:
-	-rm -f $(bindir)/kspread
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kspread.pot

@@ -5,9 +5,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la $(LIB_KHTML)
 
 ####### Files
 
-bin_PROGRAMS = kohtml.bin
+bin_PROGRAMS = kohtml
 
-kohtml_bin_SOURCES = kohtml_main.cc kohtml_doc.cc kohtml_view.cc \
+kohtml_SOURCES = kohtml_main.cc kohtml_doc.cc kohtml_view.cc \
 	kohtml_shell.cc kohtml.cc htmwidget.cc htmview.cc \
 	kfileio.cc kpropcheck.cc kpropcolor.cc kpropcombo.cc kpropdlg.cc \
 	kpropfont.cc kpropgroup.cc kpropradio.cc kpropspin.cc kproptext.cc \
@@ -42,12 +42,6 @@ SUBDIRS = toolbar
 
 ####### Build rules
 
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kohtml $(bindir)/kohtml
-
-uninstall-local:
-	-rm -f $(bindir)/kohtml
-
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kohtml.pot
 
@@ -55,5 +49,4 @@ kohtml.cc: kohtml.h
 kohtml.h: kohtml.idl $(micodir)/include/CORBA.h
 	rm -f kohtml.h
 	$(IDL) --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
-
 

@@ -6,9 +6,9 @@ LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 
 ####### Files
 
-bin_PROGRAMS = kimage.bin
+bin_PROGRAMS = kimage
 
-kimage_bin_SOURCES = \
+kimage_SOURCES = \
  kimage.cc \
  kimage_main.cc \
  kimage_shell.cc \
@@ -57,12 +57,6 @@ kdelnkdir = $(kde_appsdir)/KOffice
 ####### Build rules
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kimage $(bindir)/kimage
-
-uninstall-local:
-	rm -f $(bindir)/kimage
 
 messages:
 	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimage.pot

@@ -7,9 +7,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
-bin_PROGRAMS = kdiagramm.bin
+bin_PROGRAMS = kdiagramm
 
-kdiagramm_bin_SOURCES = kdiagramm_main.cc kdiagramm_shell.cc kdiagramm_doc.cc \
+kdiagramm_SOURCES = kdiagramm_main.cc kdiagramm_shell.cc kdiagramm_doc.cc \
 			kdiagramm.cc kdiagramm_view.cc koDiagramm.cc chart.cc \
 			sheet.cc table.cc parser.cc sheetdlg.cc KChartAreaPainter.cpp \
 			KChartAxesPainter.cpp KChartBarsPainter.cpp KChartLinesPainter.cpp\
@@ -67,12 +67,6 @@ kdelnkdir = $(kde_appsdir)/KOffice
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kdiagramm $(bindir)/kdiagramm
-
-uninstall-local:
-	-rm -f $(bindir)/kdiagramm
-
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kdiagramm.pot
 
@@ -82,5 +76,4 @@ kdiagramm.h: kdiagramm.idl $(micodir)/include/CORBA.h
 chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
-BUILT_SOURCES = kdiagramm.h chart.h
 

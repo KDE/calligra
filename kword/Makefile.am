@@ -5,9 +5,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la -lkspell $(LIBQIMGIO) $(LIB_KIMGIO)
 
 ####### Files
 
-bin_PROGRAMS = kword.bin
+bin_PROGRAMS = kword
 
-kword_bin_SOURCES = kword_doc.cc char.cc kword_main.cc kword_view.cc kword.cc kword_shell.cc \
+kword_SOURCES = kword_doc.cc char.cc kword_main.cc kword_view.cc kword.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
 		formats.cc frame.cc framedia.cc stylist.cc kcharselectdia.cc \
@@ -44,12 +44,6 @@ SUBDIRS = . toolbar templates filters dtd
 ####### Implicit rules
 
 ####### Build rules
-
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/kword $(bindir)/kword
-
-uninstall-local:
-	-rm -f $(bindir)/kword
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot

@@ -8,9 +8,9 @@ LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 
 ####### Files
 
-bin_PROGRAMS = killustrator.bin
+bin_PROGRAMS = killustrator
 
-killustrator_bin_SOURCES = KIllustrator_main.cc \
+killustrator_SOURCES = KIllustrator_main.cc \
 	KIllustrator_doc.cc \
 	KIllustrator_shell.cc \
 	KIllustrator_view.cc \
@@ -47,13 +47,10 @@ kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Build rules
 
-install-exec-local:
-	$(INSTALL_SCRIPT) $(srcdir)/killustrator $(bindir)/killustrator
-
+KIllustrator.cc: KIllustrator.h
 KIllustrator.h: KIllustrator.idl $(micodir)/include/CORBA.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/KIllustrator.idl
 
 
-KIllustrator.cc: KIllustrator.h
-BUILT_SOURCES = KIllustrator.cc
+
 
