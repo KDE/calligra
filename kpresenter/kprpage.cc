@@ -1281,6 +1281,8 @@ KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString&  text ,
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
     insertObject( i18n( "Insert Textbox" ), kptextobject, r );
+    //TODO create macro command : now insertObject can return KCommand
+    //TODO fix repaint object
     if (  !text.isEmpty() )
     {
         KPTextView *view =  kptextobject->createKPTextView( _view ? _view->getCanvas() : 0L );
