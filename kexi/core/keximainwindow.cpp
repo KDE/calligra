@@ -107,6 +107,7 @@ class KexiMainWindow::Private
 			*action_edit_cut, *action_edit_copy, *action_edit_paste;
 		// view menu
 		KAction *action_view_nav;
+		KToggleAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
@@ -266,6 +267,16 @@ KexiMainWindow::initActions()
 		SHIFT+Key_Delete, "edit_delete_row");
 
 	//VIEW MENU
+	d->action_view_data_mode = new KToggleAction(i18n("&Data View"), "table", KShortcut(), 
+		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
+	d->action_view_data_mode->setExclusiveGroup("view_mode");
+	d->action_view_design_mode = new KToggleAction(i18n("D&esign View"), "state_edit", KShortcut(), 
+		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
+	d->action_view_design_mode->setExclusiveGroup("view_mode");
+	d->action_view_text_mode = new KToggleAction(i18n("&Text View"), "state_sql", KShortcut(), 
+		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
+	d->action_view_text_mode->setExclusiveGroup("view_mode");
+
 	d->action_view_nav = new KAction(i18n("Project navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 
@@ -1135,6 +1146,21 @@ void KexiMainWindow::slotViewNavigator()
 		d->nav->setFocus();
 	d->block_KMdiMainFrm_eventFilter=false;
 
+}
+
+void KexiMainWindow::slotViewDataMode()
+{
+	//TODO
+}
+
+void KexiMainWindow::slotViewDesignMode()
+{
+	//TODO
+}
+
+void KexiMainWindow::slotViewTextMode()
+{
+	//TODO
 }
 
 void

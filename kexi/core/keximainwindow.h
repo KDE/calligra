@@ -224,6 +224,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		void slotAction(const QString& act_id);*/
 
 		void slotViewNavigator();
+		void slotViewDataMode();
+		void slotViewDesignMode();
+		void slotViewTextMode(); //!< sometimes called "SQL View"
 		void slotShowSettings();
 		void slotConfigureKeys();
 		void slotConfigureToolbars();
