@@ -508,6 +508,8 @@ OoDrawImport::appendBrush( VObject &obj )
 					KoRect rect = obj.boundingBox();
 					gradient.setOrigin( KoPoint( rect.x() + x * rect.width(),
 												 rect.y() + y * rect.height() ) );
+					gradient.setFocalPoint( KoPoint( rect.x() + x * rect.width(),
+													 rect.y() + y * rect.height() ) );
 					gradient.setVector( KoPoint( rect.x() + rect.width(),
 												 rect.y() + y * rect.height() ) );
 				}
