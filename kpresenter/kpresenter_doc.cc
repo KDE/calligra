@@ -2088,10 +2088,14 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
     }
+    KPrPage *page=m_pageList.first();
+    if(m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage())
+        page=m_kpresenterView->getCanvas()->activePage();
+
     //draw background
-    m_pageList.first()->background()->draw( &painter, zoomHandler(), rect, false );
+    page->background()->draw( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
-    QPtrListIterator<KPObject> it( m_pageList.first()->objectList() );
+    QPtrListIterator<KPObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
     {
         it.current()->draw( &painter, zoomHandler(), false );
