@@ -52,9 +52,20 @@ public:
 
 protected:
 
-    virtual void gotSlideText(
-        unsigned textType,
-        const QString &text) = 0;
+    typedef struct
+    {
+        unsigned type;
+        QString data;
+    } SlideText;
+
+    typedef struct
+    {
+        unsigned persistentReference;
+        QList<SlideText> text;
+    } Slide;
+
+    virtual void gotSlide(
+        Slide &slide) = 0;
 
 private:
     Powerpoint(const Powerpoint &);
@@ -74,7 +85,6 @@ private:
 
     myFile m_mainStream;
     QMap<unsigned, unsigned> m_persistentReferences;
-    QList<unsigned> m_slidePersists;
     unsigned m_editDepth;
     enum
     {
@@ -82,6 +92,8 @@ private:
         PASS_GET_SLIDE_CONTENTS
     } m_pass;
     unsigned m_textType;
+    Slide *m_slide;
+    QList<Slide> m_slides;
 
     // Common Header.
 

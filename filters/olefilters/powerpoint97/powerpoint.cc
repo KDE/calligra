@@ -31,7 +31,7 @@ Powerpoint::Powerpoint()
 Powerpoint::~Powerpoint()
 {
     m_persistentReferences.clear();
-    m_slidePersists.clear();
+    m_slides.clear();
 }
 
 void Powerpoint::invokeHandler(
@@ -263,7 +263,7 @@ bool Powerpoint::parse(
     stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
     m_mainStream = mainStream;
     m_persistentReferences.clear();
-    m_slidePersists.clear();
+    m_slides.clear();
     m_editDepth = 0;
 
     // Find the slide references.
@@ -274,11 +274,15 @@ bool Powerpoint::parse(
     // We should have a complete list of slide persistent references.
 
     m_pass = PASS_GET_SLIDE_CONTENTS;
-    kdError(s_area) << "TOTAL LIDES XXXXXX: " << m_slidePersists.count() << endl;
+    kdError(s_area) << "TOTAL LIDES XXXXXX: " << m_slides.count() << endl;
     unsigned i;
 
-    for (i = 0; i < m_slidePersists.count(); i++)
-        walkReference(*m_slidePersists.at(i));
+    for (i = 0; i < m_slides.count(); i++)
+    {
+        m_slide = m_slides.at(i);
+        walkReference(m_slide->persistentReference);
+        gotSlide(*m_slide);
+    }
     return true;
 }
 
@@ -584,8 +588,10 @@ void Powerpoint::opSlidePersistAtom(
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        m_slidePersists.append(new unsigned(data.psrReference));
-                kdDebug(s_area) << "slide has texts: " <<
+        m_slide = new Slide;
+        m_slide->persistentReference = data.psrReference;
+        m_slides.append(m_slide);
+                kdDebug(s_area) << "slide: "<<data.psrReference<<" has texts: " <<
                     data.numberTexts << endl;
         break;
     case PASS_GET_SLIDE_CONTENTS:
@@ -645,10 +651,14 @@ void Powerpoint::opTextBytesAtom(
         data += tmp;
     }
 
+    SlideText *text;
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        gotSlideText(m_textType, data);
+        text = new SlideText;
+        text->type = m_textType;
+        text->data = data;
+        m_slide->text.append(text);
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
@@ -671,10 +681,14 @@ void Powerpoint::opTextCharsAtom(
         data += tmp;
     }
 
+    SlideText *text;
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        gotSlideText(m_textType, data);
+        text = new SlideText;
+        text->type = m_textType;
+        text->data = data;
+        m_slide->text.append(text);
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
