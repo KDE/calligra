@@ -621,6 +621,7 @@ don't put a </?xml...> at the end of the file!).
           0 = no underline
           1 or single = single underline
           double = double-underline.
+          single-bold = thick underline
         styleline type of underline 
                 : solid, dash, dot, dashdot, dashdotdot
         underlinecolor : color of underline line.
@@ -634,8 +635,8 @@ don't put a </?xml...> at the end of the file!).
     underlinecolor CDATA #REQUIRED>
 
 <!-- STRIKEOUT
-        Value is either 0 or 1 with 1=true and 0=false single or single-bold
-        styleline style of strikeout line solid, dash, dot, dashdot, dashdotdot
+        value: 0, 1 (or single), double, single-bold (see UNDERLINE)
+        styleline: style of strikeout line solid, dash, dot, dashdot, dashdotdot
 -->
 <!ELEMENT STRIKEOUT
     EMPTY>
