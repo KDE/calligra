@@ -143,46 +143,9 @@ VLayer::save( QDomElement& element ) const
 void
 VLayer::load( const QDomElement& element )
 {
-	m_objects.setAutoDelete( true );
-	m_objects.clear();
-	m_objects.setAutoDelete( false );
-
 	m_name = element.attribute( "name" );
 	setState( element.attribute( "visible" ) == 0 ? hidden : normal );
-
-	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" ) // TODO : remove COMPOSITE later
-			{
-				VComposite* composite = new VComposite( this );
-				composite->load( e );
-				append( composite );
-			}
-			else if( e.tagName() == "GROUP" )
-			{
-				VGroup* grp = new VGroup( this );
-				grp->load( e );
-				append( grp );
-			}
-			else if( e.tagName() == "CLIP" )
-			{
-				VClipGroup* grp = new VClipGroup( this );
-				grp->load( e );
-				append( grp );
-			}
-			else if( e.tagName() == "TEXT" )
-			{
-				VText* text = new VText( this );
-				text->load( e );
-				append( text );
-			}
-		}
-	}
+	VGroup::load( element );
 }
 
 
