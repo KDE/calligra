@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include "kexipartinfo.h"
 #include "kexipartitem.h"
 #include "kexidialogbase.h"
+#include "kexiviewbase.h"
 
 #include "kexipartguiclient.h"
 #include "keximainwindow.h"
@@ -162,7 +163,12 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	dlg->m_item = &item;
 	dlg->updateCaption();
 
-//js TODO: apply settings for caption displaying menthod; there can be option for
+	KexiDB::SchemaData sdata(m_info->projectPartID());
+	sdata.setName( item.name() );
+	sdata.setCaption( item.caption() );
+	sdata.setDescription( item.description() );
+
+//js TODO: apply settings for caption displaying method; there can be option for
 //- displaying item.caption() as caption, if not empty, without instanceName
 //- displaying the same as above in tabCaption (or not)
 //	dlg->setCaption( capt );
@@ -175,6 +181,16 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //	if (dlg->mainWidget())
 //		dlg->mainWidget()->setIcon( *dlg->icon() );
 	dlg->stack()->setIcon( *dlg->icon() );
+
+	if (!item.neverSaved()) {
+		//we have to load schema data for this dialog
+		dlg->m_schemaData = loadSchemaData(dlg, sdata);
+		if (!dlg->m_schemaData) {
+			m_status = Kexi::ObjectStatus( i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
+			dlg->close(); //this will destroy dlg
+			return 0;
+		}
+	}
 
 	bool cancelled;
 	bool switchingFailed = false;
@@ -197,14 +213,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
 
-//	QWidget *view = createView(dlg->stack(), dlg, item, viewMode);
-/*
-	if (!view) {
-		//js TODO ERROR???
-	}
-	else {
-		dlg->addView(view, viewMode);
-	}*/
+	if (dlg->selectedView())
+		dlg->selectedView()->setDirty(false);
 	
 	return dlg;
 }
@@ -212,6 +222,18 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 void Part::slotCreate()
 {
 	emit newObjectRequest( m_info );
+}
+
+KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata)
+{
+	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
+	*new_schema = sdata;
+	return new_schema;
+}
+
+bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID)
+{
+	return dlg->loadDataBlock( dataString, dataID );
 }
 
 //-------------------------------------------------------------------------

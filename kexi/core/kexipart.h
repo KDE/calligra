@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -123,6 +123,10 @@ class KEXICORE_EXPORT Part : public QObject
 #endif
 
 		virtual void initActions() {};
+
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
+
+		bool loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID = QString::null);
 
 		/*! Creates shared action for action collection declared 
 		 for 'instance actions' of this part.

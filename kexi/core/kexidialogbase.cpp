@@ -50,6 +50,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 // , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
+	m_openedViewModes = 0;
 	m_currentViewMode = Kexi::NoViewMode; //no view available yet
 	m_parentWindow = parent;
 	m_newlySelectedView = 0;
@@ -95,6 +96,8 @@ void KexiDialogBase::addView(KexiViewBase *view, int mode)
 	QWidget *ch = static_cast<QWidget*>(view->child( 0, "QWidget", false ));
 	if (ch)
 		view->setFocusProxy(ch);
+
+	m_openedViewModes |= mode;
 }
 
 QSize KexiDialogBase::minimumSizeHint() const
@@ -189,8 +192,19 @@ bool KexiDialogBase::tryClose(bool dontSaveChanges)
 
 bool KexiDialogBase::dirty() const
 {
-	KexiViewBase *v = m_newlySelectedView ? m_newlySelectedView : selectedView();
-	return v ? v->dirty() : false;
+	//look for "dirty" flag
+	int m = m_openedViewModes, mode = 1;
+	while (m>0) {
+		if (m & 1) {
+			if (static_cast<KexiViewBase*>(m_stack->widget(mode))->dirty())
+				return true;
+		}
+		m >>= 1;
+		mode <<= 1;
+	}
+	return false;
+/*	KexiViewBase *v = m_newlySelectedView ? m_newlySelectedView : selectedView();
+	return v ? v->dirty() : false;*/
 }
 
 QString KexiDialogBase::itemIcon()
@@ -273,7 +287,8 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	const int prevViewMode = m_currentViewMode;
 	m_currentViewMode = newViewMode;
 	m_newlySelectedView = newView;
-	m_newlySelectedView->setDirty(false);
+	if (prevViewMode==Kexi::NoViewMode)
+		m_newlySelectedView->setDirty(false);
 	if (!newView->afterSwitchFrom(prevViewMode, cancelled)) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl; 

@@ -24,6 +24,7 @@
 #include "kexipartguiclient.h"
 #include "kexiactionproxy.h"
 #include "kexi.h"
+#include "kexipart.h"
 
 #include <qguardedptr.h>
 
@@ -150,11 +151,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 This may or not be used, depending if changes in the dialog 
 		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
 		 (e.g. like in alter-table dialog).
-		 Default implementation always returns "dirty" flag retrieved from the current 
-		 view (if present) ot just false;
-		 Reimplement this if you e.g. want reuse "dirty" 
-		 flag from internal structures that may be changed. */
-		virtual bool dirty() const;
+		 \return true if at least on "dirty" flag is set for one of the dialog's view. */
+		bool dirty() const;
 
 		/*! \return true, if this dialog's data were never saved.
 		 If it's true we're usually try to ask a user if the dialog's 
@@ -228,6 +226,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		void addView(KexiViewBase *view, int mode);
 
 		int m_supportedViewModes;
+		int m_openedViewModes;
 		int m_currentViewMode;
 
 		inline QWidgetStack * stack() const { return m_stack; }
@@ -278,6 +277,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
 		friend class KexiViewBase;
+		friend class KexiPart::Part;
 };
 
 #endif
