@@ -21,78 +21,123 @@
 #define __koStore_h_
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <qstringlist.h>
+
+class QBuffer;
+class KTarGz;
 
 /**
- * Base class for @ref KoTarStore and @ref KoBinaryStore
+ * Saves and loads koffice documents using a tar file called "the tar store".
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
 class KoStore
 {
-protected:
-    /**
-     * This is an abstract class.
-     * See KoTarStore and KoBinaryStore for how to construct a store
-     */
-    KoStore() {}
-
 public:
-    enum Mode { Read, Write };
 
-    /**
-     * Destroys the store (i.e. closes the file on the hard disk)
-     */
-    virtual ~KoStore() {}
+  enum Mode { Read, Write };
+  /**
+   * Creates a Tar Store (i.e. a file on the hard disk, to save a document)
+   * if _mode is KoStore::Write
+   * Opens a Tar Store for reading if _mode is KoStore::Read.
+   */
+  KoStore( const QString & _filename, Mode _mode );
 
-    /**
-     * Open a new file inside the store
-     * @param name the filename, internal representation ("root", "tar:0"... )
-     */
-    virtual bool open( const QString & name ) = 0;
-    /**
-     * Close the file inside the store
-     */
-    virtual void close() = 0;
+  /**
+   * Destroys the store (i.e. closes the file on the hard disk)
+   */
+  ~KoStore();
 
-    /**
-     * @return true if an error occured
-     */
-    virtual bool bad() = 0;
+  /**
+   * Open a new file inside the store
+   * @param name the filename, internal representation ("root", "tar:0"... )
+   */
+  bool open( const QString & name );
 
-    /**
-     * Write data into the currently opened file. You can also use the streams
-     * for this.
-     */
-    virtual bool write( const char* _data, unsigned long _len ) = 0;
-    /**
-     * Read data from the currently opened file. You can also use the streams
-     * for this.
-     * @return size of data read, -1 on error
-     */
-    virtual long read( char *_buffer, unsigned long _len ) = 0;
+  /**
+   * Close the file inside the store
+   */
+  void close();
 
-    /**
-     * Write data into the currently opened file. You can also use the streams
-     * for this.
-     */
-    virtual bool write( const QByteArray& data ) = 0;
-    /**
-     * Read data from the currently opened file. You can also use the streams
-     * for this.
-     */
-    virtual QByteArray read( unsigned long max ) = 0;
+  /**
+   * Read data from the currently opened file. You can also use the streams
+   * for this.
+   */
+  QByteArray read( long unsigned int max );
 
-    /**
-     * @return the size of the currently opened file (-1 on error).
-     * Can be used as an argument for the read methods, for instance
-     */
-    virtual long size() const = 0;
+  /**
+   * Write data into the currently opened file. You can also use the streams
+   * for this.
+   */
+  bool write( const QByteArray& _data );
 
-    /**
-     * @return the mode used when opening, read or write
-     */
-    virtual Mode mode() = 0;
+  /**
+   * Write data into the currently opened file. You can also use the streams
+   * for this.
+   */
+  bool write( const char* _data, unsigned long _len );
+
+  /**
+   * Read data from the currently opened file. You can also use the streams
+   * for this.
+   * @return size of data read, -1 on error
+   */
+  long read( char *_buffer, unsigned long _len );
+
+  /**
+   * @return the size of the currently opened file, -1 on error.
+   * Can be used as an argument for the read methods, for instance
+   */
+  long size() const;
+
+  /**
+   * @return true if an error occured
+   */
+  bool bad() { return !m_bGood; } // :)
+
+  /**
+   * @return the mode used when opening, read or write
+   */
+  Mode mode() { return m_mode; }
+
+  // See QIODevice
+  bool at( int pos );
+  int at() const;
+  bool atEnd() const;
+
+protected:
+  /**
+   * Conversion routine
+   * @param _internalNaming name used internally : "root", "tar:/0", ...
+   * @return the name used in the file, more user-friendly ("maindoc.xml", "part0.xml", ...)
+   * Examples:
+   *
+   * tar:/0 is saved as part0.xml
+   * tar:/0/1 is saved as part0/part1.xml
+   * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
+   */
+  static QString toExternalNaming( const QString & _internalNaming );
+
+  Mode m_mode;
+
+  // Store the filenames (with full path inside the archive) when writing, to avoid duplicates
+  QStringList m_strFiles;
+
+  // Current filename (between an open() and a close())
+  QString m_sName;
+  // Current size of the file named m_sName
+  unsigned long m_iSize;
+
+  KTarGz * m_pTar;
+  QByteArray m_byteArray;
+  QBuffer * m_stream;
+
+  bool m_bIsOpen;
+  bool m_bGood;
+
+  int m_readBytes;
+  class KoStorePrivate;
+  KoStorePrivate * d;
 };
 
 #endif

@@ -19,6 +19,7 @@
 
 #include <qiodevice.h>
 #include <koStore.h>
+#include <stdlib.h>
 
 /**
  * This class implements a QIODevice around KoStore, so that
@@ -70,6 +71,11 @@ public:
       return -1;
   }
   int ungetch( int ) { return -1; } // unsupported
+
+  // See QIODevice
+  virtual bool at( int pos ) { return m_store->at(pos); }
+  virtual int at() const { return m_store->at(); }
+  virtual bool atEnd() const { return m_store->atEnd(); }
 
 protected:
   KoStore * m_store;
