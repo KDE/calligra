@@ -6,6 +6,13 @@
 		<text>&amp;Create</text>
 		<Action name="kugarhandler_create"/>
 	</Menu>
+	<Menu name="help">
+		<Menu name="help_licenses" noMerge="1"><text>Other &amp;Licenses</text>
+		<Action name="kugar_show_license" />
+		</Merge>
+	  	</Menu>
+	  </Menu>
+
 </MenuBar>
 
 </kpartgui>
