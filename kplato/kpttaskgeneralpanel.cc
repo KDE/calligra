@@ -24,10 +24,13 @@
 #include "kptduration.h"
 #include "kptdurationwidget.h"
 #include "kptcalendar.h"
+#include "kptdatetime.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <ktextedit.h>
+#include <kcombobox.h>
+#include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kcommand.h>
 
@@ -40,7 +43,8 @@ namespace KPlato
 
 KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *p, const char *n)
     : KPTTaskGeneralPanelBase(p, n),
-      m_task(task)
+      m_task(task),
+      m_dayLength(24)
 {
     setStartValues(task, workTime);
     namefield->setFocus();
@@ -69,7 +73,8 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
     setEstimateType(task.effort()->type());
     setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
     if (workTime) {
-        setEstimateScales(workTime->durationDay().hours());
+        m_dayLength = workTime->durationDay().hours();
+        setEstimateScales(m_dayLength);
     }
     setEstimateFieldUnit(0, i18n("days"));
     setEstimateFieldUnit(1, i18n("hours"));
@@ -155,6 +160,43 @@ bool KPTTaskGeneralPanel::ok() {
     }
     return true;
 }
+
+void KPTTaskGeneralPanel::estimationTypeChanged(int type) {
+    if (scheduleType->currentItem() == 6 /* Fixed interval */) {
+        if (type == 0 /*Effort*/) {
+            setEstimateScales(m_dayLength);
+             estimate->setEnabled(true);
+        } else {
+            setEstimateScales(24);
+            estimate->setEnabled(false);
+            KPTDateTime st = scheduleStartTime->dateTime();
+            KPTDateTime end = scheduleEndTime->dateTime();
+            estimate->setValue(end - st);
+            if (st.time().isNull() && end.time().isNull()) {
+                KPTDuration d = estimate->value();
+                d.addDays(1);
+                estimate->setValue(d);
+            }
+        }
+        return;
+    }
+    KPTTaskGeneralPanelBase::estimationTypeChanged(type);
+}
+
+void KPTTaskGeneralPanel::scheduleTypeChanged(int value)
+{
+    if (value == 6 /*Fixed interval*/) { 
+        if (estimateType->currentItem() == 1/*duration*/){
+            setEstimateScales(24);
+            estimate->setEnabled(false);
+        }
+    } else {
+        setEstimateScales(m_dayLength);
+        estimate->setEnabled(true);
+    }
+    KPTTaskGeneralPanelBase::scheduleTypeChanged(value);
+}
+
 
 
 }  //KPlato namespace

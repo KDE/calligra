@@ -42,11 +42,15 @@ public:
 
     bool ok();
 
-public:
     void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
+
+public slots:
+    virtual void estimationTypeChanged(int type);
+    virtual void scheduleTypeChanged(int value);
     
 private:
     KPTTask &m_task;
+    int m_dayLength;
 };
 
 } //KPlato namespace

@@ -154,7 +154,7 @@
                         <cstring>estimateType</cstring>
                     </property>
                     <property name="editable">
-                        <bool>true</bool>
+                        <bool>false</bool>
                     </property>
                     <property name="urlDropsEnabled" stdset="0">
                         <bool>false</bool>
@@ -558,6 +558,12 @@
         <receiver>KPTTaskGeneralPanelBase</receiver>
         <slot>endTimeChanged(const QDateTime&amp;)</slot>
     </connection>
+    <connection>
+        <sender>scheduleType</sender>
+        <signal>activated(int)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>scheduleTypeChanged(int)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>chooseLeader</tabstop>
@@ -567,10 +573,11 @@
     <tabstop>pessimisticValue</tabstop>
 </tabstops>
 <includes>
+    <include location="local" impldecl="in declaration">kptduration.h</include>
     <include location="local" impldecl="in implementation">kabc/addressee.h</include>
     <include location="local" impldecl="in implementation">kabc/addresseedialog.h</include>
     <include location="local" impldecl="in implementation">kmessagebox.h</include>
-    <include location="local" impldecl="in declaration">kptduration.h</include>
+    <include location="local" impldecl="in implementation">kptdatetime.h</include>
     <include location="local" impldecl="in implementation">kpttaskgeneralpanelbase.ui.h</include>
 </includes>
 <forwards>
@@ -591,7 +598,7 @@
     <slot>setPessimistic( int value )</slot>
     <slot>enableDateTime( int scheduleType )</slot>
     <slot>estimationTypeChanged( int type )</slot>
-    <slot>setEstimate( const KPlato::KPTDuration &amp; duration )</slot>
+    <slot>setEstimate( const KPTDuration &amp; duration )</slot>
     <slot>setEstimateType( int type )</slot>
     <slot>checkAllFieldsFilled()</slot>
     <slot>setEstimateFields( int mask )</slot>
@@ -599,6 +606,7 @@
     <slot>setEstimateFieldUnit( int field, QString unit )</slot>
     <slot>startTimeChanged( const QDateTime &amp; dt )</slot>
     <slot>endTimeChanged( const QDateTime &amp; dt )</slot>
+    <slot>scheduleTypeChanged( int value )</slot>
 </slots>
 <functions>
     <function returnType="int">schedulingType() const</function>
@@ -607,7 +615,7 @@
     <function returnType="int">estimationType() const</function>
     <function returnType="int">optimistic() const</function>
     <function returnType="int">pessimistic()</function>
-    <function returnType="KPlato::KPTDuration">estimationValue()</function>
+    <function returnType="KPTDuration">estimationValue()</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
@@ -615,7 +623,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
@@ -623,7 +630,7 @@
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>
-    <includehint>kptdurationwidget.h</includehint>
+    <includehint>kplato::kptdurationwidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>

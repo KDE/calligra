@@ -127,7 +127,6 @@ void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
     case 6: //Fixed interval
         scheduleStartTime->setEnabled(true);
         scheduleEndTime->setEnabled(true);
- estimateType->setCurrentItem(0); // Effort
  break;
     default:
         scheduleStartTime->setEnabled(false);
@@ -139,13 +138,6 @@ void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
 
 void KPTTaskGeneralPanelBase::estimationTypeChanged( int type )
 {
-    if (scheduleType->currentItem() == 6 /* Fixed interval */) {
- if (type != 0 /*Effort*/) {
-             KMessageBox::sorry(this, i18n("Estimation type must be Effort\nwhen schedule type is 'Fixed interval'"));
-      estimateType->setCurrentItem(0); // Stay at Effort
-        }
-        return;
-    }
     checkAllFieldsFilled();
 }
 
@@ -208,8 +200,12 @@ void KPTTaskGeneralPanelBase::startTimeChanged( const QDateTime &dt )
            setEndTime(dt);
  scheduleEndTime->blockSignals(false);
     }
+    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    {
+ estimationTypeChanged(estimateType->currentItem());
+    }
+    
 }
-
 
 void KPTTaskGeneralPanelBase::endTimeChanged( const QDateTime &dt )
 {
@@ -222,6 +218,17 @@ void KPTTaskGeneralPanelBase::endTimeChanged( const QDateTime &dt )
      setStartTime(dt);
         scheduleStartTime->blockSignals(false);
     }
+    
+    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    {
+ estimationTypeChanged(estimateType->currentItem());
+    }
+}
+
+void KPTTaskGeneralPanelBase::scheduleTypeChanged( int value )
+{
+     estimationTypeChanged(estimateType->currentItem());
 }
 
 }  //KPlato namespace
+

@@ -475,13 +475,20 @@ KPTDateTime KPTTask::calculateForward(int use) {
                     earliestStart < m_constraintStartTime)
                     earliestStart = m_constraintStartTime;
                 break;
-            case KPTNode::FixedInterval:
+            case KPTNode::FixedInterval: {
+                KPTDateTime st = m_constraintStartTime;
+                KPTDateTime end = m_constraintEndTime;
+                if (st.time().isNull() && end.time().isNull())
+                {
+                    end = end.addDays(1);
+                }
                 if (!m_visitedBackward &&
-                    earliestStart < m_constraintStartTime) {
-                    earliestStart = m_constraintStartTime;
-                    m_durationForward = m_constraintEndTime - m_constraintStartTime;
+                    earliestStart < st) {
+                    earliestStart = st;
+                    m_durationForward = end - st;
                 }
                 break;
+            }
         }
         // Adjust duration to when resource(s) can start work
         if (m_requests) {
@@ -572,13 +579,20 @@ KPTDateTime KPTTask::calculateBackward(int use) {
                     latestFinish > m_constraintEndTime)
                     latestFinish = m_constraintEndTime;
                 break;
-            case KPTNode::FixedInterval:
+            case KPTNode::FixedInterval: {
+                KPTDateTime st = m_constraintStartTime;
+                KPTDateTime end = m_constraintEndTime;
+                if (st.time().isNull() && end.time().isNull())
+                {
+                    end = end.addDays(1);
+                }
                 if (!m_visitedForward &&
-                    latestFinish > m_constraintEndTime) {
-                    latestFinish = m_constraintEndTime;
-                    m_durationBackward = m_constraintEndTime - m_constraintStartTime;
+                    latestFinish > end) {
+                    latestFinish = end;
+                    m_durationBackward = end - st;
                 }
                 break;
+            }
         }
         if (m_requests) {
             // Move to when resource(s) can do (end) work
@@ -736,17 +750,24 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
                 m_duration = duration(m_endTime, use, true);            
             m_startTime = m_endTime - m_duration;
             break;
-        case KPTNode::FixedInterval:
+        case KPTNode::FixedInterval: {
             // m_startTime calculated above
             //kdDebug()<<"FixedInterval="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
-            if (m_constraintEndTime > latestFinish ||
-                m_constraintStartTime < m_startTime) {
+            KPTDateTime st = m_constraintStartTime;
+            KPTDateTime end = m_constraintEndTime;
+            if (st.time().isNull() && end.time().isNull())
+            {
+                end = end.addDays(1);
+            }
+            if (end > latestFinish ||
+                st < m_startTime) {
                 m_schedulingError = true;
             }                
-            m_startTime = m_constraintStartTime;            
-            m_endTime = m_constraintEndTime;            
+            m_startTime = st;            
+            m_endTime = end;            
             m_duration = m_endTime - m_startTime;
             break;
+        }
         default:
             break;
         }
@@ -944,17 +965,24 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
                 m_duration = duration(m_endTime, use, true);            
             m_startTime = m_endTime - m_duration;
             break;
-        case KPTNode::FixedInterval:
+        case KPTNode::FixedInterval: {
             // m_endTime calculated above
             //kdDebug()<<"FixedInterval="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;
-            if (m_constraintEndTime > m_endTime ||
-                m_constraintStartTime < earliestStart) {
+            KPTDateTime st = m_constraintStartTime;
+            KPTDateTime end = m_constraintEndTime;
+            if (st.time().isNull() && end.time().isNull())
+            {
+                end = end.addDays(1);
+            }
+            if (end > m_endTime ||
+                st < earliestStart) {
                 m_schedulingError = true;
             }                
-            m_startTime = m_constraintStartTime;            
-            m_endTime = m_constraintEndTime;            
+            m_startTime = st;            
+            m_endTime = end;            
             m_duration = m_endTime - m_startTime;
             break;
+        }
         default:
             break;
         }
