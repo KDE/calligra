@@ -118,9 +118,10 @@ appear <emphasis>before</emphasis> the footnote number.</para>
 
 <para>You can determine the alignment of the separator line by selecting <guilabel>Left</guilabel>,
 <guilabel>Centered</guilabel> or <guilabel>Right</guilabel></para>
-<para>Determine the line lengths using the spin box labeled <guilabel>Separator Line Length</guilabel>.</para>
-<para>Determine the line width using the spin box labeled <guilabel>Separator Line Width</guilabel>.</para>
-<para>Use the combo box labeled <guilabel>Separator Line Type</guilabel> to determine what kind of line is drawn.</para>
+<para>Determine the length of the line using the spin box labeled <guilabel>Size on page</guilabel>.</para>
+<para>The spinbox labeled <guilabel>Width</guilabel> is used to determine the thickness of the seperator line.</para>
+<note><para>Do not confuse this option with the <guilabel>Size on page</guilabel> option.  The <guilabel>Width</guilabel> is used to set the thickness of the line, not its distance across the page.</para></note>
+<para>Use the combo box labeled <guilabel>Style</guilabel> to determine what kind of line is drawn.</para>
 <para>Click <guibutton>OK</guibutton> to change the look of all footnotes or click <guibutton>Cancel</guibutton> to keep 
 the previous options.</para>
 </sect3>
@@ -194,33 +195,6 @@ appear <emphasis>before</emphasis> the endnote number.</para>
 <para>You can adjust the starting position of the footnote counter using the spinbox labeled <guilabel>Start at:</guilabel>.</para>
 </sect3>
 </sect2>
-<sect2 id="en-placement">
-<title>Change the placement of the endnotes</title>
-<para>You can determine how much space separates the main text frame and the footnotes.  Select 
-<menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
-from the menubar. This will bring up a dialog:</para>
 
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<para>Click on the tab labeled <guilabel>Headers and Footers</guilabel>. </para>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="wpfmtpg3.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<para>At the bottom of the dialog is a  text box is labeled <guilabel>Spacing between footnote and body</guilabel>.  As the label
-suggests, you can use this text
-box to specify the distance between the bottom edge of the main frame, and the top edge of the endnotes.  When you have entered the 
-desired spacing, click <guibutton>OK</guibutton>, and the endnotes will change position on the page.</para>
-</sect2>
 
 </sect1>

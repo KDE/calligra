@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-1-8</date>
+<date>2005-1-15</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
@@ -84,17 +84,17 @@ This manual describes &kword; 1.4.
 
 <!--
 TODO:
-- Continue updates to documentation - starting at "Comments"
-- Update File Dialog
+- Continue updates to documentation - starting at "Options"
 - Update screenshots
 - Write Migrating section
 - Write Watermark procedure
 - Write Chapter Numbering
+- Write section on Scanning images
 - Personal expressions path
-- How to change page numbering between different sections of the document procedure
 - Personal dictionary
 - "Load from Address Book" Button in Document Information (When working)
 - Recheck "Spelling dialog" section for changes to UI
+- Describe "Counter alignment" in footnotes/endnotes section.....when working
 
 -->
 
@@ -497,13 +497,13 @@ you desire.</para>
 the title in the middle of the header (like a novel)?</title>
 <indexterm><primary>insert page numbers</primary></indexterm>
 
-<para>This first example shows how you can combine tables and variables in a header to create a common format to your document.</para>
+<para>This first example shows how you can combine center tabs and variables in a header to create a common format to your document.</para>
 <note><para>Your document must be at least 2 pages long <emphasis>before</emphasis> you begin this procedure. </para></note>
 <orderedlist>
 <listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click on the <guilabel>About</guilabel> tab.</para></listitem>
-<listitem><para>Click once in the text box labeled <guilabel>Document Title</guilabel> with the &LMB; and enter
+<listitem><para>Click on the <guilabel>Document</guilabel> tab.</para></listitem>
+<listitem><para>Click once in the text box labeled <guilabel>Title</guilabel> with the &LMB; and enter
 the desired document title.</para></listitem>
 <listitem><para>Click on the <guibutton>OK</guibutton> button.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
@@ -511,59 +511,49 @@ from the menubar.</para></listitem>
 <listitem><para>Click on the <guilabel>Header and Footer</guilabel> tab.</para></listitem>
 <listitem><para>Select <guilabel>Different header for even and odd pages</guilabel>.</para></listitem>
 <listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>View</guimenu><guimenuitem>Header</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Show Header</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Move to an odd numbered page in your document, and click in the header box.</para></listitem>
-<listitem><para>Press <keycap>F5</keycap> to insert a table in the header.</para></listitem>
-<listitem><para>The insert table dialog will appear.  Change the initial values to:</para>
-<itemizedlist>
-<listitem><para><guilabel>Number of Rows</guilabel>: 1</para></listitem>
-<listitem><para><guilabel>Number of Columns</guilabel>: 3</para></listitem>
-<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
-<listitem><para><guilabel>Cell Widths</guilabel>: Manual</para></listitem>
-<listitem><para>Make sure the table is <guilabel>Inline</guilabel>.</para></listitem>
-</itemizedlist>
-<para>Then click <guibutton>OK</guibutton>.</para>
-</listitem>
-<listitem><para>Click in the header again with the &LMB;, to show the table.</para></listitem>
-<listitem><para>In the right column of the table, click with the &LMB;.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
-<guimenuitem>Page Number</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click the <guibutton>Right Text Align</guibutton> button (<inlinemediaobject><imageobject><imagedata
-fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject>)
-on the toolbar.</para></listitem>
-<listitem><para>Click once in the center column with the &LMB;.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
-<guimenuitem>Property</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+<listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
+<listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly 1/2 the frame width.  The frame width is
+ listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
+<listitem><para>Click the <guibutton>Center</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
+ 
+<listitem><para>Click the <guibutton>New</guibutton> button again.</para></listitem>
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly slightly less than the frame width.  The frame width is
+ listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
+<listitem><para>Click the <guibutton>Right</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
+
+<listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
+<listitem><para>Click in the header again with the &LMB;.</para></listitem>
+<listitem><para>Type the Tab Key.  This will move the cursor to the center of the header.</para></listitem>
+<listitem><para>Select Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click the <guibutton>Center Text Align</guibutton> button (<inlinemediaobject><imageobject><imagedata
-fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject>)
-on the toolbar.</para></listitem>
+<listitem><para>Type the Tab key again.  This will move the cursor near the right margin of the header.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
 <listitem><para>Move to an even numbered page in your document, and click in the header box.</para></listitem>
-<listitem><para>Press <keycap>F5</keycap> to insert a table in the header.</para></listitem>
-<listitem><para>The insert table dialog will appear.  Change the initial values to:</para>
-<itemizedlist>
-<listitem><para><guilabel>Number of Rows</guilabel>: 1</para></listitem>
-<listitem><para><guilabel>Number of Columns</guilabel>: 3</para></listitem>
-<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
-<listitem><para><guilabel>Cell Widths</guilabel>: Manual</para></listitem>
-<listitem><para>Make sure the table is <guilabel>Inline</guilabel>.</para></listitem>
-</itemizedlist>
-<para>Then click <guibutton>OK</guibutton>.</para>
-</listitem>
-<listitem><para>Click in the header again with the &LMB;, to show the table.</para></listitem>
-<listitem><para>In the left column of the table, click with the &LMB;.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
-<guimenuitem>Page Number</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click once in the center column with the &LMB;.</para></listitem>
+<listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
+<listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly 1/2 the frame width.  The frame width is
+ listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
+<listitem><para>Click the <guibutton>Center</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
+<listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
+<listitem><para>Click in the header again with the &LMB;.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
-<guimenuitem>Property</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+<guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click the <guibutton>Center Text Align</guibutton> button (<inlinemediaobject><imageobject><imagedata
-fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject>)
-on the toolbar.</para></listitem>
+<listitem><para>Type the Tab key.  This will move the cursor to the center of the header.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
 </orderedlist>
 <para>That completes the procedure. Your document now has the title of the document in the center along the top of each page, and
 the page numbers on the outside corners of the pages.  </para>
@@ -587,8 +577,8 @@ headers in your document.</para>
 <listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>
 from the menubar.</para>
 <para>This will bring up the print dialog.</para></listitem>
-<listitem><para>In the combo box labled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF/Acrobat)</guilabel></para></listitem>
-<listitem><para>Enter your desired filename in the <guilabel>Output file</guilabel> text box.</para></listitem>
+<listitem><para>In the combo box labled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF)</guilabel></para></listitem>
+<listitem><para>Enter your desired filename in the <guilabel>Output file:</guilabel> text box.</para></listitem>
 <listitem><para>If you wish to make any changes to the PDF formatting, select <guibutton>Properties</guibutton>.</para>
 <para>A complete explanation to all these properties, is beyond the scope of this document.</para></listitem>
 <listitem><para>Click <guibutton>OK</guibutton>.</para></listitem>
@@ -596,8 +586,7 @@ from the menubar.</para>
 <para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
 onto any website.</para>
 <para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The KDE Print web page</ulink>.</para>
-<para>For more information on <literal role="extension">.pdf</literal> files, visit
-<ulink url="http://www.pdfzone.com/resources/index.html">The PDFZone Resources page</ulink></para>
+
 </sect1>
 
 <sect1 id="qd-template-remove">

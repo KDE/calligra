@@ -20,7 +20,7 @@ the text moves forward or backward in the document (as text is inserted or delet
 <title>Creating a new bookmark</title>
 <para>Creating a bookark is simple.</para>
 <para>Place the cursor where you want the bookmark to be inserted.  Select
-<menuchoice><guimenu>Insert</guimenu><guimenuitem>Add Bookmark...</guimenuitem></menuchoice> from
+<menuchoice><guimenu>Insert</guimenu><guimenuitem>Bookmark...</guimenuitem></menuchoice> from
 the menubar.</para>
 <para>A small dialog box will appear.</para>
 <para>Type a short description of the bookmark location (i.e. Chapter 1, Appendix, Abstract, etc). This description will identify the
@@ -32,7 +32,7 @@ bookmark for you.</para>
 <sect2 id="bookmark-jump">
 <title>Jump to a previously created bookmark</title>
 <para>To jump to a previously created bookmark, select
-<menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark</guimenuitem></menuchoice> from
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark...</guimenuitem></menuchoice> from
 the menubar.</para>
 <para>A small dialog will appear.  Double click on the desired bookmark with the &LMB;.  You will immediately be taken to
 the location in the document that is attached to that bookmark. </para>
@@ -44,7 +44,7 @@ the location in the document that is attached to that bookmark. </para>
 <sect2 id="bookmark-rename">
 <title>Rename a bookmark</title>
 <para>To rename a bookmark, select
-<menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark</guimenuitem></menuchoice> from
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark...</guimenuitem></menuchoice> from
 the menubar.</para>
 <para>A small dialog will appear.  Click on the desired bookmark with the &LMB;.  Now select <guibutton>Rename Bookmark</guibutton>.
 A small dialog will appear.  Enter the new name for your bookmark.  Click <guibutton>OK</guibutton>.  The
@@ -54,7 +54,7 @@ bookmark is renamed immediately.
 <sect2 id="bookmark-delete">
 <title>Delete a bookmark</title>
 <para>To delete a bookmark, select
-<menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark</guimenuitem></menuchoice> from
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark...</guimenuitem></menuchoice> from
 the menubar.</para>
 <para>A small dialog will appear.  Click on the desired bookmark with the &LMB;.  </para>
 <warning><para>Be sure you have selected the correct bookmark from the list before proceeding.  &kword; does not ask for

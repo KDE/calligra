@@ -12,7 +12,7 @@
 <indexterm><primary>formulas</primary></indexterm>
 
 <para>&kword; has the ability to directly create formulas using the formula editor common to all &koffice; applications.</para>
-<note><para>This is a formula editor for creating graphical versions of formulas.  &kword; does not currently have any ability 
+<note><para>This is a formula editor for creating graphical versions of formulas.  &kword; does not currently have the ability 
 to solve mathematical equations.</para></note>
 
 <sect2 id="formulas-add"><title>Add a formula</title>

@@ -296,7 +296,7 @@ format="PNG"/></imageobject></inlinemediaobject>).</para></listitem>
 
 <varlistentry>
 <term><guilabel>Preview Mode - Number of pages per row:</guilabel></term>
-<listitem><para>Determines the number of pages per row in <link linkend="preview-mode-menu">preview mode</link>.
+<listitem><para>Determines the number of pages per row in preview mode.
 This determines the size of the pages in preview mode.</para></listitem>
 </varlistentry>
 </variablelist>

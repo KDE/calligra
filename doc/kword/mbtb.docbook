@@ -55,12 +55,13 @@ desktop.</para>
 <sect2 id="hide-toolbar">
 <title>Hiding Toolbars </title>
 
-<para>When you start &kword; for the first time, all the several toolbars
+<para>When you start &kword; for the first time, several toolbars
 are visible.  If you don't think you will need a toolbar, and want to
-reclaim that desktop space, you can hide the toolbars</para>
+reclaim that desktop space, you can hide any or all of the toolbars</para>
 
-<para>To hide a toolbar, Select <guimenu>Settings</guimenu> from the
-menubar.  This will bring up a submenu.  All of the toolbars are
+<para>To hide a toolbar, Select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem></menuchoice> from
+the menubar.  This will bring up a submenu.  All of the toolbars are
 listed.  Simply select the toolbar you want to hide or restore.</para>
 
 </sect2>
@@ -69,13 +70,14 @@ listed.  Simply select the toolbar you want to hide or restore.</para>
 <title>Moving Toolbars around</title>
 <indexterm><primary>toolbars</primary><secondary>moving</secondary></indexterm>
 
-<para>Toolbars can be located on the screen in 4 places.</para>
+<para>Toolbars can be located on the screen in 5 places.</para>
 
 <orderedlist numeration="arabic">
 <listitem><para>Top</para></listitem>
 <listitem><para>Bottom</para></listitem>
 <listitem><para>Left</para></listitem>
 <listitem><para>Right</para></listitem>
+<listitem><para>Floating</para></listitem>
 </orderedlist>
 
 <para><guilabel>Top</guilabel>, <guilabel>Bottom</guilabel>,
@@ -118,6 +120,10 @@ appear.  Select <guimenuitem>Top</guimenuitem>,
 <guimenuitem>Right</guimenuitem>.</para>
 </listitem>
 </itemizedlist>
+
+<para>If you select <guilabel>Floating</guilabel> for any toolbar, a new window will be created just for that toolbar.  This window can be moved independently from the &kword; window.</para>
+
+<para>Finally, if you select <guilabel>Flat</guilabel> for any toolbar, the toolbar will be reduced to a horizontal section of lines located directly below the menubar.  To restore this menubar, simply double click with the &LMB; on the flattened toolbar and the toolbar will be restored to its original size and position.</para>
 </sect2>
 
 <sect2 id="toolbar-options">
@@ -162,7 +168,7 @@ format="PNG"/></imageobject> </inlinemediaobject></entry>
 the toolbar you want to change, and click with the &RMB;.</para>
 
 <para>A small menu will appear at the mouse cursor.  Select
-<guimenuitem>Text position</guimenuitem>. This will open a submenu,
+<guimenuitem>Text Position</guimenuitem>. This will open a submenu,
 select your preference from the list.</para>
 
 <sect3 id="toolbar-options-size">
@@ -299,13 +305,39 @@ Document</link>.</para>
 <varlistentry>
 <term id="menu-reload">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Reload File</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Reload</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Reloads the current file from disk, erasing any changes to the document since the last time it was saved.</action></para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term id="menu-import">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Import...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Will load a file from another application.</action> &kword; attempts to decipher as much of the file as it can.  For many files, some information will be lost.  For more 
+information on the ability to import files from other applications, see the section on <link linkend="filters">filters</link> at the end of this documentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-export">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Export...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Will save a file using the format of another application.</action> &kword; attempts to save as much of the file as it can.  For many files, some information will be lost.  For more 
+information on the ability to export files to other applications, see the section on <link linkend="filters">filters</link> at the end of this documentation.</para>
+</listitem>
+</varlistentry>
+
+
 
 <varlistentry>
 <term id="menu-template-create">
@@ -413,7 +445,7 @@ classification.</para>
 <varlistentry>
 <term id="menu-send-file">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Send File...</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Mail</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -602,6 +634,19 @@ using the menubar.</para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-select-all-frames">
+<menuchoice>
+
+<guimenu>Edit</guimenu><guimenuitem>Select All Frames</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Immediately selects all frames in the currend document.</action></para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-find">
 <menuchoice>
 <shortcut>
@@ -763,37 +808,18 @@ Views</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Page Mode</guimenuitem>
+<guimenu>View</guimenu><guimenuitem>Display Mode</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>When this option is selected, &kword; will show you how your page looks in a WYSIWYG environment.  This is the standard view
-for editing your document.</para>
-<para>Compare this with <guimenuitem>Preview Mode</guimenuitem> and <guimenuitem>Text Mode</guimenuitem>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term id="preview-mode-menu">
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>Preview Mode</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>This changes &kword; from a single page view, to a multiple page view suitable for evaluating document flow and formatting.</para>
-<para>The number of pages shown in preview mode <link linkend="opt-ui">can be adjusted</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>Text Mode</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>When this option is selected, &kword; will only show the text of your document..</para>
-</listitem>
+<para>When this option is selected, A submenu opens with 3 options:</para>
+<simplelist>
+<member><guilabel>Page Mode</guilabel> - &kword; will show you how your page looks in a WYSIWYG environment.  This is the standard view
+for editing your document.</member>
+<member><guilabel>Preview Mode</guilabel> - This changes &kword; from a single page view, to a multiple page view suitable for evaluating document flow and formatting. 
+The number of pages shown in preview mode <link linkend="opt-ui">can be adjusted</link>.</member>
+<member><guilabel>Text Mode</guilabel> - When this option is selected, &kword; will only show the text of your document.</member>
+</simplelist></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -830,7 +856,7 @@ the borders back on.  </action></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Show Doc Structure</guimenuitem>
+<guimenu>View</guimenu><guimenuitem>Show/Hide Doc Structure</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -843,7 +869,7 @@ structure window.</action> For more information, refer to the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Show Rulers</guimenuitem>
+<guimenu>View</guimenu><guimenuitem>Show/Hide Rulers</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -905,12 +931,12 @@ not found on the keyboard.</action></para>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>Return</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Page Break/Hard Frame Break</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>This will enter a special character which will force text
-into the next connected text frame.</action> More information can be
+into the next connected text frame (Page Layout Templates) or the next page (Text Oriented Templates).</action> More information can be
 found at <link linkend="hard-break">Page Breaks</link> located in the <link linkend="frames">Working with Frames</link>
 section.</para>
 
@@ -933,11 +959,11 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Footnote...</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Footnote/Endnote...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will insert a footnote at the current cursor
+<para><action>This will insert a footnote or endnote at the current cursor
 position.</action>  More detailed information can be found in <link
 linkend="endnotes-and-footnotes">Footnotes</link>.</para>
 </listitem>
@@ -1044,7 +1070,7 @@ For more information refer to the section entitled
 <term id="menu-create-text-frame">
 <menuchoice>
 <shortcut>
-<keycombo action="simul"><keycap>F2</keycap></keycombo>
+<keycombo action="simul"><keycap>F10</keycap></keycombo>
 </shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem>
 </menuchoice>
@@ -1060,7 +1086,7 @@ bring up a dialog box with options to connect this text frame to other
 frames in your document.  For more information on this subject, see
 <link linkend="frames">Working with Frames</link>.</para> 
 
-<para>Typing <keycombo action="simul"><keycap>F2</keycap></keycombo> or
+<para>Typing <keycombo action="simul"><keycap>F10</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
 fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using the
 menubar.</para>
@@ -1087,7 +1113,7 @@ selected the file you want, click on the <guibutton>OK</guibutton>
 button.  &kword; will close the dialog box, and your cursor will change
 to cross hairs.  Locate the cursor on the page where you would like to
 locate one corner of your picture.  Click and hold the
-&RMB;, then drag the mouse.
+&LMB;, then drag the mouse.
 This will create a border which represents the final size of the picture
 in your document.  When you are happy with the size of the picture,
 release the mouse button and the picture will be inserted in your new
@@ -1228,13 +1254,39 @@ using the menubar.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Footnote...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Use this to alter the properties of the printed page,
-including size, headers and footers.</action> For more details, go to
-<link linkend="page-format">Formating the Page</link></para>
+<para><action>Allows you to change the look of your footnotes.</action>
+For more information see <link linkend="endnotes-and-footnotes">
+Footnotes</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Formula</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to format the selected formula.</action>  For
+more information go to <link linkend="formulas">Formulas</link></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Allows you to select a style for the selected text.  Selecting this option shows a submenu
+listing all available paragraphs styles. Select the correct style and the paragraph style will be changed.</para>
+<para>For more
+information go to <link linkend="styles">Styles</link></para>
 </listitem>
 </varlistentry>
 
@@ -1259,7 +1311,7 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-import-style">
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Import Style...</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Import Styles...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1271,7 +1323,7 @@ linkend="styles">Styles</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Create Style From Selection</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Create Style From Selection...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1279,42 +1331,18 @@ linkend="styles">Styles</link></para>
 <para>For more
 information go to <link linkend="style-add-text">Styles</link></para>
 </listitem>
-</varlistentry><varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Style</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Allows you to select a style for the selected text.  Selecting this option shows a submenu
-listing all available paragraphs styles. Select the correct style and the paragraph style will be changed.</para>
-<para>For more
-information go to <link linkend="styles">Styles</link></para>
-</listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Footnote...</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to change the look of your footnotes.</action>
-For more information see <link linkend="endnotes-and-footnotes">
-Footnotes</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Formula</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to format the selected formula.</action>  For
-more information go to <link linkend="formulas">Formulas</link></para>
+<para><action>Use this to alter the properties of the printed page,
+including size, headers and footers.</action> For more details, go to
+<link linkend="page-format">Formating the Page</link></para>
 </listitem>
 </varlistentry>
 
@@ -1443,6 +1471,28 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-create-linked">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Create Linked Copy</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Creates a duplicate frame.  The contents of the new frame will automatically be updated to match the contents of the old frame.  As you continue to edit the document, changes to one of these frames will result in the same changes to the other frame.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-tb">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Convert to Text Box</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selected text is removed from the current frame.  A new frame is created to allow the selected text to be inserted, and the new text frame is inserted into the current document.  This is an easy way to remove a section of text and place it in a text box of its own.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-framestylist">
 <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem>
@@ -1457,7 +1507,7 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-framestyle-create">
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Create Framestyle from frame</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Create Framestyle From Frame</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1481,7 +1531,7 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Text Background Color...</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Frame Background Color...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1544,7 +1594,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Row...</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Rows...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1575,7 +1625,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Column...</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Columns...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1590,7 +1640,7 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-resize-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Resize Column</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Resize Column...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1684,6 +1734,17 @@ find more about tables in the section entitled <link linkend="tablestyle">Tables
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term id="menu-table-to-text">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Converte Table to Text</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Converts data that is currently in the selected table to regular text.</action>.</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 </sect2>
 
@@ -1720,7 +1781,7 @@ equivalent to using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable/Enable Autocorrection</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1756,12 +1817,35 @@ Changing Font Case</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Personal Expressions...</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Sort Text...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Alphabatizes the selected paragraphs.  You will be given the option to sort in ascending or decending order</action>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Edit Personal Expressions...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>This is for adding and editing expressions. </action>
 For information on using and adding expressions
+refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Add Expression</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Creates a new personal expression with the selected text.</action> For more information on personal expresions, 
 refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
 </listitem>
 </varlistentry>
@@ -1791,28 +1875,6 @@ refer to the section entitled <link linkend="variables">Document variables</link
 </listitem>
 </varlistentry>
 
-<!--<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Show related words</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Uses &kword;s integrated <link linkend="thesaurus">thesaurus</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Check this words spelling</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Check the spelling of the specified word.</para>
-</listitem>
-</varlistentry>-->
-
 <varlistentry>
 <term>
 <menuchoice>
@@ -1836,7 +1898,34 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection</guimenuitem>
+<guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to hide or reveal toolbars individually.</action>  For more information see 
+the section entitled <link linkend="toolbars">Hiding, Changing and Moving Toolbars</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Type Anywhere Cursor</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>
+<indexterm><primary>Type Anywhere Cursor</primary></indexterm>
+Toggles the cursor between two distinct behaviors.</action></para>  
+<para>When Type Anywhere Cursor is not selected, and you click in an area of the document that does not currently have any text or whitespace, &kword; moves the cursor to the end of the previous line of text that exists.  This prevents the addition of whitespace where it is not needed.</para>  
+<para>When Type Anywhere Cursor is selected, &kword; inserts whitespace characters to make it possible for you to begin typing at that exact location.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1849,113 +1938,12 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Completion</guimenuitem>
+<guimenu>Settings</guimenu><guimenuitem>Configure Completion...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to modify the autocompletion options.</action>
 For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show File Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the File Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Edit Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Edit Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Table Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Table Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Insert
-Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Insert Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Paragraph
-Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Paragraph Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Format
-Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Format Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Borders
-Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Borders Toolbar is
-visible.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Show Formula
-Toolbar</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggles whether the Formula Toolbar is
-visible.</action></para>
 </listitem>
 </varlistentry>
 
@@ -2008,37 +1996,6 @@ options.For details, click <link linkend="options-kword">here</link>.</para>
 
 </sect1>
 
-<sect1 id="char-format-toolbar">
-<title>Formatting ToolBar</title>
-
-<para>The Formatting Toolbar consists of 9 buttons.  Each button
-performs a task from the <link linkend="change-font-dialog">format
-character dialog</link>.</para>
-
-<screenshot>
-<mediaobject>
-<imageobject><imagedata fileref="cftb.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<informaltable>
-<tgroup cols="2">
-<thead>
-<row><entry>Button</entry><entry>Command</entry></row>
-</thead>
-<tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Font Face</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Character Size</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bold Text</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Italics Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Underline Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Strikeout Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Superscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Subscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Text Color Button</entry></row>
-</tbody></tgroup>
-</informaltable>
-</sect1>
 
 <sect1 id="file-toolbar">
 <title>File Toolbar</title>
@@ -2086,6 +2043,39 @@ task from the menubar.  Click on that task for more details. </para>
 </tbody></tgroup>
 </informaltable>
 </sect1>
+
+<sect1 id="char-format-toolbar">
+<title>Formatting ToolBar</title>
+
+<para>The Formatting Toolbar consists of 9 buttons.  Each button
+performs a task from the <link linkend="change-font-dialog">format
+character dialog</link>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="cftb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Font Face</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Character Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bold Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Italics Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Underline Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Strikeout Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Superscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Subscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Text Color Button</entry></row>
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
 
 <sect1 id="insert-toolbar">
 <title>Insert Toolbar</title>
@@ -2458,18 +2448,14 @@ for insertion into the document). An example is shown below.</para>
 <imagedata fileref="savedlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>This section  will look more closely at the dialogs and detail their use.</para>
+<para>This section  will look more closely at this dialog and provided detailed information on its use..</para>
 
-<para>The large box below that shows I currently have 1 folder in this
-folder, entitled <filename>Past Work</filename>, and 3 files
-(<filename>Job Description</filename>, <filename>Newsletter</filename> and
-<filename>Resume</filename>).</para>
+<para>We will begin at the top of the dialog.</para>
 
 <para><emphasis>Toolbar</emphasis></para>
 
-<para>This example dialog shows the current folder is <filename
-class="directory">/home/mmcbride/kword</filename>.  You can see this
-by the text box at the top of the dialog.  If you click on this drop
+<para>The current location on the drive is listed at the top-center of the dialg.  This example dialog shows the current folder is <filename
+class="directory">/home/mmcbride/kword</filename>. If you click on this drop
 down box, you will see common and recently visited folders.  By
 selecting one of these folders, you will be immediately moved to
 that folder and the dialog box will update the file list.</para>
@@ -2482,78 +2468,80 @@ buttons work just like an Internet browser, where you can use the back
 button to travel to the previous folder, and the forward button to
 advance into a folder you just came from.</para>
 
-<para>Next to the arrow buttons, is a button that looks like a house.
-Clicking this will take you to your home folder.</para>
-
-<para>Next to the home button, is a reload button.  Clicking this
+<para>Next to the arrow buttons, is a reload button.  Clicking this
 button, causes &kword; to reload the current folder if new files have been
 added or deleted.</para>
 
-<para>Next to the reload button, is a button with a gray ribbon on it.
+<para>To the right of the reload button, is a blue file folder with a starburst.  This button
+will let you create a new folder and name it.</para>
+
+<para>Next to the reload button, is a button with a star on it.
 This button allows you to set and navigate through bookmarks.  This is
 a quick way to jump to commonly accessed folders.  By clicking
 this button, a submenu appears which allows you to add bookmarks or
 jump to a new bookmark.</para>
 
-<para>Next to the bookmark button, is a button with a gear on it, called the <emphasis>Extras Button</emphasis>.
+<para>Next to the bookmark button, is a button with a wrench on it. 
 Clicking this button brings up a sub menu with several entries:</para>
 <para>
 <variablelist>
 <varlistentry>
-<term><guimenuitem>New Folder</guimenuitem></term>
-<listitem>
-<para>Create a new subfolder in the current folder.  &kword; will 
-automatically move you into this new subfolder once it is created.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Delete</guimenuitem></term>
-<listitem>
-<para>This will delete the selected file, not the current
-document.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Sorting</guimenuitem></term>
 <listitem>
-<para>This will bring up another submenu.  You can sort the files by
-filename, by date, or by size.  Selecting the
-<guimenuitem>Reverse</guimenuitem> option will reverse the sort
-order.  Selecting <guimenuitem>Folders First</guimenuitem> will
-place the folders above all other files in the dialog box.
-Selecting <guimenuitem>Case insensitive</guimenuitem> will sort
-filenames regardless of capitalization.</para>
+<para>If this option is selected, a submenu will appear allowing you to sort your files by name, date or size.  You can sort them forward or reversed.  You can also determine if 
+folders should be listed before files, or mixed within the files.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>View</guimenuitem></term>
+<term><guimenuitem>Short View</guimenuitem></term>
 <listitem>
-<para>This will also bring up a submenu.  You can use the options in
-this submenu to change the appearance of the file dialog.</para>
+<para>If this option is selected, only the names of the files and folders will be shown.</para>
+<para>Compare this to detailed view</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Properties</guimenuitem></term>
+<term><guimenuitem>Detailed View</guimenuitem></term>
 <listitem>
-<para>If you have selected a file in the dialog box, when you select
-this option you will be given all of the properties of the selected
-file.</para>
+<para>If tis option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
+<para>Compare this to short view</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Hidden Files</guimenuitem></term>
+<listitem>
+<para>This will toggle between revealing and hiding normally hidden files.  In most cases you will want to leave this option off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show/Hide Quick Navigation Panel</guimenuitem></term>
+<listitem>
+<para>The tall box along the left side of the dialog with a dark grey backround is the Quick Navigation Panel.  You can use this option to toggle whether it is visible or not.</para>
+<para>More detailed information about hte Quick Navigation Panel is avialable further down this page.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show/Hide Preview Panel</guimenuitem></term>
+<listitem>
+<para>You can use this option to toggle whether the preview panel is visible or not.  Typically, the preview panel is left off, but it can be useful when looking for a picture to insert into a document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Seperate Folders</guimenuitem></term>
+<listitem>
+<para>Use this option to toggle between a 2 pane view of the filesystem and a one pane view of the filesystem.  
+Most people will not need to worry about this option as most people prefer the one pane view.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 </para>
 
-<para>There are two buttons next to the Extras Button which switch between <emphasis>Short View</emphasis> and
-<emphasis>Detailed View</emphasis></para>
-<para>Just to the left of the folder box, is the <emphasis>Preview Button</emphasis>, which toggles the preview 
-window in the dialog.  If the button is depressed, a preview box appears in the right of the dialog.  If it is not pressed, the file list 
-box is larger.</para>
-
-<para><emphasis>Location Bar</emphasis></para>
+<para><emphasis>Quick Navigation Bar</emphasis></para>
 
 <para>Along the left side of the dialog box, is a column that contains
 several icons. You can think of each of these icons as a shortcut to
@@ -2566,8 +2554,7 @@ Simply click with the &RMB; and a small submenu will appear.</para>
 <para><emphasis>File Name and Filters</emphasis></para>
 
 
-<para>The text box labled <guilabel>Location</guilabel> is blank,
-which indicates no file is currently selected. This text box will contain the 
+<para>The text box labled <guilabel>Location</guilabel> contains the current filename <filename>Resume.kwd</filename>. This text box will contain the 
 filename of the currently selected file when loading new documents or files into
 &kword;.  When saving a file, you will enter the desired filename in this text box.</para>
 
@@ -2576,6 +2563,11 @@ at &kword; files.  By clicking on the combo box, you can select from several
 different file formats.  You can also select <guilabel>All supported files</guilabel> to display
 all files that are supported by &kword;.  The file types available will change depending on
 the specific task at hand.</para>
+
+<para>If there is a mark in the checkbox labled <guilabel>Automatically select filename extension</guilabel>, 
+then &kword; will add the correct filename extension based on your selection in the <guilabel>Filter:</guilabel> 
+drop down box.  If there is no mark in this box, you are responsible for providing an extension.  Most users 
+will leave this box marked.</para>
 
 <para>There is a <guibutton>Cancel</guibutton> button, if you click this
 button, the action will be aborted, and you will return to editing the
