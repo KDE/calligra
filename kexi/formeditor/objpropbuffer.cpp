@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -68,7 +68,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 	QVariant value = prop.value();
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 
-	if(property == "name")
+	if(property == "name" && m_widgets.first())
 		emit nameChanged(m_widgets.first()->name(), value.toString());
 	else if(property == "paletteBackgroundPixmap")
 		(*this)["backgroundOrigin"] = "WidgetOrigin";
@@ -120,19 +120,21 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				m_lastcom->setValue(value);
 			else if(!m_undoing) // we are not already undoing -> avoid recursion
 			{
-				if((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry")) {
+				if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
 					m_lastcom = new PropertyCommand(this, QString(m_widgets.first()->name()), m_widgets.first()->property(property.latin1()), value, prop.name());
 					m_manager->activeForm()->addCommand(m_lastcom, false);
 				}
 			}
 
-			// If the property is changed, we add it in ObjectTreeItem modifProp
-			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
-			if((*this)[property.latin1()].changed())
-				tree->addModifiedProperty(property, m_widgets.first()->property(property.latin1()));
+			if (m_widgets.first()) {
+				// If the property is changed, we add it in ObjectTreeItem modifProp
+				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
+				if((*this)[property.latin1()].changed())
+					tree->addModifiedProperty(property, m_widgets.first()->property(property.latin1()));
 
-			m_widgets.first()->setProperty(property.latin1(), value);
-			emit propertyChanged(m_widgets.first(), property, value);
+				m_widgets.first()->setProperty(property.latin1(), value);
+				emit propertyChanged(m_widgets.first(), property, value);
+			}
 		}
 		else
 		{
@@ -246,7 +248,9 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 	if(!tree)  return;
 
 	int count = 0;
-	WidgetFactory *factory = m_manager->lib()->factoryForClassName(w->className());
+	WidgetInfo *winfo = m_manager->lib()->widgetInfoForClassName(w->className());
+	WidgetFactory *factory = winfo ? winfo->factory() : 0; //m_manager->lib()->factoryForClassName(w->className());
+
 	//pList.sort();
 	QStrListIterator it(pList);
 	// We go through the list of properties
@@ -286,12 +290,19 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 				add(new KexiProperty(propertyName, w->property(propertyName), desc));
 		}
 
-		if(0==qstrcmp(propertyName, "name"))
-			(*this)["name"].setAutoSync(0); // name should be updated only when pressing Enter
+//		if(0==qstrcmp(propertyName, "name"))
+//			(*this)["name"].setAutoSync(0); // name should be updated only when pressing Enter
+
+		if (winfo) {
+			tristate autoSync = winfo->autoSyncForProperty( propertyName );
+			if (! ~autoSync)
+				(*this)[propertyName].setAutoSync( autoSync ); 
+		}
 
 		updateOldValue(tree, propertyName); // update the KexiProperty.oldValue using the value in modifProp
-	}
+	}//for
 
+	(*this)["name"].setAutoSync(false); // name should be updated only when pressing Enter
 
 	(*this)["enabled"].setValue( QVariant(tree->isEnabled(), 3));
 
@@ -357,13 +368,15 @@ ObjectPropertyBuffer::resetBuffer()
 {
 	checkModifiedProp();
 
+	m_manager->showPropertyBuffer(0);
+
 	m_widgets.clear();
 	m_multiple = false;
 	m_lastcom = 0;
 	m_lastgeocom = 0;
 	m_properties.clear();
 
-	m_manager->showPropertyBuffer(0);
+//	m_manager->showPropertyBuffer(0);
 	clear();
 
 	if(!m_widgets.isEmpty())

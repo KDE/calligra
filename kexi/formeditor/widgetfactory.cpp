@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,12 +50,14 @@ using namespace KFormDesigner;
 WidgetInfo::WidgetInfo(WidgetFactory *f)
  : m_overriddenAlternateNames(0)
  , m_factory(f)
+ , m_propertiesWithDisabledAutoSync(0)
 {
 }
 
 WidgetInfo::~WidgetInfo()
 {
 	delete m_overriddenAlternateNames;
+	delete m_propertiesWithDisabledAutoSync;
 }
 
 void WidgetInfo::addAlternateClassName(const QString& alternateName, bool override)
@@ -63,7 +65,7 @@ void WidgetInfo::addAlternateClassName(const QString& alternateName, bool overri
 	m_alternateNames += alternateName;
 	if (override) {
 		if (!m_overriddenAlternateNames)
-			m_overriddenAlternateNames = new QDict<char>();
+			m_overriddenAlternateNames = new QDict<char>(101);
 		m_overriddenAlternateNames->insert(alternateName, (char*)1);
 	}
 	else {
@@ -75,6 +77,30 @@ void WidgetInfo::addAlternateClassName(const QString& alternateName, bool overri
 bool WidgetInfo::isOverriddenClassName(const QString& alternateName) const
 {
 	return m_overriddenAlternateNames && (m_overriddenAlternateNames->find(alternateName) != 0);
+}
+
+void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
+{
+	if (!m_propertiesWithDisabledAutoSync) {
+		if (~flag)
+			return;
+		m_propertiesWithDisabledAutoSync = new QAsciiDict<char>(101);
+	}
+
+	if (~flag) {
+		m_propertiesWithDisabledAutoSync->remove(propertyName);
+	}
+	else {
+		m_propertiesWithDisabledAutoSync->insert(propertyName, flag ? (char*)1 : (char*)2);
+	}
+}
+
+tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
+{
+	char* flag = m_propertiesWithDisabledAutoSync ? m_propertiesWithDisabledAutoSync->find(propertyName) : 0;
+	if (!flag)
+		return cancelled;
+	return flag==(char*)1 ? true : false;
 }
 
 ///// Widget Factory //////////////////////////

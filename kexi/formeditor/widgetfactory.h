@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qasciidict.h>
+
+#include <tristate.h>
 
 // class QPixmap;
 template<class type> class QValueVector;
@@ -57,7 +59,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		typedef QPtrList<WidgetInfo> List;
 		typedef QAsciiDict<WidgetInfo> Dict;
 
-		WidgetInfo(WidgetFactory *f=0);
+		WidgetInfo(WidgetFactory *f = 0);
 		virtual ~WidgetInfo();
 
 		//! \return a pixmap associated with the widget
@@ -121,6 +123,17 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		 Custom properties are saved as well with 'stdset' attribute set to 0. */
 		void setSavingName(const QString &saveName) { m_saveName = saveName; }
 
+		/*! Sets autoSync flag for property \a propertyName. 
+		 This allows to override autoSync flag for certain widget's property, because
+		 e.g. KexiPropertyEditor can have autoSync flag set to false or true, but 
+		 not all properties have to comply with that.
+		 \a flag equal to cancelled value means there is no overriding (the default). */
+		void setAutoSyncForProperty(const char *propertyName, tristate flag);
+
+		/*! \return autoSync override value (true or false) for \a propertyName.
+		 If cancelled value is returned, there is no overriding (the default). */
+		tristate autoSyncForProperty(const char *propertyName) const;
+
 	private:
 		QString m_pixmap;
 		QString m_class;
@@ -132,6 +145,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QDict<char> *m_overriddenAlternateNames;
 		QString m_saveName;
 		QGuardedPtr<WidgetFactory> m_factory;
+		QAsciiDict<char> *m_propertiesWithDisabledAutoSync;
 };
 
 //! The base class for all widget Factories
@@ -197,13 +211,13 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 * \param name the name of the created widget
 		 * \param toplevel the toplevel Container (if a container should get created)
 		 */
-		virtual QWidget*	create(const QCString &classname, QWidget *parent, const char *name,
+		virtual QWidget* create(const QCString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. You must add the id of the
 		 created menu items to \a menuIds, so they get deleted later. */
-		virtual bool		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
+		virtual bool createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
 		    KFormDesigner::Container *container, QValueVector<int> *menuIds)=0;
 
 		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
@@ -211,27 +225,30 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		   the class the widget belongs to, \a w is the widget to edit
 		   and \a container is the parent container of this widget (to access Form etc.).
 		 */
-		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
+		virtual void startEditing(const QString &classname, QWidget *w, Container *container)=0;
 
-		/*! This function is called just before the Form is previewed. It allows widgets to make changes before switching
-		 (ie for a Spring, hiding the cross) */
-		virtual void		previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
-		virtual void		clearWidgetContent(const QString &classname, QWidget *w);
+		/*! This function is called just before the Form is previewed. It allows widgets 
+		 to make changes before switching (ie for a Spring, hiding the cross) */
+		virtual void previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
+
+		virtual void clearWidgetContent(const QString &classname, QWidget *w);
 
 		/*! This function is called when FormIO finds a property, at save time,
 		 that it cannot handle (ie not a normal property).
 		This way you can save special properties, for example the contents of a listbox.
 		  \sa readSpecialProperty()
 		 */
-		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		virtual void saveSpecialProperty(const QString &classname, const QString &name, 
+			const QVariant &value, QWidget *w,
+			QDomElement &parentNode, QDomDocument &parent);
 
-		QDomElement &parentNode,  QDomDocument &parent);
 		/*! This function is called when FormIO finds a property or an unknown
 		element in a .ui file. You can this way load a special property, for
 		  example the contents of a listbox.
 		   \sa saveSpecialProperty()
 		*/
-		virtual bool            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item);
+		virtual bool readSpecialProperty(const QString &classname, QDomElement &node, 
+			QWidget *w, ObjectTreeItem *item);
 
 		/*! This function is used to know whether the \a property for the widget \a w
 		should be shown or not in the PropertyEditor. If \a multiple is true,
@@ -260,29 +277,30 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		void  createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, int align,  bool useFrame=false,
-		     BackgroundMode background = Qt::NoBackground);
+		void createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, 
+			int align,  bool useFrame=false, BackgroundMode background = Qt::NoBackground);
 
 		/*! This function provides a simple editing mode : it justs disable event filtering
 		for the widget, and it install it again when
 		  the widget loose focus or Enter is pressed.
 		*/
-		void     disableFilter(QWidget *w, Container *container);
+		void disableFilter(QWidget *w, Container *container);
 
-		/*! This function creates a little dialog (a KEditListBox) to modify the contents of a list
-		(of strings). It can be used to modify the contents
-		 of a combo box for instance. The modified list is copied into \a list when the user presses "Ok".*/
-		bool     editList(QWidget *w, QStringList &list);
+		/*! This function creates a little dialog (a KEditListBox) to modify the contents 
+		 of a list (of strings). It can be used to modify the contents
+		 of a combo box for instance. The modified list is copied 
+		 into \a list when the user presses "Ok".*/
+		bool editList(QWidget *w, QStringList &list);
 
 		/*! This function creates a little editor to modify rich text. It supports alignment,
 		 subscript and superscript and all basic formatting properties.
 		  If the user presses "Ok", the edited text is put in \a text.
 		  If he presses "Cancel", nothing happens. */
-		bool  editRichText(QWidget *w, QString &text);
+		bool editRichText(QWidget *w, QString &text);
 
 		/*! This function creates a dialog to modify the contents of a ListView. You can modify both
 		columns and list items. The listview is automatically  updated if the user presses "Ok".*/
-		void  editListView(QListView *listview);
+		void editListView(QListView *listview);
 
 		/*! This function destroys the editor when it loses focus or Enter is pressed. */
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
@@ -290,10 +308,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! This function is used to modify a property of a widget (eg after editing it).
 		Please use it instead of w->setProperty() to allow sync inside PropertyEditor.
 		*/
-		void  changeProperty(const char *name, const QVariant &value, Container *container);
+		void changeProperty(const char *name, const QVariant &value, Container *container);
 
 		/*! This function is called when the widget is resized, and the editor size needs to be updated. */
-		virtual void   resizeEditor(QWidget *widget, const QString &classname);
+		virtual void resizeEditor(QWidget *widget, const QString &classname);
 
 //		/*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
 //		void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
@@ -306,20 +324,20 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		Default implementation will change property "text".
 		You have to reimplement this function for editing inside the Form to work if your widget's
 		property you want to change isn't named "text".
-		This slot is called when the line edit text changes, and you have to make it really change the good
-		property of the widget using changeProperty() (text, or title, etc.).
+		This slot is called when the line edit text changes, and you have to make 
+		it really change the good property of the widget using changeProperty() (text, or title, etc.).
 		*/
-		virtual void  changeText(const QString &newText);
+		virtual void changeText(const QString &newText);
 
 		void slotTextChanged();
 
 		/*! This slot is called when the editor has lost focus or the user pressed Enter.
 		It destroys the editor or installs again the event filter on the widget. */
-		void  resetEditor();
+		void resetEditor();
 
 		/*! This slot is called when the editor is destroyed.*/
-		void  editorDeleted();
-		void  widgetDestroyed();
+		void editorDeleted();
+		void widgetDestroyed();
 
 	protected:
 		QGuardedPtr<QWidget> m_widget;
@@ -328,12 +346,12 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 #else
 		QGuardedPtr<KLineEdit>  m_editor;
 #endif
-		QString   m_firstText;
-		QGuardedPtr<ResizeHandleSet>  m_handles;
-		QGuardedPtr<Container>      m_container;
+		QString m_firstText;
+		QGuardedPtr<ResizeHandleSet> m_handles;
+		QGuardedPtr<Container> m_container;
 		WidgetInfo::List m_classes;
 
-		// i18n stuff
+		//! i18n stuff
 		QMap<QString, QString> m_propDesc;
 		QMap<QString, QString> m_propValDesc;
 };

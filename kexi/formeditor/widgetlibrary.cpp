@@ -408,11 +408,17 @@ WidgetLibrary::autoSaveProperties(const QCString &classname)
 		return QStringList();
 }
 
+WidgetInfo*
+WidgetLibrary::widgetInfoForClassName(const char* classname)
+{
+	loadFactories();
+	return d->widgets.find(classname);
+}
+
 WidgetFactory*
 WidgetLibrary::factoryForClassName(const char* classname)
 {
-	loadFactories();
-	WidgetInfo *wi = d->widgets.find(classname);
+	WidgetInfo *wi = widgetInfoForClassName(classname);
 	return wi ? wi->factory() : 0;
 }
 
