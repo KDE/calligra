@@ -351,7 +351,7 @@ set here. </action></para>
 <term><menuchoice>
 <guimenu>Header/Footer</guimenu>
 </menuchoice></term>
-<listitem><para><action>Enter the titles you want for your graph</action>here.</para>
+<listitem><para><action>Enter the titles you want for your graph here.</action></para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -455,7 +455,7 @@ now opens the Wizard.</para>
 <title>Configuring Toolbars</title>
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
-Is used to add additional buttons to the toolbars.</para>
+is used to add additional buttons to the toolbars.</para>
 
 <screenshot>
 <screeninfo>Picture of toolbars dialog</screeninfo>
