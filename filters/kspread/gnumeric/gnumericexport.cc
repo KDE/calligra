@@ -17,21 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-/* Gnumeric export filter by Phillip Ezolt (phillipezolt@hotmail.com) */
-/* 2004 - Some updates by Tim Beaulen (tbscope@gmail.com) */
-
-
-/*
- * Update notes - 30 september 2004
- *
- * I have updated the exporter to be as close to the gnumeric V10 standard as possible.
- * Some features of gnumeric are not available from kspread and vice versa though.
- *
- * For the gnumeric format, I based it on the xml-io code from the gnumeric cvs tree.
- * And in some parts on the output of gnumeric itself.
- *
- * Tim Beaulen
- */
+/* Gnumeric export filter by Phillip Ezolt (phillipezolt@hotmail.com) 
+   2004 - Some updates by Tim Beaulen (tbscope@gmail.com) */
 
 #include <gnumericexport.h>
 #include <kdebug.h>
@@ -102,17 +89,217 @@ bool GNUMERICExport::hasBorder(KSpreadCell *cell, int currentcolumn, int current
         return false;
 }
 
+const QString GNUMERICExport::ColorToString(int red, int green, int blue)
+{
+    return QString::number(red,16)+":"+QString::number(green,16)+":"+QString::number(blue,16);
+}
+
+QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
+{
+    QDomElement border_style;
+    QDomElement border;
+    
+    int red, green, blue;
+    QColor color;
+    
+    border_style = gnumeric_doc.createElement("gmr:StyleBorder");
+             
+    if ( (cell->leftBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) 
+    {
+        border = gnumeric_doc.createElement("gmr:Left");
+        border.setAttribute("Style","1");
+                
+        color =  cell->leftBorderColor(currentcolumn, currentrow);
+        red = color.red()<<8;
+        green = color.green()<<8;
+        blue = color.blue()<<8;
+                    
+        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));                   
+    }
+    else
+    {
+        border = gnumeric_doc.createElement("gmr:Left");
+        border.setAttribute("Style","0");
+    }  
+      
+    border_style.appendChild(border);
+           
+    if ( (cell->rightBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->rightBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    {
+        border = gnumeric_doc.createElement("gmr:Right");
+        border.setAttribute("Style","1");
+                
+        color =  cell->rightBorderColor(currentcolumn, currentrow);
+        red = color.red()<<8;
+        green = color.green()<<8;
+        blue = color.blue()<<8;
+                    
+        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));                
+    }
+    else
+    {
+        border = gnumeric_doc.createElement("gmr:Right");
+        border.setAttribute("Style","0");
+    }  
+    
+    border_style.appendChild(border);
+                        
+    if ( (cell->topBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->topBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    {
+        border = gnumeric_doc.createElement("gmr:Top");
+        border.setAttribute("Style","1");                
+
+        color =  cell->topBorderColor(currentcolumn, currentrow);
+        red = color.red()<<8;
+        green = color.green()<<8;
+        blue = color.blue()<<8;
+                  
+        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));               
+    } 
+    else
+    {
+        border = gnumeric_doc.createElement("gmr:Top");
+        border.setAttribute("Style","0");
+    }
+    
+    border_style.appendChild(border);
+                
+    if ( (cell->bottomBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->bottomBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    {
+        border = gnumeric_doc.createElement("gmr:Bottom");
+        border.setAttribute("Style","1");
+                
+        color =  cell->bottomBorderColor(currentcolumn, currentrow);
+        red = color.red()<<8;
+        green = color.green()<<8;
+        blue = color.blue()<<8;
+                    
+        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));               
+    } 
+    else
+    {
+        border = gnumeric_doc.createElement("gmr:Bottom");
+        border.setAttribute("Style","0");
+    }
+    
+    border_style.appendChild(border);
+                
+    if ( (cell->fallDiagonalWidth(currentcolumn, currentrow) != 0) &&
+         (cell->fallDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    {
+        border = gnumeric_doc.createElement("gmr:Diagonal");
+        border.setAttribute("Style","1");
+                
+        color =  cell->fallDiagonalColor(currentcolumn, currentrow);
+        red = color.red()<<8;
+        green = color.green()<<8;
+        blue = color.blue()<<8;
+                    
+        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));                
+    } 
+    else
+    {
+        border = gnumeric_doc.createElement("gmr:Diagonal");
+        border.setAttribute("Style","0");
+    }
+    
+    border_style.appendChild(border);
+                
+    if ( (cell->goUpDiagonalWidth(currentcolumn, currentrow) != 0) &&
+         (cell->goUpDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    {
+        border = gnumeric_doc.createElement("gmr:Rev-Diagonal");
+        border.setAttribute("Style","1");
+                
+        color =  cell->goUpDiagonalColor(currentcolumn, currentrow);
+        red = color.red()<<8;
+        green = color.green()<<8;
+        blue = color.blue()<<8;
+                  
+        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));               
+    } 
+    else
+    {
+        border = gnumeric_doc.createElement("gmr:Rev-Diagonal");
+        border.setAttribute("Style","0");  
+    }
+    
+    border_style.appendChild(border);
+    
+    return border_style;
+}
+
+QDomElement GNUMERICExport::GetFontStyle(QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
+{
+    QDomElement font_style;
+    
+    font_style = gnumeric_doc.createElement("gmr:Font");
+    font_style.appendChild(gnumeric_doc.createTextNode(cell->textFontFamily(currentcolumn, currentrow)));
+
+    if (cell->textFontItalic(currentcolumn,currentrow) || (isLink && isLinkItalic))
+    {
+        font_style.setAttribute("Italic","1");
+    }
+    if (cell->textFontBold(currentcolumn,currentrow) || (isLink && isLinkBold))
+    {
+        font_style.setAttribute("Bold","1");
+    }
+    if (cell->textFontUnderline(currentcolumn,currentrow))
+    {
+        font_style.setAttribute("Underline","1");
+    }
+    if (cell->textFontStrike(currentcolumn,currentrow))
+    {
+        font_style.setAttribute("StrikeThrough","1");
+    }
+    if (cell->textFontSize(currentcolumn,currentrow))
+    {
+        font_style.setAttribute("Unit",QString::number(cell->textFontSize(currentcolumn,currentrow)));
+    }
+    
+    return font_style;
+}
+
+QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
+{
+    QDomElement link_style;
+        
+    link_style = gnumeric_doc.createElement("gmr:HyperLink");
+        
+    QString path;
+        
+    path = linkUrl; 
+        
+    if (path.section(":",0,0).lower() == "http")
+        link_style.setAttribute("type","GnmHLinkURL");
+    else if (path.section(":",0,0).lower() == "mailto") 
+        link_style.setAttribute("type","GnmHLinkEMail");
+    else if (path.section(":",0,0).lower() == "file") 
+        link_style.setAttribute("type","GnmHLinkExternal");
+    else if (path.left(5).lower() == "sheet")
+        link_style.setAttribute("type","GnmHLinkCurWB");
+    else
+        link_style.setAttribute("type","");
+            
+    link_style.setAttribute("target",path);
+        
+    // KSpread doesn't support link tips.
+    link_style.setAttribute("tip","");        
+    
+    return link_style;
+}
+
 QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
 {
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
-	QDomElement cell_style;
-	QDomElement font_style;
-    QDomElement border_style;    
+	QDomElement cell_style;   
 
 	cell_style = gnumeric_doc.createElement("gmr:Style");
-
-	QString font_name = "Helvetica";
 
     int red, green, blue;
 
@@ -254,75 +441,10 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
             
     cell_style.setAttribute("PatternColor", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
     
-    if (cell->content() == KSpreadCell::RichText)
-    {
-        QDomElement link_style;
-        
-        link_style = gnumeric_doc.createElement("gmr:HyperLink");
-        
-        QString path;
-        QDomDocument domLink;
-        QDomElement domRoot;
-        //QDomNode domNode;
-                
-        domLink.setContent(cell->text().section("!",1,1));
-                            
-        domRoot = domLink.documentElement();
-        
-        //domNode = domLink.firstChild();
-                            
-        /*while (!domNode.isNull()) 
-        {
-            text = domNode.toElement().text();
-            domNode = domNode.nextSibling();
-        }*/
-        // TODO |----> get <b> and <i> settings too
-        
-        path = domRoot.attribute("href");
-        
-        if (path.section(":",0,0).lower() == "http")
-            link_style.setAttribute("type","GnmHLinkURL");
-        else if (path.section(":",0,0).lower() == "mailto") 
-            link_style.setAttribute("type","GnmHLinkEMail");
-        else if (path.section(":",0,0).lower() == "file") 
-            link_style.setAttribute("type","GnmHLinkExternal");
-        else if (path.left(5).lower() == "sheet")
-            link_style.setAttribute("type","GnmHLinkCurWB");
-        else
-            link_style.setAttribute("type","");
-            
-        link_style.setAttribute("target",path);
-        
-        // KSpread doesn't support hyperlink tips.
-        link_style.setAttribute("tip","");
-        
-        cell_style.appendChild(link_style);
-    }
-    
-	font_style = gnumeric_doc.createElement("gmr:Font");
-	font_style.appendChild(gnumeric_doc.createTextNode(cell->textFontFamily(currentcolumn, currentrow)));
-	cell_style.appendChild(font_style);
-
-	if (cell->textFontItalic(currentcolumn,currentrow))
-    {
-        font_style.setAttribute("Italic","1");
-	}
-    if (cell->textFontBold(currentcolumn,currentrow))
-    {
-        font_style.setAttribute("Bold","1");
-	}
-    if (cell->textFontUnderline(currentcolumn,currentrow))
-    {
-	    font_style.setAttribute("Underline","1");
-	}
-    if (cell->textFontStrike(currentcolumn,currentrow))
-    {
-        font_style.setAttribute("StrikeThrough","1");
-	}
-    if (cell->textFontSize(currentcolumn,currentrow))
-    {
-	    font_style.setAttribute("Unit",QString::number(cell->textFontSize(currentcolumn,currentrow)));
-	}
+    if (isLink)
+        cell_style.appendChild(GetLinkStyle(gnumeric_doc));
+       
+    cell_style.appendChild(GetFontStyle(gnumeric_doc, cell, currentcolumn, currentrow));
     
 	QString stringFormat;
 
@@ -499,10 +621,10 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 			stringFormat="# ?/?";
 			break;
 		case fraction_two_digits:
-			stringFormat="# ??/??";
+			stringFormat="# ?\?/?\?";
 			break;
 		case fraction_three_digits:
-			stringFormat="# ???/???";
+			stringFormat="# ?\?\?/?\?\?";
 			break;
         case Custom_format:
             stringFormat = cell->getFormatString(currentcolumn,currentrow);
@@ -510,150 +632,8 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
     }
     cell_style.setAttribute("Format",stringFormat);
              
-    if(hasBorder(cell, currentcolumn, currentrow))
-    {
-        border_style = gnumeric_doc.createElement("gmr:StyleBorder");
-             
-        if ( (cell->leftBorderWidth(currentcolumn, currentrow) != 0) &&
-             (cell->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) 
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Left");
-            border.setAttribute("Style","1");
-                
-            int red, green, blue;
-
-            QColor color =  cell->leftBorderColor(currentcolumn, currentrow);
-            red = color.red()<<8;
-            green = color.green()<<8;
-            blue = color.blue()<<8;
-                    
-            border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
-            border_style.appendChild(border);                
-        }
-        else
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Left");
-            border.setAttribute("Style","0");
-            border_style.appendChild(border);
-        }  
-             
-        if ( (cell->rightBorderWidth(currentcolumn, currentrow) != 0) &&
-             (cell->rightBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Right");
-            border.setAttribute("Style","1");
-                
-            int red, green, blue;
-
-            QColor color =  cell->rightBorderColor(currentcolumn, currentrow);
-            red = color.red()<<8;
-            green = color.green()<<8;
-            blue = color.blue()<<8;
-                    
-            border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
-            border_style.appendChild(border);                
-        }
-        else
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Right");
-            border.setAttribute("Style","0");
-            border_style.appendChild(border);
-        }  
-                        
-        if ( (cell->topBorderWidth(currentcolumn, currentrow) != 0) &&
-             (cell->topBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Top");
-            border.setAttribute("Style","1");
-                
-            int red, green, blue;
-
-            QColor color =  cell->topBorderColor(currentcolumn, currentrow);
-            red = color.red()<<8;
-            green = color.green()<<8;
-            blue = color.blue()<<8;
-                    
-            border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
-            border_style.appendChild(border);                
-        } 
-        else
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Top");
-            border.setAttribute("Style","0");
-            border_style.appendChild(border);
-        }
-                
-        if ( (cell->bottomBorderWidth(currentcolumn, currentrow) != 0) &&
-             (cell->bottomBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Bottom");
-            border.setAttribute("Style","1");
-                
-            int red, green, blue;
-
-            QColor color =  cell->bottomBorderColor(currentcolumn, currentrow);
-            red = color.red()<<8;
-            green = color.green()<<8;
-            blue = color.blue()<<8;
-                    
-            border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
-            border_style.appendChild(border);                
-        } 
-        else
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Bottom");
-            border.setAttribute("Style","0");
-            border_style.appendChild(border);
-        }
-                
-        if ( (cell->fallDiagonalWidth(currentcolumn, currentrow) != 0) &&
-             (cell->fallDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Diagonal");
-            border.setAttribute("Style","1");
-                
-            int red, green, blue;
-
-            QColor color =  cell->fallDiagonalColor(currentcolumn, currentrow);
-            red = color.red()<<8;
-            green = color.green()<<8;
-            blue = color.blue()<<8;
-                    
-            border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
-            border_style.appendChild(border);                
-        } 
-        else
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Diagonal");
-            border.setAttribute("Style","0");
-            border_style.appendChild(border);
-        }
-                
-        if ( (cell->goUpDiagonalWidth(currentcolumn, currentrow) != 0) &&
-             (cell->goUpDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Rev-Diagonal");
-            border.setAttribute("Style","1");
-                
-            int red, green, blue;
-
-            QColor color =  cell->goUpDiagonalColor(currentcolumn, currentrow);
-            red = color.red()<<8;
-            green = color.green()<<8;
-            blue = color.blue()<<8;
-                    
-            border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
-            border_style.appendChild(border);                
-        } 
-        else
-        {
-            QDomElement border = gnumeric_doc.createElement("gmr:Rev-Diagonal");
-            border.setAttribute("Style","0"); 
-            border_style.appendChild(border); 
-        }
-                
-        cell_style.appendChild(border_style);
-    }
+    if(hasBorder(cell, currentcolumn, currentrow))   
+        cell_style.appendChild(GetBorderStyle(gnumeric_doc, cell, currentcolumn, currentrow));
 
 	return cell_style;
 }
@@ -963,10 +943,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                 QDomElement cell_contents;
 		        KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
 
-                QString text;
+                QString text, style;
                 QDomDocument domLink;
                 QDomElement domRoot;
                 QDomNode domNode;
+                QDomNodeList childNodes;
 		        
                 if (!cell->isDefault() && !cell->isEmpty())
 		        {
@@ -974,52 +955,70 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                     {
                         case KSpreadCell::Text:
                             text = cell->text();
+                            isLink = false;                            
                             break;
                         case KSpreadCell::RichText:
                             // hyperlinks
                             // Extract the cell text
+                            isLink = true;
+                            isLinkBold = false;
+                            isLinkItalic = false;
                             domLink.setContent(cell->text().section("!",1,1));
                             
                             domNode = domLink.firstChild();
+                            domRoot = domNode.toElement();
+                            text = domNode.toElement().text();
                             
                             while (!domNode.isNull()) 
                             {
-                                text = domNode.toElement().text();
-                                domNode = domNode.nextSibling();
-                            }
+                                style = domNode.toElement().tagName();
 
-                            kdDebug() << "---> link, text = " << text << endl;
+                                if (style == "b")
+                                    isLinkBold = true;
+                                       
+                                if (style == "i")
+                                    isLinkItalic = true;                                    
+                                    
+                                domNode = domNode.firstChild();                                
+                            }                                                        
+
+                            //kdDebug() << "---> link, text = " << text << endl;
+                            
+                            linkUrl = domRoot.attribute("href");                            
+                            linkText = text;
+                            
                             break;
 		                case KSpreadCell::VisualFormula:
+                            isLink = false;
 		                    text = cell->text(); // untested
 		                    break;
 		                case KSpreadCell::Formula:
+                            isLink = false;
 		                    /* cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
                             text = cell->text();
                             break;
                     }
                 }
          
-                bool tst = false;
+                bool hasContent = false;
                 
                 if (!text.isEmpty() )
-                    tst = true;
+                    hasContent = true;
                 else
                 {
                     if ( cell->backGroundBrushStyle(currentcolumn, currentrow) != Qt::NoBrush )
-                        tst = true;
+                        hasContent = true;
                     else
                     {
                         if ( hasBorder(cell, currentcolumn, currentrow) )
-                            tst = true;
+                            hasContent = true;
                         else
-                            tst = false;
+                            hasContent = false;
                     }
                 }
                     
                     
-		        //if (!text.isEmpty() || hasBorder(cell, currentcolumn, currentrow) || cell->backGroundBrushStyle(currentcolumn, currentrow) != Qt::NoBrush)
-                if (tst)
+                if (hasContent)
 		        {
            
                     // Check if the cell is merged
