@@ -389,9 +389,9 @@ Form::pasteWidget(QDomElement &widg, Container *cont, QPoint pos)
 	if (!container)
 		return;
 
-	fixNames(widg); // to avoid nale clash
+	fixNames(widg); // to avoid name clash
 	if(pos.isNull())
-		widg = fixPos(widg); // to avoid widget being at the same location
+		widg = fixPos(widg, cont); // to avoid widget being at the same location
 	else
 		widg = fixPos(widg, pos);
 	m_inter = false;
@@ -463,7 +463,7 @@ Form::fixPos(QDomElement widg, QPoint newpos)
 }
 
 QDomElement
-Form::fixPos(QDomElement el)
+Form::fixPos(QDomElement el, Container *container)
 {
 	QDomElement rect;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -494,6 +494,17 @@ Form::fixPos(QDomElement el)
 		widg = m_toplevel->widget()->childAt(widg->x() + 16, widg->y() + 16, false);
 		r.moveBy(10,10);
 	}
+
+	if(r.x() < 0)
+		r.setX(0);
+	else if(r.right() > container->widget()->width())
+		r.setX(container->widget()->width() - r.width());
+
+	if(r.y() < 0)
+		r.setY(0);
+	else if(r.bottom() > container->widget()->height())
+		r.setY(container->widget()->height() - r.height());
+
 	if(r == QRect(rx, ry, rw, rh))
 		return el;
 	else

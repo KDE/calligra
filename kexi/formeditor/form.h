@@ -236,7 +236,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		   It moves the widget by (10, 10) increment (several times if there are already asted widgets at this position).
 		   \return the modified QDomElement.
 		 */
-		QDomElement  fixPos(QDomElement el);
+		QDomElement  fixPos(QDomElement el, Container *container);
 		/*! Internal function used to fix the names of the widgets before pasting them. It prevents from pasting a widget with
 		  the same name as an actual widget. The child widgets are also fixed recursively.\n
 		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is just incremented by one (eg becomes "QLineEdit2").

@@ -515,9 +515,19 @@ Container::eventFilter(QObject *s, QEvent *e)
 					}
 					else
 					{
-						tmpx = int( float( w->x() + mev->x() - m_grab.x()) / float(gridX) ) * gridX;
-						tmpy = int( float( w->y() + mev->y() - m_grab.y()) / float(gridY) ) * gridY;
+						tmpx = int( float( w->x() + mev->x() - m_grab.x()) / float(gridX) + 0.5) * gridX;
+						tmpy = int( float( w->y() + mev->y() - m_grab.y()) / float(gridY) + 0.5) * gridY;
 					}
+
+					if(tmpx < 0)
+						tmpx = 0;
+					else if(tmpx > w->parentWidget()->width() - gridX)
+						tmpx = w->parentWidget()->width() - gridX;
+
+					if(tmpy < 0)
+						tmpy = 0;
+					else if(tmpy > w->parentWidget()->height() - gridY)
+						tmpy = w->parentWidget()->height() - gridY;
 
 					if((tmpx != w->x()) || (tmpy != w->y()))
 						w->move(tmpx,tmpy);
