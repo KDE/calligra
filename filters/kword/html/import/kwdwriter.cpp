@@ -221,13 +221,20 @@ QDomElement KWDWriter::addParagraph(QDomElement parent) {
 	QDomElement k;
 	return addParagraph(parent,k);
 }
-void KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
 
-	QDomElement theLayout=layout.cloneNode().toElement();
+
+
+void KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
+	QDomElement theLayout;
+	if (layout.isNull())
+		theLayout=_doc->createElement("LAYOUT");
+	else
+		theLayout=layout.cloneNode().toElement();
 	QDomElement oldLayout=currentLayout(paragraph);
 	paragraph.removeChild(oldLayout);
 	paragraph.appendChild(theLayout);
 }
+
 
 QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClone) {
 
@@ -309,6 +316,14 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
 	lastformat.setAttribute("pos",QString("%1").arg(oldLength));
 	lastformat.setAttribute("len",QString("%1").arg(newLength));
 }
+
+QString KWDWriter::getText(QDomElement paragraph) {
+	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
+	QDomText currentText=temp.toText();
+	if (temp.isNull()) { qWarning("no text"); exit(0); }
+	return currentText.data();
+}
+
 
 QDomElement KWDWriter::startFormat(QDomElement paragraph) {
         if (paragraph.isNull()) { qWarning("startFormat on empty paragraph"); exit(0); }

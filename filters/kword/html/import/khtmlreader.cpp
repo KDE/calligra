@@ -108,13 +108,23 @@ void KHTMLReader::popState() {
 	if (s->frameset == state()->frameset)
 		{
 			state()->paragraph=s->paragraph;
-			_writer->setLayout(state()->paragraph,state()->layout);
+			if (state()->layout != s->layout) {
+				startNewLayout(false);
+			}
 		}
-	else
-		startNewParagraph(true,true);
 
 	state()->format=_writer->startFormat(state()->paragraph,state()->format);
 	delete(s);
+}
+
+
+void KHTMLReader::startNewLayout(bool startNewFormat) {
+	if (_writer->getText(state()->paragraph).isEmpty()) {
+		QDomElement layout;
+		_writer->setLayout(state()->paragraph,layout);
+	} else {
+		startNewParagraph(startNewFormat,true);
+	}
 }
 
 
@@ -173,32 +183,31 @@ void KHTMLReader::parseNode(DOM::Node node) {
 }
 
 
-#define _PP(x) {if (e.tagName() == #x) return parse_##x(e);}
-#define _PF(x,a,b,c) {if (e.tagName() == #x) { _writer->formatAttribute(state()->paragraph, #a,#b,#c); return true;}}
-#define _PL(x,a,b,c) {if (e.tagName() == #x) { _writer->layoutAttribute(state()->paragraph, #a,#b,#c); return true;}}
+#define _PP(x) {if (e.tagName().lower() == #x) return parse_##x(e);}
+#define _PF(x,a,b,c) {if (e.tagName().lower() == #x) { _writer->formatAttribute(state()->paragraph, #a,#b,#c); return true;}}
+#define _PL(x,a,b,c) {if (e.tagName().lower() == #x) { startNewParagraph(false,true); _writer->layoutAttribute(state()->paragraph, #a,#b,#c); return true;}}
 
 
 bool KHTMLReader::parseTag(DOM::Element e) {
-	qWarning(e.tagName().string().latin1());
-	_PP(P);
-	_PP(BR);
-	_PP(TABLE);
-	_PP(PRE);
-	_PP(UL);
-	_PP(OL);
-	_PP(FONT);
-	_PP(HR);
+	_PP(p);
+	_PP(br);
+	_PP(table);
+	_PP(pre);
+	_PP(ul);
+	_PP(ol);
+	_PP(font);
+	_PP(hr);
 
 	// FIXME we can get rid of these, make things tons more simple
 	// when khtml finally implements getComputedStyle
-	_PF(B,WEIGHT,value,75);
-	_PF(STRONG,WEIGHT,value,75);
-	_PF(U,UNDERLINE,value,1);
-	_PF(I,ITALIC,value,1);
+	_PF(b,WEIGHT,value,75);
+	_PF(strong,WEIGHT,value,75);
+	_PF(u,UNDERLINE,value,1);
+	_PF(i,ITALIC,value,1);
 
-	_PL(CENTER,FLOW,align,center);
-	_PL(RIGHT,FLOW,align,right);
-	_PL(LEFT,FLOW,align,left);
+	_PL(center,FLOW,align,center);
+	_PL(right,FLOW,align,right);
+	_PL(left,FLOW,align,left);
 }
 
 
@@ -285,21 +294,21 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
 
 
 
-bool KHTMLReader::parse_P(DOM::Element e) {
+bool KHTMLReader::parse_p(DOM::Element e) {
 	startNewParagraph();
 	parse_CommonAttributes(e);
 
 	return true;
 }
 
-bool KHTMLReader::parse_HR(DOM::Element e) {
+bool KHTMLReader::parse_hr(DOM::Element e) {
 	startNewParagraph();
 	_writer->addText(state()->paragraph,"--------------------------------FIXME:HR-------------");
 	startNewParagraph();
 	return true;
 }
 
-bool KHTMLReader::parse_BR(DOM::Element e) {
+bool KHTMLReader::parse_br(DOM::Element e) {
 	startNewParagraph(false,false); //keep the current format and layout
 	return false; // a BR tag has no childs.
 }
@@ -321,33 +330,33 @@ QColor parsecolor(QString colorstring) {
 }
 
 
-bool KHTMLReader::parse_TABLE(DOM::Element e) {
+bool KHTMLReader::parse_table(DOM::Element e) {
 	int tableno=_writer->createTable();
  	int nrow=0;
  	int ncol=0;
  	int has_borders=false;
 	QColor bgcolor=parsecolor("#FFFFFF");
  	DOM::Element table_body=e.firstChild();
- 	if (table_body.getAttribute("BGCOLOR").string() != "")
- 	       bgcolor=parsecolor(table_body.getAttribute("BGCOLOR").string());
- 	if ((e.getAttribute("BORDER").string().toInt() > 0))
+ 	if (table_body.getAttribute("bgcolor").string() != "")
+ 	       bgcolor=parsecolor(table_body.getAttribute("bgcolor").string());
+ 	if ((e.getAttribute("border").string().toInt() > 0))
  		has_borders=true;
 
  	// fixme rewrite this proper
  	//(maybe using computed sizes from khtml if thats once exported)
  	for (DOM::Element rows=table_body.firstChild();!rows.isNull();rows=rows.nextSibling()) {
- 	if (rows.tagName().string() == "TR") {
+ 	if (rows.tagName().string().lower() == "tr") {
 
  	    QColor obgcolor=bgcolor;
- 	    if (rows.getAttribute("BGCOLOR").string() != "")
- 	       	bgcolor=parsecolor(rows.getAttribute("BGCOLOR").string());
+ 	    if (rows.getAttribute("bgcolor").string() != "")
+ 	       	bgcolor=parsecolor(rows.getAttribute("bgcolor").string());
 
  		ncol=0;
  		for (DOM::Element cols=rows.firstChild();!cols.isNull();cols=cols.nextSibling()) {
- 		        if (cols.tagName().string() == "TD") {
+ 		        if (cols.tagName().string().lower() == "td") {
  		             QColor bbgcolor=bgcolor;
-		 	    if (cols.getAttribute("BGCOLOR").string() != "")
- 	       			bgcolor=parsecolor(cols.getAttribute("BGCOLOR").string());
+		 	    if (cols.getAttribute("bgcolor").string() != "")
+ 	       			bgcolor=parsecolor(cols.getAttribute("bgcolor").string());
 
 			    	pushNewState();
 	 	    	    	QRect colrect=cols.getRect();
@@ -382,13 +391,13 @@ bool KHTMLReader::parse_TABLE(DOM::Element e) {
 	return false; // we do our own recursion
 }
 
-bool KHTMLReader::parse_IMG(DOM::Element e) {
+bool KHTMLReader::parse_img(DOM::Element e) {
      	//QRect e=e.getRect();
     return true;
 }
 
 
-bool KHTMLReader::parse_PRE(DOM::Element e) {
+bool KHTMLReader::parse_pre(DOM::Element e) {
 	DOM::Text prething=e.firstChild();
 	if (prething.isNull()) return false;
 
@@ -403,11 +412,11 @@ bool KHTMLReader::parse_PRE(DOM::Element e) {
 	return false; // FIXME no support for tags in <PRE> sections ATM.
 }
 
-bool KHTMLReader::parse_OL(DOM::Element e) {
-	return parse_UL(e);
+bool KHTMLReader::parse_ol(DOM::Element e) {
+	return parse_ul(e);
 }
 
-bool KHTMLReader::parse_FONT(DOM::Element e) {
+bool KHTMLReader::parse_font(DOM::Element e) {
 	// fixme don't hardcode 12 font size ...
 	QString face=e.getAttribute("face").string();
         QColor color=parsecolor("#000000");
@@ -432,15 +441,15 @@ bool KHTMLReader::parse_FONT(DOM::Element e) {
         return true;
 }
 
-bool KHTMLReader::parse_UL(DOM::Element e) {
+bool KHTMLReader::parse_ul(DOM::Element e) {
         _list_depth++;
         for (DOM::Element items=e.firstChild();!items.isNull();items=items.nextSibling()) {
-                  if (items.tagName().string() == "LI") {
+                  if (items.tagName().string().lower() == "li") {
                   	pushNewState();
-                  		startNewParagraph();
+                  		startNewLayout();//Paragraph();
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
-                  		if (e.tagName().string() == "OL")
+                  		if (e.tagName().string().lower() == "ol")
 	                  		{
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","1");
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");

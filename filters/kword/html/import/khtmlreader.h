@@ -74,21 +74,22 @@ private:
         KHTMLPart *_html;
         KWDWriter *_writer;
 
+	void startNewLayout(bool startNewFormat=true);
         void startNewParagraph(bool startnewformat=true, bool startnewlayout=true);
         bool _it_worked;
 // -----------------------------------------------------
         int _list_depth;
 // -----------------------------------------------------
 	bool parse_CommonAttributes(DOM::Element e);
-	bool parse_P(DOM::Element e);
-	bool parse_BR(DOM::Element e);
-	bool parse_TABLE(DOM::Element e);
-	bool parse_PRE(DOM::Element e);
-	bool parse_FONT(DOM::Element e);
-	bool parse_OL(DOM::Element e);
-	bool parse_UL(DOM::Element e);
-	bool parse_HR(DOM::Element e);
-	bool parse_IMG(DOM::Element e);
+	bool parse_p(DOM::Element e);
+	bool parse_br(DOM::Element e);
+	bool parse_table(DOM::Element e);
+	bool parse_pre(DOM::Element e);
+	bool parse_font(DOM::Element e);
+	bool parse_ol(DOM::Element e);
+	bool parse_ul(DOM::Element e);
+	bool parse_hr(DOM::Element e);
+	bool parse_img(DOM::Element e);
 
 
 };

@@ -147,6 +147,7 @@ public:
         QDomElement currentFrameset();
         QDomElement currentParagraph(QDomElement frameset);
 	void setLayout(QDomElement paragraph, QDomElement layout);
+	QString getText(QDomElement paragraph);
 
         /**
          * returns the document root
