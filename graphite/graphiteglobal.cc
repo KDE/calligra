@@ -81,24 +81,12 @@ const double deg2rad(const double &deg) {
 }
 
 const double normalizeRad(const double &rad) {
-
-    double nRad=rad;
     double twoPi=2*M_PI;
-    while(nRad>twoPi)
-        nRad-=twoPi;
-    while(nRad<0)
-        nRad+=twoPi;
-    return nRad;
+    return rad-static_cast<double>(std::floor(rad/twoPi))*twoPi;
 }
 
 const double normalizeDeg(const double &deg) {
-
-    double nDeg=deg;
-    while(nDeg>360)
-        nDeg-=360;
-    while(nDeg<0)
-        nDeg+=360;
-    return nDeg;
+    return deg-static_cast<double>(std::floor(deg/360.0))*360.0;
 }
 
 void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
@@ -370,16 +358,16 @@ bool operator==(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()==rhs.f
 bool operator!=(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()!=rhs.fx() || lhs.fy()!=rhs.fy(); }
 
 
-FxRect::FxRect() : m_tl(FxValue(0.0), FxValue(0.0)), m_br(FxValue(-DBL_MIN), FxValue(-DBL_MIN)) {
+FxRect::FxRect() : m_tl(0.0, 0.0), m_br(-DBL_MIN, -DBL_MIN) {
 }
 
 FxRect::FxRect(const FxPoint &topleft, const QSize &size) : m_tl(topleft) {
-    m_br.setPxPoint(static_cast<const int>(m_tl.x()+size.width()),
-         static_cast<const int>(m_tl.y()+size.height()));
+    m_br.setPxPoint(m_tl.pxX()+size.width(),
+        (m_tl.pxY()+size.height()));
 }
 
-FxRect::FxRect(const double &top, const double &left, const double &width, const double &height) :
-    m_tl(FxValue(left), FxValue(top)), m_br(FxValue(left+width), FxValue(top+height)) {
+FxRect::FxRect(const double &left, const double &top, const double &width, const double &height) :
+    m_tl(left, top), m_br(left+width, top+height) {
 }
 
 FxRect::FxRect(const QRect &rect) {
@@ -394,12 +382,27 @@ bool FxRect::isEmpty() const {
     return m_tl.x()>m_br.x() || m_tl.y()>m_br.y();
 }
 
-FxRect FxRect::normalize() const {
+FxRect FxRect::normalized() const {
 
-    double x1, y1, x2, y2;
-    (m_tl.x()<m_br.x()) ? (x1=m_tl.x(), x2=m_br.x()) : (x1=m_br.x(), x2=m_tl.x());
-    (m_tl.y()<m_br.y()) ? (y1=m_tl.y(), y2=m_br.y()) : (y1=m_br.y(), y2=m_tl.y());
-    return FxRect(x1, y1, x2, y2);
+    double x, y, w, h;
+    (m_tl.x()<m_br.x()) ? (x=m_tl.x(), w=m_br.x()-m_tl.x()) : (x=m_br.x(), w=m_tl.x()-m_br.x());
+    (m_tl.y()<m_br.y()) ? (y=m_tl.y(), h=m_br.y()-m_tl.y()) : (y=m_br.y(), h=m_tl.y()-m_br.y());
+    return FxRect(x, y, w, h);
+}
+
+void FxRect::normalize() {
+
+    double tmp;
+    if(m_tl.x()>m_br.x()) {
+        tmp=m_tl.x();
+        m_tl.setX(m_br.x());
+        m_br.setX(tmp);
+    }
+    if(m_tl.y()>m_br.y()) {
+        tmp=m_tl.y();
+        m_tl.setY(m_br.y());
+        m_br.setY(tmp);
+    }
 }
 
 FxPoint FxRect::center() const {
@@ -409,31 +412,35 @@ FxPoint FxRect::center() const {
 
 void FxRect::moveTopLeft(const FxPoint &topleft) {
 
-    m_tl=topleft;
     m_br.setX(topleft.x()+(m_br.x()-m_tl.x()));
     m_br.setY(topleft.y()+(m_br.y()-m_tl.y()));
+    m_tl=topleft;
 }
 
 void FxRect::moveBottomRight(const FxPoint &bottomright) {
 
-    m_br=bottomright;
     m_tl.setX(bottomright.x()-(m_br.x()-m_tl.x()));
     m_tl.setY(bottomright.y()-(m_br.y()-m_tl.y()));
+    m_br=bottomright;
 }
 
 void FxRect::moveTopRight(const FxPoint &topright) {
 
-    m_tl.setX(topright.x()-(m_br.x()-m_tl.x()));
+    double w=m_br.x()-m_tl.x();
+    double h=m_br.y()-m_tl.y();
+    m_tl.setX(topright.x()-w);
     m_tl.setY(topright.y());
     m_br.setX(topright.x());
-    m_br.setY(topright.y()+(m_br.y()-m_tl.y()));
+    m_br.setY(topright.y()+h);
 }
 
 void FxRect::moveBottomLeft(const FxPoint &bottomleft) {
 
+    double w=m_br.x()-m_tl.x();
+    double h=m_br.y()-m_tl.y();
     m_tl.setX(bottomleft.x());
-    m_tl.setY(bottomleft.y()-(m_br.y()-m_tl.y()));
-    m_br.setX(bottomleft.x()+(m_br.x()-m_tl.x()));
+    m_tl.setY(bottomleft.y()-h);
+    m_br.setX(bottomleft.x()+w);
     m_br.setY(bottomleft.y());
 }
 
@@ -586,17 +593,22 @@ FxRect operator|(const FxRect &lhs, const FxRect &rhs) {
         return rhs;
     if(rhs.isEmpty())
         return lhs;
-    return FxRect( (lhs.left() < rhs.left() ? lhs.left() : rhs.left()),
+    FxRect tmp;
+    tmp.setCoords( (lhs.left() < rhs.left() ? lhs.left() : rhs.left()),
                    (lhs.top() < rhs.top() ? lhs.top() : rhs.top()),
                    (lhs.right() > rhs.right() ? lhs.right() : rhs.right()),
                    (lhs.bottom() > rhs.bottom() ? lhs.bottom() : rhs.bottom()) );
+    return tmp;
 }
 
 FxRect operator&(const FxRect &lhs, const FxRect &rhs) {
-    return FxRect( (lhs.left() > rhs.left() ? lhs.left() : rhs.left()),
+
+    FxRect tmp;
+    tmp.setCoords( (lhs.left() > rhs.left() ? lhs.left() : rhs.left()),
                    (lhs.top() > rhs.top() ? lhs.top() : rhs.top()),
                    (lhs.right() < rhs.right() ? lhs.right() : rhs.right()),
                    (lhs.bottom() < rhs.bottom() ? lhs.bottom() : rhs.bottom()) );
+    return tmp;
 }
 
 bool operator==(const FxRect &lhs, const FxRect &rhs) {

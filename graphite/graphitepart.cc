@@ -31,9 +31,7 @@
 //#include <gobjectfactory.h>
 
 // test
-#include <gobject.h>
 #include <ggroup.h>
-#include <kdialogbase.h>
 #include <math.h>
 
 
@@ -68,8 +66,6 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     // TODO: Check the view - if it's the same as "before" -> ok :)
     GObject *o=new GGroup(QString::fromLatin1("foo"));
     o->rotate(QPoint(10, 10), 45.0*180.0*M_1_PI);
-    kdDebug(37001) << "atan(0): " << std::atan(0)
-                   << "atan(pi/2)" << std::atan(M_PI_2) << endl;
     GObjectM9r *m=o->createM9r(this, view);
     QRect r;
     m->mousePressEvent(e, r);

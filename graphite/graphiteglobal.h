@@ -168,6 +168,7 @@ class FxValue {
 public:
     FxValue() : m_value(0.0), m_pixel(0) {}
     explicit FxValue(const int &pixel) { setPxValue(pixel); }
+    explicit FxValue(const double &value) : m_value(value) { recalculate(); }
     FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()) {}
     ~FxValue() {}
 
@@ -206,6 +207,7 @@ public:
     FxPoint(const FxValue &x, const FxValue &y) : m_x(x), m_y(y) {}
     explicit FxPoint(const QPoint &p) { setPxPoint(p); }
     FxPoint(const int &x, const int &y) { setPxPoint(x, y); }
+    FxPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
     ~FxPoint() {}
 
     FxPoint &operator=(const FxPoint &rhs) { m_x=rhs.fx(); m_y=rhs.fy(); return *this; }
@@ -227,6 +229,7 @@ public:
     void setPxY(const int &y) { m_y.setPxValue(y); }
 
     void setPoint(const FxValue &x, const FxValue &y) { m_x=x; m_y=y; }
+    void setPoint(const double &x, const double &y) { m_x.setValue(x); m_y.setValue(y); }
 
     const QPoint pxPoint() { return QPoint(pxX(), pxY()); }
     void setPxPoint(const int &x, const int &y) { m_x.setPxValue(x); m_y.setPxValue(y); }
@@ -249,14 +252,15 @@ public:
     FxRect();   // isNull()==true
     FxRect(const FxPoint &topleft, const FxPoint &bottomright) : m_tl(topleft), m_br(bottomright) {}
     FxRect(const FxPoint &topleft, const QSize &size);  // pxSize, current zoom/res
-    FxRect(const double &top, const double &left, const double &width, const double &height);
+    FxRect(const double &left, const double &top, const double &width, const double &height);
     explicit FxRect(const QRect &rect);  // pxSize, current zoom/res
     ~FxRect() {}
 
     bool isNull() const;
     bool isEmpty() const;
 
-    FxRect normalize() const;
+    FxRect normalized() const;
+    void normalize();
 
     double left() const { return m_tl.x(); }
     double top() const { return m_tl.y(); }
