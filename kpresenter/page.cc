@@ -107,6 +107,28 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 /*======================== destructor ============================*/
 Page::~Page()
 {
+    // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
+    if ( editNum != -1 ) {
+	KPObject *kpobject = objectList()->at( editNum );
+	editNum = -1;
+	if ( kpobject->getType() == OT_TEXT ) {
+	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+	    kptextobject->deactivate( view->kPresenterDoc() );
+	    kptextobject->getKTextObject()->clearFocus();
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+			this, SLOT( toFontChanged( const QFont & ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+			this, SLOT( toColorChanged( const QColor & ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+			this, SLOT( toAlignChanged( int ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			this, SLOT( exitEditMode() ) );
+	} else if ( kpobject->getType() == OT_PART ) {
+	    kpobject->deactivate();
+	    _repaint( kpobject );
+	    return;
+	}
+    }
 }
 
 /*============================ draw contents ====================*/
