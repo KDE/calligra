@@ -749,7 +749,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
     emit updateUI( true );
 }
 
-KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont )
+KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
 {
     KCommand *ret = 0;
     QTextDocument * textdoc = textDocument();
@@ -774,10 +774,10 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
 
     }
 
-    if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
+    if ( textdoc->hasSelection( selectionId ) ) {
         emit hideCursor();
-        QTextCursor c1 = textdoc->selectionStartCursor( QTextDocument::Standard );
-        QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
+        QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+        QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
         undoRedoInfo.clear();
         int id = c1.parag()->paragId();
         int index = c1.index();
@@ -785,7 +785,7 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
         int eindex = c2.index();
         readFormats( c1, c2 ); // read previous formatting info
         //kdDebug(32001) << "KoTextObject::setFormatCommand undoredo info done" << endl;
-        textdoc->setFormat( QTextDocument::Standard, format, flags );
+        textdoc->setFormat( selectionId, format, flags );
         if ( !undoRedoInfo.customItemsMap.isEmpty() )
         {
             // Some custom items (e.g. variables) depend on the format
@@ -808,7 +808,7 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
     if ( newFormat ) {
         emit showCurrentFormat();
         //kdDebug(32001) << "KoTextObject::setFormatCommand index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
-        if ( cursor->index() == cursor->parag()->length() - 1 ) {
+        if ( cursor && cursor->index() == cursor->parag()->length() - 1 ) {
             currentFormat->addRef();
             cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
             if ( cursor->parag()->length() == 1 ) {
@@ -1390,6 +1390,142 @@ bool KoTextObject::textSelectedIsAnLink(QString & href)
        href=ch->format()->anchorHref();
     }
     return true;
+}
+
+KoTextFormat * KoTextObject::currentFormat() const
+{
+    // We use the formatting of the very first character
+    // Should we use a style instead, maybe ?
+    QTextStringChar *ch = textDocument()->firstParag()->at( 0 );
+    return static_cast<KoTextFormat *>(ch->format());
+}
+
+void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
+{
+    // This pointer will be modified by setFormatCommand, so we need a holder,
+    // but in fact we don't care about the modifications here.
+    KoTextFormat* curFormat = currentFormat();
+    // This version of setFormat works on the whole textobject - we use the Temp selection for that
+    QTextDocument *textdoc = textDocument();
+    textdoc->selectAll( QTextDocument::Temp );
+    KCommand *cmd = setFormatCommand( 0L, curFormat, newFormat,
+                                      flags, zoomFont, QTextDocument::Temp );
+    textdoc->removeSelection( QTextDocument::Temp );
+    if (cmd)
+        emit newCommand( cmd );
+}
+
+void KoTextFormatInterface::setBold(bool on) {
+    KoTextFormat format( *currentFormat() );
+    format.setBold( on );
+    setFormat( &format, QTextFormat::Bold );
+}
+
+void KoTextFormatInterface::setItalic( bool on ) {
+    KoTextFormat format( *currentFormat() );
+    format.setItalic( on );
+    setFormat( &format, QTextFormat::Italic );
+}
+
+void KoTextFormatInterface::setUnderline( bool on ) {
+    KoTextFormat format( *currentFormat() );
+    format.setUnderline( on );
+    setFormat( &format, QTextFormat::Underline );
+}
+
+void KoTextFormatInterface::setStrikeOut( bool on ) {
+    KoTextFormat format( *currentFormat() );
+    format.setStrikeOut( on );
+    setFormat( &format, KoTextFormat::StrikeOut );
+}
+
+void KoTextFormatInterface::setTextBackgroundColor(const QColor & col) {
+    KoTextFormat format( *currentFormat() );
+    format.setTextBackgroundColor( col );
+    setFormat( &format, KoTextFormat::TextBackgroundColor );
+}
+
+QColor KoTextFormatInterface::textBackgroundColor() const {
+    return currentFormat()->textBackgroundColor();
+}
+
+QColor KoTextFormatInterface::textColor() const {
+    return currentFormat()->color();
+}
+
+QFont KoTextFormatInterface::textFont() const {
+    QFont fn( currentFormat()->font() );
+    // "unzoom" the font size
+    fn.setPointSize( static_cast<int>( KoTextZoomHandler::layoutUnitToPt( fn.pointSize() ) ) );
+    return fn;
+}
+
+QString KoTextFormatInterface::textFontFamily()const {
+    return currentFormat()->font().family();
+}
+
+void KoTextFormatInterface::setPointSize( int s ){
+    KoTextFormat format( *currentFormat() );
+    format.setPointSize( s );
+    setFormat( &format, QTextFormat::Size, true /* zoom the font size */ );
+}
+
+void KoTextFormatInterface::setFamily(const QString &font){
+    KoTextFormat format( *currentFormat() );
+    format.setFamily( font );
+    setFormat( &format, QTextFormat::Family );
+}
+
+void KoTextFormatInterface::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setFont( font );
+    format.setColor( col );
+    format.setTextBackgroundColor(backGroundColor);
+    if(!_subscript)
+    {
+        if(!_superscript)
+            format.setVAlign(QTextFormat::AlignNormal);
+        else
+            format.setVAlign(QTextFormat::AlignSuperScript);
+    }
+    else
+        format.setVAlign(QTextFormat::AlignSubScript);
+
+    setFormat( &format, flags, true /* zoom the font size */);
+}
+
+void KoTextFormatInterface::setTextColor(const QColor &color) {
+    KoTextFormat format( *currentFormat() );
+    format.setColor( color );
+    setFormat( &format, QTextFormat::Color );
+}
+
+void KoTextFormatInterface::setTextSubScript(bool on)
+{
+    KoTextFormat format( *currentFormat() );
+    if(!on)
+        format.setVAlign(QTextFormat::AlignNormal);
+    else
+        format.setVAlign(QTextFormat::AlignSubScript);
+    setFormat( &format, QTextFormat::VAlign );
+}
+
+void KoTextFormatInterface::setTextSuperScript(bool on)
+{
+    KoTextFormat format( *currentFormat() );
+    if(!on)
+        format.setVAlign(QTextFormat::AlignNormal);
+    else
+        format.setVAlign(QTextFormat::AlignSuperScript);
+    setFormat( &format, QTextFormat::VAlign );
+}
+
+void KoTextFormatInterface::setDefaultFormat() {
+    QTextFormatCollection * coll = currentFormat()->parent();
+    Q_ASSERT(coll);
+    KoTextFormat * format = static_cast<KoTextFormat *>(coll->defaultFormat());
+    setFormat( format, QTextFormat::Format );
 }
 
 #include "kotextobject.moc"

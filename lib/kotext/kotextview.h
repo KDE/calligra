@@ -25,6 +25,7 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <koRuler.h> // for KoTabulatorList
+#include <kotextobject.h> // for KoTextView
 class KoTextObject;
 class KoTextDocument;
 class KoTextParag;
@@ -42,7 +43,7 @@ class KoStyle;
  * It handles all the events for it (mouse, keyboard).
  * There can be several KoTextView instances for the same KoTextObject.
  */
-class KoTextView : public QObject
+class KoTextView : public QObject, public KoTextFormatInterface
 {
     Q_OBJECT
 public:
@@ -66,29 +67,11 @@ public:
     /** Call setReadWrite(false) to make the text view readonly */
     void setReadWrite( bool b ) { m_bReadWrite = b; }
 
-    KoTextFormat * currentFormat() const { return m_currentFormat; }
+    virtual KoTextFormat * currentFormat() const { return m_currentFormat; }
     void setCurrentFormat( KoTextFormat *fmt ) { m_currentFormat = fmt; }
 
-    void setBold(bool on);
-    void setItalic(bool on);
-    void setUnderline(bool on);
-    void setStrikeOut(bool on);
-    void setTextColor(const QColor &color);
-    void setPointSize( int s );
-    void setFamily(const QString &font);
-    void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    void setTextSubScript(bool on);
-    void setTextSuperScript(bool on);
-
-    void setDefaultFormat();
-
-    void setTextBackgroundColor(const QColor &);
-
-    QColor textColor() const;
-    QFont textFont() const;
-    QString textFontFamily()const;
-
-    QColor textBackgroundColor()const;
+    /** Implement the KoTextFormatInterface */
+    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont );
 
     // -- Paragraph settings --
     KCommand * setCounterCommand( const KoParagCounter & counter );

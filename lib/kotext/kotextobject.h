@@ -31,12 +31,52 @@ class KoTextFormat;
 //#include <qdatetime.h>
 
 /**
+ * The KoTextFormatInterface is a pure interface that allows access to the
+ * "current text format". This is implemented by both KoTextObject and KoTextView.
+ * For KoTextView, it's the format under the cursor.
+ * For KoTextObject, it's the global format.
+ * By changing this format and calling setFormat (with the appropriate flags),
+ * it's possible (for KPresenter and other apps which treat a textobject as a whole,
+ * unlike KWord), to implement "setBold", "setItalic" etc. only once, whether it applies
+ * to a text selection or to complete text objects.
+ */
+class KoTextFormatInterface
+{
+public:
+    /** Interface for accessing the current format */
+    virtual KoTextFormat * currentFormat() const = 0;
+    /** Interface for setting the modified format */
+    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false ) = 0;
+
+    void setBold(bool on);
+    void setItalic(bool on);
+    void setUnderline(bool on);
+    void setStrikeOut(bool on);
+    void setTextColor(const QColor &color);
+    void setPointSize( int s );
+    void setFamily(const QString &font);
+    void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
+    void setTextSubScript(bool on);
+    void setTextSuperScript(bool on);
+
+    void setDefaultFormat();
+
+    void setTextBackgroundColor(const QColor &);
+
+    QColor textColor() const;
+    QFont textFont() const;
+    QString textFontFamily()const;
+
+    QColor textBackgroundColor()const;
+};
+
+/**
  * The KoTextObject is the high-level object that contains a KoTextDocument
  * (the list of paragraphs), and takes care of the operations on it (particularly
  * the undo/redo commands).
  * Editing the text isn't done by KoTextObject but by KoTextView (document/view design).
  */
-class KoTextObject : public QObject
+class KoTextObject : public QObject, public KoTextFormatInterface
 {
     Q_OBJECT
 public:
@@ -119,7 +159,7 @@ public:
 
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
-    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
+    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = QTextDocument::Standard );
 
     /** Selections ids */
     enum SelectionIds {
@@ -155,8 +195,19 @@ public:
      */
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     /** Set format changes on selection or current cursor.
-        Returns a command if the format was applied to a selection */
+        Creates a command if the format was applied to a selection */
     void setFormat( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
+
+    /**
+     * Support for treating the whole textobject as a single object
+     * Use this format for displaying the properties (font/color/...) of the object.
+     * Interface for accessing the current format
+     */
+    virtual KoTextFormat * currentFormat() const;
+    /**
+     * Support for changing the format in the whole textobject
+     */
+    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false );
 
     /** Return the user-visible font size for this format (i.e. LU to pt conversion) */
     int docFontSize( QTextFormat * format ) const;
