@@ -26,6 +26,8 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kpresenter_doc.h>
+#include "kpresenter_view.h"
+#include "kprcanvas.h"
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
     : DCOPObject()
@@ -297,3 +299,53 @@ void KPresenterPageIface::changeClipart( const QString & filename )
     m_page->changeClipart(filename);
 }
 
+//create a rectangle and return a dcop reference!
+DCOPRef KPresenterPageIface::insertRectangle(const QRect & rect)
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertRect( rect );
+  return selectedObject();
+}
+
+DCOPRef KPresenterPageIface::insertEllipse( const QRect &rect )
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertEllipse( rect );
+  return selectedObject();
+}
+
+DCOPRef KPresenterPageIface::insertPie( const QRect &rect )
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertPie( rect );
+  return selectedObject();
+}
+
+DCOPRef KPresenterPageIface::insertLineH( const QRect& rect, bool rev )
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertLineH( rect, rev );
+  return selectedObject();
+}
+
+DCOPRef KPresenterPageIface::insertLineV( const QRect &rect, bool rev )
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertLineV( rect, rev );
+  return selectedObject();
+
+}
+
+DCOPRef KPresenterPageIface::insertLineD1( const QRect &rect, bool rev )
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertLineD1( rect, rev );
+  return selectedObject();
+}
+
+DCOPRef KPresenterPageIface::insertLineD2( const QRect &rect, bool rev )
+{
+  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  view->getCanvas()->insertLineD2( rect, rev );
+  return selectedObject();
+}

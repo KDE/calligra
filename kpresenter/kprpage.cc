@@ -3247,7 +3247,6 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
             QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect(_view->zoomHandler()) );
             br.moveBy( diffx, diffy );
             m_doc->repaint( br ); // Previous position
-            //kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
             m_doc->repaint( it.current() ); // New position
             createCommand=true;
         }

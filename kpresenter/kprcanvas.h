@@ -189,6 +189,16 @@ public:
     void setXimPosition( int x, int y, int w, int h, QFont *f );
     void createEditing( KPTextObject *textObj );
 
+
+    void insertLineH( const QRect&, bool );
+    void insertLineV( const QRect&, bool );
+    void insertLineD1( const QRect&, bool );
+    void insertLineD2( const QRect&, bool );
+    void insertRect( const QRect& );
+    void insertEllipse( const QRect& );
+    void insertPie( const QRect& );
+
+
 public slots:
     void exitEditMode();
 
@@ -291,13 +301,6 @@ protected:
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
     KPTextObject* insertTextObject( const QRect& );
-    void insertLineH( const QRect&, bool );
-    void insertLineV( const QRect&, bool );
-    void insertLineD1( const QRect&, bool );
-    void insertLineD2( const QRect&, bool );
-    void insertRect( const QRect& );
-    void insertEllipse( const QRect& );
-    void insertPie( const QRect& );
     void insertObject( const QRect& );
     void insertAutoform( const QRect&, bool );
     void insertFreehand( const KoPointArray &_pointArray );

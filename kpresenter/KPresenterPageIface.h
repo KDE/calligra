@@ -98,6 +98,17 @@ k_dcop:
     virtual void changePicture( const QString & );
     virtual void changeClipart( const QString & );
 
+    DCOPRef insertRectangle(const QRect & rect);
+    DCOPRef insertEllipse( const QRect &rect );
+    DCOPRef insertPie( const QRect &rect );
+    DCOPRef insertLineH( const QRect& rect, bool rev );
+    DCOPRef insertLineV( const QRect &rect, bool rev );
+    DCOPRef insertLineD1( const QRect &rect, bool rev );
+    DCOPRef insertLineD2( const QRect &rect, bool rev );
+
+
+
+
 private:
     KPrPage *m_page;
 
