@@ -33,6 +33,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kinstance.h>
+#include <klocale.h>
 #include <kiconloader.h>
 
 #include <stdio.h>
@@ -93,8 +94,7 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
 
     parent->installEventFilter( this );
 
-    (void)new KAction( tr("Calculator"), UserIcon("kspreadcalc",
-	    CalcFactory::global() ));
+    (void)new KAction( i18n("Calculator"), "kspreadcalc", 0, actionCollection(), "kspreadcalc");
 }
 
 void Calculator::showCalculator()
