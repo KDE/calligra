@@ -51,6 +51,8 @@ public:
 
     virtual void objectForSpellChecking(KoTextObject *obj)=0;
 
+    virtual void nextTextFrameSet( KoTextObject *obj )=0;
+
 public slots:
     void startBackgroundSpellCheck();
 

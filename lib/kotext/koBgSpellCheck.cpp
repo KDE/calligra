@@ -63,6 +63,8 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
 {
     if ( !m_bSpellCheckEnabled || !m_bgSpell.currentTextObj )
         return;
+    kdDebug() << "KoBgSpellCheck::startBackgroundSpellCheck" << endl;
+
     m_bgSpell.currentTextObj = currObj;
 
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
@@ -128,13 +130,16 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
         m_bgSpell.currentParag = parag;
     else
         m_bgSpell.currentParag = 0L; // ###
-#if 0
-    m_bgSpell.currentTextObj = nextTextFrameSet( currentTextObj );
-    if ( m_bgSpell.currentTextObj )
-        m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
-    else
-        m_bgSpell.currentParag = 0L;
-#endif
+
+    if( !m_bgSpell.currentParag)
+    {
+        KoTextObject *obj=m_bgSpell.currentTextObj;
+        nextTextFrameSet( m_bgSpell.currentTextObj );
+        if ( m_bgSpell.currentTextObj && m_bgSpell.currentTextObj!=obj)
+            m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
+        else
+            m_bgSpell.currentParag = 0L;
+    }
 }
 
 void KoBgSpellCheck::spellCheckNextParagraph()
@@ -174,7 +179,6 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringL
     if ( !fs ) return;
     if ( !m_bgSpell.currentParag ) return;
     kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling parag=" << m_bgSpell.currentParag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
-
     // TODO use Misspelled format instead
     //fs->highlightPortion( m_bgSpell.currentParag, pos, old.length(), 0L /*m_gui->canvasWidget()*/ );
     KoTextStringChar *ch = m_bgSpell.currentParag->at( pos );
@@ -189,7 +193,10 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringL
 void KoBgSpellCheck::spellCheckerDone( const QString & )
 {
     kdDebug() << "KoBgSpellCheck::spellCheckerDone" << endl;
-    m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
+    if(m_bgSpell.currentParag)
+        m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
+    if( m_bgSpell.currentTextObj)
+        m_bgSpell.currentTextObj->setBeedSpellCheck(false);
     // Done checking the current paragraph, schedule the next one
     QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
 }
