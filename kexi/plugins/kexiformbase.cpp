@@ -126,7 +126,11 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_urlreq->disconnect(o);
 			m_frame->disconnect(o);
 			m_tabWidget->disconnect(o);
+			m_formMode->disconnect(o);
+
 			m_dbNext->disconnect(o);
+			m_dbPrev->disconnect(o);
+			
 		}
 		void toggleMode(bool m)
 		{
