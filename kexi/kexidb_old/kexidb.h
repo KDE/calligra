@@ -86,6 +86,7 @@ class KexiDB : public QObject
 		virtual KexiDBResult		*getResult();
 
 		virtual KexiDBTableStruct	getStructure(const QString& table);
+		virtual QString	getNativeDataType(const KexiDBField::ColumnType& t);
 
 		QStringList			getColumns(const QString& table);
 

@@ -43,17 +43,16 @@ class MySqlDB : public KexiDB
 	public:
 		MySqlDB(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
 		~MySqlDB();
-		
+
 		/*!
 		 *  connect to mysql-database
 		 */
-		 
+
 //		int		connect(const char *host, const char *user, const char *passwd,
 //					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
 
 		QString		driverName();
-		KexiDB::DBType	dbType() { return KexiDB::RemoteDB; }
-		
+
 		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
 
 		bool		connect(QString host, QString user, QString password, QString socket, QString port);
@@ -62,12 +61,12 @@ class MySqlDB : public KexiDB
 
 		QStringList	databases();
 		QStringList	tables();
-		
+
 		/*!
 		 *  get the last error
 		 */
 		QString		error();
-		
+
 		/*!
 		 * execute a query
 		 */
@@ -77,7 +76,7 @@ class MySqlDB : public KexiDB
 		QString		escape(const QString &str);
 		QString		escape(const QByteArray& str);
 		QString		realEscape(const QString &str);
-		QByteArray	realEscape(const QByteArray &a); 
+		QByteArray	realEscape(const QByteArray &a);
 		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
 			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
 			bool binary, bool unsignedType, const QString& defaultVal);
@@ -97,20 +96,22 @@ class MySqlDB : public KexiDB
 		KexiDBResult	*useResult();
 
 		KexiDBResult	*listProcesses();
-		
+
 		int		threadID();
-		 
+
 		unsigned long	insertID();
 		unsigned long	affectedRows();
 
 		unsigned long	lastAuto();
 
 		KexiDBTableStruct	getStructure(const QString& table);
+		QString	getNativeDataType(const KexiDBField::ColumnType& t);
+		static KexiDBField::ColumnType getInternalDataType(int t);
 
 	protected:
 		int		reconnect();
 		void		initCheckUpdate();
-		
+
 		MYSQL		*m_mysql;
 		bool		m_connected;
 		bool		m_connectedDB;
@@ -121,7 +122,7 @@ class MySqlDB : public KexiDB
 		QString		m_host;
 		QString		m_user;
 		QString		m_password;
-	
+
 	private:
 		QString createDefinition(const QString& field, KexiDBField::ColumnType dtype, int length, int precision,
 			KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal);

@@ -47,7 +47,7 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiD
 }
 
 KexiDBRecord*
-MySqlDB::queryRecord(QString querystatement, bool buffer)
+MySqlDB::queryRecord(QString querystatement, bool /*buffer*/)
 {
 	kdDebug() << "MySqlDB::queryRecord()" << endl;
 	try
@@ -104,7 +104,6 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	}
 
 	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
-	throw KexiDBError(0, mysql_error(m_mysql));
 	return false;
 }
 
@@ -112,19 +111,11 @@ bool
 MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port, QString db, bool create)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
-	kdDebug() << "   host: " << host << endl;
-	kdDebug() << "   user: " << user << endl;
-	kdDebug() << "   pass: " << password << endl;
-	kdDebug() << "   socket: " << socket << endl;
-	kdDebug() << "   port: " << port << endl;
-	kdDebug() << "   db: " << db << endl;
-
-
 	if(m_connected && host == m_host && user == m_user && password == m_password && socket == m_socket
 		&& port.toUInt() == m_port)
 	{
 		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
-
+		
 		//create new database if needed
 		if(create)
 		{
@@ -134,10 +125,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		query("use "+db);
 		kdDebug() << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
 		if(mysql_errno(m_mysql) != 0)
-		{
-			throw KexiDBError(0, mysql_error(m_mysql));
 			return false;
-		}
 		m_connectedDB = true;
 		return true;
 	}
@@ -166,7 +154,6 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		}
 	}
 
-	throw KexiDBError(0, mysql_error(m_mysql));
 	return false;
 }
 
@@ -329,7 +316,7 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 	const QString& defaultVal)
 {
 	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
-	kdDebug() << "MySqlDB::alterField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
+	kdDebug() << "MySqlDB::alterField: DataType: " << getNativeDataType(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
 	qstr += " " + createDefinition(newFieldName, dtype, length, precision, constraints, binary,
 		unsignedType, defaultVal);
@@ -344,7 +331,7 @@ MySqlDB::createField(const QString& table, const QString& field, KexiDBField::Co
 	bool unsignedType, const QString& defaultVal)
 {
 	kdDebug() << "MySqlDB::createField: Table: " << table << " Field: " << field << endl;
-	kdDebug() << "MySqlDB::createField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
+	kdDebug() << "MySqlDB::createField: DataType: " << getNativeDataType(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " ADD " + field;
 	qstr += " " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
 	
@@ -353,12 +340,12 @@ MySqlDB::createField(const QString& table, const QString& field, KexiDBField::Co
 }
 
 QString
-MySqlDB::createDefinition(const QString& field, KexiDBField::ColumnType dtype, int length, int precision,
+MySqlDB::createDefinition(const QString& /*field*/, KexiDBField::ColumnType dtype, int length, int precision,
  KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal)
 {
-	QString qstr = MySqlField::sql2string(dtype);
+	QString qstr = getNativeDataType(dtype);
 	bool allowUnsigned = false;
-	
+
 	switch(dtype)
 	{
 		case KexiDBField::SQLInteger:
@@ -386,10 +373,11 @@ MySqlDB::createDefinition(const QString& field, KexiDBField::ColumnType dtype, i
 		case KexiDBField::SQLVarBinary:
 		case KexiDBField::SQLInterval:
 		case KexiDBField::SQLLongVarchar:
+		case KexiDBField::SQLLastType:
 			break;
 	}
-	
-	if(constraints & KexiDBField::NotNull)
+
+	if(constraints & KexiDBField::CCNotNull)
 	{
 		qstr += " NOT NULL";
 	}
@@ -397,27 +385,27 @@ MySqlDB::createDefinition(const QString& field, KexiDBField::ColumnType dtype, i
 	{
 		qstr += " NULL";
 	}
-	
+
 	if(binary && (dtype == KexiDBField::SQLVarchar))
 	{
 		qstr += " BINARY";
 	}
-	
+
 	if(unsignedType && allowUnsigned)
 	{
 		qstr += " UNSIGNED";
 	}
-	
+
 	if(defaultVal != "")
 	{
 		qstr += " DEFAULT " + defaultVal;
 	}
-	
-	if(constraints & KexiDBField::AutoInc)
+
+	if(constraints & KexiDBField::CCAutoInc)
 	{
 		qstr += " AUTO_INCREMENT";
 	}
-	
+
 	return qstr;
 }
 
@@ -431,17 +419,123 @@ MySqlDB::getStructure(const QString& table)
 	if(result)
 	{
 		MYSQL_FIELD* field;
-		int i = 0;
-		
+
 		while((field = mysql_fetch_field(result)))
 		{
-			dbStruct.append(new MySqlField(field, i++));
+			KexiDBField* f = new KexiDBField(field->table);
+			f->setName(field->name);
+			f->setColumnType(getInternalDataType(field->type));
+			f->setLength(field->length);
+			f->setPrecision(field->decimals);
+			f->setUnsigned(field->flags & UNSIGNED_FLAG);
+			f->setBinary(field->flags & BINARY_FLAG);
+			f->setDefaultValue(field->def);
+			f->setAutoIncrement(field->flags & AUTO_INCREMENT_FLAG);
+			f->setPrimaryKey(field->flags & PRI_KEY_FLAG);
+			f->setUniqueKey(field->flags & UNIQUE_KEY_FLAG);
+			f->setNotNull(field->flags & NOT_NULL_FLAG);
+			dbStruct.append(f);
 		}
-		
+
 		mysql_free_result(result);
 	}
-	
+
 	return dbStruct;
+}
+
+QString
+MySqlDB::getNativeDataType(const KexiDBField::ColumnType& t)
+{
+	switch(t)
+	{
+		case KexiDBField::SQLLongVarchar:
+			return "TEXT";
+		case KexiDBField::SQLVarchar:
+			return "VARCHAR";
+		case KexiDBField::SQLInteger:
+			return "INTEGER";
+		case KexiDBField::SQLSmallInt:
+			return "SMALLINT";
+		case KexiDBField::SQLTinyInt:
+			return "TINYINT";
+		case KexiDBField::SQLNumeric:
+			return "NUMERIC";
+		case KexiDBField::SQLDouble:
+			return "DOUBLE";
+		case KexiDBField::SQLBigInt:
+			return "BIGINT";
+		case KexiDBField::SQLDecimal:
+			return "DECIMAL";
+		case KexiDBField::SQLFloat:
+			return "FLOAT";
+		case KexiDBField::SQLBinary:
+			return "BLOB";
+		case KexiDBField::SQLLongVarBinary:
+			return "LONGBLOB";
+		case KexiDBField::SQLVarBinary:
+			return "BLOB";
+		case KexiDBField::SQLDate:
+			return "DATE";
+		case KexiDBField::SQLTime:
+			return "TIME";
+		case KexiDBField::SQLTimeStamp:
+			return "TIMESTAMP";
+		case KexiDBField::SQLBoolean:
+			return "BOOL";
+		case KexiDBField::SQLInterval:
+			return "ENUM";
+		case KexiDBField::SQLInvalid:
+		case KexiDBField::SQLLastType:
+			return QString::null;
+	}
+
+	return QString::null;
+}
+
+KexiDBField::ColumnType
+MySqlDB::getInternalDataType(int t)
+{
+	switch(t)
+	{
+		case FIELD_TYPE_NULL:
+			return KexiDBField::SQLInvalid;
+		case FIELD_TYPE_INT24:
+		case FIELD_TYPE_LONGLONG:
+			return KexiDBField::SQLBigInt;
+		case FIELD_TYPE_NEWDATE:
+		case FIELD_TYPE_DATE:
+			return KexiDBField::SQLDate;
+		case FIELD_TYPE_DECIMAL:
+			return KexiDBField::SQLDecimal;
+		case FIELD_TYPE_DOUBLE:
+			return KexiDBField::SQLDouble;
+		case FIELD_TYPE_FLOAT:
+			return KexiDBField::SQLFloat;
+		case FIELD_TYPE_LONG:
+		case FIELD_TYPE_YEAR:
+			return KexiDBField::SQLInteger;
+		case FIELD_TYPE_SHORT:
+			return KexiDBField::SQLSmallInt;
+		case FIELD_TYPE_TIME:
+			return KexiDBField::SQLTime;
+		case FIELD_TYPE_DATETIME:
+		case FIELD_TYPE_TIMESTAMP:
+			return KexiDBField::SQLTimeStamp;
+		case FIELD_TYPE_TINY:
+			return KexiDBField::SQLTinyInt;
+		case FIELD_TYPE_TINY_BLOB:
+		case FIELD_TYPE_MEDIUM_BLOB:
+		case FIELD_TYPE_LONG_BLOB:
+		case FIELD_TYPE_BLOB:
+			return KexiDBField::SQLVarBinary;
+		case FIELD_TYPE_VAR_STRING:
+		case FIELD_TYPE_STRING:
+		case FIELD_TYPE_SET:
+		case FIELD_TYPE_ENUM:
+			return KexiDBField::SQLVarchar;
+
+	}
+	return KexiDBField::SQLInvalid;
 }
 
 MySqlDB::~MySqlDB()

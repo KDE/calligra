@@ -28,9 +28,6 @@ Boston, MA 02111-1307, USA.
 #include "../../kexidbresult.h"
 #include "../../kexidbfield.h"
 
-#include "mysqlfield.h"
-//#include "mysqlrecord.h"
-
 typedef QMap<QString, int> FieldNames;
 typedef QIntDict<KexiDBField> FieldInfo;
 

@@ -199,7 +199,11 @@ KexiDB::getColumns(const QString& table)
 	return res;
 }
 
-
+QString
+KexiDB::getNativeDataType(const KexiDBField::ColumnType& t)
+{
+	return QString::null;
+}
 
 KexiDB::~KexiDB()
 {

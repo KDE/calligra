@@ -31,9 +31,9 @@ Boston, MA 02111-1307, USA.
 #include <qvariant.h>
 #include <qvaluevector.h>
 
-#include "cqlfield.h"
+#include "kexidbfield.h"
 
-typedef QIntDict<CqlField> FieldIndex;
+typedef QIntDict<KexiDBField> FieldIndex;
 typedef QIntDict<CqlString> RecordSet;
 typedef QValueVector<CqlString> DataVector;
 typedef QValueVector<bool> NullVector;

@@ -22,8 +22,8 @@ Boston, MA 02111-1307, USA.
 
 #include <kdebug.h>
 
-#include <mysqlresult.h>
-#include <mysqlfield.h>
+#include "mysqlresult.h"
+#include "mysqldb.h"
 
 MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(parent)
 {
@@ -42,7 +42,18 @@ MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(pare
 		//field name...
 		m_fieldNames.insert(QString::fromLatin1(m_field->name), i);
 		//field infos...
-		MySqlField *f = new MySqlField(m_field, i);
+		KexiDBField* f = new KexiDBField(m_field->table);
+		f->setName(m_field->name);
+		f->setColumnType(MySqlDB::getInternalDataType(m_field->type));
+		f->setLength(m_field->length);
+		f->setPrecision(m_field->decimals);
+		f->setUnsigned(m_field->flags & UNSIGNED_FLAG);
+		f->setBinary(m_field->flags & BINARY_FLAG);
+		f->setDefaultValue(m_field->def);
+		f->setAutoIncrement(m_field->flags & AUTO_INCREMENT_FLAG);
+		f->setPrimaryKey(m_field->flags & PRI_KEY_FLAG);
+		f->setUniqueKey(m_field->flags & UNIQUE_KEY_FLAG);
+		f->setNotNull(m_field->flags & NOT_NULL_FLAG);
 		m_fields.insert(i, f);
 		
 		//incrementing...

@@ -206,8 +206,10 @@ CqlRecord::setupCursor()
 	m_datavector.resize(metalist->size());
 	for(ColumnMetadata *meta = metalist->first(); meta; meta = metalist->next())
 	{
-		CqlField *cfield = new CqlField(meta);
-		m_fields.insert(fields, cfield);
+		KexiDBField *field = new KexiDBField("ask Seth");
+		field->setName(CqlDB::cqlString(meta->name()));
+		field->setColumnType(CqlDB::getInternalDataType(meta->columnType().typeType()));
+		m_fields.insert(fields, field);
 
 //		m_datavector.push_back(CqlString());
 		

@@ -29,13 +29,13 @@ KexiDBResult::KexiDBResult(QObject *parent) : QObject(parent, 0)
 KexiDBField*
 KexiDBResult::fieldInfo(unsigned int)
 {
-	return new KexiDBField(QString::null, 0);
+	return 0;
 }
 
 KexiDBField*
 KexiDBResult::fiedlInfo(QString)
 {
-	return new KexiDBField(QString::null, 0);
+	return 0;
 }
 
 

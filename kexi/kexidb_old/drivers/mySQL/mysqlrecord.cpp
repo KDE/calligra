@@ -25,7 +25,6 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqldb.h"
 #include "mysqlresult.h"
-#include "mysqlfield.h"
 #include "mysqlrecord.h"
 
 MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecord *parent)

@@ -20,8 +20,18 @@
 
 #include "kexidbfield.h"
 
-KexiDBField::KexiDBField(QString, unsigned int)
+KexiDBField::KexiDBField(const QString& t)
 {
+	m_table = t;
+	m_name = "";
+	m_constraints = KexiDBField::CCNone;
+	m_reference = "";
+	m_sqlType = KexiDBField::SQLInvalid;
+	m_length = 0;
+	m_precision = 0;
+	m_unsigned = false;
+	m_binary = false;
+	m_defaultValue = QVariant("");
 }
 
 QVariant::Type
@@ -104,85 +114,194 @@ KexiDBField::typeName(ColumnType sqltype)
 		case SQLInterval:
 			return "Interval";
 		case SQLInvalid:
+		case SQLLastType:
 			return QString::null;
 	}
-	
+
 	return QString::null;
 }
 
 QString
 KexiDBField::name() const
 {
-	return QString::null;
+	return m_name;
 }
 
 QString
 KexiDBField::table() const
 {
-	return QString::null;
+	return m_table;
 }
 
 QVariant::Type
-KexiDBField::type()
+KexiDBField::type() const
 {
-	return QVariant::Invalid;
+	return sql2qt(sqlType());
 }
 
 KexiDBField::ColumnType
-KexiDBField::sqlType()
+KexiDBField::sqlType() const
 {
-	return SQLInvalid;
+	return m_sqlType;
 }
 
-QVariant 
-KexiDBField::defaultValue()
+QVariant
+KexiDBField::defaultValue() const
 {
-	return QVariant::Invalid;
-}
-
-int 
-KexiDBField::length()
-{
-	return 0;
-}
-
-QString
-KexiDBField::sql2string(KexiDBField::ColumnType /*sqltype*/)
-{
-	return QString::null;
-}
-
-KexiDBField::ColumnConstraints
-KexiDBField::constraints()
-{
-	return KexiDBField::None;
-}
-
-QString
-KexiDBField::references()
-{
-	return QString::null;
+	return m_defaultValue;
 }
 
 int
-KexiDBField::precision()
+KexiDBField::length() const
 {
-	return 0;
+	return m_length;
+}
+
+KexiDBField::ColumnConstraints
+KexiDBField::constraints() const
+{
+	return m_constraints;
+}
+
+QString
+KexiDBField::references() const
+{
+	return m_reference;
+}
+
+int
+KexiDBField::precision() const
+{
+	return m_precision;
 }
 
 bool
-KexiDBField::unsignedType()
+KexiDBField::unsignedType() const
 {
-	return false;
+	return m_unsigned;
 }
 
 bool
-KexiDBField::binary()
+KexiDBField::binary() const
 {
-	return false;
+	return m_binary;
 }
 
-KexiDBField::~KexiDBField()
+void
+KexiDBField::setTable(const QString& t)
 {
+	m_table = t;
 }
 
+void
+KexiDBField::setName(const QString& n)
+{
+	m_name = n;
+}
+
+void
+KexiDBField::setColumnType(ColumnType t)
+{
+	m_sqlType = t;
+}
+
+void
+KexiDBField::setConstraints(ColumnConstraints c)
+{
+	m_constraints = c;
+}
+
+void
+KexiDBField::setLength(int l)
+{
+	m_length = l;
+}
+
+void
+KexiDBField::setPrecision(int p)
+{
+	m_precision = p;
+}
+
+void
+KexiDBField::setUnsigned(bool u)
+{
+	m_unsigned = u;
+}
+
+void
+KexiDBField::setBinary(bool b)
+{
+	m_binary = b;
+}
+
+void
+KexiDBField::setDefaultValue(const QVariant& d)
+{
+	m_defaultValue = d;
+}
+
+void
+KexiDBField::setAutoIncrement(bool a)
+{
+	if(a)
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints | KexiDBField::CCAutoInc);
+	}
+	else if(!a && (m_constraints & KexiDBField::CCAutoInc))
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints ^ KexiDBField::CCAutoInc);
+	}
+}
+
+void
+KexiDBField::setPrimaryKey(bool p)
+{
+	if(p)
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints | KexiDBField::CCPrimaryKey);
+	}
+	else if(!p && (m_constraints & KexiDBField::CCPrimaryKey))
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints ^ KexiDBField::CCPrimaryKey);
+	}
+}
+
+void
+KexiDBField::setUniqueKey(bool u)
+{
+	if(u)
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints | KexiDBField::CCUnique);
+	}
+	else if(!u && (m_constraints & KexiDBField::CCUnique))
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints ^ KexiDBField::CCUnique);
+	}
+}
+
+void
+KexiDBField::setForeignKey(bool f)
+{
+	if(f)
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints | KexiDBField::CCForeignKey);
+	}
+	else if(!f && (m_constraints & KexiDBField::CCForeignKey))
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints ^ KexiDBField::CCForeignKey);
+	}
+}
+
+void
+KexiDBField::setNotNull(bool n)
+{
+	if(n)
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints | KexiDBField::CCNotNull);
+	}
+	else if(!n && (m_constraints & KexiDBField::CCNotNull))
+	{
+		m_constraints = static_cast<KexiDBField::ColumnConstraints>(m_constraints ^ KexiDBField::CCNotNull);
+	}
+}

@@ -26,7 +26,6 @@
 
 class KexiDBField
 {
-
 	public:
 		enum ColumnType
 		{
@@ -48,21 +47,22 @@ class KexiDBField
 			SQLTimeStamp,
 			SQLTinyInt,
 			SQLVarBinary,
-			SQLVarchar
+			SQLVarchar,
+			SQLLastType	// This line should be at the end of the enum!
 		};
 
 		enum ColumnConstraints
 		{
-			None = 0,
-			AutoInc = 1,            
-			Unique = 2,
-			PrimaryKey = 4,
-			ForeignKey = 8,
-			NotNull = 16
+			CCNone = 0,
+			CCAutoInc = 1,
+			CCUnique = 2,
+			CCPrimaryKey = 4,
+			CCForeignKey = 8,
+			CCNotNull = 16
  		};
 
-		KexiDBField(QString table, unsigned int field);
-		virtual ~KexiDBField();
+		KexiDBField(const QString& t);
+		virtual ~KexiDBField() {}
 
 		static QVariant::Type sql2qt(ColumnType sqltype);
 		static QString typeName(ColumnType sqltype);
@@ -73,42 +73,67 @@ class KexiDBField
 		/*!
 		 *	@returns true if the field is autoincrement (e.g. integer/numeric)
 		 */
-		bool		auto_increment() { return constraints() & AutoInc; }
+		bool		auto_increment() const { return constraints() & CCAutoInc; }
 		/*!
 		 *	@returns true if the field is a primary key
 		 */
-		bool		primary_key() { return constraints() & PrimaryKey; }
+		bool		primary_key() const { return constraints() & CCPrimaryKey; }
 		/*!
 		 *	@returns true if the field is an unique key
 		 */
-		bool		unique_key() { return constraints() & Unique; }
+		bool		unique_key() const { return constraints() & CCUnique; }
 		/*!
 		 *	@returns true if the field is a foreign key
 		 */
-		bool		foreign_key() { return constraints() & ForeignKey; }
+		bool		foreign_key() const { return constraints() & CCForeignKey; }
 		/*!
 		 *	@returns true if the field is not allowed to be null
 		 */
-		bool		not_null() { return constraints() & NotNull; }
+		bool		not_null() const { return constraints() & CCNotNull; }
 		/*!
 		 *	@returns the constraints on this column
 		 */
-		virtual ColumnConstraints		constraints();
+		virtual ColumnConstraints		constraints() const;
 
 		/*!
 		 *	@returns the table.column that this field references or QString::null if !foreign_key()
 		 */
-		virtual QString		references();
+		virtual QString		references() const;
 
-		virtual QVariant::Type	type();
-		virtual ColumnType	sqlType();
-		virtual QVariant defaultValue();
-		virtual int length();
-		virtual int precision(); // for numeric and other fields that have both length and precision
-		virtual bool unsignedType(); // if the type has the unsigned attribute
-		virtual bool binary();
+		virtual QVariant::Type	type() const;
+		virtual ColumnType	sqlType() const;
+		virtual QVariant defaultValue() const;
+		virtual int length() const;
+		virtual int precision() const; // for numeric and other fields that have both length and precision
+		virtual bool unsignedType() const; // if the type has the unsigned attribute
+		virtual bool binary() const;
 
-		static QString sql2string(KexiDBField::ColumnType sqltype);
+		void setTable(const QString& t);
+		void setName(const QString& n);
+		void setColumnType(ColumnType t);
+		void setConstraints(ColumnConstraints c);
+		void setLength(int l);
+		void setPrecision(int p);
+		void setUnsigned(bool u);
+		void setBinary(bool b);
+		void setDefaultValue(const QVariant& d);
+		void setAutoIncrement(bool a);
+		void setPrimaryKey(bool p);
+		void setUniqueKey(bool u);
+		void setForeignKey(bool f);
+		void setNotNull(bool n);
+
+	private:
+		QString m_table;
+		QString m_name;
+		QString m_reference;
+		ColumnType m_sqlType;
+		ColumnConstraints m_constraints;
+		int m_length;
+		int m_precision;
+		bool m_unsigned;
+		bool m_binary;
+		QVariant m_defaultValue;
 };
 
 #endif

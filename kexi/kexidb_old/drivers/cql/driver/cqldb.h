@@ -55,6 +55,7 @@ class CqlDB : public KexiDB
 		static QString	cqlString(const CqlString &str);
 		static QString	cqlFixedString(const CqlFixedLengthString &str);
 		static QString	errorText(CqlException &ex);
+		static KexiDBField::ColumnType getInternalDataType(int t);
 
 	private:
 		SqlHandle	*m_db;

@@ -175,6 +175,57 @@ CqlDB::errorText(CqlException &ex)
 	return cqlString(ex.errorText());
 }
 
+static KexiDBField::ColumnType
+CqlDB::getInternalDataType(int t)
+{
+	switch(t)
+	{
+		case CqlConstants::CQL_LONGVARCHAR:
+		case CqlConstants::CQL_CHAR:
+		case CqlConstants::CQL_CHARUC:
+		case CqlConstants::CQL_VARCHAR:
+			return KexiDBField::SQLVarchar;
+
+		case CqlConstants::CQL_INTEGER:
+			return KexiDBField::SQLInteger;
+
+		case CqlConstants::CQL_BIGINT:
+			return KexiDBField::SQLBigInt;
+
+		case CqlConstants::CQL_LONGVARBINARY:
+		case CqlConstants::CQL_VARBINARY:
+			return KexiDBField::SQLBoolean;
+
+		case CqlConstants::CQL_DATE:
+			return KexiDBField::SQLDate;
+
+		case CqlConstants::CQL_REAL:
+		case CqlConstants::CQL_DECIMAL:
+			return KexiDBField::SQLDecimal;
+
+		case CqlConstants::CQL_FLOAT:
+			return KexiDBField::SQLFloat;
+
+		case CqlConstants::CQL_SMALLINT:
+			return KexiDBField::SQLSmallInt;
+
+		case CqlConstants::CQL_TIME:
+		case CqlConstants::CQL_TIMESTAMP:
+		case CqlConstants::CQL_TINYINT:
+
+		case CqlConstants::CQL_COLUMN_UNDEFINED_TYPE:
+			return KexiDBField::SQLInvalid;
+
+		case CqlConstants::CQL_BINARY:
+		case CqlConstants::CQL_BIT:
+//			return SqlBlob;
+			return KexiDBField::SQLVarchar;
+
+		default:
+			return KexiDBField::SQLVarchar;
+	}
+}
+
 CqlDB::~CqlDB()
 {
 }
