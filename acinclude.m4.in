@@ -643,9 +643,15 @@ if test "$have_kde" != "yes"; then
  else
   ac_kde_prefix=$prefix
  fi
- AC_MSG_RESULT(["will be installed in" $ac_kde_prefix])
+ if test "$exec_prefix" = NONE; then
+  ac_kde_exec_prefix=$ac_kde_prefix
+  AC_MSG_RESULT([will be installed in $ac_kde_prefix])
+ else
+  ac_kde_exec_prefix=$exec_prefix
+  AC_MSG_RESULT([will be installed in $ac_kde_prefix and $ac_kde_exec_prefix])
+ fi
 
- kde_libraries=${ac_kde_prefix}/lib
+ kde_libraries=${ac_kde_exec_prefix}/lib
  kde_includes=${ac_kde_prefix}/include
 
 else
@@ -1846,4 +1852,38 @@ AC_SUBST(LIBPYTHON)
 
 AC_MSG_RESULT(header $python_incdir library $python_libdir)
 
+])
+
+
+AC_DEFUN(KDE_CHECK_STL,
+[
+    AC_MSG_CHECKING([for type of STL implementation])
+    AC_CACHE_VAL(kde_cv_stl_type,
+    [
+	cat > conftest.C << EOF
+#include <list.h>
+    
+#ifdef __SGI_STL_LIST_H
+Type: SGI
+#else
+Type: HP
+#endif
+
+EOF
+	try='$ac_cpp conftest.C | grep "Type:" | tail -1 | sed -e "s#Type: ##"'
+	kde_cv_stl_type=
+	if test=`eval $try 2> /dev/null`; then
+	    kde_cv_stl_type=$test;
+	fi
+	
+    ])
+
+    AC_MSG_RESULT($kde_cv_stl_type)
+    if test "$kde_cv_stl_type" = "SGI";
+    then
+	AC_DEFINE_UNQUOTED(HAVE_SGI_STL) 
+    else
+        AC_DEFINE_UNQUOTED(HAVE_HP_STL)
+    fi
+    
 ])
