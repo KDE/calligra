@@ -134,6 +134,7 @@ KWordFilter::parse (const QString & filename)
   int BottomMargin = 36;
   int LeftMarginAdjust = 0;
   int RightMarginAdjust = 0;
+  int lm = 0, rm = 0;
   Token::Align align = Token::Left;
   double linespace = 1.0;
 
@@ -259,8 +260,10 @@ KWordFilter::parse (const QString & filename)
           layout.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
           layout.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
           layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
-          layout.append( "  <INDENTS left=\"" + QString::number( LeftMargin + LeftMarginAdjust - frameLeftMargin ) + "\"" + 
-                         " right=\"" + QString::number( RightMargin + RightMarginAdjust - frameRightMargin ) + "\"" +
+          lm = LeftMargin + LeftMarginAdjust - frameLeftMargin;
+          rm = RightMargin + RightMarginAdjust - frameRightMargin;
+          layout.append( "  <INDENTS left=\"" + QString::number( QMAX( 0, lm ) ) + "\"" + 
+                         " right=\"" + QString::number( QMAX( 0 , rm ) ) + "\"" +
                          " first=\"0\" />\n" );
           layout.append( "  <OFFSETS />\n" );
           layout.append( "  <PAGEBREAKING />\n" );
