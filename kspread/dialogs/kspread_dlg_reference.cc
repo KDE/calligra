@@ -39,6 +39,7 @@
 #include <qlayout.h>
 
 #include <kbuttonbox.h>
+#include <kstdguiitem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
@@ -63,9 +64,9 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   KButtonBox *bb = new KButtonBox( this );
   //  bb->addStretch();
   m_pEdit = bb->addButton( i18n("&Edit") );
-  m_pOk = bb->addButton( i18n("&OK") );
+  m_pOk = bb->addButton( KStdGuiItem::ok() );
   m_pOk->setDefault( TRUE );
-  m_pCancel = bb->addButton( i18n( "&Cancel" ) );
+  m_pCancel = bb->addButton( KStdGuiItem::cancel() );
   bb->layout();
   lay1->addWidget( bb );
 
@@ -350,7 +351,7 @@ void KSpreadEditAreaName::slotOk()
 
   KSpreadSheet *sheet;
 
-  for ( sheet = m_pView->doc()->map()->firstTable(); sheet != 0L; 
+  for ( sheet = m_pView->doc()->map()->firstTable(); sheet != 0L;
         sheet = m_pView->doc()->map()->nextTable() )
   {
     sheet->refreshChangeAreaName( m_areaName->text() );

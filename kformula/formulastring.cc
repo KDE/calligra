@@ -19,7 +19,6 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qstringlist.h>
 #include <qtextedit.h>
 #include <qtooltip.h>
@@ -28,6 +27,8 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 #include "formulastring.h"
 #include "kformula_view.h"
@@ -57,23 +58,20 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
 
     QHBoxLayout* Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
 
-    buttonHelp = new QPushButton( this, "buttonHelp" );
-    buttonHelp->setText( i18n( "&Help" ) );
+    buttonHelp = new KPushButton( KStdGuiItem::help(), this, "buttonHelp" );
     buttonHelp->setAccel( 4144 );
     buttonHelp->setAutoDefault( TRUE );
     Layout1->addWidget( buttonHelp );
     spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout1->addItem( spacer );
 
-    buttonOk = new QPushButton( this, "buttonOk" );
-    buttonOk->setText( i18n( "&OK" ) );
+    buttonOk = new KPushButton( KStdGuiItem::ok(), this, "buttonOk" );
     buttonOk->setAccel( 0 );
     buttonOk->setAutoDefault( TRUE );
     buttonOk->setDefault( TRUE );
     Layout1->addWidget( buttonOk );
 
-    buttonCancel = new QPushButton( this, "buttonCancel" );
-    buttonCancel->setText( i18n( "&Cancel" ) );
+    buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "buttonCancel" );
     buttonCancel->setAccel( 0 );
     buttonCancel->setAutoDefault( TRUE );
     Layout1->addWidget( buttonCancel );

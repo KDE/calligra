@@ -472,7 +472,7 @@ KarbonView::editPurgeHistory()
 	if( KMessageBox::warningContinueCancel( this,
 			i18n( "This action cannot be undone later. Do you really want to continue?" ),
 			i18n( "Purge History" ),
-			i18n( "C&ontinue" ),		// TODO: is there a constant for this?
+			KStdGuiItem::cont(),
 			"edit_purge_history" ) )
 	{
 		// Use the VCleanUp command to remove "deleted"

@@ -629,7 +629,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       int ret = KMessageBox::warningContinueCancel(
           0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
                   "When you open it with this version of KSpread, some information may be lost.").arg(d->syntaxVersion),
-          i18n("File Format Mismatch"), i18n("Continue") );
+          i18n("File Format Mismatch"), KStdGuiItem::cont() );
       if ( ret == KMessageBox::Cancel )
       {
           setErrorMessage( "USER_CANCELED" );

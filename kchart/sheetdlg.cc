@@ -16,8 +16,9 @@
 #include "sheetdlg.moc"
 #include <kapplication.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
-#include <qpushbutton.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 
@@ -29,10 +30,10 @@ SheetDlg::SheetDlg( QWidget *parent, const char *name )
   t = new Sheet(this,"Sheet",TABLE_SIZE);
   t->move(0,0);
 
-  cancel = new QPushButton(i18n("&Cancel"),this);
+  cancel = new KPushButton(KStdGuiItem::cancel(),this);
   cancel->resize(cancel->sizeHint());
 
-  ok = new QPushButton(i18n("&OK"),this);
+  ok = new KPushButton(KStdGuiItem::ok(),this);
   ok->resize(cancel->sizeHint());
 
   usedrowsLA = new QLabel( i18n("# Rows:" ), this );

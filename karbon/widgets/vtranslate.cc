@@ -21,10 +21,11 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qstring.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 #include "vtranslate.h"
 
@@ -61,7 +62,7 @@ VTranslate::VTranslate( QWidget* parent, const char* name )
 	m_buttonDuplicate = new QPushButton(i18n("&Duplicate"), this);
 	mainlayout->addWidget(m_buttonDuplicate);
 	mainlayout->addSpacing(1);
-	m_buttonApply = new QPushButton(i18n("&Apply"), this);
+	m_buttonApply = new KPushButton(KStdGuiItem::apply(), this);
 	mainlayout->addWidget(m_buttonApply);
 
 	mainlayout->activate();

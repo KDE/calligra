@@ -38,12 +38,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 #include <qframe.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qvariant.h>
 #include <qwhatsthis.h>
@@ -110,8 +111,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_buttonOk->setDefault( TRUE );
   Layout5->addWidget( m_buttonOk );
 
-  m_buttonCancel = new QPushButton( this, "m_buttonCancel" );
-  m_buttonCancel->setText( i18n( "&Cancel" ) );
+  m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "m_buttonCancel" );
   m_buttonCancel->setAccel( 276824131 );
   m_buttonCancel->setAutoDefault( TRUE );
   Layout5->addWidget( m_buttonCancel );
