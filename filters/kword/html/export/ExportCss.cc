@@ -625,6 +625,15 @@ bool HtmlCssWorker::doOpenStyles(void)
         // However in XHTML 1.0, you cannot put the style definition into HTML comments
         *m_streamOut << "<!--\n";
     }
+
+    // Say who we are (with the CVS revision number)
+    const QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
+    *m_streamOut << "/* KWORD_CSS_EXPORT ="
+              << strVersion.mid(10).remove('$')
+              << "*/\n";
+
     // TODO: does KWord gives a paper colour?
     *m_streamOut << "BODY\n{\n  background-color: #FFFFFF\n}\n";
 
