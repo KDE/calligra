@@ -448,6 +448,34 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         about.appendChild( title );
         title.appendChild( docinfo.createTextNode( e.text() ) );
     }
+    e = office.namedItem( "dc:subject" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
+        if ( about.isNull() ) {
+            about = docinfo.createElement( "about" );
+            elementDocInfo.appendChild( about );
+        }
+        QDomElement subject = docinfo.createElement( "subject" );
+        about.appendChild( subject );
+        subject.appendChild( docinfo.createTextNode( e.text() ) );
+    }
+    e = office.namedItem( "meta:keywords" ).toElement();
+    if ( !e.isNull() )
+    {
+        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
+        if ( about.isNull() ) {
+            about = docinfo.createElement( "about" );
+            elementDocInfo.appendChild( about );
+        }
+        QDomElement tmp = e.namedItem( "meta:keyword" ).toElement();
+        if ( !tmp.isNull() && !tmp.text().isEmpty() )
+        {
+            QDomElement keyword = docinfo.createElement( "keyword" );
+            about.appendChild( keyword );
+            keyword.appendChild( docinfo.createTextNode( tmp.text() ) );
+        }
+    }
 }
 
 KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip)
@@ -525,7 +553,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
         delete io;
         return KoFilter::StupidError;
     }
-    
+
     QImageIO imageIO( io, "PNG" );
     if ( ! imageIO.read() )
     {
@@ -533,9 +561,9 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
         delete io;
         return KoFilter::StupidError;
     }
-    
+
     io->close();
-    
+
     thumbnail = imageIO.image();
 
     if ( thumbnail.isNull() )
@@ -544,7 +572,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
         delete io;
         return KoFilter::StupidError;
     }
-        
+
     delete io;
 
     kdDebug(30519) << "File " << filename << " loaded!" << endl;
