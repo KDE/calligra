@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=KImageShop
+Exec=kimageshop
+CORBAExec=kimageshop --server
+Comment=Image processing application
+MimeType=application/x-kimageshop;image/gif
+X-KDE-RepoIds=IDL:KImageShop/DocumentFactory:1.0#KImageShop
+X-KDE-ActivationMode=shared
+Type=OpenPart
+Icon=image.xpm
+MiniIcon=image.xpm
+ServiceTypes=KOfficeDocument

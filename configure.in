@@ -95,7 +95,9 @@ AC_OUTPUT( \
 	kohtml/toolbar/Makefile \
 	kimage/Makefile \
 	kimage/pics/Makefile \
-	kpresenter/Makefile \
+    kimageshop/Makefile \
+    kimageshop/pics/Makefile \
+   	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
 	kpresenter/autoforms/Makefile \
 	kpresenter/autoforms/Arrows/Makefile \

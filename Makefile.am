@@ -1,5 +1,5 @@
 
-SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins servicetypes koshell pics
+SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kimageshop kohtml tools plugins servicetypes koshell pics
 
 AUTOMAKE_OPTIONS = foreign # 1.4
 
