@@ -35,7 +35,7 @@
 #define HELPHEIGHT 160
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
-		: QWidget( parent, name )
+		: QWidget( parent, name, Qt::WRepaintNoErase )
 {
 	QFont font( font() );
 	font.setPointSize( font.pointSize() + 2 );
