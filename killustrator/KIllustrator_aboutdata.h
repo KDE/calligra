@@ -37,12 +37,13 @@ KAboutData * newKIllustratorAboutData()
                                              I18N_NOOP("KIllustrator"),
                                              version, description,
                                              KAboutData::License_GPL,
-                                             "(c) 1998-2001, The KIllustrator Team", 0, 
+                                             "(c) 1998-2001, The KIllustrator Team", 0,
 					     "http://www.koffice.org/killustrator/");
   aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
   aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
   aboutData->addAuthor("Alexander Neundorf", 0, "neundorf@kde.org");
   aboutData->addAuthor("Rob Buis", 0, "rwlbuis@wanadoo.nl");
+  aboutData->addAuthor("Montel Laurent", 0, "lmontel@mandrakesoft.com");
   return aboutData;
 }
 
