@@ -599,19 +599,38 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
         ta = _table;
 
     // Read user specific informations....
-    KConfig *config = KGlobal::config();
-    char hostname[80];
-    struct passwd *p;
+    KConfig config("kofficerc");
+    QString full_name;
+    QString email_addr;
+    QString organization;
+    QString tmp;
+    if( config.hasGroup( "Author" ))
+    {
+        config.setGroup( "Author" );
+        full_name=config.readEntry("full-name","");
+        email_addr=config.readEntry("email", "");
+        organization=config.readEntry("company", "");
+    }
+    else
+    {
+        char hostname[80];
+        struct passwd *p;
 
-    p = getpwuid(getuid());
-    gethostname(hostname, 80);
+        p = getpwuid(getuid());
+        gethostname(hostname, 80);
 
-    config->setGroup("UserInfo");
-    QString full_name = config->readEntry("FullName", p->pw_gecos);
-    QString tmp = p->pw_name;
-    tmp += "@"; tmp += hostname;
-    QString email_addr = config->readEntry("EmailAddress", tmp );
-    QString organization = config->readEntry("Organization");
+        KConfig config2( "emaildefaults", true );
+        config2.setGroup( "Defaults" );
+        QString group = config2.readEntry("Profile","Default");
+        config2.setGroup(QString("PROFILE_%1").arg(group));
+        full_name = config2.readEntry( "FullName", p->pw_gecos );
+
+        tmp = p->pw_name;
+        tmp += "@";
+        tmp += hostname;
+
+        email_addr=config2.readEntry("EmailAddress", tmp);
+    }
 
     tmp = _data;
     int pos = 0;

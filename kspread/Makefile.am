@@ -1,6 +1,6 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 -I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript   \
--I$(top_srcdir)/lib/kformula -I$(top_srcdir)/interfaces $(all_includes)
+-I$(top_srcdir)/interfaces $(all_includes)
 
 ## The part
 kde_module_LTLIBRARIES = libkspreadpart.la

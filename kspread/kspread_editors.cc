@@ -3,11 +3,12 @@
 #include "kspread_view.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
-#include <kformulaedit.h>
 
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qapplication.h>
+
+#include <kdebug.h>
 
 /********************************************
  *
