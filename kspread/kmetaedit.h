@@ -11,13 +11,13 @@ public:
 
     virtual bool isOk() { return TRUE; }
     
-    virtual QString openFile( const char *_file ) { }
-    virtual bool updateFromFile( const char *_file ) { }
-    virtual bool switchToBuffer( const char *_buffer ) { }
-    virtual bool killBuffer( const char *_buffer ) { }
-    virtual bool saveBuffer( const char *_buffer ) { }
-    virtual bool hide() { }
-    virtual bool show() { }
+    virtual QString openFile( const char *_file ) { return QString; }
+    virtual bool updateFromFile( const char *_file ) { return false; }
+    virtual bool switchToBuffer( const char *_buffer ) { return false; }
+    virtual bool killBuffer( const char *_buffer ) { return false; }
+    virtual bool saveBuffer( const char *_buffer ) { return false; }
+    virtual bool hide() { return false; }
+    virtual bool show() { return false; }
 };
 
 KMetaEditor* createEditor();

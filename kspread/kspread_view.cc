@@ -778,7 +778,9 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
     }
     else
       cerr << "Shit! We did not get a view!!!" << endl; */
+    cout << "SYNC1\n" << endl;
     v = doc->createView();
+    cout << "SYNC2\n" << endl;
   }
   catch ( OPParts::Document::MultipleViewsNotSupported &_ex )
   {
@@ -798,10 +800,15 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
   v->setMode( OPParts::Part::ChildMode );
   v->setPartShell( partShell() );
 
+  cout << "SYNC3\n" << endl;
   KSpreadChildFrame *p = new KSpreadChildFrame( this, _child );
+  cout << "SYNC4\n" << endl;
   p->attach( v );
+  cout << "SYNC5\n" << endl;
   p->setGeometry( _child->geometry() );
+  cout << "SYNC6\n" << endl;
   p->show();
+  cout << "SYNC7\n" << endl;
   m_lstFrames.append( p );
   // CORBA::release( p );
   
