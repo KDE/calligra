@@ -194,6 +194,26 @@
 	<Example>COUNT(-5;"KSpread";2) returns 2</Example>
 	<Example>COUNT(5) returns 1</Example>
 	<Related>SUM</Related>
+	<Related>COUNTIF</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COUNTIF</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Range</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Criteria</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The COUNTIF function returns the number of cells in the given range that meet the given criteria.</Text>
+	<Syntax>COUNTIF(range;criteria)</Syntax>
+	<Example>COUNTIF(A2:A3;"14") returns 1 if A1 is -4 and A2 is 14</Example>
+	<Related>COUNT</Related>
       </Help>
     </Function>
 

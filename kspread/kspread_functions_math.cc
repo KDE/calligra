@@ -1212,6 +1212,67 @@ bool kspreadfunc_count( KSContext& context )
   return b;
 }
 
+static int kspreadfunc_countif_helper( KSContext& context, KSValue* value, 
+  const QString& criteria )
+{
+  if( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
+  {
+    bool ok = false;
+    double num = KGlobal::locale()->readNumber( criteria, &ok );
+    if( !ok ) return 0;
+    return num == value->doubleValue() ? 1 : 0;
+  }
+
+  if( KSUtil::checkType( context, value, KSValue::StringType, false ) )
+  {
+    return criteria == value->stringValue() ? 1 : 0;
+  }
+
+  if( KSUtil::checkType( context, value, KSValue::BoolType, false ) )
+  {
+    bool criteria_bool = criteria.lower() == "true";
+    if( !value && (criteria.lower() != "false") ) return 0;
+    return criteria_bool == value->boolValue() ? 1 : 0;
+  }
+
+  if( KSUtil::checkType( context, value, KSValue::ListType, false ) )
+  {
+    QValueList<KSValue::Ptr>& args = value->listValue();
+    QValueList<KSValue::Ptr>::Iterator it = args.begin();
+    QValueList<KSValue::Ptr>::Iterator end = args.end();
+    
+    int count = 0;
+    for( ; it != end; ++it )
+       if ( !kspreadfunc_countif_helper( context, *it, criteria ) ) count++;
+ 
+    return count;
+  }
+
+  return 0;   
+}
+ 
+// Function: COUNTIF
+// This is a lot simplified !!
+// Not really Excel-compatible as it understands only "equals to" relation
+bool kspreadfunc_countif( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "COUNTIF", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+    return false;
+
+  KSValue* value = args[0];
+  QString criteria = args[1]->stringValue();
+
+  int result = kspreadfunc_countif_helper( context, value, criteria );
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
 // Function: FIB
 bool kspreadfunc_fib( KSContext& context )
 {

@@ -55,6 +55,7 @@ bool kspreadfunc_atan2( KSContext& context );
 bool kspreadfunc_abs( KSContext& context );
 bool kspreadfunc_ceil( KSContext& context );
 bool kspreadfunc_count( KSContext& context );
+bool kspreadfunc_countif( KSContext& context );
 bool kspreadfunc_cur( KSContext& context );
 bool kspreadfunc_div( KSContext& context );
 bool kspreadfunc_eps( KSContext& context );
@@ -484,6 +485,7 @@ static const functionEntry funcTab[] = {
   { "CEIL", kspreadfunc_ceil },
   { "COMPLEX", kspreadfunc_complex },
   { "COUNT", kspreadfunc_count },
+  { "COUNTIF", kspreadfunc_countif },
   { "CUR", kspreadfunc_cur },
   { "DELTA", kspreadfunc_delta },
   { "DIV", kspreadfunc_div },
