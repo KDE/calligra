@@ -17,11 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <paragdia.h>
-#include <kwdoc.h>
-#include <kcharselectdia.h>
-#include <defs.h>
+#include "paragdia.h"
+#include "paragdia_p.h"
+#include "kwdoc.h"
+#include "counter.h"
+#include "defs.h"
 
+#include <kcharselectdia.h>
 #include <qwidget.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -954,9 +956,6 @@ void KWParagDia::setupTab5()
 	bModify->setEnabled(false);
       }
 
-    _tabList.setAutoDelete( TRUE );
-
-
     connect(bAdd,SIGNAL(clicked ()),this,SLOT(addClicked()));
     connect(bModify,SIGNAL(clicked ()),this,SLOT(modifyClicked()));
     connect(bDel,SIGNAL(clicked ()),this,SLOT(delClicked()));
@@ -983,35 +982,29 @@ void KWParagDia::addClicked()
       bDel->setEnabled(true);
       bModify->setEnabled(true);
 
-      KoTabulator *tab=new KoTabulator;
+      KoTabulator tab;
       if(rtLeft->isChecked())
-	tab->type=T_LEFT;
+	tab.type=T_LEFT;
       else if(rtCenter->isChecked())
-	tab->type=T_CENTER;
+	tab.type=T_CENTER;
       else if(rtRight->isChecked())
-	tab->type=T_RIGHT;
+	tab.type=T_RIGHT;
       else if(rtDecimal->isChecked())
-	tab->type=T_DEC_PNT;
+	tab.type=T_DEC_PNT;
       else
-	tab->type=T_LEFT;
+	tab.type=T_LEFT;
       double val=eTabPos->text().toDouble();
       switch ( unit )
 	{
 	case U_MM:
-	  tab->mmPos=val;
-	  tab->inchPos=MM_TO_INCH(val);
-	  tab->ptPos=MM_TO_POINT(val);
+	  tab.ptPos=MM_TO_POINT(val);
 	  break;
 	case U_INCH:
-	  tab->mmPos=INCH_TO_MM(val);
-	  tab->inchPos=val;
-	  tab->ptPos= INCH_TO_POINT(val);
+	  tab.ptPos= INCH_TO_POINT(val);
 	  break;
 	case U_PT:
 	default:
-	  tab->mmPos=POINT_TO_MM(val);
-	  tab->inchPos=POINT_TO_INCH(val);
-	  tab->ptPos=val;
+	  tab.ptPos=val;
 	}
       _tabList.append(tab);
       eTabPos->setText("");
@@ -1020,26 +1013,15 @@ void KWParagDia::addClicked()
 
 bool KWParagDia::findExistingValue(double val)
 {
-  KoTabulator *tmp;
-  for ( tmp=_tabList.first(); tmp != 0; tmp= _tabList.next() )
+    KoTabulatorList::Iterator it = _tabList.begin();
+    for ( ; it != _tabList.end(); ++it )
     {
-       switch ( unit )
-	 {
-	 case U_MM:
-	   if(tmp->mmPos==val)
-	     return true;
-	   break;
-	 case U_INCH:
-	   if(tmp->inchPos==val)
-	     return true;
-	   break;
-	 case U_PT:
-	   if(tmp->ptPos==val)
-	      return true;
-	   break;
-	 }
+        KWUnit u;
+        u.setPT( ( *it ).ptPos );
+        if ( u.value( unit ) == val )
+            return true;
     }
-  return false;
+    return false;
 }
 
 /*================================================================*/
@@ -1047,7 +1029,7 @@ void KWParagDia::modifyClicked()
 {
   if(!eTabPos->text().isEmpty() && lTabs->currentItem()!=-1)
     {
-       _tabList.remove(lTabs->currentItem());
+       _tabList.remove( _tabList.at( lTabs->currentItem() ) );
       lTabs->removeItem(lTabs->currentItem());
       addClicked();
       eTabPos->setText("");
@@ -1063,7 +1045,7 @@ void KWParagDia::delClicked()
     {
         lTabs->removeItem(lTabs->currentItem());
         m_bListTabulatorChanged=true;
-        _tabList.remove(lTabs->currentItem());
+        _tabList.remove( _tabList.at( lTabs->currentItem() ) );
         eTabPos->setText("");
         if(lTabs->count()==0)
 	{
@@ -1081,73 +1063,31 @@ void KWParagDia::delClicked()
 
 void KWParagDia::setActifItem(double value)
 {
-  KoTabulator *tmp;
-  for ( tmp=_tabList.first(); tmp != 0; tmp= _tabList.next() )
+    KoTabulatorList::Iterator it = _tabList.begin();
+    for ( ; it != _tabList.end(); ++it )
     {
-      switch ( unit )
-	{
-	case U_MM:
-	  if(tmp->mmPos==value)
-	    {
-	      switch(tmp->type)
-		{
-		case T_LEFT:
-		  rtLeft->setChecked(true);
-		  break;
-		case T_CENTER:
-		  rtCenter->setChecked(true);
-		  break;
-		case  T_RIGHT:
-		  rtRight->setChecked(true);
-		  break;
-		case T_DEC_PNT:
-		  rtDecimal->setChecked(true);
-		  break;
-		}
-	    }
-	  break;
-	case U_INCH:
-	  if(tmp->inchPos==value)
-	    {
-	      switch(tmp->type)
-		{
-		case T_LEFT:
-		  rtLeft->setChecked(true);
-		  break;
-		case T_CENTER:
-		  rtCenter->setChecked(true);
-		  break;
-		case  T_RIGHT:
-		  rtRight->setChecked(true);
-		  break;
-		case T_DEC_PNT:
-		  rtDecimal->setChecked(true);
-		  break;
-		}
-	    }
-
-	  break;
-	case U_PT:
-	default:
-	  if(tmp->ptPos==value)
-	    {
-	      switch(tmp->type)
-		{
-		case T_LEFT:
-		  rtLeft->setChecked(true);
-		  break;
-		case T_CENTER:
-		  rtCenter->setChecked(true);
-		  break;
-		case  T_RIGHT:
-		  rtRight->setChecked(true);
-		  break;
-		case T_DEC_PNT:
-		  rtDecimal->setChecked(true);
-		  break;
-		}
-	    }
-	}
+        KWUnit u;
+        u.setPT( ( *it ).ptPos );
+        if ( u.value( unit ) == value )
+        {
+            switch(( *it ).type)
+            {
+            case T_CENTER:
+                rtCenter->setChecked(true);
+                break;
+            case  T_RIGHT:
+                rtRight->setChecked(true);
+                break;
+            case T_DEC_PNT:
+                rtDecimal->setChecked(true);
+                break;
+            case T_LEFT:
+            default:
+                rtLeft->setChecked(true);
+                break;
+            }
+        }
+        break;
     }
 }
 
@@ -1488,27 +1428,21 @@ void KWParagDia::setCounter( Counter _counter )
 }
 
 /*================================================================*/
-void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
+void KWParagDia::setTabList( const KoTabulatorList & tabList )
 {
-    _tabList.clear();
-    QListIterator<KoTabulator> it( *tabList );
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        _tabList.append( t );
+    _tabList = tabList;
+    KoTabulatorList::ConstIterator it = tabList.begin();
+    for ( ; it != tabList.end(); ++it ) {
         switch ( unit )
         {
             case U_MM:
-                lTabs->insertItem(QString::number(t->mmPos));
+                lTabs->insertItem(QString::number(POINT_TO_MM( (*it).ptPos )) );
                 break;
             case U_INCH:
-                lTabs->insertItem(QString::number(t->inchPos));
+                lTabs->insertItem(QString::number(POINT_TO_INCH( (*it).ptPos )) );
                 break;
             case U_PT:
-                lTabs->insertItem(QString::number(t->ptPos));
+                lTabs->insertItem(QString::number((*it).ptPos));
                 break;
         }
     }
@@ -1550,6 +1484,17 @@ KWUnit KWParagDia::lineSpacing() const
     return KWUnit::createUnit( QMAX(eSpacing->text().toDouble(),0), unit );
 }
 
+bool KWParagDia::isBulletChanged() const
+{
+#if 0 // doesn't compile
+    if ( oldLayout.counter )
+        return ( *oldLayout.counter != counter() );
+    else
+        return counter().numbering() != Counter::NUM_NONE;
+#endif
+    return true; // unused anyway
+}
+
 void KWParagDia::setParagLayout( const KWParagLayout & lay )
 {
     setAlign( lay.alignment );
@@ -1558,7 +1503,8 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     setRightIndent( lay.margins[QStyleSheetItem::MarginRight] );
     setSpaceBeforeParag( lay.margins[QStyleSheetItem::MarginTop] );
     setSpaceAfterParag( lay.margins[QStyleSheetItem::MarginBottom] );
-    setCounter( lay.counter );
+    if ( lay.counter )
+        setCounter( *lay.counter );
     setLineSpacing( lay.lineSpacing );
     setLeftBorder( lay.leftBorder );
     setRightBorder( lay.rightBorder );
@@ -1570,4 +1516,6 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     //border init it's necessary to allow left border works
     m_bAfterInitBorder=true;
 }
+
 #include "paragdia.moc"
+#include "paragdia_p.moc"

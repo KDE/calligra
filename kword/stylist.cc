@@ -18,9 +18,7 @@
 */
 
 #include "kwdoc.h"
-//#include "paraglayout.h"
-//#include "format.h"
-//#include "font.h"
+#include "kwstyle.h"
 #include "stylist.h"
 #include "stylist.moc"
 #include "defs.h"
@@ -641,7 +639,9 @@ void KWStyleEditor::changeNumbering()
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_NUMBERING, doc );
     paragDia->setCaption( i18n( "Numbering" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    paragDia->setCounter( style->paragLayout().counter );
+    if ( !style->paragLayout().counter )
+        style->paragLayout().counter = new Counter; // default one if none set
+    paragDia->setCounter( *style->paragLayout().counter );
     paragDia->show();
 }
 
@@ -684,7 +684,8 @@ void KWStyleEditor::paragDiaOk()
      style->paragLayout().bottomBorder= paragDia->bottomBorder() ;
    } break;
    case KWParagDia::PD_NUMBERING:
-     style->paragLayout().counter= paragDia->counter() ;
+     delete style->paragLayout().counter;
+     style->paragLayout().counter = new Counter( paragDia->counter() );
      break;
    case KWParagDia::PD_TABS:
        style->paragLayout().setTabList(paragDia->tabListTabulator());

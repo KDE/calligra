@@ -18,6 +18,7 @@
 */
 
 #include "kwdoc.h"
+#include "kwview.h"
 #include "kwcommand.h"
 #include "kwtextframeset.h"
 #include "kwgroupmanager.h"
@@ -146,7 +147,7 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
                 p->setParagLayout( m_newParagLayout );
                 break;
             case Alignment:
-                p->setAlignment( m_newParagLayout.alignment );
+                p->setAlign( m_newParagLayout.alignment );
                 break;
             case Counter:
                 p->setCounter( m_newParagLayout.counter );
@@ -198,7 +199,7 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
                 p->setParagLayout( *lit );
                 break;
             case Alignment:
-                p->setAlignment( (*lit).alignment );
+                p->setAlign( (*lit).alignment );
                 break;
             case Counter:
                 //kdDebug() << "KWTextParagCommand::unexecute restoring counter " << (*lit).counter.counterType << endl;

@@ -36,8 +36,8 @@
 #include "kwview.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
-#include "kwview.moc"
 #include "kwframe.h"
+#include "kwstyle.h"
 #include "kwgroupmanager.h"
 #include "defs.h"
 #include "paragdia.h"
@@ -56,6 +56,7 @@
 #include "kcharselectdia.h"
 #include "kwcommand.h"
 #include "kwfont.h"
+#include "counter.h"
 
 
 #include <koMainWindow.h>
@@ -1570,7 +1571,7 @@ void KWView::formatParagraph()
         connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
 
         // Initialize the dialog from the current paragraph's settings
-        KWParagLayout lay = static_cast<KWTextParag *>(edit->getCursor()->parag())->createParagLayout();
+        KWParagLayout lay = static_cast<KWTextParag *>(edit->getCursor()->parag())->paragLayout();
         paragDia->setParagLayout( lay );
         paragDia->show();
         delete paragDia;
@@ -2678,14 +2679,14 @@ void KWView::paragDiaOk()
 }
 
 /*================================================================*/
-void KWView::tabListChanged( QList<KoTabulator>*_tabList )
+void KWView::tabListChanged( const KoTabulatorList & tabList )
 {
     if(!doc->isReadWrite())
         return;
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if (!edit)
         return;
-    edit->setTabList(_tabList);
+    edit->setTabList( tabList );
 }
 
 /*================================================================*/
@@ -3006,8 +3007,8 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
         canvas->setRuler2Frame( 0, 0 );
 #endif
 
-    connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), view,
-             SLOT( tabListChanged( QList<KoTabulator>* ) ) );
+    connect( r_horz, SIGNAL( tabListChanged( const KoTabulatorList & ) ), view,
+             SLOT( tabListChanged( const KoTabulatorList & ) ) );
 
 #if 0
     canvas->forceFullUpdate();
@@ -3088,3 +3089,4 @@ void KWView::printDebug() {
     doc->printDebug();
 }
 
+#include "kwview.moc"

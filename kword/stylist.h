@@ -36,6 +36,7 @@ class QComboBox;
 class QLineEdit;
 class QLabel;
 class QCheckBox;
+class KWStyle;
 
 /******************************************************************/
 /* Class: KWStyleManager                                          */

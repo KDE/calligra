@@ -19,8 +19,10 @@
 
 #include "kwtextparag.h"
 #include "kwutils.h"
+#include "kwstyle.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
+#include "counter.h"
 #include <kdebug.h>
 #include <qdom.h>
 
@@ -33,473 +35,17 @@ do \
     struc inch##attribute = POINT_TO_INCH( struc pt##attribute ); \
 } while (0)
 
-static KWTextParag * const INVALID_PARAG = (KWTextParag *)-1;
-
-Counter::Counter()
-{
-    m_numbering = NUM_NONE;
-    m_style = STYLE_NONE;
-    m_depth = 0;
-    m_startNumber = 1;
-    m_prefix = QString::null;
-    m_suffix = '.';
-    m_customBullet.character = QChar( '-' );
-    m_customBullet.font = QString::null;
-    invalidate();
-}
-
-bool Counter::operator==( const Counter & c2 ) const
-{
-    return (m_numbering==c2.m_numbering &&
-            m_style==c2.m_style &&
-            m_depth==c2.m_depth &&
-            m_startNumber==c2.m_startNumber &&
-            m_prefix==c2.m_prefix &&
-            m_suffix==c2.m_suffix &&
-            m_customBullet.character==c2.m_customBullet.character &&
-            m_customBullet.font==c2.m_customBullet.font &&
-            m_custom==c2.m_custom);
-
-}
-
-QString Counter::custom() const
-{
-    return m_custom;
-}
-
-QChar Counter::customBulletCharacter() const
-{
-    return m_customBullet.character;
-}
-
-QString Counter::customBulletFont() const
-{
-    return m_customBullet.font;
-}
-
-unsigned int Counter::depth() const
-{
-    return m_depth;
-}
-
-void Counter::invalidate()
-{
-    m_cache.number = -1;
-    m_cache.text = QString::null;
-    m_cache.width = -1;
-    m_cache.parent = INVALID_PARAG;
-}
-
-bool Counter::isBullet() const
-{
-    switch ( style() )
-    {
-    case STYLE_DISCBULLET:
-    case STYLE_SQUAREBULLET:
-    case STYLE_CIRCLEBULLET:
-    case STYLE_CUSTOMBULLET:
-        return true;
-    default:
-        return false;
-    }
-}
-
-void Counter::load( QDomElement & element )
-{
-    m_numbering = static_cast<Numbering>( element.attribute("numberingtype").toInt() );
-    m_style = static_cast<Style>( element.attribute("type").toInt() );
-    m_depth = element.attribute("depth").toInt();
-    m_customBullet.character = QChar( element.attribute("bullet").toInt() );
-    m_prefix = correctQString( element.attribute("lefttext") );
-    m_suffix = correctQString( element.attribute("righttext") );
-    QString s = element.attribute("start");
-    if ( s[0].isDigit() )
-        m_startNumber = s.toInt();
-    else // support for very-old files
-        m_startNumber = s.lower()[0].latin1() - 'a' + 1;
-    m_customBullet.font = correctQString( element.attribute("bulletfont") );
-    m_custom = correctQString( element.attribute("customdef") );
-    invalidate();
-}
-
-int Counter::number( const KWTextParag *paragraph )
-{
-    // Return cached value if possible.
-    if ( m_cache.number != -1 )
-        return m_cache.number;
-
-    // Go looking for another paragraph at the same level or higher level.
-    KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
-    Counter *otherCounter;
-
-    switch ( m_numbering )
-    {
-    case NUM_NONE:
-        // This should not occur!
-        m_cache.number = 0;
-        break;
-    case NUM_CHAPTER:
-        m_cache.number = m_startNumber;
-        // Go upwards while...
-        while ( otherParagraph )
-        {
-            otherCounter = otherParagraph->counter();
-            if ( otherCounter &&                                        // ...numbered paragraphs.
-                ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
-                ( otherCounter->m_depth <= m_depth ) )        // ...same or higher level.
-            {
-                if ( ( otherCounter->m_depth == m_depth ) &&
-                   ( otherCounter->m_style == m_style ) )
-                {
-                    // Found a preceeding paragraph of exactly our type!
-                    m_cache.number = otherCounter->number( otherParagraph ) + 1;
-                }
-                else
-                {
-                    // Found a preceeding paragraph of higher level!
-                    m_cache.number = m_startNumber;
-                }
-                break;
-            }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
-        }
-        break;
-    case NUM_LIST:
-        m_cache.number = m_startNumber;
-        // Go upwards while...
-        while ( otherParagraph )
-        {
-            otherCounter = otherParagraph->counter();
-            if ( otherCounter )                                         // ...numbered paragraphs.
-            {
-                if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
-                    ( otherCounter->m_depth <= m_depth ) )    // ...same or higher level.
-                {
-                    if ( ( otherCounter->m_depth == m_depth ) &&
-                       ( otherCounter->m_style == m_style ) )
-                    {
-                        // Found a preceeding paragraph of exactly our type!
-                        m_cache.number = otherCounter->number( otherParagraph ) + 1;
-                    }
-                    else
-                    {
-                        // Found a preceeding paragraph of higher level!
-                        m_cache.number = m_startNumber;
-                    }
-                    break;
-                }
-                else
-                if ( otherCounter->m_numbering == NUM_CHAPTER )        // ...heading number type.
-                {
-                    m_cache.number = m_startNumber;
-                    break;
-                }
-            }
-            else
-            {
-                // There is no counter at all.
-                m_cache.number = m_startNumber;
-                break;
-            }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
-        }
-        break;
-    }
-    return m_cache.number;
-}
-
-Counter::Numbering Counter::numbering() const
-{
-    return m_numbering;
-}
-
-// Go looking for another paragraph at a higher level.
-KWTextParag *Counter::parent( const KWTextParag *paragraph )
-{
-    // Return cached value if possible.
-    if ( m_cache.parent != INVALID_PARAG )
-        return m_cache.parent;
-
-    KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
-    Counter *otherCounter;
-
-    switch ( m_numbering )
-    {
-    case NUM_NONE:
-        // This should not occur!
-        otherParagraph = 0L;
-        break;
-    case NUM_CHAPTER:
-        // Go upwards while...
-        while ( otherParagraph )
-        {
-            otherCounter = otherParagraph->counter();
-            if ( otherCounter &&                                        // ...numbered paragraphs.
-                ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
-                ( otherCounter->m_depth < m_depth ) )         // ...higher level.
-            {
-                break;
-            }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
-        }
-        break;
-    case NUM_LIST:
-        // Go upwards while...
-        while ( otherParagraph )
-        {
-            otherCounter = otherParagraph->counter();
-            if ( otherCounter )                                         // ...numbered paragraphs.
-            {
-                if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
-                    ( otherCounter->m_depth < m_depth ) )     // ...higher level.
-                {
-                    break;
-                }
-                else
-                if ( otherCounter->m_numbering == NUM_CHAPTER )         // ...heading number type.
-                {
-                    otherParagraph = 0L;
-                    break;
-                }
-            }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
-        }
-        break;
-    }
-    m_cache.parent = otherParagraph;
-    return m_cache.parent;
-}
-
-QString Counter::prefix() const
-{
-    return m_prefix;
-}
-
-void Counter::save( QDomElement & element )
-{
-    element.setAttribute( "type", static_cast<int>( m_style ) );
-    element.setAttribute( "depth", m_depth );
-    element.setAttribute( "bullet", m_customBullet.character.unicode() );
-    element.setAttribute( "lefttext", m_prefix );
-    element.setAttribute( "righttext", m_suffix );
-    element.setAttribute( "start", m_startNumber );
-    element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
-    element.setAttribute( "bulletfont", m_customBullet.font );
-    element.setAttribute( "customdef", m_custom );
-}
-
-void Counter::setCustom( QString c )
-{
-    m_custom = c;
-    invalidate();
-}
-
-void Counter::setCustomBulletCharacter( QChar c )
-{
-    m_customBullet.character = c;
-    invalidate();
-}
-
-void Counter::setCustomBulletFont( QString f )
-{
-    m_customBullet.font = f;
-    invalidate();
-}
-
-void Counter::setDepth( unsigned int d )
-{
-    m_depth = d;
-    invalidate();
-}
-
-void Counter::setNumbering( Numbering n )
-{
-    m_numbering = n;
-    invalidate();
-}
-
-void Counter::setPrefix( QString p )
-{
-    m_prefix = p;
-    invalidate();
-}
-void Counter::setStartNumber( int s )
-{
-    m_startNumber = s;
-    invalidate();
-}
-
-void Counter::setStyle( Style s )
-{
-    m_style = s;
-    invalidate();
-}
-
-void Counter::setSuffix( QString s )
-{
-    m_suffix = s;
-    invalidate();
-}
-
-int Counter::startNumber() const
-{
-    return m_startNumber;
-}
-
-Counter::Style Counter::style() const
-{
-    switch ( m_style )
-    {
-    case STYLE_DISCBULLET:
-    case STYLE_SQUAREBULLET:
-    case STYLE_CIRCLEBULLET:
-    case STYLE_CUSTOMBULLET:
-        if ( m_numbering == NUM_CHAPTER )
-        {
-            // Shome mishtake surely!
-            return STYLE_NUM;
-        }
-        break;
-    default:
-        break;
-    }
-    return m_style;
-}
-
-QString Counter::suffix() const
-{
-    return m_suffix;
-}
-
-QString Counter::text( const KWTextParag *paragraph )
-{
-    // Return cached value if possible.
-    if ( m_cache.text != QString::null )
-        return m_cache.text;
-
-    // Recurse to find the text of the preceeding level.
-    if ( parent( paragraph ) )
-    {
-        m_cache.text = m_cache.parent->counter()->text( m_cache.parent );
-
-        // If the preceeding level is a bullet, replace it with blanks.
-        if ( m_cache.parent->counter()->isBullet() )
-            for ( unsigned i = 0; i < m_cache.text.length(); i++ )
-                m_cache.text.at( i ) = ' ';
-    }
-
-    // Ensure paragraph number is valid.
-    number( paragraph );
-
-    // Now convert to text.
-    QString tmp;
-    int n;
-    char bottomDigit;
-    switch ( style() )
-    {
-    case STYLE_NONE:
-        if ( m_numbering == NUM_LIST )
-            tmp = ' ';
-        break;
-    case STYLE_NUM:
-        tmp.setNum( m_cache.number );
-        break;
-    case STYLE_ALPHAB_L:
-        n = m_cache.number;
-        while ( n > 26 )
-        {
-            bottomDigit = (n-1) % 26;
-            n = (n-1) / 26;
-            tmp.prepend( QChar( 'a' + bottomDigit  ) );
-        }
-        tmp.prepend( QChar( 'a' + n -1 ) );
-        break;
-    case STYLE_ALPHAB_U:
-        n = m_cache.number;
-
-        while ( n > 26 )
-        {
-            bottomDigit = (n-1) % 26;
-            n = (n-1) / 26;
-            tmp.prepend( QChar( 'A' + bottomDigit  ) );
-        }
-        tmp.prepend( QChar( 'A' + n - 1 ) );
-        break;
-    case STYLE_ROM_NUM_L:
-        tmp = makeRomanNumber( m_cache.number ).lower();
-        break;
-    case STYLE_ROM_NUM_U:
-        tmp = makeRomanNumber( m_cache.number ).upper();
-        break;
-    case STYLE_CUSTOM:
-        ////// TODO
-        tmp.setNum( m_cache.number );
-        break;
-    case Counter::STYLE_DISCBULLET:
-    case Counter::STYLE_SQUAREBULLET:
-    case Counter::STYLE_CIRCLEBULLET:
-    case Counter::STYLE_CUSTOMBULLET:
-        // Allow space for bullet!
-        tmp = ' ';
-        break;
-    }
-    tmp.prepend( prefix() );
-    tmp.append( suffix() );
-
-    // Find the number of missing parents, and add dummy text for them.
-    int missingParents;
-    if ( parent( paragraph ) )
-    {
-        missingParents = m_depth - m_cache.parent->counter()->m_depth - 1;
-    }
-    else
-    {
-        missingParents = m_depth;
-    }
-    while ( missingParents > 0 )
-    {
-        // Each missing level adds a "0." prefix.
-        tmp.prepend( "0." );
-        missingParents--;
-    }
-    m_cache.text.append( tmp );
-    return m_cache.text;
-}
-
-int Counter::width( const KWTextParag *paragraph )
-{
-    // Return cached value if possible.
-    if ( m_cache.width != -1 )
-        return m_cache.width;
-
-    // Ensure paragraph text is valid.
-    text( paragraph );
-
-    // Now calculate width.
-    QTextFormat *format = paragraph->paragFormat();
-    m_cache.width = 0;
-    for ( unsigned int i = 0; i < m_cache.text.length(); i++ )
-        m_cache.width += format->width( m_cache.text, i );
-    return m_cache.width;
-}
-
 KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
     //kdDebug() << "KWTextParag::KWTextParag " << this << endl;
     m_item = 0L;
-    m_leftBorder.ptWidth = 0;
-    m_rightBorder.ptWidth = 0;
-    m_topBorder.ptWidth = 0;
-    m_bottomBorder.ptWidth = 0;
-    m_counter = 0L;
 }
 
 KWTextParag::~KWTextParag()
 {
     //kdDebug() << "KWTextParag::~KWTextParag " << this << endl;
     delete m_item;
-    delete m_counter;
 }
 
 // There is one QStyleSheetItems per paragraph, created on demand,
@@ -520,19 +66,19 @@ void KWTextParag::checkItem( QStyleSheetItem * & item, const char * name )
 // Return the counter associated with this paragraph.
 Counter *KWTextParag::counter()
 {
-    if ( !m_counter )
-        return m_counter;
+    if ( !m_layout.counter )
+        return m_layout.counter;
 
     // Garbage collect unnneeded counters.
-    if ( m_counter->numbering() == Counter::NUM_NONE )
+    if ( m_layout.counter->numbering() == Counter::NUM_NONE )
         setNoCounter();
-    return m_counter;
+    return m_layout.counter;
 }
 
 void KWTextParag::setMargin( QStyleSheetItem::Margin m, KWUnit _i )
 {
     kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i.pt() << endl;
-    m_margins[m] = _i;
+    m_layout.margins[m] = _i;
     if ( m == QStyleSheetItem::MarginTop && prev() )
         prev()->invalidate(0);     // for top margin
     invalidate(0);
@@ -541,49 +87,40 @@ void KWTextParag::setMargin( QStyleSheetItem::Margin m, KWUnit _i )
 void KWTextParag::setMargins( const KWUnit * margins )
 {
     for ( int i = 0 ; i < 5 ; ++i )
-        m_margins[i] = margins[i];
+        m_layout.margins[i] = margins[i];
     if ( prev() )
         prev()->invalidate(0);     // for top margin
     invalidate(0);
 }
 
+void KWTextParag::setAlign( int align )
+{
+    setAlignment( align );
+    m_layout.alignment = align;
+}
 
 void KWTextParag::setLineSpacing( KWUnit _i )
 {
-    m_lineSpacing = _i;
+    m_layout.lineSpacing = _i;
     invalidate(0);
 }
 
 void KWTextParag::setTopBorder( const Border & _brd )
 {
-    m_topBorder = _brd;
+    m_layout.topBorder = _brd;
     invalidate(0);
 }
 
 void KWTextParag::setBottomBorder( const Border & _brd )
 {
-    m_bottomBorder = _brd;
+    m_layout.bottomBorder = _brd;
     invalidate(0);
-}
-
-void  KWTextParag::setTabList( const QList<KoTabulator> *tabList )
-{
-    m_tabList.clear();
-    QListIterator<KoTabulator> it( *tabList );
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        m_tabList.append( t );
-    }
 }
 
 void KWTextParag::setNoCounter()
 {
-    delete m_counter;
-    m_counter = 0L;
+    delete m_layout.counter;
+    m_layout.counter = 0L;
     invalidateCounters();
 }
 
@@ -596,8 +133,8 @@ void KWTextParag::setCounter( const Counter & counter )
     }
     else
     {
-        delete m_counter;
-        m_counter = new Counter( counter );
+        delete m_layout.counter;
+        m_layout.counter = new Counter( counter );
 
         checkItem( m_item, "m_item" );
         // Set the display mode (in order for drawLabel to get called by QTextParag)
@@ -614,12 +151,12 @@ void KWTextParag::invalidateCounters()
     // Invalidate this paragraph and all the following ones
     // (Numbering may have changed)
     invalidate( 0 );
-    if ( m_counter )
-        m_counter->invalidate();
+    if ( m_layout.counter )
+        m_layout.counter->invalidate();
     KWTextParag *s = static_cast<KWTextParag *>( next() );
     while ( s ) {
-        if ( s->m_counter )
-            s->m_counter->invalidate();
+        if ( s->m_layout.counter )
+            s->m_layout.counter->invalidate();
         s->invalidate( 0 );
         s = static_cast<KWTextParag *>( s->next() );
     }
@@ -627,19 +164,19 @@ void KWTextParag::invalidateCounters()
 
 int KWTextParag::counterWidth() const
 {
-    if ( !m_counter )
+    if ( !m_layout.counter )
         return 0;
 
-    return m_counter->width( this );
+    return m_layout.counter->width( this );
 }
 
 // Draw the counter/bullet for a paragraph
 void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& cg )
 {
-    if ( !m_counter ) // shouldn't happen
+    if ( !m_layout.counter ) // shouldn't happen
         return;
 
-    int size = m_counter->width( this );
+    int size = m_layout.counter->width( this );
 
     // Draw the complete label.
     QTextFormat *format = paragFormat();
@@ -650,17 +187,17 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     p->setFont( newFont );
 
     // Now draw any bullet that is required over the space left for it.
-    if ( m_counter->isBullet() )
+    if ( m_layout.counter->isBullet() )
     {
         // Modify x offset.
-        for ( unsigned int i = 0; i < m_counter->suffix().length(); i++ )
-            x -= format->width( m_counter->suffix(), i );
+        for ( unsigned int i = 0; i < m_layout.counter->suffix().length(); i++ )
+            x -= format->width( m_layout.counter->suffix(), i );
         int width = format->width( ' ' );
         int height = format->height();
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
 
         // Draw the bullet.
-        switch ( m_counter->style() )
+        switch ( m_layout.counter->style() )
         {
             case Counter::STYLE_DISCBULLET:
                 p->setBrush( cg.brush( QColorGroup::Foreground ) );
@@ -676,12 +213,12 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             case Counter::STYLE_CUSTOMBULLET:
                 // The user has selected a symbol from a special font. Override the paragraph
                 // font with the given family. This conserves the right size etc.
-                if ( !m_counter->customBulletFont().isEmpty() )
+                if ( !m_layout.counter->customBulletFont().isEmpty() )
                 {
-                    newFont.setFamily( m_counter->customBulletFont() );
+                    newFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( newFont );
                 }
-                p->drawText( x - width, y - h + base, m_counter->customBulletCharacter() );
+                p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
@@ -691,7 +228,7 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     {
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text!
-        p->drawText( x - size, y - h + base, m_counter->text( this ) );
+        p->drawText( x - size, y - h + base, m_layout.counter->text( this ) );
     }
     p->setFont( oldFont );
 }
@@ -700,24 +237,24 @@ int KWTextParag::topMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
-        m_margins[ QStyleSheetItem::MarginTop ].pt()
-        + m_topBorder.ptWidth ) );
+        m_layout.margins[ QStyleSheetItem::MarginTop ].pt()
+        + m_layout.topBorder.ptWidth ) );
 }
 
 int KWTextParag::bottomMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
-        m_margins[ QStyleSheetItem::MarginBottom ].pt()
-        + m_bottomBorder.ptWidth ) );
+        m_layout.margins[ QStyleSheetItem::MarginBottom ].pt()
+        + m_layout.bottomBorder.ptWidth ) );
 }
 
 int KWTextParag::leftMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
-        m_margins[ QStyleSheetItem::MarginLeft ].pt()
-        + m_leftBorder.ptWidth
+        m_layout.margins[ QStyleSheetItem::MarginLeft ].pt()
+        + m_layout.leftBorder.ptWidth
         + counterWidth() ) );
 }
 
@@ -725,22 +262,22 @@ int KWTextParag::rightMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
-        m_margins[ QStyleSheetItem::MarginRight ].pt()
-        + m_rightBorder.ptWidth ) );
+        m_layout.margins[ QStyleSheetItem::MarginRight ].pt()
+        + m_layout.rightBorder.ptWidth ) );
 }
 
 int KWTextParag::firstLineMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
-        m_margins[ QStyleSheetItem::MarginFirstLine ].pt() ) );
+        m_layout.margins[ QStyleSheetItem::MarginFirstLine ].pt() ) );
 }
 
 int KWTextParag::lineSpacing() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
-        m_lineSpacing.pt() ) );
+        m_layout.lineSpacing.pt() ) );
 }
 
 // Reimplemented from QTextParag
@@ -750,34 +287,34 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     //qDebug("KWTextParag::paint %p", this);
         QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
-    if ( m_topBorder.ptWidth > 0
-         || m_bottomBorder.ptWidth > 0
-         || m_leftBorder.ptWidth > 0
-         || m_rightBorder.ptWidth > 0 )
+    if ( m_layout.topBorder.ptWidth > 0
+         || m_layout.bottomBorder.ptWidth > 0
+         || m_layout.leftBorder.ptWidth > 0
+         || m_layout.rightBorder.ptWidth > 0 )
     {
         int leftX = 0;
         int rightX = documentWidth()-1;
         int topY = lineY( 0 ); // Maybe this is always 0. Not sure.
-        int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_lineSpacing.pt() );
+        int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing.pt() );
         //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
-        if ( m_topBorder.ptWidth > 0 )
+        if ( m_layout.topBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_topBorder ) ); // ### in theory we should zoomIt(ptWidth)
+            painter.setPen( Border::borderPen( m_layout.topBorder ) ); // ### in theory we should zoomIt(ptWidth)
             painter.drawLine( leftX, topY, rightX, topY );
         }
-        if ( m_bottomBorder.ptWidth > 0 )
+        if ( m_layout.bottomBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_bottomBorder ) );
+            painter.setPen( Border::borderPen( m_layout.bottomBorder ) );
             painter.drawLine( leftX, bottomY, rightX, bottomY );
         }
-        if ( m_leftBorder.ptWidth > 0 )
+        if ( m_layout.leftBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_leftBorder ) );
+            painter.setPen( Border::borderPen( m_layout.leftBorder ) );
             painter.drawLine( leftX, topY, leftX, bottomY );
         }
-        if ( m_rightBorder.ptWidth > 0 )
+        if ( m_layout.rightBorder.ptWidth > 0 )
         {
-            painter.setPen( Border::borderPen( m_rightBorder ) );
+            painter.setPen( Border::borderPen( m_layout.rightBorder ) );
             painter.drawLine( rightX, topY, rightX, bottomY );
         }
     }
@@ -809,7 +346,7 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     // No "following style" setting, or same style -> copy layout & format of previous paragraph
     if (!styleApplied)
     {
-        setParagLayout( parag->createParagLayout() );
+        setParagLayout( parag->paragLayout() );
         setFormat( parag->paragFormat() );
         // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
         // for the chars in the new parag
@@ -979,8 +516,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     QDomElement layoutElem = doc.createElement( "LAYOUT" );
     paragElem.appendChild( layoutElem );
 
-    KWParagLayout layout = createParagLayout(); // slightly slow method but allows to reuse code
-    layout.save( layoutElem );
+    m_layout.save( layoutElem );
 
     // Paragraph's format
     // ## Maybe we should have a "default format" somewhere and
@@ -1045,7 +581,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         setParagLayout( paragLayout );
 
         // Load default format from style.
-        KWStyle *existingStyle = doc->findStyle( m_styleName );
+        KWStyle *existingStyle = doc->findStyle( m_layout.styleName() );
         QTextFormat *defaultFormat = existingStyle ? &existingStyle->format() : 0L;
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
@@ -1140,27 +676,56 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     }
 }
 
-KWParagLayout KWTextParag::createParagLayout()
-{
-    return KWParagLayout( *this );
-}
-
 void KWTextParag::setParagLayout( const KWParagLayout & layout )
 {
     //kdDebug() << "KWTextParag " << this << " setParagLayout" << endl;
-    setAlignment( layout.alignment );
+    setAlign( layout.alignment );
     setMargins( layout.margins );
     setLineSpacing( layout.lineSpacing );
     setLeftBorder( layout.leftBorder );
     setRightBorder( layout.rightBorder );
     setTopBorder( layout.topBorder );
     setBottomBorder( layout.bottomBorder );
-    setCounter( layout.counter );
+    if ( layout.counter )
+        setCounter( *layout.counter );
+    else
+        setNoCounter();
 
     setTabList( layout.tabList() );
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
-    m_styleName = layout.styleName();
+    setStyleName( layout.styleName() );
 }
+
+
+void KWTextParag::printRTDebug()
+{
+    static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
+    kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
+    if ( prev() && prev()->paragId() + 1 != paragId() )
+        kdWarning() << "Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
+    QVector<QStyleSheetItem> vec = styleSheetItems();
+    for ( uint i = 0 ; i < vec.size() ; ++i )
+    {
+        QStyleSheetItem * item = vec[i];
+        kdDebug() << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
+        kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
+        kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
+        kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
+    }
+    kdDebug() << "  Style: " << styleName() << endl;
+    kdDebug() << "  Text: " << string()->toString() << endl;
+    if ( counter() )
+        kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << endl;
+
+/*    kdDebug() << "  Paragraph format=" << paragFormat() << endl;
+    QTextString * s = string();
+    for ( int i = 0 ; i < s->length() ; ++i )
+        kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format() << endl;
+*/
+}
+
+
+//////////
 
 // Create a default KWParagLayout.
 KWParagLayout::KWParagLayout()
@@ -1168,26 +733,23 @@ KWParagLayout::KWParagLayout()
     initialise();
 }
 
-// Create a KWParagLayout from an existing paragraph's layout.
-KWParagLayout::KWParagLayout( KWTextParag &parag )
+// Create a KWParagLayout from an existing paragraph's layout (copy constructor).
+KWParagLayout::KWParagLayout( const KWParagLayout &layout )
 {
-    initialise();
-
-    // From QTextParag
-    alignment = parag.alignment();
-
-    // From KWTextParag
+    alignment = layout.alignment;
     for ( int i = 0 ; i < 5 ; ++i )
-        margins[i] = parag.margins()[i];
-    leftBorder = parag.leftBorder();
-    rightBorder = parag.rightBorder();
-    topBorder = parag.topBorder();
-    bottomBorder = parag.bottomBorder();
-    if ( parag.counter() )
-        counter = *parag.counter();
-    lineSpacing = parag.kwLineSpacing();
-    m_styleName = parag.styleName();
-    setTabList( parag.tabList() );
+        margins[i] = layout.margins[i];
+    leftBorder = layout.leftBorder;
+    rightBorder = layout.rightBorder;
+    topBorder = layout.topBorder;
+    bottomBorder = layout.bottomBorder;
+    if ( layout.counter )
+        counter = new Counter( *layout.counter );
+    else
+        counter = 0L;
+    lineSpacing = layout.lineSpacing;
+    setStyleName( layout.styleName() );
+    setTabList( layout.tabList() );
 }
 
 // Create a KWParagLayout from XML.
@@ -1228,10 +790,10 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
     element = parentElem.namedItem( "TABULATOR" ).toElement();
     if ( !element.isNull() )
     {
-        KoTabulator *tab = new KoTabulator;
-        tab->type = static_cast<KoTabulators>( KWDocument::getAttribute( element, "type", T_LEFT ) );
-        getPointBasedAttribute( tab->, Pos, element, "ptpos", 0.0 );
-        //m_tabList.append( tab ); TODO
+        KoTabulator tab;
+        tab.type = static_cast<KoTabulators>( KWDocument::getAttribute( element, "type", T_LEFT ) );
+        tab.ptPos = KWDocument::getAttribute( element, "ptpos", 0.0 );
+        m_tabList.append( tab );
     }
     alignment = Qt::AlignLeft;
     element = parentElem.namedItem( "FLOW" ).toElement(); // Flow is what is now called alignment internally
@@ -1314,17 +876,25 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
     element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )
     {
-        counter.load( element );
+        counter = new Counter;
+        counter->load( element );
     }
 }
 
 void KWParagLayout::initialise()
 {
     alignment = Qt::AlignLeft;
+    counter = 0L;
     leftBorder.ptWidth = 0;
     rightBorder.ptWidth = 0;
     topBorder.ptWidth = 0;
     bottomBorder.ptWidth = 0;
+    samePage = true;
+}
+
+KWParagLayout::~KWParagLayout()
+{
+    delete counter;
 }
 
 void KWParagLayout::save( QDomElement & parentElem )
@@ -1394,11 +964,11 @@ void KWParagLayout::save( QDomElement & parentElem )
         parentElem.appendChild( element );
         bottomBorder.save( element );
     }
-    if ( counter.numbering() != Counter::NUM_NONE )
+    if ( counter && counter->numbering() != Counter::NUM_NONE )
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
-        counter.save( element );
+        counter->save( element );
     }
 }
 
@@ -1407,17 +977,4 @@ void KWParagLayout::setStyleName( const QString &styleName )
     m_styleName = styleName;
 }
 
-void KWParagLayout::setTabList( const QList<KoTabulator> *tabList )
-{
-    m_tabList.clear();
-    QListIterator<KoTabulator> it( *tabList);
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        m_tabList.append( t );
-    }
-}
 #include "kwtextparag.moc"

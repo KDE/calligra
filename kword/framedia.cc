@@ -418,8 +418,17 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     grid2->setRowStretch( 2, 1 );
     grid2->activate();
 
+    RunAround ra = RA_NO;
+    if ( frame )
+        ra = frame->getRunAround();
+    else
+    {
+        KWFrame *firstFrame = doc->getFirstSelectedFrame();
+        if ( firstFrame )
+            ra = firstFrame->getRunAround();
+    }
 
-    switch ( frame ? frame->getRunAround() : doc->getRunAround() ) {
+    switch ( ra ) {
     case RA_NO: rRunNo->setChecked( true );
         break;
     case RA_BOUNDINGRECT: rRunBounding->setChecked( true );
@@ -427,16 +436,19 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     case RA_SKIP: rRunContur->setChecked( true );
         break;
     }
-    QString str;
-    switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().mm() : doc->getRunAroundGap().mm() );
-        break;
-    case U_INCH: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().inch() : doc->getRunAroundGap().inch() );
-        break;
-    case U_PT: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().pt() : doc->getRunAroundGap().pt() );
-        break;
+
+    KWUnit ragap;
+    if ( frame )
+        ragap = frame->getRunAroundGap();
+    else
+    {
+        KWFrame *firstFrame = doc->getFirstSelectedFrame();
+        if ( firstFrame )
+            ragap = firstFrame->getRunAroundGap();
     }
 
+    QString str;
+    str.sprintf( "%.2f", ragap.value( KWUnit::unitType( doc->getUnit() ) ) );
     eRGap->setText( str );
 
     //kdDebug() << "setup tab 2 exit"<<endl;

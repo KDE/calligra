@@ -276,7 +276,7 @@ public slots:
     void spellCheckerFinished( );
 
     void clipboardDataChanged();
-    void tabListChanged( QList<KoTabulator>* );
+    void tabListChanged( const KoTabulatorList & tabList );
 
     void updatePageInfo();
 

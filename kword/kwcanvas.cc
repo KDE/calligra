@@ -1757,33 +1757,11 @@ void KWCanvas::printRTDebug()
         textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
     if ( !textfs )
         return;
-    static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
     QTextDocument * textdoc = textfs->textDocument();
     for (QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
     {
-        kdDebug() << "Paragraph " << parag << "   (" << parag->paragId() << ") ------------------ " << endl;
-        if ( parag->prev() && parag->prev()->paragId() + 1 != parag->paragId() )
-            kdWarning() << "Previous paragraph " << parag->prev() << " has ID " << parag->prev()->paragId() << endl;
-        QVector<QStyleSheetItem> vec = parag->styleSheetItems();
-        for ( uint i = 0 ; i < vec.size() ; ++i )
-        {
-            QStyleSheetItem * item = vec[i];
-            kdDebug() << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
-            kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
-            kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
-            kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
-        }
         KWTextParag * p = static_cast<KWTextParag *>(parag);
-        kdDebug() << "  Style: " << p->styleName() << endl;
-        kdDebug() << "  Text: " << parag->string()->toString() << endl;
-        if ( p->counter() )
-            kdDebug() << "  Counter style=" << p->counter()->style() << " depth=" << p->counter()->depth() << endl;
-
-/*        kdDebug() << "  Paragraph format=" << p->paragFormat() << endl;
-        QTextString * s = parag->string();
-        for ( int i = 0 ; i < s->length() ; ++i )
-            kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format() << endl;
-*/
+        p->printRTDebug();
     }
 }
 

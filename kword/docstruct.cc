@@ -25,6 +25,7 @@
 #include "docstruct.h"
 #include "docstruct.moc"
 #include "kwtextframeset.h"
+#include "counter.h"
 
 #include <klocale.h>
 #include <kiconloader.h>

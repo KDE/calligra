@@ -21,13 +21,17 @@
 
 #include "kwtextframeset.h"
 #include "kwdoc.h"
+#include "kwview.h"
 #include "kwcanvas.h"
 #include "kwutils.h"
 #include "kwcommand.h"
 #include "kwgroupmanager.h"
 #include "kwdrag.h"
+#include "kwstyle.h"
+#include "counter.h"
 #include <qclipboard.h>
 #include <qdragobject.h>
+#include <klocale.h>
 
 #include <kdebug.h>
 
@@ -818,7 +822,7 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                 }
                 if ( (doc->applyStyleChangeMask() & KWDocument::U_ALIGN )==0)
                 {
-                    //style->format().setAlignment(p->alignment());
+                    styleApplied.setAlign(p->alignment());
                 }
                 if ( (doc->applyStyleChangeMask() & KWDocument::U_NUMBERING)==0 )
                 {
@@ -1197,7 +1201,7 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
     if ( copyParagLayouts ) {
         QTextParag *p = c1.parag();
         while ( p ) {
-            undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
+            undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->paragLayout();
             if ( p == c2.parag() )
                 break;
             p = p->next();
@@ -1325,7 +1329,7 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
         QTextParag * p = cursor->parag();
         undoRedoInfo.id = p->paragId();
         undoRedoInfo.eid = p->paragId();
-        undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
+        undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->paragLayout();
     }
     else{
 	QTextParag *start = textdoc->selectionStart( selectionId );
@@ -1334,8 +1338,8 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
         undoRedoInfo.eid = end->paragId();
         for ( ; start && start != end->next() ; start = start->next() )
         {
-            undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(start)->createParagLayout();
-            //kdDebug(32001) << "KWTextFrameSet::storeParagUndoRedoInfo storing counter " << static_cast<KWTextParag*>(start)->createParagLayout().counter.counterType << endl;
+            undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(start)->paragLayout();
+            //kdDebug(32001) << "KWTextFrameSet::storeParagUndoRedoInfo storing counter " << static_cast<KWTextParag*>(start)->paragLayout().counter.counterType << endl;
         }
     }
 }
@@ -1363,7 +1367,9 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const Counter & counter )
 	emit repaintChanged( this );
 	formatMore();
     }
-    undoRedoInfo.newParagLayout.counter = counter;
+    if ( !undoRedoInfo.newParagLayout.counter )
+        undoRedoInfo.newParagLayout.counter = new Counter;
+    *undoRedoInfo.newParagLayout.counter = counter;
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI();
@@ -1381,7 +1387,7 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
     undoRedoInfo.type = UndoRedoInfo::Alignment;
     undoRedoInfo.name = i18n("Change Alignment");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
-        cursor->parag()->setAlignment(align);
+        static_cast<KWTextParag *>(cursor->parag())->setAlign(align);
         emit repaintChanged( this );
     }
     else
@@ -1390,7 +1396,7 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
 	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            start->setAlignment(align);
+            static_cast<KWTextParag *>(start)->setAlign(align);
 	emit repaintChanged( this );
 	formatMore();
     }
@@ -1524,10 +1530,10 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
 }
 
 
-void KWTextFrameSet::setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList )
+void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &tabList )
 {
     QTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( QTextDocument::Standard ) && static_cast<KWTextParag *>(cursor->parag())->tabList()== tabList /*hack*/ )
+    if ( !textdoc->hasSelection( QTextDocument::Standard ) && static_cast<KWTextParag *>(cursor->parag())->tabList() == tabList )
         return; // No change needed.
 
     emit hideCursor();
@@ -2605,16 +2611,19 @@ void KWTextFrameSetEdit::updateUI()
         m_canvas->gui()->getView()->showAlign( m_paragLayout.alignment );
     }
 
-    Counter::Style ctype = m_paragLayout.counter.style();
+    // Counter
+    if ( !m_paragLayout.counter )
+        m_paragLayout.counter = new Counter; // we can afford to always have one here
+    Counter::Style cstyle = m_paragLayout.counter->style();
     if ( parag->counter() )
-        m_paragLayout.counter = *parag->counter();
+        *m_paragLayout.counter = *parag->counter();
     else
     {
-        m_paragLayout.counter.setNumbering( Counter::NUM_NONE );
-        m_paragLayout.counter.setStyle( Counter::STYLE_NONE );
+        m_paragLayout.counter->setNumbering( Counter::NUM_NONE );
+        m_paragLayout.counter->setStyle( Counter::STYLE_NONE );
     }
-    if ( m_paragLayout.counter.style() != ctype )
-        m_canvas->gui()->getView()->showCounter( m_paragLayout.counter );
+    if ( m_paragLayout.counter->style() != cstyle )
+        m_canvas->gui()->getView()->showCounter( * m_paragLayout.counter );
 
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||
@@ -2643,7 +2652,7 @@ void KWTextFrameSetEdit::updateUI()
     }
 
     m_paragLayout.setTabList( parag->tabList() );
-    m_canvas->gui()->getHorzRuler()->setTabList( parag->tabList());
+    m_canvas->gui()->getHorzRuler()->setTabList( parag->tabList() );
     // There are more paragraph settings, but those that are not directly
     // visible in the UI don't need to be handled here.
     // For instance parag and line spacing stuff, borders etc.

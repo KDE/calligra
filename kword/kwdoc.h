@@ -29,6 +29,10 @@ class KWContents;
 class KWFrameSet;
 class KWGroupManager;
 class KWPartFrameSet;
+class KWStyle;
+class KWFrame;
+class KWView;
+class KoDocumentEntry;
 
 class KSpellConfig;
 
@@ -36,18 +40,11 @@ class KSpellConfig;
 #include <koDocument.h>
 #include <koGlobal.h>
 #include <koDocumentChild.h>
-//#include <koPageLayoutDia.h>
-#include <koQueryTrader.h>
 
-#include <qtextstream.h>
-
-#include "kwview.h"
-#include "kwstyle.h"
-#include "kwframe.h"
-//#include "variable.h"
-//#include "footnote.h"
 #include "autoformat.h"
 #include "kwimage.h"
+#include "kwunit.h"
+
 #include <kcommand.h>
 
 #include <qlist.h>
@@ -126,9 +123,6 @@ public:
     void progressItemLoaded();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
-
-    virtual QStrList outputFormats();
-    virtual QStrList inputFormats();
 
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );
@@ -229,8 +223,6 @@ public:
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
     KWFrameSet *getFirstSelectedFrameSet();
 
-    void print( QPainter *painter, KPrinter *printer, float left_margin, float top_margin );
-
     void updateAllFrames();
 
     int gridX() { return m_gridX; }
@@ -263,11 +255,8 @@ public:
 
     //void enableEmbeddedParts( bool f );
 
-    RunAround getRunAround();
-    KWUnit getRunAroundGap();
-
-    void setRunAround( RunAround _ra );
-    void setRunAroundGap( KWUnit _gap );
+    //void setRunAround( RunAround _ra );
+    //void setRunAroundGap( KWUnit _gap );
 
     void getFrameMargins( KWUnit &l, KWUnit &r, KWUnit &t, KWUnit &b );
     bool isOnlyOneFrameSelected();

@@ -31,6 +31,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koMainWindow.h>
+#include <koQueryTrader.h>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -46,9 +47,9 @@
 #include "kwgroupmanager.h"
 #include "kwdoc.h"
 #include "kwcanvas.h"
-#include "kwtextparag.h"
 #include "defs.h"
 #include "kwutils.h"
+#include "kwstyle.h"
 //#include "serialletter.h"
 #include "contents.h"
 #include "kwview.h"
@@ -1165,22 +1166,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         emit sig_insertObject( ch, frameset );
     }
 
-#if 0           // Not needed anymore
-    if ( contents->hasContents() ) {
-        QString name = *( --contents->ending() );
-        KWParag *p = ( (KWTextFrameSet*)getFrameSet( 0 ) )->getFirstParag();
-        KWParag *end = p;
-        while ( p ) {
-            if ( p->getParagName() == name ) {
-                end = p;
-                break;
-            }
-            p = p->getNext();
-        }
-        contents->setEnd( end );
-    }
-#endif
-
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(R)", "®" ) );
@@ -1727,18 +1712,6 @@ bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
 }
 
 /*================================================================*/
-QStrList KWDocument::outputFormats()
-{
-    return QStrList();
-}
-
-/*================================================================*/
-QStrList KWDocument::inputFormats()
-{
-    return QStrList();
-}
-
-/*================================================================*/
 void KWDocument::addView( KoView *_view )
 {
     m_lstViews.append( (KWView*)_view );
@@ -2224,193 +2197,6 @@ KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
 }
 
 /*================================================================*/
-void KWDocument::print( QPainter */*painter*/, KPrinter */*printer*/,
-                           float /*left_margin*/, float /*top_margin*/ )
-{
-#if 0
-    int tmpZoom = zoom;
-    zoom = 100;
-    KoPageLayout pgLayout;
-    KoColumns cl;
-    KoKWHeaderFooter hf;
-    getPageLayout( pgLayout, cl, hf );
-    if ( tmpZoom != zoom )
-        setPageLayout( pgLayout, cl, hf );
-
-    printer->setFullPage( TRUE );
-    QList<KWFormatContext> fcList;
-    fcList.setAutoDelete( TRUE );
-
-    KWFormatContext *fc = 0L;
-    unsigned int i = 0;
-
-    for ( i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->getFrameType() == FT_TEXT ) {
-            frames.at( i )->setCurrent( 0 );
-            fc = new KWFormatContext( this, i + 1 );
-            fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( i ) )->getFirstParag(), TRUE );
-            fcList.append( fc );
-        }
-    }
-
-    for ( i = 0; i < static_cast<unsigned int>( m_pages ); i++ ) {
-        kapp->processEvents();
-        // don't print if outside the bounduaries printer->fromPage() / printer->toPage()
-        if ( 0 != printer->fromPage()  && i + 1 < static_cast<unsigned int>( printer->fromPage() ) ) {
-            //kdDebug(32001) << "skipping page " << i+1 << ": it is less than " << printer->fromPage() << endl;
-            continue;
-        }
-        if ( 0 != printer->toPage() && i + 1 > static_cast<unsigned int>( printer->toPage() ) ) {
-            //kdDebug(32001) << "end print on page " << i+1 << ": it is greater than " << printer->toPage() << endl;
-            break;
-        }
-
-        QRect pageRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() );
-        unsigned int minus = 0;
-        if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) )
-            printer->newPage();
-        printBorders( *painter, 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() );
-
-        QListIterator<KWFrameSet> fit = framesetsIterator();
-        for ( ; fit.current() ; ++fit )
-        {
-            KWFrameSet * frameset = fit.current();
-            if ( !frameset->isVisible() )
-                continue;
-            switch ( frameset->getFrameType() ) {
-            case FT_PICTURE: {
-                minus++;
-
-                KWPictureFrameSet *picFS = dynamic_cast<KWPictureFrameSet*>( frameset );
-                KWFrame *frame = picFS->getFrame( 0 );
-                if ( !frame->intersects( pageRect ) ) break;
-
-                QSize _size = QSize( frame->width(), frame->height() );
-                if ( _size != picFS->getImage()->size() )
-                    picFS->setSize( _size );
-
-                painter->drawImage( frame->x(), frame->y() - i * ptPaperHeight(), *picFS->getImage() );
-            } break;
-            case FT_PART: {
-                minus++;
-
-                KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>( frameset );
-                KWFrame *frame = partFS->getFrame( 0 );
-
-                QPicture *pic = partFS->getPicture();
-
-                painter->save();
-                painter->setClipRect( frame->x(), frame->y() - i * ptPaperHeight(),
-                                      frame->width() - 1, frame->height() - 1 );
-                QRect r = painter->viewport();
-                painter->setViewport( frame->x(), frame->y() - i * ptPaperHeight(), r.width(), r.height() );
-                if ( pic ) painter->drawPicture( *pic );
-                painter->setViewport( r );
-                painter->restore();
-            } break;
-            case FT_FORMULA: {
-                minus++;
-
-                KWFormulaFrameSet *formulaFS = dynamic_cast<KWFormulaFrameSet*>( frameset );
-                KWFrame *frame = formulaFS->getFrame( 0 );
-
-                QPicture *pic = formulaFS->getPicture();
-
-                painter->save();
-                QRect r = painter->viewport();
-                painter->setViewport( frame->x(), frame->y() - i * ptPaperHeight(), r.width(), r.height() );
-                if ( pic )
-                    painter->drawPicture( *pic );
-                painter->setViewport( r );
-                painter->restore();
-            } break;
-            case FT_TEXT: {
-                bool bend = FALSE;
-                bool reinit = TRUE;
-                ///////fc = fcList.at(j - minus);
-                if ( frameset->getFrameInfo() != FI_BODY ) {
-                    if ( frameset->getFrameInfo() == FI_EVEN_HEADER ||
-                         frameset->getFrameInfo() == FI_FIRST_HEADER ||
-                         frameset->getFrameInfo() == FI_ODD_HEADER ) {
-                        if ( !isHeaderVisible() ) continue;
-                        switch ( getHeaderType() ) {
-                        case HF_SAME: {
-                            if ( frameset->getFrameInfo() != FI_EVEN_HEADER )
-                                continue;
-                        } break;
-                        case HF_EO_DIFF: {
-                            if ( frameset->getFrameInfo() == FI_FIRST_HEADER )
-                                continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frameset->getFrameInfo() == FI_ODD_HEADER )
-                                continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frameset->getFrameInfo() == FI_EVEN_HEADER )
-                                continue;
-                        } break;
-                        case HF_FIRST_DIFF: {
-                            if ( i == 0 && frameset->getFrameInfo() != FI_FIRST_HEADER )
-                                continue;
-                            if ( i > 0 && frameset->getFrameInfo() != FI_EVEN_HEADER )
-                                continue;
-                        } break;
-                        default: break;
-                        }
-                    }
-                    if ( frameset->getFrameInfo() == FI_EVEN_FOOTER ||
-                         frameset->getFrameInfo() == FI_FIRST_FOOTER ||
-                         frameset->getFrameInfo() == FI_ODD_FOOTER ) {
-                        if ( !isFooterVisible() ) continue;
-                        switch ( getFooterType() ) {
-                        case HF_SAME: {
-                            if ( frameset->getFrameInfo() != FI_EVEN_FOOTER )
-                                continue;
-                        } break;
-                        case HF_EO_DIFF: {
-                            if ( frameset->getFrameInfo() == FI_FIRST_FOOTER )
-                                continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frameset->getFrameInfo() == FI_ODD_FOOTER )
-                                continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frameset->getFrameInfo() == FI_EVEN_FOOTER )
-                                continue;
-                        } break;
-                        case HF_FIRST_DIFF: {
-                            if ( i == 0 && frameset->getFrameInfo() != FI_FIRST_FOOTER )
-                                continue;
-                            if ( i > 0 && frameset->getFrameInfo() != FI_EVEN_FOOTER )
-                                continue;
-                        } break;
-                        default:
-                            break;
-                        }
-                    }
-                    fc->init( dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag(), TRUE,
-                              frameset->getCurrent() + 1, i + 1 );
-                    if ( static_cast<int>( frameset->getNumFrames() - 1 ) >
-                         static_cast<int>( frameset->getCurrent() ) )
-                        frameset->setCurrent( frameset->getCurrent() + 1 );
-                    reinit = FALSE;
-                }
-                if ( reinit )
-                    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( fc->getFrameSet() - 1 ) )->getFirstParag(), TRUE );
-                while ( !bend ) {
-                    printLine( *fc, *painter, 0, i * ptPaperHeight(), ptPaperWidth(),
-                               ptPaperHeight(), FALSE, FALSE );
-                    bend = !fc->makeNextLineLayout();
-                }
-            } break;
-            default: minus++;
-                break;
-            }
-        }
-    }
-
-    if ( tmpZoom != zoom ) {
-        zoom = tmpZoom;
-        setPageLayout( pgLayout, cl, hf );
-    }
-#endif
-}
-
-/*================================================================*/
 void KWDocument::updateAllFrames()
 {
     kdDebug() << "KWDocument::updateAllFrames" << endl;
@@ -2550,27 +2336,7 @@ bool KWDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, int 
     return FALSE;
 }
 
-/*================================================================*/
-RunAround KWDocument::getRunAround()
-{
-    KWFrame *frame = getFirstSelectedFrame();
-
-    if ( frame ) return frame->getRunAround();
-
-    return RA_NO;
-}
-
-/*================================================================*/
-KWUnit KWDocument::getRunAroundGap()
-{
-    KWFrame *frame = getFirstSelectedFrame();
-
-    if ( frame ) return frame->getRunAroundGap();
-
-    return FALSE;
-}
-
-/*================================================================*/
+#if 0
 void KWDocument::setRunAround( RunAround _ra )
 {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -2583,7 +2349,6 @@ void KWDocument::setRunAround( RunAround _ra )
     }
 }
 
-/*================================================================*/
 void KWDocument::setRunAroundGap( KWUnit _gap )
 {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -2595,6 +2360,8 @@ void KWDocument::setRunAroundGap( KWUnit _gap )
         }
     }
 }
+#endif
+
 /*================================================================*/
 void KWDocument::getFrameMargins( KWUnit &l, KWUnit &r, KWUnit &t, KWUnit &b )
 {

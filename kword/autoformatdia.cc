@@ -39,7 +39,7 @@
 #include <qlistview.h>
 #include <qmap.h>
 #include <qlineedit.h>
-
+#include <qlabel.h>
 
 
 /******************************************************************/

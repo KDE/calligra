@@ -29,8 +29,7 @@
 #include <kdialogbase.h>
 #include <qvbox.h>
 #include <kconfig.h>
-
-
+#include <qlabel.h>
 
 KWConfig::KWConfig( KWView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,

@@ -137,7 +137,7 @@ public:
     void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
     void applyStyleChange( const QString & changedStyle );
 
-    void setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList );
+    void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );
 
     virtual void layout();
 
@@ -301,11 +301,10 @@ public:
           { textFrameSet()->setBorders( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }
     void setMargin( QStyleSheetItem::Margin m, KWUnit margin )
           { textFrameSet()->setMargin( cursor, m, margin ); }
+    void setTabList( const KoTabulatorList & tabList ){ textFrameSet()->setTabList( cursor, tabList ); }
     void applyStyle( const KWStyle * style ) { textFrameSet()->applyStyle( cursor, style ); }
 
     const KWParagLayout & currentParagLayout() const { return m_paragLayout; }
-
-    void setTabList( const QList<KoTabulator> *tabList ){textFrameSet()->setTabList(cursor,tabList); }
 
 public slots:
     void updateUI();

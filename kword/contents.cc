@@ -24,6 +24,8 @@
 #include "contents.h"
 #include "kwdoc.h"
 #include "kwframe.h"
+#include "kwstyle.h"
+#include "counter.h"
 #include "kwtextframeset.h"
 
 #include <klocale.h>
@@ -122,7 +124,7 @@ void KWContents::createContents()
     {
         KWTextParag * parag = mapIt.key(); // Parag in the TOC
         KWTextParag * p = mapIt.data();    // Parag in the body
-        // TODO pl->setTabList( &tabList );
+        // TODO pl->setTabList( tabList );
         // TODO parag->insertTab( txt.length() );
 
         // Find page number for paragraph
