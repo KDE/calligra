@@ -38,7 +38,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	m_view->installEventFilter(this);
 	static_cast<QLineEdit*>(m_view)->setFrame(false);
 
-	if(ov != QString::null)
+	if(!ov.isNull())
 	{
 		switch(m_type)
 		{
