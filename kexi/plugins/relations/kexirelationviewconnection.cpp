@@ -19,6 +19,7 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qcolor.h>
 
 #include <kdebug.h>
 
@@ -55,6 +56,7 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 void
 KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 {
+	p->setPen(QColor(0,0,0));
 	int sx = m_srcTable->x() + m_srcTable->width();
 	int sy = m_srcTable->globalY(m_srcField);
 	int rx = m_rcvTable->x();

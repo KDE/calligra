@@ -131,7 +131,7 @@ class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 		 *  @code record->commit(true); //commits changes on current record and inserts insertBuffer
 		 *
 		 *  @returns a record-identification integer
-		 * after a writeOut has been done the record is deleted automatically, so don't store the 
+		 * after a writeOut has been done the record is deleted automatically, so don't store the
 		 * pointer. It can be use d for identifying a record during a recordInsertedHandler();
 		 */
 		virtual KexiDBUpdateRecord *insert(bool wantNotification=false) = 0;

@@ -34,6 +34,7 @@ class KexiRelationViewTable;
 class KexiRelationViewTableContainer;
 class KexiRelation;
 class KexiRelationDialog;
+class KexiDBTable;
 
 typedef QMap<QString, KexiRelationViewTableContainer*> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
@@ -46,7 +47,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 		KexiRelationView(KexiRelationDialog *parent, const char *name=0,KexiRelation* =0);
 		~KexiRelationView();
 
-		void		addTable(const QString &table, QStringList columns);
+		void		addTable(const QString &table, const KexiDBTable *t);
 		void		addConnection(SourceConnection con, bool interactive=true);
 
 		RelationList	getConnections()const { return m_connections; };

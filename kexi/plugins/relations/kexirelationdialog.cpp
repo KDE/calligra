@@ -99,10 +99,10 @@ KexiRelationDialog::slotAddTable()
 		const KexiDBTable * const  t=m_db->table(tname);
 		if (t)
 		{
-			QStringList fields;
-			for(uint i=0; i < t->fieldCount(); i++)
-				fields.append(t->field(i).name());
-			m_view->addTable(tname, fields);
+//			QStringList fields;
+//			for(uint i=0; i < t->fieldCount(); i++)
+//				fields.append(t->field(i).name());
+			m_view->addTable(tname, t);
 			kdDebug() << "KexiRelationDialog::slotAddTable(): adding table " << tname << endl;
 		}
 

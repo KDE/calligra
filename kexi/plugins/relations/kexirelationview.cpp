@@ -59,7 +59,7 @@ KexiRelationView::KexiRelationView(KexiRelationDialog *parent, const char *name,
 }
 
 void
-KexiRelationView::addTable(const QString &table, QStringList columns)
+KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 {
 	kdDebug() << "KexiRelationView::addTable(): " << table << endl;
 
@@ -69,7 +69,7 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 //		return;
 	}
 
-	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, columns);
+	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, t);
 	addChild(c, 100,100);
 	c->show();
 	c->setFixedSize(110, 160);

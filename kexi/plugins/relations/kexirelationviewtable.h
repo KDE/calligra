@@ -27,14 +27,15 @@
 
 class KexiRelationView;
 class KexiRelationViewTable;
+class KexiDBTable;
 //class KexiRelationViewTableContainer;
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 {
 	Q_OBJECT
-	
+
 	public:
-		KexiRelationViewTableContainer(KexiRelationView *parent, QString table, QStringList fields);
+		KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t);
 		~KexiRelationViewTableContainer();
 
 		int			globalY(const QString &field);
@@ -69,7 +70,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTable : public KListView
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, QStringList fields, const char *name=0);
+		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, const KexiDBTable *t, const char *name=0);
 		~KexiRelationViewTable();
 
 		QString			table() const { return m_table; };
@@ -100,7 +101,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabe
 	public:
 		KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent);
 		virtual ~KexiRelationViewTableContainerHeader();
-	
+
 	protected:
 		bool			eventFilter(QObject *obj, QEvent *ev);
 		void			mousePressEvent(QMouseEvent *ev);
@@ -112,7 +113,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabe
 		int			m_offsetX;
 		int			m_offsetY;
 	signals:
-		void			moved();		
+		void			moved();
 };
 
 #endif

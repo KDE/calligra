@@ -25,7 +25,10 @@
 #include <qpoint.h>
 
 #include <kdebug.h>
+#include <kiconloader.h>
 
+#include <kexiDB/kexidbtable.h>
+#include <kexiDB/kexidbfield.h>
 #include "kexirelationviewtable.h"
 #include "kexirelationview.h"
 
@@ -33,9 +36,7 @@
 
 #include <stdlib.h>
 
-//BEGIN KexiRelationViewTableContainer
-
-KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, QStringList fields)
+KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t)
  : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
 {
 //	setFixedSize(100, 150);
@@ -48,18 +49,18 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 	QLabel *l = new KexiRelationViewTableContainerHeader(table, this);
 	l->setPaletteBackgroundColor(colorGroup().highlight());
-	g->addWidget(l, 0, 0);
 
-	QPushButton *btnClose = new QPushButton("x", this, "x");
-	btnClose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	btnClose->setFixedSize(15, 15);
+//	QPushButton *btnClose = new QPushButton("x", this, "x");
+//	btnClose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+//	btnClose->setFixedSize(15, 15);
 //	btnClose->setFlat(true);
 
-	m_tableView = new KexiRelationViewTable(this, parent, table, fields, "tbl-list");
+	m_tableView = new KexiRelationViewTable(this, parent, table, t, "tbl-list");
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
 
-	g->addWidget(btnClose, 0, 1);
-	g->addMultiCellWidget(m_tableView, 1, 1, 0, 1);
+//	g->addWidget(btnClose, 0, 1);
+	g->addWidget(l, 0, 0);
+	g->addWidget(m_tableView, 1, 0);
 
 	m_tbHeight = l->height();
 
@@ -235,10 +236,10 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 
 
 KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table,
-                                             QStringList fields, const char *name)
+                                             const KexiDBTable *t, const char *name)
  : KListView(parent)
 {
-	m_fieldList = fields;
+//	m_fieldList = t.;
 	m_table = table;
 //	m_parent = parent;
 
@@ -255,9 +256,14 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 	setSorting(0, true); // disable sorting
 
 	int order=0;
-	for(QStringList::Iterator it = m_fieldList.begin(); it != m_fieldList.end(); it++)
+
+	for(uint i=0; i < t->fieldCount(); i++)
 	{
-		KListViewItem *i = new KListViewItem(this, QString::number(order), (*it));
+		KexiDBField f = t->field(i);
+		KListViewItem *i = new KListViewItem(this, QString::number(order), f.name());
+		if(f.primary_key() || f.unique_key())
+			i->setPixmap(1, SmallIcon("key"));
+
 		i->setDragEnabled(true);
 		i->setDropEnabled(true);
 		order++;
