@@ -574,15 +574,33 @@ bool KoMainWindow::saveDocument( bool saveas )
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     QCString _native_format = pDoc->nativeFormatMimeType();
+    QCString oldOutputFormat = pDoc->outputMimeType();
+    int oldSpecialOutputFlag = pDoc->specialOutputFlag();
     bool wasModified = pDoc->isModified();
 
     bool ret = false;
 
-    if ( pDoc->url().isEmpty() || saveas )
+    if ( pDoc->url().isEmpty() || saveas || pDoc->haventTriedSaving () )
     {
-        KoFileDialog *dialog=new KoFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+        QString suggestedFilename = pDoc->url ().path ();
+
+        if ( !suggestedFilename.isEmpty () ) // ".kwd" looks strange for a name
+        {
+            int c = suggestedFilename.findRev ('.');
+
+            KMimeType::Ptr mime = KMimeType::mimeType( _native_format );
+            QString ext = mime->property( "X-KDE-NativeExtension" ).toString();
+            if (!ext.isEmpty ())
+            {
+                if (c == -1)
+                    suggestedFilename += ext;
+                else
+                    suggestedFilename = suggestedFilename.left (c) + ext;
+            }
+        }
+
+        KoFileDialog *dialog=new KoFileDialog(suggestedFilename, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save Document As") );
-        dialog->setKeepLocation( true );
         dialog->setOperationMode( KFileDialog::Saving );
         QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
         dialog->setSpecialMimeFilter( mimeFilter, _native_format );
@@ -619,7 +637,15 @@ bool KoMainWindow::saveDocument( bool saveas )
                 newURL.setPath( newURL.path() + extension );
             }
 
-            if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
+            // this file exists => ask for confirmation
+            if ( KIO::NetAccess::exists( newURL ) &&
+                 (!pDoc->haventTriedSaving () ||
+                     (pDoc->haventTriedSaving () &&
+                         (newURL != pDoc->url () || outputFormat != pDoc->mimeType ())
+                     )
+                 )
+               )
+            {
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\
                                                        "Do you want to overwrite it?"),
@@ -640,7 +666,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 QString comment = ( mime->name() == KMimeType::defaultMimeType() ) ? i18n( "Unknown file type %1" ).arg( outputFormat )
                                   : mime->comment();
                 int res = KMessageBox::warningContinueCancel(
-                    0, i18n( "<qt>You are about to save the document using the format %1.<p>"
+                    0, i18n( "<qt>You are about to save the document in the %1 format.<p>"
                              "This might lose parts of the formatting of the document. Proceed?</qt>" )
                     .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                     i18n( "File Export: Confirmation Required" ),
@@ -651,13 +677,14 @@ bool KoMainWindow::saveDocument( bool saveas )
                     return false;
             }
             ret = pDoc->saveAs( newURL );
-
+            if (!ret) pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
             pDoc->setTitleModified();
         }
         else
             ret = false;
     }
     else {
+        // be sure pDoc has the correct outputMimeType!
         ret = pDoc->save();
     }
 

@@ -169,6 +169,11 @@ public:
     enum { SaveAsKOffice1dot1 = 1, SaveAsDirectoryStore = 2 };
 
     /**
+     * Returns the actual mimetype of the document
+     */
+    QCString mimeType() const;
+
+    /**
      * Set the format in which the document should be saved.
      * This is called on loading, and in "save as", so you shouldn't
      * have to call it.
@@ -177,6 +182,8 @@ public:
     void setOutputMimeType( const QCString & mimeType, int specialOutputFlag = 0 );
     QCString outputMimeType() const;
     int specialOutputFlag() const;
+
+    bool haventTriedSaving() const;
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)

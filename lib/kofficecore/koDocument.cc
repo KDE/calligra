@@ -82,6 +82,7 @@ public:
     Private() :
         m_dcopObject( 0L ),
         filterManager( 0L ),
+        haventTriedSaving( true ),
         m_specialOutputFlag( 0 ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
@@ -106,7 +107,9 @@ public:
 
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
 
+    QCString mimeType; // The actual mimetype of the document
     QCString outputMimeType; // The mimetype to use when saving
+    bool haventTriedSaving; // used to pop up a dialog when saving for the first time where the file is in a foreign format
     int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
@@ -303,7 +306,7 @@ bool KoDocument::saveFile()
     }
 
     bool ret = false;
-    bool userCancelled = false;
+    bool suppressErrorDialog = false;
     if ( outputMimeType != _native_format ) {
         kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
         // Not native format : save using export filter
@@ -312,7 +315,7 @@ bool KoDocument::saveFile()
 
         KoFilter::ConversionStatus status = d->filterManager->exp0rt( m_file, outputMimeType );
         ret = status == KoFilter::OK;
-        userCancelled = status == KoFilter::UserCancelled;
+        suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph );
     } else
         // Native format => normal save
         ret = saveNativeFormat( m_file );
@@ -321,18 +324,38 @@ bool KoDocument::saveFile()
         removeAutoSaveFiles();
 
     QApplication::restoreOverrideCursor();
-    if ( !ret && !userCancelled )
+    if ( !ret )
     {
-        if ( d->lastErrorMessage.isEmpty() )
-            KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
-        else if ( d->lastErrorMessage != "USER_CANCELED" )
+        if ( !suppressErrorDialog )
         {
-            KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file ).arg( d->lastErrorMessage ) );
-            //don't store url when we are not autorize to save file.
-            resetURL();
+            if ( d->lastErrorMessage.isEmpty() )
+                KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
+            else if ( d->lastErrorMessage != "USER_CANCELED" )
+            {
+                KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file ).arg( d->lastErrorMessage ) );
+            }
         }
+
+        // couldn't save file so this new URL is invalid
+        // FIXME: we should restore the current document's true URL instead of
+        // setting it to nothing otherwise anything that depends on the URL
+        // being correct will not work (i.e. the document will be called
+        // "Untitled" which may not be true)
+        resetURL();
     }
+
+    if ( ret )
+    {
+        d->mimeType = outputMimeType;
+        d->haventTriedSaving = false;
+    }
+
     return ret;
+}
+
+QCString KoDocument::mimeType() const
+{
+    return d->mimeType;
 }
 
 void KoDocument::setOutputMimeType( const QCString & mimeType, int specialOutputFlag )
@@ -349,6 +372,11 @@ QCString KoDocument::outputMimeType() const
 int KoDocument::specialOutputFlag() const
 {
     return d->m_specialOutputFlag;
+}
+
+bool KoDocument::haventTriedSaving() const
+{
+    return d->haventTriedSaving;
 }
 
 void KoDocument::setCheckAutoSaveFile( bool b )
@@ -1100,9 +1128,12 @@ bool KoDocument::openFile()
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
-            if ( status != KoFilter::UserCancelled && d->m_autoErrorHandlingEnabled )
+            if ( status != KoFilter::UserCancelled &&
+                 status != KoFilter::BadConversionGraph &&
+                 d->m_autoErrorHandlingEnabled )
                 // Any way of passing a better error message from the filter?
                 KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+
             return false;
         }
         kdDebug(30003) << "KoDocument::openFile - importedFile '" << importedFile
@@ -1134,9 +1165,20 @@ bool KoDocument::openFile()
         // We opened a temporary file (result of an import filter)
         // Set document URL to empty - we don't want to save in /tmp !
         // But only if in readwrite mode (no saving problem otherwise)
+        // --
+        // But this isn't true at all.  If this is the result of an
+        // import, then importedFile=temporary_file.kwd and
+        // m_file/m_url=foreignformat.ext so m_url is correct!
+        // So don't resetURL() or else the caption won't be set when
+        // foreign files are opened (an annoying bug).
+        // - Clarence
+        // 
+#if 0
         if ( isReadWrite() )
             resetURL();
-        // and remove temp file - uncomment this to debug import filters
+#endif
+
+        // remove temp file - uncomment this to debug import filters
         if(!importedFile.isEmpty())
             unlink( QFile::encodeName(importedFile) );
     }
@@ -1158,10 +1200,13 @@ bool KoDocument::openFile()
             guiFactory->addClient( this );
     }
 
+    if ( ok ) d->mimeType = typeName.latin1 ();
+
     // We decided not to save in the file's original format by default
     // ( KWord isn't a text editor or a MSWord editor :)
     // The risk of losing formatting information is too high currently.
     d->outputMimeType = _native_format;
+    if ( ok ) d->haventTriedSaving = typeName.latin1() != _native_format;
 
     return ok;
 }
