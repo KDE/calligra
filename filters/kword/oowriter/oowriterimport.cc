@@ -282,12 +282,12 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     if ( !m_content.setContent( store->device(),
         &errorMsg, &errorLine, &errorColumn ) )
     {
-	kdError(30518) << "Parsing error in content.xml" << endl
+        kdError(30518) << "Parsing error in content.xml! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
-	store->close();
-	delete store;
-	return KoFilter::ParsingError;
+        store->close();
+        delete store;
+        return KoFilter::ParsingError;
     }
     store->close();
 
@@ -300,23 +300,33 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     // anyway, so this doesn't make a big difference.
     // We now also rely on this in createStyles.
     //QDomDocument styles;
+    
+    // NOTE: If we have not have a correct styles.xml, we have to abort or the filter will crash later.
+    
     if ( store->open( "styles.xml" ) )
     {
         if ( !m_stylesDoc.setContent( store->device(),
              &errorMsg, &errorLine, &errorColumn ) )
-	{
-	    kdWarning(30518) << "Parsing error in style.xml" << endl
-		<< " In line: " << errorLine << ", column: " << errorColumn << endl
-		<< " Error message: " << errorMsg << endl;
-	}
-        else
-            kdDebug(30518) << "file containing styles loaded" << endl;
+        {
+            kdError(30518) << "Parsing error in styles.xml! Aborting!" << endl
+                << " In line: " << errorLine << ", column: " << errorColumn << endl
+                << " Error message: " << errorMsg << endl;
+            store->close();
+            delete store;
+            return KoFilter::ParsingError;
+        }
+        
         store->close();
+        kdDebug(30518) << "file containing styles loaded" << endl;
 
         //kdDebug(30518)<<" styles.toCString() :"<<m_stylesDoc.toCString()<<endl;
     }
     else
-        kdWarning(30518) << "Style definitions do not exist!" << endl;
+    {
+        kdWarning(30518) << "Style definitions do not exist! Aborting!" << endl;
+        delete store;
+        return KoFilter::WrongFormat;
+    }
 
     if ( store->open( "meta.xml" ) )
     {
