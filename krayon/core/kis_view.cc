@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kimageeffect.h>
 #include <kapp.h>
+#include <kmimetype.h>
 
 // Grmbl, X headers.....
 #ifdef GrayScale
@@ -2535,9 +2536,8 @@ void KisView::previous_layer()
 
 void KisView::import_image()
 {
-    insert_layer_image(true);
-
-    m_pDoc->setModified( true );
+	if (!insert_layer_image(true))
+		m_pDoc -> setModified(true);
 }
 
 void KisView::export_image()
@@ -2574,7 +2574,7 @@ void KisView::slotEmbeddImage(const QString &filename)
     because it can also be used for importing an image file during
     doc init.  Eventually it needs to go into koffice/filters.
 */
-void KisView::insert_layer_image(bool newImage, const QString &filename)
+int KisView::insert_layer_image(bool newImage, const QString &filename)
 {
     KURL url(filename);
 
@@ -2582,157 +2582,131 @@ void KisView::insert_layer_image(bool newImage, const QString &filename)
 	url = KFileDialog::getOpenURL( QString::null,
     	    KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
-    if( !url.isEmpty() )
-    {
-	QImage *fileImage = new QImage();
+	if (url.isEmpty())
+		return -1;
+	
+	QImage fileImage;
 
-	if (!fileImage -> load(url.path())) {
+	if (!fileImage.load(url.path())) {
+		KMimeType::Ptr mt = KMimeType::findByURL(url, 0, true);
+
 		kdDebug() << "Can't create QImage from file" << endl;
-		KMessageBox::sorry(this, i18n("Could not convert file: %1\n").arg(url.path()));
-		delete fileImage;
-		return;
+		KMessageBox::error(this, i18n("Could not import file of type\n%1").arg(mt -> name()), i18n("Missing import filter"));
+		return -1;
 	}
 
-        /* convert indexed images, all gifs and some pngs of 8 bits
-        or less, to 16 bit by creating a QPixmap from the file and
-        blitting it into a 16 bit RGBA pixmap - you can blit from a
-        lesser depth to a greater but not the other way around. This
-        is the only way, and since the really huge images are 16
-        bits or greater in depth (jpg and tiff), it's not too slow
-        for most gifs, indexed pings, etc., which are usually much
-        smaller. One bit images are taboo because of bigendian
-        problems and are rejected */
+	/* convert indexed images, all gifs and some pngs of 8 bits
+	   or less, to 16 bit by creating a QPixmap from the file and
+	   blitting it into a 16 bit RGBA pixmap - you can blit from a
+	   lesser depth to a greater but not the other way around. This
+	   is the only way, and since the really huge images are 16
+	   bits or greater in depth (jpg and tiff), it's not too slow
+	   for most gifs, indexed pings, etc., which are usually much
+	   smaller. One bit images are taboo because of bigendian
+	   problems and are rejected */
 
-        if(fileImage->depth() == 1)
-        {
-            delete fileImage;
-            kdDebug() << "No 1 bit images. "
-                      << "Where's your 2 bits worth?" << endl;
-            return;
-        }
+	if (fileImage.depth() == 1) {
+		kdDebug() << "No 1 bit images. " << "Where's your 2 bits worth?" << endl;
+		return -1;
+	}
 
-        if(fileImage->depth() < 16)
-        {
-            // we can't use this image, must convert from QPixmap
-            delete fileImage;
+	if (fileImage.depth() < 16) {
+		// create a QPixmap from the same file
+		QPixmap filePixmap(url.path());
 
-            // create a QPixmap from the same file
-            QPixmap *filePixmap = new QPixmap(url.path());
+		// the buffer QPixmap will be created at the default
+		// display depth, at least 16 bit.  We can't use
+		// Krayon on less hardware anyway.  It's not an 8
+		// bit applicaiton.
 
-            // the buffer QPixmap will be created at the default
-            // display depth, at least 16 bit.  We can't use
-            // Krayon on less hardware anyway.  It's not an 8
-            // bit applicaiton.
+		QPixmap buffer(filePixmap.width(), filePixmap.height());
 
-            QPixmap *buffer = new QPixmap(filePixmap->width(),
-                filePixmap->height());
-            buffer->fill (Qt::white);
+		if (!filePixmap.isNull() && !buffer.isNull())
+			bitBlt(&buffer, 0, 0, &filePixmap, 0, 0, filePixmap.width(), filePixmap.height());
 
-            // perform the magic
-            if(filePixmap && buffer)
-            {
-                bitBlt (buffer, 0, 0, filePixmap,
-                    0, 0, filePixmap->width(), filePixmap->height());
-            }
+		fileImage = buffer;
 
-            // we now have at least a 16 bit QImage!!!
-            QImage cImage = buffer->convertToImage();
-            fileImage = new QImage(cImage);
+		if (fileImage.depth() < 16) {
+			KMessageBox::error(this, i18n("Image cannot be converted to 16 bit."), i18n("Error loading file"));
+			kdDebug() << "newImage can't be converted to 16 bit" << endl;
+			return -1;
+		}
+	}
 
-            // clean up
-            if(filePixmap) delete filePixmap;
-            if(buffer)     delete buffer;
-        }
+	// establish a rectangle the same size as the QImage loaded
+	// from file. This will be used to set the size of the new
+	// KisLayer for the picture and/or a new KisImage
 
-        if(!fileImage)
-        {
-            kdDebug() << "This file is corrupt! We can't load it!" << endl;
-            return;
-        }
+	KisImage* img = m_pDoc->current();
+	QRect layerRect(0, 0, fileImage.width(), fileImage.height());
+	QString layerName(url.fileName());
 
-        if(fileImage->depth() < 16)
-        {
-            delete fileImage;
-            kdDebug() << "newImage can't be converted to 16 bit" << endl;
-            return;
-        }
+	// add image from the file as new layer for existing image
+	if(!newImage)
+	{
+		img->addLayer(layerRect, white, false, layerName);
+		uint indx = img->layerList().count() - 1;
+		img->setCurrentLayer(indx);
+		img->setFrontLayer(indx);
+		m_pLayerView->layerTable()->selectLayer(indx);
 
-        // establish a rectangle the same size as the QImage loaded
-        // from file. This will be used to set the size of the new
-        // KisLayer for the picture and/or a new KisImage
+		m_pLayerView->layerTable()->updateTable();
+		m_pLayerView->layerTable()->updateAllCells();
+	}
+	// add image from file as new image and append to image list
+	else
+	{
+		// this creates the new image and appends it to
+		// the image list for the document
+		KisImage *newimg = m_pDoc->newImage(layerName,
+				layerRect.width(), layerRect.height());
 
-        KisImage* img = m_pDoc->current();
-        QRect layerRect(0, 0, fileImage->width(), fileImage->height());
-        QString layerName(url.fileName());
+		// add background for layer - should this always be white?
+		bgMode bg = bm_White;
 
-        // add image from the file as new layer for existing image
-        if(!newImage)
-        {
-            img->addLayer(layerRect, white, false, layerName);
-            uint indx = img->layerList().count() - 1;
-            img->setCurrentLayer(indx);
-            img->setFrontLayer(indx);
-            m_pLayerView->layerTable()->selectLayer(indx);
+		if (bg == bm_White)
+			newimg->addLayer(QRect(0, 0,
+						newimg->width(), newimg->height()),
+					KisColor::white(), false, i18n("background"));
 
-            m_pLayerView->layerTable()->updateTable();
-            m_pLayerView->layerTable()->updateAllCells();
-        }
-        // add image from file as new image and append to image list
-        else
-        {
-            // this creates the new image and appends it to
-            // the image list for the document
-            KisImage *newimg = m_pDoc->newImage(layerName,
-                layerRect.width(), layerRect.height());
+		else if (bg == bm_Transparent)
+			newimg->addLayer(QRect(0, 0,
+						newimg->width(), newimg->height()),
+					KisColor::white(), true, i18n("background"));
 
-            // add background for layer - should this always be white?
-            bgMode bg = bm_White;
+		else if (bg == bm_ForegroundColor)
+			newimg->addLayer(QRect(0, 0,
+						newimg->width(), newimg->height()),
+					KisColor::white(), false, i18n("background"));
 
-            if (bg == bm_White)
-	            newimg->addLayer(QRect(0, 0,
-                    newimg->width(), newimg->height()),
-                    KisColor::white(), false, i18n("background"));
+		else if (bg == bm_BackgroundColor)
+			newimg->addLayer(QRect(0, 0,
+						newimg->width(), newimg->height()),
+					KisColor::white(), false, i18n("background"));
 
-            else if (bg == bm_Transparent)
-	            newimg->addLayer(QRect(0, 0,
-                    newimg->width(), newimg->height()),
-                    KisColor::white(), true, i18n("background"));
+		newimg->markDirty(QRect(0, 0,
+					newimg->width(), newimg->height()));
 
-            else if (bg == bm_ForegroundColor)
-	            newimg->addLayer(QRect(0, 0,
-                    newimg->width(), newimg->height()),
-                    KisColor::white(), false, i18n("background"));
+		m_pDoc->setCurrentImage(newimg);
+	}
 
-            else if (bg == bm_BackgroundColor)
-	            newimg->addLayer(QRect(0, 0,
-                    newimg->width(), newimg->height()),
-                    KisColor::white(), false, i18n("background"));
+	// copy the image into the layer regardless of whether
+	// a new image or just a new layer was created for it above.
+	if(!m_pDoc->QtImageToLayer(&fileImage, this))
+	{
+		kdDebug(0) << "inset_layer_image: "
+			<< "Can't load image into layer." << endl;
 
-            newimg->markDirty(QRect(0, 0,
-                newimg->width(), newimg->height()));
+		// remove empty image
+		if(newImage) remove_current_image_tab();
+	}
+	else
+	{
+		slotUpdateImage();
+		slotRefreshPainter();
+	}
 
-            m_pDoc->setCurrentImage(newimg);
-        }
-
-        // copy the image into the layer regardless of whether
-        // a new image or just a new layer was created for it above.
-        if(!m_pDoc->QtImageToLayer(fileImage, this))
-        {
-            kdDebug(0) << "inset_layer_image: "
-                       << "Can't load image into layer." << endl;
-
-            // remove empty image
-            if(newImage) remove_current_image_tab();
-        }
-        else
-        {
-            slotUpdateImage();
-            slotRefreshPainter();
-        }
-
-        // QImage creation returns 0 on failue - this is safe
-        if(fileImage) delete fileImage;
-    }
+	return 0;
 }
 
 
