@@ -96,7 +96,7 @@ void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
 
     it = tabsList.at( _from );
     const QString tabname = *it;
-	
+
     if ( !_before )
 	++_to;
 
@@ -116,7 +116,7 @@ void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
 	tabsList.insert( tabsList.at( _to ), tabname );
     }
 
-    repaint();	
+    repaint();
 }
 
 
@@ -136,7 +136,7 @@ void KSpreadTabBar::scrollRight()
 {
     if ( tabsList.count() == 0 )
 	return;
-	
+
 	if ( m_rightTab == (int)tabsList.count() )
 	return;
 
@@ -272,7 +272,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 		QFontMetrics fm = painter.fontMetrics();
 		int text_width = fm.width( text );
 		int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
-	
+
 		if ( i == activeTab )
 		{
 	    	active_text = text;
@@ -298,7 +298,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 
 //    if ( active_text != 0L )
     paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
-	
+
     painter.end();
     bitBlt( this, 0, 0, &pm );
 }
@@ -353,12 +353,12 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
 {
     if ( !m_pView->koDocument()->isReadWrite() )
       return;
- 
+
     if ( m_pPopupMenu != 0L )
         delete m_pPopupMenu;
     m_pPopupMenu = new QPopupMenu();
 
-    m_pPopupMenu->insertItem( i18n( "Rename table" ), this, SLOT( slotRename() ) );
+    m_pPopupMenu->insertItem( i18n( "Rename table..." ), this, SLOT( slotRename() ) );
     m_pPopupMenu->insertItem( i18n( "Remove table" ), this, SLOT( slotRemove() ) );
     m_pPopupMenu->insertItem( i18n( "Insert table" ), this, SLOT( slotAdd() ) );
     m_pPopupMenu->popup( _global );
@@ -369,9 +369,7 @@ void KSpreadTabBar::renameTab()
 {
     QString activeName;
     QString newName;
-    if ( !m_pView->koDocument()->isReadWrite() )
-	  return;
-    	
+
     KSpreadTable* table = m_pView->activeTable();
     activeName = table->tableName();
 
@@ -388,12 +386,14 @@ void KSpreadTabBar::renameTab()
             for( ; it2.current(); ++it2 )
 		it2.current()->changeCellTabName(activeName,newName);
 
-        }	
+        }
     }
 }
 
 void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 {
+
+
     int old_active = activeTab;
 
     if ( tabsList.count() == 0 )
@@ -416,7 +416,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
         text = *it;
 	QFontMetrics fm = painter.fontMetrics();
 	int text_width = fm.width( text );
-	
+
 	if ( i >= leftTab )
 	{
 	    if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
@@ -424,12 +424,12 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 		activeTab = i;
 		active_text = text;
 	    }
-	
+
 	    x += 10 + text_width;
 	}
 	i++;
     }
-	
+
     painter.end();
 
     if ( activeTab != old_active )
@@ -451,6 +451,9 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 
 void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
+    if ( !m_pView->koDocument()->isReadWrite() )
+        return;
+
     if ( _ev->button() == LeftButton && m_moveTab != 0 )
     {
 	if ( m_autoScroll != 0 )
@@ -462,12 +465,12 @@ void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 					  (*tabsList.at( m_moveTab - 1 )).ascii(),
 					  m_moveTabFlag == moveTabBefore );
 	moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
-		
+
 	m_moveTabFlag = moveTabNo;
 	if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
 	    m_moveTab--;
 	activeTab = m_moveTab;
-	
+
 	m_moveTab = 0;
 	repaint( false );
     }
@@ -494,6 +497,8 @@ void KSpreadTabBar::slotAutoScroll( )
 
 void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
+    if ( !m_pView->koDocument()->isReadWrite() )
+         return;
     if ( m_moveTabFlag == 0)
 	return;
 
@@ -534,7 +539,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
         {
 	    QFontMetrics fm = painter.fontMetrics();
 	    int text_width = fm.width( *it );
-			
+
 	    if ( i >= leftTab )
 	    {
 		if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
@@ -562,7 +567,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 	    i++;
 	}
 	--i;
-		
+
 	if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
         {
 	    if ( activeTab != i && m_moveTabFlag != moveTabAfter )
@@ -578,6 +583,8 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 
 void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
+    if ( !m_pView->koDocument()->isReadWrite() )
+        return;
     renameTab();
 }
 

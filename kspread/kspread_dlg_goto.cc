@@ -66,15 +66,22 @@ KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
 void KSpreadgoto::slotOk()
 {
     QString tmp_upper;
-    tmp_upper=name_cell->text().upper();
-    QString tmp = m_pView->activeTable()->tableName() + "!" + tmp_upper;
-    m_pView->canvasWidget()->hideMarker();
-    // m_pView->canvasWidget()->setgotohorz(true);
-    // m_pView->canvasWidget()->setgotovert(true);
-    m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
-    m_pView->canvasWidget()->showMarker();
-
-    accept();
+    if(!name_cell->text().isEmpty())
+        {
+        tmp_upper=name_cell->text().upper();
+        QString tmp = m_pView->activeTable()->tableName() + "!" + tmp_upper;
+        m_pView->canvasWidget()->hideMarker();
+        // m_pView->canvasWidget()->setgotohorz(true);
+        // m_pView->canvasWidget()->setgotovert(true);
+        m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
+        m_pView->canvasWidget()->showMarker();
+        accept();
+        }
+    else
+        {
+        QMessageBox::warning( 0L, i18n("Error"), i18n("Area Text is empty!"),
+			   i18n("Ok") );
+        }
 }
 
 void KSpreadgoto::slotClose()

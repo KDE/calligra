@@ -164,7 +164,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     hbox->addSpacing( 2 );
 
     m_pCanvas->setEditWidget( m_pEditWidget );
-	
+
     m_pHBorderWidget = new KSpreadHBorder( m_pFrame, m_pCanvas,this );
     m_pVBorderWidget = new KSpreadVBorder( m_pFrame, m_pCanvas ,this );
 
@@ -484,7 +484,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	  (m_pCanvas->*setMarkerRow)( cell->obscuringCellsRow() );
 	  (m_pCanvas->*setMarkerColumn)( cell->obscuringCellsColumn() );
 	}
-	
+
 	y = m_pTable->rowPos( (m_pCanvas->*markerRow)(), m_pCanvas );
 	rl = m_pTable->rowLayout( (m_pCanvas->*markerRow)() );
 	if ( y < 0 )
@@ -1754,7 +1754,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     m_pPopupColumn->insertItem( i18n("Insert Column"), this, SLOT( slotInsertColumn() ) );
     m_pPopupColumn->insertItem( i18n("Remove Column"), this, SLOT( slotRemoveColumn() ) );
-    m_pPopupColumn->insertItem( i18n("Resize"), this, SLOT( slotResizeColumn() ) );
+    m_pPopupColumn->insertItem( i18n("Resize..."), this, SLOT( slotResizeColumn() ) );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotAdjustColumn() ) );
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
@@ -1816,7 +1816,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 
     m_pPopupRow->insertItem( i18n("Insert Row"), this, SLOT( slotInsertRow() ) );
     m_pPopupRow->insertItem( i18n("Remove Row"), this, SLOT( slotRemoveRow() ) );
-    m_pPopupRow->insertItem( i18n("Resize"), this, SLOT( slotResizeRow() ) );
+    m_pPopupRow->insertItem( i18n("Resize..."), this, SLOT( slotResizeRow() ) );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotAdjustRow() ) );
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );
@@ -1873,6 +1873,9 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
     if ( m_pPopupMenu != 0L )
 	delete m_pPopupMenu;
+
+    if(!koDocument()->isReadWrite() )
+        return;
 
     m_pPopupMenu = new QPopupMenu();
 

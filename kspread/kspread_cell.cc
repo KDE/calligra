@@ -140,6 +140,36 @@ void KSpreadCell::copyLayout( int _column, int _row )
   setFloatColor( o->floatColor() );
   setFaktor( o->faktor() );
   setMultiRow( o->multiRow() );
+  KSpreadConditional *tmpCondition=0;
+  //tmpCondition=o->getFirstCondition(0);
+  if(o->getFirstCondition(0)!=0)
+    	{
+  	tmpCondition=getFirstCondition();
+  	tmpCondition->val1=o->getFirstCondition(0)->val1;
+  	tmpCondition->val2=o->getFirstCondition(0)->val2;
+  	tmpCondition->colorcond=o->getFirstCondition(0)->colorcond;
+  	tmpCondition->fontcond=o->getFirstCondition(0)->fontcond;
+  	tmpCondition->m_cond=o->getFirstCondition(0)->m_cond;
+	}
+  if(o->getSecondCondition(0)!=0)
+    	{
+  	tmpCondition=getSecondCondition();
+  	tmpCondition->val1=o->getSecondCondition(0)->val1;
+  	tmpCondition->val2=o->getSecondCondition(0)->val2;
+  	tmpCondition->colorcond=o->getSecondCondition(0)->colorcond;
+  	tmpCondition->fontcond=o->getSecondCondition(0)->fontcond;
+  	tmpCondition->m_cond=o->getSecondCondition(0)->m_cond;
+	}
+  if(o->getThirdCondition(0)!=0)
+    	{
+  	tmpCondition=getThirdCondition();
+  	tmpCondition->val1=o->getThirdCondition(0)->val1;
+  	tmpCondition->val2=o->getThirdCondition(0)->val2;
+  	tmpCondition->colorcond=o->getThirdCondition(0)->colorcond;
+  	tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
+  	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
+	}
+
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell)
@@ -172,6 +202,35 @@ void KSpreadCell::copyAll( KSpreadCell *cell)
   setFloatColor( cell->floatColor() );
   setFaktor( cell->faktor() );
   setMultiRow( cell->multiRow() );
+  KSpreadConditional *tmpCondition=0;
+  //tmpCondition=o->getFirstCondition(0);
+  if(cell->getFirstCondition(0)!=0)
+    	{
+  	tmpCondition=getFirstCondition();
+  	tmpCondition->val1=cell->getFirstCondition(0)->val1;
+  	tmpCondition->val2=cell->getFirstCondition(0)->val2;
+  	tmpCondition->colorcond=cell->getFirstCondition(0)->colorcond;
+  	tmpCondition->fontcond=cell->getFirstCondition(0)->fontcond;
+  	tmpCondition->m_cond=cell->getFirstCondition(0)->m_cond;
+	}
+  if(cell->getSecondCondition(0)!=0)
+    	{
+  	tmpCondition=getSecondCondition();
+  	tmpCondition->val1=cell->getSecondCondition(0)->val1;
+  	tmpCondition->val2=cell->getSecondCondition(0)->val2;
+  	tmpCondition->colorcond=cell->getSecondCondition(0)->colorcond;
+  	tmpCondition->fontcond=cell->getSecondCondition(0)->fontcond;
+  	tmpCondition->m_cond=cell->getSecondCondition(0)->m_cond;
+	}
+  if(cell->getThirdCondition(0)!=0)
+    	{
+  	tmpCondition=getThirdCondition();
+  	tmpCondition->val1=cell->getThirdCondition(0)->val1;
+  	tmpCondition->val2=cell->getThirdCondition(0)->val2;
+  	tmpCondition->colorcond=cell->getThirdCondition(0)->colorcond;
+  	tmpCondition->fontcond=cell->getThirdCondition(0)->fontcond;
+  	tmpCondition->m_cond=cell->getThirdCondition(0)->m_cond;
+	}
 
 }
 
