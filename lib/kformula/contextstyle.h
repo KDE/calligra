@@ -129,6 +129,7 @@ public:
     luPt getBaseSize() const;
     pt baseSize() const { return m_baseSize; }
     void setBaseSize( pt pointSize );
+    void setSizeFactor( double factor );
 
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
     bool isScript( TextStyle tstyle ) const { return ( tstyle == scriptStyle ) ||
@@ -216,7 +217,7 @@ private:
         luPt thickSpace( luPt quad ) const  { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*5./18. ); }
         luPt quadSpace( luPt quad ) const   { return quad; }
 
-        luPt axisHeight( luPt height ) const { return static_cast<luPt>( reductionFactor*height ); }
+        luPixel axisHeight( luPixel height ) const { return static_cast<luPixel>( reductionFactor*height ); }
         double reductionFactor;
     };
 
@@ -246,6 +247,12 @@ private:
     pt m_baseSize;
 
     /**
+     * Hack! Each formula might set this to a value not too far from one
+     * to get a size different from the default one.
+     */
+    double m_sizeFactor;
+
+    /**
      * The base text style of the formula.
      **/
     TextStyle m_baseTextStyle;
@@ -263,7 +270,7 @@ private:
     /**
      * Distance between base line and axis.
      */
-    luPt m_axisHeight;
+    luPixel m_axisHeight;
 
     /**
      * true means to center the symbol between its indexes.

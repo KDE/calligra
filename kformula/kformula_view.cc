@@ -97,10 +97,12 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 //                                               actionCollection(),"textfont");
 //     connect( actionElement_Text_Font, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
 
-//     KFontSizeAction* actionElement_Text_Size = new KFontSizeAction(i18n( "Size" ),0,
-//                                                   actionCollection(),"textsize");
+    KFontSizeAction* actionTextSize = new KFontSizeAction(i18n( "Size" ),0,
+                                                          actionCollection(),"formula_textsize");
+    // default is "20" which is the 8. item.
+    actionTextSize->setCurrentItem( 8 );
 
-//     connect( actionElement_Text_Size, SIGNAL( fontSizeChanged( int ) ), this, SLOT( sizeSelected( int ) ) );
+    connect( actionTextSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( sizeSelected( int ) ) );
 
 //     KToggleAction* actionElement_Text_Bold = new KToggleAction(i18n( "Bold" ),
 //                                                   "bold",
@@ -213,6 +215,11 @@ void KFormulaPartView::formulaString()
     if ( dia.exec() ) {
         // How lovely.
     }
+}
+
+void KFormulaPartView::sizeSelected( int size )
+{
+    document()->getFormula()->setFontSize( size );
 }
 
 QStringList KFormulaPartView::readFormulaString( QString text )

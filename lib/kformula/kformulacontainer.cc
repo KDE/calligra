@@ -389,19 +389,11 @@ void Container::moveTo( int x, int y )
 }
 
 
-// This doesn't work.
-void Container::setFontSize( int /*pointSize*/, bool /*forPrint*/ )
+void Container::setFontSize( int pointSize, bool /*forPrint*/ )
 {
-    // taken from KWTextFrameSet::zoom
-//     double factor = document()->getContextStyle( forPrint ).getYResolution() *
-//                     ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
-
-//     double newSize = factor*pointSize;
-//     if ( rootElement()->getBaseSize() != newSize ) {
-//         rootElement()->setBaseSize( newSize );
-//         kdDebug( DEBUGID ) << "Container::save " << newSize << endl;
-//         recalc();
-//     }
+    kdDebug() << "Container::setFontSize " << pointSize << endl;
+    rootElement()->setBaseSize( pointSize );
+    recalc();
 }
 
 
@@ -549,7 +541,8 @@ QImage Container::drawImage( int width, int height )
     impl->rootElement->draw(paint, rect, context);
     paint.end();
     context.setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-    return pm.convertToImage().smoothScale( width, height );
+    //return pm.convertToImage().smoothScale( width, height );
+    return pm.convertToImage();
 }
 
 QString Container::texString()

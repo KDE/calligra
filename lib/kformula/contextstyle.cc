@@ -33,7 +33,8 @@ ContextStyle::ContextStyle()
     : symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
-      emptyColor(Qt::blue)
+      emptyColor(Qt::blue),
+      m_sizeFactor( 0 )
 {
 //     kdDebug() << "ContextStyle::ContextStyle" << endl
 //               << "defaultFont: " << defaultFont.rawName() << endl
@@ -155,7 +156,7 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 
 luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return static_cast<luPt>( ptToLayoutUnitPt( m_baseSize*getReductionFactor( tstyle ) ) );
+    return static_cast<luPt>( ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) ) );
 }
 
 luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
@@ -171,33 +172,33 @@ luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
 
 luPixel ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
-    return ptToPixelX( textStyleValues[ tstyle ].thinSpace( quad ) );
+    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].thinSpace( quad ) );
 }
 
 luPixel ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
-    return ptToPixelX( textStyleValues[ tstyle ].mediumSpace( quad ) );
+    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].mediumSpace( quad ) );
 }
 
 luPixel ContextStyle::getThickSpace( TextStyle tstyle ) const
 {
-    return ptToPixelX( textStyleValues[ tstyle ].thickSpace( quad ) );
+    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].thickSpace( quad ) );
 }
 
 luPixel ContextStyle::getQuadSpace( TextStyle tstyle ) const
 {
-    return ptToPixelX( textStyleValues[ tstyle ].quadSpace( quad ) );
+    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].quadSpace( quad ) );
 }
 
 luPixel ContextStyle::axisHeight( TextStyle tstyle ) const
 {
     //return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
-    return textStyleValues[ tstyle ].axisHeight( m_axisHeight );
+    return static_cast<luPixel>( m_sizeFactor*textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
 }
 
 luPt ContextStyle::getBaseSize() const
 {
-    return static_cast<luPt>( ptToLayoutUnitPt( m_baseSize ) );
+    return static_cast<luPt>( ptToLayoutUnitPt( m_sizeFactor*m_baseSize ) );
 }
 
 void ContextStyle::setBaseSize( pt size )
@@ -209,20 +210,25 @@ void ContextStyle::setBaseSize( pt size )
     }
 }
 
+void ContextStyle::setSizeFactor( double factor )
+{
+    m_sizeFactor = factor;
+}
+
 
 luPixel ContextStyle::getLineWidth() const
 {
-    return ptToLayoutUnitPixX( lineWidth );
+    return ptToLayoutUnitPixX( m_sizeFactor*lineWidth );
 }
 
 luPixel ContextStyle::getEmptyRectWidth() const
 {
-    return ptToLayoutUnitPixX( m_baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize/1.8 );
 }
 
 luPixel ContextStyle::getEmptyRectHeight() const
 {
-    return ptToLayoutUnitPixX( m_baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize/1.8 );
 }
 
 

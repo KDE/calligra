@@ -32,9 +32,22 @@
 KFORMULA_NAMESPACE_BEGIN
 
 FormulaElement::FormulaElement(FormulaDocument* container)
-    : document( container ), baseSize( 18 )
+    : document( container ), baseSize( 20 ), ownBaseSize( false )
 {
 }
+
+
+void FormulaElement::setBaseSize( double size )
+{
+    if ( size > 0 ) {
+        baseSize = size;
+        ownBaseSize = true;
+    }
+    else {
+        ownBaseSize = false;
+    }
+}
+
 
 /**
  * Returns the element the point is in.
@@ -88,7 +101,12 @@ void FormulaElement::removeFormula( FormulaCursor* cursor )
 void FormulaElement::calcSizes( ContextStyle& context )
 {
     //kdDebug( DEBUGID ) << "FormulaElement::calcSizes" << endl;
-    //context.setBaseSize( getBaseSize() );
+    if ( ownBaseSize ) {
+        context.setSizeFactor( static_cast<double>( getBaseSize() )/context.baseSize() );
+    }
+    else {
+        context.setSizeFactor( 1 );
+    }
     inherited::calcSizes( context, context.getBaseTextStyle(),
                           ContextStyle::normal );
 }
@@ -100,7 +118,12 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            ContextStyle& context )
 {
     //kdDebug( DEBUGID ) << "FormulaElement::draw" << endl;
-    //context.setBaseSize( getBaseSize() );
+    if ( ownBaseSize ) {
+        context.setSizeFactor( static_cast<double>( getBaseSize() )/context.baseSize() );
+    }
+    else {
+        context.setSizeFactor( 1 );
+    }
     inherited::draw( painter, r, context, context.getBaseTextStyle(),
                      ContextStyle::normal, LuPixelPoint() );
 }
@@ -129,6 +152,9 @@ void FormulaElement::writeDom(QDomElement& element)
 {
     inherited::writeDom(element);
     element.setAttribute( "VERSION", "4" );
+    if ( ownBaseSize ) {
+        element.setAttribute( "BASESIZE", baseSize );
+    }
 }
 
 /**
@@ -147,6 +173,14 @@ bool FormulaElement::readAttributesFromDom(QDomElement& element)
     }
     if ( version < 4 ) {
         convertNames( element );
+    }
+    QString baseSizeStr = element.attribute( "BASESIZE" );
+    if ( !baseSizeStr.isNull() ) {
+        ownBaseSize = true;
+        baseSize = baseSizeStr.toInt();
+    }
+    else {
+        ownBaseSize = false;
     }
     return true;
 }

@@ -74,6 +74,8 @@ protected slots:
 
     void formulaString();
 
+    void sizeSelected( int );
+
 private:
 
     /**
