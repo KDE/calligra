@@ -26,7 +26,9 @@ endif
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 rcdir = $(kde_datadir)/kexi
-rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.rc \
+rc_DATA = kexiui.rc \
+	kexiformeditorui.rc \
+	kexiquerypartui.rc kexiquerypartinstui.rc \
 	kexirelationpartui.rc kexirelationhandlerui.rc \
 	kexitablepartui.rc kexitablepartinstui.rc \
 	kexiformpartui.rc kexiformpartinstui.rc \
