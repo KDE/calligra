@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
-
-[PropertyDef::X-KDE-Library]
-Type=QString
+Comment[es]=Manejadores de proyecto de kexi
+Comment[pt]=Gestores de Projecto do Kexi
+Comment[pt_BR]=Gestores de Projecto do Kexi
+Comment[sv]=Kexi projektfil
