@@ -321,11 +321,11 @@ void KWView::setupActions()
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
     actionExtraCreateTemplate->setStatusText( i18n( "Save this document and use it later as a template" ) );
-    actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br> You can use this new template as a starting point for another document." ) );
+    actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
     actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
     actionFileStatistics->setStatusText( i18n( "Sentence, word and letter counts for this document" ) );
-    actionFileStatistics->setWhatsThis( i18n( "Information on number of letters, words, syllables and sentences for this document.<p> Evaluates readability using the Flesch reading score." ) );
+    actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
@@ -369,15 +369,15 @@ void KWView::setupActions()
     actionViewPageMode = new KToggleAction( i18n( "&Page mode" ), 0,
                                             this, SLOT( viewPageMode() ),
                                             actionCollection(), "view_pagemode" );
-    actionViewPageMode->setWhatsThis( i18n( "Switch from preview view to page view.<br><br>Page view is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview View." ) );
-    actionViewPageMode->setStatusText( i18n( "Switch from preview view to page editing view." ) );
+    actionViewPageMode->setWhatsThis( i18n( "Switch from preview mode to page mode.<br><br>Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
+    actionViewPageMode->setStatusText( i18n( "Switch from preview mode to page editing mode." ) );
 
     actionViewPageMode->setExclusiveGroup( "viewmodes" );
     actionViewPageMode->setChecked( true );
     actionViewPreviewMode = new KToggleAction( i18n( "Pre&view mode" ), 0,
                                             this, SLOT( viewPreviewMode() ),
                                             actionCollection(), "view_previewmode" );
-    actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customised." ) );
+    actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
     actionViewPreviewMode->setStatusText( i18n( "Zoom out to a multiple page view." ) );
 
     actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
@@ -386,13 +386,13 @@ void KWView::setupActions()
                                                    this, SLOT( slotViewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
     actionViewFormattingChars->setStatusText( i18n( "Toggle the display of non-printing characters." ) );
-    actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carrige returns and other non-printing characters." ) );
+    actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
     actionViewFrameBorders = new KToggleAction( i18n( "Frame &Borders" ), 0,
                                                    this, SLOT( slotViewFrameBorders() ),
                                                    actionCollection(), "view_frameborders" );
     actionViewFrameBorders->setStatusText( i18n( "Turns the border display on and off." ) );
-    actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed.  This option is useful to see how the document will appear on the printed page." ) );
+    actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
     actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
                                           this, SLOT( viewHeader() ),
@@ -434,13 +434,13 @@ void KWView::setupActions()
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
     actionInsertSpecialChar->setStatusText( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
-    actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not fount on the keyboard." ) );
+    actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
     actionInsertFrameBreak->setStatusText( i18n( "Force the remainder of the text into the next frame." ) );
-    actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position.  All text after this point will be moved into the next frame in the frameset." ) );
+    actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
 
      actionInsertLink = new KAction( i18n( "Insert link" ), 0,
                                         this, SLOT( insertLink() ),
@@ -486,7 +486,7 @@ void KWView::setupActions()
                                     this, SLOT( refreshAllVariable() ),
                                     actionCollection(), "refresh_all_variable" );
     actionRefreshAllVariable->setStatusText( i18n( "Update all variables to current values." ) );
-    actionRefreshAllVariable->setWhatsThis( i18n( "Update all variables in the document to current values.<br><br>This will update page numbers, dates or any other variable that need updating." ) );
+    actionRefreshAllVariable->setWhatsThis( i18n( "Update all variables in the document to current values.<br><br>This will update page numbers, dates or any other variables that need updating." ) );
 
     actionInsertVariable->insert(actionRefreshAllVariable);
 
@@ -554,7 +554,7 @@ void KWView::setupActions()
                         this, SLOT( formatPage() ),
                         actionCollection(), "format_page" );
     actionFormatPage->setStatusText( i18n( "Change properties of entire page." ) );
-    actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, size of headers and footers and column settings." ) );
+    actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
     actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
@@ -716,8 +716,8 @@ void KWView::setupActions()
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
                                         this, SLOT( tableJoinCells() ),
                                         actionCollection(), "table_joincells" );
-    actionTableJoinCells->setStatusText( i18n( "Connect two or more cells into one large cell." ) );
-    actionTableJoinCells->setWhatsThis( i18n( "Connect two or more cells into one large cell.<p>This is a good way to create titles and labels within a table." ) );
+    actionTableJoinCells->setStatusText( i18n( "Join two or more cells into one large cell." ) );
+    actionTableJoinCells->setWhatsThis( i18n( "Join two or more cells into one large cell.<p>This is a good way to create titles and labels within a table." ) );
 
     actionTableSplitCells= new KAction( i18n( "&Split Cells..." ), 0,
                                          this, SLOT( tableSplitCells() ),
@@ -745,7 +745,7 @@ void KWView::setupActions()
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
     actionAutoFormat->setStatusText( i18n( "Change autocorrection options." ) );
-    actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>excptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
+    actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
 
     actionEditPersonnalExpr=new KAction( i18n( "Edit personal expressions..." ), 0,
                                          this, SLOT( editPersonalExpr() ),
