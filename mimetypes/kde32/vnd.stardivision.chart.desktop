@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.stardivision.chart
+Patterns=*.sds;*.SDS;
+Icon=kchart_chrt
+Comment=StarOffice Chart
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sds
