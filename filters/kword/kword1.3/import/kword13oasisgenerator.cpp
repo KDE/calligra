@@ -928,7 +928,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     QString strVersion;
     strVersion += "KWord-OneDotThree-Import-Filter/";
     strVersion += QString( "$Revision$" ).mid( 10 ).remove( '$' ).stripWhiteSpace();
-    strVersion = " KOffice/";
+    strVersion += " KOffice/";
     strVersion += KOFFICE_VERSION_STRING;
     writer.addTextSpan( strVersion );
     writer.endElement();
