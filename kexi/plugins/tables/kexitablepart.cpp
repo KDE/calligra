@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kmessagebox.h>
 
 #include "keximainwindow.h"
 #include "kexiproject.h"
@@ -105,8 +106,14 @@ bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 
 	KexiDB::Connection *conn = win->project()->dbConnection();
 	KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
-	if(sch)
+
+	if (sch) {
+		tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+			win, *conn, *sch, 
+			i18n("You are about to remove table \"%1\" but following objects using this table are opened:")
+			.arg(sch->name()));
 		return conn->dropTable( sch );
+	}
 	//last chance: just remove item
 	return conn->removeObject( item.identifier() );
 }
@@ -114,7 +121,6 @@ bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 tristate KexiTablePart::rename(KexiMainWindow *win, KexiPart::Item & item, 
 	const QString& newName)
 {
-//TODO: alter table name for server DB backends!
 //TODO: what about objects (queries/forms) that use old name?
 	KexiDB::Connection *conn = win->project()->dbConnection();
 	KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
@@ -133,6 +139,37 @@ KexiPart::DataSource *
 KexiTablePart::dataSource()
 {
 	return new KexiTableDataSource(this);
+}
+
+tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, KexiDB::Connection& conn, 
+	KexiDB::TableSchema& table, const QString& msg)
+{
+	QPtrList<KexiDB::Connection::TableSchemaChangeListenerInterface>* listeners
+		= conn.tableSchemaChangeListeners(table);
+	if (!listeners || listeners->isEmpty())
+		return true;
+	
+	QString openedObjectsStr = "<ul>";
+	for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(*listeners);
+		it.current(); ++it)	{
+			openedObjectsStr += QString("<li>%1</li>").arg(it.current()->listenerInfoString);
+	}
+	openedObjectsStr += "</ul>";
+	int r = KMessageBox::questionYesNo(parent, 
+		"<p>"+msg+"</p><p>"+openedObjectsStr+"</p><p>"
+		+i18n("Do you want to close all windows for these objects?"), 
+		QString::null, KGuiItem(i18n("Close windows"),"fileclose"), KStdGuiItem::cancel());
+	tristate res;
+	if (r == KMessageBox::Yes) {
+		//try to close every window
+		res = conn.closeAllTableSchemaChangeListeners(table);
+		if (res!=true) //do not expose closing errors twice; just cancel
+			res = cancelled;
+	}
+	else
+		res = cancelled;
+
+	return res;
 }
 
 //----------------

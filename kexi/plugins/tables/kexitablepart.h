@@ -57,6 +57,10 @@ class KexiTablePart : public KexiPart::Part
 				bool tableSchemaChangedInPreviousView : 1;
 		};
 
+		static tristate askForClosingObjectsUsingTableSchema(
+			QWidget *parent, KexiDB::Connection& conn, 
+			KexiDB::TableSchema& table, const QString& msg);
+
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 

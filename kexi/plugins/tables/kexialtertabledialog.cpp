@@ -905,30 +905,11 @@ tristate KexiAlterTableDialog::storeData()
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 	if (res) {
-		QPtrList<KexiDB::Connection::TableSchemaChangeListenerInterface>* listeners
-			= conn->tableSchemaChangeListeners(*tempData()->table);
-		if (listeners && !listeners->isEmpty()) {
-			QString openedObjectsStr = "<ul>";
-			for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(*listeners);
-				it.current(); ++it)	{
-					openedObjectsStr += QString("<li>%1</li>").arg(it.current()->listenerInfoString);
-			}
-			openedObjectsStr += "</ul>";
-			int r = KMessageBox::questionYesNo(this, 
-				"<p>"+i18n("You are about to change design of table \"%1\" "
-				"but following objects using this table are opened:").arg(tempData()->table->name())
-				+"</p><p>"+openedObjectsStr+"</p><p>"
-				+i18n("Do you want to close all windows for these objects?"), 
-				QString::null, KGuiItem(i18n("Close windows"),"fileclose"), KStdGuiItem::cancel());
-			if (r == KMessageBox::Yes) {
-				//try to close every window
-				res = conn->closeAllTableSchemaChangeListeners(*tempData()->table);
-				if (res!=true) //do not expose closing errors twice; just cancel
-					res = cancelled;
-			}
-			else
-				res = cancelled;
-		}
+		res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+			this, *conn, *tempData()->table, 
+			i18n("You are about to change the design of table \"%1\" "
+			"but following objects using this table are opened:")
+			.arg(tempData()->table->name()));
 	}
 	if (res) {
 		res = conn->alterTable(*tempData()->table, *newTable);
