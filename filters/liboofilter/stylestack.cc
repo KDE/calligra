@@ -80,7 +80,6 @@ void StyleStack::push( const QDomElement& style )
 
 bool StyleStack::hasAttribute( const QString& name ) const
 {
-    // TODO: has to be fixed for complex styles like list-styles
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
@@ -95,7 +94,6 @@ bool StyleStack::hasAttribute( const QString& name ) const
 
 QString StyleStack::attribute( const QString& name ) const
 {
-    // TODO: has to be fixed for complex styles like list-styles
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
