@@ -33,6 +33,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qpopupmenu.h>
+#include <qstyle.h>
 
 #include <kstddirs.h>
 #include <klocale.h>
@@ -118,14 +119,14 @@ void KisChannelView::showScrollBars( )
 
 
 ChannelTable::ChannelTable( QWidget* _parent, const char* _name )
-  : QTableView( _parent, _name )
+  : QtTableView( _parent, _name )
 {
     pChannelView = 0L;
     init( 0 );
 }
 
 ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent, const char* _name )
-  : QTableView( _parent, _name )
+  : QtTableView( _parent, _name )
 {
     pChannelView = 0L;
     init( doc );
@@ -133,7 +134,7 @@ ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent, const char* _name )
 
 ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent,
     KisChannelView *_channelview, const char* _name )
-    : QTableView( _parent, _name )
+    : QtTableView( _parent, _name )
 {
     pChannelView = _channelview;
     init( doc );
@@ -239,11 +240,10 @@ void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
             cellHeight() - 1, color);
     }
 
-    style().drawPanel( _painter, mVisibleRect.x(),
-		     mVisibleRect.y(),
-		     mVisibleRect.width(),
-		     mVisibleRect.height(), colorGroup(),
-		     true );
+    style().drawPrimitive( QStyle::PE_Panel, _painter,
+                           QRect( mVisibleRect.x(), mVisibleRect.y(),
+                                  mVisibleRect.width(), mVisibleRect.height() ),
+                           colorGroup() ); // , true );
 
     if( /* m_doc->current().channels[_row ]->isVisible()*/ true )
     {
@@ -254,12 +254,10 @@ void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
         _painter->drawPixmap( mVisibleRect.topLeft(), *mNovisibleIcon );
     }
 
-    style().drawPanel( _painter,
-                    mPreviewRect.x(),
-                    mPreviewRect.y(),
-                    mPreviewRect.width(),
-                    mPreviewRect.height(),
-                    colorGroup(), true );
+    style().drawPrimitive( QStyle::PE_Panel, _painter,
+                    QRect( mPreviewRect.x(), mPreviewRect.y(),
+                           mPreviewRect.width(), mPreviewRect.height() ),
+                           colorGroup() ); //, true );
 
     _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
     _painter->drawText( 80, 20, tmp );

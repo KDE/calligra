@@ -24,7 +24,7 @@
 #define __kis_layerview_h__
 
 #include <qdialog.h>
-#include <qtableview.h>
+#include <qttableview.h>
 #include <qrect.h>
 
 #define CELLWIDTH   200
@@ -53,20 +53,20 @@ public:
     void showScrollBars();
     LayerTable *layerTable() { return layertable; }
     QHBox *getFrame() { return frame; };
-     
+
 private:
     void initGUI();
     LayerTable *layertable;
     QHBox *frame;
     QHBox *buttons;
-    
+
     KisFrameButton *pbAddLayer;
     KisFrameButton *pbRemoveLayer;
     KisFrameButton *pbUp;
     KisFrameButton *pbDown;
 };
 
-class LayerTable : public QTableView
+class LayerTable : public QtTableView
 {
     Q_OBJECT
 
@@ -77,9 +77,9 @@ public:
     // these are not used
     LayerTable(QWidget* _parent = 0, const char* _name = 0 );
     LayerTable(KisDoc* doc, QWidget* _parent = 0, const char* name = 0 );
-    
-    // this one is used because it keeps a reference to the LayerView  
-    LayerTable(KisDoc* doc, QWidget* _parent = 0, 
+
+    // this one is used because it keeps a reference to the LayerView
+    LayerTable(KisDoc* doc, QWidget* _parent = 0,
         KisLayerView *_layerview = 0, const char* name = 0 );
 
     void updateTable();
@@ -119,7 +119,7 @@ private:
     KisDoc* m_doc;
     KisView* m_view;
     KisLayerView* pLayerView;
-  
+
     int m_items, m_selected;
     QPopupMenu* m_contextmenu;
     QPixmap *mVisibleIcon, *mNovisibleIcon;
@@ -137,7 +137,7 @@ public:
 
 protected:
 
-    LayerPropertyDialog( QString _layername, uchar _opacity, 
+    LayerPropertyDialog( QString _layername, uchar _opacity,
     QWidget *_parent, const char *_name );
 
     QLineEdit *m_name;
@@ -145,5 +145,3 @@ protected:
 };
 
 #endif // __kis_layerview_h__
-
-

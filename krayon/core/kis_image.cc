@@ -913,7 +913,7 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
             default: break;
         }
 
-        XPutImage(pix->x11Display(), pix->handle(), qt_xget_readonly_gc(),
+        XPutImage(pix->x11Display(), pix->handle(), qt_xget_readonly_gc(qt_xscreen(), false),
 	        m_pxi, 0,0, 0,0, TILE_SIZE, TILE_SIZE);
 
         //TIME_END("fast convertImageToPixmap");
@@ -1134,7 +1134,7 @@ void KisImage::mergeLayers(QList<KisLayer> list)
 
 void KisImage::upperLayer( unsigned int _layer )
 {
-    ASSERT( _layer < m_layers.count() );
+    Q_ASSERT( _layer < m_layers.count() );
 
     if( _layer > 0 )
     {
@@ -1146,7 +1146,7 @@ void KisImage::upperLayer( unsigned int _layer )
 
 void KisImage::lowerLayer( unsigned int _layer )
 {
-    ASSERT( _layer < m_layers.count() );
+    Q_ASSERT( _layer < m_layers.count() );
 
     if( _layer < ( m_layers.count() - 1 ) )
     {
@@ -1158,7 +1158,7 @@ void KisImage::lowerLayer( unsigned int _layer )
 
 void KisImage::setFrontLayer( unsigned int _layer )
 {
-    ASSERT( _layer < m_layers.count() );
+    Q_ASSERT( _layer < m_layers.count() );
 
     if( _layer < ( m_layers.count() - 1 ) )
     {
@@ -1170,7 +1170,7 @@ void KisImage::setFrontLayer( unsigned int _layer )
 
 void KisImage::setBackgroundLayer( unsigned int _layer )
 {
-    ASSERT( _layer < m_layers.count() );
+    Q_ASSERT( _layer < m_layers.count() );
 
     if( _layer > 0 )
     {

@@ -26,7 +26,7 @@
 #include <qevent.h>
 #include <qlist.h>
 #include <qpixmap.h>
-#include <qtableview.h>
+#include <qttableview.h>
 
 
 class QColor;
@@ -35,7 +35,7 @@ class QPainter;
 class IconItem;
 class PixmapWidget;
 
-class IconChooser: public QTableView
+class IconChooser: public QtTableView
 {
   Q_OBJECT
 

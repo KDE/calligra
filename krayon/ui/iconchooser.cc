@@ -21,6 +21,7 @@
  */
 
 #include <qbrush.h>
+#include <qcursor.h>
 #include <qcolor.h>
 #include <qframe.h>
 #include <qpainter.h>
@@ -32,11 +33,11 @@
 
 
 IconChooser::IconChooser( QWidget *parent, QSize iconSize, const char *name )
-  : QTableView( parent, name )
+  : QtTableView( parent, name )
 {
     setTableFlags(  Tbl_vScrollBar |  Tbl_clipCellPainting | Tbl_cutCellsH |
 		    Tbl_snapToGrid );
-    QTableView::setBackgroundColor(white);
+    QtTableView::setBackgroundColor(white);
 
     margin = 2; // a cell is 2 * two pixels larger than an item
     setCellWidth( iconSize.width() + 2*margin );
@@ -64,7 +65,7 @@ IconChooser::~IconChooser()
 
 void IconChooser::addItem( IconItem *item )
 {
-    ASSERT( item != 0L );
+    Q_ASSERT( item != 0L );
     iconList.insert( itemCount++, item );
     calculateCells();
 }
@@ -73,7 +74,7 @@ void IconChooser::addItem( IconItem *item )
 bool IconChooser::removeItem( IconItem *item )
 {
     bool ok = iconList.remove( item );
-    if ( ok ) 
+    if ( ok )
     {
         itemCount--;
         calculateCells();
@@ -92,7 +93,7 @@ void IconChooser::clear()
 
 
 // return the pointer of the item at (row,col) - beware, resizing disturbs
-// rows and cols! 
+// rows and cols!
 // return 0L if item is not found
 IconItem* IconChooser::itemAt( int row, int col )
 {
@@ -126,8 +127,8 @@ void IconChooser::setCurrentItem( IconItem *item )
     int index = iconList.find( item );
 
     // item is available
-    if ( index != -1 && nCols > 0 ) 
-    { 
+    if ( index != -1 && nCols > 0 )
+    {
         int oldRow = curRow;
         int oldCol = curCol;
 
@@ -166,14 +167,14 @@ void IconChooser::calculateCells()
 
 void IconChooser::resizeEvent ( QResizeEvent *e )
 {
-    QTableView::resizeEvent( e );
-    ASSERT( cellWidth() > 0 );
+    QtTableView::resizeEvent( e );
+    Q_ASSERT( cellWidth() > 0 );
 
     IconItem *item = currentItem();
     int oldNCols = nCols;
     nCols = viewWidth() / cellWidth();
 
-    if ( nCols != oldNCols ) 
+    if ( nCols != oldNCols )
     {
         setNumCols( nCols );
         calculateCells();
@@ -189,10 +190,10 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
 {
     IconItem *item = itemAt( row, col );
 
-    if ( item ) 
+    if ( item )
     {
         const QPixmap& pix   = item->pixmap();
-        
+
         int x  = margin; 		int y  = margin;
         int pw = pix.width(); 	int ph = pix.height();
         int cw = cellWidth(); 	int ch = cellHeight();
@@ -202,21 +203,21 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
             x = (cw - pw) / 2;
         if ( ph < itemHeight )
             y = (cw - ph) / 2;
-        
+
         if((!item->hasValidThumb()) || (pw <= itemWidth && ph <= itemHeight))
             p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
         else
         {
             const QPixmap& thumbpix = item->thumbPixmap();
             /*
-            kdDebug()   << "itemWidth "  << itemWidth  
-                        << "itemHeight " << itemHeight 
+            kdDebug()   << "itemWidth "  << itemWidth
+                        << "itemHeight " << itemHeight
                         << endl;
-                        
-            kdDebug()   << "thumbpix.width() "  << thumbpix.width()  
-                        << "thumbpix.height() " << thumbpix.height() 
+
+            kdDebug()   << "thumbpix.width() "  << thumbpix.width()
+                        << "thumbpix.height() " << thumbpix.height()
                         << endl;
-            */                                    
+            */
             x  = margin;            y  = margin;
             pw = thumbpix.width(); 	ph = thumbpix.height();
             cw = cellWidth();       ch = cellHeight();
@@ -226,12 +227,12 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
                 x = (cw - pw) / 2;
             if ( ph < itemHeight )
                 y = (cw - ph) / 2;
-        
-            p->drawPixmap( x, y, thumbpix, 0, 0, itemWidth, itemHeight);        
+
+            p->drawPixmap( x, y, thumbpix, 0, 0, itemWidth, itemHeight);
         }
-        
+
         // highlight current item
-        if ( row == curRow && col == curCol )  
+        if ( row == curRow && col == curCol )
         {
 	        p->setPen(blue);
 	        p->drawRect( 0, 0, cw, ch );
@@ -244,7 +245,7 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
     }
 
     else // empty cell
-    { 
+    {
         p->fillRect( 0, 0, cellWidth(), cellHeight(), QBrush( white ) );
     }
 }
@@ -266,9 +267,9 @@ int IconChooser::cellIndex( int row, int col )
 // eventually select the item, clicked on
 void IconChooser::mousePressEvent( QMouseEvent *e )
 {
-    QTableView::mousePressEvent( e );
+    QtTableView::mousePressEvent( e );
 
-    if ( e->button() == LeftButton ) 
+    if ( e->button() == LeftButton )
     {
         QPoint p = e->pos();
 
@@ -276,7 +277,7 @@ void IconChooser::mousePressEvent( QMouseEvent *e )
         int col = findCol( p.x() );
 
         IconItem *item = itemAt( row, col );
-        if ( item ) 
+        if ( item )
         {
             const QPixmap& pix = item->pixmap();
             if ( pix.width() > itemWidth || pix.height() > itemHeight )
@@ -300,7 +301,7 @@ void IconChooser::mousePressEvent( QMouseEvent *e )
 // when a big item is shown in full size, delete it on mouseRelease
 void IconChooser::mouseReleaseEvent( QMouseEvent * )
 {
-    if( pw ) 
+    if( pw )
     {
         delete pw;
         pw = 0L;
@@ -317,7 +318,7 @@ void IconChooser::showFullPixmap( const QPixmap& pix, const QPoint& )
 // FIXME: implement keyboard navigation
 void IconChooser::keyPressEvent( QKeyEvent *e )
 {
-    QTableView::keyPressEvent( e ); // for now...
+    QtTableView::keyPressEvent( e ); // for now...
 }
 
 

@@ -29,7 +29,7 @@
 #define MAXROWS	    8
 
 #include <qdialog.h>
-#include <qtableview.h>
+#include <qttableview.h>
 #include <qrect.h>
 
 class KisDoc;
@@ -50,7 +50,7 @@ class KisChannelView : public QWidget
 
 public:
     KisChannelView( KisDoc* doc, QWidget* _parent = 0,  const char* _name = 0 );
-    ~KisChannelView();  
+    ~KisChannelView();
     void showScrollBars();
     ChannelTable *channelTable() { return channeltable; }
     QHBox *getFrame() { return frame; };
@@ -60,14 +60,14 @@ private:
     ChannelTable *channeltable;
     QHBox *frame;
     QHBox *buttons;
-    
+
     KisFrameButton *pbAddChannel;
     KisFrameButton *pbRemoveChannel;
     KisFrameButton *pbUp;
     KisFrameButton *pbDown;
 };
 
-class ChannelTable : public QTableView
+class ChannelTable : public QtTableView
 {
     Q_OBJECT
 
@@ -78,8 +78,8 @@ public:
     ChannelTable( QWidget *_parent = 0, const char *_name = 0 );
     ChannelTable( KisDoc *_doc, QWidget *_parent = 0, const char *_name = 0 );
 
-    // this one is used because it keeps a reference to the ChannelView  
-    ChannelTable(KisDoc* doc, QWidget* _parent = 0, 
+    // this one is used because it keeps a reference to the ChannelView
+    ChannelTable(KisDoc* doc, QWidget* _parent = 0,
         KisChannelView *_channelview = 0, const char* name = 0 );
 
     void updateTable();
@@ -108,7 +108,7 @@ private:
 
     KisDoc* m_doc;
     KisChannelView* pChannelView;
-    
+
     int m_items, m_selected;
     QPopupMenu* m_contextmenu;
     QPixmap *mVisibleIcon, *mNovisibleIcon;
@@ -126,7 +126,7 @@ public:
 
 protected:
 
-    ChannelPropertyDialog( QString _channelname, uchar _opacity, 
+    ChannelPropertyDialog( QString _channelname, uchar _opacity,
     QWidget *_parent, const char *_name );
 
     QLineEdit *m_name;

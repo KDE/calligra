@@ -20,6 +20,7 @@
 
 #include <qcolor.h>
 #include <qclipboard.h>
+#include <qpainter.h>
 #include <kapp.h>
 #include <kdebug.h>
 

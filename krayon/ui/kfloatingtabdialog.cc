@@ -43,12 +43,12 @@ KFloatingTabDialog::~KFloatingTabDialog()
 void KFloatingTabDialog::resizeEvent(QResizeEvent *e)
 {
   KFloatingDialog::resizeEvent(e);
-  
+
   if (tabs)
 	{
 	  for (int i=0; i < (int)pages.size(); i++)
 		pages[i]->setGeometry(getChildRect());
-	  
+
 	  if((tabs->shape() == QTabBar::RoundedBelow) ||
 		 (tabs->shape() == QTabBar::TriangularBelow))
 		tabs->move(_left(), _height()-tabs->height());
@@ -60,7 +60,7 @@ void KFloatingTabDialog::setFont(const QFont & font)
   QFont f(font);
   f.setWeight(QFont::Light);
   QWidget::setFont(f);
-  
+
   setSizes();
 }
 
@@ -68,32 +68,32 @@ void KFloatingTabDialog::setTabFont(const QFont & font)
 {
   QFont f(font);
   tabs->setFont(f);
-  
+
   setSizes();
 }
 
 void KFloatingTabDialog::show()
 {
   unsigned int i;
-  
+
   if(isVisible())
 	return;
-  
+
   setSizes();
-  
+
   for(i = 0; i < pages.size(); i++)
 	pages[i]->hide();
-  
+
   QResizeEvent r(size(), size());
   resizeEvent(&r);
-  
+
   KFloatingDialog::show();
 }
 
 bool KFloatingTabDialog::isTabEnabled(const QString& name)
 {
   unsigned int i;
-  
+
   for(i = 0; i < pages.size(); i++)
     if (pages[i]->name() == name)
       return tabs->isTabEnabled(i);
@@ -103,10 +103,10 @@ bool KFloatingTabDialog::isTabEnabled(const QString& name)
 void KFloatingTabDialog::setTabEnabled(const QString& name, bool state)
 {
   unsigned i;
-  
+
   if (name.isEmpty())
 	return;
-  
+
   for (i = 0; i < pages.size(); i++)
 	if (pages[i]->name() == name)
 	  tabs->setTabEnabled(i, state);
@@ -120,43 +120,43 @@ void KFloatingTabDialog::setSizes()
 
 void KFloatingTabDialog::setShape(QTabBar::Shape shape)
 {
-  tabs->setShape(shape);  
+  tabs->setShape(shape);
 }
 
 QSize KFloatingTabDialog::sizeHint(void) const
 {
   /* desired size of the tabbar */
   QSize hint(tabs->sizeHint());
-  
+
   /* overall desired size of all pages */
   QSize pageHint;
   for (unsigned int i = 0; i < pages.size(); i++)
 	{
 	  QSize sizeI(pages[i]->sizeHint());
-	  
+
 	  if (sizeI.isValid())
 		{
 		  /* only pages with valid size are used */
 		  if (sizeI.width() > pageHint.width())
 			pageHint.setWidth(sizeI.width());
-		  
+
 		  if (sizeI.height() > pageHint.height())
 			pageHint.setHeight(sizeI.height());
 		}
 	}
-  
+
   if (pageHint.isValid())
 	{
 	  /* use maximum of width of tabbar and pages */
 	  if (pageHint.width() > hint.width())
 		hint.setWidth(pageHint.width());
-	  
+
 	  /* heights must just be added */
 	  hint.setHeight(hint.height() + pageHint.height());
-	  
+
 	  return (hint);
 	}
-  
+
   /*
    * If not at least a one page has a valid sizeHint we have to return
    * an invalid size as well.
@@ -168,7 +168,7 @@ QRect KFloatingTabDialog::getChildRect()
 {
   if((tabs->shape() == QTabBar::RoundedBelow) || (tabs->shape() == QTabBar::TriangularBelow))
 	{
-	  return QRect(_left(), _top(), _width(), _height() - tabs->height());      
+	  return QRect(_left(), _top(), _width(), _height() - tabs->height());
     }
   else
 	{
@@ -186,12 +186,12 @@ void KFloatingTabDialog::showTab(int i)
 		  pages[j]->hide();
 		}
 	}
-  
+
   if((unsigned)i < pages.size())
 	{
 	  emit(tabSelected(i));
 	  if( pages.size() >= 2 )
-		{ 
+		{
 		  pages[i]->raise();
 		}
 	  tabs->setCurrentTab(i);
@@ -203,8 +203,8 @@ void KFloatingTabDialog::showTab(int i)
 void KFloatingTabDialog::addTab(QWidget *w, const QString& name)
 {
   QTab *t = new QTab();
-  t->label = name;
-  t->enabled = TRUE;
+  t->setText(name);
+  t->setEnabled(TRUE);
   int id = tabs->addTab(t);
   if (id == (int)pages.size())
 	{

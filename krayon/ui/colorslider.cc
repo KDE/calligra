@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <qpen.h>
+#include <qcursor.h>
 
 #include "colorframe.h"
 #include "colorslider.h"

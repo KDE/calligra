@@ -18,6 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "kis_shell.h"  // #define problem, don't move
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstddirs.h>
@@ -28,7 +29,6 @@
 #include <koFilterManager.h>
 
 #include "kis_doc.h"
-#include "kis_shell.h"
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
 #include <kdebug.h>
@@ -39,7 +39,7 @@ KisShell::KisShell( const char* name )
 {
     m_pMessageLabel = new QLabel(statusBar());
     statusBar()->addWidget(m_pMessageLabel, true); // ?? The 2nd arg is int stretch ! (DF)
-    m_pMessageLabel->setText("Krayon Status Bar");     
+    m_pMessageLabel->setText("Krayon Status Bar");
 
     //statusBarLabel()->setText(i18n("Krayon Status Bar"));
 }
@@ -50,7 +50,7 @@ KisShell::~KisShell()
 }
 
 
-QString KisShell::nativeFormatName() const 
+QString KisShell::nativeFormatName() const
 {
     return i18n("Krayon");
 }
@@ -63,7 +63,7 @@ void KisShell::slotFileNew()
     if( !doc )
     {
         kdDebug(0) << "KisShell::slotFileNew: no rootDocument()" << endl;
-        
+
         doc = (KisDoc*)createDoc();
         if (!doc->initDoc())
 	    {
@@ -75,8 +75,8 @@ void KisShell::slotFileNew()
     else
     {
         if(!doc->slotNewImage())
-            kdDebug(0) 
-                << "KisShell::slotFileNew() can't create image" << endl;        
+            kdDebug(0)
+                << "KisShell::slotFileNew() can't create image" << endl;
     }
 }
 
@@ -87,7 +87,7 @@ void KisShell::slotFileNewDocument()
     if(doc)
     {
         if(!doc->slotNewImage())
-            kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                
+            kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;
     }
 }
 
@@ -100,7 +100,7 @@ void KisShell::slotFileAddNewImage()
     if(doc)
     {
         if(!doc->slotNewImage())
-            kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                        
+            kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;
     }
 }
 
@@ -108,7 +108,7 @@ void KisShell::slotFileAddNewImage()
 void KisShell::slotFileRemoveCurrentImage()
 {
     KisDoc* doc = (KisDoc*)rootDocument();
-    
+
     if(doc)
     {
         doc->slotRemoveImage(doc->currentImage());
@@ -131,7 +131,7 @@ bool KisShell::openDocument( const KURL & url )
 	    }
 	    return false;
     }
-    
+
     return doc->openURL( url );
 }
 

@@ -20,6 +20,7 @@
 
 #include <qcolor.h>
 #include <qclipboard.h>
+#include <qpainter.h>
 #include <kapp.h>
 #include <kdebug.h>
 
@@ -44,7 +45,7 @@ StampTool::StampTool(KisDoc *doc, KisView *view,
     m_pDoc = doc;
 
     // initialize stamp tool settings
-    KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();  
+    KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();
     opacity = s.opacity;
     useGradient = s.blendWithCurrentGradient;
 

@@ -19,6 +19,7 @@
  */
 
 
+#include <qpainter.h>
 #include <qcolor.h>
 #include <qclipboard.h>
 #include <kapp.h>
