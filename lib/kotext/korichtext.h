@@ -539,7 +539,7 @@ public:
      * @param pageWidth returns the page width at that point
      * This method merges QRichText's adjustLMargin and adjustRMargin for efficiency reasons
      */
-    virtual void adjustMargins( int yp, int h, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag );
+    virtual void adjustMargins( int yp, int h, int reqMinWidth, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag );
 
     virtual void registerFloatingItem( KoTextCustomItem* item );
     virtual void unregisterFloatingItem( KoTextCustomItem* item );

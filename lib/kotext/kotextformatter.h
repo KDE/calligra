@@ -66,6 +66,10 @@ public:
     int widthUsed() const { return wused; }
 
 protected:
+    // Return ww (in LU) and pixelww (in pixels)
+    // Should be called only once per char
+    QPair<int, int> determineCharWidth();
+
     KoTextParagLineStart *koFormatLine(
         KoZoomHandler *zh,
         KoTextParag * /*parag*/, KoTextString *string, KoTextParagLineStart *line,
@@ -85,12 +89,17 @@ private:
     KoTextParag* parag;
     int start; // always 0 currently
     int wused; // see widthUsed
+    int availableWidth;
     int maxY;
 
     // When moving a big item down, we might want to rollback
     // to the 'best position for it' if we can't make it fit anywhere else.
     QPair<int,int> maxAvailableWidth; // first=y  second=available width
 
+    // Information on current char
+    KoTextStringChar *c;
+    int i; // index number (in the paragraph)
+    int x; // X position (in LU)
 };
 
 #endif

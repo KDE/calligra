@@ -4448,7 +4448,7 @@ void KoTextFlow::setWidth( int width )
     w = width;
 }
 
-void KoTextFlow::adjustMargins( int, int, int&, int&, int& pageWidth, KoTextParag* )
+void KoTextFlow::adjustMargins( int, int, int, int&, int&, int& pageWidth, KoTextParag* )
 {
     pageWidth = w;
 }

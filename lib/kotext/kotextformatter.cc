@@ -68,20 +68,55 @@ KoTextFormatterCore::KoTextFormatterCore( KoTextFormatter* _settings,
 {
 }
 
+QPair<int, int> KoTextFormatterCore::determineCharWidth()
+{
+    int ww, pixelww;
+    KoZoomHandler *zh = doc->formattingZoomHandler();
+    if ( c->c != '\t' || c->isCustom() ) {
+        KoTextFormat *charFormat = c->format();
+        if ( c->isCustom() ) {
+            ww = c->customItem()->width;
+            Q_ASSERT( ww >= 0 );
+            ww = QMAX(0, ww);
+#ifndef REF_IS_LU
+            pixelww = zh->layoutUnitToPixelX( ww );
+#endif
+        } else {
+            ww = charFormat->charWidthLU( c, parag, i );
+#ifndef REF_IS_LU
+            // Pixel size - we want the metrics of the font that's going to be used.
+            pixelww = charFormat->charWidth( zh, true, c, parag, i );
+#endif
+        }
+    } else { // tab
+        int nx = parag->nextTab( i, x );
+        if ( nx < x )
+            ww = availableWidth - x;
+        else
+            ww = nx - x + 1;
+#ifndef REF_IS_LU
+        pixelww = zh->layoutUnitToPixelX( ww );
+#endif
+    }
+    Q_ASSERT( ww >= 0 );
+    c->width = ww;
+    return qMakePair(ww, pixelww);
+}
 
 
 int KoTextFormatterCore::format()
 {
-    KoTextStringChar *c = 0;
-    start = 0;
+    start = 0; // we don't do partial formatting yet
     if ( start == 0 )
-        c = &parag->string()->at( 0 );
+        c = &parag->string()->at( start );
+    else
+        c = 0;
 
     KoTextStringChar *firstChar = 0;
     KoTextString *string = parag->string();
     bool rtl = string->isRightToLeft();
     int left = doc ? parag->leftMargin() + doc->leftMargin() : 0;
-    int x = left;
+    x = left;
     if ( doc && !rtl )
         x += parag->firstLineMargin();
     int curLeft = left;
@@ -116,11 +151,20 @@ int KoTextFormatterCore::format()
         currentRightMargin += parag->firstLineMargin();
     int initialRMargin = currentRightMargin;
 
+
+    // We need the width of the first char for adjustMargins
+    QPair<int, int> widths = determineCharWidth();
+    int ww = widths.first; // width in layout units
+#ifndef REF_IS_LU
+    int pixelww = widths.second; // width in pixels
+#endif
+
     // dw is the document width, i.e. the maximum available width, all included.
     // We are in a variable-width design, so it is returned by each call to adjustMargins.
     int dw = 0;
     //if (doc) // always true in kotext
-    doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight, x, initialRMargin, dw, parag );
+    doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight,
+                                ww, x, initialRMargin, dw, parag );
     //else dw = parag->documentVisibleWidth();
 
     int initialLMargin = x;
@@ -128,7 +172,7 @@ int KoTextFormatterCore::format()
 
     int maxY = doc ? doc->flow()->availableHeight() : -1;
 
-    int availableWidth = dw - initialRMargin; // 'w' in QRT
+    availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
     kdDebug(32500) << "KoTextFormatter::format left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << " maxY=" << maxY << endl;
 #endif
@@ -145,7 +189,7 @@ int KoTextFormatterCore::format()
     bool wrapEnabled = settings->isWrapEnabled( parag );
     QValueList<TemporaryWordData> tempWordData;
 
-    int i = start;
+    i = start;
 #ifdef DEBUG_FORMATTER
     kdDebug(32500) << "Initial KoTextParagLineStart at y=" << y << endl;
 #endif
@@ -165,14 +209,10 @@ int KoTextFormatterCore::format()
         align = doc->alignment();
 
     int col = 0;
-    int ww = 0; // width in layout units
 
     maxAvailableWidth = qMakePair( 0, 0 );
 
     KoZoomHandler *zh = doc->formattingZoomHandler();
-#ifndef REF_IS_LU
-    int pixelww = 0; // width in pixels
-#endif
     int pixelx = zh->layoutUnitToPixelX( x );
     int lastPixelx = 0;
 
@@ -188,6 +228,8 @@ int KoTextFormatterCore::format()
         } else {
             c->lineStart = 1;
             firstChar = c;
+            tmph = c->height();
+            lineHeight = tmph;
         }
 
         if ( c->isCustom() && c->customItem()->placement() != KoTextCustomItem::PlaceInline )
@@ -195,34 +237,12 @@ int KoTextFormatterCore::format()
         else
             lastWasNonInlineCustom = FALSE;
 
-        if ( c->c != '\t' || c->isCustom() ) {
-            KoTextFormat *charFormat = c->format();
-            if ( c->isCustom() ) {
-                ww = c->customItem()->width;
-                Q_ASSERT( ww >= 0 );
-                ww = QMAX(0, ww);
-#ifndef REF_IS_LU
-                pixelww = zh->layoutUnitToPixelX( ww );
-#endif
-            } else {
-                ww = charFormat->charWidthLU( c, parag, i );
-#ifndef REF_IS_LU
-                // Pixel size - we want the metrics of the font that's going to be used.
-                pixelww = charFormat->charWidth( zh, true, c, parag, i );
-#endif
-            }
-        } else { // tab
-            int nx = parag->nextTab( i, x );
-            if ( nx < x )
-                ww = availableWidth - x;
-            else
-                ww = nx - x + 1;
-#ifndef REF_IS_LU
-            pixelww = zh->layoutUnitToPixelX( ww );
-#endif
+        if ( i > 0 ) // first one was done above already
+        {
+            QPair<int, int> widths = determineCharWidth();
+            ww = widths.first;
+            pixelww = widths.second;
         }
-        Q_ASSERT( ww >= 0 );
-        c->width = ww;
 
         // We're "aborting" the formatting. This still means we need to set the
         // lineStart bools to false (trouble ahead, otherwise!), and while we're at
@@ -241,7 +261,8 @@ int KoTextFormatterCore::format()
             int rightMargin = currentRightMargin;
             x = left;
             if ( doc )
-                doc->flow()->adjustMargins( y + parag->rect().y(), parag->rect().height(), x, rightMargin, dw, parag );
+                doc->flow()->adjustMargins( y + parag->rect().y(), parag->rect().height(), 15,
+                                            x, rightMargin, dw, parag );
             int w = dw - rightMargin;
             c->customItem()->resize( w - x );
             y += lineHeight;
@@ -344,8 +365,7 @@ int KoTextFormatterCore::format()
 
             // No breakable char found -> break at current char (i.e. before 'i')
             if ( lastBreak < 0 ) {
-                bool emptyLine = false;
-                bool positioned = false; // did we find a place?
+                bool formatLine = true;
                 if ( c->lineStart ) // ouch, empty line
                 {
                     // Remember where the biggest availableWidth was, so that if we really
@@ -358,20 +378,26 @@ int KoTextFormatterCore::format()
                     // Check if we're at the bottom of the doc, we won't find better then
                     // (and the check further down would abort)
                     // Instead we go back to where there was most width for it.
-                    if ( maxY > -1 && parag->rect().y() + y < maxY )
+                    if ( maxY > -1 && parag->rect().y() + y >= maxY )
                     {
                         kdDebug(32500) << "Final choice for the line: y=" << y << endl;
                         y = maxAvailableWidth.first;
                         Q_ASSERT( maxAvailableWidth.second != 0 );
                         lineStart->y = y;
-                        positioned = true; // it's ok here, don't "recalc for 'i'" below
                         // In this case we want to actually format the line,
                         // so we don't set emptyLine
                     }
                     else
-                        emptyLine = true;
+                    {
+                        // We don't know yet what to do with this line that needs to go down
+                        // Ideally KWTextFrameSet would tell us how much we need to move
+                        // ("validHeight" idea). For now we keep the old behavior:
+                        y += lineStart->h;
+                        kdDebug(32500) << "Moving down by h=" << lineStart->h << " lineHeight=" << lineHeight << ": y=" << y << endl;
+                        formatLine = false; // line is not ready yet
+                    }
                 }
-                if ( !emptyLine )
+                if ( formatLine )
                 {
                     // (combine lineStart->baseLine/h and tmpBaseLine/tmph)
                     int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
@@ -384,19 +410,20 @@ int KoTextFormatterCore::format()
                     lineStart->lineSpacing = parag->lineSpacing( (int)parag->lineStartList().count()-1 );
                     lineStart->h += lineStart->lineSpacing;
                     y += lineStart->h;
+                    lineStart = lineStart2;
 #ifdef DEBUG_FORMATTER
                     int linenr = parag->lineStartList().count()-1;
                     kdDebug(32500) << "line " << linenr << " done (breaking at current char). y now " << y << endl;
 #endif
-
-                    lineStart = lineStart2;
                     tmph = c->height();
                     lineHeight = 0;
 
                     initialRMargin = currentRightMargin;
                     x = left;
                     if ( doc )
-                        doc->flow()->adjustMargins( y + parag->rect().y(), tmph, x, initialRMargin, dw, parag );
+                        doc->flow()->adjustMargins( y + parag->rect().y(), tmph,
+                                                    ww, // ## correct?
+                                                    x, initialRMargin, dw, parag );
 
                     pixelx = zh->layoutUnitToPixelX( x );
                     initialHeight = tmph;
@@ -428,7 +455,7 @@ int KoTextFormatterCore::format()
                 // recalc everything for 'i', it might still not be ok where it is...
                 // (e.g. if there's no room at all on this line)
                 // But we don't want to do this forever, so we check against maxY (if known)
-                if ( !positioned && maxY > -1 )
+                if ( !c->lineStart && maxY > -1 )
                 {
                     if ( parag->rect().y() + y < maxY )
                     {
@@ -447,73 +474,78 @@ int KoTextFormatterCore::format()
                 // maxY not known -> keep going ('i' remains where it is)
                 // (that's the initial QRT behaviour)
             } else {
-                // Break the line at the last breakable character
-                i = lastBreak;
-                c = &string->at( i ); // The last char in the last line
-                int spaceAfterLine = availableWidth - c->x;
-                // ?? AFAICS we should always deduce the char's width from the available space....
-                //if ( string->isRightToLeft() && lastChr->c == '\n' )
-                spaceAfterLine -= c->width;
-
-                //else
-                if ( c->c.unicode() == 0xad || hyphenated ) // soft hyphen or hyphenation
-                {
-                    // Recalculate its width, the hyphen will appear finally (important for the parag rect)
-                    int width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->refFontMetrics().width( QChar(0xad) ) );
-                    if ( c->c.unicode() == 0xad )
-                        c->width = width;
-                    spaceAfterLine -= width;
-                }
-                KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
-                lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
-                lineStart->w = dw;
-                lineStart->h += lineStart->lineSpacing;
-                y += lineStart->h;
-                lineStart = lineStart2;
-#ifdef DEBUG_FORMATTER
-                kdDebug(32500) << "Breaking at a breakable char (" << i << "). linenr=" << parag->lineStartList().count()-1 << " y=" << y << endl;
-#endif
-
-                c = &string->at( i + 1 ); // The first char in the new line
-#ifdef DEBUG_FORMATTER
-                kdDebug(32500) << "Next line will start at i+1=" << i+1 << ", char=" << QString(c->c) << endl;
-#endif
-                tmph = c->height();
-                lineHeight = tmph;
-
-                initialRMargin = currentRightMargin;
-                x = left;
-                if ( doc )
-                    doc->flow()->adjustMargins( y + parag->rect().y(), tmph, x, initialRMargin, dw, parag );
-
-                pixelx = zh->layoutUnitToPixelX( x );
-                initialHeight = lineHeight;
-                initialLMargin = x;
-                availableWidth = dw - initialRMargin;
-                if ( x != left || availableWidth != dw )
-                    fullWidth = FALSE;
-                curLeft = x;
-                lineStart->y = y;
-                parag->insertLineStart( i + 1, lineStart );
-                tempWordData.clear();
-                lineStart->baseLine = c->ascent();
-                lineStart->h = c->height();
-                c->lineStart = 1;
-                firstChar = c;
-                tmpBaseLine = lineStart->baseLine;
-                lastBreak = -1;
-                col = 0;
-                //tminw = marg;
-                tmpWused = 0;
-                // If we're after maxY, time to stop. Hopefully KWord will create more pages.
-                if ( maxY > -1 && parag->rect().y() + y >= maxY ) {
+                // If breaking means we're after maxY, then we won't do it.
+                // Hopefully KWord will create more pages.
+                if ( maxY > -1 && parag->rect().y() + y + lineStart->h >= maxY ) {
 #ifdef DEBUG_FORMATTER
                     kdDebug(32500) << "We're after maxY, time to stop." << endl;
 #endif
                     abort = true;
                 }
                 else
+                {
+                    // Break the line at the last breakable character
+                    i = lastBreak;
+                    c = &string->at( i ); // The last char in the last line
+                    int spaceAfterLine = availableWidth - c->x;
+                    // ?? AFAICS we should always deduce the char's width from the available space....
+                    //if ( string->isRightToLeft() && lastChr->c == '\n' )
+                    spaceAfterLine -= c->width;
+
+                    //else
+                    if ( c->c.unicode() == 0xad || hyphenated ) // soft hyphen or hyphenation
+                    {
+                        // Recalculate its width, the hyphen will appear finally (important for the parag rect)
+                        int width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->refFontMetrics().width( QChar(0xad) ) );
+                        if ( c->c.unicode() == 0xad )
+                            c->width = width;
+                        spaceAfterLine -= width;
+                    }
+                    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
+                    lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+                    lineStart->w = dw;
+                    lineStart->h += lineStart->lineSpacing;
+                    y += lineStart->h;
+                    lineStart = lineStart2;
+#ifdef DEBUG_FORMATTER
+                    kdDebug(32500) << "Breaking at a breakable char (" << i << "). linenr=" << parag->lineStartList().count()-1 << " y=" << y << endl;
+#endif
+
+                    c = &string->at( i + 1 ); // The first char in the new line
+#ifdef DEBUG_FORMATTER
+                    kdDebug(32500) << "Next line will start at i+1=" << i+1 << ", char=" << QString(c->c) << endl;
+#endif
+                    tmph = c->height();
+                    lineHeight = tmph;
+
+                    initialRMargin = currentRightMargin;
+                    x = left;
+                    if ( doc )
+                        doc->flow()->adjustMargins( y + parag->rect().y(), tmph,
+                                                    c->width,
+                                                    x, initialRMargin, dw, parag );
+
+                    pixelx = zh->layoutUnitToPixelX( x );
+                    initialHeight = lineHeight;
+                    initialLMargin = x;
+                    availableWidth = dw - initialRMargin;
+                    if ( x != left || availableWidth != dw )
+                        fullWidth = FALSE;
+                    curLeft = x;
+                    lineStart->y = y;
+                    parag->insertLineStart( i + 1, lineStart );
+                    tempWordData.clear();
+                    lineStart->baseLine = c->ascent();
+                    lineStart->h = c->height();
+                    firstChar = c;
+                    tmpBaseLine = lineStart->baseLine;
+                    lastBreak = -1;
+                    col = 0;
+                    //tminw = marg;
+                    tmpWused = 0;
+                    c->lineStart = 1; // only do this if we will actually create a line for it
                     continue;
+                }
             }
         } else if ( lineStart && ( settings->isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
             // Breakable character
@@ -548,7 +580,9 @@ int KoTextFormatterCore::format()
                 int newLMargin = lm;
                 int newRMargin = currentRightMargin - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
                 int newPageWidth = dw;
-                doc->flow()->adjustMargins( y + parag->rect().y(), lineHeight, newLMargin, newRMargin, newPageWidth, parag );
+                doc->flow()->adjustMargins( y + parag->rect().y(), lineHeight,
+                                            ww,
+                                            newLMargin, newRMargin, newPageWidth, parag );
 
                 initialHeight = lineHeight;
 #ifdef DEBUG_FORMATTER
