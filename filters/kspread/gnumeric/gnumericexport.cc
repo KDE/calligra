@@ -65,6 +65,9 @@ class Cell
 GNUMERICExport::GNUMERICExport(KoFilter *, const char *, const QStringList&) :
 KoFilter()
 {
+    isLink = false;
+    isLinkBold = false;
+    isLinkItalic = false;
 }
 
 
@@ -236,8 +239,73 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,KSpreadCell
 
 QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell * cell )
 {
+    //<gmr:Validation Style="1" Type="1" Operator="7" AllowBlank="true" UseDropdown="false" Title="ghhg" Message="ghghhhjfhfghjfghj&#10;fg&#10;hjgf&#10;hj">
+    //        <gmr:Expression0>45</gmr:Expression0>
+    //      </gmr:Validation>
     //TODO
-    return QDomElement();
+    KSpreadValidity *kspread_validity = cell->getValidity();
+    QDomElement val = gnumeric_doc.createElement( "gmr:Validation" );
+    val.setAttribute( "Title", kspread_validity->title );
+    val.setAttribute( "Message", kspread_validity->message );
+    val.setAttribute( "AllowBlank", kspread_validity->allowEmptyCell ? "true":"false" );
+    switch( kspread_validity->m_action )
+    {
+    case Stop:
+        val.setAttribute("Style", "1" );
+        break;
+    case Warning:
+        val.setAttribute("Style", "2" );
+        break;
+    case Information:
+        val.setAttribute("Style", "3" );
+        break;
+    }
+    if ( !kspread_validity->displayMessage )
+        val.setAttribute("Style", "0" );
+    switch( kspread_validity->m_cond )
+    {
+    case None:
+        break;
+    case Equal:
+        break;
+    case Superior:
+        break;
+    case Inferior:
+        break;
+    case SuperiorEqual:
+        break;
+    case InferiorEqual:
+        break;
+    case Between:
+        break;
+    case Different:
+        break;
+    case DifferentTo:
+        //TODO
+        break;
+    }
+    switch( kspread_validity->m_allow )
+    {
+    case Allow_All:
+        break;
+    case Allow_Number:
+        break;
+    case Allow_Text:
+        break;
+    case Allow_Time:
+        break;
+    case Allow_Date:
+        break;
+    case Allow_Integer:
+        break;
+    case Allow_TextLength:
+        break;
+    case Allow_List:
+        //TODO
+        break;
+    }
+
+    return val;
 }
 
 QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
@@ -455,8 +523,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
     if ( cell->getValidity() )
     {
-        //TODO
-        //cell_style.appendChild( GetValidity( gnumeric_doc, cell ) );
+        cell_style.appendChild( GetValidity( gnumeric_doc, cell ) );
     }
 
 	QString stringFormat;
