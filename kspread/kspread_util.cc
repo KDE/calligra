@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string>
 #include <math.h>
+#include <ctype.h>
 
 #include <qregexp.h>
 
