@@ -60,25 +60,25 @@ KImageShopDoc::~KImageShopDoc()
 CORBA::Boolean KImageShopDoc::initDoc()
 {
   // load some test layers
-  QString _image = locate("data", "kimageshop/images/cam9b.jpg");	
+  QString _image = locate("appdata", "images/cam9b.jpg");	
   addRGBLayer(_image);
   setLayerOpacity(200);
 
-  _image = locate("data", "kimageshop/images/cambw12.jpg");
+  _image = locate("appdata", "images/cambw12.jpg");
   addRGBLayer(_image);
   moveLayer(256,384);
   setLayerOpacity(180);
 
-  _image = locate("data", "kimageshop/images/cam05.jpg");
+  _image = locate("appdata", "images/cam05.jpg");
   addRGBLayer(_image);
   setLayerOpacity(255);
 
-  _image = locate("data", "kimageshop/images/cam6.jpg");
+  _image = locate("appdata", "images/cam6.jpg");
   addRGBLayer(_image);
   moveLayer(240,280);
   setLayerOpacity(255);
 
-  _image = locate("data", "kimageshop/images/img2.jpg");
+  _image = locate("appdata", "images/img2.jpg");
   addRGBLayer(_image);
   setLayerOpacity(80);
   

@@ -231,6 +231,12 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   text = Q2C( i18n( "&Edit" ) );
   menubar->insertMenu( text , m_vMenuEdit, -1, -1 );
 
+  text = Q2C( i18n( "&Undo" ) );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem( text, this, "editUndo", 0 );
+
+  text = Q2C( i18n( "&Redo" ) );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem( text, this, "editRedo", 0 );
+
   // view menu
   text = Q2C( i18n( "&View" ) );
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
@@ -250,6 +256,8 @@ m_vMenuView->setCheckable( true );
   // options menu
   text = Q2C( i18n( "&Options" ) );
   menubar->insertMenu( text , m_vMenuOptions, -1, -1 );
+
+  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateMenubar : DONE" );
 
   return true;
 }
@@ -278,7 +286,7 @@ void KImageShopView::createGUI()
 
   // we have no brush -> create a default one
   QString _image = locate("data", "kimageshop/brushes/brush.jpg");
-  m_pBrush = new brush(_image);
+  m_pBrush = new Brush(_image);
   m_pBrush->setHotSpot(QPoint(25,25));
   
   // create brush tool
@@ -496,7 +504,7 @@ void KImageShopView::slotActivateBrushTool()
     {
       // we have no brush -> create a default one
       QString _image = locate("data", "kimageshop/brushes/brush.jpg");
-      m_pBrush = new brush(_image);
+      m_pBrush = new Brush(_image);
       m_pBrush->setHotSpot(QPoint(25,25));
     }
   
@@ -629,6 +637,14 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
 
   m_pTool->mouseRelease(mouseEvent);
+}
+
+void KImageShopView::editUndo()
+{
+}
+
+void KImageShopView::editRedo()
+{
 }
 
 void KImageShopView::viewLayerDialog()

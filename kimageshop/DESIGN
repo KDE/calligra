@@ -41,20 +41,23 @@ BrushTool
  - derived from Tool
  - paint with a brush on the canvas
 
-brush
+Brush
  - a brush class
  - can load/save brushes
 
-layer
+Layer
  - a image layer
 
-channel
+LayerList
+- a list if several layers
+
+Channel
  - a layer channel
 
 LayerDialog
 - a non-modal dialog for editing layers
 
-LayerList
+LayerView
 - a view for all layers in a canvas
 - provides context menu when clicking RMB for each layer
 

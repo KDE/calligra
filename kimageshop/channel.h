@@ -29,9 +29,11 @@ struct tileDescriptor {
 //    when the channel has to do some internal resizing/reallocation
 //    the value returned by this method is updated
 
-class channel {
- public:
-	channel(int w=0, int h=0);
+class Channel
+{
+
+public:
+	Channel(int w=0, int h=0);
 
 	void loadViaQImage(QImage img, int channel);
 	void resizeChannel(QPoint newPoint, bool init=false);

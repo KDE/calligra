@@ -15,16 +15,16 @@
 #include <klocale.h>
 
 #include "layerdlg.h"
-#include "layerlist.h"
+#include "layerview.h"
 #include "kimageshop_doc.h"
 
 LayerDialog::LayerDialog(KImageShopDoc* doc, QWidget* _parent, const char* _name, WFlags _flags )
   : QDialog( _parent, _name, _flags )
 {
-  QGridLayout* layout = new QGridLayout( this, 6, 2, 15, 7 );
+  QGridLayout* layout = new QGridLayout( this, 10, 2, 15, 7 );
 
-  LayerList* layerlist = new LayerList( doc, this, "layerlist" );
-  layout->addMultiCellWidget( layerlist, 0, 5, 0, 0 );
+  LayerView* layerlist = new LayerView( doc, this, "layerlist" );
+  layout->addMultiCellWidget( layerlist, 0, 9, 0, 0 );
 
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
   pbAddLayer->setText( i18n( "Add layer" ) );
@@ -42,12 +42,20 @@ LayerDialog::LayerDialog(KImageShopDoc* doc, QWidget* _parent, const char* _name
   pbRemoveMask->setText( i18n( "Remove mask" ) );
   layout->addWidget( pbRemoveMask, 3, 1 );
 
+  QPushButton* pbUp = new QPushButton( this, "up" );
+  pbUp->setText( i18n( "Up" ) );
+  layout->addWidget( pbUp, 4, 1 );
+
+  QPushButton* pbDown = new QPushButton( this, "down" );
+  pbDown->setText( i18n( "Down" ) );
+  layout->addWidget( pbDown, 5, 1 );
+
   QPushButton* pbClose = new QPushButton( this, "closebutton" );
   pbClose->setText( i18n( "Close" ) );
-  layout->addWidget( pbClose, 5, 1 );
+  layout->addWidget( pbClose, 9, 1 );
   QObject::connect( pbClose, SIGNAL( clicked() ), this, SLOT( hide() ) );
 
-  layout->setRowStretch( 4, 1 );
+  layout->setRowStretch( 8, 1 );
   layout->setColStretch( 0, 1 );
 
   layout->addColSpacing( 0, layerlist->sizeHint().width() );

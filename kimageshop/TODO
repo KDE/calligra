@@ -6,3 +6,5 @@ Current todo list: (add ideas here :-)
 - implement pen tool (paint a line using the foreground color)
 - implement selections
 - extend layerdialog
+- undo/redo
+

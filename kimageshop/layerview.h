@@ -16,14 +16,14 @@
 class KImageShopDoc;
 class QPopupMenu;
 
-class LayerList : public QTableView
+class LayerView : public QTableView
 {
   Q_OBJECT
 
 public:
 
-  LayerList(QWidget* _parent = 0, const char* _name = 0 );
-  LayerList(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
+  LayerView(QWidget* _parent = 0, const char* _name = 0 );
+  LayerView(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
 
   void updateTable();
   void updateList();

@@ -26,8 +26,7 @@
 // #define showi(A)
 // #define SHOW_RECT(A)
 
-#define DEBUG(AREA, CMD)
-
+#define KIS_DEBUG(AREA, CMD)
 
 Canvas::Canvas(int width, int height)
 {
@@ -58,7 +57,7 @@ Canvas::Canvas(int width, int height)
   channels=3;
   currentLayer=0;
   
-  compose=new layer(channels, false);
+  compose=new Layer(channels, false);
   compose->resizeToIncludePoint(QPoint(TILE_SIZE-1,TILE_SIZE-1));
   compose->setPixel(1,1, 0);
   
@@ -182,10 +181,11 @@ void Canvas::setUpVisual()
 
 void Canvas::addRGBLayer(QString file)
 {
-  printf("Canvas::addRGBLayer: %s\n",file.latin1());
+  DEBUG("Canvas::addRGBLayer: %s\n",file.latin1());
+
   QImage img(file);
   if (img.isNull()) {
-    printf("Unable to load image: %s\n",file.latin1());
+    DEBUG("Unable to load image: %s\n",file.latin1());
     return;
   }
   img=img.convertDepth(32);
@@ -194,14 +194,16 @@ void Canvas::addRGBLayer(QString file)
   // the other channels
   QString alphaName=file;
   alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
-  printf("Canvas::addRGBLayerAlpha: %s\n",alphaName.latin1());
+
+  DEBUG("Canvas::addRGBLayerAlpha: %s\n",alphaName.latin1());
+
   QImage alpha(alphaName);
   if (!alpha.isNull() && (img.size()!=alpha.size())) {
     puts("Incorrect sized alpha channel - not loaded");
     alpha=QImage();
   }
   
-  layer *lay=new layer(3, !alpha.isNull());
+  Layer *lay=new Layer(3, !alpha.isNull());
   lay->setName(QFileInfo(file).fileName());
   
   lay->loadRGBImage(img, alpha);
@@ -212,7 +214,7 @@ void Canvas::addRGBLayer(QString file)
 
 // Constructs the composite image in the tile at x,y and updates the relevant
 // pixmap
-void Canvas::compositeTile(int x, int y, layer *dstLay, int dstTile)
+void Canvas::compositeTile(int x, int y, Layer *dstLay, int dstTile)
 {
   // work out which tile to render into unless directed to a specific tile
   if (dstTile==-1)
@@ -220,7 +222,7 @@ void Canvas::compositeTile(int x, int y, layer *dstLay, int dstTile)
   if (dstLay==0)
     dstLay=compose;
   
-  DEBUG(tile, printf("\n*** compositeTile %d,%d\n",x,y); );
+  KIS_DEBUG(tile, printf("\n*** compositeTile %d,%d\n",x,y); );
   
   //printf("compositeTile: dstLay=%p dstTile=%d\n",dstLay, dstTile);
   
@@ -233,7 +235,7 @@ void Canvas::compositeTile(int x, int y, layer *dstLay, int dstTile)
   QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
   
   int l=0;
-  layer *lay=layers.first();
+  Layer *lay=layers.first();
   while(lay) { // Go through each layer and find its contribution to this tile
     l++;
     //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
@@ -264,7 +266,7 @@ void Canvas::compositeImage(QRect r)
   TIME_END("compositeImage");
 }
 
-void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLay,
+void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLay,
 				 int dstTile)
 {
   // calculate the position in the layer of the topLeft of the drawing tile
@@ -276,22 +278,22 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
 			       &tileOffsetX, &tileOffsetY);
   xTile=tileNo%srcLay->xTiles();
   yTile=tileNo/srcLay->xTiles();
-  DEBUG(render, showi(tileNo); );
+  KIS_DEBUG(render, showi(tileNo); );
   bool renderQ1=true, renderQ2=true, renderQ3=true, renderQ4=true;
   if (tileOffsetX<0)
     renderQ1=renderQ3=false;
   if (tileOffsetY<0)
     renderQ2=renderQ1=false;
   
-  DEBUG(render, showi(tileOffsetX); );
-  DEBUG(render, showi(tileOffsetY); );
+  KIS_DEBUG(render, showi(tileOffsetX); );
+  KIS_DEBUG(render, showi(tileOffsetY); );
   
   int maxLayerX=TILE_SIZE, maxLayerY=TILE_SIZE;
   if (srcLay->boundryTileX(tileNo)) {
     maxLayerX=srcLay->channelLastTileOffsetX();
     if (tileOffsetX>=0)
       renderQ2=false;
-    DEBUG(render, showi(maxLayerX); );
+    KIS_DEBUG(render, showi(maxLayerX); );
   }
   if (tileOffsetX==0)
     renderQ4=false;
@@ -300,16 +302,16 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
     maxLayerY=srcLay->channelLastTileOffsetY();
 		if (tileOffsetY>=0)
 		  renderQ3=false;
-		DEBUG(render, showi(maxLayerX); );
+		KIS_DEBUG(render, showi(maxLayerX); );
   }
   if (tileOffsetY==0)
     renderQ4=false;
   
   
-  DEBUG(render, showi(renderQ1); );
-  DEBUG(render, showi(renderQ2); );
-  DEBUG(render, showi(renderQ3); );
-  DEBUG(render, showi(renderQ4); );
+  KIS_DEBUG(render, showi(renderQ1); );
+  KIS_DEBUG(render, showi(renderQ2); );
+  KIS_DEBUG(render, showi(renderQ3); );
+  KIS_DEBUG(render, showi(renderQ4); );
   
   // Render quadrants of each tile (either 1, 2 or 4 quadrants get rendered)
   // 
@@ -322,7 +324,7 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
   
   dbg=false;
   
-  DEBUG(render, {
+  KIS_DEBUG(render, {
     SHOW_POINT(tileBoundary.topLeft());
     SHOW_POINT(layerPoint);
     printf("tileNo %d, tileOffsetX %d, tileOffsetY %d\n",
@@ -331,7 +333,7 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
 
   int renderedToX, renderedToY;
   
-  DEBUG(render, printf("Test 1: "); );
+  KIS_DEBUG(render, printf("Test 1: "); );
   if (renderQ1) {
     // true => render 1
     renderTileQuadrant(srcLay, tileNo, dstLay, dstTile, 
@@ -340,9 +342,9 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
     renderedToX=maxLayerX-tileOffsetX;
     renderedToY=maxLayerY-tileOffsetY;
   } else
-    DEBUG(render, puts("ignore"); );
+    KIS_DEBUG(render, puts("ignore"); );
   
-  DEBUG(render, printf("Test 2:"); );
+  KIS_DEBUG(render, printf("Test 2:"); );
   if (renderQ2) {
     // true => render 2
     if (renderQ1)
@@ -354,9 +356,9 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
 			 0, tileOffsetY, -tileOffsetX,0,
 			 TILE_SIZE, TILE_SIZE);
   } else
-    DEBUG(render, puts("ignore"));
+    KIS_DEBUG(render, puts("ignore"));
   
-  DEBUG(render, printf("Test 3:"); );
+  KIS_DEBUG(render, printf("Test 3:"); );
   if (renderQ3) {
     // true => render 3
     if (renderQ1)
@@ -368,24 +370,24 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
 			 tileOffsetX, 0, 0, -tileOffsetY, 
 			 TILE_SIZE, TILE_SIZE);
   } else
-    DEBUG(render, puts("ignore"); );
+    KIS_DEBUG(render, puts("ignore"); );
   
-  DEBUG(render, printf("Test 4:"); );
+  KIS_DEBUG(render, printf("Test 4:"); );
   // true => render 4
   if (renderQ4) {
     int newTile=tileNo;
-    DEBUG(render, showi(xTile); );
-    DEBUG(render, showi(yTile); );
+    KIS_DEBUG(render, showi(xTile); );
+    KIS_DEBUG(render, showi(yTile); );
     if (renderQ1) {
       xTile++; yTile++; newTile+=srcLay->xTiles()+1;
     } else {
       if (renderQ2) { yTile++; newTile+=srcLay->xTiles(); }
 			if (renderQ3) { xTile++; newTile+=1; }
     }
-    DEBUG(render, showi(xTile); );
-    DEBUG(render, showi(yTile); );
+    KIS_DEBUG(render, showi(xTile); );
+    KIS_DEBUG(render, showi(yTile); );
     if ((xTile<srcLay->xTiles()) && (yTile<srcLay->yTiles())) {
-      DEBUG(render, showi(newTile); );
+      KIS_DEBUG(render, showi(newTile); );
       if (!(renderQ1 && !renderQ2 && !renderQ3)) {
 	if (tileOffsetX>0) tileOffsetX=tileOffsetX-TILE_SIZE;
 	if (tileOffsetY>0) tileOffsetY=tileOffsetY-TILE_SIZE;
@@ -394,15 +396,15 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLa
 			   TILE_SIZE, TILE_SIZE);
       }
     }	else
-      DEBUG(render, puts("ignore"); );
+      KIS_DEBUG(render, puts("ignore"); );
   }	else
-    DEBUG(render, puts("ignore"); );
+    KIS_DEBUG(render, puts("ignore"); );
   
   dbg=false;
 }
 
-void Canvas::renderTileQuadrant(layer *srcLay, int srcTile, 
-				layer *dstLay, int dstTile,
+void Canvas::renderTileQuadrant(Layer *srcLay, int srcTile, 
+				Layer *dstLay, int dstTile,
 				int srcX, int srcY, 
 				int dstX, int dstY, int w, int h)
 {
@@ -425,7 +427,7 @@ void Canvas::renderTileQuadrant(layer *srcLay, int srcTile,
     h=MIN(h, srcLay->channelLastTileOffsetY()-srcY);
   // XXX now constrain for the boundry of the Canvas
   
-  DEBUG(render, printf("renderTileQuadrant: srcTile=%d src=(%d,%d) dstTile=%d dst=(%d,%d) size=(%d,%d)\n", srcTile, srcX, srcY, dstTile, dstX, dstY, w,h); );
+  KIS_DEBUG(render, printf("renderTileQuadrant: srcTile=%d src=(%d,%d) dstTile=%d dst=(%d,%d) size=(%d,%d)\n", srcTile, srcX, srcY, dstTile, dstX, dstY, w,h); );
   
   
   
@@ -462,31 +464,32 @@ void Canvas::renderTileQuadrant(layer *srcLay, int srcTile,
   }
 }
 
-layer* Canvas::layerPtr(layer *lay=0)
+Layer* Canvas::layerPtr( Layer *_layer )
 {
-  if (lay==0)
-    return(currentLayer);
-  return(lay);
+  if( _layer == 0 )
+    return( currentLayer );
+  return( _layer );
 }
 
-void Canvas::setCurrentLayer(int l)
+void Canvas::setCurrentLayer( int _layer )
 {
-  currentLayer=layers.at(l);
+  currentLayer = layers.at( _layer );
 }
 
-void Canvas::setLayerOpacity(uchar o, layer *lay)
+void Canvas::setLayerOpacity( uchar _opacity, Layer *_layer )
 {
-  lay=layerPtr(lay);
-  lay->setOpacity(o);
-  printf("set layer: %s opacity to %d\n",lay->name().data(), o);
+  _layer = layerPtr( _layer );
+  _layer->setOpacity( _opacity );
+
+  DEBUG("set layer: %s opacity to %d\n", _layer->name().data(), _opacity );
   
   // FIXME: repaint
 }
 
-void Canvas::moveLayer(int dx, int dy, layer *lay=0)
+void Canvas::moveLayer( int _dx, int _dy, Layer *_lay ) 
 {
-  lay=layerPtr(lay);
-  lay->moveBy(dx, dy);
+  _lay = layerPtr( _lay );
+  _lay->moveBy( _dx, _dy );
 }
 
 void Canvas::convertImageToPixmap(QImage *image, QPixmap *pix)
@@ -525,7 +528,7 @@ void Canvas::convertImageToPixmap(QImage *image, QPixmap *pix)
   }
 } 
 
-void Canvas::convertTileToPixmap(layer *lay, int tileNo, QPixmap *pix)
+void Canvas::convertTileToPixmap(Layer *lay, int tileNo, QPixmap *pix)
 {
   // Copy the composite image into a QImage so it can be converted to a
   // QPixmap. 
@@ -548,9 +551,9 @@ void Canvas::convertTileToPixmap(layer *lay, int tileNo, QPixmap *pix)
   convertImageToPixmap(&img, pix);
 }
 
-void Canvas::paintBrush(QPoint pt, brush *brsh)
+void Canvas::paintBrush(QPoint pt, Brush *brsh)
 {
-  layer *lay=layerPtr(0);
+  Layer *lay=layerPtr(0);
   QPoint layPt=pt-brsh->hotSpot()-lay->imageExtents().topLeft();
   QRect brushRect(layPt, brsh->brushSize());
   

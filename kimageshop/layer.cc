@@ -12,8 +12,7 @@
 #include "layer.h"
 #include "misc.h"
 
-
-layer::layer(int ch, bool hasAlpha)
+Layer::Layer(int ch, bool hasAlpha)
 	: QObject()
 {
 	channels=ch;
@@ -23,23 +22,23 @@ layer::layer(int ch, bool hasAlpha)
   alphaChannel=hasAlpha;
 
 	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
-		channelPtrs[c]=new channel(0,0);
+		channelPtrs[c]=new Channel(0,0);
 }
 
-layer::~layer()
+Layer::~Layer()
 {
 
 }
 
 void
-layer::setOpacity(uchar o)
+Layer::setOpacity(uchar o)
 {
 	opacityVal=o;
 	//	emit layerPropertiesChanged();
 }
 
 void
-layer::loadRGBImage(QImage img, QImage alpha)
+Layer::loadRGBImage(QImage img, QImage alpha)
 {
 	if (img.depth()!=32)
 		img=img.convertDepth(32);
@@ -68,7 +67,7 @@ layer::loadRGBImage(QImage img, QImage alpha)
 }
 
 void
-layer::loadGrayImage(QImage img, QImage alpha)
+Layer::loadGrayImage(QImage img, QImage alpha)
 {
 	if (img.depth()!=32)
 		img=img.convertDepth(32);
@@ -83,7 +82,7 @@ layer::loadGrayImage(QImage img, QImage alpha)
 
 
 void
-layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset)
+Layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset)
 {
 	pt=pt-channelPtrs[1]->tileExtents().topLeft();
 	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
@@ -91,7 +90,7 @@ layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset)
 }
 
 void
-layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y)
+Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y)
 {
 	pt=pt-channelPtrs[1]->tileExtents().topLeft();
 	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
@@ -100,90 +99,90 @@ layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y)
 }
 
 uchar*
-layer::channelMem(int channel, int tileNo, int ox, int oy)
+Layer::channelMem(int channel, int tileNo, int ox, int oy)
 {
 	return channelPtrs[channel]->tileBlock()[tileNo]+oy*TILE_SIZE+ox;
 }
 
 
 QRect
-layer::imageExtents() // Extents of the image in canvas coords
+Layer::imageExtents() // Extents of the image in canvas coords
 {
 	return channelPtrs[1]->imageExtents();
 }
 
 QRect
-layer::tileExtents() // Extents of the image in canvas coords
+Layer::tileExtents() // Extents of the image in canvas coords
 {
 	return channelPtrs[1]->tileExtents();
 }
 
 QPoint
-layer::channelOffset() // TopLeft of the image in the channel (not always 0,0)
+Layer::channelOffset() // TopLeft of the image in the channel (not always 0,0)
 {
 	return channelPtrs[1]->offset();
 }
 
 int   
-layer::xTiles() 
+Layer::xTiles() 
 {
 	return channelPtrs[1]->xTiles();
 }
 
 int   
-layer::yTiles() 
+Layer::yTiles() 
 {
 	return channelPtrs[1]->yTiles();
 }
 
 
 void
-layer::moveBy(int dx, int dy)
+Layer::moveBy(int dx, int dy)
 {
 	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
 		channelPtrs[c]->moveBy(dx, dy);	
 }
 
 void
-layer::moveTo(int x, int y)
+Layer::moveTo(int x, int y)
 {
 	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
 		channelPtrs[c]->moveTo(x, y);	
 }
 
 int
-layer::channelLastTileOffsetX()
+Layer::channelLastTileOffsetX()
 {
 	return channelPtrs[1]->lastTileOffsetX();
 }
 
 int
-layer::channelLastTileOffsetY()
+Layer::channelLastTileOffsetY()
 {
 	return channelPtrs[1]->lastTileOffsetY();
 }
 
 bool
-layer::boundryTileX(int tile)
+Layer::boundryTileX(int tile)
 {
 	return(((tile % xTiles())+1)==xTiles());
 }
 
 bool
-layer::boundryTileY(int tile)
+Layer::boundryTileY(int tile)
 {
 	return(((tile/xTiles())+1)==yTiles());
 }
 
 void
-layer::resizeToIncludePoint(QPoint p)
+Layer::resizeToIncludePoint(QPoint p)
 {
 	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
 		channelPtrs[c]->resizeChannel(p);
 }
 
 void
-layer::setPixel(int x, int y, uchar val)
+Layer::setPixel(int x, int y, uchar val)
 {
 	printf("layer::setPixel(%d,%d, %d)\n",x,y,val);
 	for(int c=1; c<=channels; c++)

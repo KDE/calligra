@@ -12,7 +12,6 @@
 
 #include <qimage.h>
 #include <qobject.h>
-#include <qlist.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
 
@@ -24,65 +23,88 @@ struct canvasTileDescriptor
   QPixmap pix;
 };
 
-
+/**
+ *  The canvas class.
+ */
 class Canvas : public QObject
 {
   Q_OBJECT
 
- public:
-  Canvas(int width, int height);
+public:
+
+  /**
+   *  Constructor
+   *
+   *  @param width The width of the canvas.
+   *  @param width The height of the canvas.
+   */
+  Canvas( int width, int height );
+
+  /**
+   *  Destructor.
+   */
   ~Canvas();
 
-  // Paint a area of image data on widget w.
-  // Handle zoomFactor and offset.
-  void paintPixmap(QWidget *w, QRect area, QPoint offset = QPoint(0,0), QPoint paintOffset = QPoint(0,0) , int zoomFactor = 0);
+  /**
+   *  Paint a area of image data on widget w.
+   *  Handle zoomFactor and offset.
+   */
+  void paintPixmap( QWidget *widget, QRect area, QPoint offset = QPoint( 0, 0 ), QPoint paintOffset = QPoint( 0, 0 ), int zoomFactor = 0 );
  
-  // return current layer
-  layer* getCurrentLayer() { return currentLayer; }
+  /**
+   *  Returns current layer.
+   */
+  Layer* getCurrentLayer()
+  { return currentLayer; }
 
   // return size
   int height();
   int width();
 
-  void addRGBLayer(QString file);
-  void compositeImage(QRect r);
-  void setCurrentLayer(int l);
-  layer *layerPtr(layer *lay);
-  void setLayerOpacity(uchar o, layer *lay=0);
+  void addRGBLayer( QString file );
+  void compositeImage( QRect r );
+  void setCurrentLayer( int l );
+  Layer* layerPtr( Layer* lay );
+  void setLayerOpacity( uchar o, Layer *lay = 0 );
   
-  void renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLay, int dstTile);
-  void moveLayer(int dx, int dy, layer *lay=0);
-  void renderTileQuadrant(layer *srcLay, int srcTile, layer *dstLay, int dstTile,
-			  int srcX, int srcY, int dstX, int dstY, int w, int h);
-  void paintBrush(QPoint pt, brush *brsh);
-  QList<layer> layerList() { return layers; };
+  void renderLayerIntoTile( QRect tileBoundary, Layer *srcLay, Layer *dstLay, int dstTile );
+  void moveLayer( int dx, int dy, Layer *lay = 0 );
+  void renderTileQuadrant( Layer *srcLay, int srcTile, Layer *dstLay, int dstTile,
+			   int srcX, int srcY, int dstX, int dstY, int w, int h );
+  void paintBrush( QPoint pt, Brush *brush );
+  LayerList layerList() { return layers; };
 
 public slots:
-  void setCurrentLayerOpacity(double o) { setLayerOpacity((uchar)(o*255/100)); };
+
+  void setCurrentLayerOpacity( double opacity )
+  {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
   
 protected:
-  void compositeTile(int x, int y, layer *dstLay=0, int dstTile=-1);
-  void convertTileToPixmap(layer *lay, int tileNo, QPixmap *pix);
+
+  void compositeTile( int x, int y, Layer *dstLay = 0, int dstTile = -1 );
+  void convertTileToPixmap( Layer *lay, int tileNo, QPixmap *pix );
 
 private:
+
   void setUpVisual();
-  void convertImageToPixmap(QImage *img, QPixmap *pix);
+  void convertImageToPixmap( QImage *img, QPixmap *pix );
 
   int w,h, channels;
   QRect viewportRect;
   int xTiles, yTiles;
-  QList<layer> layers;
-  layer *compose;
+  LayerList layers;
+  Layer *compose;
   QImage img;
-  layer *currentLayer;
+  Layer *currentLayer;
   QPixmap **tiles;
   bool dragging;
   QPoint dragStart;
   uchar *background[5];
   
-  enum dispVisual {unknown, rgb565, rgb888x} visual;
+  enum dispVisual { unknown, rgb565, rgb888x } visual;
   char *imageData;
   XImage *xi;
 };
 
 #endif
+

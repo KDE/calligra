@@ -14,9 +14,10 @@
 #include "qsize.h"
 #include "qpoint.h"
 
-class brush : public layer {
- public:
-	brush(QString file);
+class Brush : public Layer
+{
+public:
+	Brush(QString file);
 	
 	int    spacing()   { return spacingVal; };
 	QSize  brushSize() { return sizeVal;    };
@@ -24,7 +25,7 @@ class brush : public layer {
 	void   setHotSpot(QPoint pt) { hotSpotVal=pt; }; // XXX check in brush
 	QPoint hotSpot()   { return hotSpotVal; };
 
- private:
+private:
 	void loadBrush(QString file);
 
 	bool validVal;;

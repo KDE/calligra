@@ -23,7 +23,7 @@
 #include "kimageshop_doc.h"
 #include "kvector.h"
 
-BrushTool::BrushTool(KImageShopDoc *doc, brush *_brush) : Tool(doc)
+BrushTool::BrushTool(KImageShopDoc *doc, Brush *_brush) : Tool(doc)
 {
   m_dragging = false;
   m_pBrush = _brush;
@@ -31,7 +31,7 @@ BrushTool::BrushTool(KImageShopDoc *doc, brush *_brush) : Tool(doc)
 
 BrushTool::~BrushTool() {}
 
-void BrushTool::setBrush(brush *_brush)
+void BrushTool::setBrush(Brush *_brush)
 {
   m_pBrush = _brush;
 }

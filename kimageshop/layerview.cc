@@ -23,28 +23,28 @@
 
 #include "misc.h"
 #include "kimageshop_doc.h"
-#include "layerlist.h"
+#include "layerview.h"
 
 #define WIDTH   200
 #define HEIGHT  40
 #define MAXROWS 8
 
-QPixmap *LayerList::m_eyeIcon, *LayerList::m_linkIcon;
-QRect LayerList::m_eyeRect, LayerList::m_linkRect;
+QPixmap *LayerView::m_eyeIcon, *LayerView::m_linkIcon;
+QRect LayerView::m_eyeRect, LayerView::m_linkRect;
 
-LayerList::LayerList( QWidget* _parent, const char* _name )
+LayerView::LayerView( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
   init( 0 );
 }
 
-LayerList::LayerList( KImageShopDoc* doc, QWidget* _parent, const char* _name )
+LayerView::LayerView( KImageShopDoc* doc, QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
   init( doc );
 }
 
-void LayerList::init( KImageShopDoc* doc )
+void LayerView::init( KImageShopDoc* doc )
 {
   setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
 
@@ -92,26 +92,32 @@ void LayerList::init( KImageShopDoc* doc )
   connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
 }
 
-void LayerList::paintCell( QPainter* p, int _row, int )
+void LayerView::paintCell( QPainter* _painter, int _row, int )
 {
   if( _row == m_selected )
   {
-    p->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, QColor( 15, 175, 50 ) );
+    _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, green );
   }
-  if( m_doc->layerList().at( _row )->isVisible() )
-    p->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
-  if( m_doc->layerList().at( _row )->isLinked() )
-    p->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
 
-  p->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
-  p->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
+  if( m_doc->layerList().at( _row )->isVisible() )
+  {
+    _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
+  }
+
+  if( m_doc->layerList().at( _row )->isLinked() )
+  {
+    _painter->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
+  }
+
+  _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
+  _painter->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
 }
 
-void LayerList::updateList()
+void LayerView::updateList()
 {
 }
 
-void LayerList::updateTable()
+void LayerView::updateTable()
 {
   if( m_doc )
   {
@@ -128,13 +134,13 @@ void LayerList::updateTable()
   resize( sizeHint() );
 }
 
-void LayerList::update_contextmenu( int _index )
+void LayerView::update_contextmenu( int _index )
 {
   m_contextmenu->setItemChecked( 1, m_doc->layerList().at( _index )->isVisible() );
   m_contextmenu->setItemChecked( 2, m_doc->layerList().at( _index )->isLinked() );
 }
 
-void LayerList::selectLayer( int _index )
+void LayerView::selectLayer( int _index )
 {
   int currentSel = m_selected;
   m_selected = -1;
@@ -144,7 +150,7 @@ void LayerList::selectLayer( int _index )
   updateCell( m_selected, 0 );
 }
 
-void LayerList::inverseVisibility( int _index )
+void LayerView::inverseVisibility( int _index )
 {
   m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
@@ -152,13 +158,13 @@ void LayerList::inverseVisibility( int _index )
   m_doc->slotUpdateViews(m_doc->layerList().at( _index )->imageExtents());
 }
 
-void LayerList::inverseLinking( int _index )
+void LayerView::inverseLinking( int _index )
 {
   m_doc->layerList().at( _index )->setLinked( !m_doc->layerList().at( _index )->isLinked() );
   updateCell( _index, 0 );
 }
 
-void LayerList::renameLayer( int _index )
+void LayerView::renameLayer( int _index )
 {
   QString layername = m_doc->layerList().at( _index )->name();
 
@@ -171,17 +177,17 @@ void LayerList::renameLayer( int _index )
   updateCell( _index, 0 );
 }
 
-void LayerList::addLayer( int _index )
+void LayerView::addLayer( int _index )
 {
   cerr << "Michael : Add Layer" << endl;
 }
 
-void LayerList::removeLayer( int _index )
+void LayerView::removeLayer( int _index )
 {
   cerr << "Michael : Remove Layer" << endl;
 }
 
-void LayerList::slotMenuAction( int _id )
+void LayerView::slotMenuAction( int _id )
 {
   switch( _id )
   {
@@ -209,12 +215,12 @@ void LayerList::slotMenuAction( int _id )
   }
 }
 
-QSize LayerList::sizeHint() const
+QSize LayerView::sizeHint() const
 {
   return QSize( WIDTH, HEIGHT * MAXROWS );
 }
 
-void LayerList::mousePressEvent( QMouseEvent* _event )
+void LayerView::mousePressEvent( QMouseEvent* _event )
 {
   int row = findRow( _event->pos().y() );
   QPoint localPoint( _event->pos().x() % cellWidth(), _event->pos().y() % cellHeight() );
@@ -244,5 +250,5 @@ void LayerList::mousePressEvent( QMouseEvent* _event )
   }
 }
 
-#include "layerlist.moc"
+#include "layerview.moc"
 

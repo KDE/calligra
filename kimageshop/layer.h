@@ -12,14 +12,20 @@
 
 #include <qimage.h>
 #include <qobject.h>
+#include <qlist.h>
+
 #include "channel.h"
 
-class layer : public QObject {
+class Layer;
+
+typedef QList<Layer> LayerList;
+
+class Layer : public QObject {
 	Q_OBJECT;
 
  public:
-	layer(int ch, bool hasAlpha=true);
-	~layer();
+	Layer(int ch, bool hasAlpha=true);
+	~Layer();
 	
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);
@@ -56,7 +62,7 @@ class layer : public QObject {
 
  private:
 	uchar opacityVal;
-	channel *channelPtrs[5];
+	Channel *channelPtrs[5];
 	int channels;
 	QString nameVal;
 	bool visible, linked;
@@ -64,3 +70,4 @@ class layer : public QObject {
 };
 
 #endif
+

@@ -25,12 +25,12 @@
 
 #include "tool.h"
 
-class brush;
+class Brush;
 
 class BrushTool : public Tool
 {
  public:
-  BrushTool(KImageShopDoc *doc, brush *_brush);
+  BrushTool(KImageShopDoc *doc, Brush *_brush);
   ~BrushTool();
 
   virtual char* toolName() { return CORBA::string_dup("BrushTool"); }
@@ -39,12 +39,12 @@ class BrushTool : public Tool
   virtual void mouseMove(const KImageShop::MouseEvent& e);
   virtual void mouseRelease(const KImageShop::MouseEvent& e);
 
-  void setBrush(brush *_brush);
+  void setBrush(Brush *_brush);
 
  protected:
   QPoint m_dragStart;
   bool   m_dragging;
-  brush  *m_pBrush;
+  Brush  *m_pBrush;
 };
 
 #endif //__brushtool_h__

@@ -15,8 +15,7 @@
 #include <stdio.h>
 #include "misc.h"
 
-
-channel::channel(int w, int h)
+Channel::Channel(int w, int h)
 {
 // 	puts("new channel");
 	xTilesNo=0;
@@ -29,7 +28,7 @@ channel::channel(int w, int h)
 }
 
 void
-channel::loadViaQImage(QImage img, int channel)
+Channel::loadViaQImage(QImage img, int channel)
 {
 	// printf("loadViaQImage %dx%d\n",img.width(),img.height());
 
@@ -54,7 +53,7 @@ channel::loadViaQImage(QImage img, int channel)
 
 
 void
-channel::setPixel(int x, int y, uchar val)
+Channel::setPixel(int x, int y, uchar val)
 {
 	// assumes offset of 0,0 for top left 
 	// XXX and that x,y is inside the imageRect
@@ -65,7 +64,7 @@ channel::setPixel(int x, int y, uchar val)
 }
 
 uchar
-channel::getPixel(int x, int y)
+Channel::getPixel(int x, int y)
 {
 	// assumes offset of 0,0 for top left 
 	// XXX and that x,y is inside the imageRect
@@ -80,7 +79,7 @@ channel::getPixel(int x, int y)
 //    init - is used only when the channel is created
 
 void
-channel::resizeChannel(QPoint newPoint, bool init)
+Channel::resizeChannel(QPoint newPoint, bool init)
 {
 	if ((!init) && imageRect.contains(newPoint))
 		return;
@@ -169,7 +168,7 @@ channel::resizeChannel(QPoint newPoint, bool init)
 
 
 void
-channel::dumpTileBlock()
+Channel::dumpTileBlock()
 {
 	puts("====dumpTileBlock====");
 	SHOW_RECT_COORDS(imageRect);
@@ -186,7 +185,7 @@ channel::dumpTileBlock()
 }
 
 void
-channel::moveBy(int dx, int dy)
+Channel::moveBy(int dx, int dy)
 {
 	imageRect.moveBy(dx, dy);
 	//puts("channel::moveBy");
@@ -194,8 +193,9 @@ channel::moveBy(int dx, int dy)
 }
 
 void
-channel::moveTo(int x, int y)
+Channel::moveTo(int x, int y)
 {
 	// XXX adapt for the case where the image starts at (>0,>0)
 	imageRect.moveTopLeft(QPoint(x, y));
 }
+

@@ -14,8 +14,8 @@
 #include <qregexp.h>
 #include <stdio.h>
 
-brush::brush(QString file)
-	: layer(3, true)
+Brush::Brush(QString file)
+	: Layer(3, true)
 {
 	validVal=true;
 	loadBrush(file);
@@ -25,7 +25,7 @@ brush::brush(QString file)
 
 
 void
-brush::loadBrush(QString file)
+Brush::loadBrush(QString file)
 {
 	printf("brush::loadBrush: %s\n",file.latin1());
 	QImage img(file);

@@ -43,7 +43,7 @@ class KRuler;
 class Tool;
 class MoveTool;
 class BrushTool;
-class brush;
+class Brush;
 
 class KImageShopView : public QWidget,
 		       virtual public KoViewIf,
@@ -52,6 +52,7 @@ class KImageShopView : public QWidget,
   Q_OBJECT
     
 public:
+
   KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc );
   ~KImageShopView();
   
@@ -62,6 +63,7 @@ public:
   CORBA::Boolean printDlg();
 
 public slots:
+
   void slotUpdateView(const QRect &area);
   // slots the CanvasView connects to 
   void slotCVPaint(QPaintEvent *e);
@@ -71,10 +73,11 @@ public slots:
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
 
+protected:
+
   void scrollH( int );
   void scrollV( int );
 
-protected:
   virtual void init();
 
   void setupScrollbars();
@@ -90,11 +93,16 @@ protected:
 
   virtual void resizeEvent( QResizeEvent* _ev );
 
+  void editUndo();
+  void editRedo();
   void viewLayerDialog();
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   OpenPartsUI::ToolBar_var m_vToolBarTools;
+
   OpenPartsUI::Menu_var m_vMenuEdit;
+  CORBA::Long m_idMenuEdit_Undo;
+  CORBA::Long m_idMenuEdit_Redo;
 
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_LayerDialog;
@@ -104,6 +112,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuOptions;
   
 private:
+
   enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL };
 
   KImageShopDoc *m_pDoc; 
@@ -115,7 +124,7 @@ private:
   Tool          *m_pTool; // currently active tool
   MoveTool      *m_pMoveTool;
   BrushTool     *m_pBrushTool;
-  brush         *m_pBrush; // current brush
+  Brush         *m_pBrush; // current brush
 };
 
 #endif
