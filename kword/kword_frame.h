@@ -55,7 +55,7 @@ enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HE
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
-enum SheetSide { AnySheet=0, EvenSheets=1, OddSheets=2 };
+enum SheetSide { AnySide=0, EvenSide=1, OddSide=2 };
 
 /******************************************************************/
 /* Class: KWFrame                                                 */

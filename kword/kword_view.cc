@@ -2857,6 +2857,7 @@ void KWordView::printDebug() {
             kdDebug() << " |  Groupmanager:" << doc->getFrameSet(iFrameset)->getGroupManager() << endl;
         for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
             kdDebug() << " +-- Frame " << j << " of "<< doc->getFrameSet(iFrameset)->getNumFrames() <<  endl;
+                kdDebug() << "     FrameBehaviour: "<< doc->getFrameSet(iFrameset)->getFrame(j)->getFrameBehaviour() << endl;
                 kdDebug() << "     NewFrameBehaviour: "<< doc->getFrameSet(iFrameset)->getFrame(j)->getNewFrameBehaviour() << endl;
             kdDebug() << "     SheetSide "<< doc->getFrameSet(iFrameset)->getFrame(j)->getSheetSide() << endl;
             if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected())

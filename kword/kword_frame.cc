@@ -76,7 +76,7 @@ KWFrame::KWFrame()
 
     frameBehaviour=AutoExtendFrame;
     newFrameBehaviour = Reconnect;
-    sheetSide = AnySheet;
+    sheetSide = AnySide;
 }
 
 /*================================================================*/
@@ -107,7 +107,7 @@ KWFrame::KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomrigh
 
     frameBehaviour=AutoCreateNewFrame;
     newFrameBehaviour = Reconnect;
-    sheetSide = AnySheet;
+    sheetSide = AnySide;
 }
 
 /*================================================================*/
@@ -138,7 +138,7 @@ KWFrame::KWFrame( KWFrameSet *fs,const QPoint &topleft, const QSize &size )
 
     frameBehaviour=AutoCreateNewFrame;
     newFrameBehaviour = Reconnect;
-    sheetSide = AnySheet;
+    sheetSide = AnySide;
 }
 
 /*================================================================*/
@@ -169,7 +169,7 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height )
 
     newFrameBehaviour = Reconnect;
     frameBehaviour=AutoCreateNewFrame;
-    sheetSide = AnySheet;
+    sheetSide = AnySide;
 }
 
 /*================================================================*/
@@ -200,7 +200,7 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
 
     frameBehaviour=AutoCreateNewFrame;
     newFrameBehaviour = Reconnect;
-    sheetSide = AnySheet;
+    sheetSide = AnySide;
 }
 
 /*================================================================*/
@@ -231,7 +231,7 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
 
     frameBehaviour=AutoCreateNewFrame;
     newFrameBehaviour = Reconnect;
-    sheetSide = AnySheet;
+    sheetSide = AnySide;
 }
 
 /*================================================================*/
@@ -941,7 +941,6 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     string tag;
     string name;
-    // when a frame doesn not have a framebehaviour set use the default from the frameset.
     KWParag *last = 0L;
 
     while ( parser.open( 0L, tag ) ) {
@@ -970,6 +969,9 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	} else if ( name == "FRAME" ) {
 	    KWFrame rect;
+            NewFrameBehaviour newFrameBehaviour = Reconnect;
+            FrameBehaviour autoCreateNewValue = AutoExtendFrame;
+            SheetSide sheetSide = AnySide;
 	    KWParagLayout::Border l, r, t, b;
 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
 	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
@@ -1079,6 +1081,12 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    tinch = atof( ( *it ).m_strValue.c_str() );
 		else if ((*it).m_strName == "bbottominch")
 		    binch = atof( ( *it ).m_strValue.c_str() );
+		else if ((*it).m_strName == "autoCreateNewFrame")
+		    autoCreateNewValue = static_cast<FrameBehaviour>( atoi( ( *it ).m_strValue.c_str() ));
+		else if ((*it).m_strName == "newFrameBehaviour")
+		    newFrameBehaviour = static_cast<NewFrameBehaviour>( atoi( ( *it ).m_strValue.c_str() ));
+		else if ((*it).m_strName == "sheetSide")
+		    sheetSide = static_cast<SheetSide>( atoi( ( *it ).m_strValue.c_str() ));
 	    }
 	    KWFrame *_frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(), rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
 	    _frame->setLeftBorder( l );
@@ -1090,6 +1098,9 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
 	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+	    _frame->setFrameBehaviour( autoCreateNewValue );
+	    _frame->setSheetSide( sheetSide );
+	    _frame->setNewFrameBehaviour( newFrameBehaviour);
 	    frames.append( _frame );
 	} else
 	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
@@ -2118,6 +2129,7 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
 	    frame->setBRight( u );
 	    frame->setBTop( u );
 	    frame->setBBottom( u );
+	    frame->setNewFrameBehaviour( NoFollowup );
 	    _wid = wid;
 	    _wid += static_cast<int>(frame->getBLeft().pt() + frame->getBRight().pt());
 	    _hei = hei;
@@ -2163,7 +2175,10 @@ void KWGroupManager::recalcCols()
 	}
     }
 
-    unsigned int x = getFrameSet( 0, 0 )->getFrame( 0 )->x();
+    unsigned int x=0;
+    if(getFrameSet(0,0) &&  getFrameSet( 0, 0 )->getFrame( 0 ))
+        x =getFrameSet( 0, 0 )->getFrame( 0 )->x();
+
     for ( unsigned int i = 0; i < cols; i++ ) {
 	unsigned int j = 0;
 	for ( j = 0; j < rows; j++ ) {
