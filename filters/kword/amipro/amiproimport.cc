@@ -26,10 +26,12 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qvaluelist.h>
+#include <qfont.h>
 
 #include <kdebug.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
+#include <koGlobal.h>
 
 #include <amiproimport.h>
 #include <amiproparser.h>
@@ -49,9 +51,14 @@ class AmiProConverter: public AmiProListener
     QString root, documentInfo;
     virtual bool doOpenDocument();
     virtual bool doCloseDocument();
-    virtual bool doParagraph( const QString& text, AmiProFormatList formatList );
+    virtual bool doDefineStyle( const AmiProStyle& style );
+    virtual bool doParagraph( const QString& text, AmiProFormatList formatList,
+      AmiProLayout& l );
+  private:
+    AmiProStyleList styleList;
 };
 
+// helper function to convert AmiPro format to KWord's FORMAT
 static QString AmiProFormatAsXML( AmiProFormat format )
 {
   QString result;
@@ -59,7 +66,7 @@ static QString AmiProFormatAsXML( AmiProFormat format )
   if( format.bold ) result.append("<WEIGHT value=\"75\" />\n" );
   if( format.italic ) result.append( "<ITALIC value=\"1\" />\n" );
   if( format.underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
-  if( format.strikethrough ) result.append( "    <STRIKEOUT value=\"1\" />\n" );
+  if( format.strikethrough ) result.append( "<STRIKEOUT value=\"1\" />\n" );
   if( format.subscript ) result.append( "<VERTALIGN value=\"1\" />\n" );
   if( format.superscript ) result.append( "<VERTALIGN value=\"2\" />\n" );
 
@@ -73,6 +80,104 @@ static QString AmiProFormatAsXML( AmiProFormat format )
   result.append( "</FORMAT>\n" );
 
   return result;
+}
+
+// helper function to convert AmiPro list of formats to KWord FORMATS 
+static QString AmiProFormatListAsXML( AmiProFormatList& formatList )
+{
+  QString result;
+
+  AmiProFormatList::iterator it;
+  for( it=formatList.begin(); it!=formatList.end(); ++it )
+  {
+    AmiProFormat& format = *it;
+    result.append( AmiProFormatAsXML(format) );
+  }
+
+  result.prepend( "<FORMATS>\n" );
+  result.append( "</FORMATS>\n" );
+
+  return result;
+}
+
+// helper function to convert AmiPro paragraph layout to KWord's LAYOUT
+static QString AmiProLayoutAsXML( const AmiProLayout& layout )
+{
+  QString result;
+
+  QString align;
+  align = layout.align==AmiProLayout::Left ? "left" :
+          layout.align==AmiProLayout::Right ? "right" :
+          layout.align==AmiProLayout::Center ? "center" :
+          layout.align==AmiProLayout::Justify ? "justify" :
+          "left";
+
+  QFont font = KoGlobal::defaultFont();
+  QString fontFamily = font.family();
+  int fontSize = font.pointSize();
+
+  result.append( "<LAYOUT>\n" );
+  result.append( "  <NAME value=\"Standard\" />\n" );
+  result.append( "  <FLOW align=\"" + align + "\" />\n" );
+  result.append( "  <LINESPACING value=\"0\" />\n" );
+  result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <INDENTS />\n" );
+  result.append( "  <OFFSETS />\n" );
+  result.append( "  <PAGEBREAKING />\n" );
+  result.append( "  <COUNTER />\n" );
+  result.append( "  <FORMAT id=\"1\">\n" );
+  result.append( "    <SIZE value=\"" + QString::number(fontSize) + "\" />\n" );
+  result.append( "    <WEIGHT value=\"50\" />\n" );
+  result.append( "    <ITALIC value=\"0\" />\n" );
+  result.append( "    <UNDERLINE value=\"0\" />\n" );
+  result.append( "    <STRIKEOUT value=\"0\" />\n" );
+  result.append( "    <CHARSET value=\"0\" />\n" );
+  result.append( "    <VERTALIGN value=\"0\" />\n" );
+  result.append( "    <FONT name=\"" + fontFamily + "\" />\n" );
+  result.append( "  </FORMAT>\n" );
+  result.append( "</LAYOUT>\n" );
+
+  return result;
+}
+
+// helper function to convert AmiPro style to KWord STYLE
+static QString AmiProStyleAsXML( const AmiProStyle& style )
+{
+  QString result;
+
+  result.append( "<STYLE>\n" );
+  result.append( "<NAME value=\"" + style.name + "\" />\n" );
+  result.append( "<FLOW align=\"left\" />\n" );
+  result.append( "  <FOLLOWING name=\"Standard\" />\n" );
+  result.append( "  <FORMAT id=\"1\" >\n" );
+  result.append( "  <WEIGHT value=\"50\" />\n" );
+  result.append( "  <FONT name=\"Sans serif\" />\n" );
+  result.append( "  <SIZE value=\"12\" />\n" );
+  result.append( "   </FORMAT>\n" );
+  result.append( "</STYLE>\n" );
+
+  return result;
+}
+
+// helper function to convert AmiPro styles to KWord STYLES
+static QString AmiProStyleListAsXML( AmiProStyleList& styleList )
+{
+  QString result;
+
+  AmiProStyleList::iterator it;
+  for( it=styleList.begin(); it!=styleList.end(); ++it )
+  {
+    AmiProStyle& style = *it;
+    result.append( AmiProStyleAsXML( style ) );
+  }
+
+  result.prepend ( "<STYLES>\n" );
+  result.append( "</STYLES>\n" );
+
+  return result; 
 }
 
 AmiProConverter::AmiProConverter()
@@ -101,6 +206,7 @@ bool AmiProConverter::doCloseDocument()
 {
   QString epilog = "</FRAMESET>\n";
   epilog.append( "</FRAMESETS>\n" );
+  epilog.append( AmiProStyleListAsXML( styleList ) );
   epilog.append( "</DOC>\n" );
 
   root.append( epilog );
@@ -108,59 +214,30 @@ bool AmiProConverter::doCloseDocument()
   return true;
 }
 
-bool AmiProConverter::doParagraph( const QString& _text, AmiProFormatList formatList )
+bool AmiProConverter::doDefineStyle( const AmiProStyle& style )
 {
-  QString text, formats, layout, result;
+  styleList.append( style );
+}
 
+bool AmiProConverter::doParagraph( const QString& _text, AmiProFormatList formatList,
+  AmiProLayout& layout )
+{
   // encode text for XML-ness
   // FIXME could be faster without QRegExp
-  text = _text;
+  QString text = _text;
   text.replace( QRegExp("&"), "&amp;" );
   text.replace( QRegExp("<"), "&lt;" );
   text.replace( QRegExp(">"), "&gt;" );
   text.replace( QRegExp("\""), "&quot;" );
   text.replace( QRegExp("'"), "&apos;" );
 
-  // formats, taken from formatList
-  AmiProFormatList::iterator it;
-  for( it=formatList.begin(); it!=formatList.end(); ++it )
-  {
-    AmiProFormat& format = *it;
-    formats.append( AmiProFormatAsXML(format) );
-  }
-
-  // default LAYOUT (mostly still hard-coded)
-  layout.append( "<LAYOUT>\n" );
-  layout.append( "  <NAME value=\"Standard\" />\n" );
-  layout.append( "  <FLOW align=\"left\" />\n" );
-  layout.append( "  <LINESPACING value=\"0\" />\n" );
-  layout.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <INDENTS />\n" );
-  layout.append( "  <OFFSETS />\n" );
-  layout.append( "  <PAGEBREAKING />\n" );
-  layout.append( "  <COUNTER />\n" );
-  layout.append( "  <FORMAT id=\"1\">\n" );
-  layout.append( "    <SIZE value=\"12\" />\n" );
-  layout.append( "    <WEIGHT value=\"50\" />\n" );
-  layout.append( "    <ITALIC value=\"0\" />\n" );
-  layout.append( "    <UNDERLINE value=\"0\" />\n" );
-  layout.append( "    <STRIKEOUT value=\"0\" />\n" );
-  layout.append( "    <CHARSET value=\"0\" />\n" );
-  layout.append( "    <VERTALIGN value=\"0\" />\n" );
-  layout.append( "    <FONT name=\"Helvetica\" />\n" );
-  layout.append( "  </FORMAT>\n" );
-  layout.append( "</LAYOUT>\n" );
-
   // assemble
   root.append( "<PARAGRAPH>\n" );
   root.append( "<TEXT>" + text + "</TEXT>\n" );
-  root.append( "<FORMATS>" + formats + "</FORMATS>\n" );
-  root.append( layout );
+  root.append( AmiProFormatListAsXML( formatList ) );
+  root.append( AmiProLayoutAsXML( layout ) );
   root.append( "</PARAGRAPH>\n" );
- 
+
   return true;
 }
 

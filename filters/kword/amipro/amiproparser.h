@@ -21,6 +21,7 @@
 #define __AMIPROPARSER_H
 
 class QString;
+class QStringList;
 #include <qvaluelist.h>
 
 class AmiProFormat
@@ -30,6 +31,7 @@ class AmiProFormat
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
+    enum { Left, Right, Center, Justified } align;
     AmiProFormat();
     AmiProFormat( const AmiProFormat& );
     AmiProFormat& operator=( const AmiProFormat& );
@@ -38,15 +40,38 @@ class AmiProFormat
 
 typedef QValueList<AmiProFormat> AmiProFormatList;
 
+class AmiProLayout
+{
+  public:
+    enum { Left, Center, Right, Justify } align;
+    AmiProLayout();
+    AmiProLayout( const AmiProLayout& );
+    AmiProLayout& operator=( const AmiProLayout& );
+    void assign( const AmiProLayout& );
+};
+
+class AmiProStyle
+{
+  public:
+    QString name;
+    AmiProStyle();
+    AmiProStyle( const AmiProStyle& );
+    AmiProStyle& operator=( const AmiProStyle& );
+    void assign( const AmiProStyle& );
+};
+
+typedef QValueList<AmiProStyle> AmiProStyleList;
+
 class AmiProListener
 {
   public: 
     AmiProListener();
     virtual ~AmiProListener();
-
     virtual bool doOpenDocument();
     virtual bool doCloseDocument();   
-    virtual bool doParagraph( const QString& text, AmiProFormatList formatList );
+    virtual bool doDefineStyle( const AmiProStyle& style );
+    virtual bool doParagraph( const QString& text, AmiProFormatList formatList, 
+      AmiProLayout& layout );
 };
 
 class AmiProParser
@@ -69,14 +94,23 @@ class AmiProParser
     QString m_text;
     AmiProFormat m_currentFormat;
     AmiProFormatList m_formatList;
+    AmiProLayout m_layout;
+    AmiProStyleList m_styleList;
+
+
     AmiProListener *m_listener;
+
+    QString m_currentSection;
 
     bool setResult( int );
     bool parseParagraph( const QString& partext );
+    bool parseStyle( const QStringList& line );
+
     bool handleTag( const QString& tag );
     bool processOpenDocument();
     bool processCloseDocument();
-    bool processParagraph( const QString& text, AmiProFormatList formatList );
+    bool processParagraph( const QString& text, AmiProFormatList formatList,
+      AmiProLayout& layout );
 
 };
 

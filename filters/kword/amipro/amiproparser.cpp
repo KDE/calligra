@@ -21,6 +21,7 @@
 
 #include <qfile.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qtextstream.h>
 
 AmiProParser::AmiProParser()
@@ -70,41 +71,84 @@ bool AmiProParser::process( const QString& filename )
   if( format_version != 4 )
     return setResult( InvalidFormat );
 
-  // skip the header, look for "[edoc]"
-  while( !line.isNull() )
+  // initialize
+  m_currentFormat = AmiProFormat();
+  m_formatList.clear();
+  m_styleList.clear();
+  m_currentSection = "";
+  QStringList lines;
+
+  // parse line-by-line
+  for( ;; )
   {
+
     line = stream.readLine();
-    if( line == "[edoc]" ) break;
+    if( line.isNull() ) break;
+
+    QString old_section = m_currentSection;
+    bool enter_new_section = false;
+
+    // new main section ?
+    if( !line.isEmpty() ) if( line[0] == '[' )
+    {
+      enter_new_section = true;
+      m_currentSection = "";
+      for( unsigned i=1; i<line.length(); i++ )
+        if( line[i] == ']' ) break;
+        else m_currentSection += line[i];
+    }
+
+    // leave [tag]
+    if( enter_new_section && ( old_section == "tag" ) )
+    {
+      parseStyle( lines );
+      lines.clear();
+    }
+
+    // leave [edoc]
+    if( enter_new_section && ( old_section != "edoc" ) )
+    {
+      parseParagraph( lines.join( " " ) );
+      lines.clear();
+    }
+
+    // still in [tag]
+    if( !enter_new_section && ( old_section == "tag" ) )
+    {
+      lines.append( line );
+    } 
+
+    // still in [edoc]
+    if( !enter_new_section && ( old_section == "edoc" ) )
+    {
+      if( line.isEmpty() ) 
+      {
+         parseParagraph( lines.join( " " ) );
+         lines.clear(); 
+      }
+      else
+      {
+        if( line[0] != '>' ) lines.append( line );
+      }
+    }
+
+    // enter [tag]
+    if( enter_new_section && ( m_currentSection == "tag" ) )
+    {
+      lines.clear();
+    }
+
+    // enter [edoc]
+    if( enter_new_section && ( m_currentSection == "edoc" ) )
+    {
+      processOpenDocument();
+      lines.clear();
+    }
+
   }
 
-  // no edoc ?
-  if( line.isNull() ) return setResult( InvalidFormat );
-
-  processOpenDocument();
-
-  // now process the main document body
-  QString partext;
-  for(;;) 
-  {
-    line = stream.readLine();
-    if( line.isNull()) break;
-
-    if( !line.isEmpty() )
-       if( line[0] == '>' ) break;
-
-    if( line.isEmpty() )
-    {
-        parseParagraph( partext );
-        partext = "";
-    }
-    else
-    {
-        partext.append( line );
-    }
-  }
-
-  if( !partext.isEmpty() )
-    parseParagraph( partext );
+  // in case left-over
+  if( lines.count() > 0 ) parseParagraph( lines.join( " " ) );
 
   processCloseDocument();
 
@@ -132,7 +176,7 @@ bool AmiProParser::parseParagraph( const QString& partext )
   for( unsigned i=0; i<partext.length(); i++ )
   {
     QChar ch = partext[i];
-   
+
     // handle a tag
     if( ch == '<' )
     {
@@ -147,7 +191,7 @@ bool AmiProParser::parseParagraph( const QString& partext )
 
       else
       {
-        // this a tag, enclosed with >
+        // this is a tag, enclosed with >
         QString tag = "";
         for( i++; (i < partext.length()) && 
            (partext[i] != '>'); i++) tag.append( partext[i] );
@@ -195,8 +239,18 @@ bool AmiProParser::parseParagraph( const QString& partext )
   }
 
   if( m_listener ) 
-    return m_listener->doParagraph( m_text, m_formatList );
+    return m_listener->doParagraph( m_text, m_formatList, m_layout );
 
+  return true;
+}
+
+bool AmiProParser::parseStyle( const QStringList& lines )
+{
+  AmiProStyle style;
+  style.name = lines[0].stripWhiteSpace();
+  m_styleList.append( style );
+  if( m_listener )
+    return m_listener->doDefineStyle( style );
   return true;
 }
 
@@ -338,6 +392,22 @@ bool AmiProParser::handleTag( const QString& tag )
     m_formatList.append( m_currentFormat );
   }
 
+  // paragraph left-align
+  if( tag == "+@" )
+    m_layout.align = AmiProLayout::Left;
+
+  // paragraph right-align
+  if( tag == "+A" )
+    m_layout.align = AmiProLayout::Right;
+
+  // paragraph center
+  if( tag == "+B" )
+    m_layout.align = AmiProLayout::Center;
+
+  // paragraph justify
+  if( tag == "+C" )
+    m_layout.align = AmiProLayout::Justify;
+
   return true;
 }
 
@@ -375,6 +445,50 @@ AmiProFormat& AmiProFormat::operator=(  const AmiProFormat& f )
   return *this;
 }
 
+// paragraph layout
+AmiProLayout::AmiProLayout()
+{
+  align = Left;
+}
+
+void AmiProLayout::assign( const AmiProLayout &l )
+{
+  align = l.align;
+}
+
+AmiProLayout::AmiProLayout( const AmiProLayout& l )
+{
+  assign( l );
+}
+
+AmiProLayout& AmiProLayout::operator=( const AmiProLayout& l )
+{
+  assign( l );
+  return *this;
+}
+
+// style definition
+AmiProStyle::AmiProStyle()
+{
+  name = "Unnamed";
+}
+
+void AmiProStyle::assign( const AmiProStyle& s )
+{
+  name = s.name;
+}
+
+AmiProStyle::AmiProStyle( const AmiProStyle& s )
+{
+  assign( s );
+}
+
+AmiProStyle& AmiProStyle::operator=( const AmiProStyle& s )
+{
+  assign( s );
+  return *this;
+}
+
 // base listener for the parser
 AmiProListener::AmiProListener()
 {
@@ -392,4 +506,6 @@ AmiProListener::~AmiProListener()
 
 DO_TRUE_DEFINITION(doOpenDocument())
 DO_TRUE_DEFINITION(doCloseDocument())
-DO_TRUE_DEFINITION(doParagraph(const QString& text, AmiProFormatList formatList))
+DO_TRUE_DEFINITION(doDefineStyle(const AmiProStyle& style))
+DO_TRUE_DEFINITION(doParagraph(const QString& text, AmiProFormatList formatList,
+  AmiProLayout& ))

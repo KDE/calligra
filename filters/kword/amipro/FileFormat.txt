@@ -42,6 +42,12 @@ The following list summarizes known formmating tags:
 Note: Word underline is just like underline, except that
 spaces between words are not underlined.
 
+Paragrah align is also encoded using tag, here it the list:
+  <+@> left alignment
+  <+A> right alignment
+  <+B> center alignment
+  <+C> justified
+
 Special characters are escaped or encoded because 
 they have special meaning. Known so far: 
    < encoded as <<
@@ -60,3 +66,11 @@ Styles are applied using the following sequences:
 5  Frame, Image, Table
 ----------------------
 still pretty much a mystery :-P
+
+6  Equation
+-----------
+Equation or mathematical formula is represented in
+a language similar to TeX or LaTeX. Each equation is however
+put in a separate frame, so it is not really part
+of the document. Think of equation as embedded object
+within the document.
