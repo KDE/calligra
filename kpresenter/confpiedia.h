@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,44 +22,19 @@
 #ifndef confpiedia_h
 #define confpiedia_h
 
-#include <qframe.h>
 #include "global.h"
+
 #include <qcombobox.h>
-#include <qpen.h>
 #include <knuminput.h>
-#include <qbrush.h>
+
+class QBrush;
 class QLabel;
 class QGroupBox;
 class QPushButton;
+class QPen;
 class QPainter;
 class QComboBox;
-
-class PiePreview : public QFrame
-{
-    Q_OBJECT
-
-public:
-    PiePreview( QWidget* parent, const char* );
-    ~PiePreview() {}
-
-    void setAngle( int _angle )
-        { angle = _angle; repaint( true ); }
-    void setLength( int _len )
-        { len = _len; repaint( true ); }
-    void setType( PieType _type )
-        { type = _type; repaint( true ); }
-    void setPenBrush( const QPen &_pen, const QBrush &_brush )
-        { pen = _pen; brush = _brush; repaint( true ); }
-
-protected:
-    void drawContents( QPainter* );
-
-    int angle, len;
-    PieType type;
-    QPen pen;
-    QBrush brush;
-
-};
+class PiePreview;
 
 class ConfPieDia : public QWidget
 {

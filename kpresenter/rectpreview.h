@@ -1,7 +1,8 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   based on work by
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,52 +20,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef confrectdia_h
-#define confrectdia_h
+#ifndef RECTPREVIEW_H
+#define RECTPREVIEW_H
 
-#include <qwidget.h>
+#include <qframe.h>
+#include <qpen.h>
+#include <qbrush.h>
 
-class QBrush;
-class QPainter;
-class QPen;
-class QLabel;
-class KIntNumInput;
-class QGroupBox;
-class QPushButton;
-class RectPreview;
-
-class ConfRectDia : public QWidget
+class RectPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    ConfRectDia( QWidget* parent, const char* );
-    ~ConfRectDia();
+    RectPreview( QWidget* parent, const char* );
+    ~RectPreview() {}
 
-    void setRnds( int _rx, int _ry );
-    void setPenBrush( const QPen &_pen, const QBrush &_brush );
-    void resetConfigChangedValues();
-
-    int getRndX() const { return xRnd; }
-    int getRndY() const { return yRnd; }
-    int getRectangleConfigChange() const;
+    void setRnds( int _rx, int _ry )
+        { xRnd = _rx; yRnd = _ry; repaint( contentsRect(), true ); }
+    void setPenBrush( const QPen &_pen, const QBrush &_brush )
+        { pen = _pen; brush = _brush; repaint( true ); }
 
 protected:
-    bool m_bRndXChanged, m_bRndYChanged;
-    QLabel *lRndX, *lRndY;
-    KIntNumInput *eRndX, *eRndY;
-    RectPreview *rectPreview;
+    void drawContents( QPainter* );
+
     int xRnd, yRnd;
-    int oldXRnd, oldYRnd;
-
-protected slots:
-    void rndXChanged( int );
-    void rndYChanged( int );
-    void Apply() { emit confRectDiaOk(); }
-    void slotReset();
-signals:
-    void confRectDiaOk();
-
+    QPen pen;
+    QBrush brush;
 };
 
-#endif
+#endif /* RECTPREVIEW_H */

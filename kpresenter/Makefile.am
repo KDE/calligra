@@ -53,6 +53,9 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kprimportstyledia.cc \
 	imageEffectDia.cc imageEffectBase.ui customslideshowdia.cc \
 	pbpreview.cc penstyle.ui penstylewidget.cc \
+	rectpreview.cc \
+	piepreview.cc \
+	polygonpreview.cc \
 	brushpropertyui.ui gradientpropertyui.ui brushproperty.cc \
 	propertyeditor.cc \
 	slidetransitionwidget.ui slidetransitiondia.cc

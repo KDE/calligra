@@ -23,7 +23,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
-#include <qpainter.h>
 #include <qlayout.h>
 
 #include <klocale.h>
@@ -35,46 +34,7 @@
 #include <qbrush.h>
 #include <qcombobox.h>
 #include "global.h"
-
-#include <stdlib.h>
-
-PiePreview::PiePreview( QWidget* parent, const char* name )
-    : QFrame( parent, name )
-{
-    setFrameStyle( WinPanel | Sunken );
-    setBackgroundColor( white );
-    angle = 720; //45 * 16
-    len = 1440; //90 * 16
-    pen = QPen( black );
-    brush = QBrush( white );
-    type = PT_PIE;
-
-    setMinimumSize( 200, 100 );
-}
-
-void PiePreview::drawContents( QPainter* painter )
-{
-    int ow = width() - 8;
-    int oh = height() - 8;
-
-    painter->setPen( pen );
-    int pw = pen.width();
-    painter->setBrush( brush );
-
-    switch ( type )
-    {
-    case PT_PIE:
-        painter->drawPie( pw + 4, pw + 4, ow - 2 * pw, oh - 2 * pw, angle, len );
-        break;
-    case PT_ARC:
-        painter->drawArc( pw + 4, pw + 4, ow - 2 * pw, oh - 2 * pw, angle, len );
-        break;
-    case PT_CHORD:
-        painter->drawChord( pw + 4, pw + 4, ow - 2 * pw, oh - 2 * pw, angle, len );
-        break;
-    default: break;
-    }
-}
+#include "piepreview.h"
 
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     : QWidget( parent, name ), m_bTypeChanged(false), m_bAngleChanged(false), m_bLengthChanged(false)

@@ -36,9 +36,6 @@ Boston, MA 02111-1307, USA.
 #include <kbuttonbox.h>
 #include <kdialog.h>
 
-#include <stdlib.h>
-#include <math.h>
-
 PicturePreview::PicturePreview( QWidget* parent, const char* name)
     : QFrame( parent, name )
 {

@@ -25,44 +25,14 @@
 #ifndef confpolygondia_h
 #define confpolygondia_h
 
-#include <qframe.h>
-#include <qpen.h>
-#include <qbrush.h>
+#include <qwidget.h>
 
-class QPainter;
 class QLabel;
 class KIntNumInput;
 class QGroupBox;
 class QPushButton;
 class QRadioButton;
-
-class PolygonPreview : public QFrame
-{
-    Q_OBJECT
-
-public:
-    PolygonPreview( QWidget* parent, const char*);
-    ~PolygonPreview() {}
-
-    void setPenBrush( const QPen &_pen, const QBrush &_brush )
-        { pen = _pen; brush = _brush; repaint( true ); }
-
-public slots:
-    void slotConvexPolygon();
-    void slotConcavePolygon();
-    void slotCornersValue( int value );
-    void slotSharpnessValue( int value );
-
-protected:
-    void drawContents( QPainter* );
-
-    int nCorners;
-    int sharpness;
-    bool isConcave;
-    QPen pen;
-    QBrush brush;
-
-};
+class PolygonPreview;
 
 /******************************************************************/
 /* class ConfPolygonDia                                           */

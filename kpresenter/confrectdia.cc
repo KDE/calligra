@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,40 +23,13 @@
 
 #include <qlabel.h>
 #include <qgroupbox.h>
-#include <qpainter.h>
 #include <qlayout.h>
 
 #include <knuminput.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include "kprcommand.h"
-
-#include <stdlib.h>
-
-RectPreview::RectPreview( QWidget* parent, const char* name )
-    : QFrame( parent, name )
-{
-    setFrameStyle( WinPanel | Sunken );
-    setBackgroundColor( white );
-    xRnd = 0;
-    yRnd = 0;
-
-    setMinimumSize( 200, 100 );
-}
-
-void RectPreview::drawContents( QPainter* painter )
-{
-    int ow = width();
-    int oh = height();
-
-    painter->setPen( pen );
-    painter->setBrush( brush );
-
-    painter->save();
-    painter->drawRoundRect( 10, 10, ow - 20, oh - 20, xRnd, yRnd );
-    painter->restore();
-}
-
+#include "rectpreview.h"
 
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     : QWidget( parent, name ), m_bRndXChanged(false), m_bRndYChanged(false)

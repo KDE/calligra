@@ -1,7 +1,9 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Base code from Kontour.
+   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+   Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,52 +21,40 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef confrectdia_h
-#define confrectdia_h
+#ifndef POLYGONPREVIEW_H
+#define POLYGONPREVIEW_H
 
-#include <qwidget.h>
+#include <qframe.h>
+#include <qpen.h>
+#include <qbrush.h>
 
-class QBrush;
 class QPainter;
-class QPen;
-class QLabel;
-class KIntNumInput;
-class QGroupBox;
-class QPushButton;
-class RectPreview;
 
-class ConfRectDia : public QWidget
+class PolygonPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    ConfRectDia( QWidget* parent, const char* );
-    ~ConfRectDia();
+    PolygonPreview( QWidget* parent, const char*);
+    ~PolygonPreview() {}
 
-    void setRnds( int _rx, int _ry );
-    void setPenBrush( const QPen &_pen, const QBrush &_brush );
-    void resetConfigChangedValues();
+    void setPenBrush( const QPen &_pen, const QBrush &_brush )
+        { pen = _pen; brush = _brush; repaint( true ); }
 
-    int getRndX() const { return xRnd; }
-    int getRndY() const { return yRnd; }
-    int getRectangleConfigChange() const;
+public slots:
+    void slotConvexPolygon();
+    void slotConcavePolygon();
+    void slotCornersValue( int value );
+    void slotSharpnessValue( int value );
 
 protected:
-    bool m_bRndXChanged, m_bRndYChanged;
-    QLabel *lRndX, *lRndY;
-    KIntNumInput *eRndX, *eRndY;
-    RectPreview *rectPreview;
-    int xRnd, yRnd;
-    int oldXRnd, oldYRnd;
+    void drawContents( QPainter* );
 
-protected slots:
-    void rndXChanged( int );
-    void rndYChanged( int );
-    void Apply() { emit confRectDiaOk(); }
-    void slotReset();
-signals:
-    void confRectDiaOk();
-
+    int nCorners;
+    int sharpness;
+    bool isConcave;
+    QPen pen;
+    QBrush brush;
 };
 
-#endif
+#endif /* POLYGONPREVIEW_H */
