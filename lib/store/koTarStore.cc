@@ -241,6 +241,7 @@ long KoTarStore::read( char *_buffer, unsigned long _len )
 CORBA::Boolean KoTarStore::write( const KOStore::Data& data )
 {
   unsigned int len = data.length();
+  if ( len == 0L ) return true;
   unsigned char *p = new unsigned char[ len ];
   for( unsigned int i = 0; i < len; i++ )
     p[i] = data[i];
@@ -254,6 +255,8 @@ CORBA::Boolean KoTarStore::write( const KOStore::Data& data )
 
 bool KoTarStore::write( const char* _data, unsigned long _len )
 {
+  if ( _len == 0L ) return true;
+
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoTarStore: You must open before writing" );
