@@ -3287,6 +3287,22 @@ void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
     textView()->handleKeyReleaseEvent( e );
 }
 
+void KWTextFrameSetEdit::imStartEvent( QIMEvent* e )
+{
+    kdDebug() << "FEFOIEJFOIEWFEWIJU" << endl;
+    textView()->handleImStartEvent( e );
+}
+
+void KWTextFrameSetEdit::imComposeEvent( QIMEvent* e )
+{
+    textView()->handleImComposeEvent( e );
+}
+
+void KWTextFrameSetEdit::imEndEvent( QIMEvent* e )
+{
+    textView()->handleImEndEvent( e );
+}
+
 void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & dPoint )
 {
     if ( dPoint.x() < 0 || dPoint.y() < 0 )

@@ -2621,6 +2621,24 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 }
             }
             break;
+        case QEvent::IMStart:
+        {
+            QIMEvent * imev = static_cast<QIMEvent *>(e);
+            m_currentFrameSetEdit->imStartEvent( imev );
+        }
+        break;
+        case QEvent::IMCompose:
+        {
+            QIMEvent * imev = static_cast<QIMEvent *>(e);
+            m_currentFrameSetEdit->imComposeEvent( imev );
+        }
+        break;
+        case QEvent::IMEnd:
+        {
+            QIMEvent * imev = static_cast<QIMEvent *>(e);
+            m_currentFrameSetEdit->imEndEvent( imev );
+        }
+        break;
         default:
             break;
         }
