@@ -44,7 +44,7 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
     QLabel *lab=new QLabel(i18n("Position:(%1)").arg(m_doc->getUnitName()), page);
     position = new KLineEdit(page);
     position->setText( KoUnit::userValue( QMAX(0.00, value), m_doc->getUnit() ) );
-    position->setValidator(new KFloatValidator( 0,9999,true,position ) );
+    position->setValidator(new KFloatValidator( KoUnit::ptFromUnit(QMAX(0.00, limitTop), m_doc->getUnit() ),KoUnit::ptFromUnit(QMAX(0.00, limitBottom), m_doc->getUnit() ),true,position ) );
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotRemoveHelpLine() ));
     resize( 300,100 );
 }
@@ -79,7 +79,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     QLabel *lab=new QLabel(i18n("Position:(%1)").arg(m_doc->getUnitName()), page);
     position = new KLineEdit(page);
     position->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
-    floatValidator = new KFloatValidator( limitOfPage.top(), limitOfPage.bottom() ,true,position );
+    floatValidator = new KFloatValidator( KoUnit::ptFromUnit(limitOfPage.top(),m_doc->getUnit() ) , KoUnit::ptFromUnit(limitOfPage.bottom(),m_doc->getUnit() ) ,true,position );
     position->setValidator( floatValidator );
 
     m_rbHoriz->setChecked( true );
@@ -102,10 +102,11 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
     if ( m_rbHoriz->isChecked() )
     {
         floatValidator->setRange( limitOfPage.top(), limitOfPage.bottom());
+        floatValidator->setRange( KoUnit::ptFromUnit(limitOfPage.top(),m_doc->getUnit() ) , KoUnit::ptFromUnit(limitOfPage.bottom(),m_doc->getUnit() ));
     }
     else if ( m_rbVert->isChecked() )
     {
-        floatValidator->setRange( limitOfPage.left(), limitOfPage.right());
+        floatValidator->setRange( KoUnit::ptFromUnit(limitOfPage.left(),m_doc->getUnit() ) , KoUnit::ptFromUnit(limitOfPage.right(),m_doc->getUnit() ));
     }
 }
 
