@@ -260,9 +260,11 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   QDomElement locale = spread.namedItem( "locale" ).toElement();
   if ( !locale.isNull() )
       m_locale.load( locale );
-    //areaname
-   QDomElement areaname = spread.namedItem( "areaname" ).toElement();
-    if ( !areaname.isNull())
+
+  m_refs.clear();
+  //<areaname >
+  QDomElement areaname = spread.namedItem( "areaname" ).toElement();
+  if ( !areaname.isNull())
         loadAreaName(areaname);
 
   // <paper>
@@ -326,7 +328,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   // In case of reload (e.g. from konqueror)
   m_pMap->tableList().clear(); // it's set to autoDelete
-  m_refs.clear();
+
 
   // <map>
   QDomElement mymap = spread.namedItem( "map" ).toElement();
@@ -869,7 +871,7 @@ DCOPObject* KSpreadDoc::dcopObject()
 }
 
 void KSpreadDoc::addAreaName(QRect &_rect,QString name,QString tableName)
-{  
+{
   setModified( true );
   Reference tmp;
   tmp.rect = _rect;
@@ -927,10 +929,10 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
 
 void KSpreadDoc::loadAreaName( QDomElement& element )
 {
-for( ; !element.isNull(); element = element.nextSibling().toElement() )
+QDomElement tmp=element.firstChild().toElement();
+for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
     {
-    QDomElement reference= element.namedItem( "reference" ).toElement();
-    if ( !reference.isNull())
+    if ( tmp.tagName() == "reference" )
     {
         QString tabname;
         QString refname;
@@ -938,17 +940,17 @@ for( ; !element.isNull(); element = element.nextSibling().toElement() )
         int right=0;
         int top=0;
         int bottom=0;
-        QDomElement tableName = reference.namedItem( "tabname" ).toElement();
+        QDomElement tableName = tmp.namedItem( "tabname" ).toElement();
         if ( !tableName.isNull() )
                 {
                 tabname=tableName.text();
                 }
-        QDomElement referenceName = reference.namedItem( "refname" ).toElement();
+        QDomElement referenceName = tmp.namedItem( "refname" ).toElement();
         if ( !referenceName.isNull() )
                 {
                 refname=referenceName.text();
                 }
-        QDomElement rect =reference.namedItem( "rect" ).toElement();
+        QDomElement rect =tmp.namedItem( "rect" ).toElement();
         if(!rect.isNull())
                 {
                 bool ok;

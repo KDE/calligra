@@ -6,17 +6,17 @@ Please everyone working on KSpread:
 Get yourself a copy of Excel 97 or 2000 and create
 a really big sheet, and I mean really big and insert Graphs and
 lots of dependencies and regressions etc. use external add-ins if you have any
-and real time links. Make links between sheets and then see how 
-well Excel behaves. 
+and real time links. Make links between sheets and then see how
+well Excel behaves.
 
 1. UNDERSTAND that putting a table->recalc() or table->recalc(true) in
-your code is an abosolute NO-NO! Complex spreadsheets with possible 
+your code is an abosolute NO-NO! Complex spreadsheets with possible
 heavy mathematical calculations via dll/so add-ins as well as real
 time feeds will not be managable if you do not painstakingly check
 wether table->getAutoCalc() is true.
 
 
-2. Learn to understand that without the 
+2. Learn to understand that without the
 following short cut actions you are lost ( try to scroll
 down a list of 10,000 obersvations ...not using CTRL Down
 for example)
@@ -59,17 +59,12 @@ up at this point. you can hardly do any real work with it even on a
 
 Bug fix :
 ---------
--bug when we sort number (sort by string but not by number )
-
-
 -and also bug fix :)
 
 <montell@club-internet.fr>
 
 Torbens TODO-List:
 ------------------
-- Copy/Paste of complete rows/cols
 - Write-Protect cells
 - Select a region. Then right click -> "Spell Checking".
   All selected cells should be spell checked
-  
