@@ -25,8 +25,8 @@
 #ifndef CopyCmd_h_
 #define CopyCmd_h_
 
-#include <list>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
@@ -42,7 +42,7 @@ public:
 
 private:
   GDocument* document;
-  list<GObject*> objects;
+  QList<GObject> objects;
 };
 
 #endif

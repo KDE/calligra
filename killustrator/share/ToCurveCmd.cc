@@ -36,28 +36,26 @@ ToCurveCmd::ToCurveCmd (GDocument* doc)
   list<GObject*>::iterator it = doc->getSelection ().begin ();
   for (; it != doc->getSelection ().end (); it++) {
     (*it)->ref ();
-    objects.push_back (*it);
+    objects.append(*it);
   }
 }
 
 ToCurveCmd::~ToCurveCmd () {
-  list<GObject*>::iterator i1;
-  for (i1 = objects.begin (); i1 != objects.end (); i1++)
-    (*i1)->unref ();
-  list<GCurve*>::iterator i2;
-  for (i2 = curves.begin (); i2 != curves.end (); i2++)
-    (*i2)->unref ();
+  GObject *o;
+  for (o=objects.first(); o!=0L; o=objects.next())
+    o->unref ();
+  for (o=curves.first(); o!=0L; o=curves.next())
+    o->unref ();
 }
 
 void ToCurveCmd::execute () {
   document->setAutoUpdate (false);
-  list<GObject*>::iterator i;
-  for (i = objects.begin (); i != objects.end (); i++) {
-    unsigned int idx = document->findIndexOfObject (*i);
-    GCurve *curve = (*i)->convertToCurve ();
+  for (GObject *i = objects.first(); i !=0L; i=objects.next()) {
+    unsigned int idx = document->findIndexOfObject (i);
+    GCurve *curve = i->convertToCurve ();
     if (curve) {
-      curves.push_back (curve);
-      document->deleteObject (*i);
+      curves.append(curve);
+      document->deleteObject (i);
       document->insertObjectAtIndex (curve, idx);
       document->selectObject (curve);
     }
@@ -66,14 +64,12 @@ void ToCurveCmd::execute () {
 }
 
 void ToCurveCmd::unexecute () {
-  list<GCurve*>::iterator i1;
-  list<GObject*>::iterator i2;
-  i1 = curves.begin ();
-  i2 = objects.begin ();
-  for (; i1 != curves.end (); i1++, i2++) {
-    unsigned int idx = document->findIndexOfObject (*i1);
-    document->deleteObject (*i1);
-    document->insertObjectAtIndex (*i2, idx);
+  GCurve *c=curves.first();
+  GObject *o=objects.first();
+  for ( ; c != 0L; c=curves.next(), o=objects.next()) {
+    unsigned int idx = document->findIndexOfObject (c);
+    document->deleteObject (c);
+    document->insertObjectAtIndex (o, idx);
   }
 }
 

@@ -25,24 +25,30 @@
 #ifndef DeleteCmd_h_
 #define DeleteCmd_h_
 
-#include <list>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
 
 class DeleteCmd : public Command {
-  Q_OBJECT
-public:
-  DeleteCmd (GDocument* doc);
-  ~DeleteCmd ();
 
-  void execute ();
-  void unexecute ();
+    Q_OBJECT
+
+public:
+    DeleteCmd (GDocument* doc);
+    ~DeleteCmd ();
+
+    void execute ();
+    void unexecute ();
 
 private:
-  GDocument* document;
-  std::list<std::pair<int, GObject*> > objects;
+    GDocument* document;
+    struct MyPair {
+        GObject *o;
+        int pos;
+    };
+    QList<MyPair> objects;
 };
 
 #endif

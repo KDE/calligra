@@ -32,7 +32,7 @@
 
 CommandHistory::CommandHistory () {
   index = 0;
-  history.setAutoDelete (true);
+  history.setAutoDelete(true);
 }
 
 void CommandHistory::addCommand (Command *cmd, bool exec) {
@@ -41,7 +41,7 @@ void CommandHistory::addCommand (Command *cmd, bool exec) {
   // remove all command objects "behind" the current command
   unsigned int num = history.count ();
   for (unsigned int i = index; i < num; i++)
-    history.remove (index);
+    history.remove(index);
 
   // special treatment of translation of duplicated objects
   if (cmd->isA ("TranslateCmd")) {

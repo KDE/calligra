@@ -25,8 +25,8 @@
 #ifndef ToCurveCmd_h_
 #define ToCurveCmd_h_
 
-#include <list>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
@@ -36,7 +36,6 @@ class ToCurveCmd : public Command {
   Q_OBJECT
 public:
   ToCurveCmd (GDocument* doc);
-
   ~ToCurveCmd ();
 
   void execute ();
@@ -44,8 +43,8 @@ public:
 
 private:
   GDocument* document;
-  list<GObject*> objects;
-  list<GCurve*> curves;
+  QList<GObject> objects;
+  QList<GCurve> curves;
 };
 
 #endif

@@ -25,24 +25,28 @@
 #ifndef CutCmd_h_
 #define CutCmd_h_
 
-#include <list>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
 
 class CutCmd : public Command {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  CutCmd (GDocument* doc);
-  ~CutCmd ();
+    CutCmd (GDocument* doc);
+    ~CutCmd ();
 
-  void execute ();
-  void unexecute ();
+    void execute ();
+    void unexecute ();
 
 private:
-  GDocument* document;
-  list<std::pair<int, GObject*> > objects;
+    struct MyPair {
+        GObject *o;
+        int pos;
+    };
+    GDocument* document;
+    QList<MyPair> objects;
 };
 
 #endif

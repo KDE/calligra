@@ -25,8 +25,8 @@
 #ifndef DuplicateCmd_h_
 #define DuplicateCmd_h_
 
-#include <list>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
@@ -45,7 +45,7 @@ public:
 
 private:
   GDocument* document;
-  list<GObject*> objects, new_objects;
+  QList<GObject> objects, new_objects;
 
   static bool repeatCmd; // repeat command with given offsets
   static float repOffX, repOffY; // offset for repetition

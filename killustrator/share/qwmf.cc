@@ -159,7 +159,7 @@ bool QWinMetaFile::load(const QString aFileName)
 
     if (mSingleStep)
     {
-      debug("WMF Placeable Header (%ld):", sizeof(pheader));
+      debug("WMF Placeable Header (%d):", sizeof(pheader));
       debug("  key=%x", pheader.key);
       debug("  hmf=%x", pheader.hmf);
       debug("  bbox=(%d;%d;%d;%d)", pheader.bbox.left, pheader.bbox.top,

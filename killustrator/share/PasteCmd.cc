@@ -41,16 +41,14 @@ PasteCmd::PasteCmd (GDocument* doc)
 }
 
 PasteCmd::~PasteCmd () {
-  for (list<GObject*>::iterator it = objects.begin ();
-       it != objects.end (); it++)
-      (*it)->unref ();
+    for (GObject *o=objects.first(); o!=0L; o=objects.next())
+        o->unref();
 }
 
 void PasteCmd::execute () {
 
-    for (list<GObject*>::iterator it = objects.begin ();
-         it != objects.end (); it++)
-        (*it)->unref ();
+    for (GObject *o=objects.first(); o!=0L; o=objects.next())
+        o->unref ();
     objects.clear ();
     QString buf = QApplication::clipboard ()->text ();
     if (!buf.isEmpty()) {
@@ -61,29 +59,28 @@ void PasteCmd::execute () {
 
             QDomDocument d;
             d.setContent(buf);
-            document->insertFromXml (d, objects);
+            // FIXME - STL (Werner)
+            //document->insertFromXml (d, objects);
             document->unselectAllObjects ();
-            for (list<GObject*>::iterator it = objects.begin ();
-                 it != objects.end (); it++) {
-                (*it)->ref ();
-                (*it)->transform (m, true);
-                document->selectObject (*it);
+            for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
+                o->ref ();
+                o->transform (m, true);
+                document->selectObject(o);
             }
         }
         else {
             // plain text
             GText *tobj = new GText ();
             tobj->setText (buf);
-            objects.push_back (tobj);
+            objects.append(tobj);
             document->insertObject (tobj);
         }
     }
 }
 
 void PasteCmd::unexecute () {
-  for (list<GObject*>::iterator it = objects.begin ();
-       it != objects.end (); it++)
-      document->deleteObject (*it);
+    for (GObject *o=objects.first(); o!=0L; o=objects.next())
+        document->deleteObject(o);
 }
 
 #include <PasteCmd.moc>

@@ -39,14 +39,14 @@ CopyCmd::CopyCmd (GDocument* doc)
        it != doc->getSelection ().end (); it++) {
     GObject* o = *it;
     o->ref ();
-    objects.push_back (o);
+    objects.append(o);
   }
 }
 
 CopyCmd::~CopyCmd () {
-  for (list<GObject*>::iterator it = objects.begin ();
-       it != objects.end (); it++)
-      (*it)->unref ();
+  for(GObject *o=objects.first();
+       o!=0L; o=objects.next())
+      o->unref ();
 }
 
 void CopyCmd::execute () {
@@ -56,9 +56,9 @@ void CopyCmd::execute () {
     doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
     docu.appendChild(doc);
 
-    for (list<GObject*>::iterator it = objects.begin ();
-         it != objects.end (); it++)
-        doc.appendChild((*it)->writeToXml (docu));
+    for (GObject *o=objects.first(); o!=0L;
+         o=objects.next())
+        doc.appendChild(o->writeToXml (docu));
     QApplication::clipboard ()->setText (docu.toCString());
 }
 

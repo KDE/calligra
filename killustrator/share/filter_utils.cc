@@ -48,7 +48,7 @@ void list_export_filters () {
   }
 }
 
-bool convert_to_format (const char* fmt, char **files, int num) {
+bool convert_to_format (const char*/*fmt*/, char **/*files*/, int /*num*/) {
 
     // FIXME (Werner)
     /*FilterManager* fmgr = FilterManager::instance ();

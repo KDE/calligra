@@ -48,17 +48,16 @@ BlendCmd::BlendCmd (GDocument* doc, int steps)
 }
 
 BlendCmd::~BlendCmd () {
-  if (sobj)
-    sobj->unref ();
-  if (eobj)
-    eobj->unref ();
-  list<GCurve*>::iterator i;
-  for (i = curves.begin (); i != curves.end (); i++)
-    (*i)->unref ();
-  if (start)
-    start->unref ();
-  if (end)
-    end->unref ();
+    if (sobj)
+        sobj->unref ();
+    if (eobj)
+        eobj->unref ();
+    for (GCurve *c=curves.first(); c!=0L; c=curves.next())
+        c->unref ();
+    if (start)
+        start->unref ();
+    if (end)
+        end->unref ();
 }
 
 void BlendCmd::execute () {
@@ -81,7 +80,7 @@ void BlendCmd::execute () {
     unsigned int idx = document->findIndexOfObject (sobj);
     GCurve *curve = GCurve::blendCurves (start, end, i, num_steps);
     document->insertObjectAtIndex (curve, idx + i + 1);
-    curves.push_back (curve);
+    curves.append(curve);
   }
   document->setAutoUpdate (true);
 }
@@ -89,11 +88,9 @@ void BlendCmd::execute () {
 void BlendCmd::unexecute () {
   if (start == NULL || end == NULL)
     return;
-  list<GCurve*>::iterator i;
   document->setAutoUpdate (false);
-  for (i = curves.begin (); i != curves.end (); i++) {
-    document->deleteObject (*i);
-  }
+  for (GCurve *c=curves.first(); c!=0L; c=curves.next())
+    document->deleteObject(c);
   document->setAutoUpdate (true);
 }
 

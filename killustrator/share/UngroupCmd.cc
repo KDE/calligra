@@ -29,77 +29,71 @@
 #include <GGroup.h>
 
 UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
-  document = doc;
-  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-       it != doc->getSelection ().end (); it++) {
-    GObject* o = *it;
-    if (o->isA ("GGroup")) {
-      GGroup* gobj = (GGroup *) o;
-      gobj->ref ();
-      list<GObject*> dummy;
-      groups.push_back (GPair (gobj, dummy));
+
+    groups.setAutoDelete(true);
+    document = doc;
+    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
+         it != doc->getSelection ().end (); it++) {
+        GObject* o = *it;
+        if (o->isA ("GGroup")) {
+            GGroup* gobj = (GGroup *) o;
+            gobj->ref ();
+            GPair *p=new GPair;
+            p->group=gobj;
+            groups.append(p);
+        }
     }
-  }
 }
 
 UngroupCmd::~UngroupCmd () {
-  for (list<GPair>::iterator it = groups.begin ();
-       it != groups.end (); it++) {
-    it->first->unref ();
-    list<GObject*>& olist = it->second;
-    for (list<GObject*>::iterator it2 = olist.begin ();
-         it2 != olist.end (); it2++)
-      (*it2)->unref ();
-  }
+    for (GPair *p=groups.first(); p!=0L; p=groups.next()) {
+        p->group->unref ();
+        for (GObject *o=p->members.first(); o!=0L; o=p->members.next())
+            o->unref ();
+    }
 }
 
 void UngroupCmd::execute () {
-  for (list<GPair>::iterator it = groups.begin (); it != groups.end (); it++) {
-    GGroup *group = it->first;
-    list<GObject*>& olist = it->second;
+    for (GPair *p=groups.first(); p!=0L; p=groups.next()) {
+        GGroup *group = p->group;
+        int pos = document->findIndexOfObject (group);
+        if (pos != -1) {
+            document->setAutoUpdate (false);
+            // extract the members of the group
+            const list<GObject*> members = group->getMembers ();
+            list<GObject*>::const_iterator mi = members.begin ();
+            for (int offs = 0; mi != members.end (); mi++, offs++) {
+                GObject* obj = *mi;
+                // transform it according to the group transformation matrix
+                obj->transform (group->matrix (), true);
 
-    int pos = document->findIndexOfObject (group);
-    if (pos != -1) {
-      document->setAutoUpdate (false);
-      // extract the members of the group
-      const list<GObject*> members = group->getMembers ();
-      list<GObject*>::const_iterator mi = members.begin ();
-      for (int offs = 0; mi != members.end (); mi++, offs++) {
-        GObject* obj = *mi;
-        // transform it according to the group transformation matrix
-        obj->transform (group->matrix (), true);
-
-        // and insert it into the object list at the former position
-        // of the group object
-        document->insertObjectAtIndex (obj, pos + offs);
-        document->selectObject (obj);
-        olist.push_back (obj);
-        obj->ref ();
-      }
-      // remove the group object
-      document->deleteObject (group);
-      document->setAutoUpdate (true);
+                // and insert it into the object list at the former position
+                // of the group object
+                document->insertObjectAtIndex (obj, pos + offs);
+                document->selectObject (obj);
+                p->members.append(obj);
+                obj->ref ();
+            }
+            // remove the group object
+            document->deleteObject (group);
+            document->setAutoUpdate (true);
+        }
     }
-  }
 }
 
 void UngroupCmd::unexecute () {
   document->setAutoUpdate (false);
   document->unselectAllObjects ();
-  for (list<GPair>::iterator it = groups.begin (); it != groups.end (); it++) {
-    GGroup *group = it->first;
-    QWMatrix m = group->matrix ().invert ();
-    list<GObject*>& olist = it->second;
+  for (GPair *p=groups.first(); p!=0L; p=groups.next()) {
+    QWMatrix m = p->group->matrix ().invert ();
 
-    for (list<GObject*>::iterator it2 = olist.begin ();
-         it2 != olist.end (); it2++) {
-      GObject* obj = *it2;
-      obj->transform (m, true);
-      group->addObject (obj);
-      document->deleteObject (obj);
+    for (GObject *o=p->members.first(); o!=0L; o=p->members.next()) {
+      o->transform (m, true);
+      p->group->addObject (o);
+      document->deleteObject (o);
     }
-    document->insertObject (group);
-    document->selectObject (group);
+    document->insertObject (p->group);
+    document->selectObject (p->group);
   }
   document->setAutoUpdate (true);
 }

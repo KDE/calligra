@@ -25,8 +25,8 @@
 #ifndef BlendCmd_h_
 #define BlendCmd_h_
 
-#include <list>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
@@ -47,7 +47,7 @@ private:
   GDocument* document;
   GObject *sobj, *eobj;
   GCurve *start, *end;
-  list<GCurve*> curves;
+  QList<GCurve> curves;
   int num_steps;
 };
 

@@ -1,3 +1,4 @@
+
 /* -*- C++ -*-
 
   $Id$
@@ -23,9 +24,7 @@
 */
 
 #include <DistributeCmd.h>
-
 #include <klocale.h>
-
 #include <GDocument.h>
 
 DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib,

@@ -25,27 +25,29 @@
 #ifndef UngroupCmd_h_
 #define UngroupCmd_h_
 
-#include <list>
-#include <utility>
 #include <Command.h>
+#include <qlist.h>
 
 class GDocument;
 class GGroup;
 class GObject;
 
 class UngroupCmd : public Command {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  UngroupCmd (GDocument* doc);
-  ~UngroupCmd ();
+    UngroupCmd (GDocument* doc);
+    ~UngroupCmd ();
 
-  void execute ();
-  void unexecute ();
+    void execute ();
+    void unexecute ();
 
 private:
-  GDocument* document;
-  typedef std::pair<GGroup*, std::list<GObject*> > GPair;
-  std::list<GPair> groups;
+    GDocument* document;
+    struct GPair {
+        GGroup *group;
+        QList<GObject> members;
+    };
+    QList<GPair> groups;
 };
 
 #endif

@@ -29,47 +29,40 @@
 #include <GDocument.h>
 #include <GObject.h>
 
-using namespace std;
-
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
+  objects.setAutoDelete(true);
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {
-    GObject *o = *it;
-    o->ref ();
-    // store the old position of the object
-    int pos = doc->findIndexOfObject (o);
-    objects.push_back (pair<int, GObject*> (pos, o));
+      MyPair *p=new MyPair;
+      p->o=*it;
+      p->o->ref ();
+      // store the old position of the object
+      p->pos = doc->findIndexOfObject (p->o);
+      objects.append(p);
   }
 }
 
 DeleteCmd::~DeleteCmd () {
-  list<pair<int, GObject*> >::iterator i;
-
-  for (i = objects.begin (); i != objects.end (); i++)
-    i->second->unref ();
+    for (MyPair *p=objects.first(); p!=0; p=objects.next())
+        p->o->unref ();
 }
 
 void DeleteCmd::execute () {
-  list<pair<int, GObject*> >::iterator i;
-
-  document->setAutoUpdate (false);
-  for (i = objects.begin (); i != objects.end (); i++)
-    document->deleteObject (i->second);
-  document->setAutoUpdate (true);
+    document->setAutoUpdate (false);
+    for (MyPair *p=objects.first(); p!=0L; p=objects.next())
+        document->deleteObject (p->o);
+    document->setAutoUpdate (true);
 }
 
 void DeleteCmd::unexecute () {
-  list<pair<int, GObject*> >::iterator i;
   document->setAutoUpdate (false);
   document->unselectAllObjects ();
-  for (i = objects.begin (); i != objects.end (); i++) {
+  for (MyPair *p=objects.first(); p!=0L; p=objects.next()) {
     // insert the object at the old position
-    int pos = i->first;
-    GObject* obj = i->second;
-    obj->ref ();
-    document->insertObjectAtIndex (obj, pos);
-    document->selectObject (obj);
+    p->o->ref ();
+    document->insertObjectAtIndex (p->o, p->pos);
+    document->selectObject (p->o);
   }
   document->setAutoUpdate (true);
 }

@@ -25,18 +25,16 @@
 #include <GroupCmd.h>
 
 #include <klocale.h>
-#include <map>
+#include <qdict.h>
 
 #include <GDocument.h>
 #include <GGroup.h>
-
-using namespace std;
 
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
   group = 0L;
 
-  map<int, GObject*, less<int> > idx_map;
+  QMap<int, GObject*> idx_map;
 
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {
@@ -44,12 +42,12 @@ GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
     // objects in the group
     GObject* o = *it;
     int idx = (int) document->findIndexOfObject (o);
-    idx_map[idx] = o;
+    idx_map.insert(idx, o);
   }
-  for (map<int, GObject*, less<int> >::iterator mi = idx_map.begin ();
-       mi != idx_map.end (); mi++) {
-    // now insert the objects according their position in the list
-    objects.push_back (mi->second);
+  for (QMap<int, GObject*>::ConstIterator it=idx_map.begin();
+       it != idx_map.end(); ++it) {
+      // now insert the objects according their position in the list
+      objects.append(it.data());
   }
 }
 
@@ -59,17 +57,16 @@ GroupCmd::~GroupCmd () {
 }
 
 void GroupCmd::execute () {
-  if (! objects.empty ()) {
+  if (!objects.isEmpty ()) {
     group = new GGroup ();
-    group->ref ();
+    group->ref();
 
     document->setAutoUpdate (false);
 
-    for (list<GObject*>::iterator it = objects.begin ();
-         it != objects.end (); it++) {
-      GObject* obj = *it;
-      group->addObject (obj);
-    }
+    for (GObject *o=objects.first(); o!=0L;
+         o=objects.next())
+      group->addObject (o);
+
     // now insert the new group into the document
     document->insertObject (group);
 

@@ -44,16 +44,16 @@ DuplicateCmd::DuplicateCmd (GDocument* doc)
        it != doc->getSelection ().end (); it++) {
     GObject* o = *it;
     o->ref ();
-    objects.push_back (o);
+    objects.append(o);
   }
 }
 
 DuplicateCmd::~DuplicateCmd () {
-  list<GObject*>::iterator it;
-  for (it = objects.begin (); it != objects.end (); it++)
-    (*it)->unref ();
-  for (it = new_objects.begin ();  it != new_objects.end (); it++)
-    (*it)->unref ();
+    GObject *o;
+    for (o=objects.first(); o!=0L; o=objects.next())
+        o->unref ();
+    for (o=new_objects.first(); o!=0L; o=new_objects.next())
+        o->unref ();
 }
 
 void DuplicateCmd::execute () {
@@ -72,28 +72,28 @@ void DuplicateCmd::execute () {
   m.translate (xoff, yoff);
 
   document->unselectAllObjects ();
-  for (list<GObject*>::iterator it = objects.begin ();
-       it != objects.end (); it++) {
-    GObject *o = (*it)->copy ();
+  for (GObject *i=objects.first(); i!=0L;
+       i=objects.next()) {
+    GObject *o = i->copy ();
     o->ref ();
     o->transform (m, true);
     document->insertObject (o);
     document->selectObject (o);
-    new_objects.push_back (o);
+    new_objects.append(o);
   }
 }
 
 void DuplicateCmd::unexecute () {
-  document->unselectAllObjects ();
-  list<GObject*>::iterator it = new_objects.begin ();
-  for (it = new_objects.begin (); it != new_objects.end (); it++)
-      document->deleteObject (*it);
-  for (it = objects.begin (); it != objects.end (); it++)
-      document->selectObject (*it);
+    document->unselectAllObjects ();
+    GObject *o;
+    for (o=new_objects.first(); o!=0L; o=new_objects.next())
+        document->deleteObject(o);
+    for (o = objects.first(); o!=0L; o=objects.next())
+        document->selectObject(o);
 }
 
 void DuplicateCmd::resetRepetition () {
-  repeatCmd = false;
+    repeatCmd = false;
 }
 
 void DuplicateCmd::setRepetitionOffset (float dx, float dy) {

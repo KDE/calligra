@@ -37,20 +37,22 @@ CutCmd::CutCmd (GDocument* doc)
   : Command(i18n("Cut"))
 {
   document = doc;
+  objects.setAutoDelete(true);
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {
-    GObject* o = *it;
-    o->ref ();
+    MyPair *p=new MyPair;
+    p->o = *it;
+    p->o->ref ();
     // store the old position of the object
-    int pos = doc->findIndexOfObject (o);
-    objects.push_back (pair<int, GObject*> (pos, o));
+    p->pos = doc->findIndexOfObject(p->o);
+    objects.append(p);
   }
 }
 
 CutCmd::~CutCmd () {
-  for (list<pair<int, GObject*> >::iterator it = objects.begin ();
-       it != objects.end (); it++)
-      it->second->unref ();
+    for (MyPair *p=objects.first(); p!=0L;
+         p=objects.next())
+        p->o->unref ();
 }
 
 void CutCmd::execute () {
@@ -60,26 +62,23 @@ void CutCmd::execute () {
     doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
     docu.appendChild(doc);
 
-    for (list<pair<int, GObject*> >::iterator it = objects.begin ();
-         it != objects.end (); it++) {
-        doc.appendChild(it->second->writeToXml(docu));
-        document->deleteObject (it->second);
+    for (MyPair *p=objects.first(); p!=0L;
+         p=objects.next()) {
+        doc.appendChild(p->o->writeToXml(docu));
+        document->deleteObject (p->o);
     }
     QApplication::clipboard()->setText(docu.toCString());
 }
 
 void CutCmd::unexecute () {
   QApplication::clipboard ()->clear ();
-  list<pair<int, GObject*> >::iterator i;
   document->unselectAllObjects ();
 
-  for (i = objects.begin (); i != objects.end (); i++) {
+  for (MyPair *p=objects.first(); p!=0; p=objects.next()) {
     // insert the object at the old position
-    int pos = i->first;
-    GObject* obj = i->second;
-    obj->ref ();
-    document->insertObjectAtIndex (obj, pos);
-    document->selectObject (obj);
+    p->o->ref ();
+    document->insertObjectAtIndex (p->o, p->pos);
+    document->selectObject (p->o);
   }
 }
 
