@@ -569,38 +569,44 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             }
         }
         e = e.nextSibling().toElement();
-
-        QValueList<QDomElement>::Iterator it = listVariable.begin();
-        QValueList<QDomElement>::Iterator end = listVariable.end();
-        for ( ; it != end ; ++it )
-        {
-            QDomElement elem = *it;
-            if ( !elem.hasAttribute("pos"))
-                continue;
-            int index = elem.attribute("pos").toInt();
-            QDomElement varElem = elem.namedItem( "VARIABLE" ).toElement();
-            if ( !varElem.isNull() )
-            {
-                QDomElement typeElem = varElem.namedItem( "TYPE" ).toElement();
-                int type = typeElem.attribute( "type" ).toInt();
-                QString key = typeElem.attribute( "key" );
-                kdDebug() << "loadKTextObject variable type=" << type << " key=" << key << endl;
-                KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
-                // If varFormat is 0 (no key specified), the default format will be used.
-                KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc );
-                var->load( varElem );
-                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont() );
-
-                lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &format ));
-                var->recalc();
-            }
-        }
+        loadVariable( listVariable,lastParag );
         if ( e.isNull() )
             break;
         i = 0;
         if ( !lastParag->length() == 0 )
             lastParag = new KoTextParag( textDocument(), lastParag, 0 );
     }
+}
+
+void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset )
+{
+    QValueList<QDomElement>::Iterator it = listVariable.begin();
+    QValueList<QDomElement>::Iterator end = listVariable.end();
+    for ( ; it != end ; ++it )
+    {
+        QDomElement elem = *it;
+        if ( !elem.hasAttribute("pos"))
+            continue;
+        int index = elem.attribute("pos").toInt();
+        index+=offset;
+        QDomElement varElem = elem.namedItem( "VARIABLE" ).toElement();
+        if ( !varElem.isNull() )
+        {
+            QDomElement typeElem = varElem.namedItem( "TYPE" ).toElement();
+            int type = typeElem.attribute( "type" ).toInt();
+            QString key = typeElem.attribute( "key" );
+            kdDebug() << "loadKTextObject variable type=" << type << " key=" << key << endl;
+            KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
+            // If varFormat is 0 (no key specified), the default format will be used.
+            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc );
+            var->load( varElem );
+            KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont() );
+
+            lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &format ));
+            var->recalc();
+        }
+    }
+
 }
 
 KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont )
@@ -1685,7 +1691,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     kd->setPlain( text );
     kd->setTextObjectNumber( m_canvas->textObjectNum(kpTextObject()) );
     kd->setKPresenter( domDoc.toCString() );
-    //kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
+    kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
     return kd;
 }
 

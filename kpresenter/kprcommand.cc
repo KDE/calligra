@@ -1717,6 +1717,8 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
         }
         // Now load (parse) and apply the character formatting
         QDomElement n = paragElem.firstChild().toElement();
+        QValueList<QDomElement> listVariable;
+        listVariable.clear();
         int i = 0;
         if ( item == 0 && m_idx > 0 )
             i = m_idx;
@@ -1727,8 +1729,13 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
                 parag->setFormat( i, txt.length(), textdoc->formatCollection()->format( &fm ) );
                 i += txt.length();
             }
+            else if ( n.tagName() == "CUSTOM" )
+            {
+                listVariable.append( n );
+            }
             n = n.nextSibling().toElement();
         }
+        textdoc->textObject()->loadVariable( listVariable,parag, 0 );
         parag->format();
         parag->setChanged( TRUE );
         parag = static_cast<KoTextParag *>(parag->next());

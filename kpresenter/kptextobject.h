@@ -124,7 +124,7 @@ public:
     KCommand *textObjectToContents();
     void setProtectContent ( bool _protect ) { textObject()->setProtectContent(_protect);}
     bool isProtectContent() const { return textObject()->protectContent();}
-
+    void loadVariable( QValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset=0 );
 signals:
     void repaintChanged( KPTextObject* );
 
