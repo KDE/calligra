@@ -133,10 +133,10 @@ void KFloatingDialog::readSettings()
       m_pActivePm = new QPixmap;
       m_pInactivePm = new QPixmap;
       
-      KIconLoader* iconLoader = new KIconLoader(kapp->config(), "kwm");
+      KIconLoader iconLoader("kwm");
       
-      *(m_pActivePm) = iconLoader->reloadIcon("activetitlebar");
-      *(m_pInactivePm) = iconLoader->reloadIcon("inactivetitlebar");
+      *(m_pActivePm) = iconLoader.reloadIcon("activetitlebar");
+      *(m_pInactivePm) = iconLoader.reloadIcon("inactivetitlebar");
       
       if (m_pInactivePm->size() == QSize(0,0))
 		*m_pInactivePm = *m_pActivePm;
