@@ -1775,17 +1775,16 @@ static bool kspreadfunc_dayOfYear( KSContext& context )
 
 static double fact( double val, double end )
 {
-    /* fact =i*(i-1)*(i-2)*...*1 */
-    if(val <0||end<0)
-        return (-1);
-    if(val==0)
-        return(1);
-    else if(val==end)
-        return(1);
-    /*val==end => you don't multiplie it */
-    else
-        return(val*fact((double)(val-1),end));
-
+  /* fact =i*(i-1)*(i-2)*...*1 */
+  if(val<0.0 || end<0.0)
+    return (-1);
+  if(val==0.0)
+    return (1);
+  else if (val==end)
+    return(1);
+  /*val==end => you don't multiplie it */
+  else
+    return (val*fact((double)(val-1),end));
 }
 
 static bool kspreadfunc_fact( KSContext& context )
@@ -2592,6 +2591,54 @@ static bool kspreadfunc_gammaln( KSContext& context ) {
     return false;
   
   return true;        
+}
+
+static bool kspreadfunc_poisson( KSContext& context ) {
+  //returns the Poisson distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "POISSON", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double lambda = args[1]->doubleValue();
+  double kum = args[2]->intValue();
+
+  double result;
+
+  if (lambda < 0.0 || x < 0.0)
+    return false;
+  else if (kum == 0)  { // density
+    if (lambda == 0.0)
+      result = 0;
+    else
+      result = exp(-lambda) * pow(lambda,x) / fact(x,0);
+    }
+  else { // distribution
+    if (lambda == 0.0)
+      result = 1;
+    else {
+      double sum = 1.0;
+      double fFak = 1.0;
+      unsigned long nEnd = static_cast<unsigned long>(x);
+      for (unsigned long i = 1; i <= nEnd; i++) {
+        fFak *= static_cast<double>(i);
+        sum += pow( lambda, static_cast<double>(i) ) / fFak;
+      }
+      sum *= exp(-lambda);
+      result = sum;
+    }
+  }
+  
+  context.setValue( new KSValue(result));
+  return true;
 }
 
 static bool kspreadfunc_fv( KSContext& context )
@@ -5099,6 +5146,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "NORMSINV", new KSValue( new KSBuiltinFunction( module, "NORMSINV", kspreadfunc_normsinv) ) );
   module->addObject( "NORMINV", new KSValue( new KSBuiltinFunction( module, "NORMINV", kspreadfunc_norminv) ) );
   module->addObject( "GAMMALN", new KSValue( new KSBuiltinFunction( module, "GAMMALN", kspreadfunc_gammaln) ) );
+  module->addObject( "POISSON", new KSValue( new KSBuiltinFunction( module, "POISSON", kspreadfunc_poisson) ) );
 
   return module;
 }

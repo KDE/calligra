@@ -2778,6 +2778,33 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>POISSON</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>lambda parameter (the middle value)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the Poisson distribution.
+          The lambda and number parameters must be positive.
+          Cumulative = 0 calculates the density function; cumulative = 1 calculates the distribution.
+        </Text>
+        <Syntax>POISSON(number;lambda;cumulative)</Syntax>
+        <Example>POISSON(60;50;0) equals 0.020105</Example>
+        <Example>POISSON(60;50;1) equals 0.927840</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
