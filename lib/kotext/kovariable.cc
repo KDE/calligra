@@ -769,6 +769,11 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
 // TODO afterText == "page-variable-get", "initial-creator" and many more
 // TODO VT_MAILMERGE
 
+    return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
+}
+
+KoVariable* KoVariableCollection::loadOasisFieldCreateVariable( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context, const QString &key, int type )
+{
     KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.latin1() );
     // If varFormat is 0 (no key specified), the default format will be used.
 

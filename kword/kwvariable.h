@@ -60,6 +60,7 @@ class KWVariableCollection : public KoVariableCollection
  public:
     KWVariableCollection(KWVariableSettings *_settings, KoVariableFormatCollection* coll);
     virtual KoVariable *createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat=false, bool loadFootNote= true );
+    virtual KoVariable* loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context );
 
  private:
     KWDocument *m_doc;

@@ -79,6 +79,18 @@ KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting, KoVaria
 {
 }
 
+KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
+{
+    const QString tagName( tag.tagName() );
+    if ( tagName == "text:note" )
+    {
+        QString key = "STRING";
+        int type = VT_FOOTNOTE;
+        return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
+    }
+    else
+        return KoVariableCollection::loadOasisField( textdoc, tag, context );
+}
 
 KoVariable *KWVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct,bool _forceDefaultFormat, bool loadFootNote )
 {
@@ -197,7 +209,37 @@ void KWFootNoteVariable::setNumberingType( Numbering _type )
 
 void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
 {
-    //TODO
+    const QString tagName( elem.tagName() );
+    Q_ASSERT( tagName == "text:note" );
+    if ( tagName == "text:note" )
+    {
+        m_doc->addFootNoteRequest( elem.attribute( "text:id" ),this );
+        QString str = elem.attribute( "text:note-class" );
+        kdDebug()<<" Foot/EndNote : "<<str<<endl;
+        if ( str == "footnote" )
+            m_noteType = FootNote;
+        else if ( str == "endnote" )
+            m_noteType = EndNote;
+        else
+            kdWarning()<<" Unknown footnote type: '" << str << "'" << endl;
+        QDomNode citation = elem.namedItem( "text:note-citation" );
+        if ( citation.toElement().hasAttribute( "text:label" ) )
+            m_numberingType = Manual;
+        else
+            m_numberingType = Auto;
+        if ( m_numberingType == Auto )
+        {
+            kdDebug()<<" automatic \n";
+            m_numDisplay = citation.toElement().text().toInt();
+            formatedNote();
+        }
+        else
+        {
+            kdDebug()<<" manual \n";
+            m_varValue = QVariant( citation.toElement().text() );
+        }
+        //TODO load text
+    }
 }
 
 void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const

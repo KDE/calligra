@@ -296,6 +296,7 @@ public:
 
     /// Load variable from OASIS file format (called "field" in the OASIS format)
     virtual KoVariable* loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context );
+    virtual KoVariable* loadOasisFieldCreateVariable( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context, const QString &key, int type );
 
     KoVariableSettings *variableSetting() const { return m_variableSettings; }
     KoVariableFormatCollection *formatCollection() const { return m_formatCollection; }
