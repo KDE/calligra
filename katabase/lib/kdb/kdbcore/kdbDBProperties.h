@@ -14,21 +14,21 @@ class KDBDBProperties : virtual public ::KDB::IDBProperties_skel
   
   // IDL specified funtions
 
-  virtual CORBA::Boolean SetProperty( KDB::PROP& prop );
-  virtual CORBA::Boolean SetPropertySeq( KDB::PROPSEQ& prop_seq );
-  virtual CORBA::Boolean GetProperty( KDB::PROP& prop );
-  virtual CORBA::Boolean GetPropertySeq( KDB::PROPSEQ& prop_seq );
+  virtual bool SetProperty( KDB::PROP& prop );
+  virtual bool SetPropertySeq( KDB::PROPSEQ& prop_seq );
+  virtual bool GetProperty( KDB::PROP& prop );
+  virtual bool GetPropertySeq( KDB::PROPSEQ& prop_seq );
   virtual void GetAllProperties( KDB::PROPSEQ*& prop_seq );
-  virtual CORBA::Boolean GetPropertyInfo( KDB::PROPINFO& prop_info );
-  virtual CORBA::Boolean GetPropertyInfoSeq( KDB::PROPINFOSEQ& prop_info_seq );
+  virtual bool GetPropertyInfo( KDB::PROPINFO& prop_info );
+  virtual bool GetPropertyInfoSeq( KDB::PROPINFOSEQ& prop_info_seq );
   virtual void GetAllPropertyInfos( KDB::PROPINFOSEQ*& prop_info_seq );
   
-  virtual CORBA::Boolean SetPropertyMode( QString _qstrName, KDB::PROPMODE _mode);
+  virtual bool SetPropertyMode( QString _qstrName, KDB::PROPMODE _mode);
   
   // local helper functions
 
-  virtual CORBA::Boolean GetPropertyQStringValue( QString _qstrName, QString &_qstrValue );
-  virtual CORBA::Boolean SetPropertyQStringValue( QString _qstrName, QString _qstrValue );
+  virtual bool GetPropertyQStringValue( QString _qstrName, QString &_qstrValue );
+  virtual bool SetPropertyQStringValue( QString _qstrName, QString _qstrValue );
 
  protected:
   QMap<QString,CORBA::Any> m_props;

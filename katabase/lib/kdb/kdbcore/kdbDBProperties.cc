@@ -13,12 +13,12 @@ KDBDBProperties::~KDBDBProperties()
 }
 
 
-CORBA::Boolean KDBDBProperties::SetProperty( KDB::PROP& _prop )
+bool KDBDBProperties::SetProperty( KDB::PROP& _prop )
 {
   // We store the name of the property in an automatic qstring
   // for convenience
 
-  QString qstrName = WString2QString( _prop.wstrName );
+  QString qstrName = _prop.wstrName;
 
   // We first find out whether the property is documented
   // (if it has a corresponding PropertyInfo)
@@ -26,7 +26,7 @@ CORBA::Boolean KDBDBProperties::SetProperty( KDB::PROP& _prop )
 
   KDB::PROPINFO_var varInfo = new KDB::PROPINFO;
 
-  varInfo->wstrName = CORBA::wstring_dup( _prop.wstrName );
+  varInfo->wstrName = _prop.wstrName;
 
   if ( GetPropertyInfo( varInfo ) ) {
 
@@ -72,16 +72,16 @@ CORBA::Boolean KDBDBProperties::SetProperty( KDB::PROP& _prop )
 }
 
 
-CORBA::Boolean KDBDBProperties::SetPropertySeq( KDB::PROPSEQ& _prop_seq )
+bool KDBDBProperties::SetPropertySeq( KDB::PROPSEQ& _prop_seq )
 {
   // we implement this method using SetProperty
   // on the first exception, we return with a new exception
   // so, every property is set up to but not including the first
   // readonly property
   
-  CORBA::Boolean result = TRUE;
+  bool result = true;
   
-  for( unsigned int i = 0;  i != _prop_seq.length(); i++ ) {
+  for( unsigned int i = 0;  i != _prop_seq.count(); i++ ) {
     
     result = result && SetProperty( _prop_seq[i] );
     
@@ -91,12 +91,12 @@ CORBA::Boolean KDBDBProperties::SetPropertySeq( KDB::PROPSEQ& _prop_seq )
 }
 
 
-CORBA::Boolean KDBDBProperties::GetProperty( KDB::PROP& _prop )
+bool KDBDBProperties::GetProperty( KDB::PROP& _prop )
 {
   // We store the name of the property in an automatic qstring
   // for convenience
   
-  QString qstrName = WString2QString( _prop.wstrName );
+  QString qstrName = _prop.wstrName;
   
   // since this is the only bullet proof way for a user to know whether
   // a property (value) exists, we do not throw an exception when
@@ -183,13 +183,13 @@ CORBA::Boolean KDBDBProperties::GetProperty( KDB::PROP& _prop )
 }
 
 
-CORBA::Boolean KDBDBProperties::GetPropertySeq( KDB::PROPSEQ& _prop_seq )
+bool KDBDBProperties::GetPropertySeq( KDB::PROPSEQ& _prop_seq )
 {
   // we implement this method using GetProperty
   
-  CORBA::Boolean result = TRUE;
+  bool result = true;
   
-  for( unsigned int i = 0;  i != _prop_seq.length(); i++ ) {
+  for( unsigned int i = 0;  i != _prop_seq.count(); i++ ) {
     
     result = result && GetProperty( _prop_seq[i] );
     
@@ -226,11 +226,13 @@ void KDBDBProperties::GetAllProperties( KDB::PROPSEQ*& _prop_seq )
 
 	// this property can be read
 
-	seqResult->length(++iLength);
-	
-	(*seqResult)[iIdx].wstrName = QString2WString( itProps.key() );
-	(*seqResult)[iIdx].aValue = itProps.data();
-	
+        KDB::PROP data;
+
+        data.wstrName = itProps.key();
+        data.aValue = itProps.data();
+
+        seqResult->append( data );
+
 	iIdx++;
 	
       } // if ( itInfos.data().mode != KDB::WRITE )
@@ -238,11 +240,13 @@ void KDBDBProperties::GetAllProperties( KDB::PROPSEQ*& _prop_seq )
     } else {
       
       // this property is undocumented so we consider it readable
-      
-      seqResult->length(++iLength);
-      
-      (*seqResult)[iIdx].wstrName = QString2WString( itProps.key() );
-      (*seqResult)[iIdx].aValue = itProps.data();
+
+      KDB::PROP data;
+ 
+      data.wstrName = itProps.key();
+      data.aValue = itProps.data();
+ 
+      seqResult->append( data );
       
       iIdx++;
       
@@ -257,12 +261,12 @@ void KDBDBProperties::GetAllProperties( KDB::PROPSEQ*& _prop_seq )
 }
 
 
-CORBA::Boolean KDBDBProperties::GetPropertyInfo( KDB::PROPINFO& _prop_info )
+bool KDBDBProperties::GetPropertyInfo( KDB::PROPINFO& _prop_info )
 {
   // We store the name of the property in an automatic qstring
   // for convenience
   
-  QString qstrName = WString2QString( _prop_info.wstrName );
+  QString qstrName = _prop_info.wstrName;
 
   // now we look for PropertyInfo record in m_infos
 
@@ -282,8 +286,8 @@ CORBA::Boolean KDBDBProperties::GetPropertyInfo( KDB::PROPINFO& _prop_info )
 
   // we fill in a new (allocated) PropertyInfo with this
 
-  _prop_info.strType = CORBA::string_dup( it.data().strType );
-  _prop_info.wstrDescr = CORBA::wstring_dup( it.data().wstrDescr );
+  _prop_info.strType = it.data().strType;
+  _prop_info.wstrDescr = it.data().wstrDescr;
   _prop_info.mode = it.data().mode;
   _prop_info.status = KDB::OK;
   
@@ -293,13 +297,13 @@ CORBA::Boolean KDBDBProperties::GetPropertyInfo( KDB::PROPINFO& _prop_info )
 }
 
 
-CORBA::Boolean KDBDBProperties::GetPropertyInfoSeq( KDB::PROPINFOSEQ& _prop_info_seq )
+bool KDBDBProperties::GetPropertyInfoSeq( KDB::PROPINFOSEQ& _prop_info_seq )
 {
   // we implement this method using GetPropertyInfo
   
-  CORBA::Boolean result = TRUE;
+  bool result = TRUE;
   
-  for( unsigned int i = 0;  i != _prop_info_seq.length(); i++ ) {
+  for( unsigned int i = 0; i != _prop_info_seq.count(); i++ ) {
     
     result = result && GetPropertyInfo( _prop_info_seq[i] );
     
@@ -319,7 +323,7 @@ void KDBDBProperties::GetAllPropertyInfos( KDB::PROPINFOSEQ*& _prop_info_seq )
 
   KDB::PROPINFOSEQ *ptrInfoSeq = new KDB::PROPINFOSEQ;
 
-  ptrInfoSeq->length( nrInfos );
+  ptrInfoSeq->clear();
 
   // we iterate through the map
 
@@ -329,12 +333,16 @@ void KDBDBProperties::GetAllPropertyInfos( KDB::PROPINFOSEQ*& _prop_info_seq )
 
   for( it = m_infos.begin(); it != m_infos.end(); it++ ) {
 
-    (*ptrInfoSeq)[index].wstrName = CORBA::wstring_dup( it.data().wstrName );
-    (*ptrInfoSeq)[index].strType = CORBA::string_dup( it.data().strType );
-    (*ptrInfoSeq)[index].wstrDescr = CORBA::wstring_dup( it.data().wstrDescr );
-    (*ptrInfoSeq)[index].mode = it.data().mode;
-    (*ptrInfoSeq)[index].status = KDB::OK;
-    
+    KDB::PROPINFO propinfo;
+
+    propinfo.wstrName = it.data().wstrName;
+    propinfo.strType = it.data().strType;
+    propinfo.wstrDescr = it.data().wstrDescr;
+    propinfo.mode = it.data().mode;
+    propinfo.status = KDB::OK;
+
+    ptrInfoSeq->append( propinfo );
+
     index++;
   }
   
@@ -344,7 +352,7 @@ void KDBDBProperties::GetAllPropertyInfos( KDB::PROPINFOSEQ*& _prop_info_seq )
 }
 
 
-CORBA::Boolean KDBDBProperties::SetPropertyMode( QString _qstrName, KDB::PROPMODE _mode )
+bool KDBDBProperties::SetPropertyMode( QString _qstrName, KDB::PROPMODE _mode )
 {
   QMap<QString,KDB::PROPINFO>::Iterator it;
   
@@ -364,23 +372,23 @@ CORBA::Boolean KDBDBProperties::SetPropertyMode( QString _qstrName, KDB::PROPMOD
 }
 
 
-CORBA::Boolean KDBDBProperties::SetPropertyQStringValue( QString _qstrName, QString _qstrValue )
+bool KDBDBProperties::SetPropertyQStringValue( QString _qstrName, QString _qstrValue )
 {
   KDB::PROP prop;
 
-  prop.wstrName = QString2WString( _qstrName );
-  prop.aValue <<= QString2WString( _qstrValue );
+  prop.wstrName = _qstrName;
+  prop.aValue <<= _qstrValue;
 
   return SetProperty( prop );
 }
 
-CORBA::Boolean KDBDBProperties::GetPropertyQStringValue( QString _qstrName, QString &_qstrValue )
+bool KDBDBProperties::GetPropertyQStringValue( QString _qstrName, QString &_qstrValue )
 {
   KDB::PROP prop;
 
-  prop.wstrName = QString2WString( _qstrName );
+  prop.wstrName = _qstrName;
 
-  CORBA::Boolean bResult;
+  bool bResult;
   
   bResult = GetProperty( prop );
   
@@ -390,11 +398,11 @@ CORBA::Boolean KDBDBProperties::GetPropertyQStringValue( QString _qstrName, QStr
 
   }
 
-  CORBA::WChar * wstrValue;
+  QString  wstrValue;
 
   if ( prop.aValue >>= wstrValue ) {
 
-    _qstrValue = WString2QString( wstrValue );
+    _qstrValue = wstrValue;
 
     return TRUE;
     
