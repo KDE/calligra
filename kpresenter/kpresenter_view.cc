@@ -1471,10 +1471,10 @@ void KPresenterView::screenTransEffect()
        transEffectDia = 0;
     }
 
-    transEffectDia = new KPTransEffectDia( this, "TransEffect",
+    transEffectDia = new KPTransEffectDia( this, "slideTransitionDialog",
                                            kPresenterDoc(), this );
 
-    transEffectDia->setCaption( i18n("Transition Effect") );
+    transEffectDia->setCaption( i18n("Slide Transition") );
 
     QObject::connect( transEffectDia, SIGNAL( transEffectDiaOk() ), this, SLOT( transEffectOk() ) );
     transEffectDia->exec();
@@ -3048,7 +3048,7 @@ void KPresenterView::setupActions()
                                             this, SLOT( screenAssignEffect() ),
                                             actionCollection(), "screen_assigneffect");
 
-    actionScreenTransEffect = new KAction( i18n( "&Transition Effect..." ),
+    actionScreenTransEffect = new KAction( i18n( "&Slide Transition..." ),
                                            "effect", 0,
                                            this, SLOT( screenTransEffect() ),
                                            actionCollection(), "screen_transeffect");
@@ -3903,7 +3903,7 @@ void KPresenterView::transEffectOk()
 kdDebug() << "======= KPresenterView::transEffectOK\n";
 
     KPrPage *page=m_canvas->activePage();
-    TransEffectCmd *transEffectCmd = new TransEffectCmd( i18n( "Transition Effect" ),
+    TransEffectCmd *transEffectCmd = new TransEffectCmd( i18n( "Slide Transition" ),
                                           transEffectDia->getPageEffect(), transEffectDia->getPresSpeed(),
                                           transEffectDia->getSoundEffect(), transEffectDia->getSoundFileName(),
                                           transEffectDia->getAutoAdvance(), transEffectDia->getSlideTime(),
