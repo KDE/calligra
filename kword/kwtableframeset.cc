@@ -1158,8 +1158,10 @@ bool KWTableFrameSet::joinCells() {
         for(unsigned int j=rowBegin; j<=rowEnd;j++) {
             Cell *cell = getCell(j,i);
             if(cell && cell!=firstCell) {
-                frames.remove(cell->getFrame(0));
-                m_cells.remove(cell);
+                frames.remove( cell->getFrame(0) );
+                cell->delFrame( cell->getFrame(0));
+                //m_cells.remove(  cell);
+                m_cells.take(m_cells.find(cell));
             }
         }
     }
