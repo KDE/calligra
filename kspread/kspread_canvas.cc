@@ -1163,10 +1163,12 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   KoPoint br = rect.bottomRight();
 
   double tmp;
+  //Philipp: I don't know why we need the +1, but otherwise we don't get it correctly
+  //Testcase: Move a dialog slowly up left. Sometimes the top/left most points are not painted
   int left_col = table->leftColumn( tl.x(), tmp );
-  int right_col = table->rightColumn( br.x() );
+  int right_col = table->rightColumn( br.x() + 1.0 );
   int top_row = table->topRow( tl.y(), tmp );
-  int bottom_row = table->bottomRow( br.y() );
+  int bottom_row = table->bottomRow( br.y() + 1.0 );
 
   m_pView->m_pDoc->emitBeginOperation(false);
   table->setRegionPaintDirty(QRect(QPoint(left_col, top_row),
