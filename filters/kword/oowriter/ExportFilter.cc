@@ -424,9 +424,12 @@ void OOWriterWorker::writeContentXml(void)
 
     zipWriteData(" <office:automatic-styles>\n");
     zipWriteData(m_contentAutomaticStyles);
+    m_contentAutomaticStyles = QString::null; // Release memory
+    
     zipWriteData(" </office:automatic-styles>\n");
 
     zipWriteData(m_contentBody);
+    m_contentBody.resize( 0 ); // Release memory
 
     zipWriteData( "</office:document-content>\n" );
 
