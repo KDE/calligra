@@ -431,6 +431,21 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
         QString value = nl.attribute("VERTALIGN");
         tmp.formatEntryContext()->m_vertAlign=static_cast<KoTextFormat::VerticalAlignment>( nl.attribute("value").toInt() );
     }
+    if ( nl.hasAttribute("TEXTCOLOR" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Color;
+        QColor col( nl.attribute("TEXTCOLOR" ));
+        tmp.formatEntryContext()->m_color = col;
+    }
+    if ( nl.hasAttribute("TEXTBGCOLOR" ))
+    {
+        tmp.createNewEntryContext();
+        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::BgColor;
+        QColor col( nl.attribute("TEXTBGCOLOR" ));
+        tmp.formatEntryContext()->m_backGroungColor = col;
+    }
+
     if (tmp.formatEntryContext() )
     {
         kdDebug()<<"tmp.formatEntryContext()->m_optionsMask :"<<tmp.formatEntryContext()->m_optionsMask<<endl;
@@ -438,24 +453,6 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
     }
     else
         m_entries.insert( nl.attribute("find"), tmp );
-#if 0 //todo
-    elem = formatElem.namedItem( "COLOR" ).toElement();
-    if ( !elem.isNull() )
-    {
-        QColor col( elem.attribute("red").toInt(),
-                    elem.attribute("green").toInt(),
-                    elem.attribute("blue").toInt() );
-        format.setColor( col );
-    }
-    elem = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
-    if ( !elem.isNull() )
-    {
-        QColor col( elem.attribute("red").toInt(),
-                    elem.attribute("green").toInt(),
-                    elem.attribute("blue").toInt() );
-        format.setTextBackgroundColor( col );
-    }
-#endif
 }
 
 void KoAutoFormat::saveConfig()
@@ -620,7 +617,6 @@ QDomElement KoAutoFormat::saveEntry( QMapIterator<QString, KoAutoFormatEntry> _e
             case KoTextFormat::U_NONE:
                 data.setAttribute("UNDERLINE", "none");
                 break;
-
             }
         }
         if ( tmp->m_optionsMask & KoSearchContext::StrikeOut )
@@ -636,31 +632,24 @@ QDomElement KoAutoFormat::saveEntry( QMapIterator<QString, KoAutoFormatEntry> _e
             case KoTextFormat::S_NONE:
                 data.setAttribute("STRIKEOUT", "none");
                 break;
-
             }
         }
         if ( tmp->m_optionsMask & KoSearchContext::VertAlign)
         {
             data.setAttribute( "VERTALIGN", static_cast<int>(tmp->m_vertAlign) );
         }
-#if 0 //todo
-        elem = formatElem.namedItem( "COLOR" ).toElement();
-        if ( !elem.isNull() )
+        if ( tmp->m_optionsMask & KoSearchContext::BgColor )
         {
-            QColor col( elem.attribute("red").toInt(),
-                        elem.attribute("green").toInt(),
-                        elem.attribute("blue").toInt() );
-            format.setColor( col );
+            data.setAttribute( "TEXTCOLOR", tmp->m_color.name());
         }
-        elem = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
-        if ( !elem.isNull() )
+        if ( tmp->m_optionsMask & KoSearchContext::Color )
         {
-            QColor col( elem.attribute("red").toInt(),
-                        elem.attribute("green").toInt(),
-                        elem.attribute("blue").toInt() );
-            format.setTextBackgroundColor( col );
+            data.setAttribute( "TEXTCOLOR", tmp->m_color.name());
         }
-#endif
+        if ( tmp->m_optionsMask & KoSearchContext::BgColor )
+        {
+            data.setAttribute( "TEXTBGCOLOR", tmp->m_backGroungColor.name());
+        }
     }
     return data;
 }
