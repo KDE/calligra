@@ -22,16 +22,17 @@
 
 */
 
-#include <GDocument.h>
-#include <GGroup.h>
-#include <GPolyline.h>
-#include <cassert>
-#include <GOval.h>
-#include <GPolygon.h>
-#include <GText.h>
+#include <assert.h>
 #include <fstream.h>
 #include <limits.h>
 #include <math.h>
+
+#include <GDocument.h>
+#include <GGroup.h>
+#include <GPolyline.h>
+#include <GOval.h>
+#include <GPolygon.h>
+#include <GText.h>
 #include <XfigImport.h>
 
 using namespace std;
