@@ -20,15 +20,13 @@
 #ifndef KPTTASKDIALOG_H
 #define KPTTASKDIALOG_H
 
-#include "kpttaskdialogbase.h"
-
 #include <kdialogbase.h>
-
 #include <kptresource.h>
-
 #include <qtable.h>
 
+class KPTTaskGeneralPanelBase;
 class KPTRequestResourcesPanel;
+class KPTTaskNotesPanelBase;
 class KPTTask;
 class KLineEdit;
 class KMacroCommand;
@@ -39,26 +37,6 @@ class QButtonGroup;
 class QListBox;
 class QTable;
 class QDateTime;
-
-class KPTTaskDialogImpl : public KPTTaskDialogBase {
-    Q_OBJECT
-public:
-    KPTTaskDialogImpl (QWidget *parent);
-
-    int scheduling() const;
-    void setScheduling(int type);
-    QDateTime schedulerDateTime() const;
-    void setSchedulerDateTime(QDateTime dt);
-
-private slots:
-    void slotCheckAllFieldsFilled();
-    void slotSchedulingChanged(int activated);
-	void slotChooseLeader();
-
-signals:
-    void obligatedFieldsFilled(bool yes);
-    void schedulingTypeChanged(int activated);
-};
 
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
@@ -71,16 +49,16 @@ protected slots:
     void slotOk();
 
 private:
-    KPTTask &task;
-    KLineEdit *namefield;
-    KLineEdit *leaderfield;
-    QTextEdit *descriptionfield;
+    KPTTask &m_task;
+    KLineEdit *m_name;
+    KLineEdit *m_leader;
+    QTextEdit *m_description;
 
-    KPTRequestResourcesPanel *resourcesTab;
-    KPTTaskDialogImpl *dia;
+    KPTTaskGeneralPanelBase *m_generalTab;
+    KPTRequestResourcesPanel *m_resourcesTab;
+    KPTTaskNotesPanelBase *m_notesTab;
 
     // TODO: Duration and risk fields
 };
-
 
 #endif // KPTTASKDIALOG_H

@@ -13,8 +13,10 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptcanvasitem.cc kptprojectdialogbase.ui kptmainprojectdialogbase.ui resourcespanelbase.ui \
     durationpanelbase.ui kptdurationdialog.cc \
     kptresourceview.cc \
-    requestresourcespanelbase.ui kptrequestresourcespanel.cc \
-    kpttaskdialogbase.ui resourcedialogbase.ui kptresourcedialog.cc \
+    kpttaskresourcespanelbase.ui kptrequestresourcespanel.cc \
+    resourcedialogbase.ui kptresourcedialog.cc \
+    kpttaskgeneralpanelbase.ui \
+    kpttasknotespanelbase.ui \
     kptdatetime.cc kptreportview.cc kpttaskappointmentsview.ui \
     kptcalendar.cc kptcalendaredit.cc kptcalendarlistdialog.cc \
     kptcalendarpanel.cc kptdatetable.cc \

@@ -18,8 +18,10 @@
 */
 
 #include "kpttaskdialog.h"
-#include "kptrequestresourcespanel.h"
 #include "kpttask.h"
+#include "kpttaskgeneralpanelbase.h"
+#include "kptrequestresourcespanel.h"
+#include "kpttasknotespanelbase.h"
 #include "kptcommand.h"
 
 #include <qlayout.h>
@@ -28,8 +30,6 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kdatepicker.h>
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
 #include <kcommand.h>
 
 #include <qtextedit.h>
@@ -48,31 +48,47 @@
 
 KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true),
-      task(task)
+      m_task(task)
 {
-    dia = new KPTTaskDialogImpl(this);
-    resourcesTab = new KPTRequestResourcesPanel(dia, task, resourceGroups);
-    dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);
-    setMainWidget(dia);
+    QFrame *page;
+    QVBoxLayout *topLayout;
+    
+    // Create all the tabs.
+    page = addPage(i18n("&General"));
+    topLayout = new QVBoxLayout(page, 0, spacingHint());
+    m_generalTab = new KPTTaskGeneralPanelBase(page);
+    topLayout->addWidget(m_generalTab);
+    
+    page = addPage(i18n("&Notes"));
+    topLayout = new QVBoxLayout(page, 0, spacingHint());
+    m_resourcesTab = new KPTRequestResourcesPanel(page, task, resourceGroups);
+    topLayout->addWidget(m_resourcesTab);
+    
+    page = addPage(i18n("&Notes"));
+    topLayout = new QVBoxLayout(page, 0, spacingHint());
+    m_notesTab = new KPTTaskNotesPanelBase(page);
+    topLayout->addWidget(m_notesTab);
+
+    // Create some shortcuts.
+    m_name = m_generalTab->namefield;
+    m_leader = m_generalTab->leaderfield;
+    m_description = m_notesTab->descriptionfield;
+
+    // Set the state of all the child widgets.
     enableButtonOK(false);
-
-	dia->namefield->setText(task.name());
-	dia->leaderfield->setText(task.leader());
-
-    dia->setScheduling(task.constraint());
+    m_name->setText(task.name());
+    m_leader->setText(task.leader());
+    m_description->setText(task.description());
+    m_generalTab->setSchedulingType(task.constraint());
     if (task.constraintTime().isValid())
-        dia->setSchedulerDateTime(task.constraintTime());
+        m_generalTab->setDateTime(task.constraintTime());
     else
-        dia->setSchedulerDateTime(QDateTime::currentDateTime());
+        m_generalTab->setDateTime(QDateTime::currentDateTime());
 
-    connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
-
-    dia->namefield->setFocus();
-
-    connect(resourcesTab, SIGNAL( changed() ), dia, SLOT( slotCheckAllFieldsFilled() ));
-
-    resize(900,500); //FIXME: design ui so we don't need this
-
+    connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
+    connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+    m_generalTab->checkAllFieldsFilled();
+    m_name->setFocus();
 }
 
 
@@ -82,28 +98,28 @@ KMacroCommand *KPTTaskDialog::buildCommand() {
     
     KPTDuration dt = KPTDuration();
 
-    if (task.name() != dia->namefield->text()) {
-        cmd->addCommand(new KPTNodeModifyNameCmd(task, dia->namefield->text()));
+    if (m_task.name() != m_name->text()) {
+        cmd->addCommand(new KPTNodeModifyNameCmd(m_task, m_name->text()));
         modified = true;
     }
-    if (task.leader() != dia->leaderfield->text()) {
-        cmd->addCommand(new KPTNodeModifyLeaderCmd(task, dia->leaderfield->text()));
+    if (m_task.leader() != m_leader->text()) {
+        cmd->addCommand(new KPTNodeModifyLeaderCmd(m_task, m_leader->text()));
         modified = true;
     }
-    if (task.description() != dia->descriptionfield->text()) {
-        cmd->addCommand(new KPTNodeModifyDescriptionCmd(task, dia->descriptionfield->text()));
+    if (m_task.description() != m_description->text()) {
+        cmd->addCommand(new KPTNodeModifyDescriptionCmd(m_task, m_description->text()));
         modified = true;
     }
-    KPTNode::ConstraintType c = (KPTNode::ConstraintType)dia->scheduling();
-    if (c != task.constraint()) {
-        cmd->addCommand(new KPTNodeModifyConstraintCmd(task, c));
+    KPTNode::ConstraintType c = (KPTNode::ConstraintType)m_generalTab->schedulingType();
+    if (c != m_task.constraint()) {
+        cmd->addCommand(new KPTNodeModifyConstraintCmd(m_task, c));
         modified = true;
     }
     if (c == KPTNode::FinishNotLater || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn) {
-        cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(task, dia->schedulerDateTime()));
+        cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(m_task, m_generalTab->dateTime()));
         modified = true;
     }
-    KMacroCommand *m = resourcesTab->buildCommand();
+    KMacroCommand *m = m_resourcesTab->buildCommand();
     if (m) {
         cmd->addCommand(m);
         modified = true;
@@ -117,53 +133,6 @@ KMacroCommand *KPTTaskDialog::buildCommand() {
 
 void KPTTaskDialog::slotOk() {
     accept();
-}
-
-//////////////////////////////////////////
-
-KPTTaskDialogImpl::KPTTaskDialogImpl (QWidget *parent) : KPTTaskDialogBase(parent) {
-    connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
-    connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
-    connect (scheduleType, SIGNAL(clicked( int )), this, SLOT(slotSchedulingChanged( int )) );
-    connect (chooseLeader, SIGNAL(pressed()), SLOT(slotChooseLeader()));
-}
-
-void KPTTaskDialogImpl::slotCheckAllFieldsFilled() {
-    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty()));
-}
-
-void KPTTaskDialogImpl::slotSchedulingChanged(int activated) {
-    emit schedulingTypeChanged(activated);
-    slotCheckAllFieldsFilled();
-}
-
-void KPTTaskDialogImpl::slotChooseLeader()
-{
-  KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-  if (!a.isEmpty()) {
-	  leaderfield->setText(a.fullEmail());
-  }
-}
-
-int KPTTaskDialogImpl::scheduling() const
-{
-    return scheduleType->selectedId();
-}
-
-void KPTTaskDialogImpl::setScheduling(int type)
-{
-    scheduleType->setButton(type);
-}
-
-QDateTime KPTTaskDialogImpl::schedulerDateTime() const
-{
-    return QDateTime(schedulerDate->getDate(), schedulerTime->time());
-}
-
-void KPTTaskDialogImpl::setSchedulerDateTime(QDateTime dt)
-{
-    schedulerDate->setDate(dt.date());
-    schedulerTime->setTime(dt.time());
 }
 
 #include "kpttaskdialog.moc"
