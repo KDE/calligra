@@ -224,7 +224,7 @@ void HtmlWorker::formatTextParagraph(const QString& strText,
 
     // Replace line feeds by line breaks
     int pos;
-    QString strBr(isXML()?QString("<br/>"):QString("<br>"));
+    QString strBr(isXML()?QString("<br />"):QString("<br>"));
     while ((pos=strEscaped.find(QChar(10)))>-1)
     {
         strEscaped.replace(pos,1,strBr);
