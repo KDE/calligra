@@ -214,7 +214,8 @@ public:
 
 
     /**
-     * Search the given string, and returns whether a match was found. If one is,
+     * Search the given string, replaces with the given replacement string,
+     * and returns whether a match was found. If one is,
      * the replacement string length is also returned.
      *
      * A performance optimised version of the function is provided for use
@@ -222,8 +223,11 @@ public:
      *
      * @param text The string to search.
      * @param pattern The pattern to look for.
+     * @param replacement The replacement string to insert into the text.
      * @param index The starting index into the string.
-     * @param options. The options to use.
+     * @param options The options to use.
+     * @param replacedLength Output parameter, contains the length of the replaced string.
+     * Not always the same as replacement.length(), when backreferences are used.
      * @return The index at which a match was found, or -1 if no match was found.
      */
     static int replace( QString &text, const QString &pattern, const QString &replacement, int index, long options, int *replacedLength );
@@ -246,8 +250,13 @@ signals:
     /**
      * Connect to this slot to implement updating of replaced text during the replace
      * operation.
+     * @param text The text, in which the replacement has already been done.
+     * @param replacementIndex Starting index of the matched substring
+     * @param replacedLength Length of the replacement string
+     * @param matchedLength Length of the matched string
+     * @param expose The rectangle to expose
      */
-    void replace(const QString &text, int replacementIndex, int replacedLength,int matchedLength, const QRect &expose);
+    void replace(const QString &text, int replacementIndex, int replacedLength, int matchedLength, const QRect &expose);
 
 private:
     void doReplace();

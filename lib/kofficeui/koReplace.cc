@@ -88,6 +88,14 @@ void KoReplaceDialog::slotOk()
     m_replace->addToHistory(replacement());
 }
 
+struct KoReplace::KoReplacePrivate
+{
+    void setLabel( const QString& pattern, const QString& replacement ) {
+        m_mainLabel->setText( i18n("Replace '%1' with '%2'?").arg(pattern).arg(replacement) );
+    }
+    QLabel* m_mainLabel;
+};
+
 // Create the dialog.
 KoReplace::KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent) :
     KDialogBase(parent, __FILE__, false,  // non-modal!
@@ -97,7 +105,10 @@ KoReplace::KoReplace(const QString &pattern, const QString &replacement, long op
         false,
         i18n("&All"), i18n("&Skip"), i18n("&Yes"))
 {
-    setMainWidget( new QLabel( i18n("Replace '%1' with '%2'?").arg(pattern).arg(replacement), this ) );
+    d = new KoReplacePrivate;
+    d->m_mainLabel = new QLabel( this );
+    d->setLabel( pattern, replacement );
+    setMainWidget( d->m_mainLabel );
     m_cancelled = false;
     m_options = options;
     m_parent = parent;
@@ -114,6 +125,7 @@ KoReplace::~KoReplace()
 {
     if (!m_replacements && !m_cancelled)
         KMessageBox::information(m_parent, i18n("No text was replaced."));
+    delete d;
 }
 
 void KoReplace::slotClose()
@@ -150,10 +162,16 @@ bool KoReplace::replace(QString &text, const QRect &expose)
         {
             if (m_options & KoReplaceDialog::PromptOnReplace)
             {
-                // Tell the world about the match we found, in case someone wants to
-                // highlight it.
                 if ( validateMatch( m_text, m_index, m_matchedLength ))
                 {
+                    // Display accurate initial string and replacement string, they can vary
+                    QString matchedText = m_text.mid( m_index, m_matchedLength );
+                    QString rep = matchedText;
+                    KoReplace::replace(rep, m_replacement, 0, m_matchedLength);
+                    d->setLabel( matchedText, rep );
+
+                    // Tell the world about the match we found, in case someone wants to
+                    // highlight it.
                     emit highlight(m_text, m_index, m_matchedLength, m_expose);
                     show();
                     kapp->enter_loop();
@@ -208,21 +226,22 @@ int KoReplace::replace(QString &text, const QRegExp &pattern, const QString &rep
 
 int KoReplace::replace(QString &text, const QString &replacement, int index, int length)
 {
-    // TBD: implement backreferences.
-    text.replace(index, length, replacement);
-    return replacement.length();
+    // Backreferences: replace /0 with the right portion of 'text'
+    QString rep = replacement;
+    rep.replace( QRegExp("/0"), text.mid( index, length ) );
+    // Then replace rep into the text
+    text.replace(index, length, rep);
+    return rep.length();
 }
 
 // All.
 void KoReplace::slotUser1()
 {
-    int replacedLength;
-
-    replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
+    int replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
 
     // Tell the world about the replacement we made, in case someone wants to
     // highlight it.
-    emit replace(m_text, m_index, replacedLength,m_matchedLength , m_expose);
+    emit replace(m_text, m_index, replacedLength, m_matchedLength, m_expose);
     m_replacements++;
     if (m_options & KoReplaceDialog::FindBackwards)
         m_index--;
