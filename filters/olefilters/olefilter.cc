@@ -71,22 +71,8 @@ void OLEFilter::slotSavePic(const char *data, const char *type,
 
     QString name;
 
-    name+="/tmp/koffice-pic";
-    name+=QString::number(numPic);
-    ++numPic;
-    if(type[0]!='.')
-        name+='.';
-    name+=type;
-
-    QFile f(name);
-    if(f.open(IO_WriteOnly) && f.writeBlock(data, size)!=-1) {
-        int len=name.length();
-        *nameOUT=new char[len+1];
-        strncpy(*nameOUT, static_cast<const char*>(name), len);
-        *nameOUT[len]='\0';
-    }
-    f.close();
-    *nameOUT=0L;  // error
+    name+="tar:/";
+    // and so on...
 }
 
 void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {

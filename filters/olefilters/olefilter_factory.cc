@@ -15,7 +15,7 @@ extern "C"
 KInstance* OLEFilterFactory::s_global = 0;
 
 OLEFilterFactory::OLEFilterFactory( QObject* parent, const char* name )
-    : Factory( parent, name )
+    : KLibFactory( parent, name )
 {
     s_global = new KInstance( "olefilter" );
 }
@@ -24,7 +24,7 @@ OLEFilterFactory::~OLEFilterFactory()
 {
 }
 
-QObject* OLEFilterFactory::create( QObject* parent, const char* name )
+QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char* )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -38,5 +38,3 @@ KInstance* OLEFilterFactory::global()
 {
     return s_global;
 }
-
-
