@@ -87,7 +87,7 @@ void GPage::initialize ()
   pLayout.mmTop = 0;
   pLayout.mmBottom = 0;
   pLayout.unit = PG_MM;
-  
+
   mBGColor = white;
 
   // in pt !!
@@ -159,7 +159,7 @@ void GPage::drawContentsInRegion (QPainter& p, const Rect& , const Rect& rr,
                                       bool withBasePoints, bool outline, bool withEditMarks)
 {
 //  kdDebug(38000) << "Layers=" << layers << endl;
-  GLayer *i = layers.first(); 
+  GLayer *i = layers.first();
 //  for (QListIterator<GLayer> i(layers); i.current(); ++i)
   for(;i!=0;i=layers.next())
   {
@@ -603,7 +603,7 @@ bool GPage::insertFromXml (const QDomDocument &document, QList<GObject>& newObjs
   return parseBody (doc, newObjs, true);
 }
 
-bool GPage::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, bool /*markNew*/)
+bool GPage::parseBody (const QDomElement &element, QList<GObject>& newObjs, bool /*markNew*/)
 {
   GObject* obj = 0L;
   QDict<GObject> refDict;
@@ -646,6 +646,7 @@ bool GPage::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, 
           refDict.insert(obj->getId(), obj);
         insertObject(obj);
         cn=cn.nextSibling();
+        newObjs.append(obj);
       }
     }
     n=n.nextSibling();
@@ -716,7 +717,7 @@ bool GPage::readFromXml (const QDomElement &page)
   pLayout.mmRight=layout.attribute("rmargin").toFloat();
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
- 
+
 // update page layout
   setPageLayout (pLayout);
 
@@ -731,7 +732,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
 {
   setAutoUpdate (false);
   QDomElement head=page.namedItem("head").toElement();
-  
+
   QDomElement layout=head.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")
@@ -769,7 +770,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
   pLayout.mmRight=layout.attribute("rmargin").toFloat();
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
- 
+
 // update page layout
   setPageLayout (pLayout);
 
