@@ -547,6 +547,12 @@ void GroupObjCmd::execute()
     doc->refreshGroupButton();
 
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 void GroupObjCmd::unexecute()
@@ -566,6 +572,12 @@ void GroupObjCmd::unexecute()
     doc->refreshGroupButton();
 
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
@@ -608,6 +620,12 @@ void UnGroupObjCmd::execute()
     doc->refreshGroupButton();
 
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 void UnGroupObjCmd::unexecute()
@@ -647,6 +665,12 @@ void UnGroupObjCmd::unexecute()
     doc->refreshGroupButton();
 
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 InsertCmd::InsertCmd( const QString &_name, KPObject *_object,
@@ -2405,6 +2429,12 @@ void KPrStickyObjCommand::execute()
             unstickObj(it.current());
     }
     m_doc->repaint( false );
+
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_doc->stickyPage());
+        m_doc->updateSideBarItem(pos,  true/*sticky page*/ );
+    }
 }
 
 void KPrStickyObjCommand::unexecute()
@@ -2418,6 +2448,12 @@ void KPrStickyObjCommand::unexecute()
             stickObj(it.current());
     }
     m_doc->repaint( false );
+
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_doc->stickyPage());
+        m_doc->updateSideBarItem(pos,  true/*sticky page*/ );
+    }
 }
 
 void KPrStickyObjCommand::stickObj(KPObject *_obj)
