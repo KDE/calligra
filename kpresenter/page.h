@@ -271,6 +271,7 @@ private slots:
     void pageCopy();
     void pageDelete();
     void pagePaste();
+    void pageDefaultTemplate();
     void configPages();
     void presStructView();
     void slotGotoPage();

@@ -42,7 +42,7 @@
 
 /*======================== constructor ===========================*/
 KPObject::KPObject()
-    : orig(), ext(), shadowColor( Qt::gray )
+    : orig(), ext(), shadowColor( Qt::gray ), sticky( FALSE )
 {
     presNum = 0;
     disappearNum = 1;

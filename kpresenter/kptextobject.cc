@@ -536,7 +536,6 @@ void KPTextObject::deactivate( KPresenterDoc *doc )
     recalcPageNum( doc );
     ktextobject.reparent( 0, 0, QPoint( 0, 0 ), false );
     ktextobject.hide();
-    extendObject2Contents( 0 );
 }
 
 /*========================= zoom =================================*/

@@ -164,16 +164,6 @@ enum PresSpeed {
     PS_NORMAL = 1,
     PS_FAST = 2
 };
-enum DelPageMode {
-    DPM_LET_OBJS = 0,
-    DPM_MOVE_OBJS = 1,
-    DPM_DEL_OBJS = 2,
-    DPM_DEL_MOVE_OBJS = 3
-};
-enum InsPageMode {
-    IPM_LET_OBJS = 0,
-    IPM_MOVE_OBJS = 1
-};
 enum InsertPos {
     IP_BEFORE = 0,
     IP_AFTER = 1
@@ -195,11 +185,6 @@ enum ToolEditMode {
     INS_TABLE = 8,
     INS_FORMULA = 9,
     INS_AUTOFORM = 10
-};
-enum PresentSlides {
-    PS_ALL = 0,
-    PS_CURRENT = 1,
-    PS_SELECTED = 2
 };
 
 static const float ObjSpeed[] = { 70.0, 50.0, 30.0 };

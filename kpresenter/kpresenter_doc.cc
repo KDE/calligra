@@ -46,7 +46,7 @@
 #include "grpobjcmd.h"
 #include "commandhistory.h"
 #include "styledia.h"
-#include "inspagedia.h"
+#include "insertpagedia.h"
 
 #include <qrect.h>
 #include <qpainter.h>
@@ -328,6 +328,11 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 /*========================== save ===============================*/
 bool KPresenterDoc::saveToStream(QIODevice * dev)
 {
+    KPresenterView *view = (KPresenterView*)firstView(); // ####### do some syncing between views
+    if ( view )
+	selectedSlides = view->selectedSlideMap();
+    
+    
     QTextStream out( dev );
     out.setEncoding(QTextStream::UnicodeUTF8);
     KPObject *kpobject = 0L;
@@ -376,7 +381,6 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl;
     out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
-    out << indent << "<PRESSLIDES value=\"" << static_cast<int>( presentSlides ) << "\"/>" << endl;
 
     out << otag << "<SELSLIDES>" << endl;
     QMap<int,bool>::Iterator sit = selectedSlides.begin();
@@ -633,7 +637,8 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
     clipartCollectionKeys.clear();
     clipartCollectionNames.clear();
     lastObj = -1;
-
+    bool allSlides = FALSE;
+    
     // clean
     if ( _clean ) {
         //KoPageLayout __pgLayout;
@@ -653,7 +658,6 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
         _yRnd = 20;
         _txtBackCol = white;
         urlIntern = url().path();
-        presentSlides = PS_ALL;
     }
 
     if ( !docAlreadyOpen ) {
@@ -892,19 +896,15 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
                     _spManualSwitch = static_cast<bool>( ( *it ).m_strValue.toInt() );
             }
         } else if ( name == "PRESSLIDES" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "value" )
-                    presentSlides = static_cast<PresentSlides>( ( *it ).m_strValue.toInt() );
-            }
+	    parser.parseTag( tag, name, lst );
+	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+	    for( ; it != lst.end(); ++it ) {
+		if ( ( *it ).m_strName == "value" )
+		    if ( ( *it ).m_strValue.toInt() == 0 )
+			allSlides = TRUE;
+	    }
         } else if ( name == "SELSLIDES" ) {
             parser.parseTag( tag, name, lst );
-            // I'm quite sure the iterator works, so I commented that out ;) (Werner)
-            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            //for( ; it != lst.end(); ++it ) {
-            //}
-
             while ( parser.open( QString::null, tag ) ) {
                 int nr;
                 bool show;
@@ -1045,6 +1045,15 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
     addToRecentlyOpenedList( url().url() );
 
+    if ( allSlides ) {
+	QMap<int,bool>::Iterator sit = selectedSlides.begin();
+	for ( ; sit != selectedSlides.end(); ) {
+	    int k = sit.key();
+	    sit++;
+	    selectedSlides.replace( k, TRUE );
+	}
+    }
+    
     return true;
 }
 
@@ -3321,32 +3330,27 @@ int KPresenterDoc::getBottomBorder()
 }
 
 /*================================================================*/
-void KPresenterDoc::deletePage( int _page, DelPageMode _delPageMode )
+void KPresenterDoc::deletePage( int _page )
 {
     KPObject *kpobject = 0;
     int _h = getPageSize( 0, 0, 0 ).height();
 
-    if ( _delPageMode == DPM_DEL_OBJS || _delPageMode == DPM_DEL_MOVE_OBJS ) {
-        deSelectAllObj();
-        for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-            kpobject = objectList()->at( i );
-            if ( getPageOfObj( i, 0, 0 ) - 1 == _page )
-                kpobject->setSelected( true );
-        }
-        deleteObjs( false );
+    deSelectAllObj();
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+	kpobject = objectList()->at( i );
+	if ( getPageOfObj( i, 0, 0 ) - 1 == _page )
+	    kpobject->setSelected( true );
     }
-
-    if ( _delPageMode == DPM_MOVE_OBJS || _delPageMode == DPM_DEL_MOVE_OBJS ) {
-        for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-            kpobject = objectList()->at( i );
-            if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
-                kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() - _h );
-        }
+    deleteObjs( false );
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+	kpobject = objectList()->at( i );
+	if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
+	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() - _h );
     }
 
     for ( kpobject = objectList()->first(); kpobject; kpobject = objectList()->next() ) {
-        if ( kpobject->getType() == OT_TEXT )
-            ( (KPTextObject*)kpobject )->recalcPageNum( this );
+	if ( kpobject->getType() == OT_TEXT )
+	    ( (KPTextObject*)kpobject )->recalcPageNum( this );
     }
 
     _backgroundList.remove( _page );
@@ -3354,43 +3358,52 @@ void KPresenterDoc::deletePage( int _page, DelPageMode _delPageMode )
 }
 
 /*================================================================*/
-void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _insPos )
+int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate )
 {
     KPObject *kpobject = 0;
     int _h = getPageSize( 0, 0, 0 ).height();
 
-    if ( _insPos == IP_BEFORE ) _page--;
+    if ( _insPos == IP_BEFORE )
+	_page--;
 
-    if ( _insPageMode == IPM_MOVE_OBJS ) {
-        for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-            kpobject = objectList()->at( i );
-            if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
-                kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() + _h );
-        }
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+	kpobject = objectList()->at( i );
+	if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
+	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() + _h );
     }
 
-    if ( _insPos == IP_BEFORE ) _page++;
+    if ( _insPos == IP_BEFORE )
+	_page++;
 
-    QString _template;
-
-    if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-                                       "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
-                                       "kpresenter_template") != KoTemplateChooseDia::Cancel ) {
-        QFileInfo fileInfo( _template );
-        QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
-        _clean = false;
-
-        if ( _insPos == IP_AFTER ) _page++;
-        objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
-        loadNativeFormat( fileName );
-        objStartY = 0;
-        _clean = true;
-        setModified(true);
-        KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
-        _backgroundList.take( _backgroundList.count() - 1 );
-        _backgroundList.insert( _page, kpbackground );
+    QString _template, fileName;
+    if ( !chooseTemplate ) {
+	_template = getenv( "HOME" );
+	_template += "/.default.kpr";\
+	fileName = _template;
+    } else {
+	if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
+					   "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
+					   "kpresenter_template") != KoTemplateChooseDia::Cancel )
+	    return -1;
+	QFileInfo fileInfo( _template );
+	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
+	QString cmd = "cp " + fileName + " " + QString( getenv( "HOME" )  ) + "/.default.kpr";
+	system( cmd.latin1() );
     }
-    repaint( false );
+	
+    _clean = false;
+
+    if ( _insPos == IP_AFTER )
+	_page++;
+    objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
+    loadNativeFormat( fileName );
+    objStartY = 0;
+    _clean = true;
+    setModified(true);
+    KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
+    _backgroundList.take( _backgroundList.count() - 1 );
+    _backgroundList.insert( _page, kpbackground );
+    return _page;
 }
 
 /*================ return number of selected objs ================*/
@@ -3570,48 +3583,22 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
         return;
 
     if ( !insertPage )
-        loadObjects( parser, lst, true );
+	loadObjects( parser, lst, true );
     else {
-        InsPageDia *dia = new InsPageDia( 0, 0, this, currPage );
-        if ( dia->exec() == QDialog::Accepted ) {
-            KPObject *kpobject = 0;
-            int _h = getPageSize( 0, 0, 0 ).height();
-            InsertPos _insPos = dia->getInsertPos();
-            int _page = dia->getPageNum();
-            InsPageMode _insPageMode = dia->getInsPageMode();
-
-            if ( _insPos == IP_BEFORE )
-                _page--;
-
-            if ( _insPageMode == IPM_MOVE_OBJS ) {
-                for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-                    kpobject = objectList()->at( i );
-                    if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
-                        kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() + _h );
-                }
-            }
-
-            if ( _insPos == IP_BEFORE )
-                _page++;
-            pasting = false;
-            _clean = false;
-
-            if ( _insPos == IP_AFTER )
-                _page++;
-            objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
-            docAlreadyOpen = true;
-            loadXML( parser );
-            objStartY = 0;
-            _clean = true;
-            KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
-            _backgroundList.take( _backgroundList.count() - 1 );
-            _backgroundList.insert( _page, kpbackground );
-        }
-        delete dia;
+	int _page = currPage;
+	_page++;
+	objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
+	docAlreadyOpen = true;
+	loadXML( parser );
+	objStartY = 0;
+	_clean = true;
+	KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
+	_backgroundList.take( _backgroundList.count() - 1 );
+	_backgroundList.insert( _page, kpbackground );
     }
 
-    repaint( false );
-    setModified(true);
+    repaint( FALSE );
+    setModified(FALSE );
 }
 
 /*================= deselect all objs ===========================*/
@@ -3830,30 +3817,32 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, 
 
     KPObject *kpobject = 0L, *obj = 0L;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
-        if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) &&
-             dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->lines() > 0 )
-            objs.append( kpobject );
+	if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) &&
+	     dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->lines() > 0 )
+	    objs.append( kpobject );
 
     if ( objs.isEmpty() )
-        return QString( _title );
+	return QString( _title );
 
     obj = objs.first();
 
     kpobject = objs.first();
     for ( kpobject = objs.next(); kpobject; kpobject = objs.next() )
-        if ( kpobject->getOrig().y() < obj->getOrig().y() )
-            obj = kpobject;
+	if ( kpobject->getOrig().y() < obj->getOrig().y() )
+	    obj = kpobject;
 
     // this can't happen, but you never know :- )
     if ( !obj )
-        return QString( _title );
+	return QString( _title );
 
     KTextEdit *txtObj = dynamic_cast<KPTextObject*>( obj )->getKTextObject();
 
     QString txt = txtObj->text();
+    if ( txt.stripWhiteSpace().isEmpty() )
+	return _title;
     int i = txt.find( '\n' );
     if ( i == -1 )
-        return txt;
+	return txt;
     return txt.left( i );
 }
 
@@ -3870,26 +3859,9 @@ void KPresenterDoc::setFooter( bool b )
 }
 
 /*================================================================*/
-QValueList<int> KPresenterDoc::getSlides( int currPgNum )
+QValueList<int> KPresenterDoc::getSlides( int, KPresenterView *view )
 {
-    QValueList<int> lst;
-    switch ( presentSlides ) {
-    case PS_ALL:
-        for ( unsigned int i = 0;i < _backgroundList.count(); ++i )
-            lst.append( i + 1 );
-        break;
-    case PS_CURRENT:
-        lst.append( currPgNum );
-        break;
-    case PS_SELECTED:
-        QMap<int,bool>::Iterator it = selectedSlides.begin();
-        for ( ; it != selectedSlides.end(); ++it )
-            if ( ( *it ) )
-                lst.append( it.key() + 1 );
-        break;
-    }
-
-    return lst;
+    return view->selectedSlides();
 }
 
 /*================================================================*/

@@ -28,6 +28,7 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qguardedptr.h>
+#include <qsplitter.h>
 
 #include <qrect.h>
 #include <qpoint.h>
@@ -59,44 +60,31 @@ class EffectDia;
 class RotateDia;
 class ShadowDia;
 class KPPresStructView;
-class DelPageDia;
-class InsPageDia;
 class ConfPieDia;
 class ConfRectDia;
+class QToolButton;
+class SideBar;
 
 class KAction;
 
-/******************************************************************/
-/* class KPresenterFrame					  */
-/******************************************************************/
-/* class KPresenterFrame : public KoFrame
+class PageBase : public QWidget
 {
-    Q_OBJECT
-
 public:
+    PageBase( QWidget *parent, KPresenterView *v ) : QWidget( parent ), view( v ) {}
+    void resizeEvent( QResizeEvent *e );
 
-    // constructor
-    KPresenterFrame( KPresenterView*, KPresenterChild* );
+private:
+    KPresenterView *view;
 
-    // get child
-    KPresenterChild* child() {return m_pKPresenterChild; }
+};
 
-    // get view
-    KPresenterView* presenterView() {return m_pKPresenterView; }
-protected:
-    // child
-    KPresenterChild *m_pKPresenterChild;
-
-    // view
-    KPresenterView *m_pKPresenterView;
-
-    }; */
 
 /*****************************************************************/
 /* class KPresenterView						 */
 /*****************************************************************/
 class KPresenterView : public KoView
 {
+    friend class PageBase;
     Q_OBJECT
 
 public:
@@ -119,6 +107,13 @@ public:
 
     virtual void setupPrinter( QPrinter &printer );
     virtual void print( QPrinter &printer );
+
+    QValueList<int> selectedSlides() const;
+    QMap<int, bool > selectedSlideMap() const;
+    
+signals:
+    void currentPageChanged( int );
+
 
 public slots:
     // edit menu
@@ -168,6 +163,7 @@ public slots:
     virtual void extraLineEnd();
     virtual void extraWebPres();
     virtual void extraCreateTemplate();
+    virtual void extraDefaultTemplate();
     virtual void extraGroup();
     virtual void extraUnGroup();
 
@@ -221,6 +217,10 @@ public slots:
     virtual void penChosen( const QColor &c );
     virtual void brushChosen( const QColor &c );
 
+    void skipToPage( int _num );
+    void nextPage();
+    void prevPage();
+
 public:
     // create GUI - construct
     virtual void createGUI();
@@ -263,7 +263,6 @@ public:
     QScrollBar *getHScrollBar() { return horz; }
     QScrollBar *getVScrollBar() { return vert; }
 
-    void skipToPage( int _num );
     void makeRectVisible( QRect _rect );
 
     void restartPresStructView();
@@ -321,8 +320,6 @@ protected slots:
     void rotateOk();
     void shadowOk();
     void psvClosed();
-    void delPageOk( int, DelPageMode );
-    void insPageOk( int, InsPageMode, InsertPos );
     void confPieOk();
     void confRectOk();
 
@@ -408,8 +405,6 @@ protected:
     RotateDia *rotateDia;
     ShadowDia *shadowDia;
     KPPresStructView *presStructView;
-    DelPageDia *delPageDia;
-    InsPageDia *insPageDia;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
     QGuardedPtr<SearchDialog> searchDialog;
@@ -444,6 +439,7 @@ protected:
     bool m_bShowGUI;
     bool presStarted;
     bool allowWebPres;
+    int currPg;
 
     QSize oldSize;
 
@@ -538,8 +534,14 @@ protected:
     KAction *actionScreenPenWidth;
 
     KAction *actionColorBar;
+    KAction *actionExtraDefaultTemplate;
 
     DCOPObject *dcop;
+
+    QToolButton *pgNext, *pgPrev;
+    SideBar *sidebar;
+    QSplitter *splitter;
+    PageBase *pageBase;
 
 };
 

@@ -101,6 +101,7 @@
   <Separator/>
   <Action name="extra_webpres"/>
   <Action name="extra_template"/>
+  <Action name="extra_defaulttemplate"/>
   <Separator/>
   <Action name="extra_options"/>
  </Menu>

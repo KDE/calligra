@@ -42,7 +42,7 @@ KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &s
 {
     setMargin( 5 );
     setSpacing( 2 );
-    
+
     label = new QLabel( i18n( "Goto Page:" ), this );
 
     spinbox = new QComboBox( false, this );
@@ -51,13 +51,13 @@ KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &s
     unsigned int i = 0;
     for ( unsigned int j = 0; it != slides.end(); ++it, ++j ) {
 	QString t;
-	t = doc->getPageTitle( j, i18n( "Slide %1" ).arg( j + 1 ), fakt );
+	t = doc->getPageTitle( *it - 1, i18n( "Slide %1" ).arg( *it ), fakt );
 	spinbox->insertItem( QString( "%1 - %2" ).arg( *it ).arg( t ), -1 );
 	if ( *it == start )
 	    i = j;
     }
     spinbox->setCurrentItem( i );
-    
+
     spinbox->installEventFilter( this );
     label->installEventFilter( this );
 
@@ -71,7 +71,7 @@ KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &s
 
     show();
     QApplication::sendPostedEvents();
-    
+
     move( ( kapp->desktop()->width() - width() ) / 2,
 	  ( kapp->desktop()->height() - height() ) / 2 );
 }

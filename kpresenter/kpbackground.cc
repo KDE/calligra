@@ -165,28 +165,28 @@ void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
 void KPBackGround::restore()
 {
     if ( backType == BT_PICTURE )
-        setBackPixmap( key.dataKey.filename, key.dataKey.lastModified );
+	setBackPixmap( key.dataKey.filename, key.dataKey.lastModified );
 
     if ( backType == BT_CLIPART )
-        setBackClipFilename( clipKey.filename, clipKey.lastModified );
+	setBackClipFilename( clipKey.filename, clipKey.lastModified );
 
     if ( backType != BT_PICTURE && backPix ) {
-        pixmapCollection->removeRef( key );
-        backPix = 0L;
+	pixmapCollection->removeRef( key );
+	backPix = 0L;
     }
 
     if ( backType == BT_COLOR || backType == BT_CLIPART ||
-         backType == BT_PICTURE && backView == BV_CENTER ) {
-        if ( gradient ) {
-            gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
-            gradient = 0;
-        }
-        gradient = gradientCollection->getGradient( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
+	 backType == BT_PICTURE && backView == BV_CENTER ) {
+	if ( gradient ) {
+	    gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
+	    gradient = 0;
+	}
+	gradient = gradientCollection->getGradient( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
     }
 
     if ( backType == BT_PICTURE && backView != BV_CENTER && gradient ) {
-        gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
-        gradient = 0;
+	gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
+	gradient = 0;
     }
 }
 

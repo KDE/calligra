@@ -13,7 +13,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	page.cc ktextedit.cc styledia.cc \
 	qwmf.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc searchdia.cc \
-	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
+	shadowdia.cc presstructview.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
@@ -30,7 +30,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
-	textdialog.cc
+	textdialog.cc sidebar.cpp insertpagedia.ui
 
 libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
@@ -52,7 +52,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		qwmf.h global.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h searchdia.h shadowdia.h presstructview.h \
-		delpagedia.h inspagedia.h confpiedia.h confrectdia.h \
+		confpiedia.h confrectdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
@@ -65,7 +65,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		grpobjcmd.h commandhistory.h preview.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h textdialog.h
+		KPresenterBackgroundIface.h textdialog.h sidebar.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

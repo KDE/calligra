@@ -275,8 +275,8 @@ public:
     int getTopBorder();
     int getBottomBorder();
 
-    void deletePage( int _page, DelPageMode _delPageMode );
-    void insertPage( int _page, InsPageMode _insPageMode, InsertPos _insPos );
+    void deletePage( int _page );
+    int insertPage( int _page, InsertPos _insPos, bool chooseTemplate );
 
     void setObjectList( QList<KPObject> *_list ) {
         _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
@@ -298,13 +298,9 @@ public:
     void setFooter( bool b );
     KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
-    PresentSlides getPresentSlides() { return presentSlides; }
-    const QMap<int,bool> &getSelectedSlides() { return selectedSlides; }
-    void setPresentSlides( PresentSlides ps ) { presentSlides = ps; }
-    void setSelectedSlides( const QMap<int,bool> &ss ) { selectedSlides = QMap<int,bool>( ss ); }
-
-    QValueList<int> getSlides( int currPgNum );
-
+    QValueList<int> getSlides( int currPgNum, KPresenterView *view );
+    QMap<int, bool > getSelectedSlides() const { return selectedSlides; }
+    
     void copyPage( int num );
     virtual DCOPObject* dcopObject();
 
@@ -418,14 +414,13 @@ protected:
 
     QString urlIntern;
 
-    PresentSlides presentSlides;
-    QMap<int,bool> selectedSlides;
     QValueList<KPPixmapDataCollection::Key> usedPixmaps;
     DCOPObject *dcop;
 
     int saveOnlyPage;
     KTextEditFormatCollection *fCollection;
-
+    QMap<int, bool> selectedSlides;
+    
 };
 
 #endif

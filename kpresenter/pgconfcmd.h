@@ -36,10 +36,8 @@ class PgConfCmd : public Command
 public:
     PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                PageEffect _pageEffect, PresSpeed _presSpeed,
-               PresentSlides _presSlides, const QMap<int,bool> &_selectedSlides,
                bool _oldManualSwitch, bool _oldInfinitLoop,
                PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
-               PresentSlides _oldPresSlides, const QMap<int,bool> &_oldSelectedSlides,
                KPresenterDoc *_doc, int _pgNum );
 
     virtual void execute();
@@ -55,8 +53,6 @@ protected:
     PresSpeed presSpeed, oldPresSpeed;
     int pgNum;
     KPresenterDoc *doc;
-    PresentSlides presSlides, oldPresSlides;
-    QMap<int,bool> selectedSlides, oldSelectedSlides;
 
 };
 

@@ -581,7 +581,7 @@ void KTextEdit::drawCursor( bool visible )
 	qDebug( "something went wrong!" );
 	return;
     }
-    
+
     KTextEditString::Char *chr = cursor->parag()->at( cursor->index() );
 
     painter.setPen( QPen( chr->format->color() ) );
@@ -1376,7 +1376,6 @@ int KTextEdit::linesOfParagraph( int parag ) const
 
 int KTextEdit::lines() const
 {
-    qWarning( "WARNING: KTextEdit::lines() is slow - will be improved later..." );
     KTextEditParag *p = doc->firstParag();
     int l = 0;
     while ( p ) {
@@ -3233,7 +3232,7 @@ int KTextEditFormatterBreakWords::format( KTextEditParag *parag, int start )
     lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
     h = QMAX( h, tmph );
     lineStart->h = h;
-    
+
     // ############## unefficient!!!!!!!!!!!!!!!!!!!!!! - rewrite that!!!!
     if ( parag->alignment() & Qt::AlignHCenter || parag->alignment() & Qt::AlignRight ) {
 	int last = 0;
@@ -3258,7 +3257,7 @@ int KTextEditFormatterBreakWords::format( KTextEditParag *parag, int start )
 	}
     }
 
-    
+
     y += h + doc->paragSpacing( parag );
     return y;
 }

@@ -40,10 +40,9 @@
 /******************************************************************/
 
 /*================================================================*/
-PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
+PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
                       bool infLoop, bool swMan, int pgNum, PageEffect pageEffect,
-                      PresSpeed presSpeed, PresentSlides presSlides,
-                      const QMap<int,bool> &selectedSlides )
+                      PresSpeed presSpeed )
     : QDialog( parent, name, true )
 {
     back = new QVBox( this );
@@ -97,32 +96,14 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
     slidesCurrent = new QRadioButton( i18n( "&Current slide" ), slides );
     slidesSelected = new QRadioButton( i18n( "&Selected slides" ), slides );
 
-    switch ( presSlides ) {
-    case PS_ALL:
-        slidesAll->setChecked( true );
-        break;
-    case PS_CURRENT:
-        slidesCurrent->setChecked( true );
-        break;
-    case PS_SELECTED:
-        slidesSelected->setChecked( true );
-        break;
-    }
-
     lSlides = new QListView( slides );
     lSlides->addColumn( i18n( "Slide Nr." ) );
     lSlides->addColumn( i18n( "Slide Title" ) );
     lSlides->header()->setMovingEnabled( false );
     lSlides->setSorting( -1 );
 
-    for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-        QCheckListItem *item = new QCheckListItem( lSlides, "", QCheckListItem::CheckBox );
-        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i +1 ) ) );
-        if ( selectedSlides.contains( i ) )
-            item->setOn( *( selectedSlides.find( i ) ) );
-    }
-
+    slides->hide();
+    
     connect( slides, SIGNAL( clicked( int ) ),
              this, SLOT( presSlidesChanged( int ) ) );
 
@@ -139,8 +120,6 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
     connect( okBut, SIGNAL( clicked() ), this, SLOT( confDiaOk() ) );
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    resize( 530, 550 );
 
     presSlidesChanged( 0 );
 }
@@ -185,27 +164,3 @@ PresSpeed PgConfDia::getPresSpeed()
     return static_cast<PresSpeed>( speedCombo->currentItem() );
 }
 
-/*================================================================*/
-PresentSlides PgConfDia::getPresentSlides()
-{
-    if ( slidesAll->isChecked() )
-        return PS_ALL;
-    else if ( slidesCurrent->isChecked() )
-        return PS_CURRENT;
-    else if ( slidesSelected->isChecked() )
-        return PS_SELECTED;
-
-    return PS_ALL;
-}
-
-/*================================================================*/
-QMap<int,bool> PgConfDia::getSelectedSlides()
-{
-    QMap<int,bool> m;
-    QListViewItemIterator it( lSlides );
-    for ( ; it.current(); ++it )
-        m.insert( it.current()->text( 0 ).toInt() - 1,
-                  dynamic_cast<QCheckListItem*>( it.current() )->isOn() );
-
-    return m;
-}

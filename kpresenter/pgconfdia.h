@@ -49,14 +49,11 @@ public:
     // constructor - destructor
     PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
                bool infLoop, bool swMan, int pgNum,
-               PageEffect pageEffect, PresSpeed presSpeed,
-               PresentSlides presSlides, const QMap<int,bool> &selectedSlides );
+               PageEffect pageEffect, PresSpeed presSpeed );
     bool getInfinitLoop();
     bool getManualSwitch();
     PageEffect getPageEffect();
     PresSpeed getPresSpeed();
-    PresentSlides getPresentSlides();
-    QMap<int,bool> getSelectedSlides();
 
 protected:
     void resizeEvent( QResizeEvent *e );
