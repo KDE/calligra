@@ -1750,7 +1750,7 @@ bool KSpreadCell::calc(bool delay)
   clearFlag(Flag_Progress);
 
   // if our value changed the cells that depend on us need to be updated
-  if ( m_strFormulaOut != m_strOutText )
+  if ( m_strFormulaOut != m_strOutText ) 
   {
     setFlag(Flag_UpdatingDeps);
 
@@ -4082,7 +4082,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         // are position independent.
         if ( isFormula() )
         {
-            calc();
+            // calc();
             QDomElement text = doc.createElement( "text" );
             text.appendChild( doc.createTextNode( encodeFormula() ) );
             cell.appendChild( text );
