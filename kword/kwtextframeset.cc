@@ -312,7 +312,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     for ( ; cit.current() ; ++cit )
     {
         KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
-        if ( var && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+        if ( var && !var->isDeleted() && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
         {
             //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1
             //          << " and invalidating parag " << var->paragraph() << endl;
