@@ -174,11 +174,9 @@ bool KoPictureClipart::isClipartAsKOffice1Dot1(void) const
 
 QString KoPictureClipart::getMimeType(const QString& extension) const
 {
-    // ### TODO: give QPicture a mime type
-    // ### TODO/FIXME: be sure to handle *.qpic (no mime type) and *.wmf (could be a QPicture)
     if (extension=="svg")
         return "image/svg+xml";
     else
-        return QString(UNKNOWN_MIME_TYPE);
+        return "image/x-vnd.trolltech.qpicture";
 }
 
