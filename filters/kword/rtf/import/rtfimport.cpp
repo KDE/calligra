@@ -432,7 +432,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
 	    token.next();
 
-	    if (token.type == RTFTokenizer::ControlWord && !strcmp( token.text, "*" ))
+	    if (token.type == RTFTokenizer::ControlWord && !qstrcmp( token.text, "*" ))
 	    {
 		// {\*\control ...} destination
 		ignoreUnknown = true;
@@ -1237,8 +1237,9 @@ void RTFImport::insertUnicodeSymbol( RTFProperty * )
 	}
 	else if (token.type == RTFTokenizer::PlainText)
 	{
-	    if (strlen( token.text ) < i)
-		i -= strlen( token.text );
+            const uint len = qstrlen( token.text );
+	    if ( len < i )
+		i -= len;
 	    else
 	    {
 		token.text += i;
@@ -1417,7 +1418,7 @@ void RTFImport::parsePicture( RTFProperty * )
 	{
 	    *(--token.text) = picture.nibble;
 	}
-	uint n = (strlen( token.text ) >> 1);
+	uint n = qstrlen( token.text ) >> 1;
 	picture.bits.resize( picture.bits.size() + n );
 	char *src = token.text;
 	char *dst = (picture.bits.data() + picture.bits.size() - n);
@@ -1921,7 +1922,7 @@ void RTFImport::parseRichText( RTFProperty * )
 	// Ignore hidden text
 	if (!state.format.hidden)
 	{
-	    int len = (token.text[0] < 0) ? 1 : strlen( token.text );
+	    const int len = (token.text[0] < 0) ? 1 : qstrlen( token.text );
 
 	    // Check and store format changes
 	    if ( textState->formats.isEmpty() ||
