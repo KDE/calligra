@@ -56,6 +56,7 @@ ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
 // processing for the following tags and attributes:
 //
 // DOC
+//   PAPER format= orientation=
 //   FRAMESETS
 //     FRAMESET
 //       PARAGRAPH
@@ -64,6 +65,7 @@ ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
 //            FORMAT id=1 pos= len=
 //          LAYOUT
 //            NAME value=
+//            FLOW align=
 
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
@@ -85,21 +87,43 @@ static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
     AllowNoSubtags (myNode);
 }
 
+static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString & )
+{
+    QString *align = (QString *) tagData;
+
+    *align = QString::null;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "align", "QString", (void *) align ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+}
+
+class LayoutData
+{
+public:
+    LayoutData(void)
+    {
+        name=QString::null;
+        flow=QString::null;
+    }
+    QString name; // Name of the style
+    QString flow; // Flow
+};
 
 static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
 {
-    QString *layout = (QString *) tagData;
+    LayoutData *layout = (LayoutData *) tagData;
 
     AllowNoAttributes (myNode);
 
-    *layout = "";
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag, (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag, (void *) &layout->name ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "COUNTER",   NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FORMAT",    NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",      NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag, (void *) &layout->flow ) );
     ProcessSubtags (myNode, tagProcessingList, outputText);
 }
 
@@ -300,7 +324,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
     ProcessSubtags (myNode, tagProcessingList, formatData.abiprops);
 
     //Find the last semi-comma
-    int result=formatData.abiprops.findRev(";");
+    const int result=formatData.abiprops.findRev(";");
 
     if (result>=0)
     {
@@ -426,18 +450,17 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
 
             if ((*paraFormatDataIt).abiprops.isEmpty())
             {
-                //It's just normal text, so there is no "props" attribute
-                //Note: you must use a <c> tag!
-                outputText += "<c>";
+                // It's just normal text, so we do not need a <c> element!
+                outputText += partialText;
             }
             else
-            { //Text with properties
+            { // Text with properties, so use a <c> element!
                 outputText += "<c props=\"";
                 outputText += (*paraFormatDataIt).abiprops;
                 outputText += "\">";
+                outputText += partialText;
+                outputText += "</c>";
             }
-            outputText += partialText;
-            outputText += "</c>";
        }
 
     }
@@ -451,10 +474,10 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 
     QString paraText;
     QValueList<FormatData> paraFormatDataList;
-    QString paraLayout;
+    LayoutData paraLayout;
     QValueList<TagProcessing> tagProcessingList;
     bool hardbreak=false; // Have we an hard break?
-	
+
     tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
     tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
     tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
@@ -467,44 +490,60 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         outputText+="<pbr/>\n";
     }
 
-    //Note: AbiWord at the state of version 0.7.12 cannot use styles yet but styles are defined in the file format!
+    //Note: AbiWord at the state of version 0.7.13 has no style dialog but can use styles!
 
-#if 0
-    if ( paraLayout == "Head 1" )
+    QString style; // Style attribute for <p> element
+    QString props; // Props attribute for <p> element
+
+    // TODO: Change style names in a more elegant way!
+    if ( paraLayout.name == "Head 1" )
     {
-        outputText += "<p style=\"Heading 1\">";  //Warning: No trailing white space or else it's in the text!!!
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        style = "Heading 1";  //Warning: No trailing white space or else it's in the text!!!
     }
-    else if ( paraLayout == "Head 2" )
+    else if ( paraLayout.name == "Head 2" )
     {
-        outputText += "<p style=\"Heading 2\">";  //Warning: No trailing white space or else it's in the text!!!
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        style = "Heading 2";  //Warning: No trailing white space or else it's in the text!!!
     }
-    else if ( paraLayout == "Head 3" )
+    else if ( paraLayout.name == "Head 3" )
     {
-        outputText += "<p style=\"Heading 3\">";  //Warning: No trailing white space or else it's in the text!!!
+        style = "Heading 3";  //Warning: No trailing white space or else it's in the text!!!
     }
-    /*
-    else if ( paraLayout == "Bullet List" )
-    {
-        outputText += "<p>"; //TODO
-    }
-    else if ( paraLayout == "Enumerated List" )
-    {
-        outputText += "<p>"; //TODO
-    }
-    else if ( paraLayout == "Alphabetical List" )
-    {
-        outputText += "<p>"; //TODO
-    }
-    */
     else
     {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
-        outputText += "<p style=\"Normal\">";  //Warning: No trailing white space or else it's in the text!!!
+        style = "Normal";  //Warning: No trailing white space or else it's in the text!!!
     }
-#else
-    outputText += "<p>";  //Warning: No trailing white space or else it's in the text!!!
-#endif
+
+    // Check if the current flow is a valid one for AbiWord.
+    if ( (paraLayout.flow == "left") || (paraLayout.flow == "right") || (paraLayout.flow == "center")  || (paraLayout.flow == "justify"))
+    {
+        props += "text-align:";
+        props += paraLayout.flow;
+        props += "; ";
+    }
+
+    outputText += "<p";  //Warning: No trailing white space or else it's in the text!!!
+    if (!style.isEmpty())
+    {
+        outputText += " style=\"";
+        outputText += style;
+        outputText += "\"";
+    }
+    if (!props.isEmpty())
+    {
+        // Find the last semi-comma
+        // Note: as in CSS2, semi-commas only separates instructions (like in PASCAL) and do not terminate them (like in C)
+        const int result=props.findRev(";");
+        if (result>=0)
+        {
+            // Remove the last semi-comma and the space thereafter
+            props.remove(result,2);
+        }
+
+        outputText += " props=\"";
+        outputText += props;
+        outputText += "\"";
+    }
+    outputText += ">";  //Warning: No trailing white space or else it's in the text!!!
     ProcessParagraphData ( paraText, paraFormatDataList, outputText );
     outputText += "</p>\n";
 }
@@ -576,6 +615,93 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, QString   &outputTe
     ProcessSubtags (myNode, tagProcessingList, outputText);
 }
 
+static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
+{
+    int format=-1;
+    int orientation=-1;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "format",          "int", (void*) &format ) );
+    attrProcessingList.append ( AttrProcessing ( "width",           "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "height",          "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "orientation",     "int", (void*) &orientation ) );
+    attrProcessingList.append ( AttrProcessing ( "columns",         "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "columnspacing",   "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "hType",           "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "fType",           "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "spHeadBody",      "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "spFootBody",      "", NULL ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+
+    outputText += "<pagesize ";
+
+    switch (format)
+    {
+        // European A formats
+        case 0: // A3
+        {
+            outputText += "pagetype=\"A3\" width=\"29,7\" height=\"42,0\" units=\"cm\" ";
+            break;
+        }
+        case 1: // A4
+        {
+            outputText += "pagetype=\"A4\" width=\"21,0\" height=\"29,7\" units=\"cm\" ";
+            break;
+        }
+        case 2: // A5
+        {
+            outputText += "pagetype=\"A5\" width=\"14,8\" height=\"21,0\" units=\"cm\" ";
+            break;
+        }
+        // European B formats
+        case 7: // B5
+        {
+            outputText += "pagetype=\"B5\" width=\"17,6\" height=\"25,0\" units=\"cm\" ";
+            break;
+        }
+        // American formats
+        case 3: // Letter
+        {
+            outputText += "pagetype=\"Letter\" width=\"8,5\" height=\"11,0\" units=\"inch\" ";
+            break;
+        }
+        case 4: // Legal
+        {
+            outputText += "pagetype=\"Legal\" width=\"8,5\" height=\"14,0\" units=\"inch\" ";
+            break;
+        }
+        case 8: // US Executive (does not exists in AbiWord!)
+        {
+            outputText += "pagetype=\"Custom\" width=\"7,5\" height=\"10,0\" units=\"inch\" ";
+            break;
+        }
+        // Other!
+        case 5: // Screen
+        case 6: // Custom
+        default:
+        { // TODO: do a right implemntation!
+            outputText += "pagetype=\"Custom\" width=\"21,0\" height=\"29,7\" units=\"cm\" "; // GRR: Provisory!
+            break;
+        }
+    }
+
+    outputText += "orientation=\"";
+    if (1==orientation)
+    {
+        outputText += "landscape";
+    }
+    else
+    {
+        outputText += "portrait";
+    }
+    outputText += "\" ";
+
+    outputText += "page-scale=\"1,0\"/>\n"; // What is this exactly?
+
+}
+
 static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
 {
     QValueList<AttrProcessing> attrProcessingList;
@@ -585,7 +711,7 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
     ProcessAttributes (myNode, attrProcessingList);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
     tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
@@ -672,10 +798,10 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
     stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     // First magic: "<abiword"
-    stringBufOut += "<abiword version=\"unnumbered\">\n";
+    stringBufOut += "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
     stringBufOut += "<!-- This file is an AbiWord document. -->\n";
-    // QUESTION: Do we need the full four line comment header?
+    // We have chosen NOT to have the full comment header that AbiWord files normally have.
     stringBufOut += "\n";
 
     // Put the rest of the information in the way AbiWord puts its debug info!
