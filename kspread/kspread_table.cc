@@ -2460,10 +2460,11 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+    KSpreadCell* cell;
     for ( int x = r.left(); x <= r.right(); x++ )
     {
       int y = r.bottom();
-      KSpreadCell *cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y );
       cell->setBottomBorderPen(pen);
     }
     emit sig_updateView( this, r );
@@ -2526,6 +2527,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.right());
     cl->setRightBorderPen(pen);
 
+    KSpreadCell* cell;
     rw =m_rows.first();
     for( ; rw; rw = rw->next() )
     {
@@ -2533,7 +2535,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
       {
         for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          KSpreadCell *cell = nonDefaultCell( i, rw->row() );
+          cell = nonDefaultCell( i, rw->row() );
           cell->setRightBorderPen(pen);
         }
       }
@@ -2551,10 +2553,11 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+    KSpreadCell* cell;
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
       int x = r.right();
-      KSpreadCell *cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y );
       cell->setRightBorderPen(pen);
     }
     emit sig_updateView( this, r );
@@ -2611,6 +2614,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
     cl->setLeftBorderPen(pen);
 
+    KSpreadCell* cell;    
     rw =m_rows.first();
     for( ; rw; rw = rw->next() )
     {
@@ -2618,7 +2622,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
       {
         for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          KSpreadCell *cell = nonDefaultCell( i,  rw->row() );
+          cell = nonDefaultCell( i,  rw->row() );
           cell->setLeftBorderPen(pen);
         }
       }
@@ -2635,11 +2639,12 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
                                                                r,title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
-
+    
+    KSpreadCell* cell;
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
       int x = r.left();
-      KSpreadCell *cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y );
       cell->setLeftBorderPen(pen);
     }
     emit sig_updateView( this, r );
@@ -2697,10 +2702,11 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+    KSpreadCell* cell;
     for ( int x = r.left(); x <= r.right(); x++ )
     {
       int y = r.top();
-      KSpreadCell *cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y );
       cell->setTopBorderPen(pen);
     }
     emit sig_updateView( this, r );
@@ -2748,9 +2754,10 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
     rw->setTopBorderPen(pen);
     rw=nonDefaultRowLayout(m_rctSelection.bottom());
     rw->setBottomBorderPen(pen);
+    KSpreadCell* cell;
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
-      KSpreadCell *cell = nonDefaultCell( r.left(), y );
+      cell = nonDefaultCell( r.left(), y );
       cell->setLeftBorderPen(pen);
     }
     emit sig_updateView( this );
@@ -2779,9 +2786,10 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
     cl->setLeftBorderPen(pen);
     cl=nonDefaultColumnLayout(m_rctSelection.right());
     cl->setRightBorderPen(pen);
+    KSpreadCell* cell;
     for ( int x = r.left(); x <= r.right(); x++ )
     {
-      KSpreadCell *cell = nonDefaultCell( x, r.top() );
+      cell = nonDefaultCell( x, r.top() );
       cell->setTopBorderPen(pen);
     }
     emit sig_updateView( this );
@@ -4507,8 +4515,8 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     }
 
     KSpreadCell* refreshCell = 0;
-    QDomElement c = e.firstChild().toElement();
     KSpreadCell *cell;
+    QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
         if ( c.tagName() == "cell" )
@@ -5571,9 +5579,10 @@ void KSpreadTable::insertCell( KSpreadCell *_cell )
   /* a full scan of all the tables isn't fun, but that was already happening every time a cell is updated
      anyway.  So this isn't any worse than what we've had */
   QPtrListIterator<KSpreadTable> it( map()->tableList() );
+  KSpreadCell* c;
     for( ; it.current(); ++it )
     {
-        KSpreadCell* c = it.current()->firstCell();
+        c = it.current()->firstCell();
         for( ; c; c = c->nextCell() )
 	{
 	  if ( c->cellDependsOn(this, _cell->column(), _cell->row()) )
