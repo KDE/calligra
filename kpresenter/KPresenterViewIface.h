@@ -47,6 +47,8 @@ k_dcop:
 
     // view menu
     virtual void newView();
+    virtual void viewShowSideBar();
+    virtual void viewShowNoteBar();
 
     // insert menu
     virtual void insertPage();
@@ -94,6 +96,8 @@ k_dcop:
 
     virtual void extraAlignObjs();
 
+    virtual void extraAutoFormat();
+
     // screen menu
     virtual void screenConfigPages();
     virtual void screenPresStructView();
@@ -127,6 +131,7 @@ k_dcop:
     virtual void textSettings();
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
+    virtual void formatParagraph();
 
     // in presentation mode
     virtual int getCurrentPresPage();

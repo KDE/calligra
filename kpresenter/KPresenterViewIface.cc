@@ -484,3 +484,23 @@ void KPresenterViewIface::changeCaseOfText()
 {
     view->changeCaseOfText();
 }
+
+void KPresenterViewIface::viewShowSideBar()
+{
+    view->viewShowSideBar();
+}
+
+void KPresenterViewIface::viewShowNoteBar()
+{
+    view->viewShowNoteBar();
+}
+
+void KPresenterViewIface::formatParagraph()
+{
+    view->formatParagraph();
+}
+
+void KPresenterViewIface::extraAutoFormat()
+{
+    view->extraAutoFormat();
+}

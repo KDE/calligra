@@ -1578,21 +1578,6 @@ void KPresenterView::textEnumList()
         if(cmd)
             m_pKPresenterDoc->addCommand(cmd);
     }
-#if 0
-    KPTextObject *txtObj = page->currentTextObjectView()->textObject();
-    if ( !txtObj )
-	txtObj = page->selectedTextObj();
-    if ( txtObj ) {
-	if ( txtObj->paragType() != KTextEdit::EnumList ) {
-	    txtObj->setParagType( KTextEdit::EnumList );
-	    txtObj->setListDepth( 0 );
-	}
-	if ( !page->currentTextObjectView() )
-	    page->repaint( false );
-	else
-	    txtObj->repaint( FALSE );
-    }
-#endif
 }
 
 /*===============================================================*/
@@ -1621,21 +1606,6 @@ void KPresenterView::textUnsortList()
         if(cmd)
             m_pKPresenterDoc->addCommand(cmd);
     }
-#if 0
-    KPTextObject *txtObj = page->currentTextObjectView()->textObject();
-    if ( !txtObj )
-	txtObj = page->selectedTextObj();
-    if ( txtObj ) {
-	if ( txtObj->paragType() != KTextEdit::BulletList ) {
-	    txtObj->setParagType( KTextEdit::BulletList );
-	    txtObj->setListDepth( 0 );
-	}
-	if ( !page->currentTextObjectView() )
-	    page->repaint( false );
-	else
-	    txtObj->repaint( FALSE );
-    }
-#endif
 }
 
 /*===============================================================*/
@@ -1652,18 +1622,6 @@ void KPresenterView::textDepthPlus()
             m_pKPresenterDoc->addCommand(cmd);
     }
 
-#if 0
-    KPTextObject *txtObj = page->currentTextObjectView()->textObject();
-    if ( !txtObj )
-	txtObj = page->selectedTextObj();
-    if ( txtObj ) {
-	txtObj->setListDepth( 1 );
-	if ( !page->currentTextObjectView() )
-	    page->repaint( false );
-	else
-	    txtObj->repaint( FALSE );
-    }
-#endif
 }
 
 /*===============================================================*/
@@ -1683,18 +1641,6 @@ void KPresenterView::textDepthMinus()
         }
     }
 
-#if 0
-    KPTextObject *txtObj = page->currentTextObjectView();
-    if ( !txtObj )
-	txtObj = page->selectedTextObj();
-    if ( txtObj ) {
-	txtObj->setListDepth( -1 );
-	if ( !page->currentTextObjectView() )
-	    page->repaint( false );
-	else
-	    txtObj->repaint( FALSE );
-    }
-#endif
 }
 
 /*===============================================================*/
@@ -4604,15 +4550,6 @@ void KPresenterView::tabListChanged( const KoTabulatorList & tabList )
         return;
 
     page->setTabList( tabList );
-
-#if 0
-    KPTextView *edit=page->currentTextObjectView();
-    if (!edit)
-        return;
-    KCommand *cmd=edit->setTabListCommand( tabList );
-    if(cmd)
-        m_pKPresenterDoc->addCommand(cmd);
-#endif
 }
 
 void KPresenterView::newFirstIndent( double _firstIndent )
