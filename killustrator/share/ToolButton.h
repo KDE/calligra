@@ -32,6 +32,7 @@ class ToolButton : public QPushButton {
   Q_OBJECT
 public:
   ToolButton (const QPixmap& pixmap, QWidget *parent = 0L, 
+              const char *tooltip = 0L,
 	      const char *name = 0L);
   ToolButton (QWidget *parent = 0L, const char *name = 0L) :
     QPushButton (parent, name) {}

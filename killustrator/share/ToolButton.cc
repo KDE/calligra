@@ -22,15 +22,18 @@
 
 */
 
+#include <qtooltip.h>
 #include "ToolButton.h"
 #include "ToolButton.moc"
 
 ToolButton::ToolButton (const QPixmap& pixmap, QWidget *parent, 
-			const char *name) :
+			const char* tooltip, const char *name) :
   QPushButton (parent, name) {
     setPixmap (pixmap);
     setFixedSize (22, 22);
     setToggleButton (true);
+    if (tooltip)
+      QToolTip::add (this, tooltip);
 }
 
 void ToolButton::mousePressEvent (QMouseEvent *event) {
