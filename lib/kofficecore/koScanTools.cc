@@ -18,7 +18,6 @@
 */
 
 #include "koScanTools.h"
-#include <opIMR.h>
 
 #include <stdlib.h>
 #include <stdio.h>
