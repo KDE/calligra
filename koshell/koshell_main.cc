@@ -23,11 +23,12 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <config.h>
 
 #include "koshell_shell.h"
 
 static const char* description=I18N_NOOP("KOffice Workspace");
-static const char* version="1.2post";
+static const char* version=VERSION;
 
 int main( int argc, char **argv )
 {

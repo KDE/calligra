@@ -7,9 +7,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <config.h>
 
 static const char* description=I18N_NOOP("KOffice Chart Generator");
-static const char* version="1.2";
+static const char* version=VERSION;
 
 KAboutData * newKChartAboutData()
 {

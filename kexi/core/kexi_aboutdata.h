@@ -20,17 +20,18 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <config.h>
 
 static const char *description =
 	I18N_NOOP("Database Management");
 
-static const char *version="0.1";
+static const char *version=VERSION;
 
 KAboutData *newKexiAboutData()
 {
 	KAboutData *aboutData=new KAboutData( "kexi", I18N_NOOP("Kexi"),
 		version, description, KAboutData::License_GPL,
-		"(c) 2002, Kexi Team", 0, "http://luci.bux.at/projects/kexi", "lucijan@gmx.at");
+		I18N_NOOP("(c) 2002, Kexi Team"), 0, "http://luci.bux.at/projects/kexi", "lucijan@gmx.at");
 	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@gmx.at");
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
 	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Formdesigner, UIModes & much more"), "jowenn@kde.org");
