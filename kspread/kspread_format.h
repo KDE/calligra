@@ -55,8 +55,8 @@ public:
 
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
-		     PFactor = 0x04,
-		     PPrefix = 0x08,
+         //PFactor was here
+         PPrefix = 0x08,
 		     PPostfix = 0x10,
 		     PLeftBorder = 0x20,
 		     PRightBorder = 0x40,
@@ -168,7 +168,6 @@ public:
 
     virtual void setAlign( Align _align );
     virtual void setAlignY( AlignY _alignY );
-    virtual void setFactor( double _d );
     virtual void setPrefix( const QString& _prefix );
     virtual void setPostfix( const QString& _postfix );
     virtual void setPrecision( int _p );
@@ -335,8 +334,6 @@ public:
 
     virtual Align align( int col, int row ) const;
     virtual AlignY alignY( int col, int row ) const;
-
-    virtual double factor( int col, int row ) const;
 
     virtual bool multiRow( int col, int row ) const;
 

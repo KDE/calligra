@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2004 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2004 Tomas Mecir <mecirt@gmail.com>
+             (C) 2002-2004 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 John Dailey <dailey@vt.edu>
@@ -419,23 +420,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
 
   indent = obj->getIndent(_left, _top);
 
-  cellText = obj->text();
-
-  if ( obj->value().isNumber() || obj->value().isBoolean() )
-  {
-    m_bValue = true;
-    m_value  = obj->value().asFloat();
-  }
-  else if (obj->isDate())
-  {
-    m_bDate=true;
-    m_time  = obj->value().asDateTime();
-  }
-  else if (obj->isTime())
-  {
-    m_bTime = true;
-    m_time  = obj->value().asDateTime();
-  }
+  value = obj->value();
 
   RowFormat *rl;
   ColumnFormat *cl;
@@ -698,8 +683,6 @@ void CellFormatDlg::initGUI()
   bHideFormula   = m_style->hasProperty( KSpreadStyle::PHideFormula );
   bHideAll       = m_style->hasProperty( KSpreadStyle::PHideAll );
   bIsProtected   = !m_style->hasProperty( KSpreadStyle::PNotProtected );
-
-  cellText = i18n( "The quick brown fox jumps over the lazy dog" );
 }
 
 CellFormatDlg::~CellFormatDlg()
@@ -718,10 +701,6 @@ void CellFormatDlg::initMembers()
   formatRedNeverSignedPixmap   = 0L;
   formatAlwaysSignedPixmap     = 0L;
   formatRedAlwaysSignedPixmap  = 0L;
-
-  m_bValue = false;
-  m_bDate  = false;
-  m_bTime  = false;
 
   // We assume, that all other objects have the same values
   for ( int i = 0; i < BorderType_END; ++i )
@@ -1171,38 +1150,41 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
 
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    QGridLayout *grid = new QGridLayout(grp,10,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout(grp,11,2,KDialog::marginHint(), KDialog::spacingHint());
 
     int fHeight = grp->fontMetrics().height();
     grid->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     grp->setRadioButtonExclusive( true );
+    generic=new QRadioButton(i18n("Generic"),grp);
+    grid->addWidget(generic,1,0);
+    
     number=new QRadioButton(i18n("Number"),grp);
-    grid->addWidget(number,1,0);
+    grid->addWidget(number,2,0);
 
     percent=new QRadioButton(i18n("Percent"),grp);
-    grid->addWidget(percent,2,0);
+    grid->addWidget(percent,3,0);
 
     money=new QRadioButton(i18n("Money"),grp);
-    grid->addWidget(money,3,0);
+    grid->addWidget(money,4,0);
 
     scientific=new QRadioButton(i18n("Scientific"),grp);
-    grid->addWidget(scientific,4,0);
+    grid->addWidget(scientific,5,0);
 
     fraction=new QRadioButton(i18n("Fraction"),grp);
-    grid->addWidget(fraction,5,0);
+    grid->addWidget(fraction,6,0);
 
     date=new QRadioButton(i18n("Date format"),grp);
-    grid->addWidget(date,6,0);
+    grid->addWidget(date,7,0);
 
     time=new QRadioButton(i18n("Time format"),grp);
-    grid->addWidget(time,7,0);
+    grid->addWidget(time,8,0);
 
     textFormat=new QRadioButton(i18n("Text"),grp);
-    grid->addWidget(textFormat,8,0);
+    grid->addWidget(textFormat,9,0);
 
     customFormat=new QRadioButton(i18n("Custom"),grp);
-    grid->addWidget(customFormat,9,0);
+    grid->addWidget(customFormat,10,0);
     customFormat->setEnabled( false );
 
     QGroupBox *box2 = new QGroupBox( grp, "Box");
@@ -1212,7 +1194,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     exampleLabel=new QLabel(box2);
     grid3->addWidget(exampleLabel,0,1);
 
-    grid->addMultiCellWidget(box2,8,9,1,1);
+    grid->addMultiCellWidget(box2,9,10,1,1);
 
     customFormatEdit = new QLineEdit( grp );
     grid->addMultiCellWidget( customFormatEdit, 1, 1, 1, 1 );
@@ -1323,9 +1305,10 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     layout->addWidget(box);
 
     cellFormatType=dlg->formatType;
+    newFormatType = cellFormatType;
 
     if (!cellFormatType)
-          number->setChecked(true);
+          generic->setChecked(true);
     else
     {
         if (cellFormatType==Number_format)
@@ -1355,30 +1338,11 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
         }
         else if ( cellFormatType == Scientific_format )
           scientific->setChecked(true);
-        else if ( cellFormatType == TextDate_format
-                  || cellFormatType == ShortDate_format
-                  || ( ( (int)( cellFormatType ) >= 200 ) && ( (int)(cellFormatType) <= 217 ) ) )
+        else if ( formatIsDate (cellFormatType) )
                 date->setChecked(true);
-        else if ( cellFormatType == Time_format
-                  || cellFormatType == SecondeTime_format
-                  || cellFormatType == Time_format1
-                  || cellFormatType == Time_format2
-                  || cellFormatType == Time_format3
-                  || cellFormatType == Time_format4
-                  || cellFormatType == Time_format5
-                  || cellFormatType == Time_format6
-                  || cellFormatType == Time_format7
-                  || cellFormatType == Time_format8)
+        else if ( formatIsTime (cellFormatType) )
           time->setChecked(true);
-        else if ( cellFormatType == fraction_half
-                  || cellFormatType == fraction_quarter ||
-                  cellFormatType == fraction_eighth ||
-                  cellFormatType == fraction_sixteenth ||
-                  cellFormatType == fraction_tenth ||
-                  cellFormatType == fraction_hundredth ||
-                  cellFormatType == fraction_one_digit ||
-                  cellFormatType == fraction_two_digits ||
-                  cellFormatType == fraction_three_digits)
+        else if ( formatIsFraction (cellFormatType) )
           fraction->setChecked(true);
 	else if (cellFormatType == Text_format)
 	  textFormat->setChecked(true);
@@ -1386,6 +1350,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 	  customFormat->setChecked(true);
         }
 
+    connect(generic,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(fraction,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(money,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(date,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
@@ -1423,7 +1388,7 @@ void CellFormatPageFloat::slotChangeState()
     listFormat->clear();
     currency->hide();
     currencyLabel->hide();
-    if (dlg->cellText.isEmpty() || dlg->m_bValue || !dlg->isSingleCell())
+    if (!dlg->isSingleCell())
         {
             precision->setEnabled(true);
             prefix->setEnabled(true);
@@ -1437,10 +1402,9 @@ void CellFormatPageFloat::slotChangeState()
             postfix->setEnabled(false);
             format->setEnabled(false);
         }
-    if (number->isChecked())
-        listFormat->setEnabled(false);
-    else if (percent->isChecked())
-        listFormat->setEnabled(false);
+    if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
+        scientific->isChecked() || textFormat->isChecked())
+      listFormat->setEnabled(false);
     else if (money->isChecked())
     {
         listFormat->setEnabled(false);
@@ -1448,8 +1412,6 @@ void CellFormatPageFloat::slotChangeState()
         currency->show();
         currencyLabel->show();
     }
-    else if (scientific->isChecked())
-        listFormat->setEnabled(false);
     else if (date->isChecked())
         {
             format->setEnabled(false);
@@ -1505,7 +1467,7 @@ void CellFormatPageFloat::slotChangeState()
 
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
-            QDateTime tmpTime(QDate(1900, 1, 2), QTime(10, 35, 25));
+            QDateTime tmpTime (QDate (1, 1, 1900), QTime (10, 35, 25));
             KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
             list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format1);
             list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format2);
@@ -1540,10 +1502,6 @@ void CellFormatPageFloat::slotChangeState()
             else
                 listFormat->setCurrentItem(0);
         }
-    else if (textFormat->isChecked())
-      {
-	listFormat->setEnabled(false);
-      }
 
     if (customFormat->isChecked())
     {
@@ -1558,76 +1516,19 @@ void CellFormatPageFloat::slotChangeState()
       customFormatEdit->setHidden( true );
 
     m_bFormatTypeChanged=true;
-    if ( date->isChecked() && dlg->m_bDate)
-        makeDateFormat();
-    else
-        makeformat();
+        
+    makeformat();
 }
 
+/*
 void CellFormatPageFloat::makeDateFormat()
 {
-    FormatType tmpFormat=ShortDate_format;
-    QString tmp;
-    if ( listFormat->currentItem() == 0)
-        tmpFormat=ShortDate_format;
-    else if (listFormat->currentItem() == 1)
-        tmpFormat=TextDate_format;
-    else if (listFormat->currentItem() == 2)/*18-Feb-99*/
-        tmpFormat=date_format1;
-    else if (listFormat->currentItem() == 3) /*18-Feb-1999*/
-        tmpFormat=date_format2;
-    else if (listFormat->currentItem() == 4) /*18-Feb*/
-        tmpFormat=date_format3;
-    else if (listFormat->currentItem() == 5) /*18-05*/
-        tmpFormat=date_format4;
-    else if (listFormat->currentItem() == 6) /*18/05/00*/
-        tmpFormat=date_format5;
-    else if (listFormat->currentItem() == 7) /*18/05/1999*/
-        tmpFormat=date_format6;
-    else if (listFormat->currentItem() == 8) /*Feb-99*/
-        tmpFormat=date_format7;
-    else if (listFormat->currentItem() == 9) /*February-99*/
-        tmpFormat=date_format8;
-    else if (listFormat->currentItem() == 10) /*February-1999*/
-        tmpFormat=date_format9;
-    else if (listFormat->currentItem() == 11) /*F-99*/
-        tmpFormat=date_format10;
-    else if (listFormat->currentItem() == 12) /*18/Feb*/
-        tmpFormat=date_format11;
-    else if (listFormat->currentItem() == 13) /*18/02*/
-        tmpFormat=date_format12;
-    else if (listFormat->currentItem() == 14) /*18/Feb/1999*/
-        tmpFormat=date_format13;
-    else if (listFormat->currentItem() == 15) /*2000/Feb/18*/
-        tmpFormat=date_format14;
-    else if (listFormat->currentItem() == 16) /*2000-Feb-18*/
-        tmpFormat=date_format15;
-    else if (listFormat->currentItem() == 17) /*2000-02-18*/
-        tmpFormat=date_format16;
-    else if ( listFormat->currentItem() == 18) /*2000-02-18*/
-        tmpFormat=date_format17;
-    else if ( listFormat->currentItem() == 19)
-        tmpFormat=date_format18;
-    else if ( listFormat->currentItem() == 20)
-        tmpFormat=date_format19;
-    else if ( listFormat->currentItem() == 21)
-        tmpFormat=date_format20;
-    else if ( listFormat->currentItem() == 22)
-        tmpFormat=date_format21;
-    else if ( listFormat->currentItem() == 23)
-        tmpFormat=date_format22;
-    else if ( listFormat->currentItem() == 24)
-        tmpFormat=date_format23;
-    else if ( listFormat->currentItem() == 25)
-        tmpFormat=date_format24;
-    else if ( listFormat->currentItem() == 26)
-        tmpFormat=date_format25;
-    else if ( listFormat->currentItem() == 27)
-        tmpFormat=date_format26;
+    //baaaah...
     KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
     tmp= fmt->dateFormat( dlg->locale(), dlg->m_time.date(), tmpFormat);
     exampleLabel->setText(tmp);
 }
+*/
 
 
 void CellFormatPageFloat::init()
@@ -1636,8 +1537,8 @@ void CellFormatPageFloat::init()
     QString tmp;
     QString tmp2;
     QDate tmpDate( 2000,2,18);
-    list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),true);
-    list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),false);
+    list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), true);
+    list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), false);
     KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
     /*18-Feb-00*/
     list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format1);
@@ -1745,83 +1646,6 @@ void CellFormatPageFloat::init()
 
 }
 
-void CellFormatPageFloat::makeTimeFormat()
-{
-    QString tmp;
-    int current = listFormat->currentItem();
-    FormatType tmpFormat=Time_format;
-    if ( current == 0)
-        tmpFormat=Time_format;
-    else if (current == 1)
-        tmpFormat=SecondeTime_format;
-    else if (current == 2)
-        tmpFormat=Time_format1;
-    else if (current == 3)
-        tmpFormat=Time_format2;
-    else if (current == 4)
-        tmpFormat=Time_format3;
-    else if (current == 5)
-        tmpFormat=Time_format4;
-    else if (current == 6)
-        tmpFormat=Time_format5;
-    else if (current == 7)
-        tmpFormat=Time_format6;
-    else if (current == 8)
-        tmpFormat=Time_format7;
-    else if (current == 9)
-        tmpFormat=Time_format8;
-
-    KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
-    tmp = fmt->timeFormat( dlg->locale(), dlg->m_time, tmpFormat);
-    exampleLabel->setText(tmp);
-}
-
-QString CellFormatPageFloat::makeFractionFormat()
-{
-    double result = (dlg->m_value)-floor(dlg->m_value);
-    QString tmp;
-    if (result  ==  0 )
-    {
-        return tmp.setNum( dlg->m_value );
-    }
-    else
-    {
-        FormatType tmpFormat=fraction_half;
-        switch( listFormat->currentItem())
-        {
-            case 0:
-                tmpFormat=fraction_half;
-                break;
-            case 1:
-                tmpFormat=fraction_quarter;
-                break;
-            case 2:
-                tmpFormat=fraction_eighth;
-                break;
-            case 3:
-                tmpFormat=fraction_sixteenth;
-                break;
-            case 4:
-                tmpFormat=fraction_tenth;
-                break;
-            case 5:
-                tmpFormat=fraction_hundredth;
-                break;
-            case 6:
-                tmpFormat=fraction_one_digit;
-                break;
-            case 7:
-                tmpFormat=fraction_two_digits;
-                break;
-            case 8:
-                tmpFormat=fraction_three_digits;
-                break;
-        }
-        KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
-        return fmt->fractionFormat( dlg->m_value,tmpFormat);
-    }
-}
-
 void CellFormatPageFloat::currencyChanged(const QString &)
 {
   int index = currency->currentItem();
@@ -1833,105 +1657,105 @@ void CellFormatPageFloat::currencyChanged(const QString &)
   makeformat();
 }
 
+void CellFormatPageFloat::updateFormatType ()
+{
+  if (generic->isChecked())
+    newFormatType = Generic_format;
+  else if (number->isChecked())
+    newFormatType = Number_format;
+  else if (percent->isChecked())
+    newFormatType = Percentage_format;
+  else if (date->isChecked())
+  {
+    newFormatType=ShortDate_format;
+    switch (listFormat->currentItem())
+    {
+      case 0: newFormatType=ShortDate_format; break;
+      case 1: newFormatType=TextDate_format; break;
+      case 2: newFormatType=date_format1; break; /*18-Feb-99*/
+      case 3: newFormatType=date_format2; break; /*18-Feb-1999*/
+      case 4: newFormatType=date_format3; break; /*18-Feb*/
+      case 5: newFormatType=date_format4; break; /*18-05*/
+      case 6: newFormatType=date_format5; break; /*18/05/00*/
+      case 7: newFormatType=date_format6; break; /*18/05/1999*/
+      case 8: newFormatType=date_format7; break;/*Feb-99*/
+      case 9: newFormatType=date_format8; break; /*February-99*/
+      case 10: newFormatType=date_format9; break; /*February-1999*/
+      case 11: newFormatType=date_format10; break; /*F-99*/
+      case 12: newFormatType=date_format11; break; /*18/Feb*/
+      case 13: newFormatType=date_format12; break; /*18/02*/
+      case 14: newFormatType=date_format13; break; /*18/Feb/1999*/
+      case 15: newFormatType=date_format14; break; /*2000/Feb/18*/
+      case 16: newFormatType=date_format15; break;/*2000-Feb-18*/
+      case 17: newFormatType=date_format16; break;/*2000-02-18*/
+      case 18: newFormatType=date_format17; break; /*2000-02-18*/
+      case 19: newFormatType=date_format18; break;
+      case 20: newFormatType=date_format19; break;
+      case 21: newFormatType=date_format20; break;
+      case 22: newFormatType=date_format21; break;
+      case 23: newFormatType=date_format22; break;
+      case 24: newFormatType=date_format23; break;
+      case 25: newFormatType=date_format24; break;
+      case 26: newFormatType=date_format25; break;
+      case 27: newFormatType=date_format26; break;
+    }
+  }
+  else if (money->isChecked())
+    newFormatType = Money_format;
+  else if (scientific->isChecked())
+    newFormatType = Scientific_format;
+  else if (fraction->isChecked())
+  {
+    newFormatType=fraction_half;
+    switch (listFormat->currentItem())
+    {
+      case 0: newFormatType=fraction_half; break;
+      case 1: newFormatType=fraction_quarter; break;
+      case 2: newFormatType=fraction_eighth; break;
+      case 3: newFormatType=fraction_sixteenth; break;
+      case 4: newFormatType=fraction_tenth; break;
+      case 5: newFormatType=fraction_hundredth; break;
+      case 6: newFormatType=fraction_one_digit; break;
+      case 7: newFormatType=fraction_two_digits; break;
+      case 8: newFormatType=fraction_three_digits; break;
+    }
+  }
+  else if (time->isChecked())
+  {
+    int current = listFormat->currentItem();
+    newFormatType=Time_format;
+    switch (listFormat->currentItem())
+    {
+      case 0: newFormatType=Time_format; break;
+      case 1: newFormatType=SecondeTime_format; break;
+      case 2: newFormatType=Time_format1; break;
+      case 3: newFormatType=Time_format2; break;
+      case 4: newFormatType=Time_format3; break;
+      case 5: newFormatType=Time_format4; break;
+      case 6: newFormatType=Time_format5; break;
+      case 7: newFormatType=Time_format6; break;
+      case 8: newFormatType=Time_format7; break;
+      case 9: newFormatType=Time_format8; break;
+    }
+  }
+  else if (textFormat->isChecked())
+    newFormatType = Text_format;
+  else if (customFormat->isChecked())
+    newFormatType = Custom_format;
+}
+
 void CellFormatPageFloat::makeformat()
 {
-    m_bFormatTypeChanged=true;
-    QString tmp;
-    int p;
-    p = (precision->value() == -1) ? 8 : precision->value();
-    QChar decimal_point= dlg->locale()->decimalSymbol()[0];
-    if ( !dlg->m_bValue && !dlg->m_bDate && !dlg->m_bTime )
-        {
-            QString tmpText;
-            if ( dlg->cellText.length()>50)
-                tmpText=dlg->cellText.left(50);
-            exampleLabel->setText(tmpText);
-        }
-    else if (dlg->m_bDate)
-        {
-            if (date->isChecked())
-                {
-                    makeDateFormat();
-                }
-            else
-                exampleLabel->setText(dlg->cellText);
-        }
-    else if (dlg->m_bTime)
-        {
-            if (time->isChecked())
-                {
-                    makeTimeFormat();
-                }
-            else
-                exampleLabel->setText(dlg->cellText);
-        }
-    else if (dlg->m_bValue)
-        {
-            if (number->isChecked())
-                tmp=dlg->locale()->formatNumber(dlg->m_value,p );
-            else if (money->isChecked())
-                tmp=dlg->locale()->formatMoney(dlg->m_value, dlg->cCurrency.symbol, p );
-            else if (percent->isChecked())
-                tmp=dlg->locale()->formatNumber(dlg->m_value*100.0, p)+ " %";
-            else if (scientific->isChecked())
-                {
-                    tmp=QString::number(dlg->m_value, 'E', p);
-                    int pos;
-                    if ((pos=tmp.find('.'))!=-1)
-                        tmp=tmp.replace(pos,1,decimal_point);
-                }
-            else if (fraction->isChecked())
-                {
-                    tmp=makeFractionFormat();
-                }
-	    else if (textFormat->isChecked())
-	      {
-		tmp=QString::number(dlg->m_value);
-	      }
-	    else if (customFormat->isChecked())
-	      {
-                // TODO!
-	      }
-            if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 && !textFormat->isChecked())
-                {
-                    int start=0;
-                    if (tmp.find('%')!=-1)
-                        start=2;
-                    else if (tmp.find(dlg->cCurrency.symbol) == ((int)(tmp.length() - dlg->cCurrency.symbol.length())))
-                        start=dlg->cCurrency.symbol.length()+1;
-                    else if ((start=tmp.find('E'))!=-1)
-                        start=tmp.length()-start;
-                    else
-                        start=0;
-                    int i = tmp.length()-start;
-                    bool bFinished = false;
-
-
-                    while ( !bFinished && i > 0 )
-                        {
-                            QChar ch = tmp[ i - 1 ];
-                            if ( ch == '0' )
-                                tmp.remove(--i,1);
-                            else
-                                {
-                                    bFinished = true;
-                                    if ( ch == decimal_point )
-                                        tmp.remove(--i,1);
-                                }
-                        }
-
-                }
-            if (dlg->m_bValue && !time->isChecked() && !date->isChecked())
-                {
-                    if ( prefix->text() != "########" )
-                        tmp=prefix->text()+" "+tmp;
-                    if ( postfix->text() != "########" )
-                        tmp+=" "+postfix->text();
-                }
-            exampleLabel->setText(tmp);
-        }
-    else
-        exampleLabel->setText(i18n("Error"));
+  m_bFormatTypeChanged=true;
+  QString tmp;
+  
+  updateFormatType();
+  KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
+  tmp = fmt->formatText (dlg->value, dlg->locale(), newFormatType,
+      precision->value());
+  if (tmp.length() > 50)
+    tmp = tmp.left (50);
+  exampleLabel->setText (tmp);
 }
 
 void CellFormatPageFloat::apply( KSpreadCustomStyle * style )
@@ -1988,121 +1812,9 @@ void CellFormatPageFloat::apply( KSpreadCustomStyle * style )
   }
   if ( m_bFormatTypeChanged )
   {
-    style->changeFactor( 1.0 );
-    if ( number->isChecked() )
-      style->changeFormatType(Number_format);
-    else if ( percent->isChecked() )
+    style->changeFormatType (newFormatType);
+    if ( money->isChecked() )
     {
-      style->changeFormatType(Percentage_format);
-      style->changeFactor(100.0);
-    }
-    else if ( fraction->isChecked() )
-    {
-      if ( listFormat->currentItem() == 0 )
-        style->changeFormatType(fraction_half);
-      else if ( listFormat->currentItem() == 1)
-        style->changeFormatType(fraction_quarter);
-      else if ( listFormat->currentItem() == 2)
-        style->changeFormatType(fraction_eighth);
-      else if ( listFormat->currentItem() == 3)
-        style->changeFormatType(fraction_sixteenth);
-      else if ( listFormat->currentItem() == 4)
-        style->changeFormatType(fraction_tenth);
-      else if ( listFormat->currentItem() == 5)
-        style->changeFormatType(fraction_hundredth);
-      else if ( listFormat->currentItem() == 6)
-        style->changeFormatType(fraction_one_digit);
-      else if ( listFormat->currentItem() == 7)
-        style->changeFormatType(fraction_two_digits);
-      else if ( listFormat->currentItem() == 8)
-        style->changeFormatType(fraction_three_digits);
-    }
-    else if (date->isChecked())
-    {
-      if ( listFormat->currentItem() == 0)
-        style->changeFormatType(ShortDate_format );
-      else if (listFormat->currentItem() == 1)
-        style->changeFormatType(TextDate_format );
-      else if (listFormat->currentItem() == 2)
-        style->changeFormatType(date_format1 );
-      else if (listFormat->currentItem() == 3)
-        style->changeFormatType(date_format2 );
-      else if (listFormat->currentItem() == 4)
-        style->changeFormatType(date_format3 );
-      else if (listFormat->currentItem() == 5)
-        style->changeFormatType(date_format4 );
-      else if (listFormat->currentItem() == 6)
-        style->changeFormatType(date_format5 );
-      else if (listFormat->currentItem() == 7)
-        style->changeFormatType(date_format6 );
-      else if (listFormat->currentItem() == 8)
-        style->changeFormatType(date_format7 );
-      else if (listFormat->currentItem() == 9)
-        style->changeFormatType(date_format8 );
-      else if (listFormat->currentItem() == 10)
-        style->changeFormatType(date_format9 );
-      else if (listFormat->currentItem() == 11)
-        style->changeFormatType(date_format10 );
-      else if (listFormat->currentItem() == 12)
-        style->changeFormatType(date_format11 );
-      else if (listFormat->currentItem() == 13)
-        style->changeFormatType(date_format12 );
-      else if (listFormat->currentItem() == 14)
-        style->changeFormatType(date_format13 );
-      else if (listFormat->currentItem() == 15)
-        style->changeFormatType(date_format14 );
-      else if (listFormat->currentItem() == 16)
-        style->changeFormatType(date_format15 );
-      else if (listFormat->currentItem() == 17)
-        style->changeFormatType(date_format16 );
-      else if (listFormat->currentItem() == 18)
-        style->changeFormatType(date_format17 );
-      else if (listFormat->currentItem() == 19)
-        style->changeFormatType(date_format18 );
-      else if (listFormat->currentItem() == 20)
-        style->changeFormatType(date_format19 );
-      else if (listFormat->currentItem() == 21)
-        style->changeFormatType(date_format20 );
-      else if (listFormat->currentItem() == 22)
-        style->changeFormatType(date_format21 );
-      else if (listFormat->currentItem() == 23)
-        style->changeFormatType(date_format22 );
-      else if (listFormat->currentItem() == 24)
-        style->changeFormatType(date_format23 );
-      else if (listFormat->currentItem() == 25)
-        style->changeFormatType(date_format24 );
-      else if (listFormat->currentItem() == 26)
-        style->changeFormatType(date_format25 );
-      else if (listFormat->currentItem() == 27)
-        style->changeFormatType(date_format26 );
-    }
-    else if ( time->isChecked() )
-    {
-      int current = listFormat->currentItem();
-      if ( current == 0 )
-        style->changeFormatType(Time_format );
-      else if (current == 1)
-        style->changeFormatType(SecondeTime_format );
-      else if (current == 2)
-        style->changeFormatType(Time_format1 );
-      else if (current == 3)
-        style->changeFormatType(Time_format2 );
-      else if (current == 4)
-        style->changeFormatType(Time_format3 );
-      else if (current == 5)
-        style->changeFormatType(Time_format4 );
-      else if (current == 6)
-        style->changeFormatType(Time_format5 );
-      else if (current == 7)
-        style->changeFormatType(Time_format6 );
-      else if (current == 8)
-        style->changeFormatType(Time_format7 );
-      else if (current == 9)
-        style->changeFormatType(Time_format8 );
-    }
-    else if ( money->isChecked() )
-    {
-      style->changeFormatType(Money_format);
       KSpreadCell::Currency cur;
       int index = currency->currentItem();
       if (index == 0)
@@ -2126,212 +1838,88 @@ void CellFormatPageFloat::apply( KSpreadCustomStyle * style )
 
       style->changeCurrency( cur );
     }
-    else if ( scientific->isChecked() )
-      style->changeFormatType( Scientific_format );
-    else if ( textFormat->isChecked() )
-      style->changeFormatType( Text_format );
-    else if ( customFormat->isChecked() )
-      style->changeFormatType( Custom_format );
   }
 }
 
 void CellFormatPageFloat::applyFormat( KSpreadFormat *_obj )
 {
-    if ( postfix->text() != dlg->postfix )
-        if ( postfix->text() != "########" && postfix->isEnabled())
-            {
-                // If we are in here it *never* can be disabled - FIXME (Werner)!
-                if ( postfix->isEnabled())
-                    _obj->setPostfix( postfix->text() );
-                else
-                    _obj->setPostfix( "" );
-            }
-    if ( prefix->text() != dlg->prefix )
-        if ( prefix->text() != "########" )
-            {
-                if (prefix->isEnabled())
-                    _obj->setPrefix( prefix->text() );
-                else
-                    _obj->setPrefix( "" );
+  if ( postfix->text() != dlg->postfix )
+    if ( postfix->text() != "########" && postfix->isEnabled())
+    {
+      // If we are in here it *never* can be disabled - FIXME (Werner)!
+      if ( postfix->isEnabled())
+        _obj->setPostfix( postfix->text() );
+      else
+        _obj->setPostfix( "" );
+    }
+  if ( prefix->text() != dlg->prefix )
+    if ( prefix->text() != "########" )
+    {
+      if (prefix->isEnabled())
+        _obj->setPrefix( prefix->text() );
+      else
+        _obj->setPrefix( "" );
 
-            }
+    }
 
-    if ( dlg->precision != precision->value() )
-        _obj->setPrecision( precision->value() );
+  if ( dlg->precision != precision->value() )
+      _obj->setPrecision( precision->value() );
 
-    if (m_bFormatColorChanged)
+  if (m_bFormatColorChanged)
+  {
+    switch( format->currentItem() )
+      {
+      case 0:
+        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
+        _obj->setFloatColor( KSpreadCell::AllBlack );
+        break;
+      case 1:
+        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
+        _obj->setFloatColor( KSpreadCell::NegRed );
+        break;
+      case 2:
+        _obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
+        _obj->setFloatColor( KSpreadCell::NegRed );
+        break;
+      case 3:
+        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
+        _obj->setFloatColor( KSpreadCell::AllBlack );
+        break;
+      case 4:
+        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
+        _obj->setFloatColor( KSpreadCell::NegRed );
+        break;
+      }
+  }
+  if (m_bFormatTypeChanged)
+  {
+    _obj->setFormatType (newFormatType);
+    if (money->isChecked())
+    {
+      KSpreadCell::Currency cur;
+      int index = currency->currentItem();
+      if (index == 0)
+      {
+        if ( currency->currentText() == i18n( "Automatic" ) )
         {
-            switch( format->currentItem() )
-                {
-                case 0:
-                    _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-                    _obj->setFloatColor( KSpreadCell::AllBlack );
-                    break;
-                case 1:
-                    _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-                    _obj->setFloatColor( KSpreadCell::NegRed );
-                    break;
-                case 2:
-                    _obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
-                    _obj->setFloatColor( KSpreadCell::NegRed );
-                    break;
-                case 3:
-                    _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-                    _obj->setFloatColor( KSpreadCell::AllBlack );
-                    break;
-                case 4:
-                    _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-                    _obj->setFloatColor( KSpreadCell::NegRed );
-                    break;
-                }
+          cur.symbol = dlg->locale()->currencySymbol();
+          cur.type   = 0;
         }
-    if (m_bFormatTypeChanged)
+        else
         {
-            _obj->setFactor(1.0);
-            if (number->isChecked())
-                _obj->setFormatType(Number_format);
-            else if (percent->isChecked())
-                {
-                    _obj->setFormatType(Percentage_format);
-                    _obj->setFactor(100.0);
-                }
-            else if (fraction->isChecked())
-                {
-                    if ( listFormat->currentItem() == 0)
-                        _obj->setFormatType(fraction_half);
-                    else if ( listFormat->currentItem() == 1)
-                        _obj->setFormatType(fraction_quarter);
-                    else if ( listFormat->currentItem() == 2)
-                        _obj->setFormatType(fraction_eighth);
-                    else if ( listFormat->currentItem() == 3)
-                        _obj->setFormatType(fraction_sixteenth);
-                    else if ( listFormat->currentItem() == 4)
-                        _obj->setFormatType(fraction_tenth);
-                    else if ( listFormat->currentItem() == 5)
-                        _obj->setFormatType(fraction_hundredth);
-                    else if ( listFormat->currentItem() == 6)
-                        _obj->setFormatType(fraction_one_digit);
-                    else if ( listFormat->currentItem() == 7)
-                        _obj->setFormatType(fraction_two_digits);
-                    else if ( listFormat->currentItem() == 8)
-                        _obj->setFormatType(fraction_three_digits);
-                }
-            else if (date->isChecked())
-                {
-                    if ( listFormat->currentItem() == 0)
-                        _obj->setFormatType(ShortDate_format );
-                    else if (listFormat->currentItem() == 1)
-                        _obj->setFormatType(TextDate_format );
-                    else if (listFormat->currentItem() == 2)
-                        _obj->setFormatType(date_format1 );
-                    else if (listFormat->currentItem() == 3)
-                        _obj->setFormatType(date_format2 );
-                    else if (listFormat->currentItem() == 4)
-                        _obj->setFormatType(date_format3 );
-                    else if (listFormat->currentItem() == 5)
-                        _obj->setFormatType(date_format4 );
-                    else if (listFormat->currentItem() == 6)
-                        _obj->setFormatType(date_format5 );
-                    else if (listFormat->currentItem() == 7)
-                        _obj->setFormatType(date_format6 );
-                    else if (listFormat->currentItem() == 8)
-                        _obj->setFormatType(date_format7 );
-                    else if (listFormat->currentItem() == 9)
-                        _obj->setFormatType(date_format8 );
-                    else if (listFormat->currentItem() == 10)
-                        _obj->setFormatType(date_format9 );
-                    else if (listFormat->currentItem() == 11)
-                        _obj->setFormatType(date_format10 );
-                    else if (listFormat->currentItem() == 12)
-                        _obj->setFormatType(date_format11 );
-                    else if (listFormat->currentItem() == 13)
-                        _obj->setFormatType(date_format12 );
-                    else if (listFormat->currentItem() == 14)
-                        _obj->setFormatType(date_format13 );
-                    else if (listFormat->currentItem() == 15)
-                        _obj->setFormatType(date_format14 );
-                    else if (listFormat->currentItem() == 16)
-                        _obj->setFormatType(date_format15 );
-                    else if (listFormat->currentItem() == 17)
-                        _obj->setFormatType(date_format16 );
-                    else if (listFormat->currentItem() == 18)
-                        _obj->setFormatType(date_format17 );
-                    else if (listFormat->currentItem() == 19)
-                        _obj->setFormatType(date_format18 );
-                    else if (listFormat->currentItem() == 20)
-                        _obj->setFormatType(date_format19 );
-                    else if (listFormat->currentItem() == 21)
-                        _obj->setFormatType(date_format20 );
-                    else if (listFormat->currentItem() == 22)
-                        _obj->setFormatType(date_format21 );
-                    else if (listFormat->currentItem() == 23)
-                        _obj->setFormatType(date_format22 );
-                    else if (listFormat->currentItem() == 24)
-                        _obj->setFormatType(date_format23 );
-                    else if (listFormat->currentItem() == 25)
-                        _obj->setFormatType(date_format24 );
-                    else if (listFormat->currentItem() == 26)
-                        _obj->setFormatType(date_format25 );
-                    else if (listFormat->currentItem() == 27)
-                        _obj->setFormatType(date_format26 );
-                }
-            else if (time->isChecked())
-                {
-                  int current = listFormat->currentItem();
-                    if ( current  == 0)
-                        _obj->setFormatType(Time_format );
-                    else if (current == 1)
-                        _obj->setFormatType(SecondeTime_format );
-                    else if (current == 2)
-                        _obj->setFormatType(Time_format1 );
-                    else if (current == 3)
-                        _obj->setFormatType(Time_format2 );
-                    else if (current == 4)
-                        _obj->setFormatType(Time_format3 );
-                    else if (current == 5)
-                        _obj->setFormatType(Time_format4 );
-                    else if (current == 6)
-                        _obj->setFormatType(Time_format5 );
-                    else if (current == 7)
-                        _obj->setFormatType(Time_format6 );
-                    else if (current == 8)
-                        _obj->setFormatType(Time_format7 );
-                    else if (current == 9)
-                        _obj->setFormatType(Time_format8 );
-                }
-            else if (money->isChecked())
-            {
-                _obj->setFormatType(Money_format);
-                KSpreadCell::Currency cur;
-                int index = currency->currentItem();
-                if (index == 0)
-                {
-                  if ( currency->currentText() == i18n( "Automatic" ) )
-                  {
-                    cur.symbol = dlg->locale()->currencySymbol();
-                    cur.type   = 0;
-                  }
-                  else
-                  {
-                    cur.type   = 1;
-                    cur.symbol = currency->currentText();
-                  }
-                }
-                else
-                {
-                  cur.type   = ++index;
-                  cur.symbol = KSpreadCurrency::getDisplaySymbol( index );
-                }
-
-                _obj->setCurrency( cur.type, cur.symbol );
-            }
-            else if (scientific->isChecked())
-                _obj->setFormatType(Scientific_format);
-	    else if (textFormat->isChecked())
-	      _obj->setFormatType(Text_format);
-	    else if (customFormat->isChecked())
-	      _obj->setFormatType(Custom_format);
+          cur.type   = 1;
+          cur.symbol = currency->currentText();
         }
+      }
+      else
+      {
+        cur.type   = ++index;
+        cur.symbol = KSpreadCurrency::getDisplaySymbol( index );
+      }
+
+      _obj->setCurrency( cur.type, cur.symbol );
+    }
+  }
 }
 
 void CellFormatPageFloat::apply( KSpreadCell *_obj )
@@ -2380,8 +1968,6 @@ void CellFormatPageFloat::apply( RowFormat *_obj )
       {
         c->clearProperty(KSpreadCell::PFormatType);
         c->clearNoFallBackProperties( KSpreadCell::PFormatType );
-        c->clearProperty(KSpreadCell::PFactor);
-        c->clearNoFallBackProperties( KSpreadCell::PFactor );
       }
     }
   }
@@ -2429,8 +2015,6 @@ void CellFormatPageFloat::apply( ColumnFormat *_obj )
       {
         c->clearProperty(KSpreadCell::PFormatType);
         c->clearNoFallBackProperties( KSpreadCell::PFormatType );
-        c->clearProperty(KSpreadCell::PFactor);
-        c->clearNoFallBackProperties( KSpreadCell::PFactor );
       }
     }
   }
@@ -2445,8 +2029,7 @@ void CellFormatPageFloat::apply( ColumnFormat *_obj )
           rw->hasProperty(KSpreadCell::PPrefix) ||
           rw->hasProperty(KSpreadCell::PFloatFormat) ||
           rw->hasProperty(KSpreadCell::PFloatColor) ||
-          rw->hasProperty(KSpreadCell::PFormatType) ||
-          rw->hasProperty(KSpreadCell::PFactor) ))
+          rw->hasProperty(KSpreadCell::PFormatType) ))
     {
       for ( int i=dlg->left;i<=dlg->right;i++)
       {

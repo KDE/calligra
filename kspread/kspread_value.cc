@@ -120,7 +120,7 @@ class KSpreadValueData
     
     // create empty data
     KSpreadValueData(): type( KSpreadValue::Empty ),
-      count( 1 ), ps( 0 ) { };
+      format (KSpreadValue::fmt_None), count( 1 ), ps( 0 ) { };
 
     // destroys data
     ~KSpreadValueData(){ if( this == s_null ) s_null = 0;

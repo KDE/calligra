@@ -578,8 +578,6 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, b
     format.setAttribute( "float", (int) floatFormat( _col, _row ) );
   if ( hasProperty( PFloatColor, true ) || hasNoFallBackProperties( PFloatColor ) || force )
     format.setAttribute( "floatcolor", (int) floatColor( _col, _row ) );
-  if ( hasProperty( PFactor, true ) || hasNoFallBackProperties( PFactor ) || force )
-    format.setAttribute( "faktor", factor( _col, _row ) );
   if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType ) || force )
     format.setAttribute( "format", (int)getFormatType( _col, _row ));
   if ( hasProperty( PCustomFormat, true ) || hasNoFallBackProperties( PCustomFormat ) || force )
@@ -704,8 +702,6 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force, bool copy 
     format.setAttribute( "float", (int) m_pStyle->floatFormat() );
   if ( hasProperty( PFloatColor, true ) || hasNoFallBackProperties( PFloatColor ) || force )
     format.setAttribute( "floatcolor", (int) m_pStyle->floatColor() );
-  if ( hasProperty( PFactor, true ) || hasNoFallBackProperties( PFactor ) || force )
-    format.setAttribute( "faktor", m_pStyle->factor() );
   if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType ) || force )
     format.setAttribute( "format", (int) m_pStyle->formatType() );
   if ( hasProperty( PCustomFormat, true ) || hasNoFallBackProperties( PCustomFormat ) || force )
@@ -884,11 +880,6 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
         }
     }
 
-    if ( f.hasAttribute( "faktor" ) )
-    {
-        setFactor( f.attribute( "faktor" ).toDouble( &ok ) );
-        if ( !ok ) return false;
-    }
     if ( f.hasAttribute( "format" ) )
     {
         int fo = f.attribute( "format" ).toInt( &ok );
@@ -1356,23 +1347,6 @@ void KSpreadFormat::setAlignY( AlignY _alignY)
   }
 
   m_pStyle = m_pStyle->setAlignY( _alignY );
-  formatChanged();
-}
-
-void KSpreadFormat::setFactor( double _d )
-{
-  if ( _d == 1.0 )
-  {
-    clearProperty( PFactor );
-    setNoFallBackProperties(PFactor );
-  }
-  else
-  {
-    setProperty( PFactor );
-    clearNoFallBackProperties( PFactor );
-  }
-
-  m_pStyle = m_pStyle->setFactor( _d );
   formatChanged();
 }
 
@@ -2451,18 +2425,6 @@ KSpreadFormat::AlignY KSpreadFormat::alignY( int col, int row ) const
   }
 
   return m_pStyle->alignY();
-}
-
-double KSpreadFormat::factor( int col, int row ) const
-{
-  if ( !hasProperty( PFactor, false ) && !hasNoFallBackProperties( PFactor ) )
-  {
-    const KSpreadFormat * l = fallbackFormat( col, row );
-    if ( l )
-      return l->factor( col, row );
-  }
-
-  return m_pStyle->factor();
 }
 
 bool KSpreadFormat::multiRow( int col, int row ) const

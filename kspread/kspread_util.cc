@@ -27,6 +27,24 @@
 
 #include <kdebug.h>
 
+//helper functions for the formatting
+bool formatIsDate (FormatType fmt)
+{
+  return ((fmt == ShortDate_format) || (fmt == TextDate_format) ||
+      (((int) fmt >= 200) && ((int) fmt < 300)));
+}
+
+bool formatIsTime (FormatType fmt)
+{
+  return (((int) fmt >= 50) && ((int) fmt < 70));
+}
+
+bool formatIsFraction (FormatType fmt)
+{
+  return (((int) fmt >= 70) && ((int) fmt < 80));
+}
+
+
 //used in KSpreadPoint::init, KSpreadCell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
 int util_decodeColumnLabelText( const QString &_col )

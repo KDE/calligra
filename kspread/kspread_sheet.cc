@@ -2214,20 +2214,17 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
 
     QString getUndoTitle() { return i18n("Format Percent"); }
     bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( KSpreadCell::PFactor ) );
+        //TODO: no idea what to put here, now that factor's gone :(
+        return ( true );
     }
     void doWork( RowFormat* rw ) {
-	rw->setFactor( b ? 100.0 : 1.0 );
 	//rw->setPrecision( 0 );
-	rw->setFormatType( b ? Percentage_format : Number_format);
+	rw->setFormatType( b ? Percentage_format : Generic_format);
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setFactor( b ? 100.0 : 1.0 );
-	cl->setFormatType( b ? Percentage_format : Number_format);
+	cl->setFormatType( b ? Percentage_format : Generic_format);
     }
     void prepareCell( KSpreadCell* cell ) {
-	cell->clearProperty(KSpreadCell::PFactor);
-	cell->clearNoFallBackProperties( KSpreadCell::PFactor );
 	cell->clearProperty(KSpreadCell::PFormatType);
 	cell->clearNoFallBackProperties( KSpreadCell::PFormatType );
     }
@@ -2237,8 +2234,7 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
     void doWork( KSpreadCell* cell, bool cellRegion, int, int ) {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
-	cell->setFactor( b ? 100.0 : 1.0 );
-	cell->setFormatType( b ? Percentage_format : Number_format);
+	cell->setFormatType( b ? Percentage_format : Generic_format);
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
     }
@@ -4380,7 +4376,6 @@ void KSpreadSheet::copyCells( int x1, int y1, int x2, int y2, bool cpFormat )
     targetCell->setPostfix( sourceCell->postfix( x1, y1 ) );
     targetCell->setFloatFormat( sourceCell->floatFormat( x1, y1 ) );
     targetCell->setFloatColor( sourceCell->floatColor( x1, y1 ) );
-    targetCell->setFactor( sourceCell->factor( x1, y1 ) );
     targetCell->setMultiRow( sourceCell->multiRow( x1, y1 ) );
     targetCell->setVerticalText( sourceCell->verticalText( x1, y1 ) );
     targetCell->setStyle( sourceCell->style() );
@@ -4530,10 +4525,6 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     KSpreadFormat::FloatColor c = ref1->floatColor( ref1->column(), ref1->row() );
     ref1->setFloatColor( ref2->floatColor( ref2->column(), ref2->row() ) );
     ref2->setFloatColor(c);
-
-    double fact = ref1->factor( ref1->column(), ref1->row() );
-    ref1->setFactor( ref2->factor( ref2->column(), ref2->row() ) );
-    ref2->setFactor(fact);
 
     bool multi = ref1->multiRow( ref1->column(), ref1->row() );
     ref1->setMultiRow( ref2->multiRow( ref2->column(), ref2->row() ) );
@@ -4891,22 +4882,17 @@ struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA
     QString getUndoTitle() { return i18n("Format Money"); }
     bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PFormatType )
-		 || rw->hasProperty( KSpreadCell::PPrecision )
-		 || rw->hasProperty( KSpreadCell::PFactor ) );
+		 || rw->hasProperty( KSpreadCell::PPrecision ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setFormatType( b ? Money_format : Number_format );
-	rw->setFactor( 1.0 );
+	rw->setFormatType( b ? Money_format : Generic_format );
 	rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setFormatType( b ? Money_format : Number_format );
-	cl->setFactor( 1.0 );
+	cl->setFormatType( b ? Money_format : Generic_format );
 	cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void prepareCell( KSpreadCell* c ) {
-	c->clearProperty( KSpreadCell::PFactor );
-	c->clearNoFallBackProperties( KSpreadCell::PFactor );
 	c->clearProperty( KSpreadCell::PPrecision );
 	c->clearNoFallBackProperties( KSpreadCell::PPrecision );
 	c->clearProperty( KSpreadCell::PFormatType );
@@ -4918,8 +4904,7 @@ struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA
     void doWork( KSpreadCell* cell, bool cellRegion, int, int ) {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
-	cell->setFormatType( b ? Money_format : Number_format );
-	cell->setFactor( 1.0 );
+	cell->setFormatType( b ? Money_format : Generic_format );
 	cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();

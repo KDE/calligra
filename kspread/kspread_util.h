@@ -177,6 +177,12 @@ private:
   QPoint current;
 };
 
+//helper functions for the formatting
+bool formatIsDate (FormatType fmt);
+bool formatIsTime (FormatType fmt);
+bool formatIsFraction (FormatType fmt);
+
+
 
 QString util_rangeName( const QRect &_area );
 QString util_rangeName( KSpreadSheet *_table, const QRect &_area );

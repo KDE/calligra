@@ -55,9 +55,6 @@ class ValueParser {
   KSpreadValue tryParseNumber (const QString& str, KLocale *locale, bool *ok = 0);
   KSpreadValue tryParseDate (const QString& str, KLocale *locale, bool *ok = 0);
   KSpreadValue tryParseTime (const QString& str, KLocale *locale, bool *ok = 0);
-  
-  /** format of the last parsed value */
-  FormatType parsedFormatType () { return fmtType; };
  protected:
   ValueParser() {};
   static ValueParser *_self;
@@ -75,7 +72,6 @@ class ValueParser {
 
   /** a helper function to read integers */
   int readInt (const QString &str, uint &pos);
-  
   FormatType fmtType;
 };
 

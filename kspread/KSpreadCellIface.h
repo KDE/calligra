@@ -81,8 +81,6 @@ k_dcop:
     virtual QString getFormatType() const;
     virtual void setPrecision(int  _p);
     virtual int precision() const;
-    virtual void setFaktor( double _factor );
-    virtual double faktor()const;
     //font
     virtual void setTextFontBold( bool _b );
     virtual bool textFontBold( ) const;

@@ -40,8 +40,11 @@
 #include "kspread_view.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include "kspread_value.h"
+
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+
 class QPixmap;
 class QRadioButton;
 class QPushButton;
@@ -267,9 +270,7 @@ public:
 public slots:
     void slotChangeState();
     void makeformat();
-    void makeDateFormat();
-    void makeTimeFormat();
-    QString makeFractionFormat();
+    void updateFormatType();
     void init();
     void slotChangeValue(int);
     void formatChanged(int);
@@ -281,6 +282,7 @@ protected:
     QComboBox *format;
     QComboBox *currency;
     QLabel    *currencyLabel;
+    QRadioButton *generic;
     QRadioButton *number;
     QRadioButton *percent;
     QRadioButton *date;
@@ -294,7 +296,7 @@ protected:
     QLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDlg *dlg;
-    FormatType cellFormatType;
+    FormatType cellFormatType, newFormatType;
     //test if value changed
     bool m_bFormatTypeChanged;
     bool m_bFormatColorChanged;
@@ -666,14 +668,8 @@ public:
     FormatType formatType;
     bool bFormatType;
 
-    bool m_bValue;
-    bool m_bDate;
-    bool m_bTime;
-
-    QDateTime m_time;
-    QString cellText;
-    double m_value;
-
+    KSpreadValue value;
+    
     bool isMerged;
     bool oneCell;
 

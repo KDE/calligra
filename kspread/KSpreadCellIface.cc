@@ -332,19 +332,17 @@ void KSpreadCellIface::setFormatType(const QString &_formatType)
 
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     FormatType format;
-    cell->setFactor( 1.0);
     cell->setPrecision(2);
-    if(_formatType=="Number")
+    if (_formatType=="Generic")
+        format = Generic_format;
+    else if(_formatType=="Number")
         format=Number_format;
     else if (_formatType=="Text")
         format=Text_format;
     else if(_formatType=="Money")
         format=Money_format;
     else if(_formatType=="Percentage")
-        {
         format=Percentage_format;
-        cell->setFactor( 100.0);
-        }
     else if(_formatType=="Scientific")
         format=Scientific_format;
     else if(_formatType=="ShortDate")
@@ -374,7 +372,7 @@ void KSpreadCellIface::setFormatType(const QString &_formatType)
     else if(_formatType=="fraction_three_digits")
         format=fraction_three_digits;
     else
-        format=Number_format;
+        format=Generic_format;
     cell->setFormatType( format);
     m_table->setRegionPaintDirty(cell->cellRect());
 }
@@ -587,21 +585,6 @@ QString KSpreadCellIface::textFontFamily() const
     if( !m_table ) return QString::null;
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontFamily( m_point.x(), m_point.y() );
-}
-
-void KSpreadCellIface::setFaktor( double _factor )
-{
-    if( !m_table ) return;
-    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setFactor( _factor );
-    m_table->setRegionPaintDirty(cell->cellRect());
-}
-
-double KSpreadCellIface::faktor() const
-{
-    if( !m_table ) return 1.0;
-    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->factor( m_point.x(), m_point.y() );
 }
 
 //border left

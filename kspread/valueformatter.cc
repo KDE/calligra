@@ -22,6 +22,8 @@
 
 #include "kspread_cell.h"
 #include "kspread_locale.h"
+#include "kspread_util.h"
+#include "valueconverter.h"
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>
@@ -57,74 +59,150 @@ QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
 
   QString str;
   
-  //boolean
-  if ( cell->value().isBoolean() )
-    str = (cell->value().asBoolean()) ? i18n("True") : i18n("False");
+  KSpreadFormat::FloatFormat floatFormat =
+      cell->floatFormat (cell->column(), cell->row());
+  int precision = cell->precision (cell->column(), cell->row());
+  QString prefix = cell->prefix (cell->column(), cell->row());
+  QString postfix = cell->postfix (cell->column(), cell->row());
 
-  //date
-  else if (cell->isDate())
-    str = dateFormat (cell->locale(), cell->value().asDate(), fmtType);
+  return formatText (cell->value(), cell->locale(), fmtType, precision,
+      floatFormat, prefix, postfix);
+}
+
+QString ValueFormatter::formatText (const KSpreadValue &value, KLocale *locale,
+    FormatType fmtType, int precision, KSpreadFormat::FloatFormat floatFormat,
+    const QString &prefix, const QString &postfix)
+{
+  QString str;
   
-  //time
-  else if (cell->isTime())
-    str = timeFormat (cell->locale(), cell->value().asDateTime(), fmtType);
-
-  //number
-  else if (cell->value().isNumber())
+  //step 1: determine formatting that will be used
+  fmtType = determineFormatting (value, fmtType);
+  
+  //step 2: format the value !
+  
+  //text
+  if (fmtType == Text_format)
   {
-    QChar decimal_point = cell->locale()->decimalSymbol()[0];
+    str = ValueConverter::self()->asString (value, locale).asString();
+    if (!str.isEmpty() && str[0]=='\'' )
+      str = str.mid(1);
+  }
+  
+  //date
+  else if (formatIsDate (fmtType))
+    str = dateFormat (locale, value.asDate(), fmtType);
+    
+  //time
+  else if (formatIsTime (fmtType))
+    str = timeFormat (locale, value.asDateTime(), fmtType);
+    
+  //fraction
+  else if (formatIsFraction (fmtType))
+    str = fractionFormat (value.asFloat(), fmtType);
+
+  //another
+  else
+  {
+    QChar decimal_point = locale->decimalSymbol()[0];
     if ( decimal_point.isNull() )
       decimal_point = '.';
 
     //some cell parameters ...
-    double factor = cell->factor (cell->column(), cell->row());
-    KSpreadFormat::FloatFormat floatFormat =
-        cell->floatFormat (cell->column(), cell->row());
-    int precision = cell->precision (cell->column(), cell->row());
-
-    // Scale the value as desired by the user.
-    double v = cell->value().asFloat() * factor;
+    double v = ValueConverter::self()->asFloat (value, locale).asFloat();
 
     // Always unsigned ?
     if ((floatFormat == KSpreadCell::AlwaysUnsigned) && (v < 0.0))
       v *= -1.0;
 
     // Make a string out of it.
-    QString localizedNumber = createNumberFormat (cell->locale(), v,
-      precision, cell->getCurrencySymbol(), fmtType,
+    str = createNumberFormat (locale, v,
+      precision, locale->currencySymbol(), fmtType,
       (floatFormat == KSpreadCell::AlwaysSigned));
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
     if (precision == -1)
-      removeTrailingZeros (localizedNumber, cell->locale(), decimal_point);
-    
-    // Start building the output string with prefix and postfix
-    str = QString::null;
-    QString prefix = cell->prefix (cell->column(), cell->row());
-    QString postfix = cell->postfix (cell->column(), cell->row());
-    
-    if (!prefix.isEmpty())
-      str = prefix + " ";
-
-    str += localizedNumber;
-
-    if( !postfix.isEmpty())
-      str += " " + postfix;
+      removeTrailingZeros (str, locale, decimal_point);
   }
+    
+  if (!prefix.isEmpty())
+    str = prefix + ' ' + str;
+
+  if( !postfix.isEmpty())
+    str += ' ' + postfix;
   
-  //text
-  else if (cell->value().isString())
-  {
-    str = cell->value().asString();
-    if (!str.isEmpty() && str[0]=='\'' )
-      str = str.mid(1);
-  }
-  else // When does this happen ?
-    str = cell->value().asString();
-    
+  kdDebug() << "ValueFormatter says: " << str << endl;
   return str;
 }
+
+FormatType ValueFormatter::determineFormatting (const KSpreadValue &value,
+    FormatType fmtType)
+{
+  //if the cell value is a string, then we want to display it as-is,
+  //no matter what, same if the cell is empty
+  if (value.isString () || (value.format() == KSpreadValue::fmt_None))
+    return Text_format;
+  //same if we're supposed to display string, no matter what we actually got
+  if (fmtType == Text_format)
+    return Text_format;
+  
+  //now, everything depends on whether the formatting is Generic or not
+  if (fmtType == Generic_format)
+  {
+    //here we decide based on value's format...
+    KSpreadValue::Format fmt = value.format();
+    switch (fmt) {
+      case KSpreadValue::fmt_None:
+        fmtType = Text_format;
+      break;
+      case KSpreadValue::fmt_Boolean:
+        fmtType = Text_format;
+      break;
+      case KSpreadValue::fmt_Number:
+        if (value.asFloat() > 1e+10)
+          fmtType = Scientific_format;
+        else
+          fmtType = Number_format;
+      break;
+      case KSpreadValue::fmt_Percent:
+        fmtType = Percentage_format;
+      break;
+      case KSpreadValue::fmt_Money:
+        fmtType = Money_format;
+      break;
+      case KSpreadValue::fmt_DateTime:
+        fmtType = TextDate_format;
+      break;
+      case KSpreadValue::fmt_Date:
+        fmtType = ShortDate_format;
+      break;
+      case KSpreadValue::fmt_Time:
+        fmtType = Time_format;
+      break;
+      case KSpreadValue::fmt_String:
+        //this should never happen
+        fmtType = Text_format;
+      break;
+    };
+    return fmtType;
+  }
+  else
+  {
+    //we'll mostly want to use the given formatting, the only exception
+    //being Boolean values
+    
+    //TODO: is this correct? We may also want to convert bools to 1s and 0s
+    //if we want to display a number...
+    
+    //TODO: what to do about Custom formatting? We don't support it as of now,
+    //  but we'll have it ... one day, that is ...
+    if (value.isBoolean())
+      return Text_format;
+    else
+      return fmtType;
+  }
+}
+
 
 void ValueFormatter::removeTrailingZeros (QString &str, KLocale *locale,
     QChar decimal_point)
@@ -168,8 +246,12 @@ QString ValueFormatter::createNumberFormat (KLocale *locale,
   // if precision is -1, ask for a huge number of decimals, we'll remove
   // the zeros later. Is 8 ok ?
   int p = (precision == -1) ? 8 : precision;
-  QString localizedNumber = locale->formatNumber( value, p );
+  QString localizedNumber;
   int pos = 0;
+  
+  //multiply value by 100 for percentage format
+  if (fmt == Percentage_format)
+    value *= 100;
 
   // this will avoid displaying negative zero, i.e "-0.0000"
   if( fabs( value ) < DBL_EPSILON ) value = 0.0;
@@ -202,17 +284,6 @@ QString ValueFormatter::createNumberFormat (KLocale *locale,
       localizedNumber = QString::number (value, 'E', p);
       if ((pos = localizedNumber.find ('.')) != -1)
         localizedNumber = localizedNumber.replace (pos, 1, decimal_point);
-      break;
-    case fraction_half:
-    case fraction_quarter:
-    case fraction_eighth:
-    case fraction_sixteenth:
-    case fraction_tenth:
-    case fraction_hundredth:
-    case fraction_one_digit:
-    case fraction_two_digits:
-    case fraction_three_digits:
-      localizedNumber = fractionFormat (value, fmt);
       break;
     default :
       //other formatting?

@@ -51,7 +51,6 @@ k_dcop:
     virtual void setFormatType(const QString &formatType);
     /** @deprecated use getFormatType */
     virtual void setPrecision(int  _p);
-    virtual void setFaktor( double _factor );
     //font
     virtual void setTextFontBold( bool _b );
     virtual void setTextFontItalic( bool _b );

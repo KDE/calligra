@@ -110,17 +110,15 @@ void KSpreadLayoutIface::setPrefix(const QString &_prefix)
 void KSpreadLayoutIface::setFormatType(const QString &_formatType)
 {
     FormatType format;
-    layout->setFactor( 1.0);
     layout->setPrecision(2);
-    if(_formatType=="Number")
+    if (_formatType=="Generic")
+        format = Generic_format;
+    else if(_formatType=="Number")
         format=Number_format;
     else if(_formatType=="Money")
         format=Money_format;
     else if(_formatType=="Percentage")
-        {
         format=Percentage_format;
-        layout->setFactor( 100.0);
-        }
     else if(_formatType=="Scientific")
         format=Scientific_format;
     else if(_formatType=="ShortDate")
@@ -150,7 +148,7 @@ void KSpreadLayoutIface::setFormatType(const QString &_formatType)
     else if(_formatType=="fraction_three_digits")
         format=fraction_three_digits;
     else
-        format=Number_format;
+        format=Generic_format;
     layout->setFormatType( format);
 }
 
@@ -190,11 +188,6 @@ void KSpreadLayoutIface::setTextFontFamily( const QString& _font )
     layout->setTextFontFamily( _font );
 }
 
-
-void KSpreadLayoutIface::setFaktor( double _factor )
-{
-    layout->setFactor( _factor );
-}
 
 //border left
 void KSpreadLayoutIface::setLeftBorderStyle( const QString& _style )

@@ -98,7 +98,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
   /* for now, the first condition that is true is the one that will be used */
 
   QValueList<KSpreadConditional>::const_iterator it;
-  double value   = m_cell->value().asFloat() * m_cell->factor( m_cell->column(), m_cell->row() );
+  double value   = m_cell->value().asFloat();
   QString strVal = m_cell->text();
 
   //  if ( m_cell->value().isNumber() && !m_cell->table()->getShowFormula())

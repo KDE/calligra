@@ -669,6 +669,11 @@ void KSpreadCSVDialog::accept()
       if ( w > widths[col] )
         widths[col] = w;
 
+      cell->setFormatType (Generic_format);
+      /*
+      Disabling this code for now, everything will use Generic formatting,
+      hoping for the best (Tomas)
+      
       switch (getHeader(col))
       {
        case TEXT:
@@ -684,6 +689,7 @@ void KSpreadCSVDialog::accept()
         cell->setFormatType(Money_format);
         break;
       }
+      */
     }
   }
 

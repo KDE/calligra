@@ -51,14 +51,13 @@ KSpreadStyle::KSpreadStyle()
     m_alignY( KSpreadFormat::Middle ),
     m_floatFormat( KSpreadFormat::OnlyNegSigned ),
     m_floatColor( KSpreadFormat::AllBlack ),
-    m_formatType( Number_format ),
+    m_formatType( Generic_format ),
     m_fontFlags( 0 ),
     m_bgColor( Qt::white ),
     m_backGroundBrush( Qt::red, Qt::NoBrush ),
     m_rotateAngle( 0 ),
     m_indent( 0.0 ),
     m_precision( -1 ),
-    m_factor( 1.0 ),
     m_properties( 0 )
 {
   QFont f( KoGlobal::defaultFont() );
@@ -111,7 +110,6 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
     m_prefix( style->m_prefix ),
     m_postfix( style->m_postfix ),
     m_currency( style->m_currency ),
-    m_factor( style->m_factor ),
     m_properties( style->m_properties )
 {
 }
@@ -370,14 +368,6 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_floatColor = a;
             m_featuresSet |= SFloatColor;
         }
-    }
-
-    if ( format.hasAttribute( "factor" ) )
-    {
-        m_factor = format.attribute( "factor" ).toDouble( &ok );
-        if ( !ok )
-            return false;
-        m_featuresSet |= SFactor;
     }
 
     if ( format.hasAttribute( "format" ) )
@@ -865,9 +855,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     if ( featureSet( SFloatColor ) )
         format.setAttribute( "floatcolor", (int)m_floatColor );
 
-    if ( featureSet( SFactor ) )
-        format.setAttribute( "factor", m_factor );
-
     if ( featureSet( SFormatType ) )
         format.setAttribute( "format",(int) m_formatType );
 
@@ -1011,9 +998,6 @@ void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
 
   if ( featureSet( SFloatColor ) )
   format.setAttribute( "floatcolor", (int)m_floatColor );
-
-  if ( featureSet( SFactor ) )
-    format.setAttribute( "factor", m_factor );
 
   if ( featureSet( SFormatType ) )
     format.setAttribute( "format",(int) m_formatType );
@@ -1191,14 +1175,6 @@ bool KSpreadStyle::loadXML( QDomElement & format )
       m_floatColor = a;
       m_featuresSet |= SFloatColor;
     }
-  }
-
-  if ( format.hasAttribute( "factor" ) )
-  {
-    m_factor = format.attribute( "factor" ).toDouble( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SFactor;
   }
 
   if ( format.hasAttribute( "format" ) )
@@ -1575,11 +1551,6 @@ int KSpreadStyle::rotateAngle() const
 double KSpreadStyle::indent() const
 {
   return ( !m_parent || featureSet( SIndent ) ? m_indent : m_parent->indent() );
-}
-
-double KSpreadStyle::factor() const
-{
-  return ( !m_parent || featureSet( SFactor ) ? m_factor : m_parent->factor() );
 }
 
 QBrush const & KSpreadStyle::backGroundBrush() const
@@ -2114,21 +2085,6 @@ KSpreadStyle * KSpreadStyle::setCurrency( KSpreadFormat::Currency const & curren
   return this;
 }
 
-KSpreadStyle * KSpreadStyle::setFactor( double factor )
-{
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    KSpreadStyle * style = new KSpreadStyle( this );
-    style->m_factor = factor;
-    style->m_featuresSet |= SFactor;
-    return style;
-  }
-
-  m_factor = factor;
-  m_featuresSet |= SFactor;
-  return this;
-}
-
 KSpreadStyle * KSpreadStyle::setProperty( Properties p )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
@@ -2336,7 +2292,6 @@ KSpreadCustomStyle::KSpreadCustomStyle( KSpreadStyle * parent, QString const & n
   changePrefix( parent->prefix() );
   changePostfix( parent->postfix() );
   changeCurrency( parent->currency() );
-  changeFactor( parent->factor() );
 }
 
 KSpreadCustomStyle::KSpreadCustomStyle( QString const & name, KSpreadCustomStyle * parent )
@@ -2439,8 +2394,6 @@ bool KSpreadCustomStyle::definesAll() const
   if ( !( m_featuresSet & (uint) SAlignX ) )
     return false;
   if ( !( m_featuresSet & (uint) SAlignY ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFactor ) )
     return false;
   if ( !( m_featuresSet & (uint) SPrefix ) )
     return false;
@@ -2716,12 +2669,6 @@ void KSpreadCustomStyle::changePostfix( QString const & postfix )
 void KSpreadCustomStyle::changeCurrency( KSpreadFormat::Currency const & currency )
 {
   m_currency = currency;
-}
-
-void KSpreadCustomStyle::changeFactor( double factor )
-{
-  m_factor = factor;
-  m_featuresSet |= SFactor;
 }
 
 void KSpreadCustomStyle::addProperty( Properties p )

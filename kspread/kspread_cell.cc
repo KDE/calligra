@@ -474,7 +474,6 @@ void KSpreadCell::copyFormat( int _column, int _row )
     setPostfix( cell->postfix( _column, _row ) );
     setFloatFormat( cell->floatFormat( _column, _row ) );
     setFloatColor( cell->floatColor( _column, _row ) );
-    setFactor( cell->factor( _column, _row ) );
     setMultiRow( cell->multiRow( _column, _row ) );
     setVerticalText( cell->verticalText( _column, _row ) );
     setDontPrintText( cell->getDontprintText(_column, _row ) );
@@ -1959,35 +1958,18 @@ bool KSpreadCell::calc(bool delay)
   else if ( context.value()->type() == KSValue::BoolType )
   {
     setValue ( KSpreadValue( context.value()->boolValue() ) );
-    setFormatType(Number_format);
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
     setValue( KSpreadValue( context.value()->timeValue() ) );
-
-    //change format
-    FormatType tmpFormat = formatType();
-    if (!isTime())
-    {
-      tmpFormat = Time_format;
-      setFormatType (Time_format);
-    }
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
     setValue ( KSpreadValue( context.value()->dateValue() ) );
-    FormatType tmpFormat = formatType();
-    if (!isDate())
-    {
-      tmpFormat = ShortDate_format;
-      setFormatType (ShortDate_format);
-    }
   }
   else if ( context.value()->type() == KSValue::Empty )
   {
     setValue (KSpreadValue::empty());
-    // Format the result appropriately
-    setFormatType(Number_format);
   }
   else
   {
@@ -1998,8 +1980,6 @@ bool KSpreadCell::calc(bool delay)
     {
       d->extra()->QML = new QSimpleRichText(str.mid(1), QApplication::font()); //, m_pTable->widget() );
     }
-
-    setFormatType(Text_format);
   }
 
   clearFlag(Flag_CalcDirty);
@@ -2755,7 +2735,7 @@ void KSpreadCell::paintText( QPainter& painter,
          && !( m_pTable->getShowFormula()
                && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
     {
-      double v = value().asFloat() * factor( column(),row() );
+      double v = value().asFloat();
       if ( floatColor( cellRef.x(), cellRef.y()) == KSpreadCell::NegRed && v < 0.0 )
         tmpPen.setColor( Qt::red );
     }
@@ -2799,7 +2779,7 @@ void KSpreadCell::paintText( QPainter& painter,
 
   //hide zero
   if ( m_pTable->getHideZero() && value().isNumber() &&
-       value().asFloat() * factor( column(), row() ) == 0 )
+       value().asFloat() == 0 )
   {
     d->strOutText = QString::null;
   }
@@ -2978,7 +2958,7 @@ void KSpreadCell::paintText( QPainter& painter,
   }
 
   if ( m_pTable->getHideZero() && value().isNumber()
-       && value().asFloat() * factor( column(), row() ) == 0 )
+       && value().asFloat() == 0 )
   {
     d->strOutText = tmpText;
   }
@@ -3458,10 +3438,15 @@ int KSpreadCell::defineAlignX()
   int a = align( column(), row() );
   if ( a == KSpreadCell::Undefined )
   {
-    if ( value().isBoolean() || value().isNumber() || (value().isString() && value().asString()[0].direction() == QChar::DirR ))
-      a = KSpreadCell::Right;
+    //numbers should be right-aligned by default, as well as BiDi text
+    if ((formatType() == Text_format) || value().isString())
+      a = (d->strOutText[0].direction() == QChar::DirR) ?
+          KSpreadCell::Right : KSpreadCell::Left;
     else
-      a = KSpreadCell::Left;
+      if (value().isBoolean() || value().isNumber())
+        a = KSpreadCell::Right;
+      else
+        a = KSpreadCell::Left;
   }
   return a;
 }
@@ -3482,7 +3467,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
 {
   QFontMetrics fm = _painter.fontMetrics();
   int a = align( column(), row() );
-  if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !value().isNumber()
+  if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined)
     && !verticalText( column(),row() ))
   {
     //not enough space but align to left
@@ -3561,87 +3546,17 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
  if ( d->hasExtra() && (d->extra()->extraWidth != 0.0) )
    w = d->extra()->extraWidth;
 
- if( value().isNumber())
- {
-   if( formatType() != Scientific_format )
-   {
-     int p = (precision(column(),row())  == -1) ? 8 :
-       precision(column(),row());
-     double val =value().asFloat() * factor(column(),row());
-     int pos=0;
-     QString localizedNumber= QString::number( (val), 'E', p);
-     if((pos=localizedNumber.find('.'))!=-1)
-     {
-       localizedNumber = localizedNumber.replace( pos, 1, decimal_point );
-     }
-     if( floatFormat( column(), row() ) ==
-            KSpreadCell::AlwaysSigned && val >= 0 )
-     {
-       if( locale()->positiveSign().isEmpty() )
-       {
-         localizedNumber = '+' + localizedNumber;
-       }
-     }
-     if ( precision( column(), row() ) == -1 &&
-          localizedNumber.find( decimal_point ) >= 0 )
-     {
-       //duplicate code it's not good I know I will fix it
-       int start = 0;
-       if( ( start = localizedNumber.find('E') ) != -1 )
-       {
-         start = localizedNumber.length() - start;
-       }
-       int i = localizedNumber.length() - start;
-       bool bFinished = FALSE;
-
-       while ( !bFinished && i > 0 )
-       {
-         QChar ch = localizedNumber[ i - 1 ];
-         if ( ch == '0' )
-         {
-           localizedNumber.remove( --i, 1 );
-         }
-         else
-         {
-           bFinished = TRUE;
-           if ( ch == decimal_point )
-           {
-             localizedNumber.remove( --i, 1 );
-           }
-         }
-       }
-     }
-     if ( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w
-          && !( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
-     {
-       return localizedNumber;
-     }
-   }
-   /* What is this doing and is it broken with the new error handling? */
-   QString str( "####" );
-   int i;
-   for( i=4; i != 0; i-- )
-   {
-     if( m_pTable->doc()->unzoomItX( fm.width( str.right( i ) ) ) < w - 4.0 - 1.0 )
-     {
-       break;
-     }
-   }
-   return str.right( i );//QString("###");
- }
- else
- {
-   QString tmp;
-   for ( int i = d->strOutText.length(); i != 0; i-- )
-   {
-     tmp = d->strOutText.left( i );
-     if( m_pTable->doc()->unzoomItX( fm.width( tmp ) ) < w - 4.0 - 1.0 ) //4 equals lenght of red triangle +1 pixel
-     {
-       return tmp;
-     }
-   }
- }
- return  QString::null;
+ 
+  QString tmp;
+  for ( int i = d->strOutText.length(); i != 0; i-- )
+  {
+    tmp = d->strOutText.left( i );
+    if( m_pTable->doc()->unzoomItX( fm.width( tmp ) ) < w - 4.0 - 1.0 ) //4 equals lenght of red triangle +1 pixel
+    {
+      return tmp;
+    }
+  }
+  return  QString::null;
 }
 
 
@@ -4417,18 +4332,17 @@ double KSpreadCell::extraHeight() const
 bool KSpreadCell::isDate() const
 {
   FormatType ft = formatType();
-  // workaround, since date/time is stored as floating-point
-  return value().isNumber()
-    &&  ( ft == ShortDate_format || ft == TextDate_format || ( (ft >= date_format1) && (ft <= date_format26) ) );
+
+  return (formatIsTime (ft) || ((ft == Generic_format) &&
+      (value().format() == KSpreadValue::fmt_Date)));
 }
 
 bool KSpreadCell::isTime() const
 {
   FormatType ft = formatType();
 
-  // workaround, since date/time is stored as floating-point
-  return value().isNumber()
-    && ( ( (ft >= Time_format) && (ft <= Time_format8) ) );
+  return (formatIsTime (ft) || ((ft == Generic_format) &&
+      (value().format() == KSpreadValue::fmt_Time)));
 }
 
 void KSpreadCell::setCalcDirtyFlag()
@@ -4493,30 +4407,26 @@ void KSpreadCell::convertToDouble ()
 {
   if (isDefault())
     return;
-  if (isTime() || isDate())
-    setValue (getDouble ());
-  setFactor (1.0);
-  setFormatType (Number_format);
+    
+  setValue (getDouble ());
 }
 
 void KSpreadCell::convertToPercent ()
 {
   if (isDefault())
     return;
-  if (isTime() || isDate() )
-    setValue (getDouble ());
-  setFactor (100.0);
-  setFormatType (Percentage_format);
+    
+  setValue (getDouble ());
+  d->value.setFormat (KSpreadValue::fmt_Percent);
 }
 
 void KSpreadCell::convertToMoney ()
 {
   if (isDefault())
     return;
-  if (isTime() || isDate() )
-    setValue (getDouble ());
-  setFormatType (Money_format);
-  setFactor( 1.0 );
+    
+  setValue (getDouble ());
+  d->value.setFormat (KSpreadValue::fmt_Money);
   setPrecision (locale()->fracDigits());
 }
 
@@ -4528,9 +4438,8 @@ void KSpreadCell::convertToTime ()
 
   if (isDefault() || isEmpty())
     return;
-  if (isDate())
-    setValue (getDouble ());
-  setFormatType (SecondeTime_format);
+    
+  setValue (getDouble ());
   QTime time = value().asDateTime().time();
   int msec = (int) ( (value().asFloat() - (int) value().asFloat()) * 1000 );
   time = time.addMSecs( msec );
@@ -4545,10 +4454,8 @@ void KSpreadCell::convertToDate ()
 
   if (isDefault() || isEmpty())
     return;
-  if (isTime())
-    setValue (getDouble ());
-  setFormatType (ShortDate_format);
-  setFactor( 1.0 );
+    
+  setValue (getDouble ());
 
   //TODO: why did we call setValue(), when we override it here?
   QDate date(1900, 1, 1);
@@ -4848,52 +4755,9 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
 
     saveOasisAnnotation( xmlwriter );
-    if ( value().isBoolean() )
-    {
-        xmlwriter.addAttribute( "office:value-type", "boolean" );
-        xmlwriter.addAttribute( "office:boolean-value", ( value().asBoolean() ? "true" : "false" ) );
-    }
-    else if ( value().isNumber() )
-    {
-      FormatType type = formatType();
-
-      if ( type == Percentage_format )
-        {
-        xmlwriter.addAttribute( "office:value-type", "percentage" );
-        xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
-        }
-      else if ( type == Money_format )
-        {
-        xmlwriter.addAttribute( "office:value-type", "currency" );
-        // TODO: add code of currency
-        //xmlwriter.addAttribute( "tableoffice:currency", locale()->currencySymbol() );
-        xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
-        }
-      else if ( isDate() )
-        {
-          xmlwriter.addAttribute( "office:value-type", "date" );
-          xmlwriter.addAttribute( "office:date-value", value().asDate().toString( Qt::ISODate ) );
-        }
-      else if ( isTime() )
-        {
-          xmlwriter.addAttribute( "office:value-type", "time" );
-          xmlwriter.addAttribute( "office:time-value", value().asTime().toString( "PThhHmmMssS" ) );
-        }
-      else
-        {
-        xmlwriter.addAttribute( "office:value-type", "float" );
-        xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
-        }
-    }
-    else if ( value().isString() )
-      {
-        xmlwriter.addAttribute( "office:value-type", "string" );
-        xmlwriter.addAttribute( "office:string-value", value().asString() );
-      }
-    else
-    {
-      kdDebug() << "Type: " << value().type() << endl;
-    }
+    
+    saveOasisValue (xmlwriter);
+    
     if (d->hasExtra() && d->extra()->validity)
     {
         KSpreadGenValidationStyle styleVal(d->extra()->validity);
@@ -4927,6 +4791,65 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     return true;
 }
 
+void KSpreadCell::saveOasisValue (KoXmlWriter &xmlWriter)
+{
+  switch (value().format())
+  {
+    case KSpreadValue::fmt_None: break;  //NOTHING HERE
+    case KSpreadValue::fmt_Boolean:
+    {
+      xmlWriter.addAttribute( "office:value-type", "boolean" );
+      xmlWriter.addAttribute( "office:boolean-value", ( value().asBoolean() ?
+          "true" : "false" ) );
+      break;
+    }
+    case KSpreadValue::fmt_Number:
+    {
+      xmlWriter.addAttribute( "office:value-type", "float" );
+      xmlWriter.addAttribute( "office:value",
+          QString::number( value().asFloat() ) );
+      break;
+    }
+    case KSpreadValue::fmt_Percent:
+    {
+      xmlWriter.addAttribute( "office:value-type", "percentage" );
+      xmlWriter.addAttribute( "office:value",
+          QString::number( value().asFloat() ) );
+      break;
+    }
+    case KSpreadValue::fmt_Money:
+    {
+      xmlWriter.addAttribute( "office:value-type", "currency" );
+      // TODO: add code of currency
+      //xmlWriter.addAttribute( "tableoffice:currency",
+      // locale()->currencySymbol() );
+      xmlWriter.addAttribute( "office:value",
+          QString::number( value().asFloat() ) );
+      break;
+    }
+    case KSpreadValue::fmt_DateTime: break;  //NOTHING HERE
+    case KSpreadValue::fmt_Date:
+    {
+      xmlWriter.addAttribute( "office:value-type", "date" );
+      xmlWriter.addAttribute( "office:date-value",
+          value().asDate().toString( Qt::ISODate ) );
+      break;
+    }
+    case KSpreadValue::fmt_Time:
+    {
+      xmlWriter.addAttribute( "office:value-type", "time" );
+      xmlWriter.addAttribute( "office:time-value",
+          value().asTime().toString( "PThhHmmMssS" ) );
+      break;
+    }
+    case KSpreadValue::fmt_String:
+    {
+      xmlWriter.addAttribute( "office:value-type", "string" );
+      xmlWriter.addAttribute( "office:string-value", value().asString() );
+      break;
+    }
+  };
+}
 
 QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) const
 {
@@ -5845,6 +5768,8 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
 
 bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 {
+  //TODO: use ValueConverter::self()->asString() to generate strText
+  
   QString t = text.text();
   t = t.stripWhiteSpace();
 
@@ -5930,7 +5855,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 
   if ( formatType() == Percentage_format )
         {
-          setFactor( 100.0 ); // should have been already done by loadFormat
           t = locale->formatNumber( value().asFloat() * 100.0, precision );
     d->strText = pasteOperation( t, d->strText, op );
           d->strText += '%';

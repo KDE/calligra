@@ -196,7 +196,7 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
       else
       {
         //convert the number, change decimal point from English to local
-        s = QString::number (value.asFloat());
+        s = QString::number (value.asFloat(), 'g', 10);
         decimal_point = locale->decimalSymbol()[0];
         if (decimal_point && ((pos = s.find ('.')) != -1))
           s = s.replace (pos, 1, decimal_point);

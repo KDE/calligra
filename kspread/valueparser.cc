@@ -50,9 +50,6 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
   if ( str.isEmpty() || format == Text_format || str.at(0)=='\'' )
   {
     cell->setValue (str);
-    //we must NOT call this, or the cell shall be switched to text format
-    //for everything we put to it
-    //cell->setFormatType (Text_format);
     return;
   }
 
@@ -71,8 +68,6 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
   double money = cell->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
-    cell->setFormatType(Money_format);
-    cell->setFactor(1.0);
     cell->setPrecision(2);
     KSpreadValue val (money);
     val.setFormat (KSpreadValue::fmt_Money);
@@ -84,13 +79,7 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
     return;
 
   if (tryParseTime (strStripped, cell))
-  {
-    // Force default time format if format isn't time
-    if (!cell->isTime())
-      cell->setFormatType(Time_format);
-
     return;
-  }
 
   // Nothing particular found, then this is simply a string
   cell->setValue (KSpreadValue (str));
@@ -151,10 +140,7 @@ bool ValueParser::tryParseBool (const QString& str, KSpreadCell *cell)
   bool ok;
   KSpreadValue val = tryParseBool (str, cell->locale(), &ok);
   if (ok)
-  {
     cell->setValue (val);
-    cell->setFormatType (fmtType);
-  }
   return ok;
 }
 
@@ -163,17 +149,7 @@ bool ValueParser::tryParseNumber (const QString& str, KSpreadCell *cell)
   bool ok;
   KSpreadValue val = tryParseNumber (str, cell->locale(), &ok);
   if (ok)
-  {
     cell->setValue (val);
-    if (fmtType == Percentage_format)
-    {
-      if (cell->formatType() != Percentage_format)
-        //Only set the precision if the format wasn't percentage.
-        cell->setPrecision (0);
-      cell->setFactor (100.0);
-    }
-    cell->setFormatType (fmtType);
-  }
   return ok;
 }
 
@@ -182,12 +158,7 @@ bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
   bool ok;
   KSpreadValue value = tryParseDate (str, cell->locale(), &ok);
   if (ok)
-  {
     cell->setValue (value);
-    if (!cell->isDate())
-      //set formatting, but only if we didn't have a date before
-      cell->setFormatType (fmtType);
-  }
   return ok;
 }
 
@@ -196,12 +167,7 @@ bool ValueParser::tryParseTime (const QString& str, KSpreadCell *cell)
   bool ok;
   KSpreadValue value = tryParseTime (str, cell->locale(), &ok);
   if (ok)
-  {
     cell->setValue (value);
-    if (!cell->isTime())
-      //set formatting, but only if we didn't have a time before
-      cell->setFormatType (fmtType);
-  }
   return ok;
 }
 
@@ -235,7 +201,7 @@ KSpreadValue ValueParser::tryParseNumber (const QString& str, KLocale *locale,
   QString str2;
   if( str.at(str.length()-1)=='%')
   {
-    QString str2 = str.left (str.length()-1);
+    str2 = str.left (str.length()-1).stripWhiteSpace();
     percent = true;
   }
   else
@@ -255,6 +221,7 @@ KSpreadValue ValueParser::tryParseNumber (const QString& str, KLocale *locale,
       kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
           "' successfully parsed as percentage: " << val << "%" << endl;
       value.setValue (val / 100.0);
+      value.setFormat (KSpreadValue::fmt_Percent);
       fmtType = Percentage_format;
     }
     else

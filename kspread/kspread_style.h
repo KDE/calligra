@@ -64,7 +64,7 @@ class KSpreadStyle
     {
       SAlignX          = 0x01,
       SAlignY          = 0x02,
-      SFactor          = 0x04,
+      //SFactor was here
       SPrefix          = 0x08,
       SPostfix         = 0x10,
       SLeftBorder      = 0x20,
@@ -150,7 +150,6 @@ class KSpreadStyle
   int    precision()   const;
   int    rotateAngle() const;
   double indent()      const;
-  double factor()      const;
 
   KSpreadStyle * setAlignX( KSpreadFormat::Align  alignX );
   KSpreadStyle * setAlignY( KSpreadFormat::AlignY alignY );
@@ -177,7 +176,6 @@ class KSpreadStyle
   KSpreadStyle * setPrefix( QString const & prefix );
   KSpreadStyle * setPostfix( QString const & postfix );
   KSpreadStyle * setCurrency( KSpreadFormat::Currency const & currency );
-  KSpreadStyle * setFactor( double factor );
   KSpreadStyle * setProperty( Properties p );
   KSpreadStyle * clearProperty( Properties p );
 
@@ -289,10 +287,6 @@ class KSpreadStyle
    * about which currency from which country
    */
   KSpreadFormat::Currency m_currency;
-  /**
-   * Used to display 0.15 as 15% for example.
-   */
-  double m_factor;
 
   /**
    * Stores information like: DonPrint, DontShowFormula, Protected...
@@ -366,7 +360,6 @@ class KSpreadCustomStyle : public KSpreadStyle
   void changePrefix( QString const & prefix );
   void changePostfix( QString const & postfix );
   void changeCurrency( KSpreadFormat::Currency const & currency );
-  void changeFactor( double factor );
 
   void addProperty( Properties p );
   void removeProperty( Properties p );

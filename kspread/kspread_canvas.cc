@@ -2409,28 +2409,23 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
        case Key_Dollar:
         rw->setFormatType (Money_format);
-        rw->setFactor( 1.0 );
         rw->setPrecision( m_pDoc->locale()->fracDigits() );
         break;
 
        case Key_Percent:
-        rw->setFactor( 100.0 );
         rw->setFormatType (Percentage_format);
         break;
 
        case Key_At:
         rw->setFormatType( SecondeTime_format );
-        rw->setFactor( 1.0 );
         break;
 
        case Key_NumberSign:
         rw->setFormatType( ShortDate_format );
-        rw->setFactor( 1.0 );
         break;
 
        case Key_AsciiCircum:
         rw->setFormatType( Scientific_format );
-        rw->setFactor( 1.0 );
         break;
 
        case Key_Ampersand:
@@ -2486,27 +2481,22 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
        case Key_Dollar:
         cw->setFormatType( Money_format );
-        cw->setFactor( 1.0 );
         cw->setPrecision( m_pDoc->locale()->fracDigits() );
         break;
 
        case Key_Percent:
-        cw->setFactor( 100.0 );
         cw->setFormatType( Percentage_format );
         break;
 
        case Key_At:
         cw->setFormatType( SecondeTime_format );
-        cw->setFactor( 1.0 );
         break;
 
        case Key_NumberSign:
         cw->setFormatType( ShortDate_format );
-        cw->setFactor( 1.0 );
         break;
 
        case Key_AsciiCircum:
-        cw->setFactor( 1.0 );
         cw->setFormatType( Scientific_format );
         break;
 
@@ -2581,7 +2571,6 @@ bool KSpreadCanvas::formatCellByKey (KSpreadCell *cell, int key, const QRect &re
     case Key_AsciiCircum:
     cell->setFormatType (Scientific_format);
     cell->convertToDouble ();
-    cell->setFactor( 1.0 );
     break;
 
     case Key_Ampersand:
