@@ -193,8 +193,22 @@ void SideBar::updateItem( KPrPage *page )
     m_thb->updateItem( pos, sticky );
 }
 
+void SideBar::setViewMasterPage( bool _masterPage )
+{
+}
+
+SideBarBase::SideBarBase(KPresenterDoc *_doc, KPresenterView *_view)
+    : m_doc( _doc ), m_view( _view ), m_viewMasterPage( false )
+{
+}
+
+void SideBarBase::setViewMasterPage( bool _b )
+{
+    m_viewMasterPage = _b;
+}
+
 ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
-    :KIconView(parent), m_doc(d), m_view(v)
+    :KIconView(parent), SideBarBase( d,v)
 {
     uptodate = false;
     m_offsetX = 0;
@@ -703,7 +717,7 @@ void OutlineObjectItem::setObject( KPObject* object )
 }
 
 Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
-    : KListView( parent ), m_doc( d ), m_view( v )
+    : KListView( parent ), SideBarBase( d, v)
 {
     rebuildItems();
     setSorting( -1 );

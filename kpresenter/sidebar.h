@@ -38,7 +38,18 @@ class ThumbBar;
 class ThumbToolTip;
 class KPrPage;
 
-class ThumbBar : public KIconView
+class SideBarBase
+{
+public:
+    SideBarBase(KPresenterDoc *_doc, KPresenterView *_view);
+    void setViewMasterPage( bool _b );
+protected:
+    KPresenterDoc *m_doc;
+    KPresenterView *m_view;
+    bool m_viewMasterPage;
+};
+
+class ThumbBar : public KIconView, public SideBarBase
 {
     Q_OBJECT
 
@@ -69,14 +80,12 @@ private slots:
 private:
     QPixmap getSlideThumb(int slideNr) const;
 
-    KPresenterDoc *m_doc;
-    KPresenterView *m_view;
     ThumbToolTip *m_thumbTip;
     int m_offsetX;
     int m_offsetY;
 };
 
-class Outline: public KListView
+class Outline: public KListView, public SideBarBase
 {
     Q_OBJECT
 
@@ -111,8 +120,6 @@ private slots:
     void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
 
 private:
-    KPresenterDoc *m_doc;
-    KPresenterView *m_view;
     QListViewItem *m_movedItem, *m_movedAfter;
 };
 
@@ -136,6 +143,7 @@ public:
     Outline *outline() const { return m_outline; };
     ThumbBar *thumbBar() const { return m_thb; };
 
+    void setViewMasterPage( bool _masterPage );
 signals: // all page numbers 0-based
     void showPage( int i );
     void movePage( int from, int to );

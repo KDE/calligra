@@ -4662,6 +4662,8 @@ void KPresenterView::setEditMaster( bool editMaster )
             actionViewSlideMaster->setChecked( false );
             refreshPageButton();
         }
+        if ( sidebar )
+            sidebar->setViewMasterPage( m_editMaster );
         updateNoteBarText();
         m_canvas->repaint( false );
     }
