@@ -2529,7 +2529,10 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  m_idMenuEdit_DelPage = m_vMenuEdit->insertItem( i18n("&Delete Page..."), this, "editDelPage", 0 );
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/delslide.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuEdit_DelPage = m_vMenuEdit->insertItem6(pix, i18n("&Delete Page..."), this, "editDelPage", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
@@ -2545,8 +2548,8 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // MENU Insert
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
 
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/filenew.xpm";
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/newslide.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Page = m_vMenuInsert->insertItem6(pix, i18n("Pa&ge..."), this,"insertPage", 0, -1, -1 );
   m_vMenuInsert->insertSeparator( -1 );
@@ -3010,8 +3013,8 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarInsert->setFullWidth(false);
  
   // page
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/filenew.xpm";
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/newslide.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, i18n("Insert Page"), -1 );
   m_vToolBarInsert->insertSeparator( -1 );

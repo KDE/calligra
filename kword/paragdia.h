@@ -29,12 +29,16 @@
 #include <qcolor.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
+#include <qbuttongroup.h>
+#include <qlineedit.h>
+#include <qstrlist.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
 #include <kbuttonbox.h>
 #include <kcolorbtn.h>
 #include <kspinbox.h>
+#include "kcharselectdia.h"
 
 #include <stdlib.h>
 
@@ -135,9 +139,13 @@ class KWNumPreview : public QGroupBox
 public:
   KWNumPreview(QWidget*,const char*);
   ~KWNumPreview() {}
+
+  void setCounter(KWParagLayout::Counter _counter) { counter = _counter; repaint(true); }
   
 protected:
   void drawContents(QPainter*);
+
+  KWParagLayout::Counter counter;
 
 };
 
@@ -155,7 +163,7 @@ public:
   const int PD_BORDERS = 4;
   const int PD_NUMBERING = 8;
 
-  KWParagDia(QWidget*,const char*,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING);
+  KWParagDia(QWidget*,const char*,QStrList _fontList,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING);
   ~KWParagDia();              
 
   int getFlags() { return flags; }
@@ -190,6 +198,9 @@ public:
   KWParagLayout::Border getBottomBorder() { return bottomBorder; }
   void setBottomBorder(KWParagLayout::Border _bottomBorder) { bottomBorder = _bottomBorder; updateBorders(); }
 
+  void setCounter(KWParagLayout::Counter _counter);
+  KWParagLayout::Counter getCounter() { return counter; }
+
 protected:
   void setupTab1();
   void setupTab2();
@@ -199,24 +210,28 @@ protected:
   void updateBorders();
 
   QWidget *tab1,*tab2,*tab3,*tab4;
-  QGridLayout *grid1,*grid2,*grid3,*grid4,*indentGrid,*spacingGrid,*pSpaceGrid,*tgrid;
+  QGridLayout *grid1,*grid2,*grid3,*grid4,*indentGrid,*spacingGrid,*pSpaceGrid,*tgrid,*txtgrid,*ogrid;
   KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
-  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor,*lDepth;
-  QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame,*gType;
+  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor,*lDepth,*lcLeft,*lcRight,*lStart;
+  QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame,*gType,*gText,*gOther;
   QComboBox *cSpacing,*cStyle,*cWidth;
-  QRadioButton *rLeft,*rCenter,*rRight,*rBlock,*rANums,*rLRNums,*rURNums,*rLAlph,*rUAlph,*rBullets,*rList,*rChapter;
+  QRadioButton *rLeft,*rCenter,*rRight,*rBlock,*rANums,*rLRNums,*rURNums,*rLAlph,*rUAlph,*rBullets,*rList,*rChapter,*rNone;
   KWPagePreview *prev1;
   KWPagePreview2 *prev2;
   KButtonBox *bb;
-  QPushButton *bLeft,*bRight,*bTop,*bBottom,*bBullets;
+  QPushButton *bLeft,*bRight,*bTop,*bBottom,*bBullets,*bFont;
   KWBorderPreview *prev3;
   KColorButton *bColor;
   KNumericSpinBox *sDepth;
+  QButtonGroup *g1,*g2;
   KWNumPreview *prev4;
+  QLineEdit *ecLeft,*ecRight,*eStart;
 
   KWParagLayout::Border leftBorder,rightBorder,topBorder,bottomBorder;
   int flags;
-  
+  KWParagLayout::Counter counter;
+  QStrList fontList;
+
 protected slots:
   void leftChanged(const char*);
   void rightChanged(const char*);
@@ -236,6 +251,13 @@ protected slots:
   void brdStyleChanged(const char*);
   void brdWidthChanged(const char*);
   void brdColorChanged(const QColor&);
+  void changeBullet();
+  void typeChanged(int);
+  void numTypeChanged(int);
+  void leftTextChanged(const char*);
+  void rightTextChanged(const char*);
+  void startChanged(const char*);
+  void depthChanged();
 
 };
 

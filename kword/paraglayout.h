@@ -8,6 +8,7 @@ class KWParagLayout;
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <qfont.h>
 
 #include <iostream>
 #include <koStream.h>
@@ -21,8 +22,8 @@ class KWParagLayout
 {
 public:
     enum Flow { LEFT, RIGHT, CENTER, BLOCK };
-  //enum CounterFlow { C_LEFT, C_RIGHT };
-    enum CounterType {CT_NONE,CT_NUM = 0,CT_ALPHAB = 1,CT_ROM_NUM = 2,CT_BULLET};
+    //enum CounterFlow { C_LEFT, C_RIGHT };
+    enum CounterType {CT_NONE = 0,CT_NUM = 1,CT_ALPHAB_L = 2,CT_ALPHAB_U = 3,CT_ROM_NUM_L = 4,CT_ROM_NUM_U = 5,CT_BULLET = 6};
     enum NumType {NT_LIST = 0,NT_CHAPTER = 1};
 
     enum BorderStyle {SOLID = 0,DASH = 1,DOT = 2,DASH_DOT = 3,DASH_DOT_DOT = 4};
@@ -37,6 +38,18 @@ public:
       bool operator!=(const Border _brd) {
 	return (style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth);
       }
+    };
+
+    struct Counter
+    {
+      unsigned int counterDepth;
+      int counterBullet;
+      QString counterLeftText;
+      QString counterRightText;    
+      CounterType counterType;
+      QString startCounter;
+      NumType numberingType;
+      QString bulletFont;
     };
 
     KWParagLayout( KWordDocument *_doc, bool _add = true );
@@ -55,39 +68,28 @@ public:
     /**
      * Set the text left to the counter.
      */
-    void setCounterLeftText( const char *_t ) { counterLeftText = _t; }
+    void setCounterLeftText(QString _t) { counter.counterLeftText = _t; }
     /**
      * Set the text right to the counter.
      */
-    void setCounterRightText( const char *_t ) { counterRightText = _t; }
+    void setCounterRightText(QString _t) { counter.counterRightText = _t; }
     /**
      *  Set counter type
      */
-    void setCounterType(CounterType _t) { counterType = _t; }
+    void setCounterType(CounterType _t) { counter.counterType = _t; }
     /**
      *  Set counter bullet.
      */
-    void setCounterBullet(int _b) { counterBullet = _b; }
+    void setCounterBullet(int _b) { counter.counterBullet = _b; }
     /**
      *  Set Depth of Counter.
      */
-    void setCounterDepth( unsigned int _d ) { counterDepth = _d; }
-    /**
-     * Set Number of Counter.
-     */
-    //void setCounterNr( int _nr ) { counterNr = _nr; }
+    void setCounterDepth(unsigned int _d) { counter.counterDepth = _d; }
     /**
      * Set the format in which to print the counter.
      * This encloses font, color, point-size etc.
      *
      * @see KWFormat
-     */
-    void setCounterFormat( KWFormat& _format );
-    /**
-     * Set the name of the following parag layout.
-     * 
-     * @param _paragname must be a valid name of a KWParagLayout
-     *                   instance.
      */
     void setFollowingParagLayout( const char *_paragname );
     /**
@@ -104,11 +106,14 @@ public:
     void setTopBorder(Border _brd) { top = _brd; }
     void setBottomBorder(Border _brd) { bottom = _brd; }
 
-    void setStartCounter(QString _s) { startCounter = _s; }
-    QString getStartCounter() { return startCounter; }
+    void setStartCounter(QString _s) { counter.startCounter = _s; }
+    QString getStartCounter() { return counter.startCounter; }
 
-    void setNumberingType(NumType _t) { numberingType = _t; }
-    NumType getNumberingType() { return numberingType; }
+    void setNumberingType(NumType _t) { counter.numberingType = _t; }
+    NumType getNumberingType() { return counter.numberingType; }
+
+    void setBulletFont(QString _f) { counter.bulletFont = _f; }
+    QString getBulletFont() { return counter.bulletFont; }
 
     //KWParagLayout* getNumberLikeParagLayout() {	return numberLikeParagLayout; }
     
@@ -136,33 +141,23 @@ public:
     /**
      * @return the type of the Counter.
      */
-    CounterType getCounterType() { return counterType; }
+    CounterType getCounterType() { return counter.counterType; }
     /**
      * @return the bullet of the Counter.
      */
-    int getCounterBullet() { return counterBullet; }
+    int getCounterBullet() { return counter.counterBullet; }
     /**
      * @return depth of Counter.
      */
-    int getCounterDepth() { return counterDepth; }
-    /**
-     * @return number of Counter.
-     */
-    //int getCounterNr() { return counterNr; }
-    /**
-     * @return KWFormat for printing counter.
-     *
-     * @see KWFormat
-     */
-    KWFormat& getCounterFormat() { return counterFormat; }
+    int getCounterDepth() { return counter.counterDepth; }
     /**
      * @return the text left to the counter
      */
-    const char* getCounterLeftText() { return counterLeftText.data(); }
+    QString getCounterLeftText() { return counter.counterLeftText; }
     /**
      * @return the text right to the counter
      */
-    const char* getCounterRightText() { return counterRightText.data(); }  
+    QString getCounterRightText() { return counter.counterRightText.data(); }  
     /**
      * @return the name of the following parag layout.
      */
@@ -170,6 +165,9 @@ public:
 
     void save(ostream &out);
     void load(KOMLParser&,vector<KOMLAttrib>&);
+
+    Counter getCounter() { return counter; }
+    void setCounter(Counter _counter) { counter = _counter; }
 
 protected:
     Flow flow;
@@ -187,23 +185,7 @@ protected:
      * @see KWFormat
      */
     KWFormat format;
-    //CounterFlow counterFlow;  
-    /**
-     * A value between 0 and 7.
-     */
-    unsigned int counterDepth;
-    /**
-     * A value between 0 and 7 or -1.
-     * -1 means that we dont use any counter.
-     */
-    int counterBullet;
-    //int counterNr;
-    KWFormat counterFormat;
-    QString counterLeftText;
-    QString counterRightText;    
-    CounterType counterType;
-    QString startCounter;
-    NumType numberingType;
+    Counter counter;
     /**
      * Parag that is used for numbering. For example a theorem
      * will be numbered like this: Theorem C.N .....    with C=Chapter Counter

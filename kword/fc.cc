@@ -748,19 +748,19 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE )
     {
-	KWFormat counterfm(doc, *this );
-	counterfm.apply( parag->getParagLayout()->getCounterFormat() );
-	_painter.setFont( *(counterfm.loadFont( document )) );
-	_painter.setPen( counterfm.getColor() );
+// 	KWFormat counterfm(doc, *this );
+// 	counterfm.apply( parag->getParagLayout()->getCounterFormat() );
+// 	_painter.setFont( *(counterfm.loadFont( document )) );
+// 	_painter.setPen( counterfm.getColor() );
 	
-// 	// Is the counter fixed to the left side ?
-// 	if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT ){
-// 	    left += ptCounterWidth;
-// 	}
-// 	else { // the counter is fixed to the right side
-// 	    right += ptCounterWidth;
-// 	}
-	left += ptCounterWidth; 
+// // 	// Is the counter fixed to the left side ?
+// // 	if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT ){
+// // 	    left += ptCounterWidth;
+// // 	}
+// // 	else { // the counter is fixed to the right side
+// // 	    right += ptCounterWidth;
+// // 	}
+// 	left += ptCounterWidth; 
     }
 
 
@@ -954,15 +954,15 @@ unsigned int KWFormatContext::getLineHeight()
 
 void KWFormatContext::makeCounterLayout( QPainter &_painter )
 {
-    KWFormat format( doc,parag->getParagLayout()->getFormat() );
-    format.apply( parag->getParagLayout()->getCounterFormat() );
-    KWDisplayFont *font = loadFont( document );    
+//     KWFormat format( doc,parag->getParagLayout()->getFormat() );
+//     format.apply( parag->getParagLayout()->getCounterFormat() );
+//     KWDisplayFont *font = loadFont( document );    
 
-    parag->makeCounterText(counterText);
+//     parag->makeCounterText(counterText);
     
-    ptCounterWidth = font->getPTWidth(counterText.data());
-    ptCounterAscender = font->getPTAscender();
-    ptCounterDescender = font->getPTDescender();
+//     ptCounterWidth = font->getPTWidth(counterText.data());
+//     ptCounterAscender = font->getPTAscender();
+//     ptCounterDescender = font->getPTDescender();
 }
 
 

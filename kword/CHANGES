@@ -365,3 +365,7 @@ Reggie, 19.11.1998:
 - Started adding tab to the paragraph layout dialog for configuration of numbering (different list types and chapter numbering)
 - Use this tab in stylist too
 - Started implementing of internal stuff for using style templates in the documents
+
+Reggie, 20.11.1998:
+-------------------
+- More work on numbering (internal stuff and configuration dialog)

@@ -29,6 +29,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qbrush.h>
+#include <qstrlist.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
@@ -49,7 +50,7 @@ class KWStyleManager : public QTabDialog
   Q_OBJECT
 
 public:
-  KWStyleManager(QWidget *_parent,KWordDocument *_doc);
+  KWStyleManager(QWidget *_parent,KWordDocument *_doc,QStrList _fontList);
 
 protected:
   void setupTab1();
@@ -62,6 +63,7 @@ protected:
 
   KWordDocument *doc;
   KWStyleEditor *editor;
+  QStrList fontList;
 
 protected slots:
   void editStyle();
@@ -98,7 +100,7 @@ class KWStyleEditor : public QTabDialog
   Q_OBJECT
 
 public:
-  KWStyleEditor(QWidget *_parent,KWParagLayout *_style,KWordDocument *_doc);
+  KWStyleEditor(QWidget *_parent,KWParagLayout *_style,KWordDocument *_doc,QStrList _fontList);
 
 protected:
   void setupTab1();
@@ -114,6 +116,7 @@ protected:
   KWParagLayout *style;
   KWordDocument *doc;
   KWParagDia *paragDia;
+  QStrList fontList;
 
 signals:
   void updateStyles();

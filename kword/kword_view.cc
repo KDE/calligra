@@ -571,7 +571,7 @@ void KWordView::formatParagraph()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"");
+  paragDia = new KWParagDia(0,"",fontList);
   paragDia->setCaption(i18n("KWord - Paragraph settings"));
   QObject::connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->setLeftIndent(gui->getPaperWidget()->getLeftIndent());
@@ -584,6 +584,7 @@ void KWordView::formatParagraph()
   paragDia->setRightBorder(gui->getPaperWidget()->getRightBorder());
   paragDia->setTopBorder(gui->getPaperWidget()->getTopBorder());
   paragDia->setBottomBorder(gui->getPaperWidget()->getBottomBorder());
+  paragDia->setCounter(gui->getPaperWidget()->getCounter());
   paragDia->show();
 }
 
@@ -633,7 +634,7 @@ void KWordView::extraStylist()
       delete styleManager;
       styleManager = 0;
     }
-  styleManager = new KWStyleManager(0,m_pKWordDoc);
+  styleManager = new KWStyleManager(0,m_pKWordDoc,fontList);
   styleManager->setCaption(i18n("KWord - Stylist"));
   styleManager->show();
 }
@@ -1671,6 +1672,7 @@ void KWordView::paragDiaOk()
   gui->getPaperWidget()->setParagRightBorder(paragDia->getRightBorder());
   gui->getPaperWidget()->setParagTopBorder(paragDia->getTopBorder());
   gui->getPaperWidget()->setParagBottomBorder(paragDia->getBottomBorder());
+  gui->getPaperWidget()->setCounter(paragDia->getCounter());
   setFlow(paragDia->getFlow());
 }
 

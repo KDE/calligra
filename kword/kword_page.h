@@ -135,6 +135,11 @@ public:
   KWParagLayout::Border getBottomBorder()
     { return fc->getParag()->getParagLayout()->getBottomBorder(); }
 
+  KWParagLayout::Counter getCounter()
+    { return fc->getParag()->getParagLayout()->getCounter(); }
+  void setCounter(KWParagLayout::Counter _counter)
+    { fc->getParag()->getParagLayout()->setCounter(_counter); }
+
 
   void recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L);
 

@@ -8,26 +8,24 @@
 #include <unistd.h>
 
 KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true )
-  : format(_doc), counterFormat(_doc)
+  : format(_doc)
 {
     flow = LEFT;
     mmParagFootOffset = 0;
     mmParagHeadOffset = 0;
     mmFirstLineLeftIndent = 0;
     mmLeftIndent = 0;
-    //counterFlow = C_LEFT;
-    counterType = CT_NONE;
-    counterDepth = 0;
-    // counterNr = -1;
-    //counterNr = 0;
-    counterBullet = '-';
-    counterLeftText = "";
-    counterRightText = "";
+    counter.counterType = CT_NONE;
+    counter.counterDepth = 0;
+    counter.counterBullet = '-';
+    counter.counterLeftText = "";
+    counter.counterRightText = "";
     followingParagLayout = this;
     //numberLikeParagLayout = 0L;
     ptLineSpacing = 0;
-    startCounter = "";
-    numberingType = NT_LIST;
+    counter.startCounter = "";
+    counter.numberingType = NT_LIST;
+    counter.bulletFont = "symbol";
 
     left.color = white;
     left.style = SOLID;
@@ -42,11 +40,11 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true )
     bottom.style = SOLID;
     bottom.ptWidth = 0;
 
-    format.setDefaults( _doc );
+    format.setDefaults(_doc);
     
     document = _doc;
     if (_add)
-      document->paragLayoutList.append( this );
+      document->paragLayoutList.append(this);
     document->paragLayoutList.setAutoDelete(true);
 }
 
@@ -62,16 +60,16 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   mmParagHeadOffset = _layout.getMMParagHeadOffset();
   mmFirstLineLeftIndent = _layout.getMMFirstLineLeftIndent();
   mmLeftIndent = _layout.getMMLeftIndent();
-  counterType = static_cast<CounterType>(_layout.getCounterType());
-  counterDepth = _layout.getCounterDepth();
-  counterBullet = _layout.getCounterBullet();
-  counterLeftText = qstrdup(_layout.getCounterLeftText());
-  counterRightText = qstrdup(_layout.getCounterRightText());
+  counter.counterType = static_cast<CounterType>(_layout.getCounterType());
+  counter.counterDepth = _layout.getCounterDepth();
+  counter.counterBullet = _layout.getCounterBullet();
+  counter.counterLeftText = qstrdup(_layout.getCounterLeftText());
+  counter.counterRightText = qstrdup(_layout.getCounterRightText());
   followingParagLayout = this;
-  //numberLikeParagLayout = 0L;
   ptLineSpacing = _layout.getPTLineSpacing();
-  startCounter = _layout.getStartCounter();
-  numberingType = _layout.getNumberingType();
+  counter.startCounter = _layout.getStartCounter();
+  counter.numberingType = _layout.getNumberingType();
+  counter.bulletFont = _layout.getBulletFont();
 
   left = _layout.getLeftBorder();
   right = _layout.getRightBorder();
@@ -107,9 +105,10 @@ void KWParagLayout::save(ostream &out)
   out << indent << "<FLOW value=\"" << static_cast<int>(flow) << "\"/>" << endl;
   out << indent << "<OFFSETS head=\"" << mmParagHeadOffset << "\" foot=\"" << mmParagFootOffset << "\"/>" << endl;
   out << indent << "<INDENTS first=\"" << mmFirstLineLeftIndent << "\" left=\"" << mmLeftIndent << "\"/>" << endl;
-  out << indent << "<COUNTER type=\"" << static_cast<int>(counterType) << "\" depth=\"" << counterDepth 
-      << "\" bullet=\"" << counterBullet << "\" start=\"" << startCounter << "\" numberingtype=\"" 
-      << static_cast<int>(numberingType) << "\" lefttext=\"" << counterLeftText << "\" righttext=\"" << counterRightText << "\"/>" << endl;
+  out << indent << "<COUNTER type=\"" << static_cast<int>(counter.counterType) << "\" depth=\"" << counter.counterDepth 
+      << "\" bullet=\"" << counter.counterBullet << "\" start=\"" << counter.startCounter << "\" numberingtype=\"" 
+      << static_cast<int>(counter.numberingType) << "\" lefttext=\"" << counter.counterLeftText << "\" righttext=\"" 
+      << counter.counterRightText << "\" bulletfont=\"" << counter.bulletFont << "\"/>" << endl;
   out << indent << "<LINESPACING value=\"" << ptLineSpacing << "\"/>" << endl;
   out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
       << left.color.blue() << "\" style=\"" << static_cast<int>(left.style) << "\" width=\"" << left.ptWidth << "\"/>" << endl; 
@@ -190,19 +189,21 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "type")
-		counterType = static_cast<CounterType>(atoi((*it).m_strValue.c_str()));
+		counter.counterType = static_cast<CounterType>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "depth")
-		counterDepth = atoi((*it).m_strValue.c_str());
+		counter.counterDepth = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "bullet")
-		counterBullet = atoi((*it).m_strValue.c_str());
+		counter.counterBullet = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "lefttext")
-		counterLeftText = (*it).m_strValue.c_str();
+		counter.counterLeftText = (*it).m_strValue.c_str();
 	      else if ((*it).m_strName == "righttext")
-		counterRightText = (*it).m_strValue.c_str();
+		counter.counterRightText = (*it).m_strValue.c_str();
 	      else if ((*it).m_strName == "start")
-		startCounter = (*it).m_strValue.c_str();
+		counter.startCounter = (*it).m_strValue.c_str();
 	      else if ((*it).m_strName == "numberingtype")
-		numberingType = static_cast<NumType>(atoi((*it).m_strValue.c_str()));
+		counter.numberingType = static_cast<NumType>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bulletfont")
+		counter.bulletFont = (*it).m_strValue.c_str();
 	    }
 	}
 

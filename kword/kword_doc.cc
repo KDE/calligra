@@ -861,13 +861,13 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
   // First line ? Draw the counter ?
   if ( pos == 0 && lay->getCounterType() != KWParagLayout::CT_NONE )
     {
-      KWFormat counterfm(this, _fc );
-      counterfm.apply( lay->getCounterFormat() );
-      _painter.setFont( *( counterfm.loadFont( this ) ) );
-      _painter.setPen( counterfm.getColor() );
+//       KWFormat counterfm(this, _fc );
+//       counterfm.apply( lay->getCounterFormat() );
+//       _painter.setFont( *( counterfm.loadFont( this ) ) );
+//       _painter.setPen( counterfm.getColor() );
       
-      _painter.drawText(- xOffset, 
-			_fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
+//       _painter.drawText(- xOffset, 
+// 			_fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
     }
     
   // paint it character for character. Provisionally! !!HACK!!
