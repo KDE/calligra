@@ -1055,6 +1055,7 @@ void KWFrameDia::setupTab5()
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
     grid5->addItem( spacer,row,0 );
 
+    brushStyle->insertItem( i18n( "No Background Fill" ) );
     brushStyle->insertItem( i18n( "100% Fill Pattern" ) );
     brushStyle->insertItem( i18n( "94% Fill Pattern" ) );
     brushStyle->insertItem( i18n( "88% Fill Pattern" ) );
@@ -1069,7 +1070,6 @@ void KWFrameDia::setupTab5()
     brushStyle->insertItem( i18n( "Diagonal Lines ( / )" ) );
     brushStyle->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
     brushStyle->insertItem( i18n( "Diagonal Crossing Lines" ) );
-    brushStyle->insertItem( i18n( "No Background Fill" ) );
     connect(  brushStyle, SIGNAL( activated( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
@@ -1111,49 +1111,49 @@ void KWFrameDia::initComboStyleBrush()
 
     switch ( newBrushStyle.style() )
     {
-        case SolidPattern:
+        case NoBrush:
             brushStyle->setCurrentItem( 0 );
             break;
-        case Dense1Pattern:
+        case SolidPattern:
             brushStyle->setCurrentItem( 1 );
             break;
-        case Dense2Pattern:
+        case Dense1Pattern:
             brushStyle->setCurrentItem( 2 );
             break;
-        case Dense3Pattern:
+        case Dense2Pattern:
             brushStyle->setCurrentItem( 3 );
             break;
-        case Dense4Pattern:
+        case Dense3Pattern:
             brushStyle->setCurrentItem( 4 );
             break;
-        case Dense5Pattern:
+        case Dense4Pattern:
             brushStyle->setCurrentItem( 5 );
             break;
-        case Dense6Pattern:
+        case Dense5Pattern:
             brushStyle->setCurrentItem( 6 );
             break;
-        case Dense7Pattern:
+        case Dense6Pattern:
             brushStyle->setCurrentItem( 7 );
             break;
-        case HorPattern:
+        case Dense7Pattern:
             brushStyle->setCurrentItem( 8 );
             break;
-        case VerPattern:
+        case HorPattern:
             brushStyle->setCurrentItem( 9 );
             break;
-        case CrossPattern:
+        case VerPattern:
             brushStyle->setCurrentItem( 10 );
             break;
-        case BDiagPattern:
+        case CrossPattern:
             brushStyle->setCurrentItem( 11 );
             break;
-        case FDiagPattern:
+        case BDiagPattern:
             brushStyle->setCurrentItem( 12 );
             break;
-        case DiagCrossPattern:
+        case FDiagPattern:
             brushStyle->setCurrentItem( 13 );
             break;
-        case NoBrush:
+        case DiagCrossPattern:
             brushStyle->setCurrentItem( 14 );
             break;
         case CustomPattern:
@@ -1172,49 +1172,49 @@ QBrush KWFrameDia::frameBrushStyle()
     switch ( brushStyle->currentItem() )
     {
         case 0:
-            brush.setStyle( SolidPattern );
+            brush.setStyle( NoBrush );
             break;
         case 1:
-            brush.setStyle( Dense1Pattern );
+            brush.setStyle( SolidPattern );
             break;
         case 2:
-            brush.setStyle( Dense2Pattern );
+            brush.setStyle( Dense1Pattern );
             break;
         case 3:
-            brush.setStyle( Dense3Pattern );
+            brush.setStyle( Dense2Pattern );
             break;
         case 4:
-            brush.setStyle( Dense4Pattern );
+            brush.setStyle( Dense3Pattern );
             break;
         case 5:
-            brush.setStyle( Dense5Pattern );
+            brush.setStyle( Dense4Pattern );
             break;
         case 6:
-            brush.setStyle( Dense6Pattern );
+            brush.setStyle( Dense5Pattern );
             break;
         case 7:
-            brush.setStyle( Dense7Pattern );
+            brush.setStyle( Dense6Pattern );
             break;
         case 8:
-            brush.setStyle( HorPattern );
+            brush.setStyle( Dense7Pattern );
             break;
         case 9:
-            brush.setStyle( VerPattern );
+            brush.setStyle( HorPattern );
             break;
         case 10:
-            brush.setStyle( CrossPattern );
+            brush.setStyle( VerPattern );
             break;
         case 11:
-            brush.setStyle( BDiagPattern );
+            brush.setStyle( CrossPattern );
             break;
         case 12:
-            brush.setStyle( FDiagPattern );
+            brush.setStyle( BDiagPattern );
             break;
         case 13:
-            brush.setStyle( DiagCrossPattern );
+            brush.setStyle( FDiagPattern );
             break;
         case 14:
-            brush.setStyle( NoBrush );
+            brush.setStyle( DiagCrossPattern );
             break;
     }
 
@@ -1225,7 +1225,7 @@ QBrush KWFrameDia::frameBrushStyle()
 
 void KWFrameDia::updateBrushConfiguration()
 {
-    if(brushStyle->currentItem()==14) {
+    if(brushStyle->currentItem()==0) {
         brushPreview->hide();
     } else {
         brushPreview->show();
