@@ -322,7 +322,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	if( m_fill && m_fill->type() == fill_fill )
 	{
 		m_fill->color().pseudoValues( r, g, b );
-		a = qRound( 255 * m_fill->opacity() );
+		a = qRound( 255 * m_fill->color().opacity() );
 		fillColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		ArtSvpWriter *swr;
@@ -349,7 +349,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		// TODO : non rgb support ?
 
 		m_stroke->color().pseudoValues( r, g, b );
-		a = qRound( 255 * m_stroke->opacity() );
+		a = qRound( 255 * m_stroke->color().opacity() );
 		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		// caps translation karbon -> art
