@@ -5,5 +5,5 @@ Name=KWord's KWord 1.3 Import Filter
 X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
-X-KDE-Library=libkwordkword1dot3import.la
+X-KDE-Library=libkwordkword1dot3import
 ServiceTypes=KOfficeFilter
