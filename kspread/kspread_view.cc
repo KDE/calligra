@@ -1139,19 +1139,19 @@ void ViewPrivate::initActions()
       0, view, SLOT( gotoCell() ), ac, "gotoCell" );
   actions->gotoCell->setToolTip(i18n("Move to a particular cell."));
 
-  actions->nextSheet = new KAction( i18n("Next Sheet"),
+  actions->nextSheet = new KAction( i18n("Next Sheet"), "forward",
       Qt::CTRL+Qt::Key_PageDown, view, SLOT( nextTable() ), ac, "nextTable");
   actions->nextSheet->setToolTip(i18n("Move to the next sheet."));
 
-  actions->prevSheet = new KAction( i18n("Previous Sheet"),
+  actions->prevSheet = new KAction( i18n("Previous Sheet"), "back",
       Qt::CTRL+Qt::Key_PageUp, view, SLOT( previousTable() ), ac, "previousTable");
   actions->prevSheet->setToolTip(i18n("Move to the previous sheet."));
 
-  actions->firstSheet = new KAction( i18n("First Sheet"),
+  actions->firstSheet = new KAction( i18n("First Sheet"), "start",
       0, view, SLOT( firstTable() ), ac, "firstTable");
   actions->firstSheet->setToolTip(i18n("Move to the first sheet."));
 
-  actions->lastSheet = new KAction( i18n("Last Sheet"),
+  actions->lastSheet = new KAction( i18n("Last Sheet"), "finish",
       0, view, SLOT( lastTable() ), ac, "lastTable");
   actions->lastSheet->setToolTip(i18n("Move to the last sheet."));
 
