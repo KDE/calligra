@@ -1793,7 +1793,10 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             //we must extend note attribute
             //kdDebug()<<"presentation:notes----------------------------------\n";
-            QDomNode textBox = o.namedItem( "draw:text-box" );
+            QDomNode frameBox = o.namedItem( "draw:frame" );
+            //todo load layout for note.
+            QDomNode textBox = frameBox.namedItem( "draw:text-box" );
+
             if ( !textBox.isNull() )
             {
                 QString note;

@@ -551,6 +551,9 @@ bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter ) const
     //todo : add size for draw:text-box otherwise we can't import into oo
     //<draw:text-box presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="14.5cm" svg:height="11.408cm" svg:x="3.247cm" svg:y="14.126cm" presentation:class="notes">
     xmlWriter.startElement( "presentation:notes" );
+    xmlWriter.startElement( "draw:frame" );
+    //todo save style
+
     xmlWriter.startElement( "draw:text-box" );
     QStringList text = QStringList::split( "\n", m_noteText );
     for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
@@ -558,6 +561,7 @@ bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter ) const
         xmlWriter.addTextNode( *it );
         xmlWriter.endElement();
     }
+    xmlWriter.endElement();
     xmlWriter.endElement();
     xmlWriter.endElement();
 
