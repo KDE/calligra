@@ -654,6 +654,11 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 				command = *(ptr++);
 
 		}
+		if( path )
+		{
+			obj->combinePath( *path );
+			delete path;
+		}
 	}
 }
 
