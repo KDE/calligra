@@ -1680,21 +1680,21 @@ void KPresenterDoc::AddRemovePage()
 
 QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theFile )
 {
-    QString _template, fileName;
+    QString fileName;
     if ( !chooseTemplate ) {
-	_template = QString::fromLocal8Bit( getenv( "HOME" ) );
-	_template += "/.default.kpr";\
-	fileName = _template;
-	if ( !theFile.isEmpty() )
+        if ( theFile.isEmpty() )
+            fileName = locateLocal( "appdata", "default.kpr" );
+        else
 	    fileName = theFile;
     } else {
+	QString _template;
 	if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 					   "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
 					   "kpresenter_template") == KoTemplateChooseDia::Cancel )
 	    return QString("");
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
-	QString cmd = "cp " + fileName + " " + QString::fromLocal8Bit( getenv( "HOME" ) ) + "/.default.kpr";
+	QString cmd = "cp " + fileName + " " + locateLocal( "appdata", "default.kpr" );
 	system( QFile::encodeName(cmd) );
     }
     return fileName;

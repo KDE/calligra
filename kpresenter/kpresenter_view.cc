@@ -568,8 +568,7 @@ void KPresenterView::editHeaderFooter()
 void KPresenterView::insertPage()
 {
     InsertPageDia dia( this, 0, TRUE );
-    QString templ = QDir::homeDirPath();
-    templ += "/.default.kpr";
+    QString templ = locateLocal( "appdata", "default.kpr" );
     if ( !QFile::exists( templ ) ) {
 	dia.radioDifferent->setChecked( TRUE );
 	dia.radioDefault->setEnabled( FALSE );
@@ -1147,8 +1146,7 @@ void KPresenterView::extraCreateTemplate()
 
 void KPresenterView::extraDefaultTemplate()
 {
-    QString file = QDir::homeDirPath();
-    file += "/.default.kpr";\
+    QString file = locateLocal( "appdata", "default.kpr" );
     m_pKPresenterDoc->savePage( file, currPg );
 }
 
