@@ -110,6 +110,13 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     drawEditRect = true;
     drawEmpty = true;
     editingTextObj = false;
+
+    bleft = 0.0;
+    btop = 0.0;
+    bright = 0.0;
+    bbottom = 0.0;
+
+
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
@@ -1236,6 +1243,14 @@ KCommand * KPTextObject::textObjectToContents()
         return cmd;
     }
     return 0L;
+}
+
+void KPTextObject::setFrameMargins( double _left, double _top, double _right, double _bottom)
+{
+    bleft = _left;
+    btop = _top;
+    bright = _right;
+    bbottom = _bottom;
 }
 
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )

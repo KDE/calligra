@@ -128,6 +128,27 @@ public:
 
     void layout();
 
+    /** set left margin size */
+    void setBLeft( double b ) { bleft = b; }
+    /** set right margin size */
+    void setBRight( double b ) { bright = b; }
+    /** set top margin size */
+    void setBTop( double b ) { btop = b; }
+    /** set bottom margin size */
+    void setBBottom( double b ) { bbottom = b; }
+
+    /** get left margin size */
+    double bLeft()const { return bleft; }
+    /** get right margin size */
+    double bRight()const { return bright; }
+    /** get top margin size */
+    double bTop()const { return btop; }
+    /** get bottom margin size */
+    double bBottom()const { return bbottom; }
+
+    void setFrameMargins( double _left, double _top, double right, double bottom);
+
+
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -163,6 +184,8 @@ private:
     KoTextObject *m_textobj;
     KPresenterDoc *m_doc;
     KoParagLayout m_paragLayout;
+
+    double bleft, bright, btop, bbottom; // margins
 
     bool drawEditRect, drawEmpty;
     bool editingTextObj;

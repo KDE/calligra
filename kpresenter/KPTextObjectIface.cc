@@ -238,3 +238,47 @@ bool KPTextObjectIface::isProtectContent() const
 {
     return m_textobject->isProtectContent();
 }
+
+void KPTextObjectIface::setPtMarginLeft(double val)
+{
+    m_textobject->setBLeft(val);
+    m_textobject->kPresenterDocument()->layout( m_textobject );
+}
+
+void KPTextObjectIface::setPtMarginRight(double val)
+{
+    m_textobject->setBRight(val);
+    m_textobject->kPresenterDocument()->layout( m_textobject );
+}
+
+void KPTextObjectIface::setPtMarginTop(double val)
+{
+    m_textobject->setBTop(val);
+    m_textobject->kPresenterDocument()->layout( m_textobject );
+}
+
+void KPTextObjectIface::setPtMarginBottom(double val)
+{
+    m_textobject->setBBottom(val);
+    m_textobject->kPresenterDocument()->layout( m_textobject );
+}
+
+double KPTextObjectIface::ptMarginLeft()const
+{
+    return m_textobject->bLeft();
+}
+
+double KPTextObjectIface::ptMarginRight()const
+{
+    return m_textobject->bRight();
+}
+
+double KPTextObjectIface::ptMarginTop()const
+{
+    return m_textobject->bTop();
+}
+
+double KPTextObjectIface::ptMarginBottom()const
+{
+    return m_textobject->bBottom();
+}

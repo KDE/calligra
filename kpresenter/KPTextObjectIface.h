@@ -74,6 +74,16 @@ k_dcop:
     void setProtectContent ( bool _protect );
     bool isProtectContent() const;
 
+    double ptMarginLeft()const;
+    double ptMarginRight()const;
+    double ptMarginTop()const;
+    double ptMarginBottom()const;
+
+    void setPtMarginLeft(double val);
+    void setPtMarginRight(double val);
+    void setPtMarginTop(double val);
+    void setPtMarginBottom(double val);
+
 private:
     KPTextObject *m_textobject;
 };
