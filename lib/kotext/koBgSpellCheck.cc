@@ -23,7 +23,7 @@
 #include "koBgSpellCheck.moc"
 #include <qtimer.h>
 #include <kdebug.h>
-#include <kspell.h>
+#include <kospell.h>
 #include <ksconfig.h>
 #include <kotextobject.h>
 #include <klocale.h>
@@ -104,15 +104,15 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     bool needsWait = false;
     if ( !m_bgSpell.kspell ) // reuse if existing
     {
-        m_bgSpell.kspell = new KSpell( 0L, i18n( "Spell Checking" ),this, SLOT( spellCheckerReady() ), m_pKSpellConfig );
+        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), m_pKSpellConfig );
 
         needsWait = true; // need to wait for ready()
         connect( m_bgSpell.kspell, SIGNAL( death() ),
                  this, SLOT( spellCheckerFinished() ) );
-        connect( m_bgSpell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
-                 this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
-        connect( m_bgSpell.kspell, SIGNAL( done( const QString & ) ),
-                 this, SLOT( spellCheckerDone( const QString & ) ) );
+        connect( m_bgSpell.kspell, SIGNAL( misspelling( const QString &, int ) ),
+                 this, SLOT( spellCheckerMisspelling( const QString &, int ) ) );
+        connect( m_bgSpell.kspell, SIGNAL( done() ),
+                 this, SLOT( spellCheckerDone() ) );
     }
     m_bgSpell.kspell->setIgnoreUpperWords( m_bDontCheckUpperWord );
     m_bgSpell.kspell->setIgnoreTitleCase( m_bDontCheckTitleCase );
@@ -198,10 +198,10 @@ void KoBgSpellCheck::spellCheckNextParagraph()
     // Now spell-check that paragraph
     QString text = m_bgSpell.currentParag->string()->toString();
     text.remove( text.length() - 1, 1 ); // trailing space
-    m_bgSpell.kspell->check( text, false );
+    m_bgSpell.kspell->check(text);
 }
 
-void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
+void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
 {
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
@@ -223,7 +223,7 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringL
     slotRepaintChanged( m_bgSpell.currentTextObj );
 }
 
-void KoBgSpellCheck::spellCheckerDone( const QString & )
+void KoBgSpellCheck::spellCheckerDone()
 {
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckerDone" << endl;
@@ -241,18 +241,18 @@ void KoBgSpellCheck::spellCheckerFinished()
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
 #endif
-    KSpell::spellStatus status = m_bgSpell.kspell->status();
+    KoSpell::spellStatus status = m_bgSpell.kspell->status();
     delete m_bgSpell.kspell;
     m_bgSpell.kspell = 0;
     m_bgSpell.currentParag = 0;
     m_bgSpell.currentTextObj = 0;
-    if (status == KSpell::Error)
+    if (status == KoSpell::Error)
     {
         // KSpell badly configured... what to do?
         kdWarning() << "ISpell/ASpell not configured correctly." << endl;
         return;
     }
-    else if (status == KSpell::Crashed)
+    else if (status == KoSpell::Crashed)
     {
         kdWarning() << "ISpell/ASpell seems to have crashed." << endl;
         return;

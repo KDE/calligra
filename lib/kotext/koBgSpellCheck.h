@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qstringlist.h>
 class KoTextObject;
-class KSpell;
+class KoSpell;
 class KoDocument;
 class KSpellConfig;
 class KoTextParag;
@@ -58,8 +58,8 @@ public slots:
 
 protected slots:
     void spellCheckerReady();
-    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
-    void spellCheckerDone( const QString & );
+    void spellCheckerMisspelling(const QString &, int );
+    void spellCheckerDone();
     void spellCheckerFinished( );
     void spellCheckNextParagraph();
 
@@ -72,7 +72,7 @@ protected:
         KoBGSpell() : kspell(0L), currentTextObj(0L), currentParag(0L) {}
 
         // KSpell object for the background spellcheck
-	KSpell *kspell;
+	KoSpell *kspell;
         // The text frameset currently being checked
 	// TODO change current text frameset, and implementing nextTextFrameSet, see kwview.cc
         // TODO implement "skip unchanged framesets" and "stop timer after all checked and until
