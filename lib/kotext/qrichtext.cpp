@@ -6041,7 +6041,10 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     //if ( flags & KoTextFormat::Size )
     //    fn.setPointSizeFloat( nf.font().pointSizeFloat() );
     if ( flags & KoTextFormat::StrikeOut )
+    {
         fn.setStrikeOut( nf.font().strikeOut() );
+        setStrikeOutType( nf.strikeOutType() );
+    }
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
     if( flags & KoTextFormat::ExtendUnderLine)
