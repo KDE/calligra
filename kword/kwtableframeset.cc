@@ -1306,11 +1306,22 @@ void KWTableFrameSet::validate()
 }
 
 bool KWTableFrameSet::contains( double mx, double my ) {
-    if(m_pageBoundaries.count() ==0)  recalcRows();
+    if(m_pageBoundaries.count() ==0)
+        recalcRows();
     KWFrame *first, *last;
     for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
+
         first = m_cells.at((m_pageBoundaries[i-1]))->getFrame( 0 );
-        last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
+
+        // laurent
+        //  m_pageBoundaries[i] -1 doesn't work when you join last cells
+        // so used for the moment getCell( )
+        // I don't know if it broken somethink :(
+
+        //last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
+
+        last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
+
 
         KoRect rect( KoPoint( first->x(), first->y() ), KoPoint( last->right(), last->bottom() ) );
         if(rect.contains(mx,my))
