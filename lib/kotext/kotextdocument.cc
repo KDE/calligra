@@ -112,8 +112,6 @@ static bool is_printer( QPainter *p )
     return p && p->device() && p->device()->devType() == QInternal::Printer;
 }
 
-//#define DEBUGBRUSH(b) "[ style:" << (b).style() << " color:" << (b).color().name() << " hasPixmap:" << (b).pixmap() << "]"
-
 void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
                                               KoZoomHandler* zoomHandler, const QBrush *paper )
 {
@@ -180,6 +178,9 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     QRect crect( cx, cy, cw, ch ); // the overall crect
     QRect ir( rect ); // will be the rect to be repainted
     QBrush brush = parag->backgroundColor() ? *parag->backgroundColor() : cg.brush( QColorGroup::Base );
+    // No need to brush plain white on a printer. Brush all other cases (except "full transparent" case).
+    bool needBrush = brush.style() != Qt::NoBrush &&
+                     !(brush.style() == Qt::SolidPattern && brush.color() == Qt::white && p->device()->devType() == QInternal::Printer);
 
     bool useDoubleBuffer = !parag->document()->parent();
     // no parent docs in libkotext (and no access to nextDoubleBuffered)
@@ -229,17 +230,18 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
                     ir.x() + (int)p->translationX(), ir.y() + (int)p->translationY(),
                     ir.width(), ir.height() );
         }
-        if ( brush.style() != Qt::NoBrush )
-        {
-            //kdDebug() << "KoTextDocument::drawParagWYSIWYG fillRect 0,0 " << ir.width() << "x" << ir.height() << endl;
-	    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
-        }
-    } else {
+    }
+    if ( needBrush )
+        painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
+
+#if 0
+    } else { // was the else of "useDoubleBuffer || ..."
 	if ( cursor && cursor->parag() == parag ) {
             painter->fillRect( QRect( zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
                                brush );
 	}
     }
+#endif
 
     // Now revert the previous painter translation, and instead make (0,0) the topleft of the PARAGRAPH
     painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
@@ -284,7 +286,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
         //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
     }
 
-    if ( useDoubleBuffer ) {
+    if ( needBrush ) {
         int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
 #ifdef DEBUG_PAINTING
 //        kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
