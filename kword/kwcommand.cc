@@ -695,11 +695,11 @@ void KWFrameResizeCommand::unexecute()
     doc->frameChanged( frame );
 }
 
-KWFrameChangePictureCommand::KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile ) :
+KWFrameChangePictureCommand::KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const KoPictureKey & _oldKey, const KoPictureKey & _newKey ) :
     KNamedCommand(name),
     m_indexFrame(_frameIndex),
-    m_oldFile(_oldFile),
-    m_newFile(_newFile)
+    m_oldKey(_oldKey),
+    m_newKey(_newKey)
 {
 }
 
@@ -711,7 +711,7 @@ void KWFrameChangePictureCommand::execute()
     Q_ASSERT( frame );
     KWDocument * doc = frameSet->kWordDocument();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    frameset->loadPicture( m_newFile );
+    frameset->insertPicture( m_newKey );
     doc->frameChanged( frame );
 }
 
@@ -721,7 +721,7 @@ void KWFrameChangePictureCommand::unexecute()
     KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
     KWDocument * doc = frameSet->kWordDocument();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    frameset->loadPicture( m_oldFile );
+    frameset->insertPicture( m_oldKey );
     doc->frameChanged( frame );
 }
 

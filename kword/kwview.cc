@@ -5714,19 +5714,22 @@ void KWView::canvasAddChild( KoViewChild *child )
 
 void KWView::changePicture()
 {
-    QString file,oldFile;
+    QString file;
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    oldFile=frameset->picture().getKey().filename();
+    KoPictureKey oldKey ( frameset->picture().getKey() );
+    QString oldFile ( oldKey.filename() );
     KURL url(oldFile);
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage + KWInsertPicDia::SelectClipart, oldFile ) )
     {
-        KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file) ;
+        KoPicture picture;
+        picture.loadFromFile( file );
+        KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change Picture"), FrameIndex(frame), oldKey, picture.getKey() ) ;
 
-        frameset->loadPicture( file );
+        frameset->insertPicture( picture );
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
@@ -6981,14 +6984,17 @@ void KWView::changeHorizontalLine()
 
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWHorzLineFrameSet *frameset = static_cast<KWHorzLineFrameSet *>(frame->frameSet());
-    QString oldFile ( frameset->picture().getKey().filename() );
+    KoPictureKey oldKey ( frameset->picture().getKey() );
+    QString oldFile ( oldKey.filename() );
     KWinsertHorizontalLineDia *dia = new KWinsertHorizontalLineDia( m_doc, this);
     if ( dia->exec() )
     {
         QString file( dia->horizontalLineName() );
+        KoPicture picture;
+        picture.loadFromFile( file );
         KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change HorizontalLine"), FrameIndex(frame), oldFile, file) ;
 
-        frameset->loadPicture( file );
+        frameset->insertPicture( picture );
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }

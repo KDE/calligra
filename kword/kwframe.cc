@@ -1798,6 +1798,13 @@ void KWPictureFrameSet::insertPicture( const KoPicture& picture )
     m_picture = collection->insertPicture( picture.getKey(), picture );
 }
 
+void KWPictureFrameSet::insertPicture( const KoPictureKey& key )
+{
+    KoPictureCollection *collection = m_doc->pictureCollection();
+    // ### TODO: add some fallback, if the picture was not loaded yet.
+    m_picture = collection->insertPicture( key, KoPicture() );
+}
+
 void KWPictureFrameSet::setSize( const QSize & /*_imgSize*/ )
 {
     // Do nothing as KoPicture needs a size only at drawing time

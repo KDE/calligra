@@ -224,7 +224,7 @@ protected:
 class KWFrameChangePictureCommand : public KNamedCommand
 {
 public:
-    KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile) ;
+    KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const KoPictureKey & _oldFile, const KoPictureKey & _newFile) ;
     ~KWFrameChangePictureCommand() {}
 
     void execute();
@@ -232,8 +232,8 @@ public:
 
 protected:
     FrameIndex m_indexFrame;
-    QString m_oldFile;
-    QString m_newFile;
+    KoPictureKey m_oldKey;
+    KoPictureKey m_newKey;
 };
 
 /**

@@ -842,6 +842,7 @@ public:
 
     void loadPicture( const QString &fileName );
     void insertPicture( const KoPicture& picture );
+    void insertPicture( const KoPictureKey& key );
 
     /**
      * @deprecated
