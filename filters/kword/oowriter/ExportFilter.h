@@ -42,6 +42,9 @@
 
 class KZip;
 
+// ### TODO: as we have now OASIS support, this filter should only output strict OOWriter format
+#define STRICT_OOWRITER_VERSION_1
+
 class StyleMap : public QMap<QString,LayoutData>
 {
 public:

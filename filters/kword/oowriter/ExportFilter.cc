@@ -196,6 +196,15 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
         return false;
     }
 
+    m_zip->setCompression( KZip::NoCompression );
+    m_zip->setExtraField( KZip::NoExtraField );
+
+    const QCString appId( "application/vnd.sun.xml.writer" );
+
+    m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
+
+    m_zip->setCompression( KZip::DeflateCompression );
+
     m_streamOut=new QTextStream(m_contentBody, IO_WriteOnly);
 
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
@@ -258,6 +267,7 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     zipWriteData("<!DOCTYPE office:document");
     if (!noType)
     {
+        // No type might happen for raw XML documents (which this filter does not support yet.)
         zipWriteData("-");
         zipWriteData(type);
     }
@@ -274,32 +284,44 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
 
     // The name spaces used by OOWriter (those not used by this filter are commented out)
 
-    // For context.xml
+    // General namespaces
     zipWriteData(" xmlns:office=\"http://openoffice.org/2000/office\"");
-    zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
-    zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
-    zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
-    zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
-    zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
     zipWriteData(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
-    //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
-    zipWriteData(" xmlns:svg=\"http://www.w3.org/2000/svg\"");
-    //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
-    //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
-    //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
-    //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
-    //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
 
-    // For meta.xml
-    zipWriteData(" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");
-    zipWriteData(" xmlns:meta=\"http://openoffice.org/2000/meta\"");
+    // Namespaces for context.xml and style.xml
+    if ( type == "content" || type == "styles" || type.isEmpty() )
+    {
+        zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
+        zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
+        zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
+        zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
+        zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
 
+        //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
+        zipWriteData(" xmlns:svg=\"http://www.w3.org/2000/svg\"");
+        //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
+        //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
+        //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
+        //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
+        //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
+    }
+
+    // Namespaces For meta.xml
+    if ( type == "meta" || type.isEmpty() )
+    {
+        zipWriteData(" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");
+        zipWriteData(" xmlns:meta=\"http://openoffice.org/2000/meta\"");
+    }
 
     zipWriteData(" office:class=\"text\"");
 
+ 
+#ifdef STRICT_OOWRITER_VERSION_1
+    zipWriteData(" office:version=\"1.0\"");
+#else
     // We are using an (rejected draft OASIS) extension compared to version 1.0, so we cannot write the version string.
     // (We do not even write it for context.xml and meta.xml, as OOWriter 1.0.1 does not like it in this case.)
-    //zipWriteData("office:version=\"1.0\"");
+#endif
 
     zipWriteData(">\n");
 }
