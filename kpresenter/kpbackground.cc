@@ -83,11 +83,6 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
         _lastModified = inf.lastModified();
     }
 
-    /*
-    if ( backPix )
-        pixmapCollection->removeRef( key );
-    */
-
     QSize pixSize;
     switch ( backView )
     {
@@ -97,8 +92,6 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
         break;
     }
 
-//    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( _filename, _lastModified ), pixSize );
-//    backPix = pixmapCollection->findPixmap( key );
     backImage = imageCollection->loadImage( KPImageKey( _filename, _lastModified ) );
 
     if ( pixSize == orig_size )
@@ -167,17 +160,10 @@ void KPBackGround::restore()
 {
     if ( backType == BT_PICTURE )
         setBackPixmap( backImage.key().filename, backImage.key().lastModified );
-//	setBackPixmap( key.dataKey.filename, key.dataKey.lastModified );
 
     if ( backType == BT_CLIPART )
 	setBackClipFilename( clipKey.filename, clipKey.lastModified );
 
-    /*
-    if ( backType != BT_PICTURE && backPix ) {
-	pixmapCollection->removeRef( key );
-	backPix = 0L;
-    }
-    */
     if ( backType != BT_PICTURE )
         backImage = KPImage();
 
@@ -209,8 +195,6 @@ void KPBackGround::save( QTextStream& out )
     out << indent << "<BGRADIENT unbalanced=\"" << static_cast<int>( unbalanced )
         << "\" xfactor=\"" << xfactor << "\" yfactor=\"" << yfactor << "\"/>" << endl;
 
-//    if ( backPix && backType == BT_PICTURE )
-//        out << indent << "<BACKPIXKEY " << key << " />" << endl;
     if ( !backImage.isNull() && backType == BT_PICTURE )
         out << indent << "<BACKPIXKEY " << backImage << " />" << endl;
 
@@ -367,17 +351,13 @@ void KPBackGround::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             key.lastModified.setDate( QDate( year, month, day ) );
             key.lastModified.setTime( QTime( hour, minute, second, msec ) );
 
+            // ### the size attributes seem unused. What are they supposed to
+            // be used for?
+
             // create a 'temporary' image. Later on restore() will be called
             // called through setBgSize() from setPageLayout() from
             // completeLoading(), where we load the real image.
             backImage = KPImage( key, QImage() );
-
-            /*
-            if ( size == orig_size )
-                size = backImage.size();
-
-            backImage = backImage.scale( size );
-            */
         }
 
         // backpic
@@ -419,13 +399,6 @@ void KPBackGround::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             key.filename = _fileName;
             key.lastModified.setDate( imageCollection->tmpDate() );
             key.lastModified.setTime( imageCollection->tmpTime() );
-            /*
-            key.size = ext;
-            if ( !openPic )
-                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey, _data );
-            else
-                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey );
-            */
 
             if ( openPic )
                 backImage = imageCollection->loadImage( key );

@@ -134,9 +134,6 @@ protected:
     bool unbalanced;
     int xfactor, yfactor;
 
-//    QPixmap *backPix;
-//    KPPixmapCollection::Key key;
-//    KPPixmapCollection *pixmapCollection;
     KPImage backImage;
     KPImageCollection *imageCollection;
     KPGradientCollection *gradientCollection;

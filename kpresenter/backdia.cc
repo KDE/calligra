@@ -65,6 +65,11 @@ BackPreview::BackPreview( QWidget *parent, KPresenterDoc *doc )
     setMinimumSize( 300, 200 );
 }
 
+BackPreview::~BackPreview()
+{
+    delete back;
+}
+
 /*=============================================================*/
 void BackPreview::drawContents( QPainter *p )
 {

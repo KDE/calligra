@@ -55,6 +55,7 @@ class BackPreview : public QFrame
 
 public:
     BackPreview( QWidget *parent, KPresenterDoc *doc );
+    virtual ~BackPreview();
 
     KPBackGround *backGround() const {
 	return back;

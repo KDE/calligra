@@ -97,16 +97,6 @@ void KPPixmapObject::setSize( int _width, int _height )
     KPObject::setSize( _width, _height );
     if ( move ) return;
 
-    /*
-    if ( pixmap )
-        pixmapCollection->removeRef( key );
-
-    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( key.dataKey.filename, key.dataKey.lastModified ), ext );
-    pixmap = pixmapCollection->findPixmap( key );
-
-    if ( ext == orig_size && pixmap )
-        ext = pixmap->size();
-    */
     if ( ext == orig_size )
         ext = image.size();
 
@@ -121,17 +111,6 @@ void KPPixmapObject::resizeBy( int _dx, int _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
-
-    /*
-    if ( pixmap )
-        pixmapCollection->removeRef( key );
-
-    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( key.dataKey.filename, key.dataKey.lastModified ), ext );
-    pixmap = pixmapCollection->findPixmap( key );
-
-    if ( ext == orig_size && pixmap )
-        ext = pixmap->size();
-    */
 
     if ( ext == orig_size )
         ext = image.size();
@@ -151,19 +130,7 @@ void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModifie
         _lastModified = inf.lastModified();
     }
 
-    /*
-    if ( pixmap )
-        pixmapCollection->removeRef( key );
-
-    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( _filename, _lastModified ), _size );
-    pixmap = pixmapCollection->findPixmap( key );
-
-    if ( ext == orig_size && pixmap )
-        ext = pixmap->size();
-    */
-
     image = imageCollection->loadImage( KPImageKey( _filename, _lastModified ) );
-    assert( !image.isNull() );
 
     if ( ext == orig_size )
         ext = image.size();
@@ -364,16 +331,12 @@ void KPPixmapObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             key.lastModified.setDate( QDate( year, month, day ) );
             key.lastModified.setTime( QTime( hour, minute, second, msec ) );
 
+            // ### the size attributes seem unused. What are they supposed to
+            // be used for?
+
             // create a 'temporary' image. Later on reload() will be called
             // where we load the real image.
             image = KPImage( key, QImage() );
-
-            /*
-            if ( size == orig_size )
-                size == image.size();
-
-            image = image.scale( size );
-            */
         }
 
         // pixmap
@@ -416,15 +379,6 @@ void KPPixmapObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             key.filename = _fileName;
             key.lastModified.setDate( imageCollection->tmpDate() );
             key.lastModified.setTime( imageCollection->tmpTime() );
-//            key.lastModified.setDate( pixmapCollection->tmpDate() );
-//            key.lastModified.setTime( pixmapCollection->tmpTime() );
-            /*
-            key.size = ext;
-            if ( !openPic )
-                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey, _data );
-            else
-                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey );
-            */
 
             if ( openPic )
                 image = imageCollection->loadImage( key );
@@ -546,7 +500,6 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         return;
     }
 
-//    if ( !pixmap ) return;
     if ( image.isNull() ) return;
 
     int ox = orig.x() - _diffx;
@@ -572,7 +525,6 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
 
-//            QSize bs = pixmap->size();
             QSize bs = image.size();
 
             _painter->drawRect( sx, sy, bs.width(), bs.height() );
@@ -581,7 +533,6 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         {
             _painter->translate( ox, oy );
 
-//            QRect br = pixmap->rect();
             QSize bs = image.size();
             QRect br = QRect( 0, 0, bs.width(), bs.height() );
             int pw = br.width();
@@ -628,7 +579,6 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
     } else {
         _painter->translate( ox, oy );
 
-//        QRect br = pixmap->rect();
         QSize bs = image.size();
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
