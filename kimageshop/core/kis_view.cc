@@ -280,7 +280,7 @@ void KisView::setupActions()
 				SLOT( dialog_layer() ),actionCollection(), "dialog_layer");
   m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KISBarIcon("color_dialog"), 0, this,
 				SLOT( dialog_color() ),actionCollection(), "dialog_color");
-  m_dialog_brush = new KToggleAction( i18n("&KisBrush Dialog"), KISBarIcon("brush_dialog"), 0, this,
+  m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KISBarIcon("brush_dialog"), 0, this,
 				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
   m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"), KISBarIcon("gradient_dialog"), 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
@@ -302,7 +302,7 @@ void KisView::setupActions()
   m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pencil"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
-  m_tool_brush = new KToggleAction( i18n("&KisBrush tool"), KISBarIcon("paintbrush"), 0, this,
+  m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
   m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
@@ -921,16 +921,19 @@ void KisView::slotSetBGColor(const KisColor& c)
   m_pSideBar->slotSetBGColor( c );
 }
 
-void KisView::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )
+void KisView::slotUndoRedoChanged( QString undo, QString redo )
 {
   //####### FIXME
+
+  m_undo->setEnabled( !undo.isEmpty() );
+  m_redo->setEnabled( !undo.isEmpty() );
 }
 
-void KisView::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
+void KisView::slotUndoRedoChanged( QStringList undo, QStringList redo )
 {
   //####### FIXME
 
-  if( _undo.count() )
+  if( undo.count() )
   {
     // enable undo action
     m_undo->setEnabled( true );
@@ -941,7 +944,7 @@ void KisView::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
     m_undo->setEnabled( false );
   }
 
-  if( _redo.count() )
+  if( redo.count() )
   {
     // enable redo action
     m_redo->setEnabled( true );
