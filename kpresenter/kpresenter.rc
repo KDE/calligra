@@ -282,9 +282,6 @@
   <Action name="view_gridtofront"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
-  <Action name="screen_configpages"/>
-  <Action name="screen_presstruct"/>
-  <Separator/>
   <Action name="insert_page"/>
   <Action name="extra_defaulttemplate"/>
   <Action name="edit_duplicatepage"/>
