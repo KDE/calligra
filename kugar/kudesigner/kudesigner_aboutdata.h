@@ -41,6 +41,9 @@ KAboutData * newKudesignerAboutData()
     aboutData->addAuthor("Joseph Wenninger",
         I18N_NOOP("major bugfixes, additional features and kexi integration"), "jowenn@kde.org",
         "");
+    aboutData->addCredit("Per Winkvist",
+        I18N_NOOP("Fast name editing for report items"), "per.winkvist@cellnetwork.com",
+        "");
     aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
     return aboutData;
 }
