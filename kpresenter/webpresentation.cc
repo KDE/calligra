@@ -44,7 +44,6 @@
 #include <qfileinfo.h>
 #include <qevent.h>
 #include <qframe.h>
-#include <kprogress.h>
 #include <qfont.h>
 #include <qpixmap.h>
 #include <qsize.h>
@@ -62,10 +61,11 @@
 #include <ksimpleconfig.h>
 #include <kimageio.h>
 #include <kapp.h>
-
+#include <kprogress.h>
 #include <kstddirs.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <kcharsets.h>
 
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
@@ -215,7 +215,7 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
             m.scale( ( (float)zoom ) / 100.0, ( (float)zoom ) / 100.0 );
             pix = pix.xForm( m ); // maybe we should use smoothScale ?
         }
-        pix.save( filename, QFile::encodeName(format.upper()) );
+        pix.save( filename, format.upper().latin1() );   //lukas: provide the option to choose image quality
 
         p = progressBar->value();
         progressBar->setValue( ++p );
@@ -230,11 +230,18 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     int p;
     QString format = imageFormat( imgFormat );
 
+    QFont::CharSet chset = KGlobal::charsets()->charsetForLocale();
+    QString chsetName = KGlobal::charsets()->name(chset);
+
     QString html;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         pgNum = i + 1;
-        html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE></HEAD>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
+        html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
+        html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
+            .arg( chsetName );
+
+        html += QString( "</HEAD>\n" );
         html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
 
         html += QString( "  <CENTER>\n" );
@@ -294,8 +301,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         if ( !email.isEmpty() )
             html += "</A>";
 
-        html += i18n(" - created with %1").
-	  arg("<A HREF=\"http://www.koffice.org/kpresenter/\">KPresenter</A>");
+        html += i18n(" - created with %1").arg("<A HREF=\"http://www.koffice.org/kpresenter/\">KPresenter</A>");
         html += "  </CENTER><HR noshade>\n";
         html += "</BODY></HTML>\n";
 
@@ -316,9 +322,15 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QString html;
 
+    QFont::CharSet chset = KGlobal::charsets()->charsetForLocale();
+    QString chsetName = KGlobal::charsets()->name(chset);
+
     html = QString( "<HTML><HEAD><TITLE>%1 - ").arg( title );
     html += i18n("Table of Contents");
-    html += "</TITLE></HEAD>\n";
+    html += "</TITLE>\n";
+    html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
+            .arg( chsetName );
+    html += "</HEAD>\n";
 
     html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
 
@@ -370,11 +382,12 @@ void KPWebPresentation::init()
     if ( pw ) {
         author = QString::fromLocal8Bit( pw->pw_gecos );
         int i = author.find( ',' );
-        if ( i > 0 ) author.truncate( i );
-	gethostname( str, 79 );
+        if ( i > 0 )
+            author.truncate( i );
+        gethostname( str, 79 );
         email = QString::fromLocal8Bit( pw->pw_name ) + "@" + QString::fromLocal8Bit( str );
     }
-    
+
     title = i18n("Slideshow");
 
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
