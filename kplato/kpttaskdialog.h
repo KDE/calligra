@@ -69,7 +69,6 @@ public:
     
 protected slots:
     void slotOk();
-    void slotSchedulingChanged(int activated);
 
 private:
     KPTTask &task;

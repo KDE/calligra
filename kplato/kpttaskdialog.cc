@@ -66,14 +66,12 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resource
         dia->setSchedulerDateTime(QDateTime::currentDateTime());
 
     connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
-    connect(dia, SIGNAL( schedulingTypeChanged(int) ), this, SLOT( slotSchedulingChanged(int) ));
 
-    slotSchedulingChanged(task.constraint());
     dia->namefield->setFocus();
 
     connect(resourcesTab, SIGNAL( changed() ), dia, SLOT( slotCheckAllFieldsFilled() ));
 
-    resize(643,480); //FIXME: design ui so we don't need this
+    resize(900,500); //FIXME: design ui so we don't need this
 
 }
 
@@ -121,49 +119,13 @@ void KPTTaskDialog::slotOk() {
     accept();
 }
 
-void KPTTaskDialog::slotSchedulingChanged(int activated) {
-    bool needDate = activated >= 2;
-    dia->schedulerTime->setEnabled(needDate);
-    dia->schedulerDate->setEnabled(needDate);
-
-    QString label = QString("<p><font size=\"4\" color=\"#7797BC\"><b>%1</b></font></p><p>%2</p>");
-    switch(activated) {
-        // TODO please provide nice explenations on this.
-        case KPTNode::ASAP: // ASAP
-            label = label.arg(i18n("As Soon As Possible"));
-            label = label.arg(i18n("Place all events at the earliest possible moment permitted in the schedule"));
-            break;
-        case KPTNode::ALAP: // ALAP
-            label = label.arg(i18n("As Late As Possible"));
-            label = label.arg(i18n("Place all events at the last possible moment permitted in the schedule"));
-            break;
-        case KPTNode::StartNotEarlier: // Start not earlier than
-            label = label.arg(i18n("Start No Earlier Than"));
-            label = label.arg(i18n("The task can not be scheduled to start earlier than this date."));
-            break;
-        case KPTNode::FinishNotLater: // Finish not later than
-            label = label.arg(i18n("Finish No Later Than"));
-            label = label.arg(i18n("The task can not be scheduled to finish later than this date."));
-            break;
-        case KPTNode::MustStartOn: // Must start on
-            label = label.arg(i18n("Must Start on"));
-            label = label.arg(i18n("The task must be scheduled to start on this date."));
-            break;
-        default: // error ...
-            dia->lSchedulingExplain->setText("");
-            return;
-    }
-    dia->lSchedulingExplain->setText(label);
-}
-
-
 //////////////////////////////////////////
 
 KPTTaskDialogImpl::KPTTaskDialogImpl (QWidget *parent) : KPTTaskDialogBase(parent) {
     connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
     connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
-    connect (schedulerType, SIGNAL(activated( int )), this, SLOT(slotSchedulingChanged( int )) );
-	connect (chooseLeader, SIGNAL(pressed()), SLOT(slotChooseLeader()));
+    connect (scheduleType, SIGNAL(clicked( int )), this, SLOT(slotSchedulingChanged( int )) );
+    connect (chooseLeader, SIGNAL(pressed()), SLOT(slotChooseLeader()));
 }
 
 void KPTTaskDialogImpl::slotCheckAllFieldsFilled() {
@@ -185,12 +147,12 @@ void KPTTaskDialogImpl::slotChooseLeader()
 
 int KPTTaskDialogImpl::scheduling() const
 {
-    return schedulerType->currentItem();
+    return scheduleType->selectedId();
 }
 
 void KPTTaskDialogImpl::setScheduling(int type)
 {
-    schedulerType->setCurrentItem(type);
+    scheduleType->setButton(type);
 }
 
 QDateTime KPTTaskDialogImpl::schedulerDateTime() const
