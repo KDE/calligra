@@ -18,7 +18,7 @@
 */
 
 #include "koparagcounter.h"
-//#include "kotextparag.h"
+#include "kozoomhandler.h"
 #include "qrichtext_p.h" // for KoTextFormat
 #include <kdebug.h>
 #include <qdom.h>
@@ -483,8 +483,13 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     QString text = m_cache.text;
     if ( !text.isEmpty() )
         text.append( ' ' ); // append a trailing space, see KoTextParag::drawLabel
+    QFontMetrics fm = m_cache.counterFormat->screenFontMetrics( 0L, false );
     for ( unsigned int i = 0; i < text.length(); i++ )
-        m_cache.width += m_cache.counterFormat->width( text, i );
+        //m_cache.width += m_cache.counterFormat->width( text, i );
+        m_cache.width += fm.width( text[i] );
+    // Now go from 100%-zoom to LU
+    m_cache.width = KoTextZoomHandler::ptToLayoutUnitPt( m_cache.width );
+
     //kdDebug() << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
     return m_cache.width;
 }

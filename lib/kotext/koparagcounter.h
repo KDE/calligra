@@ -42,7 +42,10 @@ public:
     int number( const KoTextParag *paragraph );
     QString text( const KoTextParag *paragraph );
 
-    /** Work out the width of the text required for this counter. */
+    /**
+     * Work out the width of the text required for this counter.
+     * Unit : LU pixels
+     */
     int width( const KoTextParag *paragraph );
 
     /** XML support. */

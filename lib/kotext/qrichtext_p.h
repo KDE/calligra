@@ -1,7 +1,7 @@
 /**
  * This file comes from Qt's internal qrichtext_p.h file, with s/Q/Ko/ applied
  * everywhere to avoid symbol conflicts.
- * Please try to minimize the changes done to this file, and to change the *.h.inc
+ * Please try to minimize the changes done to this file, and to change the #include'd
  * files instead, to make updates to this file easier.
  */
 
@@ -96,7 +96,7 @@ class KoTextFormat;
 class KoTextFormatCollection;
 struct KoBidiContext;
 
-//// kotext additions (needed by *.h.inc)
+//// kotext additions (needed by the #included headers)
 class KCommand;
 class QDomElement;
 class KoZoomHandler;
@@ -443,7 +443,7 @@ public:
 
     KoTextDocument *parent;
 
-#include "kotextcustomitem.h.inc"
+#include "kotextcustomitem.h"
 
 protected:
     int xpos;
@@ -918,7 +918,7 @@ private:
     QChar parseChar(const QString& doc, int& pos, QStyleSheetItem::WhiteSpaceMode wsm );
     void setRichTextInternal( const QString &text );
 
-#include "kotextdocument.h.inc"
+#include "kotextdocument.h"
 
 private:
     struct Q_EXPORT Focus {
@@ -1342,7 +1342,7 @@ protected:
                           KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                           const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft  );
 
-#include "kotextparag.h.inc"
+#include "kotextparag.h"
 
 private:
     QMap<int, KoTextParagSelection> &selections() const;
@@ -1568,7 +1568,7 @@ private:
     void generateKey();
     void update();
 
-#include "kotextformat.h.inc"
+#include "kotextformat.h"
 
     QFont fn;
     QColor col;
@@ -2199,6 +2199,6 @@ inline int KoTextStringChar::descent() const
     return !isCustom() ? format()->descent() : 0;
 }
 
-#include "korichtext.h.inc"
+#include "korichtext.h"
 
 #endif

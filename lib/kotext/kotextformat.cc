@@ -172,7 +172,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
     if ( c->c.unicode() == 0xad ) // soft hyphen
 	return 0;
     Q_ASSERT( !c->isCustom() ); // actually it's a bit stupid to call this for custom items
-     if( c->isCustom() ) {
+    if( c->isCustom() ) {
 	 if( c->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
              // customitem width is in LU pixels. Convert to 100%-zoom-pixels (pt2pt==pix2pix)
              int w = qRound( KoTextZoomHandler::layoutUnitPtToPt( c->customItem()->width ) );
@@ -181,7 +181,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
          else
              return 0;
     }
-     int pixelww;
+    int pixelww;
     int r = c->c.row();
     if( r < 0x06 || r > 0x1f )
     {
