@@ -194,7 +194,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         if ( topBorder.style==KoBorder::DOUBLE_LINE)
         {
             y = rect.top() - topBorderWidth + topBorderPenWidth/2;
-            painter.drawLine( rect.left()- 2* leftBorderPenWidth, y, rect.right()+2*rightBorderPenWidth, y );
+            painter.drawLine( rect.left()- 2*leftBorderPenWidth-1, y, rect.right()+4*rightBorderPenWidth, y );
             y += topBorderPenWidth + 1;
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
         }
@@ -213,7 +213,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         if ( bottomBorder.style==KoBorder::DOUBLE_LINE)
         {
             y = rect.bottom() + bottomBorderWidth - (bottomBorderPenWidth-1)/2;
-            painter.drawLine( rect.left()-2*leftBorderPenWidth, y, rect.right()+2*rightBorderPenWidth, y );
+            painter.drawLine( rect.left()-2*leftBorderPenWidth-1, y, rect.right()+4*rightBorderPenWidth, y );
             y-= bottomBorderPenWidth + 1;
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
 
