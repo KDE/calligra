@@ -97,3 +97,14 @@ void KPresenterDocIface::setUndoRedoLimit(int val)
 {
     doc->setUndoRedoLimit(val);
 }
+
+void KPresenterDocIface::setShowRuler(bool b)
+{
+    doc->setShowRuler(b );
+    doc->reorganizeGUI();
+}
+
+bool KPresenterDocIface::showRuler() const
+{
+    return doc->showRuler();
+}

@@ -50,6 +50,10 @@ k_dcop:
     virtual int maxRecentFiles();
 
     virtual void setUndoRedoLimit(int val);
+
+    virtual void setShowRuler(bool );
+    virtual bool showRuler() const;
+
 private:
     KPresenterDoc *doc;
 
