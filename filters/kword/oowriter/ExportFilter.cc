@@ -157,6 +157,8 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     }
 
     // The name spaces used by OOWriter (those not used by this filter are commented out)
+
+    // For context.xml
     zipWriteData(" xmlns:office=\"http://openoffice.org/2000/office\"");
     zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
     zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
@@ -171,6 +173,11 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
     //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
     //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
+
+    // For meta.xml
+    zipWriteData(" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");
+    zipWriteData(" xmlns:meta=\"http://openoffice.org/2000/meta\"");
+
 
     zipWriteData(" office:class=\"text\"");
 
@@ -281,12 +288,70 @@ void OOWriterWorker::writeContentXml(void)
     zipDoneWriting();
 }
 
+void OOWriterWorker::writeMetaXml(void)
+{
+    if (!m_zip)
+        return;
+
+    zipPrepareWriting("meta.xml");
+
+    writeStartOfFile("meta");
+
+    zipWriteData(" <office:meta>\n");
+
+    // Tell who we are in case that we have a bug in our filter output!
+    zipWriteData("  <meta:generator>KWord's OOWriter Export Filter");
+    zipWriteData(QString("$Revision$").mid(10).remove('$')); // has a leading and a trailing space.
+
+    zipWriteData("</meta:generator>\n");
+
+    if (!m_docInfo.title.isEmpty())
+    {
+        zipWriteData("  <dc:title>");
+        zipWriteData(escapeOOText(m_docInfo.title));
+        zipWriteData("</dc:title>\n");
+    }
+    if (!m_docInfo.abstract.isEmpty())
+    {
+        zipWriteData("  <dc:description>");
+        zipWriteData(escapeOOText(m_docInfo.abstract));
+        zipWriteData("</dc:description>\n");
+    }
+
+    if (m_varSet.creationTime.isValid())
+    {
+        zipWriteData("  <meta:creation-date>");
+        zipWriteData(escapeOOText(m_varSet.creationTime.toString(Qt::ISODate)));
+        zipWriteData("</meta:creation-date>\n");
+    }
+
+    if (m_varSet.modificationTime.isValid())
+    {
+        zipWriteData("  <dc:date>");
+        zipWriteData(escapeOOText(m_varSet.modificationTime.toString(Qt::ISODate)));
+        zipWriteData("</dc:date>\n");
+    }
+
+    if (m_varSet.printTime.isValid())
+    {
+        zipWriteData("  <meta:print-date>");
+        zipWriteData(escapeOOText(m_varSet.printTime.toString(Qt::ISODate)));
+        zipWriteData("</meta:print-date>\n");
+    }
+
+    zipWriteData(" </office:meta>\n");
+    zipWriteData("</office:document-meta>\n");
+
+    zipDoneWriting();
+}
+
 bool OOWriterWorker::doCloseFile(void)
 {
     kdDebug(30518)<< "OOWriterWorker::doCloseFile" << endl;
     if (m_zip)
     {
         writeContentXml();
+        writeMetaXml();
         writeStylesXml();
         m_zip->close();
     }
@@ -1045,46 +1110,14 @@ bool OOWriterWorker::doFullPaperBorders (const double top, const double left,
 
 bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
-    if (!m_zip)
-        return true;
-
-
     m_docInfo=docInfo;
 
-    zipPrepareWriting("meta.xml");
+    return true;
+}
 
-    writeStartOfFile("meta");
-
-    zipWriteData(" <office:meta>\n");
-
-    // Tell who we are in case we have a bug in our filter output!
-    zipWriteData("  <meta:generator>KWord's OOWriter Export Filter");
-    zipWriteData(QString("$Revision$").mid(10).remove('$')); // has a leading and a trailing space.
-
-    zipWriteData("</meta:generator>\n");
-
-    if (!m_docInfo.title.isEmpty())
-    {
-        zipWriteData("  <dc:title>");
-        zipWriteData(escapeOOText(m_docInfo.title));
-        zipWriteData("</dc:title>\n");
-    }
-    if (!m_docInfo.abstract.isEmpty())
-    {
-        zipWriteData("  <dc:description>");
-        zipWriteData(escapeOOText(m_docInfo.abstract));
-        zipWriteData("</dc:description>\n");
-    }
-
-    QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
-    zipWriteData("  <dc:date>");
-    zipWriteData(escapeOOText(now.toString(Qt::ISODate)));
-    zipWriteData("</dc:date>\n");
-
-    zipWriteData(" </office:meta>\n");
-    zipWriteData("</office:document-meta>\n");
-
-    zipDoneWriting();
+bool OOWriterWorker::doVariableSettings(const VariableSettingsData& vs)
+{
+    m_varSet=vs;
 
     return true;
 }

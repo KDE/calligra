@@ -69,6 +69,7 @@ public:
     virtual bool doCloseStyles(void);
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
+    virtual bool doVariableSettings(const VariableSettingsData& vs);
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -93,6 +94,7 @@ private:
     void declareFont(const QString& fontName);
     void writeContentXml(void);
     void writeStylesXml(void);
+    void writeMetaXml(void);
     void writeStartOfFile(const QString& type);
 private: // ZIP methids
     bool zipPrepareWriting(const QString& name);
@@ -127,5 +129,6 @@ private:
 
     QMap<QString,QString> m_mapTextStyleKeys; // Map of keys to automatic text styles
     QMap<QString,QString> m_mapParaStyleKeys; // Map of keys to automatic paragraph styles
+    VariableSettingsData m_varSet; // KWord's <VARIABLESETTINGS>
 };
 #endif // _EXPORTFILTER_H
