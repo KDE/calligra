@@ -198,9 +198,12 @@ class KexiTableViewPrivate
 	QTimer scrollBarTipTimer;
 	uint scrollBarTipTimerCnt; //!< helper for timeout counting
 	
-	//! row colors
+	//! colors, brushes, fonts
 	QColor baseColor, textColor, altColor, grayColor;
 	QBrush diagonalGrayPattern;
+	QFont autonumberFont;
+	int autonumberTextWidth;
+	QPixmap autonumberIcon;
 
 	//! Actions pluged for this table view. \sa plugSharedAction()
 	QAsciiDict<KAction> sharedActions;

@@ -271,10 +271,11 @@ void KexiTableViewData::init()
 {
 	setAutoDelete(true);
 	columns.setAutoDelete(true);
-
 	m_visibleColumnsCount=0;
 	m_visibleColumnsIDs.resize(100);
 	m_globalColumnsIDs.resize(100);
+
+	m_autoIncrementedColumn = -2;
 }
 
 void KexiTableViewData::addColumn( KexiTableViewColumn* col )
@@ -300,6 +301,7 @@ void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 	else {
 		m_visibleColumnsIDs[ columns.count()-1 ] = -1;
 	}
+	m_autoIncrementedColumn = -2; //clear cache;
 }
 
 /*void KexiTableViewData::addColumns( KexiDB::QuerySchema *query, KexiDB::Field *field )
@@ -478,7 +480,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 		if (f->isNotNull()) {
 			GET_VALUE;
 			//check it
-			if (val->isNull()) {
+			if (val->isNull() && !f->isAutoIncrement()) {
 				//NOT NULL violated
 				m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
 				m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
@@ -488,7 +490,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 		}
 		if (f->isNotEmpty()) {
 			GET_VALUE;
-			if (val->isNull() || KexiDB::isEmptyValue( f, *val )) {
+			if (!f->isAutoIncrement() && (val->isNull() || KexiDB::isEmptyValue( f, *val ))) {
 				//NOT EMPTY violated
 				m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
 				m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
@@ -623,6 +625,22 @@ void KexiTableViewData::clear()
 {
 	KexiTableViewDataBase::clear();
 	emit refreshRequested();
+}
+
+int KexiTableViewData::autoIncrementedColumn()
+{
+	if (m_autoIncrementedColumn==-2) {
+		//find such a column
+		m_autoIncrementedColumn = 0;
+		KexiTableViewColumn::ListIterator it(columns);
+		for (; it.current(); ++it, m_autoIncrementedColumn++) {
+			if (it.current()->field()->isAutoIncrement())
+				break;
+		}
+		if (!it.current())
+			m_autoIncrementedColumn = -1;
+	}
+	return m_autoIncrementedColumn;
 }
 
 #include "kexitableviewdata.moc"

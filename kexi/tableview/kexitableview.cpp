@@ -312,6 +312,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //TMP
 //setVerticalHeaderVisible(false);
 //setHorizontalHeaderVisible(false);
+
+	updateFonts();
 }
 
 KexiTableView::~KexiTableView()
@@ -432,7 +434,6 @@ void KexiTableView::setupNavigator()
 
 	d->navPanel->updateGeometry();
 }
-
 
 void KexiTableView::setNavRowNumber(int newrow)
 {
@@ -602,9 +603,14 @@ void KexiTableView::slotRowsDeleted( const QValueList<int> &rows )
 	viewport()->setAcceptDrops(true);
 }*/
 
-void KexiTableView::setFont(const QFont &f)
+void KexiTableView::setFont( const QFont &font )
 {
-	QWidget::setFont(f);
+	QScrollView::setFont(font);
+	updateFonts(true);
+}
+
+void KexiTableView::updateFonts(bool repaint)
+{
 #ifdef Q_WS_WIN
 	d->rowHeight = fontMetrics().lineSpacing() + 4;
 #else
@@ -622,7 +628,16 @@ void KexiTableView::setFont(const QFont &f)
 		d->pTopHeader->sizeHint().height(), 0, 0);
 //	setMargins(14, d->rowHeight, 0, 0);
 	d->pVerticalHeader->setCellHeight(d->rowHeight);
-	updateContents();
+
+	QFont f = font();
+	f.setItalic(true);
+	d->autonumberFont = f;
+
+	QFontMetrics fm(d->autonumberFont);
+	d->autonumberTextWidth = fm.width(i18n("(autonumber)"));
+
+	if (repaint)
+		updateContents();
 }
 
 bool KexiTableView::beforeDeleteItem(KexiTableItem *)
@@ -1520,10 +1535,26 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		else
 			p->drawRect(0, 0, x2, y2);
 	}
-	
+
+	bool autonumber = false;
+	if (item == d->pInsertItem) {
+		//we're in "insert row"
+		if (m_data->column(col)->field()->isAutoIncrement()) {
+			//"autonumber" column
+			txt = i18n("(autonumber)");
+			autonumber = true;
+		}
+	}
+
 	// draw text
 	if (!txt.isEmpty()) {
-		if (d->pCurrentItem == item && col == d->curCol && !columnReadOnly)
+		if (autonumber) {
+			p->setPen(blue);
+			p->setFont(d->autonumberFont);
+			p->drawPixmap( w - x - x - 9 - d->autonumberTextWidth - d->autonumberIcon.width(),
+				(h-d->autonumberIcon.height())/2, d->autonumberIcon );
+		}
+		else if (d->pCurrentItem == item && col == d->curCol && !columnReadOnly)
 			p->setPen(colorGroup().highlightedText());
 		else
 			p->setPen(colorGroup().text());
@@ -1573,7 +1604,7 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 
 	// And draw the rectangles (transformed inc contents coordinates as needed)
 	QMemArray<QRect> r = reg.rects();
-	for ( int i = 0; i < (int)r.count(); ++i ) {
+	for ( int i = 0; i < (int)r.count(); i++ ) {
 		QRect rect( viewportToContents2(r[i].topLeft()), r[i].size() );
 /*		kdDebug(44021) << QString("- pEA: p->fillRect(x:%1 y:%2 w:%3 h:%4)")
 			.arg(rect.x()).arg(rect.y())
@@ -2299,6 +2330,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			d->pVerticalHeaderAlreadyAdded = true;
 			QSize s(tableSize());
 			resizeContents(s.width(), s.height());
+updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight);
 			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
 			qApp->processEvents(500);
 			ensureVisible(columnPos(d->curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(d->curCol), d->rowHeight);

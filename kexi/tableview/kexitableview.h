@@ -278,7 +278,9 @@ public:
 	virtual QSizePolicy	sizePolicy() const;
 	virtual QSize		sizeHint() const;
 	virtual QSize		minimumSizeHint() const;
-	void		setFont(const QFont &f);
+
+	/*! Reimplemented to update cached fonts and row sizes for the painter. */
+	void setFont(const QFont &f);
 
 	virtual QSize tableSize() const;
 
@@ -686,6 +688,9 @@ protected:
 	int validRowNumber(const QString& text);
 
 	void removeEditor();
+
+	//! Internal: updated sched fonts for painting.
+	void updateFonts(bool repaint = false);
 
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();

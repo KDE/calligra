@@ -288,6 +288,11 @@ public:
 	 refreshRequested() signal is emitted. */
 	virtual void clear();
 
+	//! \return index of autoincremented column. The result is cached.
+//! \todo what about multiple autoinc columns?
+//! \todo what about changing column order?
+	int autoIncrementedColumn();
+
 signals:
 	void destroying();
 
@@ -358,6 +363,8 @@ protected:
 
 	bool m_readOnly : 1;
 	bool m_insertingEnabled : 1;
+
+	int m_autoIncrementedColumn;
 
 	int (KexiTableViewData::*cmpFunc)(void *, void *);
 };

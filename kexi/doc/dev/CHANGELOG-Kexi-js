@@ -237,6 +237,8 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - enable clicked vheader button to select given row
 - enable column dragging
 - add action "restore original column order"
+- add possibility of renaming column by 1) dbl-clicking header 2) "rename column" action
+- more actions (as in Format and Insert menus of MSA2k3)
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -306,8 +308,18 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - remove single-char token names with chars (more readable + more effective)
 
 === 2004 LT TODO ===
+TableView
+- implement autonumber
+KexiDB Drivers
 - move to SQLITE3 (later it will be harder to do)
 -....
+
+2004-08-20
+KexiDB, Table View
+- Kexi now supports and shows autonumber (sequences) column, see
+  http://www.iidea.pl/~js/kexi/shots/beta5/unicode_chars_and_autonumber.png
+
+CC_MAIL: dkite@shaw.ca
 
 2004-08-19
 KexiDB
