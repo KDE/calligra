@@ -961,9 +961,10 @@ void KWDocument::recalcFrames()
 
 bool KWDocument::loadChildren( KoStore *_store )
 {
+    kdDebug() << "KWDocument::loadChildren" << endl;
     QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
-        if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
+        if ( !it.current()->loadDocument( _store ) )
             return FALSE;
     }
 
@@ -1996,9 +1997,18 @@ bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
 
     QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
-        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-        if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
-          return FALSE;
+        KoDocument* childDoc = it.current()->document();
+        kdDebug() << "KWDocument::saveChildren url:" << childDoc->url().url()
+                  << " extern:" << childDoc->isStoredExtern() << endl;
+        if ( childDoc->isStoredExtern() ) {
+            if ( !childDoc->save() )
+                return FALSE;
+        }
+        else {
+            QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+            if ( !childDoc->saveToStore( _store, internURL ) )
+                return FALSE;
+        }
     }
     return true;
 }
