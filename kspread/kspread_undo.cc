@@ -763,7 +763,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> &list,QValueList<l
             tmplayout.col=c->column();
             tmplayout.row=c->row();
             tmplayout.l=new KSpreadLayout( table );
-            tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
+            tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row, true )) );
             list.append(tmplayout);
             }
         }
@@ -790,7 +790,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> &list,QValueList<l
             tmplayout.col=c->column();
             tmplayout.row=c->row();
             tmplayout.l=new KSpreadLayout( table );
-            tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
+            tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row, true )) );
             list.append(tmplayout);
             }
         }
@@ -807,7 +807,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> &list,QValueList<l
                         tmplayout.col=x;
                         tmplayout.row=y;
                         tmplayout.l=new KSpreadLayout( table );
-                        tmplayout.l->copy( *(table->cellAt( x, y )) );
+                        tmplayout.l->copy( *(table->cellAt( x, y, true )) );
                         list.append(tmplayout);
                         }
                 }
@@ -944,12 +944,11 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
         tmplayout.col = c->column();
         tmplayout.row = c->row();
         tmplayout.l = new KSpreadLayout( table );
-        tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row, true )) );
         tmplayout.text = c->text();
         list.append(tmplayout);
       }
-    }
-    
+    }    
   }
   else if (table->isRowSelected( m_rctRect ) )
   {
@@ -972,7 +971,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
         tmplayout.col = c->column();
         tmplayout.row = row;
         tmplayout.l   = new KSpreadLayout( table );
-        tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row, true )) );
         tmplayout.text = c->text();
         list.append(tmplayout);
       }
@@ -990,7 +989,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           tmplayout.col = x;
           tmplayout.row = y;
           tmplayout.l   = new KSpreadLayout( table );
-          tmplayout.l->copy( *(table->cellAt( x, y )) );
+          tmplayout.l->copy( *(table->cellAt( x, y, true )) );
           tmplayout.text = cell->text();
           list.append(tmplayout);
         }
