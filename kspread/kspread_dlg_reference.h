@@ -25,6 +25,12 @@
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qlabel.h>
+#include <qdialog.h>
+
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
 
 class KSpreadView;
 
@@ -40,6 +46,7 @@ public slots:
   void slotCancel();
   void slotDoubleClicked(QListBoxItem *);
   void slotRemove();
+  void slotEdit();
   void slotHighlighted(QListBoxItem *);
 protected:
   KSpreadView * m_pView;
@@ -47,8 +54,31 @@ protected:
   QListBox    * m_list;
   QPushButton * m_pOk;
   QPushButton * m_pCancel;
+  QPushButton * m_pEdit;
   QPushButton * m_pRemove;
   QLabel      * m_rangeName;
+};
+
+class KSpreadEditAreaName : public QDialog
+{ 
+    Q_OBJECT
+
+public:
+    KSpreadEditAreaName( KSpreadView * parent, const char * name,
+                         QString const & areaname );
+    ~KSpreadEditAreaName();
+
+public slots:
+  void slotOk();
+
+private:
+    KSpreadView * m_pView;
+
+    QPushButton * m_buttonOk;
+    QPushButton * m_buttonCancel;
+    QLineEdit   * m_area;
+    QComboBox   * m_sheets;
+    QLabel      * m_areaName;
 };
 
 #endif

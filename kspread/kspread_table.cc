@@ -1952,6 +1952,28 @@ void KSpreadTable::refreshRemoveAreaName(const QString & _areaName)
   }
 }
 
+void KSpreadTable::refreshChangeAreaName(const QString & _areaName)
+{
+  KSpreadCell * c = m_cells.firstCell();
+  QString tmp = "'" + _areaName + "'";
+  for( ;c ; c = c->nextCell() )
+  {
+    if ( c->isFormula() )
+    {
+      if (c->text().find(tmp) != -1)
+      {
+        if ( !c->makeFormula() )
+          kdError(36001) << "ERROR: Syntax ERROR" << endl;
+        else
+        {
+          c->setCalcDirtyFlag();
+          c->update();
+        }
+      }
+    }
+  }
+}
+
 void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
 {
     KSpreadCell* c = m_cells.firstCell();

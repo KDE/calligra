@@ -26,6 +26,14 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 #include <qlayout.h>
+
+#include <qvariant.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -49,7 +57,8 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   lay1->addWidget( m_pRemove );
   //m_pRemove->setEnabled(false);
   KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
+  //  bb->addStretch();
+  m_pEdit = bb->addButton( i18n("&Edit") );
   m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
   m_pCancel = bb->addButton( i18n( "&Cancel" ) );
@@ -65,14 +74,16 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
     m_list->insertItem(text);
   }
 
-  if (!m_list->count())
+  if ( !m_list->count() )
   {
-    m_pOk->setEnabled(false);
-    m_pRemove->setEnabled(false);
+    m_pOk->setEnabled( false );
+    m_pRemove->setEnabled( false );
+    m_pEdit->setEnabled( false );
   }
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( m_pEdit, SIGNAL( clicked() ), this, SLOT( slotEdit() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_list, SIGNAL(doubleClicked(QListBoxItem *)), this,
            SLOT(slotDoubleClicked(QListBoxItem *)));
@@ -149,11 +160,21 @@ void KSpreadreference::slotRemove()
     }
   }
 
-  if (!m_list->count())
+  if ( !m_list->count() )
   {
-    m_pOk->setEnabled(false);
-    m_pRemove->setEnabled(false);
+    m_pOk->setEnabled( false );
+    m_pRemove->setEnabled( false );
+    m_pEdit->setEnabled( false );
   }
+}
+
+void KSpreadreference::slotEdit()
+{
+  QString name(m_list->text(m_list->currentItem()));
+  if ( name.length() == 0 )
+    return;
+  KSpreadEditAreaName editDlg( m_pView, "EditArea", name );
+  editDlg.exec();
 }
 
 void KSpreadreference::slotOk()
@@ -185,5 +206,135 @@ void KSpreadreference::slotCancel()
   reject();
 }
 
+
+
+KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent, 
+                                          const char * name, 
+                                          QString const & areaname )
+  : QDialog( parent, name )
+{
+  m_pView = parent;
+
+  resize( 350, 142 ); 
+  setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, 
+                              (QSizePolicy::SizeType)4, 0, 0, 
+                              sizePolicy().hasHeightForWidth() ) );
+  setCaption( i18n( "Edit Area" ) );
+  setSizeGripEnabled( TRUE );
+  QGridLayout * KSpreadEditAreaNameLayout 
+    = new QGridLayout( this, 1, 1, 11, 6, "KSpreadEditAreaNameLayout"); 
+
+  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
+  QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, 
+                                          QSizePolicy::Minimum );
+  Layout1->addItem( spacer );
+
+  m_buttonOk = new QPushButton( this, "m_buttonOk" );
+  m_buttonOk->setText( i18n( "&OK" ) );
+  m_buttonOk->setAccel( 0 );
+  m_buttonOk->setAutoDefault( TRUE );
+  m_buttonOk->setDefault( TRUE );
+  Layout1->addWidget( m_buttonOk );
+
+  m_buttonCancel = new QPushButton( this, "buttonCancel" );
+  m_buttonCancel->setText( i18n( "&Cancel" ) );
+  m_buttonCancel->setAccel( 0 );
+  m_buttonCancel->setAutoDefault( TRUE );
+  Layout1->addWidget( m_buttonCancel );
+
+  KSpreadEditAreaNameLayout->addMultiCellLayout( Layout1, 3, 3, 0, 1 );
+
+  QLabel * TextLabel4 = new QLabel( this, "TextLabel4" );
+  TextLabel4->setText( i18n( "Cell(s):" ) );
+
+  KSpreadEditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
+
+  m_area = new QLineEdit( this, "m_area" );
+
+  KSpreadEditAreaNameLayout->addWidget( m_area, 2, 1 );
+
+  QLabel * TextLabel1 = new QLabel( this, "TextLabel1" );
+  TextLabel1->setText( i18n( "Sheet:" ) );
+
+  KSpreadEditAreaNameLayout->addWidget( TextLabel1, 1, 0 );
+
+  m_sheets = new QComboBox( FALSE, this, "m_sheets" );
+
+  KSpreadEditAreaNameLayout->addWidget( m_sheets, 1, 1 );
+
+  QLabel * TextLabel2 = new QLabel( this, "TextLabel2" );
+  TextLabel2->setText( i18n( "Area Name:" ) );
+
+  KSpreadEditAreaNameLayout->addWidget( TextLabel2, 0, 0 );
+
+  m_areaName = new QLabel( this, "m_areaName" );
+  m_areaName->setText( areaname );
+
+  KSpreadEditAreaNameLayout->addWidget( m_areaName, 0, 1 );
+  
+  QPtrList<KSpreadTable> tableList = m_pView->doc()->map()->tableList();
+  for (unsigned int c = 0; c < tableList.count(); ++c)
+  {
+    KSpreadTable * t = tableList.at(c);
+    if (!t)
+      continue;
+    m_sheets->insertItem( t->tableName() );
+  }
+
+  QString tmpName;
+  QValueList<Reference>::Iterator it;
+  QValueList<Reference> area(m_pView->doc()->listArea());
+  for ( it = area.begin(); it != area.end(); ++it )
+  {
+    if ((*it).ref_name == areaname)
+    {
+      if (!m_pView->doc()->map()->findTable( (*it).table_name))
+        kdDebug(36001) << "(*it).table_name '" << (*it).table_name
+                       << "' not found!*********" << endl;
+      else
+        tmpName = util_rangeName( (*it).rect );
+      break;
+    }
+  }
+
+  m_sheets->setCurrentText( (*it).table_name );
+  m_area->setText( tmpName );
+
+  // signals and slots connections
+  connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
+  connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+}
+
+KSpreadEditAreaName::~KSpreadEditAreaName()
+{
+}
+
+void KSpreadEditAreaName::slotOk()
+{
+  KSpreadRange range( m_area->text() );
+
+  if ( !range.isValid() )
+  {
+    KSpreadPoint point( m_area->text() );
+    if ( !point.isValid() )
+      return;
+
+    m_area->setText( m_area->text() + ":" + m_area->text() );
+
+    range = KSpreadRange( m_area->text() );
+  }
+
+  m_pView->doc()->removeArea( m_areaName->text() );
+  m_pView->doc()->addAreaName(range.range, m_areaName->text(), m_sheets->currentText() );
+
+  KSpreadTable *tbl;
+  
+  for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
+  {
+    tbl->refreshChangeAreaName( m_areaName->text() );
+  }
+
+  accept();
+}
 
 #include "kspread_dlg_reference.moc"

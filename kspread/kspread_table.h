@@ -776,6 +776,7 @@ public:
 
 
     void refreshRemoveAreaName(const QString &_areaName);
+    void refreshChangeAreaName(const QString &_areaName);
 
 
     /**
