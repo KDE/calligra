@@ -1,0 +1,9 @@
+This code isn't quite done yet.  Translators, please don't do any work on
+the desktop files unless you don't mind changing it all in the near future.
+
+Also, the pure crypto code will eventually be abstracted to a library in
+kdelibs.  Please don't change it's structure without contacting:
+
+George Staikos <staikos@kde.org>
+
+

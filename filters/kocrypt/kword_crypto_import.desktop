@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KWord Document Decryption Layer
+Export=application/x-kword
+Import=application/x-kword-crypt
+Implemented=file
+X-KDE-Library=libkocryptimport
+ServiceTypes=KOfficeFilter
