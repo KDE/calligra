@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KWord Crypto Import Filter Dialog
+Export=application/x-kword
+Import=application/x-kword-crypt
+X-KDE-Library=libkocryptpwddlg
+ServiceTypes=KOfficeFilterDialog
+
