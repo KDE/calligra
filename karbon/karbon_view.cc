@@ -46,6 +46,7 @@
 #include "vfillcmd.h"
 #include "vgroupcmd.h"
 #include "vstrokecmd.h"
+#include "vtransformcmd.h"
 #include "vungroupcmd.h"
 #include "vzordercmd.h"
 
@@ -65,6 +66,7 @@
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view_iface.h"
+#include "vglobal.h"
 #include "vselection.h"
 #include "vtool.h"
 #include "vtoolcontroller.h"
@@ -404,7 +406,12 @@ KarbonView::editPaste()
 		grp.load( clip );
 		VObjectListIterator itr( grp.objects() );
 		for( ; itr.current() ; ++itr )
-			selection.append( itr.current()->clone() );
+		{
+			VTranslateCmd cmd( 0L, VGlobal::copyOffset, VGlobal::copyOffset );
+			VObject *obj = itr.current()->clone();
+			cmd.visit( *obj );
+			selection.append( obj );
+		}
 
 		part()->document().selection()->clear();
 
