@@ -160,7 +160,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
-    double dist;
+    double dist=0.0;
     int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
     QFont font; // Use the global KDE font. Let's hope it's appropriate.
@@ -314,7 +314,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
-    double dist;
+    double dist=0.0;
     int j = 0;
     int totalh = qRound( zoomIt(layout.ptHeight) );
     QString str;
