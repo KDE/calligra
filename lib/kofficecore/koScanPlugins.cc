@@ -18,9 +18,9 @@
 */
 
 #include "koScanPlugins.h"
-#include "koIMR.h"
 #include "koView.h"
 
+#include <opIMR.h>
 #include <opUIUtils.h>
 #include <qmsgbox.h>
 

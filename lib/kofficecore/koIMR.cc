@@ -18,8 +18,9 @@
 */
 
 #include "koIMR.h"
-#include "koMediator.h"
-#include "koPOAMediator.h"
+#include <opIMR.h>
+#include <opMediator.h>
+#include <opPOAMediator.h>
 #include "koQueryTrader.h"
 
 #include <klocale.h>
@@ -36,134 +37,6 @@
  * Modifications and extensions done by Torben Weis
  * (c) 1998 Torben Weis <weis@kde.org>
  */
-
-CORBA::OAMediator_ptr med;
-CORBA::POAMediator_ptr pmd;
-
-void imr_init()
-{
-  pmd = new POAMediatorImpl( opapp_orb );
-  med = new MediatorImpl;
-}
-
-bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrList &_repoids, CORBA::ImplRepository_ptr _imr )
-{
-  CORBA::ImplRepository::ImplDefSeq_var impls = _imr->find_by_name( _name );
-  if ( impls->length() > 0 )
-  {
-    cerr << "there is already a server called '"
-	 << _name << "', please choose a unique name!"
-	 << endl;
-    return false;
-  }
-
-  CORBA::ImplementationDef::ActivationMode mode;
-  if ( strcmp( _mode, "persistent" ) == 0 )
-    mode = CORBA::ImplementationDef::ActivatePersistent;
-  else if ( strcmp( _mode, "shared") == 0 )
-    mode = CORBA::ImplementationDef::ActivateShared;
-  else if ( strcmp( _mode, "unshared") == 0 )
-    mode = CORBA::ImplementationDef::ActivateUnshared;
-  else if ( strcmp( _mode, "permethod") == 0 )
-    mode = CORBA::ImplementationDef::ActivatePerMethod;
-  else if ( strcmp( _mode, "library") == 0 )
-    mode = CORBA::ImplementationDef::ActivateLibrary;
-  else
-  {
-    cerr << "invalid activation mode: " << _mode << endl;
-    cerr << "valid modes are: persistent, shared, unshared, "
-	 << "permethod, library"
-	 << endl;
-    return false;
-  }
-
-  CORBA::ImplementationDef::RepoIdList repoids;
-  repoids.length( _repoids.count() );
-  for ( unsigned int i = 0; i < _repoids.count(); i++ )
-    repoids[i] = (const char*)_repoids.at(i);
-
-  CORBA::ImplementationDef_var impl = _imr->create( mode, repoids, _name, _exec );
-  assert (!CORBA::is_nil (impl));
-  return 0;
-}
-
-CORBA::Object_ptr imr_activate( const char *_server, const char *_repoid, CORBA::ImplRepository_ptr _imr, const char *_addr )
-{
-  CORBA::ImplRepository_var imr;
-  if ( _imr == 0L )
-  {    
-    CORBA::Object_var obj = opapp_orb->resolve_initial_references ("ImplementationRepository");
-    imr = CORBA::ImplRepository::_narrow( obj );
-    assert( !CORBA::is_nil( imr ) );
-    _imr = imr;
-  }
-
-  CORBA::ImplRepository::ImplDefSeq_var impls = _imr->find_by_name( _server );
-  if ( impls->length() == 0 )
-  {
-    cout << "no such server: " << _server << endl;
-    return 0L;
-  }
-  assert (impls->length() == 1);
-
-  CORBA::ORB_var orb = CORBA::ORB_instance ("mico-local-orb");
-  CORBA::Object_var obj;
-  if ( _addr )
-  {
-    // try given address
-    obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0", _addr );
-  }
-  if (CORBA::is_nil (obj))
-  {
-    // try address of the impl repo
-    const CORBA::Address *addr = imr->_ior()->addr();
-    obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0", addr->stringify().c_str());
-  }
-  if (CORBA::is_nil( obj ) )
-  {
-    // try default addresses 
-    obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0");
-  }
-  if ( CORBA::is_nil(obj) )
-  {
-    cout << "error: cannot connect to micod" << endl;
-    return 0L;
-  }
-  CORBA::OAMediator_var oamed = CORBA::OAMediator::_narrow( obj );
-  if ( !oamed->force_activation (impls[(CORBA::ULong)0]) )
-  {
-    cout << "error: cannot activate server " << _server << endl;
-    return 0L;
-  }
-
-  // Lets bind to the requested server
-  CORBA::ORB::ObjectTag_var tag = CORBA::ORB::string_to_tag( _server );
-  obj = 0L;
-  if( _addr )
-    obj = opapp_orb->bind( _repoid, tag, _addr );
-  if( CORBA::is_nil( obj ) )
-  {
-    // try address of the impl repo
-    const CORBA::Address *addr = imr->_ior()->addr();
-    obj = opapp_orb->bind( _repoid, tag, addr->stringify().c_str());
-  }
-  if (CORBA::is_nil( obj ) )
-    obj = opapp_orb->bind( _repoid, tag );
-
-  if ( CORBA::is_nil( obj ) )
-  {
-    cout << "could not bind to server: " << _server << endl;
-    return CORBA::Object::_nil();
-  }
-  /*
-   * a bind() will only run the server the first time, but will not
-   * reactivate a server. therefore we make an invocation that will
-   * always force (re)activation.
-   */
-  obj->_non_existent ();
-
-  return CORBA::Object::_duplicate( obj );
-}
 
 KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repoid )
 {
