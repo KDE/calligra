@@ -465,7 +465,7 @@ void CSVDialog::delimiterClicked(int id)
 
 void CSVDialog::textquoteSelected(const QString& mark)
 {
-    if (mark == i18n("none"))
+    if (mark == i18n("None"))
         m_textquote = 0;
     else
         m_textquote = mark[0];
