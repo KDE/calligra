@@ -97,7 +97,7 @@ EpsImport::convert( const QCString& from, const QCString& to )
 
 	// Build ghostscript call to convert ps/eps -> ai:
 	QString command(
-		"gs -q -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ");
+		"gs -q -P- -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ");
 	command += KProcess::quote(input);
 	command += " | ";
 	command += sedFilter;
