@@ -83,7 +83,7 @@ class MyFileDialog : public KFileDialog
                 ok = QFile::exists( url.path() );
                 if ( !ok ) {
                     // Maybe offer to create a new document with that name? (see alos KoDocument::openFile)
-                    KMessageBox::error( this, i18n( "The file %1 doesn't exist." ).arg( url.path() ) );
+                    KMessageBox::error( this, i18n( "The file %1 does not exist." ).arg( url.path() ) );
                 }
             }
             return ok;
@@ -684,7 +684,7 @@ bool KoTemplateChooseDia::collectInfo()
 		KURL url = item->url();
 		if(url.isLocalFile() && !QFile::exists(url.path()))
 		{
-			KMessageBox::error( this, i18n( "The file %1 doesn't exist." ).arg( url.path() ) );
+			KMessageBox::error( this, i18n( "The file %1 does not exist." ).arg( url.path() ) );
 			return false;
 		}
 		d->m_fullTemplateName = url.url();

@@ -510,7 +510,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 {
     if ( !KIO::NetAccess::exists(url,true,0) )
     {
-        KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(url.url()) );
+        KMessageBox::error(0L, i18n("The file %1 does not exist.").arg(url.url()) );
         m_recent->removeURL(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;

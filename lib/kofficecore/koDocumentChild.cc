@@ -265,7 +265,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
                 d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
                 d->m_doc->setStoreInternal( true );
                 if ( internalURL )
-                    d->m_doc->setProperty( "unavailReason", i18n( "Couldn't load embedded object." ) );
+                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load embedded object." ) );
                 else
                     d->m_doc->setProperty( "unavailReason", i18n( "External document not found:\n%1" ).arg( tmpURL ) );
             }

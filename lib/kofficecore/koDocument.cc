@@ -1399,7 +1399,7 @@ bool KoDocument::openFile()
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(m_file) );
+            KMessageBox::error(0L, i18n("The file %1 does not exist.").arg(m_file) );
         d->m_bLoading = false;
         return false;
     }
@@ -1632,7 +1632,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         if ( !in.open( IO_ReadOnly ) )
         {
             QApplication::restoreOverrideCursor();
-            d->lastErrorMessage = i18n( "Couldn't open the file for reading (check read permissions)." );
+            d->lastErrorMessage = i18n( "Could not open the file for reading (check read permissions)." );
             return false;
         }
 
@@ -1642,7 +1642,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         {
             QApplication::restoreOverrideCursor();
             in.close();
-            d->lastErrorMessage = i18n( "Couldn't read the beginning of the file." );
+            d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
             return false;
         }
         // ### TODO: allow UTF-16
