@@ -1,51 +1,51 @@
 lib_LTLIBRARIES = libkdchart.la
 
-libkdchart_la_SOURCES = KDChartAreaPainter.cpp	\
+libkdchart_la_SOURCES = KDChart.cpp 		\
+			KDChartAreaPainter.cpp	\
 			KDChartAxesPainter.cpp	\
 			KDChartAxisParams.cpp	\
 			KDChartBarPainter.cpp	\
-			KDChart.cpp			\
+			KDChartCustomBox.cpp 	\
+			KDChartData.cpp 	\
+			KDChartDataRegion.cpp	\
 			KDChartHiLoPainter.cpp	\
 			KDChartLinesPainter.cpp	\
-			KDChartPainter.cpp		\
-			KDChartParams.cpp		\
+			KDChartPainter.cpp	\
+			KDChartParams.cpp	\
 			KDChartPiePainter.cpp	\
+			KDChartPolarPainter.cpp	\
 			KDChartRingPainter.cpp	\
 			KDChartTextPiece.cpp	\
-			KDChartWidget.cpp \
-			KDXMLTools.cpp \
+			KDChartWidget.cpp 	\
+			KDDrawText.cpp		\ 
+			KDFrame.cpp 		\
 			KDFrameProfileSection.cpp \
-			KDFrame.cpp \
-			KDChartPolarPainter.cpp \
-			KDChartCustomBox.cpp \
-			KDChartData.cpp \
-			KDDrawText.cpp 
+			KDXMLTools.cpp
 
-noinst_HEADERS =	KDChartAreaPainter.h	\
+noinst_HEADERS =	KDChart.h 		\
+			KDChartAreaPainter.h	\
 			KDChartAxesPainter.h	\
-			KDChartBarPainter.h		\
+			KDChartAxisParams.h	\
+			KDChartBarPainter.h	\
+			KDChartCustomBox.h 	\
+			KDChartData.h 		\
+			KDChartDataRegion.h	\
+			KDChartEnums.h	 	\
 			KDChartHiLoPainter.h	\
 			KDChartLinesPainter.h	\
-			KDChartPiePainter.h		\
-			KDChartRingPainter.h	\
-			KDChartTextPiece.h	\
-			KDChartAxisParams.h	\
-			KDChartDataRegion.h	\
-			KDChart.h		\
 			KDChartNotEnoughSpaceException.h	\
 			KDChartPainter.h	\
 			KDChartParams.h		\
+			KDChartPiePainter.h	\
+			KDChartPolarPainter.h	\
+			KDChartRingPainter.h	\
+			KDChartTextPiece.h	\
 			KDChartUnknownTypeException.h	\
-			KDChartWidget.h \
-			KDDrawText.h \
-			KDChartPolarPainter.h \
-			KDXMLTools.h \
+			KDChartWidget.h		\
+			KDDrawText.h 		\
+			KDFrame.h 		\
 			KDFrameProfileSection.h \
-			KDFrame.h \
-			KDChartEnums.h \
-			KDChartCustomBox.h \
-			KDChartData.h \
-			KDDrawText.h
+			KDXMLTools.h
 			
 
 METASOURCES = AUTO
