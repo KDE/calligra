@@ -27,7 +27,7 @@
 
 #include <qdialog.h>
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qwidgetstack.h>
 #include <qslider.h>
 

@@ -26,8 +26,8 @@
 #define GridDialog_h
 
 #include <qdialog.h>
-#include <qradiobt.h>
-#include <qchkbox.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 #include "Canvas.h"
 #include "FloatSpinBox.h"
 #include "UnitBox.h"

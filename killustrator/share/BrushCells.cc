@@ -26,7 +26,7 @@
 #include "BrushCells.moc"
 
 #include <qpainter.h>
-#include <qdrawutl.h>
+#include <qdrawutil.h>
 #include <qcolor.h>
 #include <iostream.h>
 

@@ -27,7 +27,7 @@
 
 #include "StartupScreen.h"
 #include "StartupScreen.moc"
-#include <qapp.h>
+#include <qapplication.h>
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qtimer.h>

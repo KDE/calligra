@@ -25,7 +25,7 @@
 
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlistbox.h>
 

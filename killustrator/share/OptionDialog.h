@@ -28,7 +28,7 @@
 #include <qdialog.h>
 #include <qtabdialog.h>
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <ktabctl.h>
 
 #include "UnitBox.h"

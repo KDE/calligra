@@ -36,8 +36,8 @@
 #include "qfile.h"
 #include <qstrlist.h> 
 #include <qfile.h>
-#include <qtstream.h> 
-#include <qapp.h>
+#include <qtextstream.h> 
+#include <qapplication.h>
 #include <X11/Xlib.h>
 
 #include <klocale.h>

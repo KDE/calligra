@@ -20,7 +20,7 @@
 
 #include <qstring.h>
 #include <qpainter.h>
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qcolor.h>

@@ -13,10 +13,10 @@
 *****************************************************************************/
 
 #include <kdebug.h>
-// #include "../config.h"
 #include <qwidget.h>
-#include <qscrbar.h>
-#include <qobjcoll.h>
+#include <qscrollbar.h>
+#include <qcollection.h>
+#include <qobjectlist.h>
 #include "QwViewport.h"
 
 #include <iostream.h>

@@ -26,7 +26,7 @@
 #include "PolygonPreview.moc"
 #include "GObject.h"
 #include <qpainter.h>
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <math.h>
 
 #define WIDTH 160

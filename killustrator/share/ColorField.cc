@@ -22,10 +22,10 @@
 
 */
 
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qpainter.h>
-#include <qdrawutl.h>
+#include <qdrawutil.h>
 
 #include "ColorField.h"
 #include "ColorField.moc"

@@ -39,7 +39,7 @@
 #include <qlayout.h>
 #include <qwidgetstack.h>
 #include <qcombobox.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qslider.h>
 
 #include "GText.h"

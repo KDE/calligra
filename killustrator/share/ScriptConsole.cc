@@ -32,7 +32,7 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qmlined.h>
 #include <qlayout.h>
 

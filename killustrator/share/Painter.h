@@ -24,7 +24,7 @@
 #ifndef Painter_h_
 #define Painter_h_
 
-#include <qpaintd.h>
+#include <qpaintdevice.h>
 #include <qpainter.h>
 
 #include <qlist.h> 

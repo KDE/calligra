@@ -26,7 +26,7 @@
 #define ColorField_h_
 
 #include <qwidget.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qvector.h>
 #include <qbrush.h>
 

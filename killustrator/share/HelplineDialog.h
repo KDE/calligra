@@ -30,7 +30,7 @@
 #include <qdialog.h>
 #include <qtabdialog.h>
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlistbox.h>
 #include <ktabctl.h>
 

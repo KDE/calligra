@@ -26,7 +26,7 @@
 #define PolygonConfigDialog_h
 
 #include <qdialog.h>
-#include <qradiobt.h>
+#include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qslider.h>
 

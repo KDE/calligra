@@ -25,7 +25,7 @@
 #ifndef Coord_h_
 #define Coord_h_
 
-#include <qdstream.h>
+#include <qdatastream.h>
 #include <qwmatrix.h>
 #include <iostream.h>
 

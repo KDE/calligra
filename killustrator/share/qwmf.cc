@@ -17,12 +17,12 @@
  */
 
 #include <qfile.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <qpainter.h>
-#include <qdstream.h>
+#include <qdatastream.h>
 #include <assert.h>
 #include <qcolor.h>
-#include <qapp.h>
+#include <qapplication.h>
 // #include <endian.h>
 #include <qpixmap.h>
 

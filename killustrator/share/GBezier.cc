@@ -34,7 +34,7 @@
 #include "GBezier.moc"
 #include "GCurve.h"
 
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <klocale.h>
 #include <kapp.h>
 

@@ -10,7 +10,7 @@
 #define QVIEWP_H
 
 #include <qwidget.h>
-#include <qscrbar.h>
+#include <qscrollbar.h>
 
 class QwViewport : public QWidget
 {

@@ -35,7 +35,7 @@
 #include <kseparator.h>
 #include <kiconloader.h>
 
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qheader.h>
 

@@ -30,9 +30,9 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlabel.h>
-#include <qmlined.h>
+#include <qmultilineedit.h>
 #include <qlayout.h>
 #include <qregexp.h>
 

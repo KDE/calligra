@@ -32,11 +32,11 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 
-#include <qpushbt.h>
-#include <qbttngrp.h>
+#include <qpushbutton.h>
+#include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgrpbox.h>
+#include <qgroupbox.h>
 #include <qframe.h>
 
 PolygonConfigDialog::PolygonConfigDialog (QWidget* parent, const char* name) : 

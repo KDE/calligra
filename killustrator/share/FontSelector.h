@@ -27,20 +27,20 @@
 #ifndef FontSelector_h_
 #define FontSelector_h_
 
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qpixmap.h>
-#include <qapp.h>
-#include <qbttngrp.h>
-#include <qchkbox.h>
-#include <qcombo.h>
+#include <qapplication.h>
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qframe.h>
-#include <qgrpbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlined.h>
+#include <qlineedit.h>
 #include <qlistbox.h>
-#include <qpushbt.h>
-#include <qradiobt.h>
-#include <qscrbar.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qscrollbar.h>
 #include <qtooltip.h>
 
 #include <qstring.h>

@@ -26,7 +26,7 @@
 #include "AboutDialog.moc"
 
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <klocale.h>
 #include <kapp.h>
 #include <kiconloader.h>

@@ -33,13 +33,13 @@
 #include <kseparator.h>
 #include <kiconloader.h>
 
-#include <qpushbt.h>
-#include <qbttngrp.h>
+#include <qpushbutton.h>
+#include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgrpbox.h>
-#include <qradiobt.h>
-#include <qchkbox.h>
+#include <qgroupbox.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 
 #include "TranslateCmd.h"
 #include "RotateCmd.h"

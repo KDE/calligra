@@ -29,7 +29,7 @@
 #include <qcolor.h>
 #include <qwmatrix.h>
 #include <qpainter.h>
-#include <qdstream.h>
+#include <qdatastream.h>
 #include <qpicture.h>
 
 #include <kurl.h>

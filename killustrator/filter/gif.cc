@@ -1,5 +1,5 @@
 #include <qimage.h>
-#include <qdstream.h>
+#include <qdatastream.h>
 #include <ctype.h>
 
 /*

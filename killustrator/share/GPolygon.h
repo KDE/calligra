@@ -30,7 +30,7 @@
 #include <qfont.h>
 #include <qwmatrix.h>
 #include <qpainter.h>
-#include <qdstream.h>
+#include <qdatastream.h>
 #include <qdict.h>
 #include <qlist.h>
 

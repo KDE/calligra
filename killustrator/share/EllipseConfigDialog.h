@@ -26,7 +26,7 @@
 #define EllipseConfigDialog_h
 
 #include <qdialog.h>
-#include <qradiobt.h>
+#include <qradiobutton.h>
 
 
 #include "OvalTool.h"

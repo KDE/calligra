@@ -27,7 +27,7 @@
 
 #include <iostream.h>
 #include <qintdict.h>
-#include <qpntarry.h>
+#include <qpointarray.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include "Coord.h"
