@@ -893,10 +893,62 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
-bool KPresenterDoc::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
+bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, KoStore* )
 {
-    //todo
-    return false;
+    QTime dt;
+    dt.start();
+
+    ignoreSticky = FALSE;
+    emit sigProgress( 0 );
+    int activePage=0;
+    lastObj = -1;
+    bool allSlides = false;
+    // clean
+    if ( _clean ) {
+        __pgLayout = KoPageLayoutDia::standardLayout();
+        _spInfiniteLoop = false;
+        _spManualSwitch = true;
+        _showPresentationDuration = false;
+        _xRnd = 20;
+        _yRnd = 20;
+        urlIntern = url().path();
+    }
+    else
+        m_spellListIgnoreAll.clear();
+    emit sigProgress( 5 );
+
+    QDomElement content = doc.documentElement();
+    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    if ( body.isNull() )
+    {
+        kdError(33001) << "No office:body found!" << endl;
+        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        return false;
+    }
+    //load settings
+    QDomElement settings = body.namedItem("presentation:settings").toElement();
+    if (!settings.isNull() && !_clean /*don't load settings when we copy/paste a page*/)
+    {
+        if (settings.attribute("presentation:endless")=="true")
+            _spInfiniteLoop = true;
+
+        if (settings.attribute("presentation:force-manual")=="true")
+            _spManualSwitch = true;
+    }
+
+    //todo load format
+    setModified(false);
+
+    ignoreSticky = TRUE;
+
+    if(_clean)
+    {
+        setModified(false);
+        startBackgroundSpellCheck();
+    }
+
+    kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+    return true;
 }
 
 bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
