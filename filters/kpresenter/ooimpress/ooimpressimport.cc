@@ -285,6 +285,12 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 //         paperElement.setAttribute( "orientation", 0 );
         // Keep pageHeight in cm to avoid rounding-errors that would
         // get multiplied with every new slide.
+
+        if (properties.attribute("style:print-orientation")=="portrait")
+            paperElement.setAttribute("orientation", 1); // yes, it's swapped ;)
+        else if (properties.attribute("style:print-orientation")=="landscape")
+            paperElement.setAttribute("orientation", 0);
+
         pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
 
         QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
