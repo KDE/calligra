@@ -198,7 +198,9 @@ public:
   void setFrameBackgroundColor(QBrush _color);
 
   KWGroupManager *getTable();
-
+  KWGroupManager *getCurrentTable()
+  { return curTable; }
+  
   void insertVariable(VariableType type);
 
 public slots:
@@ -337,6 +339,8 @@ protected:
 
   EditMode editMode;
 
+  KWGroupManager *curTable;
+  
 };
 
 #endif

@@ -96,6 +96,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   doc->setSelStart(*fc);
   doc->setSelEnd(*fc);
   doc->setSelection(false);
+
+  curTable = 0L;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -696,6 +698,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      if (r != 0 && (e->state() & ShiftButton) && doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager())
 		{
 		  doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager()->selectUntil(doc->getFrameSet(doc->getFrameSet(mx,my)));
+		  curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();
 		  goon = false;
 		}
 
@@ -706,15 +709,20 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		      if (!(e->state() & ControlButton || e->state() & ShiftButton))
 			doc->deSelectAllFrames();
 		      doc->selectFrame(mx,my);
+		      curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();		      
 		    }
 		  else if (r == 2)
 		    {
 		      if (e->state() & ControlButton || e->state() & ShiftButton)
-			doc->deSelectFrame(mx,my);
+			{
+			  doc->deSelectFrame(mx,my);
+			  curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();
+			}
 		      else if (cursor().shape() != SizeAllCursor)
 			{
 			  doc->deSelectAllFrames();
 			  doc->selectFrame(mx,my);
+			  curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();			  
 			}
 		    }
 		}
@@ -2628,7 +2636,7 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
     {
       frameset = doc->getFrameSet(i);
       if (!frameset->isVisible()) continue;
-      
+
       if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
 	  isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
 	  isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||

@@ -1300,16 +1300,16 @@ void KWordView::tableJoinCells()
 {
   gui->getPaperWidget()->mmEdit();
 
-  KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
   if (!grpMgr)
-    QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to select some cells in a table to join them!"),i18n("OK"));
   else
     {
       QPainter painter;
       painter.begin(gui->getPaperWidget());
       if (!grpMgr->joinCells(painter))
 	QMessageBox::critical(0L,i18n("Error"),i18n("You have to select some cells which are next to each other\n"
-						    "to be able to join them"),i18n("OK"));
+						    "and are not already joined."),i18n("OK"));
       painter.end();
     }
 
