@@ -120,8 +120,9 @@ public:
     bool isFrameEmpty( KWFrame * frame );
     virtual bool canRemovePage( int num );
     // reimp for internal reasons
-    virtual void delFrame( KWFrame *frm, bool remove = true );
-    virtual void delFrame( unsigned int num ) { KWFrameSet::delFrame( num ); } // stupid C++
+    virtual void delFrame( unsigned int num, bool recalc = true, bool remove = true );
+    void delFrame( KWFrame *frm, bool remove = true, bool recalc = true )
+        { KWFrameSet::delFrame( frm, remove, recalc ); } // strange C++ feature ;)
 
     /** reshuffle frames so text is always displayed from top-left down and then right. */
     virtual void updateFrames( int flags = 0xff );

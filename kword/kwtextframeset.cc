@@ -1935,15 +1935,22 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             kdDebug(32002) << "slotAfterFormatting creating new frame in frameset " << getName() << endl;
 //#endif
             uint oldCount = frames.count();
+            kdDebug() << " last frame=" << frames.last() << " pagenum=" << frames.last()->pageNum() << " getpages-1=" << m_doc->getPages()-1 << "   frames count=" << oldCount << endl;
+
             // First create a new page for it if necessary
             if ( frames.last()->pageNum() == m_doc->getPages() - 1 )
+            {
                 m_doc->appendPage();
+                kdDebug() << "now frames count=" << frames.count() << endl;
+            }
 
             // Maybe this created the frame, then we're done
             if ( frames.count() == oldCount )
             {
+                Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
                 // Otherwise, create a new frame on next page
                 KWFrame *theFrame = frames.last();
+                kdDebug() << "KWTextFrameSet::slotAfterFormatting creating frame on page " << theFrame->pageNum()+1 << endl;
                 KWFrame *frm = theFrame->getCopy();
                 frm->moveBy( 0, m_doc->ptPaperHeight() );
                 //frm->setPageNum( theFrame->pageNum()+1 );
@@ -2193,11 +2200,13 @@ bool KWTextFrameSet::canRemovePage( int num )
     return true;
 }
 
-void KWTextFrameSet::delFrame( KWFrame *frm, bool remove )
+void KWTextFrameSet::delFrame( unsigned int num, bool remove, bool recalc )
 {
-    //kdDebug() << "KWTextFrameSet(" << this << ")::delFrame " << frm << endl;
-    emit frameDeleted( frm );
-    KWFrameSet::delFrame( frm, remove );
+    KWFrame *frm = frames.at( num );
+    kdDebug() << "KWTextFrameSet(" << this << ")::delFrame " << frm << " (" << num << ")" << endl;
+    if ( frm )
+        emit frameDeleted( frm );
+    KWFrameSet::delFrame( num, remove, recalc );
 }
 
 void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QPoint & nPointBottom )

@@ -230,7 +230,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 #ifdef DEBUG_FRAMELAYOUT
             kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->getNumFrames() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
 #endif
-            mainTextFrameSet->delFrame( mainTextFrameSet->getNumFrames() - 1 );
+            mainTextFrameSet->delFrame( mainTextFrameSet->getNumFrames() - 1, true, false /*do not updateFrames!*/ );
         }
     }
 

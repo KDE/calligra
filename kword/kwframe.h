@@ -467,8 +467,8 @@ public:
 
     // frame management
     virtual void addFrame( KWFrame *_frame, bool recalc = true );
-    virtual void delFrame( unsigned int _num );
-    virtual void delFrame( KWFrame *frm, bool remove = true );
+    virtual void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
+    void delFrame( KWFrame *frm, bool remove = true, bool recalc = true ); // calls the virtual one
     void deleteAllFrames();
     void deleteAllCopies(); // for headers/footers only
 
