@@ -575,13 +575,13 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	delete[]( products );
 	delete[]( z );
 
-kdDebug() << "results" << endl;
+kdDebug(38000) << "results" << endl;
 for( int i = 0; i <= 2 * degree() - 1; ++i )
 {
-kdDebug() << newCurve.getLast()->p( i ).x() << " "
+kdDebug(38000) << newCurve.getLast()->p( i ).x() << " "
 << newCurve.getLast()->p( i ).y() << endl;
 }
-kdDebug() << endl;
+kdDebug(38000) << endl;
 
 	// Find roots.
 	QValueList<double> params;
@@ -647,7 +647,7 @@ VSegment::rootParams( QValueList<double>& params ) const
 				// Calculate intersection of chord with x-axis.
 				KoPoint chord = knot() - prev()->knot();
 
-kdDebug() << prev()->knot().x()  << " " << prev()->knot().y()
+kdDebug(38000) << prev()->knot().x()  << " " << prev()->knot().y()
 << knot().x() << " " << knot().y() << " ---> "
 << ( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() ) / - chord.y() << endl;
 				params.append(

@@ -55,7 +55,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	{
 		return;
 	}
-	kdDebug() << "VImage::draw" << endl;
+	kdDebug(38000) << "VImage::draw" << endl;
 	if( state() == edit )
 	{
 		KoRect bbox = KoRect( 0, 0, m_image->width(), m_image->height() );
@@ -63,7 +63,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 		KoPoint tr = bbox.topRight().transform( m_matrix );
 		KoPoint bl = bbox.bottomLeft().transform( m_matrix );
 		KoPoint br = bbox.bottomRight().transform( m_matrix );
-		kdDebug() << "m_boundingBox : " << m_boundingBox << endl;
+		kdDebug(38000) << "m_boundingBox : " << m_boundingBox << endl;
 	    painter->moveTo( tl );
 	    painter->lineTo( tr );
 	    painter->lineTo( br );
@@ -93,7 +93,7 @@ VImage::transform( const QWMatrix& m )
 	//QWMatrix m2 = m;
 	//m_matrix *= m2.scale( 1.0, -1.0 );
 	m_matrix *= m;
-	kdDebug() << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
+	kdDebug(38000) << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
 	m_boundingBox = m_boundingBox.transform( m );
 }
 
@@ -132,7 +132,7 @@ VImage::load( const QDomElement& element )
 						element.attribute( "m22", "1.0" ).toDouble(),
 						element.attribute( "dx", "0.0" ).toDouble(),
 						element.attribute( "dy", "0.0" ).toDouble() );
-	kdDebug() << "VImage::load : " << m_fname.latin1() << endl;
+	kdDebug(38000) << "VImage::load : " << m_fname.latin1() << endl;
 	delete m_image;
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )

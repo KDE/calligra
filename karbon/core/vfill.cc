@@ -31,14 +31,14 @@ VFill::VFill()
 	m_gradient.setOrigin( KoPoint( 0, 0 ) );
 	m_gradient.setVector( KoPoint( 0, 50 ) );
 	m_gradient.setSpreadMethod( gradient_spread_reflect );*/
-	//kdDebug() << "Size of VFill : " << sizeof(*this) << endl;
+	//kdDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
 }
 
 VFill::VFill( const VColor &c )
 	: m_type( solid )
 {
 	m_color = c;
-	//kdDebug() << "Size of VFill : " << sizeof(*this) << endl;
+	//kdDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
 }
 
 VFill::VFill( const VFill& fill )

@@ -108,7 +108,7 @@ void VStyleDocker::slotItemSelected( KoIconItem *item )
 {
 	VPattern *pattern = (VPattern *)item;
 	if( !pattern ) return;
-	kdDebug() << "loading pattern : " << pattern->tilename().latin1() << endl;
+	kdDebug(38000) << "loading pattern : " << pattern->tilename().latin1() << endl;
 	if( m_part && m_part->document().selection() )
 	{
 		VFill fill;

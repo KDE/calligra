@@ -738,7 +738,7 @@ VLayersTab::updateLayers()
 					else
 						m_objects[ itr.current() ]->setKey( objcount );
 
-					//kdDebug() << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
+					//kdDebug(38000) << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
 
 					if( dynamic_cast<VGroup *>( itr.current() ) )
 						updateObjects( itr.current(),  m_objects[ itr.current() ] );
@@ -845,7 +845,7 @@ VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListV
 void
 VHistoryItem::init()
 {
-	kdDebug() << "In VHistoryItem::init() : " << m_command->name() << endl;
+	kdDebug(38000) << "In VHistoryItem::init() : " << m_command->name() << endl;
 	char buffer[64];
 	sprintf( buffer, "%064ld", ++g_lastKey );
 	m_key = buffer;

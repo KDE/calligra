@@ -109,7 +109,7 @@ VToolBox::slotButtonPressed( int id )
 void
 VToolBox::registerTool( VTool *tool )
 {
-	kdDebug() << "VToolBox::registerTool : " << tool->name() << endl;
+	kdDebug(38000) << "VToolBox::registerTool : " << tool->name() << endl;
 	uint prio = tool->priority();
 	if( tool->category() == "shapecreation" )
 		m_shapetools.insert( ( prio == 0 ) ? m_shapetools.count() : prio - 1, tool );
@@ -123,7 +123,7 @@ void
 VToolBox::setupTools()
 {
 	QDictIterator<VTool> itr( m_part->toolController()->tools() );
-	kdDebug() << "count : " << m_part->toolController()->tools().count() << endl;
+	kdDebug(38000) << "count : " << m_part->toolController()->tools().count() << endl;
 	for( ; itr.current() ; ++itr )
 		registerTool( itr.current() );
 
@@ -155,7 +155,7 @@ VToolBox::setupTools()
 QToolButton *
 VToolBox::addButton( const char* iconName, QString tooltip, int id )
 {
-	kdDebug() << "Adding : " << iconName << endl;
+	kdDebug(38000) << "Adding : " << iconName << endl;
 	QToolButton *button = new QToolButton( insertLeft ? left : right );
 	if( iconName != "" )
 	{

@@ -66,8 +66,8 @@
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( target, w, h ), m_target( target ), m_bDrawNodes( bDrawNodes )
 {
-	//kdDebug() << "w : " << w << endl;
-	//kdDebug() << "h : " << h << endl;
+	//kdDebug(38000) << "w : " << w << endl;
+	//kdDebug(38000) << "h : " << h << endl;
 	m_width = w;//( w > 0 ) ? w : target->width();
 	m_height= h;//( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
@@ -91,8 +91,8 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( 0L, w, h ), m_buffer( buffer ), m_bDrawNodes( bDrawNodes )
 {
-	//kdDebug() << "w : " << w << endl;
-	//kdDebug() << "h : " << h << endl;
+	//kdDebug(38000) << "w : " << w << endl;
+	//kdDebug(38000) << "h : " << h << endl;
 	m_target = 0L;
 	m_width = w;
 	m_height= h;
@@ -161,8 +161,8 @@ VKoPainter::end()
 void
 VKoPainter::blit( const KoRect &r )
 {
-	//kdDebug() << "m_width : " << m_width << endl;
-	//kdDebug() << "m_height : " << m_height << endl;
+	//kdDebug(38000) << "m_width : " << m_width << endl;
+	//kdDebug(38000) << "m_height : " << m_height << endl;
 	int x		= KMAX( 0, int( r.x() ) );
 	int y		= KMAX( 0, int( r.y() ) );
 	int width	= KMIN( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
@@ -894,15 +894,15 @@ VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 	affineresult[3] = ( m_matrix.m22() * affine.m22() ) * m_zoomFactor;
 	affineresult[4] = m_matrix.dx() + affine.dx() * m_zoomFactor;
 	affineresult[5] = m_matrix.dy() - ( affine.dy() ) * m_zoomFactor;
-	/*kdDebug() << "affineresult[0] : " << affineresult[0] << endl;
-	kdDebug() << "affineresult[1] : " << affineresult[1] << endl;
-	kdDebug() << "affineresult[2] : " << affineresult[2] << endl;
-	kdDebug() << "affineresult[3] : " << affineresult[3] << endl;
-	kdDebug() << "affineresult[4] : " << affineresult[4] << endl;
-	kdDebug() << "affineresult[5] : " << affineresult[5] << endl;
-	kdDebug() << "m_matrix.dx() : " << m_matrix.dx() << endl;
-	kdDebug() << "affine.dx() : " << affine.dx() << endl;
-	kdDebug() << "image.height() : " << image.height() << endl;*/
+	/*kdDebug(38000) << "affineresult[0] : " << affineresult[0] << endl;
+	kdDebug(38000) << "affineresult[1] : " << affineresult[1] << endl;
+	kdDebug(38000) << "affineresult[2] : " << affineresult[2] << endl;
+	kdDebug(38000) << "affineresult[3] : " << affineresult[3] << endl;
+	kdDebug(38000) << "affineresult[4] : " << affineresult[4] << endl;
+	kdDebug(38000) << "affineresult[5] : " << affineresult[5] << endl;
+	kdDebug(38000) << "m_matrix.dx() : " << m_matrix.dx() << endl;
+	kdDebug(38000) << "affine.dx() : " << affine.dx() << endl;
+	kdDebug(38000) << "image.height() : " << image.height() << endl;*/
 	art_rgba_affine( m_buffer, 0, 0, m_width, m_height, m_width * 4,
 					 image.bits(), image.width(), image.height(), image.width() * 4,
 					 affineresult, ART_FILTER_NEAREST, 0L );

@@ -166,7 +166,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
-	kdDebug() << "Handling KarbonView dtor" << endl;
+	kdDebug(38000) << "Handling KarbonView dtor" << endl;
 	if( shell() )
 	{
 		delete( m_ColorManager );
@@ -236,7 +236,7 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 							 QDomElement &element, int id )
 {
 	if( container )
-		kdDebug() << container << endl;
+		kdDebug(38000) << container << endl;
 
 	if( shell() && container == m_toolbox )
 	{
@@ -321,7 +321,7 @@ KarbonView::dropEvent( QDropEvent *e )
 void
 KarbonView::print( KPrinter &printer )
 {
-	kdDebug() << "KarbonView::print" << endl;
+	kdDebug(38000) << "KarbonView::print" << endl;
 	VQPainter p( ( QPaintDevice * ) & printer, width(), height() );
 	p.begin();
 	p.setZoomFactor( 1.0 );
@@ -352,9 +352,9 @@ KarbonView::fileImportGraphic()
 		return;
 	}
 	QString fname = dialog->selectedFile();
-	//kdDebug() << "in : " << fname.latin1() << endl;
-	//kdDebug() << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
-	//kdDebug() << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
+	//kdDebug(38000) << "in : " << fname.latin1() << endl;
+	//kdDebug(38000) << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
+	//kdDebug(38000) << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
 	if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().latin1() )
 		part()->mergeNativeFormat( fname );
 	else
@@ -447,7 +447,7 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	kdDebug() << "*********" << endl;
+	kdDebug(38000) << "*********" << endl;
 
 	if( part()->document().selection()->objects().count() > 0 )
 	{
@@ -562,7 +562,7 @@ KarbonView::ungroupSelection()
 void
 KarbonView::dummyForTesting()
 {
-	kdDebug() << "KarbonView::dummyForTesting()" << endl;
+	kdDebug(38000) << "KarbonView::dummyForTesting()" << endl;
 }
 
 void
@@ -653,9 +653,9 @@ KarbonView::zoomChanged( const KoPoint &p )
 			centerY = 0.5;
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	}
-	kdDebug() << "centerX : " << centerX << endl;
-	kdDebug() << "centerY : " << centerY << endl;
-	kdDebug() << "zoomFactor : " << zoomFactor << endl;
+	kdDebug(38000) << "centerX : " << centerX << endl;
+	kdDebug(38000) << "centerY : " << centerY << endl;
+	kdDebug(38000) << "zoomFactor : " << zoomFactor << endl;
 
 	// above 2000% probably doesn't make sense... (Rob)
 	if( zoomFactor > 20 )
@@ -899,7 +899,7 @@ KarbonView::initActions()
 void
 KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
-	kdDebug() << "view->paintEverything()" << endl;
+	kdDebug(38000) << "view->paintEverything()" << endl;
 }
 
 bool

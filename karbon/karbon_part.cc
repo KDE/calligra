@@ -151,7 +151,7 @@ KarbonPart::createViewInstance( QWidget* parent, const char* name )
 void
 KarbonPart::removeView( KoView *view )
 {
-	kdDebug() << "KarbonPart::removeView" << endl;
+	kdDebug(38000) << "KarbonPart::removeView" << endl;
 	KoDocument::removeView( view );
 }
 
@@ -249,7 +249,7 @@ void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 						  bool /*transparent*/, double zoomX, double /*zoomY*/ )
 {
-	kdDebug() << "**** part->paintContent()" << endl;
+	kdDebug(38000) << "**** part->paintContent()" << endl;
 	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
 	//QPaintDeviceMetrics metrics( painter.device() );
@@ -258,12 +258,12 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomX );
-	kdDebug() << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
-	kdDebug() << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
-	kdDebug() << "rect.x() : "<< rect.x() << endl;
-	kdDebug() << "rect.y() : "<< rect.y() << endl;
-	kdDebug() << "rect.width() : "<< rect.width() << endl;
-	kdDebug() << "rect.height() : "<< rect.height() << endl;
+	kdDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
+	kdDebug(38000) << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
+	kdDebug(38000) << "rect.x() : "<< rect.x() << endl;
+	kdDebug(38000) << "rect.y() : "<< rect.y() << endl;
+	kdDebug(38000) << "rect.width() : "<< rect.width() << endl;
+	kdDebug(38000) << "rect.height() : "<< rect.height() << endl;
 	//p->setWorldMatrix( painter.worldMatrix() );
 	QWMatrix mat;
 	mat.scale( 1, -1 );

@@ -41,7 +41,7 @@ VTool::VTool( KarbonPart *part, const char* ) : m_part( part )
 
 VTool::~VTool()
 {
-	//kdDebug() << "Deleting : " << name().latin1() << endl;
+	//kdDebug(38000) << "Deleting : " << name().latin1() << endl;
 }
 
 void

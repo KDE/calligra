@@ -44,10 +44,10 @@
 
 KarbonResourceServer::KarbonResourceServer()
 {
-	kdDebug() << "-- Karbon ResourceServer --" << endl;
+	kdDebug(38000) << "-- Karbon ResourceServer --" << endl;
 
 	// PATTERNS
-	kdDebug() << "Loading patterns:" << endl;
+	kdDebug(38000) << "Loading patterns:" << endl;
 	m_patterns.setAutoDelete( true );
 
 	// image formats
@@ -72,14 +72,14 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
 		file = *it;
-		kdDebug() << " - " << file << endl;
+		kdDebug(38000) << " - " << file << endl;
 		loadPattern( file );
 	}
 
-	kdDebug() << m_patterns.count() << " patterns loaded." << endl;
+	kdDebug(38000) << m_patterns.count() << " patterns loaded." << endl;
 
 	// GRADIENTS
-	kdDebug() << "Loading gradients:" << endl;
+	kdDebug(38000) << "Loading gradients:" << endl;
 	m_gradients = new QPtrList<VGradientListItem>();
 	m_gradients->setAutoDelete( true );
 
@@ -101,14 +101,14 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
 		file = *it;
-		kdDebug() << " - " << file << endl;
+		kdDebug(38000) << " - " << file << endl;
 		loadGradient( file );
 	}
 
-	kdDebug() << m_gradients->count() << " gradients loaded." << endl;
+	kdDebug(38000) << m_gradients->count() << " gradients loaded." << endl;
 
 	// CLIPARTS
-	kdDebug() << "Loading cliparts:" << endl;
+	kdDebug(38000) << "Loading cliparts:" << endl;
 	m_cliparts = new QPtrList<VClipartIconItem>();
 	m_cliparts->setAutoDelete( true );
 
@@ -130,13 +130,13 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
 		file = *it;
-		kdDebug() << " - " << file << endl;
+		kdDebug(38000) << " - " << file << endl;
 		loadClipart( file );
 	}
 
 	m_pixmaps.setAutoDelete( true );
 
-	kdDebug() << m_cliparts->count() << " cliparts loaded." << endl;
+	kdDebug(38000) << m_cliparts->count() << " cliparts loaded." << endl;
 } // KarbonResourceServer::KarbonResourceServer
 
 KarbonResourceServer::~KarbonResourceServer()
@@ -190,7 +190,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 		filename = KarbonFactory::instance()->dirs()->saveLocation(
 					   "kis_pattern%1%2%3" ).arg( name ).arg( i ).arg( ext );
 		fi.setFile( filename );
-		kdDebug() << fi.fileName() << endl;
+		kdDebug(38000) << fi.fileName() << endl;
 	}
 
 	char buffer[ 1024 ];
@@ -230,7 +230,7 @@ KarbonResourceServer::addGradient( VGradient* gradient )
 	{
 		sprintf( buffer, "%04d.kgr", i++ );
 		fi.setFile( KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer );
-		kdDebug() << fi.fileName() << endl;
+		kdDebug(38000) << fi.fileName() << endl;
 	}
 
 	QString filename = KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer;

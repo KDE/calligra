@@ -120,7 +120,7 @@ VZOrderCmd::execute()
 						}
 					}
 				}
-				kdDebug() << "todo.count() : " << todo.count() << endl;
+				kdDebug(38000) << "todo.count() : " << todo.count() << endl;
 
 				// we have found the affected vobjects in this vlayer
 				VObjectListIterator itr3( todo );

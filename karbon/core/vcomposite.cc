@@ -387,7 +387,7 @@ VPath::loadSvgPath( const QString &d )
 {
 	//QTime s;s.start();
 	parseSVG( d, true );
-	//kdDebug() << "Parsing time : " << s.elapsed() << endl;
+	//kdDebug(38000) << "Parsing time : " << s.elapsed() << endl;
 }
 
 void

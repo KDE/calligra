@@ -560,7 +560,7 @@ VTextTool::activate()
 	m_editedText = 0L;
 
 	VSelection* selection = view()->part()->document().selection();
-	kdDebug() << "Nb objects selected: " << selection->objects().count() << endl;
+	kdDebug(38000) << "Nb objects selected: " << selection->objects().count() << endl;
 
 	if( selection->objects().count() == 1 )
 		visit( *selection->objects().getFirst() );
@@ -596,7 +596,7 @@ VTextTool::drawEditedText()
 	if( !m_editedText )
 		return;
 
-	kdDebug() << "Drawing: " << m_editedText->text() << endl;
+	kdDebug(38000) << "Drawing: " << m_editedText->text() << endl;
 
 	VPainter* painter = view()->painterFactory()->editpainter();
 

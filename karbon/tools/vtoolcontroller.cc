@@ -102,7 +102,7 @@ VToolController::registerTool( VTool *tool )
 {
 	if( !m_tools.find( tool->name() ) )
 		m_tools.insert( tool->name(), tool );
-	//kdDebug() << "active tool : " << m_activeTool->name() << endl;
+	//kdDebug(38000) << "active tool : " << m_activeTool->name() << endl;
 }
 
 bool

@@ -55,7 +55,7 @@ int traceMoveto( FT_Vector *to, VPath *composite )
 	double toy = ( -to->y / 64.0 );
 
 	//QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
-	//kdDebug() << add.latin1() << endl;
+	//kdDebug(38000) << add.latin1() << endl;
 	composite->moveTo( KoPoint( tox, toy ) );
 
 	return 0;
@@ -67,7 +67,7 @@ int traceLineto( FT_Vector *to, VPath *composite )
 	double toy = ( -to->y / 64.0 );
 
 	//QString add = "L" + QString::number(tox) + "," + QString::number(toy) + " ";
-	//kdDebug() << add.latin1() << endl;
+	//kdDebug(38000) << add.latin1() << endl;
 
 	composite->lineTo( KoPoint( tox, toy ) );
 
@@ -82,7 +82,7 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *composite )
 	double y2 = ( -to->y / 64.0 );
 
 	//QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
-	//kdDebug() << add.latin1() << endl;
+	//kdDebug(38000) << add.latin1() << endl;
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x2, y2 ) );
 	//composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
 
@@ -99,7 +99,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *composit
 	double y3 = ( -to->y / 64.0 );
 
 	//QString add = "C" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + "," + QString::number(x3) + "," + QString::number(y3);
-	//kdDebug() << add.latin1() << endl;
+	//kdDebug(38000) << add.latin1() << endl;
 
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
 
@@ -421,7 +421,7 @@ VText::traceText()
 {
 	if( m_basePath.count() == 0 )
 	{
-		kdDebug() << "Can't draw a text without base path (was: " << m_text << ")." << endl;
+		kdDebug(38000) << "Can't draw a text without base path (was: " << m_text << ")." << endl;
 		return;
 	}
 
@@ -439,7 +439,7 @@ VText::traceText()
 	QString filename = buildRequest( m_font.family(), weight, slant, m_font.pointSize(), id );
 	m_glyphs.clear();
 
-	kdDebug() << "Loading " << filename.latin1() << " for requested font \"" << m_font.family().latin1() << "\", " << m_font.pointSize() << " pt." << endl;
+	kdDebug(38000) << "Loading " << filename.latin1() << " for requested font \"" << m_font.family().latin1() << "\", " << m_font.pointSize() << " pt." << endl;
 
 	FT_UInt glyphIndex;
 	FT_Face fontFace;
@@ -450,7 +450,7 @@ VText::traceText()
 
 	if( error )
 	{
-		kdDebug() << "traceText(), could not load font. Aborting!" << endl;
+		kdDebug(38000) << "traceText(), could not load font. Aborting!" << endl;
 		return;
 	}
 
@@ -462,7 +462,7 @@ VText::traceText()
 			FT_Error error = FT_Set_Charmap( fontFace, fontFace->charmaps[charmap] );
 			if( error )
 			{
-				kdDebug() << "traceText(), unable to select unicode charmap. Aborting!" << endl;
+				kdDebug(38000) << "traceText(), unable to select unicode charmap. Aborting!" << endl;
 				FT_Done_Face( fontFace );
 				return;
 			}
@@ -480,11 +480,11 @@ VText::traceText()
 		// get the glyph index for the current character
 		QChar character = m_text.at( i );
 		glyphIndex = FT_Get_Char_Index( fontFace, character.unicode() );
-		//kdDebug() << "glyphIndex : " << glyphIndex << endl;
+		//kdDebug(38000) << "glyphIndex : " << glyphIndex << endl;
 		FT_Error error = FT_Load_Glyph( fontFace, glyphIndex, FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP );
 		if( error )
 		{
-			kdDebug() << "Houston, we have a problem : " << error << endl;
+			kdDebug(38000) << "Houston, we have a problem : " << error << endl;
 			continue;
 		}
 
@@ -530,7 +530,7 @@ VText::traceText()
 	bool ext = false;
 	float fsx = 0;
 	float yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
-	kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
+	kdDebug(38000) << "Position: " << m_position << " -> " << yoffset << endl;
 	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
 		VPath* composite = m_glyphs.at( i );
@@ -579,7 +579,7 @@ VText::traceText()
 		trafo.visit( *composite );
 		composite->setState( state() );
 
-		//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;
+		//kdDebug(38000) << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;
 
 		x += dx;
 		y += *glyphYAdvance.at( i );
@@ -634,7 +634,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 		if(	FcPatternGetString(pattern, FC_FILE, 0, &temp) != FcResultMatch ||
 		   	FcPatternGetInteger(pattern, FC_INDEX, 0, &id) != FcResultMatch )
 		{
-			kdDebug() << "VText::buildRequest(), could not load font file for requested font \"" << family.latin1() << "\"" << endl;
+			kdDebug(38000) << "VText::buildRequest(), could not load font file for requested font \"" << family.latin1() << "\"" << endl;
 			return QString::null;
 		}
 
