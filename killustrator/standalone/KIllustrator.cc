@@ -65,6 +65,7 @@
 #include "Preview.h"
 #include "units.h"
 #include "ScriptDialog.h"
+#include "DocumentInfo.h"
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -457,6 +458,7 @@ void KIllustrator::initMenu () {
   file->insertSeparator ();
   file->insertItem (i18n ("&Print"), ID_FILE_PRINT);
   file->setAccel (CTRL + Key_P, ID_FILE_PRINT);
+  file->insertItem (i18n ("Document Info"), ID_FILE_INFO);
   file->insertSeparator ();
   file->insertItem (i18n ("New &Window"), ID_FILE_NEW_WINDOW);
   file->insertSeparator ();
@@ -628,6 +630,9 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_FILE_PRINT:
     canvas->printPSDocument ();
+    break;
+  case ID_FILE_INFO:
+    DocumentInfo::showInfo (document);
     break;
   case ID_FILE_NEW_WINDOW:
     {

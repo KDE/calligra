@@ -61,6 +61,7 @@ class LayerDialog;
 #define ID_FILE_CLOSE            6
 #define ID_FILE_PRINT            7
 #define ID_FILE_NEW_WINDOW       8 
+#define ID_FILE_INFO             9
 #define ID_FILE_EXIT            10 
 
 #define ID_IMPORT             1000
