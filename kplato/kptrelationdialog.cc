@@ -60,7 +60,7 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
     m_panel->lag->setValue(rel->lag());
     
     m_panel->relationType->setFocus();
-    enableButtonOK(false);
+    enableButtonOK(true);
     connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
@@ -93,6 +93,7 @@ KPTModifyRelationDialog::KPTModifyRelationDialog(KPTRelation *rel, QWidget *p, c
 {
     setButtonText( KDialogBase::User1, i18n("Delete") );
     m_deleted = false;
+    enableButtonOK(false);
 }
 
 // Delete
