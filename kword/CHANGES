@@ -1197,3 +1197,7 @@ Reggie, 15.5.1999:
 Reggie, 16.5.1999:
 ------------------
 - Fixed some problems with toolbar icons
+
+Reggie, 18.5.1999:
+------------------
+- QChar related fix

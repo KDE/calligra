@@ -288,7 +288,7 @@ QString KWString::toString( unsigned int _pos, unsigned int _len )
         for ( unsigned int i = _pos; i <= _len + _pos; i++ )
         {
             if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
-            if ( _data_[ i ].c != 0 )
+            if ( _data_[ i ].c != QChar( static_cast<char>( 0 ) ) )
                 str += _data_[ i ].c;
             else
                 str += c;
@@ -375,7 +375,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // format
         if ( name == "FORMAT" )
         {
@@ -447,11 +447,11 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                     VariableType vart;
                     KWVariable *var = 0L;
                     KWCharVariable *v = 0L;
-        
+
                     while ( parser.open( 0L, tag ) )
                     {
                         KOMLParser::parseTag( tag.c_str(), name, lst );
-                        
+
                         if ( name == "TYPE" )
                         {
                             KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -480,7 +480,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                                         break;
                                     default: break;
                                     }
-                
+
                                     var->setVariableFormat( _doc->getVarFormats().find( static_cast<int>( vart ) ) );
                                     v = new KWCharVariable( var );
                                 }
@@ -503,19 +503,19 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                             if ( var )
                                 var->load( name, tag, lst );
                         }
-                
+
                         if ( !parser.close( tag ) )
                         {
                             cerr << "ERR: Closing Child" << endl;
                             return;
-                        }   
+                        }
                     }
                 } break;
                 case ID_KWCharFootNote:
                 {
                     KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNote::KWFootNoteInternal>() );
                     KWCharFootNote *v = new KWCharFootNote( fn );
-        
+
                     while ( parser.open( 0L, tag ) )
                     {
                         KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -537,18 +537,18 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                             if ( fn )
                                 fn->load( name, tag, parser, lst );
                         }
-                
+
                         if ( !parser.close( tag ) )
                         {
                             cerr << "ERR: Closing Child" << endl;
                             return;
-                        }   
+                        }
                     }
-        
+
                     doc->getFootNoteManager().insertFootNoteInternal( fn );
                 } break;
                 default: break;
-                }   
+                }
                 _load = false;
             }
         }
@@ -727,12 +727,12 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
 
         KWFormat *format;
         for ( unsigned int i = 0; i < _expr.length(); i++ )
-        {   
+        {
             if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
                 return -2;
-    
+
             format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
-    
+
             if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
                 return -2;
             if ( _format->checkColor && _format->color != format->getColor() )
@@ -777,12 +777,12 @@ int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _i
 
         KWFormat *format;
         for ( int i = 0; i < _len; i++ )
-        {   
+        {
             if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
                 return -2;
-    
+
             format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
-    
+
             if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
                 return -2;
             if ( _format->checkColor && _format->color != format->getColor() )
@@ -825,12 +825,12 @@ int KWString::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _
 
         KWFormat *format;
         for ( unsigned int i = 0; i < _expr.length(); i++ )
-        {   
+        {
             if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
                 return -2;
-    
+
             format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
-    
+
             if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
                 return -2;
             if ( _format->checkColor && _format->color != format->getColor() )
@@ -896,7 +896,7 @@ QCString KWString::utf8( bool _decoded = true )
 
 /*================================================================*/
 void freeChar( KWChar& _char, KWordDocument *_doc )
-{   
+{
     if ( _char.attrib )
     {
         switch( _char.attrib->getClassId() )
@@ -928,7 +928,7 @@ ostream& operator<<( ostream &out, KWString &_string )
 
     for ( unsigned int i = 0; i < _string.size(); i++ )
     {
-        if ( _string.data()[ i ].c != 0 )
+        if ( _string.data()[ i ].c != QChar( static_cast<char>( 0 ) ) )
             out << _string.data()[ i ].c;
         else
             out << c;
