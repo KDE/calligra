@@ -515,8 +515,10 @@ void KPTView::slotIndentTask()
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
-    KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(*node, i18n("Indent Task"));
-    getPart()->addCommand(cmd);
+    if (getProject().canIndentTask(node)) {
+        KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(*node, i18n("Indent Task"));
+        getPart()->addCommand(cmd);
+    }
 }
 
 void KPTView::slotUnindentTask()
@@ -527,8 +529,10 @@ void KPTView::slotUnindentTask()
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
-    KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(*node, i18n("Unindent Task"));
-    getPart()->addCommand(cmd);
+    if (getProject().canUnindentTask(node)) {
+        KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(*node, i18n("Unindent Task"));
+        getPart()->addCommand(cmd);
+    }
 }
 
 void KPTView::slotMoveTaskUp()
@@ -547,8 +551,10 @@ void KPTView::slotMoveTaskUp()
 		kdDebug()<<k_funcinfo<<"The root node cannot be moved up"<<endl;
 		return;
 	}
-    KPTNodeMoveUpCmd *cmd = new KPTNodeMoveUpCmd(*task, i18n("Move Task Up"));
-    getPart()->addCommand(cmd);
+    if (getProject().canMoveTaskUp(task)) {
+        KPTNodeMoveUpCmd *cmd = new KPTNodeMoveUpCmd(*task, i18n("Move Task Up"));
+        getPart()->addCommand(cmd);
+    }
 }
 
 void KPTView::slotMoveTaskDown()
@@ -566,8 +572,10 @@ void KPTView::slotMoveTaskDown()
 		kdDebug()<<k_funcinfo<<"The root node cannot be moved down"<<endl;
 		return;
 	}
-    KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(*task, i18n("Move Task Down"));
-    getPart()->addCommand(cmd);
+    if (getProject().canMoveTaskDown(task)) {
+        KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(*task, i18n("Move Task Down"));
+        getPart()->addCommand(cmd);
+    }
 }
 
 void KPTView::slotEditResource() {

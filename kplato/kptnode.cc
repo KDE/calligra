@@ -101,15 +101,18 @@ void KPTNode::delChildNode( int number, bool remove) {
 
 void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
     m_nodes.insert(index,node);
+    node->setParent(this);
 }
 
 void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
     int index = m_nodes.findRef(after);
     if (index == -1) {
         m_nodes.append(node);
+        node->setParent(this);
         return;
     }
     m_nodes.insert(index+1, node);
+    node->setParent(this);
 }
 
 int KPTNode::findChildNode( KPTNode* node )
@@ -482,37 +485,31 @@ KPTNode *KPTNode::childAfter(KPTNode *node) {
 
 bool KPTNode::moveChildUp(KPTNode* node)
 {
-    int index = findChildNode(node);
-    //kdDebug()<<k_funcinfo<<"index="<<index<<endl;
-    if (index == -1) {
-        kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+    if (findChildNode(node) == -1)
+        return false; // not my node!
+    KPTNode *sib = node->siblingBefore();
+    if (!sib)
         return false;
-    }
-    for (index--; index >= 0; index--) {
-        if (!m_nodes.at(index)->isDeleted()) {
-            delChildNode(node, false); // false: do not delete objekt
-            insertChildNode(index, node);
-            return true;
-        }
-    }
-    return false;
+    sib = sib->siblingBefore();
+    delChildNode(node, false);
+    if (sib) {
+        addChildNode(node, sib);
+    } else {
+        insertChildNode(0, node);
+    }        
+    return true;
 }
 
 bool KPTNode::moveChildDown(KPTNode* node)
 {
-    int index = findChildNode(node);
-    if (index == -1) {
-        kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+    if (findChildNode(node) == -1)
+        return false; // not my node!
+    KPTNode *sib = node->siblingAfter();
+    if (!sib)
         return false;
-    }
-    for (index++; index < m_nodes.count(); index++) {
-        if (!m_nodes.at(index)->isDeleted()) {
-            delChildNode(node, false); // false: do not delete objekt
-            insertChildNode(index, node);
-            return true;
-        }
-    }
-    return false;
+    delChildNode(node, false);
+    addChildNode(node, sib);
+    return true;
 }
 
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////

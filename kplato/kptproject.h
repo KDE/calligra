@@ -92,10 +92,14 @@ public:
     bool addTask( KPTNode* task, KPTNode* position );
     bool addSubTask( KPTNode* task, KPTNode* position );
     bool deleteTask( KPTNode* task );
-    bool indentTask( KPTNode* task );
-    bool unindentTask( KPTNode* task );
-    bool moveTaskUp( KPTNode* task );
-    bool moveTaskDown( KPTNode* task );
+    bool canIndentTask(KPTNode* node);
+    bool indentTask( KPTNode* node );
+    bool canUnindentTask( KPTNode* node );
+    bool unindentTask( KPTNode* node );
+    bool canMoveTaskUp( KPTNode* node );
+    bool moveTaskUp( KPTNode* node );
+    bool canMoveTaskDown( KPTNode* node );
+    bool moveTaskDown( KPTNode* node );
 
     KPTNode *node(int id);
     int mapNode(KPTNode *node);
