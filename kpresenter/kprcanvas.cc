@@ -1308,7 +1308,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left Up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left and Up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
