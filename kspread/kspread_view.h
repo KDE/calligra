@@ -35,22 +35,16 @@ class KSpreadEditWidget;
 class KSpreadCanvas;
 class KSpreadHBorder;
 class KSpreadVBorder;
-class KSpreadScripts;
 class KSpreadSheet;
 class KSpreadDoc;
 class KSpreadChild;
 class KSpreadCell;
 class KSpreadLocationEditWidget;
 class KoDocumentEntry;
-class KoCharSelectDia;
-class KStatusBarLabel;
 class KSpreadSpell;
 class KSpreadMacroUndoAction;
-class KSpreadInsertHandler;
 
 class DCOPObject;
-class KReplace;
-class KFind;
 
 namespace KSpread
 {
@@ -64,7 +58,6 @@ class TabBar;
 
 #include <koView.h>
 #include <koDocument.h>
-#include <koToolBox.h>
 #include <kdatatool.h>
 #include <kglobalsettings.h>
 
@@ -220,7 +213,7 @@ public:
 
     void initConfig();
 
-    bool isLoading()const {return m_bLoading;}
+    bool isLoading() const;
 
     /**
      * write in statusBar result of calc (Min, or Max, average, sum, count)
@@ -236,9 +229,10 @@ public:
     void insertTable( KSpreadSheet* table );
     QColor borderColor() const;
 
-    KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
-    QRect selection() const { return selectionInfo()->selection(); }
-    QPoint marker() const { return selectionInfo()->marker(); }
+    KSpreadSelection* selectionInfo() const;
+    QRect selection() const;
+    QPoint marker() const;
+
     void updateShowTableMenu();
 
     /**
@@ -249,7 +243,7 @@ public:
     /**
      * Resets the internal handle pointer, called from KSpreadInsertHandler destructor
      */
-    void resetInsertHandle() { m_pInsertHandle = 0L; }
+    void resetInsertHandle();
 
     bool showTable(const QString& tableName);
 
@@ -550,8 +544,6 @@ private:
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
     void updateButton(KSpreadCell *cell, int column, int row);
 
-    KoCharSelectDia * m_specialCharDlg;
-
     struct
     {
       KSpreadSpell *   kspell;
@@ -600,32 +592,11 @@ private:
     KSpreadChild* m_popupChildObject;
 
     /**
-     * Tells whether the user modfied the current cell.
-     * Some key events are passed to the @ref EditWindow. When this flag is set and you
-     * want to leave the cell with the marker then you must first save the new text
-     * in the cell before moving the marker.
-     */
-    bool m_bEditDirtyFlag;
-
-    /**
      * The active KSpreadSheet. This table has the input focus. It may be 0L, too.
      */
     KSpreadSheet* m_pTable;
 
-    /**
-     * Flags that indicate whether we should display additional
-     * GUI stuff like rulers and scrollbars.
-     *
-     * @see #showGUI
-     */
-    bool m_bShowGUI;
 
-    /**
-     * If @ref #updateEditWidget is called it changes some KToggleActions.
-     * That causes them to emit a signal. If this lock is TRUE, then these
-     * signals are ignored.
-     */
-    bool m_toolbarLock;
 
    struct ToolEntry
    {
@@ -634,41 +605,6 @@ private:
    };
    QPtrList<ToolEntry> m_lstTools;
 
-   static KSpreadScripts *m_pGlobalScriptsDialog;
-   //used to allow to refresh menubar
-   //otherwise kspread crash when I try to refresh menubar
-   //when I start kspread
-   bool m_bLoading;
-
-    /**
-     * Holds a guarded pointer to the transformation toolbox.
-     */
-    QGuardedPtr<KoTransformToolBox> m_transformToolBox;
-
-    /**
-     * Find and Replace context. We remember the options and the strings used
-     * previously.
-     */
-    long m_findOptions;
-    QStringList m_findStrings;
-    QStringList m_replaceStrings;
-    /**
-     * Current "find" operation
-     */
-    KFind* m_find;
-    KReplace* m_replace;
-    int m_findLeftColumn;
-    int m_findRightColumn;
-    QPoint m_findPos;
-    QPoint m_findEnd;
-
-    KStatusBarLabel* m_sbCalcLabel;
-
-  KSpreadSelection* m_selectionInfo;
-  QMap<KSpreadSheet*, QPoint> savedAnchors;
-  QMap<KSpreadSheet*, QPoint> savedMarkers;
-
-  KSpreadInsertHandler* m_pInsertHandle;
 
   /* helper functions */
   void initializeInsertActions();
