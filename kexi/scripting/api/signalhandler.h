@@ -31,6 +31,8 @@
 
 namespace Kross { namespace Api {
 
+    // Forward declarations.
+    class ScriptContainer;
     class QtObject;
 
     class SignalHandler : public QObject
@@ -39,7 +41,7 @@ namespace Kross { namespace Api {
 
         public:
             explicit SignalHandler(QtObject* qtobj);
-            explicit SignalHandler(QObject* obj);
+            explicit SignalHandler(ScriptContainer* scriptcontainer);
             ~SignalHandler();
 
             bool connect(QObject *sender, const char *signal, const QString& functionname);
@@ -62,6 +64,7 @@ namespace Kross { namespace Api {
             }
 
         private:
+            ScriptContainer* m_scriptcontainer;
             QtObject* m_qtobj;
 
             struct Connection

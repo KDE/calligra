@@ -39,7 +39,7 @@ namespace Kross { namespace Api {
     /**
      * The ScriptContainer class represents a single scriptfile.
      */
-    class /*KROSS_MAIN_EXPORT*/ ScriptContainer : private QObject
+    class /*KROSS_MAIN_EXPORT*/ ScriptContainer : public QObject
     {
             Q_OBJECT
 

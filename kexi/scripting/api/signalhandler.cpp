@@ -33,12 +33,14 @@ using namespace Kross::Api;
 
 SignalHandler::SignalHandler(QtObject* qtobj)
     : QObject(qtobj->m_object)
+    , m_scriptcontainer(0)
     , m_qtobj(qtobj)
 {
 }
 
-SignalHandler::SignalHandler(QObject* obj)
-    : QObject(obj)
+SignalHandler::SignalHandler(ScriptContainer* scriptcontainer)
+    : QObject(scriptcontainer)
+    , m_scriptcontainer(scriptcontainer)
     , m_qtobj(0)
 {
 }
@@ -58,13 +60,13 @@ bool SignalHandler::connect(QObject *sender, const char *signal, const QString& 
     return connect(conn);
 }
 
-bool SignalHandler::disconnect(QObject *sender, const char *signal, const QString& functionname)
+bool SignalHandler::disconnect(QObject *sender, const char *signal, const QString& /*functionname*/)
 {
     for(QValueList<Connection>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
         Connection conn = *it;
         if((QObject*)conn.sender == sender
            && qstrcmp(conn.signal, signal) == 0
-           //&& qstrcmp(conn.function, functionname) == 0
+           //&& qstrcmp(conn.function, functionname) == 0 //TODO
         ) {
             if(! disconnect(conn)) return false;
             m_connections.remove(it);
@@ -129,8 +131,7 @@ void SignalHandler::callback()
                          .arg(senderobj->name()).arg(conn.signal).arg(conn.function) << endl;
 
 //TODO
-//m_qtobj->m_scriptcontainer->execute();
-
+if(m_scriptcontainer) m_scriptcontainer->callFunction(conn.function);
         }
     }
 
