@@ -26,7 +26,7 @@
 #include "paragdia.h"
 
 class KWDocument;
-class KWFontChooser;
+class KoFontChooser;
 class KWStyle;
 class KWStyleEditor;
 class KWStyleManagerTab;
@@ -164,7 +164,7 @@ public:
 protected:
     virtual void resizeEvent( QResizeEvent *e );
 private:
-    KWFontChooser* m_chooser;
+    KoFontChooser* m_chooser;
     KoZoomHandler* m_zoomHandler;
 };
 

@@ -22,7 +22,7 @@
 #include "stylist.h"
 #include "stylist.moc"
 #include "defs.h"
-#include "fontdia.h"
+#include <koFontDia.h>
 
 #include <qwidget.h>
 #include <qtabwidget.h>
@@ -576,7 +576,7 @@ void KWStyleParagTab::resizeEvent( QResizeEvent *e )
 KWStyleFontTab::KWStyleFontTab( QWidget * parent )
     : KWStyleManagerTab( parent )
 {
-    m_chooser = new KWFontChooser( this );
+    m_chooser = new KoFontChooser( this );
     m_zoomHandler = new KoZoomHandler;
 }
 

@@ -41,7 +41,9 @@
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
-#include "fontdia.h"
+
+#include <koFontDia.h>
+
 #include "footnotedia.h"
 #include "insdia.h"
 #include "kcharselectdia.h"
@@ -2095,7 +2097,7 @@ void KWView::formatFont()
     {
         QColor col=edit->textBackgroundColor();
         col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-        KWFontDia *fontDia = new KWFontDia( this, "", edit->textFont(),
+        KoFontDia *fontDia = new KoFontDia( this, "", edit->textFont(),
                                             actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
                                             edit->textColor(), col );
         fontDia->exec();
