@@ -22,7 +22,7 @@
 
 #include <kxmlguiclient.h>
 
-#include <kexiDB/kexidbrecordset.h>
+#include <kexidb/cursor.h>
 
 #include "kexidialogbase.h"
 #include "kexiformhandleritem.h"
@@ -62,7 +62,7 @@ class KexiDBWidgetContainer : public KexiDialogBase
 		QString		dataSource() const;
 		void		setDataSource(QString source);
 
-		void		setRecord(KexiDBRecordSet *rec);
+		void		setRecord(KexiDB::Cursor *rec);
 
 	public slots:
 		void		next();
@@ -74,7 +74,7 @@ class KexiDBWidgetContainer : public KexiDialogBase
 
 	private:
 		QString		m_dataSource;
-		KexiDBRecordSet	*m_rec;
+		KexiDB::Cursor	*m_rec;
 		FormGUIClient	*m_gui;
 };
 

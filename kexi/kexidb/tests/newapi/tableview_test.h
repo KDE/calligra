@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexitableview.h"
+#include <tableview/kexitableview.h>
 
 int tableViewTest()
 {

@@ -118,7 +118,7 @@ KexiFormHandlerProxy::slotDelete(const QString &identifier)
 {
 }
 
-void
+bool
 KexiFormHandlerProxy::executeItem(const QString &identifier)
 {
 	slotOpen(identifier);
