@@ -914,9 +914,8 @@ bool KoDocument::saveExternalChildren()
     return true;
 }
 
-bool KoDocument::saveNativeFormat( const QString & _file )
+bool KoDocument::saveNativeFormat( const QString & file )
 {
-    QString file( _file );
     d->lastErrorMessage = QString::null;
     //kdDebug(30003) << "Saving to store" << endl;
 
