@@ -131,6 +131,7 @@ void TabBar::slotRemove( )
 void TabBar::slotAdd()
 {
   doc->addPage();
+  update();
 }
 
 void TabBar::paintEvent( QPaintEvent* )
