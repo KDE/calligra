@@ -1207,7 +1207,18 @@ bool KWFrameDia::applyChanges()
             frame->setNewFrameBehavior(KWFrame::Copy);
 
         if ( cbAspectRatio && frame->frameSet() )
-            static_cast<KWPictureFrameSet *>( frame->frameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
+        {
+            KWPictureFrameSet * frm=static_cast<KWPictureFrameSet *>( frame->frameSet() );
+            if(frm->keepAspectRatio()!=cbAspectRatio->isChecked())
+            {
+                if(!macroCmd)
+                    macroCmd = new KMacroCommand( i18n("Frame Properties") );
+                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null,frame->frameSet(), KWFrameSetPropertyCommand::FSP_KEEPASPECTRATION, cbAspectRatio->isChecked()? "keepRatio" : "dontKeepRatio" );
+                cmd->execute();
+
+                macroCmd->addCommand(cmd);
+            }
+        }
     }
     if ( tab2 )
     {
@@ -1242,6 +1253,7 @@ bool KWFrameDia::applyChanges()
     {
         if(!macroCmd)
             macroCmd = new KMacroCommand( i18n("Frame Properties") );
+
         KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
         macroCmd->addCommand(cmd);
     }

@@ -643,6 +643,9 @@ KWFrameSetPropertyCommand::KWFrameSetPropertyCommand( const QString &name, KWFra
     case FSP_FLOATING:
         m_oldValue = m_pFrameSet->isFloating() ? "true" : "false";
         break;
+    case FSP_KEEPASPECTRATION:
+        m_oldValue = static_cast<KWPictureFrameSet*>(m_pFrameSet)->keepAspectRatio() ? "keepRatio" : "dontKeepRatio";
+        break;
     }
 }
 
@@ -661,12 +664,24 @@ void KWFrameSetPropertyCommand::setValue( const QString &value )
             // ## We might want to store a list of anchors in the command, and reuse them
             // in execute/unexecute. Currently setFixed forgets the anchors and setFloating recreates new ones...
         }
-        else
+        else if(value == "false")
         {
             // Make frame(set) non-floating
             m_pFrameSet->setFixed();
         }
-        break;
+    case FSP_KEEPASPECTRATION:
+        if( value == "keepRatio")
+        {
+            KWPictureFrameSet * frameSet=dynamic_cast<KWPictureFrameSet*>(m_pFrameSet);
+            if(frameSet)
+                frameSet->setKeepAspectRatio( true );
+        }
+        else if( value=="dontKeepRatio")
+        {
+            KWPictureFrameSet * frameSet=dynamic_cast<KWPictureFrameSet*>(m_pFrameSet);
+            if(frameSet)
+                frameSet->setKeepAspectRatio( false );
+        }
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
