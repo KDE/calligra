@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,41 +21,28 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
-#include <kexiviewbase.h>
-#include <form.h>
-#include "kexiformpart.h"
+#include <qwidget.h>
+#include <qpixmap.h>
 
-class KexiFormPart;
-class KexiMainWindow;
-class KexiPropertyBuffer;
-
-namespace KexiDB
-{
-	class Connection;
-}
-
-using KFormDesigner::Form;
+#include "form.h"
 
 /**
  * this class is a data-aware form
  */
-class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
+class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 {
 	Q_OBJECT
-	Q_PROPERTY(QString DataSource READ datasource WRITE setDatasource DESIGNABLE true)
-	Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
+	//Q_PROPERTY(QString DataSource READ datasource WRITE setDatasource DESIGNABLE true)
+	//Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
 
 	public:
-		KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn, bool preview);
+		KexiDBForm(QWidget *parent, const char *name="kexi_dbform");
 		virtual ~KexiDBForm();
 
-		QString datasource() const { return m_ds; }
+		/*QString datasource() const { return m_ds; }
 		bool navigatorShown() const { return m_nav; }
 		void setDatasource(const QString &s) { m_ds = s; }
-		void showRecordNavigator(bool s) { m_nav = s; }
-
-		void initForm();
-		void loadForm();
+		void showRecordNavigator(bool s) { m_nav = s; }*/
 
 		void drawRect(const QRect& r, int type);
 		void initRect();
@@ -63,41 +51,10 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 
 		virtual QSize sizeHint() const;
 
-	protected slots:
-		void managerPropertyChanged(KexiPropertyBuffer *b);
-		void slotDirty(KFormDesigner::Form *f, bool isDirty);
-
-		void slotWidgetSelected(Form *form, bool multiple);
-		void slotFormWidgetSelected(Form *form);
-		void slotNoFormSelected();
-		void setUndoEnabled(bool enabled);
-		void setRedoEnabled(bool enabled);
-
-	protected:
-		virtual KexiPropertyBuffer *propertyBuffer() { return m_buffer; }
-		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
-		virtual bool afterSwitchFrom(int mode, bool &cancelled);
-
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual bool storeData(bool &cancel);
-
-		KexiFormPart::TempData* tempData() const {
-			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
-
-		KexiFormPart* formPart() const { return static_cast<KexiFormPart*>(part()); }
-
-		KFormDesigner::Form* form() const;
-		void setForm(KFormDesigner::Form *f);
-
-		void disableWidgetActions();
-		void enableFormActions();
-
 	private:
-		QString m_ds;
-		KexiPropertyBuffer *m_buffer;
+		/*QString m_ds;
 		bool m_nav;
-		KexiDB::Connection *m_conn;
-		QWidget *m_preview;
+		KexiDB::Connection *m_conn;*/
 
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle

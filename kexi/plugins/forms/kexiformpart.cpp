@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +35,7 @@
 #include <formIO.h>
 #include <formmanager.h>
 
-#include "kexidbform.h"
+#include "kexiformview.h"
 #include "kexiformpart.h"
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
@@ -44,7 +45,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	m_names["instance"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 
-	m_manager = new KFormDesigner::FormManager(0, 0, "manager");
+	m_manager = new KFormDesigner::FormManager(this, "manager");
 }
 
 KexiFormPart::~KexiFormPart()
@@ -79,7 +80,6 @@ void KexiFormPart::initActions()
 {
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
-	//createSharedAction(Kexi::DesignViewMode, i18n("Adjust Size"), "viewmagfit", 0, "formpart_adjust_size");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");
 
@@ -120,11 +120,10 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	if (!dialog->tempData()) {
 		dialog->setTempData( new KexiFormPart::TempData(dialog) );
 	}
-//	KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
+	//KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
 
-	KexiDBForm *view = 0;
-	view = new KexiDBForm(/*this, it, */win, parent, item.name().latin1(),
-		win->project()->dbConnection(), (viewMode == Kexi::DataViewMode));
+	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(), (viewMode == Kexi::DataViewMode)
+	/*, win->project()->dbConnection()*/ );
 
 	return view;
 }
