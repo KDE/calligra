@@ -47,6 +47,7 @@
 #include "kontour_global.h"
 #include "kontour_doc.h"
 #include "kontour_factory.h"
+#include "kontour_viewiface.h"
 #include "GDocument.h"
 #include "GPage.h"
 #include "GObject.h"
@@ -70,8 +71,6 @@
 #include "DeleteCmd.h"
 #include "ReorderCmd.h"
 #include "ToPathCmd.h"
-
-#include "KOntourViewIface.h"
 
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc):
 KoView(doc, parent, name)

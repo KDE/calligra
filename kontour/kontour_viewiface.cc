@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KOntourViewIface.h"
+#include "kontour_viewiface.h"
 
 #include "kontour_view.h"
 

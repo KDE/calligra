@@ -75,9 +75,9 @@ libkontourpart_la_SOURCES = \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
-	BrushCells.cc \
 	units.cc \
-	KOntourViewIface.skel KOntourViewIface.cc
+	kontour_viewiface.skel \
+	kontour_viewiface.cc
 
 libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkontourpart_la_LIBADD = $(top_builddir)/lib/kofficeui/libkofficeui.la $(LIB_KOPAINTER)
