@@ -240,7 +240,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FACTDOUBLE() function calculates the double factorial of a number, i.e. x!!".</Text>
+	<Text>The FACTDOUBLE() function calculates the double factorial of a number, i.e. x!!.</Text>
 	<Syntax>FACTDOUBLE(number)</Syntax>
 	<Example>FACTDOUBLE(6) returns 48</Example>
 	<Example>FACTDOUBLE(7) returns 105</Example>

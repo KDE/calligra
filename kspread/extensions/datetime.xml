@@ -66,7 +66,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The YEARS() function returns the difference between two dates in years. The third parameter indicates the calculation mode: if the mode is 0, YEARS() returns the maximal possible number of months between those days. If the mode is 1, it only returns whole years, starting at the 1st Jan and ending on the 31st Dec.</Text>
+	<Text>The YEARS() function returns the difference between two dates in years. The third parameter indicates the calculation mode: if the mode is 0, YEARS() returns the maximal possible number of years between those days. If the mode is 1, it only returns whole years, starting at the 1st Jan and ending on the 31st Dec.</Text>
 	<Syntax>YEARS(date2; date1; mode)</Syntax>
 	<Example>YEARS("2001-02-19"; "2002-02-26"; 0) returns 1, because there is one year and 7 days in between</Example>
 	<Example>YEARS("2002-02-19"; "2002-02-26"; 1) returns 0, because there is not a whole year in between, starting at the first day of the year</Example>
