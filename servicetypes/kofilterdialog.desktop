@@ -2,3 +2,15 @@
 Type=ServiceType
 X-KDE-ServiceType=KOfficeFilterDialog
 Comment=KOffice Filter Dialog
+
+[PropertyDef::Import]
+Type=QString
+
+[PropertyDef::ImportDescription]
+Type=QString
+
+[PropertyDef::Export]
+Type=QString
+
+[PropertyDef::ExportDescription]
+Type=QString
