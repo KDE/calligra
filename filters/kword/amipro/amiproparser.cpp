@@ -71,7 +71,7 @@ static QString AmiProUnescape( const QString& str )
       if( str[i+1] == '/' )
       {
         result.truncate( result.length() - 1 ); // remove the '<'
-        result.append( QChar(str[i+2].unicode() | 0x80) );
+        result.append( QChar(str[i+2].unicode() + 0x40 ) );
         i += 3;
       }
 
@@ -79,7 +79,7 @@ static QString AmiProUnescape( const QString& str )
       if( str[i+1] == '\\' )
       {
         result.truncate( result.length() - 1 ); // remove the '<'
-        result.append( QChar(str[i+2].unicode()&0x7f) ); // FIXME !
+        result.append( QChar(str[i+2].unicode()&0x7f) );
         i += 3;
       }
 
