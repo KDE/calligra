@@ -47,6 +47,10 @@ VObject::VObject( const VObject& obj )
 
 	invalidateBoundingBox();
 	m_dcop = 0L;
+
+	if( obj.document() && !obj.document()->objectName( &obj ).isEmpty() )
+		if( document() )
+			document()->setObjectName( this, obj.document()->objectName( &obj ) );
 }
 
 VObject::~VObject()
