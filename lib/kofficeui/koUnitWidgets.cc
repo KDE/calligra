@@ -45,7 +45,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     if ( res > -1 )
     {
         number = s.left( res ).stripWhiteSpace();
-        unit = regexp.cap( 1 ).stripWhiteSpace(); // ### TODO: if we allow uppercase, we need a lower() here
+        unit = regexp.cap( 1 ).stripWhiteSpace().lower();
     }
     else
     {
