@@ -88,7 +88,7 @@ public:
     void keyPressEvent(QKeyEvent *e, GraphiteView *view);
     void keyReleaseEvent(QKeyEvent *e, GraphiteView *view);
 
-    // ### TODO
+    // ###
     //virtual DCOPObject * dcopObject();
 
 public slots:
@@ -98,25 +98,27 @@ signals:
     void unitChanged(Graphite::Unit);
     void layoutChanged();
 
-protected slots:
+protected:
+    virtual KoView *createViewInstance(QWidget *parent, const char *name);
+
+private slots:
     void edit_undo();
     void edit_redo();
     void edit_cut();
 
     void documentRestored();
 
-protected:
-    virtual KoView *createViewInstance(QWidget *parent, const char *name);
-
 private:
     GraphitePart &operator=(const GraphitePart &rhs);
 
+    void updatePage();  // updates the page layout and emits layoutChanged
+
     KCommandHistory m_history;
     QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // map views to m9rs
-    // TODO: If an object is selected, store a pointer
-    //       to its M9r here and draw the handles after
-    //       drawing the whole tree.
-    // TODO: Do we need isLoading() like in KSpread?
+    // ### If an object is selected, store a pointer
+    //     to its M9r here and draw the handles after
+    //     drawing the whole tree.
+    // ### Do we need isLoading() like in KSpread?
     Graphite::PageLayout m_pageLayout;
     Graphite::Unit m_unit;
     GBackground *m_nodeZero;

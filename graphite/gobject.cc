@@ -588,7 +588,7 @@ void GObject::drawHandles(QPainter &p, QList<QRect> *handles) const {
     p.save();
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
-    // TODO: Test RasterOp Not???
+    // ### Test RasterOp Not???
 
     int size;
     int offset;

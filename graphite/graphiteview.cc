@@ -19,6 +19,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <ruler.h>
 #include <graphitepart.h>
@@ -36,8 +37,11 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
                           m_canvas->viewport()->height()-20);
     // *never* remove from here -- will result in a crash (hen <--> egg)
     setupRulers();
-    recalcRulers(0, 0);
+    m_horiz->setOffset(0, 0);
+    m_vert->setOffset(0, 0);
 
+    connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
+            SLOT(contentsMoving(int, int)));
     // doc-view magic
     connect(m_doc, SIGNAL(unitChanged(Graphite::Unit)), this,
             SLOT(rulerUnitChanged(Graphite::Unit)));
@@ -52,6 +56,8 @@ GraphiteView::~GraphiteView() {
 void GraphiteView::layoutChanged() {
     m_vert->setPageLayout(m_doc->pageLayout());
     m_horiz->setPageLayout(m_doc->pageLayout());
+    m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
+                                 m_canvas->visibleHeight());
 }
 
 void GraphiteView::slotViewZoom(const QString &t) {
@@ -151,14 +157,26 @@ void GraphiteView::slotViewZoom(const QString &t) {
     m_horiz->setZoomedRes(zr);
     m_vert->setZoomedRes(zr);
     setZoom(zoomValue);
+    m_canvas->viewport()->erase();
+    m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
+                                 m_canvas->visibleHeight());
 }
 
-void GraphiteView::recalcRulers(int x, int y) {
+void GraphiteView::contentsMoving(int x, int y) {
 
     if(x!=m_oldX)
         m_horiz->setOffset(x, y);
     if(y!=m_oldY)
         m_vert->setOffset(x, y);
+    int w=m_oldX-x;
+    if(w==0)
+        w=m_canvas->visibleWidth();
+    int h=m_oldY-y;
+    if(h==0)
+        h=m_canvas->visibleHeight();
+    kdDebug() << "GraphiteView::contentsMoving: w=" << w << " h=" << h << endl;
+    //m_canvas->viewport()->erase(0, 0, w, h);
+    m_canvas->viewport()->erase();
     m_oldX=x;
     m_oldY=y;
 }
@@ -181,7 +199,9 @@ void GraphiteView::resizeEvent(QResizeEvent *e) {
     m_canvas->resize(e->size().width()-20, e->size().height()-20);
     m_horiz->setGeometry(20, 0, e->size().width(), 20);
     m_vert->setGeometry(0, 20, 20, e->size().height());
-    recalcRulers(m_canvas->contentsX(), m_canvas->contentsY());
+    // seems to be some odd bug in the mainwindow... it loses the
+    // correct "offset" somehow
+    contentsMoving(m_canvas->contentsX(), m_canvas->contentsY());
 }
 
 void GraphiteView::updateReadWrite(bool readwrite) {
@@ -235,8 +255,6 @@ void GraphiteView::setupRulers() {
             this, SLOT(borderChanged(const Graphite::PageBorders &)));
 
     m_canvas->setRulers(m_horiz, m_vert);
-    connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
-            SLOT(recalcRulers(int, int)));
 }
 
 #include <graphiteview.moc>

@@ -80,7 +80,7 @@ GObject *GObjectFactory::create(const QDomElement &element) {
 GObjectFactory::GObjectFactory() : m_registry(17, false) {
 
     // set up the dict with all the types we are aware of
-    // TODO: Change the size of the Hash Table to fit the
+    // ### Change the size of the Hash Table to "fit" the
     // number of objects
     m_registry.setAutoDelete(true);
 

@@ -136,6 +136,8 @@ struct PageLayout {
     void setHeight(const double &height);
     double height() const;
 
+    FxRect fxRect() const;
+
     void saveDefaults();
     void loadDefaults();
 

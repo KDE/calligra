@@ -420,13 +420,13 @@ GGroupM9r::~GGroupM9r() {
 }
 
 bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ### TODO
+    // ###
     return false;
 }
 
 bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
-    // ### TODO
+    // ###
     // test
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     kdDebug(37001) << "Name: " << gobject()->name() << endl;
@@ -464,22 +464,22 @@ bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 }
 
 bool GGroupM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ### TODO
+    // ###
     return false;
 }
 
 bool GGroupM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ### TODO
+    // ###
     return false;
 }
 
 bool GGroupM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
-    // ### TODO
+    // ###
     return false;
 }
 
 bool GGroupM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
-    // ### TODO
+    // ###
     return false;
 }
 

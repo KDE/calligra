@@ -66,22 +66,20 @@ QDomElement GBackground::save(QDomDocument &doc) const {
 
 void GBackground::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
 
-    kdDebug() << "GBackground::draw" << endl;
     if(dirty())
         recalculate();
 
     // do we really have to draw ourselves?
     if(!rect.intersects(boundingRect()))
         return;
-    kdDebug() << "GBackground::draw -- 2" << endl;
 
     // okay, let's draw a nice background
+    // ### optimize, setPen
     if(!m_transparent) {
         p.save();
         if(fillStyle()==GObject::Brush) {
             p.setBrush(brush());
             p.drawRect(m_rect.pxRect());
-            kdDebug() << "GBackground::draw -- 3" << endl;
         }
         //else {
             // okay, we have a bg gradient...
@@ -122,6 +120,11 @@ void GBackground::resize(const FxRect &boundingRect) {
     setBoundingRectDirty(true);
 }
 
+void GBackground::recalculate() const {
+    m_rect.recalculate();
+    GAbstractGroup::recalculate();
+}
+
 
 GBackgroundM9r::GBackgroundM9r(GBackground *background, const Mode &mode, GraphitePart *part,
                      GraphiteView *view, const QString &type) :
@@ -129,7 +132,7 @@ GBackgroundM9r::GBackgroundM9r(GBackground *background, const Mode &mode, Graphi
 }
 
 bool GBackgroundM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ### TODO -- RMB popup
+    // ### RMB popup
     return false;
 }
 

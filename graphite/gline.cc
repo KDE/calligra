@@ -370,27 +370,27 @@ GLineM9r::~GLineM9r() {
 }
 
 bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // TODO
+    // ###
     return false;
 }
 
 bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // TODO
+    // ###
     return false;
 }
 
 bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // TODO
+    // ###
     return false;
 }
 
 bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // TODO
+    // ###
     return false;
 }
 
 bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
-    // TODO
+    // ###
     return false;
 }
 

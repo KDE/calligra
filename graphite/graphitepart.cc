@@ -44,10 +44,10 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     // ### KMessageBox::enableAllMessages -> dialog
     m_unit=Graphite::MM;  // ### load that from a rc file
 
-    m_nodeZero=new GBackground(QString::fromLatin1("Node Zero"));
+    m_nodeZero=new GBackground(QString::fromLatin1("Background"));
+    m_nodeZero->resize(m_pageLayout.fxRect());
     // test
     m_nodeZero->setBrush(Qt::red);
-    m_nodeZero->resize(FxRect(20.0, 20.0, 50.0, 50.0));
 }
 
 GraphitePart::~GraphitePart() {
@@ -65,7 +65,6 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
 }
 
 void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool transparent) {
-    kdDebug(37001) << "GraphitePart::painEvent()" << endl;
     m_nodeZero->setTransparent(transparent);
     m_nodeZero->draw(painter, rect);
 }
@@ -111,9 +110,11 @@ void GraphitePart::pageSize(double &width, double &height) const {
 }
 
 void GraphitePart::setPageSize(const QPrinter::PageSize &pageSize) {
-    m_pageLayout.size=pageSize;
-    m_pageLayout.layout=Graphite::PageLayout::Norm;
-    // TODO -- update
+    if(m_pageLayout.size!=pageSize) {
+        m_pageLayout.size=pageSize;
+        m_pageLayout.layout=Graphite::PageLayout::Norm;
+        updatePage();
+    }
 }
 
 void GraphitePart::setPageSize(const double &width, const double &height) {
@@ -127,12 +128,14 @@ void GraphitePart::setPageSize(const double &width, const double &height) {
         m_pageLayout.customHeight=width;
     }
     m_pageLayout.layout=Graphite::PageLayout::Custom;
-    // TODO -- update
+    updatePage();
 }
 
 void GraphitePart::setPageOrientation(const QPrinter::Orientation &orientation) {
-    m_pageLayout.orientation=orientation;
-    // TODO -- update
+    if(m_pageLayout.orientation!=orientation) {
+        m_pageLayout.orientation=orientation;
+        updatePage();
+    }
 }
 
 void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders, bool addCommand) {
@@ -141,7 +144,7 @@ void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders, bool
             m_history.addCommand(new GBordersCmd(this, i18n("Changing Page Borders"),
                                                  m_pageLayout.borders, pageBorders), false);
         m_pageLayout.borders=pageBorders;
-        emit layoutChanged();
+        updatePage();
     }
 }
 
@@ -151,7 +154,7 @@ void GraphitePart::setPageLayout(const Graphite::PageLayout &pageLayout, bool ad
             m_history.addCommand(new GLayoutCmd(this, i18n("Changing Page Layout"),
                                                 m_pageLayout, pageLayout), false);
         m_pageLayout=pageLayout;
-        emit layoutChanged();
+        updatePage();
     }
 }
 
@@ -163,13 +166,13 @@ void GraphitePart::showPageLayoutDia(QWidget *parent) {
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     // kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
-    // TODO: setGlobalZoom()
+    // ### setGlobalZoom()
 }
 
 void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
-    kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
+    //kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
     // test
-    // TODO: Check the view - if it's the same as "before" -> ok :)
+    // ### Check the view - if it's the same as "before" -> ok :)
     // TEST -------------
     GObject *o=new GGroup(QString::fromLatin1("foo"));
     o->rotate(FxPoint(0, 0), 45.0*180.0*M_1_PI);
@@ -179,31 +182,27 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     delete m;
     delete o;
     // TEST -------------
-    // TODO: setGlobalZoom()
+    // ### setGlobalZoom()
 }
 
-void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {
-    kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
-    // TODO: setGlobalZoom()
+void GraphitePart::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
+    //kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
+    // ### setGlobalZoom()
 }
 
-void GraphitePart::mouseDoubleClickEvent(QMouseEvent *e, GraphiteView */*view*/) {
-    kdDebug(37001) << "MDC x=" << e->x() << " y=" << e->y() << endl;
-    // TODO: setGlobalZoom()
+void GraphitePart::mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
+    //kdDebug(37001) << "MDC x=" << e->x() << " y=" << e->y() << endl;
+    // ### setGlobalZoom()
 }
 
-void GraphitePart::keyPressEvent(QKeyEvent *e, GraphiteView */*view*/) {
-    kdDebug(37001) << "KP key=" << e->key() << endl;
-    // TODO: setGlobalZoom()
+void GraphitePart::keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/) {
+    //kdDebug(37001) << "KP key=" << e->key() << endl;
+    // ### setGlobalZoom()
 }
 
-void GraphitePart::keyReleaseEvent(QKeyEvent *e, GraphiteView */*view*/) {
-    kdDebug(37001) << "KR key=" << e->key() << endl;
-    // TODO: setGlobalZoom()
-}
-
-KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
-    return new GraphiteView(this, parent, name);
+void GraphitePart::keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/) {
+    //kdDebug(37001) << "KR key=" << e->key() << endl;
+    // ### setGlobalZoom()
 }
 
 void GraphitePart::setUnit(Graphite::Unit unit) {
@@ -213,13 +212,15 @@ void GraphitePart::setUnit(Graphite::Unit unit) {
     emit unitChanged(unit);
 }
 
+KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
+    return new GraphiteView(this, parent, name);
+}
+
 void GraphitePart::edit_undo() {
-    kdDebug(37001) << "GraphitePart: edit_undo called" << endl;
     m_history.undo();
 }
 
 void GraphitePart::edit_redo() {
-    kdDebug(37001) << "GraphitePart: edit_redo called" << endl;
     m_history.redo();
 }
 
@@ -229,6 +230,11 @@ void GraphitePart::edit_cut() {
 
 void GraphitePart::documentRestored() {
     setModified(false);
+}
+
+void GraphitePart::updatePage() {
+    m_nodeZero->resize(m_pageLayout.fxRect());
+    emit layoutChanged();
 }
 
 

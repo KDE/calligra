@@ -24,6 +24,9 @@
 #include <graphiteview.h>
 #include <ruler.h>
 
+// Uncommenting the #define will result in some debug output and a green clipping rect
+//#define GRAPHITE_DEBUG_PAINTING 1
+
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
       m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L) {
@@ -59,8 +62,13 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
     m_doc->setGlobalZoom(m_view->zoom());
     QPainter p(viewport());
     p.setClipRect(e->rect());
+#ifdef GRAPHITE_DEBUG_PAINTING
+    p.setPen(Qt::green);
+    p.drawRect(e->rect());
+    p.setPen(Qt::black);
+#endif // GRAPHITE_DEBUG_PAINTING
     p.setClipping(true);
-    // TODO: 1 - define the region which has to be
+    // ###   1 - define the region which has to be
     //           repainted and  call m_doc->preparePainting(zoom)!!!
     //       2 - set the clipping region
     //       3 - call m_doc->painContent(). This draws
@@ -77,6 +85,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
     //   (flickering,...)
     // - Double buffers are invalidated via: zoomfactor
     //   changes, background changes,...
+#ifdef GRAPHITE_DEBUG_PAINTING
     kdDebug(37001) << "paintEvent: x=" << e->rect().x()
                    << " y=" << e->rect().y()
                    << " width=" << e->rect().width()
@@ -88,7 +97,10 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
                    << " height=" << visibleHeight()
                    << " | x-offset=" << contentsX()
                    << " y-offet=" << contentsY() << endl;
-    m_doc->paintContent(p, e->rect());
+#endif // GRAPHITE_DEBUG_PAINTING
+    p.translate(-contentsX(), -contentsY());
+    m_doc->paintContent(p, QRect(e->rect().left()+contentsX(), e->rect().top()+contentsY(),
+                                 e->rect().width(), e->rect().height()));
     p.end();
 }
 

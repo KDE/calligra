@@ -247,6 +247,11 @@ double PageLayout::height() const {
     }
 }
 
+FxRect PageLayout::fxRect() const {
+    return FxRect(borders.left, borders.top,
+                  width()-borders.right-borders.left, height()-borders.bottom-borders.top);
+}
+
 void PageLayout::saveDefaults() {
 
     KConfig *config=KGlobal::config();

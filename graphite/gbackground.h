@@ -52,6 +52,9 @@ public:
 
     virtual void resize(const FxRect &boundingRect);
 
+protected:
+    virtual void recalculate() const;
+
 private:
     GBackground &operator=(const GBackground &rhs);
 

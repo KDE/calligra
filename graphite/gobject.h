@@ -71,9 +71,9 @@ class PWidget;
 // decides to handle the event, it returns true afterwards. If the Event
 // remains unhandled, the M9r returns false and the Event has to be processed
 // by the calling method.
-// Note: The M9r is bound to a specific view and it won't work (correctly)
+// ### Note: The M9r is bound to a specific view and it won't work (correctly)
 // if you use one M9r for more than one view. Maybe I need some sort of
-// map or dict which relates a view to a M9r? (TODO)
+// map or dict which relates a view to a M9r?
 // Whenever a repaint is needed (movement,...), the dirty rect has to be
 // set (i.e. something different to (0, 0, 0, 0)).
 // Some of the M9rs can be in two different "modes": Create and Manipulate

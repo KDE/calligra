@@ -43,7 +43,7 @@ public:
     virtual int leftBorder() const { return 20; }
     virtual int topBorder() const { return 20; }
 
-    // ### TODO
+    // ###
     //virtual void canvasAddChild(KoViewChild *child);
     //virtual DCOPObject * dcopObject();
     //virtual void setupPrinter( QPrinter &printer );
@@ -55,7 +55,7 @@ public slots:
 protected slots:
     void slotViewZoom(const QString &text);
 
-    void recalcRulers(int x, int y);
+    void contentsMoving(int x, int y);
     void rulerUnitChanged(Graphite::Unit);
     void openPageLayoutDia();
     void borderChanged(const Graphite::PageBorders &b);
