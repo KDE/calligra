@@ -105,7 +105,6 @@ public:
     void setOffset( int _diffx, int _diffy )
     { diffx = _diffx; diffy = _diffy; repaint( false ); }
 
-    // FIXME (Werner)
     void setLeftIndent( double _left )
     { i_left = makeIntern( _left ); repaint( false ); }
     void setFirstIndent( double _first )
@@ -141,7 +140,7 @@ protected:
     void mouseDoubleClickEvent( QMouseEvent* );
     void resizeEvent( QResizeEvent *e );
 
-    unsigned int makeIntern( double _v );
+    double makeIntern( double _v );
     double zoomIt(const double &value) const;
     int zoomIt(const int &value) const;
     unsigned int zoomIt(const unsigned int &value) const;
@@ -156,7 +155,7 @@ protected:
 
     Qt::Orientation orientation;
     int diffx, diffy;
-    int i_left, i_first;
+    double i_left, i_first;
     KoPageLayout layout;
     QPixmap buffer;
     double m_zoom, m_1_zoom;
