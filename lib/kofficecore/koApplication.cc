@@ -52,27 +52,22 @@ KoApplication::~KoApplication()
 
 void KoApplication::start()
 {
-  debug("KoApplication::start()");
   KoMainWindow* pShell;
   QStringList openFiles;
   QString tmpFilename;
 
   if( m_bWithGUI )
   {
-    debug("m_bWithGUI");
     for( uint i = 0; i < m_params.count(); i++ )
     {
       tmpFilename = m_params.get( i );
-      debug("tmpFilename");
       if( tmpFilename.left( 1 ) != "-" )
       {
-        debug("will open tmpFilename");
         openFiles.append( tmpFilename );
       }
     }
     if( openFiles.isEmpty() )
     {
-      debug("no filename supplied");
       pShell = createNewShell();
       if( pShell )
       {
@@ -88,11 +83,9 @@ void KoApplication::start()
 
       for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
       {
-        debug("opening %s", (*it).latin1());
         pShell = createNewShell();
         if( pShell )
         {
-          debug("showing %s", (*it).latin1());
           pShell->show();
           pShell->openDocument( *it );
         }
