@@ -33,6 +33,7 @@
 #include "vselectnodestool.h"
 #include "vtransformcmd.h"
 #include "vtransformnodes.h"
+#include "vdrawselection.h"
 
 #include <kdebug.h>
 
@@ -89,10 +90,12 @@ VSelectNodesTool::draw()
 			recalc();
 		}
 
+		VDrawSelection op( m_objects, painter );
 		VObjectListIterator itr = m_objects;
         for( ; itr.current(); ++itr )
         {
-			itr.current()->draw( painter, &itr.current()->boundingBox() );
+		//	itr.current()->draw( painter, &itr.current()->boundingBox() );
+			op.visit( *( itr.current() ) );
 		}
 	}
 	else
@@ -222,7 +225,7 @@ VSelectNodesTool::recalc()
 			if( itr.current()->state() != VObject::deleted )
 			{
 				copy = itr.current()->clone();
-				copy->setState( VObject::edit );
+				copy->setState( VObject::selected );
 				op.visit( *copy );
 				m_objects.append( copy );
 			}
