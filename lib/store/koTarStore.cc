@@ -64,11 +64,6 @@ QString KoTarStore::toExternalNaming( const QString _internalNaming )
   if (_internalNaming.left(7) == "store:/")
     return QString("part") + _internalNaming.mid(7) + ".xml";
 
-  // it seems we have a problem when length() > 100...
-  // No idea why (filenames get truncated in the tar.gz file)
-  // Possible hack for kpresenter pictures to do here.
-  //
-
   return _internalNaming;
 }
 
@@ -147,8 +142,8 @@ void KoTarStore::close()
   
     m_sName = toExternalNaming( m_sName );
 
-    kdebug( KDEBUG_INFO, 30002, "Writing file %s into TAR archive. size %d. [byteArray size %d]",
-          m_sName.latin1(), m_iSize, m_byteArray.size() );
+    kdebug( KDEBUG_INFO, 30002, "Writing file %s into TAR archive. size %d.",
+          m_sName.latin1(), m_iSize );
     m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() );
   }
 
@@ -224,14 +219,6 @@ long KoTarStore::read( char *_buffer, unsigned long _len )
     return 0;
   
   m_stream->readRawBytes( _buffer, _len );
-  /*
-  unsigned int len = m_in.gcount();
-  if ( len != _len )
-  {
-    kdebug( KDEBUG_INFO, 30002, "KoTarStore: Error while reading" );
-    return -1;
-  }
-  */
   
   m_readBytes += _len;
   

@@ -60,6 +60,7 @@ bytes of the file). But OTOH it makes the file easier to manipulate. Tell me.
 
 Still TODO for the implementation :
 * rename the pictures when saving them, using sequential numbers (to be implemented in KoStore)
+(or better, a common class for image collections - currently discussed with Reggie)
 * ability to save embedded part's pictures (like part2_pictures, above)
 
 Thank you for your attention,
