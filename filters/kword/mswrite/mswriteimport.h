@@ -23,38 +23,42 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qobject.h>
+#include <qtextcodec.h>
 
 #include <koFilter.h>
 #include <koStore.h>
 
 #include "mswritelib.h"
-#define MSWRITE_PROJECT			MSWRITEImport
+
+// KDE debug area for mswritefilter
 #define MSWRITE_DEBUG_AREA		30509
 
 
+// KOffice Store Library does not allow more than one file to be open at a time
+// so we store objects in this structure temporarily (TODO: ask for change to lib)
 class MSWRITE_OBJECT_DATA
 {
 public:
-	char *data;
-	int dataLength;
-	int dataUpto;
-	QString nameInStore;
+	char *m_data;
+	int m_dataLength;
+	int m_dataUpto;
+	QString m_nameInStore;
 
 	MSWRITE_OBJECT_DATA ()
 	{
-		data = NULL;
-		dataLength = 0;
-		dataUpto = 0;
+		m_data = NULL;
+		m_dataLength = 0;
+		m_dataUpto = 0;
 	}
 
 	~MSWRITE_OBJECT_DATA ()
 	{
-		delete [] data;
+		delete [] m_data;
 	}
 };
 
 
-class MSWRITE_PROJECT : public KoFilter, public MSWRITE_IMPORT_LIB
+class MSWRITEImport : public KoFilter, public MSWRITE_IMPORT_LIB
 {
 	 Q_OBJECT
 
@@ -63,7 +67,7 @@ private:
 	void warning (const char *format, ...);
 	void error (const char *format, ...);
 
-	int openFiles (const char *_infilename, const char *_outfilename);
+	int openFiles (const char *infilename, const char *outfilename);
 	void closeFiles (void);
 
 	int infileRead (void *, size_t, size_t);
@@ -84,7 +88,8 @@ private:
 	int pageNewWrite (const int pageNumberClaimed = 0);
 	int pageBreakWrite (void);
 	int pageNumberWrite (void);
-	int newLineWrite (void);
+	int newLineWrite (const bool endOfParagraph = true);
+	int optionalHyphenWrite (void);
 
 	int paraInfoStartWrite (const MSWRITE_FPROP_PAP &);
 	int paraInfoEndWrite (const MSWRITE_FPROP_PAP &);
@@ -95,6 +100,7 @@ private:
 	int delayOutputFlush (void);
 
 	int textWrite_lowLevel (const char *str);
+	int textWrite_lowLevel (const QString &str);
 
 	int textWrite (const char *inStr);
 
@@ -110,39 +116,48 @@ private:
 	int imageEndWrite (void);
 
 	// temporary string for debugging functions
-	char debugStr [MSWRITE_BUFFER_SIZE];
+	char m_debugStr [MSWRITE_BUFFER_SIZE];
 
 	// files
-	FILE *infile;
-	KoStore *outfile;
-	char infilename [FILENAME_MAX + 1], outfilename [FILENAME_MAX + 1];
+	FILE *m_infile;
+	KoStore *m_outfile;
+	char m_infilename [FILENAME_MAX + 1], m_outfilename [FILENAME_MAX + 1];
+	bool m_wantPureConversion;
 
 	// page/margin dimensions
-	int pageWidth, pageHeight;
-	int leftMargin, rightMargin, topMargin, bottomMargin;
-	int left, right, top, bottom;		// describing border of Text Frameset (position, not magnitude)
-	int headerFromTop, footerFromTop;
+	int m_pageWidth, m_pageHeight;
+	int m_leftMargin, m_rightMargin, m_topMargin, m_bottomMargin;
+	int m_left, m_right, m_top, m_bottom;		// describing border of Text Frameset (position, not magnitude)
+	int m_headerFromTop, m_footerFromTop;
 
 	// formatting
-	QString formatOutput;
-	int charInfoCountStart, charInfoCountLen;
-	bool pageBreak, needAnotherParagraph;
-	int lineSpacingFromAbove;
+	QString m_formatOutput;
+	int m_charInfoCountStart, m_charInfoCountLen;
+	int m_charInfoCountLenLast;
+	bool m_pageBreak, m_needAnotherParagraph;
+	int m_pageBreakOffset;
+	int m_lineSpacingFromAbove;
 
 	// picture counters
-	QString objectPrefix;
-	int numPixmap, numClipart;
-	QString objectFrameset;
-	QString pixmaps;
-	QString cliparts;
+	QString m_objectPrefix;
+	int m_numPixmap, m_numClipart;
+	QString m_objectFrameset;
+	QString m_pixmaps;
+	QString m_cliparts;
 
-	MSWRITE_OBJECT_DATA *objectData;
-	int objectUpto;
+	MSWRITE_OBJECT_DATA *m_objectData;
+	int m_objectUpto;
+
+	int m_objectHorizOffset;
 
 	// XML output that is held back until after "Text Frameset 1" is output
 	// (i.e. header & footer)
-	bool delayOutputVar;
-	QString heldOutput;
+	bool m_delayOutput;
+	QString m_heldOutput;
+
+	// for charset conversion
+	QTextCodec *m_codec;
+	QTextDecoder *m_decoder;
 
 	// Override MSWRITE_IMPORT_LIB::sigProgress (void) {}
 	void sigProgress (const int value)
@@ -151,11 +166,14 @@ private:
 	}
 
 public:
-	MSWRITE_PROJECT (KoFilter *parent, const char *name, const QStringList &);
-	MSWRITE_PROJECT ();
+	MSWRITEImport (KoFilter *parent, const char *name, const QStringList &);
+	MSWRITEImport ();
 
-	virtual ~MSWRITE_PROJECT ();
+	virtual ~MSWRITEImport ();
 
+	void wantPureConversion (bool yesorno);
+
+	// front-end filter function
 	virtual KoFilter::ConversionStatus convert (const QCString &from, const QCString &to);
 };
 

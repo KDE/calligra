@@ -1,3 +1,10 @@
+/* $Id$ */
+
+/* NOTE: This is based on a discontinued version of MSWriteLib (0.3).
+			So please avoid adding new features until this is updated to MSWriteLib 0.4.
+			This will take a few months due to a lack of time.
+*/
+
 /* This file is part of the MSWriteView project
    Copyright (C) 2001, 2002 Clarence Dang <CTRL_CD@bigpond.com>
 
@@ -25,17 +32,17 @@
 #include "mswritelib.h"
 
 
-//#define RELEASE
+#define RELEASE
 
 #if !defined (RELEASE)
 
 #define MSWRITE_DEBUG_HEADER
-//#define MSWRITE_DEBUG_FONT_TABLE
+#define MSWRITE_DEBUG_FONT_TABLE
 //#define MSWRITE_DEBUG_PAGE_TABLE
 #define MSWRITE_DEBUG_SECTION_PROPERTY
 //#define MSWRITE_DEBUG_SECTION_TABLE
-//#define MSWRITE_DEBUG_PARAINFO
-//#define MSWRITE_DEBUG_CHARINFO
+#define MSWRITE_DEBUG_PARAINFO
+#define MSWRITE_DEBUG_CHARINFO
 #define MSWRITE_DEBUG_IMAGE
 #define MSWRITE_DEBUG_OLE
 //#define checkpoint(str) debug("checkpoint: " str "\n")
@@ -109,7 +116,7 @@ char *MSWRITE_IMPORT_LIB::getVersion (void) const
 int MSWRITE_IMPORT_LIB::filter (void)
 {
 
-// gcc 2.95.3 seems to experience an internal compiler so we use an inelegant workaround :(
+// gcc 2.95.3 seems to experience an internal compiler error so we use an inelegant workaround :(
 #define I_HAVE_A_BROKEN_COMPILER
 
 #if !defined (I_HAVE_A_BROKEN_COMPILER)
@@ -632,7 +639,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 {
 	// variable, holding file offset, for easy seeking
 	long offset;
-	
+
 	numFontTablePages = header.numPages - header.pnFontTable;
 
 	// allocate memory for fontTable
@@ -674,7 +681,6 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 	}
 
 	// loop through FFNs and read them in
-	bool friendlyExit = false;
 	for (int i = 0; i < fontTable->numFFNs; i++)
 	{
 #if defined (MSWRITE_DEBUG_FONT_TABLE)
@@ -714,14 +720,12 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 		{
 			if (i != fontTable->numFFNs - 1)
 			{
-				// we want to continue reading FFNs anyway
-				// (in case there is actually a legitimate one in there)
-				// but we will exit with _success_ if a stupid FFN is detected from now on
-				// so that certain "buggy" documents can be read
-				friendlyExit = true;
 				warning ("ffn is marked as last but is not (i(%i) != fontTable->numFFNs-1(%i))\n",
 							i, fontTable->numFFNs - 1);
 			}
+
+			// end of table (few documents end with such an FFN entry but it's in the spec)
+			break;
 		}
 
 		// calculate fontName string length
@@ -735,7 +739,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 		if (stringlen <= 0 || stringlen >= MSWRITE_PAGE_SIZE)
 		{
 		 	error ("string length (%i) is invalid\n", stringlen);
-			if (friendlyExit)		return 0;	else	return 1;
+			return 1;
 		}
 
 		// allocate memory for string (including NUL) in font table
@@ -756,7 +760,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 		if (ffn->fontName [stringlen] != '\0')
 		{
 			error ("font name doesn't end in NUL\n");
-			if (friendlyExit)		return 0;	else	return 1;
+			return 1;
 		}
 
 #if defined (MSWRITE_DEBUG_FONT_TABLE)
@@ -1438,89 +1442,78 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 							return 1;
 						}
 
+						// null terminate (I did leave space for this!)
+						buffer [numBytesToGet] = '\0';
+
 						// prune characters:
 						//		1	(pageNumber),
-						//		10	(newline),
+						//		10	(newLine),
 						//		13	(ignored),
-						//		12	(pagebreak)
-						// (using tricky length trick to recycle buffer!)
+						//		12	(pageBreak),
+						//		31 (optionalHyphen)
+						// (using a tricky method to recycle the buffer in only one pass!)
 						// and generate signals
 
-						int inLength = numBytesToGet;
-						int outLength = inLength;
-						char *outBuffer = (char *) buffer;
-						int moveBack = 0;
-						int (MSWRITE_IMPORT_LIB:: *generateSignal) (void) = NULL;
+						unsigned char *inBufferStart = buffer;
+						unsigned char *inBuffer = buffer;
+						unsigned char *outBuffer = buffer;
+						unsigned char *outBufferStart = buffer;
 
-						for (int i = 0; i < inLength; i++)
+						checkpoint ("prune");
+
+						for (; *inBuffer; inBuffer++)
 						{
-							switch (outBuffer [i])
+							// we need this because our buffer recycling tricks could overwrite it first...
+							unsigned char c = *inBuffer;
+
+							switch (c)
 							{
-							// pageNumber
-							case 1:
-								// output text before control code
-								// (until other control codes, this one could be in the middle of a paragraph)
-								// note that moveBack is probably 0 anyway because all other control codes occur at end of paragraph
-								if (moveBack != 0)
+							// write text, generate signals for special characters, write more text...
+							case 1:		// pageNumber anchor
+							case 12:		// pageBreak (some silly document might have this in the middle of a paragraph!)
+							case 10:		// newLine (some silly document _does_ have a newline in the middle of a paragraph!)
+							case 31:    // optionalHyphen (undocumented -- is an invisible hyphen, unless at end of line)
+								// output text before this character
+								*outBuffer = '\0';
+								if (outBufferStart != outBuffer)
+									textWrite ((const char *) outBufferStart);
+								//debug ("\n****INSIDE WRITE: \"%s\" *****\n", outBufferStart);
+
+								// start next string here (recycling buffer, remember? :)
+								outBufferStart = outBuffer;
+
+								// generate signal
+								switch (c)
 								{
-									// if moveBack isn't 0, it makes it harder to code :)
-									error ("moveBack is supposed to be 0 until close to end of paragraph\n");
-									return 1;
+								case 1:	pageNumberWrite ();	break;
+								case 12:	pageBreakWrite ();	break;
+								case 10:	newLineWrite ((uptoByte + (inBuffer - inBufferStart)) == paraEndByte);		break;
+								case 31: optionalHyphenWrite (); break;
 								}
 
-								outBuffer [i] = '\0';
-								textWrite (outBuffer);
-
-								// generate signal NOW
-								pageNumberWrite ();
-
-								// set output string to after control code
-								inLength -= (i + 1);
-								outLength -= (i + 1);
-								outBuffer = &outBuffer [i + 1];
-
 								break;
 
-							// pageBreak (always at end of paragraph)
-							case 12:
-								generateSignal = &MSWRITE_IMPORT_LIB::pageBreakWrite;
-								moveBack++, outLength--;
-								break;
-
-							// newLine (always at end of paragraph)
-							case 10:
-								generateSignal = &MSWRITE_IMPORT_LIB::newLineWrite;
-							case 13:		// ^^ fall through
-								moveBack++, outLength--;
+							// carriage return: ignore
+							case 13:
 								break;
 
 							// normal text character
 							default:
-								outBuffer [i - moveBack] = outBuffer [i];		// isn't this tricky? :)
+								*outBuffer = c; outBuffer++;
 								break;
-							}	// switch (outBuffer [i])	{
-						}	// for (int i = 0; i < inLength; i++)	{
-
-						checkpoint ("write text start");
+							}	// switch (*inBuffer)	{
+						}	// for (; *inBuffer; inBuffer++)	{
 
 						// null terminate (yes, I did allocate space for this!)
-						outBuffer [outLength] = '\0';
-						textWrite ((const char *) outBuffer);	// output buffer in one large block
-
-						checkpoint ("write text end");
-
-						// generate any requested end-of-paragraph signal
-						if (generateSignal)	// is there a signal?
-						{
-							if ((this->*generateSignal) ())	// generate the signal
-							{
-								error ("generateSignal() failed\n");
-								return 1;
-							}
-						}
+						*outBuffer = '\0';
+						if (outBufferStart != outBuffer)
+							textWrite ((const char *) outBufferStart);	// output buffer in one large block
+						//debug ("\n****OUTSIDE WRITE: \"%s\" *****\n", outBufferStart);
 
 						uptoByte += numBytesToGet;
 					}		// while (uptoByte <= aimByte) {
+
+					checkpoint ("out of prune loop");
 
 #if 1
 					// consistency check
@@ -1697,11 +1690,10 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 
 			// "eat" CHPs that have gone past (didn't used to do this but...)
 			//debug ("uptoByte: %i  paraEndByte: %i\n", uptoByte, paraEndByte);
+			bool firstTime = true;
 			while (uptoByte <= paraEndByte)
 			{
 				checkpoint ("eat CHP");
-
-				bool firstTime = true;
 
 				if(chpExist)
 					chpExist = charInfoNext ();
@@ -1733,9 +1725,10 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 					// write "unable to import <whatever>" using the first available CHP
 					if (firstTime)
 					{
+						//debug ("writing message: \"%s\"\n", message);
 						textWrite (message);
 						newLineWrite ();
-						message = (char *) "";
+
 						firstTime = false;
 					}
 
@@ -1751,7 +1744,6 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 					{
 						textWrite (message);
 						newLineWrite ();
-						message = (char *) "";
 					}
 					break;
 				}
@@ -1981,7 +1973,7 @@ int MSWRITE_IMPORT_LIB::getBytesPerScanLine (const int width, const int bitsPerP
 int MSWRITE_IMPORT_LIB::processBMP (const MSWRITE_IMAGE_HEADER *image)
 {
 	debug ("BMP detected\n");
-	warning ("BMP import is HIGHLY EXPERIMENTAL!\n");
+	warning ("BMP import is EXPERIMENTAL but seems stable!\n");
 
 	// allocate memory for image
 	char *imageBuffer = new char [image->numDataBytes];

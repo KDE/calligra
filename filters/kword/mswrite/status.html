@@ -1,8 +1,8 @@
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <title>KOffice filters status: MSWRITE FILTER</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>KOffice filters status: MSWRITE FILTER</title>
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
 <A NAME="START">&nbsp;</A>
@@ -29,86 +29,101 @@
 <table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH=100%>
  <tr>
   <td>
-   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH=100%>
+	<table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH=100%>
 
-    <tr BGCOLOR="#DDFFDD">
-     <td COLSPAN="2">
-      <center><b><i><font size=+1>
-       <BR>
-        Import from Microsoft Windows Write to Kword<BR>
-       <BR>
-      </font></i></b></center>
-     </td>
-    </tr>
+	 <tr BGCOLOR="#DDFFDD">
+	  <td COLSPAN="2">
+		<center><b><i><font size=+1>
+		 <BR>
+		  Import from MS WinWrite to Kword<BR>
+		 <BR>
+		</font></i></b></center>
+	  </td>
+	 </tr>
 
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>14 Jan 2002</td>
-    </tr>
+	 <tr BGCOLOR="#EEEEFF">
+	  <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
+	  <td>4 May 2002</td>
+	 </tr>
 
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td><b>Import text from MSWRITE documents</b> <br>
-     	- Full character formatting (fonts, bold, italic, underline, superscript, subscript, &quot;(page)&quot; numbering) <br>
-		- Full paragraph formatting (justification, linespacing, indenting, tabbing) <br>
-		- Headers & Footers (including whether or not they are printed on first page) <br>
-		- Full Pagebreaking (on same line as text and on next line) <br>
-		- Page formatting (margins, positioning of headers & footers, page numbers starting from any number) <br>
-		- [EXPERIMENTAL] embedded images (WMF, monochrome BMPs)
-     </td>
-    </tr>
+	 <tr BGCOLOR="#CCCCFF">
+	  <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
+	  <td><b>Import almost everything except OLE from MS WinWrite (3.0 &amp; 3.1) documents</b> <br>
+			- Character formatting (fonts, bold, italic, underline, superscript, subscript, &quot;(page)&quot; numbering) <br>
+			- Optional/Soft Hyphenation <br>
+			- Paragraph formatting (justification, linespacing, indentation, tabulation) <br>
+			- Paragraphs with multiple newlines <br>
+			- Pagebreaking (at start or end of line and on next line) <br>
+			- Images (Standard WMFs, monochrome BMPs, position from left margin) <br>
 
-    <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-     <td>
-			- Make sure that the bitmap code is correct <br>
-			- Find out why WMF isn't working <br>
+			<br>
+
+			- Headers & Footers (including whether or not they are printed on first page) <br>
+			- Page formatting (margins, positioning of headers & footers, page numbers starting from any number) <br>
+			- Character Set Conversion (currently only from CP1252 but other encodings will be supported in the next version) <br>
+	  </td>
+	 </tr>
+
+	 <tr BGCOLOR="#EEEEFF">
+	  <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
+	  <td>
 			- Fix header/footer not on first page (in 1-page document), displayed as two pages bug <br>
-			- Fix cannot use auto spHeadBody and spFootBody bug <br>
-			- OLE <br>
+			- Fix Page formatting problems <br>
 			- Counters <br>
-			- Portable code (try using this filter on a SPARC or Mac) <br>
-			- Windows charset conversion (is this required???) <br>
+			- Portable code <br>
+			- Multi-Language support (merely an extension of Character Set Conversion with a Dialog to select an encoding) <br>
+			- OLE <br>
+			<br>
 			- Performance <br>
-			- Code cleanup!
+			- Code cleanup <br>
+			- Full testing (will be done in version 0.9) <br>
+			- Fix any remaining issues that can't be easily resolved at the time of writing and/or require changes to KWord <br>
+			(see file <a href="IMPERFECT">IMPERFECT</a>)
 		</td>
-    </tr>
+	 </tr>
 
-    <tr BGCOLOR="#CCCCFF">
-     <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>
-	  	<b> Version 0.4pre: </b> <br>
-		- fixed mswritelib.cc crash on files with an unusual font table <br>
-		- gcc 2.95.[23] internal error workaround <br>
+	 <tr BGCOLOR="#CCCCFF">
+	  <td VALIGN=TOP><b><font size=+1>History<br>(Detailed)</font></b></td>
+	  <td>
+		<b> Version 0.3-2 (4 May 2002): KOffice 1.2 Release (as well as all pre-releases >= Beta2) </b> <br>
 		- page numbers starting from any number <br>
+		- optional hyphenation <br>
+		- paragraphs with multiple newlines <br>
+		- major bug fixes: pageBreak at start of line, fontTable terminated by 0 numDataBytes <br>
+		- preliminary Character Set Conversion <br>
+
+		<br>
+	  	<b> Version 0.3-1: KOffice 1.2 Beta1 </b> <br>
+		- fixed mswritelib.cc crash on files with an unusual font table <br>
+		- emulates image position from left margin by using paragraph indents <br>
+		- WMFs now render correctly in KWord (thanks to Lorthiois Thierry); note that only KWMF code was changed <br>
+		- gcc 2.95.3 internal error workaround <br>
 		- more *.desktop fixes <br>
 
 		<br>
 
 	  	<b> Version 0.3 (7 Jan 2002): Put into CVS for porting to new filter architecture </b> <br>
 		- imports nearly everything: now has full character, paragraph, page formatting <br>
-		- experimental importing of images (WMF + monochrome BMP) <br>
+		- experimental importing of images (Standard WMF + monochrome BMP) <br>
 		- significant performance enhancements (new MSWriteLib + less XML output) <br>
 		- emulates Write's unusual linespacing using OFFSETS tag <br>
 		- includes filtertest.wri to test filter <br>
 		- corrections to Makefile.am <br>
 		- corrections/changes to *.desktop files (thanks to Werner Trobin) <br>
-		- code cleanup <br>
 
 		<br>
 
-	   <b> Version 0.2 (4 Dec 2001): First stable release: </b> <br>
+		<b> Version 0.2 (4 Dec 2001): First stable release </b> <br>
 		- reads documents reliably <br>
 		- can read text with full character formatting plus partial paragraph formatting <br>
-		- performance enhancements <br>
 		- nice and modular as it uses the new MSWriteView library (MSWriteLib) <br>
 
 		<br>
 
-		<b> Version 0.1 (7 Oct 2001): </b> Underlying code is there to read in the
-			format but the filter can only do plain text, with almost no formatting (has justification)
-
-		</td>
+		<b> Version 0.1 (7 Oct 2001): Initial unstable release </b> <br>
+		- underlying code is there to read in the format but the filter can only do plain text, with almost no formatting <br>
+			(has justification)
+	</td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
@@ -120,24 +135,34 @@
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
-     <td><a href="http://www.wotsit.org/">www.wotsit.org</a> (here you can find a spec for MSWrite)</td>
+     <td>
+     	<a href="http://www.wotsit.org/">Format Specification</a>: a specification for the MSWrite format <br>
+		<br>
+		<!-- not yet done...wait until version 0.4 when the API will stabilise
+		<a href="FILTER-DESIGN">Filter Design</a>: the design of the filter and MSWriteLib (which could be used in another office suite) <br>
+		<br> -->
+		<a href="IMPERFECT">How to PERFECT the Filter</a>: problems with the filter that are/were hard to fix at the time of writing <br>
+		<br>
+		<a href="ROADMAP">Development Roadmap</a>: where development is heading <br>
+		<br>
+     	<a href="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/kofficetests/documents/import/mswrite/filtertest.wri/">Test File ver 0.3-2</a>: displays many features of MSWrite documents
+     </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
-     	<td>I will be doing more regular commits to CVS, towards the goal of version 0.4. <br>
-				<br>
-				The areas that I will specifically be working on are: <br>
-				- making the WMF code work in KWord <br>
-				- stabilising/cleaning-up the MSWRITE_IMPORT_LIB API (+making data members private) <br>
-				- testing the code :))) <br>
-				- documenting code <br>
-				- portable code <br>
-				- figuring out languages and character set problems, if they exist :) <br>
-				- beginning to write the OLE code <br>
-				<br>
-				If you would like to contribute code or see what features are planned, please read the file
-				ROADMAP which contains the anticipated development plan.
+     <td>No, this filter has <b>not</b> been abandoned! <br>
+	  		<br>
+			Development is just occuring very slowly since I'm quite busy. <br>
+			In a few months, I'll be doing the final rewrite (which will be portable and have a proper OO-design),
+			implementing OLE, checking that everything else is implemented and
+			squashing all remaining bugs.  <br>
+			Then the filter will be declared finished after much testing :) <br>
+
+			<br>
+
+			If you would like to contribute code or see what features are planned, please read the file
+			<a href="ROADMAP">ROADMAP</a> which contains the anticipated development plan.
 		</td>
     </tr>
    </table>
@@ -166,14 +191,14 @@
     <tr BGCOLOR="#FFDDDD">
      <td COLSPAN="2">
       <center><b><i><font size=+1>
-       <BR>Export Kword to Microsoft Windows Write<BR><BR>
+       <BR>Export Kword to MS WinWrite<BR><BR>
       </font></i></b></center>
      </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>28 Dec 2001</td>
+     <td>4 May 2002</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -193,11 +218,12 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Authors</font></b></td>
-     <td>(If you would like to write this Export filter, write to the <a href="mailto:koffice@kde.org">KOffice</a> mailinglist,
-	  		and cc <a href="mailto:CTRL_CD@bigpond.com">me</a> your mail :))
+     <td>(If you would like to write this Export filter,
+	  <a href="mailto:koffice@kde.org?subject=I%20want%20to%20write%20the%20MSWrite%20Export%20Filter%20for%20KWord&body=%0aHi,%0a%0aI%20would%20like%20to%20write%20this%20filter!%0aI%20can%20start%20right%20away!%0a%0aThanks!%0a&cc=CTRL_CD@bigpond.com">
+	  		send an email to the KOffice mailinglist (and cc it to me :))
+		</a>
      </td>
     </tr>
-
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
      <td>-</td>
@@ -205,11 +231,10 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
-     <td>There are currently no plans to write an Export Filter, unless you can convince me or some other
-	  		developer (perhaps, even yourself?!).  There is little point exporting to a format that no one seems
-			to be using anymore and...MSWord can't do it anyway! :)</td>
-    </tr>
-   </table>
+	  <td>There are plans to write an Export Filter however this will commence only after the upgrading of MSWriteLib to 0.4.  This will take a few months due to a lack of time.
+	</td>
+	 </tr>
+	</table>
   </td>
  </tr>
 </table>

@@ -21,17 +21,17 @@
 #define MSWRITE_IMPORT_LIB_H
 
 // CORE LIB VERSION NUMBER //
-#define MSWRITE_IMPORT_LIB_VERSION 				0.39
-#define MSWRITE_IMPORT_LIB_VERSION_STRING		"0.39"		// TODO: there's got to be better way
+#define MSWRITE_IMPORT_LIB_VERSION 				0.392
+#define MSWRITE_IMPORT_LIB_VERSION_STRING		"0.392"		// TODO: there's got to be better way
 
 // DATA TYPES //
 typedef signed char BYTE;			// 1 byte
 typedef signed short WORD;			// 2 bytes
-typedef signed long DWORD;			// 4 bytes
+typedef signed int DWORD;			// 4 bytes
 
 typedef unsigned char UBYTE;		// 1 byte
 typedef unsigned short UWORD;		// 2 bytes
-typedef unsigned long UDWORD;		// 4 bytes
+typedef unsigned int UDWORD;		// 4 bytes
 
 typedef WORD POINT;					// 2 bytes
 
@@ -721,9 +721,23 @@ protected:
 	{
 		return textWrite ("\x1");	// i.e. (char)1
 	}
-	virtual int newLineWrite (void)
+	/*virtual int carriageReturn Write (void)
+	{
+		return textWrite ("\xd");	// i.e. (char)13
+	}*/
+	virtual int newLineWrite (const bool endOfParagraph = true)
 	{
 		return textWrite ("\n");	// i.e. (char)10
+	}
+
+	/**
+	 * Optional/Soft Hyphen
+	 * @return 0 for success or nonzero for failure
+	 *
+	 */
+	virtual int optionalHyphenWrite (void)
+	{
+		return textWrite ("-");
 	}
 
 	// implement this signal to show the progress of MSWRITE_IMPORT_LIB::filter to the user
