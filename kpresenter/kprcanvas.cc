@@ -2039,6 +2039,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         QPtrListIterator<KPObject> oIt(doc->pageList().at(0)->objectList());
         for (; oIt.current(); ++oIt )
              tmpObjs.append( oIt.current() );
+
     }
     else
     {
@@ -2170,7 +2171,6 @@ bool KPrCanvas::pNext( bool )
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
 
-
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
@@ -2243,7 +2243,6 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         QPtrListIterator<KPObject> oIt( getObjectList() );
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
-
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *( --presStepList.end() );
         return true;
@@ -2810,7 +2809,6 @@ void KPrCanvas::doObjEffects()
             {
                 _soundEffect = kpobject->getAppearSoundEffect();
                 _soundFileName = kpobject->getAppearSoundEffectFileName();
-
                 _objList.append( kpobject );
 
                 QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect(m_view->zoomHandler()) );
@@ -3442,13 +3440,12 @@ void KPrCanvas::doObjEffects()
 }
 
 /*======================= draw object ============================*/
-void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int /*_x*/, int /*_y*/, int _w, int _h, int _cx, int _cy )
+void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int _w, int _h, int _cx, int _cy )
 {
     // ### TODO use _x and _y !! painter translation maybe ?
     if ( kpobject->getDisappear() &&
          kpobject->getDisappearNum() < static_cast<int>( currPresStep ) )
         return;
-
     int ox, oy, ow, oh;
     KoRect br = kpobject->getBoundingRect( m_view->zoomHandler() );
     QRect brpix = m_view->zoomHandler()->zoomRect( br );
@@ -3471,18 +3468,20 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int /*_x*/, int
         kpobject->doSpecificEffects( true );
         kpobject->setOwnClipping( ownClipping );
     }
-
+    p.translate(_x,_y);
     kpobject->draw( &p, m_view->zoomHandler(), false /*no selection*/ );
     kpobject->setSubPresStep( 0 );
     kpobject->doSpecificEffects( false );
     kpobject->setOwnClipping( true );
 
     KPObject *obj = 0;
-    for ( unsigned int i = tmpObjs.findRef( kpobject ) + 1; i < tmpObjs.count(); i++ ) {
+    for ( unsigned int i = tmpObjs.findRef( kpobject ) +1 ; i < tmpObjs.count(); i++ ) {
         obj = tmpObjs.at( i );
         if ( kpobject->getBoundingRect(m_view->zoomHandler() ).intersects( obj->getBoundingRect( m_view->zoomHandler() ) ) &&
              obj->getPresNum() < static_cast<int>( currPresStep ) )
+        {
             obj->draw( &p, m_view->zoomHandler(), false /*no selection*/ );
+        }
     }
 
     p.end();
@@ -4144,7 +4143,6 @@ void KPrCanvas::slotGotoPage()
     setCursor( blankCursor );
     int pg = currPresPage;
     pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), slideList, pg, this );
-    kdDebug() << "KPrCanvas::slotGotoPage "<<pg << endl;
     gotoPage( pg );
 
     if ( !spManualSwitch() ) {
@@ -4160,7 +4158,6 @@ void KPrCanvas::gotoPage( int pg )
         currPresPage = pg;
         kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
         slideListIterator = slideList.find( currPresPage );
-        kdDebug() << "KPrCanvas::gotoPage after find iterator:" << endl;
         editMode = false;
         drawMode = false;
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1);
