@@ -60,43 +60,43 @@ VDocument::~VDocument()
 void
 VDocument::drawPage( VPainter *p ) const
 {
-#define LEFT   20
-#define RIGHT  550
-#define BOTTOM 20
-#define TOP    830
+	double left		= 20;
+	double bottom	= 20;
+	double right	= left + m_width;
+	double top		= bottom + m_height;
 
 	p->setPen( Qt::black );
 	p->setBrush( Qt::white );
 	p->newPath();
-	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
-	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
-	p->lineTo( KoPoint( RIGHT, TOP ) );
-	p->lineTo( KoPoint( LEFT,  TOP ) );
-	p->lineTo( KoPoint( LEFT,  BOTTOM ) );
+	p->moveTo( KoPoint( left,  bottom ) );
+	p->lineTo( KoPoint( right, bottom ) );
+	p->lineTo( KoPoint( right, top ) );
+	p->lineTo( KoPoint( left,  top ) );
+	p->lineTo( KoPoint( left,  bottom ) );
 	p->fillPath();
 	p->strokePath();
 
 	p->setPen( Qt::NoPen );
 	p->setBrush( Qt::black );
 	p->newPath();
-	p->moveTo( KoPoint( RIGHT,     BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT + 2, BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT + 2, TOP ) );
-	p->lineTo( KoPoint( RIGHT,     TOP ) );
+	p->moveTo( KoPoint( right,     bottom - 2 ) );
+	p->lineTo( KoPoint( right + 2, bottom - 2 ) );
+	p->lineTo( KoPoint( right + 2, top ) );
+	p->lineTo( KoPoint( right,     top ) );
 	p->fillPath();
 
 	p->newPath();
-	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
-	p->lineTo( KoPoint( LEFT,  BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT, BOTTOM - 2 ) );
-	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
+	p->moveTo( KoPoint( left,  bottom ) );
+	p->lineTo( KoPoint( left,  bottom - 2 ) );
+	p->lineTo( KoPoint( right, bottom - 2 ) );
+	p->lineTo( KoPoint( right, bottom ) );
 	p->fillPath();
 
 	p->newPath();
-	p->moveTo( KoPoint( LEFT,  TOP ) );
-	p->lineTo( KoPoint( LEFT,  TOP + 1 ) );
-	p->lineTo( KoPoint( RIGHT, TOP + 1 ) );
-	p->lineTo( KoPoint( RIGHT, TOP ) );
+	p->moveTo( KoPoint( left,  top ) );
+	p->lineTo( KoPoint( left,  top + 1 ) );
+	p->lineTo( KoPoint( right, top + 1 ) );
+	p->lineTo( KoPoint( right, top ) );
 	p->fillPath();
 }
 
@@ -229,8 +229,8 @@ VDocument::loadXML( const QDomElement& doc )
 	m_editor = doc.attribute( "editor" );
 	m_syntaxVersion = doc.attribute( "syntaxVersion" );
 
-	m_width  = doc.attribute( "width", "0.0" ).toDouble();
-	m_height = doc.attribute( "height", "0.0" ).toDouble();
+	m_width  = doc.attribute( "width", "800.0" ).toDouble();
+	m_height = doc.attribute( "height", "550.0" ).toDouble();
 
 	m_unitName = doc.attribute( "unit", "mm" );
 
