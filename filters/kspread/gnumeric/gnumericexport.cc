@@ -37,7 +37,7 @@
 #include <kspread_doc.h>
 #include <kspread_view.h>
 #include <kspread_canvas.h>
-
+#include <kspread_sheetprint.h>
 #include <koDocumentInfo.h>
 
 
@@ -738,7 +738,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -840,12 +840,35 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         else
             tmp.appendChild(gnumeric_doc.createTextNode("1.0"));
         sheet.appendChild(tmp);
-//#if 0 //create print info
+
+        //Print Info
         tmp = gnumeric_doc.createElement( "gmr:PrintInformation" );
         margins = gnumeric_doc.createElement( "gmr:Margins" );
+
+        top = gnumeric_doc.createElement( "gmr:top" );
+        top.setAttribute("Points", table->print()->topBorder());
+        top.setAttribute("PrefUnit", "mm");
+        margins.appendChild( top );
+
+        bottom = gnumeric_doc.createElement( "gmr:bottom" );
+        bottom.setAttribute("Points", table->print()->bottomBorder());
+        bottom.setAttribute("PrefUnit", "mm");
+        margins.appendChild( bottom );
+
+        left = gnumeric_doc.createElement( "gmr:left" );
+        left.setAttribute("Points", table->print()->leftBorder());
+        left.setAttribute("PrefUnit", "mm");
+        margins.appendChild( left );
+
+        right = gnumeric_doc.createElement( "gmr:right" );
+        right.setAttribute("Points", table->print()->rightBorder());
+        right.setAttribute("PrefUnit", "mm");
+        margins.appendChild( right );
+
         tmp.appendChild( margins );
         sheet.appendChild(tmp);
-//#endif
+
+
         styles = gnumeric_doc.createElement("gmr:Styles");
         sheet.appendChild(styles);
 
