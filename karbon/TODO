@@ -1,6 +1,7 @@
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
 -	do we need operator=() everywhere we use pointers as members?
+-	merge vscaletool into vselecttool
 -	introduce polygonizevisitor in vselectool for more precise selection (lenny)
 -	rotate/scale/shear tool dont work
 -	painting (NotROP) while shape creation isnt good. creation should instead

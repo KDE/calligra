@@ -69,6 +69,7 @@
 // TODO: only for testing:
 #include "vwhirlpinch.h"
 
+
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {
