@@ -31,7 +31,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation, 
+KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 		 KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser )
     : QFrame( _parent ), buffer( width(), height() ), unit( "mm" )
 {
@@ -109,10 +109,10 @@ void KoRuler::setMousePos( int mx, int my )
 /*================================================================*/
 void KoRuler::drawHorizontal( QPainter *_painter )
 {
-    buffer.fill( backgroundColor() );
-
     QPainter p;
     p.begin( &buffer );
+
+    p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     int dist;
     int j = 0;
@@ -153,7 +153,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 	    str.sprintf( "%d00", j++ );
 	else
 	    str.sprintf( "%d", j++ );
-	p.drawText( i - diffx - fm.width( str ) / 2, ( height() - fm.height() ) / 2, 
+	p.drawText( i - diffx - fm.width( str ) / 2, ( height() - fm.height() ) / 2,
 		    fm.width( str ), height(), AlignLeft | AlignTop, str );
     }
 
@@ -177,7 +177,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     if ( flags & F_INDENTS ) {
 	p.drawPixmap( i_first - pmFirst.size().width() / 2 + r.left(), 2, pmFirst );
-	p.drawPixmap( i_left - pmLeft.size().width() / 2 + r.left(), 
+	p.drawPixmap( i_left - pmLeft.size().width() / 2 + r.left(),
 		     height() - pmLeft.size().height() - 2, pmLeft );
     }
 
@@ -235,10 +235,10 @@ void KoRuler::drawTabs( QPainter &_painter )
 /*================================================================*/
 void KoRuler::drawVertical( QPainter *_painter )
 {
-    buffer.fill( backgroundColor() );
-
     QPainter p;
     p.begin( &buffer );
+
+    p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     int dist;
     int j = 0;
@@ -280,7 +280,7 @@ void KoRuler::drawVertical( QPainter *_painter )
 	    str.sprintf( "%d00", j++ );
 	else
 	    str.sprintf( "%d", j++ );
-	p.drawText( ( width() - fm.width( str ) ) / 2, i - diffy - fm.height() / 2, 
+	p.drawText( ( width() - fm.width( str ) ) / 2, i - diffy - fm.height() / 2,
 		    width(), fm.height(), AlignLeft | AlignTop, str );
     }
 
@@ -374,9 +374,9 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	    p.begin( canvas );
 	    p.setRasterOp( NotROP );
 	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
-							 frameStart ), 0, 
-		       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
+	    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+							 frameStart ), 0,
+		       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
 							frameStart ), canvas->height() );
 	    p.end();
 	}
@@ -475,15 +475,15 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 	    p.begin( canvas );
 	    p.setRasterOp( NotROP );
 	    p.setPen( QPen( black, 1, SolidLine ) );
-	    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
-							 frameStart ), 0, 
-		       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
+	    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+							 frameStart ), 0,
+		       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
 							frameStart ), canvas->height() );
 	    p.end();
 	}
-	if ( /*tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
+	if ( /*tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
 	       frameStart ) < layout.ptLeft ||
-	      tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
+	      tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
 	      frameStart ) > layout.ptWidth -
 	      ( layout.ptRight + layout.ptLeft ) || */e->y() < -50 || e->y() > height() + 50 )
 	    tabList.remove( currTab );
@@ -538,12 +538,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		    action = A_LEFT_INDENT;
 		}
 	    }
-	    
+	
 	    if ( flags & F_TABS ) {
 		int pos;
 		currTab = -1;
 		for ( unsigned int i = 0; i < tabList.count(); i++ ) {
-		    pos = tabList.at( i )->ptPos - diffx + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
+		    pos = tabList.at( i )->ptPos - diffx + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
 							     frameStart );
 		    if ( mx > pos - 5 && mx < pos + 5 ) {
 			setCursor( sizeHorCursor );
@@ -639,18 +639,18 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		    p.begin( canvas );
 		    p.setRasterOp( NotROP );
 		    p.setPen( QPen( black, 1, SolidLine ) );
-		    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
-								 frameStart ), 0, 
-			       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
-								frameStart ), 
+		    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+								 frameStart ), 0,
+			       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+								frameStart ),
 			       canvas->height() );
 		    tabList.at( currTab )->ptPos += ( e->x() - oldMx );
 		    tabList.at( currTab )->mmPos = cPOINT_TO_MM( tabList.at( currTab )->ptPos );
 		    tabList.at( currTab )->inchPos = cPOINT_TO_INCH( tabList.at( currTab )->ptPos );
-		    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
-								 frameStart ), 0, 
-			       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : 
-								frameStart ), 
+		    p.drawLine( tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+								 frameStart ), 0,
+			       tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+								frameStart ),
 			       canvas->height() );
 		    p.end();
 		    oldMx = e->x();
