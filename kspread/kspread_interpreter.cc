@@ -182,6 +182,7 @@ bool kspreadfunc_nominal( KSContext& context );
 bool kspreadfunc_sln( KSContext& context );
 bool kspreadfunc_syd( KSContext& context );
 bool kspreadfunc_db( KSContext& context );
+bool kspreadfunc_euro( KSContext& context );
 
 // defined in kspread_functions_statistical.cc
 bool kspreadfunc_arrang( KSContext& context );
@@ -624,6 +625,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "SLN", new KSValue( new KSBuiltinFunction( module, "SLN", kspreadfunc_sln) ) );
   module->addObject( "SYD", new KSValue( new KSBuiltinFunction( module, "SYD", kspreadfunc_syd) ) );
   module->addObject( "DB", new KSValue( new KSBuiltinFunction( module, "DB", kspreadfunc_db) ) );
+  module->addObject( "EURO", new KSValue( new KSBuiltinFunction( module, "EURO", kspreadfunc_euro) ) );
 
   return module;
 }

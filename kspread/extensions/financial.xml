@@ -310,5 +310,20 @@ divides the cost evenly over the life of an asset.</Text>
       </Help>
     </Function>
 
+    <Function>
+      <Name>EURO</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Currency</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The EURO() functions converts one Euro to a given national currency in the European monetary union. Currency is one of the following:
+ATS (Austria), BEF (Belgium), DEM (Germany), ESP (Spain), FIM (Finland), FRF (France), IEP (Ireland), ITL (Italy), LUF (Luxemburg), NLG (Nederland), or PTE (Portugal).  </Text>
+	<Syntax>EUR(currency)</Syntax>
+	<Example>EUR("DEM") equals 1.95583</Example>
+      </Help>
+    </Function>
+
   </Group>
 </KSpreadFunctions>
