@@ -5299,6 +5299,13 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             {
               cell->copyAll(cellBackup);
             }
+            else
+            {
+              if( cell->isFormula() )
+              {
+                  cell->setCalcDirtyFlag();
+              }
+            }
 
             delete cellBackup;
 
