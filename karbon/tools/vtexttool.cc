@@ -571,7 +571,7 @@ VTextTool::drawPathCreation()
 {
 	VPainter * painter = view()->painterFactory()->editpainter();
 
-	view()->canvasWidget()->setYMirroring( true );
+//	view()->canvasWidget()->setYMirroring( true );
 	painter->setZoomFactor( view()->zoom() );
 
 	painter->setRasterOp( Qt::NotROP );
@@ -594,7 +594,7 @@ VTextTool::drawEditedText()
 
 	VPainter* painter = view()->painterFactory()->editpainter();
 
-	view()->canvasWidget()->setYMirroring( true );
+//	view()->canvasWidget()->setYMirroring( true );
 
 	painter->setZoomFactor( view()->zoom() );
 

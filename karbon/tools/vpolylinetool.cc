@@ -132,7 +132,7 @@ void
 VPolylineTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	view()->canvasWidget()->setYMirroring( true );
+//	view()->canvasWidget()->setYMirroring( true );
 	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
@@ -164,7 +164,7 @@ VPolylineTool::drawBezierVector( KoPoint& start, KoPoint& end )
 	VPainter* painter = view()->painterFactory()->editpainter();
 
 	painter->save();
-	view()->canvasWidget()->setYMirroring( true );
+//	view()->canvasWidget()->setYMirroring( true );
 	painter->setZoomFactor( view()->zoom() );
 
 	float zoomFactor = view()->zoom();
@@ -257,7 +257,7 @@ VPolylineTool::mouseButtonRelease()
 
 		VPainter* painter = view()->painterFactory()->editpainter();
 		painter->save();
-		view()->canvasWidget()->setYMirroring( true );
+//		view()->canvasWidget()->setYMirroring( true );
 		painter->setZoomFactor( view()->zoom() );
 		painter->setRasterOp( Qt::XorROP );
 		VStroke stroke( Qt::yellow, 0L, 1.0 );

@@ -56,7 +56,7 @@ void
 VShearTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	view()->canvasWidget()->setYMirroring( true );
+//	view()->canvasWidget()->setYMirroring( true );
 	painter->setRasterOp( Qt::NotROP );
 
 	VObjectListIterator itr = m_objects;

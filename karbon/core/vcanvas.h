@@ -21,12 +21,14 @@
 #ifndef __VCANVAS_H__
 #define __VCANVAS_H__
 
+
 #include <qscrollview.h>
 
 class KarbonPart;
 class KarbonView;
 class KoRect;
 class KoPoint;
+
 
 // The canvas is a QScrollView.
 
@@ -38,9 +40,6 @@ public:
 
 	void repaintAll( const KoRect & );
 	void repaintAll( bool drawVObjects = true );
-	KoPoint toContents( const KoPoint & ) const;
-
-	void setYMirroring( bool edit );
 
 	QPixmap *pixmap() { return m_pixmap; }
 
@@ -54,6 +53,9 @@ protected:
 	virtual void resizeEvent( QResizeEvent* event );
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
+
+	KoPoint toContents( const KoPoint & ) const;
+	void setYMirroring( bool edit );
 
 private slots:
 	void slotContentsMoving( int , int );

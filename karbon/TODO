@@ -26,7 +26,6 @@ REAL BUGS:
 
 TODO:
 -	move the X11-hacks from VPolylineTool to VCanvas so that other tools can benefit from that.
--	remove all setYMirroring() outside of VCanvas, this is an implementation detail
 -	make pattern and gradient coords absolute and not relative to the shape
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths

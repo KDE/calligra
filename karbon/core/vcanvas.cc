@@ -54,7 +54,6 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	setFocus();
 
 	m_bScrolling = false;
-
 }
 
 bool
@@ -125,6 +124,8 @@ VCanvas::setYMirroring( bool edit )
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
+	setYMirroring( true );
+
 	kdDebug() << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
 	viewport()->setUpdatesEnabled( false );
 	KoRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
@@ -185,6 +186,8 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 void
 VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObjects )
 {
+	setYMirroring( true );
+
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 	VPainter* p = m_view->painterFactory()->painter();
 	if( drawVObjects )
