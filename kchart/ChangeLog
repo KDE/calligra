@@ -1,5 +1,14 @@
 2005-03-17  Inge Wallin  <inge@lysator.liu.se>
 
+	Remove the 3D Line Parameters page from the config dialog due to
+	general uselessness and uglyness.
+	* kchartConfigDialog.cc (KChartConfigDialog): Disabled 3D Line
+	page.
+	* kchartLine3dConfigPage.cc (constructor): Changed layout
+	somewhat, during the experiments.
+	
+	----------------------------------------------------------------
+
 	Fix the uglyness of the font config dialog.
 	* kchartFontConfigPage.cc (KChartFontConfigPage): Add some stretch
 	in suitable places.

@@ -37,61 +37,60 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(), KDialog::spacingHint() );
+  QGridLayout *grid1 = new QGridLayout(this,8,2,KDialog::marginHint(), KDialog::spacingHint());
 
-  QButtonGroup* gb = new QButtonGroup( i18n("3D Line Parameters"), this );
-  QGridLayout *grid1 = new QGridLayout(gb,3,2,KDialog::marginHint(), KDialog::spacingHint());
-  layout->addWidget(gb,0,0);
+  // The 3D line on/off button.
+  line3d=new QCheckBox(i18n("3D lines"),this);
+  grid1->addWidget(line3d,1,0);
 
+  connect(line3d, SIGNAL(toggled ( bool )),
+	  this,   SLOT(slotChange3DParameter(bool)));
 
-  line3d=new QCheckBox(i18n("3D line"),gb);
-  grid1->addWidget(line3d,0,0);
+  // The line width label and input.
+  QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), this );
+  grid1->addWidget(tmpLabel,2,0);
+  lineWidth=new KIntNumInput(0, this, 10);
+  grid1->addWidget(lineWidth,2,1);
 
-  connect(line3d, SIGNAL(toggled ( bool )),this,SLOT(slotChange3DParameter(bool)));
+  // The "Draw shadow color" checkbox
+  drawShadowColor=new QCheckBox(i18n("Draw shadow color"),this);
+  grid1->addWidget(drawShadowColor,3,0);
 
-  QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), gb );
-  grid1->addWidget(tmpLabel,1,0);
-
-  lineWidth=new KIntNumInput(0, gb, 10);
-  grid1->addWidget(lineWidth,1,1);
-
-  drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb);
-  grid1->addWidget(drawShadowColor,2,0);
-
-  tmpLabel = new QLabel( i18n( "Rotation around the X-axis in degrees:" ), gb );
-  tmpLabel->resize( tmpLabel->sizeHint() );
-  grid1->addWidget(tmpLabel,3,0);
-
-  angle3dX=new KIntNumInput(0, gb, 10);
-  grid1->addWidget(angle3dX,3,1);
-  angle3dX->setRange(0, 90, 1);
-
-  tmpLabel = new QLabel( i18n( "Rotation around the Y-axis in degrees:" ), gb );
+  tmpLabel = new QLabel( i18n( "Rotation around the X-axis in degrees:" ), 
+			 this );
   tmpLabel->resize( tmpLabel->sizeHint() );
   grid1->addWidget(tmpLabel,4,0);
 
-  angle3dY=new KIntNumInput(0, gb, 10);
-  grid1->addWidget(angle3dY,4,1);
-  angle3dY->setRange(0, 90, 1);
+  angle3dX=new KIntNumInput(0, this, 10);
+  grid1->addWidget(angle3dX,4,1);
+  angle3dX->setRange(0, 90, 1);
 
-
-  tmpLabel = new QLabel( i18n( "Depth:" ), gb );
+  tmpLabel = new QLabel( i18n( "Rotation around the Y-axis in degrees:" ), this );
   tmpLabel->resize( tmpLabel->sizeHint() );
   grid1->addWidget(tmpLabel,5,0);
 
-  depth=new KDoubleNumInput(0, gb);
+  angle3dY=new KIntNumInput(0, this, 10);
+  grid1->addWidget(angle3dY,5,1);
+  angle3dY->setRange(0, 90, 1);
+
+
+  tmpLabel = new QLabel( i18n( "Depth:" ), this );
+  tmpLabel->resize( tmpLabel->sizeHint() );
+  grid1->addWidget(tmpLabel,6,0);
+
+  depth=new KDoubleNumInput(0, this);
   depth->resize(100,depth->sizeHint().height());
-  grid1->addWidget(depth,5,1);
+  grid1->addWidget(depth,6,1);
   depth->setRange(0,40, 0.1);
 
-  gb->setAlignment(Qt::AlignLeft);
   grid1->addColSpacing(0,depth->width());
   grid1->addColSpacing(0,angle3dX->width());
   grid1->setColStretch(0,1);
+  grid1->setRowStretch(7,1);
   grid1->activate();
   //it's not good but I don't know how
   //to reduce space
-  layout->addColSpacing(1,300);
+  //layout->addColSpacing(1,300);
 }
 
 void KChartLine3dConfigPage::slotChange3DParameter(bool b)

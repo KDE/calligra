@@ -100,6 +100,7 @@ Item								   Prio Status
   + Make Data page work.						DONE
   + Pie settings at the same place as Subtype?			      1 ----
   + Type specific settings for each type?			      2 ----
+  + Move Line Marker from Axes page?				      2 ----
   + Check *all* subpages for uglyness and bugs			     S1 ----
     - BackgroundPixmap						     S1 --
     - Bar		REMOVE					     S1 done
@@ -110,7 +111,7 @@ Item								   Prio Status
     - Geometry		REMOVE					     S1 done
     - HeaderFooter	Somewhat ugly?				     S1 --
     - Legend		OK					     S1 done
-    - Line3d		UGLY!!  FIX!				     S1 --
+    - Line3d		UGLY!!  Disabled			     S1 done
     - Parameter3d	OK					     S1 done
     - Parameter (Axes)	Ugly -> OK				     S1 done
     - ParameterPie	Ugly					     S1 --

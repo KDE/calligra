@@ -157,8 +157,10 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         }
         else if( m_params->chartType() == KDChartParams::Line)
         {
+#if 0	// Disabled due to bugs and all around uglyness.
             _linepage3d= new KChartLine3dConfigPage(m_params,this);
             addTab( _linepage3d,i18n("3D Line Parameters"));
+#endif
         }
         else if( m_params->chartType() == KDChartParams::Polar)
         {
