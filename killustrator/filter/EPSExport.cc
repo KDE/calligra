@@ -26,6 +26,9 @@
 #include "config.h"
 #endif
 
+#include <string>
+#include <set>
+
 #include <stdio.h>
 #include <fstream.h>
 #include <unistd.h>
@@ -77,6 +80,15 @@ bool EPSExport::exportToFile (GDocument* doc) {
   epsStream << "/PaperWidth " << doc->getPaperWidth () << " def\n"
             << "/PaperHeight " << doc->getPaperHeight () << " def\n"
             << "InitTMatrix\n";
+
+  set<string> reqFonts;
+  if (doc->requiredFonts (reqFonts)) {
+    set<string>::iterator i = reqFonts.begin ();
+    for (; i != reqFonts.end (); i++) {
+      const char* fontName = i->c_str ();
+      epsStream << i->c_str () << " /_" << &fontName[1] << " TransFont\n";
+    }
+  }
 
   // write objects
   QListIterator<GObject> it = doc->getObjects ();
