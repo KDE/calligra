@@ -928,7 +928,7 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
     cell = _destList.first();
   else
     cell = _destList.last();
-
+  int incr = 1;
   unsigned int s = 0;
 
   if (!down)
@@ -956,20 +956,26 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       }
       else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
       {
-	double val=(_srcList.at( s )->valueDouble());
+
+	double val=(_srcList.at( s )->valueDouble()+incr);
 	QString tmp;
 	tmp=tmp.setNum(val);
 	cell->setCellText( tmp, true );
+        incr++;
       }
       else if(_srcList.at( s )->isDate() && _srcList.count()==1)
       {
 	QDate tmpDate=(_srcList.at( s )->valueDate());
+        tmpDate=tmpDate.addDays( incr);
 	cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
+        incr++;
       }
       else if(_srcList.at( s )->isTime() && _srcList.count()==1)
       {
 	QTime tmpTime=(_srcList.at( s )->valueTime());
+        tmpTime=tmpTime.addSecs( incr*60 );//add one minute.
 	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
+        incr++;
       }
       else if((AutoFillSequenceItem::month != 0L)
 	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != 0L
