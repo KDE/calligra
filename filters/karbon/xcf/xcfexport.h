@@ -44,10 +44,26 @@ public:
 private:
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVLayer( VLayer& layer );
-	
+
+	/**
+	 * Tile size constants.
+	 */
+	static const unsigned m_tileWidth;
+	static const unsigned m_tileHeight;
+
+	/**
+	 * Output stream.
+	 */
 	QDataStream* m_stream;
 
+	/**
+	 * Image width.
+	 */
 	unsigned m_width;
+
+	/**
+	 * Image height.
+	 */
 	unsigned m_height;
 };
 
