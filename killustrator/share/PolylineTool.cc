@@ -45,7 +45,46 @@ PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
 }
 
 void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == Event_MouseButtonPress) {
+  if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape && line != 0L) {
+      /*
+       * Abort the last operation
+       */
+      if (newObj) {
+        // for a new object we have to remove the last point
+        line->removePoint (last);
+        if (line->numOfPoints () >= 2) {
+          // it's a regular line
+          CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
+          history->addCommand (cmd);
+        }
+        else {
+          // no valid line - delete it
+          doc->deleteObject (line);
+          line = 0L;
+        }
+      }
+      else {
+        // remove the first point: it's equal to the last point
+	// of the original line
+	points.removeFirst ();
+        // we have to remove the last added point
+        line->removePoint (last);
+        if (points.count () > 0) {
+	  if (last != 0)
+	    last = last - points.count ();
+          AddLineSegmentCmd *cmd =  
+            new AddLineSegmentCmd (doc, line, last, points);
+          history->addCommand (cmd);
+        }
+      }
+      if (line)
+        doc->setLastObject (line);
+      line = 0L; last = 0;
+    }
+  }
+  else if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () != LeftButton)
       return;
