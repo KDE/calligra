@@ -1613,7 +1613,9 @@ void KWView::showZoom( int zoom )
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 
     // Also set the zoom in KoView (for embedded views)
-    KoView::setZoom( static_cast<double>( zoom ) / 100 );
+    //KoView::setZoom( static_cast<double>( zoom ) / 100 );
+    kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
 }
 
 void KWView::slotViewFormattingChars()

@@ -1796,6 +1796,12 @@ QDomDocument KWDocument::saveXML()
         // Save non-part framesets ( part are saved further down )
         if ( frameSet->type() != FT_PART )
             frameSet->save( framesets );
+        else
+        {
+            // Set the child geometry from the frame geometry, with no viewmode applied
+            // to prepare saving below with the correct geometry
+            static_cast<KWPartFrameSet *>(frameSet)->updateChildGeometry();
+        }
 
         // If picture frameset, make a note of the image it needs.
         if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )

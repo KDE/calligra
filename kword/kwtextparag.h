@@ -185,9 +185,6 @@ public:
     // Reimplemented from QTextParag to implement non-left-aligned tabs
     virtual int nextTab( int chnum, int x );
 
-protected:
-    // This is public in QTextParag but it should be internal to KWTextParag,
-    // because it's in pixels.
     virtual int topMargin() const;
     virtual int bottomMargin() const;
     virtual int leftMargin() const;
@@ -195,6 +192,7 @@ protected:
     virtual int rightMargin() const;
     virtual int lineSpacing( int line ) const;
 
+protected:
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
 			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
 

@@ -72,6 +72,10 @@ public:
     KoPoint unzoomPoint( const QPoint & p ) const {
         return KoPoint( unzoomItX( p.x() ), unzoomItY( p.y() ) );
     }
+    KoRect unzoomRect( const QRect & r ) const {
+        return KoRect( unzoomItX( r.x() ), unzoomItY( r.y() ),
+                       unzoomItX( r.width() ), unzoomItY( r.height() ) );
+    }
 
 protected:
     int m_zoom;

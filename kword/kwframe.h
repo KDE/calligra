@@ -657,8 +657,9 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
 
-    KWChild *getChild() { return child; }
+    KWChild *getChild() { return m_child; }
 
+    void updateChildGeometry();
     virtual void updateFrames();
 
     virtual void drawFrame( KWFrame * frame, QPainter * p, const QRect & crect,
@@ -676,7 +677,7 @@ public:
 
 
 protected:
-    KWChild *child;
+    KWChild *m_child;
 };
 
 class KWPartFrameSetEdit :  public QObject, public KWFrameSetEdit
