@@ -45,26 +45,29 @@ EpsImport::convert( const QCString& from, const QCString& to )
 {
 	if(
 		to != "application/illustrator" ||
-		( from != "image/x-eps" && from != "application/postscript" ) )
+		(
+			from != "image/x-eps" &&
+			from != "application/postscript" ) )
 	{
 		return KoFilter::NotImplemented;
 	}
 
-	// copy input filename:
+	// Copy input filename:
 	QString input = m_chain->inputFile();
 
-	// quote spaces in filename:
+	// Quote spaces in filename:
 	KRun::shellQuote( input );
 
-	// build ghostscript call to convert ps/eps -> ai:
+	// Build ghostscript call to convert ps/eps -> ai:
 	QString command = QString(
 		"gs -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).
 			arg( input ).arg( m_chain->outputFile() );
 
-	// execute it:
-	system( command.latin1() );
-
-	return KoFilter::OK;
+	// Execute it:
+	if( system( command.latin1() ) )
+		return KoFilter::OK;
+	else
+		return KoFilter::StupidError;
 }
 
 #include "epsimport.moc"

@@ -41,6 +41,7 @@ static char l1_curveto		= 'c';
 static char l1_lineto		= 'l';
 static char l1_stroke		= 's';
 static char l1_fill			= 'f';
+static char l1_eofill		= 'e';
 static char l1_setlinewidth	= 'w';
 static char l1_setdash		= 'd';
 static char l1_setrgbcolor	= 'r';
@@ -79,12 +80,14 @@ EpsExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
+
 	KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
+
 	if( !storeIn )
 		return KoFilter::StupidError;
 
-	KoFilter::ConversionStatus status = KoFilter::OK;
 
+	KoFilter::ConversionStatus status = KoFilter::OK;
 
 	// Ask questions about PS level etc:
 	EpsExportDlg* dialog = new EpsExportDlg();
@@ -94,14 +97,13 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	if( dialog->exec() )
 	{
 		// Which PostScript level to support?
-		m_psLevel = dialog->psLevel();
+		m_psLevel = dialog->psLevel() + 1;
 
 		QFile fileOut( m_chain->outputFile() );
 		if( !fileOut.open( IO_WriteOnly ) )
 		{
 			QApplication::restoreOverrideCursor();
 			delete( dialog );
-			storeIn->close();
 
 			return KoFilter::StupidError;
 		}
@@ -128,7 +130,6 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 	QApplication::restoreOverrideCursor();
 	delete( dialog );
-	storeIn->close();
 
 	return status;
 }
@@ -172,7 +173,6 @@ EpsExport::visitVDocument( VDocument& document )
 	{
 		QDomDocument domIn;
 		domIn.setContent( storeIn );
-		storeIn->close();
 
 		KoDocumentInfo docInfo;
 		docInfo.load( domIn );
@@ -273,11 +273,9 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 void
 EpsExport::getStroke( const VStroke& stroke )
 {
-	if( stroke.type() != VStroke::none )
+	// Solid stroke:
+	if( stroke.type() == VStroke::solid )
 	{
-		// gsave:
-		*m_stream << l1_gsave << " ";
-
 		// dash pattern:
 		*m_stream << "[";
 
@@ -288,24 +286,32 @@ EpsExport::getStroke( const VStroke& stroke )
 		for( ; itr != array.end(); ++itr )
 			 *m_stream << *itr << " ";
 
-		*m_stream << "] " << stroke.dashPattern().offset() <<
-			" " << l1_setdash << " ";
+		*m_stream <<
+			"] " << stroke.dashPattern().offset() <<
+			" "  << l1_setdash << " ";
 
 		getColor( stroke.color() );
 
-		// setlinewidth, stroke, grestore:
+		// setlinewidth, stroke:
 		*m_stream <<
 			" " << stroke.lineWidth() <<
 			" " << l1_setlinewidth <<
-			" " << l1_stroke <<
-			" " << l1_grestore << "\n";
+			" " << l1_stroke << "\n";
+	}
+	else if( stroke.type() == VStroke::grad )
+	{
+		if( m_psLevel == 3 )
+		{
+			
+		}
 	}
 }
 
 void
 EpsExport::getFill( const VFill& fill )
 {
-	if( fill.type() != VFill::none )
+	// Solid fill:
+	if( fill.type() == VFill::solid )
 	{
 		// gsave:
 		*m_stream << l1_gsave << " ";
@@ -314,9 +320,15 @@ EpsExport::getFill( const VFill& fill )
 		getColor( fill.color() );
 
 		// fill, grestore:
-		*m_stream <<
-			" " << l1_fill <<
-			" " << l1_grestore << "\n";
+		*m_stream << " " << l1_fill << " " << l1_grestore << "\n";
+	}
+	// Gradient:
+	else if( fill.type() == VFill::grad )
+	{
+		if( m_psLevel == 3 )
+		{
+			
+		}
 	}
 }
 
