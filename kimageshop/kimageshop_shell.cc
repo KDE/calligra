@@ -34,6 +34,7 @@
 #include "kimageshop_shell.h"
 #include "kimageshop_doc.h"
 #include "kimageshop_view.h"
+#include "newdialog.h"
 
 QList<KImageShopShell>* KImageShopShell::s_lstShells = 0L;
 
@@ -123,7 +124,10 @@ bool KImageShopShell::newDocument()
     return true;
   }
 
-  m_pDoc = new KImageShopDoc(510, 510);
+  NewDialog newdialog( this );
+  if ( ! newdialog.exec() ) return false;
+  
+  m_pDoc = new KImageShopDoc( newdialog.newwidth(), newdialog.newheight() );
   if ( !m_pDoc->initDoc() )
   {
     releaseDocument();
