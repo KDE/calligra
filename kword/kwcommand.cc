@@ -641,7 +641,6 @@ void KWFramePropertiesCommand::unexecute()
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
     frame->copySettings(m_frameBefore);
-
     KWDocument * doc = frameSet->kWordDocument();
     if(doc)
     {
