@@ -671,11 +671,28 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					break;
 				}
 				// TODO : arc support
-				/*case 'a':
+				case 'a':
 					relative = true;
 				case 'A':
 				{
-				}*/
+					bool largeArc, sweep;
+					double angle, rx, ry;
+					ptr = getCoord( ptr, rx );
+					ptr = getCoord( ptr, ry );
+					ptr = getCoord( ptr, angle );
+					ptr = getCoord( ptr, tox );
+
+					largeArc = tox == 1;
+					ptr = getCoord( ptr, tox );
+					sweep = tox == 1;
+					ptr = getCoord( ptr, tox );
+					ptr = getCoord( ptr, toy );
+
+					/*if(relative)
+						pathSegList()->appendItem(createSVGPathSegArcRel(tox, toy, rx, ry, angle, largeArc, sweep));
+					else
+						pathSegList()->appendItem(createSVGPathSegArcAbs(tox, toy, rx, ry, angle, largeArc, sweep));*/
+				}
 			}
 
 			lastCommand = command;
