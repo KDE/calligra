@@ -67,6 +67,7 @@ private:
 	void createPresentationAnimation(const QDomElement& element);
 
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
+	void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );
 
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
 
