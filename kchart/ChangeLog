@@ -1,3 +1,14 @@
+2005-03-24  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 55606: [modified] tag doesn't work correctly.
+	* kchartDataEditor.{h,cc} (m_modified): new member
+	(modified): new method.
+	(tableChanged): new slot
+	(misc): set m_modified if data changed, including headers.
+	* kchart_part.{h,cc} (slotModified): new slot
+	(setData): connect wizard::finished() with slotModified
+	* kchart_view.cc (edit, apply, wizard): call setModified() in document
+
 2005-03-23  Inge Wallin  <inge@lysator.liu.se>
 
 	Implement wish 45358: KChart start up dialog?

@@ -218,6 +218,7 @@ void KChartView::edit()
     ed.getData(dat);
     ed.getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+    ((KChartPart*)koDocument())->setModified(true);
 
     kdDebug(35001) << "***After calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
@@ -229,11 +230,16 @@ void KChartView::edit()
 
 void KChartView::applyEdit(kchartDataEditor *ed)
 {
+    if (!ed->modified())
+	return;
+
     ed->getData(( (KChartPart*)koDocument())->data());
     ed->getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed->getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+    ((KChartPart*)koDocument())->setModified(true);
 
     repaint();
+
 }
 
 
@@ -244,6 +250,7 @@ void KChartView::wizard()
 	new KChartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
     kdDebug(35001) << "Executed. Now, display it" << endl;
     if (wiz->exec()) {
+	((KChartPart*)koDocument())->setModified(true);
         repaint();
         updateGuiTypeOfChart();
         kdDebug(35001) << "Ok, executed..." << endl;
@@ -314,6 +321,7 @@ void KChartView::config(int flags)
 
 void KChartView::slotRepaint()
 {
+    ((KChartPart*)koDocument())->setModified(true);
     repaint();
 }
 

@@ -146,10 +146,16 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     connect(m_table->verticalHeader(),   SIGNAL(clicked(int)),
 	    this,                        SLOT(row_clicked(int)) );
 
+    connect(m_table, SIGNAL(valueChanged(int, int)),
+	    this,    SLOT(tableChanged(int, int)) );
+
     // At first, assume that any shrinking of the table is a mistake.
     // A confirmation dialog will make sure that the user knows what
     // (s)he is doing.
     m_userWantsToShrink = false;
+
+    // The data is not modified at the start.
+    m_modified          = false;
 
     // Add tooltips and WhatsThis help.
     addDocs();
@@ -382,6 +388,8 @@ void kchartDataEditor::setRows(int rows)
 	// Default value for the new rows: empty string
 	for (int i = old_rows; i < rows; i++)
 	    m_table->verticalHeader()->setLabel(i, "");
+
+	m_modified = true;
     }
     else if (rows < m_table->numRows()) {
 	bool ask_user = false;
@@ -409,6 +417,8 @@ void kchartDataEditor::setRows(int rows)
 
 	// Do the actual shrinking.
 	m_table->setNumRows(rows);
+
+	m_modified = true;
     }
 }
 
@@ -435,6 +445,8 @@ void kchartDataEditor::setCols(int cols)
 	    m_table->horizontalHeader()->setLabel(i, "");
 	    m_table->setColumnWidth(i, COLUMNWIDTH);
 	}
+
+	m_modified = true;
     }
     else if (cols < m_table->numCols()) {
 	bool ask_user = false;
@@ -462,6 +474,8 @@ void kchartDataEditor::setCols(int cols)
 
 	// Do the actual shrinking.
 	m_table->setNumCols(cols);
+
+	m_modified = true;
     }
 }
 
@@ -476,8 +490,10 @@ void kchartDataEditor::column_clicked(int column)
 					 0, this);
 
     // Rename the column.
-    if ( !name.isEmpty() )
+    if ( !name.isEmpty() ) {
         m_table->horizontalHeader()->setLabel(column, name);
+	m_modified = true;
+    }
 }
 
 
@@ -491,8 +507,16 @@ void kchartDataEditor::row_clicked(int row)
 					 0, this);
 
     // Rename the row.
-    if ( !name.isEmpty() )
+    if ( !name.isEmpty() ) {
         m_table->verticalHeader()->setLabel(row, name);
+	m_modified = true;
+    }
+}
+
+
+void  kchartDataEditor::tableChanged(int row, int col)
+{
+    m_modified = true;
 }
 
 

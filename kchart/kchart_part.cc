@@ -413,7 +413,10 @@ void KChartPart::setData( const KoChart::Data& data )
 bool KChartPart::showWizard()
 {
     KChartWizard  *wizard = new KChartWizard( this, m_parentWidget, "wizard" );
-    bool           ret = wizard->exec();
+
+    connect( wizard, SIGNAL(finished()), this, SLOT(slotModified()) );
+
+    bool  ret = wizard->exec();
 
     delete wizard;
     return ret;
@@ -1494,6 +1497,16 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
 #endif
     return true;
 }
+
+
+
+void  KChartPart::slotModified()
+{
+    kdDebug(35001) << "slotModified called!" << endl;
+
+    setModified(true);
+}
+
 
 }  //KChart namespace
 

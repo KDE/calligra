@@ -78,6 +78,9 @@ public:
     void  initNullChart();
     void  initTestChart();
 
+public slots:
+    void  slotModified();
+
 signals:
     void docChanged();
 

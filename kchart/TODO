@@ -21,8 +21,11 @@ Item								   Prio Status
   + 41612: No titles for axes					      1	----
      - Fixed by new KDChart version					kdch
      - Enable and activate settings in the config dialog.		--
-  + 55606: [modified] tag doesn't work correctly.		      2 ----
-  + 90893: never-saved doc failes autosave			      2 ----
+  + 55606: [modified] tag doesn't work correctly.		      2 DONE
+     - Set modified when data is changed.			      2 done
+     - Set modified when the chart is changed through config.	      2 done
+     - Set modified when the chart is changed through wizard.	      2 done
+  + 90893: never-saved doc failes autosave			      2 DONE
   + 77839: Program hangs when only one value for pie chart 	      1	KDCH DONE
 	   and value = 0.
        Fixed by new KDChart version
@@ -41,6 +44,8 @@ Item								   Prio Status
        Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
        Fixed by new KDChart version (hopefully)
+  + ------: A chart in a spreadsheet opens the template dialog 	      1 ----
+	    before the wizard appears.
 
 * Wishes
   + 14971: Data in rows or columns				      1	DONE

@@ -79,6 +79,8 @@ public:
     void setColLabels(const QStringList &colLabels);
     void getColLabels(QStringList &colLabels);
 
+    bool modified() const { return m_modified; }
+
 private:
     void  addDocs();
 
@@ -89,10 +91,14 @@ private slots:
     void  slotApply();
     void  setRows(int rows);
     void  setCols(int cols);
-    //the user clicked on a column in the column header
+
+    // The user clicked on a header item.
     void  column_clicked(int);
-    //the user clicked on a row in the row header
     void  row_clicked(int);
+
+    // Called when something changes in the table.
+    void  tableChanged(int row, int col);
+
     void test();
 
 private:
@@ -105,7 +111,9 @@ private:
 
     // This member is set to true if the user shrinks the data table,
     // and confirms this by clicking OK in a warning dialog.
-    bool        m_userWantsToShrink;
+    bool  m_userWantsToShrink;
+
+    bool  m_modified;
 };
 
 }  //KChart namespace
