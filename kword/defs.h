@@ -92,8 +92,9 @@ enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
 * FT_PICTURE = One frame with a picture<br>
 * FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
 * FT_FORMULA = one frame with an embedded formula frame. This is semi-native
+* FT_TABLE = Frameset which contains table cells.
 */
-enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
+enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4, FT_TABLE };
 
 /** The different types of textFramesets (that TEXT is important here!)
 * FI_BODY = normal text frames.<br>

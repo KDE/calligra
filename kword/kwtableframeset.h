@@ -79,6 +79,8 @@ public:
     };
     friend class Cell;
 
+    virtual FrameType getFrameType() { return FT_TABLE; }
+
     // constructors
     KWTableFrameSet( KWDocument *_doc );
     KWTableFrameSet( KWTableFrameSet &original );

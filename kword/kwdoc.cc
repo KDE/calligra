@@ -44,7 +44,7 @@
 
 #include "kwframe.h"
 #include "kwtextframeset.h"
-#include "kwgroupmanager.h"
+#include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "defs.h"
@@ -184,7 +184,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastStyle = 0L;
     frames.setAutoDelete( TRUE );
-    grpMgrs.setAutoDelete( TRUE );
+    grpMgrs.setAutoDelete( false );
  //   variables.setAutoDelete( FALSE );
 
 //    slDataBase = new KWSerialLetterDataBase( this );
@@ -1178,6 +1178,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         if(! getFrameSet(i)) {
             kdWarning () << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
+        } else if(getFrameSet(i)->getFrameType()==FT_TABLE) {
+            static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
         } else if(! getFrameSet(i)->getFrame(0)) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
             delFrameSet(getFrameSet(i));
@@ -1194,14 +1196,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                     getFrameSet(i)->getFrame(f)->setWidth(minFrameWidth);
                 }
             }
-        }
-    }
-    for (int i = getNumGroupManagers()-1; i>-1; i--) {
-        if(! getGroupManager(i)) {
-            kdWarning () << "GroupManager " << i << " is NULL!!" << endl;
-            grpMgrs.remove(i);
-        } else {
-            getGroupManager(i)->validate();
         }
     }
     emit sigProgress(-1);
@@ -1376,29 +1370,28 @@ void KWDocument::loadFrameSets( QDomElement framesets )
             case FT_TEXT: {
                 KWTextFrameSet *fs;
                 if ( !_name.isEmpty() ) {
-                    KWGroupManager *grpMgr = 0L;
-                    if ( getNumGroupManagers() > 0 ) {
-                        for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
-                            if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
-                                getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name ) {
-                                grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
-                                break;
-                            }
+                    KWTableFrameSet *table = 0L;
+                    for ( unsigned int i = 0; i < frames.count(); i++ ) {
+                        KWFrameSet *f = frames.at(i);
+                        if(! f->isVisible()) continue;
+                        if(f->getName() == _name) {
+                            table = static_cast<KWTableFrameSet *> (f);
+                            break;
                         }
                     }
-                    if ( !grpMgr ) {
-                        grpMgr = new KWGroupManager( this );
+                    if ( !table ) {
+                        table = new KWTableFrameSet( this );
 
-                        grpMgr->setName( _name );
-                        addGroupManager( grpMgr );
+                        table->setName( _name );
+                        addFrameSet( table );
                     }
-                    fs = new KWGroupManager::Cell( grpMgr, _row, _col );
+                    fs = new KWTableFrameSet::Cell( table, _row, _col );
                     fs->setVisible( _visible );
                     fs->setName( fsname );
                     fs->load( framesetElem );
                     fs->setFrameInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
-                    KWGroupManager::Cell *cell = (KWGroupManager::Cell *)fs;
+                    KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)fs;
                     cell->m_rows = _rows;
                     cell->m_cols = _cols;
 //                    grpMgr->addCell( cell, _row, _col );
@@ -2028,18 +2021,6 @@ KWFrameSet * KWDocument::getFrameSet( unsigned int mx, unsigned int my )
         }
     }
 
-    // For now this is a duplicate for the groupmanager list, but the groupmanager list
-    // will probably be removed shortly, so the following is not needed then anymore..
-    for (unsigned i=0; i<grpMgrs.count(); i++) {
-        KWFrameSet *frameSet = grpMgrs.at(i);
-        if ( frameSet->contains( mx, my ) ) {
-            if ( !frameSet->isVisible() )
-                continue;
-            return frameSet;
-        }
-    }
-
-
     return 0L;
 }
 
@@ -2303,7 +2284,7 @@ KWFrameSet *KWDocument::getFrameCoords( unsigned int &x, unsigned int &y,
 /*================================================================*/
 void KWDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
 {
-    QList<KWGroupManager> grpMgrs;
+    QList<KWTableFrameSet> grpMgrs;
     grpMgrs.setAutoDelete( FALSE );
 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -2345,9 +2326,9 @@ void KWDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int w,
 }
 
 /*================================================================*/
-void KWDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )
+void KWDocument::updateTableHeaders( QList<KWTableFrameSet> &grpMgrs )
 {
-    KWGroupManager *grpMgr;
+    KWTableFrameSet *grpMgr;
 
     for ( grpMgr = grpMgrs.first(); grpMgr != 0; grpMgr = grpMgrs.next() )
         grpMgr->updateTempHeaders();
@@ -2430,7 +2411,7 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
     _hf = m_pageHeaderFooter;
 }
 
-void KWDocument::delGroupManager( KWGroupManager *g, bool deleteit )
+void KWDocument::delGroupManager( KWTableFrameSet *g, bool deleteit )
 {
   if (deleteit)
     grpMgrs.remove( g );
@@ -2539,7 +2520,7 @@ void KWDocument::printDebug() {
         kdDebug() << " |  Info: " << infoFrameset[ frameset->getFrameInfo() ] << endl;
         if(frameset->getGroupManager()) {
             kdDebug() << " |  Groupmanager: " << frameset->getGroupManager() << endl;
-            KWGroupManager::Cell *cell = (KWGroupManager::Cell *)frameset;
+            KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)frameset;
             kdDebug() << " |  |- row :" << cell->m_row << endl;
             kdDebug() << " |  |- col :" << cell->m_col << endl;
             kdDebug() << " |  |- rows:" << cell->m_rows << endl;
