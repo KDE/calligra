@@ -24,6 +24,7 @@
 #include "kimageshop_view.h"
 #include "kimageshop_global.h"
 #include "kimageshop_doc.h"
+#include "kimageshop_canvas.h"
 
 #include "colordialog.h"
 #include "layerdlg.h"
@@ -47,6 +48,7 @@
 #include <qpainter.h>
 #include <kaction.h>
 #include <qscrollbar.h>
+#include <qevent.h>
 
 KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char* name )
   : ContainerView( doc, parent, name )
@@ -57,14 +59,141 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   QObject::connect( m_pDoc, SIGNAL( docUpdated( const QRect& ) ),
                     this, SLOT( slotDocUpdated ( const QRect& ) ) );
 
-  setBackgroundMode( QWidget::NoBackground );
-  setMouseTracking(true);
-
   m_fg = KColor::black();
   m_bg = KColor::white();
 
-  // edit actions
+  setupActions();
+  setupCanvas();
+  setupScrollBars();
+  setupRulers();
+  setupDialogs();
+  setupTools();
+}
 
+void KImageShopView::setupCanvas()
+{
+  m_pCanvas = new KImageShopCanvas(this, "kis_canvas");
+
+  QObject::connect( m_pCanvas, SIGNAL( mousePressed( QMouseEvent* ) ),
+                    this, SLOT( canvasGotMousePressEvent ( QMouseEvent* ) ) );
+
+  QObject::connect( m_pCanvas, SIGNAL( mouseMoved( QMouseEvent* ) ),
+                    this, SLOT( canvasGotMouseMoveEvent ( QMouseEvent* ) ) );
+  
+  QObject::connect( m_pCanvas, SIGNAL( mouseReleased (QMouseEvent* ) ),
+		    this, SLOT( canvasGotMouseReleaseEvent ( QMouseEvent* ) ) );
+
+  QObject::connect( m_pCanvas, SIGNAL( gotPaintEvent (QPaintEvent* ) ),
+		    this, SLOT( canvasGotPaintEvent ( QPaintEvent* ) ) );
+  
+}
+
+void KImageShopView::setupScrollBars()
+{
+  m_pVert = new QScrollBar( QScrollBar::Vertical, this );
+  m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
+
+  m_pVert->setGeometry(width()-16, 20, 16, height()-36);
+  m_pHorz->setGeometry(20, height()-16, width()-36, 16);
+  m_pHorz->setValue(0);
+  m_pVert->setValue(0);
+  m_pVert->show();
+  m_pHorz->show();
+
+  QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
+  QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
+
+}
+
+void KImageShopView::setupRulers()
+{
+  m_pHRuler = new KRuler(KRuler::horizontal, this);
+  m_pVRuler = new KRuler(KRuler::vertical, this);
+
+  m_pHRuler->setGeometry(20, 0, width()-20, 20);
+  m_pVRuler->setGeometry(0, 20, 20, height()-20);
+
+  m_pVRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+  m_pHRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+
+  m_pVRuler->setRulerStyle(KRuler::pixel);
+  m_pHRuler->setRulerStyle(KRuler::pixel);
+}
+
+void KImageShopView::setupTools()
+{
+  // move tool
+  m_pMoveTool = new MoveTool(m_pDoc);
+  
+  // brush tool
+  m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
+  
+  // pen tool
+  m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
+  
+  // color picker
+  m_pColorPicker = new ColorPicker(m_pDoc, this);
+  //connect(m_pColorPicker, SIGNAL(fgColorPicked(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
+  //connect(m_pColorPicker, SIGNAL(bgColorPicked(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
+  
+  // zoom tool
+  m_pZoomTool = new ZoomTool(this);
+  
+  activateTool(m_pMoveTool);
+}
+
+void KImageShopView::setupDialogs()
+{
+  // color dialog
+  m_pColorDialog = new ColorDialog( this );
+  m_pColorDialog->move(519, 387);
+  m_pColorDialog->show();
+  m_dialog_color->setChecked(true);
+  //addDialog(m_pColorDialog);
+
+  connect(m_pColorDialog, SIGNAL(fgColorChanged(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
+  connect(m_pColorDialog, SIGNAL(bgColorChanged(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
+
+  // brush dialog
+  m_pBrushDialog = new BrushDialog(this);
+  m_pBrushDialog->resize(205, 267);
+  m_pBrushDialog->move(22, 297);
+  m_pBrushDialog->hide();
+  //addDialog(m_pBrushDialog);
+
+  // brush
+  m_pBrushChooser = m_pBrushDialog->brushChooser();
+  m_pBrush = m_pBrushChooser->currentBrush();
+  QObject::connect(m_pBrushChooser, SIGNAL(selected(const Brush *)), this, SLOT(slotSetBrush(const Brush*)));
+
+  // layer dialog
+  m_pLayerDialog = new LayerDialog( m_pDoc, this );
+  m_pLayerDialog->resize( 205, 267 );
+  m_pLayerDialog->move( 563, 21 );
+  m_pLayerDialog->show();
+  m_pLayerDialog->setFocus();
+  m_dialog_layer->setChecked(true);
+  //addDialog(m_pLayerDialog);
+
+  // gradient dialog
+  m_pGradientDialog = new GradientDialog( m_pDoc, this );
+  m_pGradientDialog->resize( 206, 185 );
+  m_pGradientDialog->move( 200, 290 );
+  m_pGradientDialog->hide();
+  //addDialog(m_pGradientDialog);
+
+  // gradient editor dialog
+  m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
+  m_pGradientEditorDialog->resize( 400, 200 );
+  m_pGradientEditorDialog->move( 100, 190 );
+  m_pGradientEditorDialog->hide();
+  //addDialog(m_pGradientEditorDialog);
+}
+
+void KImageShopView::setupActions()
+{
+  // edit actions
+  
   m_undo = new KAction( i18n("&Undo"), KImageShopBarIcon("undo"), 0, this, SLOT( undo() ),
 			actionCollection(), "undo");
   m_redo = new KAction( i18n("&Redo"), KImageShopBarIcon("redo"), 0, this, SLOT( redo() ),
@@ -143,117 +272,15 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   // misc actions
   m_preferences = new KAction( i18n("&Preferences"), 0, this,
 			       SLOT( preferences() ),actionCollection(), "preferences");
-
-  // scrollbars
-  setupScrollBars();
-
-  // rulers
-  setupRulers();
-
-  // color dialog
-  m_pColorDialog = new ColorDialog( this );
-  m_pColorDialog->move(519, 387);
-  m_pColorDialog->show();
-  //addDialog(m_pColorDialog);
-  m_dialog_color->setChecked(true);
-
-  connect(m_pColorDialog, SIGNAL(fgColorChanged(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
-  connect(m_pColorDialog, SIGNAL(bgColorChanged(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
-
-  // brush dialog
-  m_pBrushDialog = new BrushDialog(this);
-  m_pBrushDialog->resize(205, 267);
-  m_pBrushDialog->move(22, 297);
-  m_pBrushDialog->hide();
-  //addDialog(m_pBrushDialog);
-
-  // brush
-  m_pBrushChooser = m_pBrushDialog->brushChooser();
-  m_pBrush = m_pBrushChooser->currentBrush();
-  QObject::connect(m_pBrushChooser, SIGNAL(selected(const Brush *)), this, SLOT(slotSetBrush(const Brush*)));
-
-  // layer dialog
-  m_pLayerDialog = new LayerDialog( m_pDoc, this );
-  m_pLayerDialog->resize( 205, 267 );
-  m_pLayerDialog->move( 563, 21 );
-  m_pLayerDialog->show();
-  m_pLayerDialog->setFocus();
-  m_dialog_layer->setChecked(true);
-  //addDialog(m_pLayerDialog);
-
-  // create gradient dialog
-  m_pGradientDialog = new GradientDialog( m_pDoc, this );
-  m_pGradientDialog->resize( 206, 185 );
-  m_pGradientDialog->move( 200, 290 );
-  m_pGradientDialog->hide();
-  //addDialog(m_pGradientDialog);
-
-  // create gradient editor dialog
-  m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
-  m_pGradientEditorDialog->resize( 400, 200 );
-  m_pGradientEditorDialog->move( 100, 190 );
-  m_pGradientEditorDialog->hide();
-  //addDialog(m_pGradientEditorDialog);
-
-  // create move tool
-  m_pMoveTool = new MoveTool(m_pDoc);
-  
-  // create brush tool
-  m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
-
-  // create pen tool
-  m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
-
-  // create color picker
-  m_pColorPicker = new ColorPicker(m_pDoc, this);
-  connect(m_pColorPicker, SIGNAL(fgColorPicked(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
-  connect(m_pColorPicker, SIGNAL(bgColorPicked(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
-  
-  // create zoom tool
-  m_pZoomTool = new ZoomTool(this);
-
-  activateTool(m_pMoveTool);
-}
-
-void KImageShopView::setupScrollBars()
-{
-  m_pVert = new QScrollBar( QScrollBar::Vertical, this );
-  m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
-
-  m_pVert->setGeometry(width()-16, 20, 16, height()-36);
-  m_pHorz->setGeometry(20, height()-16, width()-36, 16);
-  m_pHorz->setValue(0);
-  m_pVert->setValue(0);
-  m_pVert->show();
-  m_pHorz->show();
-
-  QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
-  QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
-
-}
-
-void KImageShopView::setupRulers()
-{
-  m_pHRuler = new KRuler(KRuler::horizontal, this);
-  m_pVRuler = new KRuler(KRuler::vertical, this);
-
-  m_pHRuler->setGeometry(20, 0, width()-20, 20);
-  m_pVRuler->setGeometry(0, 20, 20, height()-20);
-
-  m_pVRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-  m_pHRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-
-  m_pVRuler->setRulerStyle(KRuler::pixel);
-  m_pHRuler->setRulerStyle(KRuler::pixel);
 }
 
 void KImageShopView::resizeEvent(QResizeEvent*)
 {
   qDebug("resize");
-  m_pHRuler->show();
-  m_pVRuler->show();
-  m_pHorz->hide();
-  m_pVert->hide();
+
+  // ruler geometry
+  m_pHRuler->setGeometry(20, 0, width()-20, 20);
+  m_pVRuler->setGeometry(0, 20, 20, height()-20);
 
   // KImageShopView heigth/width - ruler heigth/width
 
@@ -267,6 +294,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pHorz->hide();
       m_pVert->setValue(0);
       m_pHorz->setValue(0);
+      m_pCanvas->setGeometry(20, 20, viewW, viewH);
     }
   else if (docHeight() <= viewH) // we need a horizontal scrollbar
     {
@@ -275,6 +303,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pHorz->setRange(0, docWidth() - viewW);
       m_pHorz->setGeometry(20, height()-16, width()-16, 16);
       m_pHorz->show();
+      m_pCanvas->setGeometry(20, 20, viewW, viewH-16);
     }
   else if(docWidth() <= viewW) // we need a vertical scrollbar
     {
@@ -283,6 +312,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pVert->setRange(0, docHeight() - viewH);
       m_pVert->setGeometry(width()-16, 20, 16, height()-16);
       m_pVert->show();
+      m_pCanvas->setGeometry(20, 20, viewW-16, viewH);
     }
   else // we need both scrollbars
     {
@@ -292,11 +322,8 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pHorz->setRange(0, docWidth() - viewW + 16);
       m_pHorz->setGeometry(20, height()-16, width()-36, 16);
       m_pHorz->show();
+      m_pCanvas->setGeometry(20, 20, viewW-16, viewH-16);
     }
-
-  // ruler geometry
-  m_pHRuler->setGeometry(20, 0, width()-20, 20);
-  m_pVRuler->setGeometry(0, 20, 20, height()-20);
 
   // ruler ranges
   m_pVRuler->setRange(0, docHeight());
@@ -317,48 +344,76 @@ void KImageShopView::resizeEvent(QResizeEvent*)
 void KImageShopView::scrollH(int)
 {
   m_pHRuler->setOffset(m_pHorz->value());
-  repaint();
+  m_pCanvas->repaint();
 }
 
 void KImageShopView::scrollV(int)
 {
   m_pVRuler->setOffset(m_pVert->value());
-  repaint();
+  m_pCanvas->repaint();
 }
 
 void KImageShopView::slotDocUpdated()
 {
-  repaint();
+  m_pCanvas->repaint();
 }
 
 void KImageShopView::slotDocUpdated(const QRect& r)
 {
-  repaint(r.left() + 20 + xPaintOffset(), r.top() + 20 + yPaintOffset() , r.width(), r.height()); 
+  m_pCanvas->repaint(r.left() + xPaintOffset() // FIXME ######
+		     , r.top() + yPaintOffset()
+		     , r.width() + xPaintOffset()
+		     , r.height()  + yPaintOffset()); 
 }
 
-void KImageShopView::paintEvent( QPaintEvent* e )
+void KImageShopView::canvasGotMousePressEvent( QMouseEvent *e )
+{
+  QMouseEvent ev( QEvent::MouseButtonPress
+		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
+			   e->pos().y() - yPaintOffset() + m_pVert->value())
+		  , e->globalPos(), e->button(), e->state() );
+
+  emit canvasMousePressEvent( &ev );
+}
+
+void KImageShopView::canvasGotMouseMoveEvent ( QMouseEvent *e )
+{
+  QMouseEvent ev( QEvent::MouseMove
+		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
+			   e->pos().y() - yPaintOffset() + m_pVert->value())
+		  , e->globalPos(), e->button(), e->state() );
+
+  emit canvasMouseMoveEvent( &ev );
+}
+
+void KImageShopView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
+{
+  QMouseEvent ev( QEvent::MouseButtonRelease
+		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
+			   e->pos().y() - yPaintOffset() + m_pVert->value())
+		  , e->globalPos(), e->button(), e->state() );
+
+  emit canvasMouseReleaseEvent( &ev );
+}
+
+void KImageShopView::canvasGotPaintEvent( QPaintEvent*e )
 {
   QRect ur = e->rect();
   QPainter p;
 
-  p.begin( this );
+  p.begin( m_pCanvas );
 
   // draw background ##### OPTIMIZE THIS TO REDUCE FLICKER
-  p.eraseRect(0,0,20,20);
-  p.eraseRect(20,20,xPaintOffset(),height());
-  p.eraseRect(20 + xPaintOffset(),0, width(),20 + yPaintOffset());
-  p.eraseRect(20 + xPaintOffset(),0, width(),20 + yPaintOffset());
-  p.eraseRect(20 + xPaintOffset(), 20 + yPaintOffset() + docHeight(), width(), height());
-  p.eraseRect(20 + xPaintOffset() + docWidth(), 20 + yPaintOffset(), width(), height());
+  p.eraseRect(0, 0, xPaintOffset(), height());
+  p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
+  p.eraseRect(xPaintOffset(), yPaintOffset() + docHeight(), width(), height());
+  p.eraseRect(xPaintOffset() + docWidth(), yPaintOffset(), width(), height());
 
   // draw the image
-  ur.moveBy(-20 - xPaintOffset() + m_pHorz->value() , -20 - yPaintOffset() + m_pVert->value());
+  ur.moveBy( -xPaintOffset() + m_pHorz->value() , -yPaintOffset() + m_pVert->value());
 
-  ur.setWidth(ur.width()+1); // why do I need this?
-  ur.setHeight(ur.height()+1); // why do I need this?
-  
-  int xt = 20 + xPaintOffset() + ur.x() - m_pHorz->value();
-  int yt = 20 + yPaintOffset() + ur.y() - m_pVert->value();
+  int xt = xPaintOffset() + ur.x() - m_pHorz->value();
+  int yt = yPaintOffset() + ur.y() - m_pVert->value();
 
   p.translate(xt, yt);
 
@@ -366,36 +421,6 @@ void KImageShopView::paintEvent( QPaintEvent* e )
   part()->paintEverything( p, ur, FALSE, this );
   
   p.end();
-}
-
-void KImageShopView::mousePressEvent ( QMouseEvent *e )
-{
-  QPoint pos = e->pos();
-  pos += QPoint(-xPaintOffset() - 20, -yPaintOffset() - 20);
-  QMouseEvent event(QEvent::MouseButtonPress, pos, e->globalPos(), e->button(), e->state());
-
-  emit mousePressed(&event);
-}
-
-void KImageShopView::mouseReleaseEvent ( QMouseEvent *e )
-{
-  QPoint pos = e->pos();
-  pos += QPoint(-xPaintOffset() - 20, -yPaintOffset() - 20);
-  QMouseEvent event(QEvent::MouseButtonRelease, pos, e->globalPos(), e->button(), e->state());
-
-  emit mouseReleased(&event);
-}
-
-void KImageShopView::mouseMoveEvent ( QMouseEvent *e )
-{
-  m_pHRuler->slotNewValue(e->x() - xPaintOffset()-20 + m_pHorz->value());
-  m_pVRuler->slotNewValue(e->y() - yPaintOffset()-20 + m_pVert->value());
-
-  QPoint pos = e->pos();
-  pos += QPoint(-xPaintOffset() - 20, -yPaintOffset() - 20);
-  QMouseEvent event(QEvent::MouseMove, pos, e->globalPos(), e->button(), e->state());
-
-  emit mouseMoved(&event);
 }
 
 void KImageShopView::activateTool(Tool* t)
@@ -408,13 +433,13 @@ void KImageShopView::activateTool(Tool* t)
 
   m_pTool = t;
 
-  QObject::connect( this, SIGNAL( mousePressed( QMouseEvent* ) ),
+  QObject::connect( this, SIGNAL( canvasMousePressEvent( QMouseEvent* ) ),
                     m_pTool, SLOT( mousePress ( QMouseEvent* ) ) );
 
-  QObject::connect( this, SIGNAL( mouseMoved( QMouseEvent* ) ),
+  QObject::connect( this, SIGNAL( canvasMouseMoveEvent( QMouseEvent* ) ),
                     m_pTool, SLOT( mouseMove ( QMouseEvent* ) ) );
   
-  QObject::connect( this, SIGNAL( mouseReleased (QMouseEvent* ) ),
+  QObject::connect( this, SIGNAL( canvasMouseReleaseEvent (QMouseEvent* ) ),
 		    m_pTool, SLOT( mouseRelease ( QMouseEvent* ) ) );
 }
 
@@ -595,11 +620,7 @@ int KImageShopView::docHeight()
 
 int KImageShopView::xPaintOffset()
 {
-  int s = 0;
-  if (m_pVert->isVisible())
-    s = 16;
-
-  int v = static_cast<int>((width() - 20 - s - docWidth())/2);
+  int v = static_cast<int>((m_pCanvas->width() - docWidth())/2);
   if (v < 0)
     v = 0;
   return v;
@@ -607,11 +628,7 @@ int KImageShopView::xPaintOffset()
 
 int KImageShopView::yPaintOffset()
 {
-  int s = 0;
-  if (m_pHorz->isVisible())
-    s = 16;
-
-  int v = static_cast<int>((height() - 20 - s - docHeight())/2);
+  int v = static_cast<int>((m_pCanvas->height() - docHeight())/2);
   if (v < 0)
     v = 0;
   return v;

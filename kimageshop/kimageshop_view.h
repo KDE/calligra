@@ -38,6 +38,7 @@ class ColorDialog;
 class LayerDialog;
 
 class KImageShopDoc;
+class KImageShopCanvas;
 class QScrollBar;
 class KRuler;
 
@@ -70,9 +71,9 @@ class KImageShopView : public ContainerView
   void slotSetBGColor(const KColor&);
 
  signals:
-  void mousePressed(QMouseEvent *);
-  void mouseMoved(QMouseEvent *);
-  void mouseReleased(QMouseEvent *);
+  void canvasMousePressEvent( QMouseEvent * );
+  void canvasMouseMoveEvent( QMouseEvent * );
+  void canvasMouseReleaseEvent( QMouseEvent * );
 
  protected slots:
   // edit action slots
@@ -116,16 +117,20 @@ class KImageShopView : public ContainerView
   void scrollH(int);
   void scrollV(int);
 
+  void canvasGotMousePressEvent( QMouseEvent * );
+  void canvasGotMouseMoveEvent ( QMouseEvent * );
+  void canvasGotMouseReleaseEvent ( QMouseEvent * );
+  void canvasGotPaintEvent( QPaintEvent* );
 
  protected:
-  virtual void paintEvent( QPaintEvent* );
   virtual void resizeEvent( QResizeEvent* );
-  virtual void mousePressEvent ( QMouseEvent * );
-  virtual void mouseReleaseEvent ( QMouseEvent * );
-  virtual void mouseMoveEvent ( QMouseEvent * );
 
+  void setupCanvas();
   void setupScrollBars();
   void setupRulers();
+  void setupTools();
+  void setupDialogs();
+  void setupActions();
 
   void activateTool(Tool*);
 
@@ -167,6 +172,7 @@ class KImageShopView : public ContainerView
   GradientEditorDialog *m_pGradientEditorDialog;
   ColorDialog          *m_pColorDialog;
 
+  KImageShopCanvas     *m_pCanvas;
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
   KColor                m_fg, m_bg;

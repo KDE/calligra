@@ -45,7 +45,7 @@ QObject* KImageShopFactory::create( QObject* parent, const char* name, const cha
 	return 0;
     }
     
-    KImageShopDoc *doc = new KImageShopDoc( 640, 480, (KoDocument*)parent, name );
+    KImageShopDoc *doc = new KImageShopDoc( 512, 512, (KoDocument*)parent, name );
     emit objectCreated(doc);
     return doc;
 }
