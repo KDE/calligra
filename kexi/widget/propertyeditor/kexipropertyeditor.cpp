@@ -43,9 +43,9 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, boo
 	addColumn(i18n("Property"), 145);
 	addColumn(i18n("Value"), 100);
 
-	m_currentEditor = 0;
 	m_buffer = 0;
 	m_topItem = 0;
+	m_editItem = 0;
 	m_returnToAccept = returnToAccept;
 	m_sync = AutoSync;
 

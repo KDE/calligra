@@ -22,6 +22,7 @@
 #define KEXIPROPERTYEDITOR_H
 
 #include <qvariant.h>
+#include <qguardedptr.h>
 
 #include <klistview.h>
 
@@ -65,7 +66,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		void 	resizeEvent(QResizeEvent *ev);
 
 	private:
-		KexiPropertySubEditor	*m_currentEditor;
+		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem	*m_editItem;
 		KexiPropertyEditorItem	*m_topItem;
 		bool 			m_returnToAccept;
