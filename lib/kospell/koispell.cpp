@@ -120,6 +120,8 @@ void KOISpell::startIspell()
     // TODO: add option -h to ignore HTML (XML) code
     if (ksconfig->client() == KOS_CLIENT_ISPELL || ksconfig->client() == KOS_CLIENT_ASPELL)
     {
+        // -a : pipe mode
+        // -S : sort suggestions by probable correctness
         *proc << "-a" << "-S";
         switch ( type )
         {
@@ -218,11 +220,9 @@ void KOISpell::startIspell()
         */
 
 
-        // -a : pipe mode
-        // -S : sort suggestions by probable correctness
     }
     else       // hspell doesn't need all the rest of the options
-        *proc << "-a";
+        *proc << "-a"; // -a : pipe mode
     if (trystart==0) //don't connect these multiple times
     {
         connect (proc, SIGNAL (  receivedStderr (KProcess *, char *, int)),
