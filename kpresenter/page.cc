@@ -139,6 +139,14 @@ bool Page::eventFilter( QObject *o, QEvent *e )
             return true;
         }
     }
+    case QEvent::FocusIn:
+        if ( m_currentTextObjectView )
+            m_currentTextObjectView->focusInEvent();
+        return TRUE;
+    case QEvent::FocusOut:
+        if ( m_currentTextObjectView  )
+            m_currentTextObjectView->focusOutEvent();
+        return TRUE;
     }
     return false;
 }
@@ -306,6 +314,18 @@ void Page::mousePressEvent( QMouseEvent *e )
 {
     if(!view->koDocument()->isReadWrite())
         return;
+
+    if(m_currentTextObjectView)
+    {
+        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        Q_ASSERT(txtObj);
+        if(txtObj->contains( e->pos(), diffx(), diffy() ))
+        {
+            m_currentTextObjectView->mousePressEvent(e);
+            return;
+        }
+    }
+
 
     //disallow selecting objects outside the "page"
     if ( editMode ) {
@@ -481,6 +501,18 @@ void Page::mousePressEvent( QMouseEvent *e )
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent( QMouseEvent *e )
 {
+    if(m_currentTextObjectView)
+    {
+        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        Q_ASSERT(txtObj);
+        if(txtObj->contains( e->pos(), diffx(), diffy() ))
+        {
+            m_currentTextObjectView->mouseReleaseEvent(  e, QPoint());
+            emit objectSelectedChanged();
+            return;
+        }
+    }
+
     if ( e->button() != LeftButton ) {
         ratio = 0.0;
         keepRatio = false;
@@ -774,6 +806,17 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 /*==================== handle mouse moved ========================*/
 void Page::mouseMoveEvent( QMouseEvent *e )
 {
+    if(m_currentTextObjectView)
+    {
+        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        Q_ASSERT(txtObj);
+        if(txtObj->contains( e->pos(), diffx(), diffy() ))
+        {
+            m_currentTextObjectView->mouseMoveEvent( e, QPoint());
+            return;
+        }
+    }
+
     if ( editMode ) {
 	view->setRulerMousePos( e->x(), e->y() );
 
@@ -1047,6 +1090,17 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 {
     if(!view->koDocument()->isReadWrite())
         return;
+
+    if(m_currentTextObjectView)
+    {
+        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        Q_ASSERT(txtObj);
+        if(txtObj->contains( e->pos(), diffx(), diffy() ))
+        {
+            m_currentTextObjectView->mouseDoubleClickEvent( e, QPoint());
+            return;
+        }
+    }
 
     //disallow activating objects outside the "page"
     if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, diffx(), diffy(), _presFakt ).contains(e->pos()))

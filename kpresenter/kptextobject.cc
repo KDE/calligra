@@ -909,3 +909,23 @@ void KPTextView::drawCursor( bool b )
     // TODO a kword-like painting method (many changes required though)
     kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
 }
+
+void KPTextView::mousePressEvent( QMouseEvent *e)
+{
+    handleMousePressEvent( e, QPoint() );
+}
+
+void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)
+{
+    handleMouseDoubleClickEvent( e, pos  );
+}
+
+void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint & )
+{
+    //handleMouseMoveEvent(e, QPoint() );
+}
+
+void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
+{
+    handleMouseReleaseEvent();
+}
