@@ -81,12 +81,12 @@ public:
 	VFill& operator=( const VFill& fill );
 
 private:
-	VColor m_color;
-	VGradient m_gradient;
-	VPattern m_pattern;
+	VColor		m_color;
+	VGradient	m_gradient;
+	VPattern	m_pattern;
 
-	VFillType m_type;
-	VFillRule m_fillRule;
+	VFillType	m_type		: 3;
+	VFillRule	m_fillRule	: 1;
 };
 
 #endif

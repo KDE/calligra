@@ -31,12 +31,14 @@ VFill::VFill()
 	m_gradient.setOrigin( KoPoint( 0, 0 ) );
 	m_gradient.setVector( KoPoint( 0, 50 ) );
 	m_gradient.setSpreadMethod( gradient_spread_reflect );*/
+	//kdDebug() << "Size of VFill : " << sizeof(*this) << endl;
 }
 
 VFill::VFill( const VColor &c )
 	: m_type( solid ), m_fillRule( winding )
 {
 	m_color = c;
+	//kdDebug() << "Size of VFill : " << sizeof(*this) << endl;
 }
 
 VFill::VFill( const VFill& fill )
@@ -51,7 +53,7 @@ VFill::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "FILL" );
 	element.appendChild( me );
 
-	if( m_type != none )
+	if( !( m_type == none ) )
 	{
 		// save color:
 		m_color.save( me );
@@ -68,7 +70,7 @@ VFill::save( QDomElement& element ) const
 	}
 
 	// save fill rule if necessary:
-	if( m_fillRule != evenOdd )
+	if( !( m_fillRule == evenOdd ) )
 		me.setAttribute( "fillRule", m_fillRule );
 }
 

@@ -113,18 +113,17 @@ public:
 	VStroke& operator=( const VStroke& stroke );
 
 private:
-	VObject* m_parent;
+	VObject			*m_parent;
 
-	VStrokeType m_type;
-
-	VColor m_color;
-	VGradient m_gradient;
-	VPattern m_pattern;
-	float m_lineWidth;
-	VLineCap m_lineCap : 2;
-	VLineJoin m_lineJoin : 2;
-	float m_miterLimit;
-	VDashPattern m_dashPattern;
+	VColor			m_color;
+	VGradient		m_gradient;
+	VPattern		m_pattern;
+	float			m_lineWidth;
+	float			m_miterLimit;
+	VLineCap		m_lineCap	: 2;
+	VLineJoin		m_lineJoin	: 2;
+	VStrokeType		m_type		: 3;
+	VDashPattern	m_dashPattern;
 };
 
 #endif
