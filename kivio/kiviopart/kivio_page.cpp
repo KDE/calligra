@@ -53,6 +53,7 @@
 #include "kivio_canvas.h"
 #include "kivio_guidelines.h"
 #include "kivio_config.h"
+#include "kivio_view.h"
 
 #include "kivio_common.h"
 #include "kivio_connector_point.h"
@@ -981,11 +982,12 @@ void KivioPage::cut()
   deleteSelectedStencils();
 }
 
-void KivioPage::paste(KoZoomHandler* zoom)
+void KivioPage::paste(KivioView* view)
 {
   QPtrList<KivioStencil> list;
   list.setAutoDelete(false);
   KivioDragObject kdo;
+  KoZoomHandler* zoom = view->zoomHandler();
 
   if(kdo.decode(QApplication::clipboard()->data(), list, this)) {
     unselectAllStencils();
@@ -1007,6 +1009,8 @@ void KivioPage::paste(KoZoomHandler* zoom)
       selectStencil(stencil);
       stencil = list.next();
     }
+
+    view->canvasWidget()->startPasteMoving();
   }
 }
 

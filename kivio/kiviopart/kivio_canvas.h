@@ -26,8 +26,10 @@
 #include <qpoint.h>
 #include <qrect.h>
 #include <qstring.h>
+#include <qptrlist.h>
 
 #include <koQueryTrader.h>
+#include <koPoint.h>
 
 #include "kivio_point.h"
 #include "kivio_rect.h"
@@ -52,7 +54,6 @@ class QPixmap;
 class QScrollBar;
 class QTimer;
 
-class KoPoint;
 class KoSize;
 
 #define YBORDER_WIDTH 50
@@ -143,6 +144,8 @@ class KivioCanvas : public QWidget
 
     void setZoom(int);
 
+    void startPasteMoving();
+
   protected:
     virtual void mousePressEvent( QMouseEvent* );
     virtual void mouseReleaseEvent( QMouseEvent* );
@@ -170,6 +173,9 @@ class KivioCanvas : public QWidget
     void paintSelectedXOR();
 
     void updateGuidesCursor();
+
+    void continuePasteMoving(const QPoint &pos);
+    void endPasteMoving();
 
   protected slots:
     void borderTimerTimeout();
@@ -210,6 +216,10 @@ class KivioCanvas : public QWidget
     QCursor* storedCursor;
     KivioGuideLineData* pressGuideline;
     QPoint lastPoint;
+
+    bool m_pasteMoving;
+    QPtrList<KivioRect> m_lstOldGeometry;
+    KoPoint m_origPoint;
 };
 
 #endif

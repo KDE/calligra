@@ -1513,7 +1513,7 @@ void KivioView::copyStencil()
 
 void KivioView::pasteStencil()
 {
-    m_pActivePage->paste(zoomHandler());
+    m_pActivePage->paste(this);
     m_pDoc->updateView(m_pActivePage);
 }
 

@@ -50,6 +50,7 @@ class DCOPObject;
 
 class KivioPainter;
 class KPrinter;
+class KivioView;
 class KoZoomHandler;
 
 #define BORDER_SPACE 1
@@ -164,7 +165,7 @@ class KivioPage : public QObject
 
     void copy();
     void cut();
-    void paste(KoZoomHandler* zoom);
+    void paste(KivioView* view);
 
   signals:
     void sig_updateView( KivioPage *_page );

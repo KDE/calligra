@@ -42,7 +42,6 @@
 #include <koGlobal.h>
 #include <kozoomhandler.h>
 #include <koSize.h>
-#include <koPoint.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -87,6 +86,8 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolCont
 
   m_pScrollX = 0;
   m_pScrollY = 0;
+
+  m_pasteMoving = false;
 
   m_buffer = new QPixmap();
 
@@ -459,6 +460,11 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
 {
     if(!m_pDoc->isReadWrite())
         return;
+    if(m_pasteMoving) {
+      endPasteMoving();
+      return;
+    }
+
     if(m_pView->isShowGuides())
     {
         lastPoint = e->pos();
@@ -522,39 +528,43 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
   if(!m_pDoc->isReadWrite())
     return;
 
-  if(m_pView->isShowGuides())
-  {
-    m_pView->setMousePos(e->pos().x(),e->pos().y());
+  if(m_pasteMoving) {
+    continuePasteMoving(e->pos());
+  } else {
+    if(m_pView->isShowGuides())
+    {
+      m_pView->setMousePos(e->pos().x(),e->pos().y());
 
-    KivioGuideLines* gl = activePage()->guideLines();
+      KivioGuideLines* gl = activePage()->guideLines();
 
-    if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
-      if (m_guideLinesTimer->isActive()) {
-        m_guideLinesTimer->stop();
-        guideLinesTimerTimeout();
-      }
-      delegateThisEvent = false;
-      eraseGuides();
-      QPoint p = e->pos();
-      p -= lastPoint;
-      if (p.x() != 0)
-        gl->moveSelectedByX(m_pView->zoomHandler()->unzoomItX(p.x()));
-      if (p.y() != 0)
-        gl->moveSelectedByY(m_pView->zoomHandler()->unzoomItY(p.y()));
-      m_pDoc->setModified( true );
-      paintGuides();
-    } else {
-      if ((e->state() & ~ShiftButton) == NoButton) {
-        KoPoint p = mapFromScreen(e->pos());
-        KivioGuideLineData* gd = gl->find(p.x(), p.y(), m_pView->zoomHandler()->unzoomItY(2));
-        if (gd) {
-          delegateThisEvent = false;
-          if (!storedCursor)
-            storedCursor = new QCursor(cursor());
-          setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
-        } else {
-          updateGuidesCursor();
-        }
+      if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
+	if (m_guideLinesTimer->isActive()) {
+	  m_guideLinesTimer->stop();
+	  guideLinesTimerTimeout();
+	}
+	delegateThisEvent = false;
+	eraseGuides();
+	QPoint p = e->pos();
+	p -= lastPoint;
+	if (p.x() != 0)
+	  gl->moveSelectedByX(m_pView->zoomHandler()->unzoomItX(p.x()));
+	if (p.y() != 0)
+	  gl->moveSelectedByY(m_pView->zoomHandler()->unzoomItY(p.y()));
+	m_pDoc->setModified( true );
+	paintGuides();
+      } else {
+	if ((e->state() & ~ShiftButton) == NoButton) {
+	  KoPoint p = mapFromScreen(e->pos());
+	  KivioGuideLineData* gd = gl->find(p.x(), p.y(), m_pView->zoomHandler()->unzoomItY(2));
+	  if (gd) {
+	    delegateThisEvent = false;
+	    if (!storedCursor)
+	      storedCursor = new QCursor(cursor());
+	    setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
+	  } else {
+	    updateGuidesCursor();
+	  }
+	}
       }
     }
   }
@@ -1422,6 +1432,135 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
 
   setViewCenterPoint(c);
   setUpdatesEnabled(true);
+}
+
+void KivioCanvas::startPasteMoving()
+{
+  m_pasteMoving = true;
+  // Create a new painter object
+  beginUnclippedSpawnerPainter();
+  drawSelectedStencilsXOR();
+
+  // Tell the view to update the toolbars to reflect the
+  // first selected stencil's settings
+  m_pView->updateToolBars();
+
+
+  // Build the list of old geometry
+  KivioRect *pData;
+  m_lstOldGeometry.clear();
+  KivioStencil* pStencil = activePage()->selectedStencils()->first();
+
+  while( pStencil )
+  {
+    pData = new KivioRect;
+    *pData = pStencil->rect();
+    m_lstOldGeometry.append(pData);
+
+
+    pStencil = activePage()->selectedStencils()->next();
+  }
+
+  m_origPoint = mapFromScreen( lastPoint );
+}
+
+void KivioCanvas::continuePasteMoving(const QPoint &pos)
+{
+  KoPoint pagePoint = mapFromScreen( pos );
+
+  double dx = pagePoint.x() - m_origPoint.x();
+  double dy = pagePoint.y() - m_origPoint.y();
+
+  bool snappedX;
+  bool snappedY;
+
+  double newX, newY;
+
+  // Undraw the old stencils
+  drawSelectedStencilsXOR();
+
+
+  // Translate to the new position
+  KivioStencil *pStencil = activePage()->selectedStencils()->first();
+  KivioRect* pData = m_lstOldGeometry.first();
+  // bool move = true;
+
+  while( pStencil && pData )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
+    {
+      KoPoint p;
+
+      // First attempt a snap-to-grid
+      p.setCoords(pData->x() + dx, pData->y() + dy);
+      p = snapToGrid(p);
+
+      newX = p.x();
+      newY = p.y();
+
+      // Now the guides override the grid so we attempt to snap to them
+      p.setCoords(pData->x() + dx + pStencil->w(), pData->y() + dy + pStencil->h());
+      p = snapToGuides(p, snappedX, snappedY);
+
+      if(snappedX) {
+        newX = p.x() - pStencil->w();
+      }
+
+      if(snappedY) {
+        newY = p.y() - pStencil->h();
+      }
+
+      p.setCoords(pData->x() + dx, pData->y() + dy);
+      p = snapToGuides(p, snappedX, snappedY);
+
+      if(snappedX) {
+        newX = p.x();
+      }
+
+      if(snappedY) {
+        newY = p.y();
+      }
+
+      if( pStencil->protection()->at( kpX ) == false ) {
+        pStencil->setX(newX);
+      }
+      if( pStencil->protection()->at( kpY ) == false ) {
+        pStencil->setY(newY);
+      }
+    }
+
+    pData = m_lstOldGeometry.next();
+    pStencil = activePage()->selectedStencils()->next();
+  }
+
+  // Draw the stencils
+  drawSelectedStencilsXOR();
+  m_pView->updateToolBars();
+}
+
+void KivioCanvas::endPasteMoving()
+{
+  KivioStencil *pStencil = activePage()->selectedStencils()->first();
+  KivioRect *pData = m_lstOldGeometry.first();
+
+  while( pStencil && pData )
+  {
+    if(pStencil->type() == kstConnector) {
+      pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->zoomItY(4));
+    }
+
+    pData = m_lstOldGeometry.next();
+    pStencil = activePage()->selectedStencils()->next();
+  }
+
+  drawSelectedStencilsXOR();
+
+  endUnclippedSpawnerPainter();
+
+  // Clear the list of old geometry
+  m_lstOldGeometry.clear();
+  m_pasteMoving = false;
 }
 
 #include "kivio_canvas.moc"
