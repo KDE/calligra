@@ -72,6 +72,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"|",		insertSymbol,		0L, 0x00b7 ),
 	PROP(	0L,		"}",		insertSymbol,		0L, '}' ),
 	PROP(	0L,		"~",		insertSymbol,		0L, 0x00a0 ),
+	PROP(	0L,		"-",		insertSymbol,		0L, 0x00ad ),
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
@@ -206,9 +207,13 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"u",		insertUnicodeSymbol,	state.format.uc, 0 ),
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
 	MEMBER(	0L,		"ul",		setToggleProperty,	state.format.underline, 0 ),
-	MEMBER(	0L,		"uld",		setFlagProperty,	state.format.underline, true ),
+	MEMBER(	0L,		"uld",		setFlagProperty,	state.format.underlineDot, true ),
+	MEMBER(	0L,		"uldash",	setFlagProperty,	state.format.underlineDash, true ),
+	MEMBER(	0L,		"uldashd",	setFlagProperty,	state.format.underlineDashDot, true ),
+	MEMBER(	0L,		"uldashdd",	setFlagProperty,	state.format.underlineDashDotDot, true ),
 	MEMBER(	0L,		"uldb",		setFlagProperty,	state.format.underlined, true ),
 	MEMBER(	0L,		"ulnone",	setFlagProperty,	state.format.underline, false ),
+	MEMBER(	0L,		"ulth",		setFlagProperty,	state.format.underlineThick, true ),
 	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underline, true ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
@@ -317,7 +322,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     // Create main document
     frameSets.clear( 2 );
-    pictures.clear( );
+    pictures.clear();
     bodyText.node.clear( 3 );
     firstPageHeader.node.clear( 3 );
     oddPagesHeader.node.clear( 3 );
@@ -714,14 +719,20 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.bgcolor	= -1;
     format.uc		= 1;
     format.vertAlign	= RTFFormat::Normal;
-    format.underline	= false;
-    format.underlined   = false;
     format.bold		= false;
     format.italic	= false;
     format.strike	= false;
     format.striked	= false;
     format.hidden	= false;
     format.caps		= false;
+
+    format.underline		= false;
+    format.underlined		= false;
+    format.underlineDash	= false;
+    format.underlineThick	= false;
+    format.underlineDot		= false;
+    format.underlineDashDot	= false;
+    format.underlineDashDotDot	= false;
 }
 
 /**
@@ -948,7 +959,7 @@ void RTFImport::insertUTF8( int ch )
     token.type = RTFTokenizer::PlainText;
     token.text = buf;
 
-    if (ch > 0)
+    if (ch > 31)
     {
 	if (ch > 0x007f)
 	{
@@ -961,6 +972,17 @@ void RTFImport::insertUTF8( int ch )
 	    ch = (ch & 0x3f) | 0x80;
 	}
 	*text++ = ch;
+    }
+    else
+    {
+        // We have a control character, so we must check if it is XML-compactible
+        if ( ch == 9 || ch == 10 || ch == 13 )
+            *text++ = ch ;
+        else
+        {
+            kdWarning() << "RTFImport::insertUTF8: tried to insert control character " << ch << endl;
+            *text++ = '?' ;
+        }
     }
     *text++ = 0;
 
@@ -1009,7 +1031,7 @@ void RTFImport::insertHexSymbol( RTFProperty * )
  */
 void RTFImport::insertUnicodeSymbol( RTFProperty * )
 {
-    char ch = token.value;
+    const int ch = token.value;
 
     // Ignore the next N characters (or control words)
     for (uint i=state.format.uc; i > 0; )
@@ -1077,7 +1099,7 @@ void RTFImport::parseFontTable( RTFProperty * )
 		font.name.truncate(space);
 		qFont.setFamily( font.name );
 	    }
-	    QFontInfo *info=new QFontInfo( font.name );
+	    QFontInfo *info=new QFontInfo( qFont );
 	    fontTable.insert( state.format.font, info->family().utf8() );
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
@@ -1193,7 +1215,7 @@ void RTFImport::parsePicture( RTFProperty * )
         {
         case RTFPicture::WMF:
         case RTFPicture::EMF:
-            ext="wmf";
+            ext = "wmf";
             break;
         case RTFPicture::BMP:
             ext = "bmp";
@@ -1227,8 +1249,8 @@ void RTFImport::parsePicture( RTFProperty * )
 
         // Add picture or clipart frameset
         frameSets.addFrameSet( frameName, 2, 0 );
-        kdDebug() << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
-        kdDebug() << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
+        //kdDebug() << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
+        //kdDebug() << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
         frameSets.addFrame( 0, 0,
                 (picture.desiredWidth  * picture.scalex) /100 ,
                 (picture.desiredHeight * picture.scaley) /100 , 0, 1, 0 );
@@ -1308,8 +1330,8 @@ void RTFImport::parseField( RTFProperty * )
 		}
 
 		node.addNode( "LINK" );
-		node.setAttribute( "linkName", fldrslt.latin1() );
-		node.setAttribute( "hrefName", hrefName.latin1() );
+		node.setAttribute( "linkName", fldrslt.utf8() );
+		node.setAttribute( "hrefName", hrefName.utf8() );
 		node.closeNode( "LINK" );
 		addVariable( node, 9, "STRING", &fldfmt);
 	    }
@@ -1787,14 +1809,48 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.setAttribute( "value", format.fmt.italic );
 	    node.closeNode( "ITALIC" );
 	}
-	if (!baseFormat || format.fmt.underline != baseFormat->underline || format.fmt.underlined != baseFormat->underlined)
+        if (!baseFormat || format.fmt.underline != baseFormat->underline
+            || format.fmt.underlined != baseFormat->underlined
+            || format.fmt.underlineDash != baseFormat->underlineDash
+            || format.fmt.underlineThick != baseFormat->underlineThick
+            || format.fmt.underlineDot != baseFormat->underlineDot
+            || format.fmt.underlineDashDot != baseFormat->underlineDashDot
+            || format.fmt.underlineDashDotDot != baseFormat->underlineDashDotDot )
 	{
 	    node.addNode( "UNDERLINE" );
-            QCString st;
+            QCString st,styleline;
             st.setNum(format.fmt.underline);
             if ( format.fmt.underlined )
                 st="double";
-	    node.setAttribute( "value", st );
+            else if ( format.fmt.underlineDash )
+            {
+                st="1";
+                styleline="dash";
+            }
+            else if (format.fmt.underlineThick )
+            {
+                st="single-bold";
+                styleline="solid";
+            }
+            else if (format.fmt.underlineDot )
+            {
+                st="1";
+                styleline="dot";
+            }
+            else if (format.fmt.underlineDashDot )
+            {
+                st="1";
+                styleline="dashdot";
+            }
+            else if (format.fmt.underlineDashDotDot )
+            {
+                st="1";
+                styleline="dashdotdot";
+            }
+            node.setAttribute( "value", st );
+            if ( !styleline.isEmpty() )
+                node.setAttribute( "styleline", styleline );
+
 	    node.closeNode( "UNDERLINE" );
 	}
 	if (!baseFormat || format.fmt.strike != baseFormat->strike || format.fmt.striked != baseFormat->striked)
