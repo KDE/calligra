@@ -1248,7 +1248,7 @@ QPixmap KoDocument::generatePreview( const QSize& size )
     paintEverything(p, rc, false);
     p.end();
 
-    // ### TODO: why reconvert it to a QPixmap, when mostly it will be re-cobverted back to a QIMage in the calling function
+    // ### TODO: why re-convert it to a QPixmap, when mostly it will be re-converted back to a QImage in the calling function
     pix.convertFromImage(pix.convertToImage().smoothScale(previewWidth, previewHeight));
 
     return pix;
