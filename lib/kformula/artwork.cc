@@ -26,8 +26,11 @@
 #include <qpixmap.h>
 #include <qstring.h>
 
+#include <kdebug.h>
+
 #include "artwork.h"
 #include "contextstyle.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -455,6 +458,7 @@ void Artwork::drawRightRoundBracket(QPainter& p, const ContextStyle& style, lu x
 void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, const char chars[],
                                     lu x, lu y, lu charHeight)
 {
+    //kdDebug() << "Artwork::drawSmallRoundBracket" << endl;
     QFont f = style.getSymbolFont();
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
@@ -463,24 +467,24 @@ void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, cons
     char lowercorner = chars[1];
 
     QFontMetrics fm(p.fontMetrics());
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
+    QRect upperBound = fm.boundingRect(uppercorner);
+    QRect lowerBound = fm.boundingRect(lowercorner);
 
-    //p.setPen(Qt::gray);
-    //p.drawRect(x, y, upperBound.width(), upperBound.height() + lowerBound.height());
+    pt ptX = style.layoutUnitToPixelX( x );
+    pt ptY = style.layoutUnitToPixelY( y );
 
-    //p.setPen(Qt::black);
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y-upperBound.top() ),
-                QString( QChar( uppercorner ) ) );
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+upperBound.height()-lowerBound.top() ),
-                QString( QChar( lowercorner ) ) );
+    //p.setPen( Qt::gray );
+    //p.drawRect( ptX, ptY, upperBound.width(), upperBound.height() + lowerBound.height() );
+
+    //p.setPen( Qt::black );
+    p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
+    p.drawText( ptX, ptY+upperBound.height()-lowerBound.top(), QString( QChar( lowercorner ) ) );
 }
 
 void Artwork::drawBigRoundBracket(QPainter& p, const ContextStyle& style, const char chars[],
                                   lu x, lu y, lu charHeight, lu height)
 {
+    //kdDebug() << "Artwork::drawBigRoundBracket" << endl;
     QFont f = style.getSymbolFont();
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
@@ -490,35 +494,34 @@ void Artwork::drawBigRoundBracket(QPainter& p, const ContextStyle& style, const 
     char line = chars[2];
 
     QFontMetrics fm(f);
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
-    LuRect lineBound = fm.boundingRect(line);
+    QRect upperBound = fm.boundingRect(uppercorner);
+    QRect lowerBound = fm.boundingRect(lowercorner);
+    QRect lineBound = fm.boundingRect(line);
 
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y-upperBound.top() ),
-                QString( QChar( uppercorner ) ) );
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+height-lowerBound.top()-lowerBound.height() ),
+    pt ptX = style.layoutUnitToPixelX( x );
+    pt ptY = style.layoutUnitToPixelY( y );
+
+    p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
+    p.drawText( ptX, ptY+height-lowerBound.top()-lowerBound.height(),
                 QString( QChar( lowercorner ) ) );
 
     // for printing
     // If the world was perfect and the urw-symbol font correct
     // this could be 0.
-    lu safety = lineBound.height() / 10;
+    //pt safety = lineBound.height() / 10.0;
+    pt safety = 0;
 
-    lu gap = height - upperBound.height() - lowerBound.height();
-    lu lineHeight = lineBound.height() - safety;
-    int lineCount = gap / lineHeight;
-    lu start = upperBound.height()-lineBound.top() - safety;
+    pt gap = height - upperBound.height() - lowerBound.height();
+    pt lineHeight = lineBound.height() - safety;
+    int lineCount = static_cast<int>( gap / lineHeight );
+    pt start = upperBound.height()-lineBound.top() - safety;
 
     for (int i = 0; i < lineCount; i++) {
-        p.drawText(x, y+start+i*lineHeight, QString(QChar(line)));
+        p.drawText( ptX, ptY+start+i*lineHeight, QString(QChar(line)));
     }
-    lu remaining = gap - lineCount*lineHeight;
-    lu dist = ( lineHeight - remaining ) / 2;
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+height-upperBound.height()+
-                                          dist-lineBound.height()-lineBound.top() ),
+    pt remaining = gap - lineCount*lineHeight;
+    pt dist = ( lineHeight - remaining ) / 2;
+    p.drawText( ptX, ptY+height-upperBound.height()+dist-lineBound.height()-lineBound.top(),
                 QString( QChar( line ) ) );
 }
 
@@ -639,24 +642,21 @@ void Artwork::drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, cons
     char middle = chars[3];
 
     QFontMetrics fm(p.fontMetrics());
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
+    QRect upperBound = fm.boundingRect(uppercorner);
+    QRect lowerBound = fm.boundingRect(lowercorner);
     //LuRect lineBound = fm.boundingRect(line);
-    LuRect middleBound = fm.boundingRect(middle);
+    QRect middleBound = fm.boundingRect(middle);
+
+    pt ptX = style.layoutUnitToPixelX( x );
+    pt ptY = style.layoutUnitToPixelY( y );
 
     //p.setPen(Qt::gray);
     //p.drawRect(x, y, upperBound.width() + offset, upperBound.height() + lowerBound.height() + middleBound.height());
 
     //p.setPen(Qt::black);
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y-upperBound.top() ),
-                QString( QChar( uppercorner ) ) );
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+upperBound.height()-middleBound.top() ),
-                QString( QChar( middle ) ) );
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+upperBound.height()+
-                                          middleBound.height()-lowerBound.top() ),
+    p.drawText( ptX,ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
+    p.drawText( ptX, ptY+upperBound.height()-middleBound.top(), QString( QChar( middle ) ) );
+    p.drawText( ptX, ptY+upperBound.height()+middleBound.height()-lowerBound.top(),
                 QString( QChar( lowercorner ) ) );
 }
 
@@ -673,50 +673,47 @@ void Artwork::drawBigCurlyBracket(QPainter& p, const ContextStyle& style, const 
     char middle = chars[3];
 
     QFontMetrics fm(p.fontMetrics());
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
-    LuRect middleBound = fm.boundingRect(middle);
-    LuRect lineBound = fm.boundingRect(line);
+    QRect upperBound = fm.boundingRect(uppercorner);
+    QRect lowerBound = fm.boundingRect(lowercorner);
+    QRect middleBound = fm.boundingRect(middle);
+    QRect lineBound = fm.boundingRect(line);
+
+    pt ptX = style.layoutUnitToPixelX( x );
+    pt ptY = style.layoutUnitToPixelY( y );
 
     //p.setPen(Qt::gray);
     //p.drawRect(x, y, upperBound.width() + offset, height);
 
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y-upperBound.top() ),
-                QString( QChar( uppercorner ) ) );
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+(height-middleBound.height())/2-middleBound.top() ),
+    p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
+    p.drawText( ptX, ptY+(height-middleBound.height())/2-middleBound.top(),
                 QString( QChar( middle ) ) );
-    p.drawText( style.layoutUnitToPixelX( x ),
-                style.layoutUnitToPixelY( y+height-lowerBound.top()-lowerBound.height() ),
+    p.drawText( ptX, ptY+height-lowerBound.top()-lowerBound.height(),
                 QString( QChar( lowercorner ) ) );
 
     // for printing
     // If the world was perfect and the urw-symbol font correct
     // this could be 0.
     //lu safety = lineBound.height() / 10;
-    lu safety = 0;
+    pt safety = 0;
 
-    lu lineHeight = lineBound.height() - safety;
-    lu gap = height/2 - upperBound.height() - middleBound.height() / 2;
+    pt lineHeight = lineBound.height() - safety;
+    pt gap = height/2 - upperBound.height() - middleBound.height() / 2;
 
     if (gap > 0) {
         QString ch = QString(QChar(line));
-        int lineCount = gap / lineHeight + 1;
+        int lineCount = static_cast<int>( gap / lineHeight ) + 1;
 
-        lu start = (height - middleBound.height()) / 2 + safety;
+        pt start = (height - middleBound.height()) / 2 + safety;
         for (int i = 0; i < lineCount; i++) {
-            p.drawText( style.layoutUnitToPixelX( x ),
-                        style.layoutUnitToPixelY( y-lineBound.top()+QMAX( start-(i+1)*lineHeight,
-                                                                          upperBound.width() ) ),
+            p.drawText( ptX, ptY-lineBound.top()+QMAX( start-(i+1)*lineHeight,
+                                                       upperBound.width() ),
                         ch );
         }
 
         start = (height + middleBound.height()) / 2 - safety;
         for (int i = 0; i < lineCount; i++) {
-            p.drawText( style.layoutUnitToPixelX( x ),
-                        style.layoutUnitToPixelY( y-lineBound.top()+QMIN( start+i*lineHeight,
-                                                                          height-upperBound.width()-lineBound.height() ) ),
+            p.drawText( ptX, ptY-lineBound.top()+QMIN( start+i*lineHeight,
+                                                       height-upperBound.width()-lineBound.height() ),
                         ch );
         }
     }

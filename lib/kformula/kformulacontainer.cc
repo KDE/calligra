@@ -726,7 +726,7 @@ void Container::save(QString file)
     //cerr << (const char *)data << endl;
 
     QTextStream stream(&f);
-    stream.setEncoding(QTextStream::Unicode);
+    stream.setEncoding(QTextStream::UnicodeUTF8);
     domData().save(stream,4);
     f.close();
 }
@@ -748,7 +748,7 @@ void Container::load(QString file)
         return;
     }
     QTextStream stream(&f);
-    stream.setEncoding(QTextStream::Unicode);
+    stream.setEncoding(QTextStream::UnicodeUTF8);
     QString content = stream.read();
     //kdDebug( 40000 ) << content << endl;
     QDomDocument doc;

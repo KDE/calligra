@@ -154,6 +154,18 @@ void BracketElement::draw( QPainter& painter, const LuRect& r,
         left->draw(painter, r, style, contentHeight, myPos);
         right->draw(painter, r, style, contentHeight, myPos);
     }
+
+    // Debug
+//     painter.setBrush( Qt::NoBrush );
+//     painter.setPen( Qt::red );
+//     painter.drawRect( style.layoutUnitToPixelX( myPos.x()+left->getX() ),
+//                       style.layoutUnitToPixelY( myPos.y()+left->getY() ),
+//                       style.layoutUnitToPixelX( left->getWidth() ),
+//                       style.layoutUnitToPixelY( left->getHeight() ) );
+//     painter.drawRect( style.layoutUnitToPixelX( myPos.x()+right->getX() ),
+//                       style.layoutUnitToPixelY( myPos.y()+right->getY() ),
+//                       style.layoutUnitToPixelX( right->getWidth() ),
+//                       style.layoutUnitToPixelY( right->getHeight() ) );
 }
 
 
