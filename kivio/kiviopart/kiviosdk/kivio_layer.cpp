@@ -79,7 +79,7 @@ KivioLayer::~KivioLayer()
 
 bool KivioLayer::addStencil( KivioStencil *pStencil )
 {
-    int pos=m_pDeletedStencilList->findRef(pStencil);
+    int pos = m_pDeletedStencilList->findRef(pStencil);
     if ( pos != -1 )
         m_pDeletedStencilList->take( pos);
 

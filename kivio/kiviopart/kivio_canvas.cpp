@@ -927,57 +927,17 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     // Terminate the drawing object
     endSpawnerDragDraw();
 
-//    // Get as handle on the icon view
-//    KivioIconView *pIconView = (KivioIconView *)m_pView->stackBar()->visiblePage();
-
-//    // Get a pointer to the currently dragged KivioStencilSpawner object
-//    KivioStencilSpawner *pSpawner = pIconView->curDragSpawner();
+    // Get a pointer to the currently dragged KivioStencilSpawner object
     KivioStencilSpawner *pSpawner = KivioIconView::curDragSpawner();
+    
     if( !pSpawner )
         return;
-
-
-    // Get a pointer to the current KivioPage
-    KivioPage *pPage = activePage();
-    if( !pPage )
-    {
-       kdDebug(43000) << "KivioCanvas::dropEvent() - No active page for stencil to drop on" << endl;
-        return;
-    }
-
-    // Allocate a new stencil
-    KivioStencil *pNewStencil = pSpawner->newStencil();
-
-    // Set the current stencil settings
+        
     QPoint pos = e->pos();
     KoPoint pagePoint = snapToGrid(mapFromScreen( pos ));
-    pNewStencil->setX( pagePoint.x() );
-    pNewStencil->setY( pagePoint.y() );
-    pNewStencil->setW( pSpawner->defWidth() );
-    pNewStencil->setH( pSpawner->defHeight() );
-    pNewStencil->setTextFont(doc()->defaultFont());
+    view()->addStencilFromSpawner(pSpawner, pagePoint.x(), pagePoint.y());
 
-    // Only set these properties if we held ctrl down
-    // FIXME: Make this happen!
-//    pNewStencil->setFGColor( m_pView->fgColor() );
-//    pNewStencil->setBGColor( m_pView->bgColor() );
-//    pNewStencil->setLineWidth( (float)m_pView->lineWidth() );
-
-
-    // Add the new stencil to the page
-    pPage->addStencil( pNewStencil );
-
-    pPage->unselectAllStencils();
-    pPage->selectStencil( pNewStencil );
-
-    // FIXME:Select the "selection tool" in case it's not done
-/*    Tool *t = m_pToolsController->findTool("Select");
-    if( t )
-    {
-        m_pToolsController->selectTool(t);
-    }
-*/
-    m_pDoc->updateView(activePage());
+    // FIXME Select the "selection tool" in case it's not done
 }
 
 

@@ -146,6 +146,9 @@ class KivioView : public KoView
     QPtrList<KAction> alignActionList();
     QPtrList<KAction> groupActionList();
     QPtrList<KAction> layerActionList();
+    
+    int hTextAlign();
+    int vTextAlign();
 
   signals:
     void zoomChanged(int);
@@ -193,7 +196,7 @@ class KivioView : public KoView
     void bringStencilToFront();
     void sendStencilToBack();
 
-    void addStencilFromSpawner( KivioStencilSpawner * );
+    void addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x = 0.0, double y = 0.0 );
 
     void changePage( const QString& _name );
 

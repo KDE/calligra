@@ -1324,9 +1324,9 @@ void KivioView::updateToolBars()
         m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
         m_lineStyleAction->setCurrentSelection(pStencil->linePattern());
 
-        m_setFGColor->setActiveColor(pStencil->fgColor());
-        m_setBGColor->setActiveColor(pStencil->bgColor());
-        m_setTextColor->setActiveColor(pStencil->textColor());
+        m_setFGColor->setCurrentColor(pStencil->fgColor());
+        m_setBGColor->setCurrentColor(pStencil->bgColor());
+        m_setTextColor->setCurrentColor(pStencil->textColor());
 
         showAlign(pStencil->hTextAlign());
         showVAlign(pStencil->vTextAlign());
@@ -1634,26 +1634,36 @@ void KivioView::slotChangeStencilRotation(int d)
 }
 
 /**
- * When passed a spawner, this will create a new stencil at 0,0.
+ * When passed a spawner, this will create a new stencil at x, y.
 */
-void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner )
+void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, double y )
 {
     KivioStencil *pStencil;
-
 
     // Allocate the new stencil and set it's default size/style
     pStencil = pSpawner->newStencil();
 
-    pStencil->setPosition( 0.0f, 0.0f );
-    pStencil->setTextFont(doc()->defaultFont());
+    pStencil->setPosition( x, y );
 
     // Only set these properties if we held ctrl down
-    // FIXME: Make this happen!
-//    pStencil->setFGColor( fgColor() );
-//    pStencil->setBGColor( bgColor() );
-//    pStencil->setLineWidth( (float)lineWidth() );
-
-
+    if(KApplication::keyboardModifiers() == KApplication::ControlModifier) {
+      pStencil->setFGColor(m_setFGColor->color());
+      pStencil->setBGColor(m_setBGColor->color());
+      QFont f = m_setFontFamily->font();
+      f.setPointSize(m_setFontSize->fontSize());
+      f.setBold(m_setBold->isChecked());
+      f.setItalic(m_setItalics->isChecked());
+      f.setUnderline(m_setUnderline->isChecked());
+      pStencil->setTextFont(f);
+      pStencil->setTextColor(m_setTextColor->color());
+      pStencil->setVTextAlign(vTextAlign());
+      pStencil->setHTextAlign(hTextAlign());
+      pStencil->setLinePattern(m_lineStyleAction->currentSelection());
+      pStencil->setLineWidth(m_lineWidthAction->currentWidth());
+    } else {
+      pStencil->setTextFont(doc()->defaultFont());
+    }
+    
     // Unselect everything, then the stencil to the page, and select it
     m_pActivePage->unselectAllStencils();
     m_pActivePage->addStencil( pStencil );
@@ -2188,6 +2198,28 @@ void KivioView::installStencilSet()
   Kivio::StencilSetInstaller dlg(this);
   dlg.exec();
   emit updateStencilSetList();
+}
+
+int KivioView::hTextAlign()
+{
+  if(m_textAlignRight->isChecked()) {
+    return Qt::AlignRight;
+  } else if(m_textAlignLeft->isChecked()) {
+    return Qt::AlignLeft;
+  }
+  
+  return Qt::AlignHCenter;
+}
+
+int KivioView::vTextAlign()
+{
+  if(m_textVAlignSub->isChecked() && !m_textVAlignSuper->isChecked()) {
+    return Qt::AlignBottom;
+  } else if(!m_textVAlignSub->isChecked() && m_textVAlignSuper->isChecked()) {
+    return Qt::AlignTop;
+  }
+  
+  return Qt::AlignVCenter;
 }
 
 #include "kivio_view.moc"
