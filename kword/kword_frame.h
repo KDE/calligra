@@ -126,6 +126,11 @@ public:
     void setTopBorder( KWParagLayout::Border _brd ) { brd_top = _brd; }
     void setBottomBorder( KWParagLayout::Border _brd ) { brd_bottom = _brd; }
 
+    void createResizeHandlesForPage(KWPage *page);
+    void removeResizeHandlesForPage(KWPage *page);
+    void removeResizeHandles();
+    void updateResizeHandles();
+
     QRegion getEmptyRegion( bool useCached = TRUE );
 
     QBrush getBackgroundColor() { return backgroundColor; }
@@ -163,9 +168,9 @@ protected:
     QBrush backgroundColor;
 
     KWUnit bleft, bright, btop, bbottom;
-    QArray<KWResizeHandle*> handles;
 
 private:
+    QList<KWResizeHandle> handles;
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
     KWFrameSet *frameSet;
@@ -482,7 +487,7 @@ public:
     QString getName() { return name; }
 
     void selectUntil( KWFrameSet *fs, KWPage *page );
-    bool isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned int &col );
+    bool getFirstSelected(unsigned int &row, unsigned int &col );
     bool isOneSelected( unsigned int &row, unsigned int &col );
 
     void insertRow( unsigned int _idx, bool _recalc = true, bool _removeable = false );

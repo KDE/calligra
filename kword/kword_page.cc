@@ -462,6 +462,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
 /*================================================================*/
 void KWPage::vmmCreate( int mx, int my )
 {
+kdDebug() << "KWPage::vmmCreate" << endl;
     mx -= contentsX();
     my -= contentsY();
 
@@ -479,7 +480,7 @@ void KWPage::vmmCreate( int mx, int my )
     if ( deleteMovingRect ) {
         if ( useAnchor ) {
             p.drawLine( anchor->getOrigin(), insRect.topLeft() );
-        };
+        }
         p.drawRect( insRect );
     }
     else {
@@ -488,7 +489,7 @@ void KWPage::vmmCreate( int mx, int my )
 
             grpMgr = new KWGroupManager( doc );
             QString _name;
-            _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() );
+            _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() ); // TODO change this!! (TZ)
             grpMgr->setName( _name );
             insertAnchor( grpMgr );
             anchor = grpMgr;
@@ -497,6 +498,7 @@ void KWPage::vmmCreate( int mx, int my )
     insRect.setWidth( insRect.width() + mx - oldMx );
     insRect.setHeight( insRect.height() + my - oldMy );
 
+    // The person who coded the next if statement should burn for live!! (its 13 lines for *&$ sake!)
     if ( insRect.normalize().x() + static_cast<int>( contentsX() ) < 0 || insRect.normalize().y()
          + static_cast<int>( contentsY() ) <
          getPageOfRect( QRect( insRect.normalize().x() + static_cast<int>( contentsX() ), insRect.normalize().y()
@@ -505,11 +507,12 @@ void KWPage::vmmCreate( int mx, int my )
          * static_cast<int>( ptPaperHeight() ) ||
          insRect.normalize().right() + static_cast<int>( contentsX() ) > static_cast<int>( ptPaperWidth() ) ||
          insRect.normalize().bottom() + static_cast<int>( contentsY() ) > ( getPageOfRect(
-                                                                                          QRect( insRect.normalize().x() +
-                                                                                                 static_cast<int>( contentsX() ),
-                                                                                                 insRect.normalize().y() + static_cast<int>( contentsY() ),
-                                                                                                 insRect.normalize().width(), insRect.normalize().height() ) ) + 1 ) *
-         static_cast<int>( ptPaperHeight() ) ) {
+                QRect( insRect.normalize().x() +
+                static_cast<int>( contentsX() ),
+                insRect.normalize().y() + static_cast<int>( contentsY() ),
+                insRect.normalize().width(), insRect.normalize().height() ) ) + 1 ) *
+                static_cast<int>( ptPaperHeight() ) ) {
+
         insRect.setWidth( insRect.width() - ( mx - oldMx ) );
         insRect.setHeight( insRect.height() - ( my - oldMy ) );
     }
@@ -664,35 +667,27 @@ void KWPage::vmpEditFrame( QMouseEvent *e, int mx, int my )
 {
     if ( e ) {
         // only simulate selection - we do real selection below
-        int r = doc->selectFrame( mx, my, TRUE );
+        int currentSelection = doc->selectFrame( mx, my, TRUE );
 
         KWFrameSet *fs = doc->getFrameSet( doc->getFrameSet( mx, my ) );
-        if ( r != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
-            // select all frames from top left selection to new selection.
-            // TODO make this more intelligent, remember first selected, and use that instead of 
-            //      top left selected frame
-            selectFrame( mx, my, TRUE );
+        if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
             fs->getGroupManager()->selectUntil( fs, this );
             curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-        } else {
-            if ( r == 0 ) // none selected
+        } else if ( currentSelection == 0 ) { // none selected
+            selectAllFrames( FALSE );
+        } else if ( currentSelection == 1 ) { // 1 selected
+            if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
                 selectAllFrames( FALSE );
-
-            // 1 selected
-            if ( r == 1 ) {
-                if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
-                    selectAllFrames( FALSE );
+            selectFrame( mx, my, TRUE );
+            curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
+        } else if ( currentSelection == 2 ) { // was allready selected
+            if ( e->state() & ControlButton || e->state() & ShiftButton ) {
+                selectFrame( mx, my, FALSE );
+                curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
+            } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
+                selectAllFrames( FALSE );
                 selectFrame( mx, my, TRUE );
                 curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-            } else if ( r == 2 ) { // was allready selected
-                if ( e->state() & ControlButton || e->state() & ShiftButton ) {
-                    selectFrame( mx, my, FALSE );
-                    curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-                } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
-                    selectAllFrames( FALSE );
-                    selectFrame( mx, my, TRUE );
-                    curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-                }
             }
         }
     }
@@ -924,9 +919,12 @@ void KWPage::vmrEditFrame( int mx, int my )
     if ( mouseMoved ) {
         doc->recalcFrames();
         doc->updateAllFrames();
-        if(frame->getFrameSet()->getGroupManager()) {
-            frame->getFrameSet()->getGroupManager()->recalcCols();
-            frame->getFrameSet()->getGroupManager()->recalcRows();
+        KWGroupManager *grpMgr = frame->getFrameSet()->getGroupManager();
+        if(grpMgr) {
+            grpMgr->recalcCols();
+            grpMgr->recalcRows();
+            grpMgr->updateTempHeaders();
+            repaintTableHeaders( grpMgr );
         }
         recalcAll = TRUE;
         recalcText();
@@ -1011,6 +1009,7 @@ void KWPage::vmrCreateFormula()
 /*================================================================*/
 void KWPage::vmrCreateTable()
 {
+kdDebug() << "KWPage::vmrCreateTable" << endl;
     repaintScreen( FALSE );
 
     insRect = insRect.normalize();
@@ -3224,39 +3223,6 @@ void KWPage::drawFrameBorder( QPainter &_painter, KWFrame *tmp, int dx, int dy )
 }
 
 /*================================================================*/
-void KWPage::createResizeHandles( KWFrame *frame )
-{
-    if ( frame->handles.size() < 8 ) {
-        frame->handles.resize( 8 );
-        for ( unsigned int i = 0; i < 8; ++i )
-            frame->handles[ i ] = 0;
-    }
-
-    for ( unsigned int i = 0; i < 8; ++i ) {
-        if ( frame->handles[ i ] )
-            delete frame->handles[ i ];
-        frame->handles[ i ] = new KWResizeHandle( this, (KWResizeHandle::Direction)i,
-                                                  frame );
-    }
-}
-
-/*================================================================*/
-void KWPage::removeResizeHandles( KWFrame *frame )
-{
-    if ( frame->handles.size() < 8 ) {
-        frame->handles.resize( 8 );
-        for ( unsigned int i = 0; i < 8; ++i )
-            frame->handles[ i ] = 0;
-    }
-
-    for ( unsigned int i = 0; i < 8; ++i ) {
-        if ( frame->handles[ i ] )
-            delete frame->handles[ i ];
-        frame->handles[ i ] = 0;
-    }
-}
-
-/*================================================================*/
 void KWPage::frameSizeChanged( KoPageLayout /* _layout */)
 {
     setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
@@ -4285,7 +4251,7 @@ bool KWPage::editModeChanged( QKeyEvent *e )
     }
 
     return FALSE;
-
+/* Who inserted the above return ??
     switch ( e->key() ) {
     case Key_Delete: {
         if ( editMode != EM_DELETE ) {
@@ -4324,7 +4290,7 @@ bool KWPage::editModeChanged( QKeyEvent *e )
     }
     }
 
-    return FALSE;
+    return FALSE; */
 }
 
 /*================================================================*/
@@ -4340,7 +4306,7 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
     KWTextFrameSet *fs;
 
     KWFormatContext *paintfc = new KWFormatContext( doc, doc->getFrameSetNum( grpMgr->getCell( 0 )->frameSet ) + 1 );
-    for ( unsigned i = 0; i < grpMgr->getNumCells(); i++ ) {
+    for ( unsigned int i = 0; i < grpMgr->getNumCells(); i++ ) {
         fs = dynamic_cast<KWTextFrameSet*>( grpMgr->getCell( i )->frameSet );
         if ( !fs->isRemoveableHeader() ) continue;
 
@@ -4377,15 +4343,10 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
 void KWPage::insertAnchor( KWCharAnchor *_anchor )
 {
     // Note the origin of the anchor. This allows the drawing logic
-    // to point to the anchor is required.
+    // to point to the anchor if required.
 
     _anchor->setOrigin( QPoint( fc->getPTPos(), fc->getPTY() ) );
     fc->getParag()->insertAnchor( fc->getTextPos(), _anchor );
-
-    // TBD: is this required?
-    recalcPage( 0L );
-    recalcCursor( TRUE );
-    doc->setModified( TRUE );
 }
 
 /*================================================================*/
@@ -4977,9 +4938,9 @@ void KWPage::selectAllFrames( bool select )
                 bool s = frame->isSelected();
                 frame->setSelected( select );
                 if ( select )
-                    createResizeHandles( frame );
+                    frame->createResizeHandlesForPage(this);
                 else if ( s )
-                    removeResizeHandles( frame );
+                    frame->removeResizeHandles();
             }
         }
     }
@@ -4998,9 +4959,9 @@ void KWPage::selectFrame( int mx, int my, bool select )
                 bool s = frame->isSelected();
                 frame->setSelected( select );
                 if ( select )
-                    createResizeHandles( frame );
+                    frame->createResizeHandlesForPage(this);
                 else if ( s )
-                    removeResizeHandles( frame );
+                    frame->removeResizeHandles();
             }
         }
     }
@@ -5087,10 +5048,7 @@ void KWPage::updateSelections()
         for ( unsigned int j = 0; j < doc->getFrameSet( i )->getNumFrames(); ++j ) {
             KWFrame *frame = doc->getFrameSet( i )->getFrame( j );
             if ( frame->isSelected() ) {
-                for ( int k = frame->handles.size() -1 ; k >= 0 ; k-- ) { // This needs to be a SIGNED int!!
-                    if(frame->handles[ k ])
-                        frame->handles[ k ]->updateGeometry();
-                }
+                frame->updateResizeHandles();
             }
         }
     }
@@ -5315,7 +5273,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
             frm = fs->getFrame( j );
             if ( frame->isSelected() && frm != frame ) {
                 frm->setSelected( FALSE );
-                page->removeResizeHandles( frm );
+                frm->removeResizeHandles();
             }
         }
     }
@@ -5372,5 +5330,10 @@ void KWResizeHandle::updateGeometry()
         break;
     }
     resize( 6, 6 );
+}
+
+/*================================================================*/
+KWPage *KWResizeHandle::getPage() {
+    return page;
 }
 

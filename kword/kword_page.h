@@ -68,6 +68,7 @@ public:
 
     KWResizeHandle( KWPage *p, Direction d, KWFrame *frm );
     void updateGeometry();
+    KWPage *getPage();
 
 protected:
     void mouseMoveEvent( QMouseEvent *e );
@@ -180,8 +181,6 @@ public:
     void footerHeaderDisappeared();
     void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true, QRegion *region = 0 );
     void drawFrameBorder( QPainter &p, KWFrame *frame, int dx = 0, int dy = 0 );
-    void createResizeHandles( KWFrame *frame );
-    void removeResizeHandles( KWFrame *frame );
     void setRuler2Frame( unsigned int _frameset, unsigned int _frame ); // depricated.
     void setRuler2Frame( KWFrame *);
     void setMouseMode( MouseMode _mm );

@@ -51,10 +51,11 @@
 
 /*================================================================*/
 KWFrame::KWFrame()
-    : QRect(), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect(), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom(), handles()
 {
     runAround = RA_NO;
     intersections.setAutoDelete( true );
+    handles.setAutoDelete( true );
     selected = false;
     runAroundGap = 1;
     mostRight = false;
@@ -81,12 +82,13 @@ KWFrame::KWFrame()
 
 /*================================================================*/
 KWFrame::KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomright )
-    : QRect( topleft, bottomright ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( topleft, bottomright ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom(), handles()
 {
     frameSet = fs;
 
     runAround = RA_NO;
     intersections.setAutoDelete( true );
+    handles.setAutoDelete( true );
     selected = false;
     mostRight = false;
     emptyRegionDirty = TRUE;
@@ -112,12 +114,13 @@ KWFrame::KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomrigh
 
 /*================================================================*/
 KWFrame::KWFrame( KWFrameSet *fs,const QPoint &topleft, const QSize &size )
-    : QRect( topleft, size ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( topleft, size ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom(), handles()
 {
     frameSet = fs;
 
     runAround = RA_NO;
     intersections.setAutoDelete( true );
+    handles.setAutoDelete( true );
     selected = false;
     mostRight = false;
     emptyRegionDirty = TRUE;
@@ -143,12 +146,13 @@ KWFrame::KWFrame( KWFrameSet *fs,const QPoint &topleft, const QSize &size )
 
 /*================================================================*/
 KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height )
-    : QRect( left, top, width, height ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( left, top, width, height ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom(), handles()
 {
     frameSet = fs;
 
     runAround = RA_NO;
     intersections.setAutoDelete( true );
+    handles.setAutoDelete( true );
     selected = false;
     mostRight = false;
     emptyRegionDirty = TRUE;
@@ -174,12 +178,13 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height )
 
 /*================================================================*/
 KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround _ra, KWUnit _gap )
-    : QRect( left, top, width, height ), runAroundGap( _gap ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( left, top, width, height ), runAroundGap( _gap ), intersections(), bleft(), bright(), btop(), bbottom(), handles()
 {
     frameSet = fs;
 
     runAround = _ra;
     intersections.setAutoDelete( true );
+    handles.setAutoDelete( true );
     selected = false;
     mostRight = false;
     emptyRegionDirty = TRUE;
@@ -205,12 +210,13 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
 
 /*================================================================*/
 KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
-    : QRect( _rect ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( _rect ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom(), handles()
 {
     frameSet = fs;
 
     runAround = RA_NO;
     intersections.setAutoDelete( true );
+    handles.setAutoDelete( true );
     selected = false;
     mostRight = false;
     emptyRegionDirty = TRUE;
@@ -237,12 +243,6 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
 /*================================================================*/
 KWFrame::~KWFrame()
 {
-    if ( handles && handles.size() >= 8 ) {
-        for ( unsigned int i = 0; i < 8; ++i ) {
-            if ( handles[ i ] )
-                delete handles[ i ];
-        }
-    }
 }
 
 /*================================================================*/
@@ -404,6 +404,44 @@ KWFrame *KWFrame::getCopy() {
     frm->setPageNum(getPageNum());
 
     return frm;
+}
+
+/*================================================================*/
+/* Insert 8 resize handles which will be drawn in param page      */
+/*================================================================*/
+void KWFrame::createResizeHandlesForPage(KWPage *page) {
+    removeResizeHandlesForPage(page);
+
+    for (unsigned int i=0; i < 8; i++) {
+        handles.append(new KWResizeHandle( page, (KWResizeHandle::Direction)i, this ));
+    }
+}
+
+/*================================================================*/
+/* remove all the resize handles which will be drawn in param page*/
+/*================================================================*/
+void KWFrame::removeResizeHandlesForPage(KWPage *page) {
+    for( unsigned int i; i < handles.count(); i++) {
+        if(handles.at ( i )->getPage() == page) {
+            handles.remove(i--);
+        }
+    }
+}
+
+/*================================================================*/
+/* remove all resizeHandles                                       */
+/*================================================================*/
+void KWFrame::removeResizeHandles() {
+    handles.clear();
+}
+
+/*================================================================*/
+/* move the resizehandles to current location of frame            */
+/*================================================================*/
+void KWFrame::updateResizeHandles() {
+    for (unsigned int i=0; i< handles.count(); i++) {
+        handles.at(i)->updateGeometry();
+    }
 }
 
 /******************************************************************/
@@ -2163,6 +2201,7 @@ KWFrameSet *KWGroupManager::getFrameSet( unsigned int row, unsigned int col )
 }
 
 /*================================================================*/
+/* returns the cell that occupies row, col. */
 KWGroupManager::Cell *KWGroupManager::getCell( unsigned int row, unsigned int col )
 {
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
@@ -2189,10 +2228,9 @@ KWGroupManager::Cell *KWGroupManager::getCell( KWFrameSet *f ) {
 /*================================================================*/
 bool KWGroupManager::isTableHeader( KWFrameSet *fs )
 {
-    for ( unsigned int i = 0; i < cols; i++ ) {
-        if ( cells.at( i )->frameSet == fs )
-            return true;
-    }
+    Cell *cell = getCell(fs);
+    if(cell) 
+        return fs->isRemoveableHeader() || cell->row==0;
 
     return false;
 }
@@ -2565,12 +2603,8 @@ QRect KWGroupManager::getBoundingRect()
 /*================================================================*/
 bool KWGroupManager::hasSelectedFrame()
 {
-    for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->frameSet->getFrame( 0 )->isSelected() )
-            return true;
-    }
-
-    return false;
+    unsigned int a=0,b=0;
+    return getFirstSelected(a,b);
 }
 
 /*================================================================*/
@@ -2585,7 +2619,7 @@ void KWGroupManager::moveBy( int dx, int dy )
 /*================================================================*/
 void KWGroupManager::drawAllRects( QPainter &p, int xOffset, int yOffset )
 {
-    KWFrame *frame = 0L;
+    KWFrame *frame;
 
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
         frame = cells.at( i )->frameSet->getFrame( 0 );
@@ -2597,51 +2631,50 @@ void KWGroupManager::drawAllRects( QPainter &p, int xOffset, int yOffset )
 /*================================================================*/
 void KWGroupManager::deselectAll()
 {
-    KWFrame *frame = 0L;
-
-    for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        frame = cells.at( i )->frameSet->getFrame( 0 );
-        frame->setSelected( false );
-    }
+    for ( unsigned int i = 0; i < cells.count(); i++ )
+        cells.at( i )->frameSet->getFrame( 0 )->setSelected( false );
 }
 
 /*================================================================*/
-void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page )
-{
-    // TODO debug this, right now it always selects 2 frames at a minimum.
-    // TRY selecting top left and shift top left...
-    unsigned int row = 0, col = 0;
-    row=getCell( fs )->row;
-    col=getCell( fs )->col;
+/* the selectUntil method will select all frames from the first 
+   selected to the frame of the argument frameset.
+   The page argument is the page where the resize handles will be
+    drawn/erased.
+*/
+void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page ) {
+    unsigned int toRow = 0, toCol = 0;
+    Cell *cell = getCell(fs);
+    toRow=cell->row;
+    toCol=cell->col;
 
-    unsigned int srow = 0, scol = 0;
-    if ( !isOneSelected( fs, srow, scol ) )
-        srow = scol = 0;
+    unsigned int fromRow = 0, fromCol = 0;
+    getFirstSelected( fromRow, fromCol );
 
-    if ( srow > row ) {
-        srow = srow^row;
-        row = srow^row;
-        srow = srow^row;
+    if ( fromRow > toRow ) { // doSwap
+        fromRow = fromRow^toRow;
+        toRow = fromRow^toRow;
+        fromRow = fromRow^toRow;
     }
 
-    if ( scol > col ) {
-        scol = scol^col;
-        col = scol^col;
-        scol = scol^col;
+    if ( fromCol > toCol ) { // doSwap
+        fromCol = fromCol^toCol;
+        toCol = fromCol^toCol;
+        fromCol = fromCol^toCol;
     }
+
 
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        bool s = cells.at( i )->frameSet->getFrame( 0 )->isSelected();
-        if ( cells.at( i )->row <= row && cells.at( i )->col <= col &&
-             cells.at( i )->row >= srow && cells.at( i )->col >= scol )
-            cells.at( i )->frameSet->getFrame( 0 )->setSelected( TRUE );
-        else
-            cells.at( i )->frameSet->getFrame( 0 )->setSelected( FALSE );
-        if ( cells.at( i )->frameSet->getFrame( 0 )->isSelected() != s ) {
-            if ( cells.at( i )->frameSet->getFrame( 0 )->isSelected() )
-                page->createResizeHandles( cells.at( i )->frameSet->getFrame( 0 ) );
-            else
-                page->removeResizeHandles( cells.at( i )->frameSet->getFrame( 0 ) );
+        cell = cells.at(i);
+        // check if cell falls completely in square.
+        int row = cell->row + cell->rows -1;
+        int col = cell->col + cell->cols -1;
+        if(row >= fromRow && row <= toRow && col >= fromCol && col <= toCol) {
+            cell->frameSet->getFrame( 0 )->setSelected( true );
+            cell->frameSet->getFrame(0)->createResizeHandlesForPage(page);
+            cell->frameSet->getFrame(0)->updateResizeHandles();
+        } else {
+            cell->frameSet->getFrame( 0 )->setSelected( false );
+            cell->frameSet->getFrame(0)->removeResizeHandles();
         }
     }
 }
@@ -2671,21 +2704,18 @@ bool KWGroupManager::isOneSelected(unsigned int &row, unsigned int &col) {
 }
 
 /*================================================================*/
-bool KWGroupManager::isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned int &col )
+/* returns true if at least one is selected, excluding the argument frameset.
+*/
+bool KWGroupManager::getFirstSelected( unsigned int &row, unsigned int &col )
 {
-    bool one = false;
-
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->frameSet->getFrame( 0 )->isSelected() && fs != cells.at( i )->frameSet ) {
-            if ( !one ) {
-                row = cells.at( i )->row;
-                col = cells.at( i )->col;
-                one = true;
-            }
+        if (cells.at( i )->frameSet->getFrame( 0 )->isSelected()) {
+            row = cells.at( i )->row;
+            col = cells.at( i )->col;
+            return true;
         }
     }
-
-    return one;
+    return false;
 }
 
 /*================================================================*/
@@ -2763,8 +2793,11 @@ void KWGroupManager::insertCol( unsigned int _idx )
     QRect r = getBoundingRect();
 
     for ( i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->col == 0 ) h.append( new int( cells.at( i )->frameSet->getFrame( 0 )->height() ) );
-        if ( cells.at( i )->col >= _idx ) cells.at( i )->col++;
+        Cell *cell = cells.at(i);
+        if ( cell->col == 0 ) 
+            for( int colspan=cell->rows; colspan>0; colspan--)
+                h.append( new int( cell->frameSet->getFrame( 0 )->height() / cell->rows ) );
+        if ( cell->col >= _idx ) cell->col++;
     }
 
     QList<KWTextFrameSet> nCells;
@@ -2810,17 +2843,24 @@ void KWGroupManager::insertCol( unsigned int _idx )
 }
 
 /*================================================================*/
-void KWGroupManager::deleteRow( unsigned int _idx, bool _recalc )
+/* Delete all cells that are completely in this row.              */
+/*================================================================*/
+
+void KWGroupManager::deleteRow( unsigned int row, bool _recalc )
 {
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->row == _idx ) {
-            doc->delFrameSet( cells.at( i )->frameSet );
-            cells.at( i )->frameSet = 0L;
-            cells.remove( i );
-            i--;
-            continue;
-        }
-        if ( cells.at( i )->row > _idx ) cells.at( i )->row--;
+        Cell *cell = cells.at(i);
+        if ( cell->row == row) { // cell is indeed in row 
+            if ( cell->rows == 1) {  // lets remove it.
+                doc->delFrameSet( cell->frameSet );
+                cell->frameSet = 0L;
+                cells.remove( i );
+                i--;
+            } else { // we can move it out of the way!
+                cell->rows--;
+            }
+        } else if ( cells.at( i )->row > row ) 
+            cells.at( i )->row--;
     }
 
     rows--;
@@ -2829,17 +2869,22 @@ void KWGroupManager::deleteRow( unsigned int _idx, bool _recalc )
 }
 
 /*================================================================*/
-void KWGroupManager::deleteCol( unsigned int _idx )
+/* Delete all cells that are completely in this col.              */
+/*================================================================*/
+void KWGroupManager::deleteCol( unsigned int col )
 {
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->col == _idx ) {
-            doc->delFrameSet( cells.at( i )->frameSet );
-            cells.at( i )->frameSet = 0L;
-            cells.remove( i );
-            i--;
-            continue;
-        }
-        if ( cells.at( i )->col > _idx ) cells.at( i )->col--;
+        Cell *cell = cells.at(i);
+        if ( cell->col == col ) { // cell is indeed in col
+            if(cell->cols == 1) { // lets remove it
+                doc->delFrameSet( cells.at( i )->frameSet );
+                cells.at( i )->frameSet = 0L;
+                cells.remove( i );
+                i--;
+            } else {
+                cell->cols--;
+            }
+        } else if ( cells.at( i )->col > col ) cells.at( i )->col--;
     }
 
     cols--;
@@ -2890,13 +2935,11 @@ void KWGroupManager::ungroup()
 /*================================================================*/
 bool KWGroupManager::joinCells() {
     unsigned int colBegin, rowBegin, colEnd,rowEnd,width,height;
-    if ( !isOneSelected( 0L, rowBegin, colBegin ) ) return false;
+    if ( !getFirstSelected( rowBegin, colBegin ) ) return false;
     Cell *firstCell = getCell(rowBegin, colBegin);
     colEnd=colBegin+firstCell->cols-1;
     rowEnd=rowBegin+firstCell->rows-1;
 
-    //width=firstCell->frameSet->getFrame(0)->width();
-    //height=firstCell->frameSet->getFrame(0)->height();
     while(colEnd+1 <getCols()) { // count all horizontal selected cells
         Cell *cell = getCell(rowEnd,colEnd+1);
         if(cell->frameSet->getFrame(0)->isSelected()) {
@@ -2947,6 +2990,8 @@ bool KWGroupManager::joinCells() {
     firstCell->rows=rowEnd-rowBegin+1;
     firstCell->frameSet->getFrame(0)->setHeight(height);
     firstCell->frameSet->getFrame(0)->setWidth(width);
+    firstCell->frameSet->getFrame(0)->updateResizeHandles();
+
     recalcCols();
     recalcRows();
 
@@ -2957,7 +3002,7 @@ bool KWGroupManager::joinCells() {
 bool KWGroupManager::splitCell()
 {
     unsigned int col, row;
-    if ( !isOneSelected( 0L, row, col ) ) return false;
+    if ( !isOneSelected( row, col ) ) return false;
 
     kdDebug () << "Not implemented yet!" << endl;
     return false;
@@ -3066,7 +3111,7 @@ void KWGroupManager::validate()
                 if(y== -1) y=0;
                 if(width== -1) width=minFrameWidth;
                 if(height== -1) height=minFrameHeight;
-                kdDebug() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
+                //kdDebug() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
                 KWFrame *frame = new KWFrame(_frameSet, x, y, width, height );
                 frame->setFrameBehaviour(AutoExtendFrame);
                 _frameSet->addFrame( frame );
