@@ -6,48 +6,55 @@
 #ifndef __VSHAPETOOL_H__
 #define __VSHAPETOOL_H__
 
+#include <qstring.h>
+
 #include <koPoint.h>
 
 #include "vglobal.h"
 #include "vtool.h"
 
 
+class VPath;
+
+
 class VShapeTool : public VTool
 {
 public:
-	VShapeTool( KarbonView* view, bool polar = false );
+	VShapeTool( KarbonView* view, const QString& name, bool polar = false );
 
 	virtual bool eventFilter( QEvent* event );
 
 	virtual void showDialog() const {}
+	
+	const QString& name() const { return m_name; }
 
 protected:
-	// make it "abstract":
+	// Make it "abstract":
 	virtual ~VShapeTool() {}
 
-	// derived tools implement specialised commands. d1, d2 are either
-	// width, height or radius, angle.
-	virtual VCommand* createCmd( double x, double y, double d1, double d2 ) = 0;
+	virtual VPath* shape() const = 0;
+	
+	/// Draws the object while it is edited.
+	virtual void drawTemporaryObject() const;
 
-	// draw the object while it is edited:
-	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 ) = 0;
-
-private:
-	inline void recalcCoords();
-
-	// calculate width/height or radius/angle?
-	bool m_calcPolar;
-
-	// input (mouse coordinates):
-	KoPoint m_fp;
-	KoPoint m_lp;
-
-	// output:
+	/// Output coordinates.
 	KoPoint m_p;
 	double m_d1;
 	double m_d2;
 
-	// states:
+private:
+	inline void recalcCoords();
+
+	QString m_name;
+	
+	/// Input coordinates.
+	KoPoint m_fp;
+	KoPoint m_lp;
+
+	/// Calculate wiidth/height or radius/angle?
+	bool m_isPolar;
+
+	/// States:
 	bool m_isDragging;
 	bool m_isSquare;
 	bool m_isCentered;
@@ -58,7 +65,7 @@ void
 VShapeTool::recalcCoords()
 {
 	// calculate radius and angle:
-	if( m_calcPolar )
+	if( m_isPolar )
 	{
 		// radius:
 		m_d1 = sqrt(

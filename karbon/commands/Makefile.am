@@ -9,19 +9,12 @@ noinst_LTLIBRARIES = libkarboncommands.la
 noinst_HEADERS = \
 	vcommand.h \
 	vdeletecmd.h \
-	vellipsecmd.h \
 	vfillcmd.h \
 	vflattencmd.h \
 	vgroupcmd.h \
 	vinsertknotscmd.h \
-	vpolygoncmd.h \
-	vrectanglecmd.h \
 	vroundcornerscmd.h \
-	vroundrectcmd.h \
 	vshapecmd.h \
-	vsinuscmd.h \
-	vspiralcmd.h \
-	vstarcmd.h \
 	vstrokecmd.h \
 	vtransformcmd.h \
 	vwhirlpinchcmd.h
@@ -29,19 +22,12 @@ noinst_HEADERS = \
 libkarboncommands_la_SOURCES = \
 	vcommand.cc \
 	vdeletecmd.cc \
-	vellipsecmd.cc \
 	vfillcmd.cc \
 	vflattencmd.cc \
 	vgroupcmd.cc \
 	vinsertknotscmd.cc \
-	vpolygoncmd.cc \
-	vrectanglecmd.cc \
 	vroundcornerscmd.cc \
-	vroundrectcmd.cc \
 	vshapecmd.cc \
-	vsinuscmd.cc \
-	vspiralcmd.cc \
-	vstarcmd.cc \
 	vstrokecmd.cc \
 	vtransformcmd.cc \
 	vwhirlpinchcmd.cc

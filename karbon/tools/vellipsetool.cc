@@ -9,16 +9,13 @@
 #include <klocale.h>
 
 #include "karbon_view.h"
-#include "vellipsecmd.h"
+#include "vellipse.h"
 #include "vellipsedlg.h"
 #include "vellipsetool.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vpath.h"
 
 
 VEllipseTool::VEllipseTool( KarbonView* view )
-	: VShapeTool( view )
+	: VShapeTool( view, i18n( "Insert Ellipse" ) )
 {
 	// create config dialog:
 	m_dialog = new VEllipseDlg();
@@ -34,45 +31,30 @@ VEllipseTool::~VEllipseTool()
 void
 VEllipseTool::activate()
 {
-	view()->statusMessage()->setText( i18n( "Insert Ellipse" ) );
+	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
-void
-VEllipseTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
+VPath*
+VEllipseTool::shape() const
 {
-	VPainter *painter = view()->painterFactory()->editpainter();
-
-	VEllipseCmd* cmd =
-		new VEllipseCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
-
-	VObject* path = cmd->createPath();
-	path->setState( state_edit );
-	path->draw( painter, path->boundingBox() );
-
-	delete( cmd );
-	delete( path );
-}
-
-VCommand*
-VEllipseTool::createCmd( double x, double y, double d1, double d2 )
-{
-	if( d1 <= 1.0 && d2 <= 1.0 )
+	if( m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VEllipseCmd( &view()->part()->document(),
-					x, y,
-					x + m_dialog->width(),
-					y + m_dialog->height() );
+				new VEllipse(
+					0L,
+					m_p,
+					m_dialog->width(), 
+					m_dialog->height() );
 		else
 			return 0L;
 	}
 	else
 		return
-			new VEllipseCmd( &view()->part()->document(),
-				x, y,
-				x + d1,
-				y + d2 );
+			new VEllipse(
+				0L,
+				m_p,
+				m_d1,
+				m_d2 );
 }
-

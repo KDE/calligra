@@ -13,7 +13,7 @@ class VSpiral : public VPath
 public:
 	VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments,
-		double fade, bool clockwise, double angle );
+		double fade, bool clockwise, double angle = 0.0 );
 };
 
 #endif

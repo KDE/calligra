@@ -8,13 +8,13 @@
 
 
 VRectangle::VRectangle( VObject* parent,
-		const KoPoint& topLeft, const KoPoint& bottomRight )
+		const KoPoint& topLeft, double width, double height )
 	: VPath( parent )
 {
-	moveTo( KoPoint( topLeft.x(),     topLeft.y() ) );
-	lineTo( KoPoint( bottomRight.x(), topLeft.y() ) );
-	lineTo( KoPoint( bottomRight.x(), bottomRight.y() ) );
-	lineTo( KoPoint( topLeft.x(),     bottomRight.y() ) );
+	moveTo( topLeft );
+	lineTo( KoPoint( topLeft.x() + width, topLeft.y() ) );
+	lineTo( KoPoint( topLeft.x() + width, topLeft.y() - height ) );
+	lineTo( KoPoint( topLeft.x(),         topLeft.y() - height ) );
 	close();
 }
 

@@ -7,17 +7,15 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+
 #include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vpath.h"
-#include "vstarcmd.h"
+#include "vstar.h"
 #include "vstardlg.h"
 #include "vstartool.h"
 
 
 VStarTool::VStarTool( KarbonView* view )
-	: VShapeTool( view, true )
+	: VShapeTool( view, i18n( "Insert Star" ), true )
 {
 	// create config dialog:
 	m_dialog = new VStarDlg();
@@ -34,40 +32,20 @@ VStarTool::~VStarTool()
 void
 VStarTool::activate()
 {
-	view()->statusMessage()->setText( i18n( "Insert Star" ) );
+	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
-void
-VStarTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
+VPath*
+VStarTool::shape() const
 {
-	VPainter *painter = view()->painterFactory()->editpainter();
-	
-	VStarCmd* cmd =
-		new VStarCmd( &view()->part()->document(),
-			p.x(), p.y(),
-			d1,
-			m_dialog->innerR() * d1 / m_dialog->outerR(),
-			m_dialog->edges(),
-			d2 );
-
-	VObject* path = cmd->createPath();
-	path->setState( state_edit );
-	path->draw( painter, path->boundingBox() );
-
-	delete( cmd );
-	delete( path );
-}
-
-VCommand*
-VStarTool::createCmd( double x, double y, double d1, double d2 )
-{
-	if( d1 <= 1.0 )
+	if( m_d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VStarCmd( &view()->part()->document(),
-					x, y,
+				new VStar(
+					0L,
+					m_p,
 					m_dialog->outerR(),
 					m_dialog->innerR(),
 					m_dialog->edges() );
@@ -76,12 +54,13 @@ VStarTool::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VStarCmd( &view()->part()->document(),
-				x, y,
-				d1,
-				m_dialog->innerR() * d1 / m_dialog->outerR(),
+			new VStar(
+				0L,
+				m_p,
+				m_d1,
+				m_dialog->innerR() * m_d1 / m_dialog->outerR(),
 				m_dialog->edges(),
-				d2 );
+				m_d2 );
 }
 
 void

@@ -7,17 +7,15 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+
 #include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vpath.h"
-#include "vsinuscmd.h"
+#include "vsinus.h"
 #include "vsinusdlg.h"
 #include "vsinustool.h"
 
 
 VSinusTool::VSinusTool( KarbonView* view )
-	: VShapeTool( view )
+	: VShapeTool( view, i18n( "Insert Sinus" ) )
 {
 	// create config dialog:
 	m_dialog = new VSinusDlg();
@@ -34,48 +32,33 @@ VSinusTool::~VSinusTool()
 void
 VSinusTool::activate()
 {
-	view()->statusMessage()->setText( i18n( "Insert Sinus" ) );
+	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
-void
-VSinusTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
+VPath*
+VSinusTool::shape() const
 {
-	VPainter *painter = view()->painterFactory()->editpainter();
-	
-	VSinusCmd* cmd =
-		new VSinusCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
-			m_dialog->periods() );
-
-	VObject* path = cmd->createPath();
-	path->setState( state_edit );
-	path->draw( painter, path->boundingBox() );
-
-	delete( cmd );
-	delete( path );
-}
-
-VCommand*
-VSinusTool::createCmd( double x, double y, double d1, double d2 )
-{
-	if( d1 <= 1.0 && d2 <= 1.0 )
+	if( m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VSinusCmd( &view()->part()->document(),
-					x, y,
-					x + m_dialog->width(),
-					y + m_dialog->height(),
+				new VSinus(
+					0L,
+					m_p,
+					m_dialog->width(),
+					m_dialog->height(),
 					m_dialog->periods() );
 		else
 			return 0L;
 	}
 	else
 		return
-			new VSinusCmd( &view()->part()->document(),
-				x, y,
-				x + d1,
-				y + d2,
+			new VSinus(
+				0L,
+				m_p,
+				m_d1,
+				m_d2,
 				m_dialog->periods() );
 }
 

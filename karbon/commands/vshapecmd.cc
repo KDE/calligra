@@ -4,32 +4,38 @@
 */
 
 #include "vdocument.h"
-#include "vobject.h"
+#include "vpath.h"
 #include "vshapecmd.h"
+
+VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VPath* path )
+	: VCommand( doc, name ), m_path( path )
+{
+}
 
 void
 VShapeCmd::execute()
 {
-	if ( m_object )
-		m_object->setState( state_normal );
+	if( !m_path )
+		return;
+
+	if( m_path->state() == state_deleted )
+		m_path->setState( state_normal );
 	else
 	{
-		m_object = createPath();
-
-		m_doc->applyDefaultColors( *m_object );
-		// add path:
-		m_doc->append( m_object );
-		m_doc->select( *m_object, true );
+		m_doc->applyDefaultColors( *m_path );
+		// Add path:
+		m_doc->append( m_path );
+		m_doc->select( *m_path, true );
 	}
 }
 
 void
 VShapeCmd::unexecute()
 {
-	if ( m_object )
-	{
-		m_doc->deselect( *m_object );
-		m_object->setState( state_deleted );
-	}
+	if( !m_path )
+		return;
+
+	m_doc->deselect( *m_path );
+	m_path->setState( state_deleted );
 }
 

@@ -12,7 +12,7 @@ class VEllipse : public VPath
 {
 public:
 	VEllipse( VObject* parent,
-		const KoPoint& topLeft, const KoPoint& bottomRight );
+		const KoPoint& topLeft, double width, double height );
 };
 
 #endif

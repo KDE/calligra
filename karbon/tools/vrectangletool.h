@@ -20,9 +20,7 @@ public:
 
 	virtual void activate();
 
-	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
-
-	virtual void drawTemporaryObject( const KoPoint& p, double d1, double d2 );
+	virtual VPath* shape() const;
 
 private:
 	VRectangleDlg* m_dialog;

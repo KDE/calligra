@@ -11,7 +11,7 @@
 
 
 VSinus::VSinus( VObject* parent,
-		const KoPoint& topLeft, const KoPoint& bottomRight, uint periods )
+		const KoPoint& topLeft, double width, double height, uint periods )
 	: VPath( parent )
 {
 	// We want at least 1 period:
@@ -90,13 +90,10 @@ VSinus::VSinus( VObject* parent,
 		curveTo( p1, p2, p3 );
 	}
 
-	double w = bottomRight.x() - topLeft.x();
-	double h = topLeft.y() - bottomRight.y();
-
 	// Translate and scale:
 	QWMatrix m;
-	m.translate( topLeft.x(), bottomRight.y() + h * 0.5 );
-	m.scale( w / periods, h * 0.5 );
+	m.translate( topLeft.x(), topLeft.y() - height * 0.5 );
+	m.scale( width / periods, height * 0.5 );
 	transform( m );
 }
 

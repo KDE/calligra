@@ -12,7 +12,7 @@ class VRoundRect : public VPath
 {
 public:
 	VRoundRect( VObject* parent,
-		const KoPoint& topLeft, const KoPoint& bottomRight, double edgeRadius );
+		const KoPoint& topLeft, double width, double height, double edgeRadius );
 };
 
 #endif

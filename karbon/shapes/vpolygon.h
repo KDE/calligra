@@ -12,7 +12,7 @@ class VPolygon : public VPath
 {
 public:
 	VPolygon( VObject* parent,
-		const KoPoint& center, double radius, uint edges, double angle );
+		const KoPoint& center, double radius, uint edges, double angle = 0.0 );
 };
 
 #endif

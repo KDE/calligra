@@ -7,17 +7,15 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+
 #include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vpath.h"
-#include "vroundrectcmd.h"
+#include "vroundrect.h"
 #include "vroundrectdlg.h"
 #include "vroundrecttool.h"
 
 
 VRoundRectTool::VRoundRectTool( KarbonView* view )
-	: VShapeTool( view )
+	: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
 {
 	// create config dialog:
 	m_dialog = new VRoundRectDlg();
@@ -34,48 +32,33 @@ VRoundRectTool::~VRoundRectTool()
 void
 VRoundRectTool::activate()
 {
-	view()->statusMessage()->setText( i18n( "Insert Round Rectangle" ) );
+	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
-void
-VRoundRectTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
+VPath*
+VRoundRectTool::shape() const
 {
-	VPainter *painter = view()->painterFactory()->editpainter();
-	
-	VRoundRectCmd* cmd =
-		new VRoundRectCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
-			m_dialog->round() );
-
-	VObject* path = cmd->createPath();
-	path->setState( state_edit );
-	path->draw( painter, path->boundingBox() );
-
-	delete( cmd );
-	delete( path );
-}
-
-VCommand*
-VRoundRectTool::createCmd( double x, double y, double d1, double d2 )
-{
-	if( d1 <= 1.0 && d2 <= 1.0 )
+	if( m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VRoundRectCmd( &view()->part()->document(),
-					x, y,
-					x + m_dialog->width(),
-					y + m_dialog->height(),
+				new VRoundRect(
+					0L,
+					m_p,
+					m_dialog->width(),
+					m_dialog->height(),
 					m_dialog->round() );
 		else
 			return 0L;
 	}
 	else
 		return
-			new VRoundRectCmd( &view()->part()->document(),
-				x, y,
-				x + d1,
-				y + d2,
+			new VRoundRect(
+				0L,
+				m_p,
+				m_d1,
+				m_d2,
 				m_dialog->round() );
 }
 

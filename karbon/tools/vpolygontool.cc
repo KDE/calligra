@@ -9,16 +9,13 @@
 #include <klocale.h>
 
 #include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vpath.h"
-#include "vpolygoncmd.h"
+#include "vpolygon.h"
 #include "vpolygondlg.h"
 #include "vpolygontool.h"
 
 
 VPolygonTool::VPolygonTool( KarbonView* view )
-	: VShapeTool( view, true )
+	: VShapeTool( view, i18n( "Insert Polygon" ), true )
 {
 	// create config dialog:
 	m_dialog = new VPolygonDlg();
@@ -34,39 +31,20 @@ VPolygonTool::~VPolygonTool()
 void
 VPolygonTool::activate()
 {
-	view()->statusMessage()->setText( i18n( "Insert Polygon" ) );
+	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
-void
-VPolygonTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
+VPath*
+VPolygonTool::shape() const
 {
-	VPainter *painter = view()->painterFactory()->editpainter();
-	
-	VPolygonCmd* cmd =
-		new VPolygonCmd( &view()->part()->document(),
-			p.x(), p.y(),
-			d1,
-			m_dialog->edges(),
-			d2 );
-
-	VObject* path = cmd->createPath();
-	path->setState( state_edit );
-	path->draw( painter, path->boundingBox() );
-
-	delete( cmd );
-	delete( path );
-}
-
-VCommand*
-VPolygonTool::createCmd( double x, double y, double d1, double d2 )
-{
-	if( d1 <= 1.0 )
+	if( m_d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VPolygonCmd( &view()->part()->document(),
-					x, y,
+				new VPolygon(
+					0L,
+					m_p,
 					m_dialog->radius(),
 					m_dialog->edges() );
 		else
@@ -74,11 +52,12 @@ VPolygonTool::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VPolygonCmd( &view()->part()->document(),
-				x, y,
-				d1,
+			new VPolygon(
+				0L,
+				m_p,
+				m_d1,
 				m_dialog->edges(),
-				d2 );
+				m_d2 );
 }
 
 void

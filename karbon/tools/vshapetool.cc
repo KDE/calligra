@@ -7,14 +7,20 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
+#include "vpath.h"
+#include "vshapecmd.h"
 #include "vshapetool.h"
 
 
-VShapeTool::VShapeTool( KarbonView* view, bool polar )
-	: VTool( view ), m_calcPolar( polar ),
-		m_isDragging( false ), m_isSquare( false ),
-		m_isCentered( false )
+VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
+	: VTool( view ), m_name( name )
 {
+	m_isPolar = polar;
+	m_isDragging = false;
+	m_isSquare   = false;
+	m_isCentered = false;
 }
 
 bool
@@ -23,7 +29,7 @@ VShapeTool::eventFilter( QEvent* event )
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
 		// erase old object:
-		drawTemporaryObject( m_p, m_d1, m_d2 );
+		drawTemporaryObject();
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
@@ -32,7 +38,7 @@ VShapeTool::eventFilter( QEvent* event )
 		recalcCoords();
 
 		// paint new object:
-		drawTemporaryObject( m_p, m_d1, m_d2 );
+		drawTemporaryObject();
 
 		return true;
 	}
@@ -45,26 +51,18 @@ VShapeTool::eventFilter( QEvent* event )
 
 		recalcCoords();
 
-		VCommand* cmd = 0L;
-
 		// adjust to real viewport contents instead of raw mouse coords:
 		KoPoint p = view()->canvasWidget()->viewportToContents( QPoint( m_p.x(), m_p.y() ) );
-		cmd = createCmd(
-			p.x() / view()->zoom(),
-			p.y() / view()->zoom(),
-			m_d1 / view()->zoom(),
-			m_calcPolar ? m_d2 : m_d2 / view()->zoom() );
 
-		if( cmd )
-		{
-			view()->part()->addCommand( cmd, true );
-			view()->selectionChanged();
-		}
-		else
-		{
-			// erase old object:
-			drawTemporaryObject( m_p, m_d1, m_d2 );
-		}
+
+		VShapeCmd* cmd = new VShapeCmd(
+			&view()->part()->document(),
+			name(),
+			shape() );
+
+		view()->part()->addCommand( cmd, true );
+		view()->selectionChanged();
+
 
 		m_isDragging = false;
 		m_isSquare = false;
@@ -86,7 +84,7 @@ VShapeTool::eventFilter( QEvent* event )
 			m_isCentered = false;
 
 			// erase old object:
-			drawTemporaryObject( m_p, m_d1, m_d2 );
+			drawTemporaryObject();
 
 			return true;
 		}
@@ -99,10 +97,10 @@ VShapeTool::eventFilter( QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 			}
 
 			return true;
@@ -116,10 +114,10 @@ VShapeTool::eventFilter( QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 			}
 
 			return true;
@@ -138,10 +136,10 @@ VShapeTool::eventFilter( QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 			}
 
 			return true;
@@ -154,10 +152,10 @@ VShapeTool::eventFilter( QEvent* event )
 			if ( m_isDragging )
 			{
 				// erase old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 				recalcCoords();
 				// draw new old object:
-				drawTemporaryObject( m_p, m_d1, m_d2 );
+				drawTemporaryObject();
 			}
 
 			return true;
@@ -175,7 +173,7 @@ VShapeTool::eventFilter( QEvent* event )
 		
 		// draw initial object:
 		recalcCoords();
-		drawTemporaryObject( m_p, m_d1, m_d2 );
+		drawTemporaryObject();
 
 		m_isDragging = true;
 
@@ -185,3 +183,13 @@ VShapeTool::eventFilter( QEvent* event )
 	return false;
 }
 
+void
+VShapeTool::drawTemporaryObject() const
+{
+	VPainter* painter = view()->painterFactory()->editpainter();
+	
+	VPath* path = shape();
+	path->setState( state_edit );
+	path->draw( painter, path->boundingBox() );
+	delete( path );
+}

@@ -12,7 +12,7 @@ class VRectangle : public VPath
 {
 public:
 	VRectangle( VObject* parent,
-		const KoPoint& topLeft, const KoPoint& bottomRight );
+		const KoPoint& topLeft, double width, double height );
 };
 
 #endif

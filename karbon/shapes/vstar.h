@@ -13,7 +13,7 @@ class VStar : public VPath
 public:
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
-		uint edges, double angle );
+		uint edges, double angle = 0.0 );
 };
 
 #endif

@@ -7,17 +7,15 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+
 #include "karbon_view.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vpath.h"
-#include "vrectanglecmd.h"
+#include "vrectangle.h"
 #include "vrectangledlg.h"
 #include "vrectangletool.h"
 
 
 VRectangleTool::VRectangleTool( KarbonView* view )
-	: VShapeTool( view )
+	: VShapeTool( view, i18n( "Insert Rectangle" ) )
 {
 	// create config dialog:
 	m_dialog = new VRectangleDlg();
@@ -33,45 +31,31 @@ VRectangleTool::~VRectangleTool()
 void
 VRectangleTool::activate()
 {
-	view()->statusMessage()->setText( i18n( "Insert Rectangle" ) );
+	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
-void
-VRectangleTool::drawTemporaryObject( const KoPoint& p, double d1, double d2 )
+VPath*
+VRectangleTool::shape() const
 {
-	VPainter *painter = view()->painterFactory()->editpainter();
-	
-	VRectangleCmd* cmd =
-		new VRectangleCmd( &view()->part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
-
-	VObject* path = cmd->createPath();
-	path->setState( state_edit );
-	path->draw( painter, path->boundingBox() );
-
-	delete( cmd );
-	delete( path );
-}
-
-VCommand*
-VRectangleTool::createCmd( double x, double y, double d1, double d2 )
-{
-	if( d1 <= 1.0 && d2 <= 1.0 )
+	if( m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VRectangleCmd( &view()->part()->document(),
-					x, y,
-					x + m_dialog->width(),
-					y + m_dialog->height() );
+				new VRectangle(
+					0L,
+					m_p,
+					m_dialog->width(),
+					m_dialog->height() );
 		else
 			return 0L;
 	}
 	else
 		return
-			new VRectangleCmd( &view()->part()->document(),
-				x, y,
-				x + d1,
-				y + d2 );
+			new VRectangle(
+				0L,
+				m_p,
+				m_d1,
+				m_d2 );
 }
 

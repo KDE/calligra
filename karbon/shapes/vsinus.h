@@ -12,7 +12,7 @@ class VSinus : public VPath
 {
 public:
 	VSinus( VObject* parent,
-		const KoPoint& topLeft, const KoPoint& bottomRight, uint periods );
+		const KoPoint& topLeft, double width, double height, uint periods );
 };
 
 #endif
