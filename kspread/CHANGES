@@ -4,6 +4,7 @@ Bugfixes:
 - Fix rendering bugs of cell borders (when scrolled up)
 - Fix crash on printout when printrange was one row or one column only
 - Small fix: "14: 4 am" is now "14:04 am"
+- Fix scroll to end of sheet when zoomed
 
 
 
