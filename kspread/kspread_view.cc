@@ -2659,7 +2659,7 @@ void KSpreadView::paste()
         QRect r( activeTable()-> selection() );
         m_pTable->paste( QPoint( r.left(), r.top() ) );
         if( m_pTable->getAutoCalc() )
-            m_pTable->recalc();
+            m_pTable->calc();
         resultOfCalc();
         updateEditWidget();
     }

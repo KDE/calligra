@@ -1479,6 +1479,9 @@ void KSpreadCell::clearFormula()
 
 bool KSpreadCell::calc(bool delay)
 {
+  if ( !testFlag(Flag_CalcDirty) )
+    return true;
+
   if ( testFlag(Flag_Progress) )
   {
     kdError(36001) << "ERROR: Circle" << endl;
@@ -1498,8 +1501,6 @@ bool KSpreadCell::calc(bool delay)
   if ( !isFormula() )
     return true;
 
-  if ( !testFlag(Flag_CalcDirty) )
-    return true;
 
   if (delay)
   {
@@ -1542,6 +1543,7 @@ bool KSpreadCell::calc(bool delay)
 	    s->parse( m_strFormulaOut );
 	  }
 	  setFlag(Flag_LayoutDirty);
+          clearFlag(Flag_CalcDirty);
 	  DO_UPDATE;
 	  return false;
 	}
@@ -1572,6 +1574,7 @@ bool KSpreadCell::calc(bool delay)
     }
     // setFlag(Flag_LayoutDirty);
     clearFlag(Flag_Progress);
+    clearFlag(Flag_CalcDirty);
 
     if ( m_style == ST_Select )
     {
@@ -3498,12 +3501,13 @@ void KSpreadCell::updateDepending()
     return;
   }
 
+  calc();
+
   kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
 
   KSpreadDependency* d = NULL;
 
   setFlag(Flag_UpdatingDeps);
-  setFlag(Flag_CalcDirty);
 
   // Every cell that references us must calculate with this new value
   for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
@@ -3512,7 +3516,7 @@ void KSpreadCell::updateDepending()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-	d->Table()->cellAt( c, r )->updateDepending();
+	d->Table()->cellAt( c, r )->calc();
       }
     }
   }
@@ -4707,7 +4711,7 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-	d->Table()->cellAt( c, r )->NotifyDepending(m_iColumn, m_iRow, m_pTable, isDepending);
+	d->Table()->nonDefaultCell( c, r )->NotifyDepending(m_iColumn, m_iRow, m_pTable, isDepending);
       }
     }
   }
