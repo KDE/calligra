@@ -71,6 +71,8 @@ protected slots:
     void editStyle( int ) { editStyle(); }
     void addStyle();
     void deleteStyle();
+    void upStyle();
+    void downStyle();
     void updateStyleList();
     void updateButtons( const QString & );
     void smartClicked();

@@ -3827,6 +3827,43 @@ void KWordDocument::addStyleTemplate( KWParagLayout *pl )
     }
     paragLayoutList.append( pl );
 }
+
+/*================================================================*/
+void KWordDocument::moveDownStyleTemplate ( const QString & _styleName )
+{
+    unsigned int pos = 0;
+    KWParagLayout* p;
+    for (  p = paragLayoutList.first(); p != 0L; p = paragLayoutList.next(), ++pos )
+    {
+        if ( p->getName() == _styleName )
+        {
+            KWParagLayout * next = paragLayoutList.at(pos+1);
+            if (!next) return;
+            // We have "p" "next" and we want "next" "p"
+            paragLayoutList.insert( pos, next ); // "next", "p", "next"
+            paragLayoutList.take( pos+2 );       // Remove last "next"
+            return;
+        }
+    }
+}
+
+/*================================================================*/
+void KWordDocument::moveUpStyleTemplate ( const QString & _styleName )
+{
+    unsigned int pos = 0;
+    KWParagLayout* p;
+    for (  p = paragLayoutList.first(); p != 0L; p = paragLayoutList.next(), ++pos )
+    {
+        if ( p->getName() == _styleName )
+        {
+            // We have "prev" "p" and we want "p" "prev"
+            paragLayoutList.insert( pos-1, p ); // "p" "prev" "p"
+            paragLayoutList.take( pos+1 );      // Remove last "p"
+            return;
+        }
+    }
+}
+
 /*================================================================*/
 void KWordDocument::setStyleChanged( QString _name )
 {

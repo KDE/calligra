@@ -89,7 +89,9 @@ void KWStyleManager::setupTab1()
     bCopy = bButtonBox->addButton( i18n( "&Copy..." ), false );
     bButtonBox->addStretch();
     bUp = bButtonBox->addButton( i18n( "Up" ), false );
+    connect( bUp, SIGNAL( clicked() ), this, SLOT( upStyle() ) );
     bDown = bButtonBox->addButton( i18n( "D&own" ), false );
+    connect( bDown, SIGNAL( clicked() ), this, SLOT( downStyle() ) );
     bButtonBox->layout();
     grid1->addWidget( bButtonBox, 0, 1 );
 
@@ -259,6 +261,24 @@ void KWStyleManager::deleteStyle()
 }
 
 /*================================================================*/
+void KWStyleManager::upStyle()
+{
+    int pos=lStyleList->currentItem()-1;
+    doc->moveUpStyleTemplate (lStyleList->currentText() );
+    updateStyleList();
+    lStyleList->setCurrentItem(pos);
+}
+
+/*================================================================*/
+void KWStyleManager::downStyle()
+{
+    int pos=lStyleList->currentItem()+1;
+    doc->moveDownStyleTemplate (lStyleList->currentText() );
+    updateStyleList();
+    lStyleList->setCurrentItem(pos);
+}
+
+/*================================================================*/
 bool KWStyleManager::apply()
 {
     int f = 0;
@@ -324,6 +344,16 @@ void KWStyleManager::updateButtons( const QString &s )
         bDelete->setEnabled( false );
     else
         bDelete->setEnabled( true );
+
+    if(lStyleList->currentItem()==0)
+	bUp->setEnabled(false);
+    else
+      bUp->setEnabled(true);
+
+    if(lStyleList->currentItem()==(int)(lStyleList->count()-1))
+      bDown->setEnabled(false);
+    else
+      bDown->setEnabled(true);
 }
 
 /******************************************************************/

@@ -400,6 +400,10 @@ public:
     bool getViewTableGrid() {return _viewTableGrid;}
     void setViewTableGrid(bool _b) {_viewTableGrid=_b;}
 
+    void moveDownStyleTemplate ( const QString & _styleName );
+    void moveUpStyleTemplate ( const QString & _styleName );
+
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
