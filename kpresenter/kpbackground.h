@@ -110,7 +110,6 @@ public:
 protected:
     void drawBackColor( QPainter *_painter );
     void drawBackPix( QPainter *_painter );
-    void drawBackClip( QPainter *_painter );
     void drawBorders( QPainter *_painter );
     void drawHeaderFooter( QPainter *_painter, const QPoint &_offset );
     void removeGradient();

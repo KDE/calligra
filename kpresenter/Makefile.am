@@ -29,7 +29,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
 	textdialog.ui sidebar.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
-	preview.h preview.cc kpresenter_dlg_config.cc
+	kpresenter_dlg_config.cc
 
 libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) 

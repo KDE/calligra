@@ -51,7 +51,7 @@
 #include <textdialog.h>
 #include <sidebar.h>
 #include <insertpagedia.h>
-#include <preview.h>
+#include <koPictureFilePreview.h>
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -466,7 +466,7 @@ void KPresenterView::insertPicture()
 
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Insert Picture"));
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -504,9 +504,9 @@ void KPresenterView::insertClipart()
     page->setToolEditMode( TEM_MOUSE );
     page->deSelectAllObj();
 
-    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( QString::null, KoPictureFilePreview::clipartPattern(), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -2716,7 +2716,7 @@ void KPresenterView::changePicture( const QString & filename )
 
     KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Select new Picture"));
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -2736,9 +2736,9 @@ void KPresenterView::changePicture( const QString & filename )
 /*====================== change clipart =========================*/
 void KPresenterView::changeClipart( const QString & filename )
 {
-    KFileDialog fd( filename, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( filename, KoPictureFilePreview::clipartPattern(), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     KURL url;
     if ( fd.exec() == QDialog::Accepted )

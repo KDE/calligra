@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <preview.h>
+#include <koPictureFilePreview.h>
 #include <backdia.h>
 #include <kpbackground.h>
 #include <kpresenter_doc.h>
@@ -395,7 +395,7 @@ void BackDia::selectPic()
     //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
 
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     if ( fd.exec() == QDialog::Accepted )
     {
@@ -416,8 +416,8 @@ void BackDia::selectPic()
 void BackDia::selectClip()
 {
     KURL url;
-    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
+    KFileDialog fd( QString::null, KoPictureFilePreview::clipartPattern(), 0, 0, true );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     if ( fd.exec() == QDialog::Accepted )
     {

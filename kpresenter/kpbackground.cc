@@ -113,13 +113,16 @@ void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
     case BT_CLIPART:
     {
         drawBackColor( _painter );
-        _painter->save();
-        // We have to use setViewport here, but it doesn't cumulate with previous transformations
-        // (e.g. painter translation set up by kword when embedding kpresenter...)   :(
-        _painter->setViewport( _offset.x(), _offset.y(), ext.width(), ext.height() );
-        ////_painter->scale( 1.0 * ext.width() / r.width(), 1.0 * ext.height() / r.height() );
-        drawBackClip( _painter );
-        _painter->restore();
+        if ( !backClipart.isNull() )
+        {
+            _painter->save();
+            _painter->translate( _offset.x(), _offset.y() );
+            QRect br = backClipart.picture()->boundingRect();
+            if ( br.width() && br.height() )
+                _painter->scale( (double)ext.width() / (double)br.width(), (double)ext.height() / (double)br.height() );
+            _painter->drawPicture( *backClipart.picture() );
+            _painter->restore();
+        }
     } break;
     }
 
@@ -494,13 +497,6 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 
         doc->footer()->getKTextObject()->move( pnt.x(), pnt.y() );
     }
-}
-
-/*================================================================*/
-void KPBackGround::drawBackClip( QPainter *_painter )
-{
-    if ( !backClipart.isNull() )
-        _painter->drawPicture( *backClipart.picture() );
 }
 
 /*================================================================*/
