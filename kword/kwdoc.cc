@@ -3874,7 +3874,7 @@ void KWDocument::slotCommandExecuted()
 }
 
 
-void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
+void KWDocument::setKOSpellConfig(const KOSpellConfig& _kspell)
 {
   if(m_pKOSpellConfig==0)
     m_pKOSpellConfig=new KOSpellConfig();

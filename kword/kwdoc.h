@@ -603,7 +603,7 @@ public:
      * get custom kspell config
      */
 
-    void setKOSpellConfig(KOSpellConfig _kspell);
+    void setKOSpellConfig(const KOSpellConfig& _kspell);
     KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
 
 #ifndef NDEBUG
