@@ -175,7 +175,6 @@ bool AbiWordWorker::doOpenDocument(void)
     // (AbiWord and QT handle UTF-8 well, so we stay with this encoding!)
     *m_streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-#if 1
     // NOTE: AbiWord CVS 2002-02-?? has a new DOCTYPE
     *m_streamOut << "<!DOCTYPE abiword PUBLIC \"-//ABISOURCE//DTD AWML 1.0 Strict//EN\"";
     *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
@@ -183,14 +182,9 @@ bool AbiWordWorker::doOpenDocument(void)
     // First magic: "<abiword"
     *m_streamOut << "<abiword";
     *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
+    *m_streamOut << " xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
+    // AbiWord CVS HEAD 2002-02-22 defines other namesapces, which we are not using.
     *m_streamOut << " version=\"\" fileformat=\"1.0\" styles=\"unlocked\">\n";
-#else
-    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
-    *m_streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
-    *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
-    // First magic: "<abiword"
-    *m_streamOut << "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
-#endif
     // Second magic: "<!-- This file is an AbiWord document."
     // TODO/FIXME: write as much space as AbiWord does for the following line.
     *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
@@ -245,9 +239,10 @@ bool AbiWordWorker::doCloseDocument(void)
                 {
                     strMime="image/jpeg";
                 }
-                // TODO: verify BMP (and AbiWord's mime type)
+                // TODO: AbiWord cannot handle BMP directly (only PNG and JPEG)
                 else if (strExtension=="bmp")
                 {
+                    kdWarning(30506) << "Unknown extension! BMP is not supported!" << endl;
                     strMime="image/x-bmp";
                 }
                 // TODO: mathml and svg
@@ -649,7 +644,7 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
     }
 
     //TODO: other layout things
-    // TODO/FIXME: what if layout->abiprops might is empty!
+    // TODO/FIXME: what if abiprops might is empty!
     *m_streamOut << " props=\"" << abiprops << "\"";
 
     *m_streamOut << "/>\n";
@@ -664,7 +659,6 @@ bool AbiWordWorker::doFullPaperFormat(const int format,
 
     switch (format)
     {
-#if 1
         // ISO A formats
         case PG_DIN_A0: // ISO A0
         case PG_DIN_A1: // ISO A1
@@ -700,91 +694,6 @@ bool AbiWordWorker::doFullPaperFormat(const int format,
             outputText+="\" ";
             break;
         }
-#else
-        // ISO A formats
-        case PG_DIN_A0: // ISO A0
-        {
-            outputText += "pagetype=\"A0\" width=\"84.1\" height=\"118.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_A1: // ISO A1
-        {
-            outputText += "pagetype=\"A1\" width=\"59.4\" height=\"84.1\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_A2: // ISO A2
-        {
-            outputText += "pagetype=\"A2\" width=\"42.0\" height=\"59.4\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_A3: // ISO A3
-        {
-            outputText += "pagetype=\"A3\" width=\"29.7\" height=\"42.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_A4: // ISO A4
-        {
-            outputText += "pagetype=\"A4\" width=\"21.0\" height=\"29.7\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_A5: // ISO A5
-        {
-            outputText += "pagetype=\"A5\" width=\"14.8\" height=\"21.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_A6: // ISO A6
-        {
-            outputText += "pagetype=\"A6\" width=\"10.5\" height=\"14.8\" units=\"cm\" ";
-            break;
-        }
-        // ISO B formats
-        case PG_DIN_B0: // ISO B0
-        {
-            outputText += "pagetype=\"B0\" width=\"100.0\" height=\"141.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_B1: // ISO B1
-        {
-            outputText += "pagetype=\"B1\" width=\"70.7\" height=\"100.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_B2: // ISO B2
-        {
-            outputText += "pagetype=\"B2\" width=\"50.0\" height=\"70.7\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_B3: // ISO B3
-        {
-            outputText += "pagetype=\"B3\" width=\"35.3\" height=\"50.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_B4: // ISO B4
-        {
-            outputText += "pagetype=\"B4\" width=\"25.8\" height=\"35.3\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_B5: // ISO B5
-        {
-            outputText += "pagetype=\"B5\" width=\"17.6\" height=\"25.0\" units=\"cm\" ";
-            break;
-        }
-        case PG_DIN_B6: // ISO B6
-        {
-            outputText += "pagetype=\"B6\" width=\"12.5\" height=\"17.6\" units=\"cm\" ";
-            break;
-        }
-        // American formats
-        case PG_US_LETTER: // US Letter
-        {
-            outputText += "pagetype=\"Letter\" width=\"8.5\" height=\"11.0\" units=\"inch\" ";
-            break;
-        }
-        case PG_US_LEGAL: // US Legal
-        {
-            outputText += "pagetype=\"Legal\" width=\"8.5\" height=\"14.0\" units=\"inch\" ";
-            break;
-        }
-#endif
         case PG_US_EXECUTIVE: // US Executive (does not exists in AbiWord!)
         {
             // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!
