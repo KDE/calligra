@@ -93,6 +93,9 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   editMode = EM_NONE;
   setKeyCompression(true);
 
+  doc->setSelStart(*fc);
+  doc->setSelEnd(*fc);
+  doc->setSelection(false);
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }

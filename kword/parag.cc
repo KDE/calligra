@@ -221,6 +221,8 @@ bool KWParag::deleteText( unsigned int _pos, unsigned int _len = 1)
 
 void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
 {
+  if (text.size() == 0) return;
+  
   assert( _pos < text.size() );
 
   for (unsigned int i = 0;i < _len;i++)

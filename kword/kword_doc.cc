@@ -2132,6 +2132,9 @@ void KWordDocument::insertPicture(QString _filename,KWPage *_paperWidget)
 /*================================================================*/
 void KWordDocument::drawSelection(QPainter &_painter,int xOffset,int yOffset)
 {
+  if (!selStart.getParag() || !selEnd.getParag())
+    return;
+  
   _painter.save();
   RasterOp rop = _painter.rasterOp();
 
