@@ -28,7 +28,7 @@ class KWordDocument;
 class KWVariable;
 class KWParag;
 
-enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, 
+enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
 		   VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_NONE };
 enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4 };
 
@@ -293,6 +293,7 @@ class KWCustomVariable : public KWVariable
 {
 public:
     KWCustomVariable( KWordDocument *_doc, const QString &name_ );
+    KWCustomVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
         KWCustomVariable *var = new KWCustomVariable( doc, name );
@@ -311,12 +312,12 @@ public:
 
     virtual QString getName() const;
     virtual QString getValue() const;
-    
+
     virtual void setValue( const QString &v );
-    
+
 protected:
     QString name;
-    
+
 };
 
 #endif

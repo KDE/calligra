@@ -1444,3 +1444,7 @@ Reggie, 24.8.1999:
 - Implemented inserting custom variables
 - Implemented editing values of custom variables
 - Some fixes
+
+Reggie, 25.8.1999:
+------------------
+- Implemented saving and loading of custom variables

@@ -17,6 +17,7 @@
 #include "parag.h"
 #include "defs.h"
 #include "kword_doc.h"
+#include "kword_utils.h"
 
 #include <komlMime.h>
 #include <klocale.h>
@@ -123,11 +124,11 @@ QString KWVariableCustomFormat::convert( KWVariable *_var )
 /******************************************************************/
 
 /*================================================================*/
-KWVariable::KWVariable( KWordDocument *_doc ) 
-    : text() 
-{ 
-    varFormat = 0L; 
-    doc = _doc; 
+KWVariable::KWVariable( KWordDocument *_doc )
+    : text()
+{
+    varFormat = 0L;
+    doc = _doc;
     doc->registerVariable( this );
 }
 
@@ -288,12 +289,10 @@ void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
 
     int h, m, s, ms;
 
-    if ( name == "TIME" )
-    {
+    if ( name == "TIME" ) {
         KOMLParser::parseTag( tag.c_str(), name, lst );
         vector<KOMLAttrib>::const_iterator it = lst.begin();
-        for( ; it != lst.end(); it++ )
-        {
+        for( ; it != lst.end(); it++ ) {
             if ( ( *it ).m_strName == "hour" )
                 h = atoi( ( *it ).m_strValue.c_str() );
             else if ((*it).m_strName == "minute")
@@ -335,12 +334,27 @@ void KWCustomVariable::recalc()
 void KWCustomVariable::save( ostream &out )
 {
     KWVariable::save( out );
+    out << indent << "<CUSTOM name=\"" << correctQString( name ).latin1() << "\" value=\"" 
+	<< correctQString( getValue() ).latin1() << "\"/>" << endl;
 }
 
 /*================================================================*/
-void KWCustomVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+void KWCustomVariable::load( string name_, string tag, vector<KOMLAttrib>& lst )
 {
-    KWVariable::load( name, tag, lst );
+    doc->unregisterVariable( this );
+    doc->registerVariable( this );
+    recalc();
+    KWVariable::load( name_, tag, lst );
+    if ( name_ == "CUSTOM" ) {
+        KOMLParser::parseTag( tag.c_str(), name_, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for(  ; it != lst.end(); it++ ) {
+            if ( ( *it ).m_strName == "name" )
+                name = ( *it ).m_strValue.c_str();
+            else if ( (*it).m_strName == "value" )
+		setValue( ( *it ).m_strValue.c_str() );
+        }
+    }
 }
 
 /*================================================================*/
@@ -354,7 +368,7 @@ QString KWCustomVariable::getValue() const
 {
     return doc->getVariableValue( name );
 }
-    
+
 /*================================================================*/
 void KWCustomVariable::setValue( const QString &v )
 {
