@@ -387,6 +387,8 @@ void KivioView::setupActions()
   m_selectAll=KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" );
   m_selectNone=new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
 
+  KAction *action;
+
   (void) new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   (void) new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
 
@@ -395,14 +397,20 @@ void KivioView::setupActions()
 
   (void) new KAction(i18n("&Text..."), "text", 0, this, SLOT(textFormat()),
     actionCollection(), "textFormat");
+
   (void) new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
     actionCollection(), "stencilFormat");
-  (void) new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
+
+   action = new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
     actionCollection(), "arrowHeadFormat");
+   action->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
+
   /* Create the fg color button */
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
+  m_setFGColor->setWhatsThis(i18n("The Foreground Color allows you to choose a color for the lines of the stencils."));
   connect(m_setFGColor,SIGNAL(activated()),SLOT(setFGColor()));
   m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
+  m_setBGColor->setWhatsThis(i18n("You can choose a color for the background of a stencil by using this button."));
   connect(m_setBGColor,SIGNAL(activated()),SLOT(setBGColor()));
 
   // Text bar
@@ -461,7 +469,8 @@ void KivioView::setupActions()
   QHBoxLayout* lwl = new QHBoxLayout(lineWidthWidget);
   lwl->addWidget(lineWidthLbl);
   lwl->addWidget(m_setLineWidth);
-  (void*) new KWidgetAction(lineWidthWidget, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+  action = new KWidgetAction(lineWidthWidget, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+  action->setWhatsThis(i18n("The line width allows setting the width of outlines, either using predefined values or user input"));
   connect(m_setLineWidth, SIGNAL(valueChanged(double)), SLOT(setLineWidth()));
   connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setLineWidthUnit(KoUnit::Unit)));
 
@@ -501,10 +510,12 @@ void KivioView::setupActions()
 
   m_viewZoom = new KSelectAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom");
   m_viewZoom->setEditable(true);
+  m_viewZoom->setWhatsThis(i18n("Zoom Level allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
   connect(m_viewZoom, SIGNAL(activated(const QString&)), SLOT(viewZoom(const QString&)));
   changeZoomMenu();
 
   m_setArrowHeads = new KivioArrowHeadAction(i18n("Arrowheads"), "arrowheads", actionCollection(), "arrowHeads");
+  m_setArrowHeads->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
   connect( m_setArrowHeads, SIGNAL(endChanged(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setArrowHeads, SIGNAL(startChanged(int)), SLOT(slotSetStartArrow(int)));
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
