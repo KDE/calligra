@@ -49,7 +49,7 @@ represent data columns.
 <para>
 <anchor id="template-att"/>The value of the <sgmltag class="attribute">Template</sgmltag>
 attribute is the &URL; of the report template
-used to format the data
+used to format the data.
 </para>
 <!--
 <variablelist>
@@ -82,7 +82,7 @@ used to format the data.
 <listitem>
 <para>
 The attribute value indicates which detail in the report template
-is used to display data. Rows can contain various column set for various levels,
+is used to display data. Rows can contain various column sets for various levels,
 so any attribute except <sgmltag class="attribute">level</sgmltag> should
 be stated as #IMPLIED.
 </para>

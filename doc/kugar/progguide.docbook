@@ -10,7 +10,7 @@ this prolog
 <title>Programmer's Guide</title>
 
 <sect1 id="how-to-use-in-progs">
-<title>How to use &kugar; for reporting in own programs</title>
+<title>How to use &kugar; for reporting in your own programs</title>
 
 <itemizedlist>
 <title>There are several ways to use &kugar;</title>
@@ -36,13 +36,13 @@ section for a detailed description.
 <listitem>
 <para>
 Use &kugar; directly in the application's code.
-See <link linkend="prog-using-widget">Using a &kugar; classes for reporting</link>
+See <link linkend="prog-using-widget">Using &kugar; classes for reporting</link>
 section for a detailed description.
 </para>
 </listitem>
 <listitem>
 <para>
-Create a &Qt; designer plugin, use it to build application &GUI; in the designer and
+Create a &Qt; designer plugin, use it to build the application &GUI; in the designer and
 link it to the program dynamically.
 See <link linkend="prog-designer-plugin">Creating &Qt; designer plugin</link>
 section for a detailed description.
@@ -50,15 +50,15 @@ section for a detailed description.
 </listitem>
 </itemizedlist>
 
-<para> The last two ways are acceptable for &Qt; and &kde; developers.
-But &kugar; is designed to be a report generator, independent from a
-programming language or/and <acronym>IDE</acronym>. It uses &XML;
+<para> The last two ways are acceptable for &Qt; and &kde; developers;
+but &kugar; is designed to be a report generator, independent from a
+programming language and/or <acronym>IDE</acronym>. It uses &XML;
 format for describing report templates and data files. So any program
 can produce output in &kugar; data file format as described in <link
 linkend="kugardata-dtd">KugarData <acronym>DTD</acronym></link> or
 even a report template file format (see <link
 linkend="template-dtd">KugarTemplate <acronym>DTD</acronym></link>).
-A &kugar; shell (report viewer) can be used to preview and print
+A &kugar; shell (report viewer) can be used to preview and print the
 generated report.  </para>
 
 </sect1>
@@ -67,7 +67,7 @@ generated report.  </para>
 <title>Using &kugar; shell for previewing reports</title>
 
 <orderedlist>
-<title>The way to create and preview (print) report is:</title>
+<title>The way to create and preview (print) a report is:</title>
 <listitem>
 <para>
 Create a report template file with &kudesigner;
@@ -81,7 +81,7 @@ Use <link linkend="kugardata-dtd">KugarData <acronym>DTD</acronym></link> to pro
 </listitem>
 <listitem>
 <para>
-Run &kugar; shell to preview and print report. For example, to do this, in c or c++
+Run &kugar; shell to preview and print a report. For example, to do this, in C or C++
 languages call:</para>
 
 <programlisting>
@@ -96,7 +96,7 @@ Don't forget to include <filename class="headerfile">stdlib.h</filename>.
 </sect1>
 
 <sect1 id="prog-using-widget">
-<title>Using a &kugar; classes for reporting</title>
+<title>Using &kugar; classes for reporting</title>
 <para>
 &kugar; library includes two widgets for use.
 </para>
@@ -107,19 +107,19 @@ via <function>i18n()</function> calls.
 </para>
 <para>
 <classname>MReportViewer</classname> class is designed for &Qt;
-developers and provide real crossplatforming. It can be used not
-only on &UNIX; platforms. but on &Windows; and &Mac; too.
+developers and provides real crossplatforming. It can be used not
+only on &UNIX; platforms, but also on &Windows; and &MacOS;.
 </para>
 <para>
-In order to build program that uses kugar library, it should be linked
-with <filename>libkugar.so</filename> shared library, that is provided with kugar distribution on all
+In order to build a program that uses the &kugar; library, it should be linked
+with <filename>libkugar.so</filename> shared library, which is provided with the &kugar; distribution on all
 &UNIX; platforms.
 </para>
 <para>
 Include files are <filename>kugarqt.h</filename> and <filename>kugar.h</filename>
-for &Qt; and &kde; programs accordingly.
+for &Qt; and &kde; programs respectively.
 </para>
-<para>For a detailed example of how &kugar; classes can be used, see <filename class="directory">/shell</filename>
+<para>For a detailed example of how &kugar; classes can be used, look in the <filename class="directory">/shell</filename>
 directory in the &kugar; sources.
 </para>
 <para>
@@ -139,7 +139,7 @@ contains several public methods that can be used.
 <funcdef>void <function>printReport</function></funcdef>
 <void/>
 </funcprototype>
-<funcsynopsisinfo>Calls print dialog to print the report.</funcsynopsisinfo>
+<funcsynopsisinfo>Calls the print dialog to print the report.</funcsynopsisinfo>
 </funcsynopsis>
 
 <funcsynopsis>
@@ -198,27 +198,27 @@ create a QIODevice successor and redefine all necessary functionality.
 <title>Creating &Qt; designer plugin</title>
 
 <para>
-This is the example code of how is designer plugin created. The code below creates plugin for
+This is the example code of how a designer plugin is created. The code below creates a plugin for
 a &kde; <classname>KReportViewer</classname> widget.
 </para>
 
 <para>
 If a &Qt;
-widget is desired, replace <classname>KReportViewer</classname> to
-<classname>MReportViewer</classname> and <filename>kugar.h</filename> to
+widget is desired, replace <classname>KReportViewer</classname> with
+<classname>MReportViewer</classname> and <filename>kugar.h</filename> with
 <filename>kugarqt.h</filename> in the plugin code.
 </para>
 
 <sect2 id="plugin-usage">
 <title>Plugin usage</title>
 <para>
-Designer plugin will allow the usage of &Qt; Designer to place <classname>KReportViewer</classname>
+Designer plugin will allow the usage of &Qt; Designer to place a <classname>KReportViewer</classname>
 widget onto a window and preview it correctly.
 </para>
 
 <para>
 Programs that make use of this plugin must be linked dynamically with it.
-The corresponding library called <filename>libkugar_plugin.so</filename>.
+The corresponding library is called <filename>libkugar_plugin.so</filename>.
 Widgets or dialogs that include <classname>KReportViewer</classname>
 widget must include &lt;kugar.h&gt; in implementation and have a forward declaration
 of <classname>class KReportViewer</classname>. Includes can be done with &Qt;
@@ -226,7 +226,7 @@ Designer's Object Explorer (Source tab).
 </para>
 
 <para>
-To build plugin run:
+To build the plugin run:
 <cmdsynopsis>
 <command>qmake</command>
 <arg>kugar_plugin.pro</arg>

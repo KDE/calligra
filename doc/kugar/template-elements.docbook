@@ -215,7 +215,7 @@ class="element">DetailFooter</sgmltag> sections</title>
 <para>
 The <sgmltag class="element">DetailHeader</sgmltag> and <sgmltag
 class="element">DetailFooter</sgmltag> elements define report sections
-that are printed before and after details of given level and below on the report.
+that are printed before and after details of a given level and below on the report.
 </para>
 
 <synopsis>
@@ -252,7 +252,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 <term><anchor id="dhf-level"/><sgmltag class="attribute">Level</sgmltag></term>
 <listitem>
 <para>
-Set the level in hierarchy of the section. Sections with higher levels will be printed
+Set the hierarchy level of the section. Sections with higher levels will be printed
 before sections with lower ones. Level can be any number beginning from 0.
 </para>
 
@@ -271,7 +271,7 @@ before sections with lower ones. Level can be any number beginning from 0.
 <para>
 The <sgmltag class="element">Detail</sgmltag> element defines the report
 section that contains the report data. The report can have multiple details,
-which accessed by detail's Level attribute.
+which are accessed by the detail's Level attribute.
 </para>
 
 <synopsis>
@@ -299,7 +299,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 <term><anchor id="d-level"/><sgmltag class="attribute">Level</sgmltag></term>
 <listitem>
 <para>
-Set the level in hierarchy of the section. Sections with higher levels will be printed
+Set the hierarchy level of the section. Sections with higher levels will be printed
 before sections with lower ones. Level can be any number beginning from 0. This is an attribute
 from a <sgmltag class="attribute">row</sgmltag> element in a data file.
 </para>

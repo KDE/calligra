@@ -59,7 +59,7 @@
 <abstract>
 <para>
 &kugar; is a template based &XML; report engine.
-&kudesigner; is a flexible &GUI; report template designer for Kugar report engine.
+&kudesigner; is a flexible &GUI; report template designer for &kugar; report engine.
 </para>
 </abstract>
 
@@ -84,7 +84,7 @@ includes &GUI; report template designer, report engine, &konqueror; part
 for easy report preview and a set of examples.  </para>
 
 <para> The &kugar; Report Designer is a report template creation tool
-for &kugar; report engine.  &kugar; report engine uses a &XML; based
+for &kugar; report engine.  &kugar; report engine uses an &XML; based
 report template file (which can be created by hand or with
 &kudesigner;) and data file (also in &XML; format) to create
 reports. To get more information on &kudesigner; refer to the <link
@@ -128,7 +128,7 @@ Copyright 2000, 2001, Phil Thompson
 Copyright 2002 Alexander Dymo
 </para>
 
-<para>Portions of the documentation Copyright 2000,2001 Phil Thompson
+<para>Portions of the documentation Copyright 2000, 2001 Phil Thompson
 and Copyright 2002 Alexander Dymo</para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->

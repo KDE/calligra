@@ -82,7 +82,7 @@ of details.
 <listitem>
 <para>
 The <sgmltag class="element">DetailFooter</sgmltag> element defines report
-sections that are printed after details of given level and below on the report.
+sections that are printed after details of a given level and below on the report.
 </para>
 </listitem>
 </varlistentry>
@@ -92,7 +92,7 @@ sections that are printed after details of given level and below on the report.
 <listitem>
 <para>
 The <sgmltag class="element">PageFooter</sgmltag> element defines report
-sections that are usually printed at the end of the every page in the
+sections that are usually printed at the end of every page in the
 report.
 </para>
 </listitem>
