@@ -5375,10 +5375,29 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
+            bool ok = false;
             QStringList listVal = QStringList::split( valExpression, "," );
-            d->extra()->validity->valMin = listVal[0].toDouble();
-            d->extra()->validity->valMax = listVal[1].toDouble();
 
+            d->extra()->validity->valMin = listVal[0].toDouble(&ok);
+            if ( !ok )
+            {
+                d->extra()->validity->valMin = listVal[0].toInt(&ok);
+#if 0
+                if ( !ok )
+                    d->extra()->validity->valMin = listVal[0];
+#endif
+            }
+            ok=false;
+            d->extra()->validity->valMax = listVal[1].toDouble(&ok);
+            if ( !ok )
+            {
+                d->extra()->validity->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                if ( !ok )
+                    d->extra()->validity->valMax = listVal[1];
+#endif
+            }
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
@@ -5387,9 +5406,33 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( valExpression, "," );
-            d->extra()->validity->valMin = listVal[0].toDouble();
-            d->extra()->validity->valMax = listVal[1].toDouble();
+            bool ok = false;
+
+            d->extra()->validity->valMin = listVal[0].toDouble(&ok);
+            if ( !ok )
+            {
+                d->extra()->validity->valMin = listVal[0].toInt(&ok);
+#if 0
+                if ( !ok )
+                    d->extra()->validity->valMin = listVal[0];
+#endif
+            }
+            ok=false;
+            d->extra()->validity->valMax = listVal[1].toDouble(&ok);
+            if ( !ok )
+            {
+                d->extra()->validity->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                if ( !ok )
+                    d->extra()->validity->valMax = listVal[1];
+#endif
+            }
+
+
+
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         else
@@ -5428,8 +5471,27 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( "cell-content-is-between(" );
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( valExpression, "," );
-                d->extra()->validity->valMin = listVal[0].toDouble();
-                d->extra()->validity->valMax = listVal[1].toDouble();
+                bool ok = false;
+                d->extra()->validity->valMin = listVal[0].toDouble(&ok);
+                if ( !ok )
+                {
+                    d->extra()->validity->valMin = listVal[0].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        d->extra()->validity->valMin = listVal[0];
+#endif
+                }
+                ok=false;
+                d->extra()->validity->valMax = listVal[1].toDouble(&ok);
+                if ( !ok )
+                {
+                    d->extra()->validity->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                    if ( !ok )
+                        d->extra()->validity->valMax = listVal[1];
+#endif
+                }
                 d->extra()->validity->m_cond = Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
@@ -5437,8 +5499,26 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( valExpression, "," );
-                d->extra()->validity->valMin = listVal[0].toDouble();
-                d->extra()->validity->valMax = listVal[1].toDouble();
+                bool ok = false;
+                d->extra()->validity->valMin = listVal[0].toDouble(&ok);
+                if ( !ok )
+                {
+                    d->extra()->validity->valMin = listVal[0].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        d->extra()->validity->valMin = listVal[0];
+#endif
+                }
+                ok=false;
+                d->extra()->validity->valMax = listVal[1].toDouble(&ok);
+                if ( !ok )
+                {
+                    d->extra()->validity->valMax = listVal[1].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        d->extra()->validity->valMax = listVal[1];
+#endif
+                }
                 d->extra()->validity->m_cond = Different;
             }
         }
@@ -5446,6 +5526,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     if ( element.hasAttribute( "table:allow-empty-cell" ) )
     {
         //todo implement it into kspread
+        //todo add attribute and config into kspread_cell
     }
     if ( element.hasAttribute( "table:base-cell-address" ) )
     {
@@ -5497,51 +5578,53 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
 
 void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
 {
+    QString value;
+
     if ( valExpression.contains( "<" ) )
     {
-        QString value = valExpression.remove( "<" );
-        kdDebug()<<" value :"<<value<<endl;
+        value = valExpression.remove( "<" );
         d->extra()->validity->m_cond = Inferior;
-        d->extra()->validity->valMin = value.toDouble();
     }
     else if(valExpression.contains( ">" ) )
     {
-        QString value = valExpression.remove( ">" );
-        kdDebug()<<" value :"<<value<<endl;
+        value = valExpression.remove( ">" );
         d->extra()->validity->m_cond = Superior;
-        d->extra()->validity->valMin = value.toDouble();
     }
     else if (valExpression.contains( "<=" ) )
     {
-        QString value = valExpression.remove( "<=" );
-        kdDebug()<<" value :"<<value<<endl;
+        value = valExpression.remove( "<=" );
         d->extra()->validity->m_cond = InferiorEqual;
-        d->extra()->validity->valMin = value.toDouble();
     }
     else if (valExpression.contains( ">=" ) )
     {
-        QString value = valExpression.remove( ">=" );
-        kdDebug()<<" value :"<<value<<endl;
+        value = valExpression.remove( ">=" );
         d->extra()->validity->m_cond = SuperiorEqual;
-        d->extra()->validity->valMin = value.toDouble();
     }
     else if (valExpression.contains( "=" ) )
     {
-        QString value = valExpression.remove( "=" );
-        kdDebug()<<" value :"<<value<<endl;
+        value = valExpression.remove( "=" );
         d->extra()->validity->m_cond = Equal;
-        d->extra()->validity->valMin = value.toDouble();
     }
     else if (valExpression.contains( "!=" ) )
     {
         //add Differentto attribute
-        QString value = valExpression.remove( "!=" );
-        kdDebug()<<" value :"<<value<<endl;
+        value = valExpression.remove( "!=" );
         d->extra()->validity->m_cond = DifferentTo;
-        d->extra()->validity->valMin = value.toDouble();
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug()<<" value :"<<value<<endl;
+    bool ok = false;
+    d->extra()->validity->valMin = value.toDouble(&ok);
+    if ( !ok )
+    {
+        d->extra()->validity->valMin = value.toInt(&ok);
+#if 0
+        if ( !ok )
+            d->extra()->validity->valMin = value;
+#endif
+    }
+
 }
 
 
