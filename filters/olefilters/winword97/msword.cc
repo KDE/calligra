@@ -490,24 +490,46 @@ void MsWord::getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result)
 }
 
 // Walk a FKP of BTEs outputting text.
-void MsWord::getParagraphsFromBtes(const U8 *textStartFc, U32 textLength, bool unicode)
+void MsWord::getParagraphsFromBtes(U32 startFc, U32 endFc, bool unicode)
 {
     // A bin table is a plex of BTEs.
 
     Plex<BTE, 2> btes = Plex<BTE, 2>(this);
-    U32 startFc;
-    U32 endFc;
+    U32 actualStartFc;
+    U32 actualEndFc;
     BTE data;
 
     // Walk the BTEs.
 
     btes.startIteration(m_tableStream + m_fib.fcPlcfbtePapx, m_fib.lcbPlcfbtePapx);
-    while (btes.getNext(&startFc, &endFc, &data))
+    while (btes.getNext(&actualStartFc, &actualEndFc, &data))
     {
+        if (actualEndFc <= startFc)
+        {
+            // This one ends before the region of interest.
+
+            continue;
+        }
+        else
+        if (endFc <= actualStartFc)
+        {
+            // This one starts after the area of interest...we are done!
+
+            break;
+        }
+
+        // Tailor the result array to the caller's request.
+
+        //kdDebug(s_area) << "bte for FCs: " << startFc << ".." << endFc <<
+            //" actual FCs: " << actualStartFc << ".." << actualEndFc << endl;
+        if (actualStartFc < startFc)
+            actualStartFc = startFc;
+        if (actualEndFc > endFc)
+            actualEndFc = endFc;
         getParagraphsFromPapxs(
             m_mainStream + (data.pn * 512),
-            textStartFc,
-            textLength,
+            actualStartFc,
+            actualEndFc,
             unicode);
     }
 }
@@ -515,46 +537,72 @@ void MsWord::getParagraphsFromBtes(const U8 *textStartFc, U32 textLength, bool u
 // Walk a FKP of PAPXs outputting text.
 void MsWord::getParagraphsFromPapxs(
     const U8 *fkp,
-    const U8 *textStartFc,
-    U32 textLength,
+    U32 startFc,
+    U32 endFc,
     bool unicode)
 {
     // A PAPX FKP contains PHEs.
 
     Fkp<PHE, PAPXFKP> papx = Fkp<PHE, PAPXFKP>(this);
 
-    U32 startFc;
-    U32 endFc;
+    U32 actualStartFc;
+    U32 actualEndFc;
     U8 rgb;
     PHE layout;
     PAPXFKP style;
 
     // Decode main body text.
-//        kdDebug(s_area) << "text at: " << m_currentTextStreamPosition << " < " <<  (m_fib.ccpText - 1) * 2 << endl;
-//    if (m_currentTextStreamPosition < (m_fib.ccpText - 1) * 2)
-//        kdDebug(s_area) << "text at: " << m_currentTextStreamPosition << " <= " <<  (m_fib.ccpText) << endl;
-//    if (m_currentTextStreamPosition <= (m_fib.ccpText))
+
     {
-//        kdDebug(s_area) << "body text from: " << m_currentTextStreamPosition << ".." << m_currentTextStreamPosition+textLength<< endl;
         papx.startIteration(fkp);
-        while (papx.getNext(&startFc, &endFc, &rgb, &layout, &style))
+        while (papx.getNext(&actualStartFc, &actualEndFc, &rgb, &layout, &style))
         {
             QString text;
             CHPXarray chpxs;
 
-            //kdDebug(s_area) << "pap from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
-            read(m_fib.lid, m_mainStream + startFc, &text, endFc - startFc, unicode);
+            //kdDebug(s_area) << "pap from: " << actualStartFc << ".." << actualEndFc << ": rgb: " << rgb << endl;
+            if (actualEndFc <= startFc)
+            {
+                // This one ends before the region of interest.
+
+                continue;
+            }
+            else
+            if (endFc <= actualStartFc)
+            {
+                // This one starts after the area of interest...we are done!
+
+                break;
+            }
+
+            // Tailor the result array to the caller's request.
+
+            //kdDebug(s_area) << "text for FCs: " << startFc << ".." << endFc <<
+                //" actual FCs: " << actualStartFc << ".." << actualEndFc << endl;
+            if (actualStartFc < startFc)
+                actualStartFc = startFc;
+            if (actualEndFc > endFc)
+                actualEndFc = endFc;
+
+            read(
+                m_fib.lid,
+                m_mainStream + actualStartFc,
+                &text,
+                (actualEndFc - actualStartFc) / (unicode ? 2 : 1),
+                unicode);
+            if (text[text.length()] == '\r')
+                text.truncate(text.length() - 1);
 
             // Get the CHPXs that apply to this paragraph, then bias all the start and end positions
             // to be relative to the string we just extracted.
 
             unsigned i;
 
-            getChpxs(startFc, endFc, chpxs);
+            getChpxs(actualStartFc, actualEndFc, chpxs);
             for (i = 0; i < chpxs.size(); i++)
             {
-                chpxs[i].startFc -= startFc;
-                chpxs[i].endFc -= startFc;
+                chpxs[i].startFc -= actualStartFc;
+                chpxs[i].endFc -= actualStartFc;
             }
 
             // TBD: Now eliminate any deleted text.
@@ -591,11 +639,6 @@ void MsWord::getParagraphsFromPapxs(
     if (m_currentTextStreamPosition < m_fib.ccpHdrTxbx)
         kdDebug(s_area) << "output header textbox to: " << m_currentTextStreamPosition << endl;
 */
-
-//    if (unicode)
-//        m_currentTextStreamPosition += textLength / 2;
-//    else
-        m_currentTextStreamPosition += textLength;
 
     // If the string ends in a CR, strip it off.
 
@@ -856,7 +899,6 @@ void MsWord::parse()
     // Initialise the parse state.
 
     m_wasInTable = false;
-    m_currentTextStreamPosition = 0;
 
     // Note that we test for the presence of complex structure, rather than
     // m_fib.fComplex. This allows us to treat newer files which always seem
@@ -944,8 +986,8 @@ void MsWord::parse()
 
         Plex<PCD, 8> *pieceTable = new Plex<PCD, 8>(this);
 
-        U32 startCp;
-        U32 endCp;
+        U32 actualStartCp;
+        U32 actualEndCp;
         PCD data;
         const U32 codepage1252mask = 0x40000000;
         bool unicode;
@@ -953,13 +995,13 @@ void MsWord::parse()
         kdDebug(s_area) << "text stream: FCs: " << m_fib.fcMin << ".." << m_fib.fcMac << endl;
         kdDebug(s_area) << "body text: " << m_fib.ccpText << endl;
         pieceTable->startIteration(piecePtr, pieceCount);
-        while (pieceTable->getNext(&startCp, &endCp, &data))
+        while (pieceTable->getNext(&actualStartCp, &actualEndCp, &data))
         {
             unsigned prmCount;
             const U8 *prmPtr;
             U8 sprm[3];
 
-            kdDebug(s_area) << "piece table: CPs: " << startCp << ".." << endCp << " at FC: " << data.fc << endl;
+            kdDebug(s_area) << "piece table: CPs: " << actualStartCp << ".." << actualEndCp << " at FC: " << data.fc << endl;
             unicode = ((data.fc & codepage1252mask) != codepage1252mask);
             //unicode = unicode || m_fib.fExtChar;
             if (!unicode)
@@ -995,14 +1037,18 @@ void MsWord::parse()
 
                 paragraph.apply(prmPtr, prmCount);
             }
-            getParagraphsFromBtes(m_mainStream + data.fc, endCp - startCp, unicode);
+            getParagraphsFromBtes(
+                data.fc,
+                data.fc + ((actualEndCp - actualStartCp) * (unicode ? 2 : 1)),
+                unicode);
         }
     }
     else
     {
         getParagraphsFromBtes(
-            m_mainStream + m_fib.fcMin,
-            m_fib.fcMac - m_fib.fcMin,
+            //m_mainStream + m_fib.fcMin,
+            m_fib.fcMin,
+            m_fib.fcMac,
             false);
     }
 }

@@ -265,15 +265,14 @@ private:
     // The text stream contains body text, header, footers, endnotes, footnotes
     // and so on. These routines help walk the text stream.
 
-    unsigned m_currentTextStreamPosition;
     void getParagraphsFromBtes(
-        const U8 *textStartFc,
-        U32 textLength,
+        U32 startFc,
+        U32 endFc,
         bool unicode);
     void getParagraphsFromPapxs(
         const U8 *fkp,
-        const U8 *textStartFc,
-        U32 textLength,
+        U32 startFc,
+        U32 endFc,
         bool unicode);
 
     // Convert a char into a unicode character.
