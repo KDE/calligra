@@ -315,7 +315,11 @@ bool KoDocument::saveFile()
         if ( d->lastErrorMessage.isEmpty() )
             KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
         else if ( d->lastErrorMessage != "USER_CANCELED" )
+        {
             KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file ).arg( d->lastErrorMessage ) );
+            //don't store url when we are not autorize to save file.
+            resetURL();
+        }
     }
     return ret;
 }
