@@ -821,6 +821,81 @@ static bool kspreadfunc_average( KSContext& context )
   return b;
 }
 
+
+static bool kspreadfunc_median_helper
+  (KSContext& context, QValueList<KSValue::Ptr>& args, 
+   QValueList<KSValue::Ptr>& sortedList)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+  bool returnVal = true;
+
+  /* loop through each value, adding it to the sorted list (recursing
+     whenever necessary */
+  while(it != end && returnVal)
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      /* try to recurse */
+      returnVal = kspreadfunc_median_helper(context, (*it)->listValue(), 
+					    sortedList);
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      /* insert it properly into the list */
+      QValueList<KSValue::Ptr>::Iterator ptr = sortedList.begin();
+      QValueList<KSValue::Ptr>::Iterator endPtr = sortedList.end();
+      
+      /* find the proper place */
+      while (ptr != endPtr && (*it)->doubleValue() > (*ptr)->doubleValue())
+      {
+	++ptr;
+      }
+      sortedList.insert(ptr, *it);
+    }
+    ++it;
+  }
+
+  return returnVal;
+}
+
+static bool kspreadfunc_median( KSContext& context )
+{
+  double result = 0.0;
+  bool worked;
+  
+  /* need a list to hold all the values in sorted order so we can pick out the
+     median one */
+  QValueList<KSValue::Ptr> sortedValues;
+
+  worked = kspreadfunc_median_helper(context, context.value()->listValue(),
+				     sortedValues);
+
+  if (worked && sortedValues.size() > 0)
+  {
+    /* get the median value */
+    QValueList<KSValue::Ptr>::Iterator ptr = 
+      sortedValues.at((sortedValues.size() - 1) / 2);
+
+    /* now we're halfway through the list, or if there is an even number of 
+       items, we're on the 'first' of the 2 in the middle */
+    
+    result = (*ptr)->doubleValue();
+    if (sortedValues.size() % 2 == 0)
+    {
+      ++ptr;
+      result = (result + (*ptr)->doubleValue()) / 2;
+    }
+
+  }
+
+  context.setValue( new KSValue(result));
+
+  return worked;
+}
+
+
+
 static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result, double avera)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -4251,6 +4326,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "degree", new KSValue( new KSBuiltinFunction( module, "degree", kspreadfunc_degree ) ) );
   module->addObject( "radian", new KSValue( new KSBuiltinFunction( module, "radian", kspreadfunc_radian ) ) );
   module->addObject( "average", new KSValue( new KSBuiltinFunction( module, "average", kspreadfunc_average ) ) );
+  module->addObject( "median", new KSValue( new KSBuiltinFunction( module, "median", kspreadfunc_median ) ) );
   module->addObject( "variance", new KSValue( new KSBuiltinFunction( module, "variance", kspreadfunc_variance) ) );
   module->addObject( "multiply", new KSValue( new KSBuiltinFunction( module, "multiply", kspreadfunc_mult) ) );
   module->addObject( "OR", new KSValue( new KSBuiltinFunction( module, "OR", kspreadfunc_or) ) );

@@ -2354,6 +2354,38 @@
       </Help>
     </Function>
 
+
+    <Function>
+      <Name>median</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point value or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The median() function calculates the median of all the values given as parameters.  You can calculate the median of a range like median(A1:B5) or a list of values like median(12; 5; 12.5).  Blank cells will be considered as a zero, and cells with text will be ignored</Text>
+	<Syntax>median(value;value;...)</Syntax>
+	<Example>median(12; 5; 5.5) equals 5.5</Example>
+	<Example>median(12; 7; 8;2) equals 7.5</Example>
+      </Help>
+    </Function>
+
     <Function>
       <Name>variance</Name>
       <Type>Float</Type>
