@@ -1425,8 +1425,9 @@ void KPresenterView_impl::presentParts(float _presFakt,QPainter* _painter,QRect 
       QPicture* pic;
       pic = chl.current()->draw();
 
-      _painter->drawPicture(*pic);
- 
+      if (pic && !pic->isNull())
+	_painter->drawPicture(*pic);
+  
       _painter->resetXForm();
     }
 }

@@ -66,6 +66,7 @@ Page::~Page()
 /*============================ draw contents ====================*/
 void Page::draw(QRect _rect,QPainter *p)
 {
+  p->save();
   editMode = false;
   fillBlack = false;
   _presFakt = 1.0;
@@ -81,7 +82,7 @@ void Page::draw(QRect _rect,QPainter *p)
   _presFakt = 1.0;
   fillBlack = true;
   editMode = true;
-  repaint(false);
+  p->restore();
 }
 
 /*======================== paint event ===========================*/

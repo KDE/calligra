@@ -174,10 +174,13 @@ KPresenterDocument_impl::~KPresenterDocument_impl()
 /*======================== draw contents as QPicture =============*/
 void KPresenterDocument_impl::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
 {
-  debug("DRAW");
+  warning("***********************************************");
+  warning(i18n("KPresenter doesn't support KoDocument::draw(...) now!"));
+  warning("***********************************************");
+  return;
+  
   if (m_lstViews.count() > 0)
     {
-      debug("DRAW do it");
       QPainter painter;
       painter.begin(_dev);
      
