@@ -850,8 +850,6 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 				contrly = cury;
 			}
 		}
-
-		obj->end();
 	}
 }
 
