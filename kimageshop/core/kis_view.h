@@ -103,9 +103,6 @@ class KisView : public KoView
   void paste();
 
   // dialog action slots
-  void dialog_layer();
-  void dialog_color();
-  void dialog_brush();
   void dialog_gradient();
   void dialog_gradienteditor();
   void updateToolbarButtons();
@@ -191,7 +188,7 @@ class KisView : public KoView
   // edit actions
   KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste;
   // dialog actions
-  KToggleAction *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
+  KToggleAction *m_dialog_gradient, *m_dialog_gradienteditor;
   // tool actions
   KToggleAction *m_tool_select_rect, *m_tool_select_polygon, *m_tool_move, *m_tool_zoom, *m_tool_brush,
     *m_tool_draw, *m_tool_pen, *m_tool_gradient, *m_tool_colorpicker, *m_tool_fill,

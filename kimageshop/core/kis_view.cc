@@ -249,37 +249,6 @@ void KisView::setupTools()
 
 void KisView::setupDialogs()
 {
-  // color dialog
-  //m_pColorDialog = new ColorDialog( this );
-  // m_pColorDialog->resize(254, 150);
-  //m_pColorDialog->move(521, 380);
-  //m_pColorDialog->hide();
-  //connect( m_pColorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
-
-  //connect(m_pColorDialog, SIGNAL(fgColorChanged(const KisColor&)),
-  //	  this, SLOT(slotSetFGColor(const KisColor&)));
-  //connect(m_pColorDialog, SIGNAL(bgColorChanged(const KisColor&)),
-  //		  this, SLOT(slotSetBGColor(const KisColor&)));
-
-  // layer dialog
-  //m_pLayerDialog = new LayerDialog( m_pDoc, this );
-  //m_pLayerDialog->resize( 205, 267 );
-  //m_pLayerDialog->move( 560, 22 );
-  //m_pLayerDialog->hide();
-  //connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
-
-  // brush dialog
-  //m_pBrushDialog = new BrushDialog(this);
-  //m_pBrushDialog->resize(185, 158);
-  //m_pBrushDialog->move(523, 220);
-  //m_pBrushDialog->hide();
-  //connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
-
-  // brush
-  //m_pBrushChooser = m_pBrushDialog->brushChooser();
-  //m_pBrush = m_pBrushChooser->currentBrush();
-  //QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)), this, SLOT(slotSetBrush(const KisBrush*)));
-
   // gradient dialog
   m_pGradientDialog = new GradientDialog( m_pDoc, this );
   m_pGradientDialog->resize( 206, 185 );
@@ -315,8 +284,6 @@ void KisView::setupActions()
   new KAction( i18n("Zoom &out"), KISBarIcon("viewmag-"), 0, this,
                SLOT( zoom_out() ), actionCollection(), "zoom_out" );
 
-  m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KISBarIcon("brush_dialog"), 0, this,
-				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
   m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
 										 KISBarIcon("gradient_dialog"), 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
@@ -818,43 +785,6 @@ void KisView::zoom_out()
     zoom_out( 0, 0 );
 }
 
-void KisView::dialog_layer()
-{
-  /*
-  if (m_dialog_layer->isChecked())
-  {
-    m_pLayerDialog->show();
-    m_pLayerDialog->setFocus();
-  }
-  else
-    m_pLayerDialog->hide();
-  */
-}
-
-void KisView::dialog_color()
-{
-  /* if (m_dialog_color->isChecked())
-  {
-    m_pColorDialog->show();
-    m_pColorDialog->setFocus();
-  }
-  else
-    m_pColorDialog->hide();
-  */
-}
-
-void KisView::dialog_brush()
-{
-  /* if (m_dialog_brush->isChecked())
-  {
-    m_pBrushDialog->show();
-    m_pBrushDialog->setFocus();
-  }
-  else
-    m_pBrushDialog->hide();
-  */
-}
-
 void KisView::dialog_gradient()
 {
   if (m_dialog_gradient->isChecked())
@@ -882,9 +812,6 @@ void KisView::updateToolbarButtons()
 {
   kDebugInfo( "KisView::updateToolbarButtons" );
 
-  // m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
-  //m_dialog_color->setChecked( m_pColorDialog->isVisible() );
-  //m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
   m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
   m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
 }

@@ -12,9 +12,6 @@
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
   <Separator/>
-  <Action name="dialog_layer"/>
-  <Action name="dialog_color"/>
-  <Action name="dialog_brush"/>
   <Action name="dialog_gradient"/>
   <Action name="dialog_gradienteditor"/>
  </Menu>
@@ -62,23 +59,17 @@
   <Action name="paste"/>
 </ToolBar>
 <ToolBar position="top">
-  <Action name="dialog_layer"/>
-  <Action name="dialog_color"/>
-  <Action name="dialog_brush"/>
   <Action name="dialog_gradient"/>
   <Action name="dialog_gradienteditor"/>
 </ToolBar>
 <ToolBar position="left">
   <Action name="tool_select_rect"/>
-  <Action name="tool_select_polygon"/>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
   <Action name="tool_colorpicker"/>
   <Action name="tool_pen"/>
-  <Action name="tool_draw_figure"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
-  <Action name="tool_fill"/>
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
 </ToolBar>
