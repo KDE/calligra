@@ -538,33 +538,36 @@ void KivioDoc::printContent( KPrinter &prn )
  */
 bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDialog *dlg)
 {
-    QPixmap buffer( pPage->paperLayout().ptWidth + dlg->border()*2,
-        pPage->paperLayout().ptHeight + dlg->border()*2 );
+  KoZoomHandler zoom;
+  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
+  QPixmap buffer( zoom.zoomItX(pPage->paperLayout().ptWidth) + dlg->border()*2,
+      zoom.zoomItY(pPage->paperLayout().ptHeight) + dlg->border()*2 );
 
-    kdDebug() << "KivioDoc::exportCurPage() to " << fileName << "\n";
+  kdDebug() << "KivioDoc::exportCurPage() to " << fileName << "\n";
 
-    KivioScreenPainter p;
+  KivioScreenPainter p;
 
-    buffer.fill(Qt::white);
+  buffer.fill(Qt::white);
 
-    p.start( &buffer );
-    p.setTranslation( dlg->border(), dlg->border() );
+  p.start( &buffer );
+  p.setTranslation( dlg->border(), dlg->border() );
 
-    if( dlg->fullPage()==true )
-    {
-        pPage->printContent(p);
-    }
-    else
-    {
-        pPage->printSelected(p);
-    }
+  if( dlg->fullPage()==true )
+  {
+    pPage->printContent(p);
+  }
+  else
+  {
+    pPage->printSelected(p);
+  }
 
-    p.stop();
+  p.stop();
 
 
-    QFileInfo finfo(fileName);
+  QFileInfo finfo(fileName);
 
-    return buffer.save( fileName, finfo.extension(false).upper().latin1(), dlg->quality());
+  return buffer.save( fileName, finfo.extension(false).upper().latin1(), dlg->quality());
 }
 
 
