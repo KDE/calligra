@@ -101,6 +101,7 @@ protected:
 
     FrameBehaviour frameBehaviour;
     KWUnits frameUnits;
+    QString oldFrameName;
 
 protected slots:
     void runNoClicked();

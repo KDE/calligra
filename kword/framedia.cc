@@ -571,7 +571,8 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         if(!same) found=false;
     }
 
-    eFrameSetName->setText( i18n( "Frameset %1" ).arg( numTxtFrameSets ) );
+    oldFrameName=i18n( "Frameset %1" ).arg( numTxtFrameSets );
+    eFrameSetName->setText( oldFrameName );
     connectListSelected( lFrameSList->firstChild() );
 
     //kdDebug() << "setup tab 3 exit"<<endl;
@@ -975,6 +976,7 @@ bool KWFrameDia::applyChanges()
                                               "can not be made because a frameset with that name\n"
                                               "already exists. Please enter another name or select\n"
                                               "an existing frameset from the list.").arg(name));
+                    eFrameSetName->setText(oldFrameName);
                     return false;
                 }
             }
