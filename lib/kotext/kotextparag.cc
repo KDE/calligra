@@ -472,7 +472,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     for ( int idx = start ; idx < end ; ++idx )
     {
         QTextStringChar &ch = string()->at(idx);
-        if ( ch.isCustom() )
+        if ( ch.isCustom() || ch.c.isSpace() )
             continue;
         if ( !lastFormat->inFont( ch.c ) )
         {
