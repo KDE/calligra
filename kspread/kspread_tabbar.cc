@@ -479,7 +479,7 @@ bool TabBar::canScrollForward() const
 {
     if ( d->tabs.count() == 0 )
         return false;
-
+        
     return d->lastTab < d->tabs.count();
 }
 
@@ -634,6 +634,7 @@ void TabBar::paintEvent( QPaintEvent* )
                      height(), colorGroup(), FALSE, 1, &fill );
 
     d->layoutTabs();
+    d->updateButtons();
     
     // draw first all non-active, visible tabs
     for( unsigned c = 0; c < d->tabRects.count(); c++ )
