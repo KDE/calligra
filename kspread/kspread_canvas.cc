@@ -699,7 +699,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  doc()->emitEndOperation();
+  doc()->emitEndOperation( KSpreadDoc::Paint, area );
 }
 
 void KSpreadCanvas::slotScrollVert( int _value )
@@ -742,7 +742,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
                                             unzoomedValue));
   }
 
-  activeTable()->setRegionPaintDirty(area);
+  activeTable()->setRegionPaintDirty( area );
 
 
   // New absolute position
@@ -752,7 +752,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   activeTable()->enableScrollBarUpdates( true );
 
-  doc()->emitEndOperation();
+  doc()->emitEndOperation( KSpreadDoc::Paint, area );
 }
 
 void KSpreadCanvas::slotMaxColumn( int _max_column )
@@ -2428,7 +2428,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
   QRect rect = selection();
 
   m_pDoc->emitBeginOperation(false);
-  table->setRegionPaintDirty(rect);
+  table->setRegionPaintDirty( rect );
   int right  = rect.right();
   int bottom = rect.bottom();
 
@@ -2498,7 +2498,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           break;
 
          default:
-           m_pDoc->emitEndOperation();
+           m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
           return false;
         } // switch
 
@@ -2553,13 +2553,13 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         m_pDoc->emitEndOperation();
+         m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
         return false;
       }
       table->emit_updateRow( rw, r );
     }
 
-    m_pDoc->emitEndOperation();
+    m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
     return true;
   }
 
@@ -2621,7 +2621,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           break;
 
          default:
-           m_pDoc->emitEndOperation();
+           m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
           return false;
         }
         cell = table->getNextCellDown( c, cell->row() );
@@ -2676,12 +2676,12 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         m_pDoc->emitEndOperation();
+         m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
          return false;
       }
       table->emit_updateColumn( cw, c );
     }
-    m_pDoc->emitEndOperation();
+    m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
     return true;
   }
 
@@ -2749,14 +2749,14 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         m_pDoc->emitEndOperation();
+         m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
         return false;
       } // switch
     } // for left .. right
   } // for top .. bottom
   _ev->accept();
 
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, rect );
   return true;
 }
 

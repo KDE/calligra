@@ -476,7 +476,7 @@ int KSpreadSheet::topRow( int _ypos, double & _top,
         _top = -_canvas->yOffset();
     }
     else
-        _top = 0;
+        _top = 0.0;
 
     int row = 1;
     double y = rowFormat( row )->dblHeight( _canvas );

@@ -1343,13 +1343,15 @@ void KSpreadView::initializeBorderActions()
                                            TKSelectColorAction::LineColor,
                                            actionCollection(), "borderColor" );
 
-  connect(m_borderColor,SIGNAL(activated()),SLOT(changeBorderColor()));
-  m_borderColor->setToolTip(i18n("Select a new border color."));
+  connect( m_borderColor, SIGNAL(activated()), SLOT(changeBorderColor()) );
+  m_borderColor->setToolTip( i18n( "Select a new border color." ) );
 
 }
 
 KSpreadView::~KSpreadView()
 {
+  ElapsedTime el( "~KSpreadView" );
+  m_pDoc->increaseNumOperation(); // no paints anymore...
     deleteEditor( true );
     if ( !m_transformToolBox.isNull() )
 	delete (&*m_transformToolBox);
@@ -1385,8 +1387,8 @@ KSpreadView::~KSpreadView()
 void KSpreadView::initConfig()
 {
     KConfig *config = KSpreadFactory::global()->config();
-    if( config->hasGroup("Parameters" ))
-        {
+    if ( config->hasGroup("Parameters" ))
+    {
         config->setGroup( "Parameters" );
         m_pDoc->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true));
         m_pDoc->setShowVerticalScrollBar(config->readBoolEntry("Vert ScrollBar",true));
@@ -1410,9 +1412,9 @@ void KSpreadView::initConfig()
         //but default value is stored as seconde.
         m_pDoc->setAutoSave(config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
         m_pDoc->setBackupFile( config->readBoolEntry("BackupFile",true));
-	}
+    }
 
- if(  config->hasGroup("KSpread Color" ) )
+   if (  config->hasGroup("KSpread Color" ) )
    {
      config->setGroup( "KSpread Color" );
      QColor _col(Qt::lightGray);
@@ -1483,16 +1485,15 @@ void KSpreadView::recalcWorkBook()
 {
   KSpreadSheet *tbl;
   m_pDoc->emitBeginOperation(true);
-    for ( tbl = m_pDoc->map()->firstTable();
-	  tbl != 0L;
-          tbl = m_pDoc->map()->nextTable() )
-    {
-      bool b = tbl->getAutoCalc();
-      tbl->setAutoCalc(true);
-      tbl->recalc();
-      tbl->setAutoCalc(b);
-    }
-
+  for ( tbl = m_pDoc->map()->firstTable();
+        tbl != 0L;
+        tbl = m_pDoc->map()->nextTable() )
+  {
+    bool b = tbl->getAutoCalc();
+    tbl->setAutoCalc(true);
+    tbl->recalc();
+    tbl->setAutoCalc(b);
+  }
 
   m_pDoc->emitEndOperation();
 }
@@ -1503,7 +1504,8 @@ void KSpreadView::refreshLocale()
   KSpreadSheet *tbl;
   for ( tbl = m_pDoc->map()->firstTable();
         tbl != 0L;
-        tbl = m_pDoc->map()->nextTable() ){
+        tbl = m_pDoc->map()->nextTable() )
+  {
     tbl->updateLocale();
   }
   m_pDoc->emitEndOperation();
@@ -1567,18 +1569,18 @@ void KSpreadView::extraSpelling()
 
 void KSpreadView::startKSpell()
 {
-    if(m_pDoc->getKSpellConfig())
+    if ( m_pDoc->getKSpellConfig() )
     {
-        m_pDoc->getKSpellConfig()->setIgnoreList(m_pDoc->spellListIgnoreAll());
-        m_pDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+        m_pDoc->getKSpellConfig()->setIgnoreList( m_pDoc->spellListIgnoreAll() );
+        m_pDoc->getKSpellConfig()->setReplaceAllList( m_spell.replaceAll );
 
     }
     m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
-                                     SLOT( spellCheckerReady() ),
-                                     m_pDoc->getKSpellConfig() );
+                                       SLOT( spellCheckerReady() ),
+                                       m_pDoc->getKSpellConfig() );
 
-  m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
-  m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
+  m_spell.kspell->setIgnoreUpperWords( m_pDoc->dontCheckUpperWord() );
+  m_spell.kspell->setIgnoreTitleCase( m_pDoc->dontCheckTitleCase() );
 
   QObject::connect( m_spell.kspell, SIGNAL( death() ),
                     this, SLOT( spellCheckerFinished() ) );
@@ -1626,10 +1628,11 @@ void KSpreadView::spellCheckerReady()
   {
     // if nothing is selected we have to check every cell
     // we use a different way to make it faster
+    ElapsedTime et( "Check spelling in table..." );
     while ( m_spell.currentCell )
     {
       // check text only
-      if ( !m_spell.currentCell->isDefault() && m_spell.currentCell->value().isString() )
+      if ( m_spell.currentCell->value().isString() )
       {
         m_spell.kspell->check( m_spell.currentCell->text(), true );
 
@@ -1637,6 +1640,8 @@ void KSpreadView::spellCheckerReady()
       }
 
       m_spell.currentCell = m_spell.currentCell->nextCell();
+      if ( m_spell.currentCell->isDefault() )
+        kdDebug() << "checking default cell!!" << endl << endl;
     }
 
     if (spellSwitchToOtherTable())
@@ -1698,7 +1703,7 @@ void KSpreadView::spellCheckerReady()
 
 void KSpreadView::spellCleanup()
 {
-  if (m_pCanvas)
+  if ( m_pCanvas )
     m_pCanvas->setCursor( ArrowCursor );
 
   m_spell.kspell->cleanUp();
@@ -1712,17 +1717,16 @@ void KSpreadView::spellCleanup()
 
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
 
-  if(m_spell.macroCmdSpellCheck)
-      m_pDoc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
+  if ( m_spell.macroCmdSpellCheck )
+    m_pDoc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
   m_spell.macroCmdSpellCheck=0L;
-
 }
 
 
 bool KSpreadView::spellSwitchToOtherTable()
 {
   // there is no other table
-  if(m_pDoc->map()->count()==1)
+  if ( m_pDoc->map()->count() == 1 )
     return false;
 
   // for optimization
@@ -1762,7 +1766,7 @@ bool KSpreadView::spellSwitchToOtherTable()
        != KMessageBox::Yes )
     return false;
 
-  setActiveTable(m_spell.currentSpellTable);
+  setActiveTable( m_spell.currentSpellTable );
 
   return true;
 }
@@ -1773,7 +1777,7 @@ void KSpreadView::spellCheckerMisspelling( const QString &,
                                            unsigned int )
 {
   // scroll to the cell
-  if (!m_spell.spellCheckSelection)
+  if ( !m_spell.spellCheckSelection )
   {
     m_spell.spellCurrCellX = m_spell.currentCell->column();
     m_spell.spellCurrCellY = m_spell.currentCell->row();
@@ -1816,10 +1820,10 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
   cell->setCellText( content );
   m_pEditWidget->setText( content );
 
-  if(!m_spell.macroCmdSpellCheck)
-      m_spell.macroCmdSpellCheck=new KSpreadMacroUndoAction( m_pDoc, i18n("Correct Misspelled Word") );
-  m_spell.macroCmdSpellCheck->addCommand(undo);
-  m_pDoc->emitEndOperation();
+  if ( !m_spell.macroCmdSpellCheck )
+      m_spell.macroCmdSpellCheck = new KSpreadMacroUndoAction( m_pDoc, i18n("Correct Misspelled Word") );
+  m_spell.macroCmdSpellCheck->addCommand( undo );
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::spellCheckerDone( const QString & )
@@ -1855,7 +1859,7 @@ void KSpreadView::spellCheckerDone( const QString & )
     }
     m_spell.replaceAll.clear();
 
-    if(m_spell.macroCmdSpellCheck)
+    if ( m_spell.macroCmdSpellCheck )
     {
         m_pDoc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
     }
@@ -2234,7 +2238,7 @@ void KSpreadView::changeTextColor()
   {
     m_pTable->setSelectionTextColor( selectionInfo(), m_textColor->color() );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::setSelectionTextColor(const QColor &txtColor)
@@ -2244,7 +2248,7 @@ void KSpreadView::setSelectionTextColor(const QColor &txtColor)
   {
     m_pTable->setSelectionTextColor( selectionInfo(), txtColor );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, selectionInfo()->selection() );
 }
 
 void KSpreadView::changeBackgroundColor()
@@ -2254,7 +2258,7 @@ void KSpreadView::changeBackgroundColor()
   {
     m_pTable->setSelectionbgColor( selectionInfo(), m_bgColor->color() );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::setSelectionBackgroundColor(const QColor &bgColor)
@@ -2264,7 +2268,7 @@ void KSpreadView::setSelectionBackgroundColor(const QColor &bgColor)
   {
     m_pTable->setSelectionbgColor( selectionInfo(), bgColor );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::changeBorderColor()
@@ -2274,7 +2278,7 @@ void KSpreadView::changeBorderColor()
   {
     m_pTable->setSelectionBorderColor( selectionInfo(), m_borderColor->color() );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
@@ -2284,7 +2288,7 @@ void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
   {
     m_pTable->setSelectionBorderColor( selectionInfo(), bdColor );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::helpUsing()
@@ -2356,103 +2360,118 @@ void KSpreadView::redo()
 
 void KSpreadView::deleteColumn()
 {
-
   if ( !m_pTable )
     return;
 
-  m_pDoc->emitBeginOperation(false);
+  m_pDoc->emitBeginOperation( false );
 
   QRect r( m_selectionInfo->selection() );
 
-  m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
+  m_pTable->removeColumn( r.left(), ( r.right()-r.left() ) );
 
   updateEditWidget();
-  m_selectionInfo->setSelection(m_selectionInfo->marker(),
-                                m_selectionInfo->marker(), m_pTable);
-  m_pDoc->emitEndOperation();
+  m_selectionInfo->setSelection( m_selectionInfo->marker(),
+                                 m_selectionInfo->marker(), m_pTable );
+
+  QRect vr( m_pTable->visibleRect( m_pCanvas ) );
+  vr.setLeft( r.left() );
+
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, vr );
 }
 
 void KSpreadView::deleteRow()
 {
-    if ( !m_pTable )
-        return;
+  if ( !m_pTable )
+    return;
+  
+  m_pDoc->emitBeginOperation( false );
+  QRect r( m_selectionInfo->selection() );
+  m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
+  
+  updateEditWidget();
+  m_selectionInfo->setSelection( m_selectionInfo->marker(),
+                                 m_selectionInfo->marker(), m_pTable );
 
-    m_pDoc->emitBeginOperation(false);
-    QRect r( m_selectionInfo->selection() );
-    m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
+  QRect vr( m_pTable->visibleRect( m_pCanvas ) );
+  vr.setTop( r.top() );
 
-    updateEditWidget();
-    m_selectionInfo->setSelection(m_selectionInfo->marker(),
-                                  m_selectionInfo->marker(), m_pTable);
-    m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, vr );
 }
 
 void KSpreadView::insertColumn()
 {
-    if ( !m_pTable )
-        return;
-    m_pDoc->emitBeginOperation(false);
-    QRect r( m_selectionInfo->selection() );
-    m_pTable->insertColumn( r.left(),(r.right()-r.left()) );
+  if ( !m_pTable )
+    return;
 
+  m_pDoc->emitBeginOperation( false );
+  QRect r( m_selectionInfo->selection() );
+  m_pTable->insertColumn( r.left(), ( r.right()-r.left() ) );
+  
+  updateEditWidget();
 
-    updateEditWidget();
-    m_pDoc->emitEndOperation();
+  QRect vr( m_pTable->visibleRect( m_pCanvas ) );
+  vr.setLeft( r.left() - 1 );
+
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, vr );
 }
 
 void KSpreadView::hideColumn()
 {
-    if ( !m_pTable )
-        return;
-    m_pDoc->emitBeginOperation(false);
-    QRect r( m_selectionInfo->selection() );
-    m_pTable->hideColumn( r.left(),(r.right()-r.left()) );
-    m_pDoc->emitEndOperation();
+  if ( !m_pTable )
+    return;
+  m_pDoc->emitBeginOperation( false );
+  QRect r( m_selectionInfo->selection() );
+  m_pTable->hideColumn( r.left(), ( r.right()-r.left() ) );
+  m_pDoc->emitEndOperation();
+
+  QRect vr( m_pTable->visibleRect( m_pCanvas ) );
+  vr.setLeft( r.left() );
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, vr );
 }
 
 void KSpreadView::showColumn()
 {
-    if ( !m_pTable )
-        return;
-
-    KSpreadShowColRow dlg( this, "showCol", KSpreadShowColRow::Column );
-    dlg.exec();
+  if ( !m_pTable )
+    return;
+  
+  KSpreadShowColRow dlg( this, "showCol", KSpreadShowColRow::Column );
+  dlg.exec();
 }
 
 void KSpreadView::showSelColumns()
 {
-    if ( !m_pTable )
-        return;
-
-    int i;
-    QRect rect = m_selectionInfo->selection();
-    ColumnFormat * col;
-    QValueList<int>hiddenCols;
-
-    m_pDoc->emitBeginOperation(false);
-
-    for ( i = rect.left(); i <= rect.right(); ++i )
+  if ( !m_pTable )
+    return;
+  
+  int i;
+  QRect rect = m_selectionInfo->selection();
+  ColumnFormat * col;
+  QValueList<int>hiddenCols;
+  
+  m_pDoc->emitBeginOperation( false );
+  
+  for ( i = rect.left(); i <= rect.right(); ++i )
+  {
+    if (i == 2) // "B"
     {
-      if (i == 2) // "B"
-      {
-        col = activeTable()->columnFormat( 1 );
-        if ( col->isHide() )
-        {
-          hiddenCols.append( 1 );
-        }
-      }
-
-      col = m_pTable->columnFormat( i );
+      col = activeTable()->columnFormat( 1 );
       if ( col->isHide() )
       {
-	hiddenCols.append(i);
+        hiddenCols.append( 1 );
       }
     }
-
-    if (hiddenCols.count() > 0)
-      m_pTable->showColumn(0, -1, hiddenCols);
-
-    m_pDoc->emitEndOperation();
+    
+    col = m_pTable->columnFormat( i );
+    if ( col->isHide() )
+    {
+      hiddenCols.append( i );
+    }
+  }
+  
+  if  (hiddenCols.count() > 0 )
+    m_pTable->showColumn( 0, -1, hiddenCols );
+  
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::insertRow()
@@ -6319,7 +6338,8 @@ int KSpreadView::canvasYOffset() const
 void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
   ElapsedTime et( "***guiActivateEvent***" );
-    m_pDoc->emitBeginOperation(false);
+  m_pDoc->increaseNumOperation();
+    m_pDoc->emitBeginOperation( false );
 
     if ( ev->activated() )
     {
@@ -6331,13 +6351,14 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     else
     {
         /*if(m_sbCalcLabel)
-        {
-            disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-            }*/
+          {
+          disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+          }*/
     }
 
     m_pDoc->emitEndOperation();
     KoView::guiActivateEvent( ev );
+  m_pDoc->decreaseNumOperation();
 }
 
 void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
