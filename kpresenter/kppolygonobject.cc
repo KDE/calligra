@@ -26,6 +26,7 @@
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
+#include "KPPolygonObjectIface.h"
 
 #include <math.h>
 
@@ -72,6 +73,14 @@ KPPolygonObject &KPPolygonObject::operator=( const KPPolygonObject & )
 {
     return *this;
 }
+
+DCOPObject* KPPolygonObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPPolygonObjectIface( this );
+    return dcop;
+}
+
 
 /*========================= save =================================*/
 QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )

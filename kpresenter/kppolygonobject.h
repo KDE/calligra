@@ -26,6 +26,7 @@
 
 class KPGradient;
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPPolygonObject                                         */
@@ -41,6 +42,7 @@ public:
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
     virtual ~KPPolygonObject() {}
+    virtual DCOPObject* dcopObject();
 
     KPPolygonObject &operator=( const KPPolygonObject & );
 
