@@ -139,7 +139,7 @@ public:
     QChar getCounterBullet() const { return counter.counterBullet; }
     int getCounterDepth() const { return counter.counterDepth; }
     QString getCounterLeftText() const { return counter.counterLeftText; }
-    QString getCounterRightText() const { return counter.counterRightText.latin1(); }
+    QString getCounterRightText() const { return counter.counterRightText; }
 
     QString getFollowingParagLayout() { return followingParagLayout; }
 

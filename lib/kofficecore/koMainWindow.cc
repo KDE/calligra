@@ -434,6 +434,13 @@ bool KoMainWindow::saveDocument( bool saveas )
     }
 }
 
+void KoMainWindow::closeEvent(QCloseEvent *e) {
+    if(queryClose()) {
+        setRootDocument(0L);
+        KParts::MainWindow::closeEvent(e);
+    }
+}
+
 bool KoMainWindow::queryClose()
 {
   if ( rootDocument() == 0 )

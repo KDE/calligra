@@ -216,6 +216,7 @@ protected:
      */
     virtual bool saveDocument( bool _saveas = false );
 
+    virtual void closeEvent(QCloseEvent *e);
     virtual bool queryClose();
 
     KRecentFilesAction *m_recent;
