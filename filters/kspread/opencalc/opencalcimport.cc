@@ -1861,12 +1861,6 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
       layout->setHideFormula( false );
       layout->setHideAll( false );
     }
-    else if ( prot == "formula-hidden" )
-    {
-      layout->setHideAll( false );
-      layout->setHideFormula( true );
-      layout->setNotProtected( true );
-    }
     kdDebug(30518) << "Cell " << prot << endl;
   }
 
