@@ -131,10 +131,25 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
             default: align = 0; break;
           };
 
+          const Sidewinder::FormatFont& font = format.font();
+
           QDomElement fe;
           fe = mainDocument.createElement( "format" );
           fe.setAttribute( "align", QString::number( align ) );
           ce.appendChild( fe );
+
+          QDomElement ff;
+          ff = mainDocument.createElement( "font" );
+          QString fontFamily = string(format.font().fontFamily()).string();
+          unsigned fontSize = font.fontSize();
+          ff.setAttribute( "family", fontFamily );
+          ff.setAttribute( "size", QString::number( fontSize ) );
+          ff.setAttribute( "weight", font.bold() ? "75" : "50" );
+          ff.setAttribute( "bold", font.bold() ? "yes" : "no" );
+          ff.setAttribute( "italic", font.italic() ? "yes" : "no" );
+          ff.setAttribute( "underline", font.underline() ? "yes" : "no" );
+          ff.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
+          fe.appendChild( ff );
 
           Sidewinder::Value value = cell->value();
 
