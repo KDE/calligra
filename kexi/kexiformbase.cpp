@@ -3,6 +3,7 @@
                              -------------------
     begin                : Mon Jun 17 2002
     copyright            : (C) 2002 by lucijan busch
+			   (C) 2002 by Joseph Wenninger <jowenn@kde.org>
     email                : lucijan@gmx.at
  ***************************************************************************/
 
@@ -40,6 +41,7 @@
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource)
 	: KexiDialogBase(parent,name)
 {
+	initActions();
 	if(datasource == "")
 	{
 		setCaption(i18n("[new form]"));
@@ -56,6 +58,17 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource
 	
 	m_widgetRectRequested = false;
 	m_widgetRect = false;
+}
+
+void KexiFormBase::initActions()
+{
+        //own-actions
+        KAction *actionWidgetLineEdit = new KAction(i18n("Line Edit"), "lineedit",
+                Key_F5, this, SLOT(slotWidgetLineEdit()), actionCollection(), "widget_line_edit");
+
+        KAction *actionWidgetPushButton = new KAction(i18n("Push Button"), "button",
+                Key_F6, this, SLOT(slotWidgetPushButton()), actionCollection(), "widget_push_button");
+	setXMLFile("kexiformeditorui.rc");
 }
 
 void KexiFormBase::setActions(QPtrList<KAction> *actions)

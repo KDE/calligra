@@ -48,7 +48,7 @@ METASOURCES = AUTO
 kexi_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 rcdir = $(kde_datadir)/kexi
-rc_DATA = kexiui.rc
+rc_DATA = kexiui.rc kexiformeditorui.rc
 
 messages: rc.cpp
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \

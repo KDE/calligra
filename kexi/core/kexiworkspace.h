@@ -2,15 +2,17 @@
 #define KEXIWORKSPACE_H
 
 #include <qworkspace.h>
+#include <qguardedptr.h>
 
 class KexiDialogBase;
+class KexiMainWindow;
 
 class KexiWorkspace : public QWorkspace
 {
 	Q_OBJECT
 	
 	public:
-		KexiWorkspace(QWidget *parent=0, const char *name=0);
+		KexiWorkspace(QWidget *parent=0, const char *name=0, KexiMainWindow* mw=0);
 		~KexiWorkspace();
 		
 		void addItem(KexiDialogBase *newItem);
@@ -22,6 +24,10 @@ class KexiWorkspace : public QWorkspace
 
 	protected slots:
 		void takeItem(KexiDialogBase *delItem);
+		void slotWindowActivated(QWidget*);
+	private:
+	QGuardedPtr<KexiDialogBase> m_activeDialog;
+	KexiMainWindow *m_mainwindow;
 };
 
 #endif

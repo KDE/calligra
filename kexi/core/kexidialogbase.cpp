@@ -1,6 +1,6 @@
 #include "kexidialogbase.h"
 
-KexiDialogBase::KexiDialogBase(QWidget *parent, const char *name) : QWidget(parent, name)
+KexiDialogBase::KexiDialogBase(QWidget *parent, const char *name) : QWidget(parent, name),KXMLGUIClient()
 {
 }
 

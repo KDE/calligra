@@ -2,8 +2,9 @@
 #define KEXIDIALOGBASE_H
 
 #include <qwidget.h>
+#include <kxmlguiclient.h>
 
-class KexiDialogBase : public QWidget
+class KexiDialogBase : public QWidget, public KXMLGUIClient
 {
 	Q_OBJECT
 	

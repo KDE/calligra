@@ -3,6 +3,7 @@
                              -------------------
     begin                : Mon Jun 17 2002
     copyright            : (C) 2002 by lucijan busch
+			   (C) 2002 by Joseph Wenninger <jowenn@kde.org>
     email                : lucijan@gmx.at
  ***************************************************************************/
 
@@ -41,6 +42,7 @@ class KexiFormBase : public KexiDialogBase
 		void unregisterActions(QPtrList<KAction> *actions);
 
 	protected:
+		void initActions();
 		void registerAction(KAction *action);
 
 		void paintEvent(QPaintEvent *ev);
