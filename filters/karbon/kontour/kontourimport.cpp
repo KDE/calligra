@@ -187,15 +187,15 @@ KontourImport::convert()
 		{
 			QDomElement point = b.namedItem( "polyline" ).firstChild().toElement();
 			VComposite *path = new VComposite( &m_document );
-			int firstx, firsty, x, y;
-			firstx = point.attribute( "x" ).toInt();
-			firsty = point.attribute( "y" ).toInt();
+			double firstx, firsty, x, y;
+			firstx = point.attribute( "x" ).toDouble();
+			firsty = point.attribute( "y" ).toDouble();
 			path->moveTo( KoPoint( firstx, firsty ) );
 			point = point.nextSibling().toElement();
 			for( ; !point.isNull(); point = point.nextSibling().toElement() )
 			{
-				x = point.attribute( "x" ).toInt();
-				y = point.attribute( "y" ).toInt();
+				x = point.attribute( "x" ).toDouble();
+				y = point.attribute( "y" ).toDouble();
 				path->lineTo( KoPoint( x, y ) );
 			}
 			// back to first point
