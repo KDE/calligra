@@ -38,7 +38,7 @@
 #include <config.h>
 
 KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
-    : QScrollView( parent, "canvas", WNorthWestGravity | WRepaintNoErase | WResizeNoErase ), doc( d )
+    : QScrollView( parent, "canvas", WNorthWestGravity | WResizeNoErase ), doc( d )
 {
     m_gui = lGui;
     m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
@@ -350,7 +350,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
 
             region &= pageContentsReg; // intersect
             painter->setClipRegion( region );
-            painter->fillRect( region.boundingRect(), Qt::white );
+            painter->fillRect( region.boundingRect(), colorGroup().brush( QColorGroup::Base ) );
             painter->restore();
         }
     }
