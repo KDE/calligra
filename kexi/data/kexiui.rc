@@ -1,17 +1,16 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="98">
+<kpartgui name="kexi" version="100">
 <MenuBar>
-  <Menu name="edit"><text>&amp;Edit</text>
-    <Merge/>
+  <Menu name="file" noMerge="1">
+    <text>&amp;File</text>
+    <Action name="file_quit"/>
   </Menu>
-  <Menu name="view"><text>&amp;View</text>
-    <Action name="view_newview"/>
-    <ActionList name="view_closeallviews"/>
-    <Separator/>
-    <Action name="view_viewmode"/>
-    <Separator/>
-    <Action name="show_nav"/>
-    <Action name="show_contexthelp"/>
+  <Menu name="edit" noMerge="1">
+    <text>&amp;Edit</text>
+    <Action name="edit_copy"/>
+    <Action name="edit_cut"/>
+    <Action name="edit_paste"/>
+    <Merge/>
   </Menu>
   <Menu name="project" noMerge="1">
     <text>&amp;Project</text>
@@ -21,6 +20,15 @@
     <Action name="kexi_importserverdata"/>
     <Separator/>
     <Action name="project_props"/>
+  </Menu>
+  <Menu name="view"><text>&amp;View</text>
+    <Action name="view_newview"/>
+    <ActionList name="view_closeallviews"/>
+    <Separator/>
+    <Action name="view_viewmode"/>
+    <Separator/>
+    <Action name="show_nav"/>
+    <Action name="show_contexthelp"/>
   </Menu>
   <Menu name="settings"><text>&amp;Settings</text>
     <Separator group="settings_show"/>
