@@ -165,6 +165,45 @@ void KChartParamsIface::setLegendSpacing( uint space )
     params->setLegendSpacing(space );
 }
 
+void KChartParamsIface::setLegendFontRelSize( int legendFontRelSize )
+{
+    params->setLegendFontRelSize(legendFontRelSize);
+}
+
+int KChartParamsIface::legendFontRelSize() const
+{
+    return params->legendFontRelSize();
+}
+
+void KChartParamsIface::setLegendFontUseRelSize( bool legendFontUseRelSize )
+{
+    params->setLegendFontUseRelSize(legendFontUseRelSize);
+}
+
+bool KChartParamsIface::legendFontUseRelSize() const
+{
+    return params->legendFontUseRelSize();
+}
+
+void KChartParamsIface::setLegendTitleFontUseRelSize( bool legendTitleFontUseRelSize )
+{
+    params->setLegendTitleFontUseRelSize(legendTitleFontUseRelSize);
+}
+
+bool KChartParamsIface::legendTitleFontUseRelSize() const
+{
+    return params->legendTitleFontUseRelSize();
+}
+
+void KChartParamsIface::setLegendTitleFontRelSize( int legendTitleFontRelSize )
+{
+    params->setLegendTitleFontRelSize(legendTitleFontRelSize);
+}
+
+int KChartParamsIface::legendTitleFontRelSize() const
+{
+    return params->legendTitleFontRelSize();
+}
 
 uint KChartParamsIface::legendSpacing()
 {

@@ -111,6 +111,16 @@ k_dcop:
     virtual void setLegendTitleText( const QString& text );
     virtual void setLegendSpacing( uint space );
     virtual uint legendSpacing();
+    //legend font
+    virtual void setLegendFontRelSize( int legendFontRelSize );
+    virtual int legendFontRelSize() const;
+    virtual void setLegendFontUseRelSize( bool legendFontUseRelSize );
+    virtual bool legendFontUseRelSize() const;
+    virtual void setLegendTitleFontUseRelSize( bool legendTitleFontUseRelSize );
+    virtual bool legendTitleFontUseRelSize() const;
+    virtual void setLegendTitleFontRelSize( int legendTitleFontRelSize );
+    virtual int legendTitleFontRelSize() const;
+    
 
     virtual bool showGrid();
     
