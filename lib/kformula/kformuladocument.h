@@ -112,7 +112,7 @@ public:
      * Load a OASIS content.xml DomDocument
      * @since 1.4
      */
-    bool loadOasis( QDomDocument doc );
+    bool loadOasis( const QDomDocument& doc );
     
     /**
      * Load the document settings.

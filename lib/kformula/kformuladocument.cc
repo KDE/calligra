@@ -163,7 +163,7 @@ bool Document::loadXML( QDomDocument doc )
     return formulae.count() > 0;
 }
 
-bool Document::loadOasis( QDomDocument doc )
+bool Document::loadOasis( const QDomDocument& doc )
 {
    // ### TODO: not finished!
     KFormula::Container* formula = newFormula( 0 );
