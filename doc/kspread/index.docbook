@@ -414,7 +414,7 @@ export data</para>
 
 <itemizedlist>
 <listitem>
-<para>A functioning &UNIX; system with the &X-Window; system
+<para>A functioning &UNIX; system with the &X-Windows; system
 configured.</para>
 </listitem>
 <listitem>
