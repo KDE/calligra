@@ -104,7 +104,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     noSignals=false;
     switchStyle();
 
-    setInitialSize( QSize( 600, 540 ) );
+    setInitialSize( QSize( 600, 570 ) );
 }
 
 void KWStyleManager::addTab( KWStyleManagerTab * tab )
