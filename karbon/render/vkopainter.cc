@@ -55,6 +55,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 #include <math.h>
 
 #include <koPoint.h>
@@ -617,7 +618,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 
 	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
 	if( !pat.isValid() )
-		pat.load( "pics/cr32-app-karbon.png" );
+		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", -KIcon::SizeMedium ) );
 
 	ArtPattern *pattern = art_new( ArtPattern, 1 );
 
