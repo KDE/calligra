@@ -225,7 +225,7 @@ protected:
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table
 
     void terminateCurrentEdit();
-    void insertInlineTable();
+    bool insertInlineTable();
 
 signals:
     // Emitted when the current frameset edit changes

@@ -533,11 +533,15 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
             if( m_frameInline)
             {
+                bool inlineCreated = true;
                 if(m_frameInlineType==FT_TABLE)
-                    insertInlineTable();
+                    inlineCreated = insertInlineTable();
                 else if(m_frameInlineType==FT_PICTURE)
                     m_gui->getView()->insertInlinePicture();
-                m_frameInline=false;
+                if ( inlineCreated)
+                    m_frameInline=false;
+                else
+                    KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted"));
             }
         }
 
@@ -666,12 +670,15 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     }
 }
 
-void KWCanvas::insertInlineTable()
+bool KWCanvas::insertInlineTable()
 {
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if(edit)
     {
+        if ( edit->textFrameSet()->textObject()->protectContent() )
+            return false;
         m_insRect = KoRect( 0, 0, edit->frameSet()->frame(0)->width(), 10 );
+
         KWTableFrameSet * table = createTable();
         m_doc->addFrameSet( table, false );
         edit->insertFloatingFrameSet( table, i18n("Insert Inline Table") );
@@ -691,6 +698,7 @@ void KWCanvas::insertInlineTable()
         m_frameInline=false;
     }
     m_gui->getView()->updateFrameStatusBarItem();
+    return true;
 }
 
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid )
