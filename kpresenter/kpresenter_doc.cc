@@ -987,6 +987,18 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with content.xml
         return false;
 
+    KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT /*no family needed*/ );
+    //<style:properties fo:margin-top="0.991cm" fo:margin-bottom="0.991cm" fo:margin-left="0.991cm" fo:margin-right="0.991cm" fo:page-width="26.162cm" fo:page-height="18.415cm" style:print-orientation="landscape"/>
+    pageLayout.addPropertyPt( "fo:page-width", m_pageLayout.ptWidth );
+    pageLayout.addPropertyPt( "fo:page-height", m_pageLayout.ptHeight );
+    pageLayout.addProperty( "style:print-orientation", m_pageLayout.orientation == PG_LANDSCAPE ? "landscape" : "portrait" );
+    pageLayout.addPropertyPt( "fo:margin-left", m_pageLayout.ptLeft );
+    pageLayout.addPropertyPt( "fo:margin-top", m_pageLayout.ptTop );
+    pageLayout.addPropertyPt( "fo:margin-right", m_pageLayout.ptRight );
+    pageLayout.addPropertyPt( "fo:margin-bottom", m_pageLayout.ptBottom );
+    mainStyles.lookup( pageLayout, "pm" );
+
+
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
@@ -1028,6 +1040,7 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
 
 void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
+    QString pageLayoutName;
     KoStoreDevice stylesDev( store );
     KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
 
@@ -1070,8 +1083,26 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
     }
 
-
+    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+    Q_ASSERT( styles.count() == 1 );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
+        // which only works as long as we have only one page master
+        stylesWriter.endElement();
+        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
+        pageLayoutName = (*it).name;
+    }
     stylesWriter.endElement(); // office:automatic-styles
+
+    //code from kword
+    stylesWriter.startElement( "office:master-styles" );
+    stylesWriter.startElement( "style:master-page" );
+    stylesWriter.addAttribute( "style:name", "Standard" );
+    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter.endElement();
+    stylesWriter.endElement(); // office:master-style
 
 
     stylesWriter.endElement(); // root element (office:document-styles)
