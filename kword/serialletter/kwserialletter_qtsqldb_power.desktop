@@ -3,7 +3,20 @@ Type=Service
 ServiceTypes=KWord/SerialLetterPlugin
 
 Name=QT-SQL source (power user)
+Name[ara]=مصدر QT-SQL (للمستخدمين المحترفين)
+Name[az]=QT-SQL mənbəyi (təcrübəli istifadəçi)
+Name[bs]=QT-SQL izvor (super korisnik)
+Name[da]=QT-SQL-kilde (avanceret bruger)
+Name[hu]=QT-SQL forrás (kibővített funkciókkal, szakembereknek)
 Comment=This datasource type lets you use SQL database tables. Depending on your system configuration: MySQL,Postgres,(Oracle, if you use a licenced version of QT),....
+Comment[ara]=نوع مصدر البيانات هذا يسمح لك باستخدام جداول قواعد بيانات SQL. اعتمادا على تهيئة نظامك: MySQL,Postgres,(Oracle, اذا كنت تستخدم النسخة التجارية من QT),....
+Comment[az]=Bu mənbə sizə SQL verilənlər bazasını istifadə etməyə imkan verir. Sistem qurğularınızdan asılı olaraq : MySQL,Postgres,(Oracle, lisenziyalı QT buraxılışını işlədirsinizsə),....
+Comment[da]=Denne datakildetype lader dig bruge SQL-databasetabeller. Afhængig af dine systemindstillinger: MySQL,Postgres, (Oracle, hvis du bruger en licens-udgave af QT),....
+Comment[he]=טיפוס מקור נתונים זה מאפשר לך להשתמש בטבלאות SQL, בהתאם לתצורת המערכת שלך: Postgres ,MySQL (אוראקל, אם אתה משתמש בעותק מורשה של QT)...
+Comment[hu]=Ez az adatforrástípus lehetővé teszi SQL adatbázistáblák használatát. A rendszer beállításaitól függően: MySQL, Postgres (és Oracle, ha a használt Qt fizetős) stb.
+Comment[nl]=met dit type datasource kunt u SQL-databasetabellen gebruiken. Afhankelijk van uw systeeminstallatie: MySQL, Postgres, Oracle (als u een gelicenseerde versie van QT hebt), ...,
+Comment[xxx]=xx
 
 X-KDE-Library=kwserialletter_qtsqldb_power
 X-KDE-Capabilities=edit,open
+X-KDE-InternalName=QTSQLPower

@@ -26,6 +26,7 @@
 #include <kinstance.h>
 
 typedef class QMap< class QString, class QString > DbRecord;
+#define KWSLUnspecified		0
 #define KWSLEdit		1
 #define KWSLCreate		2
 #define KWSLOpen		3

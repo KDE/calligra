@@ -22,6 +22,7 @@
 
 #include <qdom.h>
 #include "serialletter_interface.h"
+#include "serialletter_qtsql_base.h"
 #include "qtsqldatasourceeditor.h"
 
 /******************************************************************
@@ -30,7 +31,7 @@
  *
  ******************************************************************/
 
-class KWQTSQLSerialDataSource: public KWSerialLetterDataSource
+class KWQTSQLSerialDataSource: public KWQTSQLSerialDataSourceBase
 {
     public:
     KWQTSQLSerialDataSource(KInstance *inst);

@@ -76,11 +76,17 @@ public:
     KWSerialLetterDataSource *openPluginFor(int type);
 
     virtual void refresh(bool force);
+    virtual QStringList availablePlugins();
+    virtual bool loadPlugin(QString name,QString command);
+    virtual bool isConfigDialogShown();
 protected:
     friend class KWSerialLetterConfigDialog;
     KWDocument *doc;
+    int action;
     class KWSerialLetterDataSource *plugin;
     QMap<QString, QString> emptyMap;
+    bool askUserForConfirmationAndConfig(KWSerialLetterDataSource *tmpPlugin,bool config,QWidget *par);
+    bool rejectdcopcall;
 };
 
 
@@ -100,7 +106,6 @@ class KWSerialLetterConfigDialog : public KDialogBase
 public:
    KWSerialLetterConfigDialog ( QWidget *parent, KWSerialLetterDataBase *db );
    ~KWSerialLetterConfigDialog();
-   int action;
 protected:
     QPushButton *edit;
     QPushButton *create;

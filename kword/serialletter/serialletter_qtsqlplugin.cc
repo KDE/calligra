@@ -29,7 +29,7 @@
  ******************************************************************/
 
 KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst)
-	: KWSerialLetterDataSource(inst)
+	: KWQTSQLSerialDataSourceBase(inst)
 {
 }
 
@@ -98,11 +98,14 @@ void KWQTSQLSerialDataSource::load( QDomElement& parentElem )
 
 bool KWQTSQLSerialDataSource::showConfigDialog(QWidget *par,int action)
 {
-   if (action==KWSLOpen)
-   {
-   }
-   bool ret=true;
-   return ret;
+	bool ret;
+	if (action==KWSLEdit)
+	{
+		ret=true;
+	}
+	else ret=KWQTSQLSerialDataSourceBase::showConfigDialog(par,action);
+
+	return ret;
 }
 
 

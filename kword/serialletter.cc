@@ -46,6 +46,56 @@ KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
     : QObject(doc_),KWordSerialLetterDatabaseIface(QCString(doc_->dcopObject()->objId()+".SerialLetterDataBase")),doc( doc_ )
 {
    plugin=0; //loadPlugin("classic");
+   rejectdcopcall=false;
+}
+
+QStringList KWSerialLetterDataBase::availablePlugins()
+{
+	QStringList tmp;
+	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/SerialLetterPlugin"),QString::null);
+	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
+	{
+		tmp.append((*it)->property("X-KDE-InternalName").toString());
+		kdDebug()<<"Found serial letter plugin: "<< (*it)->name()<<endl;
+	}
+	return tmp;
+}
+
+bool KWSerialLetterDataBase::isConfigDialogShown()
+{
+	return rejectdcopcall;
+}
+
+bool KWSerialLetterDataBase::loadPlugin(QString name,QString command)
+{
+        if (rejectdcopcall)return false;
+	QString constrain=QString("[X-KDE-InternalName] =='"+name+"'");
+	kdDebug()<<constrain<<endl;
+	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/SerialLetterPlugin"),constrain);
+	KService::Ptr it=pluginOffers.first();
+	if (it)
+	{
+		KWSerialLetterDataSource *tmp=loadPlugin(it->library());
+		if (!tmp)
+		{
+			kdDebug()<<"Couldn't load plugin"<<endl;
+			return false; //Plugin couldn't be loaded
+		}
+		//Plugin found and loaded
+		if (command=="silent") return askUserForConfirmationAndConfig(tmp,false,0);
+		else
+		{
+			if (command=="open") action=KWSLOpen;
+			else if (command=="create") action=KWSLCreate;
+			else action=KWSLUnspecified;
+			return askUserForConfirmationAndConfig(tmp,true,0);
+		}
+	}
+	else
+	{
+		kdDebug()<<"No plugin found"<<endl;
+		return false; //No plugin with specified name found
+	}
 }
 
 KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
@@ -156,9 +206,46 @@ int KWSerialLetterDataBase::getNumRecords() const
 
 void KWSerialLetterDataBase::showConfigDialog(QWidget *par)
 {
+	rejectdcopcall=true;
 	KWSerialLetterConfigDialog *dia=new KWSerialLetterConfigDialog(par,this);
 	dia->exec();
 	delete dia;
+	rejectdcopcall=false;
+}
+
+
+bool KWSerialLetterDataBase::askUserForConfirmationAndConfig(KWSerialLetterDataSource *tmpPlugin,bool config,QWidget *par)
+{
+	if (tmpPlugin)
+	{
+		bool replaceit=false;
+		if (!config) replaceit=true;
+		else
+			replaceit=tmpPlugin->showConfigDialog(par,action);
+		if (replaceit)
+		{
+			if (plugin)
+			{
+				if (KMessageBox::warningContinueCancel(par,
+					i18n("Do you really want to replace the current datasource ?"),
+					QString::null,QString::null,QString::null,true)== KMessageBox::Cancel)
+				{
+					delete tmpPlugin;
+					tmpPlugin=0;
+					return false;
+				}
+				delete plugin;
+			}
+			plugin=tmpPlugin;
+		}
+		else
+		{
+			tmpPlugin=0;
+			delete tmpPlugin;
+			return false;
+		}
+	}
+	return true;
 }
 
 
@@ -298,54 +385,34 @@ void KWSerialLetterConfigDialog::enableDisableEdit()
 }
 
 void KWSerialLetterConfigDialog::slotEditClicked()
-{action=KWSLEdit;
+{db_->action=KWSLEdit;
  if (db_->plugin) db_->plugin->showConfigDialog((QWidget*)parent(),KWSLEdit);
 }
 
 void KWSerialLetterConfigDialog::slotCreateClicked()
 {
-	action=KWSLCreate;
-	doNewActions();
+	db_->action=KWSLCreate;
+	doNewActions();  
 //done(QDialog::Accepted);
 }
 
 void KWSerialLetterConfigDialog::doNewActions()
 {
-	KWSerialLetterDataSource *tmpPlugin=db_->openPluginFor(action);
-	if (tmpPlugin)
-	{
-		if (tmpPlugin->showConfigDialog(dynamic_cast<QWidget*>(parent()),action))
-		{
-			if (db_->plugin)
-			{
-				if (KMessageBox::warningContinueCancel(this,
-					i18n("Do you really want to replace the current datasource ?"),
-					QString::null,QString::null,QString::null,true)== KMessageBox::Cancel)
-				{
-					delete tmpPlugin;
-					return;
-				}
-
-			}
-			db_->plugin=tmpPlugin;
-		}
-		else
-		{
-			delete tmpPlugin;
-		}
-	}
+	KWSerialLetterDataSource *tmpPlugin=db_->openPluginFor(db_->action);
+	db_->askUserForConfirmationAndConfig(tmpPlugin,true,this);
 	enableDisableEdit();
 }
 
+
 void KWSerialLetterConfigDialog::slotOpenClicked()
 {
-	action=KWSLOpen;
+	db_->action=KWSLOpen;
 	doNewActions();
 }
 
 void KWSerialLetterConfigDialog::slotPreviewClicked()
 {
-	action=KWSLMergePreview;
+	db_->action=KWSLMergePreview;
 	KMainWindow *mw=dynamic_cast<KMainWindow*>(((QWidget *)parent())->topLevelWidget());
 	if (mw)
 	{
@@ -358,7 +425,7 @@ void KWSerialLetterConfigDialog::slotPreviewClicked()
 }
 
 void KWSerialLetterConfigDialog::slotDocumentClicked()
-{action=KWSLMergeDocument;done(QDialog::Accepted);}
+{db_->action=KWSLMergeDocument;done(QDialog::Accepted);}
 
 KWSerialLetterConfigDialog::~KWSerialLetterConfigDialog()
 {

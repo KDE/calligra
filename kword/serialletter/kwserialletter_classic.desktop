@@ -3,7 +3,21 @@ Type=Service
 ServiceTypes=KWord/SerialLetterPlugin
 
 Name=Internal Store
+Name[ara]=المخزن الداخلي
+Name[az]=Daxili Mağaza
+Name[da]=Intern opbevaring
+Name[he]=איחסון פנימי
+Name[hu]=Belső adatbázis
+Name[xxx]=xx
 Comment=This datasource type stores the data directly in the KWord file
+Comment[ara]=نوع مصدر البيانات هذا يقوم بتخزين البيانات بشكل مباشر في KWord
+Comment[az]=Bu mənbə verilənləri düz KWord fayl içinə qeyd edir.
+Comment[da]=Denne datakildetype gemmer sine data direkte i KWord-filen
+Comment[he]=טיפוס מקור נתונים זה מאחסן את הנתונים ישירות בקובץ של KWord
+Comment[hu]=Ez az adatforrástípus az adatokat közvetlenül a KWord fájlban tárolja
+Comment[nl]=dit type datasource bewaart de gegevens rechtstreeks in het KWordbestand.
+Comment[xxx]=xx
 
 X-KDE-Library=kwserialletter_classic
 X-KDE-Capabilities=edit,create
+X-KDE-InternalName=Classic
