@@ -69,7 +69,7 @@ bool CSVExport::filterExport(const QString &file, KoDocument * document,
         return false;
     }
 
-    const KSpreadDoc * const ksdoc=(const KSpreadDoc* const)document;
+    const KSpreadDoc * ksdoc=static_cast<const KSpreadDoc *>(document);
 
     if( ksdoc->mimeType() != "application/x-kspread" )
     {
