@@ -1439,6 +1439,10 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
     {
         d->afterFormattingEmitted = true;
         bool abort = false;
+        // Check if we need more space - for proper default value of 'abort'
+        if ( ( bottom > m_availableHeight ) ||   // this parag is already off page
+             ( m_lastFormatted && bottom + m_lastFormatted->rect().height() > m_availableHeight ) ) // or next parag will be off page
+            abort = true;
         emit afterFormatting( bottom, m_lastFormatted, &abort );
         if ( abort )
             return;
