@@ -820,6 +820,12 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setOutputFileName( tmpFile.name() );
     int oldNumCopies = printer.numCopies();
     printer.setNumCopies( 1 );
+#ifdef HAVE_KDEPRINT
+    // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
+    // a "don't use the previous settings" mode. The current way is really too much of a hack.
+    QString oldKDEPreview = printer.option( "kde-preview" );
+    printer.setOption( "kde-preview", "0" );
+#endif
 
     rootView()->print(printer);
     KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
@@ -827,6 +833,9 @@ void KoMainWindow::slotFilePrintPreview()
     // Restore previous values
     printer.setOutputFileName( oldFileName );
     printer.setNumCopies( oldNumCopies );
+#ifdef HAVE_KDEPRINT
+    printer.setOption( "kde-preview", oldKDEPreview );
+#endif
 }
 
 void KoMainWindow::slotConfigureKeys()
