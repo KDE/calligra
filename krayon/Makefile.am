@@ -1,39 +1,39 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = libkrayonpart.la
-libkrayonpart_la_SOURCES = dummy.cc
+kde_module_LTLIBRARIES = libkritapart.la
+libkritapart_la_SOURCES = dummy.cc
 
-libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkrayonpart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
+libkritapart_la_LDFLAGS = $(KDE_PLUGIN)
+libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
 	../lib/kofficeui/libkofficeui.la
 METASOURCES = AUTO
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = krayon.la
-krayon_la_SOURCES = main.cc
-krayon_la_LDFLAGS = $(all_libraries) -avoid-version -module
-krayon_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+lib_LTLIBRARIES = krita.la
+krita_la_SOURCES = main.cc
+krita_la_LDFLAGS = $(all_libraries) -avoid-version -module
+krita_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
-bin_PROGRAMS = krayon
-krayon_SOURCES = dummy.cc
-krayon_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-krayon_LDADD = krayon.la
+bin_PROGRAMS = krita
+krita_SOURCES = dummy.cc
+krita_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+krita_LDADD = krita.la
 
 dummy.cc:
 	echo > dummy.cc
 
-kdelnk_DATA = krayon.desktop
+kdelnk_DATA = krita.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-#kdemime_DATA = x-krayon.desktop
+#kdemime_DATA = x-krita.desktop
 kdemimedir = $(kde_mimedir)/application
 
-rcdir = $(kde_datadir)/krayon
-rc_DATA = krayon.rc
+rcdir = $(kde_datadir)/krita
+rc_DATA = krita.rc
 
 SUBDIRS = core tools ui . dtd plugins data pics
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc */*.cc core/kis_aboutdata.h -o $(podir)/krayon.pot
+	$(XGETTEXT) rc.cpp *.cc */*.cc core/kis_aboutdata.h -o $(podir)/krita.pot

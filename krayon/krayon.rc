@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krayon" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="2">
 
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
@@ -161,9 +161,9 @@
 </ToolBar>
 
 <!--
-<ToolBar name="krayonbox" position="top"><Text>KrayonBox</Text>
+<ToolBar name="kritabox" position="top"><Text>KritaBox</Text>
   <Action name="colors_dialog"/>
-  <Action name="krayons_dialog"/>
+  <Action name="kritas_dialog"/>
   <Action name="brushes_dialog"/>
   <Action name="patterns_dialog"/>
   <Action name="layers_dialog"/>

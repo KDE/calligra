@@ -1,5 +1,5 @@
-# Krayon has two problems currently:
+# krita has two problems currently:
 # - the lack of developers ;)
 # - its name conflicts with an existing product
-# If anyone starts developing Krayon again, please rename it, first thing.
-DO_NOT_COMPILE="$DO_NOT_COMPILE krayon"
+# If anyone starts developing krita again, please rename it, first thing.
+DO_NOT_COMPILE="$DO_NOT_COMPILE krita"
