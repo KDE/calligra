@@ -193,21 +193,6 @@ VKoPainter::strokePath()
 }
 
 void
-VKoPainter::drawRect( double x, double y, double w, double h )
-{
-	ArtVpath vpath[] = {
-	{ ART_MOVETO, x, y },
-	{ ART_LINETO, x, y + h },
-	{ ART_LINETO, x + w, y + h },
-	{ ART_LINETO, x + w, y  },
-	{ ART_LINETO, x, y },
-	{ ART_END, 0, 0 }
-	};
-
-	drawVPath( vpath );
-}
-
-void
 VKoPainter::setPen( const VStroke &stroke )
 {
 	delete m_stroke;

@@ -151,8 +151,9 @@ VPath::draw( VPainter *painter, const QRect& rect,
 void
 VPath::drawBox( VPainter *painter, double x, double y, uint handleSize )
 {
-	painter->drawRect( x - handleSize, y - handleSize,
-					  handleSize*2 + 1, handleSize*2 + 1 );
+	// TODO : use moveTo / lineTo
+	//painter->drawRect( x - handleSize, y - handleSize,
+	//				  handleSize*2 + 1, handleSize*2 + 1 );
 }
 
 const KoPoint&

@@ -122,12 +122,6 @@ VQPainter::strokePath()
 }
 
 void
-VQPainter::drawRect( double x, double y, double w, double h )
-{
-	m_painter->drawRect( int(x), int(y), int(w), int(h) );
-}
-
-void
 VQPainter::setPen( const VStroke &stroke )
 {
 	QPen pen;

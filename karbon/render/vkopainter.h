@@ -33,7 +33,6 @@ public:
 	virtual void setZoomFactor( double );
 
 	// drawing
-	virtual void drawRect( double x, double y, double w, double h );
     virtual void moveTo( const KoPoint & );
     virtual void lineTo( const KoPoint & );
     virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );

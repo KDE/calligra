@@ -50,11 +50,11 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	{
 		// rotate operation
 		QWMatrix mat;
-		mat.translate( m_fp.x(), m_fp.y() );
+		mat.translate( m_fp.x() / view->zoomFactor(), m_fp.y() / view->zoomFactor() );
 		m_angle = atan2( m_lp.y() - m_fp.y(), m_lp.x() - m_fp.x() );
 		//m_angle += M_PI / 2;
 		mat.rotate( m_angle / VGlobal::pi_180 );
-		mat.translate( - m_fp.x(), - m_fp.y() );
+		mat.translate( - m_fp.x() / view->zoomFactor(), - m_fp.y() / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -119,7 +119,7 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdRotate(
 				part(),
-				part()->selection(), m_fp, m_angle / VGlobal::pi_180 ),
+				part()->selection(), m_fp / view->zoomFactor(), m_angle / VGlobal::pi_180 ),
 			true );
 
 //			part()->repaintAllViews();
