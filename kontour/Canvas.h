@@ -98,7 +98,7 @@ private slots:
   void updateScrollBars();
   void scrollX(int v);
   void scrollY(int v);
-  void updateRegion(const KoRect &r);
+  void updateRegion(const KoRect &r, bool handle = false);
 
 private:
   void propagateMouseEvent(QMouseEvent *e);

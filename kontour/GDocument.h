@@ -132,7 +132,7 @@ public:
   // find page with name
   GPage *findPage(QString name);
   
-  void emitChanged(const KoRect &r);
+  void emitChanged(const KoRect &r, bool handle = false);
 
 public slots:
   void setModified(bool flag = true);
@@ -143,7 +143,7 @@ signals:
   void helplinesChanged();
   void pageChanged();                    // active page was changed
   void updateLayerView();
-  void changed(const KoRect &r);
+  void changed(const KoRect &r, bool handle);
 
 private slots:
   void changeCanvas();

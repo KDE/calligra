@@ -31,8 +31,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "GBezier.h"
-#include "Painter.h"
 #include "GDocument.h"
 
 GSegment::GSegment(const QDomElement &element)
@@ -42,7 +40,7 @@ GSegment::GSegment(const QDomElement &element)
 
 
 
-const GLine::KoPoint &point(int i) const
+const KoPoint &GLine::point(int i) const
 {
   return points[i];
 }
@@ -59,7 +57,7 @@ QDomElement GLine::writeToXml(QDomDocument &document)
   line.setAttribute("y1", points[0].y());
   line.setAttribute("x2", points[1].x());
   line.setAttribute("y2", points[1].y());
-  return element;
+  return line;
 }
 
 void GLine::draw(QPainter &p, bool withBasePoints, bool outline, bool drawFirst)
@@ -67,10 +65,10 @@ void GLine::draw(QPainter &p, bool withBasePoints, bool outline, bool drawFirst)
 
 }
 
-void GLine::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+void GLine::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 {
-  points[idx].x(points[idx].x() + dx);
-  points[idx].y(points[idx].y() + dy);
+  points[idx].setX(points[idx].x() + dx);
+  points[idx].setY(points[idx].y() + dy);
   // TODO Ctrl Pressed
 }
 
@@ -99,7 +97,7 @@ double GLine::length() const
 
 
 
-
+/*
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier
   float xp, yp;
@@ -245,7 +243,7 @@ bool GSegment::contains (const Coord& p) {
   return false;
 }
 
-void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
+void GSegment::draw (QPainter& p, bool withBasePoints, bool outline,
                      bool drawFirst) {
   if (skind == sk_Line)
     Painter::drawLine (p, points[0].x (), points[0].y (),
@@ -265,7 +263,7 @@ void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
   }
 }
 
-void GSegment::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
+void GSegment::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
   assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) ||
                        (skind == sk_Line && idx < 2)));
   points[idx].x (points[idx].x () + dx);
@@ -314,10 +312,10 @@ float GSegment::length () const {
    for (int i = 0; i < 3; i++)
      len += seg_length (points[i], points[i + 1]);
   return len;
-}
+}*/
 
 /*******************[GPath]*********************/
-
+/*
 GPath::GPath (GDocument* doc)
 : GObject (doc)
 {
@@ -394,7 +392,7 @@ bool GPath::contains (const Coord& p) {
     return false;
 }
 
-void GPath::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
+void GPath::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
   int pidx = 0;
   QValueList<GSegment>::Iterator i;
   float ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
@@ -459,10 +457,10 @@ GObject* GPath::copy () {
   return new GPath (*this);
 }
 
-/*GObject* GPath::create (GDocument *doc, const QDomElement &element)
+GObject* GPath::create (GDocument *doc, const QDomElement &element)
 {
   return new GPath(doc, element);
-}*/
+}
 
 QDomElement GPath::writeToXml (QDomDocument &document) {
 
@@ -543,7 +541,7 @@ const GSegment& GPath::getSegment (int idx) {
 void GPath::removePoint (int idx, bool update)
 {
   kdDebug(38000) << "GPath::removePoint isn't implemented" <<endl;
-/*
+
     int pidx = 0;
     QValueList<GSegment>::Iterator i;
 
@@ -566,7 +564,7 @@ void GPath::removePoint (int idx, bool update)
 
   if (update)
     updateRegion ();
-*/
+
 }
 
 GPath* GPath::blendCurves (GPath *start, GPath *end, int step, int num) {
@@ -673,6 +671,67 @@ void GPath::updatePath ()
       points.setPoint (last + i, parray.point (i));
     last += parray.size ();
   }
+}*/
+
+GPath::GPath()
+{
+}
+
+GPath::GPath(const QDomElement &element)
+{
+}
+
+GPath::GPath(const GPath &obj)
+{
+}
+
+void GPath::lineTo(KoPoint &p)
+{
+}
+
+QString GPath::typeName() const
+{
+  if(mClosed)
+    return i18n("Closed Path");
+  else
+    return i18n("Path");
+}
+
+QDomElement GPath::writeToXml(QDomDocument &document)
+{
+}
+
+void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
+{
+}
+
+int GPath::getNeighbourPoint(const KoPoint &point)
+{
+}
+
+void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
+{
+}
+
+void GPath::removePoint(int idx, bool update = true)
+{
+}
+
+bool GPath::contains(const KoPoint &p)
+{
+}
+
+bool GPath::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
+{
+}
+
+void GPath::calcBoundingBox()
+{
+}
+
+GPath *GPath::convertToPath() const
+{
+  return new GPath(*this);
 }
 
 #include "GPath.moc"

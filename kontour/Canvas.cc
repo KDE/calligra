@@ -72,7 +72,7 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
   connect(vBar, SIGNAL(valueChanged(int)), SLOT(scrollY(int)));
 
-  connect(mGDoc, SIGNAL(changed(const KoRect &)), this, SLOT(updateRegion(const KoRect &)));
+  connect(mGDoc, SIGNAL(changed(const KoRect &, bool)), this, SLOT(updateRegion(const KoRect &, bool)));
 
 //  connect(mGDoc, SIGNAL (sizeChanged ()), this, SLOT (docSizeChanged()));
   connect(mGDoc, SIGNAL(pageChanged()), this, SLOT(changePage()));
@@ -455,12 +455,19 @@ void Canvas::scrollY(int v)
   repaint();
 }
 
-void Canvas::updateRegion(const KoRect &r)
+void Canvas::updateRegion(const KoRect &r, bool handle)
 {
   int x = static_cast<int>(r.x() + mXOffset);
   int y = static_cast<int>(r.y() + mYOffset);
   int w = static_cast<int>(r.width() * zoomFactor());
   int h = static_cast<int>(r.height() * zoomFactor());
+  if(handle)
+  {
+    x -= 7;
+    y -= 7;
+    w += 14;
+    h += 14;
+  }
   kdDebug(38000) << "update: x=" << x << " y=" << y << " w=" << w << " h=" << h <<endl;
   QRect rr(x, y, w, h);
   updateBuf(rr);

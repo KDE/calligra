@@ -138,11 +138,6 @@ public slots:
 //  void objectChanged (const KoRect &r);
 //  void layerChanged ();
 
-signals:
-  void changed();
-  void changed(const KoRect& r);
-  void selectionChanged();
-  void sizeChanged();
 private:
   GDocument *mGDoc;
 

@@ -43,6 +43,7 @@ libkontourpart_la_SOURCES = \
 	GPage.cc \
 	GLayer.cc \
 	GObject.cc \
+	GPath.cc \
 	GOval.cc \
 	GRect.cc \
 	GStyle.cc \

@@ -225,7 +225,7 @@ void GPage::raiseLayer(GLayer *layer)
     layers.insert(pos+1, l);
     unselectAllObjects();
   }
-  emit changed ();
+//  emit changed ();
 }
 
 void GPage::lowerLayer(GLayer *layer)
@@ -244,7 +244,7 @@ void GPage::lowerLayer(GLayer *layer)
     layers.insert(pos-1, l);
     unselectAllObjects();
   }
-  emit changed ();
+//  emit changed ();
 }
 
 unsigned int GPage::objectCount() const
@@ -262,8 +262,8 @@ void GPage::insertObject(GObject *obj)
 //  connect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 //  connect (obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
 //  setModified();
-  if(autoUpdate)
-    emit changed();
+//  if(autoUpdate)
+//    emit changed();
 }
 
 void GPage::deleteObject(GObject *obj)
@@ -283,11 +283,11 @@ void GPage::deleteObject(GObject *obj)
     {
       selBoxIsValid = false;
       updateHandle();
-      if(autoUpdate)
-        emit selectionChanged();
+//      if(autoUpdate)
+//        emit selectionChanged();
     }
-    if(autoUpdate)
-      emit changed();
+//    if(autoUpdate)
+//      emit changed();
   }
 }
 
@@ -303,11 +303,11 @@ void GPage::insertObjectAtIndex(GObject *obj, unsigned int idx)
   if(layer == 0L)
     layer = active_layer;
   layer->insertObjectAtIndex (obj, idx);
-  if (autoUpdate)
+/*  if (autoUpdate)
   {
     emit changed ();
     emit selectionChanged ();
-  }
+  }*/
 }
 
 void GPage::moveObjectToIndex(GObject *obj, unsigned int idx)
@@ -318,27 +318,23 @@ void GPage::moveObjectToIndex(GObject *obj, unsigned int idx)
   layer->moveObjectToIndex (obj, idx);
 
   //setModified ();
-  if (autoUpdate)
+/*  if (autoUpdate)
   {
     emit changed ();
     emit selectionChanged ();
-  }
+  }*/
 }
 
 void GPage::selectObject(GObject *obj)
 {
-  if(selection.containsRef(obj)==0)
+  kdDebug(38000) << "Select object" << endl;
+  if(selection.containsRef(obj) == 0)
   {
-    // object isn't yet in selection list
-    obj->select (true);
+    /* object isn't yet in selection list */
+    obj->select(true);
     selection.append(obj);
-    selBoxIsValid = false;
+    selBoxIsValid = true;
     updateHandle();
-    if (autoUpdate)
-    {
-      emit changed ();
-      emit selectionChanged ();
-    }
   }
 }
 
@@ -347,16 +343,11 @@ void GPage::unselectObject(GObject *obj)
   int i = selection.findRef(obj);
   if(i != -1)
   {
-    // remove object from the selection list
-    obj->select (false);
+    /* remove object from the selection list */
+    obj->select(false);
     selection.remove(i);
     selBoxIsValid = false;
     updateHandle();
-    if (autoUpdate)
-    {
-      emit changed ();
-      emit selectionChanged ();
-    }
   }
 }
 
@@ -378,16 +369,12 @@ void GPage::selectAllObjects()
     }
   }
   selBoxIsValid = false;
-//  updateHandle();
-//  if(autoUpdate)
-//  {
-//    emit changed();
-//    emit selectionChanged();
-//  }
+  updateHandle();
 }
 
 void GPage::unselectAllObjects()
 {
+  kdDebug(38000) << "Unselect all objects" << endl;
   if(selection.isEmpty())
     return;
 
@@ -395,11 +382,7 @@ void GPage::unselectAllObjects()
     o->select(false);
   selection.clear();
   selBoxIsValid = false;
-//  if (autoUpdate)
-//  {
-//    emit changed();
-//    emit selectionChanged();
-//  }
+  updateHandle();
 }
 
 void GPage::selectNextObject()
@@ -446,11 +429,11 @@ void GPage::deleteSelectedObjects()
     selection.clear ();
     //setModified ();
     selBoxIsValid = false;
-    if (autoUpdate)
+/*    if (autoUpdate)
     {
       emit changed ();
       emit selectionChanged ();
-    }
+    }*/
   }
 }
 
@@ -640,16 +623,21 @@ bool GPage::findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist)
           olist.append (*oi);
     }
   }
-  return olist.count () > 0;
+  return olist.count() > 0;
 }
 
 void GPage::updateHandle()
 {
-  KoRect r = boundingBoxForSelection();
+  kdDebug(38000) << "Update handle" << endl;
+  KoRect r = mSelBox;
+  r = r.unite(boundingBoxForSelection());
   if(selectionIsEmpty())
     mHandle.show(false);
   else
+  {
     mHandle.box(r);
+    document()->emitChanged(r, true);
+  }
 }
 
 /*******************[OLD]*********************

@@ -28,6 +28,7 @@
 
 #include "GObject.h"
 
+#include <qptrlist.h>
 #include <koPoint.h>
 
 /**
@@ -87,48 +88,67 @@ private:
  *
  */
 
-class GCubicBezier : public GSegment
+/*class GCubicBezier : public GSegment
 {
 public:
 
 private:
   KoPoint points[4];
-};
+};*/
 
 /**
  * Quadratic Bezier segment.
  *
  */
 
-class GQuadBezier : public GSegment
+/*class GQuadBezier : public GSegment
 {
 public:
 
 private:
   KoPoint points[3];
-};
+};*/
 
 /**
  * Arc segment.
  *
  */
 
-class GArc : public GSegment
+/*class GArc : public GSegment
 {
 public:
 
 private:
   koPoint points[3];
-};
+};*/
 
 
 class GPath : public GObject
 {
   Q_OBJECT
 public:
-  GPath (GDocument* parent);
-  GPath (GDocument* parent, const QDomElement &element);
-  GPath (const GPath& obj);
+  GPath();
+  GPath(const QDomElement &element);
+  GPath(const GPath &obj);
+
+  void lineTo(KoPoint &p);
+
+  QString typeName() const;
+  QDomElement writeToXml(QDomDocument &document);
+  void draw(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+
+  int getNeighbourPoint(const KoPoint &point);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+  void removePoint(int idx, bool update = true);
+  bool contains(const KoPoint &p);
+  bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all);
+
+  void calcBoundingBox();
+  GPath *convertToPath() const;
+private:
+  QPtrList<GSegment> segments;
+  bool mClosed;
+/*
   
   void lineTo(KoPoint &p);
   void curveTo();
@@ -146,23 +166,7 @@ public:
   
   
 
-  virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false, bool withEditMarks=true);
-  virtual bool contains (const Coord& p);
-  virtual QString typeName () const;
-
-  virtual GObject* copy ();
-  //virtual GObject* create (GDocument *doc, const QDomElement &element);
-
-  virtual QDomElement writeToXml (QDomDocument &document);
-
-  virtual void movePoint (int idx, double dx, double dy, bool ctrlPressed=false);
-  virtual void removePoint (int idx, bool update = true);
-  virtual int getNeighbourPoint (const Coord& p);
-
   virtual void getPath(QValueList<Coord>& path);
-
-  virtual GCurve* convertToCurve () const { return new GCurve (*this); }
 
   void addLineSegment (const Coord& p1, const Coord& p2);
   void addBezierSegment (const Coord& p1, const Coord& p2,
@@ -187,7 +191,7 @@ protected:
 
 private:
   QValueList<GSegment> segments;
-  bool closed;
+  bool closed;*/
 };
 
 #endif

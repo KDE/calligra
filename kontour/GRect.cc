@@ -30,6 +30,7 @@
 #include <qpainter.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kontour_global.h"
 
@@ -118,13 +119,13 @@ QDomElement GRect::writeToXml(QDomDocument &document)
   KoRect r(sPoint, ePoint);
   r = r.normalize();
 
-  QDomElement oval = document.createElement("oval");
-  oval.setAttribute("x", r.left() + r.width() / 2.0);
-  oval.setAttribute("y", r.top() + r.height() / 2.0);
-  oval.setAttribute("rx", r.width() / 2.0);
-  oval.setAttribute("ry", r.height() / 2.0);
-  oval.appendChild(GObject::writeToXml(document));
-  return oval;
+  QDomElement rect = document.createElement("rect");
+  rect.setAttribute("x", r.left());
+  rect.setAttribute("y", r.top());
+  rect.setAttribute("sx", r.width());
+  rect.setAttribute("sy", r.height());
+  rect.appendChild(GObject::writeToXml(document));
+  return rect;
 }
 
 void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
@@ -195,9 +196,8 @@ void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
  */
 }
 
-void GRect::calcBoundingBox ()
+void GRect::calcBoundingBox()
 {
-  calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
   calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
 /*  double x, y;
 
@@ -233,7 +233,7 @@ int GRect::getNeighbourPoint(const KoPoint &p)
   return -1;
 }
 
-void GRect::movePoint (int idx, double dx, double dy, bool /*ctrlPressed*/)
+void GRect::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
 /*  double adx = fabs (dx);
   double ady = fabs (dy);
@@ -309,12 +309,18 @@ bool GRect::contains(const KoPoint &p)
   if(box.contains(p))
   {
     QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
-    x1 = sPoint.x();
-    x2 = ePoint.x();
-    if(x1 >= x2)
+    if(sPoint.x() >= ePoint.x())
     {
-      x1 = x2;
+      x1 = ePoint.x();
       x2 = sPoint.x();
+    }
+    else
+    {
+      x1 = sPoint.x();
+      x2 = ePoint.x();
+    }
+    if(sPoint.y() >= ePoint.y())
+    {
       y1 = ePoint.y();
       y2 = sPoint.y();
     }
@@ -324,20 +330,15 @@ bool GRect::contains(const KoPoint &p)
       y2 = ePoint.y();
     }
 
-    double x, a, b, sqr;
-    double mx, my;
+    kdDebug(38000) << "Rect: X1 = " << x1 << endl;
+    kdDebug(38000) << "Rect: X2 = " << x2 << endl;
+    kdDebug(38000) << "Rect: Y1 = " << y1 << endl;
+    kdDebug(38000) << "Rect: Y2 = " << y2 << endl;
+    kdDebug(38000) << "Rect: px = " << pp.x() << endl;
+    kdDebug(38000) << "Rect: py = " << pp.y() << endl;
 
-    mx = (x1 + x2) / 2;
-    my = (y1 + y2) / 2;
-    a = (x2 - x1) / 2;
-    b = (y2 - y1) / 2;
-    x = pp.x();
-    if(x1 <= x && x <= x2)
-    {
-      sqr = sqrt((1 - ((x - mx) * (x - mx)) / (a * a)) * (b * b));
-      if(my - sqr <= pp.y() && pp.y() <= my + sqr)
-        return true;
-    }
+    if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1 && (pp.x() == x1 || pp.x() == x2 || pp.y() == y1 || pp.y() == y2))
+      return true;
   }
   return false;
 }

@@ -385,9 +385,9 @@ GPage *GDocument::findPage(QString name)
   return 0L;
 }
 
-void GDocument::emitChanged(const KoRect &r)
+void GDocument::emitChanged(const KoRect &r, bool handle)
 {
-  emit changed(r);
+  emit changed(r, handle);
 }
 
 void GDocument::setModified(bool flag)
