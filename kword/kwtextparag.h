@@ -90,6 +90,11 @@ public:
 
     KWStyle* style;
 
+    bool hasBorder() const { return topBorder.ptWidth > 0
+                                 || bottomBorder.ptWidth > 0
+                                 || leftBorder.ptWidth > 0
+                                 || rightBorder.ptWidth > 0; }
+
     void setTabList( const KoTabulatorList & tabList ) { m_tabList = tabList; }
     KoTabulatorList tabList() const { return m_tabList; }
 
@@ -141,6 +146,7 @@ public:
     Border rightBorder() const { return m_layout.rightBorder; }
     Border topBorder() const { return m_layout.topBorder; }
     Border bottomBorder() const { return m_layout.bottomBorder; }
+    bool hasBorder() const { return m_layout.hasBorder(); }
 
     void setLeftBorder( const Border & _brd ) { m_layout.leftBorder = _brd; }
     void setRightBorder( const Border & _brd ) { m_layout.rightBorder = _brd; }

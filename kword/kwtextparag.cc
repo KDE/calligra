@@ -318,7 +318,7 @@ int KWTextParag::lineSpacing( int line ) const
         {
             // Tricky. During formatting height doesn't include the linespacing,
             // but afterwards (e.g. when drawing the cursor), it does !
-            return isValid() ? height * 1 / 3 : height / 2;
+            return isValid() ? height / 3 : height / 2;
         }
         else if ( m_layout.lineSpacing == KWParagLayout::LS_DOUBLE )
         {
@@ -336,23 +336,26 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     //qDebug("KWTextParag::paint %p", this);
     QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
-    if ( m_layout.topBorder.ptWidth > 0
-         || m_layout.bottomBorder.ptWidth > 0
-         || m_layout.leftBorder.ptWidth > 0
-         || m_layout.rightBorder.ptWidth > 0 )
+    if ( m_layout.hasBorder() )
     {
         KWZoomHandler * zh = textDocument()->zoomHandler();
 
         QRect r;
-        // r.setLeft( leftMargin() ); // breaks with centered text and with counters
-        r.setLeft( at( 0 )->x - counterWidth() - 1 );
-        r.setRight( rect().width() - rightMargin() - 1 ); /*documentWidth()-1 requires many fixes in QRT*/
+        // Old solution: stick to the text
+        //r.setLeft( at( 0 )->x - counterWidth() - 1 );
+        //r.setRight( rect().width() - rightMargin() - 1 );
+
+        // New solution: occupy the full width
+        r.setLeft( Border::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 ) );
+        // ## documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
+        r.setRight( documentWidth() - 2 - Border::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
         r.setTop( lineY( 0 ) );
         int lastLine = lines() - 1;
-        kdDebug() << "KWTextParag::paint height=" << lineHeight( lastLine ) << " spacing=" << lineSpacing( lastLine ) << endl;
         r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) - lineSpacing( lastLine ) ) - 1 );
 
-        Border::drawBorders( painter, zh, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
+        //kdDebug() << "KWTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
+        Border::drawBorders( painter, zh, r,
+                             m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                              0, QPen() );
     }
 }

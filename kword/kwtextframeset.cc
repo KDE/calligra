@@ -389,6 +389,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
     m_currentViewMode = viewMode;
+    //m_currentDrawnFrame = frame;
 
     //QRect normalFrameRect( m_doc->zoomRect( *frame ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
@@ -579,7 +580,6 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;
     int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
-    //int top = frame ? kWordDocument()->zoomItX( frame->top() ) : 0;
     int width = to - from;
     int bottomSkip = 0;
 
@@ -642,7 +642,12 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     if ( marginLeft )
         *marginLeft = from;
     if ( marginRight )
-        *marginRight = width - to;
+    {
+        /*kdDebug() << "KWTextFrameSet::getMargins " << getName()
+                  << " textdoc's width=" << textdoc->width()
+                  << " frame's width=" << width << " to=" << to << endl;*/
+        *marginRight = textdoc->width() /*width*/ - to;
+    }
     if ( breakEnd )
         *breakEnd = bottomSkip; // in internal coord already
 }
@@ -740,7 +745,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
     return false;
 }
 
-void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool /*pages*/ )
+void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, bool /*pages*/ )
 {
     // This is called since the 'vertical break' QRT flag is true.
     // End of frames/pages lead to those "vertical breaks".
@@ -750,8 +755,9 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     // paragraph's y position), which makes it easy to implement.
 
     int breaked = false;
-    bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
-    bool hardFrameBreak = parag ? static_cast<KWTextParag *>(parag)->hardFrameBreakBefore() : false;
+    KWTextParag *parag = static_cast<KWTextParag *>( _parag );
+    bool linesTogether = parag ? parag->linesTogether() : false;
+    bool hardFrameBreak = parag ? parag->hardFrameBreakBefore() : false;
     if ( !hardFrameBreak && parag && parag->prev() )
         hardFrameBreak = static_cast<KWTextParag *>(parag->prev())->hardFrameBreakAfter();
 
@@ -862,10 +868,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     int yp_ro = yp;
     QTextFlow::adjustFlow( yp_ro, w, h, parag, FALSE );
 
-    //Hack. Fixing the parag rect from here, to add room for the CR formatting character
-    if ( parag && m_doc->viewFormattingChars() )
+    // We also use adjustFlow as a hook into the formatting algo, to fix the parag rect if necessary.
+    if ( parag && parag->hasBorder() )
     {
-        if ( static_cast<KWTextParag *>( parag )->hardFrameBreakAfter() )
+        parag->setWidth( textdoc->width() - 1 );
+    }
+    // Fixing the parag rect for the formatting chars (CR and frame break).
+    else if ( parag && m_doc->viewFormattingChars() )
+    {
+        if ( parag->hardFrameBreakAfter() )
         {
             QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
             // keep in sync with KWTextFrameSet::adjustFlow
@@ -945,30 +956,31 @@ void KWTextFrameSet::updateFrames()
     if ( frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
 
-    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
-    //               << " setWidth=" << frames.first()->width() << endl;
-    int width = kWordDocument()->zoomItX( frames.first()->width() );
-    // TODO ####### we need support for variable width.... (could be done in adjustRMargin in fact)
-    if ( width != textdoc->width() )
-        textdoc->setWidth( width );
-
-    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 
     // Sort frames of this frameset on (page, y coord, x coord)
 
     QValueList<FrameStruct> sortedFrames;
 
     double pageHeight = m_doc->ptPaperHeight();
+    int width = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
-        // Set the page number while we're at it
-        //frameIt.current()->setPageNum( static_cast<int>( frameIt.current()->y() / pageHeight ) );
+        // Calculate max width while we're at it
+        width = QMAX( width, kWordDocument()->zoomItX( frameIt.current()->width() ) );
 
         FrameStruct str;
         str.frame = frameIt.current();
         sortedFrames.append( str );
     }
+    if ( width != textdoc->width() )
+    {
+        kdDebug() << "KWTextFrameSet::updateFrames setWidth " << width << endl;
+        textdoc->setMinimumWidth( -1, 0 );
+        textdoc->setWidth( width );
+    }
+
     qHeapSort( sortedFrames );
 
     // Prepare the m_framesInPage structure
