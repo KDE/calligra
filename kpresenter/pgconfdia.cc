@@ -24,7 +24,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
-#include <qvbox.h>
+#include <qlayout.h>
 #include <qlistview.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
@@ -46,11 +46,11 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
                       PresSpeed presSpeed )
     : QDialog( parent, name, true )
 {
-    back = new QVBox( this );
-    back->setMargin( 10 );
+    QVBoxLayout *back = new QVBoxLayout( this );
+    back->setMargin( 5 );
     back->setSpacing( 5 );
 
-    general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), back, "general" );
+    general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), this, "general" );
     general->setFrameStyle( QFrame::Box | QFrame::Sunken );
 
     infinitLoop = new QCheckBox( i18n( "&Infinite Loop" ), general );
@@ -64,7 +64,9 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     speedSpinBox = new QSpinBox( general, "speedSpinBox" );
     speedSpinBox->setValue( presSpeed );
 
-    page = new QButtonGroup( 1, Qt::Horizontal, i18n( "Page Configuration" ), back, "page" );
+    back->addWidget(general);
+
+    page = new QButtonGroup( 1, Qt::Horizontal, i18n( "Page Configuration" ), this, "page" );
     page->setFrameStyle( QFrame::Box | QFrame::Sunken );
 
     label1 = new QLabel( i18n( "Page number: %1" ).arg( pgNum ), page );
@@ -87,7 +89,9 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     effectCombo->insertItem( i18n( "Fly away 1" ) );
     effectCombo->setCurrentItem( static_cast<int>( pageEffect ) );
 
-    slides = new QButtonGroup( 1, Qt::Horizontal, back );
+    back->addWidget(page);
+    
+    slides = new QButtonGroup( 1, Qt::Horizontal, this );
     slides->setCaption( i18n( "Show slides in presentation" ) );
 
     slidesAll = new QRadioButton( i18n( "&All slides" ), slides );
@@ -100,12 +104,14 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     lSlides->header()->setMovingEnabled( false );
     lSlides->setSorting( -1 );
 
+    back->addWidget(slides);
+
     slides->hide();
 
     connect( slides, SIGNAL( clicked( int ) ),
              this, SLOT( presSlidesChanged( int ) ) );
 
-    KButtonBox *bb = new KButtonBox( back );
+    KButtonBox *bb = new KButtonBox( this );
 
     bb->addStretch();
     okBut = bb->addButton( i18n( "OK" ) );
@@ -119,8 +125,9 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-    presSlidesChanged( 0 );
-    resize( 300, 350 );
+    back->addWidget(bb);
+
+    //presSlidesChanged( 0 );
 }
 
 /*================================================================*/
@@ -130,13 +137,6 @@ void PgConfDia::presSlidesChanged( int )
         lSlides->setEnabled( true );
     else
         lSlides->setEnabled( false );
-}
-
-/*================================================================*/
-void PgConfDia::resizeEvent( QResizeEvent *e )
-{
-    QDialog::resizeEvent( e );
-    back->resize( size() );
 }
 
 /*================================================================*/

@@ -28,8 +28,7 @@
 class QButtonGroup;
 class QLabel;
 class QPushButton;
-class QVBox;
-class QResizeEvent;
+class QVBoxLayout;
 class QListView;
 class KPresenterDoc;
 class QRadioButton;
@@ -57,8 +56,6 @@ public:
     PresSpeed getPresSpeed();
 
 protected:
-    void resizeEvent( QResizeEvent *e );
-
     QButtonGroup *general, *page, *slides;
     QCheckBox *infinitLoop, *manualSwitch;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
@@ -66,7 +63,7 @@ protected:
     QPushButton *cancelBut, *okBut;
     QComboBox *effectCombo;
     QSpinBox *speedSpinBox;
-    QVBox *back;
+    QVBoxLayout *back;
     QListView *lSlides;
 
 public slots:
