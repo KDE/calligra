@@ -181,11 +181,11 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
 
     setWidth( content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2 );
     setHeight( content->getHeight() + distY + rootOffset.y() );
-    setMidline( getHeight() - content->getHeight() + content->getMidline() );
+    //setMidline( getHeight() - content->getHeight() + content->getMidline() );
 
     content->setX( rootOffset.x() + unit+unit/3 );
     content->setY( rootOffset.y() + distY );
-    calcBaseline();
+    setBaseline(content->getBaseline() + content->getY());
 }
 
 /**

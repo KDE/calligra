@@ -29,20 +29,6 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-void ContextStyle::TextStyleValues::setup( QFont font,
-                                           luPt baseSize,
-                                           double reduction )
-{
-    reductionFactor = reduction;
-
-    font.setPointSize( baseSize );
-    QFontMetrics fm( font );
-
-    // Or better the real space required? ( boundingRect )
-    quad = fm.width( 'M' );
-}
-
-
 ContextStyle::ContextStyle()
     : defaultFont( "Times", 18, QFont::Normal, true ),
       nameFont( "Times" ), numberFont( "Times" ),
@@ -57,6 +43,11 @@ ContextStyle::ContextStyle()
               << "numberFont: " << numberFont.rawName() << endl
               << "operatorFont: " << operatorFont.rawName() << endl
               << "symbolFont: " << symbolFont.rawName() << endl;
+
+    textStyleValues[ displayStyle      ].setup( 1. );
+    textStyleValues[ textStyle         ].setup( 1. );
+    textStyleValues[ scriptStyle       ].setup( .7 );
+    textStyleValues[ scriptScriptStyle ].setup( .49 );
 
     m_baseTextStyle = displayStyle;
 
@@ -174,7 +165,7 @@ luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
     return static_cast<luPt>( ptToLayoutUnitPt( baseSize*getReductionFactor( tstyle ) ) );
 }
 
-luPt ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
+luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
 {
     switch ( space ) {
     case THIN:   return getThinSpace( tstyle );
@@ -185,26 +176,30 @@ luPt ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
     return 0;
 }
 
-luPt ContextStyle::getThinSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
-    return textStyleValues[ tstyle ].thinSpace();
+    return ptToPixelX( textStyleValues[ tstyle ].thinSpace( quad ) );
 }
 
-luPt ContextStyle::getMediumSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
-    return textStyleValues[ tstyle ].mediumSpace();
+    return ptToPixelX( textStyleValues[ tstyle ].mediumSpace( quad ) );
 }
 
-luPt ContextStyle::getThickSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getThickSpace( TextStyle tstyle ) const
 {
-    return textStyleValues[ tstyle ].thickSpace();
+    return ptToPixelX( textStyleValues[ tstyle ].thickSpace( quad ) );
 }
 
-luPt ContextStyle::getQuadSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getQuadSpace( TextStyle tstyle ) const
 {
-    return textStyleValues[ tstyle ].quadSpace();
+    return ptToPixelX( textStyleValues[ tstyle ].quadSpace( quad ) );
 }
 
+luPixel ContextStyle::axisHeight( TextStyle tstyle ) const
+{
+    return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
+}
 
 luPt ContextStyle::getBaseSize() const
 {
@@ -279,12 +274,14 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 
 void ContextStyle::setup()
 {
-    //double size = getBaseSize();
     luPt size = static_cast<luPt>( ptToLayoutUnitPt( baseSize ) );
-    textStyleValues[ displayStyle      ].setup( getSymbolFont(), size, 1. );
-    textStyleValues[ textStyle         ].setup( getSymbolFont(), size, 1. );
-    textStyleValues[ scriptStyle       ].setup( getSymbolFont(), size, .7 );
-    textStyleValues[ scriptScriptStyle ].setup( getSymbolFont(), size, .49 );
+    QFont font = symbolFont;
+    font.setPointSize( size );
+    QFontMetrics fm( font );
+
+    // Or better the real space required? ( boundingRect )
+    quad = fm.width( 'M' );
+    m_axisHeight = fm.strikeOutPos();
 }
 
 KFORMULA_NAMESPACE_END

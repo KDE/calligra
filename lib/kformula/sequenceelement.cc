@@ -129,20 +129,12 @@ bool SequenceElement::isEmpty()
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void SequenceElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     if (!isEmpty()) {
-        luPt mySize = context.getAdjustedSize( tstyle );
         luPixel width = 0;
         luPixel toBaseline = 0;
         luPixel fromBaseline = 0;
-
-        QFont font = context.getDefaultFont();
-        font.setPointSize(mySize);
-        QFontMetrics fm(font);
-        luPixel fromMidline = fm.strikeOutPos();
-
-        //uint count = children.count();
 
         // Let's do all normal elements that have a base line.
         QPtrListIterator<BasicElement> it( children );
@@ -151,18 +143,16 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
 
             luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
-                spaceBefore = context.ptToPixelX( child->getElementType()->getSpaceBefore( context, tstyle ) );
+                spaceBefore = style.ptToPixelX( child->getElementType()->getSpaceBefore( style, tstyle ) );
             }
 
             if ( !child->isInvisible() ) {
-                child->calcSizes( context, tstyle, istyle );
+                child->calcSizes( style, tstyle, istyle );
                 child->setX( width + spaceBefore );
                 width += child->getWidth() + spaceBefore;
 
-                if ( child->getBaseline() > -1 ) {
-                    toBaseline = QMAX( toBaseline, child->getBaseline() );
-                    fromBaseline = QMAX( fromBaseline, child->getHeight()-child->getBaseline() );
-                }
+                toBaseline = QMAX( toBaseline, child->getBaseline() );
+                fromBaseline = QMAX( fromBaseline, child->getHeight()-child->getBaseline() );
             }
             else {
                 width += spaceBefore;
@@ -170,34 +160,19 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
             }
         }
 
-        bool noBaseline = toBaseline == 0;
-
-        // Now all normal elements without a base line.
-        it.toFirst();
-        for ( ; it.current(); ++it ) {
-            BasicElement* child = it.current();
-            if (!child->isInvisible()) {
-                if (child->getBaseline() == -1) {
-                    toBaseline = QMAX(toBaseline, child->getMidline()+fromMidline);
-                    fromBaseline = QMAX(fromBaseline, child->getHeight()-(child->getMidline()+fromMidline));
-                }
-            }
-        }
-
         setWidth(width);
         setHeight(toBaseline+fromBaseline);
-        setBaseline(noBaseline ? -1 : toBaseline);
-        setMidline(toBaseline-fromMidline);
+        setBaseline(toBaseline);
 
         setChildrenPositions();
     }
     else {
-        luPixel w = context.getEmptyRectWidth();
-        luPixel h = context.getEmptyRectHeight();
+        luPixel w = style.getEmptyRectWidth();
+        luPixel h = style.getEmptyRectHeight();
         setWidth( w );
         setHeight( h );
         setBaseline( h );
-        setMidline( h*.5 );
+        //setMidline( h*.5 );
     }
 }
 
@@ -207,12 +182,7 @@ void SequenceElement::setChildrenPositions()
     QPtrListIterator<BasicElement> it( children );
     for ( ; it.current(); ++it ) {
         BasicElement* child = it.current();
-        if (child->getBaseline() > -1) {
-            child->setY(getBaseline() - child->getBaseline());
-        }
-        else {
-            child->setY(getMidline() - child->getMidline());
-        }
+        child->setY(getBaseline() - child->getBaseline());
     }
 }
 

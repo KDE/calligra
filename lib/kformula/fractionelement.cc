@@ -89,18 +89,19 @@ BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    numerator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
-			 style.convertIndexStyleUpper( istyle ));
-    denominator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
-			   style.convertIndexStyleLower( istyle ));
+    ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction( tstyle );
+    ContextStyle::IndexStyle u_istyle = style.convertIndexStyleUpper( istyle );
+    ContextStyle::IndexStyle l_istyle = style.convertIndexStyleLower( istyle );
+
+    numerator->calcSizes( style, i_tstyle, u_istyle );
+    denominator->calcSizes( style, i_tstyle, l_istyle );
 
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
     setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
                2*distY + style.getLineWidth() );
-    setMidline( numerator->getHeight() + distY + .5*style.getLineWidth() );
-    setBaseline( -1 );
+    setBaseline( numerator->getHeight() + distY + .5*style.getLineWidth() + style.axisHeight( tstyle ) );
 
     numerator->setX( ( getWidth() - numerator->getWidth() ) / 2 );
     denominator->setX( ( getWidth() - denominator->getWidth() ) / 2 );
@@ -136,9 +137,9 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
         painter.setPen( QPen( style.getDefaultColor(),
                               style.layoutUnitToPixelY( style.getLineWidth() ) ) );
         painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y() + getMidline() ),
+                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ),
                           style.layoutUnitToPixelX( myPos.x() + getWidth() ),
-                          style.layoutUnitToPixelY( myPos.y() + getMidline() ) );
+                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ) );
     }
 }
 

@@ -33,7 +33,7 @@ using namespace std;
 int BasicElement::evilDestructionCount = 0;
 
 BasicElement::BasicElement( BasicElement* p )
-        : parent( p ), m_baseline( 0 ), m_axis( 0 ), elementType( 0 )
+        : parent( p ), m_baseline( 0 ), elementType( 0 )
 {
     setX( 0 );
     setY( 0 );
@@ -88,24 +88,6 @@ void BasicElement::goInside(FormulaCursor* cursor)
     BasicElement* mainChild = getMainChild();
     if (mainChild != 0) {
         mainChild->goInside(cursor);
-    }
-}
-
-
-/**
- * Calculates the base line. This is used by all elements
- * those main child determines the position of the elements
- * base line.
- */
-void BasicElement::calcBaseline()
-{
-    BasicElement* content = getMainChild();
-    if (content->getBaseline() > -1) {
-        //setBaseline(content->getBaseline() - content->getMidline() + getMidline());
-        setBaseline(content->getBaseline() + content->getY());
-    }
-    else {
-        setBaseline(-1);
     }
 }
 

@@ -97,27 +97,35 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
         left   ->setY(getBaseline() - left   ->getBaseline());
         right  ->setY(getBaseline() - right  ->getBaseline());
 
-        setMidline(content->getY() + content->getMidline());
+        //setMidline(content->getY() + content->getMidline());
         setHeight(QMAX(content->getY() + content->getHeight(),
                        QMAX(left ->getY() + left ->getHeight(),
                             right->getY() + right->getHeight())));
     }
     else {
-        luPixel contentHeight = 2 * QMAX( content->getMidline(),
-                                          content->getHeight() - content->getMidline() );
+        //kdDebug( DEBUGID ) << "BracketElement::calcSizes " << content->axis( style, tstyle ) << " " << content->getHeight() << endl;
+        luPixel contentHeight = 2 * QMAX( content->axis( style, tstyle ),
+                                          content->getHeight() - content->axis( style, tstyle ) );
         left->calcSizes( style, tstyle, contentHeight );
         right->calcSizes( style, tstyle, contentHeight );
 
         // height
         setHeight(QMAX(contentHeight,
                        QMAX(left->getHeight(), right->getHeight())));
-        setMidline(getHeight() / 2);
+        //setMidline(getHeight() / 2);
 
         left   ->setY((getHeight() - left   ->getHeight())/2);
         right  ->setY((getHeight() - right  ->getHeight())/2);
 
-        content->setY(getMidline() - content->getMidline());
-        calcBaseline();
+        content->setY(getHeight() / 2 - content->axis( style, tstyle ));
+        setBaseline(content->getBaseline() + content->getY());
+//         kdDebug() << "BracketElement::calcSizes" << endl
+//                   << "getHeight(): " << getHeight() << endl
+//                   << "left->getHeight():  " << left->getHeight() << endl
+//                   << "right->getHeight(): " << right->getHeight() << endl
+//                   << "left->getY():  " << left->getY() << endl
+//                   << "right->getY(): " << right->getY() << endl
+//                   << endl;
     }
 
     // width
@@ -149,8 +157,8 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
         right->draw(painter, r, style, tstyle, myPos);
     }
     else {
-        luPixel contentHeight = 2 * QMAX(content->getMidline(),
-                                         content->getHeight() - content->getMidline());
+        luPixel contentHeight = 2 * QMAX(content->axis( style, tstyle ),
+                                         content->getHeight() - content->axis( style, tstyle ));
         left->draw(painter, r, style, tstyle, contentHeight, myPos);
         right->draw(painter, r, style, tstyle, contentHeight, myPos);
     }

@@ -202,17 +202,17 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     // heights
     //int toMidline = QMAX(content->getHeight() / 2,
-    luPixel toMidline = QMAX(content->getMidline(),
+    luPixel toMidline = QMAX(content->axis( style, tstyle ),
                              upperHeight + symbol.getHeight()/2);
     //int fromMidline = QMAX(content->getHeight() / 2,
-    luPixel fromMidline = QMAX(content->getHeight() - content->getMidline(),
+    luPixel fromMidline = QMAX(content->getHeight() - content->axis( style, tstyle ),
                                lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
-    setMidline(toMidline);
+    //setMidline(toMidline);
 
     symbol.setY(toMidline - symbol.getHeight()/2);
     //content->setY(toMidline - content->getHeight()/2);
-    content->setY(toMidline - content->getMidline());
+    content->setY(toMidline - content->axis( style, tstyle ));
 
     if (hasUpper()) {
         if (style.getCenterSymbol()) {
@@ -242,7 +242,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         }
         lower->setY(toMidline + symbol.getHeight()/2 + distY);
     }
-    calcBaseline();
+    setBaseline(content->getBaseline() + content->getY());
 }
 
 /**

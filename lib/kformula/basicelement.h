@@ -319,7 +319,9 @@ public:
     //KoPoint getParentPosition() { return position; }
 
     luPixel getBaseline() const { return m_baseline; }
-    luPixel getMidline() const { return m_axis; }
+    //luPixel getMidline() const { return m_axis; }
+    luPixel axis( const ContextStyle& style, ContextStyle::TextStyle tstyle ) const {
+        return getBaseline() - style.axisHeight( tstyle ); }
 
 
     /**
@@ -351,14 +353,7 @@ protected:
     void setHeight( luPixel height ) { m_height = height; }
 
     void setBaseline( luPixel line ) { m_baseline = line; }
-    void setMidline( luPixel axis ) { m_axis = axis; }
-
-    /**
-     * Calculates the base line. This is used by all elements
-     * those main child determines the position of the elements
-     * base line.
-     */
-    void calcBaseline();
+    //void setMidline( luPixel axis ) { m_axis = axis; }
 
     //Save/load support
 
@@ -446,7 +441,7 @@ private:
      *
      * This will have to go. (?)
      */
-    luPixel m_axis;
+    //luPixel m_axis;
 
     /**
      * The token that describes our type. Please note that we don't

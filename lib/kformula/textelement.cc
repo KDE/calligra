@@ -102,13 +102,13 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
         setWidth( fm.width( ch ) );
         setHeight( bound.height() );
         setBaseline( -bound.top() );
-        setMidline( getBaseline() - fm.strikeOutPos() );
+        //setMidline( getBaseline() - fm.strikeOutPos() );
     }
     else {
         setWidth( context.getEmptyRectWidth() * 2./3. );
         setHeight( context.getEmptyRectHeight() * 2./3. );
         setBaseline( getHeight() );
-        setMidline( getBaseline() / 2 );
+        //setMidline( getBaseline() / 2 );
     }
 
     //kdDebug( DEBUGID ) << "bound.height(): " << bound.height() << endl;

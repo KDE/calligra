@@ -384,15 +384,17 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     uint rows = getRows();
     uint columns = getColumns();
 
+    ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction(tstyle);
+    ContextStyle::IndexStyle i_istyle = style.convertIndexStyleUpper(istyle);
+
     for (uint r = 0; r < rows; r++) {
         QPtrList< MatrixSequenceElement >* list = content.at(r);
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
-            element->calcSizes(style, style.convertTextStyleFraction(tstyle),
-			       style.convertIndexStyleUpper(istyle));
-            toMidlines[r] = QMAX(toMidlines[r], element->getMidline());
+            element->calcSizes( style, i_tstyle, i_istyle );
+            toMidlines[r] = QMAX(toMidlines[r], element->axis( style, i_tstyle ));
             fromMidlines[r] = QMAX(fromMidlines[r],
-                                   element->getHeight()-element->getMidline());
+                                   element->getHeight()-element->axis( style, i_tstyle ));
             widths[c] = QMAX(widths[c], element->getWidth());
         }
     }
@@ -418,7 +420,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
                 element->setX(xPos + widths[c] - element->getWidth());
                 break;
             }
-            element->setY(yPos - element->getMidline());
+            element->setY(yPos - element->axis( style, i_tstyle ));
             xPos += widths[c] + distX;
         }
         yPos += fromMidlines[r] + distY;
@@ -433,12 +435,11 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     setWidth(width);
     setHeight(height);
     if ((rows == 2) && (columns == 1)) {
-        setMidline(getMainChild()->getHeight() + distY / 2);
+        setBaseline( getMainChild()->getHeight() + distY / 2 + style.axisHeight( tstyle ) );
     }
     else {
-        setMidline(height/2);
+        setBaseline( height/2 + style.axisHeight( tstyle ) );
     }
-    setBaseline(-1);
 }
 
 /**

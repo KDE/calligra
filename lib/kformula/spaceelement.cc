@@ -48,10 +48,10 @@ void SpaceElement::calcSizes( const ContextStyle& style,
     QChar ch = 'x';
     LuPixelRect bound = fm.boundingRect( ch );
 
-    setWidth( style.ptToPixelX( style.getSpace( tstyle, spaceWidth ) ) );
+    setWidth( style.getSpace( tstyle, spaceWidth ) );
     setHeight( bound.height() );
     setBaseline( -bound.top() );
-    setMidline( getBaseline() - fm.strikeOutPos() );
+    //setMidline( getBaseline() - fm.strikeOutPos() );
 }
 
 void SpaceElement::draw( QPainter& painter, const LuPixelRect& r,

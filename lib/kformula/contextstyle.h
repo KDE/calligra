@@ -135,11 +135,13 @@ public:
     /**
      * TeX like spacings.
      */
-    luPt getSpace( TextStyle tstyle, SpaceWidth space ) const;
-    luPt getThinSpace( TextStyle tstyle ) const;
-    luPt getMediumSpace( TextStyle tstyle ) const;
-    luPt getThickSpace( TextStyle tstyle ) const;
-    luPt getQuadSpace( TextStyle tstyle ) const;
+    luPixel getSpace( TextStyle tstyle, SpaceWidth space ) const;
+    luPixel getThinSpace( TextStyle tstyle ) const;
+    luPixel getMediumSpace( TextStyle tstyle ) const;
+    luPixel getThickSpace( TextStyle tstyle ) const;
+    luPixel getQuadSpace( TextStyle tstyle ) const;
+
+    luPixel axisHeight( TextStyle tstyle ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
@@ -205,15 +207,15 @@ private:
 
     struct TextStyleValues {
 
-        void setup( QFont font, luPt baseSize, double reduction );
+        void setup( double reduction ) { reductionFactor = reduction; }
 
-        luPt thinSpace() const   { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )/6. ); }
-        luPt mediumSpace() const { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*2./9. ); }
-        luPt thickSpace() const  { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*5./18. ); }
-        luPt quadSpace() const   { return quad; }
+        luPt thinSpace( luPt quad ) const   { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )/6. ); }
+        luPt mediumSpace( luPt quad ) const { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*2./9. ); }
+        luPt thickSpace( luPt quad ) const  { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*5./18. ); }
+        luPt quadSpace( luPt quad ) const   { return quad; }
 
+        luPt axisHeight( luPt height ) const { return static_cast<luPt>( reductionFactor*height ); }
         double reductionFactor;
-        luPt quad;
     };
 
     TextStyleValues textStyleValues[ 4 ];
@@ -252,11 +254,14 @@ private:
     pt lineWidth;
 
     /**
-     * The little rect (square in most cases) that marks the
-     * empty place where elements might be inserted.
+     * Size of one quad.
      */
-    //pt emptyRectWidth;
-    //pt emptyRectHeight;
+    luPt quad;
+
+    /**
+     * Distance between base line and axis.
+     */
+    luPt m_axisHeight;
 
     /**
      * true means to center the symbol between its indexes.
