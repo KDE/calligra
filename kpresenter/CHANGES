@@ -1,3 +1,19 @@
+Changes after KPresenter 1.3 beta 2
+===================================
+
+
+Changes after KPresenter 1.3 beta 1
+===================================
+Fixes:
+- fixed loading of old documents with invalid paragraph indents
+- paste image gives tiny initial object (#59058)
+- setting the font size in the toolbar doesn't work (#39786)
+- objects disappears on the rightside of a dinA0 presentation (#37370)
+
+New features:
+- flip groups horizontally/vertically (#45561)
+
+
 Changes after KPresenter 1.2
 ============================
 - Add "add to bookmark" feature
