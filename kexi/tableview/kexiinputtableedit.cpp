@@ -42,7 +42,10 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 	m_type = type; //TODO(js) remove m_type !
 	kdDebug() << "KexiInputTableEdit: value.typeName()==" << value.typeName() << endl;
 	kdDebug() << "KexiInputTableEdit: type== " << m_type << endl;
-	m_value = value;
+	m_origValue = value;//original value
+	QString m_decsym = KGlobal::locale()->decimalSymbol();
+	if (m_decsym.isEmpty())
+		m_decsym=".";//default
 
 	QHBoxLayout *lyr = new QHBoxLayout(this);
 	lyr->addSpacing(4);
@@ -97,10 +100,10 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 	}
 	else
 #endif
-		QString tmp_val = value.toString();
+		QString tmp_val = m_origValue.toString();
 
 		if (KexiDB::Field::isFPNumericType(m_type)) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
-			if (value.toDouble() == 0.0) {
+			if (m_origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
 			else {
@@ -110,7 +113,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 					m_cview->setText("");
 				else if (sl.count()==2) {
 					kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
-					tmp_val = sl[0] + KGlobal::locale()->decimalSymbol() + sl[1];
+					tmp_val = sl[0] + m_decsym + sl[1];
 				}
 				tmp_val+=add;
 			}
@@ -119,7 +122,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 			m_cview->setValidator( validator );
 		}
 		else if (KexiDB::Field::isNumericType(m_type)) {
-			if (value.toInt() == 0) {
+			if (m_origValue.toInt() == 0) {
 				tmp_val=add; //eat 0
 			}
 			else {
@@ -130,7 +133,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 			QValidator *validator = new KIntValidator(m_cview);
 			m_cview->setValidator( validator );
 		}
-		else {
+		else {//default: text
 			tmp_val+=add;
 			m_cview->setText(tmp_val);
 		}
@@ -149,9 +152,165 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 //		setRestrictedCompletion();
 
 	m_comp = comp;
-	setFocusProxy(m_view);
+	setFocusProxy(m_cview);
+
+	m_origText = m_cview->text();
 }
 
+void
+KexiInputTableEdit::setRestrictedCompletion()
+{
+	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
+//	KLineEdit *content = static_cast<KLineEdit*>(m_view);
+	if(m_cview->text().isEmpty())
+		return;
+
+	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do" << endl;
+
+	m_cview->useGlobalKeyBindings();
+
+	QStringList newC;
+	for(QStringList::Iterator it = m_comp.begin(); it != m_comp.end(); ++it)
+	{
+		if((*it).startsWith(m_cview->text()))
+			newC.append(*it);
+	}
+	m_cview->setCompletedItems(newC);
+}
+
+void
+KexiInputTableEdit::completed(const QString &s)
+{
+	kdDebug() << "KexiInputTableEdit::completed(): " << s << endl;
+	m_cview->setText(s);
+}
+
+bool KexiInputTableEdit::valueChanged()
+{
+	if (m_cview->text()!=m_origText)
+		return true;
+	return KexiTableEdit::valueChanged();
+}
+
+QVariant
+KexiInputTableEdit::value(bool &ok)
+{
+	if (KexiDB::Field::isFPNumericType(m_type)) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+		//! js @todo PRESERVE PRECISION!
+		QString txt = m_cview->text();
+		if (m_decsym!=".")
+			txt.replace(m_decsym,".");//convert back
+		return QVariant( txt.toDouble(&ok) );
+	}
+	else if (KexiDB::Field::isNumericType(m_type)) {
+		//check constraints
+		return QVariant( m_cview->text().toInt(&ok) );
+	}
+	//default: text
+	ok = true;
+	return QVariant( m_cview->text() );
+}
+#if 0
+	//let qt&mysql understand what we mean... (numeric values)
+	QString v;
+	switch(m_type)
+	{
+		case QVariant::UInt:
+		case QVariant::Int:
+		case QVariant::Double:
+//			QString v;
+			if(!m_calculatedCell)
+			{
+				qDebug("KexiInputTableEdit::value() converting => %s", m_cview->text().latin1());
+				v = m_cview->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
+				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
+				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
+				kdDebug() << "KexiInputTableEdit::value() converting => " << v.latin1() << endl;
+				return QVariant(v);
+			}
+			else
+			{
+				//ok here should the formula be parsed so, just feel like in perl :)
+				kdDebug() << "KexiInputTableEdit::value() calculating..." << endl;
+				double result = 0;
+				QString real = m_cview->text().right(m_cview->text().length() - 1);
+				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
+				real = real.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
+//				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
+				QStringList values = QStringList::split(QRegExp("[\\+|\\*|\\/|-]"), real, false);
+				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);
+
+				double lastValue = 0;
+				QString lastOp = "";
+				for(int i=0; i < (int)values.count(); i++)
+				{
+					double next;
+
+					QString op = QString((*ops.at(i))).stripWhiteSpace();
+
+					if(!((*values.at(i+1)).isEmpty()) && i == 0)
+					{
+						double local = (*values.at(i)).toDouble();
+						next = (*values.at(i+1)).toDouble();
+
+						QString op = (*ops.at(i));
+						if(op == "+")
+							result = local + next;
+						else if(op == "-")
+							result = local - next;
+						else if(op == "*")
+							result = local * next;
+						else
+							result = local / next;
+					}
+					else if(!(*values.at(i+1)).isEmpty())
+					{
+						next = (*values.at(i+1)).toDouble();
+
+						QString op = QString((*ops.at(i))).stripWhiteSpace();
+						if(op == "+")
+							result = result + next;
+						else if(op == "-")
+							result = result - next;
+						else if(op == "*")
+							result = result * next;
+						else
+							result = result / next;
+					}
+
+				}
+
+				return QVariant(result);
+
+			}
+			break;
+
+		default:
+			kdDebug() << "KexiInputTableEdit::value() default..." << endl;
+			return QVariant(m_cview->text());
+	}
+#endif
+
+void
+KexiInputTableEdit::end(bool mark)
+{
+	m_cview->end(mark);
+}
+
+void
+KexiInputTableEdit::backspace()
+{
+	m_cview->backspace();
+}
+
+void
+KexiInputTableEdit::clear()
+{
+	m_cview->clear();
+}
+
+
+#if 0 //js: we've QValidator for validating!
 bool
 KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
@@ -250,137 +409,7 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 		return KexiTableEdit::eventFilter(watched, e);
 	}
 }
-
-void
-KexiInputTableEdit::setRestrictedCompletion()
-{
-	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
-	KLineEdit *content = static_cast<KLineEdit*>(m_view);
-	if(content->text().isEmpty())
-		return;
-
-	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do" << endl;
-
-	content->useGlobalKeyBindings();
-
-	QStringList newC;
-	for(QStringList::Iterator it = m_comp.begin(); it != m_comp.end(); ++it)
-	{
-		if((*it).startsWith(content->text()))
-			newC.append(*it);
-	}
-	content->setCompletedItems(newC);
-}
-
-void
-KexiInputTableEdit::completed(const QString &s)
-{
-	kdDebug() << "KexiInputTableEdit::completed(): " << s << endl;
-	static_cast<KLineEdit*>(m_view)->setText(s);
-}
-
-QVariant
-KexiInputTableEdit::value()
-{
-#if 0
-	//let qt&mysql understand what we mean... (numeric values)
-	QString v;
-	switch(m_type)
-	{
-		case QVariant::UInt:
-		case QVariant::Int:
-		case QVariant::Double:
-//			QString v;
-			if(!m_calculatedCell)
-			{
-				qDebug("KexiInputTableEdit::value() converting => %s", m_cview->text().latin1());
-				v = m_cview->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
-				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
-				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
-				kdDebug() << "KexiInputTableEdit::value() converting => " << v.latin1() << endl;
-				return QVariant(v);
-			}
-			else
-			{
-				//ok here should the formula be parsed so, just feel like in perl :)
-				kdDebug() << "KexiInputTableEdit::value() calculating..." << endl;
-				double result = 0;
-				QString real = m_cview->text().right(m_cview->text().length() - 1);
-				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
-				real = real.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
-//				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
-				QStringList values = QStringList::split(QRegExp("[\\+|\\*|\\/|-]"), real, false);
-				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);
-
-				double lastValue = 0;
-				QString lastOp = "";
-				for(int i=0; i < (int)values.count(); i++)
-				{
-					double next;
-
-					QString op = QString((*ops.at(i))).stripWhiteSpace();
-
-					if(!((*values.at(i+1)).isEmpty()) && i == 0)
-					{
-						double local = (*values.at(i)).toDouble();
-						next = (*values.at(i+1)).toDouble();
-
-						QString op = (*ops.at(i));
-						if(op == "+")
-							result = local + next;
-						else if(op == "-")
-							result = local - next;
-						else if(op == "*")
-							result = local * next;
-						else
-							result = local / next;
-					}
-					else if(!(*values.at(i+1)).isEmpty())
-					{
-						next = (*values.at(i+1)).toDouble();
-
-						QString op = QString((*ops.at(i))).stripWhiteSpace();
-						if(op == "+")
-							result = result + next;
-						else if(op == "-")
-							result = result - next;
-						else if(op == "*")
-							result = result * next;
-						else
-							result = result / next;
-					}
-
-				}
-
-				return QVariant(result);
-
-			}
-			break;
-
-		default:
-			kdDebug() << "KexiInputTableEdit::value() default..." << endl;
-			return QVariant(m_cview->text());
-	}
 #endif
-	return QVariant(0);
-}
 
-void
-KexiInputTableEdit::end(bool mark)
-{
-	m_cview->end(mark);
-}
-
-void
-KexiInputTableEdit::backspace()
-{
-	m_cview->backspace();
-}
-
-void
-KexiInputTableEdit::clear()
-{
-	m_cview->clear();
-}
 
 #include "kexiinputtableedit.moc"

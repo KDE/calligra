@@ -57,4 +57,8 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 	return QWidget::eventFilter(watched, e);
 }
 
-  
+bool KexiTableEdit::valueChanged()
+{
+	bool ok;
+	return (m_origValue != value(ok)) && ok;
+}

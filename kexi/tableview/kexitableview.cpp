@@ -2085,14 +2085,36 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 	}
 }
 
+void KexiTableView::removeEditor()
+{
+	if (!d->pEditor)
+		return;
+
+	delete d->pEditor;
+	d->pEditor = 0;
+	viewport()->setFocus();
+}
+
 void KexiTableView::acceptEditor()
 {
 	if (!d->pEditor)
 		return;
 //	d->pCurrentItem->setText(d->curCol, d->pEditor->text());
 	QVariant oldValue=d->pCurrentItem->at(d->curCol);
-	(*d->pCurrentItem)[d->curCol] = d->pEditor->value();
-	cancelEditor();
+	if (!d->pEditor->valueChanged()) {
+		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
+		removeEditor();
+		return;
+	}
+	bool ok;
+	QVariant newval = d->pEditor->value(ok);
+	if (!ok) {
+		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
+		removeEditor();
+		return;
+	}
+	(*d->pCurrentItem)[d->curCol] = newval;
+	removeEditor();
 	emit itemChanged(d->pCurrentItem, d->curCol,oldValue);
 	emit itemChanged(d->pCurrentItem, d->curCol);
 }
@@ -2102,9 +2124,7 @@ void KexiTableView::cancelEditor()
 	if (!d->pEditor)
 		return;
 
-	delete d->pEditor;
-	d->pEditor = 0;
-	viewport()->setFocus();
+	removeEditor();
 }
 
 void KexiTableView::acceptRowEdit()

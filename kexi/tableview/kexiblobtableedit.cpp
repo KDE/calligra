@@ -104,26 +104,26 @@ KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, con
 }
 
 QVariant
-KexiBlobTableEdit::value()
+KexiBlobTableEdit::value(bool &ok)
 {
+	//todo
+	ok = true;
+
 	if(m_content && m_content->isModified())
 	{
 		return QVariant(m_content->text());
 	}
-	else
-	{
-		QByteArray value;
-		QFile f( m_tempFile->name() );
-		f.open(IO_ReadOnly);
-		QDataStream stream(&f);
-		char* data = (char*) malloc(f.size());
-		value.resize(f.size());
-		stream.readRawBytes(data, f.size());
-		value.duplicate(data, f.size());
-		free(data);
-		kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
-		return QVariant(value);
-	}
+	QByteArray value;
+	QFile f( m_tempFile->name() );
+	f.open(IO_ReadOnly);
+	QDataStream stream(&f);
+	char* data = (char*) malloc(f.size());
+	value.resize(f.size());
+	stream.readRawBytes(data, f.size());
+	value.duplicate(data, f.size());
+	free(data);
+	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
+	return QVariant(value);
 }
 
 KexiBlobTableEdit::~KexiBlobTableEdit()

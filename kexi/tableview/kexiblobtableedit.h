@@ -35,7 +35,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 		KexiBlobTableEdit(const QByteArray& val, QWidget* parent = 0, const char* name = 0);
 		~KexiBlobTableEdit();
 
-		virtual QVariant value();
+		virtual QVariant value(bool &ok);
 	protected:
 		KTempFile* m_tempFile;
 		KProcess* m_proc;

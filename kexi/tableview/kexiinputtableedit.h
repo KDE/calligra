@@ -34,8 +34,11 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		KexiInputTableEdit(QVariant value, int type, const QString& add=QString::null,
 		 QWidget *parent=0, const char *name=0, QStringList comp = QStringList());
 
-		virtual QVariant value();
-		virtual bool eventFilter(QObject* watched, QEvent* e);
+		virtual bool valueChanged();
+
+		virtual QVariant value(bool &ok);
+
+//		virtual bool eventFilter(QObject* watched, QEvent* e);
 		void end(bool mark);
 		void backspace();
 		void clear();
@@ -44,15 +47,17 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		void setRestrictedCompletion();
 		void completed(const QString &);
 
-
 	protected:
 		void showHintButton();
 
-		int	m_type;
-		QVariant	m_value;
+		int m_type; //! one of KexiDB::Field
 
 		bool		m_calculatedCell;
 		QStringList	m_comp;
+
+		QString m_decsym; //! decimal symbol
+		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
+
 
 	private:
 		KLineEdit	*m_cview;

@@ -27,11 +27,18 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 {
 	public:
 		KexiTableEdit(QWidget* parent = 0, const char* name = 0);
-		virtual QVariant value() = 0;
+
+		//! @return true if editor's value is changed (compared to original value)
+		virtual bool valueChanged();
+
+		virtual QVariant value(bool &ok) = 0;
+
 		virtual void resize(int w, int h);
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 	protected:
 //		virtual void paintEvent( QPaintEvent *pe );
+		QVariant m_origValue;
+
 		QWidget* m_view;
 };
 

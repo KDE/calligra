@@ -32,7 +32,8 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStrin
 }
 
 
-QVariant KexiComboBoxTableEdit::value()
+QVariant KexiComboBoxTableEdit::value(bool &ok)
 {
+	ok = true;
 	return QVariant(static_cast<KComboBox*>(m_view)->currentItem());
 }

@@ -100,18 +100,19 @@ KexiDateTableEdit::slotDateChanged(QDate date)
 }
 
 QVariant
-KexiDateTableEdit::value()
+KexiDateTableEdit::value(bool &ok)
 {
-	bool ok = true;
+	ok = true;
 //js	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
-	QDate date = m_edit->date();
+//	QDate date = m_edit->date();
+	return QVariant(m_edit->date());
 
-	if(!ok)
+/*	if(!ok)
 	{
 		date = m_oldVal;
-	}
+	}*/
 
-	return QVariant(date.toString(Qt::ISODate));
+//	return QVariant(date.toString(Qt::ISODate));
 }
 
 void

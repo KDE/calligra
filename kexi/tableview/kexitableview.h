@@ -383,6 +383,8 @@ protected:
 	//! internal, to determine valid row number when navigator text changed
 	int validRowNumber(const QString& text);
 
+	void removeEditor();
+
 	//--------------------------
 		
 	KexiTableViewData *m_data;

@@ -51,7 +51,7 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 	public:
 		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
 
-		QVariant value();
+		virtual QVariant value(bool &ok);
 	
 	protected:
 		virtual bool eventFilter( QObject *o, QEvent *e );
