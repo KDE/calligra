@@ -541,7 +541,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         }
 
         KWTableFrameSet *table = 0L;
-        KWDocument::TableToSelectPosition ePositionTable = m_doc->positionToSelectRowcolTable(e->pos(), &table);
+        KWDocument::TableToSelectPosition ePositionTable = m_doc->positionToSelectRowcolTable( normalPoint, &table);
         // are we in the situation to select row/cols of a table?
         if (ePositionTable != KWDocument::TABLE_POSITION_NONE)
         {   // YES => select row/col
@@ -549,7 +549,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             {  // in position to select a ROW
                 // here the cursor is on the left of the table. the y is OK, but the x is not,
                 // hence finding a proper x with the table object
-                KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(e->pos().y())  );
+                KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(normalPoint.y())  );
                 if (cell)
                 {
                     table->selectRow( cell->getRow() );
@@ -560,7 +560,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             else
             { // in position to select a COLUMN
               // here the cursor is on top of the table. the x is ok, but the y is not.
-                KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(e->pos().x()), table->topWithoutBorder()  );
+                KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(normalPoint.x()), table->topWithoutBorder()  );
                 if (cell)
                 {
                     table->selectCol( cell->getColumn() );
@@ -1897,7 +1897,7 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
 
     }
 
-    // Edit the frameset under the mouse, if any
+    // Edit the frameset "fs"
     if ( fs && !m_currentFrameSetEdit )
     {
         KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
