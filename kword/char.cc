@@ -102,6 +102,26 @@ void KWString::insert( unsigned int _pos,QString _text)
     }
 }
 
+void KWString::insert( unsigned int _pos,KWString *_text)
+{
+  assert( _pos <= _len_ );
+
+  unsigned int nl = _text->size();
+
+  unsigned int l = _len_;
+
+  resize( _len_ + nl );
+
+  if ( _pos < l )
+    memmove( _data_ + _pos + nl, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
+
+  for( unsigned int i = 0; i < nl; ++i )
+    {
+      _data_[ _pos + i ].c = _text->data()[i].c;
+      _data_[ _pos + i ].attrib = _text->data()[i].attrib;
+    }
+}
+
 void KWString::insert( unsigned int _pos, const char _c )
 {
   assert( _pos <= _len_ );

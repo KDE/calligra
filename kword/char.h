@@ -100,7 +100,7 @@ public:
   QString getText() { return var->getText(); }
 
   KWVariable *getVar() { return var; }
-  
+
 protected:
   KWVariable *var;
 
@@ -133,6 +133,7 @@ public:
     { return _max_; }
   void append(KWChar *_text,unsigned int _len);
   void insert(unsigned int _pos,QString _text);
+  void insert(unsigned int _pos,KWString *_text);
   void insert(unsigned int _pos,const char _c);
   void insert(unsigned int _pos,KWCharImage *_image);
   void insert(unsigned int _pos,KWCharTab *_tab);

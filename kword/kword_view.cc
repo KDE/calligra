@@ -685,7 +685,7 @@ void KWordView::editCopy()
 void KWordView::editPaste()
 {
   QClipboard *cb = QApplication::clipboard();
-  
+
   if (cb->data()->provides(MIME_TYPE))
     {
       if (cb->data()->encodedData(MIME_TYPE).size())
@@ -696,7 +696,9 @@ void KWordView::editPaste()
       if (cb->data()->encodedData("text/plain").size())
 	gui->getPaperWidget()->editPaste(cb->data()->encodedData("text/plain"));
     }
-  
+  else if (!cb->text().isEmpty())
+    gui->getPaperWidget()->editPaste(cb->text());
+
   sendFocusEvent();
 }
 

@@ -913,5 +913,10 @@ Reggie, 11.3.1999:
 - Text is copied as text/plain and in native KWord format (application/x-kword) to the clipboard (using KWordDrag as QMimeSource)
   (only partly implemented)
 - When pasting text: If native KWord format (application/x-kword) is provided, this is used, else text/plain is used
-  (only partly implemented) 
+  (only partly implemented)
 => when cut/copy/pasting between or in KWord documents, formatting is copied/pasted too now
+
+Reggie, 12.3.1999:
+------------------
+- Some fixes
+- Some more work on pasting text

@@ -806,13 +806,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	{
 	  KWordChild *ch = new KWordChild(this);
 	  ch->load(parser,lst);
-	  //QRect r = ch->geometry();
 	  insertChild(ch);
-// 	  KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
-// 	  KWFrame *frame = new KWFrame(r.x(),r.y(),r.width(),r.height());
-// 	  frameset->addFrame(frame);
-// 	  addFrameSet(frameset);
-// 	  emit sig_insertObject(ch,frameset);
 	}
       else if (name == "PAPER")
 	{
@@ -2307,7 +2301,7 @@ void KWordDocument::copySelectedText()
   QString clipString = "";
 
   KWParag *firstParag = 0L,*parag = 0L;
-  
+
   if (selStart.getParag() == selEnd.getParag())
     {
       if (selStart.getTextPos() < selEnd.getTextPos())
@@ -2363,10 +2357,10 @@ void KWordDocument::copySelectedText()
     }
 
   QClipboard *cb = QApplication::clipboard();
-  
+
   string clip_string;
   tostrstream out(clip_string);
-  
+
   parag = firstParag;
   out << otag << "<PARAGRAPHS>" << endl;
   while (parag)
@@ -2377,11 +2371,11 @@ void KWordDocument::copySelectedText()
       parag = parag->getNext();
     }
   out << etag << "</PARAGRAPHS>" << endl;
-  
+
   KWordDrag *d = new KWordDrag;
   d->setPlain(clipString);
   d->setKWord(clip_string.c_str());
-  
+
   cb->setData(d);
 }
 
@@ -2473,7 +2467,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	
       KOMLStreamFeed feed(in);
       KOMLParser parser(&feed);
-      
+
       string tag;
       vector<KOMLAttrib> lst;
       string name;
@@ -2495,8 +2489,8 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      for(;it != lst.end();it++)
 		{
 		}
-	  
-	      parag2 = new KWParag(dynamic_cast<KWTextFrameSet*>(getFrameSet(_fc->getFrameSet() - 1)),this,0L,0L,defaultParagLayout);
+	
+	      parag2 = new KWParag(dynamic_cast<KWTextFrameSet*>(getFrameSet(_fc->getFrameSet() - 1)),this,0L,0L,defaultParagLayout,false);
 	      parag2->load(parser,lst);
 	      if (!firstParag)
 		firstParag = parag2;
@@ -2505,7 +2499,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      parag = parag2;
 	    }
 	  else ;
-	  
+	
 	  if (!parser.close(tag))
 	    return;
 	
@@ -2516,6 +2510,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
     {
       if ((_mime == "text/plain" && strList.count() == 1) || (_mime == MIME_TYPE && !firstParag->getNext()))
 	{
+	  // --------------- MIME: text/plain
 	  if (_mime == "text/plain")
 	    {
 	      QString str;
@@ -2537,14 +2532,19 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      painter.end();
 	      delete format;
 	    }
+	  // ---------------- MIME: application/x-kword
 	  else
 	    {
-	      parag = _fc->getParag();
-	      parag2 = parag->getNext();
-	      parag->setNext(firstParag);
-	      firstParag->setNext(parag2);
-	      firstParag->setPrev(parag);
-	      if (parag2) parag2->setPrev(parag);
+	      KWString *str = new KWString();
+	      *str = *firstParag->getKWString();
+	      _fc->getParag()->insertText(_fc->getTextPos(),str);
+
+	      painter.begin(_page);
+	      for (unsigned int j = 0;j < firstParag->getTextLen();j++)
+		_fc->cursorGotoRight(painter);
+	      painter.end();
+
+	      delete firstParag;
 	    }
 	}
       else if (strList.count() == 2)

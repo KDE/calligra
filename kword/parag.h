@@ -37,7 +37,7 @@ public:
    *
    * @see KWParagraphLayout
    */
-  KWParag(KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout );
+  KWParag(KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout, bool useForFirst = true);
   KWParag(const KWParag& _parag);
 
   /**
@@ -133,6 +133,7 @@ public:
   void setPTYEnd( unsigned int _y ) { ptYEnd = _y; }
 
   void insertText(unsigned int _pos,QString _text);
+  void insertText(unsigned int _pos,KWString *_text);
   void insertVariable(unsigned int _pos,KWVariable *_var);
   void insertPictureAsChar(unsigned int _pos,QString _filename);
   void insertTab(unsigned int _pos);

@@ -12,7 +12,7 @@
 #include <unistd.h>
 
 KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next,
-		 KWParagLayout* _paragLayout )
+		 KWParagLayout* _paragLayout, bool useForFirst)
 {
   prev = _prev;
   next = _next;
@@ -23,7 +23,7 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, 
 
   if (prev)
     prev->setNext(this);
-  else
+  else if (useForFirst)
     frameSet->setFirstParag(this);
 
   if (next)
@@ -177,6 +177,11 @@ void KWParag::makeCounterWidth()
 }
 
 void KWParag::insertText( unsigned int _pos,QString _text)
+{
+  text.insert(_pos,_text);
+}
+
+void KWParag::insertText( unsigned int _pos,KWString *_text)
 {
   text.insert(_pos,_text);
 }

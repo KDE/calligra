@@ -774,6 +774,8 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	    if (cb->data()->encodedData("text/plain").size())
 	      editPaste(cb->data()->encodedData("text/plain"));
 	  }
+	else if (!cb->text().isEmpty())
+	  editPaste(cb->text());
       } break;
     case RightButton:
       {
@@ -975,6 +977,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 /*================================================================*/
 void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 {
+  if (e->button() != LeftButton) return;
+  
   unsigned int mx = e->x() + xOffset;
   unsigned int my = e->y() + yOffset;
 
