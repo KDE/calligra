@@ -538,6 +538,7 @@ void KSpreadTable::setChooseRect( const QRect &_sel )
 
 void KSpreadTable::unselect()
 {
+    // No selection? Then do nothing.
     if ( m_rctSelection.left() == 0 )
 	return;
 
@@ -545,6 +546,7 @@ void KSpreadTable::unselect()
     // Discard the selection
     m_rctSelection.setCoords( 0, 0, 0, 0 );
 
+    // Emit signal so that the views can update.
     emit sig_unselect( this, r );
 }
 

@@ -48,6 +48,7 @@
     <Action name="showcomment"/>
     <Action name="removecomment"/>
   </Menu>
+  <Action name="insertMathExpr"/>
   <Action name="insertFormula"/>
   <Action name="series"/>
   <Action name="createAnchor"/>

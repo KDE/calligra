@@ -817,6 +817,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
+    // If in choose mode, we handle the mouse differently.
     if( m_bChoose )
     {
 	chooseMousePressEvent( _ev );
@@ -834,8 +835,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	deleteEditor( true ); // save changes
     }
 
+    // Remember current values.
     QRect selection( table->selectionRect() );
-
     int old_column = markerColumn();
     int old_row = markerRow();
 
@@ -875,7 +876,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	if ( _ev->pos().x() >= xpos + w - 2 && _ev->pos().x() <= xpos + w + 3 &&
 	     _ev->pos().y() >= ypos + h - 1 && _ev->pos().y() <= ypos + h + 4 )
         {
-	    // Auto fill ?
+	    // Auto fill ? That is done using the left mouse button.
 	    if ( _ev->button() == LeftButton )
 	    {
 		m_eMouseAction = AutoFill;
@@ -897,7 +898,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 		m_iMouseStartColumn = markerColumn();
 		m_iMouseStartRow = markerRow();
 	    }
-	    // Resize a cell ?
+	    // Resize a cell (dont with the right mouse button) ?
+	    // But for that to work there must not be a selection.
 	    else if ( _ev->button() == MidButton && selection.left() == 0 )
 	    {
 		m_eMouseAction = ResizeCell;
@@ -916,10 +918,12 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
     hideMarker();
 
+    // In which cell did the user click ?
     int xpos, ypos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
+    // Unselect a selection ?
     if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
 	table->unselect();
 
@@ -1266,16 +1270,18 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   if ( !table )
     return;
 
-  // Dont handle accelerators
+  // Dont handle special keys.
   if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
   {
     QWidget::keyPressEvent( _ev );
     return;
   }
 
+  // Always accept so that events are not
+  // passed to the parent.
   _ev->accept();
 
-  // Find out about the current selection
+  // Find out about the current selection/choose.
   QRect selection;
   if ( m_bChoose )
     selection = activeTable()->chooseRect();
@@ -1313,22 +1319,22 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       if ( m_bChoose )
         chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
       else
-        {
+      {
         QRect selection = activeTable()->selectionRect();
-        if(selection.left()==0)
-                gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select );
+        if( selection.left() == 0 )
+	    gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select );
         else
-                {
-                if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
-                        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true );
-                else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
-                        gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true );
-                else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
-                        gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true );
-                else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
-                        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true );
-                }
-        }
+        {
+	    if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
+		gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true );
+	    else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
+		gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true );
+	    else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
+		gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true );
+	    else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
+		gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true );
+	}
+      }
       return;
     case Key_Down:
 

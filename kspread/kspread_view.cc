@@ -351,7 +351,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	     this, SLOT( formulaSelection( const QString& ) ) );
 
     // Insert menu
-    (void) new KAction( i18n("&Math expression ..."), "funct", 0, this, SLOT( insertFormula() ),
+    (void) new KAction( i18n("&Math expression ..."), "funct", 0, this, SLOT( insertMathExpr() ),
+                        actionCollection(), "insertMathExpr" );
+    (void) new KAction( i18n("&Formula"), "formula", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
     (void) new KAction( i18n("&Series ..."),"series", 0, this, SLOT( series() ), actionCollection(), "series" );
     (void) new KAction( i18n("&Anchor ..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
@@ -1160,11 +1162,17 @@ void KSpreadView::verticalText(bool b)
 
 void KSpreadView::insertFormula()
 {
-  if ( m_pTable == 0L )
+    // ####
+}
+
+void KSpreadView::insertMathExpr()
+{
+    if ( m_pTable == 0L )
 	return;
-  KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
-  dlg->show();
-  // Is the dialog deleted when it's closed ? (David)
+    KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
+    dlg->show();
+    // #### Is the dialog deleted when it's closed ? (David)
+    // Torben thinks that not.
 }
 
 void KSpreadView::formulaSelection( const QString &_math )
@@ -2608,12 +2616,14 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     // Emit a signal for internal use
     emit sig_selectionChanged( _table, _new );
 
+    // Empty selection ?
     if ( _new.left() == 0 && _new.right() == 0 )
 	m_tableFormat->setEnabled( FALSE );
     else
 	m_tableFormat->setEnabled( TRUE );
 
-    // Send some event around
+    // Send some event around. This is read for example
+    // by the calculator plugin.
     KSpreadSelectionChanged ev( _new, activeTable()->name() );
     QApplication::sendEvent( this, &ev );
 
@@ -2632,10 +2642,10 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 
-    if ( _old.right() == 0x7fff || _new.right() == 0x7fff )
+    /* if ( _old.right() == 0x7fff || _new.right() == 0x7fff )
 	m_pVBorderWidget->update();
     else if ( _old.bottom() == 0x7fff || _new.bottom() == 0x7fff )
-	m_pHBorderWidget->update();
+    m_pHBorderWidget->update(); */
 }
 
 void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
@@ -2644,17 +2654,22 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     if ( _table != m_pTable )
 	return;
 
-    // qDebug("void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect &_old %i %i|%i %i\n",_old.left(),_old.top(),_old.right(),_old.bottom());
-
+    // Unselect the action which only works on a selection
+    // with mutiple cells.
+    m_tableFormat->setEnabled( FALSE );
+	
     QRect r( _old.x(), _old.y(), _old.width() + 1, _old.height() + 1 );
     m_pCanvas->updateCellRect( r );
+    m_pVBorderWidget->update();
+    m_pHBorderWidget->update();
 
+    /*
     // Are complete columns selected ?
     if ( _old.bottom() == 0x7FFF )
 	m_pHBorderWidget->update();	
     // Are complete rows selected ?
     else if ( _old.right() == 0x7FFF )
-	m_pVBorderWidget->update();
+    m_pVBorderWidget->update(); */
 }
 
 void KSpreadView::repaintPolygon( const QPointArray& polygon )

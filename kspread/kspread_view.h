@@ -211,6 +211,7 @@ public slots:
     void insertColumn();
     void insertRow();
     void insertFormula();
+    void insertMathExpr();
     void formulaSelection( const QString &_math );
     void changeTextColor();
     void changeBackgroundColor();
@@ -471,7 +472,7 @@ private:
     KAction* m_changeAngle;
     KAction* m_mergeCell;
     KAction* m_dissociateCell;
-    KAction* m_gotoCell; 
+    KAction* m_gotoCell;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
