@@ -1082,7 +1082,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
     bool _first_footer = false, _even_footer = false, _odd_footer = false;
     bool _first_header = false, _even_header = false, _odd_header = false;
-    bool _footnotes;
+    bool _footnotes = false;
 
     for ( unsigned int k = 0; k < getNumFrameSets(); k++ )
     {
