@@ -2110,7 +2110,8 @@ void KPresenterView::initGui()
     KStatusBar * sb = statusBar();
     if ( sb )
         sb->show();
-
+    showZoom( zoomHandler()->zoom() );
+    m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
 }
 
@@ -4835,8 +4836,6 @@ void KPresenterView::setZoom( int zoom, bool updateViews )
     // Also set the zoom in KoView (for embedded views)
     //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
-    //update ranges
-    setRanges();
 }
 
 void KPresenterView::slotUpdateScrollBarRanges()

@@ -302,6 +302,7 @@ void KPresenterDoc::initConfig()
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
     setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+
 }
 
 KoStyle* KPresenterDoc::standardStyle()
