@@ -28,11 +28,11 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
+#include <klineeditdlg.h>
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_view.h"
 #include "kspread_table.h"
-#include "kspread_dlg_tabname.h"
 #include "kspread_tabbar.h"
 #include "kspread_map.h"
 #include "kspread_undo.h"
@@ -382,29 +382,35 @@ void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name 
 
 void KSpreadTabBar::slotRename()
 {
-    QString activeName;
-    QString newName;
-
     // Store the current name of the active table
     KSpreadTable* table = m_pView->activeTable();
-    activeName = table->tableName();
 
-    KSpreadTableName tndlg( m_pView, "TableName" , activeName );
-    if ( tndlg.exec() )
+    bool ok;
+    QString activeName = table->tableName();
+    QString newName = KLineEditDlg::getText( i18n("Table Name"), activeName, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) // User pushed an OK button.
     {
-        // Have a different name ?
-        if ( ( newName = tndlg.tableName() ) != activeName )
+        if ( (newName.stripWhiteSpace()).isEmpty() ) // Table name is empty.
+        {
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Table name cannot be empty."), i18n("Change table name") );
+            // Recursion
+            slotRename();
+        }
+        else if ( newName != activeName ) // Table name changed.
         {
             // Is the name already used
             if ( !table->setTableName( newName ) )
             {
-                KMessageBox::error( this, i18n("This name is already used."));
+                KNotifyClient::beep();
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change table name") );
                 // Recursion
                 slotRename();
-                return;
-            }
-            m_pView->updateEditWidget();
-            m_pView->doc()->setModified( true );
+             }
+             m_pView->updateEditWidget();
+             m_pView->doc()->setModified( true );
         }
     }
 }

@@ -24,7 +24,6 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
-class KSpreadTableName;
 
 /**
  * This tab bar is used by @ref KSpreadView. It is used to choose between all
