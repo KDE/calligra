@@ -166,6 +166,12 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		  */
 		void		createGridLayout();
 
+		void  drawConnection(QMouseEvent *mev);
+		void  drawSelectionRect(QMouseEvent *mev);
+		void  drawInsertRect(QMouseEvent *mev, QObject *s);
+		void  drawCopiedWidgetRect(QMouseEvent *mev);
+		void  dragWidgets(QMouseEvent *mev);
+
 	private:
 		// the watched container and it's toplevel one...
 		QGuardedPtr<QWidget> m_container;
