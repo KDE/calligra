@@ -26,6 +26,7 @@
 #include <fstream.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <limits.h>
 #include <qpainter.h>
 #include <qprinter.h>
@@ -394,6 +395,17 @@ void Canvas::printPSDocument () {
     for (; it.current (); ++it) 
       it.current ()->writeToPS (psStream);
     psStream << "showpage\n%%EOF" << endl;
+    psStream.close ();
+
+    if (! pSetup.outputToFile ()) {
+      const char* prog = pSetup.printProgram ();
+      const char* printer = pSetup.printerName ();
+      int num = pSetup.numCopies ();
+      QString cmd;
+      cmd.sprintf ("%s -# %d -P %s %s", prog, num, printer, tmpName);
+      system ((const char *) cmd);
+      unlink (tmpName);
+    }
   }
 }
 
