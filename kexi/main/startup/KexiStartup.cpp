@@ -265,7 +265,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			usr = i18n("unspecified user", "(unspecified)");
 		else
 			usr = cdata.userName;
-		msg += ("<p>"+i18n("User name: %1").arg(usr)+"</p>");
+		msg += ("<p>"+i18n("Username: %1").arg(usr)+"</p>");
 
 		QCString pwd;
 		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
