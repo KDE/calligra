@@ -47,9 +47,9 @@ class KisTool : public QObject
   virtual void mouseRelease(QMouseEvent*);
     
  protected:
-  KisDoc    *m_pDoc;
-  KisView   *m_pView;
-  QCursor           m_Cursor;
+  KisDoc  *m_pDoc;
+  KisView *m_pView;
+  QCursor  m_Cursor;
 };
 
 #endif
