@@ -277,6 +277,8 @@ protected:
 
     void tableSplitCells(int col, int row);
 
+    void startKSpell();
+
 private:
     KWDocument *doc;
 
