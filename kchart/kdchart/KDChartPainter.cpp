@@ -867,8 +867,8 @@ QPoint KDChartPainter::pointOnCircle( const QRect& rect, int angle )
     double normAngleRad = DEGTORAD( normAngle );
     double cosAngle = cos( normAngleRad );
     double sinAngle = -sin( normAngleRad );
-    double posX = std::floor( cosAngle * ( double ) rect.width() / 2.0 + 0.5 );
-    double posY = std::floor( sinAngle * ( double ) rect.height() / 2.0 + 0.5 );
+    double posX = floor( cosAngle * ( double ) rect.width() / 2.0 + 0.5 );
+    double posY = floor( sinAngle * ( double ) rect.height() / 2.0 + 0.5 );
     return QPoint( ( int ) posX + rect.center().x(),
                    ( int ) posY + rect.center().y() );
 }
