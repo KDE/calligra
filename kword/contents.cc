@@ -218,7 +218,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         name = QString( "Contents Head %1" ).arg( depth+1 );
     else
         name = "Contents Title";
-    KWStyle * style = fs->kWordDocument()->findStyle( name );
+    KWStyle * style = fs->kWordDocument()->styleCollection()->findStyle( name );
     if ( !style )
     {
         style = new KWStyle( name );
@@ -243,7 +243,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );
         }
-        style = fs->kWordDocument()->addStyleTemplate( style );     // register the new style
+        style = fs->kWordDocument()->styleCollection()->addStyleTemplate( style );     // register the new style
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
     }
     return style;

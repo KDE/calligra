@@ -656,18 +656,18 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
         if ( !element.isNull() )
         {
             QString styleName = element.attribute( "value" );
-            style = doc->findStyle( styleName );
+            style = doc->styleCollection()->findStyle( styleName );
             if (!style)
             {
                 kdError(32001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
-                style = doc->findStyle( "Standard" );
+                style = doc->styleCollection()->findStyle( "Standard" );
             }
             //else kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
         }
         else
         {
             kdError(32001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
-            style = doc->findStyle( "Standard" );
+            style = doc->styleCollection()->findStyle( "Standard" );
         }
         Q_ASSERT(style);
         layout.style = style;

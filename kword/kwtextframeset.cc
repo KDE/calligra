@@ -101,7 +101,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
 
-    m_textobj = new KoTextObject( textdoc, m_doc->findStyle( "Standard" ),
+    m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ),
                                   this, (m_name+"-textobj").utf8() );
 
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
@@ -1414,7 +1414,7 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
     {
         // Create an empty one, then. See KWTextDocument ctor.
         textDocument()->clear( true );
-        static_cast<KWTextParag *>( textDocument()->firstParag() )->setStyle( m_doc->findStyle( "Standard" ) );
+        static_cast<KWTextParag *>( textDocument()->firstParag() )->setStyle( m_doc->styleCollection()->findStyle( "Standard" ) );
     }
     else
         textDocument()->setLastParag( lastParagraph );

@@ -253,15 +253,8 @@ public:
 
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd );
 
-    const QPtrList<KWStyle> & styleList() const;
-    /**
-     * Look for a style named @p name. If not found, it will return 0L.
-     */
-    KWStyle* findStyle( const QString & name );
-    /**
-     * Return style number @p i.
-     */
-    KWStyle* styleAt( int i );
+
+    KoStyleCollection * styleCollection() { return m_styleColl;}
 
     QFont defaultFont() const { return m_defaultFont; }
 
@@ -396,10 +389,6 @@ public:
      */
     void setKSpellConfig(KSpellConfig _kspell);
     KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
-
-    KWStyle* addStyleTemplate( KWStyle *style );
-
-    void removeStyleTemplate ( KWStyle *style );
 
 #ifndef NDEBUG
     void printDebug();

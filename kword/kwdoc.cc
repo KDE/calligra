@@ -214,7 +214,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // so let's have a Standard style at least
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
     standardStyle->format().setFont( m_defaultFont );
-    addStyleTemplate( standardStyle );
+    m_styleColl->addStyleTemplate( standardStyle );
 
     if ( name )
         dcopObject();
@@ -1460,7 +1460,7 @@ void KWDocument::loadEmbedded( QDomElement embedded )
 void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 {
     QValueList<QString> followingStyles;
-    QPtrList<KWStyle>m_styleList(m_styleColl->styleList());
+    QPtrList<KWStyle> m_styleList(m_styleColl->styleList());
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
@@ -1491,7 +1491,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
         // Style created, now let's try to add it
 
-        sty = addStyleTemplate( sty );
+        sty = m_styleColl->addStyleTemplate( sty );
 
         if(m_styleList.count() > followingStyles.count() )
         {
@@ -1510,25 +1510,6 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         m_styleColl->styleAt(i++)->setFollowingStyle( style );
     }
 
-}
-
-const QPtrList<KWStyle> & KWDocument::styleList() const
-{
-    return m_styleColl->styleList();
-}
-
-KWStyle* KWDocument::styleAt( int i )
-{
-    return m_styleColl->styleAt(i);
-}
-
-KWStyle* KWDocument::addStyleTemplate( KWStyle * sty )
-{
-    return m_styleColl->addStyleTemplate(sty);
-}
-
-void KWDocument::removeStyleTemplate ( KWStyle *style ) {
-    m_styleColl->removeStyleTemplate(style);
 }
 
 void KWDocument::progressItemLoaded()
@@ -2195,11 +2176,6 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     emit sig_insertObject( ch, frameset );
 
     frameChanged( frame ); // repaint etc.
-}
-
-KWStyle* KWDocument::findStyle( const QString & _name )
-{
-    return m_styleColl->findStyle(_name);
 }
 
 /* Update all views of this document, area can be cleared

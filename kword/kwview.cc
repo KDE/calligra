@@ -1512,7 +1512,7 @@ void KWView::setTool( int _mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
-    QPtrListIterator<KWStyle> styleIt( m_doc->styleList() );
+    QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
         if ( styleIt.current()->name() == styleName ) {
@@ -1526,7 +1526,7 @@ void KWView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
     QStringList lst;
-    QPtrListIterator<KWStyle> styleIt( m_doc->styleList() );
+    QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     for (; styleIt.current(); ++styleIt ) {
         lst << styleIt.current()->translatedName();
     }
@@ -2745,7 +2745,7 @@ void KWView::extraStylist()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->hideCursor();
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleList());
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList());
     styleManager->exec();
     delete styleManager;
     if ( edit )
@@ -3058,7 +3058,7 @@ void KWView::textStyleSelected( int index )
     {
         KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
         if ( edit )
-            edit->applyStyle( m_doc->styleAt( index ) );
+            edit->applyStyle( m_doc->styleCollection()->styleAt( index ) );
     }
     else
     { // it might be that a frame (or several frames) are selected
@@ -3076,7 +3076,7 @@ void KWView::textStyleSelected( int index )
             {
                 KoTextObject *textObject = ((KWTextFrameSet*)curFrameSet)->textObject();
                 textObject->textDocument()->selectAll( KoTextDocument::Temp );
-                KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, QTextFormat::Format, true, true );
+                KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, QTextFormat::Format, true, true );
                 textObject->textDocument()->removeSelection( KoTextDocument::Temp );
                 if (cmd)
                     globalCmd->addCommand( cmd );
