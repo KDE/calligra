@@ -106,7 +106,7 @@ public:
      */
     KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
                         const QCString &format="",
-                        const QCString &nativePattern="",
+                        const QString &nativePattern=QString::null,
                         const QString &nativeName=QString::null,
                         const DialogType &dialogType=Everything,
                         const QCString& templateType="");
@@ -128,7 +128,7 @@ public:
      */
     static ReturnType choose(KInstance* global, QString &file,
                              const QCString &format="",
-                             const QCString &nativePattern="",
+                             const QString &nativePattern=QString::null,
                              const QString &nativeName=QString::null,
                              const DialogType &dialogType=Everything,
                              const QCString& templateType="");
