@@ -122,7 +122,6 @@ Add RMB option on text to copy current format to a (new) style. Including tab po
 - picture insertion point when pasting should be as an inline frame. Using default placing methods.
 - cut/paste of images do not work across documents (also in bugs.kde.org)
 - auto-update TOC before printing, so no doc is printed with an out-of-date TOC. It might alter the layout, ok, but an out-of-date TOC is just a waste of paper (besides being misleading...)
-- The "Company" field in doc settings is not taken from the system. The author and email are...
 - interaction with frame breaks are a bit strange. How do you remove it? You cannot select it, nor can you use backspace or del..
 - the stylist has a poor use of pixel space. Huge preview areas, for sometimes just 4 radio buttons. Too many tabs too...
 My suggestion would be to combine "Indent and Spacing", "Aligns" and
