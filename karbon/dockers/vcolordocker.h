@@ -43,6 +43,7 @@ public:
 public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();
+	virtual void setColor( VColor *);
 
 private:
 	QWidget *mainWidget;
@@ -66,6 +67,7 @@ private slots:
 	void updateCMYK();
 	void updateRGB();
 	void updateOpacity();
+	void updateSliders();
 
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )

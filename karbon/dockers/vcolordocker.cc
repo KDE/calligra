@@ -160,5 +160,53 @@ void VColorDocker::setStrokeDocker()
 	setCaption( i18n( "Stroke Color" ) );
 }
 
+void VColorDocker::setColor( VColor *color )
+{
+	m_Color = color;
+	updateSliders();
+}
+
+void VColorDocker::updateSliders()
+{
+	//Disconnect sliders  to avoid canvas updating
+	disconnect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
+	disconnect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
+	disconnect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );   
+	disconnect( mCyanSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	disconnect( mMagentaSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	disconnect( mYellowSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	disconnect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	disconnect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
+	
+	//Update sliders
+	switch ( m_Color->colorSpace() ) {
+	case VColor::rgb:
+		mRedSlider->setValue( int ( m_Color->operator[](0) * 255 ) );
+		mGreenSlider->setValue( int ( m_Color->operator[](1) * 255 ) );
+		mBlueSlider->setValue( int ( m_Color->operator[](2) * 255 ) );
+		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
+		mTabWidget->changeTab( mRGBWidget, i18n( "RGB ") );
+		break;
+	case VColor::cmyk:
+		mCyanSlider->setValue( int ( m_Color->operator[](0) * 100 ) );
+		mMagentaSlider->setValue( int ( m_Color->operator[](1) * 100 ) );
+		mYellowSlider->setValue( int ( m_Color->operator[](2) * 100 ) );
+		mBlackSlider->setValue( int ( m_Color->operator[](3) * 100 ) );
+		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
+		mTabWidget->changeTab( mCMYKWidget, i18n( "CMYK" ) );
+		break;
+	}
+	
+	//Reconnect sliders again
+	connect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
+	connect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
+	connect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );   
+	connect( mCyanSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mMagentaSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mYellowSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
+	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
+}
+
 #include "vcolordocker.moc"
 
