@@ -116,6 +116,7 @@ public:
     KFCAddNumber(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
    
 };
+
 class KFCAddOperator : public KFCAdd
 {
 public:
@@ -127,15 +128,14 @@ public:
    
 };
 
-class KFCAddRoot : public KFormulaCommand
+class KFCAddReplacing : public KFormulaCommand
 {
 public:
    /**
-    * Build a addRootElement command and add
-    * at cursor a root element
+    * abstract class hinerited by bracket and root
     */
-    KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
- 
+    KFCAddReplacing(KFormulaContainer *document,FormulaCursor* cursor);
+
     virtual bool undo(FormulaCursor *cursor);
     virtual bool redo(FormulaCursor *cursor);
 
@@ -144,6 +144,30 @@ protected:
      QList<BasicElement> removedList;
      BasicElement *insideElement;   
   
+};
+
+
+class KFCAddRoot : public KFCAddReplacing
+{
+public:
+   /**
+    * Build a addRootElement command and add
+    * at cursor a root element
+    */
+    KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
+ 
+  
+};
+
+class KFCAddBracket : public KFCAddReplacing
+{
+public:
+   /**
+    * Build a addBracketElement command and add
+    * at cursor a braket element
+    */
+    KFCAddBracket(KFormulaContainer *document,FormulaCursor* cursor,QChar left,QChar right);
+ 
 };
 
 class KFCAddMatrix : public KFormulaCommand

@@ -87,6 +87,12 @@ public:
      * It overwrite the file if exists.
      */
     void save(QString file);
+
+    /**
+     * Load function.
+     * Load the formula from the specified file.
+     */
+    void load(QString file);
     
     
 signals:

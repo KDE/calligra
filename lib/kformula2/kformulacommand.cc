@@ -22,6 +22,7 @@
 
 #include "kformulacommand.h"
 #include "formulacursor.h"
+#include "bracketelement.h"
 #include "matrixelement.h"
 #include "basicelement.h"
 #include "textelement.h"
@@ -153,6 +154,7 @@ KFCAddNumber::KFCAddNumber(KFormulaContainer *document,FormulaCursor *cursor,QCh
     undocursor=cursor->getCursorData();
 
 }
+
 KFCAddOperator::KFCAddOperator(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
 : KFCAdd(document,cursor)
 {
@@ -168,30 +170,16 @@ KFCAddOperator::KFCAddOperator(KFormulaContainer *document,FormulaCursor *cursor
 }
 
 
-// ******  Add root command 
+// ******  Add root,bracket etc command 
 
-KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
+KFCAddReplacing::KFCAddReplacing(KFormulaContainer *document,FormulaCursor *cursor)
 		        : KFormulaCommand(document,cursor)
 {
 
-    RootElement* root = new RootElement();
-
-    if(cursor->isSelection())
-    {        
-	cursor->replaceSelectionWith(root);
-    }
-    else
-	cursor->insert(root);
-        
-	//cursor->setSelection(false);
-    insideElement=root;
-    cursor->goInsideElement(root);
-    undocursor=cursor->getCursorData();
-
-
 }
 
-bool KFCAddRoot::undo(FormulaCursor *cursor)
+
+bool KFCAddReplacing::undo(FormulaCursor *cursor)
 {
 
 
@@ -206,7 +194,7 @@ bool KFCAddRoot::undo(FormulaCursor *cursor)
 }
 
 
-bool KFCAddRoot::redo(FormulaCursor *cursor)
+bool KFCAddReplacing::redo(FormulaCursor *cursor)
 {
 
     cursor->setCursorData(cursordata);
@@ -227,6 +215,52 @@ bool KFCAddRoot::redo(FormulaCursor *cursor)
     return true;
 }
 
+
+KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
+		        : KFCAddReplacing(document,cursor)
+{
+
+    RootElement* root = new RootElement();
+
+    if(cursor->isSelection())
+    {        
+	cursor->replaceSelectionWith(root);
+    }
+    else
+	cursor->insert(root);
+        
+	//cursor->setSelection(false);
+    insideElement=root;
+    cursor->goInsideElement(root);
+    undocursor=cursor->getCursorData();
+
+
+}
+
+
+// ******  Add Bracket command 
+
+KFCAddBracket::KFCAddBracket(KFormulaContainer *document,FormulaCursor *cursor,QChar left,QChar right)
+		        : KFCAddReplacing(document,cursor)
+
+{
+
+    BracketElement* bra = new BracketElement(left,right);
+
+    if(cursor->isSelection())
+    {        
+	cursor->replaceSelectionWith(bra);
+    }
+    else
+	cursor->insert(bra);
+        
+	//cursor->setSelection(false);
+    insideElement=bra;
+    cursor->goInsideElement(bra);
+    undocursor=cursor->getCursorData();
+
+
+}
 
 // ******  Add matrix command 
 

@@ -188,6 +188,8 @@ public:
     //Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
     
+    virtual void buildFromDom(QDomElement *elem);
+
     
     // debug
     virtual ostream& output(ostream&);

@@ -98,3 +98,10 @@ QDomElement BasicElement::getElementDom(QDomDocument *doc)
     return de;
 }
 
+void BasicElement::buildFromDom(QDomElement *elem)
+{
+    QString sizeStr=elem->attribute("SIZE");
+    if(!sizeStr.isNull()) 
+        setRelativeSize(sizeStr.toInt());
+}
+

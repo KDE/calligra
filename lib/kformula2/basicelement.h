@@ -261,6 +261,11 @@ public:
     
     virtual QDomElement getElementDom(QDomDocument *doc);
     
+    /**
+     * Set this element attribute, build children and 
+     * call their buildFromDom.
+     */
+    virtual void buildFromDom(QDomElement *elem);
 
     // debug
     virtual ostream& output(ostream&);

@@ -142,7 +142,7 @@ void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
 
 void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
 {
-
+/*
     BracketElement* bracket = new BracketElement(left, right);
     if (cursor->isSelection()) {
         cursor->replaceSelectionWith(bracket);
@@ -152,6 +152,11 @@ void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
         //cursor->setSelection(false);
     }
     cursor->goInsideElement(bracket);
+*/
+
+    KFCAddBracket *command=new KFCAddBracket(this,cursor,left,right);
+    execute(command);
+
 
 }
 
@@ -448,5 +453,19 @@ void KFormulaContainer::save(QString file)
   
     QTextStream str(&f);
     domData().save(str,4);
+    f.close();
+}	
+
+void KFormulaContainer::load(QString file)
+{
+	
+    QFile f(file);
+    if(!f.open(IO_ReadOnly))
+    cerr << "Error" << endl;   
+    QDomDocument doc;
+    doc.setContent(&f);
+
+
+    
     f.close();
 }	

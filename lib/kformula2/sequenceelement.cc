@@ -26,7 +26,11 @@
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "sequenceelement.h"
-
+#include "textelement.h"
+#include "matrixelement.h"
+#include "rootelement.h"
+#include "operatorelement.h"
+#include "numberelement.h"
 
 SequenceElement::SequenceElement(BasicElement* parent)
     : BasicElement(parent)
@@ -575,5 +579,49 @@ QDomElement SequenceElement::getElementDom(QDomDocument *doc)
 }
 
 
+void SequenceElement::buildFromDom(QDomElement *elem)
+{
+//Only set size.
+    BasicElement::buildFromDom(elem);
+
+
+    QDomNode n = elem->firstChild();
+    while ( !n.isNull() ) {
+        if ( n.isElement() ) {
+             QDomElement e = n.toElement();
+	     BasicElement *child=0;
+	     QString tag=e.tagName();
+	     tag=tag.upper();
+	     if(tag=="TEXT") 
+		 child=new TextElement(e.attribute("CHAR").at(0),this);
+	     else
+	     if(tag=="NUMBER")
+	         child=new NumberElement(e.attribute("CHAR").at(0),this);
+	     else
+	     if(tag=="OPERATOR")
+	         child=new OperatorElement(e.attribute("CHAR").at(0));
+	     else
+	     if(tag=="ROOT")
+	         child=new RootElement(this);
+	     else
+	     if(tag=="MATRIX")
+	         child=new MatrixElement(e.attribute("ROWS").toInt(),
+          	                        e.attribute("COLUMNS").toInt(),this);
+	     else
+	     if(tag=="SEQUENCE")
+	         child=new SequenceElement(this);
+	
+	     if(child) {
+	         child->buildFromDom(&e);
+		//How to add the child to the sequence ?
+		 
+	     }  
+	 }
+        
+        n = n.nextSibling();
+    }    
+    
+
+}
 
 
