@@ -1612,6 +1612,8 @@ void KPresenterView::createGUI()
 		      this, SLOT( alignChanged( int ) ) );
     QObject::connect( page, SIGNAL( updateSideBarItem( int ) ),
                       this, SLOT( updateSideBarItem( int ) ) );
+    QObject::connect( page, SIGNAL( objectSelectedChanged()),
+                      this, SLOT( objectSelectedChanged()));
 
     // setup GUI
     setupActions();
@@ -1649,6 +1651,7 @@ void KPresenterView::initGui()
     actionEditUndo->setEnabled( false );
     actionEditRedo->setEnabled( false );
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
+    objectSelectedChanged();
 }
 
 void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -2043,6 +2046,17 @@ void KPresenterView::setupActions()
 					  SLOT( penChosen( const QColor & ) ),
 					  colorList,
 					  actionCollection(), "colorbar" );
+}
+
+
+void KPresenterView::objectSelectedChanged()
+{
+    bool state=page->isOneObjectSelected();
+    actionScreenAssignEffect->setEnabled(state);
+    actionExtraRotate->setEnabled(state);
+    actionExtraShadow->setEnabled(state);
+    actionExtraAlignObjs->setEnabled(state);
+
 }
 
 /*=========== take changes for backgr dialog =====================*/

@@ -209,6 +209,9 @@ public slots:
      */
     void updateSideBarItem( int pagenr );
 
+
+    void objectSelectedChanged();
+
 public:
     // create GUI
     virtual void createGUI();

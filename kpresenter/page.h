@@ -124,6 +124,8 @@ public:
 
     bool mouseSelectedObject;
 
+    bool isOneObjectSelected();
+
 public slots:
     void exitEditMode();
 
@@ -310,6 +312,7 @@ signals:
     void alignChanged( int );
     void updateSideBarItem( int );
     void stopPres();
+    void objectSelectedChanged();
 
 };
 #endif //PAGE_H

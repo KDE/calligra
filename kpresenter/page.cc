@@ -724,7 +724,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
         setToolEditMode( TEM_MOUSE );
     } break;
     }
-
+    emit objectSelectedChanged();
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
 
@@ -1193,6 +1193,7 @@ void Page::selectObj( int num )
             toColorChanged( c );
             toAlignChanged( kptextobject->getKTextObject()->alignment() );
         }
+        emit objectSelectedChanged();
     }
 }
 
@@ -1216,6 +1217,7 @@ void Page::selectObj( KPObject *kpobject )
         toAlignChanged( kptextobject->getKTextObject()->alignment() );
     }
     _repaint( kpobject );
+    emit objectSelectedChanged();
 
     mouseSelectedObject = true;
 }
@@ -1227,6 +1229,7 @@ void Page::deSelectObj( KPObject *kpobject )
     _repaint( kpobject );
 
     mouseSelectedObject = false;
+    emit objectSelectedChanged();
 }
 
 /*====================== select all objects ======================*/
@@ -1236,6 +1239,7 @@ void Page::selectAllObj()
         selectObj( i );
 
     mouseSelectedObject = true;
+    emit objectSelectedChanged();
 }
 
 
@@ -1251,6 +1255,7 @@ void Page::deSelectAllObj()
     }
 
     mouseSelectedObject = false;
+    emit objectSelectedChanged();
 }
 
 /*======================== setup menus ===========================*/
@@ -2067,6 +2072,17 @@ bool Page::canAssignEffect( QList<KPObject> &objs ) const
             objs.append( oIt.current() );
 
     return !objs.isEmpty();
+}
+
+/*================================================================*/
+bool Page::isOneObjectSelected()
+{
+    QListIterator<KPObject> oIt( *objectList() );
+    for (; oIt.current(); ++oIt )
+        if ( oIt.current()->isSelected() )
+            return true;
+
+    return false;
 }
 
 /*================================================================*/
