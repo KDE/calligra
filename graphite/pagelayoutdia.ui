@@ -786,7 +786,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Restore &amp;Default  Settings</string>
+                        <string>Restore &amp;Default Settings</string>
                     </property>
                     <property>
                         <name>whatsThis</name>
