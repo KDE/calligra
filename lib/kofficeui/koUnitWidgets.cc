@@ -37,7 +37,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     kdDebug(30004) << "KoUnitDoubleValidator::validate : " << s << " at " << pos << endl;
     QValidator::State result = Acceptable;
 
-    QRegExp regexp ("([ a-zA-Z]+)$"); // Letters at end
+    QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
     const int res = regexp.search( s );
     QString number, unit;
     
@@ -54,14 +54,14 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     kdDebug(30004) << "Split:" << number << ":" << unit << ":" << endl;
     
     bool ok = false;
-    const double value = m_base->toDouble( number, &ok );
+    const double value = KGlobal::locale()->readNumber( number, &ok );
     double newVal = 0.0;
     if( ok )
     {
         // ### TODO: see if KoUnit has not something similar
         // ### TODO: long unit names?
         if ( unit.isEmpty() )
-            newVal = value;
+            newVal = value; // ### TODO: verify if this is not "Intermediate" instead
         else if( unit == "mm"  )
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_MM );
         else if( unit == "cm" ) 
@@ -78,6 +78,14 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_CC );
         else if( unit == "pi" )
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_PI );
+#if 1
+        else
+        {
+            // Probably the user is trying to edit the unit
+            kdDebug(30004) << "Intermediate" << endl;    
+            return Intermediate;
+        }
+#else
         else if( unit.startsWith( "m" ) || unit.startsWith( "c" ) || unit.startsWith( "d" ) || unit.startsWith( "i" ) || unit.startsWith( "p" ) )
         {
             kdDebug(30004) << "Intermediate" << endl;    
@@ -88,6 +96,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
             kdWarning(30004) << "Unknown unit: " << unit << endl;    
             return Invalid;
         }
+#endif
     }
     else
     {
