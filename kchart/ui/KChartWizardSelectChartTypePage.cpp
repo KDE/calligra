@@ -28,7 +28,6 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _barsPB->setToggleButton( true );
   _barsPB->resize( barsFR->contentsRect().width(), 
 				  barsFR->contentsRect().height() );
-  _barsPB->setOn( true );
   _typeBG->insert( _barsPB, Bars );
   _barsPM.load( KApplication::kde_toolbardir() + "/chart_bars.gif" );
   _barsPB->setPixmap( _barsPM );
@@ -125,6 +124,9 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   QLabel* pie3DLA = new QLabel( i18n( "3D Pie" ), this );
   pie3DLA->setGeometry( 198, 218, 94, 20 );
   pie3DLA->setAlignment( AlignCenter );
+
+  // switch the correct button on
+  ((QPushButton*)_typeBG->find( _chart->chartType() ))->setOn( true );
 
   connect( _typeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( chartTypeSelected( int ) ) );

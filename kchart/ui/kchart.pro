@@ -7,7 +7,7 @@ HEADERS     =				\
 		KChartWizardSelectChartTypePage.h	\
 		KChartWizardSelectChartSubTypePage.h	\
 		KChartWizardSetupDataPage.h		\
-		KChartWizardLabelsLegendPage.cpp	\
+		KChartWizardLabelsLegendPage.h	\
 		KChartWizardSetupAxesPage.h
 
 SOURCES     =	\

@@ -61,7 +61,7 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
 
   // Fifth page: labels/legends setup
   _labelslegendpage = new KWizardPage;
-  QWidget* labelslegendwidget = new KChartWizardLabelsLegendPage( this );
+  QWidget* labelslegendwidget = new KChartWizardLabelsLegendPage( this, _chart );
   _labelslegendpage->w = labelslegendwidget;
   _labelslegendpage->title = i18n( "Labels and legend" );
   _labelslegendpage->enabled = true;
@@ -69,13 +69,13 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
 
   // Sixth page: axes setup
   _axespage = new KWizardPage;
-  QWidget* axeswidget = new KChartWizardSetupAxesPage( this );
+  QWidget* axeswidget = new KChartWizardSetupAxesPage( this, _chart );
   _axespage->w = axeswidget;
   _axespage->title = i18n( "Setup axes" );
   _axespage->enabled = true;
   addPage( _axespage );
 
-  resize( 400, 300 );
+  resize( 400, 500 );
 }
 
 

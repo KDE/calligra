@@ -38,7 +38,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent ) :
   
   QButtonGroup* descrBG = new QButtonGroup( this );
   descrBG->hide();
-  coldescript = new QRadioButton( this, "RadioButton_3" );
+  coldescript = new QCheckBox( this, "CheckBox_3" );
   coldescript->setGeometry( 260, 110, 20, 30 );
   coldescript->setChecked( true );
   connect( coldescript, SIGNAL( toggled( bool ) ),
@@ -51,7 +51,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent ) :
   tmpQLabel->setText( "Use first row as description" );
   tmpQLabel->setAlignment( 1313 );
   
-  rowdescript = new QRadioButton( this, "RadioButton_4" );
+  rowdescript = new QCheckBox( this, "CheckBox_4" );
   rowdescript->setGeometry( 260, 150, 20, 30 );
   connect( rowdescript, SIGNAL( toggled( bool ) ),
 		   this, SLOT( firstRowIsDescriptionToggled( bool ) ) );

@@ -3,20 +3,15 @@
 
 #include <qwidget.h>
 
-class QRadioButton;
-class QLineEdit;
+class KChart;
 
 class KChartWizardSetupAxesPage : public QWidget
 {
 public:
-  KChartWizardSetupAxesPage( QWidget* parent );
+  KChartWizardSetupAxesPage( QWidget* parent, KChart* chart );
 
 private:
-  QRadioButton* descriptYes;
-  QRadioButton* descriptNo;
-  QLineEdit* title;
-  QLineEdit* xaxis;
-  QLineEdit* yaxis;
+  KChart* _chart;
 };
 
 #endif

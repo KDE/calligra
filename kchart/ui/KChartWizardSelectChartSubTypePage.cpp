@@ -122,6 +122,10 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 	barsinfrontLA->setGeometry( 198, 104, 94, 20 );
 	barsinfrontLA->setAlignment( AlignCenter );
 	barsinfrontLA->show();
+
+	// switch the correct button on
+    ((QPushButton*)_typeBG->find( _chart->overwrite() ))->setOn( true );
+
 	break;
   }  
   default: {
@@ -132,6 +136,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 	nosubtypesLA->show();
   }
   }
+
 
   connect( _typeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( chartSubTypeSelected( int ) ) );

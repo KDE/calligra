@@ -1,4 +1,4 @@
-/* $Id: $ */
+/* $Id$ */
 
 #include "KChartWizardSelectDataPage.h"
 
@@ -21,5 +21,5 @@ KChartWizardSelectDataPage::KChartWizardSelectDataPage( QWidget* parent ) :
   tmpQLabel->setGeometry( 10, 50, 360, 20 );
   tmpQLabel->setText( "you must select another rectangular area here." );
 
-  setMinimumSize( 400, 300 );
+  setMinimumSize( 600, 300 );
 }

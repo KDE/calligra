@@ -22,8 +22,8 @@ private slots:
 private:
   QRadioButton* datacol;
   QRadioButton* datarow;
-  QRadioButton* rowdescript;
-  QRadioButton* coldescript;
+  QCheckBox* rowdescript;
+  QCheckBox* coldescript;
 };
 
 #endif
