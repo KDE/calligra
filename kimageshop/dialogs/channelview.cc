@@ -82,6 +82,24 @@ void ChannelView::init( KImageShopDoc* doc )
 
 void ChannelView::paintCell( QPainter* _painter, int _row, int )
 {
+  QString tmp;
+
+  switch( _row )
+  {
+    case 0 :
+      tmp = i18n( "Red" );
+      break;
+    case 1 :
+      tmp = i18n( "Green" );
+      break;
+    case 2 :
+      tmp = i18n( "Blue" );
+      break;
+    default :
+      tmp = i18n( "Alpha" );
+      break;
+  }
+
   if( _row == m_selected )
   {
     _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, green );
@@ -93,16 +111,16 @@ void ChannelView::paintCell( QPainter* _painter, int _row, int )
   }
 
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
-  _painter->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
+  _painter->drawText( 80, 20, tmp );
 }
 
 void ChannelView::updateTable()
 {
   if( m_doc )
   {
-    m_items = 0;
-    setNumRows( 0 );
-    setNumCols( 0 );
+    m_items = 1;
+    setNumRows( 3 );
+    setNumCols( 1 );
 /*
     m_items = m_doc->layerList().count();
     setNumRows( m_items );
@@ -189,8 +207,6 @@ void ChannelView::mousePressEvent( QMouseEvent *_event )
   }
   else if( _event->button() & RightButton )
   {
-    // TODO: Should the Layer under the cursor selected when clicking RMB ?
-
     selectChannel( row );
     update_contextmenu( row );
     m_contextmenu->popup( mapToGlobal( _event->pos() ) );
@@ -225,6 +241,7 @@ void ChannelView::swapChannels( int a, int b )
 
 void ChannelView::slotRaiseChannel()
 {
+/*
   unsigned int newpos = m_selected > 0 ? m_selected - 1 : 0;
 
   if( m_selected != newpos )
@@ -236,10 +253,12 @@ void ChannelView::slotRaiseChannel()
     updateCell( m_selected + 1, 0 );
     updateCell( m_selected, 0 );
   }
+*/
 }
 
 void ChannelView::slotLowerChannel()
 {
+/*
   unsigned int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
 
   if( m_selected != newpos )
@@ -251,6 +270,7 @@ void ChannelView::slotLowerChannel()
     updateCell( m_selected - 1, 0 );
     updateCell( m_selected, 0 );
   }
+*/
 }
 
 void ChannelView::updateAllCells()

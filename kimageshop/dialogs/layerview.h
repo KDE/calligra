@@ -31,6 +31,8 @@ class QPopupMenu;
 class QLineEdit;
 class KIntSpinBox;
 
+class Layer;
+
 class LayerView : public QTableView
 {
   Q_OBJECT
@@ -80,8 +82,6 @@ private:
   int m_items, m_selected;
   QPopupMenu* m_contextmenu;
 };
-
-class Layer;
 
 class LayerPropertyDialog : QDialog
 {

@@ -59,6 +59,10 @@ public:
   static QPixmap *m_eyeIcon, *m_linkIcon;
   static QRect m_eyeRect, m_linkRect, m_previewRect;
 
+public slots:
+
+  void slotTabSelected( int );
+
 private:
 
   QWidget *m_pLayerTab, *m_pChannelTab;

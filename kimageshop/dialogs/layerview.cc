@@ -273,7 +273,7 @@ void LayerView::slotAddLayer()
   QRect updateRect = m_doc->layerList().at( m_doc->layerList().count() - 1 )->imageExtents();
   m_doc->compositeImage( updateRect );
 
-  m_selected = m_doc->layerList().count() - 1;
+  selectLayer( m_doc->layerList().count() - 1 );
 
   updateTable();
   updateAllCells();
@@ -329,9 +329,7 @@ void LayerView::slotRaiseLayer()
     m_doc->upperLayer( m_selected );
     repaint();
     swapLayers( m_selected, newpos );
-    m_selected = newpos;
-    updateCell( m_selected + 1, 0 );
-    updateCell( m_selected, 0 );
+    selectLayer( newpos );
   }
 }
 
@@ -346,9 +344,7 @@ void LayerView::slotLowerLayer()
     m_doc->lowerLayer( m_selected );
     repaint();
     swapLayers( m_selected, newpos );
-    m_selected = newpos;
-    updateCell( m_selected - 1, 0 );
-    updateCell( m_selected, 0 );
+    selectLayer( newpos );
   }
 }
 
@@ -359,7 +355,7 @@ void LayerView::slotFrontLayer()
   if( m_selected != ( m_doc->layerList().count() - 1 ) )
   {
     m_doc->setFrontLayer( m_selected );
-    m_selected = m_doc->layerList().count() - 1;
+    selectLayer( m_doc->layerList().count() - 1 );
 
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
     m_doc->compositeImage( updateRect );
@@ -375,7 +371,8 @@ void LayerView::slotBackgroundLayer()
   if( m_selected != 0 )
   {
     m_doc->setBackgroundLayer( m_selected );
-    m_selected = 0;
+
+    selectLayer( 0 );
 
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
     m_doc->compositeImage( updateRect );
@@ -446,14 +443,4 @@ bool LayerPropertyDialog::editProperties( Layer &_layer )
 }
 
 #include "layerview.moc"
-
-
-
-
-
-
-
-
-
-
 

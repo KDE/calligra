@@ -139,9 +139,17 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent )
 
   addTab(m_pLayerTab, i18n("Layers"));
   addTab(m_pChannelTab, i18n("Channels"));
+
+  QObject::connect( this, SIGNAL( tabSelected( int ) ), this, SLOT( slotTabSelected( int ) ) );
+}
+
+void LayerDialog::slotTabSelected( int _tab )
+{
+  if( _tab == 1 )
+  {
+    cout << "ChannelView-Tab selected" << endl;
+  }
 }
 
 #include "layerdlg.moc"
-
-
 
