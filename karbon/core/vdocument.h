@@ -33,7 +33,7 @@ public:
 	const QString& syntaxVersion() { return m_syntaxVersion; }
 	void setSyntaxVersion( const QString& syntaxVersion ) { m_syntaxVersion = syntaxVersion; }
 
-	void insertLayer( const VLayer* layer );
+	void insertLayer( VLayer* layer );
 
 	const VLayerList& layers() const { return m_layers; }
 
@@ -55,7 +55,7 @@ public:
 	void moveSelectionDown();
 	void moveSelectionUp();
 
-	void insertObject( const VObject* object ); // insert a new vobject
+	void insertObject( VObject* object ); // insert a new vobject
 
 	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
 

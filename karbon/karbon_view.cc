@@ -56,6 +56,7 @@
 #include "vqpainter.h"
 
 //#include "vtext.h"
+#include "vgroup.h"
 #include "vtoolcontainer.h"
 
 #include <kdebug.h>
@@ -267,6 +268,16 @@ KarbonView::groupSelection()
 void
 KarbonView::ungroupSelection()
 {
+	if( m_part->document().selection().count() == 1 )
+	{
+		VGroup *grp = dynamic_cast<VGroup *>( m_part->document().selection().getFirst() );
+		if( grp )
+		{
+			grp->ungroup();
+			delete grp;
+			m_part->document().deselectAllObjects();
+		}
+	}
 }
 
 // TODO: remove this one someday:

@@ -19,13 +19,15 @@ VGroupCmd::VGroupCmd( KarbonPart* part )
 void
 VGroupCmd::execute()
 {
+	m_group = new VGroup();
+
 	VObjectListIterator itr( m_objects );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
 		m_part->document().activeLayer()->removeRef( itr.current() );
+		m_group->insertObject( itr.current() );
 	}
-	m_group = new VGroup( m_objects );
 	m_part->insertObject( m_group );
 	m_part->document().selectObject( *m_group, true );
 }
@@ -38,12 +40,12 @@ VGroupCmd::unexecute()
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_part->insertObject( itr.current() );
+		//m_part->insertObject( itr.current() );
 		m_part->document().selectObject( *( itr.current() ) );
 	}
 	// TODO : remove from corresponding VLayer
-	m_part->document().activeLayer()->removeRef( m_group );
-	m_group->empty();
+	//static_cast<VLayer *>( m_group->parent() )->removeRef( m_group );
+	m_group->ungroup();
 	delete m_group;
 	m_group = 0L;
 }

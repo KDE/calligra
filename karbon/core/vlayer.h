@@ -16,7 +16,7 @@ class QDomElement;
 
 // all vobjects exist inside a layer.
 
-class VLayer
+class VLayer : VObjectBase
 {
 public:
 	VLayer();
@@ -24,7 +24,7 @@ public:
 
 	void draw( VPainter *painter, const KoRect& rect );
 
-	void insertObject( const VObject* object );
+	void insertObject( VObject* object );
 	void prependObject( const VObject* object );
 	void removeRef( const VObject* object );
 	void moveObjectDown( const VObject* object );

@@ -22,14 +22,15 @@ VDocument::~VDocument()
 }
 
 void
-VDocument::insertLayer( const VLayer* layer )
+VDocument::insertLayer( VLayer* layer )
 {
 	qDebug ("insert layer");
 	m_layers.append( layer );
+	m_activeLayer = layer;
 }
 
 void
-VDocument::insertObject( const VObject* object )
+VDocument::insertObject( VObject* object )
 {
 	m_activeLayer->insertObject( object );
 }

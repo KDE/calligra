@@ -81,7 +81,7 @@ KarbonPart::saveXML()
 }
 
 void
-KarbonPart::insertObject( const VObject* object )
+KarbonPart::insertObject( VObject* object )
 {
 	// don't repaint here explicitely. some commands might want to insert many
 	// objects.

@@ -39,10 +39,11 @@ VLayer::draw( VPainter *painter, const KoRect& rect )
 }
 
 void
-VLayer::insertObject( const VObject* object )
+VLayer::insertObject( VObject* object )
 {
 	// put new objects "on top" by appending them:
 	m_objects.append( object );
+	object->setParent( this );
 }
 
 void

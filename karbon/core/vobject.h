@@ -20,6 +20,21 @@ enum VState
 	state_deleted  = 3  /// not visible
 };
 
+class VObjectBase
+{
+public:
+	VObjectBase( VObjectBase *parent = 0L ) : m_parent( parent ) {}
+	VObjectBase( const VObjectBase &obj )
+	{
+		m_parent = obj.m_parent;
+	}
+	void setParent( VObjectBase *parent ) { m_parent = parent; }
+	VObjectBase *parent() { return m_parent; }
+
+protected:
+	VObjectBase *m_parent;
+};
+
 
 class QDomElement;
 class QWMatrix;
@@ -33,10 +48,10 @@ class VVisitor;
  * transform on demand, clone and load/save itself.
  * Also an extension mechanism is provided.
  */
-class VObject
+class VObject : public VObjectBase
 {
 public:
-	VObject( VState state = state_normal )
+	VObject( VObjectBase *parent = 0L, VState state = state_normal ) : VObjectBase( parent )
 	{
 		m_state = state;
 		m_boundingBoxIsInvalid = true;

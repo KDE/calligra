@@ -5,6 +5,7 @@
 
 #include "vgroup.h"
 #include "vpath.h"
+#include "vlayer.h"
 
 #include <qdom.h>
 
@@ -56,8 +57,22 @@ VGroup::transform( const QWMatrix& m )
 }
 
 void
-VGroup::empty()
+VGroup::ungroup()
 {
+	VLayer *layer = static_cast<VLayer *>( parent() );
+	if( !layer )
+		return;
+
+	// unregister from parent layer
+	layer->removeRef( this );
+	// inform all objects in this group their new parent
+	VObjectListIterator itr = m_objects;
+	for ( ; itr.current() ; ++itr )
+	{
+		layer->insertObject( itr.current() );
+		itr.current()->setParent( ( VObjectBase * )layer );
+	}
+	// done
 	m_objects.clear();
 }
 
@@ -149,8 +164,9 @@ VGroup::load( const QDomElement& element )
 }
 
 void
-VGroup::insertObject( const VObject* object )
+VGroup::insertObject( VObject* object )
 {
 	// put new objects "on top" by appending them:
 	m_objects.append( object );
+	object->setParent( this );
 }
