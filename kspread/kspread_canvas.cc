@@ -3579,8 +3579,13 @@ void KSpreadCanvas::paintUpdates()
       if ( sheet->cellIsPaintDirty( QPoint( x, y ) ) )
       {
         cell = sheet->cellAt( x, y );
-        cell->calc();
-        cell->makeLayout( painter, x, y );
+        
+        // recalc and relayout only for non default cells
+        if( !cell->isDefault() )
+        {
+          cell->calc();
+          cell->makeLayout( painter, x, y );
+        }
 
         bool paintBordersBottom = false;
         bool paintBordersRight = false;
