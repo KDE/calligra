@@ -1,12 +1,36 @@
+/*  This file is part of the KDE project
+    Copyright (C) 2002,2003 Joseph Wenninger <jowenn@kde.org>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as published by
+    the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
 #include <kexikugarhandleritem.h>
 #include <kexikugarhandler.h>
 #include <kexikugarhandleritem.moc>
+#include <kexidataprovider.h>
+#include <ksimpleconfig.h>
 #include <kparts/componentfactory.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <qfile.h>
 #include <kdebug.h>
 #include <koStore.h>
+#include <qdom.h>
+#include <kexiDB/kexidbrecord.h>
+#include <qtextstream.h>
+#include <qfile.h>
+#include <kexikugarwrapper.h>
 
 KexiKugarHandlerItem::KexiKugarHandlerItem(KexiKugarHandler *parent, const QString& name, const QString& mime,
                                            const QString& identifier)
@@ -26,6 +50,13 @@ KexiKugarHandlerItem::KexiKugarHandlerItem(KexiKugarHandler *parent, const QStri
 		else
 		{
 			m_tempPath+="/";
+				if (mkdir(QFile::encodeName(m_tempPath+"data"),0700)!=0) {
+				kdDebug()<<"FAILED"<<endl;
+			}
+			if (mkdir(QFile::encodeName(m_tempPath+"tmpData"),0700)!=0) {
+				kdDebug()<<"FAILED"<<endl;
+			}
+
 		        parent->kexiProject()->addFileReference(FileReference("reports",
 				"/"+identifier+"/template.kut", "/reports/"+identifier+"/template.kut"));
 		        parent->kexiProject()->addFileReference(FileReference("reports",
@@ -112,3 +143,70 @@ const QString &KexiKugarHandlerItem::storedDataset(const QString &datasetName) c
 	return tmp?*tmp:QString::null;
 }
 
+
+void KexiKugarHandlerItem::view(KexiView *view) {
+	if (m_tempPath.isEmpty()) {
+		kdDebug()<<"Put some error messages here"<<endl;
+		return;
+	}
+	if (m_designer) {
+		if (m_designer->isModified()) {
+			kdDebug()<<"There is a modified designer document. Ask the user if he wants to save and use them"<<endl;
+		}
+	}
+	QFile tmp(m_tempPath+"/template.kut");
+	if (!tmp.exists()) {
+		kdDebug()<<"show an error message"<<endl;
+	}
+	QString filename=generateDataFile();
+	if (!filename.isEmpty()) {
+		new KexiKugarWrapper(view, this ,filename);
+	}
+}
+
+QString KexiKugarHandlerItem::generateDataFile() {
+	KSimpleConfig templateInfo(m_tempPath+"template.kukexi",true);
+	QDomDocument doc("KugarData");
+	doc.appendChild(doc.createElement("KugarData"));
+	doc.documentElement().setAttribute("Template","../template.kut");
+	doc.insertBefore(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""),doc.firstChild());
+	QDomElement parent=doc.documentElement();
+
+	QString queryLine;
+	kdDebug()<<"Trying to build data file"<<endl;
+	kdDebug()<<templateInfo.readEntry(QString("DETAIL_0"),"NOTHING FOUND")<<endl;
+	for(int level=0;!(queryLine=templateInfo.readEntry(QString("DETAIL_%1").arg(level),QString())).isEmpty();level++) {
+		kdDebug()<<"Found a none empty query line for level "<<level<<endl;
+
+		QString providerName=KexiProjectHandler::handlerNameFromGlobalIdentifier(queryLine);
+		if (providerName.isEmpty()) continue;
+		kdDebug()<<"provider plugin name has been decoded: "<<providerName<<endl;
+
+		KexiDataProvider *prov=KEXIDATAPROVIDER((projectPart()->kexiProject()->handlerForMime(providerName)));
+		if (!prov) continue;
+		kdDebug()<<"Provider found"<<endl;
+
+		KexiDBRecord  *recs=prov->records(KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
+		if (!recs) continue;
+		kdDebug()<<"There are records"<<endl;
+
+		while (recs->next()) {
+			QDomElement rowitem=doc.createElement("Row");
+			rowitem.setAttribute("level",QString("%1").arg(level));
+			for (uint i=0;i<recs->fieldCount();i++) {
+				rowitem.setAttribute(recs->fieldName(i),recs->value(i).toString());
+			}
+			parent.appendChild(rowitem);
+			
+		}
+		
+		delete recs;
+	}
+	QFile f(m_tempPath+"tmpData/data1.kud");
+	f.open(IO_WriteOnly);
+	QTextStream st(&f);
+	st.setEncoding(QTextStream::UnicodeUTF8);
+	st<<doc.toString();
+	f.close();
+	return m_tempPath+"tmpData/data1.kud";
+}
