@@ -260,6 +260,7 @@ void KWFrameSet::delFrame( unsigned int _num )
 
 void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 {
+    kdDebug() << "KWFrameSet::delFrame " << frm << " " << remove << endl;
     int _num = frames.findRef( frm );
     ASSERT( _num != -1 );
     if ( _num == -1 )

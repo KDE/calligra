@@ -1203,7 +1203,7 @@ void KWView::editDeleteFrame()
                                                           "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
         if (result != KMessageBox::Continue)
             return;
-        gui->canvasWidget()->deleteTable( fs->getGroupManager() );
+        doc->deleteTable( fs->getGroupManager() );
         return;
     }
 
@@ -1227,7 +1227,7 @@ void KWView::editDeleteFrame()
                                                         i18n("Delete Frame"), i18n("&Delete"));
 
             if (result == KMessageBox::Continue)
-                gui->canvasWidget()->deleteFrame( theFrame );
+                doc->deleteFrame( theFrame );
             return;
         }
 
@@ -1238,7 +1238,7 @@ void KWView::editDeleteFrame()
                                                     i18n("Delete Frame"),
                                                     i18n("&Delete"));
     if (result == KMessageBox::Continue)
-        gui->canvasWidget()->deleteFrame( theFrame );
+        doc->deleteFrame( theFrame );
 }
 
 void KWView::editCustomVars()
@@ -1997,7 +1997,7 @@ void KWView::tableDeleteRow()
                                                         i18n("&Delete"));
             if (result == KMessageBox::Continue)
             {
-                gui->canvasWidget()->deleteTable( table );
+                doc->deleteTable( table );
             }
         }
         else
@@ -2035,7 +2035,7 @@ void KWView::tableDeleteCol()
                                                         i18n("&Delete"));
             if (result == KMessageBox::Continue)
             {
-                gui->canvasWidget()->deleteTable( table );
+                doc->deleteTable( table );
             }
         }
         else
@@ -2138,7 +2138,7 @@ void KWView::tableDelete()
     }
     else
     {
-        gui->canvasWidget()->deleteTable( table );
+        doc->deleteTable( table );
     }
 }
 

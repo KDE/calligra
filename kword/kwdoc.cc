@@ -2504,6 +2504,49 @@ void KWDocument::updateResizeHandles( )
    }
 }
 
+void KWDocument::deleteTable( KWTableFrameSet *table )
+{
+    if ( !table )
+        return;
+    KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), this, table );
+    addCommand( cmd );
+    cmd->execute();
+}
+
+void KWDocument::deleteFrame( KWFrame * frame )
+{
+    KWFrameSet * fs = frame->getFrameSet();
+    QString cmdName;
+    TypeStructDocItem docItem;
+    switch (fs->getFrameType() ) {
+    case FT_TEXT:
+        cmdName=i18n("Delete text frame");
+        docItem=TextFrames;
+        break;
+    case FT_FORMULA:
+        cmdName=i18n("Delete formula frame");
+        docItem=FormulaFrames;
+        break;
+    case FT_PICTURE:
+        cmdName=i18n("Delete picture frame");
+        docItem=Pictures;
+        break;
+    case FT_PART:
+        cmdName=i18n("Delete object frame");
+        docItem=Embedded;
+        break;
+    case FT_TABLE:
+    case FT_BASE:
+        ASSERT( 0 );
+        break;
+    }
+    KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, this, frame );
+    addCommand( cmd );
+    cmd->execute();
+
+    emit docStructureChanged(docItem);
+}
+
 void KWDocument::reorganizeGUI()
 {
    QListIterator<KWView> it( m_lstViews );

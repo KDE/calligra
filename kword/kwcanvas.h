@@ -136,10 +136,6 @@ public:
 
     KWTableFrameSet *getCurrentTable() { return curTable; }
 
-    //delete frame
-    void deleteTable( KWTableFrameSet *groupManager );
-    void deleteFrame( KWFrame * frame );
-
     //move canvas to show point dPoint (in doc coordinates)
     void scrollToOffset( const KoPoint & dPoint );
 

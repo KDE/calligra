@@ -102,7 +102,7 @@ protected:
 
     FrameBehaviour frameBehaviour;
     KWUnit::Unit frameUnits;
-    QString oldFrameName;
+    QString oldFrameSetName;
 
 protected slots:
     void runNoClicked();

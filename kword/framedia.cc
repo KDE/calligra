@@ -447,30 +447,22 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     QHBox *row = new QHBox( tab3 );
     row->setSpacing( 5 );
-    ( void )new QLabel( i18n( "Name of new frameset:" ), row );
+    if (! frame->getFrameSet())
+    {
+        ( void )new QLabel( i18n( "Name of new frameset:" ), row );
+        oldFrameSetName = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
+    }
+    else
+    {
+        ( void )new QLabel( i18n( "Name of frameset:" ), row );
+        oldFrameSetName = frame->getFrameSet()->getName();
+    }
     eFrameSetName = new QLineEdit( row );
+    eFrameSetName->setText( oldFrameSetName );
 
     grid3->addWidget( row, 2, 0 );
 
-    bool found=true;
-    while (found) {
-        numTxtFrameSets++;
-
-        bool same = false;
-        for ( unsigned int i = 0;!same && i < doc->getNumFrameSets(); ++i ) {
-            if ( doc->getFrameSet( i )->getName() == i18n("Frameset %1" ).arg(numTxtFrameSets)){
-                same = true;
-                break;
-            }
-        }
-        if(!same) found=false;
-    }
-
-    oldFrameName=i18n( "Frameset %1" ).arg( numTxtFrameSets );
-    eFrameSetName->setText( oldFrameName );
     connectListSelected( lFrameSList->firstChild() );
-
-    //kdDebug() << "setup tab 3 exit"<<endl;
 
     if ( frame && frame->getFrameSet() && frame->getFrameSet()->isFloating() )
         tab3->setEnabled( false );
@@ -777,92 +769,97 @@ bool KWFrameDia::applyChanges()
     {
         // FrameBehaviour
         if(rResizeFrame->isChecked())
-        {
             frame->setFrameBehaviour(AutoExtendFrame);
-        }
         else if ( rAppendFrame->isChecked())
-        {
             frame->setFrameBehaviour(AutoCreateNewFrame);
-        }
         else
-        {
             frame->setFrameBehaviour(Ignore);
-        }
 
         // NewFrameBehaviour
         if(reconnect->isChecked())
-        {
             frame->setNewFrameBehaviour(Reconnect);
-        }
         else if ( noFollowup->isChecked())
-        {
             frame->setNewFrameBehaviour(NoFollowup);
-        }
         else
-        {
             frame->setNewFrameBehaviour(Copy);
-        }
+
+        // Frame/Frameset belonging, and frameset naming
+        // We have basically three cases:
+        // * Creating a frame (fs==0), and creating a frameset ('*' selected)
+        // * Creating a frame (fs==0), and attaching to an existing frameset (other)
+        // * Editing a frame (fs!=0), possibly changing the frameset attachment, possibly renaming the frameset...
 
         QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
-        QString name = QString::null;
-        if ( str[ 0 ] == '*' ) {
+        bool createFrameset = ( str[ 0 ] == '*' );
+        if ( createFrameset )
             str.remove( 0, 1 );
-            name = eFrameSetName->text();
-            if ( name.isEmpty() )
-                name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
-
-            if (  doc->getFrameSetByName( name )!=0 )
-            {
-                KMessageBox::sorry( this,
-                                    i18n( "A new frameset with the name '%1'\n"
-                                          "can not be made because a frameset with that name\n"
-                                          "already exists. Please enter another name or select\n"
-                                          "an existing frameset from the list.").arg(name));
-                eFrameSetName->setText(oldFrameName);
-                return false;
-            }
-        }
         int _num = str.toInt() - 1;
+        KWFrameSet * fs = frame->getFrameSet();
 
-        KWFrameSet*fs= frame->getFrameSet();
-        // delete frame from frameset
+        QString name = eFrameSetName->text();
+        if ( name.isEmpty() ) // Don't allow empty names
+            name = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
+
+        if ( fs || createFrameset ) // Last or first case -> check frameset name unicity
+        {
+            // Note: this isn't recursive, so it won't find table cells.
+            QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+            for ( ; fit.current() ; ++fit )
+                if ( fit.current()->getName() == name &&
+                     fs /*which is 0L when creating*/ != fit.current() )
+                {
+                    if ( createFrameset )
+                        KMessageBox::sorry( this,
+                                            i18n( "A new frameset with the name '%1'\n"
+                                                  "can not be made because a frameset with that name\n"
+                                                  "already exists. Please enter another name or select\n"
+                                                  "an existing frameset from the list.").arg(name));
+                    else
+                        KMessageBox::sorry( this,
+                                            i18n( "A frameset with the name '%1'\n"
+                                                  "already exists. Please enter another name.\n" ).arg(name) );
+                    eFrameSetName->setText(oldFrameSetName);
+                    return false;
+                }
+        }
+
+        // Third case (changing frame attachment)
         if ( fs &&
              ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
                 fs == doc->getFrameSet(_num)))
         {
-
-
-            KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet*>( fs );
-            QTextParag * parag = textfs->textDocument()->firstParag();
-            if(!( parag!=parag->next() && parag->string()->toString().length()==0))
+            // Check if last frame
+            if ( fs->getNumFrames() == 1 )
             {
-                int result;
-                result = KMessageBox::warningContinueCancel(this,
+                kdDebug() << "KWFrameDia::applyChanges " << fs->getName() << " has only one frame" << endl;
+                ASSERT( fs->getFrameType() == FT_TEXT );
+                KWTextFrameSet * textfs = static_cast<KWTextFrameSet*>( fs );
+                QTextParag * parag = textfs->textDocument()->firstParag();
+                bool isEmpty = parag->next() == 0L && parag->length() == 1;
+                if ( !isEmpty )
+                {
+                    int result = KMessageBox::warningContinueCancel(this,
                                                             i18n( "You are about to reconnect the last Frame of the\n"
                                                                   "Frameset '%1'.\n"
-                                                                  "Doing so will delete the Frameset and all the\n"
-                                                                  "text contained in it!\n\n"
+                                                                  "The contents of this Frameset will not appear\n"
+                                                                  "anymore!\n\n"
                                                                   "Are you sure you want to do that?").arg(fs->getName()),
-                                                            i18n("Reconnect Frame"), i18n("&Delete"));
-                if (result == KMessageBox::Continue)
-                {
-                     if ( frame->getFrameSet()->getNumFrames() > 1 )
-                         frame->getFrameSet()->delFrame( frame, FALSE );
-                     else
-                     {
-                         frame->getFrameSet()->delFrame( frame, FALSE );
-                         doc->delFrameSet( frame->getFrameSet() );
-                     }
+                                                            i18n("Reconnect Frame"), i18n("&Reconnect"));
+                    if (result != KMessageBox::Continue)
+                        return false;
                 }
             }
 
+            kdDebug() << "KWFrameDia::applyChanges detaching frame from frameset " << fs->getName() << endl;
+            // Detach frame from its frameset (re-attach is done afterwards)
+            fs->delFrame( frame, FALSE );
+            // TODO undo/redo ?
         }
+        // Do not use 'fs' past this, the above might have changed the frame's frameset
 
         if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
-            // attach frame to frameset
-            if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
-                doc->getFrameSet( _num )->addFrame( frame );
-            } else { // create a new frameset
+            if ( createFrameset )
+            {
                 kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
                 KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
                 _frameSet->addFrame( frame );
@@ -870,6 +867,20 @@ bool KWFrameDia::applyChanges()
                 KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc, frame) ;
                 doc->addCommand(cmd);
             }
+            else
+            {
+                kdDebug() << "KWFrameDia::applyChanges attaching to frameset " << _num << endl;
+                // attach frame to frameset number _num
+                KWFrameSet * newFs = doc->getFrameSet( _num );
+                ASSERT( newFs );
+                newFs->addFrame( frame );
+                // TODO undo/redo ?
+            }
+        }
+        else
+        {
+            // Rename frameset
+            frame->getFrameSet()->setName( name );
         }
     } // end of 'tab1 and text frame'
 
@@ -971,10 +982,20 @@ void KWFrameDia::connectListSelected( QListViewItem *item )
         return;
 
     QString str = item->text( 0 );
-    if ( str[ 0 ] == '*' ) {
-        str.remove( 0, 1 );
+    bool createFrameset = ( str[ 0 ] == '*' );
+    if ( createFrameset )
+    {
+        // Allow naming new frameset
         eFrameSetName->setEnabled( TRUE );
-    } else
+    }
+    else if ( frame && frame->getFrameSet() )
+    {
+        int _num = str.toInt() - 1;
+        // Allow renaming an existing frameset
+        // ( Disabled when changing the frameset connection )
+        eFrameSetName->setEnabled( doc->getFrameSet( _num ) == frame->getFrameSet() );
+    }
+    else
         eFrameSetName->setEnabled( FALSE );
 }
 

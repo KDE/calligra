@@ -175,6 +175,11 @@ public:
     void addFrameSet( KWFrameSet *f, bool finalize = true );
     void delFrameSet( KWFrameSet *f, bool deleteit = true );
 
+    // Frame/table deletion - with undo/redo support
+    // Moved to KWDocument so that dialogs can call them if necessary
+    void deleteTable( KWTableFrameSet *groupManager );
+    void deleteFrame( KWFrame * frame );
+
     // Those distances are in _pixels_, i.e. with zoom and resolution applied.
     unsigned int topBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptTop )); }
     unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
