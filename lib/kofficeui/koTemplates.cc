@@ -170,14 +170,10 @@ void KoTemplateTree::writeTemplateTree() {
                 writeTemplate(t, group, localDir);
             }
             if(t->isHidden() && t->touched() && t->file().contains(localDir)) {
-                //kdDebug() << "+++ delete local template (rm -rf)##############" << endl;
+                //kdDebug() << "+++ delete local template ##############" << endl;
                 writeTemplate(t, group, localDir);
-                QString command="rm -rf ";
-                command+=t->file();
-                command+=" ";
-                command+=t->picture();
-                //kdDebug() << "command: " << command << endl;
-                system(command.local8Bit());
+                QFile::remove(t->file());
+                QFile::remove(t->picture());
             }
         }
     }
