@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXI_IMPORT_H
-#define KEXI_IMPORT_H
+#ifndef KEXI_MIGRATE_H
+#define KEXI_MIGRATE_H
 
 #include "kexidb/connection.h"
 #include "kexidb/tableschema.h"
@@ -39,7 +39,7 @@ namespace KexiMigration
 	6. Ask user what to do if column type is not supported
 	7. See kexi/doc/dec/kexi_import.txt for more info
 	*/
-	class KexiMigrate : public QObject, public KexiDB::Object
+	class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 	{
 		Q_OBJECT
 	
@@ -83,7 +83,7 @@ namespace KexiMigration
 			KexiDB::ConnectionData* m_externalData;
 			
 			QString m_dbName;
-                        QString m_todbname;
+			QString m_todbname;
 			KexiDB::TableSchema* m_table;
 			KexiDB::Field* m_f;
 		private:		

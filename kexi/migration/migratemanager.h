@@ -35,7 +35,7 @@ namespace KexiMigration {
 class MigrateManagerInternal;
 
 //! Database migration management, e.g. finding and loading drivers.
-class MigrateManager : public QObject, public KexiDB::Object
+class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 {
 	public:
 		typedef QMap<QString, KService::Ptr> ServicesMap;

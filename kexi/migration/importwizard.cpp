@@ -1,23 +1,37 @@
-//
-// C++ Implementation: importwizard
-//
-// Description:
-//
-//
-// Author: Adam Pigg <adam@piggz.co.uk>, (C) 2004
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/* This file is part of the KDE project
+   Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "importwizard.h"
-#include <migration/keximigrate.h>
-#include <migration/migratemanager.h>
+#include "keximigrate.h"
+#include "migratemanager.h"
 
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qvbox.h>
 #include <qlayout.h>
+
 #include <kcombobox.h>
+#include <kmessagebox.h>
+#include <kpushbutton.h>
+#include <kdebug.h>
+#include <klineedit.h>
+
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 #include <core/kexidbconnectionset.h>
@@ -25,14 +39,8 @@
 #include <main/startup/KexiConnSelector.h>
 #include <main/startup/KexiProjectSelector.h>
 #include <main/startup/KexiOpenExistingFile.h>
-#include <kmessagebox.h>
 
-#include <kpushbutton.h>
-#include <kdebug.h>
-#include <klineedit.h>
-
-namespace KexiMigration
-{
+using namespace KexiMigration;
 
 //===========================================================
 //
@@ -253,11 +261,11 @@ void importWizard::accept()
         cdata = new KexiDB::ConnectionData;
         cdata->connName = dstNewDBName->text();
         cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
-        cdata->setFileName( dstConn->m_fileDlg->currentFileName() );
+        cdata->setFileName( dstConn->selectedFileName() );
 	
-	kdDebug() << "Current file name: " << dstConn->m_fileDlg->currentFileName() << endl;
+	kdDebug() << "Current file name: " << dstConn->selectedFileName() << endl;
 	
-	dbname = dstConn->m_fileDlg->currentFileName();
+	dbname = dstConn->selectedFileName();
     }
     else
     {
@@ -406,5 +414,5 @@ void importWizard::helpClicked()
         KMessageBox::information(this, "No help availbale for this page", "Help");
     }
 }
-};
+
 #include "importwizard.moc"
