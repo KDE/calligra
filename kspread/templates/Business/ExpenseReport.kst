@@ -664,7 +664,7 @@
       <pen width="1" style="1" color="#000000" />
      </right-border>
     </format>
-    <text>=SUM(#0#-1#:#0#-12#)</text>
+    <text>=SUM(#0#-12#:#0#-1#)</text>
     <result dataType="Num" >0</result>
    </cell>
    <cell row="10" column="8" >
