@@ -68,6 +68,9 @@ public:
 
 	virtual ~VSelection();
 
+	/**
+	 * Paint selected objects outline and handle.
+	 */
 	void draw( VPainter* painter, double zoomFactor ) const;
 
 	virtual const KoRect& boundingBox() const;
@@ -75,11 +78,6 @@ public:
 	virtual VSelection* clone() const;
 
 	virtual void accept( VVisitor& visitor );
-
-	/**
-	 * Removes the reference to the object, not the object itself.
-	 */
-	void take( VObject& object );
 
 	/**
 	 * Adds all objects to the selection.
@@ -98,7 +96,12 @@ public:
 	bool append( const KoRect& rect, bool selectObjects = true );
 
 	/**
-	 * Removes the references to all objects, not the objects itselves.
+	 * Removes the reference to the object, not the object itself.
+	 */
+	void take( VObject& object );
+
+	/**
+	 * Removes the references to all objects, not the objects themselves.
 	 */
 	void clear();
 
@@ -114,7 +117,6 @@ public:
 	 * Deselects all nodes.
 	 */
 	void clearNodes();
-
 
 	/**
 	 * Returns the handle node id, the KoPoint is inside.
@@ -133,17 +135,13 @@ private:
 	bool m_selectObjects;
 
 	/**
-	 * Select or deselect all objects inside this rectangle.
-	 */
-	KoRect m_rect;
-
-	/**
-	 * A list of selected objects.
+	 * The list of currently selected objects.
 	 */
 	VObjectList m_objects;
 
 	/**
 	 * Paint coordinates of handle rectangle and handle nodes.
+	 * Used for handle node determination and handle node drawing.
 	 */
 	KoRect *m_handleRect;
 
