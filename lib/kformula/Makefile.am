@@ -1,13 +1,13 @@
 
-INCLUDES= $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) 
+INCLUDES= $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 
 SUBDIRS = pics dtd
 
 ####### 
-# you can add here more. This one gets installed 
-lib_LTLIBRARIES = libkformula.la
+# We have to name it kformulalib, not just kformula, since that's the name of the kdeinit module for kformula.
+lib_LTLIBRARIES = libkformulalib.la
 
-libkformula_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
+libkformulalib_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	formulaelement.cc indexelement.cc kformulacontainer.cc \
 	sequenceelement.cc textelement.cc bracketelement.cc \
 	matrixelement.cc fractionelement.cc rootelement.cc symbolelement.cc \
@@ -22,15 +22,15 @@ libkformula_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 #include_HEADERS = kformulacontainer.h kformuladocument.h kformulaview.h \
 #	kformuladefs.h kformulaconfigpage.h
 
-libkformula_la_LDFLAGS = -version-info 3:0 -no-undefined
-libkformula_la_LIBADD  = $(LIB_KDEUI) $(LIB_KOTEXT) $(all_libraries) $(KDE_RPATH)
+libkformulalib_la_LDFLAGS = -version-info 3:0 -no-undefined
+libkformulalib_la_LIBADD  = $(LIB_KDEUI) $(LIB_KOTEXT) $(all_libraries) $(KDE_RPATH)
 
-libkformula_la_METASOURCES = AUTO
+libkformulalib_la_METASOURCES = AUTO
 
 check_PROGRAMS = kformulatest
 
 kformulatest_SOURCES = main.cc kformulawidget.cc
-kformulatest_LDADD = libkformula.la
+kformulatest_LDADD = libkformulalib.la
 
 #symbolnames.cc: 
 #	awk -F, '$$1 !~ "#" {if (split($$3,a," ")>0) print "i18n(\"" a[1] "\");"}' config/unicode.tbl > symbolnames.cc
