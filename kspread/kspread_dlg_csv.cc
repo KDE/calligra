@@ -64,6 +64,13 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   //  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
   MyDialogLayout = new QGridLayout( page, 1, 1, 11, 6, "MyDialogLayout");
 
+  // Limit the range
+  int column = m_targetRect.left();
+  KSpreadCell* lastCell = m_pView->activeTable()->getLastCellColumn( column );
+  if( lastCell )
+    if( m_targetRect.bottom() > lastCell->row() )
+      m_targetRect.setBottom( lastCell->row() );
+
   m_table = new QTable( page, "m_table" );
   //m_table->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_table->sizePolicy().hasHeightForWidth() ) );
   m_table->setNumRows( 0 );
