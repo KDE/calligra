@@ -298,10 +298,32 @@ int KWTextParag::firstLineMargin() const
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
-int KWTextParag::lineSpacing() const
+int KWTextParag::lineSpacing( int line ) const
 {
-    return textDocument()->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.lineSpacing );
+    if ( m_layout.lineSpacing >= 0 )
+        return textDocument()->textFrameSet()->kWordDocument()->zoomItY(
+            m_layout.lineSpacing );
+    else {
+        KWTextParag * that = const_cast<KWTextParag *>(this);
+        ASSERT( line < that->lineStartList().count() );
+        //kdDebug() << "KWTextParag::lineSpacing line=" << line << " lines=" << that->lineStartList().count() << endl;
+        QMap<int, QTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
+        while ( line-- > 0 )
+            ++it;
+        int height = ( *it )->h;
+        //kdDebug() << " line height=" << height << endl;
+
+        if ( m_layout.lineSpacing == KWParagLayout::LS_ONEANDHALF )
+        {
+            // Tricky. During formatting height doesn't include the linespacing,
+            // but afterwards (e.g. when drawing the cursor), it does !
+            return isValid() ? height * 2 / 3 : height / 2;
+        }
+        else if ( m_layout.lineSpacing == KWParagLayout::LS_DOUBLE )
+        {
+            return isValid() ? height / 2 : height;
+        }
+    }
 }
 
 // Reimplemented from QTextParag
@@ -323,7 +345,8 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         r.setLeft( at( 0 )->x - counterWidth() - 1 );
         r.setRight( rect().width() - rightMargin() - 1 ); /*documentWidth()-1 requires many fixes in QRT*/
         r.setTop( lineY( 0 ) );
-        r.setBottom( static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing ) - 1 );
+        int lastLine = lines() - 1;
+        r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) - lineSpacing( lastLine ) ) - 1 );
 
         Border::drawBorders( painter, doc, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                              0, QPen() );
@@ -952,6 +975,7 @@ void KWTextParag::printRTDebug( int info )
         {
             QTextStringChar & ch = s->at(i);
             kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
+                      << " height=" << ch.height()
                       << " format=" << ch.format()
                       << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KWTextFormat *>(ch.format())->pointSizeFloat()
@@ -1152,8 +1176,15 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool us
 
     element = parentElem.namedItem( "LINESPACING" ).toElement(); // KWord-1.0 DTD
     if ( !element.isNull() )
-        lineSpacing = KWDocument::getAttribute( element, "value", 0.0 );
-
+    {
+        QString value = element.attribute( "value" );
+        if ( value == "oneandhalf" )
+            lineSpacing = LS_ONEANDHALF;
+        else if ( value == "double" )
+            lineSpacing = LS_DOUBLE;
+        else
+            lineSpacing = value.toDouble();
+    }
 
     pageBreaking = 0;
     element = parentElem.namedItem( "PAGEBREAKING" ).toElement();
@@ -1269,7 +1300,12 @@ void KWParagLayout::save( QDomElement & parentElem )
     {
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
-        element.setAttribute( "value", lineSpacing );
+        if ( lineSpacing == LS_ONEANDHALF )
+            element.setAttribute( "value", "oneandhalf" );
+        else if ( lineSpacing == LS_DOUBLE )
+            element.setAttribute( "value", "double" );
+        else
+            element.setAttribute( "value", lineSpacing );
     }
 
     if ( pageBreaking != 0 )

@@ -82,6 +82,7 @@ public:
     // This class is used as a struct, which explains the public vars :)
     int alignment;
     double margins[5]; // left, right, top, bottom, firstLineSpacing - in pt
+    enum { LS_ONEANDHALF = -1, LS_DOUBLE = -2 };
     double lineSpacing;
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter* counter; // can be 0 if no counter set
@@ -125,11 +126,14 @@ public:
     // Margins
     double margin( QStyleSheetItem::Margin m ) { return m_layout.margins[m]; }
     const double * margins() const { return m_layout.margins; }
-    double kwLineSpacing() const { return m_layout.lineSpacing; }
-
     void setMargin( QStyleSheetItem::Margin m, double _i );
     void setMargins( const double * _i );
+
+    // Line spacing in pt if >=0, can also be LS_ONEANDHALF or LS_DOUBLE
+    double kwLineSpacing() const { return m_layout.lineSpacing; }
+
     void setLineSpacing( double _i );
+
     void setAlign( int align ); // use this, not QTextParag::setAlignment !
 
     // Borders
@@ -212,7 +216,7 @@ protected:
     virtual int leftMargin() const;
     virtual int firstLineMargin() const;
     virtual int rightMargin() const;
-    virtual int lineSpacing() const;
+    virtual int lineSpacing( int line ) const;
 
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
 			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );

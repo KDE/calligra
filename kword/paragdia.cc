@@ -343,18 +343,18 @@ void KWNumPreview::drawContents( QPainter* painter) {
 
     QRect r = contentsRect();
     QFontMetrics fm( font() );
- 
+
     painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
                        r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
     painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
                           r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
- 
+
     QFont f( m_style->format().font() );
     QColor c( m_style->format().color() );
- 
+
     painter->setPen( QPen( c ) );
     painter->setFont( f );
- 
+
     fm = QFontMetrics( f );
     int y = height() / 2 - fm.height() / 2;
 
@@ -398,7 +398,7 @@ void KWNumPreview::drawContents( QPainter* painter) {
         theText.append(" ");
     }
     theText.append(i18n("Normal paragraph text"));
- 
+
     painter->drawText( 20 + (int)( m_style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
                                    + m_style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),
                        y, fm.width( theText ),
@@ -589,7 +589,18 @@ double KWIndentSpacingWidget::spaceAfterParag() const
 
 double KWIndentSpacingWidget::lineSpacing() const
 {
-    return KWUnit::fromUserValue( QMAX(eSpacing->text().toDouble(),0), m_unit );
+    int index = cSpacing->currentItem();
+    switch ( index ) {
+    case 0: // single
+        return 0;
+    case 1: // one-and-half
+        return KWParagLayout::LS_ONEANDHALF;
+    case 2:
+        return KWParagLayout::LS_DOUBLE;
+    case 3:
+    default:
+        return KWUnit::fromUserValue( QMAX(eSpacing->text().toDouble(),0), m_unit );
+    }
 }
 
 int KWIndentSpacingWidget::pageBreaking() const
@@ -632,7 +643,18 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
     prev1->setAfter( _after );
 
     double _spacing = lay.lineSpacing;
-    str = QString::number( KWUnit::userValue( _spacing, m_unit ) );
+    str = QString::null;
+    if ( _spacing == 0 )
+        cSpacing->setCurrentItem( 0 );
+    else if ( _spacing == KWParagLayout::LS_ONEANDHALF )
+        cSpacing->setCurrentItem( 1 );
+    else if ( _spacing = KWParagLayout::LS_DOUBLE )
+        cSpacing->setCurrentItem( 2 );
+    else
+    {
+        cSpacing->setCurrentItem( 3 );
+        str = QString::number( KWUnit::userValue( _spacing, m_unit ) );
+    }
     eSpacing->setText( str );
     prev1->setSpacing( _spacing );
 
@@ -678,10 +700,13 @@ void KWIndentSpacingWidget::spacingActivated( int _index )
     if ( _index == cSpacing->count()-1 /* last item */ ) {
         eSpacing->setEnabled( true );
         eSpacing->setFocus();
+        prev1->setSpacing( eSpacing->text().toDouble() );
     } else {
         eSpacing->setEnabled( false );
+        // 1 -> oneandhalf (8)
+        // 2 -> double (16)
+        prev1->setSpacing( _index == 1 ? 8 : _index == 2 ? 16 : 0 );
     }
-    prev1->setSpacing( eSpacing->text().toDouble() );
 }
 
 void KWIndentSpacingWidget::spacingChanged( const QString & _text )
@@ -1048,7 +1073,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     : KWParagLayoutWidget( KWParagDia::PD_NUMBERING, parent, name ), stylesList()
 {
 
-    QVBoxLayout *Form1Layout = new QVBoxLayout( this ); 
+    QVBoxLayout *Form1Layout = new QVBoxLayout( this );
     Form1Layout->setSpacing( 6 );
     Form1Layout->setMargin( 11 );
 
@@ -1066,7 +1091,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     QRadioButton *rNone = new QRadioButton( gNumbering, "rNone" );
     rNone->setText( i18n( "&None" ) );
     numberingGroupLayout->addWidget( rNone );
-    
+
     gNumbering->insert( rNone , Counter::NUM_NONE);
 
     QRadioButton *rList = new QRadioButton( gNumbering, "rList" );
@@ -1087,7 +1112,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     gStyle->layout()->setSpacing( 0 );
     gStyle->layout()->setMargin( 0 );
 
-    QHBoxLayout *layout8 = new QHBoxLayout( gStyle->layout() );; 
+    QHBoxLayout *layout8 = new QHBoxLayout( gStyle->layout() );
     layout8->setSpacing( 6 );
     layout8->setMargin( 11 );
 
@@ -1122,7 +1147,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     styleLayoutLayout->setSpacing( 6 );
     styleLayoutLayout->setMargin( 11 );
 
-    QHBoxLayout *Layout2 = new QHBoxLayout; 
+    QHBoxLayout *Layout2 = new QHBoxLayout;
     Layout2->setSpacing( 6 );
     Layout2->setMargin( 0 );
 
@@ -1141,7 +1166,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     Layout2->addWidget( sSuffix );
     styleLayoutLayout->addLayout( Layout2 );
 
-    QGridLayout *Layout7 = new QGridLayout; 
+    QGridLayout *Layout7 = new QGridLayout;
     Layout7->setSpacing( 6 );
     Layout7->setMargin( 0 );
 
@@ -1205,7 +1230,7 @@ void KWParagCounterWidget::fillStyleCombo(Counter::Numbering type) {
 
     if(styleBuffer <= lstStyle->count())
         lstStyle->setCurrentItem(styleBuffer);
-    else 
+    else
         if(cur <= lstStyle->count())
             lstStyle->setCurrentItem(cur);
 
@@ -1326,7 +1351,7 @@ void KWParagCounterWidget::save( KWParagLayout & lay ) {
     m_counter.setStartNumber(spnStart->value());
     m_counter.setPrefix(sPrefix->text());
     m_counter.setSuffix(sSuffix->text()); */
-    
+
     if ( lay.counter )
         *lay.counter = m_counter;
     else
@@ -1483,7 +1508,7 @@ void KWParagTabulatorsWidget::delClicked()
 	{
             lTabs->setCurrentItem(0);
             setActiveItem(lTabs->currentText().toDouble());
-	}
+        }
     }
 }
 

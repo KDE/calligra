@@ -577,7 +577,7 @@ don't put a </?xml...> at the end of the file!).
 
 <!-- 
         The space to be added between two consecutive lines in a given paragraph.
-        value in points 
+        value in points. Can also be "oneandhalf" for 1.5 lines and "double".
 -->
 <!ELEMENT LINESPACING
     EMPTY>
