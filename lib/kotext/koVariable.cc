@@ -1003,6 +1003,11 @@ QStringList KoPgNumVariable::actionTexts()
     return lst;
 }
 
+QStringList KoPgNumVariable::subTypeText()
+{
+    return KoPgNumVariable::actionTexts();
+}
+
 /******************************************************************/
 /* Class: KoFieldVariable                                         */
 /******************************************************************/

@@ -466,6 +466,10 @@ public:
     enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1 };
     static QStringList actionTexts();
 
+    virtual QStringList subTypeText();
+
+    virtual void setVariableSubType( short int type){m_subtype=type;}
+
     // For the 'current page' variable. This is called by KWTextFrameSet::drawFrame.
     void setPgNum( int pgNum ) { m_pgNum = pgNum; }
     short int subtype() const { return m_subtype; }
