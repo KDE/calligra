@@ -37,7 +37,7 @@ void MyCanvas::scaleCanvas(int scale)
 
 void MyCanvas::drawForeground ( QPainter & painter, const QRect & clip )
 {
-	kdDebug()<<"MyCanvas::drawForeGround"<<endl;
+	//kdDebug()<<"MyCanvas::drawForeGround"<<endl;
 	for (CanvasBox *b=selected.first();b;b=selected.next())
 	{
 		b->drawHolders(painter);

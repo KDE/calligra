@@ -239,7 +239,7 @@ bool ReportCanvas::startResizing(QMouseEvent *e, QPoint &p)
 		if (resizing_type)
 		{
 			selectItem(cbx,false);
-			kdDebug()<<"A Widget should be resized"<<endl;
+			//kdDebug()<<"A Widget should be resized"<<endl;
         	        moving = 0;
                 	resizing = cbx;
 			moving_start = p;
@@ -499,12 +499,12 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	double newYPos=r->y();
 	double h=r->height();
 	double w=r->width();
-	kdDebug()<<"resizing"<<endl;
+//	kdDebug()<<"resizing"<<endl;
 
 //vertical resizing
 	if (resizing_type & CanvasBox::ResizeBottom)
 	{
-		kdDebug()<<"Resize bottom"<<endl;
+//		kdDebug()<<"Resize bottom"<<endl;
 		h = h + p.y() - moving_start.y();
 		fixMaxValues(h,r->y(),resizing_constraint.bottom(),moving_offsetY);
 		if(resizing->rtti() != KuDesignerRttiCanvasLine)
@@ -513,7 +513,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	else
 		if (resizing_type & CanvasBox::ResizeTop)
 		{
-			kdDebug()<<"Resize top"<<endl;
+//			kdDebug()<<"Resize top"<<endl;
 			newYPos=r->y()+p.y()-moving_start.y();
 			fixMinValues(newYPos,resizing_constraint.top(),moving_offsetY);
 			if(resizing->rtti() != KuDesignerRttiCanvasLine)
@@ -525,7 +525,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 //horizontal resizing
 	if (resizing_type & CanvasBox::ResizeRight)
 	{
-		kdDebug()<<"Resize right"<<endl;
+//		kdDebug()<<"Resize right"<<endl;
         	w = w + p.x() - moving_start.x();
 		fixMaxValues(w,r->x(),resizing_constraint.right(),moving_offsetX);
 		if(resizing->rtti() != KuDesignerRttiCanvasLine)
@@ -535,7 +535,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	else
 		if (resizing_type & CanvasBox::ResizeLeft)
 		{
-			kdDebug()<<"Resize left"<<endl;
+//			kdDebug()<<"Resize left"<<endl;
 			newXPos=r->x()+p.x()-moving_start.x();
 			fixMinValues(newXPos,resizing_constraint.left(),moving_offsetX);
 			if(resizing->rtti() != KuDesignerRttiCanvasLine)
