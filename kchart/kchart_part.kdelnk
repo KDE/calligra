@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=KChart
 Name[no]=Graf
+Name[ru]=Графики
 Exec=kchart.bin --server
 Comment=Kalles Charter
 Comment[no]=Kalles graf
 Comment[pt_BR]=Programa de desenho de fluxogramas
+Comment[ru]=Графики Kalle
 MimeTypes=application/x-kchart,
 RepoID=IDL:KCharter/Factory:1.0,
 ActivationMode=shared

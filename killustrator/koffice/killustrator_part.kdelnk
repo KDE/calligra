@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=KIllustrator
 Name[no]=IllustratЬr
+Name[ru]=Иллюстратор
 Exec=killustrator.bin --server
 Comment=KIllustrator Vector Graphics Application
 Comment[no]=Vektorgrafikkprogrammet KIllustrator
 Comment[pt_BR]=Programa de grАficos vetoriais KIllustrator
+Comment[ru]=Векторный графический редактор
 MimeTypes=application/x-killustrator,
 RepoID=IDL:KIllustrator/DocumentFactory:1.0,
 ActivationMode=shared

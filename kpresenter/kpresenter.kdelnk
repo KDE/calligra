@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=KPresenter
 Name[no]=Presenterer
+Name[ru]=Презентации
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
 Comment[no]=Reggies presentasjonsprogramvare
 Comment[pt_BR]=Software de ApresentaГУes
+Comment[ru]=Программа для подготовки презентаций Reggie
 Comment[sk]=Reggieho PrezentaХnЩ softvИr
 MimeTypes=application/x-kpresenter,
 RepoID=IDL:KPresenter/DocumentFactory:1.0,

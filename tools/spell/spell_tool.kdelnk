@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=SpellTool
 Name[no]=StaveverktЬy
+Name[ru]=Проверка правописания
 Exec=spell_tool --server
 Comment=Torben's Spell Tool
 Comment[no]=Torbens staveverktЬy
 Comment[pt_BR]=Ferramenta de correГЦo ortogrАfica
+Comment[ru]=Проверка правописания Torben'а
 MimeTypes=text/x-single-word,
 RepoID=IDL:DataTools/Tool:1.0,
 ActivationMode=shared

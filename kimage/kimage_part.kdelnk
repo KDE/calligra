@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=KImage
 Name[no]=Bilde
+Name[ru]=Изображение
 Exec=kimage.bin --server
 Comment=Torben's Image Viewer
 Comment[no]=Torbens bildefremviser
 Comment[pt_BR]=Visualizador de Imagens
+Comment[ru]=Программа просмотра изображений Torben'а
 Comment[sk]=Torbenov prehliadaХ obrАzkov
 MimeTypes=application/x-kimage,image/gif,
 RepoID=IDL:KImage/DocumentFactory:1.0,IDL:KOffice/Print:1.0,

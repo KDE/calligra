@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=KFormula
 Name[no]=Formel
+Name[ru]=Формулы
 Exec=kformula.bin --server
 Comment=The Formula Editor
 Comment[no]=Formelregidereren
 Comment[pt_BR]=Editor de FСrmulas
+Comment[ru]=Редактор формул
 MimeTypes=application/x-kformula
 RepoID=IDL:KFormula/Factory:1.0,
 ActivationMode=shared

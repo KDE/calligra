@@ -2,10 +2,12 @@
 [KDE Desktop Entry]
 Name=KDiagramm
 Name[no]=Diagram
+Name[ru]=‰…¡«“¡ÕÕŸ
 Exec=kdiagramm.bin --server
 Comment=Torben's Chart
 Comment[no]=Torbens graf
 Comment[pt_BR]=Programa para confecÁ„o de diagramas
+Comment[ru]=Á“¡∆…À… Torben'¡
 MimeTypes=application/x-kdiagramm,
 RepoID=IDL:KDiagramm/DocumentFactory:1.0,IDL:Chart/SimpleChart:1.0,
 ActivationMode=shared
