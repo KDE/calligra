@@ -293,6 +293,65 @@ private:
 };
 
 /**
+  Class BackupRecord represents Backup record, which determines whether 
+  Microsoft Excel makes a backup of the file while saving.
+ */
+class BackupRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new Backup record.
+   */
+  BackupRecord();
+  
+  /**
+   * Destroy the record.
+   */
+  ~BackupRecord();
+  
+  /**
+   * Returns true if a backup is made when saving the file.
+   * 
+   * \sa setBackup
+   */
+  bool backup() const;
+  
+  /**
+   * If r is true, a backup will be made when saving the file.
+   * 
+   * \sa backup
+   */
+  void setBackup( bool r );
+
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "BACKUP"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  BackupRecord( const BackupRecord& );
+  BackupRecord& operator=( const BackupRecord& );
+
+  class Private;
+  Private* d;
+};
+
+
+/**
   Class BOFRecord represents BOF (Beginning of File) record, which
   is used to mark beginning of a set of records (following the BOF record).
   For each BOF record, there should also be one corresponding EOF record.

@@ -332,6 +332,9 @@ Record* RecordFactory::create( unsigned type )
   else if( type == EOFRecord::id )
     record = new EOFRecord();
     
+  if( type == BackupRecord::id )
+    record = new BackupRecord();
+    
   if( type == BlankRecord::id )
     record = new BlankRecord();
     
@@ -534,6 +537,52 @@ void Record::setData( unsigned size, const unsigned char* data )
 void Record::dump( std::ostream& out ) const
 {
   // nothing to dump
+}
+
+// ========== BACKUP ========== 
+
+const unsigned int BackupRecord::id = 0x0040;
+
+class BackupRecord::Private
+{
+public:
+  bool backup;
+};
+
+BackupRecord::BackupRecord():
+  Record()
+{
+  d = new BackupRecord::Private();
+  d->backup = false;
+}
+
+BackupRecord::~BackupRecord()
+{
+  delete d;
+}
+
+bool BackupRecord::backup() const
+{
+  return d->backup;
+}
+
+void BackupRecord::setBackup( bool b )
+{
+  d->backup = b;
+}
+
+void BackupRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 2 ) return;
+  
+  unsigned flag = readU16( data );
+  d->backup = flag != 0;
+}
+
+void BackupRecord::dump( std::ostream& out ) const
+{
+  out << "BACKUP" << std::endl;
+  out << " Backup on save : " << (backup() ? "Yes" : "No") << std::endl;
 }
 
 // ========== BOF ========== 
@@ -1076,7 +1125,6 @@ void ColInfoRecord::dump( std::ostream& out ) const
   out << "     Collapsed : " << ( collapsed() ? "Yes" : "No" ) << std::endl;
   out << " Outline Level : " << outlineLevel() << std::endl;  
 }
-
 
 // ========== DATEMODE ========== 
 
