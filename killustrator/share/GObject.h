@@ -336,6 +336,8 @@ public:
   bool workInProgress () const { return inWork; }
   void setWorkInProgress (bool flag) { inWork = flag; }
 
+  void invalidateClipRegion  ();
+
 signals:
   void changed ();
   void changed (const Rect& r);

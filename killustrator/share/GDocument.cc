@@ -981,3 +981,15 @@ void GDocument::printInfo (QString& s) {
     s += os.str ();
 }
   
+void GDocument::invalidateClipRegions () {
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    GLayer* layer = *li;
+    if (layer->isVisible ()) {
+      list<GObject*>& contents = layer->objects ();
+      list<GObject*>::iterator oi = contents.begin ();
+      for (; oi != contents.end (); oi++)
+	(*oi)->invalidateClipRegion ();
+    }
+  }
+}

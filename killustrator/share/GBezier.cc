@@ -252,6 +252,7 @@ void GBezier::draw (Painter& p, bool withBasePoints) {
       p.drawPolyline (ppoints);
   }
 #endif
+  p.setClipping (false);
   p.restore ();
   if (sArrow != 0L) {
     Coord pp = points.at (1)->transform (tmpMatrix);

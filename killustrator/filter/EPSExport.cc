@@ -82,7 +82,10 @@ bool EPSExport::exportToFile (GDocument* doc) {
   paint.setClipRect (0, 0, box.width () + 2, box.height () + 2);
   // and move the objects to the origin
   paint.translate (-box.left () + 1, -box.top () + 1);
+  // force update of cliping regions (only for gradient pixmaps)
+  doc->invalidateClipRegions ();
   doc->drawContents (paint);
+  doc->invalidateClipRegions ();
   paint.end ();
   return true;
 }

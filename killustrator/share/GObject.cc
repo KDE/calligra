@@ -426,3 +426,8 @@ void GObject::printInfo () {
     cout << className () << " bbox = [" << boundingBox () << "]" << endl;
 }
 
+void GObject::invalidateClipRegion  () {
+  if (gradientFill ())
+    gShape.setInvalid ();
+}
+

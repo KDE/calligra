@@ -69,6 +69,8 @@ public:
   void drawContentsInRegion (Painter& p, const Rect& r,
 			     bool withBasePoints = false);
 
+  void invalidateClipRegions ();
+
   /*
    * Layer management
    */

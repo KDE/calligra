@@ -362,9 +362,8 @@ void Canvas::printDocument () {
   if (printer.setup (this)) {
     Painter paint;
     paint.begin (&printer);
-    
+    paint.setClipping (false);
     document->drawContents (paint);
-
     paint.end ();
   }
 }

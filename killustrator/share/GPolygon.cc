@@ -225,6 +225,7 @@ void GPolygon::draw (Painter& p, bool withBasePoints) {
       }
     }
   }
+  p.setClipping (false);
   p.restore ();
 }
 
