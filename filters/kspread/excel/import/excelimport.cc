@@ -38,7 +38,7 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 
-#include <sidewinder.h>
+#include <swinder.h>
 #include <iostream>
 
 typedef KGenericFactory<ExcelImport, KoFilter> ExcelImportFactory;
