@@ -23,7 +23,8 @@ csvfilterdia.h csvfilterdia_factory.h csvexport.h csvexport_factory.h
 
 METASOURCES = AUTO
 
-service_DATA = kspread_csv_import.desktop kspread_csv_dia.desktop kspread_csv_export.desktop
+service_DATA = kspread_csv_import.desktop kspread_csv_export.desktop \
+kspread_csv_import_dia.desktop kspread_csv_export_dia.desktop
 servicedir = $(kde_servicesdir)
 
 data_DATA = x-csv.desktop

@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=Service
+Name=KSpreadCSVFilterDia
+Comment=CSV Filter Dialog
+Comment[cs]=Dialog CSV filtru
+Comment[de]=CSV-Filterdialog
+Comment[eo]=CSV-filtro-dialogo
+Comment[fi]=CSV-suotimen dialogi
+Comment[hu]=CSV szűrő
+Comment[ja]=CSV フィルターダイアログ
+Comment[no]=CSV-filterdialog
+Comment[ro]=Dialog de filtrare CVS
+Comment[sl]=Dialog s filtrom CSV
+Export=text/x-csv
+ExportDescription=CSV
+Import=application/x-kspread
+ImportDescription=KSpread
+X-KDE-Library=libcsvfilterdia
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilterDialog

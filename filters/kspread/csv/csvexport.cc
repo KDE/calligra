@@ -47,7 +47,7 @@ CSVExport::CSVExport(KoFilter *parent, QString name) :
 
 const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
                                const QCString& from, const QCString& to,
-                               const QString &) {
+                               const QString &config) {
 
     if(to!="text/x-csv" || from!="application/x-kspread")
     {
@@ -68,7 +68,11 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
     // should do the conversion after loading.
     // But those who wrote French and German versions of Excel didn't think so...
     //QChar decimal_point = '.';
-    QChar csv_delimiter = ',';
+    QChar csv_delimiter;
+    if(config.isEmpty())
+	csv_delimiter = ',';
+    else
+	csv_delimiter = config[0];
 
     // read the whole file
     QByteArray array=in.read(in.size());
