@@ -35,6 +35,7 @@
 #include <koFilterChain.h>
 #include <koGlobal.h>
 #include <koUnit.h>
+#include <koStyleStack.h>
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>
@@ -1081,7 +1082,83 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
 
   table->print()->setHeadFootLine( hleft, hmiddle, hright,
                                    fleft, fmiddle, fright );
+  if ( style->hasAttribute( "style:page-master-name" ) )
+  {
+      QString masterPageLayoutStyleName=style->attribute( "style:page-master-name" );
+      kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+      QDomElement *masterLayoutStyle = m_styles[masterPageLayoutStyleName];
+      kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+      if ( !masterLayoutStyle )
+          return;
+      KoStyleStack styleStack;
+      styleStack.push( *masterLayoutStyle );
+      loadOasisMasterLayoutPage( table, styleStack );
+  }
 }
+
+void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStack &styleStack )
+{
+    float left = 0.0;
+    float right = 0.0;
+    float top = 0.0;
+    float bottom = 0.0;
+    float width = 0.0;
+    float height = 0.0;
+    QString orientation = "Portrait";
+    QString format;
+
+    // Laurent : Why we stored layout information as Millimeter ?!!!!!
+    // kspread used point for all other attribute
+    // I don't understand :(
+    if ( styleStack.hasAttribute( "fo:page-width" ) )
+    {
+        width = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:page-width" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:page-height" ) )
+    {
+        height = KoUnit::toMM( KoUnit::parseValue( styleStack.attribute( "fo:page-height" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-top" ) )
+    {
+        top = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-bottom" ) )
+    {
+        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-bottom" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-left" ) )
+    {
+        left = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-right" ) )
+    {
+        right = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) ) );
+    }
+    if ( styleStack.hasAttribute( "style:writing-mode" ) )
+    {
+        kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttribute( "style:writing-mode" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "style:print-orientation" ) )
+    {
+        orientation = ( styleStack.attribute( "style:print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+    }
+    if ( styleStack.hasAttribute("style:num-format" ) )
+    {
+        kdDebug()<<" num-format :"<<styleStack.attribute("style:num-format" )<<endl;
+        //todo fixme
+    }
+    format = QString( "%1x%2" ).arg( width ).arg( height );
+    kdDebug()<<" format : "<<format<<endl;
+    table->print()->setPaperLayout( left, top, right, bottom, format, orientation );
+
+    kdDebug()<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
+//<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
+//          QString format = paper.attribute( "format" );
+//      QString orientation = paper.attribute( "orientation" );
+//        m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+//      }
+}
+
 
 bool OpenCalcImport::parseBody( int numOfTables )
 {
@@ -1196,6 +1273,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
         QString stylename = "pm" + tableStyle->attribute( "style:master-page-name" );
 
         loadTableMasterStyle( table, stylename );
+
       }
     }
     if ( t.hasAttribute( "table:print-ranges" ) )
