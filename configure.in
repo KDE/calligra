@@ -206,7 +206,6 @@ AC_OUTPUT( \
 	kformula/Makefile \
 	kformula/pics/Makefile \
 	killustrator/Makefile \
-	killustrator/doc/Makefile \
 	killustrator/filter/Makefile \
 	killustrator/koffice/Makefile \
 	killustrator/pics/Makefile \
