@@ -196,12 +196,10 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
     // Now for each entry in the autocorrect list, look if
     // the word of the same size in wordArray matches.
     // This allows an o(n) behaviour instead of an o(n^2).
-    KWAutoFormatEntryMap::ConstIterator it = m_entries.begin();
-    KWAutoFormatEntryMap::ConstIterator end = m_entries.end();
-    for ( ; it != end ; ++it )
+    for(int i=m_maxFindLength;i>0;--i)
     {
-        int i = it.key().length();
-        if ( i<=m_maxFindLength && wordArray[i]!=0 && it.key() == wordArray[i] )
+        KWAutoFormatEntryMap::ConstIterator it = m_entries.find(wordArray[i]);
+        if ( wordArray[i]!=0 && it!=m_entries.end() )
         {
             KWTextDocument * textdoc = parag->textDocument();
             unsigned int length = wordArray[i].length();
