@@ -54,9 +54,29 @@
 #include <koStream.h>
 
 #include <strstream.h>
-#include <kautoarray.h>
 
 #include "../kchart/kchart_part.h"
+
+/* include the kauto_array class here since this is the only place
+ * where it is used */
+template <class X>
+class kauto_array {
+  X *ptr;
+ 
+public:
+  typedef X element_type;
+  explicit kauto_array(size_t n) { ptr = new X[n]; }
+  ~kauto_array() { delete [] ptr; }
+
+  X& operator[](int n) { return ptr[n]; }
+  operator X*() { return ptr; }
+  X* operator +(int offset) { return ptr + offset; }
+
+private:
+  kauto_array& operator=(const kauto_array& a);
+  kauto_array(const kauto_array& a);
+};
+
 
 /* ############ Torben
    There is this m_lstChildren in KSpreadTable. Make sure to keep in addition
