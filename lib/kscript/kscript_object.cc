@@ -184,7 +184,7 @@ bool KSObject::disconnect( KSContext& context )
 	  // No connections in existence right now
 	  return true;
       }
-      
+
       l->clear();
     }
     else if ( KSUtil::checkType( context, args[0], KSValue::MethodType, false ) )
@@ -229,6 +229,8 @@ KSObject::SignalList* KSObject::findSignal( const QString& name, bool _insert )
 
 bool KSObject::emitSignal( const QString& name, KSContext& context )
 {
+  ASSERT( context.value() && context.value()->type() == KSValue::ListType );
+
   SignalList* l = findSignal( name );
   // Nobody registered for that signal until now
   if ( !l )
@@ -237,9 +239,16 @@ bool KSObject::emitSignal( const QString& name, KSContext& context )
   // Remove our namespaces
   KSSubScope* scope = context.scope()->popLocalScope();
 
+  // Save the parameters
+  QValueList<KSValue::Ptr> params = context.value()->listValue();
+
   SignalList::Iterator it = l->begin();
   for( ; it != l->end(); ++it )
   {
+    // Refill the parameters for 2nd, 3nd, ... call.
+    if ( it != l->begin() )
+	context.setValue( new KSValue( params ) );
+
     (*it).m_slot->ref();
     (*it).m_receiver->ref();
     KSMethod method( (*it).m_receiver->module(), new KSValue( (*it).m_receiver ), (*it).m_slot );
@@ -251,6 +260,9 @@ bool KSObject::emitSignal( const QString& name, KSContext& context )
       return false;
     }
   }
+
+  // Now get rid of the parameters
+  params.clear();
 
   // Resume namespaces
   context.scope()->pushLocalScope( scope );
@@ -314,7 +326,7 @@ bool KSObject::inherits( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "Object::inherits" ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType ) )
     return false;
 
@@ -372,12 +384,12 @@ bool KSScriptObject::destructor()
       KSValue::Ptr v = new KSValue( KSValue::ListType );
       ref(); ref();
       v->listValue().append( new KSValue( this ) );
+      KSContext l( context );
+      l.setValue( v );
 
       printf("Calling destructor %s\n",(*it)->classValue()->name().ascii() );
       if ( (*it2)->type() == KSValue::FunctionType )
       {
-	KSContext l( context );
-	l.setValue( v );
 	if ( !(*it2)->functionValue()->call( l ) )
 	{
 	  context.scope()->popModule();
@@ -387,7 +399,6 @@ bool KSScriptObject::destructor()
       }
       else if ( (*it2)->type() == KSValue::BuiltinMethodType )
       {
-	KSContext l( context );
 	if ( !( (this->*((*it2)->builtinMethodValue()))( l ) ) )
 	{
 	  context.scope()->popModule();

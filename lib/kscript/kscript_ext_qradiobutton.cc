@@ -13,13 +13,11 @@
 #define RETURN_LEFTEXPR( n, value ) if ( name == n ) { KSValue::Ptr ptr = value; ptr->setMode( KSValue::LeftExpr ); return ptr; }
 #define RETURN_RIGHTEXPR( n, value ) if ( name == n ) { return value; }
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
-#define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; }
+#define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; return TRUE; }
 
-KSClass_QRadioButton::KSClass_QRadioButton( KSModule* m ) : KSScriptClass( m, "QRadioButton", 0 )
+KSClass_QRadioButton::KSClass_QRadioButton( KSModule* m, const char* name ) : KSClass_QWidget( m, name )
 {
   nameSpace()->insert( "QRadioButton", new KSValue( (KSBuiltinMethod)&KSObject_QRadioButton::ksQRadioButton ) );
-  nameSpace()->insert( "show", new KSValue( (KSBuiltinMethod)&KSObject_QRadioButton::ksQRadioButton_show ) );
-  nameSpace()->insert( "destroy", new KSValue( (KSBuiltinMethod)&KSObject_QRadioButton::ksQRadioButton_delete ) );
 }
 
 KSScriptObject* KSClass_QRadioButton::createObject( KSClass* c )
@@ -33,73 +31,53 @@ KSObject_QRadioButton::KSObject_QRadioButton( KSClass* c ) : KSObject_QWidget( c
 
 bool KSObject_QRadioButton::ksQRadioButton( KSContext& context )
 {
-  printf("QRadioButton\n");
+  qDebug("QRadioButton\n");
 
   if ( !checkDoubleConstructor( context, "QRadioButton" ) )
     return false;
 
-  // TODO: check parameters
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    
+  QWidget* parent = 0;
+  QString name;
 
-  setObject( new QRadioButton( "Test", 0 ) );
+  if ( args.count() >= 1 )
+  {
+      if ( !checkArguments( context, context.value(), "QRadioButton::QRadioButton", KS_Qt_Object::WidgetType ) )
+	  return FALSE;
+      parent = KSObject_QWidget::convert( args[0] );
+  }
+  if ( args.count() >= 2 )
+  {
+      if ( !checkArguments( context, context.value(), "QRadioButton::QRadioButton", KS_Qt_Object::StringType ) )
+	  return FALSE;
+      name = args[1]->stringValue();
+  }
+  if ( args.count() > 2 )
+  {
+      KSUtil::tooFewArgumentsError( context, "QRadioButton::QRadioButton" );
+      return FALSE;
+  }
 
-  printf("QRadioButton 2\n");
+  setObject( new QRadioButton( parent, name ) );
 
-  return true;
-}
-
-bool KSObject_QRadioButton::ksQRadioButton_show( KSContext& context )
-{
-  printf("QRadioButton::show\n");
-
-  if ( !checkLive( context, "QRadioButton::show" ) )
-    return false;
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QRadioButton::QRadioButton" ) )
-    return false;
-
-  QRadioButton* w = (QRadioButton*)object();
-  w->show();
-
-  return true;
-}
-
-bool KSObject_QRadioButton::ksQRadioButton_delete( KSContext& context )
-{
-  printf("QRadioButton::delete\n");
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QRadioButton::delete" ) )
-    return false;
-
-  if ( !object() )
-    return true;
-
-  delete object();
-  setObject( 0 );
+  qDebug("QRadioButton 2\n");
 
   return true;
 }
 
 KSValue::Ptr KSObject_QRadioButton::member( KSContext& context, const QString& name )
 {
-  RETURN_RIGHTEXPR( "width", new KSValue( WIDGET->width() ) );
-  RETURN_RIGHTEXPR( "height", new KSValue( WIDGET->height() ) );
-  RETURN_RIGHTEXPR( "x", new KSValue( WIDGET->x() ) );
-  RETURN_RIGHTEXPR( "y", new KSValue( WIDGET->y() ) );
-
   CHECK_LEFTEXPR( context, name );
 
-  RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );
   RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
 
-  return KS_Qt_Object::member( context, name );
+  return KSObject_QWidget::member( context, name );
 }
 
-bool KSObject_QRadioButton::setMember( KSContext& context, const QString& name, KSValue* v )
+bool KSObject_QRadioButton::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
-  SET_PROP( "geometry", WIDGET->setGeometry( *KSObject_QRect::convert( v ) ), RectType )
-  else
-    return KS_Qt_Object::setMember( context, name, v );
 
-  return TRUE;
+  return KSObject_QWidget::setMember( context, name, v );
 }

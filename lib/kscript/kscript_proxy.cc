@@ -61,7 +61,7 @@ bool KSProxy::inherits( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "Proxy::inherits" ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType ) )
     return false;
 

@@ -58,7 +58,7 @@ bool ksfunc_toInt( KSContext& context )
   if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
   {
     context.setValue( new KSValue( (KScript::Long)args[0]->doubleValue() ) );
-    return true;    
+    return true;
   }
   else if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
   {
@@ -86,7 +86,7 @@ bool ksfunc_toFloat( KSContext& context )
   if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
   {
     context.setValue( new KSValue( (KScript::Double)args[0]->intValue() ) );
-    return true;    
+    return true;
   }
   else if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
   {
@@ -116,8 +116,7 @@ bool ksfunc_connect( KSContext& context )
   if ( !KSUtil::checkType( context, args[1], KSValue::MethodType, true ) )
     return false;
 
-  // TODO: Check for builtin signal
-  QString sig = args[0]->methodValue()->function()->functionValue()->name();
+  QString sig = args[0]->methodValue()->name();
   KSObject* o = args[0]->methodValue()->object()->objectValue();
 
   args[1]->methodValue()->function()->ref();

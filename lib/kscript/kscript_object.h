@@ -133,7 +133,14 @@ protected:
 class KSMethod : public QShared
 {
 public:
-  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func ) : QShared(), m_object( obj ), m_func( func ), m_module( m ) { }
+  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func ) : QShared(), m_object( obj ), m_func( func ), m_module( m ), m_method_name( 0 ) { }
+  /**
+   * Use this method if the function is KSBuiltinFunction or KSStructBuiltinFunction.
+   * In this case we pass the name of the method. No copy of this name is made and the
+   * destructor does not free the string. So you should only pass constants here.
+   */
+  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func, const char* name )
+      : QShared(), m_object( obj ), m_func( func ), m_module( m ), m_method_name( name ) { }
   virtual ~KSMethod() { }
 
   bool call( KSContext& context );
@@ -143,10 +150,14 @@ public:
 
   KSModule* module() { return m_module; }
 
+  const char* name() { return ( m_method_name != 0 ? m_method_name : m_func->functionValue()->name().latin1() ); }
+
 private:
   KSValue::Ptr m_object;
   KSValue::Ptr m_func;
   KSModule* m_module;
+
+  const char* m_method_name;
 };
 
 class KSProperty : public QShared

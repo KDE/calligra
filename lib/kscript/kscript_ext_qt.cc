@@ -2,12 +2,15 @@
 #include "kscript_ext_qwidget.h"
 #include "kscript_ext_qapplication.h"
 #include "kscript_ext_qrect.h"
-#include "kscript_ext_qpushbutton.h"
-#include "kscript_ext_qradiobutton.h"
+#include "kscript_ext_qlineedit.h"
 #include "kscript_ext_qcheckbox.h"
+#include "kscript_ext_qradiobutton.h"
+#include "kscript_ext_qpushbutton.h"
 #include "kscript_ext_qlabel.h"
+#include "kscript_ext_qvboxlayout.h"
 #include "kscript_value.h"
 #include "kscript_util.h"
+#include "kscript.h"
 
 #define CHECKTYPE( context, v, type ) if ( !checkType( context, v, type ) ) return FALSE;
 
@@ -19,11 +22,13 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QWidget", new KSValue( new KSClass_QWidget( module ) ) );
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
   module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
-  module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
-  module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
+  module->addObject( "QLineEdit", new KSValue( new KSClass_QLineEdit( module ) ) );
   module->addObject( "QRadioButton", new KSValue( new KSClass_QRadioButton( module ) ) );
+  module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
   module->addObject( "QCheckBox", new KSValue( new KSClass_QCheckBox( module ) ) );
-
+  module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
+  module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
+	  
   return module;
 }
 
@@ -42,7 +47,7 @@ KS_Qt_Callback* KS_Qt_Callback::self()
   return s_pSelf;
 }
 
-void KS_Qt_Callback::connect( QObject* s, KSObject* r )
+void KS_Qt_Callback::connect( QObject* s, KS_Qt_Object* r )
 {
   DestroyCallback c;
   c.m_sender = s;
@@ -51,14 +56,16 @@ void KS_Qt_Callback::connect( QObject* s, KSObject* r )
   QObject::connect( s, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 }
 
-void KS_Qt_Callback::connect( QObject* s, const QString& sig, KSObject* r, const KSValue::Ptr& slot )
+void KS_Qt_Callback::connect( QObject* s, const char* qt_sig, const char* qt_slot,
+			      KSObject* r, const char* ks_sig )
 {
   Connection c;
   c.m_sender = s;
-  c.m_signal = sig;
   c.m_receiver = r;
-  c.m_slot = slot;
+  c.m_kscriptSignal = ks_sig;
   m_connections.append( c );
+
+  QObject::connect( s, qt_sig, this, qt_slot );
 }
 
 void KS_Qt_Callback::disconnect( KSObject* r )
@@ -76,7 +83,10 @@ void KS_Qt_Callback::disconnect( KSObject* r )
   while( it2 != m_callbacks.end() )
   {
     if ( r == (*it2).m_receiver )
-      it2 = m_callbacks.remove( it2 );
+    {
+	(*it2).m_sender->disconnect( SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
+	it2 = m_callbacks.remove( it2 );
+    }
     else
       ++it2;
   }
@@ -89,11 +99,59 @@ void KS_Qt_Callback::slotDestroyed()
   QValueList<DestroyCallback>::Iterator it = m_callbacks.begin();
   while( it != m_callbacks.end() )
   {
-    if ( s == (*it).m_sender )
-      if ( (*it).m_receiver->status() == KSObject::Alive )
-	(*it).m_receiver->kill();
+      if ( s == (*it).m_sender && (*it).m_receiver->status() == KSObject::Alive )
+      {
+	  qDebug("QObject %x sent kill signal", (int)s);
+	  (*it).m_receiver->setObject( 0 );
+	  (*it).m_receiver->kill();
+	  // Try again. The problem is that ->kill() causes our list
+	  // to be modified somewhere. So we trust noone and start again
+	  // from the very beginning.
+	  it = m_callbacks.begin();
+      }
+      else
+	  ++it;
+  }
+}
+
+void KS_Qt_Callback::emitSignal( const QValueList<KSValue::Ptr>& params, const char* name )
+{
+  QValueList<Connection>::Iterator it =  m_connections.begin();
+  while( it != m_connections.end() )
+  {
+    if ( sender() == (*it).m_sender && (*it).m_kscriptSignal == name )
+    {
+	// Get context
+	KSContext& context = (*it).m_receiver->getClass()->module()->interpreter()->context();
+	KSModule* module = context.scope()->popModule();
+
+	// Switch to our modules namespace
+	context.scope()->pushModule( (*it).m_receiver->getClass()->module() );
+
+	context.setValue( new KSValue( params ) );
+
+	(*it).m_receiver->emitSignal( (*it).m_kscriptSignal, context );
+
+	context.scope()->popModule();
+	context.scope()->pushModule( module );
+    }
     ++it;
   }
+}
+
+void KS_Qt_Callback::textChanged( const QString& param1 )
+{
+    QValueList<KSValue::Ptr> params;
+    params.append( new KSValue( param1 ) );
+    
+    emitSignal( params, "textChanged" );
+}
+
+void KS_Qt_Callback::clicked()
+{
+    QValueList<KSValue::Ptr> params;
+    
+    emitSignal( params, "clicked" );
 }
 
 /**********************************************
@@ -124,14 +182,17 @@ bool KS_Qt_Object::destructor()
 {
   bool b = KSScriptObject::destructor();
 
+  KS_Qt_Callback::self()->disconnect( this );
+
   if ( m_object )
   {
     if ( m_ownership )
-      delete m_object;
+    {
+	qDebug("Deleting %x and widget %x %s",(int)this,(int)m_object,m_object->className());
+	delete m_object;
+    }
     m_object = 0;
   }
-
-  KS_Qt_Callback::self()->disconnect( this );
 
   return b;
 }
@@ -141,7 +202,7 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
   KSValue::Ptr ptr;
   if ( name == "name" )
     ptr = new KSValue( QString( m_object->name() ) );
-    
+
   if ( ptr )
   {
     ptr->setMode( KSValue::LeftExpr );
@@ -151,7 +212,7 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
   return KSObject::member( context, name );
 }
 
-bool KS_Qt_Object::setMember( KSContext& context, const QString& name, KSValue* v )
+bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   if ( name == "name" )
   {
@@ -335,6 +396,20 @@ bool KS_Qt_Object::checkType( KSContext& context, KSValue* v, KS_Qt_Object::Type
       return true;
     KSUtil::castingError( context, "Object", "QRect" );
     return false;
+  case ObjectType:
+    if ( !KSUtil::checkType( context, v, KSValue::ObjectType, _fatal ) )
+      return false;
+    if ( v->objectValue()->inherits( "KS_Qt_Object" ) )
+      return true;
+    KSUtil::castingError( context, "Object", "QObject" );
+    return false;
+  case WidgetType:
+    if ( !KSUtil::checkType( context, v, KSValue::ObjectType, _fatal ) )
+      return false;
+    if ( v->objectValue()->inherits( "KSObject_QWidget" ) )
+      return true;
+    KSUtil::castingError( context, "Object", "QWidget" );
+    return false;
   case NoType:
     ASSERT( 0 );
   }
@@ -367,6 +442,29 @@ bool KS_Qt_Object::checkLive( KSContext& context, const QString& name )
   return true;
 }
 
+/**********************************************
+ *
+ * KSClass_QObject
+ *
+ **********************************************/
+
+KSClass_QObject::KSClass_QObject( KSModule* m, const char* name ) : KSScriptClass( m, name, 0 )
+{
+};
+    
+bool KSClass_QObject::hasSignal( const QString& name )
+{
+    if ( m_signals.contains( name ) )
+	return TRUE;
+    
+    return KSScriptClass::hasSignal( name );
+}
+
+void KSClass_QObject::addQtSignal( const QString& str )
+{
+    m_signals.append( str );
+}
 
 #include "kscript_ext_qt.moc"
+
 #undef CHECKTYPE

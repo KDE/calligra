@@ -1,6 +1,7 @@
 #include "kscript_ext_qapplication.h"
 #include "kscript_context.h"
-#include <stdio.h>
+#include "kscript_util.h"
+
 #include <qapplication.h>
 
 KSClass_QApplication::KSClass_QApplication( KSModule* m ) : KSScriptClass( m, "QApplication", 0 )
@@ -21,7 +22,7 @@ KSObject_QApplication::KSObject_QApplication( KSClass* c ) : KS_Qt_Object( c )
 
 bool KSObject_QApplication::ksQApplication( KSContext& context )
 {
-  printf("QApplication\n");
+  qDebug("QApplication\n");
 
   if ( object() )
   {
@@ -30,7 +31,8 @@ bool KSObject_QApplication::ksQApplication( KSContext& context )
     return false;
   }
 
-  // TODO: check parameters
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QApplication::QApplication" ) )
+      return false;
 
   ASSERT( qApp );
   // We dont know the application object -> FALSE
@@ -41,7 +43,7 @@ bool KSObject_QApplication::ksQApplication( KSContext& context )
 
 bool KSObject_QApplication::ksQApplication_exec( KSContext& context )
 {
-  printf("QApplication::exec\n");
+  qDebug("QApplication::exec\n");
 
   if ( !object() )
   {
@@ -50,7 +52,8 @@ bool KSObject_QApplication::ksQApplication_exec( KSContext& context )
     return false;
   }
 
-  // TODO: check parameters
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QApplication::QApplication" ) )
+      return false;
 
   QApplication* a = (QApplication*)object();
   a->exec();
@@ -58,10 +61,12 @@ bool KSObject_QApplication::ksQApplication_exec( KSContext& context )
   return true;
 }
 
-bool KSObject_QApplication::ksQApplication_delete( KSContext& )
+bool KSObject_QApplication::ksQApplication_delete( KSContext& context )
 {
-  printf("QApplication::delete\n");
-  // TODO: check parameters
+  qDebug("QApplication::delete\n");
+  
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QApplication::QApplication" ) )
+      return false;
 
   if ( !object() )
     return true;

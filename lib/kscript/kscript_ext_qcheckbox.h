@@ -1,19 +1,15 @@
-
-// NOT YET FUNCTIONAL, ONLY FOR TESTING
-
 #ifndef __KSCRIPT_EXT_QCHECKBOX_H__
 #define __KSCRIPT_EXT_QCHECKBOX_H__
 
 #include "kscript_class.h"
-// #include "kscript_ext_qt.h"
 #include "kscript_ext_qwidget.h"
 
 class KSContext;
 
-class KSClass_QCheckBox : public KSScriptClass
+class KSClass_QCheckBox : public KSClass_QWidget
 {
 public:
-  KSClass_QCheckBox( KSModule* );
+  KSClass_QCheckBox( KSModule*, const char* name = "QCheckBox" );
 
   virtual bool isBuiltin() { return true; }
 
@@ -27,11 +23,9 @@ public:
   KSObject_QCheckBox( KSClass* );
 
   bool ksQCheckBox( KSContext& );
-  bool ksQCheckBox_show( KSContext& );
-  bool ksQCheckBox_delete( KSContext& );
 
   KSValue::Ptr member( KSContext& context, const QString& name );
-  bool setMember( KSContext& context, const QString& name, KSValue* v );
+  bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );
 
   bool inherits( const char* name ) { return ( strcmp( name, "KSObject_QCheckBox" ) == 0 || KSObject_QWidget::inherits( name ) ); }
 };

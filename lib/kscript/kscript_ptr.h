@@ -1,5 +1,5 @@
 /* This class is property of Troll Tech. It's here temporarily
-   until it appears in Qt's CVS 
+   until it appears in Qt's CVS
 */
 
 #ifndef __KSCRIPT_PTR_H__
@@ -29,7 +29,7 @@ public:
     ptr = p.ptr; if ( ptr ) ptr->ref();
     return *this;
   }
-  KSSharedPtr<T>& operator= ( T* p ) { 
+  KSSharedPtr<T>& operator= ( T* p ) {
     if ( ptr && ptr->deref() ) delete ptr;
     ptr = p; /* ptr->ref(); */
     return *this;
@@ -42,7 +42,7 @@ public:
   operator bool() const { return ( ptr != 0 ); }
   operator bool() { return (ptr != 0); }
   operator T*() { return ptr; }
-  operator const T*() const { return ptr; }
+  operator T*() const { return (T*)ptr; }
 
   const T& operator*() const { return *ptr; }
   T& operator*() { return *ptr; }

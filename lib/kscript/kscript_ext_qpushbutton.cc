@@ -1,8 +1,15 @@
+// We want to access the signals
+#include <qobjectdefs.h>
+#ifdef signals
+#undef signals
+#define signals public
+#endif
+
 #include "kscript_ext_qpushbutton.h"
 #include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
-#include <stdio.h>
+
 #include <qpushbutton.h>
 
 #define WIDGET ((QPushButton*)object())
@@ -10,13 +17,15 @@
 #define RETURN_LEFTEXPR( n, value ) if ( name == n ) { KSValue::Ptr ptr = value; ptr->setMode( KSValue::LeftExpr ); return ptr; }
 #define RETURN_RIGHTEXPR( n, value ) if ( name == n ) { return value; }
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
-#define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; }
+#define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; return TRUE; }
 
-KSClass_QPushButton::KSClass_QPushButton( KSModule* m ) : KSScriptClass( m, "QPushButton", 0 )
+KSClass_QPushButton::KSClass_QPushButton( KSModule* m, const char* name ) : KSClass_QWidget( m, name )
 {
   nameSpace()->insert( "QPushButton", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton ) );
-  nameSpace()->insert( "show", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_show ) );
-  nameSpace()->insert( "destroy", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_delete ) );
+  nameSpace()->insert( "setText", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_setText ) );
+  nameSpace()->insert( "clicked", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_clicked ) );
+
+  addQtSignal( "clicked" );
 }
 
 KSScriptObject* KSClass_QPushButton::createObject( KSClass* c )
@@ -24,79 +33,104 @@ KSScriptObject* KSClass_QPushButton::createObject( KSClass* c )
   return new KSObject_QPushButton( c );
 }
 
-KSObject_QPushButton::KSObject_QPushButton( KSClass* c ) : KSObject_QWidget( c ) // was: KS_Qt_Object
+// ------------------------------------------------------
+
+KSObject_QPushButton::KSObject_QPushButton( KSClass* c ) : KSObject_QWidget( c )
 {
 }
 
 bool KSObject_QPushButton::ksQPushButton( KSContext& context )
 {
-  printf("QPushButton\n");
+  qDebug("QPushButton\n");
 
   if ( !checkDoubleConstructor( context, "QPushButton" ) )
     return false;
 
-  // TODO: check parameters
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    
+  QWidget* parent = 0;
+  QString name;
 
-  setObject( new QPushButton( 0 ) );
+  if ( args.count() >= 1 )
+  {
+      if ( !checkArguments( context, context.value(), "QPushButton::QPushButton", KS_Qt_Object::WidgetType ) )
+	  return FALSE;
+      parent = KSObject_QWidget::convert( args[0] );
+  }
+  if ( args.count() >= 2 )
+  {
+      if ( !checkArguments( context, context.value(), "QPushButton::QPushButton", KS_Qt_Object::StringType ) )
+	  return FALSE;
+      name = args[1]->stringValue();
+  }
+  if ( args.count() > 2 )
+  {
+      KSUtil::tooFewArgumentsError( context, "QPushButton::QPushButton" );
+      return FALSE;
+  }
 
-  printf("QPushButton 2\n");
+  setObject( new QPushButton( parent, name ) );
+
+  qDebug("QPushButton 2\n");
 
   return true;
 }
 
-bool KSObject_QPushButton::ksQPushButton_show( KSContext& context )
+void KSObject_QPushButton::setObject( QObject* obj )
 {
-  printf("QPushButton::show\n");
+    if ( obj )
+	KS_Qt_Callback::self()->connect( obj, SIGNAL( clicked() ),
+					 SLOT( clicked() ), this, "clicked" );
 
-  if ( !checkLive( context, "QPushButton::show" ) )
+    KSObject_QWidget::setObject( obj );
+}
+
+bool KSObject_QPushButton::ksQPushButton_setText( KSContext& context )
+{
+  qDebug("QPushButton::setText\n");
+
+  if ( !checkLive( context, "QPushButton::setText" ) )
     return false;
 
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QPushButton::QPushButton" ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "QPushButton::setText" ) )
     return false;
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !checkType( context, args[0], KS_Qt_Object::StringType ) )
+      return false;
 
   QPushButton* w = (QPushButton*)object();
-  w->show();
+  w->setText( args[0]->stringValue() );
 
   return true;
 }
 
-bool KSObject_QPushButton::ksQPushButton_delete( KSContext& context )
+bool KSObject_QPushButton::ksQPushButton_clicked( KSContext& context )
 {
-  printf("QPushButton::delete\n");
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QPushButton::delete" ) )
+  if ( !checkLive( context, "QPushButton::clicked" ) )
     return false;
 
-  if ( !object() )
-    return true;
+  if ( !KSUtil::checkArgumentsCount( context, 0, "QPushButton::clicked" ) )
+    return false;
 
-  delete object();
-  setObject( 0 );
+  WIDGET->clicked();
 
   return true;
 }
 
 KSValue::Ptr KSObject_QPushButton::member( KSContext& context, const QString& name )
 {
-  RETURN_RIGHTEXPR( "width", new KSValue( WIDGET->width() ) );
-  RETURN_RIGHTEXPR( "height", new KSValue( WIDGET->height() ) );
-  RETURN_RIGHTEXPR( "x", new KSValue( WIDGET->x() ) );
-  RETURN_RIGHTEXPR( "y", new KSValue( WIDGET->y() ) );
-
   CHECK_LEFTEXPR( context, name );
 
   RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );
-  RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
 
-  return KS_Qt_Object::member( context, name );
+  return KSObject_QWidget::member( context, name );
 }
 
-bool KSObject_QPushButton::setMember( KSContext& context, const QString& name, KSValue* v )
+bool KSObject_QPushButton::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
-  SET_PROP( "geometry", WIDGET->setGeometry( *KSObject_QRect::convert( v ) ), RectType )
-  else
-    return KS_Qt_Object::setMember( context, name, v );
 
-  return TRUE;
+  return KSObject_QWidget::setMember( context, name, v );
 }

@@ -191,7 +191,7 @@ bool KSEval_interface_dcl( KSParseNode* node, KSContext& context )
 
   context.setValue( 0 );
 
-  return true; 
+  return true;
 }
 
 bool KSEval_interface_header( KSParseNode* node, KSContext& context )
@@ -325,21 +325,21 @@ bool KSEval_param_dcls( KSParseNode* node, KSContext& context )
 bool KSEval_t_vertical_line( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
-  
+
   if ( !KSUtil::checkType( context, l.value(), KSValue::BoolType, true ) )
     return false;
   if ( !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
     return false;
 
   context.setValue( new KSValue( (KScript::Boolean)( l.value()->boolValue() || r.value()->boolValue() ) ) );
-  
+
   return true;
 }
 
 bool KSEval_t_circumflex( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
-  
+
   if ( !KSUtil::checkType( context, l.value(), KSValue::BoolType, true ) )
     return false;
   if ( !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
@@ -347,49 +347,49 @@ bool KSEval_t_circumflex( KSParseNode* node, KSContext& context )
 
   context.setValue( new KSValue( (KScript::Boolean)( ( l.value()->boolValue() && !r.value()->boolValue() ) ||
 						     ( !l.value()->boolValue() && !r.value()->boolValue() ) ) ) );
-  
+
   return true;
 }
 
 bool KSEval_t_ampersand( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
-  
+
   if ( !KSUtil::checkType( context, l.value(), KSValue::BoolType, true ) )
     return false;
   if ( !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
     return false;
 
   context.setValue( new KSValue( (KScript::Boolean)( l.value()->boolValue() && r.value()->boolValue() ) ) );
-  
+
   return true;
 }
 
 bool KSEval_t_shiftright( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
-  
+
   if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) )
     return false;
   if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     return false;
 
   context.setValue( new KSValue( (KScript::Long)( l.value()->intValue() >> r.value()->intValue() ) ) );
-  
+
   return true;
 }
 
 bool KSEval_t_shiftleft( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
-  
+
   if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) )
     return false;
   if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     return false;
 
   context.setValue( new KSValue( (KScript::Long)( l.value()->intValue() << r.value()->intValue() ) ) );
-  
+
   return true;
 }
 
@@ -754,11 +754,11 @@ bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
 
   if ( !context.value() )
     context.scope()->addObject( node->getIdent(), l.shareValue() );
-  else if ( context.value()->type() == KSValue::ClassType )  
+  else if ( context.value()->type() == KSValue::ClassType )
     context.value()->classValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
-  else if ( context.value()->type() == KSValue::StructClassType )  
+  else if ( context.value()->type() == KSValue::StructClassType )
     context.value()->structClassValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
-  else if ( context.value()->type() == KSValue::InterfaceType )  
+  else if ( context.value()->type() == KSValue::InterfaceType )
     context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
   else
     ASSERT( 0 );
@@ -783,10 +783,10 @@ bool KSEval_class_dcl( KSParseNode* node, KSContext& context )
   if ( right )
     if ( !right->eval( context ) )
       return false;
-  
+
   context.setValue( 0 );
 
-  return true; 
+  return true;
 }
 
 bool KSEval_class_header( KSParseNode* node, KSContext& context )
@@ -890,7 +890,7 @@ bool KSEval_func_lines( KSParseNode* node, KSContext& context )
   if ( node->branch2() )
     if ( !node->branch2()->eval( context ) )
       return false;
-  
+
   return true;
 }
 
@@ -1092,7 +1092,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
   if ( l.value()->type() == KSValue::StringType )
   {
     int len = l.value()->stringValue().length();
-    
+
     if ( index >= len && !context.leftExpr() )
     {
       QString tmp( "Too large index %1");
@@ -1395,7 +1395,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
   }
   else
     ASSERT( 0 );
-    
+
   // Resume namespaces
   context.scope()->pushLocalScope( scope );
   context.scope()->pushModule( module );
@@ -1433,7 +1433,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
       context.exception()->addLine( node->getLineNo() );
       return false;
     }
-    
+
     context.setValue( v );
 
     return true;
@@ -1447,7 +1447,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
       context.exception()->addLine( node->getLineNo() );
       return false;
     }
-    
+
     context.setValue( v );
 
     return true;
@@ -1461,7 +1461,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
       context.exception()->addLine( node->getLineNo() );
       return false;
     }
-    
+
     context.setValue( v );
 
     return true;
@@ -1475,7 +1475,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
       context.exception()->addLine( node->getLineNo() );
       return false;
     }
-    
+
     context.setValue( v );
 
     return true;
@@ -1516,7 +1516,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
     context.setValue( new KSValue( new KSMethod( context.scope()->module(), l.shareValue(), v ) ) );
     return true;
   }
-  /* 
+  /*
   else
   {
     QString tmp( "From %1 to Object" );
@@ -1530,9 +1530,10 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
     return false;
   }
 
-  if ( v->type() == KSValue::FunctionType || v->type() == KSValue::BuiltinMethodType ||
-       v->type() == KSValue::StructBuiltinMethodType || v->type() == KSValue::ProxyBuiltinMethodType )
-    context.setValue( new KSValue( new KSMethod( module, l.shareValue(), v ) ) );
+  if ( v->type() == KSValue::FunctionType  )
+      context.setValue( new KSValue( new KSMethod( module, l.shareValue(), v ) ) );
+  else if ( v->type() == KSValue::BuiltinMethodType || v->type() == KSValue::StructBuiltinMethodType )
+    context.setValue( new KSValue( new KSMethod( module, l.shareValue(), v, node->getIdent() ) ) );
   else
     context.setValue( v );
 
@@ -1936,7 +1937,7 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
       // Same mode as the array
       v->setMode( mode );
       context.scope()->addObject( node->getStringLiteral(), v );
-      
+
       // Get the key of the map in the local scope
       v = new KSValue( it.key() );
       v->setMode( KSValue::Constant );
@@ -1951,7 +1952,7 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
 	return false;
       }
     }
-    
+
     context.scope()->localScope()->popNamespace();
   }
   else
@@ -1975,7 +1976,7 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
       // Same mode as the array
       v->setMode( mode );
       context.scope()->addObject( node->getIdent(), v );
-      
+
       // Evaluate the body
       KSContext ctx( context );
       if ( !node->branch2()->eval( ctx ) )
@@ -1985,7 +1986,7 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
 	return false;
       }
     }
-    
+
     context.scope()->localScope()->popNamespace();
   }
 
@@ -2127,7 +2128,7 @@ bool KSEval_signal_dcl( KSParseNode* node, KSContext& context )
   // Call the signal
   if ( !v->objectValue()->emitSignal( node->getIdent(), context ) )
     return false;
-  
+
   return true;
 }
 
@@ -2245,7 +2246,7 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
     // All children should know about the new KSStructClass
     context.setValue( new KSValue( ( p = new KSStructClass( context.scope()->module(), node->getIdent(), node ) ) ) );
     context.scope()->addObject( node->getIdent(), context.shareValue() );
-  
+
     KSParseNode *left = node->branch1();
     if ( left )
       if ( !left->eval( context ) )
@@ -2262,7 +2263,7 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
     context.interpreter()->addRepoidImplementation( it.data()->stringValue(), new KSValue( p ) );
   }
 
-  return true; 
+  return true;
 }
 
 bool KSEval_t_struct_members( KSParseNode* node, KSContext& context )
@@ -2334,11 +2335,11 @@ extern bool KSEval_t_try( KSParseNode* node, KSContext& context )
     context.scope()->localScope()->popNamespace();
     return true;
   }
-  
+
   // We got an error. First resume the namespace. This
   // will do automatically a stack unwinding
   context.scope()->localScope()->popNamespace();
-    
+
   // Execute the catch clauses
   KSParseNode *right = node->branch2();
   ASSERT( right );
@@ -2382,7 +2383,7 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
 
     // Resume namespace
     context.scope()->localScope()->popNamespace();
-    
+
     return true;
   }
 

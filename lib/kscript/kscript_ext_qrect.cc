@@ -9,7 +9,7 @@
 #define RETURN_LEFTEXPR( n, value ) if ( name == n ) { KSValue::Ptr ptr = value; ptr->setMode( KSValue::LeftExpr ); return ptr; }
 #define RETURN_RIGHTEXPR( n, value ) if ( name == n ) { return value; }
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
-#define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; }
+#define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; return TRUE; }
 #define ARG( v, i ) (v->listValue()[i])
 
 KSClass_QRect* KSClass_QRect::s_pSelf = 0;
@@ -75,7 +75,7 @@ KSValue::Ptr KSObject_QRect::member( KSContext& context, const QString& name )
   return KSScriptObject::member( context, name );
 }
 
-bool KSObject_QRect::setMember( KSContext& context, const QString& name, KSValue* v )
+bool KSObject_QRect::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   SET_PROP( "width", m_rect.setWidth( v->intValue() ), KS_Qt_Object::IntType )
   SET_PROP( "height", m_rect.setHeight( v->intValue() ), KS_Qt_Object::IntType )
@@ -85,10 +85,8 @@ bool KSObject_QRect::setMember( KSContext& context, const QString& name, KSValue
   SET_PROP( "right", m_rect.setRight( v->intValue() ), KS_Qt_Object::IntType )
   SET_PROP( "bottom", m_rect.setBottom( v->intValue() ), KS_Qt_Object::IntType )
   SET_PROP( "top", m_rect.setTop( v->intValue() ), KS_Qt_Object::IntType )
-  else
-    return KSScriptObject::setMember( context, name, v );
 
-  return true;
+  return KSScriptObject::setMember( context, name, v );
 }
 
 #undef CHECKTYPE

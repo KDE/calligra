@@ -36,11 +36,11 @@ public:
   bool ksQRect_unite( KSContext& context );
 
   KSValue::Ptr member( KSContext& context, const QString& name );
-  bool setMember( KSContext& context, const QString& name, KSValue* v );
+  bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );
 
   bool inherits( const char* name ) { return ( strcmp( name, "KSObject_QRect" ) == 0 || KSScriptObject::inherits( name ) ); }
 
-  static QRect* convert( KSValue* v ) { return &((KSObject_QRect*)v->objectValue())->m_rect; }
+  static QRect* convert( const KSValue::Ptr& v ) { return &((KSObject_QRect*)v->objectValue())->m_rect; }
 
 private:
   QRect m_rect;
