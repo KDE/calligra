@@ -23,7 +23,6 @@
 #include <qstringlist.h>
 
 #include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
 
 /*!
  */
