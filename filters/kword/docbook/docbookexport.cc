@@ -26,7 +26,6 @@
 #include <docbookexport.moc>
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <qregexp.h>
 #include <qdir.h>
 #include <qdom.h>
 
@@ -236,7 +235,7 @@ void DocBookWorker::ProcessTableData ( const Table &table )
 
         doFullDocument ( *(*cellIt).paraList );
 
-        tableText += "        <ENTRY>" + outputText.replace ( QRegExp ( "\n" ), "" ) + "</ENTRY>\n";
+        tableText += "        <ENTRY>" + outputText.replace ( '\n' , "" ) + "</ENTRY>\n";
 
         outputText = tmpBuf;
     }
