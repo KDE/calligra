@@ -28,7 +28,8 @@
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
   KDialogBase( parent, "sheetPropertiesDialog", true, 
-  i18n("Sheet Properties"), Ok|Cancel|Default )
+  i18n("Sheet Properties"), 
+  KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Default )
 {
   QVBox* mainWidget = makeVBoxMainWidget();
   d = new SheetPropertiesBase( mainWidget );
