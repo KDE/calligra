@@ -87,7 +87,9 @@ class KexiDataTableView : public KexiTableView
 		int		m_maxRecord;
 		int		m_records;
 
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 //		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
 };
 

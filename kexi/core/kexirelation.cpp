@@ -39,7 +39,9 @@ KexiRelation::KexiRelation(KexiProject *parent,const char * name)
 {
 
 	m_parent=parent;
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 #if 0
 	m_relationList.clear();
 	m_undoStack.clear();
@@ -52,7 +54,9 @@ void KexiRelation::incUsageCount(){m_usageCount++;}
 void KexiRelation::decUsageCount()
 {
 	m_usageCount--;
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 #if 0
 
 	if (!m_usageCount)
@@ -62,7 +66,9 @@ void KexiRelation::decUsageCount()
 #endif
 }
 
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 #if 0
 RelationList KexiRelation::projectRelations(){return m_relationList;}
 void KexiRelation::updateRelationList(QObject *who,RelationList relationList)
@@ -78,7 +84,9 @@ void KexiRelation::updateRelationList(QObject *who,RelationList relationList)
 void KexiRelation::storeRelations(KoStore *store)
 {
 
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 #if 0
     QDomDocument domDoc("Relations");
     domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
@@ -137,7 +145,9 @@ void KexiRelation::storeRelations(KoStore *store)
 
 void KexiRelation::loadRelations(KoStore *store)
 {
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 #if 0
 	m_relationList.clear();
     if(!store->open("relations.xml"))

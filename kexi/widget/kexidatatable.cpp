@@ -312,7 +312,9 @@ KexiDataTable::slotRemoved(QObject *sender, const QString &table, uint record)
 void
 KexiDataTable::slotRemoveCurrentRecord()
 {
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 #if 0
 	//IS IT GOOD WE HAVE THIS HERE? maybe move some to KexiDataTableView?
 	if(m_tableView->selectedItem() && !m_tableView->selectedItem()->isInsertItem())

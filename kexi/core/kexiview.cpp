@@ -397,7 +397,9 @@ KexiView::slotShowProjectProps()
 	KexiProjectProperties p(this, project()->dbConnectionData());
 	if(p.exec())
 	{
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 //		project()->db()->setEncoding(p.encoding());
 //		project()->dbConnection()->setEncoding(p.encoding());
 	}

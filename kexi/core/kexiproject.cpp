@@ -95,7 +95,9 @@ DCOPObject* KexiProject::dcopObject()
 
 bool KexiProject::completeSaving( KoStore* store )
 {
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 //	m_dbconnection->flush(store);
 	m_relationManager->storeRelations(store);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
@@ -335,7 +337,10 @@ void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bo
 bool
 KexiProject::initDBConnection(KexiProjectConnectionData *connection, KoStore *store)
 {
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
+	return false;
 /*
 	if(!connection)
 		return false;

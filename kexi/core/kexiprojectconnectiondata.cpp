@@ -170,7 +170,9 @@ KexiProjectConnectionData::writeInfo(QDomDocument &domDoc)
 void
 KexiProjectConnectionData::flush(KoStore *store)
 {
+#ifndef Q_WS_WIN
 #warning fixme
+#endif
 #if 0
 	kdDebug() << "KexiDBConnection::flush()" << endl;
 	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && store && !m_persistant)
@@ -191,7 +193,9 @@ KexiProjectConnectionData::flush(KoStore *store)
 void
 KexiProjectConnectionData::provide(KoStore *store)
 {
+#ifndef Q_WS_WIN
 #warning fixme
+#endif
 #if 0
 	kdDebug() << "KexiDBConnection::provide()" << endl;
 	if(!store)
@@ -231,7 +235,9 @@ KexiProjectConnectionData::provide(KoStore *store)
 void
 KexiProjectConnectionData::clean()
 {
+#ifndef Q_WS_WIN
 #warning fixme
+#endif
 #if 0
 	kdDebug() << "KexiDBConnection::clean()" << endl;
 	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && !m_persistant)

@@ -50,7 +50,9 @@ KexiProjectProperties::KexiProjectProperties(QWidget *parent, KexiProjectConnect
 	g->addWidget(m_encoding,	0, 1);
 	g->addMultiCell(vSpace,	1, 1, 0, 1);
 
-#warning fixme
+#ifndef Q_WS_WIN
+#warning FIXME
+#endif
 //	setupDBProperties(dbconn);
 }
 

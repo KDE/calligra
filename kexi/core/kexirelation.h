@@ -36,7 +36,9 @@ class KEXICORE_EXPORT KexiRelation : public QObject
 	public:
 		KexiRelation(KexiProject *parent, const char *name="relationmanager");
 		~KexiRelation();
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 /*
 		RelationList projectRelations();
 		void updateRelationList(QObject *who, RelationList relationList);
@@ -50,7 +52,9 @@ class KEXICORE_EXPORT KexiRelation : public QObject
 		void relationListUpdated(QObject *sender);
 		
 	private:
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 /*		typedef QValueStack<RelationList> UndoRedoStack;
 		RelationList m_relationList;*/
 		KexiProject *m_parent;

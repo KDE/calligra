@@ -26,9 +26,11 @@ class QDomElement;
 class QDomDocument;
 class KoStore;
 /**
- * this class aims to provide
+ * This class aims to provide
  * methods to store/load database settings
- * especially for file based engines
+ * especially for file based engines. Extends KexiDB::ConnectionData with 
+ * additional information (selected driver name and database name) 
+ * that allows fully-automatic reconnect eg. on next application startup. 
  */
 
 class KEXICORE_EXPORT KexiProjectConnectionData:public KexiDB::ConnectionData

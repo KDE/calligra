@@ -36,12 +36,16 @@ class KEXICORE_EXPORT KexiProjectProperties : public KDialogBase
 	public:
 		KexiProjectProperties(QWidget *parent, KexiProjectConnectionData *dbconn);
 		~KexiProjectProperties();
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 //		KexiDB::Encoding encoding();
 
 	protected:
+#ifndef Q_WS_WIN
 #warning FIXME
-//		void		setupDBProperties(KexiProjectConnectionData *db);
+#endif
+	//		void		setupDBProperties(KexiProjectConnectionData *db);
 
 	private:
 		QComboBox	*m_encoding;
