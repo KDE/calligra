@@ -2249,6 +2249,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 	}
 	else {
 		newcol = d->curCol; //no changes
+		newcol = QMAX(0, newcol); //may not be < 0 !
 	}
 	newrow = QMAX( 0, row);
 	newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
@@ -2452,7 +2453,6 @@ bool KexiTableView::acceptEditor()
 
 	//show the validation result if not OK:
 	if (res == KexiValidator::Error) {
-		//js: todo: message!!!
 		if (desc.isEmpty())
 			KMessageBox::sorry(this, msg);
 		else
@@ -2507,6 +2507,7 @@ bool KexiTableView::acceptRowEdit()
 	bool success = false;
 	bool allow = true;
 	const bool inserting = d->newRowEditing;
+	QString msg, desc;
 //	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
 
 	if (m_data->rowEditBuffer()->isEmpty()) {
@@ -2520,13 +2521,17 @@ bool KexiTableView::acceptRowEdit()
 			kdDebug() << "-- NOTHING TO ACCEPT!!!" << endl;
 		}
 	}
-	else {
+	else {//not empty edit buffer:
 		if (d->newRowEditing) {
 			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), allow);
 			if (allow) {
 				kdDebug() << "-- INSERTING: " << endl;
 				m_data->rowEditBuffer()->debug();
 				success = m_data->saveNewRow(*d->pCurrentItem);
+				if (!success) {
+					msg = i18n("Row insering failed.");
+					//todo: add desc...
+				}
 			}
 		}
 		else {
@@ -2536,6 +2541,10 @@ bool KexiTableView::acceptRowEdit()
 				kdDebug() << "-- UPDATING: " << endl;
 				m_data->rowEditBuffer()->debug();
 				success = m_data->saveRowChanges(*d->pCurrentItem);
+				if (!success) {
+					msg = i18n("Row changing failed.");
+					//todo: add desc...
+				}
 			}
 		}
 	}
@@ -2547,7 +2556,10 @@ bool KexiTableView::acceptRowEdit()
 		else {
 			kdDebug() << "EDIT ROW - ERROR!" << endl;
 		}
-		//js todo: show errors
+		if (desc.isEmpty())
+			KMessageBox::sorry(this, msg);
+		else
+			KMessageBox::detailedSorry(this, msg, desc);
 	}
 	
 	if (allow) {
