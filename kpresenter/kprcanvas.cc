@@ -6571,7 +6571,7 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
     {
         newy= (y )-(visibleRect().top()+diffy());
         if( newy < 0)
-            m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+newy);
+            m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+newy  - ymargin);
     }
 
     int newx= (x+xmargin)-(visibleRect().right()+diffx());
@@ -6583,7 +6583,7 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
     {
         newx= (x /*+xmargin*/)-(visibleRect().left()+diffx());
         if( newx < 0)
-            m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+newx);
+            m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+newx - xmargin );
     }
 
 }
