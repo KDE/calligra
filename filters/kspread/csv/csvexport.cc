@@ -201,7 +201,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           str += "\n";
 
         QString name( expDialog.getTableDelimiter() );
-        QString tname( i18n("<TABLENAME>") );
+        const QString tname( i18n("<SHEETNAME>") );
         int pos = name.find( tname );
         if ( pos != -1 )
         {

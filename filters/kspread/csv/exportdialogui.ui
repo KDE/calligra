@@ -105,7 +105,7 @@
                                     <cstring>m_tableDelimiter</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>********&lt;TABLENAME&gt;********</string>
+                                    <string>********&lt;SHEETNAME&gt;********</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -121,7 +121,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;TABLENAME&gt; gets replaced by the name of the next sheet.</string>
+                                    <string>&lt;SHEETNAME&gt; gets replaced by the name of the next sheet.</string>
                                 </property>
                                 <property name="alignment">
                                     <set>WordBreak|AlignVCenter</set>
