@@ -7,7 +7,7 @@
 #define __VROTATETOOL_H__
 
 #include "vtool.h"
-
+#include "vselection.h"
 
 class VRotateTool : public VTool
 {
@@ -32,6 +32,8 @@ private:
 	KoPoint m_sp;
 
 	double m_angle;
+
+	VHandleNode m_activeNode;
 
 	bool m_isDragging;
 };

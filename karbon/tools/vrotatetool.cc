@@ -19,7 +19,6 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vpath.h"
-#include "vselection.h"
 #include "vtransformcmd.h"
 
 #include <kdebug.h>
@@ -79,8 +78,7 @@ VRotateTool::drawTemporaryObject()
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	VHandleNode node = view()->part()->document().selection()->handleNode( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
-	if( view()->part()->document().selection()->objects().count() > 0 && node != node_mm )
+	if( view()->part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
 	{
 		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 		KoRect rect = view()->part()->document().selection()->boundingBox();
@@ -91,22 +89,22 @@ VRotateTool::drawTemporaryObject()
 			m_sp.y() - view()->canvasWidget()->contentsY() );
 
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
-		if( node == node_lt )
+		if( m_activeNode == node_lt )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.left() - m_sp.x() );
-		else if( node == node_mt )
+		else if( m_activeNode == node_mt )
 			m_angle += M_PI / 2;
-		else if( node == node_rt )
+		else if( m_activeNode == node_rt )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.right() - m_sp.x() );
-		else if( node == node_rm)
+		else if( m_activeNode == node_rm)
 		{
 		}
-		else if( node == node_rb )
+		else if( m_activeNode == node_rb )
 			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.right() - m_sp.x() );
-		else if( node == node_mb )
+		else if( m_activeNode == node_mb )
 			m_angle -= M_PI / 2;
-		else if( node == node_lb )
+		else if( m_activeNode == node_lb )
 			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.left() - m_sp.x() );
-		else if( node == node_lm )
+		else if( m_activeNode == node_lm )
 		{
 		}
 		// rotate operation
@@ -207,6 +205,8 @@ VRotateTool::eventFilter( QEvent* event )
 		m_fp.setY( mouse_event->pos().y() );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
+
+		m_activeNode = view()->part()->document().selection()->handleNode( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
 		// draw initial object:
 		drawTemporaryObject();

@@ -5,7 +5,6 @@ REAL BUGS:
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	revert() in vpath::combine() doesnt work
--	fix rotatetool (to verify, just click and release without dragging)
 
 TODO:
 -	unify vselecttool and vselectnodestool
