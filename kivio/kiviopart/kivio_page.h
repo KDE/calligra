@@ -123,6 +123,7 @@ class KivioPage : public QObject
     void selectStencil( KivioStencil * );
     void selectStencils( double, double, double, double );
     QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
+    bool checkForStencilTypeInSelection(KivioStencilType type);
 
     KoRect getRectForAllSelectedStencils();
     KoRect getRectForAllStencils();

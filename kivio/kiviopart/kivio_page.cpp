@@ -1646,5 +1646,21 @@ void KivioPage::setPaintSelected(bool paint)
   }
 }
 
+bool KivioPage::checkForStencilTypeInSelection(KivioStencilType type)
+{
+  KivioStencil *pStencil = m_lstSelection.first();
+
+  while( pStencil )
+  {
+    if(pStencil->type() == type) {
+      return true;
+    }
+    
+    pStencil = m_lstSelection.next();
+  }
+  
+  return false;
+}
+
 #include "kivio_page.moc"
 

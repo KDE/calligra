@@ -533,6 +533,30 @@ void KivioView::initActions()
   toggleShowRulers(true);
 
   updateButton();
+        
+  m_setFontFamily->setFont( doc()->defaultFont().family() );
+  m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
+  m_setBold->setChecked( false );
+  m_setItalics->setChecked( false );
+  m_setUnderline->setChecked( false );
+  m_lineWidthAction->setCurrentWidth(1.0);
+  m_lineStyleAction->setCurrentSelection(Qt::SolidLine);
+  showAlign(Qt::AlignHCenter);
+  showVAlign(Qt::AlignVCenter);
+
+  m_pStencilGeometryPanel->setSize(0.0,0.0);
+  m_pStencilGeometryPanel->setPosition(0.0,0.0);
+  m_pStencilGeometryPanel->setRotation(0);
+
+  m_setArrowHeads->setCurrentStartArrow(0);
+  m_setArrowHeads->setCurrentEndArrow(0);
+
+  m_menuTextFormatAction->setEnabled( false );
+  m_menuStencilConnectorsAction->setEnabled( false );
+
+  m_setFGColor->setCurrentColor(QColor(0, 0, 0));
+  m_setBGColor->setCurrentColor(QColor(255, 255, 255));
+  m_setTextColor->setCurrentColor(QColor(0, 0, 0));
 
   viewZoom(zoomHandler()->zoom());
 }
@@ -1310,6 +1334,10 @@ void KivioView::updateToolBars()
 
         m_menuTextFormatAction->setEnabled( false );
         m_menuStencilConnectorsAction->setEnabled( false );
+    
+        m_setFGColor->setCurrentColor(QColor(0, 0, 0));
+        m_setBGColor->setCurrentColor(QColor(255, 255, 255));
+        m_setTextColor->setCurrentColor(QColor(0, 0, 0));
     }
     else
     {
@@ -1369,14 +1397,22 @@ void KivioView::updateToolBars()
 
     if(activePage()->selectedStencils()->count() > 1) {
       m_groupAction->setEnabled(true);
+      m_alignAndDistribute->setEnabled(true);
     } else {
       m_groupAction->setEnabled(false);
+      m_alignAndDistribute->setEnabled(false);
     }
     
     if(activePage()->selectedStencils()->count() > 0) {
       m_editCut->setEnabled(true);
       m_editCopy->setEnabled(true);
-      m_ungroupAction->setEnabled(true);
+      
+      if(activePage()->checkForStencilTypeInSelection(kstGroup)) {
+        m_ungroupAction->setEnabled(true);
+      } else {
+        m_ungroupAction->setEnabled(false);
+      }
+      
       m_stencilToBack->setEnabled(true);
       m_stencilToFront->setEnabled(true);
     } else {
@@ -1671,6 +1707,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
 
     // Mark the page as modified and repaint
     m_pDoc->updateView(m_pActivePage);
+    pluginManager()->activateDefaultTool();
 }
 
 void KivioView::alignStencilsDlg()
