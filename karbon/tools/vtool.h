@@ -62,7 +62,7 @@ protected:	// for selection-tool. it has to reimplement eventFilter.
 inline void
 VTool::recalcCoords()
 {
-	// calculate angle and radius:
+	// calculate radius and angle:
 	if( m_calcPolar )
 	{
 		// radius:

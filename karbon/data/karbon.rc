@@ -9,8 +9,8 @@
 		<Action name="edit_cut"/>
 		<Action name="edit_copy"/>
 		<Action name="edit_paste"/>
-		<Action name="edit_selectall"/>
-		<Action name="delete"/>
+		<Action name="edit_select_all"/>
+		<Action name="edit_delete"/>
 		<Separator/>
 		<Menu name="object">
 			<text>P&amp;urge</text>
@@ -18,7 +18,11 @@
 		</Menu>
 	</Menu>
 	<Menu name="object">
-		<text>&amp;Modify</text>
+		<text>&amp;Object</text>
+		<Separator/>
+	</Menu>
+		<Menu name="text">
+		<text>&amp;Text</text>
 		<Separator/>
 	</Menu>
 	<Menu name="view">

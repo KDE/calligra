@@ -65,8 +65,12 @@ VCCmdSpiral::createPath()
 	// translate path to center:
 	QWMatrix m;
 	m.translate( m_centerX, m_centerY );
-	// sadly it's not easy possible to simply add m_angle while creation:
-	m.rotate( m_angle * VGlobal::one_pi_180 );
+
+	// sadly it's not feasible to simply add m_angle while creation.
+	m.rotate(
+		( m_angle + ( m_clockWise ? VGlobal::pi : 0.0 ) ) * // make cw-spiral start at mouse-pointer
+			VGlobal::one_pi_180 );	// one_pi_180 = 1/(pi/180) = 180/pi.
+
 	path->transform( m );
 
 	return path;

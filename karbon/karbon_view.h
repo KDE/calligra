@@ -7,7 +7,7 @@
 
 #include <koView.h>
 
-#include "vcanvas.h"	// necessary because of canvas()
+#include "vcanvas.h"
 
 class QPaintEvent;
 
@@ -70,8 +70,9 @@ private:
 	// i currently think that all views should be in the same state (static):
 	static VTool* s_currentTool;
 
-	// actions:
+	// zoom action:
 	KSelectAction* m_zoomAction;
+	// shape actions:
 	KToggleAction* m_ellipseToolAction;
 	KToggleAction* m_polygonToolAction;
 	KToggleAction* m_rectangleToolAction;

@@ -10,17 +10,17 @@ noinst_HEADERS = \
 	vcanvas.h \
 	vcommand.h \
 	vglobal.h \
+	vhandle.h \
 	vlayer.h \
 	vobject.h \
-	vpath.h \
-	vhandle.h
+	vpath.h 
 
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
 	vcommand.cc \
+	vhandle.cc \
 	vlayer.cc \
-	vpath.cc \
-	vhandle.cc
+	vpath.cc 
 
 libkarboncore_la_METASOURCES = \
 	AUTO

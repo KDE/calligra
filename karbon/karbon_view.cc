@@ -40,10 +40,8 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 
-	// initial tool is selection-tool:
-	if ( s_currentTool == 0L )
-		s_currentTool = VMToolSelect::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+	// initial tool is select-tool:
+	selectTool();
 	m_selectToolAction->setChecked( true );
 }
 
@@ -169,8 +167,8 @@ KarbonView::initActions()
 		"edit_paste" );
   	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(),
 		"edit_selectall" );
-  	new KAction( i18n("&Delete"), "editdelete", 0, this, SLOT( editDeleteSelection() ), actionCollection(),
-		"delete" );
+  	new KAction( i18n( "&Delete" ), "editdelete", 0, this, SLOT( editDeleteSelection() ), actionCollection(),
+		"editdelete" );
 
 	// tools:
 	m_ellipseToolAction = new KToggleAction(
@@ -207,8 +205,8 @@ KarbonView::initActions()
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 
-	// view
-	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, this, SLOT( zoomChanged() ), actionCollection(),
+	// zoom:
+	m_zoomAction = new KSelectAction( i18n( "&Zoom" ), 0, this, SLOT( zoomChanged() ), actionCollection(),
 		"view_zoom" );
 	QStringList stl;
 	stl
@@ -216,9 +214,9 @@ KarbonView::initActions()
 		<< i18n( "50%" )
 		<< i18n( "100%" )
 		<< i18n( "200%" );
-	m_zoomAction->setItems(stl);
-	m_zoomAction->setCurrentItem(2);
-	m_zoomAction->setEditable(true);
+	m_zoomAction->setItems( stl );
+	m_zoomAction->setCurrentItem( 2 );
+	m_zoomAction->setEditable( true );
 }
 
 void
