@@ -37,6 +37,7 @@
 #include "kexiformview.h"
 
 #include "kexidbfactory.h"
+#include "formmanager.h"
 
 KexiSubForm::KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name)
 : QScrollView(parent, name), m_manager(manager), m_form(0), m_widget(0)
@@ -127,6 +128,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
+
+	m_propDesc["dataSource"] = i18n("Data source");
 }
 
 KexiDBFactory::~KexiDBFactory()

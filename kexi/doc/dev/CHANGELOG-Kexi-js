@@ -389,6 +389,11 @@ Core
 - KexiProperty - added 'fixed' flag for 'list' types
  (the flag is used in Property Editor in most cases)
 - KexiPart::ObjectTypes introduced
+Form Designer
+- some fixes for efficiency
+- WidgetFactory can now define custom i18n'd:
+  -property descriptions
+  -property value descriptions
 
 2004-12-20
 SQLite Drivers (2 and 3)
