@@ -1878,28 +1878,10 @@ void KPresenterView::penChosen()
     QColor c = actionPenColor->color();
     if ( !m_canvas->currentTextObjectView() )
     {
-        KPrPage *page = m_canvas->activePage();
-        QPen e_pen = QPen(c, page->getPen(pen).width(), page->getPen(pen).style());
-
-        KMacroCommand *macro= 0L;
-
-        KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                                    PenCmd::Color, page->objectList() );
-        if(cmd)
-        {
-            macro= new KMacroCommand(i18n( "Change Pen Color" ));
-            macro->addCommand(cmd);
-        }
-        cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                                  PenCmd::Color, stickyPage()->objectList() );
-        if(cmd)
-        {
-            if (!macro )
-                macro= new KMacroCommand(i18n( "Change Pen Color" ));
-            macro->addCommand(cmd);
-        }
-        if(macro)
-            m_pKPresenterDoc->addCommand(macro);
+        KCommand * cmd( getPenCmd( i18n( "Change Pen Color" ), QPen(c), 
+                                   L_NORMAL, L_NORMAL, PenCmd::Color ) );
+        if( cmd )
+            m_pKPresenterDoc->addCommand( cmd );
         else
             pen.setColor( c );
     }
@@ -2024,29 +2006,10 @@ void KPresenterView::extraLineBeginDoubleLineArrow()
 
 void KPresenterView::setExtraLineBegin(LineEnd lb)
 {
-    KPrPage *page=m_canvas->activePage();
-    QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), page->getPen(pen).style());
-
-    KMacroCommand *macro=0L;
-
-    KCommand *cmd=page->setPen( e_pen, lb, page->getLineEnd( lineEnd ),
-                                PenCmd::LineBegin, page->objectList() );
-    if(cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n("Change Line Begin"));
-        macro->addCommand(cmd);
-    }
-    cmd=stickyPage()->setPen( e_pen, lb, page->getLineEnd( lineEnd ),
-                              PenCmd::LineBegin, stickyPage()->objectList() );
-    if(cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n("Change Line Begin"));
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
+    KCommand * cmd( getPenCmd( i18n("Change Line Begin"), QPen(), 
+                               lb, L_NORMAL, PenCmd::LineBegin ) );
+    if( cmd )
+        kPresenterDoc()->addCommand( cmd );
     else
         lineBegin = lb;
 }
@@ -2093,29 +2056,10 @@ void KPresenterView::extraLineEndDoubleLineArrow()
 
 void KPresenterView::setExtraLineEnd(LineEnd le)
 {
-    KPrPage *page=m_canvas->activePage();
-    QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), page->getPen(pen).style());
-
-    KMacroCommand *macro=0L;
-
-    KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), le,
-                                PenCmd::LineEnd, page->objectList() );
-    if(cmd)
-    {
-        if (!macro )
-            macro=new KMacroCommand(i18n("Change Line End"));
-        macro->addCommand(cmd);
-    }
-    cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), le,
-                              PenCmd::LineEnd, stickyPage()->objectList() );
-    if(cmd)
-    {
-        if (!macro )
-            macro=new KMacroCommand(i18n("Change Line End"));
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
+    KCommand * cmd( getPenCmd( i18n("Change Line End"), QPen(), 
+                               L_NORMAL, le, PenCmd::LineEnd ) );
+    if( cmd )
+        kPresenterDoc()->addCommand( cmd );
     else
         lineEnd = le;
 }
@@ -2152,32 +2096,13 @@ void KPresenterView::extraPenStyleNoPen()
 
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KPrPage *page = m_canvas->activePage();
-    QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), style );
-
-    KMacroCommand *macro=0L;
-
-    KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                                PenCmd::Style, page->objectList() );
-    if(cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n("Change Pen Style"));
-        macro->addCommand(cmd);
-    }
-    cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                              PenCmd::Style, stickyPage()->objectList() );
-    if(cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n("Change Pen Style"));
-
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
+    KCommand * cmd( getPenCmd( i18n("Change Pen Style"), QPen(style), 
+                               L_NORMAL, L_NORMAL, PenCmd::Style ) );
+    
+    if( cmd )
+        kPresenterDoc()->addCommand( cmd );
     else
-        pen = e_pen;
+        pen.setStyle( style );
 }
 
 void KPresenterView::extraPenWidth1()
@@ -2232,32 +2157,15 @@ void KPresenterView::extraPenWidth10()
 
 void KPresenterView::setExtraPenWidth( unsigned int width )
 {
-    KPrPage *page=m_canvas->activePage();
-    QPen e_pen = QPen(page->getPen(pen).color(), width, page->getPen(pen).style());
+    QPen tmpPen;
+    tmpPen.setWidth( width );
+    KCommand * cmd( getPenCmd( i18n("Change Pen Width"), tmpPen, 
+                               L_NORMAL, L_NORMAL, PenCmd::Width ) );
 
-    KMacroCommand *macro=0L;
-
-    KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                                PenCmd::Width, page->objectList() );
-    if(cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n("Change Pen Width"));
-        macro->addCommand(cmd);
-    }
-    cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                              PenCmd::Width, stickyPage()->objectList() );
-    if(cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n("Change Pen Width"));
-
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
+    if( cmd )
+        kPresenterDoc()->addCommand( cmd );
     else
-        pen = e_pen;
+        pen.setWidth( width );
 }
 
 void KPresenterView::newPageLayout( KoPageLayout _layout )
@@ -3376,23 +3284,13 @@ void KPresenterView::styleOk()
 
     if ((confPenDia = styleDia->getConfPenDia()))
     {
-        cmd=m_canvas->activePage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
-                                           confPenDia->getPenConfigChange(), m_canvas->activePage()->objectList());
-
+        cmd = getPenCmd( i18n( "Apply Properties" ), confPenDia->getPen(), confPenDia->getLineBegin(), 
+                         confPenDia->getLineEnd(), confPenDia->getPenConfigChange() );
         if(cmd)
         {
             if ( !macro)
                 macro=new KMacroCommand(i18n( "Apply Properties" ) );
-            macro->addCommand(cmd);
-        }
 
-        cmd=stickyPage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
-                                 confPenDia->getPenConfigChange(), stickyPage()->objectList());
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
             macro->addCommand(cmd);
         }
     }
@@ -7179,6 +7077,28 @@ void KPresenterView::slotCorrectWord()
                                          edit->cursor(), act->text(),
                                          KoTextDocument::Standard, i18n("Replace Word") ));
     }
+}
+
+KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb, LineEnd le, int flags )
+{
+    KMacroCommand * macro = NULL;
+
+    KCommand * cmd = m_canvas->activePage()->setPen( pen, lb, le, flags );
+    if( cmd )
+    {
+        macro = new KMacroCommand( name );
+        macro->addCommand( cmd );
+    }
+    
+    cmd = stickyPage()->setPen( pen, lb, le, flags );
+    if( cmd )
+    {
+        if ( !macro )
+            macro = new KMacroCommand( name );
+        macro->addCommand( cmd );
+    }
+
+    return macro;
 }
 
 #include "kpresenter_view.moc"

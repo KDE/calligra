@@ -734,6 +734,12 @@ protected:
     KCommand * applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst);
     void textStyleSelected( KoStyle *_sty );
 
+    /*
+     * create a command which sets the pen according to the flags
+     * for the selected objects on the active and sticky page
+     */
+    KCommand * getPenCmd( const QString &name, QPen pen, LineEnd lb, LineEnd le, int flags );
+
 private:
     void clearSpellChecker();
 

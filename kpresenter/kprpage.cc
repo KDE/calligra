@@ -1476,7 +1476,7 @@ KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     return kppartobject;
 }
 
-KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> /* list */)
+KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags )
 {
     PenCmd * cmd = NULL;
 

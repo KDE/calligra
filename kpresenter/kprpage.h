@@ -143,7 +143,7 @@ public:
 
     bool getProtectContent(bool prot) const;
 
-    KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> list);
+    KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags );
     KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2, 
                         BCType gt, bool unbalanced, int xfactor, int yfactor, int flags );
 
