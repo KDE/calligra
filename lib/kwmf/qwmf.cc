@@ -80,6 +80,15 @@ public:
     virtual ~WinObjPatternBrushHandle() {};
 };
 
+class WinObjFontHandle: public WinObjHandle
+{
+public:
+    virtual void apply( QPainter& p );
+    QFont font;
+    int rotation;
+    virtual ~WinObjFontHandle() {};
+};
+
 void WinObjBrushHandle::apply( QPainter& p )
 {
     p.setBrush( brush );
@@ -93,6 +102,11 @@ void WinObjPenHandle::apply( QPainter& p )
 void WinObjPatternBrushHandle::apply( QPainter& p )
 {
     p.setBrush( brush );
+}
+
+void WinObjFontHandle::apply( QPainter& p )
+{
+    p.setFont( font );
 }
 
 #define MAX_OBJHANDLE 64
@@ -162,6 +176,9 @@ bool QWinMetaFile::load( QBuffer &buffer )
     DWORD rdSize;
     WORD rdFunc;
 
+    mTextAlign = 0;
+    mRotation = 0;
+    mTextColor = Qt::black;
     if ( mFirstCmd ) delete mFirstCmd;
     mFirstCmd = NULL;
 
@@ -307,7 +324,6 @@ bool QWinMetaFile::load( QBuffer &buffer )
 
         if ( i<rdSize )
         {
-            //debug( "file truncated: %s", aFileName.ascii() );
                 kdDebug() << "WMF : file truncated !" << endl;
             return false;
         }
@@ -348,6 +364,7 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
     mWinding = false;
 
     mPainter.begin( aTarget );
+
     for ( cmd=mFirstCmd; cmd; cmd=cmd->next )
     {
         idx = cmd->funcIndex;
@@ -359,9 +376,12 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
 
         if ( mSingleStep || metaFuncTab[ idx ].method==0 )
         {
+            if ( metaFuncTab[ idx ].method == 0 )
             fprintf( stderr, "QWinMetaFile: unimplemented %s", metaFuncTab[ idx ].name );
-            for ( i=0; i<cmd->numParm; i++ )
-                fprintf( stderr, " %d", cmd->parm[ i ] );
+            else
+                fprintf( stderr, "%s  : ", metaFuncTab[ idx ].name );
+            
+            for ( int i=0 ; i < cmd->numParm ; i++ ) fprintf( stderr, " %d", cmd->parm[ i ] );
 
             if ( mSingleStep )
             {
@@ -373,7 +393,6 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
         if ( metaFuncTab[ idx ].method!=0 )
         {
             ( this->*metaFuncTab[ idx ].method )( cmd->numParm, cmd->parm );
-            if ( mSingleStep ) qApp->processEvents( 1000 );
         }
     }
     mPainter.end();
@@ -396,8 +415,8 @@ void QWinMetaFile::setWindowOrg( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowExt( long, short* parm )
 {
-    mBBox.setWidth( QABS( parm[ 1 ] ) );
-    mBBox.setHeight( QABS( parm[ 0 ] ) );
+    mBBox.setWidth( parm[ 1 ] );
+    mBBox.setHeight( parm[ 0 ] );
 
     QRect r = mPainter.window();
 
@@ -441,6 +460,49 @@ void QWinMetaFile::polygon( long, short* parm )
 
 
 //-----------------------------------------------------------------------------
+void QWinMetaFile::polyPolygon( long, short* parm )
+{
+    QRegion region;
+    int  i, j, startPolygon;
+
+    mPainter.save();
+
+    // define clipping region
+    QRect win = bbox();
+    startPolygon = 1+parm[ 0 ];
+    for ( i=0 ; i < parm[ 0 ] ; i++ ) {
+        QPointArray pa1( parm[ 1+i ] );
+        for ( j=0 ; j < parm[ 1+i ] ; j++) {
+            pa1.setPoint ( j, parm[ startPolygon ], parm[ startPolygon+1 ] );
+            startPolygon += 2;
+        }
+        QRegion r( pa1 );
+        region = region.eor( r );
+    }
+    mPainter.setClipRegion( region, QPainter::CoordPainter );
+
+    // fill polygons
+    mPainter.fillRect( win.left(), win.top(), win.width(), win.height(), mPainter.brush() );
+
+    // draw polygon's border if necessary
+    if ( mPainter.pen().style() != Qt::NoPen ) {
+        mPainter.setClipping( false );
+        mPainter.setBrush( Qt::NoBrush );
+
+        QPointArray* pa;
+        int idxPolygon = 1 + parm[ 0 ];
+        for ( i=0 ; i < parm[ 0 ] ; i++ ) {
+            pa = pointArray( parm[ 1+i ], &parm[ idxPolygon ] );
+            mPainter.drawPolygon( *pa );
+            idxPolygon += parm[ 1+i ] * 2;
+        }
+    }
+
+    mPainter.restore();
+}
+
+
+//-----------------------------------------------------------------------------
 void QWinMetaFile::polyline( long, short* parm )
 {
     QPointArray* pa;
@@ -460,9 +522,14 @@ void QWinMetaFile::rectangle( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::roundRect( long, short* parm )
 {
+    int xRnd = 0, yRnd = 0;
+
     // convert (xRound, yRound) in percentage
-    int xRnd = (parm[ 1 ] * 100) / (parm[ 3 ]-parm[ 5 ])  ;
-    int yRnd = (parm[ 0 ] * 100) / (parm[ 2 ]-parm[ 4 ])  ;
+    if ( (parm[ 3 ] - parm[ 5 ]) != 0  )
+        xRnd = (parm[ 1 ] * 100) / (parm[ 3 ] - parm[ 5 ])  ;
+    if ( (parm[ 2 ] - parm[ 4 ]) != 0  )
+        yRnd = (parm[ 0 ] * 100) / (parm[ 2 ] - parm[ 4 ])  ;
+
     mPainter.drawRoundRect( parm[ 5 ], parm[ 4 ], parm[ 3 ]-parm[ 5 ], parm[ 2 ]-parm[ 4 ], xRnd, yRnd );
 }
 
@@ -544,20 +611,7 @@ void QWinMetaFile::setPixel( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setRop( long, short* parm )
 {
-    Qt::RasterOp opTab[] =
-    {
-        Qt::CopyROP/*none*/,
-        Qt::CopyROP, Qt::CopyROP, Qt::EraseROP, Qt::NotCopyROP,    /*  1...4 */
-        Qt::CopyROP, Qt::NotROP, Qt::XorROP, Qt::CopyROP,          /*  5...8 */
-        Qt::NotEraseROP, Qt::NotXorROP, Qt::CopyROP, Qt::NotOrROP, /*  9..12 */
-        Qt::CopyROP, Qt::CopyROP, Qt::OrROP, Qt::CopyROP           /* 13..16 */
-    };
-    Qt::RasterOp rop;
-
-    if ( parm[ 0 ]>0 && parm[ 0 ]<=16 ) rop = opTab[ parm[ 0 ] ];
-    else rop = Qt::CopyROP;
-
-    mPainter.setRasterOp( rop );
+    mPainter.setRasterOp( winToQtRaster( parm[ 0 ] ) );
 }
 
 
@@ -576,6 +630,127 @@ void QWinMetaFile::restoreDC( long, short* )
 
 
 //-----------------------------------------------------------------------------
+void QWinMetaFile::intersectClipRect( long, short* parm )
+{
+    QRegion region( bbox() );
+
+    QRegion newRegion( parm[ 3 ], parm[ 2 ], parm[ 1 ] - parm[ 3 ], parm[ 0 ] - parm[ 2 ] );
+    region = region.intersect( newRegion );
+
+    mPainter.setClipRegion( region, QPainter::CoordPainter );
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::excludeClipRect( long, short* parm )
+{
+    QRegion region( bbox() );
+
+    QRegion newRegion( parm[ 3 ], parm[ 2 ], parm[ 1 ] - parm[ 3 ], parm[ 0 ] - parm[ 2 ] );
+    region = region.subtract( newRegion );
+
+    mPainter.setClipRegion( region, QPainter::CoordPainter );
+}
+
+
+//-----------------------------------------------------------------------------
+// Text
+//-----------------------------------------------------------------------------
+void QWinMetaFile::setTextColor( long, short* parm )
+{
+    mTextColor = color( parm );
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::setTextAlign( long, short* parm )
+{
+    mTextAlign = parm[ 0 ];
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::textOut( long num, short* parm )
+{
+
+    short copyParm[ num + 1 ];
+
+    // re-order parameters
+    int idxOffset = (parm[ 0 ] / 2) + 1 + (parm[ 0 ] & 1);
+    copyParm[ 0 ] = parm[ idxOffset ];
+    copyParm[ 1 ] = parm[ idxOffset + 1 ];
+    copyParm[ 2 ] = parm[ 0 ];
+    copyParm[ 3 ] = 0;
+    memcpy( &copyParm[ 4 ], &parm[ 1 ], parm[ 0 ] );
+
+    extTextOut( num + 1, copyParm );
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::extTextOut( long num, short* parm )
+{
+    char* ptStr;
+    int x, y, width, height;
+    int idxOffset;
+
+    if ( parm[ 3 ] != 0 )       // ETO_CLIPPED flag add 4 parameters
+        ptStr = (char*)&parm[ 8 ];
+    else
+        ptStr = (char*)&parm[ 4 ];
+
+    QCString text( ptStr, parm[ 2 ] + 1 );
+
+    QFontMetrics fm( mPainter.font() );
+    width = fm.width( text ) + fm.descent();  // because fm.width(text) isn't rigth with Italic text
+    height = fm.height();
+
+    mPainter.save();
+
+    if ( mTextAlign & 0x01 ) {       // (left, top) position = current logical position
+        QPoint pos = mPainter.pos();
+        x = pos.x();
+        y = pos.y();
+    }
+    else {                           // (left, top) position = parameters
+        x = parm[ 1 ];
+        y = parm[ 0 ];
+    }
+
+    if ( mRotation ) {
+        mPainter.translate( parm[ 1 ], parm[ 0 ]);
+        mPainter.rotate ( mRotation );
+        mPainter.translate( -parm[ 1 ], -parm[ 0 ] );
+    }
+
+    // alignment
+    if ( mTextAlign & 0x06 )
+        x -= ( width / 2 );
+    if ( mTextAlign & 0x08 )
+        y -= (height - fm.descent());
+
+    mPainter.setPen( mTextColor );
+    idxOffset = (parm[ 2 ] / 2) + 4 + (parm[ 2 ] & 1);
+    if ( ( parm[ 2 ] > 1 ) && ( num >= (idxOffset + parm[ 2 ]) ) && ( parm[ 3 ] == 0 ) ) {
+        // offset for each char
+        int left = x;
+        mPainter.drawText( left, y, width, height, Qt::AlignLeft | Qt::AlignTop, text.mid(0, 1) );
+        for ( int i = 1; i < parm[ 2 ] ; i++ ) {
+            left += parm[ idxOffset + i - 1 ];
+            mPainter.drawText( left, y, width, height, Qt::AlignLeft | Qt::AlignTop, text.mid(i, 1) );
+        }
+    }
+    else {
+        mPainter.drawText( x, y, width, height, Qt::AlignLeft | Qt::AlignTop, text );
+    }
+
+    mPainter.restore();
+
+}
+
+
+
+//-----------------------------------------------------------------------------
 // Bitmap
 //-----------------------------------------------------------------------------
 void QWinMetaFile::dibBitBlt( long num, short* parm )
@@ -587,7 +762,19 @@ void QWinMetaFile::dibBitBlt( long num, short* parm )
             long raster = toDWord( parm );
 
             mPainter.setRasterOp( winToQtRaster( raster )  );
-            mPainter.drawImage( parm[ 7 ], parm[ 6 ], bmpSrc, parm[ 3 ], parm[ 2 ], QABS(parm[ 5 ]), QABS(parm[ 4 ]) );
+
+            // wmf file allow negative width or height
+            mPainter.save();
+            if ( parm[ 5 ] < 0 ) {  // width < 0 => horizontal flip
+                QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+                mPainter.setWorldMatrix( m, true );
+            }
+            if ( parm[ 4 ] < 0 ) {  // height < 0 => vertical flip
+                QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+                mPainter.setWorldMatrix( m, true );
+            }
+            mPainter.drawImage( parm[ 7 ], parm[ 6 ], bmpSrc, parm[ 3 ], parm[ 2 ], parm[ 5 ], parm[ 4 ] );
+            mPainter.restore();
         }
     }
     else {
@@ -605,9 +792,22 @@ void QWinMetaFile::dibStretchBlt( long num, short* parm )
         long raster = toDWord( parm );
 
         mPainter.setRasterOp( winToQtRaster( raster )  );
-        bmpSrc = bmpSrc.copy( parm[ 3 ], parm[ 2 ], QABS(parm[ 5 ]), QABS(parm[ 4 ]) );
-        bmpSrc = bmpSrc.scale( QABS(parm[ 7 ]), QABS(parm[ 6 ]) );
+
+        // wmf file allow negative width or height
+        mPainter.save();
+        if ( parm[ 7 ] < 0 ) {  // width < 0 => horizontal flip
+            QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+            mPainter.setWorldMatrix( m, true );
+        }
+        if ( parm[ 6 ] < 0 ) {  // height < 0 => vertical flip
+            QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+            mPainter.setWorldMatrix( m, true );
+        }
+        bmpSrc = bmpSrc.copy( parm[ 5 ], parm[ 4 ], parm[ 3 ], parm[ 2 ] );
+        // TODO: scale the bitmap ( QImage::scale(parm[ 7 ], parm[ 6 ]) is actually too slow )
+
         mPainter.drawImage( parm[ 9 ], parm[ 8 ], bmpSrc );
+        mPainter.restore();
     }
 }
 
@@ -621,9 +821,22 @@ void QWinMetaFile::stretchDib( long num, short* parm )
         long raster = toDWord( parm );
 
         mPainter.setRasterOp( winToQtRaster( raster )  );
-        bmpSrc = bmpSrc.copy( parm[ 6 ], parm[ 5 ], QABS(parm[ 4 ]), QABS(parm[ 3 ]) );
-        bmpSrc = bmpSrc.scale( QABS(parm[ 8 ]), QABS(parm[ 7 ]) );
+        
+        // wmf file allow negative width or height
+        mPainter.save();
+        if ( parm[ 8 ] < 0 ) {  // width < 0 => horizontal flip
+            QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+            mPainter.setWorldMatrix( m, true );
+        }
+        if ( parm[ 7 ] < 0 ) {  // height < 0 => vertical flip
+            QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+            mPainter.setWorldMatrix( m, true );
+        }
+        bmpSrc = bmpSrc.copy( parm[ 6 ], parm[ 5 ], parm[ 4 ], parm[ 3 ] );
+        // TODO: scale the bitmap ( QImage::scale(parm[ 8 ], parm[ 7 ]) is actually too slow )
+
         mPainter.drawImage( parm[ 10 ], parm[ 9 ], bmpSrc );
+        mPainter.restore();
     }
 }
 
@@ -743,6 +956,26 @@ void QWinMetaFile::createPenIndirect( long, short* parm )
 
     int width = 0;  // TODO : width of pen proportional to device context width
     handle->pen.setWidth( width );
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::createFontIndirect( long , short* parm)
+{
+    WinObjFontHandle* handle = new WinObjFontHandle;
+    addHandle( handle );
+
+    QString family( (const char*)&parm[ 9 ] );
+
+    mRotation = -parm[ 2 ]  / 10;               // text rotation (in 1/10 degree)
+                                                // TODO: memorisation of rotation in object Font
+    handle->font.setFamily( family );
+    handle->font.setFixedPitch( ((parm[ 8 ] & 0x01) == 0) );
+    // TODO: investigation why some test case need -2. (size of font in logical point)
+    handle->font.setPointSize( abs(parm[ 0 ]) - 2 );
+    handle->font.setWeight( (parm[ 4 ] >> 3) );
+    handle->font.setItalic( (parm[ 5 ] & 0x01) );
+    handle->font.setUnderline( (parm[ 5 ] & 0x100) );
 }
 
 
@@ -966,7 +1199,5 @@ bool QWinMetaFile::dibToBmp( QImage& bmp, const char* dib, long size )
         return true;
     }
 }
-
-
 
 

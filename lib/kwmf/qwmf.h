@@ -85,6 +85,8 @@ public: // should be protected but cannot
     void ellipse( long num, short* parms );
     // draw polygon
     void polygon( long num, short* parms );
+    /* draw a list of polygons */
+    void polyPolygon( long num, short* parms );
     // draw series of lines
     void polyline( long num, short* parms );
     /* draw a rectangle */
@@ -111,6 +113,19 @@ public: // should be protected but cannot
     void saveDC( long num, short* parms );
     /* restore device context */
     void restoreDC( long num, short* parms );
+    /*  clipping region is the intersection of this region and the original region */
+    void intersectClipRect( long num, short* parms );
+    /* delete a clipping rectangle of the original region */
+    void excludeClipRect( long num, short* parms );
+
+    /****************** Text *******************/
+    /* set text color */
+    void setTextColor( long num, short* parms );
+    /* set text alignment */
+    void setTextAlign( long num, short* parms );
+    /* draw text */
+    void textOut( long num, short* parms );
+    void extTextOut( long num, short* parms );
 
     /****************** Bitmap *******************/
     /* copies a DIB into a dest location */
@@ -132,6 +147,8 @@ public: // should be protected but cannot
     void createBrushIndirect( long num, short* parms );
     // create a logical pen
     void createPenIndirect( long num, short* parms );
+    /* create a logical font */
+    void createFontIndirect( long num, short* parms );
 
     /****************** misc *******************/
     // Escape ( enhanced command set )
@@ -175,11 +192,11 @@ protected:
 protected:
     QPainter mPainter;
     QPointArray mPoints;
+    QColor mTextColor;
+    int mTextAlign, mRotation;
     bool mIsPlaceable, mIsEnhanced, mValid;
     WmfCmd* mFirstCmd;
     bool mWinding;
-    QBrush mBrush;
-    QPen mPen;
     QRect mBBox;
     bool mSingleStep;
     WinObjHandle** mObjHandleTab;
