@@ -50,6 +50,8 @@ KexiDataTable::KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor,
 void KexiDataTable::init()
 {
 	connect(m_view, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
+	//! before closing - we'are accepting editing
+	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
 
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_view);
