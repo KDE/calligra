@@ -31,6 +31,7 @@
 #include <qvaluelist.h>
 #include <qcolor.h>
 
+#include "GStyle.h"
 #include "GStyleList.h"
 
 class KontourDocument;
