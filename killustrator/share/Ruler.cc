@@ -117,7 +117,7 @@ void Ruler::setMeasurementUnit (MeasurementUnit mu) {
   munit = mu;
   drawRuler ();
   updatePointer (currentPosition, currentPosition);
-  //  repaint ();
+  repaint ();
 }
 
 void Ruler::setZoomFactor (float zf) {
@@ -125,7 +125,7 @@ void Ruler::setZoomFactor (float zf) {
   recalculateSize (0L);
   drawRuler ();
   updatePointer (currentPosition, currentPosition);
-  //  repaint ();
+  repaint ();
 }
 
 void Ruler::updatePointer (int x, int y) {
