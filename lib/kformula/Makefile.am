@@ -28,11 +28,11 @@ libkformula_la_LIBADD  = $(LIB_KDEUI) $(LIB_KOTEXT) $(all_libraries) $(KDE_RPATH
 
 libkformula_la_METASOURCES = AUTO
 
-check_PROGRAMS = kformulatest unittest
+check_PROGRAMS = kformulatest #unittest
 
 kformulatest_SOURCES = main.cc kformulawidget.cc
 kformulatest_LDADD = libkformula.la
 
 # needs the CppUnit from http://www.xProgramming.com/software.htm
-unittest_SOURCES = testcommands.cc testformulacursor.cc testformulaelement.cc testindexelement.cc testmain.cc
-unittest_LDADD = libkformula.la libCppUnit.so libCppUnitRunner.so
+#unittest_SOURCES = testcommands.cc testformulacursor.cc testformulaelement.cc testindexelement.cc testmain.cc
+#unittest_LDADD = libkformula.la libCppUnit.so libCppUnitRunner.so

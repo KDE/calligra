@@ -79,13 +79,13 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_O: document->load("test.xml"); return;
             case Qt::Key_Q: kapp->quit(); return;
             case Qt::Key_S: document->save("test.xml"); return;
-            case Qt::Key_T: cout << document->texString().latin1() << endl; return;
+            case Qt::Key_T: std::cout << document->texString().latin1() << std::endl; return;
             case Qt::Key_U: document->document()->addGenericUpperIndex(); return;
             case Qt::Key_V: document->document()->paste(); return;
             case Qt::Key_X: document->document()->cut(); return;
             case Qt::Key_Z: document->document()->undo(); return;
             default:
-                //cerr << "Key: " << event->key() << endl;
+                //std::cerr << "Key: " << event->key() << std::endl;
                 break;
         }
     }
@@ -98,7 +98,7 @@ void TestWidget::importOld(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        cerr << "Error opening file" << endl;
+        std::cerr << "Error opening file" << std::endl;
         return;
     }
     QTextStream stream(&f);
@@ -200,15 +200,15 @@ int main(int argc, char** argv)
 
     int destruct = BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "BasicElement::EvilDestructionCount: " << destruct << endl;
+        std::cerr << "BasicElement::EvilDestructionCount: " << destruct << std::endl;
     }
     destruct = Command::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "Command::EvilDestructionCount: " << destruct << endl;
+        std::cerr << "Command::EvilDestructionCount: " << destruct << std::endl;
     }
     destruct = ElementType::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "ElementType::EvilDestructionCount: " << destruct << endl;
+        std::cerr << "ElementType::EvilDestructionCount: " << destruct << std::endl;
     }
 
     return result;
