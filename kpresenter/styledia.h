@@ -87,7 +87,8 @@ public:
         SdPen = 1,
         SdBrush = 2,
         SdGradient = 4,
-        SdAll = SdPen | SdBrush | SdGradient
+	SdEndBeginLine = 8,
+        SdAll = SdPen | SdBrush | SdGradient | SdEndBeginLine
     };
 
     StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SdAll );

@@ -3443,15 +3443,24 @@ int KPresenterDoc::getPenBrushFlags()
             switch ( kpobject->getType() ) {
                 case OT_LINE:
                     flags = flags | StyleDia::SdPen;
+                    flags = flags | StyleDia::SdEndBeginLine;
                     break;
                 case OT_PIE:
                     flags=flags | StyleDia::SdPen | StyleDia::SdBrush;
                     break;
-                case OT_RECT: case OT_PART:  case OT_AUTOFORM: case OT_ELLIPSE:
+                case OT_RECT: case OT_PART:  case OT_ELLIPSE:
                 case OT_TEXT: case OT_PICTURE: case OT_CLIPART: {
                     flags = flags | StyleDia::SdPen;
                     flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                } break;
+                }
+                    break;
+                case OT_AUTOFORM:
+                {
+                    flags = flags | StyleDia::SdPen;
+                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+                    flags = flags | StyleDia::SdEndBeginLine;
+                }
+                break;
                 default: break;
             }
         }

@@ -207,6 +207,12 @@ void StyleDia::setupTab1()
     connect( clineEnd, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
+    if ( !(flags & SdEndBeginLine) )
+    {
+        clineEnd->setEnabled( false);
+        clineBegin->setEnabled(false);
+    }
+
     //hack for better layout
     l = new QLabel( " ", right );
     l->setFixedHeight( l->sizeHint().height() );
