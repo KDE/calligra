@@ -144,7 +144,6 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
                                       QButton *cancelButton, QButton *okButton )
   : QLineEdit( _parent, "KSpreadEditWidget" )
 {
-  Q_ASSERT(m_pCanvas != NULL);
   m_pCanvas = _canvas;
   // Those buttons are created by the caller, so that they are inserted
   // properly in the layout - but they are then managed here.
