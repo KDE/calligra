@@ -954,8 +954,11 @@ void KWView::setupActions()
     updateTableStyleList();
 
     actionConvertTableToText = new KAction( i18n( "Convert table to text" ), 0,
-                        this, SLOT( convertTableToText() ),
-                        actionCollection(), "convert_table_to_text" );
+                                            this, SLOT( convertTableToText() ),
+                                            actionCollection(), "convert_table_to_text" );
+    actionSortText= new KAction( i18n( "Sort Text" ), 0,
+                                 this, SLOT( sortText() ),
+                                 actionCollection(), "sort_text" );
 
     // ---------------------- Tools menu
 
@@ -6823,6 +6826,11 @@ void KWView::slotAddIgnoreAllWord()
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit )
         m_doc->addIgnoreWordAll( edit->underCursorWord() );
+}
+
+void KWView::sortText()
+{
+    //todo
 }
 
 /******************************************************************/

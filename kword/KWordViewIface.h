@@ -117,6 +117,7 @@ k_dcop:
     int currentPage();
     void convertTableToText();
     void convertToTextBox();
+    void addIgnoreAllWord();
 
 private:
     KWView *view;

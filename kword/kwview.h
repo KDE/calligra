@@ -246,6 +246,7 @@ public slots:
     void tableDelete();
     void tableStylist();
     void convertTableToText();
+    void sortText();
 
     void slotStyleSelected();
     void slotFrameStyleSelected();
@@ -583,6 +584,7 @@ private:
     KAction *actionTableJoinCells;
     KAction *actionTableSplitCells;
     KAction *actionConvertTableToText;
+    KAction *actionSortText;
     KToggleAction *actionTableProtectCells;
 
     KAction *actionTableUngroup;

@@ -376,3 +376,8 @@ void KWordViewIface::convertToTextBox()
 {
     view->convertToTextBox();
 }
+
+void KWordViewIface::addIgnoreAllWord()
+{
+    view->slotAddIgnoreAllWord();
+}
