@@ -33,6 +33,7 @@ KoText:
 
 KoSpell:
 - Improved configure check for libaspell
+- Fixed confusion with ispell's dictionaries which made it forget the chosen dictionary
 
 KoWMF:
 - Fixed infinite loop on invalid WMF file
