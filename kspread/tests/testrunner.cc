@@ -32,6 +32,7 @@
 #include "tester.h"
 #include "value_tester.h"
 #include "formula_tester.h"
+#include "stylecluster_tester.h"
 
 namespace KSpread
 {
@@ -80,6 +81,7 @@ TestRunner::TestRunner(KLocale *locale):
   
   // add all tests here !!
   addTester( new ValueTester() );
+  addTester( new StyleClusterTester() );
   addTester( new FormulaParserTester(locale) );
   addTester( new FormulaEvalTester(locale) );
 }

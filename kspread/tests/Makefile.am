@@ -15,6 +15,7 @@ libtests_la_SOURCES = \
 	testrunner.cc \
 	value_tester.cc \
 	formula_tester.cc \
+	stylecluster_tester.cc \
 	inspector.cc
 
 noinst_HEADERS = \
@@ -22,6 +23,7 @@ noinst_HEADERS = \
 	testrunner.h \
 	value_tester.h \
 	formula_tester.h \
+	stylecluster_tester.h \
 	inspector.h
         
 METASOURCES = AUTO
