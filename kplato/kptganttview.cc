@@ -770,14 +770,31 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos
         kdDebug()<<"No item selected"<<endl;
         return;
     }
-	QPopupMenu *menu = m_mainview->popupMenu("node_popup");
-	if (menu)
-	{
-		/*int id =*/ menu->exec(pos);
-		//kdDebug()<<k_funcinfo<<"id="<<id<<endl;
-	}
-	else
-		kdDebug()<<k_funcinfo<<"No menu!"<<endl;
+    KPTNode *n = getNode(item);
+    if (n == 0) {
+        kdDebug()<<"No node selected"<<endl;
+        return;
+    }
+    KPTTask *t =  dynamic_cast<KPTTask*>(n);
+    if (t && (t->type() == KPTNode::Type_Task || t->type() == KPTNode::Type_Milestone)) {
+        QPopupMenu *menu = m_mainview->popupMenu("task_popup");
+        if (menu)
+        {
+            /*int id =*/ menu->exec(pos);
+            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+        }
+        return;
+    }
+    if (t && t->type() == KPTNode::Type_Summarytask) {
+        QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+        if (menu)
+        {
+            /*int id =*/ menu->exec(pos);
+            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+        }
+        return;
+    }
+    //TODO: Other nodetypes
 }
 
 void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* /*item*/)

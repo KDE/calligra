@@ -189,12 +189,12 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
         SLOT(slotConfigure()), actionCollection(), "configure");
 
     // ------ Popup
-    actionOpenNode = new KAction(i18n("Node Properties"), "node_properties", 0, this,
+    actionOpenNode = new KAction(i18n("Edit..."), "node_properties", 0, this,
         SLOT(slotOpenNode()), actionCollection(), "node_properties");
     actionDeleteTask = new KAction(i18n("Delete Task"), "editdelete", 0, this,
         SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
-    actionEditResource = new KAction(i18n("Edit Resource"), "edit_resource", 0, this,
+    actionEditResource = new KAction(i18n("Edit Resource..."), "edit_resource", 0, this,
         SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
 
