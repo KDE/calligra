@@ -196,6 +196,8 @@ public:
 
     void setFootNoteType( NoteType _type ) { m_footEndNote.noteType = _type; }
     void setNumberingFootNoteType(KWFootNoteVariable::Numbering _type) { m_footEndNote.numberingType = _type; }
+
+    void tableSelectCell(KWTableFrameSet *table, KWFrameSet *cell);
     bool selectAllFrames( bool select );
 
     KCommand * createTextBox(const KoRect & rect );

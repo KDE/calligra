@@ -3872,6 +3872,30 @@ void KWView::toolsPart()
     m_gui->canvasWidget()->insertPart( actionToolsCreatePart->documentEntry() );
 }
 
+
+int KWView::tableSelectCell(const QString &tableName, uint row, uint col)
+{
+    if(!m_doc || !m_gui)
+        return -1;
+    KWFrameSet *fs = m_doc->frameSetByName(tableName);
+    if(!fs) 
+        return -1;
+    KWTableFrameSet *table = dynamic_cast<KWTableFrameSet*>(fs);
+    if(!table)
+        return -1;
+    if (row >= table->getRows() || col >= table->getCols())
+        return -1;
+
+    KWTableFrameSet::Cell *cell = table->getCell(row, col);
+        
+    KWCanvas *canvas = m_gui->canvasWidget();
+    if(!canvas)
+        return -1;
+    canvas->tableSelectCell(table, cell);   
+    return 0; 
+}
+
+
 void KWView::tableProperties()
 {
     KWCanvas * canvas = m_gui->canvasWidget();

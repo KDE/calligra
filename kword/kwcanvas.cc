@@ -1853,6 +1853,15 @@ bool KWCanvas::selectAllFrames( bool select )
     return ret;
 }
 
+void KWCanvas::tableSelectCell(KWTableFrameSet *table, KWFrameSet *cell)
+{
+    if ( m_currentFrameSetEdit )
+        terminateCurrentEdit();
+    selectFrame( cell->frame(0), TRUE ); // select the frame.
+    curTable = table;
+    emit frameSelectedChanged();
+}
+
 void KWCanvas::selectFrame( KWFrame * frame, bool select )
 {
     if ( frame->isSelected() != select )

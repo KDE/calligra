@@ -251,6 +251,7 @@ public slots:
     void insertFormula( QMimeSource* source=0 );
     void toolsPart();
 
+    int  tableSelectCell(const QString &tableName, uint row, uint col);
     void tableProperties();
     void tableInsertRow();
     void tableInsertRow(uint row, KWTableFrameSet *table = 0);

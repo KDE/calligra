@@ -181,6 +181,11 @@ void KWordViewIface::createStyleFromSelection()
     view->createStyleFromSelection();
 }
 
+uint KWordViewIface::tableSelectCell(const QString &name, uint row, uint col)
+{
+    return view->tableSelectCell(name, row, col);
+}
+
 void KWordViewIface::tableInsertRow()
 {
     view->tableInsertRow();
