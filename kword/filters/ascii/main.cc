@@ -124,11 +124,11 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
   str += "<FRAMESETS>\n";
   str += "<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
   str += "<FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n";
-   
+
   str += "<PARAGRAPH>\n";
   str += "<TEXT> </TEXT>\n";
   str += "</PARAGRAPH>\n";
-  
+
   str += "</FRAMESET>\n";
   str += "</FRAMESETS>\n";
   str += "</DOC>\n";
@@ -139,7 +139,7 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
   for(CORBA::ULong i = 0;i < len;++i)
     data[i] = str[i];
 
-  delete buffer;
+  delete[] buffer;
 }
 
 
