@@ -311,7 +311,7 @@
 			displaymessage display or not error alert
                         displayvalidationinformation display or not input help
                         allowemptycell allow to have an empty cell
-
+			listvalidity gave list of test allow into cell
 -->
 <!ELEMENT param EMPTY>
 <!ATTLIST param         valmin           CDATA #REQUIRED
@@ -321,7 +321,8 @@
                         action           CDATA #REQUIRED
 			displaymessage   CDATA #REQUIRED
                         displayvalidationinformation CDATA #REQUIRED
-                        allowemptycell   CDATA #REQUIRED>
+                        allowemptycell   CDATA #REQUIRED
+			listvalidity     CDATA #REQUIRED>
 
 <!ELEMENT title (#PCDATA)>
 

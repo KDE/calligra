@@ -2973,7 +2973,7 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
   int zcellRect_bottom = doc->zoomItY (cellRect.bottom());
 
   // Draw page borders
-  
+
   if ( cellRef.x() >= print->printRange().left() &&
     cellRef.x() <= print->printRange().right() + 1 &&
     cellRef.y() >= print->printRange().top() &&
@@ -3051,7 +3051,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   int zcellRect_right (doc->zoomItX (cellRect.right()));
   int zcellRect_top (doc->zoomItY (cellRect.top()));
   int zcellRect_bottom (doc->zoomItY (cellRect.bottom()));
-  
+
   /* we might not paint some borders if this cell is merged with another in
      that direction
   bool paintLeft   = paintBorderLeft;
@@ -4561,6 +4561,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc,
         param.setAttribute("displaymessage",d->extra()->validity->displayMessage);
         param.setAttribute("displayvalidationinformation",d->extra()->validity->displayValidationInformation);
         param.setAttribute("allowemptycell",d->extra()->validity->allowEmptyCell);
+        if ( !d->extra()->validity->listValidity.isEmpty() )
+            param.setAttribute( "listvalidity", d->extra()->validity->listValidity.join( ";" ) );
         validity.appendChild(param);
         QDomElement title = doc.createElement( "title" );
         title.appendChild( doc.createTextNode( d->extra()->validity->title ) );
@@ -5694,6 +5696,10 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           if ( param.hasAttribute( "allowemptycell" ) )
           {
               d->extra()->validity->allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
+          }
+          if ( param.hasAttribute("listvalidity") )
+          {
+              d->extra()->validity->listValidity=QStringList::split(param.attribute("listvalidity"), ";" );
           }
         }
         QDomElement inputTitle = validity.namedItem( "inputtitle" ).toElement();
