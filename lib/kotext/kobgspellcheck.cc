@@ -40,7 +40,7 @@ using namespace KSpell2;
 
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <kdeversion.h>
 #include <qtimer.h>
 #include <qptrdict.h>
 
