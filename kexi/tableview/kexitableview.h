@@ -383,7 +383,7 @@ signals:
 	/*! Emitted before change of the single, currently edited cell.
 	 Connect this signal to your slot and set \a allow value to false 
 	 to disallow the change. */
-	void aboutToChangeItem(KexiTableItem *, QVariant newValue, bool& allow);
+	void aboutToChangeCell(KexiTableItem *, QVariant newValue, bool& allow);
 
 	/*! Emited before inserting of a new, current row.
 	 Connect this signal to your slot and set \a allow value to false 

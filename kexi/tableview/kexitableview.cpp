@@ -2470,7 +2470,7 @@ bool KexiTableView::acceptEditor()
 	if (res == KexiValidator::Ok) {
 		//2. check using signal
 		bool allow = true;
-		emit aboutToChangeItem(d->pCurrentItem, newval, allow);
+		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
 		if (allow) {
 			//send changes to the backend
 			m_data->updateRowEditBuffer(d->curCol,newval);
@@ -2478,7 +2478,7 @@ bool KexiTableView::acceptEditor()
 			kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
 		} else {
-			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeItem() signal" << endl;
+			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeCell() signal" << endl;
 			res = KexiValidator::Error;
 		}
 	}
