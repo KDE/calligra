@@ -73,7 +73,7 @@ public:
     if( ptr ) clear();
     columns = c; rows = r;
     unsigned count = columns * rows;
-    ptr = new (KSpreadValue*)[count];
+    ptr = new KSpreadValue* [count];
     for( unsigned i = 0; i < count; i++ )
       ptr[i] = (KSpreadValue*)0;
   }
