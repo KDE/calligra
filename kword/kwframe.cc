@@ -1202,7 +1202,8 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 #ifdef DEBUG_DRAW
         kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
 #endif
-        QRegion reg = frameClipRegion( painter, frame, innerCRect, viewMode, onlyChanged );
+        // not clipping against frame for inline frames -> frameClipRegion uses absolute coordinates.
+        QRegion reg = frameClipRegion( painter, frame, innerCRect, viewMode, onlyChanged, !isFloating() );
         if ( !reg.isEmpty() )
         {
             painter->save();
