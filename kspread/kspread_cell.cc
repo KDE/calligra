@@ -344,12 +344,17 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   lst.setAutoDelete( TRUE );
   KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strAction, lst );
   // Did a syntax error occur ?
-  if ( context.exception() && m_pTable->doc()->getShowMessageError())
+  if ( context.exception() )
   {
-    QString tmp(i18n("Error in cell %1\n\n"));
-    tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-    tmp += context.exception()->toString( context );
-    KMessageBox::error((QWidget*)0L , tmp);
+    kdDebug(36001) << "Failed action in cell " <<
+      util_cellName(m_iColumn, m_iRow) << endl;
+    if (m_pTable->doc()->getShowMessageError())
+    {
+      QString tmp(i18n("Error in cell %1\n\n"));
+      tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+      tmp += context.exception()->toString( context );
+      KMessageBox::error((QWidget*)0L , tmp);
+    }
     return;
   }
 
