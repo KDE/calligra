@@ -20,27 +20,21 @@
 #ifndef __VINSERTKNOTSCMD_H__
 #define __VINSERTKNOTSCMD_H__
 
-#include "vcommand.h"
 
+#include "vreplacingcmd.h"
 
 class VPath;
-class VSelection;
 
 
-class VInsertKnotsCmd : public VCommand
+class VInsertKnotsCmd : public VReplacingCmd
 {
 public:
-	VInsertKnotsCmd( VDocument *doc, uint knots );
-	virtual ~VInsertKnotsCmd();
-
-	virtual void execute();
-	virtual void unexecute();
+	VInsertKnotsCmd( VDocument* doc, uint knots );
+	virtual ~VInsertKnotsCmd() {}
 
 	virtual void visitVPath( VPath& path );
 
 protected:
-	VSelection* m_selection;
-
 	uint m_knots;
 };
 

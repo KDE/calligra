@@ -20,28 +20,21 @@
 #ifndef __VROUNDCORNERSCMD_H__
 #define __VROUNDCORNERSCMD_H__
 
-#include "vcommand.h"
 
+#include "vreplacingcmd.h"
 
 class VPath;
-class VSelection;
 
 
-class VRoundCornersCmd : public VCommand
+class VRoundCornersCmd : public VReplacingCmd
 {
 public:
-	VRoundCornersCmd( VDocument *doc, double radius );
-	virtual ~VRoundCornersCmd();
-
-	virtual void execute();
-	virtual void unexecute();
+	VRoundCornersCmd( VDocument* doc, double radius );
+	virtual ~VRoundCornersCmd() {}
 
 	virtual void visitVPath( VPath& path );
 
 protected:
-	VSelection* m_oldObjects;
-	VSelection* m_newObjects;
-
 	double m_radius;
 };
 

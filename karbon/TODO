@@ -24,6 +24,7 @@ TODO:
 -	make pattern and gradient coords absolute and not relative to the shape
 -	polylinetool seems to generate flat beziers instead of lines. this gives unexpected results
 	in "round corners".
+-	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths
 -	bring text support back, ideally using fontconfig and freetype, and no xft.
@@ -52,7 +53,6 @@ OPTIMIZATION:
 MAKE IT NICE:
 -	being a kde/koffice app, we should use the global selection color for selections
 -	use SVG's path notation natively?
--	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent

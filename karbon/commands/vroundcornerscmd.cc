@@ -23,108 +23,13 @@
 #include "vpath.h"
 #include "vroundcornerscmd.h"
 #include "vsegment.h"
-#include "vselection.h"
 
 
 VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
-	: VCommand( doc, i18n( "Round Corners" ) )
+	: VReplacingCmd( doc, i18n( "Round Corners" ) )
 {
 	// Set members.
-	m_oldObjects = document()->selection()->clone();
-	m_newObjects = new VSelection();
 	m_radius = radius > 0.0 ? radius : 1.0;
-
-
-	// Create new shapes.
-
-	// Pointer to temporary object.
-	VObject* newObject;
-
-	VObjectListIterator itr( m_oldObjects->objects() );
-
-	for( ; itr.current(); ++itr )
-	{
-		// Reset success.
-		setSuccess( false );
-
-		// Clone object and visit the clone.
-		newObject = itr.current()->clone();
-		visit( *newObject );
-
-		// Success.
-		if( success() )
-		{
-			// Insert new shape right before old shape.
-			itr.current()->parent()->insertInfrontOf(
-				newObject, itr.current() );
-
-			// Add new shape to list of new objects.
-			m_newObjects->append( newObject );
-		}
-		// No success.
-		else
-		{
-			// Don't consider this object in the future anymore.
-			m_oldObjects->take( *itr.current() );
-
-			// Delete temporary object.
-			delete( newObject );
-		}
-	}
-}
-
-VRoundCornersCmd::~VRoundCornersCmd()
-{
-	delete( m_oldObjects );
-	delete( m_newObjects );
-}
-
-void
-VRoundCornersCmd::execute()
-{
-	// Nothing to do.
-	if( m_newObjects->objects().count() == 0 )
-		return;
-
-	VObjectListIterator itr( m_oldObjects->objects() );
-
-	// Hide old objects.
-	for( ; itr.current(); ++itr )
-	{
-		document()->selection()->take( *itr.current() );
-		itr.current()->setState( VObject::deleted );
-	}
-
-	// Show new objects.
-	for( itr = m_newObjects->objects(); itr.current(); ++itr )
-	{
-		itr.current()->setState( VObject::normal );
-		document()->selection()->append( itr.current() );
-	}
-}
-
-void
-VRoundCornersCmd::unexecute()
-{
-	// Nothing to do.
-	if( m_newObjects->objects().count() == 0 )
-		return;
-
-	VObjectListIterator itr( m_oldObjects->objects() );
-
-	// Show old objects.
-	for( ; itr.current(); ++itr )
-	{
-		itr.current()->setState( VObject::normal );
-		document()->selection()->append( itr.current() );
-	}
-
-	// Hide new objects.
-	for( itr = m_newObjects->objects(); itr.current(); ++itr )
-	{
-		document()->selection()->take( *itr.current() );
-		itr.current()->setState( VObject::deleted );
-	}
 }
 
 void

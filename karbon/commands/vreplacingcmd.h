@@ -17,36 +17,39 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <klocale.h>
-
-#include "vinsertknotscmd.h"
-#include "vpath.h"
-#include "vsegment.h"
+#ifndef __VREPLACINGCMD_H__
+#define __VREPLACINGCMD_H__
 
 
-VInsertKnotsCmd::VInsertKnotsCmd( VDocument* doc, uint knots )
-	: VReplacingCmd( doc, i18n( "Insert Knots" ) )
+#include "vcommand.h"
+
+class QString;
+class VSelection;
+
+
+/**
+ * VReplacingCmd is a generic command. Derive from it if you plan to do complex
+ * transformations upon selected objects which make it necessary to replace
+ * each object as a whole with a new object.
+ */
+
+class VReplacingCmd : public VCommand
 {
-	m_knots = knots > 0 ? knots : 1;
-}
+public:
+	virtual void execute();
+	virtual void unexecute();
 
-void
-VInsertKnotsCmd::visitVPath( VPath& path )
-{
-	path.first();
+protected:
+	/**
+	 * Make it "abstract".
+	 */
+	VReplacingCmd( VDocument* doc, const QString& name );
+	virtual ~VReplacingCmd();
 
-	// Ommit first segment.
-	while( path.next() )
-	{
-		for( uint i = m_knots; i > 0; --i )
-		{
-			path.insert(
-				path.current()->splitAt( 1.0 / ( i + 1.0 ) ) );
+private:
+	VSelection* m_oldObjects;
+	VSelection* m_newObjects;
+};
 
-			path.next();
-		}
+#endif
 
-		if( !success() )
-			setSuccess();
-	}
-}
