@@ -1173,7 +1173,10 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
         QDomDocument doc;
         doc.setContent( _store->device() );
         if ( !loadXML( _store->device(), doc ) )
+        {
+            _store->close();
             return false;
+        }
         _store->close();
     }
 
