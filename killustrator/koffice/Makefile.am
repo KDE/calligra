@@ -1,9 +1,9 @@
 
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(srcdir)/.. -I$(srcdir)/../share -I$(srcdir)/../filter $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-FILTER_LIBS = $(build_dir)/../filter/libfilter.a
-XML_LIBS = $(build_dir)/../xmlutils/libxml.a
-KSHARE_LIBS = $(build_dir)/../share/libkillu.a
+FILTER_LIBS = ./../filter/libfilter.a
+XML_LIBS = ./../xmlutils/libxml.a
+KSHARE_LIBS = ./../share/libkillu.a
 LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(KOFFICE_LIBS) \
 	-lkparts -lkpartsui -lkom $(LIBMICO) $(LIB_KIO) $(LIBQIMGIO) $(LIB_KFILE) 
 
