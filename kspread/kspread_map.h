@@ -52,8 +52,8 @@ public:
   virtual KSpread::Table_ptr table( const char* name );
   
   // C++
-  virtual QDOM::Element save( QDOM::Document& doc );
-  virtual bool loadXML( const QDOM::Element& mymap );
+  virtual QDomElement save( QDomDocument& doc );
+  virtual bool loadXML( const QDomElement& mymap );
   virtual bool loadChildren( KOStore::Store_ptr _store );
   
   void makeChildList( KOffice::Document_ptr _doc, const char *_path );

@@ -231,8 +231,8 @@ class RowLayout : public KSpreadLayout
 public:
     RowLayout( KSpreadTable *_table, int _row );
 
-    virtual QDOM::Element save( QDOM::Document& );
-    virtual bool load( const QDOM::Element& );
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement& );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -321,8 +321,8 @@ class ColumnLayout : public KSpreadLayout
 public:
     ColumnLayout( KSpreadTable *_table, int _column );
 
-    virtual QDOM::Element save( QDOM::Document& );
-    virtual bool load( const QDOM::Element& );
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement& );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.

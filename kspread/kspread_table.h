@@ -160,8 +160,8 @@ public:
   void update();
   
   virtual bool loadDocument( KOStore::Store_ptr _store, const char *_format );
-  virtual bool load( const QDOM::Element& );
-  virtual QDOM::Element save( QDOM::Document& );
+  virtual bool load( const QDomElement& );
+  virtual QDomElement save( QDomDocument& );
   
 protected:
   ChartBinding *m_pBinding;
@@ -226,8 +226,8 @@ public:
     char* tableName() { return CORBA::string_dup( m_strName.data() ); }
 
     // C++
-    virtual QDOM::Element save( QDOM::Document& );
-    virtual bool loadXML( const QDOM::Element& table );
+    virtual QDomElement save( QDomDocument& );
+    virtual bool loadXML( const QDomElement& table );
     virtual bool loadChildren( KOStore::Store_ptr _store );
  
     virtual void makeChildList( KOffice::Document_ptr _doc, const char *_path );
@@ -452,7 +452,7 @@ public:
     /**
      * @see #paste
      */
-    bool loadSelection( const QDOM::Document&, int _xshift, int _yshift );
+    bool loadSelection( const QDomDocument&, int _xshift, int _yshift );
     
     /**
      * Deletes all cells in the given rectangle.

@@ -157,16 +157,16 @@ int RowLayout::height( KSpreadCanvas *_canvas )
     return (int)(m_fHeight * MM_TO_POINT);
 }
 
-QDOM::Element RowLayout::save( QDOM::Document& doc )
+QDomElement RowLayout::save( QDomDocument& doc )
 {
-  QDOM::Element row = doc.createElement( "row" );
+  QDomElement row = doc.createElement( "row" );
   row.setAttribute( "height", m_fHeight );
   row.setAttribute( "row", m_iRow );
 
   return row;
 }
 
-bool RowLayout::load( const QDOM::Element& row )
+bool RowLayout::load( const QDomElement& row )
 {
   bool ok;
   if ( row.hasAttribute( "height" ) )
@@ -241,16 +241,16 @@ int ColumnLayout::width( KSpreadCanvas *_canvas )
     return (int)( m_fWidth * MM_TO_POINT );
 }
 
-QDOM::Element ColumnLayout::save( QDOM::Document& doc )
+QDomElement ColumnLayout::save( QDomDocument& doc )
 {
-  QDOM::Element col = doc.createElement( "col" );
+  QDomElement col = doc.createElement( "col" );
   col.setAttribute( "width", m_fWidth );
   col.setAttribute( "col", m_iColumn );
 
   return col;
 }
 
-bool ColumnLayout::load( const QDOM::Element& col )
+bool ColumnLayout::load( const QDomElement& col )
 {
   bool ok;
   if ( col.hasAttribute( "width" ) )

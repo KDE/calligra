@@ -101,9 +101,9 @@ public:
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
-    virtual QDOM::Element save( QDOM::Document&, int _x_offset = 0, int _y_offset = 0 );
-    virtual bool load( const QDOM::Element& e ) { return load( e, 0, 0 ); }
-    virtual bool load( const QDOM::Element&, int _xshift, int _yshift );
+    virtual QDomElement save( QDomDocument&, int _x_offset = 0, int _y_offset = 0 );
+    virtual bool load( const QDomElement& e ) { return load( e, 0, 0 ); }
+    virtual bool load( const QDomElement&, int _xshift, int _yshift );
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).

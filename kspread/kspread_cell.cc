@@ -1082,7 +1082,7 @@ bool KSpreadCell::makeFormular()
   if ( context.exception() )
   {
     clearFormular();
-    
+
     m_bError = true;
     m_strFormularOut = "####";
     m_bBool = false;
@@ -1942,7 +1942,7 @@ void KSpreadCell::setText( const QString& _text )
    */
   else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
-    m_pQML = new QSimpleRichText( m_strText.mid(1) );//, m_pTable->widget() );
+    m_pQML = new QSimpleRichText( m_strText.mid(1), QApplication::font() );//, m_pTable->widget() );
 
     m_bValue = false;
     m_bBool = false;
@@ -2189,13 +2189,13 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
   }
 }
 
-QDOM::Element KSpreadCell::save( QDOM::Document& doc, int _x_offset, int _y_offset )
+QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 {
-  QDOM::Element cell = doc.createElement( "cell" );
+  QDomElement cell = doc.createElement( "cell" );
   cell.setAttribute( "row", m_iRow - _y_offset );
   cell.setAttribute( "column", m_iColumn - _x_offset );
 
-  QDOM::Element format = doc.createElement( "format" );
+  QDomElement format = doc.createElement( "format" );
   cell.appendChild( format );
   format.setAttribute( "align", (int)m_eAlign );
 
@@ -2225,11 +2225,11 @@ QDOM::Element KSpreadCell::save( QDOM::Document& doc, int _x_offset, int _y_offs
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
     format.appendChild( doc.createElement( "pen", m_textPen ) );
 
-  QDOM::Element left = doc.createElement( "left-border" );
+  QDomElement left = doc.createElement( "left-border" );
   left.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
   format.appendChild( left );
 
-  QDOM::Element top = doc.createElement( "top-border" );
+  QDomElement top = doc.createElement( "top-border" );
   top.appendChild( doc.createElement( "pen", m_topBorderPen ) );
   format.appendChild( top );
 
@@ -2237,13 +2237,13 @@ QDOM::Element KSpreadCell::save( QDOM::Document& doc, int _x_offset, int _y_offs
   {
     if ( isFormular() )
     {
-      QDOM::Element text = doc.createElement( "text" );
+      QDomElement text = doc.createElement( "text" );
       text.appendChild( doc.createTextNode( encodeFormular() ) );
       cell.appendChild( text );
     }
     else
     {
-      QDOM::Element text = doc.createElement( "text" );
+      QDomElement text = doc.createElement( "text" );
       text.appendChild( doc.createTextNode( m_strText ) );
       cell.appendChild( text );
     }
@@ -2252,7 +2252,7 @@ QDOM::Element KSpreadCell::save( QDOM::Document& doc, int _x_offset, int _y_offs
   return cell;
 }
 
-bool KSpreadCell::load( const QDOM::Element& cell, int _xshift, int _yshift )
+bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift )
 {
   bool ok;
   m_iRow = cell.attribute( "row" ).toInt( &ok );
@@ -2272,7 +2272,7 @@ bool KSpreadCell::load( const QDOM::Element& cell, int _xshift, int _yshift )
     return false;
   }
 
-  QDOM::Element f = cell.namedItem( "format" ).toElement();
+  QDomElement f = cell.namedItem( "format" ).toElement();
   if ( !f.isNull() )
   {
     if ( f.hasAttribute( "align" ) )
@@ -2361,26 +2361,26 @@ bool KSpreadCell::load( const QDOM::Element& cell, int _xshift, int _yshift )
       if ( !ok ) return false;
     }
 
-    QDOM::Element pen = f.namedItem( "pen" ).toElement();
+    QDomElement pen = f.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
       setTextPen( pen.toPen() );
 
-    QDOM::Element font = f.namedItem( "font" ).toElement();
+    QDomElement font = f.namedItem( "font" ).toElement();
     if ( !font.isNull() )
       setTextFont( font.toFont() );
 
-    QDOM::Element left = f.namedItem( "left-border" ).toElement();
+    QDomElement left = f.namedItem( "left-border" ).toElement();
     if ( !left.isNull() )
     {
-      QDOM::Element pen = left.namedItem( "pen" ).toElement();
+      QDomElement pen = left.namedItem( "pen" ).toElement();
       if ( !pen.isNull() )
 	setLeftBorderPen( pen.toPen() );
     }
 
-    QDOM::Element top = f.namedItem( "top-border" ).toElement();
+    QDomElement top = f.namedItem( "top-border" ).toElement();
     if ( !top.isNull() )
     {
-      QDOM::Element pen = top.namedItem( "pen" ).toElement();
+      QDomElement pen = top.namedItem( "pen" ).toElement();
       if ( !pen.isNull() )
 	setTopBorderPen( pen.toPen() );
     }
@@ -2389,7 +2389,7 @@ bool KSpreadCell::load( const QDOM::Element& cell, int _xshift, int _yshift )
     m_strPostfix = f.attribute( "postfix" );
   }
 
-  QDOM::Element text = cell.namedItem( "text" ).toElement();
+  QDomElement text = cell.namedItem( "text" ).toElement();
   if ( !text.isNull() )
   {
     QString t = text.text();

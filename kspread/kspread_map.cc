@@ -53,14 +53,14 @@ void KSpreadMap::removeTable( KSpreadTable *_table )
   m_lstTables.setAutoDelete( true );
 }
 
-QDOM::Element KSpreadMap::save( QDOM::Document& doc )
+QDomElement KSpreadMap::save( QDomDocument& doc )
 {
-  QDOM::Element mymap = doc.createElement( "map" );
+  QDomElement mymap = doc.createElement( "map" );
 
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
   {
-    QDOM::Element e = it.current()->save( doc );
+    QDomElement e = it.current()->save( doc );
     if ( e.isNull() )
       return e;
     mymap.appendChild( e );
@@ -69,12 +69,12 @@ QDOM::Element KSpreadMap::save( QDOM::Document& doc )
   return mymap;
 }
 
-bool KSpreadMap::loadXML( const QDOM::Element& mymap )
+bool KSpreadMap::loadXML( const QDomElement& mymap )
 {
-  QDOM::Node n = mymap.firstChild();
+  QDomNode n = mymap.firstChild();
   while( !n.isNull() )
   {
-    QDOM::Element e = n.toElement();
+    QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "table" )
     {
       printf("----------------- ADDING TABLE ------------------\n");

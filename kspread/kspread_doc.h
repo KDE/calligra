@@ -65,7 +65,7 @@ public:
 
   // C++
   virtual bool loadChildren( KOStore::Store_ptr _store );
-  virtual bool loadXML( const QDOM::Document&, KOStore::Store_ptr );
+  virtual bool loadXML( const QDomDocument&, KOStore::Store_ptr );
   
   virtual void cleanUp();
 

@@ -168,66 +168,66 @@ bool KSpreadDoc::hasToWriteMultipart()
 
 bool KSpreadDoc::save( QIODevice* dev, KOStore::Store_ptr, const char* format )
 {
-  QDOM::Document doc( "spreadsheet" );
+  QDomDocument doc( "spreadsheet" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\"" ) );
-  QDOM::Element spread = doc.createElement( "spreadsheet" );
+  QDomElement spread = doc.createElement( "spreadsheet" );
   spread.setAttribute( "author", "Torben Weis" );
   spread.setAttribute( "email", "weis@kde.org" );
   spread.setAttribute( "editor", "KSpread" );
   spread.setAttribute( "mime", "application/x-kspread" );
   doc.appendChild( spread );
-  QDOM::Element paper = doc.createElement( "paper" );
+  QDomElement paper = doc.createElement( "paper" );
   paper.setAttribute( "format", paperFormatString() );
   paper.setAttribute( "orientation", orientationString() );
   spread.appendChild( paper );
-  QDOM::Element borders = doc.createElement( "borders" );
+  QDomElement borders = doc.createElement( "borders" );
   borders.setAttribute( "left", leftBorder() );
   borders.setAttribute( "top", topBorder() );
   borders.setAttribute( "right", rightBorder() );
   borders.setAttribute( "bottom", bottomBorder() );
   paper.appendChild( borders );
-  QDOM::Element head = doc.createElement( "head" );
+  QDomElement head = doc.createElement( "head" );
   paper.appendChild( head );
   if ( !headLeft().isEmpty() )
   {
-    QDOM::Element left = doc.createElement( "left" );
+    QDomElement left = doc.createElement( "left" );
     head.appendChild( left );
     left.appendChild( doc.createTextNode( headLeft() ) );
   }
   if ( !headMid().isEmpty() )
   {
-    QDOM::Element center = doc.createElement( "center" );
+    QDomElement center = doc.createElement( "center" );
     head.appendChild( center );
     center.appendChild( doc.createTextNode( headMid() ) );
   }
   if ( !headRight().isEmpty() )
   {
-    QDOM::Element right = doc.createElement( "right" );
+    QDomElement right = doc.createElement( "right" );
     head.appendChild( right );
     right.appendChild( doc.createTextNode( headRight() ) );
   }
-  QDOM::Element foot = doc.createElement( "foot" );
+  QDomElement foot = doc.createElement( "foot" );
   paper.appendChild( foot );
   if ( !footLeft().isEmpty() )
   {
-    QDOM::Element left = doc.createElement( "left" );
+    QDomElement left = doc.createElement( "left" );
     foot.appendChild( left );
     left.appendChild( doc.createTextNode( footLeft() ) );
   }
   if ( !footMid().isEmpty() )
   {
-    QDOM::Element center = doc.createElement( "center" );
+    QDomElement center = doc.createElement( "center" );
     foot.appendChild( center );
     center.appendChild( doc.createTextNode( footMid() ) );
   }
   if ( !footRight().isEmpty() )
   {
-    QDOM::Element right = doc.createElement( "right" );
+    QDomElement right = doc.createElement( "right" );
     foot.appendChild( right );
     right.appendChild( doc.createTextNode( footRight() ) );
   }
 
-  QDOM::Element e = m_pMap->save( doc );
+  QDomElement e = m_pMap->save( doc );
   if ( e.isNull() )
     return false;
   spread.appendChild( e );
@@ -240,7 +240,7 @@ bool KSpreadDoc::save( QIODevice* dev, KOStore::Store_ptr, const char* format )
   return true;
 }
 
-bool KSpreadDoc::loadXML( const QDOM::Document& doc, KOStore::Store_ptr  )
+bool KSpreadDoc::loadXML( const QDomDocument& doc, KOStore::Store_ptr  )
 {
   // <spreadsheet>
   if ( doc.doctype().name() != "spreadsheet" )
@@ -248,20 +248,20 @@ bool KSpreadDoc::loadXML( const QDOM::Document& doc, KOStore::Store_ptr  )
     m_bLoading = false;
     return false;
   }
-  QDOM::Element spread = doc.documentElement();
+  QDomElement spread = doc.documentElement();
 
   if ( spread.attribute( "mime" ) != "application/x-kspread" )
     return false;
 
   // <paper>
-  QDOM::Element paper = spread.namedItem( "paper" ).toElement();
+  QDomElement paper = spread.namedItem( "paper" ).toElement();
   if ( !paper.isNull() )
   {
     QString format = paper.attribute( "format" );
     QString orientation = paper.attribute( "orientation" );
     
     // <borders>
-    QDOM::Element borders = paper.namedItem( "borders" ).toElement();
+    QDomElement borders = paper.namedItem( "borders" ).toElement();
     if ( borders.isNull() )
       return false;
     bool ok;
@@ -279,30 +279,30 @@ bool KSpreadDoc::loadXML( const QDOM::Document& doc, KOStore::Store_ptr  )
     QString hleft, hright, hcenter;
     QString fleft, fright, fcenter;
     // <head>
-    QDOM::Element head = paper.namedItem( "head" ).toElement();
+    QDomElement head = paper.namedItem( "head" ).toElement();
     if ( !head.isNull() )
     {
-      QDOM::Element left = head.namedItem( "left" ).toElement();
+      QDomElement left = head.namedItem( "left" ).toElement();
       if ( !left.isNull() )
 	hleft = left.text();
-      QDOM::Element center = head.namedItem( "center" ).toElement();
+      QDomElement center = head.namedItem( "center" ).toElement();
       if ( !center.isNull() )
       hcenter = center.text();
-      QDOM::Element right = head.namedItem( "right" ).toElement();
+      QDomElement right = head.namedItem( "right" ).toElement();
       if ( !right.isNull() )
 	hright = right.text();
     }
     // <foot>
-    QDOM::Element foot = paper.namedItem( "foot" ).toElement();
+    QDomElement foot = paper.namedItem( "foot" ).toElement();
     if ( !foot.isNull() )
     {
-      QDOM::Element left = foot.namedItem( "left" ).toElement();
+      QDomElement left = foot.namedItem( "left" ).toElement();
       if ( !left.isNull() )
 	fleft = left.text();
-      QDOM::Element center = foot.namedItem( "center" ).toElement();
+      QDomElement center = foot.namedItem( "center" ).toElement();
       if ( !center.isNull() )
 	fcenter = center.text();
-      QDOM::Element right = foot.namedItem( "right" ).toElement();
+      QDomElement right = foot.namedItem( "right" ).toElement();
       if ( !right.isNull() )
 	fright = right.text();
     }
@@ -310,7 +310,7 @@ bool KSpreadDoc::loadXML( const QDOM::Document& doc, KOStore::Store_ptr  )
   }
 
   // <map>
-  QDOM::Element mymap = spread.namedItem( "map" ).toElement();
+  QDomElement mymap = spread.namedItem( "map" ).toElement();
   if ( !mymap.isNull() )
     if ( !m_pMap->loadXML( mymap ) )
     {

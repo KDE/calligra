@@ -1642,7 +1642,7 @@ void KSpreadTable::paste( const QPoint &_marker )
     return;
   }
 
-  QDOM::Document doc;
+  QDomDocument doc;
   doc.setContent( data );
   // TODO: Error checking needed here ....
   loadSelection( doc, _marker.x() - 1, _marker.y() - 1 );
@@ -1651,21 +1651,21 @@ void KSpreadTable::paste( const QPoint &_marker )
   emit sig_updateView( this );
 }
 
-bool KSpreadTable::loadSelection( const QDOM::Document& doc, int _xshift, int _yshift )
+bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift )
 {
   // <spreadsheet>
   if ( doc.doctype().name() != "spreadsheet-selection" )
     return false;
 
-  QDOM::Element sel = doc.documentElement();
+  QDomElement sel = doc.documentElement();
 
   if ( sel.attribute( "mime" ) != "application/x-kspread-selection" )
     return false;
 
-  QDOM::Node n = sel.firstChild();
+  QDomNode n = sel.firstChild();
   while( !n.isNull() )
   {
-    QDOM::Element e = n.toElement();
+    QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "cell" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
@@ -2003,9 +2003,9 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
 
 bool KSpreadTable::saveCellRect( QIODevice* dev, const QRect &_rect )
 {
-  QDOM::Document doc( "spreadsheet-selection" );
+  QDomDocument doc( "spreadsheet-selection" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\"" ) );
-  QDOM::Element spread = doc.createElement( "spreadsheet-selection" );
+  QDomElement spread = doc.createElement( "spreadsheet-selection" );
   spread.setAttribute( "author", "Torben Weis" );
   spread.setAttribute( "email", "weis@kde.org" );
   spread.setAttribute( "editor", "KSpread" );
@@ -2021,7 +2021,7 @@ bool KSpreadTable::saveCellRect( QIODevice* dev, const QRect &_rect )
       QPoint p( it.current()->column(), it.current()->row() );
       if ( _rect.contains( p ) )
       {
-	QDOM::Element e = it.current()->save( doc, _rect.left() - 1, _rect.top() - 1 );
+	QDomElement e = it.current()->save( doc, _rect.left() - 1, _rect.top() - 1 );
 	if ( e.isNull() )
 	  return false;
 	spread.appendChild( e );
@@ -2035,9 +2035,9 @@ bool KSpreadTable::saveCellRect( QIODevice* dev, const QRect &_rect )
   return true;
 }
 
-QDOM::Element KSpreadTable::save( QDOM::Document& doc )
+QDomElement KSpreadTable::save( QDomDocument& doc )
 {
-  QDOM::Element table = doc.createElement( "table" );
+  QDomElement table = doc.createElement( "table" );
   table.setAttribute( "name", m_strName );
 
   // Save all cells.
@@ -2046,9 +2046,9 @@ QDOM::Element KSpreadTable::save( QDOM::Document& doc )
   {
     if ( !it.current()->isDefault() )
     {
-      QDOM::Element e = it.current()->save( doc );
+      QDomElement e = it.current()->save( doc );
       if ( e.isNull() )
-	return QDOM::Element();
+	return QDomElement();
       table.appendChild( e );
     }
   }
@@ -2059,9 +2059,9 @@ QDOM::Element KSpreadTable::save( QDOM::Document& doc )
   {
     if ( !rl.current()->isDefault() )
     {
-      QDOM::Element e = rl.current()->save( doc );
+      QDomElement e = rl.current()->save( doc );
       if ( e.isNull() )
-	return QDOM::Element();
+	return QDomElement();
       table.appendChild( e );
     }
   }
@@ -2072,9 +2072,9 @@ QDOM::Element KSpreadTable::save( QDOM::Document& doc )
   {
     if ( !cl.current()->isDefault() )
     {
-      QDOM::Element e = cl.current()->save( doc );
+      QDomElement e = cl.current()->save( doc );
       if ( e.isNull() )
-	return QDOM::Element();
+	return QDomElement();
       table.appendChild( e );
     }
   }
@@ -2082,9 +2082,9 @@ QDOM::Element KSpreadTable::save( QDOM::Document& doc )
   QListIterator<KSpreadChild> chl( m_lstChildren );
   for( ; chl.current(); ++chl )
   {
-    QDOM::Element e = chl.current()->save( doc );
+    QDomElement e = chl.current()->save( doc );
     if ( e.isNull() )
-      return QDOM::Element();
+      return QDomElement();
     table.appendChild( e );
   }
 
@@ -2096,16 +2096,16 @@ bool KSpreadTable::isLoading()
   return m_pDoc->isLoading();
 }
 
-bool KSpreadTable::loadXML( const QDOM::Element& table )
+bool KSpreadTable::loadXML( const QDomElement& table )
 {
   m_strName = table.attribute( "name" );
   if ( m_strName.isEmpty() )
     return false;
 
-  QDOM::Node n = table.firstChild();
+  QDomNode n = table.firstChild();
   while( !n.isNull() )
   {
-    QDOM::Element e = n.toElement();
+    QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "cell" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
@@ -2509,12 +2509,12 @@ void ChartChild::update()
     m_pBinding->cellChanged( 0L );
 }
 
-QDOM::Element ChartChild::save( QDOM::Document& doc )
+QDomElement ChartChild::save( QDomDocument& doc )
 {
   CORBA::String_var u = m_rDoc->url();
   CORBA::String_var mime = m_rDoc->mimeType();
 
-  QDOM::Element e = doc.createElement( "chart" );
+  QDomElement e = doc.createElement( "chart" );
   e.setAttribute( "mime", mime.in() );
   e.setAttribute( "url", u.in() );
   e.appendChild( doc.createElement( "geometry", m_geometry ) );
@@ -2525,7 +2525,7 @@ QDOM::Element ChartChild::save( QDOM::Document& doc )
   return e;
 }
 
-bool ChartChild::load( const QDOM::Element& chart )
+bool ChartChild::load( const QDomElement& chart )
 {
   m_strURL = chart.attribute( "url" );
   m_strMimeType = chart.attribute( "mime" );
@@ -2543,7 +2543,7 @@ bool ChartChild::load( const QDOM::Element& chart )
 
   m_geometry = chart.namedItem( "geometry" ).toElement().toRect();
 
-  QDOM::Element data = chart.namedItem( "data-area" ).toElement();
+  QDomElement data = chart.namedItem( "data-area" ).toElement();
   if ( data.isNull() )
     return false;
   setDataArea( data.toRect() );
