@@ -2976,8 +2976,12 @@ KexiMainWindowImpl::initUserActions()
 */
 }
 
+#include <kreplacedialog.h>
+
 void KexiMainWindowImpl::slotImportProject()
 {
+	KReplaceDialog dlg(this);
+	dlg.exec();
 #ifndef KEXI_NO_MIGRATION
 	QDialog *d = KexiInternalPart::createModalDialogInstance("migration", this, this);
 	if (!d)

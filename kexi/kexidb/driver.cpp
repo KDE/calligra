@@ -93,10 +93,14 @@ Driver::~Driver()
 bool Driver::isValid()
 {
 	clearError();
-	if (KexiDB::versionMajor() != versionMajor()) {
+	if (KexiDB::versionMajor() != versionMajor()
+		|| KexiDB::versionMinor() != versionMinor())
+	{
 		setError(ERR_INCOMPAT_DRIVER_VERSION, 
 		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.")
-		.arg(name()).arg(versionMajor()).arg(KexiDB::versionMajor()));
+		.arg(name())
+		.arg(QString("%1.%2").arg(versionMajor(),versionMinor()))
+		.arg(QString("%1.%2").arg(KexiDB::versionMajor(),KexiDB::versionMinor())));
 		return false;
 	}
 		

@@ -227,6 +227,12 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   - ctors and dtors are WAY TOO SLOW!
   - add an option: for bigger tables load only part of the table data
   - optimize MySQL record size
+- add focus rectangles for cells: 
+  http://mfc.dundas.com/mfc/grid/index.aspx?section=Grid&body=focusrectangles.htm
+- add more cell types & options:
+  http://mfc.dundas.com/mfc/grid/index.aspx?section=Grid&body=celltypes.htm
+	--including: red corner with a note; sliders; radio buttons
+
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -378,6 +384,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 
 CCMAIL: dkite@shaw.ca
+
+2004-12-02
+KexiDB
+- version field added to kexidb driver's service files
 
 2004-11-29
 Plugins

@@ -172,7 +172,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 and proper error message is set properly on any error. */
 		virtual bool isValid();
 	
-		/*! driver's static version information, it is automatically implemented
+		/*! Driver's static version information, it is automatically defined
 		 in implementation using KEXIDB_DRIVER macro (see driver_p.h) */
 		virtual int versionMajor() const = 0;
 		virtual int versionMinor() const = 0;

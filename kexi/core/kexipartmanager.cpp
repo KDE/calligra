@@ -83,8 +83,10 @@ Manager::lookup()
 		KService::Ptr ptr = ordered[i];
 		if (ptr) {
 			Info *info = new Info(ptr);
-			m_partsByMime.insert(info->mime(), info);
-			kdDebug() << "Manager::lookup(): inserting info to " << info->mime() << endl;
+			if (!info->mime().isEmpty()) {
+				m_partsByMime.insert(info->mime(), info);
+				kdDebug() << "Manager::lookup(): inserting info to " << info->mime() << endl;
+			}
 //			m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
 			m_partlist.append(info);
 		}

@@ -44,7 +44,7 @@ KAboutData *newKexiAboutData()
 	);
 	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@kde.org");
 	aboutData->addAuthor("Cedric Pasteur", I18N_NOOP("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
-	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
+	aboutData->addAuthor("Jarosław Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
 	aboutData->addAuthor("Adam Pigg", I18N_NOOP("PostgreSQL database driver"), "adam@piggz.fsnet.co.uk");
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Former Developer"),"psn@linux.se");
 	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Original Form Designer, Original UIModes & much more"), "jowenn@kde.org");

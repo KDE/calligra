@@ -104,15 +104,42 @@ bool DriverManagerInternal::lookupDrivers()
 		KService::Ptr ptr = (*it);
 		QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 		if (srv_name.isEmpty()) {
-			KexiDBWarn << "DriverManagerInternal::lookupDrivers(): X-Kexi-DriverName must be set for KexiDB driver \"" << ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
+			KexiDBWarn << "DriverManagerInternal::lookupDrivers():"
+				" X-Kexi-DriverName must be set for KexiDB driver \"" 
+				<< ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
 			delete ptr;
 			continue;
 		}
 		if (m_services_lcase.contains(srv_name.lower())) {
+			KexiDBWarn << "DriverManagerInternal::lookupDrivers(): more than one driver named '" 
+				<< srv_name.lower() << "'\n -- skipping this one!" << endl;
 			delete ptr;
 			continue;
 		}
-		
+
+		QString srv_ver_str = ptr->property("X-Kexi-KexiDBVersion").toString();
+		QStringList &lst( QStringList::split(".", srv_ver_str) );
+		int minor_ver, major_ver;
+		bool ok = (lst.count() == 2);
+		if (ok)
+			major_ver = lst[0].toUInt(&ok);
+		if (ok)
+			minor_ver = lst[1].toUInt(&ok);
+		if (!ok) {
+			KexiDBWarn << "DriverManagerInternal::lookupDrivers(): problem with detecting '"
+			<< srv_name.lower() << "' driver's version -- skipping it!" << endl;
+			delete ptr;
+			continue;
+		}
+		if (major_ver != KexiDB::versionMajor() || minor_ver != KexiDB::versionMinor()) {
+			KexiDBWarn << QString("DriverManagerInternal::lookupDrivers(): '%1' driver" 
+				" has version '%2' but required KexiDB driver version is '%3.%4'\n"
+				" -- skipping this driver!").arg(srv_name.lower()).arg(srv_ver_str)
+				.arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) << endl;
+			delete ptr;
+			continue;
+		}
+
 		QString mime = ptr->property("X-Kexi-FileDBDriverMime").toString().lower();
 		QString drvType = ptr->property("X-Kexi-DriverType").toString().lower();
 		if (drvType=="file") {
@@ -121,7 +148,8 @@ bool DriverManagerInternal::lookupDrivers()
 					m_services_by_mimetype.insert(mime, ptr);
 				}
 				else {
-					KexiDBWarn << "DriverManagerInternal::lookupDrivers(): more than one driver for '" << mime << "' mime type!" << endl;
+					KexiDBWarn << "DriverManagerInternal::lookupDrivers(): more than one driver for '" 
+					<< mime << "' mime type!" << endl;
 				}
 			}
 		}
@@ -191,12 +219,18 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		return 0;
 	}
 	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
-	KexiDBDbg << "drv="<<(long)drv <<endl;
+//	KexiDBDbg << "drv="<<(long)drv <<endl;
 
 //	drv->setName(srv_name.latin1());
 	drv->d->service = ptr; //store info
 	drv->d->fileDBDriverMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString();
 	drv->d->initInternalProperties();
+
+	if (!drv->isValid()) {
+		setError(drv);
+		delete drv;
+		return 0;
+	}
 	m_drivers.insert(name.latin1(), drv); //cache it
 	return drv;
 }

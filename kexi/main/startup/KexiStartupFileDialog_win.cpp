@@ -52,7 +52,7 @@ KexiStartupFileDialogBase::KexiStartupFileDialogBase(
 	//make default 'My Documents' folder
 //TODO: store changes in the app's config file?
 	if (_dirName.isEmpty()) {
-		_dirName = getRegistryValue(HKEY_CURRENT_USER, 
+		_dirName = getWin32RegistryValue(HKEY_CURRENT_USER, 
 			"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal");
 	}
 
