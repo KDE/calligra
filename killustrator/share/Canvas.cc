@@ -617,6 +617,7 @@ void Canvas::printDocument () {
   }
   printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
                           QPrinter::Portrait : QPrinter::Landscape);
+  printer.setFullPage(true);
   if (printer.setup (this)) {
     QPainter paint;
     paint.begin (&printer);
