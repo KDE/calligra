@@ -17,19 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kapp.h>
-#include <kdialogbase.h>
 #include <klocale.h>
 
-#include <qlayout.h>
 #include <qvbox.h>
-#include <kbuttonbox.h>
 
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 
 #include "kwchangecasedia.h"
-#include "kwview.h"
 #include "kwtextframeset.h"
 
 

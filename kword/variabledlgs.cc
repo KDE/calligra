@@ -25,12 +25,10 @@
 
 #include <qcombobox.h>
 #include <qvbox.h>
-#include <qhbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qheader.h>
 #include <qlineedit.h>
-#include <qstringlist.h>
 
 /******************************************************************
  *

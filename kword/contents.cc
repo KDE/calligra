@@ -17,21 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qptrlist.h>
-#include "kwstyle.h"
-#include <koRuler.h>
 #include <koparagcounter.h>
-#include <kotextobject.h>
 
 #include "contents.h"
 #include "kwdoc.h"
-#include "kwframe.h"
-#include "kwcommand.h"
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"
 #include "kwtextparag.h"
 
-#include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
 

@@ -17,53 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcolor.h>
-#include <qevent.h>
-#include <qregion.h>
 #include <kmessagebox.h>
-#include <qdict.h>
-#include <qpixmap.h>
 #include <qfileinfo.h>
 
 #include <koTemplateChooseDia.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
 #include <koMainWindow.h>
-#include <koQueryTrader.h>
 
-#include <kapp.h> // for KDE_VERSION
-#include <kurl.h>
+#include <kapplication.h> // for KDE_VERSION
 #include <klocale.h>
-#include <kstddirs.h>
-#include <kiconloader.h>
-#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kglobalsettings.h>
-#include <kcharsets.h>
 
 #include <kformuladocument.h>
 #include <koDocumentInfo.h>
 #include <unistd.h>
 #include <math.h>
 
-#include "kwframe.h"
-#include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "defs.h"
 #include "kwutils.h"
-#include "kwstyle.h"
 #include "autoformat.h"
 #include "variable.h"
 #include "serialletter.h"
 #include "kwview.h"
 #include "kwviewmode.h"
-#include "kwfactory.h"
 #include "kwcommand.h"
 #include "kwtextimage.h"
 #include <kdebug.h>
-#include <kfontdialog.h>
-#include <kconfig.h>
 
 #include <kspell.h>
 

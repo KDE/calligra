@@ -21,7 +21,7 @@
 
 #include "kwview.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KWordViewIface::KWordViewIface( KWView *view_ )

@@ -20,12 +20,10 @@
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwcommand.h"
-#include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
 #include <kotextobject.h>
 
-#include <qrichtext_p.h>
 using namespace Qt3;
 #include <kdebug.h>
 

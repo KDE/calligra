@@ -20,24 +20,14 @@
 
 #include "kwcanvas.h"
 #undef Unsorted
-#include <qpainter.h>
-#include <qstring.h>
-#include <qkeycode.h>
-#include <qpixmap.h>
-#include <qevent.h>
 #include <kmessagebox.h>
 #include <qclipboard.h>
-#include <qsplitter.h>
-#include <kaction.h>
 #include <qregexp.h>
-#include <qobjectlist.h>
 #include <qpaintdevicemetrics.h>
-#include <qtl.h>
 #include <qprogressdialog.h>
 
 
 #include "autoformatdia.h"
-#include <koparagcounter.h>
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
@@ -53,11 +43,8 @@
 #include "kwdoc.h"
 #include "kwdrag.h"
 #include "kweditpersonnalexpressiondia.h"
-#include "kwframe.h"
 #include "kwinsertpicdia.h"
-#include "kwstyle.h"
 #include "kwtableframeset.h"
-#include "kwtextframeset.h"
 #include "kwview.h"
 #include "kwviewmode.h"
 #include "paragdia.h"
@@ -69,7 +56,6 @@
 #include "variable.h"
 #include "variabledlgs.h"
 #include "kwinsertlink.h"
-#include <kotextformat.h>
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -81,7 +67,7 @@
 #include <kotextobject.h>
 
 #include <ktempfile.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
@@ -89,12 +75,12 @@
 #include <qrect.h>
 #undef Bool
 #include <kspell.h>
-#include <kcolordlg.h>
+#include <kcolordialog.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kimageio.h>
 #include <tkcoloractions.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kparts/event.h>
 #include <kformuladocument.h>
 

@@ -18,24 +18,18 @@
 */
 
 #include <klocale.h>
-#include <kinstance.h>
 
 #include <qlayout.h>
-#include <qfile.h>
 #include <qvbox.h>
 #include <kdebug.h>
-#include <kstddirs.h>
 #include <qlabel.h>
 
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
-#include <qlineedit.h>
-#include <kicontheme.h>
 #include <kiconloader.h>
 #include "kwinsertlink.h"
 
-#include <qwidget.h>
 
 KWInsertLinkDia::KWInsertLinkDia( QWidget *parent, const char *name )
     : KDialogBase( KDialogBase::IconList, i18n("Insert Link: "),

@@ -21,10 +21,7 @@
 #include "kcharselectdia.moc"
 
 #include <qlayout.h>
-#include <qstrlist.h>
 
-#include <kbuttonbox.h>
-#include <kapp.h>
 #include <klocale.h>
 #include <kcharselect.h>
 

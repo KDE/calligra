@@ -17,28 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwdoc.h"
 #include "kwcanvas.h"
 #include "tabledia.h"
 #include "tabledia.moc"
 
-#include <qwidget.h>
-#include <qlayout.h>
 #include <qlabel.h>
-#include <qstring.h>
-#include <qevent.h>
 #include <qspinbox.h>
-#include <qpen.h>
-#include <qcolor.h>
-#include <qpainter.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
-#include <qlistbox.h>
 #include <qcombobox.h>
 
-#include <kapp.h>
-#include <kcolorbtn.h>
-#include <kbuttonbox.h>
 #include <klocale.h>
 
 #include <stdlib.h>

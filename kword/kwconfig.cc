@@ -17,9 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kapp.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -28,15 +26,12 @@
 
 
 #include <qcheckbox.h>
-#include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qvbox.h>
 #include <qcombobox.h>
 
 #include "kwconfig.h"
 #include "kwview.h"
-#include "kwunit.h"
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "kwviewmode.h"

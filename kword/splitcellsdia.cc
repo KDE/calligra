@@ -21,12 +21,10 @@
 #include "splitcellsdia.moc"
 #include "tabledia.h"
 
-#include <qwidget.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 
-#include <kapp.h>
 #include <klocale.h>
 
 KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int numrows, unsigned int numcols)

@@ -20,9 +20,7 @@
 #include "KWordDocIface.h"
 
 #include "kwdoc.h"
-#include "kwview.h"
 
-#include <kapp.h>
 #include <dcopclient.h>
 
 KWordDocIface::KWordDocIface( KWDocument *doc_ )

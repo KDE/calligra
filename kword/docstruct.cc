@@ -20,22 +20,15 @@
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwcanvas.h"
-#include "kwframe.h"
 #include "docstruct.h"
 #include "docstruct.moc"
-#include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include <koparagcounter.h>
 #include "kwtextdocument.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
-#include <qframe.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qintdict.h>
 
 
 /******************************************************************/

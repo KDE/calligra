@@ -18,18 +18,14 @@
 */
 
 #include <klocale.h>
-#include <kinstance.h>
 #include <klineeditdlg.h>
 
-#include <qlayout.h>
 #include <qfile.h>
-#include <qvbox.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qlistbox.h>
 
 #include "kweditpersonnalexpressiondia.h"
 #include "kwview.h"

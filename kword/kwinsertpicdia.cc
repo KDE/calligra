@@ -21,7 +21,6 @@
 #include <koPictureFilePreview.h>
 #include <klocale.h>
 #include <kfiledialog.h>
-#include <qframe.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qpicture.h>

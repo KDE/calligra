@@ -28,7 +28,7 @@
 #include <kotextdocument.h>
 
 #include <klocale.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 

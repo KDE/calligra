@@ -18,8 +18,6 @@
 */
 
 #include "kwdoc.h"
-#include "kwframe.h"
-#include "kwcanvas.h"
 #include "insdia.h"
 #include "insdia.moc"
 #include "kwtableframeset.h"
@@ -27,10 +25,7 @@
 
 #include <klocale.h>
 
-#include <qwidget.h>
-#include <qlayout.h>
 #include <qlabel.h>
-#include <qstring.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

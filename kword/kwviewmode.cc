@@ -21,7 +21,6 @@
 #include <kotextdocument.h>
 #include "kwdoc.h"
 #include <kdebug.h>
-#include <qpainter.h>
 #include <kwtextframeset.h>
 
 QSize KWViewModeNormal::contentsSize()

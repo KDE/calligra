@@ -18,13 +18,10 @@
 */
 
 #include "kwanchor.h"
-#include "kwcommand.h"
-#include "kwtextdocument.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include "kwviewmode.h"
 #include <kdebug.h>
-#include <qdom.h>
 
 KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum )
     : KoTextCustomItem( textdoc ),

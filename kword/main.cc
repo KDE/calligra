@@ -19,7 +19,6 @@
 
 #include <koApplication.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
 #include <dcopclient.h>
 #include "kwaboutdata.h"
 

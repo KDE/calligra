@@ -19,32 +19,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qlistbox.h>
 #include <qlabel.h>
-#include <qhbox.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qheader.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
 #include <klocale.h>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include "kwdoc.h"
 #include "serialletter.h"
 #include "serialletter.moc"
 #include "variabledlgs.h"
-#include "kwutils.h"
 #include <kmainwindow.h>
 #include "defs.h"
-#include <klibloader.h>
 #include <qfile.h>
 #include <kstdaction.h>
 #include <kaction.h>
-#include <kservice.h>
 #include <kmessagebox.h>
 
 /******************************************************************

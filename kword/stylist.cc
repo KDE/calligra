@@ -42,8 +42,8 @@
 #include <qcheckbox.h>
 
 #include <kbuttonbox.h>
-#include <kapp.h>
-#include <kcolordlg.h>
+#include <kapplication.h>
+#include <kcolordialog.h>
 #include <klocale.h>
 #include <kwtextdocument.h>
 #include <kiconloader.h>

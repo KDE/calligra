@@ -24,20 +24,13 @@
 #include "kcharselectdia.h"
 
 #include <klocale.h>
-#include <kcharselect.h>
 #include <kmessagebox.h>
-#include <kbuttonbox.h>
 #include <klistview.h>
-#include <klineedit.h>
 
 #include <qlayout.h>
 #include <qvbox.h>
-#include <qhbox.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qfont.h>
-#include <qmap.h>
-#include <qlineedit.h>
 #include <qlabel.h>
 
 

@@ -18,12 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qrichtext_p.h>
 #include <qregexp.h>
-#include <qtimer.h>
 
 #include "kwtextframeset.h"
-#include "kwtextdocument.h"
 #include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
@@ -32,8 +29,6 @@
 #include "kwanchor.h"
 #include "kwcommand.h"
 #include "kwdrag.h"
-#include "kwstyle.h"
-#include <kotextformat.h>
 #include <koparagcounter.h>
 #include "contents.h"
 #include "variable.h"
@@ -41,13 +36,10 @@
 #include "serialletter.h"
 #include "autoformat.h"
 #include <qclipboard.h>
-#include <qdragobject.h>
-#include <qtl.h>
 #include <qprogressdialog.h>
 #include <qpopupmenu.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
-#include <kconfig.h>
 #include <koDataTool.h>
 #include <kotextobject.h>
 #include <kocommand.h>

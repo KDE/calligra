@@ -21,43 +21,19 @@
 #include "paragdia_p.h"
 #include "kwdoc.h"
 //#include "defs.h"
-#include <koparagcounter.h>
 
-#include <qbrush.h>
-#include <qbuttongroup.h>
 #include <qcheckbox.h>
-#include <qcolor.h>
 #include <qcombobox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
 #include <qhbuttongroup.h>
 #include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qvalidator.h>
 #include <qvbox.h>
-#include <qwhatsthis.h>
-#include <qwidget.h>
-#include <qdict.h>
-#include <qtl.h>
 
-#include <kapp.h>
-#include <kbuttonbox.h>
 #include <kcharselectdia.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kwutils.h>
-#include <kwstyle.h>
 #include "kwtextdocument.h"
 #include <knumvalidator.h>
 

@@ -19,26 +19,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <klocale.h>
-#include <koFind.h>
-#include <koReplace.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qgroupbox.h>
-#include <qlineedit.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <qpushbutton.h>
 #include <qspinbox.h>
-#include <qwidget.h>
 #include <kdebug.h>
 #include "searchdia.h"
 #include "kwcanvas.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
-#include <kotextformat.h>
-#include <kotextdocument.h>
 #include <kotextobject.h>
 #include <kcommand.h>
 

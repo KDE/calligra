@@ -17,16 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "qrichtext_p.h"
 #include "kwcanvas.h"
-#include "kwframe.h"
-#include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwviewmode.h"
-#include "kwtextdocument.h"
-#include "kwanchor.h"
 #include "kwdrag.h"
 #include "framedia.h"
 #include "kwcommand.h"
@@ -38,10 +33,9 @@
 
 #include <ktempfile.h>
 #include <klocale.h>
-#include <kaction.h>
 #include <kcursor.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <config.h>
 #include <assert.h>

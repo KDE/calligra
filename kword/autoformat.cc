@@ -20,7 +20,6 @@
 
 #include "autoformat.h"
 #include "kwdoc.h"
-#include "kwtextparag.h"
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
 
@@ -28,12 +27,9 @@
 #include <klocale.h>
 #include <kinstance.h>
 #include <kconfig.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
-#include <qrichtext_p.h>
-#include <qvector.h>
 #include <qfile.h>
-#include <qdom.h>
 
 #include <kotextobject.h>
 

@@ -18,11 +18,9 @@
 */
 
 #include "kwtextimage.h"
-#include "kwtextdocument.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include "defs.h"
-#include <qdom.h>
 #include <kdebug.h>
 
 KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )

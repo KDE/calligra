@@ -21,14 +21,8 @@
 #include "kwaboutdata.h"
 #include "kwdoc.h"
 
-#include <kfiledialog.h>
-#include <kglobal.h>
-#include <kstddirs.h>
-#include <kimageio.h>
-#include <kinstance.h>
-#include <klocale.h>
+#include <kstandarddirs.h>
 
-#include <qstringlist.h>
 #include <kiconloader.h>
 
 extern "C"

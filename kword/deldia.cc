@@ -18,24 +18,15 @@
 */
 
 #include "kwdoc.h"
-#include "kwframe.h"
 #include "kwtableframeset.h"
-#include "kwcanvas.h"
 #include "deldia.h"
 #include "deldia.moc"
 #include "kwcommand.h"
 
 #include <klocale.h>
 
-#include <qwidget.h>
-#include <qlayout.h>
 #include <qlabel.h>
-#include <qstring.h>
-#include <qevent.h>
 #include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qpainter.h>
 
 #include <stdlib.h>
 

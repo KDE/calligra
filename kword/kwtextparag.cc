@@ -18,20 +18,15 @@
 */
 
 #include "kwtextparag.h"
-#include "kwtextdocument.h"
 #include "kwdoc.h"
-#include "kwanchorpos.h"
 #include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
 #include "kwviewmode.h"
 #include "variable.h"
 #include <koparagcounter.h>
-#include <kotextobject.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <qdom.h>
-#include <qtl.h>
 #include <assert.h>
 
 // Called by KoTextParag::drawParagString - all params are in pixel coordinates
