@@ -542,6 +542,7 @@ public:
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();
+    void switchModeView();
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 

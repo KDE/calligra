@@ -3557,5 +3557,11 @@ void KWDocument::updateTextFrameSetEdit()
         viewPtr->slotFrameSetEditChanged();
 
 }
+void KWDocument::switchModeView()
+{
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->switchModeView();
+
+}
 
 #include "kwdoc.moc"

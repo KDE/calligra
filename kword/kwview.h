@@ -169,7 +169,7 @@ public:
     void updateHeaderFooterButton();
     void updateFooter();
     void updateHeader();
-
+    void switchModeView();
 public slots:
     void fileStatistics();
     void editCut();

@@ -292,6 +292,7 @@ void KWCanvas::switchViewMode( KWViewMode * newViewMode )
     delete m_viewMode;
     m_viewMode = newViewMode;
     refreshViewMode();
+    m_doc->switchModeView();
 }
 
 void KWCanvas::refreshViewMode()

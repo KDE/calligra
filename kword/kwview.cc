@@ -210,7 +210,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     QString mode = m_doc->lastViewMode();
     m_gui->canvasWidget()->switchViewMode( KWViewMode::create( mode, m_doc ) );
-
     //when kword is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
     if(!m_doc->isReadWrite())
@@ -329,6 +328,7 @@ void KWView::initGUIButton()
         actionViewPageMode->setChecked(true);
     else
         actionViewPageMode->setChecked(true);
+    switchModeView();
 }
 
 void KWView::setupActions()
@@ -4486,7 +4486,8 @@ void KWView::slotFrameSetEditChanged()
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
     actionInsertSpecialChar->setEnabled(state);
-    actionInsertFormula->setEnabled(state);
+
+    actionInsertFormula->setEnabled(state && (m_gui->canvasWidget()->viewMode()->type()!="ModeText"));
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
 
@@ -4966,6 +4967,18 @@ void KWView::createStyleFromSelection()
         }
         delete dia;
     }
+}
+
+void KWView::switchModeView()
+{
+    QString mode=m_gui->canvasWidget()->viewMode()->type();
+    bool state = (mode!="ModeText");
+    actionToolsCreateText->setEnabled(state);
+    actionToolsCreatePix->setEnabled(state);
+    actionToolsCreatePart->setEnabled(state);
+    actionInsertFormula->setEnabled(state);
+    actionInsertTable->setEnabled(state);
+
 }
 
 /******************************************************************/
