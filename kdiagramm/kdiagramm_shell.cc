@@ -281,7 +281,7 @@ void KDiagrammShell::releaseDocument()
 void KDiagrammShell::slotFileNew()
 {
   if ( !newDocument() )    
-    QMessageBox::critical( this, i18n("KDiagramm Error"), i18n("Could not create new document"), i18n("Ok") );
+    QMessageBox::critical( this, i18n("KDiagramm Error"), i18n("Could not create new document"), i18n("OK") );
 }
 
 void KDiagrammShell::slotFileOpen()
