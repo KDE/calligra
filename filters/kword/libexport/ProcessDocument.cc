@@ -232,7 +232,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     TextFormatting* text=(TextFormatting*) tagData;
     QString str,style;
     bool wordbyword = false;
-    int red = 0, green = 0, blue = 0;
+    QString strColor;
 
     QValueList<AttrProcessing> attrProcessingList;
 
@@ -240,9 +240,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
         << AttrProcessing ( "value",   "QString", &str )
         << AttrProcessing ( "styleline", "QString",  &style )
         << AttrProcessing ( "wordbyword", "bool", &wordbyword )
-        << AttrProcessing ( "red",   "int", (void *) &red   )
-        << AttrProcessing ( "green", "int", (void *) &green )
-        << AttrProcessing ( "blue",  "int", (void *) &blue  )
+        << AttrProcessing ( "underlinecolor",   "QString", &strColor )
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -263,7 +261,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     {
         text->underlineStyle = style;
         text->underlineWord = wordbyword;
-        text->underlineColor.setRgb(red,green,blue);
+        text->underlineColor.setNamedColor(strColor);
     }
 }
 
