@@ -45,7 +45,6 @@ class KivioBirdEyePanel;
 class KivioLayerPanel;
 class KivioProtectionPanel;
 class KivioStencilGeometryPanel;
-class KivioViewManagerPanel;
 
 class KoDocumentEntry;
 class KoTabBar;
@@ -156,7 +155,6 @@ class KivioView : public KoView
 
   protected:
     void createGeometryDock();
-    void createViewManagerDock();
     void createLayerDock();
     void createBirdEyeDock();
     void createProtectionDock();
@@ -331,7 +329,6 @@ class KivioView : public KoView
     KoRuler* hRuler;
 
     KivioStencilGeometryPanel* m_pStencilGeometryPanel;
-    KivioViewManagerPanel* m_pViewManagerPanel;
     KivioLayerPanel* m_pLayersPanel;
     KivioBirdEyePanel* m_pBirdEyePanel;
     KivioProtectionPanel* m_pProtectionPanel;

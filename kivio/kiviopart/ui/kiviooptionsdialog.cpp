@@ -354,7 +354,6 @@ void KivioOptionsDialog::applyGuides()
 
 void KivioOptionsDialog::defaultPage()
 {
-  KivioView* view = static_cast<KivioView*>(parent());
   m_layout = Kivio::Config::defaultPageLayout();
   m_font = Kivio::Config::font();
   m_unitCombo->setCurrentItem(KoUnit::unit(Kivio::Config::unit()));

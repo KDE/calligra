@@ -46,7 +46,6 @@ class KivioStencil;
 
 namespace Kivio {
   class DragBarButton;
-  class ViewItemList;
 }
 
 class KoStore;
@@ -129,8 +128,6 @@ class KivioDoc : public KoDocument
     KoUnit::Unit units()const { return m_units; }
 
     KivioGridData grid() { return Kivio::Config::grid(); }
-
-    ViewItemList* viewItems()const { return viewItemList; }
 
     void initConfig();
     void saveConfig();
@@ -238,8 +235,6 @@ class KivioDoc : public KoDocument
 
     KoUnit::Unit m_units;
     KivioGridData gridData;
-
-    ViewItemList* viewItemList;
 
     DCOPObject *dcop;
     KoCommandHistory * m_commandHistory;

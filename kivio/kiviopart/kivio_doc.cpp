@@ -36,7 +36,6 @@
 #include "kivio_screen_painter.h"
 #include "kivio_stencil.h"
 #include "kivio_stencil_spawner_set.h"
-#include "kivio_viewmanager_panel.h"
 #include "kivioglobal.h"
 #include "kivio_config.h"
 
@@ -137,8 +136,6 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   initConfig();
 
-  viewItemList = new ViewItemList(this);
-
   //laurent: Why don't use menu history for undo/redo command ? sync with other koffice application
   m_commandHistory = new KoCommandHistory( actionCollection(),  /*false*/true  ) ;
   connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
@@ -236,7 +233,6 @@ QDomDocument KivioDoc::saveXML()
 
   QDomElement viewItemsElement = doc.createElement("ViewItems");
   kivio.appendChild(viewItemsElement);
-  viewItemList->save(viewItemsElement);
 
   doc.appendChild(kivio);
 
@@ -501,10 +497,6 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
         {
             loadStencilSpawnerSet( id );
         }
-    }
-    else if( name == "ViewItems" )
-    {
-        viewItemList->load(node.toElement());
     }
     else if( name == "Options" )
     {

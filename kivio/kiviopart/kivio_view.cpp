@@ -93,7 +93,6 @@
 
 #include "kivio_protection_panel.h"
 #include "kivio_stencil_geometry_panel.h"
-#include "kivio_viewmanager_panel.h"
 #include "kivio_layer_panel.h"
 #include "kivio_birdeye_panel.h"
 #include "export_page_dialog.h"
@@ -247,7 +246,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // Must be executed before setActivePage() and before setupActions()
   createGeometryDock();
-  createViewManagerDock();
   createLayerDock();
   createBirdEyeDock();
   createProtectionDock();
@@ -317,17 +315,6 @@ void KivioView::createGeometryDock()
     KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), "stencil_geometry", 0, actionCollection(), "stencilGeometry" );
     connect( showStencilGeometry, SIGNAL(toggled(bool)), stencilGeometryBase, SLOT(makeVisible(bool)));
     connect( stencilGeometryBase, SIGNAL(visibleChange(bool)), SLOT(toggleStencilGeometry(bool)));
-}
-
-void KivioView::createViewManagerDock()
-{
-    m_pViewManagerPanel = new KivioViewManagerPanel(this, this);
-    ToolDockBase* viewManagerBase = toolDockManager()->createToolDock(m_pViewManagerPanel,i18n("View Manager"));
-    viewManagerBase->move(0,0);
-
-    KToggleAction* showViewManager = new KToggleAction( i18n("View Manager"), "view_manager", 0, actionCollection(), "viewManager" );
-    connect( showViewManager, SIGNAL(toggled(bool)), viewManagerBase, SLOT(makeVisible(bool)));
-    connect( viewManagerBase, SIGNAL(visibleChange(bool)), SLOT(toggleViewManager(bool)));
 }
 
 void KivioView::createBirdEyeDock()
