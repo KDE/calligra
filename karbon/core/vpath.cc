@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <koPoint.h>
+#include <koRect.h>
 #include <qmap.h>
 #include <qpainter.h>
 #include <qptrvector.h>
@@ -67,8 +68,8 @@ public:
 	const KoPoint* p3() const
 		{ return &m_p3; }
 
-	virtual void setP1( const KoPoint& p ) {}
-	virtual void setP2( const KoPoint& p ) {}
+	virtual void setP1( const KoPoint& /*p*/ ) {}
+	virtual void setP2( const KoPoint& /*p*/ ) {}
 	void setP3( const KoPoint& p ) { m_p3 = p; };
 
 	VSegment* previous() const { return m_prev; }
@@ -76,16 +77,16 @@ public:
 		{ m_prev = const_cast<VSegment*>( prev ); }
 
 	virtual bool isFlat() const = 0;
-	virtual void calcBoundingBox( KoPoint& min, KoPoint& max ) const;
+	virtual KoRect boundingBox() const;
+	virtual bool bbsIntersect( const VSegment* seg ) const;
+	virtual bool intersectsWithBB( const KoRect& rect ) const;
 	virtual void addYourselfSplittedAtTo(
 		const double t, VPath& path, bool left = true ) = 0;
-	virtual QPtrVector<VSegment> splitAtMidpoint() const {};
+	virtual QPtrVector<VSegment> splitAtMidpoint() const = 0;
 
 	void findIntersectionParametersWith( const double t0, const double t1,
 		const VSegment* segB, const double u0, const double u1,
 		QValueList<double>& paramsA, QValueList<double>& paramsB ) const;
-
-	virtual bool isVisible() const { return false; }
 
 private:
 	KoPoint m_p3;
@@ -102,6 +103,10 @@ public:
 	virtual VMoveTo* clone() const;
 
 	virtual bool isFlat() const { return true; }
+	virtual bool bbsIntersect( const VSegment* ) const
+		{ return false; }
+	virtual bool intersectsWithBB( const KoRect& ) const
+		{ return false; }
 	virtual void addYourselfSplittedAtTo(
 		const double t, VPath& path, bool left = true );
 	virtual QPtrVector<VSegment> splitAtMidpoint() const;
@@ -120,8 +125,6 @@ public:
 	virtual void addYourselfSplittedAtTo(
 		const double t, VPath& path, bool left = true );
 	virtual QPtrVector<VSegment> splitAtMidpoint() const;
-
-	virtual bool isVisible() const { return true; }
 };
 
 
@@ -145,12 +148,10 @@ public:
 	void setFixedCtrl( const char fixedCtrl ) { m_fixedCtrl = fixedCtrl; }
 
 	virtual bool isFlat() const;
-	virtual void calcBoundingBox( KoPoint& min, KoPoint& max ) const;
+	virtual KoRect boundingBox() const;
 	virtual void addYourselfSplittedAtTo(
 		const double t, VPath& path, bool left = true );
 	virtual QPtrVector<VSegment> splitAtMidpoint() const;
-
-	virtual bool isVisible() const { return true; }
 
 private:
 	KoPoint m_p1;
@@ -168,27 +169,54 @@ public:
 	virtual VClosePath* clone() const;
 
 	virtual bool isFlat() const { return true; }
+	virtual bool bbsIntersect( const VSegment* ) const
+		{ return false; }
+	virtual bool intersectsWithBB( const KoRect& ) const
+		{ return false; }
 	virtual void addYourselfSplittedAtTo(
 		const double t, VPath& path, bool left = true );
 	virtual QPtrVector<VSegment> splitAtMidpoint() const;
 };
 
-
-void
-VSegment::calcBoundingBox( KoPoint& min, KoPoint& max ) const
+KoRect
+VSegment::boundingBox() const
 {
+	KoRect rect;
+
 	if ( p0() == 0L )
-		return;
+		return rect;
 
 	if( p0()->x() > p3()->x() )
-		{ min.setX( p3()->x() ); max.setX( p0()->x() ); }
+		{ rect.setLeft( p3()->x() ); rect.setRight( p0()->x() ); }
 	else
-		{ min.setX( p0()->x() ); max.setX( p3()->x() ); }
+		{ rect.setLeft( p0()->x() ); rect.setRight( p3()->x() ); }
 
 	if( p0()->y() > p3()->y() )
-		{ min.setY( p3()->y() ); max.setY( p0()->y() ); }
+		{ rect.setBottom( p3()->y() ); rect.setTop( p0()->y() ); }
 	else
-		{ min.setY( p0()->y() ); max.setY( p3()->y() ); }
+		{ rect.setBottom( p0()->y() ); rect.setTop( p3()->y() ); }
+
+	return rect;
+}
+
+bool
+VSegment::bbsIntersect( const VSegment* seg ) const
+{
+	return seg->intersectsWithBB( boundingBox() );
+}
+
+bool
+VSegment::intersectsWithBB( const KoRect& rect ) const
+{
+	KoRect r = boundingBox();
+	if(
+		r.left() > rect.right() || r.top() < rect.bottom() ||
+		rect.left() > r.right() || rect.top() < r.bottom() )
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void
@@ -199,28 +227,12 @@ VSegment::findIntersectionParametersWith( const double t0, const double t1,
 	if( p0() == 0L || segB->p0() == 0L )
 		return;
 
-	if( !isVisible() || !segB->isVisible() )
-		return;
-
 // TODO: to save some stack, maybe move bb-test in front of all
 // findIntersectionParametersWith() calls?
 
-	// calculate bounding-boxes:
-	KoPoint minA;
-	KoPoint maxA;
-	calcBoundingBox( minA, maxA );
-
-	KoPoint minB;
-	KoPoint maxB;
-	segB->calcBoundingBox( minB, maxB );
-
 	// bounding-boxes dont intersect => game over:
-	if (
-		minA.x() > maxB.x() || minB.x() > maxA.x() ||
-		minA.y() > maxB.y() || minB.y() > maxA.y() )
-	{
+	if ( !bbsIntersect( segB ) )
 		return;
-	}
 
 	if( isFlat() )
 	{
@@ -254,9 +266,9 @@ VSegment::findIntersectionParametersWith( const double t0, const double t1,
 			QPtrVector<VSegment> newSegsB = segB->splitAtMidpoint();
 
 			newSegsB.at( 0 )->findIntersectionParametersWith(
-				u0, midU, this, t0, t1, paramsA, paramsB );
+				u0, midU, this, t0, t1, paramsB, paramsA );
 			newSegsB.at( 1 )->findIntersectionParametersWith(
-				midU, u1, this, t0, t1, paramsA, paramsB );
+				midU, u1, this, t0, t1, paramsB, paramsA );
 		}
 	}
 	else
@@ -296,14 +308,9 @@ VMoveTo::clone() const
 }
 
 void
-VMoveTo::addYourselfSplittedAtTo( const double t, VPath& path, bool left )
+VMoveTo::addYourselfSplittedAtTo( const double /*t*/, VPath& path, bool left )
 {
-	if ( p0() == 0L || t < 0.0 || t > 1.0 )
-		return;
-
-	if ( left )
-		path.moveTo( *p0() + t * ( *p3() - *p0() ) );
-	else
+	if ( !left )
 		path.moveTo( *p3() );
 
 	setPrevious( path.lastSegment() );
@@ -312,6 +319,7 @@ VMoveTo::addYourselfSplittedAtTo( const double t, VPath& path, bool left )
 QPtrVector<VSegment>
 VMoveTo::splitAtMidpoint() const
 {
+// TODO: unecessary
 	QPtrVector<VSegment> segments( 2 );
 
 	if ( p0() == 0L )
@@ -388,37 +396,41 @@ VCurveTo::isFlat() const
 	return true;
 }
 
-void
-VCurveTo::calcBoundingBox( KoPoint& min, KoPoint& max ) const
+KoRect
+VCurveTo::boundingBox() const
 {
+	KoRect rect;
+
 	if ( p0() == 0L )
-		return;
+		return rect;
 
 	if( p0()->x() > p3()->x() )
-		{ min.setX( p3()->x() ); max.setX( p0()->x() ); }
+		{ rect.setLeft( p3()->x() ); rect.setRight( p0()->x() ); }
 	else
-		{ min.setX( p0()->x() ); max.setX( p3()->x() ); }
-	if( p1()->x() < min.x() )
-		min.setX( p1()->x() );
-	else if( p1()->x() > max.x() )
-		max.setX( p1()->x() );
-	if( p2()->x() < min.x() )
-		min.setX( p2()->x() );
-	else if( p2()->x() > max.x() )
-		max.setX( p2()->x() );
+		{ rect.setLeft( p0()->x() ); rect.setRight( p3()->x() ); }
+	if( p1()->x() < rect.left() )
+		rect.setLeft( p1()->x() );
+	else if( p1()->x() > rect.right() )
+		rect.setRight( p1()->x() );
+	if( p2()->x() < rect.left() )
+		rect.setLeft( p2()->x() );
+	else if( p2()->x() > rect.right() )
+		rect.setRight( p2()->x() );
 
 	if( p0()->y() > p3()->y() )
-		{ min.setY( p3()->y() ); max.setY( p0()->y() ); }
+		{ rect.setBottom( p3()->y() ); rect.setTop( p0()->y() ); }
 	else
-		{ min.setY( p0()->y() ); max.setY( p3()->y() ); }
-	if( p1()->y() < min.y() )
-		min.setY( p1()->y() );
-	else if( p1()->y() > max.y() )
-		max.setY( p1()->y() );
-	if( p2()->y() < min.y() )
-		min.setY( p2()->y() );
-	else if( p2()->y() > max.y() )
-		max.setY( p2()->y() );
+		{ rect.setBottom( p0()->y() ); rect.setTop( p3()->y() ); }
+	if( p1()->y() < rect.bottom() )
+		rect.setBottom( p1()->y() );
+	else if( p1()->y() > rect.top() )
+		rect.setTop( p1()->y() );
+	if( p2()->y() < rect.bottom() )
+		rect.setBottom( p2()->y() );
+	else if( p2()->y() > rect.top() )
+		rect.setTop( p2()->y() );
+
+	return rect;
 }
 
 void
@@ -499,14 +511,9 @@ VClosePath::clone() const
 
 void
 VClosePath::addYourselfSplittedAtTo(
-	const double t, VPath& path, bool left )
+	const double /*t*/, VPath& path, bool left )
 {
-	if ( p0() == 0L || t < 0.0 || t > 1.0 )
-		return;
-
-	if ( left )
-		path.lineTo( *p0() + t * ( *p3() - *p0() ) );
-	else
+	if ( !left )
 		path.close();
 
 	setPrevious( path.lastSegment() );
@@ -515,6 +522,7 @@ VClosePath::addYourselfSplittedAtTo(
 QPtrVector<VSegment>
 VClosePath::splitAtMidpoint() const
 {
+// TODO: unecessary
 	QPtrVector<VSegment> segments( 2 );
 
 	if ( p0() == 0L )
@@ -542,7 +550,7 @@ VPath::VPath()
 	m_segments.append( new VMoveTo( KoPoint( 0.0, 0.0 ) ) );
 }
 
-VPath::VPath( const VPath& path )
+VPath::VPath( const VPath& /*path*/ )
 	: VObject()
 {
 // TODO: implement copy-ctor
@@ -550,14 +558,13 @@ VPath::VPath( const VPath& path )
 
 VPath::~VPath()
 {
-// TODO: should we be polite and destruct the QPtrLists as well ?
 	QPtrListIterator<VSegment> itr( m_segments );
 	for( ; itr.current() ; ++itr )
 		delete( itr.current() );
 }
 
 void
-VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
+VPath::draw( QPainter& painter, const QRect& /*rect*/, const double zoomFactor )
 {
 	if( isDeleted() ) return;
 
@@ -598,18 +605,15 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		if( (*itr)->isVisible() )
-		{
-			// draw boxes:
-			painter.setPen( Qt::black );
-			const uint handleSize = 3;
+		// draw boxes:
+		painter.setPen( Qt::black );
+		const uint handleSize = 3;
 
-			painter.drawRect(
-				itr.current()->p3()->x() - handleSize,
-				itr.current()->p3()->y() - handleSize,
-				handleSize*2 + 1,
-				handleSize*2 + 1 );
-		}
+		painter.drawRect(
+			itr.current()->p3()->x() - handleSize,
+			itr.current()->p3()->y() - handleSize,
+			handleSize*2 + 1,
+			handleSize*2 + 1 );
 	}
 
 	painter.restore();
@@ -783,6 +787,7 @@ VPath::close()
 {
 	if( isClosed() ) return *this;
 
+	// add a lineTo if necessary:
 	if( currentPoint() != *( m_segments.getFirst()->p3() ) )
 		lineTo( *( m_segments.getFirst()->p3() ) );
 

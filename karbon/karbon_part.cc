@@ -15,7 +15,7 @@
 // TODO: remove these after debugging:
 #include <qwmatrix.h>
 #include "vccmd_ellipse.h"
-#include "vccmd_rectangle.h"
+#include "vccmd_star.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -43,32 +43,12 @@ bool
 KarbonPart::initDoc()
 {
 // TODO: remove the whole test code:
-/*
+
 	VCCmdEllipse e( this, 50, 100, 150, 250 );
 	VPath* elly = e.createPath();
-*/
-/*
-	VCCmdRectangle e( this, 50, 100, 100, 350 );
-	VPath* elly = e.createPath();
-	QWMatrix l;
 
-	l.translate(-40,60);
-	l.rotate(-45.0);
-	elly->transform( l );
-*/
-/*
-	VCCmdRectangle r( this, 80, 70, 250, 200 );
+	VCCmdStar r( this, 110, 150, 80, 30, 8 );
 	VPath* rect = r.createPath();
-*/
-
-	VPath* elly = new VPath();
-	elly->moveTo(200,100);
-	elly->lineTo(100,200);
-
-	VPath* rect = new VPath();
-	rect->moveTo(200,200);
-	rect->lineTo(100,100);
-
 
 	insertObject( elly );
 	insertObject( rect );
@@ -93,7 +73,6 @@ KarbonPart::initDoc()
 		insertObject( obj );
 	}
 
-	// If nothing is loaded, do initialize here
 	return true;
 }
 
@@ -136,7 +115,7 @@ KarbonPart::addCommand( VCommand* cmd )
 }
 
 void
-KarbonPart::repaintAllViews( bool erase )
+KarbonPart::repaintAllViews( bool /*erase*/ )
 {
 	QPtrListIterator<KoView> itr( views() );
 	for ( ; itr.current() ; ++itr )

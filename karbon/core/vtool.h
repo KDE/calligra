@@ -20,10 +20,11 @@ public:
 	virtual ~VTool() = 0;
 
 	// handling mouse/keyboard events:
-	virtual bool eventFilter( KarbonView* view, QEvent* event ) { return false; }
+	virtual bool eventFilter( KarbonView* /*view*/, QEvent* /*event*/ )
+		{ return false; }
 
 	// only manipulating (opposed to creating) tools have to implement this:
-	virtual VCommand* manipulate( VObject* object ) { return 0L; }
+	virtual VCommand* manipulate( VObject* /*object*/ ) { return 0L; }
 };
 
 #endif
