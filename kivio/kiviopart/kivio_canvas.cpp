@@ -524,6 +524,8 @@ void KivioCanvas::leaveEvent( QEvent* )
 
 void KivioCanvas::mousePressEvent(QMouseEvent* e)
 {
+    if(!m_pDoc->isReadWrite())
+        return;
   lastPoint = e->pos();
   TKPoint p = mapFromScreen(e->pos());
   KivioGuideLines* gl = activePage()->guideLines();
@@ -561,6 +563,8 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
 
 void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
 {
+    if(!m_pDoc->isReadWrite())
+        return;
   if (pressGuideline) {
     m_guideLinesTimer->stop();
     TKPoint p = mapFromScreen(e->pos());
@@ -578,7 +582,9 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
 
 void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
 {
-  m_pVRuler->updatePointer(e->pos().x(),e->pos().y());
+   if(!m_pDoc->isReadWrite())
+        return;
+    m_pVRuler->updatePointer(e->pos().x(),e->pos().y());
   m_pHRuler->updatePointer(e->pos().x(),e->pos().y());
 
   TKPoint p = mapFromScreen(e->pos());
@@ -893,7 +899,7 @@ void KivioCanvas::beginUnclippedPainter()
 
     if ( !unclipped )
         clearWFlags( WPaintUnclipped );
-	
+
     unclippedPainter->setRasterOp( NotROP );
     unclippedPainter->setPen( QPen(blue,1,DotLine) );
 }
@@ -1178,7 +1184,7 @@ TKPoint KivioCanvas::snapToGridAndGuides(TKPoint point)
 	  else
 	     p.x = dxy.w*(dx+1);
        }
-       
+
        if ( disty < dist.h) {
 	  if ( QABS(p.y-dxy.h*dy) < QABS(p.y-dxy.h*(dy+1)) )
 	     p.y = dxy.h*dy;
@@ -1200,7 +1206,7 @@ TKPoint KivioCanvas::snapToGridAndGuides(TKPoint point)
        {
 	  p.y = (float)pData->position();
        }
-       
+
        pData = pGuides->findVertical( point.x, four );
        if( pData )
        {
@@ -1252,7 +1258,7 @@ TKPoint KivioCanvas::snapToGuides(TKPoint point, bool &snappedX, bool &snappedY)
     snappedX = false;
     snappedY = false;
     TKPoint p = point;
-    
+
     if (m_pView->isSnapGuides())
     {
        float four = 4.0f / m_pZoom;
@@ -1263,7 +1269,7 @@ TKPoint KivioCanvas::snapToGuides(TKPoint point, bool &snappedX, bool &snappedY)
 	  snappedY = true;
 	  p.y = (float)pData->position();
        }
-       
+
        pData = pGuides->findVertical( point.x, four );
        if( pData )
        {
