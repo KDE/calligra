@@ -3611,6 +3611,7 @@ FormatFont ExcelReader::convertFont( unsigned fontIndex )
     FontRecord fr = d->fontTable[ fontIndex ];
     font.setFontSize( fr.height() / 20.0 );
     font.setFontFamily( fr.fontName() );
+    font.setColor( convertColor( fr.colorIndex() ) );
     font.setBold( fr.boldness() > 500 );
     font.setItalic( fr.italic() );
     font.setStrikeout( fr.strikeout() );    
