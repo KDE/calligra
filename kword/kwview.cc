@@ -399,11 +399,10 @@ void KWView::setupActions()
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
     */
 
-    /*
-
-    TODO for the moment serail letter doesn't work.
+    
+    // TODO at the moment serial letters don't work correctly
     addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
-    */
+    
 
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
                                             actionCollection(), "insert_expression" );
@@ -1071,11 +1070,11 @@ void KWView::print( KPrinter &prt )
     //kdDebug() << "x11AppDPI: " << QPaintDevice::x11AppDpiX() << "," << QPaintDevice::x11AppDpiY() << endl;
 
     bool serialLetter = FALSE;
-#if 0
-    QList<KWVariable> *vars = m_doc->getVariables();
+
+    QList<KWVariable> vars = m_doc->getVariables();
     KWVariable *v = 0;
-    for ( v = vars->first(); v; v = vars->next() ) {
-        if ( v->getType() == VT_SERIALLETTER ) {
+    for ( v = vars.first(); v; v = vars.next() ) {
+        if ( v->type() == VT_SERIALLETTER ) {
             serialLetter = TRUE;
             break;
         }
@@ -1084,7 +1083,7 @@ void KWView::print( KPrinter &prt )
     if ( !m_doc->getSerialLetterDataBase() ||
          m_doc->getSerialLetterDataBase()->getNumRecords() == 0 )
         serialLetter = FALSE;
-#endif
+
     //float left_margin = 0.0;
     //float top_margin = 0.0;
 
@@ -1145,18 +1144,16 @@ void KWView::print( KPrinter &prt )
     {
         if ( !serialLetter )
             m_gui->canvasWidget()->print( &painter, &prt );
-#if 0
         else
         {
             for ( int i = 0; i < m_doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
                 m_doc->setSerialLetterRecord( i );
-                m_gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
+                m_gui->canvasWidget()->print( &painter, &prt );
                 if ( i < m_doc->getSerialLetterDataBase()->getNumRecords() - 1 )
                     prt.newPage();
             }
             m_doc->setSerialLetterRecord( -1 );
         }
-#endif
     }
 
     painter.end();
@@ -1573,13 +1570,11 @@ void KWView::editCustomVars()
 
 void KWView::editSerialLetterDataBase()
 {
-#if 0
     KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, m_doc->getSerialLetterDataBase() );
     dia->exec();
-    m_gui->canvasWidget()->recalcWholeText();
-    m_gui->canvasWidget()->repaintScreen( FALSE );
+    // Don't know if we really need this so it's commented out (SL)
+    // m_gui->canvasWidget()->repaintAll( FALSE );
     delete dia;
-#endif
 }
 
 void KWView::viewTextMode()

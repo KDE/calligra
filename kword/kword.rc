@@ -16,6 +16,8 @@
   <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_replace"/>
+  <Separator/>
+  <Action name="edit_sldatabase"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
