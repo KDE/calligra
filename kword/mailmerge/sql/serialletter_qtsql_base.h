@@ -55,7 +55,8 @@ class KWQTSQLSerialDataSourceBase: public KWMailMergeDataSource
 	QString port;
 	QString databasename;
 	QGuardedPtr<QSqlDatabase> database;
- 
+	QString DataBaseConnection; 
+        static int connectionId;
    k_dcop:
      bool openDatabase();
 

@@ -42,15 +42,18 @@
  *
  ******************************************************************/
 
+int KWQTSQLSerialDataSourceBase::connectionId=0;
+
 KWQTSQLSerialDataSourceBase::KWQTSQLSerialDataSourceBase(KInstance *inst,QObject *parent)
 	: KWMailMergeDataSource(inst,parent)
 {
+	DataBaseConnection=QString("KWQTSQLPOWER")+parent->name()+QString("--%1").arg(connectionId++);
 	port=i18n("default");
 }
 
 KWQTSQLSerialDataSourceBase::~KWQTSQLSerialDataSourceBase()
 {
-	QSqlDatabase::removeDatabase(QString("KWQTSQLPOWER")+parent()->name());
+	QSqlDatabase::removeDatabase(DataBaseConnection);
 }
 
 
@@ -71,8 +74,8 @@ bool KWQTSQLSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
 bool  KWQTSQLSerialDataSourceBase::openDatabase()
 {
 	QCString pwd;
-	QSqlDatabase::removeDatabase(QString("KWQTSQLPOWER")+parent()->name());
-        database=QSqlDatabase::addDatabase(driver,QString("KWQTSQLPOWER")+parent()->name());
+	QSqlDatabase::removeDatabase(DataBaseConnection);
+        database=QSqlDatabase::addDatabase(driver,DataBaseConnection);
         if (database)
         {
                 if (database->lastError().type()!=QSqlError::None)
