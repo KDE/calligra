@@ -1268,6 +1268,7 @@ void KSpreadUndoSort::undo()
     return;
 
   doc()->undoBuffer()->lock();
+  doc()->emitBeginOperation();
 
   copyAll( m_lstRedoLayouts, m_lstRedoColLayouts,
            m_lstRedoRowLayouts, table );
@@ -1309,7 +1310,10 @@ void KSpreadUndoSort::undo()
     table->updateCell( cell, (*it2).col, (*it2).row );
   }
 
+  doc()->emitEndOperation();
+
   table->updateView(m_rctRect);
+
   doc()->undoBuffer()->unlock();
 }
 
@@ -1320,6 +1324,7 @@ void KSpreadUndoSort::redo()
 	return;
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
 
     if( util_isColumnSelected( m_rctRect ) )
     {
@@ -1358,7 +1363,7 @@ void KSpreadUndoSort::redo()
       cell->setDisplayDirtyFlag();
       table->updateCell( cell, (*it2).col, (*it2).row );
     }
-
+    doc()->emitEndOperation();
     table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }
