@@ -27,6 +27,8 @@
 // because it's faster ;p (Werner)
 #define POINT_TO_MM(px) ((px)*0.352777167)
 #define MM_TO_POINT(mm) ((mm)*2.83465058)
+#define POINT_TO_CM(px) ((px)*0.0352777167)
+#define CM_TO_POINT(cm) ((cm)*28.3465058)
 #define POINT_TO_INCH(px) ((px)*0.01388888888889)
 #define INCH_TO_POINT(inch) ((inch)*72.0)
 #define MM_TO_INCH(mm) ((mm)*0.039370147)
@@ -42,6 +44,7 @@ class KoUnit
 public:
     enum Unit {
         U_MM,
+        U_CM,
         U_PT,
         U_INCH
     };
@@ -56,6 +59,11 @@ public:
     static double toMM( double ptValue ) {
         // "mm" values are rounded to 0.0001 millimeters
         return qRound( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
+    }
+
+    // Prepare ptValue to be displayed in cm
+    static double toCM( double ptValue ) {
+        return qRound( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
     // Prepare ptValue to be displayed in inch
@@ -83,6 +91,7 @@ public:
     // Convert a unit name into a Unit enum
     static Unit unit( const QString &_unitName ) {
         if ( _unitName == QString::fromLatin1( "mm" ) ) return U_MM;
+        if ( _unitName == QString::fromLatin1( "cm" ) ) return U_CM;
         if ( _unitName == QString::fromLatin1( "in" )
             || _unitName == QString::fromLatin1("inch") /*compat*/ ) return U_INCH;
         return U_PT;
@@ -90,6 +99,7 @@ public:
     // Get the name of a unit
     static QString unitName( Unit _unit ) {
         if ( _unit == U_MM ) return QString::fromLatin1( "mm" );
+        if ( _unit == U_CM ) return QString::fromLatin1( "cm" );
         if ( _unit == U_INCH ) return QString::fromLatin1( "in" );
         return QString::fromLatin1( "pt" );
     }
