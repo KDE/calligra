@@ -3413,57 +3413,63 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 void ExcelReader::handleRecord( Record* record )
 {
   if( !record ) return;
-
-  if ( record->rtti() == BottomMarginRecord::id )
-	  handleBottomMargin( static_cast<BottomMarginRecord*>( record ) );
-  if ( record->rtti() == BoundSheetRecord::id )
-	  handleBoundSheet( static_cast<BoundSheetRecord*>( record ) );
-  if ( record->rtti() == BOFRecord::id )
-	  handleBOF( static_cast<BOFRecord*>( record ) );
-  if ( record->rtti() == BoolErrRecord::id )
-	  handleBoolErr( static_cast<BoolErrRecord*>( record ) );
-  if ( record->rtti() == BlankRecord::id )
-	  handleBlank( static_cast<BlankRecord*>( record ) );
-  if ( record->rtti() == ColInfoRecord::id )
-	  handleColInfo( static_cast<ColInfoRecord*>( record ) );
-  if ( record->rtti() == FormatRecord::id )
-	  handleFormat( static_cast<FormatRecord*>( record ) );
-  if ( record->rtti() == FontRecord::id )
-	  handleFont( static_cast<FontRecord*>( record ) );
-  if ( record->rtti() == FooterRecord::id )
-	   handleFooter( static_cast<FooterRecord*>( record ) );
-  if ( record->rtti() == HeaderRecord::id )
-	  handleHeader( static_cast<HeaderRecord*>( record ) );
-  if ( record->rtti() == LabelRecord::id )
-	  handleLabel( static_cast<LabelRecord*>( record ) );
-  if ( record->rtti() == LabelSSTRecord::id )
-	  handleLabelSST( static_cast<LabelSSTRecord*>( record ) );
-  if ( record->rtti() == LeftMarginRecord::id )
-	  handleLeftMargin( static_cast<LeftMarginRecord*>( record ) );
-  if ( record->rtti() == MergedCellsRecord::id )
-	  handleMergedCells( static_cast<MergedCellsRecord*>( record ) );
-  if ( record->rtti() == MulBlankRecord::id )
-	  handleMulBlank( static_cast<MulBlankRecord*>( record ) );
-  if ( record->rtti() == MulRKRecord::id )
-	  handleMulRK( static_cast<MulRKRecord*>( record ) );
-  if ( record->rtti() == NumberRecord::id )
-	  handleNumber( static_cast<NumberRecord*>( record ) );
-  if ( record->rtti() == PaletteRecord::id )
-	  handlePalette( static_cast<PaletteRecord*>( record ) );
-  if ( record->rtti() == RightMarginRecord::id )
-	  handleRightMargin( static_cast<RightMarginRecord*>( record ) );
-  if ( record->rtti() == RKRecord::id )
-	  handleRK( static_cast<RKRecord*>( record ) );
-  if ( record->rtti() == RowRecord::id )
-	  handleRow( static_cast<RowRecord*>( record ) );
-  if ( record->rtti() == RStringRecord::id )
-	  handleRString( static_cast<RStringRecord*>( record ) );
-  if ( record->rtti() == SSTRecord::id )
-	  handleSST( static_cast<SSTRecord*>( record ) );
-  if ( record->rtti() == TopMarginRecord::id )
-	  handleTopMargin( static_cast<TopMarginRecord*>( record ) );
-  if ( record->rtti() == XFRecord::id )
-	  handleXF( static_cast<XFRecord*>( record ) );
+  
+  unsigned type = record->rtti();
+  switch( type )
+  {
+    case BottomMarginRecord::id: 
+      handleBottomMargin( static_cast<BottomMarginRecord*>( record ) ); break;
+    case BoundSheetRecord::id: 
+      handleBoundSheet( static_cast<BoundSheetRecord*>( record ) ); break;
+    case BOFRecord::id: 
+      handleBOF( static_cast<BOFRecord*>( record ) ); break;
+    case BoolErrRecord::id: 
+      handleBoolErr( static_cast<BoolErrRecord*>( record ) ); break;
+    case BlankRecord::id: 
+      handleBlank( static_cast<BlankRecord*>( record ) ); break;
+    case ColInfoRecord::id: 
+      handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
+    case FormatRecord::id: 
+      handleFormat( static_cast<FormatRecord*>( record ) ); break;
+    case FontRecord::id: 
+      handleFont( static_cast<FontRecord*>( record ) ); break;
+    case FooterRecord::id: 
+      handleFooter( static_cast<FooterRecord*>( record ) ); break;
+    case HeaderRecord::id: 
+      handleHeader( static_cast<HeaderRecord*>( record ) ); break;
+    case LabelRecord::id: 
+      handleLabel( static_cast<LabelRecord*>( record ) ); break;
+    case LabelSSTRecord::id: 
+      handleLabelSST( static_cast<LabelSSTRecord*>( record ) ); break;
+    case LeftMarginRecord::id: 
+      handleLeftMargin( static_cast<LeftMarginRecord*>( record ) ); break;
+    case MergedCellsRecord::id: 
+      handleMergedCells( static_cast<MergedCellsRecord*>( record ) ); break;
+    case MulBlankRecord::id: 
+      handleMulBlank( static_cast<MulBlankRecord*>( record ) ); break;
+    case MulRKRecord::id: 
+      handleMulRK( static_cast<MulRKRecord*>( record ) ); break;
+    case NumberRecord::id: 
+      handleNumber( static_cast<NumberRecord*>( record ) ); break;
+    case PaletteRecord::id: 
+      handlePalette( static_cast<PaletteRecord*>( record ) ); break;
+    case RightMarginRecord::id: 
+      handleRightMargin( static_cast<RightMarginRecord*>( record ) ); break;
+    case RKRecord::id: 
+      handleRK( static_cast<RKRecord*>( record ) ); break;
+    case RowRecord::id: 
+      handleRow( static_cast<RowRecord*>( record ) ); break;
+    case RStringRecord::id: 
+      handleRString( static_cast<RStringRecord*>( record ) ); break;
+    case SSTRecord::id: 
+      handleSST( static_cast<SSTRecord*>( record ) ); break;
+    case TopMarginRecord::id: 
+      handleTopMargin( static_cast<TopMarginRecord*>( record ) ); break;
+    case XFRecord::id: 
+      handleXF( static_cast<XFRecord*>( record ) ); break;
+    default:
+      break;  
+  }
 }
 
 void ExcelReader::handleBottomMargin( BottomMarginRecord* record )
