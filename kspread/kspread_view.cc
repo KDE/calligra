@@ -525,7 +525,57 @@ void ViewPrivate::initActions()
       ac, "textColor",true );
   actions->textColor->setDefaultColor(QColor());
 
+  actions->alignLeft = new KToggleAction( i18n("Align Left"), "text_left",
+      0, ac, "left");
+  QObject::connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
+      view, SLOT( alignLeft( bool ) ) );
+  actions->alignLeft->setExclusiveGroup( "Align" );
+  actions->alignLeft->setToolTip(i18n("Left justify the cell contents."));
 
+  actions->alignCenter = new KToggleAction( i18n("Align Center"), "text_center",
+      0, ac, "center");
+  QObject::connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
+      view, SLOT( alignCenter( bool ) ) );
+  actions->alignCenter->setExclusiveGroup( "Align" );
+  actions->alignCenter->setToolTip(i18n("Center the cell contents."));
+
+  actions->alignRight = new KToggleAction( i18n("Align Right"), "text_right",
+      0, ac, "right");
+  QObject::connect( actions->alignRight, SIGNAL( toggled( bool ) ),
+      view, SLOT( alignRight( bool ) ) );
+  actions->alignRight->setExclusiveGroup( "Align" );
+  actions->alignRight->setToolTip(i18n("Right justify the cell contents."));
+
+  actions->alignTop = new KToggleAction( i18n("Align Top"), "text_top",
+      0, ac, "top");
+  QObject::connect( actions->alignTop, SIGNAL( toggled( bool ) ),
+      view, SLOT( alignTop( bool ) ) );
+  actions->alignTop->setExclusiveGroup( "Pos" );
+  actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell."));
+
+  actions->alignMiddle = new KToggleAction( i18n("Align Middle"), "middle",
+      0, ac, "middle");
+  QObject::connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
+      view, SLOT( alignMiddle( bool ) ) );
+  actions->alignMiddle->setExclusiveGroup( "Pos" );
+  actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell."));
+
+  actions->alignBottom = new KToggleAction( i18n("Align Bottom"), "text_bottom",
+      0, ac, "bottom");
+  QObject::connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
+      view, SLOT( alignBottom( bool ) ) );
+  actions->alignBottom->setExclusiveGroup( "Pos" );
+  actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell."));
+
+  actions->verticalText = new KToggleAction( i18n("Vertical Text"),"vertical_text" ,
+      0 ,ac, "verticaltext" );
+  QObject::connect( actions->verticalText, SIGNAL( toggled( bool ) ),
+      view, SLOT( verticalText( bool ) ) );
+  actions->verticalText->setToolTip(i18n("Print cell contents vertically."));
+
+  actions->changeAngle = new KAction( i18n("Change Angle..."),
+      0, view, SLOT( changeAngle() ), ac, "changeangle" );
+  actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed."));
 }
 
 
@@ -674,8 +724,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeCellOperationActions();
     initializeCellPropertyActions();
     initializeTextFormatActions();
-    initializeTextLayoutActions();
-    initializeTextPropertyActions();
     initializeTableActions();
     initializeSpellChecking();
     initializeRowColumnActions();
@@ -1258,127 +1306,6 @@ void KSpreadView::initializeTextFormatActions()
                                     SLOT( firstLetterUpper() ),
                                     actionCollection(), "firstletterupper" );
   d->actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter."));
-}
-
-void KSpreadView::initializeTextLayoutActions()
-{
-  /*******************************/
-  d->actions->alignLeft = new KToggleAction( i18n("Align Left"), "text_left", 0,
-                                   actionCollection(), "left");
-  connect( d->actions->alignLeft, SIGNAL( toggled( bool ) ), this,
-           SLOT( alignLeft( bool ) ) );
-  d->actions->alignLeft->setExclusiveGroup( "Align" );
-  d->actions->alignLeft->setToolTip(i18n("Left justify the cell contents."));
-
-  /*******************************/
-  d->actions->alignCenter = new KToggleAction( i18n("Align Center"), "text_center", 0,
-                                     actionCollection(), "center");
-  connect( d->actions->alignCenter, SIGNAL( toggled( bool ) ), this,
-           SLOT( alignCenter( bool ) ) );
-  d->actions->alignCenter->setExclusiveGroup( "Align" );
-  d->actions->alignCenter->setToolTip(i18n("Center the cell contents."));
-
-  /*******************************/
-  d->actions->alignRight = new KToggleAction( i18n("Align Right"), "text_right", 0,
-                                    actionCollection(), "right");
-  connect( d->actions->alignRight, SIGNAL( toggled( bool ) ), this,
-           SLOT( alignRight( bool ) ) );
-  d->actions->alignRight->setExclusiveGroup( "Align" );
-  d->actions->alignRight->setToolTip(i18n("Right justify the cell contents."));
-
-  /*******************************/
-  d->actions->alignTop = new KToggleAction( i18n("Align Top"), "text_top", 0,
-                                  actionCollection(), "top");
-  connect( d->actions->alignTop, SIGNAL( toggled( bool ) ), this,
-           SLOT( alignTop( bool ) ) );
-  d->actions->alignTop->setExclusiveGroup( "Pos" );
-  d->actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell."));
-
-  /*******************************/
-  d->actions->alignMiddle = new KToggleAction( i18n("Align Middle"), "middle", 0,
-                                     actionCollection(), "middle");
-  connect( d->actions->alignMiddle, SIGNAL( toggled( bool ) ), this,
-           SLOT( alignMiddle( bool ) ) );
-  d->actions->alignMiddle->setExclusiveGroup( "Pos" );
-  d->actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell."));
-
-  /*******************************/
-  d->actions->alignBottom = new KToggleAction( i18n("Align Bottom"), "text_bottom", 0,
-                                     actionCollection(), "bottom");
-  connect( d->actions->alignBottom, SIGNAL( toggled( bool ) ), this,
-           SLOT( alignBottom( bool ) ) );
-  d->actions->alignBottom->setExclusiveGroup( "Pos" );
-  d->actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell."));
-
-  /*******************************/
-  d->actions->verticalText = new KToggleAction( i18n("Vertical Text"),"vertical_text" ,
-                                      0 ,actionCollection(), "verticaltext" );
-  connect( d->actions->verticalText, SIGNAL( toggled( bool ) ), this,
-           SLOT( verticalText( bool ) ) );
-  d->actions->verticalText->setToolTip(i18n("Print cell contents vertically."));
-
-  /*******************************/
-  d->actions->changeAngle = new KAction( i18n("Change Angle..."), 0, this,
-                               SLOT( changeAngle() ), actionCollection(),
-                               "changeangle" );
-  d->actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed."));
-}
-
-void KSpreadView::initializeTextPropertyActions()
-{
-  /*******************************/
-  d->actions->bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B,
-                              actionCollection(), "bold");
-  connect( d->actions->bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-
-  /*******************************/
-  d->actions->italic = new KToggleAction( i18n("Italic"), "text_italic", CTRL + Key_I,
-                                actionCollection(), "italic");
-  connect( d->actions->italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-
-  /*******************************/
-  d->actions->underline = new KToggleAction( i18n("Underline"), "text_under",
-                                   CTRL + Key_U, actionCollection(),
-                                   "underline");
-  connect( d->actions->underline, SIGNAL( toggled( bool ) ), this,
-           SLOT( underline( bool ) ) );
-
-  /*******************************/
-  d->actions->strikeOut = new KToggleAction( i18n("Strike Out"), "text_strike", 0,
-                                   actionCollection(), "strikeout");
-  connect( d->actions->strikeOut, SIGNAL( toggled( bool ) ), this,
-           SLOT( strikeOut( bool ) ) );
-
-  /*******************************/
-  d->actions->selectFont = new KFontAction( i18n("Select Font..."), 0, actionCollection(),
-                                  "selectFont" );
-  connect( d->actions->selectFont, SIGNAL( activated( const QString& ) ), this,
-           SLOT( fontSelected( const QString& ) ) );
-
-  /*******************************/
-  d->actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0,
-                                          actionCollection(), "selectFontSize" );
-  connect( d->actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ), this,
-           SLOT( fontSizeSelected( int ) ) );
-
-  /*******************************/
-  d->actions->fontSizeUp = new KAction( i18n("Increase Font Size"), "fontsizeup", 0, this,
-                              SLOT( increaseFontSize() ), actionCollection(),
-                              "increaseFontSize" );
-
-  /*******************************/
-  d->actions->fontSizeDown = new KAction( i18n("Decrease Font Size"), "fontsizedown", 0,
-                                this, SLOT( decreaseFontSize() ),
-                                actionCollection(), "decreaseFontSize" );
-
-  /*******************************/
-  d->actions->textColor = new TKSelectColorAction( i18n("Text Color"),
-                                         TKSelectColorAction::TextColor,
-                                         actionCollection(), "textColor",true );
-  connect( d->actions->textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
-  d->actions->textColor->setDefaultColor(QColor());
-
-  /*******************************/
 }
 
 void KSpreadView::initializeTableActions()
