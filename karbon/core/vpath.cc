@@ -98,37 +98,6 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 		painter->fillPath();
 
 		// draw stroke:
-		/*for( itr.toFirst(); itr.current(); ++itr )
-		{
-			VSegmentListIterator jtr( *( itr.current() ) );
-			for( ; jtr.current(); ++jtr )
-			{
-				if( jtr.current()->type() == segment_curve  )
-					painter->curveTo(
-						jtr.current()->ctrlPoint1(),
-						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot2() );
-				else if( jtr.current()->type() == segment_curve1  )
-					painter->curveTo(
-						jtr.current()->knot1(),
-						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot2() );
-				else if( jtr.current()->type() == segment_curve2  )
-					painter->curveTo(
-						jtr.current()->ctrlPoint1(),
-						jtr.current()->knot2(),
-						jtr.current()->knot2() );
-				else if(
-					jtr.current()->type() == segment_line ||
-					jtr.current()->type() == segment_end  )
-				{
-					painter->lineTo( jtr.current()->knot2() );
-				}
-				else
-					painter->moveTo( jtr.current()->knot2() );
-			}
-		}*/
-
 		painter->setRasterOp( Qt::CopyROP );
 		painter->setPen( stroke() );
 		painter->setBrush( Qt::NoBrush );
