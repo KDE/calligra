@@ -65,11 +65,11 @@ VShapeTool::recalcCoords()
 	{
 		// radius:
 		m_d1 = sqrt(
-			( m_lp.x() - m_fp.x() ) * ( m_lp.x() - m_fp.x() ) +
-			( m_lp.y() - m_fp.y() ) * ( m_lp.y() - m_fp.y() ) );
+			(double)(( m_lp.x() - m_fp.x() ) * ( m_lp.x() - m_fp.x() ) +
+			( m_lp.y() - m_fp.y() ) * ( m_lp.y() - m_fp.y() ) ));
 
 		// angle:
-		m_d2 = atan2( ( m_lp.y() - m_fp.y() ), ( m_lp.x() - m_fp.x() ) );
+		m_d2 = atan2( (double)( m_lp.y() - m_fp.y() ), (double)( m_lp.x() - m_fp.x() ) );
 
 		// define pi/2 as "0.0":
 		m_d2 -= VGlobal::pi_2;
