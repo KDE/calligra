@@ -127,7 +127,7 @@ void
 VStarOptionsWidget::typeChanged( int type )
 {
 	m_innerR->setEnabled( type == VStar::star_outline || type == VStar::framed_star );
-	m_innerAngle->setEnabled( type == VStar::star_outline || type == VStar::framed_star );
+	m_innerAngle->setEnabled( type == VStar::star || type == VStar::star_outline || type == VStar::framed_star );
 }
 
 VStarTool::VStarTool( KarbonView* view )

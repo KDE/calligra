@@ -51,25 +51,57 @@ VStar::VStar( VObject* parent,
 		outerRadius * sin( angle + VGlobal::pi_2 ) );
 	moveTo( p );
 
-	if( m_type == wheel || m_type == spoke )
-		innerRadius = 0.0;
-
-	for ( uint i = 0; i < edges; ++i )
+	if( m_type == star || m_type == framed_star )
 	{
-		if( m_type != polygon )
+		innerRadius = 0.4 * outerRadius;
+		int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
+		int k = j - 1;
+		int jumpto = 0;
+		for ( uint i = 1; i < edges + 1; ++i )
 		{
 			p.setX( innerRadius *
-				cos( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				cos( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 ) ) );
 			p.setY( innerRadius *
-				sin( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				sin( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 ) ) );
+			lineTo( p );
+
+			jumpto = ( i * j ) % edges;
+
+			p.setX( innerRadius *
+				cos( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 ) ) );
+			p.setY( innerRadius *
+				sin( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 ) ) );
+			lineTo( p );
+
+			p.setX( outerRadius *
+				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto ) );
+			p.setY( outerRadius *
+				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto ) );
 			lineTo( p );
 		}
+	}
+	else
+	{
+		if( m_type == wheel || m_type == spoke )
+			innerRadius = 0.0;
 
-		p.setX( outerRadius *
-			cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
-		p.setY( outerRadius *
-			sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
-		lineTo( p );
+		for ( uint i = 0; i < edges; ++i )
+		{
+			if( m_type != polygon )
+			{
+				p.setX( innerRadius *
+					cos( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				p.setY( innerRadius *
+					sin( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				lineTo( p );
+			}
+
+			p.setX( outerRadius *
+				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
+			p.setY( outerRadius *
+				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
+			lineTo( p );
+		}
 	}
 	if( m_type == wheel || m_type == framed_star )
 		for ( int i = edges - 1; i >= 0; --i )
