@@ -82,6 +82,7 @@ signals:
 protected slots:
     void selectAllSlides();
     void deselectAllSlides();
+    void radioButtonClicked();
 };
 
 #endif
