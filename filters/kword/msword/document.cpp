@@ -29,6 +29,8 @@
 #include <parser.h>
 #include <parserfactory.h>
 #include <paragraphproperties.h>
+#include <functor.h>
+#include <functordata.h>
 
 #include <qfont.h>
 #include <qfontinfo.h>
@@ -200,6 +202,25 @@ void Document::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 void Document::sectionEnd()
 {
 
+}
+
+void Document::pageBreak()
+{
+    // Check if PAGEBREAKING already exists (e.g. due to linesTogether)
+    QDomElement pageBreak = m_oldLayout.namedItem( "PAGEBREAKING" ).toElement();
+    if ( pageBreak.isNull() )
+    {
+        pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
+        m_oldLayout.appendChild( pageBreak );
+    }
+    pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
+}
+
+void Document::headersFound( const wvWare::Functor<wvWare::Parser97, wvWare::HeaderData>& parseHeaders )
+{
+    // The functor is a first-class "citicen" (value semantics)
+    wvWare::Functor<wvWare::Parser97, wvWare::HeaderData> myFunctor( parseHeaders );
+    myFunctor(); // for now ;)
 }
 
 void Document::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
@@ -434,18 +455,6 @@ QString Document::getFont(unsigned fc) const
 #endif
 
     return info.family();
-}
-
-void Document::pageBreak()
-{
-    // Check if PAGEBREAKING already exists (e.g. due to linesTogether)
-    QDomElement pageBreak = m_oldLayout.namedItem( "PAGEBREAKING" ).toElement();
-    if ( pageBreak.isNull() )
-    {
-        pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
-        m_oldLayout.appendChild( pageBreak );
-    }
-    pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
 }
 
 void Document::writeOutParagraph( const QString& styleName, const QString& text )

@@ -53,12 +53,12 @@ public:
 
     virtual void sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep );
     virtual void sectionEnd();
+    virtual void pageBreak();
+    virtual void headersFound( const wvWare::Functor<wvWare::Parser97, wvWare::HeaderData>& parseHeaders );
 
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );
     virtual void paragraphEnd();
     virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
-
-    virtual void pageBreak();
 
 private:
     QString getFont(unsigned fc) const;
