@@ -738,7 +738,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -805,11 +805,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         sheet = gnumeric_doc.createElement("gmr:Sheet");
         sheets.appendChild(sheet);
 
-        sheet.setAttribute("DisplayFormulas", table->getShowFormula());
-        sheet.setAttribute("HideZero", table->getHideZero());
-        sheet.setAttribute("HideGrid", !table->getShowGrid());
-        sheet.setAttribute("HideColHeader", !ksdoc->showColumnHeader());
-        sheet.setAttribute("HideRowHeader", !ksdoc->showRowHeader());
+        sheet.setAttribute("DisplayFormulas", table->getShowFormula() ? "true" : "false" );
+        sheet.setAttribute("HideZero", table->getHideZero()? "true" : "false");
+        sheet.setAttribute("HideGrid", !table->getShowGrid()? "true" : "false");
+        sheet.setAttribute("HideColHeader", ( !ksdoc->showColumnHeader() ? "true" : "false" ));
+        sheet.setAttribute("HideRowHeader", ( !ksdoc->showRowHeader()? "true" : "false" ));
         /* Not available in KSpread ?
          * sheet.setAttribute("DisplayOutlines", "true");
          * sheet.setAttribute("OutlineSymbolsBelow", "true");
@@ -872,6 +872,18 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         QString orientString = table->print()->orientation() == PG_LANDSCAPE ? "landscape" : "portrait";
         orientation.appendChild( gnumeric_doc.createTextNode(orientString) );
         tmp.appendChild( orientation );
+
+        header = gnumeric_doc.createElement( "gmr:Header" );
+        header.setAttribute( "Left", table->print()->headLeft() );
+        header.setAttribute( "Middle", table->print()->headMid() );
+        header.setAttribute( "Right", table->print()->headRight() );
+        tmp.appendChild( header );
+
+        footer = gnumeric_doc.createElement( "gmr:Footer" );
+        footer.setAttribute( "Left", table->print()->footLeft() );
+        footer.setAttribute( "Middle", table->print()->footMid() );
+        footer.setAttribute( "Right", table->print()->footRight() );
+        tmp.appendChild( footer );
 
         paper = gnumeric_doc.createElement( "gmr:paper" );
         paper.appendChild( gnumeric_doc.createTextNode( table->print()->paperFormatString() ) );
