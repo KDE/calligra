@@ -126,6 +126,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	}
 	else
 	{
+		kdDebug() << "MySqlDB::connect(db): retrying..." << endl;
 		if(connect(host, user, password, socket, port))
 		{
 			//create new database if needed

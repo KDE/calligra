@@ -100,7 +100,7 @@ KexiCreateProject::next()
 			KWizard::next();
 		}
 	}
-	else if(currentPage() == m_pageLocation)
+	else if(currentPage() == m_pageAuth)
 	{
 		kdDebug() << "KexiCreateProject::next(): time to connect..." << endl;
 		QString engine = m_pageEngine->data("engine").toString();
@@ -111,7 +111,9 @@ KexiCreateProject::next()
 		QString pass = m_pageAuth->data("password").toString();
 		bool savePass = m_pageAuth->data("savePassword").toBool();
 
+		kdDebug() << "User = " << user << endl;
 		kdDebug() << "Socket = " << socket << " Port = " << port << endl;
+		
 		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket,
 			port, savePass);
 	}
