@@ -84,7 +84,9 @@ class KexiTableViewPrivate
 //	QMemArray<int> pColumnModes;
 //	QPtrList<QVariant> pColumnDefaults;
 
+#if 0//(js) doesn't work!
 	QTimer			*scrollTimer;
+#endif
 	KexiTableItem	*pInsertItem;
 	
 	QStringList		dropFilters;

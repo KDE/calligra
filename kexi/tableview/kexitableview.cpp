@@ -165,8 +165,10 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	setData( data );
 
+#if 0//(js) doesn't work!
 	d->scrollTimer = new QTimer(this);
 	connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
+#endif
 
 	setBackgroundAltering(true);
 
@@ -723,6 +725,11 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 	// Go through the columns in the row r
 	// if we know from where to where, go through [colfirst, collast],
 	// else go through all of them
+	if (colfirst==-1)
+		colfirst=0;
+	if (collast==-1)
+		collast=cols()-1;
+
 	int colp=0, colw;
 	colp = 0;
 	int transly = rowp-cy;
@@ -763,7 +770,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 	kdDebug(44021) << QString(" KexiTableView::drawContents(cx:%1 cy:%2 cw:%3 ch:%4)")
 			.arg(cx).arg(cy).arg(cw).arg(ch) << endl;
 
- 	if (rowlast == -1) {
+	if (rowlast == -1) {
 		rowlast = rows() - 1;
 		plus1row = inserting;
 		if (rowfirst == -1) {
@@ -1217,7 +1224,9 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	if(d->curCol == -1)
 		d->curCol = d->numCols-1;
 */
-	setCursor(newrow,newcol);
+	if(e->button() != NoButton) {
+		setCursor(newrow,newcol);
+	}
 
 /*js:
 	//	if we have a new focus cell, repaint
@@ -1300,6 +1309,8 @@ void KexiTableView::showContextMenu(QPoint pos)
 
 void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 {
+#if 0//(js) doesn't work!
+
 	// do the same as in mouse press
 	int x,y;
 	contentsToViewport(e->x(), e->y(), x, y);
@@ -1334,7 +1345,8 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 		d->scrollTimer->stop();
 		contentsMousePressEvent(e);
 	}
-
+#endif
+	QScrollView::contentsMouseMoveEvent(e);
 }
 
 void KexiTableView::startEditCurrentCell()
@@ -1347,10 +1359,12 @@ void KexiTableView::startEditCurrentCell()
 
 void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *)
 {
+#if 0//(js) doesn't work!
 	if(d->needAutoScroll)
 	{
 		d->scrollTimer->stop();
 	}
+#endif
 }
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
@@ -1887,7 +1901,7 @@ void KexiTableView::updateGeometries()
 
 int KexiTableView::columnWidth(int col) const
 {
-    return d->pTopHeader->sectionSize(col);
+	return d->pTopHeader->sectionSize(col);
 }
 
 int KexiTableView::rowHeight() const
@@ -1897,7 +1911,7 @@ int KexiTableView::rowHeight() const
 
 int KexiTableView::columnPos(int col) const
 {
-    return d->pTopHeader->sectionPos(col);
+	return d->pTopHeader->sectionPos(col);
 }
 
 int KexiTableView::rowPos(int row) const
@@ -1907,7 +1921,10 @@ int KexiTableView::rowPos(int row) const
 
 int KexiTableView::columnAt(int pos) const
 {
-    return d->pTopHeader->sectionAt(pos);
+	int r = d->pTopHeader->sectionAt(pos);
+	if (r==-1)
+		kdDebug() << "columnAt("<<pos<<")==-1 !!!" << endl;
+	return r;
 }
 
 int KexiTableView::rowAt(int pos, bool ignoreEnd) const
@@ -2146,28 +2163,29 @@ bool KexiTableView::updateContextMenu()
   return false;
 }
 
+//(js) unused
 void KexiTableView::slotAutoScroll()
 {
 	kdDebug(44021) << "KexiTableView::slotAutoScroll()" <<endl;
-	if(d->needAutoScroll)
+	if (!d->needAutoScroll)
+		return;
+
+	switch(d->scrollDirection)
 	{
-		switch(d->scrollDirection)
-		{
-			case ScrollDown:
-				setCursor(d->curRow + 1, d->curCol);
-				break;
+		case ScrollDown:
+			setCursor(d->curRow + 1, d->curCol);
+			break;
 
-			case ScrollUp:
-				setCursor(d->curRow - 1, d->curCol);
-				break;
-			case ScrollLeft:
-				setCursor(d->curRow, d->curCol - 1);
-				break;
+		case ScrollUp:
+			setCursor(d->curRow - 1, d->curCol);
+			break;
+		case ScrollLeft:
+			setCursor(d->curRow, d->curCol - 1);
+			break;
 
-			case ScrollRight:
-				setCursor(d->curRow, d->curCol + 1);
-				break;
-		}
+		case ScrollRight:
+			setCursor(d->curRow, d->curCol + 1);
+			break;
 	}
 }
 
