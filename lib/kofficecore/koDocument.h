@@ -422,7 +422,7 @@ public:
      *  Reimplement this method to load the contents of your KOffice document,
      *  from the XML document ("content.xml").
      */
-    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles ) = 0;
 
     /**
      *  Reimplement this to save the contents of the KOffice document into
