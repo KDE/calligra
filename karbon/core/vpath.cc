@@ -187,23 +187,139 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				else
 					painter->setBrush( Qt::NoBrush );
 
-				painter->moveTo(
-					KoPoint(
-						jtr.current()->knot().x() - 2 / zoomFactor,
-						jtr.current()->knot().y() - 2 / zoomFactor ) );
-				painter->lineTo(
-					KoPoint(
-						jtr.current()->knot().x() + 2 / zoomFactor,
-						jtr.current()->knot().y() - 2 / zoomFactor ) );
-				painter->lineTo(
-					KoPoint(
-						jtr.current()->knot().x() + 2 / zoomFactor,
-						jtr.current()->knot().y() + 2 / zoomFactor ) );
-				painter->lineTo(
-					KoPoint(
-						jtr.current()->knot().x() - 2 / zoomFactor,
-						jtr.current()->knot().y() + 2 / zoomFactor ) );
-				painter->fillPath();
+				if( jtr.current()->type() == VSegment::curve  )
+				{
+					if( jtr.current()->isSelected() )
+					{
+						if( jtr.current()->ctrlPointFixing() == VSegment::none ||
+							jtr.current()->ctrlPointFixing() == VSegment::second )
+						{
+							painter->moveTo( KoPoint(
+								jtr.current()->ctrlPoint1().x() - 2 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() - 2 / zoomFactor ) );
+							painter->lineTo( KoPoint(
+								jtr.current()->ctrlPoint1().x() + 2 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() - 2 / zoomFactor ) );
+							painter->lineTo( KoPoint(
+								jtr.current()->ctrlPoint1().x() + 2 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() + 2 / zoomFactor ) );
+							painter->lineTo( KoPoint(
+								jtr.current()->ctrlPoint1().x() - 2 / zoomFactor,
+								jtr.current()->ctrlPoint1().y() + 2 / zoomFactor ) );
+
+							painter->fillPath();
+						}
+
+					painter->newPath();
+				painter->setRasterOp( Qt::NotROP );
+
+					painter->moveTo( KoPoint(
+							jtr.current()->knot().x() - 2 / zoomFactor,
+							jtr.current()->knot().y() - 2 / zoomFactor ) );
+					painter->lineTo( KoPoint(
+							jtr.current()->knot().x() + 2 / zoomFactor,
+							jtr.current()->knot().y() - 2 / zoomFactor ) );
+					painter->lineTo( KoPoint(
+							jtr.current()->knot().x() + 2 / zoomFactor,
+							jtr.current()->knot().y() + 2 / zoomFactor ) );
+					painter->lineTo( KoPoint(
+							jtr.current()->knot().x() - 2 / zoomFactor,
+							jtr.current()->knot().y() + 2 / zoomFactor ) );
+					painter->fillPath();
+
+
+					if( jtr.current()->ctrlPointFixing() == VSegment::none ||
+						jtr.current()->ctrlPointFixing() == VSegment::first )
+					{
+						painter->newPath();
+						painter->setRasterOp( Qt::NotROP );
+
+						painter->moveTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
+						painter->lineTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
+						painter->lineTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
+						painter->lineTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
+
+						painter->fillPath();
+					}
+
+					VStroke stroke;
+					stroke.setLineWidth( 1.0 );
+					stroke.setColor( Qt::blue.light().rgb() );
+					painter->setPen( stroke );
+
+					// line between ctrl points
+					painter->newPath();
+					if( jtr.current()->ctrlPointFixing() == VSegment::none )
+					{
+						if( jtr.current()->prev()  )
+						{
+							if( jtr.current()->prev()->type() == VSegment::curve )
+								// prev 2nd ctrl point to 1st ctrl point
+								painter->moveTo( KoPoint(
+										jtr.current()->prev()->ctrlPoint2().x(),
+										jtr.current()->prev()->ctrlPoint2().y() ) );
+							else
+								// prev knot to 1st ctrl point
+								painter->moveTo( KoPoint(
+										jtr.current()->prev()->knot().x(),
+										jtr.current()->prev()->knot().y() ) );
+							painter->lineTo( KoPoint(
+									jtr.current()->ctrlPoint1().x(),
+									jtr.current()->ctrlPoint1().y() ) );
+							painter->strokePath();
+							painter->newPath();
+						}
+					}
+					else if( jtr.current()->ctrlPointFixing() == VSegment::first )
+					{
+						painter->moveTo( KoPoint(
+								jtr.current()->knot().x(),
+								jtr.current()->knot().y() ) );
+						painter->lineTo( KoPoint(
+								jtr.current()->ctrlPoint2().x(),
+								jtr.current()->ctrlPoint2().y() ) );
+					}
+					else
+					{
+						painter->moveTo( KoPoint(
+								jtr.current()->knot().x(),
+								jtr.current()->knot().y() ) );
+						painter->lineTo( KoPoint(
+								jtr.current()->ctrlPoint1().x(),
+								jtr.current()->ctrlPoint1().y() ) );
+					}
+					painter->strokePath();
+					}
+				}
+				else
+				{
+					painter->moveTo(
+						KoPoint(
+							jtr.current()->knot().x() - 2 / zoomFactor,
+							jtr.current()->knot().y() - 2 / zoomFactor ) );
+					painter->lineTo(
+						KoPoint(
+							jtr.current()->knot().x() + 2 / zoomFactor,
+							jtr.current()->knot().y() - 2 / zoomFactor ) );
+					painter->lineTo(
+						KoPoint(
+							jtr.current()->knot().x() + 2 / zoomFactor,
+							jtr.current()->knot().y() + 2 / zoomFactor ) );
+					painter->lineTo(
+						KoPoint(
+							jtr.current()->knot().x() - 2 / zoomFactor,
+							jtr.current()->knot().y() + 2 / zoomFactor ) );
+
+					painter->fillPath();
+				}
 			}
 		}
 
