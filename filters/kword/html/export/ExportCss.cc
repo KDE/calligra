@@ -92,22 +92,14 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
             strReturn+=qch;
             lastEscaped=false;
         }
-        else if (ch>=161)
+        else // if ch >= 33 && ch <=127 but without alphanumerics (or not in encoding)
         {
-            // ### TODO: verify if HTML user agents really support it
-            // We have a non-acceptable character, so escape it!
-            strReturn+='\\'; // start escape
-            strReturn+=QString::number(ch,16);
-            lastEscaped=true;
-        }
-        else // if ch >= 33 && ch <=127 but without alphanumerics
-        {
-            // CSS2 does not allow these character unescaped, but a CSS escape would break some HTML user agents
+            // CSS2 does not allow these character unescaped, but a CSS escape would break some HTML user agents (e.g. Mozilla 1.4)
             // So we have to do our own incompatible cooking. :-(
             strReturn+="--"; // start our private escape
             strReturn+=QString::number(ch,16);
             strReturn+="--"; // end our private escape
-            lastEscaped=true;
+            lastEscaped=false;
         }
     }
     // It is supposed that a last escape do not need an extra space
