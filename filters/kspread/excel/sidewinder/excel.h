@@ -82,12 +82,6 @@ private:
   Private* d;
 };
 
-class RecordFactory
-{
-public:
-  static Record* create( unsigned type );
-};
-
 /**
   Class Record represents a base class for all other type record,
   hence do not use this class in real life.
@@ -112,6 +106,11 @@ public:
     Destroys the record.
   */
   virtual ~Record();
+  
+  /**
+   * Record factory, create a new record of specified type.
+   */
+  static Record* create( unsigned type );
   
   void setVersion( unsigned v ){ ver = v; };
   

@@ -317,100 +317,6 @@ EString EString::fromSheetName( const void* p, unsigned datasize )
   return result;
 }
 
-
-//=============================================
-//          RecordFactory
-//=============================================
-
-Record* RecordFactory::create( unsigned type )
-{
-  Record* record = 0;
-  
-  if( type == BOFRecord::id )
-    record = new BOFRecord();
-    
-  else if( type == EOFRecord::id )
-    record = new EOFRecord();
-    
-  if( type == BackupRecord::id )
-    record = new BackupRecord();
-    
-  if( type == BlankRecord::id )
-    record = new BlankRecord();
-    
-  if( type == BoolErrRecord::id )
-    record = new BoolErrRecord();
-    
-  if( type == BottomMarginRecord::id )
-    record = new BottomMarginRecord();
-    
-  if( type == BoundSheetRecord::id )
-    record = new BoundSheetRecord();
-    
-  if( type == CalcModeRecord::id )
-    record = new CalcModeRecord();
-    
-  if( type == ColInfoRecord::id )
-    record = new ColInfoRecord();
-    
-  if( type == DateModeRecord::id )
-    record = new DateModeRecord();
-    
-  if( type == DimensionRecord::id )
-    record = new DimensionRecord();
-    
-  else if( type == FormatRecord::id )
-    record = new FormatRecord();
-    
-  else if( type == FontRecord::id )
-    record = new FontRecord();
-    
-  else if( type == LabelRecord::id )
-    record = new LabelRecord();
-    
-  else if( type == LabelSSTRecord::id )
-    record = new LabelSSTRecord();
-    
-  if( type == LeftMarginRecord::id )
-    record = new LeftMarginRecord();
-    
-  else if( type == MergedCellsRecord::id )
-    record = new MergedCellsRecord();
-    
-  else if( type == MulBlankRecord::id )
-    record = new MulBlankRecord();
-    
-  else if( type == MulRKRecord::id )
-    record = new MulRKRecord();
-    
-  else if( type == NumberRecord::id )
-    record = new NumberRecord();
-    
-  if( type == RightMarginRecord::id )
-    record = new RightMarginRecord();
-    
-  else if( type == RKRecord::id )
-    record = new RKRecord();
-    
-  else if( type == RowRecord::id )
-    record = new RowRecord();
-    
-  else if( type == RStringRecord::id )
-    record = new RStringRecord();
-    
-  else if( type == SSTRecord::id )
-    record = new SSTRecord();
-  
-  else if( type == XFRecord::id )
-    record = new XFRecord();
-  
-  else if( type == TopMarginRecord::id )
-    record = new TopMarginRecord();
-    
-  return record;
-};
-
-
 //=============================================
 //          CellInfo
 //=============================================
@@ -522,6 +428,94 @@ Record::Record()
 Record::~Record()
 {
 }
+
+Record* Record::create( unsigned type )
+{
+  Record* record = 0;
+  
+  if( type == BOFRecord::id )
+    record = new BOFRecord();
+    
+  else if( type == EOFRecord::id )
+    record = new EOFRecord();
+    
+  if( type == BackupRecord::id )
+    record = new BackupRecord();
+    
+  if( type == BlankRecord::id )
+    record = new BlankRecord();
+    
+  if( type == BoolErrRecord::id )
+    record = new BoolErrRecord();
+    
+  if( type == BottomMarginRecord::id )
+    record = new BottomMarginRecord();
+    
+  if( type == BoundSheetRecord::id )
+    record = new BoundSheetRecord();
+    
+  if( type == CalcModeRecord::id )
+    record = new CalcModeRecord();
+    
+  if( type == ColInfoRecord::id )
+    record = new ColInfoRecord();
+    
+  if( type == DateModeRecord::id )
+    record = new DateModeRecord();
+    
+  if( type == DimensionRecord::id )
+    record = new DimensionRecord();
+    
+  else if( type == FormatRecord::id )
+    record = new FormatRecord();
+    
+  else if( type == FontRecord::id )
+    record = new FontRecord();
+    
+  else if( type == LabelRecord::id )
+    record = new LabelRecord();
+    
+  else if( type == LabelSSTRecord::id )
+    record = new LabelSSTRecord();
+    
+  if( type == LeftMarginRecord::id )
+    record = new LeftMarginRecord();
+    
+  else if( type == MergedCellsRecord::id )
+    record = new MergedCellsRecord();
+    
+  else if( type == MulBlankRecord::id )
+    record = new MulBlankRecord();
+    
+  else if( type == MulRKRecord::id )
+    record = new MulRKRecord();
+    
+  else if( type == NumberRecord::id )
+    record = new NumberRecord();
+    
+  if( type == RightMarginRecord::id )
+    record = new RightMarginRecord();
+    
+  else if( type == RKRecord::id )
+    record = new RKRecord();
+    
+  else if( type == RowRecord::id )
+    record = new RowRecord();
+    
+  else if( type == RStringRecord::id )
+    record = new RStringRecord();
+    
+  else if( type == SSTRecord::id )
+    record = new SSTRecord();
+  
+  else if( type == XFRecord::id )
+    record = new XFRecord();
+  
+  else if( type == TopMarginRecord::id )
+    record = new TopMarginRecord();
+    
+  return record;
+};
 
 void Record::setPosition( unsigned pos )
 {
@@ -3028,7 +3022,7 @@ const char* filename )
     if( type == 0 ) continue;
     
     // create the record using the factory
-    Record* record = RecordFactory::create( type );
+    Record* record = Record::create( type );
 
     if( record )
     {
