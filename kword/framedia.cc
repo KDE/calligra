@@ -927,7 +927,6 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     synchronize=new QCheckBox( i18n("Synchronize"), grp2 );
     mGrid->addMultiCellWidget( synchronize, 5, 5, 0, 0);
     grid4->addMultiCellWidget( grp2, row, (++row), 0,1 );
-
     if ( frame )
     {
         sml->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
@@ -945,12 +944,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         oldMarginTop=smt->value();
         oldMarginBottom=smb->value();
     }
-
     bool disable = false;
     bool disableMargins = false;
     bool isMainFrame = false;
     // Only one frame selected, or when creating a frame -> enable coordinates
-    if ( doc->isOnlyOneFrameSelected() || !frame->frameSet() )
+    if ( doc->isOnlyOneFrameSelected() || (frame&& !frame->frameSet()) )
     {
 	// Can't use frame->pageNum() here since frameset might be 0
 	int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
