@@ -2251,7 +2251,7 @@ void KPrPage::changePicture( const QString & filename )
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected() && it.current()->getType()==OT_POLYGON)
+        if(it.current()->isSelected() && it.current()->getType()==OT_PICTURE)
         {
     	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getImageCollection(), image.key() );
 
@@ -2292,18 +2292,16 @@ void KPrPage::changeClipart( const QString & filename )
 
 void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
-    //FIXME
-#if 0
-    KPImageKey key = _imageCollection.loadImage( filename ).key();
-    KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection, key );
-    kppixmapobject->setOrig( ( ( diffx + _x ) / _rastX ) * _rastX, ( ( diffy + _y ) / _rastY ) * _rastY );
+    KPImageKey key = m_doc->getImageCollection()->loadImage( filename ).key();
+    KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->getImageCollection() , key );
+    kppixmapobject->setOrig( (   _x  / m_doc->rastX() ) * m_doc->rastX(), ( _y  / m_doc->rastY() ) * m_doc->rastY() );
     kppixmapobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc,this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
 
-    QRect s = m_doc->zoomHandler()->zoomRect(getPageRect(  ));
+    QRect s = getZoomPageRect();
     float fakt = 1;
     if ( kppixmapobject->getSize().width() > s.width() )
 	fakt = (float)s.width() / (float)kppixmapobject->getSize().width();
@@ -2314,11 +2312,10 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 	int w = (int)( fakt * (float)kppixmapobject->getSize().width() );
 	int h = (int)( fakt * (float)kppixmapobject->getSize().height() );
 	kppixmapobject->setSize( w, h );
-	repaint( false );
+	m_doc->repaint( false );
     }
 
     m_doc->setModified(true);
-#endif
 }
 
 void KPrPage::enableEmbeddedParts( bool f )
@@ -2592,7 +2589,25 @@ void KPrPage::setNoteText(  const QString &_text )
 
 QString KPrPage::getNoteText(  )
 {
-    if(noteText.isEmpty())
-        return QString("");
     return noteText;
+}
+
+void KPrPage::makeUsedPixmapList()
+{
+   QPtrListIterator<KPObject> it( m_objectList );
+   for ( ; it.current() ; ++it )
+   {
+       if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
+       {
+           if( it.current()->getType()==OT_PICTURE)
+               m_doc->appendPixmapKey(dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
+           else
+               m_doc->appendClipartKey(dynamic_cast<KPClipartObject*>( it.current())->getKey());
+       }
+   }
+
+   if( kpbackground->getBackType()==BT_PICTURE)
+       m_doc->appendPixmapKey(kpbackground->getBackPixKey());
+   else if( kpbackground->getBackType()==BT_CLIPART)
+       m_doc->appendClipartKey(kpbackground->getBackClipKey());
 }

@@ -504,7 +504,7 @@ QDomDocument KPresenterDoc::saveXML()
 void KPresenterDoc::enableEmbeddedParts( bool f )
 {
     KPrPage *page=0L;
-    for(page=pageList().first(); page; page=pageList().next())
+    for(page=m_pageList.first(); page; page=m_pageList.next())
         page->enableEmbeddedParts(f);
 }
 
@@ -1697,36 +1697,12 @@ void KPresenterDoc::makeUsedPixmapList()
     usedPixmaps.clear();
     usedCliparts.clear();
 
-    KPObject *kpobject = 0L;
-    int i = 0;
-#if 0
-    for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next(), ++i ) {
-	if ( kpobject->getType() == OT_PICTURE || kpobject->getType() == OT_CLIPART ) {
-	    if ( saveOnlyPage != -1 ) {
-		int pg = getPageOfObj( i, 0, 0 ) - 1;
-		if ( saveOnlyPage != pg )
-		    continue;
-	    }
-            if ( kpobject->getType() == OT_PICTURE )
-                usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
-            else // if ( kpobject->getType() == OT_CLIPART )
-                usedCliparts.append( dynamic_cast<KPClipartObject*>( kpobject )->getKey() );
-	}
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+	if ( saveOnlyPage != -1 &&
+	     i != saveOnlyPage )
+	    continue;
+        m_pageList.at(i)->makeUsedPixmapList();
     }
-#endif
-#if 0
-    KPBackGround *kpbackground = 0;
-    i = 0;
-    for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next(), ++i )
-    {
-        if ( saveOnlyPage != -1 && i != saveOnlyPage )
-            continue;
-        if ( kpbackground->getBackType() == BT_PICTURE )
-            usedPixmaps.append( kpbackground->getBackPixKey() );
-        else if ( kpbackground->getBackType() == BT_CLIPART )
-            usedCliparts.append( kpbackground->getBackClipKey() );
-    }
-#endif
 }
 
 /*================================================================*/
@@ -1978,6 +1954,16 @@ void KPresenterDoc::insertObjectInPage(int offset, KPObject *_obj)
     }
     _obj->setOrig(_obj->getOrig().x(),newPos);
     m_pageList.at(page)->appendObject(_obj);
+}
+
+void KPresenterDoc::appendPixmapKey( KPImageKey key)
+{
+    usedPixmaps.append(key);
+}
+
+void KPresenterDoc::appendClipartKey(KPClipartKey key)
+{
+    usedCliparts.append(key);
 }
 
 #include <kpresenter_doc.moc>

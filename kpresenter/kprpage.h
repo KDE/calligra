@@ -158,6 +158,8 @@ public:
 
     KPBackGround *background(){return kpbackground;}
 
+    void makeUsedPixmapList();
+
     void setBackColor( QColor backColor1, QColor backColor2, BCType bcType,
 			    bool unbalanced, int xfactor, int yfactor );
     void setBackPixmap( const KPImageKey & key );

@@ -3664,7 +3664,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float left_margin, 
         if ( i > printer->fromPage() ) printer->newPage();
 
         painter->resetXForm();
-        painter->fillRect( getPageRect( 0 ), white );
+        painter->fillRect( m_activePage->getZoomPageRect(), white );
 
         printPage( painter, i - 1 );
         kapp->processEvents();
@@ -4137,7 +4137,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         QCursor c = cursor();
         setCursor( waitCursor );
         m_activePage->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y() +
-                            ( currPgNum() - 1) * getPageRect( 0 ).height() );
+                            ( currPgNum() - 1) * m_activePage->getZoomPageRect().height() );
         setCursor( c );
 
         e->accept();
@@ -4168,7 +4168,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                     QCursor c = cursor();
                     setCursor( waitCursor );
                     m_activePage->insertPicture( filename, e->pos().x(), e->pos().y() +
-                                        ( currPgNum() - 1) * getPageRect( 0 ).height() );
+                                        ( currPgNum() - 1) * m_activePage->getZoomPageRect().height() );
                     setCursor( c );
                 } else if ( mimetype.contains( "text" ) ) {
                     QCursor c = cursor();
@@ -4572,7 +4572,7 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
   if ( !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) || !obj )
       return;
 
-  QSize pgSize = m_view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
+  QSize pgSize = m_activePage->getZoomPageRect().size();
   QSize presSize( x, y );
 
   scalePixmapToBeOrigIn( origSize, currentSize, pgSize, presSize, obj );
@@ -4601,12 +4601,12 @@ void KPrCanvas::scalePixmapToBeOrigIn( const QSize &/*origSize*/, const QSize &c
 
 void KPrCanvas::setTextBackground( KPTextObject *obj )
 {
-    QPixmap pix( getPageRect( 0 ).size() );
+    QPixmap pix( m_activePage->getZoomPageRect().size() );
     QPainter painter( &pix );
     m_activePage->background()->draw( &painter, FALSE );
     QPixmap bpix( obj->getSize() );
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
-            getPageRect( 0 ).height() * ( m_view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
+            m_activePage->getZoomPageRect().height() * ( m_view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
 #if 0
     QBrush b( white, bpix );
     QPalette pal( obj->textObjectView()->palette() );
