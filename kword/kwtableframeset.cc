@@ -447,7 +447,55 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     }
     redrawFromCol=m_cols;
 
-    //kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
+    // check if any rowPosition entries are unused
+   
+    // first create a hash of all row entries 
+    QMap<unsigned int,int> rows;        // rownr, count
+    unsigned int top=m_rowPositions.count() - m_pageBoundaries.count()-1;
+    for(unsigned int i=0; i < top; rows[i++]=0);
+
+    // fill hash with data
+    for (cell = m_cells.first(); cell; cell = m_cells.next()) {
+        rows[cell->m_row]+=1;
+    }
+  
+    // check if some entries have stayed unused. 
+    unsigned int counter=top;
+    int adjustment=m_pageBoundaries.count()-1;
+
+    do { 
+        counter--;
+        if(adjustment >= 0 && counter == m_pageBoundaries[adjustment])
+            adjustment--;
+        if(rows[counter]==0) {
+            m_rows--;
+            m_rowPositions.erase(m_rowPositions.at(counter+(adjustment>0?adjustment:0)));
+            for (cell = m_cells.first(); cell; cell = m_cells.next()) {
+                if(cell->m_row < counter && cell->m_rows + cell->m_row > counter)
+                    cell->m_rows--;
+                if(cell->m_row > counter)
+                    cell->m_row--;
+            }
+
+            if(adjustment >= -1) {
+                pageBound = m_pageBoundaries.at(adjustment+1);
+                while(pageBound!=m_pageBoundaries.end()) {
+                    (*pageBound)= (*pageBound)-1;
+                    pageBound++;
+                }
+            }
+        }
+    } while(counter!=0);
+
+
+
+    redrawFromCol=0;
+    for(cell=m_cells.first();cell;cell=m_cells.next()) {
+        if((cell->m_row + cell->m_rows > fromRow && cell->m_row < untilRow) || cell->m_col + cell->m_cols > redrawFromCol)
+            position(cell);
+    }
+    redrawFromCol=m_cols;
+    kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
 }
 
 void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode ) {
@@ -489,7 +537,6 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
 }
 
 void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
-    kdDebug() << "KWTableFrameSet::position" << endl;
     if(!theCell->frame(0)) { // sanity check.
         kdDebug(32002) << "screwy table cell!! row:" << theCell->m_row << ", col: " << theCell->m_col << endl;
         return;
@@ -803,22 +850,18 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
 
     for( unsigned int i = 0; i < getRows(); i++ ) {
         int rows;
-        double height;
         Cell *cell;
         if(newColNumber > 0 ) {
             cell = getCell(i, newColNumber-1);
             if(cell->m_col + cell->m_cols > newColNumber) {
                 // cell overlaps the new column
                 cell->m_cols++;
-                cell->frame(0)->setWidth(cell->frame(0)->width() + width + tableCellSpacing - 1);
                 continue;
             }
             rows = cell->m_rows;
-            height = cell->frame(0)->height();
         } else {
             rows = 1;
             cell = getCell(i, newColNumber+1);
-            height = cell->frame(0)->height();
         }
         Cell *newCell=0L;
         if(redoFrameset.isEmpty())
@@ -860,22 +903,20 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
 }
 
 /* Delete all cells that are completely in this row.              */
-
 void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
 {
-    double height=0;
-    unsigned int rowspan=1;
-    // I want to know the height of the row(s) I am removing.
-    for (unsigned int rowspan=1; rowspan < m_rows && height==0; rowspan++) {
+    unsigned int rowspan;
+    // I want to know the amount of the row(s) I am removing.
+    for (rowspan=1; rowspan < m_rows; rowspan++) {
         for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
             if(m_cells.at(i)->m_row == row && m_cells.at(i)->m_rows==rowspan) {
-                height=m_cells.at(i)->frame(0)->height();
                 break;
             }
         }
     }
 
-    QValueList<double>::iterator tmp = m_rowPositions.at(row+1);
+    double height= getPositionOfRow(row+rowspan-1,true) - getPositionOfRow(row);
+    QValueList<double>::iterator tmp = m_rowPositions.at(row+rowspan);
     tmp=m_rowPositions.erase(tmp);
     while(tmp!=m_rowPositions.end()) {
         (*tmp)= (*tmp)-height;
@@ -1030,12 +1071,11 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     // update firstcell properties to reflect the merge
     firstCell->m_cols=colEnd-colBegin+1;
     firstCell->m_rows=rowEnd-rowBegin+1;
-    position(firstCell);
+    position(firstCell, true);
     firstCell->frame(0)->updateResizeHandles();
 
     m_doc->updateAllFrames();
     m_doc->repaintAllViews();
-for(unsigned int i=0; i < m_colPositions.count() ; kdDebug() << "col " << i << ": " << m_colPositions[i++] << endl);
     return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
 }
 
@@ -1224,50 +1264,27 @@ void KWTableFrameSet::validate()
             }
             if(! found) {
                 kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
-                // worth it ?
-                //QString name = m_doc->generateFramesetName( i18n( "1 is table name, 2 is a number", "%1 Auto Added Cell %2" ).arg( getName() ) );
-                Cell *_frameSet = new Cell( this, row, col );
-                double x=-1, y=-1, width=-1, height=-1;
-                for (unsigned int i=0; i < m_cells.count(); i++) {
-                    if(m_cells.at(i)->m_row==row)
-                        y=m_cells.at(i)->frame(0)->y();
-                    if(m_cells.at(i)->m_col==col)
-                        x=m_cells.at(i)->frame(0)->x();
-                    if(m_cells.at(i)->m_col==col && m_cells.at(i)->m_cols==1)
-                        width=m_cells.at(i)->frame(0)->width();
-                    if(m_cells.at(i)->m_row==row && m_cells.at(i)->m_rows==1)
-                        height=m_cells.at(i)->frame(0)->height();
-                    if(x!=-1 && y!=-1 && width!=-1 && height != -1)
-                        break;
-                }
-                if(x== -1) x=0;
-                if(y== -1) y=0;
-                if(width== -1) width=minFrameWidth;
-                if(height== -1) height=minFrameHeight;
-                kdWarning() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
-                KWFrame *theFrame = new KWFrame(_frameSet, x, y, width, height, KWFrame::RA_NO );
+                QString name = m_doc->generateFramesetName( i18n( "1 is table name, 2 is a number", "%1 Auto Added Cell %2" ).arg( getName() ) );
+                Cell *cell = new Cell( this, row, col, name );
+                KWFrame *theFrame = new KWFrame(cell, 10, 10, 20, 20, KWFrame::RA_NO );
                 theFrame->setFrameBehaviour(KWFrame::AutoExtendFrame);
                 theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
-                _frameSet->addFrame( theFrame,false );
-                _frameSet->m_rows = 1;
-                _frameSet->m_cols = 1;
+                cell->addFrame( theFrame,false );
+                cell->m_rows = 1;
+                cell->m_cols = 1;
+                position(cell);
             }
         }
     }
-    double bottom = getCell(m_rows-1,0)->frame(0)->bottom();
     while (! misplacedCells.isEmpty()) {
         // append cell at bottom of table.
         Cell *cell = misplacedCells.take(0);
-        cell->frame(0)->setWidth(boundingRect().width());
-        cell->frame(0)->moveBy( boundingRect().left() -
-                                             cell->frame(0)->left(),
-                                             bottom - cell->frame(0)->top() - tableCellSpacing);
         cell->m_row = m_rows++;
         cell->m_col = 0;
         cell->m_cols = m_cols;
         cell->m_rows = 1;
-        bottom=cell->frame(0)->bottom();
         m_cells.append(cell);
+        position(cell);
     }
 }
 
