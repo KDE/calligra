@@ -25,18 +25,9 @@
 
 namespace KWEFUtil
 {
-
-QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
-    const bool quot = false, const bool apos = false );
 void GetNativePaperFormat(const int format,
     QString& width, QString& height, QString& units);
 }
 
-// Deprecated! Use KWEFUtil::EscapeSgmlText
-static inline QString EscapeXmlText(const QString& strIn,
-    const bool quot = false, const bool apos = false )
-{
-    return KWEFUtil::EscapeSgmlText(NULL,strIn,quot,apos);
-}
 
 #endif /* KWEF_UTIL_H */

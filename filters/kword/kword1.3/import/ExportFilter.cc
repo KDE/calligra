@@ -66,7 +66,49 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
 {
     // Escape quotes (needed in attributes)
     // Escape apostrophs (allowed by XML)
-    return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
+
+    QString strReturn;
+    QChar ch;
+
+    for (uint i=0; i<strText.length(); i++)
+    {
+        ch=strText[i];
+        switch (ch.unicode())
+        {
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        case 34: // "
+            {
+                strReturn+="&quot;";
+                break;
+            }
+        case 39: // '
+            {
+                strReturn+="&apos;";
+                break;
+            }
+        default:
+            {
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
+
+    return strReturn;
 }
 
 
@@ -1655,8 +1697,8 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
 
     m_styles += "  <style:style";
 
-    m_styles += " style:name=\"" + EscapeXmlText(layout.styleName,true,true) + "\"";
-    m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
+    m_styles += " style:name=\"" + escapeOOText( layout.styleName ) + "\"";
+    m_styles += " style:next-style-name=\"" + escapeOOText( layout.styleFollowing ) + "\"";
     m_styles += " style:family=\"paragraph\" style:class=\"text\"";
     m_styles += ">\n";
     m_styles += "   <style:properties ";
