@@ -1,0 +1,22 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kformdesigner" version="0.1">
+
+<MenuBar>
+  <Menu name="widgets">
+   <text>&amp;Widgets</text>
+   <Merge/>
+   <Separator/>
+   <Action name="library_widget0"/>
+   <Action name="library_widget1"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="widgets" fullWidth="false">
+ <text>Widgets</text>
+ <Action name="library_widget0"/>
+ <Action name="library_widget1"/>
+ <ActionList name="library_widgets" />
+</ToolBar>
+
+</kpartgui>
+

@@ -64,7 +64,7 @@ KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, con
 	m_view = new QWidget(this);
 	QGridLayout *g = new QGridLayout(m_view);
 
-	if(mmr->mimeType().contains("text/"))
+	if(mmr->mimeType().contains("text/") || val.size() == 0)
 	{
 		m_content = new QTextEdit(m_view);
 		m_content->setTextFormat(PlainText);

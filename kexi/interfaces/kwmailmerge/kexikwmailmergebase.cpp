@@ -51,8 +51,6 @@ KexiKWMailMergeBase::showConfigDialog(QWidget *parent, int action)
 			QString url = KFileDialog::getOpenFileName(QString::null, "*.kexi", parent);
 			m_connection = new KexiKWMMConnection(url);
 			return m_connection->load();
-//			KexiKWMMConfigDlg *dlg = new KexiKWMMConfigDlg(parent);
-//			return dlg->exec();
 		}
 		case KWSLEdit:
 		{
@@ -63,8 +61,8 @@ KexiKWMailMergeBase::showConfigDialog(QWidget *parent, int action)
 				m_mime = dlg->mime();
 				m_id = dlg->id();
 				sampleRecord = dlg->fields();
-				initDB(true);
-				initDB(false);
+				initDB();
+//				initDB(false);
 			}
 
 			return accepted;
@@ -83,11 +81,11 @@ KexiKWMailMergeBase::openDatabase()
 {
 	kdDebug() << "KexiKWMailMergeBase::openDatabase()" << endl;
 
-	return initDB(false);
+	return initDB();
 }
 
 bool
-KexiKWMailMergeBase::initDB(bool count)
+KexiKWMailMergeBase::initDB()
 {
 	KexiProjectHandler *h = m_connection->project()->handlerForMime(m_mime);
 	KexiDataProvider *prov = KEXIDATAPROVIDER(h);

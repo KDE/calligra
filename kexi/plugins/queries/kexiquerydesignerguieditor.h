@@ -97,6 +97,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerGuiEditor : public QWidget
 		void			slotAddParameter();
 		void			slotRemoveParameter();
 		void			slotItemSelected(KexiTableItem *);
+		void			slotContextMenuRequested(KexiTableItem *, int col, const QPoint &);
 
 	signals:
 		void			contextHelp(const QString &, const QString &);

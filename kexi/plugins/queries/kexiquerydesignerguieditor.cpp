@@ -33,6 +33,7 @@
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecordset.h"
 
+#include "kexifilterdlg.h"
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiprojecthandler.h"
@@ -62,6 +63,9 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(m_designTable, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 	connect(m_designTable, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(slotItemSelected(KexiTableItem *)));
+	connect(m_designTable, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
+	 SLOT(slotContextMenuRequested(KexiTableItem *, int, const QPoint &)));
+
 	m_paramList=new KexiParameterListEditor(vSplitter);
 	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
 
@@ -437,6 +441,12 @@ void KexiQueryDesignerGuiEditor::setUpTable()
 		if(it->isInsertItem())
 			m_insertItem = it;
 	}
+}
+
+void KexiQueryDesignerGuiEditor::slotContextMenuRequested(KexiTableItem *, int col, const QPoint &)
+{
+	KexiFilterDlg *d = new KexiFilterDlg(m_view->project(), this);
+	d->exec();
 }
 
 void KexiQueryDesignerGuiEditor::slotRemoveParameter() {

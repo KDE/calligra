@@ -20,15 +20,18 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
+#include <qtoolbutton.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include <kexidatasourcecombobox.h>
 #include <kexiproject.h>
 #include <kexiprojecthandler.h>
 #include <kexiprojecthandlerproxy.h>
 #include <kexidataprovider.h>
+#include <widget/kexifilterdlg.h>
 
 #include "kexiview.h"
 #include "kexikwmmconnection.h"
@@ -51,14 +54,19 @@ KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "kex
 	m_view = new KexiView(KexiView::EmbeddedMode, c->project(), frame);
 	m_view->resize(400, 300);
 
+	QToolButton *filterBtn = new QToolButton(frame);
+	connect(filterBtn, SIGNAL(clicked()), this, SLOT(showFilterDlg()));
+	filterBtn->setPixmap(MainBarIcon("filter"));
 
 	QGridLayout *g = new QGridLayout(frame);
 	g->addWidget(lDs,			0, 0);
-	g->addMultiCellWidget(m_dataSource,	0, 0, 1, 2);
+	g->addWidget(m_dataSource,		0, 1);
 	g->addMultiCellWidget(m_view,		1, 1, 0, 2);
+	g->addWidget(filterBtn,			0, 2);
 	lDs->show();
 	m_dataSource->show();
 	m_view->show();
+	filterBtn->show();
 }
 
 void
@@ -100,6 +108,13 @@ KexiKWMMConfigDlg::fields()
 	}
 
 	return rec;
+}
+
+void
+KexiKWMMConfigDlg::showFilterDlg()
+{
+//	KexiFilterDlg *dlg = new KexiFilterDlg(0, this);
+//	dlg->exec();
 }
 
 KexiKWMMConfigDlg::~KexiKWMMConfigDlg()

@@ -20,6 +20,7 @@
 
 #ifndef KEXIDIALOGBASE_H
 #define KEXIDIALOGBASE_H
+#undef KEXI_NO_PRINT
 
 #include <qwidget.h>
 #include <kxmlguiclient.h>
@@ -32,6 +33,7 @@ class QDockWindow;
 class KPrinter;
 
 typedef QPtrList<QWidget> Widgets;
+
 
 class KEXICORE_EXPORT KexiDialogBase : public QWidget
 {

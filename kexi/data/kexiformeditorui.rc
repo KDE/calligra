@@ -1,16 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformeditor" version="4">
+<kpartgui name="kexiformeditor" version="6">
 
 <MenuBar>
-	<Menu name="widgets">
-		<text>&amp;Widgets</text>
-		<Action name="widget_label"/>
-		<Action name="widget_line_edit"/>
-		<Action name="widget_push_button"/>
-		<Action name="widget_url_requester"/>
-		<Action name="widget_frame"/>
-		<Action name="widget_tabwidget"/>
-		<Action name="widget_table"/>
+	<Menu name="insertM">
+		<text>&amp;Insert</text>
+		<ActionList name="widget_list"/>
+		<Action name="library_widget_Tab Widget"/>
 	</Menu>
 </MenuBar>
 
@@ -20,21 +15,8 @@
 
 <ToolBar name="widgetsToolBar">
 	<Text>Widgets</Text>
-	<Action name="widget_label"/>
-	<Action name="widget_line_edit"/>
-	<Action name="widget_push_button"/>
-	<Action name="widget_url_requester"/>
-	<Action name="widget_frame"/>
-	<Action name="widget_tabwidget"/>
-	<Action name="widget_table"/>
-</ToolBar>
-
-<ToolBar name="DBNavigation">
-	<Text>Database Navigation</Text>
-	<Action name="first" />
-	<Action name="prev" />
-	<Action name="next" />
-	<Action name="last" />
+	<ActionList name="widget_list"/>
+	<Action name="library_widget_Tab Widget"/>
 </ToolBar>
 
 </kpartgui>

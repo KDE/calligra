@@ -1,5 +1,5 @@
 lib_LTLIBRARIES = libkexiextendedwidgets.la
-libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexirecordnavigator.cpp
+libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexirecordnavigator.cpp kexifilterdlg.cpp kexiquerydesignersqleditor.cpp
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KOFFICEUI) ../tableview/libkexidatatable.la ../core/libkexicore.la
 

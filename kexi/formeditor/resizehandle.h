@@ -19,7 +19,8 @@
 #ifndef KFE_RESIZEHANDLER_H
 #define KFE_RESIZEHANDLER_H
 
-#include <qpixmap.h>
+#include <qwidget.h>
+#include <qguardedptr.h>
 
 /**
   *@author Joseph Wenninger
@@ -27,10 +28,13 @@
 
 
 
-namespace KFormEditor
+namespace KFormDesigner
 {
-
-	class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
+	/**
+	 * a single widget which represents a dot for resizing a widget
+	 * @author Joseph Wenninger
+	 */
+	class ResizeHandle : public QWidget
 	{
 	Q_OBJECT
 	public:
@@ -54,13 +58,17 @@ namespace KFormEditor
 		int m_y;
 	};
 
-	class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
+	/**
+	 * a set of resize handles (for resizing widgets)
+	 * @author Joseph Wenninger
+	 */
+	class ResizeHandleSet: public QObject
 	{
 	Q_OBJECT
 	public:
 		ResizeHandleSet(QWidget *modify);
 		~ResizeHandleSet();
-		QWidget *widget()const{return m_widget;};
+		QWidget *widget() const {return m_widget;};
 	private:
 		QGuardedPtr<ResizeHandle> handles[8];
 		QGuardedPtr<QWidget> m_widget;

@@ -45,7 +45,7 @@ class KexiKWMailMergeBase : public KWMailMergeDataSource
 		virtual QString	getValue(const QString &, int) const;
 		virtual int	getNumRecords() const;
 
-		bool	initDB(bool count);
+		bool	initDB();
 
 	k_dcop:
 		bool	openDatabase();

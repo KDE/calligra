@@ -14,7 +14,7 @@ kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquery
 				kexiquerydesignersqlhistory.cpp kexiparameterlisteditor.ui kexiaddparamwidget.ui \
 				kexiaddparamdialog.cpp kexidynamicqueryparameterdialog.cpp
 
-kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module -no-undefine
 kexihandler_query_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la ../widget/libkexiextendedwidgets.la
 
 kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerproxy.cpp kexirelationview.cpp \

@@ -25,7 +25,9 @@
 class QObject;
 class QString;
 
-class KFORMEDITOR_EXPORT PropertyBufferItem
+#define KFORMEDITOR_EXPORT
+
+class PropertyBufferItem
 {
 	public:
 		PropertyBufferItem(QObject *o, const QString &name, QVariant value);

@@ -1,14 +1,12 @@
-lib_LTLIBRARIES = libkformeditor.la
+INCLUDES = $(all_includes)
+lib_LTLIBRARIES =  libkformeditor.la
+libkformeditor_la_LDFLAGS = -no-undefined $(all_libraries)
+libkformeditor_la_SOURCES = container.cpp container.h resizehandle.cpp resizehandle.h widgetfactory.cpp widgetfactory.h widgetlibrary.cpp widgetlibrary.h libactionwidget.cpp form.h form.cpp objecttree.cpp propertybuffer.cpp  propertybufferitem.cpp  propertyeditor.cpp  propertyeditoreditor.cpp  propertyeditorinput.cpp  propertyeditoritem.cpp  propertyeditorlist.cpp
 
-INCLUDES = -I$(srcdir)/.. $(all_includes)
+METASOURCES = AUTO
+libkformeditor_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KPARTS)
 
-SUBDIRS = .
+servicetypesdir = $(kde_servicetypesdir)
+servicetypes_DATA=widgetfactory.desktop
 
-libkformeditor_la_METASOURCES = AUTO
-
-libkformeditor_la_SOURCES = propertyeditor.cpp propertyeditoritem.cpp propertyeditoreditor.cpp propertyeditorlist.cpp propertyeditorinput.cpp widgetcontainer.cpp resizehandle.cpp container_frame.cpp container_tabwidget.cpp containerIface.cpp propertybufferitem.cpp propertybuffer.cpp eventeditor.cpp eventeditoritem.cpp eventeditoreditor.cpp widgetwatcher.cpp widgetprovider.cpp eventdetail.ui eventbuffer.cpp
-
-libkformeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXICORE_EXPORT= -DKFORMEDITOR_EXPORT=
-
+SUBDIRS = . factories test

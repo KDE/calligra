@@ -32,7 +32,7 @@
 #include "propertyeditoreditor.h"
 #include "propertyeditorlist.h"
 #include "propertyeditorinput.h"
-#include "eventeditoreditor.h"
+//#include "eventeditoreditor.h"
 
 PropertyEditor::PropertyEditor(QWidget *parent, bool returnToAccept, const char *name)
  : KListView(parent, name)
@@ -118,7 +118,7 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 			break;
 
 		case QVariant::BitArray:
-			editor = new EventEditorEditor(viewport(), i);
+//			editor = new EventEditorEditor(viewport(), i);
 			break;
 
 		default:

@@ -28,7 +28,10 @@
 
 //typedef QMap<QObject *, PropertyBufferItem *> PropertyBuffer;
 
-class KFORMEDITOR_EXPORT PropertyBuffer : public QObject, public QPtrList<PropertyBufferItem>
+//#define KFORMEDITOR_EXPORT
+#define KFORMEDITOR_EXPORT
+
+class PropertyBuffer : public QObject, public QPtrList<PropertyBufferItem>
 {
 	Q_OBJECT
 

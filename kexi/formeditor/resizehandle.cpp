@@ -37,9 +37,9 @@
 #include <qobjectlist.h>
 
 #include "resizehandle.h"
-#include "widgetcontainer.h"
+//#include "widgetcontainer.h"
 
-namespace KFormEditor {
+namespace KFormDesigner {
 
 	ResizeHandle::ResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos):QWidget(parent)
 	{
@@ -106,7 +106,9 @@ namespace KFormEditor {
 
 	void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	{
-		int m_dotSpacing=WidgetContainer::dotSpacing();
+//		int m_dotSpacing=WidgetContainer::dotSpacing();
+		#warning FIXME
+		int m_dotSpacing=10;
 		if (!m_dragging) return;
 
 		int tmpx=m_buddy->x();

@@ -42,6 +42,7 @@ class KexiKWMMConfigDlg : public KDialogBase
 
 	protected slots:
 		void	slotSourceChanged(int);
+		void	showFilterDlg();
 
 	private:
 		KexiDataSourceComboBox	*m_dataSource;
