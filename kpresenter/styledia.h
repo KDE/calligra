@@ -35,6 +35,7 @@ class QSlider;
 class KPGradient;
 class QResizeEvent;
 class QWidgetStack;
+class QLabel;
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -128,6 +129,7 @@ private:
     QComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QSlider *xfactor, *yfactor;
+    QLabel *xfactorLabel, *yfactorLabel;
     KPGradient *gradient;
     bool lockUpdate;
     int flags;

@@ -339,15 +339,15 @@ void StyleDia::setupTab2()
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    l = new QLabel( i18n( "X-Factor:" ), gradientConfig );
-    l->setFixedHeight( l->sizeHint().height() );
+    xfactorLabel = new QLabel( i18n( "X-Factor:" ), gradientConfig );
+    xfactorLabel->setFixedHeight( xfactorLabel->sizeHint().height() );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    l = new QLabel( i18n( "Y-Factor:" ), gradientConfig );
-    l->setFixedHeight( l->sizeHint().height() );
+    yfactorLabel = new QLabel( i18n( "Y-Factor:" ), gradientConfig );
+    yfactorLabel->setFixedHeight( yfactorLabel->sizeHint().height() );
 
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
@@ -396,13 +396,11 @@ void StyleDia::updateBrushConfiguration()
     if ( lockUpdate )
 	return;
 
-    if ( !unbalanced->isChecked() ) {
-	xfactor->setEnabled( false );
-	yfactor->setEnabled( false );
-    } else {
-	xfactor->setEnabled( true );
-	yfactor->setEnabled( true );
-    }
+    bool state =unbalanced->isChecked();
+    xfactorLabel->setEnabled(state);
+    yfactorLabel->setEnabled(state);
+    xfactor->setEnabled( state );
+    yfactor->setEnabled( state );
 
     if ( getFillType() == FT_BRUSH ) {
 	brushPrev->setPaintType( PBPreview::Brush );
