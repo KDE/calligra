@@ -266,6 +266,22 @@ public:
 
     bool canMoveOneObject()const;
     QPtrList<KPTextObject> listOfTextObjs() const;
+
+    bool getSticky( bool sticky ) const;
+    bool getProtect( bool prot ) const;
+    bool getKeepRatio( bool _ratio ) const;
+    QPen getPen( const QPen & _pen )const;
+    QBrush getBrush( const QBrush & _brush )const;
+    LineEnd getLineBegin( LineEnd  _end )const;
+    LineEnd getLineEnd( LineEnd  _end )const;
+    FillType getFillType( FillType _fillType ) const;
+    QColor getGColor1( const QColor & _col )const;
+    QColor getGColor2( const QColor & _col )const;
+    BCType getGType( BCType _gt )const;
+    bool getGUnbalanced( bool _g )const;
+    int getGXFactor( int _g )const;
+    int getGYFactor( int _g )const;
+
 public slots:
     void exitEditMode();
 

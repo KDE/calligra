@@ -966,25 +966,25 @@ void KPresenterView::extraPenBrush()
     }
 
     styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, m_canvas->getPenBrushFlags(),canHaveStickyObj, state );
-    styleDia->setPen( page->getPen( pen ) );
-    styleDia->setBrush( page->getBrush( brush ) );
-    styleDia->setLineBegin( page->getLineBegin( lineBegin ) );
-    styleDia->setLineEnd( page->getLineEnd( lineEnd ) );
-    styleDia->setFillType( page->getFillType( fillType ) );
-    styleDia->setGradient( page->getGColor1( gColor1 ),
-			   page->getGColor2( gColor2 ),
-			   page->getGType( gType ),
-			   page->getGUnbalanced( gUnbalanced ),
-			   page->getGXFactor( gXFactor ),
-			   page->getGYFactor( gYFactor ) );
+    styleDia->setPen( m_canvas->getPen( pen ) );
+    styleDia->setBrush( m_canvas->getBrush( brush ) );
+    styleDia->setLineBegin( m_canvas->getLineBegin( lineBegin ) );
+    styleDia->setLineEnd( m_canvas->getLineEnd( lineEnd ) );
+    styleDia->setFillType( m_canvas->getFillType( fillType ) );
+    styleDia->setGradient( m_canvas->getGColor1( gColor1 ),
+			   m_canvas->getGColor2( gColor2 ),
+			   m_canvas->getGType( gType ),
+			   m_canvas->getGUnbalanced( gUnbalanced ),
+			   m_canvas->getGXFactor( gXFactor ),
+			   m_canvas->getGYFactor( gYFactor ) );
     if ( state )
     {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());
     }
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
-    styleDia->setProtected( page->getProtect( protect ) );
-    styleDia->setKeepRatio( page->getKeepRatio( keepRatio ) );
+    styleDia->setProtected( m_canvas->getProtect( protect ) );
+    styleDia->setKeepRatio( m_canvas->getKeepRatio( keepRatio ) );
 
 
     styleDia->setCaption( i18n( "Pen and Brush" ) );

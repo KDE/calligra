@@ -7286,3 +7286,116 @@ void KPrCanvas::rectSymetricalObjet()
         insRect.setSize( 2*insRect.size() );
     }
 }
+
+bool KPrCanvas::getSticky( bool sticky ) const
+{
+    bool result =m_activePage->getSticky( sticky );
+    if ( result != sticky)
+        return result;
+    return stickyPage()->getSticky( sticky );
+}
+
+bool KPrCanvas::getProtect( bool prot ) const
+{
+    bool result =m_activePage->getProtect( prot );
+    if ( result != prot)
+        return result;
+    return stickyPage()->getProtect( prot );
+}
+
+bool KPrCanvas::getKeepRatio( bool _ratio ) const
+{
+    bool result =m_activePage->getKeepRatio( _ratio );
+    if ( result != _ratio)
+        return result;
+    return stickyPage()->getKeepRatio( _ratio );
+}
+
+QPen KPrCanvas::getPen( const QPen & _pen )const
+{
+    QPen pen = m_activePage->getPen( _pen );
+    if ( pen != _pen )
+        return pen;
+    return stickyPage()->getPen( _pen);
+}
+
+QBrush KPrCanvas::getBrush( const QBrush & _brush )const
+{
+    QBrush brush = m_activePage->getBrush( _brush );
+    if ( brush != _brush )
+        return brush;
+    return stickyPage()->getBrush( _brush);
+}
+
+LineEnd KPrCanvas::getLineBegin( LineEnd  _end )const
+{
+    LineEnd end = m_activePage->getLineBegin( _end );
+    if ( end != _end )
+        return end;
+    return stickyPage()->getLineBegin( _end);
+}
+
+LineEnd KPrCanvas::getLineEnd( LineEnd  _end )const
+{
+    LineEnd end = m_activePage->getLineEnd( _end );
+    if ( end != _end )
+        return end;
+    return stickyPage()->getLineEnd( _end);
+}
+
+FillType KPrCanvas::getFillType( FillType _fillType ) const
+{
+    FillType fill = m_activePage->getFillType( _fillType );
+    if ( fill != _fillType )
+        return fill;
+    return stickyPage()->getFillType( _fillType);
+
+}
+
+QColor KPrCanvas::getGColor1( const QColor & _col )const
+{
+    QColor col = m_activePage->getGColor1( _col );
+    if ( col != _col )
+        return col;
+    return stickyPage()->getGColor1( _col);
+}
+
+QColor KPrCanvas::getGColor2( const QColor & _col )const
+{
+    QColor col = m_activePage->getGColor2( _col );
+    if ( col != _col )
+        return col;
+    return stickyPage()->getGColor2( _col);
+}
+
+BCType KPrCanvas::getGType( BCType _gt )const
+{
+    BCType type = m_activePage->getGType( _gt );
+    if ( type != _gt )
+        return type;
+    return stickyPage()->getGType( _gt);
+}
+
+bool KPrCanvas::getGUnbalanced( bool _g )const
+{
+    bool type= m_activePage->getGUnbalanced( _g );
+    if ( type != _g )
+        return type;
+    return stickyPage()->getGUnbalanced( _g);
+}
+
+int KPrCanvas::getGXFactor( int _g )const
+{
+    int type= m_activePage->getGXFactor( _g );
+    if ( type != _g )
+        return type;
+    return stickyPage()->getGXFactor( _g);
+}
+
+int KPrCanvas::getGYFactor( int _g )const
+{
+    int type= m_activePage->getGYFactor( _g );
+    if ( type != _g )
+        return type;
+    return stickyPage()->getGYFactor( _g);
+}
