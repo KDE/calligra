@@ -12,9 +12,6 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 
-// only for test-object:
-#include "vccmd_rectangle.h"
-
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
@@ -23,11 +20,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
-
-// <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	m_commandHistory->addCommand(
-		new VCCmdRectangle( this, 100, 300, 300, 150, 30 ) );
-// </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
 KarbonPart::~KarbonPart()
@@ -74,7 +66,7 @@ void
 KarbonPart::addCommand( VCommand* cmd )
 {
 	kdDebug() << "KarbonPart::addCommand " << cmd->name() << endl;
-	m_commandHistory->addCommand( cmd, false );
+	m_commandHistory->addCommand( cmd );
 	setModified( true );
 }
 

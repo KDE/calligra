@@ -28,7 +28,7 @@ protected:
 private:
 	KarbonPart* m_part;
 
-	bool m_isDown;
+	bool m_isDragging;
 
 	// temporary QRect:
 	QRect m_QRect;

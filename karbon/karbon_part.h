@@ -31,7 +31,7 @@ public:
 
 	void addCommand( VCommand* cmd );
 
-	// sacrify constness for transparent access:
+	// sacrifying safty for transparent access:
 	QList<VLayer>& layers() { return m_layers; }
 
 protected:
@@ -42,7 +42,7 @@ private:
 	QList<VLayer> m_layers;
 
 	// everybody loves undo/redo:
-	VCommandHistory * m_commandHistory;
+	VCommandHistory* m_commandHistory;
 };
 
 #endif

@@ -29,7 +29,7 @@ public:
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
 	
-	virtual QWidget* canvas() { return m_canvas; }
+	virtual VCanvas* canvas() { return m_canvas; }
 
 protected slots:
 	void editCut();

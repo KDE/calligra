@@ -16,11 +16,17 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	  WRepaintNoErase ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
 {
 	viewport()->setFocusPolicy( QWidget::StrongFocus );
+
 	viewport()->setMouseTracking( true );
 	setMouseTracking( true );
-	setFocus();
+
 	viewport()->setBackgroundColor( Qt::white );
 //	viewport()->setBackgroundMode( QWidget::NoBackground );
+
+// TODO: remove this line
+resizeContents( 800, 600 );
+
+	setFocus();
 }
 
 void

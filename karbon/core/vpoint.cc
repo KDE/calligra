@@ -20,11 +20,19 @@ VPoint::VPoint( const VPoint& point )
 const QPoint&
 VPoint::getQPoint( const double zoomFactor ) const
 {
-	m_QPoint.setX( qRound( m_x*zoomFactor ) );
-	m_QPoint.setY( qRound( m_y*zoomFactor ) );
+	m_QPoint.setX( qRound( m_x * zoomFactor ) );
+	m_QPoint.setY( qRound( m_y * zoomFactor ) );
 
 	return m_QPoint;
 }
+
+void
+VPoint::setFromQPoint( const QPoint& point, const double zoomFactor )
+{
+	m_x = point.x() / zoomFactor;
+	m_y = point.y() / zoomFactor;
+}
+
 
 // make these functions inline someday :)
 void

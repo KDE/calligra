@@ -19,10 +19,18 @@ class VTool
 public:
 	virtual ~VTool() = 0;
 
+	// change cursor etc.:
+	virtual void activate() {}
+	// ask the user for input-values:
+
+	// well, handling mouse/keyboard events:
 	virtual bool eventFilter( KarbonView* view, QEvent* event ) { return false; }
 
 	// only manipulating (opposed to creating) tools have to implement this:
 	virtual VCommand* manipulate( VObject* object ) { return 0L; }
+
+// TODO: make this a slot:
+	virtual void slotConfigDialog() {}
 };
 
 #endif
