@@ -1601,15 +1601,15 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>As an example, if we look at a snipit of a document, and assign different styles to appropriate parts :</para>
 <informaltable frame="none"><tgroup cols="2" align="left">
 <tbody>
-<row><entry></entry><entry><emphasis>Section Title ----></emphasis></entry><entry>Setion 1:  How to use your new computer</entry></row>
+<row><entry></entry><entry><emphasis>Section Title ----&gt;</emphasis></entry><entry>Setion 1:  How to use your new computer</entry></row>
 <row><entry></entry><entry></entry></row>
-<row><entry></entry><entry><emphasis>Normal Text ----></emphasis></entry><entry><para>Do to a revolutionary new teaching method, we can now teach you how to use you computer in 10 minutes.  </para><para></para></entry></row>
+<row><entry></entry><entry><emphasis>Normal Text ----&gt;</emphasis></entry><entry><para>Do to a revolutionary new teaching method, we can now teach you how to use you computer in 10 minutes.  </para><para></para></entry></row>
 <row><entry></entry><entry></entry></row>
 <row><entry></entry><entry></entry><entry><para>We should begin by quickly summarizing the parts of your new computer.</para><para></para></entry></row>
 <row><entry></entry><entry></entry></row>
 <row><entry></entry><entry></entry><entry>(text deleted)</entry></row>
 <row><entry></entry><entry></entry></row>
-<row><entry></entry><entry><emphasis>Section Title ----></emphasis></entry><entry>Section 2:  What to do if the 10 minute manual didn't work.</entry></row>
+<row><entry></entry><entry><emphasis>Section Title ----&gt;</emphasis></entry><entry>Section 2:  What to do if the 10 minute manual didn't work.</entry></row>
 </tbody></tgroup></informaltable>
 <para>In this example, you can see this computer manual consists of two sections.  To the title text of each section, we have changed the text style to "Section Title". The rest of the document text is left as "Normal Text".</para>
 <para>We do not need to know how exactly we want the text and paragraphs of these sections to look yet.  All we need to do is identify these sections of text as "Section Titles" or "Normal Text".</para>
@@ -3329,7 +3329,5 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 </glossary>
 
-<![ %addindex; [ &kdedocindex; ]]>
 </book>
-
 
