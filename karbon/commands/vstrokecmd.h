@@ -28,13 +28,6 @@
 
 // Stroke object(s)
 
-
-class VPath;
-class VSelection;
-class VStroke;
-class VGradient;
-class VPattern;
-
 class VStrokeColorCmd : public VCommand
 {
 public:
@@ -45,8 +38,8 @@ public:
 	virtual void unexecute();
 
 private:
-	VSelection* m_selection;
-	VColor* m_color;
+	VSelection			*m_selection;
+	VColor				*m_color;
 	QValueVector<VColor> m_oldcolors;
 };
 
@@ -60,8 +53,8 @@ public:
 	virtual void unexecute();
 
 private:
-	VSelection* m_selection;
-	double m_width;
+	VSelection			*m_selection;
+	double				 m_width;
 	QValueVector<double> m_oldwidths;
 };
 
@@ -79,9 +72,9 @@ public:
 protected:
 	VSelection* m_selection;
 
-	const VStroke *m_stroke;
-	VGradient *m_gradient;
-	VPattern *m_pattern;
+	const VStroke	*m_stroke;
+	VGradient		*m_gradient;
+	VPattern		*m_pattern;
 
 	QValueVector<VStroke> m_oldcolors;
 };
