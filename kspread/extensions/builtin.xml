@@ -240,136 +240,7 @@
 
   </Group>
   <Group>
-    <GroupName>Time and Date</GroupName>
-
-    <Function>
-      <Name>dayOfYear</Name>
-      <Type>Int</Type>
-      <Parameter>
-	<Comment>Year</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Month</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Day</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The dayOfYear() function returns the number of the day in the year (1...365).</Text>
-	<Syntax>dayOfYear( year; month; date )</Syntax>
-	<Example>dayOfYear(2000;12;1) returns 336</Example>
-	<Example>dayOfYear(2000;2;29) return 60</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>date</Name>
-      <Type>String</Type>
-      <Parameter>
-	<Comment>Year</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Month</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Day</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The date() function returns the date formatted with local parameters.</Text>
-	<Syntax>date( year; month; date )</Syntax>
-	<Example>date(2000;5;5) returns Friday 05 May 2000</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>time</Name>
-      <Type>String</Type>
-      <Parameter>
-	<Comment>Hours</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Minutes</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Seconds</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The time() function returns the time formatted with local parameters.</Text>
-	<Syntax>time( hours; minutes; seconds )</Syntax>
-	<Example>time(10;2;2) returns 10:02:02</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>day</Name>
-      <Type>String</Type>
-      <Parameter>
-	<Comment>Number of day in week (1..7)</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The day() function returns name of day of the week (1..7). In some countries the first day of the week is the monday, while in others the first day of the week is sunday.</Text>
-	<Syntax>day( weekday )</Syntax>
-	<Example>day(1) returns Monday (if the week starts on Monday)</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>month</Name>
-      <Type>String</Type>
-      <Parameter>
-	<Comment>Number of month (1..12)</Comment>
-	<Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The month() function returns name of the month (1...12).</Text>
-	<Syntax>month( number )</Syntax>
-	<Example>month(5) returns May</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>currentDate</Name>
-      <Type>String</Type>
-      <Help>
-	<Text>The currentDate() function returns the current date formatted with local parameters.</Text>
-	<Syntax>currentDate()</Syntax>
-	<Example>currentDate() returns "Saturday 15 July 2000"</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>currentDateTime</Name>
-      <Type>String</Type>
-      <Help>
-	<Text>The currentDateTime() function returns the current date and time formatted with local parameters.</Text>
-	<Syntax>currentDateTime()</Syntax>
-	<Example>currentDateTime() returns "Saturday 15 July 2000 19:12:01"</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>currentTime</Name>
-      <Type>String</Type>
-      <Help>
-	<Text>The currentTime() function returns the current time formatted with local parameters.</Text>
-	<Syntax>currentTime()</Syntax>
-	<Example>currentTime() returns "19:12:01"</Example>
-      </Help>
-    </Function>
-
-  </Group>
-  <Group>
-    <GroupName>Text</GroupName>
+    <GroupName>Conversion</GroupName>
 
     <Function>
       <Name>DEC2BIN</Name>
@@ -550,6 +421,216 @@
 	<Example>HEX2BIN("37") returns "110111"</Example>
       </Help>
     </Function>
+
+    <Function>
+      <Name>POLR</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value in X</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value in Y</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The POLR() function returns the radius corresponding to the position of a point in a cartisien landmark.</Text>
+	<Syntax>POLR( X;Y )</Syntax>
+	<Example>POLR(12;12) returns 16.9705</Example>
+	<Example>POLR(12;0) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>POLA</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value in X</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value in Y</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartisien landmark.</Text>
+	<Syntax>POLA( X;Y )</Syntax>
+	<Example>POLA(12;12) returns 16.9705</Example>
+	<Example>POLA(12;0) returns 0.7853</Example>
+            <Example>POLA(0;12) returns 1.5707</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CARX</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Radius</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The CARX() function returns the X position corresponding to the position of a point in a polar landmark.</Text>
+	<Syntax>CARX( Radius;Angle )</Syntax>
+	<Example>CARX(12;1.5707) returns 0</Example>
+	<Example>CARX(12;0) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CARY</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Radius</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+        <Text>The CARY() function returns the Y position corresponding to the position of a point in a polar landmark.</Text>
+        <Syntax>CARY( Radius;Angle )</Syntax>
+        <Example>CARY(12;1.5707) returns 12</Example>
+        <Example>CARY(12;0) returns 0</Example>
+      </Help>
+    </Function>
+
+  </Group>
+  <Group>
+    <GroupName>Time and Date</GroupName>
+
+    <Function>
+      <Name>dayOfYear</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Day</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The dayOfYear() function returns the number of the day in the year (1...365).</Text>
+	<Syntax>dayOfYear( year; month; date )</Syntax>
+	<Example>dayOfYear(2000;12;1) returns 336</Example>
+	<Example>dayOfYear(2000;2;29) return 60</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>date</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Day</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The date() function returns the date formatted with local parameters.</Text>
+	<Syntax>date( year; month; date )</Syntax>
+	<Example>date(2000;5;5) returns Friday 05 May 2000</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>time</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Hours</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Minutes</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Seconds</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The time() function returns the time formatted with local parameters.</Text>
+	<Syntax>time( hours; minutes; seconds )</Syntax>
+	<Example>time(10;2;2) returns 10:02:02</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>day</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number of day in week (1..7)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The day() function returns name of day of the week (1..7). In some countries the first day of the week is the monday, while in others the first day of the week is sunday.</Text>
+	<Syntax>day( weekday )</Syntax>
+	<Example>day(1) returns Monday (if the week starts on Monday)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>month</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number of month (1..12)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The month() function returns name of the month (1...12).</Text>
+	<Syntax>month( number )</Syntax>
+	<Example>month(5) returns May</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>currentDate</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>The currentDate() function returns the current date formatted with local parameters.</Text>
+	<Syntax>currentDate()</Syntax>
+	<Example>currentDate() returns "Saturday 15 July 2000"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>currentDateTime</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>The currentDateTime() function returns the current date and time formatted with local parameters.</Text>
+	<Syntax>currentDateTime()</Syntax>
+	<Example>currentDateTime() returns "Saturday 15 July 2000 19:12:01"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>currentTime</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>The currentTime() function returns the current time formatted with local parameters.</Text>
+	<Syntax>currentTime()</Syntax>
+	<Example>currentTime() returns "19:12:01"</Example>
+      </Help>
+    </Function>
+
+  </Group>
+  <Group>
+    <GroupName>Text</GroupName>
 
     <Function>
       <Name>EXACT</Name>
