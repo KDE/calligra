@@ -1,8 +1,8 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
-   Copyright 2001, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,13 +23,14 @@
 #include <qtextcodec.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-#include <qcombobox.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcharsets.h>
 #include <kglobal.h>
 #include <kapplication.h>
+#include <kcombobox.h>
+#include <kmessagebox.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>
@@ -41,8 +42,11 @@ AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
 
     kapp->restoreOverrideCursor();
 
-    QStringList encodings(KGlobal::charsets()->descriptiveEncodingNames());
-    // Add a few non-standard encodings
+    QStringList encodings;
+    encodings << i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
+    encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18n("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple 
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
@@ -50,12 +54,8 @@ AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
 
     m_dialog->comboBoxEncoding->insertStringList(encodings);
 
-    resize(size()); // Is this right?
-
     setMainWidget(m_dialog);
 
-    connect(m_dialog->comboBoxEncoding, SIGNAL(activated(int)), this,
-        SLOT(comboBoxEncodingActivated(int)));
 }
 
 AsciiExportDialog :: ~AsciiExportDialog(void)
@@ -65,39 +65,30 @@ AsciiExportDialog :: ~AsciiExportDialog(void)
 
 QTextCodec* AsciiExportDialog::getCodec(void) const
 {
-    QTextCodec* codec=NULL;
+    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
+    kdDebug(30502) << "Encoding: " << strCodec << endl;
 
-    if (m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
+    bool ok = false;
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+
+    // If QTextCodec has not found a valid encoding, so try with KCharsets.
+    if ( codec )
     {
-        kdDebug(30502) << "Encoding: UTF-8" << endl;
-        codec=QTextCodec::codecForName("UTF-8");
+        ok = true;
     }
-    else if (m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
+    else
     {
-        kdDebug(30502) << "Encoding: Locale" << endl;
-        codec=QTextCodec::codecForLocale();
-    }
-    else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
-    {
-        QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-        kdDebug(30502) << "Encoding: " << strCodec << endl;
-        if (strCodec.isEmpty())
-        {
-            codec=QTextCodec::codecForLocale();
-        }
-        else
-        {
-            // We do not use QTextCodec::codecForName here
-            //   because we fear subtle problems
-            codec=KGlobal::charsets()->codecForName(strCodec);
-        }
+        codec = KGlobal::charsets()->codecForName( strCodec, ok );
     }
 
-    if (!codec)
+    // Still nothing?
+    if ( !codec || !ok )
     {
         // Default: UTF-8
-        kdWarning(30502) << "No codec set, assuming UTF-8" << endl;
-        codec=QTextCodec::codecForName("UTF-8");
+        kdWarning(30502) << "Cannot find encoding:" << strCodec << endl;
+        // ### TODO: what parent to use?
+        KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
+        return 0;
     }
 
     return codec;
@@ -116,11 +107,6 @@ QString AsciiExportDialog::getEndOfLine(void) const
         strReturn="\n";
 
     return strReturn;
-}
-
-void AsciiExportDialog::comboBoxEncodingActivated(int)
-{
-    m_dialog->buttonGroupEncoding->setButton(2); // Select the "other" button
 }
 
 #include <ExportDialog.moc>

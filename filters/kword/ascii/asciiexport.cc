@@ -466,7 +466,15 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QCString& from, const QCSt
         return KoFilter::StupidError;
     }
 
-    worker->setCodec(dialog->getCodec());
+    QTextCodec* codec = dialog->getCodec();
+    if ( !codec )
+    {
+        kdError(30502) << "No codec!" << endl;
+        delete dialog;
+        return KoFilter::StupidError;
+    }
+
+    worker->setCodec( codec );
     worker->setEndOfLine(dialog->getEndOfLine());
 
     delete dialog;
