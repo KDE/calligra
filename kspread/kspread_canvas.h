@@ -38,6 +38,7 @@
 #include <kcombobox.h>
 
 #include <koQueryTrader.h>
+#include <koRect.h>
 
 #include "kspread_util.h"
 

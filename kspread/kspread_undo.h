@@ -28,7 +28,8 @@ class KSpreadDoc;
 class ColumnFormat;
 class RowFormat;
 
-#include "kspread_cell.h"
+#include "kspread_global.h"
+
 #include <koUnit.h>
 #include <koPageLayout.h>
 
@@ -332,7 +333,7 @@ protected:
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_table, const QString& _text, int _column, int _row,KSpreadCell::FormatType _formatType );
+    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_table, const QString& _text, int _column, int _row, FormatType _formatType );
     virtual ~KSpreadUndoSetText();
 
     virtual void undo();
@@ -344,8 +345,8 @@ protected:
     int m_iColumn;
     QString m_strText;
     QString m_strRedoText;
-    KSpreadCell::FormatType m_eFormatType;
-    KSpreadCell::FormatType m_eFormatTypeRedo;
+    FormatType m_eFormatType;
+    FormatType m_eFormatTypeRedo;
 };
 
 class KSpreadUndoCellFormat : public KSpreadUndoAction

@@ -50,7 +50,7 @@ KSpreadStyle::KSpreadStyle()
     m_alignY( KSpreadFormat::Middle ),
     m_floatFormat( KSpreadFormat::OnlyNegSigned ),
     m_floatColor( KSpreadFormat::AllBlack ),
-    m_formatType( KSpreadFormat::Number ),
+    m_formatType( Number_format ),
     m_fontFlags( 0 ),
     m_bgColor( Qt::white ),
     m_backGroundBrush( Qt::red, Qt::NoBrush ),
@@ -129,7 +129,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttribute( "style:data-style-name" ) )
     {
         kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<styleStack.attribute( "style:data-style-name" )<<endl;
-        kdDebug()<<" oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attribute( "style:data-style-name" )]<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attribute( "style:data-style-name" )]<<endl;
     }
     if ( styleStack.hasAttribute( "style:font-name" ) )
     {
@@ -384,7 +384,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         int fo = format.attribute( "format" ).toInt( &ok );
         if ( ! ok )
             return false;
-        m_formatType = ( KSpreadFormat::FormatType ) fo;
+        m_formatType = ( FormatType ) fo;
         m_featuresSet |= SFormatType;
     }
     if ( format.hasAttribute( "custom" ) )
@@ -487,77 +487,77 @@ QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
     QString styleName;
     switch( m_formatType )
     {
-    case KSpreadFormat::Number:
+    case Number_format:
         styleName = saveOasisStyleNumericNumber( mainStyles );
         break;
-    case KSpreadFormat::Text_format:
+    case Text_format:
         styleName = saveOasisStyleNumericText( mainStyles );
         break;
-    case KSpreadFormat::Money:
+    case Money_format:
         styleName = saveOasisStyleNumericMoney( mainStyles );
         break;
-    case KSpreadFormat::Percentage:
+    case Percentage_format:
         styleName = saveOasisStyleNumericPercentage( mainStyles );
         break;
-    case KSpreadFormat::Scientific:
+    case Scientific_format:
         styleName = saveOasisStyleNumericScientific( mainStyles );
         break;
-    case KSpreadFormat::ShortDate:
-    case KSpreadFormat::TextDate:
+    case ShortDate_format:
+    case TextDate_format:
         styleName = saveOasisStyleNumericDate( mainStyles );
         break;
-    case KSpreadFormat::Time:
-    case KSpreadFormat::SecondeTime:
-    case KSpreadFormat::Time_format1:
-    case KSpreadFormat::Time_format2:
-    case KSpreadFormat::Time_format3:
-    case KSpreadFormat::Time_format4:
-    case KSpreadFormat::Time_format5:
-    case KSpreadFormat::Time_format6:
-    case KSpreadFormat::Time_format7:
-    case KSpreadFormat::Time_format8:
+    case Time_format:
+    case SecondeTime_format:
+    case Time_format1:
+    case Time_format2:
+    case Time_format3:
+    case Time_format4:
+    case Time_format5:
+    case Time_format6:
+    case Time_format7:
+    case Time_format8:
         styleName = saveOasisStyleNumericTime( mainStyles );
         break;
-    case KSpreadFormat::fraction_half:
-    case KSpreadFormat::fraction_quarter:
-    case KSpreadFormat::fraction_eighth:
-    case KSpreadFormat::fraction_sixteenth:
-    case KSpreadFormat::fraction_tenth:
-    case KSpreadFormat::fraction_hundredth:
-    case KSpreadFormat::fraction_one_digit:
-    case KSpreadFormat::fraction_two_digits:
-    case KSpreadFormat::fraction_three_digits:
+    case fraction_half:
+    case fraction_quarter:
+    case fraction_eighth:
+    case fraction_sixteenth:
+    case fraction_tenth:
+    case fraction_hundredth:
+    case fraction_one_digit:
+    case fraction_two_digits:
+    case fraction_three_digits:
         styleName = saveOasisStyleNumericFraction( mainStyles );
         break;
-    case KSpreadFormat::date_format1:
-    case KSpreadFormat::date_format2:
-    case KSpreadFormat::date_format3:
-    case KSpreadFormat::date_format4:
-    case KSpreadFormat::date_format5:
-    case KSpreadFormat::date_format6:
-    case KSpreadFormat::date_format7:
-    case KSpreadFormat::date_format8:
-    case KSpreadFormat::date_format9:
-    case KSpreadFormat::date_format10:
-    case KSpreadFormat::date_format11:
-    case KSpreadFormat::date_format12:
-    case KSpreadFormat::date_format13:
-    case KSpreadFormat::date_format14:
-    case KSpreadFormat::date_format15:
-    case KSpreadFormat::date_format16:
-    case KSpreadFormat::date_format17:
-    case KSpreadFormat::date_format18:
-    case KSpreadFormat::date_format19:
-    case KSpreadFormat::date_format20:
-    case KSpreadFormat::date_format21:
-    case KSpreadFormat::date_format22:
-    case KSpreadFormat::date_format23:
-    case KSpreadFormat::date_format24:
-    case KSpreadFormat::date_format25:
-    case KSpreadFormat::date_format26:
+    case date_format1:
+    case date_format2:
+    case date_format3:
+    case date_format4:
+    case date_format5:
+    case date_format6:
+    case date_format7:
+    case date_format8:
+    case date_format9:
+    case date_format10:
+    case date_format11:
+    case date_format12:
+    case date_format13:
+    case date_format14:
+    case date_format15:
+    case date_format16:
+    case date_format17:
+    case date_format18:
+    case date_format19:
+    case date_format20:
+    case date_format21:
+    case date_format22:
+    case date_format23:
+    case date_format24:
+    case date_format25:
+    case date_format26:
         styleName = saveOasisStyleNumericDate( mainStyles );
         break;
-    case KSpreadFormat::Custom:
+    case Custom_format:
         styleName = saveOasisStyleNumericCustom( mainStyles );
         break;
     }
@@ -632,34 +632,34 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_DATE );
     switch( m_formatType )
     {
-    case KSpreadFormat::ShortDate:
-    case KSpreadFormat::TextDate:
-    case KSpreadFormat::date_format1:
-    case KSpreadFormat::date_format2:
-    case KSpreadFormat::date_format3:
-    case KSpreadFormat::date_format4:
-    case KSpreadFormat::date_format5:
-    case KSpreadFormat::date_format6:
-    case KSpreadFormat::date_format7:
-    case KSpreadFormat::date_format8:
-    case KSpreadFormat::date_format9:
-    case KSpreadFormat::date_format10:
-    case KSpreadFormat::date_format11:
-    case KSpreadFormat::date_format12:
-    case KSpreadFormat::date_format13:
-    case KSpreadFormat::date_format14:
-    case KSpreadFormat::date_format15:
-    case KSpreadFormat::date_format16:
-    case KSpreadFormat::date_format17:
-    case KSpreadFormat::date_format18:
-    case KSpreadFormat::date_format19:
-    case KSpreadFormat::date_format20:
-    case KSpreadFormat::date_format21:
-    case KSpreadFormat::date_format22:
-    case KSpreadFormat::date_format23:
-    case KSpreadFormat::date_format24:
-    case KSpreadFormat::date_format25:
-    case KSpreadFormat::date_format26:
+    case ShortDate_format:
+    case TextDate_format:
+    case date_format1:
+    case date_format2:
+    case date_format3:
+    case date_format4:
+    case date_format5:
+    case date_format6:
+    case date_format7:
+    case date_format8:
+    case date_format9:
+    case date_format10:
+    case date_format11:
+    case date_format12:
+    case date_format13:
+    case date_format14:
+    case date_format15:
+    case date_format16:
+    case date_format17:
+    case date_format18:
+    case date_format19:
+    case date_format20:
+    case date_format21:
+    case date_format22:
+    case date_format23:
+    case date_format24:
+    case date_format25:
+    case date_format26:
         break;
     default:
         kdDebug()<<"this date format is not defined ! :"<<m_formatType<<endl;
@@ -711,16 +711,16 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     switch( m_formatType )
     {
-    case KSpreadFormat::Time:
-    case KSpreadFormat::SecondeTime:
-    case KSpreadFormat::Time_format1:
-    case KSpreadFormat::Time_format2:
-    case KSpreadFormat::Time_format3:
-    case KSpreadFormat::Time_format4:
-    case KSpreadFormat::Time_format5:
-    case KSpreadFormat::Time_format6:
-    case KSpreadFormat::Time_format7:
-    case KSpreadFormat::Time_format8:
+    case Time_format:
+    case SecondeTime_format:
+    case Time_format1:
+    case Time_format2:
+    case Time_format3:
+    case Time_format4:
+    case Time_format5:
+    case Time_format6:
+    case Time_format7:
+    case Time_format8:
         break;
     default:
         kdDebug()<<"time format not defined :"<<m_formatType<<endl;
@@ -744,23 +744,23 @@ QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
     elementWriter.startElement( "number:fraction" );
     switch( m_formatType )
     {
-    case KSpreadFormat::fraction_half:
+    case fraction_half:
         break;
-    case KSpreadFormat::fraction_quarter:
+    case fraction_quarter:
         break;
-    case KSpreadFormat::fraction_eighth:
+    case fraction_eighth:
         break;
-    case KSpreadFormat::fraction_sixteenth:
+    case fraction_sixteenth:
         break;
-    case KSpreadFormat::fraction_tenth:
+    case fraction_tenth:
         break;
-    case KSpreadFormat::fraction_hundredth:
+    case fraction_hundredth:
         break;
-    case KSpreadFormat::fraction_one_digit:
+    case fraction_one_digit:
         break;
-    case KSpreadFormat::fraction_two_digits:
+    case fraction_two_digits:
         break;
-    case KSpreadFormat::fraction_three_digits:
+    case fraction_three_digits:
         break;
     default:
         kdDebug()<<" fraction format not defined :"<<m_formatType<<endl;
@@ -983,7 +983,7 @@ void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
   if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
     format.setAttribute( "custom", m_strFormat );
 
-  if ( featureSet( SFormatType ) && formatType() == KSpreadFormat::Money )
+  if ( featureSet( SFormatType ) && formatType() == Money_format )
   {
     format.setAttribute( "type", (int) m_currency.type );
     format.setAttribute( "symbol", m_currency.symbol );
@@ -1168,7 +1168,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     int fo = format.attribute( "format" ).toInt( &ok );
     if ( ! ok )
       return false;
-    m_formatType = ( KSpreadFormat::FormatType ) fo;
+    m_formatType = ( FormatType ) fo;
     m_featuresSet |= SFormatType;
   }
   if ( format.hasAttribute( "custom" ) )
@@ -1176,7 +1176,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     m_strFormat = format.attribute( "custom" );
     m_featuresSet |= SCustomFormat;
   }
-  if ( m_formatType == KSpreadFormat::Money )
+  if ( m_formatType == Money_format )
   {
     if ( format.hasAttribute( "type" ) )
     {
@@ -1569,7 +1569,7 @@ KSpreadFormat::FloatColor KSpreadStyle::floatColor() const
   return ( !m_parent || featureSet( SFloatColor ) ? m_floatColor : m_parent->floatColor() );
 }
 
-KSpreadFormat::FormatType KSpreadStyle::formatType() const
+FormatType KSpreadStyle::formatType() const
 {
   return ( !m_parent || featureSet( SFormatType ) ? m_formatType : m_parent->formatType() );
 }
@@ -2222,7 +2222,7 @@ KSpreadStyle * KSpreadStyle::clearProperty( Properties p )
 }
 
 
-KSpreadStyle * KSpreadStyle::setFormatType( KSpreadFormat::FormatType format )
+KSpreadStyle * KSpreadStyle::setFormatType( FormatType format )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2645,7 +2645,7 @@ void KSpreadCustomStyle::changeFloatColor( KSpreadFormat::FloatColor color )
   m_featuresSet |= SFloatColor;
 }
 
-void KSpreadCustomStyle::changeFormatType( KSpreadFormat::FormatType format )
+void KSpreadCustomStyle::changeFormatType( FormatType format )
 {
   m_formatType = format;
   m_featuresSet |= SFormatType;

@@ -1056,7 +1056,7 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       else if(_srcList.at( s )->value().isNumber() && _srcList.count()==1)
       {
 	double val;
-        if ( _srcList.at( s )->formatType() == KSpreadFormat::Percentage )
+        if ( _srcList.at( s )->formatType() == Percentage_format )
             factor = 0.01;
         if (!down)
           val = (_srcList.at( s )->value().asFloat() - (incr * factor));

@@ -23,8 +23,11 @@
 #include <qstring.h>
 #include <qrect.h>
 #include <qdatetime.h>
-#include <kspread_cell.h>
 
+#include "kspread_global.h"
+#include "kspread_value.h"
+
+class KSpreadCell;
 class KSpreadMap;
 class KSpreadSheet;
 class KLocale;
@@ -191,13 +194,13 @@ int util_decodeColumnLabelText( const QString &_col );
 */
 QString util_encodeColumnLabelText( int column );
 
-QString util_dateFormat( KLocale* locale, const QDate &_date, KSpreadCell::FormatType fmtType);
+QString util_dateFormat( KLocale* locale, const QDate &_date, FormatType fmtType);
 
-QString util_timeFormat( KLocale* locale, const QDateTime &_time, KSpreadCell::FormatType fmtType);
+QString util_timeFormat( KLocale* locale, const QDateTime &_time, FormatType fmtType);
 
-QString util_dateTimeFormat( KLocale * locale, double date, KSpreadCell::FormatType fmtType, QString const & format );
+QString util_dateTimeFormat( KLocale * locale, double date, FormatType fmtType, QString const & format );
 
-QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
+QString util_fractionFormat( double value , FormatType fmtType);
 
 QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
                       KLocale const * const locale, bool insert );

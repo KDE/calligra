@@ -1469,9 +1469,9 @@ void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
 
     actions->wrapText->setChecked( cell->multiRow( column,row ) );
 
-    KSpreadCell::FormatType ft = cell->formatType();
-    actions->percent->setChecked( ft == KSpreadCell::Percentage );
-    actions->money->setChecked( ft == KSpreadCell::Money );
+    FormatType ft = cell->formatType();
+    actions->percent->setChecked( ft == Percentage_format );
+    actions->money->setChecked( ft == Money_format );
 
     if ( activeSheet && !activeSheet->isProtected() )
       actions->removeComment->setEnabled( !cell->comment(column,row).isEmpty() );

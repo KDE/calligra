@@ -674,14 +674,14 @@ void KSpreadCSVDialog::accept()
        case TEXT:
         break;
        case NUMBER:
-        cell->setFormatType(KSpreadCell::Number);
+        cell->setFormatType(Number_format);
         cell->setPrecision(2);
         break;
        case DATE:
-        cell->setFormatType(KSpreadCell::ShortDate);
+        cell->setFormatType(ShortDate_format);
         break;
        case CURRENCY:
-        cell->setFormatType(KSpreadCell::Money);
+        cell->setFormatType(Money_format);
         break;
       }
     }

@@ -149,7 +149,7 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
     m_length -= 2;
   }
 
-  if ( (cell()->formatType()) == KSpreadCell::Percentage )
+  if ( (cell()->formatType()) == Percentage_format )
   {
     if ( (t.length() == 1) && t[0].isDigit() )
     {

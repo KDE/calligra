@@ -190,3 +190,4 @@ KSpreadValue Convert::toDateTime (const KSpreadValue &val, KLocale *locale)
   //TODO... [note that KLocale can't parse DateTime both at once]
 }
 
+//TODO: ValueParser, ValueFormatter

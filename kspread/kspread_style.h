@@ -29,6 +29,8 @@ class QDomElement;
 #include <qfont.h>
 #include <qpen.h>
 
+#include <koOasisStyles.h>
+
 #include "kspread_format.h"
 
 class KSpreadCustomStyle;
@@ -138,7 +140,7 @@ class KSpreadStyle
   KSpreadFormat::AlignY      alignY()      const;
   KSpreadFormat::FloatFormat floatFormat() const;
   KSpreadFormat::FloatColor  floatColor()  const;
-  KSpreadFormat::FormatType  formatType()  const;
+  FormatType  formatType()  const;
 
   KSpreadFormat::Currency const & currency() const;
 
@@ -169,7 +171,7 @@ class KSpreadStyle
   KSpreadStyle * setBackGroundBrush( QBrush const & brush );
   KSpreadStyle * setFloatFormat( KSpreadFormat::FloatFormat format );
   KSpreadStyle * setFloatColor( KSpreadFormat::FloatColor color );
-  KSpreadStyle * setFormatType( KSpreadFormat::FormatType format );
+  KSpreadStyle * setFormatType( FormatType format );
   KSpreadStyle * setStrFormat( QString const & strFormat );
   KSpreadStyle * setPrecision( int precision );
   KSpreadStyle * setPrefix( QString const & prefix );
@@ -206,7 +208,7 @@ class KSpreadStyle
    */
   KSpreadFormat::FloatColor m_floatColor;
 
-  KSpreadFormat::FormatType m_formatType;
+  FormatType m_formatType;
 
   /**
    * The font used to draw the text
@@ -358,7 +360,7 @@ class KSpreadCustomStyle : public KSpreadStyle
   void changeBackGroundBrush( QBrush const & brush );
   void changeFloatFormat( KSpreadFormat::FloatFormat format );
   void changeFloatColor( KSpreadFormat::FloatColor color );
-  void changeFormatType( KSpreadFormat::FormatType format );
+  void changeFormatType( FormatType format );
   void changeStrFormat( QString const & strFormat );
   void changePrecision( int precision );
   void changePrefix( QString const & prefix );

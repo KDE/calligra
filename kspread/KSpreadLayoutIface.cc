@@ -109,48 +109,48 @@ void KSpreadLayoutIface::setPrefix(const QString &_prefix)
 
 void KSpreadLayoutIface::setFormatType(const QString &_formatType)
 {
-    KSpreadFormat::FormatType format;
+    FormatType format;
     layout->setFactor( 1.0);
     layout->setPrecision(2);
     if(_formatType=="Number")
-        format=KSpreadFormat::Number;
+        format=Number_format;
     else if(_formatType=="Money")
-        format=KSpreadFormat::Money;
+        format=Money_format;
     else if(_formatType=="Percentage")
         {
-        format=KSpreadFormat::Percentage;
+        format=Percentage_format;
         layout->setFactor( 100.0);
         }
     else if(_formatType=="Scientific")
-        format=KSpreadFormat::Scientific;
+        format=Scientific_format;
     else if(_formatType=="ShortDate")
-        format=KSpreadFormat::ShortDate;
+        format=ShortDate_format;
     else if(_formatType=="TextDate")
-        format=KSpreadFormat::TextDate;
+        format=TextDate_format;
     else if(_formatType=="Time")
-        format=KSpreadFormat::Time;
+        format=Time_format;
     else if(_formatType=="SecondeTime")
-        format=KSpreadFormat::SecondeTime;
+        format=SecondeTime_format;
     else if(_formatType=="fraction_half")
-        format=KSpreadFormat::fraction_half;
+        format=fraction_half;
     else if(_formatType=="fraction_quarter")
-        format=KSpreadFormat::fraction_quarter;
+        format=fraction_quarter;
     else if(_formatType=="fraction_eighth")
-        format=KSpreadFormat::fraction_eighth;
+        format=fraction_eighth;
     else if(_formatType=="fraction_sixteenth")
-        format=KSpreadFormat::fraction_sixteenth;
+        format=fraction_sixteenth;
     else if(_formatType=="fraction_tenth")
-        format=KSpreadFormat::fraction_tenth;
+        format=fraction_tenth;
     else if(_formatType=="fraction_hundredth")
-        format=KSpreadFormat::fraction_hundredth;
+        format=fraction_hundredth;
     else if(_formatType=="fraction_one_digit")
-        format=KSpreadFormat::fraction_one_digit;
+        format=fraction_one_digit;
     else if(_formatType=="fraction_two_digits")
-        format=KSpreadFormat::fraction_two_digits;
+        format=fraction_two_digits;
     else if(_formatType=="fraction_three_digits")
-        format=KSpreadFormat::fraction_three_digits;
+        format=fraction_three_digits;
     else
-        format=KSpreadFormat::Number;
+        format=Number_format;
     layout->setFormatType( format);
 }
 

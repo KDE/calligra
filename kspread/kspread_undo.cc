@@ -20,6 +20,7 @@
 
 #include "kspread_global.h"
 #include "kspread_undo.h"
+#include "kspread_cell.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
@@ -825,7 +826,7 @@ void KSpreadUndoPaperLayout::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_table, const QString& _text, int _column, int _row,KSpreadCell::FormatType _formatType ) :
+KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_table, const QString& _text, int _column, int _row,FormatType _formatType ) :
     KSpreadUndoAction( _doc )
 {
     name=i18n("Change Text");

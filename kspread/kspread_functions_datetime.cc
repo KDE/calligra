@@ -975,7 +975,7 @@ bool kspreadfunc_today( KSContext& context )
 
     context.setValue( new KSValue( QDate::currentDate() ) );
     KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
-    cell->setFormatType( KSpreadFormat::ShortDate );
+    cell->setFormatType( ShortDate_format );
 
 
     return true;

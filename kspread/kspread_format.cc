@@ -587,7 +587,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, b
     if ( s.length() > 0 )
       format.setAttribute( "custom", s );
   }
-  if ( getFormatType( _col, _row ) == Money )
+  if ( getFormatType( _col, _row ) == Money_format )
   {
     format.setAttribute( "type", (int) m_pStyle->currency().type ); // TODO: fallback?
     format.setAttribute( "symbol", m_pStyle->currency().symbol );
@@ -710,7 +710,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force, bool copy 
   if ( hasProperty( PCustomFormat, true ) || hasNoFallBackProperties( PCustomFormat ) || force )
     if ( m_pStyle->strFormat().length() > 0 )
       format.setAttribute( "custom", m_pStyle->strFormat() );
-  if ( m_pStyle->formatType() == Money )
+  if ( m_pStyle->formatType() == Money_format )
   {
     format.setAttribute( "type", (int) m_pStyle->currency().type );
     format.setAttribute( "symbol", m_pStyle->currency().symbol );
@@ -899,7 +899,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
     {
         setFormatString( f.attribute( "custom" ) );
     }
-    if ( m_pStyle->formatType() == Money )
+    if ( m_pStyle->formatType() == Money_format )
     {
       Currency c;
       c.type = -1;
@@ -1035,7 +1035,7 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
   if ( font.hasAttribute( "fo:color" ) )
     setTextColor( QColor( font.attribute( "fo:color" ) ) );
   if ( font.hasAttribute( "fo:font-size" ) )
-      setTextFontSize( KoUnit::parseValue( font.attribute( "fo:font-size" ),10.0 ) );
+      setTextFontSize( (int) KoUnit::parseValue( font.attribute( "fo:font-size" ),10.0 ) );
   else
     setTextFontSize( 10 );
 
@@ -1843,7 +1843,7 @@ void KSpreadFormat::setVerticalText( bool _b )
 
 void KSpreadFormat::setFormatType( FormatType _format )
 {
-  if ( _format == KSpreadFormat::Number )
+  if ( _format == Number_format )
   {
     clearProperty( PFormatType );
     setNoFallBackProperties( PFormatType);
@@ -2488,7 +2488,7 @@ bool KSpreadFormat::verticalText( int col, int row ) const
   return m_pStyle->hasProperty( KSpreadStyle::PVerticalText );
 }
 
-KSpreadFormat::FormatType KSpreadFormat::getFormatType( int col, int row ) const
+FormatType KSpreadFormat::getFormatType( int col, int row ) const
 {
   if ( !hasProperty( PFormatType, false ) && !hasNoFallBackProperties( PFormatType ) )
   {
@@ -2609,7 +2609,7 @@ bool KSpreadFormat::isHideFormula( int col, int row) const
 bool KSpreadFormat::currencyInfo( Currency & currency) const
 {
   // TODO: fallback ?
-  if ( m_pStyle->formatType() != Money )
+  if ( m_pStyle->formatType() != Money_format )
     return false;
 
   currency.symbol = m_pStyle->currency().symbol;

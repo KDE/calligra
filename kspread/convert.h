@@ -56,14 +56,14 @@ class Convert {
 KSpreadValue in the desired format */
 
 class ValueParser {
-
+  //TODO: copy stuff from KSpreadCell and kspread_util.*
 };
 
 /** The ValueFormatter class generates a textual representation of
 data stored in a KSpreadValue, with a given formatting */
 
 class ValueFormatter {
-
+  //TODO: copy stuff from KSpreadCell and kspread_util.*
 };
 
 

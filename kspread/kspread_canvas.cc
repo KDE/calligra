@@ -658,8 +658,8 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
             m_validationInfo->setAlignment( Qt::AlignVCenter );
             QPainter painter;
             painter.begin( this );
-            int len = 0.0;
-            int hei = 0.0;
+            int len = 0;
+            int hei = 0;
             QString resultText;
             if ( !title.isEmpty() )
             {
@@ -963,8 +963,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if ( m_dragStart.x() != -1 )
   {
-    QPoint p ( (int) _ev->pos().x() + xOffset(),
-               (int) _ev->pos().y() + yOffset() );
+    QPoint p ( (int) _ev->pos().x() + (int) xOffset(),
+               (int) _ev->pos().y() + (int) yOffset() );
 
     if ( ( m_dragStart - p ).manhattanLength() > 4 )
     {
@@ -1020,15 +1020,15 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   double ty = table->dblRowPos( rct.top() );
   double by = table->dblRowPos( rct.bottom() + 1 );
 
-  r1.setLeft( lx - 1 );
-  r1.setTop( ty - 1 );
-  r1.setRight( rx + 1 );
-  r1.setBottom( by + 1 );
+  r1.setLeft( (int) (lx - 1) );
+  r1.setTop( (int) (ty - 1) );
+  r1.setRight( (int) (rx + 1) );
+  r1.setBottom( (int) (by + 1) );
 
-  r2.setLeft( lx + 1 );
-  r2.setTop( ty + 1 );
-  r2.setRight( rx - 1 );
-  r2.setBottom( by - 1 );
+  r2.setLeft( (int) (lx + 1) );
+  r2.setTop( (int) (ty + 1) );
+  r2.setRight( (int) (rx - 1) );
+  r2.setBottom( (int) (by - 1) );
 
   QRect selectionHandle = m_pView->selectionInfo()->selectionHandleArea();
 
@@ -1062,8 +1062,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !table->isProtected() )
       setCursor( KCursor::handCursor() );
   }
-  else if ( r1.contains( QPoint( ev_PosX, ev_PosY ) )
-            && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
+  else if ( r1.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) )
+            && !r2.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) ) )
     setCursor( KCursor::handCursor() );
   else
     setCursor( arrowCursor );
@@ -1284,21 +1284,21 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       double ty = table->dblRowPos( rct.top() );
       double by = table->dblRowPos( rct.bottom() + 1 );
 
-      r1.setLeft( lx - 1 );
-      r1.setTop( ty - 1 );
-      r1.setRight( rx + 1 );
-      r1.setBottom( by + 1 );
+      r1.setLeft( (int) (lx - 1) );
+      r1.setTop( (int) (ty - 1) );
+      r1.setRight( (int) (rx + 1) );
+      r1.setBottom( (int) (by + 1) );
 
-      r2.setLeft( lx + 1 );
-      r2.setTop( ty + 1 );
-      r2.setRight( rx - 1 );
-      r2.setBottom( by - 1 );
+      r2.setLeft( (int) (lx + 1) );
+      r2.setTop( (int) (ty + 1) );
+      r2.setRight( (int) (rx - 1) );
+      r2.setBottom( (int) (by - 1) );
     }
 
     m_dragStart.setX( -1 );
 
-    if ( r1.contains( QPoint( ev_PosX, ev_PosY ) )
-         && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
+    if ( r1.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) )
+         && !r2.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) ) )
     {
       m_dragStart.setX( (int) ev_PosX );
       m_dragStart.setY( (int) ev_PosY );
@@ -1583,11 +1583,11 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
   double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
   double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
 
-  QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
+  QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
-  if ( r1.contains( QPoint( ev_PosX, ev_PosY ) ) )
+  if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
     _ev->ignore( r1 );
 }
 
@@ -1612,11 +1612,11 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
   double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
 
-  QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
+  QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
-  if ( r1.contains( QPoint( ev_PosX, ev_PosY ) ) )
+  if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
   {
     _ev->ignore( );
     return;
@@ -2643,14 +2643,14 @@ void KSpreadCanvas::convertToPercent( KSpreadCell * cell )
   if ( cell->isTime() || cell->isDate() )
     cell->setValue( getDouble( cell ) );
   cell->setFactor( 100.0 );
-  cell->setFormatType( KSpreadCell::Percentage );
+  cell->setFormatType (Percentage_format);
 }
 
 void KSpreadCanvas::convertToMoney( KSpreadCell * cell )
 {
   if ( cell->isTime() || cell->isDate() )
     cell->setValue( getDouble( cell ) );
-  cell->setFormatType( KSpreadCell::Money );
+  cell->setFormatType (Money_format);
   cell->setFactor( 1.0 );
   cell->setPrecision( m_pDoc->locale()->fracDigits() );
 }
@@ -2661,7 +2661,7 @@ void KSpreadCanvas::convertToTime( KSpreadCell * cell )
     return;
   if ( cell->isDate() )
     cell->setValue( getDouble( cell ) );
-  cell->setFormatType( KSpreadFormat::SecondeTime );
+  cell->setFormatType (SecondeTime_format);
   QTime time = cell->value().asDateTime().time();
   int msec = (int) ( (cell->value().asFloat() - (int) cell->value().asFloat())* 1000 );
   time = time.addMSecs( msec );
@@ -2674,13 +2674,13 @@ void KSpreadCanvas::convertToDate( KSpreadCell * cell )
     return;
   if ( cell->isTime() )
     cell->setValue( getDouble( cell ) );
-  cell->setFormatType( KSpreadFormat::ShortDate );
+  cell->setFormatType (ShortDate_format);
   cell->setFactor( 1.0 );
 
   QDate date(1900, 1, 1);
   date = date.addDays( (int) cell->value().asFloat() - 1 );
   date = cell->value().asDateTime().date();
-  cell->setCellText( util_dateFormat(m_pDoc->locale(), date, KSpreadCell::ShortDate) );
+  cell->setCellText (util_dateFormat(m_pDoc->locale(), date, ShortDate_format));
 }
 
 bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
@@ -2729,7 +2729,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         {
          case Key_Exclam:
           convertToDouble( cell );
-          cell->setFormatType( KSpreadCell::Number );
+          cell->setFormatType (Number_format);
           cell->setPrecision( 2 );
           break;
 
@@ -2750,7 +2750,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           break;
 
          case Key_AsciiCircum:
-          cell->setFormatType( KSpreadCell::Scientific );
+          cell->setFormatType (Scientific_format);
           convertToDouble( cell );
           cell->setFactor( 1.0 );
           break;
@@ -2780,33 +2780,33 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
       switch ( _ev->key() )
       {
        case Key_Exclam:
-        rw->setFormatType( KSpreadCell::Number );
+        rw->setFormatType (Number_format);
         rw->setPrecision( 2 );
         break;
 
        case Key_Dollar:
-        rw->setFormatType( KSpreadCell::Money );
+        rw->setFormatType (Money_format);
         rw->setFactor( 1.0 );
         rw->setPrecision( m_pDoc->locale()->fracDigits() );
         break;
 
        case Key_Percent:
         rw->setFactor( 100.0 );
-        rw->setFormatType( KSpreadCell::Percentage );
+        rw->setFormatType (Percentage_format);
         break;
 
        case Key_At:
-        rw->setFormatType( KSpreadFormat::SecondeTime );
+        rw->setFormatType( SecondeTime_format );
         rw->setFactor( 1.0 );
         break;
 
        case Key_NumberSign:
-        rw->setFormatType( KSpreadFormat::ShortDate );
+        rw->setFormatType( ShortDate_format );
         rw->setFactor( 1.0 );
         break;
 
        case Key_AsciiCircum:
-        rw->setFormatType( KSpreadCell::Scientific );
+        rw->setFormatType( Scientific_format );
         rw->setFactor( 1.0 );
         break;
 
@@ -2852,7 +2852,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         {
          case Key_Exclam:
           convertToDouble( cell );
-          cell->setFormatType( KSpreadCell::Number );
+          cell->setFormatType (Number_format);
           cell->setPrecision( 2 );
           break;
 
@@ -2873,7 +2873,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           break;
 
          case Key_AsciiCircum:
-          cell->setFormatType( KSpreadCell::Scientific );
+          cell->setFormatType (Scientific_format);
           convertToDouble( cell );
           cell->setFactor( 1.0 );
           break;
@@ -2903,34 +2903,34 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
       switch ( _ev->key() )
       {
        case Key_Exclam:
-        cw->setFormatType( KSpreadCell::Number );
+        cw->setFormatType( Number_format );
         cw->setPrecision( 2 );
         break;
 
        case Key_Dollar:
-        cw->setFormatType( KSpreadCell::Money );
+        cw->setFormatType( Money_format );
         cw->setFactor( 1.0 );
         cw->setPrecision( m_pDoc->locale()->fracDigits() );
         break;
 
        case Key_Percent:
         cw->setFactor( 100.0 );
-        cw->setFormatType( KSpreadCell::Percentage );
+        cw->setFormatType( Percentage_format );
         break;
 
        case Key_At:
-        cw->setFormatType( KSpreadFormat::SecondeTime );
+        cw->setFormatType( SecondeTime_format );
         cw->setFactor( 1.0 );
         break;
 
        case Key_NumberSign:
-        cw->setFormatType( KSpreadFormat::ShortDate );
+        cw->setFormatType( ShortDate_format );
         cw->setFactor( 1.0 );
         break;
 
        case Key_AsciiCircum:
         cw->setFactor( 1.0 );
-        cw->setFormatType( KSpreadCell::Scientific );
+        cw->setFormatType( Scientific_format );
         break;
 
        case Key_Ampersand:
@@ -2970,7 +2970,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
       {
        case Key_Exclam:
         convertToDouble( cell );
-        cell->setFormatType( KSpreadCell::Number );
+        cell->setFormatType (Number_format);
         cell->setPrecision( 2 );
         break;
 
@@ -2991,7 +2991,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        case Key_AsciiCircum:
-        cell->setFormatType( KSpreadCell::Scientific );
+        cell->setFormatType (Scientific_format);
         convertToDouble( cell );
         cell->setFactor( 1.0 );
         break;
@@ -3045,27 +3045,27 @@ void KSpreadCanvas::doAutoScroll()
     //Provide progressive scrolling depending on the mouse position
     if ( pos.y() < 0 )
     {
-        vertScrollBar()->setValue( vertScrollBar()->value() -
-                                   autoScrollAccelerationY( - pos.y() ) );
+        vertScrollBar()->setValue ((int) (vertScrollBar()->value() -
+                                   autoScrollAccelerationY( - pos.y())));
         select = true;
     }
     else if ( pos.y() > height() )
     {
-        vertScrollBar()->setValue( vertScrollBar()->value() +
-                                   autoScrollAccelerationY( pos.y() - height() ) );
+        vertScrollBar()->setValue ((int) (vertScrollBar()->value() +
+                                   autoScrollAccelerationY (pos.y() - height())));
         select = true;
     }
 
     if ( pos.x() < 0 )
     {
-        horzScrollBar()->setValue( horzScrollBar()->value() -
-                                   autoScrollAccelerationX( - pos.x() ) );
+        horzScrollBar()->setValue ((int) (horzScrollBar()->value() -
+                                   autoScrollAccelerationX( - pos.x() )));
         select = true;
     }
     else if ( pos.x() > width() )
     {
-        horzScrollBar()->setValue( horzScrollBar()->value() +
-                                   autoScrollAccelerationX( pos.x() - width() ) );
+        horzScrollBar()->setValue ((int) (horzScrollBar()->value() +
+                                   autoScrollAccelerationX( pos.x() - width())));
         select = true;
     }
 
@@ -3088,7 +3088,7 @@ double KSpreadCanvas::autoScrollAccelerationX( int offset )
         case 1: return 20.0;
         case 2: return doc()->unzoomItX( width() );
         case 3: return doc()->unzoomItX( width() );
-        default: return doc()->unzoomItX( width() * 5.0 );
+        default: return doc()->unzoomItX( (int) (width() * 5.0) );
     }
 }
 
@@ -3100,7 +3100,7 @@ double KSpreadCanvas::autoScrollAccelerationY( int offset )
         case 1: return 20.0;
         case 2: return doc()->unzoomItY( height() );
         case 3: return doc()->unzoomItY( height() );
-        default: return doc()->unzoomItY( height() * 5.0 );
+        default: return doc()->unzoomItY( (int) (height() * 5.0) );
     }
 }
 
@@ -4488,9 +4488,8 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       {
         RowFormat *rl = table->rowFormat( row + 1 );
         y = table->dblRowPos( row + 1 );
-        m_pCanvas->vertScrollBar()->setValue( (m_pCanvas->doc()->zoomItY( ev_PosY
-                                                              + rl->dblHeight() )
-                                                              - dHeight ));
+        m_pCanvas->vertScrollBar()->setValue ((int) (m_pCanvas->doc()->zoomItY
+              (ev_PosY + rl->dblHeight()) - dHeight));
       }
     }
   }
@@ -5208,8 +5207,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       {
         ColumnFormat *cl = table->columnFormat( col + 1 );
         x = table->dblColumnPos( col + 1 );
-        m_pCanvas->horzScrollBar()->setValue( (m_pCanvas->doc()->zoomItX( ev_PosX
-                                              + cl->dblWidth() ) - dWidth) );
+        m_pCanvas->horzScrollBar()->setValue ((int)
+            (m_pCanvas->doc()->zoomItX (ev_PosX + cl->dblWidth()) - dWidth));
       }
     }
 

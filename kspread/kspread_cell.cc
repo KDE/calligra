@@ -1599,7 +1599,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     if( fabs( value ) < DBL_EPSILON ) value = 0.0;
 
     // round the number, based on desired precision if not scientific is chosen (scientific has relativ precision)
-    if( formatType() != Scientific )
+    if( formatType() != Scientific_format )
     {
         double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
         double mm = (p > 10) ? pow(10.0,p) : m[p];
@@ -1610,7 +1610,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 
     switch( formatType() )
     {
-    case Number:
+    case Number_format:
         localizedNumber = locale()->formatNumber(value, p);
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
@@ -1618,7 +1618,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
                 localizedNumber='+'+localizedNumber;
         }
         break;
-    case Percentage:
+    case Percentage_format:
         localizedNumber = locale()->formatNumber(value, p)+ " %";
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
@@ -1626,7 +1626,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
                 localizedNumber='+'+localizedNumber;
         }
         break;
-    case Money:
+    case Money_format:
         localizedNumber = locale()->formatMoney(value, getCurrencySymbol(), p );
         if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
@@ -1634,7 +1634,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
                 localizedNumber = '+' + localizedNumber;
         }
         break;
-    case Scientific:
+    case Scientific_format:
         localizedNumber= QString::number(value, 'E', p);
         if((pos=localizedNumber.find('.'))!=-1)
             localizedNumber=localizedNumber.replace(pos,1,decimal_point);
@@ -1644,8 +1644,8 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
                 localizedNumber='+'+localizedNumber;
         }
         break;
-    case ShortDate:
-    case TextDate:
+    case ShortDate_format:
+    case TextDate_format:
     case date_format1:
     case date_format2:
     case date_format3:
@@ -2154,7 +2154,7 @@ bool KSpreadCell::calc(bool delay)
   {
     setValue ( KSpreadValue( context.value()->boolValue() ) );
     d->strOutText = context.value()->boolValue() ? i18n("True") : i18n("False");
-    setFormatType(Number);
+    setFormatType(Number_format);
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
@@ -2162,11 +2162,11 @@ bool KSpreadCell::calc(bool delay)
 
     //change format
     FormatType tmpFormat = formatType();
-    if( tmpFormat != SecondeTime &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
+    if( tmpFormat != SecondeTime_format &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
         && tmpFormat != Time_format3)
     {
       d->strOutText = locale()->formatTime( value().asDateTime().time(), false);
-      setFormatType( Time );
+      setFormatType (Time_format);
     }
     else
     {
@@ -2177,10 +2177,10 @@ bool KSpreadCell::calc(bool delay)
   {
     setValue ( KSpreadValue( context.value()->dateValue() ) );
     FormatType tmpFormat = formatType();
-    if( tmpFormat != TextDate
+    if( tmpFormat != TextDate_format
         && !(tmpFormat>=200 &&tmpFormat<=216))
     {
-        setFormatType(ShortDate);
+        setFormatType(ShortDate_format);
         d->strOutText = locale()->formatDate( value().asDateTime().date(), true);
     }
     else
@@ -2192,7 +2192,7 @@ bool KSpreadCell::calc(bool delay)
   {
     setValue (KSpreadValue::empty());
     // Format the result appropriately
-    setFormatType(Number);
+    setFormatType(Number_format);
     d->strOutText = createFormat( 0.0, d->column, d->row );
   }
   else
@@ -3666,7 +3666,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
 
  if( value().isNumber())
  {
-   if( formatType() != Scientific )
+   if( formatType() != Scientific_format )
    {
      int p = (precision(column(),row())  == -1) ? 8 :
        precision(column(),row());
@@ -4171,14 +4171,14 @@ void KSpreadCell::setDate( QString const & dateString )
     //tryParseDate has already called setValue(), so we needn't worry about that
     
     FormatType tmpFormat = formatType();
-    if ( tmpFormat != TextDate &&
+    if ( tmpFormat != TextDate_format &&
          !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
     {
       //test if it's a short date or text date.
       if ((locale()->formatDate( value().asDateTime().date(), false) == dateString))
-        setFormatType(TextDate);
+        setFormatType(TextDate_format);
       else
-        setFormatType(ShortDate);
+        setFormatType(ShortDate_format);
     }
   }
   else
@@ -4510,7 +4510,7 @@ bool KSpreadCell::testValidity() const
     return (valid || d->extra()->validity == NULL || d->extra()->validity->m_action != Stop);
 }
 
-KSpreadFormat::FormatType KSpreadCell::formatType() const
+FormatType KSpreadCell::formatType() const
 {
     return getFormatType( d->column, d->row );
 }
@@ -4561,7 +4561,7 @@ bool KSpreadCell::isDate() const
   FormatType ft = formatType();
   // workaround, since date/time is stored as floating-point
   return value().isNumber()
-    &&  ( ft == ShortDate || ft == TextDate || ( (ft >= date_format1) && (ft <= date_format26) ) );
+    &&  ( ft == ShortDate_format || ft == TextDate_format || ( (ft >= date_format1) && (ft <= date_format26) ) );
 }
 
 bool KSpreadCell::isTime() const
@@ -4570,7 +4570,7 @@ bool KSpreadCell::isTime() const
 
   // workaround, since date/time is stored as floating-point
   return value().isNumber()
-    && ( ( (ft >= Time) && (ft <= Time_format8) ) );
+    && ( ( (ft >= Time_format) && (ft <= Time_format8) ) );
 }
 
 void KSpreadCell::setCalcDirtyFlag()
@@ -4643,7 +4643,7 @@ void KSpreadCell::checkTextInput()
     if ( tryParseNumber( strStripped ) )
     {
         if ( strStripped.contains('E') || strStripped.contains('e') )
-            setFormatType(Scientific);
+            setFormatType(Scientific_format);
         else
             checkNumberFormat();
         return;
@@ -4659,9 +4659,9 @@ void KSpreadCell::checkTextInput()
         if ( tryParseNumber( strTrimmed ) )
         {
             setValue( KSpreadValue( value().asFloat()/ 100.0 ) );
-            if ( formatType() != Percentage )
+            if ( formatType() != Percentage_format )
             {
-                setFormatType(Percentage);
+                setFormatType(Percentage_format);
                 setPrecision(0); // Only set the precision if the format wasn't percentage.
             }
             setFactor(100.0);
@@ -4674,7 +4674,7 @@ void KSpreadCell::checkTextInput()
     double money = locale()->readMoney(str, &ok);
     if ( ok )
     {
-        setFormatType(Money);
+        setFormatType(Money_format);
         setFactor(1.0);
         setPrecision(2);
         setValue( KSpreadValue( money ) );
@@ -4684,14 +4684,14 @@ void KSpreadCell::checkTextInput()
     if ( tryParseDate( str ) )
     {
         FormatType tmpFormat = formatType();
-        if ( tmpFormat != TextDate &&
+        if ( tmpFormat != TextDate_format &&
            !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
         {
             //test if it's a short date or text date.
             if ((locale()->formatDate( value().asDateTime().date(), false) == str))
-                setFormatType(TextDate);
+                setFormatType(TextDate_format);
             else
-                setFormatType(ShortDate);
+                setFormatType(ShortDate_format);
         }
 
         d->strText = str;
@@ -4702,12 +4702,12 @@ void KSpreadCell::checkTextInput()
     {
         // Force default time format if format isn't time
         FormatType tmpFormat = formatType();
-        if ( tmpFormat != SecondeTime && tmpFormat != Time_format1
+        if ( tmpFormat != SecondeTime_format && tmpFormat != Time_format1
              && tmpFormat != Time_format2 && tmpFormat != Time_format3
              && tmpFormat != Time_format4 && tmpFormat != Time_format6
              && tmpFormat != Time_format5 && tmpFormat != Time_format7
              && tmpFormat != Time_format8 )
-          setFormatType(Time);
+          setFormatType(Time_format);
 
         // Parsing as time acts like an autoformat: we even change d->strText
         if ( tmpFormat != Time_format7 ) // [h]:mm:ss -> might get set by tryParseTime(str)
@@ -4889,10 +4889,10 @@ bool KSpreadCell::tryParseTime( const QString& str )
 
 void KSpreadCell::checkNumberFormat()
 {
-    if ( formatType() == Number && value().isNumber() )
+    if ( formatType() == Number_format && value().isNumber() )
     {
         if ( value().asFloat() > 1e+10 )
-            setFormatType( Scientific );
+            setFormatType( Scientific_format );
     }
 }
 
@@ -5156,14 +5156,14 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
     else if ( value().isNumber() )
     {
-      KSpreadFormat::FormatType type = formatType();
+      FormatType type = formatType();
 
-      if ( type == KSpreadFormat::Percentage )
+      if ( type == Percentage_format )
         {
         xmlwriter.addAttribute( "office:value-type", "percentage" );
         xmlwriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
         }
-      else if ( type == KSpreadFormat::Money )
+      else if ( type == Money_format )
         {
         xmlwriter.addAttribute( "office:value-type", "currency" );
         // TODO: add code of currency
@@ -5421,7 +5421,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 if ( !isFormula )
                     setValue( value );
                 setCurrency( 1, element.attribute( "office:currency" ) );
-                setFormatType( KSpreadFormat::Money );
+                setFormatType (Money_format);
             }
         }
         else if( valuetype == "percentage" )
@@ -5432,7 +5432,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             {
                 if ( !isFormula )
                     setValue( value );
-                setFormatType( KSpreadFormat::Percentage );
+                setFormatType (Percentage_format);
             }
         }
         else if ( valuetype == "date" )
@@ -5467,7 +5467,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             if ( ok )
             {
                 setValue( QDate( year, month, day ) );
-                setFormatType( KSpreadFormat::ShortDate );
+                setFormatType (ShortDate_format);
                 kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
@@ -5512,17 +5512,16 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
                 setValue( QTime( hours % 24, minutes, seconds ) );
-                setFormatType( KSpreadFormat::Time );
+                setFormatType (Time_format);
             }
         }
         else if( valuetype == "string" )
         {
-          bool ok = false;
           QString value = element.attribute( "office:value" );
             if ( value.isEmpty() )
                 value = element.attribute( "office:string-value" );
           setValue( value );
-          setFormatType( KSpreadFormat::Text_format );
+          setFormatType (Text_format);
         }
         else
             kdDebug()<<" type of value found : "<<valuetype<<endl;
@@ -6186,16 +6185,16 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
     {
       // ...except for date/time
       FormatType cellFormatType = formatType();
-      if ((cellFormatType==KSpreadCell::TextDate ||
-           cellFormatType==KSpreadCell::ShortDate
+      if ((cellFormatType==TextDate_format ||
+           cellFormatType==ShortDate_format
            ||((int)(cellFormatType)>=200 && (int)(cellFormatType)<=217))
           && ( t.contains('/') == 2 ))
         dataType = "Date";
-      else if ( (cellFormatType==KSpreadCell::Time
-                 || cellFormatType==KSpreadCell::SecondeTime
-                 ||cellFormatType==KSpreadCell::Time_format1
-                 ||cellFormatType==KSpreadCell::Time_format2
-                 ||cellFormatType==KSpreadCell::Time_format3)
+      else if ( (cellFormatType==Time_format
+                 || cellFormatType==SecondeTime_format
+                 ||cellFormatType==Time_format1
+                 ||cellFormatType==Time_format2
+                 ||cellFormatType==Time_format3)
                 && ( t.contains(':') == 2 ) )
         dataType = "Time";
       else
@@ -6239,7 +6238,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         */
         int precision = t.length() - t.find('.') - 1;
 
-	if ( formatType() == Percentage )
+	if ( formatType() == Percentage_format )
         {
           setFactor( 100.0 ); // should have been already done by loadFormat
           t = locale->formatNumber( value().asFloat() * 100.0, precision );

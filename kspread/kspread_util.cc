@@ -191,7 +191,7 @@ QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeco
 }
 
 QString
-util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
+util_fractionFormat(double value, FormatType fmtType)
 {
     double result = value - floor(value);
     int index;
@@ -202,33 +202,33 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
 	return QString::number(value);
 
     switch (fmtType) {
-    case KSpreadCell::fraction_half:
+    case fraction_half:
 	index = 2;
 	break;
-    case KSpreadCell::fraction_quarter:
+    case fraction_quarter:
 	index = 4;
 	break;
-    case KSpreadCell::fraction_eighth:
+    case fraction_eighth:
 	index = 8;
 	break;
-    case KSpreadCell::fraction_sixteenth:
+    case fraction_sixteenth:
 	index = 16;
 	break;
-    case KSpreadCell::fraction_tenth:
+    case fraction_tenth:
 	index = 10;
 	break;
-    case KSpreadCell::fraction_hundredth:
+    case fraction_hundredth:
 	index = 100;
 	break;
-    case KSpreadCell::fraction_one_digit:
+    case fraction_one_digit:
 	index = 3;
 	limit = 9;
 	break;
-    case KSpreadCell::fraction_two_digits:
+    case fraction_two_digits:
 	index = 4;
 	limit = 99;
 	break;
-    case KSpreadCell::fraction_three_digits:
+    case fraction_three_digits:
 	index = 5;
 	limit = 999;
 	break;
@@ -241,9 +241,9 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
 
     /* handle halves, quarters, tenths, ... */
 
-    if (fmtType != KSpreadCell::fraction_three_digits
-	&& fmtType != KSpreadCell::fraction_two_digits
-	&& fmtType != KSpreadCell::fraction_one_digit) {
+    if (fmtType != fraction_three_digits
+	&& fmtType != fraction_two_digits
+	&& fmtType != fraction_one_digit) {
 	double calc = 0;
 	int index1 = 0;
 	double diff = result;
@@ -314,12 +314,12 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
 
 QString
 util_timeFormat(KLocale * locale, const QDateTime & dt,
-		KSpreadCell::FormatType fmtType)
+		FormatType fmtType)
 {
-    if (fmtType == KSpreadCell::Time)
+    if (fmtType == Time_format)
 	return locale->formatTime(dt.time(), false);
 
-    if (fmtType == KSpreadCell::SecondeTime)
+    if (fmtType == SecondeTime_format)
 	return locale->formatTime(dt.time(), true);
 
     int h = dt.time().hour();
@@ -332,14 +332,14 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
     bool pm = (h > 12);
     QString AMPM( pm ? i18n("PM"):i18n("AM") );
 
-    if (fmtType == KSpreadCell::Time_format1) {	// 9 : 01 AM
+    if (fmtType == Time_format1) {	// 9 : 01 AM
 	return QString("%1:%2 %3")
 		.arg((pm ? h - 12 : h),2)
 		.arg(minute,2)
 		.arg(AMPM);
     }
 
-    if (fmtType == KSpreadCell::Time_format2) {	//9:01:05 AM
+    if (fmtType == Time_format2) {	//9:01:05 AM
 	return QString("%1:%2:%3 %4")
 		.arg((pm ? h-12 : h),2)
 		.arg(minute,2)
@@ -347,7 +347,7 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
 		.arg(AMPM);
     }
 
-    if (fmtType == KSpreadCell::Time_format3) {
+    if (fmtType == Time_format3) {
 	return QString("%1 %2 %3 %4 %5 %6")			// 9 h 01 min 28 s
 		.arg(hour,2)
 		.arg(i18n("h"))
@@ -357,11 +357,11 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
 		.arg(i18n("s"));
     }
 
-    if (fmtType == KSpreadCell::Time_format4) {	// 9:01
+    if (fmtType == Time_format4) {	// 9:01
 	return QString("%1:%2").arg(hour, 2).arg(minute, 2);
     }
 
-    if (fmtType == KSpreadCell::Time_format5) {	// 9:01:12
+    if (fmtType == Time_format5) {	// 9:01:12
 	return QString("%1:%2:%3").arg(hour, 2).arg(minute, 2).arg(second, 2);
     }
 
@@ -371,15 +371,15 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
 
     h += d * 24;
 
-    if (fmtType == KSpreadCell::Time_format6)
+    if (fmtType == Time_format6)
     {	// [mm]:ss
       m += (h * 60);
       return QString("%1:%2").arg(m, 1).arg(second, 2);
     }
-    if (fmtType == KSpreadCell::Time_format7) {	// [h]:mm:ss
+    if (fmtType == Time_format7) {	// [h]:mm:ss
 	return QString("%1:%2:%3").arg(h, 1).arg(minute, 2).arg(second, 2);
     }
-    if (fmtType == KSpreadCell::Time_format8)
+    if (fmtType == Time_format8)
     {	// [h]:mm
       m += (h * 60);
       return QString("%1:%2").arg(h, 1).arg(minute, 2);
@@ -390,128 +390,128 @@ util_timeFormat(KLocale * locale, const QDateTime & dt,
 
 QString
 util_dateFormat(KLocale * locale, const QDate &date,
-		KSpreadCell::FormatType fmtType)
+		FormatType fmtType)
 {
     QString tmp;
-    if (fmtType == KSpreadCell::ShortDate) {
+    if (fmtType == ShortDate_format) {
 	tmp = locale->formatDate(date, true);
     }
-    else if (fmtType == KSpreadCell::TextDate) {
+    else if (fmtType == TextDate_format) {
 	tmp = locale->formatDate(date, false);
     }
-    else if (fmtType == KSpreadCell::date_format1) {	/*18-Feb-99 */
+    else if (fmtType == date_format1) {	/*18-Feb-99 */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "-" + locale->calendar()->monthString(date, true) + "-";
 	tmp = tmp + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format2) {	/*18-Feb-1999 */
+    else if (fmtType == date_format2) {	/*18-Feb-1999 */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "-" + locale->calendar()->monthString(date, true) + "-";
 	tmp = tmp + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format3) {	/*18-Feb */
+    else if (fmtType == date_format3) {	/*18-Feb */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "-" + locale->calendar()->monthString(date, true);
     }
-    else if (fmtType == KSpreadCell::date_format4) {	/*18-05 */
+    else if (fmtType == date_format4) {	/*18-05 */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "-" + QString().sprintf("%02d", date.month() );
     }
-    else if (fmtType == KSpreadCell::date_format5) {	/*18/05/00 */
+    else if (fmtType == date_format5) {	/*18/05/00 */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + QString().sprintf("%02d", date.month()) + "/";
 	tmp = tmp + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format6) {	/*18/05/1999 */
+    else if (fmtType == date_format6) {	/*18/05/1999 */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + QString().sprintf("%02d", date.month()) + "/";
 	tmp = tmp + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format7) {	/*Feb-99 */
+    else if (fmtType == date_format7) {	/*Feb-99 */
         tmp = locale->calendar()->monthString(date, true) + "-";
 	tmp = tmp + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format8) {	/*February-99 */
+    else if (fmtType == date_format8) {	/*February-99 */
       tmp = locale->calendar()->monthString(date, false) + "-";
 	tmp = tmp + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format9) {	/*February-1999 */
+    else if (fmtType == date_format9) {	/*February-1999 */
         tmp = locale->calendar()->monthString(date, false) + "-";
 	tmp = tmp + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format10) {	/*F-99 */
+    else if (fmtType == date_format10) {	/*F-99 */
         tmp = locale->calendar()->monthString(date, false).at(0) + "-";
 	tmp = tmp + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format11) {	/*18/Feb */
+    else if (fmtType == date_format11) {	/*18/Feb */
 	tmp = QString().sprintf("%02d", date.day()) + "/";
 	tmp += locale->calendar()->monthString(date, true);
     }
-    else if (fmtType == KSpreadCell::date_format12) {	/*18/02 */
+    else if (fmtType == date_format12) {	/*18/02 */
 	tmp = QString().sprintf("%02d", date.day()) + "/";
 	tmp += QString().sprintf("%02d", date.month());
     }
-    else if (fmtType == KSpreadCell::date_format13) {	/*18/Feb/1999 */
+    else if (fmtType == date_format13) {	/*18/Feb/1999 */
 	tmp = QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + locale->calendar()->monthString(date, true) + "/";
 	tmp = tmp + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format14) {	/*2000/Feb/18 */
+    else if (fmtType == date_format14) {	/*2000/Feb/18 */
 	tmp = QString::number(date.year());
 	tmp = tmp + "/" + locale->calendar()->monthString(date, true) + "/";
 	tmp = tmp + QString().sprintf("%02d", date.day());
     }
-    else if (fmtType == KSpreadCell::date_format15) {	/*2000-Feb-18 */
+    else if (fmtType == date_format15) {	/*2000-Feb-18 */
 	tmp = QString::number(date.year());
 	tmp = tmp + "-" + locale->calendar()->monthString(date, true) + "-";
 	tmp = tmp + QString().sprintf("%02d", date.day());
     }
-    else if (fmtType == KSpreadCell::date_format16) {	/*2000-02-18 */
+    else if (fmtType == date_format16) {	/*2000-02-18 */
 	tmp = QString::number(date.year());
 	tmp = tmp + "-" + QString().sprintf("%02d", date.month()) + "-";
 	tmp = tmp + QString().sprintf("%02d", date.day());
     }
-    else if (fmtType == KSpreadCell::date_format17) {	/*2 february 2000 */
+    else if (fmtType == date_format17) {	/*2 february 2000 */
 	tmp = QString().sprintf("%d", date.day());
 	tmp = tmp + " " + locale->calendar()->monthString(date, false) + " ";
 	tmp = tmp + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format18) {	/*02/18/1999 */
+    else if (fmtType == date_format18) {	/*02/18/1999 */
 	tmp = QString().sprintf("%02d", date.month());
 	tmp = tmp + "/" + QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format19) {	/*02/18/99 */
+    else if (fmtType == date_format19) {	/*02/18/99 */
 	tmp = QString().sprintf("%02d", date.month());
 	tmp = tmp + "/" + QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format20) {	/*Feb/18/99 */
+    else if (fmtType == date_format20) {	/*Feb/18/99 */
         tmp = locale->calendar()->monthString(date, true);
 	tmp = tmp + "/" + QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format21) {	/*Feb/18/1999 */
+    else if (fmtType == date_format21) {	/*Feb/18/1999 */
         tmp = locale->calendar()->monthString(date, true);
 	tmp = tmp + "/" + QString().sprintf("%02d", date.day());
 	tmp = tmp + "/" + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format22) {	/*Feb-1999 */
+    else if (fmtType == date_format22) {	/*Feb-1999 */
         tmp = locale->calendar()->monthString(date, true) + "-";
 	tmp = tmp + QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format23) {	/*1999 */
+    else if (fmtType == date_format23) {	/*1999 */
 	tmp = QString::number(date.year());
     }
-    else if (fmtType == KSpreadCell::date_format24) {	/*99 */
+    else if (fmtType == date_format24) {	/*99 */
 	tmp = QString::number(date.year()).right(2);
     }
-    else if (fmtType == KSpreadCell::date_format25) {	/*2000/02/18 */
+    else if (fmtType == date_format25) {	/*2000/02/18 */
 	tmp = QString::number(date.year());
 	tmp = tmp + "/" + QString().sprintf("%02d", date.month());
 	tmp = tmp + "/" + QString().sprintf("%02d", date.day());
     }
-    else if (fmtType == KSpreadCell::date_format26) {	/*2000/Feb/18 */
+    else if (fmtType == date_format26) {	/*2000/Feb/18 */
 	tmp = QString::number(date.year());
 	tmp = tmp + "/" + locale->calendar()->monthString(date, true);
 	tmp = tmp + "/" + QString().sprintf("%02d", date.day());
@@ -531,7 +531,7 @@ util_dateFormat(KLocale * locale, const QDate &date,
 }
 
 
-QString util_dateTimeFormat( KLocale * /*locale*/, double /*date*/, KSpreadCell::FormatType /*fmtType*/, QString const & /*format*/ )
+QString util_dateTimeFormat( KLocale * /*locale*/, double /*date*/, FormatType /*fmtType*/, QString const & /*format*/ )
 {
     return QString::null;
 }

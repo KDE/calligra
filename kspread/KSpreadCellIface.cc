@@ -331,50 +331,50 @@ void KSpreadCellIface::setFormatType(const QString &_formatType)
     if( !m_table ) return;
 
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    KSpreadCell::FormatType format;
+    FormatType format;
     cell->setFactor( 1.0);
     cell->setPrecision(2);
     if(_formatType=="Number")
-        format=KSpreadCell::Number;
+        format=Number_format;
     else if (_formatType=="Text")
-        format=KSpreadCell::Text_format;
+        format=Text_format;
     else if(_formatType=="Money")
-        format=KSpreadCell::Money;
+        format=Money_format;
     else if(_formatType=="Percentage")
         {
-        format=KSpreadCell::Percentage;
+        format=Percentage_format;
         cell->setFactor( 100.0);
         }
     else if(_formatType=="Scientific")
-        format=KSpreadCell::Scientific;
+        format=Scientific_format;
     else if(_formatType=="ShortDate")
-        format=KSpreadCell::ShortDate;
+        format=ShortDate_format;
     else if(_formatType=="TextDate")
-        format=KSpreadCell::TextDate;
+        format=TextDate_format;
     else if(_formatType=="Time")
-        format=KSpreadCell::Time;
+        format=Time_format;
     else if(_formatType=="SecondeTime")
-        format=KSpreadCell::SecondeTime;
+        format=SecondeTime_format;
     else if(_formatType=="fraction_half")
-        format=KSpreadCell::fraction_half;
+        format=fraction_half;
     else if(_formatType=="fraction_quarter")
-        format=KSpreadCell::fraction_quarter;
+        format=fraction_quarter;
     else if(_formatType=="fraction_eighth")
-        format=KSpreadCell::fraction_eighth;
+        format=fraction_eighth;
     else if(_formatType=="fraction_sixteenth")
-        format=KSpreadCell::fraction_sixteenth;
+        format=fraction_sixteenth;
     else if(_formatType=="fraction_tenth")
-        format=KSpreadCell::fraction_tenth;
+        format=fraction_tenth;
     else if(_formatType=="fraction_hundredth")
-        format=KSpreadCell::fraction_hundredth;
+        format=fraction_hundredth;
     else if(_formatType=="fraction_one_digit")
-        format=KSpreadCell::fraction_one_digit;
+        format=fraction_one_digit;
     else if(_formatType=="fraction_two_digits")
-        format=KSpreadCell::fraction_two_digits;
+        format=fraction_two_digits;
     else if(_formatType=="fraction_three_digits")
-        format=KSpreadCell::fraction_three_digits;
+        format=fraction_three_digits;
     else
-        format=KSpreadCell::Number;
+        format=Number_format;
     cell->setFormatType( format);
     m_table->setRegionPaintDirty(cell->cellRect());
 }
@@ -387,96 +387,96 @@ QString KSpreadCellIface::getFormatType() const
     QString stringFormat;
     switch( cell->getFormatType(m_point.x(), m_point.y()))
         {
-        case KSpreadCell::Text_format:
+        case Text_format:
             stringFormat="Text";
             break;
-        case KSpreadCell::Number:
+        case Number_format:
                 stringFormat="Number";
                 break;
-        case KSpreadCell::Money:
+        case Money_format:
                 stringFormat="Money";
                 break;
-        case KSpreadCell::Percentage:
+        case Percentage_format:
                 stringFormat="Percentage";
                 break;
-        case KSpreadCell::Scientific:
+        case Scientific_format:
                 stringFormat="Scientific";
                 break;
-        case KSpreadCell::ShortDate:
+        case ShortDate_format:
                 stringFormat="ShortDate";
                 break;
-        case KSpreadCell::TextDate:
+        case TextDate_format:
                 stringFormat="TextDate";
                 break;
-        case KSpreadCell::date_format1:
-        case KSpreadCell::date_format2:
-        case KSpreadCell::date_format3:
-        case KSpreadCell::date_format4:
-        case KSpreadCell::date_format5:
-        case KSpreadCell::date_format6:
-        case KSpreadCell::date_format7:
-        case KSpreadCell::date_format8:
-        case KSpreadCell::date_format9:
-        case KSpreadCell::date_format10:
-        case KSpreadCell::date_format11:
-        case KSpreadCell::date_format12:
-        case KSpreadCell::date_format13:
-        case KSpreadCell::date_format14:
-        case KSpreadCell::date_format15:
-        case KSpreadCell::date_format16:
-	case KSpreadCell::date_format17:
-	case KSpreadCell::date_format18:
-	case KSpreadCell::date_format19:
-	case KSpreadCell::date_format20:
-	case KSpreadCell::date_format21:
-	case KSpreadCell::date_format22:
-	case KSpreadCell::date_format23:
-	case KSpreadCell::date_format24:
-	case KSpreadCell::date_format25:
-	case KSpreadCell::date_format26:
+        case date_format1:
+        case date_format2:
+        case date_format3:
+        case date_format4:
+        case date_format5:
+        case date_format6:
+        case date_format7:
+        case date_format8:
+        case date_format9:
+        case date_format10:
+        case date_format11:
+        case date_format12:
+        case date_format13:
+        case date_format14:
+        case date_format15:
+        case date_format16:
+	case date_format17:
+	case date_format18:
+	case date_format19:
+	case date_format20:
+	case date_format21:
+	case date_format22:
+	case date_format23:
+	case date_format24:
+	case date_format25:
+	case date_format26:
                 stringFormat="date format";
                 break;
-        case KSpreadCell::Time:
+        case Time_format:
                 stringFormat="Time";
                 break;
-        case KSpreadCell::SecondeTime:
+        case SecondeTime_format:
                 stringFormat="SecondeTime";
                 break;
-        case KSpreadCell::Time_format1:
-        case KSpreadCell::Time_format2:
-        case KSpreadCell::Time_format3:
-        case KSpreadCell::Time_format4:
-        case KSpreadCell::Time_format5:
-        case KSpreadCell::Time_format6:
-        case KSpreadCell::Time_format7:
-        case KSpreadCell::Time_format8:
+        case Time_format1:
+        case Time_format2:
+        case Time_format3:
+        case Time_format4:
+        case Time_format5:
+        case Time_format6:
+        case Time_format7:
+        case Time_format8:
                 stringFormat="time format";
                 break;
-        case KSpreadCell::fraction_half:
+        case fraction_half:
                 stringFormat="fraction_half";
                 break;
-        case KSpreadCell::fraction_quarter:
+        case fraction_quarter:
                 stringFormat="fraction_quarter";
                 break;
-        case KSpreadCell::fraction_eighth:
+        case fraction_eighth:
                 stringFormat="fraction_eighth";
                 break;
-        case KSpreadCell::fraction_sixteenth:
+        case fraction_sixteenth:
                 stringFormat="fraction_sixteenth";
                 break;
-        case KSpreadCell::fraction_tenth:
+        case fraction_tenth:
                 stringFormat="fraction_tenth";
                 break;
-        case KSpreadCell::fraction_hundredth:
+        case fraction_hundredth:
                 stringFormat="fraction_hundredth";
                 break;
-        case KSpreadCell::fraction_one_digit:
+        case fraction_one_digit:
                 stringFormat="fraction_one_digit";
                 break;
-        case KSpreadCell::fraction_two_digits:
+        case fraction_two_digits:
                 stringFormat="fraction_two_digits";
                 break;
-        case KSpreadCell::fraction_three_digits:
+        case fraction_three_digits:
                 stringFormat="fraction_three_digits";
                 break;
         }

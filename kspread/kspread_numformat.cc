@@ -17,6 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
+/*
+The only function visible from the outside is formatNumber, whose
+implementation is at the very bottom of this file. Its prototype
+is declared in kspread_util.h. However, it is not used anywhere.
+TODO: Find out whether it is supposed to be used instead of
+something else (locale()->formatNumber() maybe?) and either use it
+or get rid of it.
+Tomas
+*/
 #include <qdatetime.h>
 #include <qmap.h>
 #include <qstring.h>

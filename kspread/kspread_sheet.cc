@@ -2214,11 +2214,11 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
     void doWork( RowFormat* rw ) {
 	rw->setFactor( b ? 100.0 : 1.0 );
 	//rw->setPrecision( 0 );
-	rw->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
+	rw->setFormatType( b ? Percentage_format : Number_format);
     }
     void doWork( ColumnFormat* cl ) {
 	cl->setFactor( b ? 100.0 : 1.0 );
-	cl->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
+	cl->setFormatType( b ? Percentage_format : Number_format);
     }
     void prepareCell( KSpreadCell* cell ) {
 	cell->clearProperty(KSpreadCell::PFactor);
@@ -2233,7 +2233,7 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
 	cell->setFactor( b ? 100.0 : 1.0 );
-	cell->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
+	cell->setFormatType( b ? Percentage_format : Number_format);
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
     }
@@ -4558,7 +4558,7 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     ref1->setAngle( ref2->getAngle( ref2->column(), ref2->row() ) );
     ref2->setAngle(angle);
 
-    KSpreadFormat::FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
+    FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
     ref1->setFormatType( ref2->getFormatType( ref2->column(), ref2->row() ) );
     ref2->setFormatType(form);
   }
@@ -4890,12 +4890,12 @@ struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA
 		 || rw->hasProperty( KSpreadCell::PFactor ) );
     }
     void doWork( RowFormat* rw ) {
-	rw->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
+	rw->setFormatType( b ? Money_format : Number_format );
 	rw->setFactor( 1.0 );
 	rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void doWork( ColumnFormat* cl ) {
-	cl->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
+	cl->setFormatType( b ? Money_format : Number_format );
 	cl->setFactor( 1.0 );
 	cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
@@ -4913,7 +4913,7 @@ struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA
     void doWork( KSpreadCell* cell, bool cellRegion, int, int ) {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
-	cell->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
+	cell->setFormatType( b ? Money_format : Number_format );
 	cell->setFactor( 1.0 );
 	cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
 	if ( cellRegion )
