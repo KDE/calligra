@@ -19,6 +19,7 @@ Boston, MA 02111-1307, USA.
 
 #include "kexicreateproject.h"
 #include "kexicreateprojectpage.h"
+#include "kexicreateprojectpage.moc"
 
 KexiCreateProjectPage::KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name) : QWidget(parent, name)
 {
