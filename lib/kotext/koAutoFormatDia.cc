@@ -33,6 +33,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <kdebug.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -419,7 +420,8 @@ void KoAutoFormatDia::setupTab5()
 
     m_maxNbWordCompletion = new QSpinBox( tab5);
     m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
-    //m_maxNbWordCompletion->setMinValue( 1 );
+    m_maxNbWordCompletion->setMinValue( 1 );
+    m_maxNbWordCompletion->setMaxValue( 500 );
     m_maxNbWordCompletion->resize( m_maxNbWordCompletion->sizeHint() );
 
     cbAppendSpace = new QCheckBox( tab5 );

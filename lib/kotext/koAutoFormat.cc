@@ -61,6 +61,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_typographicDoubleQuotes(),
       m_maxlen( 0 ),
       m_minCompletionWordLength( 5 ),
+      m_nbMaxCompletionWord( 500 ),
       m_ignoreUpperCase(false)
 {
     m_listCompletion=new KCompletion();
@@ -115,8 +116,8 @@ void KoAutoFormat::readConfig()
     m_autoCompletion = config.readBoolEntry( "AutoCompletion", false );
 
     m_completionAppendSpace = config.readBoolEntry( "CompletionAppendSpace", false );
-    m_minCompletionWordLength = config.readNumEntry( "CompletionMinWordLength", 5 );
-    m_nbMaxCompletionWord = config.readNumEntry( "NbMaxCompletionWord", 100 );
+    m_minCompletionWordLength = config.readUnsignedNumEntry( "CompletionMinWordLength", 5 );
+    m_nbMaxCompletionWord = config.readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
 
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
@@ -300,7 +301,6 @@ QString KoAutoFormat::getWordAfterSpace(KoTextParag *parag, int index)
 
 void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
 {
-    kdDebug()<<" m_autoCompletion :"<<m_autoCompletion<<endl;
     if( m_autoCompletion )
     {
         QString lastWord = getLastWord(parag, index+1);
