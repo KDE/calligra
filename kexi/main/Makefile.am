@@ -27,6 +27,7 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/main \
 	-I$(top_srcdir)/kexi/main/projectWizard \
 	-I$(top_srcdir)/kexi/main/startup \
+	-I$(top_builddir)/kexi/main/startup \
 	-I$(top_srcdir)/kexi/widget/propertyeditor \
 	$(all_includes)
 
