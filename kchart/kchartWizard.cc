@@ -51,6 +51,7 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   _axespage = new KChartWizardSetupAxesPage( this, _chart );
   addPage( _axespage, i18n( "Setup axes" ) );
   setFinishEnabled(_axespage, true);
+  setNextEnabled(_axespage, false);
   //  connect( this, SIGNAL( finished() ), _selectdatapage, SLOT( apply() ) );
   connect( this ,SIGNAL( finished() ), _labelslegendpage, SLOT( apply() ) );
   connect( this ,SIGNAL( finished() ), _selectcharttypepage, SLOT( apply() ) );
@@ -136,7 +137,7 @@ void KChartWizard::reject()
   QWizard::reject();
 }
 
-void KChartWizard::setDataArea( QString area )
+void KChartWizard::setDataArea( QString /*area*/ )
 {
   //  _selectdatapage->rangeED->setText( area );
 }
@@ -144,6 +145,7 @@ void KChartWizard::setDataArea( QString area )
 
 QString KChartWizard::dataArea() const
 {
+  return QString("");
   //  return _selectdatapage->rangeED->text();
 }
 

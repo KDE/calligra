@@ -1395,7 +1395,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     case Key_Delete:
 
        activeTable()->clearSelection( QPoint( markerColumn(), markerRow() ) );
-
+       m_pView->editWidget()->setText( "" );
        return;
 
     default:

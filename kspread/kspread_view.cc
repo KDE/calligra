@@ -985,6 +985,7 @@ void KSpreadView::sortInc()
         activeTable()->sortByRow( r.top() );
     else
         activeTable()->sortByColumn( r.left());
+    updateEditWidget();
 }
 
 void KSpreadView::sortDec()
@@ -1002,6 +1003,7 @@ void KSpreadView::sortDec()
         activeTable()->sortByRow( r.top(),KSpreadTable::Decrease);
     else
         activeTable()->sortByColumn( r.left(),KSpreadTable::Decrease);
+    updateEditWidget();
 }
 
 void KSpreadView::reloadScripts()

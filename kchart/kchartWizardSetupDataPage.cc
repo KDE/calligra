@@ -20,14 +20,14 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   tmpQGroupBox->setGeometry( 260, 10, 130, 80 );
   tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setAlignment( 1 );
-  
+
   datarow = new QRadioButton( this, "RadioButton_1" );
   datarow->setGeometry( 270, 40, 100, 20 );
   datarow->setText( i18n("Rows") );
-  connect( datarow, SIGNAL( clicked() ), 
+  connect( datarow, SIGNAL( clicked() ),
 		   this, SLOT( dataInRowsClicked() ) );
   tmpQGroupBox->insert( datarow );
-  
+
   datacol = new QRadioButton( this, "RadioButton_2" );
   datacol->setGeometry( 270, 60, 100, 20 );
   datacol->setText( i18n("Columns") );
@@ -35,12 +35,12 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   connect( datarow, SIGNAL( clicked() ),
 		   this, SLOT( dataInColsClicked() ) );
   tmpQGroupBox->insert( datacol );
-  
+
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_3" );
   tmpQLabel->setGeometry( 270, 20, 100, 20 );
   tmpQLabel->setText( i18n("Data is in:") );
-  
+
   QButtonGroup* descrBG = new QButtonGroup( this );
   descrBG->hide();
   coldescript = new QCheckBox( this, "CheckBox_3" );
@@ -50,24 +50,24 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
 		   this, SLOT( firstColumnIsDescriptionToggled( bool ) ) );
   coldescript->setText( "" );
   descrBG->insert( coldescript );
-  
+
   tmpQLabel = new QLabel( this, "Label_4" );
   tmpQLabel->setGeometry( 280, 110, 100, 30 );
   tmpQLabel->setText( i18n("Use first row as description") );
   tmpQLabel->setAlignment( 1313 );
-  
+
   rowdescript = new QCheckBox( this, "CheckBox_4" );
   rowdescript->setGeometry( 260, 150, 20, 30 );
   connect( rowdescript, SIGNAL( toggled( bool ) ),
 		   this, SLOT( firstRowIsDescriptionToggled( bool ) ) );
   rowdescript->setText( "" );
   descrBG->insert( rowdescript );
-  
+
   tmpQLabel = new QLabel( this, "Label_5" );
   tmpQLabel->setGeometry( 280, 150, 100, 30 );
   tmpQLabel->setText( i18n("Use first column as description") );
   tmpQLabel->setAlignment( 1313 );
-  
+
   QFrame* tmpQFrame;
   tmpQFrame = new QFrame( this, "Frame_1" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
@@ -81,7 +81,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   preview->resize( tmpQFrame->contentsRect().width(),
 				   tmpQFrame->contentsRect().height() );
   */
-  parent->resize( 400, 350 );
+  //parent->resize( 400, 350 );
 }
 
 
@@ -96,7 +96,7 @@ KChartWizardSetupDataPage::~KChartWizardSetupDataPage()
 void KChartWizardSetupDataPage::dataInRowsClicked()
 {
   _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Row,
-								 coldescript->isChecked(), 
+								 coldescript->isChecked(),
 								 rowdescript->isChecked() );
 }
 
@@ -109,7 +109,7 @@ void KChartWizardSetupDataPage::dataInColsClicked()
 
 void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 {
-  _parent->emitNeedNewData( _parent->dataArea(), 
+  _parent->emitNeedNewData( _parent->dataArea(),
 							( datarow->isChecked() ? KChartWizard::Row :
 							  KChartWizard::Col ),
 							coldescript->isChecked(),
@@ -118,7 +118,7 @@ void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 
 void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 {
-  _parent->emitNeedNewData( _parent->dataArea(), 
+  _parent->emitNeedNewData( _parent->dataArea(),
 							( datarow->isChecked() ? KChartWizard::Row :
 							  KChartWizard::Col ),
 							coldescript->isChecked(),
