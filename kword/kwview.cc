@@ -167,6 +167,7 @@ KWView::~KWView()
 {
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete gui;
+    delete m_sbPageLabel;
 }
 
 void KWView::initConfig()
