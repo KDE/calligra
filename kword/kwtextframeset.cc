@@ -2215,7 +2215,10 @@ void KWTextFrameSet::renumberFootNotes()
         if ( changed )
         {
             if ( var->frameSet() ) //safety
+            {
                 var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
+                var->frameSet()->setCounterText( var->text() );
+            }
             var->resize();
             var->paragraph()->invalidate(0);
             var->paragraph()->setChanged( true );
@@ -3102,11 +3105,26 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     }
 }
 
+//////
+
 void KWFootNoteFrameSet::createInitialFrame( int pageNum )
 {
      KWFrame *frame = new KWFrame(this, 0, pageNum * m_doc->ptPaperHeight() + 1, 20, 20 );
      frame->setFrameBehavior(KWFrame::AutoExtendFrame);
      addFrame( frame );
+}
+
+void KWFootNoteFrameSet::setCounterText( const QString& text )
+{
+    KoTextParag* parag = textDocument()->firstParag();
+    Q_ASSERT( parag );
+    if ( parag ) {
+        KoParagCounter counter;
+        counter.setNumbering( KoParagCounter::NUM_FIXEDTEXT );
+        counter.setPrefix( text );
+        counter.setSuffix( QString::null );
+        parag->setCounter( counter );
+    }
 }
 
 #include "kwtextframeset.moc"

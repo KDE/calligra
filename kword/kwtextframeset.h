@@ -377,7 +377,16 @@ public:
     void setFootNoteVariable( KWFootNoteVariable* var ) { m_footNoteVar = var; }
     KWFootNoteVariable* footNoteVariable() const { return m_footNoteVar; }
 
+    /** Create the first frame for this frameset.
+     *  KWFrameLayout will reposition it at the correct place.
+     */
     void createInitialFrame( int pageNum );
+
+    /** Called by KWTextFrameSet::renumberFootNotes.
+     *  Sets the text of the parag-counter in the footnote text.
+     */
+    void setCounterText( const QString& text );
+
 private:
     KWFootNoteVariable* m_footNoteVar;
 };
