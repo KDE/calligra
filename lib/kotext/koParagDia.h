@@ -447,6 +447,7 @@ public:
     KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true, bool disableAll = false);
     ~KoParagDia();
 
+    /** Flags passed to constructor */
     int getFlags()const { return m_flags; }
 
     /** Make a given page the current one - @p page is a flag (PD_something) value */
@@ -497,6 +498,9 @@ public:
                                            oldLayout.topBorder!=topBorder() ||
                                            oldLayout.bottomBorder!=bottomBorder() ); }
     bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
+    KoParagLayout paragLayout() const;
+    /// @return the set of flags which were changed
+    int changedFlags() const;
 
 protected slots:
     void slotReset();

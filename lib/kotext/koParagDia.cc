@@ -2162,5 +2162,31 @@ bool KoParagDia::isCounterChanged() const
         return counter().numbering() != KoParagCounter::NUM_NONE;
 }
 
+int KoParagDia::changedFlags() const
+{
+    return paragLayout().compare( oldLayout );
+}
+
+KoParagLayout KoParagDia::paragLayout() const
+{
+    KoParagLayout newLayout;
+    newLayout.setLineSpacingValue( lineSpacing() );
+    newLayout.lineSpacingType = lineSpacingType();
+    newLayout.setTabList( tabListTabulator() );
+    newLayout.alignment = align();
+    newLayout.margins[QStyleSheetItem::MarginFirstLine] = firstLineIndent();
+    newLayout.margins[QStyleSheetItem::MarginLeft] = leftIndent();
+    newLayout.margins[QStyleSheetItem::MarginRight] = rightIndent();
+    newLayout.margins[QStyleSheetItem::MarginTop] = spaceBeforeParag();
+    newLayout.margins[QStyleSheetItem::MarginBottom] = spaceAfterParag();
+    newLayout.pageBreaking = pageBreaking();
+    newLayout.leftBorder = leftBorder();
+    newLayout.rightBorder = rightBorder();
+    newLayout.topBorder = topBorder();
+    newLayout.bottomBorder = bottomBorder();
+    newLayout.counter = new KoParagCounter( counter() );
+    return newLayout;
+}
+
 #include "koParagDia.moc"
 #include "koParagDia_p.moc"
