@@ -403,6 +403,14 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 ** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
    format without opening database
 
+
+=== Docs TODO ===
+
+-translate the current content from polish to english
+-migrate english content to wiki format
+-move polish content to .po translation file
+-Add this to the preface http://encyklopedia.helion.pl/index.php/Kartotekowa_baza_danych
+
 === 2005 PRO TODO ===
 -greatly improve sql parser
 -greatly improve sql gui designer
@@ -430,6 +438,14 @@ TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kex
 
 Startup TODO:
 - add "Save Special->Shortcut file for this project" action
+
+2005-02-23
+Forms
+- fixed Tab/BackTab ordering within form's fields, including cycles 
+  and problems after detaching/attaching windows for Child Frame Mode.
+  QApplication::sendEvent() used instead setFocus() for more realistic 
+  (especially for QLineEdits) focusing effects when tabulator is pressed.
+- QLabel and KexiPixmapLabel available again in KFD
 
 2005-02-21
 Kexi Startup

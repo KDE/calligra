@@ -12,7 +12,6 @@ Group: PropertyEditor
 
 Group: Notification Messages
 -dontAskBeforeDeleteRow [boolean]
--autogeneratePrimaryKeysOnTableDesignSaving [boolean]
 
 Group: General
 #especially useful for SQL-related messages
@@ -25,3 +24,23 @@ Group: Startup
 
 Group: TableView
 TODO: -add default values for KexiTableView::Appearance
+
+Group: TableDesigner
+-autogeneratePrimaryKeysOnTableDesignSaving [boolean]
+TODO: -defaultFieldType [the list of types], default=Text
+TODO: -autoPrimaryKeyForFieldNames [stringlist]
+TODO: -defaultTextFieldLength [uint, <255] default=50
+TODO: -defaultIntegerFieldSubtype [the list of types (byte, short, etc.)] default=long
+
+Group: QueryDesigner
+TODO: -autoJoinOnTableInserting [bool]
+
+Group: KeyboardNavigation
+-cursorPlacementAfterLastOrFirstFormField [stringlist: nextOrPrevRecord|firstOrLastField(default)]
+
+Group: Forms
+TODO:-overrideStyleName [string] (empty if do not override)
+
+Group: NewFormDefaults
+TODO:-styleName [string]
+TODO:-autoTabStop [bool]
