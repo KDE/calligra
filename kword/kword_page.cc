@@ -196,14 +196,14 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
              this, SLOT( verticalSliderMoved( int ) ) );
 }
 
-KWPage::~KWPage() 
-{ 
+KWPage::~KWPage()
+{
   delete oldFc;
   delete formatFC;
-  delete fc; 
+  delete fc;
   delete mm_menu;
   delete frame_edit_menu;
-  selectAllFrames( FALSE ); 
+  selectAllFrames( FALSE );
 }
 /*================================================================*/
 unsigned int KWPage::ptLeftBorder()
@@ -1458,42 +1458,49 @@ void KWPage::editDeleteFrame()
         return;
     }
 
-    KWFrameSet *fs = 0;
-    KWFrame *frame = 0;
-    for ( unsigned int i = 0;i < doc->getNumFrameSets(); ++i ) {
-        KWFrameSet *f = doc->getFrameSet( i );
-        for ( unsigned int j = 0;j < f->getNumFrames(); ++j ) {
-            KWFrame *_f = f->getFrame( j );
-            if ( _f->isSelected() ) {
-                if ( frame ) {
-                    KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
-                                                    "You can only delete one frame at the time." ),
-                                        i18n( "Delete Frame" ) );
-                    return;
-                }
-                frame = _f;
-                fs = f;
-            }
-        }
+    QList<KWFrame> frames=doc->getSelectedFrames();
+    if(frames.count()>1)  {
+        KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
+                                        "You can only delete one frame at the time." ),
+                            i18n( "Delete Frame" ) );
+        return;
     }
-
-    if ( !frame || !fs ) {
+    if(frames.count()<1)  {
         KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
                                         "You need to select a frame first in order to delete it."),
                             i18n( "Delete Frame" ) );
         return;
     }
+    KWFrame *theFrame = frames.at(0);
 
-    if ( fs->getGroupManager() ) {
-        // Should we not post a message "really delete" here ??
-        deleteTable( fs->getGroupManager() );
+    if ( isAHeader(theFrame->getFrameSet()->getFrameInfo()) ) {
+        KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be deleted."),
+                            i18n( "Delete Frame"  ) );
+        return;
+    }
+    if ( isAFooter(theFrame->getFrameSet()->getFrameInfo()) ) {
+        KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be deleted."),
+                            i18n( "Delete Frame"  ) );
         return;
     }
 
-    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
-        if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
+    // frame is part of a table?
+    if ( theFrame->getFrameSet()->getGroupManager() ) {
+        int result;
+        result = KMessageBox::warningContinueCancel(this,
+                                                    i18n( "You are about to delete a table\n"
+                                                          "Doing so will delete all the text in the table\n"
+                                                          "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
+        if (result != KMessageBox::Continue)
             return;
-        KWParag *parag= dynamic_cast <KWTextFrameSet *> (fs)->getFirstParag();
+        deleteTable( theFrame->getFrameSet()->getGroupManager() );
+        return;
+    }
+
+    if ( theFrame->getFrameSet()->getNumFrames() == 1 && theFrame->getFrameSet()->getFrameType() == FT_TEXT) {
+        if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( theFrame->getFrameSet() ) == 0 )
+            return;
+        KWParag *parag= dynamic_cast <KWTextFrameSet *> (theFrame->getFrameSet())->getFirstParag();
         if(!( parag!=parag->getNext() && parag->getKWString()->size()==0)) {
             int result;
             result = KMessageBox::warningContinueCancel(this,
@@ -1501,7 +1508,7 @@ void KWPage::editDeleteFrame()
                                                               "Frameset '%1'.\n"
                                                               "Doing so will delete this Frameset and all the\n"
                                                               "text contained in it as well!\n\n"
-                                                              "Are you sure you want to do that?").arg(fs->getName()),
+                                                              "Are you sure you want to do that?").arg(theFrame->getFrameSet()->getName()),
                                                         i18n("Delete Frame"), i18n("&Delete"));
             if (result != KMessageBox::Continue)
                 return;
@@ -1511,18 +1518,16 @@ void KWPage::editDeleteFrame()
     if ( blinking )
         stopBlinkCursor();
 
-    // get previous frameset
-    KWFrameSet *f = doc->getFrameSet( fc->getFrameSet() - 1 );
-    if ( f == fs ) {
-        fc->setFrameSet( 1 );
-        fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
-    }
-
-    if ( fs->getNumFrames() > 1 )
-        fs->delFrame( frame );
+    // do the actual delete.
+    if ( theFrame->getFrameSet()->getNumFrames() > 1 )
+        theFrame->getFrameSet()->delFrame( theFrame );
     else
-        doc->delFrameSet( fs );
+        doc->delFrameSet( theFrame->getFrameSet() );
 
+
+    // set FC to new frameset
+    fc->setFrameSet( 1 );
+    fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
 
     doc->recalcFrames();
     doc->updateAllFrames();
@@ -1543,12 +1548,13 @@ void KWPage::deleteTable( KWGroupManager *g )
     if ( blinking )
         stopBlinkCursor();
 
-    fc->setFrameSet( 0 );
-    fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
-
     doc->delGroupManager( g );
     doc->recalcFrames();
     doc->updateAllFrames();
+
+    fc->setFrameSet( 0 );
+    fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
+
     recalcAll = TRUE;
     recalcText();
     recalcCursor();
