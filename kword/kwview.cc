@@ -2397,7 +2397,7 @@ void KWView::deleteFrame( bool _warning )
                 return;
 
             KoTextDocument * textdoc = textfs->textDocument();
-            if ( textdoc->length() > 1 )
+            if ( textdoc->length() > 0 )
             {
                 int result = KMessageBox::warningContinueCancel(
                     this,
