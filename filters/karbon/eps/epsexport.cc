@@ -450,3 +450,5 @@ EpsExport::getColor( const VColor& color )
 		copy[2] << " " << l1_setrgbcolor;
 }
 
+
+#include "epsexport.moc"
