@@ -144,37 +144,8 @@ SvgExport::visitVPath( VPath& path )
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
 
-
-/*
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "SEGMENTS" )
-				exportSegments( s, e );
-			if( e.tagName() == "FILL" )
-			{
-				getFill( s, e );
-
-				// i think this is right?
-				if( fill_rule == 0 )
-				{
-					*m_stream << " fill-rule=\"evenodd\"";
-				}
-				else
-				{
-					*m_stream << " fill-rule=\"nonzero\"";
-				}
-			}
-			if( e.tagName() == "STROKE" )
-				getStroke( s, e );
-		}
-	}
-*/
-
+	getFill( *( path.fill() ) );
+	getStroke( *( path.stroke() ) );
 
 	*m_stream << " />" << endl;
 
@@ -193,113 +164,46 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 		switch( itr.current()->type() )
 		{
 			case segment_curve:
-				*m_stream <<
+				*m_stream << " C " <<
 					itr.current()->ctrlPoint1().x() << " " <<
 					itr.current()->ctrlPoint1().y() << " " <<
 					itr.current()->ctrlPoint2().x() << " " <<
 					itr.current()->ctrlPoint2().y() << " " <<
 					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"c\n";
+					itr.current()->knot2().y();
 			break;
 			case segment_curve1:
-				*m_stream <<
+				*m_stream << " C " <<
 					itr.current()->knot1().x() << " " <<
 					itr.current()->knot1().y() << " " <<
 					itr.current()->ctrlPoint2().x() << " " <<
 					itr.current()->ctrlPoint2().y() << " " <<
 					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"c\n";
+					itr.current()->knot2().y();
 			break;
 			case segment_curve2:
-				*m_stream <<
+				*m_stream << " C " << 
 					itr.current()->ctrlPoint1().x() << " " <<
 					itr.current()->ctrlPoint1().y() << " " <<
 					itr.current()->knot2().x() << " " <<
 					itr.current()->knot2().y() << " " <<
 					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"c\n";
+					itr.current()->knot2().y();
 			break;
 			case segment_line:
-				*m_stream <<
+				*m_stream << " L " <<
 					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"l\n";
+					itr.current()->knot2().y();
 			break;
 			case segment_begin:
-				*m_stream <<
+				*m_stream << " M " <<
 					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"m\n";
+					itr.current()->knot2().y();
 			break;
 			case segment_end:
 			break;
 		}
 	}
-
-
-
-/*
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			// convert the varoius karbon curves to svg "C" curves
-			if( e.tagName() == "CURVE" )
-			{
-			*m_stream <<
-				"C" <<
-				e.attribute( "x1" ) << "," <<
-				e.attribute( "y1" ) << " " <<
-				e.attribute( "x2" ) << "," <<
-				e.attribute( "y2" ) << " " <<
-				e.attribute( "x3" ) << "," <<
-				e.attribute( "y3" ) << " ";
-			}
-			if( e.tagName() == "CURVE1" )
-			{
-			*m_stream <<
-				"C" <<
-				e.attribute( "x1" ) << "," <<
-				e.attribute( "y1" ) << " " <<
-				e.attribute( "x1" ) << "," <<
-				e.attribute( "y1" ) << " " <<
-				e.attribute( "x3" ) << "," <<
-				e.attribute( "y3" ) << " ";
-			}
-			if( e.tagName() == "CURVE2" )
-			{
-			*m_stream <<
-				"C" <<
-				e.attribute( "x1" ) << "," <<
-				e.attribute( "y1" ) << " " <<
-				e.attribute( "x3" ) << "," <<
-				e.attribute( "y3" ) << " " <<
-				e.attribute( "x3" ) << "," <<
-				e.attribute( "y3" ) << " ";
-			}
-			else if( e.tagName() == "LINE" )
-			{
-				*m_stream <<
-					"L" <<
-					e.attribute( "x" ) << " " <<
-					e.attribute( "y" ) << " ";
-			}
-			else if( e.tagName() == "MOVE" )
-			{
-				*m_stream <<
-					"M" <<
-					e.attribute( "x" ) << " " <<
-					e.attribute( "y" ) << " ";
-			}
-		}
-	}
-*/
 
 	if( segmentList.isClosed() )
 		*m_stream << "Z";
@@ -310,45 +214,31 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 void
 SvgExport::getFill( const VFill& fill )
 {
-/*
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "COLOR" )
-			{
-
-				// make sure getHexColor returns something
-				// shouldn't be needed really
-				if( !e.attribute( "colorSpace" ).isNull() )
-				{
-					*m_stream << " fill=\"";
-					getHexColor( s, e );
-					*m_stream << "\"";
-				}
-
-				if( !e.attribute( "opacity" ).isNull() )
-				{
-					*m_stream << " fill-opacity=\"" << e.attribute( "opacity" ) << "\"";
-				}
-			}
-		}
-	}
-*/
+	*m_stream << " fill=\"";
+	if( fill.type() == fill_none )
+		*m_stream << "none";
+	else // TODO : gradient fills
+		getHexColor( fill.color() );
+	*m_stream << "\"";
+	*m_stream << " fill-opacity=\"" << fill.color().opacity() << "\"";
+	if( fill.fillRule() == fillrule_evenOdd )
+		*m_stream << " fill-rule=\"evenodd\"";
+	else
+		*m_stream << " fill-rule=\"nonzero\"";
 }
 
 void
 SvgExport::getStroke( const VStroke& stroke )
 {
-/*
-	if( !node.attribute( "lineWidth" ).isNull() )
-	{
-		*m_stream << " stroke-width=\"" << node.attribute( "lineWidth" ) << "\"";
-	}
+	*m_stream << " stroke=\"";
+	if( stroke.type() == stroke_none )
+		*m_stream << "none";
+	else // TODO : gradient fills
+		getHexColor( stroke.color() );
+	*m_stream << "\"";
 
+	*m_stream << " stroke-width=\"" << stroke.lineWidth() << "\"";
+/*
 	if( !node.attribute( "lineCap" ).isNull() )
 	{
 		if( node.attribute( "lineCap" ).toInt() == 0 )
@@ -434,45 +324,45 @@ SvgExport::getStroke( const VStroke& stroke )
 void
 SvgExport::getHexColor( const VColor& color )
 {
-/*
 	// Convert the various color-spaces to hex
 
 	QString Output;
 
+	float v1, v2, v3, v4;
+	color.values( &v1, &v2, &v3, &v4 );
 	// rgb
-	if( node.attribute( "colorSpace" ).toInt() == 0 )
+	if( color.colorSpace() == VColor::rgb )
 	{
-		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v1" ).toFloat() * 255 ), int( node.attribute( "v2" ).toFloat() * 255 ), int( node.attribute( "v3" ).toFloat() * 255 ) );
+		Output.sprintf( "#%02x%02x%02x", int( v1 * 255 ), int( v2 * 255 ), int( v3 * 255 ) );
 	}
 
 	// cmyk
-	else if( node.attribute( "colorSpace" ).toInt() == 1 )
+	else if( color.colorSpace() == VColor::cmyk )
 	{
-		Output.sprintf( "#%02x%02x%02x", int( ( 1 - node.attribute( "v1" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v2" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v3" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ) );
+		Output.sprintf( "#%02x%02x%02x", int( ( 1 - v1 - v4 ) * 255 ), int( ( 1 - v2 - v4 ) * 255 ), int( ( 1 - v3 - v4 ) * 255 ) );
 	}
 
 	// hsb
-	else if( node.attribute( "colorSpace" ).toInt() == 2 )
+	else if( color.colorSpace() == VColor::hsb )	
 	{
 		// maybe do this manually - or could it stay like this?
 		QColor hsvColor;
 		int rComponent;
 		int gComponent;
 		int bComponent;
-		hsvColor.setHsv( int( node.attribute( "v1" ).toFloat() * 359 ), int( node.attribute( "v2" ).toFloat() * 255 ), int( node.attribute( "v3" ).toFloat() * 255 ) );
+		hsvColor.setHsv( int( v1 * 359 ), int( v2 * 255 ), int( v3 * 255 ) );
 		hsvColor.rgb(&rComponent, &gComponent, &bComponent);
 
 		Output.sprintf( "#%02x%02x%02x", rComponent, gComponent, bComponent );
 	}
 
 	// grey
-	else if( node.attribute( "colorSpace" ).toInt() == 3 )
-	{
-		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
-	}
+	//else if( color.colorSpace() == VColor::gray )
+	//{
+	//	Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
+	//}
 
 	*m_stream << Output;
-*/
 }
 
 void
