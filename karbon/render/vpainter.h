@@ -43,6 +43,7 @@ public:
 	virtual void moveTo( const KoPoint & ) = 0;
 	virtual void lineTo( const KoPoint & ) = 0;
 	virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & ) = 0;
+	virtual void newPath() = 0;
 	virtual void strokePath() = 0;
 	virtual void fillPath() = 0;
 

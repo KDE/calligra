@@ -60,6 +60,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 	if( state() != state_edit )
 	{
 		// paint fill:
+		painter->newPath();
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
@@ -97,7 +98,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 		painter->fillPath();
 
 		// draw stroke:
-		for( itr.toFirst(); itr.current(); ++itr )
+		/*for( itr.toFirst(); itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
@@ -126,7 +127,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 				else
 					painter->moveTo( jtr.current()->knot2() );
 			}
-		}
+		}*/
 
 		painter->setRasterOp( Qt::CopyROP );
 		painter->setPen( stroke() );
@@ -139,6 +140,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
+			painter->newPath();
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
@@ -186,6 +188,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
+				painter->newPath();
 				painter->setBrush( Qt::blue.light() );
 				painter->moveTo(
 					KoPoint(

@@ -108,6 +108,11 @@ VQPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 }
 
 void
+VQPainter::newPath()
+{
+}
+
+void
 VQPainter::fillPath()
 {
 	// we probably dont need filling for qpainter

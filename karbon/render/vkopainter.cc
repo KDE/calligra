@@ -173,6 +173,12 @@ VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 }
 
 void
+VKoPainter::newPath()
+{
+	m_index = 0;
+}
+
+void
 VKoPainter::fillPath()
 {
 	// find begin of last subpath
@@ -195,19 +201,18 @@ VKoPainter::fillPath()
 		m_path[ m_index ].y3	= m_path[ find ].y3;
 
 		m_index++;
+		m_path[ m_index ].code = ART_END;
 	}
+	else
+		m_path[ m_index++ ].code = ART_END;
 
-	m_path[ m_index ].code = ART_END;
 
 	ArtVpath *path;
 	path = art_bez_path_to_vec( m_path , 0.25 );
 
-	delete m_stroke;
-	m_stroke = 0L;
-
-	m_index = 0;
-
 	drawVPath( path );
+
+	m_index--;
 	//art_free( path );
 }
 
@@ -220,10 +225,7 @@ VKoPainter::strokePath()
 	ArtVpath *path;
 	path = art_bez_path_to_vec( m_path , 0.25 );
 
-	delete m_fill;
-	m_fill = 0L;
-
-	m_index = 0;
+	//m_index = 0;
 
 	drawVPath( path );
 	//art_free( path );
