@@ -1,6 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula $(all_includes)
 
 ####### Files
 
@@ -17,7 +17,7 @@ libkwordpart_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
 		autoformat.cc autoformatdia.cc variabledlgs.cc \
                 serialletter.cc contents.cc kword_factory.cc
 libkwordpart_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
-libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
+libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la -lkspell
 libkwordpart_la_METASOURCES = AUTO
 
 kword_la_SOURCES = main.cc

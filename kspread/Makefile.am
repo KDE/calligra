@@ -1,5 +1,5 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) \
--I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
+-I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript -I$(top_srcdir)/lib/kformula $(all_includes)
 
 ####### Files
 
