@@ -80,7 +80,7 @@ Counter *KWTextParag::counter()
 
 void KWTextParag::setMargin( QStyleSheetItem::Margin m, KWUnit _i )
 {
-    kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i.pt() << endl;
+    //kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i.pt() << endl;
     m_layout.margins[m] = _i;
     if ( m == QStyleSheetItem::MarginTop && prev() )
         prev()->invalidate(0);     // for top margin
@@ -544,8 +544,6 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     // pass it instead of 0L, to only save the non-default attributes
     QDomElement paragFormatElement = saveFormat( doc, paragFormat(), 0L, 0, to - from + 1 );
     layoutElem.appendChild( paragFormatElement );
-
-    // TODO TABULATOR
 }
 
 //static
@@ -650,7 +648,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
-        QDomElement formatElem = attributes.firstChild().toElement();
+        QDomElement formatElem = formatsElem.firstChild().toElement();
         for ( ; !formatElem.isNull() ; formatElem = formatElem.nextSibling().toElement() )
         {
             if ( formatElem.tagName() == "FORMAT" )
@@ -703,7 +701,6 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 
 void KWTextParag::setParagLayout( const KWParagLayout & layout )
 {
-    //kdDebug() << "KWTextParag " << this << " setParagLayout" << endl;
     setAlign( layout.alignment );
     setMargins( layout.margins );
     setLinesTogether( layout.linesTogether );
@@ -749,6 +746,11 @@ void KWTextParag::printRTDebug()
                   << " " << s->at(i).format()->key()
             //<< " fontsize:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat()
                   << endl;*/
+
+    /*KoTabulatorList tabList = m_layout.tabList();
+    KoTabulatorList::Iterator it = tabList.begin();
+    for ( ; it != tabList.end() ; it++ )
+        kdDebug() << "Tab at: " << (*it).ptPos << endl;*/
 }
 
 
@@ -814,9 +816,16 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         kdError(32001) << "Missing NAME tag in LAYOUT" << endl;
     }
 
-    element = parentElem.namedItem( "TABULATOR" ).toElement();
-    if ( !element.isNull() )
+    // Load the paragraph tabs - forget about the ones from the style first.
+    // We can't apply the 'default comes from the style' in this case, because
+    // there is no way to differenciate between "I want no tabs in the parag"
+    // and "use default from style".
+    m_tabList.clear();
+    QDomNodeList listTabs = parentElem.elementsByTagName ( "TABULATOR" );
+    unsigned int count = listTabs.count();
+    for (unsigned int item = 0; item < count; item++)
     {
+        element = listTabs.item( item ).toElement();
         KoTabulator tab;
         tab.type = static_cast<KoTabulators>( KWDocument::getAttribute( element, "type", T_LEFT ) );
         tab.ptPos = KWDocument::getAttribute( element, "ptpos", 0.0 );
@@ -923,6 +932,7 @@ void KWParagLayout::initialise()
     topBorder.ptWidth = 0;
     bottomBorder.ptWidth = 0;
     linesTogether = false;
+    m_tabList.clear();
 }
 
 KWParagLayout::~KWParagLayout()
