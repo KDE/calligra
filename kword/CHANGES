@@ -3,6 +3,8 @@ Changed between 1.3.2 and 1.3.3
 - Fix all 3 style menus for any translation (#61007)
 - Fix loading of tabulators in old KWord documents (part of #73351)
 - Restart numbering starting a new list (#68927)
+- (All koffice applications) : fixed handling of remote koffice files in konqueror.
+- (All koffice applications) : fixed race condition when using dcopstart.
 
 Changed between 1.3.1 and 1.3.2
 ===============================
