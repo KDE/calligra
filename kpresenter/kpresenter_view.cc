@@ -4374,9 +4374,9 @@ void KPresenterView::setupRulers()
 {
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
     tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
-
     h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->getUnit(), tabChooser );
     h_ruler->changeFlags(0);
+
     h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
     v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0, kPresenterDoc()->getUnit() );
     v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
@@ -6518,40 +6518,56 @@ void KPresenterView::refreshRuler( bool state )
     if( getHRuler() )
     {
 
-        if( state )
+        if ( !m_pKPresenterDoc->isReadWrite())
         {
-            if( getHRuler()->flags() != KoRuler::F_HELPLINES )
-            {
-                getHRuler()->changeFlags(KoRuler::F_HELPLINES);
-                getHRuler()->repaint();
-            }
+            getHRuler()->changeFlags(KoRuler::F_NORESIZE);
+            getHRuler()->repaint();
         }
         else
         {
-            if( getHRuler()->flags() != 0 )
+            if( state )
             {
-                getHRuler()->changeFlags( 0 );
-                getHRuler()->repaint();
+                if( getHRuler()->flags() != KoRuler::F_HELPLINES )
+                {
+                    getHRuler()->changeFlags(KoRuler::F_HELPLINES);
+                    getHRuler()->repaint();
+                }
+            }
+            else
+            {
+                if( getHRuler()->flags() != 0 )
+                {
+                    getHRuler()->changeFlags( 0 );
+                    getHRuler()->repaint();
+                }
             }
         }
     }
 
     if( getVRuler())
     {
-        if( state )
+        if ( !m_pKPresenterDoc->isReadWrite())
         {
-            if( getVRuler()->flags() != KoRuler::F_HELPLINES )
-            {
-                getVRuler()->changeFlags(KoRuler::F_HELPLINES);
-                getVRuler()->repaint();
-            }
+            getVRuler()->changeFlags(KoRuler::F_NORESIZE);
+            getVRuler()->repaint();
         }
         else
         {
-            if( getVRuler()->flags()!= 0)
+            if( state )
             {
-                getVRuler()->changeFlags(0);
-                getVRuler()->repaint();
+                if( getVRuler()->flags() != KoRuler::F_HELPLINES )
+                {
+                    getVRuler()->changeFlags(KoRuler::F_HELPLINES);
+                    getVRuler()->repaint();
+                }
+            }
+            else
+            {
+                if( getVRuler()->flags()!= 0)
+                {
+                    getVRuler()->changeFlags(0);
+                    getVRuler()->repaint();
+                }
             }
         }
     }
