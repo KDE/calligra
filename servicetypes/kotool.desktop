@@ -2,28 +2,35 @@
 Type=ServiceType
 X-KDE-ServiceType=KoDataTool
 Comment=KOffice Tool
+Comment[az]=KOffice Vasitəsi
+Comment[br]=Ostilh KOffice
+Comment[bs]=KOffice alat
 Comment[ca]=Eina KOffice
 Comment[cs]=Nástroj KOffice
-Comment[da]=Koffice redskab
+Comment[da]=KOffice værktøj
 Comment[de]=KOffice-Dienstprogramm
 Comment[el]=Εργαλείο KOffice
 Comment[eo]=Ilo por KOficejo
-Comment[es]=Herramienta KOffice
+Comment[es]=Herramienta de KOffice
 Comment[et]=KOffice'i tööriist
+Comment[eu]=KOffice Tresna
 Comment[fi]=KOffice-työkalu
 Comment[fr]=Outil de KOffice
 Comment[gl]=Ferramenta de KOffice
 Comment[he]=KOffice ילכ
 Comment[hr]=KOffice alat
 Comment[hu]=KOffice eszköz
-Comment[is]=Tól K-vöndulsins
+Comment[is]=Tól KDE-vöndulsins
 Comment[it]=Strumento di KOffice
 Comment[ja]=KOfficeツール
-Comment[lt]=KOffice Priemonė
+Comment[ko]=K사무용 쓰이는 도구
+Comment[lt]=KOffice įrankis
+Comment[lv]=KOffice Rīks
 Comment[mk]=KOffice алатка
 Comment[nl]=KOffice Hulpprogramma
-Comment[no]=KDE Verktøy
+Comment[no]=KOffice Verktøy
 Comment[no_NY]=KOffice-verktøy
+Comment[oc]=Otilh KOffice
 Comment[pl]=Narzędzie KOffice
 Comment[pt]=Ferramenta do KOffice
 Comment[pt_BR]=Ferramenta do KOffice
@@ -31,20 +38,22 @@ Comment[ro]=Utilitar KOffice
 Comment[ru]=Утилита для KOffice
 Comment[sk]=Nástroje KOffice
 Comment[sl]=Orodje za KOffice
+Comment[sr]=Alat za KOffice
 Comment[sv]=Verktyg till KOffice
 Comment[ta]=KOffice ¸ÕÅ¢
 Comment[tr]=KOffice Aracı
-Comment[uk]=Утіліта KOffice
+Comment[uk]=Утиліта KOffice
 Comment[zh_CN.GB2312]=KOffice 工具
+Comment[zh_TW.Big5]=KOffice 工具
 
 [PropertyDef::Commands]
-Type=QStringList
-
-[PropertyDef::CommandsI18N]
 Type=QStringList
 
 [PropertyDef::DataType]
 Type=QString
 
 [PropertyDef::DataMimeTypes]
+Type=QStringList
+
+[PropertyDef::ExcludeFrom]
 Type=QStringList
