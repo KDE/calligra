@@ -29,7 +29,7 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qprintdialog.h>
-#include <qcollection.h>
+#include <qptrcollection.h>
 #include <qkeycode.h>
 #include <qcheckbox.h>
 #include <qmime.h>
