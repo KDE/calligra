@@ -27,7 +27,7 @@
 #include <kstddirs.h>
 #include <qstringlist.h>
 #include <kcmdlineargs.h>
-#include <qdir.h>
+#include <kdebug.h>
 
 KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName )
     : KApplication(argc, argv, rAppName)
@@ -57,8 +57,11 @@ void KoApplication::start()
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( KoDocument::nativeFormatMimeType() );
 
-    ASSERT( !entry.isEmpty() );
-
+    if ( entry.isEmpty() )
+    {
+        kdError() << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
+        ::exit(1);
+    }
     
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
 
@@ -79,11 +82,10 @@ void KoApplication::start()
         // Loop through arguments
         
         short int n=0;
-        for(int it=0; it < argsCount; it++ )
+        for(int i=0; i < argsCount; i++ )
         {
             KoDocument* doc = entry.createDoc( 0 );
-            KURL url( QDir::currentDirPath()+"/", args->arg(0) ); // allow URLs relative to current dir
-            if ( doc->loadFromURL( url ) )
+            if ( doc->loadFromURL( args->url(i) ) )
             {
               KoMainWindow* shell = doc->createShell();
               shell->show();
