@@ -25,8 +25,8 @@
 
 
 #include "kspread_dlg_series.h"
-#include "kspread_canvas.h"
 #include "kspread_doc.h"
+#include "kspread_editors.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 

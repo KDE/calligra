@@ -59,289 +59,12 @@
 #include <qbuffer.h>
 #include <qlabel.h>
 #include <qdrawutil.h>
-#include <qbutton.h>
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qpoint.h>
 #include <qscrollbar.h>
 #include <float.h>
 
-
-KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * _parent,
-                                                      KSpreadView * _view )
-    : KComboBox( _parent, "KSpreadComboboxLocationEditWidget" )
-{
-    m_locationWidget = new KSpreadLocationEditWidget( _parent, _view );
-    setLineEdit( m_locationWidget );
-    insertItem( "" );
-
-    QValueList<Reference>::Iterator it;
-    QValueList<Reference> area = _view->doc()->listArea();
-    for ( it = area.begin(); it != area.end(); ++it )
-        slotAddAreaName( (*it).ref_name);
-}
-
-void KSpreadComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
-{
-    insertItem( _name );
-}
-
-void KSpreadComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
-{
-    for ( int i = 0; i<count(); i++ )
-        if ( text(i)==_name )
-        {
-            removeItem( i );
-            return;
-        }
-}
-
-KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
-                                                      KSpreadView * _view )
-    : QLineEdit( _parent, "KSpreadLocationEditWidget" ),
-      m_pView(_view)
-{
-}
-
-void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
-{
-    // Do not handle special keys and accelerators. This is
-    // done by QLineEdit.
-    if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
-    {
-        QLineEdit::keyPressEvent( _ev );
-        // Never allow that keys are passed on to the parent.
-        _ev->accept();
-
-        return;
-    }
-
-    // Handle some special keys here. Eve
-    switch( _ev->key() )
-    {
-    case Key_Return:
-    case Key_Enter:
-        {
-            QString ltext = text();
-            QString tmp = ltext.lower();
-            QValueList<Reference>::Iterator it;
-	    QValueList<Reference> area = m_pView->doc()->listArea();
-	    for ( it = area.begin(); it != area.end(); ++it )
-            {
-                if ((*it).ref_name == tmp)
-                {
-                    QString tmp = (*it).table_name;
-                    tmp += "!";
-                    tmp += util_rangeName((*it).rect);
-                    m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
-                    return;
-                }
-            }
-
-            // Set the cell component to uppercase:
-            // Table1!a1 -> Table1!A2
-            int pos = ltext.find('!');
-            if ( pos !=- 1 )
-                tmp = ltext.left(pos)+ltext.mid(pos).upper();
-            else
-                tmp = ltext.upper();
-
-            // Selection entered in location widget
-            if ( ltext.contains( ':' ) )
-                m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
-            // Location entered in location widget
-            else
-            {
-                KSpreadPoint point( tmp, m_pView->doc()->map());
-                bool validName = true;
-                for (unsigned int i = 0; i < ltext.length(); ++i)
-                {
-                    if (!ltext[i].isLetter())
-                    {
-                        validName = false;
-                        break;
-                    }
-                }
-                if ( !point.isValid() && validName)
-                {
-                    QRect rect( m_pView->selection() );
-                    KSpreadSheet * t = m_pView->activeTable();
-                    // set area name on current selection/cell
-
-                    m_pView->doc()->addAreaName(rect, ltext.lower(),
-                                                t->tableName());
-                }
-
-                if (!validName)
-                    m_pView->canvasWidget()->gotoLocation( point );
-            }
-
-            // Set the focus back on the canvas.
-            m_pView->canvasWidget()->setFocus();
-            _ev->accept();
-        }
-        break;
-    // Escape pressed, restore original value
-    case Key_Escape:
-        // #### Torben says: This is duplicated code. Bad.
-        if ( m_pView->selectionInfo()->singleCellSelection() ) {
-            setText( KSpreadCell::columnName( m_pView->canvasWidget()->markerColumn() )
-                     + QString::number( m_pView->canvasWidget()->markerRow() ) );
-        } else {
-            setText( KSpreadCell::columnName( m_pView->selection().left() )
-                     + QString::number( m_pView->selection().top() )
-                     + ":"
-                     + KSpreadCell::columnName( m_pView->selection().right() )
-                     + QString::number( m_pView->selection().bottom() ) );
-        }
-        m_pView->canvasWidget()->setFocus();
-        _ev->accept();
-        break;
-    default:
-        QLineEdit::keyPressEvent( _ev );
-        // Never allow that keys are passed on to the parent.
-        _ev->accept();
-    }
-}
-
-/****************************************************************
- *
- * KSpreadEditWidget
- * The line-editor that appears above the table and allows to
- * edit the cells content.
- *
- ****************************************************************/
-
-KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
-                                      QButton *cancelButton, QButton *okButton )
-  : QLineEdit( _parent, "KSpreadEditWidget" )
-{
-  m_pCanvas = _canvas;
-  Q_ASSERT(m_pCanvas != NULL);
-  // Those buttons are created by the caller, so that they are inserted
-  // properly in the layout - but they are then managed here.
-  m_pCancelButton = cancelButton;
-  m_pOkButton = okButton;
-
-  installEventFilter(m_pCanvas);
-
-  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable() )
-    setEnabled( false );
-
-  QObject::connect( m_pCancelButton, SIGNAL( clicked() ),
-                    this, SLOT( slotAbortEdit() ) );
-  QObject::connect( m_pOkButton, SIGNAL( clicked() ),
-                    this, SLOT( slotDoneEdit() ) );
-
-  setEditMode( false ); // disable buttons
-}
-
-void KSpreadEditWidget::showEditWidget(bool _show)
-{
-    if (_show)
-	{
-	    m_pCancelButton->show();
-	    m_pOkButton->show();
-	    show();
-	}
-    else
-	{
-	    m_pCancelButton->hide();
-	    m_pOkButton->hide();
-	    hide();
-	}
-}
-
-void KSpreadEditWidget::slotAbortEdit()
-{
-    m_pCanvas->deleteEditor( false /*discard changes*/ );
-    // will take care of the buttons
-}
-
-void KSpreadEditWidget::slotDoneEdit()
-{
-    m_pCanvas->deleteEditor( true /*keep changes*/ );
-    // will take care of the buttons
-}
-
-void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
-{
-    // Dont handle special keys and accelerators
-    if ( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
-         || ( _ev->state() & Qt::ShiftButton )
-         || ( _ev->key() == Key_Shift )
-         || ( _ev->key() == Key_Control ) )
-    {
-        QLineEdit::keyPressEvent( _ev );
-        _ev->accept();
-        return;
-    }
-
-  if ( !m_pCanvas->doc()->isReadWrite() )
-    return;
-
-  if ( !m_pCanvas->editor() )
-  {
-    // Start editing the current cell
-    m_pCanvas->createEditor( KSpreadCanvas::CellEditor,false );
-  }
-  KSpreadTextEditor * cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
-
-  switch ( _ev->key() )
-  {
-    case Key_Down:
-    case Key_Up:
-    case Key_Return:
-    case Key_Enter:
-      cellEditor->setText( text());
-      // Don't allow to start a chooser when pressing the arrow keys
-      // in this widget, since only up and down would work anyway.
-      // This is why we call slotDoneEdit now, instead of sending
-      // to the canvas.
-      //QApplication::sendEvent( m_pCanvas, _ev );
-      slotDoneEdit();
-      m_pCanvas->view()->updateEditWidget();
-      _ev->accept();
-      break;
-    case Key_F2:
-      cellEditor->setFocus();
-      cellEditor->setText( text());
-      cellEditor->setCursorPosition(cursorPosition());
-      break;
-    default:
-
-      QLineEdit::keyPressEvent( _ev );
-
-      setFocus();
-      cellEditor->blockCheckChoose( TRUE );
-      cellEditor->setText( text() );
-      cellEditor->blockCheckChoose( FALSE );
-      cellEditor->setCursorPosition( cursorPosition() );
-  }
-}
-
-void KSpreadEditWidget::setEditMode( bool mode )
-{
-  m_pCancelButton->setEnabled(mode);
-  m_pOkButton->setEnabled(mode);
-}
-
-void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
-{
-  //kdDebug(36001) << "EditWidget lost focus" << endl;
-  // See comment about setLastEditorWithFocus
-  m_pCanvas->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
-
-  QLineEdit::focusOutEvent( ev );
-}
-
-void KSpreadEditWidget::setText( const QString& t )
-{
-  if ( t == text() ) // Why this? (David)
-    return;
-
-  QLineEdit::setText( t );
-}
 
 /****************************************************************
  *
@@ -1771,24 +1494,26 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     }
 }
 
-QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
+QPoint KSpreadCanvas::cursorPos ()
 {
-  QPoint destination;
   QPoint cursor;
-
   if (m_bChoose)
   {
     cursor = selectionInfo()->getChooseCursor();
     /* if the cursor is unset, pretend we're starting at the regular cursor */
     if (cursor.x() == 0 || cursor.y() == 0)
-    {
       cursor = selectionInfo()->cursorPosition();
-    }
   }
   else
-  {
     cursor = selectionInfo()->cursorPosition();
-  }
+  
+  return cursor;
+}
+
+QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
+{
+  QPoint destination;
+  QPoint cursor = cursorPos ();
 
   QPoint cellCorner = cursor;
   KSpreadCell* cell = activeTable()->cellAt(cursor.x(), cursor.y());
@@ -1969,17 +1694,7 @@ void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
     deleteEditor( false );
 
   event->accept(); // ?
-  QPoint cursor;
-
-  if (m_bChoose)
-  {
-    cursor = selectionInfo()->getChooseCursor();
-    /* if the cursor is unset, pretend we're starting at the regular cursor */
-    if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
-  }
-  else
-    cursor = selectionInfo()->cursorPosition();
+  QPoint cursor = cursorPos();
 
   m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
 }
@@ -2143,17 +1858,7 @@ void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
   activeTable()->clearTextSelection( selectionInfo() );
   m_pView->editWidget()->setText( "" );
 
-  QPoint cursor;
-
-  if ( m_bChoose )
-  {
-    cursor = selectionInfo()->getChooseCursor();
-    /* if the cursor is unset, pretend we're starting at the regular cursor */
-    if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
-  }
-  else
-    cursor = selectionInfo()->cursorPosition();
+  QPoint cursor = cursorPos();
 
   m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
   return;
@@ -2166,17 +1871,8 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
     m_pView->editWidget()->setCursorPosition( m_pEditor->cursorPosition() - 1 );
   m_pView->editWidget()->cursorForward( false );
 
-  QPoint cursor;
-
-  if ( m_bChoose )
-  {
-    cursor = selectionInfo()->getChooseCursor();
-    /* if the cursor is unset, pretend we're starting at the regular cursor */
-    if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
-  }
-  else
-    cursor = selectionInfo()->cursorPosition();
+  
+  QPoint cursor = cursorPos();
 
   m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
   return;
@@ -2184,25 +1880,15 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
 
 void KSpreadCanvas::processF4Key(QKeyEvent* event)
 {
-  /* I have no idea what this is doing.  But it was in the code so I'm leaving it
+  /* passes F4 to the editor (if any), which will process it
    */
   if ( m_pEditor )
   {
     m_pEditor->handleKeyPressEvent( event );
-    m_pView->editWidget()->setFocus();
+//    m_pView->editWidget()->setFocus();
     m_pView->editWidget()->setCursorPosition( m_pEditor->cursorPosition() );
   }
-  QPoint cursor;
-
-  if ( m_bChoose )
-  {
-    cursor = selectionInfo()->getChooseCursor();
-    /* if the cursor is unset, pretend we're starting at the regular cursor */
-    if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
-  }
-  else
-    cursor = selectionInfo()->cursorPosition();
+  QPoint cursor = cursorPos();
 
   m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
   return;
@@ -2228,17 +1914,7 @@ void KSpreadCanvas::processOtherKey(QKeyEvent *event)
       m_pEditor->handleKeyPressEvent( event );
   }
 
-  QPoint cursor;
-
-  if ( m_bChoose )
-  {
-    cursor = selectionInfo()->getChooseCursor();
-    /* if the cursor is unset, pretend we're starting at the regular cursor */
-    if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
-  }
-  else
-    cursor = selectionInfo()->cursorPosition();
+  QPoint cursor = cursorPos();
 
   m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
 
@@ -2640,7 +2316,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     processF2Key( _ev );
     return;
     break;
-
+   
    case Key_F4:
     processF4Key( _ev );
     return;
@@ -2651,6 +2327,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     return;
     break;
   }
+  
+  //most process*Key methods call emitEndOperation, this only gets called in some situations
+  // (after some move operations)
   m_pDoc->emitEndOperation( table->visibleRect( this ) );
   return;
 }
@@ -2777,55 +2456,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           continue;
         }
 
-        QPen pen;
-
-        switch ( _ev->key() )
-        {
-         case Key_Exclam:
-          convertToDouble( cell );
-          cell->setFormatType (Number_format);
-          cell->setPrecision( 2 );
-          break;
-
-         case Key_Dollar:
-          convertToMoney( cell );
-          break;
-
-         case Key_Percent:
-          convertToPercent( cell );
-          break;
-
-         case Key_At:
-          convertToTime( cell );
-          break;
-
-         case Key_NumberSign:
-          convertToDate( cell );
-          break;
-
-         case Key_AsciiCircum:
-          cell->setFormatType (Scientific_format);
-          convertToDouble( cell );
-          cell->setFactor( 1.0 );
-          break;
-
-         case Key_Ampersand:
-          if ( r == rect.top() )
-          {
-            pen = QPen( m_pView->borderColor(), 1, SolidLine);
-            cell->setTopBorderPen( pen );
-          }
-          else if ( r == rect.bottom() )
-          {
-            pen = QPen( m_pView->borderColor(), 1, SolidLine);
-            cell->setBottomBorderPen( pen );
-          }
-          break;
-
-         default:
-           m_pDoc->emitEndOperation( rect );
-          return false;
-        } // switch
+        formatCellByKey (cell, _ev->key(), rect);
 
         cell = table->getNextCellRight( cell->column(), r );
       } // while (cell)
@@ -2901,54 +2532,8 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           continue;
         }
 
-        QPen pen;
-        switch ( _ev->key() )
-        {
-         case Key_Exclam:
-          convertToDouble( cell );
-          cell->setFormatType (Number_format);
-          cell->setPrecision( 2 );
-          break;
+        formatCellByKey (cell, _ev->key(), rect);
 
-         case Key_Dollar:
-          convertToMoney( cell );
-          break;
-
-         case Key_Percent:
-          convertToPercent( cell );
-          break;
-
-         case Key_At:
-          convertToTime( cell );
-          break;
-
-         case Key_NumberSign:
-          convertToDate( cell );
-          break;
-
-         case Key_AsciiCircum:
-          cell->setFormatType (Scientific_format);
-          convertToDouble( cell );
-          cell->setFactor( 1.0 );
-          break;
-
-         case Key_Ampersand:
-          if ( c == rect.left() )
-          {
-            pen = QPen( m_pView->borderColor(), 1, SolidLine);
-            cell->setLeftBorderPen( pen );
-          }
-          else if ( c == rect.right() )
-          {
-            pen = QPen( m_pView->borderColor(), 1, SolidLine);
-            cell->setRightBorderPen( pen );
-          }
-          break;
-
-         default:
-           m_pDoc->emitEndOperation( rect );
-          return false;
-        }
         cell = table->getNextCellDown( c, cell->row() );
       }
 
@@ -3018,70 +2603,73 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
       if ( cell->isObscuringForced() )
         continue;
-
-      QPen  pen;
-      switch ( _ev->key() )
-      {
-       case Key_Exclam:
-        convertToDouble( cell );
-        cell->setFormatType (Number_format);
-        cell->setPrecision( 2 );
-        break;
-
-       case Key_Dollar:
-        convertToMoney( cell );
-        break;
-
-       case Key_Percent:
-        convertToPercent( cell );
-        break;
-
-       case Key_At:
-        convertToTime( cell );
-        break;
-
-       case Key_NumberSign:
-        convertToDate( cell );
-        break;
-
-       case Key_AsciiCircum:
-        cell->setFormatType (Scientific_format);
-        convertToDouble( cell );
-        cell->setFactor( 1.0 );
-        break;
-
-       case Key_Ampersand:
-        if ( row == rect.top() )
-        {
-          pen = QPen( m_pView->borderColor(), 1, SolidLine);
-          cell->setTopBorderPen( pen );
-        }
-        if ( row == rect.bottom() )
-        {
-          pen = QPen( m_pView->borderColor(), 1, SolidLine);
-          cell->setBottomBorderPen( pen );
-        }
-        if ( col == rect.left() )
-        {
-          pen = QPen( m_pView->borderColor(), 1, SolidLine);
-          cell->setLeftBorderPen( pen );
-        }
-        if ( col == rect.right() )
-        {
-          pen = QPen( m_pView->borderColor(), 1, SolidLine);
-          cell->setRightBorderPen( pen );
-        }
-        break;
-
-       default:
-         m_pDoc->emitEndOperation( rect );
-        return false;
-      } // switch
+      
+      formatCellByKey (cell, _ev->key(), rect);
     } // for left .. right
   } // for top .. bottom
   _ev->accept();
 
   m_pDoc->emitEndOperation( rect );
+  return true;
+}
+
+bool KSpreadCanvas::formatCellByKey (KSpreadCell *cell, int key, const QRect &rect)
+{
+  QPen pen;
+  switch (key)
+  {
+    case Key_Exclam:
+    convertToDouble( cell );
+    cell->setFormatType (Number_format);
+    cell->setPrecision( 2 );
+    break;
+
+    case Key_Dollar:
+    convertToMoney( cell );
+    break;
+
+    case Key_Percent:
+    convertToPercent( cell );
+    break;
+
+    case Key_At:
+    convertToTime( cell );
+    break;
+
+    case Key_NumberSign:
+    convertToDate( cell );
+    break;
+
+    case Key_AsciiCircum:
+    cell->setFormatType (Scientific_format);
+    convertToDouble( cell );
+    cell->setFactor( 1.0 );
+    break;
+
+    case Key_Ampersand:
+    if ( cell->row() == rect.top() )
+    {
+      pen = QPen( m_pView->borderColor(), 1, SolidLine);
+      cell->setTopBorderPen( pen );
+    }
+    if ( cell->row() == rect.bottom() )
+    {
+      pen = QPen( m_pView->borderColor(), 1, SolidLine);
+      cell->setBottomBorderPen( pen );
+    }
+    if ( cell->column() == rect.left() )
+    {
+      pen = QPen( m_pView->borderColor(), 1, SolidLine);
+      cell->setLeftBorderPen( pen );
+    }
+    if ( cell->column() == rect.right() )
+    {
+      pen = QPen( m_pView->borderColor(), 1, SolidLine);
+      cell->setRightBorderPen( pen );
+    }
+    break;
+  } // switch
+  
   return true;
 }
 

@@ -37,6 +37,7 @@
 #include "kspread_canvas.h"
 #include "kspread_view.h"
 #include "kspread_locale.h"
+#include "kspread_editors.h"
 
 #include <kconfig.h>
 #include <kstatusbar.h>

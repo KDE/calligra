@@ -35,7 +35,6 @@
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qpen.h>
-#include <kcombobox.h>
 
 #include <koQueryTrader.h>
 #include <koRect.h>
@@ -58,6 +57,7 @@ class QWidget;
 class QTimer;
 class QButton;
 class KSpreadLocationEditWidget;
+class KSpreadComboboxLocationEditWidget;
 class QPainter;
 class QLabel;
 class QScrollBar;
@@ -65,70 +65,6 @@ class QScrollBar;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-
-class KSpreadComboboxLocationEditWidget : public KComboBox
-{
-    Q_OBJECT
-public:
-    KSpreadComboboxLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
-
-public slots:
-    void slotAddAreaName( const QString & );
-    void slotRemoveAreaName( const QString & );
-
-private:
-    KSpreadLocationEditWidget *m_locationWidget;
-};
-
-
- /**
- * A widget that allows the user to enter an arbitrary
- * cell location to goto or cell selection to highlight
- */
-class KSpreadLocationEditWidget : public QLineEdit
-{
-	Q_OBJECT
-public:
-	KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
-	KSpreadView * view() const { return m_pView;}
-protected:
-	virtual void keyPressEvent( QKeyEvent * _ev );
-private:
-	KSpreadView * m_pView;
-signals:
-	void gotoLocation( int, int );
-};
-
-/**
- * The widget that appears above the table and allows to
- * edit the cells content.
- */
-class KSpreadEditWidget : public QLineEdit
-{
-    Q_OBJECT
-public:
-    KSpreadEditWidget( QWidget *parent, KSpreadCanvas *canvas,
-                       QButton *cancelButton, QButton *okButton);
-
-    virtual void setText( const QString& t );
-
-    // Go into edit mode (enable the buttons)
-    void setEditMode( bool mode );
-
-    void showEditWidget(bool _show);
-public slots:
-    void slotAbortEdit();
-    void slotDoneEdit();
-
-protected:
-    virtual void keyPressEvent ( QKeyEvent* _ev );
-    virtual void focusOutEvent( QFocusEvent* ev );
-
-private:
-    QButton* m_pCancelButton;
-    QButton* m_pOkButton;
-    KSpreadCanvas* m_pCanvas;
-};
 
 /**
  * The canvas builds a part of the GUI of KSpread.
@@ -528,6 +464,10 @@ private:
 
 
   bool formatKeyPress( QKeyEvent * _ev );
+  
+  /** helper method for formatKeyPress */
+  bool formatCellByKey (KSpreadCell *cell, int key, const QRect &rect);
+  
   double getDouble( KSpreadCell * cell );
   void convertToDouble( KSpreadCell * cell );
   void convertToPercent( KSpreadCell * cell );
@@ -547,6 +487,9 @@ private:
    */
   void extendCurrentSelection(QPoint cell);
 
+  /** current cursor position, be it marker of choose marker */
+  QPoint cursorPos ();
+  
   /**
    * returns the rect that needs to be redrawn
    */

@@ -1,11 +1,35 @@
+/* This file is part of the KDE project
+
+   Copyright 1999-2004 The KSpread Team <koffice-devel@mail.kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+
 #include "kspread_editors.h"
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include "kspread_selection.h"
+#include "kspread_sheet.h"
 #include "kspread_view.h"
 
 #include <klineedit.h>
 #include <qapplication.h>
+#include <qbutton.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qregexp.h>
@@ -246,7 +270,6 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
     newString += tmp2;
 
     m_pEdit->setText(newString);
-    m_pEdit->setFocus();
     m_pEdit->setCursorPosition( cur );
 
     _ev->accept();
@@ -326,6 +349,282 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
     }
 
     return FALSE;
+}
+
+KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * _parent,
+                                                      KSpreadView * _view )
+    : KComboBox( _parent, "KSpreadComboboxLocationEditWidget" )
+{
+    m_locationWidget = new KSpreadLocationEditWidget( _parent, _view );
+    setLineEdit( m_locationWidget );
+    insertItem( "" );
+
+    QValueList<Reference>::Iterator it;
+    QValueList<Reference> area = _view->doc()->listArea();
+    for ( it = area.begin(); it != area.end(); ++it )
+        slotAddAreaName( (*it).ref_name);
+}
+
+void KSpreadComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
+{
+    insertItem( _name );
+}
+
+void KSpreadComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
+{
+    for ( int i = 0; i<count(); i++ )
+        if ( text(i)==_name )
+        {
+            removeItem( i );
+            return;
+        }
+}
+
+KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
+                                                      KSpreadView * _view )
+    : QLineEdit( _parent, "KSpreadLocationEditWidget" ),
+      m_pView(_view)
+{
+}
+
+void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
+{
+    // Do not handle special keys and accelerators. This is
+    // done by QLineEdit.
+    if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+    {
+        QLineEdit::keyPressEvent( _ev );
+        // Never allow that keys are passed on to the parent.
+        _ev->accept();
+
+        return;
+    }
+
+    // Handle some special keys here. Eve
+    switch( _ev->key() )
+    {
+    case Key_Return:
+    case Key_Enter:
+        {
+            QString ltext = text();
+            QString tmp = ltext.lower();
+            QValueList<Reference>::Iterator it;
+	    QValueList<Reference> area = m_pView->doc()->listArea();
+	    for ( it = area.begin(); it != area.end(); ++it )
+            {
+                if ((*it).ref_name == tmp)
+                {
+                    QString tmp = (*it).table_name;
+                    tmp += "!";
+                    tmp += util_rangeName((*it).rect);
+                    m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
+                    return;
+                }
+            }
+
+            // Set the cell component to uppercase:
+            // Table1!a1 -> Table1!A2
+            int pos = ltext.find('!');
+            if ( pos !=- 1 )
+                tmp = ltext.left(pos)+ltext.mid(pos).upper();
+            else
+                tmp = ltext.upper();
+
+            // Selection entered in location widget
+            if ( ltext.contains( ':' ) )
+                m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
+            // Location entered in location widget
+            else
+            {
+                KSpreadPoint point( tmp, m_pView->doc()->map());
+                bool validName = true;
+                for (unsigned int i = 0; i < ltext.length(); ++i)
+                {
+                    if (!ltext[i].isLetter())
+                    {
+                        validName = false;
+                        break;
+                    }
+                }
+                if ( !point.isValid() && validName)
+                {
+                    QRect rect( m_pView->selection() );
+                    KSpreadSheet * t = m_pView->activeTable();
+                    // set area name on current selection/cell
+
+                    m_pView->doc()->addAreaName(rect, ltext.lower(),
+                                                t->tableName());
+                }
+
+                if (!validName)
+                    m_pView->canvasWidget()->gotoLocation( point );
+            }
+
+            // Set the focus back on the canvas.
+            m_pView->canvasWidget()->setFocus();
+            _ev->accept();
+        }
+        break;
+    // Escape pressed, restore original value
+    case Key_Escape:
+        // #### Torben says: This is duplicated code. Bad.
+        if ( m_pView->selectionInfo()->singleCellSelection() ) {
+            setText( KSpreadCell::columnName( m_pView->canvasWidget()->markerColumn() )
+                     + QString::number( m_pView->canvasWidget()->markerRow() ) );
+        } else {
+            setText( KSpreadCell::columnName( m_pView->selection().left() )
+                     + QString::number( m_pView->selection().top() )
+                     + ":"
+                     + KSpreadCell::columnName( m_pView->selection().right() )
+                     + QString::number( m_pView->selection().bottom() ) );
+        }
+        m_pView->canvasWidget()->setFocus();
+        _ev->accept();
+        break;
+    default:
+        QLineEdit::keyPressEvent( _ev );
+        // Never allow that keys are passed on to the parent.
+        _ev->accept();
+    }
+}
+
+/****************************************************************
+ *
+ * KSpreadEditWidget
+ * The line-editor that appears above the table and allows to
+ * edit the cells content.
+ *
+ ****************************************************************/
+
+KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
+                                      QButton *cancelButton, QButton *okButton )
+  : QLineEdit( _parent, "KSpreadEditWidget" )
+{
+  m_pCanvas = _canvas;
+  Q_ASSERT(m_pCanvas != NULL);
+  // Those buttons are created by the caller, so that they are inserted
+  // properly in the layout - but they are then managed here.
+  m_pCancelButton = cancelButton;
+  m_pOkButton = okButton;
+
+  installEventFilter(m_pCanvas);
+
+  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable() )
+    setEnabled( false );
+
+  QObject::connect( m_pCancelButton, SIGNAL( clicked() ),
+                    this, SLOT( slotAbortEdit() ) );
+  QObject::connect( m_pOkButton, SIGNAL( clicked() ),
+                    this, SLOT( slotDoneEdit() ) );
+
+  setEditMode( false ); // disable buttons
+}
+
+void KSpreadEditWidget::showEditWidget(bool _show)
+{
+    if (_show)
+	{
+	    m_pCancelButton->show();
+	    m_pOkButton->show();
+	    show();
+	}
+    else
+	{
+	    m_pCancelButton->hide();
+	    m_pOkButton->hide();
+	    hide();
+	}
+}
+
+void KSpreadEditWidget::slotAbortEdit()
+{
+    m_pCanvas->deleteEditor( false /*discard changes*/ );
+    // will take care of the buttons
+}
+
+void KSpreadEditWidget::slotDoneEdit()
+{
+    m_pCanvas->deleteEditor( true /*keep changes*/ );
+    // will take care of the buttons
+}
+
+void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
+{
+    // Dont handle special keys and accelerators
+    if ( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+         || ( _ev->state() & Qt::ShiftButton )
+         || ( _ev->key() == Key_Shift )
+         || ( _ev->key() == Key_Control ) )
+    {
+        QLineEdit::keyPressEvent( _ev );
+        _ev->accept();
+        return;
+    }
+
+  if ( !m_pCanvas->doc()->isReadWrite() )
+    return;
+
+  if ( !m_pCanvas->editor() )
+  {
+    // Start editing the current cell
+    m_pCanvas->createEditor( KSpreadCanvas::CellEditor,false );
+  }
+  KSpreadTextEditor * cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
+
+  switch ( _ev->key() )
+  {
+    case Key_Down:
+    case Key_Up:
+    case Key_Return:
+    case Key_Enter:
+      cellEditor->setText( text());
+      // Don't allow to start a chooser when pressing the arrow keys
+      // in this widget, since only up and down would work anyway.
+      // This is why we call slotDoneEdit now, instead of sending
+      // to the canvas.
+      //QApplication::sendEvent( m_pCanvas, _ev );
+      slotDoneEdit();
+      m_pCanvas->view()->updateEditWidget();
+      _ev->accept();
+      break;
+    case Key_F2:
+      cellEditor->setFocus();
+      cellEditor->setText( text());
+      cellEditor->setCursorPosition(cursorPosition());
+      break;
+    default:
+
+      QLineEdit::keyPressEvent( _ev );
+
+      setFocus();
+      cellEditor->blockCheckChoose( TRUE );
+      cellEditor->setText( text() );
+      cellEditor->blockCheckChoose( FALSE );
+      cellEditor->setCursorPosition( cursorPosition() );
+  }
+}
+
+void KSpreadEditWidget::setEditMode( bool mode )
+{
+  m_pCancelButton->setEnabled(mode);
+  m_pOkButton->setEnabled(mode);
+}
+
+void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
+{
+  //kdDebug(36001) << "EditWidget lost focus" << endl;
+  // See comment about setLastEditorWithFocus
+  m_pCanvas->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
+
+  QLineEdit::focusOutEvent( ev );
+}
+
+void KSpreadEditWidget::setText( const QString& t )
+{
+  if ( t == text() ) // Why this? (David)
+    return;
+
+  QLineEdit::setText( t );
 }
 
 

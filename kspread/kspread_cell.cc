@@ -6087,7 +6087,9 @@ KSpreadCell::~KSpreadCell()
     }
 
     d->value = KSpreadValue::empty();
-    valueChanged ();
+    
+    if (!isDefault())
+      valueChanged ();  //our value has been changed (is now null), but only if we aren't default
 
     delete d;
 }

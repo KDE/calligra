@@ -1,14 +1,42 @@
+/* This file is part of the KDE project
+
+   Copyright 1999-2004 The KSpread Team <koffice-devel@mail.kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+
 #ifndef __kspread_editors_h__
 #define __kspread_editors_h__
 
 #include <kcompletion.h>
 #include <qwidget.h>
+#include <kcombobox.h>
+
 class KSpreadCell;
 class KSpreadCanvas;
+class KSpreadView;
+
+class KSpreadLocationEditWidget;
 
 
 class QFont;
+class QButton;
 class KLineEdit;
+
 class KSpreadCellEditor : public QWidget
 {
     Q_OBJECT
@@ -76,6 +104,71 @@ private:
     bool m_sizeUpdate;
     uint m_length;
     int  m_fontLength;
+};
+
+
+class KSpreadComboboxLocationEditWidget : public KComboBox
+{
+    Q_OBJECT
+public:
+    KSpreadComboboxLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
+
+public slots:
+    void slotAddAreaName( const QString & );
+    void slotRemoveAreaName( const QString & );
+
+private:
+    KSpreadLocationEditWidget *m_locationWidget;
+};
+
+
+ /**
+ * A widget that allows the user to enter an arbitrary
+ * cell location to goto or cell selection to highlight
+ */
+class KSpreadLocationEditWidget : public QLineEdit
+{
+	Q_OBJECT
+public:
+	KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
+	KSpreadView * view() const { return m_pView;}
+protected:
+	virtual void keyPressEvent( QKeyEvent * _ev );
+private:
+	KSpreadView * m_pView;
+signals:
+	void gotoLocation( int, int );
+};
+
+/**
+ * The widget that appears above the table and allows to
+ * edit the cells content.
+ */
+class KSpreadEditWidget : public QLineEdit
+{
+    Q_OBJECT
+public:
+    KSpreadEditWidget( QWidget *parent, KSpreadCanvas *canvas,
+                       QButton *cancelButton, QButton *okButton);
+
+    virtual void setText( const QString& t );
+
+    // Go into edit mode (enable the buttons)
+    void setEditMode( bool mode );
+
+    void showEditWidget(bool _show);
+public slots:
+    void slotAbortEdit();
+    void slotDoneEdit();
+
+protected:
+    virtual void keyPressEvent ( QKeyEvent* _ev );
+    virtual void focusOutEvent( QFocusEvent* ev );
+
+private:
+    QButton* m_pCancelButton;
+    QButton* m_pOkButton;
+    KSpreadCanvas* m_pCanvas;
 };
 
 

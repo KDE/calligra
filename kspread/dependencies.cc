@@ -469,7 +469,7 @@ void DependencyList::processDependencies (const RangeList &rangeList)
 void DependencyList::updateCell (const KSpreadPoint &cell) const
 {
   KSpreadCell *c = cell.cell();
-  
+
   //prevent infinite recursion (circular dependencies)
   if (c->testFlag (KSpreadCell::Flag_Progress))
   {
