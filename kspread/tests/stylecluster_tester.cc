@@ -44,7 +44,7 @@ StyleClusterTester::StyleClusterTester(KSpreadSheet *sheet): Tester()
 
 QString StyleClusterTester::name()
 {
-  return QString("Test Cell Styles");
+  return QString("Style Cluster");
 }
 
 void StyleClusterTester::check_value( const char *file, int line, const char* msg, void * result, 
