@@ -266,8 +266,9 @@
                 <stat import="none" export="twostars"/>
             </filter>
             <filter id="kspread_latex">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/latex"/>
                 <title xml:lang="en_us">LaTeX</title>
-                <stat import="none" export="planned"/>
+                <stat import="none" export="onestar"/>
             </filter>
             <filter id="kspread_quattro">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/qpro"/>
