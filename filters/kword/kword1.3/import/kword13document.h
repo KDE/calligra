@@ -24,6 +24,7 @@
 
 class QIODevice;
 class KTempFile;
+class KWord13Picture;
 
 #include <qstring.h>
 #include <qmap.h>
@@ -69,6 +70,7 @@ public:
     QPtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
     QPtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
     QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
+    QPtrList<KWord13Picture> m_pictureList; ///< List of all pictures
     KTempFile* m_previewFile;
 };
 

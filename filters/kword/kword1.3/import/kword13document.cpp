@@ -26,6 +26,7 @@
 
 #include "kword13utils.h"
 #include "kword13layout.h"
+#include "kword13picture.h"
 #include "kword13document.h"
 
 KWord13Document::KWord13Document( void ) : m_previewFile( 0 )
@@ -35,6 +36,7 @@ KWord13Document::KWord13Document( void ) : m_previewFile( 0 )
     m_otherFramesetList.setAutoDelete( true );
     m_headerFooterFramesetList.setAutoDelete( true );
     m_footEndNoteFramesetList.setAutoDelete( true );
+    m_pictureList.setAutoDelete( true );
 }
 
 KWord13Document::~KWord13Document( void )
