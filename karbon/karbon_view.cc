@@ -287,8 +287,8 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_canvas->setGeometry( space, space, width() - space, height() - space );
 	int xoff = m_canvas->contentsX() - m_canvas->pageOffsetX();
 	m_horizRuler->setOffset( xoff, 0 );
-	m_horizRuler->setFrameStartEnd( -m_canvas->pageOffsetX(), int( part()->document().width() * zoom() ) );
-	int yoff = -m_canvas->pageOffsetY() - m_canvas->contentsY();
+	m_horizRuler->setFrameStartEnd( 0, int( part()->document().width() * zoom() ) );
+	int yoff = -m_canvas->pageOffsetY() + m_canvas->contentsY();
 	m_vertRuler->setOffset( 0, yoff );
 	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoom() ) );
 	reorganizeGUI();
@@ -745,8 +745,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 
 	int xoff = m_canvas->contentsX() - m_canvas->pageOffsetX();
 	m_horizRuler->setOffset( xoff, 0 );
-	m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX()*/ - m_canvas->contentsX(), int( part()->document().width() * zoomFactor ) );
-	int yoff = -m_canvas->pageOffsetY() - m_canvas->contentsY();
+	m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX() - m_canvas->contentsX()*/ 0, int( part()->document().width() * zoomFactor ) );
+	int yoff = -m_canvas->pageOffsetY() + m_canvas->contentsY();
 	m_vertRuler->setOffset( 0, yoff );
 	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoomFactor ) );
 
@@ -1064,19 +1064,15 @@ KarbonView::pageLayout()
 void
 KarbonView::canvasContentsMoving( int x, int y )
 {
-kdDebug() << x << " ! " << y << endl;
 	if( m_canvas->horizontalScrollBar()->isVisible() )
 	{	
-		int xoff = -m_canvas->pageOffsetX() + m_canvas->contentsX() + x;
 		m_horizRuler->setOffset( x - m_canvas->pageOffsetX(), 0 );
-		m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX()*/ -x + m_canvas->pageOffsetX(), int( part()->document().width() * zoom() ) );
-		//m_horizRuler->setOffset( x - 20 + m_canvas->pageOffsetX(), 0 );
+		m_horizRuler->setFrameStartEnd( -x + m_canvas->pageOffsetX(), int( part()->document().width() * zoom() ) );
 	}
 	if( m_canvas->verticalScrollBar()->isVisible() )
 	{
 		m_vertRuler->setOffset( 0, y - m_canvas->pageOffsetY() );
-		m_vertRuler->setFrameStartEnd( /*m_canvas->pageOffsetX()*/ y - m_canvas->pageOffsetY(), int( part()->document().height() * zoom() ) );
-		//m_vertRuler->setOffset( 0, y - 20 + m_canvas->pageOffsetY() );
+		m_vertRuler->setFrameStartEnd( y - m_canvas->pageOffsetY(), int( part()->document().height() * zoom() ) );
 	}
 }
 
