@@ -218,12 +218,9 @@ QString Document::getFont(unsigned fc) const
     Q_ASSERT( m_parser );
     if ( !m_parser )
         return QString::null;
-    const wvWare::Word97::FFN* ffn = m_parser->font( fc );
-    Q_ASSERT( ffn );
-    if ( !ffn )
-        return QString::null;
+    const wvWare::Word97::FFN& ffn ( m_parser->font( fc ) );
 
-    QConstString fontName( reinterpret_cast<const QChar*>( ffn->xszFfn.data() ), ffn->xszFfn.length() );
+    QConstString fontName( reinterpret_cast<const QChar*>( ffn.xszFfn.data() ), ffn.xszFfn.length() );
     QString font = fontName.string();
 
 //#ifdef FONT_DEBUG
