@@ -177,44 +177,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
 
-  // Tab Bar Button
-  m_pTabBarFirst = new QPushButton(pRightSide);
-  m_pTabBarFirst->setPixmap(BarIcon("tab_first", KivioFactory::global()));
-  m_pTabBarFirst->setFixedSize(16,16);
-  connect( m_pTabBarFirst,
-           SIGNAL(clicked()),
-           m_pTabBar,
-           SLOT(scrollFirst()));
-
-  m_pTabBarLeft = new QPushButton(pRightSide);
-  m_pTabBarLeft->setPixmap(BarIcon("tab_left", KivioFactory::global()));
-  m_pTabBarLeft->setFixedSize(16,16);
-  connect( m_pTabBarLeft,
-           SIGNAL(clicked()),
-           m_pTabBar,
-           SLOT(scrollLeft()));
-
-  m_pTabBarRight = new QPushButton(pRightSide);
-  m_pTabBarRight->setPixmap(BarIcon("tab_right", KivioFactory::global()));
-  m_pTabBarRight->setFixedSize(16,16);
-  connect( m_pTabBarRight,
-           SIGNAL(clicked()),
-           m_pTabBar,
-           SLOT(scrollRight()));
-
-  m_pTabBarLast = new QPushButton(pRightSide);
-  m_pTabBarLast->setPixmap(BarIcon("tab_last", KivioFactory::global()));
-  m_pTabBarLast->setFixedSize(16,16);
-  connect( m_pTabBarLast,
-           SIGNAL(clicked()),
-           m_pTabBar,
-           SLOT(scrollLast()));
-
   QHBoxLayout* tabLayout = new QHBoxLayout();
-  tabLayout->addWidget(m_pTabBarFirst);
-  tabLayout->addWidget(m_pTabBarLeft);
-  tabLayout->addWidget(m_pTabBarRight);
-  tabLayout->addWidget(m_pTabBarLast);
   tabLayout->addWidget(tabSplit);
 
   // The widget on which we display the page

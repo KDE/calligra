@@ -272,10 +272,6 @@ class KivioView : public KoView
     void showZoom(int z);
   private:
     KivioCanvas *m_pCanvas;
-    QPushButton *m_pTabBarFirst;
-    QPushButton *m_pTabBarLeft;
-    QPushButton *m_pTabBarRight;
-    QPushButton *m_pTabBarLast;
     KoTabBar *m_pTabBar;
 
     KAction* m_paperLayout;
