@@ -64,7 +64,7 @@ KexiSubForm::setFormName(const QString &name)
                 return; // Be sure to don't run into a endless-loop cause of recursive subforms.
             list.append(pw->name());
         }
-        if(! parentformview && pw->isA("KexiFormView"))
+        else if(! parentformview && pw->isA("KexiFormView"))
             parentformview = pw; // we need a KexiFormView*
         pw = pw->parentWidget();
     }
