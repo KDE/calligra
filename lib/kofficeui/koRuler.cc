@@ -257,13 +257,18 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     // Draw the indents triangles
     if ( d->flags & F_INDENTS ) {
         int top = 2;
-        p.drawPixmap( qRound(applyRtlAndZoom(i_first) - d->pmFirst.width() * 0.5 +
-                                 static_cast<double>(r.left())), top, d->pmFirst );
+        double halfPixmapWidth = d->pmFirst.width() * 0.5;
+        // Cumulate i_first with correct indent
+        double firstLineIdent = i_first + ( d->rtl ? d->i_right : i_left );
+        p.drawPixmap( qRound( static_cast<double>(r.left()) + applyRtlAndZoom( firstLineIdent ) - halfPixmapWidth ),
+                      top, d->pmFirst );
+
         int bottom = height() - d->pmLeft.height() - 2;
-        p.drawPixmap( qRound(applyRtlAndZoom(i_left) - d->pmLeft.width() * 0.5 +
-                             static_cast<double>(r.left())), bottom, d->pmLeft );
-        p.drawPixmap( qRound(static_cast<double>(r.right()) - applyRtlAndZoom(d->i_right)
-                             - d->pmLeft.width() * 0.5 ), bottom, d->pmLeft );
+        halfPixmapWidth = d->pmLeft.width() * 0.5;
+        p.drawPixmap( qRound( static_cast<double>(r.left()) + zoomIt(i_left) - halfPixmapWidth ),
+                      bottom, d->pmLeft );
+        p.drawPixmap( qRound( static_cast<double>(r.right()) - zoomIt(d->i_right) - halfPixmapWidth ),
+                      bottom, d->pmLeft );
     }
 
     // Show the mouse position
@@ -559,10 +564,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         if ( d->canvas )
             drawLine(d->oldMx, -1);
         update();
-        double _tmp = i_first;
         emit newLeftIndent( i_left );
-        i_first = _tmp;
-        emit newFirstIndent( i_first );
     } else if ( d->action == A_RIGHT_INDENT ) {
         if ( d->canvas )
             drawLine(d->oldMx, -1);
@@ -613,9 +615,10 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int right = d->frameEnd - diffx;
     int bottom = qRound(zoomIt(layout.ptBottom));
     bottom = ph - bottom - diffy;
-    int ip_left = qRound(applyRtlAndZoom(i_left));
-    int ip_first = qRound(applyRtlAndZoom(i_first));
-    int ip_right = qRound(applyRtlAndZoom(d->i_right));
+    // Cumulate first-line-indent
+    double ip_first = qRound( zoomIt( i_first + ( d->rtl ? d->i_right : i_left) ) );
+    int ip_left = qRound(zoomIt(i_left));
+    int ip_right = qRound(zoomIt(d->i_right));
 
     int mx = e->x();
     mx = mx+diffx < 0 ? 0 : mx;
@@ -649,7 +652,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     }
                 }
                 if ( d->flags & F_INDENTS ) {
-                    if ( mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
+                    int firstX = d->rtl ? right - ip_first : left + ip_first;
+                    if ( mx > firstX - 5 && mx < firstX + 5 &&
                          my >= 2 && my <= d->pmFirst.size().height() + 2 ) {
                         setCursor( ArrowCursor );
                         d->action = A_FIRST_INDENT;
@@ -681,22 +685,24 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx < right-10 && mx+diffx-2 > 0) {
                             drawLine( d->oldMx, mx );
                             layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
+#if 0
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
                                 i_first=unZoomItRtl( ip_first );
                                 emit newFirstIndent( i_first );
                             }
+#endif
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
-                                i_left=unZoomItRtl( ip_left );
+                                i_left=unZoomIt( ip_left );
                                 emit newLeftIndent( i_left );
                             }
                             if ( ip_right > right-left-15 ) {
                                 ip_right=right-left-15;
                                 ip_right=ip_right<0? 0 : ip_right;
-                                d->i_right=unZoomItRtl( ip_right );
+                                d->i_right=unZoomIt( ip_right );
                                 emit newRightIndent( d->i_right );
                             }
                             d->oldMx = mx;
@@ -710,22 +716,24 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx > left+10 && mx+diffx <= pw-2) {
                             drawLine( d->oldMx, mx );
                             layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
+#if 0
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
                                 i_first=unZoomItRtl( ip_first );
                                 emit newFirstIndent( i_first );
                             }
+#endif
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
-                                i_left=unZoomItRtl( ip_left );
+                                i_left=unZoomIt( ip_left );
                                 emit newLeftIndent( i_left );
                             }
                             if ( ip_right > right-left-15 ) {
                                 ip_right=right-left-15;
                                 ip_right=ip_right<0? 0 : ip_right;
-                                d->i_right=unZoomItRtl( ip_right );
+                                d->i_right=unZoomIt( ip_right );
                                 emit newRightIndent( d->i_right );
                             }
                             d->oldMx = mx;
@@ -737,7 +745,10 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case A_FIRST_INDENT: {
                         if ( d->canvas ) {
-                            if (d->rtl) newValue = unZoomIt(pw) - newValue;
+                            if (d->rtl)
+                                newValue = unZoomIt(pw) - newValue - d->i_right;
+                            else
+                                newValue -= i_left;
                             if(newValue == i_first) break;
                             drawLine( d->oldMx, newPos);
                             d->oldMx=newPos;
@@ -747,13 +758,10 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case A_LEFT_INDENT: {
                         if ( d->canvas ) {
-                            if (d->rtl) newValue = unZoomIt(pw) - newValue;
+                            //if (d->rtl) newValue = unZoomIt(pw) - newValue;
                             if(newValue == i_left) break;
-                            double newFirst =(i_first - i_left) + newValue;
-                            if(zoomIt(newFirst) + left > right) break;
 
                             drawLine( d->oldMx, newPos);
-                            i_first = newFirst;
                             i_left = newValue;
                             d->oldMx = newPos;
                             update();
@@ -762,8 +770,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_RIGHT_INDENT: {
                         if ( d->canvas ) {
                             double rightValue = unZoomIt(right - newPos);
-                            if (d->rtl) rightValue = unZoomIt(pw) - rightValue;
+                            //if (d->rtl) rightValue = unZoomIt(pw) - rightValue;
                             if(rightValue == d->i_right) break;
+
                             drawLine( d->oldMx, newPos);
                             d->i_right=rightValue;
                             d->oldMx = newPos;

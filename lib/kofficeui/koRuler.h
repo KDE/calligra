@@ -157,6 +157,7 @@ public:
 
     /**
      * Set the [paragraph] first-line left indent to the specified position (in the current unit)
+     * This indent is cumulated with the left or right margin, depending on the [paragraph] direction.
      */
     void setFirstIndent( double _first )
     { i_first = makeIntern( _first ); update(); }
