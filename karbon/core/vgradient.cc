@@ -12,7 +12,7 @@ VGradient::VGradient( VGradientType type )
 }
 
 void
-VGradient::addStop( const VColor &color, float rampPoint )
+VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 {
 	VColorStop stop;
 	stop.color = color;
@@ -20,6 +20,10 @@ VGradient::addStop( const VColor &color, float rampPoint )
 	rampPoint = rampPoint < 0.0 ? 0.0 : rampPoint;
 	rampPoint = rampPoint > 1.0 ? 1.0 : rampPoint;
 	stop.rampPoint = rampPoint;
+	// Clamping between 0.0 and 1.0
+	midPoint = midPoint < 0.0 ? 0.0 : midPoint;
+	midPoint = midPoint > 1.0 ? 1.0 : midPoint;
+	stop.midPoint = midPoint;
 	m_colorStops.append( stop );
 }
 
@@ -42,6 +46,7 @@ VGradient::save( QDomElement& element ) const
 		QDomElement stop = element.ownerDocument().createElement( "COLORSTOP" );
 		(*itr).color.save( stop );
 		stop.setAttribute( "ramppoint", (*itr).rampPoint );
+		stop.setAttribute( "midpoint", (*itr).midPoint );
 		me.appendChild( stop );
 	}
 
@@ -73,6 +78,7 @@ VGradient::load( const QDomElement& element )
 				VColorStop stop;
 				stop.color.load( colorstop.firstChild().toElement() );
 				stop.rampPoint = colorstop.attribute( "ramppoint", "0.0" ).toDouble();
+				stop.midPoint = colorstop.attribute( "midpoint", "0.5" ).toDouble();
 				m_colorStops.append( stop );
 			}
 		}

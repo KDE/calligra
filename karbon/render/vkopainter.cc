@@ -578,15 +578,20 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 	offsets = colorStops.size();
 
 	QMemArray<ArtGradientStop> *stopArray = new QMemArray<ArtGradientStop>();
-	stopArray->resize( offsets );
+	stopArray->resize( offsets * 2 - 1 );
 
 	for( int offset = 0 ; offset < offsets ; offset++ )
 	{
-		(*stopArray)[ offset ].offset = colorStops[ offset ].rampPoint;
+		double ramp = colorStops[ offset ].rampPoint;
+		double mid  = colorStops[ offset ].midPoint;
+		(*stopArray)[ offset * 2 ].offset = ramp;
+		//kdDebug() << " (*stopArray)[ offset * 2 ].offset : " <<  (*stopArray)[ offset * 2 ].offset << endl;
 
 		QColor qStopColor = colorStops[ offset ].color.toQColor();
-		art_u32 stopColor = (qRed(qStopColor.rgb()) << 24) | (qGreen(qStopColor.rgb()) << 16) |
-							(qBlue(qStopColor.rgb()) << 8) | qAlpha(qStopColor.rgb());
+		int r = qRed( qStopColor.rgb() );
+		int g = qGreen( qStopColor.rgb() );
+		int b = qBlue( qStopColor.rgb() );
+		art_u32 stopColor = (r << 24) | (g << 16) | (b << 8) | qAlpha(qStopColor.rgb());
 
 		ArtPixMaxDepth color[ 4 ];
 		color[ 0 ] = ART_PIX_MAX_FROM_8( (stopColor >> 24) & 0xff );
@@ -594,12 +599,38 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		color[ 2 ] = ART_PIX_MAX_FROM_8( (stopColor >> 8) & 0xff );
 		color[ 3 ] = ART_PIX_MAX_FROM_8( (stopColor) & 0xff );
 
-		(*stopArray)[ offset ].color[ 0 ] = color[ 0 ];
-		(*stopArray)[ offset ].color[ 1 ] = color[ 1 ];
-		(*stopArray)[ offset ].color[ 2 ] = color[ 2 ];
-		(*stopArray)[ offset ].color[ 3 ] = color[ 3 ];
+		(*stopArray)[ offset * 2 ].color[ 0 ] = color[ 0 ];
+		(*stopArray)[ offset * 2 ].color[ 1 ] = color[ 1 ];
+		(*stopArray)[ offset * 2 ].color[ 2 ] = color[ 2 ];
+		(*stopArray)[ offset * 2 ].color[ 3 ] = color[ 3 ];
+
+		if( offset + 1 != offsets )
+		{
+			//kdDebug() << " colorStops[ offset ].midPoint : " <<  colorStops[ offset ].midPoint << endl;
+			//kdDebug() << " colorStops[ offset + 1 ].rampPoint : " <<  colorStops[ offset + 1 ].rampPoint << endl;
+			(*stopArray)[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ].rampPoint - ramp ) * colorStops[ offset ].midPoint;
+			//kdDebug() << "(*stopArray)[ offset * 2  ].offset : " << (*stopArray)[ offset * 2  ].offset << endl;
+			//kdDebug() << "(*stopArray)[ offset * 2 + 1 ].offset : " << (*stopArray)[ offset * 2 + 1 ].offset << endl;
+
+			QColor qStopColor2 = colorStops[ offset + 1 ].color.toQColor();
+			stopColor = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
+						int(g + ((qGreen(qStopColor2.rgb()) - g)) * 0.5) << 16 |
+						int(b + ((qBlue(qStopColor2.rgb()) - b)) * 0.5) << 8 |
+						qAlpha(qStopColor2.rgb());
+
+			color[ 0 ] = ART_PIX_MAX_FROM_8( (stopColor >> 24) & 0xff );
+			color[ 1 ] = ART_PIX_MAX_FROM_8( (stopColor >> 16) & 0xff );
+			color[ 2 ] = ART_PIX_MAX_FROM_8( (stopColor >> 8) & 0xff );
+			color[ 3 ] = ART_PIX_MAX_FROM_8( (stopColor) & 0xff );
+
+			(*stopArray)[ offset * 2 + 1 ].color[ 0 ] = color[ 0 ];
+			(*stopArray)[ offset * 2 + 1 ].color[ 1 ] = color[ 1 ];
+			(*stopArray)[ offset * 2 + 1 ].color[ 2 ] = color[ 2 ];
+			(*stopArray)[ offset * 2 + 1 ].color[ 3 ] = color[ 3 ];
+		}
 	}
 
+	offsets = offsets * 2 - 1;
 	return stopArray->data();
 }
 
