@@ -37,7 +37,7 @@ public:
     const QStringList& examples() { return m_examples; }
     const QStringList& syntax() { return m_syntax; }
     const QStringList& related() { return m_related; }
-    QString helpText() const { return m_help; }
+    const QStringList& helpText() const { return m_help; }
     QString name() const { return m_name; }
     KSpreadParameterType type() const { return m_type; }
     
@@ -54,7 +54,7 @@ private:
     QStringList m_examples;
     QStringList m_syntax;
     QStringList m_related;
-    QString m_help;
+    QStringList m_help;
     QString m_name;
     KSpreadParameterType m_type;
     QValueList<KSpreadFunctionParameter> m_params;

@@ -131,7 +131,7 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 		    {
 			QDomElement e2 = n2.toElement();
 			if ( e2.tagName() == "Text" )
-			    m_help = i18n( e2.text().utf8() );
+			    m_help.append ( i18n( e2.text().utf8() ) );
 			else if ( e2.tagName() == "Syntax" )
 			    m_syntax.append( i18n( e2.text().utf8() ) );
 			else if ( e2.tagName() == "Example" )
@@ -159,9 +159,21 @@ QString KSpreadFunctionDescription::toQML() const
 {
     QString text( "<qt><h1>" );
     text += name();
-    text += "</h1><p>";
-    text += helpText();
-    text += i18n("</p><p><b>Return type: </b>");
+    text += "</h1>";
+
+    if( !m_help.isEmpty() )
+    {
+	text += i18n("<p>");
+	QStringList::ConstIterator it = m_help.begin();
+	for( ; it != m_help.end(); ++it )
+	{
+	    text += *it;
+	    text += "<p>";
+	}
+	text += "</p>";
+    }
+
+    text += i18n("<p><b>Return type: </b>");
     text += toString( type() );
     text += "</p>";
 
