@@ -2289,10 +2289,18 @@ void KWView::borderSet()
     }
     if ( actionToolsEditFrames->isChecked() )
     {
-        gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
-        gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
-        gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
-        gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
+        if ( actionBorderLeft->isChecked() && actionBorderRight->isChecked()
+            && actionBorderBottom->isChecked() && actionBorderTop->isChecked())
+        {
+            gui->canvasWidget()->setOutlineFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+        }
+        else
+        {
+            gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+            gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
+            gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
+            gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
+        }
     }
     else
     {

@@ -1164,6 +1164,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
         return;
     QList<FrameBorderTypeStruct> tmpBorderList;
     QList<FrameIndex> frameindexList;
+    bool leftFrameBorderChanged=false;
 
     if (!_b)
         _frmBrd.ptWidth=0;
@@ -1184,15 +1185,26 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
         if (_b)
         {
             if (_frmBrd!=frame->getLeftBorder())
+            {
+                leftFrameBorderChanged=true;
                 frame->setLeftBorder(_frmBrd);
+            }
         }
         else
-            frame->setLeftBorder(_frmBrd);
+        {
+            if(frame->getLeftBorder().ptWidth!=0)
+            {
+                leftFrameBorderChanged=true;
+                frame->setLeftBorder(_frmBrd);
+            }
+        }
     }
-
-    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
-    doc->addCommand(cmd);
-    doc->repaintAllViews();
+    if(leftFrameBorderChanged)
+    {
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        doc->addCommand(cmd);
+        doc->repaintAllViews();
+    }
 }
 
 /*================================================================*/
@@ -1203,6 +1215,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
         return;
     QList<FrameBorderTypeStruct> tmpBorderList;
     QList<FrameIndex> frameindexList;
+    bool rightFrameBorderChanged=false;
     KWFrame *frame=0L;
     if (!_b)
         _frmBrd.ptWidth=0;
@@ -1222,15 +1235,26 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
         if (_b)
         {
             if (_frmBrd!=frame->getRightBorder())
+            {
+                rightFrameBorderChanged=true;
                 frame->setRightBorder(_frmBrd);
+            }
         }
         else
-            frame->setRightBorder(_frmBrd);
+        {
+            if(frame->getRightBorder().ptWidth!=0)
+            {
+                frame->setRightBorder(_frmBrd);
+                rightFrameBorderChanged=true;
+            }
+        }
     }
-
-    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
-    doc->addCommand(cmd);
-    doc->repaintAllViews();
+    if( rightFrameBorderChanged)
+    {
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        doc->addCommand(cmd);
+        doc->repaintAllViews();
+    }
 }
 
 /*================================================================*/
@@ -1242,6 +1266,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
 
     QList<FrameBorderTypeStruct> tmpBorderList;
     QList<FrameIndex> frameindexList;
+    bool topFrameBorderChanged=false;
 
     KWFrame *frame=0L;
     if (!_b)
@@ -1260,14 +1285,26 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         if (_b)
         {
             if (_frmBrd!=frame->getTopBorder())
+            {
+                topFrameBorderChanged=true;
                 frame->setTopBorder(_frmBrd);
+            }
         }
         else
-            frame->setTopBorder(_frmBrd);
+        {
+            if(frame->getTopBorder().ptWidth!=0)
+            {
+                topFrameBorderChanged=true;
+                frame->setTopBorder(_frmBrd);
+            }
+        }
     }
-    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
-    doc->addCommand(cmd);
-    doc->repaintAllViews();
+    if(topFrameBorderChanged)
+    {
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        doc->addCommand(cmd);
+        doc->repaintAllViews();
+    }
 }
 
 /*================================================================*/
@@ -1276,7 +1313,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
-
+    bool bottomFrameBorderChanged=false;
     QList<FrameBorderTypeStruct> tmpBorderList;
     QList<FrameIndex> frameindexList;
     KWFrame *frame=0L;
@@ -1297,15 +1334,26 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
         if (_b)
         {
             if (_frmBrd!=frame->getBottomBorder())
+            {
+                bottomFrameBorderChanged=true;
                 frame->setBottomBorder(_frmBrd);
+            }
         }
         else
-            frame->setBottomBorder(_frmBrd);
+        {
+            if(frame->getBottomBorder().ptWidth!=0)
+            {
+                bottomFrameBorderChanged=true;
+                frame->setBottomBorder(_frmBrd);
+            }
+        }
     }
-
-    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
-    doc->addCommand(cmd);
-    doc->repaintAllViews();
+    if(bottomFrameBorderChanged)
+    {
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        doc->addCommand(cmd);
+        doc->repaintAllViews();
+    }
 }
 
 /*================================================================*/
