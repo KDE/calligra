@@ -128,7 +128,7 @@ public:
     virtual int lineSpacing( int line ) const;
 
     /** @return the parag rect, in pixels. This takes care of some rounding problems */
-    QRect pixelRect() const;
+    QRect pixelRect( KoZoomHandler* zh ) const;
 
 protected:
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,

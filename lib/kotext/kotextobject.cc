@@ -34,7 +34,7 @@ KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
-    textdoc = new KoTextDocument( zh, 0, new KoTextFormatCollection( defaultFont ) );
+    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont ) );
     init();
 }
 
@@ -81,14 +81,14 @@ int KoTextObject::availableHeight() const
 int KoTextObject::docFontSize( QTextFormat * format ) const
 {
     Q_ASSERT( format );
-    return static_cast<int>( textdoc->zoomHandler()->layoutUnitToPt( format->font().pointSize() ) );
+    return static_cast<int>( KoTextZoomHandler::layoutUnitToPt( format->font().pointSize() ) );
 }
 
 int KoTextObject::zoomedFontSize( int docFontSize ) const
 {
     kdDebug() << "KoTextObject::zoomedFontSize: docFontSize=" << docFontSize
-              << " - in LU: " << textdoc->zoomHandler()->ptToLayoutUnit( docFontSize ) << endl;
-    return textdoc->zoomHandler()->ptToLayoutUnit( docFontSize );
+              << " - in LU: " << KoTextZoomHandler::ptToLayoutUnit( docFontSize ) << endl;
+    return KoTextZoomHandler::ptToLayoutUnit( docFontSize );
 }
 
 void KoTextObject::slotAfterUndoRedo()

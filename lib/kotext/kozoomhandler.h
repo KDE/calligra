@@ -23,16 +23,56 @@
 #include <koRect.h>
 
 /**
- * This class handles the zooming and DPI stuff (conversions between pt values and pixels).
- * It is now separate from KWDocument so that it's possible to create paragraphs
- * without a KWDocument (for instance, for the previews), and in case another KOffice
- * app wants to reuse this class.
+ * A KoTextZoomHandler converts between an internal text layout resolution of
+ * 1440 DPI (by default) and the point-size for the fonts (those known by the user).
+ * This conversion doesn't depend on the zoom level. Anything depending on the zoom
+ * is handled by KoZoomHandler.
+ * Not a real class, it only has static methods, since it has no data.
  */
-class KoZoomHandler
+class KoTextZoomHandler
+{
+public:
+    KoTextZoomHandler() {}
+    virtual ~KoTextZoomHandler() {}
+
+    /** Change the factor that converts between pointsizes
+     * and layout units (by default 20 - for 1440 DPI at 72 DPI) */
+    static void setPtToLayoutUnitFactor( int factor ) { m_layoutUnitFactor = factor; }
+
+    /** Not zoom dependent. Simply convert a pt value (e.g. a frame)
+     * to high-resolution layout unit coordinates. */
+    static int ptToLayoutUnit( double pt )
+                   // is qRound needed ?
+    { return static_cast<int>( pt * static_cast<double>( m_layoutUnitFactor ) ); }
+
+    static QPoint ptToLayoutUnit( const KoPoint &p )
+    { return QPoint( ptToLayoutUnit( p.x() ),
+                     ptToLayoutUnit( p.y() ) ); }
+    static QRect ptToLayoutUnit( const KoRect &r )
+    { return QRect( ptToLayoutUnit( r.topLeft() ),
+                    ptToLayoutUnit( r.bottomRight() ) ); }
+
+    static double layoutUnitToPt( int lu )
+    { return static_cast<double>( lu ) / static_cast<double>( m_layoutUnitFactor ); }
+    static KoPoint layoutUnitToPt( const QPoint& p )
+    { return KoPoint( layoutUnitToPt( p.x() ),
+                      layoutUnitToPt( p.y() ) ); }
+
+protected:
+    /** This being static ensures that the same value is used by all KoZoomHandler instances */
+    static int m_layoutUnitFactor;
+};
+
+/**
+ * This class handles the zooming and DPI stuff (conversions between pt values and pixels).
+ * An instance of KoZoomHandler operates at a given zoom (see @ref setZoomAndResolution)
+ * so there is usually one instance of KoZoomHandler per view.
+ */
+class KoZoomHandler : public KoTextZoomHandler
 {
 public:
     KoZoomHandler();
-    virtual ~KoZoomHandler();
+    virtual ~KoZoomHandler() {}
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -89,28 +129,6 @@ public:
 
     //// Support for WYSIWYG text layouting /////
 
-    // TODO blah blah about layout units
-    void setPtToLayoutUnitFactor( int factor );
-
-    // Not zoom dependent. Simply convert a pt value (e.g. a frame)
-    // to high-resolution layout unit coordinates.
-    int ptToLayoutUnit( double pt ) const
-                   // is qRound needed ?
-    { return static_cast<int>( pt * static_cast<double>( m_layoutUnitFactor ) ); }
-    QPoint ptToLayoutUnit( const KoPoint &p ) const
-    { return QPoint( ptToLayoutUnit( p.x() ),
-                     ptToLayoutUnit( p.y() ) ); }
-    QRect ptToLayoutUnit( const KoRect &r ) const
-    { return QRect( ptToLayoutUnit( r.topLeft() ),
-                    ptToLayoutUnit( r.bottomRight() ) ); }
-
-    double layoutUnitToPt( int lu ) const
-    { return static_cast<double>( lu ) / static_cast<double>( m_layoutUnitFactor ); }
-    KoPoint layoutUnitToPt( const QPoint& p ) const
-    { return KoPoint( layoutUnitToPt( p.x() ),
-                     layoutUnitToPt( p.y() ) ); }
-
-    // Zoom dependent
     int pixelToLayoutUnitX( int x ) const
     { return ptToLayoutUnit( unzoomItX( x ) ); }
     int pixelToLayoutUnitY( int y ) const
@@ -138,25 +156,18 @@ public:
     { return QRect( layoutUnitToPixel( r.topLeft() ),
                     layoutUnitToPixel( r.bottomRight() ) ); }
 
-#if 0 // we don't need this
-    /**
-     * Given a font size in points (for the current zoom),
-     * this returns the font size for the font in layout units, in pt (use setPointSize())
-     */
-    int fontSizeToLayoutUnit( double ptSizeFloat, bool forPrint ) const;
-#endif
     /**
      * Given the font size for the font in layout units, in pt (use pointSize())
      * this returns the font size to use on screen the current zoom, in pt (use setPointSizeFloat()),
      */
     double layoutUnitToFontSize( int luSize, bool /*forPrint*/ ) const;
 
-    // For converting fontsizes from/to layout units and zoom-independent pt sizes (like the one the user sees, e.g. 12pt)
-    // use ptToLayoutUnit and layoutUnitToPt
+    // Note: For converting fontsizes from/to layout units and zoom-independent
+    // pt sizes (like the one the user sees, e.g. 12pt),
+    // use ptToLayoutUnit and layoutUnitToPt, not layoutToFontSize.
 
 protected:
     int m_zoom;
-    int m_layoutUnitFactor;
     double m_resolutionX;
     double m_resolutionY;
     double m_zoomedResolutionX;

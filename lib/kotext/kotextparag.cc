@@ -175,6 +175,7 @@ int KoTextParag::counterWidth() const
 }
 
 // Draw the counter/bullet for a paragraph
+// This is called by QTextParag::paint.
 void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
@@ -198,7 +199,8 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         textColor = KoTextFormat::defaultTextColor( p );
     p->setPen( QPen( textColor ) );
 
-    KoZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    assert( zh );
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
     p->setFont( format->screenFont( zh ) );
 
@@ -273,43 +275,43 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
 int KoTextParag::topMargin() const
 {
-    KoZoomHandler * zh = textDocument()->zoomHandler();
-    return zh->ptToLayoutUnit( m_layout.margins[ QStyleSheetItem::MarginTop ] )
-        + KoBorder::zoomWidthY( m_layout.topBorder.ptWidth, zh, 0 );
+    return KoTextZoomHandler::ptToLayoutUnit(
+        m_layout.margins[ QStyleSheetItem::MarginTop ]
+        + m_layout.topBorder.ptWidth );
 }
 
 int KoTextParag::bottomMargin() const
 {
-    KoZoomHandler * zh = textDocument()->zoomHandler();
-    return zh->ptToLayoutUnit( m_layout.margins[ QStyleSheetItem::MarginBottom ] )
-        + KoBorder::zoomWidthY( m_layout.bottomBorder.ptWidth, zh, 0 );
+    return KoTextZoomHandler::ptToLayoutUnit(
+        m_layout.margins[ QStyleSheetItem::MarginBottom ]
+        + m_layout.bottomBorder.ptWidth );
 }
 
 int KoTextParag::leftMargin() const
 {
-    KoZoomHandler * zh = textDocument()->zoomHandler();
-    return zh->ptToLayoutUnit( m_layout.margins[ QStyleSheetItem::MarginLeft ] )
-        + KoBorder::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 )
+    return KoTextZoomHandler::ptToLayoutUnit(
+        m_layout.margins[ QStyleSheetItem::MarginLeft ]
+        + m_layout.leftBorder.ptWidth )
         + counterWidth() /* in layout units already */;
 }
 
 int KoTextParag::rightMargin() const
 {
-    KoZoomHandler * zh = textDocument()->zoomHandler();
-    return zh->ptToLayoutUnit( m_layout.margins[ QStyleSheetItem::MarginRight ] )
-        + KoBorder::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 );
+    return KoTextZoomHandler::ptToLayoutUnit(
+        m_layout.margins[ QStyleSheetItem::MarginRight ]
+        + m_layout.rightBorder.ptWidth );
 }
 
 int KoTextParag::firstLineMargin() const
 {
-    return textDocument()->zoomHandler()->ptToLayoutUnit(
+    return KoTextZoomHandler::ptToLayoutUnit(
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
 int KoTextParag::lineSpacing( int line ) const
 {
     if ( m_layout.lineSpacing >= 0 )
-        return textDocument()->zoomHandler()->ptToLayoutUnit(
+        return KoTextZoomHandler::ptToLayoutUnit(
             m_layout.lineSpacing );
     else {
         KoTextParag * that = const_cast<KoTextParag *>(this);
@@ -339,9 +341,8 @@ int KoTextParag::lineSpacing( int line ) const
     return 0;
 }
 
-QRect KoTextParag::pixelRect() const
+QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 {
-    KoZoomHandler * zh = textDocument()->zoomHandler();
     QRect rect( zh->layoutUnitToPixel( rect() ) );
     // After division we almost always end up with the top overwriting the bottom of the parag above
     if ( prev() )
@@ -362,8 +363,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
                          int clipx, int clipy, int clipw, int cliph )
 {
     //kdDebug() << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
-    //kdDebug() << " clipw in pix (approx) : " << textDocument()->zoomHandler()->layoutUnitToPixelX( clipw ) << endl;
-    //kdDebug() << " cliph in pix (approx) : " << textDocument()->zoomHandler()->layoutUnitToPixelX( cliph ) << endl;
+    //kdDebug() << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << endl;
+    //kdDebug() << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
 #if 1
     // We force the alignment to justify during drawing, so that drawParagString is called
     // for at most one word at a time, never more. This allows to make the spaces slightly
@@ -381,7 +382,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     // Now draw paragraph border
     if ( m_layout.hasBorder() )
     {
-        KoZoomHandler * zh = textDocument()->zoomHandler();
+        KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+        assert(zh);
 
         QRect r;
         // Old solution: stick to the text
@@ -413,7 +415,8 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
     KoTextFormat* lastFormat=static_cast<KoTextFormat *>(_lastFormat);
-    KoZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    assert(zh);
 
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
 
@@ -568,7 +571,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 // Reimplemented from QTextParag
 void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
 {
-    KoZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
     //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
     QTextParag::drawCursor( painter, cursor, x,
@@ -582,12 +585,11 @@ void KoTextParag::setTabList( const KoTabulatorList &tabList )
     m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
-        KoZoomHandler * zh = textDocument()->zoomHandler();
         int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
         KoTabulatorList::Iterator it = lst.begin();
         unsigned int i = 0;
         for ( ; it != lst.end() ; ++it, ++i )
-            tabs[i] = zh->ptToLayoutUnit( (*it).ptPos );
+            tabs[i] = KoTextZoomHandler::ptToLayoutUnit( (*it).ptPos );
         tabs[i] = 0;
         assert( i == tabList.count() );
         setTabArray( tabs );

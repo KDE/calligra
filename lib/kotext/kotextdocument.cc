@@ -25,9 +25,11 @@
 #include <kdebug.h>
 #include <kcommand.h>
 
-KoTextDocument::KoTextDocument( KoZoomHandler * zoomHandler, QTextDocument *p,
-                                KoTextFormatCollection *fc, KoTextFormatter *formatter, bool createInitialParag )
-    : QTextDocument( p, fc ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
+KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollection *fc,
+                                KoTextFormatter *formatter, bool createInitialParag )
+    : QTextDocument( 0L /*we don't use parent documents */, fc ),
+      m_zoomHandler( zoomHandler ),
+      m_bDestroying( false )
 {
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
     if ( !formatter )
@@ -133,7 +135,8 @@ QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
     return ko_buf_pixmap;
 }
 
-void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg, const QBrush *paper )
+void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
+                                              KoZoomHandler* zoomHandler, const QBrush *paper )
 {
     if ( !firstParag() )
 	return;
@@ -149,7 +152,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	if ( !parag->isValid() )
 	    parag->format();
 
-	QRect pr( static_cast<KoTextParag *>(parag)->pixelRect() );
+	QRect pr( static_cast<KoTextParag *>(parag)->pixelRect( zoomHandler ) );
         pr.setLeft( 0 );
         pr.setWidth( QWIDGETSIZE_MAX );
 
@@ -168,7 +171,8 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 
 void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
-                                       bool drawCursor, QTextCursor *cursor, bool resetChanged )
+                                       KoZoomHandler* zoomHandler, bool drawCursor,
+                                       QTextCursor *cursor, bool resetChanged )
 {
 #ifdef DEBUG_PAINTING
     kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
@@ -176,7 +180,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     QPainter *painter = 0;
     if ( resetChanged )
 	parag->setChanged( FALSE );
-    QRect rect = static_cast<KoTextParag *>(parag)->pixelRect();
+    QRect rect = static_cast<KoTextParag *>(parag)->pixelRect( zoomHandler );
     QRect ir( rect );
     QRect crect( cx, cy, cw, ch ); // in pixels
 
@@ -223,10 +227,10 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     } else {
 	if ( cursor && cursor->parag() == parag ) {
 	    if ( !parag->backgroundColor() )
-		painter->fillRect( QRect( m_zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
+		painter->fillRect( QRect( zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
 				   cg.brush( QColorGroup::Base ) );
 	    else
-		painter->fillRect( QRect( m_zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
+		painter->fillRect( QRect( zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
 				   *parag->backgroundColor() );
 	}
     }
@@ -238,7 +242,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
     // The cliprect is checked in layout units, in QTextParag::paint
-    QRect crect_lu( m_zoomHandler->pixelToLayoutUnit( crect ) );
+    QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
 #ifdef DEBUG_PAINTING
     kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
 #endif
@@ -269,7 +273,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
         //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
     }
 
-    int docright = m_zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
+    int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
     if ( rect.x() + rect.width() < docright ) {
 	p->fillRect( rect.x() + rect.width(), rect.y(),
 		     docright - ( rect.x() + rect.width() ),
@@ -280,12 +284,14 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 }
 
 Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-				 bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
+                                              KoZoomHandler* zoomHandler, bool onlyChanged,
+                                              bool drawCursor, QTextCursor *cursor,
+                                              bool resetChanged )
 {
     if ( isWithoutDoubleBuffer() /* || par && par->withoutDoubleBuffer */ ) {
 	//setWithoutDoubleBuffer( TRUE );
 	QRect crect( cx, cy, cw, ch );
-	drawWithoutDoubleBuffer( p, crect, cg );
+	drawWithoutDoubleBuffer( p, crect, cg, zoomHandler );
 	return 0;
     }
     setWithoutDoubleBuffer( FALSE );
@@ -311,10 +317,10 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
     //kdDebug() << "KoTextDocument::drawWYSIWYG crect=" << DEBUGRECT(crect) << endl;
 
     // Space above first parag
-    QRect pixelRect = parag->pixelRect();
+    QRect pixelRect = parag->pixelRect( zoomHandler );
     if ( isPageBreakEnabled() && parag && cy <= pixelRect.y() && pixelRect.y() > 0 ) {
         QRect r( 0, 0,
-                 m_zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
+                 zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
                  pixelRect.y() );
         r &= crect;
         if ( !r.isEmpty() )
@@ -326,14 +332,14 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 	if ( !parag->isValid() )
 	    parag->format();
 
-	QRect ir = parag->pixelRect();
+	QRect ir = parag->pixelRect( zoomHandler );
         //kdDebug() << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
 	if ( isPageBreakEnabled() && parag->next() )
         {
-            int nexty = static_cast<KoTextParag *>(parag->next())->pixelRect().y();
+            int nexty = static_cast<KoTextParag *>(parag->next())->pixelRect(zoomHandler).y();
 	    if ( ir.y() + ir.height() < nexty ) {
 		QRect r( 0, ir.y() + ir.height(),
-			 m_zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
+			 zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
 			 nexty - ( ir.y() + ir.height() ) );
 		r &= crect;
 		if ( !r.isEmpty() )
@@ -341,7 +347,7 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 	    }
         }
 	if ( !ir.intersects( crect ) ) {
-	    ir.setWidth( m_zoomHandler->layoutUnitToPixelX( parag->document()->width() ) );
+	    ir.setWidth( zoomHandler->layoutUnitToPixelX( parag->document()->width() ) );
 	    if ( ir.intersects( crect ) )
 		p->fillRect( ir.intersect( crect ), cg.brush( QColorGroup::Base ) );
 	    if ( ir.y() > cy + ch ) {
@@ -354,17 +360,18 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 	    }
 	}
         else if ( parag->hasChanged() || !onlyChanged ) {
-            drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg, drawCursor, cursor, resetChanged );
+            drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg,
+                              zoomHandler, drawCursor, cursor, resetChanged );
         }
 
 	parag = static_cast<KoTextParag *>( parag->next() );
     }
 
     parag = static_cast<KoTextParag *>( lastParag() );
-    pixelRect = parag->pixelRect();
-    int docheight = m_zoomHandler->layoutUnitToPixelY( parag->document()->height() );
+    pixelRect = parag->pixelRect(zoomHandler);
+    int docheight = zoomHandler->layoutUnitToPixelY( parag->document()->height() );
     if ( pixelRect.y() + pixelRect.height() < docheight ) {
-        int docwidth = m_zoomHandler->layoutUnitToPixelX( parag->document()->width() );
+        int docwidth = zoomHandler->layoutUnitToPixelX( parag->document()->width() );
 	p->fillRect( 0, pixelRect.y() + pixelRect.height(),
                      docwidth, docheight - ( pixelRect.y() + pixelRect.height() ),
 		     cg.brush( QColorGroup::Base ) );
@@ -405,7 +412,7 @@ QTextFormat * KoTextCustomItem::format() const
 
 void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
-    KoZoomHandler *zh=textDocument()->zoomHandler();
+    KoZoomHandler *zh=textDocument()->paintingZoomHandler();
     //kdDebug()<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     x=zh->layoutUnitToPixelX(x) + paragraph()->at( index() )->pixelxadj;

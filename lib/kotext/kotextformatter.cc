@@ -80,7 +80,7 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
     int ww = 0; // width in layout units
 
     KoTextDocument *textdoc = static_cast<KoTextDocument *>(doc);
-    KoZoomHandler *zh = textdoc->zoomHandler();
+    KoZoomHandler *zh = textdoc->formattingZoomHandler();
     int pixelww = 0; // width in pixels
     int pixelx = zh->layoutUnitToPixelX( x );
 

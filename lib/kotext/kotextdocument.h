@@ -35,8 +35,11 @@ class KoTextDocument : public QTextDocument
     Q_OBJECT
 public:
     /**
+     * Construct a text document, i.e. a set of paragraphs
+     *
      * @param zoomHandler The KoZoomHandler instance, to handle the zooming, as the name says :)
-     * @param p don't mind p (we don't use parent documents). Pass 0L.
+     * We need one here because KoTextFormatter needs one for formatting, currently.
+     *
      * @param fc a format collection for this document. Ownership is transferred to the document.
      * @param formatter a text formatter for this document. If 0L, a KoTextFormatter is created.
      *  If not, ownership of the given one is transferred to the document.
@@ -44,7 +47,7 @@ public:
      *  since the constructor can't call the reimplementation. In that case, make sure to call
      *  clear(true) in your constructor; QRT doesn't support documents without paragraphs.
      */
-    KoTextDocument( KoZoomHandler *zoomHandler, QTextDocument *p,
+    KoTextDocument( KoZoomHandler *zoomHandler,
                     KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L,
                     bool createInitialParag = true );
 
@@ -53,8 +56,19 @@ public:
     /** Factory method for paragraphs */
     virtual Qt3::QTextParag * createParag( QTextDocument *d, Qt3::QTextParag *pr = 0, Qt3::QTextParag *nx = 0, bool updateIds = TRUE );
 
-    /** Return the zoom handler associated with this document. */
-    KoZoomHandler * zoomHandler() const { return m_zoomHandler; }
+    /** Return the zoom handler associated with this document,
+     * used when formatting. Don't use for any other purpose, it might disappear. */
+    KoZoomHandler * formattingZoomHandler() const { return m_zoomHandler; }
+
+    /**
+     * Return the zoom handler currently used for drawing.
+     * (This means, at a particular zoom level).
+     * Don't call this in a method that isn't called by drawWYSIWYG, it will be 0L !
+     * (a different one than zoomHandler(), in case it disappears one day,
+     * to have different zoom levels in different views)
+     */
+    KoZoomHandler * paintingZoomHandler() const { return m_zoomHandler; }
+
 
     /** Visit all the parts of a selection.
      * Returns true, unless canceled. See KoParagVisitor. */
@@ -74,20 +88,26 @@ public:
     /** The main drawing method. Equivalent to QTextDocument::draw, but reimplemented
      * for wysiwyg */
     Qt3::QTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-		      bool onlyChanged = FALSE, bool drawCursor = FALSE, QTextCursor *cursor = 0,
-		      bool resetChanged = TRUE );
+                                  KoZoomHandler* zoomHandler, bool onlyChanged = FALSE,
+                                  bool drawCursor = FALSE, QTextCursor *cursor = 0,
+                                  bool resetChanged = TRUE );
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
-     * Equivalent to QTextDocument::draw, but reimplemented for wysiwyg */
+     * Equivalent to QTextDocument::draw, but modified for wysiwyg */
     void drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
-		    QPixmap *&doubleBuffer, const QColorGroup &cg,
-		    bool drawCursor, QTextCursor *cursor, bool resetChanged = TRUE );
+                           QPixmap *&doubleBuffer, const QColorGroup &cg,
+                           KoZoomHandler* zoomHandler,
+                           bool drawCursor, QTextCursor *cursor,
+                           bool resetChanged = TRUE );
 
 protected:
-    void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg, const QBrush *paper = 0 );
-    KoZoomHandler * m_zoomHandler;
+    void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
+                                  KoZoomHandler* zoomHandler, const QBrush *paper = 0 );
 
 private:
+    // The zoom handler used when formatting
+    // (due to the pixelx/pixelww stuff in KoTextFormatter)
+    KoZoomHandler * m_zoomHandler;
     QPixmap *bufferPixmap( const QSize &s );
     bool m_bDestroying;
     QPixmap *ko_buf_pixmap;

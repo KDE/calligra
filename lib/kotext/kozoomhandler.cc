@@ -22,16 +22,15 @@
 #include <qpaintdevice.h>
 #include <koGlobal.h>
 
+// Layout text at 1440 DPI
+// Maybe this should depend on the value of x11AppDpiY, so that it's really
+// always the same ?
+int KoTextZoomHandler::m_layoutUnitFactor = 20;
+
 KoZoomHandler::KoZoomHandler()
 {
-    // Layout text at 1440 DPI
-    m_layoutUnitFactor = 20;
     // Note that this calls the method below, not the derived one
     setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
-}
-
-KoZoomHandler::~KoZoomHandler()
-{
 }
 
 void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bool )
@@ -47,11 +46,6 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bo
                    << " m_zoomedResolutionX=" << m_zoomedResolutionX
                    << " m_resolutionY=" << m_resolutionY
                    << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
-}
-
-void KoZoomHandler::setPtToLayoutUnitFactor( int factor )
-{
-    m_layoutUnitFactor = factor;
 }
 
 #if 0
