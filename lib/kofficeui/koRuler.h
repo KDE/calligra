@@ -72,7 +72,6 @@ class KoRulerPrivate;
 class KoRuler : public QFrame
 {
     Q_OBJECT
-    friend class KoRulerPrivate;
 
 public:
     static const int F_TABS = 1;
@@ -147,6 +146,8 @@ protected:
     unsigned int unZoomIt(const unsigned int &value) const;
     void setupMenu();
     void uncheckMenu();
+    void searchTab(int mx);
+    void drawLine(int oldX, int newX);
 
     KoRulerPrivate *d;
 
