@@ -330,8 +330,8 @@ public:
                                   KoView *view = 0L, double zoomX = 1.0, double zoomY = 1.0 );
 
     /**
-     * Generates a preview picture of the document
-     * (to be used in the File Dialog).
+     * @brief Generates a preview picture of the document
+     * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
     virtual QPixmap generatePreview( const QSize& size );
 
