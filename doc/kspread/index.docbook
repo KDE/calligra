@@ -145,14 +145,13 @@ remember that this is a very small example of a spreadsheet, doing simple
 calculations on only a few numbers. For any reasonably sized table of values
 using a spreadsheet to do the calculations is much quicker and more accurate 
 than doing them manually.</para>
-<para>Also, a spreadsheet lets you play the <quote>What if ?</quote> game.
+<para>Also, a spreadsheet lets you play the <quote>What if?</quote> game.
 Because each formula is automatically recalculated whenever any of the values
-it refers to are changed you can quickly see what happens if you alter any of
+it refers to are changed, you can quickly see what happens if you alter any of
 them. Using our example you can see the effect of reducing the amount spent on
 food in December by just entering a new value into cell C2. Or if you had a
 spreadsheet that modelled the greenhouse effect accurately you could perhaps
-see the effect of a 50 percent reduction in the amount of hot air emitted by
-the world's leading politicians. </para>
+see the effect of a 50 percent reduction in the amount of methane. </para>
 </sect1>
 
 <sect1 id="selecting">
