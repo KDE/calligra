@@ -22,7 +22,7 @@
 
 #include <koView.h>
 #include "maindlg2.h"
-#include "clstbldesigner.h"
+#include "clstbldesigner2.h"
 
 class KAction;
 class QPaintEvent;
