@@ -201,6 +201,10 @@ public:
 		m_matrix *= mat;
 	}
 
+
+	void loadSvgPath( const QString & );
+	void saveSvgPath( QString & ) const;
+
 protected:
 	void writeTransform( QDomElement & ) const;
 
@@ -209,9 +213,6 @@ protected:
 	virtual void svgLineTo( double x1, double y1, bool abs = true );
 	virtual void svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool abs = true );
 	virtual void svgClosePath();
-
-	void loadSvgPath( const QString & );
-	void saveSvgPath( QString & ) const;
 
 protected:
 	QWMatrix m_matrix;
