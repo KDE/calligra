@@ -2,7 +2,7 @@ INCLUDES  = -I$(srcdir)/widgets -I$(srcdir)/dialogs -I$(srcdir)/tools $(MICO_INC
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO) widgets/libkiswidgets.la dialogs/libkisdialogs.la tools/libkistools.la
 
-SUBDIRS   = widgets dialogs tools . pics data
+SUBDIRS   = widgets dialogs tools . pics data ktl
 
 ####### Files
 
