@@ -24,4 +24,4 @@ icondir = $(kde_datadir)/kexi/icons
 EXTRA_DIST = $(icon_ICON)
 
 
-KDE_ICON = kexi kexiproject_sqlite kexiproject_shortcut
+KDE_ICON = kexi kexiproject_sqlite kexiproject_sqlite2 kexiproject_shortcut
