@@ -57,14 +57,19 @@ void KPSlidePreview::setPage( QListViewItem *item )
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
     view->getPage()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0 ).height(), i );
 
-    double faktW = static_cast<double>( width() ) / static_cast<double>( doc->getPageRect( 0, 0, 0 ).width() );
-    double faktH = static_cast<double>( height() ) / static_cast<double>( doc->getPageRect( 0, 0, 0 ).height() );
-    double fakt = QMIN( faktW, faktH ) - 0.05;
+    int w = doc->getPageRect( 0, 0, 0 ).width();
+    int h = doc->getPageRect( 0, 0, 0 ).height();
+    if ( w >= h ) {
+        w = width();
+        h = height();
+    }
+    else {
+        w = height();
+        h = width();
+    }
 
-    QWMatrix m;
-    m.scale( fakt, fakt );
-    pix = pix.xForm( m );
-
+    const QImage img( pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ) );
+    pix.convertFromImage( img );
     setPixmap( pix );
 }
 

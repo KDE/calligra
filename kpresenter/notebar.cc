@@ -72,6 +72,7 @@ NoteBar::~NoteBar()
 
 void NoteBar::setCurrentNoteText( const QString &_text )
 {
+    initialize = true;
     textEdit->setText( _text );
 }
 

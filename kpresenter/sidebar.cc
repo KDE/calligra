@@ -300,9 +300,13 @@ void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 
 void Outline::renamePageTitle()
 {
-    int pageNumber = QListView::selectedItem()->text( 1 ).toInt() - 1;
+    QListViewItem *item = QListView::selectedItem();
+    if ( !item )
+        return;
+
+    int pageNumber = item->text( 1 ).toInt() - 1;
     bool ok;
-    QString activeTitle = QListView::selectedItem()->text( 0 );
+    QString activeTitle = item->text( 0 );
     QString newTitle = KLineEditDlg::getText( i18n("Rename Page"),i18n("Page Title"), activeTitle, &ok, this );
 
     // Have a different name ?
