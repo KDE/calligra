@@ -169,8 +169,11 @@ void KPTextObject::resizeTextDocument()
 /*======================= set size ===============================*/
 void KPTextObject::setSize( double _width, double _height )
 {
-    KPObject::setSize( _width, _height );
-    resizeTextDocument();
+    if ( _width != ext.width() || _height != ext.height() )
+    {
+        KPObject::setSize( _width, _height );
+        resizeTextDocument();
+    }
 }
 
 /*======================= set size ===============================*/
@@ -226,21 +229,14 @@ double KPTextObject::load(const QDomElement &element)
         int t = -1;
         if ( !type.isEmpty() )
         {
-#if 0
-            if ( type == "1" )
-                t = KTextEdit::EnumList;
-            if ( type == "2" )
-                t = KTextEdit::BulletList;
-#endif
             if ( type == "1" )
                 t = 1;
             if ( type == "2" )
                 t = 2;
         }
         loadKTextObject( e, t );
-        //loadKTextObject( e, -1 /*TODO*/ );
     }
-    setSize( ext.width(), ext.height() ); // this will to formatMore()
+    resizeTextDocument(); // this will to formatMore()
     return offset;
 }
 
