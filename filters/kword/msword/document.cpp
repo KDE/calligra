@@ -455,27 +455,32 @@ void Document::slotPictureFound( const QString& frameName, const QString& pictur
 
 void Document::processSubDocQueue()
 {
-    while ( !m_subdocQueue.empty() )
+    // Table cells can contain footnotes, and footnotes can contain tables [without footnotes though]
+    // This is why we need to repeat until there's nothing more do to (#79024)
+    while ( !m_subdocQueue.empty() || !m_tableQueue.empty() )
     {
-        SubDocument subdoc( m_subdocQueue.front() );
-        Q_ASSERT( subdoc.functorPtr );
-        (*subdoc.functorPtr)(); // call it
-        delete subdoc.functorPtr; // delete it
-        m_subdocQueue.pop();
-    }
-    while ( !m_tableQueue.empty() )
-    {
-        KWord::Table& table = m_tableQueue.front();
-        m_tableHandler->tableStart( &table );
-        QValueList<KWord::Row> &rows = table.rows;
-        for( QValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
-            KWord::TableRowFunctorPtr f = (*it).functorPtr;
-            Q_ASSERT( f );
-            (*f)(); // call it
-            delete f; // delete it
+        while ( !m_subdocQueue.empty() )
+        {
+            SubDocument subdoc( m_subdocQueue.front() );
+            Q_ASSERT( subdoc.functorPtr );
+            (*subdoc.functorPtr)(); // call it
+            delete subdoc.functorPtr; // delete it
+            m_subdocQueue.pop();
         }
-        m_tableHandler->tableEnd();
-        m_tableQueue.pop();
+        while ( !m_tableQueue.empty() )
+        {
+            KWord::Table& table = m_tableQueue.front();
+            m_tableHandler->tableStart( &table );
+            QValueList<KWord::Row> &rows = table.rows;
+            for( QValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+                KWord::TableRowFunctorPtr f = (*it).functorPtr;
+                Q_ASSERT( f );
+                (*f)(); // call it
+                delete f; // delete it
+            }
+            m_tableHandler->tableEnd();
+            m_tableQueue.pop();
+        }
     }
 }
 
