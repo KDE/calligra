@@ -485,6 +485,7 @@ don't put a </?xml...> at the end of the file!).
             0xad is a soft hyphen
             0xa0 is a non-breaking space
             \n is a linebreak (within the paragraph)
+            \t is a tabulator
 
         Attributes:
 
@@ -667,6 +668,7 @@ don't put a </?xml...> at the end of the file!).
         styleline type of underline 
                 : solid, dash, dot, dashdot, dashdotdot
         underlinecolor : color of underline line.
+        wordbyword: 0 or 1. If 1, spaces are not underlined. Opposite of fo:score-spaces.
 
 -->
 <!ELEMENT UNDERLINE
@@ -680,6 +682,7 @@ don't put a </?xml...> at the end of the file!).
 <!-- STRIKEOUT
         value: 0, 1 (or single), double, single-bold (see UNDERLINE)
         styleline: style of strikeout line solid, dash, dot, dashdot, dashdotdot
+        wordbyword: 0 or 1. If 1, spaces are not striked out. Opposite of fo:score-spaces.
 -->
 <!ELEMENT STRIKEOUT
     EMPTY>
