@@ -24,16 +24,16 @@
 #include <qtimer.h>
 #include <kdebug.h>
 #include <kospell.h>
-#include <ksconfig.h>
 #include <kotextobject.h>
 #include <klocale.h>
+#include <koSconfig.h>
 
 //#define DEBUG_BGSPELLCHECKING
 
 class KoBgSpellCheck::KoBgSpellCheckPrivate
 {
 public:
-    KSpellConfig * m_pKSpellConfig;
+    KOSpellConfig * m_pKOSpellConfig;
     QTimer * startTimer;
     QTimer * nextParagraphTimer;
 };
@@ -44,7 +44,7 @@ KoBgSpellCheck::KoBgSpellCheck()
     kdDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
 #endif
     d = new KoBgSpellCheck::KoBgSpellCheckPrivate;
-    d->m_pKSpellConfig=0L;
+    d->m_pKOSpellConfig=0L;
     d->startTimer = new QTimer( this );
     connect( d->startTimer, SIGNAL( timeout() ),
              this, SLOT( startBackgroundSpellCheck() ) );
@@ -64,7 +64,7 @@ KoBgSpellCheck::KoBgSpellCheck()
 KoBgSpellCheck::~KoBgSpellCheck()
 {
     delete m_bgSpell.kspell;
-    delete d->m_pKSpellConfig;
+    delete d->m_pKOSpellConfig;
     delete d;
 }
 
@@ -175,9 +175,10 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     }
 
     bool needsWait = false;
+#if 0
     if ( !m_bgSpell.kspell ) // reuse if existing
     {
-        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), d->m_pKSpellConfig );
+        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), d->m_pKOSpellConfig );
 
         needsWait = true; // need to wait for ready()
         connect( m_bgSpell.kspell, SIGNAL( death() ),
@@ -191,6 +192,7 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     m_bgSpell.kspell->setIgnoreTitleCase( m_bDontCheckTitleCase );
     if ( !needsWait )
         spellCheckerReady();
+#endif
 }
 
 void KoBgSpellCheck::spellCheckerReady()
@@ -380,24 +382,32 @@ void KoBgSpellCheck::spellCheckerFinished()
     // Normal death - nothing to do
 }
 
-KSpellConfig* KoBgSpellCheck::spellConfig()
+KOSpellConfig* KoBgSpellCheck::spellConfig()
 {
-  if ( !d->m_pKSpellConfig )
-    d->m_pKSpellConfig = new KSpellConfig();
-  return d->m_pKSpellConfig;
+  if ( !d->m_pKOSpellConfig )
+    d->m_pKOSpellConfig = new KOSpellConfig();
+  return d->m_pKOSpellConfig;
 }
 
-void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
+void KoBgSpellCheck::setKSpellConfig(KOSpellConfig _kspell)
 {
   (void)spellConfig();
   stopSpellChecking();
 
-  d->m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  d->m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
-  d->m_pKSpellConfig->setDictionary(_kspell.dictionary ());
-  d->m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
-  d->m_pKSpellConfig->setEncoding(_kspell.encoding());
-  d->m_pKSpellConfig->setClient(_kspell.client());
+  d->m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  d->m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
+  d->m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
+  d->m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
+  d->m_pKOSpellConfig->setEncoding(_kspell.encoding());
+  d->m_pKOSpellConfig->setEncoding(_kspell.encoding());
+  d->m_pKOSpellConfig->setIgnoreCase ( _kspell.ignoreCase ());
+  d->m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
+  d->m_pKOSpellConfig->setDontCheckTitleCase( _kspell.dontCheckTitleCase());
+  d->m_pKOSpellConfig->setDontCheckUpperWord( _kspell.dontCheckUpperWord() );
+  d->m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
+  d->m_pKOSpellConfig->setClient (_kspell.client());
+
+
   m_bSpellCheckConfigure = false;
   startBackgroundSpellCheck();
 }

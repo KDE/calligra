@@ -3888,8 +3888,7 @@ void KWDocument::setKOSpellConfig(const KOSpellConfig& _kspell)
   m_pKOSpellConfig->setDontCheckUpperWord( _kspell.dontCheckUpperWord() );
   m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
   m_pKOSpellConfig->setClient (_kspell.client());
-  //FIXME
-  //m_bgSpellCheck->setKSpellConfig(_kspell);
+  m_bgSpellCheck->setKSpellConfig(_kspell);
 }
 
 #ifndef NDEBUG

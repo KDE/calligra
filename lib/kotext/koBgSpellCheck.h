@@ -27,7 +27,7 @@
 class KoTextObject;
 class KoSpell;
 class KoDocument;
-class KSpellConfig;
+class KOSpellConfig;
 class KoTextParag;
 
 class KoBgSpellCheck : public QObject
@@ -43,7 +43,7 @@ public:
     void setIgnoreUpperWords( bool b);
     void setIgnoreTitleCase( bool b);
 
-    void setKSpellConfig(KSpellConfig _kspell);
+    void setKSpellConfig(KOSpellConfig _kspell);
 
     //repaint object when we spell check
     virtual void slotRepaintChanged(KoTextObject *obj)=0;
@@ -67,7 +67,7 @@ protected slots:
     void spellCheckNextParagraph();
 
 protected:
-    KSpellConfig* spellConfig();
+    KOSpellConfig* spellConfig();
     void nextParagraphNeedingCheck();
     void stopSpellChecking();
     // Structure holding the background spellcheck data

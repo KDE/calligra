@@ -3343,8 +3343,7 @@ void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
     m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
     m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
     m_pKOSpellConfig->setClient (_kspell.client());
-    //FIXME
-    //m_bgSpellCheck->setKSpellConfig(_kspell);
+    m_bgSpellCheck->setKSpellConfig(_kspell);
 }
 
 #include "kpresenter_doc.moc"
