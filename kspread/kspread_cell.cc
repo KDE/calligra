@@ -155,15 +155,11 @@ public:
 
     // This is the text we want to display. Not necessarily the same as strText,
     // e.g. strText="1" and strOutText="1.00"
+    // Also holds value that we got from calculation, formerly known as strFormulaOut
     QString strOutText;
 
     // The parse tree of the real formula (e.g: "=A1*A2").
     KSParseNode* code;
-
-    // The value we got from calculation.
-    // If the cell holds a formula, makeLayout() will use strFormulaOut
-    // instead of strText since strText stores the formula the user entered.
-    QString strFormulaOut;
 
     // position and dimension of displayed text
     double textX;
@@ -388,8 +384,28 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     clearAllErrors();
     d->value = v;
 
-    if( value().isBoolean() )
+    //set strText and strOutText
+    //TODO finish it, then remove from other places
+    switch (value().type()) {
+      case KSpreadValue::Empty:
+        d->strOutText = d->strText = QString::null;
+      break;
+      case KSpreadValue::Boolean:
         d->strOutText = d->strText  = ( value().asBoolean() ? i18n("True") : i18n("False") );
+      break;
+      case KSpreadValue::Integer:
+      break;
+      case KSpreadValue::Float:
+      break;
+      case KSpreadValue::String:
+      break;
+      case KSpreadValue::Array:
+      break;
+      case KSpreadValue::CellRange: // not used yet
+      break;
+      case KSpreadValue::Error:
+      break;
+    };
 
     // Free all content data
     if (d->hasExtra())
@@ -1592,7 +1608,7 @@ void KSpreadCell::setOutputText()
   }
   else if ( isFormula() )
   {
-    d->strOutText = d->strFormulaOut;
+    //NOTHING HERE
   }
   else if( value().isString() )
   {
@@ -2077,7 +2093,7 @@ bool KSpreadCell::makeFormula()
     clearFormula();
 
     setFlag(Flag_ParseError);
-    d->strFormulaOut = "####";
+    d->strOutText = "####";
     KSpreadValue v;
     v.setError ( "####" );
     setValue (v);
@@ -2120,7 +2136,7 @@ bool KSpreadCell::calc(bool delay)
   {
     kdError(36001) << "ERROR: Circle" << endl;
     setFlag(Flag_CircularCalculation);
-    d->strFormulaOut = "####";
+    d->strOutText = "####";
     KSpreadValue v;
     v.setError ( "####" );
     setValue (v);
@@ -2167,7 +2183,7 @@ bool KSpreadCell::calc(bool delay)
         KSpreadCell *cell = dep->Table()->cellAt( x, y );
         if ( !cell->calc( delay ) )
         {
-          d->strFormulaOut = "####";
+          d->strOutText = "####";
           setFlag(Flag_DependancyError);
           KSpreadValue v;
           v.setError( "####" );
@@ -2183,7 +2199,7 @@ bool KSpreadCell::calc(bool delay)
   {
     // If we got an error during evaluation ...
     setFlag(Flag_ParseError);
-    d->strFormulaOut = "####";
+    d->strOutText = "####";
     setFlag(Flag_LayoutDirty);
     KSpreadValue v;
     v.setError( "####" );
@@ -2208,19 +2224,19 @@ bool KSpreadCell::calc(bool delay)
     setValue ( KSpreadValue( context.value()->doubleValue() ) );
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    d->strFormulaOut = createFormat( value().asFloat(), d->column, d->row );
+    d->strOutText = createFormat( value().asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
     setValue ( KSpreadValue( (int)context.value()->intValue() ) );
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    d->strFormulaOut = createFormat( value().asFloat(), d->column, d->row );
+    d->strOutText = createFormat( value().asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
     setValue ( KSpreadValue( context.value()->boolValue() ) );
-    d->strFormulaOut = context.value()->boolValue() ? i18n("True") : i18n("False");
+    d->strOutText = context.value()->boolValue() ? i18n("True") : i18n("False");
     setFormatType(Number);
   }
   else if ( context.value()->type() == KSValue::TimeType )
@@ -2232,12 +2248,12 @@ bool KSpreadCell::calc(bool delay)
     if( tmpFormat != SecondeTime &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
         && tmpFormat != Time_format3)
     {
-      d->strFormulaOut = locale()->formatTime( value().asDateTime().time(), false);
+      d->strOutText = locale()->formatTime( value().asDateTime().time(), false);
       setFormatType( Time );
     }
     else
     {
-      d->strFormulaOut = util_timeFormat(locale(), value().asDateTime(), tmpFormat);
+      d->strOutText = util_timeFormat(locale(), value().asDateTime(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::DateType)
@@ -2248,11 +2264,11 @@ bool KSpreadCell::calc(bool delay)
         && !(tmpFormat>=200 &&tmpFormat<=216))
     {
         setFormatType(ShortDate);
-        d->strFormulaOut = locale()->formatDate( value().asDateTime().date(), true);
+        d->strOutText = locale()->formatDate( value().asDateTime().date(), true);
     }
     else
     {
-        d->strFormulaOut = util_dateFormat( locale(), value().asDateTime().date(), tmpFormat);
+        d->strOutText = util_dateFormat( locale(), value().asDateTime().date(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::Empty )
@@ -2260,23 +2276,22 @@ bool KSpreadCell::calc(bool delay)
     setValue (KSpreadValue::empty());
     // Format the result appropriately
     setFormatType(Number);
-    d->strFormulaOut = createFormat( 0.0, d->column, d->row );
+    d->strOutText = createFormat( 0.0, d->column, d->row );
   }
   else
   {
 //FIXME    m_dataType = StringData;
     setValue( KSpreadValue( context.value()->toString( context ) ) );
-    d->strFormulaOut = context.value()->toString( context );
-    if ( !d->strFormulaOut.isEmpty() && d->strFormulaOut[0] == '!' )
+    d->strOutText = context.value()->toString( context );
+    if ( !d->strOutText.isEmpty() && d->strOutText[0] == '!' )
     {
-      d->extra()->QML = new QSimpleRichText( d->strFormulaOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
+      d->extra()->QML = new QSimpleRichText( d->strOutText.mid(1),  QApplication::font() );//, m_pTable->widget() );
     }
-    else if( !d->strFormulaOut.isEmpty() && d->strFormulaOut[0]=='\'')
+    else if( !d->strOutText.isEmpty() && d->strOutText[0]=='\'')
     {
-        d->strFormulaOut=d->strFormulaOut.right(d->strFormulaOut.length()-1);
+        d->strOutText=d->strOutText.right(d->strOutText.length()-1);
     }
-    else
-      d->strFormulaOut=d->strFormulaOut;
+    
     setFormatType(Text_format);
   }
 
@@ -4711,10 +4726,8 @@ void KSpreadCell::checkTextInput()
 
     Q_ASSERT( d->content == Text );
 
-    // Get the text from that cell (using result of formula if any)
+    // Get the text from that cell
     QString str = d->strText;
-    if ( isFormula() )
-        str = d->strFormulaOut;
 
     // If the text is empty, we don't have a value
     // If the user stated explicitly that he wanted text (using the format or using a quote),
