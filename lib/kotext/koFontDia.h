@@ -25,7 +25,10 @@
 #include <qrichtext_p.h>
 #include <qradiobutton.h>
 class QComboBox;
-// The embeddable font chooser widget
+
+/**
+ * The embeddable font chooser widget
+ */
 class KoFontChooser : public QTabWidget
 {
     Q_OBJECT
@@ -37,7 +40,7 @@ public:
      */
     KoFontChooser( QWidget * parent, const char* name = 0L,
             bool _withSubSuperScript = true, uint fontListCriteria=0);
-    virtual ~KoFontChooser() {}
+    virtual ~KoFontChooser();
 
     void setFont( const QFont &_font, bool _subscript, bool _superscript );
     void setColor( const QColor & col );
@@ -48,7 +51,7 @@ public:
 
 
     QFont getNewFont() const { return m_newFont; }
-    QColor color() const { return m_chooseFont->color(); }
+    QColor color() const;
     QColor backGroundColor() const { return m_backGroundColor;}
     QColor underlineColor() const { return m_underlineColor ; }
 
@@ -87,7 +90,6 @@ private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
     QRadioButton *m_subScript;
-    QComboBox *m_strikeOut;
 
     QComboBox *m_underlining;
     QComboBox *m_underlineType;
@@ -98,6 +100,8 @@ private:
     QPushButton *m_colorButton;
     QPushButton *m_backGroundColorButton;
 
+    class KoFontChooserPrivate;
+    KoFontChooserPrivate* d;
 
     QFont m_newFont;
     QColor m_backGroundColor;

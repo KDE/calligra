@@ -31,12 +31,29 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 
+struct KoFontChooser::KoFontChooserPrivate
+{
+    QComboBox *m_strikeOut;
+    QColor m_textColor;
+};
+
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
     : QTabWidget( parent, name )
 {
+    d = new KoFontChooserPrivate;
     setupTab1(_withSubSuperScript, fontListCriteria );
     setupTab2();
     m_changedFlags = 0;
+}
+
+KoFontChooser::~KoFontChooser()
+{
+    delete d; d = 0;
+}
+
+QColor KoFontChooser::color() const
+{
+    return d->m_textColor;
 }
 
 void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
@@ -121,9 +138,9 @@ void KoFontChooser::setupTab2()
     lab = new QLabel( i18n("StrikeThrough"), grp);
     grid->addWidget( lab, 2, 0);
 
-    m_strikeOut = new QComboBox( grp );
-    grid->addWidget( m_strikeOut, 3, 0);
-    m_strikeOut->insertStringList( lst );
+    d->m_strikeOut = new QComboBox( grp );
+    grid->addWidget( d->m_strikeOut, 3, 0);
+    d->m_strikeOut->insertStringList( lst );
 
 
     m_strikeOutType= new QComboBox(grp );
@@ -131,7 +148,7 @@ void KoFontChooser::setupTab2()
     m_strikeOutType->insertStringList( lstType );
 
 
-    connect( m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
+    connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
@@ -151,7 +168,11 @@ void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscr
 
 void KoFontChooser::setColor( const QColor & col )
 {
-    m_chooseFont->setColor( col );
+    d->m_textColor = col;
+    if ( col.isValid() )
+        m_chooseFont->setColor( col );
+    else
+        m_chooseFont->setColor( QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
     m_changedFlags = 0;
 }
 
@@ -177,10 +198,6 @@ void KoFontChooser::slotFontChanged(const QFont & f)
         m_changedFlags |= KoTextFormat::Family;
     if ( f.pointSize() != m_newFont.pointSize() )
         m_changedFlags |= KoTextFormat::Size;
-    //kdDebug() << "KWFontChooser::slotFontChanged newcharset=" << f.charSet() << " oldcharset=" << m_newFont.charSet() << endl;
-    // ######## Not needed in 3.0?
-    //if ( f.charSet() != m_newFont.charSet() )
-    //    m_changedFlags |= KoTextFormat::CharSet;
     kdDebug() << "KWFontChooser::slotFontChanged m_changedFlags=" << m_changedFlags << endl;
     m_newFont = f;
 }
@@ -208,13 +225,18 @@ void KoFontChooser::slotSuperScriptClicked()
 
 void KoFontChooser::slotChangeColor()
 {
-    QColor color = m_chooseFont->color();
-    if ( KColorDialog::getColor( color, QApplication::palette().color( QPalette::Active, QColorGroup::Text ) ) )
+    QColor color = d->m_textColor;
+    QColor defaultTextColor = QApplication::palette().color( QPalette::Active, QColorGroup::Text );
+    if ( KColorDialog::getColor( color, defaultTextColor ) )
     {
-        if ( color != m_chooseFont->color() )
+        if ( color != d->m_textColor )
         {
+            d->m_textColor = color;
             m_changedFlags |= KoTextFormat::Color;
-            m_chooseFont->setColor( color );
+            if ( color.isValid() )
+                m_chooseFont->setColor( color );
+            else
+                m_chooseFont->setColor( defaultTextColor );
         }
     }
 }
@@ -270,7 +292,7 @@ KoTextFormat::NbLine KoFontChooser::getNbLineType( QComboBox * combo )
 
 KoTextFormat::NbLine KoFontChooser::getStrikeOutNbLineType()
 {
-    return getNbLineType(m_strikeOut );
+    return getNbLineType( d->m_strikeOut );
 }
 
 
@@ -319,7 +341,7 @@ void KoFontChooser::changeNbLineType( KoTextFormat::NbLine _nb, QComboBox * comb
 
 void KoFontChooser::setStrikeOutNblineType(KoTextFormat::NbLine nb)
 {
-    changeNbLineType( nb, m_strikeOut);
+    changeNbLineType( nb, d->m_strikeOut );
     m_changedFlags = 0;
 }
 
@@ -367,7 +389,7 @@ void KoFontChooser::setUnderlineLineStyle(KoTextFormat::LineStyle _t)
 void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::LineStyle _t)
 {
     changeLineStyle(  _t, m_strikeOutType );
-    m_strikeOutType->setEnabled( m_strikeOut->currentItem()!= 0);
+    m_strikeOutType->setEnabled( d->m_strikeOut->currentItem()!= 0);
 
     m_changedFlags = 0;
 }
