@@ -30,6 +30,7 @@
 
 #include "formulacursor.h"
 #include "kformulacontainer.h"
+#include "kformuladocument.h"
 #include "kformulamimesource.h"
 
 
@@ -66,8 +67,8 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 	return document.toCString();
     else 
     if(QString(format)=="image/ppm") {
-        KCommandHistory history;
-        KFormulaContainer tmpContainer(history);
+        KFormulaDocument document;
+        KFormulaContainer tmpContainer(&document);
 	FormulaCursor *c=tmpContainer.createCursor();
         tmpContainer.setActiveCursor(c);
         tmpContainer.paste();

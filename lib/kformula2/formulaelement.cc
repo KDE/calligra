@@ -25,6 +25,7 @@
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "kformulacontainer.h"
+#include "kformuladocument.h"
 
 
 FormulaElement::FormulaElement(KFormulaContainer* container)
@@ -74,6 +75,12 @@ void FormulaElement::calcSizes(ContextStyle& context)
 void FormulaElement::draw(QPainter& painter, ContextStyle& context)
 {
     inherited::draw(painter, context, size, QPoint());
+}
+
+
+const SymbolTable& FormulaElement::getSymbolTable() const
+{
+    return document->getDocument()->getSymbolTable();
 }
 
 

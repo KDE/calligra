@@ -30,6 +30,7 @@
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "kformulacontainer.h"
+#include "kformuladocument.h"
 #include "kformulawidget.h"
 
 
@@ -37,8 +38,6 @@ KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const ch
     : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
       cursorVisible(false), cursorHasChanged(true), document(doc)
 {
-    leftBracket = '(';
-    rightBracket = ')';
     
     // This is buggy. We do need more/other messages.
     connect(document, SIGNAL(elementWillVanish(BasicElement*)),
@@ -97,7 +96,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         int latin1 = ch.latin1();
         switch (latin1) {
         case '(':
-            document->addBracket(leftBracket, rightBracket);
+            document->getDocument()->addDefaultBracket();
             break;
         case '[':
             document->addSquareBracket();

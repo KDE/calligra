@@ -280,7 +280,10 @@ private:
      */
     QList<BasicElement> children;
 
-    Token* parseTree;
+    /**
+     * the syntax tree of the sequence
+     */
+    ElementType* parseTree;
 };
 
 #endif // __SEQUENCEELEMENT_H

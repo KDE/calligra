@@ -23,6 +23,7 @@
 
 class FormulaCursor;
 class KFormulaContainer;
+class KFormulaDocument;
 class KFormulaDoc;
 
 
@@ -60,7 +61,8 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QDomDocument saveXML();
 
-    KFormulaContainer* getFormula() { return formula; }
+    KFormulaContainer* getFormula() const { return formula; }
+    KFormulaDocument* getDocument() const { return document; }
     
 public slots:
 
@@ -94,6 +96,12 @@ private:
      * The place where all formula related work is done.
      */
     KFormulaContainer* formula;
+
+    /**
+     * The document that contains all the formulas.
+     * Right now we only have one, but this might change.
+     */
+    KFormulaDocument* document;
 };
 
 #endif

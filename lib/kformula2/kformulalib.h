@@ -1,11 +1,14 @@
 /**
  * @libdoc A formula editor library.
  *
- * The kformula editor library. There are two classes you might be interessted in.
- * First there is the @ref KFormulaContainer . It is the document. You will need to
- * have one object for every formula you want to create. The other one is
- * @ref KFormulaWidget . This one is the view. You can create any number of views
- * for each document.
+ * The kformula editor library. There are three classes you might be interessted in.
+ * First there is the @ref KFormulaDocument . It is, you guess it, the document.
+ * Next there is the @ref KFormulaContainer . It represents one formula. Each
+ * formula belongs to a document and a document might have any number of formulas.
+ * For this reason the formula should be considered as part of the document.
+ * The last class is
+ * @ref KFormulaWidget . This one is a widget that serves as view.
+ * You can create any number of views for each formula.
  *
  * The document contains functions like load/save and the undo stack as well as
  * everything you need to edit the formula.

@@ -27,9 +27,7 @@
 #include <qstring.h>
 #include <qtextstream.h>
 
-#include <kaction.h>
 #include <klocale.h>
-#include <kstdaction.h>
 
 #include "MatrixDialog.h"
 #include "bracketelement.h"
@@ -40,21 +38,21 @@
 #include "indexelement.h"
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
+#include "kformuladocument.h"
 #include "kformulamimesource.h"
 #include "kformulawidget.h"
 #include "matrixelement.h"
-#include "numberelement.h"
-#include "operatorelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
 
 
-KFormulaContainer::KFormulaContainer(KCommandHistory& _history)
-        : history(_history)
+KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
+        : document(doc)
 {
-    connect(this, SIGNAL(commandExecuted()), &history, SIGNAL(commandExecuted()));
+    connect(this, SIGNAL(commandExecuted()),
+            document->getHistory(), SIGNAL(commandExecuted()));
     rootElement = new FormulaElement(this);
     dirty = true;
     testDirty();
@@ -62,6 +60,7 @@ KFormulaContainer::KFormulaContainer(KCommandHistory& _history)
 
 KFormulaContainer::~KFormulaContainer()
 {
+    getDocument()->formulaDies(this);
     delete rootElement;
 }
 
@@ -69,6 +68,12 @@ KFormulaContainer::~KFormulaContainer()
 FormulaCursor* KFormulaContainer::createCursor()
 {
     return new FormulaCursor(rootElement);
+}
+
+
+KCommandHistory* KFormulaContainer::getHistory() const
+{
+    return document->getHistory();
 }
 
 
@@ -96,7 +101,7 @@ void KFormulaContainer::changed()
  */
 void KFormulaContainer::setActiveView(KFormulaWidget* view)
 {
-    activeView = view;
+    getDocument()->activate(this);
     if (view != 0) {
         setActiveCursor(view->getCursor());
     }
@@ -114,82 +119,6 @@ void KFormulaContainer::testDirty()
 bool KFormulaContainer::isEmpty()
 {
     return rootElement->countChildren() == 0;
-}
-
-
-void KFormulaContainer::createActions(KActionCollection* collection)
-{
-    addIntegralAction = new KAction(i18n("Add/change to integral"),
-                                    "mini-integral",
-                                    CTRL + Key_6,
-                                    this, SLOT(addIntegral()),
-                                    collection, "addintegral");
-    addSumAction      = new KAction(i18n("Add/change to sum"),
-                                    "mini-sum",
-                                    CTRL + Key_7,
-                                    this, SLOT(addSum()),
-                                    collection, "addsum");
-    addProductAction  = new KAction(i18n("Add/change to product"),
-                                    "mini-product",
-                                    CTRL + Key_4,
-                                    this, SLOT(addProduct()),
-                                    collection, "addproduct");
-    addRootAction     = new KAction(i18n("Add/change to root"),
-                                    "mini-root",
-                                    CTRL + Key_2,
-                                    this, SLOT(addRoot()),
-                                    collection, "addroot");
-    addFractionAction = new KAction(i18n("Add/change to fraction"),
-                                    "mini-frac",
-                                    CTRL + Key_3,
-                                    this, SLOT(addFraction()),
-                                    collection, "addfrac");
-    addBracketAction  = new KAction(i18n("Add/change to bracket"),
-                                    "mini-bra",
-                                    CTRL + Key_5,
-                                    this, SLOT(addDefaultBracket()),
-                                    collection,"addbra");
-
-    addMatrixAction   = new KAction(i18n("Add matrix"),
-                                    "matrix",
-                                    CTRL + Key_8,
-                                    this, SLOT(addMatrix()),
-                                    collection, "addmatrix");
-
-    addUpperLeftAction  = new KAction(i18n("Add upper left index"),
-                                      "index3",
-                                      0,
-                                      this, SLOT(addUpperLeftIndex()),
-                                      collection, "addupperleft");
-    addLowerLeftAction  = new KAction(i18n("Add lower left index"),
-                                      "index2",
-                                      0,
-                                      this, SLOT(addLowerLeftIndex()),
-                                      collection, "addlowerleft");
-    addUpperRightAction = new KAction(i18n("Add upper right index"),
-                                      "index1",
-                                      0,
-                                      this, SLOT(addUpperRightIndex()),
-                                      collection, "addupperright");
-    addLowerRightAction = new KAction(i18n("Add lower right index"),
-                                      "index0",
-                                      0,
-                                      this, SLOT(addLowerRightIndex()),
-                                      collection, "addlowerright");
-
-    addGenericUpperAction = new KAction(i18n("Add upper index"),
-                                      CTRL + Key_U,
-                                      this, SLOT(addGenericUpperIndex()),
-                                      collection, "addupperindex");
-    addGenericLowerAction = new KAction(i18n("Add lower index"),
-                                      CTRL + Key_L,
-                                      this, SLOT(addGenericLowerIndex()),
-                                      collection, "addlowerindex");
-
-    removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
-                                        CTRL + Key_R,
-                                        this, SLOT(removeEnclosing()),
-                                        collection, "removeenclosing");
 }
 
 
@@ -230,9 +159,9 @@ void KFormulaContainer::addBracket(char left, char right)
 
 void KFormulaContainer::addDefaultBracket()
 {
-    if (!hasValidView())
-        return;
-    addBracket(activeView->getLeftBracket(), activeView->getRightBracket());
+//     if (!hasValidView())
+//         return;
+//     addBracket(activeView->getLeftBracket(), activeView->getRightBracket());
 }
 
 void KFormulaContainer::addFraction()
@@ -275,9 +204,7 @@ void KFormulaContainer::addMatrix(int rows, int columns)
 
 void KFormulaContainer::addMatrix()
 {
-    if (!hasValidView())
-        return;
-    MatrixDialog* dialog = new MatrixDialog(activeView);
+    MatrixDialog* dialog = new MatrixDialog(0);
     if (dialog->exec()) {
         uint rows = dialog->w;
         uint cols = dialog->h;
@@ -508,7 +435,7 @@ void KFormulaContainer::execute(KFormulaCommand* command)
 {
     command->execute();
     if (!command->isSenseless()) {
-        history.addCommand(command, false);
+        getHistory()->addCommand(command, false);
         emit commandExecuted();
     }
     else {
@@ -522,20 +449,8 @@ void KFormulaContainer::removeSelection()
     FormulaCursor* cursor = getActiveCursor();
     if (cursor->isSelection()) {
         KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
-        history.addCommand(command);
+        getHistory()->addCommand(command);
     }
-}
-
-
-void KFormulaContainer::undo()
-{
-    history.undo();
-}
-
-
-void KFormulaContainer::redo()
-{
-    history.redo();
 }
 
 
@@ -588,7 +503,7 @@ void KFormulaContainer::load(QString file)
         return;
     }
     if (load(doc)) {
-        history.clear();
+        getHistory()->clear();
     }
     f.close();
 }

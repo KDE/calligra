@@ -27,6 +27,7 @@
 class BasicElement;
 class ContextStyle;
 class KFormulaContainer;
+class SymbolTable;
 
 
 /**
@@ -72,10 +73,11 @@ public:
      */
     void draw(QPainter& painter, ContextStyle& context);
 
-    // Save&load
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-
+    /**
+     * @returns our documents symbol table
+     */
+    const SymbolTable& getSymbolTable() const;
+    
 protected:
 
     //Save/load support

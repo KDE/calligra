@@ -44,6 +44,7 @@
 #include <kurl.h>
 
 #include <kformulacontainer.h>
+#include <kformuladocument.h>
 
 
 
@@ -54,8 +55,8 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     //kdDebug(39001) << "General Settings" << endl;
 
     history = new KCommandHistory(actionCollection());
-    formula = new KFormulaContainer(*history);
-    formula->createActions(actionCollection());
+    document = new KFormulaDocument(actionCollection(), history);
+    formula = new KFormulaContainer(document);
 
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
@@ -67,6 +68,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
 KFormulaDoc::~KFormulaDoc()
 {
     delete formula;
+    delete document;
     delete history;
 }
 

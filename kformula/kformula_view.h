@@ -91,8 +91,6 @@ public slots:
     void elementColor();
     void generalColor();
     void generalFont();
-    void delimiterLeft();
-    void delimiterRight();
     
 protected:
 
@@ -135,9 +133,6 @@ private:
     KAction* addGenericUpperAction;
     KAction* addGenericLowerAction;
     KAction* removeEnclosingAction;
-    
-    KSelectAction* leftBracket;
-    KSelectAction* rightBracket;
 };
 
 #endif

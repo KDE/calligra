@@ -49,18 +49,6 @@ public:
     KFormulaWidget(KFormulaContainer*, QWidget* parent=0, const char* name=0, WFlags f=0);
     ~KFormulaWidget();
 
-    /**
-     * Sets the char that is to be used as default
-     * left bracket.
-     */
-    void setLeftBracket(char left) { leftBracket = left; }
-
-    /**
-     * Sets the char that is to be used as default
-     * right bracket.
-     */
-    void setRightBracket(char right) { rightBracket = right; }
-
 
     /**
      * @returns the point inside the formula widget where the cursor is.
@@ -149,16 +137,6 @@ protected:
 private:
 
     /**
-     * The char to be used for the default left bracket.
-     */
-    char getLeftBracket() const { return leftBracket; }
-    
-    /**
-     * The char to be used for the default right bracket.
-     */
-    char getRightBracket() const { return rightBracket; }
-    
-    /**
      * Tell everybody that our cursor has changed if so.
      */
     void emitCursorChanged();
@@ -181,16 +159,13 @@ private:
     bool readOnly;
 
     /**
-     * The char to be used for the default left bracket.
+     * The formula we show.
      */
-    char leftBracket;
+    KFormulaContainer* document;
 
     /**
-     * The char to be used for the default right bracket.
+     * Out cursor.
      */
-    char rightBracket;
-    
-    KFormulaContainer* document;
     FormulaCursor* cursor;
 };
 

@@ -40,6 +40,7 @@ class FormulaCursor;
 class FormulaElement;
 class KCommand;
 class KFormulaCommand;
+class KFormulaDocument;
 class KFormulaWidget;
 class QKeyEvent;
 class QPainter;
@@ -48,7 +49,8 @@ class QWidget;
 
 
 /**
- * The document. Provides everything to edit the formula.
+ * The document. Actually only one part of the whole.
+ * Provides everything to edit the formula.
  */
 class KFormulaContainer : public QObject {
     friend class KFormulaMimeSource;
@@ -58,11 +60,13 @@ public:
 
     /**
      * Construct a new formula.
+     *
+     * @param doc the document we belong to.
      * @param _history The undo stack we are to store our commands in.
      *                 It must not deleted as long as we exist because
      *                 we only store a reference to it.
      */
-    KFormulaContainer(KCommandHistory& _history);
+    KFormulaContainer(KFormulaDocument* doc);
     
     ~KFormulaContainer();
 
@@ -154,26 +158,10 @@ public:
     bool isEmpty();
 
     /**
-     * Creates the standard formula actions and puts them into
-     * the collection.
+     * @returns the document this formula belongs to.
      */
-    void createActions(KActionCollection* collection);
+    KFormulaDocument* getDocument() const { return document; }
 
-    KAction* getAddBracketAction()       { return addBracketAction; }
-    KAction* getAddFractionAction()      { return addFractionAction; }
-    KAction* getAddRootAction()          { return addRootAction; }
-    KAction* getAddSumAction()           { return addSumAction; }
-    KAction* getAddProductAction()       { return addProductAction; }
-    KAction* getAddIntegralAction()      { return addIntegralAction; }
-    KAction* getAddMatrixAction()        { return addMatrixAction; }
-    KAction* getAddUpperLeftAction()     { return addUpperLeftAction; }
-    KAction* getAddLowerLeftAction()     { return addLowerLeftAction; }
-    KAction* getAddUpperRightAction()    { return addUpperRightAction; }
-    KAction* getAddLowerRightAction()    { return addLowerRightAction; }
-    KAction* getAddGenericUpperAction()  { return addGenericUpperAction; }
-    KAction* getAddGenericLowerAction()  { return addGenericLowerAction; }
-    KAction* getRemoveEnclosingAction()  { return removeEnclosingAction; }
-    
 signals:
 
     /**
@@ -270,17 +258,6 @@ public slots:
     void remove(BasicElement::Direction = BasicElement::beforeCursor);
     
     void replaceElementWithMainChild(BasicElement::Direction = BasicElement::beforeCursor);
-    void removeEnclosing() { replaceElementWithMainChild(); }
-
-    /**
-     * Undo and move the undone command to the redo stack
-     */
-    void undo();
-
-    /**
-     * Redo and move the redone command to the undo stack
-     */
-    void redo();
 
     /**
      * Insert data from the clipboard.
@@ -297,6 +274,10 @@ public slots:
      */
     void cut();
 
+protected:
+
+    KCommandHistory* getHistory() const;
+    
 private:
 
     void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
@@ -325,11 +306,6 @@ private:
     bool hasValidCursor() const { return activeCursor != 0; }
 
     /**
-     * @returns true if there is a view.
-     */
-    bool hasValidView() const { return activeView != 0; }
-
-    /**
      * If true we need to recalc the formula.
      */
     bool dirty;
@@ -346,39 +322,13 @@ private:
 
     /**
      * The active cursor is the one that triggered the last command.
-     * We need to remember it so we can use the kdelib undo system.
      */
     FormulaCursor* activeCursor;
-    
-    /**
-     * The active formula view.
-     */
-    KFormulaWidget* activeView;
-    
-    /**
-     * Our undo stack. We don't own it. The stack belongs to
-     * our parent and might contain not formula related commands
-     * as well.
-     */
-    KCommandHistory& history;
 
-    
-    // We know our actions, maybe a client is interessted...
-    
-    KAction* addBracketAction;
-    KAction* addFractionAction;
-    KAction* addRootAction;
-    KAction* addSumAction;
-    KAction* addProductAction;
-    KAction* addIntegralAction;
-    KAction* addMatrixAction;
-    KAction* addUpperLeftAction;
-    KAction* addLowerLeftAction;
-    KAction* addUpperRightAction;
-    KAction* addLowerRightAction;
-    KAction* addGenericUpperAction;
-    KAction* addGenericLowerAction;
-    KAction* removeEnclosingAction;
+    /**
+     * The document we belong to.
+     */
+    KFormulaDocument* document;
     
     // debug
     friend class TestFormulaCursor;

@@ -24,14 +24,15 @@
 #include <qpainter.h>
 
 #include "bracketelement.h"
+#include "elementtype.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
-#include "formulatoken.h"
 #include "fractionelement.h"
 #include "indexelement.h"
 #include "matrixelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
+#include "sequenceparser.h"
 #include "symbolelement.h"
 #include "textelement.h"
 
@@ -687,13 +688,14 @@ void SequenceElement::parse()
 {
     delete parseTree;
 
-    // Those tokens are gone. Make sure they won't
+    // Those types are gone. Make sure they won't
     // be used.
     for (uint i = 0; i < children.count(); i++) {
-        children.at(i)->setToken(0);
+        children.at(i)->setElementType(0);
     }
-    
-    SequenceParser parser;
+
+    const SymbolTable& symbols = formula()->getSymbolTable();
+    SequenceParser parser(symbols);
     parseTree = parser.parse(children);
 
     // debug

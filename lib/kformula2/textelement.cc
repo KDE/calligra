@@ -25,7 +25,7 @@
 #include <qpainter.h>
 
 #include "basicelement.h"
-#include "formulatoken.h"
+#include "elementtype.h"
 #include "textelement.h"
 #include "contextstyle.h"
 
@@ -45,10 +45,10 @@ void TextElement::calcSizes(ContextStyle& context, int parentSize)
     int mySize = QMAX(parentSize + getRelativeSize(), 8);
     QFont font;
     
-    Token* token = getToken();
-    if (token != 0) {
-        spaceWidth = token->getSpace(context, mySize);
-        font = token->getFont(context);
+    ElementType* type = getElementType();
+    if (type != 0) {
+        spaceWidth = type->getSpace(context, mySize);
+        font = type->getFont(context);
     }
     else {
         spaceWidth = 0;
@@ -78,10 +78,10 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
     int mySize = QMAX(parentSize + getRelativeSize(), 10);
     QFont font;
     
-    Token* token = getToken();
-    if (token != 0) {
-        font = token->getFont(context);
-        token->setUpPainter(context, painter);
+    ElementType* type = getElementType();
+    if (type != 0) {
+        font = type->getFont(context);
+        type->setUpPainter(context, painter);
     }
     else {
         font = context.getDefaultFont();

@@ -30,7 +30,7 @@
 int BasicElement::evilDestructionCount = 0;
 
 BasicElement::BasicElement(BasicElement* p)
-    : parent(p)
+        : parent(p), elementType(0)
 {
     relativeSize = 0;
     evilDestructionCount++;

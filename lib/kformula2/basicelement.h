@@ -37,10 +37,10 @@
 #include "contextstyle.h"
 
 class ComplexElement;
+class ElementType;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
-class Token;
 
 
 /**
@@ -68,6 +68,9 @@ class Token;
  */
 class BasicElement
 {
+    friend class SequenceElement;
+    friend class SequenceParser;
+    
 public:  
 
     /*
@@ -91,11 +94,6 @@ public:
      */
     virtual QChar getCharacter() const { return QChar::null; }
 
-    /**
-     * Sets a new token. This is done during parsing.
-     */
-    void setToken(Token* t) { token = t; }
-    
     
     /**
      * Sets the cursor and returns the element the point is in.
@@ -346,12 +344,18 @@ protected:
     SequenceElement* buildChild(QDomNode& node, QString name);
 
     /**
-     * @returns the token that contains our type.
+     * @returns our type. This is an object from our parent's syntax tree
+     * or 0 if there was a very bad parsing error.
      */
-    Token* getToken() { return token; }
+    ElementType* getElementType() { return elementType; }
     
 private:
 
+    /**
+     * Sets a new type. This is done during parsing.
+     */
+    void setElementType(ElementType* t) { elementType = t; }
+    
     /**
      * Our parent.
      * The parent might not be null except for the FormulaElement
@@ -384,7 +388,7 @@ private:
      * The token that describes our type. Please note that we don't
      * own it.
      */
-    Token* token;
+    ElementType* elementType;
 
     // debug
     static int evilDestructionCount;

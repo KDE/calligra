@@ -44,4 +44,6 @@ Text, numbers and operators are supported as well.
 Please note that the key bindings are for testing only. The library
 is meant to be used with KActions. Look at KFormulaContainer::createActions.
 
+And yes, we do have syntax highlighting!
+
 See DESIGN to know the structure of the formulas

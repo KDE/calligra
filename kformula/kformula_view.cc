@@ -31,6 +31,7 @@
 //#include <kglobal.h>
 
 #include <kformulacontainer.h>
+#include <kformuladocument.h>
 #include <kformulawidget.h>
 
 #include "kformula_view.h"
@@ -58,30 +59,31 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
     // Nice parts start in read only mode.
     formulaWidget->setReadOnly(true);
 
-    KFormulaContainer* formula = m_pDoc->getFormula();
+    //KFormulaContainer* formula = m_pDoc->getFormula();
+    KFormulaDocument* document = m_pDoc->getDocument();
     
     // copy&paste
-    cutAction   = KStdAction::cut(formula, SLOT(cut()), actionCollection());
-    copyAction  = KStdAction::copy(formula, SLOT(copy()), actionCollection());
-    pasteAction = KStdAction::paste(formula, SLOT(paste()), actionCollection());
+    cutAction   = KStdAction::cut(document, SLOT(cut()), actionCollection());
+    copyAction  = KStdAction::copy(document, SLOT(copy()), actionCollection());
+    pasteAction = KStdAction::paste(document, SLOT(paste()), actionCollection());
     cutAction->setEnabled(false);
     copyAction->setEnabled(false);
 
     // elements
-    addBracketAction      = formula->getAddBracketAction();
-    addFractionAction     = formula->getAddFractionAction();
-    addRootAction         = formula->getAddRootAction();
-    addSumAction          = formula->getAddSumAction();
-    addProductAction      = formula->getAddProductAction();
-    addIntegralAction     = formula->getAddIntegralAction();
-    addMatrixAction       = formula->getAddMatrixAction();
-    addUpperLeftAction    = formula->getAddUpperLeftAction();
-    addLowerLeftAction    = formula->getAddLowerLeftAction();
-    addUpperRightAction   = formula->getAddUpperRightAction();
-    addLowerRightAction   = formula->getAddLowerRightAction();
-    addGenericUpperAction = formula->getAddGenericUpperAction();
-    addGenericLowerAction = formula->getAddGenericLowerAction();
-    removeEnclosingAction = formula->getRemoveEnclosingAction();
+    addBracketAction      = document->getAddBracketAction();
+    addFractionAction     = document->getAddFractionAction();
+    addRootAction         = document->getAddRootAction();
+    addSumAction          = document->getAddSumAction();
+    addProductAction      = document->getAddProductAction();
+    addIntegralAction     = document->getAddIntegralAction();
+    addMatrixAction       = document->getAddMatrixAction();
+    addUpperLeftAction    = document->getAddUpperLeftAction();
+    addLowerLeftAction    = document->getAddLowerLeftAction();
+    addUpperRightAction   = document->getAddUpperRightAction();
+    addLowerRightAction   = document->getAddLowerRightAction();
+    addGenericUpperAction = document->getAddGenericUpperAction();
+    addGenericLowerAction = document->getAddGenericLowerAction();
+    removeEnclosingAction = document->getRemoveEnclosingAction();
 
     mn_indexList = new QPopupMenu();
     mn_indexList->insertItem(BarIcon("index0"),0);
@@ -298,37 +300,6 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
 //                                                this,SLOT(matrixRemCol()),
 //                                                actionCollection(),"matrixremcol");
 
-    QStringList delimiter;
-    delimiter.append(QString("("));
-    delimiter.append(QString("["));
-    delimiter.append(QString("<"));
-    delimiter.append(QString("/"));
-    delimiter.append(QString("\\"));
-    delimiter.append(QString(")"));
-    delimiter.append(QString("]"));
-    delimiter.append(QString(">"));
-    delimiter.append(QString("|"));
-    leftBracket = new KSelectAction(i18n("Left delimiter"),
-                                    0, this, SLOT(delimiterLeft()),
-                                    actionCollection(), "typeleft");
-    leftBracket->setItems(delimiter);
-    leftBracket->setCurrentItem(0);
-
-    delimiter.clear();
-    delimiter.append(QString(")"));
-    delimiter.append(QString("]"));
-    delimiter.append(QString(">"));
-    delimiter.append(QString("/"));
-    delimiter.append(QString("\\"));
-    delimiter.append(QString("("));
-    delimiter.append(QString("["));
-    delimiter.append(QString("<"));
-    delimiter.append(QString("|"));
-    rightBracket = new KSelectAction(i18n("Right delimiter"),
-                                     0, this, SLOT(delimiterRight()),
-                                     actionCollection(), "typeright");
-    rightBracket->setItems(delimiter);
-    rightBracket->setCurrentItem(0);
 
     // notify on cursor change
     connect(formulaWidget, SIGNAL(cursorChanged(bool, bool)),
@@ -874,18 +845,6 @@ void KFormulaView::generalColor()
 void KFormulaView::generalFont()
 {
     kdDebug(39001) <<"Slot generalFont\n";
-}
-
-void KFormulaView::delimiterLeft()
-{
-    QString left = leftBracket->currentText();
-    formulaWidget->setLeftBracket(left.at(0).latin1());
-}
-
-void KFormulaView::delimiterRight()
-{
-    QString right = rightBracket->currentText();
-    formulaWidget->setRightBracket(right.at(0).latin1());
 }
 
 void KFormulaView::setupPrinter(QPrinter&)

@@ -14,9 +14,10 @@
 #include <kcmdlineargs.h>
 #include <kcommand.h>
 
-#include "formulatoken.h"
+#include "elementtype.h"
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
+#include "kformuladocument.h"
 #include "kformulawidget.h"
 
 
@@ -57,7 +58,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_U: document->addGenericUpperIndex(); return;
             case Qt::Key_V: document->paste(); return;
             case Qt::Key_X: document->cut(); return;
-            case Qt::Key_Z: (state & Qt::ShiftButton) ? document->redo() : document->undo(); return;
+            case Qt::Key_Z: (state & Qt::ShiftButton) ? document->getDocument()->redo() : document->getDocument()->undo(); return;
             default:
                 //cerr << "Key: " << event->key() << endl;
                 break;
@@ -87,8 +88,8 @@ int main(int argc, char** argv)
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    KCommandHistory* history = new KCommandHistory;
-    KFormulaContainer* container = new KFormulaContainer(*history);
+    KFormulaDocument* document = new KFormulaDocument;
+    KFormulaContainer* container = new KFormulaContainer(document);
     KFormulaWidget* mw1 = new TestWidget(container, 0, "test1");
     KFormulaWidget* mw2 = new TestWidget(container, 0, "test2");
 
@@ -108,7 +109,7 @@ int main(int argc, char** argv)
     int result = app.exec();
 
     delete container;
-    delete history;
+    delete document;
     
     int destruct = BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
@@ -118,9 +119,9 @@ int main(int argc, char** argv)
     if (destruct != 0) {
         cerr << "KFormulaCommand::EvilDestructionCount: " << destruct << endl;
     }
-    destruct = Token::getEvilDestructionCount();
+    destruct = ElementType::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "Token::EvilDestructionCount: " << destruct << endl;
+        cerr << "ElementType::EvilDestructionCount: " << destruct << endl;
     }
 
     return result;
