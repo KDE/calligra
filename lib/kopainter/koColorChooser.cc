@@ -55,10 +55,8 @@ QWidget(parent, name)
 
   clr_patch = new KColorPatch(this);
 
-  KoColorFrame *fff = new KoColorFrame(this);   //Temp widget (will be changed to palette)
-  fff->setFixedHeight(20);
-  fff->slotSetColor1(red);
-  fff->slotSetColor2(green);
+  KHSSelector *mColorSelector = new KHSSelector(this);
+  mColorSelector->setFixedHeight(20);
 
   mRGBWidget = new RGBWidget(this, this);
   mGreyWidget = new GreyWidget(this, this);
@@ -71,7 +69,7 @@ QWidget(parent, name)
   mGrid->addMultiCellWidget(mRGBWidget, 1, 1, 1, 4);
   mGrid->addMultiCellWidget(mGreyWidget, 1, 1, 1, 4);
   mGrid->addWidget(clr_patch, 1, 0);
-  mGrid->addMultiCellWidget(fff, 2, 2, 0, 4);
+  mGrid->addMultiCellWidget(mColorSelector, 2, 2, 0, 4);
 
   connect(btnRGB, SIGNAL(clicked()), this, SLOT(slotShowRGB()));
   connect(btnHSB, SIGNAL(clicked()), this, SLOT(slotShowHSB()));
