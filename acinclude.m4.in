@@ -1032,6 +1032,15 @@ AC_DEFUN(AC_CHECK_COMPILERS,
    fi
   ], [ac_use_debug_code="no"])
 
+  AC_ARG_ENABLE(strict,[  --enable-strict         compiles with strict compiler options (may not work!)],
+   [ 
+    if test $enableval = "no"; then 
+         ac_use_strict_options="no"
+       else 
+         ac_use_strict_options="yes"
+    fi
+   ], [ac_use_strict_options="no"])
+
 dnl this was AC_PROG_CC. I had to include it manualy, since I had to patch it
   AC_MSG_CHECKING(for a C-Compiler)
   dnl if there is one, print out. if not, don't matter
@@ -1067,6 +1076,10 @@ dnl this was AC_PROG_CC. I had to include it manualy, since I had to patch it
 
     if test "$GCC" = "yes"; then
      CFLAGS="$CFLAGS -Wall"
+
+     if test "$ac_use_strict_options" = "yes"; then
+	CFLAGS="$CFLAGS -W -ansi -pedantic"     
+     fi
     fi
 
   fi
@@ -1163,6 +1176,14 @@ EOF
 
     if test "$GXX" = "yes"; then
        CXXFLAGS="$CXXFLAGS -Wall"
+ 
+       if test "$ac_use_strict_options" = "yes"; then
+	CXXFLAGS="$CXXFLAGS -W -ansi -pedantic -Wtraditional  -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion  -Woverloaded-virtual -Wundef -Wbad-function-cast  -Wsynth"
+       fi
+
+       if test "$kde_very_strict" = "yes"; then
+         CXXFLAGS="$CXXFLAGS -Wold-style-cast -Wshadow -Wredundant-decls"
+       fi
     fi
   fi  
 
@@ -1806,6 +1827,7 @@ if test "$kde_cv_libgpp_includes" != "no"; then
   all_includes="-I$kde_cv_libgpp_includes $all_includes"
 fi
 ])
+])
 
 
 AC_DEFUN(KDE_CHECK_MICO,
@@ -1913,6 +1935,8 @@ AC_MSG_RESULT($kde_cv_have_mini_stl)
 if test "$kde_cv_have_mini_stl" = "yes"; then
   AC_DEFINE_UNQUOTED(HAVE_MINI_STL)
 fi
+])
+
 ])
 
 
@@ -2027,12 +2051,9 @@ AC_DEFUN(KDE_CHECK_STL_SGI,
       AC_TRY_COMPILE([
 #include <string>
 ],[
-int main()
-{
   string astring="Hallo Welt.";
   astring.erase(, 6); // now astring is "Welt"
   return 0;
-};
 ], kde_cv_stl_type_sgi=yes,
    kde_cv_stl_type_sgi=no)
 ])
@@ -2052,12 +2073,9 @@ AC_DEFUN(KDE_CHECK_STL_HP,
       AC_TRY_COMPILE([
 #include <string>
 ],[
-int main()
-{
   string astring="Hello World";
   astring.remove(0, 6); // now astring is "World"
   return 0;
-};
 ], kde_cv_stl_type_hp=yes,
    kde_cv_stl_type_hp=no)
 ])
@@ -2105,3 +2123,50 @@ else
   AC_MSG_RESULT(not found)
 fi
 ])
+
+AC_DEFUN(KDE_CHECK_ANSI,
+[
+AC_MSG_CHECKING([for strdup])
+
+    AC_CACHE_VAL(kde_cv_stl_type_sgi,
+    [
+AC_LANG_CPLUSPLUS
+save_CXXFLAGS="$CXXFLAGS"
+if test "$GCC" = "yes"; then
+  CXXFLAGS="$CXXFLAGS -pedantic-errors"
+fi
+
+AC_TRY_COMPILE([
+#include <string.h>
+],[
+  char buffer[] = "Hallo";
+  strdup(buffer)
+], kde_cv_has_strdup=yes,
+   kde_cv_has_strdup=no)
+CXXFLAGS="$save_CXXFLAGS"
+])
+AC_MSG_RESULT($kde_cv_has_strdup)
+
+if test "$kde_cv_has_strdup" = "yes"; then
+  AC_DEFINE_UNQUOTED(HAVE_STRDUP)
+fi
+
+])
+
+AC_DEFUN(KDE_CHECK_INSURE,
+[
+  AC_ARG_ENABLE(insure, [  --enable-insure             use insure++ for debugging [default=no]],
+  [
+  if test $enableval = "no"; dnl
+	then ac_use_insure="no"
+	else ac_use_insure="yes"
+   fi
+  ], [ac_use_insure="no"])
+
+  AC_MSG_CHECKING(if we will use Insure++ to debug)
+  AC_MSG_RESULT($ac_use_insure)
+  if test "$ac_use_insure" = "yes"; dnl
+       then CC="insure"; CXX="insure"; dnl CFLAGS="$CLAGS -fno-rtti -fno-exceptions "????
+   fi
+])          
+
