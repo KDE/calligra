@@ -1892,6 +1892,7 @@ void KPresenterView::penChosen()
 		pen.setColor( c );
 	    else
 		pen = NoPen;
+            delete macro;
 	}
     }
     else
@@ -1932,6 +1933,7 @@ void KPresenterView::brushChosen()
 		brush.setColor( c );
 	    else
 		brush = NoBrush;
+            delete macro;
 	}
     }
     else
@@ -6340,7 +6342,7 @@ void KPresenterView::slotObjectEditChanged()
 
 void KPresenterView::duplicateObj()
 {
-    if (m_canvas->currentTextObjectView() )
+    if (m_canvas->currentTextObjectView() && !m_canvas->isOneObjectSelected() )
         return;
 
     KPrDuplicatObjDia *dlg= new KPrDuplicatObjDia(this,  m_pKPresenterDoc);

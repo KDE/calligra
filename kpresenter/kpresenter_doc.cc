@@ -405,7 +405,7 @@ KPresenterDoc::~KPresenterDoc()
 
 void KPresenterDoc::addCommand( KCommand * cmd )
 {
-    kdDebug() << "KWDocument::addCommand " << cmd->name() << endl;
+    kdDebug() << "KPresenterDoc::addCommand " << cmd->name() << endl;
     m_commandHistory->addCommand( cmd, false );
     setModified( true );
 }
