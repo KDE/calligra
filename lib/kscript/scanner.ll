@@ -6,7 +6,7 @@
 
 #include "kscript_parsenode.h"
 #include "kscript_types.h"
-#include "kscript_synext.h"
+// #include "kscript_synext.h"
 
 #ifndef KDE_USE_FINAL
 #include "yacc.cc.h"

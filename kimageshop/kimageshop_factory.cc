@@ -1,7 +1,7 @@
 #include "kimageshop_factory.h"
 #include "kimageshop_doc.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 
@@ -15,14 +15,14 @@ extern "C"
     }
 };
 
-KLibGlobal* KImageShopFactory::s_global = 0;
+KInstance* KImageShopFactory::s_global = 0;
 
 KImageShopFactory::KImageShopFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
   KImageIO::registerFormats();
 
-  s_global = new KLibGlobal( "kimageshop" );
+  s_global = new KInstance( "kimageshop" );
   
   s_global->dirs()->addResourceType("kis",
 				    KStandardDirs::kde_default("data") + "kimageshop/");
@@ -51,7 +51,7 @@ QObject* KImageShopFactory::create( QObject* parent, const char* name, const cha
     return new KImageShopDoc( 510, 510, (KoDocument*)parent, name );
 }
 
-KLibGlobal* KImageShopFactory::global()
+KInstance* KImageShopFactory::global()
 {
     return s_global;
 }

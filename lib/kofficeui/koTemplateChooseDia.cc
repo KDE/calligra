@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
-#include <klibglobal.h>
+#include <kinstance.h>
 
 #include <qhbox.h>
 #include <qvbox.h>
@@ -34,7 +34,7 @@
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name, const QString& _template_type,
-					 KLibGlobal* _global, bool _hasCancel,bool _onlyTemplates,
+					 KInstance* _global, bool _hasCancel,bool _onlyTemplates,
 					 const QString &importFilter, const QString &mimeType )
     : QDialog(parent,name,true), template_type(_template_type), onlyTemplates(_onlyTemplates),
       m_strImportFilter( importFilter ), m_strMimeType( mimeType )
@@ -63,7 +63,7 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name, const
 }
 
 /*================================================================*/
-KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate(const QString& _template_type, KLibGlobal* global,
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate(const QString& _template_type, KInstance* global,
 								    QString &_template,bool _hasCancel, bool _onlyTemplates,
 								    const QString &importFilter, const QString &mimeType )
 {

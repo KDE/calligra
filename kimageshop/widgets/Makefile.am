@@ -1,3 +1,4 @@
+
 INCLUDES = -I$(srcdir)/.. $(all_includes)
 
 noinst_LTLIBRARIES = libkiswidgets.la

@@ -90,6 +90,7 @@ bool KSObject_QDialog::ksQDialog_show( KSContext& context )
     return false;
   QDialog* w = (QDialog*)object();
   w->show();
+  return true;
 }
 
 bool KSObject_QDialog::ksQDialog_hide( KSContext& context )
@@ -98,6 +99,7 @@ bool KSObject_QDialog::ksQDialog_hide( KSContext& context )
     return false;
   QDialog* w = (QDialog*)object();
   w->hide();
+  return true;
 }
 
 void KSObject_QDialog::setObject( QObject* obj )

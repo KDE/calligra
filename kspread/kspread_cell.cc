@@ -42,7 +42,7 @@
 #include <komlWriter.h>
 #include <torben.h>
 #include <kformula.h>
-#include <klibglobal.h>
+#include <kinstance.h>
 #include <klocale.h>
 #include <kscript_parsenode.h>
 

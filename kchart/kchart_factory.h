@@ -9,7 +9,7 @@
 
 #include <klibloader.h>
 
-class KLibGlobal;
+class KInstance;
 
 class KChartFactory : public KLibFactory
 {
@@ -20,10 +20,10 @@ public:
 
     virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject" );
 
-    static KLibGlobal* global();
+    static KInstance* global();
 
 private:
-    static KLibGlobal* s_global;
+    static KInstance* s_global;
 };
 
 #endif

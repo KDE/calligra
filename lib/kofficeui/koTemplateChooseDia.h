@@ -63,7 +63,7 @@ signals:
 
 class QGridLayout;
 
-class KLibGlobal;
+class KInstance;
 
 /******************************************************************/
 /* Class: KoTemplateChooseDia					  */
@@ -76,10 +76,10 @@ class KoTemplateChooseDia : public QDialog
 public:
     enum ReturnType {Cancel,Template,File,Empty};
 
-    KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type, KLibGlobal* global, bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType );
+    KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type, KInstance* global, bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType );
     ~KoTemplateChooseDia() {;}
 
-    static ReturnType chooseTemplate(const QString& template_type, KLibGlobal* global, QString &_template, bool _hasCancel, bool _onlyTemplates = true, const QString &importFilter = QString::null, const QString &mimeType = QString::null );
+    static ReturnType chooseTemplate(const QString& template_type, KInstance* global, QString &_template, bool _hasCancel, bool _onlyTemplates = true, const QString &importFilter = QString::null, const QString &mimeType = QString::null );
 
     QString getTemplate() { return templateName; }
     QString getFullTemplate() { return fullTemplateName; }
@@ -111,7 +111,7 @@ private:
     QGridLayout *grid;
     QString m_strImportFilter;
     QString m_strMimeType;
-    KLibGlobal* global;
+    KInstance* global;
 
 private slots:
     void nameChanged(const QString &);

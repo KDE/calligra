@@ -25,7 +25,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
-#include <klibglobal.h>
+#include <kinstance.h>
 #include <klocale.h>
 #include <kstddirs.h>
 

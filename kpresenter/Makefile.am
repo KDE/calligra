@@ -1,6 +1,6 @@
 
-INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes)
-LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
+LDFLAGS	= $(all_libraries) $(KDE_RPATH)
 LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
 
 ####### Files

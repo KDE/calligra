@@ -1,7 +1,7 @@
 #include "kspread_factory.h"
 #include "kspread_doc.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 #include <kstddirs.h>
 
 extern "C"
@@ -12,12 +12,12 @@ extern "C"
     }
 };
 
-KLibGlobal* KSpreadFactory::s_global = 0;
+KInstance* KSpreadFactory::s_global = 0;
 
 KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "kspread" );
+    s_global = new KInstance( "kspread" );
     s_global->dirs()->addResourceType( "toolbar",
 				       KStandardDirs::kde_default("data") + "koffice/toolbar/");
 }
@@ -37,7 +37,7 @@ QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* 
     return new KSpreadDoc( (KoDocument*)parent, name );
 }
 
-KLibGlobal* KSpreadFactory::global()
+KInstance* KSpreadFactory::global()
 {
     return s_global;
 }

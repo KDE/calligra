@@ -2,7 +2,7 @@
 #include "asciiexport_factory.moc"
 #include "asciiexport.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 
 extern "C"
 {
@@ -12,12 +12,12 @@ extern "C"
     }
 };
 
-KLibGlobal* ASCIIExportFactory::s_global = 0;
+KInstance* ASCIIExportFactory::s_global = 0;
 
 ASCIIExportFactory::ASCIIExportFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "asciiexport" );
+    s_global = new KInstance( "asciiexport" );
 }
 
 ASCIIExportFactory::~ASCIIExportFactory()
@@ -34,7 +34,7 @@ QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const ch
     return new ASCIIExport( (KoFilter*)parent, name );
 }
 
-KLibGlobal* ASCIIExportFactory::global()
+KInstance* ASCIIExportFactory::global()
 {
     return s_global;
 }

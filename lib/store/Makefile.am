@@ -1,7 +1,7 @@
 
 lib_LTLIBRARIES = libkstore.la
 LDFLAGS = -version-info 1:0:0 $(all_libraries)
-INCLUDES = $(MICO_INCLUDES) $(all_includes)
+INCLUDES = $(all_includes)
 IDL_FLAGS = --relative-paths
 
 ####### Files

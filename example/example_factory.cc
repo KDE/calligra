@@ -1,7 +1,7 @@
 #include "example_factory.h"
 #include "example_part.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 
 extern "C"
 {
@@ -11,12 +11,12 @@ extern "C"
     }
 };
 
-KLibGlobal* ExampleFactory::s_global = 0;
+KInstance* ExampleFactory::s_global = 0;
 
 ExampleFactory::ExampleFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "example" );
+    s_global = new KInstance( "example" );
 }
 
 ExampleFactory::~ExampleFactory()
@@ -34,7 +34,7 @@ QObject* ExampleFactory::create( QObject* parent, const char* name, const char* 
     return new ExamplePart( (KoDocument*)parent, name );
 }
 
-KLibGlobal* ExampleFactory::global()
+KInstance* ExampleFactory::global()
 {
     return s_global;
 }

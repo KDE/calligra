@@ -21,7 +21,7 @@ KoDataToolInfo::KoDataToolInfo( const KService::Ptr& service )
 {
     m_service = service;
 
-    if ( m_service && !m_service->serviceTypes().contains( "KoDataTool" ) )
+    if ( !!m_service && !m_service->serviceTypes().contains( "KoDataTool" ) )
     {
 	qDebug("The service %s does not feature the service type KoDataTool", m_service->name().latin1() );
 	m_service = 0;

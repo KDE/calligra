@@ -2,7 +2,7 @@
 #include "olefilter_factory.moc"
 #include "olefilter.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 
 extern "C"
 {
@@ -12,12 +12,12 @@ extern "C"
     }
 };
 
-KLibGlobal* OLEFilterFactory::s_global = 0;
+KInstance* OLEFilterFactory::s_global = 0;
 
 OLEFilterFactory::OLEFilterFactory( QObject* parent, const char* name )
     : Factory( parent, name )
 {
-    s_global = new KLibGlobal( "olefilter" );
+    s_global = new KInstance( "olefilter" );
 }
 
 OLEFilterFactory::~OLEFilterFactory()
@@ -34,7 +34,7 @@ QObject* OLEFilterFactory::create( QObject* parent, const char* name )
     return new OLEFilter( (KoFilter*)parent, name );
 }
 
-KLibGlobal* OLEFilterFactory::global()
+KInstance* OLEFilterFactory::global()
 {
     return s_global;
 }

@@ -1,6 +1,8 @@
 #ifndef KOICONS_H
 #define KOICONS_H
 
+class KInstance;
+
 #include <kiconloader.h>
 
 #define KofficeBarIcon( x ) BarIcon( x, KoIcons::global() )
@@ -8,10 +10,10 @@
 class KoIcons
 {
 public:
-    static KLibGlobal* global();
+    static KInstance* global();
     
 private:
-    static KLibGlobal* s_global;
+    static KInstance* s_global;
 };
 
 #endif

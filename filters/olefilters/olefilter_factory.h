@@ -3,7 +3,7 @@
 
 #include <loader.h>
 
-class KLibGlobal;
+class KInstance;
 
 class OLEFilterFactory : public Factory
 {
@@ -14,9 +14,9 @@ public:
 
     virtual QObject* create( QObject* parent = 0, const char* name = 0 );
 
-    static KLibGlobal* global();
+    static KInstance* global();
 
 private:
-    static KLibGlobal* s_global;
+    static KInstance* s_global;
 };
 #endif

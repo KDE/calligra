@@ -1,13 +1,13 @@
 #include "koIcons.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 
-KLibGlobal* KoIcons::s_global = 0;
+KInstance* KoIcons::s_global = 0;
 
-KLibGlobal* KoIcons::global()
+KInstance* KoIcons::global()
 {
     if ( s_global == 0 )
-	s_global = new KLibGlobal( "koffice" );
+	s_global = new KInstance( "koffice" );
     
     return s_global;
 }

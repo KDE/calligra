@@ -1,7 +1,7 @@
 #MIN_CONFIG
 
-KDE_CHECK_MICO()
-KDE_CHECK_MINI_STL()
+# KDE_CHECK_MICO()
+# KDE_CHECK_MINI_STL()
  
 idldir="\$(includedir)/idl"
 AC_SUBST(idldir)

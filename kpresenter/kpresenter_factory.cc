@@ -6,7 +6,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-#include <klibglobal.h>
+#include <kinstance.h>
 
 #include <qstringlist.h>
 
@@ -32,12 +32,12 @@ extern "C"
 };
 
 
-KLibGlobal* KPresenterFactory::s_global = 0;
+KInstance* KPresenterFactory::s_global = 0;
 
 KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "kpresenter" );
+    s_global = new KInstance( "kpresenter" );
 
     s_global->dirs()->addResourceType("kpresenter_template",
 				      KStandardDirs::kde_default("data") + "kpresenter/templates/");
@@ -62,7 +62,7 @@ QObject* KPresenterFactory::create( QObject* parent, const char* name, const cha
     return new KPresenterDoc( (KoDocument*)parent, name );
 }
 
-KLibGlobal* KPresenterFactory::global()
+KInstance* KPresenterFactory::global()
 {
     return s_global;
 }

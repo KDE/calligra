@@ -7,7 +7,7 @@
 #include "kchart_factory.h"
 #include "kchart_part.h"
 
-#include <klibglobal.h>
+#include <kinstance.h>
 
 extern "C"
 {
@@ -17,12 +17,12 @@ extern "C"
     }
 };
 
-KLibGlobal* KChartFactory::s_global = 0;
+KInstance* KChartFactory::s_global = 0;
 
 KChartFactory::KChartFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "kchart" );
+    s_global = new KInstance( "kchart" );
 }
 
 KChartFactory::~KChartFactory()
@@ -39,7 +39,7 @@ QObject* KChartFactory::create( QObject* parent, const char* name, const char* c
     return new KChartPart( (KoDocument*)parent, name );
 }
 
-KLibGlobal* KChartFactory::global()
+KInstance* KChartFactory::global()
 {
     return s_global;
 }

@@ -24,7 +24,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv );
+    KoApplication app( argc, argv, "example" );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-example" );
     ASSERT( !entry.isEmpty() );

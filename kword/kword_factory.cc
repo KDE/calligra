@@ -6,7 +6,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-#include <klibglobal.h>
+#include <kinstance.h>
 
 #include <qstringlist.h>
 
@@ -32,12 +32,12 @@ extern "C"
 };
 
 
-KLibGlobal* KWordFactory::s_global = 0;
+KInstance* KWordFactory::s_global = 0;
 
 KWordFactory::KWordFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "kword" );
+    s_global = new KInstance( "kword" );
 
     s_global->dirs()->addResourceType( "kword_template",
 				       KStandardDirs::kde_default("data") + "kword/templates/");
@@ -62,7 +62,7 @@ QObject* KWordFactory::create( QObject* parent, const char* name, const char* cl
     return new KWordDocument( (KoDocument*)parent, name );
 }
 
-KLibGlobal* KWordFactory::global()
+KInstance* KWordFactory::global()
 {
     return s_global;
 }

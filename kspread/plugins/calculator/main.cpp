@@ -31,7 +31,7 @@
 #include <qstring.h>
 
 #include <kaction.h>
-#include <klibglobal.h>
+#include <kinstance.h>
 #include <kiconloader.h>
 
 #include <stdio.h>
@@ -50,12 +50,12 @@ extern "C"
     }
 };
 
-KLibGlobal* CalcFactory::s_global = 0;
+KInstance* CalcFactory::s_global = 0;
 
 CalcFactory::CalcFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KLibGlobal( "kspreadcalc" );
+    s_global = new KInstance( "kspreadcalc" );
 }
 
 CalcFactory::~CalcFactory()
@@ -73,7 +73,7 @@ QObject* CalcFactory::create( QObject* parent, const char* name, const char* cla
     return new Calculator( (KSpreadView*)parent, name );
 }
 
-KLibGlobal* CalcFactory::global()
+KInstance* CalcFactory::global()
 {
     return s_global;
 }
