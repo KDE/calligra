@@ -176,14 +176,14 @@ void KSpreadTabBar::scrollLast()
 
         if ( m_rightTab == i )
         return;
-        
+
     QStringList::Iterator it;
         it = tabsList.end();
         do
         {
                 --it;
                 QFontMetrics fm = painter.fontMetrics();
-                
+
             x += 10 + fm.width( *it );
                 if ( x > width() )
                 {
@@ -426,7 +426,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
             if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
             {
                 activeTab = i;
-                active_text = text;
+                active_text = text.latin1();
             }
 
             x += 10 + text_width;

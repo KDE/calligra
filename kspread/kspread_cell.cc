@@ -156,30 +156,30 @@ void KSpreadCell::copyLayout( int _column, int _row )
     KSpreadConditional *tmpCondition;
     if( o->getFirstCondition(0) )
     {
-  	tmpCondition=getFirstCondition();
-  	tmpCondition->val1=o->getFirstCondition(0)->val1;
-  	tmpCondition->val2=o->getFirstCondition(0)->val2;
-  	tmpCondition->colorcond=o->getFirstCondition(0)->colorcond;
-  	tmpCondition->fontcond=o->getFirstCondition(0)->fontcond;
-  	tmpCondition->m_cond=o->getFirstCondition(0)->m_cond;
+        tmpCondition=getFirstCondition();
+        tmpCondition->val1=o->getFirstCondition(0)->val1;
+        tmpCondition->val2=o->getFirstCondition(0)->val2;
+        tmpCondition->colorcond=o->getFirstCondition(0)->colorcond;
+        tmpCondition->fontcond=o->getFirstCondition(0)->fontcond;
+        tmpCondition->m_cond=o->getFirstCondition(0)->m_cond;
     }
     if( o->getSecondCondition(0) )
     {
-  	tmpCondition=getSecondCondition();
-  	tmpCondition->val1=o->getSecondCondition(0)->val1;
-  	tmpCondition->val2=o->getSecondCondition(0)->val2;
-  	tmpCondition->colorcond=o->getSecondCondition(0)->colorcond;
-  	tmpCondition->fontcond=o->getSecondCondition(0)->fontcond;
-  	tmpCondition->m_cond=o->getSecondCondition(0)->m_cond;
+        tmpCondition=getSecondCondition();
+        tmpCondition->val1=o->getSecondCondition(0)->val1;
+        tmpCondition->val2=o->getSecondCondition(0)->val2;
+        tmpCondition->colorcond=o->getSecondCondition(0)->colorcond;
+        tmpCondition->fontcond=o->getSecondCondition(0)->fontcond;
+        tmpCondition->m_cond=o->getSecondCondition(0)->m_cond;
     }
     if( o->getThirdCondition(0) )
     {
-  	tmpCondition=getThirdCondition();
-  	tmpCondition->val1=o->getThirdCondition(0)->val1;
-  	tmpCondition->val2=o->getThirdCondition(0)->val2;
-  	tmpCondition->colorcond=o->getThirdCondition(0)->colorcond;
-  	tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
-  	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
+        tmpCondition=getThirdCondition();
+        tmpCondition->val1=o->getThirdCondition(0)->val1;
+        tmpCondition->val2=o->getThirdCondition(0)->val2;
+        tmpCondition->colorcond=o->getThirdCondition(0)->colorcond;
+        tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
+        tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
     }
     setComment( o->comment(_column, _row) );
     setAngle( o->getAngle(_column, _row) );
@@ -201,10 +201,10 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
     setAction(cell->action() );
 
     if ( m_pPrivate )
-	delete m_pPrivate;
+        delete m_pPrivate;
     m_pPrivate = 0;
     if ( cell->m_pPrivate )
-	m_pPrivate = cell->m_pPrivate->copy( this );
+        m_pPrivate = cell->m_pPrivate->copy( this );
 }
 
 void KSpreadCell::defaultStyle()
@@ -240,15 +240,15 @@ void KSpreadCell::defaultStyle()
   setPostfix( "" );
   setPrefix( "" );
   if(m_firstCondition!=0)
-  	delete m_firstCondition;
+        delete m_firstCondition;
   m_firstCondition=0;
 
   if(m_thirdCondition!=0)
-  	delete m_thirdCondition;
+        delete m_thirdCondition;
   m_thirdCondition=0;
 
   if(m_secondCondition!=0)
-  	delete m_secondCondition;
+        delete m_secondCondition;
   m_secondCondition=0;
 
   m_conditionIsTrue=false;
@@ -281,8 +281,8 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
     for( int y = _row; y <= _row + m_iExtraYCells; y++ )
       if ( x != _col || y != _row )
       {
-	KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-	cell->unobscure();
+        KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
+        cell->unobscure();
       }
 
   // disable forcing ?
@@ -300,12 +300,12 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
 
     // Obscure the cells
     for( int x = _col; x <= _col + _x; x++ )
-	for( int y = _row; y <= _row + _y; y++ )
-	    if ( x != _col || y != _row )
-	    {
-		KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-		cell->obscure( this, _col, _row );
-	    }
+        for( int y = _row; y <= _row + _y; y++ )
+            if ( x != _col || y != _row )
+            {
+                KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
+                cell->obscure( this, _col, _row );
+            }
 
     // Refresh the layout
     // QPainter painter;
@@ -325,23 +325,23 @@ void KSpreadCell::move( int col, int row )
     int ey = extraYCells();
 
     if ( m_pObscuringCell )
-	m_pObscuringCell = 0;
+        m_pObscuringCell = 0;
 
     // Unobscure the objects we obscure right now
     for( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; x++ )
-	for( int y = m_iRow; y <= m_iRow + m_iExtraYCells; y++ )
-	    if ( x != m_iColumn || y != m_iRow )
-	    {
-		KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-		cell->unobscure();
-	    }
+        for( int y = m_iRow; y <= m_iRow + m_iExtraYCells; y++ )
+            if ( x != m_iColumn || y != m_iRow )
+            {
+                KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
+                cell->unobscure();
+            }
 
     m_iColumn = col;
     m_iRow = row;
 
     // Reobscure cells if we are forced to do so.
     if ( m_bForceExtraCells )
-	forceExtraCells( col, row, ex, ey );
+        forceExtraCells( col, row, ex, ey );
 }
 
 void KSpreadCell::setLayoutDirtyFlag()
@@ -349,22 +349,22 @@ void KSpreadCell::setLayoutDirtyFlag()
     m_bLayoutDirtyFlag= TRUE;
 
     if ( m_pObscuringCell )
-	m_pObscuringCell->setLayoutDirtyFlag();
+        m_pObscuringCell->setLayoutDirtyFlag();
 }
 
 bool KSpreadCell::needsPrinting() const
 {
     if ( isDefault() )
-	return FALSE;
+        return FALSE;
 
     if ( !m_strText.isEmpty() )
-	return TRUE;
+        return TRUE;
 
     if ( hasProperty( PTopBorder ) || hasProperty( PLeftBorder ) ||
-	 hasProperty( PRightBorder ) || hasProperty( PBottomBorder ) ||
-	 hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ||
-	 hasProperty( PBackgroundBrush ) || hasProperty( PBackgroundColor ) )
-	return TRUE;
+         hasProperty( PRightBorder ) || hasProperty( PBottomBorder ) ||
+         hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ||
+         hasProperty( PBackgroundBrush ) || hasProperty( PBackgroundColor ) )
+        return TRUE;
 
     return FALSE;
 }
@@ -372,7 +372,7 @@ bool KSpreadCell::needsPrinting() const
 bool KSpreadCell::isEmpty() const
 {
   if ( isDefault() )
-	return TRUE;
+        return TRUE;
 
   if ( m_strText.isEmpty() )
     return TRUE;
@@ -383,7 +383,7 @@ bool KSpreadCell::isEmpty() const
 bool KSpreadCell::isObscuringForced()
 {
     if ( !m_pObscuringCell )
-	return FALSE;
+        return FALSE;
 
     return m_pObscuringCell->isForceExtraCells();
 }
@@ -415,11 +415,11 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     QPopupMenu *popup = new QPopupMenu;
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
     QObject::connect( popup, SIGNAL( activated( int ) ),
-		      s, SLOT( slotItemSelected( int ) ) );
+                      s, SLOT( slotItemSelected( int ) ) );
     int id = 0;
     QStringList::ConstIterator it = s->m_lstItems.begin();
     for( ; it != s->m_lstItems.end(); ++it )
-	popup->insertItem( *it, id++ );
+        popup->insertItem( *it, id++ );
 
     RowLayout *rl = m_pTable->rowLayout( row() );
     int tx = m_pTable->columnPos( column(), _canvas );
@@ -457,25 +457,24 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
       // Print out exception if any
       if ( context2.exception() )
       {
-	  QString tmp(i18n("Error in cell %1\n\n"));
-	  tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-	  tmp += context2.exception()->toString( context2 );
-	  KMessageBox::error( (QWidget*)0L, tmp);
+          QString tmp(i18n("Error in cell %1\n\n"));
+          tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+          tmp += context2.exception()->toString( context2 );
+          KMessageBox::error( (QWidget*)0L, tmp);
       }
 }
 
 QString KSpreadCell::encodeFormular( int _col, int _row )
 {
     if ( _col == -1 )
-	_col = m_iColumn;
+        _col = m_iColumn;
     if ( _row == -1 )
-	_row = m_iRow;
+        _row = m_iRow;
 
     QString erg = "";
 
-    const char *p = m_strText.data();
-    if ( p == 0L )
-	return QString();
+    if(m_strText.isEmpty())
+        return m_strText;
 
     char buf[ 2 ];
     buf[ 1 ] = 0;
@@ -483,112 +482,114 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
     bool fix1 = FALSE;
     bool fix2 = FALSE;
 
+    // FIXME (Werner)
+    const char *p=m_strText.latin1();
     while ( *p != 0 )
     {
-	/*if ( *p == '\"' )
-	{
-	    while ( *p && *p != '\"' )
-	    {
-		buf[ 0 ] = *p++;
-		erg += buf;
-		if ( *p == '\\' )
-		{
-		    buf[ 0 ] = *p++;
-		    erg += buf;
-		}
-	    }
-	    p++;
-	}*/
-	/*else*/ if ( *p != '$' && !isalpha( *p ) )
-	{
-	    buf[0] = *p++;
-	    erg += buf;
-	    fix1 = fix2 = FALSE;
-	}
-	else
-	{
-	    QString tmp = "";
-	    if ( *p == '$' )
-	    {
-		tmp = "$";
-		p++;
-		fix1 = TRUE;
-	    }
-	    if ( isalpha( *p ) )
-	    {
-		char buffer[ 1024 ];
-		char *p2 = buffer;
-		while ( *p && isalpha( *p ) )
-		{
-		    buf[ 0 ] = *p;
-		    tmp += buf;
-		    *p2++ = *p++;
-		}
-		*p2 = 0;
-		if ( *p == '$' )
-		{
-		    tmp += "$";
-		    p++;
-		    fix2 = TRUE;
-		}
-		if ( isdigit( *p ) )
-		{
-		    const char *p3 = p;
-		    int row = atoi( p );
-		    while ( *p != 0 && isdigit( *p ) ) p++;
-		    // Is it a table
-		    if ( *p == '!' )
-		    {
-			erg += tmp;
-			fix1 = fix2 = FALSE;
-			p = p3;
-		    }
-		    else // It must be a cell identifier
-		    {
-			int col = 0;
+        /*if ( *p == '\"' )
+        {
+            while ( *p && *p != '\"' )
+            {
+                buf[ 0 ] = *p++;
+                erg += buf;
+                if ( *p == '\\' )
+                {
+                    buf[ 0 ] = *p++;
+                    erg += buf;
+                }
+            }
+            p++;
+        }*/
+        /*else*/ if ( *p != '$' && !isalpha( *p ) )
+        {
+            buf[0] = *p++;
+            erg += buf;
+            fix1 = fix2 = FALSE;
+        }
+        else
+        {
+            QString tmp = "";
+            if ( *p == '$' )
+            {
+                tmp = "$";
+                p++;
+                fix1 = TRUE;
+            }
+            if ( isalpha( *p ) )
+            {
+                char buffer[ 1024 ];
+                char *p2 = buffer;
+                while ( *p && isalpha( *p ) )
+                {
+                    buf[ 0 ] = *p;
+                    tmp += buf;
+                    *p2++ = *p++;
+                }
+                *p2 = 0;
+                if ( *p == '$' )
+                {
+                    tmp += "$";
+                    p++;
+                    fix2 = TRUE;
+                }
+                if ( isdigit( *p ) )
+                {
+                    const char *p3 = p;
+                    int row = atoi( p );
+                    while ( *p != 0 && isdigit( *p ) ) p++;
+                    // Is it a table
+                    if ( *p == '!' )
+                    {
+                        erg += tmp;
+                        fix1 = fix2 = FALSE;
+                        p = p3;
+                    }
+                    else // It must be a cell identifier
+                    {
+                        int col = 0;
                         //used when there is a lower reference cell
                         //example =a1
                         int offset='a'-'A';
-			if ( strlen( buffer ) >= 2 )
-			{
+                        if ( strlen( buffer ) >= 2 )
+                        {
                             if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-			        col += 26 * ( buffer[0] - 'A' + 1 );
+                                col += 26 * ( buffer[0] - 'A' + 1 );
                             else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
                                  col += 26 * ( buffer[0] - 'A' + 1 -offset );
                             if(buffer[1] >= 'A' && buffer[1] <= 'Z')
-			        col += buffer[1] - 'A' + 1;
+                                col += buffer[1] - 'A' + 1;
                             else if( buffer[1]>= 'a' && buffer[1] <= 'z' )
                                  col +=  buffer[1] - 'A' + 1 -offset ;
-			}
-			else
+                        }
+                        else
                             if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-			        col += buffer[0] - 'A' + 1;
+                                col += buffer[0] - 'A' + 1;
                             else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
                                 col += buffer[0] - 'A' + 1 -offset ;
-			if ( fix1 )
-			    sprintf( buffer, "$%i", col );
-			else
-			    sprintf( buffer, "#%i", col - _col );
-			erg += buffer;
-			if ( fix2 )
-			    sprintf( buffer, "$%i#", row );
-			else
-			    sprintf( buffer, "#%i#", row - _row );
-			erg += buffer;
-		    }
-		}
-		else
-		{
-		    erg += tmp;
-		    fix1 = fix2 = FALSE;
-		}
-	    }
-	    else
-	    {
-		erg += tmp;
-		fix1 = FALSE;
-	    }
-	}
+                        if ( fix1 )
+                            sprintf( buffer, "$%i", col );
+                        else
+                            sprintf( buffer, "#%i", col - _col );
+                        erg += buffer;
+                        if ( fix2 )
+                            sprintf( buffer, "$%i#", row );
+                        else
+                            sprintf( buffer, "#%i#", row - _row );
+                        erg += buffer;
+                    }
+                }
+                else
+                {
+                    erg += tmp;
+                    fix1 = fix2 = FALSE;
+                }
+            }
+            else
+            {
+                erg += tmp;
+                fix1 = FALSE;
+            }
+        }
     }
 
     return erg;
@@ -597,80 +598,80 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 {
     if ( _col == -1 )
-	_col = m_iColumn;
+        _col = m_iColumn;
     if ( _row == -1 )
-	_row = m_iRow;
+        _row = m_iRow;
 
     QString erg = "";
     const char *p = _text;
 
     if ( p == 0L )
-	return QString();
+        return QString();
 
     char buf[ 2 ];
     buf[ 1 ] = 0;
 
     while ( *p != 0 )
     {
-	/*if ( *p == '\"' )
-	{
-	    while ( *p && *p != '\"' )
-	    {
-		buf[ 0 ] = *p++;
-		erg += buf;
-		if ( *p == '\\' )
-		{
-		    buf[ 0 ] = *p++;
-		    erg += buf;
-		}
-	    }
-	    p++;
-	}*/
-	if ( *p == '#' || *p == '$' )
-	{
-	    bool fix1 = FALSE;
-	    bool fix2 = FALSE;
-	    if ( *p++ == '$' )
-		fix1 = TRUE;
-	    int col = atoi( p );
-	    if ( !fix1 )
-		col += _col;
-	    if ( *p == '-' ) p++;
-	    while ( *p != 0 && isdigit( *p ) ) p++;
-	    // Skip '#' or '$'
-	    if ( *p++ == '$' )
-		fix2 = TRUE;
-	    int row = atoi( p );
-	    if ( !fix2 )
-		row += _row;
-	    if ( *p == '-' ) p++;
-	    while ( *p != 0 && isdigit( *p ) ) p++;
-	    // Skip '#' or '$'
-	    p++;
-	    if ( row <= 0 || col <= 0 )
-	    {
-		kdError(36001) << "ERROR: out of range" << endl;
-		return QString( _text );
-	    }
-	    if ( fix1 )
-		erg += "$";
-	    char buffer[ 20 ];
-	    char *p2 = buffer;
-	    if ( col > 26 )
-		*p2++ = 'A' + ( col / 26 ) - 1;
-	    *p2++ = 'A' + ( col % 26 ) - 1;
-	    *p2 = 0;
-	    erg += buffer;
-	    if ( fix2 )
-		erg += "$";
-	    sprintf( buffer, "%i", row );
-	    erg += buffer;
-	}
-	else
-	{
-	    buf[ 0 ] = *p++;
-	    erg += buf;
-	}
+        /*if ( *p == '\"' )
+        {
+            while ( *p && *p != '\"' )
+            {
+                buf[ 0 ] = *p++;
+                erg += buf;
+                if ( *p == '\\' )
+                {
+                    buf[ 0 ] = *p++;
+                    erg += buf;
+                }
+            }
+            p++;
+        }*/
+        if ( *p == '#' || *p == '$' )
+        {
+            bool fix1 = FALSE;
+            bool fix2 = FALSE;
+            if ( *p++ == '$' )
+                fix1 = TRUE;
+            int col = atoi( p );
+            if ( !fix1 )
+                col += _col;
+            if ( *p == '-' ) p++;
+            while ( *p != 0 && isdigit( *p ) ) p++;
+            // Skip '#' or '$'
+            if ( *p++ == '$' )
+                fix2 = TRUE;
+            int row = atoi( p );
+            if ( !fix2 )
+                row += _row;
+            if ( *p == '-' ) p++;
+            while ( *p != 0 && isdigit( *p ) ) p++;
+            // Skip '#' or '$'
+            p++;
+            if ( row <= 0 || col <= 0 )
+            {
+                kdError(36001) << "ERROR: out of range" << endl;
+                return QString( _text );
+            }
+            if ( fix1 )
+                erg += "$";
+            char buffer[ 20 ];
+            char *p2 = buffer;
+            if ( col > 26 )
+                *p2++ = 'A' + ( col / 26 ) - 1;
+            *p2++ = 'A' + ( col % 26 ) - 1;
+            *p2 = 0;
+            erg += buffer;
+            if ( fix2 )
+                erg += "$";
+            sprintf( buffer, "%i", row );
+            erg += buffer;
+        }
+        else
+        {
+            buf[ 0 ] = *p++;
+            erg += buf;
+        }
     }
 
     return erg;
@@ -691,16 +692,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     if ( !m_bForceExtraCells )
     {
-	for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
-	    for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
-		if ( x != m_iColumn || y != m_iRow )
-	        {
-		    KSpreadCell *cell = m_pTable->cellAt( x, y );
-		    cell->unobscure();
-		}
+        for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
+            for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
+                if ( x != m_iColumn || y != m_iRow )
+                {
+                    KSpreadCell *cell = m_pTable->cellAt( x, y );
+                    cell->unobscure();
+                }
 
-	m_iExtraXCells = 0;
-	m_iExtraYCells = 0;
+        m_iExtraXCells = 0;
+        m_iExtraYCells = 0;
     }
 
     /**
@@ -708,186 +709,186 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
      */
     if ( m_pQML )
     {
-	// Calculate how many cells we could use in addition right hand
-	// Never use more then 10 cells.
-	int right = 0;
-	int max_width = width( _col );
-	bool ende = false;
-	int c;
-	m_pQML->setWidth( &_painter, max_width );
-	for( c = _col + 1; !ende && c <= _col + 10; ++c )
+        // Calculate how many cells we could use in addition right hand
+        // Never use more then 10 cells.
+        int right = 0;
+        int max_width = width( _col );
+        bool ende = false;
+        int c;
+        m_pQML->setWidth( &_painter, max_width );
+        for( c = _col + 1; !ende && c <= _col + 10; ++c )
         {
-	    KSpreadCell *cell = m_pTable->cellAt( c, _row );
-	    if ( cell && !cell->isEmpty() )
-		ende = true;
-	    else
-	    {
-		ColumnLayout *cl = m_pTable->columnLayout( c );
-		max_width += cl->width();
+            KSpreadCell *cell = m_pTable->cellAt( c, _row );
+            if ( cell && !cell->isEmpty() )
+                ende = true;
+            else
+            {
+                ColumnLayout *cl = m_pTable->columnLayout( c );
+                max_width += cl->width();
 
-		// Can we make use of extra cells ?
-		int h = m_pQML->height();
-		m_pQML->setWidth( &_painter, max_width );
-		if ( m_pQML->height() < h )
-		    ++right;
-		else
-	        {
-		    max_width -= cl->width();
-		    m_pQML->setWidth( &_painter, max_width );
-		    ende = true;
-		}
-	    }
-	}
+                // Can we make use of extra cells ?
+                int h = m_pQML->height();
+                m_pQML->setWidth( &_painter, max_width );
+                if ( m_pQML->height() < h )
+                    ++right;
+                else
+                {
+                    max_width -= cl->width();
+                    m_pQML->setWidth( &_painter, max_width );
+                    ende = true;
+                }
+            }
+        }
 
-	// How may space do we need now ?
-	// m_pQML->setWidth( &_painter, max_width );
-	int h = m_pQML->height();
-	int w = m_pQML->width();
-	kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
+        // How may space do we need now ?
+        // m_pQML->setWidth( &_painter, max_width );
+        int h = m_pQML->height();
+        int w = m_pQML->width();
+        kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
 
-	m_richWidth = w;
-	m_richHeight = h;
+        m_richWidth = w;
+        m_richHeight = h;
 
-	// Occupy the needed extra cells in horizontal direction
-	max_width = width( _col );
-	ende = ( max_width >= w );
-	for( c = _col + 1; !ende && c <= _col + right; ++c )
+        // Occupy the needed extra cells in horizontal direction
+        max_width = width( _col );
+        ende = ( max_width >= w );
+        for( c = _col + 1; !ende && c <= _col + right; ++c )
         {
-	    KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-	    cell->obscure( this, _col, _row );
-	    ColumnLayout *cl = m_pTable->columnLayout( c );
-	    max_width += cl->width();
-	    if ( max_width >= w )
-		ende = true;
-	}
-	m_iExtraXCells = c - _col - 1;
-	m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
+            KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
+            cell->obscure( this, _col, _row );
+            ColumnLayout *cl = m_pTable->columnLayout( c );
+            max_width += cl->width();
+            if ( max_width >= w )
+                ende = true;
+        }
+        m_iExtraXCells = c - _col - 1;
+        m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
 
-	// Occupy the needed extra cells in vertical direction
-	int max_height = height( 0 );
-	int r = _row;
-	ende = ( max_height >= h );
-	for( r = _row + 1; !ende && r < _row + 500; ++r )
+        // Occupy the needed extra cells in vertical direction
+        int max_height = height( 0 );
+        int r = _row;
+        ende = ( max_height >= h );
+        for( r = _row + 1; !ende && r < _row + 500; ++r )
         {
-	    bool empty = true;
-	    for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
-	    {
-		KSpreadCell *cell = m_pTable->cellAt( c, r );
-		if ( cell && !cell->isEmpty() )
-		    empty = false;
-	    }
-	    if ( !empty )
-		ende = true;
-	    else
-	    {
-		// Occupy this row
-		for( c = _col; c <= _col + m_iExtraXCells; ++c )
-	        {
-		    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-		    cell->obscure( this, _col, _row );
-		}
-		RowLayout *rl = m_pTable->rowLayout( r );
-		max_height += rl->height();
-		if ( max_height >= h )
-		    ende = true;
-	    }
-	}
-	m_iExtraYCells = r - _row - 1;
-	m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+            bool empty = true;
+            for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+            {
+                KSpreadCell *cell = m_pTable->cellAt( c, r );
+                if ( cell && !cell->isEmpty() )
+                    empty = false;
+            }
+            if ( !empty )
+                ende = true;
+            else
+            {
+                // Occupy this row
+                for( c = _col; c <= _col + m_iExtraXCells; ++c )
+                {
+                    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
+                    cell->obscure( this, _col, _row );
+                }
+                RowLayout *rl = m_pTable->rowLayout( r );
+                max_height += rl->height();
+                if ( max_height >= h )
+                    ende = true;
+            }
+        }
+        m_iExtraYCells = r - _row - 1;
+        m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
 
-	m_bLayoutDirtyFlag = false;
-	return;
+        m_bLayoutDirtyFlag = false;
+        return;
     }
     /**
      * A visual formula
      */
     else if ( m_pVisualFormula )
     {
-	// Calculate how many cells we could use in addition right hand
-	// Never use more then 10 cells.
-	int right = 0;
-	int max_width = width( _col );
-	bool ende = false;
-	int c;
+        // Calculate how many cells we could use in addition right hand
+        // Never use more then 10 cells.
+        int right = 0;
+        int max_width = width( _col );
+        bool ende = false;
+        int c;
 
-	for( c = _col + 1; !ende && c <= _col + 10; ++c )
+        for( c = _col + 1; !ende && c <= _col + 10; ++c )
         {
-	    KSpreadCell *cell = m_pTable->cellAt( c, _row );
-	    if ( cell && !cell->isEmpty() )
-		ende = true;
-	    else
-	    {
-		ColumnLayout *cl = m_pTable->columnLayout( c );
-		max_width += cl->width();
-		++right;
-	    }
-	}
+            KSpreadCell *cell = m_pTable->cellAt( c, _row );
+            if ( cell && !cell->isEmpty() )
+                ende = true;
+            else
+            {
+                ColumnLayout *cl = m_pTable->columnLayout( c );
+                max_width += cl->width();
+                ++right;
+            }
+        }
 
-	// How may space do we need now ?
-	// TODO: We have to initialize sizes here ....
-	_painter.save();
-	_painter.setPen( m_textPen.color() );
-	_painter.setFont( m_textFont );
-	m_pVisualFormula->setPos( -1000, -1000 );
-	m_pVisualFormula->redraw( _painter );
-	_painter.restore();
-	QSize size = m_pVisualFormula->size();
-	int h = size.height();
-	int w = size.width();
+        // How may space do we need now ?
+        // TODO: We have to initialize sizes here ....
+        _painter.save();
+        _painter.setPen( m_textPen.color() );
+        _painter.setFont( m_textFont );
+        m_pVisualFormula->setPos( -1000, -1000 );
+        m_pVisualFormula->redraw( _painter );
+        _painter.restore();
+        QSize size = m_pVisualFormula->size();
+        int h = size.height();
+        int w = size.width();
 
-	kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
-	m_richWidth=w;
-	m_richHeight=h;
+        kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
+        m_richWidth=w;
+        m_richHeight=h;
 
-	// Occupy the needed extra cells in horizontal direction
-	max_width = width( _col );
-	ende = ( max_width >= w );
-	for( c = _col + 1; !ende && c <= _col + right; ++c )
+        // Occupy the needed extra cells in horizontal direction
+        max_width = width( _col );
+        ende = ( max_width >= w );
+        for( c = _col + 1; !ende && c <= _col + right; ++c )
         {
-	    KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-	    cell->obscure( this, _col, _row );
-	    ColumnLayout *cl = m_pTable->columnLayout( c );
-	    max_width += cl->width();
-	    if ( max_width >= w )
-		ende = true;
-	}
-	m_iExtraXCells = c - _col - 1;
-	m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
+            KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
+            cell->obscure( this, _col, _row );
+            ColumnLayout *cl = m_pTable->columnLayout( c );
+            max_width += cl->width();
+            if ( max_width >= w )
+                ende = true;
+        }
+        m_iExtraXCells = c - _col - 1;
+        m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
 
-	// Occupy the needed extra cells in vertical direction
-	int max_height = height( 0 );
-	int r = _row;
-	ende = ( max_height >= h );
-	for( r = _row + 1; !ende && r < _row + 500; ++r )
+        // Occupy the needed extra cells in vertical direction
+        int max_height = height( 0 );
+        int r = _row;
+        ende = ( max_height >= h );
+        for( r = _row + 1; !ende && r < _row + 500; ++r )
         {
-	    bool empty = true;
-	    for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
-	    {
-		KSpreadCell *cell = m_pTable->cellAt( c, r );
-		if ( cell && !cell->isEmpty() )
-		    empty = false;
-	    }
-	    if ( !empty )
-		ende = true;
-	    else
-	    {
-		// Occupy this row
-		for( c = _col; c <= _col + m_iExtraXCells; ++c )
-	        {
-		    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-		    cell->obscure( this, _col, _row );
-		}
-		RowLayout *rl = m_pTable->rowLayout( r );
-		max_height += rl->height();
-		if ( max_height >= h )
-		    ende = true;
-	    }
-	}
-	m_iExtraYCells = r - _row - 1;
-	m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+            bool empty = true;
+            for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+            {
+                KSpreadCell *cell = m_pTable->cellAt( c, r );
+                if ( cell && !cell->isEmpty() )
+                    empty = false;
+            }
+            if ( !empty )
+                ende = true;
+            else
+            {
+                // Occupy this row
+                for( c = _col; c <= _col + m_iExtraXCells; ++c )
+                {
+                    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
+                    cell->obscure( this, _col, _row );
+                }
+                RowLayout *rl = m_pTable->rowLayout( r );
+                max_height += rl->height();
+                if ( max_height >= h )
+                    ende = true;
+            }
+        }
+        m_iExtraYCells = r - _row - 1;
+        m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
 
-	m_bLayoutDirtyFlag = false;
-	return;
+        m_bLayoutDirtyFlag = false;
+        return;
     }
 
     /**
@@ -903,21 +904,21 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     if ( isFormular() && m_pTable->getShowFormular() )
     {
-	m_strOutText = m_strText;
+        m_strOutText = m_strText;
     }
     else if ( m_style == ST_Select )
     {
-	// If this is a select box, find out about the selected item
-	// in the KSpreadPrivate data struct
-	SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-	m_strOutText = s->text();
+        // If this is a select box, find out about the selected item
+        // in the KSpreadPrivate data struct
+        SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+        m_strOutText = s->text();
     }
     else if ( isBool() )
     {
-	if ( m_dValue == 0 )
-	    m_strOutText = "False";
-	else
-	    m_strOutText = "True";
+        if ( m_dValue == 0 )
+            m_strOutText = "False";
+        else
+            m_strOutText = "True";
     }
     else if( isDate() )
     {
@@ -929,44 +930,44 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else if ( isValue()  )
     {
-	// First get some locale information
-	if (!decimal_point)
+        // First get some locale information
+        if (!decimal_point)
         { // (decimal_point is static)
-	    decimal_point = KGlobal::locale()->decimalSymbol()[0];
-	    kdDebug(36001) << "decimal_point is '" << decimal_point.latin1() << "'" << endl;
+            decimal_point = KGlobal::locale()->decimalSymbol()[0];
+            kdDebug(36001) << "decimal_point is '" << decimal_point.latin1() << "'" << endl;
 
-	    if ( decimal_point.isNull() )
-		decimal_point = '.';
-	}
+            if ( decimal_point.isNull() )
+                decimal_point = '.';
+        }
 
-	// Scale the value as desired by the user.
-	double v = m_dValue * m_dFaktor;
+        // Scale the value as desired by the user.
+        double v = m_dValue * m_dFaktor;
 
-	// Always unsigned ?
-	if ( floatFormat( _col, _row ) == KSpreadCell::AlwaysUnsigned && v < 0.0)
-	    v *= -1.0;
+        // Always unsigned ?
+        if ( floatFormat( _col, _row ) == KSpreadCell::AlwaysUnsigned && v < 0.0)
+            v *= -1.0;
 
-	// Make a string out of it.
-	QString localizedNumber = createFormat( v, _col, _row );
+        // Make a string out of it.
+        QString localizedNumber = createFormat( v, _col, _row );
 
-	// Remove trailing zeros and the decimal point if necessary
-	// unless the number has no decimal point
-	if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
+        // Remove trailing zeros and the decimal point if necessary
+        // unless the number has no decimal point
+        if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
         {
-	/*    int i = localizedNumber.length();
-	    bool bFinished = FALSE;
-	    while ( !bFinished && i > 0 )
-	    {
-		QChar ch = localizedNumber[ i - 1 ];
-		if ( ch == '0' )
-		    localizedNumber.truncate( --i );
-		else
-	        {
-		    bFinished = TRUE;
-		    if ( ch == decimal_point )
-			localizedNumber.truncate( --i );
-		}
-	    }*/
+        /*    int i = localizedNumber.length();
+            bool bFinished = FALSE;
+            while ( !bFinished && i > 0 )
+            {
+                QChar ch = localizedNumber[ i - 1 ];
+                if ( ch == '0' )
+                    localizedNumber.truncate( --i );
+                else
+                {
+                    bFinished = TRUE;
+                    if ( ch == decimal_point )
+                        localizedNumber.truncate( --i );
+                }
+            }*/
             int start=0;
             if(localizedNumber.find('%')!=-1)
                 start=2;
@@ -977,72 +978,72 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             else
                 start=0;
             int i = localizedNumber.length()-start;
-	    bool bFinished = FALSE;
+            bool bFinished = FALSE;
 
 
             while ( !bFinished && i > 0 )
-	    {
-		QChar ch = localizedNumber[ i - 1 ];
+            {
+                QChar ch = localizedNumber[ i - 1 ];
                 if ( ch == '0' )
                     localizedNumber.remove(--i,1);
-		else
-	        {
-		    bFinished = TRUE;
-		    if ( ch == decimal_point )
+                else
+                {
+                    bFinished = TRUE;
+                    if ( ch == decimal_point )
                         localizedNumber.remove(--i,1);
                 }
             }
-	}
+        }
 
-	// Start building the output string with prefix and postfix
-	m_strOutText = "";
+        // Start building the output string with prefix and postfix
+        m_strOutText = "";
         if( !prefix( _col, _row ).isEmpty())
-	        m_strOutText += prefix( _col, _row )+" ";
+                m_strOutText += prefix( _col, _row )+" ";
 
-	m_strOutText += localizedNumber;
+        m_strOutText += localizedNumber;
 
         if( !postfix( _col, _row ).isEmpty())
-	        m_strOutText += " "+postfix( _col, _row );
+                m_strOutText += " "+postfix( _col, _row );
 
-	verifyCondition();
+        verifyCondition();
 
-	// Find the correct color which depends on the conditions
-	// and the sign of the value.
-	if ( floatColor( _col, _row ) == KSpreadCell::NegRed && v < 0.0 )
+        // Find the correct color which depends on the conditions
+        // and the sign of the value.
+        if ( floatColor( _col, _row ) == KSpreadCell::NegRed && v < 0.0 )
             tmpPen.setColor( Qt::red );
-	else if( m_conditionIsTrue )
-    	{
-	    KSpreadConditional *tmpCondition=0;
-	    switch(m_numberOfCond)
-	    {
-	    case 0:
-		tmpCondition=m_firstCondition;
-		break;
-	    case 1:
-		tmpCondition=m_secondCondition;
-		break;
-	    case 2:
-		tmpCondition=m_thirdCondition;
-		break;
-	    }
+        else if( m_conditionIsTrue )
+        {
+            KSpreadConditional *tmpCondition=0;
+            switch(m_numberOfCond)
+            {
+            case 0:
+                tmpCondition=m_firstCondition;
+                break;
+            case 1:
+                tmpCondition=m_secondCondition;
+                break;
+            case 2:
+                tmpCondition=m_thirdCondition;
+                break;
+            }
             tmpPen.setColor(tmpCondition->colorcond);
- 	}
+        }
     }
     else if ( isFormular() )
     {
-	m_strOutText = m_strFormularOut;
+        m_strOutText = m_strFormularOut;
     }
     else
     {
-	m_strOutText = m_strText;
+        m_strOutText = m_strText;
     }
 
     // Empty text?
     if ( m_strOutText.isEmpty() )
     {
-	m_strOutText = QString::null;
-	if ( isDefault() )
-	    return;
+        m_strOutText = QString::null;
+        if ( isDefault() )
+            return;
     }
 
     _painter.setPen(tmpPen);
@@ -1057,16 +1058,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
         {
-	case 0:
-	    tmpCondition = m_firstCondition;
-	    break;
-	case 1:
-	    tmpCondition = m_secondCondition;
-	    break;
-	case 2:
-	    tmpCondition = m_thirdCondition;
-	    break;
-	}
+        case 0:
+            tmpCondition = m_firstCondition;
+            break;
+        case 1:
+            tmpCondition = m_secondCondition;
+            break;
+        case 2:
+            tmpCondition = m_thirdCondition;
+            break;
+        }
         _painter.setFont( tmpCondition->fontcond );
     }
     else
@@ -1090,16 +1091,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // Calculate the extraWidth and extraHeight if we are forced to.
     if ( m_bForceExtraCells )
     {
-	for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
+        for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
         {
-	    ColumnLayout *cl = m_pTable->columnLayout( x );
-	    w += cl->width() ;
-	}
-	for ( int y = _row + 1; y <= _row + m_iExtraYCells; y++ )
+            ColumnLayout *cl = m_pTable->columnLayout( x );
+            w += cl->width() ;
+        }
+        for ( int y = _row + 1; y <= _row + m_iExtraYCells; y++ )
         {
-	    RowLayout *rl = m_pTable->rowLayout( y );
-	    h += rl->height() ;
-	}
+            RowLayout *rl = m_pTable->rowLayout( y );
+            h += rl->height() ;
+        }
     }
 
     m_iExtraWidth = w;
@@ -1107,39 +1108,39 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Some space for the little button of the combo box
     if ( m_style == ST_Select )
-	w -= 16;
+        w -= 16;
 
     // Do we need to break the line into multiple lines and are we allowed to
     // do so?
     int lines = 1;
     if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-	 rightBorderWidth( _col, _row ) && m_bMultiRow )
+         rightBorderWidth( _col, _row ) && m_bMultiRow )
     {
-	// copy of m_strOutText
-	QString o = m_strOutText;
+        // copy of m_strOutText
+        QString o = m_strOutText;
 
-	// No space ?
-	if( o.find(' ') != -1 )
+        // No space ?
+        if( o.find(' ') != -1 )
         {
-	    o += ' ';
-	    int start = 0;
-	    int pos = 0;
-	    int pos1 = 0;
-	    m_strOutText = "";
-	    do
+            o += ' ';
+            int start = 0;
+            int pos = 0;
+            int pos1 = 0;
+            m_strOutText = "";
+            do
             {
-		pos = o.find(' ',pos );
-		int width = fm.width( m_strOutText.mid( start, (pos1-start) ) + o.mid( pos1, (pos-pos1) ) );
+                pos = o.find(' ',pos );
+                int width = fm.width( m_strOutText.mid( start, (pos1-start) ) + o.mid( pos1, (pos-pos1) ) );
 
-		if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
-	        {
-		    m_strOutText += o.mid(pos1,(pos-pos1));
-		    pos1 = pos;
-		}
-		else
+                if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
                 {
-		    if(o.at(pos1)==' ')
-			pos1 = pos1 + 1;
+                    m_strOutText += o.mid(pos1,(pos-pos1));
+                    pos1 = pos;
+                }
+                else
+                {
+                    if(o.at(pos1)==' ')
+                        pos1 = pos1 + 1;
                     if(pos1!=0 && pos!=-1)
                         {
                         m_strOutText += "\n" + o.mid( pos1, ( pos - pos1 ) );
@@ -1148,38 +1149,38 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                     else
                         m_strOutText += o.mid( pos1, ( pos - pos1 ) );
                     start = pos1;
-		    pos1 = pos;
-		}
-		pos++;
-	    }
-	    while( o.find( ' ', pos ) != -1 );
+                    pos1 = pos;
+                }
+                pos++;
+            }
+            while( o.find( ' ', pos ) != -1 );
         }
 
         m_iOutTextHeight *= lines;
 
         m_nbLines = lines;
-	m_iTextX = 0;
+        m_iTextX = 0;
 
-	// Calculate the maximum width
-	QString t;
-	int i;
-	int pos = 0;
-	m_iOutTextWidth = 0;
-	do
+        // Calculate the maximum width
+        QString t;
+        int i;
+        int pos = 0;
+        m_iOutTextWidth = 0;
+        do
         {
-	    i = m_strOutText.find( "\n", pos );
-	    if ( i == -1 )
-		t = m_strOutText.mid( pos, m_strOutText.length() - pos );
-	    else
-	    {
-		t = m_strOutText.mid( pos, i - pos );
-		pos = i + 1;
-	    }
-	    int tw = fm.width( t );
-	    if ( tw > m_iOutTextWidth )
-		m_iOutTextWidth = tw;
-	}
-	while ( i != -1 );
+            i = m_strOutText.find( "\n", pos );
+            if ( i == -1 )
+                t = m_strOutText.mid( pos, m_strOutText.length() - pos );
+            else
+            {
+                t = m_strOutText.mid( pos, i - pos );
+                pos = i + 1;
+            }
+            int tw = fm.width( t );
+            if ( tw > m_iOutTextWidth )
+                m_iOutTextWidth = tw;
+        }
+        while ( i != -1 );
     }
 
     // Calculate m_iTextX and m_iTextY
@@ -1189,57 +1190,57 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Do we have to occupy additional cells right hand ?
     if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-	 rightBorderWidth( _col, _row ) )
+         rightBorderWidth( _col, _row ) )
     {
-	// No chance. We can not obscure more/less cells.
-	if ( m_bForceExtraCells )
+        // No chance. We can not obscure more/less cells.
+        if ( m_bForceExtraCells )
         {
-	    // The text does not fit in the cell
-	    //m_strOutText = "**";
+            // The text does not fit in the cell
+            //m_strOutText = "**";
             m_bCellTooShort=true;
-	}
-	else
+        }
+        else
         {
-	    int c = m_iColumn;
-	    int end = 0;
-	    // Find free cells right hand to this one
-	    while ( !end )
+            int c = m_iColumn;
+            int end = 0;
+            // Find free cells right hand to this one
+            while ( !end )
             {
-		ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
-		KSpreadCell *cell = m_pTable->cellAt( c + 1, m_iRow );
-		if ( cell->isEmpty() )
-	        {
-		    w += cl2->width() - 1;
-		    c++;
+                ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
+                KSpreadCell *cell = m_pTable->cellAt( c + 1, m_iRow );
+                if ( cell->isEmpty() )
+                {
+                    w += cl2->width() - 1;
+                    c++;
 
-		    // Enough space ?
-		    if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-			 rightBorderWidth( _col, _row ) )
-			end = 1;
-		}
-		// Not enough space, but the next cell is not empty
-		else
-		    end = -1;
-	    }
+                    // Enough space ?
+                    if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+                         rightBorderWidth( _col, _row ) )
+                        end = 1;
+                }
+                // Not enough space, but the next cell is not empty
+                else
+                    end = -1;
+            }
 
-	    // Dont occupy additional space for right aligned or centered text or values.
-	    // ##### Why ?
-	    if ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined )
-	    {
-		m_iExtraWidth = w;
-		for( int i = m_iColumn + 1; i <= c; ++i )
-	        {
-		    KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
-		    cell->obscure( this, m_iColumn, m_iRow );
-		}
-		m_iExtraXCells = c - m_iColumn;
-	    }
-	    else
-	    {
+            // Dont occupy additional space for right aligned or centered text or values.
+            // ##### Why ?
+            if ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined )
+            {
+                m_iExtraWidth = w;
+                for( int i = m_iColumn + 1; i <= c; ++i )
+                {
+                    KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
+                    cell->obscure( this, m_iColumn, m_iRow );
+                }
+                m_iExtraXCells = c - m_iColumn;
+            }
+            else
+            {
                 m_bCellTooShort=true;
                 //m_strOutText = "**";
-	    }
-	}
+            }
+        }
     }
     m_bLayoutDirtyFlag = FALSE;
 }
@@ -1255,39 +1256,39 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     switch( m_eFormatNumber)
     {
     case Number :
-	localizedNumber = KGlobal::locale()->formatNumber(value, p);
-	if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
+        localizedNumber = KGlobal::locale()->formatNumber(value, p);
+        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-	    if(KGlobal::locale()->positiveSign().isEmpty())
-		localizedNumber='+'+localizedNumber;
-	}
-	break;
+            if(KGlobal::locale()->positiveSign().isEmpty())
+                localizedNumber='+'+localizedNumber;
+        }
+        break;
     case Percentage :
         localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-	    if(KGlobal::locale()->positiveSign().isEmpty())
-		localizedNumber='+'+localizedNumber;
-	}
-	break;
+            if(KGlobal::locale()->positiveSign().isEmpty())
+                localizedNumber='+'+localizedNumber;
+        }
+        break;
     case Money :
-	localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
-	if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
+        localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
+        if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-	    if(KGlobal::locale()->positiveSign().isNull())
-		localizedNumber='+'+localizedNumber;
-	}
-	break;
+            if(KGlobal::locale()->positiveSign().isNull())
+                localizedNumber='+'+localizedNumber;
+        }
+        break;
     case Scientific:
-	localizedNumber= QString::number(value, 'E', p);
-	if((pos=localizedNumber.find('.'))!=-1)
-	    localizedNumber=localizedNumber.replace(pos,1,decimal_point);
+        localizedNumber= QString::number(value, 'E', p);
+        if((pos=localizedNumber.find('.'))!=-1)
+            localizedNumber=localizedNumber.replace(pos,1,decimal_point);
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-	    if(KGlobal::locale()->positiveSign().isEmpty())
-		localizedNumber='+'+localizedNumber;
-	}
-	break;
+            if(KGlobal::locale()->positiveSign().isEmpty())
+                localizedNumber='+'+localizedNumber;
+        }
+        break;
     case ShortDate:
     case TextDate :
     case date_format1:
@@ -1306,7 +1307,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case date_format14:
     case date_format15:
     case date_format16:
-	break;
+        break;
     case fraction_half:
     case fraction_quarter:
     case fraction_eighth:
@@ -1316,16 +1317,16 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case fraction_one_digit:
     case fraction_two_digits:
     case fraction_three_digits:
-	localizedNumber=createFractionFormat(value);
+        localizedNumber=createFractionFormat(value);
         if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-	    if(KGlobal::locale()->positiveSign().isEmpty())
-		localizedNumber='+'+localizedNumber;
-	}
-	break;
+            if(KGlobal::locale()->positiveSign().isEmpty())
+                localizedNumber='+'+localizedNumber;
+        }
+        break;
     default :
-	kdDebug(36001)<<"Error in m_eFormatNumber\n";
-	break;
+        kdDebug(36001)<<"Error in m_eFormatNumber\n";
+        break;
     }
 
     return localizedNumber;
@@ -1344,37 +1345,37 @@ QString KSpreadCell::createFractionFormat(double value)
     {
         switch( m_eFormatNumber)
         {
-	case fraction_half:
-	    index=2;
-	    break;
-	case fraction_quarter:
-	    index=4;
-	    break;
-	case fraction_eighth:
-	    index=8;
-	    break;
-	case fraction_sixteenth:
-	    index=16;
-	    break;
-	case fraction_tenth:
-	    index=10;
-	    break;
-	case fraction_hundredth:
-	    index=100;
-	    break;
+        case fraction_half:
+            index=2;
+            break;
+        case fraction_quarter:
+            index=4;
+            break;
+        case fraction_eighth:
+            index=8;
+            break;
+        case fraction_sixteenth:
+            index=16;
+            break;
+        case fraction_tenth:
+            index=10;
+            break;
+        case fraction_hundredth:
+            index=100;
+            break;
         case fraction_one_digit:
-	    index=3;
-	    break;
+            index=3;
+            break;
         case fraction_two_digits:
-	    index=4;
-	    break;
+            index=4;
+            break;
         case fraction_three_digits:
-	    index=5;
-	    break;
-	default:
-	    kdDebug(36001)<<"Error in Fraction format\n";
-	    break;
-	}
+            index=5;
+            break;
+        default:
+            kdDebug(36001)<<"Error in Fraction format\n";
+            break;
+        }
         if( m_eFormatNumber !=fraction_three_digits
         && m_eFormatNumber !=fraction_two_digits
         && m_eFormatNumber !=fraction_one_digit)
@@ -1384,13 +1385,13 @@ QString KSpreadCell::createFractionFormat(double value)
                 double diff = result;
                 for(int i=1;i<index;i++)
                 {
-	                calc = i*1.0 / index;
-	                if( fabs( result - calc ) < diff )
-	                {
-		        index1=i;
-		        diff = fabs(result-calc);
-	                }
-	        }
+                        calc = i*1.0 / index;
+                        if( fabs( result - calc ) < diff )
+                        {
+                        index1=i;
+                        diff = fabs(result-calc);
+                        }
+                }
                 tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
                 }
          else
@@ -1562,93 +1563,93 @@ void KSpreadCell::verifyCondition()
 
     if(m_bValue && !m_pTable->getShowFormular())
     {
-	for(int i=0;i<3;i++)
+        for(int i=0;i<3;i++)
         {
-	    switch(i)
-	    {
-	    case 0:
-		tmpCondition=m_firstCondition;
-		break;
-	    case 1:
-		tmpCondition=m_secondCondition;
-		break;
-	    case 2:
-		tmpCondition=m_thirdCondition;
-		break;
-	    }
+            switch(i)
+            {
+            case 0:
+                tmpCondition=m_firstCondition;
+                break;
+            case 1:
+                tmpCondition=m_secondCondition;
+                break;
+            case 2:
+                tmpCondition=m_thirdCondition;
+                break;
+            }
 
-	    if( tmpCondition != 0 && tmpCondition->m_cond != None )
+            if( tmpCondition != 0 && tmpCondition->m_cond != None )
             {
 
-		switch(tmpCondition->m_cond)
+                switch(tmpCondition->m_cond)
                 {
                 case Equal :
-		    if(v == tmpCondition->val1 )
-		    {
+                    if(v == tmpCondition->val1 )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 case Superior :
-		    if( v > tmpCondition->val1 )
-		    {
+                    if( v > tmpCondition->val1 )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 case Inferior :
-		    if(v < tmpCondition->val1 )
-		    {
+                    if(v < tmpCondition->val1 )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 case SuperiorEqual :
-		    if( v >= tmpCondition->val1 )
-		    {
+                    if( v >= tmpCondition->val1 )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 case InferiorEqual :
-		    if(v <= tmpCondition->val1 )
-		    {
+                    if(v <= tmpCondition->val1 )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 case Between :
-		    if( ( v > QMIN(tmpCondition->val1, tmpCondition->val2 ) ) &&
-			( v < QMAX(tmpCondition->val1, tmpCondition->val2 ) ) )
-		    {
+                    if( ( v > QMIN(tmpCondition->val1, tmpCondition->val2 ) ) &&
+                        ( v < QMAX(tmpCondition->val1, tmpCondition->val2 ) ) )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 case Different :
-		    if( ( v < QMIN(tmpCondition->val1, tmpCondition->val2 ) ) ||
-			( v > QMAX(tmpCondition->val1, tmpCondition->val2) ) )
-		    {
+                    if( ( v < QMIN(tmpCondition->val1, tmpCondition->val2 ) ) ||
+                        ( v > QMAX(tmpCondition->val1, tmpCondition->val2) ) )
+                    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
-		    }
-		    break;
+                    }
+                    break;
 
                 default:
-		    kdDebug(36001) << "Pb in Conditional" << endl;
+                    kdDebug(36001) << "Pb in Conditional" << endl;
 
-		    m_conditionIsTrue = false;
-		    break;
+                    m_conditionIsTrue = false;
+                    break;
                 }
 
-	    }
-	}
+            }
+        }
     }
 }
 
@@ -1662,77 +1663,77 @@ void KSpreadCell::offsetAlign( int _col,int _row )
     int h = rl->height();
 
     if ( m_iExtraXCells )
-	w = m_iExtraWidth;
+        w = m_iExtraWidth;
     if ( m_iExtraYCells )
-	h = m_iExtraHeight;
+        h = m_iExtraHeight;
 
     switch( m_eAlignY )
     {
     case KSpreadCell::Top:
-	if(!m_rotateAngle)
-	    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-	else
+        if(!m_rotateAngle)
+            m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+        else
         {
-	    if(m_rotateAngle<0)
-		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-	    else
-		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-	}
-	break;
+            if(m_rotateAngle<0)
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+            else
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+        }
+        break;
     case KSpreadCell::Bottom:
-	if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
-	    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-	else if(m_rotateAngle!=0)
+        if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
+            m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+        else if(m_rotateAngle!=0)
         {
-	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+            if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
                 {
                 if( m_rotateAngle < 0 )
-		        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
                 else
                         m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                 }
-	    else
+            else
                 {
-		if( m_rotateAngle < 0 )
-		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-		else
-		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                if( m_rotateAngle < 0 )
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                else
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                 }
-	}
-	else if( m_bMultiRow )
+        }
+        else if( m_bMultiRow )
         {
             int tmpline=m_nbLines;
             if(m_nbLines>1)
                 tmpline=m_nbLines-1;
-	    if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
-		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*tmpline- bottomBorderWidth( _col, _row );
-	    else
-		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+            if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
+                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*tmpline- bottomBorderWidth( _col, _row );
+            else
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
         }
-	else
-	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+m_fmAscent;
-	    else
-		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-	break;
+        else
+            if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+m_fmAscent;
+            else
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+        break;
     case KSpreadCell::Middle:
-	if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
-	    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-	else if( m_rotateAngle != 0 )
+        if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
+            m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+        else if( m_rotateAngle != 0 )
         {
-	    if( ( h - m_iOutTextHeight ) > 0 )
+            if( ( h - m_iOutTextHeight ) > 0 )
             {
                 if( m_rotateAngle < 0 )
                         m_iTextY = ( h - m_iOutTextHeight ) / 2 ;
                 else
-		        m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
             }
             else
                 {
                 if( m_rotateAngle < 0 )
-		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-		else
-		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                else
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                 }
         }
         else if( m_bMultiRow )
@@ -1740,40 +1741,40 @@ void KSpreadCell::offsetAlign( int _col,int _row )
             int tmpline=m_nbLines;
             if(m_nbLines==0)
                 tmpline=1;
-	    if(( h - m_iOutTextHeight*tmpline )>0)
-		m_iTextY = ( h - m_iOutTextHeight*tmpline ) / 2 +m_fmAscent;
-	    else
-		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+            if(( h - m_iOutTextHeight*tmpline )>0)
+                m_iTextY = ( h - m_iOutTextHeight*tmpline ) / 2 +m_fmAscent;
+            else
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
         }
         else
-	    if(( h - m_iOutTextHeight )>0)
-		m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-	    else
-		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-	break;
+            if(( h - m_iOutTextHeight )>0)
+                m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+            else
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+        break;
     }
 
     if ( a == KSpreadCell::Undefined )
     {
-	if ( m_bValue || m_bDate || m_bTime)
-	    a = KSpreadCell::Right;
-	else
-	    a = KSpreadCell::Left;
+        if ( m_bValue || m_bDate || m_bTime)
+            a = KSpreadCell::Right;
+        else
+            a = KSpreadCell::Left;
     }
     if(m_pTable->getShowFormular())
-	a = KSpreadCell::Left;
+        a = KSpreadCell::Left;
 
     switch( a )
     {
     case KSpreadCell::Left:
-	m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-	break;
+        m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+        break;
     case KSpreadCell::Right:
-	m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
-	break;
+        m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+        break;
     case KSpreadCell::Center:
-	m_iTextX = ( w - m_iOutTextWidth ) / 2;
-	break;
+        m_iTextX = ( w - m_iOutTextWidth ) / 2;
+        break;
     }
 }
 
@@ -1814,21 +1815,21 @@ void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
     {
         switch(m_numberOfCond)
         {
-	case 0:
-	    tmpCondition=m_firstCondition;
-	    break;
-	case 1:
-	    tmpCondition=m_secondCondition;
-	    break;
-	case 2:
-	    tmpCondition=m_thirdCondition;
-	    break;
-	}
-	_paint.setFont( tmpCondition->fontcond );
+        case 0:
+            tmpCondition=m_firstCondition;
+            break;
+        case 1:
+            tmpCondition=m_secondCondition;
+            break;
+        case 2:
+            tmpCondition=m_thirdCondition;
+            break;
+        }
+        _paint.setFont( tmpCondition->fontcond );
     }
     else
     {
-	_paint.setFont( m_textFont );
+        _paint.setFont( m_textFont );
     }
 
     textSize(_paint);
@@ -1924,8 +1925,8 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bLayoutDirtyFlag = true;
     if ( m_style == ST_Select )
     {
-	SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-	s->parse( m_strFormularOut );
+        SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+        s->parse( m_strFormularOut );
     }
     DO_UPDATE;
     return false;
@@ -1949,59 +1950,59 @@ bool KSpreadCell::calc( bool _makedepend )
       // Dependency to a rectangular area
       if ( dep->m_iColumn2 != -1 )
       {
-	int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-	int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-	int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-	int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
+        int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
+        int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
+        int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
+        int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
         for ( int x = left; x <= right; x++ )
-	  for ( int y = top; y <= bottom; y++ )
-	  {
-	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
-	    if ( cell == 0L )
-	      return false;
-	    if ( !cell->calc( _makedepend ) )
-	    {
-	      m_strFormularOut = "####";
+          for ( int y = top; y <= bottom; y++ )
+          {
+            KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
+            if ( cell == 0L )
+              return false;
+            if ( !cell->calc( _makedepend ) )
+            {
+              m_strFormularOut = "####";
               m_bError=true;
               m_bValue = false;
-	      m_bBool = false;
+              m_bBool = false;
               m_bDate=false;
               m_bTime=false;
-	      m_bProgressFlag = false;
-	      if ( m_style == ST_Select )
-	      {
-		  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-		  s->parse( m_strFormularOut );
-	      }
-	      m_bLayoutDirtyFlag = true;
-	      DO_UPDATE;
-	      return false;
-	    }
-	  }
+              m_bProgressFlag = false;
+              if ( m_style == ST_Select )
+              {
+                  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+                  s->parse( m_strFormularOut );
+              }
+              m_bLayoutDirtyFlag = true;
+              DO_UPDATE;
+              return false;
+            }
+          }
       }
       else // Dependency to a single cell
-      { 
-	KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
-	if ( cell == 0L )
-	  return false;
-	if ( !cell->calc( _makedepend ) )
-	{
-	  m_bError = true;
-	  m_strFormularOut = "####";
-	  m_bValue = false;
-	  m_bBool = false;
+      {
+        KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
+        if ( cell == 0L )
+          return false;
+        if ( !cell->calc( _makedepend ) )
+        {
+          m_bError = true;
+          m_strFormularOut = "####";
+          m_bValue = false;
+          m_bBool = false;
           m_bDate = false;
           m_bTime=false;
-	  m_bProgressFlag = false;
-	  m_bLayoutDirtyFlag = true;
-	  if ( m_style == ST_Select )
+          m_bProgressFlag = false;
+          m_bLayoutDirtyFlag = true;
+          if ( m_style == ST_Select )
           {
-	      SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-	      s->parse( m_strFormularOut );
-	  }
-	  DO_UPDATE;
-	  return false;
-	}
+              SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+              s->parse( m_strFormularOut );
+          }
+          DO_UPDATE;
+          return false;
+        }
       }
     }
   }
@@ -2024,10 +2025,10 @@ bool KSpreadCell::calc( bool _makedepend )
       // Print out exception if any
       if ( context.exception() )
       {
-	QString tmp(i18n("Error in cell %1\n\n"));
+        QString tmp(i18n("Error in cell %1\n\n"));
         tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-	tmp += context.exception()->toString( context );
-	KMessageBox::error( (QWidget*)0L, tmp);
+        tmp += context.exception()->toString( context );
+        KMessageBox::error( (QWidget*)0L, tmp);
       }
 
     }
@@ -2036,8 +2037,8 @@ bool KSpreadCell::calc( bool _makedepend )
 
     if ( m_style == ST_Select )
     {
-	SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-	s->parse( m_strFormularOut );
+        SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+        s->parse( m_strFormularOut );
         DO_UPDATE;
     }
     return false;
@@ -2170,7 +2171,7 @@ QString KSpreadCell::valueString() const
  *            top left = 11, top_right = 12, bottom_right = 13, bottom_left = 14.
  */
 static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int row,
-			     int w, int h, int pos, const QRect& marker )
+                             int w, int h, int pos, const QRect& marker )
 {
     QPoint p = marker.bottomRight();
 
@@ -2178,69 +2179,69 @@ static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int 
     {
     // top
     case 1:
-	if ( p.x() == col && p.y() == row - 1 )
+        if ( p.x() == col && p.y() == row - 1 )
         {
-	    _painter.drawLine( _tx, _ty, _tx + w - 3, _ty );
-	    _painter.fillRect( _tx + w - 2, _ty - 1, 5, 5, _painter.pen().color() );
-	}
-	else
-	    _painter.drawLine( _tx, _ty, _tx + w, _ty );
-	break;
+            _painter.drawLine( _tx, _ty, _tx + w - 3, _ty );
+            _painter.fillRect( _tx + w - 2, _ty - 1, 5, 5, _painter.pen().color() );
+        }
+        else
+            _painter.drawLine( _tx, _ty, _tx + w, _ty );
+        break;
     // bottom
     case 3:
-	if ( p.x() == col && p.y() == row )
+        if ( p.x() == col && p.y() == row )
         {
-	    _painter.drawLine( _tx, _ty + h, _tx + w - 3, _ty + h );
-	    _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
-	}
-	else
-	    _painter.drawLine( _tx, _ty + h, _tx + w, _ty + h );
-	break;
+            _painter.drawLine( _tx, _ty + h, _tx + w - 3, _ty + h );
+            _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
+        }
+        else
+            _painter.drawLine( _tx, _ty + h, _tx + w, _ty + h );
+        break;
     // left
     case 4:
-	if ( p.x() == col - 1 && p.y() == row )
+        if ( p.x() == col - 1 && p.y() == row )
         {
-	    _painter.drawLine( _tx, _ty - 1, _tx, _ty + h - 3 );
-	    _painter.fillRect( _tx - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
-	}
-	else
-	    _painter.drawLine( _tx, _ty - 1, _tx, _ty + h + 2 );
-	break;
+            _painter.drawLine( _tx, _ty - 1, _tx, _ty + h - 3 );
+            _painter.fillRect( _tx - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
+        }
+        else
+            _painter.drawLine( _tx, _ty - 1, _tx, _ty + h + 2 );
+        break;
     // right
     case 2:
-	if ( p.x() == col && p.y() == row )
+        if ( p.x() == col && p.y() == row )
         {
-	    _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h - 3 );
-	    _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
-	}
-	else
-	    _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h + 2 );
-	break;
+            _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h - 3 );
+            _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
+        }
+        else
+            _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h + 2 );
+        break;
     // top left
     case 11:
-	if ( p.x() == col - 1 && p.y() == row - 1 )
-	    _painter.fillRect( _tx - 2, _ty - 1, 5, 5, _painter.pen().color() );
-	else
-	    _painter.drawLine( _tx, _ty, _tx, _ty + 1 );
-	break;
+        if ( p.x() == col - 1 && p.y() == row - 1 )
+            _painter.fillRect( _tx - 2, _ty - 1, 5, 5, _painter.pen().color() );
+        else
+            _painter.drawLine( _tx, _ty, _tx, _ty + 1 );
+        break;
     // top right
     case 12:
-	_painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + 1 );
-	break;
+        _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + 1 );
+        break;
     // bottom right
     case 13:
-	_painter.drawLine( _tx + w, _ty + h - 1, _tx + w, _ty + h + 1 );
-	break;
+        _painter.drawLine( _tx + w, _ty + h - 1, _tx + w, _ty + h + 1 );
+        break;
     // bottom left
     case 14:
-	_painter.drawLine( _tx, _ty + h - 1, _tx, _ty + h + 1 );
-	break;
+        _painter.drawLine( _tx, _ty + h - 1, _tx, _ty + h + 1 );
+        break;
     }
 }
 
 // Used by m_pObscuringCell->paintCell, in the next method
 void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
-			      int _col, int _row, QRect *_prect )
+                              int _col, int _row, QRect *_prect )
 {
     RowLayout *rl = m_pTable->rowLayout( _row );
     ColumnLayout *cl = m_pTable->columnLayout( _col );
@@ -2251,30 +2252,30 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 }
 
 void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
-			     int _tx, int _ty,
-			     int _col, int _row,
-			     ColumnLayout *cl, RowLayout *rl,
-			     QRect *_prect, bool override_obscured )
+                             int _tx, int _ty,
+                             int _col, int _row,
+                             ColumnLayout *cl, RowLayout *rl,
+                             QRect *_prect, bool override_obscured )
 {
     // If this cell is obscured then draw the obscuring one instead.
     if ( m_pObscuringCell && !override_obscured )
     {
-	_painter.save();
-	m_pObscuringCell->paintCell( _rect, _painter,
-				     m_iObscuringCellsColumn, m_iObscuringCellsRow, _prect );
-	_painter.restore();
-	m_bLayoutDirtyFlag = FALSE;
-	return;
+        _painter.save();
+        m_pObscuringCell->paintCell( _rect, _painter,
+                                     m_iObscuringCellsColumn, m_iObscuringCellsRow, _prect );
+        _painter.restore();
+        m_bLayoutDirtyFlag = FALSE;
+        return;
     }
 
     // Need to recalculate ?
     if ( /*m_bCalcDirtyFlag*/calcDirtyFlag() && !override_obscured )
-	calc();
+        calc();
 
     bool old_layoutflag = m_bLayoutDirtyFlag;
     // Need to make a new layout ?
     if ( m_bLayoutDirtyFlag && !override_obscured )
-	makeLayout( _painter, _col, _row );
+        makeLayout( _painter, _col, _row );
 
     // Determine the dimension of the cell.
     int w = cl->width();
@@ -2285,45 +2286,45 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     int w2 = w;
     int h2 = h;
     if ( m_iExtraXCells )
-	w2 = m_iExtraWidth;
+        w2 = m_iExtraWidth;
     if ( m_iExtraYCells )
-	h2 = m_iExtraHeight;
+        h2 = m_iExtraHeight;
 
     QRect r2( _tx, _ty, w2, h2 );
     if ( !r2.intersects( _rect ) )
-	return;
+        return;
 
     // Tell our caller where we painted.
     // ## Torben: Where is this used ?
     if ( _prect )
-	_prect->setRect( _tx, _ty, w, h );
+        _prect->setRect( _tx, _ty, w, h );
 
     // is the cell selected ?
     bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
     if ( m_pObscuringCell )
-	selected = m_pTable->selectionRect().contains( QPoint( m_pObscuringCell->column(),
-								    m_pObscuringCell->row() ) );
+        selected = m_pTable->selectionRect().contains( QPoint( m_pObscuringCell->column(),
+                                                                    m_pObscuringCell->row() ) );
     // Dont draw any selection when printing.
     if ( _painter.device()->isExtDev() )
-	selected = FALSE;
+        selected = FALSE;
 
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
     QRect m = m_pTable->marker();
     // Determine the correct background color
     if ( selected && ( _col != m.left() || _row != m.top() )  )
-	_painter.setBackgroundColor( defaultColorGroup.highlight() );
+        _painter.setBackgroundColor( defaultColorGroup.highlight() );
     else
     {
-	QColor bg = bgColor( _col, _row );
-	// if ( m_pObscuringCell )
-	// bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
-	// m_pObscuringCell->row() );
+        QColor bg = bgColor( _col, _row );
+        // if ( m_pObscuringCell )
+        // bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
+        // m_pObscuringCell->row() );
 
-	if ( bg.isValid() )
-	    _painter.setBackgroundColor( bg );
-	else
-	    _painter.setBackgroundColor( defaultColorGroup.base() );
+        if ( bg.isValid() )
+            _painter.setBackgroundColor( bg );
+        else
+            _painter.setBackgroundColor( defaultColorGroup.base() );
     }
 
     //
@@ -2347,46 +2348,46 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // overwrite any other border.
     //
     if ( left_pen.style() == Qt::NoPen &&
-	 ( !m_pObscuringCell || m_pObscuringCell->column() == _col ) )
+         ( !m_pObscuringCell || m_pObscuringCell->column() == _col ) )
     {
-	if( table()->getShowGrid() )
+        if( table()->getShowGrid() )
         {
-	    left_offset = 1;
+            left_offset = 1;
 
-	    QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
-	    QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
+            QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
+            QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
 
-	    int dt = 0;
-	    if ( t.style() != Qt::NoPen )
-		dt = 1;
-	    int db = 0;
-	    if ( b.style() != Qt::NoPen )
-		db = 1;
+            int dt = 0;
+            if ( t.style() != Qt::NoPen )
+                dt = 1;
+            int db = 0;
+            if ( b.style() != Qt::NoPen )
+                db = 1;
 
-	    _painter.setPen( table()->doc()->defaultGridPen() );
-	    _painter.drawLine( _tx, _ty + dt, _tx, _ty + h - db );
-	}
+            _painter.setPen( table()->doc()->defaultGridPen() );
+            _painter.drawLine( _tx, _ty + dt, _tx, _ty + h - db );
+        }
     }
     if ( top_pen.style() == Qt::NoPen &&
-	 ( !m_pObscuringCell || m_pObscuringCell->row() == _row ) )
+         ( !m_pObscuringCell || m_pObscuringCell->row() == _row ) )
     {
-	if( table()->getShowGrid() )
+        if( table()->getShowGrid() )
         {
-	    top_offset = 1;
+            top_offset = 1;
 
-	    QPen l = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
-	    QPen r = m_pTable->cellAt( _col, _row - 1 )->rightBorderPen( _col, _row - 1 );
+            QPen l = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
+            QPen r = m_pTable->cellAt( _col, _row - 1 )->rightBorderPen( _col, _row - 1 );
 
-	    int dl = 0;
-	    if ( l.style() != Qt::NoPen )
-		dl = ( l.width() - 1 ) / 2 + 1;
-	    int dr = 0;
-	    if ( r.style() != Qt::NoPen )
-		dr = r.width() / 2;
+            int dl = 0;
+            if ( l.style() != Qt::NoPen )
+                dl = ( l.width() - 1 ) / 2 + 1;
+            int dr = 0;
+            if ( r.style() != Qt::NoPen )
+                dr = r.width() / 2;
 
-	    _painter.setPen( table()->doc()->defaultGridPen() );
-	    _painter.drawLine( _tx + dl, _ty, _tx + w - dr, _ty );
-	}
+            _painter.setPen( table()->doc()->defaultGridPen() );
+            _painter.drawLine( _tx + dl, _ty, _tx + w - dr, _ty );
+        }
     }
 
     //
@@ -2394,52 +2395,52 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     //
     if ( left_pen.style() != Qt::NoPen )
     {
-	int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 + ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
-	int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
+        int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 + ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
+        int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
 
-	_painter.setPen( left_pen );
-	_painter.drawLine( _tx, _ty - top, _tx, _ty + h + bottom );
+        _painter.setPen( left_pen );
+        _painter.drawLine( _tx, _ty - top, _tx, _ty + h + bottom );
 
-	left_offset = left_pen.width() - ( left_pen.width() / 2 );
+        left_offset = left_pen.width() - ( left_pen.width() / 2 );
     }
     if ( right_pen.style() != Qt::NoPen && extraXCells() == 0 )
     {
-	int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +  ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
-	int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
+        int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +  ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
+        int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
 
-	_painter.setPen( right_pen );
-	_painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
+        _painter.setPen( right_pen );
+        _painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
 
-	right_offset = right_pen.width() / 2;
+        right_offset = right_pen.width() / 2;
     }
     if ( top_pen.style() != Qt::NoPen )
     {
-	_painter.setPen( top_pen );
-	_painter.drawLine( _tx, _ty, _tx + w, _ty );
+        _painter.setPen( top_pen );
+        _painter.drawLine( _tx, _ty, _tx + w, _ty );
 
-	top_offset = top_pen.width() - ( top_pen.width() / 2 );
+        top_offset = top_pen.width() - ( top_pen.width() / 2 );
     }
     if ( bottom_pen.style() != Qt::NoPen && extraYCells() == 0 )
     {
-	_painter.setPen( bottom_pen );
-	_painter.drawLine( _tx, h + _ty, _tx + w, h + _ty );
+        _painter.setPen( bottom_pen );
+        _painter.drawLine( _tx, h + _ty, _tx + w, h + _ty );
 
-	bottom_offset = bottom_pen.width() / 2;
+        bottom_offset = bottom_pen.width() / 2;
     }
 
     // Erase the background of the cell.
     if ( !_painter.device()->isExtDev() )
-	_painter.eraseRect( _tx + left_offset, _ty + top_offset,
-			    w - left_offset - right_offset,
-			    h - top_offset - bottom_offset );
+        _painter.eraseRect( _tx + left_offset, _ty + top_offset,
+                            w - left_offset - right_offset,
+                            h - top_offset - bottom_offset );
 
     // Draw a background brush
     QBrush bb = backGroundBrush( _col, _row );
     if( bb.style() != Qt::NoBrush )
     {
-	_painter.fillRect( _tx + left_offset, _ty + top_offset,
-			   w - left_offset - right_offset,
-			   h - top_offset - bottom_offset, bb );
+        _painter.fillRect( _tx + left_offset, _ty + top_offset,
+                           w - left_offset - right_offset,
+                           h - top_offset - bottom_offset, bb );
     }
 
     //
@@ -2456,48 +2457,48 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
     if ( vert_pen.style() != Qt::NoPen )
     {
-	QPen horz_pen = cell_l->topBorderPen( _col - 1, _row );
-	int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
-	_painter.setPen( vert_pen );
-	_painter.drawLine( _tx, _ty, _tx, _ty + bottom );
+        QPen horz_pen = cell_l->topBorderPen( _col - 1, _row );
+        int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+        _painter.setPen( vert_pen );
+        _painter.drawLine( _tx, _ty, _tx, _ty + bottom );
     }
 
     // Fix the borders which meat at the top right corner
     vert_pen = cell_t->rightBorderPen( _col, _row - 1 );
     if ( vert_pen.style() != Qt::NoPen )
     {
-	QPen horz_pen = cell_r->topBorderPen( _col + 1, _row );
-	int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
-	_painter.setPen( vert_pen );
-	_painter.drawLine( _tx + w, _ty, _tx + w, _ty + bottom );
+        QPen horz_pen = cell_r->topBorderPen( _col + 1, _row );
+        int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+        _painter.setPen( vert_pen );
+        _painter.drawLine( _tx + w, _ty, _tx + w, _ty + bottom );
     }
 
     // This cell is obscured? Then dont draw any content
     if ( override_obscured )
-	goto drawmarker;
+        goto drawmarker;
     // This cell is obscuring other ones? Then we redraw their
     // background and borders before we paint our content there.
     else if ( extraXCells() || extraYCells() )
     {
-	int ypos = _ty;
-	for( int y = 0; y <= extraYCells(); ++y )
+        int ypos = _ty;
+        for( int y = 0; y <= extraYCells(); ++y )
         {
-	    int xpos = _tx;
-	    RowLayout* rl = m_pTable->rowLayout( _row + y );
+            int xpos = _tx;
+            RowLayout* rl = m_pTable->rowLayout( _row + y );
 
-	    for( int x = 0; x <= extraXCells(); ++ x )
-	    {
-		ColumnLayout* cl = m_pTable->columnLayout( _col + x );
-		if ( y != 0 || x != 0 )
-	        {
-		    KSpreadCell* cell = m_pTable->cellAt( _col + x, _row + y );
-		    cell->paintCell( _rect, _painter, xpos, ypos, _col + x, _row + y, cl, rl, 0, true );
-		}
-		xpos += cl->width();
-	    }
+            for( int x = 0; x <= extraXCells(); ++ x )
+            {
+                ColumnLayout* cl = m_pTable->columnLayout( _col + x );
+                if ( y != 0 || x != 0 )
+                {
+                    KSpreadCell* cell = m_pTable->cellAt( _col + x, _row + y );
+                    cell->paintCell( _rect, _painter, xpos, ypos, _col + x, _row + y, cl, rl, 0, true );
+                }
+                xpos += cl->width();
+            }
 
-	    ypos += rl->height();
-	}
+            ypos += rl->height();
+        }
     }
 
     //
@@ -2505,28 +2506,28 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     //
     if ( m_fallDiagonalPen.style() != Qt::NoPen )
     {
-	// Diagonal line go across other cells if this cell is
-	// a multicol/row cell. So use "w2" instead of "w" ...
-	_painter.setPen( m_fallDiagonalPen );
-	_painter.drawLine( _tx, _ty, _tx + w2, _ty + h2 );
+        // Diagonal line go across other cells if this cell is
+        // a multicol/row cell. So use "w2" instead of "w" ...
+        _painter.setPen( m_fallDiagonalPen );
+        _painter.drawLine( _tx, _ty, _tx + w2, _ty + h2 );
     }
     if ( m_goUpDiagonalPen.style() != Qt::NoPen )
     {
-	_painter.setPen( m_goUpDiagonalPen );
-	_painter.drawLine( _tx, _ty + h2 , _tx + w2, _ty );
+        _painter.setPen( m_goUpDiagonalPen );
+        _painter.drawLine( _tx, _ty + h2 , _tx + w2, _ty );
     }
 
     // Point the little corner if there is a comment attached
     // to this cell.
     if( !m_strComment.isEmpty())
     {
-	QPointArray point( 3 );
-	point.setPoint( 0,_tx + w2 - 10, _ty );
-	point.setPoint( 1, _tx + w2,_ty );
-	point.setPoint( 2, _tx + w2,_ty + 10 );
-	_painter.setBrush( QBrush(Qt::red  ) );
-	_painter.setPen( Qt::NoPen );
-	_painter.drawPolygon( point );
+        QPointArray point( 3 );
+        point.setPoint( 0,_tx + w2 - 10, _ty );
+        point.setPoint( 1, _tx + w2,_ty );
+        point.setPoint( 2, _tx + w2,_ty + 10 );
+        _painter.setBrush( QBrush(Qt::red  ) );
+        _painter.setPen( Qt::NoPen );
+        _painter.drawPolygon( point );
     }
 
     /**
@@ -2534,19 +2535,19 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     if ( m_style == KSpreadCell::ST_Button )
     {
-	QBrush fill( Qt::lightGray );
-	QApplication::style().drawButton( &_painter, _tx + 1, _ty + 1,
-					  w2 - 1, h2 - 1,
-					  defaultColorGroup, selected, &fill );
+        QBrush fill( Qt::lightGray );
+        QApplication::style().drawButton( &_painter, _tx + 1, _ty + 1,
+                                          w2 - 1, h2 - 1,
+                                          defaultColorGroup, selected, &fill );
     }
     /**
      * Modification for drawing the combo box
      */
     else if ( m_style == KSpreadCell::ST_Select )
     {
-	QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
-						w2 - 1, h2 - 1,
-						defaultColorGroup, selected );
+        QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
+                                                w2 - 1, h2 - 1,
+                                                defaultColorGroup, selected );
     }
 
     /**
@@ -2554,24 +2555,24 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     if ( m_pQML )
     {
-	_painter.save();
-	m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
-	_painter.restore();
+        _painter.save();
+        m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
+        _painter.restore();
     }
     /**
      * Visual Formula ?
      */
     else if ( m_pVisualFormula )
     {
-	_painter.save();
-	_painter.setPen( m_textPen/*.color()??*/ );
-	_painter.setFont( m_textFont );
-	// TODO: No better method to set new font ?
-	if ( old_layoutflag )
-	    m_pVisualFormula->parse( m_strText.mid(1) );
-	m_pVisualFormula->setPos( _tx + w2/2, _ty + h2/2 );
-	m_pVisualFormula->redraw( _painter );
-	_painter.restore();
+        _painter.save();
+        _painter.setPen( m_textPen/*.color()??*/ );
+        _painter.setFont( m_textFont );
+        // TODO: No better method to set new font ?
+        if ( old_layoutflag )
+            m_pVisualFormula->parse( m_strText.mid(1) );
+        m_pVisualFormula->setPos( _tx + w2/2, _ty + h2/2 );
+        m_pVisualFormula->redraw( _painter );
+        _painter.restore();
     }
     /**
      * Usual Text
@@ -2581,49 +2582,49 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         QPen tmpPen(m_textPen);
         if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
-	    QPen p( m_textPen );
-	    p.setColor( defaultColorGroup.highlightedText() );
-	    _painter.setPen( p );
-	}
-	else
-	    _painter.setPen( m_textPen );
+            QPen p( m_textPen );
+            p.setColor( defaultColorGroup.highlightedText() );
+            _painter.setPen( p );
+        }
+        else
+            _painter.setPen( m_textPen );
 
-	// #### Torben: This looks like duplication to me
-	verifyCondition();
-	if(m_conditionIsTrue && !m_pTable->getShowFormular())
+        // #### Torben: This looks like duplication to me
+        verifyCondition();
+        if(m_conditionIsTrue && !m_pTable->getShowFormular())
         {
-	    KSpreadConditional *tmpCondition=0;
-	    switch(m_numberOfCond)
-	    {
-	    case 0:
-		tmpCondition=m_firstCondition;
-		break;
-	    case 1:
-		tmpCondition=m_secondCondition;
-		break;
-	    case 2:
-		tmpCondition=m_thirdCondition;
-		break;
-	    }
-	    _painter.setFont( tmpCondition->fontcond );
+            KSpreadConditional *tmpCondition=0;
+            switch(m_numberOfCond)
+            {
+            case 0:
+                tmpCondition=m_firstCondition;
+                break;
+            case 1:
+                tmpCondition=m_secondCondition;
+                break;
+            case 2:
+                tmpCondition=m_thirdCondition;
+                break;
+            }
+            _painter.setFont( tmpCondition->fontcond );
             tmpPen.setColor( tmpCondition->colorcond );
         }
-	else
+        else
         {
-	    _painter.setFont( m_textFont );
-	    if( m_bValue && !m_pTable->getShowFormular() )
-	    {
-		double v = m_dValue * m_dFaktor;
+            _painter.setFont( m_textFont );
+            if( m_bValue && !m_pTable->getShowFormular() )
+            {
+                double v = m_dValue * m_dFaktor;
                 if ( floatColor( _col, _row) == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular() )
                     tmpPen.setColor( Qt::red );
                 else
                     tmpPen.setColor( textColor( _col, _row) );
-	    }
-	    else
+            }
+            else
                 tmpPen.setColor( textColor( _col, _row) );
-	}
+        }
         _painter.setPen(tmpPen);
-	//_painter.setFont( m_textFont );
+        //_painter.setFont( m_textFont );
         QString tmpText=m_strOutText;
         if(m_bCellTooShort)
                 m_strOutText="**";
@@ -2631,93 +2632,93 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         conditionAlign( _painter, _col, _row );
 
 
-	if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
-	    _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
-	else if( m_rotateAngle!=0)
+        if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
+            _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
+        else if( m_rotateAngle!=0)
         {
-	    int angle=m_rotateAngle;
-	    QFontMetrics fm = _painter.fontMetrics();
-	    _painter.rotate(angle);
-	    int x;
-	    if(angle>0)
-		x=_tx + m_iTextX;
-	    else
-		x=static_cast<int>(_tx + m_iTextX -(fm.descent() + fm.ascent())*sin(angle*M_PI/180));
-	    int y;
-	    if(angle>0)
-		y=_ty + m_iTextY;
-	    else
-		y=_ty + m_iTextY+m_iOutTextHeight;
-	    _painter.drawText( x*cos(angle*M_PI/180)+y*sin(angle*M_PI/180),
-			       -x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180) , m_strOutText );
-	    _painter.rotate(-angle);
-	}
-	else if( m_bMultiRow && !m_bVerticalText)
+            int angle=m_rotateAngle;
+            QFontMetrics fm = _painter.fontMetrics();
+            _painter.rotate(angle);
+            int x;
+            if(angle>0)
+                x=_tx + m_iTextX;
+            else
+                x=static_cast<int>(_tx + m_iTextX -(fm.descent() + fm.ascent())*sin(angle*M_PI/180));
+            int y;
+            if(angle>0)
+                y=_ty + m_iTextY;
+            else
+                y=_ty + m_iTextY+m_iOutTextHeight;
+            _painter.drawText( x*cos(angle*M_PI/180)+y*sin(angle*M_PI/180),
+                               -x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180) , m_strOutText );
+            _painter.rotate(-angle);
+        }
+        else if( m_bMultiRow && !m_bVerticalText)
         {
-	    QString t;
-	    int i;
-	    int pos = 0;
-	    int dy = 0;
-	    int dx = 0;
-	    QFontMetrics fm = _painter.fontMetrics();
-	    do
-	    {
-		i = m_strOutText.find( "\n", pos );
-		if ( i == -1 )
-		    t = m_strOutText.mid( pos, m_strOutText.length() - pos );
-		else
-	        {
-		    t = m_strOutText.mid( pos, i - pos );
-		    pos = i + 1;
-		}
+            QString t;
+            int i;
+            int pos = 0;
+            int dy = 0;
+            int dx = 0;
+            QFontMetrics fm = _painter.fontMetrics();
+            do
+            {
+                i = m_strOutText.find( "\n", pos );
+                if ( i == -1 )
+                    t = m_strOutText.mid( pos, m_strOutText.length() - pos );
+                else
+                {
+                    t = m_strOutText.mid( pos, i - pos );
+                    pos = i + 1;
+                }
 
-		int a = m_eAlign;
-		if ( a == KSpreadCell::Undefined )
-	        {
-		    if ( m_bValue || m_bDate || m_bTime)
-			a = KSpreadCell::Right;
-		    else
-			a = KSpreadCell::Left;
-		}
-		if(m_pTable->getShowFormular())
-		    a = KSpreadCell::Left;
+                int a = m_eAlign;
+                if ( a == KSpreadCell::Undefined )
+                {
+                    if ( m_bValue || m_bDate || m_bTime)
+                        a = KSpreadCell::Right;
+                    else
+                        a = KSpreadCell::Left;
+                }
+                if(m_pTable->getShowFormular())
+                    a = KSpreadCell::Left;
 
-		// #### Torben: This looks duplicated for me
-		switch( a )
-	        {
-		case KSpreadCell::Left:
-		    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-		    break;
-		case KSpreadCell::Right:
-		    m_iTextX = w2 - BORDER_SPACE - fm.width( t )
-			       - rightBorderWidth( _col, _row );
-		    break;
-		case KSpreadCell::Center:
-		    m_iTextX = ( w2 - fm.width( t ) ) / 2;
-		}
-		_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
-		dy += fm.descent() + fm.ascent();
-	    }
-	    while ( i != -1 );
-	}
-	else if( m_bVerticalText)
+                // #### Torben: This looks duplicated for me
+                switch( a )
+                {
+                case KSpreadCell::Left:
+                    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+                    break;
+                case KSpreadCell::Right:
+                    m_iTextX = w2 - BORDER_SPACE - fm.width( t )
+                               - rightBorderWidth( _col, _row );
+                    break;
+                case KSpreadCell::Center:
+                    m_iTextX = ( w2 - fm.width( t ) ) / 2;
+                }
+                _painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
+                dy += fm.descent() + fm.ascent();
+            }
+            while ( i != -1 );
+        }
+        else if( m_bVerticalText)
         {
-	    QString t;
-	    int i=0;
-	    int dy = 0;
-	    int dx = 0;
-	    int j=0;
-	    QFontMetrics fm = _painter.fontMetrics();
-	    do
-	    {
-		i=m_strOutText.length();
-		t=m_strOutText.at(j);
-		_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
-		dy += fm.descent() + fm.ascent();
-		j++;
-	    }
-	    while ( j != i );
-	}
+            QString t;
+            int i=0;
+            int dy = 0;
+            int dx = 0;
+            int j=0;
+            QFontMetrics fm = _painter.fontMetrics();
+            do
+            {
+                i=m_strOutText.length();
+                t=m_strOutText.at(j);
+                _painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
+                dy += fm.descent() + fm.ascent();
+                j++;
+            }
+            while ( j != i );
+        }
 
         if(m_bCellTooShort)
                 m_strOutText=tmpText;
@@ -2725,21 +2726,21 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     // Dont draw page borders or the marker when printing
     if ( _painter.device()->isExtDev() )
-	return;
+        return;
 
     // Draw page borders
     if ( m_pTable->isShowPageBorders() )
     {
-	if ( m_pTable->isOnNewPageY( _row ) )
+        if ( m_pTable->isOnNewPageY( _row ) )
         {
-	    _painter.setPen( Qt::red );
-	    _painter.drawLine( _tx, _ty, _tx + w, _ty );
-	}
-	if ( m_pTable->isOnNewPageX( _col ) )
+            _painter.setPen( Qt::red );
+            _painter.drawLine( _tx, _ty, _tx + w, _ty );
+        }
+        if ( m_pTable->isOnNewPageX( _col ) )
         {
-	    _painter.setPen( Qt::red );
-	    _painter.drawLine( _tx, _ty, _tx, _ty + h );
-	}
+            _painter.setPen( Qt::red );
+            _painter.drawLine( _tx, _ty, _tx, _ty + h );
+        }
     }
 
  drawmarker:
@@ -2759,68 +2760,68 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     // The marker is exactly this cell ?
     if ( marker.left() == _col && marker.right() == _col &&
-	 marker.top() == _row && marker.bottom() == _row )
+         marker.top() == _row && marker.bottom() == _row )
     {
-	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
-	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
-	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
-	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
+        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
+        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
     }
     else if ( marker.contains( QPoint(_col, _row) ) )
     {
-	// int w = cl->width();
-	// int h = rl->height();
+        // int w = cl->width();
+        // int h = rl->height();
 
-	// Upper border ?
-	if ( _row == marker.top() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
-	// Left border ?
-	if ( _col == marker.left() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
-	// Lower border ?
-	if ( _row == marker.bottom() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
-	// Right border ?
-	if ( _col == marker.right() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+        // Upper border ?
+        if ( _row == marker.top() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
+        // Left border ?
+        if ( _col == marker.left() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+        // Lower border ?
+        if ( _row == marker.bottom() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
+        // Right border ?
+        if ( _col == marker.right() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
     }
     // Dont obeye extra cells
     else if ( larger.contains( QPoint(_col, _row) ) )
     {
-	// int w = cl->width();
-	// int h = rl->height();
+        // int w = cl->width();
+        // int h = rl->height();
 
-	// Upper border ?
-	if ( _col >= marker.left() && _col <= marker.right() && _row - 1 == marker.bottom() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
-	// Left border ?
-	if ( _row >= marker.top() && _row <= marker.bottom() && _col - 1 == marker.right() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
-	// Lower border ?
-	if ( _col >= marker.left() && _col <= marker.right() && _row + 1 == marker.top() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
-	// Right border ?
-	if ( _row >= marker.top() && _row <= marker.bottom() && _col + 1 == marker.left() )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
-	// Top left corner ?
-	if ( _row == marker.bottom() + 1 && _col == marker.right() + 1 )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 11, marker );
-	// Top right corner ?
-	if ( _row == marker.bottom() + 1 && _col == marker.left() - 1 )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 12, marker );
-	// Bottom right corner ?
-	if ( _row == marker.top() - 1 && _col == marker.left() - 1 )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 13, marker );
-	// Bottom left corner ?
-	if ( _row == marker.top() - 1 && _col == marker.right() + 1 )
-	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 14, marker );
+        // Upper border ?
+        if ( _col >= marker.left() && _col <= marker.right() && _row - 1 == marker.bottom() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
+        // Left border ?
+        if ( _row >= marker.top() && _row <= marker.bottom() && _col - 1 == marker.right() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+        // Lower border ?
+        if ( _col >= marker.left() && _col <= marker.right() && _row + 1 == marker.top() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
+        // Right border ?
+        if ( _row >= marker.top() && _row <= marker.bottom() && _col + 1 == marker.left() )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+        // Top left corner ?
+        if ( _row == marker.bottom() + 1 && _col == marker.right() + 1 )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 11, marker );
+        // Top right corner ?
+        if ( _row == marker.bottom() + 1 && _col == marker.left() - 1 )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 12, marker );
+        // Bottom right corner ?
+        if ( _row == marker.top() - 1 && _col == marker.left() - 1 )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 13, marker );
+        // Bottom left corner ?
+        if ( _row == marker.top() - 1 && _col == marker.right() + 1 )
+            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 14, marker );
     }
 }
 
 /*
 void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _row,
-			 ColumnLayout *cl, RowLayout *rl, bool _only_left,
-			 bool _only_top, const QPen& _grid_pen )
+                         ColumnLayout *cl, RowLayout *rl, bool _only_left,
+                         bool _only_top, const QPen& _grid_pen )
 {
     // ###### Torben: This looks unbelievable bad!
 
@@ -2870,15 +2871,15 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
       int dy=0;
       int dx=0;
       if ( m_fallDiagonalPen.style() != Qt::NoPen )
-	{
-	  _painter.setPen( m_fallDiagonalPen );
-	  _painter.drawLine( _tx + dx, _ty + dy, _tx + cl->width() , _ty + rl->height() );
-	}
+        {
+          _painter.setPen( m_fallDiagonalPen );
+          _painter.drawLine( _tx + dx, _ty + dy, _tx + cl->width() , _ty + rl->height() );
+        }
       if ( m_goUpDiagonalPen.style() != Qt::NoPen )
-	{
-	  _painter.setPen( m_goUpDiagonalPen );
-	  _painter.drawLine( _tx , _ty +rl->height() , _tx + cl->width(), _ty  );
-	}
+        {
+          _painter.setPen( m_goUpDiagonalPen );
+          _painter.drawLine( _tx , _ty +rl->height() , _tx + cl->width(), _ty  );
+        }
       if( m_backGroundBrush.style()!= Qt::NoBrush)
         {
         int left=leftBorderWidth( _col, _row) + BORDER_SPACE;
@@ -2896,23 +2897,23 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
       _painter.setPen( m_textPen );
       verifyCondition();
       if(m_conditionIsTrue && !m_pTable->getShowFormular())
-      	{
+        {
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
-		{
-		case 0:
-			tmpCondition=m_firstCondition;
-			break;
-		case 1:
-			tmpCondition=m_secondCondition;
-			break;
-		case 2:
-			tmpCondition=m_thirdCondition;
-			break;
-		}
+                {
+                case 0:
+                        tmpCondition=m_firstCondition;
+                        break;
+                case 1:
+                        tmpCondition=m_secondCondition;
+                        break;
+                case 2:
+                        tmpCondition=m_thirdCondition;
+                        break;
+                }
 
         _painter.setFont( tmpCondition->fontcond );
-      	}
+        }
       else
         _painter.setFont( m_textFont );
       conditionAlign(_painter,_col,_row);
@@ -2973,37 +2974,37 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 bool KSpreadCell::hasProperty( Properties p ) const
 {
     if ( !m_pObscuringCell )
-	return KSpreadLayout::hasProperty( p );
+        return KSpreadLayout::hasProperty( p );
 
     // An obscured cell may only have a property if
     // the parent has it and if it is related to borders.
 
     if ( !m_pObscuringCell->hasProperty( p ) )
-	return FALSE;
+        return FALSE;
 
     switch( p )
     {
     case PBackgroundBrush:
     case PBackgroundColor:
-	return TRUE;
+        return TRUE;
     case PLeftBorder:
-	if ( column() == m_pObscuringCell->column() )
-	    return TRUE;
-	break;
+        if ( column() == m_pObscuringCell->column() )
+            return TRUE;
+        break;
     case PRightBorder:
-	if ( column() == m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
-	    return TRUE;
-	break;
+        if ( column() == m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
+            return TRUE;
+        break;
     case PTopBorder:
-	if ( row() == m_pObscuringCell->row() )
-	    return TRUE;
-	break;
+        if ( row() == m_pObscuringCell->row() )
+            return TRUE;
+        break;
     case PBottomBorder:
-	if ( row() == m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
-	    return TRUE;
-	break;
+        if ( row() == m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
+            return TRUE;
+        break;
     default:
-	return FALSE;
+        return FALSE;
     }
 
     return FALSE;
@@ -3013,11 +3014,11 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-	// Ask the obscuring cell for a rigth border
-	if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
-	    return m_pObscuringCell->backGroundBrush( m_pObscuringCell->column(), m_pObscuringCell->row() );
+        // Ask the obscuring cell for a rigth border
+        if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
+            return m_pObscuringCell->backGroundBrush( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-	return m_pTable->emptyBrush();
+        return m_pTable->emptyBrush();
     }
 
     return KSpreadLayout::backGroundBrush( _col, _row );
@@ -3027,11 +3028,11 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-	// Ask the obscuring cell for a rigth border
-	if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
-	    return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
+        // Ask the obscuring cell for a rigth border
+        if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
+            return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-	return m_pTable->emptyColor();
+        return m_pTable->emptyColor();
     }
 
     return KSpreadLayout::bgColor( _col, _row );
@@ -3048,7 +3049,7 @@ void KSpreadCell::setLeftBorderPen( const QPen& p )
 {
     KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() );
     if ( cell && cell->hasProperty( PRightBorder ) )
-	cell->clearProperty( PRightBorder );
+        cell->clearProperty( PRightBorder );
 
     KSpreadLayout::setLeftBorderPen( p );
 }
@@ -3057,7 +3058,7 @@ void KSpreadCell::setTopBorderPen( const QPen& p )
 {
     KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 );
     if ( cell && cell->hasProperty( PBottomBorder ) )
-	cell->clearProperty( PBottomBorder );
+        cell->clearProperty( PBottomBorder );
 
     KSpreadLayout::setTopBorderPen( p );
 }
@@ -3066,7 +3067,7 @@ void KSpreadCell::setRightBorderPen( const QPen& p )
 {
     KSpreadCell* cell = m_pTable->cellAt( column() + 1, row() );
     if ( cell && cell->hasProperty( PLeftBorder ) )
-	cell->clearProperty( PLeftBorder );
+        cell->clearProperty( PLeftBorder );
 
     KSpreadLayout::setRightBorderPen( p );
 }
@@ -3075,7 +3076,7 @@ void KSpreadCell::setBottomBorderPen( const QPen& p )
 {
     KSpreadCell* cell = m_pTable->cellAt( column(), row() + 1 );
     if ( cell && cell->hasProperty( PTopBorder ) )
-	cell->clearProperty( PTopBorder );
+        cell->clearProperty( PTopBorder );
 
     KSpreadLayout::setBottomBorderPen( p );
 }
@@ -3084,28 +3085,28 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-	// Is this cell at the right border of the "big" joined cell ?
-	// If not then there is no right border.
-	if ( _col != m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
-	    return m_pTable->emptyPen();
+        // Is this cell at the right border of the "big" joined cell ?
+        // If not then there is no right border.
+        if ( _col != m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
+            return m_pTable->emptyPen();
 
-	// Ask the obscuring cell for a rigth border
-	if ( m_pObscuringCell->hasProperty( PRightBorder ) )
-	    return m_pObscuringCell->rightBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
+        // Ask the obscuring cell for a rigth border
+        if ( m_pObscuringCell->hasProperty( PRightBorder ) )
+            return m_pObscuringCell->rightBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-	// Ask the cell on the right
-	KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
-	if ( cell->hasProperty( PLeftBorder ) )
-	    return cell->leftBorderPen( _col + 1, _row );
+        // Ask the cell on the right
+        KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
+        if ( cell->hasProperty( PLeftBorder ) )
+            return cell->leftBorderPen( _col + 1, _row );
 
-	return m_pTable->emptyPen();
+        return m_pTable->emptyPen();
     }
 
     if ( !hasProperty( PRightBorder ) )
     {
-	KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
-	if ( cell->hasProperty( PLeftBorder ) )
-	    return cell->leftBorderPen( _col + 1, _row );
+        KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
+        if ( cell->hasProperty( PLeftBorder ) )
+            return cell->leftBorderPen( _col + 1, _row );
     }
 
     return KSpreadLayout::rightBorderPen( _col, _row );
@@ -3115,28 +3116,28 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-	// Is this cell at the left border of the "big" joined cell ?
-	// If not then there is no left border.
-	if ( _col != m_pObscuringCell->column() )
-	    return m_pTable->emptyPen();
+        // Is this cell at the left border of the "big" joined cell ?
+        // If not then there is no left border.
+        if ( _col != m_pObscuringCell->column() )
+            return m_pTable->emptyPen();
 
-	// Ask the obscuring cell for a left border
-	if ( m_pObscuringCell->hasProperty( PLeftBorder ) )
-	    return m_pObscuringCell->leftBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
+        // Ask the obscuring cell for a left border
+        if ( m_pObscuringCell->hasProperty( PLeftBorder ) )
+            return m_pObscuringCell->leftBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-	// Ask the cell on the left
-	KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
-	if ( cell->hasProperty( PRightBorder ) )
-	    return cell->rightBorderPen( _col - 1, _row );
+        // Ask the cell on the left
+        KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
+        if ( cell->hasProperty( PRightBorder ) )
+            return cell->rightBorderPen( _col - 1, _row );
 
-	return m_pTable->emptyPen();
+        return m_pTable->emptyPen();
     }
 
     if ( !hasProperty( PLeftBorder ) )
     {
-	KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
-	if ( cell->hasProperty( PRightBorder ) )
-	    return cell->rightBorderPen( _col - 1, _row );
+        KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
+        if ( cell->hasProperty( PRightBorder ) )
+            return cell->rightBorderPen( _col - 1, _row );
     }
 
     return KSpreadLayout::leftBorderPen( _col, _row );
@@ -3146,28 +3147,28 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-	// Is this cell at the bottom border of the "big" joined cell ?
-	// If not then there is no bottom border.
-	if ( _row != m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
-	    return m_pTable->emptyPen();
+        // Is this cell at the bottom border of the "big" joined cell ?
+        // If not then there is no bottom border.
+        if ( _row != m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
+            return m_pTable->emptyPen();
 
-	// Ask the obscuring cell for a bottom border
-	if ( m_pObscuringCell->hasProperty( PBottomBorder ) )
-	    return m_pObscuringCell->bottomBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
+        // Ask the obscuring cell for a bottom border
+        if ( m_pObscuringCell->hasProperty( PBottomBorder ) )
+            return m_pObscuringCell->bottomBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-	// Ask the cell below
-	KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
-	if ( cell->hasProperty( PTopBorder ) )
-	    return cell->topBorderPen( _col, _row + 1 );
+        // Ask the cell below
+        KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
+        if ( cell->hasProperty( PTopBorder ) )
+            return cell->topBorderPen( _col, _row + 1 );
 
-	return m_pTable->emptyPen();
+        return m_pTable->emptyPen();
     }
 
     if ( !hasProperty( PBottomBorder ) )
     {
-	KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
-	if ( cell->hasProperty( PTopBorder ) )
-	    return cell->topBorderPen( _col, _row + 1 );
+        KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
+        if ( cell->hasProperty( PTopBorder ) )
+            return cell->topBorderPen( _col, _row + 1 );
     }
 
     return KSpreadLayout::bottomBorderPen( _col, _row );
@@ -3177,28 +3178,28 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 {
     if ( m_pObscuringCell )
     {
-	// Is this cell at the top border of the "big" joined cell ?
-	// If not then there is no top border.
-	if ( _row != m_pObscuringCell->row() )
-	    return m_pTable->emptyPen();
+        // Is this cell at the top border of the "big" joined cell ?
+        // If not then there is no top border.
+        if ( _row != m_pObscuringCell->row() )
+            return m_pTable->emptyPen();
 
-	// Ask the obscuring cell for a top border
-	if ( m_pObscuringCell->hasProperty( PTopBorder ) )
-	    return m_pObscuringCell->topBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
+        // Ask the obscuring cell for a top border
+        if ( m_pObscuringCell->hasProperty( PTopBorder ) )
+            return m_pObscuringCell->topBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
-	// Ask the cell above
-	KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
-	if ( cell->hasProperty( PBottomBorder ) )
-	    return cell->bottomBorderPen( _col, _row - 1 );
+        // Ask the cell above
+        KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
+        if ( cell->hasProperty( PBottomBorder ) )
+            return cell->bottomBorderPen( _col, _row - 1 );
 
-	return m_pTable->emptyPen();
+        return m_pTable->emptyPen();
     }
 
     if ( !hasProperty( PTopBorder ) )
     {
-	KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
-	if ( cell->hasProperty( PBottomBorder ) )
-	    return cell->bottomBorderPen( _col, _row - 1 );
+        KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
+        if ( cell->hasProperty( PBottomBorder ) )
+            return cell->bottomBorderPen( _col, _row - 1 );
     }
 
     return KSpreadLayout::topBorderPen( _col, _row );
@@ -3304,8 +3305,8 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
     checkFormat(true);
     if ( !m_pTable->isLoading() )
-	if ( !makeFormular() )
-	    kdError(36002) << "ERROR: Syntax ERROR" << endl;
+        if ( !makeFormular() )
+            kdError(36002) << "ERROR: Syntax ERROR" << endl;
     // A Hack!!!! For testing only
     // QString ret = encodeFormular( column, row );
     // decodeFormular( ret, column, row );
@@ -3358,15 +3359,15 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
   if ( m_style == ST_Select && !m_pTable->isLoading() )
   {
       if ( m_bCalcDirtyFlag )
-	  calc();
+          calc();
       // if ( m_bLayoutDirtyFlag )
       // makeLayout( m_pTable->painter(), column(), row() );
 
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       if ( m_content == Formula )
-	  s->parse( m_strFormularOut );
+          s->parse( m_strFormularOut );
       else
-	  s->parse( m_strText );
+          s->parse( m_strText );
       printf("SELECT %s\n", s->text().latin1() );
       checkValue();
       // m_bLayoutDirtyFlag = true;
@@ -3383,13 +3384,13 @@ void KSpreadCell::setValue( double _d )
 
     // Free all content data
     if ( m_pQML )
-	delete m_pQML;
+        delete m_pQML;
     m_pQML = 0;
     if ( m_pVisualFormula )
-	delete m_pVisualFormula;
+        delete m_pVisualFormula;
     m_pVisualFormula = 0;
     if ( isFormular() )
-	clearFormular();
+        clearFormular();
 
     m_lstDepends.clear();
     m_bError =false;
@@ -3403,7 +3404,7 @@ void KSpreadCell::setValue( double _d )
 
     // Do not update formulas and stuff here
     if ( !m_pTable->isLoading() )
-	update();
+        update();
 }
 
 void KSpreadCell::update()
@@ -3411,9 +3412,9 @@ void KSpreadCell::update()
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
     if ( m_pObscuringCell )
     {
-	m_pObscuringCell->setLayoutDirtyFlag();
-	m_pObscuringCell->setDisplayDirtyFlag();
-	m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
+        m_pObscuringCell->setLayoutDirtyFlag();
+        m_pObscuringCell->setDisplayDirtyFlag();
+        m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
     }
 
     bool b_update_begin = m_bDisplayDirtyFlag;
@@ -3422,7 +3423,7 @@ void KSpreadCell::update()
     updateDepending();
 
     if ( !b_update_begin && m_bDisplayDirtyFlag )
-	m_pTable->updateCell( this, m_iColumn, m_iRow );
+        m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()
@@ -3433,19 +3434,19 @@ void KSpreadCell::updateDepending()
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
     {
-	KSpreadCell* c = it.current()->firstCell();
-	for( ; c; c = c->nextCell() )
-	    if ( c != this )
-		c->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
+        KSpreadCell* c = it.current()->firstCell();
+        for( ; c; c = c->nextCell() )
+            if ( c != this )
+                c->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
     }
 
     // Recalculate every cell with calc dirty flag
     QListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
     for( ; it2.current(); ++it2 )
     {
-	KSpreadCell* c = it2.current()->firstCell();
-	for( ; c; c = c->nextCell() )
-	    c->calc( TRUE );
+        KSpreadCell* c = it2.current()->firstCell();
+        for( ; c; c = c->nextCell() )
+            c->calc( TRUE );
     }
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
 
@@ -3457,10 +3458,10 @@ bool KSpreadCell::updateChart(bool refresh)
     // Update a chart for example if it depends on this cell.
     if ( m_iRow != 0 && m_iColumn != 0 )
     {
-	CellBinding *bind;
-	for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
+        CellBinding *bind;
+        for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
         {
-	    if ( bind->contains( m_iColumn, m_iRow ) )
+            if ( bind->contains( m_iColumn, m_iRow ) )
                 {
                 if(!refresh)
                         return true;
@@ -3468,7 +3469,7 @@ bool KSpreadCell::updateChart(bool refresh)
                 bind->cellChanged( this );
                 return true;
                 }
-	}
+        }
     }
     return false;
 
@@ -3490,11 +3491,12 @@ void KSpreadCell::checkValue()
     }
 
     // Get the text that we actually display
-    const char *p = m_strText.data();
+    // FIXME (Werner)
+    const char *p = m_strText.latin1();
     if ( m_style == ST_Select )
-      p = ((SelectPrivate*)m_pPrivate)->text();
+      p = ((SelectPrivate*)m_pPrivate)->text().latin1();
     else if ( isFormular() )
-      p = m_strFormularOut.data();
+      p = m_strFormularOut.latin1();
     const char *ptext = p;
 
     // If the output is empty, we dont have a value
@@ -3522,25 +3524,25 @@ void KSpreadCell::checkValue()
     m_bValue = TRUE;
     bool point = FALSE;
     if ( *p == '+' || *p == '-' )
-	p++;
+        p++;
     while ( *p != 0 && m_bValue )
     {
-	if ( *p == ',' || *p == '.' || *p == decimal_point )
-	{
-	    // Only one decimal point is allowed
-	    if ( point )
-	      m_bValue = FALSE;
-	    else
-	      point = TRUE;
-	}
-	else if ( !isdigit( *p ) )
-	  m_bValue = FALSE;
-	p++;
+        if ( *p == ',' || *p == '.' || *p == decimal_point )
+        {
+            // Only one decimal point is allowed
+            if ( point )
+              m_bValue = FALSE;
+            else
+              point = TRUE;
+        }
+        else if ( !isdigit( *p ) )
+          m_bValue = FALSE;
+        p++;
     }
 
     if ( m_bValue )
         {
-	m_dValue = atof( ptext );
+        m_dValue = atof( ptext );
         if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
         ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
         ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
@@ -3655,7 +3657,7 @@ void KSpreadCell::checkValue()
         ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
         setFormatNumber(Number);
     /* if ( old_value != bValue )
-	displayDirtyFlag = TRUE; */
+        displayDirtyFlag = TRUE; */
 }
 
 void KSpreadCell::checkFormat(bool _formular)
@@ -3699,18 +3701,18 @@ void KSpreadCell::checkFormat(bool _formular)
                 m_strText= QString::number(val, 'f',8);
 
                 int i = m_strText.length();
-	        bool bFinished = FALSE;
-	        while ( !bFinished && i > 0 )
-	        {
-		QChar ch = m_strText[ i - 1 ];
-		if ( ch == '0' )
-		    m_strText.truncate( --i );
-		else
-	        {
-		    bFinished = TRUE;
-		    if ( ch == '.' )
-			m_strText.truncate( --i );
-		}
+                bool bFinished = FALSE;
+                while ( !bFinished && i > 0 )
+                {
+                QChar ch = m_strText[ i - 1 ];
+                if ( ch == '0' )
+                    m_strText.truncate( --i );
+                else
+                {
+                    bFinished = TRUE;
+                    if ( ch == '.' )
+                        m_strText.truncate( --i );
+                }
                 }
                 setFaktor(1.0);
                 if(_formular)
@@ -3741,9 +3743,9 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
       int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
       int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
       if ( _table == dep->m_pTable )
-	if ( left <= _column && _column <= right )
-	  if ( top <= _row && _row <= bottom )
-	    isdep = TRUE;
+        if ( left <= _column && _column <= right )
+          if ( top <= _row && _row <= bottom )
+            isdep = TRUE;
     }
     else if ( dep->m_iColumn == _column && dep->m_iRow == _row && dep->m_pTable == _table )
       isdep = TRUE;
@@ -3756,9 +3758,9 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
     {
-	KSpreadCell* c = it.current()->firstCell();
-	for( ; c; c = c->nextCell() )
-	    c->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
+        KSpreadCell* c = it.current()->firstCell();
+        for( ; c; c = c->nextCell() )
+            c->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
     }
   }
 }
@@ -3771,7 +3773,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     cell.setAttribute( "column", m_iColumn - _x_offset );
 
     if ( !action().isEmpty() )
-	cell.setAttribute( "action", action() );
+        cell.setAttribute( "action", action() );
 
     //
     // Save the formatting information
@@ -3781,55 +3783,55 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 
     if ( isForceExtraCells() )
     {
-	if ( extraXCells() )
-	    format.setAttribute( "colspan", extraXCells() );
-	if ( extraYCells() )
-	    format.setAttribute( "rowspan", extraYCells() );
+        if ( extraXCells() )
+            format.setAttribute( "colspan", extraXCells() );
+        if ( extraYCells() )
+            format.setAttribute( "rowspan", extraYCells() );
     }
     if ( style() )
-	format.setAttribute( "style", (int)m_style );
+        format.setAttribute( "style", (int)m_style );
 
 
     if( ( m_firstCondition != 0 ) || ( m_secondCondition != 0 ) || ( m_thirdCondition != 0 ) )
     {
-  	QDomElement condition = doc.createElement("condition");
+        QDomElement condition = doc.createElement("condition");
 
-  	if( m_firstCondition != 0 )
+        if( m_firstCondition != 0 )
         {
-	    QDomElement first=doc.createElement("first");
-	    first.setAttribute("cond",(int)m_firstCondition->m_cond);
-	    first.setAttribute("val1",m_firstCondition->val1);
-	    first.setAttribute("val2",m_firstCondition->val2);
-	    first.setAttribute("color",m_firstCondition->colorcond.name());
-	    first.appendChild( createElement( "font", m_firstCondition->fontcond, doc ) );
+            QDomElement first=doc.createElement("first");
+            first.setAttribute("cond",(int)m_firstCondition->m_cond);
+            first.setAttribute("val1",m_firstCondition->val1);
+            first.setAttribute("val2",m_firstCondition->val2);
+            first.setAttribute("color",m_firstCondition->colorcond.name());
+            first.appendChild( createElement( "font", m_firstCondition->fontcond, doc ) );
 
-	    condition.appendChild(first);
-	}
-  	if( m_secondCondition != 0 )
+            condition.appendChild(first);
+        }
+        if( m_secondCondition != 0 )
         {
-	    QDomElement second=doc.createElement("second");
-	    second.setAttribute("cond",(int)m_secondCondition->m_cond);
-	    second.setAttribute("val1",m_secondCondition->val1);
-	    second.setAttribute("val2",m_secondCondition->val2);
-	    second.setAttribute("color",m_secondCondition->colorcond.name());
-	    second.appendChild( createElement( "font", m_secondCondition->fontcond, doc ) );
+            QDomElement second=doc.createElement("second");
+            second.setAttribute("cond",(int)m_secondCondition->m_cond);
+            second.setAttribute("val1",m_secondCondition->val1);
+            second.setAttribute("val2",m_secondCondition->val2);
+            second.setAttribute("color",m_secondCondition->colorcond.name());
+            second.appendChild( createElement( "font", m_secondCondition->fontcond, doc ) );
 
 
-	    condition.appendChild(second);
-	}
-	if( m_thirdCondition != 0 )
+            condition.appendChild(second);
+        }
+        if( m_thirdCondition != 0 )
         {
-	    QDomElement third=doc.createElement("third");
-	    third.setAttribute("cond",(int)m_thirdCondition->m_cond);
-	    third.setAttribute("val1",m_thirdCondition->val1);
-	    third.setAttribute("val2",m_thirdCondition->val2);
-	    third.setAttribute("color",m_thirdCondition->colorcond.name());
-	    third.appendChild( createElement( "font", m_thirdCondition->fontcond, doc ) );
+            QDomElement third=doc.createElement("third");
+            third.setAttribute("cond",(int)m_thirdCondition->m_cond);
+            third.setAttribute("val1",m_thirdCondition->val1);
+            third.setAttribute("val2",m_thirdCondition->val2);
+            third.setAttribute("color",m_thirdCondition->colorcond.name());
+            third.appendChild( createElement( "font", m_thirdCondition->fontcond, doc ) );
 
 
-	    condition.appendChild(third);
-	}
-  	cell.appendChild( condition );
+            condition.appendChild(third);
+        }
+        cell.appendChild( condition );
     }
 
     if ( !m_strComment.isEmpty() )
@@ -3844,45 +3846,45 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     //
     if ( !m_strText.isEmpty() )
     {
-	// Formulars need to be encoded to enshure that they
-	// are position independent.
-	if ( isFormular() )
+        // Formulars need to be encoded to enshure that they
+        // are position independent.
+        if ( isFormular() )
         {
-	    QDomElement text = doc.createElement( "text" );
-	    text.appendChild( doc.createTextNode( encodeFormular() ) );
-	    cell.appendChild( text );
-	}
-	// Have to be saved in some CDATA section because of too many
-	// special charatcers.
-	else if ( content() == RichText || content() == VisualFormula )
+            QDomElement text = doc.createElement( "text" );
+            text.appendChild( doc.createTextNode( encodeFormular() ) );
+            cell.appendChild( text );
+        }
+        // Have to be saved in some CDATA section because of too many
+        // special charatcers.
+        else if ( content() == RichText || content() == VisualFormula )
         {
-	    QDomElement text = doc.createElement( "text" );
-	    text.appendChild( doc.createCDATASection( m_strText ) );
-	    cell.appendChild( text );
-	}
-	else if( (getFormatNumber(m_iColumn,m_iRow)==ShortDate || getFormatNumber(m_iColumn,m_iRow)==TextDate
+            QDomElement text = doc.createElement( "text" );
+            text.appendChild( doc.createCDATASection( m_strText ) );
+            cell.appendChild( text );
+        }
+        else if( (getFormatNumber(m_iColumn,m_iRow)==ShortDate || getFormatNumber(m_iColumn,m_iRow)==TextDate
         || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=215))&& m_bDate )
         {
-	    QDomElement text = doc.createElement( "text" );
-	    QString tmp;
-	    tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
-	    text.appendChild( doc.createTextNode( tmp ) );
-	    cell.appendChild( text );
-	}
-	else if( (getFormatNumber(m_iColumn,m_iRow)==Time || getFormatNumber(m_iColumn,m_iRow)==SecondeTime)&& m_bTime )
+            QDomElement text = doc.createElement( "text" );
+            QString tmp;
+            tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
+            text.appendChild( doc.createTextNode( tmp ) );
+            cell.appendChild( text );
+        }
+        else if( (getFormatNumber(m_iColumn,m_iRow)==Time || getFormatNumber(m_iColumn,m_iRow)==SecondeTime)&& m_bTime )
         {
-	    QDomElement text = doc.createElement( "text" );
-	    QString tmp;
-	    tmp=m_Time.toString();
-	    text.appendChild( doc.createTextNode( tmp ) );
-	    cell.appendChild( text );
-	}
-	else
+            QDomElement text = doc.createElement( "text" );
+            QString tmp;
+            tmp=m_Time.toString();
+            text.appendChild( doc.createTextNode( tmp ) );
+            cell.appendChild( text );
+        }
+        else
         {
-	    QDomElement text = doc.createElement( "text" );
-	    text.appendChild( doc.createTextNode( m_strText ) );
-	    cell.appendChild( text );
-	}
+            QDomElement text = doc.createElement( "text" );
+            text.appendChild( doc.createTextNode( m_strText ) );
+            cell.appendChild( text );
+        }
     }
 
     return cell;
@@ -3902,18 +3904,18 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     if ( !ok ) return false;
 
     if ( cell.hasAttribute( "action" ) )
-	setAction( cell.attribute("action") );
+        setAction( cell.attribute("action") );
 
     // Validation
     if ( m_iRow < 1 || m_iRow > 0xFFFF )
     {
-	kdDebug(36001) << "Value out of Range Cell:row=" << m_iRow << endl;
-	return false;
+        kdDebug(36001) << "Value out of Range Cell:row=" << m_iRow << endl;
+        return false;
     }
     if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
     {
-	kdDebug(36001) << "Value out of Range Cell:column=" << m_iColumn << endl;
-	return false;
+        kdDebug(36001) << "Value out of Range Cell:column=" << m_iColumn << endl;
+        return false;
     }
 
     //
@@ -3922,38 +3924,38 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     QDomElement f = cell.namedItem( "format" ).toElement();
     if ( !f.isNull() && ( pm == Normal || pm == Format || pm == NoBorder ) )
     {
-	if ( !KSpreadLayout::load( f ) )
-	    return false;
+        if ( !KSpreadLayout::load( f ) )
+            return false;
 
-	if ( f.hasAttribute( "colspan" ) )
+        if ( f.hasAttribute( "colspan" ) )
         {
-	    int i = f.attribute("colspan").toInt( &ok );
-	    if ( !ok ) return false;
-	    // Validation
-	    if ( i < 0 || i > 0xFFF )
-	    {
-		kdDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
-		return false;
-	    }
-	    m_iExtraXCells = i;
-	    if ( i > 0 )
-		m_bForceExtraCells = true;
-	}
+            int i = f.attribute("colspan").toInt( &ok );
+            if ( !ok ) return false;
+            // Validation
+            if ( i < 0 || i > 0xFFF )
+            {
+                kdDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
+                return false;
+            }
+            m_iExtraXCells = i;
+            if ( i > 0 )
+                m_bForceExtraCells = true;
+        }
 
-	if ( f.hasAttribute( "rowspan" ) )
+        if ( f.hasAttribute( "rowspan" ) )
         {
-	    int i = f.attribute("rowspan").toInt( &ok );
-	    if ( !ok ) return false;
-	    // Validation
-	    if ( i < 0 || i > 0xFFF )
-	    {
-		kdDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
-		return false;
-	    }
-	    m_iExtraYCells = i;
-	    if ( i > 0 )
-		m_bForceExtraCells = true;
-	}
+            int i = f.attribute("rowspan").toInt( &ok );
+            if ( !ok ) return false;
+            // Validation
+            if ( i < 0 || i > 0xFFF )
+            {
+                kdDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
+                return false;
+            }
+            m_iExtraYCells = i;
+            if ( i > 0 )
+                m_bForceExtraCells = true;
+        }
 
         if(m_bForceExtraCells)
         {
@@ -3968,91 +3970,91 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     QDomElement condition = cell.namedItem( "condition" ).toElement();
     if ( !condition.isNull())
     {
-	QDomElement first = condition.namedItem( "first" ).toElement();
-	if(!first.isNull())
+        QDomElement first = condition.namedItem( "first" ).toElement();
+        if(!first.isNull())
         {
-	    m_firstCondition=new KSpreadConditional;
-	    if ( first.hasAttribute( "cond" ) )
-	    {
-		m_firstCondition->m_cond =(Conditional) first.attribute("cond").toInt( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(first.hasAttribute("val1"))
-	    {
-		m_firstCondition->val1 =first.attribute("val1").toDouble( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(first.hasAttribute("val2"))
-	    {
-		m_firstCondition->val2 =first.attribute("val2").toDouble( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(first.hasAttribute("color"))
-	    {
-		m_firstCondition->colorcond=QColor(first.attribute( "color"));
-	    }
-	    QDomElement font = first.namedItem( "font" ).toElement();
-	    if ( !font.isNull() )
-		m_firstCondition->fontcond=toFont(font) ;
+            m_firstCondition=new KSpreadConditional;
+            if ( first.hasAttribute( "cond" ) )
+            {
+                m_firstCondition->m_cond =(Conditional) first.attribute("cond").toInt( &ok );
+                if ( !ok ) return false;
+            }
+            if(first.hasAttribute("val1"))
+            {
+                m_firstCondition->val1 =first.attribute("val1").toDouble( &ok );
+                if ( !ok ) return false;
+            }
+            if(first.hasAttribute("val2"))
+            {
+                m_firstCondition->val2 =first.attribute("val2").toDouble( &ok );
+                if ( !ok ) return false;
+            }
+            if(first.hasAttribute("color"))
+            {
+                m_firstCondition->colorcond=QColor(first.attribute( "color"));
+            }
+            QDomElement font = first.namedItem( "font" ).toElement();
+            if ( !font.isNull() )
+                m_firstCondition->fontcond=toFont(font) ;
 
-	}
+        }
 
-	QDomElement second = condition.namedItem( "second" ).toElement();
-	if(!second.isNull())
+        QDomElement second = condition.namedItem( "second" ).toElement();
+        if(!second.isNull())
         {
-	    m_secondCondition=new KSpreadConditional;
-	    if ( second.hasAttribute( "cond" ) )
-	    {
-		m_secondCondition->m_cond =(Conditional) second.attribute("cond").toInt( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(second.hasAttribute("val1"))
-	    {
-		m_secondCondition->val1 =second.attribute("val1").toDouble( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(second.hasAttribute("val2"))
-	    {
-		m_secondCondition->val2 =second.attribute("val2").toDouble( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(second.hasAttribute("color"))
-	    {
-		m_secondCondition->colorcond=QColor(second.attribute( "color"));
-	    }
-	    QDomElement font = second.namedItem( "font" ).toElement();
-	    if ( !font.isNull() )
-		m_secondCondition->fontcond=toFont(font) ;
+            m_secondCondition=new KSpreadConditional;
+            if ( second.hasAttribute( "cond" ) )
+            {
+                m_secondCondition->m_cond =(Conditional) second.attribute("cond").toInt( &ok );
+                if ( !ok ) return false;
+            }
+            if(second.hasAttribute("val1"))
+            {
+                m_secondCondition->val1 =second.attribute("val1").toDouble( &ok );
+                if ( !ok ) return false;
+            }
+            if(second.hasAttribute("val2"))
+            {
+                m_secondCondition->val2 =second.attribute("val2").toDouble( &ok );
+                if ( !ok ) return false;
+            }
+            if(second.hasAttribute("color"))
+            {
+                m_secondCondition->colorcond=QColor(second.attribute( "color"));
+            }
+            QDomElement font = second.namedItem( "font" ).toElement();
+            if ( !font.isNull() )
+                m_secondCondition->fontcond=toFont(font) ;
 
-	}
+        }
 
-	QDomElement third = condition.namedItem( "third" ).toElement();
-	if(!third.isNull())
+        QDomElement third = condition.namedItem( "third" ).toElement();
+        if(!third.isNull())
         {
-	    m_thirdCondition=new KSpreadConditional;
-	    if ( third.hasAttribute( "cond" ) )
-	    {
-		m_thirdCondition->m_cond =(Conditional) third.attribute("cond").toInt( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(third.hasAttribute("val1"))
-	    {
-		m_thirdCondition->val1 =third.attribute("val1").toDouble( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(third.hasAttribute("val2"))
-	    {
-		m_thirdCondition->val2 =third.attribute("val2").toDouble( &ok );
-		if ( !ok ) return false;
-	    }
-	    if(third.hasAttribute("color"))
-	    {
-		m_thirdCondition->colorcond=QColor(third.attribute( "color"));
-	    }
-	    QDomElement font = third.namedItem( "font" ).toElement();
-	    if ( !font.isNull() )
-		m_thirdCondition->fontcond=toFont(font) ;
-	}
+            m_thirdCondition=new KSpreadConditional;
+            if ( third.hasAttribute( "cond" ) )
+            {
+                m_thirdCondition->m_cond =(Conditional) third.attribute("cond").toInt( &ok );
+                if ( !ok ) return false;
+            }
+            if(third.hasAttribute("val1"))
+            {
+                m_thirdCondition->val1 =third.attribute("val1").toDouble( &ok );
+                if ( !ok ) return false;
+            }
+            if(third.hasAttribute("val2"))
+            {
+                m_thirdCondition->val2 =third.attribute("val2").toDouble( &ok );
+                if ( !ok ) return false;
+            }
+            if(third.hasAttribute("color"))
+            {
+                m_thirdCondition->colorcond=QColor(third.attribute( "color"));
+            }
+            QDomElement font = third.namedItem( "font" ).toElement();
+            if ( !font.isNull() )
+                m_thirdCondition->fontcond=toFont(font) ;
+        }
     }
 
     //
@@ -4062,7 +4064,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     if ( !comment.isNull() && ( pm == ::Normal || pm == ::Comment || pm == ::NoBorder ))
     {
         QString t = comment.text();
-	//t = t.stripWhiteSpace();
+        //t = t.stripWhiteSpace();
         setComment( t );
     }
 
@@ -4073,64 +4075,64 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     QDomElement text = cell.namedItem( "text" ).toElement();
     if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )
     {
-	QString t = text.text();
-	t = t.stripWhiteSpace();
-	// A formula like =A1+A2 ?
+        QString t = text.text();
+        t = t.stripWhiteSpace();
+        // A formula like =A1+A2 ?
         if( t[0] == '=' )
         {
-	    t = decodeFormular( t, m_iColumn, m_iRow );
+            t = decodeFormular( t.latin1(), m_iColumn, m_iRow );
 
             // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
             setCellText( pasteOperation( t, m_strText, op ), false );
         }
-	// A date
+        // A date
         else if( getFormatNumber(m_iColumn,m_iRow) == ShortDate || getFormatNumber(m_iColumn,m_iRow) == TextDate
         || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=215))
         {
-	    int pos;
-	    int pos1;
-	    int year = -1;
-	    int month = -1;
-	    int day = -1;
-	    pos = t.find('/');
-	    year = t.mid(0,pos).toInt();
-	    pos1 = t.find('/',pos+1);
-	    month = t.mid(pos+1,((pos1-1)-pos)).toInt();
-	    day = t.right(t.length()-pos1-1).toInt();
-	    m_Date = QDate(year,month,day);
-	    if(m_Date.isValid() )
+            int pos;
+            int pos1;
+            int year = -1;
+            int month = -1;
+            int day = -1;
+            pos = t.find('/');
+            year = t.mid(0,pos).toInt();
+            pos1 = t.find('/',pos+1);
+            month = t.mid(pos+1,((pos1-1)-pos)).toInt();
+            day = t.right(t.length()-pos1-1).toInt();
+            m_Date = QDate(year,month,day);
+            if(m_Date.isValid() )
                 setCellText( KGlobal::locale()->formatDate( m_Date, true ), false );
-	    else
+            else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
-	// A Time
+        // A Time
         else if( getFormatNumber(m_iColumn,m_iRow) == Time || getFormatNumber(m_iColumn,m_iRow) == SecondeTime )
         {
-	    int hours = -1;
-	    int minutes = -1;
-	    int second = -1;
-	    int pos, pos1;
-	    pos = t.find(':');
-	    hours = t.mid(0,pos).toInt();
-	    pos1 = t.find(':',pos+1);
-	    minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
-	    second = t.right(t.length()-pos1-1).toInt();
-	    m_Time = QTime(hours,minutes,second);
-	    if(m_Time.isValid() )
+            int hours = -1;
+            int minutes = -1;
+            int second = -1;
+            int pos, pos1;
+            pos = t.find(':');
+            hours = t.mid(0,pos).toInt();
+            pos1 = t.find(':',pos+1);
+            minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
+            second = t.right(t.length()-pos1-1).toInt();
+            m_Time = QTime(hours,minutes,second);
+            if(m_Time.isValid() )
                 setCellText(KGlobal::locale()->formatTime(m_Time,true),false);
-	    else
+            else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
-	// A Text, QML or a visual formula
+        // A Text, QML or a visual formula
         else
         {
-	    // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
-	    setCellText( pasteOperation( t, m_strText, op ), false );
+            // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
+            setCellText( pasteOperation( t, m_strText, op ), false );
         }
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )
-	setStyle( (Style)f.attribute("style").toInt() );
+        setStyle( (Style)f.attribute("style").toInt() );
 
     return true;
 }
@@ -4138,27 +4140,27 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operation op )
 {
     if ( op == OverWrite )
-	return new_text;
+        return new_text;
 
     QString tmp_op;
     QString tmp;
     QString old;
     if( new_text.find("=") == 0 )
     {
-	tmp = new_text.right( new_text.length() - 1 );
+        tmp = new_text.right( new_text.length() - 1 );
     }
     else
     {
-	tmp = new_text;
+        tmp = new_text;
     }
 
     if( old_text.find("=") == 0 )
     {
-	old = old_text.right( old_text.length() - 1 );
+        old = old_text.right( old_text.length() - 1 );
     }
     else
     {
-	old = old_text;
+        old = old_text;
     }
 
     QString inter;
@@ -4168,46 +4170,46 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
 
     if( b1 && b2 )
     {
-	switch( op )
+        switch( op )
         {
-	case  Add:
-	    tmp_op = "="+inter.setNum(old.toDouble()+tmp.toDouble());
-	    break;
-	case Mul :
-	    tmp_op = "="+inter.setNum(old.toDouble()*tmp.toDouble());
-	    break;
-	case Sub:
-	    tmp_op = "="+inter.setNum(old.toDouble()-tmp.toDouble());
-	    break;
-	case Div:
-	    tmp_op = "="+inter.setNum(old.toDouble()/tmp.toDouble());
-	    break;
-	default:
-	    ASSERT( 0 );
-	}
-	return tmp_op;
+        case  Add:
+            tmp_op = "="+inter.setNum(old.toDouble()+tmp.toDouble());
+            break;
+        case Mul :
+            tmp_op = "="+inter.setNum(old.toDouble()*tmp.toDouble());
+            break;
+        case Sub:
+            tmp_op = "="+inter.setNum(old.toDouble()-tmp.toDouble());
+            break;
+        case Div:
+            tmp_op = "="+inter.setNum(old.toDouble()/tmp.toDouble());
+            break;
+        default:
+            ASSERT( 0 );
+        }
+        return tmp_op;
     }
     else if ( ( new_text[0] == '=' && old_text[0] == '=' ) ||
-	      ( b1 && old_text[0] == '=' ) || ( new_text[0] == '=' && b2 ) )
+              ( b1 && old_text[0] == '=' ) || ( new_text[0] == '=' && b2 ) )
     {
-	switch( op )
+        switch( op )
         {
-	case  Add:
-	    tmp_op="=("+old+")+"+"("+tmp+")";
-	    break;
-	case Mul :
-	    tmp_op="=("+old+")*"+"("+tmp+")";
-	    break;
-	case Sub:
-	    tmp_op="=("+old+")-"+"("+tmp+")";
-	    break;
-	case Div:
-	    tmp_op="=("+old+")/"+"("+tmp+")";
-	    break;
-	default :
-	    ASSERT( 0 );
-	}
-	return tmp_op;
+        case  Add:
+            tmp_op="=("+old+")+"+"("+tmp+")";
+            break;
+        case Mul :
+            tmp_op="=("+old+")*"+"("+tmp+")";
+            break;
+        case Sub:
+            tmp_op="=("+old+")-"+"("+tmp+")";
+            break;
+        case Div:
+            tmp_op="=("+old+")/"+"("+tmp+")";
+            break;
+        default :
+            ASSERT( 0 );
+        }
+        return tmp_op;
     }
 
     return new_text;
@@ -4262,21 +4264,21 @@ void KSpreadCell::tableDies()
 KSpreadCell::~KSpreadCell()
 {
     if ( m_nextCell )
-	m_nextCell->setPreviousCell( m_previousCell );
+        m_nextCell->setPreviousCell( m_previousCell );
     if ( m_previousCell )
-	m_previousCell->setNextCell( m_nextCell );
+        m_previousCell->setNextCell( m_nextCell );
 
     if ( m_pPrivate )
-	delete m_pPrivate;
+        delete m_pPrivate;
     if ( m_pQML )
-	delete m_pQML;
+        delete m_pQML;
     if ( m_pVisualFormula )
-	delete m_pVisualFormula;
+        delete m_pVisualFormula;
 
     // Unobscure cells.
     for( int x = 0; x <= m_iExtraXCells; ++x )
-	for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
-	     y <= m_iExtraYCells; ++y )
+        for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
+             y <= m_iExtraYCells; ++y )
     {
         KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
         if ( cell )
@@ -4322,16 +4324,16 @@ void SelectPrivate::parse( const QString& _text )
     m_lstItems.clear();
 
     if ( _text.isEmpty() )
-	return;
+        return;
 
     m_lstItems = QStringList::split( '\\', _text );
 
     if ( m_iIndex != -1 && m_iIndex < (int)m_lstItems.count() )
     { }
     else if ( m_lstItems.count() > 0 )
-	m_iIndex = 0;
+        m_iIndex = 0;
     else
-	m_iIndex = -1;
+        m_iIndex = -1;
 }
 
 void SelectPrivate::slotItemSelected( int _id )
@@ -4348,7 +4350,7 @@ void SelectPrivate::slotItemSelected( int _id )
 QString SelectPrivate::text() const
 {
     if ( m_iIndex == -1 )
-	return QString::null;
+        return QString::null;
 
     return m_lstItems[ m_iIndex ];
 }

@@ -35,7 +35,7 @@
 #include <knumvalidator.h>
 #include <kdebug.h>
 
-KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* name )
+KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QString &name )
         : QWidget( _parent )
 
 {
@@ -113,7 +113,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   connect(fontButton,SIGNAL(clicked()),this,SLOT(changeLabelFont()));
 
   connect(this,SIGNAL(fontSelected()),
-	  this,SLOT(refreshPreview()));
+          this,SLOT(refreshPreview()));
   emit(fontSelected());
 }
 
@@ -123,59 +123,59 @@ font=tmp->fontcond;
 color->setColor(tmp->colorcond);
 QString val;
 switch(tmp->m_cond)
-	{
-	case None :
-		break;
-	case Equal :
-	    	choose->setCurrentItem(1);
-	    	edit1->setEnabled(true);
-		val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		break;
-	case Superior :
-		choose->setCurrentItem(2);
-	    	edit1->setEnabled(true);
-		val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		break;
-	case Inferior :
-		choose->setCurrentItem(3);
-	    	edit1->setEnabled(true);
-	    	val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		break;
-	case SuperiorEqual :
-		choose->setCurrentItem(4);
-	    	edit1->setEnabled(true);
-	    	val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		break;
-	case InferiorEqual :
-		choose->setCurrentItem(5);
-		edit1->setEnabled(true);
-		val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		break;
+        {
+        case None :
+                break;
+        case Equal :
+                choose->setCurrentItem(1);
+                edit1->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                break;
+        case Superior :
+                choose->setCurrentItem(2);
+                edit1->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                break;
+        case Inferior :
+                choose->setCurrentItem(3);
+                edit1->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                break;
+        case SuperiorEqual :
+                choose->setCurrentItem(4);
+                edit1->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                break;
+        case InferiorEqual :
+                choose->setCurrentItem(5);
+                edit1->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                break;
 
-	case Between :
-		choose->setCurrentItem(6);
-		edit1->setEnabled(true);
-		edit2->setEnabled(true);
-		val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		val=val.setNum(tmp->val2);
-		edit2->setText(val);
-		break;
-	case Different :
-		choose->setCurrentItem(7);
-		edit1->setEnabled(true);
-		edit2->setEnabled(true);
-		val=val.setNum(tmp->val1);
-		edit1->setText(val);
-		val=val.setNum(tmp->val2);
-		edit2->setText(val);
-		break;
-	}
+        case Between :
+                choose->setCurrentItem(6);
+                edit1->setEnabled(true);
+                edit2->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                val=val.setNum(tmp->val2);
+                edit2->setText(val);
+                break;
+        case Different :
+                choose->setCurrentItem(7);
+                edit1->setEnabled(true);
+                edit2->setEnabled(true);
+                val=val.setNum(tmp->val1);
+                edit1->setText(val);
+                val=val.setNum(tmp->val2);
+                edit2->setText(val);
+                break;
+        }
 
 emit(fontSelected());
 }
@@ -240,7 +240,7 @@ double KSpreadWidgetconditional::getBackSecondValue()
 {
 QString tmp;
 tmp=edit2->text();
-return(	tmp.toDouble());
+return( tmp.toDouble());
 }
 
 
@@ -282,7 +282,7 @@ switch(  choose->currentItem())
                 result=Different;
                 break;
          default:
-	        kdDebug(36001) << "Error in list" << endl;
+                kdDebug(36001) << "Error in list" << endl;
                 break;
         }
 
@@ -290,7 +290,7 @@ return result;
 }
 
 KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QRect &_marker)
-	: QDialog( parent, name,TRUE )
+        : QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker=_marker;
@@ -344,8 +344,8 @@ if(tmpCondition3!=0)
 for ( int x = marker.left(); x <= marker.right(); x++ )
         {
         for ( int y = marker.top(); y <= marker.bottom(); y++ )
-	        {
-	        KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
+                {
+                KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
                 if((obj2->getFirstCondition(0)!=0)&& bFirstCond)
                         {
                         if((obj2->getFirstCondition(0)->val1==tmpCondition->val1)&&
@@ -364,7 +364,7 @@ for ( int x = marker.left(); x <= marker.right(); x++ )
                 else
                         bFirstCond=false;
 
-		if((obj2->getSecondCondition(0)!=0)&& bSecondCond)
+                if((obj2->getSecondCondition(0)!=0)&& bSecondCond)
                         {
                         if((obj2->getSecondCondition(0)->val1==tmpCondition2->val1)&&
                            (obj2->getSecondCondition(0)->val2==tmpCondition2->val2)&&
@@ -382,7 +382,7 @@ for ( int x = marker.left(); x <= marker.right(); x++ )
                 else
                         bSecondCond=false;
 
-		if((obj2->getThirdCondition(0)!=0)&& bThirdCond)
+                if((obj2->getThirdCondition(0)!=0)&& bThirdCond)
                         {
                         if((obj2->getThirdCondition(0)->val1==tmpCondition3->val1)&&
                            (obj2->getThirdCondition(0)->val2==tmpCondition3->val2)&&
@@ -400,7 +400,7 @@ for ( int x = marker.left(); x <= marker.right(); x++ )
                 else
                         bThirdCond=false;
 
-	        }
+                }
         }
 //kdDebug(36001)<<"Condition1 :"<<bFirstCond<<endl;
 //kdDebug(36001)<<"Condition2 :"<<bSecondCond<<endl;
@@ -409,41 +409,41 @@ for ( int x = marker.left(); x <= marker.right(); x++ )
 for(int i=0;i<3;i++)
    {
    switch(i)
-	{
-	case 0:
-		//tmpCondition=obj->getFirstCondition(0);
-		if(bFirstCond)//tmpCondition!=0)
-    			{
-    			firstCond->init(tmpCondition);
-    			}
+        {
+        case 0:
+                //tmpCondition=obj->getFirstCondition(0);
+                if(bFirstCond)//tmpCondition!=0)
+                        {
+                        firstCond->init(tmpCondition);
+                        }
                 else
                     {
                     firstCond->disabled();
                     }
-		break;
-	case 1:
-		//tmpCondition=obj->getSecondCondition(0);
-		if(bSecondCond)//tmpCondition!=0)
-    			{
-    			secondCond->init(tmpCondition2);
-    			}
+                break;
+        case 1:
+                //tmpCondition=obj->getSecondCondition(0);
+                if(bSecondCond)//tmpCondition!=0)
+                        {
+                        secondCond->init(tmpCondition2);
+                        }
                 else
                     {
                     secondCond->disabled();
                     }
-		break;
-	case 2:
-		//tmpCondition=obj->getThirdCondition(0);
-		if(bThirdCond)//tmpCondition!=0)
-    			{
-    			thirdCond->init(tmpCondition3);
-    			}
+                break;
+        case 2:
+                //tmpCondition=obj->getThirdCondition(0);
+                if(bThirdCond)//tmpCondition!=0)
+                        {
+                        thirdCond->init(tmpCondition3);
+                        }
                 else
                     {
                     thirdCond->disabled();
                     }
-		break;
-	}
+                break;
+        }
 
 
     }
@@ -463,10 +463,10 @@ if(firstCond->typeOfCondition()!=None)
     if((firstCond->typeOfCondition()==Different)||
        (firstCond->typeOfCondition()==Between))
       {
-	tmpCond[0].val2=firstCond->getBackSecondValue();
+        tmpCond[0].val2=firstCond->getBackSecondValue();
       }
         else
-	  tmpCond[0].val2=-1;
+          tmpCond[0].val2=-1;
   }
  else
    {
@@ -485,9 +485,9 @@ if(firstCond->typeOfCondition()!=None)
      tmpCond[1].colorcond=secondCond->getColor();
      tmpCond[1].m_cond=secondCond->typeOfCondition();
      if((secondCond->typeOfCondition()==Different)||
-	(secondCond->typeOfCondition()==Between))
+        (secondCond->typeOfCondition()==Between))
        {
-	 tmpCond[1].val2=secondCond->getBackSecondValue();
+         tmpCond[1].val2=secondCond->getBackSecondValue();
        }
      else
        tmpCond[1].val2=-1;
@@ -509,9 +509,9 @@ if(firstCond->typeOfCondition()!=None)
      tmpCond[2].colorcond=thirdCond->getColor();
      tmpCond[2].m_cond=thirdCond->typeOfCondition();
      if((thirdCond->typeOfCondition()==Different)||
-	(thirdCond->typeOfCondition()==Between))
+        (thirdCond->typeOfCondition()==Between))
        {
-	 tmpCond[2].val2=thirdCond->getBackSecondValue();
+         tmpCond[2].val2=thirdCond->getBackSecondValue();
        }
      else
        tmpCond[2].val2=-1;
@@ -527,7 +527,7 @@ if(firstCond->typeOfCondition()!=None)
    }
 
  m_pView->activeTable()->setConditional( QPoint(  m_pView->canvasWidget()->markerColumn(),
-						  m_pView->canvasWidget()->markerRow() ), tmpCond );
+                                                  m_pView->canvasWidget()->markerRow() ), tmpCond );
 
  accept();
 

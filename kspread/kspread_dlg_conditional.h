@@ -37,7 +37,7 @@ class KSpreadWidgetconditional : public QWidget
 {
   Q_OBJECT
 public:
-  KSpreadWidgetconditional(QWidget *_parent,const char* name);
+  KSpreadWidgetconditional(QWidget *_parent, const QString &name);
   double getBackFirstValue();
   double getBackSecondValue();
   QFont getFont(){return font;}

@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <math.h>
 
-QStrList *AutoFillSequenceItem::month = 0L;
-QStrList *AutoFillSequenceItem::day = 0L;
+QStringList *AutoFillSequenceItem::month = 0L;
+QStringList *AutoFillSequenceItem::day = 0L;
 
 /**********************************************************************************
  *
@@ -56,8 +56,8 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
     double d;
     if ( !item->getDelta( item2, d ) )
       {
-	ok = FALSE;
-	return;
+        ok = FALSE;
+        return;
       }
     sequence->at( i++ ) = d;
     item2 = _next->getNext();
@@ -114,106 +114,106 @@ AutoFillSequenceItem::AutoFillSequenceItem( double _d )
     type = FLOAT;
 }
 
-AutoFillSequenceItem::AutoFillSequenceItem( const char *_str )
+AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 {
     string = _str;
     type = STRING;
 
     if ( month == 0L )
     {
-	month = new QStrList();
-	month->append( i18n("January") );
-	month->append( i18n("February") );
-	month->append( i18n("March") );
-	month->append( i18n("April") );
-	month->append( i18n("May") );
-	month->append( i18n("June") );
-	month->append( i18n("July") );
-	month->append( i18n("August") );
-	month->append( i18n("September") );
-	month->append( i18n("October") );
-	month->append( i18n("November") );
-	month->append( i18n("December") );
+        month = new QStringList();
+        month->append( i18n("January") );
+        month->append( i18n("February") );
+        month->append( i18n("March") );
+        month->append( i18n("April") );
+        month->append( i18n("May") );
+        month->append( i18n("June") );
+        month->append( i18n("July") );
+        month->append( i18n("August") );
+        month->append( i18n("September") );
+        month->append( i18n("October") );
+        month->append( i18n("November") );
+        month->append( i18n("December") );
     }
 
     if ( day == 0L )
     {
-	day = new QStrList();
-	day->append( i18n("Monday") );
-	day->append( i18n("Tuesday") );
-	day->append( i18n("Wednesday") );
-	day->append( i18n("Thursday") );
-	day->append( i18n("Friday") );
-	day->append( i18n("Saturday") );
-	day->append( i18n("Sunday") );
+        day = new QStringList();
+        day->append( i18n("Monday") );
+        day->append( i18n("Tuesday") );
+        day->append( i18n("Wednesday") );
+        day->append( i18n("Thursday") );
+        day->append( i18n("Friday") );
+        day->append( i18n("Saturday") );
+        day->append( i18n("Sunday") );
     }
 
-    if ( month->find( _str ) != -1 )
+    if ( month->find( _str ) != month->end() )
     {
-	type = MONTH;
-	return;
+        type = MONTH;
+        return;
     }
 
-    if ( day->find( _str ) != -1 )
+    if ( day->find( _str ) != day->end() )
     {
-	type = DAY;
-	return;
+        type = DAY;
+        return;
     }
 
-    if ( string.data()[0] == '=' )
-	type = FORMULAR;
+    if ( string[0] == '=' )
+        type = FORMULAR;
 }
 
 bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 {
     if ( seq->getType() != type )
-	return FALSE;
+        return FALSE;
 
     switch( type )
     {
     case INTEGER:
-	_delta = (double)( seq->getIValue() - ivalue );
-	return TRUE;
+        _delta = (double)( seq->getIValue() - ivalue );
+        return TRUE;
     case FLOAT:
-	_delta = seq->getDValue() - dvalue;
-	return TRUE;
+        _delta = seq->getDValue() - dvalue;
+        return TRUE;
     case FORMULAR:
     case STRING:
-	if ( string == seq->getString() )
-	{
-	    _delta = 0.0;
-	    return TRUE;
-	}
-	return FALSE;
+        if ( string == seq->getString() )
+        {
+            _delta = 0.0;
+            return TRUE;
+        }
+        return FALSE;
     case MONTH:
-	{
-	    int i = month->find( string );
-	    int j = month->find( seq->getString() );
-	    int k = j;
-	    if ( j < i )
-		k += month->count();
-	    if ( j + 1 == i )
-		_delta = -1.0;
-	    else
-		_delta = ( double )( k - i );
-	    return TRUE;
-	}
+        {
+            int i = month->findIndex( string );
+            int j = month->findIndex( seq->getString() );
+            int k = j;
+            if ( j < i )
+                k += month->count();
+            if ( j + 1 == i )
+                _delta = -1.0;
+            else
+                _delta = ( double )( k - i );
+            return TRUE;
+        }
 
     case DAY:
-	{
-	    int i = day->find( string );
-	    int j = day->find( seq->getString() );
-	    int k = j;
-	    if ( j < i )
-		k += day->count();
-	    if ( j + 1 == i )
-		_delta = -1.0;
-	    else
-		_delta = ( double )( k - i );
-	    return TRUE;
-	}
+        {
+            int i = day->findIndex( string );
+            int j = day->findIndex( seq->getString() );
+            int k = j;
+            if ( j < i )
+                k += day->count();
+            if ( j + 1 == i )
+                _delta = -1.0;
+            else
+                _delta = ( double )( k - i );
+            return TRUE;
+        }
     default:
-	return FALSE;
+        return FALSE;
     }
 }
 
@@ -224,33 +224,33 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
     switch( type )
     {
     case INTEGER:
-	erg.sprintf("%i", ivalue + _no * (int)_delta );
-	break;
+        erg.sprintf("%i", ivalue + _no * (int)_delta );
+        break;
     case FLOAT:
-	erg.sprintf("%f", dvalue + (double)_no * _delta );
-	break;
+        erg.sprintf("%f", dvalue + (double)_no * _delta );
+        break;
     case FORMULAR:
     case STRING:
-	erg = string.data();
-	break;
+        erg = string;
+        break;
     case MONTH:
-	{
-	    int i = month->find( string );
-	    int j = i + _no * (int) _delta;
-	    int k = j % month->count();
-	    erg = month->at( k );
-	}
+        {
+            int i = month->findIndex( string );
+            int j = i + _no * (int) _delta;
+            int k = j % month->count();
+            erg = (*month->at( k ));
+        }
         break;
     case DAY:
-	{
-	    int i = day->find( string );
-	    int j = i + _no * (int) _delta;
-	    int k = j % day->count();
-	    erg = day->at( k );
-	}
+        {
+            int i = day->findIndex( string );
+            int j = i + _no * (int) _delta;
+            int k = j % day->count();
+            erg = (*day->at( k ));
+        }
     }
 
-    return QString( erg.data() );
+    return QString( erg );
 }
 
 /**********************************************************************************
@@ -265,30 +265,30 @@ AutoFillSequence::AutoFillSequence( KSpreadCell *_cell )
 
     if ( _cell->isFormular() )
     {
-	QString d = _cell->encodeFormular().data();
-	sequence.append( new AutoFillSequenceItem( d.data() ) );
+        QString d = _cell->encodeFormular();
+        sequence.append( new AutoFillSequenceItem( d ) );
     }
     else if ( _cell->isValue() )
     {
-	if ( floor( _cell->valueDouble() ) == _cell->valueDouble() )
-	{
-	    sequence.append( new AutoFillSequenceItem( (int)_cell->valueDouble() ) );
-	}
-	else
-	    sequence.append( new AutoFillSequenceItem( _cell->valueDouble() ) );
+        if ( floor( _cell->valueDouble() ) == _cell->valueDouble() )
+        {
+            sequence.append( new AutoFillSequenceItem( (int)_cell->valueDouble() ) );
+        }
+        else
+            sequence.append( new AutoFillSequenceItem( _cell->valueDouble() ) );
     }
-    else if ( _cell->text() )
-	sequence.append( new AutoFillSequenceItem( _cell->text() ) );
+    else if ( !_cell->text().isEmpty() )
+        sequence.append( new AutoFillSequenceItem( _cell->text() ) );
 }
 
 bool AutoFillSequence::matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta )
 {
     AutoFillDeltaSequence delta( this, _seq );
     if ( !delta.isOk() )
-	return FALSE;
+        return FALSE;
 
     if ( delta.equals( _delta ) )
-	 return TRUE;
+         return TRUE;
 
     return FALSE;
 }
@@ -300,18 +300,18 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     // Special handling for formulas
     if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULAR )
     {
-	QString f = dest->decodeFormular( sequence.first()->getString() ).data();
-	dest->setCellText( f.data(), true );
-	dest->copyLayout( src );
-	return;
+        QString f = dest->decodeFormular( sequence.first()->getString().latin1() );
+        dest->setCellText( f, true );
+        dest->copyLayout( src );
+        return;
     }
 
     AutoFillSequenceItem *item;
     int i = 0;
     for ( item = sequence.first(); item != 0L; item = sequence.next() )
-	erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
+        erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
 
-    dest->setCellText( erg.data(), true );
+    dest->setCellText( erg, true );
     dest->copyLayout( src );
 }
 
@@ -326,47 +326,47 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     // Fill from left to right
     if ( src.left() == dest.left() && src.right() < dest.right() )
     {
-	for ( int y = src.top(); y <= src.bottom(); y++ )
-	{
-	    int x;
-	    QList<KSpreadCell> destList;
-	    for ( x = src.right() + 1; x <= dest.right(); x++ )
-		destList.append( nonDefaultCell( x, y ) );
-	    QList<KSpreadCell> srcList;
-	    for ( x = src.left(); x <= src.right(); x++ )
-		srcList.append( cellAt( x, y ) );
-	    QList<AutoFillSequence> seqList;
-	    seqList.setAutoDelete( TRUE );
-	    for ( x = src.left(); x <= src.right(); x++ )
-		seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
-	    fillSequence( srcList, destList, seqList );
-	}
+        for ( int y = src.top(); y <= src.bottom(); y++ )
+        {
+            int x;
+            QList<KSpreadCell> destList;
+            for ( x = src.right() + 1; x <= dest.right(); x++ )
+                destList.append( nonDefaultCell( x, y ) );
+            QList<KSpreadCell> srcList;
+            for ( x = src.left(); x <= src.right(); x++ )
+                srcList.append( cellAt( x, y ) );
+            QList<AutoFillSequence> seqList;
+            seqList.setAutoDelete( TRUE );
+            for ( x = src.left(); x <= src.right(); x++ )
+                seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
+            fillSequence( srcList, destList, seqList );
+        }
     }
 
     // Fill from top to bottom
     if ( src.top() == dest.top() && src.bottom() < dest.bottom() )
     {
-	for ( int x = src.left(); x <= dest.right(); x++ )
-	{
-	    int y;
-	    QList<KSpreadCell> destList;
-	    for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
-		destList.append( nonDefaultCell( x, y ) );
-	    QList<KSpreadCell> srcList;
-	    for ( y = src.top(); y <= src.bottom(); y++ )
-		srcList.append( cellAt( x, y ) );
-	    QList<AutoFillSequence> seqList;
-	    seqList.setAutoDelete( TRUE );
-	    for ( y = src.top(); y <= src.bottom(); y++ )
-		seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
-	    fillSequence( srcList, destList, seqList );
-	}
+        for ( int x = src.left(); x <= dest.right(); x++ )
+        {
+            int y;
+            QList<KSpreadCell> destList;
+            for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
+                destList.append( nonDefaultCell( x, y ) );
+            QList<KSpreadCell> srcList;
+            for ( y = src.top(); y <= src.bottom(); y++ )
+                srcList.append( cellAt( x, y ) );
+            QList<AutoFillSequence> seqList;
+            seqList.setAutoDelete( TRUE );
+            for ( y = src.top(); y <= src.bottom(); y++ )
+                seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
+            fillSequence( srcList, destList, seqList );
+        }
     }
 
 }
 
 void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList,
-				 QList<AutoFillSequence>& _seqList )
+                                 QList<AutoFillSequence>& _seqList )
 {
     QList<AutoFillDeltaSequence> deltaList;
     deltaList.setAutoDelete( TRUE );
@@ -384,69 +384,69 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
     // We try to find the shortest interval.
     for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
     {
-	// If the interval is of length 'step' then the _seqList size must
-	// be a multiple of 'step'
-	if ( _seqList.count() % step == 0 )
-	{
-	    // Be optimistic
-	    bool ok = TRUE;
-	    deltaList.clear();
+        // If the interval is of length 'step' then the _seqList size must
+        // be a multiple of 'step'
+        if ( _seqList.count() % step == 0 )
+        {
+            // Be optimistic
+            bool ok = TRUE;
+            deltaList.clear();
 
-	    // Gueess the delta by looking at cells 0...2*step-1
-	    //
-	    // Since the interval may be of length 'step' we calculate the delta
-	    // between cells 0 and step, 1 and step+1, ...., step-1 and 2*step-1
-	    for ( unsigned int t = 0; t < step; t++ )
-	    {
-		deltaList.append( new AutoFillDeltaSequence( _seqList.at(t), _seqList.at(t+step) ) );
-		if ( !deltaList.getLast()->isOk() )
-		    ok = FALSE;
-	    }
-	
-	    // Verify the delta by looking at cells step..._seqList.count()
-	    //
-	    // We only looked at the cells 0 ... '2*step-1'.
-	    // Now test wether the cells from "(tst-1) * step + s" share the same delta
-	    // with the cell "tst * step + s" for all test=1..._seqList.count()/step and
-	    // for all s=0...step-1.
-	    for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() ); tst++ )
-	    {
-		for ( unsigned int s = 0; ok && ( s < step ); s++ )
-		{
-		    if ( !_seqList.at( (tst-1) * step + s )->matches( _seqList.at( tst * step + s ),
-								       deltaList.at( s ) ) )
-			ok = FALSE;
-		}
-	    }
+            // Gueess the delta by looking at cells 0...2*step-1
+            //
+            // Since the interval may be of length 'step' we calculate the delta
+            // between cells 0 and step, 1 and step+1, ...., step-1 and 2*step-1
+            for ( unsigned int t = 0; t < step; t++ )
+            {
+                deltaList.append( new AutoFillDeltaSequence( _seqList.at(t), _seqList.at(t+step) ) );
+                if ( !deltaList.getLast()->isOk() )
+                    ok = FALSE;
+            }
 
-	    // Did we find a valid interval ?
-	    if ( ok )
-	    {
-		// Start iterating with the first cell
-		KSpreadCell *cell = _destList.first();
-		unsigned int s = 0;
-		// Amount of intervals (blocks)
-		int block = _seqList.count() / step;
-		// Loop over all destination cells
-		while ( cell )
-		{
-		    // End of block? -> start again from beginning
-		    if ( s == step )
-		    {
-			block++;
-			s = 0;
-		    }
-		    // Set the value of 'cell' by adding 'block' times the delta tp the value
-		    // of cell 's'.
-		    _seqList.at( s )->fillCell( _srcList.at( s ), cell, deltaList.at( s ), block );
-		    // Next cell
-		    cell = _destList.next();
-		    s++;
-		}
+            // Verify the delta by looking at cells step..._seqList.count()
+            //
+            // We only looked at the cells 0 ... '2*step-1'.
+            // Now test wether the cells from "(tst-1) * step + s" share the same delta
+            // with the cell "tst * step + s" for all test=1..._seqList.count()/step and
+            // for all s=0...step-1.
+            for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() ); tst++ )
+            {
+                for ( unsigned int s = 0; ok && ( s < step ); s++ )
+                {
+                    if ( !_seqList.at( (tst-1) * step + s )->matches( _seqList.at( tst * step + s ),
+                                                                       deltaList.at( s ) ) )
+                        ok = FALSE;
+                }
+            }
 
-		return;
-	    }
-	}
+            // Did we find a valid interval ?
+            if ( ok )
+            {
+                // Start iterating with the first cell
+                KSpreadCell *cell = _destList.first();
+                unsigned int s = 0;
+                // Amount of intervals (blocks)
+                int block = _seqList.count() / step;
+                // Loop over all destination cells
+                while ( cell )
+                {
+                    // End of block? -> start again from beginning
+                    if ( s == step )
+                    {
+                        block++;
+                        s = 0;
+                    }
+                    // Set the value of 'cell' by adding 'block' times the delta tp the value
+                    // of cell 's'.
+                    _seqList.at( s )->fillCell( _srcList.at( s ), cell, deltaList.at( s ), block );
+                    // Next cell
+                    cell = _destList.next();
+                    s++;
+                }
+
+                return;
+            }
+        }
     }
 
     // We did not find any valid interval. So just copy over the marked
@@ -455,23 +455,23 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
     unsigned int s = 0;
     while ( cell )
     {
-	if ( s == _srcList.count() )
-	    s = 0;
+        if ( s == _srcList.count() )
+            s = 0;
 
-	if ( _srcList.at( s )->text() != 0L )
-	{
-	    if ( _srcList.at( s )->isFormular() )
-	    {
-		QString d = _srcList.at( s )->encodeFormular();
-		cell->setCellText( cell->decodeFormular( d.data() ).data(), true );
-	    }
-	    else
-		cell->setCellText( _srcList.at( s )->text(), true );
-	}
-	else
-	    cell->setCellText( "", true );
-	cell->copyLayout( _srcList.at( s ) );
-	cell = _destList.next();
-	s++;
+        if ( _srcList.at( s )->text() != 0L )
+        {
+            if ( _srcList.at( s )->isFormular() )
+            {
+                QString d = _srcList.at( s )->encodeFormular();
+                cell->setCellText( cell->decodeFormular( d.latin1() ), true );
+            }
+            else
+                cell->setCellText( _srcList.at( s )->text(), true );
+        }
+        else
+            cell->setCellText( "", true );
+        cell->copyLayout( _srcList.at( s ) );
+        cell = _destList.next();
+        s++;
     }
 }

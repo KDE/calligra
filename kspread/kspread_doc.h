@@ -155,24 +155,24 @@ public:
                        const char* _paper, const char* _orientation );
 
   QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
-  return completeHeading( m_headLeft.data(), _p, _t ); }
+  return completeHeading( m_headLeft.latin1(), _p, _t ); }
   QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
-  return completeHeading( m_headMid.data(), _p, _t ); }
+  return completeHeading( m_headMid.latin1(), _p, _t ); }
   QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return "";
-  return completeHeading( m_headRight.data(), _p, _t ); }
+  return completeHeading( m_headRight.latin1(), _p, _t ); }
   QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return "";
-  return completeHeading( m_footLeft.data(), _p, _t ); }
+  return completeHeading( m_footLeft.latin1(), _p, _t ); }
   QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return "";
-  return completeHeading( m_footMid.data(), _p, _t ); }
+  return completeHeading( m_footMid.latin1(), _p, _t ); }
   QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
-  return completeHeading( m_footRight.data(), _p, _t ); }
+  return completeHeading( m_footRight.latin1(), _p, _t ); }
 
-  QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.data(); }
-  QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.data(); }
-  QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.data(); }
-  QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.data(); }
-  QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.data(); }
-  QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
+  QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.latin1(); }
+  QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.latin1(); }
+  QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.latin1(); }
+  QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.latin1(); }
+  QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.latin1(); }
+  QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.latin1(); }
 
   void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
                         const char *_footl, const char *_footm, const char *_footr );

@@ -12,7 +12,7 @@
 #include <stdlib.h>
 
 KSpreadScripts::KSpreadScripts( QWidget* parent, const char* name )
-	: QDialog( parent, name ), KSpreadScriptsData( this )
+        : QDialog( parent, name ), KSpreadScriptsData( this )
 {
   // editor = 0L;
 
@@ -43,13 +43,13 @@ void KSpreadScripts::updateList()
 
     while ( ( fi = it.current() ) )
     {
-	QString t = fi->fileName();
-	if ( t.right(3) == ".py" )
-	{
-	    list->insertItem( t.left( t.length() - 3 ).data() );
-	    nameList.append( t );
-	}
-	++it;
+        QString t = fi->fileName();
+        if ( t.right(3) == ".py" )
+        {
+            list->insertItem( t.left( t.length() - 3 ) );
+            nameList.append( t );
+        }
+        ++it;
     }
 }
 
@@ -69,30 +69,30 @@ void KSpreadScripts::slotAdd()
     QString t = add2->text();
     if ( t.length() == 0 )
     {
-	KMessageBox::error(this, i18n("You must enter a name"));
-	return;
+        KMessageBox::error(this, i18n("You must enter a name"));
+        return;
     }
 
-    QString t2 ( t.data() );
+    QString t2 ( t );
     t2 += ".ks";
     if ( nameList.find( t2 ) != nameList.end() )
     {
-	KMessageBox::error(this,i18n( "The file already exists"));
-	return;
+        KMessageBox::error(this,i18n( "The file already exists"));
+        return;
     }
 
     QString d( locate( "data", "/kspread/scripts/" ) );
-    d += t2.data();
-    FILE *f = fopen( d.data(), "w" );
+    d += t2;
+    FILE *f = fopen( QFile::encodeName(d), "w" );
     if ( f == 0L )
     {
-	KMessageBox::error(this, i18n("Could not open file.\nPerhaps access denied"));
-	return;
+        KMessageBox::error(this, i18n("Could not open file.\nPerhaps access denied"));
+        return;
     }
     fclose( f );
 
     /* nameList.append( t2 );
-    list->inSort( t.data() );	 */
+    list->inSort( t.data() );    */
     updateList();
 
     add2->setText( "" );
@@ -101,12 +101,12 @@ void KSpreadScripts::slotAdd()
 void KSpreadScripts::slotDelete()
 {
     if ( list->currentItem() == -1 )
-	return;
+        return;
 
     QString t = i18n("Do you really want to delete the script\n%1").arg(list->text( list->currentItem() ) );
 
     if ( KMessageBox::questionYesNo(this, t,i18n("KSpread Question"))==4 )
-	return;
+        return;
 
     QString t2( list->text( list->currentItem() ) );
     t2 += ".py";
@@ -115,9 +115,9 @@ void KSpreadScripts::slotDelete()
     list->removeItem( list->currentItem() ); */
 
     QString dir( locate( "data", "/kspread/scripts/" ) );
-    dir += t2.data();
+    dir += t2;
     // HACK
-    unlink( t2.data() );
+    unlink( QFile::encodeName(t2) );
 
     /* QString t3;
     t3.sprintf("kfmclient move '%s' trash:/", dir.data() );
@@ -129,21 +129,21 @@ void KSpreadScripts::slotDelete()
 void KSpreadScripts::slotRename()
 {
     if ( list->currentItem() == -1 )
-	return;
+        return;
 
     QString t = rename2->text();
     if ( t.length() == 0 )
     {
-	KMessageBox::error(this, i18n("You must enter a name"));
-	return;
+        KMessageBox::error(this, i18n("You must enter a name"));
+        return;
     }
 
-    QString t2 ( t.data() );
+    QString t2 ( t );
     t2 += ".py";
     if ( nameList.find( t2 ) != nameList.end() )
     {
-	KMessageBox::error(this, i18n("The file already exists"));
-	return;
+        KMessageBox::error(this, i18n("The file already exists"));
+        return;
     }
 
     QString t3( list->text( list->currentItem() ) );
@@ -156,12 +156,12 @@ void KSpreadScripts::slotRename()
 
     QString dir( locate( "data", "/kspread/scripts/" ) );
 
-    QString t4( dir.data() );
-    t4 += t3.data();
-    QString t5( dir.data() );
-    t5 += t2.data();
+    QString t4( dir );
+    t4 += t3;
+    QString t5( dir );
+    t5 += t2;
 
-    ::rename( t4.data(), t5.data() );
+    ::rename( QFile::encodeName(t4), QFile::encodeName(t5) );
 
     updateList();
 }
@@ -169,13 +169,13 @@ void KSpreadScripts::slotRename()
 void KSpreadScripts::slotEdit()
 {
     if ( list->currentItem() == -1 )
-	return;
+        return;
 
     QString t2( list->text( list->currentItem() ) );
     t2 += ".ks";
 
     /* if ( editor == 0L )
-	editor = createEditor();
+        editor = createEditor();
 
     QString dir( kapp->kde_datadir().copy() );
     dir += "/kspread/scripts/";
@@ -195,41 +195,41 @@ KSpreadScripts::~KSpreadScripts()
 
 KSpreadScriptsData::KSpreadScriptsData( QWidget* parent )
 {
-	list = new QListBox( parent, "ListBox_1" );
-	list->setGeometry( 10, 40, 180, 260 );
-	list->setFrameStyle( 51 );
-	list->setLineWidth( 2 );
+        list = new QListBox( parent, "ListBox_1" );
+        list->setGeometry( 10, 40, 180, 260 );
+        list->setFrameStyle( 51 );
+        list->setLineWidth( 2 );
 
-	QLabel* tmpQLabel;
-	tmpQLabel = new QLabel( parent, "Label_1" );
-	tmpQLabel->setGeometry( 10, 10, 100, 30 );
-	tmpQLabel->setText( i18n("Scripts") );
+        QLabel* tmpQLabel;
+        tmpQLabel = new QLabel( parent, "Label_1" );
+        tmpQLabel->setGeometry( 10, 10, 100, 30 );
+        tmpQLabel->setText( i18n("Scripts") );
 
-	del = new QPushButton( parent, "PushButton_1" );
-	del->setGeometry( 210, 40, 100, 30 );
-	del->setText( i18n("Delete") );
+        del = new QPushButton( parent, "PushButton_1" );
+        del->setGeometry( 210, 40, 100, 30 );
+        del->setText( i18n("Delete") );
 
-	add = new QPushButton( parent, "PushButton_2" );
-	add->setGeometry( 210, 90, 100, 30 );
-	add->setText( i18n("Add") );
+        add = new QPushButton( parent, "PushButton_2" );
+        add->setGeometry( 210, 90, 100, 30 );
+        add->setText( i18n("Add") );
 
-	add2 = new QLineEdit( parent, "LineEdit_1" );
-	add2->setGeometry( 210, 130, 180, 30 );
-	add2->setText( "" );
+        add2 = new QLineEdit( parent, "LineEdit_1" );
+        add2->setGeometry( 210, 130, 180, 30 );
+        add2->setText( "" );
 
-	edit = new QPushButton( parent, "PushButton_3" );
-	edit->setGeometry( 210, 180, 100, 30 );
-	edit->setText( i18n("Edit") );
+        edit = new QPushButton( parent, "PushButton_3" );
+        edit->setGeometry( 210, 180, 100, 30 );
+        edit->setText( i18n("Edit") );
 
-	rename = new QPushButton( parent, "PushButton_4" );
-	rename->setGeometry( 210, 230, 100, 30 );
-	rename->setText( i18n("Rename") );
+        rename = new QPushButton( parent, "PushButton_4" );
+        rename->setGeometry( 210, 230, 100, 30 );
+        rename->setText( i18n("Rename") );
 
-	rename2 = new QLineEdit( parent, "LineEdit_2" );
-	rename2->setGeometry( 210, 270, 180, 30 );
-	rename2->setText( "" );
+        rename2 = new QLineEdit( parent, "LineEdit_2" );
+        rename2->setGeometry( 210, 270, 180, 30 );
+        rename2->setText( "" );
 
-	parent->resize( 400, 310 );
+        parent->resize( 400, 310 );
 }
 
 #include "kspread_dlg_scripts.moc"

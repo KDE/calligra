@@ -280,7 +280,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     float bottom = borders.attribute( "bottom" ).toFloat( &ok );
     if ( !ok ) { m_bLoading = false; return false; }
 
-    setPaperLayout( left, top, right, bottom, format, orientation );
+    setPaperLayout( left, top, right, bottom, format.latin1(), orientation.latin1() );
 
     QString hleft, hright, hcenter;
     QString fleft, fright, fcenter;
@@ -312,7 +312,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       if ( !right.isNull() )
         fright = right.text();
     }
-    setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright );
+    setHeadFootLine( hleft.latin1(), hcenter.latin1(), hright.latin1(), fleft.latin1(), fcenter.latin1(), fright.latin1() );
   }
 
   // In case of reload (e.g. from konqueror)
@@ -356,7 +356,7 @@ KSpreadTable* KSpreadDoc::createTable()
   QString s( i18n("Table%1") );
   s = s.arg( m_iTableId++ );
 
-  KSpreadTable *t = new KSpreadTable( m_pMap, s );
+  KSpreadTable *t = new KSpreadTable( m_pMap, s.latin1() );
   t->setTableName( s, TRUE );
   return t;
 }
@@ -431,7 +431,7 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
       m_paperWidth = atof( _paper );
       int i = tmp.find( 'x' );
       if ( i != -1 )
-        m_paperHeight = atof( tmp.data() + i + 1 );
+        m_paperHeight = tmp.toDouble() + i + 1;
       if ( m_paperWidth < 10.0 )
         m_paperWidth = PG_A4_WIDTH;
       if ( m_paperHeight < 10.0 )
@@ -591,9 +591,9 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
         tmp.replace( pos, 5, organization );
     pos = 0;
     while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
-        tmp.replace( pos, 7, ta.data() );
+        tmp.replace( pos, 7, ta );
 
-    return QString( tmp.data() );
+    return QString( tmp );
 }
 
 void KSpreadDoc::resetInterpreter()
@@ -771,7 +771,7 @@ void KSpreadDoc::paperLayoutDlg()
 
     setPaperLayout( pl.mmLeft, pl.mmTop, pl.mmRight, pl.mmBottom, pl.format, pl.orientation );
 
-    setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
+    setHeadFootLine( hf.headLeft.latin1(), hf.headMid.latin1(), hf.headRight.latin1(), hf.footLeft.latin1(), hf.footMid.latin1(), hf.footRight.latin1() );
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent )
@@ -783,7 +783,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
     paintContent( painter, rect, transparent, table );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table )
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadTable* table )
 {
     if ( isLoading() )
         return;

@@ -7,10 +7,10 @@
     The stack engine conatined in this file was take from
     Martin Bartlett's xfrmcalc
 
-    portions:	Copyright (C) 1996 Bernd Johannes Wuebben
+    portions:   Copyright (C) 1996 Bernd Johannes Wuebben
                                    wuebben@math.cornell.edu
 
-    portions: 	Copyright (C) 1995 Martin Bartlett
+    portions:   Copyright (C) 1995 Martin Bartlett
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -61,55 +61,55 @@ int isinf(double x) { return !finite(x) && x==x; }
 
 extern QList<CALCAMNT> temp_stack;
 last_input_type last_input;
-char		display_str[DSP_SIZE+1];
+char            display_str[DSP_SIZE+1];
 
-stack_ptr	top_of_stack = NULL;	
-stack_ptr	top_type_stack[2] = { NULL, NULL };	
-int 		stack_next, stack_last;
-stack_item	process_stack[STACK_SIZE];
+stack_ptr       top_of_stack = NULL;
+stack_ptr       top_type_stack[2] = { NULL, NULL };
+int             stack_next, stack_last;
+stack_item      process_stack[STACK_SIZE];
 
-int    		inverse = FALSE;
-int   	 	precedence_base = 0;
-num_base    	current_base = NB_DECIMAL;
-int    		input_limit = 0;
-int    		input_count = 0;
+int             inverse = FALSE;
+int             precedence_base = 0;
+num_base        current_base = NB_DECIMAL;
+int             input_limit = 0;
+int             input_count = 0;
 
-//item_contents 	display_data = { ITEM_AMOUNT, 0 };
-item_contents 	display_data;
+//item_contents         display_data = { ITEM_AMOUNT, 0 };
+item_contents   display_data;
 
-int 		display_size = DEC_SIZE;
+int             display_size = DEC_SIZE;
 
-int    		hyp_mode = 0;
-int    		angle_mode = ANG_DEGREE;
-int		refresh_display; // if 1 we start a new number
-int		display_error = 0;
-int		decimal_point = 0;
-int		percent_mode = 0;
-bool 		eestate = false; // if true then we are in ee input mode
+int             hyp_mode = 0;
+int             angle_mode = ANG_DEGREE;
+int             refresh_display; // if 1 we start a new number
+int             display_error = 0;
+int             decimal_point = 0;
+int             percent_mode = 0;
+bool            eestate = false; // if true then we are in ee input mode
 
-CALCAMNT 	pi;
-CALCAMNT	memory_num = 0.0;
+CALCAMNT        pi;
+CALCAMNT        memory_num = 0.0;
 
 int precedence[14] = { 0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 6 };
 
-    int		adjust_op[14][3] = {
-				{FUNC_NULL,     FUNC_NULL,     FUNC_NULL},
-				{FUNC_OR,       FUNC_OR,       FUNC_XOR },
-				{FUNC_XOR,      FUNC_XOR,      FUNC_XOR },
-				{FUNC_AND,      FUNC_AND,      FUNC_AND },
-				{FUNC_LSH,      FUNC_LSH,      FUNC_RSH },
-				{FUNC_RSH,      FUNC_RSH,      FUNC_RSH },
-				{FUNC_ADD,      FUNC_ADD,      FUNC_ADD },
-				{FUNC_SUBTRACT, FUNC_SUBTRACT, FUNC_SUBTRACT},
-				{FUNC_MULTIPLY, FUNC_MULTIPLY, FUNC_MULTIPLY},
-				{FUNC_DIVIDE,   FUNC_DIVIDE,   FUNC_DIVIDE},
-				{FUNC_MOD,      FUNC_MOD,      FUNC_INTDIV },
-				{FUNC_POWER,    FUNC_POWER,    FUNC_PWR_ROOT},
-				{FUNC_PWR_ROOT, FUNC_PWR_ROOT, FUNC_PWR_ROOT},
-				{FUNC_INTDIV,   FUNC_INTDIV,   FUNC_INTDIV},
+    int         adjust_op[14][3] = {
+                                {FUNC_NULL,     FUNC_NULL,     FUNC_NULL},
+                                {FUNC_OR,       FUNC_OR,       FUNC_XOR },
+                                {FUNC_XOR,      FUNC_XOR,      FUNC_XOR },
+                                {FUNC_AND,      FUNC_AND,      FUNC_AND },
+                                {FUNC_LSH,      FUNC_LSH,      FUNC_RSH },
+                                {FUNC_RSH,      FUNC_RSH,      FUNC_RSH },
+                                {FUNC_ADD,      FUNC_ADD,      FUNC_ADD },
+                                {FUNC_SUBTRACT, FUNC_SUBTRACT, FUNC_SUBTRACT},
+                                {FUNC_MULTIPLY, FUNC_MULTIPLY, FUNC_MULTIPLY},
+                                {FUNC_DIVIDE,   FUNC_DIVIDE,   FUNC_DIVIDE},
+                                {FUNC_MOD,      FUNC_MOD,      FUNC_INTDIV },
+                                {FUNC_POWER,    FUNC_POWER,    FUNC_PWR_ROOT},
+                                {FUNC_PWR_ROOT, FUNC_PWR_ROOT, FUNC_PWR_ROOT},
+                                {FUNC_INTDIV,   FUNC_INTDIV,   FUNC_INTDIV},
     };
 /*
-    char		*function_desc[] = {
+    char                *function_desc[] = {
 
       "Null",
       "Or",
@@ -127,31 +127,31 @@ int precedence[14] = { 0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 6 };
       "Integer Division"
     };
     */
-    Arith      	Arith_ops[14] = { NULL,
-				  ExecOr,
-				  ExecXor,  	
-				  ExecAnd,
-				  ExecLsh,
-				  ExecRsh,
-				  ExecAdd, ExecSubtract,
-				  ExecMultiply,
-				  ExecDivide, ExecMod,
-				  ExecPower, ExecPwrRoot,
-				  ExecIntDiv
-    };	
+    Arith       Arith_ops[14] = { NULL,
+                                  ExecOr,
+                                  ExecXor,
+                                  ExecAnd,
+                                  ExecLsh,
+                                  ExecRsh,
+                                  ExecAdd, ExecSubtract,
+                                  ExecMultiply,
+                                  ExecDivide, ExecMod,
+                                  ExecPower, ExecPwrRoot,
+                                  ExecIntDiv
+    };
 
-    Prcnt     	Prcnt_ops[14] = { NULL,
-				  NULL,
-				  NULL,
-				  NULL,
-				  NULL,
-				  NULL,
-				  ExecAddSubP,  ExecAddSubP,
-				  ExecMultiplyP,
-				  ExecDivideP, ExecDivideP,
-				  ExecPowerP, ExecPwrRootP,
-				  ExecDivideP
-    };	
+    Prcnt       Prcnt_ops[14] = { NULL,
+                                  NULL,
+                                  NULL,
+                                  NULL,
+                                  NULL,
+                                  NULL,
+                                  ExecAddSubP,  ExecAddSubP,
+                                  ExecMultiplyP,
+                                  ExecDivideP, ExecDivideP,
+                                  ExecPowerP, ExecPwrRootP,
+                                  ExecDivideP
+    };
 
 
 void QtCalculator::InitializeCalculator(void) {
@@ -182,7 +182,7 @@ void QtCalculator::InitializeCalculator(void) {
 
   RefreshCalculator();
   pi = ASIN(1L) * 2L;
-}		
+}
 
 void fpe_handler(int fpe_parm)
 {
@@ -191,7 +191,7 @@ void fpe_handler(int fpe_parm)
   display_error = 1;
   DISPLAY_AMOUNT = 0L;
 
-}		
+}
 
 void QtCalculator::setData( const QRect& _range, const char *_table )
 {
@@ -223,16 +223,16 @@ void QtCalculator::setLabel( const char *_text )
 
 void QtCalculator::RefreshCalculator(void)
 {
-	InitStack();
-	display_error = 0;
-	DISPLAY_AMOUNT = 0L;
-	inverse = FALSE;
-	UpdateDisplay();
-	last_input = DIGIT; // must set last to DIGIT after Update Display in order
-	                    // not to get a display holding e.g. 0.000
-	input_count = 0;
-	decimal_point = 0;
-}		
+        InitStack();
+        display_error = 0;
+        DISPLAY_AMOUNT = 0L;
+        inverse = FALSE;
+        UpdateDisplay();
+        last_input = DIGIT; // must set last to DIGIT after Update Display in order
+                            // not to get a display holding e.g. 0.000
+        input_count = 0;
+        decimal_point = 0;
+}
 
 void QtCalculator::EnterDigit(int data)
 {
@@ -241,7 +241,7 @@ void QtCalculator::EnterDigit(int data)
 
     QString string;
     string.setNum(data);
-    strcat(display_str,string.data());
+    strcat(display_str, string.latin1());
     DISPLAY_AMOUNT = (CALCAMNT) strtod(display_str,0);
     UpdateDisplay();
     return;
@@ -259,13 +259,13 @@ void QtCalculator::EnterDigit(int data)
   if (!(input_limit && input_count >= input_limit))
     if (DISPLAY_AMOUNT < 0)
       DISPLAY_AMOUNT = decimal_point ?
-	DISPLAY_AMOUNT - ((CALCAMNT)data /
-			  POW(current_base, decimal_point++)) :
+        DISPLAY_AMOUNT - ((CALCAMNT)data /
+                          POW(current_base, decimal_point++)) :
     (current_base * DISPLAY_AMOUNT) - data;
     else
       DISPLAY_AMOUNT = decimal_point ?
-	DISPLAY_AMOUNT + ((CALCAMNT)data /
-			  POW(current_base, decimal_point++)) :
+        DISPLAY_AMOUNT + ((CALCAMNT)data /
+                          POW(current_base, decimal_point++)) :
     (current_base * DISPLAY_AMOUNT) + data;
 
   if (decimal_point){
@@ -429,8 +429,8 @@ void QtCalculator::EnterDecimal()
 
     DISPLAY_AMOUNT = 0L;
     refresh_display = 0;
-    //	  decimal_point = 1;
-    //	  input_count = 1;
+    //    decimal_point = 1;
+    //    input_count = 1;
     strcpy(display_str, "0.");
     calc_display->setText(display_str);
   }
@@ -532,37 +532,37 @@ void QtCalculator::Power()
 
 void QtCalculator::EnterStackFunction(int data)
 {
-	item_contents 	new_item;
-	int		new_precedence;
-	int 		dummy;
+        item_contents   new_item;
+        int             new_precedence;
+        int             dummy;
 
-	dummy = 0;
+        dummy = 0;
 
-	/*
-	if (inverse ) {
-	  dummy = 3;
-	  inverse = FALSE;
-	}
-	else {
-	  dummy = 1;
-	}
-	*/
+        /*
+        if (inverse ) {
+          dummy = 3;
+          inverse = FALSE;
+        }
+        else {
+          dummy = 1;
+        }
+        */
 
-	//	printf("data %d dummy %d\n",data,dummy);
-	data = adjust_op[data][dummy];
-	//	printf("data %d \n",data );
+        //      printf("data %d dummy %d\n",data,dummy);
+        data = adjust_op[data][dummy];
+        //      printf("data %d \n",data );
 
-	PushStack(&display_data);
+        PushStack(&display_data);
 
-	new_item.s_item_type = ITEM_FUNCTION;
-	new_item.s_item_data.item_func_data.item_function = data;
-	new_item.s_item_data.item_func_data.item_precedence =
-		new_precedence = precedence[data] + precedence_base;
+        new_item.s_item_type = ITEM_FUNCTION;
+        new_item.s_item_data.item_func_data.item_function = data;
+        new_item.s_item_data.item_func_data.item_precedence =
+                new_precedence = precedence[data] + precedence_base;
 
-	refresh_display = 1;
-	if (UpdateStack(new_precedence))
-		UpdateDisplay();
-	PushStack(&new_item);
+        refresh_display = 1;
+        if (UpdateStack(new_precedence))
+                UpdateDisplay();
+        PushStack(&new_item);
 }
 
 void QtCalculator::EnterNegate()
@@ -580,10 +580,10 @@ void QtCalculator::EnterNegate()
       display_str[pos+1] = '-';
     else{
       if(display_str[pos+1] == '-')
-	display_str[pos+1] = '+';
+        display_str[pos+1] = '+';
       else{
-	string.insert(pos +1,'-');
-	strncpy(display_str,string.data(),DSP_SIZE);
+        string.insert(pos +1,'-');
+        strncpy(display_str,string.latin1(),DSP_SIZE);
       }
     }
     DISPLAY_AMOUNT = (CALCAMNT)strtod(display_str,0);
@@ -602,22 +602,22 @@ void QtCalculator::EnterNegate()
 void QtCalculator::EnterOpenParen()
 {
   eestate = false;
-	last_input = OPERATION;
-	precedence_base += PRECEDENCE_INCR;
-	refresh_display = 1;
+        last_input = OPERATION;
+        precedence_base += PRECEDENCE_INCR;
+        refresh_display = 1;
 
 }
 
 void QtCalculator::EnterCloseParen()
 {
   eestate = false;
-	last_input = OPERATION;
-	PushStack(&display_data);
-	refresh_display = 1;
-	if (UpdateStack(precedence_base))
-		UpdateDisplay();
-	if ((precedence_base -= PRECEDENCE_INCR) < 0)
-		precedence_base = 0;
+        last_input = OPERATION;
+        PushStack(&display_data);
+        refresh_display = 1;
+        if (UpdateStack(precedence_base))
+                UpdateDisplay();
+        if ((precedence_base -= PRECEDENCE_INCR) < 0)
+                precedence_base = 0;
 
 }
 
@@ -625,7 +625,7 @@ void QtCalculator::EnterRecip()
 {
   eestate = false;
   last_input = OPERATION;
-  DISPLAY_AMOUNT = 1 / DISPLAY_AMOUNT;	
+  DISPLAY_AMOUNT = 1 / DISPLAY_AMOUNT;
   refresh_display = 1;
   UpdateDisplay();
 }
@@ -633,85 +633,85 @@ void QtCalculator::EnterRecip()
 void QtCalculator::EnterInt()
 {
   eestate = false;
-	CALCAMNT work_amount1, work_amount2;
+        CALCAMNT work_amount1, work_amount2;
 
-	last_input = OPERATION;	
-	if (!inverse){
-	  work_amount2 = MODF(DISPLAY_AMOUNT, &work_amount1);
-	  DISPLAY_AMOUNT = work_amount2 ;
-	    }
-	else {
-	  DISPLAY_AMOUNT = work_amount1;
-	  inverse = FALSE;
-	}
-	
-	refresh_display = 1;
-	UpdateDisplay();
+        last_input = OPERATION;
+        if (!inverse){
+          work_amount2 = MODF(DISPLAY_AMOUNT, &work_amount1);
+          DISPLAY_AMOUNT = work_amount2 ;
+            }
+        else {
+          DISPLAY_AMOUNT = work_amount1;
+          inverse = FALSE;
+        }
+
+        refresh_display = 1;
+        UpdateDisplay();
 
 }
 
 void QtCalculator::EnterFactorial()
 {
   eestate = false;
-	CALCAMNT work_amount1, work_amount2;
-	int	 incr;
+        CALCAMNT work_amount1, work_amount2;
+        int      incr;
 
-	MODF(DISPLAY_AMOUNT, &work_amount1);
+        MODF(DISPLAY_AMOUNT, &work_amount1);
 
-	incr = work_amount1 < 0 ? -1 : 1;
-	work_amount2 = work_amount1 - incr;
-	while (work_amount1 != 0 && work_amount2 != 0 && !display_error) {
-		work_amount1 *= work_amount2;
-		work_amount2 -= incr;
-		if(isinf(work_amount1)) {
-		  display_error=1;
-		   break;
-		}
-	}
+        incr = work_amount1 < 0 ? -1 : 1;
+        work_amount2 = work_amount1 - incr;
+        while (work_amount1 != 0 && work_amount2 != 0 && !display_error) {
+                work_amount1 *= work_amount2;
+                work_amount2 -= incr;
+                if(isinf(work_amount1)) {
+                  display_error=1;
+                   break;
+                }
+        }
 
-	if( work_amount1 == 0.0)
-	  work_amount1 = 1.0;
+        if( work_amount1 == 0.0)
+          work_amount1 = 1.0;
 
-	DISPLAY_AMOUNT = work_amount1;
-	refresh_display = 1;
-	last_input = OPERATION;
-	UpdateDisplay();
+        DISPLAY_AMOUNT = work_amount1;
+        refresh_display = 1;
+        last_input = OPERATION;
+        UpdateDisplay();
 
 }
 
 void QtCalculator::EnterSquare()
 {
   eestate = false;
-	if (!inverse){
-		DISPLAY_AMOUNT *= DISPLAY_AMOUNT;	
-	}
-	else if (DISPLAY_AMOUNT < 0)
-	display_error = 1;
-	else
-		DISPLAY_AMOUNT = SQRT(DISPLAY_AMOUNT);	
-	refresh_display = 1;
-	inverse = FALSE;
-	last_input = OPERATION;	
-	UpdateDisplay();
+        if (!inverse){
+                DISPLAY_AMOUNT *= DISPLAY_AMOUNT;
+        }
+        else if (DISPLAY_AMOUNT < 0)
+        display_error = 1;
+        else
+                DISPLAY_AMOUNT = SQRT(DISPLAY_AMOUNT);
+        refresh_display = 1;
+        inverse = FALSE;
+        last_input = OPERATION;
+        UpdateDisplay();
 
 }
 
 void QtCalculator::EnterNotCmp()
 {
   eestate = false;
-	CALCAMNT	boh_work_d;
-	long 		boh_work;
+        CALCAMNT        boh_work_d;
+        long            boh_work;
 
-	MODF(DISPLAY_AMOUNT, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX)
-		display_error = 1;
-		else {
-		boh_work = (long int) boh_work_d;
-		DISPLAY_AMOUNT = ~boh_work;	
-			}
-	refresh_display = 1;
-	last_input = OPERATION;
-	UpdateDisplay();
+        MODF(DISPLAY_AMOUNT, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX)
+                display_error = 1;
+                else {
+                boh_work = (long int) boh_work_d;
+                DISPLAY_AMOUNT = ~boh_work;
+                        }
+        refresh_display = 1;
+        last_input = OPERATION;
+        UpdateDisplay();
 
 }
 
@@ -869,7 +869,7 @@ void QtCalculator::ComputeMean(){
 
 void QtCalculator::ComputeSin()
 {
-  CALCAMNT	work_amount;
+  CALCAMNT      work_amount;
   eestate = false;
   work_amount = DISPLAY_AMOUNT;
 
@@ -881,7 +881,7 @@ void QtCalculator::ComputeSin()
     else {
       DISPLAY_AMOUNT = ASINH( work_amount);
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
+        display_error = 1;
       inverse = FALSE;       // reset the inverse flag
     }
   }
@@ -891,14 +891,14 @@ void QtCalculator::ComputeSin()
       // sine
       switch (angle_mode) {
       case ANG_DEGREE:
-	work_amount = DEG2RAD(DISPLAY_AMOUNT);
-	break;
+        work_amount = DEG2RAD(DISPLAY_AMOUNT);
+        break;
       case ANG_GRADIENT:
-	work_amount = GRA2RAD(DISPLAY_AMOUNT);
-	break;
+        work_amount = GRA2RAD(DISPLAY_AMOUNT);
+        break;
       case ANG_RADIAN:
-	work_amount = DISPLAY_AMOUNT;
-	break;
+        work_amount = DISPLAY_AMOUNT;
+        break;
       }
       DISPLAY_AMOUNT = SIN( work_amount);
     }
@@ -907,19 +907,19 @@ void QtCalculator::ComputeSin()
       DISPLAY_AMOUNT = ASIN(work_amount);
             switch (angle_mode) {
       case ANG_DEGREE:
-	work_amount = RAD2DEG(DISPLAY_AMOUNT);
-	break;
+        work_amount = RAD2DEG(DISPLAY_AMOUNT);
+        break;
       case ANG_GRADIENT:
-	work_amount = RAD2GRA(DISPLAY_AMOUNT);
-	break;
+        work_amount = RAD2GRA(DISPLAY_AMOUNT);
+        break;
       case ANG_RADIAN:
-	work_amount = DISPLAY_AMOUNT;
-	break;
+        work_amount = DISPLAY_AMOUNT;
+        break;
       }
       DISPLAY_AMOUNT = work_amount;
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
-      inverse = FALSE; 		// reset the inverse flag
+        display_error = 1;
+      inverse = FALSE;          // reset the inverse flag
     }
   }
 
@@ -999,7 +999,7 @@ void QtCalculator::ComputeStd(){
 
 void QtCalculator::ComputeCos()
 {
-  CALCAMNT	work_amount;
+  CALCAMNT      work_amount;
   eestate = false;
   work_amount = DISPLAY_AMOUNT;
 
@@ -1011,7 +1011,7 @@ void QtCalculator::ComputeCos()
     else {
       DISPLAY_AMOUNT = ACOSH( work_amount);
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
+        display_error = 1;
       inverse = FALSE;       // reset the inverse flag
     }
   }
@@ -1021,14 +1021,14 @@ void QtCalculator::ComputeCos()
       // sine
       switch (angle_mode) {
       case ANG_DEGREE:
-	work_amount = DEG2RAD(DISPLAY_AMOUNT);
-	break;
+        work_amount = DEG2RAD(DISPLAY_AMOUNT);
+        break;
       case ANG_GRADIENT:
-	work_amount = GRA2RAD(DISPLAY_AMOUNT);
-	break;
+        work_amount = GRA2RAD(DISPLAY_AMOUNT);
+        break;
       case ANG_RADIAN:
-	work_amount = DISPLAY_AMOUNT;
-	break;
+        work_amount = DISPLAY_AMOUNT;
+        break;
       }
       DISPLAY_AMOUNT = COS( work_amount);
     }
@@ -1037,21 +1037,21 @@ void QtCalculator::ComputeCos()
       DISPLAY_AMOUNT = ACOS(work_amount);
       switch (angle_mode) {
       case ANG_DEGREE:
-	work_amount = RAD2DEG(DISPLAY_AMOUNT);
-	break;
+        work_amount = RAD2DEG(DISPLAY_AMOUNT);
+        break;
       case ANG_GRADIENT:
-	work_amount = RAD2GRA(DISPLAY_AMOUNT);
-	break;
+        work_amount = RAD2GRA(DISPLAY_AMOUNT);
+        break;
       case ANG_RADIAN:
-	work_amount = DISPLAY_AMOUNT;
-	break;
+        work_amount = DISPLAY_AMOUNT;
+        break;
       }
 
       DISPLAY_AMOUNT = work_amount;
 
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
-      inverse = FALSE; 		// reset the inverse flag
+        display_error = 1;
+      inverse = FALSE;          // reset the inverse flag
     }
   }
 
@@ -1124,7 +1124,7 @@ void QtCalculator::ComputeMedean(){
 
 void QtCalculator::ComputeTan()
 {
-  CALCAMNT	work_amount;
+  CALCAMNT      work_amount;
   eestate = false;
   work_amount = DISPLAY_AMOUNT;
 
@@ -1136,7 +1136,7 @@ void QtCalculator::ComputeTan()
     else {
       DISPLAY_AMOUNT = ATANH( work_amount);
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
+        display_error = 1;
       inverse = FALSE;       // reset the inverse flag
     }
   }
@@ -1146,39 +1146,39 @@ void QtCalculator::ComputeTan()
       // tan
       switch (angle_mode) {
       case ANG_DEGREE:
-	work_amount = DEG2RAD(DISPLAY_AMOUNT);
-	break;
+        work_amount = DEG2RAD(DISPLAY_AMOUNT);
+        break;
       case ANG_GRADIENT:
-	work_amount = GRA2RAD(DISPLAY_AMOUNT);
-	break;
+        work_amount = GRA2RAD(DISPLAY_AMOUNT);
+        break;
       case ANG_RADIAN:
-	work_amount = DISPLAY_AMOUNT;
-	break;
+        work_amount = DISPLAY_AMOUNT;
+        break;
       }
       DISPLAY_AMOUNT = TAN( work_amount);
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
+        display_error = 1;
     }
     else {
       // arctan
       DISPLAY_AMOUNT = ATAN(work_amount);
       switch (angle_mode) {
       case ANG_DEGREE:
-	work_amount = RAD2DEG(DISPLAY_AMOUNT);
-	break;
+        work_amount = RAD2DEG(DISPLAY_AMOUNT);
+        break;
       case ANG_GRADIENT:
-	work_amount = RAD2GRA(DISPLAY_AMOUNT);
-	break;
+        work_amount = RAD2GRA(DISPLAY_AMOUNT);
+        break;
       case ANG_RADIAN:
-	work_amount = DISPLAY_AMOUNT;
-	break;
+        work_amount = DISPLAY_AMOUNT;
+        break;
       }
 
       DISPLAY_AMOUNT = work_amount;
 
       if (errno == EDOM || errno == ERANGE)
-	display_error = 1;
-      inverse = FALSE; 		// reset the inverse flag
+        display_error = 1;
+      inverse = FALSE;          // reset the inverse flag
     }
   }
 
@@ -1210,7 +1210,7 @@ void QtCalculator::EnterLogr()
   case 2:
     {
       if ( !table_name.isEmpty() )
-	useData();
+        useData();
 
       ComputeSum();
       break;
@@ -1248,9 +1248,9 @@ void QtCalculator::EnterLogr()
 
     if (!inverse) {
       if (DISPLAY_AMOUNT <= 0)
-	display_error = 1;
+        display_error = 1;
       else
-	DISPLAY_AMOUNT = LOG_TEN(DISPLAY_AMOUNT);	
+        DISPLAY_AMOUNT = LOG_TEN(DISPLAY_AMOUNT);
       refresh_display = 1;
       UpdateDisplay();
     } else if (inverse) {
@@ -1300,13 +1300,13 @@ void QtCalculator::EnterLogn()
     last_input = OPERATION;
     if (!inverse) {
       if (DISPLAY_AMOUNT <= 0)
-	display_error = 1;
+        display_error = 1;
       else
-	DISPLAY_AMOUNT = LOG(DISPLAY_AMOUNT);	
+        DISPLAY_AMOUNT = LOG(DISPLAY_AMOUNT);
       refresh_display = 1;
       UpdateDisplay();
     } else if (inverse) {
-      DISPLAY_AMOUNT = EXP(DISPLAY_AMOUNT);	
+      DISPLAY_AMOUNT = EXP(DISPLAY_AMOUNT);
       refresh_display = 1;
       inverse =FALSE;
       UpdateDisplay();
@@ -1321,10 +1321,10 @@ void QtCalculator::EnterLogn()
 void QtCalculator::base_selected(int number){
 
   switch(number){
-  case 0:	
+  case 0:
     SetHex();
     break;
-  case 1:	
+  case 1:
     SetDec();
     break;
   case 2:
@@ -1342,10 +1342,10 @@ void QtCalculator::base_selected(int number){
 void QtCalculator::angle_selected(int number){
 
   switch(number){
-  case 0:	
+  case 0:
     SetDeg();
     break;
-  case 1:	
+  case 1:
     SetRad();
     break;
   case 2:
@@ -1369,69 +1369,69 @@ void QtCalculator::SetInverse(){
 
 
 void QtCalculator::SetDeg() {
-	angle_mode = ANG_DEGREE;
+        angle_mode = ANG_DEGREE;
 }
 
 void QtCalculator::SetGra() {
-	angle_mode = ANG_GRADIENT;
+        angle_mode = ANG_GRADIENT;
 }
 
 void QtCalculator::SetRad() {
-	angle_mode = ANG_RADIAN;
+        angle_mode = ANG_RADIAN;
 
 }
 
 void QtCalculator::SetHex() {
-	/*
-	 * Set Hex Mode
-	 */
+        /*
+         * Set Hex Mode
+         */
 
-	current_base = NB_HEX;
-	display_size = BOH_SIZE;
-	decimal_point = 0;
-	input_limit = 8;
+        current_base = NB_HEX;
+        display_size = BOH_SIZE;
+        decimal_point = 0;
+        input_limit = 8;
 
-	UpdateDisplay();
+        UpdateDisplay();
 }
 
 void QtCalculator::SetOct() {
-	/*
-	 * Set Oct Mode
-	 */
+        /*
+         * Set Oct Mode
+         */
 
-	current_base = NB_OCTAL;
-	display_size = BOH_SIZE;
-	decimal_point = 0;
-	input_limit = 11;
+        current_base = NB_OCTAL;
+        display_size = BOH_SIZE;
+        decimal_point = 0;
+        input_limit = 11;
 
-	UpdateDisplay();
+        UpdateDisplay();
 }
 
 void QtCalculator::SetBin() {
-	/*
-	 * Set Bin Mode
-	 */
+        /*
+         * Set Bin Mode
+         */
 
-	current_base = NB_BINARY;
-	display_size = BOH_SIZE;
-	decimal_point = 0;
-	input_limit = 16;
+        current_base = NB_BINARY;
+        display_size = BOH_SIZE;
+        decimal_point = 0;
+        input_limit = 16;
 
-	UpdateDisplay();
+        UpdateDisplay();
 }
 
 void QtCalculator::SetDec()
 {
-	/*
-	 * Set Dec Mode
-	 */
+        /*
+         * Set Dec Mode
+         */
 
-	current_base = NB_DECIMAL;
-	display_size = DEC_SIZE;
-	input_limit = 0;
+        current_base = NB_DECIMAL;
+        display_size = DEC_SIZE;
+        input_limit = 0;
 
 
-	UpdateDisplay();
+        UpdateDisplay();
 }
 
 
@@ -1464,7 +1464,7 @@ void QtCalculator::MR()
   UpdateDisplay();
 
 }
-	
+
 void QtCalculator::Mplusminus()
 {
 
@@ -1481,40 +1481,40 @@ void QtCalculator::Mplusminus()
 void QtCalculator::MC()
 {
 
-	memory_num = 0;
-	refresh_display = 1;
+        memory_num = 0;
+        refresh_display = 1;
 }
 
 void QtCalculator::EnterEqual()
 {
   eestate = false;
-	last_input = OPERATION;
-	PushStack(&display_data);
-	refresh_display = 1;
-	
-	/*	if (UpdateStack(0))*/
-	            UpdateStack(0);
-	
-	UpdateDisplay();
-	precedence_base = 0;
-	
-	CALCAMNT* number ;
+        last_input = OPERATION;
+        PushStack(&display_data);
+        refresh_display = 1;
 
-	if(temp_stack.count() > TEMP_STACK_SIZE){
+        /*      if (UpdateStack(0))*/
+                    UpdateStack(0);
 
-	  number = temp_stack.getFirst();
-	  temp_stack.removeFirst();
+        UpdateDisplay();
+        precedence_base = 0;
 
-	  if(number)
-	    free(number);
-	}	
+        CALCAMNT* number ;
 
-	number = (CALCAMNT*) malloc(sizeof(CALCAMNT));
-	*number = DISPLAY_AMOUNT;
+        if(temp_stack.count() > TEMP_STACK_SIZE){
 
-	//printf("appending %Lg\n",*number);
+          number = temp_stack.getFirst();
+          temp_stack.removeFirst();
 
-	temp_stack.append(number);
+          if(number)
+            free(number);
+        }
+
+        number = (CALCAMNT*) malloc(sizeof(CALCAMNT));
+        *number = DISPLAY_AMOUNT;
+
+        //printf("appending %Lg\n",*number);
+
+        temp_stack.append(number);
 
 
 }
@@ -1569,122 +1569,122 @@ void QtCalculator::UpdateDisplay()
   // inputting a number so that the period and the 0 after a period
   // are correctly displayed.
 
-	CALCAMNT	boh_work_d;
-	long 		boh_work = 0;
-	int		str_size = 0;
+        CALCAMNT        boh_work_d;
+        long            boh_work = 0;
+        int             str_size = 0;
 
-	if(eestate && (current_base == NB_DECIMAL)){
-	
-		calc_display->setText(display_str);
-		return;
-	}
-	
-	if (current_base != NB_DECIMAL) {
-		MODF(DISPLAY_AMOUNT, &boh_work_d);
-		if (boh_work_d < LONG_MIN || boh_work_d > ULONG_MAX)
-		display_error = 1;
+        if(eestate && (current_base == NB_DECIMAL)){
 
-	/*
+                calc_display->setText(display_str);
+                return;
+        }
+
+        if (current_base != NB_DECIMAL) {
+                MODF(DISPLAY_AMOUNT, &boh_work_d);
+                if (boh_work_d < LONG_MIN || boh_work_d > ULONG_MAX)
+                display_error = 1;
+
+        /*
          * We may be in that never-never land where boh numbers
-	 * turn from positive to negative - if so then we do
+         * turn from positive to negative - if so then we do
          * just that, allowing boh negative numbers to be entered
          * as read (from dumps and the like!)
          */
-		else if (boh_work_d > LONG_MAX) {
-			DISPLAY_AMOUNT =
-				LONG_MIN+(boh_work_d-LONG_MAX-1);
-			boh_work = (long)DISPLAY_AMOUNT;
+                else if (boh_work_d > LONG_MAX) {
+                        DISPLAY_AMOUNT =
+                                LONG_MIN+(boh_work_d-LONG_MAX-1);
+                        boh_work = (long)DISPLAY_AMOUNT;
                 }
-		else {
-			DISPLAY_AMOUNT = boh_work_d;
-			boh_work = (long) boh_work_d;
-		}
-	}
+                else {
+                        DISPLAY_AMOUNT = boh_work_d;
+                        boh_work = (long) boh_work_d;
+                }
+        }
 
-	if (!display_error) {
+        if (!display_error) {
 
-		if (current_base == NB_BINARY)
-			str_size = cvb(display_str,
-			  	       boh_work,
-				       BOH_SIZE);
-		else if (current_base == NB_OCTAL)
-			str_size = sprintf(display_str,
-					   "%lo",
-					   boh_work);
-		else if (current_base == NB_DECIMAL) {
+                if (current_base == NB_BINARY)
+                        str_size = cvb(display_str,
+                                       boh_work,
+                                       BOH_SIZE);
+                else if (current_base == NB_OCTAL)
+                        str_size = sprintf(display_str,
+                                           "%lo",
+                                           boh_work);
+                else if (current_base == NB_DECIMAL) {
 
-		  if(!kcalcdefaults.fixed || last_input == DIGIT
-		     || (DISPLAY_AMOUNT > 1.0e+16)){
+                  if(!kcalcdefaults.fixed || last_input == DIGIT
+                     || (DISPLAY_AMOUNT > 1.0e+16)){
 
-		    // if I don't guard against the DISPLAY_AMOUNT being too large
-		    // kcalc will segfault on larger amount. Such as from typing
-		    // from 5*5*******
-		
-		    str_size = sprintf(display_str,
+                    // if I don't guard against the DISPLAY_AMOUNT being too large
+                    // kcalc will segfault on larger amount. Such as from typing
+                    // from 5*5*******
 
-#ifdef HAVE_LONG_DOUBLE
-				     "%.*Lg", // was *Lg
-				
-				     kcalcdefaults.precision  +1,
-#else
-					   "%.*g",
-
-				     kcalcdefaults.precision  +1,
-#endif
-					     DISPLAY_AMOUNT);
-		  }
-		  else{//fixed
-
-		  str_size = sprintf(display_str,
+                    str_size = sprintf(display_str,
 
 #ifdef HAVE_LONG_DOUBLE
-				     "%.*Lf", // was *Lg
-				
-				     kcalcdefaults.fixedprecision  ,
+                                     "%.*Lg", // was *Lg
+
+                                     kcalcdefaults.precision  +1,
 #else
-					   "%.*f",
+                                           "%.*g",
 
-				     kcalcdefaults.fixedprecision  ,
+                                     kcalcdefaults.precision  +1,
 #endif
-					     DISPLAY_AMOUNT);
+                                             DISPLAY_AMOUNT);
+                  }
+                  else{//fixed
 
-		  }// fixed
-
-		  if ( input_count > 0 && !strpbrk(display_str,"e") &&
-					   last_input == DIGIT   ) {
+                  str_size = sprintf(display_str,
 
 #ifdef HAVE_LONG_DOUBLE
-		    str_size = sprintf(display_str,
-					   "%.*Lf",
-			    (kcalcdefaults.precision +1 > input_count)?
-			     input_count : kcalcdefaults.precision ,
-			     DISPLAY_AMOUNT);
+                                     "%.*Lf", // was *Lg
+
+                                     kcalcdefaults.fixedprecision  ,
 #else
-		    str_size = sprintf(display_str,
-					   "%.*f",
-			    (kcalcdefaults.precision +1 > input_count)?
-			     input_count : kcalcdefaults.precision ,
-			     DISPLAY_AMOUNT);
+                                           "%.*f",
+
+                                     kcalcdefaults.fixedprecision  ,
 #endif
-		  }
+                                             DISPLAY_AMOUNT);
 
-		}
-		else
-		  if (current_base == NB_HEX)
-			str_size = sprintf(display_str,
-					   "%lX",
-					   boh_work);
-		  else
-			display_error = 1;
-	      }
+                  }// fixed
 
-	if (display_error || str_size < 0) {
-	  display_error = 1;
-	  strcpy(display_str,"Error");
-	  if(kcalcdefaults.beep)
-	    QApplication::beep();
-	}
-	calc_display->setText(display_str);
+                  if ( input_count > 0 && !strpbrk(display_str,"e") &&
+                                           last_input == DIGIT   ) {
+
+#ifdef HAVE_LONG_DOUBLE
+                    str_size = sprintf(display_str,
+                                           "%.*Lf",
+                            (kcalcdefaults.precision +1 > input_count)?
+                             input_count : kcalcdefaults.precision ,
+                             DISPLAY_AMOUNT);
+#else
+                    str_size = sprintf(display_str,
+                                           "%.*f",
+                            (kcalcdefaults.precision +1 > input_count)?
+                             input_count : kcalcdefaults.precision ,
+                             DISPLAY_AMOUNT);
+#endif
+                  }
+
+                }
+                else
+                  if (current_base == NB_HEX)
+                        str_size = sprintf(display_str,
+                                           "%lX",
+                                           boh_work);
+                  else
+                        display_error = 1;
+              }
+
+        if (display_error || str_size < 0) {
+          display_error = 1;
+          strcpy(display_str,"Error");
+          if(kcalcdefaults.beep)
+            QApplication::beep();
+        }
+        calc_display->setText(display_str);
 
 
   if (inverse){
@@ -1706,244 +1706,244 @@ void QtCalculator::UpdateDisplay()
 
 int cvb(char *out_str, long amount, int max_digits)
 {
-	/*
-	 * A routine that converts a long int to
-	 * binary display format
-	 */
+        /*
+         * A routine that converts a long int to
+         * binary display format
+         */
 
-	char		work_str[(sizeof(amount) * CHAR_BIT) + 1];
-	int		work_char = 0,
-			lead_zero = 1,
-			lead_one = 1,
-			lead_one_count = 0,
-			work_size = sizeof(amount) * CHAR_BIT;
-	unsigned long	bit_mask = (1 << ((sizeof(amount) * CHAR_BIT) - 1));
+        char            work_str[(sizeof(amount) * CHAR_BIT) + 1];
+        int             work_char = 0,
+                        lead_zero = 1,
+                        lead_one = 1,
+                        lead_one_count = 0,
+                        work_size = sizeof(amount) * CHAR_BIT;
+        unsigned long   bit_mask = (1 << ((sizeof(amount) * CHAR_BIT) - 1));
 
-	while (bit_mask) {
+        while (bit_mask) {
 
-		if (amount & bit_mask) {
-			if (lead_one)
-				lead_one_count++;
-			lead_zero = 0;
-			work_str[work_char++] = '1';
-		} else {
-			lead_one = 0;
-			if (!lead_zero)
-				work_str[work_char++] = '0';
-		}
-		bit_mask >>= 1;
-	}
-	if (!work_char)
-		work_str[work_char++] = '0';
-	work_str[work_char] = '\0';
+                if (amount & bit_mask) {
+                        if (lead_one)
+                                lead_one_count++;
+                        lead_zero = 0;
+                        work_str[work_char++] = '1';
+                } else {
+                        lead_one = 0;
+                        if (!lead_zero)
+                                work_str[work_char++] = '0';
+                }
+                bit_mask >>= 1;
+        }
+        if (!work_char)
+                work_str[work_char++] = '0';
+        work_str[work_char] = '\0';
 
-	if (work_char-lead_one_count < max_digits)
-		return strlen(strcpy(out_str,
-				      &work_str[lead_one_count ?
-				      work_size - max_digits :
-				      0]));
-	else
-	   return -1;
-}		
+        if (work_char-lead_one_count < max_digits)
+                return strlen(strcpy(out_str,
+                                      &work_str[lead_one_count ?
+                                      work_size - max_digits :
+                                      0]));
+        else
+           return -1;
+}
 
 int UpdateStack(int run_precedence)
 {
-	item_contents 	new_item, *top_item , *top_function;
-	CALCAMNT	left_op =0.0 , right_op =0.0;
-	int		op_function= 0, return_value = 0;
+        item_contents   new_item, *top_item , *top_function;
+        CALCAMNT        left_op =0.0 , right_op =0.0;
+        int             op_function= 0, return_value = 0;
 
-	new_item.s_item_type = ITEM_AMOUNT;
-	while ((top_function = TopTypeStack(ITEM_FUNCTION)) &&
-	top_function->s_item_data.item_func_data.item_precedence >=
-	run_precedence) {
+        new_item.s_item_type = ITEM_AMOUNT;
+        while ((top_function = TopTypeStack(ITEM_FUNCTION)) &&
+        top_function->s_item_data.item_func_data.item_precedence >=
+        run_precedence) {
 
-		return_value = 1;
+                return_value = 1;
 
-		if ((top_item = PopStack())->s_item_type != ITEM_AMOUNT){
-		  QMessageBox::message( "Error",
-					"Stack processing error - right_op", "O.K." );
+                if ((top_item = PopStack())->s_item_type != ITEM_AMOUNT){
+                  QMessageBox::message( "Error",
+                                        "Stack processing error - right_op", "O.K." );
 
-		}
-		right_op = top_item->s_item_data.item_amount;
+                }
+                right_op = top_item->s_item_data.item_amount;
 
-		if (!((top_item = PopStack()) &&
-		top_item->s_item_type == ITEM_FUNCTION)) {
-		  QMessageBox::message( "Error",
-					"Stack processing error - function", "O.K." );
+                if (!((top_item = PopStack()) &&
+                top_item->s_item_type == ITEM_FUNCTION)) {
+                  QMessageBox::message( "Error",
+                                        "Stack processing error - function", "O.K." );
 
-		}
-		op_function =
-			top_item->s_item_data.item_func_data.item_function;	
+                }
+                op_function =
+                        top_item->s_item_data.item_func_data.item_function;
 
-		if (!((top_item = PopStack()) &&
-		top_item->s_item_type == ITEM_AMOUNT)) {
-		  QMessageBox::message( "Error",
-					"Stack processing error - left_op", "O.K." );
-		}
-		left_op = top_item->s_item_data.item_amount;
-	
-		new_item.s_item_data.item_amount =
-			(Arith_ops[op_function])(left_op, right_op);
-		PushStack(&new_item);
-			
-	}	
-	if (return_value &&
-	    percent_mode &&
-	    !display_error &&
-	    Prcnt_ops[op_function] != NULL){
-		new_item.s_item_data.item_amount =
-			(Prcnt_ops[op_function])(left_op,
-				right_op,
-				new_item.s_item_data.item_amount);
-		PushStack(&new_item);
-	}
-	if (return_value)
-		DISPLAY_AMOUNT = new_item.s_item_data.item_amount;
+                if (!((top_item = PopStack()) &&
+                top_item->s_item_type == ITEM_AMOUNT)) {
+                  QMessageBox::message( "Error",
+                                        "Stack processing error - left_op", "O.K." );
+                }
+                left_op = top_item->s_item_data.item_amount;
 
-	return return_value;
+                new_item.s_item_data.item_amount =
+                        (Arith_ops[op_function])(left_op, right_op);
+                PushStack(&new_item);
+
+        }
+        if (return_value &&
+            percent_mode &&
+            !display_error &&
+            Prcnt_ops[op_function] != NULL){
+                new_item.s_item_data.item_amount =
+                        (Prcnt_ops[op_function])(left_op,
+                                right_op,
+                                new_item.s_item_data.item_amount);
+                PushStack(&new_item);
+        }
+        if (return_value)
+                DISPLAY_AMOUNT = new_item.s_item_data.item_amount;
+
+        return return_value;
 }
 
 int isoddint(CALCAMNT input)
 {
-	CALCAMNT	dummy;
-	/*
-	 * Routine to check if CALCAMNT is an Odd integer
-	 */
-	return (MODF(input, &dummy) == 0.0 &&
-		MODF(input/2, &dummy) == 0.5);
+        CALCAMNT        dummy;
+        /*
+         * Routine to check if CALCAMNT is an Odd integer
+         */
+        return (MODF(input, &dummy) == 0.0 &&
+                MODF(input/2, &dummy) == 0.5);
 }
 
 CALCAMNT ExecOr(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecOr\n");
-	CALCAMNT	boh_work_d;
-	long 		boh_work_l, boh_work_r;
+        CALCAMNT        boh_work_d;
+        long            boh_work_l, boh_work_r;
 
-	MODF(left_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_l = (long int)boh_work_d;
-	MODF(right_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_r = (long int) boh_work_d;
-	return (boh_work_l | boh_work_r);
+        MODF(left_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_l = (long int)boh_work_d;
+        MODF(right_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_r = (long int) boh_work_d;
+        return (boh_work_l | boh_work_r);
 }
 
 CALCAMNT ExecXor(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecXOr\n");
-	CALCAMNT	boh_work_d;
-	long 		boh_work_l, boh_work_r;
+        CALCAMNT        boh_work_d;
+        long            boh_work_l, boh_work_r;
 
-	MODF(left_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_l = (long int) boh_work_d;
-	MODF(right_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_r = (long int) boh_work_d;
-	return (boh_work_l ^ boh_work_r);
+        MODF(left_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_l = (long int) boh_work_d;
+        MODF(right_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_r = (long int) boh_work_d;
+        return (boh_work_l ^ boh_work_r);
 }
 
 CALCAMNT ExecAnd(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecAnd\n");
-	CALCAMNT	boh_work_d;
-	long 		boh_work_l, boh_work_r;
+        CALCAMNT        boh_work_d;
+        long            boh_work_l, boh_work_r;
 
-	MODF(left_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_l = (long int ) boh_work_d;
-	MODF(right_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_r = (long int ) boh_work_d;
-	return (boh_work_l & boh_work_r);
+        MODF(left_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_l = (long int ) boh_work_d;
+        MODF(right_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_r = (long int ) boh_work_d;
+        return (boh_work_l & boh_work_r);
 }
 
 CALCAMNT ExecLsh(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecLsh\n");
-	CALCAMNT	boh_work_d;
-	long 		boh_work_l, boh_work_r;
+        CALCAMNT        boh_work_d;
+        long            boh_work_l, boh_work_r;
 
-	MODF(left_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_l = (long int) boh_work_d;
-	MODF(right_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_r = (long int ) boh_work_d;
-	return (boh_work_l << boh_work_r);
+        MODF(left_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_l = (long int) boh_work_d;
+        MODF(right_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_r = (long int ) boh_work_d;
+        return (boh_work_l << boh_work_r);
 }
 
 CALCAMNT ExecRsh(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecRsh\n");
-	CALCAMNT	boh_work_d;
-	long 		boh_work_l, boh_work_r;
+        CALCAMNT        boh_work_d;
+        long            boh_work_l, boh_work_r;
 
-	MODF(left_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_l = (long int ) boh_work_d;
-	MODF(right_op, &boh_work_d);
-	if (FABS(boh_work_d) > LONG_MAX) {
-		display_error = 1;
-		return 0;
-	}
-	boh_work_r = ( long int ) boh_work_d;
-	return (boh_work_l >> boh_work_r);
+        MODF(left_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_l = (long int ) boh_work_d;
+        MODF(right_op, &boh_work_d);
+        if (FABS(boh_work_d) > LONG_MAX) {
+                display_error = 1;
+                return 0;
+        }
+        boh_work_r = ( long int ) boh_work_d;
+        return (boh_work_l >> boh_work_r);
 }
 
 CALCAMNT ExecAdd(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecAdd\n");
-	return left_op + right_op;
+        return left_op + right_op;
 }
 
 CALCAMNT ExecSubtract(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecSubtract\n");
-	return left_op - right_op;
+        return left_op - right_op;
 }
 
 CALCAMNT ExecMultiply(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecMulti\n");
-	return left_op * right_op;
+        return left_op * right_op;
 }
 
 CALCAMNT ExecDivide(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("ExecDivide\n");
-	if (right_op == 0) {
-		display_error = 1;
-		return 0L;
-	} else
-		return left_op / right_op;
+        if (right_op == 0) {
+                display_error = 1;
+                return 0L;
+        } else
+                return left_op / right_op;
 }
 
 CALCAMNT ExecMod(CALCAMNT left_op, CALCAMNT right_op)
@@ -1975,63 +1975,63 @@ CALCAMNT ExecMod(CALCAMNT left_op, CALCAMNT right_op)
 CALCAMNT ExecIntDiv(CALCAMNT left_op, CALCAMNT right_op)
 {
   // printf("IndDiv\n");
-	if (right_op == 0) {
-		display_error = 1;
-		return 0L;
-	} else {
-		MODF(left_op / right_op, &left_op);
-		return left_op;
-	}
+        if (right_op == 0) {
+                display_error = 1;
+                return 0L;
+        } else {
+                MODF(left_op / right_op, &left_op);
+                return left_op;
+        }
 }
 
 CALCAMNT ExecPower(CALCAMNT left_op, CALCAMNT right_op)
 {
 
        // printf("ExecPowser %g left_op, %g right_op\n",left_op, right_op);
-	if (right_op == 0)
-		return 1L;
-	if (left_op < 0 && isoddint(1/right_op))
-		left_op = -1L * POW((-1L * left_op), right_op);
-	else
-		left_op = POW(left_op, right_op);
-	if (errno == EDOM || errno == ERANGE) {
-		display_error = 1;
-		return 0;
-	} else
-		return left_op;
+        if (right_op == 0)
+                return 1L;
+        if (left_op < 0 && isoddint(1/right_op))
+                left_op = -1L * POW((-1L * left_op), right_op);
+        else
+                left_op = POW(left_op, right_op);
+        if (errno == EDOM || errno == ERANGE) {
+                display_error = 1;
+                return 0;
+        } else
+                return left_op;
 }
 
 CALCAMNT ExecPwrRoot(CALCAMNT left_op, CALCAMNT right_op)
 {
 
        // printf("ExecPwrRoot  %g left_op, %g right_op\n", left_op, right_op);
-	if (right_op == 0) {
-		display_error = 1;
-		return 0L;
-	}
-	if (left_op < 0 && isoddint(right_op))
-		left_op = -1L * POW((-1L * left_op), (1L)/right_op);
-	else
-		left_op = POW(left_op, (1L)/right_op);
-	if (errno == EDOM || errno == ERANGE) {
-	  display_error = 1;
-	  return 0;
-	}
-	else
-	  return left_op;
+        if (right_op == 0) {
+                display_error = 1;
+                return 0L;
+        }
+        if (left_op < 0 && isoddint(right_op))
+                left_op = -1L * POW((-1L * left_op), (1L)/right_op);
+        else
+                left_op = POW(left_op, (1L)/right_op);
+        if (errno == EDOM || errno == ERANGE) {
+          display_error = 1;
+          return 0;
+        }
+        else
+          return left_op;
 }
 
-	
+
 CALCAMNT ExecAddSubP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
 {
   // printf("ExecAddsubP\n");
   (void) left_op;
 
-	if (result == 0) {
-		display_error = 1;
-		return 0;
-	} else
-		return (result * 100L) / right_op;
+        if (result == 0) {
+                display_error = 1;
+                return 0;
+        } else
+                return (result * 100L) / right_op;
 }
 
 CALCAMNT ExecMultiplyP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
@@ -2040,7 +2040,7 @@ CALCAMNT ExecMultiplyP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
   (void) left_op;
   (void) right_op;
 
-	return (result / 100L);
+        return (result / 100L);
 }
 
 CALCAMNT ExecDivideP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
@@ -2049,14 +2049,14 @@ CALCAMNT ExecDivideP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
   (void) left_op;
   (void) right_op;
 
-	return (result * 100L);
+        return (result * 100L);
 }
 
 CALCAMNT ExecPowerP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
 {
   // printf("ExecPowerP\n");
   (void) result;
-	return ExecPower(left_op, (right_op / 100L));
+        return ExecPower(left_op, (right_op / 100L));
 }
 
 CALCAMNT ExecPwrRootP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
@@ -2064,115 +2064,115 @@ CALCAMNT ExecPwrRootP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
   // printf("ExePwrRootP\n");
   (void) result;
 
-	if (right_op == 0) {
-		display_error = 1;
-		return 0;
-	} else
-		return ExecPower(left_op, (100L / right_op));
+        if (right_op == 0) {
+                display_error = 1;
+                return 0;
+        } else
+                return ExecPower(left_op, (100L / right_op));
 }
 
 
 
 stack_ptr AllocStackItem (void) {
 
-	if (stack_next <= stack_last) {
+        if (stack_next <= stack_last) {
 
-		process_stack[stack_next].prior_item = NULL;
-		process_stack[stack_next].prior_type = NULL;
-		return &process_stack[stack_next++];
-	}
+                process_stack[stack_next].prior_item = NULL;
+                process_stack[stack_next].prior_type = NULL;
+                return &process_stack[stack_next++];
+        }
 
-	QMessageBox::message( "Emergency", "Stack Error !", "O.K." );
-	return &process_stack[stack_next];
+        QMessageBox::message( "Emergency", "Stack Error !", "O.K." );
+        return &process_stack[stack_next];
 }
 
 void UnAllocStackItem (stack_ptr return_item) {
 
-	if (return_item != &process_stack[--stack_next]) {
-	
-	  QMessageBox::message( "Emergency", "Stack Error !", "O.K." );
-	}	
+        if (return_item != &process_stack[--stack_next]) {
+
+          QMessageBox::message( "Emergency", "Stack Error !", "O.K." );
+        }
 
 }
 void PushStack(item_contents *add_item)
 {
-	/*
-	 * Add an item to the stack
-	 */
+        /*
+         * Add an item to the stack
+         */
 
-	stack_ptr new_item = top_of_stack;
+        stack_ptr new_item = top_of_stack;
 
-	if (!(new_item &&
-	new_item->item_value.s_item_type == add_item->s_item_type)) {
+        if (!(new_item &&
+        new_item->item_value.s_item_type == add_item->s_item_type)) {
 
-		new_item = AllocStackItem();	/* Get a new item    */
+                new_item = AllocStackItem();    /* Get a new item    */
 
-		/*
-		 * Chain new item to existing stacks
-		 */
+                /*
+                 * Chain new item to existing stacks
+                 */
 
-		new_item->prior_item = top_of_stack;
-		top_of_stack	     = new_item;
-		new_item->prior_type = top_type_stack[add_item->s_item_type];
-		top_type_stack[add_item->s_item_type] = new_item;
-	}
+                new_item->prior_item = top_of_stack;
+                top_of_stack         = new_item;
+                new_item->prior_type = top_type_stack[add_item->s_item_type];
+                top_type_stack[add_item->s_item_type] = new_item;
+        }
 
-	new_item->item_value  = *add_item;	/* assign contents*/
+        new_item->item_value  = *add_item;      /* assign contents*/
 
 }
 
 item_contents *PopStack(void)
 {
-	/*
-	 * Remove and return the top item in the stack
-	 */
+        /*
+         * Remove and return the top item in the stack
+         */
 
-	static item_contents return_item;
-	item_contents *return_item_ptr = NULL;
-	stack_ptr return_stack_ptr;
+        static item_contents return_item;
+        item_contents *return_item_ptr = NULL;
+        stack_ptr return_stack_ptr;
 
-	if ((return_stack_ptr = top_of_stack)) {
-		return_item = top_of_stack->item_value;
+        if ((return_stack_ptr = top_of_stack)) {
+                return_item = top_of_stack->item_value;
 
-		top_type_stack[return_item.s_item_type]
-			     = top_of_stack->prior_type;
-		top_of_stack = top_of_stack->prior_item;
+                top_type_stack[return_item.s_item_type]
+                             = top_of_stack->prior_type;
+                top_of_stack = top_of_stack->prior_item;
 
-		UnAllocStackItem(return_stack_ptr);
-		return_item_ptr = &return_item;
-	}
+                UnAllocStackItem(return_stack_ptr);
+                return_item_ptr = &return_item;
+        }
 
-	return return_item_ptr;
+        return return_item_ptr;
 }
 
 item_contents *TopOfStack(void)
 {
-	/*
-	 * Return the top item in the stack without removing
-	 */
+        /*
+         * Return the top item in the stack without removing
+         */
 
-	item_contents *return_item_ptr = NULL;
+        item_contents *return_item_ptr = NULL;
 
-	if (top_of_stack) {
-		return_item_ptr = &top_of_stack->item_value;
-	}
+        if (top_of_stack) {
+                return_item_ptr = &top_of_stack->item_value;
+        }
 
-	return return_item_ptr;
+        return return_item_ptr;
 }
 
 item_contents *TopTypeStack(item_type rqstd_type)
 {
-	/*
-	 * Return the top item in the stack without removing
-	 */
+        /*
+         * Return the top item in the stack without removing
+         */
 
-	item_contents *return_item_ptr = NULL;
+        item_contents *return_item_ptr = NULL;
 
-	if (top_type_stack[rqstd_type]) {
-		return_item_ptr = &top_type_stack[rqstd_type]->item_value;
-	}
+        if (top_type_stack[rqstd_type]) {
+                return_item_ptr = &top_type_stack[rqstd_type]->item_value;
+        }
 
-	return return_item_ptr;
+        return return_item_ptr;
 }
 
 
@@ -2183,10 +2183,10 @@ item_contents *TopTypeStack(item_type rqstd_type)
 
 
 void InitStack (void) {
-	
-	stack_next = 0;
-	stack_last = STACK_SIZE - 1;
-	top_of_stack = top_type_stack[0] = top_type_stack[1] = NULL;
+
+        stack_next = 0;
+        stack_last = STACK_SIZE - 1;
+        top_of_stack = top_type_stack[0] = top_type_stack[1] = NULL;
 }
 
-	
+

@@ -166,7 +166,7 @@ KSpreadTable* KSpreadTable::find( int _id )
   return (*s_mapTables)[ _id ];
 }
 
-KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
+KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const char *_name )
     : QObject( _map, _name )
 {
   if ( s_mapTables == 0L )
@@ -187,7 +187,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
 
   m_lstCellBindings.setAutoDelete( FALSE );
 
-  m_strName = _name;
+  m_strName = tableName;
 
   // m_lstChildren.setAutoDelete( true );
 
@@ -3987,39 +3987,39 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
         QFont font( "Times", 10 );
         painter.setFont( font );
         QFontMetrics fm = painter.fontMetrics();
-        int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
+        int w = fm.width( m_pDoc->headLeft( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
             painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )),
-                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headLeft( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
+                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headLeft( pagenr, m_strName.latin1() ) );
+        w = fm.width( m_pDoc->headMid( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
             painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
                                      ( MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ) / 2.0 ),
-                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headMid( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
+                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headMid( pagenr, m_strName.latin1() ) );
+        w = fm.width( m_pDoc->headRight( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
             painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
                                      MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ),
-                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headRight( pagenr, m_strName ) );
+                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headRight( pagenr, m_strName.latin1() ) );
 
         // print foot line
-        w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
+        w = fm.width( m_pDoc->footLeft( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
             painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )),
                               (int)( MM_TO_POINT ( m_pDoc->paperHeight() - 10.0 )),
-                              m_pDoc->footLeft( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
+                              m_pDoc->footLeft( pagenr, m_strName.latin1() ) );
+        w = fm.width( m_pDoc->footMid( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
             painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )+
                                      ( MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ) / 2.0 ),
                               (int)( MM_TO_POINT  ( m_pDoc->paperHeight() - 10.0 ) ),
-                              m_pDoc->footMid( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
+                              m_pDoc->footMid( pagenr, m_strName.latin1() ) );
+        w = fm.width( m_pDoc->footRight( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
             painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
                                      MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ),
                               (int)( MM_TO_POINT ( m_pDoc->paperHeight() - 10.0 ) ),
-                              m_pDoc->footRight( pagenr, m_strName ) );
+                              m_pDoc->footRight( pagenr, m_strName.latin1() ) );
 
         painter.translate( MM_TO_POINT ( m_pDoc->leftBorder()),
                            MM_TO_POINT ( m_pDoc->topBorder() ));

@@ -21,7 +21,7 @@ public:
     ~KSpreadCellProxy();
 
     virtual bool process( const QCString& obj, const QCString& fun, const QByteArray& data,
-			  QCString& replyType, QByteArray &replyData );
+                          QCString& replyType, QByteArray &replyData );
 
 private:
     QCString m_prefix;
@@ -42,14 +42,14 @@ KSpreadCellProxy::~KSpreadCellProxy()
 }
 
 bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const QByteArray& data,
-					QCString& replyType, QByteArray &replyData )
+                                        QCString& replyType, QByteArray &replyData )
 {
     if ( strncmp( m_prefix.data(), obj.data(), m_prefix.length() ) != 0 )
-	return FALSE;
+        return FALSE;
 
     KSpreadPoint p( obj.data() + m_prefix.length() );
     if ( !p.isValid() )
-	return FALSE;
+        return FALSE;
 
     m_cell->setCell( m_table, p.pos );
     return m_cell->process( fun, data, replyType, replyData );
@@ -79,8 +79,8 @@ KSpreadTableIface::~KSpreadTableIface()
 DCOPRef KSpreadTableIface::cell( int x, int y )
 {
     QCString str = objId();
-    str += "/";
-    str += util_cellName( x, y );
+    str += '/';
+    str += util_cellName( x, y ).latin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }
@@ -111,21 +111,21 @@ QString KSpreadTableIface::name() const
 
 
 bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray& data,
-					QCString& replyType, QByteArray &replyData )
+                                        QCString& replyType, QByteArray &replyData )
 {
     kdDebug(36001) << "Calling '" << fun.data() << "'" << endl;
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
-	return FALSE;
+        return FALSE;
 
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
-	return FALSE;
+        return FALSE;
 
     // Is the function name a valid cell like "B5" ?
     KSpreadPoint p( fun.left( len - 2 ).data() );
     if ( !p.isValid() )
-	return FALSE;
+        return FALSE;
 
     QCString str = objId() + "/" + fun.left( len - 2 );
 

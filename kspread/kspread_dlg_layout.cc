@@ -71,20 +71,20 @@ void KSpreadPatternSelect::paintEvent( QPaintEvent *_ev )
 
     if ( !undefined )
     {
-	pen.setColor( penColor );
-	pen.setStyle( penStyle );
-	pen.setWidth( penWidth );
+        pen.setColor( penColor );
+        pen.setStyle( penStyle );
+        pen.setWidth( penWidth );
 
-	painter.begin( this );
-	painter.setPen( pen );
+        painter.begin( this );
+        painter.setPen( pen );
         painter.drawLine( 6, height()/2, width() - 6,height()/2  );
         painter.end();
     }
     else
     {
-	painter.begin( this );
-	painter.fillRect( 2, 2, width() - 4, height() - 4, BDiagPattern );
-	painter.end();
+        painter.begin( this );
+        painter.fillRect( 2, 2, width() - 4, height() - 4, BDiagPattern );
+        painter.end();
     }
 }
 
@@ -114,7 +114,7 @@ void KSpreadPatternSelect::slotSelect()
 }
 
 CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _left, int _top,
-			      int _right, int _bottom ) : QObject()
+                              int _right, int _bottom ) : QObject()
 {
     undefinedPixmap = 0L;
     formatOnlyNegSignedPixmap = 0L;
@@ -228,14 +228,14 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     heigthSize = 0;
     for ( int x = _left; x <= _right; x++ )
     {
-	cl = m_pView->activeTable()->columnLayout( x );
-    	widthSize = QMAX( cl->width( /* m_pView->canvasWidget() */ ), widthSize );
+        cl = m_pView->activeTable()->columnLayout( x );
+        widthSize = QMAX( cl->width( /* m_pView->canvasWidget() */ ), widthSize );
     }
 
     for ( int y = _top; y <= _bottom; y++ )
     {
-    	rl = m_pView->activeTable()->rowLayout(y);
-    	heigthSize = QMAX( rl->height( /* m_pView->canvasWidget() */ ),heigthSize );
+        rl = m_pView->activeTable()->rowLayout(y);
+        heigthSize = QMAX( rl->height( /* m_pView->canvasWidget() */ ),heigthSize );
     }
 
     // We assume, that all other objects have the same values
@@ -281,54 +281,54 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     for ( int x = _left; x <= _right; x++ )
     {
         for ( int y = _top; y <= _bottom; y++ )
-	{
-	    KSpreadCell *obj = table->cellAt( x, y );
+        {
+            KSpreadCell *obj = table->cellAt( x, y );
 
-	    if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
-		bFallDiagonalStyle = FALSE;
-	    if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
-		bFallDiagonalStyle = FALSE;
-	    if ( fallDiagonalColor != obj->fallDiagonalColor( x, y ) )
-		bfallDiagonalColor = FALSE;
-	    if ( goUpDiagonalStyle != obj->goUpDiagonalStyle( x, y ) )
-		bGoUpDiagonalStyle = FALSE;
-	    if ( goUpDiagonalWidth != obj->goUpDiagonalWidth( x, y ) )
-		bGoUpDiagonalStyle = FALSE;
-	    if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
-		bGoUpDiagonalColor = FALSE;
+            if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
+                bFallDiagonalStyle = FALSE;
+            if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
+                bFallDiagonalStyle = FALSE;
+            if ( fallDiagonalColor != obj->fallDiagonalColor( x, y ) )
+                bfallDiagonalColor = FALSE;
+            if ( goUpDiagonalStyle != obj->goUpDiagonalStyle( x, y ) )
+                bGoUpDiagonalStyle = FALSE;
+            if ( goUpDiagonalWidth != obj->goUpDiagonalWidth( x, y ) )
+                bGoUpDiagonalStyle = FALSE;
+            if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
+                bGoUpDiagonalColor = FALSE;
             if ( strike != obj->textFontStrike( x, y ) )
-		bStrike = FALSE;
+                bStrike = FALSE;
             if ( underline != obj->textFontUnderline( x, y ) )
-		bUnderline = FALSE;
-	    if ( prefix != obj->prefix( x, y ) )
-		prefix = QString::null;
-	    if ( postfix != obj->postfix( x, y ) )
-		postfix = QString::null;
-	    /*if ( precision != obj->precision( x, y ) )
-		precision = -2;*/
-	    if ( floatFormat != obj->floatFormat( x, y ) )
-		bFloatFormat = FALSE;
-	    if ( floatColor != obj->floatColor( x, y ) )
-		bFloatColor = FALSE;
-	    if ( textColor != obj->textColor( x, y ) )
-		bTextColor = FALSE;
-	    if ( textFontFamily != obj->textFontFamily( x, y ) )
-		bTextFontFamily = FALSE;
-	    if ( textFontSize != obj->textFontSize( x, y ) )
-		bTextFontSize = FALSE;
-	    if ( textFontBold != obj->textFontBold( x, y ) )
-		bTextFontBold = FALSE;
-	    if ( textFontItalic != obj->textFontItalic( x, y ) )
-		bTextFontItalic = FALSE;
-	    if ( bgColor != obj->bgColor( x, y ) )
-		bBgColor = FALSE;
+                bUnderline = FALSE;
+            if ( prefix != obj->prefix( x, y ) )
+                prefix = QString::null;
+            if ( postfix != obj->postfix( x, y ) )
+                postfix = QString::null;
+            /*if ( precision != obj->precision( x, y ) )
+                precision = -2;*/
+            if ( floatFormat != obj->floatFormat( x, y ) )
+                bFloatFormat = FALSE;
+            if ( floatColor != obj->floatColor( x, y ) )
+                bFloatColor = FALSE;
+            if ( textColor != obj->textColor( x, y ) )
+                bTextColor = FALSE;
+            if ( textFontFamily != obj->textFontFamily( x, y ) )
+                bTextFontFamily = FALSE;
+            if ( textFontSize != obj->textFontSize( x, y ) )
+                bTextFontSize = FALSE;
+            if ( textFontBold != obj->textFontBold( x, y ) )
+                bTextFontBold = FALSE;
+            if ( textFontItalic != obj->textFontItalic( x, y ) )
+                bTextFontItalic = FALSE;
+            if ( bgColor != obj->bgColor( x, y ) )
+                bBgColor = FALSE;
             if( textRotation != obj->getAngle(_left, _top) )
                 bTextRotation = FALSE;
             if( formatNumber != obj->getFormatNumber(_left, _top) )
                 bFormatNumber = FALSE;
-	    if ( eStyle != obj->style() )
-		eStyle = KSpreadCell::ST_Undef;
-	}
+            if ( eStyle != obj->style() )
+                eStyle = KSpreadCell::ST_Undef;
+        }
     }
 
     if( !bTextRotation )
@@ -338,11 +338,11 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     {
         KSpreadCell *obj = table->cellAt( _left, y );
         if ( leftBorderStyle != obj->leftBorderStyle( _left, y ) )
-		bLeftBorderStyle = FALSE;
-	if ( leftBorderWidth != obj->leftBorderWidth( _left, y ) )
-		bLeftBorderStyle = FALSE;
-	if ( leftBorderColor != obj->leftBorderColor( _left, y ) )
-		bLeftBorderColor = FALSE;
+                bLeftBorderStyle = FALSE;
+        if ( leftBorderWidth != obj->leftBorderWidth( _left, y ) )
+                bLeftBorderStyle = FALSE;
+        if ( leftBorderColor != obj->leftBorderColor( _left, y ) )
+                bLeftBorderColor = FALSE;
     }
 
 
@@ -350,33 +350,33 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     {
         KSpreadCell *obj = table->cellAt( _right, y );
         if ( rightBorderStyle != obj->rightBorderStyle( _right, y ) )
-		bRightBorderStyle = FALSE;
-	if ( rightBorderWidth != obj->rightBorderWidth( _right, y ) )
-		bRightBorderStyle = FALSE;
-	if ( rightBorderColor != obj->rightBorderColor( _right, y ) )
-		bRightBorderColor = FALSE;
+                bRightBorderStyle = FALSE;
+        if ( rightBorderWidth != obj->rightBorderWidth( _right, y ) )
+                bRightBorderStyle = FALSE;
+        if ( rightBorderColor != obj->rightBorderColor( _right, y ) )
+                bRightBorderColor = FALSE;
     }
 
     for ( int x = _left; x <= _right; x++ )
     {
         KSpreadCell *obj = table->cellAt( x, _top );
         if (  topBorderStyle != obj->topBorderStyle( x, _top ) )
-		bTopBorderStyle = FALSE;
-	if ( topBorderWidth != obj->topBorderWidth( x, _top ) )
-		bTopBorderStyle = FALSE;
-	if ( topBorderColor != obj->topBorderColor( x, _top ) )
-		bTopBorderColor = FALSE;
+                bTopBorderStyle = FALSE;
+        if ( topBorderWidth != obj->topBorderWidth( x, _top ) )
+                bTopBorderStyle = FALSE;
+        if ( topBorderColor != obj->topBorderColor( x, _top ) )
+                bTopBorderColor = FALSE;
     }
 
     for ( int x = _left; x <= _right; x++ )
     {
         KSpreadCell *obj = table->cellAt( x, _bottom );
         if ( bottomBorderStyle != obj->bottomBorderStyle( x, _bottom ) )
-		bBottomBorderStyle = FALSE;
-	if ( bottomBorderWidth != obj->bottomBorderWidth( x, _bottom ) )
-		bBottomBorderStyle = FALSE;
-	if ( bottomBorderColor != obj->bottomBorderColor( x, _bottom ) )
-		bBottomBorderColor = FALSE;
+                bBottomBorderStyle = FALSE;
+        if ( bottomBorderWidth != obj->bottomBorderWidth( x, _bottom ) )
+                bBottomBorderStyle = FALSE;
+        if ( bottomBorderColor != obj->bottomBorderColor( x, _bottom ) )
+                bBottomBorderColor = FALSE;
     }
 
 
@@ -385,29 +385,29 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     {
         for ( int y = _top+1; y <= _bottom; y++ )
         {
-	    KSpreadCell *obj = table->cellAt( x, y );
+            KSpreadCell *obj = table->cellAt( x, y );
 
-	    if ( horizontalBorderStyle != obj->topBorderStyle( x, y ) )
-		bHorizontalBorderStyle = FALSE;
-	    if ( horizontalBorderWidth != obj->topBorderWidth( x, y ) )
-		bHorizontalBorderStyle = FALSE;
-	    if ( horizontalBorderColor != obj->topBorderColor( x, y ) )
-		bHorizontalBorderColor = FALSE;
+            if ( horizontalBorderStyle != obj->topBorderStyle( x, y ) )
+                bHorizontalBorderStyle = FALSE;
+            if ( horizontalBorderWidth != obj->topBorderWidth( x, y ) )
+                bHorizontalBorderStyle = FALSE;
+            if ( horizontalBorderColor != obj->topBorderColor( x, y ) )
+                bHorizontalBorderColor = FALSE;
         }
     }
 
     for ( int x = _left+1; x <= _right; x++ )
     {
-	for ( int y = _top; y <= _bottom; y++ )
+        for ( int y = _top; y <= _bottom; y++ )
         {
-	    KSpreadCell *obj = table->cellAt( x, y );
+            KSpreadCell *obj = table->cellAt( x, y );
 
-	    if ( verticalBorderStyle != obj->leftBorderStyle( x, y ) )
-		bVerticalBorderStyle = FALSE;
-	    if ( verticalBorderWidth != obj->leftBorderWidth( x, y ) )
-		bVerticalBorderStyle = FALSE;
-	    if ( verticalBorderColor != obj->leftBorderColor( x, y ) )
-		bVerticalBorderColor = FALSE;
+            if ( verticalBorderStyle != obj->leftBorderStyle( x, y ) )
+                bVerticalBorderStyle = FALSE;
+            if ( verticalBorderWidth != obj->leftBorderWidth( x, y ) )
+                bVerticalBorderStyle = FALSE;
+            if ( verticalBorderColor != obj->leftBorderColor( x, y ) )
+                bVerticalBorderColor = FALSE;
         }
     }
 
@@ -431,18 +431,18 @@ void CellLayoutDlg::init()
     if ( formatOnlyNegSignedPixmap == 0L )
     {
         QColor black = colorGroup.text(); // not necessarily black :)
-	formatOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", black );
-	formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", Qt::red );
-	formatRedNeverSignedPixmap = paintFormatPixmap( "123.456", black, "123.456", Qt::red );
-	formatAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", black );
-	formatRedAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", Qt::red );
+        formatOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", black );
+        formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", Qt::red );
+        formatRedNeverSignedPixmap = paintFormatPixmap( "123.456", black, "123.456", Qt::red );
+        formatAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", black );
+        formatRedAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", Qt::red );
 
-	// Make the undefined pixmap
+        // Make the undefined pixmap
         undefinedPixmap = new QPixmap( 100, 12 );
         QPainter painter;
         painter.begin( undefinedPixmap );
-	painter.setBackgroundColor( colorGroup.base() );
-	painter.setPen( colorGroup.text() );
+        painter.setBackgroundColor( colorGroup.base() );
+        painter.setPen( colorGroup.text() );
         painter.fillRect( 0, 0, 100, 12, BDiagPattern );
         painter.end();
     }
@@ -480,7 +480,7 @@ void CellLayoutDlg::init()
 }
 
 QPixmap* CellLayoutDlg::paintFormatPixmap( const char *_string1, const QColor & _color1,
-					     const char *_string2, const QColor & _color2 )
+                                             const char *_string2, const QColor & _color2 )
 {
     QPixmap *pixmap = new QPixmap( 150, 14 );
 
@@ -507,39 +507,39 @@ void CellLayoutDlg::slotApply()
     KSpreadUndoCellLayout *undo;
     if ( !table->doc()->undoBuffer()->isLocked() )
     {
-	QRect rect;
-	// Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
-	// So we have to save these layouts, too
-	rect.setCoords( left, top, right + 1, bottom + 1 );
-	undo = new KSpreadUndoCellLayout( table->doc(), table, rect );
-	table->doc()->undoBuffer()->appendUndo( undo );
+        QRect rect;
+        // Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
+        // So we have to save these layouts, too
+        rect.setCoords( left, top, right + 1, bottom + 1 );
+        undo = new KSpreadUndoCellLayout( table->doc(), table, rect );
+        table->doc()->undoBuffer()->appendUndo( undo );
     }
 
     for ( int x = left; x <= right; x++ )
-	for ( int y = top; y <= bottom; y++ )
-	{
-	    KSpreadCell *obj = table->nonDefaultCell( x, y );
-	    floatPage->apply( obj );
-	    miscPage->apply( obj );
-	    fontPage->apply( obj );
+        for ( int y = top; y <= bottom; y++ )
+        {
+            KSpreadCell *obj = table->nonDefaultCell( x, y );
+            floatPage->apply( obj );
+            miscPage->apply( obj );
+            fontPage->apply( obj );
             positionPage->apply( obj );
             patternPage->apply(obj);
-	}
+        }
 
     if(positionPage->getSizeHeight()!=heigthSize)
-    	{
-    	for ( int x = top; x <= bottom; x++ )
-    		{
-    		m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x );
-    		}
-    	}
+        {
+        for ( int x = top; x <= bottom; x++ )
+                {
+                m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x );
+                }
+        }
     if(positionPage->getSizeWidth()!=widthSize)
-    	{
-    	for ( int x = left; x <= right; x++ )
-    		{
-    		m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x );
-    		}
-    	}
+        {
+        for ( int x = left; x <= right; x++ )
+                {
+                m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x );
+                }
+        }
 
     // Outline
       borderPage->applyOutline( left, top, right, bottom );
@@ -581,9 +581,9 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     tmpQLabel->setText( i18n("Prefix") );
 
     if ( dlg->postfix.isNull() )
-	postfix->setText( "########" );
+        postfix->setText( "########" );
     else
-	postfix->setText( dlg->postfix.data() );
+        postfix->setText( dlg->postfix );
 
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,0,0);
@@ -594,9 +594,9 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     tmpQLabel->setText( i18n("Precision") );
 
     if ( dlg->prefix.isNull() )
-	prefix->setText( "########" );
+        prefix->setText( "########" );
     else
-	prefix->setText( dlg->prefix.data() );
+        prefix->setText( dlg->prefix );
 
 
     format->insertItem( *_dlg->formatOnlyNegSignedPixmap, 0 );
@@ -612,17 +612,17 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
 
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
-	format->setCurrentItem( 5 );
+        format->setCurrentItem( 5 );
     else if ( dlg->floatFormat == KSpreadCell::OnlyNegSigned && dlg->floatColor == KSpreadCell::AllBlack )
-	format->setCurrentItem( 0 );
+        format->setCurrentItem( 0 );
     else if ( dlg->floatFormat == KSpreadCell::OnlyNegSigned && dlg->floatColor == KSpreadCell::NegRed )
-	format->setCurrentItem( 1 );
+        format->setCurrentItem( 1 );
     else if ( dlg->floatFormat == KSpreadCell::AlwaysUnsigned && dlg->floatColor == KSpreadCell::NegRed )
-	format->setCurrentItem( 2 );
+        format->setCurrentItem( 2 );
     else if ( dlg->floatFormat == KSpreadCell::AlwaysSigned && dlg->floatColor == KSpreadCell::AllBlack )
-	format->setCurrentItem( 3 );
+        format->setCurrentItem( 3 );
     else if ( dlg->floatFormat == KSpreadCell::AlwaysSigned && dlg->floatColor == KSpreadCell::NegRed )
-	format->setCurrentItem( 4 );
+        format->setCurrentItem( 4 );
     layout->addWidget(box);
 
 
@@ -1068,7 +1068,7 @@ else if(dlg->m_bValue)
                 tmp=QString::number(dlg->m_value, 'E', p);
                 int pos;
                 if((pos=tmp.find('.'))!=-1)
-	                tmp=tmp.replace(pos,1,decimal_point);
+                        tmp=tmp.replace(pos,1,decimal_point);
                 }
         else if(fraction->isChecked())
                 {
@@ -1083,33 +1083,33 @@ else if(dlg->m_bValue)
                         int index = 0;
                         switch( listFormat->currentItem())
                         {
-	                case 0:
-	                        index=2;
-	                        break;
-	                case 1:
-	                        index=4;
-	                        break;
-	                case 2:
-	                        index=8;
-        	                break;
-	                case 3:
-	                        index=16;
-	                        break;
-        	        case 4:
-	                        index=10;
-	                        break;
-	                case 5:
-	                        index=100;
-        	                break;
+                        case 0:
+                                index=2;
+                                break;
+                        case 1:
+                                index=4;
+                                break;
+                        case 2:
+                                index=8;
+                                break;
+                        case 3:
+                                index=16;
+                                break;
+                        case 4:
+                                index=10;
+                                break;
+                        case 5:
+                                index=100;
+                                break;
                         case 6:
                                 index=3;
-        	                break;
+                                break;
                         case 7:
                                 index=4;
-        	                break;
+                                break;
                         case 8:
                                 index=5;
-        	                break;
+                                break;
                         }
                         if( listFormat->currentItem()!=6
                         &&listFormat->currentItem()!=7
@@ -1120,12 +1120,12 @@ else if(dlg->m_bValue)
                                 double diff = result;
                                 for(int i=1;i<index;i++)
                                 {
-        	                        calc = i*1.0 / index;
-	                                if( fabs( result - calc ) < diff )
-	                                        {
-		                                index1=i;
-        		                        diff = fabs(result-calc);
-	                                        }
+                                        calc = i*1.0 / index;
+                                        if( fabs( result - calc ) < diff )
+                                                {
+                                                index1=i;
+                                                diff = fabs(result-calc);
+                                                }
                                 }
                                 tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
                         }
@@ -1188,18 +1188,18 @@ else if(dlg->m_bValue)
             else
                 start=0;
             int i = tmp.length()-start;
-	    bool bFinished = FALSE;
+            bool bFinished = FALSE;
 
 
             while ( !bFinished && i > 0 )
-	    {
-		QChar ch = tmp[ i - 1 ];
+            {
+                QChar ch = tmp[ i - 1 ];
                 if ( ch == '0' )
                     tmp.remove(--i,1);
-		else
-	        {
-		    bFinished = TRUE;
-		    if ( ch == decimal_point )
+                else
+                {
+                    bFinished = TRUE;
+                    if ( ch == decimal_point )
                         tmp.remove(--i,1);
                 }
             }
@@ -1207,9 +1207,9 @@ else if(dlg->m_bValue)
         }
         if(dlg->m_bValue && !time->isChecked() && !date->isChecked())
         {
-                if ( strcmp( prefix->text(), "########" ) != 0 )
+                if ( prefix->text() != "########" )
                         tmp=prefix->text()+" "+tmp;
-                if ( strcmp( postfix->text(), "########" ) != 0 )
+                if ( postfix->text() != "########" )
                         tmp+=" "+postfix->text();
         }
         exampleLabel->setText(tmp);
@@ -1219,49 +1219,50 @@ else if(dlg->m_bValue)
 }
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 {
-    if ( strcmp( postfix->text(), dlg->postfix.data() ) != 0 )
-	if ( strcmp( postfix->text(), "########" ) != 0 && postfix->isEnabled())
+    if ( postfix->text() != dlg->postfix )
+        if ( postfix->text() != "########" && postfix->isEnabled())
         {
+            // If we are in here it *never* can be disabled - FIXME (Werner)!
             if( postfix->isEnabled())
-	        _obj->setPostfix( postfix->text() );
+                _obj->setPostfix( postfix->text() );
             else
                 _obj->setPostfix( "" );
         }
-    if ( strcmp( prefix->text(), dlg->prefix.data() ) != 0 )
-	if ( strcmp( prefix->text(), "########" ) != 0 )
+    if ( prefix->text() != dlg->prefix )
+        if ( prefix->text() != "########" )
         {
             if(prefix->isEnabled())
-	        _obj->setPrefix( prefix->text() );
+                _obj->setPrefix( prefix->text() );
             else
                 _obj->setPrefix( "" );
 
         }
 
     if ( dlg->precision != precision->value() )
-	_obj->setPrecision( precision->value() );
+        _obj->setPrecision( precision->value() );
 
     switch( format->currentItem() )
     {
     case 0:
-	_obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-	_obj->setFloatColor( KSpreadCell::AllBlack );
-	break;
+        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
+        _obj->setFloatColor( KSpreadCell::AllBlack );
+        break;
     case 1:
-	_obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-	_obj->setFloatColor( KSpreadCell::NegRed );
-	break;
+        _obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
+        _obj->setFloatColor( KSpreadCell::NegRed );
+        break;
     case 2:
-	_obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
-	_obj->setFloatColor( KSpreadCell::NegRed );
-	break;
+        _obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
+        _obj->setFloatColor( KSpreadCell::NegRed );
+        break;
     case 3:
-	_obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-	_obj->setFloatColor( KSpreadCell::AllBlack );
-	break;
+        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
+        _obj->setFloatColor( KSpreadCell::AllBlack );
+        break;
     case 4:
-	_obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-	_obj->setFloatColor( KSpreadCell::NegRed );
-	break;
+        _obj->setFloatFormat( KSpreadCell::AlwaysSigned );
+        _obj->setFloatColor( KSpreadCell::NegRed );
+        break;
     }
     _obj->setFaktor(1.0);
     if(number->isChecked())
@@ -1386,9 +1387,9 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     if ( dlg->isSingleCell() )
     {
       if ( !dlg->actionText.isEmpty() )
-	actionText->setText( dlg->actionText );
+        actionText->setText( dlg->actionText );
       if ( dlg->eStyle == KSpreadCell::ST_Normal || dlg->eStyle == KSpreadCell::ST_Undef )
-	actionText->setEnabled( false );
+        actionText->setEnabled( false );
     }
     else
       actionText->setEnabled( false );
@@ -1481,7 +1482,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
    if ( dlg->bTextFontFamily )
    {
         selFont.setFamily( dlg->textFontFamily );
-        kdDebug(36001) << "Family = " << dlg->textFontFamily.data() << endl;
+        kdDebug(36001) << "Family = " << dlg->textFontFamily << endl;
 
         if( !family_combo->findItem(dlg->textFontFamily))
                 {
@@ -1500,13 +1501,13 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   grid2->addMultiCellWidget(family_combo,1,5,0,0);
 
   connect( family_combo, SIGNAL(highlighted(const QString &)),
-	   SLOT(family_chosen_slot(const QString &)) );
+           SLOT(family_chosen_slot(const QString &)) );
 
   size_combo = new QComboBox( true, box1, "Size" );
   QStringList lst;
   lst.append("");
   for ( unsigned int i = 1; i < 100; ++i )
-	lst.append( QString( "%1" ).arg( i ) );
+        lst.append( QString( "%1" ).arg( i ) );
 
   size_combo->insertStringList( lst );
 
@@ -1514,7 +1515,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
   grid2->addWidget(size_combo,1,2);
   connect( size_combo, SIGNAL(activated(const QString &)),
-	   SLOT(size_chosen_slot(const QString &)) );
+           SLOT(size_chosen_slot(const QString &)) );
   connect( size_combo ,SIGNAL( textChanged(const QString &)),
         this,SLOT(size_chosen_slot(const QString &)));
 
@@ -1526,7 +1527,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
   grid2->addWidget(weight_combo,3,1);
   connect( weight_combo, SIGNAL(activated(const QString &)),
-	   SLOT(weight_chosen_slot(const QString &)) );
+           SLOT(weight_chosen_slot(const QString &)) );
 
   style_combo = new QComboBox( box1, "Style" );
   style_combo->insertItem( "", 0 );
@@ -1535,19 +1536,19 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   grid2->addWidget(style_combo,1,1);
   style_combo->setInsertionPolicy(QComboBox::NoInsertion);
   connect( style_combo, SIGNAL(activated(const QString &)),
-	   SLOT(style_chosen_slot(const QString &)) );
+           SLOT(style_chosen_slot(const QString &)) );
 
   strike = new QCheckBox(i18n("Strike out"),box1);
   grid2->addWidget(strike,5,2);
   strike->setChecked(dlg->strike);
   connect( strike, SIGNAL( clicked()),
-	   SLOT(strike_chosen_slot()) );
+           SLOT(strike_chosen_slot()) );
 
   underline = new QCheckBox(i18n("Underline"),box1);
   grid2->addWidget(underline,3,2);
   underline->setChecked(dlg->underline);
   connect( underline, SIGNAL( clicked()),
-	   SLOT(underline_chosen_slot()) );
+           SLOT(underline_chosen_slot()) );
 
 
   grid->addWidget(box1);
@@ -1595,7 +1596,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   //  example_label->setAutoResize(true);
   grid2->addMultiCellWidget(example_label,0,3,2,3);
   connect(this,SIGNAL(fontSelected( const QFont&  )),
-	  this,SLOT(display_example( const QFont&)));
+          this,SLOT(display_example( const QFont&)));
 
 
   grid->addWidget(box1);
@@ -1613,15 +1614,15 @@ textColor=_color;
 void CellLayoutPageFont::apply( KSpreadCell *_obj )
 {
     if ( !bTextColorUndefined )
-	_obj->setTextColor( textColor );
+        _obj->setTextColor( textColor );
     if ( size_combo->currentItem() != 0 )
-	_obj->setTextFontSize( selFont.pointSize() );
+        _obj->setTextFontSize( selFont.pointSize() );
     if ( !family_combo->currentText().isEmpty() )
-	_obj->setTextFontFamily( selFont.family() );
+        _obj->setTextFontFamily( selFont.family() );
     if ( weight_combo->currentItem() != 0 )
-	_obj->setTextFontBold( selFont.bold() );
+        _obj->setTextFontBold( selFont.bold() );
     if ( style_combo->currentItem() != 0 )
-	_obj->setTextFontItalic( selFont.italic() );
+        _obj->setTextFontItalic( selFont.italic() );
     _obj->setTextFontStrike( strike->isChecked() );
     _obj->setTextFontUnderline(underline->isChecked() );
 }
@@ -1715,7 +1716,7 @@ void CellLayoutPageFont::setCombos()
  bool found;
 
  if ( dlg->bTextColor )
-	textColor = dlg->textColor;
+        textColor = dlg->textColor;
  else
         textColor = colorGroup().text();
  textColorButton->setColor( textColor );
@@ -1731,14 +1732,14 @@ void CellLayoutPageFont::setCombos()
 
      for (int i = 1; i < number_of_entries - 1; i++)
      {
-	 if ( string == (QString) family->text(i))
-	 {
+         if ( string == (QString) family->text(i))
+         {
 
              family->setCurrentItem(i);
-	     //     kdDebug(36001) << "Found Font " << string.data() << endl;
-	     found = true;
-	     break;
-	 }
+             //     kdDebug(36001) << "Found Font " << string.data() << endl;
+             found = true;
+             break;
+         }
      }
  }
  else
@@ -1755,12 +1756,12 @@ void CellLayoutPageFont::setCombos()
      found = false;
 
      for (int i = 0; i < number_of_entries ; i++){
-	 if ( string == (QString) combo->text(i)){
-	     combo->setCurrentItem(i);
-	     found = true;
-	     // kdDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
-	     break;
-	 }
+         if ( string == (QString) combo->text(i)){
+             combo->setCurrentItem(i);
+             found = true;
+             // kdDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
+             break;
+         }
      }
  }
  else
@@ -2197,10 +2198,10 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     size->setValidator(new KIntValidator( size ));
     QString tmp;
     for(int i=0;i<10;i++)
-    	{
-    	tmp=tmp.setNum(i);
-    	size->insertItem(tmp);
-    	}
+        {
+        tmp=tmp.setNum(i);
+        size->insertItem(tmp);
+        }
     size->setCurrentItem(1);
 
     style=new QComboBox(tmpQGroupBox);
@@ -2235,30 +2236,30 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     {
     if ( dlg->bLeftBorderColor && dlg->bLeftBorderStyle  )
       {
-	left->setPenStyle(dlg->leftBorderStyle );
-	left->setPenWidth(dlg->leftBorderWidth);
-	left->setColor(dlg->leftBorderColor);
-	left->setOn(true);
+        left->setPenStyle(dlg->leftBorderStyle );
+        left->setPenWidth(dlg->leftBorderWidth);
+        left->setColor(dlg->leftBorderColor);
+        left->setOn(true);
       }
     else
       {
 
-	left->setUndefined();
+        left->setUndefined();
       }
  }
  if(dlg->rightBorderStyle!=Qt::NoPen|| !dlg->bRightBorderStyle)
     {
     if ( dlg->bRightBorderColor && dlg->bRightBorderStyle && dlg->rightBorderStyle!=NoPen)
       {
-	right->setPenStyle(dlg->rightBorderStyle );
-	right->setPenWidth(dlg->rightBorderWidth);
-	right->setColor(dlg->rightBorderColor);
-	right->setOn(true);
+        right->setPenStyle(dlg->rightBorderStyle );
+        right->setPenWidth(dlg->rightBorderWidth);
+        right->setColor(dlg->rightBorderColor);
+        right->setOn(true);
       }
     else
       {
 
-	right->setUndefined();
+        right->setUndefined();
       }
      }
 
@@ -2266,15 +2267,15 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     {
     if ( dlg->bTopBorderColor && dlg->bTopBorderStyle)
       {
-	top->setPenStyle(dlg->topBorderStyle );
-	top->setPenWidth(dlg->topBorderWidth);
-	top->setColor(dlg->topBorderColor);
-      	top->setOn(true);
+        top->setPenStyle(dlg->topBorderStyle );
+        top->setPenWidth(dlg->topBorderWidth);
+        top->setColor(dlg->topBorderColor);
+        top->setOn(true);
       }
     else
       {
 
-	top->setUndefined();
+        top->setUndefined();
       }
      }
 
@@ -2283,15 +2284,15 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     if ( dlg->bBottomBorderColor && dlg->bBottomBorderStyle )
 
       {
-	bottom->setPenStyle(dlg->bottomBorderStyle );
-	bottom->setPenWidth(dlg->bottomBorderWidth);
-	bottom->setColor(dlg->bottomBorderColor);
-	bottom->setOn(true);
+        bottom->setPenStyle(dlg->bottomBorderStyle );
+        bottom->setPenWidth(dlg->bottomBorderWidth);
+        bottom->setColor(dlg->bottomBorderColor);
+        bottom->setOn(true);
       }
     else
       {
 
-	bottom->setUndefined();
+        bottom->setUndefined();
       }
  }
 
@@ -2302,13 +2303,13 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     if ( dlg->bHorizontalBorderColor && dlg->bHorizontalBorderStyle )
       {
         horizontal->setPenStyle(dlg->horizontalBorderStyle );
-	horizontal->setPenWidth(dlg->horizontalBorderWidth);
+        horizontal->setPenWidth(dlg->horizontalBorderWidth);
         horizontal->setColor(dlg->horizontalBorderColor);
-	horizontal->setOn(true);
+        horizontal->setOn(true);
        }
     else
        {
-	 horizontal->setUndefined();
+         horizontal->setUndefined();
        }
     }
   }
@@ -2321,14 +2322,14 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
         {
                 if ( dlg->bVerticalBorderColor && dlg->bVerticalBorderStyle )
                 {
-	        vertical->setPenStyle(dlg->verticalBorderStyle );
-	        vertical->setPenWidth(dlg->verticalBorderWidth);
-	        vertical->setColor(dlg->verticalBorderColor);
-	        vertical->setOn(true);
-	        }
+                vertical->setPenStyle(dlg->verticalBorderStyle );
+                vertical->setPenWidth(dlg->verticalBorderWidth);
+                vertical->setColor(dlg->verticalBorderColor);
+                vertical->setOn(true);
+                }
         else
                 {
-	        vertical->setUndefined();
+                vertical->setUndefined();
                 }
          }
    }
@@ -2341,14 +2342,14 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   {
     if ( dlg->bfallDiagonalColor && dlg->bFallDiagonalStyle  )
       {
-	fallDiagonal->setPenStyle(dlg->fallDiagonalStyle );
-	fallDiagonal->setPenWidth(dlg->fallDiagonalWidth);
-	fallDiagonal->setColor(dlg->fallDiagonalColor);
-	fallDiagonal->setOn(true);
+        fallDiagonal->setPenStyle(dlg->fallDiagonalStyle );
+        fallDiagonal->setPenWidth(dlg->fallDiagonalWidth);
+        fallDiagonal->setColor(dlg->fallDiagonalColor);
+        fallDiagonal->setOn(true);
       }
     else
       {
-	fallDiagonal->setUndefined();
+        fallDiagonal->setUndefined();
       }
    }
 
@@ -2356,14 +2357,14 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     {
     if ( dlg->bGoUpDiagonalColor && dlg->bGoUpDiagonalStyle )
       {
-	goUpDiagonal->setPenStyle(dlg->goUpDiagonalStyle );
-	goUpDiagonal->setPenWidth(dlg->goUpDiagonalWidth);
-	goUpDiagonal->setColor(dlg->goUpDiagonalColor);
-	goUpDiagonal->setOn(true);
+        goUpDiagonal->setPenStyle(dlg->goUpDiagonalStyle );
+        goUpDiagonal->setPenWidth(dlg->goUpDiagonalWidth);
+        goUpDiagonal->setColor(dlg->goUpDiagonalColor);
+        goUpDiagonal->setOn(true);
       }
     else
       {
-	goUpDiagonal->setUndefined();
+        goUpDiagonal->setUndefined();
       }
     }
 
@@ -2384,55 +2385,55 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     slotSetColorButton( black );
 
     connect( color, SIGNAL( changed( const QColor & ) ),
-	     this, SLOT( slotSetColorButton( const QColor & ) ) );
+             this, SLOT( slotSetColorButton( const QColor & ) ) );
 
 
     connect( pattern1, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern2, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern3, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern4, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern5, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern6, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern7, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern8, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern9, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
     connect( pattern10, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
 
   connect( goUpDiagonal, SIGNAL( clicked (KSpreadBorderButton *) ),
-	   this, SLOT( changeState( KSpreadBorderButton *) ) );
+           this, SLOT( changeState( KSpreadBorderButton *) ) );
   connect( top, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
   connect( right, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
 
   connect( fallDiagonal, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
 
   connect( bottom, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
   connect( left, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
   connect( horizontal, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
   connect( vertical, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( changeState(KSpreadBorderButton *) ) );
+           this, SLOT( changeState(KSpreadBorderButton *) ) );
 
   connect( all, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( preselect(KSpreadBorderButton *) ) );
+           this, SLOT( preselect(KSpreadBorderButton *) ) );
   connect( remove, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( preselect(KSpreadBorderButton *) ) );
+           this, SLOT( preselect(KSpreadBorderButton *) ) );
   connect( outline, SIGNAL( clicked(KSpreadBorderButton *) ),
-	   this, SLOT( preselect(KSpreadBorderButton *) ) );
+           this, SLOT( preselect(KSpreadBorderButton *) ) );
 
   connect( area ,SIGNAL( redraw()),this,SLOT(draw()));
   connect( area ,SIGNAL( choosearea(QMouseEvent * )),
@@ -2462,26 +2463,26 @@ void CellLayoutPageBorder::slotChangeStyle(int)
   else
   {
   switch(index)
-	{
-	case 0:
+        {
+        case 0:
                 preview->setPattern( preview->getColor(), penSize, DotLine );
-		break;
-	case 1:
+                break;
+        case 1:
                 preview->setPattern( preview->getColor(), penSize, DashLine );
-		break;
-	case 2:
+                break;
+        case 2:
                 preview->setPattern( preview->getColor(), penSize, DashDotLine );
-		break;
-	case 3:
+                break;
+        case 3:
                 preview->setPattern( preview->getColor(), penSize, DashDotDotLine );
-		break;
-	case 4:
-	        preview->setPattern( preview->getColor(), penSize, SolidLine );
-		break;
-	default:
-		kdDebug(36001)<<"Error in combobox\n";
-		break;
-	}
+                break;
+        case 4:
+                preview->setPattern( preview->getColor(), penSize, SolidLine );
+                break;
+        default:
+                kdDebug(36001)<<"Error in combobox\n";
+                break;
+        }
  }
  slotUnselect2(preview);
 }
@@ -2517,11 +2518,11 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 {
                 for ( int y = _top+1; y <= _bottom; y++ )
                 {
-	        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
+                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
 
-	        obj->setTopBorderColor( horizontal->getColor() );
-	        obj->setTopBorderStyle( horizontal->getPenStyle() );
-	        obj->setTopBorderWidth( horizontal->getPenWidth() );
+                obj->setTopBorderColor( horizontal->getColor() );
+                obj->setTopBorderStyle( horizontal->getPenStyle() );
+                obj->setTopBorderWidth( horizontal->getPenWidth() );
 
 
                 }
@@ -2536,9 +2537,9 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 {
                 KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
 
-	        obj->setLeftBorderColor( vertical->getColor() );
-	        obj->setLeftBorderStyle( vertical->getPenStyle() );
-	        obj->setLeftBorderWidth( vertical->getPenWidth() );
+                obj->setLeftBorderColor( vertical->getColor() );
+                obj->setLeftBorderStyle( vertical->getPenStyle() );
+                obj->setLeftBorderWidth( vertical->getPenWidth() );
 
 
                 }
@@ -2552,9 +2553,9 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
         {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _left,y );
 
-	obj->setLeftBorderColor( left->getColor() );
-	obj->setLeftBorderStyle( left->getPenStyle() );
-	obj->setLeftBorderWidth( left->getPenWidth() );
+        obj->setLeftBorderColor( left->getColor() );
+        obj->setLeftBorderStyle( left->getPenStyle() );
+        obj->setLeftBorderWidth( left->getPenWidth() );
         }
     }
 
@@ -2564,8 +2565,8 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
         {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
         obj->setRightBorderColor( right->getColor() );
-	obj->setRightBorderStyle( right->getPenStyle() );
-	obj->setRightBorderWidth( right->getPenWidth() );
+        obj->setRightBorderStyle( right->getPenStyle() );
+        obj->setRightBorderWidth( right->getPenWidth() );
         }
     }
 
@@ -2576,8 +2577,8 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_top );
 
         obj->setTopBorderColor( top->getColor() );
-	obj->setTopBorderStyle( top->getPenStyle() );
-	obj->setTopBorderWidth( top->getPenWidth() );
+        obj->setTopBorderStyle( top->getPenStyle() );
+        obj->setTopBorderWidth( top->getPenWidth() );
         }
     }
 
@@ -2588,8 +2589,8 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_bottom );
 
         obj->setBottomBorderColor( bottom->getColor() );
-	obj->setBottomBorderStyle( bottom->getPenStyle() );
-	obj->setBottomBorderWidth( bottom->getPenWidth() );
+        obj->setBottomBorderStyle( bottom->getPenStyle() );
+        obj->setBottomBorderWidth( bottom->getPenWidth() );
         }
     }
 
@@ -2600,15 +2601,15 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
                 if ( fallDiagonal->isChanged() )
                         {
-	                obj->setFallDiagonalColor( fallDiagonal->getColor() );
-	                obj->setFallDiagonalStyle( fallDiagonal->getPenStyle() );
-	                obj->setFallDiagonalWidth( fallDiagonal->getPenWidth() );
+                        obj->setFallDiagonalColor( fallDiagonal->getColor() );
+                        obj->setFallDiagonalStyle( fallDiagonal->getPenStyle() );
+                        obj->setFallDiagonalWidth( fallDiagonal->getPenWidth() );
                         }
                 if ( goUpDiagonal->isChanged() )
                         {
-	                obj->setGoUpDiagonalColor( goUpDiagonal->getColor() );
-	                obj->setGoUpDiagonalStyle( goUpDiagonal->getPenStyle() );
-	                obj->setGoUpDiagonalWidth( goUpDiagonal->getPenWidth() );
+                        obj->setGoUpDiagonalColor( goUpDiagonal->getColor() );
+                        obj->setGoUpDiagonalStyle( goUpDiagonal->getPenStyle() );
+                        obj->setGoUpDiagonalWidth( goUpDiagonal->getPenWidth() );
                         }
                 }
         }
@@ -2635,25 +2636,25 @@ void CellLayoutPageBorder::slotSetColorButton( const QColor &_color )
 void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
 {
     if ( pattern1 != _p )
-	pattern1->slotUnselect();
+        pattern1->slotUnselect();
     if ( pattern2 != _p )
-	pattern2->slotUnselect();
+        pattern2->slotUnselect();
     if ( pattern3 != _p )
-	pattern3->slotUnselect();
+        pattern3->slotUnselect();
     if ( pattern4 != _p )
-	pattern4->slotUnselect();
+        pattern4->slotUnselect();
     if ( pattern5 != _p )
-	pattern5->slotUnselect();
+        pattern5->slotUnselect();
     if ( pattern6 != _p )
-	pattern6->slotUnselect();
+        pattern6->slotUnselect();
     if ( pattern7 != _p )
-	pattern7->slotUnselect();
+        pattern7->slotUnselect();
     if ( pattern8 != _p )
-	pattern8->slotUnselect();
+        pattern8->slotUnselect();
     if ( pattern9 != _p )
-	pattern9->slotUnselect();
+        pattern9->slotUnselect();
     if ( pattern10 != _p )
-	pattern10->slotUnselect();
+        pattern10->slotUnselect();
     preview->setPattern( _p->getColor(), _p->getPenWidth(), _p->getPenStyle() );
 }
 
@@ -2669,13 +2670,13 @@ void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
                  right->unselect();
 
           if(top->isOn())
-	         top->unselect();
+                 top->unselect();
 
           if(bottom->isOn())
-	         bottom->unselect();
+                 bottom->unselect();
 
           if(fallDiagonal->isOn())
-	         fallDiagonal->unselect();
+                 fallDiagonal->unselect();
 
          if(goUpDiagonal->isOn())
                  goUpDiagonal->unselect();
@@ -2736,17 +2737,17 @@ void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
   _p->setChanged(true);
 
       if(_p->isOn())
-	{
-	  _p->setPenWidth(preview->getPenWidth());
-	  _p->setPenStyle(preview->getPenStyle());
-	  _p->setColor( currentColor );
-	}
+        {
+          _p->setPenWidth(preview->getPenWidth());
+          _p->setPenStyle(preview->getPenStyle());
+          _p->setColor( currentColor );
+        }
       else
-	{
-	  _p->setPenWidth(1);
-	  _p->setPenStyle(Qt::NoPen);
-	  _p->setColor( colorGroup().text() );
-	}
+        {
+          _p->setPenWidth(1);
+          _p->setPenStyle(Qt::NoPen);
+          _p->setColor( colorGroup().text() );
+        }
 
  area->repaint();
 }
@@ -3054,9 +3055,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     bgColorButton = new KColorButton( tmpQGroupBox, "ColorButton" );
     grid3->addWidget(bgColorButton,0,1);
     if ( dlg->bBgColor )
-	bgColor = dlg->bgColor;
+        bgColor = dlg->bgColor;
     else
-	bgColor = colorGroup().base();
+        bgColor = colorGroup().base();
     bgColorButton->setColor(bgColor);
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
@@ -3084,35 +3085,35 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     grid->addWidget( tmpQGroupBox,4,0);
 
     connect( brush1, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush2, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush3, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush4, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush5, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush6, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush7, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush8, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush9, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush10, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush11, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush12, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush13, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush14, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
     connect( brush15, SIGNAL( clicked( KSpreadBrushSelect* ) ),
-	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
+             this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
 
     brush1->setPattern( Qt::red, Qt::VerPattern );
     brush2->setPattern( Qt::red,Qt::HorPattern );
@@ -3137,7 +3138,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     current->setBackgroundColor(bgColor);
 
     connect( color, SIGNAL( changed( const QColor & ) ),
-	     this, SLOT( slotSetColorButton( const QColor & ) ) );
+             this, SLOT( slotSetColorButton( const QColor & ) ) );
 
     slotSetColorButton( dlg->brushColor );
     init();
@@ -3162,67 +3163,67 @@ b_notAnyColor=false;
 void CellLayoutPagePattern::init()
 {
     if(dlg->brushStyle==Qt::VerPattern)
-	{
-    	brush1->slotSelect();
-    	}
+        {
+        brush1->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::HorPattern)
-    	{
-    	brush2->slotSelect();
-    	}
+        {
+        brush2->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense1Pattern)
-    	{
-    	brush3->slotSelect();
-    	}
+        {
+        brush3->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense2Pattern)
-    	{
-    	brush4->slotSelect();
-    	}
+        {
+        brush4->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense3Pattern)
-    	{
-    	brush5->slotSelect();
-    	}
+        {
+        brush5->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense4Pattern)
-    	{
-    	brush6->slotSelect();
-    	}
+        {
+        brush6->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense5Pattern)
-    	{
-    	brush7->slotSelect();
-    	}
+        {
+        brush7->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense6Pattern)
-    	{
-    	brush8->slotSelect();
-    	}
+        {
+        brush8->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::Dense7Pattern)
-    	{
-    	brush9->slotSelect();
-    	}
+        {
+        brush9->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::CrossPattern)
-    	{
-    	brush10->slotSelect();
-    	}
+        {
+        brush10->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::BDiagPattern)
         {
-    	brush11->slotSelect();
-    	}
+        brush11->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::FDiagPattern)
-    	{
-    	brush12->slotSelect();
-    	}
+        {
+        brush12->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::VerPattern)
-    	{
-    	brush13->slotSelect();
-    	}
+        {
+        brush13->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::DiagCrossPattern)
-    	{
-    	brush14->slotSelect();
-    	}
+        {
+        brush14->slotSelect();
+        }
     else if(dlg->brushStyle==Qt::NoBrush)
-    	{
-    	brush15->slotSelect();
-    	}
+        {
+        brush15->slotSelect();
+        }
     else
-    	kdDebug(36001) << "Error in brushStyle" << endl;
+        kdDebug(36001) << "Error in brushStyle" << endl;
 }
 
 void CellLayoutPagePattern::slotSetColorButton( const QColor &_color )
@@ -3252,35 +3253,35 @@ void CellLayoutPagePattern::slotUnselect2( KSpreadBrushSelect *_p )
     selectedBrush = _p;
 
     if ( brush1 != _p )
-	brush1->slotUnselect();
+        brush1->slotUnselect();
     if ( brush2 != _p )
-	brush2->slotUnselect();
+        brush2->slotUnselect();
     if ( brush3 != _p )
-	brush3->slotUnselect();
+        brush3->slotUnselect();
     if ( brush4 != _p )
-	brush4->slotUnselect();
+        brush4->slotUnselect();
     if ( brush5 != _p )
-	brush5->slotUnselect();
+        brush5->slotUnselect();
     if ( brush6 != _p )
-	brush6->slotUnselect();
+        brush6->slotUnselect();
     if ( brush7 != _p )
-	brush7->slotUnselect();
+        brush7->slotUnselect();
     if ( brush8 != _p )
-	brush8->slotUnselect();
+        brush8->slotUnselect();
     if ( brush9 != _p )
-	brush9->slotUnselect();
+        brush9->slotUnselect();
     if ( brush10 != _p )
-	brush10->slotUnselect();
+        brush10->slotUnselect();
     if ( brush11 != _p )
-	brush11->slotUnselect();
+        brush11->slotUnselect();
     if ( brush12 != _p )
-	brush12->slotUnselect();
+        brush12->slotUnselect();
     if ( brush13 != _p )
-	brush13->slotUnselect();
+        brush13->slotUnselect();
     if ( brush14 != _p )
-	brush14->slotUnselect();
+        brush14->slotUnselect();
     if ( brush15 != _p )
-	brush15->slotUnselect();
+        brush15->slotUnselect();
 
     current->setBrushStyle(selectedBrush->getBrushStyle());
 }
@@ -3295,6 +3296,6 @@ void CellLayoutPagePattern::apply( KSpreadCell *_obj )
   if( b_notAnyColor)
         _obj->setBgColor( QColor() );
   else if ( !bBgColorUndefined )
-	_obj->setBgColor( bgColor );
+        _obj->setBgColor( bgColor );
 }
 #include "kspread_dlg_layout.moc"

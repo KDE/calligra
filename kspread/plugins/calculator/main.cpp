@@ -50,7 +50,7 @@ extern "C"
 {
     void* init_libkspreadcalc()
     {
-	return new CalcFactory;
+        return new CalcFactory;
     }
 };
 
@@ -71,8 +71,8 @@ QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*c
 {
     if ( !parent->inherits("KSpreadView") )
     {
-	kdError() << "CalcFactory: KSpreadView expected. Parent is " << parent->className() << endl;
-	return 0;
+        kdError() << "CalcFactory: KSpreadView expected. Parent is " << parent->className() << endl;
+        return 0;
     }
 
     QObject *obj = new Calculator( (KSpreadView*)parent, name );
@@ -101,16 +101,16 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
 
     // HACK: Don't know what to do with the icon (Werner)
     (void)new KAction( i18n("Calculator"), SmallIcon("kspreadcalc", CalcFactory::global()),
-		       0, this, SLOT( showCalculator() ), actionCollection(), "kspreadcalc");
+                       0, this, SLOT( showCalculator() ), actionCollection(), "kspreadcalc");
 }
 
 void Calculator::showCalculator()
 {
     if ( m_calc )
     {
-	m_calc->show();
-	m_calc->raise();
-	return;
+        m_calc->show();
+        m_calc->raise();
+        return;
     }
 
      m_calc = new QtCalculator( this, (KSpreadView*)parent() );
@@ -126,44 +126,44 @@ Calculator::~Calculator()
 bool Calculator::eventFilter( QObject*, QEvent* ev )
 {
     if ( !m_calc )
-	return FALSE;
+        return FALSE;
 
     if ( KSpreadSelectionChanged::test( ev ) )
     {
-	KSpreadSelectionChanged* event = (KSpreadSelectionChanged*)ev;
-	
-	// Selection cleared ?
-	if ( event->rect().left() == 0 )
-	    return FALSE;
+        KSpreadSelectionChanged* event = (KSpreadSelectionChanged*)ev;
 
-	KSpreadTable* table = m_view->doc()->map()->findTable( event->table() );
-	if ( !table )
-	    return FALSE;
+        // Selection cleared ?
+        if ( event->rect().left() == 0 )
+            return FALSE;
 
-	// A single cell selected ?
-	if ( event->rect().left() == event->rect().right() &&
-	     event->rect().top() == event->rect().bottom() )
+        KSpreadTable* table = m_view->doc()->map()->findTable( event->table() );
+        if ( !table )
+            return FALSE;
+
+        // A single cell selected ?
+        if ( event->rect().left() == event->rect().right() &&
+             event->rect().top() == event->rect().bottom() )
         {
-	    KSpreadCell* cell = table->cellAt( event->rect().left(), event->rect().top() );
-	    if ( !cell )
-		return FALSE;
-	
-	    double d;
-	    if ( cell->isEmpty() )
-		d = 0;
-	    else
-		d = cell->valueDouble();
-	    m_calc->setValue( d );
+            KSpreadCell* cell = table->cellAt( event->rect().left(), event->rect().top() );
+            if ( !cell )
+                return FALSE;
 
-	    return FALSE;
-	}
+            double d;
+            if ( cell->isEmpty() )
+                d = 0;
+            else
+                d = cell->valueDouble();
+            m_calc->setValue( d );
 
-	// Multiple cells selected ?
-	m_calc->setData( event->rect(), event->table() );
-	QString str = util_rangeName( table, event->rect() );
-	m_calc->setLabel( str );
-	
-	return FALSE;
+            return FALSE;
+        }
+
+        // Multiple cells selected ?
+        m_calc->setData( event->rect(), event->table().latin1() );
+        QString str = util_rangeName( table, event->rect() );
+        m_calc->setLabel( str.latin1() );
+
+        return FALSE;
     }
 
     return FALSE;
@@ -185,26 +185,26 @@ void QtCalculator::useData()
 
     // How many cells ?
     int len = ( table_range.right() - table_range.left() + 1 ) *
-	      ( table_range.bottom() - table_range.top() + 1 );
+              ( table_range.bottom() - table_range.top() + 1 );
 
     double *v = new double[ len ];
     int n = 0;
     for( int x = table_range.left(); x <= table_range.right(); x++ )
-	for( int y = table_range.top(); y <= table_range.bottom(); y++ )
+        for( int y = table_range.top(); y <= table_range.bottom(); y++ )
         {
-	    KSpreadView* view = corba->view();
-	    KSpreadTable* table = view->doc()->map()->findTable( table_name );
-	    if ( !table )
-		return;
-	    KSpreadCell* cell = table->cellAt( x, y );
-	    if ( !cell )
-		return;
+            KSpreadView* view = corba->view();
+            KSpreadTable* table = view->doc()->map()->findTable( table_name );
+            if ( !table )
+                return;
+            KSpreadCell* cell = table->cellAt( x, y );
+            if ( !cell )
+                return;
 
-	    v[n++] = cell->valueDouble();
-	}
+            v[n++] = cell->valueDouble();
+        }
 
     for( int i = 0; i < n; i++ )
-	stats.enterData( v[i] );
+        stats.enterData( v[i] );
 
     delete []v;
 

@@ -188,7 +188,7 @@ public:
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
 
-    KSpreadTable( KSpreadMap *_map, const char *_name );
+    KSpreadTable( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
     ~KSpreadTable();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y );

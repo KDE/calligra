@@ -2143,34 +2143,34 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
       for( int x = 0; x < r->range.width(); ++x )
       {
-	KSValue* c;
-	KSpreadCell* cell = r->table->cellAt( r->range.x() + x, r->range.y() + y );
+        KSValue* c;
+        KSpreadCell* cell = r->table->cellAt( r->range.x() + x, r->range.y() + y );
 
-	if ( cell->hasError() )
-	{
-	  QString tmp( i18n("The cell %1 has an error:\n\n%2") );
-	  tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
-	  tmp = tmp.arg( node->getStringLiteral() );
-	  context.setException( new KSException( "ErrorInCell", tmp ) );
-	  return false;
-	}
+        if ( cell->hasError() )
+        {
+          QString tmp( i18n("The cell %1 has an error:\n\n%2") );
+          tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+          tmp = tmp.arg( node->getStringLiteral() );
+          context.setException( new KSException( "ErrorInCell", tmp ) );
+          return false;
+        }
 
-	if ( cell->isDefault() )
-	  c = new KSValue( 0.0 );
-	else if ( cell->isValue() )
-	  c = new KSValue( cell->valueDouble() );
-	else if ( cell->isBool() )
-	  c = new KSValue( cell->valueBool() );
-	else if ( cell->isDate() )
-	  c = new KSValue( cell->valueDate() );
-	else if ( cell->isTime() )
-	  c = new KSValue( cell->valueTime() );
-	else if ( cell->valueString().isEmpty() )
-	  c = new KSValue( 0.0 );
-	else
-	  c = new KSValue( cell->valueString() );
+        if ( cell->isDefault() )
+          c = new KSValue( 0.0 );
+        else if ( cell->isValue() )
+          c = new KSValue( cell->valueDouble() );
+        else if ( cell->isBool() )
+          c = new KSValue( cell->valueBool() );
+        else if ( cell->isDate() )
+          c = new KSValue( cell->valueDate() );
+        else if ( cell->isTime() )
+          c = new KSValue( cell->valueTime() );
+        else if ( cell->valueString().isEmpty() )
+          c = new KSValue( 0.0 );
+        else
+          c = new KSValue( cell->valueString() );
 
-	l->listValue().append( c );
+        l->listValue().append( c );
       }
       v->listValue().append( l );
     }
@@ -2189,7 +2189,7 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table,
 {
   // Create the parse tree.
   KSParser parser;
-  if ( !parser.parse( formula, KSCRIPT_EXTENSION_KSPREAD ) )
+  if ( !parser.parse( formula.latin1(), KSCRIPT_EXTENSION_KSPREAD ) )
   {
     context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
     return 0;

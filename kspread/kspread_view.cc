@@ -805,7 +805,7 @@ void KSpreadView::fontSelected( const QString &_font )
         return;
 
     if ( m_pTable != 0L )
-      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), _font );
+      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), _font.latin1() );
 
     // Dont leave the focus in the toolbars combo box ...
     if ( m_pCanvas->editor() )
