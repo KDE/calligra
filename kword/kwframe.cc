@@ -1487,18 +1487,11 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
         return;
     QSize s ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
     painter->save();
-    //////// Problem. The first method only works for WMFs, the second method only works for SVGs !
-#if 1
-    QRect vp( 0, 0, s.width(), s.height() );
-    painter->setViewport( painter->worldMatrix().map( vp ) ); // stolen from kontour
-    painter->setWorldMatrix (QWMatrix ());
-#else
-    // Thanks to Harri, Qt3 makes it much much easier - for SVGs ;)
+    // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = m_clipart.picture()->boundingRect();
     //kdDebug() << "KWClipartFrameSet::drawFrame boundingRect: " << br.width() << "x" << br.height() << endl;
     if ( br.width() && br.height() ) // just to avoid an impossible crash
         painter->scale( (double)s.width() / (double)br.width(), (double)s.height() / (double)br.height() );
-#endif
     painter->drawPicture( *m_clipart.picture() );
     painter->restore();
 }

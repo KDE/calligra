@@ -186,7 +186,7 @@ void KWInsertPicDia::slotChooseClipart()
 
 bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
 {
-    KFileDialog fd( _path, i18n( "*.svg|SVG files (*.svg)\n*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( _path, i18n( "*.svg *.wmf|Cliparts (*.svg *.wmf)\n" ), 0, 0, true );
     fd.setCaption(i18n("Choose Clipart"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )

@@ -20,28 +20,23 @@
 #ifndef preview_h
 #define preview_h
 
-#include <kfiledialog.h>
-#include <kurl.h>
-
-#include <qstring.h>
-#include <qurl.h>
-#include <qvbox.h>
-#include <qpixmap.h>
+#include <kpreviewwidgetbase.h>
 
 class PixmapView;
 
-class Preview : public QVBox
+class Preview : public KPreviewWidgetBase
 {
     Q_OBJECT
 
 public:
     Preview( QWidget *parent );
-    
+
 public slots:
-    void showPreview( const KURL &U );
+    virtual void showPreview(const KURL &url);
+    virtual void clearPreview();
 
 private:
-    PixmapView *pixmap;
+    PixmapView *pixmapView;
 
 };
 

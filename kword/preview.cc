@@ -17,13 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpicture.h>
 #include "preview.h"
 #include "preview.moc"
-#include <qscrollview.h>
-#include <qfileinfo.h>
 #include <koClipartCollection.h>
+#include <kdialog.h>
+#include <kurl.h>
+#include <qlayout.h>
+#include <qfileinfo.h>
 #include <qpainter.h>
+#include <qpicture.h>
+#include <qscrollview.h>
 
 class PixmapView : public QScrollView
 {
@@ -48,14 +51,12 @@ public:
  	    p.setBackgroundColor( Qt::white );
  	    pixmap.fill( Qt::white );
 
- 	    QRect oldWin = p.window();
- 	    QRect vPort = p.viewport();
- 	    p.setViewport( 0, 0, 200, 200 );
+            QRect br = pic.boundingRect();
+            if ( br.width() && br.height() ) // just to avoid an impossible crash
+                p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
  	    p.drawPicture( pic );
- 	    p.setWindow( oldWin );
- 	    p.setViewport( vPort );
  	    p.end();
- 	    resizeContents( pixmap.size().width(), pixmap.size().height() );
+ 	    resizeContents( pixmap.width(), pixmap.height() );
  	    viewport()->repaint( FALSE );
  	}
     }
@@ -70,9 +71,11 @@ private:
 };
 
 Preview::Preview( QWidget *parent )
-    : QVBox( parent )
+    : KPreviewWidgetBase( parent )
 {
-    pixmap = new PixmapView( this );
+    QVBoxLayout *vb = new QVBoxLayout( this, KDialog::marginHint() );
+    pixmapView = new PixmapView( this );
+    vb->addWidget( pixmapView, 1 );
 }
 
 void Preview::showPreview( const KURL &u )
@@ -81,12 +84,17 @@ void Preview::showPreview( const KURL &u )
 	QString path = u.path();
 	QFileInfo fi( path );
 	if ( fi.extension().lower() == "wmf" || fi.extension().lower() == "emf" || fi.extension().lower() == "svg")
-	    pixmap->setClipart( path );
+	    pixmapView->setClipart( path );
 	else {
 	    QPixmap pix( path );
-	    pixmap->setPixmap( pix );
+	    pixmapView->setPixmap( pix );
 	}
     } else {
-	pixmap->setPixmap( QPixmap() );
+	pixmapView->setPixmap( QPixmap() );
     }
+}
+
+void Preview::clearPreview()
+{
+    pixmapView->setPixmap( QPixmap() );
 }
