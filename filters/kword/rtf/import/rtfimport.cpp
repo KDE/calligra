@@ -60,7 +60,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@rtf",		"@headerl",	parseRichText,		oddPagesHeader, true ),
 	MEMBER(	"@rtf",		"@headerr",	parseRichText,		evenPagesHeader, true ),
 	PROP(	"@rtf",		"@info",	skipGroup,		0L, true ),
-	PROP(	"Text",		"@nonshppict",	skipGroup,		0L, true ),
+	PROP(	"Text",		"@shpinst",	skipGroup,		0L, true ),
 	PROP(	"Text",		"@pict",	parsePicture,		0L, true ),
 	MEMBER(	"@",		"@rtf",		parseRichText,		bodyText, true ),
 	PROP(	"Text",		"@shppict",	skipGroup,		0L, false ),
