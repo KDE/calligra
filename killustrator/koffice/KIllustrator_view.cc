@@ -382,20 +382,14 @@ void KIllustratorView::setupCanvas()
     
     connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),hRuler,SLOT(updateVisibleArea(const QRect&)));
     connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),vRuler,SLOT(updateVisibleArea(const QRect&)));
-/*    QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-                      hRuler, SLOT(updateVisibleArea (int, int)));
-    QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-                      vRuler, SLOT(updateVisibleArea (int, int)));*/
 
     connect (canvas, SIGNAL(zoomFactorChanged (float)),
                       this, SLOT(slotZoomFactorChanged(float)));
 
-    connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-                      hRuler, SLOT(updatePointer(int, int)));
-    connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-                      vRuler, SLOT(updatePointer(int, int)));
-    connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
-                      this, SLOT(popupForSelection (int, int)));
+    connect(canvas,SIGNAL(mousePositionChanged(int,int)),hRuler,SLOT(updatePointer(int,int)));
+    connect(canvas,SIGNAL(mousePositionChanged(int,int)),vRuler,SLOT(updatePointer(int,int)));
+
+    connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection(int,int)));
     
     // helpline creation
     connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
@@ -1250,11 +1244,8 @@ void KIllustratorView::slotZoomOut()
 //when we get here, the canvas is already zoomed
 void KIllustratorView::slotZoomFactorChanged(float factor)
 {
-
-    //QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
-                      //vRuler, SLOT(setZoomFactor (float, int ,int)));*/
-   vRuler->setZoomFactor(factor,canvas->relativePaperArea().left(),canvas->relativePaperArea().top());
-   hRuler->setZoomFactor(factor,canvas->relativePaperArea().left(),canvas->relativePaperArea().top());
+   vRuler->setZoomFactor(factor,canvas->visibleArea().left(),canvas->visibleArea().top());
+   hRuler->setZoomFactor(factor,canvas->visibleArea().left(),canvas->visibleArea().top());
    QStringList list=m_viewZoom->items();
    QString f=QString::number(qRound(factor*100.0));
    int i=0;
