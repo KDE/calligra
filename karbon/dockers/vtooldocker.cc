@@ -34,6 +34,7 @@
 #include "karbon_factory.h"
 
 #include "vtooldocker.h"
+#include "vstrokefillpreview.h"
 
 VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
@@ -42,7 +43,9 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	setCloseMode( QDockWindow::Never );
 	QToolButton *button;
 
-	m_btngroup = new QButtonGroup( 2, Horizontal, this );
+	QWidget *mainWidget = new QWidget( this );
+
+	m_btngroup = new QButtonGroup( 2, Horizontal, mainWidget );
 	m_btngroup->setExclusive( true );
 	m_btngroup->setInsideSpacing( 2 );
 	m_btngroup->setInsideMargin( 5 );
@@ -139,7 +142,17 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
 	m_btngroup->insert( button );
 
-	setWidget( m_btngroup );
+
+	m_strokeFillPreview = new VStrokeFillPreview( m_part, mainWidget );
+
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
+	mainWidgetLayout->addWidget( m_btngroup );
+	mainWidgetLayout->addWidget( m_strokeFillPreview );
+	mainWidgetLayout->activate();
+	//mainWidget->setMaximumHeight( 164 );
+	//mainWidget->setMinimumWidth( 194 );
+
+	setWidget( mainWidget );
 }
 
 #include "vtooldocker.moc"

@@ -27,6 +27,7 @@ class QWidget;
 class KoMainWindow;
 class KarbonView;
 class KarbonPart;
+class VStrokeFillPreview;
 
 class VToolDocker : public VDocker
 {
@@ -51,9 +52,10 @@ signals:
 	void gradToolActivated();
 
 private:
-	QButtonGroup	*m_btngroup;
-	KarbonPart		*m_part;
-	KarbonView		*m_view;
+	QButtonGroup		*m_btngroup;
+	KarbonPart			*m_part;
+	KarbonView			*m_view;
+	VStrokeFillPreview	*m_strokeFillPreview;
 };
 
 #endif
