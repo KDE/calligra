@@ -255,16 +255,6 @@ public:
     KSpreadView* view()const { return m_pView; }
     KSpreadDoc* doc()const { return m_pDoc; }
 
-    /**
-     * Find support.
-     */
-    void find( const QPoint &_marker, QString _find, long options );
-
-    /**
-     * Find'n'Replace support.
-     */
-    void replace( const QPoint &_marker, QString _find, QString _replace, long options );
-
     virtual bool focusNextPrevChild( bool );
 
     bool chooseFormulaArea() const { return m_bChoose;}
@@ -290,10 +280,6 @@ public slots:
 
     void slotMaxColumn( int _max_column );
     void slotMaxRow( int _max_row );
-
-    // Connected to KoFind/KoReplace by KSpreadSheet during a search and replace
-    void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );
-    void replace( const QString &newText, int index, int replacedLength,int searchWordLenght, const QRect &cellRect );
 
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );

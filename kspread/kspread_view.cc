@@ -44,7 +44,10 @@
 #include <dcopclient.h>
 #include <dcopref.h>
 
-#include <koReplace.h>
+#include <kfind.h>
+#include <kreplace.h>
+#include <kfinddialog.h>
+#include <kreplacedialog.h>
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
 #include <koTemplateCreateDia.h>
@@ -110,6 +113,8 @@
 KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 
 // non flickering version of KSpell.
+// DF: those fixes have been applied to kde-3.2-pre, so KSpreadSpell
+// can go away when koffice requires kde-3.2.
 class KSpreadSpell : public KSpell
 {
  public:
@@ -392,6 +397,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
     m_findOptions = 0;
+    m_find = 0L;
+    m_replace = 0L;
 
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
@@ -605,9 +612,9 @@ void KSpreadView::initializeEditActions()
   m_redo->setEnabled( FALSE );
   m_redo->setToolTip(i18n("Redo the action that has been undone."));
 
-  m_find = KStdAction::find(this, SLOT(find()), actionCollection());
+  m_findAction = KStdAction::find(this, SLOT(find()), actionCollection());
 
-  m_replace = KStdAction::replace(this, SLOT(replace()), actionCollection());
+  m_replaceAction = KStdAction::replace(this, SLOT(replace()), actionCollection());
 }
 
 void KSpreadView::initializeAreaOperationActions()
@@ -709,13 +716,13 @@ void KSpreadView::initializeGlobalOperationActions()
   m_protectSheet = new KToggleAction( i18n( "Protect &Sheet" ), 0,
                                       actionCollection(), "protectSheet" );
   m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
-  connect( m_protectSheet, SIGNAL( toggled( bool ) ), this, 
+  connect( m_protectSheet, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectSheet( bool ) ) );
 
   m_protectDoc = new KToggleAction( i18n( "Protect &Doc" ), 0,
                                       actionCollection(), "protectDoc" );
   m_protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
-  connect( m_protectDoc, SIGNAL( toggled( bool ) ), this, 
+  connect( m_protectDoc, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectDoc( bool ) ) );
 
   connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
@@ -1309,7 +1316,7 @@ void KSpreadView::initConfig()
         m_pDoc->setShowRowHeader(config->readBoolEntry("Row Header",true));
         m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         m_pDoc->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(KSpread::Bottom)));
-        m_pDoc->setIndentValue( config->readNumEntry( "Indent", 10.0 ) );
+        m_pDoc->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
         m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
 	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
@@ -1903,7 +1910,7 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
 
 }
 
-void KSpreadView::adjustActions( KSpreadSheet const * const table, 
+void KSpreadView::adjustActions( KSpreadSheet const * const table,
                                  KSpreadCell const * const cell )
 {
   QRect selection = m_selectionInfo->selection();
@@ -2020,7 +2027,8 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_gotoCell->setEnabled( true );
   m_viewZoom->setEnabled( true );
   m_showPageBorders->setEnabled( true );
-  m_find->setEnabled( true);
+  m_findAction->setEnabled( true);
+  m_replaceAction->setEnabled( readwrite );
   if ( !m_pDoc->isReadWrite())
       m_copy->setEnabled( true );
   //  m_newView->setEnabled( true );
@@ -3290,7 +3298,7 @@ void KSpreadView::goalSeek()
                                          m_pCanvas->markerRow() ),
                             "KSpreadGoalSeekDlg" );
   dlg->show();
-  /* TODO - hanging pointer? */
+  /* dialog autodeletes itself */
 }
 
 void KSpreadView::subtotals()
@@ -3359,44 +3367,214 @@ void KSpreadView::gotoCell()
 
 void KSpreadView::find()
 {
-    KoFindDialog dlg( this, "Find", m_findOptions, m_findStrings );
-    if ( KoFindDialog::Accepted != dlg.exec() )
+    KFindDialog dlg( this, "Find", m_findOptions, m_findStrings );
+    dlg.setHasSelection( !m_selectionInfo->singleCellSelection() );
+    dlg.setHasCursor( true );
+    if ( KFindDialog::Accepted != dlg.exec() )
         return;
 
+    // Save for next time
     m_findOptions = dlg.options();
     m_findStrings = dlg.findHistory();
 
-    // Do the finding!
-    m_pDoc->emitBeginOperation(false);
-    activeTable()->find( dlg.pattern(), dlg.options(), m_pCanvas );
-    m_pDoc->emitEndOperation();
+    // Create the KFind object
+    delete m_find;
+    delete m_replace;
+    m_find = new KFind( dlg.pattern(), dlg.options(), this );
+    m_replace = 0L;
+
+    initFindReplace();
+    findNext();
+}
+
+// Initialize a find or replace operation, using m_find or m_replace,
+// and m_findOptions.
+void KSpreadView::initFindReplace()
+{
+    KFind* findObj = m_find ? m_find : m_replace;
+    Q_ASSERT( findObj );
+    connect(findObj, SIGNAL( highlight( const QString &, int, int ) ),
+            this, SLOT( slotHighlight( const QString &, int, int ) ) );
+    connect(findObj, SIGNAL( findNext() ),
+            this, SLOT( findNext() ) );
+
+    bool bck = m_findOptions & KFindDialog::FindBackwards;
+    KSpreadSheet* currentSheet = activeTable();
+
+    QRect region = ( m_findOptions & KFindDialog::SelectedText )
+                   ? m_selectionInfo->selection()
+                   : QRect( 1, 1, currentSheet->maxColumn(), currentSheet->maxRow() ); // All cells
+
+    int colStart = !bck ? region.left() : region.right();
+    int colEnd = !bck ? region.right() : region.left();
+    int rowStart = !bck ? region.top() :region.bottom();
+    int rowEnd = !bck ? region.bottom() : region.top();
+    if ( m_findOptions & KFindDialog::FromCursor ) {
+        QPoint marker( m_selectionInfo->marker() );
+        colStart = marker.x();
+        rowStart = marker.y();
+    }
+    m_startColumn = colStart;
+    m_findPos = QPoint( colStart, rowStart );
+    m_findEnd = QPoint( colEnd, rowEnd );
+    kdDebug() << k_funcinfo << m_findPos << " to " << m_findEnd << endl;
+}
+
+void KSpreadView::findNext()
+{
+    KFind* findObj = m_find ? m_find : m_replace;
+    if ( !findObj )  {
+        find();
+        return;
+    }
+    KFind::Result res = KFind::NoMatch;
+    KSpreadCell* cell = findNextCell();
+    while ( res == KFind::NoMatch && cell )
+    {
+        if ( findObj->needData() )
+        {
+            findObj->setData( cell->text() );
+            m_findPos = QPoint( cell->column(), cell->row() );
+        }
+
+        // Let KFind inspect the text fragment, and display a dialog if a match is found
+        if ( m_find )
+            res = m_find->find();
+        else
+            res = m_replace->replace();
+
+        if ( res == KFind::NoMatch )  {
+            // Go to next cell, skipping unwanted cells
+            if ( forw )
+                ++m_findPos.rx();
+            else
+                --m_findPos.rx();
+            cell = findNextCell();
+        }
+    }
+
+    if ( res == KFind::NoMatch )
+    {
+        //emitUndoRedo();
+        //removeHighlight();
+        if ( findObj->shouldRestart() ) {
+            m_findOptions &= ~KFindDialog::FromCursor;
+            findObj->resetCounts();
+            findNext();
+        }
+        else { // done, close the 'find next' dialog
+            if ( m_find )
+                m_find->closeFindNextDialog();
+            else
+                m_replace->closeReplaceNextDialog();
+        }
+    }
+}
+
+KSpreadCell* KSpreadView::findNextCell()
+{
+    // getFirstCellRow / getNextCellRight would be faster at doing that,
+    // but it doesn't seem to be easy to combine it with 'start a column m_find.x()'...
+
+    KSpreadSheet* sheet = activeTable();
+    KSpreadCell* cell = 0L;
+    bool forw = ! ( m_findOptions & KFindDialog::FindBackwards );
+    int col = m_findPos.x();
+
+    // TODO: check those tests. < or <=  ?
+    for (int row = m_findPos.y() ; !cell && (forw ? row < m_findEnd.y() : row > m_findEnd.y()) ; forw ? ++row : --row )
+    {
+        while ( !cell && (forw ? col < m_findEnd.x() : col > m_findEnd.x()) )
+        {
+            cell = sheet->cellAt( col, row );
+            if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
+                cell = 0L;
+            if ( forw ) ++col;
+            else --col;
+        }
+        col = m_startColumn;
+    }
+    // if ( !cell )
+    // No more next cell - TODO go to next sheet (if not looking in a selection)
+    // (and make m_findEnd (max,max) in that case...)
+    return cell;
+}
+
+void KSpreadView::findPrevious()
+{
+    KFind* findObj = m_find ? m_find : m_replace;
+    if ( !findObj )  {
+        find();
+        return;
+    }
+    int opt = m_findOptions;
+    bool forw = ! ( opt & KFindDialog::FindBackwards );
+    if ( forw )
+        m_findOptions = ( opt | KFindDialog::FindBackwards );
+    else
+        m_findOptions = ( opt & ~KFindDialog::FindBackwards );
+
+    findNext();
+
+    m_findOptions = opt; // restore initial options
 }
 
 void KSpreadView::replace()
 {
-    KoReplaceDialog dlg( this, "Replace", m_findOptions, m_findStrings, m_replaceStrings );
-    if ( KoReplaceDialog::Accepted != dlg.exec() )
+    KReplaceDialog dlg( this, "Replace", m_findOptions, m_findStrings, m_replaceStrings );
+    dlg.setHasSelection( !m_selectionInfo->singleCellSelection() );
+    dlg.setHasCursor( true );
+    if ( KReplaceDialog::Accepted != dlg.exec() )
       return;
 
     m_findOptions = dlg.options();
     m_findStrings = dlg.findHistory();
     m_replaceStrings = dlg.replacementHistory();
 
-    // Do the replacement.
-    m_pDoc->emitBeginOperation(false);
+    delete m_find;
+    delete m_replace;
+    m_find = 0L;
+    m_replace = new KReplace( dlg.pattern(), dlg.replacement(), dlg.options() );
+    initFindReplace();
+    connect(
+        m_replace, SIGNAL( replace( const QString &, int, int, int ) ),
+        this, SLOT( slotReplace( const QString &, int, int, int ) ) );
 
-    activeTable()->replace( dlg.pattern(), dlg.replacement(), dlg.options(),
-                            m_pCanvas );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        QRect region( m_findPos, m_findEnd );
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, region );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
+    findNext();
+
+#if 0
     // Refresh the editWidget
+    // TODO - after a replacement only?
     KSpreadCell *cell = activeTable()->cellAt( canvasWidget()->markerColumn(),
                                                canvasWidget()->markerRow() );
     if ( cell->text() != 0L )
         editWidget()->setText( cell->text() );
     else
         editWidget()->setText( "" );
+#endif
+}
 
-    m_pDoc->emitEndOperation();
+void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
+{
+    m_pCanvas->gotoLocation( m_findPos, activeTable() );
+}
+
+void KSpreadView::slotReplace( const QString &newText, int, int, int )
+{
+    // Which cell was this again?
+    KSpreadCell *cell = activeTable()->cellAt( m_findPos );
+
+    // ...now I remember, update it!
+    cell->setDisplayDirtyFlag();
+    cell->setCellText( newText );
+    cell->clearDisplayDirtyFlag();
 }
 
 void KSpreadView::conditional()
@@ -3577,10 +3755,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     unzoomedRect.moveBy( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
 
     //KOfficeCore cannot handle KoRect directly, so switching to QRect
-    QRect unzoomedGeometry = QRect( unzoomedRect.x(),
-                                    unzoomedRect.y(),
-                                    unzoomedRect.width(),
-                                    unzoomedRect.height() );
+    QRect unzoomedGeometry = unzoomedRect.toQRect();
 
     if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
@@ -3611,10 +3786,7 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
     unzoomedRect.moveBy( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
 
     //KOfficeCore cannot handle KoRect directly, so switching to QRect
-    QRect unzoomedGeometry = QRect( unzoomedRect.x(),
-                                    unzoomedRect.y(),
-                                    unzoomedRect.width(),
-                                    unzoomedRect.height() );
+    QRect unzoomedGeometry = unzoomedRect.toQRect();
 
 
     // Insert the new child in the active table.
@@ -3769,7 +3941,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
        return;
      }
 
-     m_pTable->setProtected( QCString() );     
+     m_pTable->setProtected( QCString() );
    }
    m_pDoc->setModified( true );
    adjustActions( !mode );
@@ -3777,7 +3949,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
 
 void KSpreadView::adjustActions( bool mode )
 {
-  m_replace->setEnabled( mode );
+  m_replaceAction->setEnabled( mode );
   m_insertSeries->setEnabled( mode );
   m_insertLink->setEnabled( mode );
   m_insertFunction->setEnabled( mode );
@@ -4385,9 +4557,9 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
             break;
           }
         }
-        
+
         col = activeTable()->columnFormat( i );
-        
+
         if ( col->isHide() )
         {
           m_showSelColumns->setEnabled(true);
@@ -4443,16 +4615,16 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
       {
 	m_areaName->plug( m_pPopupRow );
       }
-      
+
       m_resizeRow->plug( m_pPopupRow );
       m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
       m_pPopupRow->insertSeparator();
       m_insertRow->plug( m_pPopupRow );
       m_deleteRow->plug( m_pPopupRow );
       m_hideRow->plug( m_pPopupRow );
-      
+
       m_showSelColumns->setEnabled(false);
-      
+
       int i;
       RowFormat * row;
       QRect rect = m_selectionInfo->selection();
@@ -4469,7 +4641,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
             break;
           }
         }
-        
+
         row = activeTable()->rowFormat( i );
         if ( row->isHide() )
         {
@@ -4560,7 +4732,7 @@ void KSpreadView::slotListChoosePopupMenu( )
    h = cell->extraHeight();
  ty += h;
 
- QPoint p( tx, ty );
+ QPoint p( (int)tx, (int)ty );
  QPoint p2 = m_pCanvas->mapToGlobal( p );
  m_popupListChoose->popup( p2 );
  QObject::connect( m_popupListChoose, SIGNAL( activated( int ) ),
@@ -4634,15 +4806,15 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         m_insertCell->plug( m_pPopupMenu );
         m_removeCell->plug( m_pPopupMenu );
       }
-      
+
       m_pPopupMenu->insertSeparator();
       m_addModifyComment->plug( m_pPopupMenu );
       if( !cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
       {
         m_removeComment->plug( m_pPopupMenu );
       }
-      
-      
+
+
       if(activeTable()->testListChoose(selectionInfo()))
       {
 	m_pPopupMenu->insertSeparator();
@@ -5315,7 +5487,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
                                        const QRect &oldSelection,
                                        const QPoint& /* oldMarker*/ )
 {
-    m_pDoc->emitBeginOperation(false);
+    //m_pDoc->emitBeginOperation(false);
     QRect newSelection = m_selectionInfo->selection();
 
     // Emit a signal for internal use
@@ -5336,7 +5508,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
       m_resizeColumn->setEnabled( !rowSelected );
       m_equalizeColumn->setEnabled( !rowSelected );
 
-      bool simpleSelection = m_selectionInfo->singleCellSelection() 
+      bool simpleSelection = m_selectionInfo->singleCellSelection()
         || colSelected || rowSelected;
 
       m_tableFormat->setEnabled( !simpleSelection );
@@ -5363,7 +5535,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
 
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
-    m_pDoc->emitEndOperation();
+    //m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::resultOfCalc()
@@ -5530,10 +5702,10 @@ void KSpreadView::resultOfCalc()
         break;
     }
 
-    m_pDoc->emitBeginOperation();
+    //m_pDoc->emitBeginOperation();
     if ( m_sbCalcLabel )
         m_sbCalcLabel->setText(QString(" ") + tmp + ' ');
-    m_pDoc->emitEndOperation();
+    //m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::statusBarClicked(int _id)

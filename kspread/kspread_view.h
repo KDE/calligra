@@ -60,6 +60,8 @@ class KSpreadInsertHandler;
 class KActionMenu;
 
 class DCOPObject;
+class KReplace;
+class KFind;
 
 #include <qptrlist.h>
 #include <qpoint.h>
@@ -244,6 +246,8 @@ public slots:
     void toggleProtectDoc( bool );
     void viewZoom(const QString &);
     void find();
+    void findNext();
+    void findPrevious();
     void replace();
     void conditional();
     void validity();
@@ -404,6 +408,15 @@ protected slots:
     void slotItemSelected( int );
     void slotListChoosePopupMenu( );
 
+    /**
+     * Called by find/replace (findNext) when it found a match
+     */
+    void slotHighlight( const QString &text, int matchingIndex, int matchedLength );
+    /**
+     * Called when replacing text in a cell
+     */
+    void slotReplace( const QString &newText, int, int, int );
+
 protected slots:
 
     void slotChildSelected( KoDocumentChild* ch );
@@ -463,6 +476,9 @@ protected:
 
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
+    void initFindReplace();
+    KSpreadCell* findNextCell();
+
 private:
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
@@ -503,8 +519,8 @@ private:
     KAction* m_insertFunction;
     KAction* m_transform;
     KAction* m_copy;
-    KAction* m_replace;
-    KAction* m_find;
+    KAction* m_findAction;
+    KAction* m_replaceAction;
     KAction* m_paste;
     KAction* m_cut;
     KAction* m_specialPaste;
@@ -732,6 +748,14 @@ private:
     long m_findOptions;
     QStringList m_findStrings;
     QStringList m_replaceStrings;
+    /**
+     * Current "find" operation
+     */
+    KFind* m_find;
+    KReplace* m_replace;
+    int m_startColumn;
+    QPoint m_findPos;
+    QPoint m_findEnd;
 
     KStatusBarLabel* m_sbCalcLabel;
 
@@ -758,7 +782,7 @@ private:
   void initializeBorderActions();
   void adjustMapActions( bool mode );
   void adjustActions( bool mode );
-  void adjustActions( KSpreadSheet const * const table, 
+  void adjustActions( KSpreadSheet const * const table,
                       KSpreadCell const * const cell );
 
 

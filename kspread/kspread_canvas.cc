@@ -594,29 +594,6 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   }
 }
 
-
-void KSpreadCanvas::highlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, const QRect &cellRect )
-{
-    // Which cell was this again?
-    //KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
-
-    // ...now I remember, update it!
-    // TBD: highlight it!
-    gotoLocation( cellRect.topLeft(), activeTable() );
-}
-
-// Used by replace() logic to modify a cell.
-void KSpreadCanvas::replace( const QString &newText, int /*index*/, int /*replacedLength*/, int /*searchWordLenght*/,const QRect &cellRect )
-{
-    // Which cell was this again?
-    KSpreadCell *cell = activeTable()->cellAt( cellRect.left(), cellRect.top() );
-
-    // ...now I remember, update it!
-    cell->setDisplayDirtyFlag();
-    cell->setCellText( newText );
-    cell->clearDisplayDirtyFlag();
-}
-
 void KSpreadCanvas::slotScrollHorz( int _value )
 {
   if ( activeTable() == 0L )
@@ -1135,10 +1112,10 @@ void KSpreadCanvas::startTheDrag()
 
   // right area for start dragging
   KSpreadTextDrag * d = new KSpreadTextDrag( this );
-  
+
   QRect rct( selectionInfo()->selection() );
   QDomDocument doc = table->saveCellRect( rct );
-  
+
   // Save to buffer
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
@@ -1146,10 +1123,10 @@ void KSpreadCanvas::startTheDrag()
   str.setEncoding( QTextStream::UnicodeUTF8 );
   str << doc;
   buffer.close();
-  
+
   d->setPlain( table->copyAsText( selectionInfo() ) );
   d->setKSpread( buffer.buffer() );
-  
+
   d->dragCopy();
 }
 
@@ -1307,7 +1284,7 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
   double ypos = table->dblRowPos( selectionInfo()->selection().top() );
   double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
   double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
-  
+
   QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
@@ -1319,7 +1296,7 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
 void KSpreadCanvas::dragLeaveEvent( QDragLeaveEvent * )
 {
   if ( m_scrollTimer->isActive() )
-    m_scrollTimer->stop();  
+    m_scrollTimer->stop();
 }
 
 void KSpreadCanvas::dropEvent( QDropEvent * _ev )
@@ -1336,7 +1313,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   double ypos = table->dblRowPos( selectionInfo()->selection().top() );
   double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
   double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
-  
+
   QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
@@ -1350,7 +1327,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   int col = table->leftColumn( ev_PosX, tmp );
   int row = table->topRow( ev_PosY, tmp );
 
-  if ( !KSpreadTextDrag::canDecode( _ev ) ) 
+  if ( !KSpreadTextDrag::canDecode( _ev ) )
   {
     _ev->ignore();
     return;
@@ -1765,7 +1742,7 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
 void KSpreadCanvas::processOtherKey(QKeyEvent *event)
 {
   // No null character ...
-  if ( event->text().isEmpty() || !m_pView->koDocument()->isReadWrite() 
+  if ( event->text().isEmpty() || !m_pView->koDocument()->isReadWrite()
        || !activeTable() || activeTable()->isProtected() )
   {
     event->accept();
@@ -3573,7 +3550,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
                 m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
             }
           }
-          
+
           for( int i = start; i <= end; i++ )
           {
             RowFormat *rl = table->nonDefaultRowFormat( i );

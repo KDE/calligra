@@ -550,17 +550,6 @@ public:
      */
     void pasteTextPlain( QString &_text, QRect pasteArea);
 
-    /**
-     * Find support.
-     */
-    void find( const QString &_find, long options, KSpreadCanvas *canvas );
-
-    /**
-     * Find'n'Replace support.
-     */
-    void replace( const QString &_find, const QString &_replace, long options,
-                  KSpreadCanvas *canvas );
-
     void sortByRow( const QRect &area, int ref_row, SortingOrder );
     void sortByRow( const QRect &area, int key1, int key2, int key3,
                     SortingOrder order1, SortingOrder order2, SortingOrder order3,
@@ -1205,7 +1194,7 @@ protected:
      */
     KSpreadMap *m_pMap;
     KSpreadDoc *m_pDoc;
-  
+
     /**
      * Password for protecting this sheet
      */
@@ -1641,7 +1630,7 @@ protected:
   QValueList<QRect> m_paintDirtyList;
 
 public:
-    // see kspread_table.cc for an explanation of this
+    // see kspread_sheet.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)
     struct CellWorker {
 	const bool create_if_default;

@@ -37,7 +37,10 @@
 #include <qlineedit.h>
 #include <kmessagebox.h>
 
-#include <koReplace.h>
+#include <kfind.h>
+#include <kfinddialog.h>
+#include <kreplace.h>
+#include <kreplacedialog.h>
 #include <kprinter.h>
 #include <koDocumentInfo.h>
 
@@ -637,7 +640,7 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
     KSpreadCell *cell = nonDefaultCell( _column, _row );
 
     if ( isProtected() )
-    { 
+    {
       if ( cell->notProtected( _column, _row ) )
         NO_MODIFICATION_POSSIBLE;
     }
@@ -2542,68 +2545,7 @@ void KSpreadSheet::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
   }
 }
 
-void KSpreadSheet::find( const QString &_find, long options, KSpreadCanvas *canvas )
-{
-  KSpreadSelection* selectionInfo = canvas->view()->selectionInfo();
-
-    // Identify the region of interest.
-    QRect region( selectionInfo->selection() );
-    QPoint marker( selectionInfo->marker() );
-    if (options & KoFindDialog::SelectedText)
-    {
-
-        // Complete rows selected ?
-        if ( util_isRowSelected(region) )
-        {
-        }
-        // Complete columns selected ?
-        else if ( util_isColumnSelected(region) )
-        {
-        }
-    }
-    else
-    {
-        // All cells.
-        region.setCoords( 1, 1, m_iMaxColumn, m_iMaxRow );
-    }
-
-    // Create the class that handles all the actual Find stuff, and connect it to its
-    // local slots.
-    KoFind dialog( _find, options );
-    QObject::connect(
-        &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
-        canvas, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
-
-    // Now do the finding...
-    QRect cellRegion( 0, 0, 0, 0 );
-    bool bck = options & KoFindDialog::FindBackwards;
-
-    int colStart = !bck ? region.left() : region.right();
-    int colEnd = !bck ? region.right() : region.left();
-    int rowStart = !bck ? region.top() :region.bottom();
-    int rowEnd = !bck ? region.bottom() : region.top();
-    if ( options & KoFindDialog::FromCursor ) {
-        colStart = marker.x();
-        rowStart =  marker.y();
-    }
-    KSpreadCell *cell;
-    for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row )
-    {
-        for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
-        {
-            cell = cellAt( col, row );
-            if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
-            {
-                QString text = cell->text();
-                cellRegion.setTop( row );
-                cellRegion.setLeft( col );
-                if ( !dialog.find( text, cellRegion ) )
-                    return;
-            }
-        }
-    }
-}
-
+#if 0
 void KSpreadSheet::replace( const QString &_find, const QString &_replace, long options,
                             KSpreadCanvas *canvas )
 {
@@ -2613,7 +2555,7 @@ void KSpreadSheet::replace( const QString &_find, const QString &_replace, long 
     QRect region( selectionInfo->selection() );
     QPoint marker( selectionInfo->marker() );
 
-    if (options & KoReplaceDialog::SelectedText)
+    if (options & KReplaceDialog::SelectedText)
     {
 
         // Complete rows selected ?
@@ -2633,7 +2575,7 @@ void KSpreadSheet::replace( const QString &_find, const QString &_replace, long 
 
     // Create the class that handles all the actual replace stuff, and connect it to its
     // local slots.
-    KoReplace dialog( _find, _replace, options );
+    KReplace dialog( _find, _replace, options );
     QObject::connect(
         &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
         canvas, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
@@ -2649,13 +2591,13 @@ void KSpreadSheet::replace( const QString &_find, const QString &_replace, long 
     }
 
     QRect cellRegion( 0, 0, 0, 0 );
-    bool bck = options & KoFindDialog::FindBackwards;
+    bool bck = options & KFindDialog::FindBackwards;
 
     int colStart = !bck ? region.left() : region.right();
     int colEnd = !bck ? region.right() : region.left();
     int rowStart = !bck ? region.top() :region.bottom();
     int rowEnd = !bck ? region.bottom() : region.top();
-    if ( options & KoFindDialog::FromCursor ) {
+    if ( options & KFindDialog::FromCursor ) {
         colStart = marker.x();
         rowStart =  marker.y();
     }
@@ -2676,6 +2618,7 @@ void KSpreadSheet::replace( const QString &_find, const QString &_replace, long 
         }
     }
 }
+#endif
 
 void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
                                  const QColor &_color )
@@ -6360,11 +6303,11 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     {
       if ( m_strPassword.size() > 0 )
       {
-        QCString str = KCodecs::base64Encode( m_strPassword ); 
+        QCString str = KCodecs::base64Encode( m_strPassword );
         table.setAttribute( "protected", QString( str.data() ) );
       }
       else
-        table.setAttribute( "protected", "" );      
+        table.setAttribute( "protected", "" );
     }
 
     // paper parameters
@@ -6792,7 +6735,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       if ( passwd.length() > 0 )
       {
         QCString str( passwd.latin1() );
-        m_strPassword = KCodecs::base64Decode( str );        
+        m_strPassword = KCodecs::base64Decode( str );
       }
       else
         m_strPassword = QCString( "" );
