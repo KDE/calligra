@@ -32,7 +32,10 @@
 #include <qlistview.h>
 #include <qpen.h>
 #include <qpushbutton.h>
+#include <qradiobutton.h>
 #include <qvaluelist.h>
+#include <qvbuttongroup.h>
+#include <qwhatsthis.h>
 
 #include <kcolorbutton.h>
 #include <kglobal.h>
@@ -55,36 +58,85 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
 void PgConfDia::setupPageGeneral()
 {
     QFrame* generalPage = addPage( i18n("&General") );
+    QWhatsThis::add( generalPage, i18n("<p>This dialog allows you to configure how the slideshow "
+				       "will be displayed, including whether the slides are "
+				       "automatically sequenced or manually controlled, and also "
+				       "allows you to configure a <em>drawing pen</em> that can "
+				       "be used during the display of the presentation to add "
+				       "additional information or to emphasise particular points.</p>") );
     QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, KDialog::marginHint(), KDialog::spacingHint() );
     generalLayout->setAutoAdd( true );
 
-    manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), generalPage );
-    manualSwitch->setChecked( m_doc->spManualSwitch() );
-    connect( manualSwitch, SIGNAL( toggled(bool) ), this, SLOT( manualSwitchToggled(bool) ) );
+    QVButtonGroup *switchGroup = new QVButtonGroup( i18n("&Transition type"), generalPage );
+    QWhatsThis::add( switchGroup, i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
+					  "then each transition and effect on a slide, or transition from "
+					  "one slide to the next, will require an action. Typically this "
+					  "action will be a mouse click, or the space bar.</p></li>"
+					  "<li><p>If you select <b>Automatic transition to next step or slide</b> "
+					  "then the presentation will automatically sequence each transition "
+					  "and effect on a slide, and will automatically transition to the "
+					  "next slide when the current slide is fully displayed. The speed "
+					  "of sequencing is controlled using the slider below. This also "
+					  "enables the option to automatically loop back to the first "
+					  "slide after the last slide has been shown.</p></li>") );
+    m_manualButton = new QRadioButton( i18n("&Manual transition to next step or slide"), switchGroup );
+    m_manualButton->setChecked( m_doc->spManualSwitch() );
+    m_autoButton = new QRadioButton( i18n("&Automatic transition to next step or slide"), switchGroup );
 
-    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
-    infiniteLoop->setChecked( m_doc->spInfiniteLoop() );
-    infiniteLoop->setEnabled( !m_doc->spManualSwitch() );
-
-    presentationDuration = new QCheckBox( i18n( "Show presentation &duration" ), generalPage );
-    presentationDuration->setChecked( m_doc->presentationDuration() );
-
-    new QLabel( i18n("Speed:"), generalPage );
+    QLabel *speedLabel = new QLabel( i18n("Speed:"), generalPage );
+    QWhatsThis::add( speedLabel, i18n("<p>This slider allows you to configure the speed "
+				       "of transition through the presentation.</p>") );
 
     QWidget* sp = new QWidget( generalPage );
     QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, spacingHint() );
     speedLayout->setAutoAdd( true );
 
-    new QLabel( i18n("Slow"), sp );
+    QLabel *slowLabel = new QLabel( i18n("Slow"), sp );
     speedSlider = new QSlider( 1, 10, 1, 1, Qt::Horizontal, sp );
     speedSlider->setValue( m_doc->getPresSpeed() );
     speedSlider->setTickmarks( QSlider::Below );
     speedSlider->setTickInterval( 1 );
-    new QLabel( i18n("Fast"), sp );
+    QLabel *fastLabel = new QLabel( i18n("Fast"), sp );
+    QWhatsThis::add( speedSlider, i18n("<p>This slider allows you to configure the speed "
+				       "of transition through the presentation.</p>" ) );
+    QWhatsThis::add( slowLabel, i18n("<p>This slider allows you to configure the speed "
+				     "of transition through the presentation.</p>" ) );
+    QWhatsThis::add( fastLabel, i18n("<p>This slider allows you to configure the speed "
+				     "of transition through the presentation.</p>" ) );
+
+    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
+    QWhatsThis::add( infiniteLoop, i18n("<p>If this checkbox is selected, then the slideshow "
+					"will restart at the first slide after the last slide "
+					"has been displayed. It is only available if the "
+					"<b>Automatic transition to next step or slide</b> "
+					"button is selected above.</p> <p>This option may be "
+					"useful if you are running a promotional display.</p>") );
+    infiniteLoop->setChecked( m_doc->spInfiniteLoop() );
+    infiniteLoop->setEnabled( !m_doc->spManualSwitch() );
+    connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setEnabled(bool) ) );
+
+    presentationDuration = new QCheckBox( i18n( "Measure presentation &duration" ), generalPage );
+    QWhatsThis::add( presentationDuration, i18n("<p>If this checkbox is selected, the time that "
+						"each slide was displayed for, and the total time "
+						"for the presentation will be measured.</p> "
+						"<p>The times will be displayed at the end of the "
+						"presentation.</p> "
+						"<p>This can be used during rehersal to check "
+						"coverage for each issue in the presentation, "
+						"and to verify that the presentation duration "
+						"is correct.</p>" ) );
+    presentationDuration->setChecked( m_doc->presentationDuration() );
 
     // presentation pen (color and width)
 
     QGroupBox* penGroup = new QGroupBox( 1, Qt::Horizontal, i18n("Presentation Pen") , generalPage );
+    QWhatsThis::add( penGroup, i18n("<p>This part of the dialog allows you to configure the "
+				    "<em>drawing mode</em>, which allows you to add additional "
+				    "information, emphasise particular content, or to correct "
+				    "errors during the presentation by drawing on the slides "
+				    "using the mouse.</p>"
+				    "<p>You can configure the color of the drawing pen and the "
+				    "width of the pen.</p>" ) );
     penGroup->setInsideSpacing( KDialog::spacingHint() );
     penGroup->setInsideMargin( KDialog::marginHint() );
     penGroup->setFlat(true);
@@ -105,6 +157,10 @@ void PgConfDia::setupPageGeneral()
 void PgConfDia::setupPageSlides()
 {
     QFrame* slidesPage = addPage( i18n("&Slides") );
+    QWhatsThis::add( slidesPage, i18n("<p>This dialog allows you to configure which slides "
+				      "are used in the presentation. Slides that are not "
+				      "selected will not be displayed during the slide "
+				      "show.</p>") );
     QVBoxLayout *slidesLayout = new QVBoxLayout( slidesPage, 0, spacingHint() );
     slidesLayout->setAutoAdd( true );
 
@@ -146,7 +202,7 @@ bool PgConfDia::getInfiniteLoop() const
 
 bool PgConfDia::getManualSwitch() const
 {
-    return manualSwitch->isChecked();
+    return m_manualButton->isChecked();
 }
 
 bool PgConfDia::getPresentationDuration() const
@@ -195,11 +251,6 @@ void PgConfDia::deselectAllSlides()
         if( checkItem ) checkItem->setOn( false );
         item = item->nextSibling();
     }
-}
-
-void PgConfDia::manualSwitchToggled( bool state )
-{
-    infiniteLoop->setEnabled( !state );
 }
 
 PresSpeed PgConfDia::getPresSpeed() const

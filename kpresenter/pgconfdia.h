@@ -36,6 +36,7 @@ class QCheckBox;
 class QComboBox;
 class QColor;
 class QListView;
+class QRadioButton;
 
 class KIntNumInput;
 class KColorButton;
@@ -61,7 +62,8 @@ protected:
 
     KPresenterDoc* m_doc;
 
-    QCheckBox *infiniteLoop, *manualSwitch, *presentationDuration;
+    QCheckBox *infiniteLoop, *presentationDuration;
+    QRadioButton *m_manualButton, *m_autoButton;
     KColorButton* penColor;
     KIntNumInput* penWidth;
 
@@ -80,8 +82,6 @@ signals:
 protected slots:
     void selectAllSlides();
     void deselectAllSlides();
-    void manualSwitchToggled( bool state );
-
 };
 
 #endif
