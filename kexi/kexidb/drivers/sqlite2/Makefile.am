@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 kde_module_LTLIBRARIES = kexidb_sqlite2driver.la
 
 INCLUDES = -I$(top_srcdir)/kexi/3rdparty/kexisql/src -I$(srcdir)/../..  \
-	-I$(srcdir)/../sqlite/moc -I$(top_srcdir)/kexi $(all_includes)
+	-I$(srcdir)/../sqlite/moc -I$(srcdir)/../sqlite -I$(top_srcdir)/kexi $(all_includes)
 
 kexidb_sqlite2driver_la_METASOURCES = AUTO
 
