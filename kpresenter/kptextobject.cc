@@ -208,10 +208,9 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
             rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-            QWMatrix m, mtx;
-            mtx.rotate( angle );
+            QWMatrix m;
             m.translate( pw / 2, ph / 2 );
-            m = mtx * m;
+            m.rotate( angle );
 
             _painter->setWorldMatrix( m, true );
 
@@ -273,10 +272,9 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-        QWMatrix m, mtx;
-        mtx.rotate( angle );
+        QWMatrix m;
         m.translate( pw / 2, ph / 2 );
-        m = mtx * m;
+        m.rotate( angle );
 
         _painter->setWorldMatrix( m, true );
 
