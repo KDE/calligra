@@ -23,6 +23,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// ANSI C
+#include <assert.h>
+
 // qt includes
 #include <qevent.h>
 #include <qpainter.h>
@@ -1917,13 +1920,11 @@ void KisView::tool_paste()
 void KisView::undo()
 {
     kdDebug() << "UNDO called" << endl;
-    //m_pDoc->commandHistory()->undo();
 }
 
 void KisView::redo()
 {
     kdDebug() << "REDO called" << endl;
-    //m_pDoc->commandHistory()->redo();
 }
 
 /*---------------------------------
@@ -2990,42 +2991,26 @@ void KisView::setZoomFactor( float zf )
     m_zoomFactor = zf;
 }
 
-
 void KisView::slotSetBrush(KisBrush* b)
 {
-    m_pBrush = b;
+	assert(m_pBrushTool);
+	assert(m_pPenTool);
+	assert(m_pAirBrushTool);
+	assert(m_pEraserTool);
+	assert(m_pBrush);
 
-    if (m_pBrushTool)
-        m_pBrushTool->setBrush(b);
-    if (m_pPenTool)
-        m_pPenTool->setBrush(b);
-    if (m_pAirBrushTool)
-        m_pAirBrushTool->setBrush(b);
-    if (m_pEraserTool)
-        m_pEraserTool->setBrush(b);
+	m_pBrush = b;
+	m_pBrushTool -> setBrush(b);
+	m_pPenTool -> setBrush(b);
+	m_pAirBrushTool -> setBrush(b);
+	m_pEraserTool -> setBrush(b);
+	m_pSideBar -> slotSetBrush(*b);
 
-    m_pSideBar->slotSetBrush(*b);
-
-    // ugly hack :o (Toshitaka)
-    // for current tool cursor.
-    if ( m_pTool == m_pBrushTool )
-        m_pBrushTool->setBrush( b );
-    else if ( m_pTool == m_pPenTool )
-        m_pPenTool->setBrush( b );
-    else if ( m_pTool == m_pAirBrushTool )
-        m_pAirBrushTool->setBrush( b );
-    else if ( m_pTool == m_pEraserTool )
-        m_pEraserTool->setBrush( b );
-    else if ( m_pTool == m_pFillTool )
-        m_pFillTool->setCursor();
-    else if ( m_pTool == m_pColorChangerTool )
-        m_pColorChangerTool->setCursor();
-    else if ( m_pTool == m_pZoomTool )
-        m_pZoomTool->setCursor();
-    else if ( m_pTool == m_pMoveTool )
-        m_pMoveTool->setCursor();
+	if (m_pTool) {
+		m_pTool -> setBrush(b);
+		m_pTool -> setCursor();
+	}
 }
-
 
 void KisView::slotSetKrayon(KisKrayon* k)
 {
