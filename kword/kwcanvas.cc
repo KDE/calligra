@@ -1503,10 +1503,10 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
             // If a frame was selected, we edit that one instead - ## well, its frameset at least.
             KWFrameSet * fs = frame ? frame->getFrameSet() : doc->getFrameSet( 0 );
             ASSERT( fs );
-            KWTableFrameSet *table = fs->getGroupManager();
             if ( fs )
             {
                 //kdDebug() << "KWCanvas::setMouseMode editing " << fs << endl;
+                KWTableFrameSet *table = fs->getGroupManager();
                 if(table)
                 {
                     m_currentFrameSetEdit=table->createFrameSetEdit(this);
