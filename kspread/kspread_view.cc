@@ -363,23 +363,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pVertScrollBar, SIGNAL( valueChanged(int) ), m_pCanvas, SLOT( slotScrollVert(int) ) );
     QObject::connect( m_pHorzScrollBar, SIGNAL( valueChanged(int) ), m_pCanvas, SLOT( slotScrollHorz(int) ) );
 
-    KSpreadTable *tbl;
-    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-        addTable( tbl );
-    tbl = m_pDoc->map()->initialActiveTable();
-    if (tbl)
-        setActiveTable(tbl);
-    else
-        //activate first table which is not hiding
-        setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
-
-    QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
-
-
-    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
-
-    QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( slotRefreshLocale()));
-
     // Handler for moving and resizing embedded parts
     ContainerHandler* h = new ContainerHandler( this, m_pCanvas );
     connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
@@ -418,6 +401,24 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeSpellChecking();
     initializeRowColumnActions();
     initializeBorderActions();
+
+    KSpreadTable *tbl;
+    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
+      addTable( tbl );
+    tbl = m_pDoc->map()->initialActiveTable();
+    if (tbl)
+      setActiveTable(tbl);
+    else
+      //activate first table which is not hiding
+      setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
+
+    QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
+
+
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
+
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( slotRefreshLocale()));
+
 }
 
 
@@ -2703,7 +2704,7 @@ void KSpreadView::changeTable( const QString& _name )
     //refresh toggle button
     updateBorderButton();
 
-    //update visible area    
+    //update visible area
     m_pVBorderWidget->repaint();
     m_pHBorderWidget->repaint();
     m_pCanvas->repaint();
