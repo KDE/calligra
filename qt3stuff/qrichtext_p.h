@@ -103,7 +103,7 @@ class Q_EXPORT QTextStringChar
 public:
     // this is never called, initialize variables in QTextString::insert()!!!
     QTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0;}
-    virtual ~QTextStringChar();
+    /*virtual*/ ~QTextStringChar(); // unnecessary expense removed
 
     QChar c;
     enum Type { Regular, Custom, Mark, Shaped };
@@ -804,6 +804,7 @@ public:
     const QList<QTextCustomItem> & allCustomItems() const { return customItems; }
 
     void setFlow( QTextFlow *f );
+    void forgetFlow();
     QTextFlow *flow() const { return flow_; }
     bool verticalBreak() const { return pages; }
     void setVerticalBreak( bool b ) { pages = b; }
@@ -1760,6 +1761,11 @@ inline void QTextDocument::setFlow( QTextFlow *f )
     if ( flow_ )
 	delete flow_;
     flow_ = f;
+}
+
+inline void QTextDocument::forgetFlow()
+{
+    flow_ = 0L;
 }
 
 inline bool QTextDocument::hasSelection( int id ) const
