@@ -63,7 +63,6 @@
 #include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
 #include "kivio_painter.h"
-#include "kivio_ps_printer.h"
 #include "kivio_stencil.h"
 #include "kivio_1d_stencil.h"
 #include "KIvioPageIface.h"
@@ -132,19 +131,6 @@ KivioPage* KivioPage::find( int _id )
     return 0L;
 
   return (*s_mapPages)[ _id ];
-}
-
-void KivioPage::print( KivioPSPrinter *printer )
-{
-    KivioLayer *pLayer = m_lstLayers.first();
-    while( pLayer )
-    {
-        if( pLayer->visible() )
-        {
-            pLayer->printContent( *printer );
-            pLayer = m_lstLayers.next();
-        }
-    }
 }
 
 void KivioPage::print( QPainter &/*painter*/, KPrinter */*_printer*/ )

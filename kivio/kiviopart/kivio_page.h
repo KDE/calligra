@@ -73,8 +73,6 @@ struct DistributeData
   Extent extent;
 };
 
-class KivioPSPrinter;
-
 class KivioPage : public QObject
 {
   Q_OBJECT
@@ -101,7 +99,6 @@ class KivioPage : public QObject
 
     KivioPage *findPage( const QString & _name );
 
-    void print( KivioPSPrinter * );
     void print( QPainter &painter, KPrinter *_printer );
     void update();
     int id()const { return m_id; }

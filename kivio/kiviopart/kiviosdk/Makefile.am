@@ -26,7 +26,6 @@ libkiviosdk_la_SOURCES = \
 		kivio_screen_painter.cpp\
 		kivio_layer.cpp\
 		kivio_connector_target.cpp\
-		kivio_ps_printer.cpp\
 		kivio_group_stencil.cpp\
 		kivio_connector_point.cpp\
 		kivio_plugin_stencil_spawner.cpp\
@@ -77,8 +76,6 @@ EXTRA_DIST = \
 		kivio_layer.h\
 		kivio_connector_target.cpp\
 		kivio_connector_target.h\
-		kivio_ps_printer.cpp\
-		kivio_ps_printer.h\
 		kivio_group_stencil.cpp\
 		kivio_group_stencil.h\
 		kivio_connector_point.cpp\

@@ -101,7 +101,6 @@
 #include "kivio_stencil.h"
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_screen_painter.h"
-#include "kivio_ps_printer.h"
 
 #include "kivio_pluginmanager.h"
 
