@@ -19,4 +19,4 @@ kofficeui_FILES = *.h
 kofficeui_LIBS = -lkofficecore -lkparts -lkdeui -lkdecore -lqt
 
 kscript_FILES = *.h
-kscript_LIBS = -lqt
+kscript_LIBS = -lqk -lqt
