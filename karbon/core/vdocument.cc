@@ -161,7 +161,7 @@ void
 VDocument::deselect( VObject& object )
 {
 	object.setState( state_normal );
-	m_selection->take( &object );
+	m_selection->take( object );
 }
 
 void
