@@ -121,38 +121,46 @@ void KSpreadresize2::slotChangeState()
 void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->selection() );
-
     double new_size = KoUnit::ptFromUnit( m_pSize2->value()*m_pView->canvasWidget()->zoom(), m_pView->doc()->getUnit() );
-    if ( (int( size ) != int( new_size )) ||m_pDefault->isChecked())
+
+    if( m_pDefault->isChecked() )
+    {
+        switch( type )
+        {
+            case resize_row:
+                new_size = heightOfRow * m_pView->canvasWidget()->zoom();
+                break;
+            case resize_column:
+                new_size = colWidth * m_pView->canvasWidget()->zoom();
+                break;
+        }
+    }
+    
+    //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+    if ( qRound( size * 1000.0 ) != qRound( new_size * 1000.0 ) )
     {
         if ( !m_pView->doc()->undoBuffer()->isLocked() )
         {
             KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
             m_pView->doc()->undoBuffer()->appendUndo( undo );
         }
-        switch(type)
+        switch( type )
         {
           case resize_row:
-	    if( m_pDefault->isChecked() )
-	      for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	        m_pView->vBorderWidget()->resizeRow( heightOfRow*m_pView->canvasWidget()->zoom(), i, false );
-	    else
-	      for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	        m_pView->vBorderWidget()->resizeRow( new_size, i, false );
-	    break;
+              //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+              for( int i=selection.top(); i<=selection.bottom(); i++ )
+                  m_pView->vBorderWidget()->resizeRow( new_size, i, false );
+              break;
 
           case resize_column:
-	    if( m_pDefault->isChecked() )
-	      for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	    m_pView->hBorderWidget()->resizeColumn( colWidth*m_pView->canvasWidget()->zoom(), i, false );
-	    else
-	      for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	        m_pView->hBorderWidget()->resizeColumn( new_size, i, false );
-	    break;
+              //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+              for( int i=selection.left(); i<=selection.right(); i++ )
+                  m_pView->hBorderWidget()->resizeColumn( new_size, i, false );
+              break;
 
           default :
-	    kdDebug(36001) << "Err in type_resize" << endl;
-	    break;
+              kdDebug(36001) << "Err in type_resize" << endl;
+              break;
         }
     }
     accept();
