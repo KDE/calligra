@@ -986,18 +986,19 @@ void KFormulaView::insertIndex(int i)
     m_pDoc->addIndex(i);
 }
 
-void KFormulaView::sizeSelected(const char *size)
+void KFormulaView::sizeSelected(const CORBA::WChar *size)
 {
 
     BasicElement *el=m_pDoc->currentElement();
     if (el==0) return;
-    el->setNumericFont(atoi(size));
-    warning(size);
+    el->setNumericFont(C2Q(size).toInt());
+    warning(C2Q(size));
     update();
 }
-void KFormulaView::fontSelected(const char *font)
+void KFormulaView::fontSelected(const CORBA::WChar *_font)
 {
     BasicElement *el=m_pDoc->currentElement();
+    QString font = C2Q( _font );
 
     if (el==0)
 	return;
@@ -1015,7 +1016,7 @@ void KFormulaView::fontSelected(const char *font)
     update();
 }
 
-void KFormulaView::modeSelected(const char *)
+void KFormulaView::modeSelected(const CORBA::WChar *)
 {
     warning("mode");
 }
@@ -1120,21 +1121,21 @@ void KFormulaView::generalFont()
 {
     warning("Slot generalFont");
 }
-void KFormulaView::delimiterLeft(const char *left)
+void KFormulaView::delimiterLeft(const CORBA::WChar *left)
 {
     QString content=m_pDoc->currentElement()->getContent();
     warning(content);
-    content[0]=left[0];
+    content[0]=C2Q(left)[0];
     warning(content);
     m_pDoc->currentElement()->setContent(content);
     update();
 }
 
-void KFormulaView::delimiterRight(const char *right)
+void KFormulaView::delimiterRight(const CORBA::WChar *right)
 {
     QString content=m_pDoc->currentElement()->getContent();
     warning(content);
-    content[1]=right[0];
+    content[1]=C2Q(right)[0];
     warning(content);
     m_pDoc->currentElement()->setContent(content);
     update();

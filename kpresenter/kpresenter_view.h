@@ -210,8 +210,8 @@ public:
     virtual void helpContents();
 
     // text toolbar
-    virtual void sizeSelected( const char * );
-    virtual void fontSelected( const char * );
+    virtual void sizeSelected( const CORBA::WChar * );
+    virtual void fontSelected( const CORBA::WChar * );
     virtual void textBold();
     virtual void textItalic();
     virtual void textUnderline();

@@ -202,9 +202,9 @@ protected:
     virtual void addTopRightIndex();
     virtual void addBottomRightIndex();
     virtual void indexList();
-    virtual void sizeSelected(const char*);
-    virtual void fontSelected(const char*);
-    virtual void modeSelected(const char*);
+    virtual void sizeSelected(const CORBA::WChar*);
+    virtual void fontSelected(const CORBA::WChar*);
+    virtual void modeSelected(const CORBA::WChar*);
     virtual void textFont();
     virtual void textSplit();
     virtual void togglePixmap();
@@ -224,8 +224,8 @@ protected:
     virtual void elementColor();
     virtual void generalColor();
     virtual void generalFont();
-    virtual void delimiterLeft(const char*);
-    virtual void delimiterRight(const char*);    
+    virtual void delimiterLeft(const CORBA::WChar*);
+    virtual void delimiterRight(const CORBA::WChar*);
  protected slots:
     void insertIndex(int i);
 };

@@ -29,9 +29,9 @@ module KFormula
 	  slot void addTopRightIndex();
 	  slot void addBottomRightIndex();
           slot void indexList();
-          slot void sizeSelected(in string size);
-          slot void fontSelected(in string font);
-          slot void modeSelected(in string mode);
+          slot void sizeSelected(in wstring size);
+          slot void fontSelected(in wstring font);
+          slot void modeSelected(in wstring mode);
           slot void textFont();
           slot void textSplit();
           slot void togglePixmap();
@@ -57,8 +57,8 @@ module KFormula
           slot void fractionDist();
           slot void fractionDistMore();
           slot void fractionDistLess();
-          slot void delimiterLeft(in string left);
-          slot void delimiterRight(in string right);    
+          slot void delimiterLeft(in wstring left);
+          slot void delimiterRight(in wstring right);    
 //	  slot void insertIndex(in unsigned long i);
 	};
 

@@ -1480,8 +1480,9 @@ void KWordView::helpAboutKDE()
 }
 
 /*====================== text style selected  ===================*/
-void KWordView::textStyleSelected( const char *style )
+void KWordView::textStyleSelected( const CORBA::WChar *_style )
 {
+    QString style = C2Q( _style );
     gui->getPaperWidget()->applyStyle( style );
     format = m_pKWordDoc->findParagLayout( style )->getFormat();
     gui->getPaperWidget()->formatChanged( format );
@@ -1491,18 +1492,20 @@ void KWordView::textStyleSelected( const char *style )
 }
 
 /*======================= text size selected  ===================*/
-void KWordView::textSizeSelected( const char *size )
+void KWordView::textSizeSelected( const CORBA::WChar *_size )
 {
-    tbFont.setPointSize( atoi( size ) );
-    format.setPTFontSize( atoi( size ) );
+    QString size = C2Q( _size );
+    tbFont.setPointSize( size.toInt() );
+    format.setPTFontSize( size.toInt() );
     gui->getPaperWidget()->formatChanged( format );
 
     sendFocusEvent();
 }
 
 /*======================= text font selected  ===================*/
-void KWordView::textFontSelected( const char *font )
+void KWordView::textFontSelected( const CORBA::WChar *_font )
 {
+    QString font = C2Q( _font );
     tbFont.setFamily( font );
     format.setUserFont( m_pKWordDoc->findUserFont( font ) );
     gui->getPaperWidget()->formatChanged( format );
@@ -1609,10 +1612,10 @@ void KWordView::textAlignBlock()
 }
 
 /*===============================================================*/
-void KWordView::textLineSpacing( const char *spc )
+void KWordView::textLineSpacing( const CORBA::WChar *spc )
 {
     KWUnit u;
-    u.setPT( atoi( spc ) );
+    u.setPT( C2Q( spc ).toInt() );
     gui->getPaperWidget()->setLineSpacing( u );
 
     sendFocusEvent();
@@ -1736,17 +1739,17 @@ void KWordView::textBorderColor()
 }
 
 /*================================================================*/
-void KWordView::textBorderWidth( const char *width )
+void KWordView::textBorderWidth( const CORBA::WChar *width )
 {
-    tmpBrd.ptWidth = atoi( width );
+    tmpBrd.ptWidth = C2Q( width ).toInt();
 
     sendFocusEvent();
 }
 
 /*================================================================*/
-void KWordView::textBorderStyle( const char *style )
+void KWordView::textBorderStyle( const CORBA::WChar *style )
 {
-    QString stl( style );
+    QString stl = C2Q( style );
 
     if ( stl == i18n( "solid line" ) )
         tmpBrd.style = KWParagLayout::SOLID;
@@ -1809,17 +1812,17 @@ void KWordView::frameBorderColor()
 }
 
 /*================================================================*/
-void KWordView::frameBorderWidth( const char *width )
+void KWordView::frameBorderWidth( const CORBA::WChar *width )
 {
-    frmBrd.ptWidth = atoi( width );
+    frmBrd.ptWidth = C2Q( width ).toInt();
 
     sendFocusEvent();
 }
 
 /*================================================================*/
-void KWordView::frameBorderStyle( const char *style )
+void KWordView::frameBorderStyle( const CORBA::WChar *style )
 {
-    QString stl( style );
+    QString stl = C2Q( style );
 
     if ( stl == i18n( "solid line" ) )
         frmBrd.style = KWParagLayout::SOLID;

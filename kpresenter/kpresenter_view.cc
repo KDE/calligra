@@ -1338,18 +1338,18 @@ void KPresenterView::helpContents()
 // }
 
 /*===============================================================*/
-void KPresenterView::sizeSelected( const char *size )
+void KPresenterView::sizeSelected( const CORBA::WChar *size )
 {
-    tbFont.setPointSize( atoi( size ) );
+    tbFont.setPointSize( C2Q( size ).toInt() );
     page->setTextFont( &tbFont );
 
     sendFocusEvent();
 }
 
 /*===============================================================*/
-void KPresenterView::fontSelected( const char *font )
+void KPresenterView::fontSelected( const CORBA::WChar *font )
 {
-    tbFont.setFamily( qstrdup( font ) );
+    tbFont.setFamily( C2Q( font ) );
     page->setTextFont( &tbFont );
 
     sendFocusEvent();

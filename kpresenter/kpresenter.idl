@@ -89,8 +89,8 @@ module KPresenter
 
       slot void helpContents();
 
-      slot void sizeSelected(in string size);
-      slot void fontSelected(in string font);
+      slot void sizeSelected(in wstring size);
+      slot void fontSelected(in wstring font);
       slot void textBold();
       slot void textItalic();
       slot void textUnderline();

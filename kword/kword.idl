@@ -75,9 +75,9 @@ module KWord
       slot void helpAboutKOffice();
       slot void helpAboutKDE();
 
-      slot void textStyleSelected(in string size);
-      slot void textSizeSelected(in string size);
-      slot void textFontSelected(in string font);
+      slot void textStyleSelected(in wstring size);
+      slot void textSizeSelected(in wstring size);
+      slot void textFontSelected(in wstring font);
       slot void textBold();
       slot void textItalic();
       slot void textUnderline();
@@ -86,7 +86,7 @@ module KWord
       slot void textAlignCenter();
       slot void textAlignRight();
       slot void textAlignBlock();
-      slot void textLineSpacing(in string spc);
+      slot void textLineSpacing(in wstring spc);
       slot void textEnumList();
       slot void textUnsortList();
       slot void textSuperScript();
@@ -96,15 +96,15 @@ module KWord
       slot void textBorderTop();
       slot void textBorderBottom();
       slot void textBorderColor();
-      slot void textBorderWidth(in string width);
-      slot void textBorderStyle(in string style);
+      slot void textBorderWidth(in wstring width);
+      slot void textBorderStyle(in wstring style);
       slot void frameBorderLeft();
       slot void frameBorderRight();
       slot void frameBorderTop();
       slot void frameBorderBottom();
       slot void frameBorderColor();
-      slot void frameBorderWidth(in string width);
-      slot void frameBorderStyle(in string style);
+      slot void frameBorderWidth(in wstring width);
+      slot void frameBorderStyle(in wstring style);
       slot void frameBackColor();
     };
 

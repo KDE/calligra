@@ -1257,9 +1257,8 @@ void KIllustratorView::setupPage () {
     m_pDoc->setPageLayout (pLayout);
 }
 
-void KIllustratorView::zoomSizeSelected (const char* s) {
-  float value;
-  sscanf (s, "%3f", &value);
+void KIllustratorView::zoomSizeSelected (const CORBA::WChar* s) {
+  float value = C2Q( s ).toFloat();
   if (canvas)
     canvas->setZoomFactor (value / 100.0);
 }

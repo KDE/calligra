@@ -884,16 +884,16 @@ void KSpreadView::insertRow()
   m_pTable->insertRow( m_pCanvas->markerRow() );
 }
 
-void KSpreadView::fontSelected( const char *_font )
+void KSpreadView::fontSelected( const CORBA::WChar *_font )
 {
     if ( m_pTable != 0L )
-      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), _font );
+      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), C2Q( _font ) );
 }
 
-void KSpreadView::fontSizeSelected( const char *_size )
+void KSpreadView::fontSizeSelected( const CORBA::WChar *_size )
 {
   if ( m_pTable != 0L )
-      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, atoi( _size ) );
+      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, C2Q( _size ).toInt() );
 }
 
 void KSpreadView::bold()

@@ -170,9 +170,9 @@ public:
     virtual void helpAboutKOffice();
     virtual void helpAboutKDE();
 
-    virtual void textStyleSelected( const char *style );
-    virtual void textSizeSelected( const char *size );
-    virtual void textFontSelected( const char *font );
+    virtual void textStyleSelected( const CORBA::WChar *style );
+    virtual void textSizeSelected( const CORBA::WChar *size );
+    virtual void textFontSelected( const CORBA::WChar *font );
     virtual void textBold();
     virtual void textItalic();
     virtual void textUnderline();
@@ -181,7 +181,7 @@ public:
     virtual void textAlignCenter();
     virtual void textAlignRight();
     virtual void textAlignBlock();
-    virtual void textLineSpacing( const char *spc );
+    virtual void textLineSpacing( const CORBA::WChar *spc );
     virtual void textEnumList();
     virtual void textUnsortList();
     virtual void textSuperScript();
@@ -191,15 +191,15 @@ public:
     virtual void textBorderTop();
     virtual void textBorderBottom();
     virtual void textBorderColor();
-    virtual void textBorderWidth( const char *width );
-    virtual void textBorderStyle( const char *style );
+    virtual void textBorderWidth( const CORBA::WChar *width );
+    virtual void textBorderStyle( const CORBA::WChar *style );
     virtual void frameBorderLeft();
     virtual void frameBorderRight();
     virtual void frameBorderTop();
     virtual void frameBorderBottom();
     virtual void frameBorderColor();
-    virtual void frameBorderWidth( const char *width );
-    virtual void frameBorderStyle( const char *style );
+    virtual void frameBorderWidth( const CORBA::WChar *width );
+    virtual void frameBorderStyle( const CORBA::WChar *style );
     virtual void frameBackColor();
 
     virtual void setMode( KOffice::View::Mode _mode );

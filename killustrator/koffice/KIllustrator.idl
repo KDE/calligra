@@ -100,7 +100,7 @@ module KIllustrator {
     slot void setPenColor (in long id);
     slot void setFillColor (in long id);
 
-    slot void zoomSizeSelected (in string size);
+    slot void zoomSizeSelected (in wstring size);
 
     slot void showScripts ();
   };

@@ -90,8 +90,8 @@ module KSpread
 		slot void insertTable();
 		slot void insertImage();
 		slot void insertObject();
-		slot void fontSizeSelected( in string size );
-		slot void fontSelected( in string font );
+		slot void fontSizeSelected( in wstring size );
+		slot void fontSelected( in wstring font );
 		slot void consolidate();
 
 		Book book();

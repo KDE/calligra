@@ -183,7 +183,7 @@ public:
   void configPolygonTool ();
   void configEllipseTool ();
 
-  void zoomSizeSelected (const char* s);
+  void zoomSizeSelected (const CORBA::WChar* s);
 
   void showScripts ();
 

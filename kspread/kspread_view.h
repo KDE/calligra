@@ -301,11 +301,11 @@ public:
     /**
      * ToolBar
      */
-    void fontSelected( const char *_font );
+    void fontSelected( const CORBA::WChar *_font );
     /**
      * ToolBar
      */
-    void fontSizeSelected( const char *_size );
+    void fontSizeSelected( const CORBA::WChar *_size );
     /**
      * ToolBar
      */
