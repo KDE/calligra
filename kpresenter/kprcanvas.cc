@@ -5769,8 +5769,22 @@ int KPrCanvas::getPenBrushFlags() const
 
 void KPrCanvas::ungroupObjects()
 {
-    m_activePage->ungroupObjects();
-    stickyPage()->ungroupObjects();
+    KMacroCommand *macro = new KMacroCommand(i18n( "Ungroup Objects" ));
+    KCommand *cmd = m_activePage->ungroupObjects();
+    if ( cmd )
+    {
+        macro = new KMacroCommand(i18n( "Ungroup Objects" ));
+        macro->addCommand( cmd );
+    }
+    cmd = stickyPage()->ungroupObjects();
+    if ( cmd )
+    {
+        if ( !macro)
+            macro = new KMacroCommand(i18n( "Ungroup Objects" ));
+        macro->addCommand( cmd );
+    }
+    if ( macro )
+        m_view->kPresenterDoc()->addCommand( macro );
 }
 
 void KPrCanvas::groupObjects()

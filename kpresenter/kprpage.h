@@ -95,7 +95,7 @@ public:
 
     KPObject* getSelectedObj() const;
     void groupObjects();
-    void ungroupObjects();
+    KCommand * ungroupObjects();
     void raiseObjs( bool forward );
     void lowerObjs( bool backward );
     bool getCheckConcavePolygon( bool check ) const;
