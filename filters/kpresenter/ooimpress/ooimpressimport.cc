@@ -112,38 +112,19 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
   }
 
   QDomDocument styles;
-  QCString totalString;
-  char tempData[1024];
-
-  Q_LONG size = store->read( &tempData[0], 1023 );
-  while ( size > 0 )
-  {
-    QCString tempString( tempData, size + 1);
-    totalString += tempString;
-
-    size = store->read( &tempData[0], 1023 );
-  }
-
-  m_content.setContent( totalString );
-  totalString = "";
+  QByteArray content = store->device()->readAll();
+  m_content.setContent( content );
   store->close();
+
   //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
   kdDebug() << "File containing content loaded " << endl;
 
   if ( store->open( "styles.xml" ) )
   {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    styles.setContent( totalString );
-    totalString = "";
+    content = store->device()->readAll();
+    styles.setContent( content );
     store->close();
+
     //kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
     kdDebug() << "File containing styles loaded" << endl;
   }
@@ -152,18 +133,10 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 
   if ( store->open( "meta.xml" ) )
   {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    m_meta.setContent( totalString );
-    totalString = "";
+    content = store->device()->readAll();
+    m_meta.setContent( content );
     store->close();
+
     kdDebug() << "File containing meta definitions loaded" << endl;
   }
   else
@@ -171,18 +144,10 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 
   if ( store->open( "settings.xml" ) )
   {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    m_settings.setContent( totalString );
-    totalString = "";
+    content = store->device()->readAll();
+    m_settings.setContent( content );
     store->close();
+
     kdDebug() << "File containing settings loaded" << endl;
   }
   else
