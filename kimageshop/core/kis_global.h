@@ -1,7 +1,7 @@
 /*
- *  kis_util.h - part of KImageShop
+ *  kis_global.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,27 +18,18 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_util_h__
-#define __kis_util_h__
+#ifndef __kis_global_h__
+#define __kis_global_h__
 
-#include <qrect.h>
-#include <qpoint.h>
-#include <qstring.h>
+// size for graphic blocks - must be a power of 2
+const int TILE_SIZE = 64;
 
-template<class T> inline T min(T a, T b) { return (a<b)?a:b; }
-template<class T> inline T max(T a, T b) { return (a>b)?a:b; }    
+enum ActiveColor { NONE, FOREGROUND, BACKGROUND};
 
-class KisUtil
-{
- public:
-  KisUtil() {}
+// color spaces
+enum cSpace { INDEXED, RGB, HSV, CMYK, LAB };
 
-  static void printRect( const QRect&, const QString& name = "Rect" );
-  static void printPoint( const QPoint&, const QString& name = "Point" );
-
-  static void enlargeRectToContainPoint( QRect& r, QPoint p );
-  static QRect findTileExtents( QRect r );
-};
-                      
+// color modes
+enum cMode { M_INDEXED, M_GREYSCALE, M_RGB, M_RGBA, M_CMYK, M_CMYKA, M_LAB, M_LABA };
 
 #endif

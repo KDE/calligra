@@ -34,6 +34,7 @@
 #include <kaboutdata.h>
 #include <kstdaction.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
 
 #include "kis_core.h"
 #include "kis_view.h"
@@ -43,7 +44,7 @@
 #include "kis_tabbar.h"
 #include "kis_brush.h"
 #include "kis_tool.h"
-#include "kis_util.h"
+#include "kis_factory.h"
 #include "kis_gradient.h"
 #include "kis_pluginserver.h"
 
@@ -64,6 +65,8 @@
 #include "kis_tool_gradient.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
+
+#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     : KoView( doc, parent, name )
@@ -1016,7 +1019,7 @@ int KisView::yPaintOffset()
   return v;
 }
 
-void KisView::scrollTo( QPoint p )
+void KisView::scrollTo( QPoint )
 {
 }
 

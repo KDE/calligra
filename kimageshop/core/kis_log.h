@@ -1,7 +1,7 @@
 /*
- *  kis_brushserver.h - part of KImageShop
+ *  kis_log.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,30 +18,33 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_brushserver_h__
-#define __kis_brushserver_h__
 
-#include <qlist.h>
-#include <qstring.h>
+#ifndef __kis_log_h__
+#define __kis_log_h__
 
-#include "kis_brush.h"
+#include <stream.h>
 
-class KisBrushServer
+class KisLog
 {
-
 public:
+  KisLog() {}
 
-  KisBrushServer();
-  ~KisBrushServer();
+  // write log output to a file instead of cerr
+  static void setLogFile(const char *file);
 
-  int count() { return m_brushes.count(); }
-  QList<KisBrush> brushes() { return m_brushes; }
+  static ostream &output() { return *m_output; };
+  static ostream &log(const char *prefix);
 
- protected:
-  const KisBrush* loadBrush( const QString& filename );
- 
- private:
-  QList<KisBrush>  m_brushes;
+private:
+
+  static ostream *m_output;
+  static char    *m_logfile;
+
 };
 
-#endif // __kis_brushserver_h__
+inline ostream &dbg()   { return KisLog::log("Debug"); };
+inline ostream &log()   { return KisLog::log("Log"); };
+inline ostream &err()   { return KisLog::log("Error"); };
+inline ostream &fatal() { return KisLog::log("Fatal error"); };
+
+#endif

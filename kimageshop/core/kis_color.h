@@ -22,15 +22,14 @@
 #define __color_h__
 
 #include <qcolor.h>
-
-enum colorModel { INDEXED, RGB, HSV, LAB, CMYK };
+#include "kis_global.h"
 
 class KisColor
 {
  public:
 
   KisColor();
-  KisColor(int a, int b, int c,  colorModel m = RGB);
+  KisColor(int a, int b, int c,  cSpace m = RGB);
   KisColor(int c, int m, int y,  int k);
   KisColor(const QColor&);
 
@@ -46,7 +45,7 @@ class KisColor
   void cmyk (int *C, int *M, int *Y, int *K) const;
   QColor color() const;
 
-  colorModel native() const { return m_native; }
+  cSpace native() const { return m_native; }
 
   int R() const;
   int G() const;
@@ -122,7 +121,7 @@ class KisColor
   mutable bool m_CMYKvalid;
   mutable bool m_LABvalid;
 
-  colorModel m_native; 
+  cSpace m_native; 
 };
 
 inline const KisColor KisColor::white()

@@ -1,7 +1,7 @@
 /*
- *  kis_util.h - part of KImageShop
+ *  kis_timer.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,27 +18,22 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_util_h__
-#define __kis_util_h__
+#ifndef __kis_timer_h__
+#define __kis_timer_h__
 
-#include <qrect.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <sys/time.h>
 
-template<class T> inline T min(T a, T b) { return (a<b)?a:b; }
-template<class T> inline T max(T a, T b) { return (a>b)?a:b; }    
-
-class KisUtil
+class KisTimer
 {
  public:
-  KisUtil() {}
+  KisTimer() {}
+  
+  static void start();
+  static void stop( const char* text );
 
-  static void printRect( const QRect&, const QString& name = "Rect" );
-  static void printPoint( const QPoint&, const QString& name = "Point" );
-
-  static void enlargeRectToContainPoint( QRect& r, QPoint p );
-  static QRect findTileExtents( QRect r );
-};
-                      
+ private:
+  static struct timeval tv1, tv2;
+  static struct timezone tz;
+};                  
 
 #endif

@@ -38,7 +38,9 @@
 #include "kis_layer.h"
 #include "kis_util.h"
 #include "kis_brush.h"
+#include "kis_global.h"
 #include "kis_util.h"
+#include "kis_timer.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -132,7 +134,7 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 {
   if (!p) return;
 
- KisUtil::startTimer();
+  //KisTimer::start();
  int startX, startY, pixX, pixY, clipX, clipY = 0;
 
  int l = area.left();
@@ -193,7 +195,7 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 	    }
 	}
     }
- KisUtil::stopTimer("paintImage ");
+ //KisTimer::stop("paintImage ");
 }
 
 void KisImage::setUpVisual()
@@ -343,7 +345,7 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 
 void KisImage::compositeImage(QRect r)
 {
-  KisUtil::startTimer();
+  //KisTimer::start();
   for(int y=0;y<yTiles;y++)
     for(int x=0;x<xTiles;x++)
       if (r.isNull() ||
@@ -355,7 +357,7 @@ void KisImage::compositeImage(QRect r)
 	
 	convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
       }
-  KisUtil::stopTimer("compositeImage");
+  //KisTimer::stop("compositeImage");
 
   emit updated(r);
 }

@@ -25,7 +25,7 @@
 
 class KInstance;
 class KisPluginServer;
-class KisBrushServer;
+class KisResourceServer;
 class KAboutData;
 
 class KisFactory : public KLibFactory
@@ -35,17 +35,19 @@ public:
     KisFactory( QObject* parent = 0, const char* name = 0 );
     ~KisFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
+    virtual QObject* create( QObject* parent = 0, const char* name = 0,
+							 const char* classname = "QObject", const QStringList &args = QStringList() );
 
-    static KInstance* global();
-    static KisPluginServer* pServer();
-    static KisBrushServer* bServer();
+	static KAboutData        *aboutData();
+    static KInstance         *global();
+    static KisPluginServer   *pServer();
+    static KisResourceServer *rServer();
 
 private:
-    static KInstance*       s_global;
-    static KisPluginServer* s_pserver;
-    static KisBrushServer*  s_bserver;
-	static KAboutData*      s_aboutData;
+    static KInstance           *s_global;
+    static KisPluginServer     *s_pserver;
+    static KisResourceServer   *s_rserver;
+	static KAboutData          *s_aboutData;
 };
 
 #endif

@@ -28,7 +28,7 @@
 
 #include "kis_framebutton.h"
 #include "kis_color.h"
-#include "kis_util.h"
+#include "kis_global.h"
 
 class KDualColorButton;
 class KisBrushWidget;

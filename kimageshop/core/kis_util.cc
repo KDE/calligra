@@ -19,13 +19,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "kis_global.h"
 #include "kis_util.h"
 
-struct timeval KisUtil::tv1, KisUtil::tv2;
-struct timezone KisUtil::tz;
-
-
-KisUtil::KisUtil() {}
+// A number which can be added to any image coordinate to make it positive
+// Used to make numbers round towards + or - infinity regardless of sign
+const long BIGNUM = (TILE_SIZE*10000);
 
 void KisUtil::printRect( const QRect& r, const QString& name )
 {
@@ -36,18 +35,6 @@ void KisUtil::printRect( const QRect& r, const QString& name )
 void KisUtil::printPoint( const QPoint& p, const QString& name )
 {
   qDebug("%s:: x:%d y:%d", name.latin1(), p.x(), p.y()); 
-}
-
-void KisUtil::startTimer()
-{
-  gettimeofday( &tv1, &tz );
-}
-
-void KisUtil::stopTimer( const QString& text )
-{
-  gettimeofday( &tv2, &tz );
-  float time = float( tv2.tv_sec - tv1.tv_sec ) + ( tv2.tv_usec - tv1.tv_usec ) / 1000000.;
-  qDebug( "%s took %5.6f seconds\n", text.latin1(), time );
 }
 
 void KisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )

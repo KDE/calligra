@@ -26,8 +26,9 @@
 
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
-#include "kis_brushserver.h"
+#include "kis_resourceserver.h"
 #include "kis_doc.h"
+#include "kis_log.h"
 
 extern "C"
 {
@@ -37,10 +38,10 @@ extern "C"
     }
 };
 
+KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
 KisPluginServer* KisFactory::s_pserver = 0;
-KisBrushServer* KisFactory::s_bserver = 0;
-KAboutData* KisFactory::s_aboutData = 0;
+KisResourceServer* KisFactory::s_rserver = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
@@ -57,12 +58,16 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
   (void)global();
   s_pserver = new KisPluginServer;
-  s_bserver = new KisBrushServer;
+  s_rserver = new KisResourceServer;
+  
+  KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global));
+  log() << "Starting KImageShop" << endl;
 }
 
 KisFactory::~KisFactory()
 {
   delete s_pserver;
+  delete s_rserver;
   if ( s_global )
     delete s_global;
 }
@@ -92,6 +97,10 @@ KInstance* KisFactory::global()
 										KStandardDirs::kde_default("data") + "kimageshop/images/");
       s_global->dirs()->addResourceType("kis_brushes",
 										KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+	  s_global->dirs()->addResourceType("kis_pattern",
+										KStandardDirs::kde_default("data") + "kimageshop/pattern/");
+	  s_global->dirs()->addResourceType("kis_gradients",
+										KStandardDirs::kde_default("data") + "kimageshop/gradients/");
       s_global->dirs()->addResourceType("kis_pics",
 										KStandardDirs::kde_default("data") + "kimageshop/pics/");
       s_global->dirs()->addResourceType("kis_plugins",
@@ -103,14 +112,19 @@ KInstance* KisFactory::global()
     return s_global;
 }
 
+KAboutData* KisFactory::aboutData()
+{
+    return s_aboutData;
+}
+
 KisPluginServer* KisFactory::pServer()
 {
     return s_pserver;
 }
 
-KisBrushServer* KisFactory::bServer()
+KisResourceServer* KisFactory::rServer()
 {
-    return s_bserver;
+    return s_rserver;
 }
 
 #include "kis_factory.moc"

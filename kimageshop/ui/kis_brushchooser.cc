@@ -31,7 +31,7 @@
 #include <kstddirs.h>
 
 #include "kis_factory.h"
-#include "kis_brushserver.h"
+#include "kis_resourceserver.h"
 #include "iconchooser.h"
 #include "integerwidget.h"
 
@@ -56,7 +56,7 @@ KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
 
   chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
   
-  QList<KisBrush> bList = KisFactory::bServer()->brushes();
+  QList<KisBrush> bList = KisFactory::rServer()->brushes();
   
   for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
     {

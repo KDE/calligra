@@ -69,7 +69,7 @@ void KisColor::labChanged() const
   m_LABvalid = true;
 }
 
-KisColor::KisColor(int a, int b, int c, colorModel m)
+KisColor::KisColor(int a, int b, int c, cSpace m)
 {
   switch (m)
 	{

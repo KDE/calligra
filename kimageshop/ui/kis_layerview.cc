@@ -36,6 +36,7 @@
 #include <iostream>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kiconloader.h>
 
 #include "kis_doc.h"
 #include "kis_util.h"
@@ -43,6 +44,8 @@
 #include "kis_factory.h"
 #include "kis_framebutton.h"
 #include "integerwidget.h"
+
+#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 using namespace std;
 
@@ -58,19 +61,19 @@ KisLayerView::KisLayerView( KisDoc *_doc, QWidget *_parent, const char *_name )
   layout->addWidget( buttons );
   
   KisFrameButton* pbAddLayer = new KisFrameButton( buttons );
-  pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
+  pbAddLayer->setPixmap( KISBarIcon( "newlayer" ) );
   connect( pbAddLayer, SIGNAL( clicked() ), layertable, SLOT( slotAddLayer() ) );
   
   KisFrameButton* pbRemoveLayer = new KisFrameButton( buttons );
-  pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
+  pbRemoveLayer->setPixmap( KISBarIcon( "deletelayer" ) );
   connect( pbRemoveLayer, SIGNAL( clicked() ), layertable, SLOT( slotRemoveLayer() ) );
   
   KisFrameButton* pbUp = new KisFrameButton( buttons );
-  pbUp->setPixmap( BarIcon( "raiselayer" ) );
+  pbUp->setPixmap( KISBarIcon( "raiselayer" ) );
   connect( pbUp, SIGNAL( clicked() ), layertable, SLOT( slotRaiseLayer() ) );
 
   KisFrameButton* pbDown = new KisFrameButton( buttons );
-  pbDown->setPixmap( BarIcon( "lowerlayer" ) );
+  pbDown->setPixmap( KISBarIcon( "lowerlayer" ) );
   connect( pbDown, SIGNAL( clicked() ), layertable, SLOT( slotLowerLayer() ) );
 }
 

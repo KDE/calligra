@@ -24,6 +24,7 @@
 #include <stdio.h>
 
 #include "kis_channeldata.h"
+#include "kis_global.h"
 #include "kis_util.h"
 
 KisChannelData::KisChannelData(int _numChannels, enum cSpace _cspace)

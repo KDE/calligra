@@ -19,7 +19,7 @@
  */
 
 #include "kis_layer.h"
-#include "kis_util.h"
+#include "kis_global.h"
 
 KisLayer::KisLayer(int ch)
 	: QObject()

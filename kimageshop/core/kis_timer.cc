@@ -1,7 +1,7 @@
 /*
- *  kis_util.h - part of KImageShop
+ *  kis_timer.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,27 +18,21 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_util_h__
-#define __kis_util_h__
+#include <iostream.h>
+#include "kis_timer.h"
 
-#include <qrect.h>
-#include <qpoint.h>
-#include <qstring.h>
+struct timeval KisTimer::tv1, KisTimer::tv2;
+struct timezone KisTimer::tz;
 
-template<class T> inline T min(T a, T b) { return (a<b)?a:b; }
-template<class T> inline T max(T a, T b) { return (a>b)?a:b; }    
 
-class KisUtil
+void KisTimer::start()
 {
- public:
-  KisUtil() {}
+  gettimeofday( &tv1, &tz );
+}
 
-  static void printRect( const QRect&, const QString& name = "Rect" );
-  static void printPoint( const QPoint&, const QString& name = "Point" );
-
-  static void enlargeRectToContainPoint( QRect& r, QPoint p );
-  static QRect findTileExtents( QRect r );
-};
-                      
-
-#endif
+void KisTimer::stop( const char* text)
+{
+  gettimeofday( &tv2, &tz );
+  float time = float( tv2.tv_sec - tv1.tv_sec ) + ( tv2.tv_usec - tv1.tv_usec ) / 1000000.;
+  cout << text << " took " << time << " seconds\n";
+}
