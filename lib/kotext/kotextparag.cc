@@ -166,7 +166,8 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     assert( zh );
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
 
-    int xLeft = zh->layoutUnitToPixelX( xLU - (str->isRightToLeft() ? 0 : counterWidthLU) );
+    bool rtl = str->isRightToLeft(); // when true, we put suffix+counter+prefix at the RIGHT of the paragraph.
+    int xLeft = zh->layoutUnitToPixelX( xLU - (rtl ? 0 : counterWidthLU) );
     int y = zh->layoutUnitToPixelY( yLU );
     //int h = zh->layoutUnitToPixelY( yLU, hLU );
     int base = zh->layoutUnitToPixelY( yLU, baseLU );
@@ -198,14 +199,14 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         QString prefix = m_layout.counter->prefix();
         if ( !prefix.isEmpty() )
         {
-            if ( str->isRightToLeft() )
+            if ( rtl )
                 prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height );
 
             p->drawText( xLeft, y + base, prefix );
         }
 
-        QRect er( xBullet + (str->isRightToLeft() ? width : 0), y + height / 2 - width / 2, width, width );
+        QRect er( xBullet + (rtl ? width : 0), y + height / 2 - width / 2, width, width );
         // Draw the bullet.
         switch ( m_layout.counter->style() )
         {
@@ -241,13 +242,14 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         }
 
         QString suffix = m_layout.counter->suffix();
-        if ( !str->isRightToLeft() )
-            suffix += ' ' /*the space after the bullet*/;
         if ( !suffix.isEmpty() )
         {
+            if ( !rtl )
+                suffix += ' ' /*the space after the bullet*/;
+
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height );
 
-            p->drawText( xBullet + width, y + base, suffix );
+            p->drawText( xBullet + width, y + base, suffix, -1, rtl ? QPainter::RTL : QPainter::LTR );
         }
     }
     else
@@ -259,7 +261,11 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
         QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
-            p->drawText( xLeft, y + base, counterText + ' ' );
+        {
+            counterText += ' ' /*the space after the bullet (before in RTL mode)*/;
+
+            p->drawText( xLeft, y + base, counterText, -1, rtl ? QPainter::RTL : QPainter::LTR );
+        }
     }
     p->restore();
 }

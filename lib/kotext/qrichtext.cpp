@@ -3955,7 +3955,9 @@ void KoTextParag::format( int start, bool doMove )
 	delete *it;
 
     KoTextStringChar *c = 0;
-    if ( hasBorder() ) ////kotext: border extends to doc width
+    if ( hasBorder() || string()->isRightToLeft() )
+        ////kotext: border extends to doc width
+        ////        and, bidi parags might have a counter, which will be right-aligned...
     {
         setWidth( textDocument()->width() - 1 );
     }
