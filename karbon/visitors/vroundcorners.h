@@ -20,7 +20,6 @@ public:
 	double radius() const { return m_radius; }
 	void setRadius( double radius );
 
-	virtual void visitVPath( VPath& path );
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:

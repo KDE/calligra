@@ -5,7 +5,6 @@
 #include <qptrlist.h>
 
 #include "vflatten.h"
-#include "vpath.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
@@ -14,16 +13,6 @@ VFlatten::setFlatness( double flatness )
 {
 	if( flatness > 0.0 )
 		m_flatness = flatness;
-}
-
-void
-VFlatten::visitVPath( VPath& path )
-{
-	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-	{
-		itr.current()->accept( *this );
-	}
 }
 
 void

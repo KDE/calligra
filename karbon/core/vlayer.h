@@ -51,11 +51,6 @@ public:
 
 	void sendToBack( const VObject& object );
 
-	/// clean up object list.
-	/// All objects with state deleted are removed from the layer
-	/// and destroyed.
-	void removeDeletedObjects();
-
 	const QString& name() { return m_name; }
 	void setName( const QString& name ) { m_name= name; }
 

@@ -18,7 +18,6 @@ public:
 	double flatness() const { return m_flatness; }
 	void setFlatness( double flatness );
 
-	virtual void visitVPath( VPath& path );
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:

@@ -5,8 +5,8 @@
 #include <qptrlist.h>
 
 #include "vinsertknots.h"
-#include "vpath.h"
 #include "vsegment.h"
+#include "vsegmentlist.h"
 
 
 void
@@ -14,14 +14,6 @@ VInsertKnots::setKnots( uint knots )
 {
 	if( knots )
 		m_knots = knots;
-}
-
-void
-VInsertKnots::visitVPath( VPath& path )
-{
-	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
 }
 
 void

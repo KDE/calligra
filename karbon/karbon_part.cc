@@ -11,14 +11,15 @@
 #include <klocale.h>
 #include <koTemplateChooseDia.h>
 
-#include "karbon_part.h"
 #include "karbon_factory.h"
+#include "karbon_part.h"
 #include "karbon_part_iface.h"
 #include "karbon_view.h"
+#include "vcleanup.h"
 #include "vcommand.h"
-#include "vpainterfactory.h"
-#include "vpainter.h"
 #include "vglobal.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
 
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
@@ -35,7 +36,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
 	initConfig();
-        initUnit();
+	initUnit();
+
 	if( name )
 		dcopObject();
 }
@@ -136,12 +138,9 @@ KarbonPart::slotCommandExecuted()
 void
 KarbonPart::purgeHistory()
 {
-	// remove "deleted" objects from all layers:
-	VLayerListIterator itr( m_doc.layers() );
-	for ( ; itr.current() ; ++itr )
-	{
-		itr.current()->removeDeletedObjects();
-	}
+	// Use the VCleanUp visitor to remove "deleted" objects from all layers:
+	VCleanUp op;
+	op.visit( m_doc );
 
 	// clear command history:
 	m_commandHistory->clear();

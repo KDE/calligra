@@ -90,19 +90,6 @@ VLayer::sendToBack( const VObject& /*object*/ )
 }
 
 void
-VLayer::removeDeletedObjects()
-{
-	for( m_objects.first(); m_objects.current(); m_objects.next() )
-	{
-		if( m_objects.current()->state() == deleted )
-		{
-			delete( m_objects.current() );
-			m_objects.remove();
-		}
-	}
-}
-
-void
 VLayer::save( QDomElement& element ) const
 {
 	QDomElement me = element.ownerDocument().createElement( "LAYER" );

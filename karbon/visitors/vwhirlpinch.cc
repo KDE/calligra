@@ -22,9 +22,7 @@ VWhirlPinch::visitVPath( VPath& path )
 	VInsertKnots insertKnots( 2 );
 	insertKnots.visit( path );
 
-	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
+	VVisitor::visitVPath( path );
 }
 
 void

@@ -6,7 +6,6 @@
 #include <qvaluelist.h>
 
 #include "vboolean.h"
-#include "vpath.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
@@ -18,14 +17,6 @@ VBoolean::visit( VObject& object1, VObject& object2 )
 	m_list2 = 0L;
 	object1.accept( *this );
 	object2.accept( *this );
-}
-
-void
-VBoolean::visitVPath( VPath& path )
-{
-	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
 }
 
 void

@@ -35,7 +35,6 @@ public:
 	virtual void visit( VObject& /*object*/ ) {}
 	void visit( VObject& object1, VObject& object2 );
 
-	virtual void visitVPath( VPath& path );
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:

@@ -10,6 +10,7 @@ noinst_LTLIBRARIES = libkarbonvisitors.la
 
 noinst_HEADERS = \
 	vboolean.h \
+	vcleanup.h \
 	vflatten.h \
 	vinsertknots.h \
 	vroundcorners.h \
@@ -18,6 +19,7 @@ noinst_HEADERS = \
 
 libkarbonvisitors_la_SOURCES = \
 	vboolean.cc \
+	vcleanup.cc \
 	vflatten.cc \
 	vinsertknots.cc \
 	vroundcorners.cc \

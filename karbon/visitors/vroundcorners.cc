@@ -4,9 +4,9 @@
 
 #include <qptrlist.h>
 
-#include "vpath.h"
 #include "vroundcorners.h"
 #include "vsegment.h"
+#include "vsegmentlist.h"
 
 
 void
@@ -14,14 +14,6 @@ VRoundCorners::setRadius( double radius )
 {
 	if( radius > 0.0 )
 		m_radius = radius;
-}
-
-void
-VRoundCorners::visitVPath( VPath& path )
-{
-	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
 }
 
 void

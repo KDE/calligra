@@ -3,12 +3,10 @@ TODO:
 	(make vselection a visitor and paint selected shapes instead of each shape)
 -	add a list of vsegment to vselection, add selection-flags to vsegment for 
 	node-selection
--	if we come up that vpaths should always have a defined winding
+-	add vsegmentlist::winding(). if we come up that vpaths should always have a defined winding
 	(e.g. ccw), create all shapes accordingly. + check in close() and
 	combine().
 -	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
--	make a cleanup visitor instead of VLayer::removeDeletedObjects() +
-	add default visit*() to VVisitor
 
 REAL BUGS:
 -	linewith doesnt update bbox anymore

@@ -177,12 +177,8 @@ EpsExport::visitVDocument( VDocument& document )
 		"/R {grestore} def\n"
 	<< endl;
 
-
 	// Export layers:
-	VLayerListIterator itr( document.layers() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
-
+	VVisitor::visitVDocument( document );
 
 	// Finished:
 	*m_stream <<
@@ -191,30 +187,9 @@ EpsExport::visitVDocument( VDocument& document )
 }
 
 void
-EpsExport::visitVGroup( VGroup& group )
-{
-	// Export objects:
-	VObjectListIterator itr( group.objects() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
-}
-
-void
-EpsExport::visitVLayer( VLayer& layer )
-{
-	// Export objects:
-	VObjectListIterator itr( layer.objects() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
-}
-
-void
 EpsExport::visitVPath( VPath& path )
 {
-	// Export segmentlists:
-	VSegmentListListIterator itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
+	VVisitor::visitVPath( path );
 
 	getFill( *path.fill() );
 	getStroke( *path.stroke() );

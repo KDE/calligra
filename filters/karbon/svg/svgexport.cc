@@ -102,33 +102,11 @@ SvgExport::visitVDocument( VDocument& document )
 	// we dont need the selection anymore:
 	document.selection()->clear();
 
-
 	// export layers:
-	VLayerListIterator itr( document.layers() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
-
+	VVisitor::visitVDocument( document );
 
 	// end tag:
 	*m_stream << "</svg>" << endl;
-}
-
-void
-SvgExport::visitVGroup( VGroup& group )
-{
-	// export objects:
-	VObjectListIterator itr( group.objects() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
-}
-
-void
-SvgExport::visitVLayer( VLayer& layer )
-{
-	// export objects:
-	VObjectListIterator itr( layer.objects() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
 }
 
 void
@@ -136,10 +114,7 @@ SvgExport::visitVPath( VPath& path )
 {
 	*m_stream << "<path";
 
-	// export segmentlists:
-	VSegmentListListIterator itr( path.segmentLists() );
-	for( ; itr.current(); ++itr )
-		itr.current()->accept( *this );
+	VVisitor::visitVPath( path );
 
 	getFill( *( path.fill() ) );
 	getStroke( *( path.stroke() ) );

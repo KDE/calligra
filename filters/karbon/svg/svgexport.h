@@ -34,8 +34,6 @@ public:
 
 private:
 	virtual void visitVDocument( VDocument& document );
-	virtual void visitVGroup( VGroup& group );
-	virtual void visitVLayer( VLayer& layer );
 	virtual void visitVPath( VPath& path );
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 	virtual void visitVText( VText& text );

@@ -9,15 +9,14 @@
 #include <qptrlist.h>
 #include <koDocument.h>
 #include <koUnit.h>
+#include "vcolor.h"
 #include "vdocument.h"
 #include "vlayer.h"
-#include "vcolor.h"
 
+class DCOPObject;
 class QRect;
-
 class VCommand;
 class VCommandHistory;
-class DCOPObject;
 
 /**
  * Keeps track of visual per document properties.
