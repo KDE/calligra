@@ -35,7 +35,6 @@
 
 #include <koGlobal.h>
 
-#include "kqiodevicegzip.h"
 #include <abiwordimport.h>
 #include <abiwordimport.moc>
 
@@ -370,6 +369,7 @@ void PopulateProperties(StackItem* stackItem,
     QString strFontSize=abiPropsMap["font-size"].getValue();
     if (!strFontSize.isEmpty())
     {
+        // FIXME: replace by IdentPos
         int size=0;
         int ch; // digit value of the character
         for (int pos=0;;pos++)
@@ -1361,7 +1361,6 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
-#if 0
     // We have an AbiWord file that may be compressed
 
     QString strMime; // Mime type of the compressor (default: unknown)
@@ -1401,38 +1400,6 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
     delete in;
-#else
-    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
-        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
-    {   //The input file is compressed
-        KQIODeviceGZip in(fileIn);
-        if (!in.open(IO_ReadOnly))
-        {
-            kdError(30506) << "Cannot open KQIODeviceGzip. Aborting!" << endl;
-            return false;
-        }
-        QTextStream inStream(&in);
-        QXmlInputSource source(inStream);
-        in.close();
-        kdDebug(30506) << source.data() << endl;
-        if (!reader.parse( source ))
-        {
-            kdError(30506) << "Import (GZIP): Parsing unsuccessful. Aborting!" << endl;
-            return false;
-        }
-    }
-    else
-    {
-        // The input file is now uncompressed, so we may handle it directly
-        QFile in(fileIn);
-        QXmlInputSource source(in);
-        if (!reader.parse( source ))
-        {
-            kdError(30506) << "Import (UNCOMPRESSED): Parsing unsuccessful. Aborting!" << endl;
-            return false;
-        }
-    }
-#endif
 
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
