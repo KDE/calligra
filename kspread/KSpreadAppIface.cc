@@ -48,7 +48,7 @@ DCOPRef KSpreadAppIface::createDoc( const QString& name )
 {
     // ######### Torben: Check for duplicate names here
     KSpreadDoc* doc = new KSpreadDoc( 0, name.latin1() );
-    doc->initDoc(doc->initDocFlags());
+    doc->initDoc( KoDocument::InitDocEmpty, 0 );
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
