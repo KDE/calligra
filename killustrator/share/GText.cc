@@ -585,3 +585,7 @@ void GText::setPathObject (GObject* obj) {
     updateRegion (true);
   }
 }
+
+bool GText::isEmpty () const {
+  return (text.empty () || (lines () == 1 && text[0] == ""));
+}

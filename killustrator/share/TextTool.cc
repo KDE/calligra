@@ -43,8 +43,14 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     QMouseEvent *me = (QMouseEvent *) e;
     Coord pos (me->x (), me->y ());
 
-    if (text != 0L)
-      text->showCursor (false);
+    if (text != 0L) {
+      if (text->isEmpty ()) {
+	// an empty text was entered -> remove the object
+	doc->deleteObject (text);
+      }
+      else
+	text->showCursor (false);
+    }
 
     text = 0L;
 
@@ -153,8 +159,14 @@ void TextTool::deactivate (GDocument *doc, Canvas*) {
     doc->unselectAllObjects ();
     doc->setLastObject (text);
     if (origState == 0L) {
-      CreateTextCmd *cmd = new CreateTextCmd (doc, text);
-      history->addCommand (cmd);
+      if (text->isEmpty ()) {
+	// an empty text was entered -> remove the object
+	doc->deleteObject (text);
+      }
+      else {
+	CreateTextCmd *cmd = new CreateTextCmd (doc, text);
+	history->addCommand (cmd);
+      }
     }
     else {
       SetTextCmd *cmd = new SetTextCmd (doc, text, origState);

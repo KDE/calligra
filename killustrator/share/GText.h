@@ -102,6 +102,8 @@ public:
 
   virtual void writeToXml (XmlWriter&);
 
+  bool isEmpty () const;
+
 public slots:
   void updateMatricesForPath ();
   void deletePathObject ();
