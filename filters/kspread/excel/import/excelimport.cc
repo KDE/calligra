@@ -32,6 +32,7 @@
 #include <qfontmetrics.h>
 #include <qstring.h>
 #include <qregexp.h>
+#include <qdom.h>
 
 #include <kdebug.h>
 #include <koFilterChain.h>
@@ -101,24 +102,18 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   QString root, documentInfo;
 
-  root = "<!DOCTYPE spreadsheet >\n";
-  root += "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n";
-  root += "<paper format=\"A4\" orientation=\"Portrait\" >\n";
-  root += "<borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n";
-  root += "<head/>\n";
-  root += "<foot/>\n";
-  root += "</paper>\n";
-  root += "<map activeTable=\"Table1\" >\n";
+  QDomDocument mainDocument( "spreadsheet" );
 
-  root += "<locale positivePrefixCurrencySymbol=\"True\"";
-  root += "  negativeMonetarySignPosition=\"0\"";
-  root += "  negativePrefixCurrencySymbol=\"True\" fracDigits=\"2\"";
-  root += "  thousandsSeparator=\",\" dateFormat=\"%A %d %B %Y\"";
-  root += "  timeFormat=\"%H:%M:%S\" monetaryDecimalSymbol=\".\"";
-  root += "  weekStartsMonday=\"True\" currencySymbol=\"$\"";
-  root += "  negativeSign=\"-\" positiveSign=\"\"";
-  root += "  positiveMonetarySignPosition=\"1\" decimalSymbol=\".\"";
-  root += "  monetaryThousandsSeparator=\",\" dateFormatShort=\"%Y-%m-%d\" />\n";
+  QDomElement spreadsheet;
+  spreadsheet = mainDocument.createElement( "spreadsheet" );
+  spreadsheet.setAttribute( "editor","MS Excel Import Filter" );
+  spreadsheet.setAttribute( "mime","application/x-kspread" );
+  mainDocument.appendChild( spreadsheet );
+
+  QDomElement map;
+  map = mainDocument.createElement( "map" );
+  map.setAttribute( "activeTable", "Table1" );
+  spreadsheet.appendChild( map );
 
   for( unsigned i=0; i < workbook->sheetCount(); i++ )
   {
@@ -126,22 +121,22 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
     if( !sheet ) break;
 
-    root += "<table name=\"";
-    root += string( sheet->name() ).string();
-    root += "\" columnnumber=\"0\" borders=\"0\"";
-    root += "  hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\"";
-    root += "  formular=\"0\" lcmode=\"0\" >\n";
+    QDomElement table;
+    table = mainDocument.createElement( "table" );
+    table.setAttribute( "name", string( sheet->name() ).string() );
+    map.appendChild( table );
 
-    QFont font = KoGlobal::defaultFont();
     for( unsigned row = 0; row <= sheet->maxRow(); row++ )
       for( unsigned col = 0; col <= sheet->maxColumn(); col++ )
       {
         Sidewinder::Cell* cell = sheet->cell( col, row, false );
         if( cell )
         {
-          root += "<cell row=\"" + QString::number( row+1 ) + "\"" +
-            "column=\"" + QString::number( col+1 ) + "\" >\n";
-
+          QDomElement ce;
+          ce = mainDocument.createElement( "cell" );
+          ce.setAttribute( "row", QString::number( row+1 ) );
+          ce.setAttribute( "column", QString::number( col+1 ) );
+          table.appendChild( ce );
 
           const Sidewinder::Format& format = cell->format();
 
@@ -154,46 +149,54 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
             default: align = 0; break;
           };
 
-          root += "<format align=\"";
-          root += QString::number( align );
-          root += "\">";
-          root += "</format>\n";
+          QDomElement fe;
+          fe = mainDocument.createElement( "format" );
+          fe.setAttribute( "align", QString::number( align ) );
+          ce.appendChild( fe );
 
           Sidewinder::Value value = cell->value();
-          if( value.isEmpty() )
-            root += "<text></text>\n";
-          else if( value.isBoolean() )
+
+          QDomElement ve;
+          ve = mainDocument.createElement( "text" );
+          ce.appendChild( ve );
+
+          if( value.isBoolean() )
           {
+            ve.setAttribute( "dataType", "Bool" );
             if( value.asBoolean() )
-              root += "<text dataType=\"Bool\" outStr=\"True\" >true</text>\n";
-            else;
-              root += "<text dataType=\"Bool\" outStr=\"False\" >false</text>\n";
+            {
+              ve.setAttribute( "outStr", "True" );
+              ve.appendChild( mainDocument.createTextNode( "true" ) );
+            }
+            else
+            {
+              ve.setAttribute( "outStr", "False" );
+              ve.appendChild( mainDocument.createTextNode( "false" ) );
+            }
           }
           else if( value.isFloat() )
           {
-            root += QString("<text dataType=\"Num\" >%1</text>\n").
-              arg( QString::number( value.asFloat() ) );
-              std::cout << "row:" << row << " col:" << col;
-              std::cout << " is " << value.asFloat() << std::endl;
-          }else if( value.isInteger() )
-            root += QString("<text dataType=\"Num\" >%1</text>\n").
-              arg( QString::number( value.asInteger() ) );
+            ve.setAttribute( "dataType", "Num" );
+            QString str = QString::number( value.asFloat() );
+            ve.appendChild( mainDocument.createTextNode( str ) );
+          }
+          else if( value.isInteger() )
+          {
+            ve.setAttribute( "dataType", "Num" );
+            QString str = QString::number( value.asInteger() );
+            ve.appendChild( mainDocument.createTextNode( str ) );
+          }
           else if( value.isString() )
-            root += QString("<text dataType=\"Str\" >%1</text>\n").
-              arg( encodeXML( string( value.asString() ).string() ) );
-          else
-            root += "<text></text>\n"; // fallback
+          {
+            ve.setAttribute( "dataType", "Str" );
+            QString str = string( value.asString() ).string();
+            ve.appendChild( mainDocument.createTextNode( str ) );
+          }
 
-         root += "</cell>\n";
         }
       }
 
-    root += "</table>\n";
-
-    }
-
-  root += "</map>\n";
-  root += "</spreadsheet>";
+  }
 
   // prepare storage
   KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
@@ -201,9 +204,10 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   // store output document
   if( out )
     {
-      QCString cstring = root.utf8();
+      QCString cstring = mainDocument.toCString();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->writeBlock( (const char*) cstring, cstring.length() );
+      out->close();
     }
 
   // store document info
@@ -213,6 +217,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
        QCString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
        out->writeBlock( (const char*) cstring, cstring.length() );
+       out->close();
      }
 
   delete reader;
