@@ -766,8 +766,11 @@ bool KWFrameDia::applyChanges()
     if ( !frame )
         return false;
 
-    if ( tab1 && frameType==FT_TEXT )
+    if ( frameType==FT_TEXT ) // tab 1 and 3 only exist for text framesets
     {
+        ASSERT( tab1 );
+        ASSERT( tab3 );
+
         // FrameBehaviour
         if(rResizeFrame->isChecked())
             frame->setFrameBehaviour(AutoExtendFrame);
@@ -840,12 +843,12 @@ bool KWFrameDia::applyChanges()
                 if ( !isEmpty )
                 {
                     int result = KMessageBox::warningContinueCancel(this,
-                                                            i18n( "You are about to reconnect the last Frame of the\n"
-                                                                  "Frameset '%1'.\n"
-                                                                  "The contents of this Frameset will not appear\n"
-                                                                  "anymore!\n\n"
-                                                                  "Are you sure you want to do that?").arg(fs->getName()),
-                                                            i18n("Reconnect Frame"), i18n("&Reconnect"));
+                                                                    i18n( "You are about to reconnect the last Frame of the\n"
+                                                                          "Frameset '%1'.\n"
+                                                                          "The contents of this Frameset will not appear\n"
+                                                                          "anymore!\n\n"
+                                                                          "Are you sure you want to do that?").arg(fs->getName()),
+                                                                    i18n("Reconnect Frame"), i18n("&Reconnect"));
                     if (result != KMessageBox::Continue)
                         return false;
                 }
@@ -885,6 +888,19 @@ bool KWFrameDia::applyChanges()
         }
     } // end of 'tab1 and text frame'
 
+    if ( tab2 )
+    {
+        // Run around
+        if ( rRunNo->isChecked() )
+            frame->setRunAround( RA_NO );
+        else if ( rRunBounding->isChecked() )
+            frame->setRunAround( RA_BOUNDINGRECT );
+        else if ( rRunContur->isChecked() )
+            frame->setRunAround( RA_SKIP );
+
+        frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
+    }
+
     if ( tab4 )
     {
         // The floating attribute applies to the whole frameset...
@@ -906,56 +922,40 @@ bool KWFrameDia::applyChanges()
             doc->addCommand(cmd);
             cmd->execute();
         }
-    }
-    if ( tab2 )
-    {
-        // Run around
-        if ( rRunNo->isChecked() )
-            frame->setRunAround( RA_NO );
-        else if ( rRunBounding->isChecked() )
-            frame->setRunAround( RA_BOUNDINGRECT );
-        else if ( rRunContur->isChecked() )
-            frame->setRunAround( RA_SKIP );
 
-        frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
-    }
+        if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
+                                                ( doc->processingType() == KWDocument::WP &&
+                                                  doc->getFrameSetNum( frame->getFrameSet() ) > 0 ) ) ) {
+            if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
+                //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
+                //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
+                //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
-    if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
-                                            ( doc->processingType() == KWDocument::WP &&
-                                              doc->getFrameSetNum( frame->getFrameSet() ) > 0 ) ) ) {
-        if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
-            //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
-            //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
-            //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
+                double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
+                double py = KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() );
+                double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
+                double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
 
-            double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
-            double py = KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() );
-            double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
-            double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
+                FrameIndex index( frame );
+                FrameResizeStruct tmpResize;
+                tmpResize.sizeOfBegin = frame->normalize();
+                frame->setRect( px, py, pw, ph );
+                // TODO apply page limits?
+                tmpResize.sizeOfEnd = frame->normalize();
 
-            FrameIndex index;
-            FrameResizeStruct tmpResize;
-            tmpResize.sizeOfBegin = frame->normalize();
-
-            frame->setRect( px, py, pw, ph );
-            // TODO apply page limits?
-
-            tmpResize.sizeOfEnd = frame->normalize();
-            index.m_pFrameSet=frame->getFrameSet();
-            index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-
-            KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
-            doc->addCommand(cmd);
-            doc->frameChanged( frame );
+                KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
+                doc->addCommand(cmd);
+                doc->frameChanged( frame );
+            }
         }
-    }
 
-    double u1, u2, u3, u4;
-    u1=KWUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
-    u2=KWUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
-    u3=KWUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
-    u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
-    doc->setFrameMargins( u1, u2, u3, u4 );
+        double u1, u2, u3, u4;
+        u1=KWUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
+        u2=KWUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
+        u3=KWUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
+        u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
+        doc->setFrameMargins( u1, u2, u3, u4 );
+    }
 
     updateFrames();
     return true;
@@ -974,6 +974,7 @@ void KWFrameDia::updateFrames()
         if(theFrame->isSelected())
             theFrame->updateResizeHandles();
     }
+    doc->repaintAllViews();
 }
 
 void KWFrameDia::slotOk()

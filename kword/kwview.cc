@@ -2000,10 +2000,10 @@ void KWView::tableJoinCells()
                                   "and are not already joined." ),
                             i18n( "Join Cells" ) );
     }
+    doc->layout();
     //KoRect r = doc->zoomRect( table->boundingRect() );
     //gui->canvasWidget()->repaintScreen( r, TRUE );
     gui->canvasWidget()->repaintAll();
-    doc->layout();
 }
 
 void KWView::tableSplitCellsVerticaly()
@@ -2043,9 +2043,9 @@ void KWView::tableSplitCells(int cols, int rows)
     }
     //KoRect r = doc->zoomRect( table->boundingRect() );
     //gui->canvasWidget()->repaintScreen( r, TRUE );
-    gui->canvasWidget()->repaintAll();
     doc->updateAllFrames();
     doc->layout();
+    gui->canvasWidget()->repaintAll();
 }
 
 void KWView::tableUngroupTable()
