@@ -584,6 +584,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
     else if( d->action == A_HELPLINES )
     {
         emit addHelpline( e->pos(), orientation == Qt::Horizontal);
+        setCursor( ArrowCursor );
     }
 }
 
