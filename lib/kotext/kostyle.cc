@@ -193,6 +193,7 @@ KoParagStyle* KoStyleCollection::addStyleTemplate( KoParagStyle * sty )
     for ( KoParagStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         if ( p->name() == sty->name() ) {
+            //kdDebug() << k_funcinfo << "replace existing style " << p->name() << endl;
             // Replace existing style
             if ( sty != p )
             {
@@ -225,16 +226,20 @@ void KoStyleCollection::updateStyleListOrder( const QStringList &list )
     for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {
         //kdDebug()<<" style :"<<(*it)<<endl;
+        bool found = false;
         QPtrListIterator<KoParagStyle> style( m_styleList );
         for ( ; style.current() ; ++style )
         {
             if ( style.current()->name() == *it)
             {
                 orderStyle.append( style.current() );
+                found = true;
                 //kdDebug()<<" found !!!!!!!!!!!!\n";
                 break;
             }
         }
+        if ( !found )
+            kdDebug() << "style " << *it << " not found" << endl;
     }
     m_styleList.setAutoDelete( false );
     m_styleList.clear();
@@ -495,7 +500,10 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
 
     m_format.save( gs );
 
-    return genStyles.lookup( gs, "U", true );
+    if ( m_name.isEmpty() )
+        return genStyles.lookup( gs, "U", true );
+    else // try to preserve existing internal name
+        return genStyles.lookup( gs, m_name, false );
 }
 
 const KoParagLayout & KoParagStyle::paragLayout() const

@@ -109,6 +109,7 @@ protected slots:
 protected:
     KoParagStyle * style( const QString & _name );
     void addTab( KoStyleManagerTab * tab );
+    QString generateUniqueName();
 };
 
 class KoStyleManagerTab : public QWidget {

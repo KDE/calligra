@@ -383,6 +383,17 @@ KoParagStyle * KoStyleManager::style( const QString & _name )
     return 0;
 }
 
+QString KoStyleManager::generateUniqueName()
+{
+    int count = 1;
+    QString name;
+    do {
+        name = "new" + QString::number( count++ );
+    } while ( style( name ) );
+    return name;
+}
+
+
 void KoStyleManager::addStyle() {
     save();
 
@@ -391,6 +402,7 @@ void KoStyleManager::addStyle() {
     {
         m_currentStyle = new KoParagStyle( *m_currentStyle ); // Create a new style, initializing from the current one
         m_currentStyle->setDisplayName( str );
+        m_currentStyle->setInternalName( generateUniqueName() );
     }
     else
         m_currentStyle = new KoParagStyle( str );
@@ -404,7 +416,7 @@ void KoStyleManager::addStyle() {
     m_inheritCombo->insertItem( str );
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
     noSignals=false;
-    m_styleOrder<< str;
+    m_styleOrder << m_currentStyle->name();
 
     updateGUI();
 }
@@ -460,11 +472,11 @@ void KoStyleManager::deleteStyle() {
 
 void KoStyleManager::moveUpStyle()
 {
+    Q_ASSERT( m_currentStyle );
     if ( m_currentStyle )
         save();
-    unsigned int pos = 0;
-    QString currentStyleName=m_stylesList->currentText ();
-
+    const QString currentStyleName = m_currentStyle->name();
+    const QString currentStyleDisplayName = m_stylesList->currentText();
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
@@ -472,13 +484,13 @@ void KoStyleManager::moveUpStyle()
         m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);
     }
 
-    pos=m_stylesList->currentItem();
+    int pos = m_stylesList->currentItem();
     noSignals=true;
     m_stylesList->changeItem( m_stylesList->text( pos-1 ), pos );
     m_styleCombo->changeItem( m_stylesList->text( pos-1 ), pos );
 
-    m_stylesList->changeItem( currentStyleName, pos-1 );
-    m_styleCombo->changeItem( currentStyleName, pos-1 );
+    m_stylesList->changeItem( currentStyleDisplayName, pos-1 );
+    m_styleCombo->changeItem( currentStyleDisplayName, pos-1 );
 
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
@@ -488,10 +500,11 @@ void KoStyleManager::moveUpStyle()
 
 void KoStyleManager::moveDownStyle()
 {
+    Q_ASSERT( m_currentStyle );
     if ( m_currentStyle )
         save();
-    unsigned int pos = 0;
-    QString currentStyleName=m_stylesList->currentText ();
+    const QString currentStyleName = m_currentStyle->name();
+    const QString currentStyleDisplayName = m_stylesList->currentText();
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
@@ -499,13 +512,12 @@ void KoStyleManager::moveDownStyle()
         m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName);
     }
 
-
-    pos=m_stylesList->currentItem();
+    int pos = m_stylesList->currentItem();
     noSignals=true;
-    m_stylesList->changeItem( m_stylesList->text ( pos+1 ),pos);
-    m_styleCombo->changeItem( m_stylesList->text ( pos+1 ),pos);
-    m_stylesList->changeItem( currentStyleName ,pos+1);
-    m_styleCombo->changeItem( currentStyleName ,pos+1);
+    m_stylesList->changeItem( m_stylesList->text( pos+1 ), pos );
+    m_styleCombo->changeItem( m_stylesList->text( pos+1 ), pos );
+    m_stylesList->changeItem( currentStyleDisplayName, pos+1 );
+    m_styleCombo->changeItem( currentStyleDisplayName, pos+1 );
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
@@ -577,7 +589,7 @@ void KoStyleManager::apply() {
     for ( tmp = removeStyle.first(); tmp ;tmp = removeStyle.next() )
         removeStyleTemplate( tmp );
 
-    updateStyleListOrder( m_styleOrder);
+    updateStyleListOrder( m_styleOrder );
     updateAllStyleLists();
     noSignals=false;
 }
@@ -593,7 +605,7 @@ void KoStyleManager::renameStyle(const QString &theText) {
     kdDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
     m_styleCombo->changeItem( theText, index );
     m_inheritCombo->changeItem( theText, index+1 );
-    m_styleOrder[index]=theText;
+    //m_styleOrder[index]=theText; // not needed anymore, we use internal names
     kdDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
     m_stylesList->changeItem( theText, index );
 

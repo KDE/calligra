@@ -126,7 +126,7 @@ public:
 
     /** The internal name (untranslated if a standard style) */
     QString name() const { return m_name; }
-    //void setInternalName( const QString & name ) { m_name = name; }
+    void setInternalName( const QString & name ) { m_name = name; }
     /** The user-visible name (e.g. translated) */
     QString displayName() const;
     void setDisplayName( const QString& name );
