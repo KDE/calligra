@@ -131,7 +131,8 @@ private:
     ulong m_automaticParagraphStyleNumber; ///< Number of paragraph-based automatic styles (increment *before* use)
     ulong m_automaticTextStyleNumber; ///< Number of text-based automatic styles (increment *before* use)
     ulong m_footnoteNumber; ///< Number of footnote (for text:id) (increment *before* use)
-    ulong m_tableNumber; ///< Number of footnote (for table:name) (increment *before* use)
+    ulong m_tableNumber; ///< Number of table (for table:name) (increment *before* use)
+    ulong m_textBoxNumber; ///< Number of a textbox (for draw:text-box) (increment *before* use)
     
 
     QString m_styles; ///< Normal paragraph styles (in OO format)

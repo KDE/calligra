@@ -57,7 +57,7 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0), m_tableNumber(0)
+    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 )
 {
 }
 
@@ -1207,11 +1207,12 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
 
-    // Be careful that while being similar the following 4 strings have different purposes
+    // Be careful that while being similar the following 5 strings have different purposes
     const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) ); // It also increases m_tableNumber
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
     const QString translatedName( i18n( "Object name", "Table %1").arg( m_tableNumber ) );
-    const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_tableNumber ) );
+    const QString automaticFrameStyle ( makeAutomaticStyleName( "TableFrame", m_textBoxNumber ) ); // It also increases m_textBoxNumber
+    const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_textBoxNumber ) );
 
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
@@ -1245,7 +1246,6 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     kdDebug(30520) << "Number of columns: " << numberColumns << endl;
 
-    kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
 
     double tableWidth = 0.0; // total width of table
     uint i; // We need the loop variable 2 times
@@ -1257,6 +1257,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     // An inlined table, is an "as-char" text-box
     *m_streamOut << "<draw:text-box"; // ### TODO: style name
+    *m_streamOut << " style:name=\"" << escapeOOText( automaticFrameStyle ) << "\"";
     *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
     // ### TODO: a height!
@@ -1269,8 +1270,22 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         << "\" >\n";
 
 
-    // Now we have enough information to generate the style for the table
-    m_contentAutomaticStyles += "  <style:style";
+    // Now we have enough information to generate the style for the table and its frame
+    kdDebug(30520) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
+    m_contentAutomaticStyles += "  <style:style"; // for frame
+    m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
+    m_contentAutomaticStyles += " style:family=\"graphics\"";
+    m_contentAutomaticStyles += ">\n";
+    m_contentAutomaticStyles += "   <style:properties ";
+    m_contentAutomaticStyles += " fo:padding=\"0pt\" fo:border=\"none\"";
+    m_contentAutomaticStyles += " fo:margin-left=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-top=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-bottom=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-right=\"0pt\"";
+    m_contentAutomaticStyles += "/>\n";
+    m_contentAutomaticStyles += "  </style:style>\n";
+    kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+    m_contentAutomaticStyles += "  <style:style"; // for table
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"table\"";
     m_contentAutomaticStyles += ">\n";
