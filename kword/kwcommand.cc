@@ -97,6 +97,8 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
         kdDebug() << "KWTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
         return c;
     }
+     QList<KoTabulator>tmp;
+     QListIterator<KoTabulator> it(tmp) ;
     while ( p ) {
         switch ( m_flags ) {
             case All:
@@ -121,7 +123,17 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
 	        p->setTopBorder(m_newParagLayout.topBorder);
 	        break;
             case Tabulator:
-                //todo
+                tmp.clear();
+                it=m_newParagLayout.m_tabList ;
+                for ( it.toFirst(); it.current(); ++it ) {
+                    KoTabulator *t = new KoTabulator;
+                    t->type = it.current()->type;
+                    t->mmPos = it.current()->mmPos;
+                    t->inchPos = it.current()->inchPos;
+                    t->ptPos = it.current()->ptPos;
+                    tmp.append( t );
+                }
+                p->setTabList(&tmp);
                 break;
             default:
                 kdDebug() << "Houston we have a problem" << endl;
@@ -150,6 +162,8 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
             kdDebug() << "KWTextParagCommand::unexecute m_oldParagLayouts not big enough!" << endl;
             break;
         }
+        QList<KoTabulator> tmp;
+        QListIterator<KoTabulator> it(tmp);
         switch ( m_flags ) {
             case All:
                 p->setParagLayout( *lit );
@@ -174,7 +188,17 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
 	        p->setTopBorder((*lit).topBorder);
 	        break;
             case Tabulator:
-                //todo
+                tmp.clear();
+                it= (*lit).m_tabList ;
+                for ( it.toFirst(); it.current(); ++it ) {
+                    KoTabulator *t = new KoTabulator;
+                    t->type = it.current()->type;
+                    t->mmPos = it.current()->mmPos;
+                    t->inchPos = it.current()->inchPos;
+                    t->ptPos = it.current()->ptPos;
+                    tmp.append( t );
+                }
+                p->setTabList(&tmp);
                 break;
             default:
                 kdDebug() << "KWTextParagCommand::unexecute unhandled flag " << m_flags << endl;
