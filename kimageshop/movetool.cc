@@ -48,9 +48,6 @@ void MoveCommand::unexecute()
 
 void MoveCommand::moveTo( QPoint _pos )
 {
-  cout << "MoveCommand::moveTo" << endl;
-  cout << "moveTo : " << _pos.x() << ":" << _pos.y() << endl;
-
   QRect oldRect;
   QRect newRect;
   QRect updateRect;
@@ -93,11 +90,9 @@ void MoveTool::mousePress( const KImageShop::MouseEvent& e )
   if( !e.leftButton )
     return;
 
-  // layer is not visible
   if( !m_pDoc->getCurrentLayer()->isVisible() )
     return;
 
-  // mouse is not in layer
   if( !m_pDoc->getCurrentLayer()->imageExtents().contains( QPoint( e.posX, e.posY ) ) )
     return;
 
@@ -134,22 +129,17 @@ void MoveTool::mouseRelease( const KImageShop::MouseEvent& e )
   if( !e.leftButton )
     return;
 
-  // no dragging active
   if( !m_dragging )
     return;
 
-  // add command to history when layer has moved
   if( m_layerPosition != m_layerStart )
   {
-    cout << "add move command" << endl;
-
     MoveCommand *moveCommand = new MoveCommand( m_pDoc,
       m_pDoc->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
 
     m_pDoc->commandHistory()->addCommand( moveCommand );
   }
 
-  // leave dragging mode
   m_dragging = false;
 }
 
