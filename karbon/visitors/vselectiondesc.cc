@@ -36,23 +36,27 @@ void
 VSelectionDescription::visitVComposite( VComposite& )
 {
 	m_desc = QString( i18n( "1 composite path" ) );
+	m_shortdesc = QString( i18n( "path" ) );
 }
 
 void
 VSelectionDescription::visitVGroup( VGroup &group )
 {
 	m_desc = i18n( QString( "1 group, containing %1 objects" ).arg( group.objects().count() ).latin1() );
+	m_shortdesc = i18n( "group" );
 }
 
 void
 VSelectionDescription::visitVText( VText& )
 {
 	m_desc = QString( i18n( "1 text object" ) );
+	m_shortdesc = QString( i18n( "text" ) );
 }
 
 void
 VSelectionDescription::visitVImage( VImage& )
 {
 	m_desc = QString( i18n( "1 image object" ) );
+	m_shortdesc = QString( i18n( "image" ) );
 }
 

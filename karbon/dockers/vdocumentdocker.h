@@ -107,6 +107,17 @@ private:
 	VLayer*      m_layer;
 }; // VLayerListViewItem
 
+class VObjectListViewItem : public QListViewItem
+{
+public:
+	VObjectListViewItem( QListViewItem* parent, VObject* object );
+
+	void update();
+
+private:
+	VObject	*m_object;
+};
+
 class VLayersTab : public QWidget
 {
 Q_OBJECT

@@ -28,7 +28,7 @@
 class VSelectionDescription : public VVisitor
 {
 public:
-	VSelectionDescription() { m_desc = ""; }
+	VSelectionDescription() { m_desc = ""; m_shortdesc = ""; }
 
 	virtual void visitVSelection( VSelection& );
 	virtual void visitVGroup( VGroup& );
@@ -37,9 +37,11 @@ public:
 	virtual void visitVImage( VImage& );
 
 	QString description() { return m_desc; }
+	QString shortDescription() { return m_shortdesc; }
 
 private:
 	QString m_desc;
+	QString m_shortdesc;
 };
 
 #endif

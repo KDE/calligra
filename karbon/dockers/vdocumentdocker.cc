@@ -46,6 +46,7 @@
 #include "vstroke.h"
 #include "vcanvas.h"
 #include "vdocumentdocker.h"
+#include <visitors/vselectiondesc.h>
 
 static long g_lastKey = 0;
 
@@ -287,7 +288,39 @@ VDocumentTab::slotCommandExecuted()
  *  Layers tab                                                           *
  *************************************************************************/
 
- VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer )
+VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object )
+	: QListViewItem( parent, 0L ), m_object( object )
+{
+	update();
+}
+
+void
+VObjectListViewItem::update()
+{
+	KIconLoader il;
+	QPixmap preview;
+	preview.resize( 16, 16 );
+	VKoPainter p( &preview, 16, 16, false );
+	// Y mirroring
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( 0,  -16 );
+	p.setWorldMatrix( mat );
+
+	// TODO: When the document will support page size, change the following line.
+	p.setZoomFactor( 16. / 800. );
+	m_object->draw( &p );
+	p.end();
+
+	VSelectionDescription selectionDesc;
+	selectionDesc.visit( *m_object );
+	setText( 2, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
+	setPixmap( 1, QPixmap( il.iconPath( ( m_object->state() == VObject::normal || m_object->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
+	setPixmap( 2, preview );
+}
+
+
+VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer )
 	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer )
 {
 	update();
@@ -507,10 +540,20 @@ VLayersTab::updateLayers()
 	QPtrVector<VLayer> vector;
 	m_document->layers().toVector( &vector );
 	VLayerListViewItem* item;
+	VObjectListViewItem *item2;
+	KIconLoader il;
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
 		if ( vector[i]->state() != VObject::deleted )
+		{
 			item = new VLayerListViewItem( m_layersListView, vector[i] );
+			VObjectListIterator itr = vector[i]->objects();
+			for( ; itr.current();++itr )
+				if( itr.current()->state() != VObject::deleted )
+					item2 = new VObjectListViewItem( item, itr.current() );
+
+			item->setOpen( true );
+		}
 	}
 	m_layersListView->sort();
 } // VLayersTab::updateLayers
