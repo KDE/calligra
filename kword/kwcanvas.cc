@@ -1276,6 +1276,17 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 void KWCanvas::editFrameProperties()
 {
     KWFrame *frame=doc->getFirstSelectedFrame();
+    if ( isAHeader(frame->getFrameSet()->getFrameInfo()) )
+    {
+        KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be edited."), i18n( "Frame Properties"  ) );
+        return;
+    }
+    if ( isAFooter(frame->getFrameSet()->getFrameInfo()) )
+    {
+        KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be edited."),i18n( "Frame Properties"  ) );
+        return;
+    }
+
     if (frame)
     {
         KWFrameDia * frameDia = new KWFrameDia( this, frame);
