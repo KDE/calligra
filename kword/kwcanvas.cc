@@ -256,6 +256,8 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* 
         KWFrameSet * frameset = fit.current();
         drawFrameSet( frameset, painter, crect, false, true, viewMode );
     }
+
+    m_doc->maybeDeleteDoubleBufferPixmap();
 }
 
 void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
