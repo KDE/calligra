@@ -368,6 +368,8 @@ bool KoMainWindow::openDocument( const KURL & url )
 bool KoMainWindow::saveDocument( bool saveas )
 {
     KoDocument* pDoc = rootDocument();
+    if(!pDoc)
+        return;
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     QCString _native_format = pDoc->nativeFormatMimeType();
