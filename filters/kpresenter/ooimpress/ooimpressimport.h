@@ -28,7 +28,7 @@
 #include <qdom.h>
 #include <qdict.h>
 #include <qcolor.h>
-#include "stylestack.h"
+#include <stylestack.h>
 
 class OoImpressImport : public KoFilter
 {
@@ -65,8 +65,6 @@ private:
     QDomNode findAnimationByObjectID(const QString & id);
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 
-    double toPoint( QString value, double defaultVal = 0.0 );
-    bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
     QString expandWhitespace(const QDomElement& tag);
 
