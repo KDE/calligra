@@ -46,6 +46,7 @@
 #if KDE_IS_VERSION(3, 2, 0)
 #include <kcalendarsystem.h>
 #endif
+#include <qregexp.h>
 
 KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     : m_replace( replace )
@@ -275,114 +276,9 @@ void KoAutoFormat::readConfig(bool force)
 
     }
 
-    Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
-    config->setGroup( "AutoFormatEntries" );
+    //config->setGroup( "AutoFormatEntries" );
 
-    bool fileNotFound = false;
-    QFile xmlFile;
-    KLocale klocale(m_doc->instance()->instanceName());
-    kdDebug()<<"m_autoFormatLanguage :"<<m_autoFormatLanguage<<endl;
-    if ( m_autoFormatLanguage.isEmpty() )
-    {
-        kdDebug()<<"klocale.languageList().front() :"<<klocale.languageList().front()<<endl;
-        xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
-        if(!xmlFile.open(IO_ReadOnly)) {
-            xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
-            if(!xmlFile.open(IO_ReadOnly)) {
-                fileNotFound = true;
-            }
-        }
-    }
-    else
-    {
-        xmlFile.setName(locate( "data", "koffice/autocorrect/" + m_autoFormatLanguage + ".xml", m_doc->instance() ));
-        if(!xmlFile.open(IO_ReadOnly))
-        {
-            if ( m_autoFormatLanguage!="all_languages" )
-            {
-                xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
-                if(!xmlFile.open(IO_ReadOnly)) {
-                    xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
-                    if(!xmlFile.open(IO_ReadOnly)) {
-                        fileNotFound = true;
-                    }
-                }
-            }
-        }
-    }
-
-    if(!fileNotFound) {
-        QDomDocument doc;
-        if(!doc.setContent(&xmlFile)) {
-            //return;
-        }
-        if(doc.doctype().name() != "autocorrection") {
-            //return;
-        }
-        QDomElement de=doc.documentElement();
-
-        loadAutoCorrection( de );
-
-        QDomElement upper = de.namedItem( "UpperCaseExceptions" ).toElement();
-        if(!upper.isNull())
-        {
-            QDomNodeList nl = upper.childNodes();
-            for(uint i = 0; i < nl.count(); i++)
-            {
-                m_upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
-            }
-        }
-
-        QDomElement twoUpper = de.namedItem( "TwoUpperLetterExceptions" ).toElement();
-        if(!twoUpper.isNull())
-        {
-            QDomNodeList nl = twoUpper.childNodes();
-            for(uint i = 0; i < nl.count(); i++)
-            {
-                m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
-            }
-        }
-
-        QDomElement superScript = de.namedItem( "SuperScript" ).toElement();
-        if(!superScript.isNull())
-        {
-            QDomNodeList nl = superScript.childNodes();
-            for(uint i = 0; i < nl.count() ; i++) {
-                //bug in qmap we overwrite = false doesn't work
-                //so we can't add multiple "othernb"
-                m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
-            }
-        }
-
-        QDomElement doubleQuote = de.namedItem( "DoubleQuote" ).toElement();
-        if(!doubleQuote.isNull())
-        {
-            QDomElement childItem = doubleQuote.namedItem("doublequote").toElement();
-            if ( !childItem.isNull() )
-            {
-                QString attr = childItem.attribute( "begin" );
-                if ( !attr.isEmpty() && attr[0] != 0 )
-                    m_typographicDefaultDoubleQuotes.begin = attr[0];
-                attr = childItem.attribute( "end" );
-                if ( !attr.isEmpty() && attr[0] != 0 )
-                    m_typographicDefaultDoubleQuotes.end = attr[0];
-            }
-        }
-        QDomElement simpleQuote = de.namedItem( "SimpleQuote" ).toElement();
-        if(!simpleQuote.isNull())
-        {
-            QDomElement childItem = simpleQuote.namedItem("simplequote").toElement();
-            if ( !childItem.isNull() )
-            {
-                QString attr = childItem.attribute( "begin" );
-                if ( !attr.isEmpty() && attr[0] != 0 )
-                    m_typographicDefaultSimpleQuotes.begin = attr[0];
-                attr = childItem.attribute( "end" );
-                if ( !attr.isEmpty() && attr[0] != 0 )
-                    m_typographicDefaultSimpleQuotes.end = attr[0];
-            }
-        }
-    }
+    readAutoCorrectConfig();
 
     if( beginDoubleQuote.isEmpty())
     {
@@ -434,22 +330,125 @@ void KoAutoFormat::readConfig(bool force)
                                         && !m_typographicSimpleQuotes.begin.isNull();
 
 
-    xmlFile.close();
     loadAllLanguagesAutoCorrection();
     buildMaxLen();
     autoFormatIsActive();
     m_configRead = true;
 }
 
+void KoAutoFormat::readAutoCorrectConfig()
+{
+    Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
+    KLocale klocale(m_doc->instance()->instanceName());
+    QString kdelang = klocale.languageList().front();
+    kdelang.remove( QRegExp( "@.*" ) );
+    kdDebug(32500) << "KoAutoFormat: m_autoFormatLanguage=" << m_autoFormatLanguage << " kdelang=" << kdelang << endl;
+    QString fname;
+    if ( !m_autoFormatLanguage.isEmpty() )
+    {
+        fname = locate( "data", "koffice/autocorrect/" + m_autoFormatLanguage + ".xml", m_doc->instance() );
+    }
+    if ( m_autoFormatLanguage != "all_languages" )
+    {
+        if ( fname.isEmpty() && !kdelang.isEmpty() )
+            fname = locate( "data", "koffice/autocorrect/" + kdelang + ".xml", m_doc->instance() );
+        if ( fname.isEmpty() && kdelang.contains("_") )
+        {
+            kdelang.remove( QRegExp( "_.*" ) );
+            fname = locate( "data", "koffice/autocorrect/" + kdelang + ".xml", m_doc->instance() );
+        }
+        if ( fname.isEmpty() )
+            fname = locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() );
+    }
+    if ( fname.isEmpty() )
+        return;
+    QFile xmlFile(fname);
+    if(!xmlFile.open(IO_ReadOnly))
+        return;
+
+    QDomDocument doc;
+    if(!doc.setContent(&xmlFile))
+        return;
+
+    if(doc.doctype().name() != "autocorrection") {
+        //return;
+    }
+    QDomElement de=doc.documentElement();
+
+    loadAutoCorrection( de );
+
+    QDomElement upper = de.namedItem( "UpperCaseExceptions" ).toElement();
+    if(!upper.isNull())
+    {
+        QDomNodeList nl = upper.childNodes();
+        for(uint i = 0; i < nl.count(); i++)
+        {
+            m_upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
+        }
+    }
+
+    QDomElement twoUpper = de.namedItem( "TwoUpperLetterExceptions" ).toElement();
+    if(!twoUpper.isNull())
+    {
+        QDomNodeList nl = twoUpper.childNodes();
+        for(uint i = 0; i < nl.count(); i++)
+        {
+            m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
+        }
+    }
+
+    QDomElement superScript = de.namedItem( "SuperScript" ).toElement();
+    if(!superScript.isNull())
+    {
+        QDomNodeList nl = superScript.childNodes();
+        for(uint i = 0; i < nl.count() ; i++) {
+            //bug in qmap we overwrite = false doesn't work
+            //so we can't add multiple "othernb"
+            m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
+        }
+    }
+
+    QDomElement doubleQuote = de.namedItem( "DoubleQuote" ).toElement();
+    if(!doubleQuote.isNull())
+    {
+        QDomElement childItem = doubleQuote.namedItem("doublequote").toElement();
+        if ( !childItem.isNull() )
+        {
+            QString attr = childItem.attribute( "begin" );
+            if ( !attr.isEmpty() && attr[0] != 0 )
+                m_typographicDefaultDoubleQuotes.begin = attr[0];
+            attr = childItem.attribute( "end" );
+            if ( !attr.isEmpty() && attr[0] != 0 )
+                m_typographicDefaultDoubleQuotes.end = attr[0];
+        }
+    }
+    QDomElement simpleQuote = de.namedItem( "SimpleQuote" ).toElement();
+    if(!simpleQuote.isNull())
+    {
+        QDomElement childItem = simpleQuote.namedItem("simplequote").toElement();
+        if ( !childItem.isNull() )
+        {
+            QString attr = childItem.attribute( "begin" );
+            if ( !attr.isEmpty() && attr[0] != 0 )
+                m_typographicDefaultSimpleQuotes.begin = attr[0];
+            attr = childItem.attribute( "end" );
+            if ( !attr.isEmpty() && attr[0] != 0 )
+                m_typographicDefaultSimpleQuotes.end = attr[0];
+        }
+    }
+}
+
 void KoAutoFormat::loadAllLanguagesAutoCorrection()
 {
-    QFile xmlFile;
-    xmlFile.setName(locate( "data", "koffice/autocorrect/all_languages.xml", m_doc->instance() ));
+    QString fname = locate( "data", "koffice/autocorrect/all_languages.xml", m_doc->instance() );
+    if ( fname.isEmpty() )
+        return;
+    QFile xmlFile( fname );
     if(xmlFile.open(IO_ReadOnly))
     {
         QDomDocument doc;
         if(!doc.setContent(&xmlFile)) {
-            //return;
+            return;
         }
         if(doc.doctype().name() != "autocorrection") {
             //return;

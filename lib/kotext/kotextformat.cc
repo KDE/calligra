@@ -419,7 +419,6 @@ void KoTextFormat::load( KoOasisContext& context )
         parseShadowFromCss( styleStack.attribute("fo:text-shadow") );
     }
 
-    /// ######## TODO finish
     // ######### TODO - it seems OO has it as a paragraph property... (what about msword?)
     //d->m_bHyphenation = false;
 

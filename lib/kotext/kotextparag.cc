@@ -1735,7 +1735,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
                 setCustomItem( pos, customItem, 0 );
             KoTextFormat f;
             f.load( context );
-            kdDebug(32002) << "loadOasisField: applying formatting from " << pos << " to " << pos+length << "\n   format=" << f.key() << endl;
+            //kdDebug(32500) << "loadOasisSpan: applying formatting from " << pos << " to " << pos+length << "\n   format=" << f.key() << endl;
             setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
             pos += length;
         }

@@ -321,6 +321,7 @@ private:
     void loadAutoCorrection( const QDomElement & _de, bool _allLanguages = false );
     void loadAllLanguagesAutoCorrection();
     KCommand *autoFormatWord( KoTextCursor* textEditCursor, KoTextParag *parag, int &index, KoTextObject *txtObj, QString * _wordArray, bool _allLanguages );
+    void readAutoCorrectConfig();
 
     KoDocument *m_doc;
     KoVariableCollection *m_varCollection;

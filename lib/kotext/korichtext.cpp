@@ -938,11 +938,13 @@ void KoTextCursor::gotoHome()
 
 void KoTextCursor::gotoEnd()
 {
-    if ( doc && !doc->lastParag()->isValid() )
-    {
-	kdDebug(32500) << "Last parag, " << doc->lastParag()->paragId() << ", is invalid - aborting gotoEnd() !" << endl;
-	return;
-    }
+    // This can happen in a no-auto-resize frame with overflowing contents.
+    // Don't prevent going to the end of the text, even if it's not visible.
+    //if ( doc && !doc->lastParag()->isValid() )
+    //{
+//	kdDebug(32500) << "Last parag, " << doc->lastParag()->paragId() << ", is invalid - aborting gotoEnd() !" << endl;
+//	return;
+//    }
 
     tmpIndex = -1;
     if ( doc )
