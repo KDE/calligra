@@ -307,7 +307,6 @@ KoMainWindow::~KoMainWindow()
          !d->m_rootDoc->isEmbedded())
     {
         //kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
-        d->m_manager->removePart( d->m_rootDoc ); // otherwise ~PartManager will try to access the deleted doc
         delete d->m_rootDoc;
     }
 
@@ -333,7 +332,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( doc )
   {
     doc->setSelectable( false );
-    d->m_manager->addPart( doc, false );
+    //d->m_manager->addPart( doc, false ); // done by KoView::setPartManager
     d->m_rootViews.append( doc->createView( d->m_splitter ) );
     d->m_rootViews.current()->setPartManager( d->m_manager );
 
@@ -362,7 +361,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
     //kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
-    d->m_manager->removePart( oldRootDoc ); // otherwise ~PartManager will try to access the deleted doc
     delete oldRootDoc;
   }
 }
@@ -947,15 +945,15 @@ void KoMainWindow::slotNewToolbarConfig()
   if (rootDocument())
     applyMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
   KXMLGUIFactory *factory = guiFactory();
-  
+
   // Check if there's an active view
   if( !d->m_activeView )
   	return;
-	
+
   // This gets plugged in even for embedded views
   factory->plugActionList(d->m_activeView, "view_closeallviews",
 			  d->m_veryHackyActionList);
-				  
+
   // This one only for root views
   if(d->m_rootViews.findRef(d->m_activeView)!=-1)
     factory->plugActionList(d->m_activeView, "view_split",
