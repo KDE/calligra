@@ -306,131 +306,129 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         fillStyleStack( dp );
         m_styleStack.setPageMark();
 
-        // take care of a possible page background
-        if ( m_styleStack.hasAttribute( "draw:fill" ) )
+        // take care of a possible page background or slide transition
+        if ( m_styleStack.hasAttribute( "draw:fill" ) ||
+             m_styleStack.hasAttribute( "presentation:transition-style" ) )
         {
             QDomElement bgPage = doc.createElement( "PAGE" );
-            QString fill = m_styleStack.attribute( "draw:fill" );
-            if ( fill == "solid" )
+
+            // background
+            if ( m_styleStack.hasAttribute( "draw:fill" ) )
             {
-                QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
-                backColor1.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
-                bgPage.appendChild( backColor1 );
-
-                QDomElement bcType = doc.createElement( "BCTYPE" );
-                bcType.setAttribute( "value", 0 ); // plain
-                bgPage.appendChild( bcType );
-
-                QDomElement backType = doc.createElement( "BACKTYPE" );
-                backType.setAttribute( "value", 0 ); // color/gradient
-                bgPage.appendChild( backType );
-
-                backgroundElement.appendChild( bgPage );
-            }
-            else if ( fill == "gradient" )
-            {
-                QDomElement bgPage = doc.createElement( "PAGE" );
-                QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
-                QDomElement* draw = m_draws[style];
-                appendBackgroundGradient( doc, bgPage, *draw );
-
-                backgroundElement.appendChild( bgPage );
-            }
-            else if ( fill == "bitmap" )
-            {
-                QDomElement bgPage = doc.createElement( "PAGE" );
-                QString style = m_styleStack.attribute( "draw:fill-image-name" );
-                QDomElement* draw = m_draws[style];
-                appendBackgroundImage( doc, bgPage, pictureElement, *draw );
-
-                QDomElement backView = doc.createElement( "BACKVIEW" );
-                if ( m_styleStack.hasAttribute( "style:repeat" ) )
+                QString fill = m_styleStack.attribute( "draw:fill" );
+                if ( fill == "solid" )
                 {
-                    QString repeat = m_styleStack.attribute( "style:repeat" );
-                    if ( repeat == "stretch" )
-                        backView.setAttribute( "value", 0 ); // zoomed
-                    else if ( repeat == "no-repeat" )
-                        backView.setAttribute( "value", 1 ); // centered
+                    QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
+                    backColor1.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
+                    bgPage.appendChild( backColor1 );
+
+                    QDomElement bcType = doc.createElement( "BCTYPE" );
+                    bcType.setAttribute( "value", 0 ); // plain
+                    bgPage.appendChild( bcType );
+
+                    QDomElement backType = doc.createElement( "BACKTYPE" );
+                    backType.setAttribute( "value", 0 ); // color/gradient
+                    bgPage.appendChild( backType );
+                }
+                else if ( fill == "gradient" )
+                {
+                    QDomElement bgPage = doc.createElement( "PAGE" );
+                    QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
+                    QDomElement* draw = m_draws[style];
+                    appendBackgroundGradient( doc, bgPage, *draw );
+                }
+                else if ( fill == "bitmap" )
+                {
+                    QDomElement bgPage = doc.createElement( "PAGE" );
+                    QString style = m_styleStack.attribute( "draw:fill-image-name" );
+                    QDomElement* draw = m_draws[style];
+                    appendBackgroundImage( doc, bgPage, pictureElement, *draw );
+
+                    QDomElement backView = doc.createElement( "BACKVIEW" );
+                    if ( m_styleStack.hasAttribute( "style:repeat" ) )
+                    {
+                        QString repeat = m_styleStack.attribute( "style:repeat" );
+                        if ( repeat == "stretch" )
+                            backView.setAttribute( "value", 0 ); // zoomed
+                        else if ( repeat == "no-repeat" )
+                            backView.setAttribute( "value", 1 ); // centered
+                        else
+                            backView.setAttribute( "value", 2 ); // use tiled as default
+                    }
                     else
                         backView.setAttribute( "value", 2 ); // use tiled as default
+                    bgPage.appendChild( backView );
+
+                    QDomElement backType = doc.createElement( "BACKTYPE" );
+                    backType.setAttribute( "value", 1 ); // image
+                    bgPage.appendChild( backType );
                 }
-                else
-                    backView.setAttribute( "value", 2 ); // use tiled as default
-                bgPage.appendChild( backView );
-
-                QDomElement backType = doc.createElement( "BACKTYPE" );
-                backType.setAttribute( "value", 1 ); // image
-                bgPage.appendChild( backType );
-
-                backgroundElement.appendChild( bgPage );
             }
-        }
 
-        // slide transition
-        if (m_styleStack.hasAttribute("presentation:transition-style"))
-        {
-            QDomElement bgPage = doc.createElement("PAGE");
-            QDomElement pgEffect = doc.createElement("PGEFFECT");
+            // slide transition
+            if (m_styleStack.hasAttribute("presentation:transition-style"))
+            {
+                QDomElement pgEffect = doc.createElement("PGEFFECT");
 
-            const QString effect = m_styleStack.attribute("presentation:transition-style");
-            kdDebug() << "Transition name: " << effect << endl;
-            int pef;        // PEF_NONE
+                const QString effect = m_styleStack.attribute("presentation:transition-style");
+                kdDebug() << "Transition name: " << effect << endl;
+                int pef;        // PEF_NONE
 
-            if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
-                pef=14;
-            else if (effect=="horizontal-stripes" || effect=="horizontal-lines") // PEF_BLINDS_HOR
-                pef=13;
-            else if (effect=="spiralin-left" || effect=="spiralin-right"
-                     || effect== "spiralout-left" || effect=="spiralout-right") // PEF_SURROUND1
-                pef=11;
-            else if (effect=="fade-from-upperleft") // PEF_STRIPS_RIGHT_DOWN
-                pef=39;
-            else if (effect=="fade-from-upperright") // PEF_STRIPS_LEFT_DOWN
-                pef=37;
-            else if (effect=="fade-from-lowerleft") // PEF_STRIPS_RIGHT_UP
-                pef=38;
-            else if (effect=="fade-from-lowerright") // PEF_STRIPS_LEFT_UP
-                pef=36;
-            else if (effect=="fade-from-top") // PEF_COVER_DOWN
-                pef=19;
-            else if (effect=="fade-from-bottom") // PEF_COVER_UP
-                pef=21;
-            else if (effect=="fade-from-left") // PEF_COVER_RIGHT
-                pef=25;
-            else if (effect=="fade-from-right") // PEF_COVER_LEFT
-                pef=23;
-            else if (effect=="fade-to-center") // PEF_CLOSE_ALL
-                pef=3;
-            else if (effect=="fade-from-center") // PEF_OPEN_ALL
-                pef=6;
-            else if (effect=="open-vertical") // PEF_OPEN_HORZ; really, no kidding ;)
-                pef=4;
-            else if (effect=="open-horizontal") // PEF_OPEN_VERT
-                pef=5;
-            else if (effect=="close-vertical") // PEF_CLOSE_HORZ
-                pef=1;
-            else if (effect=="close-horizontal") // PEF_CLOSE_VERT
-                pef=2;
-            else if (effect=="dissolve") // PEF_DISSOLVE; perfect hit ;)
-                pef=35;
-            else if (effect=="horizontal-checkerboard") // PEF_CHECKBOARD_ACROSS
-                pef=17;
-            else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
-                pef=18;
-            else if (effect=="roll-from-left") // PEF_UNCOVER_RIGHT
-                pef=26;
-            else if (effect=="roll-from-right") // PEF_UNCOVER_LEFT
-                pef=24;
-            else if (effect=="roll-from-bottom") // PEF_UNCOVER_UP
-                pef=22;
-            else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
-                pef=20;
-            else         // we choose a random transition instead of the unsupported ones ;)
-                pef=-1;
+                if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
+                    pef=14;
+                else if (effect=="horizontal-stripes" || effect=="horizontal-lines") // PEF_BLINDS_HOR
+                    pef=13;
+                else if (effect=="spiralin-left" || effect=="spiralin-right"
+                         || effect== "spiralout-left" || effect=="spiralout-right") // PEF_SURROUND1
+                    pef=11;
+                else if (effect=="fade-from-upperleft") // PEF_STRIPS_RIGHT_DOWN
+                    pef=39;
+                else if (effect=="fade-from-upperright") // PEF_STRIPS_LEFT_DOWN
+                    pef=37;
+                else if (effect=="fade-from-lowerleft") // PEF_STRIPS_RIGHT_UP
+                    pef=38;
+                else if (effect=="fade-from-lowerright") // PEF_STRIPS_LEFT_UP
+                    pef=36;
+                else if (effect=="fade-from-top") // PEF_COVER_DOWN
+                    pef=19;
+                else if (effect=="fade-from-bottom") // PEF_COVER_UP
+                    pef=21;
+                else if (effect=="fade-from-left") // PEF_COVER_RIGHT
+                    pef=25;
+                else if (effect=="fade-from-right") // PEF_COVER_LEFT
+                    pef=23;
+                else if (effect=="fade-to-center") // PEF_CLOSE_ALL
+                    pef=3;
+                else if (effect=="fade-from-center") // PEF_OPEN_ALL
+                    pef=6;
+                else if (effect=="open-vertical") // PEF_OPEN_HORZ; really, no kidding ;)
+                    pef=4;
+                else if (effect=="open-horizontal") // PEF_OPEN_VERT
+                    pef=5;
+                else if (effect=="close-vertical") // PEF_CLOSE_HORZ
+                    pef=1;
+                else if (effect=="close-horizontal") // PEF_CLOSE_VERT
+                    pef=2;
+                else if (effect=="dissolve") // PEF_DISSOLVE; perfect hit ;)
+                    pef=35;
+                else if (effect=="horizontal-checkerboard") // PEF_CHECKBOARD_ACROSS
+                    pef=17;
+                else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
+                    pef=18;
+                else if (effect=="roll-from-left") // PEF_UNCOVER_RIGHT
+                    pef=26;
+                else if (effect=="roll-from-right") // PEF_UNCOVER_LEFT
+                    pef=24;
+                else if (effect=="roll-from-bottom") // PEF_UNCOVER_UP
+                    pef=22;
+                else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
+                    pef=20;
+                else         // we choose a random transition instead of the unsupported ones ;)
+                    pef=-1;
 
-            pgEffect.setAttribute("value", pef);
-
-            bgPage.appendChild(pgEffect);
+                pgEffect.setAttribute("value", pef);
+                bgPage.appendChild(pgEffect);
+            }
             backgroundElement.appendChild(bgPage);
         }
 
