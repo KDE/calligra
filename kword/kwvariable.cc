@@ -129,12 +129,16 @@ void KWPgNumVariable::recalc()
         resize();
     }
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()
+    // But we don't want to keep a width of -1 ...
+    if ( width == -1 )
+        width = 0;
 }
 
 QString KWPgNumVariable::text(bool realValue)
 {
     if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
         return fieldCode();
+    // #### ??? What?
     else if ( m_subtype !=  VST_CURRENT_SECTION && m_doc->viewMode()->type() == "ModeText" && !realValue)
         return fieldCode();
     else

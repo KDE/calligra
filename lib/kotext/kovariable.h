@@ -632,7 +632,7 @@ public:
     // a given page (see KWTextFrameSet::drawFrame and KPTextObject::recalcPageNum)
     void setPgNum( int pgNum ) { m_varValue = QVariant( pgNum); }
     // For the 'current section title' variable. Same thing.
-    void setSectionTitle( const QString& title ) { m_varValue = QVariant( title); }
+    void setSectionTitle( const QString& title );
 
     virtual short int subType() const { return m_subtype; }
 

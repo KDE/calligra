@@ -184,6 +184,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             KoTextFormat *charFormat = c->format();
             if ( c->isCustom() ) {
                 ww = c->customItem()->width;
+                Q_ASSERT( ww >= 0 );
+                ww = QMAX(0, ww);
 #ifndef REF_IS_LU
                 pixelww = zh->layoutUnitToPixelX( ww );
 #endif
@@ -204,6 +206,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             pixelww = zh->layoutUnitToPixelX( ww );
 #endif
         }
+        Q_ASSERT( ww >= 0 );
         c->width = ww;
 
         //code from qt-3.1beta2

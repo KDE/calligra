@@ -1347,6 +1347,7 @@ void KoPgNumVariable::load( QDomElement& elem )
     if (!pgNumElem.isNull())
     {
         m_subtype = pgNumElem.attribute("subtype").toInt();
+        // ### This could use the format...
         if ( m_subtype != VST_CURRENT_SECTION )
             m_varValue = QVariant(pgNumElem.attribute("value").toInt());
         else
@@ -1806,5 +1807,15 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
     KoVariable::drawCustomItem( p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset, drawingShadow );
 
     p->restore();
+}
+
+void KoPgNumVariable::setSectionTitle( const QString& _title )
+{
+    QString title( _title );
+    if ( title.isEmpty() )
+    {
+        title = i18n("<None>"); // TODO after msg freeze: <No title>
+    }
+    m_varValue = QVariant( title );
 }
 

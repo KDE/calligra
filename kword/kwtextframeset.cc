@@ -550,27 +550,29 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
             KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
             if ( var && !var->isDeleted() )
             {
-                if ( var->subType() == KWPgNumVariable::VST_PGNUM_CURRENT )
+                QSize oldSize( var->width, var->height );
+                switch ( var->subType() )
                 {
+                case KWPgNumVariable::VST_PGNUM_CURRENT:
                     //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
                     //          << " and invalidating parag " << var->paragraph() << endl;
                     var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
-                }
-                else if ( var->subType() == KWPgNumVariable::VST_CURRENT_SECTION )
-                {
+                    break;
+                case KWPgNumVariable::VST_CURRENT_SECTION:
                     var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
-                }
-                else if ( var->subType() == KWPgNumVariable::VST_PGNUM_PREVIOUS )
-                {
+                    break;
+                case KWPgNumVariable::VST_PGNUM_PREVIOUS:
                     var->setPgNum( QMAX(theFrame->pageNum()-1,0)   + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
-                }
-                else if ( var->subType() == KWPgNumVariable::VST_PGNUM_NEXT )
-                {
+                    break;
+                case KWPgNumVariable::VST_PGNUM_NEXT:
                     var->setPgNum( QMIN(theFrame->pageNum()+1, theFrame->pageNum()+1)  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                    break;
                 }
 
                 var->resize();
-                var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+                QSize newSize( var->width, var->height );
+                if ( oldSize != newSize )
+                    var->paragraph()->invalidate( 0 ); // size has changed -> need reformatting !
                 var->paragraph()->setChanged( true );
             }
         }
