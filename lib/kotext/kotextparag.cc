@@ -329,19 +329,29 @@ int KoTextParag::bottomMargin() const
 int KoTextParag::leftMargin() const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    int cw=0;
+    if( m_layout.counter && !str->isRightToLeft() &&
+    	(( m_layout.counter->alignment() == Qt::AlignLeft ) || ( m_layout.counter->alignment() == Qt::AlignAuto )))
+	    cw = counterWidth();
+
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.width() )
-        + (str->isRightToLeft() ? 0 : counterWidth()) /* in layout units already */;
+        + cw; /* in layout units already */
 }
 
 int KoTextParag::rightMargin() const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    int cw=0;
+    if( m_layout.counter && str->isRightToLeft() &&
+    	(( m_layout.counter->alignment() == Qt::AlignRight ) || ( m_layout.counter->alignment() == Qt::AlignAuto )))
+	    cw = counterWidth();
+
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginRight ]
         + m_layout.rightBorder.width() )
-        + (str->isRightToLeft() ? counterWidth() : 0); // If RTL, the counter is on the right.
+        + cw; /* in layout units already */
 }
 
 int KoTextParag::firstLineMargin() const

@@ -41,6 +41,7 @@
 #include <qgroupbox.h>
 #include <knuminput.h>
 #include <kdeversion.h>
+#include <kcombobox.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
     :QWidget( parent, name ),
@@ -116,6 +117,17 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     lStart->setBuddy( spnStart );
     grid->addWidget( spnStart, 2, 2);
 
+    lAlignment = new QLabel( gStyle, "lAlignment" );
+    lAlignment->setText( i18n( "Counter alignment:" ) );
+    grid->addWidget( lAlignment, 2, 3 );
+
+    cbAlignment = new KComboBox( gStyle, "cbAlignment" );
+    cbAlignment->insertItem(i18n("Align Auto"));
+    cbAlignment->insertItem(i18n("Align Left"));
+    cbAlignment->insertItem(i18n("Align Right"));
+    cbAlignment->setCurrentItem(0);
+    grid->addWidget( cbAlignment, 2, 4 );
+
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
     lDepth->setText( i18n( "&Depth:" ) );
     lDepth->setBuddy( spnDepth );
@@ -150,6 +162,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
     connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
     connect( spnDisplayLevels, SIGNAL( valueChanged (int) ), this, SLOT( displayLevelsChanged(int) ) );
+    connect( cbAlignment, SIGNAL( activated (const QString&) ), this, SLOT( alignmentChanged(const QString&) ) );
     noSignals = false;
     if ( disableAll )
     {
@@ -164,7 +177,23 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         lStart->setEnabled( false );
         lCustom->setEnabled( false );
         cbRestart->setEnabled( false );
+        cbAlignment->setEnabled( false );
     }
+}
+
+void KoCounterStyleWidget::alignmentChanged(const QString& s)
+{
+    int a;
+    if(s==i18n("Align Left"))
+        a=Qt::AlignLeft;
+    else if(s==i18n("Align Right"))
+        a=Qt::AlignRight;
+    else if(s==i18n("Align Auto"))
+        a=Qt::AlignAuto;
+    else
+        kdError()<<"Not Implemented"<<endl;
+    m_counter.setAlignment(a);
+    emit sig_alignmentChanged(a);
 }
 
 void KoCounterStyleWidget::setCounter (KoParagCounter counter )
@@ -253,6 +282,14 @@ void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
     spnStart->setValue( m_counter.startNumber() );
 
     cbRestart->setChecked( m_counter.restartCounter() );
+    if(m_counter.alignment()==Qt::AlignLeft)
+        cbAlignment->setCurrentText(i18n("Align Left"));
+    else if(m_counter.alignment()==Qt::AlignRight)
+        cbAlignment->setCurrentText(i18n("Align Right"));
+    else if(m_counter.alignment()==Qt::AlignAuto)
+        cbAlignment->setCurrentText(i18n("Align Auto"));
+    else
+        kdError()<<"Not Implemented"<<endl;
 }
 
 void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
@@ -1500,6 +1537,7 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
     connect( m_styleWidget, SIGNAL( sig_restartChanged(bool) ), this, SLOT( restartChanged(bool) ) );
     connect( m_styleWidget, SIGNAL( sig_depthChanged (int) ), this, SLOT( depthChanged(int) ) );
     connect( m_styleWidget, SIGNAL( sig_displayLevelsChanged (int) ), this, SLOT( displayLevelsChanged(int) ) );
+    connect( m_styleWidget, SIGNAL( sig_alignmentChanged (int) ), this, SLOT( alignmentChanged(int) ) );
     connect( m_styleWidget, SIGNAL( changeCustomBullet( const QString & , QChar ) ), this, SLOT( slotChangeCustomBullet( const QString & , QChar ) ) );
 
     connect( m_styleWidget, SIGNAL( sig_numTypeChanged( int ) ), this, SLOT( numTypeChanged(int ) ) );

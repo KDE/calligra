@@ -142,6 +142,11 @@ public:
     QString custom() const;
     void setCustom( QString c );
 
+    /** Counter alignment
+     */
+    int alignment() const;
+    void setAlignment( int a );
+
     /**
      * Return the format to use for the counter.
      * This does no caching, it's merely to centralize code.
@@ -179,6 +184,7 @@ private:
     QString m_custom;
     QString m_prefix;
     QString m_suffix;
+    int m_align;
 
     class Private;
     Private *d; // define operator= and copy ctor when using this!

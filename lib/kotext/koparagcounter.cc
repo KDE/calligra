@@ -37,6 +37,7 @@ KoParagCounter::KoParagCounter()
     m_suffix = '.';
     m_customBulletChar = QChar( '-' );
     m_customBulletFont = QString::null;
+    m_align = Qt::AlignAuto;
     invalidate();
 }
 
@@ -53,6 +54,7 @@ bool KoParagCounter::operator==( const KoParagCounter & c2 ) const
             m_suffix==c2.m_suffix &&
             m_customBulletChar==c2.m_customBulletChar &&
             m_customBulletFont==c2.m_customBulletFont &&
+            m_align==c2.m_align &&
             m_custom==c2.m_custom);
 
 }
@@ -130,6 +132,7 @@ void KoParagCounter::load( QDomElement & element )
         m_displayLevels = m_depth+1;
     m_customBulletFont = element.attribute("bulletfont");
     m_custom = element.attribute("customdef");
+    m_align = element.attribute("align", "0").toInt(); //AlignAuto as defeult
     QString restart = element.attribute("restart");
     m_restartCounter = (restart == "true") || (restart == "1");
     invalidate();
@@ -323,6 +326,7 @@ void KoParagCounter::save( QDomElement & element )
         element.setAttribute( "restart", "true" );
     if ( !m_cache.text.isEmpty() )
         element.setAttribute( "text", m_cache.text );
+    element.setAttribute( "align", m_align );
 }
 
 void KoParagCounter::setCustom( QString c )
@@ -372,6 +376,12 @@ void KoParagCounter::setDisplayLevels( int l )
     invalidate();
 }
 
+void KoParagCounter::setAlignment( int a )
+{
+    m_align = a;
+    invalidate();
+}
+
 void KoParagCounter::setStyle( Style s )
 {
     m_style = s;
@@ -392,6 +402,11 @@ int KoParagCounter::startNumber() const
 int KoParagCounter::displayLevels() const
 {
     return m_displayLevels;
+}
+
+int KoParagCounter::alignment() const
+{
+    return m_align;
 }
 
 KoParagCounter::Style KoParagCounter::style() const

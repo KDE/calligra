@@ -50,6 +50,7 @@ class QPushButton;
 class QRadioButton;
 class QWidget;
 class KDoubleNumInput;
+class KComboBox;
 
 /**
  * This is the base class for any widget [usually used in a tab]
@@ -240,6 +241,7 @@ signals:
     void sig_suffixChanged(const QString &);
     void sig_prefixChanged(const QString &);
     void sig_numTypeChanged( int );
+    void sig_alignmentChanged( int );
     void changeCustomBullet( const QString & , QChar );
     void changeStyle( KoParagCounter::Style );
 protected slots:
@@ -247,6 +249,7 @@ protected slots:
     void restartChanged(bool b) {m_counter.setRestartCounter(b);emit sig_restartChanged(b);}
     void depthChanged(int i) {m_counter.setDepth(i);emit sig_depthChanged(i);}
     void displayLevelsChanged(int i) {m_counter.setDisplayLevels(i);emit sig_displayLevelsChanged(i);}
+    void alignmentChanged(const QString& s);
     void suffixChanged(const QString & txt) {m_counter.setSuffix(txt);emit sig_suffixChanged(txt); }
     void prefixChanged(const QString & txt) {m_counter.setPrefix(txt);emit sig_prefixChanged(txt); }
 
@@ -269,6 +272,8 @@ private:
     QLabel *lStart;
     QLabel *lCustom;
     QCheckBox *cbRestart;
+    KComboBox *cbAlignment;
+    QLabel *lAlignment;
     unsigned int styleBuffer;
     bool noSignals;
 };
@@ -302,6 +307,7 @@ protected slots:
     void restartChanged(bool b) {m_counter.setRestartCounter(b); }
     void depthChanged(int i) {m_counter.setDepth(i); updatePreview();}
     void displayLevelsChanged(int i) {m_counter.setDisplayLevels(i); updatePreview();}
+    void alignmentChanged(int i) {m_counter.setAlignment(i); updatePreview();}
     void slotChangeCustomBullet( const QString & f, QChar c);
     void styleChanged (KoParagCounter::Style st );
 
