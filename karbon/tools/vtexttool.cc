@@ -890,6 +890,8 @@ VTextTool::VTextCmd::execute()
 	}
 
 	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
@@ -921,6 +923,8 @@ VTextTool::VTextCmd::unexecute()
 	}
 
 	m_executed = false;
+
+	setSuccess( false );
 }
 
 VTextTool::VTextToCompositeCmd::VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text )
@@ -950,6 +954,8 @@ VTextTool::VTextToCompositeCmd::execute()
 	document()->selection()->append( m_group );
 
 	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
@@ -965,6 +971,8 @@ VTextTool::VTextToCompositeCmd::unexecute()
 	m_group->setState( VObject::deleted );
 
 	m_executed = false;
+
+	setSuccess( false );
 }
 
 bool
