@@ -6946,7 +6946,7 @@ void KWView::addPersonalExpression()
 
     if ( !file.open( IO_WriteOnly ) )
     {
-        kdDebug()<<"Error \n";
+        kdDebug()<<"Error in addPersonalExpression()\n";
 	return;
     }
     file.writeBlock(s,s.length());
@@ -6956,7 +6956,11 @@ void KWView::addPersonalExpression()
 
 void KWView::insertHorizontalLine()
 {
-    //todo
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit )
+    {
+        //todo
+    }
 }
 
 /******************************************************************/
