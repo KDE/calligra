@@ -1128,7 +1128,7 @@ MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
 					: KoFilter()
 {
 	m_simulateLinespacing = false;
-	m_simulateImageOffset = false;
+	m_simulateImageOffset = true;
 
 	m_pageBreak = 0;
 	m_needAnotherParagraph = false;
@@ -1165,7 +1165,7 @@ KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const Q
 	if (to != "application/x-kword" || from != "application/x-mswrite")
 		return KoFilter::NotImplemented;
 
-#if 1
+#if 0
 	//MSWriteImportDialog *dialog = new MSWriteImportDialog ();
 	MSWriteImportDialog dialog;
 
@@ -1201,7 +1201,7 @@ KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const Q
 		return KoFilter::FileNotFound;
 	}
 
-#if 0
+#if 1
 	// just select windows-1252 until a "Select Encoding" dialog is added
 	m_codec = QTextCodec::codecForName ("CP 1252");
 #endif
