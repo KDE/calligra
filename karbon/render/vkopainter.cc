@@ -133,7 +133,7 @@ VKoPainter::moveTo( const KoPoint &p )
 	if( m_index == 0)
 	{
 		if( !m_path )
-			m_path = art_new( ArtBpath, 100 );
+			m_path = art_new( ArtBpath, 500 );
 
 		m_path[ m_index ].code = ART_MOVETO;
 	}
@@ -175,7 +175,7 @@ VKoPainter::fillPath()
 {
 	// find begin of last subpath
     int find = -1;
-    for( int i = m_index; i >= 0; i-- )
+    for( int i = m_index - 1; i >= 0; i-- )
     {
         if( m_path[i].code == ART_MOVETO_OPEN || m_path[i].code == ART_MOVETO )
         {
@@ -185,7 +185,8 @@ VKoPainter::fillPath()
 	}
 
 	// for now, always close
-    if( find != -1 )
+    if( find != -1 && ( m_path[ find ].x3 != m_path[ m_index - 1 ].x3 ||
+						m_path[ find ].y3 != m_path[ m_index - 1 ].y3 ) )
 	{
 		m_path[ m_index ].code = ART_LINETO;
 		m_path[ m_index ].x3	= m_path[ find ].x3;
