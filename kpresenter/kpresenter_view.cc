@@ -1902,8 +1902,9 @@ void KPresenterView::backOk( bool takeGlobal )
 /*================== autoform chosen =============================*/
 void KPresenterView::afChooseOk( const QString & c )
 {
+    QString afDir = kapp->kde_datadir();
     QFileInfo fileInfo( c );
-    QString fileName = locate("autoforms", fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf" );
+    QString fileName( afDir + "/kpresenter/autoforms/" + fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf" );
 
     page->deSelectAllObj();
     //m_pKPresenterDoc->insertAutoform( pen, brush, lineBegin, lineEnd, fillType, gColor1, gColor2, gType, fileName, xOffset, yOffset );

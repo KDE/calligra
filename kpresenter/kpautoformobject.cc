@@ -147,8 +147,11 @@ void KPAutoformObject::save( ostream& out )
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
 
-    QString str = filename ;
-    str = str.remove( 0, filename.findRev('/') );
+    QString afDir = qstrdup( KApplication::kde_datadir() );
+    afDir += "/kpresenter/autoforms/";
+    int len = afDir.length();
+    QString str = qstrdup( filename );
+    str = str.remove( 0, len );
     out << indent << "<FILENAME value=\"" << str.ascii() << "\"/>" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
@@ -348,7 +351,10 @@ void KPAutoformObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 if ( ( *it ).m_strName == "value" )
                 {
                     filename = ( *it ).m_strValue.c_str();
-                    atfInterp.load( locate("autoforms", filename) );
+                    QString afDir = qstrdup( KApplication::kde_datadir() );
+                    afDir += "/kpresenter/autoforms/";
+                    filename.insert( 0, qstrdup( afDir ) );
+                    atfInterp.load( filename );
                 }
             }
         }

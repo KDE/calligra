@@ -54,6 +54,9 @@
 #include <ksimpleconfig.h>
 #include <kimgio.h>
 
+#include <kstddirs.h>
+#include <kglobal.h>
+
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
 /******************************************************************/
@@ -161,7 +164,7 @@ void KPWebPresentation::initCreation( QProgressBar *progressBar )
     uint index = 0;
 
     QString filename;
-    
+
     while (pics[index]) {
 	filename = pics[index] + format;
 	system( QString( "cp %1 %2/pics/%3" ).
@@ -479,7 +482,7 @@ void KPWebPresentationWizard::setupPage2()
 			"  compression, but is supported also by  \n"
 			"  old Web-Browsers.  \n");
 
-    if (KImageIO::canWrite("JPEG")) 
+    if (KImageIO::canWrite("JPEG"))
       help += i18n("  JPEG is a picture format with a quite good  \n"
 		   "  compression and which is also supported by  \n"
 		   "  all Web-Browsers.  \n");

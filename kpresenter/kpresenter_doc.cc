@@ -66,6 +66,8 @@
 
 #include <klocale.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 #include <koView.h>
 #include <koTemplateChooseDia.h>
