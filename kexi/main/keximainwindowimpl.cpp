@@ -39,11 +39,13 @@
 #include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <kparts/componentfactory.h>
+#include <kdockwidget_private.h>
 
 #include <kexidb/connection.h>
 
 #include "kexibrowser.h"
 #include "kexipropertyeditorview.h"
+#include "kexipropertybuffer.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
@@ -75,6 +77,9 @@
 //first fix the geometry
 #define KEXI_NO_CTXT_HELP 1
 
+//show property editor
+#define KEXI_PROP_EDITOR 1
+
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
 class KexiMainWindowImpl::Private
@@ -86,11 +91,14 @@ class KexiMainWindowImpl::Private
 		KexiContextHelp *ctxHelp;
 #endif
 		KexiBrowser *nav;
-		KexiPropertyEditorView *propEditor;
+		QGuardedPtr<KexiPropertyEditorView> propEditor;
+		QGuardedPtr<KexiPropertyBuffer> propBuffer;
+
 		KexiDialogDict dialogs;
 		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
 
+		QTimer timer; //helper timer
 //		QPtrDict<KexiActionProxy> actionProxies;
 //		KActionPtrList sharedActions;
 //		QSignalMapper *actionMapper;
@@ -112,7 +120,7 @@ class KexiMainWindowImpl::Private
 		KAction *action_edit_delete, *action_edit_delete_row,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste;
 		// view menu
-		KAction *action_view_nav;
+		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
@@ -144,6 +152,8 @@ class KexiMainWindowImpl::Private
 		focus_before_popup=0;
 //		relationPart=0;
 		privateDocIDCounter=0;
+		action_view_nav=0;
+		action_view_propeditor=0;
 	}
 };
 
@@ -209,9 +219,10 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	}
 
 	m_pTaskBar->setCaption(i18n("Task bar"));	//js TODO: move this to KMDIlib
-//	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
 
 	invalidateActions();
+
+	d->timer.singleShot(0,this,SLOT(slotLastActions()));
 }
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
@@ -297,6 +308,10 @@ KexiMainWindowImpl::initActions()
 
 	d->action_view_nav = new KAction(i18n("Project navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
+#ifdef KEXI_PROP_EDITOR
+	d->action_view_propeditor = new KAction(i18n("Property editor"), "", ALT + Key_2,
+		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
+#endif
 
 	new KAction(i18n("From File..."), "fileopen", 0, 
 		this, SLOT(slotImportFile()), actionCollection(), "import_file");
@@ -690,14 +705,44 @@ KexiMainWindowImpl::initNavigator()
 	invalidateActions();
 }
 
+void KexiMainWindowImpl::slotLastActions()
+{
+#ifdef KEXI_PROP_EDITOR
+	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+	ds->resize(ds->width()*3, ds->height());
+	ds->setSeparatorPos(30, true);
+	ds->setForcedFixedWidth( dw, 200 );
+#endif
+#ifdef Q_WS_WIN
+	showMaximized();//js: workaround for not yet completed layout settings storage on win32
+#endif
+}
+
 void KexiMainWindowImpl::initPropertyEditor()
 {
-//TODO: FIX LAYOUT PROBLEMS
 #ifdef KEXI_PROP_EDITOR
+//TODO: FIX LAYOUT PROBLEMS
 	d->propEditor = new KexiPropertyEditorView(this);
 	d->propEditor->installEventFilter(this);
 	d->propEditorToolWindow = addToolWindow(d->propEditor, 
 		KDockWidget::DockRight, getMainDockWidget(), 20);
+
+	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+	ds->show();
+//	ds->resize(400, ds->height());
+	ds->setSeparatorPos(400, true);
+	ds->setForcedFixedWidth( dw, 400 );
+//	ds->resize(400, ds->height());
+//	dw->resize(400, dw->height());
+	dw->setMinimumWidth(200);
+//	ds->setMinimumWidth(200);
+//	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);
+
+	if (m_rightContainer) {
+		m_rightContainer->setForcedFixedWidth( 400 );
+	}
 #endif
 /*    KMdiToolViewAccessor *tmp=createToolWindow();
     tmp->setWidgetToWrap(d->propEditor);
@@ -818,9 +863,12 @@ KexiMainWindowImpl::restoreSettings()
 	applyMainWindowSettings( d->config, "MainWindow" );//, instance()->instanceName() );
 
 	//small hack - set the default -- bottom
-	d->config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
-	if (d->config->readEntry("Position").isEmpty() || d->config->readEntry("Position")=="Bottom") {
-		d->config->writeEntry("Position","Bottom");
+//	d->config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
+	d->config->setGroup("MainWindow Toolbar KMdiTaskBar");
+	const bool tbe = d->config->readEntry("Position").isEmpty();
+	if (tbe || d->config->readEntry("Position")=="Bottom") {
+		if (tbe)
+			d->config->writeEntry("Position","Bottom");
 		moveDockWindow(m_pTaskBar, DockBottom);
 	}
 
@@ -1027,6 +1075,12 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 
 	if (dialogChanged) {
 //		invalidateSharedActions();
+		//update property editor's contents...
+//		if ((KexiPropertyBuffer*)d->propBuffer!=d->curDialog->propertyBuffer()) {
+		propertyBufferSwitched(d->curDialog);
+//			d->propBuffer = d->curDialog->propertyBuffer();
+//			d->propEditor->editor()->setBuffer( d->propBuffer );
+//		}
 	}
 
 	//update caption...
@@ -1041,7 +1095,13 @@ bool
 KexiMainWindowImpl::activateWindow(int id)
 {
 	kdDebug() << "KexiMainWindowImpl::activateWindow()" << endl;
-	KexiDialogBase *dlg = d->dialogs[id];
+	return activateWindow( d->dialogs[id] );
+}
+
+bool
+KexiMainWindowImpl::activateWindow(KexiDialogBase *dlg)
+{
+	kdDebug() << "KexiMainWindowImpl::activateWindow(KexiDialogBase *)" << endl;
 	if(!dlg)
 		return false;
 
@@ -1237,8 +1297,7 @@ void KexiMainWindowImpl::slotProjectRelations()
 	if (!d->prj)
 		return;
 	KexiDialogBase *d = KexiInternalPart::createDialogInstance("relation", this);
-	if (d)
-		d->activate();
+	activateWindow(d);
 /*	KexiRelationPart *p = relationPart();
 	if(!p)
 		return;
@@ -1287,7 +1346,21 @@ void KexiMainWindowImpl::slotViewNavigator()
 	d->block_KMdiMainFrm_eventFilter=true;
 		d->nav->setFocus();
 	d->block_KMdiMainFrm_eventFilter=false;
+}
 
+void KexiMainWindowImpl::slotViewPropertyEditor()
+{
+	if (!d->propEditor || !d->propEditorToolWindow)
+		return;
+
+	if (!d->propEditor->isVisible())
+		makeWidgetDockVisible(d->propEditor);
+
+	d->propEditorToolWindow->wrapperWidget()->raise();
+
+	d->block_KMdiMainFrm_eventFilter=true;
+	d->propEditor->setFocus();
+	d->block_KMdiMainFrm_eventFilter=false;
 }
 
 void KexiMainWindowImpl::slotViewDataMode()
@@ -1585,7 +1658,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 				return 0;
 			}
 		}
-		if (!activateWindow(item->identifier())) {
+		if (!activateWindow(dlg)) {
 			//js TODO: add error msg...
 			return 0;
 		}
@@ -1608,7 +1681,7 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 		return false;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	if (dlg) {
-		if (activateWindow(item->identifier())) {//just activate
+		if (activateWindow(dlg)) {//item->identifier())) {//just activate
 			invalidateViewModeActions();
 			return dlg;
 		}
@@ -1695,6 +1768,15 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item )
 int KexiMainWindowImpl::generatePrivateDocID()
 {
 	return --d->privateDocIDCounter;
+}
+
+void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg)
+{
+	if ((KexiDialogBase*)d->curDialog!=dlg)
+		return;
+
+	d->propBuffer = d->curDialog->propertyBuffer();
+	d->propEditor->editor()->setBuffer( d->propBuffer );
 }
 
 

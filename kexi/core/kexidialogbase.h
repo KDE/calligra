@@ -38,6 +38,7 @@ class KexiContextHelpInfo;
 namespace KexiPart {
 	class Part;
 }
+class KexiPropertyBuffer;
 
 class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
 {
@@ -126,6 +127,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		int m_currentViewMode;
 
 		inline QWidgetStack * stack() const { return m_stack; }
+
+		KexiPropertyBuffer *propertyBuffer();
 
 	private:
 		KexiMainWindow *m_parentWindow;

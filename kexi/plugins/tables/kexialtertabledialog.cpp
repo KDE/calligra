@@ -48,7 +48,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 {
 	m_table = &table;
 	m_constraints.resize(101);
-	m_row = 0;
+	m_row = -99;
 	init();
 }
 
@@ -130,8 +130,8 @@ void KexiAlterTableDialog::init()
 	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
 
 */
-	m_properties = new KexiPropertyEditor(splitter);
-	m_properties->setBuffer(m_constraints.at(0));
+//	m_properties = new KexiPropertyEditor(splitter);
+//	m_properties->setBuffer(m_constraints.at(0));
 
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(splitter);
@@ -184,9 +184,10 @@ void KexiAlterTableDialog::slotCellSelected(int, int row)
 	kdDebug() << "KexiAlterTableDialog::slotCellSelected()" << endl;
 	if(row == m_row)
 		return;
-
-	m_properties->setBuffer(m_constraints.at(row));
 	m_row = row;
+	propertyBufferSwitched();
+
+//	m_properties->setBuffer(m_constraints.at(row));
 }
 
 bool KexiAlterTableDialog::beforeSwitchTo(int)
@@ -230,6 +231,11 @@ bool KexiAlterTableDialog::beforeSwitchTo(int)
 	}*/
 
 	return true;
+}
+
+KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
+{
+	return m_constraints.at(m_view->currentRow());
 }
 
 /*

@@ -21,8 +21,7 @@
 #define KEXIPROPERTYEDITORVIEW_H
 
 #include "kexiviewbase.h"
-
-class KexiPropertyEditor;
+#include "kexipropertyeditor.h"
 
 /*! The container (acts as a dock window) for KexiPropertyEditor
 */
@@ -33,6 +32,11 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorView : public KexiViewBase
 	public:
 		KexiPropertyEditorView(KexiMainWindow *mainWin);
 		~KexiPropertyEditorView();
+
+		virtual QSize sizeHint() const;
+		virtual QSize minimumSizeHint() const;
+
+		KexiPropertyEditor *editor() const { return m_editor; }
 
 	public slots:
 		virtual void setGeometry( const QRect &r );

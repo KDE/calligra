@@ -166,16 +166,16 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 		SLOT(slotValueChanged(KexiPropertySubEditor *)));
 	if(!i->modified())
 	{
-	editor->setGeometry(geometry);
-	editor->resize(geometry.width(), geometry.height());
+		editor->setGeometry(geometry);
+		editor->resize(geometry.width(), geometry.height());
 	}
 	else
 	{
-	m_defaults->resize(geometry.height(), geometry.height());
-	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
-	m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
-	editor->resize(geometry.width()-m_defaults->width(), geometry.height());
-	m_defaults->show();
+		m_defaults->resize(geometry.height(), geometry.height());
+		QPoint p = contentsToViewport(QPoint(0, geometry.y()));
+		m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
+		editor->resize(geometry.width()-m_defaults->width(), geometry.height());
+		m_defaults->show();
 	}
 	editor->show();
 	addChild(editor);
@@ -198,20 +198,21 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(m_buffer && sync)
 		{
-		if(m_editItem->depth()==1)
-			m_buffer->changeProperty(m_editItem->name().latin1(), value);
-		else if(m_editItem->depth()==2)
-		{
-			KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
-			m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
-		}
+			if(m_editItem->depth()==1) {
+				m_buffer->changeProperty(m_editItem->name().latin1(), value);
+			}
+			else if(m_editItem->depth()==2)
+			{
+				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
+				m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
+			}
 		}
 		else
-		if(m_editItem->depth()==2)
-		{
-			KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
-			parent->getComposedValue();
-		}
+			if(m_editItem->depth()==2)
+			{
+				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
+				parent->getComposedValue();
+			}
 		emit valueChanged(m_editItem->text(0), value);
 	}
 }
@@ -225,8 +226,9 @@ KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 		m_editItem->setValue(value);
 		if(m_buffer)
 		{
-			if(m_editItem->depth()==1)
+			if(m_editItem->depth()==1) {
 				m_buffer->changeProperty(m_editItem->name().latin1(), value);
+			}
 			else if(m_editItem->depth()==2)
 			{
 				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
@@ -330,11 +332,14 @@ KexiPropertyEditor::fill()
 {
 	reset(false);
 
+	if (!m_buffer)
+		return;
+
 	KexiPropertyBuffer::Iterator it;
 	
 	if(!m_topItem)
 	{
-	m_topItem = new KexiPropertyEditorItem(this,"Top Item");
+		m_topItem = new KexiPropertyEditorItem(this,"Top Item");
 	}
 	
 	for(it = m_buffer->begin(); it != m_buffer->end(); ++it)

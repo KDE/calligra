@@ -25,6 +25,7 @@
 #include "kexicontexthelp_p.h"
 #include "kexipart.h"
 #include "kexipartinfo.h"
+#include "kexipropertybuffer.h"
 
 #include <qwidgetstack.h>
 #include <qobjectlist.h>
@@ -200,6 +201,8 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 	m_stack->raiseWidget(view);
 	view->afterSwitchFrom(m_currentViewMode);
 	m_currentViewMode = viewMode;
+
+	view->propertyBufferSwitched();
 	return true;
 }
 
@@ -211,6 +214,15 @@ void KexiDialogBase::setFocus()
 	else {
 		KMdiChildView::setFocus();
 	}
+}
+
+KexiPropertyBuffer *KexiDialogBase::propertyBuffer()
+{
+	KexiViewBase *v = static_cast<KexiViewBase*>(m_stack->visibleWidget());
+	if (v) {
+		return v->propertyBuffer();
+	}
+	return 0;
 }
 
 #include "kexidialogbase.moc"

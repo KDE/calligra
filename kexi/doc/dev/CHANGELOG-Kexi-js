@@ -267,6 +267,15 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - Access -> Kexi migration tool
 - scripting
 
+=== PropertyEditor TODO: ==========
+-for each row (proerty) allow to define double-click-action dependent on property type,
+ * e.g. bool editor: toggle true/false,
+ * enum editor: select next value (circularly),
+ * fire selection dialog for filename editor, color editor, pixmap editor, etc.
+ * expand childred for cells of type like "Rect"
+ * other types- by default: just move cursor to editor
+
+
 Detailed TODO for Beta3:
 1. Finish Startup Framework (see above: MOST RECENT TODO)
 2. Make alter table GUI (and KexiDB layer) workable
@@ -287,10 +296,17 @@ Detailed TODO for Beta3:
 --ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
 -use one and multi-key relations from kexidb
 
+2004-02-10
+- Property editor is now used globally in Kexi (property buffer's change comes from active KexiView)
+- Alter Table Dialog connected to global property editor
+- Kexi Main Window: removed unused code
+- Action for Focusing Property editor (alt+2) added
+
 2004-02-09
 --design command-line option added, especially useful for developers
 main window:
 - dock/layout/geometries settings are stored/restored (a bit better, not complete though)
+- table view: update width of a combobox popup on editor's resizing
 
 2004-02-08
 - libkeximain introduced (by splitting libkexicore)

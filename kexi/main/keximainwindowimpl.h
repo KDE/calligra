@@ -62,8 +62,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 * activates a window by it's document identifier
 		 * @returns false if doc couldn't be raised or isn't opened
 		 */
-		bool		activateWindow(int id);
+		bool activateWindow(int id);
 
+		/*! Like above, using \a dlg passed explicity. Above method just calls this one. */
+		bool activateWindow(KexiDialogBase *dlg);
 
 		void startup(KexiProjectData* pdata);
 
@@ -237,6 +239,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void slotAction(const QString& act_id);*/
 
 		void slotViewNavigator();
+		void slotViewPropertyEditor();
 		void slotViewDataMode();
 		void slotViewDesignMode();
 		void slotViewTextMode(); //!< sometimes called "SQL View"
@@ -256,6 +259,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void slotQuit();
 
 		void slotImportFile();
+
+		//! There are performed all actions that need to be done immediately after  ctro (using timer)
+		void slotLastActions();
+
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg);
 
 	private:
 

@@ -26,6 +26,7 @@
 
 class KexiMainWindow;
 class KexiDialogBase;
+class KexiPropertyBuffer;
 
 class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 {
@@ -78,6 +79,14 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		virtual bool dirty();
 
 		virtual void closeEvent( QCloseEvent * e );
+
+		/*! \return a property buffer for this view. For reimplementation. By default returns NULL. */
+		virtual KexiPropertyBuffer *propertyBuffer();
+
+		/*! Call this in your view's implementation whenever current property buffer 
+		 (returned by propertyBuffer()) is switched to other,
+		 so property editor contents need to be completely replaced. */
+		void propertyBufferSwitched();
 
 		QString m_defaultIconName;
 

@@ -21,6 +21,7 @@
 
 #include "keximainwindow.h"
 #include "kexidialogbase.h"
+#include "kexipropertybuffer.h"
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : QWidget(parent, name)
@@ -73,6 +74,19 @@ void KexiViewBase::closeEvent( QCloseEvent * e )
 {
 	emit closing();
 	QWidget::closeEvent(e);
+}
+
+KexiPropertyBuffer *KexiViewBase::propertyBuffer()
+{
+	return 0;
+}
+
+void KexiViewBase::propertyBufferSwitched()
+{
+	KexiDialogBase *dlg = parentDialog();
+
+	if (dlg)
+		m_mainWin->propertyBufferSwitched( dlg );
 }
 
 #include "kexiviewbase.moc"

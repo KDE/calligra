@@ -18,7 +18,6 @@
 */
 
 #include "kexipropertyeditorview.h"
-#include "kexipropertyeditor.h"
 #include "keximainwindow.h"
 
 #include <klocale.h>
@@ -36,10 +35,21 @@ KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin)
 	QHBoxLayout *lyr = new QHBoxLayout(this);
 	m_editor = new KexiPropertyEditor(this, false /*AutoSync*/, "propeditor");
 	lyr->addWidget(m_editor);
+	setFocusProxy(m_editor);
 }
 
 KexiPropertyEditorView::~KexiPropertyEditorView()
 {
+}
+
+QSize KexiPropertyEditorView::sizeHint() const
+{
+	return QSize(200,200);//m_editor->sizeHint();
+}
+
+QSize KexiPropertyEditorView::minimumSizeHint() const
+{
+	return QSize(200,200);//m_editor->sizeHint();
 }
 
 void KexiPropertyEditorView::setGeometry ( const QRect &r )
@@ -51,6 +61,7 @@ void KexiPropertyEditorView::resize (  int w, int h  )
 {
 	KexiViewBase::resize( w, h );
 }
+
 
 
 #include "kexipropertyeditorview.moc"

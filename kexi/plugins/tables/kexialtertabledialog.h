@@ -59,6 +59,8 @@ class KexiAlterTableDialog : public KexiViewBase
 
 		virtual bool beforeSwitchTo(int mode);
 
+		virtual KexiPropertyBuffer *propertyBuffer();
+
 	protected slots:
 		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
@@ -66,7 +68,7 @@ class KexiAlterTableDialog : public KexiViewBase
 	private:
 		KexiTableView *m_view;
 		KexiDB::TableSchema *m_table;
-		KexiPropertyEditor *m_properties;
+//		KexiPropertyEditor *m_properties;
 		Constraints m_constraints;
 		int m_row;
 };
