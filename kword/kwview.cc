@@ -2792,7 +2792,7 @@ void KWView::spellCheckerFinished( )
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                      "Please make sure you have ISpell properly configured and in your PATH."));
+                                      "Please make sure you have ISpell properly configured and in your PATH.\nUsed settings->configure."));
     }
     else if (status == KSpell::Crashed)
     {

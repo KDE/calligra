@@ -1085,6 +1085,7 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     }
 
     updateFrames();
+    kWordDocument()->layout();
     m_changed = true;
     emit repaintChanged( this );
 }
@@ -1097,6 +1098,7 @@ void KWFormulaFrameSet::updateFrames()
 
     formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
                      kWordDocument()->zoomItY( frames.at(0)->y() ) );
+
 }
 
 void KWFormulaFrameSet::save(QDomElement& parentElem)
