@@ -159,32 +159,6 @@ bool Page::eventFilter( QObject *o, QEvent *e )
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
         }
-        else if(keyev->state()==ControlButton )
-        {
-            QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-            QPtrListIterator<KoTextFormatInterface> it( lst );
-            if(!lst.isEmpty())
-            {
-                KoTextFormat *format=lst.first()->currentFormat();
-                if(!format)
-                    return false;
-                if(keyev->key()==Key_I)
-                {
-                    setTextItalic(!format->font().italic());
-                    return true;
-                }
-                else if(keyev->key()==Key_U)
-                {
-                    setTextUnderline(!format->font().underline());
-                    return true;
-                }
-                else if(keyev->key()==Key_B)
-                {
-                    setTextBold( !format->font().bold() );
-                    return true;
-                }
-            }
-        }
     }
     case QEvent::FocusIn:
         if ( m_currentTextObjectView )
@@ -792,7 +766,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 
     QPoint mv;
     QSize sz;
-    if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE ) {
+    if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE  && resizeObjNum != -1 ) {
         kpobject = objectList()->at( resizeObjNum );
         if ( kpobject ) {
             mv = QPoint( kpobject->getOrig().x() - oldRect.x(),
@@ -2018,8 +1992,8 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
 {
     _presFakt = presFakt;
     m_showOnlyPage = curPgNum;
-    //kdDebug(33001) << "Page::startScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
-    //kdDebug(33001) << "                              _presFakt=" << _presFakt << endl;
+    kdDebug(33001) << "Page::startScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
+    kdDebug(33001) << "                              _presFakt=" << _presFakt << endl;
 
     presMenu->setItemChecked( PM_SM, true );
     presMenu->setItemChecked( PM_DM, false );
