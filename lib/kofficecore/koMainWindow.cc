@@ -251,7 +251,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 #endif
 	QString file;
 
-        //kdebug(KDEBUG_INFO, 31000, "koMainWindow, nach prepareDialog, vor exec");
+        //kDebugInfo( 31000, "koMainWindow, nach prepareDialog, vor exec");
 
 	bool bOk = true;
 	do {
@@ -263,7 +263,7 @@ bool KoMainWindow::saveDocument( bool saveas )
             else
                 return false;
 
-            kdebug(KDEBUG_INFO, 31000, "koMainWindow, nach exec");
+            kDebugInfo( 31000, "koMainWindow, nach exec");
 
             KoFilterManager::self()->cleanUp();
             delete dialog;
