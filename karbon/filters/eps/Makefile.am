@@ -1,7 +1,7 @@
-kde_module_LTLIBRARIES = libkarbonepsexport.la
+kde_module_LTLIBRARIES = libkarbonaiimport.la
 
-libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN) -module -avoid-version -no-undefined
-libkarbonepsexport_la_LIBADD = \
+libkarbonaiimport_la_LDFLAGS = $(KDE_PLUGIN) -module -avoid-version -no-undefined
+libkarbonaiimport_la_LIBADD = \
 	../../../../koffice/lib/kofficeui/libkofficeui.la
 
 INCLUDES = \
@@ -10,15 +10,15 @@ INCLUDES = \
 	-I$(srcdir)/../../../../koffice/lib/kofficeui \
 	$(all_includes)
 
-service_DATA = karbon_eps_export.desktop
+service_DATA = karbon_ai_import.desktop
 servicedir = $(kde_servicesdir)
 
 noinst_HEADERS = \
-	epsexport.h
+	aiimport.h
 
-libkarbonepsexport_la_SOURCES = \
-	epsexport.cc
+libkarbonaiimport_la_SOURCES = \
+	aiimport.cc
 
-libkarbonepsexport_la_METASOURCES = \
+libkarbonaiimport_la_METASOURCES = \
 	AUTO
 

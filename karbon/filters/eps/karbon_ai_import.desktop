@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=Karbon Illustrator Import Filter
+X-KDE-Export=application/x-karbon
+X-KDE-Import=application/illustrator
+X-KDE-Weight=1
+X-KDE-Library=libkarbonaiimport
+ServiceTypes=KOfficeFilter
