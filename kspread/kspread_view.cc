@@ -1417,6 +1417,10 @@ void KSpreadView::dissociateCell()
 
 void KSpreadView::consolidate()
 {
+    if ( m_pCanvas->editor() )
+    {
+        m_pCanvas->deleteEditor( true ); // save changes
+    }
     KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
     dlg->show();
 }

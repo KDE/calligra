@@ -29,9 +29,9 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-
-#include <assert.h>
-#include <stdio.h>
+#include <qlayout.h>
+//#include <assert.h>
+//#include <stdio.h>
 
 #include <kdebug.h>
 
@@ -42,47 +42,54 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 
   setCaption( i18n("Consolidate") );
 
+  QGridLayout *grid1 = new QGridLayout(this,12,2,15,7);
+
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setGeometry( 10, 20, 150, 20 );
+  grid1->addWidget(tmpQLabel,0,0);
   tmpQLabel->setText( i18n("Function") );
 
   m_pFunction = new QComboBox( this );
-  m_pFunction->setGeometry( 10, 40, 150, 30 );
-  m_idSumme = 0; m_pFunction->insertItem( i18n("sum"), m_idSumme );
-  m_idAverage = 1; m_pFunction->insertItem( i18n("average"), m_idAverage );
+  grid1->addWidget(m_pFunction,1,0);
+
+  m_idSumme = 0;
+  m_pFunction->insertItem( i18n("sum"), m_idSumme );
+
+  m_idAverage = 1;
+  m_pFunction->insertItem( i18n("average"), m_idAverage );
 
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setGeometry( 10, 80, 150, 30 );
   tmpQLabel->setText( i18n("Reference") );
+  grid1->addWidget(tmpQLabel,2,0);
 
   m_pRef = new QLineEdit( this );
-  m_pRef->setGeometry( 10, 110, 150, 30 );
+  grid1->addWidget(m_pRef,3,0);
 
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setGeometry( 10, 140, 150, 30 );
+  grid1->addWidget(tmpQLabel,4,0);
   tmpQLabel->setText( i18n("Entered References") );
 
   m_pRefs = new QListBox( this );
-  m_pRefs->setGeometry( 10, 170, 150, 80 );
-
-  m_pOk = new QPushButton( i18n("OK"), this );
-  m_pOk->setGeometry( 180, 20, 100, 30 );
-  m_pOk->setEnabled( false );
-  m_pClose = new QPushButton( i18n("Cancel"), this );
-  m_pClose->setGeometry( 180, 60, 100, 30 );
-
-  m_pAdd = new QPushButton( i18n("Add"), this );
-  m_pAdd->setGeometry( 180, 120, 100, 30 );
-  m_pRemove = new QPushButton( i18n("Remove"), this );
-  m_pRemove->setGeometry( 180, 160, 100, 30 );
+  grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
 
   m_pRow = new QCheckBox( i18n("Description in Row"), this );
-  m_pRow->setGeometry( 10, 270, 300, 30 );
+  grid1->addWidget( m_pRow,9,0);
   m_pCol = new QCheckBox( i18n("Description in Column"), this );
-  m_pCol->setGeometry( 10, 300, 300, 30 );
+  grid1->addWidget(m_pCol,10,0);
   m_pCopy = new QCheckBox( i18n("Copy data"), this );
-  m_pCopy->setGeometry( 10, 330, 300, 30 );
+  grid1->addWidget(m_pCopy,11,0);
+
+  m_pOk = new QPushButton( i18n("OK"), this );
+  grid1->addWidget(m_pOk,0,1);
+  m_pOk->setEnabled( false );
+  m_pClose = new QPushButton( i18n("Cancel"), this );
+  grid1->addWidget(m_pClose,1,1);
+
+  m_pAdd = new QPushButton( i18n("Add"), this );
+  grid1->addWidget(m_pAdd,2,1);
+  m_pRemove = new QPushButton( i18n("Remove"), this );
+  grid1->addWidget(m_pRemove,3,1);
+
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
