@@ -108,7 +108,6 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
 QSize KWAnchor::size() const
 {
-    KWDocument * doc = m_frameset->kWordDocument();
     return m_frameset->floatingFrameSize( m_frameNum );
 }
 

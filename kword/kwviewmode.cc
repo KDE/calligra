@@ -187,7 +187,6 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
-    QRect pageRect;
     int paperWidth = doc->paperWidth();
     int paperHeight = doc->paperHeight();
     //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;

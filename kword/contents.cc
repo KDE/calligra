@@ -129,7 +129,7 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd )
+void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
 {
     KWTextDocument * textdoc = fs->textDocument();
     // Remove existing table of contents, based on the style

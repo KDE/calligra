@@ -190,7 +190,7 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
                 wordArray[word.length()]=word;
             }
             word.prepend( ch );
-            if (((index - 1)-i)==m_maxFindLength)
+            if (((index - 1)-i) == (int)m_maxFindLength)
                 break;
         }
     }

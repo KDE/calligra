@@ -305,7 +305,7 @@ int KWTextParag::lineSpacing( int line ) const
             m_layout.lineSpacing );
     else {
         KWTextParag * that = const_cast<KWTextParag *>(this);
-        ASSERT( line < that->lineStartList().count() );
+        ASSERT( line < (int)that->lineStartList().count() );
         //kdDebug() << "KWTextParag::lineSpacing line=" << line << " lines=" << that->lineStartList().count() << endl;
         QMap<int, QTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
         while ( line-- > 0 )
@@ -324,6 +324,8 @@ int KWTextParag::lineSpacing( int line ) const
             return isValid() ? height / 2 : height;
         }
     }
+    kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacing << endl;
+    return 0;
 }
 
 // Reimplemented from QTextParag
@@ -606,8 +608,9 @@ int KWTextParag::nextTab( int chnum, int x )
             }
             ++i;
         }
-    } else // No tab list, use tab-stop-width. QTextParag has the code :)
-        return QTextParag::nextTab( chnum, x );
+    }
+    // No tab list (or no more tabs), use tab-stop-width. QTextParag has the code :)
+    return QTextParag::nextTab( chnum, x );
 }
 
 //static

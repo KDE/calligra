@@ -1391,7 +1391,7 @@ KWPartFrameSet::~KWPartFrameSet()
 {
 }
 
-void KWPartFrameSet::drawFrame( KWFrame* frame, QPainter * painter, const QRect & crect,
+void KWPartFrameSet::drawFrame( KWFrame* frame, QPainter * painter, const QRect & /*crect TODO*/,
                                 QColorGroup &, bool onlyChanged, bool, KWFrameSetEdit * )
 {
     if (!onlyChanged)
@@ -1524,7 +1524,7 @@ KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
     return new KWFormulaFrameSetEdit(this, canvas);
 }
 
-void KWFormulaFrameSet::drawFrame( KWFrame* frame, QPainter* painter, const QRect& crect,
+void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const QRect& crect,
                                    QColorGroup& cg, bool onlyChanged, bool resetChanged,
                                    KWFrameSetEdit *edit )
 {

@@ -61,7 +61,7 @@ public:
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
-    virtual void setPagesPerRow(int _nb) {}
+    virtual void setPagesPerRow(int) {}
     virtual int pagesPerRow() {return 0;}
 
 protected:

@@ -2699,7 +2699,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
     KWFrameSet * fs = frame->getFrameSet();
     frame->setSelected(false);
     QString cmdName;
-    TypeStructDocItem docItem;
+    TypeStructDocItem docItem = (TypeStructDocItem) 0;
     switch (fs->type() ) {
     case FT_TEXT:
         cmdName=i18n("Delete text frame");
@@ -2712,6 +2712,10 @@ void KWDocument::deleteFrame( KWFrame * frame )
     case FT_PICTURE:
         cmdName=i18n("Delete picture frame");
         docItem=Pictures;
+        break;
+    case FT_CLIPART:
+        cmdName=i18n("Delete picture frame"); // TODO "Delete clipart frame" after msg freeze
+        docItem=Cliparts;
         break;
     case FT_PART:
         cmdName=i18n("Delete object frame");
