@@ -126,6 +126,7 @@ public:
     bool getProtect( bool p );
 
     bool getKeepRatio( bool p );
+    bool getProtectContent(bool prot) const;
 
 
     KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,

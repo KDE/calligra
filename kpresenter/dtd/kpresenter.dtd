@@ -244,7 +244,8 @@
                   bulletType3 NMTOKEN #REQUIRED
                   bulletType4 NMTOKEN #REQUIRED
                   margin NMTOKEN #REQUIRED
-                  paragSpacing NMTOKEN #REQUIRED>
+                  paragSpacing NMTOKEN #REQUIRED
+                  protectcontent NMTOKEN #REQUIRED>
 
 <!ELEMENT ENUMLISTTYPE EMPTY>
 <!ATTLIST ENUMLISTTYPE

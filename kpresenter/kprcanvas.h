@@ -270,6 +270,7 @@ public:
     bool getSticky( bool sticky ) const;
     bool getProtect( bool prot ) const;
     bool getKeepRatio( bool _ratio ) const;
+    bool getProtectContent(bool prot) const;
     QPen getPen( const QPen & _pen )const;
     QBrush getBrush( const QBrush & _brush )const;
     LineEnd getLineBegin( LineEnd  _end )const;

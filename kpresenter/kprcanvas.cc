@@ -7446,3 +7446,11 @@ KCommand *KPrCanvas::setProtectContent( bool b )
         delete macro;
     return 0L;
 }
+
+bool KPrCanvas::getProtectContent(bool prot) const
+{
+    bool result =m_activePage->getProtectContent(prot);
+    if ( result != prot)
+        return result;
+    return stickyPage()->getProtectContent( prot );
+}

@@ -253,6 +253,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     sticky = FALSE;
     protect = FALSE;
     keepRatio = FALSE;
+    protectContent = FALSE;
     m_canvas = 0L;
     m_spell.kspell = 0;
     automaticScreenPresFirstTimer = true;
@@ -976,7 +977,7 @@ void KPresenterView::extraPenBrush()
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
     styleDia->setProtected( m_canvas->getProtect( protect ) );
     styleDia->setKeepRatio( m_canvas->getKeepRatio( keepRatio ) );
-
+    styleDia->setProtectContent( m_canvas->getProtectContent(protectContent));
 
     styleDia->setCaption( i18n( "Properties" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
@@ -3456,7 +3457,7 @@ void KPresenterView::styleOk()
 	sticky = bSticky;
         keepRatio = styleDia->isSticky();
         protect = styleDia->isProtected();
-
+        protectContent = styleDia->isProtectContent();
         actionBrushColor->setCurrentColor( (confBrushDia->getBrush()).color() );
         actionPenColor->setCurrentColor( (confPenDia->getPen()).color() );
     }

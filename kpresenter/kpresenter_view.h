@@ -728,6 +728,7 @@ private:
     int rndX, rndY;
     bool sticky;
     bool protect;
+    bool protectContent;
     bool keepRatio;
     // for Convex/Concave Polygon
     bool checkConcavePolygon;

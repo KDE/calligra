@@ -185,7 +185,8 @@ double KPTextObject::load(const QDomElement &element)
     double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem(tagTEXTOBJ).toElement();
     if(!e.isNull()) {
-
+        if ( e.hasAttribute( "protectcontent"))
+            protectContent= (bool)e.attribute( "protectcontent" ).toInt();
 #if 0
         ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
         ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
@@ -381,6 +382,8 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 #endif
 
     QDomElement textobj=doc.createElement(tagTEXTOBJ);
+    if ( protectContent )
+        textobj.setAttribute( "protectcontent", (int)protectContent);
 #if 0
     textobj.setAttribute(attrLineSpacing, ktextobject.document()->lineSpacing());
     textobj.setAttribute(attrParagSpacing, ktextobject.document()->paragSpacing());
