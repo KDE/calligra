@@ -293,6 +293,17 @@ void XMLTree::getDate(int date, int& year, int& month, int& day)
     year += 1900;
 }
 
+void XMLTree::getTime( double time, int &hour,int  &min, int &second)
+{
+  double tmp;
+  tmp=time*24;
+  hour=(int)tmp;
+  tmp=(tmp-hour)*60;
+  min=(int)tmp;
+  tmp=(tmp-min)*60;
+  second=(int)tmp;
+}
+
 const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 {
     QString s;
@@ -376,16 +387,17 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
             format.setAttribute("format", "206");
             break;
         case 0x12:  // Time: h:mm AM/PM
-            format.setAttribute("format", "50");
+	    format.setAttribute("format", "52");
             break;
         case 0x13:  // Time: h:mm:ss AM/PM
-            format.setAttribute("format", "51");
+	  format.setAttribute("format", "53");
             break;
-        case 0x14:  // Time: h:mm
-            format.setAttribute("format", "50");
+        case 0x14:  // Time: h:mm this format doesn't exist
+	  //in kspread => time system h:mm
+	    format.setAttribute("format", "50");
             break;
         case 0x15:  // Time: h:mm:ss
-            format.setAttribute("format", "51");
+	    format.setAttribute("format", "51");
             break;
         case 0x2a:  // Number currency
         case 0x2c:
@@ -465,10 +477,13 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 	  break;
     case 0xB5:  //date 2/2/00 12:00 AM :doesn't exist in kspread
       //=>2/2/00
+      //this is a date-time format => problem when it's a time
           format.setAttribute("format", "204");
 	  break;
     case 0xB6: //date 2/2/00 0:00 : doesn't exist in kspread
       //=>2/2/00
+      //this a a date-time format => problem when
+      //it's a time
           format.setAttribute("format", "204");
 	  break;
     case 0xB7: //date F doesn't exist in kspread
@@ -479,6 +494,8 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
       format.setAttribute("format", "209");
       break;
     case 0xB9: //time format ?
+      format.setAttribute("format", "50");
+	  break;
     default:
       s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
 			      formats[xfs[xf]->ifmt]->cch);
@@ -1409,13 +1426,29 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
   QString s;
   Q_UINT16 row, column, xf;
   body >> row >> column >> xf >> value;
-
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
+
+  switch (xfs[xf]->ifmt) {
+    case 0x12:
+    case 0x13:
+    case 0x14: // Time
+    case 0x15:
+    case 0x2D:  
+    case 0x2E:  
+    case 0x2F: 
+    case 0xB9:  
+      int hour, min, second;
+      getTime( value, hour, min, second);
+      s.sprintf("%d:%d:%d", hour, min, second);
+      break;
+    default: // Number
+      s = m_locale.formatNumber(value);
+      break;
+    }
   
-  s = m_locale.formatNumber(value);
 
   QDomElement text = root->createElement("text");
   text.appendChild(root->createTextNode(s));

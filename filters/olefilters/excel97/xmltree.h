@@ -118,6 +118,7 @@ private:
   void getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
   void getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
   void getDate(int date, int& year, int& month, int& day);
+  void getTime( double time, int &hour,int  &min, int &second);
 
   struct format_rec {
     Q_UINT8 cch;
