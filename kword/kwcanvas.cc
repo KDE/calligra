@@ -524,7 +524,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         m_mouseMeaning = m_doc->getMouseMeaning( normalPoint, e->state(), &frame );
         //kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
         Q_ASSERT( m_mouseMeaning < MEANING_TOPLEFT ); // during resizing, the resizehandles are supposed to get the events
-        if ( m_mouseMeaning == MEANING_MOUSE_MOVE )
+        if ( m_mouseMeaning == MEANING_MOUSE_MOVE || m_mouseMeaning == MEANING_MOUSE_SELECT )
         {
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
