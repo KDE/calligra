@@ -3,8 +3,8 @@ SUBDIRS = parser
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(srcdir)/parser $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-liblateximport_la_LDFLAGS	= -module -avoid-version -no-undefined
-liblateximport_la_LIBADD = $(KOFFICE_LIBS) -Lparser -llatexparser
+liblateximport_la_LDFLAGS= -module -avoid-version -no-undefined
+liblateximport_la_LIBADD = $(KOFFICE_LIBS) parser/liblatexparser.la
 
 ####### Files
 
