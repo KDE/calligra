@@ -365,7 +365,6 @@ Oasis File Format:
 
 Todo:
 -----
--> save/load validation (in progress)
 -> save/load conditional cell attribute
 -> save/load font format
 -> save/load formula
@@ -376,3 +375,4 @@ Done:
 -> save/load column/row attribute (without font)
 -> save/load note
 -> save/load protect doc/sheet
+-> save/load validation

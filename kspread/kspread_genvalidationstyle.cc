@@ -141,12 +141,16 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     case Allow_Number:
         break;
     case Allow_Text:
+        //doesn't exist into oo spec
         break;
     case Allow_Time:
+        result = createTimeValidationCondition( _val );
         break;
     case Allow_Date:
+        result = createDateValidationCondition( _val );
         break;
     case Allow_Integer:
+        result = createIntergerValidationCondition( _val );
         break;
     case Allow_TextLength:
         result = createTextValidationCondition( _val );
@@ -155,6 +159,174 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     return result;
 }
 
+QString KSpreadGenValidationStyle::createIntergerValidationCondition( KSpreadValidity* _val )
+{
+    QString result( "cell-content-is-whole-number() and " );
+    switch( _val->m_cond )
+    {
+    case None:
+        //nothing
+        break;
+    case Equal:
+        result+="cell-content()";
+        result+="=";
+        result+=QString::number( _val->valMin );
+        break;
+    case Superior:
+        result+="cell-content()";
+        result+=">";
+        result+=QString::number( _val->valMin );
+        break;
+    case Inferior:
+        result+="cell-content()";
+        result+="<";
+        result+=QString::number( _val->valMin );
+        break;
+    case SuperiorEqual:
+        result+="cell-content()";
+        result+=">=";
+        result+=QString::number( _val->valMin );
+        break;
+    case InferiorEqual:
+        result+="cell-content()";
+        result+="<=";
+        result+=QString::number( _val->valMin );
+        break;
+    case Different:
+        result+="cell-content()";
+        result+="!=";
+        result+=QString::number( _val->valMin );
+        break;
+    case Between:
+        result+="cell-content-is-between(";
+        result+=QString::number( _val->valMin );
+        result+=",";
+        result+=QString::number( _val->valMax );
+        result+=")";
+        break;
+    case DifferentTo:
+        result+="cell-content-is-not-between(";
+        result+=QString::number( _val->valMin );
+        result+=",";
+        result+=QString::number( _val->valMax );
+        result+=")";
+        break;
+    }
+    return result;
+}
+
+
+QString KSpreadGenValidationStyle::createTimeValidationCondition( KSpreadValidity* _val )
+{
+    QString result( "cell-content-is-time() and " );
+    switch( _val->m_cond )
+    {
+    case None:
+        //nothing
+        break;
+    case Equal:
+        result+="cell-content()";
+        result+="=";
+        result+=_val->timeMin.toString( );
+        break;
+    case Superior:
+        result+="cell-content()";
+        result+=">";
+        result+=_val->timeMin.toString( );
+        break;
+    case Inferior:
+        result+="cell-content()";
+        result+="<";
+        result+=_val->timeMin.toString( );
+        break;
+    case SuperiorEqual:
+        result+="cell-content()";
+        result+=">=";
+        result+=_val->timeMin.toString( );
+        break;
+    case InferiorEqual:
+        result+="cell-content()";
+        result+="<=";
+        result+=_val->timeMin.toString( );
+        break;
+    case Different:
+        result+="cell-content()";
+        result+="!=";
+        result+=_val->timeMin.toString( );
+        break;
+    case Between:
+        result+="cell-content-is-between(";
+        result+=_val->timeMin.toString( );
+        result+=",";
+        result+=_val->timeMax.toString( );
+        result+=")";
+        break;
+    case DifferentTo:
+        result+="cell-content-is-not-between(";
+        result+=_val->timeMin.toString( );
+        result+=",";
+        result+=_val->timeMax.toString( );
+        result+=")";
+        break;
+    }
+    return result;
+}
+
+QString KSpreadGenValidationStyle::createDateValidationCondition( KSpreadValidity* _val )
+{
+    QString result( "cell-content-is-date() and " );
+    switch( _val->m_cond )
+    {
+    case None:
+        //nothing
+        break;
+    case Equal:
+        result+="cell-content()";
+        result+="=";
+        result+=_val->dateMin.toString();
+        break;
+    case Superior:
+        result+="cell-content()";
+        result+=">";
+        result+=_val->dateMin.toString();
+        break;
+    case Inferior:
+        result+="cell-content()";
+        result+="<";
+        result+=_val->dateMin.toString();
+        break;
+    case SuperiorEqual:
+        result+="cell-content()";
+        result+=">=";
+        result+=_val->dateMin.toString();
+        break;
+    case InferiorEqual:
+        result+="cell-content()";
+        result+="<=";
+        result+=_val->dateMin.toString();
+        break;
+    case Different:
+        result+="cell-content()";
+        result+="!=";
+        result+=_val->dateMin.toString();
+        break;
+    case Between:
+        result+="cell-content-is-between(";
+        result+=_val->dateMin.toString();
+        result+=",";
+        result+=_val->dateMax.toString();
+        result+=")";
+        break;
+    case DifferentTo:
+        result+="cell-content-is-not-between(";
+        result+=_val->dateMin.toString();
+        result+=",";
+        result+=_val->dateMax.toString();
+        result+=")";
+        break;
+    }
+    return result;
+}
 
 QString KSpreadGenValidationStyle::createTextValidationCondition( KSpreadValidity* _val )
 {
