@@ -1891,12 +1891,20 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
     direction = KSpread::Top;
     break;
   case Key_Left:
-    direction = KSpread::Left;
+    if (activeTable()->layoutDirection()==KSpreadSheet::RightToLeft)
+      direction = KSpread::Right;
+    else
+      direction = KSpread::Left;
     break;
   case Key_Right:
-  case Key_Tab:
-    direction = KSpread::Right;
+    if (activeTable()->layoutDirection()==KSpreadSheet::RightToLeft)
+      direction = KSpread::Left;
+    else
+      direction = KSpread::Right;
     break;
+  case Key_Tab:
+      direction = KSpread::Right;
+      break;
   default:
     Q_ASSERT(false);
     break;
@@ -2303,6 +2311,52 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   //Ctrl+Key_Left
   case Key_Left:
 
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+  {
+    cell = table->cellAt( marker.x(), marker.y() );
+    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
+    {
+      lastCell = cell;
+      col = marker.x()+1;
+      cell = table->cellAt(col, cell->row());
+      while ((cell != NULL) && (col < KS_colMax) && (!cell->isEmpty()) )
+      {
+        if (!(table->columnFormat(cell->column())->isHide()))
+        {
+          lastCell = cell;
+          searchThroughEmpty = FALSE;
+        }
+        col++;
+        cell = table->cellAt(col, cell->row());
+      }
+      cell = lastCell;
+    }
+    if (searchThroughEmpty)
+    {
+      cell = table->getNextCellRight(marker.x(), marker.y());
+
+      while ((cell != NULL) &&
+            (cell->isEmpty() || (table->columnFormat(cell->column())->isHide())))
+      {
+        cell = table->getNextCellRight(cell->column(), cell->row());
+      }
+    }
+
+    if (cell == NULL)
+      col = marker.x();
+    else
+      col = cell->column();
+
+    while ( table->columnFormat(col)->isHide() )
+    {
+      col--;
+    }
+
+    destination.setX(col);
+    destination.setY(marker.y());
+  }
+  else
+  {
     cell = table->cellAt( marker.x(), marker.y() );
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
     {
@@ -2345,11 +2399,59 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
     destination.setX(col);
     destination.setY(marker.y());
+  }
     break;
 
   //Ctrl+Key_Right
   case Key_Right:
 
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+  {
+    cell = table->cellAt( marker.x(), marker.y() );
+    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
+    {
+      lastCell = cell;
+      col = marker.x()-1;
+      cell = table->cellAt(col, cell->row());
+      while ((cell != NULL) && (col > 0) && (!cell->isEmpty()) )
+      {
+        if (!(table->columnFormat(cell->column())->isHide()))
+        {
+          lastCell = cell;
+          searchThroughEmpty = FALSE;
+        }
+        col--;
+        if ( col > 0 )
+            cell = table->cellAt(col, cell->row());
+      }
+      cell = lastCell;
+    }
+    if (searchThroughEmpty)
+    {
+      cell = table->getNextCellLeft(marker.x(), marker.y());
+
+      while ((cell != NULL) &&
+            (cell->isEmpty() || (table->columnFormat(cell->column())->isHide())))
+      {
+        cell = table->getNextCellLeft(cell->column(), cell->row());
+      }
+    }
+
+    if (cell == NULL)
+      col = 1;
+    else
+      col = cell->column();
+
+    while ( table->columnFormat(col)->isHide() )
+    {
+      col++;
+    }
+
+    destination.setX(col);
+    destination.setY(marker.y());
+  }
+  else
+  {
     cell = table->cellAt( marker.x(), marker.y() );
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
     {
@@ -2391,6 +2493,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
     destination.setX(col);
     destination.setY(marker.y());
+  }
     break;
 
   }
