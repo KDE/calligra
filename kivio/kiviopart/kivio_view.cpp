@@ -50,7 +50,6 @@
 #include <kstdaction.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <kformulaedit.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 
