@@ -21,6 +21,7 @@
 
 #include "vellipse.h"
 #include "vtransformcmd.h"
+#include <klocale.h>
 
 
 VEllipse::VEllipse( VObject* parent,
@@ -50,6 +51,6 @@ QString
 VEllipse::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Ellipse";
+	return !result.isEmpty() ? result : i18n( "Ellipse" );
 }
 

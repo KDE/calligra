@@ -24,6 +24,7 @@
 #include "vglobal.h"
 #include "vsinus.h"
 #include "vtransformcmd.h"
+#include <klocale.h>
 
 
 VSinus::VSinus( VObject* parent,
@@ -119,7 +120,7 @@ QString
 VSinus::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Sinus";
+	return !result.isEmpty() ? result : i18n( "Sinus" );
 }
 
 

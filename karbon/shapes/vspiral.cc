@@ -23,11 +23,10 @@
 
 #include <qwmatrix.h>
 
-#include "vfill.h"
 #include "vglobal.h"
 #include "vspiral.h"
 #include "vtransformcmd.h"
-
+#include <klocale.h>
 
 VSpiral::VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments, double fade,
@@ -87,6 +86,6 @@ QString
 VSpiral::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Spiral";
+	return !result.isEmpty() ? result : i18n( "Spiral" );
 }
 

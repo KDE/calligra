@@ -26,6 +26,7 @@
 #include "vglobal.h"
 #include "vpolygon.h"
 #include "vtransformcmd.h"
+#include <klocale.h>
 
 
 VPolygon::VPolygon( VObject* parent,
@@ -73,7 +74,7 @@ QString
 VPolygon::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Polygon";
+	return !result.isEmpty() ? result : i18n( "Polygon" );
 }
 
 

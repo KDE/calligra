@@ -20,7 +20,7 @@
 
 
 #include "vrectangle.h"
-
+#include <klocale.h>
 
 VRectangle::VRectangle( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
@@ -39,6 +39,6 @@ QString
 VRectangle::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Rectangle";
+	return !result.isEmpty() ? result : i18n( "Rectangle" );
 }
 

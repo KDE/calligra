@@ -26,7 +26,7 @@
 #include "vglobal.h"
 #include "vstar.h"
 #include "vtransformcmd.h"
-
+#include <klocale.h>
 
 VStar::VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
@@ -79,6 +79,6 @@ QString
 VStar::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Star";
+	return !result.isEmpty() ? result : i18n( "Star" );
 }
 
