@@ -61,7 +61,7 @@ public:
                             StorageCreationError, BadMimeType, BadConversionGraph,
                             EmbeddedDocError, WrongFormat, NotImplemented,
                             ParsingError, InternalError, UnexpectedEOF,
-                            UnexpectedOpcode, UserCancelled,
+                            UnexpectedOpcode, UserCancelled, OutOfMemory,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255 };
 
     virtual ~KoFilter();
