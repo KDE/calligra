@@ -74,9 +74,9 @@ public:
     }
     void ok(KPTProject &p, KMacroCommand *macro) {
         if (state == New) {
-            //kdDebug()<<k_funcinfo<<"add: "<<calendar->name()<<endl;
+            //kdDebug()<<k_funcinfo<<"add: "<<calendar->name()<<" p="<<&p<<endl;
             base ? calendar->setParent(base->baseCalendar()) : calendar->setParent(0);
-            macro->addCommand(new KPTCalendarAddCmd(p, calendar));
+            macro->addCommand(new KPTCalendarAddCmd(&p, calendar));
             calendar = 0;
         } else if (state == Modified) {
             //kdDebug()<<k_funcinfo<<"modified: "<<calendar->name()<<endl;
@@ -141,6 +141,7 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
     : KDialogBase( Swallow, i18n("Calendar's Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
+    //kdDebug()<<k_funcinfo<<&p<<endl;
     dia = new KPTCalendarListDialogImpl(this);
     QPtrListIterator<KPTCalendar> it = p.calendars();
     for (; it.current(); ++it) {

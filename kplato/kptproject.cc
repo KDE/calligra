@@ -59,6 +59,8 @@ KPTProject::KPTProject(KPTNode *parent)
     m_maxNodeId = 0;
     m_maxGroupId = 0;
     m_maxResourceId = 0;
+    
+    m_calendars.setAutoDelete(true);
 
 }
 
@@ -768,6 +770,7 @@ QPtrList<KPTAppointment> KPTProject::appointments(const KPTNode *node) {
 }
 
 void KPTProject::addCalendar(KPTCalendar *calendar) {
+    //kdDebug()<<k_funcinfo<<calendar->name()<<endl;
     m_calendars.append(calendar);
 }
 

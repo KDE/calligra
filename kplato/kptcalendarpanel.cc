@@ -552,11 +552,6 @@ void KPTCalendarPanel::setCalendar(KPTCalendar *cal) {
     table->clear();
     if (cal) {
         table->setMarkedWeeks(cal->weekMap());
-        KPTWeekMap w = cal->weekMap();
-        KPTWeekMap::iterator wi;
-        for (wi = w.begin(); wi != w.end(); ++wi)
-            //kdDebug()<<k_funcinfo<<" week "<<wi.key()<<"="<<wi.data()<<endl;
-            
         table->setMarkedWeekdays(cal->weekdaysMap());
         QPtrListIterator<KPTCalendarDay> it = cal->days();
         //kdDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;

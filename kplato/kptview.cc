@@ -346,7 +346,7 @@ void KPTView::slotAddSubTask() {
             KMacroCommand *m = dia->buildCommand();
             m->execute(); // do changes to task
             delete m;
-            KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(getProject(), node, currNode, i18n("Add subtask"));
+            KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(&(getProject()), node, currNode, i18n("Add subtask"));
             getPart()->addCommand(cmd); // add task to project
     		slotUpdate(true);
 			return;
@@ -369,7 +369,7 @@ void KPTView::slotAddTask() {
             KMacroCommand *m = dia->buildCommand();
             m->execute(); // do changes to task
             delete m;
-            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getProject(), node, currNode, i18n("Add task"));
+            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(&(getProject()), node, currNode, i18n("Add task"));
             getPart()->addCommand(cmd); // add task to project
     		slotUpdate(true);
 			return;
@@ -397,7 +397,7 @@ void KPTView::slotAddMilestone() {
             KMacroCommand *m = dia->buildCommand();
             m->execute(); // do changes to task
             delete m;
-            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getProject(), node, currNode, i18n("Add milestone"));
+            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(&(getProject()), node, currNode, i18n("Add milestone"));
             getPart()->addCommand(cmd); // add task to project
     		slotUpdate(true);
 			return;

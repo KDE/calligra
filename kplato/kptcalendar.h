@@ -190,7 +190,7 @@ public:
     KPTCalendar();
     KPTCalendar(QString name, KPTCalendar *parent=0);
     KPTCalendar(KPTCalendar *calendar);
-    ~KPTCalendar() { delete m_weeks; delete m_weekdays; }
+    ~KPTCalendar();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }

@@ -350,6 +350,11 @@ KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
     init();
 }
 
+KPTCalendar::~KPTCalendar() {
+    //kdDebug()<<k_funcinfo<<"deleting "<<m_name<<endl;
+    delete m_weeks; 
+    delete m_weekdays; 
+}
 KPTCalendar::KPTCalendar(KPTCalendar *calendar) {
     copy(*calendar);
 }
@@ -569,18 +574,18 @@ bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) 
 #ifndef NDEBUG
 void KPTCalendarDay::printDebug(QCString indent) {
     QString s[] = {"None", "Non-working", "Working"};
-    //kdDebug()<<indent<<" "<<m_date<<" = "<<s[m_state]<<endl;
+    kdDebug()<<indent<<" "<<m_date<<" = "<<s[m_state]<<endl;
     if (m_state == KPTMap::Working) {
         indent += "  ";
         QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
         for (; it.current(); ++it) {
-            //kdDebug()<<indent<<" Interval: "<<it.current()->first<<" to "<<it.current()->second<<endl;
+            kdDebug()<<indent<<" Interval: "<<it.current()->first<<" to "<<it.current()->second<<endl;
         }
     }
     
 }
 void KPTCalendarWeekdays::printDebug(QCString indent) {
-    //kdDebug()<<indent<<"Weekdays ------"<<endl;
+    kdDebug()<<indent<<"Weekdays ------"<<endl;
     QPtrListIterator<KPTCalendarDay> it = m_weekdays;
     for (char c='0'; it.current(); ++it) {
         it.current()->printDebug(indent + "  Day " + c++ + ": ");
@@ -589,15 +594,15 @@ void KPTCalendarWeekdays::printDebug(QCString indent) {
 }
 void KPTCalendarWeeks::printDebug(QCString indent) {
     QCString s[] = {"None", "Non-working", "Working"};
-    //kdDebug()<<indent<<" Weeks ------"<<endl;
+    kdDebug()<<indent<<" Weeks ------"<<endl;
     indent += "  ";
     KPTWeekMap::iterator it;
     for (it = m_weeks.begin(); it != m_weeks.end(); ++it) {
-        //kdDebug()<<indent<<" Week: "<<it.key()<<" = "<<s[it.data()]<<endl;
+        kdDebug()<<indent<<" Week: "<<it.key()<<" = "<<s[it.data()]<<endl;
     }
 }
 void KPTCalendar::printDebug(QCString indent) {
-    //kdDebug()<<indent<<"KPTCalendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
+    kdDebug()<<indent<<"KPTCalendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
     if (m_parent) kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
     m_weekdays->printDebug(indent + "  ");
     m_weeks->printDebug(indent + "  ");

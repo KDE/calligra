@@ -30,14 +30,13 @@ class KPTCalendar;
 class KPTCalendarAddCmd : public KNamedCommand
 {
 public:
-    KPTCalendarAddCmd(KPTProject &project, KPTCalendar *cal, QString name=0);
+    KPTCalendarAddCmd(KPTProject *project, KPTCalendar *cal, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTProject m_project;
+    KPTProject *m_project;
     KPTCalendar *m_cal;
-    KPTNode *m_position;
     bool m_added;
 };
 
@@ -55,12 +54,12 @@ private:
 class KPTNodeAddCmd : public KNamedCommand
 {
 public:
-    KPTNodeAddCmd(KPTProject &project, KPTNode *node, KPTNode *position, QString name=0);
+    KPTNodeAddCmd(KPTProject *project, KPTNode *node, KPTNode *position, QString name=0);
     void execute();
     void unexecute();
 
 protected:
-    KPTProject m_project;
+    KPTProject *m_project;
     KPTNode *m_node;
     KPTNode *m_position;
     bool m_added;
@@ -80,14 +79,14 @@ private:
 class KPTTaskAddCmd : public KPTNodeAddCmd
 {
 public:
-    KPTTaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name=0);
+    KPTTaskAddCmd(KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
     void execute();
 };
 
 class KPTSubtaskAddCmd : public KPTNodeAddCmd
 {
 public:
-    KPTSubtaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name=0);
+    KPTSubtaskAddCmd(KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
     void execute();
 };
 
