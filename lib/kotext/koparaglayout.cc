@@ -767,7 +767,8 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "ptpos", (*it).ptPos );
         element.setAttribute( "filling", (*it).filling );
         element.setAttribute( "width", (*it).ptWidth );
-        element.setAttribute( "alignchar", QString((*it).alignChar) );
+        if ( !(*it).alignChar.isNull() )
+          element.setAttribute( "alignchar", QString((*it).alignChar) );
     }
 }
 
@@ -827,7 +828,8 @@ void KoParagLayout::saveOasis( KoGenStyle& gs ) const
             break;
         case T_DEC_PNT:  // "alignment on decimal point"
             tabsWriter.addAttribute( "style:type", "char" );
-            tabsWriter.addAttribute( "style:char", QString( (*it).alignChar ) );
+            if ( !(*it).alignChar.isNull() )
+              tabsWriter.addAttribute( "style:char", QString( (*it).alignChar ) );
             break;
         case T_INVALID: // keep compiler happy, this can't happen
             break;

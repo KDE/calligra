@@ -540,6 +540,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
                 break;
             case KoTabChooser::TAB_DEC_PNT:
                 tab.type = T_DEC_PNT;
+                tab.alignChar = KGlobal::locale()->decimalSymbol()[0];
                 break;
             default: break;
             }
