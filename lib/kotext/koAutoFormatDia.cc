@@ -546,6 +546,7 @@ void KoAutoFormatDia::setupTab3()
     grid->setRowStretch( 2, 1 );
 
     pbRemove->setEnabled(false);
+    pbChangeFormat->setEnabled( false );
     pbAdd->setEnabled(false);
 
     initTab3();
@@ -635,6 +636,7 @@ void KoAutoFormatDia::slotfind2( const QString & )
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
     KoAutoFormatEntry * entry=m_autoFormat.findFormatEntry(m_find->text());
     pbRemove->setEnabled(state && entry);
+    pbChangeFormat->setEnabled(state && entry);
     pbAdd->setEnabled(state);
 }
 
@@ -651,6 +653,7 @@ void KoAutoFormatDia::refreshEntryList()
     bool state = !(m_replace->text().isEmpty()) && !(m_find->text().isEmpty());
     //we can delete item, as we search now in listbox and not in m_find lineedit
     pbRemove->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
+    pbChangeFormat->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
     pbAdd->setEnabled(state);
 }
 
@@ -732,6 +735,7 @@ void KoAutoFormatDia::slotEditEntry()
     m_replace->setText(m_pListView->currentItem()->text(1));
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
     pbRemove->setEnabled(state);
+    pbChangeFormat->setEnabled( state );
     pbAdd->setEnabled(state);
 }
 
