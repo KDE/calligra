@@ -55,7 +55,7 @@ KAboutData * newKWordAboutData()
     aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
     aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
     aboutData->addAuthor("Robert Jacolin", 0, "rjacolin@ifrance.com");
-    aboutData->addAuthor("Enno Bartels", 0, "ebartels@nwm.de");
+    aboutData->addAuthor("Enno Bartels", 0, "ebartels@nwn.de");
     aboutData->addAuthor("Ewald Snel", 0, "ewald@rambo.its.tudelft.nl");
     aboutData->addAuthor("Tomasz Grobelny", 0, "grotk@poczta.onet.pl");
     aboutData->addAuthor("Michael Johnson", 0, "mikej@xnet.com");
