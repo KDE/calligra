@@ -35,6 +35,7 @@
 #include <kpoint.h>
 #include <qcursor.h>
 #include <qregion.h>
+#include <qdropsite.h>
 #include <qpaintdevice.h>
 
 #include <koRuler.h>
@@ -55,7 +56,7 @@ enum EditMode {EM_INSERT,EM_DELETE,EM_BACKSPACE,EM_CMOVE,EM_NONE,EM_RETURN};
 /* Class: KWPage                                                  */
 /******************************************************************/
 
-class KWPage : public QWidget
+class KWPage : public QWidget/*, QDropSite*/
 {
   Q_OBJECT
 
@@ -273,7 +274,13 @@ protected:
   bool editModeChanged(QKeyEvent *e);
   void repaintTableHeaders(KWGroupManager *grpMgr);
 
-
+  void startDrag();
+  virtual void dragEnterEvent(QDragEnterEvent *e);
+  virtual void dragMoveEvent(QDragMoveEvent *e);
+  virtual void dragLeaveEvent(QDragLeaveEvent *e);
+  virtual void dropEvent(QDropEvent *e);
+  bool isInSelection(KWFormatContext *_fc);  
+  
   KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
@@ -337,7 +344,8 @@ protected:
 
   bool recalcingText;
   bool mouseMoved;
-
+  bool maybeDrag;
+  
   EditMode editMode;
 
   KWGroupManager *curTable;

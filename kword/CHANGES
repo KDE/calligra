@@ -1033,3 +1033,9 @@ Reggie, 4.4.1999:
   - Speed improvement and fix for calculation the start number of a new footnote
 - Improved and fixed some stuff in KWString
 - Fix in KWordView::setFormat (doesn't segfault in stupid cases anymore)
+
+Reggie, 5.4.1999:
+-----------------
+- More work on footnotes/endnotes
+- Started with Drag'n'Drop (dragging a selected text from one KWord App and dropping
+  it into another KWord App works already somehow)

@@ -117,6 +117,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 
 
   setKeyCompression(true);
+  setAcceptDrops(true);
 }
 
 /*================================================================*/
@@ -869,13 +870,21 @@ void KWordView::viewDocStruct()
 /*===============================================================*/
 void KWordView::viewFootNotes()
 {
+  m_vMenuEdit->setItemChecked(m_idMenuView_FootNotes,true);
+  m_vMenuEdit->setItemChecked(m_idMenuView_EndNotes,false);
 
+  m_pKWordDoc->setNoteType(KWordDocument::FootNotes);
+  
   sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::viewEndNotes()
 {
+  m_vMenuEdit->setItemChecked(m_idMenuView_FootNotes,false);
+  m_vMenuEdit->setItemChecked(m_idMenuView_EndNotes,true);
+
+  m_pKWordDoc->setNoteType(KWordDocument::EndNotes);
 
   sendFocusEvent();
 }
@@ -1849,21 +1858,49 @@ void KWordView::keyPressEvent(QKeyEvent *e)
 /*================================================================*/
 void KWordView::mousePressEvent(QMouseEvent *e)
 {
+  QApplication::sendEvent(gui->getPaperWidget(),e); 
 }
 
 /*================================================================*/
 void KWordView::mouseMoveEvent(QMouseEvent *e)
 {
+  QApplication::sendEvent(gui->getPaperWidget(),e); 
 }
 
 /*================================================================*/
 void KWordView::mouseReleaseEvent(QMouseEvent *e)
 {
+  QApplication::sendEvent(gui->getPaperWidget(),e); 
 }
 
 /*================================================================*/
 void KWordView::focusInEvent(QFocusEvent *e)
 {
+  QApplication::sendEvent(gui->getPaperWidget(),e); 
+}
+
+/*================================================================*/
+void KWordView::dragEnterEvent(QDragEnterEvent *e)
+{ 
+  QApplication::sendEvent(gui,e); 
+}
+
+/*================================================================*/
+void KWordView::dragMoveEvent(QDragMoveEvent *e)
+{ 
+  QApplication::sendEvent(gui,e); 
+}
+
+/*================================================================*/
+void KWordView::dragLeaveEvent(QDragLeaveEvent *e)
+{ 
+  QApplication::sendEvent(gui,e); 
+}
+
+/*================================================================*/
+void KWordView::dropEvent(QDropEvent *e)
+{ 
+  QApplication::sendEvent(gui,e); 
 }
 
 /*================================================================*/
@@ -3149,6 +3186,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   connect(panner,SIGNAL(pannerResized()),this,SLOT(reorganize()));
 
   setKeyCompression(true);
+  setAcceptDrops(true);
   setFocusPolicy(QWidget::StrongFocus);
 }
 
@@ -3215,6 +3253,30 @@ void KWordGUI::keyPressEvent(QKeyEvent* e)
 }
 
 /*================================================================*/
+void KWordGUI::dragEnterEvent(QDragEnterEvent *e)
+{ 
+  QApplication::sendEvent(paperWidget,e); 
+}
+
+/*================================================================*/
+void KWordGUI::dragMoveEvent(QDragMoveEvent *e)
+{ 
+  QApplication::sendEvent(paperWidget,e); 
+}
+
+/*================================================================*/
+void KWordGUI::dragLeaveEvent(QDragLeaveEvent *e)
+{ 
+  QApplication::sendEvent(paperWidget,e); 
+}
+
+/*================================================================*/
+void KWordGUI::dropEvent(QDropEvent *e)
+{ 
+  QApplication::sendEvent(paperWidget,e); 
+}
+
+/*================================================================*/
 void KWordGUI::reorganize()
 {
   disconnect(panner,SIGNAL(pannerResized()),this,SLOT(reorganize()));
@@ -3274,5 +3336,3 @@ void KWordGUI::showDocStruct(bool __show)
 
   reorganize();
 }
-
-

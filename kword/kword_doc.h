@@ -90,6 +90,8 @@ class KWordDocument : public QObject,
   Q_OBJECT
 
 public:
+  enum NoteType {FootNotes,EndNotes};
+  
   KWordDocument();
   ~KWordDocument();
 
@@ -393,6 +395,8 @@ public:
   long int getPageNum(int bottom);
 
   KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
+  void setNoteType(NoteType nt) { noteType = nt; }
+  NoteType getNoteType() { return noteType; }
   
 signals:
   void sig_imageModified();
@@ -483,6 +487,7 @@ protected:
   QPixmap ret_pix;
 
   bool _header,_footer;
+  NoteType noteType;
 
   KWUserFont *cUserFont;
   KWDisplayFont *cDisplayFont;
@@ -496,7 +501,7 @@ protected:
   KWCommandHistory history;
   QIntDict<KWVariableFormat> varFormats;
   KWFootNoteManager footNoteManager;
-  
+
 };
 
 #endif

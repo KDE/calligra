@@ -40,6 +40,7 @@ class KWordShell;
 #include <qmessagebox.h>
 #include <qclipboard.h>
 #include <qbrush.h>
+#include <qdropsite.h>
 
 #include <koRuler.h>
 #include <kcolordlg.h>
@@ -129,7 +130,7 @@ public:
   virtual void viewDocStruct();
   virtual void viewFootNotes();
   virtual void viewEndNotes();
-  
+
   virtual void insertPicture();
   virtual void insertClipart();
   virtual void insertSpecialChar();
@@ -141,7 +142,7 @@ public:
   virtual void insertVariablePageNum();
   virtual void insertVariableOther();
   virtual void insertFootNoteEndNote();
-  
+
   virtual void formatFont();
   virtual void formatColor();
   virtual void formatParagraph();
@@ -278,6 +279,10 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void focusInEvent(QFocusEvent *e);
+  virtual void dragEnterEvent(QDragEnterEvent *e);
+  virtual void dragMoveEvent(QDragMoveEvent *e);
+  virtual void dragLeaveEvent(QDragLeaveEvent *e);
+  virtual void dropEvent(QDropEvent *e);
 
   enum PType {TXT_COLOR,FRAME_COLOR,BACK_COLOR};
   QString colorToPixString(QColor,PType _type);
@@ -309,7 +314,7 @@ protected:
   CORBA::Long m_idMenuView_DocStruct;
   CORBA::Long m_idMenuView_FootNotes;
   CORBA::Long m_idMenuView_EndNotes;
-  
+
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Picture;
@@ -598,6 +603,10 @@ protected slots:
 protected:
   void resizeEvent(QResizeEvent *e);
   void keyPressEvent(QKeyEvent *e);
+  virtual void dragEnterEvent(QDragEnterEvent *e);
+  virtual void dragMoveEvent(QDragMoveEvent *e);
+  virtual void dragLeaveEvent(QDragLeaveEvent *e);
+  virtual void dropEvent(QDropEvent *e);
 
   int xOffset,yOffset;
   bool _show;

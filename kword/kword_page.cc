@@ -19,6 +19,7 @@
 #include "kword_page.moc"
 #include "kword_view.h"
 #include "footnote.h"
+#include "clipbrd_dnd.h"
 
 /******************************************************************/
 /* Class: KWPage                                                  */
@@ -26,13 +27,14 @@
 
 /*================================================================*/
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
-  : QWidget(parent,""), buffer(width(),height()), format(_doc)
+  : QWidget(parent,"")/*, QDropSite(this)*/, buffer(width(),height()), format(_doc)
 {
   setFocusPolicy(QWidget::StrongFocus);
 
   editNum = -1;
   recalcingText = false;
-
+  maybeDrag = false;
+  
   setBackgroundColor(white);
   buffer.fill(white);
   doc = _doc;
@@ -99,6 +101,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   doc->setSelection(false);
 
   curTable = 0L;
+
+  setAcceptDrops(true);
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -134,6 +138,15 @@ void KWPage::init()
 /*================================================================*/
 void KWPage::mouseMoveEvent(QMouseEvent *e)
 {
+  if (maybeDrag)
+    {
+      maybeDrag = false;
+      mousePressed = false;
+      mouseMoved = false;
+      startDrag();
+      return;
+    }
+  
   if (!hasFocus())
     gui->getView()->sendFocusEvent();
 
@@ -585,6 +598,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 /*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
+  maybeDrag = false;
+  
   if (gui->getView()) gui->getView()->sendFocusEvent();
 
   if (editNum != -1)
@@ -612,7 +627,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	QPainter _painter;
 	_painter.begin(this);
 	
-	if (doc->has_selection())
+	if (doc->has_selection() && mouseMode != MM_EDIT)
 	  {
 	    doc->drawSelection(_painter,xOffset,yOffset);
 	    doc->setSelection(false);
@@ -646,7 +661,23 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		  markerIsVisible = true;
 		
 		  _painter.end();
-		
+
+		  if (isInSelection(fc))
+		    {
+		      maybeDrag = true;
+		      return;
+		    }
+		  else
+		    {
+		      if (doc->has_selection())
+			{
+			  _painter.begin(this);
+			  doc->drawSelection(_painter,xOffset,yOffset);
+			  doc->setSelection(false);
+			  _painter.end();
+			}
+		    }
+		  
 		  doc->setSelStart(*fc);
 		  doc->setSelEnd(*fc);
 		  doc->setSelection(false);
@@ -838,7 +869,17 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 /*================================================================*/
 void KWPage::mouseReleaseEvent(QMouseEvent *e)
 {
+  if (maybeDrag && doc->has_selection() && mouseMode == MM_EDIT)
+    {
+      debug("here");
+      doc->setSelection(false);
+      buffer.fill(white);
+      repaint(false);
+    }
+
   mousePressed = false;
+  maybeDrag = false;
+  
   switch (mouseMode)
     {
     case MM_EDIT:
@@ -4022,3 +4063,180 @@ void KWPage::insertFootNote(KWFootNote *fn)
   recalcPage(0L);
   recalcCursor(true);
 }
+
+/*================================================================*/
+void KWPage::startDrag()
+{
+  //debug("void KWPage::startDrag()");
+
+  KWordDrag *drag = new KWordDrag(this);
+  editCopy();
+  QClipboard *cb = QApplication::clipboard();
+  drag->setKWord(cb->data()->encodedData(MIME_TYPE));
+  drag->setPlain(cb->data()->encodedData("text/plain"));
+  drag->setPixmap(ICON("txt.xpm"),KPoint(10,10));
+  drag->dragCopy();
+}
+
+/*================================================================*/
+void KWPage::dragEnterEvent(QDragEnterEvent *e)
+{
+  //debug("void KWPage::dragEnterEvent(QDragEnterEvent *e)");
+
+  if (KWordDrag::canDecode(e))
+    {
+      if (mouseMode != MM_EDIT)
+	setMouseMode(MM_EDIT);
+	      
+      unsigned int mx = e->pos().x() + xOffset;
+      unsigned int my = e->pos().y() + yOffset;
+	
+      QPainter _painter;
+      _painter.begin(this);
+	
+      if (doc->has_selection())
+	{
+	  doc->drawSelection(_painter,xOffset,yOffset);
+	  doc->setSelection(false);
+	}
+
+      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+      markerIsVisible = false;
+	
+      int frameset = doc->getFrameSet(mx,my);
+	
+      selectedFrameSet = selectedFrame = -1;
+      if (frameset != -1 && doc->getFrameSet(frameset)->getFrameType() == FT_TEXT)
+	{
+	  fc->setFrameSet(frameset + 1);
+		
+	  fc->cursorGotoPixelLine(mx,my,_painter);
+	  fc->cursorGotoPixelInLine(mx,my,_painter);
+		
+	  _painter.end();
+	  scrollToCursor(*fc);
+	  _painter.begin(this);
+
+	  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+	  markerIsVisible = true;
+		
+	  _painter.end();
+
+	  doc->setSelection(false);
+		
+	  if (doc->getProcessingType() == KWordDocument::DTP)
+	    {
+	      int frame = doc->getFrameSet(frameset)->getFrame(mx,my);
+	      if (frame != -1)
+		{
+		  if (doc->getProcessingType() == KWordDocument::DTP)
+		    setRuler2Frame(frameset,frame);
+		}
+	      selectedFrame = frame;
+	      selectedFrameSet = frameset;
+	    }
+		
+	  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+		
+	  if (fc->getParag())
+	    {	
+	      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
+	      gui->getView()->setFormat(*((KWFormat*)fc),true,false);
+	      gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
+	      gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					      fc->getParag()->getParagLayout()->getRightBorder(),
+					      fc->getParag()->getParagLayout()->getTopBorder(),
+					      fc->getParag()->getParagLayout()->getBottomBorder());
+	      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+	      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
+	      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+	      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
+	    }
+	  
+	  e->accept();
+	}
+      else
+	{
+	  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+	  markerIsVisible = true;
+	  _painter.end();
+	}
+    } 
+}
+
+/*================================================================*/
+void KWPage::dragMoveEvent(QDragMoveEvent *e)
+{
+  //debug("void KWPage::dragMoveEvent(QDragMoveEvent *e)");
+}
+
+/*================================================================*/
+void KWPage::dragLeaveEvent(QDragLeaveEvent *e)
+{
+  //debug("void KWPage::dragLeaveEvent(QDragLeaveEvent *e)");
+}
+
+/*================================================================*/
+void KWPage::dropEvent(QDropEvent *e)
+{
+  //debug("void KWPage::dropEvent(QDropEvent *e)");
+
+  QDropEvent *drop = e;
+  
+  if (drop->provides(MIME_TYPE))
+    {
+      if (drop->encodedData(MIME_TYPE).size())
+	editPaste(drop->encodedData(MIME_TYPE),MIME_TYPE);
+    }
+  else if (drop->provides("text/plain"))
+    {
+      if (drop->encodedData("text/plain").size())
+	editPaste(drop->encodedData("text/plain"));
+    }
+}
+
+/*================================================================*/
+bool KWPage::isInSelection(KWFormatContext *_fc)
+{
+  if (!doc->has_selection())
+    return false;
+  
+  if (doc->getSelStart()->getParag() == _fc->getParag())
+    {
+      if (_fc->getTextPos() >= doc->getSelStart()->getTextPos())
+	{
+	  if (doc->getSelStart()->getParag() == doc->getSelEnd()->getParag())
+	    {
+	      if (_fc->getTextPos() <= doc->getSelEnd()->getTextPos())
+		return true;
+	      return false;
+	    }
+	  return true;
+	}
+      return false;
+    }
+  
+  if (doc->getSelStart()->getParag() == doc->getSelEnd()->getParag())
+    return false;
+  
+  if (doc->getSelEnd()->getParag() == _fc->getParag())
+    {
+      if (_fc->getTextPos() <= doc->getSelEnd()->getTextPos())
+	return true;
+      return false;
+    }
+
+  KWParag *parag = doc->getSelStart()->getParag()->getNext();
+  
+  while (parag && parag != doc->getSelEnd()->getParag())
+    {
+      if (parag == _fc->getParag())
+	return true;
+
+      parag = parag->getNext();
+    }
+
+  return false;
+}
+
