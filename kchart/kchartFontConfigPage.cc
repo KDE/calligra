@@ -80,7 +80,16 @@ void KChartFontConfigPage::initList()
   QStringList lst;
   for(int i =0;i<data->rows();i++)
   {
-      listColor->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i) :_params->legendText( i ) );
+      if(i<_params->maxDataColor())
+          listColor->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :_params->legendText( i ) );
+      else
+      {
+          if( !noEnough )
+          {
+              listColor->insertItem(i18n("Not enough color"));
+              noEnough = true;
+          }
+      }
       extColor.setColor(i,_params->dataColor(i));
   }
   listColor->setCurrentItem(0);
@@ -112,15 +121,16 @@ void KChartFontConfigPage::initList()
 
 void KChartFontConfigPage::changeIndex(int newindex)
 {
-  if(index>11)
-    colorButton->setEnabled(false);
-  else {
-    if(!colorButton->isEnabled())
-      colorButton->setEnabled(true);
-    extColor.setColor(index,colorButton->color());
-    colorButton->setColor(extColor.color(newindex));
-    index=newindex;
-  }
+    if(index>_params->maxDataColor())
+        colorButton->setEnabled(false);
+    else
+    {
+        if(!colorButton->isEnabled())
+            colorButton->setEnabled(true);
+        extColor.setColor(index,colorButton->color());
+        colorButton->setColor(extColor.color(newindex));
+        index=newindex;
+    }
 }
 
 void KChartFontConfigPage::changeLabelFont()
@@ -211,5 +221,6 @@ void KChartFontConfigPage::apply()
 //     _params->ExtColor.setColor(i,extColor.color(i));
 
   for(int i =0;i<data->rows();i++)
-      _params->setDataColor(i,extColor.color(i));
+      if(i<_params->maxDataColor())
+          _params->setDataColor(i,extColor.color(i));
 }
