@@ -1485,6 +1485,7 @@ public:
 			lineSpacing = MSWrite::LineSpacing::Double;
 			break;
 		case LayoutData::LS_CUSTOM:
+		case LayoutData::LS_FIXED:
 		case LayoutData::LS_ATLEAST:
 			lineSpacing = getClosestLineSpacing (layout.lineSpacing);
 			break;
