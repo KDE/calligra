@@ -324,8 +324,6 @@ VText::save( QDomElement& element ) const
 		element.appendChild( me );
 
 		m_basePath.save( me );
-		m_stroke->save( me );
-		m_fill->save( me );
 
 		// save all glyphs / paths
 		VCompositeListIterator itr = m_glyphs;

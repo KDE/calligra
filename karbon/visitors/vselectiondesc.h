@@ -23,7 +23,13 @@
 #include "vvisitor.h"
 #include <qstring.h>
 
-/***
+/**
+ * This visitors visits structures and tries to capture relevant object type info
+ * as text. There are two methods, one creates a large description like "(1 group, containing
+ * 2 objects)", and a short description giving object id, or if there is no object id just the
+ * object type, like group/path/text etc.
+ *
+ * These texts are primarily meant for statusbar messages and object trees.
  */
 class VSelectionDescription : public VVisitor
 {
