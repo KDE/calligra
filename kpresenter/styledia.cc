@@ -256,7 +256,8 @@ void StyleDia::setupTab2()
 
     cFillType = new QComboBox( false, left );
     cFillType->insertItem( i18n( "Brush" ) );
-    cFillType->insertItem( i18n( "Gradient" ) );
+    if(flags & SdGradient)
+        cFillType->insertItem( i18n( "Gradient" ) );
 
     connect( cFillType, SIGNAL( activated( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );

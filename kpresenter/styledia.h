@@ -84,9 +84,10 @@ class StyleDia : public QTabDialog
 
 public:
     enum PbType {
-	SdPen = 1,
-	SdBrush = 2,
-	SdAll = SdPen | SdBrush
+        SdPen = 1,
+        SdBrush = 2,
+        SdGradient = 4,
+        SdAll = SdPen | SdBrush | SdGradient
     };
 
     StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SdAll );
@@ -100,7 +101,7 @@ public:
     void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
 		      bool _unbalanced, int _xfactor, int _yfactor );
     void setSticky( bool s );
-    
+
     QPen getPen();
     QBrush getBrush();
     LineEnd getLineBegin();
@@ -118,7 +119,7 @@ private:
     void setupTab1();
     void setupTab2();
     void setupTab3();
-    
+
     QWidgetStack *stack;
     KColorButton *choosePCol, *chooseBCol;
     QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
@@ -141,7 +142,5 @@ signals:
     void styleOk();
 
 };
+
 #endif //STYLEDIA_H
-
-
-
