@@ -105,6 +105,7 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
     }
     else
     {
+        kdDebug() << "KPRectObject::paint"<< _zoomHandler->zoomItX(ow - 2 * pw)<< endl;
           if ( angle == 0 || angle==360 )
                 _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
           else  //rotated

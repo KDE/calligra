@@ -57,6 +57,7 @@ public:
     virtual QString getTypeString() const
     { return i18n("Ellipse"); }
 
+    virtual void zoomObject();
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler *_zoomHandler );
 

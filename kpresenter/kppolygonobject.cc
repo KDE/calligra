@@ -365,3 +365,13 @@ void KPPolygonObject::drawPolygon()
         redrawPix = true;
     }
 }
+
+
+void KPPolygonObject::zoomObject()
+{
+    if ( fillType == FT_GRADIENT && gradient )
+    {
+        gradient->setSize(getSize());
+        redrawPix=true;
+    }
+}

@@ -2031,8 +2031,11 @@ void KPresenterDoc::updateZoomRuler()
 
 void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
 {
+
 #if 0
     // Update all fonts
+    QPtrListIterator<KPObject> it( getObjectList() );
+
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->zoom( forPrint );
@@ -2047,6 +2050,15 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
 
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         m_pageList.at(i)->background()->restore();
+    }
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        QPtrListIterator<KPObject> oIt( ((KPresenterView*)it.current())->getCanvas()->getObjectList() );
+        for (; oIt.current(); ++oIt )
+        {
+            oIt.current()->zoomObject();
+        }
     }
 }
 

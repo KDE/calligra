@@ -60,6 +60,7 @@ public:
 
     KPClipartCollection::Key getKey() const
     { return m_clipart.key(); }
+    virtual void zoomObject();
 
 protected:
     KPClipart m_clipart;

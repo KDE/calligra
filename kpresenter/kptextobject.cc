@@ -1498,6 +1498,14 @@ void KPTextView::dropEvent( QDropEvent * e )
 }
 
 
+void KPTextObject::zoomObject()
+{
+    if ( fillType == FT_GRADIENT && gradient )
+    {
+        gradient->setSize(getSize());
+    }
+}
+
 void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElement &parentElem,
                          int from /* default 0 */,
                          int to /* default length()-2 */ )

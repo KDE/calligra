@@ -199,3 +199,11 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool
 
     KPObject::draw( _painter, _zoomHandler, drawSelection );
 }
+
+void KPClipartObject::zoomObject()
+{
+    if ( fillType == FT_GRADIENT && gradient )
+    {
+        gradient->setSize(getSize());
+    }
+}

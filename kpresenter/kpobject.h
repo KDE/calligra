@@ -207,6 +207,7 @@ public:
     virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
     virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
     void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler );
+    virtual void zoomObject(){};
 protected:
     /**
      * Modifies x and y to add the shadow offsets

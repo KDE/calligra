@@ -410,3 +410,12 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
 
     }
 }
+
+void KPAutoformObject::zoomObject()
+{
+    if ( fillType == FT_GRADIENT && gradient )
+    {
+        gradient->setSize(getSize());
+        redrawPix=true;
+    }
+}
