@@ -31,4 +31,4 @@ Comment[sv]=Ordbehandlare med många finesser
 MimeType=application/x-kword
 Type=Application
 Icon=kword
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,text/plain

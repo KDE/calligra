@@ -42,4 +42,5 @@ Comment[sv]=Torbens kalkylprogram
 MimeType=application/x-kspread
 Type=Application
 Icon=kspread
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,text/x-csv
+
