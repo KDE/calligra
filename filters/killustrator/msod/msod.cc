@@ -30,6 +30,7 @@ Msod::Msod(
     unsigned dpi)
 {
 //    m_dpi = dpi;
+    m_images.setAutoDelete(true);
 }
 
 Msod::~Msod()
@@ -115,11 +116,11 @@ void Msod::invokeHandler(
     if (!result)
     {
         if (funcTab[i].name)
-            kdError(s_area) << "invokeHandler: unsupported opcode: " <<
+            kdWarning(s_area) << "invokeHandler: unsupported opcode: " <<
                 funcTab[i].name <<
                 " operands: " << byteOperands << endl;
         else
-            kdError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
+            kdWarning(s_area) << "invokeHandler: unsupported opcode: 0x" <<
                 QString::number(op.opcode.fields.fbt, 16) <<
                 " operands: " << byteOperands << endl;
 
@@ -199,58 +200,58 @@ void Msod::opBlip(MSOFBH &, U32 byteOperands, QDataStream &operands)
         data += 16;
         skip(16, operands);
     }
-    switch (m_blipInstance)
+    switch (m_blipType)
     {
-    case msobiWMF:
-    case msobiEMF:
-    case msobiPICT:
+    case msoblipEMF:
+    case msoblipWMF:
+    case msoblipPICT:
         data += 18;
         skip(18, operands);
         operands >> isNotCompressed;
         break;
-    case msobiPNG:
-    case msobiJPEG:
-    case msobiDIB:
+    case msoblipJPEG:
+    case msoblipPNG:
+    case msoblipDIB:
         // Skip the "tag".
         data += 1;
         skip(1, operands);
         break;
     default:
-        kdWarning(s_area) << "opBlip: unknown Blip signature: " <<
-            m_blipInstance << endl;
         break;
     }
 
-    // Only return data we can vouch for!
+    // Work out the file type.
 
-    QString pictureType;
-    switch (m_blipInstance)
+    Image *image = new Image();
+    switch (m_blipType)
     {
-    case msobiWMF:
-        pictureType = "wmf";
+    case msoblipEMF:
+        image->extension = "emf";
         break;
-    case msobiEMF:
-        pictureType = "emf";
+    case msoblipWMF:
+        image->extension = "wmf";
         break;
-    case msobiPICT:
-        pictureType = "pic";
+    case msoblipPICT:
+        image->extension = "pic";
         break;
-    case msobiPNG:
-        pictureType = "png";
+    case msoblipJPEG:
+        image->extension = "jpg";
         break;
-    case msobiJPEG:
-        pictureType = "jpg";
+    case msoblipPNG:
+        image->extension = "png";
         break;
-    case msobiDIB:
-        pictureType = "dib";
+    case msoblipDIB:
+        image->extension = "dib";
         break;
     default:
-        pictureType = "img";
+        image->extension = "img";
         break;
     }
-
-    U32 pictureLength = byteOperands - data;
-    skip(pictureLength, operands);
+    image->length = byteOperands - data;
+    image->data = new char[image->length];
+    operands.readRawBytes((char *)image->data, image->length);
+    m_images.resize(m_images.size() + 1);
+    m_images.insert(m_images.size() - 1, image);
 }
 
 // FBSE - File Blip Store Entry
@@ -273,8 +274,52 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
     } data;
     unsigned i;
 
-    m_blipInstance = static_cast<MSOBI>(op.opcode.fields.inst & (~1));
-    m_blipHasPrimaryId = (op.opcode.fields.inst & 1);
+    // Blip signature as encoded in the MSOFBH.inst
+
+    typedef enum
+    {
+        msobiUNKNOWN = 0,
+        msobiWMF = 0x216,       // Metafile header then compressed WMF
+        msobiEMF = 0x3D4,       // Metafile header then compressed EMF
+        msobiPICT = 0x542,      // Metafile header then compressed PICT
+        msobiPNG = 0x6E0,       // One byte tag then PNG data
+        msobiJFIF = 0x46A,      // One byte tag then JFIF data
+        msobiJPEG = msobiJFIF,
+        msobiDIB = 0x7A8,       // One byte tag then DIB data
+        msobiClient = 0x800     // Clients should set this bit
+    } MSOBI;
+
+    m_blipType = static_cast<MSOBLIPTYPE>(op.opcode.fields.inst);
+    switch (m_blipType)
+    {
+    case msoblipEMF:
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiEMF) == 1;
+        break;
+    case msoblipWMF:
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiWMF) == 1;
+        break;
+    case msoblipPICT:
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiPICT) == 1;
+        break;
+    case msoblipJPEG:
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiJPEG) == 1;
+        break;
+    case msoblipPNG:
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiPNG) == 1;
+        break;
+    case msoblipDIB:
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiDIB) == 1;
+        break;
+    default:
+        kdWarning(s_area) << "opBlip: unknown Blip signature: " <<
+            m_blipType << endl;
+        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiClient) == 1;
+        break;
+    }
+    if (m_blipHasPrimaryId)
+    {
+        kdWarning(s_area) << "opBlip: Blip has primary header!" << endl;
+    }
 
     operands >> data.btWin32 >> data.btMacOS;
     for (i = 0; i < sizeof(data.rgbUid); i++)
@@ -283,12 +328,6 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
     operands >> data.cRef >> data.foDelay;
     operands >> data.usage >> data.cbName;
     operands >> data.unused2 >> data.unused2;
-        kdWarning(s_area) << "opBse: inst " <<
-            op.opcode.fields.inst << endl;
-        kdWarning(s_area) << "w32: inst " <<
-            data.btWin32 << endl;
-        kdWarning(s_area) << "mac: inst " <<
-            data.btMacOS << endl;
 
     // If the Blip is not in this drawing file, process it "manually".
 
@@ -488,6 +527,15 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
             break;
         case 260:
             m_pib = value;
+            if (m_isRequiredDrawing)
+            {
+                Image *image = m_images[m_pib - 1];
+                gotPicture(
+                    m_pib,
+                    image->extension,
+                    image->length,
+                    image->data);
+            }
             break;
         case 267:
             m_pictureId = value;
@@ -780,11 +828,11 @@ void Msod::opSp(MSOFBH &op, U32 byteOperands, QDataStream &operands)
     if (!result)
     {
         if (funcTab[i].name)
-            kdError(s_area) << "opSp: unsupported shape: " <<
+            kdWarning(s_area) << "opSp: unsupported shape: " <<
                 funcTab[i].name <<
                 " operands: " << byteOperands << endl;
         else
-            kdError(s_area) << "opSp: unsupported shape: " <<
+            kdWarning(s_area) << "opSp: unsupported shape: " <<
                 op.opcode.fields.inst <<
                 " operands: " << byteOperands << endl;
 

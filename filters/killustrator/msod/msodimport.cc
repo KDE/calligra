@@ -38,9 +38,10 @@ MSODImport::~MSODImport()
 {
 }
 
-const bool MSODImport::filter(
+const bool MSODImport::filter1(
     const QString &fileIn,
     const QString &fileOut,
+    const QString &prefixOut,
     const QString &from,
     const QString &to,
     const QString &config)
@@ -93,8 +94,9 @@ const bool MSODImport::filter(
 
     emit sigProgress(100);
 
+kdError(s_area) << "prefixout:" <<prefixOut<< endl;
     KoStore out = KoStore(QString(fileOut), KoStore::Write);
-    if (!out.open("root"))
+    if (!out.open(prefixOut /*"root"*/))
     {
         kdError(s_area) << "Unable to open output file!" << endl;
         out.close();
@@ -116,6 +118,26 @@ void MSODImport::pointArray(
                     "\" y=\"" + QString::number(points.point(i).y()) +
                      "\"/>\n";
     }
+}
+
+void MSODImport::gotPicture(
+    unsigned id,
+    QString extension,
+    unsigned length,
+    const char *data)
+{
+    QString ourKey;
+    QString uid;
+
+    ourKey = "image" + QString::number(id) + "." + extension;
+/*
+    emit signalSavePic(
+            ourKey,
+            uid,
+            extension,
+            length,
+            picture);
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -147,7 +169,6 @@ void MSODImport::gotPolygon(
     m_text += "</polyline>\n";
     m_text += "</polygon>\n";
 }
-
 
 //-----------------------------------------------------------------------------
 void MSODImport::gotPolyline(

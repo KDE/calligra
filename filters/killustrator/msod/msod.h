@@ -30,6 +30,7 @@ DESCRIPTION
 
 class QString;
 class QPointArray;
+#include <qvector.h>
 
 class Msod
 {
@@ -62,6 +63,11 @@ public:
 protected:
     // Override to get results of parsing.
 
+    virtual void gotPicture(
+        unsigned id,
+        QString extension,
+        unsigned length,
+        const char *data) = 0;
     virtual void gotPolygon(
         unsigned penColour,
         unsigned penStyle,
@@ -108,23 +114,33 @@ private:
         U32 cbLength;
     } MSOFBH;
 
-    // Blip signature as encoded in the MSOFBH.inst
-
     typedef enum
     {
-        msobiUNKNOWN = 0,
-        msobiWMF = 0x216,       // Metafile header then compressed WMF
-        msobiEMF = 0x3D4,       // Metafile header then compressed EMF
-        msobiPICT = 0x542,      // Metafile header then compressed PICT
-        msobiPNG = 0x6E0,       // One byte tag then PNG data
-        msobiJFIF = 0x46A,      // One byte tag then JFIF data
-        msobiJPEG = msobiJFIF,
-        msobiDIB = 0x7A8,       // One byte tag then DIB data
-        msobiClient = 0x800     // Clients should set this bit
-    } MSOBI;
+        msoblipERROR,               // An error occured during loading.
+        msoblipUNKNOWN,             // An unknown blip type.
+        msoblipEMF,                 // Windows Enhanced Metafile.
+        msoblipWMF,                 // Windows Metafile.
+        msoblipPICT,                // Macintosh PICT.
+        msoblipJPEG,                // JFIF.
+        msoblipPNG,                 // PNG.
+        msoblipDIB,                 // Windows DIB.
+        msoblipFirstClient = 32,    // First client defined blip type.
+        msoblipLastClient  = 255    // Last client defined blip type.
+    } MSOBLIPTYPE;
 
-    MSOBI m_blipInstance;
+    MSOBLIPTYPE m_blipType;
     bool m_blipHasPrimaryId;
+    unsigned m_imageId;
+    class Image
+    {
+    public:
+        QString extension;
+        unsigned length;
+        const char *data;
+        Image() { data = 0L; }
+        ~Image() { delete [] data; }
+    };
+    QVector<Image> m_images;
 
     // Opcode handling and Metafile painter methods.
 

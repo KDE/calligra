@@ -39,15 +39,22 @@ public:
         const char *name);
     virtual ~MSODImport();
 
-    virtual const bool filter(
+    virtual const bool filter1(
         const QString &fileIn,
         const QString &fileOut,
+        const QString &prefixOut,
         const QString &from,
         const QString &to,
         const QString &config = QString::null);
+    virtual bool supportsEmbedding() { return true; }
 
 protected:
 
+    virtual void gotPicture(
+        unsigned id,
+        QString extension,
+        unsigned length,
+        const char *data);
     virtual void gotPolygon(
         unsigned penColour,
         unsigned penStyle,
