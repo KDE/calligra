@@ -27,6 +27,7 @@
 #include <qpointarray.h>
 #include <qregion.h>
 #include <qdom.h>
+#include <qbuffer.h>
 
 #include <kapplication.h>
 #include <kooasiscontext.h>
@@ -359,7 +360,7 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
 {
     if ( effect == EF_NONE && effect3==EF3_NONE)
         return false;
-    if ( effect != EF_NONE )
+    if ( effect != EF_NONE ) //FIXME when style is EF_NONE
     {
         animation.startElement( "presentation:show-shape" );
         animation.addAttribute( "draw:shape-id", objectId );
@@ -415,6 +416,14 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
             animation.addAttribute( "presentation:effect", "fade" );
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
+        }
+        if( !a_fileName.isEmpty() )
+        {
+            //store sound into file ?
+             //<presentation:sound xlink:href="../../usr/lib/openoffice/share/gallery/sounds/pluck.wav" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
+            animation.startElement( "presentation:sound" );
+            animation.addAttribute( "xlink:href", a_fileName );
+            animation.endElement();
         }
         animation.endElement();
     }
@@ -478,6 +487,16 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
         }
+        if( !d_fileName.isEmpty() )
+        {
+            //store sound into file ?
+             //<presentation:sound xlink:href="../../usr/lib/openoffice/share/gallery/sounds/pluck.wav" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
+            animation.startElement( "presentation:sound" );
+            animation.addAttribute( "xlink:href", a_fileName );
+            animation.endElement();
+        }
+        animation.endElement();
+
         animation.endElement();
     }
     return true;

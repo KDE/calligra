@@ -54,6 +54,7 @@ Done:
 -> save/load stroke line
 -> save/load shadow object
 -> save/load page layout
+-> save/load sound page effect
 
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
