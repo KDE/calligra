@@ -52,6 +52,10 @@ public:
 	int horizontalGap() { return m_horizontalGap; }
 	QSize itemSize() { return m_itemSize; }
 
+	bool legalToLink(KPTNode &par, KPTNode &child);
+	bool legalParents(KPTNode *par, KPTNode *child);
+	bool legalChildren(KPTNode *par, KPTNode *child);
+	
 protected:
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void drawChildren(KPTNode *node);

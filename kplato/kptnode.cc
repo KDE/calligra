@@ -203,18 +203,6 @@ bool KPTNode::isParentOf(KPTNode *node) {
 	return false;
 }
 
-bool KPTNode::isDependantOn(KPTNode *node) {
-    if (node->isParentOf(this))
-	    return true;
-    
-	QPtrListIterator<KPTRelation> it(m_dependChildNodes);
-	for ( ; it.current(); ++it ) {
-		if (it.current()->child()->isDependantOn(node))
-		    return true;
-	}
-    return false;
-}
-
 KPTRelation *KPTNode::findRelation(KPTNode *node) {
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
@@ -435,14 +423,14 @@ bool KPTNode::allParentsDrawn() {
 	return true;
 }
 
-void KPTNode::drawPertRelations(QCanvas* canvas) {
+void KPTNode::drawPertRelations(KPTPertCanvas* view) {
     QPtrListIterator<KPTRelation> it(m_dependChildNodes); 
     for ( ; it.current(); ++it ) {
-        it.current()->draw(canvas);
+        it.current()->draw(view);
     }
     QPtrListIterator<KPTNode> nit(m_nodes); 
     for ( ; nit.current(); ++nit ) {
-        nit.current()->drawPertRelations(canvas);
+        nit.current()->drawPertRelations(view);
 	}
 }
 

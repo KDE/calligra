@@ -136,7 +136,7 @@ public:
 class KPTRelationCanvasItem : public QCanvasPolygon
 {
 public:
-    KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel );
+    KPTRelationCanvasItem( KPTPertCanvas *view, KPTRelation *rel );
     virtual ~KPTRelationCanvasItem();
 
     virtual int rtti() const;

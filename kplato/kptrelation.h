@@ -27,6 +27,7 @@
 
 class KPTNode;
 class KPTProject;
+class KPTPertCanvas;
 class QCanvas;
 class QDomElement;
 
@@ -75,7 +76,7 @@ public:
     
     bool completeLoad(KPTNode *top);
     
-    void draw(QCanvas* canvas);
+    void draw(KPTPertCanvas* view);
     
 protected: // variables
     KPTNode *m_parent;

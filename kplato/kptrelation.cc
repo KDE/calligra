@@ -113,10 +113,10 @@ bool KPTRelation::completeLoad(KPTNode *top) {
     return true;
 }
 
-void KPTRelation::draw(QCanvas* canvas) {
+void KPTRelation::draw(KPTPertCanvas* view) {
     kdDebug()<<k_funcinfo<<endl;
     
-	KPTRelationCanvasItem *item = new KPTRelationCanvasItem(canvas, this);
+	KPTRelationCanvasItem *item = new KPTRelationCanvasItem(view, this);
 	item->show();
 }
 

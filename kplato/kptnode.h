@@ -139,10 +139,9 @@ public:
     }
     
 	bool isParentOf(KPTNode *node);
-	bool isDependantOn(KPTNode *node);
+    bool isDependChildOf(KPTNode *node);
 	
     KPTRelation *findRelation(KPTNode *node);
-    bool isDependChildOf(KPTNode *node);
 	int getRow(KPTNode *parent = 0);
 	int getColumn(KPTNode *parent = 0);
 	
@@ -222,7 +221,7 @@ public:
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
     virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
-    virtual void drawPertRelations(QCanvas*);
+    virtual void drawPertRelations(KPTPertCanvas* view);
     
     virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
     virtual KPTDuration &startNotEarlier() { return sneTime; }

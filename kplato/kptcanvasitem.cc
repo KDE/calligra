@@ -252,8 +252,8 @@ void KPTPertMilestoneItem::printDebug( int /*info*/ )
 
 ////////////////////   KPTRelationCanvasItem   //////////////////////////
 
-KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
-    : QCanvasPolygon(canvas),
+KPTRelationCanvasItem::KPTRelationCanvasItem( KPTPertCanvas *view, KPTRelation *rel)
+    : QCanvasPolygon(view->canvas()),
 	m_rel(rel)
 {
     //kdDebug()<<k_funcinfo<<endl;
@@ -263,8 +263,8 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	//  c) START_START: child column >= parent column
 	//  d) Child row can be >= than parent row
 
-	wgap = 20;
-	hgap = 10;
+	wgap = view->verticalGap();
+	hgap = view->horizontalGap();
 
 	// could not use ...rect() here, don't know why
 	parentTop = (int)(rel->parent()->pertItem()->y());
