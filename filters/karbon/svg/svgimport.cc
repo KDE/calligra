@@ -289,6 +289,7 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 			}
 			else
 				offset = temp.toFloat();
+
 			if( !stop.attribute( "stop-color" ).isEmpty() )
 				parseColor( c, stop.attribute( "stop-color" ) );
 			else
@@ -303,9 +304,13 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 					QString params	= substyle[1].stripWhiteSpace();
 					if( command == "stop-color" )
 						parseColor( c, params );
+					if( command == "stop-opacity" )
+						c.setOpacity( params.toDouble() );
 				}
 
 			}
+			if( !stop.attribute( "stop-opacity" ).isEmpty() )
+				c.setOpacity( stop.attribute( "stop-opacity" ).toDouble() );
 			gradient->addStop( c, offset, 0.5 );
 		}
 	}
