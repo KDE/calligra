@@ -79,7 +79,6 @@ void KWAutoFormat::readConfig()
     if(!xmlFile.open(IO_ReadOnly)) {
         xmlFile.setName(KWFactory::global()->dirs()->findResource("autocorrect","autocorrect.xml"));
     if(!xmlFile.open(IO_ReadOnly)) {
-        kdDebug()<<"xmlFile.name :"<<xmlFile.name()<<endl;
 	fileNotFound = true;
       }
     }
