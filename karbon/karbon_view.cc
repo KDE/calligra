@@ -42,7 +42,7 @@
 #include <koMainWindow.h>
 #include <koFontDia.h>
 
-#include "KArbonViewIface.h"
+#include "KarbonViewIface.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -80,7 +80,7 @@ KarbonView::~KarbonView()
 DCOPObject* KarbonView::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KArbonViewIface( this );
+	m_dcop = new KarbonViewIface( this );
 
     return m_dcop;
 }
@@ -160,7 +160,6 @@ KarbonView::editPurgeHistory()
 void
 KarbonView::objectMoveToTop()
 {
-	kdDebug() << "toTOP!!!!!" << endl;
 	m_part->moveSelectionToTop();
 }
 

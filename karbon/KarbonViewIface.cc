@@ -17,59 +17,59 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KArbonViewIface.h"
+#include "KarbonViewIface.h"
 
 #include "karbon_view.h"
 
 #include <dcopclient.h>
 
-KArbonViewIface::KArbonViewIface( KarbonView *view_ )
+KarbonViewIface::KarbonViewIface( KarbonView *view_ )
     : KoViewIface( view_ )
 {
     m_view = view_;
 }
 
-void KArbonViewIface::editCut()
+void KarbonViewIface::editCut()
 {
   m_view->editCut();
 }
 
-void KArbonViewIface::editCopy()
+void KarbonViewIface::editCopy()
 {
   m_view->editCopy();
 }
 
-void KArbonViewIface::editPaste()
+void KarbonViewIface::editPaste()
 {
   m_view->editPaste();
 }
 
-void KArbonViewIface::editSelectAll()
+void KarbonViewIface::editSelectAll()
 {
   m_view->editSelectAll();
 }
 
-void KArbonViewIface::editDeselectAll()
+void KarbonViewIface::editDeselectAll()
 {
   m_view->editDeselectAll();
 }
 
-void KArbonViewIface::editDeleteSelection()
+void KarbonViewIface::editDeleteSelection()
 {
   m_view->editDeleteSelection();
 }
 
-void KArbonViewIface::editPurgeHistory()
+void KarbonViewIface::editPurgeHistory()
 {
   m_view->editPurgeHistory();
 }
 
-void KArbonViewIface::objectMoveToTop()
+void KarbonViewIface::objectMoveToTop()
 {
   m_view->objectMoveToTop();
 }
 
-void KArbonViewIface::objectMoveToBottom()
+void KarbonViewIface::objectMoveToBottom()
 {
   m_view->objectMoveToBottom();
 }

@@ -26,11 +26,11 @@
 
 class KarbonView;
 
-class KArbonViewIface : public KoViewIface
+class KarbonViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    KArbonViewIface( KarbonView *view_ );
+    KarbonViewIface( KarbonView *view_ );
 k_dcop:
     void editCut();
     void editCopy();
