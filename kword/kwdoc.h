@@ -283,9 +283,11 @@ public:
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
     /** Gather all the frames which are on a certain page and return them.
-     * The list is unordered. @see KWFrameSet::framesInPage
+     * The list is ordered. @see KWFrameSet::framesInPage
+     * @param pageNum the number of the page
+     * @param sorted if true the list is ordered. should be true always.
      */
-    QPtrList<KWFrame> framesInPage( int pageNum ) const;
+    QPtrList<KWFrame> framesInPage( int pageNum , bool sorted=true) const;
 
 
     /**
@@ -581,8 +583,6 @@ protected:
     DCOPObject *dcop;
 
 private:
-    // private helper function for fixZorder and framesInPage.
-    QPtrList<KWFrame> framesInPageUnsorted( int pageNum ) const;
     //private helper functions for frameUnderMouse
     /** return the top-most frame under mouse, using nPoint, always returns the first found. */
     KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);

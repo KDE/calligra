@@ -2553,7 +2553,7 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
 
 void KWDocument::fixZOrders() {
 	for (int pgnum=0;pgnum<getPages();pgnum++) {
-		QPtrList<KWFrame> frames= framesInPageUnsorted(pgnum);
+		QPtrList<KWFrame> frames= framesInPage(pgnum,false);
 		// scan this page to see if we need to fixup.
 		bool need_fixup=true;
 		for (KWFrame *f = frames.last();f;f=frames.prev()) {
@@ -2580,10 +2580,10 @@ void KWDocument::fixZOrders() {
 
 class KWFrameList: public QPtrList<KWFrame>
 {
-public:
-    virtual int compareItems(Item a, Item b)
+protected:
+    virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
     {
-            int za = ((KWFrame *)a)->zOrder();
+           int za = ((KWFrame *)a)->zOrder();
            int zb = ((KWFrame *)b)->zOrder();
            if (za == zb) return 0;
            if (za <= zb) return -1;
@@ -2592,7 +2592,7 @@ public:
 };
 
 
-QPtrList<KWFrame> KWDocument::framesInPageUnsorted( int pageNum ) const {
+QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted) const {
     KWFrameList frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2605,15 +2605,10 @@ QPtrList<KWFrame> KWDocument::framesInPageUnsorted( int pageNum ) const {
         for ( ; it.current() ; ++it )
             frames.append( it.current() );
     }
+    if (sorted) frames.sort();
     return frames;
 }
 
-
-QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
-    QPtrList<KWFrame> frames=framesInPageUnsorted(pageNum);
-    frames.sort();
-    return frames;
-}
 
 KWFrame *KWDocument::getFirstSelectedFrame() const
 {
