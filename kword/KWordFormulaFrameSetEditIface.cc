@@ -185,7 +185,7 @@ void KWordFormulaFrameSetEditIface::makeGreek()
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->makeGreek();
 }
 
-void KWordFormulaFrameSetEditIface::insertSymbol( QString name )
+void KWordFormulaFrameSetEditIface::insertSymbol( const QString &name )
 {
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->insertSymbol( name );
 }
@@ -265,7 +265,7 @@ void KWordFormulaFrameSetEditIface::eraseSelection( int direction )
     m_framesetedit->getFormulaView()->eraseSelection( static_cast<KFormula::Direction>( direction ) );
 }
 
-void KWordFormulaFrameSetEditIface::addText( QString str )
+void KWordFormulaFrameSetEditIface::addText( const QString &str )
 {
     m_framesetedit->getFormulaView()->addText( str );
 }

@@ -66,7 +66,7 @@ k_dcop:
     void addGenericUpperIndex();
     void removeEnclosing();
     void makeGreek();
-    void insertSymbol( QString name );
+    void insertSymbol( const QString &name );
 
     void appendColumn();
     void insertColumn();
@@ -90,7 +90,7 @@ k_dcop:
     bool isEnd() const;
 
     void eraseSelection( int direction );
-    void addText( QString str );
+    void addText( const QString &str );
 
 private:
     KWFormulaFrameSetEdit *m_framesetedit;
