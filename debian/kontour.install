@@ -1,9 +1,6 @@
 debian/tmp/usr/bin/kontour
 debian/tmp/usr/lib/kontour.*
 debian/tmp/usr/lib/kde3/libkontourpart.*
-debian/tmp/usr/lib/kde3/libsvgexport.*
-debian/tmp/usr/lib/kde3/libsvgimport.*
-debian/tmp/usr/lib/kde3/libxfigimport.*
 debian/tmp/usr/share/applnk/Office/kontour.desktop
 debian/tmp/usr/share/apps/kontour
 debian/tmp/usr/share/icons/hicolor/16x16/apps/kontour.png
