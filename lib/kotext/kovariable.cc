@@ -442,7 +442,7 @@ KoVariableCollection::~KoVariableCollection()
 }
 
 void KoVariableCollection::clear()
-{ 
+{
     variables.clear();
     varValues.clear();
     m_varSelected = 0;
@@ -2359,6 +2359,8 @@ QStringList KoStatisticVariable::actionTexts()
     lst << i18n( "Number of Sentence" );
     lst << i18n( "Number of Lines" );
     lst << i18n( "Number of Characteres" );
+    lst << i18n( "Number of Non Whitespace characteres" );
+    lst << i18n( "Number of Syllable" );
     lst << i18n( "Number of Frame" );
     lst << i18n( "Number of Embedded Object" );
     lst << i18n( "Number of Picture" );
@@ -2438,6 +2440,16 @@ void KoStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
         m_subtype = VST_STATISTIC_NB_SENTENCE;
         m_varValue = QVariant( elem.text().toInt() );
     }
+    else if ( localName == "non-whitespace-character-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "syllable-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_SYLLABLE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
     //TODO other copy
 }
 
@@ -2488,6 +2500,18 @@ void KoStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*con
         writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
         writer.endElement();
         break;
+    case VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE:
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:character-without-space-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_SYLLABLE:
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:syllable-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
     }
 }
 
@@ -2524,6 +2548,14 @@ QString KoStatisticVariable::fieldCode()
     else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
     {
         return i18n( "Number of Characteres" );
+    }
+    else if ( m_subtype == VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE )
+    {
+        return i18n( "Number of non whitespace character" );
+    }
+    else if ( m_subtype == VST_STATISTIC_NB_SYLLABLE )
+    {
+        return i18n( "Number of syllable" );
     }
     else
         return i18n( "Number of Frame" );

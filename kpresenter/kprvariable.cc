@@ -168,6 +168,14 @@ void KPrStatisticVariable::recalc()
         {
             nb = charsWithSpace;
         }
+        else if ( m_subtype ==VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE )
+        {
+            nb = charsWithoutSpace;
+        }
+        else if ( m_subtype ==VST_STATISTIC_NB_SYLLABLE )
+        {
+            nb = syllables;
+        }
         else
             nb = 0;
     }
