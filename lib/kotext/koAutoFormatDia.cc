@@ -1240,7 +1240,7 @@ void KoCompletionDia::slotAddCompletionEntry()
         {
             m_listCompletion.append( newWord );
             m_lbListCompletion->insertItem( newWord );
-            pbRemoveCompletionEntry->setEnabled( true );
+            pbRemoveCompletionEntry->setEnabled( !m_lbListCompletion->currentText().isEmpty() );
         }
 
     }
