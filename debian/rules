@@ -147,7 +147,7 @@ binary-arch: build install
 	dh_installchangelogs -pkword kword/CHANGES
 	dh_link -a
 	dh_strip -a
-	dh_compress -a --exclude=.docbook
+	dh_compress -a --exclude=.docbook --exclude=.bz2
 	dh_fixperms -a
 	dh_makeshlibs -a -V
 	dh_installdeb -a

@@ -1,8 +1,10 @@
 koffice (1:1.1-beta3-1) unstable; urgency=low
 
-  * New upstream release (closes: Bug#75750, Bug#90686, Bug#98370, Bug#101017).
+  * New upstream release (closes: #75750, #90686, #98370, #101017, #101951).
+  * Pulled latest kugar docs from CVS.
+  * Happy birthday to me! :)
 
- -- Ben Burton <benb@acm.org>  Sun, 17 Jun 2001 16:28:44 -0500
+ -- Ben Burton <benb@acm.org>  Thu, 28 Jun 2001 01:21:00 -0500
 
 koffice (1:1.1-beta2-3) unstable; urgency=low
 
