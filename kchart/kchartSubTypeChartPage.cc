@@ -73,13 +73,13 @@ void KChartHiloSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::HiLoNormal:
-        exampleLA->setPixmap( UserIcon( "areasubtypenormal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "hilosubtypenormal", KChartFactory::global()  ) );
         break;
     case KDChartParams::HiLoClose:
-        exampleLA->setPixmap( UserIcon( "areasubtypestacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "hilosubtypestacked", KChartFactory::global()  ) );
         break;
     case KDChartParams::HiLoOpenClose:
-        exampleLA->setPixmap( UserIcon( "areasubtypepercent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "hilosubtypepercent", KChartFactory::global()  ) );
         break;
     };
 }
@@ -304,13 +304,13 @@ void KChartLineSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::AreaNormal:
-        exampleLA->setPixmap( UserIcon( "areasubtypenormal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "linesubtypenormal", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaStacked:
-        exampleLA->setPixmap( UserIcon( "areasubtypestacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "linesubtypestacked", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaPercent:
-        exampleLA->setPixmap( UserIcon( "areasubtypepercent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "linesubtypepercent", KChartFactory::global()  ) );
         break;
     };
 }
