@@ -270,7 +270,7 @@ private:
 
     void raiseObject();
     void lowerObject();
-    int selectedObjectNumber;
+    int selectedObjectPosition;
 
 public slots:
     void chPic();

@@ -109,7 +109,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         ratio = 0;
         keepRatio = false;
         mouseSelectedObject = false;
-        selectedObjectNumber = -1;
+        selectedObjectPosition = -1;
     } else {
         view = 0;
         hide();
@@ -1296,9 +1296,9 @@ void Page::deSelectAllObj()
     if(view->kPresenterDoc()->numSelected()==0)
         return;
 
-    if ( !view->kPresenterDoc()->raiseAndLowerObject && selectedObjectNumber != -1 ) {
+    if ( !view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) {
         lowerObject();
-        selectedObjectNumber = -1;
+        selectedObjectPosition = -1;
     }
     else
         view->kPresenterDoc()->raiseAndLowerObject = false;
@@ -4368,44 +4368,32 @@ void Page::resizeObject()
 
 void Page::raiseObject()
 {
-    if ( selectedObjectNumber == -1 ) {
-        KPObject *kpobject = 0;
-        int j = 0;
-        // Examine number of the object which user selected.
-        for ( uint i = 0; i < objectList()->count(); ++i ) {
-            kpobject = objectList()->at( i );
-            if ( kpobject->isSelected() ) {
-                ++j;
-                if ( j > 1 )
-                    break;
-            }
-        }
+    if ( selectedObjectPosition == -1 ) {
+        KPObject *kpobject;
 
-        if ( j == 1 ) { // execute this if user selected is one object.
-            for ( uint i = 0; i < objectList()->count(); ++i ) {
-                kpobject = objectList()->at( i );
+        if ( view->kPresenterDoc()->numSelected() == 1 ) { // execute this if user selected is one object.
+            for ( kpobject = objectList()->first(); kpobject != 0; kpobject = objectList()->next() ) {
                 if ( kpobject->isSelected() ) {
-                    objectList()->remove( i );
+                    selectedObjectPosition = objectList()->at();
+                    objectList()->remove( selectedObjectPosition );
                     objectList()->append( kpobject );
-                    selectedObjectNumber = i;
                     break;
                 }
             }
         }
         else
-            selectedObjectNumber = -1;
+            selectedObjectPosition = -1;
     }
 }
 
 void Page::lowerObject()
 {
-    KPObject *kpobject = 0;
+    KPObject *kpobject;
 
-    for ( uint i = 0; i < objectList()->count(); ++i ) {
-        kpobject = objectList()->at( i );
+    for ( kpobject = objectList()->first(); kpobject != 0; kpobject = objectList()->next() ) {
         if ( kpobject->isSelected() ) {
-            objectList()->remove( i );
-            objectList()->insert( selectedObjectNumber, kpobject );
+            objectList()->remove( objectList()->at() );
+            objectList()->insert( selectedObjectPosition, kpobject );
             break;
         }
     }

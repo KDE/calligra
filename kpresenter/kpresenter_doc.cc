@@ -188,7 +188,7 @@ void KPresenterDoc::initConfig()
     KConfig* config = KPresenterFactory::global()->config();
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
-        setAutoSave( config->readNumEntry( "AutoSave",defaultAutoSave()  ));
+        setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
         _rastX = config->readNumEntry( "RastX", 10 );
         _rastY = config->readNumEntry( "RastY", 10 );
     }
