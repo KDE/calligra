@@ -1,8 +1,8 @@
-koffice (2.0-20000823-1.0) experimental; urgency=low
+koffice (2.0-20000825-1.0) experimental; urgency=low
  
   * KDE 2.0 beta 4
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 23 Aug 2000 16:30:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 25 Aug 2000 22:30:00 -0700
                                                                                 
 koffice (2.0-20000821-1.0) experimental; urgency=low
  
