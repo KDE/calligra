@@ -632,7 +632,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
 	if (cmd.isEmpty())
 	{
-	    KMessageBox::error(0L,"You don't appear to have perl installed.\nIt is needed to convert this document.\nPlease install perl and try again.");
+	    KMessageBox::error(0L, i18n("You don't appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
 	    return false;
 	}
 	cmd += " ";
@@ -2965,7 +2965,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 	}
     }
 
-    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object( s )" ), _objectList, _new, this );
+    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object( s )" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
 
@@ -3438,7 +3438,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 
     QString _template, fileName;
     if ( !chooseTemplate ) {
-	_template = getenv( "HOME" );
+	_template = QString::fromLocal8Bit( getenv( "HOME" ) );
 	_template += "/.default.kpr";\
 	fileName = _template;
 	if ( !theFile.isEmpty() )
@@ -3450,8 +3450,8 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 	    return -1;
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
-	QString cmd = "cp " + fileName + " " + QString( getenv( "HOME" )  ) + "/.default.kpr";
-	system( cmd.local8Bit().data() );
+	QString cmd = "cp " + fileName + " " + QString::fromLocal8Bit( getenv( "HOME" ) ) + "/.default.kpr";
+	system( QFile::encodeName(cmd) );
     }
 
     _clean = false;
@@ -3785,7 +3785,7 @@ void KPresenterDoc::alignObjsCenterV()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) top" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) center / vertical" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }
@@ -3812,7 +3812,7 @@ void KPresenterDoc::alignObjsBottom()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) top" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) bottom" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }
@@ -4024,7 +4024,7 @@ void KPresenterDoc::ungroupObjects()
 {
     KPObject *kpobject = getSelectedObj();
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
-	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Object" ),
+	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
 							  (KPGroupObject*)kpobject, this );
 	_commands.addCommand( unGroupObjCmd );
 	unGroupObjCmd->execute();
@@ -4083,4 +4083,3 @@ QValueList<int> KPresenterDoc::selectedSlides() const /* returned list is 0-base
             result << i;
     return result;
 }
-
