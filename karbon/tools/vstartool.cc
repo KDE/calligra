@@ -111,6 +111,25 @@ VStarTool::~VStarTool()
 	delete( m_optionsWidget );
 }
 
+void
+VStarTool::arrowKeyReleased( Qt::Key key )
+{
+	int change = 0;
+	if( key == Qt::Key_Up )
+		change = 1;
+	else if( key == Qt::Key_Down )
+		change = -1;
+
+	if( change != 0 )
+	{
+		draw();
+
+		m_optionsWidget->setEdges( m_optionsWidget->edges() + change );
+
+		draw();
+	}
+}
+
 VComposite*
 VStarTool::shape( bool interactive ) const
 {

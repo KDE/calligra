@@ -46,6 +46,8 @@ public:
 
 	void refreshUnit();
 
+	virtual void arrowKeyReleased( Qt::Key );
+
 private:
 	class VStarOptionsWidget : public QGroupBox
 	{
