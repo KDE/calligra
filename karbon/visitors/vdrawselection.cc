@@ -110,7 +110,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->moveTo(
 							jtr.current()->prev()->knot() );
 						m_painter->lineTo(
-							jtr.current()->ctrlPoint1() );
+							jtr.current()->point( 0 ) );
 
 						m_painter->strokePath();
 					}
@@ -120,7 +120,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						jtr.current()->knotSelected() )
 					{
 						m_painter->moveTo(
-							jtr.current()->ctrlPoint2() );
+							jtr.current()->point( 1 ) );
 						m_painter->lineTo(
 							jtr.current()->knot() );
 
@@ -136,7 +136,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						  jtr.current()->prev()->knotSelected() ) )
 					{
 						m_painter->setBrush( Qt::blue.light() );
-						m_painter->drawNode( jtr.current()->ctrlPoint1(), 2 );
+						m_painter->drawNode( jtr.current()->point( 0 ), 2 );
 					}
 					else
 						m_painter->setBrush( Qt::NoBrush );
@@ -152,7 +152,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						jtr.current()->knotSelected() )
 					{
 						m_painter->setBrush( Qt::blue.light() );
-						m_painter->drawNode( jtr.current()->ctrlPoint2(), 2 );
+						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
 					}
 					else
 						m_painter->setBrush( Qt::NoBrush );

@@ -258,10 +258,10 @@ EpsExport::visitVPath( VPath& path )
 		{
 			case VSegment::curve:
 				*m_stream <<
-					itr.current()->ctrlPoint1().x() << " " <<
-					itr.current()->ctrlPoint1().y() << " " <<
-					itr.current()->ctrlPoint2().x() << " " <<
-					itr.current()->ctrlPoint2().y() << " " <<
+					itr.current()->point( 0 ).x() << " " <<
+					itr.current()->point( 0 ).y() << " " <<
+					itr.current()->point( 1 ).x() << " " <<
+					itr.current()->point( 1 ).y() << " " <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y() << " " <<
 					l1_curveto << "\n";

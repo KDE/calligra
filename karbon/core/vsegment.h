@@ -29,6 +29,7 @@
 #include "vglobal.h"
 
 class QDomElement;
+class QWMatrix;
 class VPainter;
 
 /**
@@ -80,8 +81,8 @@ public:
 	~VSegment();
 
 	/**
-	 * Returns the segment's degree. For beziers "three" most likely,
-	 * "one" for lines.
+	 * Returns the segment's degree, which is identical to the number of node data.
+	 * For cubic beziers it is "three" and "one" for lines.
 	 */
 	unsigned degree() const
 	{
@@ -89,9 +90,10 @@ public:
 	}
 
 	/**
-	 * Sets the degree.
+	 * Sets the segment's degree and thus resizes the array of node data. All old node data
+	 * are lost. You will have to backup them on your own.
 	 */
-	void setDegree();
+	void setDegree( unsigned degree );
 
 
 	/**
@@ -128,38 +130,44 @@ public:
 	}
 
 
-	void draw( VPainter* painter ) const;
+	/**
+	 * Returns the point with index 0 <= i < degree(),
+	 */
+	const KoPoint& point( unsigned i ) const
+	{
+		return m_nodes[ i ].m_vector;
+	}
 
+	/**
+	 * Returns the knot. This is a convenience function using point().
+	 */
+	const KoPoint& knot() const
+	{
+		return point( degree() - 1 );
+	}
+
+	/**
+	 * Sets the point with index 0 <= i < degree() to "p".
+	 */
+	void setPoint( unsigned i, const KoPoint& p )
+	{
+		m_nodes[ i ].m_vector = p;
+	}
+
+	/**
+	 * Sets the knot. This is a convenience function using setPoint().
+	 */
+	void setKnot( const KoPoint& p )
+	{
+		m_nodes[ degree() - 1 ].m_vector = p;
+	}
+
+
+	// TODO: remove
 	VCtrlPointFixing ctrlPointFixing() const
 		{ return m_ctrlPointFixing; }
 	void setCtrlPointFixing( VCtrlPointFixing fixing )
 		{ m_ctrlPointFixing = fixing; }
-
-	/**
-	 * Returns node with 1 <= index <= 3.
-	 */
-	const KoPoint& node( uint index ) const
-		{ return m_node[--index]; }
-
-	/**
-	 * Sets node with 1 <= index <= 3 to point.
-	 */
-	void setNode( uint index, const KoPoint& point )
-		{ m_node[--index] = point; }
-
-	const KoPoint& ctrlPoint1() const
-		{ return m_node[0]; }
-	const KoPoint& ctrlPoint2() const
-		{ return m_node[1]; }
-	const KoPoint& knot() const
-		{ return m_node[2]; }
-
-	void setCtrlPoint1( const KoPoint& p )
-		{ m_node[0] = p; }
-	void setCtrlPoint2( const KoPoint& p )
-		{ m_node[1] = p; }
-	void setKnot( const KoPoint& p )
-		{ m_node[2] = p; }
 
 	/**
 	 * Returns index of the node at point p. Returns 0 of none
@@ -169,12 +177,6 @@ public:
 	uint nodeNear( const KoPoint& p,
 		double isNearRange = VGlobal::isNearRange ) const;
 
-	/**
-	 * Returns a reverted version of this segment. For example:
-	 * if this segment is a line from A to B, the result is a line from
-	 * B to A.
-	 */
-	VSegment* revert() const;
 
 	/**
 	 * Returns a pointer to the previous not deleted segment, if stored in a
@@ -195,10 +197,10 @@ public:
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
 	/**
-	 * Returns the point on this segment for 0 <= t <= 1.
+	 * Returns the point on this segment at parameter 0 <= t <= 1.
 	 * This is a convenience wrapper for pointDerivatives().
 	 */
-	KoPoint point( double t ) const;
+	KoPoint at( double t ) const;
 
 	/**
 	 * Returns the normalized tangent vector (length=1) at the point
@@ -224,22 +226,24 @@ public:
 	void pointTangentNormal( double t, KoPoint* p = 0L,
 		KoPoint* tn = 0L, KoPoint* n = 0L ) const;
 
+
 	/**
 	 * Returns the arclength from p0 to the point parametrized
-	 * by 0 <= t <= 1. For beziers this functionis a bit expensive.
+	 * by 0 <= t <= 1. For beziers this function is a bit expensive.
 	 */
 	double length( double t = 1.0 ) const;
 
 	/**
-	 * Returns the chord length |p0p3| (the distance from the previous
+	 * Returns the chord length (the distance from the previous
 	 * knot to the current knot).
 	 */
 	double chordLength() const;
 
 	/**
-	 * Returns the length of the control polygon |p0p1|+|p1p2|+|p2p3|.
+	 * Returns the length of the control polygon.
 	 */
 	double polyLength() const;
+
 
 	/**
 	 * Returns the parameter of a point located at arclength len.
@@ -251,6 +255,7 @@ public:
 	 * Returns the parameter of the nearest point to the point p on this segment.
 	 */
 	double nearestPointParam( const KoPoint& p ) const;
+
 
 	/**
 	 * Returns true if tangent at p3 is exactly parallel to the tangent at
@@ -265,10 +270,20 @@ public:
 			   : false;
 	}
 
+
 	/**
 	 * Returns the bounding box.
 	 */
 	KoRect boundingBox() const;
+
+
+	/**
+	 * Returns a reverted version of this segment. For example:
+	 * if this segment is a line from A to B, the result is a line from
+	 * B to A.
+	 */
+	VSegment* revert() const;
+
 
 	/**
 	 *  Splits the segment at parameter 0 <= t <= 1. Returns a pointer
@@ -277,11 +292,6 @@ public:
 	 */
 	VSegment* splitAt( double t );
 
-	/**
-	 * Makes the segment a bezier curve. Lines will have control points at
-	 * parameters t and 1 - t.
-	 */
-	void convertToCurve( double t = 1.0 / 3.0 );
 
 	/**
 	 * Returns true if lines A0A1 and B0B1 intersect.
@@ -323,8 +333,17 @@ public:
 	bool edited( uint index ) const
 		{ return m_nodeEdited[index]; }
 
+
+	void draw( VPainter* painter ) const;
+
+
+	void transform( const QWMatrix& m );
+
+
 	void save( QDomElement& element ) const;
+
 	void load( const QDomElement& element );
+
 
 	/**
 	 * Returns a pointer to a copy of this segment.
@@ -333,22 +352,50 @@ public:
 
 private:
 	/**
-	 * Degree. For beziers "three" most likely, "one" for lines.
+	 * Degree. For beziers most likely "three", "one" for lines.
 	 */
 	unsigned m_degree;
 
-	// TODO : struct?
-	KoPoint m_node[3];
-	bool m_nodeSelected[3];
-	bool m_nodeEdited[3];
+	/**
+	 * The segment type.
+	 */
+	VSegmentType m_type;
 
-	VSegment* m_prev;
-	VSegment* m_next;
-
+	/**
+	 * The segment state.
+	 */
 	VState m_state;
 
-	VSegmentType m_type;
+
+	/**
+	 * Node data.
+	 */
+	struct VNodeData
+	{
+		KoPoint m_vector;
+		bool m_isSelected;
+	};
+
+	/**
+	 * A pointer to an array of node data.
+	 */
+	VNodeData* m_nodes;
+
+
+	// TODO: remove
+	bool m_nodeSelected[3];
+	bool m_nodeEdited[3];
 	VCtrlPointFixing m_ctrlPointFixing;
+
+	/**
+	 * Pointer to the previous segment.
+	 */
+	VSegment* m_prev;
+
+	/**
+	 * Pointer to the next segment.
+	 */
+	VSegment* m_next;
 };
 
 #endif

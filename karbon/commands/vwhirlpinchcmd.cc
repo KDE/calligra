@@ -79,7 +79,8 @@ VWhirlPinchCmd::visitVPath( VPath& path )
 
 	while( path.current() )
 	{
-		path.current()->convertToCurve();
+// TODO: selfmade this function since it's gone:
+//		path.current()->convertToCurve();
 
 
 		// Apply three times separately to each segment node.
@@ -106,7 +107,7 @@ VWhirlPinchCmd::visitVPath( VPath& path )
 		}
 
 
-		delta = path.current()->ctrlPoint1() - m_center;
+		delta = path.current()->point( 0 ) - m_center;
 		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
 		if( dist < m_radius )
@@ -124,11 +125,11 @@ VWhirlPinchCmd::visitVPath( VPath& path )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( m_center.x(), m_center.y() );
 
-			path.current()->setCtrlPoint1( delta.transform( m ) );
+			path.current()->setPoint( 0, delta.transform( m ) );
 		}
 
 
-		delta = path.current()->ctrlPoint2() - m_center;
+		delta = path.current()->point( 1 ) - m_center;
 		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
 		if( dist < m_radius )
@@ -146,7 +147,7 @@ VWhirlPinchCmd::visitVPath( VPath& path )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( m_center.x(), m_center.y() );
 
-			path.current()->setCtrlPoint2( delta.transform( m ) );
+			path.current()->setPoint( 1, delta.transform( m ) );
 		}
 
 

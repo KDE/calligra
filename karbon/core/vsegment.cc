@@ -61,7 +61,7 @@ height(
 
 VSegment::VSegment( unsigned degree )
 {
-	m_degree = degree;
+	m_nodes = new VNodeData[ degree ];
 	m_type = begin;
 	m_state = normal;
 
@@ -82,7 +82,7 @@ VSegment::VSegment( unsigned degree )
 
 VSegment::VSegment( const VSegment& segment )
 {
-	m_degree = segment.m_degree;
+	m_nodes = new VNodeData[ segment.m_degree ];
 	m_type = segment.m_type;
 	m_state = segment.m_state;
 
@@ -91,9 +91,11 @@ VSegment::VSegment( const VSegment& segment )
 	m_prev = segment.m_prev;
 	m_next = segment.m_next;
 
-	m_node[0] = segment.m_node[0];
-	m_node[1] = segment.m_node[1];
-	m_node[2] = segment.m_node[2];
+	// Copy points.
+	for( unsigned i = 0; i < degree(); ++i )
+	{
+		setPoint( i, segment.point( i ) );
+	}
 
 	m_nodeSelected[0] = segment.m_nodeSelected[0];
 	m_nodeSelected[1] = segment.m_nodeSelected[1];
@@ -108,11 +110,22 @@ VSegment::VSegment( const VSegment& segment )
 
 VSegment::~VSegment()
 {
+	delete[]( m_nodes );
 }
 
 void
-VSegment::setDegree()
+VSegment::setDegree( unsigned degree )
 {
+	// Do nothing if old and new degrees are identical.
+	if( m_degree == degree )
+		return;
+
+
+	// Delete old node data.
+	delete[]( m_nodes );
+
+	// Allocate new node data.
+	m_nodes = new VNodeData[ degree ];
 }
 
 void
@@ -121,9 +134,10 @@ VSegment::draw( VPainter* painter ) const
 	if( state() == deleted )
 		return;
 
+
 	if( type() == curve )
 	{
-		painter->curveTo( ctrlPoint1(), ctrlPoint2(), knot() );
+		painter->curveTo( point( 0 ), point( 1 ), point( 3 ) );
 	}
 	else if( type() == line )
 	{
@@ -147,20 +161,32 @@ VSegment::isFlat( double flatness ) const
 	}
 
 	if( m_type == curve )
-		return
-			height( m_prev->m_node[2], m_node[0], m_node[2] ) / chordLength()
-				< flatness &&
-			height( m_prev->m_node[2], m_node[1], m_node[2] ) / chordLength()
-				< flatness;
+	{
+		bool flat;
+
+		for( unsigned i = 0; i < degree() - 1; ++i )
+		{
+			flat =
+				height( m_prev->knot(), point( i ), knot() ) / chordLength()
+					< flatness;
+
+			if( !flat )
+				break;
+		}
+
+		return flat;
+	}
 
 	return false;
 }
 
 KoPoint
-VSegment::point( double t ) const
+VSegment::at( double t ) const
 {
 	KoPoint p;
+
 	pointDerivatives( t, &p );
+
 	return p;
 }
 
@@ -175,13 +201,14 @@ VSegment::pointDerivatives( double t, KoPoint* p,
 		return;
 	}
 
+
 	// Lines.
 	if( m_type == line )
 	{
-		const KoPoint diff = m_node[2] - m_prev->m_node[2];
+		const KoPoint diff = knot() - m_prev->knot();
 
 		if( p )
-			*p = m_prev->m_node[2] + diff * t;
+			*p = m_prev->knot() + diff * t;
 		if( d1 )
 			*d1 = diff;
 		if( d2 )
@@ -190,26 +217,35 @@ VSegment::pointDerivatives( double t, KoPoint* p,
 		return;
 	}
 
+
 	// Beziers.
-	KoPoint q[4];
-	q[0] = m_prev->m_node[2];
-	q[1] = m_node[0];
-	q[2] = m_node[1];
-	q[3] = m_node[2];
+
+	// Copy points.
+	KoPoint* q = new KoPoint[ degree() + 1 ];
+
+	q[ 0 ] = m_prev->knot();
+
+	for( unsigned i = 0; i < degree(); ++i )
+	{
+		q[ i + 1 ] = point( i );
+	}
+
 
 	// The De Casteljau algorithm.
-	for( uint j = 1; j <= 3; ++j )
+	for( uint j = 1; j <= degree(); ++j )
 	{
-		for( uint i = 0; i <= 3 - j; ++i )
+		for( uint i = 0; i <= degree() - j; ++i )
 		{
 			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
 		}
 
+		// Save first derivative now we have it.
 		if( j == 1 )
 		{
 			if( d2 )
 				*d2 = 6 * ( q[2] - 2 * q[1] + q[0] );
 		}
+		// Save second derivative now we have it.
 		else if( j == 2 )
 		{
 			if( d1 )
@@ -217,8 +253,13 @@ VSegment::pointDerivatives( double t, KoPoint* p,
 		}
 	}
 
+	// Save point.
 	if( p )
 		*p = q[0];
+
+
+	delete[]( q );
+
 
 	return;
 }
@@ -351,10 +392,10 @@ VSegment::chordLength() const
 
 	return
 		sqrt(
-				( m_node[2].x() - m_prev->m_node[2].x() ) *
-				( m_node[2].x() - m_prev->m_node[2].x() ) +
-				( m_node[2].y() - m_prev->m_node[2].y() ) *
-				( m_node[2].y() - m_prev->m_node[2].y() ) );
+				( knot().x() - m_prev->knot().x() ) *
+				( knot().x() - m_prev->knot().x() ) +
+				( knot().y() - m_prev->knot().y() ) *
+				( knot().y() - m_prev->knot().y() ) );
 }
 
 double
@@ -367,25 +408,18 @@ VSegment::polyLength() const
 		return 0.0;
 	}
 
-	return
-		sqrt(
-				( m_node[0].x() - m_prev->m_node[2].x() ) *
-				( m_node[0].x() - m_prev->m_node[2].x() )
-			+
-				( m_node[0].y() - m_prev->m_node[2].y() ) *
-				( m_node[0].y() - m_prev->m_node[2].y() ) )
-		+ sqrt(
-				( m_node[1].x() - m_node[0].x() ) *
-				( m_node[1].x() - m_node[0].x() )
-			+
-				( m_node[1].y() - m_node[0].y() ) *
-				( m_node[1].y() - m_node[0].y() ) )
-		+ sqrt(
-				( m_node[2].x() - m_node[1].x() ) *
-				( m_node[2].x() - m_node[1].x() )
-			+
-				( m_node[2].y() - m_node[1].y() ) *
-				( m_node[2].y() - m_node[1].y() ) );
+
+	KoPoint d = point( 0 ) - m_prev->knot();
+	double length = sqrt( d * d );
+
+	for( unsigned i = 1; i < degree(); ++i )
+	{
+		d = point( i ) - point( i - 1 );
+		length += sqrt( d * d );
+	}
+
+
+	return length;
 }
 
 double
@@ -432,7 +466,7 @@ VSegment::param( double len ) const
 }
 
 double
-VSegment::nearestPointParam( const KoPoint& p ) const
+VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
 {
 	if(
 		!m_prev ||
@@ -500,41 +534,42 @@ VSegment::isSmooth( const VSegment& next ) const
 KoRect
 VSegment::boundingBox() const
 {
-	// Initialize with p3.
-	KoRect rect( m_node[2], m_node[2] );
+	// Initialize with knot.
+	KoRect rect( knot(), knot() );
 
+
+	// Add p0, if it exists.
 	if( m_prev )
 	{
-		if( m_prev->m_node[2].x() < rect.left() )
-			rect.setLeft( m_prev->m_node[2].x() );
-		if( m_prev->m_node[2].x() > rect.right() )
-			rect.setRight( m_prev->m_node[2].x() );
-		if( m_prev->m_node[2].y() < rect.top() )
-			rect.setTop( m_prev->m_node[2].y() );
-		if( m_prev->m_node[2].y() > rect.bottom() )
-			rect.setBottom( m_prev->m_node[2].y() );
+		if( m_prev->knot().x() < rect.left() )
+			rect.setLeft( m_prev->knot().x() );
+
+		if( m_prev->knot().x() > rect.right() )
+			rect.setRight( m_prev->knot().x() );
+
+		if( m_prev->knot().y() < rect.top() )
+			rect.setTop( m_prev->knot().y() );
+
+		if( m_prev->knot().y() > rect.bottom() )
+			rect.setBottom( m_prev->knot().y() );
 	}
 
-	if( m_type == curve )
+
+	for( unsigned i = 0; i < degree() - 1; ++i )
 	{
-		if( m_node[0].x() < rect.left() )
-			rect.setLeft( m_node[0].x() );
-		if( m_node[0].x() > rect.right() )
-			rect.setRight( m_node[0].x() );
-		if( m_node[0].y() < rect.top() )
-			rect.setTop( m_node[0].y() );
-		if( m_node[0].y() > rect.bottom() )
-			rect.setBottom( m_node[0].y() );
+		if( point( i ).x() < rect.left() )
+			rect.setLeft( point( i ).x() );
 
-		if( m_node[1].x() < rect.left() )
-			rect.setLeft( m_node[1].x() );
-		if( m_node[1].x() > rect.right() )
-			rect.setRight( m_node[1].x() );
-		if( m_node[1].y() < rect.top() )
-			rect.setTop( m_node[1].y() );
-		if( m_node[1].y() > rect.bottom() )
-			rect.setBottom( m_node[1].y() );
+		if( point( i ).x() > rect.right() )
+			rect.setRight( point( i ).x() );
+
+		if( point( i ).y() < rect.top() )
+			rect.setTop( point( i ).y() );
+
+		if( point( i ).y() > rect.bottom() )
+			rect.setBottom( point( i ).y() );
 	}
+
 
 	return rect;
 }
@@ -555,9 +590,9 @@ VSegment::splitAt( double t )
 	// Lines are easy: no need to modify the current segment.
 	if( m_type == line )
 	{
-		segment->m_node[2] =
-			m_prev->m_node[2] +
-			( m_node[2] - m_prev->m_node[2] ) * t;
+		segment->setKnot(
+			m_prev->knot() +
+			( knot() - m_prev->knot() ) * t );
 
 		segment->m_type = line;
 		segment->m_state = m_state;
@@ -565,11 +600,13 @@ VSegment::splitAt( double t )
 		return segment;
 	}
 
+/*
+// TODO
 	// These references make the folowing code nicer to look at.
-	KoPoint& p0 = m_prev->m_node[2];
+	KoPoint& p0 = m_prev->knot();
 	KoPoint& p1 = m_node[0];
 	KoPoint& p2 = m_node[1];
-	KoPoint& p3 = m_node[2];
+	KoPoint& p3 = knot();
 
 	// Calculate the 2 new beziers.
 	segment->m_node[0] = p0 + ( p1 - p0 ) * t;
@@ -580,34 +617,15 @@ VSegment::splitAt( double t )
 
 	segment->m_node[1] =
 		segment->m_node[0] + ( segment->m_node[1] - segment->m_node[0] ) * t;
-	segment->m_node[2] =
+	segment->knot() =
 		segment->m_node[1] + ( p1 - segment->m_node[1] ) * t;
 
 	// Set the new segment type and state.
 	segment->m_type = curve;
 	segment->m_state = m_state;
+*/
 
 	return segment;
-}
-
-void
-VSegment::convertToCurve( double t )
-{
-	if(
-		!m_prev ||
-		m_type == begin )
-	{
-		return;
-	}
-
-	if( m_type == line )
-	{
-		m_node[0] = point( t );
-		m_node[1] = point( 1.0 - t );
-	}
-
-	m_type = curve;
-	m_ctrlPointFixing = none;
 }
 
 bool
@@ -642,16 +660,18 @@ VSegment::linesIntersect(
 uint
 VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
 {
-	if( m_node[0].isNear( p, isNearRange ) )
-		return 1;
+	unsigned index = 0;
 
-	if( m_node[1].isNear( p, isNearRange ) )
-		return 2;
+	for( unsigned i = 0; i < degree(); ++i )
+	{
+		if( point( 0 ).isNear( p, isNearRange ) )
+		{
+			index = i + 1;
+			break;
+		}
+	}
 
-	if( m_node[2].isNear( p, isNearRange ) )
-		return 3;
-
-	return 0;
+	return index;
 }
 
 VSegment*
@@ -671,9 +691,13 @@ VSegment::revert() const
 
 
 	// Swap points.
-	segment->m_node[0] = m_node[1];
-	segment->m_node[1] = m_node[0];
-	segment->m_node[2] = m_prev->m_node[2];
+	for( unsigned i = 0; i < degree() - 1; ++i )
+	{
+		segment->setPoint( i, point( degree() - 2 - i ) );
+	}
+
+	segment->setKnot( m_prev->knot() );
+
 
 	// Swap node selection.
 	segment->m_nodeSelected[0] = m_nodeSelected[1];
@@ -716,6 +740,16 @@ VSegment::next() const
 }
 
 void
+VSegment::transform( const QWMatrix& m )
+{
+	for( unsigned i = 0; i < degree(); ++i )
+	{
+		setPoint( i, point( i ).transform( m ) );
+	}
+}
+
+
+void
 VSegment::save( QDomElement& element ) const
 {
 	if( state() == deleted )
@@ -726,24 +760,24 @@ VSegment::save( QDomElement& element ) const
 	if( m_type == curve )
 	{
 		me = element.ownerDocument().createElement( "CURVE" );
-		me.setAttribute( "x1", m_node[0].x() );
-		me.setAttribute( "y1", m_node[0].y() );
-		me.setAttribute( "x2", m_node[1].x() );
-		me.setAttribute( "y2", m_node[1].y() );
-		me.setAttribute( "x3", m_node[2].x() );
-		me.setAttribute( "y3", m_node[2].y() );
+		me.setAttribute( "x1", point( 0 ).x() );
+		me.setAttribute( "y1", point( 0 ).y() );
+		me.setAttribute( "x2", point( 1 ).x() );
+		me.setAttribute( "y2", point( 1 ).y() );
+		me.setAttribute( "x3", knot().x() );
+		me.setAttribute( "y3", knot().y() );
 	}
 	else if( m_type == line )
 	{
 		me = element.ownerDocument().createElement( "LINE" );
-		me.setAttribute( "x", m_node[2].x() );
-		me.setAttribute( "y", m_node[2].y() );
+		me.setAttribute( "x", knot().x() );
+		me.setAttribute( "y", knot().y() );
 	}
 	else if( m_type == begin )
 	{
 		me = element.ownerDocument().createElement( "MOVE" );
-		me.setAttribute( "x", m_node[2].x() );
-		me.setAttribute( "y", m_node[2].y() );
+		me.setAttribute( "x", knot().x() );
+		me.setAttribute( "y", knot().y() );
 	}
 
 	if( m_ctrlPointFixing )
@@ -758,9 +792,11 @@ VSegment::load( const QDomElement& element )
 	switch( element.attribute( "ctrlPointFixing", "0" ).toUShort() )
 	{
 		case 1:
-			m_ctrlPointFixing = first; break;
+			m_ctrlPointFixing = first;
+			break;
 		case 2:
-			m_ctrlPointFixing = second; break;
+			m_ctrlPointFixing = second;
+			break;
 		default:
 			m_ctrlPointFixing = none;
 	}
@@ -768,24 +804,47 @@ VSegment::load( const QDomElement& element )
 	if( element.tagName() == "CURVE" )
 	{
 		m_type = curve;
-		m_node[0].setX( element.attribute( "x1" ).toDouble() );
-		m_node[0].setY( element.attribute( "y1" ).toDouble() );
-		m_node[1].setX( element.attribute( "x2" ).toDouble() );
-		m_node[1].setY( element.attribute( "y2" ).toDouble() );
-		m_node[2].setX( element.attribute( "x3" ).toDouble() );
-		m_node[2].setY( element.attribute( "y3" ).toDouble() );
+
+		setDegree( 3 );
+
+		setPoint(
+			0,
+			KoPoint(
+				element.attribute( "x1" ).toDouble(),
+				element.attribute( "y1" ).toDouble() ) );
+
+		setPoint(
+			1,
+			KoPoint(
+				element.attribute( "x2" ).toDouble(),
+				element.attribute( "y2" ).toDouble() ) );
+
+		setKnot(
+			KoPoint(
+				element.attribute( "x3" ).toDouble(),
+				element.attribute( "y3" ).toDouble() ) );
 	}
 	else if( element.tagName() == "LINE" )
 	{
 		m_type = line;
-		m_node[2].setX( element.attribute( "x" ).toDouble() );
-		m_node[2].setY( element.attribute( "y" ).toDouble() );
+
+		setDegree( 1 );
+
+		setKnot(
+			KoPoint(
+				element.attribute( "x" ).toDouble(),
+				element.attribute( "y" ).toDouble() ) );
 	}
 	else if( element.tagName() == "MOVE" )
 	{
 		m_type = begin;
-		m_node[2].setX( element.attribute( "x" ).toDouble() );
-		m_node[2].setY( element.attribute( "y" ).toDouble() );
+
+		setDegree( 1 );
+
+		setKnot(
+			KoPoint(
+				element.attribute( "x" ).toDouble(),
+				element.attribute( "y" ).toDouble() ) );
 	}
 }
 

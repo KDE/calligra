@@ -45,7 +45,7 @@ VSelectNodes::visitVPath( VPath& path )
 		{
 			if(
 				path.current()->ctrlPointFixing() != VSegment::first &&
-				m_rect.contains( path.current()->ctrlPoint1() ) )
+				m_rect.contains( path.current()->point( 0 ) ) )
 			{
 				// select first control point, when previous knot is selected:
 				if(
@@ -60,7 +60,7 @@ VSelectNodes::visitVPath( VPath& path )
 
 			if(
 				path.current()->ctrlPointFixing() != VSegment::second &&
-				m_rect.contains( path.current()->ctrlPoint2() ) )
+				m_rect.contains( path.current()->point( 1 ) ) )
 			{
 				// select second control point, when knot is selected:
 				if( path.current()->knotSelected() )

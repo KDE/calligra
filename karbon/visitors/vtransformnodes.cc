@@ -44,14 +44,16 @@ VTransformNodes::visitVPath( VPath& path )
 		}
 		else if( path.current()->edited( 0 ) )
 		{
-			path.current()->setCtrlPoint1(
-				path.current()->ctrlPoint1().transform( m_matrix ) );
+			path.current()->setPoint(
+				0,
+				path.current()->point( 0 ).transform( m_matrix ) );
 		}
 
 		if( path.current()->edited( 2 ) )
 		{
-			path.current()->setCtrlPoint2(
-				path.current()->ctrlPoint2().transform( m_matrix ) );
+			path.current()->setPoint(
+				1,
+				path.current()->point( 1 ).transform( m_matrix ) );
 			path.current()->setKnot(
 				path.current()->knot().transform( m_matrix ) );
 
@@ -59,19 +61,22 @@ VTransformNodes::visitVPath( VPath& path )
 			{
 				path.getFirst()->setKnot(
 					path.getFirst()->knot().transform( m_matrix ) );
-				path.getFirst()->next()->setCtrlPoint1(
-					path.getFirst()->next()->ctrlPoint1().transform( m_matrix ) );
+				path.getFirst()->next()->setPoint(
+					0,
+					path.getFirst()->next()->point( 0 ).transform( m_matrix ) );
 			}
 			else
 			{
-				path.current()->next()->setCtrlPoint1(
-					path.current()->next()->ctrlPoint1().transform( m_matrix ) );
+				path.current()->next()->setPoint(
+					0,
+					path.current()->next()->point( 0 ).transform( m_matrix ) );
 			}
 		}
 		else if( path.current()->edited( 1 ) )
 		{
-			path.current()->setCtrlPoint2(
-				path.current()->ctrlPoint2().transform( m_matrix ) );
+			path.current()->setPoint(
+				1,
+				path.current()->point( 1 ).transform( m_matrix ) );
 		}
 
 		if( !success() )

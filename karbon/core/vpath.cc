@@ -133,8 +133,8 @@ VPath::VPath( VObject* parent )
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
 
-	// add an initial ("begin") segment:
-	append( new VSegment() );
+	// Add an initial "begin" segment.
+	append( new VSegment( 1 ) );
 }
 
 VPath::VPath( const VPath& list )
@@ -165,8 +165,8 @@ VPath::VPath( const VSegment& segment )
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
 
-	// add an initial ("begin") segment:
-	append( new VSegment() );
+	// Add an initial "begin" segment.
+	append( new VSegment( 1 ) );
 
 	if( segment.prev() )
 		moveTo( segment.prev()->knot() );
@@ -202,9 +202,10 @@ VPath::moveTo( const KoPoint& p )
 bool
 VPath::lineTo( const KoPoint& p )
 {
-	if( isClosed() ) return false;
+	if( isClosed() )
+		return false;
 
-	VSegment* s = new VSegment();
+	VSegment* s = new VSegment( 1 );
 	s->setType( VSegment::line );
 	s->setKnot( p );
 	append( s );
@@ -216,14 +217,19 @@ bool
 VPath::curveTo(
 	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
-	if( isClosed() ) return false;
+	if( isClosed() )
+		return false;
 
 	VSegment* s = new VSegment();
+
 	s->setType( VSegment::curve );
-	s->setCtrlPoint1( p1 );
-	s->setCtrlPoint2( p2 );
-	s->setKnot( p3 );
+
+	s->setPoint( 0, p1 );
+	s->setPoint( 1, p2 );
+	s->setPoint( 2, p3 );
+
 	append( s );
+
 
 	return true;
 }
@@ -231,14 +237,20 @@ VPath::curveTo(
 bool
 VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 {
-	if( isClosed() ) return false;
+	if( isClosed() )
+		return false;
 
 	VSegment* s = new VSegment();
+
 	s->setType( VSegment::curve );
 	s->setCtrlPointFixing( VSegment::first );
-	s->setCtrlPoint2( p2 );
-	s->setKnot( p3 );
+
+	s->setPoint( 0, s->prev()->knot() );
+	s->setPoint( 1, p2 );
+	s->setPoint( 2, p3 );
+
 	append( s );
+
 
 	return true;
 }
@@ -246,14 +258,20 @@ VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 bool
 VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 {
-	if( isClosed() ) return false;
+	if( isClosed() )
+		return false;
 
 	VSegment* s = new VSegment();
+
 	s->setType( VSegment::curve );
 	s->setCtrlPointFixing( VSegment::second );
-	s->setCtrlPoint1( p1 );
-	s->setKnot( p3 );
+
+	s->setPoint( 0, p1 );
+	s->setPoint( 1, p3 );
+	s->setPoint( 2, p3 );
+
 	append( s );
+
 
 	return true;
 }
@@ -262,25 +280,28 @@ bool
 VPath::arcTo(
 	const KoPoint& p1, const KoPoint& p2, const double r )
 {
-	// This routine is inspired by code in GNU ghostscript.
+	/* This routine is inspired by code in GNU ghostscript.
+	 *
+	 *           |- P1B3 -|
+	 *
+	 *          |- - - T12- - -|
+	 *
+	 *  -   - P1 x....__--o.....x P2
+	 *  |   |    :  _/    B3
+	 * P1B0      : /
+	 *      |    :/
+	 *  |        |
+	 *  -  T10   o B0
+	 *           |
+	 *      |    |
+	 *           |
+	 *      |    |
+	 *      -    x P0
+	 */
 
-	//           |- P1B3 -|
-	//
-	//           |- - - T12- - -|
-	//
-	//  -   - P1 x....__--o.....x P2
-	//  |   |    :  _/    B3
-	// P1B0      : /
-	//      |    :/
-	//  |        |
-	//  -  T10   o B0
-	//           |
-	//      |    |
-	//           |
-	//      |    |
-	//      -    x P0
+	if( isClosed() || r < 0.0 )
+		return false;
 
-	if( isClosed() || r < 0.0 ) return false;
 
 	// We need to calculate the tangent points. Therefore calculate tangents
 	// T10=P1P0 and T12=P1P2 first:
@@ -344,10 +365,10 @@ VPath::arcTo(
 void
 VPath::close()
 {
-	// In the case the list is absolutely empty (which should actually never happen),
+	// In the case the list is 100% empty (which should actually never happen),
 	// append a "begin" first, to avoid a crash:
 	if( count() == 0 )
-		append( new VSegment() );
+		append( new VSegment( 1 ) );
 
 	// Move end-segment if we are already closed:
 	if( m_isClosed )
@@ -483,14 +504,14 @@ void
 VPath::transform( const QWMatrix& m )
 {
 	VSegment* segment = m_first;
+
 	while( segment )
 	{
-		segment->m_node[0] = segment->m_node[0].transform( m );
-		segment->m_node[1] = segment->m_node[1].transform( m );
-		segment->m_node[2] = segment->m_node[2].transform( m );
+		segment->transform( m );
 
 		segment = segment->m_next;
 	}
+
 
 	invalidateBoundingBox();
 }
