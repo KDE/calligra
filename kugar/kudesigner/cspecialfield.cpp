@@ -45,7 +45,7 @@ CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCan
 	    << i18n("9 - yyyy-m-d")
 	    << i18n("10 - dd.mm.yy")
 	    << i18n("11 - dd.mm.yyyy");
-    props["DataType"] = propValues;
+    props["DateFormat"] = propValues;
     propValues.second.clear();
 }
 
