@@ -2657,6 +2657,12 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
             objlist.append(static_cast<KPTextObject*>( oIt.current() ));
     }
 
+    oIt=m_stickyPage->objectList();
+    for ( ; oIt.current() ; ++oIt )
+    {
+        if(oIt.current()->getType()==OT_TEXT)
+            objlist.append(static_cast<KPTextObject*>( oIt.current() ));
+    }
 
     int pos=objlist.findNextRef(obj);
     if(pos !=-1)
