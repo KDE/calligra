@@ -325,23 +325,19 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     QString tmp2;
 
-    while ( parser.open( 0L, tag ) )
-    {
+    while ( parser.open( 0L, tag ) ) {
 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
 	// text
-	if ( name == "TEXT" )
-	{
+	if ( name == "TEXT" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    tmp2 = ( *it ).m_strValue.c_str();
 	    }
 
-	    if ( parser.readText( tmp ) )
-	    {
+	    if ( parser.readText( tmp ) ) {
 		QString s = tmp.c_str();
 		if ( s.simplifyWhiteSpace().length() > 0 )
 		    tmp2 = tmp.c_str();
@@ -351,78 +347,49 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
 	    if ( text.size() == 1 && tmp2.length() > 0 ) text.remove( 0 );
 	    text.insert( text.size(), tmp2 );
-	}
-
-	// hard break
-	else if ( name == "HARDBRK" )
-	{
+	} else if ( name == "HARDBRK" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "frame" )
 		    hardBreak = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
-	}
-
-	// info
-	else if ( name == "INFO" )
-	{
+	} else if ( name == "INFO" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "info" )
 		    info = static_cast<Info>( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
-	}
-
-	// name
-	else if ( name == "NAME" )
-	{
+	} else if ( name == "NAME" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "name" )
 		    paragName = correctQString( ( *it ).m_strValue.c_str() );
 	    }
-	}
-
-	// format
-	else if ( name == "FORMATS" )
-	{
+	} else if ( name == "FORMATS" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 	    }
 	    text.loadFormat( parser, lst, document, frameSet );
-	}
-
-	// layout
-	else if ( name == "LAYOUT" )
-	{
+	} else if ( name == "LAYOUT" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 	    }
 	    paragLayout->load( parser, lst );
-	}
-
-	else
+	} else
 	    cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
 
-	if ( !parser.close( tag ) )
-	{
+	if ( !parser.close( tag ) ) {
 	    cerr << "ERR: Closing Child" << endl;
 	    return;
 	}
     }
 
-    for ( unsigned int i = 0; i < text.size(); i++ )
-    {
+    for ( unsigned int i = 0; i < text.size(); i++ ) {
 	if ( !text.data()[ i ].attrib )
 	    setFormat( i, 1, paragLayout->getFormat() );
     }

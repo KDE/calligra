@@ -135,7 +135,10 @@ QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
 	return QString();
     }
 
-    return "<" + dynamic_cast<KWSerialLetterVariable*>( _var )->getValue() + ">";
+    if ( dynamic_cast<KWSerialLetterVariable*>( _var )->getValue() ==
+	 dynamic_cast<KWSerialLetterVariable*>( _var )->getName() )
+	return "<" + dynamic_cast<KWSerialLetterVariable*>( _var )->getValue() + ">";
+    return dynamic_cast<KWSerialLetterVariable*>( _var )->getValue();
 }
 
 

@@ -850,13 +850,10 @@ void KWPage::vmpMidButton()
 {
     QClipboard *cb = QApplication::clipboard();
 
-    if ( cb->data()->provides( MIME_TYPE ) )
-    {
+    if ( cb->data()->provides( MIME_TYPE ) ) {
 	if ( cb->data()->encodedData( MIME_TYPE ).size() )
 	    editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
-    }
-    else if ( cb->data()->provides( "text/plain" ) )
-    {
+    } else if ( cb->data()->provides( "text/plain" ) ) {
 	if ( cb->data()->encodedData( "text/plain" ).size() )
 	    editPaste( cb->data()->encodedData( "text/plain" ) );
     }
@@ -867,8 +864,7 @@ void KWPage::vmpMidButton()
 /*================================================================*/
 void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
 {
-    if ( mouseMode != MM_EDIT_FRAME )
-    {
+    if ( mouseMode != MM_EDIT_FRAME ) {
 	KWCharAttribute *attrib = 0L;
 
 	QPainter painter;
@@ -880,17 +876,12 @@ void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
 	    debug( "ObjectType: %d, %p", attrib->getClassId(), attrib );
 	return;
     }
-    if ( doc->getFrameSet( mx, my ) == -1 )
-    {
+    if ( doc->getFrameSet( mx, my ) == -1 ) {
 	QPoint pnt( QCursor::pos() );
 	mm_menu->popup( pnt );
-    }
-    else
-    {
-	switch ( mouseMode )
-	{
-	case MM_EDIT_FRAME:
-	{
+    } else {
+	switch ( mouseMode ) {
+	case MM_EDIT_FRAME: {
 	    oldMx = mx;
 	    oldMy = my;
 	    if ( doc->selectFrame( mx, my ) == 1 && !( e->state() & ControlButton || e->state() & ShiftButton ) )

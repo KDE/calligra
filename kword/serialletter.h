@@ -23,6 +23,10 @@
 #include <qvbox.h>
 #include <qlistview.h>
 
+#include <iostream>
+
+#include <koStream.h>
+
 class QListBox;
 class QPushButton;
 class QLineEdit;
@@ -45,13 +49,17 @@ public:
     void appendRecord();
     void addEntry( const QString &name );
     void removeEntry( const QString &name );
-
+    void removeRecord( int i );
+    
     const QMap< QString, QString > &getRecordEntries() const {
 	return sampleRecord;
     }
     int getNumRecords() const {
 	return (int)db.count();
     }
+
+    void save( ostream &out );
+    void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:
     typedef QMap< QString, QString > DbRecord;
@@ -97,10 +105,10 @@ public:
     KWSerialLetterEditorListItem( QListView *parent );
     KWSerialLetterEditorListItem( QListView *parent, QListViewItem *after );
     virtual ~KWSerialLetterEditorListItem();
-    
+
     virtual void setText( int i, const QString &text );
     virtual QString text( int i ) const;
-    
+
     void setup();
     void update();
 
@@ -122,7 +130,7 @@ class KWSerialLetterEditorList : public QListView
 public:
     KWSerialLetterEditorList( QWidget *parent, KWSerialLetterDataBase *db_ );
     virtual ~KWSerialLetterEditorList();
-    
+
     void updateItems();
     void displayRecord( int i );
 
@@ -137,7 +145,7 @@ protected slots:
 protected:
     KWSerialLetterDataBase *db;
     int currentRecord;
-    
+
 };
 
 /******************************************************************
@@ -160,14 +168,14 @@ protected:
     KWSerialLetterEditorList *dbList;
     QVBox *back;
     KWSerialLetterDataBase *db;
-    
+
 protected slots:
     void changeRecord( int i );
     void addEntry();
     void addRecord();
     void removeEntry();
     void removeRecord();
-    
+
 };
 
 #endif

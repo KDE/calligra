@@ -126,19 +126,6 @@ KWordDocument::KWordDocument()
     slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
 
-    // ### remove this later
-    slDataBase->addEntry( i18n( "First Name" ) );
-    slDataBase->addEntry( i18n( "Last Name" ) );
-    slDataBase->appendRecord();
-    slDataBase->setValue( i18n( "First Name" ), "Reginald", 0 );
-    slDataBase->setValue( i18n( "Last Name" ), "Stadlbauer", 0 );
-    slDataBase->appendRecord();
-    slDataBase->setValue( i18n( "First Name" ), "Tux", 1 );
-    slDataBase->setValue( i18n( "Last Name" ), "Linux", 1 );
-    slDataBase->appendRecord();
-    slDataBase->setValue( i18n( "First Name" ), "Konqi", 2 );
-    slDataBase->setValue( i18n( "Last Name" ), "KDE", 2 );
-
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
@@ -999,6 +986,14 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	    footNoteManager.load( parser, lst );
 	}
 
+	else if ( name == "SERIALL" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+	    slDataBase->load( parser, lst );
+	}
+
 	else if ( name == "FRAMESETS" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1530,7 +1525,11 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	    out << indent << "<PARAG name=\"" << correctQString( *it ).latin1() << "\"/>" << endl;
 	out << etag << "</CPARAGS>" << endl;
     }
-	
+
+    out << otag << "<SERIALL>" << endl;
+    slDataBase->save( out );
+    out << etag << "</SERIALL>" << endl;
+    
 
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
@@ -2166,7 +2165,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     }
 
     if ( _viewFormattingChars && _fc.isCursorAtParagEnd() )
-	_painter.drawPixmap( _fc.getPTPos() + 3 - xOffset, 
+	_painter.drawPixmap( _fc.getPTPos() + 3 - xOffset,
 			     _fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height() - yOffset,
 			     ret_pix );
 
@@ -3624,7 +3623,7 @@ bool KWordDocument::isOnlyOneFrameSelected()
 }
 
 /*================================================================*/
-KWFrameSet *KWordDocument::getFrameCoords( unsigned int &x, unsigned int &y, 
+KWFrameSet *KWordDocument::getFrameCoords( unsigned int &x, unsigned int &y,
 					   unsigned int &w, unsigned int &h, unsigned int &num )
 {
     x = y = w = h = 0;

@@ -1561,3 +1561,12 @@ Reggie, 2.10.1999:
   result were lots of redraw errors and lots of unnecesarry redraws.
   Now the handles are widgets => no redraw problems and
   much less redraws necesarry :-)
+
+Reggie, 3.10.1999:
+--------------
+- All necesarry operations work now in the serial letter 
+  database editor (removing records or entries crashes sometimes,
+  looks like a QValueList prob. - I´ll look into that later)
+- Implemented saving and loading serial letter db => serial letters are
+  useable now in KWord :-)
+- Fixes

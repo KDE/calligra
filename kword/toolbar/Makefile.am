@@ -5,7 +5,8 @@ toolbar_DATA =  unsortedList.png enumList.png table.png sub.png super.png \
 	formula.png char.png return.png kwsearch.png \
 	colin.png colout.png rowin.png rowout.png tree_arrange.png \
 	tree_picture.png tree_textframes.png tree_embedded.png tree_table.png \
-	tree_clipart.png
+	tree_clipart.png sl_addentry.xpm sl_delentry.xpm sl_addrecord.xpm \
+	sl_delrecord.xpm
 
 toolbardir = $(kde_datadir)/kword/toolbar
 

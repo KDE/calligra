@@ -38,23 +38,28 @@
 KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
     : QDialog( parent, "", TRUE ), variables( vars )
 {
-    setCaption( i18n( "Variable Name" ) );
+    if ( variables )
+	setCaption( i18n( "Variable Name" ) );
+    else
+	setCaption( i18n( "Entry Name" ) );
     
     back = new QVBox( this );
     back->setSpacing( 5 );
     back->setMargin( 5 );
-    
+
     QHBox *row1 = new QHBox( back );
     row1->setSpacing( 5 );
-    
+
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
     l->setFixedSize( l->sizeHint() );
     names = new QComboBox( TRUE, row1 );
-    
-    KWVariable *var = 0;
-    for ( var = variables->first(); var; var = variables->next() ) {
-	if ( var->getType() == VT_CUSTOM )
-	    names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
+
+    if ( variables ) {
+	KWVariable *var = 0;
+	for ( var = variables->first(); var; var = variables->next() ) {
+	    if ( var->getType() == VT_CUSTOM )
+		names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
+	}
     }
     
     KButtonBox *bb = new KButtonBox( back );
@@ -63,7 +68,7 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
     ok->setDefault( TRUE );
     QPushButton *cancel = bb->addButton( i18n( "&Cancel"  ) );
     bb->layout();
-    
+
     connect( ok, SIGNAL( clicked() ),
 	     this, SLOT( accept() ) );
     connect( cancel, SIGNAL( clicked() ),
@@ -93,7 +98,7 @@ void KWVariableNameDia::resizeEvent( QResizeEvent *e )
 
 /*================================================================*/
 KWVariableValueListItem::KWVariableValueListItem( QListView *parent )
-    : QListViewItem( parent ) 
+    : QListViewItem( parent )
 {
     editWidget = new QLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
@@ -118,7 +123,7 @@ void KWVariableValueListItem::update()
 }
 
 /*================================================================*/
-void KWVariableValueListItem::setVariable( KWCustomVariable *v ) 
+void KWVariableValueListItem::setVariable( KWCustomVariable *v )
 {
     var = v;
     editWidget->setText( var->getValue() );
@@ -126,10 +131,10 @@ void KWVariableValueListItem::setVariable( KWCustomVariable *v )
 }
 
 /*================================================================*/
-KWCustomVariable *KWVariableValueListItem::getVariable() const 
+KWCustomVariable *KWVariableValueListItem::getVariable() const
 {
     return var;
-    
+
 }
 
 /*================================================================*/
@@ -201,11 +206,11 @@ KWVariableValueDia::KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars
     : QDialog( parent, "", TRUE ), variables( vars )
 {
     setCaption( i18n( "Variable Value Editor" ) );
-    
+
     back = new QVBox( this );
     back->setSpacing( 5 );
     back->setMargin( 5 );
-    
+
     list = new KWVariableValueList( back );
 
     QStringList lst;
@@ -220,7 +225,7 @@ KWVariableValueDia::KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars
 	    }
 	}
     }
-    
+
     resize( 600, 400 );
     list->updateItems();
     list->updateItems();
