@@ -1145,7 +1145,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
         }
     } else {
         // Text view mode
-        drawFrame( m_doc->frameSet( 0 )->frame(0)/*0L*/ /*frame*/, p, crect, crect, 0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
+        drawFrame( 0L /*frame*/, p, crect, crect, 0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
     }
 }
 
@@ -1260,7 +1260,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
         frameColorGroup.setBrush( QColorGroup::Base, bgBrush );
     }
 
-    if ( drawUnderlyingFrames && !frame->framesBelow().isEmpty() )
+    if ( drawUnderlyingFrames && frame && !frame->framesBelow().isEmpty() )
     {
         // Double-buffering - not when printing
         QPainter* doubleBufPainter = painter;
