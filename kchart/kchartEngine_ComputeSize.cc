@@ -30,6 +30,7 @@ void KChartEngine::computeSize() {
   int vtitle_hgt = params->do_vol() && !params->ytitle2.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
   int ylabel_wth = 0;
   int vlabel_wth = 0;
+  int llabel_wth = 0;
 
   int xtics = params->grid||params->xaxis? 1+2: 0;
   int ytics = params->grid||params->yaxis? 1+3: 0;
@@ -201,6 +202,22 @@ void KChartEngine::computeSize() {
     }
   }
 
+  if ( params->llabel ) {
+    int legend_biggest     = -INT_MAX;
+    unsigned int legend_len = 0;
+    for( int i=0; i<num_sets; ++i ) {
+        legend_biggest = QMAX( legend_len, (params->legend[i].local8Bit()).length() );
+        legend_len = legend_biggest;
+    }
+    if ( legend_biggest > 16 )
+        legend_biggest = 16;
+
+        llabel_wth = 1+ legend_biggest*params->labelFontWidth() +1;
+  }
+  else
+    llabel_wth = 0;
+  params->label_width = llabel_wth;
+
   graphwidth = imagewidth - ( ( (params->hard_size && params->hard_xorig)? params->hard_xorig:
                                                                 ( ytitle_hgt +
                                   ylabel_wth +
@@ -208,6 +225,7 @@ void KChartEngine::computeSize() {
                                                           + vtics
                                                           + vtitle_hgt
                                                           + vlabel_wth
+                                                          + llabel_wth
                                                           + xdepth_3Dtotal );
   if( params->hard_size && params->hard_graphwidth )                            /* user wants to use his */
     graphwidth = params->hard_graphwidth;

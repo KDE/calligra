@@ -38,6 +38,7 @@ private:
     QCheckBox *shelf;
     QCheckBox *xlabel;
     QCheckBox *cross;
+    QCheckBox *llabel;
     QLineEdit *title;
     QLineEdit *xtitle;
     QLineEdit *ytitle;

@@ -38,7 +38,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
   QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
   QVBoxLayout* left = new QVBoxLayout( 10 );
   toplevel->addLayout( left, 2 );
-  
+
   wallCB = new QComboBox( false, this, "wallCombo" );
   QWhatsThis::add( wallCB, i18n( "You can select a background image from "
 								 "this list. Initially, the installed KDE "
@@ -70,7 +70,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
 									 "it originally has." ) );
   left->addWidget( wallWidget, 2 );
 
-  connect( wallCB, SIGNAL( activated( int ) ), 
+  connect( wallCB, SIGNAL( activated( int ) ),
 		   this, SLOT( slotWallPaperChanged( int ) ) );
 
   QVGroupBox* right = new QVGroupBox( i18n( "Configuration" ), this );
@@ -78,7 +78,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
 								"that control how the background image is "
 								"displayed." ) );
   toplevel->addWidget( right );
-  
+
   QHBox* intensityHB = new QHBox( right );
   intensityHB->setSpacing( 10 );
   QLabel* intensityLA = new QLabel( i18n( "&Intensity in %" ), intensityHB );
@@ -120,29 +120,38 @@ void KChartBackgroundPixmapConfigPage::init()
 	centeredCB->setEnabled( false );
 }
 
-
 void KChartBackgroundPixmapConfigPage::apply()
 {
-  if( wallCB->currentText() != _params->backgroundPixmapName ) {
-	_params->backgroundPixmapName = wallCB->currentText();
-	_params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ) );
-	_params->backgroundPixmapIsDirty = true;
-  }
-  if( (int)(_params->backgroundPixmapIntensity * 100.0) !=
-	  intensitySB->value() ) {
+    if( wallCB->currentText() != _params->backgroundPixmapName ) {
+        if(wallCB->currentText()==i18n("None"))
+        {
+            _params->backgroundPixmapName = "";
+            _params->backgroundPixmap=QPixmap("");
+            _params->backgroundPixmapIsDirty = false;
+        }
+        else
+        {
+            _params->backgroundPixmapName = wallCB->currentText();
+
+            _params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ) );
+            _params->backgroundPixmapIsDirty = true;
+        }
+    }
+    if( (int)(_params->backgroundPixmapIntensity * 100.0) !=
+        intensitySB->value() ) {
 	_params->backgroundPixmapIntensity = (float)(intensitySB->value()) / 100.0;
 	_params->backgroundPixmapIsDirty = true;
-  }
-  if( _params->backgroundPixmapScaled !=
-	  scaledCB->isChecked() ) {
+    }
+    if( _params->backgroundPixmapScaled !=
+        scaledCB->isChecked() ) {
 	_params->backgroundPixmapScaled = scaledCB->isChecked();
 	_params->backgroundPixmapIsDirty = true;
-  }
-  if( _params->backgroundPixmapCentered !=
-	  centeredCB->isChecked() ) {
+    }
+    if( _params->backgroundPixmapCentered !=
+        centeredCB->isChecked() ) {
 	_params->backgroundPixmapCentered = centeredCB->isChecked();
 	_params->backgroundPixmapIsDirty = true;
-  }
+    }
 }
 
 
@@ -165,7 +174,7 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
   if( !fileName.isEmpty() ) {
 	wallCB->insertItem( fileName );
 	wallCB->setCurrentItem( wallCB->count()-1 );
-  } else 
+  } else
 	wallCB->setCurrentItem( 0 );
 
   loadWallPaper();

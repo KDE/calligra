@@ -118,6 +118,7 @@ int KChartEngine::out_graph() {
     if(!params->isPie()) {
           drawGridAndLabels(do_ylbl_fractions);
           kdDebug(35001) << "more advanced grids" << endl;
+          drawLabelColoredCharacter();
         }
     /* intervening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */

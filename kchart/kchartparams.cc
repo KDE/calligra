@@ -149,6 +149,7 @@ void KChartParameters::saveConfig(KConfig *conf) {
   conf->writeEntry("xaxis", xaxis);
   conf->writeEntry("yaxis", yaxis);
   conf->writeEntry("yaxis2", yaxis2);
+  conf->writeEntry("llabel", llabel);
   conf->writeEntry("yval_style", yval_style );
   conf->writeEntry("stack_type", (int)stack_type);
   conf->writeEntry("_3d_depth", _3d_depth);
@@ -232,6 +233,7 @@ void KChartParameters::loadConfig(KConfig *conf) {
   xaxis = conf->readBoolEntry("xaxis", xaxis);
   yaxis = conf->readBoolEntry("yaxis", yaxis);
   yaxis2 = conf->readBoolEntry("yaxis2", yaxis);
+  llabel = conf->readBoolEntry("llabel", llabel);
   yval_style = conf->readNumEntry("yval_style", yval_style);
   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
   _3d_depth = conf->readDoubleNumEntry("_3d_depth", _3d_depth );
@@ -318,6 +320,7 @@ void KChartParameters::defaultConfig()
   xaxis = true;
   yaxis = true;
   yaxis2 = true;
+  llabel = true;
   yval_style = true;
   hasxlabel=true;
   stack_type = KCHARTSTACKTYPE_DEPTH;

@@ -322,6 +322,8 @@ void KChartEngine::drawVYAxisTitle() {
 void KChartEngine::drawYAxisTitle() {
   if( params->yaxis && !params->ytitle.isEmpty() )
     {
+      if ( params->isPie() )
+        params->label_width = 0;
       int ytit_len = params->ytitle.length()*params->yTitleFontWidth();
       /*QColor  titlecolor = params->YTitleColor==Qt::black?
                 PlotColor: params->YTitleColor;*/
@@ -331,7 +333,7 @@ void KChartEngine::drawYAxisTitle() {
       p->rotate(-90);
       //p->drawText( 0, imageheight/2 + ytit_len/2, params->ytitle );
       p->drawText(- imageheight/2 -ytit_len/2,
-                                  params->yTitleFontHeight(),params->ytitle);
+                                  params->yTitleFontHeight() + params->label_width,params->ytitle);
 
       p->rotate(90);
     }

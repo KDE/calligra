@@ -23,7 +23,7 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
     toplevel->addLayout( layout );
 
     QButtonGroup* gb1 = new QButtonGroup( i18n("Parameters"), this );
-    QGridLayout *grid1 = new QGridLayout(gb1,8,1,15,7);
+    QGridLayout *grid1 = new QGridLayout(gb1,9,1,15,8);
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     grid1->addWidget(grid,0,0);
@@ -49,8 +49,11 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
     cross = new QCheckBox( i18n( "Cross" ), gb1 );
     grid1->addWidget(cross,7,0);
 
+    llabel = new QCheckBox( i18n( "Legend" ), gb1 );
+    grid1->addWidget(llabel,8,0);
+
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
-    QGridLayout *grid2 = new QGridLayout(gb2,7,2,15,7);
+    QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
     QLabel *tmpLabel = new QLabel( i18n( "Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,0,0);
@@ -101,7 +104,7 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
     grid2->addWidget(ylabel2_fmt,5,1);
 
     QButtonGroup* gb3 = new QButtonGroup( i18n("Annotation"), this );
-    QGridLayout *grid3 = new QGridLayout(gb3,7,1,15,7);
+    QGridLayout *grid3 = new QGridLayout(gb3,8,1,15,8);
 
     tmpLabel = new QLabel( i18n( "Annotation" ), gb3 );
     tmpLabel->setAlignment(Qt::AlignCenter);
@@ -178,6 +181,7 @@ void KChartParameterConfigPage::init()
     yaxis->setChecked(_params->yaxis);
     xlabel->setChecked(_params->hasxlabel);
     shelf->setChecked(_params->shelf);
+    llabel->setChecked(_params->llabel);
     if(_params->type==KCHARTTYPE_LINE)
         {
          cross->setEnabled(true);
@@ -238,6 +242,7 @@ void KChartParameterConfigPage::apply()
     _params->border=border->isChecked();
     _params->xaxis=xaxis->isChecked();
     _params->yaxis=yaxis->isChecked();
+    _params->llabel=llabel->isChecked();
     if(xaxis->isChecked())
     	_params->hasxlabel=xlabel->isChecked();
     if(_params->has_yaxis2())

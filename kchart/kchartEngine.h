@@ -26,6 +26,7 @@ public:
   void drawScatter();
   void drawBackgroundImage();
   void prepareColors();
+  void drawLabelColoredCharacter();
 
   // functions to resize the chart
   // implementation in kchartEngine_ComputeSize.cc

@@ -150,6 +150,7 @@ struct KChartParameters
     bool yaxis;
     bool yaxis2;
     bool cross;
+    bool llabel;
     int yval_style;
     KChartStackType stack_type;
     double _3d_depth;
@@ -198,6 +199,7 @@ struct KChartParameters
     int hard_graphwidth;
     int hard_xorig;
     int hard_yorig;
+    int label_width;
 
   // background pixmap stuff
   KPixmap backgroundPixmap;

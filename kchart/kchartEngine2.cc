@@ -79,6 +79,8 @@ void KChartEngine::drawAnnotation() {
 void KChartEngine::titleText() {
     if( !params->title.isEmpty() )
         {
+        if ( params->isPie() )
+            params->label_width = 0;
         int tlen=0;
         QColor  titlecolor = params->TitleColor;
         cnt_nl( (const char*)params->title.local8Bit(), &tlen );
@@ -89,7 +91,7 @@ void KChartEngine::titleText() {
                                 INT_MAX,
                                 Qt::AlignCenter,
                                 params->title );
-        p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2, // x
+        p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2 + params->label_width, // x
                                 0, // y
                                 br.width(), br.height(),
                                 Qt::AlignCenter, params->title );
@@ -105,7 +107,7 @@ void KChartEngine::titleText() {
         QColor  titlecolor = params->XTitleColor;
         p->setPen( titlecolor );
         p->setFont( params->xTitleFont() );
-        p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
+        p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2 + params->label_width,
                         imageheight-params->xTitleFontHeight()-1, params->xtitle );
         }
 }
@@ -250,4 +252,53 @@ void KChartEngine::prepareColors()
                  if( params->threeD() )
                    ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
            }
+}
+
+void KChartEngine::drawLabelColoredCharacter()
+{
+    if( params->llabel && !params->legend.isEmpty() ) {
+        int i, j;
+        for ( i = 0, j = params->labelFontHeight(); i < num_sets; i++, j=j+params->labelFontHeight() ) {
+            int lineNumber;
+            int lineNumberCount;
+            int numberOfMaximumCharacter;
+            int m, n;
+            QString label;
+            QColor  labelcolor = params->ExtColor.color(i);
+
+            p->setPen( labelcolor );
+            p->setFont( params->labelFont() );
+
+            lineNumber = (params->legend[i].local8Bit()).length() / 17 + 1;
+            lineNumberCount = 1;
+            n = 0;
+
+            // Lenght of character string to display is one line 16 characters.
+            // One character is two characters in multibyte character (CJK etc...).
+            if ( lineNumber > 1 ) {
+                do {
+                    QString label_sort;
+                    numberOfMaximumCharacter = 16 + n;
+
+                    for ( m = n; m < numberOfMaximumCharacter; ++m ) {
+                        if ( (params->legend[i][m]).isNull() )
+                            break;
+                        label_sort += params->legend[i][m];
+                        if ( QString(params->legend[i][m]).length() < (QString(params->legend[i][m]).local8Bit()).length() )
+                            --numberOfMaximumCharacter;
+                    }
+
+                    p->drawText( 5, j, label_sort );
+                    ++lineNumberCount;
+                    if ( lineNumberCount < lineNumber+1 )
+                        j = j + params->labelFontHeight();
+                    n = numberOfMaximumCharacter;
+                } while ( lineNumberCount < lineNumber+1 );
+            }
+            else {
+                label = params->legend[i];
+                p->drawText( 5, j, label );
+            }
+        }
+    }
 }

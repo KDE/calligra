@@ -320,6 +320,7 @@ QDomDocument KChartPart::saveXML() {
   graph.setAttribute( "thumbnail", _params->thumbnail );
   graph.setAttribute( "thumblabel", _params->thumblabel );
   graph.setAttribute( "thumbval", _params->thumbval );
+  graph.setAttribute("llabel",(int)_params->llabel);
   params.appendChild(graph);
   //graph params
   QDomElement graphparams = doc.createElement("graphparams");
@@ -677,6 +678,10 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
       if(!ok)
 	return false;
     }
+    if(graph.hasAttribute( "llabel" )) {
+      _params->llabel=(bool) graph.attribute("llabel").toInt( &ok );
+      if(!ok) return false;
+    }
   }
   QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
   if(!graphparams.isNull()) {
@@ -957,6 +962,10 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.52  2000/10/20 07:20:38  kalle
+   * Fixes bug that you cannot have more than 4x4 charts when entering data in the data editor
+   * (I wonder whether this is important enough to go into 2.0.1, can anybody help me decide?)
+   *
    * Revision 1.51  2000/10/14 15:30:40  faure
    * Patch from Laurent (background pixmap, and some cleanup).
    *
