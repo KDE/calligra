@@ -3,7 +3,7 @@
 /*
    This file is part of the KDE project
    Copuright 2001 Michael Johnson <mikej@xnet.com>
-   Copyright 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
    Copyright 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or

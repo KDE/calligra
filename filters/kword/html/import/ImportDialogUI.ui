@@ -1,7 +1,7 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ImportDialogUI</class>
 <comment>Dialog for the HTML import of KWord</comment>
-<author>Nicolas GOUTTE &lt;nicog@snafu.de&gt;</author>
+<author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>ImportDialogUI</cstring>

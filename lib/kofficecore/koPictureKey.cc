@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@
 // these files get a <KEY> element as child of <PIXMAPS> but not one as child of <FORMAT> and <IMAGE>.
 // Therefore we need to be careful that the key remains compatible to default values (another good reason for the first note)
 //
-// Notes added by Nicolas GOUTTE <nicog@snafu.de>
+// Notes added by Nicolas GOUTTE <goutte@kde.org>
 
 
 

@@ -20,7 +20,7 @@
 /*
    This file is based on the file :
     koffice/filters/kword/html/htmlexportdia.h
-	Copyright (C) 2001 Nicolas Goutte <nicog@snafu.de>
+	Copyright (C) 2001 Nicolas Goutte <goutte@kde.org>
 
    which was based on the old file:
     /home/kde/koffice/filters/kspread/csv/csvfilterdia.h

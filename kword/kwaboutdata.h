@@ -51,7 +51,7 @@ KAboutData * newKWordAboutData()
     // filter developers
     aboutData->addAuthor("Shaheed Haque", 0, "srhaque@iee.org");
     aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    aboutData->addAuthor("Nicolas Goutte", 0, "nicog@snafu.de");
+    aboutData->addAuthor("Nicolas Goutte", 0, "goutte@kde.org");
     aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
     aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
     aboutData->addAuthor("Robert Jacolin", 0, "rjacolin@ifrance.com");
