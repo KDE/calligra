@@ -404,7 +404,8 @@ void KPMSPresentationSetup::createMSPresentation( KPresenterDoc *_doc, KPresente
     KPMSPresentationSetup *dlg = new KPMSPresentationSetup( _doc, _view );
 
     dlg->setCaption( i18n( "Create Memory Stick Slideshow" ) );
-    dlg->show();
+    dlg->exec();
+    delete dlg;
 }
 
 void KPMSPresentationSetup::showColourGroup(bool on)
