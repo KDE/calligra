@@ -35,6 +35,9 @@ namespace Kontour
   const double minZoomFactor = 0.06;
   const double maxZoomFactor = 100.0;
   const double pi = 3.14159265358979323846;
+  const double minGridDistance = 6.0;
+
+  enum Position{ HPos_Top = 1, HPos_Right = 2, HPos_Bottom = 4, HPos_Left = 8, HPos_Center = 16 };
   
   inline double segLength(const KoPoint &c1, const KoPoint &c2)
   {

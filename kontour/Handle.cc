@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qnamespace.h>
 
+#include "kontour_global.h"
 #include "GPage.h"
 
 Handle::Handle(GPage *aGPage)
@@ -140,31 +141,27 @@ void Handle::draw(QPainter &p)
 
 int Handle::contains(const KoPoint &p)
 {
-/*  static int mask[] = {
-    Handle_Left|Handle_Top, Handle_Top,
-    Handle_Top|Handle_Right, Handle_Right,
-    Handle_Right|Handle_Bottom, Handle_Bottom,
-    Handle_Bottom|Handle_Left, Handle_Left
-     HPos_Left | HPos_Top,
-     HPos_Top,
-     HPos_Top | HPos_Right,
-     HPos_Right,
-     HPos_Right | HPos_Bottom,
-     HPos_Bottom,
-     HPos_Bottom | HPos_Left,
-     HPos_Left
+  static int mask[] =
+  {
+    Kontour::HPos_Left | Kontour::HPos_Top,
+    Kontour::HPos_Top,
+    Kontour::HPos_Top | Kontour::HPos_Right,
+    Kontour::HPos_Right,
+    Kontour::HPos_Right | Kontour::HPos_Bottom,
+    Kontour::HPos_Bottom,
+    Kontour::HPos_Bottom | Kontour::HPos_Left,
+    Kontour::HPos_Left
   };
-
-  // Check if one of the outer handles is selected
-  for (int i = 0; i < 8; i++) {
-    Rect r (pos[i].x () - 4, pos[i].y () - 4, 8, 8);
-    if (r.contains (p))
+  /* Check if one of the outer handles is selected */
+  for(int i = 0; i < 8; i++)
+  {
+    KoRect r(pos[i].x() - 4, pos[i].y() - 4, 8, 8);
+    if(r.contains(p))
       return mask[i];
   }
-  // Maybe the rotation center ?
-  if (mRotCenter.isNear (p, 5))
-    return HPos_Center;
-*/
+  /* Maybe the rotation center ? */
+/*  if(mRotCenter.isNear(p, 5))
+    return Kontour::HPos_Center;*/
   return 0;
 }
 

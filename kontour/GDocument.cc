@@ -33,8 +33,6 @@
 #include "kontour_doc.h"
 #include "GPage.h"
 
-const double MIN_GRID_DIST = 6.0;
-
 GDocument::GDocument(KontourDocument *aDoc)
 {
   mDoc = aDoc;
@@ -82,10 +80,10 @@ void GDocument::zoomFactor(double factor)
 
   /* Change grid distance. */
   mXGridZ = mXGrid * factor;
-  while(mXGridZ < MIN_GRID_DIST)
+  while(mXGridZ < Kontour::minGridDistance)
     mXGridZ *= 2.0;
   mYGridZ = mYGrid * factor;
-  while(mYGridZ < MIN_GRID_DIST)
+  while(mYGridZ < Kontour::minGridDistance)
     mYGridZ *= 2.0;
   
   double scale = factor / mZoomFactor;
@@ -244,7 +242,7 @@ QDomDocument GDocument::saveToXml()
   return document;
 }
 
-bool GDocument::readFromXml(const QDomDocument &document)
+bool GDocument::readFromXml(const QDomDocument &/*document*/)
 {
   return true;
   /*if ( document.doctype().name() != "kontour" )

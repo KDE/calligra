@@ -33,6 +33,7 @@
 
 #include <stdlib.h>  //for abs()
 
+#include "kontour_global.h"
 #include "kontour_view.h"
 #include "kontour_doc.h"
 #include "GDocument.h"
@@ -187,7 +188,65 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
         {
           canvas->setCursor(Qt::SizeAllCursor);
           ctype = C_Move;
-        } 
+        }
+	return;
+      }
+    }
+    else
+    {
+      QRect r = canvas->onCanvas(page->boundingBoxForSelection());
+      if(r.contains(xpos, ypos))
+      {
+        if(ctype != C_Move)
+        {
+          canvas->setCursor(Qt::SizeAllCursor);
+          ctype = C_Move;
+        }
+	return;
+      }
+      int hmask = page->handle().contains(KoPoint(x, y));
+      if(hmask)
+      {
+        if(ctype != C_Size)
+        {
+          ctype = C_Size;
+          switch(hmask)
+          {
+          case(Kontour::HPos_Left | Kontour::HPos_Top):
+            canvas->setCursor(Qt::sizeFDiagCursor);
+            break;
+          case(Kontour::HPos_Top):
+            canvas->setCursor(Qt::sizeVerCursor);
+            break;
+          case(Kontour::HPos_Top | Kontour::HPos_Right):
+            canvas->setCursor(Qt::sizeBDiagCursor);
+            break;
+          case(Kontour::HPos_Right):
+            canvas->setCursor(Qt::sizeHorCursor);
+            break;
+          case(Kontour::HPos_Right | Kontour::HPos_Bottom):
+            canvas->setCursor(Qt::sizeFDiagCursor);
+            break;
+          case(Kontour::HPos_Bottom):
+            canvas->setCursor(Qt::sizeVerCursor);
+            break;
+          case(Kontour::HPos_Bottom | Kontour::HPos_Left):
+            canvas->setCursor(Qt::sizeBDiagCursor);
+            break;
+          case(Kontour::HPos_Left):
+            canvas->setCursor(Qt::sizeHorCursor);
+             break;
+          default:
+            canvas->setCursor(Qt::sizeAllCursor);
+            break;
+	  }
+        }
+	return;
+      }
+      if(ctype != C_Arrow)
+      {
+        canvas->setCursor(Qt::arrowCursor);
+        ctype = C_Arrow;
       }
     }
   }
