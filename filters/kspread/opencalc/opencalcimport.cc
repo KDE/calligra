@@ -144,26 +144,6 @@ double timeToNum( int h, int m, int s )
   return (double) secs / (double) SECSPERDAY;
 }
 
-int getFontSize( QString s )
-{
-  int result;
-  int l = s.length();
-  int i;
-  for ( i = 0; i < l; ++i )
-  {
-    if ( !s[i].isNumber() )
-      break;
-  }
-
-  s = s.left( i );
-  bool ok = false;
-  result = s.toInt( &ok );
-  if ( !ok )
-    result = 10; // OpenCalc default font size
-
-  return result;
-}
-
 bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
                                     KSpreadSheet * table, int & row, int & number,
                                     bool isLast )
@@ -1684,8 +1664,8 @@ void OpenCalcImport::loadFontStyle( KSpreadFormat * layout, QDomElement const * 
     layout->setTextFontFamily( font->attribute( "fo:font-family" ) );
   if ( font->hasAttribute( "fo:color" ) )
     layout->setTextColor( QColor( font->attribute( "fo:color" ) ) );
-  if ( font->hasAttribute( "fo:size" ) )
-    layout->setTextFontSize( getFontSize( font->attribute( "fo:size" ) ) );
+  if ( font->hasAttribute( "fo:font-size" ) )
+    layout->setTextFontSize(  KoUnit::parseValue( font->attribute( "fo:font-size" ),10.0 ));
   else
     layout->setTextFontSize( 10 );
   if ( font->hasAttribute( "fo:font-style" ) )
