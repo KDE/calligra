@@ -974,6 +974,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
       QDomNode font = style.namedItem( "gmr:Font" );
       QDomNode validation = style.namedItem( "gmr:Validation" );
       QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
+      QDomNode hyperlink = style.namedItem( "gmr:HyperLink" );
       int startCol = e.attribute( "startCol" ).toInt() + 1;
       int endCol   = e.attribute( "endCol" ).toInt() + 1;
       int startRow = e.attribute( "startRow" ).toInt() + 1;
@@ -1289,6 +1290,11 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
               if (font_element.hasAttribute("Unit"))
               { kspread_cell->setTextFontSize(font_element.attribute("Unit").toInt()); }
 
+            }
+            if ( !hyperlink.isNull() )
+            {
+                //TODO
+                kdDebug()<<" import hyperlink \n";
             }
           }
         }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000 David Faure <faure@kde.org>
+   Copyright (C) 2005 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -809,12 +810,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     if ( ksdoc->listArea().count()>0 )
     {
         QDomElement areaNames = gnumeric_doc.createElement("gmr:Names");
-        QValueList<Reference>::Iterator it;
-        QValueList<Reference>::Iterator itbegin;
-        QValueList<Reference> area =ksdoc->listArea();
-        itbegin=area.begin();
-        QValueList<Reference>::Iterator itend( area.end() );
-        for ( it = itbegin; it != itend; ++it )
+        const QValueList<Reference> &area = ksdoc->listArea(); // copying by value is slow!
+        QValueList<Reference>::ConstIterator it = area.begin();
+        QValueList<Reference>::ConstIterator end = area.end();
+        for ( ; it != end; ++it )
         {
             QDomElement areaName = gnumeric_doc.createElement("gmr:Name");
             QDomElement areaNameElement = gnumeric_doc.createElement("gmr:name");
@@ -1225,7 +1224,7 @@ QString convertRefToRange( const QString & table, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
-#if 0
+#if 0 //FIXME !!!!
   if ( topLeft == bottomRight )
     return convertRefToBase( table, rect );
 #endif
