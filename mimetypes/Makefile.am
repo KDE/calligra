@@ -1,4 +1,4 @@
-if compile_mimetypes_kde31
+if need_kde31_compatibility
   KDE31MIMEDIR = kde31
 endif
 
