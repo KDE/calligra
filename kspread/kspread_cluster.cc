@@ -101,8 +101,8 @@ KSpreadCell* KSpreadCluster::lookup( int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::lookup: invalid column or row value (row: "
-		       << x << "  | col: " << y << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::lookup: invalid column or row value (col: "
+		       << x << "  | row: " << y << ")" << endl;
 	return 0;
     }
     int cx = x / KSPREAD_CLUSTER_LEVEL2;
@@ -121,8 +121,8 @@ const KSpreadCell* KSpreadCluster::lookup( int x, int y ) const
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::lookup: invalid column or row value (row: "
-		       << x << "  | col: " << y << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::lookup: invalid column or row value (col: "
+		       << x << "  | row: " << y << ")" << endl;
 	return 0;
     }
 
@@ -143,8 +143,8 @@ void KSpreadCluster::insert( KSpreadCell* cell, int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::insert: invalid column or row value (row: "
-		       << x << "  | col: " << y << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::insert: invalid column or row value (col: "
+		       << x << "  | row: " << y << ")" << endl;
 	return;
     }
 
@@ -182,8 +182,8 @@ void KSpreadCluster::remove( int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::remove: invalid column or row value (row: "
-		       << x << "  | col: " << y << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::remove: invalid column or row value (col: "
+		       << x << "  | row: " << y << ")" << endl;
 	return;
     }
 
@@ -271,8 +271,8 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::shiftRow: invalid column or row value (row: "
-		       << marker.x() << "  | col: " << marker.y() << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::shiftRow: invalid column or row value (col: "
+		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return FALSE;
     }
 
@@ -328,8 +328,8 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::shiftColumn: invalid column or row value (row: "
-		       << marker.x() << "  | col: " << marker.y() << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::shiftColumn: invalid column or row value (col: "
+		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return FALSE;
     }
 
@@ -446,8 +446,8 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::unshiftColumn: invalid column or row value (row: "
-		       << marker.x() << "  | col: " << marker.y() << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::unshiftColumn: invalid column or row value (col: "
+		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return;
     }
 
@@ -494,8 +494,8 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::unshiftRow: invalid column or row value (row: "
-		       << marker.x() << "  | col: " << marker.y() << ")" << endl;
+	kdDebug(36001) << "KSpreadCluster::unshiftRow: invalid column or row value (col: "
+		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return;
     }
 
