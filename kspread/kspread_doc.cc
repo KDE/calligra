@@ -301,9 +301,8 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-    ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f, "application/x-kspread",
-                                       "*.ksp", i18n("KSpread"),
-                                        dlgtype, "kspread_template");
+    ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f,
+                                       dlgtype, "kspread_template", parentWidget );
 
     if ( ret == KoTemplateChooseDia::File )
     {

@@ -185,9 +185,8 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     dlgtype = KoTemplateChooseDia::OnlyTemplates;
   }
 
-  ret = KoTemplateChooseDia::choose(  KivioFactory::global(), f,
-                                      MIME_TYPE, "*.flw", i18n("Kivio"),
-                                      dlgtype, "kivio_template", parentWidget);
+  ret = KoTemplateChooseDia::choose( KivioFactory::global(), f,
+                                     dlgtype, "kivio_template", parentWidget );
 
   if ( ret == KoTemplateChooseDia::File ) {
     KURL url(f);

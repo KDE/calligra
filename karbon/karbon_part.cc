@@ -118,8 +118,7 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
       //  else
         //    dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
-										  "*.karbon", i18n( "Karbon14" ), dlgtype, "karbon_template" );
+	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, dlgtype, "karbon_template", parentWidget );
 	// set as default paper
         m_pageLayout.format = KoPageFormat::defaultFormat();
         m_pageLayout.orientation = PG_PORTRAIT;

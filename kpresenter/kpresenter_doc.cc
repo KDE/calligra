@@ -2941,10 +2941,8 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-    ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-                                        "application/x-kpresenter", "*.kpr",
-                                        i18n("KPresenter"), dlgtype,
-                                        "kpresenter_template" );
+    ret = KoTemplateChooseDia::choose( KPresenterFactory::global(), _template,
+                                       dlgtype, "kpresenter_template", parentWidget );
 
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
@@ -3176,7 +3174,7 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
 
     KPrPage * page = m_pageList.take( oldPos );
     m_pageList.insert( newPos, page );
-    
+
     pageOrderChanged();
 
     // Update the sidebars
@@ -3207,11 +3205,12 @@ QString KPresenterDoc::templateFileName( bool chooseTemplate, const QString &the
         else
             fileName = theFile;
     } else {
+        // TODO: pass parentWidget as parameter to this method
+        QWidget* parentWidget = 0;
         QString _template;
-        if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-                                           "", QString::null, QString::null,
-                                           KoTemplateChooseDia::OnlyTemplates,
-                                           "kpresenter_template") == KoTemplateChooseDia::Cancel )
+        if ( KoTemplateChooseDia::choose( KPresenterFactory::global(), _template,
+                                          KoTemplateChooseDia::OnlyTemplates,
+                                          "kpresenter_template", parentWidget ) == KoTemplateChooseDia::Cancel )
             return QString::null;
         QFileInfo fileInfo( _template );
         fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";

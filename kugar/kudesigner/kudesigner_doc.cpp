@@ -79,18 +79,18 @@ bool KudesignerDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     // If nothing is loaded, do initialize here
     bool ok = FALSE;
 
-//todo use flags
+    // TODO if (flags==KoDocument::InitDocEmpty)
 
     QString _template;
     KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != KoDocument::InitDocFileNew)
+    if (flags != KoDocument::InitDocFileNew)
         dlgtype = KoTemplateChooseDia::Everything;
     else
         dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KudesignerFactory::global(), _template, "application/x-kudesigner", "*.kut", i18n("Kugar Designer"),
-        dlgtype, "kudesigner_template");
+        KudesignerFactory::global(), _template,
+        dlgtype, "kudesigner_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".ktm" );

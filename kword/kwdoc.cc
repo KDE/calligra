@@ -525,7 +525,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KWFactory::global(), _template, "application/x-kword", "*.kwd", i18n("KWord"),
+        KWFactory::global(), _template,
         dlgtype, "kword_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
