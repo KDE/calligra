@@ -353,7 +353,7 @@ void KoPageLayoutDia::setupTab1()
         switch ( layout.unit ) {
         case PG_MM: str = i18n("mm"); break;
         case PG_PT: str = i18n("pt"); break;
-        case PG_INCH: str = i18n("inch"); break;
+        case PG_INCH: str = i18n("inches"); break;
         }
 
         lpgUnit = new QLabel( i18n("All values are given in %1").arg(str), tab1 );
@@ -715,7 +715,7 @@ void KoPageLayoutDia::setupTab3()
     switch ( layout.unit ) {
     case PG_MM: str = i18n("mm"); break;
     case PG_PT: str = i18n("pt"); break;
-    case PG_INCH: str = i18n("inch"); break;
+    case PG_INCH: str = i18n("inches"); break;
     }
 
     QLabel *lCSpacing = new QLabel( i18n("Columns Spacing ( %1 ):").arg(str), tab3 );
@@ -768,7 +768,7 @@ void KoPageLayoutDia::setupTab4()
     switch ( layout.unit ) {
     case PG_MM: str = i18n("mm"); break;
     case PG_PT: str = i18n("pt"); break;
-    case PG_INCH: str = i18n("inch"); break;
+    case PG_INCH: str = i18n("inches"); break;
     }
 
     QWidget *tab4 = addPage(i18n( "Header and Footer" ));
