@@ -594,7 +594,6 @@ void KexiMainWindowImpl::invalidateViewModeActions()
 
 void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 {
-#if 0
 	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
 	if (!projectData) {
 		importantInfo(true);
@@ -677,7 +676,6 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 
 	//show if wasn't show yet
 	importantInfo(true);
-#endif
 }
 
 static QString internalReason(KexiDB::Object *obj)
@@ -2332,6 +2330,7 @@ void KexiMainWindowImpl::slotImportantInfo()
 
 void KexiMainWindowImpl::importantInfo(bool onStartup)
 {
+#if 0
 	if (onStartup && !d->showImportantInfoOnStartup)
 		return;
 
@@ -2382,6 +2381,7 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 	d->config->setGroup("Startup");
 	d->config->writeEntry(key,show);
 	d->showImportantInfoOnStartup = false;
+#endif
 }
 
 void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
