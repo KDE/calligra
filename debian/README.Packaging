@@ -1,0 +1,8 @@
+
+When doing a new CVS pull, don't forget to edit admin/am_edit (lines
+1538--1547) to ensure that HTML documentation is still being built.
+
+This is necessary because Debian asks that documentation be available in
+HTML format.
+
+ -- Ben Burton <benb@acm.org>  Sun,  8 Apr 2001 11:19:00 -0500
