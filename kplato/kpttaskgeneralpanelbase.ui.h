@@ -46,26 +46,6 @@ int KPTTaskGeneralPanelBase::schedulingType() const
     return scheduleType->currentItem();
 }
 
-void KPTTaskGeneralPanelBase::setStartTime( const QDateTime &dt )
-{
-    scheduleStartTime->setDateTime(dt);
-}
-
-void KPTTaskGeneralPanelBase::setEndTime( const QDateTime &dt )
-{
-    scheduleEndTime->setDateTime(dt);
-}
-
-QDateTime KPTTaskGeneralPanelBase::startTime() const
-{
-    return scheduleStartTime->dateTime();
-}
-
-QDateTime KPTTaskGeneralPanelBase::endTime()
-{
-    return scheduleEndTime->dateTime();
-}
-
 void KPTTaskGeneralPanelBase::changeLeader()
 {
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
@@ -111,26 +91,42 @@ void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
     {
     case 0: //ASAP
     case 1: //ALAP
-        scheduleStartTime->setEnabled(false);
-        scheduleEndTime->setEnabled(false);
+        if (useTime) {
+            scheduleStartTime->setEnabled(false);
+            scheduleEndTime->setEnabled(false);
+        }
+        scheduleStartDate->setEnabled(false);
+        scheduleEndDate->setEnabled(false);
         break;
     case 2: //Must start on
     case 4: // Start not earlier
-        scheduleStartTime->setEnabled(true);
-        scheduleEndTime->setEnabled(false);
+        if (useTime) {
+            scheduleStartTime->setEnabled(true);
+            scheduleEndTime->setEnabled(false);
+        }
+        scheduleStartDate->setEnabled(true);
+        scheduleEndDate->setEnabled(false);
         break;
     case 3: //Must finish on
     case 5: // Finish not later
-        scheduleStartTime->setEnabled(false);
-        scheduleEndTime->setEnabled(true);
+        if (useTime) {
+            scheduleStartTime->setEnabled(false);
+            scheduleEndTime->setEnabled(true);
+        }
+        scheduleStartDate->setEnabled(false);
+        scheduleEndDate->setEnabled(true);
         break;
     case 6: //Fixed interval
         scheduleStartTime->setEnabled(true);
         scheduleEndTime->setEnabled(true);
- break;
+        break;
     default:
-        scheduleStartTime->setEnabled(false);
-        scheduleEndTime->setEnabled(false);
+        if (useTime) {
+            scheduleStartTime->setEnabled(false);
+            scheduleEndTime->setEnabled(false);
+        }
+        scheduleStartDate->setEnabled(false);
+        scheduleEndDate->setEnabled(false);
         break;
     }
 }
@@ -188,40 +184,65 @@ void KPTTaskGeneralPanelBase::setEstimateFieldUnit( int field, QString unit )
     estimate->setFieldUnit(field, unit);
 }
 
-
-void KPTTaskGeneralPanelBase::startTimeChanged( const QDateTime &dt )
+void KPTTaskGeneralPanelBase::startDateChanged()
 {
-    if (dt > endTime()) 
+    QDate date = startDate();
+    if (date > endDate()) 
     {
- scheduleEndTime->blockSignals(true);
-        if (endTime().time() > dt.time())
-     setEndTime(QDateTime(dt.date(), endTime().time()));
- else
-           setEndTime(dt);
- scheduleEndTime->blockSignals(false);
+        scheduleEndTime->blockSignals(true);
+        setEndDate(date);
+        scheduleEndTime->blockSignals(false);
     }
     if (scheduleType->currentItem() == 6 /*FixedInterval*/)
     {
- estimationTypeChanged(estimateType->currentItem());
+        estimationTypeChanged(estimateType->currentItem());
+    }
+}
+
+void KPTTaskGeneralPanelBase::startTimeChanged( const QTime &time )
+{
+    if (time > endTime()) 
+    {
+        scheduleEndTime->blockSignals(true);
+        setEndTime(time);
+        scheduleEndTime->blockSignals(false);
+    }
+    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    {
+        estimationTypeChanged(estimateType->currentItem());
     }
     
 }
 
-void KPTTaskGeneralPanelBase::endTimeChanged( const QDateTime &dt )
+
+void KPTTaskGeneralPanelBase::endDateChanged()
 {
-    if (dt < startTime()) 
+    QDate date = endDate();
+    if (date < startDate()) 
     {
- scheduleStartTime->blockSignals(true);
- if (startTime().time() < dt.time())
-            setStartTime(QDateTime(dt.date(), startTime().time()));
-        else 
-     setStartTime(dt);
+        scheduleStartTime->blockSignals(true);
+        setStartDate(date);
         scheduleStartTime->blockSignals(false);
     }
     
     if (scheduleType->currentItem() == 6 /*FixedInterval*/)
     {
- estimationTypeChanged(estimateType->currentItem());
+        estimationTypeChanged(estimateType->currentItem());
+    }
+}
+
+void KPTTaskGeneralPanelBase::endTimeChanged( const QTime &time )
+{
+    if (time < startTime()) 
+    {
+        scheduleStartTime->blockSignals(true);
+        setStartTime(time);
+        scheduleStartTime->blockSignals(false);
+    }
+    
+    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    {
+        estimationTypeChanged(estimateType->currentItem());
     }
 }
 
@@ -230,5 +251,71 @@ void KPTTaskGeneralPanelBase::scheduleTypeChanged( int value )
      estimationTypeChanged(estimateType->currentItem());
 }
 
-}  //KPlato namespace
 
+QDateTime KPTTaskGeneralPanelBase::startDateTime()
+{
+    return QDateTime(startDate(), startTime());
+}
+
+
+QDateTime KPTTaskGeneralPanelBase::endDateTime()
+{
+    return QDateTime(endDate(), endTime());
+}
+
+void KPTTaskGeneralPanelBase::setStartTime( const QTime &time )
+{
+    scheduleStartTime->setTime(time);
+}
+
+void KPTTaskGeneralPanelBase::setEndTime( const QTime &time )
+{
+    scheduleEndTime->setTime(time);
+}
+
+QTime KPTTaskGeneralPanelBase::startTime() const
+{
+    return scheduleStartTime->time();
+}
+
+QTime KPTTaskGeneralPanelBase::endTime()
+{
+    return scheduleEndTime->time();
+}
+
+QDate KPTTaskGeneralPanelBase::startDate()
+{
+    return scheduleStartDate->date();
+}
+
+
+QDate KPTTaskGeneralPanelBase::endDate()
+{
+    return scheduleEndDate->date();
+}
+
+void KPTTaskGeneralPanelBase::setStartDateTime( const QDateTime &dt )
+{
+    setStartDate(dt.date());
+    setStartTime(dt.time());
+}
+
+
+void KPTTaskGeneralPanelBase::setEndDateTime( const QDateTime &dt )
+{
+    setEndDate(dt.date());
+    setEndTime(dt.time());
+}
+
+void KPTTaskGeneralPanelBase::setStartDate( const QDate &date )
+{
+    scheduleStartDate->setDate(date);
+}
+
+
+void KPTTaskGeneralPanelBase::setEndDate( const QDate &date )
+{
+    scheduleEndDate->setDate(date);
+}
+
+}  //KPlato namespace

@@ -22,6 +22,7 @@
 #define KPLATO_PART_H
 
 #include "kpttask.h"
+#include "kptconfig.h"
 
 #include <koDocument.h>
 
@@ -72,9 +73,7 @@ public:
     
     void setCommandType(int type);
     
-    KPTTask &defaultTask() { return m_defaultTask; }
-    void loadConfig();
-    void saveConfig();
+    static KPTConfig &config() { return configuration; }
     
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
@@ -89,7 +88,8 @@ private:
     KPTView *m_view;
     KoCommandHistory *m_commandHistory;
     bool m_update, m_calculate;
-    KPTTask m_defaultTask;
+    
+    static KPTConfig configuration;
 };
 
 }  //KPlato namespace

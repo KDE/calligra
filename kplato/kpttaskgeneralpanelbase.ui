@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>658</width>
-            <height>397</height>
+            <height>401</height>
         </rect>
     </property>
     <property name="caption">
@@ -217,14 +217,6 @@
                         <cstring>scheduleType</cstring>
                     </property>
                 </widget>
-                <widget class="KDateTimeWidget" row="0" column="2">
-                    <property name="name">
-                        <cstring>scheduleStartTime</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Start time or Earliest start</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel3</cstring>
@@ -244,13 +236,96 @@
                         <string>Estimate</string>
                     </property>
                 </widget>
-                <widget class="KDateTimeWidget" row="1" column="2">
+                <spacer row="1" column="0">
                     <property name="name">
-                        <cstring>scheduleEndTime</cstring>
+                        <cstring>spacer4</cstring>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>End time or Latest finish</string>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>88</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="3" column="0">
+                    <property name="name">
+                        <cstring>spacer4_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>88</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="3" column="1">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>110</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLayoutWidget" row="0" column="2">
+                    <property name="name">
+                        <cstring>layout9</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KDateWidget">
+                            <property name="name">
+                                <cstring>scheduleStartDate</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QTimeEdit">
+                            <property name="name">
+                                <cstring>scheduleStartTime</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="2">
+                    <property name="name">
+                        <cstring>layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KDateWidget">
+                            <property name="name">
+                                <cstring>scheduleEndDate</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QTimeEdit">
+                            <property name="name">
+                                <cstring>scheduleEndTime</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
                 <widget class="KPlato::KPTDurationWidget" row="2" column="2">
                     <property name="name">
@@ -331,111 +406,50 @@
                         </widget>
                     </hbox>
                 </widget>
-                <spacer row="3" column="1">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>110</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <spacer row="1" column="0">
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>88</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <spacer row="3" column="0">
-                    <property name="name">
-                        <cstring>spacer4_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>88</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
             </grid>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout34</cstring>
+                <cstring>layout14</cstring>
             </property>
-            <vbox>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout14</cstring>
+                        <cstring>descriptionlabell6</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>descriptionlabell6</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Note</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>descriptionfield</cstring>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer4_2_2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>244</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
-                </widget>
-                <widget class="KTextEdit">
-                    <property name="name">
+                    <property name="text">
+                        <string>Note</string>
+                    </property>
+                    <property name="buddy" stdset="0">
                         <cstring>descriptionfield</cstring>
                     </property>
                 </widget>
-            </vbox>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer4_2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>244</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="KTextEdit">
+            <property name="name">
+                <cstring>descriptionfield</cstring>
+            </property>
         </widget>
     </vbox>
 </widget>
@@ -523,18 +537,6 @@
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
-        <sender>scheduleStartTime</sender>
-        <signal>valueChanged(const QDateTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
-        <slot>checkAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>scheduleEndTime</sender>
-        <signal>valueChanged(const QDateTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
-        <slot>checkAllFieldsFilled()</slot>
-    </connection>
-    <connection>
         <sender>chooseLeader</sender>
         <signal>clicked()</signal>
         <receiver>KPTTaskGeneralPanelBase</receiver>
@@ -547,22 +549,58 @@
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
-        <sender>scheduleStartTime</sender>
-        <signal>valueChanged(const QDateTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
-        <slot>startTimeChanged(const QDateTime&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>scheduleEndTime</sender>
-        <signal>valueChanged(const QDateTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
-        <slot>endTimeChanged(const QDateTime&amp;)</slot>
-    </connection>
-    <connection>
         <sender>scheduleType</sender>
         <signal>activated(int)</signal>
         <receiver>KPTTaskGeneralPanelBase</receiver>
         <slot>scheduleTypeChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>scheduleEndDate</sender>
+        <signal>changed(QDate)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>checkAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>scheduleEndTime</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>checkAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>scheduleStartDate</sender>
+        <signal>changed(QDate)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>checkAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>scheduleStartTime</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>checkAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>scheduleStartTime</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>startTimeChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>scheduleEndTime</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>endTimeChanged(const QTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>scheduleStartDate</sender>
+        <signal>changed(QDate)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>startDateChanged()</slot>
+    </connection>
+    <connection>
+        <sender>scheduleEndDate</sender>
+        <signal>changed(QDate)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>endDateChanged()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -583,6 +621,9 @@
 <forwards>
     <forward>class KMessageBox</forward>
 </forwards>
+<variables>
+    <variable access="public">bool useTime;</variable>
+</variables>
 <signals>
     <signal>obligatedFieldsFilled( bool )</signal>
     <signal>schedulingTypeChanged( int )</signal>
@@ -590,8 +631,6 @@
 </signals>
 <slots>
     <slot>setSchedulingType( int type )</slot>
-    <slot>setStartTime( const QDateTime &amp; dt )</slot>
-    <slot>setEndTime( const QDateTime &amp; dt )</slot>
     <slot>changeLeader()</slot>
     <slot>setEstimationType( int type )</slot>
     <slot>setOptimistic( int value )</slot>
@@ -604,18 +643,30 @@
     <slot>setEstimateFields( int mask )</slot>
     <slot>setEstimateScales( int day )</slot>
     <slot>setEstimateFieldUnit( int field, QString unit )</slot>
-    <slot>startTimeChanged( const QDateTime &amp; dt )</slot>
-    <slot>endTimeChanged( const QDateTime &amp; dt )</slot>
+    <slot>startDateChanged()</slot>
+    <slot>startTimeChanged( const QTime &amp; time )</slot>
+    <slot>endDateChanged()</slot>
+    <slot>endTimeChanged( const QTime &amp; time )</slot>
     <slot>scheduleTypeChanged( int value )</slot>
+    <slot>setStartTime( const QTime &amp; time )</slot>
+    <slot>setEndTime( const QTime &amp; time )</slot>
+    <slot>setStartDateTime( const QDateTime &amp; dt )</slot>
+    <slot>setEndDateTime( const QDateTime &amp; dt )</slot>
+    <slot>setStartDate( const QDate &amp; date )</slot>
+    <slot>setEndDate( const QDate &amp; date )</slot>
 </slots>
 <functions>
     <function returnType="int">schedulingType() const</function>
-    <function returnType="QDateTime">startTime() const</function>
-    <function returnType="QDateTime">endTime()</function>
     <function returnType="int">estimationType() const</function>
     <function returnType="int">optimistic() const</function>
     <function returnType="int">pessimistic()</function>
     <function returnType="KPTDuration">estimationValue()</function>
+    <function returnType="QDateTime">startDateTime()</function>
+    <function returnType="QDateTime">endDateTime()</function>
+    <function returnType="QTime">startTime() const</function>
+    <function returnType="QTime">endTime()</function>
+    <function returnType="QDate">startDate()</function>
+    <function returnType="QDate">endDate()</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
@@ -624,12 +675,8 @@
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
     <includehint>kplato::kptdurationwidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>

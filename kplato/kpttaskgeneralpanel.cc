@@ -25,6 +25,8 @@
 #include "kptdurationwidget.h"
 #include "kptcalendar.h"
 #include "kptdatetime.h"
+#include "kptconfig.h"
+#include "kptpart.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -36,6 +38,7 @@
 
 #include <qlayout.h>
 #include <qdatetime.h> 
+#include <qdatetimeedit.h> 
 #include <kdebug.h>
 
 namespace KPlato
@@ -46,30 +49,39 @@ KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *wor
       m_task(task),
       m_dayLength(24)
 {
+    useTime = KPTPart::config().behavior().dateTimeUsage != KPTBehavior::Date;
     setStartValues(task, workTime);
     namefield->setFocus();
 }
 
 void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *workTime) {
+    m_effort = m_duration = task.effort()->expected();
+    
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
     setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
-        setStartTime(task.constraintStartTime());
+        setStartDateTime(task.constraintStartTime());
     } else {
         QDate date = QDate::currentDate();
         QTime time = workTime ? workTime->startOfDay(date.dayOfWeek()-1) : QTime::currentTime();
-        setStartTime(QDateTime(date, time)); 
+        setStartDateTime(QDateTime(date, time)); 
     }
     if (task.constraintEndTime().isValid()) {
-        setEndTime(task.constraintEndTime());
+        setEndDateTime(task.constraintEndTime());
     } else {
         QDate date = QDate::currentDate();
         QTime time = workTime ? workTime->endOfDay(date.dayOfWeek()-1) : QTime::currentTime();
-        setEndTime(QDateTime(date, time)); 
-    }    
+        setEndDateTime(QDateTime(date, time)); 
+    }
+    if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date) {
+        setStartTime(QTime());
+        scheduleStartTime->setEnabled(false);
+        setEndTime(QTime());
+        scheduleEndTime->setEnabled(false);
+    }
     setEstimateType(task.effort()->type());
     setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
     if (workTime) {
@@ -109,14 +121,14 @@ KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
         cmd->addCommand(new KPTNodeModifyConstraintCmd(part, m_task, c));
         modified = true;
     }
-    if (startTime() != m_task.constraintStartTime() &&
+    if (startDateTime() != m_task.constraintStartTime() &&
         (c == KPTNode::FixedInterval || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn)) {
-        cmd->addCommand(new KPTNodeModifyConstraintStartTimeCmd(part, m_task, startTime()));
+        cmd->addCommand(new KPTNodeModifyConstraintStartTimeCmd(part, m_task, startDateTime()));
         modified = true;
     }
-    if (endTime() != m_task.constraintEndTime() &&
+    if (endDateTime() != m_task.constraintEndTime() &&
         (c == KPTNode::FinishNotLater || c == KPTNode::FixedInterval || c == KPTNode::MustFinishOn)) {
-        cmd->addCommand(new KPTNodeModifyConstraintEndTimeCmd(part, m_task, endTime()));
+        cmd->addCommand(new KPTNodeModifyConstraintEndTimeCmd(part, m_task, endDateTime()));
         modified = true;
     }
     if (!idfield->isHidden() && idfield->text() != m_task.id()) {
@@ -165,18 +177,18 @@ void KPTTaskGeneralPanel::estimationTypeChanged(int type) {
     if (scheduleType->currentItem() == 6 /* Fixed interval */) {
         if (type == 0 /*Effort*/) {
             setEstimateScales(m_dayLength);
-             estimate->setEnabled(true);
+            estimate->setEnabled(true);
+            setEstimate(m_effort);
         } else {
             setEstimateScales(24);
             estimate->setEnabled(false);
-            KPTDateTime st = scheduleStartTime->dateTime();
-            KPTDateTime end = scheduleEndTime->dateTime();
-            estimate->setValue(end - st);
-            if (st.time().isNull() && end.time().isNull()) {
-                KPTDuration d = estimate->value();
-                d.addDays(1);
-                estimate->setValue(d);
+            KPTDateTime st = startDateTime();
+            KPTDateTime end = endDateTime();
+            m_duration = end - st;
+            if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date) {
+                m_duration.addDays(1);
             }
+            estimate->setValue(m_duration);
         }
         return;
     }

@@ -1,9 +1,21 @@
+/****************************************************************************
+** ui.h extension file, included from the uic-generated form implementation.
+**
+** If you want to add, delete, or rename functions or slots, use
+** Qt Designer to update this file, preserving your code.
+**
+** You should not define a constructor or destructor in this file.
+** Instead, write your code in functions called init() and destroy().
+** These will automatically be called by the form's constructor and
+** destructor.
+*****************************************************************************/
+
 /* This file is part of the KDE project
    Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; 
+   License as published by the Free Software Foundation;
    version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
@@ -17,38 +29,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTCONFIGDIALOG_H
-#define KPTCONFIGDIALOG_H
-
-#include <kdialogbase.h>
-
-class QWidget;
-
-namespace KPlato
+void KPTConfigBehaviorPanelBase::slotChanged()
 {
-
-class KPTTaskDefaultPanel;
-class KPTConfigBehaviorPanel;
-class KPTConfig;
-
-class KPTConfigDialog : public KDialogBase {
-    Q_OBJECT
-public:
-    KPTConfigDialog(KPTConfig &config, QWidget *parent=0, const char *name=0);
-
-protected slots:
-    void slotApply();
-    void slotOk();
-    void slotDefault();
-    void slotChanged();
-    
-private:
-    KPTConfig &m_config;
-    KPTTaskDefaultPanel *m_taskDefaultPage;
-    KPTConfigBehaviorPanel *m_behaviorPage;
-
-};
-
-} //KPlato namespace
-
-#endif // KPTCONFIGDIALOG_H
+    emit changed();
+}

@@ -17,45 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTTASKGENERALPANEL_H
-#define KPTTASKGENERALPANEL_H
+#ifndef KPTCONFIGBEHAVIORPANEL_H
+#define KPTCONFIGBEHAVIORPANEL_H
 
-#include "kpttaskgeneralpanelbase.h"
+#include "kptconfigbehaviorpanelbase.h"
+#include "kptconfig.h"
 
 class KMacroCommand;
 
 namespace KPlato
 {
 
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
+class KPTConfigBehaviourPanelBase;
 class KPTPart;
-class KPTTask;
-class KPTStandardWorktime;
 
-class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
+class KPTConfigBehaviorPanel : public KPTConfigBehaviorPanelBase {
     Q_OBJECT
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    KPTConfigBehaviorPanel(KPTBehavior &behavior, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
-
+    void setStartValues();
     bool ok();
-
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
-
-public slots:
-    virtual void estimationTypeChanged(int type);
-    virtual void scheduleTypeChanged(int value);
+    bool apply();
     
 private:
-    KPTTask &m_task;
-    int m_dayLength;
-    
-    KPTDuration m_effort;
-    KPTDuration m_duration;
+    KPTBehavior m_oldvalues;
+    KPTBehavior &m_behavior;
+
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKGENERALPANEL_H
+#endif // KPTCONFIGBEHAVIORPANEL_H

@@ -20,6 +20,9 @@
 #include "kptconfigdialog.h"
 
 #include "kpttaskdefaultpanel.h"
+#include "kptconfigbehaviorpanel.h"
+
+#include "kptconfig.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptcalendar.h"
@@ -42,18 +45,23 @@ static inline QPixmap loadIcon( const char * name ) {
 }
 
 
-KPTConfigDialog::KPTConfigDialog(KPTTask &task, QWidget *parent, const char *n)
+KPTConfigDialog::KPTConfigDialog(KPTConfig &config, QWidget *parent, const char *n)
     : KDialogBase(KDialogBase::IconList, i18n("Configure KPlato"),
                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-                  KDialogBase::Ok, parent)
+                  KDialogBase::Ok, parent),
+      m_config(config)
 {
 
-    QVBox *page = addVBoxPage(i18n("Task defaults"), i18n("Task defaults"), loadIcon("misc"));
-    m_taskDefaultPage = new KPTTaskDefaultPanel(task, 0, page);
+    QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
+    m_behaviorPage = new KPTConfigBehaviorPanel(config.behavior(), page);
+    
+    page = addVBoxPage(i18n("Task defaults"), i18n("Task defaults"), loadIcon("misc"));
+    m_taskDefaultPage = new KPTTaskDefaultPanel(config.taskDefaults(), 0, page);
     
     enableButtonOK(false);
     enableButtonApply(false);
     
+    connect(m_behaviorPage, SIGNAL(changed()), SLOT(slotChanged()));
     connect(m_taskDefaultPage, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
@@ -61,9 +69,13 @@ KPTConfigDialog::KPTConfigDialog(KPTTask &task, QWidget *parent, const char *n)
 void KPTConfigDialog::slotApply() {
     if (!m_taskDefaultPage->ok())
         return;
+    if (!m_behaviorPage->ok())
+        return;
     KCommand *cmd = m_taskDefaultPage->buildCommand(0);
     if (cmd)
         cmd->execute();    
+
+    m_behaviorPage->apply();
 }
 
 void KPTConfigDialog::slotOk() {
@@ -73,8 +85,9 @@ void KPTConfigDialog::slotOk() {
 
 void KPTConfigDialog::slotDefault() {
     kdDebug()<<k_funcinfo<<endl;
-    KPTTask task;
-    m_taskDefaultPage->setStartValues(task);
+    m_taskDefaultPage->setStartValues(m_config.taskDefaults());
+    m_behaviorPage->setStartValues();
+    
     //enableButtonOk(false);
 }
 

@@ -17,45 +17,48 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTTASKGENERALPANEL_H
-#define KPTTASKGENERALPANEL_H
+#ifndef KPTCONFIG_H
+#define KPTCONFIG_H
 
-#include "kpttaskgeneralpanelbase.h"
-
-class KMacroCommand;
+#include "kpttask.h"
 
 namespace KPlato
 {
 
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
-class KPTPart;
-class KPTTask;
-class KPTStandardWorktime;
-
-class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
-    Q_OBJECT
+class KPTBehavior {
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
-
-    KMacroCommand *buildCommand(KPTPart *part);
-
-    bool ok();
-
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
-
-public slots:
-    virtual void estimationTypeChanged(int type);
-    virtual void scheduleTypeChanged(int value);
-    
-private:
-    KPTTask &m_task;
-    int m_dayLength;
-    
-    KPTDuration m_effort;
-    KPTDuration m_duration;
+    enum DateTimeUsage { DateTime, Date };
+    enum CalculationMode { Manual, OnChange };
+    KPTBehavior() {
+        dateTimeUsage = DateTime;
+        calculationMode = Manual;
+        allowOverbooking = true;
+    }
+    int dateTimeUsage;
+    int calculationMode;
+    bool allowOverbooking;
 };
 
-} //KPlato namespace
+class KPTConfig {
+public:
+    
+    KPTConfig();
+    ~KPTConfig();
 
-#endif // KPTTASKGENERALPANEL_H
+    void setReadWrite(bool readWrite) { m_readWrite = readWrite; }
+    void load();
+    void save();
+
+    KPTTask &taskDefaults() { return m_taskDefaults; }
+    KPTBehavior &behavior() { return m_behavior; }
+    
+private:
+    bool m_readWrite;
+    KPTBehavior m_behavior;  
+    KPTTask m_taskDefaults;
+
+};
+
+}  //KPlato namespace
+
+#endif // KPTCONFIG_H

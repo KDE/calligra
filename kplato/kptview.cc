@@ -360,7 +360,7 @@ void KPTView::slotAddSubTask() {
 	// If we are positionend on the root project, then what we really want to
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
-    KPTTask* node = new KPTTask(getPart()->defaultTask(), currentTask());
+    KPTTask* node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
     KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
@@ -382,7 +382,7 @@ void KPTView::slotAddSubTask() {
 
 
 void KPTView::slotAddTask() {
-    KPTTask *node = new KPTTask(getPart()->defaultTask(), currentTask());
+    KPTTask *node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
     KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime());
     if (dia->exec()) {
 		KPTNode* currNode = currentTask();
@@ -431,7 +431,7 @@ void KPTView::slotAddMilestone() {
 
 void KPTView::slotConfigure() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTConfigDialog *dia = new KPTConfigDialog(getPart()->defaultTask());
+    KPTConfigDialog *dia = new KPTConfigDialog(KPTPart::config());
     dia->exec();
     delete dia;
 }
