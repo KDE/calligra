@@ -460,7 +460,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     {
         config->setGroup( "Misc" );
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
-        m_oldRefreshSideBar = config->readBoolEntry("RefreshSideBar",false);
+        m_oldRefreshSideBar = config->readBoolEntry("RefreshSideBar",true);
     }
 
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
@@ -608,6 +608,8 @@ void ConfigureMiscPage::slotDefault()
    m_underlineLink->setChecked(true);
    m_displayFieldCode->setChecked( false );
    KPresenterDoc* doc = m_pView->kPresenterDoc();
+   cbSideBarRefresh->setChecked(true);
+
 
    resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
    resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );

@@ -378,7 +378,7 @@ void KPresenterDoc::initConfig()
         int undo=config->readNumEntry("UndoRedo",-1);
         if(undo!=-1)
             setUndoRedoLimit(undo);
-        setRefreshSideBar( config->readBoolEntry("RefreshSideBar",false));
+        setRefreshSideBar( config->readBoolEntry("RefreshSideBar",true));
     }
 
     // Apply configuration, without creating an undo/redo command
