@@ -111,8 +111,8 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
         setMidline( getBaseline() / 2 );
     }
 
-    //kdDebug() << "bound.height(): " << bound.height() << endl;
-    //kdDebug() << "bound.top(): " << bound.top() << endl;
+    //kdDebug( 40000 ) << "bound.height(): " << bound.height() << endl;
+    //kdDebug( 40000 ) << "bound.top(): " << bound.top() << endl;
 }
 
 /**

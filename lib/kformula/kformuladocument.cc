@@ -202,7 +202,7 @@ ContextStyle& KFormulaDocument::getContextStyle( bool forPrinting )
 {
     // Make sure not to change anything depending on `forPrinting' that
     // would require a new calculation of the formula.
-    //kdDebug() << "KFormulaDocument::activate: forPrinting=" << forPrinting << endl;
+    //kdDebug( 40000 ) << "KFormulaDocument::activate: forPrinting=" << forPrinting << endl;
     impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
     return impl->contextStyle;
 }

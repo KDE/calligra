@@ -630,7 +630,7 @@ void KFormulaContainer::setFontSize( int /*pointSize*/, bool /*forPrint*/ )
 //     double newSize = factor*pointSize;
 //     if ( rootElement()->getBaseSize() != newSize ) {
 //         rootElement()->setBaseSize( newSize );
-//         kdDebug() << "KFormulaContainer::save " << newSize << endl;
+//         kdDebug( 40000 ) << "KFormulaContainer::save " << newSize << endl;
 //         recalc();
 //     }
 }
@@ -647,7 +647,7 @@ void KFormulaContainer::save(QString file)
 {
     QFile f(file);
     if(!f.open(IO_Truncate | IO_ReadWrite)) {
-        kdDebug() << "Error opening file " << file.latin1() << endl;
+        kdDebug( 40000 ) << "Error opening file " << file.latin1() << endl;
         return;
     }
     QCString data=domData().toCString();
@@ -672,13 +672,13 @@ void KFormulaContainer::load(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        kdDebug() << "Error opening file " << file.latin1() << endl;
+        kdDebug( 40000 ) << "Error opening file " << file.latin1() << endl;
         return;
     }
     QTextStream stream(&f);
     stream.setEncoding(QTextStream::Unicode);
     QString content = stream.read();
-    //kdDebug() << content << endl;
+    //kdDebug( 40000 ) << content << endl;
     QDomDocument doc;
     if (!doc.setContent(content)) {
         f.close();
@@ -694,7 +694,7 @@ void KFormulaContainer::loadMathMl(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        kdDebug() << "Error opening file " << file.latin1() << endl;
+        kdDebug( 40000 ) << "Error opening file " << file.latin1() << endl;
         return;
     }
     QDomDocument doc;
@@ -732,7 +732,7 @@ bool KFormulaContainer::load(QDomNode doc)
         }
         else {
             delete root;
-            kdDebug() << "Error constructing element tree." << endl;
+            kdDebug( 40000 ) << "Error constructing element tree." << endl;
         }
     }
     return false;

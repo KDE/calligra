@@ -248,7 +248,7 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
         painter.setBrush(Qt::NoBrush);
         painter.setPen(QPen(context.getEmptyColor(), context.getLineWidth()));
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
-//         kdDebug() << "SequenceElement::calcCursorSize: "
+//         kdDebug( 40000 ) << "SequenceElement::calcCursorSize: "
 //                   << myPos.x() << " " << myPos.y() << " "
 //                   << getWidth() << " " << getHeight()
 //                   << endl;
