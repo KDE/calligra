@@ -185,7 +185,8 @@ KexiProject::loadProject(const QString& url)
 	{
 		QCString password;
 		int keep = 1;
-		int result = KPasswordDialog::getPassword(password, i18n("Database password for %1").arg(parsedCred.user), &keep);
+		int result = KPasswordDialog::getPassword(password, i18n("Password for %1 on %2").arg(parsedCred.user)
+			.arg(parsedCred.host), &keep);
 		
 		if(result == KPasswordDialog::Accepted)
 		{
