@@ -457,9 +457,9 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
 
     //reactive spellchecking
     m_currentTextObj->setNeedSpellCheck(true);
-
-    m_macroCmd->addCommand(m_currentTextObj->replaceSelectionCommand(
-        &cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null ));
+    KCommand *cmd=m_currentTextObj->replaceSelectionCommand(&cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null );
+    if( cmd )
+        m_macroCmd->addCommand(cmd);
 }
 
 void KoFindReplace::setActiveWindow()
