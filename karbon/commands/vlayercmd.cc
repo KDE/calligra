@@ -20,6 +20,7 @@
 
 #include "vlayer.h"
 #include "vlayercmd.h"
+#include "vdocument.h"
 
 VLayerCmd::VLayerCmd( VDocument* doc, const QString& name, VLayer* layer, VLayerCmdType order )
 	: VCommand( doc, name, "14_layers" ), m_layer( layer ), m_cmdType( order )

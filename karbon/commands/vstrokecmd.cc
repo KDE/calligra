@@ -24,6 +24,7 @@
 #include "vstroke.h"
 #include "vgradient.h"
 #include "vstrokecmd.h"
+#include "vdocument.h"
 
 VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke, const QString& icon )
     : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( *stroke )

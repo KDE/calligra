@@ -23,7 +23,7 @@
 #include "vgroup.h"
 #include "vgroupcmd.h"
 #include "vselection.h"
-
+#include "vdocument.h"
 
 VGroupCmd::VGroupCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Group Objects" ), "14_group" )

@@ -20,7 +20,7 @@
 
 #include "vreplacingcmd.h"
 #include "vselection.h"
-
+#include "vdocument.h"
 
 VReplacingCmd::VReplacingCmd( VDocument* doc, const QString& name )
 	: VCommand( doc, name )

@@ -21,6 +21,7 @@
 
 #include "vzordercmd.h"
 #include "vselection.h"
+#include "vdocument.h"
 
 VZOrderCmd::VZOrderCmd( VDocument *doc, VOrder state )
 	: VCommand( doc, i18n( "Order Selection" ) ), m_state( state )

@@ -26,6 +26,7 @@
 #include "vsegment.h"
 #include "vselection.h"
 #include "vwhirlpinchcmd.h"
+#include "vdocument.h"
 
 
 VWhirlPinchCmd::VWhirlPinchCmd( VDocument* doc,

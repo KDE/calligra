@@ -25,6 +25,7 @@
 #include "vselection.h"
 #include "vsegment.h"
 #include "vpath.h"
+#include "vdocument.h"
 
 VDeleteNodeCmd::VDeleteNodeCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Delete Node" ) )

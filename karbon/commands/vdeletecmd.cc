@@ -22,7 +22,7 @@
 
 #include "vdeletecmd.h"
 #include "vselection.h"
-
+#include "vdocument.h"
 
 VDeleteCmd::VDeleteCmd( VDocument* doc )
 	: VCommand( doc, i18n( "Delete Objects" ), "editdelete" )

@@ -23,6 +23,7 @@
 #include "klocale.h"
 
 #include "vcommand.h"
+#include "karbon_part.h"
 
 
 VCommandHistory::VCommandHistory( KarbonPart* part )

@@ -37,6 +37,8 @@
 #include <knuminput.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
+#include "vdocument.h"
 #include "vkopainter.h"
 #include "vglobal.h"
 #include "vpainterfactory.h"

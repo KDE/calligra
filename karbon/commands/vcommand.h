@@ -25,12 +25,13 @@
 #include <assert.h>
 
 #include <qobject.h>
+#include <qptrlist.h>
 
-#include "karbon_part.h"
 #include "vvisitor.h"
 
 class VDocument;
-
+class KarbonPart;
+class KAction;
 
 class VCommand : public VVisitor
 {

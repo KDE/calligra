@@ -21,7 +21,7 @@
 
 #include "vcleanupcmd.h"
 #include "vlayer.h"
-
+#include "vdocument.h"
 
 VCleanUpCmd::VCleanUpCmd( VDocument *doc )
 		: VCommand( doc, i18n( "Clean Up" ) )

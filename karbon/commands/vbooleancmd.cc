@@ -28,7 +28,7 @@
 #include "vpath.h"
 #include "vsegment.h"
 #include "vselection.h"
-
+#include "vdocument.h"
 
 VBooleanCmd::VBooleanCmd( VDocument *doc, VBooleanType type )
 	: VCommand( doc, i18n( "Boolean Operation" ) )

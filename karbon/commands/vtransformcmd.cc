@@ -29,6 +29,7 @@
 #include "vtransformcmd.h"
 #include "vstroke.h"
 #include "vfill.h"
+#include "vdocument.h"
 
 #include <kdebug.h>
 
