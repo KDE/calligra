@@ -989,11 +989,18 @@ void KPTGanttView::getContext(KPTContext &context) const {
     if (currentNode()) {
         context.currentNode = currentNode()->id();
     }
-    for (KDGanttViewItem *i = m_gantt->firstChild(); i; i = i->nextSibling()) {
+    getContextClosedNodes(context, m_gantt->firstChild());
+}
+
+void KPTGanttView::getContextClosedNodes(KPTContext &context, KDGanttViewItem *item) const {
+    if (item == 0)
+        return;
+    for (KDGanttViewItem *i = item; i; i = i->nextSibling()) {
         if (!i->isOpen()) {
             context.closedNodes.append(getNode(i)->id());
             kdDebug()<<k_funcinfo<<"add closed "<<i->listViewText()<<endl;
         }
+        getContextClosedNodes(context, i->firstChild());
     }
 }
 

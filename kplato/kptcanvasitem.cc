@@ -694,6 +694,8 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNod
     if (p)
         m_view = p->ganttView();
     setRenameEnabled(0, true);
+    setExpandable(true);
+    setOpen(true);
 }
 
 void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
