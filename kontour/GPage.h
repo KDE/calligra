@@ -137,6 +137,7 @@ public:
    * Style management
    */
   void changePaintStyles(const KoColor &c);
+  void changeOutlineStyles(const KoColor &c);
 
 public slots:
 //  void objectChanged ();

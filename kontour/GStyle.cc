@@ -26,23 +26,37 @@
 
 #include <qdom.h>
 
-GStyle::GStyle()
+class GStylePrivate
 {
-  ocolor = KoColor::black();
-  fcolor = KoColor::white();
+public:
+	KoColor ocolor;
+	unsigned int lwidth;
+	KoColor fcolor;
+};
+
+GStyle::GStyle() : d(new GStylePrivate)
+{
+  d->ocolor = KoColor::black();
+  d->lwidth = 1;
+  d->fcolor = KoColor::white();
 }
 
 GStyle::GStyle(const QDomElement &style)
 {
-
 }
 
 GStyle::GStyle(GStyle &obj)
 {
-  ocolor = obj.ocolor;
-  fcolor = obj.fcolor;
+  d->ocolor = obj.d->ocolor;
+  d->lwidth = obj.d->lwidth;
+  d->fcolor = obj.d->fcolor;
 }
-  
+
+GStyle::~GStyle()
+{
+	delete d;
+}
+
 QDomElement GStyle::writeToXml(QDomDocument &document)
 {
   QDomElement style = document.createElement("style");
@@ -51,17 +65,38 @@ QDomElement GStyle::writeToXml(QDomDocument &document)
   
 void GStyle::outlineColor(const KoColor &c)
 {
-  ocolor = c;
+  d->ocolor = c;
 }
   
+const KoColor &GStyle::outlineColor() const
+{
+  return d->ocolor;
+}
+
+void GStyle::outlineWidth(unsigned int lwidth)
+{
+  d->lwidth = lwidth;
+}
+
+unsigned int GStyle::outlineWidth() const
+{
+  return d->lwidth;
+}
+
 void GStyle::fillColor(const KoColor &c)
 {
-  fcolor = c;
+  d->fcolor = c;
+}
+
+const KoColor &GStyle::fillColor() const
+{
+  return d->fcolor;
 }
 
 GStyle &GStyle::operator=(const GStyle &s)
 {
-  ocolor = s.ocolor;
-  fcolor = s.fcolor;
+  d->ocolor = s.d->ocolor;
+  d->lwidth  = s.d->lwidth;
+  d->fcolor = s.d->fcolor;
   return *this;
 }

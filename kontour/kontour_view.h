@@ -106,7 +106,7 @@ private slots:
   void popupForSelection();
   void popupForRulers();
 
-  void changePenColor(KoColor c);
+  void changeOutlineColor(const KoColor &c);
   void changePaintColor(const KoColor &c);
   void changeSelection();
 
@@ -180,6 +180,7 @@ private:
   /* Panels */
   LayerPanel *mLayerPanel;
   KoColorChooser *mPaintPanel;
+  KoColorChooser *mOutlinePanel;
 
   // Actions
   KAction *m_copy;

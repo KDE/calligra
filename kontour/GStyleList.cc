@@ -78,6 +78,7 @@ void GStyleList::addStyle()
 {
   GStyle *st = new GStyle();
   list.insert(i18n("new"), st);
+  mCurStyle = st;
 }
 
 void GStyleList::deleteStyle()

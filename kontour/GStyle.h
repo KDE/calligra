@@ -32,26 +32,30 @@ class QDomElement;
 
 /* Class for drawing style */
 
+class GStylePrivate;
 class GStyle
 {
 public:
   GStyle();
   GStyle(const QDomElement &style);
   GStyle(GStyle &obj);
+  virtual ~GStyle();
      
   QDomElement writeToXml(QDomDocument &document);
   
-  const KoColor &outlineColor() const {return ocolor; }
+  const KoColor &outlineColor() const;
   void outlineColor(const KoColor &c);
   
-  const KoColor &fillColor() const {return fcolor; }
+  unsigned int outlineWidth() const;
+  void outlineWidth(unsigned int lwidth);
+
+  const KoColor &fillColor() const;
   void fillColor(const KoColor &c);
   
   GStyle &operator=(const GStyle &s);
     
 private:
-  KoColor ocolor;      // outline color
-  KoColor fcolor;      // fill color
+  GStylePrivate *d;
 };
 
 #endif

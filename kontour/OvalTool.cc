@@ -146,6 +146,7 @@ void OvalTool::processEvent(QEvent *e)
       oval->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
       CreateOvalCmd *cmd = new CreateOvalCmd(toolController()->view()->activeDocument(), oval);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+	  oval->style(*(doc->document()->styles()->current())); // copy current style
       doc->history()->addCommand(cmd);
       canvas->updateBuf(r);
       canvas->repaint(r);

@@ -144,9 +144,10 @@ public:
    * Style management
    */
   const GStyle &style() const {return st; }
-  void style(GStyle s);
+  void style(const GStyle &s);
 
   void changePaintStyle(const KoColor &c);
+  void changeOutlineStyle(const KoColor &c);
 
   /**
    * Control points.

@@ -116,7 +116,7 @@ void GObject::setZoomFactor(double f, double pf)
 
 }
 
-void GObject::style(GStyle s)
+void GObject::style(const GStyle &s)
 {
   st = s;
 }
@@ -297,6 +297,7 @@ void GObject::setPen(QPainter *p)
   // TODO : set dashes, arrows, linewidth etc.
   QPen pen;
   pen.setColor(st.outlineColor().color());
+  pen.setWidth(st.outlineWidth());
   p->setPen(pen);
 }
 
@@ -312,6 +313,11 @@ void GObject::setBrush(QPainter *p)
 void GObject::changePaintStyle(const KoColor &c)
 {
   st.fillColor(c);
+}
+
+void GObject::changeOutlineStyle(const KoColor &c)
+{
+  st.outlineColor(c);
 }
 
 #include "GObject.moc"

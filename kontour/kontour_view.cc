@@ -345,11 +345,11 @@ void KontourView::setupPanels()
   win2->setResizeEnabled(true);
   QTabWidget *tab2 = new QTabWidget(win2, "Tab");
   tab2->setTabShape(QTabWidget::Triangular);
-  KoColorChooser *mColorPanel2 = new KoColorChooser(tab2);
-  tab2->insertTab(mColorPanel2, "Outline");
+  mOutlinePanel = new KoColorChooser(tab2);
+  connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
+  tab2->insertTab(mOutlinePanel, "Color");
   // TODO : add some content here :)
-  tab2->insertTab(new QWidget(tab2), "Foo");
-  tab2->insertTab(new QWidget(tab2), "Fa");
+  tab2->insertTab(new QWidget(tab2), "Style");
   win2->setWidget(tab2);
   win2->setResizeEnabled(false);
   //win1->setCaption(i18n("Paint properties"));
@@ -556,18 +556,25 @@ void KontourView::popupForRulers()
   rulerMenu->popup(QCursor::pos());
 }
 
-void KontourView::changePenColor(KoColor c)
+void KontourView::changeOutlineColor(const KoColor &c)
 {
+  // if there is a selection, change its outline color
+  if(activeDocument() && activeDocument()->activePage() &&
+    !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changeOutlineStyles(c);
+	activeDocument()->styles()->current()->outlineColor(c);
+  }
 }
 
 void KontourView::changePaintColor(const KoColor &c)
 {
-  //kdDebug(38000) << "Brush color changed!" << endl;
   // if there is a selection, change its paint color
   if(activeDocument() && activeDocument()->activePage() &&
     !activeDocument()->activePage()->selectionIsEmpty())
   {
     activeDocument()->activePage()->changePaintStyles(c);
+	activeDocument()->styles()->current()->fillColor(c);
   }
 }
 
@@ -648,6 +655,8 @@ void KontourView::slotDelete()
 
 void KontourView::slotSelectAll()
 {
+  tcontroller->selectTool("Select");
+  activeDocument()->activePage()->selectAllObjects();
 }
 
 void KontourView::slotZoomIn()
@@ -766,7 +775,7 @@ void KontourView::slotUngroup()
 
 void KontourView::slotStyles(const QString &s)
 {
-
+  activeDocument()->styles()->current(m_styles->currentText());
 }
 
 void KontourView::slotAddStyle()
