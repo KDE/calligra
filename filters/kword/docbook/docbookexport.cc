@@ -25,6 +25,7 @@
 #include <docbookexport.h>
 #include <docbookexport.moc>
 #include <kdebug.h>
+#include <kgenericfactory.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qdom.h>
@@ -36,8 +37,12 @@
 #include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 
-DocBookExport::DocBookExport ( KoFilter    *parent,
-                               const char  *name    ) : KoFilter (parent, name)
+typedef KGenericFactory<DocBookExport, KoFilter> DocBookExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libdocbookexport, DocBookExportFactory( "docbookexport" ) );
+
+DocBookExport::DocBookExport ( KoFilter          *parent,
+                               const char        *name,
+                               const QStringList & ) : KoFilter (parent, name)
 {
 }
 

@@ -34,7 +34,7 @@ class DocBookExport : public KoFilter {
     Q_OBJECT
 
 public:
-    DocBookExport (KoFilter *parent, const char *name );
+    DocBookExport (KoFilter *parent, const char *name, const QStringList & );
     virtual ~DocBookExport() {}
     /** filtering :) */
     virtual bool filter(const QString &fileIn, const QString &fileOut,

@@ -8,9 +8,9 @@ libdocbookexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.
 
 kde_module_LTLIBRARIES = libdocbookexport.la
 
-libdocbookexport_la_SOURCES = docbookexport.cc docbookexport_factory.cc
+libdocbookexport_la_SOURCES = docbookexport.cc
 
-noinst_HEADERS = docbookexport.h docbookexport_factory.h
+noinst_HEADERS = docbookexport.h 
 
 METASOURCES = AUTO
 
