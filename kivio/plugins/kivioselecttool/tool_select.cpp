@@ -567,7 +567,15 @@ void SelectTool::continueDragging(const QPoint &pos)
 void SelectTool::continueCustomDragging(const QPoint &pos)
 {
     KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
-    pagePoint = m_pCanvas->snapToGrid(pagePoint);
+    bool hit = false;
+
+    if(m_pCustomDraggingStencil->type() == kstConnector){
+      pagePoint = m_pCanvas->activePage()->snapToTarget(pagePoint, 8.0, hit);
+    }
+
+    if(!hit) {
+      pagePoint = m_pCanvas->snapToGrid( pagePoint );
+    }
 
     KivioCustomDragData data;
     data.page = m_pCanvas->activePage();

@@ -42,3 +42,5 @@ Kivio 1.3beta4 -> 1.3rc1
 Kivio 1.3rc1 -> 1.3
 --------------------
 - Made the connector tool snap to targets before the grid/help lines
+- Made the select tool snap to targets before the grid when resizing connectors
+
