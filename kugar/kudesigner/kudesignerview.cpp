@@ -84,3 +84,4 @@ void KuDesignerView::print(KPrinter *pPrinter)
 
   p.end();
 }
+#include "kudesignerview.moc"

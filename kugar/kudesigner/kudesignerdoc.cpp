@@ -520,3 +520,4 @@ void KuDesignerDoc::setCanvas(MyCanvas *c)
     if (c) docCanvas = c;
     return;
 }
+#include "kudesignerdoc.moc"

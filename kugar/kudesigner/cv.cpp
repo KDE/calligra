@@ -217,3 +217,4 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	canvas()->update();
     }
 }
+#include "cv.moc"

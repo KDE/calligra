@@ -51,3 +51,4 @@ dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList>
 
     connect(buttonOk, SIGNAL(clicked()), this, SLOT(commitProps()));
 }
+#include "itemopts.moc"

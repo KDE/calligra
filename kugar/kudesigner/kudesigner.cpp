@@ -739,3 +739,4 @@ void KuDesignerApp::slotAddItemLine(){
 void KuDesignerApp::unselectItemAction(){
     itemsNothing->setChecked(true);
 }
+#include "kudesigner.moc"
