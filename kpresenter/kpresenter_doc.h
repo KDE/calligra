@@ -252,7 +252,7 @@ public:
     void alignObjsTop();
     void alignObjsCenterV();
     void alignObjsBottom();
-    void replaceObjs();
+    void replaceObjs( bool createUndoRedo = true );
 
     PresSpeed getPresSpeed() const { return presSpeed; }
     void setPresSpeed( PresSpeed _presSpeed ) { presSpeed = _presSpeed; }

@@ -198,7 +198,8 @@ void KPresenterDoc::initConfig()
         config->setGroup( "KPresenter Color" );
         setTxtBackCol(config->readColorEntry( "BackgroundColor", &oldBgColor ));
     }
-    replaceObjs();
+    // Apply configuration, without creating an undo/redo command
+    replaceObjs( false );
 }
 
 /*==============================================================*/
@@ -536,8 +537,8 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	b = loadXML( doc );
 	ignoreSticky = TRUE;
     }
-    setModified(false);
     initConfig();
+    setModified(false);
     return b;
 }
 
@@ -3132,7 +3133,7 @@ void KPresenterDoc::pasteObjs( const QByteArray & data, int diffx, int diffy, in
 }
 
 /*====================== replace objects =========================*/
-void KPresenterDoc::replaceObjs()
+void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
     KPObject *kpobject = 0;
     int ox, oy;
@@ -3155,8 +3156,11 @@ void KPresenterDoc::replaceObjs()
 
     SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, _rastX, _rastY,
 						      _orastX, _orastY, _txtBackCol, _otxtBackCol, this );
-    _commands.addCommand( setOptionsCmd );
     setOptionsCmd->execute();
+    if ( createUndoRedo )
+        _commands.addCommand( setOptionsCmd );
+    else
+       delete setOptionsCmd;
 }
 
 /*========================= restore background ==================*/
@@ -3428,7 +3432,9 @@ void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 	((KPresenterView*)it.current())->changeUndo( _undo, !_undo.isEmpty() );
 	((KPresenterView*)it.current())->changeRedo( _redo, !_redo.isEmpty() );
     }
-    setModified(true);
+    kdDebug() << "slotUndoRedoChanged " << _undo << endl;
+    if ( !_undo.isEmpty() )
+        setModified(true);
 }
 
 /*==============================================================*/
