@@ -87,6 +87,7 @@ void
 PropertyEditorFont::resizeEvent(QResizeEvent *ev)
 {
 	m_label->resize(ev->size().width(), ev->size().height()-1);
+	m_button->resize(m_button->width(), ev->size().height());
 	m_button->move(ev->size().width() - m_button->width(), 0);
 }
 

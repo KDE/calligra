@@ -987,14 +987,25 @@ void KexiMainWindowImpl::initPropertyEditor()
 	d->propEditorToolWindow = addToolWindow(d->propEditor,
 		KDockWidget::DockRight, getMainDockWidget(), 20);
 
+	QFont f(d->propEditor->font());
+	//this gives:
+	// -2/3 of base font size (6 point minimum)
+	// if the current screen width is > 1300, +1 point is added to every 100 points greater than 1300
+	// maximum size is the base size
+	int size = QMAX( 6 + QMAX(0, KGlobalSettings::desktopGeometry(this).width() - 1300) / 100 , f.pointSize()*2/3 );
+	f.setPointSize( QMIN( size, f.pointSize() ) );
+	d->propEditor->setFont(f);
+
 	if (mdiMode()==KMdi::ChildframeMode) {
 	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 #if defined(KDOCKWIDGET_P)
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		ds->show();
 	//	ds->resize(400, ds->height());
-		ds->setSeparatorPos(400, true);
-		ds->setForcedFixedWidth( dw, 400 );
+//		ds->setSeparatorPos(400, true);
+//		ds->setForcedFixedWidth( dw, 400 );
+		ds->setSeparatorPos(600, true);
+		ds->setForcedFixedWidth( dw, 600 );
 	//	ds->resize(400, ds->height());
 	//	dw->resize(400, dw->height());
 #endif

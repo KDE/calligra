@@ -462,5 +462,5 @@ KexiFormView::setRedoEnabled(bool enabled)
 KexiFormView::~KexiFormView()
 {}
 
-//#include "kexiformview.moc"
+#include "kexiformview.moc"
 

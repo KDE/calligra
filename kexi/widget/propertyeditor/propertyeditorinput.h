@@ -121,6 +121,8 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public KexiPropertySubEdito
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 
+		virtual bool eventFilter(QObject* watched, QEvent* e);
+
 	protected slots:
 		void			setState(bool state);
 

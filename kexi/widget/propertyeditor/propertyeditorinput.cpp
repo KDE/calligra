@@ -193,6 +193,7 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, 
  : KexiPropertySubEditor(parent, property, name)
 {
 	m_toggle = new QToolButton(this);
+	m_toggle->setFocusPolicy(QWidget::NoFocus);
 	m_toggle->setToggleButton(true);
 	m_toggle->setUsesTextLabel(true);
 	m_toggle->setTextPosition(QToolButton::Right); //js BesideIcon -didnt work before qt3.2);
@@ -209,6 +210,21 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, 
 
 	m_toggle->show();
 	setWidget(m_toggle);
+	installEventFilter(this);
+}
+
+bool PropertyEditorBool::eventFilter(QObject* watched, QEvent* e)
+{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if(ev->key() == Key_Space)
+		{
+			m_toggle->toggle();
+			return true;
+		}
+	}
+	return KexiPropertySubEditor::eventFilter(watched, e);
 }
 
 QVariant

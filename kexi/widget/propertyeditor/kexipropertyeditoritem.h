@@ -28,6 +28,8 @@
 
 #include "kexiproperty.h"
 
+#define KexiPropertyEditorItem_BranchBoxSize 9
+
 /** This class is a subclass of KListViewItem which is associated to a property.
     It also takes care of drawing custom contents.
  **/
@@ -88,6 +90,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 //		virtual QString key ( int column, bool ascending ) const;
 		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
+		virtual void paintFocus ( QPainter * p, const QColorGroup & cg, const QRect & r );
 
 	protected:
 		/*! Reimplemented from KListViewItem to draw custom contents. Properties names are wriiten in bold if 

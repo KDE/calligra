@@ -308,6 +308,12 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 === 2004 LT TODO ===
 
 2004-08-05
+PropertyEditor
+- Bool Editor: toggle button has now without ugly focus (space key still works)
+- KexiPropertySubEditor:setWidget() focus proxy is set only if the widget has 
+  non-zero focus policy.
+- [+][-] branch box is better positioned; treeStepSize is now narrower
+- font size is decreased to a reasonable minimum
 Core
 - generateIconSetWithStar() not used, static icons added insted (icon cache was confused)
 

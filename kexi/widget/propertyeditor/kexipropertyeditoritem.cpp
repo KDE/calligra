@@ -253,10 +253,22 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 
 		if(item->firstChild())
 		{
-			p->drawRect(2, item->height()/2 -4, 9, 9);
-			p->drawLine(4, item->height()/2, 8, item->height()/2);
+//			p->drawRect(2, item->height()/2 -4, 9, 9);
+			const int marg = (item->height()-KexiPropertyEditorItem_BranchBoxSize)/2;
+			p->save();
+			p->setPen( QColor(200,200,200) );
+			p->drawRect(2, marg, 
+				KexiPropertyEditorItem_BranchBoxSize, KexiPropertyEditorItem_BranchBoxSize);
+			p->fillRect(2+1, marg+1, 
+				KexiPropertyEditorItem_BranchBoxSize-2, KexiPropertyEditorItem_BranchBoxSize-2, white);
+			p->restore();
+//			p->drawLine(4, item->height()/2, 8, item->height()/2);
+			p->drawLine(2+2, marg+KexiPropertyEditorItem_BranchBoxSize/2,
+				KexiPropertyEditorItem_BranchBoxSize-1, marg+KexiPropertyEditorItem_BranchBoxSize/2);
 			if(!item->isOpen())
-				p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
+				p->drawLine(2+KexiPropertyEditorItem_BranchBoxSize/2, marg+2, 
+					2+KexiPropertyEditorItem_BranchBoxSize/2, marg+KexiPropertyEditorItem_BranchBoxSize-3);
+//				p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
 		}
 
 		p->translate(0, item->totalHeight());
@@ -440,3 +452,8 @@ int KexiPropertyEditorItem::compare( QListViewItem *i, int col, bool ascending )
 	return m_order - static_cast<KexiPropertyEditorItem*>(i)->m_order;
 //		QString().sprintf("%5.5d", m_order).localeAwareCompare( QString().sprintf("%5.5d", i->m_order) );
 }
+
+void KexiPropertyEditorItem::paintFocus ( QPainter * , const QColorGroup & , const QRect &  )
+{
+}
+
