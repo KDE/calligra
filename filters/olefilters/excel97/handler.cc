@@ -42,7 +42,7 @@ bool Handler::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 
 	typedef struct
 	{
-		char *name;
+		const char *name;
 		Q_UINT16 opcode;
 		Method handler;
 	} OPCode;

@@ -364,7 +364,7 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 		format.setAttribute("indent", (indent * 10));
 	if((xwork->align >> 3) & 0x01 == 1)
 		format.setAttribute("multirow", "yes");
-	
+
 	switch(xwork->ifmt)
 	{
 		case 0x00:  // We need this to avoid 'default'
@@ -883,6 +883,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 						(*stringPtr).prepend("degree(");
 						break;
 					default:
+						(*stringPtr).prepend("not_handled_yet(");
 						kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
 						break;
 				}
@@ -903,8 +904,8 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 
 				switch (integer) {
 					case 1: // if
-                                                --stringPtr;
-                                                --stringPtr;
+						--stringPtr;
+						--stringPtr;
 						(*stringPtr).prepend("IF(");
 						break;
 					case 4:  // sum
@@ -934,6 +935,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 						(*stringPtr).prepend("DB(");
 						break;
 					default:
+						(*stringPtr).prepend("not_handled_yet(");
 						kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
 						break;
 				}
@@ -1017,7 +1019,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			default:
 				kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 		}
 	}
