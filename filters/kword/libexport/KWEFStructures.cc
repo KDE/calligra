@@ -108,16 +108,17 @@ QString VariableData::getFieldValue(void) const
     return propertyMap["field:value"];
 }
 
-void VariableData::setFootnote(bool automatic,const QString& value, QValueList<ParaData>* para)
+void VariableData::setFootnote( const QString& notetype, const QString& automatic,const QString& value, QValueList<ParaData>* para)
 {
     propertyMap["footnote:value"] = value;
-    propertyMap["footnote:auto"]  = automatic ? "1" : "0";
+    propertyMap["footnote:auto"]  = automatic;
+    propertyMap["footnote:notetype"]  = notetype;
     footnotePara = para;
 }
 
 bool VariableData::getFootnoteAuto(void) const
 {
-    return propertyMap["footnote:auto"]=="1";
+    return propertyMap["footnote:auto"]=="auto";
 }
 
 QString VariableData::getFootnoteValue(void) const
@@ -125,6 +126,11 @@ QString VariableData::getFootnoteValue(void) const
     return propertyMap["footnote:value"];
 }
 
+bool VariableData::getFootnoteType( void ) const
+{
+    return propertyMap["footnote:notetype"] == "footnote";
+}
+ 
 QValueList<ParaData>* VariableData::getFootnotePara(void) const
 {
     return footnotePara;

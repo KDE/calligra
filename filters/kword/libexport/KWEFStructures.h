@@ -206,6 +206,9 @@ class FrameAnchor
       Table   table;
 };
 
+/**
+ * Data of variables
+ */
 class VariableData
 {
 public:
@@ -235,15 +238,25 @@ public:
     QString getFieldName(void) const;
     QString getFieldValue(void) const;
     /**
-     * Set parameters of a FOOTNOTE element
+     * Set parameters of a \<FOOTNOTE\> element
+     * @since 1.4 (change of parameters)
      */
-    void setFootnote(bool automatic, const QString& value, QValueList<ParaData>* para);
+    void setFootnote( const QString& notetype, const QString& automatic, const QString& value, QValueList<ParaData>* para );
+    /**
+     * Is the footnote an automatic one?
+     * @return true for an automatical foornote, false for a manual footnote
+     */
     bool getFootnoteAuto(void) const;
+    /// Get the value (counter) of the footnote
     QString getFootnoteValue(void) const;
+    /**
+     * Get type of footnote
+     * @return true for footnote, false for endnote
+     * @since 1.4
+     */
+    bool getFootnoteType( void ) const;
+    /// Paragrapgh of the footnote
     QValueList<ParaData>* getFootnotePara(void) const;
-    
-    /// \todo
-    bool getFootnoteType( void ) const { return true; }
 
     /**
      * Set generic variable data

@@ -391,12 +391,15 @@ static void ProcessFieldTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 {
     VariableData *variable = (VariableData *) tagData;
-    QString frameset, value, numberingtype;
+    QString frameset, value, numberingtype, notetype;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("value", value) );
-    attrProcessingList.append ( AttrProcessing ("numberingtype", numberingtype) );
-    attrProcessingList.append ( AttrProcessing ("frameset", frameset) );
+    attrProcessingList
+        << AttrProcessing ( "value", value )
+        << AttrProcessing ( "numberingtype", numberingtype )
+        << AttrProcessing ( "frameset", frameset )
+        << AttrProcessing ( "notetype", notetype )
+        ;
     ProcessAttributes (myNode, attrProcessingList);
 
     // search for frameset in the footnoteList
@@ -404,7 +407,7 @@ static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader 
     {
        if( leader->footnoteList[i].frameName == frameset )
        {
-           variable->setFootnote(numberingtype=="auto",value, &leader->footnoteList[i].para);
+           variable->setFootnote( notetype, numberingtype, value, &leader->footnoteList[i].para );
            break;
        }
     }
