@@ -77,7 +77,7 @@ KoSpell::KoSpell(QWidget *_parent, QObject *obj, const char *slot, KSpellConfig 
 
 	//won't be using the dialog in ksconfig, just the option values
 	if (_ksc!=0)
-		ksconfig = _ksc;
+		ksconfig = new KSpellConfig(_ksc);
 	else
 		ksconfig = new KSpellConfig;
 
