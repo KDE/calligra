@@ -205,24 +205,26 @@ public:
       This includes m_rowArray, the Rows and Cells but not m_colPositions and
       m_rowPositions, as they are not used during the traversal.
       The conditions include:
-      <ul>
-      <li>( A ) All positions in m_rowArray must be occupied by a valid cell, ie must
-      not be null.
-      <li>( B ) The Cell instance variables (m_row, m_rows, etc) must correctly
-      correspond to where the cells are in m_rowArray.
-      <li>( C ) The m_rows and m_cols instance variables of the table are also correct.
-      </ul>
+      <UL>
+      <LI>( A ) All positions in m_rowArray must be occupied by a valid cell, ie must
+      not be null.</LI>
+      <LI>( B ) The Cell instance variables (m_row, m_rows, etc) must correctly
+      correspond to where the cells are in m_rowArray.</LI>
+      <LI>( C ) The m_rows and m_cols instance variables of the table are also correct.</LI>
+      </UL>
       Taken together, these conditions are pretty much equivalent to the
       validate() function passing. These conditions may not hold in the middle
       of a method when table data structures are being manipulated.
 
       This table shows what conditions are necessary for each type of iterator:
-
-                                      A      B      C
-      TableIterator<VISIT_GRID>    |  x   |      |  x   |
-      TableIterator<VISIT_CELL>    |  x   |  x   |  x   |
-      TableIterator<CHECKED>       |      |      |  x   |
-      MarkedIterator               |  x   |      |  x   |
+        
+      <TABLE>
+      <TR><TD>                           </TD><TD>A</TD><TD>B</TD><TD>C</TD></TR>
+      <TR><TD>TableIterator\<VISIT_GRID\></TD><TD>x</TD><TD> </TD><TD>x</TD></TR>
+      <TR><TD>TableIterator\<VISIT_CELL\></TD><TD>x</TD><TD>x</TD><TD>x</TD></TR>
+      <TR><TD>TableIterator\<CHECKED\>   </TD><TD> </TD><TD> </TD><TD>x</TD></TR>
+      <TR><TD>MarkedIterator             </TD><TD>x</TD><TD> </TD><TD>x</TD></TR>
+      </TABLE>
 
       The only iterator that can be used when their are null positions in the
       table is the checked iterator.
