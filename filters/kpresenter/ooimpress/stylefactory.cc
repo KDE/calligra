@@ -19,6 +19,8 @@
 
 #include "stylefactory.h"
 
+#include <qcolor.h>
+
 #include <koUnit.h>
 #include <kdebug.h>
 
@@ -722,6 +724,46 @@ TextStyle::TextStyle( QDomElement & e, const uint index )
         m_font_size = QString( "%1pt" ).arg( e.attribute( "pointSize" ) );
     if ( e.hasAttribute( "color" ) )
         m_color = e.attribute( "color" );
+    if ( e.hasAttribute( "bold" ) && e.attribute( "bold" ) == "1" )
+        m_font_weight = "bold";
+    if ( e.hasAttribute( "italic" ) && e.attribute( "italic" ) == "1" )
+        m_font_style = "italic";
+    if ( e.hasAttribute( "strikeOut" ) )
+    {
+        if ( e.attribute( "strikeOut" ) == "single" )
+            m_text_crossing_out = "single-line";
+        else if ( e.attribute( "strikeOut" ) == "single-bold" )
+            m_text_crossing_out = "thick-line";
+        else if ( e.attribute( "strikeOut" ) == "double" )
+            m_text_crossing_out = "double-line";
+    }
+    if ( e.hasAttribute( "underline" ) )
+    {
+        QString underline = e.attribute( "underline" );
+        QString style = e.attribute( "underlinestyleline" );
+        m_text_underline_color = e.attribute( "underlinecolor" );
+
+        if ( style == "solid" )
+        {
+            if ( underline == "1" )
+                m_text_underline = "single";
+            else if ( underline == "single-bold" )
+                m_text_underline = "bold";
+            else if ( underline == "double" )
+                m_text_underline = "double";
+            else if ( underline == "wave" )
+                m_text_underline = "wave";
+        }
+        else if ( style == "dot" )
+        {
+            if ( underline == "1" )
+                m_text_underline = "dotted";
+            else if ( underline == "single-bold" )
+                m_text_underline = "bold-dotted";
+        }
+        else if ( style == "dash" )
+            m_text_underline = "dash";
+    }
 }
 
 void TextStyle::toXML( QDomDocument & doc, QDomElement & e ) const
@@ -1054,6 +1096,13 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
     m_text_indent = "0cm";
 
     QDomNode shadow = e.namedItem( "SHADOW" );
+    QDomNode indents = e.namedItem( "INDENTS" );
+    QDomNode offsets = e.namedItem( "OFFSETS" );
+    QDomNode leftBorder = e.namedItem( "LEFTBORDER" );
+    QDomNode rightBorder = e.namedItem( "RIGHTBORDER" );
+    QDomNode topBorder = e.namedItem( "TOPBORDER" );
+    QDomNode bottomBorder = e.namedItem( "BOTTOMBORDER" );
+    QDomNode lineSpacing = e.namedItem( "LINESPACING" );
 
     m_name = QString( "P%1" ).arg( index );
     if ( e.hasAttribute( "align" ) )
@@ -1082,6 +1131,49 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
         QString distance = QString( "%1pt" ).arg( s.attribute( "distance" ) );
         m_text_shadow = distance + " " + distance;
     }
+
+    if ( !indents.isNull() )
+    {
+        QDomElement i = indents.toElement();
+        m_margin_left = StyleFactory::toCM( i.attribute( "left" ) );
+        m_margin_right = StyleFactory::toCM( i.attribute( "right" ) );
+        m_text_indent = StyleFactory::toCM( i.attribute( "first" ) );
+    }
+
+    if ( !offsets.isNull() )
+    {
+        QDomElement o = offsets.toElement();
+        m_margin_top = StyleFactory::toCM( o.attribute( "before" ) );
+        m_margin_bottom = StyleFactory::toCM( o.attribute( "after" ) );
+    }
+
+    if ( !leftBorder.isNull() )
+        m_border_left = parseBorder( leftBorder.toElement() );
+    if ( !rightBorder.isNull() )
+        m_border_right = parseBorder( rightBorder.toElement() );
+    if ( !topBorder.isNull() )
+        m_border_top = parseBorder( topBorder.toElement() );
+    if ( !bottomBorder.isNull() )
+        m_border_bottom = parseBorder( bottomBorder.toElement() );
+
+    if ( !lineSpacing.isNull() )
+    {
+        QDomElement l = lineSpacing.toElement();
+        QString type = l.attribute( "type" );
+
+        if ( type == "single" )
+            m_line_height = "100%";
+        else if ( type == "oneandhalf" )
+            m_line_height = "150%";
+        else if ( type == "double" )
+            m_line_height = "200%";
+        else if ( type == "multiple" )
+            m_line_height = QString( "%1%" ).arg( l.attribute( "spacingvalue" ).toInt() * 100 );
+        else if ( type == "custom" )
+            m_line_spacing = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
+        else if ( type == "atleast" )
+            m_line_height_at_least = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
+    }
 }
 
 void ParagraphStyle::toXML( QDomDocument & doc, QDomElement & e ) const
@@ -1103,6 +1195,24 @@ void ParagraphStyle::toXML( QDomDocument & doc, QDomElement & e ) const
         properties.setAttribute( "text:enable-numbering", m_enable_numbering );
     if ( m_text_shadow != QString::null )
         properties.setAttribute( "fo:text-shadow", m_text_shadow );
+    if ( m_margin_top != QString::null )
+        properties.setAttribute( "fo:margin-top", m_margin_top );
+    if ( m_margin_bottom != QString::null )
+        properties.setAttribute( "fo:margin-bottom", m_margin_bottom );
+    if ( m_border_left != QString::null )
+        properties.setAttribute( "fo:border-left", m_border_left );
+    if ( m_border_right != QString::null )
+        properties.setAttribute( "fo:border-right", m_border_right );
+    if ( m_border_top != QString::null )
+        properties.setAttribute( "fo:border-top", m_border_top );
+    if ( m_border_bottom != QString::null )
+        properties.setAttribute( "fo:border-bottom", m_border_bottom );
+    if ( m_line_height != QString::null )
+        properties.setAttribute( "fo:line-height", m_line_height );
+    if ( m_line_height_at_least != QString::null )
+        properties.setAttribute( "style:line-height-at-least", m_line_height_at_least );
+    if ( m_line_spacing != QString::null )
+        properties.setAttribute( "style:line-spacing", m_line_spacing );
 
     style.appendChild( properties );
     e.appendChild( style );
@@ -1115,6 +1225,33 @@ bool ParagraphStyle::operator==( const ParagraphStyle & paragraphStyle ) const
              m_text_indent == paragraphStyle.m_text_indent &&
              m_text_align == paragraphStyle.m_text_align &&
              m_enable_numbering == paragraphStyle.m_enable_numbering &&
-             m_text_shadow == paragraphStyle.m_text_shadow );
+             m_text_shadow == paragraphStyle.m_text_shadow &&
+             m_margin_top == paragraphStyle.m_margin_top &&
+             m_margin_bottom == paragraphStyle.m_margin_bottom &&
+             m_border_left == paragraphStyle.m_border_left &&
+             m_border_right == paragraphStyle.m_border_right &&
+             m_border_top == paragraphStyle.m_border_top &&
+             m_border_bottom == paragraphStyle.m_border_bottom &&
+             m_line_height == paragraphStyle.m_line_height &&
+             m_line_height_at_least == paragraphStyle.m_line_height_at_least &&
+             m_line_spacing == paragraphStyle.m_line_spacing );
+}
+
+QString ParagraphStyle::parseBorder( QDomElement e )
+{
+    QString style;
+    int _style = e.attribute( "style" ).toInt();
+    if ( _style == 5 )
+        style = "double";
+    else
+        style = "solid";
+
+    QString width = StyleFactory::toCM( e.attribute( "width" ) );
+
+    QColor color( e.attribute( "red" ).toInt(),
+                  e.attribute( "green" ).toInt(),
+                  e.attribute( "blue" ).toInt() );
+
+    return QString( "%1 %2 %3" ).arg( width ).arg( style ).arg( color.name() );
 }
 

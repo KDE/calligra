@@ -207,9 +207,12 @@ public:
 
 private:
     ParagraphStyle() {};
+    QString parseBorder( QDomElement e );
 
     QString m_name, m_margin_left, m_margin_right, m_text_indent, m_text_align,
-        m_enable_numbering,  m_text_shadow;
+        m_enable_numbering,  m_text_shadow,  m_margin_top, m_margin_bottom,
+        m_border_left, m_border_right, m_border_top, m_border_bottom,
+        m_line_height, m_line_height_at_least, m_line_spacing;
 };
 
 class StyleFactory
