@@ -2422,7 +2422,7 @@ QPixmap KPresenterDoc::generatePreview( const QSize& size )
 
     QPixmap pix = KoDocument::generatePreview(size);
 
-    zoomHandler()->setZoomAndResolution(oldZoom, oldResX * 72, oldResY * 72);
+    zoomHandler()->setZoomAndResolution(oldZoom, int(oldResX * 72), int(oldResY * 72));
     newZoomAndResolution( false, false );
 
     return pix;
