@@ -22,8 +22,8 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
 
   QLabel *label;
 
-  IntegerWidget *opacity = new IntegerWidget( 0, 100, this );
-  opacity->setBackgroundColor( red );
+  IntegerWidget *opacity = new IntegerWidget( 0, 100, area );
+//opacity->setBackgroundColor( red );
   opacity->setTickmarks( QSlider::Below );
   opacity->setTickInterval( 10 );
   layout->addWidget( opacity, 0, 1 );
@@ -32,8 +32,8 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
   label->setBackgroundColor( blue );
   layout->addWidget( label, 0, 0 );
 
-  IntegerWidget *offset = new IntegerWidget( 0, 100, this, "offset" );
-  offset->setBackgroundColor( green );
+  IntegerWidget *offset = new IntegerWidget( 0, 100, area, "offset" );
+//offset->setBackgroundColor( green );
   offset->setTickmarks( QSlider::Below );
   offset->setTickInterval( 10 );
   layout->addWidget( offset, 1, 1 );
