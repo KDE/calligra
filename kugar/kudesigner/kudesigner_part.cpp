@@ -19,10 +19,4 @@
 
 #include <kudesigner_factory.h>
 
-extern "C"
-{
-    void* init_libkudesignerpart()
-    {
-        return new KudesignerFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkudesignerpart, KudesignerFactory )

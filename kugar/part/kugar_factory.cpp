@@ -24,17 +24,14 @@ KAboutData *KugarFactory::s_aboutdata = 0L;
 
 // The part's entry point.
 
-extern "C" void *init_libkugarpart()
-{
-    return new KugarFactory;
-}
+K_EXPORT_COMPONENT_FACTORY( libkugarpart, KugarFactory )
 
 
 // The factory ctor.
 
 KugarFactory::KugarFactory(QObject *parent, const char* name):KoFactory(parent,name)
 {
-	global();	
+	global();
 }
 
 KInstance* KugarFactory::global()

@@ -26,14 +26,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-extern "C"
-{
-    void* init_libkudesignerpart()
-    {
-        return new KudesignerFactory;
-    }
-}
-
 KInstance* KudesignerFactory::s_global = 0L;
 KAboutData* KudesignerFactory::s_aboutData = 0L;
 
@@ -62,7 +54,7 @@ KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
 
-    if (bWantKoDocument && (data.count()>0)) 
+    if (bWantKoDocument && (data.count()>0))
     {
 	for (QStringList::const_iterator it=data.begin();it!=data.end();++it)
 	{
