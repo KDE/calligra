@@ -1126,7 +1126,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
             setLastFormattedParag( cursor->parag() );
         }
     } break;
-    case ActionReturn:
+    case ActionReturn: {
 	checkUndoRedoInfo( cursor, UndoRedoInfo::Return );
 	if ( !undoRedoInfo.valid() ) {
 	    undoRedoInfo.id = cursor->parag()->paragId();
@@ -1136,10 +1136,20 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	}
 	undoRedoInfo.text += "\n";
 	cursor->splitAndInsertEmptyParag();
+	ASSERT( cursor->parag()->prev() );
 	if ( cursor->parag()->prev() )
             setLastFormattedParag( cursor->parag()->prev() );
+
         doUpdateCurrentFormat = false;
-        break;
+        KWStyle * style = static_cast<KWTextParag *>( cursor->parag()->prev() )->style();
+        if ( style )
+        {
+            KWStyle * newStyle = style->followingStyle();
+            if ( newStyle && style != newStyle ) // different "following style" applied
+                doUpdateCurrentFormat = true;
+        }
+
+    } break;
     case ActionKill:
 	checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
 	if ( !undoRedoInfo.valid() ) {
