@@ -1281,7 +1281,7 @@ void KWInsertRowCommand::execute()
 {
     kdDebug() << "KWInsertRowCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    if(m_inserted) 
+    if(m_inserted)
         m_pTable->reInsertRow(*m_rr);
     else {
         m_inserted = true;
@@ -1297,7 +1297,7 @@ void KWInsertRowCommand::unexecute()
 {
     kdDebug() << "KWInsertRowCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    
+
     doc->terminateEditing(m_pTable);
     m_pTable->deleteRow( m_rowPos, *m_rr);
 
@@ -1878,6 +1878,13 @@ void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParamet
     m_var->setNumberingType( _param.numberingType );
     m_var->setManualString( _param.manualString );
     m_var->setNumDisplay( -1 ); // force renumberFootNotes to recalc
+    if (  m_var->numberingType()== KWFootNoteVariable::Manual)
+    {
+        m_var->resize();
+        m_var->paragraph()->invalidate(0);
+        m_var->paragraph()->setChanged( true );
+    }
+
     KWTextFrameSet * frameset = dynamic_cast<KWTextFrameSet *>( m_doc->frameSet( 0 ));
     Q_ASSERT( frameset );
     if ( frameset)
