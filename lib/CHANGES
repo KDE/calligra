@@ -5,6 +5,9 @@ KOfficeUI:
 - Fix loading of icons when creating templates
 - Allow template icons up to 64x64 instead of 60x60 and scale better if too big
 
+KOfficeCore:
+- Support MS-DOS EPS files directly without stripping them internally.
+
 Changes after KOffice-1.3-rc1
 =============================
 KOfficeCore:
