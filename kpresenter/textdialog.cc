@@ -118,7 +118,7 @@ TextDialog::TextDialog( QWidget* parent,  const char* name, bool modal, WFlags f
     hbox_5->setMargin( 0 );
 
     TextLabel1_4 = new QLabel( GroupBox1, "TextLabel1_4" );
-    TextLabel1_4->setProperty( "text", i18n( "4&. Level:"  ) );
+    TextLabel1_4->setProperty( "text", i18n( "&4. Level:"  ) );
     hbox_5->addWidget( TextLabel1_4 );
 
     comboBullet4 = new QComboBox( FALSE, GroupBox1, "comboBullet4" );
