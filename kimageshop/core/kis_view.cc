@@ -285,10 +285,10 @@ void kisView::setupActions()
   m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
   m_tool_move->setExclusiveGroup( "tools" );
-  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KISBarIcon("viewmag"), 0, this,
+  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KISBarIcon("zoom"), 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
   m_tool_zoom->setExclusiveGroup( "tools" );
-  m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pen"), 0, this,
+  m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pencil"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
   m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,

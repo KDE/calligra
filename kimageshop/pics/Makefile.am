@@ -12,5 +12,7 @@ data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
             dock.png layer_dialog.png color_dialog.png brush_dialog.png \
 	    gradient_dialog.png gradienteditor_dialog.png dialog.png \
 	    colorpicker.png gradient.png tab_first.png tab_left.png \
-	    tab_right.png tab_last.png
+	    tab_right.png tab_last.png move.png paintbrush.png pencil.png \
+	    contiguous.png elliptical.png crop.png fill.png handdrawn.png \
+	    rectangular.png text.png zoom.png
 
