@@ -19,6 +19,8 @@
 
 #include "kchart_shell.h"
 #include "kchart_part.h"
+#include "kchart_factory.h"
+#include <kstddirs.h>
 
 KChartShell::KChartShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
@@ -31,7 +33,9 @@ KChartShell::~KChartShell()
 
 QString KChartShell::configFile() const
 {
-    return readConfigFile( "kchart_shell.rc" );
+    return readConfigFile( locate( "data", "kchart/kchart.rc", 
+			  KChartFactory::global() ) );
+    //    return readConfigFile( "kchart_shell.rc" );
 }
 
 KoDocument* KChartShell::createDoc()

@@ -7,6 +7,8 @@
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_shell.h"
+#include "kchart_factory.h"
+#include <kstddirs.h>
 
 #include <engine.h>
 #include <kchartparams.h>
@@ -118,7 +120,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 
 QString KChartPart::configFile() const
 {
-    return readConfigFile( "kchart.rc" );
+  //    return readConfigFile( "kchart.rc" );
+    return readConfigFile( locate( "data", "kchart/kchart.rc", 
+			  KChartFactory::global() ) );
 }
 
 
@@ -143,6 +147,9 @@ void KChartPart::saveConfig( KConfig *conf ) {
 
 /**
  * $Log$
+ * Revision 1.1  1999/10/20 10:07:32  kulow
+ * sync with canossa
+ *
  * Revision 1.15  1999/10/18 08:15:10  kalle
  * Pulled the colors (and some other stuff) into KChartParameter
  *

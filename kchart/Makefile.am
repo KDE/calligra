@@ -74,6 +74,9 @@ libkchart_la_METASOURCES = kchart_shell.moc kchart_part.moc \
 		sheetdlg.moc \
 		table.moc
 
+rcdir = $(kde_datadir)/kchart
+rc_DATA = kchart.rc                                           
+
 
 
 
