@@ -1148,6 +1148,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
 /*======================== align objects left ===================*/
 void KPrPage::alignObjsLeft()
 {
+    MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
     QPtrList<KPObject> _objects;
     QPtrList<KoPoint> _diffs;
@@ -1169,7 +1170,7 @@ void KPrPage::alignObjsLeft()
 
     if(newPosition)
     {
-        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, m_doc );
         m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
@@ -1183,6 +1184,7 @@ void KPrPage::alignObjsLeft()
 /*==================== align objects center h ===================*/
 void KPrPage::alignObjsCenterH()
 {
+    MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
     QPtrList<KPObject> _objects;
     QPtrList<KoPoint> _diffs;
@@ -1205,7 +1207,7 @@ void KPrPage::alignObjsCenterH()
     }
     if(newPosition)
     {
-        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
+        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
                                                  _diffs, _objects, m_doc );
         m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
@@ -1220,6 +1222,7 @@ void KPrPage::alignObjsCenterH()
 /*==================== align objects right ======================*/
 void KPrPage::alignObjsRight()
 {
+    MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
     QPtrList<KPObject> _objects;
     QPtrList<KoPoint> _diffs;
@@ -1239,7 +1242,7 @@ void KPrPage::alignObjsRight()
     }
     if(newPosition)
     {
-        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, m_doc);
+        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, m_doc);
         m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
@@ -1253,6 +1256,7 @@ void KPrPage::alignObjsRight()
 /*==================== align objects top ========================*/
 void KPrPage::alignObjsTop()
 {
+    MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
     QPtrList<KPObject> _objects;
     QPtrList<KoPoint> _diffs;
@@ -1275,7 +1279,7 @@ void KPrPage::alignObjsTop()
     }
     if(newPosition)
     {
-        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, m_doc );
         m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
@@ -1289,6 +1293,7 @@ void KPrPage::alignObjsTop()
 /*==================== align objects center v ===================*/
 void KPrPage::alignObjsCenterV()
 {
+    MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
     QPtrList<KPObject> _objects;
     QPtrList<KoPoint> _diffs;
@@ -1313,7 +1318,7 @@ void KPrPage::alignObjsCenterV()
     }
     if(newPosition)
     {
-        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, m_doc );
         m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
@@ -1326,6 +1331,7 @@ void KPrPage::alignObjsCenterV()
 
 void KPrPage::alignObjsBottom()
 {
+    MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
     QPtrList<KPObject> _objects;
     QPtrList<KoPoint> _diffs;
@@ -1348,7 +1354,7 @@ void KPrPage::alignObjsBottom()
 
     if(newPosition)
     {
-        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, m_doc );
         m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
