@@ -2,13 +2,12 @@ SUBDIRS = xrgbrender
 
 INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
-	-I$(top_srcdir)/lib/kopainter/support \
 	-I$(srcdir)/xrgbrender \
 	-I$(srcdir)/../core \
-	-DLIBART_COMPILATION \
+	$(LIBART_CFLAGS) \
 	$(all_includes)
 
-libvpainter_la_LIBADD = $(top_builddir)/lib/kopainter/support/libsupport.la ./xrgbrender/libkarbonxrgbrender.la
+libvpainter_la_LIBADD = $(LIBART_LIBS) ./xrgbrender/libkarbonxrgbrender.la
 
 noinst_LTLIBRARIES = libvpainter.la
 
@@ -16,11 +15,15 @@ noinst_HEADERS = \
 	vpainter.h \
 	vpainterfactory.h \
 	vqpainter.h \
+	art_rgb_svp.h \
+	art_rgb.h \
 	vkopainter.h
 
 libvpainter_la_SOURCES = \
 	vpainterfactory.cc \
 	vqpainter.cc \
+	art_rgb_svp.c \
+	art_rgb.c \
 	vkopainter.cc
 
 libvpainter_la_METASOURCES = \

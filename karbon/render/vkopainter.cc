@@ -15,22 +15,22 @@
 #include <qpointarray.h>
 #include <qimage.h>
 
-#include <art_vpath.h>
-#include <art_bpath.h>
-#include <art_vpath_bpath.h>
-#include <art_svp_vpath.h>
-#include <art_svp_vpath_stroke.h>
-#include <art_svp.h>
-#include <art_svp_ops.h>
-#include <art_affine.h>
-#include <art_rgb_svp.h>
-#include <art_rect_svp.h>
-#include <art_svp_intersect.h>
-#include <art_pathcode.h>
-#include <art_vpath_dash.h>
-#include <art_rgb_affine.h>
-#include <art_render_gradient.h>
-#include <art_render_svp.h>
+#include "libart_lgpl/art_vpath.h"
+#include <libart_lgpl/art_bpath.h>
+#include <libart_lgpl/art_vpath_bpath.h>
+#include <libart_lgpl/art_svp_vpath.h>
+#include <libart_lgpl/art_svp_vpath_stroke.h>
+#include <libart_lgpl/art_svp.h>
+#include <libart_lgpl/art_svp_ops.h>
+#include <libart_lgpl/art_affine.h>
+#include "art_rgb_svp.h"
+#include <libart_lgpl/art_rect_svp.h>
+#include <libart_lgpl/art_svp_intersect.h>
+#include <libart_lgpl/art_pathcode.h>
+#include <libart_lgpl/art_vpath_dash.h>
+#include <libart_lgpl/art_rgb_affine.h>
+#include <libart_lgpl/art_render_gradient.h>
+#include <libart_lgpl/art_render_svp.h>
 
 #include <X11/Xlib.h>
 
@@ -456,7 +456,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		{
 			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
 			if( x0 != y0 && x1 != y1 )
-				art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+				art_rgb_svp_alpha_( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 			art_svp_free( strokeSvp );
 		}
 	}
@@ -469,7 +469,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		{
 			clampToViewport( *fillSvp, x0, y0, x1, y1 );
 			if( x0 != x1 && y0 != y1 )
-				art_rgb_svp_alpha( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+				art_rgb_svp_alpha_( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 			art_svp_free( fillSvp );
 		}
 	}
