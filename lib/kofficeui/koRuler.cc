@@ -167,7 +167,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     QFont font = QFont( "helvetica", 8 ); // Ugh... hardcoded (Werner)
     QFontMetrics fm( font );
 
-    p.setBrush( Qt::white );
+    p.setBrush( colorGroup().brush( QColorGroup::Base ) );
 
     // Draw white rect
     QRect r;
@@ -228,13 +228,13 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     // Draw ending bar (at page width)
     int constant=zoomIt(1);
     p.drawLine( totalw - diffx + constant, 1, totalw - diffx + constant, height() - 1 );
-    p.setPen( Qt::white );
+    p.setPen( colorGroup().color( QColorGroup::Base ) );
     p.drawLine( totalw - diffx, 1, totalw - diffx, height() - 1 );
 
     // Draw starting bar (at 0)
-    p.setPen( Qt::black );
+    p.setPen( colorGroup().color( QColorGroup::Text ) );
     p.drawLine( -diffx, 1, -diffx, height() - 1 );
-    p.setPen( Qt::white );
+    p.setPen( colorGroup().color( QColorGroup::Base ) );
     p.drawLine( -diffx - constant, 1, -diffx - constant, height() - 1 );
 
     // Draw the indents triangles
@@ -251,7 +251,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
-        p.setPen( Qt::black );
+        p.setPen( colorGroup().color( QColorGroup::Text ) );
         p.drawLine( mposX, 1, mposX, height() - 1 );
     }
     hasToDelete = false;
@@ -269,7 +269,7 @@ void KoRuler::drawTabs( QPainter &_painter )
 {
     int ptPos = 0;
 
-    _painter.setPen( QPen( Qt::black, 2, SolidLine ) );
+    _painter.setPen( QPen( colorGroup().color( QColorGroup::Text ), 2, SolidLine ) );
 
     KoTabulatorList::Iterator it = d->tabList.begin();
     for ( ; it != d->tabList.end() ; it++ ) {
@@ -294,7 +294,8 @@ void KoRuler::drawTabs( QPainter &_painter )
             ptPos -= 10;
             _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
             _painter.drawLine( ptPos + 20 / 2, 4, ptPos + 20 / 2, height() - 4 );
-            _painter.fillRect( ptPos + 20 / 2 + 2, height() - 9, 3, 3, black );
+            _painter.fillRect( ptPos + 20 / 2 + 2, height() - 9, 3, 3,
+                               colorGroup().color( QColorGroup::Text ) );
         } break;
         default: break;
         }
@@ -314,7 +315,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     QFont font = QFont( "helvetica", 8 );  // Hardcode the size? (Werner)
     QFontMetrics fm( font );
 
-    p.setBrush( Qt::white );
+    p.setBrush( colorGroup().brush( QColorGroup::Base ) );
 
     // Draw white rect
     QRect r;
@@ -372,18 +373,18 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     // Draw ending bar (at page height)
     p.drawLine( 1, totalh - diffy + 1, width() - 1, totalh - diffy + 1 );
-    p.setPen( Qt::white );
+    p.setPen( colorGroup().color( QColorGroup::Base ) );
     p.drawLine( 1, totalh - diffy, width() - 1, totalh - diffy );
 
     // Draw starting bar (at 0)
-    p.setPen( Qt::black );
+    p.setPen( colorGroup().color( QColorGroup::Text ) );
     p.drawLine( 1, -diffy, width() - 1, -diffy );
-    p.setPen( Qt::white );
+    p.setPen( colorGroup().color( QColorGroup::Base ) );
     p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
 
     // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
-        p.setPen( Qt::black );
+        p.setPen( colorGroup().color( QColorGroup::Text ) );
         p.drawLine( 1, mposY, width() - 1, mposY );
     }
     hasToDelete = false;
