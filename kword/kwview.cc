@@ -1574,7 +1574,7 @@ void KWView::viewTextMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal ); // share the same zoom
         setZoom( m_zoomViewModeNormal, false );
-        m_gui->canvasWidget()->switchViewMode( new KWViewModeText( m_gui->canvasWidget() ) );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModeText( m_doc ) );
     }
     else
         actionViewTextMode->setChecked( true ); // always one has to be checked !
@@ -1589,7 +1589,7 @@ void KWView::viewPageMode()
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
         slotUpdateRuler();
-        m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_gui->canvasWidget()) );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_doc ) );
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -1603,7 +1603,7 @@ void KWView::viewPreviewMode()
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
         slotUpdateRuler();
-        m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_gui->canvasWidget(),m_doc->getNbPagePerRow() ) );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_doc, m_doc->getNbPagePerRow() ) );
     }
     else
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !
@@ -2276,7 +2276,7 @@ void KWView::extraCreateTemplate()
     painter.begin( &pix );
     QRect pageRect( 0, 0, m_doc->paperWidth(), m_doc->paperHeight() );
 
-    KWViewModeNormal * viewMode = new KWViewModeNormal( 0L );
+    KWViewModeNormal * viewMode = new KWViewModeNormal( m_doc );
     QColorGroup cg = QApplication::palette().active();
 
     // Draw all framesets contents

@@ -51,7 +51,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_currentFrameSetEdit = 0L;
     m_mousePressed = false;
     m_imageDrag = false;
-    m_viewMode = new KWViewModeNormal( this ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
+    m_viewMode = new KWViewModeNormal( m_doc ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
     cmdMoveFrame=0L;
 
     // Default table parameters.
@@ -128,7 +128,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
     QRect crect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
-    drawFrameSet( fs, &p, crect, true, resetChanged );
+    drawFrameSet( fs, &p, crect, true, resetChanged, m_viewMode );
 }
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
@@ -143,7 +143,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     if ( m_currentFrameSetEdit )
         m_currentFrameSetEdit->focusOutEvent();
     m_printing = true;
-    KWViewMode *viewMode = new KWViewModePrint;
+    KWViewMode *viewMode = new KWViewModePrint( m_doc );
 
     QValueList<int> pageList;
 #ifndef HAVE_KDEPRINT

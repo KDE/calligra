@@ -2010,7 +2010,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     /*painter.translate( -leftBorder(), -topBorder() );
     rect.moveBy( leftBorder(), topBorder() );*/
 
-    KWViewModeEmbedded * viewMode = new KWViewModeEmbedded();
+    KWViewModeEmbedded * viewMode = new KWViewModeEmbedded( this );
 
     QColorGroup cg = QApplication::palette().active();
 
