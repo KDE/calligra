@@ -102,6 +102,8 @@ public:
      */
     QLabel * statusBarLabel();
 
+    void setMaxRecentItems(uint _number);
+
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.

@@ -1043,4 +1043,9 @@ QString KoMainWindow::nativeFormatPattern()
     return *mimeType->patterns().begin();
 }
 
+void KoMainWindow::setMaxRecentItems(uint _number)
+{
+        m_recent->setMaxItems( _number );
+}
+
 #include <koMainWindow.moc>
