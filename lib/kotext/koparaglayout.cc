@@ -401,7 +401,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     }
 
     KoTabulatorList tabList = layout.tabList();
-    KoTabulatorList::Iterator it = tabList.begin();
+    KoTabulatorList::ConstIterator it = tabList.begin();
     for ( ; it != tabList.end() ; it++ )
     {
         element = doc.createElement( "TABULATOR" );
