@@ -29,6 +29,7 @@ private:
   QLineEdit *y_interval;
   QLineEdit *y_max;
   QLineEdit *y_min;
+  QLineEdit *ylabel_fmt;
   QSpinBox *angle;
 };
 

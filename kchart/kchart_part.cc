@@ -239,11 +239,27 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   graph.setAttribute("border",(int)_params->border);
   graph.setAttribute("transbg",(int)_params->transparent_bg);
   params.appendChild(graph);
-
+  //graph params
   QDomElement graphparams = doc.createElement("graphparams");
-  graphparams.setAttribute("3ddepth",(double)_params->_3d_depth);
-  graphparams.setAttribute("3dangle",(short)_params->_3d_angle);
+  graphparams.setAttribute("depth3d",(double)_params->_3d_depth);
+  graphparams.setAttribute("angle3d",(short)_params->_3d_angle);
+  graphparams.setAttribute("barwidth",(short)_params->bar_width);
   params.appendChild(graphparams);
+  //graph color
+  QDomElement graphcolor = doc.createElement("graphcolor");
+  graphcolor.setAttribute( "bgcolor", _params->BGColor.name() );
+  graphcolor.setAttribute( "gridcolor", _params->GridColor.name() );
+  graphcolor.setAttribute( "linecolor", _params->LineColor.name() );
+  graphcolor.setAttribute( "plotcolor", _params->PlotColor.name() );
+  graphcolor.setAttribute( "volcolor", _params->VolColor.name() );
+  graphcolor.setAttribute( "titlecolor", _params->TitleColor.name() );
+  graphcolor.setAttribute( "xtitlecolor", _params->XTitleColor.name() );
+  graphcolor.setAttribute( "ytitlecolor", _params->YTitleColor.name() );
+  graphcolor.setAttribute( "ytitle2color", _params->YTitle2Color.name() );
+  graphcolor.setAttribute( "xlabelcolor", _params->XLabelColor.name() );
+  graphcolor.setAttribute( "ylabelcolor", _params->YLabelColor.name() );
+  graphcolor.setAttribute( "ylabel2color", _params->YLabel2Color.name() );
+  params.appendChild(graphcolor);
 
   cerr << "Ok, till here!!!";
   QBuffer buffer;
@@ -361,7 +377,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 		_params->setYTitleFont(font.toFont());
         }
   QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
-    if ( !ytitlefont.isNull())
+    if ( !yaxis.isNull())
         {
         if(yaxis.hasAttribute( "yinterval" ))
                 {
@@ -424,17 +440,74 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
                 }
         }
   QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
-  if(!graph.isNull())
+  if(!graphparams.isNull())
         {
-         if(graph.hasAttribute( "3ddept" ))
+         if(graphparams.hasAttribute( "dept3d" ))
                 {
-                _params->_3d_depth=graph.attribute("3ddept").toDouble( &ok );
+                _params->_3d_depth=graphparams.attribute("dept3d").toDouble( &ok );
                 if(!ok) return false;
                 }
-         if(graph.hasAttribute( "3dangle" ))
+         if(graphparams.hasAttribute( "angle3d" ))
                 {
-                _params->_3d_angle=graph.attribute("3dangle").toShort( &ok );
+                _params->_3d_angle=graphparams.attribute("angle3d").toShort( &ok );
                 if(!ok) return false;
+                }
+         if(graphparams.hasAttribute( "barwidth" ))
+                {
+                _params->bar_width=graphparams.attribute("barwidth").toShort( &ok );
+                if(!ok) return false;
+                }
+        }
+   QDomElement graphcolor = params.namedItem( "graphcolor" ).toElement();
+   if(!graphcolor.isNull())
+        { cout <<"Chargement des couleurs\n";
+         if(graphcolor.hasAttribute( "bgcolor" ))
+                {
+                _params->BGColor= QColor( graphcolor.attribute( "bgcolor" ) );
+                }
+         if(graphcolor.hasAttribute( "gridcolor" ))
+                {
+                _params->GridColor= QColor( graphcolor.attribute( "gridcolor" ) );
+                }
+         if(graphcolor.hasAttribute( "linecolor" ))
+                {
+                _params->LineColor= QColor( graphcolor.attribute( "linecolor" ) );
+                }
+         if(graphcolor.hasAttribute( "plotcolor" ))
+                {
+                _params->PlotColor= QColor( graphcolor.attribute( "plotcolor" ) );
+                }
+         if(graphcolor.hasAttribute( "volcolor" ))
+                {
+                _params->VolColor= QColor( graphcolor.attribute( "volcolor" ) );
+                }
+         if(graphcolor.hasAttribute( "titlecolor" ))
+                {
+                _params->TitleColor= QColor( graphcolor.attribute( "titlecolor" ) );
+                }
+         if(graphcolor.hasAttribute( "xtitlecolor" ))
+                {
+                _params->XTitleColor= QColor( graphcolor.attribute( "xtitlecolor" ) );
+                }
+         if(graphcolor.hasAttribute( "ytitlecolor" ))
+                {
+                _params->YTitleColor= QColor( graphcolor.attribute( "ytitlecolor" ) );
+                }
+         if(graphcolor.hasAttribute( "ytitle2color" ))
+                {
+                _params->YTitle2Color= QColor( graphcolor.attribute( "ytitle2color" ) );
+                }
+         if(graphcolor.hasAttribute( "xlabelcolor" ))
+                {
+                _params->XLabelColor= QColor( graphcolor.attribute( "xlabelcolor" ) );
+                }
+         if(graphcolor.hasAttribute( "ylabelcolor" ))
+                {
+                _params->YLabelColor= QColor( graphcolor.attribute( "ylabelcolor" ) );
+                }
+         if(graphcolor.hasAttribute( "ylabel2color" ))
+                {
+                _params->YLabel2Color= QColor( graphcolor.attribute( "ylabel2color" ) );
                 }
         }
   return true;
@@ -476,6 +549,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.14  2000/01/04 21:02:31  mlaurent
+ * Start save parameters in file
+ *
  * Revision 1.13  2000/01/03 20:26:42  mlaurent
  * Improved kchartWizard and bugfix
  *
