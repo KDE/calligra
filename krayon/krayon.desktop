@@ -36,7 +36,5 @@ Type=Application
 Icon=krayon
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-krayon
-
-
-KDE-X-StartupNotify=true
+X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
