@@ -711,3 +711,6 @@ Speed up KSpreadTextEditor::checkChoose(), might fix i18n problem as well
 -Now kspread support Date
 Date is saving in "international format", date can read in each language.
 
+2000-07-01-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Add new format : Fraction format (1/2,1/4,1/8,1/16,1/10,1/100)

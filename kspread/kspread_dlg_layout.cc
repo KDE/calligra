@@ -602,7 +602,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     //box = new QGroupBox( this, "Box");
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    grid = new QGridLayout(grp,6,1,15,7);
+    grid = new QGridLayout(grp,6,2,15,7);
     grp->setRadioButtonExclusive( TRUE );
     number=new QRadioButton(i18n("Number"),grp);
     grid->addWidget(number,0,0);
@@ -616,11 +616,14 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     date=new QRadioButton(i18n("Date Format"),grp);
     grid->addWidget(date,3,0);
 
-    shortdate=new QRadioButton(i18n("Date Format Short"),grp);
-    grid->addWidget(shortdate,4,0);
-
     scientific=new QRadioButton(i18n("Scientific"),grp);
-    grid->addWidget(scientific,5,0);
+    grid->addWidget(scientific,4,0);
+
+    fraction=new QRadioButton(i18n("Fraction"),grp);
+    grid->addWidget(fraction,5,0);
+
+    listFormat=new QListBox(grp);
+    grid->addMultiCellWidget(listFormat,0,5,1,1);
     layout->addWidget(grp);
 
     if(!dlg->bFormatNumber)
@@ -635,17 +638,80 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
                 money->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::Scientific)
                 scientific->setChecked(true);
-        else if(dlg->formatNumber==KSpreadCell::ShortDate)
-                shortdate->setChecked(true);
-        else if(dlg->formatNumber==KSpreadCell::TextDate)
+        else if(dlg->formatNumber==KSpreadCell::TextDate ||
+        dlg->formatNumber==KSpreadCell::ShortDate)
                 date->setChecked(true);
-
+        else if(dlg->formatNumber==KSpreadCell::fraction_half ||
+        dlg->formatNumber==KSpreadCell::fraction_quarter ||
+        dlg->formatNumber==KSpreadCell::fraction_eighth ||
+        dlg->formatNumber==KSpreadCell::fraction_sixteenth ||
+        dlg->formatNumber==KSpreadCell::fraction_tenth ||
+        dlg->formatNumber==KSpreadCell::fraction_hundredth )
+                fraction->setChecked(true);
         }
-    //date->setEnabled(false);
-
+    connect(fraction,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(money,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(date,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(scientific,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(number,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(percent,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    slotChangeState();
     this->resize( 400, 400 );
 }
 
+void CellLayoutPageFloat::slotChangeState()
+{
+QStringList list;
+listFormat->clear();
+if(number->isChecked())
+        listFormat->setEnabled(false);
+else if(percent->isChecked())
+        listFormat->setEnabled(false);
+else if(money->isChecked())
+        listFormat->setEnabled(false);
+else if(scientific->isChecked())
+        listFormat->setEnabled(false);
+else if(date->isChecked())
+        {
+        listFormat->setEnabled(true);
+        list+=KGlobal::locale()->formatDate(QDate::currentDate(),true);
+        list+=KGlobal::locale()->formatDate(QDate::currentDate(),false);
+        listFormat->insertStringList(list);
+        if( dlg->formatNumber==KSpreadCell::ShortDate )
+                listFormat->setCurrentItem(0);
+        else if(dlg->formatNumber==KSpreadCell::TextDate)
+                listFormat->setCurrentItem(1);
+        else
+                listFormat->setCurrentItem(0);
+        }
+else if(fraction->isChecked())
+        {
+        listFormat->setEnabled(true);
+        list+="1/2";
+        list+="1/4";
+        list+="1/8";
+        list+="1/16";
+        list+="1/10";
+        list+="1/100";
+        listFormat->insertStringList(list);
+        if(dlg->formatNumber==KSpreadCell::fraction_half)
+                listFormat->setCurrentItem(0);
+        else if(dlg->formatNumber==KSpreadCell::fraction_quarter)
+                listFormat->setCurrentItem(1);
+        else if(dlg->formatNumber==KSpreadCell::fraction_eighth )
+                listFormat->setCurrentItem(2);
+        else if(dlg->formatNumber==KSpreadCell::fraction_sixteenth )
+                listFormat->setCurrentItem(3);
+        else if(dlg->formatNumber==KSpreadCell::fraction_tenth )
+                listFormat->setCurrentItem(4);
+        else if(dlg->formatNumber==KSpreadCell::fraction_hundredth )
+                listFormat->setCurrentItem(5);
+        else
+                listFormat->setCurrentItem(0);
+        }
+
+
+}
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 {
     if ( strcmp( postfix->text(), dlg->postfix.data() ) != 0 )
@@ -694,10 +760,28 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
         _obj->setFormatNumber(KSpreadCell::Percentage);
         _obj->setFaktor(100.0);
         }
-    else if(shortdate->isChecked())
-        _obj->setFormatNumber(KSpreadCell::ShortDate);
+    else if(fraction->isChecked())
+        {
+        if( listFormat->currentItem()==0)
+                _obj->setFormatNumber(KSpreadCell::fraction_half);
+        else if( listFormat->currentItem()==1)
+                _obj->setFormatNumber(KSpreadCell::fraction_quarter);
+        else if( listFormat->currentItem()==2)
+                _obj->setFormatNumber(KSpreadCell::fraction_eighth);
+        else if( listFormat->currentItem()==3)
+                _obj->setFormatNumber(KSpreadCell::fraction_sixteenth);
+        else if( listFormat->currentItem()==4)
+                _obj->setFormatNumber(KSpreadCell::fraction_tenth);
+        else if( listFormat->currentItem()==5)
+                _obj->setFormatNumber(KSpreadCell::fraction_hundredth);
+        }
     else if(date->isChecked())
-        _obj->setFormatNumber(KSpreadCell::TextDate);
+        {
+        if( listFormat->currentItem()==0)
+                _obj->setFormatNumber(KSpreadCell::ShortDate );
+        else if(listFormat->currentItem()==1)
+                _obj->setFormatNumber(KSpreadCell::TextDate );
+        }
     else if(money->isChecked())
         _obj->setFormatNumber(KSpreadCell::Money);
     else if(scientific->isChecked())

@@ -225,7 +225,7 @@ void KSpreadCell::defaultStyle()
   m_textFont = font;
   setTextColor( QColor() );
   setBgColor( QColor() );
-  setFaktor( 1 );
+  setFaktor( 1.0);
   setPrecision( -1 );
   setPostfix( "" );
   setPrefix( "" );
@@ -1176,12 +1176,73 @@ switch( m_eFormatNumber)
         case ShortDate:
         case TextDate :
                 break;
+        case fraction_half:
+        case fraction_quarter:
+        case fraction_eighth:
+        case fraction_sixteenth:
+        case fraction_tenth:
+        case fraction_hundredth:
+                localizedNumber=createFractionFormat(value);
+                break;
         default :
                 kdDebug(36001)<<"Error in m_eFormatNumber\n";
                 break;
         }
 //kdDebug(36001)<<"localizedNumber : "<<localizedNumber.ascii()<<endl;
 return localizedNumber;
+}
+
+QString KSpreadCell::createFractionFormat(double value)
+{
+double result=value-floor(value);
+int index=0;
+QString tmp;
+if(result==0)
+        {
+        tmp=tmp.setNum(value);
+        return  tmp;
+        }
+else
+        {
+        switch( m_eFormatNumber)
+                {
+                case fraction_half:
+                        index=2;
+                        break;
+                case fraction_quarter:
+                        index=4;
+                        break;
+                case fraction_eighth:
+                        index=8;
+                        break;
+                case fraction_sixteenth:
+                        index=16;
+                        break;
+                case fraction_tenth:
+                        index=10;
+                        break;
+                case fraction_hundredth:
+                        index=100;
+                        break;
+                default:
+                        kdDebug(36001)<<"Error in Fraction format\n";
+                        break;
+                }
+        double calc=0;
+        int index1=1;
+        double diff=result;
+        for(int i=1;i<index;i++)
+                {
+                calc=i*1.0/index;
+                if(fabs(result-calc)<diff)
+                        {
+                        index1=i;
+                        diff=fabs(result-calc);
+                        }
+                }
+        tmp=tmp.setNum(floor(value))+" "+tmp.setNum(index1)+"/"+tmp.setNum(index);
+        return(tmp);
+        }
 }
 
 void KSpreadCell::verifyCondition()
@@ -2929,13 +2990,13 @@ void KSpreadCell::updateDepending()
 
 void KSpreadCell::checkValue()
 {
+    m_bValue = false;
+    m_dValue = 0;
+    m_bBool = false;
+    m_bDate = false;
     // If the input is empty, we dont have a value
     if ( m_strText.isEmpty() )
     {
-      m_bValue = false;
-      m_dValue = 0;
-      m_bBool = false;
-      m_bDate = false;
       m_strOutText = "";
       return;
     }
@@ -2951,27 +3012,20 @@ void KSpreadCell::checkValue()
     // If the output is empty, we dont have a value
     if ( p == 0L )
     {
-      m_bValue = false;
-      m_bBool = false;
-      m_bDate = false;
       return;
     }
 
     // Test for boolean
     if ( strcasecmp( p, "true") == 0 )
     {
-      m_bValue = false;
       m_dValue = 1.0;
       m_bBool = true;
-      m_bDate = false;
       return;
     }
     else if ( strcasecmp( p, "false" ) == 0 )
     {
-      m_bValue = false;
       m_dValue = 0.0;
       m_bBool = true;
-      m_bDate = false;
       return;
     }
     m_bBool = false;
@@ -2999,8 +3053,6 @@ void KSpreadCell::checkValue()
     if ( m_bValue )
         {
 	m_dValue = atof( ptext );
-        m_bBool = false;
-        m_bDate = false;
         return;
         }
 
@@ -3015,8 +3067,6 @@ void KSpreadCell::checkValue()
         if(ok)
                 {
                 m_bValue=true;
-                m_bBool = false;
-                m_bDate = false;
                 m_dValue=val;
                 m_eFormatNumber=Percentage;
                 m_strText=tmp.setNum(m_dValue);
@@ -3041,8 +3091,6 @@ void KSpreadCell::checkValue()
                 if(ok)
                         {
                         m_bValue=true;
-                        m_bBool = false;
-                        m_bDate = false;
                         m_dValue=val;
                         m_eFormatNumber=Money;
                         m_strText=tmp.setNum(m_dValue);
@@ -3059,8 +3107,6 @@ void KSpreadCell::checkValue()
                 if(ok)
                         {
                         m_bValue=true;
-                        m_bBool = false;
-                        m_bDate = false;
                         m_dValue=val;
                         m_eFormatNumber=Money;
                         m_strText=tmp.setNum(m_dValue);
@@ -3074,21 +3120,12 @@ void KSpreadCell::checkValue()
     if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
         {
         m_bDate = true;
-        m_bValue = false;
         m_dValue = 0;
-        m_bBool = false;
         if( m_eFormatNumber!=TextDate)
                 m_eFormatNumber=ShortDate;
         m_Date=tmpDate;
         m_strText=KGlobal::locale()->formatDate(m_Date,true); //short format date
         return;
-        }
-    else
-        {
-        m_bDate = false;
-        m_bValue = false;
-        m_dValue = 0;
-        m_bBool = false;
         }
     /* if ( old_value != bValue )
 	displayDirtyFlag = TRUE; */

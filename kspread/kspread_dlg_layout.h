@@ -189,10 +189,14 @@ protected:
  */
 class CellLayoutPageFloat : public QWidget
 {
+    Q_OBJECT
 public:
     CellLayoutPageFloat( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
+
+public slots:
+    void slotChangeState();
 
 protected:
     QLineEdit* postfix;
@@ -201,10 +205,11 @@ protected:
     QComboBox *format;
     QRadioButton *number;
     QRadioButton *percent;
-    QRadioButton *shortdate;
     QRadioButton *date;
     QRadioButton *money;
     QRadioButton *scientific;
+    QRadioButton *fraction;
+    QListBox *listFormat;
     CellLayoutDlg *dlg;
 };
 

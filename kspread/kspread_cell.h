@@ -117,7 +117,9 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50 };
+    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
+     fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
+     fraction_tenth=74,fraction_hundredth=75};
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     /**
@@ -650,7 +652,7 @@ public:
     formatNumber getFormatNumber(){return  m_eFormatNumber;}
 
     QString createFormat(double value);
-
+    QString createFractionFormat(double value);
     /**
      * Used for comparing cells (when sorting)
      */
