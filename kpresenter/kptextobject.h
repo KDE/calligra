@@ -109,7 +109,7 @@ public:
 			int to /* default length()-2 */ );
     KoParagLayout loadParagLayout( QDomElement & parentElem);
 
-    KoTextFormat *loadFormat( QDomElement &n );
+    KoTextFormat loadFormat( QDomElement &n );
 
 signals:
     void repaintChanged( KPTextObject* );

@@ -1595,19 +1595,23 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
     QString text;
 
     QValueList<QDomElement> listParagraphs;
-    QDomElement paragraph = elem.firstChild().toElement();
+    QDomElement paragElem = elem.firstChild().toElement();
     bool first = true;
-    for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
+    for ( ; !paragElem.isNull() ; paragElem = paragElem.nextSibling().toElement() )
     {
-        if ( paragraph.tagName() == "P" )
+        if ( paragElem.tagName() == "P" )
         {
-            QString s = paragraph.namedItem( "TEXT" ).toElement().text();
+            QDomElement n = paragElem.firstChild().toElement();
+            while ( !n.isNull() ) {
+                if ( n.tagName() == "TEXT" )
+                    text += n.firstChild().toText().data();
+                n = n.nextSibling().toElement();
+            }
+            listParagraphs.append( paragElem );
             if ( !first )
                 text += '\n';
             else
                 first = false;
-            text += s;
-            listParagraphs.append( paragraph );
         }
     }
     kdDebug() << "KPrPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
@@ -1626,47 +1630,45 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
     KoTextParag * parag = static_cast<KoTextParag *>(firstParag);
     //kdDebug() << "KPrPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
 
-    uint count = listParagraphs.count();
+    //uint count = listParagraphs.count();
     QValueList<QDomElement>::ConstIterator it = listParagraphs.begin();
     QValueList<QDomElement>::ConstIterator end = listParagraphs.end();
     for ( uint item = 0 ; it != end ; ++it, ++item )
     {
         if (!parag)
         {
-            kdWarning() << "KPrPasteTextCommand: parag==0L ! KWord bug, please report." << endl;
+            kdWarning() << "KPrPasteTextCommand: parag==0L ! KPresenter bug, please report." << endl;
             break;
         }
-        QDomElement paragElem = *it;
+        paragElem = *it;
         // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
-        if ( item == 0 && m_idx > 0 )
-        {
-            KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem);
-            parag->setParagLayout( paragLayout );
-
-            KoTextFormat *fm=textdoc->textObject()->loadFormat( paragElem );
-            kdDebug()<<"format :"<<fm->key()<<endl;
-
-            int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
-            parag->setFormat( m_idx, endIndex - m_idx, fm, TRUE );
-
-        }
+        if ( item == 0 && m_idx > 0 ) { }
         else
         {
-
             if ( item == 0 ) // This paragraph existed, store its parag layout
                 m_oldParagLayout = parag->paragLayout();
 
             KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem);
             parag->setParagLayout( paragLayout );
-            // Last paragraph: some of the text might be from before the paste
-            int len = (item == count-1) ? c->index() : parag->string()->length();
-            // Apply default format
-            parag->setFormat( 0, len, textdoc->textObject()->loadFormat( paragElem ), TRUE );
+        }
+        // Now load (parse) and apply the character formatting
+        QDomElement n = paragElem.firstChild().toElement();
+        int i = 0;
+        if ( item == 0 && m_idx > 0 )
+            i = m_idx;
+        while ( !n.isNull() ) {
+            if ( n.tagName() == "TEXT" ) {
+                QString txt = n.firstChild().toText().data();
+                KoTextFormat fm = textdoc->textObject()->loadFormat( n );
+                parag->setFormat( i, txt.length(), textdoc->formatCollection()->format( &fm ) );
+                i += txt.length();
+            }
+            n = n.nextSibling().toElement();
         }
         parag->format();
         parag->setChanged( TRUE );
         parag = static_cast<KoTextParag *>(parag->next());
-        kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
+        //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();

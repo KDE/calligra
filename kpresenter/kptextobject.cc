@@ -138,7 +138,9 @@ void KPTextObject::setSize( int _width, int _height )
     if ( move )
         return;
 
+    kdDebug() << " KPTextObject::setSize -> setting doc width to " << KoTextZoomHandler::ptToLayoutUnit( _width ) << endl;
     textDocument()->setWidth( KoTextZoomHandler::ptToLayoutUnit( _width ) );
+    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
 }
@@ -149,7 +151,9 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     KPObject::resizeBy( _dx, _dy );
     if ( move )
         return;
+    kdDebug() << " KPTextObject::resizeBy -> setting doc width to " << KoTextZoomHandler::ptToLayoutUnit( getSize().width() ) << endl;
     textDocument()->setWidth( KoTextZoomHandler::ptToLayoutUnit( getSize().width() ) );
+    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
 }
@@ -281,7 +285,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
 // Assumes the painter is already set up correctly.
 void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
-    kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
+    //kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
     //// ### Transparent background - TODO use configuration ?
     cg.setBrush( QColorGroup::Base, NoBrush );
@@ -366,7 +370,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     KoTextParag *parag = static_cast<KoTextParag*> (textDocument()->firstParag());
     // ### fix this loop (Werner)
     while ( parag ) {
-        saveParagraph( doc,parag,textobj,0,parag->length()-1 );
+        saveParagraph( doc, parag, textobj, 0, parag->length()-2 );
         parag = static_cast<KoTextParag*>( parag->next());
     }
     return textobj;
@@ -382,7 +386,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     int tmpVerticalAlign=-1;
 
     tmpFamily=lastFormat->font().family();
-    tmpPointSize=KoZoomHandler::layoutUnitToPt( lastFormat->font().pointSize());
+    tmpPointSize=static_cast<int>(KoZoomHandler::layoutUnitToPt( lastFormat->font().pointSize()));
     tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
     tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
     tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
@@ -491,7 +495,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         lastParag->remove( 0, 1 ); // Remove current trailing space
                         firstTextTag = false;
                     }
-                    KoTextFormat *fm=loadFormat( n );
+                    KoTextFormat fm = loadFormat( n );
 
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
@@ -502,9 +506,9 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     if ( txt.isEmpty() )
                         txt = ' ';
                     if ( ( !txt[txt.length()-1].isSpace()  && n.isNull() ) )
-                        txt+=' '; // trailing space at end of paragraph
+                        txt += ' '; // trailing space at end of paragraph
                     lastParag->append( txt, true );
-                    lastParag->setFormat( i, txt.length(), fm, false );
+                    lastParag->setFormat( i, txt.length(), textDocument()->formatCollection()->format( &fm ) );
                     //kdDebug()<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
                     i += txt.length();
                 }
@@ -533,8 +537,9 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 #endif
 }
 
-KoTextFormat *KPTextObject::loadFormat( QDomElement &n )
+KoTextFormat KPTextObject::loadFormat( QDomElement &n )
 {
+    KoTextFormat format;
     QString family = n.attribute( attrFamily );
     int size = n.attribute( attrPointSize ).toInt();
     bool bold=false;
@@ -557,34 +562,30 @@ KoTextFormat *KPTextObject::loadFormat( QDomElement &n )
     fn.setItalic( italic );
     fn.setUnderline( underline );
     fn.setStrikeOut( strikeOut );
+    //kdDebug() << "KPTextObject::loadFormat: family=" << family << " size=" << fn.pointSize() << endl;
     QColor col( color );
 
-    //todo FIXME : KoTextFormat
-
-    KoTextFormat *fm = static_cast<KoTextFormat*> (textDocument()->formatCollection()->format( fn, col ));
-    //kdDebug()<<"******************************************\n";
-    //kdDebug()<<"format :"<<fm->key()<<endl;
-    //kdDebug()<<"******************************************\n";
+    format.setFont( fn );
+    format.setColor( col );
     QString textBackColor=n.attribute(attrTextBackColor);
     if(!textBackColor.isEmpty())
     {
         QColor tmpCol(textBackColor);
         tmpCol=tmpCol.isValid() ? tmpCol : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-        fm->setTextBackgroundColor(tmpCol);
+        format.setTextBackgroundColor(tmpCol);
     }
     //TODO FIXME : value is correct, but format is not good :(
     if(n.hasAttribute(attrVertAlign))
-        fm->setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
+        format.setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
 
-    if(n.hasAttribute(attrLinkName))
+    if(n.hasAttribute(attrLinkName) && n.hasAttribute(attrHrefName))
     {
-        if(n.hasAttribute(attrHrefName))
-        {
-            fm->setAnchorName(n.attribute(attrLinkName));
-            fm->setAnchorHref(n.attribute(attrHrefName));
-        }
+        format.setAnchorName(n.attribute(attrLinkName));
+        format.setAnchorHref(n.attribute(attrHrefName));
     }
-    return fm;
+
+    kdDebug()<<"loadFormat :"<<format.key()<<endl;
+    return format;
 }
 
 KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
@@ -954,10 +955,8 @@ KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString &
     if ( removeSelected && textDocument()->hasSelection( QTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, QTextDocument::Standard ) );
     m_textobj->emitHideCursor();
-    // correct but useless due to unzoom/zoom
-    // (which invalidates everything and sets lastformatted to firstparag)
-    //setLastFormattedParag( cursor->parag()->prev() ?
-    //                       cursor->parag()->prev() : cursor->parag() );
+    m_textobj->setLastFormattedParag( cursor->parag()->prev() ?
+                           cursor->parag()->prev() : cursor->parag() );
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
@@ -1137,7 +1136,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
 
 void KPTextView::ensureCursorVisible()
 {
-    kdDebug()<<"KPTextView::ensureCursorVisible()\n";
+    kdDebug()<<"KPTextView::ensureCursorVisible() : not implemented\n";
 }
 
 void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
@@ -1348,11 +1347,11 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     else
     {
         text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
-        m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(c1.parag()),elem, c1.index(), c1.parag()->length()-1);
+        m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(c1.parag()),elem, c1.index(), c1.parag()->length()-2);
         Qt3::QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->string()->toString() + "\n";
-            m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(p),elem, 0, p->length()-1);
+            m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(p),elem, 0, p->length()-2);
             p = p->next();
         }
         text += c2.parag()->string()->toString().left( c2.index() );
@@ -1529,13 +1528,13 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
     saveParagLayout( parag->paragLayout(), paragraph );
     KoTextFormat *lastFormat = 0;
     QString tmpText;
-    for ( int i = from; i < to; ++i ) {
+    for ( int i = from; i <= to; ++i ) {
         QTextStringChar &c = parag->string()->at(i);
         if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
             if ( lastFormat )
                 paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
             lastFormat = static_cast<KoTextFormat*> (c.format());
-            tmpText="";
+            tmpText=QString::null;
         }
         tmpText+=c.c;
     }
