@@ -844,13 +844,13 @@ don't put a </?xml...> at the end of the file!).
 <!--
         The space to be added between two consecutive lines in a given paragraph.
         value in points. Can also be "oneandhalf" for 1.5 lines and "double".
-        "custom" or "atleast" or "exactly" or "multiple"
+        "custom" or "atleast" or "multiple"
         If not specified, the default value is 0.
 -->
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
-    type (CDATA|oneandhalf|double|custom|atleast|exactly|multiple) #IMPLIED
+    type (CDATA|oneandhalf|double|custom|atleast|multiple) #IMPLIED
     spacingvalue CDATA #IMPLIED>
 
 <!--
