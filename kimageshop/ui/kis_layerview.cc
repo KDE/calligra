@@ -29,7 +29,6 @@
 #include <qpainter.h>
 #include <qlineedit.h>
 #include <qpopupmenu.h>
-#include <qmessagebox.h>
 #include <qpushbutton.h>
 
 #include <kstddirs.h>
@@ -37,6 +36,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 
 #include "kis_doc.h"
 #include "kis_util.h"
@@ -101,13 +101,13 @@ void LayerTable::init( KisDoc* doc )
   QString _icon = locate( "kis_pics", "eye.png", KisFactory::global() );
   m_eyeIcon = new QPixmap;
   if( !m_eyeIcon->load( _icon ) )
-	QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
+	KMessageBox::error( this, "Can't find eye.png", "Canvas" );
   m_eyeRect = QRect( QPoint( 2,( CELLHEIGHT - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
 
   _icon = locate( "kis_pics", "link.png", KisFactory::global() );
   m_linkIcon = new QPixmap;
   if( !m_linkIcon->load( _icon ) )
-	QMessageBox::critical( this, "Canvas", "Can't find link.png" );
+	KMessageBox::error( this, "Can't find link.png", "Canvas" );
   m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
 
   // HACK - the size of the preview image should be configurable somewhere

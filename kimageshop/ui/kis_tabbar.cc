@@ -22,13 +22,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qmessagebox.h>
 #include <qpointarray.h>
 #include <qstring.h>
 #include <qtimer.h>
 #include <qpopupmenu.h>
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <kis_view.h>
 #include <kis_doc.h>
@@ -174,10 +174,10 @@ void KisTabBar::setActiveTab( const QString& _text )
 
 void KisTabBar::slotRemove( )
 {
-  int ret = QMessageBox::warning( this, i18n("Remove image"),
+  int ret = KMessageBox::warningContinueCancel( this, 
 				  i18n("You are going to remove the active image.\nDo you want to continue?"),
-				  i18n("Yes"), i18n("No"), QString::null, 1, 1);
-  if ( ret == 0 )
+				  i18n("Remove image"), i18n("&Remove"));
+  if ( ret == KMessageBox::Continue )
     {
       int i = 1;
       QStringList::Iterator it;
