@@ -55,7 +55,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-20-04</date>
+<date>2002-07-05</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -197,9 +197,9 @@ download templates from the web, or use the current document to create a
 new template.</para>
 </listitem>
 <listitem>
-<para>&kword; allows very complicated numbering of lists. You are not
+<para>&kword; provides automatic numbering of lists. <!--You are not
 limited to numbers or letters, you can define your own series for your
-special lists.</para>
+special lists.--> </para>
 </listitem>
 <listitem>
 <para>Define paragraph layout styles, to shorten the editing time of
@@ -272,13 +272,13 @@ letter, to the most complex document you might need to work on.</para>
 the conclusion that reading this manual from cover to cover, is an
 unreasonable (and fortunately unnecessary) task.</para>
 
-<para>Since different users will have different needs, each section of
+<para>This user guide is designed to be helpful to a wide variety of
+users, from the very experienced, to the novice user.  Since different users will have different needs, each section of
 this manual is self-contained.  The user is not expected to have read all of
 the previous sections of the manual to find the instructions
 useful.</para>
 
-<para>This user guide is designed to be helpful to a wide variety of
-users, from the very experienced, to the novice user.  To help determine what
+<para>To help determine what
 should read before starting to work with &kword;, I have prepared a suggested
 reading list for three levels of users.</para>
 
@@ -307,6 +307,7 @@ reading list for three levels of users.</para>
 <member><link linkend="store-print">Document Storage and Printing</link></member>
 <member><link linkend="guides-2">Editing Your Document</link></member>
 <member><link linkend="menu-intro">Introduction to Menu Bars and Tool Bars</link></member>
+<member><link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout templates</link></member>
 </simplelist>
 </entry>
 </row>
@@ -319,6 +320,7 @@ or <application>Applixware</application>.)</entry>
 <entry><simplelist type="vert" columns="1">
 <member><link linkend="fundamentals">Fundamentals</link></member>
 <member><link linkend="tutorial">Step by Step Tutorial</link></member>
+<member><link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout templates</link></member>
 </simplelist></entry>
 </row>
 

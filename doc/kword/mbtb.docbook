@@ -2083,8 +2083,8 @@ for insertion into the document). An example is shown below.</para>
 <para>This section  will look more closely at the dialogs and detail their use.</para>
 
 <para>The large box below that shows I currently have 1 folder in this
-directory, entitled <filename>Past Work</filename>, and 2 files
-(<filename>Job Description</filename> and
+directory, entitled <filename>Past Work</filename>, and 3 files
+(<filename>Job Description</filename>, <filename>Newsletter</filename> and
 <filename>Resume</filename>).</para>
 
 <para><emphasis>Toolbar</emphasis></para>
@@ -2117,14 +2117,15 @@ a quick way to jump to commonly accessed directories.  By clicking
 this button, a submenu appears which allows you to add bookmarks or
 jump to a new bookmark.</para>
 
-<para>Next to the bookmark button, is a button with a gear on it.
+<para>Next to the bookmark button, is a button with a gear on it, called the <emphasis>Extras Button</emphasis>.
 Clicking this button brings up a sub menu with several entries:</para>
 <para>
 <variablelist>
 <varlistentry>
 <term><guimenuitem>New Directory</guimenuitem></term>
 <listitem>
-<para>Create a new subdirectory in the current directory.  &kword; will automatically move you into this new subdirectory once it is created.</para>
+<para>Create a new subdirectory in the current directory.  &kword; will 
+automatically move you into this new subdirectory once it is created.</para>
 </listitem>
 </varlistentry>
 
@@ -2167,6 +2168,13 @@ file.</para>
 </varlistentry>
 </variablelist>
 </para>
+
+<para>There are two buttons next to the Extras Button which switch between <emphasis>Short View</emphasis> and
+<emphasis>Detailed View</emphasis></para>
+<para>Just to the left of the directory box, is the <emphasis>Preview Button</emphasis>, which toggles the preview 
+window in the dialog.  If the button is depressed, a preview box appears in the right of the dialog.  If it is not pressed, the file list 
+box is larger.</para>
+
 <para><emphasis>Location Bar</emphasis></para>
 
 <para>Along the left side of the dialog box, is a column that contains

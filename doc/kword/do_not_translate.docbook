@@ -15,37 +15,37 @@ as of the date included in the note.</para>
 <tgroup cols="3">
 <tbody>
 <row><entry>Introduction</entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>What parts of this guide should I read? </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Introduction </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>What parts of this guide should I read? </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Fundamentals </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Starting KWord </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>An Introduction to Templates </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>The difference between Text Oriented and Page Layout templates </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Starting KWord </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>An Introduction to Templates </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>The difference between Text Oriented and Page Layout templates </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Step by Step Tutorial </entry><entry></entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry>Step by Step Tutorial </entry><entry></entry><entry>Checked (May 7, 2002)</entry></row>
 
 <row><entry></entry></row>
 
 <row><entry>The KWord Screen </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Overview </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Using Rulers </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Overview </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Using Rulers </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG:Document Storage and Printing </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Beginning a New Document </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Saving a Document </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Retrieving a Saved Document </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Printing A Document </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Beginning a New Document </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Saving a Document </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Retrieving a Saved Document </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Printing A Document </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: Editing your Document </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Selecting Text </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Using Multiple Views </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Undo/Redo </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Selecting Text </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Using Multiple Views </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Undo/Redo </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry><entry>Finding and Replacing Text </entry><entry>Stable-Needs Updates-Questions pending</entry></row>
 <row><entry></entry><entry>Spell Checking </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry><entry>Autocorrection </entry><entry>Written-Unstable-Message changes</entry></row>
@@ -107,7 +107,7 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>Border Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry><entry>Formula Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry><entry>Selecting Colors from a Color dialog </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Selecting files from the file dialog </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Selecting files from the file dialog </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>KWord Options </entry><entry></entry><entry></entry></row>

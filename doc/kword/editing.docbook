@@ -71,6 +71,7 @@ Use the following key combinations to move the endpoint to the desired location.
 <row><entry align="center"><keycombo action="simul">&Shift;<keycap>Page-Down</keycap></keycombo></entry><entry>Moves the current endpoint down one screen.</entry></row>
 
 <row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Down</keycap></keycombo></entry><entry>Moves the current endpoint down one page.  The endpoint is locate at the first character of this page.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo></entry><entry>Select all text in the current frameset.</entry></row>
 
 </tbody></tgroup></informaltable>
 <para>Once the start and endpoints have been defined, all text between the startpoint and endpoint is selected.</para>
@@ -203,15 +204,18 @@ again, and more of the edits will be undone.</para>
 <para>By default, &kword; keeps track of the last 30 edits to the document.
 This number can be adjusted up or down.  For details, see <link linkend="opt-misc">Configuring &kword;</link>.</para>
 <para>The <emphasis>Undo</emphasis> and <emphasis>Redo</emphasis> commands can
-be accessed from the menubar (as in the examples above) or from the toolbar.</para>
+be accessed from the menubar (as in the examples above), by using keyboard shortcuts or from the toolbar.</para>
 
-<informaltable><tgroup cols="2">
+<informaltable><tgroup cols="3">
 <thead>
-<row><entry>Command</entry><entry>Toolbar Button</entry></row>
+<row><entry>Command</entry><entry>Toolbar Button</entry><entry>Keyboard Shortcut</entry></row>
 </thead><tbody>
-<row><entry>Undo</entry><entry><inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/></imageobject></inlinemediaobject></entry></row>
+<row><entry>Undo</entry><entry><inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/>
+</imageobject></inlinemediaobject></entry><entry><keycombo
+action="simul">&Ctrl;<keycap>Z</keycap></keycombo></entry></row>
 <row><entry>Redo</entry><entry><inlinemediaobject><imageobject><imagedata fileref="redo.png" format="PNG"/>
-</imageobject></inlinemediaobject></entry></row>
+</imageobject></inlinemediaobject></entry><entry><keycombo
+action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -281,7 +285,9 @@ on the toolbar.</para>
 
 <listitem>
 <para>Using the keyboard shortcut: <keycombo
-action="simul">&Ctrl;<keycap>C</keycap></keycombo></para>
+action="simul">&Ctrl;<keycap>C</keycap></keycombo> or the alternate keyboard shortcut: 
+<keycombo
+action="simul">&Ctrl;<keycap>Insert</keycap></keycombo></para>
 </listitem>
 
 <listitem>
@@ -324,7 +330,9 @@ A small submenu will appear.  Simply select <guilabel>Cut</guilabel></para>
 </listitem>
 <listitem>
 <para>Using the keyboard shortcut: <keycombo
-action="simul">&Ctrl;<keycap>X</keycap></keycombo></para>
+action="simul">&Ctrl;<keycap>X</keycap></keycombo> or the alternate keyboard shortcut: 
+<keycombo
+action="simul">&Shift;<keycap>Delete</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
 
@@ -360,7 +368,9 @@ submenu will appear.  Simply select <guilabel>Paste</guilabel></para>
 
 <listitem>
 <para>Using the keyboard shortcut: <keycombo
-action="simul">&Ctrl;<keycap>V</keycap></keycombo></para>
+action="simul">&Ctrl;<keycap>V</keycap></keycombo> or the alternate keyboard shortcut: 
+<keycombo
+action="simul">&Shift;<keycap>Insert</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
 
@@ -424,7 +434,7 @@ the toolbar.</para>
 </screenshot>
 <sect3><title>Basic Text Search</title>
 <para>The drop-down box labelled <guilabel>Text to Find</guilabel>,
-provides a place for you to enter the text of your search command. In
+provides a place for you to enter the text of your search command. (In
 the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>)</para> <para>If you click on
 <guibutton>OK</guibutton>, then &kword; will search the document until it
