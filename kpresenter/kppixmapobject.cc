@@ -182,7 +182,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    int penw = pen.width() / 2;
+    double penw = _zoomHandler->zoomItX(pen.width() / 2);
 
     if ( shadowDistance > 0 )
     {
@@ -194,10 +194,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
 
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
-
-            QSize bs = image.size();
-
-            _painter->drawRect( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy), _zoomHandler->zoomItX(bs.width()), _zoomHandler->zoomItY(bs.height()) );
+            _painter->drawRect( _zoomHandler->zoomItX(ox+sx), _zoomHandler->zoomItY(oy+sx), _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY(ext.height()) );
         }
         else
         {
