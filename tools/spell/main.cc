@@ -48,10 +48,9 @@ SpellCheckerFactory::~SpellCheckerFactory()
 {
 }
 
-QObject* SpellCheckerFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
+QObject* SpellCheckerFactory::createObject( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
     SpellChecker *checker = new SpellChecker( parent, name );
-    emit objectCreated(checker);
     return checker;
 }
 

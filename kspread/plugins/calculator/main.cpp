@@ -63,7 +63,7 @@ CalcFactory::~CalcFactory()
     delete s_global;
 }
 
-QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
+QObject* CalcFactory::createObject( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
     if ( !parent->inherits("KSpreadView") )
     {
@@ -72,7 +72,6 @@ QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*c
     }
 
     QObject *obj = new Calculator( (KSpreadView*)parent, name );
-    emit objectCreated( obj );
     return obj;
 }
 

@@ -44,7 +44,7 @@ public:
     SpellCheckerFactory( QObject* parent = 0, const char* name = 0 );
     ~SpellCheckerFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, 
+    virtual QObject* createObject( QObject* parent = 0, const char* name = 0, 
 			     const char* classname = "QObject", const QStringList &args = QStringList() );
 };
 

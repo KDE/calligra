@@ -60,11 +60,10 @@ KugarFactory::~KugarFactory()
 
 // Create a new part.
 
-QObject *KugarFactory::create(QObject *parent,const char *name,const char *,const QStringList &)
+QObject *KugarFactory::createObject(QObject *parent,const char *name,const char *,const QStringList &)
 {
 	QObject *obj = new KugarPart((QWidget*)parent,name);
 
-	emit objectCreated(obj);
 
 	return obj;
 }
