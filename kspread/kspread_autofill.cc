@@ -623,7 +623,7 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
       type = AutoFillSequenceItem::DATE;
     else if ( cell->isTime() )
       type = AutoFillSequenceItem::TIME;
-    else 
+    else
       return false; // Cannot happen du to if condition
 
     while ( cell && cell2 )
@@ -971,14 +971,20 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       else if(_srcList.at( s )->isDate() && _srcList.count()==1)
       {
 	QDate tmpDate=(_srcList.at( s )->valueDate());
-        tmpDate=tmpDate.addDays( incr);
-	cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
+        if (!down)
+            tmpDate=tmpDate.addDays( -incr);
+        else
+            tmpDate=tmpDate.addDays( +incr);
+        cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
         incr++;
       }
       else if(_srcList.at( s )->isTime() && _srcList.count()==1)
       {
 	QTime tmpTime=(_srcList.at( s )->valueTime());
-        tmpTime=tmpTime.addSecs( incr*60 );//add one minute.
+        if (!down)
+            tmpTime=tmpTime.addSecs( -incr*60 );//add one minute.
+        else
+            tmpTime=tmpTime.addSecs( incr*60 );//add one minute.
 	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
         incr++;
       }
