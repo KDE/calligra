@@ -1,349 +1,529 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-   <meta name="keywords" content="killustrator">
-   <meta name="description" content="German documentation for killustrator">
-   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; I; Linux 2.0.36 i586) [Netscape]">
-   <title>Das KIllustrator Handbuch: Anwendung</title>
-</head>
-<body text="#000000" bgcolor="#FFFFFF" link="#AA0000">
-<font face="Helvetica">
-<a href="http://www.kde.org/"><img SRC="logotp3.gif" ALT="The K Desktop Environment" BORDER=0 WIDTH=102 HEIGHT=27></a>
-<hr WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
-<p align=right><a href="killustrator-4.html">n&auml;chste</a> <a href="killustrator-2.html">vorherige</a> <a href="index.html#toc3">Inhaltsverzeichnis</a>
-<h3><a NAME="s3"></a>3. Anwendung</h3>
-<h3><a NAME="ss3.1"></a>3.1 Allgemeines zur Anwendung</h3>
-Die Bedienung des KIllustrators ist intuitiv erlernbar
-und stark an Zeichenproramme angelehnt, die sich unter Windows bereits
-einen Namen gemacht haben. Die verwendeten <A HREF="killustrator-6.html#ss6.1">Tastenk&uuml;rzel</A> entsprechen
-denen, die unter <A HREF="http://www.kde.org/standards.html">http://www.kde.org/standards.html</A> als KDE-Standards
-festgelegt sind.<BR> Bei den verschiedenen Aktionen besteht, wenn es sinnvoll ist, die M&ouml;glichkeit der Verwendung der
-STRG-Taste. Wird diese Taste gedr&uuml;ckt gehalten, so wird die entsprechende Aktion proportional ausgef&uuml;hrt. (d.H.
-<i>x</i> und <i>y</i> Richtung werden gleich behandelt.) Wenn man beispielsweise beim Aufziehen eines Rechteckes die STRG-Taste
-dr&uuml;ckt, so zeichnet man ein Quadrat.<BR>
-Einige Funktionen k&ouml;nnen auch gleichzeitig auf mehrere selektierte Objekte angewandt werden. Ich lasse diese
-Betrachtung der Einfachkeit halber au&szlig;en vor.
-<h3><a NAME="ss3.2"></a>3.2 Zeichnen von 2D-Primitiven</h3>
-Das prinzipielle Vorgehen, um ein 2D-Primitiv zu zeichnen, besteht aus folgenden Schritten:
-<br>&nbsp;
-<ol>
-<li>W&auml;hlen des zu zeichnenden Objekttypes
-<li>Zeichnen des Objektes
-</ol>
-Der zweite Schritt variiert bei den verschiedenen 2D-Primitiven. Daher gehe ich seperat auf jedes ein.
-Das Icon des Knopfes, der zur Auswahl des entsprechenden Objekttypes gedr&uuml;ckt werden mu&szlig;,
-habe ich auch mit aufgef&uuml;hrt, obwohl die Icons eigentlich eindeutig
-die Funktion des Knopfes beschreiben.
-<h3><a NAME="sss3.2.1"></a>3.2.1 Freihand</h3>
-<img SRC="freehand.gif" height=22 width=22 ALT="Freihand-Tool">&nbsp;&nbsp;
-Um eine Freihandzeichnung anzufertigen, gehen man folgt vor:
-<ol>
-<li>Linksklick auf den Punkt der Zeichenfl&auml;che, an dem die Freihandzeichnung anfangen soll
-<li>zeichnen bei gedr&uuml;ckter linker Maustaste
-<li>wenn der Endpunkt der Freihandzeichnung erreicht ist, linke Maustaste loslassen
-</ol>
-<h3><a NAME="sss3.2.2"></a>3.2.2 Linie / Polygonzug</h3>
-<img SRC="line.gif" height=22 width=22 alt="Linien-Tool">&nbsp;&nbsp;
-Mit diesem Tool k&ouml;nnen Polygonz&uuml;ge gezeichnet werden. Im KIllustrator
-ist eine Linie ein Polygon, welches nur aus einer Linie besteht. Daher
-werden diese beiden Objekte im KIllustrator mit einem Tool gezeichnet.
-<h3><a NAME="ssss3.2.2.1"></a>3.2.2.1 Linie</h3>
-Um eine Linie zu zeichnen, geht man wie folgt von:
-<ol>
-<li>Linksklick auf den Anfangspunkt der Linie
-<li>Loslassen der linken Maustaste und aufziehen der Linie
-<li>Rechtsklick auf den Endpunkt der Linie
-</ol>
-<h3>
-<a NAME="ssss3.2.2.2"></a>3.2.2.2 Pfad</h3>
-Um einen Pfad zu zeichnen, geht man wie folgt vor:
-<ol>
-<li>Linksklick auf den Anfangspunkt des Pfades
-<li>Loslassen der linken Maustaste und Aufziehen der ertsen Linie
-<li>Linksklick auf den Punkt, an dem der n&auml;chste Punkt des Polygons liegen soll
-<li>Loslassen der linken Maustaste und aufziehen der zweiten Linie
-<li>...
-<li>Soll die letzte Linie gezeichnet werden, so beendet man diese nicht mit einem Linksklick, sondern mit
-einem Rechtsklick
-</ol>
-<h3><a NAME="ssss3.2.2.3"></a>3.2.2.3 geschlossener Polygonzug</h3>
-Um einen geschlossenen Polygonzug zu zeichnen, geht man wie beim Pfad vor. Der Unterschied liegt nur im Beenden
-des Polygonzuges. Um das Polygon zu schlie&szlig;en, h&auml;lt man die&nbsp;
-Schift-Taste gedr&uuml;ckt, wenn man den abschlie&szlig;enden Rechsklick
-macht. Dadurch wird eine Linie von dem zuletzt mit einem Linksklick gesetzten
-Punkt zum Anfangspunkt des Polygonzuges gezeichnet.
-<h3><a NAME="sss3.2.3"></a>3.2.3 Bezierkurve</h3>
-<img SRC="bezier.gif" height=20 width=20 alt="Bezierkurven-Tool">&nbsp;&nbsp;
-Bezierkurven zu zeichnen ist oftmals ein Problem, nicht so jedoch mit dem KIllustrator. Man gehe wie folgt vor:
-<ol>
-<li>Linksklick auf den Anfangspunkt der Bezierkurve
-<li>Mit der Hilfslinie den Anstieg des Kurvensegmentes in diesem Punkt festlegen
-<li>Linksklick auf den zweiten Punkt dieses Kurvensegmentes
-<li>Kurve mit der Hilfslinie formen
-<li>sollen weitere Kurvensegmente gezeichnet werden, Linksklick ansonsten Rechtsklick zum &Uuml;bernehmen des
-gezeichneten Segmentes
-</ol>
-<h3><a NAME="sss3.2.4"></a>3.2.4 Rechteck</h3>
-<img SRC="rect.gif" height=20 width=20 alt="Rechtecktool">&nbsp;&nbsp; Um ein Rechteck zu zeichnen, geht man wie folgt
-vor:
-<ol>
-<li>Linksklick auf einen Eckpunkt des Rechteckes
-<li>Aufziehen des Rechteckes bei gedr&uuml;ckter Linker Maustaste
-<li>Linke Maustaste wieder loslassen
-</ol>M&ouml;chte man ein Quadrat zeichnen, so kann man beim Aufziehen des Rechteckes die STRG-Taste gedr&uuml;ckt
-halten.
-<h3><a NAME="sss3.2.5"></a>3.2.5 gleichm&auml;&szlig;iges Polygon</h3>
-<img SRC="polygon.gif" height=20 width=20 alt="Polygon-Tool">&nbsp;&nbsp; Das Tool f&uuml;r gleichm&auml;&szlig;ige
-Polygone ist eine einfache M&ouml;glichkeit, gleichseitige Dreiecke, Vierecke,
-etc. zu zeichnen, wenn man dies nicht &uuml;ber einen Polygonzug selbst
-machen will. Das Vorgehen hierbei ist folgendes:
-<ol>
-<li>Linker-Doppelklick auf den Knopf f&uuml;r gleichm&auml;&szlig;ige Polygone
-<li>nun &ouml;ffnet sich ein Fenster, in dem man das zu zeichnende Polygon definieren kann
-<p><img SRC="Poly_set.gif" height=278 width=418 Alt="Dialog zum Erstellen gleichmaessiger Polygone">
-<br>&nbsp;
-<li>entsprechende Einstellungen vornehmen
-<li>best&auml;tigen mittels Linksklick auf den OK-Knopf
-<li>Linksklick auf den Anfangspunkt*
-<li>Aufziehen des Polygons bei gedr&uuml;ckter linker Maustaste
-<li>Loslassen der Maustaste
-</ol>
-*In diesem Fall ist der Anfangspunkt nicht als solche zu sehen, da er nach dem Aufziehen des Polygons nicht mehr zu
-diesem dazu geh&ouml;rt. Man sollte mit diesem Tool einfach ein bischen &quot;herumspielen&quot; und den
-Funktionsumfang herausfinden.
-<h3><a NAME="sss3.2.6"></a>3.2.6 Ellipse / Kreis</h3>
-<img SRC="ellipse.gif" height=20 width=20 alt="Ellipsen-Tool">&nbsp;&nbsp;Um eine Ellipse zu zeichnen, geht man wie folgt vor:
-<ol>
-<li>Linksklick auf einen Punkt des Umrechteckes* der Ellipse
-<li>Aufziehen der Ellipse bei gedr&uuml;ckter linker Maustaste
-<li>Loslassen der Linken Maustaste
-</ol>
-Soll statt einer Ellipse ein Kreis gezeichnet werden, mu&szlig; lediglich beim Aufziehen die STRG-Taste gedr&uuml;ckt
-werden.
-<p>*Vereinfacht gesagt ist ein Umrechteck ein Rechteck, da&szlig; man um die Ellipse zeichnen kann, wobei die Kanten
-des Rechteckes Tangenten der Ellipse sind.
-<h3><a NAME="sss3.2.7"></a>3.2.7 Text</h3>
-<img SRC="text.gif" height=22 width=22 alt="Text-Tool">&nbsp;&nbsp; Dieses Tool dient zum Einbinden von Texten in eine
-KIllustratorzeichnung.
-Man gehe dazu wie folgt vor:
-<ol>
-<li>Linksklick auf die Stelle, an der der Text beginnen soll
-<li>Eingeben des Textes
-</ol>Die Eingabe wird solange fortgesetzt, bis ein neuer Objekttyp gew&auml;hlt oder ein Linksklick zur Eingabe
-des n&auml;chsten Textes an einer anderen Stelle gemacht wird.
-<h3><a NAME="ss3.3"></a>3.3 Transformationen von 2D-Primitiven</h3>
-Wie jedes Zeichentool bietet auch der KIllustrator mannigfaltige M&ouml;glichkeiten, gezeichnete Objekte zu rotieren,
-zu skalieren, zu verschieben; kurz gesagt zu transformieren. Dieser Abschnitt beschreibt nun, wie man entsprechende
-Transformationen durchf&uuml;hren kann. Das Icon, welches unter den Punkten zugeordnet ist, ist jeweils vorher in der
-Iconleiste zu w&auml;hlen.<BR>
-<h3><a NAME="sss3.3.1"></a>3.3.1 Rotation</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp; Unter Rotation versteht man das Drehen eines Objektes um seinen
-Mittelpukt. Alle gezeichneten Objekte k&ouml;nnen gedreht werden.&nbsp; Man gehe wie
-folgt vor, um ein Objekt zu drehen:
-<ol>
-<li>2x Linksklick auf das zu drehende Objekt (bis der Rahmen um das Objekt aus Pfeilen besteht)
-<li>einen Eckpfeil anklicken und bei gedr&uuml;ckter Maustaste das Objekt drehen
-<li>Maustaste loslassen
-</ol>
-<h3>
-<a NAME="sss3.3.2"></a>3.3.2 Skalieren</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp;Unter skalieren versteht man das Vergr&ouml;&szlig;ern bzw.
-Verkleinern von Objekten. Alle gezeichneten Objekte k&ouml;nnen skaliert werden. Zum Skalieren von Objekten geht man
-wie folgt vor:
-<ol>
-<li>Linksklick auf das zu skalierende Objekt (bis der Rahmen um das Objekt aus gef&uuml;llten Quadraten besteht)
-<li>das gef&uuml;llte Quadrat anklicken, in dessen Richtung das Objekt skaliert werden soll
-<li>bei gedr&uuml;ckter Maustaste Objekt skalieren
-<li>Maustaste loslassen
-</ol>
-H&auml;lt man beim Skalieren eines Objektes die STRG-Taste gedr&uuml;ckt, so wird das Objekt proportional skaliert.
-<h3><a NAME="sss3.3.3"></a>3.3.3 Verschieben von Objekten</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp;Zum Verschieben von Objekten geht man wie folgt vor:
-<ol>
-<li>Linksklick in das zu verschiebende Objekt
-<li>bei gedr&uuml;ckter linker Maustaste Objekt verschieben
-<li>Maustaste loslassen
-</ol>
-<h3><a NAME="sss3.3.4"></a>3.3.4 &Auml;ndern eines gezeichneten Objektes</h3>
-<img SRC="point.gif" height=20 width=20 alt="Manipulationspunkte">&nbsp;&nbsp;Neben den Transformationen von ganzen Objekten besteht auch
-die M&ouml;glichkeit einzelne Teile von Objekten zu manipulieren. Wenn man auf das Icon geklickt
-hat, &ouml;ffnet sich ein Untermen&uuml;, &uuml;ber welches man die folgenden &Auml;nderungen ausw&auml;hlen kann.
-<br>WICHTIG ! Das Objekt, das auf diese Art ver&auml;ndert werden soll, mu&szlig; vorher selektiert sein! W&auml;hlt
-man daraufhin das Punktmanipulationstool, so &auml;ndert sich der Rahmen des Objektes in leere Vierecke.
-<h3><a NAME="ssss3.3.4.1"></a>3.3.4.1 Verschieben von Punkten</h3>
-<img SRC="movepoint.gif" height=20 width=20 alt="Manipulatiospunkte verschieben">&nbsp;&nbsp;
-Zum Verschieben eines einzelnen Objektpunktes geht man wie folgt vor:
-<ol>
-<li>Linkklick auf den zu verschiebenden Punkt
-<li>bei gedr&uuml;ckter Maustaste Punkt verschieben
-<li>Maustaste loslassen
-</ol>
-<h3><a NAME="ssss3.3.4.2"></a>3.3.4.2 Hinzuf&uuml;gen von Punkten</h3>
-<img SRC="newpoint.gif" height=22 width=22 alt="Manipulatiospunkte hinzufuegen">&nbsp;&nbsp; Diese Funktion erm&ouml;glicht es komplexen Objekten einen
-Manipulationspunkt hinzuzuf&uuml;gen: Man klickt daf&uuml;r einfach auf die Stelle des Objektes, an der der Punkt
-gesetzt werden soll.
-<h3><a NAME="ssss3.3.4.3"></a>3.3.4.3 Entfernen von Punkten</h3>
-<img SRC="rmpoint.gif" height=22 width=22 alt="Manipulatiospunkte entfernen">&nbsp;&nbsp;
-Mit dieser Funktion kann man durch einfaches Anklicken Punkte aus Objekten entfernen.
-<h3><a name="ssss3.3.4.4"></a>3.3.4.4 F&uuml;llen von Objekten</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp; Will man ein Objekt einfach mit einer Farbe f&uuml;llen, ist es ausreichend, dieses zu 
-selektieren und mit der linken Maustaste auf die gew&uuml;nschte Farbe in der Farbauswahlleiste zu klicken. Ist die
-gew&uuml;nschte Farbe nicht dabei oder soll zum F&uuml;llen ein Muster oder ein Farbverlauf verwendet werden, geht man wie
-folgt vor.
-<ol>
-	<li>selektieren des zu f&uuml;llenden Objektes
-	<li>Rechtsklick in das Objekt (Maustaste wieder loslassen)
-	<li>Men&uuml;punkt &quot;Eigenschaften&quot; anklicken
-	<li>das Register &quot;F&uuml;llung&quot; anklicken
-</ol>
-Nun sind der Phantasie keine Grenzen gesetzt. Ist die gew&uuml;nschte F&uuml;llung gefunden, best&auml;tigt man mit OK und
-voila.
-<BR>
-WICHTIG ! Beim F&uuml;llen mit einem Muster mu&szlig; eine Farbe festgelegt werden. Anderenfalls kann es sein, da&szlig; das
-Objekt leer scheint, obwohl es gef&uuml;llt ist.
-<h3><a NAME="ss3.4"></a>3.4 Positionieren von Objekten</h3>
-Der KIllustrator bietet eine Vielzahl von Hilfsmitteln zum Positionieren von Objekten. Er erm&ouml;glicht ein punktgenaues
-Zeichnen und ein sp&auml;teres Ausrichten der Objekte.
-<h3><a NAME="sss3.4.1"></a>3.4.1 Gitter</h3>
-Das Gitter ist eine M&ouml;glichkeit, schon beim Zeichnen sehr genau zu arbeiten. Es kann aber auch nur als Anhalt
-angesehen werden. Folgende drei Aktionen sind zum Einstellen von Gittern m&ouml;glich. (In Klammern steht als erstes,
-&uuml;ber welche Men&uuml;punkte man die entsprechende Funktion ausl&ouml;sen kann und als zweites, was sie bewirkt.)
-<ol>
-	<li>Gitter anzeigen (Ansicht -> Gitter anzeigen, stellt das Gitter dar)
-	<li>An Gitter ausrichten (Layout -> An Gitter ausrichten, Objekte rasten nun auf dem Gitter ein)
-	<li>Gitter bearbeiten (Layout -> Gitter, bearbeiten des Gitters)
-</ol>
-Die Funktionen eins und zwei erkl&auml;ren sich von selbst und k&ouml;nnen auch mit entsprechenden Kn&ouml;pfen unter
-Funktion drei ausgel&ouml;st werden. Das Bearbeiten des Gitters erm&ouml;glicht zudem noch das Einstellen des Abstandes
-der Gitterpunkte.
-<h3><a NAME="sss3.4.2"></a>3.4.2 Hilfslinien</h3>
-Hilfslinien sind neben dem Gitter eine M&ouml;glichkeit bereits beim Zeichnen Perfektion walten zu lassen. Der
-Funktionsumfang entspricht dem des Gitters und auch die Funktionsaufrufe sind &auml;quivalet zu finden. Sie haben
-gegen&uuml;ber dem Gitter den Vorteil, da&szlig; man die Abst&auml;nde zwischen den einzelnen Hilflinien frei variieren
-kann. Der KIllustrator erm&ouml;glicht vertikale und horizontale Hilfslinien.<BR>
-<h3><a NAME="sss3.4.3"></a>3.4.3 Ausrichten von Objekten</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp; Diese Positionierungsart greift nach dem Zeichnen eines
-Objektes. Man selektiere das auszurichtende Objekt und Klicke mit der rechten Maustaste in dieses. Nun w&auml;hlt man den
-Men&uuml;punkt &quot;Ausrichten&quot; und erh&auml;lt folgendes Dialogfenster:
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img SRC="ausrichten.gif" height=328 width=358 Alt="Dialog zum ausrichten von Objekten">
-<p>
-<FONT COLOR="Red">In der mir vorliegenden Version funktioniert nur das Ausrichten auf der Seitenmitte. Ich werde
-diesbez&uuml;glich noch einmal mit Kai-Uwe sprechen und hoffe, da&szlig; in der n&auml;chsten Version mehr Funktionalit&auml;t zum
-Ausrichten implementiert ist.</font>
-<h3><a NAME="sss3.4.4"></a>3.4.4 Ausrichten von Texten an Pfaden</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp; Das Ausrichten eines Textes an einem Pfad ist ein sehr
-n&uuml;tzliches Tool, wenn man z.B. Banner gestalten will. Ist der entsprechende Pfad gezeichnet, geht man wie folgt vor, um
-an ihm einen Text auszurichten:
-<ol>
-	<li>selektieren des auszurichtenden Textes
-	<li>&uuml;ber den Men&uuml;punkt &quot;Anordnen&quot; den Punkt &quot;Text entlang eines Pfades&quot; w&auml;hlen
-	<li>das Objekt, das als Pfad dienen soll, mit der linken Maustaste anklicken (ein Rechtsklick bricht die Aktion ab!)
-</ol>
-Folgende Objekte k&ouml;nnen als Pfad verwendet werden:
-<ul>
-	<li><A HREF="#sss3.2.1">Freihandzeichnungen</A>
-	<li><A HREF="#ssss3.2.2.1">Linien</A>, <A HREF="#ssss3.2.2.2">Pfade</A>, <A HREF="#ssss3.2.2.3">geschlossene
-	Polygone</A>
-	<li><A HREF="#sss3.2.3">Bezierkurven</A>
-	<li><A HREF="#sss3.2.5">Ellipsen, Kreise</A>
-</ul>
-<h3><a NAME="sss3.4.5"></a>3.4.5 Gruppieren von Objekten</h3>
-Einzelne Objekte k&ouml;nnen zu Gruppen zusammengefa&szlig;t werden. Dies ist vor allem dann interessant, wenn man komplexe Figuren
-aus einzelnen Objekten zusammensetzen und diese Figuren dann als einzelnes Objekt betrachten will. Zum 
-Gruppieren von Objekten geht man wie folgt vor:
-<ol>
-	<li>Selektieren der zu gruppierenden Objekte
-	<li>...
-</ol>
-Will man eine Gruppe wieder trennen, selektiert man diese und verwendet die Funktion &quot;...&quot; des
-Men&uuml;punktes &quot;...;&quot;.
-<h3><a NAME="ss3.5"></a>3.5 Das Schichtenkonzept</h3>
-<h3><a NAME="sss3.5.1"></a>3.5.1 Was sind Schichten?</h3>
-Das Schichtenkonzept l&auml;&szlig;t sich am einfachsten an Papierzeichnungen erkl&auml;ren. Jede Schicht entspricht einem
-Blatt. Standartm&auml;&szlig;ig sind alle Bl&auml;tter transparent, k&ouml;nnen beschrieben und verschickt werden. Im
-KIllustrator entsprechen diese drei Eigenschaften folgende Funktionen:
-<ul>
-	<li>Transparenz: Man kann durch die einzelnen Schichten auf die anderen blicken. Es entsteht somit der Eindruck, man
-	arbeite mit nur einer Schicht (einem Blatt).
-	<li>Beschreibbarkeit: Ich kann in der gew&auml;hlten Schicht zeichnen.
-	<li>Verschickbarkeit: Diese Schicht wird mit ausgedruckt.
-</ul>
-Damit ist aber das Repertoire noch nicht ausgesch&ouml;pft. Einzelne Schichten k&ouml;nnen ausgeblendet werden. Ihr Inhalt
-wird dadurch nicht mehr angezeigt. Dies ist auch beim Drucken m&ouml;glich.<BR>
-<h3><a NAME="sss3.5.2"></a>3.5.2 Arbeiten mit Schichten?</h3>
-<h3><a NAME="ss3.6"></a>3.6 Umgang mit Dateien</h3>
-<h3><a NAME="sss3.6.1"></a>3.6.1 Zeichnung speichern</h3>
-Zum Speichern von Zeichnungen gibt es im gro&szlig;en und ganzen zwei Wege. Zum einen, &uuml;ber den Men&uuml;punkt 
-&quot;Datei&quot; und zum anderen &uuml;ber das Diskettenicon in der Iconleiste. Hat man die aktuelle Zeichnung neu erstellt und noch nie
-gespeichert, so gelangt man auf jeden Fall in den Dialog, in dem man den Dateinamen der zu speichernden Zeichnung bestimmen
-kann. Ist der Zeichnung bereits ein Dateiname zugewiesen, so kann wird dieser verwendet, es sei denn, man benutzt den 
-Men&uuml;punkt &quot;Speichern unter&quot;.<BR>
-Man sollte als Dateierweiterung <tt>.kil</tt> verwenden. Nur so ist es gew&auml;hrleistet, da&szlig; der KIllustrator diese
-Datei auch problemlos wiederfindet.
-<h3><a NAME="sss3.6.2"></a>3.6.2 Zeichnung laden</h3>
-<h3><a NAME="sss3.6.3"></a>3.6.3 Importieren und Exportieren</h3>
-<h3><a NAME="sss3.6.4"></a>3.6.4 Zeichnung Drucken</h3>
-<h3><a NAME="ss3.7"></a>3.7 Undo / Redo</h3>
-Die Funktionen Undo und Redo erm&ouml;glichen es, ein wenig mit den verschiedenen Tools &quot;herumzuspielen&quot;.
-Wenn man merkt, da&szlig; der Schritt, den man gerade gemacht hat, nicht gef&auml;llt, so verwendet
-man einfach Undo um ihn r&uuml;ckg&auml;ngig zu machen. Stellt man nach einem Undo fest, da&szlig; die
-r&uuml;ckg&auml;nging gemachte Aktion doch nicht so schlecht gewesen ist, kann man sie mit Redo wiederholen.
-<BR>
-Der KIllustrator bietet die M&ouml;glichkeit alle gemachten Aktionen zu wiederrufen. D.h. das Undo funktioniert 
-solange, bis die Zeichnung wieder leer ist.<BR>
-Man sollte aber beachten, da&szlig; Undo und Redo immer in der Reihenfolge wirken, in der gezeichnet wurde. Es ist
-also nicht m&ouml;glich nur den vorletzten Schritt r&uuml;ckg&auml;ngig zu machen und den letzten zu behalten. 
-<h3><a name="ss3.8"></A>3.8 Ansicht verg&ouml;&szlig;ern bzw. verkleinern</h3>
-<img SRC="zoom.gif" height=20 width=20 alt="Zoom-Tool">&nbsp;&nbsp; Das Zoomen, wie das &Auml;ndern der Ansichtsgr&ouml;&szlig;e
-auch genannt wird, kann auf zwei Wegen erfolgen. Der einfachste ist das Ausw&auml;hlen eines Zoomfaktors aus dem
-Ausklappmen&uuml; in dem standardm&auml;&szlig;ig 100% steht. Der zweite besteht in der Verwendung der Lupe. Klickt man mit
-der linken Maustaste in die Zeichnung, so wird die Region um den Klickpunkt auf den n&auml;chste Zoomfaktor
-vergr&ouml;&szlig;ert. Folgende Zoomfaktoren stehen zur Verf&uuml;gung:
-<ul>
-	<li>50%
-	<li>100%
-	<li>150%
-	<li>200%
-	<li>400%
-	<li>600%
-	<li>800%
-	<li>1000%
-</ul>
-<h3><a name="ss3.9"></A>3.9 Umgang mit Farben</h3>
-<img SRC="pfeil.gif" height=20 width=20 alt="Auswahl">&nbsp;&nbsp; Der Umgang mit Farben ist beim KIllustrator sehr einfach gestaltet. Im Grunde k&ouml;nnte man ihn mit einem Satz
-beschreiben, wenn da nicht noch zus&auml;tzliche Funktionen w&auml;ren. Allgemein sei gesagt, ein Linksklick in die
-Farbauswahlleiste &auml;ndert die F&uuml;llfarbe, ein Rechtsklick hingegen die Zeichen- bzw. Rahmenfarbe eines selektierten
-Objektes. Ist der gew&uuml;nschte Farbton nicht in dieser Leiste enthalten, mu&szlig; man zum &Auml;ndern der Zeichenfarbe wie folgt vorgehen.
-<ol>
-	<li>Selektieren des zu bearbeitenden Objektes
-	<li>Rechtsklick in das Objekt und Men&uuml;punkt &quot;Eigenschaften&quot; ausw&auml;hlen
-	<li>Register &quot;Umri&szlig;&quot; w&auml;hlen
-	<li>&uuml;ber den Knopf &quot;Farbe&quot; gelangt man in den Farbdialog
-<p><img SRC="color.gif" height=312 width=460 Alt="Dialog zur Farbauswahl"><p>
-	<li>Linksklick in das &quot;bunte&quot; Fenster und bei gedr&uuml;ckter Maustaste Farbton durch Bewegen der Maus
-	w&auml;hlen
-	<li>Loslassen der linken Maustaste
-	<li>Linksklick auf das kleine Dreieck am rechten Fensterrand
-	<li>Einstellen der Helligkeit durch Auf- und Abbewegen des kleinen Dreickes bei gedr&uuml;ckter linker Maustaste
-	<li>Loslassen der linken Maustaste
-	<li>durch einen Linksklick einen freien Farbplatz ausw&auml;hlen
-	<li>mit dem Knopf &quot;Zu eigenen Farben hinzuf&uuml;gen&quot; diesem Farbplatz die eingestellte Farbe zuweisen
-</ol>
-Man kann die HSV und RGB Werte der Farbe auch direkt als Zahlenwert eingeben. Dazu klickt man in das entsprechende Feld,
-editiert den Wert und schlie&szlig;t den Vorgang mit der Eingabetaste ab.
-<h3><a name="ss3.10"></A>3.10 &Auml;ndern der Standardparameter</h3>
-<h3><a name="sss3.10.1"></A>3.10.1 globale Parameter</h3>
-<h3><a name="ssss3.10.1.1"></A>3.10.1.1 Seiteneinstellungen</h3>
-<h3><a name="ssss3.10.1.2"></A>3.10.1.2 Ma&szlig;einheiten</h3>
-<h3><a name="sss3.10.2"></A>3.10.2 Parameter von Objekten</h3>
-Funktionen, wie z.B. das F&uuml;llen von Objekten, k&ouml;nnen als Standard f&uuml;r neu zu zeichnenden Objekte definiert werden.
-Dies geschieht, indem man die entsprechende Funktion aufruft, ohne ein Objekt selektiert zu haben. Aus
-Sicherheitsgr&uuml;nden mu&szlig; man dann noch eine Best&auml;tigung der globalen &Auml;nderung vornehmen. 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>Das KIllustrator Handbuch: Anwendung</TITLE>
+ <LINK HREF="killustrator-4.html" REL=next>
+ <LINK HREF="killustrator-2.html" REL=previous>
+ <LINK HREF="index.html#toc3" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="killustrator-4.html">Weiter</A>
+<A HREF="killustrator-2.html">Zurück</A>
+<A HREF="index.html#toc3">Inhalt</A>
+<HR>
+<H2><A NAME="s3">3. Anwendung</A></H2>
 
-<p align=right><a href="killustrator-4.html">n&auml;chste</a> <a href="killustrator-2.html">vorherige</a> <a href="index.html#toc3">Inhaltsverzeichnis</a>
-<p><center><hr WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE></center>
-</font>
-</body>
-</html>
+<H2><A NAME="ss3.1">3.1 Allgemeine Hinweise</A>
+</H2>
+
+<P>
+<P>Die Bedienung des KIllustrators ist intuitiv erlernbar und stark an 
+Zeichenproramme angelehnt, die sich unter Windows bereits einen Namen gemacht 
+haben. Die verwendeten 
+<A HREF="killustrator-5.html#shortcut">Tastenkürzel</A> entsprechen 
+denen, die unter 
+<A HREF="http://www.kde.org/standards.html">http://www.kde.org/standards.html</A> als KDE-Standards festgelegt sind.
+<P>Bei den verschiedenen Aktionen besteht, wenn es sinnvoll ist, die Möglichkeit 
+der Verwendung der STRG-Taste. Wird diese Taste gedrückt gehalten, so wird die
+entsprechende Aktion proportional ausgeführt. (d.H. x und y Richtung werden 
+gleich behandelt.) Wenn man beispielsweise beim Aufziehen eines Rechteckes die
+STRG-Taste drückt, so zeichnet man ein Quadrat.
+<P>Einige Funktionen können auch gleichzeitig auf mehrere selektierte Objekte 
+angewandt werden. Ich lasse diese Betrachtung der Einfachkeit halber außen vor. 
+<H2><A NAME="ss3.2">3.2 Zeichnen von 2D-Primitiven</A>
+</H2>
+
+<P>
+<P>Das prinzipielle Vorgehen, um ein 2D-Primitiv zu zeichnen, besteht aus folgenden Schritten: 
+<P>
+<OL>
+<LI>Wählen des zu zeichnenden Objekttypes </LI>
+<LI>Zeichnen des Objektes</LI>
+</OL>
+<P>Der zweite Schritt variiert bei den verschiedenen 2D-Primitiven. Daher gehe 
+ich seperat auf jedes ein. Das Icon des Knopfes, der zur Auswahl des 
+entsprechenden Objekttypes gedrückt werden muß, habe ich auch mit aufgeführt, 
+obwohl die Icons eigentlich eindeutig die Funktion des Knopfes beschreiben. 
+<P>
+<H3><A NAME="fh"></A> Freihand</H3>
+
+<P>
+<IMG SRC="freehand.gif">
+ Um eine Freihandzeichnung anzufertigen, gehen man folgt vor:
+<OL>
+<LI> Linksklick auf den Punkt der Zeichenfläche, an dem die 
+Freihandzeichnung anfangen soll </LI>
+<LI>zeichnen bei gedrückter linker Maustaste </LI>
+<LI>wenn der Endpunkt der Freihandzeichnung erreicht ist, linke Maustaste loslassen</LI>
+</OL>
+<P>
+<H3>Linie / Polygonzug</H3>
+
+<P>
+<IMG SRC="line.gif">
+ Mit diesem Tool können Polygonzüge gezeichnet werden. Im KIllustrator ist eine Linie ein Polygon, welches nur aus einer Linie besteht. Daher werden diese beiden Objekte im KIllustrator mit einem Tool gezeichnet.
+<P>
+<H3><A NAME="li"></A> Linie</H3>
+
+<P>
+<IMG SRC="line.gif">
+ Um eine Linie zu zeichnen, geht man wie folgt von:
+<P>
+<OL>
+<LI>Linksklick auf den Anfangspunkt der Linie </LI>
+<LI>Loslassen der linken Maustaste und aufziehen der Linie </LI>
+<LI>Rechtsklick auf den Endpunkt der Linie</LI>
+</OL>
+<P>
+<H3><A NAME="pf"></A> Pfad</H3>
+
+<P>
+<IMG SRC="line.gif">
+ Um einen Pfad zu zeichnen, geht man wie folgt vor:
+<OL>
+<LI>Linksklick auf den Anfangspunkt des Pfades </LI>
+<LI>Loslassen der linken Maustaste und Aufziehen der ertsen Linie </LI>
+<LI>Linksklick auf den Punkt, an dem der nächste Punkt des Polygons liegen soll </LI>
+<LI>Loslassen der linken Maustaste und aufziehen der zweiten Linie </LI>
+<LI>... </LI>
+<LI>Soll die letzte Linie gezeichnet werden, so beendet man diese nicht mit einem Linksklick, sondern mit einem Rechtsklick</LI>
+</OL>
+<P>
+<H3><A NAME="gp"></A> geschlossener Polygonzug</H3>
+
+<P>
+<IMG SRC="line.gif">
+ Um einen geschlossenen Polygonzug zu zeichnen, geht man wie beim Pfad vor. Der Unterschied liegt nur im Beenden des Polygonzuges. Um das Polygon zu schließen, hält man die  Schift-Taste gedrückt, wenn man den abschließenden Rechsklick macht. Dadurch wird
+
+ eine Linie von dem zuletzt mit einem Linksklick gesetzten Punkt zum Anfangspunkt des Polygonzuges gezeichnet.
+<P>
+<H3><A NAME="be"></A> Bezierkurve</H3>
+
+<P>
+<IMG SRC="bezier.gif">
+ Bezierkurven zu zeichnen ist oftmals ein Problem, nicht so jedoch mit dem KIllustrator. Man gehe wie folgt vor:
+<OL>
+<LI>Linksklick auf den Anfangspunkt der Bezierkurve </LI>
+<LI>Mit der Hilfslinie den Anstieg des Kurvensegmentes in diesem Punkt festlegen </LI>
+<LI>Linksklick auf den zweiten Punkt dieses Kurvensegmentes </LI>
+<LI>Kurve mit der Hilfslinie formen </LI>
+<LI>sollen weitere Kurvensegmente gezeichnet werden, Linksklick ansonsten Rechtsklick zum Übernehmen des gezeichneten Segmentes</LI>
+</OL>
+<P>
+<H3>Rechteck</H3>
+
+<P>
+<IMG SRC="rect.gif">
+ Um ein Rechteck zu zeichnen, geht man wie folgt vor:
+<OL>
+<LI>Linksklick auf einen Eckpunkt des Rechteckes </LI>
+<LI>Aufziehen des Rechteckes bei gedrückter Linker Maustaste </LI>
+<LI>Linke Maustaste wieder loslassen</LI>
+</OL>
+
+Möchte man ein Quadrat zeichnen, so kann man beim Aufziehen des Rechteckes die STRG-Taste gedrückt halten. 
+<P>
+<H3>gleichmäßiges Polygon</H3>
+
+<P>
+<IMG SRC="polygon.gif">
+ Das Tool für gleichmäßige Polygone ist eine einfache Möglichkeit, gleichseitige Dreiecke, Vierecke, etc. zu zeichnen, wenn man dies nicht über einen Polygonzug selbst machen will. Das Vorgehen hierbei ist folgendes:
+<OL>
+<LI>Linker-Doppelklick auf den Knopf für gleichmäßige Polygone </LI>
+<LI>nun öffnet sich ein Fenster, in dem man das zu zeichnende Polygon definieren kann
+<P>
+<IMG SRC="Poly_set.gif">
+<P>
+</LI>
+<LI>entsprechende Einstellungen vornehmen</LI>
+<LI>bestätigen mittels Linksklick auf den OK-Knopf </LI>
+<LI>Linksklick auf den Anfangspunkt* </LI>
+<LI>Aufziehen des Polygons bei gedrückter linker Maustaste </LI>
+<LI>Loslassen der Maustaste</LI>
+</OL>
+
+*In diesem Fall ist der Anfangspunkt nicht als solche zu sehen, da er nach dem Aufziehen des Polygons nicht mehr zu diesem dazu gehört. Man sollte mit diesem Tool einfach ein bischen "herumspielen" und den Funktionsumfang herausfinden.
+<P>
+<H3><A NAME="el"></A> Ellipse / Kreis</H3>
+
+<P>
+<IMG SRC="ellipse.gif">
+ Um eine Ellipse zu zeichnen, geht man wie folgt vor:
+<OL>
+<LI>Linksklick auf einen Punkt des Umrechteckes* der Ellipse </LI>
+<LI>Aufziehen der Ellipse bei gedrückter linker Maustaste </LI>
+<LI>Loslassen der Linken Maustaste</LI>
+</OL>
+
+Soll statt einer Ellipse ein Kreis gezeichnet werden, muß lediglich beim Aufziehen die STRG-Taste gedrückt werden. 
+<P>*Vereinfacht gesagt ist ein Umrechteck ein Rechteck, daß man um die Ellipse zeichnen kann, wobei die Kanten des Rechteckes Tangenten der Ellipse sind. 
+<P>
+<H3>Text</H3>
+
+<P>
+<IMG SRC="text.gif">
+ Dieses Tool dient zum Einbinden von Texten in eine KIllustratorzeichnung. Man gehe dazu wie folgt vor:
+<OL>
+<LI>Linksklick auf die Stelle, an der der Text beginnen soll </LI>
+<LI>Eingeben des Textes</LI>
+</OL>
+
+Die Eingabe wird solange fortgesetzt, bis ein neuer Objekttyp gewählt oder ein Linksklick zur Eingabe des nächsten Textes an einer anderen Stelle gemacht wird. 
+<P>
+<H2><A NAME="ss3.3">3.3 Transformationen von 2D-Primitiven</A>
+</H2>
+
+<P>Wie jedes Zeichentool bietet auch der KIllustrator mannigfaltige Möglichkeiten, gezeichnete Objekte zu rotieren, zu skalieren, zu verschieben; kurz gesagt zu transformieren. Dieser Abschnitt beschreibt nun, wie man entsprechende Transformationen durchf
+
+ühren kann. Das Icon, welches unter den Punkten zugeordnet ist, ist jeweils vorher in der Iconleiste zu wählen.
+<P>
+<H3>Rotation</H3>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Unter Rotation versteht man das Drehen eines Objektes um seinen Mittelpukt. Alle gezeichneten Objekte können gedreht werden.  Man gehe wie folgt vor, um ein Objekt zu drehen:
+<OL>
+<LI>2x Linksklick auf das zu drehende Objekt (bis der Rahmen um das Objekt aus Pfeilen besteht) </LI>
+<LI>einen Eckpfeil anklicken und bei gedrückter Maustaste das Objekt drehen  </LI>
+<LI>Maustaste loslassen</LI>
+</OL>
+<P>
+<H3>Skalieren</H3>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Unter skalieren versteht man das Vergrößern bzw. Verkleinern von Objekten. Alle gezeichneten Objekte können skaliert werden. Zum Skalieren von Objekten geht man wie folgt vor:
+<OL>
+<LI>Linksklick auf das zu skalierende Objekt (bis der Rahmen um das Objekt aus gefüllten Quadraten besteht) </LI>
+<LI>das gefüllte Quadrat anklicken, in dessen Richtung das Objekt skaliert werden soll </LI>
+<LI>bei gedrückter Maustaste Objekt skalieren </LI>
+<LI>Maustaste loslassen</LI>
+</OL>
+
+Hält man beim Skalieren eines Objektes die STRG-Taste gedrückt, so wird das Objekt proportional skaliert. 
+<P>
+<H3>Verschieben von Objekten</H3>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Zum Verschieben von Objekten geht man wie folgt vor:
+<OL>
+<LI>Linksklick in das zu verschiebende Objekt </LI>
+<LI>bei gedrückter linker Maustaste Objekt verschieben </LI>
+<LI>Maustaste loslassen</LI>
+</OL>
+
+Hält man während des Verschiebens die STRG-Taste gedrückt, erfolgt die
+Verschiebung entweder nur horizontal oder nur vertikal.
+<H3>Ändern eines gezeichneten Objektes</H3>
+
+<P>
+<IMG SRC="point.gif">
+ Neben den Transformationen von ganzen Objekten besteht auch die Möglichkeit einzelne Teile von Objekten zu manipulieren. Wenn man auf das Icon geklickt hat, öffnet sich ein Untermenü, über welches man die folgenden Änderungen auswählen kann.
+WICHTIG ! Das Objekt, das auf diese Art verändert werden soll, muß vorher selektiert sein! Wählt man daraufhin das Punktmanipulationstool, so ändert sich der Rahmen des Objektes in leere Vierecke. 
+<P>
+<H3>Verschieben von Punkten</H3>
+
+<P>
+<IMG SRC="movepoint.gif">
+ Zum Verschieben eines einzelnen Objektpunktes geht man wie folgt vor:
+<OL>
+<LI>Linkklick auf den zu verschiebenden Punkt </LI>
+<LI>bei gedrückter Maustaste Punkt verschieben </LI>
+<LI>Maustaste loslassen</LI>
+</OL>
+<P>
+<H3>Hinzufügen von Punkten</H3>
+
+<P>
+<IMG SRC="newpoint.gif">
+ Diese Funktion ermöglicht es komplexen Objekten einen Manipulationspunkt hinzuzufügen: Man klickt dafür einfach auf die Stelle des Objektes, an der der Punkt gesetzt werden soll.
+<P>
+<H3>Entfernen von Punkten</H3>
+
+<P>
+<IMG SRC="rmpoint.gif">
+ Mit dieser Funktion kann man durch einfaches Anklicken Punkte aus Objekten entfernen.
+<P>
+<H3>Füllen von Objekten</H3>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Will man ein Objekt einfach mit einer Farbe füllen, ist es ausreichend, dieses zu selektieren und mit der linken Maustaste auf die gewünschte Farbe in der Farbauswahlleiste zu klicken. Ist die gewünschte Farbe nicht dabei oder soll zum Füllen ein Muster 
+
+oder ein Farbverlauf verwendet werden, geht man wie folgt vor.
+<OL>
+<LI>selektieren des zu füllenden Objektes </LI>
+<LI>Rechtsklick in das Objekt (Maustaste wieder loslassen) </LI>
+<LI>Menüpunkt "Eigenschaften" anklicken </LI>
+<LI>das Register "Füllung" anklicken</LI>
+<LI>wählen, ob einfarbig, mit einen Muster oder mit einem Farbverlauf
+gefüllt werden soll</LI>
+</OL>
+
+Nun sind der Phantasie keine Grenzen gesetzt. Ist die gewünschte Füllung gefunden, bestätigt man mit OK und voila. 
+WICHTIG ! Beim Füllen mit einem Muster muß eine Farbe festgelegt werden. Anderenfalls kann es sein, daß das Objekt leer scheint, obwohl es gefüllt ist. 
+<P>
+<H2><A NAME="ss3.4">3.4 Positionieren von Objekten</A>
+</H2>
+
+<P>Der KIllustrator bietet eine Vielzahl von Hilfsmitteln zum Positionieren von Objekten. Er ermöglicht ein punktgenaues Zeichnen und ein späteres Ausrichten der Objekte. 
+<P>
+<H3>Gitter</H3>
+
+<P>Das Gitter ist eine Möglichkeit, schon beim Zeichnen sehr genau zu arbeiten. Es kann aber auch nur als Anhalt angesehen werden. Folgende drei Aktionen sind zum Einstellen von Gittern möglich. (In Klammern steht als erstes, über welche Menüpunkte man di
+
+e entsprechende Funktion auslösen kann und als zweites, was sie bewirkt.) 
+<OL>
+<LI>Gitter anzeigen (Ansicht -> Gitter anzeigen, stellt das Gitter dar) </LI>
+<LI>An Gitter ausrichten (Layout -> An Gitter ausrichten, Objekte rasten nun auf dem Gitter ein) </LI>
+<LI>Gitter bearbeiten (Layout -> Gitter, bearbeiten des Gitters)</LI>
+</OL>
+
+Die Funktionen eins und zwei erklären sich von selbst und können auch mit entsprechenden Knöpfen unter Funktion drei ausgelöst werden. Das Bearbeiten des Gitters ermöglicht zudem noch das Einstellen des Abstandes der Gitterpunkte. 
+<P>
+<H3>Hilfslinien</H3>
+
+<P>Hilfslinien sind neben dem Gitter eine Möglichkeit bereits beim Zeichnen Perfektion walten zu lassen. Der Funktionsumfang entspricht dem des Gitters und auch die Funktionsaufrufe sind äquivalet zu finden. Sie haben gegenüber dem Gitter den Vorteil, daß
+
+ man die Abstände zwischen den einzelnen Hilflinien frei variieren kann. Der KIllustrator ermöglicht vertikale und horizontale Hilfslinien.
+<P>
+<H3>Ausrichten von Objekten</H3>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Diese Positionierungsart greift nach dem Zeichnen
+eines Objektes. Man
+selektiere das auszurichtende Objekt und Klicke mit der rechten Maustaste in dieses. Nun wählt man den Menüpunkt "Ausrichten" und erhält folgendes Dialogfenster: 
+<P>
+<BLOCKQUOTE>
+<IMG SRC="ausrichten.gif">
+</BLOCKQUOTE>
+<P><I>In der mir vorliegenden Version funktioniert nur das Ausrichten auf der Seitenmitte. Ich werde diesbezüglich noch einmal mit Kai-Uwe sprechen und hoffe, daß in der nächsten Version mehr Funktionalität zum Ausrichten implementiert ist. </I>
+<P>
+<H3>Ausrichten von Texten an Pfaden</H3>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Das Ausrichten eines Textes an einem Pfad ist ein sehr
+nützliches Tool,
+wenn man z.B. Banner gestalten will. Ist der entsprechende Pfad gezeichnet, geht man wie folgt vor, um an ihm einen Text auszurichten: 
+<OL>
+<LI>selektieren des auszurichtenden Textes </LI>
+<LI>über den Menüpunkt "Anordnen" den Punkt "Text entlang eines Pfades" wählen </LI>
+<LI>das Objekt, das als Pfad dienen soll, mit der linken Maustaste anklicken (ein Rechtsklick bricht die Aktion ab!)</LI>
+</OL>
+<P>Folgende Objekte können als Pfad verwendet werden: 
+<UL>
+<LI>
+<A HREF="#fh">Freihandzeichnungen</A></LI>
+<LI>
+<A HREF="#li">Linien</A>, 
+<A HREF="#pf">Pfade</A>, 
+<A HREF="#gp">geschlossene Polygone</A> </LI>
+<LI>
+<A HREF="#be">Bezierkurven</A></LI>
+<LI>
+<A HREF="#el">Ellipsen, Kreise</A></LI>
+</UL>
+<H3>Gruppieren von Objekten</H3>
+
+<P>Einzelne Objekte können zu Gruppen zusammengefaßt werden. Dies ist vor allem dann interessant, wenn man komplexe Figuren aus einzelnen Objekten zusammensetzen und diese Figuren dann als einzelnes Objekt betrachten will. Zum Gruppieren von Objekten geht
+
+ man wie folgt vor: 
+<OL>
+<LI>Selektieren der zu gruppierenden Objekte; Das Selektieren mehrerer
+Objekte kann entweder mittest des Selektionstools oder durch Verwendung
+der SHIFT-Taste erreicht werden.</LI>
+<LI>Gruppieren der Objekte
+(Anordnen->Gruppierung) </LI>
+</OL>
+
+Will man eine Gruppe wieder trennen, selektiert man diese und verwendet
+die Funktion "Gruppierung aufheben" des Menüpunktes "Anordnen". 
+<H2><A NAME="ss3.5">3.5 Das Schichtenkonzept</A>
+</H2>
+
+<P>
+<H3>Was sind Schichten?</H3>
+
+<P>Das Schichtenkonzept läßt sich am einfachsten an Papierzeichnungen erklären. Jede Schicht entspricht einem Blatt. Standartmäßig sind alle Blätter transparent, können beschrieben und verschickt werden. Im KIllustrator entsprechen diese drei Eigenschafte
+
+n folgende Funktionen: 
+<UL>
+<LI>Transparenz: Man kann durch die einzelnen Schichten auf die anderen blicken. Es entsteht somit der Eindruck, man arbeite mit nur einer Schicht (einem Blatt). </LI>
+<LI>Beschreibbarkeit: Ich kann in der gewählten Schicht zeichnen. </LI>
+<LI>Verschickbarkeit: Diese Schicht wird mit ausgedruckt.</LI>
+</UL>
+
+Damit ist aber das Repertoire noch nicht ausgeschöpft. Einzelne Schichten können ausgeblendet werden. Ihr Inhalt wird dadurch nicht mehr angezeigt. Dies ist auch beim Drucken möglich.
+<H3>Arbeiten mit Schichten</H3>
+
+<P>...
+<H2><A NAME="ss3.6">3.6 Umgang mit Dateien</A>
+</H2>
+
+<P>
+<P>
+<H3>Zeichnung speichern</H3>
+
+<P>Zum Speichern von Zeichnungen gibt es im großen und ganzen zwei Wege. Zum einen, über den Menüpunkt "Datei" und zum anderen über das Diskettenicon in der Iconleiste. Hat man die aktuelle Zeichnung neu erstellt und noch nie gespeichert, so gelangt man a
+
+uf jeden Fall in den Dialog, in dem man den Dateinamen der zu speichernden Zeichnung bestimmen kann. 
+<P>
+<BLOCKQUOTE>
+<IMG SRC="save_dialog.gif">
+</BLOCKQUOTE>
+<P>Ist der Zeichnung bereits ein Dateiname zugewiesen, so wird dieser verwendet, es sei denn, man benutzt den Menüpunkt "Speichern unter".
+Man sollte als Dateierweiterung <CODE>.kil</CODE> verwenden. Nur so ist es gewährleistet, daß der KIllustrator diese Datei auch problemlos wiederfindet. 
+<P>
+<H3>Zeichnung laden</H3>
+
+<P>Auch zum Öffnen von Dateien gibt es zwei Wege. Entweder klickt man auf das entsprechende Icon in der Iconleiste oder man benutzt den Menüpunkt "Datei" und dessen Menüeintrag "Datei öffnen". Auf beiden Wegen gelangt man in den "Öffnen"-Dialog. 
+<P>
+<BLOCKQUOTE>
+<IMG SRC="open_dialog.gif">
+</BLOCKQUOTE>
+<P>Da diese Dialogform dem KDE-Standard entspricht, soll an dieser Stelle nicht auf jeden Knopf eingegangen werden. Hat man die zu öffnende Datei selektiert, so erscheint im rechten Teil des Dialoges eine Vorschau. Nun kann man die Datei entweder mittels 
+
+Doppelklick auf den Dateinamen oder über den Knopf "OK" laden. 
+<P>
+<H3>Importieren und Exportieren</H3>
+
+<P>Leider werden die meisten Programme daran gemessen, wie viele Fremdformate sie unterstützen. Damit Software jedoch einen gewissen Grad Flexibilität hat, sind solche Import- und Exportschnittstellen notwendig. Der KIllustrator kann diverse Dateiformate 
+
+in Zeichnungen einbinden (importieren): 
+<UL>
+<LI>KIllustrator Zeichnungen (.kil) </LI>
+<LI>XFig Zeichnungen (.fig) </LI>
+<LI>Windows Metafiles (.wmf) </LI>
+<LI>GIF Bilder (.gif) </LI>
+<LI>JPEG Bilder (.jpg) </LI>
+<LI>PNG Bilder (.png) </LI>
+<LI>X11 Bitmaps </LI>
+<LI>X11 Pixmaps (.xpm)</LI>
+</UL>
+
+Der KIllustrator kann Zeichnungen in folgenden Fremdformaten speichern (exportieren): 
+<UL>
+<LI>GIF Bilder (.gif) </LI>
+<LI>X11 Pixmaps (.xpm) </LI>
+<LI>Encapsulated Postscript (.eps) </LI>
+<LI>PPM Bilder (.ppm)</LI>
+</UL>
+<H3>Importieren</H3>
+
+<P>Das Importieren von Objekten in eine KIllustratorzeichnung funktioniert leider
+nicht für alle Formate auf die gleiche Weise. Die meisten Importfilter findet
+man im Menü "Bearbeiten" unter "Einfügen". Der Unterpunkt "Clipart" ermöglicht
+das Einfügen von <CODE>.wmf</CODE> Dateien. Die Filter für pixelorientierte Bilder befinden
+sich im Unterpunkt "Bitmap". Um XFig-Zeichnungen oder eine ander
+KIllustrator-Zeichnung zu importieren, muß man den Menüeintrag "Importieren" 
+im "Datei"-Menü benutzen. 
+Die jeweiligen Dialoge entsprechen dem Dialog zum Datei öffnen. 
+<P>
+<H3>Exportieren</H3>
+
+<P>Über das Menü "Datei" und den Menüpunkt "exportieren" gelangt man in
+folgenden Dialog: 
+<P>
+<BLOCKQUOTE>
+<IMG SRC="export.gif">
+</BLOCKQUOTE>
+<P>
+<P>Prinzipiell entspricht er dem Dialog zum speichern von Dateien. Der einzige Unterschied besteht in der Tatsache, daß man das Dateiformat festlegen kann. 
+<P>
+<H3>Zeichnung Drucken</H3>
+
+<P>
+<P>
+<H2><A NAME="ss3.7">3.7 Undo / Redo</A>
+</H2>
+
+<P>Die Funktionen Undo und Redo ermöglichen es, ein wenig mit den verschiedenen Tools "herumzuspielen". Wenn man merkt, daß der Schritt, den man gerade gemacht hat, nicht gefällt, so verwendet man einfach Undo um ihn rückgängig zu machen. Stellt man nach 
+
+einem Undo fest, daß die rückgänging gemachte Aktion doch nicht so schlecht gewesen ist, kann man sie mit Redo wiederholen.
+Der KIllustrator bietet die Möglichkeit alle gemachten Aktionen zu wiederrufen. D.h. das Undo funktioniert solange, bis die Zeichnung wieder leer ist.
+Man sollte aber beachten, daß Undo und Redo immer in der Reihenfolge wirken, in der gezeichnet wurde. Es ist also nicht möglich nur den vorletzten Schritt rückgängig zu machen und den letzten zu behalten. 
+<P>
+<H2><A NAME="ss3.8">3.8 Ansicht vergößern bzw. verkleinern</A>
+</H2>
+
+<P>
+<IMG SRC="zoom.gif">
+ Das Zoomen, wie das Ändern der Ansichtsgröße auch
+genannt
+wird, kann auf zwei Wegen erfolgen. Der einfachste ist das Auswählen eines Zoomfaktors aus dem Ausklappmenü in dem standardmäßig 100% steht. Der zweite besteht in der Verwendung der Lupe. Klickt man mit der linken Maustaste in die Zeichnung, so wird die R
+
+egion um den Klickpunkt auf den nächste Zoomfaktor vergrößert. Folgende Zoomfaktoren stehen zur Verfügung:
+<P>
+<UL>
+<LI>50% </LI>
+<LI>100% </LI>
+<LI>150% </LI>
+<LI>200% </LI>
+<LI>400% </LI>
+<LI>600% </LI>
+<LI>800% </LI>
+<LI>1000%</LI>
+</UL>
+<P>
+<H2><A NAME="ss3.9">3.9 Umgang mit Farben</A>
+</H2>
+
+<P>
+<IMG SRC="pfeil.gif">
+ Der Umgang mit Farben ist beim KIllustrator sehr
+einfach gestaltet. Im
+Grunde könnte man ihn mit einem Satz beschreiben, wenn da nicht noch zusätzliche Funktionen wären. Allgemein sei gesagt, ein Linksklick in die Farbauswahlleiste ändert die Füllfarbe, ein Rechtsklick hingegen die Zeichen- bzw. Rahmenfarbe eines selektierte
+
+n Objektes. Ist der gewünschte Farbton nicht in dieser Leiste enthalten, muß man zum Ändern der Zeichenfarbe wie folgt vorgehen. 
+<P>
+<OL>
+<LI>Selektieren des zu bearbeitenden Objektes </LI>
+<LI>Rechtsklick in das Objekt und Menüpunkt "Eigenschaften" auswählen </LI>
+<LI>Register "Umriß" wählen </LI>
+<LI>über den Knopf "Farbe" gelangt man in den Farbdialog 
+<P>
+<IMG SRC="color.gif">
+<P>
+</LI>
+<LI>Linksklick in das "bunte" Fenster und bei gedrückter Maustaste Farbton durch Bewegen der Maus wählen </LI>
+<LI>ssen der linken Maustaste </LI>
+<LI>Linksklick auf das kleine Dreieck am rechten Fensterrand </LI>
+<LI>Einstellen der Helligkeit durch Auf- und Abbewegen des kleinen Dreickes bei gedrückter linker Maustaste </LI>
+<LI>Loslassen der linken Maustaste </LI>
+<LI>durch einen Linksklick einen freien Farbplatz auswählen </LI>
+<LI>mit dem Knopf "Zu eigenen Farben hinzufügen" diesem Farbplatz die eingestellte Farbe zuweisen</LI>
+</OL>
+
+Man kann die HSV und RGB Werte der Farbe auch direkt als Zahlenwert eingeben. Dazu klickt man in das entsprechende Feld, editiert den Wert und schließt den Vorgang mit der Eingabetaste ab. 
+<P>
+<H2><A NAME="ss3.10">3.10 Ändern der Standardparameter</A>
+</H2>
+
+<P>
+<H3>globale Parameter</H3>
+
+<P>
+<H3>Seiteneinstellungen</H3>
+
+<P>
+<H3>Maßeinheiten</H3>
+
+<P>
+<P>
+<H3>Parameter von Objekten</H3>
+
+<P>Funktionen, wie z.B. das Füllen von Objekten, können als Standard für neu zu zeichnenden Objekte definiert werden. Dies geschieht, indem man die entsprechende Funktion aufruft, ohne ein Objekt selektiert zu haben. Aus Sicherheitsgründen muß man dann no
+
+ch eine Bestätigung der globalen Änderung vornehmen. 
+<P>
+<P>
+<HR>
+<A HREF="killustrator-4.html">Weiter</A>
+<A HREF="killustrator-2.html">Zurück</A>
+<A HREF="index.html#toc3">Inhalt</A>
+</BODY>
+</HTML>
