@@ -195,8 +195,16 @@ TODO: improove security for password information in .kexis files
 TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
 IDEA: integrate password information in .kexis files with KWallet
 
+
+2003-12-08
+- Kexi MainWindows' settings are now stored and restored:
+  - toolbars, docks positions
+  - MDI mode
+  - added workaround for TaskBar positioning problem
+
 2003-12-06
 - sources synced with win32 target, again
+- Kexi:: singletons are now accessed via functions, eg. Kexi::connset()
 
 2003-12-03
 - KMDI modes enabled

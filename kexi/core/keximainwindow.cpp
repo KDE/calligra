@@ -24,6 +24,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
@@ -108,7 +109,7 @@ KexiMainWindow::KexiMainWindow()
 		else
 			menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
 	}
-	
+
 //	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
 }
 
@@ -367,9 +368,21 @@ KexiMainWindow::closeEvent(QCloseEvent *ev)
 void
 KexiMainWindow::restoreSettings()
 {
-	KConfig *config = KGlobal::config();
+	KConfig *config = kapp->config();
 	config->setGroup("MainWindow");
-	int mdimode = config->readNumEntry("MDIMode", KMdi::TabPageMode);
+
+	//small hack - set the default -- bottom
+	config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
+	if (config->readEntry("Position").isEmpty()) {
+		config->writeEntry("Position","Bottom");
+		moveDockWindow(m_pTaskBar, DockBottom);
+	}
+	config->setGroup("MainWindow");
+
+	// Saved settings
+	applyMainWindowSettings( config );//, instance()->instanceName() );
+
+	int mdimode = config->readNumEntry("MDIMode", -1);//KMdi::TabPageMode);
 
 	switch(mdimode)
 	{
@@ -382,31 +395,28 @@ KexiMainWindow::restoreSettings()
 		case KMdi::IDEAlMode:
 			switchToIDEAlMode();
 			break;
-		default:
+    case KMdi::TabPageMode:
 			switchToTabPageMode();
 			break;
+    default:;//-1
 	}
 
 //	setGeometry(config->readRectEntry("Geometry", new QRect(150, 150, 400, 500)));
 
-    // Saved size
-    restoreWindowSize( config );
-    
-	if ( !initialGeometrySet() )
-    {
-        // Default size
+	if ( !initialGeometrySet() ) {
+		// Default size
 #if KDE_IS_VERSION(3,1,90)
-	const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
+		const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
 #else
-	const int deskWidth = QApplication::desktop()->width();
+		const int deskWidth = QApplication::desktop()->width();
 #endif
-        if (deskWidth > 1100) // very big desktop ?
-            resize( 1000, 800 );
-        if (deskWidth > 850) // big desktop ?
-            resize( 800, 600 );
-        else // small (800x600, 640x480) desktop
-            resize( 600, 400 );
-    }
+		if (deskWidth > 1100) // very big desktop ?
+			resize( 1000, 800 );
+		if (deskWidth > 850) // big desktop ?
+			resize( 800, 600 );
+		else // small (800x600, 640x480) desktop
+			resize( 600, 400 );
+	}
 }
 
 void
@@ -414,11 +424,10 @@ KexiMainWindow::storeSettings()
 {
 	kdDebug() << "KexiMainWindow::storeSettings()" << endl;
 
-	KConfig *config = KGlobal::config();
+	KConfig *config = kapp->config();
 	config->setGroup("MainWindow");
-	saveWindowSize( instance()->config() );
-	saveMainWindowSettings( KGlobal::config(), instance()->instanceName() );
-//	config->writeEntry("Geometry", geometry());
+	saveWindowSize( config ); //instance()->config() );
+	saveMainWindowSettings( config );
 	config->writeEntry("MDIMode", mdiMode());
 	config->sync();
 }
