@@ -124,7 +124,19 @@ VSegmentList::VSegmentList( VObject* parent )
 VSegmentList::VSegmentList( const VSegmentList& list )
 	: VObject( list )
 {
-	*this = list;
+	m_isClosed = list.m_isClosed;
+
+	m_first = m_last = m_current = 0L;
+	m_number = 0;
+	m_currentIndex = -1;
+	m_iteratorList = 0L;
+
+	VSegment* segment = list.m_first;
+	while( segment )
+	{
+		append( new VSegment( *segment ) );
+		segment = segment->m_next;
+	}
 }
 
 VSegmentList::~VSegmentList()
@@ -513,8 +525,6 @@ VSegmentList::prepend( const VSegment* segment )
 void
 VSegmentList::append( const VSegment* segment )
 {
-	if( isClosed() ) return;
-
 	VSegment* s = const_cast<VSegment*>( segment );
 
 	s->m_next = 0L;
@@ -528,9 +538,6 @@ VSegmentList::append( const VSegment* segment )
 
 	m_currentIndex = m_number;
 	++m_number;
-
-	if( s->type() == segment_end )
-		close();
 
 	invalidateBoundingBox();
 }
