@@ -1402,6 +1402,9 @@ QString KoFieldVariable::fieldCode()
     case VST_ABSTRACT:
         return i18n("Abstract");
         break;
+    case VST_INITIAL:
+        return i18n("Initial");
+        break;
     }
     return i18n("Field");
 }
@@ -1474,6 +1477,7 @@ void KoFieldVariable::recalc()
         case VST_CITY:
         case VST_STREET:
         case VST_AUTHORTITLE:
+        case VST_INITIAL:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
             KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
@@ -1501,6 +1505,8 @@ void KoFieldVariable::recalc()
                     value = authorPage->street();
                 else if ( m_subtype == VST_AUTHORTITLE )
                     value = authorPage->title();
+                else if ( m_subtype == VST_INITIAL )
+                    value = authorPage->initial();
             }
         }
         break;
@@ -1550,6 +1556,7 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "File Name Without Extension" );
     lst << i18n( "Directory Name" ); // is "Name" necessary ?
     lst << i18n( "Directory && File Name" );
+    lst << i18n( "Initial" );
     return lst;
 }
 
@@ -1595,6 +1602,8 @@ KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber
         case 14: v = VST_DIRECTORYNAME;
                 break;
         case 15: v = VST_PATHFILENAME;
+                break;
+        case 16: v = VST_INITIAL;
                 break;
         default:
             v = VST_NONE;

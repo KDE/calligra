@@ -221,6 +221,8 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
     {
         if ( n.tagName() == "full-name" )
             m_fullName = n.text();
+        else if ( n.tagName() == "initial" )
+            m_initial = n.text();
         else if ( n.tagName() == "title" )
             m_title = n.text();
         else if ( n.tagName() == "company" )
@@ -250,6 +252,11 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
     QDomElement t = doc.createElement( "full-name" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_fullName ) );
+
+    t = doc.createElement( "initial" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_initial ) );
+
 
     t = doc.createElement( "title" );
     e.appendChild( t );
@@ -293,6 +300,11 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
 QString KoDocumentInfoAuthor::fullName() const
 {
     return m_fullName;
+}
+
+QString KoDocumentInfoAuthor::initial() const
+{
+    return m_initial;
 }
 
 QString KoDocumentInfoAuthor::title() const
@@ -344,6 +356,12 @@ void KoDocumentInfoAuthor::setFullName( const QString& n )
 {
     m_fullName = n;
 }
+
+void KoDocumentInfoAuthor::setInitial( const QString& n )
+{
+    m_initial = n;
+}
+
 
 void KoDocumentInfoAuthor::setTitle( const QString& n )
 {

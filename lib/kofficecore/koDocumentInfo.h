@@ -91,6 +91,7 @@ public:
     virtual QDomElement save( QDomDocument& doc );
 
     QString fullName() const;
+    QString initial() const;
     QString title() const;
     QString company() const;
     QString email() const;
@@ -111,7 +112,7 @@ public:
     void setPostalCode( const QString& n );
     void setCity( const QString& n );
     void setStreet( const QString& n );
-
+    void setInitial( const QString& n );
     void initParameters();
 
 private:
@@ -125,6 +126,7 @@ private:
     QString m_postalCode;
     QString m_city;
     QString m_street;
+    QString m_initial;
 };
 
 class KoDocumentInfoAbout : public KoDocumentInfoPage

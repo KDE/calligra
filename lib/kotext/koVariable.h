@@ -499,7 +499,7 @@ public:
                         // room for more 'author' page info fields if asked for
                         VST_TITLE = 10, VST_ABSTRACT = 11,
                         VST_POSTAL_CODE = 12, VST_CITY = 13, VST_STREET = 14,
-                        VST_AUTHORTITLE = 15};
+                        VST_AUTHORTITLE = 15, VST_INITIAL = 16};
 
     virtual VariableType type() const
     { return VT_FIELD; }

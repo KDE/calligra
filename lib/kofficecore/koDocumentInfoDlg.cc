@@ -56,6 +56,7 @@ public:
   KoDocumentInfo *m_info;
 
   QLineEdit *m_leFullName;
+    QLineEdit *m_leInitial;
   QLineEdit *m_leAuthorTitle;
   QLineEdit *m_leCompany;
   QLineEdit *m_leEmail;
@@ -150,6 +151,9 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leFullName->setText( name );
   }
 
+  (void) new QLabel( i18n( "Initial:" ), grid );
+  d->m_leInitial = new QLineEdit( authorInfo->initial(), grid );
+
   (void) new QLabel( i18n( "Title:" ), grid );
   d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), grid );
 
@@ -193,6 +197,9 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
+  connect( d->m_leInitial, SIGNAL( textChanged( const QString & ) ),
+           this, SIGNAL( changed() ) );
+
   connect( d->m_leAuthorTitle, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
   connect( d->m_leCompany, SIGNAL( textChanged( const QString & ) ),
@@ -261,6 +268,7 @@ void KoDocumentInfoDlg::save()
 void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
 {
   authorInfo->setFullName( d->m_leFullName->text() );
+  authorInfo->setInitial( d->m_leInitial->text() );
   authorInfo->setTitle( d->m_leAuthorTitle->text() );
   authorInfo->setCompany( d->m_leCompany->text() );
   authorInfo->setEmail( d->m_leEmail->text() );
