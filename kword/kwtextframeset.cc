@@ -3300,8 +3300,8 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     }
     else
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc);
-
-    insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
+    if ( var)
+        insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
 }
 
 void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText, bool refreshCustomMenu )

@@ -103,7 +103,12 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
             if ( _forceDefaultFormat )
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
-                varFormat =  coll->format( KoDateVariable::formatStr() );
+            {
+                QCString result = KoDateVariable::formatStr();
+                if ( result == 0 )//we cancel insert variable
+                    return 0L;
+                varFormat =  coll->format( result );
+            }
         }
         return new KWDateVariable( textdoc, subtype, varFormat, this, m_doc );
     case VT_TIME:
@@ -113,7 +118,12 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
             if ( _forceDefaultFormat )
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
-                varFormat =  coll->format( KoTimeVariable::formatStr() );
+            {
+                QCString result = KoTimeVariable::formatStr();
+                if ( result == 0 )//we cancel insert variable
+                    return 0L;
+                varFormat =  coll->format( result );
+            }
         }
         return new KWTimeVariable( textdoc, subtype, varFormat, this, m_doc );
     default:
