@@ -14,21 +14,19 @@ noinst_LTLIBRARIES = \
 noinst_HEADERS = \
 	vdocker.h \
 	vcolordocker.h \
-	vlayersdocker.h \
 	vcontexthelpdocker.h \
 	vstrokedocker.h \
 	vtooloptionsdocker.h \
-	vhistorydocker.h
+	vdocumentdocker.h
 
 libkarbondockers_la_SOURCES = \
 	dummy.cc \
 	vdocker.cc \
 	vcolordocker.cc \
-	vlayersdocker.cc \
 	vcontexthelpdocker.cc \
 	vstrokedocker.cc \
 	vtooloptionsdocker.cc \
-	vhistorydocker.cc
+	vdocumentdocker.cc 
 
 libkarbondockers_la_METASOURCES = AUTO
 
