@@ -1376,9 +1376,9 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 
   QRect vr( QPoint(left_col, top_row),
             QPoint(right_col, bottom_row) );
-  m_pView->m_pDoc->emitBeginOperation( false );
+  m_pView->doc()->emitBeginOperation( false );
   table->setRegionPaintDirty( vr );
-  m_pView->m_pDoc->emitEndOperation( vr );
+  m_pView->doc()->emitEndOperation( vr );
 }
 
 void KSpreadCanvas::focusInEvent( QFocusEvent* )
