@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Screen
-Name[af]=SKERM
 Name[az]=Ekran
 Name[bg]=Екран
 Name[cs]=Obrazovka
@@ -22,6 +21,7 @@ Name[lt]=Ekranas
 Name[lv]=Ekrāns
 Name[mt]=Skrin
 Name[nl]=Scherm
+Name[no]=Skjerm
 Name[no_NY]=Skjerm
 Name[pl]=Ekran
 Name[pt_BR]=Tela
@@ -39,4 +39,5 @@ Name[vi]=Màn hình
 Name[wa]=Waitroûle
 Name[xh]=Ikhusi
 Name[zh_CN.GB2312]=屏幕
+Name[zh_TW.Big5]=畫面
 X-KDE-DefaultTab=true
