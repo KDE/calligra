@@ -431,23 +431,31 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 if (0==(*paraFormatDataIt).variable.m_type) // date
                 {
                    // ### TODO: fixed/variable date, exact custom formats
-                   str += "{\\field{\\*\\fldinst{DATE \\\\* MERGEFORMAT }}}";
+                   str += "{\\field{\\*\\fldinst DATE \\\\* MERGEFORMAT }{\\fldrslt ";
+                   str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                   str += "}}";
                 }
                 else if (2==(*paraFormatDataIt).variable.m_type) // time
                 {
                    // ### TODO: fixed/variable time, exact custom formats
-                   str += "{\\field{\\*\\fldinst{TIME \\\\* MERGEFORMAT }}}";
+                   str += "{\\field{\\*\\fldinst TIME \\\\* MERGEFORMAT }{\\fldrslt ";
+                   str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                   str += "}}";
                 }
                 else if (4==(*paraFormatDataIt).variable.m_type)
                 {
                     QString strFieldType;
                     if ((*paraFormatDataIt).variable.isPageNumber())
                     {
-                        str += "{\\field{\\*\\fldinst{PAGE \\\\* MERGEFORMAT }}}";
+                        str += "{\\field{\\*\\fldinst PAGE \\\\* MERGEFORMAT }{\\fldrslt ";
+                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        str += "}}";
                     }
                     else if ((*paraFormatDataIt).variable.isPageCount())
                     {
-                        str += "{\\field{\\*\\fldinst{NUMPAGES \\\\* MERGEFORMAT }}}";
+                        str += "{\\field{\\*\\fldinst NUMPAGES \\\\* MERGEFORMAT }{\\fldrslt ";
+                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        str += "}}";
                     }
                     else
                     {
