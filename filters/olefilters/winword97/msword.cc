@@ -1079,7 +1079,11 @@ MsWord::MsWord(
         const myFile &mainStream,
         const myFile &table0Stream,
         const myFile &table1Stream,
-        const myFile &dataStream)
+        const myFile &dataStream) :
+    mainStream(mainStream),
+    table0Stream(table0Stream),
+    table1Stream(table1Stream),
+    dataStream(dataStream)
 {
     m_constructionError = QString("");
     m_fib.nFib = s_minWordVersion;
@@ -1109,6 +1113,7 @@ MsWord::MsWord(
     // being present until we are destroyed.
 
     m_mainStream = mainStream.data;
+kdDebug(s_area) << "MsWord::MsWord: mainStream.data"<<m_mainStream << endl;
     if (table0Stream.data && table1Stream.data)
     {
         // If and only if both table streams are present, the FIB tells us which

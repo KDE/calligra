@@ -19,18 +19,17 @@
 #ifndef EXCELFILTER_H
 #define EXCELFILTER_H
 
-#include <qdatastream.h>
-
 #include <filterbase.h>
+#include <qcstring.h>
+#include <qdatastream.h>
 #include <xmltree.h>
-#include <myfile.h>
 
 const int MAX_RECORD_SIZE = 0x2024;
 
 class ExcelFilter:public FilterBase
 {
 public:
-    ExcelFilter(const myFile &mainStream);
+    ExcelFilter(const QByteArray &mainStream);
     ~ExcelFilter();
 
     virtual const bool filter();

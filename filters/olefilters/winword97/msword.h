@@ -32,9 +32,9 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <mswordgenerated.h>
+#include <myfile.h>
 #include <qarray.h>
 
-class myFile;
 class Properties;
 
 class MsWord: public MsWordGenerated
@@ -327,6 +327,10 @@ protected:
 
 private:
     friend class Properties;
+    myFile mainStream;
+    myFile table0Stream;
+    myFile table1Stream;
+    myFile dataStream;
 
     // Error handling and reporting support.
 

@@ -15,15 +15,35 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
 
-// A data-structure to hold the file-info
+DESCRIPTION
+
+    A data-structure to hold the file data for an OLE stream. Shared storage is
+    used to implement reference counting and storage reclamation.
+*/
 
 #ifndef MYFILE_H
 #define MYFILE_H
 
-struct myFile {
-    unsigned char *data;
+#include <qcstring.h>
+
+class myFile: public QByteArray
+{
+public:
+    myFile() { data = 0L; length = 0; }
+
+    // NOTE: this implementation may look completely ugly, but its features are
+    // mostly for backwards compatibility. If you feel like cleaning up, be my
+    // guest!
+
+    const unsigned char *data;
     unsigned int length;
+
+    void setRawData(const unsigned char *data, unsigned length)
+    {
+        this->data = data;
+        this->length = length;
+        QByteArray::setRawData((const char *)data, length);
+    }
 };
 #endif // MYFILE_H

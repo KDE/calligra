@@ -18,6 +18,7 @@
 */
 
 #include <klaola.h>
+#include <myfile.h>
 
 KLaola::KLaola(const myFile &file) {
 
@@ -26,15 +27,15 @@ KLaola::KLaola(const myFile &file) {
     smallBlockFile=0L;
     bbd_list=0L;
     ok=true;
-//    ppsList.setAutoDelete(true);
-//    m_currentPath.setAutoDelete(true);
+    m_nodeList.setAutoDelete(true);
+    //m_currentPath.setAutoDelete(true);
 
     if( (file.length % 0x200) != 0 ) {
         kdError(s_area) << "KLaola::KLaola(): Invalid file size!" << endl;
         ok=false;
     }
     if(ok) {
-        data=file.data;
+        m_file=file;
         maxblock = file.length / 0x200 - 2;
         maxSblock=0;  // will be set in readSmallBlockDepot
 
@@ -52,7 +53,7 @@ KLaola::KLaola(const myFile &file) {
 
     // current path=root dirHandle
     m_currentPath.clear();
-    m_currentPath.append(m_tree.getFirst()->getFirst()->node);
+    m_currentPath.append(m_nodeTree.getFirst()->getFirst()->node);
 }
 
 KLaola::~KLaola() {
@@ -67,9 +68,10 @@ KLaola::~KLaola() {
     bbd_list=0L;
 }
 
+// Comvert the given list of nodes into a tree.
 void KLaola::createTree(const int handle, const short index) {
 
-    Node *node = dynamic_cast<Node *>(ppsList.at(handle));
+    Node *node = dynamic_cast<Node *>(m_nodeList.at(handle));
     SubTree *subtree;
 
     TreeNode *tree=new TreeNode;
@@ -88,13 +90,13 @@ void KLaola::createTree(const int handle, const short index) {
     }
     if(node->dirHandle!=-1) {
         subtree=new SubTree;
-//        subtree->setAutoDelete(true);
-        m_tree.append(subtree);
-        tree->subtree=m_tree.at();
+        subtree->setAutoDelete(true);
+        m_nodeTree.append(subtree);
+        tree->subtree=m_nodeTree.at();
         //kdDebug(s_area) << "create tree: dirHandle" << endl;
         createTree(node->dirHandle, tree->subtree);
     }
-    subtree=m_tree.at(index);
+    subtree=m_nodeTree.at(index);
     //kdDebug(s_area) << "create tree: APPEND " << handle << " tree node " << tree << endl;
     subtree->append(tree);
     if(node->nextHandle!=-1) {
@@ -133,7 +135,7 @@ const KLaola::NodeList KLaola::find(const QString &name, const bool onlyCurrentD
 
     if(ok) {
         if(!onlyCurrentDir) {
-            for(node=ppsList.first(); node; node=ppsList.next()) {
+            for(node=m_nodeList.first(); node; node=m_nodeList.next()) {
                 if(node->name()==name) {
                     ret.append(node);
                     ++i;
@@ -184,7 +186,7 @@ int KLaola::nextSmallBlock(int pos) const
 
 bool KLaola::parseHeader() {
 
-    if(qstrncmp((const char*)data,"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1",8 )!=0) {
+    if(qstrncmp((const char*)m_file.data,"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1",8 )!=0) {
         kdError(s_area) << "KLaola::parseHeader(): Invalid file format (unexpected id in header)!" << endl;
         return false;
     }
@@ -210,7 +212,7 @@ KLaola::NodeList KLaola::parseCurrentDir() {
     bool found;
 
     if(ok) {
-        for(i=0, subtree=m_tree.first(); i<m_currentPath.count(); ++i) {
+        for(i=0, subtree=m_nodeTree.first(); i<m_currentPath.count(); ++i) {
             treeNode=subtree->first();
             found=false;
             do {
@@ -224,7 +226,7 @@ KLaola::NodeList KLaola::parseCurrentDir() {
                 else
                     treeNode=subtree->next();
             } while(!found && ok);
-            subtree=m_tree.at(treeNode->subtree);
+            subtree=m_nodeTree.at(treeNode->subtree);
         }
     }
     if(ok) {
@@ -248,7 +250,7 @@ KLaola::NodeList KLaola::parseRootDir() {
     if(ok) {
         tmp=m_currentPath;
         m_currentPath.clear();      // current path=root dirHandle
-        m_currentPath.append(m_tree.getFirst()->getFirst()->node);
+        m_currentPath.append(m_nodeTree.getFirst()->getFirst()->node);
         tmpNodeList=parseCurrentDir();
         m_currentPath=tmp;
     }
@@ -257,12 +259,12 @@ KLaola::NodeList KLaola::parseRootDir() {
 
 unsigned char KLaola::read8(int i) const
 {
-    return data[i];
+    return m_file.data[i];
 }
 
 unsigned short KLaola::read16(int i) const
 {
-    return ( (data[i+1] << 8) + data[i] );
+    return ( (m_file.data[i+1] << 8) + m_file.data[i] );
 }
 
 unsigned int KLaola::read32(int i) const
@@ -288,7 +290,7 @@ const unsigned char *KLaola::readBBStream(int start, bool setmaxSblock)
         i=0;
         tmp=start;
         while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
-            memcpy(&p[i*0x200], &data[(tmp+1)*0x200], 0x200);
+            memcpy(&p[i*0x200], &m_file.data[(tmp+1)*0x200], 0x200);
             tmp=nextBigBlock(tmp);
             ++i;
         }
@@ -323,7 +325,7 @@ void KLaola::readBigBlockDepot() {
 
     bigBlockDepot=new unsigned char[0x200*num_of_bbd_blocks];
     for(unsigned int i=0; i<num_of_bbd_blocks; ++i)
-        memcpy(&bigBlockDepot[i*0x200], &data[(bbd_list[i]+1)*0x200], 0x200);
+        memcpy(&bigBlockDepot[i*0x200], &m_file.data[(bbd_list[i]+1)*0x200], 0x200);
 }
 
 void KLaola::readSmallBlockDepot() {
@@ -345,12 +347,13 @@ void KLaola::readRootList() {
         pos=nextBigBlock(pos);
     }
     SubTree *subtree=new SubTree;
-//    subtree->setAutoDelete(true);
-    m_tree.append(subtree);
+    subtree->setAutoDelete(true);
+    m_nodeTree.append(subtree);
 
     createTree(0, 0);           // build the tree with a recursive method :)
 }
 
+// Add the given OLE node to the list of nodes.
 void KLaola::readPPSEntry(int pos, const int handle) {
 
     int nameSize = read16(pos + 0x40);
@@ -376,30 +379,31 @@ void KLaola::readPPSEntry(int pos, const int handle) {
         node->sb = read32(pos + 0x74);
         node->size = read32(pos + 0x78);
         node->deadDir = false;
-        ppsList.append(node);
+        m_nodeList.append(node);
     }
 }
 
 myFile KLaola::stream(const OLENode *node) {
 
     const Node *realNode = dynamic_cast<const Node *>(node);
+    const unsigned char *temp;
     myFile ret;
 
     if(ok) {
         if(realNode->size>=0x1000)
-            ret.data=const_cast<unsigned char*>(readBBStream(realNode->sb));
+            temp = readBBStream(realNode->sb);
         else
-            ret.data=const_cast<unsigned char*>(readSBStream(realNode->sb));
-        ret.length=realNode->size;
+            temp = readSBStream(realNode->sb);
+        ret.setRawData(temp, realNode->size);
     }
     return ret;
 }
 
-myFile KLaola::stream(int handle) {
+myFile KLaola::stream(unsigned handle) {
 
     OLENode *node;
 
-    node = ppsList.at(handle);
+    node = m_nodeList.at(handle);
     return stream(node);
 }
 

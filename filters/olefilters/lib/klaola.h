@@ -15,19 +15,22 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
 
-// KLaola is the class which is used to decode the OLE 2 streams.
+DESCRIPTION
+
+    This class is used to decode OLE 2 streams. When instantiated, it
+    constructs an internal "filesystem" that corresponds to the OLE storage
+    tree. This tree can be navigated, and the individual OLE streams
+    returned as a linear memory buffer.
+*/
 
 #ifndef KLAOLA_H
 #define KLAOLA_H
 
-#include <string.h>
-#include <qstring.h>
-#include <qarray.h>
-#include <qlist.h>
 #include <kdebug.h>
 #include <myfile.h>
+#include <qstring.h>
+#include <qlist.h>
 
 class KLaola {
 
@@ -37,8 +40,7 @@ public:
 
     bool isOk() {return ok;}
 
-    // A little bit of OLE-Information. If you want to navigate through
-    // the "filesystem" you have to use this struct.
+    // A class representing an abstracted node in the OLE filesystem.
 
     class OLENode {
     public:
@@ -52,22 +54,21 @@ public:
         OLENode() {}
     };
 
+    // Wade through the "file system"
+
     typedef QList<OLENode> NodeList;
     NodeList parseRootDir();
     NodeList parseCurrentDir();
-
-    // Wade through the "file system"
+    const NodeList currentPath() const;
+    const NodeList find(const QString &name, const bool onlyCurrentDir=false);
     bool enterDir(const OLENode *node);
     bool leaveDir();
-    const NodeList currentPath() const;
 
     // Return the stream for a given node.
     //
     // Note: data - 512 byte blocks, but length is set correctly :)
-    // Make sure that you delete [] the data!
     myFile stream(const OLENode *node);
-    myFile stream(int handle);
-    const NodeList find(const QString &name, const bool onlyCurrentDir=false);
+    myFile stream(unsigned handle);
 
 private:
     KLaola(const KLaola &);
@@ -78,20 +79,21 @@ private:
     unsigned short read16(int i) const;
     unsigned int read32(int i) const;
 
+    // Parsing functions.
     bool parseHeader();
     void readBigBlockDepot();
     void readSmallBlockDepot();
     void readSmallBlockFile();
     void readRootList();
-    void readPPSEntry(int pos, const int handle);
-    void createTree(const int handle, const short index);
-    const unsigned char *readBBStream(int start, const bool setmaxSblock=false);
+    void readPPSEntry(int pos, int handle);
+    void createTree(const int handle, short index);
+    const unsigned char *readBBStream(int start, bool setmaxSblock=false);
     const unsigned char *readSBStream(int start) const;
     int nextBigBlock(int pos) const;
     int nextSmallBlock(int pos) const;
 
-    // dump some info (similar to "lls"
-    // of the LAOLA-project)
+    // Dump the parsed structure info (similar to "lls"
+    // of the LAOLA-project).
     void testIt(QString prefix = "");
 
     typedef enum
@@ -124,8 +126,13 @@ private:
         bool deadDir;     // true, if the dir is a "dead end"
     };
 
+    // Lists of nodes.
+
+    NodeList m_nodeList;
+    NodeList m_currentPath;
+
     // The OLE storage is represented as a tree. Each node in the tree may
-    // refer to a subtree. Each subtree is stored asa list of nodes.
+    // refer to a subtree. Each subtree is stored as a list of nodes.
 
     struct TreeNode
     {
@@ -133,14 +140,11 @@ private:
         short subtree;
     };
     typedef QList<TreeNode> SubTree;
-    QList<SubTree> m_tree;
-
-    NodeList ppsList;
-    NodeList m_currentPath;
+    QList<SubTree> m_nodeTree;
 
     bool ok;        // is the file OK?
 
-    unsigned char *data;
+    myFile m_file;
     unsigned char *bigBlockDepot;
     unsigned char *smallBlockDepot;
     unsigned char *smallBlockFile;
@@ -150,6 +154,6 @@ private:
     unsigned int num_of_bbd_blocks; // number of big block depot blocks
     unsigned int root_startblock;   // Root chain's first big block
     unsigned int sbd_startblock;    // small block depot's first big block
-    unsigned int *bbd_list;  //array of num_of_bbd_blocks big block numbers
+    unsigned int *bbd_list;         //array of num_of_bbd_blocks big block numbers
 };
 #endif // KLAOLA_H

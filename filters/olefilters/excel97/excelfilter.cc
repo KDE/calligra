@@ -23,13 +23,11 @@
 #include <records.h>
 #include <excelfilter.h>
 
-ExcelFilter::ExcelFilter(const myFile &mainStream):FilterBase(), length(mainStream.length)
+ExcelFilter::ExcelFilter(const QByteArray &mainStream):FilterBase(), length(mainStream.size())
 {
     length *= .85; // we reduce to 85% so that the progress-bar reachs 100%
-    QByteArray a;
-    a.setRawData((char*) mainStream.data, (int) mainStream.length);
 
-    s = new QDataStream(a, IO_ReadOnly);
+    s = new QDataStream(mainStream, IO_ReadOnly);
     s->setByteOrder(QDataStream::LittleEndian);
 
     tree = new XMLTree();
