@@ -178,7 +178,7 @@ bool KWAutoFormat::doUpperCase(KWParag *parag,KWFormatContext *fc)
 	
 	  parag->getKWString()->data()[fc->getTextPos()].autoformat = info;
 
-	  parag->getKWString()->data()[fc->getTextPos()].c.toUpper();
+	  parag->getKWString()->data()[fc->getTextPos()].c = parag->getKWString()->data()[fc->getTextPos()].c.upper();
 	  converted = true;
 	}
     }
@@ -204,7 +204,7 @@ bool KWAutoFormat::doUpperCase(KWParag *parag,KWFormatContext *fc)
 	
 	  parag->getKWString()->data()[fc->getTextPos()].autoformat = info;
 
-	  parag->getKWString()->data()[fc->getTextPos()].c.toLower();
+	  parag->getKWString()->data()[fc->getTextPos()].c = parag->getKWString()->data()[fc->getTextPos()].c.lower();
 	  converted = true;
 	}
     }
@@ -258,7 +258,7 @@ void KWAutoFormat::configUpperUpper(bool _uu)
 bool KWAutoFormat::isUpper(const QChar &c)
 {
   QChar c2(c);
-  c2.toLower();
+  c2 = c2.lower();
 
   if (c2 != c)
     return true;
@@ -270,7 +270,7 @@ bool KWAutoFormat::isUpper(const QChar &c)
 bool KWAutoFormat::isLower(const QChar &c)
 {
   QChar c2(c);
-  c2.toUpper();
+  c2 = c2.upper();
 
   if (c2 != c)
     return true;

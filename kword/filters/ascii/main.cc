@@ -137,7 +137,7 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
 
   data.length(len);
   for(CORBA::ULong i = 0;i < len;++i)
-    data[i] = str[i];
+    data[i] = QChar(str[i]);
 
   delete[] buffer;
 }
