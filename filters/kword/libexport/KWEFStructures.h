@@ -316,6 +316,10 @@ public:
         shadowDistance(0.0), shadowDirection(0)
         { }
 
+
+    enum { LS_CUSTOM = 0, LS_SINGLE = 10, LS_ONEANDHALF = 15, LS_DOUBLE = 20,
+      LS_ATLEAST = 30, LS_EXACTLY = 40, LS_MULTIPLE = 50 };
+
     QString     styleName;
     QString     styleFollowing;
     QString     alignment;      // left, right, center, justify

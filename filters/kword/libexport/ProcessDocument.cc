@@ -643,33 +643,39 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
     {
         // for old format
         if( oldValue == "oneandhalf" )
-            layout->lineSpacingType = 15;
+            layout->lineSpacingType = LayoutData::LS_ONEANDHALF;
         else if ( oldValue == "double" )
-            layout->lineSpacingType = 20;
+            layout->lineSpacingType = LayoutData::LS_DOUBLE;
         else
         {
             const double size = oldValue.toDouble ();
             if ( size >= 1.0 )
             {
                 // We have a valid size
-                layout->lineSpacingType = 0; // set to custom
+                layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
                 layout->lineSpacing     = size;
             }
             else
-               layout->lineSpacingType = 10; // assume single linespace
+               layout->lineSpacingType = LayoutData::LS_SINGLE; // assume single linespace
          }
     }
     else
     {
         // for new format
         if( spacingType == "oneandhalf" )
-            layout->lineSpacingType = 15;
+            layout->lineSpacingType = LayoutData::LS_ONEANDHALF;
         else if ( spacingType == "double" )
-            layout->lineSpacingType = 20;
+            layout->lineSpacingType = LayoutData::LS_DOUBLE;
         else if ( spacingType == "custom" )
-            layout->lineSpacingType = 0;
+            layout->lineSpacingType = LayoutData::LS_CUSTOM;
+        else if ( spacingType == "atleast" )
+            layout->lineSpacingType = LayoutData::LS_ATLEAST;
+        else if ( spacingType == "exactly" )
+            layout->lineSpacingType = LayoutData::LS_EXACTLY;
+        else if ( spacingType == "multiple" )
+            layout->lineSpacingType = LayoutData::LS_MULTIPLE;
         else
-               layout->lineSpacingType = 10; // assume single linespace
+             layout->lineSpacingType = LayoutData::LS_SINGLE; // assume single linespace
         layout->lineSpacing = spacingValue;
     }
 }
