@@ -86,6 +86,9 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
 
     createDocumentContent( content );
 
+    // add the automatic styles
+    m_styleFactory.addAutomaticStyles( content, m_styles );
+
     // store document content
     if ( !store->open( "content.xml" ) )
     {
@@ -261,14 +264,6 @@ void OoImpressExport::createDocumentStyles( QDomDocument & docstyles )
     m_styleFactory.addOfficeStyles( docstyles, styles );
     content.appendChild( styles );
 
-//     QDomElement fontDecls = doc.createElement( "office:font-decls" );
-//     m_styles.writeFontDecl( doc, fontDecls );
-
-//     QDomElement defaultStyle = doc.createElement( "style:style" );
-//     defaultStyle.setAttribute( "style:name", "Default" );
-//     defaultStyle.setAttribute( "style:family", "table-cell" );
-//     officeStyles.appendChild( defaultStyle );
-
     QDomElement automatic = docstyles.createElement( "office:automatic-styles" );
     m_styleFactory.addOfficeAutomatic( docstyles, automatic );
     content.appendChild( automatic );
@@ -372,9 +367,8 @@ void OoImpressExport::exportPaperSettings( QDomDocument & doccontent )
     QDomNode paper = doc.namedItem( "PAPER" );
 
     QDomElement p = paper.toElement();
-    m_masterPageStyle = m_styleFactory.createPageStyle( p );
+    m_masterPageStyle = m_styleFactory.createPageMasterStyle( p );
     m_pageHeight = p.attribute( "ptHeight" ).toFloat();
-    kdDebug() << p.attribute( "ptHeight") << endl;
 }
 
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
@@ -451,6 +445,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
 void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QDomElement textbox = doc.createElement( "draw:text-box" );
+    setGraphicStyle( source, textbox );
     set2DGeometry( source, textbox );
     appendText( doc, source, textbox );
 
@@ -534,6 +529,12 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
     }
+}
+
+void OoImpressExport::setGraphicStyle( QDomElement & source, QDomElement & target )
+{
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    target.setAttribute( "draw:style-name", gs );
 }
 
 #include "ooimpressexport.moc"

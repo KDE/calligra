@@ -54,6 +54,7 @@ private:
     void appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void set2DGeometry( QDomElement & source, QDomElement & target );
     void setLineGeometry( QDomElement & source, QDomElement & target );
+    void setGraphicStyle( QDomElement & source,  QDomElement & target );
 
     int m_currentPage;
     float m_pageHeight;
