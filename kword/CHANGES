@@ -408,4 +408,13 @@ Reggie, 26.11.1998:
 
 Reggie, 27.11.1998:
 -------------------
-- Lost of fixes
+- Lots of fixes
+- Did some speed improvments - it's noticeable faster now :-)
+
+Reggie, 28.11.1998:
+-------------------
+- Lots of fixes again
+- Fixed some memory leak producing code (which made KWord really slow too)
+- Much more speed improvements
+- Improved "Blocksatz" - it doesn't wobble anymore :-)
+- Fixes with scrolling/redraw

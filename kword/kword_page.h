@@ -88,7 +88,7 @@ public:
 
   void scroll(int dx,int dy);
 
-  void formatChanged(KWFormat &_format);
+  void formatChanged(KWFormat &_format,bool _redraw = true);
   void setFlow(KWParagLayout::Flow _flow)
     { fc->getParag()->getParagLayout()->setFlow(_flow); recalcCursor(); }
   void setLeftIndent(float _left)

@@ -58,11 +58,11 @@ public:
     KWParagLayout& operator=(KWParagLayout &_layout);
 
     void setFormat( KWFormat &_format );
-    void setMMFirstLineLeftIndent( unsigned int _i ) { mmFirstLineLeftIndent = _i; }
-    void setMMLeftIndent( unsigned int _i ) { mmLeftIndent = _i; }
-    void setMMParagFootOffset( unsigned int _i) { mmParagFootOffset = _i; }
-    void setMMParagHeadOffset( unsigned int _i) { mmParagHeadOffset = _i; }
-    void setPTLineSpacing( unsigned int _i) { ptLineSpacing = _i; }
+    void setMMFirstLineLeftIndent(unsigned int _i) { mmFirstLineLeftIndent = _i; ptFirstLineLeftIndent = MM_TO_POINT(mmFirstLineLeftIndent); }
+    void setMMLeftIndent(unsigned int _i) { mmLeftIndent = _i; ptLeftIndent = MM_TO_POINT(mmLeftIndent); }
+    void setMMParagFootOffset(unsigned int _i) { mmParagFootOffset = _i; ptParagFootOffset = MM_TO_POINT(mmParagFootOffset); }
+    void setMMParagHeadOffset(unsigned int _i) { mmParagHeadOffset = _i; ptParagHeadOffset = MM_TO_POINT(mmParagHeadOffset); }
+    void setPTLineSpacing(unsigned int _i) { ptLineSpacing = _i; }
     void setName(QString _n) { name = _n; }
     void setFlow( Flow _f ) { flow = _f; }
     /**
@@ -109,10 +109,10 @@ public:
 
     KWFormat& getFormat() { return format; }
     QString getName() { return name; }
-    unsigned int getPTFirstLineLeftIndent() { return MM_TO_POINT(mmFirstLineLeftIndent); }
-    unsigned int getPTLeftIndent() { return MM_TO_POINT(mmLeftIndent); }
-    unsigned int getPTParagFootOffset() { return MM_TO_POINT(mmParagFootOffset); }
-    unsigned int getPTParagHeadOffset() { return MM_TO_POINT(mmParagHeadOffset); }
+    unsigned int getPTFirstLineLeftIndent() { return ptFirstLineLeftIndent; }
+    unsigned int getPTLeftIndent() { return ptLeftIndent; }
+    unsigned int getPTParagFootOffset() { return ptParagFootOffset; }
+    unsigned int getPTParagHeadOffset() { return ptParagHeadOffset; }
     unsigned int getMMFirstLineLeftIndent() { return mmFirstLineLeftIndent; }
     unsigned int getMMLeftIndent() { return mmLeftIndent; }
     unsigned int getMMParagFootOffset() { return mmParagFootOffset; }
@@ -160,6 +160,10 @@ protected:
     unsigned int mmParagHeadOffset;
     unsigned int mmFirstLineLeftIndent;
     unsigned int mmLeftIndent;
+    unsigned int ptParagFootOffset;
+    unsigned int ptParagHeadOffset;
+    unsigned int ptFirstLineLeftIndent;
+    unsigned int ptLeftIndent;
     unsigned int ptLineSpacing;
     Border left,right,top,bottom;
 

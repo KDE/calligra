@@ -156,7 +156,7 @@ public:
   // C++
   virtual CORBA::Boolean printDlg();
 
-  virtual void setFormat(KWFormat &_format,bool _check = true,bool _update_page = true);
+  virtual void setFormat(KWFormat &_format,bool _check = true,bool _update_page = true,bool _redraw = true);
   virtual void setFlow(KWParagLayout::Flow _flow);
   virtual void setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
 			       KWParagLayout::Border _top,KWParagLayout::Border _bottom);

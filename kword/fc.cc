@@ -91,7 +91,7 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     {
 //       if (isCursorInLastLine() && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
 // 	ptY += getParag()->getParagLayout()->getPTParagFootOffset(); 
-      parag->setPTYEnd( ptY + getLineHeight() );
+      parag->setPTYEnd( ptY );
       parag = parag->getNext();
       if ( parag == 0L )
       {
@@ -242,6 +242,46 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter )
     cursorGotoPos( textPos, _painter );
 }
 
+void KWFormatContext::cursorGotoRight( QPainter &_painter, int _pos )
+{
+    during_vertical_cursor_movement = FALSE;
+
+    for (int i = 0;i < _pos;i++)
+      {
+	// Are we at the end of a paragraph ?
+	if ( isCursorAtParagEnd() )
+	  {
+	    // The last paragraph ?
+	    if ( parag->getNext() == 0L )
+	      return;
+	    // Skip the current line
+	    ptY += getLineHeight();
+	    // Enter the next paragraph
+	    enterNextParag( _painter );
+	    cursorGotoLineStart( _painter );
+	    continue;
+	  }
+	else if (isCursorInLastLine())
+	  {
+	    cursorGotoNextChar(_painter);
+	    continue;
+	  }
+	
+	// If the cursor is in the last line of some paragraph,
+	// then we should not care here.
+	if ( isCursorAtLastChar() )
+	  {
+	    lineStartPos = lineEndPos;
+	    ptY += getLineHeight();
+	    makeLineLayout( _painter );
+	    cursorGotoLineStart( _painter );
+	    continue;
+	  }
+	
+	cursorGotoNextChar(_painter);
+      }
+}
+
 void KWFormatContext::cursorGotoLeft( QPainter &_painter )
 {
     during_vertical_cursor_movement = FALSE;
@@ -377,7 +417,7 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
 void KWFormatContext::cursorGotoLineStart( QPainter &_painter )
 {
   during_vertical_cursor_movement = FALSE;
-
+  spacingError = 0;
   cursorGotoPos( lineStartPos, _painter );
 }
 
@@ -474,6 +514,7 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     //float ddx = 0.0;
     //char buffer[_textpos + 2];
     unsigned int pos = lineStartPos;
+    spacingError = 0;
     ptPos = ptStartPos;
     //*((KWFormat*)this) = lineStartFormat;
     compare_formats = false;
@@ -549,14 +590,22 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
   while (_p->getPTYEnd() < my && _p->getNext())
     _p = _p->getNext();
 
+  if (_p->getPrev()) _p = _p->getPrev();
+
   init(_p,_painter,false,false);
 
+  bool found = false;
   while (makeNextLineLayout(_painter))
     {
       if (ptY <= my && ptY + getLineHeight() >= my &&
 	  ptLeft <= mx && ptLeft + ptWidth >= mx)
-	break;
+	{
+	  found = true;
+	  break;
+	}
     }
+
+  if (!found) ptY -= getLineHeight();
 
   textPos = lineStartPos;
   cursorGotoLineStart(_painter);
@@ -644,10 +693,12 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
     {
 	if ( parag->getNext() == 0L || outOfFrame)
 	  {
+	    ptY += getLineHeight();
+	    parag->setPTYEnd( ptY );
 	    outOfFrame = false;
 	    return FALSE;
 	  }
-	else
+
 	ptY += getLineHeight();
 	enterNextParag( _painter );
     }
@@ -762,19 +813,21 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     ptCounterPos = ptStartPos - ptCounterWidth;
     
     // Get the correct font
-    tmpFormat.apply( *this );
-    KWDisplayFont *font = tmpFormat.loadFont( document );
-    displayFont = font;
-    
+//     tmpFormat.apply( *this );
+//     KWDisplayFont *font = tmpFormat.loadFont( document );
+//     displayFont = font;
+
+    apply(*this);
 
     // Get ascender/descender of the font we are starting with
-    tmpPTAscender = font->getPTAscender();
-    tmpPTDescender = font->getPTDescender();
+    tmpPTAscender = displayFont->getPTAscender();
+    tmpPTDescender = displayFont->getPTDescender();
 
     lineStartFormat = *this;
     
     // Loop until we reach the end of line
-    while(ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right  && textPos < parag->getTextLen())
+    while (ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right && 
+	   textPos < parag->getTextLen())
     {
 	char c = text[ textPos ].c;
 
@@ -791,7 +844,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	// if we will not fit into the line anymore, let us leave the loop
 	if (c != 0)
 	  {
-	    if (ptPos + font->getPTWidth(c) >= xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right)
+	    if (ptPos + displayFont->getPTWidth(c) >= xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right)
 	      break;
 	  }
 	else
@@ -832,9 +885,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	else // A usual character ...
 	{ 
 	    // Go right ...
-	    ptPos += font->getPTWidth(c);
+	    ptPos += displayFont->getPTWidth(c);
 	    // Increase the lines width
-	    tmpPTWidth += font->getPTWidth(c);
+	    tmpPTWidth += displayFont->getPTWidth(c);
 	    // One more character
 	    textPos++;
 	}
@@ -868,7 +921,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 
     // Calculate the space between words if we have "block" formating.
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
-      ptSpacing = (float)( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - ptTextLen - indent - _right) / (float)spaces;
+	ptSpacing = static_cast<float>(document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - ptTextLen - 
+				       indent - _right) / static_cast<float>(spaces);
     else
       ptSpacing = 0;
 
@@ -951,42 +1005,29 @@ void KWFormatContext::apply( KWFormat &_format )
   if (compare_formats && _format == *((KWFormat*)this)) return;
 
   KWFormat::apply(_format);
-  if (displayFont)
+  if (_format.getVertAlign() != VA_NORMAL)
+    displayFont = document->findDisplayFont(userFont,(2 * _format.getPTFontSize()) / 3,_format.getWeight(),
+					    _format.getItalic(),_format.getUnderline());
+  else
+    displayFont = loadFont(document);
+  
+  ptAscender = displayFont->getPTAscender();
+  ptDescender = displayFont->getPTDescender();
+  ptMaxAscender = max(ptAscender,ptMaxAscender);
+  ptMaxDescender = max(ptDescender,ptMaxDescender);
+  
+  if (_format.getVertAlign() == KWFormat::VA_SUB)
+    ptMaxDescender = max(ptMaxDescender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
+  else if (_format.getVertAlign() == KWFormat::VA_SUPER)
+    ptMaxAscender = max(ptMaxAscender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
+  
+  if (!offsetsAdded)
     {
-      displayFont->setFamily(_format.getUserFont()->getFontName());
-      if (_format.getPTFontSize() != -1)
-	{
-	  if (_format.getVertAlign() == VA_NORMAL)
-	    displayFont->setPTSize(_format.getPTFontSize());
-	  else
-	    displayFont->setPTSize((2 * _format.getPTFontSize()) / 3);
-	}
-				   
-      if (_format.getWeight() != -1)
-	displayFont->setWeight(_format.getWeight());
-      if (_format.getItalic() != -1)
-	displayFont->setItalic(_format.getItalic());
-      if (_format.getUnderline() != -1)
-	displayFont->setUnderline(_format.getUnderline());
-
-      ptAscender = displayFont->getPTAscender();
-      ptDescender = displayFont->getPTDescender();
-      ptMaxAscender = max(ptAscender,ptMaxAscender);
-      ptMaxDescender = max(ptDescender,ptMaxDescender);
-
-      if (_format.getVertAlign() == KWFormat::VA_SUB)
-	ptMaxDescender = max(ptMaxDescender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
-      else if (_format.getVertAlign() == KWFormat::VA_SUPER)
-	ptMaxAscender = max(ptMaxAscender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
-
-      if (!offsetsAdded)
-	{
-	  if (isCursorInLastLine()  && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
-	    ptMaxDescender += getParag()->getParagLayout()->getPTParagFootOffset(); 
-	  if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-	    ptMaxAscender += getParag()->getParagLayout()->getPTParagHeadOffset(); 
-	  offsetsAdded = true;
-	}
+      if (isCursorInLastLine()  && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
+	ptMaxDescender += getParag()->getParagLayout()->getPTParagFootOffset(); 
+      if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+	ptMaxAscender += getParag()->getParagLayout()->getPTParagHeadOffset(); 
+      offsetsAdded = true;
     }
 }
 

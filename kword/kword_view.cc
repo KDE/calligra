@@ -242,7 +242,7 @@ CORBA::Boolean KWordView::printDlg()
 }
 
 /*================================================================*/
-void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page = true)
+void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page = true,bool _redraw = true)
 {
   if (_check && _format == format) return;
 
@@ -314,7 +314,7 @@ void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page
   format = _format;
   
   if (_update_page)
-    gui->getPaperWidget()->formatChanged(format);
+    gui->getPaperWidget()->formatChanged(format,_redraw);
 }
 
 /*================================================================*/
@@ -482,7 +482,7 @@ void KWordView::updateStyle(QString _styleName)
   if (_styleName == "Bullet List")
     m_vToolBarText->setButton(ID_USORT_LIST,true);  
 
-  setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false);
+  setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false,true,false);
 }
 
 /*===============================================================*/

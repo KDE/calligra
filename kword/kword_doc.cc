@@ -825,7 +825,7 @@ KWDisplayFont* KWordDocument::findDisplayFont(KWUserFont* _font,unsigned int _si
   KWDisplayFont* font = 0L;
   for (font = displayFontList.first();font != 0L;font = displayFontList.next())
     {
-      if (font->getUserFont() == _font && font->getPTSize() == _size &&
+      if (font->getUserFont()->getFontName() == _font->getFontName() && font->getPTSize() == _size &&
 	  font->weight() == _weight && font->italic() == _italic && font->underline() == _underline)
 	return font;
     }
@@ -1000,7 +1000,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
   _painter.setPen( _fc.getColor() );
 
   //cerr << "Starting with color " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
-  
+
   char buffer[200];
   int i = 0;
   unsigned int tmpPTPos = 0;

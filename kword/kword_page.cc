@@ -626,7 +626,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	if (doc->has_selection())
 	  doc->copySelectedText();
 	
-	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFormat(*((KWFormat*)fc),true,false);
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
@@ -773,8 +773,7 @@ void KWPage::recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_f
 
   _fc->gotoStartOfParag(_painter);
   _fc->cursorGotoLineStart(_painter);
-  for (unsigned int i = 0;i < pos;i++)
-    _fc->cursorGotoRight(_painter);
+  _fc->cursorGotoRight(_painter,pos);
 
   _painter.end();
 
@@ -915,11 +914,9 @@ void KWPage::paintEvent(QPaintEvent* e)
 	  } break;
 	case FT_TEXT:
 	  {
-	    //KWParag *p = doc->findFirstParagOfPage(firstVisiblePage,i);
 	    KWParag *p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
 	    if (p)
 	      {
-		//if (p->getPrev()) p = p->getPrev();
 		paintfc->setFrameSet(i + 1);
 		paintfc->init(p,painter,true,recalcAll);
 		
@@ -1249,6 +1246,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	scrollToCursor(*fc);
 
 	buffer.fill(white);
+	has_to_copy = false;
 	repaint(false);
 
 	// HACK
@@ -1271,7 +1269,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->apply(format);
 	inKeyEvent = false;
 	return;
-
       } break;
     case Key_Delete:
       {
@@ -1283,16 +1280,27 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	bool recalc = false;
 	bool goNext = false;
 	unsigned int lineEndPos;
+	bool exitASAP = true;
 
 	if (!del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext())
 	  {
 	    KWParag *p = fc->getParag()->getNext();
+	    int ptYStart = fc->getParag()->getPTYStart();
+	    int startPage = fc->getParag()->getStartPage();
+	    int startFrame = fc->getParag()->getStartFrame();
+	    p->setPTYStart(ptYStart);
+	    p->setStartPage(startPage);
+	    p->setStartFrame(startFrame);
 	    frameSet->deleteParag(fc->getParag());
-	    if (p) fc->init(p,painter);
+	    if (p) fc->init(p,painter,false,false);
+	    exitASAP = false;
 	  }
 	else if (!del && fc->getParag()->getTextLen() > 0)
-	  frameSet->joinParag(fc->getParag(),fc->getParag()->getNext());
-	  
+	  {
+	    frameSet->joinParag(fc->getParag(),fc->getParag()->getNext());
+	    exitASAP = false;
+	  }
+
 	lineEndPos = fc->getLineEndPos();
 	KWFormatContext paintfc(doc,fc->getFrameSet());
 
@@ -1308,9 +1316,12 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	bool bend = false;
 
 	unsigned int currFrameNum = paintfc.getFrame() - 1;
+	unsigned int ptYEnd = fc->getParag()->getPTYEnd();
 
 	while (!bend)
 	  {
+	    if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
+		fc->getParag()->getPTYEnd() == ptYEnd && exitASAP) break;
 	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
@@ -1346,16 +1357,14 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      bend = true;
 	  }
 
-	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom())
+	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom() && 
+	    !paintfc.getParag()->getNext())
 	  {
-	    unsigned int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
+	    unsigned int _y = (int)paintfc.getParag()->getPTYEnd() - (int)yOffset;
 	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset ;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
 	    unsigned int _hei = frameSet->getFrame(paintfc.getFrame() - 1)->height() - 
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
-// 	    _x += frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y + yOffset,_hei);
-// 	    _wid -= (frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y + yOffset,_hei) +
-// 		     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(_y + yOffset,_hei));
 	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
 	    drawBuffer(KRect(_x,_y,_wid,_hei));
 	  }
@@ -1383,7 +1392,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    fc->cursorGotoLeft(painter);
 	    painter.end();
-	    draw_buffer = false;
+	    //draw_buffer = false;
 	    repaint(false);
 	    // HACK
 	    kbdc.auto_repeat_mode = repeat;
@@ -1411,6 +1420,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	bool recalc = false;
 	bool goNext = false;
 	unsigned int lineEndPos;
+	bool exitASAP = true;
 
 	if (!del && fc->getParag()->getTextLen() == 0)
 	  {
@@ -1418,16 +1428,18 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    frameSet->deleteParag(fc->getParag());
 	    if (p) 
 	      {
-		fc->init(p,painter);
+		fc->init(p,painter,false,false);
 		tmpTextPos = p->getTextLen();
 	      }
+	    exitASAP = false;
 	  }
 	else if (!del && fc->getParag()->getTextLen() > 0)
 	  {
 	    KWParag *p = fc->getParag()->getPrev();
 	    frameSet->joinParag(fc->getParag()->getPrev(),fc->getParag());
-	    if (p) fc->init(p,painter);
+	    if (p) fc->init(p,painter,false,false);
 	    joined = p ? true : false;
+	    exitASAP = false;
 	  }
 
 	lineEndPos = fc->getLineEndPos();
@@ -1445,9 +1457,12 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	bool bend = false;
 
 	unsigned int currFrameNum = paintfc.getFrame() - 1;
+	unsigned int ptYEnd = fc->getParag()->getPTYEnd();
 
 	while (!bend)
 	  {
+	    if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
+		fc->getParag()->getPTYEnd() == ptYEnd && exitASAP) break;
 	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
@@ -1483,16 +1498,14 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      bend = true;
 	  }
 
-	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom())
+	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom() && 
+	    !paintfc.getParag()->getNext())
 	  {
-	    unsigned int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
+	    unsigned int _y = (int)paintfc.getParag()->getPTYEnd() - (int)yOffset;
 	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
 	    unsigned int _hei = frameSet->getFrame(paintfc.getFrame() - 1)->height() - 
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
-// 	    _x += frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y,_hei);
-// 	    _wid -= (frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y,_hei) +
-// 		     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(_y,_hei));
 	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
 	    drawBuffer(KRect(_x,_y,_wid,_hei));
 	  }
@@ -1535,7 +1548,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       {
 	if (e->ascii() && e->ascii() > 31)
 	  {
-	    if (has_to_copy) copyBuffer();
+	    if (has_to_copy) copyBuffer(); 
 	    
 	    draw_buffer = false;
 	    char tmpString[2] = {0,0};
@@ -1558,9 +1571,12 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    bool bend = false;
 	    
 	    unsigned int currFrameNum = paintfc.getFrame() - 1;
-	    
+	    unsigned int ptYEnd = fc->getParag()->getPTYEnd();
+	    	    
 	    while (!bend)
 	      {
+		if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
+		    fc->getParag()->getPTYEnd() == ptYEnd) break;
 		if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 		    static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 		if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
@@ -1580,7 +1596,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				 paintfc.getLineHeight(),QBrush(white));
 		if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
 		  {
-		    drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+		    drawBuffer(KRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				     paintfc.getPTY() - yOffset,
 				     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),
 												      paintfc.getLineHeight()) -
@@ -1595,7 +1611,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		if (paintfc.getPage() > lastVisiblePage)
 		  bend = true;
 	      }
-
+	      
 	    if (isPrev)
 	      fc->cursorGotoNextLine(painter);
 
@@ -1769,11 +1785,11 @@ void KWPage::scroll(int dx,int dy)
 }
 
 /*================================================================*/
-void KWPage::formatChanged(KWFormat &_format)
+void KWPage::formatChanged(KWFormat &_format,bool _redraw = true)
 {
   format = _format;
 
-  if (doc->has_selection() && !inKeyEvent)
+  if (doc->has_selection() && !inKeyEvent && _redraw)
     {
       QPainter p;
 

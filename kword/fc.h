@@ -54,6 +54,7 @@ public:
      */
     int cursorGotoNextChar( QPainter &_painter );
     void cursorGotoRight( QPainter &_painter );
+    void cursorGotoRight( QPainter &_painter, int _pos );
     void cursorGotoLeft( QPainter &_painter );
     void cursorGotoUp( QPainter &_painter );
     void cursorGotoDown( QPainter &_painter );

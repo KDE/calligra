@@ -15,6 +15,10 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
     mmParagHeadOffset = 0;
     mmFirstLineLeftIndent = 0;
     mmLeftIndent = 0;
+    ptParagFootOffset = 0;
+    ptParagHeadOffset = 0;
+    ptFirstLineLeftIndent = 0;
+    ptLeftIndent = 0;
     counter.counterType = CT_NONE;
     counter.counterDepth = 0;
     counter.counterBullet = '·';
@@ -60,6 +64,10 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   mmParagHeadOffset = _layout.getMMParagHeadOffset();
   mmFirstLineLeftIndent = _layout.getMMFirstLineLeftIndent();
   mmLeftIndent = _layout.getMMLeftIndent();
+  ptParagFootOffset = _layout.getPTParagFootOffset();
+  ptParagHeadOffset = _layout.getPTParagHeadOffset();
+  ptFirstLineLeftIndent = _layout.getPTFirstLineLeftIndent();
+  ptLeftIndent = _layout.getPTLeftIndent();
   counter.counterType = static_cast<CounterType>(_layout.getCounterType());
   counter.counterDepth = _layout.getCounterDepth();
   counter.counterBullet = _layout.getCounterBullet();
@@ -170,9 +178,15 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "head")
-		mmParagHeadOffset = atoi((*it).m_strValue.c_str());
+		{
+		  mmParagHeadOffset = atoi((*it).m_strValue.c_str());
+		  setMMParagHeadOffset(mmParagHeadOffset);
+		}
 	      else if ((*it).m_strName == "foot")
-		mmParagFootOffset = atoi((*it).m_strValue.c_str());
+		{	
+		  mmParagFootOffset = atoi((*it).m_strValue.c_str());
+		  setMMParagFootOffset(mmParagFootOffset);
+		}
 	    }
 	}
 
@@ -184,9 +198,15 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "first")
-		mmFirstLineLeftIndent = atoi((*it).m_strValue.c_str());
+		{
+		  mmFirstLineLeftIndent = atoi((*it).m_strValue.c_str());
+		  setMMFirstLineLeftIndent(mmFirstLineLeftIndent);
+		}
 	      else if ((*it).m_strName == "left")
-		mmLeftIndent = atoi((*it).m_strValue.c_str());
+		{
+		  mmLeftIndent = atoi((*it).m_strValue.c_str());
+		  setMMLeftIndent(mmLeftIndent);
+		}
 	    }
 	}
 
