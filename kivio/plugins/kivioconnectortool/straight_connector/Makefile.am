@@ -26,7 +26,7 @@ EXTRA_DIST = \
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(stencildir)
 	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
-	$(LN_S) $(DESTDIR)$(kde_moduledir)/libstraight_connector.so $(DESTDIR)$(stencildir)/straight_connector.ksp
+	$(LN_S) $(kde_moduledir)/libstraight_connector.so $(DESTDIR)$(stencildir)/straight_connector.ksp
 
 uninstall-local:
 	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
