@@ -936,6 +936,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
             if(obj.hasAttribute("type"))
                 tmp=obj.attribute("type").toInt();
             t=static_cast<ObjType>(tmp);
+            tmp=0;
             if(obj.hasAttribute("sticky"))
                 tmp=obj.attribute("sticky").toInt();
             sticky=static_cast<bool>(tmp);
