@@ -25,6 +25,8 @@
 #include "kexiactionproxy.h"
 
 class QComboBox;
+class QPushButton;
+
 class KexiRelationView;
 class KexiMainWindow;
 class KPopupMenu;
@@ -46,7 +48,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public QWidget, public KexiA
 		~KexiRelationWidget();
 
 //		KexiRelationView	*relationView() const { return m_relationView; }
-		void			chooseTable(QString t);
+		void			addTable(QString t);
 
 //	signals:
 //		void openTable(KexiDB::TableSchema* table, bool designMode);
@@ -79,6 +81,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public QWidget, public KexiA
 	private:
 		KexiMainWindow *m_win;
 		QComboBox		*m_tableCombo;
+		QPushButton		*m_btnAdd;
 		KexiRelationView	*m_relationView;
 		KexiDB::Connection	*m_conn;
 

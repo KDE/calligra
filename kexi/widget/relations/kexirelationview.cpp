@@ -35,6 +35,7 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <kglobalsettings.h>
+#include <kmessagebox.h>
 
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
@@ -43,6 +44,7 @@
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
+#include "kexi_utils.h"
 
 KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name)
  : QScrollView(parent, name, WStaticContents)
@@ -438,7 +440,10 @@ KexiRelationView::removeSelectedObject()
 		m_selectedConnection = 0;
 //		invalidateActions();
 	}
-//TODO	else if (
+	else if (m_focusedTableView) {
+		//TODO
+		KEXI_UNFINISHED(i18n("Hide table"));
+	}
 }
 
 void KexiRelationView::slotTableViewGotFocus()

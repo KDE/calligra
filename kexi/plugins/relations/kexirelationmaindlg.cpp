@@ -49,7 +49,12 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *paren
 	QVBoxLayout *g = new QVBoxLayout(this);
 	g->addWidget(m_rel);
 
-//	registerDialog();
+	//show all tables
+	KexiDB::Connection *conn = mainWin->project()->dbConnection();
+	QStringList tables = conn->tableNames();
+	for (QStringList::Iterator it = tables.begin(); it!=tables.end(); ++it) {
+		m_rel->addTable( *it );
+	}
 }
 
 KexiRelationMainDlg::~KexiRelationMainDlg()

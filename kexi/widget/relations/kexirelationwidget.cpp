@@ -58,10 +58,10 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_tableCombo->insertStringList(m_conn->tableNames());
 	QStringList tmp=m_conn->tableNames();
 
-	QPushButton *btnAdd = new QPushButton(i18n("&Add"), this);
-	hlyr->addWidget(btnAdd);
+	m_btnAdd = new QPushButton(i18n("&Add"), this);
+	hlyr->addWidget(m_btnAdd);
 	hlyr->addStretch(1);
-	connect(btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
+	connect(m_btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
 	m_relationView = new KexiRelationView(this, m_conn);
 	g->addWidget(m_relationView, 1, 0);
@@ -142,12 +142,16 @@ KexiRelationWidget::slotAddTable()
 			if (oi>=m_tableCombo->count()) oi=m_tableCombo->count()-1;
 			m_tableCombo->setCurrentItem(oi);
 		}
+		else {
+			m_tableCombo->setEnabled(false);
+			m_btnAdd->setEnabled(false);
+		}
 	}
 }
 
 
 void
-KexiRelationWidget::chooseTable(QString t)
+KexiRelationWidget::addTable(QString t)
 {
 	for(int i=0; i < m_tableCombo->count(); i++)
 	{
@@ -241,14 +245,14 @@ void KexiRelationWidget::openSelectedTable()
 {
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->table())
 		return;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), false/*open*/);
+	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), Kexi::DataViewMode);
 }
 
 void KexiRelationWidget::designSelectedTable()
 {
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->table())
 		return;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), true/*design*/);
+	m_win->openObject("kexi/table", m_relationView->focusedTableView()->table()->name(), Kexi::DesignViewMode);
 }
 
 #include "kexirelationwidget.moc"
