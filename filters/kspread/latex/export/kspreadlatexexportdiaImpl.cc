@@ -57,8 +57,7 @@
  */
 KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* parent, 
 		const char* name_, bool modal, WFlags fl )
-    : LatexExportDia( parent, name_, modal, fl ),
-						DCOPObject("LatexFilterConfigDia"), _in( in )
+    : LatexExportDia( parent, name_, modal, fl ), _in( in )
 {
 	int i = 0;
 
@@ -82,11 +81,12 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 		i = i + 1;
 	}
 
-	/*if(!kapp->dcopClient()->isRegistered() )
+	_iface = new LatexExportIface(this);
+	if(!kapp->dcopClient()->isRegistered() )
 	{
 		kapp->dcopClient()->registerAs("FilterConfigDia");
-		kapp->dcopClient()->setDefaultObject(objId());
-	}*/
+		kapp->dcopClient()->setDefaultObject(_iface->objId());
+	}
 }
 
 /*

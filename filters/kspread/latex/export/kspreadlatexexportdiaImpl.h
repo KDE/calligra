@@ -24,21 +24,20 @@
 #include <qstringlist.h>
 #include <kurl.h>
 
-#include <dcopobject.h>
+#include "latexexportIface.h"
 
 class KoStore;
 class KConfig;
 
-class KSpreadLatexExportDiaImpl : public LatexExportDia, public DCOPObject
+class KSpreadLatexExportDiaImpl : public LatexExportDia
 {
     Q_OBJECT
 
 	private:
-		//K_DCOP
-
     QString _fileOut;
     KoStore* _in;
     KConfig* _config;
+		LatexExportIface* _iface;
 
 	public:
     KSpreadLatexExportDiaImpl( KoStore*, QWidget* parent = 0,
@@ -47,9 +46,6 @@ class KSpreadLatexExportDiaImpl : public LatexExportDia, public DCOPObject
 
     void setOutputFile(QString file) { _fileOut = file; }
 	
-	k_dcop:
-		void useDefaultConfig() { accept(); }
-
 	public slots:
     virtual void reject();
     virtual void accept();
