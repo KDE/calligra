@@ -18,7 +18,7 @@ Part* Part::parentPart()
 {
     if ( parent() && parent()->inherits( "Part" ) )
 	return (Part*)parent();
-    
+
     return 0;
 }
 
@@ -117,6 +117,7 @@ PartChild::PartChild( Part* parent )
     m_rotation = 0.0;
     m_lock = FALSE;
     m_transparent = FALSE;
+    m_part = 0;
 }
 
 void PartChild::setPart( Part* part, const QRect& geometry )
