@@ -148,13 +148,18 @@ k_dcop:
     //don't print text
     virtual void setDontPrintText ( bool _b);
     virtual bool getDontprintText() const ;
+
     virtual bool hasValidation() const;
     virtual void removeValidity();
     virtual QString validationTitle() const;
     virtual QString validationMessage() const;
     virtual bool displayValidationMessage() const;
     virtual bool validationAllowEmptyCell() const;
+    virtual bool displayValidationInformation() const;
+    virtual QStringList listValidation() const;
 
+    virtual QString validationTitleInfo() const;
+    virtual QString validationMessageInfo() const;
 
 private:
     QPoint m_point;

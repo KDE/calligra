@@ -1149,6 +1149,56 @@ QString KSpreadCellIface::validationMessage() const
         return "";
 }
 
+QStringList KSpreadCellIface::listValidation() const
+{
+    if( !m_sheet ) return QStringList();
+    KSpreadCell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->listValidity;
+    }
+    else
+        return QStringList();
+}
+
+
+QString KSpreadCellIface::validationTitleInfo() const
+{
+    if( !m_sheet ) return "";
+    KSpreadCell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->titleInfo;
+    }
+    else
+        return "";
+}
+
+QString KSpreadCellIface::validationMessageInfo() const
+{
+    if( !m_sheet ) return "";
+    KSpreadCell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->messageInfo;
+    }
+    else
+        return "";
+}
+
+
+bool KSpreadCellIface::displayValidationInformation() const
+{
+    if( !m_sheet ) return false;
+    KSpreadCell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->displayValidationInformation;
+    }
+    else
+        return false;
+}
+
 bool KSpreadCellIface::displayValidationMessage() const
 {
     if( !m_sheet ) return false;
