@@ -57,7 +57,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb );
-
+  bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
   if(_type==Column)
         {
         ColumnLayout *col=m_pView->activeTable()->firstCol();
@@ -73,7 +73,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
         QValueList<int>::Iterator it;
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  {
-	    if(!m_pView->activeTable()->getShowColumnNumber())
+	    if(!showColNumber)
 	      listCol+=i18n("Column: %1").arg(util_columnLabel(*it));
 	    else
 	      listCol+=i18n("Column: %1").arg(text.setNum(*it));
@@ -100,9 +100,8 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
         }
 
   if(!list->count())
-    {
       m_pOk->setEnabled(false);
-    }
+
   //selection multiple
   list->setSelectionMode(QListBox::Multi);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );

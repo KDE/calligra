@@ -47,7 +47,18 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     case Key_Return:
     case Key_Enter:
         {
-            QString tmp;
+            QValueList<Reference>::Iterator it;
+	    QValueList<Reference> area=m_pView->doc()->listArea();
+	    for ( it = area.begin(); it != area.end(); ++it )
+		{
+		    if((*it).ref_name==text())
+			{
+			m_pView->canvasWidget()->gotoLocation( KSpreadRange(util_rangeName((*it).rect )));
+			return;
+			}
+		}
+
+	    QString tmp;
             int pos;
 
             // Set the cell component to uppercase:
@@ -2676,7 +2687,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
         {
-                m_pCanvas->deleteEditor( true ); // save changes
+	    m_pCanvas->deleteEditor( true ); // save changes
         }
   // Find the first visible row and the y position of this row.
   int y = 0;
