@@ -2,7 +2,12 @@
 // Copyright (C) 2000-2002 Trolltech AS.  All rights reserved.
 
 // This is temporary workaround
+// Will be implemented outside of Qt class
 // TODO check for future Qt versions (3.4?)
+
+#ifndef KEXIDATETIMEEDITOR_P_H
+#define KEXIDATETIMEEDITOR_P_H
+
 #include <qglobal.h>
 
 #ifdef Q_WS_WIN
@@ -34,7 +39,7 @@ private:
 };
 
 
-class Q_EXPORT QNumberSection
+class QNumberSection
 {
 public:
 	int selectionStart() const;
@@ -119,7 +124,10 @@ uint QDateTimeEditor::sectionCount() const
 	return d->sectionCount();
 }
 
+#include "kexidatetimeeditor_p.moc"
+
 #endif //KEXIDATATIMEEDITOR_P_IMPL
 
 #endif
 
+#endif //KEXIDATETIMEEDITOR_P_H
