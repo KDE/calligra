@@ -2706,6 +2706,7 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var )
         cursor()->parag()->setChanged( true );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
         frameSet()->kWordDocument()->refreshMenuCustomVariable();
+        textObject()->selectionChangedNotify();
     }
 }
 
