@@ -31,10 +31,19 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
+#include <kspread_cell.h>
 #include <kspread_doc.h>
 #include <kspread_functions.h>
+#include <kspread_map.h>
 #include <kspread_table.h>
 #include <kspread_util.h>
+
+namespace math_local
+{
+  bool gWorking = false;
+}
+
+using namespace math_local;
 
 // prototypes
 bool kspreadfunc_abs( KSContext& context );
@@ -78,11 +87,18 @@ bool kspreadfunc_sqrtpi( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
 
+
+bool kspreadfunc_multipleOP( KSContext& context );
+bool kspreadfunc_subtotal( KSContext& context );
+
 // registers all math functions
 void KSpreadRegisterMathFunctions()
 {
+  gWorking = false;
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
+  repo->registerFunction( "MULTIPLEOPERATIONS", kspreadfunc_multipleOP );
+  repo->registerFunction( "SUBTOTAL",    kspreadfunc_subtotal );
   repo->registerFunction( "ABS",         kspreadfunc_abs );
   repo->registerFunction( "CEIL",        kspreadfunc_ceil );
   repo->registerFunction( "COUNT",       kspreadfunc_count );
@@ -268,6 +284,7 @@ bool kspreadfunc_exp( KSContext& context )
 // Function: ceil
 bool kspreadfunc_ceil( KSContext& context )
 {
+  kdDebug() << "Ceil" << endl;
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "ceil", true ) )
@@ -1388,6 +1405,287 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
   double result = ( pow((1+s)/2,n) - pow((1-s)/2,n) ) / s;
 
   context.setValue( new KSValue( result ) );
+  return true;
+}
+
+// Function: MULTIPLEOPERATIONS
+bool kspreadfunc_multipleOP( KSContext& context )
+{
+  if (gWorking)
+    return true;
+
+  gWorking = true;
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 5, "MULTIPLEOPERATIONS", true ) )
+  {
+    gWorking = false;
+    return false;
+  }
+
+  // 0: cell must contain formula with double/int result
+  // 0, 1, 2, 3, 4: must contain integer/double
+  for (int i = 0; i < 5; ++i)
+  {
+    if ( !KSUtil::checkType( context, args[i], KSValue::DoubleType, true ) )
+    {
+      gWorking = false;
+      return false;
+    }
+  }
+
+  ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
+
+  double oldCol = args[1]->doubleValue();
+  double oldRow = args[3]->doubleValue();
+  kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
+
+  KSpreadCell * cell;
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadPoint point( extra[1]->stringValue() );  
+  KSpreadPoint point2( extra[3]->stringValue() );
+  KSpreadPoint point3( extra[0]->stringValue() );
+
+  if ( ( args[1]->doubleValue() != args[2]->doubleValue() )
+       || ( args[3]->doubleValue() != args[4]->doubleValue() ) )
+  {
+    cell = table->cellAt( point.pos.x(), point.pos.y() );
+    cell->setValue( args[2]->doubleValue() );
+    kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x() 
+              << ", " << point.pos.y() << endl;
+
+    cell = table->cellAt( point2.pos.x(), point.pos.y() );
+    cell->setValue( args[4]->doubleValue() );
+    kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x() 
+              << ", " << point2.pos.y() << endl;
+  }
+
+  KSpreadCell * cell1 = table->cellAt( point3.pos.x(), point3.pos.y() );
+  cell1->calc( false );
+
+  double d = cell1->valueDouble();
+  kdDebug() << "Cell: " << point3.pos.x() << "; " << point3.pos.y() << " with value "
+            << d << endl;
+
+  kdDebug() << "Resetting old values" << endl;
+ 
+  cell = table->cellAt( point.pos.x(), point.pos.y() );
+  cell->setValue( oldCol );
+
+  cell = table->cellAt( point2.pos.x(), point2.pos.y() );
+  cell->setValue( oldRow );
+
+  cell1->calc( false );
+
+  ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
+
+  context.setValue( new KSValue( (double) d ) );
+ 
+  gWorking = false;
+  return true;
+}
+
+static bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result,int & number)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_average_helper( context, (*it)->listValue(), result, number) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      result += (*it)->doubleValue();
+      number++;
+    }
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result, double avera)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_variance_helper( context, (*it)->listValue(), result ,avera) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      result += ( (*it)->doubleValue() - avera ) * ( (*it)->doubleValue() - avera );
+      }
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_stddev_helper( context, (*it)->listValue(), result ,avera) )
+        return false;
+
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
+    }
+  }
+
+  return true;
+}
+
+// Function: SUBTOTAL:
+bool kspreadfunc_subtotal( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "SUBTOTAL", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  // create a new list
+  QValueList<KSValue::Ptr> * list = new QValueList<KSValue::Ptr>;
+  int function = args[0]->intValue();
+  
+  KSValue * c = 0;
+  KSpreadCell  * cell = 0;
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+
+  KSpreadRange range ( extra[1]->stringValue(), map, table );
+  if ( !range.isValid() )
+  {
+    KSpreadPoint point( extra[1]->stringValue(), map, table );
+    
+    if ( !point.isValid() )
+      return false;
+
+    range.range = QRect( point.pos.x(), point.pos.y(),
+                         point.pos.x(), point.pos.y() );
+
+  }
+   
+  KSValue * l = new KSValue( KSValue::ListType );
+  int count = 0;
+  int countA = 0;
+  double sum = 0.0;
+  double max = 0.0;
+
+  if ( function == 6 ) // product
+    sum = 1.0;
+
+  int x = range.range.left();
+  int y = range.range.top();
+  int bottom = range.range.bottom();
+  
+  for ( ; y <= bottom; ++y )
+  {
+    cell = table->cellAt( x, y );
+    if ( cell->text().find( "SUBTOTAL", 0, false ) != -1 )
+      continue;
+    
+    ++count;
+    if ( cell->isNumeric() )
+    {
+      ++countA;
+      if ( function == 1 || function == 9 || function == 7 || function == 8
+           || function == 10 || function == 11 )
+        sum += cell->valueDouble();
+      else if ( function == 4 )
+      {
+        if ( countA == 1 )
+          max = cell->valueDouble();
+        else
+        if ( cell->valueDouble() > max )
+          max = cell->valueDouble();
+      }
+      else if ( function == 5 )
+      {
+        if ( countA == 1 )
+          max = cell->valueDouble();
+        else
+        if ( cell->valueDouble() < max )
+          max = cell->valueDouble();
+      }
+      else if ( function == 6 )
+        sum *= cell->valueDouble();
+    }
+
+
+    c = new KSValue( cell->valueDouble() );
+    l->listValue().append( c );
+  }
+  list->append ( l );
+
+
+  double result  = 0.0;
+  double average = sum / countA;
+
+  switch( function )
+  {
+   case 1: // Average
+    context.setValue( new KSValue( average ) );
+    break;
+   case 2: // Count
+    context.setValue( new KSValue( count ) );
+    break;
+   case 3: // CountA (count without blanks)
+    context.setValue( new KSValue( countA ) );
+    break;
+   case 4: // MAX
+    context.setValue( new KSValue( max ) );
+    break;
+   case 5: // Min
+    context.setValue( new KSValue( max ) );
+    break;
+   case 6: // Product
+    context.setValue( new KSValue( sum ) );
+    break;
+   case 7: // StDev
+    kspreadfunc_stddev_helper( context, *list, result, average );
+    context.setValue( new KSValue( sqrt( result / ((double) (countA - 1) ) ) ) );
+    break;
+   case 8: // StDevP
+    kspreadfunc_stddev_helper( context, *list, result, average );
+    context.setValue( new KSValue( sqrt( result / countA ) ) );
+    break;
+   case 9: // Sum
+    context.setValue( new KSValue( sum ) );
+    break;
+   case 10: // Var
+    kspreadfunc_variance_helper( context, *list, result, average );
+    context.setValue( new KSValue( (double)(result / (countA - 1)) ) );
+    break;
+   case 11: // VarP
+    kspreadfunc_variance_helper( context, *list, result, average );
+    context.setValue( new KSValue( (double)(result / countA) ) );
+    break;
+   default:
+    return false;
+  }
+
   return true;
 }
 
