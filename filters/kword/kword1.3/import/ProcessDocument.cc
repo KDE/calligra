@@ -844,6 +844,7 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
         else
         {
             const double size = oldValue.toDouble ();
+            // ### TODO: is this check right? The user might have wanted lines "glued" together
             if ( size >= 1.0 )
             {
                 // We have a valid size
@@ -875,6 +876,28 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
     }
 }
 
+static void ProcessLineSpaceTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
+{
+    // <LINESPACE> is an old tag, of before syntax 1
+    LayoutData *layout = (LayoutData *) tagData;
+    double spacingValue = 0.0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "pt", spacingValue );
+    attrProcessingList << AttrProcessing ( "mm" );
+    attrProcessingList << AttrProcessing ( "inch" );
+    ProcessAttributes (myNode, attrProcessingList);
+
+
+    if ( ! spacingValue )
+    {
+        kdDebug(30520) << "Found <LINESPACE pt=\"0\">" << endl;
+    }
+
+    layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
+    layout->lineSpacing     = spacingValue;
+}
+
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
@@ -884,7 +907,6 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
     ValueListFormatData formatDataList;
 
-    QString lineSpacing;
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
     tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessFollowingTag,         &layout->styleFollowing      );
@@ -903,13 +925,14 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
     if ( leader->m_oldSyntax )
     {
+        layout->indentLeft = 0.0; // ### TODO: needed or not?
         tagProcessingList
             << TagProcessing ( "FLOW",   ProcessStringValueTag,    &layout->alignment )
             << TagProcessing ( "OHEAD",  ProcessOldLayoutChildTag, &layout->marginTop )
             << TagProcessing ( "OFOOT",  ProcessOldLayoutChildTag, &layout->marginBottom )
             << TagProcessing ( "ILEFT",  ProcessOldLayoutChildTag, &layout->indentLeft )
             << TagProcessing ( "IFIRST", ProcessOldLayoutChildTag, &layout->indentFirst )
-            << TagProcessing ( "IRIGHT", ProcessOldLayoutChildTag, &layout->indentRight ) // ### TODO: does this tag really exist?
+            << TagProcessing ( "LINESPACE", ProcessLineSpaceTag,   layout )
             ;
     }
     else
