@@ -130,7 +130,7 @@ public:
 
     void insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len, LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
-    void insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
+    KPTextObject* insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
     void insertLine( const KoRect &r, const QPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
     void insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName, bool unbalanced,int xfactor, int yfactor );

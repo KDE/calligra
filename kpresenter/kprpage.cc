@@ -1034,7 +1034,7 @@ void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, 
 }
 
 /*===================== insert a textobject =====================*/
-void KPrPage::insertTextObject( const KoRect& r, const QString& text, KPresenterView *_view )
+KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString& text, KPresenterView *_view )
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
     kptextobject->setOrig( r.x(), r.y() );
@@ -1054,6 +1054,7 @@ void KPrPage::insertTextObject( const KoRect& r, const QString& text, KPresenter
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, m_doc, this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
+    return kptextobject;
 }
 
 /*======================= insert an autoform ====================*/

@@ -975,8 +975,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     } break;
     case INS_TEXT: {
         if ( !insRect.isNull() ) {
-            insertTextObject( insRect );
+            KPTextObject* kptextobject = insertTextObject( insRect );
             setToolEditMode( TEM_MOUSE );
+
+            // User-friendlyness: automatically start editing this textobject
+            activePage()->deSelectAllObj();
+            createEditing( kptextobject );
+            //setTextBackground( kptextobject );
+            //setCursor( arrowCursor );
         }
     } break;
     case INS_LINE: {
@@ -3577,13 +3583,14 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 }
 
 /*================================================================*/
-void KPrCanvas::insertTextObject( const QRect& _r )
+KPTextObject* KPrCanvas::insertTextObject( const QRect& _r )
 {
     QRect r(_r);
     r.moveBy(diffx(),diffy());
     KoRect rect=m_view->zoomHandler()->unzoomRect(r);
-    m_activePage->insertTextObject( rect );
-    selectObj( objectList().last() );
+    KPTextObject* obj = m_activePage->insertTextObject( rect );
+    selectObj( obj );
+    return obj;
 }
 
 /*================================================================*/
@@ -4778,8 +4785,8 @@ void KPrCanvas::createEditing( KPTextObject *textObj )
         editNum = -1;
     }
     m_currentTextObjectView=textObj->createKPTextView( this );
+    // ## we should really replace editNum with a pointer
     editNum=objectList().findRef(textObj);
-
 }
 
 void KPrCanvas::terminateEditing( KPTextObject *textObj )

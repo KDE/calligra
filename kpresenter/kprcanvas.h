@@ -289,7 +289,7 @@ protected:
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
-    void insertTextObject( const QRect& );
+    KPTextObject* insertTextObject( const QRect& );
     void insertLineH( const QRect&, bool );
     void insertLineV( const QRect&, bool );
     void insertLineD1( const QRect&, bool );
