@@ -1,8 +1,9 @@
-INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
+INCLUDES  = -I$(srcdir)/widgets -I$(srcdir)/dialogs -I$(srcdir)/tools \
+			 $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO) 
+LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO) widgets/libkiswidgets.la dialogs/libkisdialogs.la tools/libkistools.la
 
-SUBDIRS   = pics data
+SUBDIRS   = widgets dialogs tools . pics data
 
 ####### Files
 
@@ -11,39 +12,22 @@ bin_PROGRAMS = kimageshop
 #canvastest
 #canvastest_SOURCES = canvastest.cc channeldata.cc layer.cc canvas.cc misc.cc
 
-kimageshop_SOURCES = channeldata.cc layer.cc canvas.cc brush.cc \
-	layerview.cc layerdlg.cc channelview.cc misc.cc \
-	kimageshop_undo.cc kimageshop_config.cc kvector.cc canvasview.cc \
-	integerwidget.cc tool.cc movetool.cc \
-	brushtool.cc zoomtool.cc kfloatingdialog.cc \
-	colordialog.cc kfloatingtabdialog.cc kcolor.cc \
-	brusheswidget.cc brushdialog.cc \
-	iconchooser.cc kfloatingdialogowner.cc preferencesdlg.cc \
-	gradientdlg.cc gradienteditordlg.cc gradientview.cc \
-	newdialog.cc colorframe.cc colorslider.cc \
-	kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
-	kimageshop.idl kimageshop_main.cc
+kimageshop_SOURCES = channeldata.cc layer.cc canvas.cc \
+	brush.cc misc.cc kimageshop_undo.cc kimageshop_config.cc kvector.cc \
+	canvasview.cc tool.cc kfloatingdialog.cc kfloatingtabdialog.cc kcolor.cc \
+	kfloatingdialogowner.cc kimageshop_shell.cc kimageshop_doc.cc \
+	kimageshop_view.cc kimageshop_main.cc  
 
 noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
 	kimageshop_doc.h kimageshop_view.h kimageshop_undo.h kimageshop_config.h \
-	kvector.h zoomtool.h kfloatingdialog.h kcolor.h \
-	canvas.h canvasview.h layer.h layerview.h layerdlg.h \
-	brush.h channel.h misc.h tool.h movetool.h brushtool.h \
-	colordialog.h channelview.h kfloatingtabdialog.h \
-	integerwidget.h brusheswidget.h brushdialog.h \
-	iconchooser.h kfloatingdialogowner.h preferencesdlg.h \
-	gradientdlg.h gradienteditordlg.h gradientview.h \
-	newdialog.h colorframe.h colorslider.h
+	kvector.h kfloatingdialog.h kcolor.h misc.h tool.h \
+	canvas.h canvasview.h layer.h brush.h channel.h \
+	kfloatingtabdialog.h kfloatingdialogowner.h
 
 METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kimageshop_doc.moc kimageshop_view.moc kimageshop_config.moc \
-	canvasview.moc \
-	canvas.moc layer.moc layerview.moc layerdlg.moc \
-	kfloatingdialog.moc colordialog.moc channelview.moc \
-	kfloatingtabdialog.moc brusheswidget.moc brushdialog.moc \
-	iconchooser.moc integerwidget.moc preferencesdlg.moc \
-	gradientdlg.moc gradienteditordlg.moc gradientview.moc \
-	newdialog.moc colorframe.moc colorslider.moc
+	canvasview.moc canvas.moc layer.moc kfloatingdialog.moc \
+	kfloatingtabdialog.moc
 
 idl_DATA = kimageshop.idl
 
@@ -52,8 +36,13 @@ kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Build rules
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
+#IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
 messages:
-	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimageshop.pot
-
+	$(XGETTEXT) -C  -ktranslate -kaliasLocal -ki18n -x $(includedir)/kde.pot *.h *.cc *.cpp && mv messages.po ../po/kimageshop.pot
+	for subdir in $(SUBDIRS); do \
+	   if test ! "x$$subdir" = "x."; then \
+	   echo "Making messages in $$subdir"; \
+	   (cd $$subdir && $(MAKE) -f Makefile.am messages) || exit 1; \
+	 fi ;\
+	done

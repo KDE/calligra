@@ -22,6 +22,8 @@
 #include <qprinter.h>
 
 #include <kimgio.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <opAutoLoader.h>
 
@@ -47,6 +49,10 @@ KoMainWindow* KImageShopApp::createNewShell()
 int main(int argc, char** argv)
 {
   kimgioRegister();
+
+  KGlobal::locale()->insertCatalogue("libkistools");
+  KGlobal::locale()->insertCatalogue("libkiswidgets");
+  KGlobal::locale()->insertCatalogue("libkisdialogs");
 
   KImageShopAutoLoader loader("IDL:KImageShop/DocumentFactory:1.0", "KImageShop");
   KImageShopApp app(argc, argv);
