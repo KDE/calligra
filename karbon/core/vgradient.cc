@@ -165,8 +165,9 @@ VGradient::save( QDomElement& element ) const
 QString
 VGradient::saveOasis( KoGenStyles &mainStyles ) const
 {
-	KoGenStyle gradientStyle( VDocument::STYLE_GRADIENT /*no family name*/);
-	if( m_type == VGradient::radial )
+	bool radial = m_type == VGradient::radial;
+	KoGenStyle gradientStyle( radial ? VDocument::STYLE_RADIAL_GRADIENT : VDocument::STYLE_LINEAR_GRADIENT /*no family name*/);
+	if( radial )
 	{
 		gradientStyle.addAttribute( "draw:style", "radial" );
 		gradientStyle.addAttribute( "draw:cx", "50%" );
@@ -190,8 +191,14 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 }
 
 void
-VGradient::loadOasis( const KoStyleStack &stack )
+VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
 {
+	if( object.attribute( "svg:spreadMethod" ) == "repeat" )
+		m_repeatMethod = VGradient::repeat;
+	else if( object.attribute( "svg:spreadMethod" ) == "reflect" )
+		m_repeatMethod = VGradient::reflect;
+	else
+		m_repeatMethod = VGradient::none;
 }
 
 void

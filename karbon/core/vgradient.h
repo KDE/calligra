@@ -106,7 +106,7 @@ public:
 	void save( QDomElement& element ) const;
 	QString saveOasis( KoGenStyles &mainStyles ) const;
 	void load( const QDomElement& element );
-	void loadOasis( const KoStyleStack &stack );
+	void loadOasis( const QDomElement &object, KoStyleStack &stack );
 
 	void transform( const QWMatrix& m );
 

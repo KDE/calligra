@@ -159,7 +159,7 @@ VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
 	m_stroke->loadOasis( styleStack );
-	m_fill->loadOasis( styleStack );
+	m_fill->loadOasis( object, context );
 	return true;
 }
 

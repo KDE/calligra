@@ -22,7 +22,8 @@
 #include <kdebug.h>
 
 #include <koGenStyles.h>
-#include <koStyleStack.h>
+#include <kooasiscontext.h>
+#include <koOasisStyles.h>
 
 #include "vfill.h"
 
@@ -96,8 +97,9 @@ VFill::saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const
 }
 
 void
-VFill::loadOasis( const KoStyleStack &stack )
+VFill::loadOasis( const QDomElement &object, KoOasisContext &context )
 {
+	KoStyleStack &stack = context.styleStack();
 	if( stack.hasAttribute( "draw:fill" ) )
 	{
 		if( stack.attribute( "draw:fill" ) == "solid" )
@@ -106,6 +108,15 @@ VFill::loadOasis( const KoStyleStack &stack )
 			setColor( QColor( stack.attribute( "draw:fill-color" ) ) );
 			if( stack.hasAttribute( "draw:opacity" ) )
 				m_color.setOpacity( stack.attribute( "draw:opacity" ).remove( '%' ).toFloat() / 100. );
+		}
+		else if( stack.attribute( "draw:fill" ) == "gradient" )
+		{
+			setType( VFill::grad );
+			QString style = stack.attribute( "draw:fill-gradient-name" );
+			kdDebug()<<" style gradient name :"<<style<<endl;
+			QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
+			if( grad )
+				m_gradient.loadOasis( *grad, stack );
 		}
 	}
 }
