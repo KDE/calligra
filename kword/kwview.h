@@ -265,7 +265,7 @@ public slots:
     void updatePageInfo();
 
     void slotSpecialChar(QChar , const QString &);
-    void updateButton();
+    void updateButtons();
 protected:
 
     KWTextFrameSetEdit *currentTextEdit();
@@ -338,6 +338,8 @@ protected:
     KToggleAction *actionFormatList;
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
+    KAction* actionInsertSpecialChar;
+    KAction* actionInsertPicture;
 
     // Text and Frame borders.
     KToggleAction *actionBorderLeft;

@@ -282,11 +282,11 @@ void KWView::setupActions()
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
-    (void) new KAction( i18n( "&Picture Inline..." ), "picture", Key_F2,
+    actionInsertPicture = new KAction( i18n( "&Picture Inline..." ), "picture", Key_F2,
                         this, SLOT( insertPicture() ),
                         actionCollection(), "insert_picture" );
 
-    (void) new KAction( i18n( "&Special Character..." ), "char",
+    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char",
                         ALT + SHIFT + Key_C,
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
@@ -2776,7 +2776,7 @@ KWTextFrameSetEdit *KWView::currentTextEdit()
 }
 
 /*================================================================*/
-void KWView::updateButton()
+void KWView::updateButtons()
 {
     bool state=false;
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2806,6 +2806,9 @@ void KWView::updateButton()
     actionFormatList->setEnabled(state);
     actionFormatSuper->setEnabled(state);
     actionFormatSub->setEnabled(state);
+    actionFormatParag->setEnabled(state);
+    actionInsertSpecialChar->setEnabled(state);
+    actionInsertPicture->setEnabled(state);
 }
 
 /******************************************************************/
@@ -2914,7 +2917,7 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
     setAcceptDrops( TRUE );
     setFocusPolicy( QWidget::NoFocus );
 
-    connect(canvas,SIGNAL(currentFrameSetEditChanged()),view,SLOT(updateButton()));
+    connect(canvas,SIGNAL(currentFrameSetEditChanged()),view,SLOT(updateButtons()));
     canvas->setContentsPos( 0, 0 );
 }
 
