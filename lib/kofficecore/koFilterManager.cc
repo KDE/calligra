@@ -88,12 +88,13 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
                                            const bool allfiles ) const
 {
     QString service;
-    if ( direction == Import )
-        service = "Export == '";
-    else
-        service = "Import == '";
+    service = "'";
     service += _format;
-    service += "'";
+    service += "' in ";
+    if ( direction == Import )
+        service += "Export";
+    else
+        service += "Import";
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
 
@@ -112,39 +113,52 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
     for( unsigned int i = 0; i < vec.count(); ++i )
     {
         KMimeType::Ptr t;
-        QString mime;
+        QStringList mimes, descriptions;
         if ( direction == Import )
-            mime = vec[i].import;
-        else
-            mime = vec[i].export_;
-
-        t = KMimeType::mimeType( mime );
-        // Did we get exactly this mime type ?
-        if ( t && mime == t->name() )
         {
-            if ( !ret.isEmpty() )
-                ret += "\n";
-            QString patterns = t->patterns().join(" ");
-            ret += patterns;
-            ret += "|";
-            if ( direction == Import )
-                ret += vec[i].importDescription;
-            else
-                ret += vec[i].exportDescription;
-            ret += " (";
-            ret += patterns;
-            ret += ")";
+            mimes = vec[i].import;
+            descriptions = vec[i].importDescription;
         }
         else
         {
-            if ( !ret.isEmpty() )
-                ret += "\n";
-            ret += "*|";
-            if ( direction == Import )
-                ret += vec[i].importDescription;
+            mimes = vec[i].export_;
+            descriptions = vec[i].exportDescription;
+        }
+
+        kdDebug() << "KoFilterManager::fileSelectorList mimes=" << mimes.join("-") << endl;
+        kdDebug() << "KoFilterManager::fileSelectorList descriptions=" << descriptions.join("-") << endl;
+        ASSERT( mimes.count() == descriptions.count() );
+
+        QStringList::ConstIterator it = mimes.begin();
+        QStringList::ConstIterator descrit = descriptions.begin();
+        for ( ; it != mimes.end() ; ++it, ++descrit )
+        {
+            QString mime ( *it );
+            t = KMimeType::mimeType( mime );
+            // Did we get exactly this mime type ?
+            if ( t && mime == t->name() )
+            {
+                if ( !t->patterns().isEmpty() )
+                {
+                    if ( !ret.isEmpty() )
+                        ret += "\n";
+                    QString patterns = t->patterns().join(" ");
+                    ret += patterns;
+                    ret += "|";
+                    ret += *descrit;
+                    ret += " (";
+                    ret += patterns;
+                    ret += ")";
+                }
+            }
             else
-                ret += vec[i].exportDescription;
-            ret += " (*)";
+            {
+                if ( !ret.isEmpty() )
+                    ret += "\n";
+                ret += "*|";
+                ret += *descrit;
+                ret += " (*)";
+            }
         }
     }
     if( allfiles )
@@ -165,12 +179,13 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const bool allfiles ) {
 
     QString service;
-    if ( direction == Import )
-        service = "Export == '";
-    else
-        service = "Import == '";
+    service = "'";
     service += _format;
-    service += "'";
+    service += "' in ";
+    if ( direction == Import )
+        service += "Export";
+    else
+        service += "Import";
 
     d->config=QString::null;   // reset the config string
 
@@ -185,34 +200,39 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     for(unsigned int i=0; i<vec1.count(); ++i) {
         KMimeType::Ptr t;
-        QString mime;
+        QStringList mimes;
         if ( direction == Import )
-            mime = vec1[i].import;
+            mimes = vec1[i].import;
         else
-            mime = vec1[i].export_;
+            mimes = vec1[i].export_;
 
-        t = KMimeType::mimeType( mime );
-        // Did we get exactly this mime type ?
-        if ( t && mime == t->name() )
+        QStringList::ConstIterator it = mimes.begin();
+        for ( ; it != mimes.end() ; ++it )
         {
-            KoFilterDialog *filterdia=vec1[i].createFilterDialog();
-            ASSERT(filterdia);
+            QString mime ( *it );
+            t = KMimeType::mimeType( mime );
+            // Did we get exactly this mime type ?
+            if ( t && mime == t->name() )
+            {
+                KoFilterDialog *filterdia=vec1[i].createFilterDialog();
+                ASSERT(filterdia);
 
-            QStringList patterns = t->patterns();
-            QString tmp;
-            unsigned short k;
-            for(unsigned int j=0; j<patterns.count(); ++j) {
-                tmp=patterns[j];
-                k=0;
+                QStringList patterns = t->patterns();
+                QString tmp;
+                unsigned short k;
+                for(unsigned int j=0; j<patterns.count(); ++j) {
+                    tmp=patterns[j];
+                    k=0;
 
-                while(tmp[tmp.length()-k]!=QChar('.')) {
-                    ++k;
+                    while(tmp[tmp.length()-k]!=QChar('.')) {
+                        ++k;
+                    }
+                    d->dialogMap.insert(tmp.right(k), id);
                 }
-                d->dialogMap.insert(tmp.right(k), id);
+                d->ps->addWidget(filterdia, id);
+                d->originalDialogs.insert(id, filterdia);
+                ++id;
             }
-            d->ps->addWidget(filterdia, id);
-            d->originalDialogs.insert(id, filterdia);
-            ++id;
         }
     }
     if(!d->dialogMap.isEmpty()) {
@@ -274,11 +294,11 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
         return _file;
     }
 
-    QString constr = "Export == '";
+    QString constr = "'";
     constr += _native_format;
-    constr += "' and Import == '";
+    constr += "' in Export and '";
     constr += mimeType;
-    constr += "'";
+    constr += "' in Import";
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )

@@ -124,16 +124,16 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 KoFilterEntry::KoFilterEntry( KService::Ptr service )
   : m_service( service )
 {
-  import = service->property( "Import" ).toString();
-  importDescription = service->property( "ImportDescription" ).toString();
-  export_ = service->property( "Export" ).toString();
-  exportDescription = service->property( "ExportDescription" ).toString();
+  import = service->property( "Import" ).toStringList();
+  importDescription = service->property( "ImportDescription" ).toStringList();
+  export_ = service->property( "Export" ).toStringList();
+  exportDescription = service->property( "ExportDescription" ).toStringList();
   implemented = service->property( "Implemented" ).toString();
 }
 
 QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
 {
-  kdDebug(30003) << "KoFilterEntry::query( " << _constr << endl;
+    kdDebug(30003) << "KoFilterEntry::query( " << _constr << ")" << endl;
   QValueList<KoFilterEntry> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
@@ -180,15 +180,15 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
 KoFilterDialogEntry::KoFilterDialogEntry( KService::Ptr service )
   : m_service( service )
 {
-  import = service->property( "Import" ).toString();
-  importDescription = service->property( "ImportDescription" ).toString();
-  export_ = service->property( "Export" ).toString();
-  exportDescription = service->property( "ExportDescription" ).toString();
+  import = service->property( "Import" ).toStringList();
+  importDescription = service->property( "ImportDescription" ).toStringList();
+  export_ = service->property( "Export" ).toStringList();
+  exportDescription = service->property( "ExportDescription" ).toStringList();
 }
 
 QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _constr )
 {
-  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ", " << endl;
+  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ")" << endl;
   QValueList<KoFilterDialogEntry> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilterDialog", _constr );

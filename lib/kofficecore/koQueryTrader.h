@@ -104,22 +104,22 @@ public:
   /**
    *  The imported mimetype.
    */
-  QString import;
+  QStringList import;
 
   /**
    *  Comment regarding the imported data format.
    */
-  QString importDescription;
+  QStringList importDescription;
 
   /**
    *    The exported mimetype.
    */
-  QString export_;
+  QStringList export_;
 
   /**
    *  Comment regarding the exported data format.
    */
-  QString exportDescription;
+  QStringList exportDescription;
 
   /**
    *  Which one of the filter methods is implemented?
@@ -130,13 +130,13 @@ public:
    *  @return TRUE if the filter can imports the requested mimetype.
    */
   bool imports( const QString & _mimetype ) const
-  { return ( import.find( _mimetype ) != -1 ); }
+  { return ( import.contains( _mimetype ) ); }
 
   /**
    *  @return TRUE if the filter can exports the requested mimetype.
    */
   bool exports( const QString & _m ) const
-  { return ( export_.find( _m ) != -1 ); }
+  { return ( export_.contains( _m ) ); }
 
   /**
    *  This function will query KDED to find all available filters.
@@ -168,22 +168,22 @@ public:
   /**
    *  The imported mimetype of the matching filter.
    */
-  QString import;
+  QStringList import;
 
   /**
    *  Comment regarding the imported data format of the matching filter.
    */
-  QString importDescription;
+  QStringList importDescription;
 
   /**
    *    The exported mimetype of the matching filter.
    */
-  QString export_;
+  QStringList export_;
 
   /**
    *  Comment regarding the exported data format of the matching filter.
    */
-  QString exportDescription;
+  QStringList exportDescription;
 
   /**
    *  This function will query KDED to find all available filter dialogs.
