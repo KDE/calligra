@@ -631,6 +631,8 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 
 void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
+    emit doubleClicked();
+
   if ( !d->view->koDocument()->isReadWrite()|| !d->view->doc()->getShowTabBar() || d->view->activeTable()->isProtected())
         return;
     slotRename();

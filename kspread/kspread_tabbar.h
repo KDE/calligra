@@ -171,6 +171,11 @@ signals:
      */
     void contextMenu( const QPoint& pos );
 
+    /**
+     * This signal is emitted whenever the tab bar is double-clicked.
+     */
+    void doubleClicked();
+
 public slots:
     /**
      * Opens a dialog to rename active tab.
