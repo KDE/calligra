@@ -94,10 +94,6 @@ public:
   // delete the given layer as well as all contained objects
   void deleteLayer (GLayer *layer);
 
-  // return helpline layer
-  GLayer* layerForHelplines ();
-  bool helplineLayerIsActive ();
-
   void insertObject (GObject* obj);
   void selectObject (GObject* obj);
   void unselectObject (GObject* obj);

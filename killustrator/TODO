@@ -1,10 +1,25 @@
 TODO-LIST
 
-See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
-
-Small Feature Wishes
-
 * Layers: Undo of deleting
+* Moving of objects between layers without copy/paste. [Tobias Burnus].
+
+**Filters
+* Import/Export filters: AI, XCF, (CMX) etc.
+  SVG filter (export/import or both) or other filters (Adobe
+  Illustrator, Corel CMX, GIMP XCF or GFig, etc.) 
+  PGML: http://www.w3.org/TR/1998/NOTE-PGML
+* Autotrace plugin support, http://homepages.go.com/~martweb/AutoTrace.htm
+* WMF import/(export) filter; presently only inserting as QWmfObjects works,
+  but this cannot be edited (see Edit|Insert|Clipart)
+
+* Pattern: Besides no background as second colour, an optional second colour
+  should be supported
+
+**Zooming
+
+
+
+
 
 * If the mouse pointer (PointEditTool) is outside an arc/pie, paint an arc, else
   paint a pie
@@ -14,12 +29,6 @@ Small Feature Wishes
   (mouse: left button down)
   [Shift] should be made to draw centerbased ellips/rectangles.
 
-* [Tab] should circle to the next object (maybe config: next object in this
-  layer in all layers), presently it jumps to the zoom combobox and stays there.
-
-* Make UnitBoxes etc i18n (i.e. comma or \cdot instead of dot as decimal
-  seperator; maybe: output '.', except ',' and '·' as '.')
-
 * Support in Page Dialog: Add Page size rectangle
   maybe: Change the pagedialog (from koffice) to a KIll. one,
   with support for pagecolor and other units as well as more
@@ -27,7 +36,6 @@ Small Feature Wishes
 
 --------------------------------
 Bugs and features from the bug and wish website
-* [optional] Cross cursors [Torsten Rahn supas121@astrophysik.uni-kiel.de].  
 * A textbox tool should be addded. Or, if one double clicks on a box, a marker
   comes up so that text can be added in its interior. If this is done, then text
   alignment within a box should also be available.
@@ -45,7 +53,6 @@ Bugs and features from the bug and wish website
   [Stefan Farestam stefan@tibco.com]
 * When I double click on a textbox, I would like to edit the text directly
   [Stefan Farestam stefan@tibco.com].
-* Export to wmf [Stefan Farestam stefan@tibco.com].
 * Export interface should be available through a command line interface, so if I
   want to automatically convert all ".kil" files to ".eps", then that should be
   easy to do. (It would certainly be ok if killustrator provided the possibility
@@ -63,28 +70,14 @@ Bugs and features from the bug and wish website
   of objects easily - this state is forgotten as soon as you perform any other
   action (care must be taken to make objects pin to the side of the page and not
   go out of reach) [Paul Campbell paul@chromatic.com].
-* Spline support.
-* Autotrace support [Martin Weber Martin.Weber@usa.net].
-  See http://homepages.go.com/~martweb/AutoTrace.htm
 * A Designworks-like curve tool [Martin Weber Martin.Weber@usa.net].
-* More advanced helpline management. [Hagen Höpfner].
-* Fit drawing to paper before printing. [Hagen Höpfner].
-* Additional paper formats. [Tobias Burnus].
 * Shearing, whereby the opposite side is fixed. [Tobias Burnus].
-* Converting arbitrary objects into curves. [Tobias Burnus].
-* A "Bug report" button. [Gary Lawrence Murphy].
-* Moving of objects between layers without copy/paste. [Tobias Burnus].
+
 * An extrusion tool similar to Corel Draw. [Lawrence Commander].
 --------------------------------
 
 Projects:
-* Import/Export filters: AI, XCF, (CMX) etc.
-  SVG filter (export/import or both) or other filters (Adobe
-  Illustrator, Corel CMX, GIMP XCF or GFig, etc.) 
-  PGML: http://www.w3.org/TR/1998/NOTE-PGML
-* Autotrace plugin support, http://homepages.go.com/~martweb/AutoTrace.htm
-* WMF import/(export) filter; presently only inserting as QWmfObjects works,
-  but this cannot be edited (see Edit|Insert|Clipart)
+
 
 Bigger ones
 * Support an nonpage drawing area and make sure no object is goes over this
@@ -111,21 +104,7 @@ Bigger ones
 
 * arbitray values for the angle of linear gradient
   (presently: only horizontal and vertical)
-* Pattern: Besides no background as second colour, an optional second colour
-  should be supported
 
-* Auxilary lines should be moveable by mouse and should be drawable out of the
-  rouler
-  
-* The Beziere line system needs a complete rework:
-  We need one line type, of which each node can be either an edge or a bezier
-  point (see Corel Draw! for an model)
-  -> If this is done the following point should be done
-
-* ConvertToCurve of circles is suboptimal: a circle is converted into a douzend
-  of streight lines!
-  Rectangles with round edges and arcs/pies converted to circles and
-  non-round-edged rectangles
 
 * selecting more than one point should be possible when using the point edit
   tool

@@ -322,6 +322,8 @@ void Canvas::docSizeChanged()
 void Canvas::paintEvent (QPaintEvent* e)
 {
    if (!guiActive) return;
+   QTime time;
+   time.start();
    //kdDebug()<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
    pendingRedraws = 0;
 
@@ -373,7 +375,8 @@ void Canvas::paintEvent (QPaintEvent* e)
   const QRect& rect = e->rect ();
   bitBlt (this, rect.x (), rect.y (), buffer,
             rect.x (), rect.y (), rect.width (), rect.height ());
- }
+  kdDebug() << "DRAWING TIME = " << time.elapsed () << endl;
+}
 
 void Canvas::ensureVisibility (bool flag) {
   ensureVisibilityFlag = flag;
@@ -885,7 +888,6 @@ void Canvas::readGridProperties ()
    config->setGroup ("Helplines");
    helplinesAreOn = config->readBoolEntry ("showHelplines");
    helplinesSnapIsOn = config->readBoolEntry ("snapToHelplines");
-   document->activePage()->layerForHelplines ()->setVisible (helplinesAreOn);
 
 
 }
@@ -919,13 +921,6 @@ void Canvas::updateGridInfos ()
    document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
    //kdDebug()<<"after getGrid() gridsnapison: "<<int(gridSnapIsOn)<<endl;
    document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-   if (helplinesAreOn != document->activePage()->layerForHelplines ()->isVisible ())
-      showHelplines (document->activePage()->layerForHelplines ()->isVisible ());
-   else
-   {
-      //saveGridProperties ();
-      //emit gridStatusChanged ();
-   }
 }
 
 /***************************HELPLINES********************/
@@ -1054,7 +1049,7 @@ void Canvas::showHelplines (bool flag)
    if (helplinesAreOn != flag)
    {
       helplinesAreOn = flag;
-      document->activePage()->layerForHelplines ()->setVisible (helplinesAreOn);
+//      document->activePage()->layerForHelplines ()->setVisible (helplinesAreOn);
       repaint();
       //emit gridStatusChanged ();
       //saveGridProperties ();

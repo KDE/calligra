@@ -96,12 +96,7 @@ void GPage::initialize ()
   selection.clear ();
   layers.setAutoDelete(true);
   layers.clear ();
-  // add layer for Helplines
-  GLayer *l = addLayer ();
-  l->setInternal ();
-  l->setName (i18n("Helplines"));  //this layer will be for all pages...
-  connect (l, SIGNAL(propertyChanged ()),
-           doc, SLOT(helplineStatusChanged ()));
+
   active_layer = addLayer ();
   active_layer->setVisible(true);
   active_layer->setPrintable(true);
@@ -157,7 +152,7 @@ void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
   }
 }
 
-void GPage::drawContentsInRegion (QPainter& p, const Rect& /*r*/, const Rect& rr,
+void GPage::drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
                                       bool withBasePoints, bool outline)
 {
   for (QListIterator<GLayer> i(layers); i.current(); ++i)
@@ -705,7 +700,7 @@ bool GPage::readFromXml (const QDomElement &page)
   pLayout.mmRight=layout.attribute("rmargin").toFloat();
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
-
+ 
 // update page layout
   setPageLayout (pLayout);
 
@@ -720,7 +715,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
 {
   setAutoUpdate (false);
   QDomElement head=page.namedItem("head").toElement();
-
+  
   QDomElement layout=head.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")
@@ -758,7 +753,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
   pLayout.mmRight=layout.attribute("rmargin").toFloat();
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
-
+ 
 // update page layout
   setPageLayout (pLayout);
 
@@ -955,16 +950,6 @@ void GPage::deleteLayer (GLayer *layer)
   }
   emit selectionChanged ();
   emit changed ();
-}
-
-GLayer *GPage::layerForHelplines ()
-{
-  return layers.first();
-}
-
-bool GPage::helplineLayerIsActive ()
-{
-  return (active_layer->isInternal ()); // hmmm?? Is that safe?
 }
 
 void GPage::invalidateClipRegions ()
