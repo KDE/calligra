@@ -1,7 +1,5 @@
 /*
- * $Id$
- *
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #include "kchartParameterPieConfigPage.h"
@@ -166,8 +164,8 @@ else
 
 void KChartParameterPieConfigPage::init()
 {
+    title->setText(_params->header1Text());
     // PENDING(kalle) Put back in
-    //     title->setText(_params->title);
 //     lineLabel->setChecked(_params->label_line);
 //     dist->setValue(_params->label_dist);
 //     switch( _params->percent_labels ) {
@@ -196,7 +194,6 @@ void KChartParameterPieConfigPage::init()
 void KChartParameterPieConfigPage::apply()
 {
     // PENDING(kalle) Put back in
-    //     _params->title=title->text();
 //     _params->label_line=lineLabel->isChecked();
 //     if(lineLabel->isChecked())
 //     	_params->label_dist=dist->value();
@@ -212,4 +209,6 @@ void KChartParameterPieConfigPage::apply()
 //     	_params->percent_labels=KCHARTPCTTYPE_BELOW;
 //     else
 //     	kdDebug(35001)<<"Error in QRadioButton\n";
+
+     _params->setHeader1Text(title->text());
 }
