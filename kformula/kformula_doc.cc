@@ -130,7 +130,9 @@ QDomDocument KFormulaDoc::saveXML()
 
 bool KFormulaDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
-    //todo
+    // we don't have style into this format
+    // we don't have settings into kformula (for the moment)
+    // necessary to adapt kformula code to load MathML format with Oasis Extension.
     return false;
 }
 
