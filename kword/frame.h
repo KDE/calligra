@@ -39,6 +39,7 @@ class KWordChild;
 class KWordFrame;
 class KWGroupManager;
 class KFormulaEdit;
+class KWFormat;
 
 enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
 enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, 
@@ -391,7 +392,8 @@ public:
 
     void insertChar( int c );
     void setFormat( const QFont &f, const QColor &c );
-    void getFormat( QFont &f, QColor &c );
+
+    KWFormat *getFormat();
     
 protected:
     KFormulaEdit *formulaEdit;

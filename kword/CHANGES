@@ -1537,3 +1537,8 @@ Reggie, 21.9.1999:
     should be smart when updating styles or if the user
     wants to set the options for updating itself
 - Code cleanups
+- Updating text-toolbar when acivating/deactivating a formula 
+  frame works now
+- Undo/Redo of the formula editor can be used now
+- font and color of formulas is saved/loaded now
+- some more fixes for formula editing

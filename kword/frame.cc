@@ -20,6 +20,8 @@
 #include "parag.h"
 #include "defs.h"
 #include "kword_utils.h"
+#include "format.h"
+#include "font.h"
 
 #include <komlMime.h>
 #include <koView.h>
@@ -34,7 +36,7 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 #include <qfile.h>
-#include <qpalette.h>
+#include <qscrollview.h>
 
 /******************************************************************/
 /* Class: KWFrame						  */
@@ -1446,10 +1448,11 @@ void KWPartFrameSet::update()
 
 /*================================================================*/
 KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc, QWidget *parent )
-    : KWFrameSet( _doc ), pic( 0 ), font( "utopia", 12 ), color( Qt::black )
+    : KWFrameSet( _doc ), pic( 0 ), font( "times", 12 ), color( Qt::black )
 
 {
-    formulaEdit = new KFormulaEdit( parent );
+    formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
+    ( (QScrollView*)parent )->addChild( formulaEdit );
     formulaEdit->setFont( font );
     if ( pic )
 	delete pic;
@@ -1499,26 +1502,34 @@ void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::getFormat( QFont &f, QColor &c )
+KWFormat *KWFormulaFrameSet::getFormat()
 {
-    f = font;
-    c = color;
+    KWFormat *f = new KWFormat( doc );
+    f->setUserFont( doc->findUserFont( font.family() ) );
+    f->setPTFontSize( font.pointSize() );
+    f->setWeight( font.weight() );
+    f->setUnderline( font.underline() );
+    f->setItalic( font.italic() );
+    f->setVertAlign( KWFormat::VA_NORMAL );
+    f->setColor( color );
+    
+    return f;
 }
 
 /*================================================================*/
 void KWFormulaFrameSet::activate( QWidget *_widget, int diffx, int diffy, int /*diffxx*/ )
 {
-    if ( formulaEdit->parent() != _widget )
-	formulaEdit->reparent( _widget, 0, QPoint( 0, 0 ), FALSE );
+    if ( formulaEdit->parent() != ( (QScrollView*)_widget )->viewport() )
+	formulaEdit->reparent( ( (QScrollView*)_widget )->viewport(), 0, QPoint( 0, 0 ), FALSE );
 
     formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
     formulaEdit->redraw( TRUE );
     formulaEdit->setBackgroundColor( frames.at( 0 )->getBackgroundColor().color() );
-    formulaEdit->setGeometry( QRect( frames.at( 0 )->x() - diffx, frames.at( 0 )->y() - diffy,
-				     frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    formulaEdit->resize( frames.at( 0 )->width(), frames.at( 0 )->height() );
+    ( (QScrollView*)_widget )->moveChild( formulaEdit, frames.at( 0 )->x(), frames.at( 0 )->y() );
     formulaEdit->show();
+    ( (QScrollView*)_widget )->viewport()->setFocusProxy( formulaEdit );
     _widget->setFocusProxy( formulaEdit );
-    ( ( QWidget* )_widget->parent() )->setFocusProxy( formulaEdit );
     formulaEdit->setFocus();
 }
 
@@ -1551,7 +1562,8 @@ void KWFormulaFrameSet::create( QWidget *parent )
 	return;
     }
     
-    formulaEdit = new KFormulaEdit( parent );
+    formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
+    ( (QScrollView*)parent )->addChild( formulaEdit );
     formulaEdit->getFormula()->setFont( font );
     formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
     formulaEdit->getFormula()->setForeColor( color );
@@ -1566,8 +1578,7 @@ void KWFormulaFrameSet::update()
     if ( !formulaEdit )
 	return;
     formulaEdit->setFont( font );
-    formulaEdit->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
-				     frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    formulaEdit->resize( frames.at( 0 )->width(), frames.at( 0 )->height() );
     formulaEdit->getFormula()->setPos( formulaEdit->width() / 2, formulaEdit->height() / 2 );
     if ( pic )
 	delete pic;
@@ -1590,6 +1601,10 @@ void KWFormulaFrameSet::save( ostream &out )
     out << formulaEdit->text().utf8().data() << endl;
     out << etag << "</FORMULA>" << endl;
 
+    out << otag << "<FORMAT>" << endl;
+    getFormat()->save( out );
+    out << etag << "</FORMAT>" << endl;
+    
     out << etag << "</FRAMESET>" << endl;
 }
 
@@ -1611,6 +1626,15 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    parser.readText( tmp );
 	    text = QString::fromUtf8( tmp.c_str() );
 	    text = text.stripWhiteSpace();
+	} if ( name == "FORMAT" ) {
+	    KWFormat f( doc );
+	    f.load( parser, lst, doc );
+	    font = QFont( f.getUserFont()->getFontName() );
+	    font.setPointSize( f.getPTFontSize() );
+	    font.setWeight( f.getWeight() ); 
+	    font.setUnderline( f.getUnderline() ); 
+	    font.setItalic( f.getItalic() ); 
+	    color = f.getColor();
 	} else if ( name == "FRAME" ) {
 	    KWFrame rect;
 	    KWParagLayout::Border l, r, t, b;

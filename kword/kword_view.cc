@@ -200,7 +200,7 @@ void KWordView::init()
 	    slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
 			      dynamic_cast<KWPartFrameSet*>( frameset ) );
 	else if ( frameset->getFrameType() == FT_FORMULA )
-	    dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->getPaperWidget()->viewport() );
+	    dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->getPaperWidget() );
     }
 }
 
@@ -2138,14 +2138,14 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     CORBA::WString_var toolTip = Q2C( i18n( "Undo" ) );
     m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo",
 							 TRUE, toolTip, -1 );
-    m_vToolBarEdit->setItemEnabled( ID_UNDO, FALSE );
+    //m_vToolBarEdit->setItemEnabled( ID_UNDO, FALSE );
 
     // redo
     pix = OPUIUtils::convertPixmap( BarIcon( "redo" ) );
     toolTip = Q2C( i18n( "Redo" ) );
     m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo",
 							 TRUE, toolTip, -1 );
-    m_vToolBarEdit->setItemEnabled( ID_REDO, FALSE );
+    //m_vToolBarEdit->setItemEnabled( ID_REDO, FALSE );
 
     m_vToolBarEdit->insertSeparator( -1 );
 
