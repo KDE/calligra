@@ -61,6 +61,8 @@
 #include <float.h>
 using namespace std;
 
+#undef S_NONE // Solaris defines it in sys/signal.h
+
 /******************************************************************/
 /* Class: KPTextObject                                            */
 /******************************************************************/

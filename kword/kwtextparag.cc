@@ -30,6 +30,7 @@
 #include <assert.h>
 
 //#define DEBUG_FORMATTING
+#undef S_NONE // Solaris defines it in sys/signal.h
 
 // Called by KoTextParag::drawParagString - all params are in pixel coordinates
 void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/, int start, int len,
