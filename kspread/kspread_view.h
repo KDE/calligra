@@ -543,7 +543,6 @@ private:
 
 
   /* helper functions */
-  void adjustMapActions( bool mode );
   bool checkChangeRecordPassword();
   void endOperation( QRect const & rect );
 

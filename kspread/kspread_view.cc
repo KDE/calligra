@@ -295,7 +295,7 @@ public:
     DCOPObject* dcop;
 
     KSpreadDoc* doc;
-    KSpreadMap* map;
+    KSpreadMap* workbook;
 
     // the active sheet, may be 0
     // this is the sheet which has the input focus
@@ -401,6 +401,7 @@ public:
     void initActions();
     void adjustActions( bool mode );
     void adjustActions( KSpreadSheet* sheet, KSpreadCell* cell );
+    void adjustWorkbookActions( bool mode );
 };
 
 KSpreadScripts* ViewPrivate::globalScriptsDlg = 0L;
@@ -1395,7 +1396,7 @@ void ViewPrivate::adjustActions( bool mode )
   actions->fillUp->setEnabled( false );
   actions->fillDown->setEnabled( false );
 
-  if ( mode && doc && map && !map->isProtected() )
+  if ( mode && doc && workbook && !workbook->isProtected() )
     actions->renameTable->setEnabled( true );
   else
     actions->renameTable->setEnabled( false );
@@ -1426,6 +1427,29 @@ void ViewPrivate::adjustActions( KSpreadSheet* sheet, KSpreadCell* cell )
   }
 }
 
+void ViewPrivate::adjustWorkbookActions( bool mode )
+{
+  actions->hideTable->setEnabled( mode );
+  actions->showTable->setEnabled( mode );
+  actions->insertTable->setEnabled( mode );
+  actions->menuInsertTable->setEnabled( mode );
+  actions->removeTable->setEnabled( mode );
+
+  if ( mode )
+  {
+    if ( activeSheet && !activeSheet->isProtected() )
+    {
+      bool state = ( workbook->visibleSheets().count() > 1 );
+      actions->removeTable->setEnabled( state );
+      actions->hideTable->setEnabled( state );
+    }
+    actions->showTable->setEnabled( workbook->hiddenSheets().count() > 0 );
+    if ( activeSheet->isProtected() )
+      actions->renameTable->setEnabled( false );
+    else
+      actions->renameTable->setEnabled( true );
+  }
+}
 
 /*****************************************************************************
  *
@@ -1443,7 +1467,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     d->view = this;
     d->dcop = 0;
     d->doc  = doc;
-    d->map  = doc->map();
+    d->workbook  = doc->map();
 
     d->activeSheet = 0;
 
@@ -1601,10 +1625,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     else
     {
       //activate first table which is not hiding
-      tbl = d->map->findTable( d->map->visibleSheets().first());
+      tbl = d->workbook->findTable( d->workbook->visibleSheets().first());
       if ( !tbl )
       {
-        tbl = d->map->firstTable();
+        tbl = d->workbook->firstTable();
         if ( tbl )
         {
           tbl->setHidden( false );
@@ -1639,7 +1663,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
 
     d->adjustActions( !d->activeSheet->isProtected() );
-    adjustMapActions( !d->map->isProtected() );
+    d->adjustWorkbookActions( !d->workbook->isProtected() );
 }
 
 KSpreadView::~KSpreadView()
@@ -1862,9 +1886,9 @@ void KSpreadView::recalcWorkBook()
 {
   KSpreadSheet * tbl;
   d->doc->emitBeginOperation( true );
-  for ( tbl = d->map->firstTable();
+  for ( tbl = d->workbook->firstTable();
         tbl != 0L;
-        tbl = d->map->nextTable() )
+        tbl = d->workbook->nextTable() )
   {
     bool b = tbl->getAutoCalc();
     tbl->setAutoCalc( true );
@@ -1879,9 +1903,9 @@ void KSpreadView::refreshLocale()
 {
   d->doc->emitBeginOperation(true);
   KSpreadSheet *tbl;
-  for ( tbl = d->map->firstTable();
+  for ( tbl = d->workbook->firstTable();
         tbl != 0L;
-        tbl = d->map->nextTable() )
+        tbl = d->workbook->nextTable() )
   {
     tbl->updateLocale();
   }
@@ -2102,11 +2126,11 @@ void KSpreadView::spellCleanup()
 bool KSpreadView::spellSwitchToOtherTable()
 {
   // there is no other table
-  if ( d->map->count() == 1 )
+  if ( d->workbook->count() == 1 )
     return false;
 
   // for optimization
-  QPtrList<KSpreadSheet> tableList = d->map->tableList();
+  QPtrList<KSpreadSheet> tableList = d->workbook->tableList();
 
   unsigned int curIndex = tableList.findRef(d->spell.currentSpellTable);
   ++curIndex;
@@ -2285,10 +2309,10 @@ void KSpreadView::initialPosition()
 {
     // Set the initial position for the marker as store in the XML file,
     // (1,1) otherwise
-    int col = d->map->initialMarkerColumn();
+    int col = d->workbook->initialMarkerColumn();
     if ( col <= 0 )
       col = 1;
-    int row = d->map->initialMarkerRow();
+    int row = d->workbook->initialMarkerRow();
     if ( row <= 0 )
       row = 1;
 
@@ -2307,11 +2331,11 @@ void KSpreadView::initialPosition()
     d->actions->fillDown->setEnabled( false );
     d->actions->fillLeft->setEnabled( false );
 
-    d->actions->recordChanges->setChecked( d->map->changes() );
-    d->actions->acceptRejectChanges->setEnabled( d->map->changes() );
-    d->actions->filterChanges->setEnabled( d->map->changes() );
-    d->actions->protectChanges->setEnabled( d->map->changes() );
-    d->actions->commentChanges->setEnabled( d->map->changes() );
+    d->actions->recordChanges->setChecked( d->workbook->changes() );
+    d->actions->acceptRejectChanges->setEnabled( d->workbook->changes() );
+    d->actions->filterChanges->setEnabled( d->workbook->changes() );
+    d->actions->protectChanges->setEnabled( d->workbook->changes() );
+    d->actions->commentChanges->setEnabled( d->workbook->changes() );
 
     // make paint effective:
     d->doc->decreaseNumOperation();
@@ -2329,7 +2353,7 @@ void KSpreadView::initialPosition()
       initConfig();
 
     d->adjustActions( !d->activeSheet->isProtected() );
-    adjustMapActions( !d->map->isProtected() );
+    d->adjustWorkbookActions( !d->workbook->isProtected() );
 }
 
 
@@ -2478,7 +2502,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   d->actions->transform->setEnabled( false );
   d->actions->redo->setEnabled( false );
   d->actions->undo->setEnabled( false );
-  if ( !d->doc || !d->map || d->map->isProtected() )
+  if ( !d->doc || !d->workbook || d->workbook->isProtected() )
   {
     d->actions->showTable->setEnabled( false );
     d->actions->hideTable->setEnabled( false );
@@ -3447,8 +3471,8 @@ void KSpreadView::slotTableRemoved( KSpreadSheet *_t )
 
   QString m_tableName=_t->tableName();
   d->tabBar->removeTab( _t->tableName() );
-  if (d->map->findTable( d->map->visibleSheets().first()))
-    setActiveTable( d->map->findTable( d->map->visibleSheets().first() ));
+  if (d->workbook->findTable( d->workbook->visibleSheets().first()))
+    setActiveTable( d->workbook->findTable( d->workbook->visibleSheets().first() ));
   else
     d->activeSheet = 0L;
 
@@ -3524,9 +3548,9 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
 
   d->actions->showPageBorders->setChecked( d->activeSheet->isShowPageBorders() );
   d->actions->protectSheet->setChecked( d->activeSheet->isProtected() );
-  d->actions->protectDoc->setChecked( d->map->isProtected() );
+  d->actions->protectDoc->setChecked( d->workbook->isProtected() );
   d->adjustActions( !d->activeSheet->isProtected() );
-  adjustMapActions( !d->map->isProtected() );
+  d->adjustWorkbookActions( !d->workbook->isProtected() );
 
   /* see if there was a previous selection on this other table */
   QMapIterator<KSpreadSheet*, QPoint> it = d->savedAnchors.find(d->activeSheet);
@@ -3564,7 +3588,7 @@ void KSpreadView::slotTableHidden( KSpreadSheet* table )
 void KSpreadView::slotTableShown( KSpreadSheet* table )
 {
   d->doc->emitBeginOperation(false);
-  d->tabBar->setTabs( d->map->visibleSheets() );
+  d->tabBar->setTabs( d->workbook->visibleSheets() );
   updateShowTableMenu();
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
@@ -3574,7 +3598,7 @@ void KSpreadView::changeTable( const QString& _name )
     if ( activeTable()->tableName() == _name )
         return;
 
-    KSpreadSheet *t = d->map->findTable( _name );
+    KSpreadSheet *t = d->workbook->findTable( _name );
     if ( !t )
     {
         kdDebug(36001) << "Unknown table " << _name << endl;
@@ -3599,19 +3623,19 @@ void KSpreadView::changeTable( const QString& _name )
 
 void KSpreadView::moveTable( unsigned table, unsigned target )
 {
-    QStringList vs = d->map->visibleSheets();
+    QStringList vs = d->workbook->visibleSheets();
 
     if( target >= vs.count() )
-        d->map->moveTable( vs[ table ], vs[ vs.count()-1 ], false );
+        d->workbook->moveTable( vs[ table ], vs[ vs.count()-1 ], false );
     else
-        d->map->moveTable( vs[ table ], vs[ target ], true );
+        d->workbook->moveTable( vs[ table ], vs[ target ], true );
 
     d->tabBar->moveTab( table, target );
 }
 
 void KSpreadView::insertTable()
 {
-  if ( d->map->isProtected() )
+  if ( d->workbook->isProtected() )
   {
     KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) );
     return;
@@ -3626,7 +3650,7 @@ void KSpreadView::insertTable()
   d->doc->undoBuffer()->appendUndo( undo );
   setActiveTable( t );
 
-  if ( d->map->visibleSheets().count() > 1 )
+  if ( d->workbook->visibleSheets().count() > 1 )
   {
     d->actions->removeTable->setEnabled( true );
     d->actions->hideTable->setEnabled( true );
@@ -3640,13 +3664,13 @@ void KSpreadView::hideTable()
   if ( !d->activeSheet )
     return;
 
-  if ( d->map->visibleSheets().count() ==  1)
+  if ( d->workbook->visibleSheets().count() ==  1)
   {
      KMessageBox::error( this, i18n("You cannot hide the last visible table.") );
      return;
   }
 
-  QStringList vs = d->map->visibleSheets();
+  QStringList vs = d->workbook->visibleSheets();
   int i = vs.findIndex( d->activeSheet->tableName() ) - 1;
   if( i < 0 ) i = 1;
   QString sn = vs[i];
@@ -4451,7 +4475,7 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
 
 void KSpreadView::toggleProtectDoc( bool mode )
 {
-   if ( !d->doc || !d->map )
+   if ( !d->doc || !d->workbook )
      return;
 
    QCString passwd;
@@ -4468,7 +4492,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
-     d->map->setProtected( hash );
+     d->workbook->setProtected( hash );
    }
    else
    {
@@ -4483,43 +4507,18 @@ void KSpreadView::toggleProtectDoc( bool mode )
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
-     if ( !d->map->checkPassword( hash ) )
+     if ( !d->workbook->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Incorrect password" ) );
        d->actions->protectDoc->setChecked( true );
        return;
      }
 
-     d->map->setProtected( QCString() );
+     d->workbook->setProtected( QCString() );
    }
 
    d->doc->setModified( true );
-   adjustMapActions( !mode );
-}
-
-void KSpreadView::adjustMapActions( bool mode )
-{
-  d->actions->hideTable->setEnabled( mode );
-  d->actions->showTable->setEnabled( mode );
-  d->actions->insertTable->setEnabled( mode );
-  d->actions->menuInsertTable->setEnabled( mode );
-  d->actions->removeTable->setEnabled( mode );
-
-  if ( mode )
-  {
-    if ( d->activeSheet && !d->activeSheet->isProtected() )
-    {
-      bool state = ( d->map->visibleSheets().count() > 1 );
-      d->actions->removeTable->setEnabled( state );
-      d->actions->hideTable->setEnabled( state );
-    }
-    d->actions->showTable->setEnabled( d->map->hiddenSheets().count() > 0 );
-    if ( d->activeSheet->isProtected() )
-      d->actions->renameTable->setEnabled( false );
-    else
-      d->actions->renameTable->setEnabled( true );
-  }
-  // slotUpdateView( d->activeSheet );
+   d->adjustWorkbookActions( !mode );
 }
 
 void KSpreadView::toggleProtectSheet( bool mode )
@@ -4854,7 +4853,7 @@ void KSpreadView::editCell()
 }
 
 bool KSpreadView::showTable(const QString& tableName) {
-  KSpreadSheet *t=d->map->findTable(tableName);
+  KSpreadSheet *t=d->workbook->findTable(tableName);
   if ( !t )
   {
     kdDebug(36001) << "Unknown table " <<tableName<<  endl;
@@ -4868,7 +4867,7 @@ bool KSpreadView::showTable(const QString& tableName) {
 
 void KSpreadView::nextTable(){
 
-  KSpreadSheet * t = d->map->nextTable( activeTable() );
+  KSpreadSheet * t = d->workbook->nextTable( activeTable() );
   if ( !t )
   {
     kdDebug(36001) << "Unknown table " <<  endl;
@@ -4880,7 +4879,7 @@ void KSpreadView::nextTable(){
 
 void KSpreadView::previousTable()
 {
-  KSpreadSheet * t = d->map->previousTable( activeTable() );
+  KSpreadSheet * t = d->workbook->previousTable( activeTable() );
   if ( !t )
   {
     kdDebug(36001) << "Unknown table "  << endl;
@@ -4892,7 +4891,7 @@ void KSpreadView::previousTable()
 
 void KSpreadView::firstTable()
 {
-  KSpreadSheet *t = d->map->firstTable();
+  KSpreadSheet *t = d->workbook->firstTable();
   if ( !t )
   {
     kdDebug(36001) << "Unknown table " <<  endl;
@@ -4904,7 +4903,7 @@ void KSpreadView::firstTable()
 
 void KSpreadView::lastTable()
 {
-  KSpreadSheet *t = d->map->lastTable( );
+  KSpreadSheet *t = d->workbook->lastTable( );
   if ( !t )
   {
     kdDebug(36001) << "Unknown table " <<  endl;
@@ -6758,7 +6757,7 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
     return;
   if ( d->tabBar )
   {
-    bool state = ( d->map->visibleSheets().count() > 1 );
+    bool state = ( d->workbook->visibleSheets().count() > 1 );
     if ( d->activeSheet && d->activeSheet->isProtected() )
     {
       d->actions->removeTable->setEnabled( false );
@@ -6769,7 +6768,7 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
       d->actions->removeTable->setEnabled( state);
       d->actions->hideTable->setEnabled( state );
     }
-    if ( !d->doc || !d->map || d->map->isProtected() )
+    if ( !d->doc || !d->workbook || d->workbook->isProtected() )
     {
       d->actions->insertTable->setEnabled( false );
       d->actions->renameTable->setEnabled( false );
@@ -6794,9 +6793,9 @@ void KSpreadView::removeTable( KSpreadSheet *_t )
   d->doc->emitBeginOperation(false);
   QString m_tablName=_t->tableName();
   d->tabBar->removeTab( m_tablName );
-  setActiveTable( d->map->findTable( d->map->visibleSheets().first() ));
+  setActiveTable( d->workbook->findTable( d->workbook->visibleSheets().first() ));
 
-  bool state = d->map->visibleSheets().count() > 1;
+  bool state = d->workbook->visibleSheets().count() > 1;
   d->actions->removeTable->setEnabled( state );
   d->actions->hideTable->setEnabled( state );
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -6811,7 +6810,7 @@ void KSpreadView::insertTable( KSpreadSheet* table )
     d->tabBar->addTab( tabName );
   }
 
-  bool state = ( d->map->visibleSheets().count() > 1 );
+  bool state = ( d->workbook->visibleSheets().count() > 1 );
   d->actions->removeTable->setEnabled( state );
   d->actions->hideTable->setEnabled( state );
   d->doc->emitEndOperation( table->visibleRect( d->canvas ) );
@@ -6828,7 +6827,7 @@ void KSpreadView::updateShowTableMenu()
   if ( d->activeSheet->isProtected() )
     d->actions->showTable->setEnabled( false );
   else
-    d->actions->showTable->setEnabled( d->map->hiddenSheets().count() > 0 );
+    d->actions->showTable->setEnabled( d->workbook->hiddenSheets().count() > 0 );
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
