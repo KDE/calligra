@@ -433,8 +433,8 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QPoint &_marker,bool makeUndo=true, PasteMode=Normal, Operation=OverWrite );
-    void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite );
+    void paste( const QPoint &_marker,bool makeUndo=true, PasteMode=Normal, Operation=OverWrite,bool insert=false );
+    void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,bool insert=false );
     void defaultSelection( const QPoint &_marker );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
@@ -464,21 +464,21 @@ public:
      * inserts a new and empty column. After this the table is redrawn.
      * nbCol is the number of column which are installing
      */
-    bool insertColumn( int col,int nbCol=0 );
+    bool insertColumn( int col,int nbCol=0,bool makeUndo=true );
     /**
      * Moves all rows which are >= @p row one position down and
      * inserts a new and empty row. After this the table is redrawn.
      */
-    bool insertRow( int row,int nbRow=0 );
+    bool insertRow( int row,int nbRow=0 ,bool makeUndo=true);
 
     /**
      * Deletes the column @p col and redraws the table.
      */
-    void removeColumn( int col,int nbCol=0 );
+    void removeColumn( int col,int nbCol=0,bool makeUndo=true );
     /**
      * Deletes the row @p row and redraws the table.
      */
-    void removeRow( int row,int nbRow=0 );
+    void removeRow( int row,int nbRow=0,bool makeUndo=true );
 
     int adjustColumn( const QPoint &_marker, int _col = -1 );
     int adjustRow( const QPoint &_marker, int _row = -1 );
@@ -694,9 +694,9 @@ public:
     /**
      * @see #paste
      */
-    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite );
+    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false );
 
-    void loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift);
+    void loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert);
 
     /**
      * Deletes all cells in the given rectangle.

@@ -408,7 +408,7 @@ protected:
 class KSpreadUndoCellPaste : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable *_table,int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection );
+    KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable *_table,int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert );
     virtual ~KSpreadUndoCellPaste();
 
     virtual void undo();
@@ -427,6 +427,7 @@ protected:
     int nbRow;
     int xshift;
     int yshift;
+    bool  b_insert;
     QString m_tableName;
 };
 

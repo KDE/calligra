@@ -1544,7 +1544,7 @@ void KSpreadUndoShowTable::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* table, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection )
+KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* table, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert )
     : KSpreadUndoAction( _doc )
 {
     title=i18n("Paste");
@@ -1554,6 +1554,7 @@ KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* tabl
     nbRow=_nbRow;
     xshift=_xshift;
     yshift=_yshift;
+    b_insert=insert;
     createListCell( m_data, m_lstColumn,m_lstRow,table );
 
 }

@@ -2318,9 +2318,9 @@ void KSpreadTable::unshiftRow( const QRect & rect )
     emit sig_updateView( this );
 }
 
-bool KSpreadTable::insertColumn( int col, int nbCol )
+bool KSpreadTable::insertColumn( int col, int nbCol,bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
         KSpreadUndoInsertColumn *undo = new KSpreadUndoInsertColumn( m_pDoc, this, col,nbCol );
         m_pDoc->undoBuffer()->appendUndo( undo  );
@@ -2348,9 +2348,9 @@ bool KSpreadTable::insertColumn( int col, int nbCol )
     return res;
 }
 
-bool KSpreadTable::insertRow( int row,int nbRow )
+bool KSpreadTable::insertRow( int row,int nbRow,bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
         KSpreadUndoInsertRow *undo = new KSpreadUndoInsertRow( m_pDoc, this, row,nbRow );
         m_pDoc->undoBuffer()->appendUndo( undo  );
@@ -2379,9 +2379,9 @@ bool KSpreadTable::insertRow( int row,int nbRow )
     return res;
 }
 
-void KSpreadTable::removeColumn( int col,int nbCol )
+void KSpreadTable::removeColumn( int col,int nbCol,bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
         KSpreadUndoRemoveColumn *undo = new KSpreadUndoRemoveColumn( m_pDoc, this, col, nbCol );
         m_pDoc->undoBuffer()->appendUndo( undo  );
@@ -2405,9 +2405,9 @@ void KSpreadTable::removeColumn( int col,int nbCol )
     emit sig_updateView( this );
 }
 
-void KSpreadTable::removeRow( int row,int nbRow )
+void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
         KSpreadUndoRemoveRow *undo = new KSpreadUndoRemoveRow( m_pDoc, this, row,nbRow );
         m_pDoc->undoBuffer()->appendUndo( undo  );
@@ -5667,7 +5667,7 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
     deleteSelection( _marker );
 }
 
-void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op )
+void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert )
 {
     QMimeSource* mime = QApplication::clipboard()->data();
     if ( !mime )
@@ -5680,10 +5680,10 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
     else
         return;
 
-    paste( b, _marker,makeUndo, sp, op );
+    paste( b, _marker,makeUndo, sp, op,insert );
 }
 
-void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op )
+void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
@@ -5695,15 +5695,15 @@ void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUn
 
     // ##### TODO: Test for parsing errors
 
-    loadSelection( doc, _marker.x() - 1, _marker.y() - 1,makeUndo, sp, op );
+    loadSelection( doc, _marker.x() - 1, _marker.y() - 1,makeUndo, sp, op, insert);
     m_pDoc->setModified( true );
 }
 
-bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo, PasteMode sp, Operation op )
+bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo, PasteMode sp, Operation op,bool insert )
 {
     QDomElement e = doc.documentElement();
     if(!isLoading()&&makeUndo)
-        loadSelectionUndo( doc, _xshift,_yshift);
+        loadSelectionUndo( doc, _xshift,_yshift,insert);
 
     if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
@@ -5815,7 +5815,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     return true;
 }
 
-void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift)
+void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert)
 {
     QDomElement e = doc.documentElement();
     QRect rect;
@@ -5825,7 +5825,7 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
         int count = columns.attribute("count").toInt();
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, count, 0, _xshift,_yshift,rect );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, count, 0, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
     return;
@@ -5837,7 +5837,7 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
         int count = rows.attribute("count").toInt();
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,count, _xshift,_yshift,rect );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,count, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
     return;
@@ -5871,7 +5871,7 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
     {
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect,false );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
     }
