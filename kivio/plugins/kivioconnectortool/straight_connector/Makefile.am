@@ -9,11 +9,11 @@ lib_LTLIBRARIES =libstraight_connector.la
 
 libstraight_connector_la_LDFLAGS = -version-info 1
 
-INCLUDES = $(all_includes)\
-		-I$(top_srcdir)/kivio/kiviopart\
-		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-		-I$(top_srcdir)/kivio/kiviopart/tklib\
-		-I$(top_srcdir)/kivio/kiviopart/tools
+INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+	-I$(top_srcdir)/kivio/kiviopart/tklib\
+	-I$(top_srcdir)/kivio/kiviopart/tools\
+	$(KOFFICE_INCLUDES) $(all_includes)
 libstraight_connector_la_METASOURCES = AUTO
 libstraight_connector_la_SOURCES = \
 		straight_connector.cpp

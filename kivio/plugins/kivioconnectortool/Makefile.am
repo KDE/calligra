@@ -13,7 +13,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector \
-	$(all_includes)
+	$(KOFFICE_INCLUDES) $(all_includes)
 libkivioconnectortool_la_METASOURCES = AUTO
 libkivioconnectortool_la_SOURCES = \
 		plugin.cpp\
