@@ -312,8 +312,7 @@ double KPObject::load(const QDomElement &element) {
 /*======================= get bounding rect ======================*/
 KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
 {
-    KoRect r( orig.x() , orig.y(),
-             ext.width(), ext.height() );
+    KoRect r( orig, ext );
 
     if ( shadowDistance > 0 )
     {
@@ -374,7 +373,7 @@ void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandle
     KoRect rr = br;
     double yPos = -rr.y();
     double xPos = -rr.x();
-    rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
+    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
 
     double sx = 0;
     double sy = 0;
@@ -394,8 +393,7 @@ bool KPObject::contains( const KoPoint &_point,KoZoomHandler *_zoomHandler ) con
 {
     if ( angle == 0.0 )
     {
-        KoRect r( orig.x() , orig.y() ,
-                 ext.width(), ext.height() );
+        KoRect r( orig, ext );
         return r.contains( _point );
     }
     else
@@ -410,8 +408,7 @@ bool KPObject::intersects( const KoRect &_rect,KoZoomHandler *_zoomHandler ) con
 {
     if ( angle == 0.0 )
     {
-        KoRect r( orig.x(), orig.y(),
-                 ext.width(), ext.height() );
+        KoRect r( orig, ext );
         return r.intersects( _rect );
     }
     else
@@ -433,7 +430,7 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
     double oh = ext.height();
     bool headerFooter=doc->isHeaderFooter(this);
     KoZoomHandler *_zoomHandler=doc->zoomHandler();
-    KoRect r( ox, oy, ow, oh );
+    KoRect r( orig, ext );
     if ( angle != 0.0 )
     {
         r=rotateRectObject(_zoomHandler );
@@ -556,7 +553,7 @@ void KPObject::getShadowCoords( double& _x, double& _y ) const
 void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, SelectionMode mode )
 {
     if ( !selected || mode == SM_NONE )
-	return;
+        return;
 
     _painter->save();
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
@@ -572,24 +569,24 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     int h = _zoomHandler->zoomItY(r.height()) - 6;
 
     if ( mode == SM_MOVERESIZE ) {
-	_painter->drawRect( x, y,  zX6, zY6 );
-	_painter->drawRect( x, y + h / 2, zX6, zY6 );
-	_painter->drawRect( x, y + h, zX6, zY6 );
-	_painter->drawRect( x + w, y, zX6, zY6 );
-	_painter->drawRect( x + w, y + h / 2, zX6, zY6 );
-	_painter->drawRect( x + w, y + h, zX6, zY6 );
-	_painter->drawRect( x + w / 2, y,zX6, zY6 );
-	_painter->drawRect( x + w / 2, y + h, zX6, zY6 );
+        _painter->drawRect( x, y,  zX6, zY6 );
+        _painter->drawRect( x, y + h / 2, zX6, zY6 );
+        _painter->drawRect( x, y + h, zX6, zY6 );
+        _painter->drawRect( x + w, y, zX6, zY6 );
+        _painter->drawRect( x + w, y + h / 2, zX6, zY6 );
+        _painter->drawRect( x + w, y + h, zX6, zY6 );
+        _painter->drawRect( x + w / 2, y,zX6, zY6 );
+        _painter->drawRect( x + w / 2, y + h, zX6, zY6 );
     }
     else if ( mode == SM_PROTECT) {
-	_painter->drawRect( x, y,  zX6, zY6 );
-	_painter->drawRect( x, y + h / 2, zX6, zY6 );
-	_painter->drawRect( x, y + h, zX6, zY6 );
-	_painter->drawRect( x + w, y, zX6, zY6 );
-	_painter->drawRect( x + w, y + h / 2, zX6, zY6 );
-	_painter->drawRect( x + w, y + h, zX6, zY6 );
-	_painter->drawRect( x + w / 2, y,zX6, zY6 );
-	_painter->drawRect( x + w / 2, y + h, zX6, zY6 );
+        _painter->drawRect( x, y,  zX6, zY6 );
+        _painter->drawRect( x, y + h / 2, zX6, zY6 );
+        _painter->drawRect( x, y + h, zX6, zY6 );
+        _painter->drawRect( x + w, y, zX6, zY6 );
+        _painter->drawRect( x + w, y + h / 2, zX6, zY6 );
+        _painter->drawRect( x + w, y + h, zX6, zY6 );
+        _painter->drawRect( x + w / 2, y,zX6, zY6 );
+        _painter->drawRect( x + w / 2, y + h, zX6, zY6 );
 
         x= x + 1;
         y= y + 1;
@@ -607,10 +604,10 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
         _painter->fillRect( x + w / 2, y + h , zX6 , zY6 , brush );
     }
     else if ( mode == SM_ROTATE ) {
-	_painter->drawEllipse( x, y,  zX6, zY6 );
-	_painter->drawEllipse( x, y + h, zX6, zY6 );
-	_painter->drawEllipse( x + w, y, zX6, zY6 );
-	_painter->drawEllipse( x + w, y + h, zX6, zY6 );
+        _painter->drawEllipse( x, y,  zX6, zY6 );
+        _painter->drawEllipse( x, y + h, zX6, zY6 );
+        _painter->drawEllipse( x + w, y, zX6, zY6 );
+        _painter->drawEllipse( x + w, y + h, zX6, zY6 );
     }
 
     _painter->restore();
@@ -733,7 +730,7 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 		     SelectionMode selectionMode, bool drawContour )
 {
     if ( selectionMode != SM_NONE &&  !drawContour )
-	paintSelection( _painter, _zoomHandler, selectionMode );
+        paintSelection( _painter, _zoomHandler, selectionMode );
 }
 
 
@@ -791,8 +788,6 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 {
     double ox = orig.x();
     double oy = orig.y();
-    //double ow = ext.width();
-    //double oh = ext.height();
     _painter->save();
 
     // Draw the shadow if any
