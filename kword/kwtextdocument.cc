@@ -28,6 +28,7 @@
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
+#include <kodom.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -72,13 +73,13 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
     // table-of-content OOo SPEC 7.5 p452
     //fillStyleStack( tag, "text:style-name" ); that's the section style
 
-    //QDomElement tocSource = toc.namedItem( "text:table-of-content-source" );
+    //QDomElement tocSource = KoDom::namedItemNS( toc, KoXmlNS::text, "table-of-content-source" );
     // TODO parse templates and generate "Contents ..." styles from it
     //for ( QDomNode n(tocSource.firstChild()); !text.isNull(); text = text.nextSibling() )
     //{
     //}
 
-    QDomElement tocIndexBody = tag.namedItem( "text:index-body" ).toElement();
+    QDomElement tocIndexBody = KoDom::namedItemNS( tag, KoXmlNS::text, "index-body" );
     for ( QDomNode n(tocIndexBody.firstChild()); !n.isNull(); n = n.nextSibling() )
     {
         context.styleStack().save();
@@ -209,7 +210,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 // we could have multiple spans there, but OO ensures that there is always only one,
                 // splitting the hyperlink if necessary (at format changes).
                 // Note that we ignore the formatting of the span.
-                QDomElement spanElem = tag.namedItem( "text:span" ).toElement();
+                QDomElement spanElem = KoDom::namedItemNS( tag, KoXmlNS::text, "span" );
                 QString text;
                 if( spanElem.isNull() )
                     text = tag.text();

@@ -37,6 +37,7 @@
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
 #include <koPictureCollection.h>
+#include <kodom.h>
 #include <koxmlns.h>
 #include <kotextobject.h> // for customItemChar!
 
@@ -1716,10 +1717,10 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
 KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& context )
 {
     double width = 100;
-    if ( tag.hasAttribute( "svg:width" ) ) { // fixed width
+    if ( tag.hasAttributeNS( KoXmlNS::svg, "width" ) ) { // fixed width
         // TODO handle percentage (of enclosing table/frame/page)
         width = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "width", QString::null ) );
-    } else if ( tag.hasAttribute( "fo:min-width" ) ) {
+    } else if ( tag.hasAttributeNS( KoXmlNS::fo, "min-width" ) ) {
         // min-width is not supported in KWord. Let's use it as a fixed width.
         width = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-width", QString::null ) );
     } else {
@@ -1727,10 +1728,10 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     }
     double height = 100;
     bool hasMinHeight = false;
-    if ( tag.hasAttribute( "svg:height" ) ) { // fixed height
+    if ( tag.hasAttributeNS( KoXmlNS::svg, "height" ) ) { // fixed height
         // TODO handle percentage (of enclosing table/frame/page)
         height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "height", QString::null ) );
-    } else if ( tag.hasAttribute( "fo:min-height" ) ) {
+    } else if ( tag.hasAttributeNS( KoXmlNS::fo, "min-height" ) ) {
         height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
         hasMinHeight = true;
     } else {
@@ -1748,7 +1749,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     // Copy-frames. OASIS extension requested on 29/03/2004.
     // We currently ignore the value of the copy-of attribute. It probably needs to
     // be handled like chain-next-name (kwtextframeset.cc) but for all types of frameset.
-    frame->setCopy( tag.hasAttribute( "draw:copy-of" ) );
+    frame->setCopy( tag.hasAttributeNS( KoXmlNS::draw, "copy-of" ) );
     frame->loadCommonOasisProperties( context, this );
 
     addFrame( frame, false );
@@ -2245,7 +2246,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
 {
     kdDebug() << k_funcinfo << endl;
     KoPictureKey key;
-    QDomNode binaryData = tag.namedItem( "office:binary-data" );
+    QDomNode binaryData = KoDom::namedItemNS( tag, KoXmlNS::office, "binary-data" );
     if ( !binaryData.isNull() )
     {
         QCString data = binaryData.toElement().text().latin1();

@@ -62,6 +62,7 @@
 #include <koxmlwriter.h>
 #include <koOasisSettings.h>
 #include <koxmlns.h>
+#include <kodom.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -1072,14 +1073,14 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     __hf.ptFootNoteBodySpacing = 10.0;
 
     QDomElement content = doc.documentElement();
-    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() )
     {
         kdError(30518) << "No office:body found!" << endl;
         setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
         return false;
     }
-    body = body.namedItem( "office:text" ).toElement();
+    body = KoDom::namedItemNS( body, KoXmlNS::office, "text" );
     if ( body.isNull() )
     {
         kdError(30518) << "No office:text found!" << endl;
@@ -1110,8 +1111,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         //__hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
 
-        QDomElement properties( masterPageStyle->namedItem( "style:page-layout-properties" ).toElement() );
-        QDomElement footnoteSep = properties.namedItem( "style:footnote-sep" ).toElement();
+        QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
@@ -1153,7 +1154,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     m_loadingInfo = new KWLoadingInfo;
 
     // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
-    m_processingType = ( body.firstChild().toElement().tagName() == "text:page-sequence" )
+    m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() )
                        ? DTP : WP;
 
     // TODO settings (m_unit, spellcheck settings)
@@ -1193,28 +1194,28 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO support for first-page
     bool hasEvenOddHeader = false;
     bool hasEvenOddFooter = false;
-    QDomElement headerStyle = masterPageStyle->namedItem( "style:header-style" ).toElement();
-    QDomElement footerStyle = masterPageStyle->namedItem( "style:footer-style" ).toElement();
-    QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
+    QDomElement headerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "header-style" );
+    QDomElement footerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "footer-style" );
+    QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-left" );
     if ( !headerLeftElem.isNull() ) {
         kdDebug() << "Found header-left" << endl;
         hasEvenOddHeader = true;
         __hf.header = HF_EO_DIFF; // ###
         loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
     }
-    QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
+    QDomElement headerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header" );
     if ( !headerElem.isNull() ) {
         kdDebug() << "Found header" << endl;
         loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
     }
-    QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
+    QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-left" );
     if ( !footerLeftElem.isNull() ) {
         kdDebug() << "Found footer-left" << endl;
         hasEvenOddFooter = true;
         __hf.footer = HF_EO_DIFF; // ###
         loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
     }
-    QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
+    QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
     if ( !footerElem.isNull() ) {
         kdDebug() << "Found footer" << endl;
         loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );

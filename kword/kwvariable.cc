@@ -29,9 +29,11 @@
 #include <kovariable.h>
 #include <koxmlwriter.h>
 #include <koxmlns.h>
-#include <klocale.h>
+#include <kodom.h>
 
+#include <klocale.h>
 #include <kdebug.h>
+
 #include <qdom.h>
 #include <qtimer.h>
 
@@ -232,8 +234,8 @@ void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& con
             m_noteType = EndNote;
         else
             kdWarning()<<" Unknown footnote type: '" << str << "'" << endl;
-        QDomNode citation = elem.namedItem( "text:note-citation" );
-        if ( citation.toElement().hasAttribute( "text:label" ) )
+        QDomNode citation = KoDom::namedItemNS( elem, KoXmlNS::text, "note-citation" );
+        if ( citation.toElement().hasAttributeNS( KoXmlNS::text, "label" ) )
             m_numberingType = Manual;
         else
             m_numberingType = Auto;
