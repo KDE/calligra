@@ -250,7 +250,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   }
 
   QDomElement kivio = doc.documentElement();
-  if ( kivio.attribute( "mime" ) != "application/x-kivio" ) {
+  if ( kivio.attribute( "mime" ) != "application/x-kivio" && kivio.attribute( "mime" ) != "application/vnd.kde.kivio" ) {
      kdDebug() << "KivioDoc::loadXML() - Invalid mime type" << endl;
     m_bLoading = false;
     return false;
