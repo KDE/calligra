@@ -99,4 +99,4 @@ kdelnkdir = $(kde_appsdir)/Office
 SUBDIRS =  kdchart . toolbar pics
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h -o $(podir)/kchart.pot
+	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h kdchart/*.cpp -o $(podir)/kchart.pot
