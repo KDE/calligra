@@ -164,19 +164,12 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
 
 
     KSpreadCell *obj = table->cellAt( _left, _top );
-    oneCell=false;
-    if( left==right && top==bottom)
-    {
-      if(obj->extraXCells()!=0 ||obj->extraYCells()!=0)
-        isMerged=true;
-      else
-      {
-        oneCell=true;
-        isMerged=false;
-      }
-    }
-    else
-        isMerged=false;
+    oneCell = ((left == right && top == bottom) ||
+               (obj->isForceExtraCells() &&
+                left + obj->extraXCells() == right &&
+                top + obj->extraYCells() == bottom));
+    isMerged = (oneCell && obj->isForceExtraCells());
+
     // Initialize with the upper left object.
     borders[BorderType_Left].style = obj->leftBorderStyle( _left, _top );
     borders[BorderType_Left].width = obj->leftBorderWidth( _left, _top );
