@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=Kexi Source
+Name[cs]=Zdroj Kexi
 Name[da]=Kexi-kilde
 Name[el]=Πηγή Kexi
 Name[es]=Origen de Kexi
@@ -15,21 +16,9 @@ Name[pt_BR]=Fonte Kexi
 Name[sv]=Kexi-källfil
 Name[zh_CN]=Kexi 源
 
-Comment=This datasource allows you choosing an existing Kexi project
-Comment[bg]=Този източник на база данни ви позволява да избирате изпълнение на kexi проект
-Comment[da]=Denne datakilde tillader dig at vælge et eksisterende kexi-projekt
-Comment[el]=Αυτή η πηγή δεδομένων σας επιτρέπει να επιλέξετε μια υπάρχουσα εργασία του kexi
-Comment[es]=Este origen de datos le permite elegir un proyecto kexi existente
-Comment[et]=See andmeallikas võimaldab valida olemasolevat kexi projekti
-Comment[fr]=Cette source de données vous permet de choisir un projet kexi existant
-Comment[hu]=Ez az adatforrás egy már létező Kexi projekt felhasználását teszi lehetővé
-Comment[lo]=This detasousrce allow you choosing a existing kexi project
-Comment[lv]=Šis datu avots atļauj jums izvēlēties eksistējo??u kexi projektu
-Comment[pt_BR]=Esta fonte de dados lhe permite escolher um projeto kexi existente
-Comment[ru]=Источник данных для проекта Kexi
-Comment[sk]=Tento zdroj dát umožňuje vybrať existujúci projekt kexi
-Comment[sv]=Den här datakällfilen låter dig välja ett befintligt Kexi-projekt
-Comment[zh_CN]=此数据源允许您选择一个现有的 kexi 项目
+Comment=This datasource allows you to choose an existing Kexi project
+Comment[pt]=Esta fonte de dados permite-lhe escolher um projecto do kexi
+Comment[pt_BR]=Esta fonte de dados permite-lhe escolher um projecto do kexi
 
 X-KDE-Library=kwmailmerge_kexi
 X-KDE-Capabilities=edit,open
