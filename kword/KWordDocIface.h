@@ -213,6 +213,7 @@ k_dcop:
 
     bool displayFiedCode()const;
     void setDisplayFiedCode( bool b);
+    QString configAutoFormatLanguage( )const;
 
 private:
     KWDocument *doc;

@@ -754,3 +754,8 @@ QStringList KWordDocIface::listOfBookmarkName()const
 {
     return doc->listOfBookmarkName();
 }
+
+QString KWordDocIface::configAutoFormatLanguage( )const
+{
+    return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
+}
