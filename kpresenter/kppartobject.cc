@@ -30,7 +30,7 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     : KPObject()
 {
     child = _child;
-    view = 0L;
+    frame = 0L;
     brush = Qt::NoBrush;
     gradient = 0;
     fillType = FT_BRUSH;
@@ -40,6 +40,16 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     gColor2 = Qt::green;
     _enableDrawing = true;
     getNewPic = false;
+}
+
+/*================================================================*/
+KPPartObject::~KPPartObject()
+{
+    if ( frame )
+    {
+        frame->detach();
+        delete frame;
+    }
 }
 
 /*================================================================*/
@@ -141,18 +151,30 @@ void KPPartObject::paint( QPainter *_painter )
 }
 
 /*================================================================*/
-void KPPartObject::activate( QWidget * /*_widget*/, int diffx, int diffy )
+void KPPartObject::activate( QWidget *_widget, int diffx, int diffy )
 {
-    view->setGeometry( orig.x() - diffx + 20, orig.y() - diffy + 20, ext.width(), ext.height() );
-    view->show();
-    view->view()->mainWindow()->setActivePart( view->view()->id() );
+    if ( !frame ) 
+    {
+        frame = new KPresenterFrame( dynamic_cast<KPresenterView*>( _widget ), child );
+        frame->attachView( view );
+        frame->show();
+    }
+    frame->setGeometry( orig.x() - diffx + 20, orig.y() - diffy + 20, ext.width(), ext.height() );
+    frame->view()->mainWindow()->setActivePart( frame->view()->id() );
+    
+    parentID = dynamic_cast<KPresenterView*>( _widget )->getID();
 }
 
 /*================================================================*/
 void KPPartObject::deactivate()
 {
-    view->hide();
-    view->view()->mainWindow()->setActivePart( parentID );
+    if ( frame )
+    {
+        frame->view()->mainWindow()->setActivePart( parentID );
+        // HACK!
+        frame->setGeometry( -10, -10, 1, 1 );
+    }
+    
     getNewPic = true;
 }
 

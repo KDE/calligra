@@ -1089,10 +1089,6 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 
                     kpobject->activate( this, diffx(), diffy() );
                     kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
-                    //setFocusProxy( kptextobject->getKTextObject() );
-                    //setFocusPolicy( QWidget::StrongFocus );
-                    //kptextobject->getKTextObject()->setFocusPolicy( QWidget::StrongFocus );
-                    //kptextobject->getKTextObject()->setFocus();
                     kptextobject->getKTextObject()->setShowCursor( true );
                     connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
                     connect( kptextobject->getKTextObject(), SIGNAL( giveMeFocus() ), view, SLOT( sendFocusEvent() ) );
@@ -1104,13 +1100,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
                 }
                 else if ( kpobject->getType() == OT_PART )
                 {
-                    view->kPresenterDoc()->hideAllFrames();
-                    view->setFramesToParts();
-                    kpobject->activate( this, diffx(), diffy() );
-                    //setFocusProxy( dynamic_cast<KPPartObject*>( kpobject )->getView() );
-                    //setFocusPolicy( QWidget::StrongFocus );
-                    //dynamic_cast<KPPartObject*>( kpobject )->getView()->setFocusPolicy( QWidget::StrongFocus );
-                    //dynamic_cast<KPPartObject*>( kpobject )->getView()->setFocus();
+                    kpobject->activate( view, diffx(), diffy() );
                     editNum = i;
                     break;
                 }
@@ -3226,7 +3216,6 @@ void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float
         kapp->processEvents();
 
         painter->resetXForm();
-        view->presentParts( 1.0, painter, getPageSize( i - 1 ), diffx(), diffy() );
         kapp->processEvents();
 
         view->setDiffY( i * ( getPageSize( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
@@ -3652,10 +3641,6 @@ void Page::slotGotoPage()
         resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
         repaint( false );
         setFocus();
-
-        QPainter p( this );
-        view->presentParts( presFakt(), &p, QRect( 0, 0, 0, 0 ), diffx(), diffy() );
-        p.end();
     }
 }
 

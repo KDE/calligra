@@ -427,7 +427,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
                 format = "JPEG";
             if ( QImage::outputFormats().find( format ) == -1 )
                 format = "BMP";
-            
+
             QString mime = "image/" + format.lower();
             _store->open( u2, mime.lower() );
             ostorestream out( _store );
@@ -3063,16 +3063,6 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
             viewPtr->getHRuler()->setUnit( __unit );
             viewPtr->getVRuler()->setUnit( __unit );
         }
-    }
-}
-
-/*==============================================================*/
-void KPresenterDoc::hideAllFrames()
-{
-    if ( !m_lstViews.isEmpty() )
-    {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-            viewPtr->hideAllFrames();
     }
 }
 

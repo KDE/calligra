@@ -303,8 +303,6 @@ public:
     void setObjectList( QList<KPObject> *_list )
     { _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false ); }
 
-    void hideAllFrames();
-
     int getPenBrushFlags();
 
     void enableEmbeddedParts( bool f );
@@ -370,7 +368,7 @@ protected:
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
     void makeUsedPixmapList();
-    
+
     // ************ variables ************
 
     struct PixCache
@@ -435,7 +433,7 @@ protected:
     PresentSlides presentSlides;
     QMap<int,bool> selectedSlides;
     QValueList<KPPixmapDataCollection::Key> usedPixmaps;
-    
+
 };
 
 #endif

@@ -90,7 +90,6 @@ KPresenterFrame::KPresenterFrame( KPresenterView* _view, KPresenterChild* _child
 {
     m_pKPresenterView = _view;
     m_pKPresenterChild = _child;
-    obj = 0L;
 }
 
 /*****************************************************************/
@@ -110,8 +109,6 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
     m_pKPresenterDoc = 0L;
     m_bKPresenterModified = false;
     m_bUnderConstruction = true;
-
-    m_lstFrames.setAutoDelete( true );
 
     // init
     backDia = 0;
@@ -214,44 +211,10 @@ KPresenterView::~KPresenterView()
     edeb( "...KPresenterView::~KPresenterView() %i\n", _refcnt() );
 }
 
-/*===============================================================*/
-void KPresenterView::setFramesToParts()
-{
-    KPresenterFrame *frame = 0L;
-    for ( unsigned int i = 0; i < m_lstFrames.count(); i++ )
-    {
-        frame = m_lstFrames.at( i );
-        frame->hide();
-        frame->view()->setMainWindow( mainWindow() );
-        frame->getKPPartObject()->setView( frame );
-        frame->getKPPartObject()->setMainWindow( mainWindow() );
-        frame->getKPPartObject()->setParentID( id() );
-    }
-}
-
-/*===============================================================*/
-void KPresenterView::hideAllFrames()
-{
-    KPresenterFrame *frame = 0L;
-    for ( unsigned int i = 0; i < m_lstFrames.count(); i++ )
-    {
-        frame = m_lstFrames.at( i );
-        frame->hide();
-    }
-}
-
 /*======================= clean up ==============================*/
 void KPresenterView::cleanUp()
 {
     if ( m_bIsClean ) return;
-
-    cerr << "1a ) Deactivate Frames" << endl;
-
-    QListIterator<KPresenterFrame> it( m_lstFrames );
-    for( ; it.current() != 0L; ++it )
-    {
-        it.current()->detach();
-    }
 
     OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
     if ( !CORBA::is_nil( menu_bar_manager ) )
@@ -541,7 +504,7 @@ void KPresenterView::insertPicture()
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
 							kimgio_patterns(), 0);
-    
+
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
     if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file.data(), xOffset, yOffset );
@@ -1092,8 +1055,6 @@ void KPresenterView::screenStart()
             kill( screensaver_pid, SIGSTOP );
         }
 
-        hideParts();
-
         page->deSelectAllObj();
         presStarted = true;
         if ( fullScreen )
@@ -1193,8 +1154,6 @@ void KPresenterView::screenStop()
         setSize( oldSize.width(), oldSize.height() );
         widget()->resize( oldSize );
         resizeEvent( 0L );
-
-        showParts();
 
         // start screensaver again
         QString pidFile;
@@ -1832,8 +1791,6 @@ void KPresenterView::createGUI()
     QObject::connect( page, SIGNAL( fontChanged( QFont* ) ), this, SLOT( fontChanged( QFont* ) ) );
     QObject::connect( page, SIGNAL( colorChanged( QColor* ) ), this, SLOT( colorChanged( QColor* ) ) );
     QObject::connect( page, SIGNAL( alignChanged( TxtParagraph::HorzAlign ) ), this, SLOT( alignChanged( TxtParagraph::HorzAlign ) ) );
-    //widget()->setFocusPolicy( QWidget::StrongFocus );
-    //widget()->setFocusProxy( page );
 
     // setup GUI
     setupPopupMenus();
@@ -1855,12 +1812,6 @@ void KPresenterView::construct()
     assert( m_pKPresenterDoc != 0L );
 
     m_bUnderConstruction = false;
-
-    m_lstFrames.clear();
-
-//   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
-//   for( ; it.current(); ++it )
-//     slotInsertObject( it.current() );
 
     KPObject *kpobject;
     for ( unsigned int i = 0; i < m_pKPresenterDoc->objectList()->count(); i++ )
@@ -1907,62 +1858,25 @@ void KPresenterView::slotInsertObject( KPresenterChild *_child, KPPartObject *_k
         exit( 1 );
     }
 
-    KPresenterFrame *p = new KPresenterFrame( this, _child );
-    p->setGeometry( _child->geometry() );
-    m_lstFrames.append( p );
-
     KOffice::View_var kv = KOffice::View::_narrow( v );
     kv->setMode( KOffice::View::ChildMode );
     assert( !CORBA::is_nil( kv ) );
-    p->attachView( kv );
-
-    p->hide();
-    _kppo->setView( p );
-    p->setKPPartObject( _kppo );
-
-//   page->insertChild( p );
-//   vert->raise();
-//   horz->raise();
-
-//   QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
-//         this, SLOT( slotGeometryEnd( KoFrame* ) ) );
-//   QObject::connect( p, SIGNAL( sig_moveEnd( KoFrame* ) ),
-//         this, SLOT( slotMoveEnd( KoFrame* ) ) );
+    _kppo->setView( kv );
 }
 
 /*========================== update child geometry =============*/
 void KPresenterView::slotUpdateChildGeometry( KPresenterChild * /*_child*/ )
 {
-//   // Find frame for child
-//   KPresenterFrame *f = 0L;
-//   QListIterator<KPresenterFrame> it( m_lstFrames );
-//   for ( ; it.current() && !f; ++it )
-//     if ( it.current()->child() == _child )
-//       f = it.current();
-
-//   assert( f != 0L );
-
-//   // Are we already up to date ?
-//   if ( _child->geometry() == f->partGeometry() ) return;
-
-//   // TODO scaling
-//   f->setPartGeometry( _child->geometry() );
 }
 
 /*======================= slot geometry end ====================*/
 void KPresenterView::slotGeometryEnd( KoFrame* /*_frame*/ )
 {
-//   KPresenterFrame *f = ( KPresenterFrame* )_frame;
-//   // TODO scaling
-//   m_pKPresenterDoc->changeChildGeometry( f->child(), _frame->partGeometry(), xOffset, yOffset );
 }
 
 /*==================== slot move end ===========================*/
 void KPresenterView::slotMoveEnd( KoFrame* /*_frame*/ )
 {
-//   KPresenterFrame *f = ( KPresenterFrame* )_frame;
-//   // TODO scaling
-//   m_pKPresenterDoc->changeChildGeometry( f->child(), _frame->partGeometry(), xOffset, yOffset );
 }
 
 /*=========== take changes for backgr dialog =====================*/
@@ -2906,59 +2820,6 @@ void KPresenterView::doAutomaticScreenPres()
     }
 
     screenStop();
-}
-
-/*======================= hide parts ============================*/
-void KPresenterView::hideParts()
-{
-    QListIterator<KPresenterFrame> it( m_lstFrames );
-
-    for( ; it.current(); ++it )
-        it.current()->hide();
-}
-
-/*====================== present parts ==========================*/
-void KPresenterView::presentParts( float /*_presFakt*/, QPainter* /*_painter*/, QRect /*_rect*/, int /*_diffx*/, int /*_diffy*/ )
-{
-//   QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
-//   QRect child_geometry;
-//   float scale_w, scale_h;
-
-//   for( ; chl.current(); ++chl )
-//     {
-//       child_geometry.setLeft( static_cast<int>( static_cast<float>( chl.current()->_geometry().left() ) * _presFakt ) );
-//       child_geometry.setTop( static_cast<int>( static_cast<float>( chl.current()->_geometry().top() ) * _presFakt ) );
-
-//       child_geometry.setRight( chl.current()->_geometry().right() );
-//       child_geometry.setBottom( chl.current()->_geometry().bottom() );
-
-//       scale_w = static_cast<float>( chl.current()->_geometry().width() ) * _presFakt /
-//  static_cast<float>( chl.current()->_geometry().width() );
-
-//       scale_h = static_cast<float>( chl.current()->_geometry().height() ) * _presFakt /
-//  static_cast<float>( chl.current()->_geometry().height() );
-
-//       _painter->translate( static_cast<float>( child_geometry.left() ) - static_cast<float>( _diffx ),
-//            static_cast<float>( child_geometry.top() ) - static_cast<float>( _diffy ) );
-//       _painter->scale( scale_w, scale_h );
-
-//       QPicture* pic;
-//       pic = chl.current()->draw();
-
-//       if ( pic && !pic->isNull() )
-//  _painter->drawPicture( *pic );
-
-//       _painter->resetXForm();
-//     }
-}
-
-/*==================== show parts again =========================*/
-void KPresenterView::showParts()
-{
-//   QListIterator<KPresenterFrame> it( m_lstFrames );
-
-//   for( ; it.current(); ++it )
-//     it.current()->show();
 }
 
 /*========================= change undo =========================*/

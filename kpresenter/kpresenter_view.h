@@ -81,19 +81,12 @@ public:
 
     // get view
     KPresenterView* presenterView() {return m_pKPresenterView; }
-
-    void setKPPartObject( KPPartObject *o ) { obj = o; }
-    KPPartObject *getKPPartObject() { return obj; }
-
 protected:
-
     // child
     KPresenterChild *m_pKPresenterChild;
 
     // view
     KPresenterView *m_pKPresenterView;
-
-    KPPartObject *obj;
 
 };
 
@@ -231,7 +224,7 @@ public:
     virtual void textSpacing();
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
-    
+
     // color bar
     virtual void setPenColor( CORBA::Long id );
     virtual void setFillColor( CORBA::Long id );
@@ -262,10 +255,6 @@ public:
     // properties
     void changePicture( unsigned int, const QString & );
     void changeClipart( unsigned int, QString );
-
-    void presentParts( float, QPainter*, QRect, int, int );
-    void hideParts();
-    void showParts();
 
     Page* getPage() {return page; }
 
@@ -307,9 +296,6 @@ public:
     int getRndX() { return rndX; }
     int getRndY() { return rndY; }
 
-    void setFramesToParts();
-    void hideAllFrames();
-
     QFont &currFont() { return tbFont; }
     QColor &currColor() { return tbColor; }
 
@@ -324,6 +310,9 @@ public:
     // get fonts
     static void getFonts( QStringList &lst );
 
+    KOffice::MainWindow_var getMainWindow() { return m_vKoMainWindow; }
+    OpenParts::Id getID() { return OPPartIf::m_id; }
+    
 public slots:
 
     // Document signals
@@ -646,9 +635,6 @@ protected:
     QScrollBar *vert, *horz;
     int xOffset, yOffset;
     int _xOffset, _yOffset;
-
-    // frames
-    QList<KPresenterFrame> m_lstFrames;
 
     // dialogs
     BackDia *backDia;

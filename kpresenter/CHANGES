@@ -314,7 +314,7 @@ Reggie, 15.6.1999:
 ------------------
 - Pixmaps are now (if possible) saved in native format
   and not always in BMP => redruces file size if you
-  use compressed image formats and keeps transparency 
+  use compressed image formats and keeps transparency
   e.g. for XPMs.
 
 Reggie, 17.6.1999:
@@ -325,3 +325,8 @@ Reggie, 17.6.1999:
 - Cleanups
 - Fixes in dialog layouts
 
+
+Reggie, 22.6.1999:
+------------------
+- Activating/Deactivating embedded parts works now
+  (no crashes anymore :-)

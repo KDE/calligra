@@ -36,11 +36,10 @@ class KPPartObject : public KPObject
 {
 public:
     KPPartObject( KPresenterChild *_child );
-    virtual ~KPPartObject()
-    {}
+    virtual ~KPPartObject();
 
     KPPartObject &operator=( const KPPartObject & );
-    
+
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
@@ -81,12 +80,6 @@ public:
     virtual void setOrig( int _x, int _y );
     virtual void moveBy( int _dx, int _dy );
 
-    KPresenterFrame *getView() { return view; }
-    void setView( KPresenterFrame *_view ) { view = _view; }
-
-    void setMainWindow( OpenParts::MainWindow_ptr _mainWindow ) { mainWindow = KOffice::MainWindow::_narrow( _mainWindow ); }
-    void setParentID( OpenParts::Id _id ) { parentID = _id; }
-
     KPresenterChild *getChild() { return child; }
 
     void enableDrawing( bool f ) { _enableDrawing = f; }
@@ -94,6 +87,9 @@ public:
     void setGetNewPic( bool _new )
     { getNewPic = _new; }
 
+    void setView( KOffice::View_var kv )
+    { view = KOffice::View::_narrow( kv ); }
+    
 protected:
     void paint( QPainter *_painter );
 
@@ -106,11 +102,11 @@ protected:
     KPGradient *gradient;
     bool _enableDrawing;
 
-    KPresenterFrame *view;
+    KPresenterFrame *frame;
     KPresenterChild *child;
-    KOffice::MainWindow_var mainWindow;
     OpenParts::Id parentID;
-
+    KOffice::View_var view;
+    
     bool getNewPic;
 
 };
