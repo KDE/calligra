@@ -495,11 +495,19 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
 
-            cell->paintCell( rect, painter, NULL,
-                             KoPoint( xpos, ypos ), QPoint( x, y ),
-                             paintBordersRight, paintBordersBottom,
-                             paintBordersLeft, paintBordersTop,
-                             rightPen, bottomPen, leftPen, topPen );
+            if ( m_pSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+              cell->paintCell( rect, painter, NULL,
+                               KoPoint( view.width() - xpos -
+                                   col_lay->dblWidth(), ypos ), QPoint( x, y ),
+                               paintBordersRight, paintBordersBottom,
+                               paintBordersLeft, paintBordersTop,
+                               rightPen, bottomPen, leftPen, topPen );
+            else
+              cell->paintCell( rect, painter, NULL,
+                               KoPoint( xpos, ypos ), QPoint( x, y ),
+                               paintBordersRight, paintBordersBottom,
+                               paintBordersLeft, paintBordersTop,
+                               rightPen, bottomPen, leftPen, topPen );
 
             xpos += col_lay->dblWidth();
         }
