@@ -32,6 +32,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #endif
 #include <kurl.h>
 #include <koQueryTypes.h>

@@ -210,23 +210,25 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     ps=new PreviewStack(0L, "preview stack", this);
 
-    // create a nice default dialog with and info button (-> msgbox)
+    // create a nice default dialog with and info button (-> info dia)
     QWidget *d=new QWidget(ps, "default preview");
     QBoxLayout *mbox=new QVBoxLayout(d, 10);
-    QString tmp=i18n("Sorry, no preview available.");
-    QLabel *l=new QLabel(i18n(tmp), d);
-    l->setMinimumSize(l->sizeHint());
-    mbox->addStretch(5);
-    mbox->addWidget(l);
+    QBoxLayout *centered1=new QHBoxLayout(d);
     mbox->addStretch(2);
-    QBoxLayout *centered=new QHBoxLayout(d);
-    mbox->addLayout(centered);
-    QPushButton *info=new QPushButton(i18n("&Info"), d);
+    mbox->addLayout(centered1);
+    QString tmp=i18n("Sorry, no dialog available.");
+    QLabel *l=new QLabel(tmp, d);
+    centered1->addStretch(5);
+    centered1->addWidget(l, 3);
+    centered1->addStretch(5);
+    mbox->addStretch(2);
+    QBoxLayout *centered2=new QHBoxLayout(d);
+    mbox->addLayout(centered2);
+    QPushButton *info=new QPushButton(i18n("Info"), d);
     ps->connect(info, SIGNAL(clicked()), ps, SLOT(slotInfo()));
-    info->setMinimumSize(info->sizeHint());
-    centered->addStretch(5);
-    centered->addWidget(info, 3);
-    centered->addStretch(5);
+    centered2->addStretch(5);
+    centered2->addWidget(info, 3);
+    centered2->addStretch(5);
     mbox->addStretch(5);
     mbox->activate();
 
@@ -463,6 +465,15 @@ void PreviewStack::showPreview(const KURL &url) {
 }
 
 void PreviewStack::slotInfo() {
-    kDebugInfo(30003, "Info clicked...");
+    //kDebugInfo(30003, "PreviewStack::slotInfo(): Info clicked...");
+    KMessageBox::information(0L, i18n("The new K File Dialog supports a preview mode which\n"
+                                      "enables applications to show previews or dialogs to\n"
+                                      "configure the opening/saving process.\n\n"
+                                      "KOffice uses this feature to let the user adjust the\n"
+                                      "behaviour of some filters. However you don't need\n"
+                                      "this feature for e.g. ASCII import and we can't provide\n"
+                                      "such a dialog for each and every mime type. Therefore\n"
+                                      "we added this default dialog which is shown when\n"
+                                      "nothing else is appropriate."), i18n("Basic Information"));
 }
 #endif
