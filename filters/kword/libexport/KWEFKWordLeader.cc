@@ -155,10 +155,9 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 static void ProcessImageTag ( QDomNode         myNode,
                               void            *tagData,
                               KWEFKWordLeader *leader )
-// <IMAGE> and <CLIPART>
-{
+{ // <PICTURE>
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL ); // Not in <CLIPART>
+    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
     ProcessAttributes (myNode, attrProcessingList);
 
     QValueList<TagProcessing> tagProcessingList;
@@ -264,9 +263,8 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             }
             break;
 
-    case 2:
-    case 5:
-        // Note: we treat IMAGE (2) and CLIPART (5) the same
+    case 2: // PICTURE
+    case 5: // CLIPART: deprecated (up to KOffice 1.2 Beta 2)
         {
 #if 0
             kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
@@ -281,13 +279,14 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList
                     << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
+                    << TagProcessing ( "PICTURE", ProcessImageTag, &frameAnchor->picture.key )
                     << TagProcessing ( "IMAGE",   ProcessImageTag, &frameAnchor->picture.key )
                     << TagProcessing ( "CLIPART", ProcessImageTag, &frameAnchor->picture.key )
                     ;
                 ProcessSubtags (myNode, tagProcessingList, leader);
 
 #if 0
-                kdDebug (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
+                kdDebug (30508) << "DEBUG: FRAMESET PICTURE KEY filename of picture is " << frameAnchor->picture.key << endl;
 #endif
 
                 frameAnchor->key = frameAnchor->picture.key;
@@ -554,6 +553,7 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
         << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL      )
         << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    &paraList )
         << TagProcessing ( "STYLES",      NULL,                   NULL      ) // Already done
+        << TagProcessing ( "PICTURES",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )

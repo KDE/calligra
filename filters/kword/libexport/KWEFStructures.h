@@ -138,8 +138,8 @@ class Picture
     public:
         Picture () {}
 
-        KoPictureKey key;           // IMAGE/PIXMAPS KEY filename - where the picture came from
-        QString koStoreName;   // PIXMAPS KEY name           - filename within kwd archive
+        KoPictureKey key;      // Picture key: where the picture came from
+        QString koStoreName;   // Picture store name: filename within kwd archive
 };
 
 
