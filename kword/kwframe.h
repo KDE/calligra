@@ -152,7 +152,7 @@ public:
     /** What happens on new page
      * (create a new frame and reconnect, no followup, make copy) */
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    NewFrameBehavior newFrameBehavior()const { return (NewFrameBehavior)m_newFrameBehavior; }
+    NewFrameBehavior newFrameBehavior()const { return m_newFrameBehavior; }
     void setNewFrameBehavior( NewFrameBehavior nfb ) { m_newFrameBehavior = nfb; }
 
     /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset
@@ -310,8 +310,8 @@ public:
 private:
     char /*SheetSide*/ m_sheetSide;
     char /*RunAroundSide*/ m_runAround; // includes runaround side
-    char /*FrameBehavior*/ m_frameBehavior;
-    char /*NewFrameBehavior*/ m_newFrameBehavior;
+    FrameBehavior m_frameBehavior : 8;
+    NewFrameBehavior m_newFrameBehavior : 8;
     double m_runAroundLeft, m_runAroundRight, m_runAroundTop, m_runAroundBottom;
     double m_paddingLeft, m_paddingRight, m_paddingTop, m_paddingBottom;
     double m_minFrameHeight;
