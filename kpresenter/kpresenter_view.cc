@@ -721,7 +721,8 @@ void KPresenterView_impl::createGUI()
   if (m_pKPresenterDoc && page)
     {
       QObject::connect(m_pKPresenterDoc,SIGNAL(restoreBackColor(unsigned int)),page,SLOT(restoreBackColor(unsigned int)));
-      page->restoreBackColor(0);
+      for (unsigned int i = 0;i < KPresenterDoc()->pageList()->count();i++)
+	page->restoreBackColor(i);
     }
 
   resizeEvent(0L);

@@ -210,11 +210,11 @@ bool KPresenterDocument_impl::save(ostream& out)
       << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
   
-  out << otag << "<BACKGROUND pages=\"" << _pageList.count() << "\">" << endl;
+  out << otag << "<BACKGROUND pages=" << _pageList.count() << ">" << endl;
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
 
-  out << otag << "<OBJECTS objects=\"" << _objList.count() << "\">" << endl;
+  out << otag << "<OBJECTS objects=" << _objList.count() << ">" << endl;
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
 
@@ -289,7 +289,7 @@ void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
       << "\" underline=\"" << txtPtr->enumListType().font.underline() << "\" red=\"" 
       << txtPtr->enumListType().color.red() << "\" green=\"" << txtPtr->enumListType().color.green() 
       << "\" blue=\"" << txtPtr->enumListType().color.blue() << "\"/>" << endl; 
-  out << indent << "<UNSORTEDLISTTYPE type=\"" /** SOMETHING missing here ?? */ << "\" family=\"" 
+  out << indent << "<UNSORTEDLISTTYPE type=\"" << txtPtr->enumListType().type << "\" family=\"" 
       << txtPtr->unsortListType().font.family() << "\" pointSize=\"" << txtPtr->unsortListType().font.pointSize()
       << "\" bold=\"" << txtPtr->unsortListType().font.bold() << "\" italic=\"" << txtPtr->unsortListType().font.italic()
       << "\" underline=" << txtPtr->unsortListType().font.underline() << " red=\"" 
@@ -363,36 +363,36 @@ bool KPresenterDocument_impl::load(const char *_url)
   string tag;
   vector<KOMLAttrib> lst;
   string name;
-
+  
   // DOC
   if (!parser.open("DOC",tag))
-   {
-     cerr << "Missing DOC" << endl;
-     return false;
-   }
+    {
+      cerr << "Missing DOC" << endl;
+      return false;
+    }
   
-   KOMLParser::parseTag(tag.c_str(),name,lst);
-   vector<KOMLAttrib>::const_iterator it = lst.begin();
-   for (;it != lst.end();it++)
-     {
-       if ((*it).m_strName == "mime")
-	 {
-	   if ((*it).m_strValue != "application/x-kpresenter")
-	     {
-	       cerr << "Unknown mime type" << (*it).m_strValue << endl;
-	       return false;
-	     }
-	 }
-     }
-
-   if (!load(parser))
-     return false;
-   
-   parser.close(tag);
-   
-   m_strFileURL = _url;
+  KOMLParser::parseTag(tag.c_str(),name,lst);
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for (;it != lst.end();it++)
+    {
+      if ((*it).m_strName == "mime")
+	{
+	  if ((*it).m_strValue != "application/x-kpresenter")
+	    {
+	      cerr << "Unknown mime type" << (*it).m_strValue << endl;
+	      return false;
+	    }
+	}
+    }
   
-   return true;
+  if (!load(parser))
+    return false;
+  
+  parser.close(tag);
+  
+  m_strFileURL = _url;
+  
+  return true;
 }
 
 /*========================== load ===============================*/
@@ -407,9 +407,18 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   // clean
   if (!_pageList.isEmpty())
     _pageList.clear();
-
   if (!_objList.isEmpty())
     _objList.clear();
+  _objNums = 0;
+  _pageNums = 0;
+  _spInfinitLoop = false;
+  _spManualSwitch = true;
+  _rastX = 20;
+  _rastY = 20;
+  _xRnd = 20;
+  _yRnd = 20;
+  _txtBackCol.operator=(white);
+  _txtSelCol.operator=(lightGray);
       
 
   // PAPER
@@ -484,7 +493,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 
   
   setPageLayout(__pgLayout,0,0);
-  repaint(true);
+  //repaint(true);
   return true;
 }
 
@@ -501,8 +510,9 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
       // page
       if (name == "PAGE")
 	{    
-	  insertNewPage(0,0);
-	  unsigned int _num = _pageList.count()-1;
+	  insertNewPage(0,0);  _spPageConfig.setAutoDelete(true);
+
+	  unsigned int _num = _pageList.count();
 	  pagePtr = _pageList.last();
 	  
 	  while (parser.open(0L,tag))
