@@ -379,6 +379,8 @@ void KSpreadconditional::init()
 
 void KSpreadconditional::slotOk()
 {
+  m_pView->doc()->emitBeginOperation( false );
+
   QValueList<KSpreadConditional> newList;
   KSpreadConditional newCondition;
 
@@ -410,6 +412,7 @@ void KSpreadconditional::slotOk()
 
   kdDebug() << "Update done" << endl;
 
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 

@@ -3265,19 +3265,16 @@ void KSpreadView::sortList()
 
 void KSpreadView::gotoCell()
 {
-  m_pDoc->emitBeginOperation(false);
   KSpreadGotoDlg dlg( this, "GotoCell" );
   dlg.exec();
-  m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::find()
 {
     KoFindDialog dlg( this, "Find", m_findOptions, m_findStrings );
     if ( KoFindDialog::Accepted != dlg.exec() )
-    {
         return;
-    }
+
     m_findOptions = dlg.options();
     m_findStrings = dlg.findHistory();
 
@@ -3290,17 +3287,16 @@ void KSpreadView::find()
 void KSpreadView::replace()
 {
     KoReplaceDialog dlg( this, "Replace", m_findOptions, m_findStrings, m_replaceStrings );
-    m_pDoc->emitBeginOperation(false);
     if ( KoReplaceDialog::Accepted != dlg.exec() )
-    {
-      m_pDoc->emitEndOperation();
       return;
-    }
+
     m_findOptions = dlg.options();
     m_findStrings = dlg.findHistory();
     m_replaceStrings = dlg.replacementHistory();
 
     // Do the replacement.
+    m_pDoc->emitBeginOperation(false);
+
     activeTable()->replace( dlg.pattern(), dlg.replacement(), dlg.options(),
                             m_pCanvas );
 
@@ -3321,14 +3317,12 @@ void KSpreadView::conditional()
 
   if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
-    KMessageBox::error( this, i18n("Area too large!"));
+    KMessageBox::error( this, i18n("Area too large!") );
   }
   else
   {
-    m_pDoc->emitBeginOperation(false);
-    KSpreadconditional dlg(this,"conditional",rect);
+    KSpreadconditional dlg( this, "conditional", rect);
     dlg.exec();
-    m_pDoc->emitEndOperation();
   }
 }
 
@@ -3342,10 +3336,8 @@ void KSpreadView::validity()
   }
   else
   {
-    m_pDoc->emitBeginOperation(false);
     KSpreadDlgValidity dlg( this,"validity",rect);
     dlg.exec();
-    m_pDoc->emitEndOperation();
   }
 }
 
@@ -3354,9 +3346,7 @@ void KSpreadView::insertSeries()
 {
     m_pCanvas->closeEditor();
     KSpreadSeriesDlg dlg( this, "Series", QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::sort()
@@ -3368,9 +3358,7 @@ void KSpreadView::sort()
     }
 
     KSpreadSortDlg dlg( this, "Sort" );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::insertHyperlink()
@@ -3378,9 +3366,7 @@ void KSpreadView::insertHyperlink()
     m_pCanvas->closeEditor();
 
     KSpreadLinkDlg dlg( this, "Insert Link" );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::insertFromDatabase()
@@ -3391,9 +3377,7 @@ void KSpreadView::insertFromDatabase()
     QRect rect = m_selectionInfo->selection();
 
     KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 #endif
 }
 
@@ -3403,9 +3387,7 @@ void KSpreadView::insertFromTextfile()
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
     KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
-    m_pDoc->emitBeginOperation(false);
     dialog.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::insertFromClipboard()
@@ -3413,9 +3395,7 @@ void KSpreadView::insertFromClipboard()
     m_pCanvas->closeEditor();
 
     KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Clipboard );
-    m_pDoc->emitBeginOperation(false);
     dialog.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::setupPrinter( KPrinter &prt )
@@ -3503,7 +3483,6 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 {
     if ( !m_pTable )
       return;
-    m_pDoc->emitBeginOperation(false);
 
     // Transform the view coordinates to document coordinates
     KoRect unzoomedRect = m_pDoc->unzoomRect( _geometry );
@@ -3532,7 +3511,6 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
                              _e,
                              m_selectionInfo->selection() );
     }
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )

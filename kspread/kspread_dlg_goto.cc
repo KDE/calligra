@@ -52,6 +52,8 @@ void KSpreadGotoDlg::textChanged ( const QString &_text )
 
 void KSpreadGotoDlg::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
+
     QString tmp_upper;
     tmp_upper=m_nameCell->text().upper();
     bool result = true;
@@ -59,6 +61,9 @@ void KSpreadGotoDlg::slotOk()
         result = m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
     else //Location entered in location widget
         result = m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
+
+    m_pView->doc()->emitEndOperation();
+
     if ( result )
         accept();
     else

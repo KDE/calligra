@@ -618,6 +618,8 @@ void KSpreadCSVDialog::accept()
       m_pView->doc()->undoBuffer()->appendUndo( undo );
   }
 
+  m_pView->doc()->emitBeginOperation();
+
   for (int row = 0; row < numRows; ++row)
   {
     for (int col = 0; col < numCols; ++col)
@@ -642,6 +644,8 @@ void KSpreadCSVDialog::accept()
       }
     }
   }
+
+  m_pView->doc()->emitEndOperation();
   QDialog::accept();
 }
 

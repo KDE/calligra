@@ -693,7 +693,9 @@ else
 
         }
 
+m_pView->doc()->emitBeginOperation( false );
 m_pView->activeTable()->setValidity( m_pView->selectionInfo(),  result);
+m_pView->doc()->emitEndOperation();
 accept();
 }
 

@@ -184,6 +184,8 @@ void KSpreadSeriesDlg::slotOk()
 
   //        double val_end = QMAX(dend, dstart);
   //        double val_start = QMIN(dend, dstart);
+  m_pView->doc()->emitBeginOperation( false );
+
   m_pTable->setSeries( marker, dstart, dend, dstep, mode, type );
 
   KSpreadCell * cell = m_pTable->cellAt( marker.x(), marker.y() );
@@ -192,6 +194,7 @@ void KSpreadSeriesDlg::slotOk()
   else
     m_pView->editWidget()->setText( "" );
 
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 

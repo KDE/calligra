@@ -80,13 +80,15 @@ void KSpreadLinkDlg::slotOk()
     default:
       kdDebug(36001)<<"Error in KSpreadLinkDlg\n";
     }
-  if(!result.isEmpty())
+  if( !result.isEmpty() )
     setCellText(result);
 }
 
 void KSpreadLinkDlg::setCellText(const QString &_text)
 {
-  KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),m_pView->canvasWidget()->markerRow() );
+    m_pView->doc()->emitBeginOperation( false );
+
+    KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),m_pView->canvasWidget()->markerRow() );
 
     if( !cell->isDefault() )
       {
@@ -107,6 +109,7 @@ void KSpreadLinkDlg::setCellText(const QString &_text)
 	accept();
       }
 
+    m_pView->doc()->emitEndOperation();
 }
 
 
