@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="61">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="62">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -100,6 +100,8 @@
   </Menu>
  </Menu>
  <Menu name="table"><text>Ta&amp;ble</text>
+  <Action name="table_propertiesmenu"/>
+  <Separator/>
   <Menu name="Row"><text>Row</text>
  	 <Action name="table_insrow"/>
 	 <Action name="table_delrow"/>
@@ -161,6 +163,8 @@
   <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar hidden="true" name="table_toolbar" position="top"><Text>Table</Text>
+  <Action name="table_properties"/>
+  <Separator/>
   <Action name="table_style"/>
   <Separator/>
   <Action name="table_insrow"/>

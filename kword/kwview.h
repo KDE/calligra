@@ -219,6 +219,7 @@ public slots:
     void insertFormula( QMimeSource* source=0 );
     void toolsPart();
 
+    void tableProperties();
     void tableInsertRow();
     void tableInsertCol();
     void tableResizeCol();
@@ -540,6 +541,8 @@ private:
     KAction *actionTableDelete;
 
     KAction *actionTableStylist;
+    KAction *actionTablePropertiesMenu;
+    KAction *actionTableProperties;
 
     KAction *actionExtraSpellCheck;
     KAction *actionExtraCreateTemplate;

@@ -133,7 +133,9 @@ public:
 
     // Table creation support - methods used by KWView to reuse the last settings
     unsigned int tableRows() const { return m_table.rows; }
+    void setTableRows( unsigned int rows ) { m_table.rows=rows; }
     unsigned int tableCols() const { return m_table.cols; }
+    void setTableCols( unsigned int cols ) { m_table.cols=cols; }
     int tableWidthMode()const { return m_table.width; }
     int tableHeightMode()const { return m_table.height; }
     bool tableIsFloating()const { return m_table.floating; }

@@ -70,7 +70,8 @@ class KWTableDia : public KDialogBase
 
 public:
     typedef int CellSize; // in fact KWTableFrameSet::CellSize, which is an enum
-    KWTableDia( QWidget *parent, const char *name, KWCanvas *_canvas, KWDocument *_doc,
+    enum UseMode{ NEW, EDIT };
+    KWTableDia( QWidget *parent, const char *name, UseMode _useMode, KWCanvas *_canvas, KWDocument *_doc,
 		int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName);
 
 protected:
@@ -83,16 +84,21 @@ protected:
     QSpinBox *nRows, *nCols;
     KWTablePreview *preview;
     QCheckBox *cbIsFloating;
+    QCheckBox *cbReapplyTemplate1, *cbReapplyTemplate2;
 
     QGridLayout *grid;
     KWTableTemplateSelector *tableTemplateSelector;
 
+    UseMode m_useMode;
     KWCanvas *canvas;
     KWDocument *doc;
 
+    int oldRowCount, oldColCount;
+    QString oldTemplateName;
 protected slots:
     void rowsChanged( int );
     void colsChanged( int );
+    void slotSetReapply( bool );
     virtual void slotOk();
 };
 

@@ -22,6 +22,11 @@
 #include "tabledia.moc"
 
 #include "kwtabletemplateselector.h"
+#include "kwcommand.h"
+#include "kwdoc.h"
+#include "kwtableframeset.h"
+#include "kwtabletemplate.h"
+#include <kcommand.h>
 
 #include <qlabel.h>
 #include <qspinbox.h>
@@ -61,17 +66,22 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /* Class: KWTableDia                                              */
 /******************************************************************/
 
-KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
+KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWCanvas *_canvas, KWDocument *_doc,
 			int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName)
     : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
 {
+    m_useMode = _useMode;
     canvas = _canvas;
     doc = _doc;
 
     setupTab1( rows, cols, wid, hei, floating );
     setupTab2( _templateName );
 
-    setInitialSize( QSize(500, 450) );
+    setInitialSize( QSize(500, 480) );
+
+    oldRowCount = rows;
+    oldColCount = cols;
+    oldTemplateName = _templateName;
 }
 
 void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating )
@@ -94,45 +104,63 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     nCols->setValue( cols );
     grid->addWidget( nCols, 3, 0 );
 
-    lHei = new QLabel( i18n( "Cell heights:" ), tab1 );
-    grid->addWidget( lHei, 4, 0 );
+    if ( m_useMode==NEW )
+    {
+        lHei = new QLabel( i18n( "Cell heights:" ), tab1 );
+        grid->addWidget( lHei, 4, 0 );
 
-    cHei = new QComboBox( FALSE, tab1 );
-    cHei->insertItem( i18n( "Automatic" ) );
-    cHei->insertItem( i18n( "Manual" ) );
-    cHei->setCurrentItem( (int)hei );
-    grid->addWidget( cHei, 5, 0 );
+        cHei = new QComboBox( FALSE, tab1 );
+        cHei->insertItem( i18n( "Automatic" ) );
+        cHei->insertItem( i18n( "Manual" ) );
+        cHei->setCurrentItem( (int)hei );
+        grid->addWidget( cHei, 5, 0 );
 
-    lWid = new QLabel( i18n( "Cell widths:" ), tab1 );
-    grid->addWidget( lWid, 6, 0 );
+        lWid = new QLabel( i18n( "Cell widths:" ), tab1 );
+        grid->addWidget( lWid, 6, 0 );
 
-    cWid = new QComboBox( FALSE, tab1 );
-    cWid->insertItem( i18n( "Automatic" ) );
-    cWid->insertItem( i18n( "Manual" ) );
-    cWid->setCurrentItem( (int)wid );
-    grid->addWidget( cWid, 7, 0 );
+        cWid = new QComboBox( FALSE, tab1 );
+        cWid->insertItem( i18n( "Automatic" ) );
+        cWid->insertItem( i18n( "Manual" ) );
+        cWid->setCurrentItem( (int)wid );
+        grid->addWidget( cWid, 7, 0 );
+    }
 
     preview = new KWTablePreview( tab1, rows, cols );
     preview->setBackgroundColor( white );
     grid->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
-    // Checkbox for floating/fixed location. The default is floating (aka inline).
-    cbIsFloating = new QCheckBox( i18n( "The table is &inline" ), tab1 );
-    //cbIsFloating->setEnabled(false);
-    cbIsFloating->setChecked( floating );
+    if ( m_useMode==NEW )
+    {
+        // Checkbox for floating/fixed location. The default is floating (aka inline).
+        cbIsFloating = new QCheckBox( i18n( "The table is &inline" ), tab1 );
+        //cbIsFloating->setEnabled(false);
+        cbIsFloating->setChecked( floating );
 
-    grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
+        grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
+    }
+    else
+    if (m_useMode==EDIT)
+    {
+        cbReapplyTemplate1 = new QCheckBox( i18n("Re-apply template to table"), tab1 );
+        grid->addMultiCellWidget( cbReapplyTemplate1, 9, 9, 0, 2);
+    
+        connect( cbReapplyTemplate1, SIGNAL( toggled ( bool )  ), this, SLOT( slotSetReapply( bool ) ) );
+    }
 
     grid->addRowSpacing( 0, lRows->height() );
     grid->addRowSpacing( 1, nRows->height() );
     grid->addRowSpacing( 2, lCols->height() );
     grid->addRowSpacing( 3, nCols->height() );
-    grid->addRowSpacing( 4, lHei->height() );
-    grid->addRowSpacing( 5, cHei->height() );
-    grid->addRowSpacing( 6, lWid->height() );
-    grid->addRowSpacing( 7, cWid->height() );
+    if ( m_useMode==NEW )
+    {
+        grid->addRowSpacing( 4, lHei->height() );
+        grid->addRowSpacing( 5, cHei->height() );
+        grid->addRowSpacing( 6, lWid->height() );
+        grid->addRowSpacing( 7, cWid->height() );
+    }
     grid->addRowSpacing( 8, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
-    grid->addRowSpacing( 9, cbIsFloating->height() );
+    if ( m_useMode==NEW )
+        grid->addRowSpacing( 9, cbIsFloating->height() );
     grid->setRowStretch( 0, 0 );
     grid->setRowStretch( 1, 0 );
     grid->setRowStretch( 2, 0 );
@@ -148,10 +176,13 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     grid->addColSpacing( 0, nRows->width() );
     grid->addColSpacing( 0, lCols->width() );
     grid->addColSpacing( 0, nCols->width() );
-    grid->addColSpacing( 0, lHei->width() );
-    grid->addColSpacing( 0, cHei->width() );
-    grid->addColSpacing( 0, lWid->width() );
-    grid->addColSpacing( 0, cWid->width() );
+    if ( m_useMode==NEW )
+    {
+        grid->addColSpacing( 0, lHei->width() );
+        grid->addColSpacing( 0, cHei->width() );
+        grid->addColSpacing( 0, lWid->width() );
+        grid->addColSpacing( 0, cWid->width() );
+    }
     grid->addColSpacing( 1, 150 );
     grid->setColStretch( 0, 0 );
     grid->setColStretch( 1, 1 );
@@ -166,21 +197,105 @@ void KWTableDia::setupTab2(const QString & _templateName )
 {
     QWidget *tab2 = addPage( i18n("Templates"));
 
-    QGridLayout *grid = new QGridLayout( tab2, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab2, 2, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     tableTemplateSelector = new KWTableTemplateSelector( doc, tab2, _templateName );
     grid->addWidget(tableTemplateSelector, 0, 0);
 
+    if (m_useMode==EDIT)
+    {
+        cbReapplyTemplate2 = new QCheckBox( i18n("Re-apply template to table"), tab2 );
+        grid->addWidget( cbReapplyTemplate2, 1, 0);
+
+        grid->setRowStretch( 0, 1);
+        grid->setRowStretch( 1, 0);
+
+        connect( cbReapplyTemplate2, SIGNAL( toggled ( bool )  ), this, SLOT( slotSetReapply( bool ) ) );
+    }
     grid->activate();
 }
 
 void KWTableDia::slotOk()
 {
-    canvas->createTable( nRows->value(), nCols->value(),
-                         cWid->currentItem(),
-                         cHei->currentItem(),
-                         cbIsFloating->isChecked(),
-                         tableTemplateSelector->getTableTemplate() );
+    if ( m_useMode==NEW )
+        canvas->createTable( nRows->value(), nCols->value(),
+                             cWid->currentItem(),
+                             cHei->currentItem(),
+                             cbIsFloating->isChecked(),
+                             tableTemplateSelector->getTableTemplate() );
+    else
+    {
+        KWTableFrameSet *table = canvas->getCurrentTable();
+        if ( table )
+        {
+            KMacroCommand *macroCmd = 0L;
+            KCommand *cmd = 0L;
+
+            // Add or delete rows
+            int rowsDiff = nRows->value()-oldRowCount;
+            if ( rowsDiff!=0 )
+            {
+                macroCmd = new KMacroCommand( (rowsDiff>0 ) ? i18n("Add new rows to table") : i18n("Remove rows from table") );
+                for ( int i = 0 ; i < abs( rowsDiff ) ; i++ )
+                {
+                    if ( rowsDiff < 0 )
+                        cmd = new KWRemoveRowCommand( "Remove row", table, oldRowCount-i-1 );
+                    else
+                    {
+                        cmd = new KWInsertRowCommand( "Insert row", table, oldRowCount+i );
+                    }
+
+                    if (cmd) macroCmd->addCommand( cmd );
+                }
+                if (macroCmd) {
+                    doc->addCommand( macroCmd );
+                    macroCmd->execute();
+                }
+                canvas->setTableRows( nRows->value() );
+            }
+
+            // Add or delete cols
+            int colsDiff = nCols->value()-oldColCount;
+            if ( colsDiff!=0 )
+            {
+                double maxRightOffset;
+                if (table->isFloating())
+                    // inline table: max offset of containing frame
+                    maxRightOffset = table->anchorFrameset()->frame(0)->right();
+                else
+                    // non inline table: max offset of the page
+                    maxRightOffset = doc->ptPaperWidth() - doc->ptRightBorder();
+
+                macroCmd = new KMacroCommand( (colsDiff>0 ) ? i18n("Add new columns to table") : i18n("Remove columns from table") );
+                cmd = 0L;
+                for ( int i = 0 ; i < abs( colsDiff ) ; i++ )
+                {
+                    if ( colsDiff < 0 )
+                        cmd = new KWRemoveColumnCommand( "Remove column", table, oldColCount-i-1 );
+                    else
+                    {
+                        cmd = new KWInsertColumnCommand( "Insert column", table, oldColCount+i,  maxRightOffset);
+                    }
+
+                    if (cmd) macroCmd->addCommand( cmd );
+                }
+                if (macroCmd) {
+                    doc->addCommand( macroCmd );
+                    macroCmd->execute();
+                }
+                canvas->setTableCols( nCols->value() );
+            }
+
+            // Apply template
+            if ( ( oldTemplateName!=tableTemplateSelector->getTableTemplate()->name() ) || (cbReapplyTemplate1->isChecked()) ) 
+            {
+                KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( "Apply template to table", table, tableTemplateSelector->getTableTemplate() );
+                doc->addCommand(ttCmd);
+                ttCmd->execute();
+                canvas->setTableTemplateName( tableTemplateSelector->getTableTemplate()->name() );
+            }
+        }      
+    }
     KDialogBase::slotOk();
 }
 
@@ -193,3 +308,10 @@ void KWTableDia::colsChanged( int _cols )
 {
     preview->setCols( _cols );
 }
+
+void KWTableDia::slotSetReapply( bool _reapply )
+{
+    if ( cbReapplyTemplate1->isChecked()!=_reapply ) cbReapplyTemplate1->setChecked( _reapply );
+    if ( cbReapplyTemplate2->isChecked()!=_reapply ) cbReapplyTemplate2->setChecked( _reapply );
+}
+

@@ -812,7 +812,21 @@ void KWView::setupActions()
     actionBackgroundColor->setDefaultColor(QColor());
 
     // ---------------------- Table menu
+    actionTablePropertiesMenu = new KAction( i18n( "&Properties..." ), 0,
+                               this, SLOT( tableProperties() ),
+                               actionCollection(), "table_propertiesmenu" );
+    actionTablePropertiesMenu->setToolTip( i18n( "Adjust properties of the current table." ) );
+    actionTablePropertiesMenu->setWhatsThis( i18n( "Adjust properties of the current table." ) );
 
+/* TODO: disabled for the moment because I first want a nice icon :-) (09-06-2002)
+
+    actionTableProperties = new KAction( i18n( "&Properties..." ), 0,
+                               this, SLOT( tableProperties() ),
+                               actionCollection(), "table_properties" );
+    actionTableProperties->setToolTip( i18n( "Adjust properties of the current table." ) );
+    actionTableProperties->setWhatsThis( i18n( "Adjust properties of the current table." ) );
+
+*/
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
                                this, SLOT( tableInsertRow() ),
                                actionCollection(), "table_insrow" );
@@ -1746,6 +1760,7 @@ void KWView::showMouseMode( int _mouseMode )
     actionFormatFrameSet->setEnabled(FALSE);
     actionTableDelRow->setEnabled( false );
     actionTableDelCol->setEnabled( false );
+    actionTablePropertiesMenu->setEnabled( false );
 }
 
 void KWView::showStyle( const QString & styleName )
@@ -3358,7 +3373,7 @@ void KWView::insertTable()
 {
     KWCanvas * canvas = m_gui->canvasWidget();
     canvas->setMouseMode( KWCanvas::MM_EDIT );
-    KWTableDia *tableDia = new KWTableDia( this, 0, canvas, m_doc,
+    KWTableDia *tableDia = new KWTableDia( this, 0, KWTableDia::NEW, canvas, m_doc,
                                            canvas->tableRows(),
                                            canvas->tableCols(),
                                            canvas->tableWidthMode(),
@@ -3400,6 +3415,23 @@ void KWView::insertFormula( QMimeSource* source )
 void KWView::toolsPart()
 {
     m_gui->canvasWidget()->insertPart( actionToolsCreatePart->documentEntry() );
+}
+
+void KWView::tableProperties()
+{
+    KWCanvas * canvas = m_gui->canvasWidget();
+    canvas->setMouseMode( KWCanvas::MM_EDIT );
+    KWTableDia *tableDia = new KWTableDia( this, 0, KWTableDia::EDIT, canvas, m_doc,
+                                           canvas->tableRows(),
+                                           canvas->tableCols(),
+                                           canvas->tableWidthMode(),
+                                           canvas->tableHeightMode(),
+                                           canvas->tableIsFloating(),
+                                           canvas->tableTemplateName());
+    tableDia->setCaption( i18n( "Adjust Table" ) );
+    if ( tableDia->exec() == QDialog::Rejected )
+        canvas->setMouseMode( KWCanvas::MM_EDIT );
+    delete tableDia;
 }
 
 void KWView::tableInsertRow()
@@ -5045,6 +5077,7 @@ void KWView::frameSelectedChanged()
     actionTableUngroup->setEnabled( state );
     actionTableResizeCol->setEnabled( state );
     actionTableProtectCells->setEnabled( state );
+    actionTablePropertiesMenu->setEnabled( state );
     if ( state )
     {
         unsigned int row = 0;
