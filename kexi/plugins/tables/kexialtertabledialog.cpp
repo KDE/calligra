@@ -110,6 +110,9 @@ void KexiAlterTableDialog::init()
 	m_view = new KexiTableView(data, splitter, "tableview");
 	m_view->setNavigatorEnabled(false);
 	m_view->setSortingEnabled(false);//no, sorting is not good idea here
+	m_view->adjustColumnWidthToContents(0); //adjust column width
+	m_view->adjustColumnWidthToContents(1); //adjust column width
+	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
 	setFocusProxy(m_view);
 	
 

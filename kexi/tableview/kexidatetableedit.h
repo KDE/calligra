@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,11 +23,8 @@
 #define KEXIDATETABLEEDIT_H
 
 #include <kexitableedit.h>
-
 #include <kdatepicker.h>
-
-
-//class KDatePicker;
+#include "kexicelleditorfactory.h"
 
 class KDatePicker;
 class KLineEdit;
@@ -49,24 +46,28 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiDateTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
-			QWidget *parent=0);
+		KexiDateTableEdit(KexiDB::Field &f, QWidget *parent=0);
 //		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
 
 		virtual QVariant value(bool &ok);
 
+		virtual bool valueIsNull();
+
+		virtual bool valueIsEmpty();
+
 		virtual void clear();
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
-
-	protected:
-		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	protected slots:
 		void slotDateChanged(QDate);
 		void slotShowDatePicker();
 
 	protected:
+		virtual void init(const QString& add);
+
+		virtual bool eventFilter( QObject *o, QEvent *e );
+
 		KDatePicker	*m_datePicker;
 		/*KLineEdit*/QDateEdit* m_edit;
 		
@@ -81,6 +82,16 @@ class KEXIDATATABLE_EXPORT KexiDatePicker : public KDatePicker
 	public:
 		KexiDatePicker(QWidget *parent, QDate date, const char *name, WFlags f);
 		~KexiDatePicker();
+};
+
+class KexiDateEditorFactoryItem : public KexiCellEditorFactoryItem
+{
+	public:
+		KexiDateEditorFactoryItem();
+		virtual ~KexiDateEditorFactoryItem();
+
+	protected:
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
 };
 
 #endif

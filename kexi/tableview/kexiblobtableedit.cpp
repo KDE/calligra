@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,25 +46,42 @@
 #include <kfiledialog.h>
 #include <kio/job.h>
 
-//KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, const char* name)
-//	: KexiTableEdit(parent, name)
-KexiBlobTableEdit::KexiBlobTableEdit(
-	QVariant value, KexiDB::Field &f, const QString& add, QWidget *parent)
- : KexiTableEdit(value, f, parent,"KexiBlobTableEdit")
+
+KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::Field &f, QWidget *parent)
+ : KexiTableEdit(f, parent,"KexiBlobTableEdit")
 {
-	QByteArray val = value.toByteArray();
+	m_proc = 0;
+	m_content = 0;
+}
+
+KexiBlobTableEdit::~KexiBlobTableEdit()
+{
+	kdDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
+	if (m_tempFile) {
+		m_tempFile->unlink();
+		//todo
+	}
+	delete m_proc;
+	m_proc = 0;
+	kdDebug() << "KexiBlobTableEdit: Ready." << endl;
+}
+
+//! initializes this editor with \a add value
+void KexiBlobTableEdit::init(const QString& add)
+{
+	QByteArray val = m_origValue.toByteArray();
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
 	m_tempFile = new KTempFile();
 	m_tempFile->setAutoDelete(true);
 	kdDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->name() << endl;
 	m_tempFile->dataStream()->writeRawBytes(val.data(), val.size());
 	m_tempFile->close();
+	delete m_tempFile;
+	m_tempFile = 0;
 
+/*js: TODO
 	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
 	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
-
-	m_proc = 0;
-	m_content = 0;
 
 	m_view = new QWidget(this);
 	QGridLayout *g = new QGridLayout(m_view);
@@ -104,7 +122,7 @@ KexiBlobTableEdit::KexiBlobTableEdit(
 	KArrowButton *menu = new KArrowButton(m_view, Qt::DownArrow, "Menu button");
 	g->addWidget(menu, 3, 0);
 	connect(menu, SIGNAL(clicked()), SLOT(menu()));
-
+*/
 }
 
 bool KexiBlobTableEdit::valueIsNull()
@@ -140,15 +158,6 @@ KexiBlobTableEdit::value(bool &ok)
 	free(data);
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
 	return QVariant(value);
-}
-
-KexiBlobTableEdit::~KexiBlobTableEdit()
-{
-	kdDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
-	m_tempFile->unlink();
-	delete m_proc;
-	m_proc = 0;
-	kdDebug() << "KexiBlobTableEdit: Ready." << endl;
 }
 
 void
@@ -292,5 +301,23 @@ void KexiBlobTableEdit::clear()
 {
 	//TODO??
 }
+
+
+//======================================================
+
+KexiBlobEditorFactoryItem::KexiBlobEditorFactoryItem()
+{
+}
+
+KexiBlobEditorFactoryItem::~KexiBlobEditorFactoryItem()
+{
+}
+
+KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
+	KexiDB::Field &f, QWidget* parent)
+{
+	return new KexiBlobTableEdit(f, parent);
+}
+
 
 #include "kexiblobtableedit.moc"

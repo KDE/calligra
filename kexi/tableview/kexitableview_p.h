@@ -73,6 +73,9 @@ class KexiTableViewPrivate
 //	KexiTableRM		*pRecordMarker;
 	KexiTableEdit	*pEditor;
 
+	//! editors: one for each column (indexed by KexiTableViewColumn)
+	QPtrDict<KexiTableEdit> editors;
+
 //	int numRows;
 //	int numCols;
 	int rowHeight;
@@ -161,6 +164,8 @@ class KexiTableViewPrivate
 
 	//! Actions pluged for this table view. \sa plugSharedAction()
 	QAsciiDict<KAction> sharedActions;
+
+
 };
 
 #endif

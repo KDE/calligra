@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,9 +25,8 @@
 
 //KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list, QWidget *parent,
 // const char *name) : KexiTableEdit(parent, name)
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(
-	QVariant value, KexiDB::Field &f, const QString& add, QWidget *parent)
- : KexiTableEdit(value, f, parent,"KexiComboBoxTableEdit")
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QWidget *parent)
+ : KexiTableEdit(f, parent,"KexiComboBoxTableEdit")
 {
 	m_view = new KComboBox(this, "tableCombo");
 	m_combo = static_cast<KComboBox*>(m_view);
@@ -38,13 +38,16 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(
 		if(!hints.at(i).isEmpty())
 			m_combo->insertItem(hints.at(i));
 	}
-	m_combo->setCurrentItem(value.toInt() - 1);
 
 //js:	TODO
 //js	static_cast<KComboBox*>(m_view)->insertStringList(list);
 //js	static_cast<KComboBox*>(m_view)->setCurrentItem(static_cast<int>(t));
 }
 
+void KexiComboBoxTableEdit::init(const QString& /*add*/)
+{
+	m_combo->setCurrentItem(m_origValue.toInt() - 1);
+}
 
 QVariant KexiComboBoxTableEdit::value(bool &ok)
 {
@@ -77,5 +80,22 @@ bool KexiComboBoxTableEdit::valueIsNull()
 bool KexiComboBoxTableEdit::valueIsEmpty()
 {
 	return false;
+}
+
+
+//======================================================
+
+KexiComboBoxEditorFactoryItem::KexiComboBoxEditorFactoryItem()
+{
+}
+
+KexiComboBoxEditorFactoryItem::~KexiComboBoxEditorFactoryItem()
+{
+}
+
+KexiTableEdit* KexiComboBoxEditorFactoryItem::createEditor(
+	KexiDB::Field &f, QWidget* parent)
+{
+	return new KexiComboBoxTableEdit(f, parent);
 }
 

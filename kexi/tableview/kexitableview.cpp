@@ -60,6 +60,7 @@
 #include "kexidatetableedit.h"
 #endif
 
+#include "kexicelleditorfactory.h"
 #include "kexitableedit.h"
 #include "kexiinputtableedit.h"
 #include "kexicomboboxtableedit.h"
@@ -67,11 +68,39 @@
 
 #include "kexitableview_p.h"
 
+bool KexiTableView_cellEditorFactoriesInitialized = false;
+
+// Initializes standard editor cell editor factories
+void KexiTableView::initCellEditorFactories()
+{
+	if (KexiTableView_cellEditorFactoriesInitialized)
+		return;
+	KexiCellEditorFactoryItem* item;
+	item = new KexiBlobEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( KexiDB::Field::BLOB, *item );
+
+	item = new KexiDateEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( KexiDB::Field::Date, *item );
+
+	item = new KexiComboBoxEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( KexiDB::Field::Enum, *item );
+
+	//default type
+	item = new KexiInputEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( KexiDB::Field::InvalidType, *item );
+
+	KexiTableView_cellEditorFactoriesInitialized = true;
+}
+
+
 
 KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
 :QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
-	,d( new KexiTableViewPrivate() )
 {
+	KexiTableView::initCellEditorFactories();
+
+	d = new KexiTableViewPrivate();
+
 	m_data = new KexiTableViewData(); //to prevent crash because m_data==0
 	m_owner = true;                   //-this will be deleted if needed
 
@@ -985,36 +1014,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	p->drawLine( 0, y2, x2, y2 );	// bottom
 	p->setPen(pen);
 
-/*	if(d->pCurrentItem == item && d->recordIndicator)
-	{
-		p->setBrush(colorGroup().highlight());
-		p->setPen(colorGroup().highlight());
-		p->drawRect(0, 0, x2, y2);
-	}
-*/
-
-//	int iOffset = 0;
-//	QPen fg(colorGroup().text());
-//	p->setPen(fg);
-#if 0 //todo(js)
-	if(item->isInsertItem())
-	{
-//		QFont f = p->font();
-//		f.setBold(true);
-//		p->setFont(f);
-//		p->setPen(QPen(colorGroup().mid()));
-		p->setPen(QColor(190,190,190));
-//		iOffset = 3;
-	}
-#endif
-
 #ifdef Q_WS_WIN
 	int x = 1;
 	int y_offset = -1;
 #else
 	int x = 1;
-//	int y_offset = 2;
-//	int y_offset = 1;
 	int y_offset = 0;
 #endif
 
@@ -1032,27 +1036,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			cell_value = item->at(col);
 		}
 	}
-
-	/*if (d->pCurrentItem == item && d->rowEditing && m_data->rowEditBuffer())
-	{
-		KexiTableViewColumn* tvcol = m_data->column(col);
-		if (tvcol->isDBAware) {
-			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
-			if (cv)
-				cell_value = *cv;
-			else 
-				cell_value = item->at(col);
-		}
-		else {
-			QVariant *cv = m_data->rowEditBuffer()->at( tvcol->caption );
-			if (cv)
-				cell_value = *cv;
-			else 
-				cell_value = item->at(col);
-		}
-	}
-	else
-		cell_value = item->at(col);*/
 
 	if (KexiDB::Field::isFPNumericType( ctype )) {
 #ifdef Q_WS_WIN
@@ -1083,13 +1066,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		align |= AlignLeft;
 	}
 	else if (KexiDB::Field::isIntegerType( ctype )) {
-//		case QVariant::UInt:
-//		case QVariant::Int:
-			int num = cell_value.toInt();
-//			if(num < 0)
-//				p->setPen(red);
-//			p->drawText(x - (x+x) - 2, 2, w, h, AlignRight, QString::number(num));
-//			qDebug("KexiTableView::paintCell(): mode: %i", d->pColumnModes->at(col));
+		int num = cell_value.toInt();
 #ifdef Q_WS_WIN
 //			y_offset = 1;
 		x = 1;
@@ -1130,16 +1107,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		}
 	}
 	else if (ctype == KexiDB::Field::Date) { //todo: datetime & time
-//		case QVariant::Date:
 #ifdef Q_WS_WIN
 		x = 5;
-//		y_offset = -1;
 #else
 		x = 5;
-//		y_offset = 0;
 #endif
-//		QString s = "";
-
 		if(cell_value.toDate().isValid())
 		{
 #ifdef USE_KDE
@@ -1148,8 +1120,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			if (!cell_value.isNull())
 				txt = cell_value.toDate().toString(Qt::LocalDate);
 #endif
-//js			p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
-//				p->drawText(x, -1, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
 		}
 		align |= AlignLeft;
 	}
@@ -1202,7 +1172,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	//	If we are in the focus cell, draw indication
 	if(d->pCurrentItem == item && col == d->curCol) //js: && !d->recordIndicator)
 	{
-//		if (!hasFocus() && !viewport()->hasFocus()) {
 		if (has_focus) {
 			p->setPen(colorGroup().text());
 		}
@@ -1212,7 +1181,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			p->setPen(gray_pen);
 		}
 		p->drawRect(0, 0, x2, y2);
-//			p->drawRect(-1, -1, w+1, h+1);
 	}
 	
 	// draw text
@@ -1763,10 +1731,11 @@ void KexiTableView::selectPrevRow()
 void KexiTableView::createEditor(int row, int col, const QString& addText, bool removeOld)
 {
 	kdDebug(44021) << "KexiTableView::createEditor('"<<addText<<"',"<<removeOld<<")"<<endl;
-	if (m_data->column(col)->readOnly())//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
+	if (m_data->column(col)->readOnly()) {//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
+		kdDebug(44021) << "COL IS READ ONLY!"<<endl;
 		return;
+	}
 	
-//	QString val;
 	QVariant val;
 	if (!removeOld) {
 		val = *bufferedValueAt(col);
@@ -1790,6 +1759,8 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 
 			break;
 	}*/
+
+	const bool startRowEdit = !d->rowEditing; //remember if we're starting row edit
 
 	if (!d->rowEditing) {
 		//we're starting row editing session
@@ -1822,9 +1793,33 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 
 	//it's getting ugly :)
 
-	int t = columnType(col);
+	KexiTableViewColumn *tvcol = m_data->column(col);
+	int t = tvcol->field->type();
+
+	//find the editor for this column
+	d->pEditor = d->editors[ tvcol ];
+	if (!d->pEditor) {//not found: create
+		d->pEditor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, viewport());
+		if (!d->pEditor) {//create error!
+			//js TODO: show error???
+			cancelRowEdit();
+			return;
+		}
+		d->pEditor->installEventFilter(this);
+		if (d->pEditor->view())
+			d->pEditor->view()->installEventFilter(this);
+		//store
+		d->editors.insert( tvcol, d->pEditor );
+	}
+	d->pEditor->init(val, addText);
+	moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
+
+	d->pEditor->resize(columnWidth(d->curCol)-2, rowHeight()-1);
+
+/*
 	if (t==KexiDB::Field::BLOB) {
-			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, addText, viewport());
+//			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, addText, viewport());
+			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, viewport());
 			d->pEditor->resize(columnWidth(d->curCol)-1, 150);
 			moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
 	}
@@ -1867,10 +1862,6 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight());
 	}
 #else
-//	if (columnType(col)==QVariant::String) {
-		//moveChild(d->pEditor, columnPos(d->curCol)+5, rowPos(d->curRow));
-		//d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight(d->curRow)-1);
-	//}
 	if (columnType(col)==KexiDB::Field::Date) {
 		moveChild(d->pEditor, columnPos(d->curCol)-0, rowPos(d->curRow)-2);
 		d->pEditor->resize(columnWidth(d->curCol)+0, rowHeight()+3);
@@ -1881,13 +1872,13 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 	}
 #endif
 //	moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-	d->pEditor->installEventFilter(this);
-	if (d->pEditor->view())
-		d->pEditor->view()->installEventFilter(this);
+*/
+
 	d->pEditor->show();
 	d->pEditor->setFocus();
 
-	emit rowEditStarted(d->curRow);
+	if (startRowEdit)
+		emit rowEditStarted(d->curRow);
 }
 
 void KexiTableView::focusInEvent(QFocusEvent*)
@@ -2233,7 +2224,8 @@ void KexiTableView::removeEditor()
 		return;
 
 	d->pEditor->blockSignals(true);
-	delete d->pEditor;
+	d->pEditor->hide();
+//	delete d->pEditor;
 	d->pEditor = 0;
 	viewport()->setFocus();
 }
@@ -2574,7 +2566,36 @@ QString KexiTableView::columnCaption(int colNum) const
 
 void KexiTableView::adjustColumnWidthToContents(int colNum)
 {
+	if (columns()<=colNum)
+		return;
+
+	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(colNum) );
+	if (!item)
+		return;
+	int maxw;
+	{
+		QFontMetrics fm( d->pTopHeader->font() );
+		maxw = fm.width( d->pTopHeader->label( colNum ) );
+	}
+	QFontMetrics fm(font());
+//	int start = rowAt(contentsY());
+//	int end = QMAX( start, rowAt( contentsY() + viewport()->height() - 1 ) );
+//	for (int i=start; i<=end; i++) {
+
+//js TODO: this is NOT EFFECTIVE for big data sets!!!!
 	
+	for (QPtrListIterator<KexiTableItem> it( *m_data ); it.current(); ++it) {
+		maxw = QMAX( maxw, item->widthForValue( it.current()->at( colNum ), fm ) );
+	}
+	maxw += fm.width("  ");
+	if (maxw < 10 )
+		maxw = 10; //not too small
+	d->pTopHeader->resizeSection( colNum, maxw );
+}
+
+void KexiTableView::setColumnStretchEnabled( bool set, int colNum )
+{
+	d->pTopHeader->setStretchEnabled( set, colNum );
 }
 
 int KexiTableView::currentColumn() const

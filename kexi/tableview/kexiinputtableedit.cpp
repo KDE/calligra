@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,14 +35,17 @@
 #include <knumvalidator.h>
 	
 
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, KexiDB::Field &f, const QString& add,
- QWidget *parent)
- : KexiTableEdit(value, f, parent,"KexiInputTableEdit")
+KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QWidget *parent)
+ : KexiTableEdit(f, parent,"KexiInputTableEdit")
 {
 //	m_type = f.type(); //copied because the rest of code uses m_type
 //	m_field = &f;
 //	m_origValue = value;//original value
-	init(add);
+	init();
+}
+
+KexiInputTableEdit::~KexiInputTableEdit()
+{
 }
 
 /*
@@ -57,7 +60,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 	init(add);
 }*/
 
-void KexiInputTableEdit::init(const QString& add)
+void KexiInputTableEdit::init()
 {
 	kdDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
 	kdDebug() << "KexiInputTableEdit: type== " << m_field->typeName() << endl;
@@ -89,7 +92,10 @@ void KexiInputTableEdit::init(const QString& add)
 	if (m_field->isNumericType()) {
 		m_cview->setAlignment(AlignRight);
 	}
+}
 	
+void KexiInputTableEdit::init(const QString& add)
+{
 #if 0 //js
 	if(!ov.isEmpty())
 	{
@@ -463,7 +469,23 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 		return KexiTableEdit::eventFilter(watched, e);
 	}
 }
-#endif
+#endif //0
 
+
+//======================================================
+
+KexiInputEditorFactoryItem::KexiInputEditorFactoryItem()
+{
+}
+
+KexiInputEditorFactoryItem::~KexiInputEditorFactoryItem()
+{
+}
+
+KexiTableEdit* KexiInputEditorFactoryItem::createEditor(
+	KexiDB::Field &f, QWidget* parent)
+{
+	return new KexiInputTableEdit(f, parent);
+}
 
 #include "kexiinputtableedit.moc"

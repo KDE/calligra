@@ -95,6 +95,12 @@ public:
 	/*! Adjusts column's width to its (current) contents. */
 	void adjustColumnWidthToContents(int colNum);
 	
+	/*! If \a set is true, \a colNum column is resized to take full possible width.
+	 If \a set is false, no automatic resize will be performed. 
+	 If \a colNum is -1, all columns are equally resized, when needed, to take full possible width.
+	 This method behaves like QHeader::setStretchEnabled ( bool b, int section ). */
+	void setColumnStretchEnabled( bool set, int colNum );
+
 	bool isSortingEnabled() const;
 
 	/*! \return sorted column number or -1 if no column is sorted */
@@ -265,6 +271,9 @@ public:
 	 will be used (example: Shift+Enter key for "data_save_row" action). \sa shortCutPressed()
 	*/
 	void plugSharedAction(KAction* a);
+
+	//! Initializes standard editor cell editor factories. This is called internally, once.
+	static void initCellEditorFactories();
 
 public slots:
 	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted

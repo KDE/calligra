@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,17 +25,16 @@
 #include <qvariant.h>
 
 #include "kexitableedit.h"
+#include "kexicelleditorfactory.h"
 
 class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 
 	public:
-//		KexiInputTableEdit(QVariant value, int type, QString ov=QString::null, bool mark=false,
-//		KexiInputTableEdit(QVariant value, int type, const QString& add=QString::null,
-//		 QWidget *parent=0);
-		KexiInputTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
-		 QWidget *parent=0);
+		KexiInputTableEdit(KexiDB::Field &f, QWidget *parent=0);
+
+		virtual ~KexiInputTableEdit();
 
 		virtual bool valueChanged();
 
@@ -61,8 +60,11 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		void completed(const QString &);
 
 	protected:
+		//! initializes this editor with \a add value
+		virtual void init(const QString& add);
+
 		void showHintButton();
-		void init(const QString& add);
+		void init();
 
 		bool		m_calculatedCell;
 //js		QStringList	m_comp;
@@ -76,6 +78,16 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 	signals:
 		void hintClicked();
+};
+
+class KexiInputEditorFactoryItem : public KexiCellEditorFactoryItem
+{
+	public:
+		KexiInputEditorFactoryItem();
+		virtual ~KexiInputEditorFactoryItem();
+
+	protected:
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
 };
 
 #endif

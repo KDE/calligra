@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include <qcstring.h>
 
 #include "kexitableedit.h"
+#include "kexicelleditorfactory.h"
 
 class KTempFile;
 class KProcess;
@@ -32,10 +34,8 @@ class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
-		KexiBlobTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
-			QWidget *parent=0);
-//		KexiBlobTableEdit(const QByteArray& val, QWidget* parent = 0, const char* name = 0);
-		~KexiBlobTableEdit();
+		KexiBlobTableEdit(KexiDB::Field &f, QWidget *parent=0);
+		virtual ~KexiBlobTableEdit();
 
 		bool valueIsNull();
 		bool valueIsEmpty();
@@ -45,14 +45,6 @@ class KexiBlobTableEdit : public KexiTableEdit
 		virtual void clear();
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
-	protected:
-		KTempFile* m_tempFile;
-		KProcess* m_proc;
-		QTextEdit *m_content;
-
-		QString openWithDlg(const QString& file);
-		void execute(const QString& app, const QString& file);
-
 	protected slots:
 		void slotFinished(KProcess* p);
 		void open();
@@ -60,6 +52,28 @@ class KexiBlobTableEdit : public KexiTableEdit
 		void menu();
 		void loadFile();
 		void saveFile();
+
+	protected:
+		//! initializes this editor with \a add value
+		virtual void init(const QString& add);
+
+		QString openWithDlg(const QString& file);
+
+		void execute(const QString& app, const QString& file);
+
+		KTempFile* m_tempFile;
+		KProcess* m_proc;
+		QTextEdit *m_content;
+};
+
+class KexiBlobEditorFactoryItem : public KexiCellEditorFactoryItem
+{
+	public:
+		KexiBlobEditorFactoryItem();
+		virtual ~KexiBlobEditorFactoryItem();
+
+	protected:
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 
 #include "kexidb/field.h"
 #include "kexitableedit.h"
+#include "kexicelleditorfactory.h"
 
 /**
  * 
@@ -32,11 +34,11 @@
 class KexiComboBoxTableEdit : public KexiTableEdit
 {
 	public:
-		KexiComboBoxTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
-			QWidget *parent=0);
+		KexiComboBoxTableEdit(KexiDB::Field &f, QWidget *parent=0);
 //		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
 //			QWidget *parent=0, const char *name=0);
-		
+
+
 		virtual QVariant value(bool &ok);
 
 		virtual void clear();
@@ -47,8 +49,20 @@ class KexiComboBoxTableEdit : public KexiTableEdit
 		virtual bool valueIsEmpty();
 
 	private:
+		virtual void init(const QString& /*add*/);
+
 		//pointer for to reduces casting (typing :)
 		KComboBox *m_combo;
+};
+
+class KexiComboBoxEditorFactoryItem : public KexiCellEditorFactoryItem
+{
+	public:
+		KexiComboBoxEditorFactoryItem();
+		virtual ~KexiComboBoxEditorFactoryItem();
+
+	protected:
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
 };
 
 #endif

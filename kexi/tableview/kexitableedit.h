@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,12 @@ namespace KexiDB {
 class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 {
 	public:
-		KexiTableEdit(QVariant value, KexiDB::Field &f, QWidget* parent = 0, const char* name = 0);
+		KexiTableEdit(KexiDB::Field &f, QWidget* parent = 0, const char* name = 0);
+
+		virtual ~KexiTableEdit();
+
+		//! Just initializes \a value, and calls init(const QString& add). Called by KexiTableView
+		void init(QVariant value, const QString& add);
 
 		//! @return true if editor's value is changed (compared to original value)
 		virtual bool valueChanged();
@@ -39,7 +44,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		//! \return true is editor's value is null (not empty)
 		virtual bool valueIsNull() = 0;
 
-		//! \return true is editor's value is empty (not null). 
+		//! \return true if editor's value is empty (not null). 
 		//! Only few field types can accept "EMPTY" property 
 		//! (check this with KexiDB::Field::hasEmptyProperty()), 
 		virtual bool valueIsEmpty() = 0;
@@ -69,6 +74,10 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		virtual void clear() = 0;
 
 	protected:
+		/*! Initializes this editor with \a add value, which should be somewhat added to the current
+		 value (already storted in m_origValue). Implement this. */
+		virtual void init(const QString& add) = 0;
+
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 		void setView(QWidget *v);
 

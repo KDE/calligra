@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,13 +43,10 @@
 
 #include "kexidatetableedit.h"
 
-//KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *name)
-//  : KexiTableEdit(parent, name)
-KexiDateTableEdit::KexiDateTableEdit(
-	QVariant value, KexiDB::Field &f, const QString& add, QWidget *parent)
- : KexiTableEdit(value, f, parent,"KexiDateTableEdit")
+KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QWidget *parent)
+ : KexiTableEdit(f, parent,"KexiDateTableEdit")
 {
-	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
+//	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
 	m_view = new QWidget(this);
 //	m_edit = new KLineEdit(m_view);
 	m_edit = new QDateEdit(m_view);
@@ -77,19 +74,33 @@ KexiDateTableEdit::KexiDateTableEdit(
 	layout->addWidget(m_edit, 1);
 	layout->addWidget(btn, 0);
 
+	setFocusProxy(m_edit);
+}
+
+void KexiDateTableEdit::init(const QString& add)
+{
 	bool ok;
-	QDate date = KGlobal::locale()->readDate(value.toString(), &ok);
+	QDate date = KGlobal::locale()->readDate(m_origValue.toString(), &ok);
 
 	if(!ok)
 	{
 		date = QDate::currentDate();
 	}
 
-//js	m_edit->setText(KGlobal::locale()->formatDate(date, true));
 	m_edit->setDate(date);
 	
 	m_oldVal = date;
-	setFocusProxy(m_edit);
+}
+
+//! \return true is editor's value is null (not empty)
+bool KexiDateTableEdit::valueIsNull()
+{
+	return m_edit->date().isNull();
+}
+
+bool KexiDateTableEdit::valueIsEmpty()
+{
+	return false;//js OK? TODO (nonsense?)
 }
 
 void
@@ -217,6 +228,22 @@ KexiDatePicker::KexiDatePicker(QWidget *parent, QDate date, const char *name, WF
 
 KexiDatePicker::~KexiDatePicker()
 {
+}
+
+//======================================================
+
+KexiDateEditorFactoryItem::KexiDateEditorFactoryItem()
+{
+}
+
+KexiDateEditorFactoryItem::~KexiDateEditorFactoryItem()
+{
+}
+
+KexiTableEdit* KexiDateEditorFactoryItem::createEditor(
+	KexiDB::Field &f, QWidget* parent)
+{
+	return new KexiDateTableEdit(f, parent);
 }
 
 #include "kexidatetableedit.moc"

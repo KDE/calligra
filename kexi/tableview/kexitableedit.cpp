@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,9 +23,8 @@
 
 #include <qpalette.h>
 
-KexiTableEdit::KexiTableEdit(QVariant value, KexiDB::Field &f, QWidget* parent, const char* name)
+KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QWidget* parent, const char* name)
 : QWidget(parent, name)
- ,m_origValue(value)
  ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
  ,m_view(0)
@@ -45,6 +44,16 @@ KexiTableEdit::KexiTableEdit(QVariant value, KexiDB::Field &f, QWidget* parent, 
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
 //	installEventFilter(this);
 }*/
+
+KexiTableEdit::~KexiTableEdit()
+{
+}
+
+void KexiTableEdit::init(QVariant value, const QString& add)
+{
+	m_origValue = value;
+	init(add);
+}
 
 void KexiTableEdit::setView(QWidget *v)
 {
