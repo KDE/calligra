@@ -8,12 +8,12 @@
 class KChart;
 class QPainter;
 class table_t;
-struct KoDiagrammParameters;
+struct KoChartParameters;
 
 class KChartAreaPainter : public KChartAxesPainter
 {
 public:
-  KChartAreaPainter( KoDiagrammParameters* chart );
+  KChartAreaPainter( KoChartParameters* chart );
   ~KChartAreaPainter();
 
   virtual void drawData( QPainter* painter, table_t* table );

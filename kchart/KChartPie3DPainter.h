@@ -10,7 +10,7 @@ class table_t;
 class KChartPie3DPainter : public KChartPiePainter
 {
 public:
-  KChartPie3DPainter( KoDiagrammParameters* chart );
+  KChartPie3DPainter( KoChartParameters* chart );
   ~KChartPie3DPainter();
 
 protected:

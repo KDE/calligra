@@ -9,16 +9,16 @@
 
 #include <qwidget.h>
 #include <qlineedit.h>
-#include "KoDiagrammParameters.h"
+#include "KoChartParameters.h"
 
 class QRadioButton;
 
-class KoDiagrammBarConfigPage : public QWidget
+class KoChartBarConfigPage : public QWidget
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammBarConfigPage( QWidget* parent );
+	KoChartBarConfigPage( QWidget* parent );
 
 	void setOverwriteMode( OverwriteMode overwrite );
 	OverwriteMode overwriteMode() const;
@@ -33,12 +33,12 @@ private:
 };
 
 
-inline void KoDiagrammBarConfigPage::setXAxisDistance( int xbardist )
+inline void KoChartBarConfigPage::setXAxisDistance( int xbardist )
 {
 	_xbardist->setText( QString().setNum( xbardist ) );
 }
 
-inline int KoDiagrammBarConfigPage::xAxisDistance() const
+inline int KoChartBarConfigPage::xAxisDistance() const
 {
 	QString num = _xbardist->text();
 	return num.toInt();

@@ -17,24 +17,24 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kdiagramm_main_h__
-#define __kdiagramm_main_h__
+#ifndef __kchart_main_h__
+#define __kchart_main_h__
 
 #include <koApplication.h>
 
 #include "kchart_doc.h"
 #include "kchart_shell.h"
 
-class KDiagrammShell;
+class KChartShell;
 
-class KDiagrammApp : public KoApplication
+class KChartApp : public KoApplication
 {
   Q_OBJECT
 public:
-  KDiagrammApp( int &argc, char** argv );
-  ~KDiagrammApp();
+  KChartApp( int &argc, char** argv );
+  ~KChartApp();
   
-  class KoMainWindow* createNewShell() {return new KDiagrammShell;};
+  class KoMainWindow* createNewShell() {return new KChartShell;};
   /*
 protected:
   KDiagrammShell *m_pShell;

@@ -1,8 +1,8 @@
 /* $Id$ */
 
 #include "KChartPiePainter.h"
-#include "koDiagramm.h"
-#include "KoDiagrammParameters.h"
+#include "koChart.h"
+#include "KoChartParameters.h"
 
 #include <qpainter.h>
 #include <qpdevmet.h>
@@ -15,7 +15,7 @@
 #define PI M_PI
 #endif
 
-KChartPiePainter::KChartPiePainter( KoDiagrammParameters* chart ) :
+KChartPiePainter::KChartPiePainter( KoChartParameters* chart ) :
   KChartPainter( chart )
 {
 }

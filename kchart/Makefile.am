@@ -10,17 +10,17 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 bin_PROGRAMS = kchart
 
 kchart_SOURCES = chart.idl kchart.idl kchart_main.cc kchart_shell.cc \
-			kchart_doc.cc kchart_view.cc koDiagramm.cc \
+			kchart_doc.cc kchart_view.cc koChart.cc \
 			sheet.cc table.cc parser.cc sheetdlg.cc KChartAreaPainter.cpp \
 			KChartAxesPainter.cpp KChartBarsPainter.cpp KChartLinesPainter.cpp\
 			KChartLinesPointsPainter.cpp KChartPainter.cpp \
 			KChartPie3DPainter.cpp KChartPiePainter.cpp \
-			KChartPointsPainter.cpp KoDiagrammColorConfigPage.cpp \
-			KoDiagrammBarConfigDialog.cpp KoDiagrammAreaConfigDialog.cpp \
-			KoDiagrammPieConfigDialog.cpp KoDiagrammLinesConfigDialog.cpp \
-			KoDiagrammLinesPointsConfigDialog.cpp \
-			KoDiagrammPointsConfigDialog.cpp KoDiagrammConfigDialog.cpp \
-			KoDiagrammBarConfigPage.cpp KoDiagrammGeometryConfigPage.cpp
+			KChartPointsPainter.cpp KoChartColorConfigPage.cpp \
+			KoChartBarConfigDialog.cpp KoChartAreaConfigDialog.cpp \
+			KoChartPieConfigDialog.cpp KoChartLinesConfigDialog.cpp \
+			KoChartLinesPointsConfigDialog.cpp \
+			KoChartPointsConfigDialog.cpp KoChartConfigDialog.cpp \
+			KoChartBarConfigPage.cpp KoChartGeometryConfigPage.cpp
 
 noinst_HEADERS =	kchart_main.h kchart_shell.h kchart_doc.h \
 					kchart.h kchart_view.h chart.h \
@@ -29,27 +29,27 @@ noinst_HEADERS =	kchart_main.h kchart_shell.h kchart_doc.h \
 					KChartLinesPainter.h KChartLinesPointsPainter.h \
 					KChartPainter.h	KChartPie3DPainter.h \
 					KChartPiePainter.h KChartPointsPainter.h \
-					KoDiagrammColorConfigPage.h \
-					KoDiagrammBarConfigDialog.h \
-					KoDiagrammPieConfigDialog.h \
-					KoDiagrammAreaConfigDialog.h \
-					KoDiagrammLinesConfigDialog.h \
-					KoDiagrammLinesPointsConfigDialog.h \
-					KoDiagrammPointsConfigDialog.h \
-					KoDiagrammConfigDialog.h \
-					KoDiagrammBarConfigPage.h \
-					KoDiagrammGeometryConfigPage.h
+					KChartColorConfigPage.h \
+					KChartBarConfigDialog.h \
+					KChartPieConfigDialog.h \
+					KChartAreaConfigDialog.h \
+					KChartLinesConfigDialog.h \
+					KChartLinesPointsConfigDialog.h \
+					KChartPointsConfigDialog.h \
+					KChartConfigDialog.h \
+					KChartBarConfigPage.h \
+					KChartGeometryConfigPage.h
 
 
 chart_IDLDIR = $(interfacedir)
 
 METASOURCES = kchart_main.moc kchart_shell.moc kchart_doc.moc \
-	kchart_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc \
-	KoDiagrammColorConfigPage.moc KoDiagrammBarConfigDialog.moc \
-	KoDiagrammAreaConfigDialog.moc KoDiagrammPieConfigDialog.moc \
-	KoDiagrammLinesConfigDialog.moc KoDiagrammLinesPointsConfigDialog.moc \
-	KoDiagrammPointsConfigDialog.moc KoDiagrammConfigDialog.moc \
-	KoDiagrammBarConfigPage.moc KoDiagrammGeometryConfigPage.moc
+	kchart_view.moc koChart.moc table.moc sheet.moc sheetdlg.moc \
+	KoChartColorConfigPage.moc KoChartBarConfigDialog.moc \
+	KoChartAreaConfigDialog.moc KoChartPieConfigDialog.moc \
+	KoChartLinesConfigDialog.moc KoChartLinesPointsConfigDialog.moc \
+	KoChartPointsConfigDialog.moc KoChartConfigDialog.moc \
+	KoChartBarConfigPage.moc KoChartGeometryConfigPage.moc
 
 noinst_HEADERS = kchart_main.h kchart_shell.h kchart_doc.h \
 	         kchart.h kchart_view.h chart.h \

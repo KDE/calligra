@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kdiagramm_doc_h__
-#define __kdiagramm_doc_h__
+#ifndef __kchart_doc_h__
+#define __kchart_doc_h__
 
-class KDiagrammDoc;
+class KChartDoc;
 
 #include <koFrame.h>
 #include <koDocument.h>
@@ -38,28 +38,28 @@ class KDiagrammDoc;
 
 #include "kchart.h"
 #include "kchart_view.h"
-#include "koDiagramm.h"
+#include "koChart.h"
 #include "chart.h"
 
 #include <koPageLayoutDia.h>
 
 
-#define MIME_TYPE "application/x-kdiagramm"
-#define EDITOR "IDL:KDiagramm/Document:1.0"
+#define MIME_TYPE "application/x-kchart"
+#define EDITOR "IDL:KChart/Document:1.0"
 
 /*
  */
-class KDiagrammDoc : public QObject,
+class KChartDoc : public QObject,
 		     virtual public KoDocument,
 		     virtual public KoPrintExt,
 		     virtual public Chart::SimpleChart_skel,
-		     virtual public KDiagramm::Document_skel
+		     virtual public KChart::Document_skel
 {
   Q_OBJECT
 public:
   // C++
-  KDiagrammDoc();
-  ~KDiagrammDoc();
+  KChartDoc();
+  ~KChartDoc();
 
   // C++
   virtual bool save( ostream&, const char *_format );
@@ -70,10 +70,10 @@ public:
 
   virtual void cleanUp();
 
-  virtual void removeView( KDiagrammView* _view );
+  virtual void removeView( KChartView* _view );
 
   // C++
-  virtual KDiagrammView* createDiagrammView(QWidget *_parent = 0);
+  virtual KChartView* createDiagrammView(QWidget *_parent = 0);
 
   // IDL
   virtual bool initDoc();
@@ -190,8 +190,8 @@ public:
   QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.data(); }
   QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
 
-  KoDiagramm::dia_type diaType() { return m_type; }
-  void setDiaType( KoDiagramm::dia_type _type );
+  KoChart::dia_type diaType() { return m_type; }
+  void setDiaType( KoChart::dia_type _type );
 
   void calcPaperSize();
 
@@ -204,9 +204,9 @@ protected:
 
   table_t m_table;
   bool m_bEmpty;
-  KoDiagramm::dia_type m_type;
+  KoChart::dia_type m_type;
 
-  QList<KDiagrammView> m_lstViews;
+  QList<KChartView> m_lstViews;
 
   Chart::Range m_range;
 

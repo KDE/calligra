@@ -4,10 +4,10 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammBarConfigPage.h"
-#include "KoDiagrammParameters.h"
+#include "KoChartBarConfigPage.h"
+#include "KoChartParameters.h"
 
-#include "KoDiagrammBarConfigPage.moc"
+#include "KoChartBarConfigPage.moc"
 
 #include <qbuttongroup.h>
 #include <qlayout.h>
@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 
-KoDiagrammBarConfigPage::KoDiagrammBarConfigPage( QWidget* parent ) :
+KoChartBarConfigPage::KoChartBarConfigPage( QWidget* parent ) :
 	QWidget( parent, "Bar diagramm config page" )
 {
 	// PENDING(kalle) Use layout management to layout group boxes in dialog
@@ -104,7 +104,7 @@ KoDiagrammBarConfigPage::KoDiagrammBarConfigPage( QWidget* parent ) :
 }
 
 
-void KoDiagrammBarConfigPage::setOverwriteMode( OverwriteMode overwrite )
+void KoChartBarConfigPage::setOverwriteMode( OverwriteMode overwrite )
 {
 	switch( overwrite ) {
 	case SideBySide:
@@ -128,7 +128,7 @@ void KoDiagrammBarConfigPage::setOverwriteMode( OverwriteMode overwrite )
 }
 
 
-OverwriteMode KoDiagrammBarConfigPage::overwriteMode() const
+OverwriteMode KoChartBarConfigPage::overwriteMode() const
 {
 	if( _sidebysideRB->isChecked() )
 		return SideBySide;

@@ -17,15 +17,15 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kdiagramm_idl__
-#define __kdiagramm_idl__
+#ifndef __kchart_idl__
+#define __kchart_idl__
 
 #include <openparts.idl>
 #include <koffice.idl>
 #include <openparts_ui.idl>
 #include <chart.idl>
 
-module KDiagramm
+module KChart
 {
 	enum Mode { LINES, AREAS, BARS, CAKES };
 
@@ -42,9 +42,9 @@ module KDiagramm
 
 		struct EventConfigured
 		{
-			KDiagramm::Mode mode;
+			KChart::Mode mode;
 		};
-		const string eventConfigured = "UserEvent/KDiagramm/Configured";
+		const string eventConfigured = "UserEvent/KChart/Configured";
 	};
 
 	interface Document : KOffice::Document, KOffice::Print, Chart::SimpleChart

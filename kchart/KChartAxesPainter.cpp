@@ -3,8 +3,8 @@
 #include "KChartAxesPainter.h"
 #include "KChartAreaPainter.h"
 #include "KChartBarsPainter.h"
-#include "KoDiagrammParameters.h"
-#include "koDiagramm.h"
+#include "KoChartParameters.h"
+#include "koChart.h"
 
 #include <qfontmet.h>
 #include <qpaintd.h>
@@ -14,7 +14,7 @@
 
 #include <math.h> // rint
 
-KChartAxesPainter::KChartAxesPainter( KoDiagrammParameters* chart ) :
+KChartAxesPainter::KChartAxesPainter( KoChartParameters* chart ) :
   KChartPainter( chart )
 {
 }

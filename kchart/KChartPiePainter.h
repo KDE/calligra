@@ -12,7 +12,7 @@ class table_t;
 class KChartPiePainter : public KChartPainter
 {
 public:
-  KChartPiePainter( KoDiagrammParameters* chart );
+  KChartPiePainter( KoChartParameters* chart );
   ~KChartPiePainter();
 
   virtual void paintChart( QPainter* painter, table_t* table );

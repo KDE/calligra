@@ -13,12 +13,12 @@
 // PENDING(kalle) Make this dynamic.
 #define NUMDATACOLORS 6
 
-class KoDiagrammColorConfigPage : public QWidget
+class KoChartColorConfigPage : public QWidget
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammColorConfigPage( QWidget* parent );
+	KoChartColorConfigPage( QWidget* parent );
 
 	void setAccentColor( QColor color );
 	QColor accentColor() const;
@@ -46,73 +46,73 @@ private:
 };
 
 
-inline void KoDiagrammColorConfigPage::setAccentColor( QColor color )
+inline void KoChartColorConfigPage::setAccentColor( QColor color )
 {
 	_accentCB->setColor( color );
 }
 
-inline QColor KoDiagrammColorConfigPage::accentColor() const
+inline QColor KoChartColorConfigPage::accentColor() const
 {
 	return _accentCB->color();
 }
 
 
-inline void KoDiagrammColorConfigPage::setAxisLabelColor( QColor color )
+inline void KoChartColorConfigPage::setAxisLabelColor( QColor color )
 {
 	_axislabelCB->setColor( color );
 }
 
-inline QColor KoDiagrammColorConfigPage::axisLabelColor() const
+inline QColor KoChartColorConfigPage::axisLabelColor() const
 {
 	return _axislabelCB->color();
 }
 
 
-inline void KoDiagrammColorConfigPage::setForegroundColor( QColor color )
+inline void KoChartColorConfigPage::setForegroundColor( QColor color )
 {
 	_foregroundCB->setColor( color );
 }
 
-inline QColor KoDiagrammColorConfigPage::foregroundColor() const
+inline QColor KoChartColorConfigPage::foregroundColor() const
 {
 	return _foregroundCB->color();
 }
 
 
-inline void KoDiagrammColorConfigPage::setBackgroundColor( QColor color )
+inline void KoChartColorConfigPage::setBackgroundColor( QColor color )
 {
 	_backgroundCB->setColor( color );
 }
 
-inline QColor KoDiagrammColorConfigPage::backgroundColor() const
+inline QColor KoChartColorConfigPage::backgroundColor() const
 {
 	return _backgroundCB->color();
 }
 
 
-inline void KoDiagrammColorConfigPage::setTextColor( QColor color )
+inline void KoChartColorConfigPage::setTextColor( QColor color )
 {
 	_textCB->setColor( color );
 }
 
-inline QColor KoDiagrammColorConfigPage::textColor() const
+inline QColor KoChartColorConfigPage::textColor() const
 {
 	return _textCB->color();
 }
 
 
-inline void KoDiagrammColorConfigPage::setLabelColor( QColor color )
+inline void KoChartColorConfigPage::setLabelColor( QColor color )
 {
 	_labelCB->setColor( color );
 }
 
-inline QColor KoDiagrammColorConfigPage::labelColor() const
+inline QColor KoChartColorConfigPage::labelColor() const
 {
 	return _labelCB->color();
 }
 
 
-inline void KoDiagrammColorConfigPage::setDataColor( uint dataset,
+inline void KoChartColorConfigPage::setDataColor( uint dataset,
 													 QColor color )
 {
 	if( dataset >= NUMDATACOLORS )
@@ -122,7 +122,7 @@ inline void KoDiagrammColorConfigPage::setDataColor( uint dataset,
 }
 
 
-inline QColor KoDiagrammColorConfigPage::dataColor( uint dataset ) const
+inline QColor KoChartColorConfigPage::dataColor( uint dataset ) const
 {
 	if( dataset >= NUMDATACOLORS )
 		return _dataCB[0]->color();

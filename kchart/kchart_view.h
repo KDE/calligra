@@ -17,12 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kdiagramm_gui_h__
-#define __kdiagramm_gui_h__
+#ifndef __kchart_view_h__
+#define __kchart_view_h__
 
-class KDiagrammView;
-class KDiagrammDoc;
-class KDiagrammShell;
+class KChartView;
+class KChartDoc;
+class KChartShell;
 
 #include <koFrame.h>
 #include <koView.h>
@@ -38,20 +38,20 @@ class KDiagrammShell;
 #include <qpoint.h>
 
 #include "kchart.h"
-#include <koDiagramm.h>
+#include <koChart.h>
 
 /**
  */
-class KDiagrammView : public KoDiagrammView,
+class KChartView : public KoChartView,
 		    virtual public KoViewIf,
-		    virtual public KDiagramm::View_skel
+		    virtual public KChart::View_skel
 {
     Q_OBJECT
 public:
-    KDiagrammView( QWidget *_parent, const char *_name, KDiagrammDoc *_doc );
-    ~KDiagrammView();
+    KChartView( QWidget *_parent, const char *_name, KChartDoc *_doc );
+    ~KChartView();
 
-    KDiagrammDoc* doc() { return m_pDoc; }
+    KChartDoc* doc() { return m_pDoc; }
 
     /**
      * ToolBar
@@ -101,7 +101,7 @@ protected:
     // C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-  //virtual bool mappingEventConfigured( KDiagramm::View::EventConfigured _event );
+  //virtual bool mappingEventConfigured( KChart::View::EventConfigured _event );
 
     virtual void newView();
     virtual void helpUsing();
@@ -125,7 +125,7 @@ protected:
     long int m_idMenuHelp_About;
     long int m_idMenuHelp_Using;
 
-    KDiagrammDoc *m_pDoc;
+    KChartDoc *m_pDoc;
 };
 
 #endif

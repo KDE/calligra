@@ -1,7 +1,7 @@
 /* $Id$ */
 
 #include "KChartPainter.h"
-#include "KoDiagrammParameters.h"
+#include "KoChartParameters.h"
 
 #include <qcolor.h>
 #include <qfont.h>
@@ -10,7 +10,7 @@
 
 #include <values.h>
 
-KChartPainter::KChartPainter( KoDiagrammParameters* chart ) :
+KChartPainter::KChartPainter( KoChartParameters* chart ) :
   _chart( chart )
 {
 }

@@ -31,24 +31,24 @@
 // DEBUG
 #include <iostream>
 
-KOFFICE_DOCUMENT_FACTORY( KDiagrammDoc, KDiagrammFactory, KDiagramm::DocumentFactory_skel )
-typedef OPAutoLoader<KDiagrammFactory> KDiagrammAutoLoader;
+KOFFICE_DOCUMENT_FACTORY( KChartDoc, KChartFactory, KChart::DocumentFactory_skel )
+typedef OPAutoLoader<KChartFactory> KChartAutoLoader;
 
-KDiagrammApp::KDiagrammApp( int &argc, char** argv ) : 
+KChartApp::KChartApp( int &argc, char** argv ) : 
   KoApplication( argc, argv, "kchart" )
 {
   //  m_pShell = 0L;
 }
 
-KDiagrammApp::~KDiagrammApp()
+KChartApp::~KChartApp()
 {
 }
 
 int main( int argc, char **argv )
 {
-  KDiagrammAutoLoader loader( "IDL:KChart/DocumentFactory:1.0", "KChart" );
+  KChartAutoLoader loader( "IDL:KChart/DocumentFactory:1.0", "KChart" );
 
-  KDiagrammApp app( argc, argv );
+  KChartApp app( argc, argv );
 
   app.exec();
 

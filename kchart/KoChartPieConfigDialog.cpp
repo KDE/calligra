@@ -4,17 +4,17 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammPieConfigDialog.h"
+#include "KoChartPieConfigDialog.h"
 
-#include "KoDiagrammPieConfigDialog.moc"
+#include "KoChartPieConfigDialog.moc"
 
 #include <kapp.h>
 #include <klocale.h>
 
-KoDiagrammPieConfigDialog::KoDiagrammPieConfigDialog(
-													 KoDiagrammParameters* params,
+KoChartPieConfigDialog::KoChartPieConfigDialog(
+													 KoChartParameters* params,
 													 QWidget* parent ) :
-	KoDiagrammConfigDialog( params, parent  )
+	KoChartConfigDialog( params, parent  )
 {
 	// Fill pages with values
 	defaults();

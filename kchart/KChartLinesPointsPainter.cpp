@@ -1,11 +1,11 @@
 /* $Id$ */
 
 #include "KChartLinesPointsPainter.h"
-#include "KoDiagrammParameters.h"
+#include "KoChartParameters.h"
 
 #include <qpainter.h>
 
-KChartLinesPointsPainter::KChartLinesPointsPainter( KoDiagrammParameters* chart ) :
+KChartLinesPointsPainter::KChartLinesPointsPainter( KoChartParameters* chart ) :
   KChartLinesPainter( chart ),
   KChartPointsPainter( chart )
 {

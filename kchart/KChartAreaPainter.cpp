@@ -1,13 +1,13 @@
 /* $Id$ */
 
 #include "KChartAreaPainter.h"
-#include "koDiagramm.h"
-#include "KoDiagrammParameters.h"
+#include "koChart.h"
+#include "KoChartParameters.h"
 
 #include <qpainter.h>
 #include <qpen.h>
 
-KChartAreaPainter::KChartAreaPainter( KoDiagrammParameters* chart ) :
+KChartAreaPainter::KChartAreaPainter( KoChartParameters* chart ) :
   KChartAxesPainter( chart )
 {
 	_charttype = Area;

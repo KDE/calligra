@@ -1,11 +1,11 @@
 /* $Id$ */
 
 #include "KChartPointsPainter.h"
-#include "KoDiagrammParameters.h"
+#include "KoChartParameters.h"
 
 #include <qpainter.h>
 
-KChartPointsPainter::KChartPointsPainter( KoDiagrammParameters* chart ) :
+KChartPointsPainter::KChartPointsPainter( KoChartParameters* chart ) :
   KChartAxesPainter( chart )
 {
   fatal( "Sorry, not implemented: KChartPointsPainter::KChartPointsPainter" );

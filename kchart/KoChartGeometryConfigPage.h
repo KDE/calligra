@@ -10,12 +10,12 @@
 #include <qwidget.h>
 #include <qlineedit.h>
 
-class KoDiagrammGeometryConfigPage : public QWidget
+class KoChartGeometryConfigPage : public QWidget
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammGeometryConfigPage( QWidget* parent );
+	KoChartGeometryConfigPage( QWidget* parent );
 
 private:
 };

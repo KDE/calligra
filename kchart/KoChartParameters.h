@@ -1,7 +1,7 @@
 /* $Id$ */
 
-#ifndef _KDIAGRAMMPARAMETERS_H
-#define _KDIAGRAMMPARAMETERS_H
+#ifndef _KCHARTPARAMETERS_H
+#define _KCHARTPARAMETERS_H
 
 #include <qcolor.h>
 #include <qpen.h>
@@ -44,9 +44,9 @@ inline QColor KChartColorArray::color( uint pos ) const
 }
 
 
-struct KoDiagrammParameters
+struct KoChartParameters
 {
-	KoDiagrammParameters();
+	KoChartParameters();
 
 	void setXLabelFont( QFont );
 	QFont xLabelFont() const;
@@ -166,7 +166,7 @@ private:
 };
 
 
-inline KoDiagrammParameters::KoDiagrammParameters()
+inline KoChartParameters::KoChartParameters()
 {
   // margins that will be left empty
   _topmargin = 0;
@@ -253,7 +253,7 @@ inline KoDiagrammParameters::KoDiagrammParameters()
 
 
 
-inline void KoDiagrammParameters::setXLabelFont( QFont font  )
+inline void KoChartParameters::setXLabelFont( QFont font  )
 {
   _xlabelfont = font;
 
@@ -262,13 +262,13 @@ inline void KoDiagrammParameters::setXLabelFont( QFont font  )
   _xlabelfontheight = fm.height();
 }
 
-inline QFont KoDiagrammParameters::xLabelFont() const
+inline QFont KoChartParameters::xLabelFont() const
 {
   return _xlabelfont;
 }
 
 
-inline void KoDiagrammParameters::setYLabelFont( QFont font )
+inline void KoChartParameters::setYLabelFont( QFont font )
 {
   _ylabelfont = font;
 
@@ -277,13 +277,13 @@ inline void KoDiagrammParameters::setYLabelFont( QFont font )
   _ylabelfontheight = fm.height();
 }
 
-inline QFont KoDiagrammParameters::yLabelFont() const
+inline QFont KoChartParameters::yLabelFont() const
 {
   return _ylabelfont;
 }
 
 
-inline void KoDiagrammParameters::setValueFont( QFont font  )
+inline void KoChartParameters::setValueFont( QFont font  )
 {
   _valuefont = font;
   QFontMetrics fm( font );
@@ -291,13 +291,13 @@ inline void KoDiagrammParameters::setValueFont( QFont font  )
   _valuefontheight = fm.height();
 }
 
-inline QFont KoDiagrammParameters::valueFont() const
+inline QFont KoChartParameters::valueFont() const
 {
   return _valuefont;
 }
 
 
-inline void KoDiagrammParameters::setXAxisFont( QFont font  )
+inline void KoChartParameters::setXAxisFont( QFont font  )
 {
   _xaxisfont = font;
 
@@ -306,13 +306,13 @@ inline void KoDiagrammParameters::setXAxisFont( QFont font  )
   _xaxisfontheight = fm.height();
 }
 
-inline QFont KoDiagrammParameters::xAxisFont() const
+inline QFont KoChartParameters::xAxisFont() const
 {
   return _xaxisfont;
 }
 
 
-inline void KoDiagrammParameters::setYAxisFont( QFont font )
+inline void KoChartParameters::setYAxisFont( QFont font )
 {
   _yaxisfont = font;
 
@@ -322,13 +322,13 @@ inline void KoDiagrammParameters::setYAxisFont( QFont font )
 
 }
 
-inline QFont KoDiagrammParameters::yAxisFont() const
+inline QFont KoChartParameters::yAxisFont() const
 {
   return _yaxisfont;
 }
 
 
-inline void KoDiagrammParameters::setLegendFont( QFont font )
+inline void KoChartParameters::setLegendFont( QFont font )
 {
   _legendfont = font;
 
@@ -338,13 +338,13 @@ inline void KoDiagrammParameters::setLegendFont( QFont font )
 
 }
 
-inline QFont KoDiagrammParameters::legendFont() const
+inline QFont KoChartParameters::legendFont() const
 {
   return _legendfont;
 }
 
 
-inline void KoDiagrammParameters::setLabelFont( QFont font )
+inline void KoChartParameters::setLabelFont( QFont font )
 {
   _xlabelfont = font;
   _ylabelfont = font;
@@ -356,12 +356,12 @@ inline void KoDiagrammParameters::setLabelFont( QFont font )
   _ylabelfontheight = fm.height();
 }
 
-inline QFont KoDiagrammParameters::labelFont() const
+inline QFont KoChartParameters::labelFont() const
 {
   return _xlabelfont;
 }
 
-inline void KoDiagrammParameters::setTitleFont( QFont font )
+inline void KoChartParameters::setTitleFont( QFont font )
 {
   _titlefont = font;
 
@@ -371,7 +371,7 @@ inline void KoDiagrammParameters::setTitleFont( QFont font )
 
 }
 
-inline QFont KoDiagrammParameters::titleFont() const
+inline QFont KoChartParameters::titleFont() const
 {
   return _titlefont;
 }

@@ -6,17 +6,17 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qpen.h>
-#include "koDiagramm.h"
+#include "koChart.h"
 
 class QPainter;
 class table_t;
-class KoDiagrammParameters;
+class KoChartParameters;
 
 // The base class for all chart painters
 class KChartPainter
 {
 public:
-  KChartPainter( KoDiagrammParameters* chart );
+  KChartPainter( KoChartParameters* chart );
   virtual ~KChartPainter();
 
   void setTitleFont( QFont font );
@@ -38,7 +38,7 @@ protected:
 	double maxValue( line_t& );
 	double minValue( line_t& );
 	void minMaxOverallYValue( table_t* table, double& min, double& max );
-	KoDiagrammParameters* _chart;
+	KoChartParameters* _chart;
 };
 
 #endif

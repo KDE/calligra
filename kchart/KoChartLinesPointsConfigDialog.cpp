@@ -4,17 +4,17 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammLinesPointsConfigDialog.h"
+#include "KoChartLinesPointsConfigDialog.h"
 
-#include "KoDiagrammLinesPointsConfigDialog.moc"
+#include "KoChartLinesPointsConfigDialog.moc"
 
 #include <kapp.h>
 #include <klocale.h>
 
-KoDiagrammLinesPointsConfigDialog::KoDiagrammLinesPointsConfigDialog(
-															   KoDiagrammParameters* params,
+KoChartLinesPointsConfigDialog::KoChartLinesPointsConfigDialog(
+															   KoChartParameters* params,
 															   QWidget* parent ) :
-	KoDiagrammConfigDialog( params, parent  )
+	KoChartConfigDialog( params, parent  )
 {
 	// Fill pages with values
 	defaults();

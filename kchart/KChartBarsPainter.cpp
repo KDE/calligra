@@ -1,14 +1,14 @@
 /* $Id$ */
 
 #include "KChartBarsPainter.h"
-#include "koDiagramm.h"
-#include "KoDiagrammParameters.h"
+#include "koChart.h"
+#include "KoChartParameters.h"
 
 #include <qpainter.h>
 
 #include <math.h> // rint
 
-KChartBarsPainter::KChartBarsPainter( KoDiagrammParameters* chart ) :
+KChartBarsPainter::KChartBarsPainter( KoChartParameters* chart ) :
   KChartAxesPainter( chart )
 {
 }

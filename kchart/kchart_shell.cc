@@ -29,29 +29,29 @@
 #include <qmsgbox.h>
 #include <klocale.h>
 
-QList<KDiagrammShell>* KDiagrammShell::s_lstShells = 0L;
+QList<KChartShell>* KChartShell::s_lstShells = 0L;
 
-KDiagrammShell::KDiagrammShell()
+KChartShell::KChartShell()
 {
   m_pDoc = 0L;
   m_pView = 0L;
 
   if ( s_lstShells == 0L )
-    s_lstShells = new QList<KDiagrammShell>;
+    s_lstShells = new QList<KChartShell>;
 
   s_lstShells->append( this );
 }
 
-KDiagrammShell::~KDiagrammShell()
+KChartShell::~KChartShell()
 {
-  cerr << "KDiagrammShell::~KDiagrammShell()" << endl;
+  cerr << "KChartShell::~KChartShell()" << endl;
 
   cleanUp();
 
   s_lstShells->removeRef( this );
 }
 
-bool KDiagrammShell::isModified()
+bool KChartShell::isModified()
 {
   if ( m_pDoc )
     return (bool)m_pDoc->isModified();
@@ -59,7 +59,7 @@ bool KDiagrammShell::isModified()
   return false;
 }
 
-bool KDiagrammShell::requestClose()
+bool KChartShell::requestClose()
 {
   int res = QMessageBox::warning( 0L, i18n("Warning"), i18n("The document has been modified\nDo you want to save it ?" ),
 				  i18n("Yes"), i18n("No"), i18n("Cancel") );
@@ -73,14 +73,14 @@ bool KDiagrammShell::requestClose()
   return false;
 }
 
-void KDiagrammShell::cleanUp()
+void KChartShell::cleanUp()
 {
   releaseDocument();
 
   KoMainWindow::cleanUp();
 }
 
-void KDiagrammShell::setDocument( KDiagrammDoc *_doc )
+void KChartShell::setDocument( KChartDoc *_doc )
 {
   if ( m_pDoc )
     releaseDocument();
@@ -107,17 +107,17 @@ void KDiagrammShell::setDocument( KDiagrammDoc *_doc )
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 }
 
-bool KDiagrammShell::newDocument()
+bool KChartShell::newDocument()
 {
   if ( m_pDoc )
   {
-    KDiagrammShell *s = new KDiagrammShell();
+    KChartShell *s = new KChartShell();
     s->show();
     s->newDocument();
     return true;
   }
 
-  m_pDoc = new KDiagrammDoc;
+  m_pDoc = new KChartDoc;
   if ( !m_pDoc->initDoc() )
   {
     cerr << "ERROR: Could not initialize document" << endl;
@@ -149,20 +149,20 @@ bool KDiagrammShell::newDocument()
   return true;
 }
 
-bool KDiagrammShell::openDocument( const char *_url )
+bool KChartShell::openDocument( const char *_url )
 {
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
-    KDiagrammShell *s = new KDiagrammShell();
+    KChartShell *s = new KChartShell();
     s->show();
     return s->openDocument( _url );
   }
 
   cerr << "Creating new document" << endl;
 
-  m_pDoc = new KDiagrammDoc;
+  m_pDoc = new KChartDoc;
   if ( !m_pDoc->loadFromURL( _url ) )
     return false;
 
@@ -188,24 +188,24 @@ bool KDiagrammShell::openDocument( const char *_url )
   return true;
 }
 
-bool KDiagrammShell::saveDocument()
+bool KChartShell::saveDocument()
 {
-  return KoMainWindow::saveDocument( "application/x-kdiagramm", "*.kdg", "KDiagramm" );
+  return KoMainWindow::saveDocument( "application/x-kchart", "*.kdg", "KChart" );
 }
 
-bool KDiagrammShell::printDlg()
+bool KChartShell::printDlg()
 {
   assert( m_pView != 0L );
 
   return m_pView->printDlg();
 }
 
-void KDiagrammShell::helpAbout()
+void KChartShell::helpAbout()
 {
-  // KoAboutDia::about( KoAboutDia::KDiagramm, "0.0.2" );
+  // KoAboutDia::about( KoAboutDia::KChart, "0.0.2" );
 }
 
-bool KDiagrammShell::closeDocument()
+bool KChartShell::closeDocument()
 {
   if ( isModified() )
   {
@@ -216,9 +216,9 @@ bool KDiagrammShell::closeDocument()
   return true;
 }
 
-bool KDiagrammShell::closeAllDocuments()
+bool KChartShell::closeAllDocuments()
 {
-  KDiagrammShell* s;
+  KChartShell* s;
   for( s = s_lstShells->first(); s != 0L; s = s_lstShells->next() )
   {
     if ( s->isModified() )
@@ -231,12 +231,12 @@ bool KDiagrammShell::closeAllDocuments()
   return true;
 }
 
-int KDiagrammShell::documentCount()
+int KChartShell::documentCount()
 {
   return s_lstShells->count();
 }
 
-void KDiagrammShell::releaseDocument()
+void KChartShell::releaseDocument()
 {
   int views = 0;
   if ( m_pDoc )
@@ -273,13 +273,13 @@ void KDiagrammShell::releaseDocument()
   m_pDoc = 0L;
 }
 
-void KDiagrammShell::slotFileNew()
+void KChartShell::slotFileNew()
 {
   if ( !newDocument() )
-    QMessageBox::critical( this, i18n("KDiagramm Error"), i18n("Could not create new document"), i18n("OK") );
+    QMessageBox::critical( this, i18n("KChart Error"), i18n("Could not create new document"), i18n("OK") );
 }
 
-void KDiagrammShell::slotFileOpen()
+void KChartShell::slotFileOpen()
 {
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
@@ -294,14 +294,14 @@ void KDiagrammShell::slotFileOpen()
   }
 }
 
-void KDiagrammShell::slotFileSave()
+void KChartShell::slotFileSave()
 {
   assert( m_pDoc != 0L );
 
   (void) saveDocument();
 }
 
-void KDiagrammShell::slotFileSaveAs()
+void KChartShell::slotFileSaveAs()
 {
   QString _url = m_pDoc->url();
   m_pDoc->setURL( "" );
@@ -310,7 +310,7 @@ void KDiagrammShell::slotFileSaveAs()
     m_pDoc->setURL( _url );
 }
 
-void KDiagrammShell::slotFileClose()
+void KChartShell::slotFileClose()
 {
   if ( documentCount() <= 1 )
   {
@@ -325,14 +325,14 @@ void KDiagrammShell::slotFileClose()
   delete this;
 }
 
-void KDiagrammShell::slotFilePrint()
+void KChartShell::slotFilePrint()
 {
   assert( m_pView );
 
   (void)m_pView->printDlg();
 }
 
-void KDiagrammShell::slotFileQuit()
+void KChartShell::slotFileQuit()
 {
   cerr << "EXIT 1" << endl;
 
@@ -345,12 +345,12 @@ void KDiagrammShell::slotFileQuit()
   kapp->exit();
 }
 
-KOffice::Document_ptr KDiagrammShell::document()
+KOffice::Document_ptr KChartShell::document()
 {
   return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KOffice::View_ptr KDiagrammShell::view()
+KOffice::View_ptr KChartShell::view()
 {
   return KOffice::View::_duplicate( m_pView );
 }

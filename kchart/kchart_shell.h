@@ -17,31 +17,31 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kdiagramm_shell_h__
-#define __kdiagramm_shell_h__
+#ifndef __kchart_shell_h__
+#define __kchart_shell_h__
 
-class KDiagrammShell_impl;
+class KChartShell_impl;
 
 #include <koMainWindow.h>
 
-class KDiagrammDoc;
-class KDiagrammView;
+class KChartDoc;
+class KChartView;
 
 #include <qlist.h>
 #include <qtimer.h>
 #include <qstring.h>
 
-class KDiagrammShell : public KoMainWindow
+class KChartShell : public KoMainWindow
 {
   Q_OBJECT
 public:
   // C++
-  KDiagrammShell();
-  ~KDiagrammShell();
+  KChartShell();
+  ~KChartShell();
 
   // C++
   virtual void cleanUp();
-  void setDocument( KDiagrammDoc *_doc );
+  void setDocument( KChartDoc *_doc );
 
   // C++
   virtual bool newDocument();
@@ -73,10 +73,10 @@ protected:
 
   void releaseDocument();
   
-  KDiagrammDoc* m_pDoc;
-  KDiagrammView* m_pView;
+  KChartDoc* m_pDoc;
+  KChartView* m_pView;
 
-  static QList<KDiagrammShell>* s_lstShells;
+  static QList<KChartShell>* s_lstShells;
 };
 
 #endif

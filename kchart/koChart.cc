@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koDiagramm.h"
+#include "koChart.h"
 #include <math.h>
 #include <functional>
 
@@ -52,12 +52,12 @@ const double KREIS_CUTOFF = 1.0;
 #include "KChartAreaPainter.h"
 #include "KChartBarsPainter.h"
 #include "KChartLinesPainter.h"
-#include "KoDiagrammBarConfigDialog.h"
-#include "KoDiagrammAreaConfigDialog.h"
-#include "KoDiagrammPieConfigDialog.h"
-#include "KoDiagrammLinesConfigDialog.h"
-#include "KoDiagrammLinesPointsConfigDialog.h"
-#include "KoDiagrammPointsConfigDialog.h"
+#include "KoChartBarConfigDialog.h"
+#include "KoChartAreaConfigDialog.h"
+#include "KoChartPieConfigDialog.h"
+#include "KoChartLinesConfigDialog.h"
+#include "KoChartLinesPointsConfigDialog.h"
+#include "KoChartPointsConfigDialog.h"
 #include <klocale.h>
 #endif
 
@@ -67,23 +67,23 @@ bool operator < ( const pair<double, string>& x, const pair<double, string>& y)
 };
 
 /////////////////////////////////////////////////////////////////////////////
-// KoDiagrammView
+// KoChartView
 
-KoDiagrammView::KoDiagrammView( QWidget *_parent ) : QWidget( _parent )
+KoChartView::KoChartView( QWidget *_parent ) : QWidget( _parent )
 {
   //setBackgroundColor( white );
 }
 
-KoDiagrammView::~KoDiagrammView()
+KoChartView::~KoChartView()
 {
 }
 
-void KoDiagrammView::resizeEvent( QResizeEvent * )
+void KoChartView::resizeEvent( QResizeEvent * )
 {
   update();
 }
 
-void KoDiagrammView::paintEvent( QPaintEvent * )
+void KoChartView::paintEvent( QPaintEvent * )
 {
   QPainter painter;
   painter.begin( this );
@@ -95,7 +95,7 @@ void KoDiagrammView::paintEvent( QPaintEvent * )
 
 
 #ifndef OLDCODE
-void KoDiagrammView::mousePressEvent( QMouseEvent* ev )
+void KoChartView::mousePressEvent( QMouseEvent* ev )
 {
 	if( ev->button() != RightButton )
 		QWidget::mousePressEvent( ev );
@@ -105,7 +105,7 @@ void KoDiagrammView::mousePressEvent( QMouseEvent* ev )
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// KoDiagramm message handlers
+// KoChart message handlers
 
 const double pi = 3.1415926535;
 
@@ -137,53 +137,53 @@ static void drawPie( QPainter& _painter, const QRect& _rect, int _a, int _alen )
 
 
 #ifndef OLDCODE
-void KoDiagramm::config( QWidget* parent )
+void KoChart::config( QWidget* parent )
 {
 	switch( m_lastPainterType ) {
 	case Bars:
 		{
-			KoDiagrammBarConfigDialog* dlg = new
-				KoDiagrammBarConfigDialog( &_params, parent );
+			KoChartBarConfigDialog* dlg = new
+				KoChartBarConfigDialog( &_params, parent );
 			dlg->exec();
 			delete dlg;
 			break;
 		}
 	case Area:
 		{
-			KoDiagrammAreaConfigDialog* dlg = new
-				KoDiagrammAreaConfigDialog( &_params, parent );
+			KoChartAreaConfigDialog* dlg = new
+				KoChartAreaConfigDialog( &_params, parent );
 			dlg->exec();
 			delete dlg;
 			break;
 		}
 	case Pie:
 		{
-			KoDiagrammPieConfigDialog* dlg = new
-				KoDiagrammPieConfigDialog( &_params, parent );
+			KoChartPieConfigDialog* dlg = new
+				KoChartPieConfigDialog( &_params, parent );
 			dlg->exec();
 			delete dlg;
 			break;
 		}
 	case Lines:
 		{
-			KoDiagrammLinesConfigDialog* dlg = new
-				KoDiagrammLinesConfigDialog( &_params, parent );
+			KoChartLinesConfigDialog* dlg = new
+				KoChartLinesConfigDialog( &_params, parent );
 			dlg->exec();
 			delete dlg;
 			break;
 		}
 	case LinesPoints:
 		{
-			KoDiagrammLinesPointsConfigDialog* dlg = new
-				KoDiagrammLinesPointsConfigDialog( &_params, parent );
+			KoChartLinesPointsConfigDialog* dlg = new
+				KoChartLinesPointsConfigDialog( &_params, parent );
 			dlg->exec();
 			delete dlg;
 			break;
 		}
 	case Points:
 		{
-			KoDiagrammPointsConfigDialog* dlg = new
-				KoDiagrammPointsConfigDialog( &_params, parent );
+			KoChartPointsConfigDialog* dlg = new
+				KoChartPointsConfigDialog( &_params, parent );
 			dlg->exec();
 			delete dlg;
 			break;
@@ -196,7 +196,7 @@ void KoDiagramm::config( QWidget* parent )
 
 
 
-void KoDiagramm::paint( QPainter& painter, int width, int height )
+void KoChart::paint( QPainter& painter, int width, int height )
 {
   switch( m_diaType )
   {
@@ -232,7 +232,7 @@ void KoDiagramm::paint( QPainter& painter, int width, int height )
 
 
 #ifndef OLDCODE
-void KoDiagramm::setupPainter( QPainter& painter )
+void KoChart::setupPainter( QPainter& painter )
 {
 	painter.setPen( _params._fgcolor );
 	painter.setPen( _params._bgcolor );
@@ -249,7 +249,7 @@ void KoDiagramm::setupPainter( QPainter& painter )
 
 // Sauelendiagramm
 ///////////////////////////////////////////////////////////////////////
-void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height )
+void KoChart::drawDiagrammSaeulen( QPainter& painter, int _width, int _height )
 {
 #ifndef OLDCODE
 	if( m_lastPainterType != Bars ) {
@@ -500,7 +500,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
 // Kreisdiagramm
 ///////////////////////////////////////////////////////////////////////
 
-void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
+void KoChart::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 {
   // Exception
   if ( m_table.xDesc.count() < 2 )
@@ -752,7 +752,7 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 
 // Linendiagramm
 ///////////////////////////////////////////////////////////////////////
-void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height )
+void KoChart::drawDiagrammLinien( QPainter& painter, int _width, int _height )
 {
 #ifndef OLDCODE
 	if( m_diaType == DT_LINIEN ) {
@@ -1057,7 +1057,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
 }
 
 
-void KoDiagramm::clearData()
+void KoChart::clearData()
 {
   m_table.data.clear();
   m_table.xDesc.clear();
@@ -1066,7 +1066,7 @@ void KoDiagramm::clearData()
 }
 
 
-void KoDiagramm::setData( table_t& data, const char* szTitle,
+void KoChart::setData( table_t& data, const char* szTitle,
 			data_type datType /*DAT_NUMMER*/, dia_type diaType /*=DT_KREIS_ODER_SAEULEN*/)
 {
   m_table = data;
@@ -1077,18 +1077,18 @@ void KoDiagramm::setData( table_t& data, const char* szTitle,
 }
 
 /*
-void KoDiagramm::FormatAnzahl( double val, CString& out )
+void KoChart::FormatAnzahl( double val, CString& out )
 {
 	out.Format("%d", (int)val);
 }
 
-void KoDiagramm::FormatGebuehr( double val, CString& out )
+void KoChart::FormatGebuehr( double val, CString& out )
 {
 	COleCurrencyExt cur( val );
 	out = cur.FormatWithSymbol(2);
 }
 
-void KoDiagramm::FormatDauer( double val, CString& out)
+void KoChart::FormatDauer( double val, CString& out)
 {
 	COleDateTimeSpan date(0,0,0,(int)val );
 	out.Format("%0d:%02d:%02d",
@@ -1099,12 +1099,12 @@ void KoDiagramm::FormatDauer( double val, CString& out)
 }
 */
 
-void KoDiagramm::KatDouble( double val, double& out )
+void KoChart::KatDouble( double val, double& out )
 {
   out = pow(10,(int) ceil(log10(val)) );
 }
 
-void KoDiagramm::KatTime( double val, double& out )
+void KoChart::KatTime( double val, double& out )
 {
   if( val <= 30)	// 1/2 Minute
     out = 30;
@@ -1122,4 +1122,4 @@ void KoDiagramm::KatTime( double val, double& out )
 }
 
 
-#include "koDiagramm.moc"
+#include "koChart.moc"

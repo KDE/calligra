@@ -9,22 +9,22 @@
 
 #include <qtabdialog.h>
 
-class KoDiagrammParameters;
-class KoDiagrammColorConfigPage;
-class KoDiagrammGeometryConfigPage;
+class KoChartParameters;
+class KoChartColorConfigPage;
+class KoChartGeometryConfigPage;
 
-class KoDiagrammConfigDialog : public QTabDialog
+class KoChartConfigDialog : public QTabDialog
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammConfigDialog( KoDiagrammParameters* params, 
+	KoChartConfigDialog( KoChartParameters* params, 
 							QWidget*	parent );
 
 protected:
-	KoDiagrammParameters* _params;
-	KoDiagrammGeometryConfigPage* _geompage;
-	KoDiagrammColorConfigPage* _colorpage;
+	KoChartParameters* _params;
+	KoChartGeometryConfigPage* _geompage;
+	KoChartColorConfigPage* _colorpage;
 
 protected slots:
 	virtual void apply();

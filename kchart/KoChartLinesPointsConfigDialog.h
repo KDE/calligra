@@ -7,16 +7,16 @@
 #ifndef __KODIAGRAMMLINESPOINTSCONFIGDIALOG_H__
 #define __KODIAGRAMMLINESPOINTSCONFIGDIALOG_H__
 
-#include "KoDiagrammConfigDialog.h"
+#include "KoChartConfigDialog.h"
 
-class KoDiagrammParameters;
+class KoChartParameters;
 
-class KoDiagrammLinesPointsConfigDialog : public KoDiagrammConfigDialog
+class KoChartLinesPointsConfigDialog : public KoChartConfigDialog
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammLinesPointsConfigDialog( KoDiagrammParameters* params, 
+	KoChartLinesPointsConfigDialog( KoChartParameters* params, 
 									   QWidget*	parent );
 };
 

@@ -7,16 +7,16 @@
 #ifndef __KODIAGRAMMPIECONFIGDIALOG_H__
 #define __KODIAGRAMMPIECONFIGDIALOG_H__
 
-#include "KoDiagrammConfigDialog.h"
+#include "KoChartConfigDialog.h"
 
-class KoDiagrammParameters;
+class KoChartParameters;
 
-class KoDiagrammPieConfigDialog : public KoDiagrammConfigDialog
+class KoChartPieConfigDialog : public KoChartConfigDialog
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammPieConfigDialog( KoDiagrammParameters* params, 
+	KoChartPieConfigDialog( KoChartParameters* params, 
 								QWidget*	parent );
 };
 

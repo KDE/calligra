@@ -1,15 +1,15 @@
 /* $Id$ */
 
 #include "KChartPie3DPainter.h"
-#include "koDiagramm.h"
-#include "KoDiagrammParameters.h"
+#include "koChart.h"
+#include "KoChartParameters.h"
 
 #include <qpdevmet.h>
 #include <qpainter.h>
 #include <math.h>
 #include <stdio.h>
 
-KChartPie3DPainter::KChartPie3DPainter( KoDiagrammParameters* chart ) :
+KChartPie3DPainter::KChartPie3DPainter( KoChartParameters* chart ) :
   KChartPiePainter( chart )
 {
 }

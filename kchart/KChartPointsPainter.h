@@ -11,7 +11,7 @@ class table_t;
 class KChartPointsPainter : public KChartAxesPainter
 {
 public:
-  KChartPointsPainter( KoDiagrammParameters* chart );
+  KChartPointsPainter( KoChartParameters* chart );
   ~KChartPointsPainter();
 
   virtual void drawData( QPainter* painter, table_t* table );

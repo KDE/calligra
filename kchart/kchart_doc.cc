@@ -39,11 +39,11 @@
 
 /*****************************************************************************
  *
- * KDiagrammDoc
+ * KChartDoc
  *
  *****************************************************************************/
 
-KDiagrammDoc::KDiagrammDoc()
+KChartDoc::KChartDoc()
 {
   // Demo values
   m_table.xDesc.append( "Torben" );
@@ -74,7 +74,7 @@ KDiagrammDoc::KDiagrammDoc()
   m_bEmpty = true;
   m_bModified = FALSE;
 
-  m_type = KoDiagramm::DT_SAEULEN;
+  m_type = KoChart::DT_SAEULEN;
 
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
@@ -89,14 +89,14 @@ KDiagrammDoc::KDiagrammDoc()
   m_lstViews.setAutoDelete( false );
 }
 
-bool KDiagrammDoc::initDoc()
+bool KChartDoc::initDoc()
 {
   return true;
 }
 
-void KDiagrammDoc::cleanUp()
+void KChartDoc::cleanUp()
 {
-  cerr << "CLeanUp KDiagrammDoc" << endl;
+  cerr << "CLeanUp KChartDoc" << endl;
 
   if ( m_bIsClean )
     return;
@@ -106,55 +106,55 @@ void KDiagrammDoc::cleanUp()
   KoDocument::cleanUp();
 }
 
-KOffice::MainWindow_ptr KDiagrammDoc::createMainWindow()
+KOffice::MainWindow_ptr KChartDoc::createMainWindow()
 {
-  KDiagrammShell* shell = new KDiagrammShell;
+  KChartShell* shell = new KChartShell;
   shell->show();
   shell->setDocument( this );
 
   return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
-void KDiagrammDoc::removeView( KDiagrammView* _view )
+void KChartDoc::removeView( KChartView* _view )
 {
   m_lstViews.removeRef( _view );
 }
 
-KDiagrammView* KDiagrammDoc::createDiagrammView(QWidget *_parent)
+KChartView* KChartDoc::createDiagrammView(QWidget *_parent)
 {
-  KDiagrammView *p = new KDiagrammView( _parent, 0L, this );
+  KChartView *p = new KChartView( _parent, 0L, this );
   //p->QWidget::show();
   m_lstViews.append( p );
 
   return p;
 }
 
-OpenParts::View_ptr KDiagrammDoc::createView()
+OpenParts::View_ptr KChartDoc::createView()
 {
   return OpenParts::View::_duplicate( createDiagrammView() );
 }
 
-void KDiagrammDoc::viewList( OpenParts::Document::ViewList & _list )
+void KChartDoc::viewList( OpenParts::Document::ViewList & _list )
 {
   _list.clear();
 
-  QListIterator<KDiagrammView> it( m_lstViews );
+  QListIterator<KChartView> it( m_lstViews );
   for( ; it.current(); ++it )
   {
     _list.append ( OpenParts::View::_duplicate( it.current() ) );
   }
 }
 
-int KDiagrammDoc::viewCount()
+int KChartDoc::viewCount()
 {
   return m_lstViews.count();
 }
 
-bool KDiagrammDoc::save( ostream& out, const char* /* format */ )
+bool KChartDoc::save( ostream& out, const char* /* format */ )
 {
   out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kdiagramm"
-      << "\" mime=\"" << "application/x-kdiagramm" << "\" >" << endl;
+  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kchart"
+      << "\" mime=\"" << "application/x-kchart" << "\" >" << endl;
 
   out << etag << "</DOC>" << endl;
 
@@ -163,7 +163,7 @@ bool KDiagrammDoc::save( ostream& out, const char* /* format */ )
   return true;
 }
 
-bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr /*_store*/ )
+bool KChartDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr /*_store*/ )
 {
   cerr << "------------------------ LOADING --------------------" << endl;
 
@@ -184,7 +184,7 @@ bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr /*_store*/ )
   {
     if ( (*it).m_strName == "mime" )
     {
-      if ( (*it).m_strValue != "application/x-kdiagramm" )
+      if ( (*it).m_strValue != "application/x-kchart" )
       {
 	cerr << "Unknown mime type " << (*it).m_strValue << endl;
 	return false;
@@ -199,7 +199,7 @@ bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr /*_store*/ )
   return true;
 }
 
-bool KDiagrammDoc::completeLoading( KOStore::Store_ptr /* _store */ )
+bool KChartDoc::completeLoading( KOStore::Store_ptr /* _store */ )
 {
   cerr << "------------------------ COMPLETION DONE --------------------" << endl;
 
@@ -208,12 +208,12 @@ bool KDiagrammDoc::completeLoading( KOStore::Store_ptr /* _store */ )
   return true;
 }
 
-void KDiagrammDoc::showWizard()
+void KChartDoc::showWizard()
 {
   // TODO
 }
 
-void KDiagrammDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix )
+void KChartDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix )
 {
   cout << "Got w=" << matrix.columns << " h=" << matrix.rows << endl;
 
@@ -253,7 +253,7 @@ void KDiagrammDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix 
   emit sig_updateView();
 }
 
-void KDiagrammDoc::editData()
+void KChartDoc::editData()
 {
   // create dialog
   QDialog *dlg = new QDialog(0,"SheetDlg",true);
@@ -314,17 +314,17 @@ void KDiagrammDoc::editData()
 }
 
 
-void KDiagrammDoc::configChart()
+void KChartDoc::configChart()
 {
 #ifndef OLDCODE
     // PENDING(Torben) How to transfer configuration from diag._params
     // to document?
-    KoDiagramm diag;
+    KoChart diag;
     diag.config( 0 );
 #endif
 }
 
-void KDiagrammDoc::print( QPaintDevice* _dev )
+void KChartDoc::print( QPaintDevice* _dev )
 {
   QPainter painter;
   painter.begin( _dev );
@@ -373,14 +373,14 @@ void KDiagrammDoc::print( QPaintDevice* _dev )
 
   painter.translate( MM_TO_POINT * m_leftBorder, MM_TO_POINT * m_topBorder );
 
-  KoDiagramm diag;
-  diag.setData( data(), "", KoDiagramm::DAT_NUMMER, m_type );
+  KoChart diag;
+  diag.setData( data(), "", KoChart::DAT_NUMMER, m_type );
   diag.paint( painter, MM_TO_POINT * printableWidth(), MM_TO_POINT * printableHeight() );
 
   painter.end();
 }
 
-void KDiagrammDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+void KChartDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
 			 float _scale )
 {
   cerr << "DRAWING w=" << _width << " h=" << _height << endl;
@@ -391,14 +391,14 @@ void KDiagrammDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
   if ( _scale != 1.0 )
     painter.scale( _scale, _scale );
 
-  KoDiagramm diag;
-  diag.setData( data(), "", KoDiagramm::DAT_NUMMER, m_type );
+  KoChart diag;
+  diag.setData( data(), "", KoChart::DAT_NUMMER, m_type );
   diag.paint( painter, _width, _height );
 
   painter.end();
 }
 
-void KDiagrammDoc::paperLayoutDlg()
+void KChartDoc::paperLayoutDlg()
 {
   KoPageLayout pl;
   pl.format = paperFormat();
@@ -435,7 +435,7 @@ void KDiagrammDoc::paperLayoutDlg()
   emit sig_updateView();
 }
 
-void KDiagrammDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
+void KChartDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
 				    const char *_footl, const char *_footm, const char *_footr )
 {
   m_headLeft = _headl;
@@ -448,7 +448,7 @@ void KDiagrammDoc::setHeadFootLine( const char *_headl, const char *_headm, cons
   m_bModified = TRUE;
 }
 
-void KDiagrammDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+void KChartDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
 				   KoFormat _paper, KoOrientation _orientation )
 {
   m_leftBorder = _leftBorder;
@@ -463,7 +463,7 @@ void KDiagrammDoc::setPaperLayout( float _leftBorder, float _topBorder, float _r
   m_bModified = TRUE;
 }
 
-QString KDiagrammDoc::completeHeading( const char *_data, int ,
+QString KChartDoc::completeHeading( const char *_data, int ,
 				       const char */*_table*/ )
 {
   /* QString page;
@@ -503,7 +503,7 @@ QString KDiagrammDoc::completeHeading( const char *_data, int ,
     return QString( tmp.data() );
 }
 
-void KDiagrammDoc::calcPaperSize()
+void KChartDoc::calcPaperSize()
 {
     switch( m_paperFormat )
     {
@@ -543,13 +543,13 @@ void KDiagrammDoc::calcPaperSize()
     }
 }
 
-void KDiagrammDoc::setDiaType( KoDiagramm::dia_type _type )
+void KChartDoc::setDiaType( KoChart::dia_type _type )
 {
   m_type = _type;
   emit sig_updateView();
 }
 
-KDiagrammDoc::~KDiagrammDoc()
+KChartDoc::~KChartDoc()
 {
 }
 

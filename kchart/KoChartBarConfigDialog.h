@@ -7,17 +7,17 @@
 #ifndef __KODIAGRAMMBARCONFIGDIALOG_H__
 #define __KODIAGRAMMBARCONFIGDIALOG_H__
 
-#include "KoDiagrammConfigDialog.h"
+#include "KoChartConfigDialog.h"
 
-class KoDiagrammParameters;
-class KoDiagrammBarConfigPage;
+class KoChartParameters;
+class KoChartBarConfigPage;
 
-class KoDiagrammBarConfigDialog : public KoDiagrammConfigDialog
+class KoChartBarConfigDialog : public KoChartConfigDialog
 {
 	Q_OBJECT
 
 public:
-	KoDiagrammBarConfigDialog( KoDiagrammParameters* params, 
+	KoChartBarConfigDialog( KoChartParameters* params, 
 							   QWidget*	parent );
 
 public slots:
@@ -25,7 +25,7 @@ public slots:
 	virtual void defaults();
 
 private:
-	KoDiagrammBarConfigPage* _barpage;
+	KoChartBarConfigPage* _barpage;
 };
 
 #endif

@@ -14,7 +14,7 @@ class KChartLinesPointsPainter : public virtual KChartLinesPainter,
 								 virtual KChartPointsPainter
 {
 public:
-  KChartLinesPointsPainter( KoDiagrammParameters* chart );
+  KChartLinesPointsPainter( KoChartParameters* chart );
   ~KChartLinesPointsPainter();
 
   virtual void drawData( QPainter* painter, table_t* table );

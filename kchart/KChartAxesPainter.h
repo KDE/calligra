@@ -4,7 +4,7 @@
 #define _KCHARTAXESPAINTER_H
 
 #include "KChartPainter.h"
-#include "KoDiagrammParameters.h"
+#include "KoChartParameters.h"
 
 #include <qfont.h>
 #include <qstrlist.h>
@@ -17,7 +17,7 @@ class table_t;
 class KChartAxesPainter : public KChartPainter
 {
 public:
-  KChartAxesPainter( KoDiagrammParameters* chart );
+  KChartAxesPainter( KoChartParameters* chart );
   virtual ~KChartAxesPainter();
 
   virtual void paintChart( QPainter* painter, table_t* table );
@@ -39,7 +39,6 @@ protected:
   virtual void createYLabels();
   double upperBound( double );
   double lowerBound( double );
-
 };
 
 #endif

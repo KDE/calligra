@@ -4,21 +4,21 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammBarConfigDialog.h"
-#include "KoDiagrammBarConfigPage.h"
+#include "KoChartBarConfigDialog.h"
+#include "KoChartBarConfigPage.h"
 
-#include "KoDiagrammBarConfigDialog.moc"
+#include "KoChartBarConfigDialog.moc"
 
 #include <kapp.h>
 #include <klocale.h>
 
-KoDiagrammBarConfigDialog::KoDiagrammBarConfigDialog(
-													 KoDiagrammParameters* params,
+KoChartBarConfigDialog::KoChartBarConfigDialog(
+													 KoChartParameters* params,
 													 QWidget* parent ) :
-	KoDiagrammConfigDialog( params, parent  )
+	KoChartConfigDialog( params, parent  )
 {
 	// Bar page
-	_barpage = new KoDiagrammBarConfigPage( this );
+	_barpage = new KoChartBarConfigPage( this );
 	addTab( _barpage, i18n( "&Bars" ) );
 
 	// Fill pages with values
@@ -28,17 +28,17 @@ KoDiagrammBarConfigDialog::KoDiagrammBarConfigDialog(
 }
 
 
-void KoDiagrammBarConfigDialog::apply()
+void KoChartBarConfigDialog::apply()
 {
-	KoDiagrammConfigDialog::apply();
+	KoChartConfigDialog::apply();
 	_params->_overwrite = _barpage->overwriteMode();
 	_params->_xbardist = _barpage->xAxisDistance();
 }
 
 
-void KoDiagrammBarConfigDialog::defaults()
+void KoChartBarConfigDialog::defaults()
 {
-	KoDiagrammConfigDialog::defaults();
+	KoChartConfigDialog::defaults();
 	_barpage->setOverwriteMode( _params->_overwrite );
 	_barpage->setXAxisDistance( _params->_xbardist );
 }

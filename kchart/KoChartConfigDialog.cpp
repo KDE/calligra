@@ -4,28 +4,28 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammConfigDialog.h"
-#include "KoDiagrammColorConfigPage.h"
-#include "KoDiagrammGeometryConfigPage.h"
-#include "KoDiagrammParameters.h"
+#include "KoChartConfigDialog.h"
+#include "KoChartColorConfigPage.h"
+#include "KoChartGeometryConfigPage.h"
+#include "KoChartParameters.h"
 
-#include "KoDiagrammConfigDialog.moc"
+#include "KoChartConfigDialog.moc"
 
 #include <kapp.h>
 #include <klocale.h>
 
-KoDiagrammConfigDialog::KoDiagrammConfigDialog( KoDiagrammParameters* params,
+KoChartConfigDialog::KoChartConfigDialog( KoChartParameters* params,
 												QWidget* parent ) :
 	QTabDialog( parent, "Chart config dialog", true ),
 	_params( params )
 {
 	// Geometry page
 	// PENDING(kalle) _xstep only for axes charts
-	_geompage = new KoDiagrammGeometryConfigPage( this );
+	_geompage = new KoChartGeometryConfigPage( this );
 	addTab( _geompage, i18n( "&Geometry" ) );
 
 	// Color page
-	_colorpage = new KoDiagrammColorConfigPage( this );
+	_colorpage = new KoChartColorConfigPage( this );
 	addTab( _colorpage, i18n( "&Colors" ) );
 
 	// setup buttons
@@ -36,7 +36,7 @@ KoDiagrammConfigDialog::KoDiagrammConfigDialog( KoDiagrammParameters* params,
 }
 
 
-void KoDiagrammConfigDialog::apply()
+void KoChartConfigDialog::apply()
 {
 	// Copy application data from dialog into parameter structure that is also 
 	// being used by the application.
@@ -53,7 +53,7 @@ void KoDiagrammConfigDialog::apply()
 }
 
 
-void KoDiagrammConfigDialog::defaults()
+void KoChartConfigDialog::defaults()
 {
 	// Fill pages with values
 

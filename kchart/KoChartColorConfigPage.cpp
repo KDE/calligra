@@ -4,9 +4,9 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammColorConfigPage.h"
+#include "KoChartColorConfigPage.h"
 
-#include "KoDiagrammColorConfigPage.moc"
+#include "KoChartColorConfigPage.moc"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -15,7 +15,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-KoDiagrammColorConfigPage::KoDiagrammColorConfigPage( QWidget* parent ) :
+KoChartColorConfigPage::KoChartColorConfigPage( QWidget* parent ) :
 	QWidget( parent )
 {
 	QGridLayout* grid = new QGridLayout( this, 7, 4, 15,7);

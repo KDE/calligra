@@ -4,9 +4,9 @@
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
-#include "KoDiagrammGeometryConfigPage.h"
+#include "KoChartGeometryConfigPage.h"
 
-#include "KoDiagrammGeometryConfigPage.moc"
+#include "KoChartGeometryConfigPage.moc"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -18,7 +18,7 @@
 #include <qvalidator.h>
 
 
-KoDiagrammGeometryConfigPage::KoDiagrammGeometryConfigPage( QWidget* parent ) :
+KoChartGeometryConfigPage::KoChartGeometryConfigPage( QWidget* parent ) :
 	QWidget( parent )
 {
 }

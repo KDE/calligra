@@ -37,7 +37,7 @@ struct table_t
 };
 
 #ifndef OLDCODE
-#include "KoDiagrammParameters.h"
+#include "KoChartParameters.h"
 class KChartPainter;
 #endif
 
@@ -48,11 +48,11 @@ class KChartPainter;
 #include <qstring.h>
 #include <qpainter.h>
 
-class KoDiagramm
+class KoChart
 {
 public:
 #ifndef OLDCODE
-	KoDiagramm() {
+	KoChart() {
 		m_lastPainterType = NoneYet;
 		_chartpainter = 0;
 	}
@@ -93,18 +93,18 @@ protected:
 #ifndef OLDCODE
 	KChartType m_lastPainterType;
 	KChartPainter* _chartpainter;
-	KoDiagrammParameters _params;
+	KoChartParameters _params;
 #endif
 };
 
-class KoDiagrammView : public QWidget
+class KoChartView : public QWidget
 {
   Q_OBJECT
 public:
-  KoDiagrammView( QWidget* _parent );
-  virtual ~KoDiagrammView();
+  KoChartView( QWidget* _parent );
+  virtual ~KoChartView();
 
-  KoDiagramm& diagramm() { return m_diagramm; }
+  KoChart& diagramm() { return m_diagramm; }
 
   void paintEvent( QPaintEvent *_ev );
   void resizeEvent( QResizeEvent *_ve );
@@ -113,7 +113,7 @@ public:
 #endif
   
 protected:
-  KoDiagramm m_diagramm;
+  KoChart m_diagramm;
 };
 
 #endif

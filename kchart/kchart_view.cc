@@ -23,13 +23,13 @@
 
 /*****************************************************************************
  *
- * KDiagrammView
+ * KChartView
  *
  *****************************************************************************/
 
-KDiagrammView::KDiagrammView( QWidget *_parent,
-			      const char */*_name*/, KDiagrammDoc* _doc ) :
-  KoDiagrammView( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KDiagramm::View_skel()
+KChartView::KChartView( QWidget *_parent,
+			      const char */*_name*/, KChartDoc* _doc ) :
+  KoChartView( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KChart::View_skel()
 {
   setWidget( this );
 
@@ -42,7 +42,7 @@ KDiagrammView::KDiagrammView( QWidget *_parent,
   widget()->setBackgroundColor(Qt::white);
 }
 
-void KDiagrammView::init()
+void KChartView::init()
 {
   /******************************************************
    * Menu
@@ -70,16 +70,16 @@ void KDiagrammView::init()
   slotUpdateView();
 }
 
-KDiagrammView::~KDiagrammView()
+KChartView::~KChartView()
 {
-  cerr << "KDiagrammView::~KDiagrammView() " << _refcnt() << endl;
+  cerr << "KChartView::~KChartView() " << _refcnt() << endl;
 
   cleanUp();
 }
 
-void KDiagrammView::cleanUp()
+void KChartView::cleanUp()
 {
-  cerr << "void KDiagrammView::cleanUp() " << endl;
+  cerr << "void KChartView::cleanUp() " << endl;
 
   if ( m_bIsClean )
     return;
@@ -99,8 +99,9 @@ void KDiagrammView::cleanUp()
   KoViewIf::cleanUp();
 }
 
-bool KDiagrammView::event( const char* _event, const CORBA::Any& _value )
+bool KChartView::event( const char* _event, const CORBA::Any& _value )
 {
+    cerr << "Got Event: " << _event << "\n";
   EVENT_MAPPER( _event, _value );
 
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_ptr, mappingCreateMenubar );
@@ -111,9 +112,9 @@ bool KDiagrammView::event( const char* _event, const CORBA::Any& _value )
   return false;
 }
 
-bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
+bool KChartView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  cerr << "bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
+  cerr << "bool KChartView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
 
   if ( CORBA::is_nil( _factory ) )
   {
@@ -153,7 +154,7 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
   return true;
 }
 
-bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
+bool KChartView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 {
   if ( CORBA::is_nil( _menubar ) )
   {
@@ -199,24 +200,24 @@ bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   return true;
 }
 
-void KDiagrammView::editData()
+void KChartView::editData()
 {
   m_pDoc->editData();
 }
 
 
-void KDiagrammView::configChart()
+void KChartView::configChart()
 {
 	m_pDoc->configChart();
 }
 
 
-void KDiagrammView::helpUsing()
+void KChartView::helpUsing()
 {
   kapp->invokeHTMLHelp( "kdiagramm/kdiagramm.html", QString::null );
 }
 
-bool KDiagrammView::printDlg()
+bool KChartView::printDlg()
 {
   QPrinter prt;
   if ( QPrintDialog::getPrinterSetup( &prt ) )
@@ -227,43 +228,43 @@ bool KDiagrammView::printDlg()
   return true;
 }
 
-void KDiagrammView::pageLayout()
+void KChartView::pageLayout()
 {
   m_pDoc->paperLayoutDlg();
 }
 
-void KDiagrammView::newView()
+void KChartView::newView()
 {
   assert( (m_pDoc != 0L) );
 
-  KDiagrammShell* shell = new KDiagrammShell;
+  KChartShell* shell = new KChartShell;
   shell->show();
   shell->setDocument( m_pDoc );
 }
 
-void KDiagrammView::modeLines()
+void KChartView::modeLines()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_LINIEN );
+  m_pDoc->setDiaType( KoChart::DT_LINIEN );
 }
 
-void KDiagrammView::modeAreas()
+void KChartView::modeAreas()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_AREA );
+  m_pDoc->setDiaType( KoChart::DT_AREA );
 }
 
-void KDiagrammView::modeBars()
+void KChartView::modeBars()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_SAEULEN );
+  m_pDoc->setDiaType( KoChart::DT_SAEULEN );
 }
 
-void KDiagrammView::modeCakes()
+void KChartView::modeCakes()
 {
-  m_pDoc->setDiaType( KoDiagramm::DT_KREIS );
+  m_pDoc->setDiaType( KoChart::DT_KREIS );
 }
 
-void KDiagrammView::slotUpdateView()
+void KChartView::slotUpdateView()
 {
-  m_diagramm.setData( m_pDoc->data(), "", KoDiagramm::DAT_NUMMER, m_pDoc->diaType() );
+  m_diagramm.setData( m_pDoc->data(), "", KoChart::DAT_NUMMER, m_pDoc->diaType() );
 
   update();
 }
