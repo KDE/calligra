@@ -131,6 +131,8 @@ int KWFrame::pageNum() const
 
 int KWFrame::pageNum( KWDocument* doc ) const
 {
+    if ( y() < 0.1 )
+        return 0;
     int page = static_cast<int>(y() / doc->ptPaperHeight());
     return page;
     // Circular dependency. KWDoc uses pageNum to calculate the number of pages!
