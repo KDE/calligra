@@ -34,6 +34,8 @@
 #include <kconfig.h>
 #include <kurlcombobox.h>
 #include <ktoolbar.h>
+#include <kpopupmenu.h>
+#include <ktoolbarbutton.h>
 #include <kactionclasses.h>
 
 #include <qlabel.h>
@@ -121,10 +123,18 @@ void KexiConnSelectorWidget::showAdvancedConn()
 		d->conn_sel_shown=true;
 		//setup
 //TODO 
-		KToolBar *tbar = new KToolBar(m_remote->frm_change);
+//		new KToolBarButton("change", 1, m_remote->frm_change, "change", i18n("Change"));
+/*		KPopupMenu *pm = new KPopupMenu(0);
+		pm->insertItem("aaa");
+		new KDropDownButtton(m_remote->frm_change, pm, 
+	m_remote->frm_change->setFixedWidth(100);
+//		m_remote->frm_change->setBackgroundColor(black);
+	//	KToolBar *tbar = new KToolBar(m_remote->frm_change);
+//		tbar->insertButton("change", 1, pm, true, i18n("Change"));
+		tbar->insertButton("change", 1, 
 		KActionMenu * act_change = new KActionMenu(i18n("Change"), this, "change");
 		act_change->insert( new KAction("Add connection", KShortcut(), 0, 0, 0) );
-		act_change->plug( tbar );
+		act_change->plug( tbar );*/
 //TODO
 		
 		//show connections (on demand):
