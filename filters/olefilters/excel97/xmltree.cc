@@ -21,6 +21,77 @@
 #include <qstringlist.h>
 #include "xmltree.moc"
 
+const char *LineWeightText[] =
+{
+    "hairline", "normal", "medium", "wide"
+};
+
+const char *LinePatternText[] =
+{
+    "solid", "dashed", "doted", "dash doted",
+    "dash dot doted", "invisible", "dark gray",
+    "medium gray", "light gray"
+};
+
+const char *ChartSeriesText[] =
+{
+    "Dates", "Numbers", "Sequences", "Strings"
+};
+
+const char *ChartBlankText[] = 
+{
+    "Skip blanks", "Blanks are zero", "Interpolate blanks"
+};
+
+const char *AxisText[] =
+{
+    "X axis", "Y axis", "Series axis"
+};
+
+typedef enum {
+    WGT_MODE_MIN		= -2,
+    WGT_MODE_HAIRLINE		= -1,
+    WGT_MODE_NORMAL		= 0,
+    WGT_MODE_MEDIUM		= 1,
+    WGT_MODE_WIDE 		= 2,
+    WGT_MODE_MAX		= 3
+} LineWeight;
+
+typedef enum {
+    PAT_MODE_SOLID 		= 0,
+    PAT_MODE_DASH 		= 1,
+    PAT_MODE_DOT 		= 2,
+    PAT_MODE_DASH_DOT 		= 3,
+    PAT_MODE_DASH_DOT_DOT 	= 4,
+    PAT_MODE_NONE 		= 5,
+    PAT_MODE_DARK_GRAY 		= 6,
+    PAT_MODE_MED_GRAY 		= 7,
+    PAT_MODE_LIGHT_GRAY 	= 8,
+    PAT_MODE_MAX 		= 9
+} LinePattern;
+
+typedef enum {
+    CHART_SERIES_DATES 		= 0,
+    CHART_SERIES_NUMBERS 	= 1,
+    CHART_SERIES_SEQUENCES	= 2,
+    CHART_SERIES_STRINGS 	= 3,
+    CHART_SERIES_MAX 		= 4
+} ChartSeries;
+
+typedef enum {
+    CHART_BLANK_SKIP		= 0,
+    CHART_BLANK_ZERO		= 1,
+    CHART_BLANK_INTERPOLATE	= 2,
+    CHART_BLANK_MAX		= 3
+} ChartBlank;
+
+typedef enum {
+    AXIS_X			= 0,
+    AXIS_Y			= 1,
+    AXIS_SERIES			= 2,
+    AXIS_MAX			= 3
+} Axis;
+
 const char *palette[65] = {
   "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
   "#ffffff", "#ffffff", "#000000", "#ffffff", "#ff0000", "#00ff00",
@@ -971,69 +1042,69 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 	{ "CALCCOUNT",	    0x000c, 0 /* &XMLTree::_calccount */ },
 	{ "CALCMODE",	    0x000d, 0 /* &XMLTree::_calcmode */ },
         { "CF",             0x01b1, &XMLTree::_cf },
-        { "CHART-UNITS",    0x1001, 0 /* &XMLTree::_chart-units */ },
-        { "CHART-CHART",    0x1002, 0 /* &XMLTree::_chart-chart */ },
-        { "CHART-SERIES",   0x1003, 0 /* &XMLTree::_chart-series */ },
-        { "CHART-DATAFORMAT", 0x1006, 0 /* &XMLTree::_chart-dataformat */ },
-        { "CHART-LINEFORMAT", 0x1007, 0 /* &XMLTree::_chart-lineformat */ },
-        { "CHART-MARKERFORMAT", 0x1009, 0 /* &XMLTree::_chart-markerformat */ },
-        { "CHART-AREAFORMAT", 0x100a, 0 /* &XMLTree::_chart-areaformat */ },
-        { "CHART-PIEFORMAT", 0x100b, 0 /* &XMLTree::_chart-pieformat */ },
-        { "CHART-ATTACHEDLABEL", 0x100c, 0 /* &XMLTree::_chart-attachedlabel */ },
-        { "CHART-SERIESTEXT", 0x100d, 0 /* &XMLTree::_chart-seriestext */ },
-        { "CHART-CHARTFORMAT", 0x1014, 0 /* &XMLTree::_chart-chartformat */ },
-        { "CHART-LEGEND",   0x1015, 0 /* &XMLTree::_chart-legend */ },
-        { "CHART-SERIESLIST", 0x1016, 0 /* &XMLTree::_chart-serieslist */ },
-        { "CHART-BAR",      0x1017, 0 /* &XMLTree::_chart-bar */ },
-        { "CHART-LINE",     0x1018, 0 /* &XMLTree::_chart-line */ },
-        { "CHART-PIE",      0x1019, 0 /* &XMLTree::_chart-pie */ },
-	{ "CHART-AREA",     0x101a, 0 /* &XMLTree::_chart-area */ },
-        { "CHART-SCATTER",  0x101b, 0 /* &XMLTree::_chart-scatter */ },
-        { "CHART-CHARTLINE", 0x101c, 0 /* &XMLTree::_chart-chartline */ },
-        { "CHART-AXIS",     0x101d, 0 /* &XMLTree::_chart-axis */ },
-        { "CHART-TICK",     0x101e, 0 /* &XMLTree::_chart-tick */ },
-        { "CHART-VALUERANGE", 0x101f, 0 /* &XMLTree::_chart-valuerange */ },
-        { "CHART-CATSERRANGE", 0x1020, 0 /* &XMLTree::_chart-catserrange */ },
-        { "CHART-AXISLINEFORMAT", 0x1021, 0 /* &XMLTree::_chart-axislineformat */ },
-        { "CHART-CHARTFORMATLINK", 0x1022, 0 /* &XMLTree::_chart-chartformatlink */ },
-        { "CHART-DEFAULTTEXT", 0x1024, 0 /* &XMLTree::_chart-defaulttext */ },
-        { "CHART-TEXT",     0x1025, 0 /* &XMLTree::_chart-text */ },
-        { "CHART-FONTX",    0x1026, 0 /* &XMLTree::_chart-fontx */ },
-        { "CHART-OBJECTLINK", 0x1027, 0 /* &XMLTree::_chart-objectlink */ },
-        { "CHART-FRAME",    0x1032, 0 /* &XMLTree::_chart-frame */ },
-        { "CHART-BEGIN",    0x1033, 0 /* &XMLTree::_chart-begin */ },
-        { "CHART-END",      0x1034, 0 /* &XMLTree::_chart-end */ },
-	{ "CHART-PLOTAREA", 0x1035, 0 /* &XMLTree::_chart-plotarea */ },
-        { "CHART-3D",       0x103a, 0 /* &XMLTree::_chart-3d */ },
-        { "CHART-PICF",     0x103c, 0 /* &XMLTree::_chart-picf */ },
-        { "CHART-DROPBAR",  0x103d, 0 /* &XMLTree::_chart-dropbar */ },
-        { "CHART-RADAR",    0x103e, 0 /* &XMLTree::_chart-radar */ },
-        { "CHART-SURF",     0x103f, 0 /* &XMLTree::_chart-surf */ },
-        { "CHART-RADARAREA", 0x1040, 0 /* &XMLTree::_chart-radararea */ },
-        { "CHART-AXISPARENT", 0x1041, 0 /* &XMLTree::_chart-axisparent */ },
-        { "CHART-LEGENDXN", 0x1043, 0 /* &XMLTree::_chart-legendxn */ },
-        { "CHART-SHTPROPS", 0x1044, 0 /* &XMLTree::_chart-shtprops */ },
-        { "CHART-SERTOCRT", 0x1045, 0 /* &XMLTree::_chart-sertocrt */ },
-        { "CHART-AXESUSED", 0x1046, 0 /* &XMLTree::_chart-axesused */ },
-        { "CHART-SBASEREF", 0x1048, 0 /* &XMLTree::_chart-sbaseref */ },
-        { "CHART-SERPARENT", 0x104a, 0 /* &XMLTree::_chart-serparent */ },
-        { "CHART-SERAUXTREND", 0x104b, 0 /* &XMLTree::_chart-serauxtrend */ },
-        { "CHART-IFMT",     0x104e, 0 /* &XMLTree::_chart-ifmt */ },
-	{ "CHART-POS",      0x104f, 0 /* &XMLTree::_chart-pos */ },
-        { "CHART-ALRUNS",   0x1050, 0 /* &XMLTree::_chart-alruns */ },
-        { "CHART-AI",       0x1051, 0 /* &XMLTree::_chart-ai */ },
-        { "CHART-SERAUXERRBAR", 0x105b, 0 /* &XMLTree::_chart-serauxerrbar */ },
-        { "CHART-CLRTCLIENT", 0x105c, 0 /* &XMLTree::_chart-clrtclient */ },
-        { "CHART-SERFMT",   0x105d, 0 /* &XMLTree::_chart-serfmt */ },
-        { "CHART-3DBARSHAPE", 0x105f, 0 /* &XMLTree::_chart-3dbarshape */ },
-        { "CHART-FBI",      0x1060, 0 /* &XMLTree::_chart-fbi */ },
-        { "CHART-BOPPOP",   0x1061, 0 /* &XMLTree::_chart-boppop */ },
-        { "CHART-AXCEXT",   0x1062, 0 /* &XMLTree::_chart-axcext */ },
-        { "CHART-DAT",      0x1063, 0 /* &XMLTree::_chart-dat */ },
-        { "CHART-PLOTGROWTH", 0x1064, 0 /* &XMLTree::_chart-plotgrowth */ },
-        { "CHART-SIINDEX",  0x1065, 0 /* &XMLTree::_chart-siindex */ },
-        { "CHART-GELFRAME", 0x1066, 0 /* &XMLTree::_chart-gelframe */ },
-        { "CHART-BOPPOPCUSTOM", 0x1067, 0 /* &XMLTree::_chart-boppopcustom */ },
+        { "CHART-UNITS",    0x1001, &XMLTree::_chart_units },
+        { "CHART-CHART",    0x1002, &XMLTree::_chart_chart },
+        { "CHART-SERIES",   0x1003, &XMLTree::_chart_series },
+        { "CHART-DATAFORMAT", 0x1006, &XMLTree::_chart_dataformat },
+        { "CHART-LINEFORMAT", 0x1007, &XMLTree::_chart_lineformat },
+        { "CHART-MARKERFORMAT", 0x1009, 0 /* &XMLTree::_chart_markerformat */ },
+        { "CHART-AREAFORMAT", 0x100a, &XMLTree::_chart_areaformat },
+        { "CHART-PIEFORMAT", 0x100b, 0 /* &XMLTree::_chart_pieformat */ },
+        { "CHART-ATTACHEDLABEL", 0x100c, 0 /* &XMLTree::_chart_attachedlabel */ },
+        { "CHART-SERIESTEXT", 0x100d, 0 /* &XMLTree::_chart_seriestext */ },
+        { "CHART-CHARTFORMAT", 0x1014, &XMLTree::_chart_chartformat },
+        { "CHART-LEGEND",   0x1015, 0 /* &XMLTree::_chart_legend */ },
+        { "CHART-SERIESLIST", 0x1016, 0 /* &XMLTree::_chart_serieslist */ },
+        { "CHART-BAR",      0x1017, 0 /* &XMLTree::_chart_bar */ },
+        { "CHART-LINE",     0x1018, 0 /* &XMLTree::_chart_line */ },
+        { "CHART-PIE",      0x1019, 0 /* &XMLTree::_chart_pie */ },
+	{ "CHART-AREA",     0x101a, 0 /* &XMLTree::_chart_area */ },
+        { "CHART-SCATTER",  0x101b, 0 /* &XMLTree::_chart_scatter */ },
+        { "CHART-CHARTLINE", 0x101c, 0 /* &XMLTree::_chart_chartline */ },
+        { "CHART-AXIS",     0x101d, &XMLTree::_chart_axis },
+        { "CHART-TICK",     0x101e, &XMLTree::_chart_tick },
+        { "CHART-VALUERANGE", 0x101f, 0 /* &XMLTree::_chart_valuerange */ },
+        { "CHART-CATSERRANGE", 0x1020, 0 /* &XMLTree::_chart_catserrange */ },
+        { "CHART-AXISLINEFORMAT", 0x1021, &XMLTree::_chart_axislineformat },
+        { "CHART-CHARTFORMATLINK", 0x1022, 0 /* &XMLTree::_chart_chartformatlink */ },
+        { "CHART-DEFAULTTEXT", 0x1024, 0 /* &XMLTree::_chart_defaulttext */ },
+        { "CHART-TEXT",     0x1025, 0 /* &XMLTree::_chart_text */ },
+        { "CHART-FONTX",    0x1026, 0 /* &XMLTree::_chart_fontx */ },
+        { "CHART-OBJECTLINK", 0x1027, 0 /* &XMLTree::_chart_objectlink */ },
+        { "CHART-FRAME",    0x1032, &XMLTree::_chart_frame },
+        { "CHART-BEGIN",    0x1033, &XMLTree::_chart_begin },
+        { "CHART-END",      0x1034, &XMLTree::_chart_end },
+	{ "CHART-PLOTAREA", 0x1035, 0 /* &XMLTree::_chart_plotarea */ },
+        { "CHART-3D",       0x103a, 0 /* &XMLTree::_chart_3d */ },
+        { "CHART-PICF",     0x103c, 0 /* &XMLTree::_chart_picf */ },
+        { "CHART-DROPBAR",  0x103d, 0 /* &XMLTree::_chart_dropbar */ },
+        { "CHART-RADAR",    0x103e, 0 /* &XMLTree::_chart_radar */ },
+        { "CHART-SURF",     0x103f, 0 /* &XMLTree::_chart_surf */ },
+        { "CHART-RADARAREA", 0x1040, 0 /* &XMLTree::_chart_radararea */ },
+        { "CHART-AXISPARENT", 0x1041, &XMLTree::_chart_axisparent },
+        { "CHART-LEGENDXN", 0x1043, 0 /* &XMLTree::_chart_legendxn */ },
+        { "CHART-SHTPROPS", 0x1044, &XMLTree::_chart_shtprops },
+        { "CHART-SERTOCRT", 0x1045, &XMLTree::_chart_sertocrt },
+        { "CHART-AXESUSED", 0x1046, &XMLTree::_chart_axesused },
+        { "CHART-SBASEREF", 0x1048, 0 /* &XMLTree::_chart_sbaseref */ },
+        { "CHART-SERPARENT", 0x104a, 0 /* &XMLTree::_chart_serparent */ },
+        { "CHART-SERAUXTREND", 0x104b, 0 /* &XMLTree::_chart_serauxtrend */ },
+        { "CHART-IFMT",     0x104e, 0 /* &XMLTree::_chart_ifmt */ },
+	{ "CHART-POS",      0x104f, 0 /* &XMLTree::_chart_pos */ },
+        { "CHART-ALRUNS",   0x1050, 0 /* &XMLTree::_chart_alruns */ },
+        { "CHART-AI",       0x1051, &XMLTree::_chart_ai },
+        { "CHART-SERAUXERRBAR", 0x105b, 0 /* &XMLTree::_chart_serauxerrbar */ },
+        { "CHART-CLRTCLIENT", 0x105c, 0 /* &XMLTree::_chart_clrtclient */ },
+        { "CHART-SERFMT",   0x105d, 0 /* &XMLTree::_chart_serfmt */ },
+        { "CHART-3DBARSHAPE", 0x105f, &XMLTree::_chart_3dbarshape },
+        { "CHART-FBI",      0x1060, &XMLTree::_chart_fbi },
+        { "CHART-BOPPOP",   0x1061, 0 /* &XMLTree::_chart_boppop */ },
+        { "CHART-AXCEXT",   0x1062, 0 /* &XMLTree::_chart_axcext */ },
+        { "CHART-DAT",      0x1063, 0 /* &XMLTree::_chart_dat */ },
+        { "CHART-PLOTGROWTH", 0x1064, &XMLTree::_chart_plotgrowth },
+        { "CHART-SIINDEX",  0x1065, 0 /* &XMLTree::_chart_siindex */ },
+        { "CHART-GELFRAME", 0x1066, 0 /* &XMLTree::_chart_gelframe */ },
+        { "CHART-BOPPOPCUSTOM", 0x1067, 0 /* &XMLTree::_chart_boppopcustom */ },
 	{ "CONDFMT",        0x01b0, &XMLTree::_condfmt },
         { "CODENAME",       0x00ba, 0 /* &XMLTree::_codename */ },
         { "CODEPAGE",       0x0042, &XMLTree::_codepage },
@@ -1400,6 +1471,583 @@ bool XMLTree::_cf(Q_UINT32, QDataStream &)
   return true;
 }
 
+bool XMLTree::_chart_fbi(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 xbase, ybase, height, scalebase, index;
+    
+    body >> xbase >> ybase >> height >> scalebase >> index;
+
+    kdDebug(s_area) << "CHART: XBase: " << xbase << " YBase: " << ybase << " Height: " << height << " ScaleBase: " << scalebase << " Index: " << index << endl;
+
+    return true;
+}
+
+bool XMLTree::_chart_units(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 type;
+    
+    body >> type;
+    
+    return (type == 0);
+}
+
+bool XMLTree::_chart_chart(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 xposr, yposr, xsizer, ysizer;
+    double xpos, ypos, xsize, ysize;
+    
+    body >> xposr >> yposr >> xsizer >> ysizer;
+
+    xpos = xposr / (65535. * 72.);
+    ypos = yposr / (65535. * 72.);
+    xsize = xsizer / (65535. * 72.);
+    ysize = ysizer / (65535. * 72.);
+
+    kdDebug(s_area) << "CHART: X: " << xpos << " Y: " << ypos << " X-Size: " << xsize << " Y-Size: " << ysize << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_begin(Q_UINT32, QDataStream &body)
+{
+    m_chartDepth++;
+    
+    return true;
+}
+
+bool XMLTree::_chart_plotgrowth(Q_UINT32, QDataStream &body)
+{
+    Q_INT16 skip, horizontal, vertical;
+    
+    body >> skip >> horizontal >> skip >> vertical;
+    
+    if(horizontal != -1)
+	kdDebug(s_area) << "CHART: Horizontal-Scale: " << horizontal << endl;
+    if(vertical != -1)
+	kdDebug(s_area) << "CHART: Vertical-Scale: " << vertical << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_frame(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 type, flags;
+    bool borderShadow, autoSize, autoPos;
+    
+    body >> type >> flags;
+    
+    borderShadow = (type == 4) ? true : false;
+    autoSize = (flags & 0x01) ? true : false;
+    autoPos = (flags & 0x02) ? true : false;
+
+    kdDebug(s_area) << "CHART: borderShadow: " << borderShadow << " autoSize: " << autoSize << " autoPos: " << autoPos << endl;
+
+    return true;
+}
+
+bool XMLTree::_chart_lineformat(Q_UINT32, QDataStream &body)
+{
+    Q_UINT32 color;
+    Q_INT16 weight;
+    Q_UINT16 pattern, flags, r, g, b;
+    bool autoFormat, drawTicks;
+    LinePattern pat;
+    LineWeight wgt;
+    
+    body >> color;
+    body >> pattern >> weight >> flags;
+    
+    if(pattern >= PAT_MODE_MAX)
+    {
+	kdDebug(s_area) << "CHART: Pattern higher than PAT_MODE_MAX-1! Should never happen!" << endl;
+	return false;
+    }
+
+    pat = (LinePattern) pattern;
+    kdDebug(s_area) << "CHART: Lines have a " << LinePatternText[pat] << " pattern" << endl;
+    
+    if(weight <= WGT_MODE_MIN)
+    {	
+	kdDebug(s_area) << "CHART: Weight lower than WGT_MODE_MIN-1! Should never happen!" << endl;
+	return false;
+    }
+
+    if(weight >= WGT_MODE_MAX)
+    {	
+	kdDebug(s_area) << "CHART: Weight higher than WGT_MODE_MAX-1! Should never happen!" << endl;
+	return false;
+    }
+    
+    wgt = (LineWeight) weight;
+    kdDebug(s_area) << "CHART: Lines are " << LineWeightText[wgt + 1] << " wide" << endl;
+    
+    autoFormat = (flags & 0x01) ? true : false;
+    drawTicks = (flags & 0x04) ? true : false;
+    
+    kdDebug(s_area) << "CHART: autoFormat: " << autoFormat << " drawTicks: " << drawTicks << endl;
+
+    r = (color >> 0) & 0xff;
+    g = (color >> 8) & 0xff;
+    b = (color >> 16) & 0xff;
+    
+    kdDebug(s_area) << "CHART: Color R: " << r << " G: " << g << " B: " << b << endl;        
+    return true;
+}
+
+bool XMLTree::_chart_areaformat(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 pattern, flags;
+    Q_UINT32 skip;
+    bool autoFormat, swapColors;
+
+    body >> skip >> skip;
+    body >> pattern >> flags;
+    
+    autoFormat = (flags & 0x01) ? true : false;
+    swapColors = (flags & 0x02) ? true : false;
+    
+    kdDebug(s_area) << "CHART: autoFormat: " << autoFormat << " Swap-Colors-For-Negative-Numbers: " << swapColors << endl;
+        
+    return true;
+}
+
+bool XMLTree::_chart_end(Q_UINT32, QDataStream &body)
+{
+    m_chartDepth--;
+    
+    return true;
+}
+
+bool XMLTree::_chart_series(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 cattype, catcount, valuetype, valuecount, bubblestype, bubblescount;
+    
+    body >> cattype >> valuetype;
+
+    if(cattype >= CHART_SERIES_MAX)
+    {
+	kdDebug(s_area) << "CHART: Category Type Number higher than CHART_SERIES_MAX-1! Should never happen!" << endl;
+	return false;
+    }
+
+    if(valuetype >= CHART_SERIES_MAX)
+    {
+	kdDebug(s_area) << "CHART: Value Type Number higher than CHART_SERIES_MAX-1! Should never happen!" << endl;
+	return false;
+    }
+    
+    body >> catcount >> valuecount;
+
+    kdDebug(s_area) << "CHART: " << catcount << " Categories are " << ChartSeriesText[cattype] << endl;
+    kdDebug(s_area) << "CHART: " << valuecount << " Values are " << ChartSeriesText[valuetype] << endl;
+    
+    if(biff >= BIFF_8)
+    {
+	body >> bubblestype >> bubblescount;
+
+	if(bubblestype >= CHART_SERIES_MAX)
+	{
+	    kdDebug(s_area) << "CHART: Bubbles Type Number higher than CHART_SERIES_MAX-1! Should never happen!" << endl;
+	    return false;
+	}	
+    
+	kdDebug(s_area) << "CHART: " << bubblescount << " Bubbles are " << ChartSeriesText[bubblestype] << endl;
+    }
+        
+    return true;
+}
+
+bool XMLTree::_chart_ai(Q_UINT32, QDataStream &body)
+{
+    Q_UINT8 linkType, refType;
+    Q_UINT16 flags, length, skip;
+    
+    body >> linkType >> refType >> flags;
+    
+    if(flags & 0x01)
+    {
+	kdDebug(s_area) << "CHART: Has custom number format!" << endl;
+	Q_UINT16 formatIndex;
+	
+	body >> formatIndex;
+
+	format_rec *fmt = formats[formatIndex];
+	if(fmt)
+	    QString description = QString::fromLatin1(fmt->rgch, fmt->cch);
+    }
+    else
+	kdDebug(s_area) << "CHART: Using Number format from data source!" << endl;
+
+    switch(linkType)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: Linking title or text" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: Linking values" << endl;
+	    break;
+	
+	case 2:
+	    kdDebug(s_area) << "CHART: Linking categories" << endl;
+	    break;
+	
+	case 3:
+	    kdDebug(s_area) << "CHART: Linking bubbles" << endl;
+	    break;
+	    
+	default:
+	    kdDebug(s_area) << "CHART: Unknown linkType: " << linkType << endl; 
+	    break;
+    }
+
+    switch(refType)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: Use default categories" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: Text/Value entered directly" << endl;
+	    break;
+	
+	case 2:
+	    kdDebug(s_area) << "CHART: Linked to container" << endl;
+	    break;
+	
+	default:
+	    kdDebug(s_area) << "CHART: Unknown refType: " << refType << endl; 
+	    break;
+    }
+
+    return true;
+}
+
+bool XMLTree::_chart_dataformat(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 pointNumber, seriesIndex;
+    
+    body >> pointNumber >> seriesIndex;
+    
+    if(pointNumber == 0xffff)
+	kdDebug(s_area) << "CHART: All points use series " << seriesIndex << endl;
+    else
+	kdDebug(s_area) << "CHART: Point " << pointNumber << " use series " << seriesIndex << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_3dbarshape(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 type;
+    
+    body >> type;
+    
+    switch(type)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: 3dbarshape is a, box" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: 3dbarshape is a, cylinder" << endl;
+	    break;
+	
+	case 256:
+	    kdDebug(s_area) << "CHART: 3dbarshape is a, pyramid" << endl;
+	    break;
+	    
+	case 257:
+	    kdDebug(s_area) << "CHART: 3dbarshape is a, cone" << endl;
+	    break;
+	
+	default:
+	    kdDebug(s_area) << "CHART: 3dbarshape, type: " << type << ", unknown!" << endl;
+    }
+    
+    return true;
+}
+
+bool XMLTree::_chart_sertocrt(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 index;
+    
+    body >> index;
+    
+    kdDebug(s_area) << "CHART: Series chart group index: " << index << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_shtprops(Q_UINT32, QDataStream &body)
+{
+    Q_UINT8 tmp;
+    Q_UINT16 flags;
+    bool manualFormat, onlyPlotVisibleCells, noResize, hasPositionRecord, ignorePosRecord = false;
+    ChartBlank blanks;
+    
+    body >> flags >> tmp;
+    
+    manualFormat = (flags & 0x01) ? true : false;
+    onlyPlotVisibleCells = (flags & 0x02) ? true : false;
+    noResize = (flags & 0x04) ? true : false;
+    hasPositionRecord = (flags & 0x08) ? true : false;
+    
+    if(tmp >= CHART_BLANK_MAX)
+    {
+	kdDebug(s_area) << "CHART: The 'tmp' field is higher than CHART_BLANK_MAX-1! Should never happen!" << endl;
+	return false;
+    }
+    
+    blanks = (ChartBlank) tmp;
+    
+    kdDebug(s_area) << "CHART: Sheet Properties: " << ChartBlankText[tmp] << endl;
+
+
+    if(biff >= BIFF_8)
+	ignorePosRecord = (flags & 0x10) ? true : false;
+
+    if(noResize)
+	kdDebug(s_area) << "CHART: Don't resize chart with window!" << endl;
+    else
+	kdDebug(s_area) << "CHART: Resize chart with window!" << endl;
+    
+    if(hasPositionRecord && !ignorePosRecord)
+	kdDebug(s_area) << "CHART: We have a position record!" << endl;
+    else if(hasPositionRecord && ignorePosRecord)
+	kdDebug(s_area) << "CHART: We have a position record, but ignore it!" << endl;
+
+    if(manualFormat)
+	kdDebug(s_area) << "CHART: Manually formatted!" << endl;
+    
+    if(onlyPlotVisibleCells)
+	kdDebug(s_area) << "CHART: Only plot visible cells!" << endl;    
+
+    return true;
+}
+
+bool XMLTree::_chart_axesused(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 axes;
+    
+    body >> axes;
+    
+    kdDebug(s_area) << "CHART: There are " << axes << " Axes!" << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_axisparent(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 index;
+    Q_UINT32 x, y, w, h;
+    
+    body >> index;
+    body >> x >> y >> w >> h;
+        
+    kdDebug(s_area) << "CHART: Axis x,y: " << x << "," << y << " w,h: " << w << "," << h << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_axis(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 axisType;
+    Axis ax;
+
+    body >> axisType;
+
+    if(axisType >= AXIS_MAX)
+    {
+	kdDebug(s_area) << "CHART: The axisType is higher than AXIS_MAX-1! Should never happen!" << endl;
+	return false;
+    }
+    
+    ax = (Axis) axisType;
+        
+    kdDebug(s_area) << "CHART: Found a " << AxisText[ax] << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_tick(Q_UINT32, QDataStream &body)
+{
+    Q_UINT8 major, minor, pos, flags;
+    Q_UINT16 skipl, r, g, b;
+    Q_UINT32 skip;
+
+    body >> major >> minor >> pos;
+
+    switch(major)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: No major tick!" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: Major tick inside axis!" << endl;
+	    break;
+	
+	case 2:
+	    kdDebug(s_area) << "CHART: Major tick outside axis!" << endl;
+	    break;
+	
+	case 3:
+	    kdDebug(s_area) << "CHART: Major tick across axis!" << endl;
+	    break;
+	
+	default:
+	    kdDebug(s_area) << "CHART: Unknown major tick type: " << major << endl;
+    }
+
+    switch(minor)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: No minor tick!" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: Minor tick inside axis!" << endl;
+	    break;
+	
+	case 2:
+	    kdDebug(s_area) << "CHART: Minor tick outside axis!" << endl;
+	    break;
+	
+	case 3:
+	    kdDebug(s_area) << "CHART: Minor tick across axis!" << endl;
+	    break;
+	
+	default:
+	    kdDebug(s_area) << "CHART: Unknown minor tick type: " << minor << endl;
+    }
+
+    switch(pos)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: No tick label!" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: Tick label at low end!" << endl;
+	    break;
+	
+	case 2:
+	    kdDebug(s_area) << "CHART: Tick label at high end!" << endl;
+	    break;
+	
+	case 3:
+	    kdDebug(s_area) << "CHART: Tick label near axis!" << endl;
+	    break;
+	
+	default:
+	    kdDebug(s_area) << "CHART: Unknown tick label position: " << pos << endl;
+    }
+
+
+    if(flags & 0x02)
+	kdDebug(s_area) << "CHART: Auto text background mode!" << endl;
+    else
+    {
+	Q_UINT8 mode;
+	body >> mode;
+	kdDebug(s_area) << "CHART: Background mode: " << mode << endl;
+    }
+    if(flags & 0x01)
+	kdDebug(s_area) << "CHART: Auto tick label color!" << endl;
+    else
+    {
+	Q_UINT16 color;
+	body >> color;
+	
+	r = (color >> 0) & 0xff;
+	g = (color >> 8) & 0xff;
+	b = (color >> 16) & 0xff;
+
+	kdDebug(s_area) << "CHART: Tick label color: R: " << r << " G: " << g << " B: " << b << endl;
+    }
+
+    switch(flags & 0x1c)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: No rotation!" << endl;
+	    break;
+	
+	case 1:
+	    kdDebug(s_area) << "CHART: Top to bottom rotation, letters upright!" << endl;
+	    break;
+	    
+	case 2:
+	    kdDebug(s_area) << "CHART: Rotate 90 deg. counter-clockwise!" << endl;
+	    break;
+	    
+	case 3:
+	    kdDebug(s_area) << "CHART: Rotate 90 deg. clockwise!" << endl;
+	    break;
+	    
+	default:
+	    kdDebug(s_area) << "CHART: Unknown rotation mode: " << (flags & 0x1c) << endl;
+	    break;
+    }
+    
+    if(flags & 0x20)
+	kdDebug(s_area) << "CHART: Auto Rotate!" << endl;
+    
+    return true;
+}
+
+bool XMLTree::_chart_axislineformat(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 type;
+    
+    body >> type;
+    
+    switch(type)
+    {
+	case 0:
+	    kdDebug(s_area) << "CHART: Axisline is the standard axisline!" << endl;
+	    break;
+	    
+	case 1:
+	    kdDebug(s_area) << "CHART: Axisline is a major grid line along the axis!" << endl;
+	    break;
+	    
+	case 2:
+	    kdDebug(s_area) << "CHART: Axisline is a minor grid line along the axis!" << endl;
+	    break;
+	
+	case 3:
+	    kdDebug(s_area) << "CHART: Axisline is a floor/wall along the axis!" << endl;
+	    break;
+
+	default:
+	    kdDebug(s_area) << "CHART: Axisline-Detetcion Error, unsupported type: " << type << endl;
+	    break;
+    }
+    
+    return true;
+}
+
+bool XMLTree::_chart_chartformat(Q_UINT32, QDataStream &body)
+{
+    Q_UINT16 flags, zorder, skipl;
+    Q_UINT32 skip;
+    bool varyColor;
+    
+    body >> skip >> skip >> skip >> skip;
+    body >> skipl >> flags >> zorder;
+
+    varyColor = (flags & 0x01) ? true : false;
+
+    kdDebug(s_area) << "CHART: Z-Order: " << zorder << endl;
+    
+    if(varyColor)
+	kdDebug(s_area) << "CHART: Vary color of every data point!" << endl;
+
+    return true;
+}
+
+
 bool XMLTree::_condfmt(Q_UINT32, QDataStream &)
 {
   return true;
@@ -1417,7 +2065,7 @@ bool XMLTree::_colinfo(Q_UINT32, QDataStream &body)
 {
     Q_UINT16 first, last, width, xf, options;
 
-    body >> first >> last >> width >>xf>>options;
+    body >> first >> last >> width >> xf >> options;
 
     bool hidden = (options & 0x0001) ? true : false;
 

@@ -110,9 +110,11 @@ private:
     Q_UINT16 cellColor;
   };
 
+
   Q_UINT16 biff, date1904;
   unsigned m_streamDepth;
-  
+  unsigned m_chartDepth;
+
   QDomDocument *root;
 
   QIntDict<xf_rec> xfs;
@@ -140,6 +142,27 @@ private:
   bool _bottommargin(Q_UINT32 size, QDataStream &body);
   bool _boundsheet(Q_UINT32 size, QDataStream &body);
   bool _cf(Q_UINT32 size, QDataStream &body);
+  bool _chart_fbi(Q_UINT32 size, QDataStream &body);
+  bool _chart_units(Q_UINT32 size, QDataStream &body);
+  bool _chart_chart(Q_UINT32 size, QDataStream &body);
+  bool _chart_begin(Q_UINT32 size, QDataStream &body);
+  bool _chart_plotgrowth(Q_UINT32 size, QDataStream &body);
+  bool _chart_frame(Q_UINT32 size, QDataStream &body);
+  bool _chart_lineformat(Q_UINT32 size, QDataStream &body);
+  bool _chart_areaformat(Q_UINT32 size, QDataStream &body);
+  bool _chart_end(Q_UINT32 size, QDataStream &body);
+  bool _chart_series(Q_UINT32 size, QDataStream &body);
+  bool _chart_ai(Q_UINT32 size, QDataStream &body);
+  bool _chart_dataformat(Q_UINT32 size, QDataStream &body);
+  bool _chart_3dbarshape(Q_UINT32 size, QDataStream &body);
+  bool _chart_sertocrt(Q_UINT32 size, QDataStream &body);
+  bool _chart_shtprops(Q_UINT32 size, QDataStream &body);
+  bool _chart_axesused(Q_UINT32 size, QDataStream &body);
+  bool _chart_axisparent(Q_UINT32 size, QDataStream &body);
+  bool _chart_axis(Q_UINT32 size, QDataStream &body);
+  bool _chart_tick(Q_UINT32 size, QDataStream &body);
+  bool _chart_axislineformat(Q_UINT32 size, QDataStream &body);
+  bool _chart_chartformat(Q_UINT32 size, QDataStream &body);
   bool _condfmt(Q_UINT32 size, QDataStream &body);
   bool _codepage(Q_UINT32 size, QDataStream &body);
   bool _colinfo(Q_UINT32 size, QDataStream &body);
