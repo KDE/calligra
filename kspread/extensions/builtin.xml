@@ -2719,6 +2719,23 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>NORMSINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the inverse of the standard normal cumulative
+          distribution. The number must be between 0 and 1 (non-inclusive).
+        </Text>
+        <Syntax>NORMSINV(Number)</Syntax>
+        <Example>NORMSINV(0.908789) returns 1.3333</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
