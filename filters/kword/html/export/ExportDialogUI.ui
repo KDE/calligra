@@ -182,7 +182,7 @@
                         <cstring>radioModeCss</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Extended: convert to (X)HTML with CSS</string>
+                        <string>&amp;Enhanced: convert to (X)HTML with CSS</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -226,7 +226,7 @@
                         <cstring>radioDocType1</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>TabFocus</enum>
+                        <enum>NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>&amp;HTML 4.01</string>
