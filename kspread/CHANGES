@@ -722,3 +722,8 @@ top to bottom and left to right.
 -Now kspread can understand Table1!C1 and Table1!c1
 it works.
 -Improved kspread_dlg_formula
+
+2000-07-05 Wilco Greven <j.w.greven@student.utwente.nl>
+-------------------------------------------------------
+- For the sake of consistency, better use Shift instead of Control to extend
+  a selection.

@@ -871,7 +871,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
     table->unselect();
 
-  if ((selection.right() != 0x7fff && selection.bottom() != 0x7fff)&& m_bMousePressed && ( _ev->state() & ControlButton ))
+  if ((selection.right() != 0x7fff && selection.bottom() != 0x7fff)&& m_bMousePressed && ( _ev->state() & ShiftButton ))
   {
     if( (col!=old_column)||(row!=old_row))
     {
@@ -1044,18 +1044,19 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   KSpreadTable *table = activeTable();
   if ( !table )
     return;
-  QRect selection(table->chooseRect());
+  QRect selection = table->chooseRect();
 
   int ypos, xpos;
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-  if ((selection.right() != 0x7fff && selection.bottom() != 0x7fff)&& ( _ev->state() & ControlButton ))
+  if ( (selection.right() != 0x7fff && selection.bottom() != 0x7fff) && 
+      ( _ev->state() & ShiftButton ) )
   {
-    if( (col!=m_iMouseStartColumn)||(row!=m_iMouseStartRow))
+    if ( col != m_iMouseStartColumn || row != m_iMouseStartRow )
     {
-      if( selection.left()!=0&&selection.right()!=0
-          &&selection.top()!=0&&selection.bottom()!=0)
+      if ( selection.left() !=0 && selection.right() !=0
+          && selection.top() !=0 && selection.bottom() !=0 )
       {
         if ( col < m_iMouseStartColumn )
           col = m_iMouseStartColumn;
@@ -1073,6 +1074,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
       return;
     }
   }
+
   setChooseMarkerColumn( col );
   setChooseMarkerRow( row );
   KSpreadCell *cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
@@ -1084,7 +1086,6 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
     setChooseMarkerColumn( cell->obscuringCellsColumn() );
     cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
   }
-
 
   selection.setCoords( chooseMarkerColumn(), chooseMarkerRow(),
                        chooseMarkerColumn() + cell->extraXCells(),
