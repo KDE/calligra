@@ -75,8 +75,8 @@ QByteArray KivioDragObject::encodedData(const char* mimetype) const
 
 bool KivioDragObject::canDecode(QMimeSource* e)
 {
-  for(QStringList::Iterator it = m_decodeMimeList.begin(); it != m_decodeMimeList.end(); ++it) {
-    if(e->provides((*it).local8Bit())) {
+  for(QValueList<QCString>::Iterator it = m_decodeMimeList.begin(); it != m_decodeMimeList.end(); ++it) {
+    if(e->provides(*it)) {
       return true;
     }
   }
@@ -88,9 +88,10 @@ bool KivioDragObject::decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPa
 {
   bool ok = false;
 
-  if(e->provides(m_decodeMimeList[0].local8Bit())) {
+  if(e->provides(m_decodeMimeList[0])) {
     QDomDocument doc("KivioSelection");
-    doc.setContent(QCString(e->encodedData(m_decodeMimeList[0].local8Bit())));
+    QByteArray data = e->encodedData( m_decodeMimeList[ 0 ] );
+    doc.setContent( QCString( data, data.size()+1 ) );
     KivioLayer l(page);
     ok = l.loadXML(doc.documentElement());
     KivioStencil* stencil = l.stencilList()->first();
