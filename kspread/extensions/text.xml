@@ -16,8 +16,8 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The DOLLAR() function converts a number to text using currency format, with the decimals rounded to the specified place. Although the name is DOLLAR, this functions will do the conversion according to the current locale.</Text>
-	<Syntax>DOLLAR(number,decimals)</Syntax>
+	<Text>The DOLLAR() function converts a number to text using currency format, with the decimals rounded to the specified place. Although the name is DOLLAR, this function will do the conversion according to the current locale.</Text>
+	<Syntax>DOLLAR(number;decimals)</Syntax>
 	<Example>DOLLAR(1403.77) returns "$ 1,403.77"</Example>
 	<Example>DOLLAR(-0.123;4) returns "$-0.1230"</Example>
       </Help>
@@ -39,8 +39,8 @@
 	<Type>Bool</Type>
       </Parameter>
       <Help>
-	<Text>The FIXED() function rounds a number to the specified number of decimals, formats the number in decimal format string, and returns the result as text. If deciamls is negative, number is rounded to the left ot the decimal point. If you omit decimals, it is assumed to be 2. If optional parameter no_commas is True, thousand separators will not show up.</Text>
-	<Syntax>FIXED(number,decimals,no_commas)</Syntax>
+	<Text>The FIXED() function rounds a number to the specified number of decimals, formats the number in decimal format string, and returns the result as text. If decimals is negative, number is rounded to the left of the decimal point. If you omit decimals, it is assumed to be 2. If optional parameter no_commas is True, thousand separators will not show up.</Text>
+	<Syntax>FIXED(number;decimals;no_commas)</Syntax>
 	<Example>FIXED(1234.567;1) returns "1,234.6"</Example>
 	<Example>FIXED(1234.567;1;FALSE) returns "1234.6"</Example>
 	<Example>FIXED(44.332) returns "44.33"</Example>
@@ -59,11 +59,11 @@
 	<Type>String</Type>
       </Parameter>
       <Parameter>
-	<Comment>New text which will replace</Comment>
+	<Comment>New text which will be replacement</Comment>
 	<Type>String</Type>
       </Parameter>
       <Parameter optional="true">
-	<Comment>Occurrence of replace</Comment>
+	<Comment>Occurrence of replacement</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -95,9 +95,9 @@
       <Help>
 	<Text>The SEARCH() function finds one text string (find_text) within another text string (within_text) and returns the number of the starting point of find_text, from the leftmost character of within_text. You can use wildcard characters, question mark (?) and asterisk (*). A question mark matches any single character, an asterisk matches any sequences of characters. Parameter start_num specifies the character at which to start the search. The first character is character number 1. If start_num is omitted, it is assumed to be 1. SEARCH does not distinguish between uppercase and lowercase letters.
 </Text>
-	<Syntax>SEARCH(find_text,within_text,start_num)</Syntax>
+	<Syntax>SEARCH(find_text;within_text;start_num)</Syntax>
 	<Example>SEARCH("e";"Statements";6) returns 7</Example>
-	<Example>SEARCH("margin"s;,"Profit Margin") returns 8</Example>
+	<Example>SEARCH("margin";"Profit Margin") returns 8</Example>
         <Related>FIND</Related>
       </Help>
     </Function>
@@ -110,7 +110,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The T() returns the text referred to by value. If value is or refers to text, T return value. If value does not refer to text, T return empty text.</Text>
+      <Text>The T() function returns the text referred to by value. If value is, or refers to, text then T returns value. If value does not refer to text then T returns empty text.</Text>
 	<Syntax>T(value)</Syntax>
 	<Example>T("KOffice") returns "KOffice"</Example>
 	<Example>T(1.2) returns "" (empty text)</Example>
@@ -125,7 +125,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The TEXT() converts a value to text.</Text>
+	<Text>The TEXT() function converts a value to text.</Text>
 	<Syntax>TEXT(value)</Syntax>
 	<Example>TEXT(1234.56) returns "1234.56"</Example>
 	<Example>TEXT("KSpread") returns "KSpread"</Example>
