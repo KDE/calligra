@@ -27,6 +27,7 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
+#include <qframe.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -60,12 +61,19 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
  : KexiViewBase(mainWin, parent, name)
  ,d(new KexiQueryDesignerSQLEditorPrivate())
 {
+	QVBoxLayout *lyr = new QVBoxLayout(this);
+	QFrame *fr = new QFrame(this);
+	fr->setFrameStyle(QFrame::Sunken|QFrame::WinPanel);// | QFrame::WinPanel);
+	lyr->addWidget(fr);
+	lyr = new QVBoxLayout(fr);
+	lyr->setMargin( 2 );
+
 #ifdef QT_ONLY_SQL_EDITOR
-	d->view = new KTextEdit( "", QString::null, this, "sqlDoc_editor" );
+	d->view = new KTextEdit( "", QString::null, fr, "sqlDoc_editor" );
 	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #else
-	d->doc =  KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
-	d->view = d->doc->createView(this, 0L);
+	d->doc =  KTextEditor::EditorChooser::createDocument(fr, "sqlDoc");
+	d->view = d->doc->createView(fr, 0L);
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(d->doc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
 	{
@@ -78,8 +86,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	}
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
-
 	setViewWidget(d->view);
+	lyr->addWidget(d->view);
 
 //	m_view->installEventFilter(this);
 //	setFocusProxy(m_view);
@@ -89,11 +97,9 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 //	QPushButton *btnClear = new QPushButton(i18n("&Clear"), this);
 //	btnClear->setFlat(true);
 
-	QGridLayout *g = new QGridLayout(this);
 //	g->addWidget(btnQuery,		0, 0);
 //	g->addWidget(btnClear,		0, 1);
 //	g->addMultiCellWidget(m_view,	1, 1, 0, 1);
-	g->addWidget(d->view,		0, 0);
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
