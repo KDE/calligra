@@ -7,7 +7,7 @@ libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp \
 	kexidatasourcefields.cpp kexisectionheader.cpp pixmapcollection.cpp
 
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la ../tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
+libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
 
 SUBDIRS = utils tableview . propertyeditor relations
 
@@ -32,7 +32,7 @@ SUBDIRS = utils tableview . propertyeditor relations
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE - all_includes must remain last!
-INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/tableview \
+INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/widget/tableview \
 	$(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/core $(all_includes)
 

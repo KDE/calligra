@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-INCLUDES = -I(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/core $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/core $(all_includes)
 kde_module_LTLIBRARIES = containers.la stdwidgets.la
 containers_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
 containers_la_SOURCES =  containerfactory.cpp

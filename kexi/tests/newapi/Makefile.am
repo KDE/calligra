@@ -8,7 +8,9 @@ noinst_PROGRAMS = kexidbtest
  
 # unused: kexidbmysqlcursor
 
-INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi \
+  -I$(top_srcdir)/kexi/widget \
+  $(all_includes)
 
 SUBDIRS = .
 

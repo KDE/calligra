@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include <tableview/kexitableview.h>
 #include <widget/kexidatatableview.h>
 #include <kexidb/cursor.h>
 
