@@ -49,7 +49,7 @@ using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
-static const char * CURRENT_DTD_VERSION = "1.1";
+static const char * CURRENT_DTD_VERSION = "1.2";
 
 /*****************************************************************************
  *
