@@ -394,7 +394,7 @@ int KColorBarAction::plug( QWidget *widget, int index )
 		 b, SLOT( orientationChanged( Orientation ) ) );
 	addContainer( bar, b );
 	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-	
+	b->orientationChanged( bar->orientation() );
 	return containerCount() - 1;
     } else if ( widget && widget->inherits( "KToolBar" ) ) {
 	KToolBar* bar = (KToolBar*)widget;
@@ -417,6 +417,7 @@ int KColorBarAction::plug( QWidget *widget, int index )
 	addContainer( bar, b );
 	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 	
+	b->orientationChanged( bar->orientation() );
 	return containerCount() - 1;
     }
 
