@@ -537,7 +537,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		else if( b.tagName() == "path" )
 		{
 			VComposite *path = new VComposite( &m_document );
-			parsePath( path, b );
+			parsePath( path, b.attribute( "d" ) );
 			obj = path;
 		}
 		else if( b.tagName() == "text" )
@@ -635,9 +635,10 @@ SvgImport::getCoord( const char *ptr, double &number )
 }
 
 void
-SvgImport::parsePath( VComposite *obj, const QDomElement &e )
+SvgImport::parsePath( VComposite *obj, const QString &s )
 {
-	QString d = e.attribute( "d" ).replace( QRegExp( "," ), " ");
+	QString d = s;
+	d = d.replace( QRegExp( "," ), " ");
 
 	if( !d.isEmpty() )
 	{
@@ -658,7 +659,7 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 
 			relative = false;
 
-			std::cout << "Command : " << command << std::endl;
+			//std::cout << "Command : " << command << std::endl;
 			switch( command )
 			{
 				case 'm':
