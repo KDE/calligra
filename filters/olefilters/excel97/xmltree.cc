@@ -183,7 +183,7 @@ headerCount(0), xfCount(0)
 
 	// ### David: I added m_locale to xmltree.h to make this compile
 	//     But setting the language on that locale isn't done at all in here...
-	m_locale.setLanguage("C"); // ##### FIXME
+	m_locale.setLanguage(QString("C")); // ##### FIXME
 }
 
 XMLTree::~XMLTree()
