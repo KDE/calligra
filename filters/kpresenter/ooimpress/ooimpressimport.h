@@ -50,7 +50,7 @@ private:
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
     void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
-    void appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
+    bool appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object);
     void appendPie( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object );
@@ -60,7 +60,7 @@ private:
     void appendPen( QDomDocument& doc, QDomElement& e );
     void appendBrush( QDomDocument& doc, QDomElement& e );
     void appendShadow( QDomDocument& doc, QDomElement& e );
-    void appendLineEnds( QDomDocument& doc, QDomElement& e );
+    void appendLineEnds( QDomDocument& doc, QDomElement& e, bool _ordreEndStartLine = true );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
 	void createPresentationAnimation(const QDomElement& element);

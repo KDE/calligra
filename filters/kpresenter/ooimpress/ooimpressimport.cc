@@ -496,11 +496,11 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 1 );
-                appendLineGeometry( doc, e, o, (int)offset );
+                bool ordreEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendShadow( doc, e );
-                appendLineEnds( doc, e );
+                appendLineEnds( doc, e, ordreEndStartLine );
                 appendObjectEffect(doc, e, o, soundElement);
             }
             else if (name=="draw:polyline") { // polyline
@@ -593,7 +593,8 @@ void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const
     e.appendChild( size );
 }
 
-void OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
+//return true if (x1 < x2) necessary to load correctly start-line and end-line
+bool OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
     double x1 = KoUnit::parseValue( object.attribute( "svg:x1" ) );
     double y1 = KoUnit::parseValue( object.attribute( "svg:y1" ) );
@@ -620,6 +621,7 @@ void OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, con
         linetype.setAttribute( "value", 3 );
 
     e.appendChild( linetype );
+    return (x1 < x2);
 }
 
 void OoImpressImport::appendPen( QDomDocument& doc, QDomElement& e )
@@ -1042,12 +1044,13 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
     }
 }
 
-void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e )
+void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e, bool ordreEndStartLine)
 {
-    if ( m_styleStack.hasAttribute( "draw:marker-start" ) )
+    QString attr = ordreEndStartLine ? "draw:marker-start" : "draw:marker-end";
+    if ( m_styleStack.hasAttribute( attr ) )
     {
         QDomElement lineBegin = doc.createElement( "LINEBEGIN" );
-        QString type = m_styleStack.attribute( "draw:marker-start" );
+        QString type = m_styleStack.attribute( attr );
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
             lineBegin.setAttribute( "value", 1 );
@@ -1063,10 +1066,11 @@ void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e )
             lineBegin.setAttribute( "value", 6 );
         e.appendChild( lineBegin );
     }
-    if ( m_styleStack.hasAttribute( "draw:marker-end" ) )
+    attr = ordreEndStartLine ? "draw:marker-end" : "draw:marker-start";
+    if ( m_styleStack.hasAttribute( attr ) )
     {
         QDomElement lineEnd = doc.createElement( "LINEEND" );
-        QString type = m_styleStack.attribute( "draw:marker-end" );
+        QString type = m_styleStack.attribute( attr );
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
             lineEnd.setAttribute( "value", 1 );
