@@ -2714,23 +2714,6 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
 
 //#define DEBUG_FRAMESELECT
 
-QPtrList<KWFrame> KWDocument::framesUnderFrame( KWFrame* frame ) const
-{
-    QPtrList<KWFrame> ret;
-    int page = QMIN(m_pages-1, frame->pageNum());
-    QPtrList<KWFrame> frames = framesInPage(page);
-
-    for (KWFrame *f = frames.first();f;f=frames.next()) { // z-order
-        // only consider non-inline frames, they are painted by their hosting frameset.
-        if (f->frameSet()->isFloating())
-            continue;
-        if ( f == frame )
-            break;
-        if ( f->intersects( *frame ) )
-            ret.append( f );
-    }
-    return ret;
-}
 
 KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border) {
 #ifdef DEBUG_FRAMESELECT
@@ -2787,25 +2770,16 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
             return f;
         }
     } else {
-        int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
-        QPtrList<KWFrame> frames = framesInPage(page);
-        bool alreadyFoundArgumentFrame=false;
-
-        for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
-            // only consider non-inline frames.
-            if (f->frameSet()->isFloating())
-                continue;
-
-            if (alreadyFoundArgumentFrame) {
-                if(f->frameAtPos(nPoint, true)) {
-                    if ( border ) *border = true;
-                    return f;
-                }
-                if(f->frameAtPos(nPoint))
-                    return deepestInlineFrame(f,nPoint,border);
-            } else if(f == frame)
-                alreadyFoundArgumentFrame=true;
-        }
+	QPtrList<KWFrame> frames = frame->framesBelow();
+	for (KWFrame *f = frames.last(); f;f=frames.prev()) {
+		if (f->frameAtPos(nPoint,true)) {
+			if(border) *border=true;
+			return f;
+		}
+		if (f->frameAtPos(nPoint)) {
+			return deepestInlineFrame(f,nPoint,border);
+		}
+	}
     }
     if (border != 0) *border=false;
     return 0L;
@@ -3004,18 +2978,6 @@ void KWDocument::fixZOrders() {
 }
 
 
-class KWFrameList: public QPtrList<KWFrame>
-{
-protected:
-    virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
-    {
-           int za = ((KWFrame *)a)->zOrder();
-           int zb = ((KWFrame *)b)->zOrder();
-           if (za == zb) return 0;
-           if (za < zb) return -1;
-           return 1;
-    }
-};
 
 // TODO pass viewmode for isVisible? Depends on how framesInPage is being used...
 QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted) const {

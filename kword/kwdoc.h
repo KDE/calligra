@@ -229,8 +229,6 @@ public:
      */
     KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
 
-    QPtrList<KWFrame> framesUnderFrame( KWFrame* frame ) const;
-
     // Return the total number of framesets
     unsigned int getNumFrameSets()
     { return m_lstFrameSet.count(); }
