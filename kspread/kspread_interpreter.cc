@@ -148,13 +148,13 @@ bool kspreadfunc_iseven( KSContext& context );
 bool kspreadfunc_char( KSContext& context );
 bool kspreadfunc_clean( KSContext& context );
 bool kspreadfunc_code( KSContext& context );
-bool kspreadfunc_compare( KSContext& context ); // KSpread specific
+bool kspreadfunc_compare( KSContext& context );
 bool kspreadfunc_concatenate( KSContext& context ); 
 bool kspreadfunc_dollar( KSContext& context ); 
 bool kspreadfunc_exact( KSContext& context );
 bool kspreadfunc_find( KSContext& context );
 bool kspreadfunc_fixed( KSContext& context ); 
-bool kspreadfunc_join( KSContext& context );    // obsolete, use CONCATENATE
+bool kspreadfunc_join( KSContext& context );  
 bool kspreadfunc_left( KSContext& context );
 bool kspreadfunc_len( KSContext& context );
 bool kspreadfunc_lower( KSContext& context );
@@ -163,12 +163,12 @@ bool kspreadfunc_proper(KSContext & context);
 bool kspreadfunc_replace( KSContext& context );
 bool kspreadfunc_rept( KSContext& context );
 bool kspreadfunc_right( KSContext& context );
-bool kspreadfunc_search( KSContext& context ); //TODO
-bool kspreadfunc_sleek( KSContext& context );   // KSpread-specific
-bool kspreadfunc_substitute( KSContext& context ); //TODO
+bool kspreadfunc_search( KSContext& context ); 
+bool kspreadfunc_sleek( KSContext& context );
+bool kspreadfunc_substitute( KSContext& context ); 
 bool kspreadfunc_t( KSContext& context ); 
 bool kspreadfunc_text( KSContext& context ); 
-bool kspreadfunc_toggle( KSContext& context );  // KSpread-specific
+bool kspreadfunc_toggle( KSContext& context ); 
 bool kspreadfunc_trim(KSContext& context );
 bool kspreadfunc_upper( KSContext& context );
 bool kspreadfunc_value( KSContext& context );
@@ -628,7 +628,7 @@ static const functionEntry funcTab[] = {
   { "SLN", kspreadfunc_sln },
   { "SYD", kspreadfunc_syd },
   { "DB", kspreadfunc_db },
-  { "EURO", kspreadfunc_euro },
+  { "EURO", kspreadfunc_euro },  // KSpread-specific, Gnumeric-compatible
 
   // text
   { "CHAR", kspreadfunc_char },
@@ -649,12 +649,12 @@ static const functionEntry funcTab[] = {
   { "REPLACE", kspreadfunc_replace },
   { "REPT", kspreadfunc_rept },
   { "RIGHT", kspreadfunc_right },
-  //{ "SEARCH", kspreadfunc_search },
-  { "SLEEK", kspreadfunc_sleek },
+  { "SEARCH", kspreadfunc_search },
+  { "SLEEK", kspreadfunc_sleek },  // KSpread-specific
   { "SUBSTITUTE", kspreadfunc_substitute },
   { "T", kspreadfunc_t },
   { "TEXT", kspreadfunc_text },
-  { "TOGGLE", kspreadfunc_toggle },
+  { "TOGGLE", kspreadfunc_toggle }, // KSpread-specific
   { "TRIM", kspreadfunc_trim },
   { "UPPER", kspreadfunc_upper },
   { "VALUE", kspreadfunc_value },

@@ -8,6 +8,8 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
+#include <qregexp.h>
+
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
@@ -502,6 +504,45 @@ bool kspreadfunc_right( KSContext& context )
 
     QString tmp = args[0]->stringValue().right(nb);
     context.setValue( new KSValue(tmp));
+    return true;
+}
+
+// Function: SEARCH
+bool kspreadfunc_search( KSContext& context )
+{
+    QString find_text, within_text;
+    int start_num = 1;
+
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( KSUtil::checkArgumentsCount( context, 3, "SEARCH", false ) )
+    {
+      if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+        return false;
+      start_num = args[2]->intValue();
+    }
+    else if ( !KSUtil::checkArgumentsCount( context, 2, "SEARCH", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+      return false;
+
+    find_text = args[0]->stringValue();
+    within_text = args[1]->stringValue();
+
+    // conforms to Excel behaviour
+    if( start_num <= 0 ) return false;
+    if( start_num > (int)within_text.length() ) return false;
+
+    // use globbing feature of QRegExp
+    QRegExp regex( find_text, false, true );
+    int pos = within_text.find( regex, start_num-1 );
+    if( pos < 0 ) return false;
+
+    context.setValue( new KSValue( pos + 1 ) );
     return true;
 }
 
