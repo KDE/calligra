@@ -18,7 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kdualcolorbtn.h>
 
 #include "kis_sidebar.h"
@@ -135,7 +135,7 @@ TopFrame::TopFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
   m_pEmptyFrame->setFrameStyle(Panel | Raised);
   m_pEmptyFrame->setLineWidth(1);
 
-  QFont font = KGlobal::generalFont();
+  QFont font = KGlobalSettings::generalFont();
   font.setPointSize( 8 );
 
   m_pGreyButton->setFont(font);
@@ -265,7 +265,7 @@ void DockFrame::plug (QWidget* w)
   KisFrameButton* btn = new KisFrameButton(this);
   btn->setToggleButton(true);
 
-  QFont font = KGlobal::generalFont();
+  QFont font = KGlobalSettings::generalFont();
   font.setPointSize( 8 );
 
   btn->setFont(font);
@@ -456,12 +456,12 @@ void ControlFrame::resizeEvent ( QResizeEvent * )
 
 void ControlFrame::slotSetFGColor(const KisColor& c)
 {
-  m_pColorButton->slotSetForeground( c.color() );
+  m_pColorButton->setForeground( c.color() );
 }
 
 void ControlFrame::slotSetBGColor(const KisColor& c)
 {
-  m_pColorButton->slotSetBackground( c.color() );
+  m_pColorButton->setBackground( c.color() );
 }
 
 void ControlFrame::slotFGColorSelected(const QColor& c)

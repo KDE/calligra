@@ -24,6 +24,7 @@
 #include <qwindowsstyle.h>
 
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kstddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -258,7 +259,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 		  if (m_activeShadePm.size() != r.size())
 			{
 			  m_activeShadePm.resize(r.width(), r.height());
-			  KPixmapEffect::gradient(m_activeShadePm, kapp->activeTitleColor(),
+			  KPixmapEffect::gradient(m_activeShadePm, KGlobalSettings::activeTitleColor(),
 									  m_activeBlend, m_gradientType);
 			}
 		  pm = &m_activeShadePm;
@@ -268,7 +269,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 		  if (m_inactiveShadePm.size() != r.size())
 			{
 			  m_inactiveShadePm.resize(r.width(), r.height());
-			  KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(),
+			  KPixmapEffect::gradient(m_inactiveShadePm, KGlobalSettings::inactiveTitleColor(),
 									  m_inactiveBlend, m_gradientType);
 			}
 		  pm = &m_inactiveShadePm;
@@ -278,13 +279,13 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
   // plain
   else
     {
-      p.setBackgroundColor(hasFocus() ? kapp->activeTitleColor()
-						   : kapp->inactiveTitleColor());
+      p.setBackgroundColor(hasFocus() ? KGlobalSettings::activeTitleColor()
+						   : KGlobalSettings::inactiveTitleColor());
       p.eraseRect(r);
     }
 
   // paint caption
-  p.setPen(hasFocus() ? kapp->activeTextColor() : kapp->inactiveTextColor());
+  p.setPen(hasFocus() ? KGlobalSettings::activeTextColor() : KGlobalSettings::inactiveTextColor());
 
   // FIXME: we need a global KIS config class that provides for example a KIS-global small font
   // p.setFont(tinyFont);
