@@ -10,9 +10,7 @@ Object hierarchy:
         |
 vobject-+- vtext
         |
-        |         +- vselection
-        +- vgroup-+
-                  +- vlayer
+        +- vgroup-+- vlayer
 
 
 Files and directories:

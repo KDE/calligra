@@ -11,16 +11,20 @@
 #include <kdebug.h>
 
 
-VSelection::VSelection( VObject* parent, VState /*state*/ )
-	: VGroup( parent )
+VSelection::VSelection( VObject* parent )
+	: VObject( parent )
 {
 	m_qrect = new QRect[9];
 }
 
 VSelection::VSelection( const VSelection& selection )
-	: VGroup( selection, false )
+	: VObject( selection )
 {
 	m_qrect = new QRect[9];
+
+	VObjectListIterator itr = m_objects;
+	for ( ; itr.current() ; ++itr )
+		append( itr.current() );
 }
 
 VSelection::~VSelection()
@@ -34,6 +38,30 @@ VSelection*
 VSelection::clone() const
 {
 	return new VSelection( *this );
+}
+
+void
+VSelection::take( const VObject& object )
+{
+	m_objects.removeRef( &object );
+
+	invalidateBoundingBox();
+}
+
+void
+VSelection::append( VObject* object )
+{
+	m_objects.append( object );
+
+	invalidateBoundingBox();
+}
+
+void
+VSelection::clear()
+{
+	m_objects.clear();
+
+	invalidateBoundingBox();
 }
 
 void
@@ -105,6 +133,41 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 	for( uint i = node_lt; i <= node_rb; ++i )
 		painter->drawRect( m_qrect[i] );
 }
+
+const KoRect&
+VSelection::boundingBox() const
+{
+	// check children for bbox invalidity:
+	if( !m_boundingBoxIsInvalid )
+	{
+		VObjectListIterator itr = m_objects;
+		for( ; itr.current(); ++itr )
+		{
+			if( itr.current()->boundingBoxIsInvalid() )
+			{
+				m_boundingBoxIsInvalid = true;
+				break;
+			}
+		}
+	}
+
+	if( m_boundingBoxIsInvalid )
+	{
+		// clear:
+		m_boundingBox = KoRect();
+
+		VObjectListIterator itr = m_objects;
+		for( ; itr.current(); ++itr )
+		{
+			m_boundingBox |= itr.current()->boundingBox();
+		}
+
+		m_boundingBoxIsInvalid = false;
+	}
+
+	return m_boundingBox;
+}
+
 
 VHandleNode
 VSelection::node( const QPoint& point ) const

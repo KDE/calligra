@@ -26,7 +26,7 @@ class VGroup : public VObject
 {
 public:
 	VGroup( VObject* parent = 0L, VState state = state_normal );
-	VGroup( const VGroup& group, bool copy = true );
+	VGroup( const VGroup& group );
 
 	virtual ~VGroup();
 
@@ -54,7 +54,6 @@ public:
 	/// Removes the reference to the object, not the object itself
 	void take( const VObject& object );
 
-	void prepend( VObject* object );
 	void append( VObject* object );
 
 	/// Clears the group, without destroying the grouped objects.

@@ -20,21 +20,12 @@ VGroup::VGroup( VObject* parent, VState state )
 {
 }
 
-VGroup::VGroup( const VGroup& group, bool copy )
+VGroup::VGroup( const VGroup& group )
 	: VObject( group )
 {
 	VObjectListIterator itr = group.m_objects;
-
-	if( copy )
-	{
-		for ( ; itr.current() ; ++itr )
-			append( itr.current()->clone() );
-	}
-	else
-	{
-		for ( ; itr.current() ; ++itr )
-			append( itr.current() );
-	}
+	for ( ; itr.current() ; ++itr )
+		append( itr.current()->clone() );
 }
 
 VGroup::~VGroup()
@@ -197,14 +188,6 @@ void
 VGroup::take( const VObject& object )
 {
 	m_objects.removeRef( &object );
-}
-
-void
-VGroup::prepend( VObject* object )
-{
-	object->setParent( this );
-
-	m_objects.prepend( object );
 
 	invalidateBoundingBox();
 }
@@ -223,4 +206,7 @@ void
 VGroup::clear()
 {
 	m_objects.clear();
+
+	invalidateBoundingBox();
 }
+
