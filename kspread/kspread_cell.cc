@@ -3473,8 +3473,8 @@ void KSpreadCell::checkTextInput()
             else
                 setFormatType(ShortDate);
         }
-        // Parsing as date acts like an autoformat: we even change m_strText
-        m_strText = locale()->formatDate(valueDate(), true); //short format date
+
+        m_strText = str;
         return;
     }
 

@@ -381,13 +381,18 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 
 void KSpreadTable::autofill( QRect &src, QRect &dest )
 {
-    if(src==dest || ( src.right() >= dest.right() &&  src.bottom() >= dest.bottom()))
+    if(src==dest || ( src.right() >= dest.right() &&
+                      src.bottom() >= dest.bottom()))
+    {
         return;
+    }
+
     if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( m_pDoc, this, dest );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+    {
+      KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( m_pDoc, this, dest );
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
     // Fill from left to right
     if ( src.left() == dest.left() && src.right() < dest.right() )
     {
@@ -431,7 +436,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
 }
 
 
-void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, 
+void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList,
 				 QPtrList<KSpreadCell>& _destList,
                                  QPtrList<AutoFillSequence>& _seqList )
 {
@@ -449,7 +454,7 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList,
 
 
 bool KSpreadTable::FillSequenceWithInterval
-(QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, 
+(QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList,
  QPtrList<AutoFillSequence>& _seqList)
 {
   QPtrList<AutoFillDeltaSequence> deltaList;
@@ -461,7 +466,7 @@ bool KSpreadTable::FillSequenceWithInterval
   // then the interval has the length 1 and the delta list is [2].
   // 2 200 3 300 4 400
   // Here the interval has length 2 and the delta list is [1,100]
-  
+
 
   // How big is the interval. It is in the range from [2...n/2].
   // The case of an interval of length n is handled below.
@@ -477,14 +482,14 @@ bool KSpreadTable::FillSequenceWithInterval
       ok = true;
 
       deltaList.clear();
-      
+
       // Guess the delta by looking at cells 0...2*step-1
       //
       // Since the interval may be of length 'step' we calculate the delta
       // between cells 0 and step, 1 and step+1, ...., step-1 and 2*step-1
       for ( unsigned int t = 0; t < step; t++ )
       {
-	deltaList.append( new AutoFillDeltaSequence( _seqList.at(t), 
+	deltaList.append( new AutoFillDeltaSequence( _seqList.at(t),
 						     _seqList.at(t+step) ) );
 	ok = deltaList.getLast()->isOk();
       }
@@ -492,10 +497,10 @@ bool KSpreadTable::FillSequenceWithInterval
       /* Verify the delta by looking at cells step..._seqList.count()
 	 We only looked at the cells 0 ... '2*step-1'.
 	 Now test wether the cells from "(tst-1) * step + s" share the same delta
-	 with the cell "tst * step + s" for all test=1..._seqList.count()/step 
+	 with the cell "tst * step + s" for all test=1..._seqList.count()/step
 	 and for all s=0...step-1.
       */
-      for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() ); 
+      for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() );
 	    tst++ )
       {
 	for ( unsigned int s = 0; ok && ( s < step ); s++ )
@@ -523,9 +528,9 @@ bool KSpreadTable::FillSequenceWithInterval
 	    block++;
 	    s = 0;
 	  }
-	  // Set the value of 'cell' by adding 'block' times the delta tp the 
+	  // Set the value of 'cell' by adding 'block' times the delta tp the
 	  // value of cell 's'.
-	  _seqList.at( s )->fillCell( _srcList.at( s ), cell, 
+	  _seqList.at( s )->fillCell( _srcList.at( s ), cell,
 				      deltaList.at( s ), block );
 	  // Next cell
 	  cell = _destList.next();
@@ -535,7 +540,7 @@ bool KSpreadTable::FillSequenceWithInterval
     }
   }
   return ok;
-  
+
 }
 
 void KSpreadTable::FillSequenceWithCopy
@@ -583,8 +588,8 @@ void KSpreadTable::FillSequenceWithCopy
 	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
       }
       else if((AutoFillSequenceItem::month != 0L)
-	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != 0L 
-	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() 
+	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != 0L
+	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end()
 	      && _srcList.count() == 1)
       {
 	QString strMonth=_srcList.at( s )->text();
@@ -594,9 +599,9 @@ void KSpreadTable::FillSequenceWithCopy
 	incre++;
       }
       else if(AutoFillSequenceItem::day != 0L
-	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != 0L 
-	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) 
-	         != AutoFillSequenceItem::day->end() 
+	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != 0L
+	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text())
+	         != AutoFillSequenceItem::day->end()
 	      && _srcList.count()==1)
       {
 	QString strDay=_srcList.at( s )->text();
