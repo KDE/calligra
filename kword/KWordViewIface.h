@@ -77,6 +77,14 @@ k_dcop:
 
     virtual void insertFootNote();
 
+    int configTableRows() const;
+    int configTableCols() const;
+    bool configTableIsFloating() const;
+    int configSplitCellRows() const;
+    int configSplitCellCols() const;
+    void setConfigSplitCellRows( unsigned int _nb );
+    void setConfigSplitCellCols( unsigned int _nb );
+
 private:
     KWView *view;
 
