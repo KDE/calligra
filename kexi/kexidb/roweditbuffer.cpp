@@ -26,9 +26,9 @@ using namespace KexiDB;
 
 RowEditBuffer::RowEditBuffer(bool dbAwareBuffer)
 : m_simpleBuffer(dbAwareBuffer ? 0 : new SimpleMap())
-, m_simpleBufferIt(dbAwareBuffer ? 0 : new SimpleMap::Iterator())
+, m_simpleBufferIt(dbAwareBuffer ? 0 : new SimpleMap::ConstIterator())
 , m_dbBuffer(dbAwareBuffer ? new DBMap() : 0)
-, m_dbBufferIt(dbAwareBuffer ? new DBMap::Iterator() : 0)
+, m_dbBufferIt(dbAwareBuffer ? new DBMap::ConstIterator() : 0)
 {
 }
 
@@ -40,38 +40,38 @@ RowEditBuffer::~RowEditBuffer()
 	delete m_dbBufferIt;
 }
 
-QVariant* RowEditBuffer::at( QueryColumnInfo& fi ) 
+const QVariant* RowEditBuffer::at( QueryColumnInfo& fi ) const
 { 
 	if (!m_dbBuffer) {
 		KexiDBWarning << "RowEditBuffer::at(QueryColumnInfo&): not db-aware buffer!" << endl;
 		return 0;
 	}
 	*m_dbBufferIt = m_dbBuffer->find( &fi );
-	if (*m_dbBufferIt==m_dbBuffer->end())
+	if (*m_dbBufferIt==m_dbBuffer->constEnd())
 		return 0;
 	return &(*m_dbBufferIt).data();
 }
 
-QVariant* RowEditBuffer::at( Field& f )
+const QVariant* RowEditBuffer::at( Field& f ) const
 {
 	if (!m_simpleBuffer) {
 		KexiDBWarning << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
 		return 0;
 	}
 	*m_simpleBufferIt = m_simpleBuffer->find( f.name() );
-	if (*m_simpleBufferIt==m_simpleBuffer->end())
+	if (*m_simpleBufferIt==m_simpleBuffer->constEnd())
 		return 0;
 	return &(*m_simpleBufferIt).data();
 }
 
-QVariant* RowEditBuffer::at( const QString& fname )
+const QVariant* RowEditBuffer::at( const QString& fname ) const
 {
 	if (!m_simpleBuffer) {
 		KexiDBWarning << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
 		return 0;
 	}
 	*m_simpleBufferIt = m_simpleBuffer->find( fname );
-	if (*m_simpleBufferIt==m_simpleBuffer->end())
+	if (*m_simpleBufferIt==m_simpleBuffer->constEnd())
 		return 0;
 	return &(*m_simpleBufferIt).data();
 }
@@ -96,14 +96,14 @@ void RowEditBuffer::debug()
 {
 	if (isDBAware()) {
 		kdDebug() << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
-		for (DBMap::Iterator it = m_dbBuffer->begin(); it!=m_dbBuffer->end(); ++it) {
+		for (DBMap::ConstIterator it = m_dbBuffer->constBegin(); it!=m_dbBuffer->constEnd(); ++it) {
 			kdDebug() << "* field name=" <<it.key()->field->name()<<" val="
 				<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
 		}
 		return;
 	}
 	kdDebug() << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() <<" items"<< endl;
-	for (SimpleMap::Iterator it = m_simpleBuffer->begin(); it!=m_simpleBuffer->end(); ++it) {
+	for (SimpleMap::ConstIterator it = m_simpleBuffer->constBegin(); it!=m_simpleBuffer->constEnd(); ++it) {
 		kdDebug() << "* field name=" <<it.key()<<" val="
 			<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
 	}

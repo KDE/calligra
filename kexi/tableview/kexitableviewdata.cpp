@@ -248,13 +248,8 @@ void KexiTableViewData::init(
 	addColumn(valueColumn);
 
 	uint cnt = QMIN(keys.count(), values.count());
-#if (QT_VERSION >= 0x030200) //TMP 
 	QValueList<QVariant>::ConstIterator it_keys = keys.constBegin();
 	QValueList<QVariant>::ConstIterator it_values = values.constBegin();
-#else
-	QValueListConstIterator<QVariant> it_keys = keys.begin();
-	QValueListConstIterator<QVariant> it_values = values.begin();
-#endif
 	for (;cnt>0;++it_keys, ++it_values, cnt--) {
 		KexiTableItem *item = new KexiTableItem(2);
 		(*item)[0] = (*it_keys);
@@ -489,7 +484,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 	KexiTableViewColumn::ListIterator it_f(columns);
 	KexiDB::RowData::iterator it_r = item.begin();
 	int col = 0;
-	QVariant *val;
+	const QVariant *val;
 	for (;it_f.current() && it_r!=item.end();++it_f,++it_r,col++) {
 		KexiDB::Field *f = it_f.current()->field();
 		val = 0;

@@ -95,7 +95,7 @@ bool DriverManagerInternal::lookupDrivers()
 	lookupDriversNeeded = false;
 	clearError();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/DBDriver");
-	KTrader::OfferList::Iterator it(tlist.begin());
+	KTrader::OfferList::ConstIterator it(tlist.begin());
 	for(; it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
@@ -248,8 +248,8 @@ const KexiDB::Driver::InfoMap DriverManager::driversInfo()
 	
 	if (!d_int->m_driversInfo.isEmpty())
 		return d_int->m_driversInfo;
-	ServicesMap::Iterator it;
-	for ( it=d_int->m_services.begin() ; it != d_int->m_services.end(); ++it ) {
+	ServicesMap::ConstIterator it;
+	for ( it=d_int->m_services.constBegin() ; it != d_int->m_services.constEnd(); ++it ) {
 		Driver::Info info;
 		KService::Ptr ptr = it.data();
 		info.name = ptr->property("X-Kexi-DriverName").toString();

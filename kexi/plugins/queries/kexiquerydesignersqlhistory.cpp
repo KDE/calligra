@@ -264,21 +264,12 @@ HistoryEntry::highlight(const QColorGroup &cg)
 	bool dblquote = false;
 
 	statement = m_statement;
-#if QT_VERSION >= 0x030100 //(js)
 	statement.replace("<", "&lt;");
 	statement.replace(">", "&gt;");
 	statement.replace("\r\n", "<br>"); //(js) first win32 specific pair
 	statement.replace("\n", "<br>"); // now single \n
 	statement.replace(" ", "&nbsp;");
 	statement.replace("\t", "&nbsp;&nbsp;&nbsp;");
-#else //temporary
-	statement.replace(QRegExp("<"), "&lt;");
-	statement.replace(QRegExp(">"), "&gt;");
-	statement.replace(QRegExp("\r\n"), "<br>"); //(js) first win32 specific pair
-	statement.replace(QRegExp("\n"), "<br>"); // now single \n
-	statement.replace(QRegExp(" "), "&nbsp;");
-	statement.replace(QRegExp("\t"), "&nbsp;&nbsp;&nbsp;");
-#endif
 
 	// getting quoting...
 	if(!m_selected)

@@ -122,7 +122,7 @@ public:
 
 	inline KexiTableItem *itemAt(int row) const;
 
-	QVariant* bufferedValueAt(int col);
+	const QVariant* bufferedValueAt(int col);
 	
 	/*! \return true if data represented by this table view 
 	 is not editable using it (it can be editable with other ways although). */

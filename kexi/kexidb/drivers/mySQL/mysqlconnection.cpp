@@ -64,7 +64,7 @@ bool MySqlConnection::drv_connect()
 			sockets.append("/var/run/mysqld/mysqld.sock");
 			sockets.append("/tmp/mysql.sock");
 	
-			for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
+			for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
 			{
 				if(QFile(*it).exists()) {
 					socket = (*it);
@@ -271,7 +271,7 @@ MySqlDB::connect(const QString& host, const QString& user, const QString& passwo
 		sockets.append("/var/run/mysqld/mysqld.sock");
 		sockets.append("/tmp/mysql.sock");
 
-		for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
+		for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
 		{
 			if(QFile(*it).exists())
 				msocket = (*it);

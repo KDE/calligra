@@ -31,11 +31,43 @@
 namespace KexiDB {
 
 class TableSchema;
+class QuerySchema;
 class FieldList;
 class BaseExpr;
 
 //! Meta-data for a field
 /*! KexiDB::Field provides information about single database field.
+
+ Field class has defined following members:
+ - name
+ - type
+ - database constraints
+ - additional options
+ - length (make sense mostly for string types)
+ - precision (for floating-point type)
+ - defaultValue
+ - caption (user readable name that can be e.g. translated)
+ - description (user readable name additional text, can be useful for developers)
+ - width (a hint for displaying in tabular mode or as text box)
+ 
+ Field can also have assigned expression (see KexiDB::BaseExpr class, 
+ and expression() method).
+ If an expression is defined, then field's name is 
+
+ Note that aliases for fields are defined within query, not in Field object, 
+ because the same field can be used in different queries with different alias.
+
+ Notes for advanced use: Field obeject is designed to be owned by a parent object. 
+ Such a parent object can be KexiDB::TableSchema, if the field defines single table column,
+ or KexiDB::QuerySchema, if the field defines an expression (KexiDB::BaseExpr class).
+
+ Using expression class for fields allos to define expressions within queries like
+ "SELECT AVG(price) FROM products"
+
+ You can choose whether your field is owned by query or table, 
+ using appropriate constructor, or using parameterless constructor and 
+ calling setTable() or setQuery() later.
+
 */
 class KEXI_DB_EXPORT Field
 {
@@ -75,6 +107,7 @@ class KEXI_DB_EXPORT Field
 			Map = 130        /*!< mapping from string to string list (more generic than Enum */
 		};
 
+//TODO: make this configurable
 		static int defaultTextLength() { return 200; }
 
 		/*! Type groups for fields. */
@@ -91,30 +124,6 @@ class KEXI_DB_EXPORT Field
 			LastTypeGroup = 6 // This line should be at the end of the enum!
 		};
 
-/*		enum ColumnType
-		{
-			SQLInvalid = 0,
-			SQLBigInt,
-			SQLBinary,
-			SQLBoolean,
-			SQLDate,
-			SQLDecimal,
-			SQLDouble,
-			SQLFloat,
-			SQLInteger,
-			SQLInterval,
-			SQLLongVarBinary,
-			SQLLongVarchar,
-			SQLNumeric,
-			SQLSmallInt,
-			SQLTime,
-			SQLTimeStamp,
-			SQLTinyInt,
-			SQLVarBinary,
-			SQLVarchar,
-			SQLLastType	// This line should be at the end of the enum!
-		};
-*/
 		enum Constraints
 		{
 			NoConstraints = 0,
@@ -134,6 +143,7 @@ class KEXI_DB_EXPORT Field
 		};
 
 		Field(TableSchema *tableSchema);
+		Field(QuerySchema *querySchema);
 		Field();
 
 		Field(const QString& name, Type ctype,
@@ -183,8 +193,31 @@ class KEXI_DB_EXPORT Field
 		/* ! \return the name of this field */
 		inline QString name() const { return m_name; }
 		
-		/*! \return table schema of table that owns this field. */
+		/*! \return table schema of table that owns this field
+		 or null if it has no table assigned. 
+		 @see query() */
 		virtual TableSchema* table() const;
+
+		/*! Sets \a table schema of table that owns this field. 
+		 This does not adds the field to \a table object. 
+		 You do not need to call this method by hand. 
+		 Call TableSchema::addField(Field *field) instead. 
+		 @see setQuery() */
+		virtual void setTable(TableSchema *table);
+
+		/*! For special use when the field defines expression.
+		 \return query schema of query that owns this field
+		 or null if it has no query assigned. 
+		 @see table() */
+		QuerySchema* query() const;
+
+		/*! For special use when field defines expression.
+		 Sets \a query schema of query that owns this field. 
+		 This does not adds the field to \a query object. 
+		 You do not need to call this method by hand. 
+		 Call QuerySchema::addField() instead. 
+		 @see setQuery() */
+		void setQuery(QuerySchema *query);
 
 		/*! \return true if the field is autoincrement (e.g. integer/numeric) */
 		inline bool isAutoIncrement() const { return constraints() & AutoInc; }
@@ -323,8 +356,6 @@ class KEXI_DB_EXPORT Field
 
 		void setType(Type t);
 
-		virtual void setTable(TableSchema *table);
-
 		void setName(const QString& n);
 
 		/*! Sets constraints to \a c. If PrimaryKey is set in \a c, also 
@@ -427,14 +458,17 @@ class KEXI_DB_EXPORT Field
 		*/
 		inline KexiDB::BaseExpr *expression() { return m_expr; }
 
-		/*! Sets expression data \a expr. If \a expr there was 
+		/*! Sets expression data \a expr. If there was 
 		 already expression set, it is destroyed before new assignment.
-		 this Field object becames owner of passed \a expr object
-		 - you do not have to worry about deleting of \a expr.
-		 \a expr can be null - then current field's expression is cleared.
+		 This Field object becames owner of \a expr object,
+		 so you do not have to worry about deleting it later.
+		 If the \a expr is null, current field's expression is deleted, if exists.
 		*/
 		void setExpression(KexiDB::BaseExpr *expr);
-		
+
+		/*! \return true if there is expression defined for this field.
+		 This method is provided for better readibility 
+		 - does the same as expression()!=NULL but */
 		inline bool isExpression() const { return m_expr!=NULL; }
 
 //<TMP>
@@ -446,6 +480,9 @@ class KEXI_DB_EXPORT Field
 //</TMP>
 
 	protected:
+		/*! @internal Used by constructors. */
+		void init();
+
 		FieldList *m_parent; //!< In most cases this points to a TableSchema 
 		                     //!< object that field is assigned.
 		QString m_name;

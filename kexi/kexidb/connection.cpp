@@ -242,7 +242,7 @@ QStringList Connection::databaseNames(bool also_system_db)
 	if (also_system_db)
 		return list;
 	//filter system databases:
-	for (QStringList::Iterator it = list.begin(); it!=list.end(); ++it) {
+	for (QStringList::ConstIterator it = list.constBegin(); it!=list.constEnd(); ++it) {
 		KexiDBDbg << "Connection::databaseNames(): " << *it << endl;
 		if (!m_driver->isSystemDatabaseName(*it)) {
 			KexiDBDbg << "add " << endl;
@@ -512,9 +512,9 @@ bool Connection::closeDatabase()
 /*! \todo (js) add CLEVER algorithm here for nested transactions */
 	if (m_driver->transactionsSupported()) {
 		//rollback all transactions
-		QValueList<Transaction>::iterator it;
+		QValueList<Transaction>::ConstIterator it;
 		d->m_dont_remove_transactions=true; //lock!
-		for (it=d->m_transactions.begin(); it!= d->m_transactions.end(); ++it) {
+		for (it=d->m_transactions.constBegin(); it!= d->m_transactions.constEnd(); ++it) {
 			if (!rollbackTransaction(*it)) {//rollback as much as you can, don't stop on prev. errors
 				ret = false;
 			}
@@ -877,7 +877,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 //	QString s_val; 
 //	s_val.reserve(4096);
 	m_sql = QString::null;
-	QValueList<QVariant>::iterator it = values.begin();
+	QValueList<QVariant>::ConstIterator it = values.constBegin();
 	int i=0;
 	while (f && (it!=values.end())) {
 		if (m_sql.isEmpty())
@@ -907,9 +907,9 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 //	QString s_val; 
 //	s_val.reserve(4096);
 	m_sql = QString::null;
-	QValueList<QVariant>::iterator it = values.begin();
+	QValueList<QVariant>::ConstIterator it = values.constBegin();
 	int i=0;
-	while (f && (it!=values.end())) {
+	while (f && (it!=values.constEnd())) {
 		if (m_sql.isEmpty())
 			m_sql = QString("INSERT INTO ") + 
 				escapeIdentifier(flist->first()->table()->name()) + "(" +

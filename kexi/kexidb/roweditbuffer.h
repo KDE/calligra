@@ -72,11 +72,11 @@ public:
 		{ if (m_simpleBuffer) m_simpleBuffer->insert(fname,val); }
 
 	//! useful only for db-aware buffer
-	QVariant* at( QueryColumnInfo& fi );
+	const QVariant* at( QueryColumnInfo& fi ) const;
 	
 	//! useful only for not-db-aware buffer
-	QVariant* at( Field& f );
-	QVariant* at( const QString& fname );
+	const QVariant* at( Field& f ) const;
+	const QVariant* at( const QString& fname ) const;
 
 	inline const SimpleMap simpleBuffer() { return *m_simpleBuffer; }
 	inline const DBMap dbBuffer() { return *m_dbBuffer; }
@@ -86,9 +86,9 @@ public:
 
 protected:
 	SimpleMap *m_simpleBuffer;
-	SimpleMap::Iterator *m_simpleBufferIt;
+	SimpleMap::ConstIterator *m_simpleBufferIt;
 	DBMap *m_dbBuffer;
-	DBMap::Iterator *m_dbBufferIt;
+	DBMap::ConstIterator *m_dbBufferIt;
 };
 
 } //namespace KexiDB

@@ -36,33 +36,25 @@ Field::FieldTypeNames Field::m_typeNames;
 Field::FieldTypeGroupNames Field::m_typeGroupNames;
 
 Field::Field()
-	:m_parent(0)
-	,m_name("")
-	,m_type(InvalidType)
-	,m_length(0)
-	,m_precision(0)
-	,m_options(NoOptions)
-	,m_defaultValue( QVariant(QString::null) )
-	,m_order(-1)
-	,m_width(0)
-	,m_expr(0)
 {
+	init();
 	setConstraints(NoConstraints);
 }
 
 
 Field::Field(TableSchema *tableSchema)
-	:m_parent(tableSchema)
-	,m_name("")
-	,m_type(InvalidType)
-	,m_length(0)
-	,m_precision(0)
-	,m_options(NoOptions)
-	,m_defaultValue( QVariant(QString::null) )
-	,m_order(tableSchema->fieldCount())
-	,m_width(0)
-	,m_expr(0)
 {
+	init();
+	m_parent = tableSchema;
+	m_order = tableSchema->fieldCount();
+	setConstraints(NoConstraints);
+}
+
+Field::Field(QuerySchema *querySchema)
+{
+	init();
+	m_parent = querySchema;
+	m_order = querySchema->fieldCount();
 	setConstraints(NoConstraints);
 }
 
@@ -104,6 +96,20 @@ Field::Field(const Field& f)
 Field::~Field()
 {
 	delete m_expr;
+}
+
+void Field::init()
+{
+	m_parent = 0;
+	m_name = "";
+	m_type = InvalidType;
+	m_length = 0;
+	m_precision = 0;
+	m_options = NoOptions;
+	m_defaultValue = QVariant(QString::null);
+	m_order = -1;
+	m_width = 0;
+	m_expr = 0;
 }
 
 QVariant::Type Field::variantType(uint type)
@@ -266,13 +272,25 @@ Field::TypeGroup Field::typeGroup(uint type)
 TableSchema*
 Field::table() const
 {
-	return static_cast<TableSchema*>(m_parent);
+	return dynamic_cast<TableSchema*>(m_parent);
 }
 
 void
 Field::setTable(TableSchema *tableSchema)
 {
 	m_parent = tableSchema;
+}
+
+QuerySchema*
+Field::query() const
+{
+	return dynamic_cast<QuerySchema*>(m_parent);
+}
+
+void
+Field::setQuery(QuerySchema *querySchema)
+{
+	m_parent = querySchema;
 }
 
 void
@@ -361,11 +379,7 @@ Field::setDefaultValue(const QCString& def)
 			if (!ok || (!(m_options & Unsigned) && (-v > (int)0x07FFFFFFF || v > (int)(0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
-#if (QT_VERSION >= 0x030200) //TMP
 				m_defaultValue = QVariant((Q_LLONG)v);
-#else
-				m_defaultValue = QVariant(); //do not works
-#endif
 			break;
 		}case BigInteger: {//8 bytes
 #ifndef Q_WS_WIN

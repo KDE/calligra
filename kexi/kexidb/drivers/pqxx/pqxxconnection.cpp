@@ -120,7 +120,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
         {
             sockets.append("/tmp/.s.PGSQL.5432");
 
-            for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
+            for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
             {
                 if(QFile(*it).exists())
                 {

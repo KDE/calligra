@@ -88,9 +88,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 //	m_doc = doc;
 
 	d->spl = new QSplitter(Vertical, this);
-#if (QT_VERSION >= 0x030200) //TMP 
 	d->spl->setChildrenCollapsible(false);
-#endif
 //	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
 	d->relations = new KexiRelationWidget(mainWin, d->spl, "relations");
 	connect(d->relations, SIGNAL(tableAdded(KexiDB::TableSchema&)),
