@@ -23,7 +23,6 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   // hack
 
   cerr << "Creating kchartWizard\n";
-  KGlobal::iconLoader()->setIconType( "icon" );
 
   // First page: select the range
     //_selectdatapage = new kchartWizardSelectDataPage( this );
