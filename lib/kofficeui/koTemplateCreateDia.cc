@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qheader.h>
 
+#include <ktempfile.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
@@ -46,7 +47,8 @@
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate( QWidget* parent ) : m_parent( parent )
+    KoTemplateCreateDiaPrivate( QWidget* parent )
+         : m_parent( parent ), m_tempFile( QString::null, ".png" )
     {
         m_tree=0L;
         m_name=0L;
@@ -57,6 +59,7 @@ public:
         m_groups=0L;
         m_add=0L;
         m_remove=0L;
+        m_tempFile.setAutoDelete( true );
     }
     ~KoTemplateCreateDiaPrivate() {
         delete m_tree;
@@ -73,6 +76,8 @@ public:
     QPushButton *m_add, *m_remove;
     bool m_changed;
     QWidget* m_parent;
+    /// Temp file for remote picture file
+    KTempFile m_tempFile;
 };
 
 
@@ -328,12 +333,32 @@ void KoTemplateCreateDia::slotSelect() {
         }
         return;
     }
-
+    
+#if 0
+    if ( url.isLocalFile() )
+    {
+        d->m_customFile = url.path();
+    }
+    else
+    {
+        QString target ( d->m_tempFile.name() );
+        if ( KIO::NetAccess::download( url, target, d->m_parent ) )
+        {
+            d->m_customFile = target;
+        }
+        else
+        {
+                KMessageBox::sorry( d->m_parent, i18n( "Remote file could not be downloaded."));
+                return;
+        }
+    }
+#else
     if(!url.isLocalFile()) {
         KMessageBox::sorry(0L, i18n( "Only local files are currently supported."));
         return;
     }
     d->m_customFile=url.path();
+#endif
     d->m_customPixmap=QPixmap();
     updatePixmap();
 }
