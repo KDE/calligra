@@ -63,41 +63,41 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     co[0]->setGeometry( 200,130,100,20);
     co[0]->insertItem(i18n("No-border"));
     co[0]->insertItem(i18n("Single Line"));		
-    co[0]->insertItem(i18n("Double Lne"));		
+    co[0]->insertItem(i18n("Double Line"));		
 
     co[1] = new QComboBox(w,"Combo2");
     co[1]->setGeometry( 200,150,100,20);
     co[1]->insertItem(i18n("No-border"));
     co[1]->insertItem(i18n("Single Line"));		
-    co[1]->insertItem(i18n("Double Lne"));		
+    co[1]->insertItem(i18n("Double Line"));		
 
     co[2] = new QComboBox(w,"Combo3");
     co[2]->setGeometry( 200,170,100,20);
     co[2]->insertItem(i18n("No-border"));
     co[2]->insertItem(i18n("Single Line"));		
-    co[2]->insertItem(i18n("Double Lne"));		
+    co[2]->insertItem(i18n("Double Line"));		
 
     co[3] = new QComboBox(w,"Combo4");
     co[3]->setGeometry( 200,190,100,20);
     co[3]->insertItem(i18n("No-border"));
     co[3]->insertItem(i18n("Single Line"));		
-    co[3]->insertItem(i18n("Double Lne"));		
+    co[3]->insertItem(i18n("Double Line"));		
 
     co[4] = new QComboBox(w,"Combo5");
     co[4]->setGeometry( 200,210,100,20);
     co[4]->insertItem(i18n("No-border"));
     co[4]->insertItem(i18n("Single Line"));		
-    co[4]->insertItem(i18n("Double Lne"));		
+    co[4]->insertItem(i18n("Double Line"));		
 
     co[5] = new QComboBox(w,"Combo6");
     co[5]->setGeometry( 200,230,100,20);
     co[5]->insertItem(i18n("No-border"));
     co[5]->insertItem(i18n("Single Line"));		
-    co[5]->insertItem(i18n("Double Lne"));		
+    co[5]->insertItem(i18n("Double Line"));		
 
     tmpQLabel = new QLabel( w, "Label_8" );
     tmpQLabel->setGeometry(20, 130, 170, 20 );
-    tmpQLabel->setText(i18n("Internal Horizonatl" ));
+    tmpQLabel->setText(i18n("Internal Horizontal" ));
     tmpQLabel = new QLabel( w, "Label_3" );
     tmpQLabel->setGeometry(20, 150, 170, 20 );
     tmpQLabel->setText(i18n("Internal Vertical" ));
