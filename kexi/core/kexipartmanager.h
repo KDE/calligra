@@ -43,7 +43,7 @@ namespace KexiPart
 	struct Missing
 	{
 		QString name;
-		QString mime;
+		QCString mime;
 		QString url;
 	};
 
@@ -76,7 +76,7 @@ class KEXICORE_EXPORT Manager : public QObject
 		 * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
 		 * if needed. Return 0 if loading failed.
 		 */
-		Part		*part(const QString &mime);
+		Part		*part(const QCString &mime);
 
 		/**
 		 * \return a part object for specified info. Dlopens a part using KexiPart::Info
@@ -87,7 +87,7 @@ class KEXICORE_EXPORT Manager : public QObject
 		/**
 		 * \return the info for a coresponding internal mime
 		 */
-		Info		*info(const QString &mime);
+		Info		*info(const QCString &mime);
 
 		/**
 		 * checks project's kexi__part table, creates one if nessesary

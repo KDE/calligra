@@ -150,13 +150,13 @@ Manager::removeClients( KexiMainWindow *win )
 }*/
 
 Part *
-Manager::part(const QString &mime)
+Manager::part(const QCString &mime)
 {
 	return part(m_partsByMime[mime]);
 }
 
 Info *
-Manager::info(const QString &mime)
+Manager::info(const QCString &mime)
 {
 	return m_partsByMime[mime];
 }
@@ -183,7 +183,7 @@ Manager::checkProject(KexiDB::Connection *conn)
 		{
 			Missing m;
 			m.name = cursor->value(1).toString();
-			m.mime = cursor->value(2).toString();
+			m.mime = cursor->value(2).toCString();
 			m.url = cursor->value(3).toString();
 
 			m_missing.append(m);
