@@ -61,7 +61,13 @@ KFDMainWindow::KFDMainWindow()
 void
 KFDMainWindow::loadUIFile(const QString &filename)
 {
-	m_part->openURL(KURL::fromPathOrURL(filename));
+	loadUIFile(KURL::fromPathOrURL(filename));
+}
+
+void
+KFDMainWindow::loadUIFile(const KURL &url)
+{
+	m_part->openURL(url);
 }
 
 void

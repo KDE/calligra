@@ -30,7 +30,10 @@ class KFDMainWindow : public KParts::MainWindow
 		KFDMainWindow();
 		~KFDMainWindow() {;}
 
+		/** @todo change it to bool */
 		void loadUIFile(const QString &filename);
+		/** @todo change it to bool */
+		void loadUIFile(const KURL &url);
 		virtual bool queryClose();
 
 	private:
