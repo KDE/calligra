@@ -41,20 +41,21 @@ class KivioShape;
 class KivioSMLConnector : public Kivio1DStencil
 {
 private:
-	bool loadPath(const QDomElement &e);
+	bool loadPath(const QString &file);
+    void drawOpenPath( KivioShape *, KivioIntraStencilData * );
 
+    KivioShape *m_shape;
+    QString m_name;
 protected:
-    QPtrList <KivioConnectorPoint> *m_pConnectorPoints;
 
     KivioArrowHead *m_startAH;
     KivioArrowHead *m_endAH;
 
     bool loadArrowHeads( const QDomElement & );
     QDomElement saveArrowHeads( QDomDocument & );
-    void drawOpenPath( KivioShape *, KivioIntraStencilData * );
+        virtual bool loadCustom( const QDomElement & );
+    virtual bool saveCustom( QDomElement &, QDomDocument & );
 
-    KivioShape *m_shape;
-    QString m_name;
 public:
     KivioSMLConnector(const QString& name);
     virtual ~KivioSMLConnector();
@@ -69,8 +70,7 @@ public:
     virtual void paint( KivioIntraStencilData * );
     virtual void paintOutline( KivioIntraStencilData * );
 
-    virtual bool loadCustom( const QDomElement & );
-    virtual bool saveCustom( QDomElement &, QDomDocument & );
+
 
 
     virtual void setStartAHType( int i )        { m_startAH->setType(i); }

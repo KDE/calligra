@@ -98,6 +98,7 @@ KivioSMLConnector::KivioSMLConnector(const QString &name)
    // We only have one shape, an open path.
    m_shape = new KivioShape();
    m_shape->shapeData()->setShapeType(KivioShapeData::kstOpenPath);
+   loadPath(name);
 }
 
 KivioSMLConnector::~KivioSMLConnector()
@@ -192,6 +193,36 @@ KivioStencil *KivioSMLConnector::duplicate()
     return pStencil;
 }
 
+void KivioSMLConnector::drawOpenPath( KivioShape *pShape, KivioIntraStencilData *pData )
+{
+  KivioPainter *painter;
+  KivioShapeData *pShapeData = pShape->shapeData();
+  KivioPoint *pPoint, *pNewPoint;
+  QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
+
+  QPtrList <KivioPoint> *pNewPoints = new QPtrList<KivioPoint>;
+  pNewPoints->setAutoDelete(true);
+
+  pPoint = pPointList->first();
+  while( pPoint )
+  {
+    pNewPoint = new KivioPoint( pData->zoomHandler->zoomItX(pPoint->x()),
+                                pData->zoomHandler->zoomItY(pPoint->y()),
+                                pPoint->pointType() );
+    pNewPoints->append(pNewPoint);
+
+    pPoint = pPointList->next();
+  }
+
+  painter = pData->painter;
+  double lineWidth = pShapeData->lineStyle()->width();
+  painter->setLineWidth( pData->zoomHandler->zoomItY(lineWidth) );
+  painter->setFGColor( pShapeData->lineStyle()->color() );
+
+  painter->drawOpenPath( pNewPoints );
+  delete pNewPoints;
+}
+
 void KivioSMLConnector::paint( KivioIntraStencilData *pData )
 {
   KivioPainter *painter = pData->painter;
@@ -257,16 +288,25 @@ void KivioSMLConnector::paintOutline( KivioIntraStencilData *pData )
 
 bool KivioSMLConnector::saveCustom( QDomElement &e, QDomDocument &doc )
 {
+	kdDebug() << "Save custom " << endl;
     e.appendChild( saveArrowHeads(doc) );
 
-    QDomElement type = doc.createElement("type");
-    XmlWriteString( type, "name", m_name );
+    QDomElement type = m_shape->saveXML(doc);
+    QPtrListIterator<KivioPoint> idx(*m_shape->shapeData()->pointList());
+    KivioPoint *p;
+    while( (p = idx.current()) !=0 )
+    {
+    	++idx;
+    	QDomElement pt = p->saveXML(doc);
+	type.appendChild(pt);
+    }
     e.appendChild( type );
     return true;
 }
 
 bool KivioSMLConnector::loadCustom( const QDomElement &e )
 {
+	kdDebug() << "Load custom " << endl;
    QDomNode node;
    QString name;
 
@@ -278,9 +318,17 @@ bool KivioSMLConnector::loadCustom( const QDomElement &e )
       {
 	 loadArrowHeads( node.toElement() );
       }
-      else if ( name == "type" )
+      else if ( name == "KivioShape" )
       {
-      	loadPath(node.toElement());
+      	m_shape->loadXML(node.toElement());
+	QDomNode pts = node.firstChild();
+	while( !pts.isNull())
+	{
+		KivioPoint *pt = new KivioPoint();
+		pt->loadXML(pts.toElement());
+		m_shape->shapeData()->pointList()->append(pt);
+		pts = pts.nextSibling();
+	}
       }
       node = node.nextSibling();
    }
@@ -333,43 +381,14 @@ bool KivioSMLConnector::loadArrowHeads( const QDomElement &e )
     return true;
 }
 
-void KivioSMLConnector::drawOpenPath( KivioShape *pShape, KivioIntraStencilData *pData )
+
+bool KivioSMLConnector::loadPath(const QString &file)
 {
-  KivioPainter *painter;
-  KivioShapeData *pShapeData = pShape->shapeData();
-  KivioPoint *pPoint, *pNewPoint;
+	kdDebug() << "Loading :" << file<< endl;
 
-  double defWidth = m_pSpawner->defWidth();
-  double defHeight = m_pSpawner->defHeight();
-
-  QPtrList <KivioPoint> *pPointList = pShapeData->pointList();
-  QPtrList <KivioPoint> *pNewPoints = new QPtrList<KivioPoint>;
-  pNewPoints->setAutoDelete(true);
-
-  pPoint = pPointList->first();
-  while( pPoint )
-  {
-    pNewPoint = new KivioPoint( pData->zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
-                                pData->zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
-                                pPoint->pointType() );
-    pNewPoints->append(pNewPoint);
-
-    pPoint = pPointList->next();
-  }
-
-  painter = pData->painter;
-  double lineWidth = pShapeData->lineStyle()->width();
-  painter->setLineWidth( pData->zoomHandler->zoomItY(lineWidth) );
-  painter->setFGColor( pShapeData->lineStyle()->color() );
-
-  painter->drawOpenPath( pNewPoints );
-
-  delete pNewPoints;
-}
-
-bool KivioSMLConnector::loadPath(const QDomElement &e)
-{
-	kdDebug() << "Loading :" << endl;
+	m_shape->shapeData()->pointList()->append(new KivioPoint(0,0));
+	m_shape->shapeData()->pointList()->append(new KivioPoint(0,0));
+	m_name = file;
 
 }
 
