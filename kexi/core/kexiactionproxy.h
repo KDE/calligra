@@ -28,6 +28,7 @@
 
 #include <kaction.h>
 
+#include "kexiproject.h"
 #include "kexisharedactionhost.h"
 
 class QSignal;

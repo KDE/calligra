@@ -150,6 +150,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		KexiDB::Parser* sqlParser();
 
+		/*! \return true if project is started in final mode */
+		bool final() { return m_final; }
+
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
 
@@ -184,7 +187,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		/** instance pointed by \a item is removed */
 		void itemRemoved(const KexiPart::Item &item);
 
+
 	private:
+		friend class KexiMainWindowImpl;
 	//		KexiDB::DriverManager		*m_drvManager;
 		KexiDB::Connection		*m_connection;
 		QGuardedPtr<KexiProjectData> m_data;
@@ -200,6 +205,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		                              //!< temporary identifiers for unstored items
 
 		KexiDB::Parser* m_sqlParser;
+		bool m_final;
 //		KexiProjectConnectionData	*m_connData;
 //js		KexiPart::Manager		*m_partManager;
 //		QString				m_error;

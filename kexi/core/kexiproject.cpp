@@ -64,6 +64,7 @@ KexiProject::KexiProject(KexiProjectData *pdata)
 	Kexi::partManager().lookup();
 	
 	m_connection = 0;
+	m_final = false;
 }
 
 KexiProject::~KexiProject()

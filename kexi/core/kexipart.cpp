@@ -242,7 +242,8 @@ bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QStrin
 GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient)
  : QObject(part, part->info()->objectName().latin1()), KXMLGUIClient(win)
 {
-	setXMLFile(QString("kexi")+part->info()->objectName()+"part"+(partInstanceClient?"inst":"")+"ui.rc");
+	if(!win->project()->final())
+		setXMLFile(QString("kexi")+part->info()->objectName()+"part"+(partInstanceClient?"inst":"")+"ui.rc");
 
 //	new KAction(part->m_names["new"], part->info()->itemIcon(), 0, this, 
 //		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());

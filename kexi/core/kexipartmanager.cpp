@@ -22,6 +22,7 @@
 #include <ktrader.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kparts/componentfactory.h>
 
 #include "kexipartmanager.h"
@@ -84,6 +85,7 @@ Manager::lookup()
 		if (ptr) {
 			Info *info = new Info(ptr);
 			m_partsByMime.insert(info->mime(), info);
+			kdDebug() << "Manager::lookup(): inserting info to " << info->mime() << endl;
 //			m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
 			m_partlist.append(info);
 		}
