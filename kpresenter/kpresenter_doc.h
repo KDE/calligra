@@ -251,6 +251,7 @@ public:
 
     KPPixmapCollection *getPixmapCollection() { return &_pixmapCollection; }
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
+    KPClipartCollection *getClipartCollection() { return &_clipartCollection; }
 
     CommandHistory *commands() { return &_commands; }
 

@@ -18,7 +18,6 @@ MISSING FEATURES, todo :
 - seperate the general configuration and page/slide specific config dialog
   and make 2 out of them (currently it's one, which is confusing)
 - use GM in all dialogs
-- rework background-config dialog
 - Presentation structure editor/viewer (finish it)
 - Rewrite autoforms (using XML)
 - Insert pagenumber into txt objs

@@ -19,62 +19,50 @@
 #include <qdialog.h>
 #include <qcolor.h>
 #include <qstring.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <qframe.h>
 
-#include "qwmf.h"
 #include "global.h"
-
-#include <kcolorbtn.h>
-
-#ifndef min
-#define min(a,b) ((a)<(b)?(a):(b))
-#endif
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
 
 class QLabel;
 class QGroupBox;
-class QRadioButton;
 class QComboBox;
 class QPushButton;
 class KColorButton;
 class QButtonGroup;
 class QSlider;
+class KPBackGround;
+class KPresenterDoc;
+class QResizeEvent;
+class QPainter;
+class QRadioButton;
+class QCheckBox;
 
-/******************************************************************/
-/* class ClipPreview						  */
-/******************************************************************/
+/*******************************************************************
+ *
+ * Class: BackPreview
+ *
+ *******************************************************************/
 
-class ClipPreview : public QWidget
+class BackPreview : public QFrame
 {
     Q_OBJECT
-
+    
 public:
+    BackPreview( QWidget *parent, KPresenterDoc *doc );
 
-    // constructor - destructor
-    ClipPreview( QWidget* parent = 0, const char* name = 0 );
-    ~ClipPreview();
-
-    // get - set clipart
-    void setClipart( QString );
-    QString getClipart() { return fileName; }
-
+    KPBackGround *backGround() const {
+	return back;
+    }
+    
 protected:
-
-    // paint
-    void paintEvent( QPaintEvent* );
-
+    void resizeEvent( QResizeEvent *e );
+    void drawContents( QPainter *p );
+    
 private:
-
-    // internal
-    QPicture *pic;
-    QString fileName;
-    QWinMetaFile wmf;
-
+    KPBackGround *back;
+    
 };
-
+    
 /******************************************************************/
 /* class BackDia						  */
 /******************************************************************/
@@ -83,68 +71,47 @@ class BackDia : public QDialog
     Q_OBJECT
 
 public:
+    BackDia( QWidget* parent, const char* name,
+	     BackType backType, QColor backColor1,
+	     QColor backColor2, BCType _bcType,
+	     QString backPic, QString backClip,
+	     BackView backPicView, bool _unbalanced,
+	     int _xfactor, int _yfactor, KPresenterDoc *doc );
 
-    // constructor - destructor
-    BackDia( QWidget* parent = 0, const char* name = 0,
-	     BackType backType = BT_COLOR, QColor backColor1 = white,
-	     QColor backColor2 = white, BCType _bcType = BCT_PLAIN,
-	     QString backPic = QString::null, QString backClip = QString::null,
-	     BackView backPicView = BV_TILED, bool _unbalanced = FALSE,
-	     int _xfactor = 100, int _yfactor = 100);
-    ~BackDia();
-
-    // get values
-    QColor getBackColor1() { return color1Choose->color(); }
-    QColor getBackColor2() { return color2Choose->color(); }
-    BCType getBackColorType() { return bcType; }
+    QColor getBackColor1();
+    QColor getBackColor2();
+    BCType getBackColorType();
     BackType getBackType();
-    QString getBackPixFilename() { return chosenPic; }
-    QString getBackClipFilename() { return chosenClip; }
+    QString getBackPixFilename();
+    QString getBackClipFilename();
     BackView getBackView();
-    bool getBackUnbalanced() { return unbalanced->isChecked(); }
+    bool getBackUnbalanced();
     int getBackXFactor();
     int getBackYFactor();
 
 private:
-
-    // dialog objects
-    QLabel *lPicName, *picPreview, *lClipName, *colorPreview;
-    QGroupBox *grp1, *grp2, *grp3;
-    QRadioButton *radioColor, *radioPic, *vTiled, *vCenter, *vZoom, *radioClip;
+    QLabel *lPicName, *picPreview, *lClipName;
     QCheckBox *unbalanced;
-    QComboBox *cType;
+    QComboBox *cType, *backCombo, *picView;
     QPushButton *okBut, *applyBut, *applyGlobalBut, *cancelBut;
     QPushButton *picChoose, *clipChoose;
-    QButtonGroup *buttGrp, *buttGrp2, *buttGrp3;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
-
-    // values
     QString chosenPic;
     QString chosenClip;
-    ClipPreview *clipPreview;
-    BCType bcType;
-
+    BackPreview *preview;
+    bool picChanged, clipChanged, lockUpdate;
+    
 private slots:
-
-    // dialog slots
-    void selectCType( int );
     void selectPic();
     void selectClip();
-    void openPic( const QString & );
-    void openClip( const QString & );
-    void colChanged( const QColor& ) { selectCType( bcType ); }
-    void unbalancedChanged() ;
-    void xFactorChanged( int ) { selectCType( bcType ); }
-    void yFactorChanged( int ) { selectCType( bcType ); }
-
-    void Ok() { emit backOk( false ); }
-    void Apply() { emit backOk( false ); }
-    void ApplyGlobal() { emit backOk( true ); }
+    void updateConfiguration();
+    
+    void Ok() { emit backOk( FALSE ); }
+    void Apply() { emit backOk( FALSE ); }
+    void ApplyGlobal() { emit backOk( TRUE ); }
 
 signals:
-
-    // ok
     void backOk( bool );
 
 };

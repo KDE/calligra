@@ -97,7 +97,7 @@ public:
     { return xfactor; }
     virtual int getBackYFactor()
     { return yfactor; }
-    
+
     virtual QSize getSize()
     { return ext; }
 
@@ -124,7 +124,7 @@ protected:
     PageEffect pageEffect;
     bool unbalanced;
     int xfactor, yfactor;
-    
+
     QPixmap *backPix;
     KPPixmapCollection::Key key;
     KPPixmapCollection *pixmapCollection;

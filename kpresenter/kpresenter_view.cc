@@ -764,9 +764,8 @@ void KPresenterView::extraBackground()
 			   m_pKPresenterDoc->getBackView( getCurrPgNum() - 1 ),
 			   m_pKPresenterDoc->getBackUnbalanced( getCurrPgNum() - 1 ),
 			   m_pKPresenterDoc->getBackXFactor( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackYFactor( getCurrPgNum() - 1 ) );
-    backDia->setMaximumSize( backDia->width(), backDia->height() );
-    backDia->setMinimumSize( backDia->width(), backDia->height() );
+			   m_pKPresenterDoc->getBackYFactor( getCurrPgNum() - 1 ),
+			   m_pKPresenterDoc );
     backDia->setCaption( i18n( "KPresenter - Page Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
     backDia->show();

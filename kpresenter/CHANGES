@@ -474,3 +474,8 @@ Reggie, 22.10.1999:
 ------------------
 - Implemented copying&pasting whole pages/slides
   over the clipboard
+
+Reggie, 23.10.1999:
+------------------
+- Rewrite background configuration dialog
+- Some fixes

@@ -16,114 +16,117 @@
 #include "page.h"
 #include "backdia.h"
 #include "backdia.moc"
-#include "kpgradient.h"
+#include "kpbackground.h"
+#include "kpresenter_doc.h"
 
 #include <qlabel.h>
-#include <qgroupbox.h>
-#include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qpixmap.h>
-#include <qwmatrix.h>
-#include <qapp.h>
 #include <qwidget.h>
 #include <qevent.h>
-#include <qpicture.h>
 #include <qpainter.h>
 #include <qcombo.h>
 #include <qslider.h>
+#include <qlayout.h>
+#include <qtabwidget.h>
+#include <qhbox.h>
+#include <qvbox.h>
+#include <qevent.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qdatetime.h>
 
-#include <qsize.h>
 #include <kcolorbtn.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kimgio.h>
+#include <kbuttonbox.h>
 
-#include <stdlib.h>
+/*******************************************************************
+ *
+ * Class: BackPreview
+ *
+ *******************************************************************/
 
-/******************************************************************/
-/* class ClipPreview						  */
-/******************************************************************/
-
-/*======================= constructor ============================*/
-ClipPreview::ClipPreview( QWidget* parent, const char* name )
-    : QWidget( parent, name )
+/*=============================================================*/
+BackPreview::BackPreview( QWidget *parent, KPresenterDoc *doc )
+    : QFrame( parent )
 {
-    setBackgroundColor( white );
-    pic = 0;
-    pic = new QPicture;
+    setFrameStyle( WinPanel | Sunken );
+    back = new KPBackGround( doc->getPixmapCollection(),
+			     doc->getGradientCollection(),
+			     doc->getClipartCollection(),
+			     doc );
+    setMinimumSize( 300, 200 );
 }
 
-/*======================= destructor =============================*/
-ClipPreview::~ClipPreview()
+/*=============================================================*/
+void BackPreview::drawContents( QPainter *p )
 {
-    delete pic;
+    QFrame::drawContents( p );
+    back->draw( p, QPoint( 0, 0 ), FALSE );
 }
 
-/*==================== set clipart ===============================*/
-void ClipPreview::setClipart( QString fn )
+/*=============================================================*/
+void BackPreview::resizeEvent( QResizeEvent *e )
 {
-    fileName = qstrdup( fn );
-    wmf.load( fileName );
-    wmf.paint( pic );
-    repaint();
-}
-
-/*===================== paint ====================================*/
-void ClipPreview::paintEvent( QPaintEvent* )
-{
-    QPainter p;
-
-    p.begin( this );
-    pic->play( &p );
-    p.end();
+    QFrame::resizeEvent( e );
+    back->setSize( QSize( contentsRect().width(),
+			  contentsRect().height() ) );
+    if ( isVisible() )
+	back->restore();
 }
 
 /******************************************************************/
 /* class BackDia						  */
 /******************************************************************/
 
-/*==================== constructor ===============================*/
+/*=============================================================*/
 BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
 		  QColor backColor1, QColor backColor2, BCType _bcType,
 		  QString backPic, QString backClip,
-		  BackView backPicView, bool _unbalanced, int _xfactor, int _yfactor )
+		  BackView backPicView, bool _unbalanced, int _xfactor, int _yfactor,
+		  KPresenterDoc *doc )
     : QDialog( parent, name, true )
 {
-    int col1 = 20, col2;
-    int row1 = 15, row2, butW, butH;
+    lockUpdate = TRUE;
+    QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
+    QHBoxLayout *hbox = new QHBoxLayout( layout );
+    hbox->setSpacing( 5 );
+    QVBoxLayout *vbox = new QVBoxLayout( hbox );
+    vbox->setSpacing( 5 );
 
-    lPicName = 0;
-    lClipName = 0;
+    vbox->addWidget( new QLabel( i18n( "Background Type:" ), this ) );
+    
+    backCombo = new QComboBox( FALSE, this );
+    backCombo->insertItem( i18n( "Color/Gradient" ) );
+    backCombo->insertItem( i18n( "Picture" ) );
+    backCombo->insertItem( i18n( "Clipart" ) );
+    backCombo->setCurrentItem( (int)backType );
+    connect( backCombo, SIGNAL( activated( int ) ),
+	     this, SLOT( updateConfiguration() ) );
+    
+    vbox->addWidget( backCombo );
 
-    buttGrp = new QButtonGroup( this, "bgrp1" );
-    buttGrp->setFrameStyle( QFrame::NoFrame );
-    buttGrp2 = new QButtonGroup( this, "bgrp2" );
-    buttGrp2->setFrameStyle( QFrame::NoFrame );
-    buttGrp3 = new QButtonGroup( this, "bgrp3" );
-    buttGrp3->setFrameStyle( QFrame::NoFrame );
+    QTabWidget *tabWidget = new QTabWidget( this );
+    vbox->addWidget( tabWidget );
+    
+    // color/gradient tab ---------------
+    
+    QVBox *colorTab = new QVBox( tabWidget );
+    colorTab->setSpacing( 5 );
+    colorTab->setMargin( 5 );
+    
+    color1Choose = new KColorButton( backColor1, colorTab );
+    connect( color1Choose, SIGNAL( changed( const QColor& ) ), 
+	     this, SLOT( updateConfiguration() ) );
 
-    radioColor = new QRadioButton( i18n( "Color" ), this, "radioColor" );
-    radioColor->move( col1, row1 );
-    radioColor->resize( radioColor->sizeHint() );
-    if ( backType == BT_COLOR ) radioColor->setChecked( true );
-    buttGrp->insert( radioColor );
+    color2Choose = new KColorButton( backColor2, colorTab );
+    connect( color2Choose, SIGNAL( changed( const QColor& ) ), 
+	     this, SLOT( updateConfiguration() ) );
 
-    grp1 = new QGroupBox( this );
-    grp1->move( radioColor->x(), radioColor->y()+radioColor->height()+20 );
-
-    color1Choose = new KColorButton( backColor1, grp1 );
-    color1Choose->move( 10, 10 );
-    color1Choose->resize( color1Choose->sizeHint() );
-    connect( color1Choose, SIGNAL( changed( const QColor& ) ), this, SLOT( colChanged( const QColor& ) ) );
-
-    color2Choose = new KColorButton( backColor2, grp1 );
-    color2Choose->move( 10, color1Choose->y()+color1Choose->height()+10 );
-    color2Choose->resize( color2Choose->sizeHint() );
-    connect( color2Choose, SIGNAL( changed( const QColor& ) ), this, SLOT( colChanged( const QColor& ) ) );
-
-    bcType = _bcType;
-    cType = new QComboBox( false, grp1 );
+    cType = new QComboBox( FALSE, colorTab );
     cType->insertItem( i18n( "Plain" ), -1 );
     cType->insertItem( i18n( "Horizontal Gradient" ), -1 );
     cType->insertItem( i18n( "Vertical Gradient" ), -1 );
@@ -133,290 +136,258 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     cType->insertItem( i18n( "Rectangle Gradient" ), -1 );
     cType->insertItem( i18n( "PipeCross Gradient" ), -1 );
     cType->insertItem( i18n( "Pyramid Gradient" ), -1 );
-    cType->resize( cType->sizeHint() );
-    cType->move( 10, color2Choose->y()+color2Choose->height()+20 );
-    connect( cType, SIGNAL( activated( int ) ), this, SLOT( selectCType( int ) ) );
+    cType->setCurrentItem( _bcType );
+    connect( cType, SIGNAL( activated( int ) ), 
+	     this, SLOT( updateConfiguration() ) );
 
-    unbalanced = new QCheckBox( i18n( "Unbalanced" ), grp1 );
-    unbalanced->resize( unbalanced->sizeHint() );
-    unbalanced->move( 10, cType->y() + cType->height() + 20 );
+    unbalanced = new QCheckBox( i18n( "Unbalanced" ), colorTab );
     connect( unbalanced, SIGNAL( clicked() ),
-	     this, SLOT( unbalancedChanged() ) );
+	     this, SLOT( updateConfiguration() ) );
+    unbalanced->setChecked( _unbalanced );
+    
+    (void)new QLabel( i18n( "X-Factor:" ), colorTab );
 
-    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Vertical, grp1 );
-    yfactor->resize( yfactor->sizeHint().width(),
-		     cType->width() - yfactor->sizeHint().width() - 10 );
-    yfactor->move( cType->width() - yfactor->sizeHint().width() ,
-		   unbalanced->y() + unbalanced->height() + 20 );
-    connect( yfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( yFactorChanged( int ) ) );
-
-    colorPreview = new QLabel( grp1 );
-    colorPreview->resize( cType->width() - yfactor->width() - 10,
-			  cType->width() - yfactor->width() - 10 );
-    colorPreview->move( 10, unbalanced->y() + unbalanced->height()+20 );
-
-    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, grp1 );
-
-    xfactor->resize( colorPreview->width(), xfactor->sizeHint().height() );
-    xfactor->move( 10, colorPreview->y() + colorPreview->height() );
+    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( xFactorChanged( int ) ) );
+	     this, SLOT( updateConfiguration() ) );
+    xfactor->setValue( _xfactor );
 
-    cType->setCurrentItem( bcType );
+    (void)new QLabel( i18n( "Y-Factor:" ), colorTab );
+    
+    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
+    connect( yfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( updateConfiguration() ) );
+    yfactor->setValue( _yfactor );
+    
+    tabWidget->addTab( colorTab, i18n( "&Color/Gradient" ) );
+    
+    // picture tab ---------------------
+    
+    QVBox *picTab = new QVBox( tabWidget );
+    picTab->setSpacing( 5 );
+    picTab->setMargin( 5 );
 
-    color1Choose->resize( cType->width(), color1Choose->height() );
-    color2Choose->resize( cType->width(), color2Choose->height() );
+    QLabel *l = new QLabel( i18n( "View Mode:" ), picTab );
+    l->setFixedHeight( l->sizeHint().height() );
+    
+    picView = new QComboBox( FALSE, picTab );
+    picView->insertItem( i18n( "Zoomed" ) );
+    picView->insertItem( i18n( "Centered" ) );
+    picView->insertItem( i18n( "Tiled" ) );
+    picView->setCurrentItem( (int)backPicView );
+    connect( picView, SIGNAL( activated( int ) ),
+	     this, SLOT( updateConfiguration() ) );
 
-    grp1->resize( 2*cType->x()+cType->width(),
-		  colorPreview->y()+colorPreview->height()+20 );
+    picChoose = new QPushButton( i18n( "Choose Picture..." ), picTab, "picChoose" );
+    connect( picChoose, SIGNAL( clicked() ), 
+	     this, SLOT( selectPic() ) );
 
-    radioPic = new QRadioButton( i18n( "Picture ( Pixel-Graphic )" ), this, "radioPic" );
-    radioPic->move( grp1->x()+grp1->width()+20, radioColor->y() );
-    radioPic->resize( radioPic->sizeHint() );
-    if ( backType == BT_PICTURE ) radioPic->setChecked( true );
-    buttGrp->insert( radioPic );
+    if ( backPic ) 
+	chosenPic = backPic;
+    else 
+	chosenPic = QString::null;
 
-    grp2 = new QGroupBox( this );
-    grp2->move( grp1->x()+grp1->width()+20, grp1->y() );
+    lPicName = new QLabel( picTab, "picname" );
+    lPicName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    if ( !backPic.isEmpty() ) 
+	lPicName->setText( backPic );
+    else 
+	lPicName->setText( i18n( "No Picture" ) );
+    lPicName->setFixedHeight( lPicName->sizeHint().height() );
 
-    vTiled = new QRadioButton( i18n( "Tiled" ), grp2, "tiled" );
-    vTiled->move( 10, 10 );
-    vTiled->resize( vTiled->sizeHint() );
-    if ( backPicView == BV_TILED ) vTiled->setChecked( true );
-    buttGrp2->insert( vTiled );
+    (void)new QWidget( picTab );
+    
+    tabWidget->addTab( picTab, i18n( "&Picture" ) );
+    
+    // clipart tab--------------------------
+    
+    QVBox *clipTab = new QVBox( tabWidget );
+    clipTab->setSpacing( 5 );
+    clipTab->setMargin( 5 );
+    
+    clipChoose = new QPushButton( i18n( "Choose Clipart..." ), clipTab, "clipChoose" );
+    connect( clipChoose, SIGNAL( clicked() ), 
+	     this, SLOT( selectClip() ) );
 
-    vCenter = new QRadioButton( i18n( "Center" ), grp2, "center" );
-    vCenter->move( vTiled->x()+vTiled->width()+10, 10 );
-    vCenter->resize( vCenter->sizeHint() );
-    if ( backPicView == BV_CENTER ) vCenter->setChecked( true );
-    buttGrp2->insert( vCenter );
+    if ( !backClip.isEmpty() ) 
+	chosenClip = backClip;
 
-    vZoom = new QRadioButton( i18n( "Zoom" ), grp2, "zoom" );
-    vZoom->move( vCenter->x()+vCenter->width()+10, 10 );
-    vZoom->resize( vZoom->sizeHint() );
-    if ( backPicView == BV_ZOOM ) vZoom->setChecked( true );
-    buttGrp2->insert( vZoom );
+    lClipName = new QLabel( clipTab, "clipname" );
+    lClipName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    if ( !backClip.isEmpty() ) 
+	lClipName->setText( backClip );
+    else 
+	lClipName->setText( i18n( "No Clipart" ) );
+    lClipName->setFixedHeight( lClipName->sizeHint().height() );
 
-    picChoose = new QPushButton( i18n( "Choose Picture..." ), grp2, "picChoose" );
-    picChoose->setGeometry( 10, vTiled->y()+vTiled->height()+20,
-			    vTiled->width()+vCenter->width()+vZoom->width()+20,
-			    picChoose->sizeHint().height() );
-    connect( picChoose, SIGNAL( clicked() ), this, SLOT( selectPic() ) );
+    (void)new QWidget( clipTab );
 
-    picPreview = new QLabel( grp2, "picPre" );
-    picPreview->setBackgroundColor( white );
-    picPreview->setGeometry( 10, picChoose->y()+picChoose->height()+20, picChoose->width(), 180 );
-    if ( backPic ) openPic( qstrdup( backPic ) );
-    if ( backPic ) chosenPic = qstrdup( backPic );
-    else chosenPic = QString::null;
+    tabWidget->addTab( clipTab, i18n( "Clip&art" ) );
 
-    lPicName = new QLabel( grp2, "picname" );
-    if ( backPic ) lPicName->setText( qstrdup( backPic ) );
-    else lPicName->setText( i18n( "no picture" ) );
-    lPicName->setGeometry( 10, picPreview->y()+picPreview->height()+20,
-			   picChoose->width(), lPicName->sizeHint().height() );
+    // ------------------------ preview
+    
+    preview = new BackPreview( this, doc );
+    hbox->addWidget( preview );
+    
+    // ------------------------ buttons
 
-    grp2->resize( 2*picChoose->x()+picChoose->width(),
-		  lPicName->y()+lPicName->height()+10 );
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
 
-    radioClip = new QRadioButton( i18n( "Clipart ( Vector-Graphic )" ), this, "radioClip" );
-    radioClip->move( grp2->x()+grp2->width()+20, radioColor->y() );
-    radioClip->resize( radioClip->sizeHint() );
-    if ( backType == BT_CLIPART ) radioClip->setChecked( true );
-    buttGrp->insert( radioClip );
-
-    grp3 = new QGroupBox( this );
-    grp3->move( grp2->x()+grp2->width()+20, grp2->y() );
-    grp3->resize( grp2->width(), grp2->height() );
-
-    clipChoose = new QPushButton( i18n( "Choose Clipart..." ), grp3, "clipChoose" );
-    clipChoose->setGeometry( 10, 10, grp3->width()-20, clipChoose->sizeHint().height() );
-    connect( clipChoose, SIGNAL( clicked() ), this, SLOT( selectClip() ) );
-
-    clipPreview = new ClipPreview( grp3 );
-    clipPreview->move( 10, clipChoose->y()+clipChoose->height()+20 );
-    clipPreview->resize( grp3->width()-20, grp3->width()-20 );
-    if ( backClip ) openClip( qstrdup( backClip ) );
-    if ( backClip ) chosenClip = qstrdup( backClip );
-    else chosenClip = QString::null;
-
-    lClipName = new QLabel( grp3, "clipname" );
-    if ( backClip ) lClipName->setText( qstrdup( backClip ) );
-    else lClipName->setText( i18n( "no clipart" ) );
-    lClipName->setGeometry( 10, clipPreview->y()+clipPreview->height()+20,
-			    clipChoose->width(), lClipName->sizeHint().height() );
-
-    grp3->resize( grp2->width(), lClipName->height()+lClipName->y()+20 );
-
-    col2 = grp3->x()+grp3->width();
-    row2 = grp2->y()+grp2->height()+20;
-
-    cancelBut = new QPushButton( this, "BCancel" );
-    cancelBut->setText( i18n( "Cancel" ) );
-
-    applyBut = new QPushButton( this, "BApply" );
-    applyBut->setText( i18n( "Apply" ) );
-
-    applyGlobalBut = new QPushButton( this, "BApplyGlobal" );
-    applyGlobalBut->setText( i18n( "Apply Global" ) );
-
-    okBut = new QPushButton( this, "BOK" );
-    okBut->setText( i18n( "OK" ) );
-    okBut->setAutoRepeat( false );
-    okBut->setAutoResize( false );
-    okBut->setAutoDefault( true );
+    okBut = bb->addButton( i18n( "&OK" ) );
+    applyGlobalBut = bb->addButton( i18n( "Apply &Global" ) );
+    applyBut = bb->addButton( i18n( "&Apply" ) );
+    cancelBut = bb->addButton( i18n( "&Close" ) );
     okBut->setDefault( true );
 
-    butW = max(cancelBut->sizeHint().width(),
-	       max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
-    butH = cancelBut->sizeHint().height();
-
-    cancelBut->resize( butW, butH );
-    applyBut->resize( butW, butH );
-    applyGlobalBut->resize( applyGlobalBut->sizeHint().width(), butH );
-    okBut->resize( butW, butH );
-
-    cancelBut->move( col2-cancelBut->width(), row2 );
-    applyBut->move( cancelBut->x()-5-applyBut->width(), row2 );
-    applyGlobalBut->move( applyBut->x()-5-applyGlobalBut->width(), row2 );
-    okBut->move( applyGlobalBut->x()-10-okBut->width(), row2 );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( Ok() ) );
-    connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( applyGlobalBut, SIGNAL( clicked() ), this, SLOT( ApplyGlobal() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    resize( grp3->x()+grp3->width()+20, row2+butH+10 );
-    selectCType( bcType );
-    if ( backType == BT_PICTURE ) radioPic->setChecked( true );
-    if ( backType == BT_COLOR ) radioColor->setChecked( true );
-    if ( backType == BT_CLIPART ) radioClip->setChecked( true );
-    unbalanced->setChecked( _unbalanced );
-    xfactor->setValue( _xfactor );
-    yfactor->setValue( _yfactor );
+    connect( okBut, SIGNAL( clicked() ), 
+	     this, SLOT( Ok() ) );
+    connect( applyBut, SIGNAL( clicked() ), 
+	     this, SLOT( Apply() ) );
+    connect( applyGlobalBut, SIGNAL( clicked() ), 
+	     this, SLOT( ApplyGlobal() ) );
+    connect( cancelBut, SIGNAL( clicked() ), 
+	     this, SLOT( reject() ) );
+    connect( okBut, SIGNAL( clicked() ), 
+	     this, SLOT( accept() ) );
+    bb->layout();
+    
+    layout->addWidget( bb );
+    
+    picChanged = clipChanged = TRUE;
+    lockUpdate = FALSE;
+    updateConfiguration();
 }
 
-/*===================== destructor ===============================*/
-BackDia::~BackDia()
+/*=============================================================*/
+void BackDia::updateConfiguration()
 {
+    if ( lockUpdate )
+	return;
+    
+    if ( getBackColorType() == BCT_PLAIN ) {
+	unbalanced->setEnabled( FALSE );
+	xfactor->setEnabled( FALSE );
+	yfactor->setEnabled( FALSE );
+	color2Choose->setEnabled( FALSE );
+    } else {
+	unbalanced->setEnabled( TRUE );
+	xfactor->setEnabled( TRUE );
+	yfactor->setEnabled( TRUE );
+	color2Choose->setEnabled( TRUE );
+    }
+    
+    picChanged = getBackType() == BT_PICTURE;
+    clipChanged = getBackType() == BT_CLIPART;
+    preview->backGround()->setBackType( getBackType() );
+    preview->backGround()->setBackView( getBackView() );
+    preview->backGround()->setBackColor1( getBackColor1() );
+    preview->backGround()->setBackColor2( getBackColor2() );
+    preview->backGround()->setBackColorType( getBackColorType() );
+    preview->backGround()->setBackUnbalanced( getBackUnbalanced() );
+    preview->backGround()->setBackXFactor( getBackXFactor() );
+    preview->backGround()->setBackYFactor( getBackYFactor() );
+    if ( !chosenPic.isEmpty() && picChanged )
+	preview->backGround()->setBackPixmap( getBackPixFilename(), QDateTime() );
+    if ( !chosenClip.isEmpty() && clipChanged )
+	preview->backGround()->setBackClipFilename( getBackClipFilename(), QDateTime() );
+    preview->backGround()->setBackType( getBackType() );
+    if ( preview->isVisible() && isVisible() ) {
+	preview->backGround()->restore();
+	preview->repaint( FALSE );
+    }
+    
+    picChanged = clipChanged = FALSE;
 }
 
-/*===================== get background type ======================*/
+/*=============================================================*/
 BackType BackDia::getBackType()
 {
-    if ( radioColor->isChecked() ) return BT_COLOR;
-    if ( radioPic->isChecked() ) return BT_PICTURE;
-    if ( radioClip->isChecked() ) return BT_CLIPART;
-    return BT_COLOR;
+    return (BackType)backCombo->currentItem();
 }
 
-/*===================== get background pic view ==================*/
+/*=============================================================*/
 BackView BackDia::getBackView()
 {
-    if ( vTiled->isChecked() ) return BV_TILED;
-    if ( vCenter->isChecked() ) return BV_CENTER;
-    if ( vZoom->isChecked() ) return BV_ZOOM;
-    return BV_TILED;
+    return (BackView)picView->currentItem();
 }
 
-/*==================== unbalanced toggled ========================*/
-void BackDia::unbalancedChanged()
+/*=============================================================*/
+QColor BackDia::getBackColor1() 
 {
-  selectCType( bcType );
-  xfactor->setEnabled(unbalanced->isChecked());
-  yfactor->setEnabled(unbalanced->isChecked());
+    return color1Choose->color(); 
 }
 
-
-/*==================== select color type =========================*/
-void BackDia::selectCType( int i )
+/*=============================================================*/
+QColor BackDia::getBackColor2() 
 {
-    // let's be smart about what plain does :-)
-    if (!i) {
-	color2Choose->setEnabled(false);
-	unbalanced->setEnabled(false);
-	xfactor->setEnabled(false);
-	yfactor->setEnabled(false);
-    } else {
-	color2Choose->setEnabled(true);
-	unbalanced->setEnabled(true);
-	xfactor->setEnabled(true);
-	yfactor->setEnabled(true);
-    }
-    radioPic->setChecked( false );
-    radioColor->setChecked( true );
-    radioClip->setChecked( false );
-
-    bcType = ( BCType )i;
-
-    KPGradient gradient( color1Choose->color(), color2Choose->color(), bcType, colorPreview->size(),
-			 unbalanced->isChecked(), xfactor->value(), yfactor->value() );
-
-    colorPreview->setPixmap( *gradient.getGradient() );
+    return color2Choose->color(); 
 }
 
-/*=================== choose a picture ===========================*/
-void BackDia::selectPic()
-{
-    radioPic->setChecked( true );
-    radioColor->setChecked( false );
-    radioClip->setChecked( false );
-
-    QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							KImageIO::pattern(KImageIO::Reading),
-							0 );
-
-    if ( !file.isEmpty() ) openPic( file.data() );
+/*=============================================================*/
+BCType BackDia::getBackColorType() 
+{ 
+    return (BCType)cType->currentItem();
 }
 
-/*=================== choose a clipart ===========================*/
-void BackDia::selectClip()
-{
-    radioClip->setChecked( true );
-    radioColor->setChecked( false );
-    radioPic->setChecked( false );
-
-    QString file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
-    if ( !file.isEmpty() ) openClip( file.data() );
+/*=============================================================*/
+QString BackDia::getBackPixFilename() 
+{ 
+    return chosenPic; 
 }
 
-/*==================== open a picture ============================*/
-void BackDia::openPic( const QString &picName )
-{
-    QApplication::setOverrideCursor( waitCursor );
-
-    chosenPic = qstrdup( picName );
-    QPixmap pix( picName );
-    QWMatrix m;
-
-    if ( !pix.isNull() ) {
-	m.scale( static_cast<float>( picPreview->width() ) / pix.width(),
-		 static_cast<float>( picPreview->height() ) / pix.height() );
-	picPreview->setPixmap( pix.xForm( m ) );
-	if ( lPicName ) lPicName->setText( chosenPic );
-    }
-    QApplication::restoreOverrideCursor();
+/*=============================================================*/
+QString BackDia::getBackClipFilename() 
+{ 
+    return chosenClip; 
 }
 
-/*==================== open a clipart ============================*/
-void BackDia::openClip( const QString &clipName )
-{
-    QApplication::setOverrideCursor( waitCursor );
-    chosenClip = qstrdup( clipName );
-    clipPreview->setClipart( clipName );
-    if ( lClipName ) lClipName->setText( chosenClip );
-    QApplication::restoreOverrideCursor();
+/*=============================================================*/
+bool BackDia::getBackUnbalanced() 
+{ 
+    return unbalanced->isChecked(); 
 }
 
+/*=============================================================*/
 int BackDia::getBackXFactor()
 {
     return xfactor->value();
 }
 
+/*=============================================================*/
 int BackDia::getBackYFactor()
 {
     return yfactor->value();
+}
+
+
+/*=============================================================*/
+void BackDia::selectPic()
+{
+    QString file = KFilePreviewDialog::getOpenFileName( QString::null,
+							KImageIO::pattern(KImageIO::Reading),
+							0 );
+
+    if ( !file.isEmpty() ) {
+	chosenPic = file;
+	lPicName->setText( chosenPic );
+	backCombo->setCurrentItem( 1 );
+	picChanged = TRUE;
+	updateConfiguration();
+    }
+}
+
+/*=============================================================*/
+void BackDia::selectClip()
+{
+    QString file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
+
+    if ( !file.isEmpty() ) {
+	chosenClip = file;
+	lClipName->setText( chosenClip );
+	backCombo->setCurrentItem( 2 );
+	clipChanged = TRUE;
+	updateConfiguration();
+    }
 }
 
