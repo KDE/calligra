@@ -3789,14 +3789,19 @@ void KSpreadView::mergeCell()
 
 void KSpreadView::dissociateCell()
 {
-  if ( !d->activeSheet )
+  // sanity check
+  if( !d->activeSheet )
+    return;    
+  if( d->activeSheet->isProtected() )
     return;
-
-  d->doc->emitBeginOperation( false );
-
-  d->activeSheet->dissociateCell( QPoint( d->canvas->markerColumn(),
-                                    d->canvas->markerRow() ) );
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  if( d->doc->workbook()->isProtected() )
+    return;
+    
+  KSpreadCell* cell = d->activeSheet->nonDefaultCell( QPoint( d->canvas->markerColumn(),
+      d->canvas->markerRow() ) );  
+  KCommand* command = new DissociateCellCommand( cell ); 
+  d->doc->addCommand( command );
+  command->execute();  
 }
 
 

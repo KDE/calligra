@@ -1004,7 +1004,7 @@ void CellFormatDlg::slotApply()
                                                                 top, obj->extraXCells(), obj->extraYCells() );
       macroUndo->addCommand(undo);
       
-      m_table->dissociateCell(QPoint(left,top),false);
+      m_table->dissociateCell(QPoint(left,top));
     }    
   }
 

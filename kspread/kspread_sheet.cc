@@ -5890,7 +5890,7 @@ void KSpreadSheet::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
 {
    if( m_iExtraX==0 && m_iExtraY==0)
    {
-     dissociateCell( QPoint( m_iCol,m_iRow),false);
+     dissociateCell( QPoint( m_iCol,m_iRow));
      return;
    }
 
@@ -5924,18 +5924,13 @@ void KSpreadSheet::mergeCells( const QRect &area )
   emit sig_updateView( this, area );
 }
 
-void KSpreadSheet::dissociateCell( const QPoint &cellRef, bool makeUndo)
+void KSpreadSheet::dissociateCell( const QPoint &cellRef )
 {
   QPoint marker(cellRef);
   KSpreadCell *cell = nonDefaultCell( marker );
   if(!cell->isForceExtraCells())
     return;
 
-  if ( !m_pDoc->undoLocked() && makeUndo)
-  {
-    KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, marker.x() ,marker.y(), cell->extraXCells(), cell->extraYCells());
-    m_pDoc->addCommand( undo );
-  }
     int x = cell->extraXCells() + 1;
     if( x == 0 )
         x = 1;
@@ -5945,7 +5940,6 @@ void KSpreadSheet::dissociateCell( const QPoint &cellRef, bool makeUndo)
 
     cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
     QRect selection( marker.x(), marker.y(), x, y );
-
     refreshMergedCell();
     emit sig_updateView( this, selection );
 }
