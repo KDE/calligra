@@ -287,7 +287,6 @@ void KPPresStructView::setupPagePreview()
 /*================================================================*/
 void KPPresStructView::resizeEvent( QResizeEvent * )
 {
-    //QDialog::resizeEvent( e );
     hsplit->resize( size() );
 }
 
@@ -300,7 +299,6 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
     if ( !item->parent() )
         view->skipToPage( item->text( 0 ).toInt() - 1 );
     else {
-        view->getCanvas()->deSelectAllObj();
         if (item->parent())
             view->skipToPage( item->parent()->text( 0 ).toInt() - 1 );
         else
