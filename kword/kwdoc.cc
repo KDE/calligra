@@ -299,7 +299,7 @@ void KWDocument::initConfig()
       setGridY(config->readDoubleNumEntry("GridY",10.0));
       setGridX(config->readDoubleNumEntry("GridX",10.0));
       // Config-file value in mm, default 10 pt
-      double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
+      double indent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
       setIndentValue(indent);
       setShowRuler(config->readBoolEntry("Rulers",true));
       int defaultAutoSave = KoDocument::defaultAutoSave()/60; // in minutes
