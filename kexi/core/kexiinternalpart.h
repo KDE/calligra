@@ -70,7 +70,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
 		static const KexiInternalPart* part(const char* partName);
 
-		/*! \return true is the part can create only one (unique) dialog. */
+		/*! \return true if the part can create only one (unique) dialog. */
 		inline bool uniqueDialog() const { return m_uniqueDialog; }
 
 		/*! Used internally */

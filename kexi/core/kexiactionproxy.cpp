@@ -72,6 +72,16 @@ int KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
 	return a->plug(w);
 }
 
+void KexiActionProxy::unplugSharedAction(const char *action_name, QWidget* w)
+{
+	KAction *a = sharedAction(action_name);
+	if (!a) {
+		kdWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		return;
+	}
+	a->unplug(w);
+}
+
 KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);

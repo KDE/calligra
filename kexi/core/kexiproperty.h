@@ -170,7 +170,7 @@ class KEXICORE_EXPORT KexiProperty
 		*/
 		void setAutoSync(int sync) { m_autosync = sync; }
 
-		//! \return true is this preperty value is changed. 
+		//! \return true if this preperty value is changed. 
 		bool changed() const;
 
 		/*! Marks this property as changed if \a set is true, or unchanged if \a set is true. */

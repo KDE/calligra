@@ -85,6 +85,10 @@ class KEXICORE_EXPORT KexiActionProxy
 		 \sa action(), KAction::plug(QWidget*, int) */
 		int plugSharedAction(const char *action_name, QWidget* w);
 
+		/*! Unplugs action named \a action_name from a widget \a w.
+		 \sa plugSharedAction(const char *action_name, QWidget* w) */
+		void unplugSharedAction(const char *action_name, QWidget* w);
+
 		/*! Like above, but creates alternative action as a copy of \a action_name,
 		 with \a alternativeText set. When this action is activated, just original action
 		 specified by \a action_name is activated. The aternative action has autmatically set name as:
