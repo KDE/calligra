@@ -941,17 +941,21 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
     } else {
         // DTP mode: calculate the number of pages from the frames.
-        double height=0;
+        double maxBottom=0;
         for (QPtrListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
             if(fit.current()->isDeleted()) continue;
             if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY && !fit.current()->isFloating()) {
                 KWFrameSet * fs = fit.current();
                 for (QPtrListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
-                    height=QMAX(height, f.current()->bottom());
+                    kdDebug() << " fs=" << fs->getName() << " bottom=" << f.current()->bottom() << endl;
+                    maxBottom=QMAX(maxBottom, f.current()->bottom());
                 }
             }
         }
-        m_pages = static_cast<int>((height / ptPaperHeight()) + 0.5);
+        m_pages = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
+#ifdef DEBUG_PAGES
+	kdDebug(32002) << "DTP mode: pages = maxBottom("<<maxBottom<<") / ptPaperHeight=" << ptPaperHeight() << " = " << m_pages << endl;
+#endif
         if(m_pages < 1) m_pages=1;
     }
 }
