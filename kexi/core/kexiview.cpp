@@ -39,6 +39,8 @@
 #include <kedittoolbar.h>
 #include <kcmdlineargs.h>
 
+#include <kocontexthelp.h>
+
 #include "kexiview.h"
 #include "kexiproject.h"
 #include "kexitabbrowser.h"
@@ -100,6 +102,7 @@ void KexiView::updateReadWrite( bool /*readwrite*/ )
 void KexiView::finalizeInit()
 {
 	initDocBrowser();
+	initHelper();
 
 #if QT_VERSION >= 0x030100
 	if(m_windowMode == MultipleWindowMode)
@@ -124,6 +127,12 @@ void KexiView::initDocBrowser()
 	m_browser = new KexiTabBrowser(this, m_workspace, "Document Browser");
 	m_browser->show(); //remove later
 	kdDebug() << "KexiView::initDocBrowser: done" << endl;
+}
+
+void KexiView::initHelper()
+{
+	KoContextHelpDocker *help = new KoContextHelpDocker(this);
+	help->show();
 }
 
 void KexiView::initActions()

@@ -67,6 +67,7 @@ protected:
 	void			initActions();
 	void			initMainDock();
 	void			initDocBrowser();
+	void			initHelper();
 
 	QWidget			*m_mainContent;
 	KDockWidget		*m_mainDock;
