@@ -782,7 +782,7 @@ don't put a </?xml...> at the end of the file!).
 <!--    Variable
 -->
 <!ELEMENT VARIABLE
-    (TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK)>
+    (TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK|NOTE)>
 
 <!--    Variable type
         Attributes:
@@ -797,6 +797,7 @@ don't put a </?xml...> at the end of the file!).
             7... Serial Letter (uses SERIALLETTER to save it)
             8... Field (uses FIELD to save it)
             9... Link
+            10... Note
 
         key  the description of the variable format used to display this variable.
             The first 4 letters identify the class of format:
@@ -870,6 +871,12 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST LINK
     linkName CDATA #REQUIRED
     hrefName CDATA #REQUIRED>
+
+<!ELEMENT NOTE
+    EMPTY>
+<!ATTLIST NOTE
+    note CDATA #REQUIRED>
+
 
 <!--
         Pixmap collection. This list holds the keys of all the pixmaps
