@@ -22,8 +22,6 @@
 #include <sys/time.h>
 #include <unistd.h>                                                      
 
-
-
 // #define puts(A)
 // #define showi(A)
 // #define SHOW_RECT(A)
@@ -35,7 +33,6 @@ Canvas::Canvas(int width, int height)
 {
   views.setAutoDelete(false);
   
-  dragging=false;
   w=width;
   h=height;
   viewportRect=QRect(0,0,w,h);
@@ -95,6 +92,16 @@ void Canvas::removeView(CanvasView *view)
   views.removeRef(view);
 }
 
+int Canvas::height()
+{
+  return h;
+}
+
+
+int Canvas::width()
+{
+  return w;
+}
 void Canvas::repaintView(CanvasView *view, QRect area)
 {
   if (!view)
@@ -119,7 +126,7 @@ void Canvas::repaintView(CanvasView *view, QRect area)
 	      else
 		puts("Null: not rendering");
 	    }
-	  p.drawRect(tileRect);
+	  //p.drawRect(tileRect);
 	}
     }
 }

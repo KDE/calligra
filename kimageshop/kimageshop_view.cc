@@ -293,20 +293,18 @@ void KImageShopView::setupScrollbars()
 {
   m_pVert = new QScrollBar( QScrollBar::Vertical, this );
   m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
-  m_pVert->show();
-  m_pHorz->show();
-  //QObject::connect( m_pVert, SIGNAL( valueChanged( int ) ), this, SLOT( scrollV( int ) ) );
-  //QObject::connect( m_pHorz, SIGNAL( valueChanged( int ) ), this, SLOT( scrollH( int ) ) );
-  m_pVert->setValue(m_pVert->maxValue());
-  m_pHorz->setValue(m_pHorz->maxValue());
-  m_pVert->setValue(m_pVert->minValue());
-  m_pHorz->setValue(m_pHorz->minValue());
-  
-  if ( m_pCanvasView ) 
+
+  if (m_pCanvasView)
     m_pCanvasView->resize( widget()->width()-16, widget()->height()-16 );
   
   m_pVert->setGeometry( widget()->width()-16, 0, 16, widget()->height()-16 );
   m_pHorz->setGeometry( 0, widget()->height()-16, widget()->width()-16, 16 );
+  m_pVert->show();
+  m_pHorz->show();
+
+  QObject::connect( m_pVert, SIGNAL( valueChanged( int ) ), this, SLOT( scrollV( int ) ) );
+  QObject::connect( m_pHorz, SIGNAL( valueChanged( int ) ), this, SLOT( scrollH( int ) ) );
+
 }
 
 void KImageShopView::setupRulers()
@@ -317,6 +315,12 @@ void KImageShopView::setupRulers()
   m_pCanvasView->move( 20, 20 );
   m_pHRuler->setGeometry( 20, 0, m_pCanvasView->width(), 20 );
   m_pVRuler->setGeometry( 0, 20, 20, m_pCanvasView->height() );
+
+  m_pVRuler->setOffset(0);
+  m_pHRuler->setOffset(0);
+
+  m_pVRuler->setRulerStyle(KRuler::pixel);
+  m_pHRuler->setRulerStyle(KRuler::pixel);
 
   m_pVRuler->showTinyMarks(true);
   m_pVRuler->showLittleMarks(true);
@@ -333,21 +337,41 @@ void KImageShopView::setupRulers()
 
 void KImageShopView::setRanges()
 {
-  m_pVRuler->setRange(0, m_pCanvasView->height());
-  m_pHRuler->setRange(0, m_pCanvasView->width());
+  m_pVRuler->setRange(0, m_pDoc->canvas_()->height());
+  m_pHRuler->setRange(0, m_pDoc->canvas_()->width());
 
-  m_pVert->setRange(0, m_pCanvasView->height());
-  m_pHorz->setRange(0, m_pCanvasView->width());
+  int docHeight = m_pDoc->canvas_()->height();
+  int docWidth = m_pDoc->canvas_()->width();
+
+  if(docHeight <= height() - 20)
+    {
+      m_pVert->hide();
+    }
+  else
+    {
+      m_pVert->setRange(0, docHeight - height() + 36);
+      m_pVert->show();
+    }
+
+  if(docWidth <= width() - 20)
+    {
+      m_pHorz->hide();
+    }
+  else
+    {
+      m_pHorz->setRange(0, docWidth - width() + 36);
+      m_pHorz->show();
+    }
 }
 
-void KImageShopView::scrollH( int _value )
+void KImageShopView::scrollH(int _value)
 {
-  m_pCanvasView->scroll( _value, 0 );
+  // m_pCanvasView->scroll( _value, 0 );
 }
 
-void KImageShopView::scrollV( int _value )
+void KImageShopView::scrollV(int _value)
 {
-  m_pCanvasView->scroll( 0, _value );
+  // m_pCanvasView->scroll( 0, _value );
 }
 
 void KImageShopView::newView()
@@ -386,16 +410,34 @@ void KImageShopView::resizeEvent( QResizeEvent* )
     {
       m_pHorz->show();
       m_pVert->show();
+
+      setRanges();
       
       if ( m_pHRuler )
 	m_pHRuler->show();
       if ( m_pVRuler )
 	m_pVRuler->show();
 	
-      m_pCanvasView->resize( widget()->width() - 36, widget()->height() - 36 );
+      if (m_pHorz->isVisible() && m_pVert->isVisible())
+	m_pCanvasView->resize( width() - 36, height() - 36 );
+      else if (m_pHorz->isVisible())
+	m_pCanvasView->resize( width() - 20, height() - 36 );
+      else if (m_pVert->isVisible())
+	m_pCanvasView->resize( width() - 36, height() - 20 );
+      else
+	m_pCanvasView->resize( width() - 20, height() - 20 );
+
       m_pCanvasView->move( 20, 20 );
-      m_pVert->setGeometry( widget()->width() - 16, 0, 16, widget()->height() - 16 );
-      m_pHorz->setGeometry( 0, widget()->height() - 16, widget()->width() - 16, 16 );
+
+      if (m_pHorz->isVisible())
+	m_pVert->setGeometry( width() - 16, 0, 16, height() - 16 );
+      else
+	m_pVert->setGeometry( width() - 16, 0, 16, height() );
+
+      if (m_pVert->isVisible())
+	m_pHorz->setGeometry( 0, height() - 16, width() - 16, 16 );
+      else
+	m_pHorz->setGeometry( 0, height() - 16, width(), 16 );
       
       if ( m_pHRuler )
 	m_pHRuler->setGeometry( 20, 0, m_pCanvasView->width(), 20 );
@@ -528,6 +570,9 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
 
   m_pTool->mouseMove(mouseEvent);
+  
+  m_pHRuler->slotNewValue(e->x());
+  m_pVRuler->slotNewValue(e->y());
 }
 
 void KImageShopView::slotCVMouseRelease(QMouseEvent *e)

@@ -71,7 +71,7 @@ KImageShopDoc::KImageShopDoc()
   m_lstViews.setAutoDelete( false );
 
   // setup canvas
-  m_pCanvas = new Canvas( 510, 515 );
+  m_pCanvas = new Canvas( 510, 510);
 
   // load some test layers
   QString _image = locate("data", "kimageshop/images/cam9b.jpg");	

@@ -43,6 +43,10 @@ class Canvas
   // return current layer
   layer* getCurrentLayer() { return currentLayer; }
 
+  // return size
+  int height();
+  int width();
+
   void addRGBLayer(QString file);
   void compositeImage(QRect r);
   void setCurrentLayer(int l);

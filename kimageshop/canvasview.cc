@@ -21,7 +21,10 @@
 #include "canvasview.h"
 
 
-CanvasView::CanvasView(QWidget *parent) : QWidget(parent) {}
+CanvasView::CanvasView(QWidget *parent) : QWidget(parent)
+{
+  setMouseTracking(true);
+}
 CanvasView::~CanvasView() {}
 
 void CanvasView::paintEvent(QPaintEvent *e)
