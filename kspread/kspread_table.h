@@ -324,6 +324,13 @@ public:
      * Use @ref #recalc to recaculate dirty values.
      */
     void setCalcDirtyFlag();
+   
+    /**
+     * Calculates all cells in the table with the CalcDirtyFlag.
+     * @param m_depend set to false to disable updating the dependencies (why would you want to do that?)
+     */
+    void calc(bool m_depend = true);
+   
     /**
      * Recalculates the current table. If you want to recalculate EVERYTHING, then
      * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make

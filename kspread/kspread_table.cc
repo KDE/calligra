@@ -535,20 +535,19 @@ void KSpreadTable::setCalcDirtyFlag()
 
 void KSpreadTable::recalc(bool m_depend)
 {
-  //    kdDebug(36001) << "KSpreadTable::recalc(" << m_depend << ") STARTING" << endl;
-    // First set all cells as dirty
-    setCalcDirtyFlag();
+   // First set all cells as dirty
+   setCalcDirtyFlag();
 
-    // Now recalc cells - it is important to do it AFTER, so that when
-    // calculating one cell calculates many others, those are not done again.
-    KSpreadCell* c = m_cells.firstCell();
-    for( ; c; c = c->nextCell() )
-        {
-        if(!(c->isObscured() &&c->isObscuringForced()))
-                c->calc( m_depend );
-        }
+   this->calc(m_depend);
+}
 
-    //    kdDebug(36001) << "KSpreadTable::recalc(" << m_depend << ") DONE" << endl;
+void KSpreadTable::calc(bool m_depend)
+{
+  KSpreadCell* c = m_cells.firstCell();
+  for( ; c; c = c->nextCell() )
+  {
+     c->calc( m_depend );
+  }
 }
 
 void KSpreadTable::setChooseRect( const QRect &_sel )

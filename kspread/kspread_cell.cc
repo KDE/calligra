@@ -1601,6 +1601,11 @@ bool KSpreadCell::calc( bool _makedepend )
   if ( !m_bCalcDirtyFlag )
     return true;
 
+  if ( m_pTable->doc()->delayCalculation() )
+  {
+    return true;
+  }
+ 
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
   m_bCalcDirtyFlag = false;

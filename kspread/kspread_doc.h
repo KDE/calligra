@@ -343,6 +343,11 @@ public:
   void initConfig();
   void refreshLocale();
 
+  void emitBeginOperation();
+  void emitEndOperation();
+   
+  bool delayCalculation();
+   
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -583,6 +588,7 @@ protected:
   bool m_bShowFormulaBar;
   bool m_bShowStatusBar;
 
+  bool m_bDelayCalculation;
   KSpellConfig *m_pKSpellConfig;
 
 };

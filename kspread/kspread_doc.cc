@@ -64,6 +64,8 @@ QPtrList<KSpreadDoc>& KSpreadDoc::documents()
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+  m_bDelayCalculation = false;
+   
   if ( s_docs == 0 )
       s_docs = new QPtrList<KSpreadDoc>;
   s_docs->append( this );
@@ -967,5 +969,29 @@ void KSpreadDoc::refreshLocale()
     emit sig_refreshLocale();
 }
 
+
+void KSpreadDoc::emitBeginOperation()
+{
+   KoDocument::emitBeginOperation();
+   m_bDelayCalculation = true;
+}
+
+void KSpreadDoc::emitEndOperation()
+{
+   KSpreadTable *t = NULL;
+   
+   m_bDelayCalculation = false;
+   for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
+   {
+      t->calc(true);
+   }
+   KoDocument::emitEndOperation();
+}
+
+
+bool KSpreadDoc::delayCalculation()
+{
+   return m_bDelayCalculation;
+}
 #include "kspread_doc.moc"
 
