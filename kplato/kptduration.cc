@@ -77,7 +77,7 @@ void KPTDuration::subtract(const KPTDuration &delta) {
 }
 
 KPTDuration KPTDuration::operator*(int unit) const {
-    KPTDuration dur;
+    KPTDuration dur(*this);
     if (unit < 0) {
         kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
     }
@@ -88,7 +88,7 @@ KPTDuration KPTDuration::operator*(int unit) const {
 }
 
 KPTDuration KPTDuration::operator/(int unit) const {
-    KPTDuration dur;
+    KPTDuration dur(*this);
     if (unit <= 0) {
         kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
     }

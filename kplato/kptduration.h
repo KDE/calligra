@@ -93,11 +93,11 @@ class KPTDuration {
         KPTDuration operator/(int unit) const;
         
         KPTDuration operator+(KPTDuration &d) const
-            {KPTDuration dur; dur.add(d); return dur; }
+            {KPTDuration dur(*this); dur.add(d); return dur; }
         KPTDuration &operator+=(const KPTDuration &d) {add(d); return *this; }
         
         KPTDuration operator-(const KPTDuration &d) const
-            {KPTDuration dur; dur.subtract(d); return dur; }
+            {KPTDuration dur(*this); dur.subtract(d); return dur; }
         KPTDuration &operator-=(const KPTDuration &d) {subtract(d); return *this; }
 
         QString toString(Format format = Format_DayTime) const;
