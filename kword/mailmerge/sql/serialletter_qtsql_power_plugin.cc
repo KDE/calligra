@@ -154,6 +154,7 @@ bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
    bool ret=false;
    if (action==KWSLEdit)
    {
+        if ((!database) || (!database->isOpen()))openDatabase();
 	KWQTSQLPowerMailMergeEditor *dia=new KWQTSQLPowerMailMergeEditor(par,this);
 	ret=dia->exec();
 	delete dia;
