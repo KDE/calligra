@@ -1,11 +1,11 @@
-toolbar_DATA =  unsortedList.xpm enumList.xpm table.xpm sub.xpm super.xpm \
-	borderbottom.xpm borderleft.xpm borderright.xpm bordertop.xpm \
-	run_bounding.xpm run_contur.xpm run_not.xpm \
-	editframetool.xpm edittool.xpm picframetool.xpm textframetool.xpm \
-	formula.xpm char.xpm return.xpm kwsearch.xpm \
-	colin.xpm colout.xpm rowin.xpm rowout.xpm tree_arrange.xpm \
-	tree_picture.xpm tree_textframes.xpm tree_embedded.xpm tree_table.xpm \
-	tree_clipart.xpm
+toolbar_DATA =  unsortedList.png enumList.png table.png sub.png super.png \
+	borderbottom.png borderleft.png borderright.png bordertop.png \
+	run_bounding.png run_contur.png run_not.png \
+	editframetool.png edittool.png picframetool.png textframetool.png \
+	formula.png char.png return.png kwsearch.png \
+	colin.png colout.png rowin.png rowout.png tree_arrange.png \
+	tree_picture.png tree_textframes.png tree_embedded.png tree_table.png \
+	tree_clipart.png
 
 toolbardir = $(kde_datadir)/kword/toolbar
 
