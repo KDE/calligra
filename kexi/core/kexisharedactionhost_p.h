@@ -56,6 +56,7 @@ class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 		KActionPtrList sharedActions;
 		QSignalMapper actionMapper;
 		QPtrDict<KexiVolatileActionData> volatileActions;
+		QAsciiDict<QWidget> enablers;
 
 		KexiSharedActionHost *host;
 };

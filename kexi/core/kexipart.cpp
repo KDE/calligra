@@ -75,11 +75,8 @@ void Part::createGUIClients(KexiMainWindow *win)
 		//create part's gui client
 		m_guiClient = new GUIClient(m_mainWin, this, false);
 
-		const QString newobj_icon = info()->createItemIcon();
-//static now!		Kexi::generateIconSetWithStar(info()->itemIcon(), newobj_icon);
-
 		//default actions for part's gui client:
-		KAction *act = new KAction(m_names["instance"]+"...", newobj_icon, 0, this, 
+		KAction *act = new KAction(m_names["instance"]+"...", info()->createItemIcon(), 0, this, 
 			SLOT(slotCreate()), this, (info()->objectName()+"part_create").latin1());
 		act->plug( m_mainWin->findPopupMenu("create") );
 //		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 

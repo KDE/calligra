@@ -137,18 +137,6 @@ namespace Kexi
 			KexiDB::Object *dbObj; 
 	};
 
-	/*! Generates an icons set created by bitblt-ing a small "star" icon 
-	 over icon pointed by \a origIconName. Resulted icon is added to application 
-	 pixmap cache and thus is available using SmallIcon( \a newIconName ), 
-	 and similar functions (from kiconloader.h). 
-	 
-	 Note: SmallIconSet() seems to not work for this.
-	 
-	 It's used for automatic creating icons for actions of creating new objects 
-	 for particular Kexi parts. */
-	KEXICORE_EXPORT void generateIconSetWithStar(
-		const QString& origIconName, const QString& newIconName);
-
 }//namespace Kexi
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

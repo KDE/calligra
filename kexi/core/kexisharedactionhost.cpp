@@ -33,6 +33,7 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
 , actionMapper( this )
 , volatileActions(401)
 , host(h)
+, enablers(401, false)
 {
 	volatileActions.setAutoDelete(true);
 	connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
@@ -43,12 +44,19 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 	QWidget *w = host->focusWindow(); //focusWidget();
 //	while (w && !w->inherits("KexiDialogBase") && !w->inherits("KexiDockBase"))
 //		w = w->parentWidget();
-	if (!w)
-		return;
-	KexiActionProxy * proxy = actionProxies[ w ];
-	if (!proxy)
-		return;
-	proxy->activateSharedAction(act_id.latin1());
+
+	KexiActionProxy *proxy = w ? actionProxies[ w ] : 0;
+
+	if (!proxy || !proxy->activateSharedAction(act_id.latin1())) {
+		//also try to find previous enabler
+		w = enablers[act_id];
+		if (!w)
+			return;
+		proxy = actionProxies[ w ];
+		if (!proxy)
+			return;
+		proxy->activateSharedAction(act_id.latin1());
+	}
 }
 
 //--------------------------------------------------
@@ -104,6 +112,12 @@ void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool a
 		return;
 
 	setActionAvailable(action_name, avail);
+	if (avail) {
+		d->enablers.replace(action_name, fw);
+	}
+	else {
+		d->enablers.take(action_name);
+	}
 }
 
 void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)

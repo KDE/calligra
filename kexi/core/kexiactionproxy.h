@@ -76,7 +76,7 @@ class KEXICORE_EXPORT KexiSharedActionConnector
  For example, edit->copy action can be reused to copy different types of items.
  Availability and meaning of given action depends on the context, while
  the context changes e.g. when another window is activated.
- This class is mostly used by subclassing in KExiDialogBase or KexiDockBase
+ This class is mostly used by subclassing in KexiDialogBase or KexiDockBase
  - you can subclass in a similar way.
 */
 
