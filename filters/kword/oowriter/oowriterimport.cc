@@ -1353,10 +1353,10 @@ void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats
 
 void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
 {
-    QString tableName ( parent.attribute("table:name") ); // TODO: what is empty (non-unique?)
+    QString tableName ( parent.attribute("table:name") ); // TODO: what if empty (non-unique?)
     kdDebug(30518) << "Found table " << tableName << endl;
 
-    // In OOWriter a table is never inisde a paragrpah, in KWord it is always in a paragraph
+    // In OOWriter a table is never inside a paragrpah, in KWord it is always in a paragraph
     QDomElement paragraphElementOut (doc.createElement("PARAGRAPH"));
     currentFramesetElement.appendChild(paragraphElementOut);
 
@@ -1402,7 +1402,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
         if ( name == "table:table-cell" )
         {
             const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
-                .arg(row).arg(column).arg(tableName)); // The table name could have a % sequence so, use the table name as last!
+                .arg(row).arg(column).arg(tableName)); // The table name could have a % sequence, so use the table name as last!
             kdDebug(30518) << "Trying to create " << frameName << endl;
 
             // We need to create a frameset for the cell
