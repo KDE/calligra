@@ -170,14 +170,77 @@ SvgImport::fromPercentage( const QString &s )
 		return s.toDouble();
 }
 
+// parses the number into parameter number
+const char *
+getNumber( const char *ptr, double &number )
+{
+	int integer, exponent;
+	double decimal, frac;
+	int sign, expsign;
+
+	exponent = 0;
+	integer = 0;
+	frac = 1.0;
+	decimal = 0;
+	sign = 1;
+	expsign = 1;
+
+	// read the sign
+	if(*ptr == '+')
+		ptr++;
+	else if(*ptr == '-')
+	{
+		ptr++;
+		sign = -1;
+	}
+
+	// read the integer part
+	while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+		integer = (integer * 10) + *(ptr++) - '0';
+	if(*ptr == '.') // read the decimals
+	{
+		ptr++;
+		while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+			decimal += (*(ptr++) - '0') * (frac *= 0.1);
+	}
+
+	if(*ptr == 'e' || *ptr == 'E') // read the exponent part
+	{
+		ptr++;
+
+		// read the sign of the exponent
+		if(*ptr == '+')
+			ptr++;
+		else if(*ptr == '-')
+		{
+			ptr++;
+			expsign = -1;
+		}
+
+		exponent = 0;
+		while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+		{
+			exponent *= 10;
+			exponent += *ptr - '0';
+			ptr++;
+		}
+	}
+	number = integer + decimal;
+	number *= sign * pow( (double)10, double( expsign * exponent ) );
+
+	return ptr;
+}
+
+
 double
 SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 {
 	// TODO : percentage?
-	bool ok = false;
-	double value = unit.toDouble( &ok );
+	double value = 0;
+	const char *start = unit.latin1();
+	const char *end = getNumber( start, value );
 
-	if( !ok )
+	if( uint( end - start ) < unit.length() )
 	{
 		if( unit.right( 2 ) == "pt" )
 			value = ( value / 72.0 ) * DPI;
@@ -676,7 +739,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			QString points = b.attribute( "points" ).simplifyWhiteSpace();
 			points.replace( ',', ' ' );
 			points.remove( '\r' );
-		        points.remove( '\n' );
+			points.remove( '\n' );
 			QStringList pointList = QStringList::split( ' ', points );
 			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
 			{
