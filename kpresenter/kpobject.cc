@@ -138,6 +138,8 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
                     _element = L_ARROW;
                 else if ( str == lineEndBeginSvg( L_CIRCLE ) )
                     _element = L_CIRCLE;
+                else if ( str == lineEndBeginSvg( L_SQUARE ) )
+                    _element = L_SQUARE;
                 else if ( str == lineEndBeginSvg( L_LINE_ARROW ) )
                     _element = L_LINE_ARROW;
                 else if ( str == lineEndBeginSvg( L_DIMENSION_LINE ) )
@@ -517,12 +519,10 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
 
     if( animation)
     {
-        kdDebug()<<" load animation style **************************************\n";
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
         QString speed = animation->attribute( "presentation:speed" );
-        kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
-        kdDebug()<<" speed :"<<speed<<endl;
+        kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<" speed :"<<speed<<endl;
 
         //kpresenter have three state (medium/slow/fast)
         //not implemented into kpresenter
@@ -1554,9 +1554,9 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         }
         //FIXME witdh pen style is not good :(
         if ( styleStack.hasAttribute( "svg:stroke-width", QString::null,"graphic" ) )
-            pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
+            pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width", QString::null,"graphic" ) ) );
         if ( styleStack.hasAttribute( "svg:stroke-color", QString::null,"graphic" ) )
-            pen.setColor( styleStack.attribute( "svg:stroke-color" ) );
+            pen.setColor( styleStack.attribute( "svg:stroke-color", QString::null,"graphic" ) );
     }
     else
         pen = defaultPen();
