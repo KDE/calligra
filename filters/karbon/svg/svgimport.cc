@@ -83,6 +83,11 @@ void
 SvgImport::convert()
 {
 	QDomElement docElem = inpdoc.documentElement();
+	// undo y-mirroring
+	GraphicsContext *gc = new GraphicsContext;
+	gc->matrix.scale( 1, -1 );
+	gc->matrix.translate( 0, -841 );
+	m_gc.push( gc );
 	parseGroup( 0L, docElem );
 
 	outdoc = m_document.saveXML();
@@ -197,6 +202,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	gc->stroke.setColor( strokecolor );
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
+	obj->transform( gc->matrix );
 	m_gc.push( gc );
 }
 
