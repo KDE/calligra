@@ -36,11 +36,9 @@
 
 #include "kspread_dlg_list.h"
 
-#include <kspread_doc.h>
 #include <kspread_locale.h>
-#include <kspread_view.h>
 
-KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
+KSpreadList::KSpreadList( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n("Custom Lists"), Ok|Cancel )
 {
   QWidget* page = new QWidget( this );

@@ -31,14 +31,13 @@ class QMultiLineEdit;
 class QPushButton;
 
 class KConfig;
-class KSpreadView;
 
 class KSpreadList: public KDialogBase
 {
   Q_OBJECT
 
 public:
-  KSpreadList( KSpreadView* parent, const char* name );
+  KSpreadList( QWidget* parent, const char* name );
   void init();
 
 public slots:
