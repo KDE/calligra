@@ -1007,7 +1007,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     if ( m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
 	m_eMouseAction = Mark;
-	printf("EXTRA x=%i y-=%i\n", cell->extraXCells(),cell->extraYCells() );
 	selection.setCoords( markerColumn(), markerRow(),
 			     markerColumn() + cell->extraXCells(),
 			     markerRow() + cell->extraYCells() );
@@ -2401,7 +2400,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     {
       QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH,
-                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 2,
+                  row_lay->height( m_pCanvas ), colorGroup(), true, 1,
                   &fillHighlighted );
     }
     else
@@ -2797,7 +2796,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     {
       QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
-                  XBORDER_HEIGHT, colorGroup(), FALSE, 2, &fillHighlighted );
+                  XBORDER_HEIGHT, colorGroup(), true, 1, &fillHighlighted );
     }
     else
     {
