@@ -959,7 +959,7 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,in
       _font.setBold(true);
       p.setFont(_font);
       p.setPen(yellow);
-      p.drawText(0,0,_w,_h,AlignLeft,"Doubleclick to edit");
+      p.drawText(0,0,_w,_h,AlignLeft,i18n("Doubleclick to edit"));
     }
   else
     {

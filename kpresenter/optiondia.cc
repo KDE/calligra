@@ -27,15 +27,15 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   int col1 = 20,dummy,w,h;
   
   /* Tab: General */ 
-  general = new QWidget(this,"General");
+  general = new QWidget(this,i18n("General"));
 
   lRastX = new QLabel(general,"lRastX");
-  lRastX->setText("Horizontal Raster: ");
+  lRastX->setText(i18n("Horizontal Raster: "));
   lRastX->move(col1,20);
   lRastX->resize(lRastX->sizeHint());
 
   lRastY = new QLabel(general,"lRastY");
-  lRastY->setText("Vertikal Raster: ");
+  lRastY->setText(i18n("Vertikal Raster: "));
   lRastY->move(col1,lRastX->y()+lRastX->height()+15);
   lRastY->resize(lRastY->sizeHint());
 
@@ -63,15 +63,15 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   /* Tab: Objects */
   objects = new QWidget(this,"objects");
 
-  txtObj = new QGroupBox("Objects in Editing-Mode",objects,"txtObjs");
+  txtObj = new QGroupBox(i18n("Objects in Editing-Mode"),objects,"txtObjs");
   txtObj->move(col1,col1);
 
   lBackCol = new QLabel(txtObj,"lBackCol");
-  lBackCol->setText("Backgroud color:");
+  lBackCol->setText(i18n("Backgroud color:"));
   lBackCol->move(10,20);
  
   lSelCol = new QLabel(txtObj,"lSelCol");
-  lSelCol->setText("Selection color:");
+  lSelCol->setText(i18n("Selection color:"));
   lSelCol->move(10,lBackCol->y()+lBackCol->height()+10);
 
   dummy = max(lBackCol->sizeHint().width(),lSelCol->sizeHint().width());
@@ -86,15 +86,15 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
 
   txtObj->resize(20+bBackCol->x()+bBackCol->width(),20+bSelCol->y()+bSelCol->height());
 
-  rect = new QGroupBox("Rounded Rectangles",objects,"rect");
+  rect = new QGroupBox(i18n("Rounded Rectangles"),objects,"rect");
   rect->move(col1,txtObj->y()+txtObj->height()+20);
 
   lRndX = new QLabel(rect,"lRndX");
-  lRndX->setText("Roundedness X:");
+  lRndX->setTexti18n(("Roundedness X:"));
   lRndX->move(10,20);
 
   lRndY = new QLabel(rect,"lRndY");
-  lRndY->setText("Roundedness Y:");
+  lRndY->setText(i18n("Roundedness Y:"));
   lRndY->move(10,lRndX->y()+lRndX->height()+10);
 
   dummy = max(lRndX->sizeHint().width(),lRndY->sizeHint().width());
@@ -131,12 +131,12 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   objects->setMaximumSize(objects->width(),objects->height());
 
   /* build dialog */
-  addTab(general,"General");
-  addTab(objects,"Objects");
+  addTab(general,i18n("General"));
+  addTab(objects,i18n("Objects"));
 
-  setCancelButton("Cancel");
-  setApplyButton("Apply");
-  setOkButton("OK");
+  setCancelButton(i18n("Cancel"));
+  setApplyButton(i18n("Apply"));
+  setOkButton(i18n("OK"));
 }
 
 /*===================== destructor ===============================*/
