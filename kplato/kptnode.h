@@ -281,7 +281,7 @@ public:
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments();
 
-    bool resourceError() { return m_resourceError; }
+    bool resourceError() const { return m_resourceError; }
 
     virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
     virtual bool resourceOverbooked() { return m_resourceOverbooked; }
@@ -512,7 +512,7 @@ public:
      * Return the @optimistic duaration as deviation from @expected in percent.
      * This should be a negativ value.
      */
-    int optimisticRatio() { return -10; } // FIXME
+    int optimisticRatio() const { return -10; } // FIXME
     /**
      * Set the pessimistic duration
      * @percent should be a positive value.
@@ -522,7 +522,7 @@ public:
      * Return the @pessimistic duaration as the deviation from @expected in percent.
      * This should be a positive value.
      */
-    int pessimisticRatio() { return 20; }  // FIXME
+    int pessimisticRatio() const { return 20; }  // FIXME
 
     /**
      * No effort.
