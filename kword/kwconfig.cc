@@ -906,6 +906,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
     (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup path"),doc->backupPath() );
+    (void) new QListViewItem( m_pPathView, i18n("Horizontal Line path"),doc->horizontalLinePath().join(";") );
 
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
@@ -925,6 +926,13 @@ void ConfigurePathPage::slotModifyPath()
     if ( item )
     {
         if ( item->text(0)==i18n("Personal Expression"))
+        {
+            KoEditPathDia * dlg = new KoEditPathDia( item->text( 1),   0L, "editpath");
+            if (dlg->exec() )
+                item->setText(1, dlg->newPath());
+            delete dlg;
+        }
+        if ( item->text(0)==i18n("Horizontal Line path"))
         {
             KoEditPathDia * dlg = new KoEditPathDia( item->text( 1),   0L, "editpath");
             if (dlg->exec() )
@@ -962,6 +970,11 @@ void ConfigurePathPage::slotDefault()
     item = m_pPathView->findItem(i18n("Backup path"), 0);
     if ( item )
         item->setText(1, QString::null );
+
+    item = m_pPathView->findItem(i18n("Horizontal Line path"), 0);
+    if ( item )
+        item->setText(1, KWFactory::global()->dirs()->resourceDirs("horizontalLine").join(";") );
+
 }
 
 void ConfigurePathPage::apply()
@@ -977,6 +990,19 @@ void ConfigurePathPage::apply()
             config->writeEntry( "expression path", lst);
         }
     }
+
+    item = m_pPathView->findItem(i18n("Horizontal Line path"), 0);
+    if ( item )
+    {
+        QStringList lst = QStringList::split(QString(";"), item->text(1));
+        if ( lst != m_pView->kWordDocument()->horizontalLinePath())
+        {
+            m_pView->kWordDocument()->setHorizontalLinePath(lst);
+            config->setGroup( "Kword Path" );
+            config->writeEntry( "horizontal line path", lst);
+        }
+    }
+
     item = m_pPathView->findItem(i18n("Picture path"), 0);
     if ( item )
     {

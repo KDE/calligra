@@ -463,6 +463,8 @@ void KWDocument::initConfig()
   {
       config->setGroup( "Kword Path" );
       m_personalExpressionPath=config->readListEntry( "expression path"/*,KWFactory::global()->dirs()->resourceDirs("expression")*/ );
+      m_horizontalLinePath=config->readListEntry( "horizontal line path"/*,KWFactory::global()->dirs()->resourceDirs("expression")*/ );
+
       m_picturePath=config->readEntry( "picture path",KGlobalSettings::documentPath());
       setBackupPath(config->readEntry( "backup path", QString::null ));
   }
