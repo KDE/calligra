@@ -134,6 +134,7 @@ protected:
 
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_LayerDialog;
+  CORBA::Long m_idMenuView_ColorDialog;
 
   OpenPartsUI::Menu_var m_vMenuImage;
   OpenPartsUI::Menu_var m_vMenuPlugIns;

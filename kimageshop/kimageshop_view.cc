@@ -261,6 +261,23 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
+  m_vMenuEdit->insertSeparator( -1 );
+
+  text = Q2C( i18n( "&Cut" ) );
+  pix = OPICON( "editcut.xpm" );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem3( pix, text, this, "slotEditCut", stdAccel.cut() );
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, false );
+
+  text = Q2C( i18n( "&Copy" ) );
+  pix = OPICON( "editcopy.xpm" );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem3( pix, text, this, "slotEditCopy", stdAccel.cut() );
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, false );
+
+  text = Q2C( i18n( "&Paste" ) );
+  pix = OPICON( "editpaste.xpm" );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem3( pix, text, this, "slotEditPaste", stdAccel.cut() );
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, false );
+
   // view menu
   text = Q2C( i18n( "&View" ) );
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
@@ -269,6 +286,9 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   text = Q2C( i18n( "&Layer dialog" ) );
   m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
   m_vMenuEdit->setItemChecked( m_idMenuView_LayerDialog, false );
+
+  text = Q2C( i18n( "&Color dialog" ) );
+  m_idMenuView_ColorDialog = m_vMenuView->insertItem( text, this, "viewColorDialog", 0 );
 
   // image menu
   text = Q2C( i18n( "&Image" ) );
@@ -766,6 +786,10 @@ void KImageShopView::viewLayerDialog()
     // TODO: make this working
     m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
   }
+}
+
+void KImageShopView::viewColorDialog()
+{
 }
 
 void KImageShopView::changeUndo( QString _text, bool _enable )

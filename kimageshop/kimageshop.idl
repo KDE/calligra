@@ -67,6 +67,7 @@ module KImageShop
 
                 // View menu
                 slot void viewLayerDialog();
+		slot void viewColorDialog();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print
