@@ -22,7 +22,7 @@
 
 class QPixmap;
 
-#include "kexiprojectpart.h"
+#include "kexiprojecthandler.h"
 
 class KexiQueryPart : public KexiProjectPart
 {
@@ -31,20 +31,19 @@ class KexiQueryPart : public KexiProjectPart
 	public:
 		KexiQueryPart(KexiProject *project);
 
-		QString				name();
-		QString				mime();
-		bool				visible();
+		virtual QString				name();
+		virtual QString				mime();
+		virtual bool				visible();
 
 
-                void hookIntoView(KexiView *view);
+                virtual void hookIntoView(KexiView *view);
 
-                void store (KoStore *){;}
-                void load  (KoStore *){;}
+                virtual void store (KoStore *){;}
+                virtual void load  (KoStore *){;}
 
-		void executeItem(KexiView* view, QString identifier);
 
-		QPixmap				groupPixmap();
-		QPixmap				itemPixmap();
+		virtual QPixmap				groupPixmap();
+		virtual QPixmap				itemPixmap();
 	
 	protected:
 		friend class KexiQueryPartProxy;

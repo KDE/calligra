@@ -24,7 +24,7 @@
 class QPixmap;
 
 #include "kexiquerypart.h"
-#include "kexiprojectpartproxy.h"
+#include "kexiprojecthandlerproxy.h"
 
 class KexiView;
 
