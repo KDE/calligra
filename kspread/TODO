@@ -13,7 +13,7 @@ Other things: (please add the things you are working on!)
 
 - Speed up selecting many cells!
 - general speed up!
-- WYSIWYG
+- WYSIWYG (use kotext)
 - insert manual page break
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not committed (Norbert))
@@ -32,13 +32,13 @@ Other things: (please add the things you are working on!)
 - Pivot tables
 - more chart types
 - multible Selections
-- background spell check
+- background spell check (necessary to use kotext)
 - links to cells in other kspread files
 - much more formulas (financial, database...)
         String2Int, CurrentMonth, CurrentYear, CurrentDay
         See list below
-- Insert pictures
-- Insert basic drawings, autoforms        
+- Insert pictures (Add support for object into kspread)
+- Insert basic drawings, autoforms (necessary to create a share lib from kpresenter)
 - Insert widgets like buttons, drop down lists,... + having the possibily to
   define action if pressed, or selection changes,...
 - Transparancy for embedded objects
@@ -271,6 +271,7 @@ NPV
 Trig:
 
 IMTAN
++ACOT
 
 
 ***************************************************************************************
