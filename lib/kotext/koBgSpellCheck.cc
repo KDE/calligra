@@ -67,19 +67,25 @@ void KoBgSpellCheck::addIgnoreWordAll( const QString & word)
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
     m_spellListIgnoreAll.clear();
+    stopSpellChecking();
     spellConfig()->setIgnoreList( m_spellListIgnoreAll );
+    startBackgroundSpellCheck();
 }
 
 void KoBgSpellCheck::addIgnoreWordAllList( const QStringList & list)
 {
     m_spellListIgnoreAll.clear();
+    stopSpellChecking();
     spellConfig()->setIgnoreList( list );
+    startBackgroundSpellCheck();
 }
 
 void KoBgSpellCheck::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
+    startBackgroundSpellCheck();
     spellConfig()->setIgnoreList( m_spellListIgnoreAll );
+    startBackgroundSpellCheck();
 }
 
 void KoBgSpellCheck::startBackgroundSpellCheck()
@@ -270,10 +276,7 @@ KSpellConfig* KoBgSpellCheck::spellConfig()
 void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
 {
   (void)spellConfig();
-  delete m_bgSpell.kspell;
-  m_bgSpell.kspell = 0;
-  m_bgSpell.currentParag = 0;
-  m_bgSpell.currentTextObj = 0;
+  stopSpellChecking();
 
   m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
   m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
@@ -282,4 +285,12 @@ void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setEncoding(_kspell.encoding());
   m_pKSpellConfig->setClient(_kspell.client());
   startBackgroundSpellCheck();
+}
+
+void KoBgSpellCheck::stopSpellChecking()
+{
+  delete m_bgSpell.kspell;
+  m_bgSpell.kspell = 0;
+  m_bgSpell.currentParag = 0;
+  m_bgSpell.currentTextObj = 0;
 }

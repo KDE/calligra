@@ -223,6 +223,7 @@ public:
 
 protected:
 	QStringList	m_buffer;
+        QStringList ignorelist;
 	int trystart;
 	int maxtrystart;
 	KProcIO *proc;

@@ -66,7 +66,7 @@ protected slots:
 protected:
     KSpellConfig* spellConfig();
     void nextParagraphNeedingCheck();
-
+    void stopSpellChecking();
     // Structure holding the background spellcheck data
     struct KoBGSpell {
         KoBGSpell() : kspell(0L), currentTextObj(0L), currentParag(0L) {}

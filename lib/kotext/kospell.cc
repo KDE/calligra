@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-// $Id$
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -128,6 +126,8 @@ KoSpell::KoSpell(QWidget *_parent, QObject *obj, const char *slot, KSpellConfig 
 	kdDebug() << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
 
 	m_status = Starting;
+
+        ignorelist += ksconfig->ignoreList();
 
 	// caller wants to know when kspell is ready
 	if ( obj && slot )
@@ -347,47 +347,47 @@ QString KoSpell::funnyWord(const QString & word)
 
 KoSpell::Spelling KoSpell::parseLine(const QString &line, QString &word, int &pos)
 {
-	bool skip = false;
+    bool skip = false;
 
-	//kdDebug() << "KoSpell::parseLine(\"" << line << "\")" << endl;
-	if(line.isEmpty())
-		return SpellingDone;
+    //kdDebug() << "KoSpell::parseLine(\"" << line << "\")" << endl;
+    if(line.isEmpty())
+        return SpellingDone;
 
-	QChar ch = line[0];
-	switch(ch)
-	{
-		case '*':
-		case '+':
-		case '-':
-			return SpellingOk;
-		case '&':
-		case '?':
-			skip = true;
-		case '#':
-		{
-			int p		= line.find(QChar(' '), 2);
-			word		= line.mid(2, p-2);
-			p++;
-			if(skip)
-			{
-				while(line[p].isDigit())
-					p++;
-				p++;
-			}
-			int l=0;
-			while(line[p+l].isDigit())
-				l++;
-			bool ok=true;
-			pos = line.mid(p,l).toInt(&ok);
-			//kdDebug() << "	pos=" << pos << " [" << line.mid(p,l) << "]" << endl;
+    QChar ch = line[0];
+    switch(ch)
+    {
+    case '*':
+    case '+':
+    case '-':
+        return SpellingOk;
+    case '&':
+    case '?':
+        skip = true;
+    case '#':
+    {
+        int p		= line.find(QChar(' '), 2);
+        word		= line.mid(2, p-2);
+        p++;
+        if(skip)
+        {
+            while(line[p].isDigit())
+                p++;
+            p++;
+        }
+        int l=0;
+        while(line[p+l].isDigit())
+            l++;
+        bool ok=true;
+        pos = line.mid(p,l).toInt(&ok);
+        //kdDebug() << "	pos=" << pos << " [" << line.mid(p,l) << "]" << endl;
 //			if(!ok)
 //				return SpellingError;
-			return Misspelled;
-		}
-		default:
-			return SpellingError;
-	}
-	return SpellingError;
+        return Misspelled;
+    }
+    default:
+        return SpellingError;
+    }
+    return SpellingError;
 }
 
 bool KoSpell::check(const QString &buffer)
@@ -414,78 +414,84 @@ bool KoSpell::check(const QString &buffer)
 void KoSpell::check2(KProcIO *)
 {
 //	kdDebug() << "KoSpell::check2()" << endl;
-	QString line;
-	int bytes;
-	while((bytes=proc->fgets(line, true)) >= 0)
-	{
+    QString line;
+    int bytes;
+    while((bytes=proc->fgets(line, true)) >= 0)
+    {
 
-		/* UTF-8 encoding
-		 * source: http://www.cl.cam.ac.uk/~mgk25/unicode.html
-		 *
-		 * U-00000000 - U-0000007F: 	0xxxxxxx
-		 * U-00000080 - U-000007FF:	110xxxxx 10xxxxxx
-		 * U-00000800 - U-0000FFFF:	1110xxxx 10xxxxxx 10xxxxxx
-		 * U-00010000 - U-001FFFFF:	11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-		 * U-00200000 - U-03FFFFFF:	111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-		 * U-04000000 - U-7FFFFFFF:	1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-		 */
-		int pos=0;
-		QString word;
-		Spelling spelling = parseLine(line, word, pos);
-		switch(spelling)
-		{
-			case Misspelled:
-			{
-				QString buffer = m_buffer.front();
-				pos--;	// for the '^' we sent, which ispell also counts as 1 char
-				for(int i=0; i < pos; i++)
-				{
-					ushort u = buffer[i].unicode();
-					if(u > 0x7f)
-						pos--;
-					else if(u > 0x7ff)
-						pos-=2;
-					/* ushort can't hold more than that, right?
-					else if(u > 0xffff)
-						pos-=3;
-					*/
+        /* UTF-8 encoding
+         * source: http://www.cl.cam.ac.uk/~mgk25/unicode.html
+         *
+         * U-00000000 - U-0000007F: 	0xxxxxxx
+         * U-00000080 - U-000007FF:	110xxxxx 10xxxxxx
+         * U-00000800 - U-0000FFFF:	1110xxxx 10xxxxxx 10xxxxxx
+         * U-00010000 - U-001FFFFF:	11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+         * U-00200000 - U-03FFFFFF:	111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+         * U-04000000 - U-7FFFFFFF:	1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+         */
+        int pos=0;
+        QString word;
+        Spelling spelling = parseLine(line, word, pos);
+        if(d->m_bIgnoreTitleCase && word==word.upper())
+            spelling=SpellingDone;
+        if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
+        {
+            QString text=word[0]+word.right(word.length()-1).lower();
+            if(text==word)
+                spelling=SpellingDone;
+        }
+        if (ignorelist.findIndex(word.lower())!=-1)
+            spelling=SpellingDone;
 
-				}
+        switch(spelling)
+        {
+        case Misspelled:
+        {
+            QString buffer = m_buffer.front();
+            pos--;	// for the '^' we sent, which ispell also counts as 1 char
+            for(int i=0; i < pos; i++)
+            {
+                ushort u = buffer[i].unicode();
+                if(u > 0x7f)
+                    pos--;
+                else if(u > 0x7ff)
+                    pos-=2;
+                /* ushort can't hold more than that, right?
+                   else if(u > 0xffff)
+                   pos-=3;
+                */
+
+            }
 //				kdDebug() << "KoSpell::misspelling(" << word << ", " << pos << ")" << endl;
-				emit misspelling(word, pos);
-				break;
-			}
+            emit misspelling(word, pos);
+            break;
+        }
 
-			case SpellingDone:
+        case SpellingDone:
 //				kdDebug() << "KoSpell::done()" << endl;
-				m_buffer.pop_front();
-				emit done();
-				break;
+            m_buffer.pop_front();
+            emit done();
+            break;
 
-			default:
-				kdDebug() << "KoSpell::check2() ERROR" << endl;
-				break;
-		}
-	}
+        default:
+            kdDebug() << "KoSpell::check2() ERROR" << endl;
+            break;
+        }
+    }
 
 //	proc->ackRead();
 }
 
 KoSpell:: ~KoSpell ()
 {
-	if(d)
-		delete d;
-
-	if (proc)
-		delete proc;
-
-	if (ksconfig)
-		delete ksconfig;
+    delete d;
+    delete proc;
+    delete ksconfig;
 }
 
 KSpellConfig KoSpell::ksConfig () const
 {
-  //ksconfig->setIgnoreList(ignorelist);
+    //ksconfig->setIgnoreList(ignorelist);
   return *ksconfig;
 }
 
