@@ -571,10 +571,53 @@ void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, 
 {
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
-    //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
+    qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
     QTextParag::drawCursor( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
                             zh->layoutUnitToPixelY( cury, curh ), cg );
+}
+
+// Reimplemented from QTextParag
+void KoTextParag::copyParagData( QTextParag *_parag )
+{
+    KoTextParag * parag = static_cast<KoTextParag *>(_parag);
+    // Style of the previous paragraph
+    KoStyle * style = parag->style();
+    // Obey "following style" setting
+    bool styleApplied = false;
+    if ( style )
+    {
+        KoStyle * newStyle = style->followingStyle();
+        if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
+        {
+            setParagLayout( newStyle->paragLayout() );
+            QTextFormat * format = &newStyle->format();
+            setFormat( format );
+            format->addRef();
+            string()->setFormat( 0, format, true ); // prepare format for text insertion
+            styleApplied = true;
+        }
+    }
+    else
+        kdWarning() << "Paragraph has no style " << paragId() << endl;
+
+    // No "following style" setting, or same style -> copy layout & format of previous paragraph
+    if (!styleApplied)
+    {
+        setParagLayout( parag->paragLayout() );
+        // Don't copy the hard-frame-break setting though
+        m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakBefore;
+        m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
+        // set parag format to the format of the trailing space of the previous parag
+        setFormat( parag->at( parag->length()-1 )->format() );
+        // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
+        // for the chars in the new parag
+    }
+
+    // Note: we don't call QTextParag::copyParagData on purpose.
+    // We don't want setListStyle to get called - it ruins our stylesheetitems
+    // And we don't care about copying the stylesheetitems directly,
+    // applying the parag layout will create them
 }
 
 void KoTextParag::setTabList( const KoTabulatorList &tabList )
@@ -745,3 +788,83 @@ int KoTextParag::findCustomItem( const QTextCustomItem * custom ) const
               << " not found in paragraph " << paragId() << endl;
     return 0;
 }
+
+#ifndef NDEBUG
+void KoTextParag::printRTDebug( int info )
+{
+    kdDebug() << "Paragraph " << this << "   (" << paragId() << ") [changed="
+              << hasChanged() << ", valid=" << isValid() << "] ------------------ " << endl;
+    if ( prev() && prev()->paragId() + 1 != paragId() )
+        kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
+    if ( next() && next()->paragId() != paragId() + 1 )
+        kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
+    if ( !next() )
+        kdDebug() << "  next is 0L" << endl;
+    if ( isMovedDown() )
+        kdDebug() << "  Is moved down" << endl;
+    /*
+      static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
+      QPtrVector<QStyleSheetItem> vec = styleSheetItems();
+      for ( uint i = 0 ; i < vec.size() ; ++i )
+      {
+      QStyleSheetItem * item = vec[i];
+      kdDebug() << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
+      kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
+      kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
+      kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
+      }*/
+    kdDebug() << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
+    kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
+    if ( info == 0 ) // paragraph info
+    {
+        if ( counter() )
+            kdDebug() << "  Counter style=" << counter()->style()
+                      << " numbering=" << counter()->numbering()
+                      << " depth=" << counter()->depth()
+                      << " text='" << m_layout.counter->text( this ) << "'"
+                      << " width=" << m_layout.counter->width( this ) << endl;
+        kdDebug() << "  rect() : " << DEBUGRECT( rect() ) << endl;
+
+        kdDebug() << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
+                  << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
+                  << " rightMargin()=" << rightMargin() << endl;
+
+        static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
+        KoTabulatorList tabList = m_layout.tabList();
+        KoTabulatorList::Iterator it = tabList.begin();
+        for ( ; it != tabList.end() ; it++ )
+            kdDebug() << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
+
+    } else if ( info == 1 ) // formatting info
+    {
+        kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
+                  << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->pointSizeFloat() << endl;
+
+        QTextString * s = string();
+        for ( int i = 0 ; i < s->length() ; ++i )
+        {
+            QTextStringChar & ch = s->at(i);
+            kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
+                      << " x(LU)=" << ch.x
+                      << " w(LU)=" << ch.width//s->width(i)
+                      << " x(PIX)=" << textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
+                + ch.pixelxadj
+                      << " (xadj=" << + ch.pixelxadj << ")"
+                      << " w(PIX)=" << ch.pixelwidth
+                      << " height=" << ch.height()
+                //      << " format=" << ch.format()
+                      << " \"" << ch.format()->key() << "\" "
+                //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSizeFloat()
+                      << endl;
+            if ( ch.isCustom() )
+            {
+                QTextCustomItem * item = ch.customItem();
+                kdDebug() << " - custom item " << item
+                          << " ownline=" << item->ownLine()
+                          << " size=" << item->width << "x" << item->height
+                          << endl;
+            }
+        }
+    }
+}
+#endif

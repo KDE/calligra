@@ -130,12 +130,18 @@ public:
     /** @return the parag rect, in pixels. This takes care of some rounding problems */
     QRect pixelRect( KoZoomHandler* zh ) const;
 
+
+#ifndef NDEBUG
+    void printRTDebug( int );
+#endif
+
 protected:
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
 			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
 
     /** Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph. */
     virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
+    virtual void copyParagData( QTextParag *_parag );
     void invalidateCounters();
     void checkItem( QStyleSheetItem * & item, const char * name );
 
