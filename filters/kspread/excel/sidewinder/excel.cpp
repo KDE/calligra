@@ -30,8 +30,6 @@
 #include "pole.h"
 #include "swinder.h"
 
-using namespace Swinder;
-
 // Use anonymous namespace to cover following functions
 namespace{
 
@@ -128,6 +126,20 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
 }
 
 }
+
+namespace Swinder 
+{
+std::ostream& Swinder::operator<<( std::ostream& s, Swinder::UString ustring )
+{
+  char* str = ustring.ascii();
+  s << str;
+  return s;
+}
+
+}
+
+using namespace Swinder;
+
 
 //=============================================
 //          EString
@@ -1077,7 +1089,7 @@ void BoundSheetRecord::setData( unsigned size, const unsigned char* data )
 void BoundSheetRecord::dump( std::ostream& out ) const
 {
   out << "BOUNDSHEET" << std::endl;
-  out << "               Name : " << d->name.ascii() << std::endl;
+  out << "               Name : " << d->name << std::endl;
   out << "               Type : " << d->type << " (" << typeAsString() << ")" << std::endl;
   out << "         Visibility : " << d->visibility << " (";
   if( visible() ) out << "Visible"; else out << "Hidden"; out << ")" << std::endl;
@@ -1586,7 +1598,7 @@ void FontRecord::dump( std::ostream& out ) const
 {
   out << "FONT" << std::endl;
   out << "             Height : " << height() << " twips" << std::endl;
-  out << "          Font Name : " << fontName().ascii() << std::endl;
+  out << "          Font Name : " << fontName() << std::endl;
   out << "        Color Index : " << colorIndex() << std::endl;
   out << "           Boldness : " << boldness() << std::endl;
   out << "             Italic : " << (italic()?"Yes":"No") << std::endl;
@@ -1645,7 +1657,7 @@ void FooterRecord::setData( unsigned size, const unsigned char* data )
 void FooterRecord::dump( std::ostream& out ) const
 {
   out << "FOOTER" << std::endl;
-  out << "             Footer : " << footer().ascii() << std::endl;
+  out << "             Footer : " << footer() << std::endl;
 }
 
 // ========== FORMAT ==========
@@ -1722,7 +1734,7 @@ void FormatRecord::dump( std::ostream& out ) const
 {
   out << "FORMAT" << std::endl;
   out << "             Index  : " << index() << std::endl;
-  out << "      Format String : " << formatString().ascii() << std::endl;
+  out << "      Format String : " << formatString() << std::endl;
 }
 
 
@@ -1873,7 +1885,7 @@ void LabelRecord::dump( std::ostream& out ) const
   out << "                Row : " << row() << std::endl;
   out << "             Column : " << column() << std::endl;
   out << "           XF Index : " << xfIndex() << std::endl;
-  out << "              Label : " << label().ascii() << std::endl;
+  out << "              Label : " << label() << std::endl;
 }
 
 // ========== HEADER ==========
@@ -1920,7 +1932,7 @@ void HeaderRecord::setData( unsigned size, const unsigned char* data )
 void HeaderRecord::dump( std::ostream& out ) const
 {
   out << "HEADER" << std::endl;
-  out << "              Header: " << header().ascii() << std::endl;
+  out << "              Header: " << header() << std::endl;
 }
 
 // ========== LABELSST ========== 
@@ -2663,7 +2675,7 @@ void RStringRecord::dump( std::ostream& out ) const
   out << "                Row : " << row() << std::endl;
   out << "             Column : " << column() << std::endl;
   out << "           XF Index : " << xfIndex() << std::endl;
-  out << "              Label : " << label().ascii() << std::endl;
+  out << "              Label : " << label() << std::endl;
 }
 
 // ========== SST ==========
@@ -2746,7 +2758,7 @@ void SSTRecord::dump( std::ostream& out ) const
   out << "              Count : " << count() << std::endl;
   for( unsigned i = 0; i < count(); i++ )
     out << "         String #" << std::setw(2) << i << " : " << 
-    stringAt( i ).ascii() << std::endl;
+    stringAt( i ) << std::endl;
 }
 
 // ========== STRING ==========
@@ -2793,7 +2805,7 @@ Value StringRecord::value() const
 void StringRecord::dump( std::ostream& out ) const
 {
   out << "STRING" << std::endl;
-  out << "             String : " << ustring().ascii() << std::endl;
+  out << "             String : " << ustring() << std::endl;
 }
 
 
