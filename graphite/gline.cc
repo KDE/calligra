@@ -120,6 +120,9 @@ QDomElement GLine::save(QDomDocument &doc) const {
 
 void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) {
 
+    if(dirty())
+        recalculate();
+
     if(state()==GObject::Deleted || (toPrinter && state()==GObject::Invisible))
         return;
 
@@ -133,6 +136,9 @@ void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) {
 }
 
 void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
+
+    if(dirty())
+        recalculate();
 
     p.save();
     p.setPen(Qt::black);
@@ -188,12 +194,16 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
     p.restore();
 }
 
-void GLine::recalculate() {
+void GLine::recalculate() const {
     m_a.recalculate();
     m_b.recalculate();
+    GObject::recalculate();
 }
 
 const GLine *GLine::hit(const QPoint &p) const {
+
+    if(dirty())
+        recalculate();
 
     int fBorder=GraphiteGlobal::self()->fuzzyBorder();
     QRect fuzzyRect(boundingRect().x()-fBorder, boundingRect().y()-fBorder,
@@ -245,6 +255,9 @@ const GLine *GLine::hit(const QPoint &p) const {
 
 bool GLine::intersects(const QRect &r) const {
 
+    if(dirty())
+        recalculate();
+
     if(r.contains(m_a.pxPoint()) || r.contains(m_b.pxPoint()))
         return true;
     else if(r.intersects(boundingRect()))
@@ -281,6 +294,9 @@ const QRect &GLine::boundingRect() const {
 
     if(!boundingRectDirty())
         return GObject::boundingRect();
+
+    if(dirty())
+        recalculate();
     setBoundingRect(QRect( Graphite::min(m_a.pxX(), m_b.pxX()), Graphite::min(m_a.pxY(), m_b.pxY()),
                            Graphite::abs(m_a.pxX()-m_b.pxX()), Graphite::abs(m_a.pxY()-m_b.pxY())));
     setBoundingRectDirty(false);

@@ -57,7 +57,6 @@ void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
 
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
 
-    //kdDebug() << "GCanvas::contentsMouseMoveEvent: e->x(): " << e->x() << " e->y(): " << e->y() << endl;
     if(m_vertical)
         m_vertical->setMousePos(e->x(), e->y());
     if(m_horizontal)

@@ -37,13 +37,13 @@ public:
     // create a line and initialize it with the given XML (calls the XML-CTOR)
     virtual GLine *instantiate(const QDomElement &element) const;
 
+    virtual void setDirty() { GObject::setDirty(); }
+
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
     virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
     // Do we need this? Maybe even lines should have rectangular handles...
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
-
-    virtual void recalculate();
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual bool intersects(const QRect &r) const;
@@ -66,6 +66,9 @@ public:
     void setA(const FxPoint &a) { m_a=a; }
     const FxPoint &b() const { return m_b; }
     void setB(const FxPoint &b) { m_b=b; }
+
+protected:
+    virtual void recalculate() const;
 
 private:
     GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them

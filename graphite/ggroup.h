@@ -40,6 +40,8 @@ public:
     virtual GObject *clone() const;
     virtual GObject *instantiate(const QDomElement &element) const;
 
+    virtual void setDirty();
+
     virtual bool plugChild(GObject *child, const Position &pos=Current);
     virtual bool unplugChild(GObject *child);
 
@@ -52,8 +54,6 @@ public:
     virtual QDomElement save(QDomDocument &doc) const;
 
     virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
-
-    virtual void recalculate();
 
     virtual const GObject *hit(const QPoint &p) const;
     virtual bool intersects(const QRect &r) const;
@@ -81,6 +81,8 @@ public:
 
 private:
     GGroup &operator=(const GGroup &rhs);
+
+    virtual void recalculate() const;
 
     QList<GObject> m_members;
     mutable QListIterator<GObject> *m_iterator;

@@ -242,6 +242,10 @@ public:
     // create an object and initialize it with the given XML (calls the XML-CTOR)
     virtual GObject *instantiate(const QDomElement &element) const = 0;
 
+    // When the zoom factor changes we have to propagate this to all children!
+    virtual void setDirty() = 0;  // don't forget to call this default impl.!
+    bool dirty() const { return m_dirty; }
+
     const GObject *parent() const { return m_parent; }
     void setParent(GObject *parent) const;   // parent==0L - no parent, parent==this - illegal
 
@@ -267,10 +271,8 @@ public:
     // Used to draw the handles/rot-handles when selected
     // All handles which are drawn are added to the list if the list
     // is != 0L. Use this list to check "mouseOver" stuff
+    // drawing: setROP(Not)
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
-
-    // This one is called by the document whenever the zoom of the view changes
-    virtual void recalculate() = 0;  // don't forget to call it for all coords!
 
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;
@@ -313,6 +315,9 @@ protected:
     GObject(const GObject &rhs);
     GObject(const QDomElement &element);
 
+    // This one has to be called when the status is "dirtiy" and we access the coords.
+    virtual void recalculate() const = 0; // don't forget to call!
+
     bool boundingRectDirty() const { return m_boundingRectDirty; }
     void setBoundingRectDirty(bool dirty=true) const { m_boundingRectDirty=dirty; }
     void setBoundingRect(const QRect &br) const { m_boundingRect=br; }
@@ -335,7 +340,8 @@ private:
     Gradient m_gradient;
     QPen m_pen;
 
-    bool m_ok;      // used to express errors (e.g. during loading)
+    bool m_ok : 1;      // used to express errors (e.g. during loading)
+    mutable bool m_dirty : 1;   // the zoom factor changed (->recalc on next use)
 };
 
 

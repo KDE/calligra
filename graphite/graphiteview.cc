@@ -56,7 +56,7 @@ void GraphiteView::slotViewZoom(const QString &t) {
     QChar colon(',');
     double zoomValue=1.0;
 
-    // then analyze the new text and decide it we can use it
+    // analyze the new text and decide it we can use it
     unsigned int start=0;
     bool comma=false;
     // get rid of leading garbage
@@ -129,12 +129,13 @@ void GraphiteView::slotViewZoom(const QString &t) {
         // get rid of the "wrong" text
         items.remove(items.at(m_zoomAction->currentItem()));
         // and if we got a valid text append this one
-        if(!corrected.isEmpty())
+        int index=items.findIndex(corrected);
+        if(!corrected.isEmpty() && index==-1)
             items.append(corrected);
         m_zoomAction->setItems(items);
         // set the correct item as current item (can't do that earlier)
         if(!corrected.isEmpty())
-            m_zoomAction->setCurrentItem(items.count()-1);
+            m_zoomAction->setCurrentItem(index==-1 ? items.count()-1 : index);
         else
             m_zoomAction->setCurrentItem(1); // 100%
     }

@@ -115,6 +115,14 @@ GObject *GGroup::instantiate(const QDomElement &element) const {
     return new GGroup(element);
 }
 
+void GGroup::setDirty() {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+        it.current()->setDirty();
+    GObject::setDirty();
+}
+
 bool GGroup::plugChild(GObject *child, const Position &pos) {
 
     if(child==0L)
@@ -188,21 +196,19 @@ QDomElement GGroup::save(QDomDocument &doc) const {
 
 void GGroup::draw(QPainter &p, const QRect &rect, bool toPrinter) {
 
+    if(dirty())
+        recalculate();
+
     // first go and check the boundign rect!
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->draw(p, rect, toPrinter);
 }
 
-void GGroup::recalculate() {
-
-    QListIterator<GObject> it(m_members);
-    for( ; it!=0L; ++it)
-        it.current()->recalculate();
-    setBoundingRectDirty();
-}
-
 const GObject *GGroup::hit(const QPoint &p) const {
+
+    if(dirty())
+        recalculate();
 
     QListIterator<GObject> it(m_members);
     it.toLast();
@@ -217,6 +223,9 @@ const GObject *GGroup::hit(const QPoint &p) const {
 
 bool GGroup::intersects(const QRect &r) const {
 
+    if(dirty())
+        recalculate();
+
     if(r.intersects(boundingRect()))
         return true;
     return false;
@@ -226,6 +235,9 @@ const QRect &GGroup::boundingRect() const {
 
     if(!boundingRectDirty())
         return GObject::boundingRect();
+
+    if(dirty())
+        recalculate();
 
     if(m_members.isEmpty()) {
         setBoundingRect(QRect(0, 0, 0, 0));
@@ -373,6 +385,12 @@ void GGroup::setPen(const QPen &p) {
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->setPen(p);
+}
+
+void GGroup::recalculate() const {
+    // not much to do here, because the group members are all
+    // "dirty" and know when to recalculte themselves.
+    GObject::recalculate();
 }
 
 

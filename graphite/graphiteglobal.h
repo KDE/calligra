@@ -192,11 +192,13 @@ public:
 
     // When the zoom factor and/or the resoltuion changes
     // we have to recalculate the pixel value
-    void recalculate();
+    // const, because it's more convenient and in fact the *real*
+    // value remains the same... not bitwise const, though ;)
+    void recalculate() const;
 
 private:
     double m_value;    // value in mm
-    int m_pixel;       // current pixel value (approximated, zoomed)
+    mutable int m_pixel;       // current pixel value (approximated, zoomed)
 };
 
 // compares the current pixel values!
@@ -239,7 +241,7 @@ public:
     void setPxPoint(const int &x, const int &y) { m_x.setPxValue(x); m_y.setPxValue(y); }
     void setPxPoint(const QPoint &p) { m_x.setPxValue(p.x()); m_y.setPxValue(p.y()); }
 
-    void recalculate() { m_x.recalculate(); m_y.recalculate(); }
+    void recalculate() const { m_x.recalculate(); m_y.recalculate(); }
 
 private:
     FxValue m_x, m_y;
@@ -316,7 +318,7 @@ public:
     bool intersects(const FxRect &r) const;
     bool intersects(const QRect &r) const;
 
-    void recalculate() { m_tl.recalculate(); m_br.recalculate(); }
+    void recalculate() const { m_tl.recalculate(); m_br.recalculate(); }
     QRect pxRect() const { return QRect(m_tl.pxX(), m_tl.pxY(), m_br.pxX()-m_tl.pxX(),
                                  m_br.pxY()-m_tl.pxY()); }
 private:

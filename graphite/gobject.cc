@@ -516,6 +516,17 @@ void G2DObjectM9r::updatePreview(int btn) {
 }
 
 
+void GObject::setDirty() {
+    m_dirty=true;
+    setBoundingRectDirty();
+}
+
+void GObject::setParent(GObject *parent) const {
+
+    if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
+        m_parent=parent;
+}
+
 QDomElement GObject::save(QDomDocument &doc) const {
 
     static const QString &tagObject=KGlobal::staticQString("gobject");
@@ -563,6 +574,9 @@ QDomElement GObject::save(QDomDocument &doc) const {
 }
 
 void GObject::drawHandles(QPainter &p, QList<QRect> *handles) {
+
+    if(dirty())
+        recalculate();
 
     p.save();
     p.setPen(Qt::black);
@@ -669,14 +683,8 @@ const QRect &GObject::boundingRect() const {
     return m_boundingRect;
 }
 
-void GObject::setParent(GObject *parent) const {
-
-    if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
-        m_parent=parent;
-}
-
 GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent(0L),
-    m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true) {
+    m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true), m_dirty(false) {
 
     m_gradient.type=KImageEffect::VerticalGradient;
     m_gradient.xfactor=1;
@@ -686,11 +694,11 @@ GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent
 GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
     m_state(rhs.state()), m_parent(0L), m_angle(rhs.angle()),
     m_boundingRectDirty(true), m_fillStyle(rhs.fillStyle()), m_brush(rhs.brush()),
-    m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true) {
+    m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true), m_dirty(rhs.dirty()) {
 }
 
 GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty(true),
-                                               m_ok(false) {
+                                               m_ok(false), m_dirty(false) {
 
     static const QString &tagObject=KGlobal::staticQString("gobject");
     static const QString &attrName=KGlobal::staticQString("name");
@@ -774,6 +782,10 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
         m_gradient.yfactor=1;
     }
     m_ok=true;   // CTOR has been completed successfully :)
+}
+
+void GObject::recalculate() const {
+    m_dirty=false;
 }
 
 #include <gobject.moc>

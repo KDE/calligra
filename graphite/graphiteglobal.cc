@@ -379,7 +379,7 @@ const double FxValue::valuePt() const {
     return Graphite::mm2pt(m_value);
 }
 
-void FxValue::recalculate() {
+void FxValue::recalculate() const {
     m_pixel=Graphite::double2Int(m_value*GraphiteGlobal::self()->zoomedResolution());
 }
 
