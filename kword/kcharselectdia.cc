@@ -36,24 +36,40 @@
 
 /*================================================================*/
 KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont )
-    : KDialogBase( Plain, i18n("Select a character"), Ok | Cancel, Ok, parent, name, true )
+    : KDialogBase( Plain, i18n("Select a character"), Ok | Cancel, Ok , parent, name, true )
 {
-    QWidget *page = plainPage();
+    initDialog(_chr,_font,_enableFont);
+
+    setButtonOKText(i18n("&Insert"),
+                      i18n("Insert the selected character in the text"));
+
+}
+
+/*================================================================*/
+KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr )
+    : KDialogBase( Plain, i18n("Select a character"), User1 | Cancel, User1 , parent, name, true )
+{
+    initDialog(_chr,_font,true);
+
+    setButtonText( User1, i18n("&Insert") );
+    setButtonTip( User1, i18n("Insert the selected character in the text") );
+
+}
+
+void KCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool _enableFont)
+{
+   QWidget *page = plainPage();
 
     grid = new QGridLayout( page, 1, 1, 15, 7 );
 
     charSelect = new KCharSelect( page, "", _font, _chr );
     charSelect->resize( charSelect->sizeHint() );
-    charSelect->enableFontCombo( _enableFont );
+    charSelect->enableFontCombo( true );
     grid->addWidget( charSelect, 0, 0 );
 
     grid->addColSpacing( 0, charSelect->width() );
     grid->addRowSpacing( 0, charSelect->height() );
     grid->setRowStretch( 0, 0 );
-    
-    setButtonOKText(i18n("&Insert"),
-                    i18n("Insert the selected character in the text"));
-
     charSelect->setFocus();
 }
 
@@ -86,4 +102,10 @@ QChar KCharSelectDia::chr()
 QString KCharSelectDia::font()
 {
     return charSelect->font();
+}
+
+/*================================================================*/
+void KCharSelectDia::slotUser1()
+{
+    emit insertChar(chr());
 }

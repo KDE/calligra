@@ -42,12 +42,21 @@ public:
     // constructor - destructor
     KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont );
 
+    //constructor when you want to insert multi char
+    KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr );
+
     // select char dialog
     static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true );
 
     // internal
     QChar chr();
     QString font();
+
+private:
+    void initDialog(const QChar &_chr, const QString &_font, bool _enableFont);
+
+private slots:
+    void slotUser1();
 
 protected:
     // dialog objects
@@ -56,6 +65,8 @@ protected:
     QPushButton *bOk, *bCancel;
     KCharSelect *charSelect;
 
+ signals:
+    void insertChar(QChar);
 };
 
 #endif

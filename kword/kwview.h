@@ -273,6 +273,10 @@ public slots:
 
     void clipboardDataChanged();
     void tabListChanged( QList<KoTabulator>* );
+
+
+    void slotSpecialChar(QChar c);
+
 protected:
     void setupActions();
     void createKWGUI();

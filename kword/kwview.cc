@@ -958,6 +958,7 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableJoinCells->setEnabled( FALSE );
     actionTableSplitCells->setEnabled( FALSE );
     actionTableDelete->setEnabled( FALSE );
+    actionTableUngroup->setEnabled( FALSE );
 
     switch ( _mouseMode ) {
     case MM_EDIT: {
@@ -968,10 +969,12 @@ void KWView::setTool( MouseMode _mouseMode )
         actionTableJoinCells->setEnabled( TRUE );
         actionTableSplitCells->setEnabled( TRUE );
         actionTableDelete->setEnabled( TRUE );
+        actionTableUngroup->setEnabled( TRUE );
     } break;
     case MM_EDIT_FRAME: {
         actionTableJoinCells->setEnabled( TRUE );
         actionTableSplitCells->setEnabled( TRUE );
+        actionTableUngroup->setEnabled( TRUE );
     } break;
     default: break;
     }
@@ -1152,7 +1155,7 @@ void KWView::viewHeader()
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    doc->getPageLayout( pgLayout, cl, hf );
+    doc->getPaeLayout( pgLayout, cl, hf );
     doc->setPageLayout( pgLayout, cl, hf );
     */
 }
@@ -1288,8 +1291,19 @@ void KWView::insertSpecialChar()
         return;
     QString f = font().family();
     QChar c=' ';
-    if ( KCharSelectDia::selectChar( f, c ) )
-            edit->insertSpecialChar(c);
+    KCharSelectDia *dlg=new KCharSelectDia( this, "insert special char", f,c );
+    connect(dlg,SIGNAL(insertChar(QChar)),this,SLOT(slotSpecialChar(QChar)));
+    dlg->show();
+    delete dlg;
+}
+
+/*===============================================================*/
+void KWView::slotSpecialChar(QChar c)
+{
+   KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if ( !edit )
+        return;
+    edit->insertSpecialChar(c);
 }
 
 /*===============================================================*/
