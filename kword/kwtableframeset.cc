@@ -212,7 +212,7 @@ double KWTableFrameSet::leftWithoutBorder()
     int i;
     for (i=0; cell = getCell(i,0); i++)
     {
-        left = QMAX( left, m_rowPositions[0] + cell->leftBorder() );
+        left = QMAX( left, m_colPositions[0] + cell->leftBorder() );
     }
     return left;
 }
