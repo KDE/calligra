@@ -4054,12 +4054,14 @@ void KSpreadTable::setConditional( const QRect & _marker,
   int r = _marker.right();
   int t = _marker.top();
   int b = _marker.bottom();
-  
+
+  KSpreadCell * cell;
+
   for (int x = l; x <= r; ++x)
   {
     for (int y = t; y <= b; ++y)
     {
-      KSpreadCell *cell = cellAt( x, y, true );
+      cell = cellAt( x, y, true );
       if ( cell->isObscuringForced() )
         continue;
       if ( cell->isDefault() )
