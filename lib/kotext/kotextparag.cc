@@ -1077,7 +1077,7 @@ void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *form
             p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
             break;
         case KoTextFormat::DOT:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DotLine ) );
             break;
         case KoTextFormat::DASH_DOT:
             p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
