@@ -765,8 +765,49 @@ void KWord13OasisGenerator::writeStylesXml( void )
 }
 #endif
 
+// Inspired by KWDocument::saveOasis
 void KWord13OasisGenerator::writeContentXml(void)
 {
+#if 1
+    if ( !m_store || !m_kwordDocument )
+        return;
+
+    m_store->open("content.xml"); // ### TODO: check error!
+    KoStoreDevice io ( m_store );
+    io.open( IO_WriteOnly );  // ### TODO: check error!
+
+    KoXmlWriter writer( &io, "office:document-content" );
+    
+    
+    // Automatic styles
+    writer.startElement( "office:automatic-styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it;
+    for ( it = styles.begin(); it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &writer, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_LIST );
+    for ( it = styles.begin(); it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &writer, m_oasisGenStyles, "text:list-style", (*it).name, 0 );
+    }
+    writer.endElement(); // office:automatic-styles
+
+    writer.startElement( "office:body" );
+    writer.startElement( "office:text" );
+
+    // ### TODO: write text document!
+    
+    writer.endElement(); // office:text
+    writer.endElement(); // office:body
+
+    
+    // ### TODO
+        
+    writer.endElement();
+    writer.endDocument();
+    io.close();
+    m_store->close();
+#else
     if (!m_zip)
         return;
 
@@ -798,6 +839,7 @@ void KWord13OasisGenerator::writeContentXml(void)
     kdDebug(30520) << "content.xml: closing file..." << endl;
     zipDoneWriting();
     kdDebug(30520) << "content.xml: done!" << endl;
+#endif
 }
 
 void KWord13OasisGenerator::writeMetaXml(void)
@@ -895,6 +937,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     zipWriteData( "/>\n" ); // meta:document-statistic
 #endif    
     writer.endElement();
+    writer.endDocument();
     
     io.close();
     m_store->close();
@@ -918,6 +961,8 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     }
     m_store->disallowNameExpansion();
     
+    writeStylesXml();
+    writeContentXml();
     writeMetaXml();
     
 # if 1 // DEBUG
