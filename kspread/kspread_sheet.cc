@@ -6331,7 +6331,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             }
         }
     }
-    
+
     int rowIndex = 0;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
@@ -6339,10 +6339,18 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         QDomElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
+
+            if ( rowElement.hasAttribute( "table:style-name" ) )
+            {
+                QString str = rowElement.attribute( "table:style-name" );
+                kdDebug()<<"style row !!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<str<<endl;
+                QDomElement *style = oasisStyles.styles()[str];
+                kdDebug()<<" style :"<<style<<endl;
+            }
             if( rowElement.tagName() == "table:table-row" )
             {
                 rowIndex++;
-                int columnIndex = 0;            
+                int columnIndex = 0;
                 QDomNode cellNode = rowNode.firstChild();
                 while( !cellNode.isNull() )
                 {
@@ -6354,7 +6362,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                         {
                             KSpreadCell* cell = nonDefaultCell( columnIndex, rowIndex );
                             cell->loadOasis( cellElement, oasisStyles );
-                            
+
                             if( cellElement.hasAttribute( "table:number-columns-repeated" ) )
                             {
                                 bool ok = false;
@@ -6369,10 +6377,10 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                              }
                         }
                     }
-                    
+
                     cellNode = cellNode.nextSibling();
                 }
-                
+
                 if( rowElement.hasAttribute( "table:number-rows-repeated" ) )
                 {
                     bool ok = false;
@@ -6384,7 +6392,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 }
             }
         }
-        
+
         rowNode = rowNode.nextSibling();
     }
 

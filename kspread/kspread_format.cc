@@ -2238,6 +2238,11 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     return row;
 }
 
+bool RowFormat::loadOasis( QDomElement * rowStyle )
+{
+    return true;
+}
+
 bool RowFormat::load( const QDomElement & row, int yshift, PasteMode sp, bool paste )
 {
     bool ok;
