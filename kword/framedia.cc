@@ -1116,13 +1116,21 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
     grid5->addItem( spacer,row,0 );
 
     brushStyle->insertItem( i18n( "No Background Fill" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "100% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "94% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "88% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "63% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "50% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "37% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "12% Fill Pattern" ) );
+    // xgettext:no-c-format
     brushStyle->insertItem( i18n( "6% Fill Pattern" ) );
     brushStyle->insertItem( i18n( "Horizontal Lines" ) );
     brushStyle->insertItem( i18n( "Vertical Lines" ) );
