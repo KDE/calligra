@@ -369,7 +369,7 @@ private:
     uint m_nbMaxCompletionWord;
     QStringList m_cacheNameOfDays;
     /// Indicates if doAutoFormat has called itself
-    bool m_word_inserted;
+    bool m_wordInserted;
 };
 
 #endif

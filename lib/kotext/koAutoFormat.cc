@@ -128,7 +128,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_maxFindLength( 0 ),
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 ),
-      m_word_inserted( false )
+      m_wordInserted( false )
 {
     //load once this list not each time that we "readConfig"
     loadListOfWordCompletion();
@@ -970,7 +970,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         KCommand *cmd = 0L;     
         KMacroCommand *macro = 0L;
         
-        if ( !m_word_inserted)
+        if ( !m_wordInserted)
         {
         
                 bool go_right;
@@ -1022,7 +1022,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                         else
                                 newPos= endPos-1;
                                 
-                        m_word_inserted = true; //don't allow other replacements in this replacement
+                        m_wordInserted = true; //don't allow other replacements in this replacement
                         for(int i=completionBeginPos; i<newPos;i++)
                         {
                                 textEditCursor->setIndex(i);
@@ -1031,7 +1031,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                         }
                         textEditCursor->setIndex(newPos);
                         doAutoFormat( textEditCursor, parag, newPos, ch,txtObj );
-                        m_word_inserted = false;
+                        m_wordInserted = false;
                         if (endPos==0)
                         {
                                 textEditCursor->gotoLineStart();  
