@@ -81,37 +81,37 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,const char* name)
     tmpQButtonGroup->setTitle( i18n("Borders:") );
 
     co[0] = new QComboBox(tmpQButtonGroup,"Combo1");
-    co[0]->insertItem(i18n("No-border"));
+    co[0]->insertItem(i18n("No Border"));
     co[0]->insertItem(i18n("Single Line"));
     co[0]->insertItem(i18n("Double Line"));
     grid1->addWidget(co[0],0,1);
 
     co[1] = new QComboBox(tmpQButtonGroup,"Combo2");
-    co[1]->insertItem(i18n("No-border"));
+    co[1]->insertItem(i18n("No Border"));
     co[1]->insertItem(i18n("Single Line"));
     co[1]->insertItem(i18n("Double Line"));
     grid1->addWidget(co[1],1,1);
 
     co[2] = new QComboBox(tmpQButtonGroup,"Combo3");
-    co[2]->insertItem(i18n("No-border"));
+    co[2]->insertItem(i18n("No Border"));
     co[2]->insertItem(i18n("Single Line"));
     co[2]->insertItem(i18n("Double Line"));
     grid1->addWidget(co[2],2,1);
 
     co[3] = new QComboBox(tmpQButtonGroup,"Combo4");
-    co[3]->insertItem(i18n("No-border"));
+    co[3]->insertItem(i18n("No Border"));
     co[3]->insertItem(i18n("Single Line"));
     co[3]->insertItem(i18n("Double Line"));
     grid1->addWidget(co[3],3,1);
 
     co[4] = new QComboBox(tmpQButtonGroup,"Combo5");
-    co[4]->insertItem(i18n("No-border"));
+    co[4]->insertItem(i18n("No Border"));
     co[4]->insertItem(i18n("Single Line"));
     co[4]->insertItem(i18n("Double Line"));
     grid1->addWidget(co[4],4,1);
 
     co[5] = new QComboBox(tmpQButtonGroup,"Combo6");
-    co[5]->insertItem(i18n("No-border"));
+    co[5]->insertItem(i18n("No Border"));
     co[5]->insertItem(i18n("Single Line"));
     co[5]->insertItem(i18n("Double Line"));
     grid1->addWidget(co[5],5,1);
