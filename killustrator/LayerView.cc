@@ -41,8 +41,8 @@ LayerView::LayerView (QWidget *parent, const char *name)
     setBackgroundColor(colorGroup().base());
     document = 0L;
 
-    pixmaps[0] = UserIcon ("eye");
-    pixmaps[1] = UserIcon ("freehandtool");
+    pixmaps[0] = SmallIcon ("eye");
+    pixmaps[1] = SmallIcon ("freehandtool");
     pixmaps[2] = BarIcon ("fileprint");
 
     setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);

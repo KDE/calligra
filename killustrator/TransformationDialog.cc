@@ -213,11 +213,11 @@ void TransformationDialog::createMirrorWidget (QWidget* parent) {
 
     horizMirror = new QPushButton(group);
     horizMirror->setToggleButton(true);
-    horizMirror->setPixmap(UserIcon("hmirror"));
+    horizMirror->setPixmap(SmallIcon("hmirror"));
 
     vertMirror = new QPushButton(group);
     vertMirror->setToggleButton(true);
-    vertMirror->setPixmap(UserIcon("vmirror"));
+    vertMirror->setPixmap(SmallIcon("vmirror"));
 
     group=new QHButtonGroup(parent);
     group->setFrameStyle (QFrame::NoFrame);
