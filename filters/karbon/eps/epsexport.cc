@@ -99,7 +99,6 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	delete( dialog );
 
 	storeIn->close();
-	delete storeIn;
 
 	return KoFilter::OK;
 }
@@ -115,7 +114,7 @@ EpsExport::visitVDocument( VDocument& document )
 
 	// Print a header:
 	*m_stream <<
-		"%!PS-Adobe-2.0 EPSF-1.2\n"
+		"%!PS-Adobe-3.0 EPSF-3.0\n"
 		"%%BoundingBox: "
 		// Round down:
 			<< qRound( rect.left()   - 0.5 ) << " "
