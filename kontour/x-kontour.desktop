@@ -2,6 +2,9 @@
 [Desktop Entry]
 MimeType=application/x-kontour
 Comment=Kontour
+Comment[af]=KONTOER
+Comment[da]=Kontour illustreringsprogram 
+Comment[eo]=Vektorgrafikprogramo Konturo
 Icon=kontour
 Type=MimeType
 Patterns=*.kil;

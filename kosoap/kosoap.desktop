@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=KOSoap
+Name[af]=KO-SEEP
+Name[eo]=KO-Sapo
+Name[fr]=kOSoap
+Name[sv]=Exempel
 Exec=kosoap
 X-KDE-Library=libkosoappart
 MimeType=application/x-kosoap
