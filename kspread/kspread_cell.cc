@@ -1904,61 +1904,11 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
   // Draw a background brush
   QBrush bb = backGroundBrush( cellRef.x(), cellRef.y() );
 
-  int left_offset = 0;
-  int top_offset = 0;
-  int right_offset = 0;
-  int bottom_offset = 0;
-  /* TODO:
-     these need to be initialized with the 'overhang' of the border of the
-     neighboring cell (be aware of cells to the corner).  We might also want
-     to account for the extra width of this cell's border although that
-     doesn't seem quite necessary since those are painted later over top of
-     these.
-     Another option is just to repaint neighboring cell's borders here
-     Here's some code that sort of, kind of, did this before:
-
-  //
-  // Look at the cells on our corners. It may happen that we
-  // just erased parts of their borders corner, so we might need
-  // to repaint these corners.
-  //
-  KSpreadCell* cell_t = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 );
-  KSpreadCell* cell_r = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() );
-  KSpreadCell* cell_l = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() );
-  // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
-
-  // Fix the borders which meet at the top left corner
-  QPen vert_pen = cell_t->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
-  if ( vert_pen.style() != Qt::NoPen )
-  {
-    QPen horz_pen = cell_l->topBorderPen( cellRef.x() - 1, cellRef.y() );
-    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
-    painter.setPen( vert_pen );
-    painter.drawLine( corner.x(), corner.y(), corner.x(),
-                      corner.y() + bottom );
-  }
-
-  // Fix the borders which meet at the top right corner
-  vert_pen = cell_t->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
-  if ( vert_pen.style() != Qt::NoPen )
-  {
-    QPen horz_pen = cell_r->topBorderPen( cellRef.x() + 1, cellRef.y() );
-    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
-    painter.setPen( vert_pen );
-    painter.drawLine( corner.x() + width, corner.y(),
-                      corner.x() + width, corner.y() + bottom );
-  }
-
-
-
-  */
-
   if( bb.style() != Qt::NoBrush )
   {
-    painter.fillRect( corner.x() + left_offset, corner.y() + top_offset,
-                       width - left_offset - right_offset,
-                       height - top_offset - bottom_offset, bb );
+    painter.fillRect( corner.x(), corner.y(), width, height, bb );
   }
+
 }
 
 void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
@@ -2514,6 +2464,60 @@ void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
       painter.drawLine( corner.x(), corner.y() + height , corner.x() + width,
                         corner.y() );
     }
+  }
+
+  //
+  // Look at the cells on our corners. It may happen that we
+  // just erased parts of their borders corner, so we might need
+  // to repaint these corners.
+  //
+  KSpreadCell* cell_t = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 );
+  KSpreadCell* cell_r = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() );
+  KSpreadCell* cell_l = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() );
+  KSpreadCell* cell_b = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 );
+
+  QPen vert_pen, horz_pen;
+  // Fix the borders which meet at the top left corner
+  vert_pen = cell_t->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( vert_pen.style() != Qt::NoPen )
+  {
+    horz_pen = cell_l->topBorderPen( cellRef.x() - 1, cellRef.y() );
+    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+    painter.setPen( vert_pen );
+    painter.drawLine( corner.x(), corner.y(), corner.x(),
+                      corner.y() + bottom );
+  }
+
+  // Fix the borders which meet at the top right corner
+  vert_pen = cell_t->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( vert_pen.style() != Qt::NoPen )
+  {
+    horz_pen = cell_r->topBorderPen( cellRef.x() + 1, cellRef.y() );
+    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+    painter.setPen( vert_pen );
+    painter.drawLine( corner.x() + width, corner.y(),
+                      corner.x() + width, corner.y() + bottom );
+  }
+  // Fix the borders which meet at the bottom left corner
+  vert_pen = cell_b->leftBorderPen( cellRef.x(), cellRef.y() + 1 );
+  if ( vert_pen.style() != Qt::NoPen )
+  {
+    horz_pen = cell_l->bottomBorderPen( cellRef.x() - 1, cellRef.y() );
+    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2;
+    painter.setPen( vert_pen );
+    painter.drawLine( corner.x(), corner.y() + height - bottom, corner.x(),
+                      corner.y() + height );
+  }
+
+  // Fix the borders which meet at the bottom right corner
+  vert_pen = cell_b->rightBorderPen( cellRef.x(), cellRef.y() + 1 );
+  if ( vert_pen.style() != Qt::NoPen )
+  {
+    horz_pen = cell_r->bottomBorderPen( cellRef.x() + 1, cellRef.y() );
+    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2;
+    painter.setPen( vert_pen );
+    painter.drawLine( corner.x() + width, corner.y() + height - bottom,
+                      corner.x() + width, corner.y() + height );
   }
 }
 
