@@ -3909,12 +3909,8 @@ void KPresenterView::setRanges()
     if ( vert && horz && m_canvas && m_pKPresenterDoc ) {
 	vert->setSteps( 10, m_canvas->height() );
 	vert->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
-	horz->setSteps( 10, m_canvas->activePage()->getZoomPageRect().width() +
-			16 - m_canvas->width() );
-	int range = m_canvas->activePage()->getZoomPageRect().width() +
-		16 - m_canvas->width() < 0 ? 0 :
-	    m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width();
-	horz->setRange( 0, range );
+	horz->setSteps( 10, m_canvas->width() );
+	horz->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width() ) );
     }
 }
 
