@@ -86,7 +86,7 @@ public:
 	void combine( const VPath& path );
 	void combineSegmentList( const VSegmentList& segmentList );
 
-	virtual void draw( VPainter *painter, const QRect& rect,
+	virtual void draw( VPainter *painter, const KoRect& rect,
 		const double zoomFactor = 1.0 );
 
 	const VSegment* lastSegment() const
@@ -95,8 +95,8 @@ public:
 	// apply an affine map:
 	virtual void transform( const QWMatrix& m );
 
-	virtual QRect boundingBox( const double zoomFactor ) const;
-	virtual bool intersects( const QRect& qrect, const double zoomFactor ) const;
+	virtual KoRect boundingBox( const double zoomFactor ) const;
+	virtual bool intersects( const KoRect& qrect, const double zoomFactor ) const;
 
 	virtual VObject* clone();
 

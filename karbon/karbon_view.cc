@@ -572,8 +572,8 @@ KarbonView::initActions()
 		<< i18n( "400%" )
 		<< i18n( "800%" );
 	m_zoomAction->setItems( stl );
-	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );
+	m_zoomAction->setCurrentItem( 2 );
 
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,

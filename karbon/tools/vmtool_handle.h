@@ -10,7 +10,7 @@
 
 class QPainter;
 class KarbonPart;
-class QRect;
+class KoRect;
 
 // A singleton state to represent a handle.
 
@@ -36,8 +36,8 @@ protected:
 private:
 	static VMToolHandle* s_instance;
 
-	QRect m_bbox;
-	QRect m_nodes[9];
+	KoRect m_bbox;
+	KoRect m_nodes[9];
 	short m_activeNode;
 };
 

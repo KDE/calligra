@@ -53,7 +53,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	if( m_bScrolling )
 	{
 		// TODO : only update ROIs
-		QRect r( 0, 0, viewport()->width(), viewport()->height() );
+		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
 		QWMatrix mat;
 		mat.translate( -contentsX(), -contentsY() );
@@ -99,7 +99,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
-			i.current()->draw( p, rect, m_zoomFactor );
+			i.current()->draw( p, KoRect::fromQRect( rect ), m_zoomFactor );
 
 	p->end();
 

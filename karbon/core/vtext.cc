@@ -124,7 +124,7 @@ VText::setState( const VState state )
 }
 
 void
-VText::draw( VPainter* painter, const QRect& rect,
+VText::draw( VPainter* painter, const KoRect& rect,
 	const double zoomFactor )
 {
 	if( state() == state_deleted )
@@ -164,14 +164,14 @@ VText::transform( const QWMatrix& m )
 		itr.current()->transform( m );
 }
 
-QRect
+KoRect
 VText::boundingBox( const double zoomFactor ) const
 {
 	return m_glyphs.boundingBox( zoomFactor );
 }
 
 bool
-VText::intersects( const QRect& rect, const double zoomFactor ) const
+VText::intersects( const KoRect& rect, const double zoomFactor ) const
 {
 	VObjectListIterator itr = m_glyphs;
 	for ( ; itr.current() ; ++itr )

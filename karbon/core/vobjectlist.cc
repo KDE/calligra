@@ -5,7 +5,7 @@
 
 #include "vobjectlist.h"
 
-#include <qrect.h>
+#include <koRect.h>
 
 #include <kdebug.h>
 
@@ -17,12 +17,12 @@ VObjectList::~VObjectList()
 {
 }
 
-QRect
+KoRect
 VObjectList::boundingBox( const double zoomFactor ) const
 {
 	if( count() > 0 )
 	{
-		QRect rect = getFirst()->boundingBox( zoomFactor );
+		KoRect rect = getFirst()->boundingBox( zoomFactor );
 		VObjectListIterator itr( *this );
 		++itr;
 		for ( ; itr.current() ; ++itr )
@@ -31,6 +31,6 @@ VObjectList::boundingBox( const double zoomFactor ) const
 		return rect;
 	}
 	else
-		return QRect();
+		return KoRect();
 }
 

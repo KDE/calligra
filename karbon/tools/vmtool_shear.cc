@@ -72,7 +72,7 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
-		QRect rect =  part()->selection().boundingBox( view->zoomFactor() );
+		KoRect rect = part()->selection().boundingBox( view->zoomFactor() );
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 		{
 		}

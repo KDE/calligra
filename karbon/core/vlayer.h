@@ -22,14 +22,14 @@ public:
 	VLayer();
 	~VLayer();
 
-	void draw( VPainter *painter, const QRect& rect,
+	void draw( VPainter *painter, const KoRect& rect,
 		const double zoomFactor );
 
 	void insertObject( const VObject* object );
 	void prependObject( const VObject* object );
 	void removeRef( const VObject* object );
 
-	VObjectList objectsWithinRect( const QRect& rect,
+	VObjectList objectsWithinRect( const KoRect& rect,
 		const double zoomFactor ) const;
 
 	// clean up object list:

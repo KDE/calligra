@@ -43,7 +43,7 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( VPainter *painter, const QRect& rect,
+VPath::draw( VPainter *painter, const KoRect& rect,
 	const double zoomFactor )
 {
 	if( state() == state_deleted )
@@ -314,7 +314,7 @@ VPath::transform( const QWMatrix& m )
 	}
 }
 
-QRect
+KoRect
 VPath::boundingBox( const double zoomFactor ) const
 {
 	KoRect rect;
@@ -325,15 +325,15 @@ VPath::boundingBox( const double zoomFactor ) const
 		rect |= itr.current()->boundingBox();
 	}
 
-	return QRect(
-		qRound( rect.left() * zoomFactor ),
-		qRound( rect.top() * zoomFactor ),
-		qRound( rect.width() * zoomFactor ),
-		qRound( rect.height() * zoomFactor ) );
+	return KoRect(
+		qRound( rect.left() / zoomFactor ),
+		qRound( rect.top() / zoomFactor ),
+		qRound( rect.width() / zoomFactor ),
+		qRound( rect.height() / zoomFactor ) );
 }
 
 bool
-VPath::intersects( const QRect& qrect, const double zoomFactor ) const
+VPath::intersects( const KoRect& qrect, const double zoomFactor ) const
 {
 	KoRect rect( qrect.topLeft() * zoomFactor, qrect.bottomRight() * zoomFactor );
 

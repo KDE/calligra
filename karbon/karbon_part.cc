@@ -223,7 +223,7 @@ KarbonPart::moveSelectionToBottom()
 }
 
 void
-KarbonPart::selectObjectsWithinRect( const QRect& rect,
+KarbonPart::selectObjectsWithinRect( const KoRect& rect,
 	const double zoomFactor, bool exclusive )
 {
 	if( exclusive )
@@ -325,7 +325,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current(); ++itr )
 		if ( itr.current()->visible() )
-			itr.current()->draw( p, rect, 1 );
+			itr.current()->draw( p, KoRect::fromQRect( rect ), 1 );
 
 	p->end();
 	delete painterFactory;

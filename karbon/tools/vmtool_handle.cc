@@ -42,13 +42,13 @@ VMToolHandle::drawBox( QPainter& painter, short index )
 {
 	painter.setPen( Qt::blue.light() );
 	painter.setBrush( Qt::white );
-	painter.drawRect( m_nodes[ index ] );
+	painter.drawRect( m_nodes[ index ].toQRect() );
 }
 
-QRect
+KoRect
 computeRect( int cx, int cy, const double zoomFactor )
 {
-	return QRect( QPoint( cx - HANDLE_SIZE /* zoomFactor */, cy - HANDLE_SIZE /* zoomFactor */ ),
+	return KoRect( QPoint( cx - HANDLE_SIZE /* zoomFactor */, cy - HANDLE_SIZE /* zoomFactor */ ),
 				  QPoint( cx + HANDLE_SIZE /* zoomFactor */, cy + HANDLE_SIZE /* zoomFactor */ ) );
 }
 
@@ -62,9 +62,9 @@ VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 
 	if( part()->selection().count() > 0 )
 	{
-		m_bbox =  part()->selection().boundingBox( 1 / zoomFactor );
+		m_bbox = part()->selection().boundingBox( 1 / zoomFactor );
 		kdDebug() << " x : " << m_bbox.x() << ", " << m_bbox.y() << ", " << m_bbox.width() << ", " << m_bbox.height() << endl;
-		painter.drawRect( m_bbox );
+		painter.drawRect( m_bbox.toQRect() );
 
 		// draw boxes
 		m_nodes[ NODE_LT ] = computeRect( m_bbox.left(), m_bbox.top(), zoomFactor );

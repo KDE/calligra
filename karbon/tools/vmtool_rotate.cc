@@ -75,7 +75,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	{
 		setCursor( view );
 		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
-		QRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
+		KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
 		m_sp = QPoint( rect.left() + rect.width() / 2, rect.top() + rect.height() / 2 );
 		QPoint sp = QPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );

@@ -14,12 +14,12 @@ VPathBounding::VPathBounding()
 }
 
 bool
-VPathBounding::intersects( const QRect& rect, const double zoomFactor, const VSegmentList& list )
+VPathBounding::intersects( const KoRect& rect, const double zoomFactor, const VSegmentList& list )
 {
 	m_zoomFactor = zoomFactor;
 	traverse( list );
 
-	if( !m_pa.boundingRect().intersects( rect ) )
+	if( !m_pa.boundingRect().intersects( rect.toQRect() ) )
 		return false;
 
 	// check for line intersections:

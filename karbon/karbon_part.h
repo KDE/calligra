@@ -37,7 +37,7 @@ public:
 	const VObjectList& selection() const { return m_selection; }
 	void selectObject( VObject& object, bool exclusive = false );
 	void deselectObject( VObject& object );
-	void selectObjectsWithinRect( const QRect& rect,
+	void selectObjectsWithinRect( const KoRect& rect,
 		const double zoomFactor, bool exclusive = false );
 	void selectAllObjects();	// select all vobjects period.
 	void deselectAllObjects();	// unselect all vobjects from all vlayers.

@@ -13,6 +13,7 @@
 #include <qpaintdevice.h>
 #include <qpixmap.h>
 #include <qpointarray.h>
+#include <qimage.h>
 
 #include <art_vpath_bpath.h>
 #include <art_svp_vpath.h>
@@ -24,6 +25,7 @@
 #include <art_svp_intersect.h>
 #include <art_pathcode.h>
 #include <art_vpath_dash.h>
+#include <art_rgb_affine.h>
 
 #include <X11/Xlib.h>
 
@@ -435,3 +437,20 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	art_free( vec );
 }
+
+void
+VKoPainter::drawImage( const QImage &image )
+{
+	// set up world matrix
+	double affine[6];
+	affine[0] = m_zoomFactor;//m_matrix.m11();
+	affine[1] = m_matrix.m12();
+	affine[2] = m_matrix.m21();
+	affine[3] = m_zoomFactor;//m_matrix.m22();
+	affine[4] = m_matrix.dx();
+	affine[5] = m_matrix.dy();
+	art_rgb_affine(	m_buffer, 0, 0, m_width, m_height, m_width * 4,
+					image.bits(), image.width(), image.height(), image.width() * 4,
+					affine, ART_FILTER_NEAREST, 0L );
+}
+

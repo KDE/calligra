@@ -9,7 +9,7 @@
 #include <qptrlist.h>
 #include "vobject.h"
 
-class QRect;
+class KoRect;
 
 class VObjectList : public QPtrList<VObject>
 {
@@ -17,7 +17,7 @@ public:
 	VObjectList();
 	virtual ~VObjectList();
 
-	QRect boundingBox( const double zoomFactor ) const;
+	KoRect boundingBox( const double zoomFactor ) const;
 };
 
 typedef QPtrListIterator<VObject> VObjectListIterator;

@@ -7,7 +7,7 @@
 #define __VOBJECT_H__
 
 #include <qptrlist.h>
-#include <qrect.h>
+#include <koRect.h>
 
 #include "vfill.h"
 #include "vstroke.h"
@@ -36,14 +36,14 @@ public:
 	VObject( const VObject &obj ) { m_fill = obj.m_fill; m_stroke = obj.m_stroke; m_state = obj.m_state; }
 	virtual ~VObject() {}
 
-	virtual void draw( VPainter* painter, const QRect& rect,
+	virtual void draw( VPainter* painter, const KoRect& rect,
 		const double zoomFactor = 1.0  ) = 0;
 
 	virtual void transform( const QWMatrix& m ) = 0;
 
-	virtual QRect boundingBox( const double /*zoomFactor*/ ) const
-		{ return QRect(); }
-	virtual bool intersects( const QRect& /*rect*/, const double /*zoomFactor*/ ) const
+	virtual KoRect boundingBox( const double /*zoomFactor*/ ) const
+		{ return KoRect(); }
+	virtual bool intersects( const KoRect& /*rect*/, const double /*zoomFactor*/ ) const
 		{ return false; };
 
 	VState state() const { return m_state; }

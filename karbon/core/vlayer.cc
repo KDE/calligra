@@ -30,7 +30,7 @@ VLayer::~VLayer()
 }
 
 void
-VLayer::draw( VPainter *painter, const QRect& rect,
+VLayer::draw( VPainter *painter, const KoRect& rect,
 	const double zoomFactor )
 {
 	VObjectListIterator itr = m_objects;
@@ -60,7 +60,7 @@ VLayer::removeRef( const VObject* object )
 }
 
 VObjectList
-VLayer::objectsWithinRect( const QRect& rect,
+VLayer::objectsWithinRect( const KoRect& rect,
 	const double zoomFactor ) const
 {
 	VObjectList list;

@@ -16,6 +16,7 @@ class QColor;
 class QPen;
 class QBrush;
 class QRect;
+class QImage;
 
 class VStroke;
 class VFill;
@@ -53,6 +54,8 @@ public:
 	virtual void setBrush( const VFill & ) = 0;
 	virtual void setBrush( const QColor & ) = 0;
 	virtual void setBrush( Qt::BrushStyle style ) = 0;
+
+	virtual void drawImage( const QImage & ) {}
 
 	// stack management
 	virtual void save() = 0;

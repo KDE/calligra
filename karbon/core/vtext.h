@@ -26,13 +26,13 @@ public:
 	VText( const VText& text );
 	virtual ~VText();
 
-	virtual void draw( VPainter *painter, const QRect& rect,
+	virtual void draw( VPainter *painter, const KoRect& rect,
 		const double zoomFactor = 1.0 );
 
 	virtual void transform( const QWMatrix& m );
 
-	virtual QRect boundingBox( const double zoomFactor ) const;
-	virtual bool intersects( const QRect& rect, const double zoomFactor ) const;
+	virtual KoRect boundingBox( const double zoomFactor ) const;
+	virtual bool intersects( const KoRect& rect, const double zoomFactor ) const;
 
 	virtual VObject* clone();
 
