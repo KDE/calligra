@@ -29,7 +29,9 @@
 #ifndef IMAGE_IMPORT
 namespace wvWare
 {
-    class PictureHandler;
+    class PictureHandler
+    {
+    };
 }
 #endif // IMAGE_IMPORT
 
