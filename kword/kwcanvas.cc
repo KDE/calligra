@@ -271,6 +271,7 @@ void KWCanvas::switchViewMode( KWViewMode * newViewMode )
 void KWCanvas::refreshViewMode()
 {
     slotNewContentsSize();
+    doc->updateResizeHandles( );
     repaintAll( true );
 }
 
@@ -601,7 +602,6 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     QRect newRect( frame->outerRect() );
     // Repaing only the changed rects (oldRect U newRect)
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
-
     //doRaster = TRUE;
     frameResized = TRUE;
 }
