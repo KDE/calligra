@@ -20,6 +20,7 @@
 
 #include <qlabel.h>
 #include <qgrid.h>
+#include <qpixmap.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -35,6 +36,122 @@
 #include "vselection.h"
 #include "vstrokecmd.h"
 
+static const char* width_xpm[] = {
+  "13 11 3 1",
+  "  c Gray0",
+  ". c #808080",
+  "X c None",
+  "XXXXXXXXXXXXX",
+  "XXXXXXXXXXXXX",
+  ".XXXXXXXXXXX.",
+  ".XX XXXXX XX.",
+  ".X  XXXXX  X.",
+  ".           .",
+  ".X  XXXXX  X.",
+  ".XX XXXXX XX.",
+  ".XXXXXXXXXXX.",
+  "XXXXXXXXXXXXX",
+  "XXXXXXXXXXXXX"
+};
+
+static const char* height_xpm[] = {
+  "13 11 3 1",
+  "  c Gray0",
+  ". c #808080",
+  "X c None",
+  "XXX.......XXX",
+  "XXXXXX XXXXXX",
+  "XXXXX   XXXXX",
+  "XXXX     XXXX",
+  "XXXXXX XXXXXX",
+  "XXXXXX XXXXXX",
+  "XXXXXX XXXXXX",
+  "XXXX     XXXX",
+  "XXXXX   XXXXX",
+  "XXXXXX XXXXXX",
+  "XXX.......XXX"
+};
+
+static const char* xpos_xpm[] = {
+  "13 11 2 1",
+  "  c Gray0",
+  ". c None",
+  ".. .. .......",
+  ".. .. .......",
+  "...  ........",
+  "...  ........",
+  ".. .. .......",
+  ".. .. .     .",
+  "....... ... .",
+  "....... ... .",
+  "....... ... .",
+  "....... ... .",
+  ".......     ."
+};
+
+static const char* ypos_xpm[] = {
+  "13 11 2 1",
+  "  c Gray0",
+  ". c None",
+  "... . .......",
+  "... . .......",
+  "... . .......",
+  ".... ........",
+  ".... ........",
+  "..  ...     .",
+  "....... ... .",
+  "....... ... .",
+  "....... ... .",
+  "....... ... .",
+  ".......     ."
+};
+
+static const char* rotate_xpm[]={
+"16 16 3 1",
+". c None",
+"# c #000000",
+"a c #ffffff",
+"................",
+"................",
+".......####.....",
+".....##aaaa##...",
+"##..#aaaaaaaa#..",
+"#a##aaaaaaaaaa#.",
+"#aaaaaaa####aa#.",
+"#aaaaaa#....#aa#",
+"#aaaaa#......#a#",
+"#aaaaa#......#a#",
+"#aaaaaa#.....#a#",
+".#######....#a#.",
+"...........#a#..",
+"..........###...",
+"........###.....",
+"................"};
+
+static const char *stroke_xpm[] = {
+"16 16 4 1",
+"  c Gray0",
+". c #808080",
+"X c None",
+"o c Gray100",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXX. .XXXXXX",
+"XXXXXXX   XXXXXX",
+"XXXXXX o o XXXXX",
+"XXXXXX o o XXXXX",
+"XXXXX oo oo XXXX",
+"XXXXX ooooo XXXX",
+"XXXXX oo oo XXXX",
+"XXXXX. ooo .XXXX",
+"XXXXXX ooo XXXXX",
+"XXXXXX. o .XXXXX",
+"XXXXX       XXXX",
+"XXXXXX.   .XXXXX",
+"XXXXXX.   .XXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX"
+};
+
 VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part )
 {
@@ -45,18 +162,28 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mainLayout = new QGrid( 2, Vertical, this );
 	mainLayout->setSpacing( 5 );
 	
-	new QLabel( i18n( "X:" ), mainLayout );
-	new QLabel( i18n( "Y:" ), mainLayout );
+	QLabel *lx = new QLabel( mainLayout );
+	lx->setPixmap( QPixmap((const char **)xpos_xpm) );
+	QLabel *ly = new QLabel( mainLayout );
+	ly->setPixmap( QPixmap((const char **)ypos_xpm) );
 	m_X = new KDoubleNumInput( 0.00, mainLayout );
+	m_X->setMinimumWidth( 75 );
 	m_Y = new KDoubleNumInput( 0.00, mainLayout );
+	m_Y->setMinimumWidth( 75 );
 	
-	new QLabel( i18n( "Width:" ), mainLayout );
-	new QLabel( i18n( "Height:" ), mainLayout );
+	QLabel *lw = new QLabel( mainLayout );
+	lw->setPixmap( QPixmap((const char **)width_xpm) );
+	QLabel *lh = new QLabel( mainLayout );
+	lh->setPixmap( QPixmap((const char **)height_xpm) );
 	m_Width = new KDoubleNumInput( 0.00, mainLayout );
+	m_Width->setMinimumWidth( 75 );
 	m_Height = new KDoubleNumInput( 0.00, mainLayout );
+	m_Height->setMinimumWidth( 75 );
 	
-	new QLabel( i18n( "Rotation:" ), mainLayout );
-	new QLabel( i18n( "Stroke:" ), mainLayout );
+	QLabel *lrotate = new QLabel( mainLayout );
+	lrotate->setPixmap( QPixmap((const char **)rotate_xpm) );
+	QLabel *lstroke = new QLabel( mainLayout );
+	lstroke->setPixmap( QPixmap((const char **)stroke_xpm) );
 	m_Rotation = new KDoubleNumInput( 0, mainLayout );
 	m_setLineWidth = new TKUFloatSpinBox( mainLayout );
 	m_setLineWidth->setDecimals(1);
@@ -64,6 +191,7 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	m_setLineWidth->setLineStep(0.5);
 	
 	setWidget( mainLayout );
+	setFixedSize( baseSize() );
 }
 
 VObjectDlg::~VObjectDlg()
