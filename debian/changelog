@@ -1,3 +1,11 @@
+koffice (1:1.2.92-1) unstable; urgency=low
+
+  * New upstream release (1.3-beta3).
+  * Kivio uses python2.3 instead of python2.2.
+  * Bumped standards-version to 3.6.0.
+
+ -- Ben Burton <bab@debian.org>  Wed, 13 Aug 2003 11:02:26 +1000
+
 koffice (1:1.2.91-1) unstable; urgency=low
 
   * New upstream release (1.3-beta2).
