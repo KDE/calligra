@@ -350,6 +350,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
     m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
+    m_currentViewMode = viewMode;
 
     QRect normalFrameRect( m_doc->zoomRect( *frame ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
