@@ -7,7 +7,7 @@
       <Name>cos</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -22,7 +22,7 @@
       <Name>sin</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -37,7 +37,7 @@
       <Name>tan</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -52,7 +52,7 @@
       <Name>acos</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -67,7 +67,7 @@
       <Name>asin</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -82,7 +82,7 @@
       <Name>atan</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -97,7 +97,7 @@
       <Name>cosh</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -112,7 +112,7 @@
       <Name>sinh</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radian)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -127,7 +127,7 @@
       <Name>tanh</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -142,7 +142,7 @@
       <Name>acosh</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radian)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -157,7 +157,7 @@
       <Name>asinh</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -172,7 +172,7 @@
       <Name>atanh</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radian)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -187,7 +187,7 @@
       <Name>atan2</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -202,7 +202,7 @@
       <Name>degree</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (rd)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -217,7 +217,7 @@
       <Name>radian</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (deg)</Comment>
+	<Comment>Angle (degree)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
