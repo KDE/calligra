@@ -2082,7 +2082,7 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
 
 void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
 {
-    QDomNode validation = body.namedItem( "table:content-validations" );
+    QDomNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
     kdDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
@@ -2126,7 +2126,7 @@ void KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
 
 void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
 {
-    QDomNode namedAreas = body.namedItem( "table:named-expressions" );
+    QDomNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
     if ( !namedAreas.isNull() )
     {
         QDomNode area = namedAreas.firstChild();

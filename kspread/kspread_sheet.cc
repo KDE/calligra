@@ -49,6 +49,7 @@
 #include <koStyleStack.h>
 #include <koOasisSettings.h>
 #include <koxmlns.h>
+#include <kodom.h>
 
 #include "dependencies.h"
 
@@ -6665,12 +6666,12 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
 {
     QString hleft, hmiddle, hright;
     QString fleft, fmiddle, fright;
-    QDomNode header = style->namedItem( "style:header" );
+    QDomNode header = KoDom::namedItemNS( *style, KoXmlNS::style, "header" );
 
     if ( !header.isNull() )
     {
         kdDebug() << "Header exists" << endl;
-        QDomNode part = header.namedItem( "style:region-left" );
+        QDomNode part = KoDom::namedItemNS( header, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             hleft = getPart( part );
@@ -6678,13 +6679,13 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
         }
         else
             kdDebug() << "Style:region:left doesn't exist!" << endl;
-        part = header.namedItem( "style:region-center" );
+        part = KoDom::namedItemNS( header, KoXmlNS::style, "region-center" );
         if ( !part.isNull() )
         {
             hmiddle = getPart( part );
             kdDebug() << "Header middle: " << hmiddle << endl;
         }
-        part = header.namedItem( "style:region-right" );
+        part = KoDom::namedItemNS( header, KoXmlNS::style, "region-right" );
         if ( !part.isNull() )
         {
             hright = getPart( part );
@@ -6692,7 +6693,7 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
         }
     }
     //todo implement it under kspread
-    QDomNode headerleft = style->namedItem( "style:header-left" );
+    QDomNode headerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "header-left" );
     if ( !headerleft.isNull() )
     {
         QDomElement e = headerleft.toElement();
@@ -6702,7 +6703,7 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
             kdDebug()<<"header left doesn't has attribute  style:display  \n";
     }
     //implement it under kspread
-    QDomNode footerleft = style->namedItem( "style:footer-left" );
+    QDomNode footerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "footer-left" );
     if ( !footerleft.isNull() )
     {
         QDomElement e = footerleft.toElement();
@@ -6712,23 +6713,23 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
             kdDebug()<<"footer left doesn't has attribute  style:display  \n";
     }
 
-    QDomNode footer = style->namedItem( "style:footer" );
+    QDomNode footer = KoDom::namedItemNS( *style, KoXmlNS::style, "footer" );
 
     if ( !footer.isNull() )
     {
-        QDomNode part = footer.namedItem( "style:region-left" );
+        QDomNode part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             fleft = getPart( part );
             kdDebug() << "Footer left: " << fleft << endl;
         }
-        part = footer.namedItem( "style:region-center" );
+        part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-center" );
         if ( !part.isNull() )
         {
             fmiddle = getPart( part );
             kdDebug() << "Footer middle: " << fmiddle << endl;
         }
-        part = footer.namedItem( "style:region-right" );
+        part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-right" );
         if ( !part.isNull() )
         {
             fright = getPart( part );
@@ -6752,37 +6753,37 @@ void KSpreadSheet::replaceMacro( QString & text, const QString & old, const QStr
 QString KSpreadSheet::getPart( const QDomNode & part )
 {
   QString result;
-  QDomElement e = part.namedItem( "text:p" ).toElement();
+  QDomElement e = KoDom::namedItemNS( part, KoXmlNS::text, "p" );
   while ( !e.isNull() )
   {
     QString text = e.text();
     kdDebug() << "PART: " << text << endl;
 
-    QDomElement macro = e.namedItem( "text:time" ).toElement();
+    QDomElement macro = KoDom::namedItemNS( e, KoXmlNS::text, "time" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<time>" );
 
-    macro = e.namedItem( "text:date" ).toElement();
+    macro = KoDom::namedItemNS( e, KoXmlNS::text, "date" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<date>" );
 
-    macro = e.namedItem( "text:page-number" ).toElement();
+    macro = KoDom::namedItemNS( e, KoXmlNS::text, "page-number" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<page>" );
 
-    macro = e.namedItem( "text:page-count" ).toElement();
+    macro = KoDom::namedItemNS( e, KoXmlNS::text, "page-count" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<pages>" );
 
-    macro = e.namedItem( "text:sheet-name" ).toElement();
+    macro = KoDom::namedItemNS( e, KoXmlNS::text, "sheet-name" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<sheet>" );
 
-    macro = e.namedItem( "text:title" ).toElement();
+    macro = KoDom::namedItemNS( e, KoXmlNS::text, "title" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<name>" );
 
-    macro = e.namedItem( "text:file-name" ).toElement();
+    macro = KoDom::namedItemNS( e, KoXmlNS::text, "file-name" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<file>" );
 
@@ -6808,7 +6809,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         kdDebug()<<" style :"<<style<<endl;
         if ( style )
         {
-            QDomElement properties( style->namedItem( "style:table-properties" ).toElement() );
+            QDomElement properties( KoDom::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
             if ( !properties.isNull() )
             {
                 if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )

@@ -32,6 +32,8 @@
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
+#include <kodom.h>
 #include <koOasisSettings.h>
 #include "kovariable.h"
 
@@ -201,7 +203,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	kdDebug(38000) << "Start loading OASIS document..." << endl;
 
 	QDomElement contents = doc.documentElement();
-	QDomElement body( contents.namedItem( "office:body" ).toElement() );
+	QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
 	if( body.isNull() )
 	{
 		kdDebug(38000) << "No office:body found!" << endl;
@@ -209,7 +211,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 		return false;
 	}
 
-	body = body.namedItem("office:drawing").toElement();
+	body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
 	if(body.isNull())
 	{
 		kdDebug(38000) << "No office:drawing found!" << endl;
@@ -217,7 +219,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 		return false;
 	}
 
-	QDomElement page( body.namedItem( "draw:page" ).toElement() );
+	QDomElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
 	if(page.isNull())
 	{
 		kdDebug(38000) << "No office:drawing found!" << endl;
@@ -228,7 +230,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	QString masterPageName = "Standard"; // use default layout as fallback
 	QDomElement *master = styles.masterPages()[ masterPageName ];
 	Q_ASSERT( master );
-	QDomElement *style =master ? styles.styles()[master->attribute( "style:page-layout-name" )] : 0;
+	QDomElement *style =master ? styles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
 	if( style )
 	{
         	m_pageLayout.loadOasis( *style );

@@ -30,6 +30,7 @@
 #include <kmdcodec.h>
 #include <koGenStyles.h>
 #include <koxmlns.h>
+#include <kodom.h>
 #include <time.h>
 #include <stdlib.h>
 #include <ktempfile.h>
@@ -239,7 +240,7 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
         kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
         m_strPassword = passwd;
     }
-    QDomNode tableNode = body.namedItem( "table:table" );
+    QDomNode tableNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
 
     // sanity check
     if ( tableNode.isNull() ) return false;

@@ -67,6 +67,7 @@
 #include "valueparser.h"
 
 #include <koxmlns.h>
+#include <kodom.h>
 #include <koxmlwriter.h>
 
 #include <kmessagebox.h>
@@ -5047,7 +5048,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         loadOasisStyleProperties( styleStack, oasisStyles );
         loadOasisConditional( style );
     }
-    QDomElement textP = element.namedItem( "text:p" ).toElement();
+    QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
     if ( !textP.isNull() )
     {
         QDomElement subText = textP.firstChild().toElement();
@@ -5243,7 +5244,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         forceExtraCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
 
     // cell comment/annotation
-    QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
+    QDomElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
     if ( !annotationElement.isNull() )
     {
         QString comment;
@@ -5386,7 +5387,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         //todo what is it ?
     }
 
-    QDomElement help = element.namedItem( "table:help-message" ).toElement();
+    QDomElement help = KoDom::namedItemNS( element, KoXmlNS::table, "help-message" );
     if ( !help.isNull() )
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
@@ -5399,7 +5400,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             kdDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             d->extra()->validity->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
         }
-        QDomElement attrText = help.namedItem( "text:p" ).toElement();
+        QDomElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
             kdDebug()<<"help text :"<<attrText.text()<<endl;
@@ -5407,7 +5408,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         }
     }
 
-    QDomElement error = element.namedItem( "table:error-message" ).toElement();
+    QDomElement error = KoDom::namedItemNS( element, KoXmlNS::table, "error-message" );
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
@@ -5430,7 +5431,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             kdDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             d->extra()->validity->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
-        QDomElement attrText = error.namedItem( "text:p" ).toElement();
+        QDomElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
             d->extra()->validity->message = attrText.text();
     }
