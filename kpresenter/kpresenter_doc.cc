@@ -2864,22 +2864,8 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KoStyle *sty = new KoStyle( QString::null );
-        // Load the paraglayout from the <STYLE> element
-        KoParagLayout lay = KoStyle::loadStyle( styleElem );
-        // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
-        lay.style = sty;
-        sty->paragLayout() = lay;
-
-        QDomElement nameElem = styleElem.namedItem("NAME").toElement();
-        if ( !nameElem.isNull() )
-        {
-            sty->setName( nameElem.attribute("value") );
-            //kdDebug(33001) << "KoStyle created " << this << " name=" << m_name << endl;
-        } else
-            kdWarning(33001) << "No NAME tag in LAYOUT -> no name for this style!" << endl;
-
-        sty->setFollowingStyle( sty );
-
+        // Load the style from the <STYLE> element
+        sty->loadStyle( styleElem );
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
