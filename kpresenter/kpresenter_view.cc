@@ -76,6 +76,7 @@
 #include <ktempfile.h>
 #include <kcolorbutton.h>
 
+#include <koMainWindow.h>
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
 #include <koPageLayoutDia.h>

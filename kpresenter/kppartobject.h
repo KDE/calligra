@@ -20,16 +20,12 @@
 #ifndef kppartobject_h
 #define kppartobject_h
 
-#include <koMainWindow.h>
 #include <koChild.h>
 
 #include <kpobject.h>
 
-#include <qpixmap.h>
-
 class KPresenterChild;
-class KPresenterFrame;
-class KPGradient;
+
 
 /******************************************************************/
 /* Class: KPPartObject                                            */
@@ -49,10 +45,8 @@ public:
 
     virtual void rotate( float _angle );
 
-    virtual ObjType getType() const
-    { return OT_PART; }
-    virtual QString getTypeString() const
-    { return i18n("Embedded object"); }
+    virtual ObjType getType() const { return OT_PART; }
+    virtual QString getTypeString() const { return i18n("Embedded object"); }
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
 		       bool drawSelection, bool drawContour = FALSE );
@@ -61,7 +55,6 @@ public:
     void deactivate();
 
     KPresenterChild *getChild() const { return child; }
-
     void enableDrawing( bool f ) { _enableDrawing = f; }
 
 public slots:
