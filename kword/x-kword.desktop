@@ -13,4 +13,4 @@ Comment[sv]=Ordbehandlare
 DefaultApp=KWord
 Icon=kword
 Type=MimeType
-Patterns=*.kwd;
+Patterns=*.kwd;*.kwt;
