@@ -245,20 +245,20 @@ QTextCursor * KWParagFormatCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-KWPasteCommand::KWPasteCommand( QTextDocument *d, int parag, int idx,
+KWPasteTextCommand::KWPasteTextCommand( QTextDocument *d, int parag, int idx,
                                 const QCString & data )
     : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
 {
 }
 
-QTextCursor * KWPasteCommand::execute( QTextCursor *c )
+QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
 {
     QTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
     }
-    //kdDebug() << "KWPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //kdDebug() << "KWPasteTextCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
@@ -281,7 +281,7 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
             text += '\n';
         text += s;
     }
-    //kdDebug() << "KWPasteCommand::execute Inserting text: '" << text << "'" << endl;
+    //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     textFs->unzoom();
@@ -298,13 +298,13 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     // shifted it down (side effect of splitAndInsertEmptyParag)
     firstParag = doc->paragAt( m_parag );
     KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
-    //kdDebug() << "KWPasteCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
+    //kdDebug() << "KWPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
     for (unsigned int item = 0; item < count; item++)
     {
-        //kdDebug() << "KWPasteCommand::execute item=" << item << "/" << count << endl;
+        //kdDebug() << "KWPasteTextCommand::execute item=" << item << "/" << count << endl;
         if (!parag)
         {
-            kdWarning() << "KWPasteCommand: parag==0L ! KWord bug, please report." << endl;
+            kdWarning() << "KWPasteTextCommand: parag==0L ! KWord bug, please report." << endl;
             break;
         }
         QDomElement paragElem = listParagraphs.item( item ).toElement();
@@ -342,7 +342,7 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         parag->format();
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
-        //kdDebug() << "KWPasteCommand::execute going to next parag: " << parag << endl;
+        //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
@@ -355,7 +355,7 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     return c;
 }
 
-QTextCursor * KWPasteCommand::unexecute( QTextCursor *c )
+QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
 {
     QTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {

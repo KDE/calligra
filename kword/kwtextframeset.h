@@ -89,7 +89,7 @@ public:
     void updateViewArea( QWidget * w, const QPoint & nPointBottom );
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes );
+    virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     virtual void zoom();
     void unzoom();
@@ -105,7 +105,7 @@ public:
     KWTextFormat * zoomFormatFont( const KWTextFormat * f );
 
     /** returns a deep copy of self (and all it contains) */
-    KWTextFrameSet *getCopy();
+    //KWTextFrameSet *getCopy();
 
     /** return true if some text is selected */
     bool hasSelection() const {
@@ -141,8 +141,8 @@ public:
     void undo();
     void redo();
     void clearUndoRedoInfo();
-    void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
+    void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( QTextCursor * cursor );
     void selectAll( bool select );
     void selectionChangedNotify( bool enableActions = true );

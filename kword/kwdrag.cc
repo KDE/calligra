@@ -70,7 +70,7 @@ KWDrag::KWDrag( QWidget *dragSource, const char *name )
 
 QByteArray KWDrag::encodedData( const char *mime ) const
 {
-    if ( strcmp( mimeType(), mime ) == 0 )
+    if ( strcmp( selectionMimeType(), mime ) == 0 )
         return kword;
     else
         kdWarning() << "KWDrag: unsupported type " << mime << " requested" << endl;
@@ -78,17 +78,17 @@ QByteArray KWDrag::encodedData( const char *mime ) const
 
 bool KWDrag::canDecode( QMimeSource* e )
 {
-    return e->provides( mimeType() );
+    return e->provides( selectionMimeType() );
 }
 
 const char* KWDrag::format( int i ) const
 {
     if ( i == 0 )
-        return mimeType();
+        return selectionMimeType();
     else return 0;
 }
 
-const char * KWDrag::mimeType()
+const char * KWDrag::selectionMimeType()
 {
     return "application/x-kword-selection";
 }

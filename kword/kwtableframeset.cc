@@ -1571,7 +1571,7 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
 }
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
-    KWTextFrameSet( table->m_doc, "." ) // TBD: turn getCopy into copy constructor, including setting
+    KWTextFrameSet( table->m_doc, "." )
 {
     m_table = table;
     m_row = original.m_row;

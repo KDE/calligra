@@ -1082,36 +1082,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     for (item = 0; item < listEmbedded.count(); item++)
     {
         QDomElement embedded = listEmbedded.item( item ).toElement();
-        KWChild *ch = new KWChild( this );
-        KWPartFrameSet *fs = 0;
-        QRect r;
-
-        QDomElement object = embedded.namedItem( "OBJECT" ).toElement();
-        if ( !object.isNull() )
-        {
-            ch->load( object, true );
-            r = ch->geometry();
-            insertChild( ch );
-            QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
-            QString name;
-            if ( !settings.isNull() )
-            {
-                QDomElement nameElem = embedded.namedItem( "NAME" ).toElement();
-                if ( !nameElem.isNull() )
-                    name = nameElem.attribute( "value" );
-            }
-            fs = new KWPartFrameSet( this, ch, name );
-            frames.append( fs );
-            if ( !settings.isNull() )
-            {
-                kdDebug(32001) << "KWDocument::loadXML loading embedded object" << endl;
-                fs->load( settings );
-            }
-            else
-                kdError(32001) << "No <SETTINGS> tag in EMBEDDED" << endl;
-            emit sig_insertObject( ch, fs );
-        } else
-            kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
+        loadEmbedded( embedded );
     }
 
     emit sigProgress(95);
@@ -1310,6 +1281,32 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     return TRUE;
 }
 
+void KWDocument::loadEmbedded( QDomElement embedded )
+{
+    QDomElement object = embedded.namedItem( "OBJECT" ).toElement();
+    if ( !object.isNull() )
+    {
+        KWChild *ch = new KWChild( this );
+        ch->load( object, true );
+        insertChild( ch );
+        QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
+        QString name;
+        if ( !settings.isNull() )
+            name = settings.attribute( "name" );
+        KWPartFrameSet *fs = new KWPartFrameSet( this, ch, name );
+        frames.append( fs );
+        if ( !settings.isNull() )
+        {
+            kdDebug(32001) << "KWDocument::loadXML loading embedded object" << endl;
+            fs->load( settings );
+        }
+        else
+            kdError(32001) << "No <SETTINGS> tag in EMBEDDED" << endl;
+        emit sig_insertObject( ch, fs );
+    } else
+        kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
+}
+
 void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 {
     QValueList<QString> followingStyles;
@@ -1420,86 +1417,84 @@ void KWDocument::loadFrameSets( QDomElement framesets )
     for (unsigned int item = 0; item < listFramesets.count(); item++)
     {
         QDomElement framesetElem = listFramesets.item( item ).toElement();
-        FrameSetType frameType;
-        KWFrameSet::Info frameInfo;
-        QString tableName;
-        int _row, _col, _rows, _cols;
-        bool removeable;
-        bool _visible;
-        QString fsname;
+        (void) loadFrameSet( framesetElem );
+    }
+}
 
-        frameType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
-        frameInfo = static_cast<KWFrameSet::Info>( KWDocument::getAttribute( framesetElem, "frameInfo", KWFrameSet::FI_BODY ) );
-        tableName = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
-        _row = KWDocument::getAttribute( framesetElem, "row", 0 );
-        _col = KWDocument::getAttribute( framesetElem, "col", 0 );
-        if ( framesetElem.attribute( "removeable" ) != QString::null )
-            removeable = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removeable", false ) );
-        else
-            removeable = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removable", false ) );
-        _rows = getAttribute( framesetElem, "rows", 1 );
-        _cols = getAttribute( framesetElem, "cols", 1 );
-        _visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) );
-        fsname = correctQString( KWDocument::getAttribute( framesetElem, "name", "" ) );
+KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames )
+{
+    FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
+    QString tableName = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
+    QString fsname = correctQString( KWDocument::getAttribute( framesetElem, "name", "" ) );
 
-        switch ( frameType ) {
-            case FT_TEXT: {
-                if ( !tableName.isEmpty() ) {
-                    KWTableFrameSet *table = 0L;
-                    for ( unsigned int i = 0; i < frames.count(); i++ ) {
-                        KWFrameSet *f = frames.at(i);
-                        if(! f->isVisible()) continue;
-                        if(! f->type() == FT_TABLE) continue;
-                        if(f->getName() == tableName) {
-                            table = static_cast<KWTableFrameSet *> (f);
-                            break;
-                        }
-                    }
-                    if ( !table ) {
-                        table = new KWTableFrameSet( this, tableName );
-                        frames.append( table );
-                    }
-                    KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col, fsname );
-                    cell->setVisible( _visible );
-                    cell->setFrameSetInfo( frameInfo );
-                    cell->setIsRemoveableHeader( removeable );
-                    cell->load( framesetElem );
-                    cell->m_rows = _rows;
-                    cell->m_cols = _cols;
+    switch ( frameSetType ) {
+    case FT_TEXT: {
+        if ( !tableName.isEmpty() ) {
+            // Text frameset belongs to a table -> find table by name
+            KWTableFrameSet *table = 0L;
+            QListIterator<KWFrameSet> fit = framesetsIterator();
+            for ( ; fit.current() ; ++fit ) {
+                KWFrameSet *f = fit.current();
+                if( f->type() == FT_TABLE &&
+                    f->isVisible() &&
+                    f->getName() == tableName ) {
+                    table = static_cast<KWTableFrameSet *> (f);
+                    break;
                 }
-                else
-                {
-                    KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
-                    fs->setVisible( _visible );
-                    fs->setFrameSetInfo( frameInfo );
-                    fs->setIsRemoveableHeader( removeable );
-                    fs->load( framesetElem );
-                    frames.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-
-                    // Old file format had autoCreateNewFrame as a frameset attribute
-                    if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
-                    {
-                        KWFrame::FrameBehaviour behav = static_cast<KWFrame::FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
-                        QListIterator<KWFrame> frameIt( fs->frameIterator() );
-                        for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
-                            frameIt.current()->setFrameBehaviour( behav );
-                    }
-                }
-            } break;
-            case FT_PICTURE: {
-                KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
-                fs->setFrameSetInfo( frameInfo );
-                fs->load( framesetElem );
-                frames.append( fs );
-            } break;
-            case FT_FORMULA: {
-                KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
-                fs->setFrameSetInfo( frameInfo );
-                fs->load( framesetElem );
-                frames.append( fs );
-            } break;
-            default: break;
+            }
+            if ( !table ) {
+                table = new KWTableFrameSet( this, tableName );
+                frames.append( table );
+            }
+            int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
+            int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
+            KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col, fsname );
+            cell->load( framesetElem, loadFrames );
+            cell->m_rows = getAttribute( framesetElem, "rows", 1 );
+            cell->m_cols = getAttribute( framesetElem, "cols", 1 );
+            return cell;
         }
+        else
+        {
+            KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
+            fs->load( framesetElem, loadFrames );
+            frames.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+
+            // Old file format had autoCreateNewFrame as a frameset attribute
+            if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
+            {
+                KWFrame::FrameBehaviour behav = static_cast<KWFrame::FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
+                QListIterator<KWFrame> frameIt( fs->frameIterator() );
+                for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
+                    frameIt.current()->setFrameBehaviour( behav );
+            }
+            return fs;
+        }
+    } break;
+    case FT_PICTURE: {
+        KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
+        fs->load( framesetElem, loadFrames );
+        frames.append( fs );
+        return fs;
+    } break;
+    case FT_FORMULA: {
+        KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
+        fs->load( framesetElem, loadFrames );
+        frames.append( fs );
+        return fs;
+    } break;
+    // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
+    // But this can happen when pasting !
+    // However cloning a KoDocumentChild isn't yet supported...
+    case FT_PART: {
+        /*
+        KWPartFrameSet *fs = new KWPartFrameSet( this, ......, fsname );
+        fs->load( framesetElem, loadFrames );
+        frames.append( fs );
+        return fs;
+        */
+        kdWarning(32001) << "Copying part objects isn't implemented yet" << endl;
+    } break;
     }
 }
 

@@ -139,12 +139,12 @@ protected:
 /**
  * Command created when pasting formatted text
  */
-class KWPasteCommand : public QTextCommand
+class KWPasteTextCommand : public QTextCommand
 {
 public:
-    KWPasteCommand( QTextDocument *d, int parag, int idx,
+    KWPasteTextCommand( QTextDocument *d, int parag, int idx,
                     const QCString & data );
-    ~KWPasteCommand() {}
+    ~KWPasteTextCommand() {}
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 protected:
@@ -275,7 +275,7 @@ struct pageLayout {
 };
 
 /**
- * Command created when you change layout
+ * Command created when changing the page layout
  */
 class KWPageLayoutCommand : public KCommand
 {
@@ -293,7 +293,7 @@ protected:
 
 
 /**
- * Command created when you delete a frame
+ * Command created when deleting a frame
  */
 class KWDeleteFrameCommand : public KCommand
 {
@@ -309,7 +309,7 @@ protected:
 };
 
 /**
- * Command created when you create a frame
+ * Command created when creating a frame
  */
 class KWCreateFrameCommand : public KWDeleteFrameCommand
 {
@@ -322,7 +322,7 @@ public:
 };
 
 /**
- * Command created when you ungroup a table
+ * Command created when ungrouping a table
  */
 class KWUngroupTableCommand : public KCommand
 {
@@ -338,7 +338,7 @@ protected:
 };
 
 /**
- * Command created when you delete a table
+ * Command created when deleting a table
  */
 class KWDeleteTableCommand : public KCommand
 {
@@ -354,7 +354,7 @@ protected:
 
 
 /**
- * Command created when you create a table
+ * Command created when creating a table
  */
 class KWCreateTableCommand : public KWDeleteTableCommand
 {

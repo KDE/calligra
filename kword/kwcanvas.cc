@@ -1612,6 +1612,60 @@ void KWCanvas::copySelectedFrames()
     QApplication::clipboard()->setData( kd );
 }
 
+void KWCanvas::pasteFrames()
+{
+    QMimeSource *data = QApplication::clipboard()->data();
+    QByteArray arr = data->encodedData( KWDrag::selectionMimeType() );
+    if ( !arr.size() )
+        return;
+    QDomDocument domDoc;
+    domDoc.setContent( QCString( arr ) );
+    QDomElement topElem = domDoc.documentElement();
+
+    KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
+    m_doc->addCommand( macroCmd );
+
+    QDomElement elem = topElem.firstChild().toElement();
+    for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
+    {
+        QDomElement frameElem;
+        KWFrameSet * fs = 0L;
+        if ( elem.tagName() == "FRAME" )
+        {
+            QString frameSetName = frameElem.attribute( "parentFrameset" );
+            fs = m_doc->getFrameSetByName( frameSetName );
+            if ( !fs )
+            {
+                kdWarning(32001) << "pastFrames: Frameset '" << frameSetName << "' not found" << endl;
+                continue;
+            }
+            frameElem = elem;
+        }
+        else if ( elem.tagName() == "FRAMESET" )
+        {
+            fs = m_doc->loadFrameSet( elem, false );
+            frameElem = elem.namedItem( "FRAME" ).toElement();
+        }
+        else
+            kdWarning(32001) << "Unsupported toplevel-element in KWCanvas::pasteFrames : '" << elem.tagName() << "'" << endl;
+
+        if ( fs && !frameElem.isNull() )
+        {
+            KoRect rect;
+            rect.setLeft( KWDocument::getAttribute( elem, "left", 0.0 ) );
+            rect.setTop( KWDocument::getAttribute( elem, "top", 0.0 ) );
+            rect.setRight( KWDocument::getAttribute( elem, "right", 0.0 ) );
+            rect.setBottom( KWDocument::getAttribute( elem, "bottom", 0.0 ) );
+            KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
+            frame->load( elem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+            fs->addFrame( frame );
+
+            KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
+            macroCmd->addCommand(cmd);
+        }
+    }
+}
+
 KWTableFrameSet *KWCanvas::getTable()
 {
     if( !m_currentFrameSetEdit)

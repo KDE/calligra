@@ -417,7 +417,7 @@ public:
 
     /** create XML to describe yourself */
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes );
+    virtual void load( QDomElement &framesetElem, bool loadFrames = true );
 
     /** returns page number of the numbered frame */
     int getPageOfFrame( int i ) { return frames.at( i )->pageNum(); }
@@ -480,8 +480,8 @@ public:
 
     /** table headers can created by the groupmanager, we store the fact that
      this is one in here. */
-    void setIsRemoveableHeader( bool _h ) { removeableHeader = _h; }
-    bool isRemoveableHeader() { return removeableHeader; }
+    void setIsRemoveableHeader( bool h ) { m_removeableHeader = h; }
+    bool isRemoveableHeader() { return m_removeableHeader; }
 
     /** returns if one of our frames has been selected. */
     bool hasSelectedFrame();
@@ -495,7 +495,7 @@ public:
      */
     bool isVisible() const;
 
-    /** get the visibility of the frameset. */
+    /** set the visibility of the frameset. */
     void setVisible( bool v );
 
     /** get/set frameset name. For tables in particular, this _must_ be unique */
@@ -539,7 +539,7 @@ protected:
     Info m_info;
     int m_current; // used for headers and footers, not too sure what it means
     KWTableFrameSet *grpMgr;
-    bool removeableHeader, visible;
+    bool m_removeableHeader, m_visible;
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
 };
@@ -565,7 +565,7 @@ public:
     void setSize( QSize _imgSize );
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes );
+    virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
                             QColorGroup &, bool onlyChanged, bool resetChanged,
@@ -599,7 +599,7 @@ public:
                             KWFrameSetEdit *edit = 0L );
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes );
+    virtual void load( QDomElement &attributes, bool loadFrames = true );
 
 protected slots:
     void slotChildChanged();
@@ -651,7 +651,7 @@ public:
     virtual void updateFrames();
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes );
+    virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom();

@@ -381,7 +381,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 /******************************************************************/
 KWFrameSet::KWFrameSet( KWDocument *doc )
     : m_doc( doc ), frames(), m_framesOnTop(), m_info( FI_BODY ),
-      m_current( 0 ), grpMgr( 0L ), removeableHeader( false ), visible( true ),
+      m_current( 0 ), grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
       m_anchorTextFs( 0L )
 {
     // Send our "repaintChanged" signals to the document.
@@ -940,7 +940,7 @@ void KWFrameSet::save( QDomElement &parentElem, bool saveFrames )
     parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
     parentElem.setAttribute( "frameInfo", static_cast<int>( m_info ) );
     parentElem.setAttribute( "name", correctQString( m_name ) );
-    parentElem.setAttribute( "visible", static_cast<int>( visible ) );
+    parentElem.setAttribute( "visible", static_cast<int>( m_visible ) );
 
     if ( saveFrames )
     {
@@ -968,13 +968,21 @@ void KWFrameSet::save( QDomElement &parentElem, bool saveFrames )
 }
 
 //
-// This function is intended as a helper for all the derived classes. It /*reads
-// in all the attributes common to all framesets and*/ loads all frames.
+// This function is intended as a helper for all the derived classes. It reads
+// in all the attributes common to all framesets and loads all frames.
 //
-void KWFrameSet::load( QDomElement &attributes )
+void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
 {
+    m_info = static_cast<KWFrameSet::Info>( KWDocument::getAttribute( framesetElem, "frameInfo", KWFrameSet::FI_BODY ) );
+    m_visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) );
+    if ( framesetElem.hasAttribute( "removeable" ) )
+        m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removeable", false ) );
+    else
+        m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removable", false ) );
+
+
     // <FRAME>
-    QDomElement frameElem = attributes.firstChild().toElement();
+    QDomElement frameElem = framesetElem.firstChild().toElement();
     for ( ; !frameElem.isNull() ; frameElem = frameElem.nextSibling().toElement() )
     {
         if ( frameElem.tagName() == "FRAME" )
@@ -1004,15 +1012,15 @@ bool KWFrameSet::hasSelectedFrame()
 
 void KWFrameSet::setVisible( bool v )
 {
-    visible = v;
-    if ( visible )
+    m_visible = v;
+    if ( m_visible )
         // updateFrames was disabled while we were invisible
         updateFrames();
 }
 
 bool KWFrameSet::isVisible() const
 {
-    return ( visible &&
+    return ( m_visible &&
              !frames.isEmpty() &&
              (!isAHeader() || m_doc->isHeaderVisible()) &&
              (!isAFooter() || m_doc->isFooterVisible()) &&
@@ -1220,9 +1228,9 @@ void KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
     elem.setAttribute( "value", m_image.key() );
 }
 
-void KWPictureFrameSet::load( QDomElement &attributes )
+void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
-    KWFrameSet::load( attributes );
+    KWFrameSet::load( attributes, loadFrames );
 
     // <IMAGE>
     QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
@@ -1319,14 +1327,11 @@ void KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     KWFrameSet::save( parentElem, saveFrames );
-    QDomElement nameElem = parentElem.ownerDocument().createElement( "NAME" );
-    parentElem.appendChild( nameElem );
-    nameElem.setAttribute( "value", m_name );
 }
 
-void KWPartFrameSet::load( QDomElement &attributes )
+void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
-    KWFrameSet::load( attributes );
+    KWFrameSet::load( attributes, loadFrames );
 }
 
 void KWPartFrameSet::slotChildChanged()
@@ -1438,8 +1443,8 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     if ( frames.isEmpty() )
         return;
     // Did I tell you that assignment to parameters is evil?
-    width = static_cast<int>( width / kWordDocument()->zoomedResolutionX() ) + 5;
-    height = static_cast<int>( height / kWordDocument()->zoomedResolutionY() ) + 5;
+    width = static_cast<int>( (double)width / kWordDocument()->zoomedResolutionX() ) + 5;
+    height = static_cast<int>( (double)height / kWordDocument()->zoomedResolutionY() ) + 5;
 
     double oldWidth = frames.first()->width();
     double oldHeight = frames.first()->height();
@@ -1476,9 +1481,9 @@ void KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
     formula->save(formulaElem);
 }
 
-void KWFormulaFrameSet::load(QDomElement& attributes)
+void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
 {
-    KWFrameSet::load(attributes);
+    KWFrameSet::load(attributes, loadFrames);
     QDomElement formulaElem = attributes.namedItem("FORMULA").toElement();
     if (!formulaElem.isNull()) {
         if (formula == 0) {
@@ -1590,9 +1595,15 @@ void KWFormulaFrameSetEdit::selectAll()
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
 {
     if ( visible ) {
-        int x = formulaView->getCursorPoint().x();
-        int y = formulaView->getCursorPoint().y();
-        m_canvas->ensureVisible( x, y );
+        if ( m_currentFrame )
+        {
+            // Add the cursor position to the (zoomed) frame position
+            QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
+            nPoint += formulaView->getCursorPoint();
+            // Apply viewmode conversion
+            QPoint p = m_canvas->viewMode()->normalToView( nPoint );
+            m_canvas->ensureVisible( p.x(), p.y() );
+        }
     }
     formulaFrameSet()->setChanged();
     m_canvas->repaintChanged( formulaFrameSet(), true );

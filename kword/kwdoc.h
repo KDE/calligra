@@ -310,6 +310,10 @@ public:
     // For KWTextParag
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
 
+    // This is used by loadFrameSets() and by KWCanvas to paste framesets
+    KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true );
+    void loadEmbedded( QDomElement embedded );
+
     /**
      * Find or create a format for this type of variable
      * (date, time etc.)

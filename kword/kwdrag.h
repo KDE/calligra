@@ -65,7 +65,7 @@ public:
 
     static bool canDecode( QMimeSource* e );
 
-    static const char * mimeType();
+    static const char * selectionMimeType();
 protected:
     QCString kword; // The data in XML
 };

@@ -93,6 +93,7 @@ public:
 
     void editFrameProperties();
     void copySelectedFrames();
+    void pasteFrames();
 
     // Mouse press
     void mpEditFrame( QMouseEvent *e, const QPoint& nPoint );

@@ -119,6 +119,7 @@ int KWTextFrameSet::availableHeight() const
 
 KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
+// #define DEBUG_NTI
     // Find the frame that contains nPoint. To go fast, we look them up by page number.
     int pageNum = nPoint.y() / m_doc->paperHeight();
     QListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
@@ -133,9 +134,11 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             // (which doesn't have frames, borders, etc.)
             iPoint.setX( nPoint.x() - frameRect.left() );
             iPoint.setY( nPoint.y() - ( frameRect.top() - frame->internalY() ) );
+#ifdef DEBUG_NTI
             kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
                       << " internalY=" << frame->internalY() << " because " << DEBUGRECT(frameRect)
                       << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
+#endif
             return frame;
         }
         else if ( mouseSelection ) // try harder if true
@@ -147,9 +150,11 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
                 // We are at the left of this frame (and not in any other frame of this frameset)
                 iPoint.setX( 0 );
                 iPoint.setY( nPoint.y() - ( frameRect.top() - frame->internalY() ) );
+#ifdef DEBUG_NTI
                 kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
                           << " internalY=" << frame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
                           << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
+#endif
                 return frame;
             }
             QRect openTopRect( frameRect );
@@ -159,9 +164,11 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
                 // We are at the top of this frame (...)
                 iPoint.setX( nPoint.x() - frameRect.left() );
                 iPoint.setY( frame->internalY() );
+#ifdef DEBUG_NTI
                 kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
                           << " internalY=" << frame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
                           << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
+#endif
                 return frame;
             }
         }
@@ -178,8 +185,10 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             QRect frameRect = kWordDocument()->zoomRect( *frame );
             iPoint.setX( frameRect.width() );
             iPoint.setY( frame->internalY() + frameRect.height() );
+#ifdef DEBUG_NTI
             kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
                       << " because we are under all frames of the last page" << endl;
+#endif
             return frame;
         }
         else
@@ -197,8 +206,10 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
                 else
                     iPoint.setX( 0 ); // We are, hmm, on the left or right of the frames
                 iPoint.setY( frame->internalY() );
+#ifdef DEBUG_NTI
                 kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
                           << " because we are under all frames of page " << pageNum << endl;
+#endif
                 return frame;
             } // else there is a gap (no frames on that page, but on some other further down)
             // This case isn't handled (and should be VERY rare I think)
@@ -983,7 +994,7 @@ void KWTextFrameSet::save( QDomElement &parentElem, bool saveFrames )
         framesetElem.setAttribute( "col", cell->m_col );
         framesetElem.setAttribute( "rows", cell->m_rows );
         framesetElem.setAttribute( "cols", cell->m_cols );
-        framesetElem.setAttribute( "removable", static_cast<int>( removeableHeader ) );
+        framesetElem.setAttribute( "removable", static_cast<int>( m_removeableHeader ) );
     }
 
     KWFrameSet::save( framesetElem, saveFrames );
@@ -998,9 +1009,9 @@ void KWTextFrameSet::save( QDomElement &parentElem, bool saveFrames )
     zoom();
 }
 
-void KWTextFrameSet::load( QDomElement &attributes )
+void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
-    KWFrameSet::load( attributes );
+    KWFrameSet::load( attributes, loadFrames );
 
     textdoc->clear(false); // Get rid of dummy paragraph (and more if any)
     KWTextParag *lastParagraph = 0L;
@@ -1254,11 +1265,12 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
     emit updateUI( true );
 }
 
+#if 0
 KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */
     KWTextFrameSet *newFS = new KWTextFrameSet(m_doc, getName());
     newFS->setFrameSetInfo(frameSetInfo());
-    newFS->setVisible(visible);
+    newFS->setVisible(m_visible);
     newFS->setIsRemoveableHeader(isRemoveableHeader());
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
@@ -1270,6 +1282,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
         //newFS->assign(this);
     return newFS;
 }
+#endif
 
 void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*currentFormat*/, KeyboardAction action )
 {
@@ -2510,6 +2523,9 @@ void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, KWTe
 
 void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
 {
+    // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
+    // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
+
     //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
     QTextDocument *textdoc = textDocument();
     if ( removeSelected && textdoc->hasSelection( QTextDocument::Standard ) )
@@ -2522,7 +2538,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
-    KWPasteCommand * cmd = new KWPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
+    KWPasteTextCommand * cmd = new KWPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
     m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
     *cursor = *( cmd->execute( cursor ) );
@@ -3093,7 +3109,7 @@ void KWTextFrameSetEdit::paste()
     {
         QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
         if ( arr.size() )
-            textFrameSet()->pasteKWord( cursor, QCString(arr), true );
+            textFrameSet()->pasteKWord( cursor, QCString( arr ), true );
     }
     else
     {

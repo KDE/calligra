@@ -835,21 +835,21 @@ void KWView::updateFrameStatusBarItem()
 
 void KWView::clipboardDataChanged()
 {
-    // Can we paste into something ?
-    if ( !m_gui || !m_gui->canvasWidget()->currentFrameSetEdit() || !m_doc->isReadWrite() )
+    if ( !m_gui || !m_doc->isReadWrite() )
     {
         actionEditPaste->setEnabled(false);
         return;
     }
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     // Is there plain text in the clipboard ?
-    if ( !QApplication::clipboard()->text().isEmpty() )
+    if ( edit && !QApplication::clipboard()->text().isEmpty() )
     {
         actionEditPaste->setEnabled(true);
         return;
     }
     // Is there kword XML in the clipboard ?
     QMimeSource *data = QApplication::clipboard()->data();
-    actionEditPaste->setEnabled( KWTextDrag::canDecode( data )
+    actionEditPaste->setEnabled( ( edit && KWTextDrag::canDecode( data ) )
                                  || KWDrag::canDecode( data ) );
 
 }
@@ -1177,9 +1177,15 @@ void KWView::editCopy()
 
 void KWView::editPaste()
 {
-    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-    if ( edit )
-        edit->paste();
+    QMimeSource *data = QApplication::clipboard()->data();
+    if ( data->provides( KWDrag::selectionMimeType() ) )
+        m_gui->canvasWidget()->pasteFrames();
+    else
+    {
+        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+        if ( edit )
+            edit->paste();
+    }
 }
 
 void KWView::editSelectAll()
