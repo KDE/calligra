@@ -1393,21 +1393,51 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,
 void Page::restoreBackColor(unsigned int pgNum)
 {
   QPainter *p = new QPainter();
+  unsigned int i,sameBackNum = 0;
+  bool sameBack = false;
 
-  if (_presFakt > 1.0)
+  for (i = 0;i < pgNum;i++)
     {
-      delete pageList()->at(pgNum)->cPix;
-      pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum,_presFakt).width(),
-						getPageSize(pgNum,_presFakt).height());
+      if (pageList()->at(pgNum)->backColor1 == pageList()->at(i)->backColor1 &&
+	  pageList()->at(pgNum)->backColor2 == pageList()->at(i)->backColor2 &&
+	  pageList()->at(pgNum)->bcType == pageList()->at(i)->bcType)
+	{
+	  sameBack = true;
+	  sameBackNum = i;
+	  break;
+	}
     }
 
-  p->begin(pageList()->at(pgNum)->cPix);
-  drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
-   		pageList()->at(pgNum)->bcType,
-   		p,QSize((int)((float)pageList()->at(pgNum)->cPix->width()),
-  			(int)((float)pageList()->at(pgNum)->cPix->height())));
-  p->end();
-  delete p;
+  if (_presFakt > 1.0 && !sameBack)
+    {
+      if (!pageList()->at(pgNum)->hasSameCPix)
+	delete pageList()->at(pgNum)->cPix;
+      pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1,_presFakt).width(),
+						getPageSize(pgNum+1,_presFakt).height());
+    }
+
+  if (!sameBack)
+    {
+      if (!pageList()->at(pgNum)->hasSameCPix && pageList()->at(pgNum)->cPix && _presFakt == 1.0)
+	delete pageList()->at(pgNum)->cPix;
+      if (_presFakt == 1.0)
+	pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1).width(),
+						  getPageSize(pgNum+1).height());
+      p->begin(pageList()->at(pgNum)->cPix);
+      drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
+		    pageList()->at(pgNum)->bcType,
+		    p,QSize((int)((float)pageList()->at(pgNum)->cPix->width()),
+			    (int)((float)pageList()->at(pgNum)->cPix->height())));
+      p->end();
+      delete p;
+      pageList()->at(pgNum)->hasSameCPix = false;
+    }
+
+  if (sameBack) 
+    {
+      pageList()->at(pgNum)->cPix = pageList()->at(sameBackNum)->cPix;
+      pageList()->at(pgNum)->hasSameCPix = true;
+    }
 }
 
 

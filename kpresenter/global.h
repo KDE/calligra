@@ -55,6 +55,7 @@ struct Background
   BackPic *pic;
   QPixmap *cPix;
   QList<int> timeParts;
+  bool hasSameCPix;
 };
 
 // page object

@@ -928,10 +928,12 @@ void KPresenterView_impl::backOk(bool takeGlobal)
       m_pKPresenterDoc->setBackColor(getCurrPgNum(),backDia->getBackColor1(),
 				     backDia->getBackColor2(),
 				     backDia->getBackColorType());
+      m_pKPresenterDoc->setBackType(getCurrPgNum(),backDia->getBackType());
+      m_pKPresenterDoc->setBPicView(getCurrPgNum(),backDia->getBPicView());
       m_pKPresenterDoc->setBackPic(getCurrPgNum(),backDia->getBackPic());
       m_pKPresenterDoc->setBackClip(getCurrPgNum(),backDia->getBackClip());
       m_pKPresenterDoc->setBPicView(getCurrPgNum(),backDia->getBPicView());
-      m_pKPresenterDoc->setBackType(getCurrPgNum(),backDia->getBackType());
+      page->restoreBackColor(getCurrPgNum()-1);
     }
   else
     {
@@ -940,12 +942,19 @@ void KPresenterView_impl::backOk(bool takeGlobal)
 	  m_pKPresenterDoc->setBackColor(i,backDia->getBackColor1(),
 					 backDia->getBackColor2(),
 					 backDia->getBackColorType());
+	  m_pKPresenterDoc->setBPicView(i,backDia->getBPicView());
+	  m_pKPresenterDoc->setBackType(i,backDia->getBackType());
 	  m_pKPresenterDoc->setBackPic(i,backDia->getBackPic());
 	  m_pKPresenterDoc->setBackClip(i,backDia->getBackClip());
 	  m_pKPresenterDoc->setBPicView(i,backDia->getBPicView());
-	  m_pKPresenterDoc->setBackType(i,backDia->getBackType());
 	}
+
+      for (i = 0;i < m_pKPresenterDoc->getPageNums();i++)
+	page->restoreBackColor(i);
+
     }
+
+  KPresenterDoc()->repaint(true);
 }
 
 /*================== autoform chosen =============================*/

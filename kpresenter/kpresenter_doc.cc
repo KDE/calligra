@@ -1414,6 +1414,7 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
 			      getPageSize(pagePtr->pageNum,diffx,diffy).height()); 
   pagePtr->timeParts.setAutoDelete(false);
   pagePtr->timeParts.append((int*)10);
+  pagePtr->hasSameCPix = false;
   _pageList.append(pagePtr);
 
   emit restoreBackColor(_pageNums-1);
@@ -1432,7 +1433,7 @@ void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor
 	  pagePtr->backColor1.operator=(backColor1);
 	  pagePtr->backColor2.operator=(backColor2);
 	  pagePtr->bcType = bcType;
-	  emit restoreBackColor(pageNum-1);
+	  //emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -1445,10 +1446,24 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
     {
       if (pagePtr->pageNum == pageNum)
 	{
+	  unsigned int i;
+	  
 	  pagePtr->backPic = qstrdup(backPic);
+
+	  for (i = i;i < pageNum;i++)
+	    {
+	      if (_pageList.at(i-1)->backPic == backPic &&
+		  _pageList.at(i-1)->backPicView == pagePtr->backPicView)
+		{
+		  pagePtr->backPix = _pageList.at(i-1)->backPix;
+		  pagePtr->obackPix = _pageList.at(i-1)->obackPix;
+		  break;
+		}
+	    }
+	  
 	  pagePtr->backPix.load(pagePtr->backPic);
 	  pagePtr->obackPix.load(pagePtr->backPic);
-	  emit restoreBackColor(pageNum-1);
+	  //emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -1464,7 +1479,7 @@ void KPresenterDocument_impl::setBackClip(unsigned int pageNum,const char* backC
 	  pagePtr->backClip = qstrdup(backClip);
 	  if (backClip)
 	    pagePtr->pic->setClipart(backClip);
-	  emit restoreBackColor(pageNum-1);
+	  //emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -1485,7 +1500,7 @@ void KPresenterDocument_impl::setBPicView(unsigned int pageNum,BackView picView)
 		      (float)getPageSize(pagePtr->pageNum,0,0).height()/pagePtr->obackPix.height());
 	      pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
 	    }
-	  emit restoreBackColor(pageNum-1);
+	  //emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -1499,8 +1514,8 @@ void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType
       if (pagePtr->pageNum == pageNum)
 	{
 	  pagePtr->backType = backType;
-	  emit restoreBackColor(pageNum-1);
-	  repaint(true);
+	  //emit restoreBackColor(pageNum-1);
+	  //repaint(true);
 	  return;
 	}
     }
