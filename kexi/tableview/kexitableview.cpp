@@ -1540,7 +1540,7 @@ KexiTableView::print(KPrinter &printer)
 //	p.drawLine(60,60,120,150);
 	p.end();
 }
-#endif //!KEXI_NO_PRINT
+#endif
 
 void
 KexiTableView::takeInsertItem()
