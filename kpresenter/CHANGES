@@ -441,3 +441,7 @@ Reggie, 4.9.1999:
 -----------------
 - Fixes in creating HTML slideshows
   (zooming works now)
+
+Reggie, 12.9.1999:
+------------------
+- Some fixes for pixmaps and cliparts in new and old fileformat
