@@ -303,8 +303,8 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
         difference = 0-(activeCell->getFrame(0)->left() - activeCell->leftBorder() - m_colPositions[activeCell->m_col]);
     }
 
-    if(activeCell->getFrame(0)->right() - activeCell->rightBorder() != 
-            m_colPositions[activeCell->m_col + activeCell->m_cols]) { // right border moved 
+    if(activeCell->getFrame(0)->right() - activeCell->rightBorder() !=
+            m_colPositions[activeCell->m_col + activeCell->m_cols-1]) { // right border moved
 
         col = activeCell->m_col + activeCell->m_cols;
         double difference2 = activeCell->getFrame(0)->right() + activeCell->rightBorder() - m_colPositions[activeCell->m_col + activeCell->m_cols];
@@ -363,8 +363,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         difference = 0 - (activeCell->getFrame(0)->top() - activeCell->topBorder() - getPositionOfRow(row));
     }
 
-    if(activeCell->getFrame(0)->bottom() - activeCell->bottomBorder() != 
-            getPositionOfRow(activeCell->m_row + activeCell->m_rows)) { // bottom moved 
+
+    if(activeCell->getFrame(0)->bottom() - activeCell->bottomBorder() !=
+            getPositionOfRow(activeCell->m_row + activeCell->m_rows)) { // bottom moved
 
         row = activeCell->m_row + activeCell->m_rows;
         double difference2 = activeCell->getFrame(0)->bottom() + activeCell->bottomBorder() - getPositionOfRow(row);
@@ -417,7 +418,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         if(pageBound!=m_pageBoundaries.end() && *pageBound == rowNumber ) {
             if(*j > pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder() ) { // next page marker exists, and is accurate...
                 pageNumber++;
-                pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();    
+                pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
                 untilRow=QMAX(untilRow, *pageBound);
                 pageBound++;
             } else { // pagebreak marker should be removed, since it is incorrect.
@@ -987,7 +988,7 @@ void KWTableFrameSet::deleteCol( unsigned int col )
     while(tmp!=m_colPositions.end()) {
         (*tmp)= (*tmp)-width;
         tmp++;
-    } 
+    }
 
     // move/delete cells.
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
@@ -1071,14 +1072,6 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
            getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd))
             return 0L;
     }
-kdDebug() << "bottom1" << getCell(rowEnd, colBegin)->getFrame(0)->bottom() << endl;
-    //double bottom=getCell(rowEnd, colBegin)->getFrame(0)->bottom();
-kdDebug() << "right1: " << getCell(rowEnd, colEnd)->getFrame(0)->right() << endl;
-    //double right=getCell(rowEnd, colEnd)->getFrame(0)->right();
-    double bottom=getPositionOfRow(rowEnd, /* bottom = */ true);
-    double right=m_colPositions[colEnd];
-kdDebug () << "bottom" << bottom << endl;
-kdDebug () << "right" << right << endl;
 
     QPtrList<KWFrameSet> listFrameSet;
     QPtrList<KWFrame> listCopyFrame;
@@ -1096,18 +1089,14 @@ kdDebug () << "right" << right << endl;
             }
         }
     }
+
     Q_ASSERT(firstCell);
-    // update firstcell properties te reflect the merge
+    // update firstcell properties to reflect the merge
     firstCell->m_cols=colEnd-colBegin+1;
     firstCell->m_rows=rowEnd-rowBegin+1;
-    kdDebug()<<"=colEnd-colBegin+1; :"<<colEnd-colBegin+1<<endl;
-    kdDebug()<<"=rowEnd-rowBegin+1  :"<<rowEnd-rowBegin+1<<endl;
-    firstCell->getFrame(0)->setRight(right);
-    firstCell->getFrame(0)->setBottom(bottom);
+    position(firstCell);
     firstCell->getFrame(0)->updateResizeHandles();
 
-    recalcCols();
-    recalcRows();
     m_doc->updateAllFrames();
     m_doc->repaintAllViews();
     return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
@@ -1727,7 +1716,7 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
     KWTextFrameSet::addFrame(_frame, recalc);
 }
 
-double KWTableFrameSet::Cell::leftBorder() { 
+double KWTableFrameSet::Cell::leftBorder() {
     double b = getFrame(0)->leftBorder().ptWidth;
     if(b==0) return 0;
     return (b / (m_col==0?1:2));
