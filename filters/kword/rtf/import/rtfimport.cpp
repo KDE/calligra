@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "rtfimport.h"
+#include "rtfimport.moc"
 
 #ifdef HAVE_LIBWMF
 #include <libwmf/api.h>

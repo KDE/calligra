@@ -12,6 +12,7 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include "rtfimport_factory.h"
+#include "rtfimport_factory.moc"
 #include "rtfimport.h"
 
 
