@@ -2454,7 +2454,7 @@ void KPresenterView::setupActions()
                                                    this, SLOT( slotViewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
     actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters." ) );
-    actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
+    actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KPresenter shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
     actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
                                           this, SLOT( viewHeader() ),
