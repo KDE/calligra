@@ -503,3 +503,9 @@ Reggie, 14.12.1998:
 -------------------
 - Implemented showing of formatting chars
 - Showing formatting chars / frame borders is configurable now
+
+Reggie, 15.12.1998:
+-------------------
+- More work on tabulators
+- Started with embedded objects (just internal stuff at the moment)
+- DTD is installed to $KDEDIR/share/apps/kword/dtd/kword.dtd

@@ -20,6 +20,7 @@
 #include "kword_doc.h"
 #include "kword_main.h"
 #include "kword_view.moc"
+#include "frame.h"
 
 #include <qpainter.h>
 #include <qstring.h>
@@ -44,6 +45,7 @@ KWordFrame::KWordFrame( KWordView* _view,KWordChild* _child )
 {
   m_pKWordView = _view;
   m_pKWordChild = _child;
+  obj = 0L;
 }
 
 /******************************************************************/

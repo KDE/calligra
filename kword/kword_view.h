@@ -52,6 +52,8 @@ class KWPaintWindow;
 
 #include <koPageLayoutDia.h>
 
+class KWPartFrameSet;
+
 /******************************************************************/
 /* Class: KWordFrame                                              */
 /******************************************************************/
@@ -68,9 +70,13 @@ public:
   KWordView* wordView() 
     { return m_pKWordView; }
   
+  void setPartObject(KWPartFrameSet *o) { obj = o; }
+  KWPartFrameSet *getPartObject() { return obj; }
+
 protected:
   KWordChild *m_pKWordChild;
   KWordView *m_pKWordView;
+  KWPartFrameSet *obj;
 
 };
 

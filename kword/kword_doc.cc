@@ -409,6 +409,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	}
       else if (name == "PAPER")
 	{
+	  debug("here");
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -622,9 +623,9 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 bool KWordDocument::save( ostream &out, const char* /* _format */ )
 {
   out << "<?xml version=\"1.0\"?>" << endl;
+  //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org" 
       << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
-  
   out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout.format) << "\" width=\"" << pageLayout.width
       << "\" height=\"" << pageLayout.height << "\" orientation=\"" << static_cast<int>(pageLayout.orientation) 
       << "\" columns=\"" << pageColumns.columns << "\" columnspacing=\"" << pageColumns.columnSpacing << "\">" << endl;
@@ -1153,9 +1154,9 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	}
     }
 
-  if (_viewFormattingChars && _fc.isCursorAtParagEnd()) { _painter.drawPixmap(_fc.getPTPos() + 3,_fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height(),ret_pix);
-  debug("draw f, %d, %d",_fc.getPTPos() + 3,_fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height()); }
-
+  if (_viewFormattingChars && _fc.isCursorAtParagEnd())
+    _painter.drawPixmap(_fc.getPTPos() + 3,_fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height(),ret_pix);
+  
   _painter.restore();
   return true;
 }

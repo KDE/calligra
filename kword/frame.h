@@ -21,6 +21,7 @@
 #include <qlist.h>
 #include <qcursor.h>
 #include <ksize.h>
+#include <qpicture.h>
 
 #include "image.h"
 
@@ -30,9 +31,15 @@
 #include <iostream>
 #include <koStream.h>
 
-class KWordDocument;
+#include <koMainWindow.h>
+#include <koView.h>
+#include <openparts.h>
 
-enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2};
+class KWordDocument;
+class KWordChild;
+class KWordFrame;
+
+enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
 
 /******************************************************************/
@@ -232,6 +239,43 @@ public:
 protected:
   KWImage *image;
   QString filename;
+
+};
+
+/******************************************************************/
+/* Class: KWPartFrameSet                                          */
+/******************************************************************/
+
+class KWPartFrameSet : public KWFrameSet
+{
+public:
+  KWPartFrameSet(KWordDocument *_doc,KWordChild *_child)
+    : KWFrameSet(_doc) 
+    { child = _child; }
+  virtual ~KWPartFrameSet() 
+    {;}
+
+  virtual FrameType getFrameType()
+    { return FT_PART; }
+
+  virtual QPicture *getPicture();
+
+  virtual void activate(QWidget *_widget,int diffx,int diffy);
+  virtual void deactivate();
+
+  KWordFrame *getView() { return view; }
+  void setView(KWordFrame *_view) { view = _view; }
+
+  void setMainWindow(OpenParts::MainWindow_ptr _mainWindow) { mainWindow = KOffice::MainWindow::_narrow(_mainWindow); }
+  void setParentID(OpenParts::Id _id) { parentID = _id; }
+
+  KWordChild *getChild() { return child; }
+
+protected:
+  KWordFrame *view;
+  KWordChild *child;
+  KOffice::MainWindow_var mainWindow;
+  OpenParts::Id parentID;
 
 };
 

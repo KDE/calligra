@@ -14,6 +14,7 @@
 /******************************************************************/
 
 #include "kword_doc.h"
+#include "kword_view.h"
 #include "frame.h"
 
 #include <koIMR.h>
@@ -833,4 +834,29 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  return;
 	}
     }
+}
+
+/******************************************************************/
+/* Class: KWPartFrameSet                                          */
+/******************************************************************/
+
+/*================================================================*/
+QPicture *KWPartFrameSet::getPicture() 
+{ 
+  return child->draw(); 
+}
+
+/*================================================================*/
+void KWPartFrameSet::activate(QWidget *_widget,int diffx,int diffy)
+{
+  view->setGeometry(frames.at(0)->x() - diffx + 20,frames.at(0)->y() - diffy + 20,frames.at(0)->width(),frames.at(0)->height());
+  view->show();
+  view->view()->mainWindow()->setActivePart(view->view()->id());
+}
+
+/*================================================================*/
+void KWPartFrameSet::deactivate()
+{
+  view->hide();
+  view->view()->mainWindow()->setActivePart(parentID);
 }

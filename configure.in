@@ -86,6 +86,7 @@ AC_OUTPUT( \
 	kword/templates/Makefile \
 	kword/templates/Wordprocessing/Makefile \
 	kword/templates/DTP/Makefile \
+	kword/dtd/Makefile \
 	kdiagramm/Makefile \
 	kdiagramm/pics/Makefile \
 	lib/Makefile \
