@@ -48,9 +48,7 @@
 
 #include "kfd_part.h"
 
-#define ENABLE_ACTION(name, enable) \
-	if(actionCollection()->action( name )) \
-		actionCollection()->action( name )->setEnabled( enable )
+#define ENABLE_ACTION(name, enable) if(actionCollection()->action( name )) actionCollection()->action( name )->setEnabled( enable )
 
 KInstance *KFDFactory::m_instance = 0L;
 
