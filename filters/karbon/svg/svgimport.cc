@@ -175,7 +175,15 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 		QDomElement stop = n.toElement();
 		if( stop.tagName() == "stop" )
 		{
-			float offset = stop.attribute( "offset" ).toFloat();
+			float offset;
+			QString temp = stop.attribute( "offset" );
+			if( temp.contains( '%' ) )
+			{
+				temp = temp.left( temp.length() - 1 );
+				offset = temp.toFloat() / 100.0;
+			}
+			else
+				offset = temp.toFloat();
 			if( !stop.attribute( "stop-color" ).isEmpty() )
 				c = parseColor( "stop-color" );
 			else
@@ -203,6 +211,7 @@ SvgImport::parseGradient( const QDomElement &e )
 {
 	VGradient gradient;
 	gradient.clearStops();
+	gradient.setRepeatMethod( VGradient::none );
 	if( e.tagName() == "linearGradient" )
 	{
 		gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
