@@ -124,10 +124,6 @@ class KivioStencil
     // The spawner that created this stencil
     KivioStencilSpawner *m_pSpawner;
 
-
-    // Indicates if this stencil is selected
-    bool m_selected;
-
     // The protection bits of the stencil
     QBitArray *m_pProtection;
     QBitArray *m_pCanProtect;
@@ -135,6 +131,9 @@ class KivioStencil
     // The stemcil type
     KivioStencilType m_type;
     bool m_connected;
+
+    // Indicates if this stencil is selected
+    bool m_selected;
 
   protected:
     void rotatePainter(KivioIntraStencilData *);
