@@ -14,7 +14,6 @@ correctly define the default style (by default "Standard", if not, the 1st style
 
 === TO BACKPORT ===
 Footnote/endnote (libexport?)
-Tables
 
 === Abiword's rtftest.rtf test file ===
 shadow (RTF import problem)
