@@ -233,24 +233,26 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   pPage->unselectAllStencils();
   pPage->addStencil(m_pStencil);
   pPage->selectStencil(m_pStencil);
+  // Get drag info ready
+  m_pDragData = new KivioCustomDragData();
+  m_pDragData->page = pPage;
+  m_pDragData->x = startPoint.x();
+  m_pDragData->y = startPoint.y();
 
   if(m_type == StraightConnector) {
     KivioStraightConnector* connector = static_cast<KivioStraightConnector*>(m_pStencil);
-    // Get drag info ready
-    m_pDragData = new KivioCustomDragData();
-    m_pDragData->page = pPage;
-    m_pDragData->x = startPoint.x();
-    m_pDragData->y = startPoint.y();
     m_pDragData->id = kctCustom + 2;
   
     connector->setStartPoint(startPoint.x() + 10.0f, startPoint.y() + 10.0f);
     connector->setEndPoint(startPoint.x(), startPoint.y());
-    connector->customDrag(m_pDragData);
   } else {
     Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
+    m_pDragData->id = kctCustom + 1;
     connector->addPoint(startPoint);
     connector->addPoint(startPoint);
   }
+
+  m_pStencil->customDrag(m_pDragData);
 
   canvas->repaint();
   canvas->setCursor(*m_pConnectorCursor2);
@@ -281,19 +283,20 @@ void ConnectorTool::continueRubberBanding( QMouseEvent *e )
     endPoint = canvas->snapToGrid(endPoint);
   }
 
+  m_pDragData->x = endPoint.x();
+  m_pDragData->y = endPoint.y();
+  
   if(m_type == StraightConnector) {
     KivioStraightConnector* connector = static_cast<KivioStraightConnector*>(m_pStencil);
     connector->setStartPoint(endPoint.x(), endPoint.y()); // !!
   
-    m_pDragData->x = endPoint.x();
-    m_pDragData->y = endPoint.y();
     m_pDragData->id = kctCustom + 1;
-    connector->customDrag(m_pDragData);
   } else {
     Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
-    connector->moveLastPointTo(endPoint);
+    m_pDragData->id = kctCustom + connector->pointCount();
   }
 
+  m_pStencil->customDrag(m_pDragData);
   m_pStencil->updateGeometry();
   canvas->repaint();
 }

@@ -29,6 +29,8 @@
 #include "kivio_connector_point.h"
 #include "kivio_custom_drag_data.h"
 #include "tkmath.h"
+#include "kivio_page.h"
+#include "kivio_layer.h"
 
 
 namespace Kivio {
@@ -72,18 +74,24 @@ namespace Kivio {
       {
         return static_cast<KivioCollisionType>(i + kctCustom + 1);
       }
-
-      if(i < (m_points.count() - 1)) {
-        if(collisionLine(point.x(), point.y(),
-          m_points[i + 1].x(), m_points[i + 1].y(), px, py, threshold))
-        {
-          return kctBody;
-        }
+      
+      i++;
+    }
+    
+    i = 0;
+        
+    while(i < (m_points.count() - 1)) {
+      point = m_points[i];
+      
+      if(collisionLine(point.x(), point.y(),
+        m_points[i + 1].x(), m_points[i + 1].y(), px, py, threshold))
+      {
+        return kctBody;
       }
       
       i++;
     }
-        
+    
     return kctNone;
   }
 
@@ -123,6 +131,14 @@ namespace Kivio {
     for(it = m_points.begin(); it != m_points.end(); it++) {
       x = zoomHandler->zoomItX((*it).x());
       y = zoomHandler->zoomItY((*it).y());    
+      
+      if((*it) == m_pEnd->position()) {
+        flag = ((m_pEnd->target()) ? KivioPainter::cpfConnected : 0) | KivioPainter::cpfEnd;
+      } else if((*it) == m_pStart->position()) {
+        flag = ((m_pStart->target()) ? KivioPainter::cpfConnected : 0) | KivioPainter::cpfStart;
+      } else {
+        flag = 0;
+      }
       
       painter->drawHandle(x, y, flag);
     }
@@ -175,13 +191,25 @@ namespace Kivio {
 
   void PolyLineConnector::customDrag(KivioCustomDragData* data)
   {
-    int index = data->id - kctCustom + 1;
+    int index = data->id - (kctCustom + 1);
     
     if((index < 0) || index >= m_points.count()) {
       kdDebug() << "PolyLineConnector::customDrag: Index out of range! Index = " << index << endl;
     }
     
-    movePointTo(index, KoPoint(data->x, data->y));
+    KoPoint pos(data->x, data->y);
+    movePointTo(index, pos);
+    KivioConnectorPoint* cp;
+    
+    if(index == 0) {
+      cp = m_pStart;
+    } else if(index == (m_points.count() - 1)) {
+      cp = m_pEnd;
+    } else {
+      return;
+    }
+    
+    checkForConnection(cp, data->page);
   }
 
   void PolyLineConnector::move(double xOffset, double yOffset)
@@ -219,5 +247,40 @@ namespace Kivio {
   {
     double dy = newY - y();
     move(0, dy);
+  }
+
+  void PolyLineConnector::checkForConnection(KivioConnectorPoint* cp, KivioPage* page)
+  {
+    if(cp->connectable()) {
+      KivioLayer* currentLayer = page->curLayer();
+      KivioLayer* layer = page->firstLayer();
+      bool found = false;
+      
+      while(layer && !found) {
+        if((layer != currentLayer) && (!layer->connectable() || !layer->visible())) {
+          layer = page->nextLayer();
+          continue;
+        }
+        
+        if(layer->connectPointToTarget(cp, 8.0f)) {
+          found = true;
+        }
+      
+        layer = page->nextLayer();
+      }
+      
+      if(!found) {
+        cp->disconnect();
+      }
+    }
+  }
+
+  void PolyLineConnector::updateConnectorPoints(KivioConnectorPoint* cp, double /*oldX*/, double /*oldY*/)
+  {
+    if(cp == m_pStart) {
+      m_points[0] = m_pStart->position();
+    } else if(cp == m_pEnd) {
+      m_points[m_points.count() - 1] = m_pEnd->position();
+    }
   }
 }

@@ -374,8 +374,6 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
   double _y = pData->y;
   int id = pData->id;
   double oldX, oldY;
-  bool doneSearching = false;
-  bool foundConnection = false;
   KivioConnectorPoint *p;
 
   // Locate the point specified by id
@@ -396,8 +394,9 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
     // Attempt a snap....
     KivioLayer *pCurLayer = pData->page->curLayer();
     KivioLayer *pLayer = pData->page->firstLayer(); //pData->page->curLayer();
+    bool foundConnection = false;
 
-    while( pLayer && doneSearching==false)
+    while( pLayer && !foundConnection )
     {
       // To be connected to, a layer must be visible and connectable
       if( pLayer!=pCurLayer )
@@ -413,7 +412,6 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
       if( pLayer->connectPointToTarget( p, 8.0f ) )
       {
         foundConnection = true;
-        doneSearching = true;
       }
 
       pLayer = pData->page->nextLayer();

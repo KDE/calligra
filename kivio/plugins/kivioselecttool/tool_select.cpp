@@ -328,11 +328,15 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
   int colType;
 
   KoPoint pagePoint = canvas->mapFromScreen( pos );
+  
+  // Figure out how big 4 pixels is in terms of points
+  double threshold =  view()->zoomHandler()->unzoomItY(4);
 
-  pStencil = pPage->checkForStencil( &pagePoint, &colType, 0.0, selectedOnly );
+  pStencil = pPage->checkForStencil( &pagePoint, &colType, threshold, selectedOnly );
 
-  if( !pStencil || colType < kctCustom )
+  if( !pStencil || colType < kctCustom ) {
     return false;
+  }
 
 
   if( pStencil->isSelected() )

@@ -29,6 +29,7 @@
 
 class KivioIntraStencilData;
 class KivioCustomDragData;
+class KivioPage;
 
 namespace Kivio {
   class PolyLineConnector : public Kivio1DStencil
@@ -49,6 +50,8 @@ namespace Kivio {
        */
       void addPoint(const KoPoint& p);
       
+      unsigned int pointCount() const { return m_points.count(); }
+      
       /** Move point with index @param index.
        *
        * @param index Which point to move.
@@ -68,6 +71,8 @@ namespace Kivio {
       virtual double y();
       virtual void setY(double y);
 
+      virtual void updateConnectorPoints(KivioConnectorPoint* cp, double /*oldX*/, double /*oldY*/);
+      
       // Arrow head properties
       virtual void setStartAHType(int i) { m_startArrow->setType(i); }
       virtual int startAHType() { return m_startArrow->type(); }
@@ -86,6 +91,9 @@ namespace Kivio {
       
       virtual void setEndAHLength(double f) { m_endArrow->setLength(f); }
       virtual double endAHLength() { return m_endArrow->length(); }
+    
+    protected:
+      void checkForConnection(KivioConnectorPoint* cp, KivioPage* page);
   
     private:
       KivioArrowHead* m_startArrow; // Arrow head for the first point.

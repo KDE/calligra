@@ -23,7 +23,6 @@
 
 KivioConnectorPoint::KivioConnectorPoint()
 {
-    m_x = m_y = 0.0f;
     m_pTarget = 0L;
     m_pStencil = 0L;
     m_targetId = -1;
@@ -32,7 +31,6 @@ KivioConnectorPoint::KivioConnectorPoint()
 
 KivioConnectorPoint::KivioConnectorPoint( KivioStencil *pParent, bool conn )
 {
-    m_x = m_y = 0.0f;
     m_pTarget = 0L;
     m_pStencil = pParent;
     m_targetId = -1;
@@ -74,8 +72,8 @@ void KivioConnectorPoint::setTarget( KivioConnectorTarget *pTarget  )
 
     m_pTarget = pTarget;
 
-    m_x = pTarget->x();
-    m_y = pTarget->y();
+    m_pos.setX(pTarget->x());
+    m_pos.setY(pTarget->y());
 
     m_pTarget->addConnectorPointToList( this );
 }
@@ -90,13 +88,13 @@ void KivioConnectorPoint::setTarget( KivioConnectorTarget *pTarget  )
  * Sets the X coordinate to a new value, and optionally
  * updates the stencil's geometry if updateStencil is true.
  */
-void KivioConnectorPoint::setX( float newX, bool updateStencil )
+void KivioConnectorPoint::setX( double newX, bool updateStencil )
 {
-   float oldX = m_x;
-    m_x = newX;
+  double oldX = m_pos.x();
+  m_pos.setX(newX);
 
-    if( updateStencil && m_pStencil )
-        m_pStencil->updateConnectorPoints(this, oldX, m_y);
+  if( updateStencil && m_pStencil )
+    m_pStencil->updateConnectorPoints(this, oldX, m_pos.y());
 }
 
 
@@ -109,13 +107,13 @@ void KivioConnectorPoint::setX( float newX, bool updateStencil )
  * Sets the Y coordinate to a new value, and optionally
  * updates the stencil's geometry if updateStencil is true.
  */
-void KivioConnectorPoint::setY( float newY, bool updateStencil )
+void KivioConnectorPoint::setY( double newY, bool updateStencil )
 {
-   float oldY = m_y;
-    m_y = newY;
+   double oldY = m_pos.y();
+    m_pos.setY(newY);
 
     if( updateStencil && m_pStencil )
-        m_pStencil->updateConnectorPoints(this, m_x, oldY);
+        m_pStencil->updateConnectorPoints(this, m_pos.x(), oldY);
 }
 
 
@@ -129,16 +127,15 @@ void KivioConnectorPoint::setY( float newY, bool updateStencil )
  * Sets the X & Y coordinates to new values, and optionally
  * updates the stencil's geometry if updateStencil is true.
  */
- void KivioConnectorPoint::setPosition( float newX, float newY, bool updateStencil )
+ void KivioConnectorPoint::setPosition( double newX, double newY, bool updateStencil )
 {
-   float oldX = m_x;
-   float oldY = m_y;
+  double oldX = m_pos.x();
+  double oldY = m_pos.y();
 
-    m_x = newX;
-    m_y = newY;
+  m_pos.setCoords(newX, newY);
 
-    if( updateStencil && m_pStencil )
-        m_pStencil->updateConnectorPoints(this, oldX, oldY);
+  if( updateStencil && m_pStencil )
+    m_pStencil->updateConnectorPoints(this, oldX, oldY);
 }
 
 
@@ -174,8 +171,8 @@ void KivioConnectorPoint::disconnect( bool removeFromTargetList )
  */
 bool KivioConnectorPoint::loadXML( const QDomElement &e )
 {
-    m_x = XmlReadFloat( e, "x", 1.0f );
-    m_y = XmlReadFloat( e, "y", 1.0f );
+    m_pos.setX(XmlReadFloat( e, "x", 1.0f ));
+    m_pos.setY(XmlReadFloat( e, "y", 1.0f ));
     m_targetId = XmlReadInt( e, "targetId", -1 );
     m_connectable = (bool)XmlReadInt( e, "connectable", (int)true );
 
@@ -196,8 +193,8 @@ QDomElement KivioConnectorPoint::saveXML( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("KivioConnectorPoint");
 
-    XmlWriteFloat( e, "x", m_x );
-    XmlWriteFloat( e, "y", m_y );
+    XmlWriteFloat( e, "x", m_pos.x() );
+    XmlWriteFloat( e, "y", m_pos.y() );
     XmlWriteInt( e, "connectable", (int)m_connectable );
 
     if( m_targetId != -1 )
@@ -206,13 +203,12 @@ QDomElement KivioConnectorPoint::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioConnectorPoint::moveBy( float _x, float _y, bool updateStencil )
+void KivioConnectorPoint::moveBy( double _x, double _y, bool updateStencil )
 {
-   m_x += _x;
-   m_y += _y;
+   m_pos += KoPoint(_x, _y);
 
-    if( updateStencil && m_pStencil )
-        m_pStencil->updateConnectorPoints(this, _x, _y);
+  if( updateStencil && m_pStencil )
+    m_pStencil->updateConnectorPoints(this, _x, _y);
 }
 
 bool KivioConnectorPoint::isConnected()

@@ -21,6 +21,8 @@
 
 #include <qdom.h>
 
+#include <koPoint.h>
+
 class KivioConnectorTarget;
 class KivioStencil;
 
@@ -29,7 +31,7 @@ class KivioConnectorPoint
 {
 protected:
     // The position of this connector point
-    float m_x, m_y;
+    KoPoint m_pos;
 
     // The target this connector is connected to
     KivioConnectorTarget *m_pTarget;
@@ -57,20 +59,21 @@ public:
     void setStencil( KivioStencil *p ) { m_pStencil=p; }
 
     void setTargetId( int i ) { m_targetId = i; }
-    int targetId() { return m_targetId; }
+    int targetId() const { return m_targetId; }
 
-    float x() { return m_x; }
-    float y() { return m_y; }
+    double x() const { return m_pos.x(); }
+    double y() const { return m_pos.y(); }
+    KoPoint position() const { return m_pos; }
 
-    void setX( float, bool updateStencil=true );
-    void setY( float, bool updateStencil=true );
-    void setPosition( float, float, bool updateStencil=true );
-    void moveBy( float _x, float _y, bool updateStencil=true );
+    void setX( double, bool updateStencil = true );
+    void setY( double, bool updateStencil = true );
+    void setPosition( double, double, bool updateStencil = true );
+    void moveBy( double _x, double _y, bool updateStencil = true );
 
-    bool connectable() { return m_connectable; }
+    bool connectable() const { return m_connectable; }
     void setConnectable( bool b ) { m_connectable = b; if( b==false ) { disconnect(); } }
 
-    void disconnect(bool removeFromTargetList=true);
+    void disconnect(bool removeFromTargetList = true);
     bool isConnected();
 };
 
