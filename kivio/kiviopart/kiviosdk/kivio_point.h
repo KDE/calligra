@@ -34,13 +34,13 @@ public:
     } KivioPointType;
     
 protected:
-    float m_x, m_y;                 // Coordinates of the point
+    double m_x, m_y;                 // Coordinates of the point
     KivioPointType m_pointType;     // The point type
 
 public:
     KivioPoint();
     KivioPoint( const KivioPoint & );
-    KivioPoint( float, float, KivioPointType pt=kptNormal );
+    KivioPoint( double, double, KivioPointType pt=kptNormal );
     virtual ~KivioPoint();
     
     void copyInto( KivioPoint * ) const;
@@ -50,18 +50,18 @@ public:
 
     static KivioPoint::KivioPointType pointTypeFromString( const QString & );
 
-    inline float x() const { return m_x; }
-    inline float y() const { return m_y; }
+    inline double x() const { return m_x; }
+    inline double y() const { return m_y; }
     inline KivioPointType pointType() const { return m_pointType; }
 
-    inline void setX( float newX ) { m_x=newX; }
-    inline void setY( float newY ) { m_y=newY; }
+    inline void setX( double newX ) { m_x=newX; }
+    inline void setY( double newY ) { m_y=newY; }
     inline void setPointType( KivioPointType pt ) { m_pointType=pt; }
 
-    inline void set( float newX, float newY, KivioPointType pt=kptNormal ) { m_x=newX; m_y=newY; m_pointType=pt; }
+    inline void set( double newX, double newY, KivioPointType pt=kptNormal ) { m_x=newX; m_y=newY; m_pointType=pt; }
     inline void set( const KivioPoint &p, KivioPointType pt=kptNormal ) { m_x=p.x(); m_y=p.y(); m_pointType=pt; }
 
-    inline void moveBy( float dx, float dy ) { m_x += dx; m_y += dy; }
+    inline void moveBy( double dx, double dy ) { m_x += dx; m_y += dy; }
     inline void moveBy( const KivioPoint &p ) { m_x += p.x(); m_y += p.y(); }
 };
 

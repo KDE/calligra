@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,9 +164,7 @@ void TextTool::mousePress( QMouseEvent *e )
     KivioStencil* stencil = page->checkForStencil( &pagePoint, &colType, threshold, false);
     
     if(stencil) {
-      QPtrList<KivioStencil> tmp;
-      tmp.append(stencil);
-      applyToolAction(&tmp);
+      applyToolAction(stencil, pagePoint);
     } else if(startRubberBanding(e)) {
       m_mode = stmDrawRubber;
     }
@@ -232,39 +231,72 @@ void TextTool::endRubberBanding(QMouseEvent */*e*/)
 
 void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
 {
-  KivioDoc* doc = view()->doc();
-  KivioPage *page = view()->activePage();
-
   if( stencils->isEmpty() )
     return;
 
   KivioStencil* stencil = stencils->first();
-  KivioStencilTextDlg d(0, stencil->text());
+  KivioStencilTextDlg d(view(), stencil->text());
 
   if( !d.exec() )
     return;
 
   QString text = d.text();
   KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
-  bool createMacro=false;
+  bool createMacro = false;
+  KivioDoc* doc = view()->doc();
+  KivioPage* page = view()->activePage();
   
   while( stencil )
   {
-    if ( stencil->text()!= text )
+    if(stencil->text() != text)
     {
-      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
+      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
+        stencil, stencil->text(), text, page);
       macro->addCommand( cmd);
       stencil->setText( text );
       createMacro=true;
     }
+    
     stencil = stencils->next();
   }
   
-  if ( createMacro )
-    doc->addCommand( macro);
+  if(createMacro)
+    doc->addCommand(macro);
   else
     delete macro;
   
+  doc->updateView(page);
+}
+
+void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
+{
+  if(!stencil) {
+    return;
+  }
+  
+  QString name = stencil->getTextBoxName(pos);
+  
+  if(name.isEmpty()) {
+    return;
+  }
+
+  KivioStencilTextDlg d(view(), stencil->text(name));
+
+  if(!d.exec())
+    return;
+
+  QString text = d.text();
+  KivioDoc* doc = view()->doc();
+  KivioPage* page = view()->activePage();
+
+  if(stencil->text(name) != text)
+  {
+    KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
+      stencil, stencil->text(name), text, page);
+    stencil->setText(text, name);
+    doc->addCommand(cmd);
+  }
+
   doc->updateView(page);
 }
 

@@ -69,7 +69,7 @@ KivioPoint::KivioPoint( const KivioPoint &copy )
  *
  * Creates a new point with values.
  */
-KivioPoint::KivioPoint( float newX, float newY, KivioPointType pt )
+KivioPoint::KivioPoint( double newX, double newY, KivioPointType pt )
 {
     m_x = newX;
     m_y = newY;

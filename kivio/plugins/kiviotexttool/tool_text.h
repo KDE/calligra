@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +29,7 @@ class KToggleAction;
 
 class KivioView;
 class KivioPage;
+class KoPoint;
 
 class TextTool : public Kivio::MouseTool
 {
@@ -43,6 +45,7 @@ class TextTool : public Kivio::MouseTool
   public slots:
     void setActivated(bool a);
     void applyToolAction(QPtrList<KivioStencil>* stencils);
+    void applyToolAction(KivioStencil* stencil, const KoPoint& pos);
   
   signals:
     void operationDone();

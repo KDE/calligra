@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,6 +151,15 @@ public:
 
     virtual KivioLineStyle lineStyle();
     virtual void setLineStyle(KivioLineStyle ls);
+
+    /**
+      Returns the name of the text box that is at @param p.
+      If there exist no text box at @param p then it returns QString::null.
+    */
+    virtual QString getTextBoxName(const KoPoint& p);
+
+    virtual void setText(const QString& text, const QString& name);
+    virtual QString text(const QString& name);
 };
 
 #endif

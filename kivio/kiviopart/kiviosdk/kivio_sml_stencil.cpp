@@ -1991,3 +1991,77 @@ void KivioSMLStencil::setLineStyle(KivioLineStyle ls)
         pShape = m_pShapeList->next();
     }
 }
+
+QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
+{
+  KivioShape* pShape = m_pShapeList->first();
+  KoPoint pos = p;
+  
+  // Calculate the rotation...
+  QWMatrix m;
+  m.translate(m_x, m_y);
+  m.translate(m_w / 2.0, m_h / 2.0);
+  m.rotate(m_rotation);
+  m.translate(-m_w / 2.0, -m_h / 2.0);
+  
+  while(pShape)
+  {
+    if(pShape->shapeData()->shapeType() == KivioShapeData::kstTextBox)
+    {
+      double x = pShape->shapeData()->x();
+      double y = pShape->shapeData()->y();
+      double w = pShape->shapeData()->w();
+      double h = pShape->shapeData()->h();
+      
+      // Create the rotated rectangle
+      KoPoint pPoints[4];
+      pPoints[0].setX(x * m.m11() + y * m.m21() + m.dx());
+      pPoints[0].setY(x * m.m12() + y * m.m22() + m.dy());
+      pPoints[1].setX(w * m.m11() + y * m.m21() + m.dx());
+      pPoints[1].setY(w * m.m12() + y * m.m22() + m.dy());
+      pPoints[2].setX(w * m.m11() + h * m.m21() + m.dx());
+      pPoints[2].setY(w * m.m12() + h * m.m22() + m.dy());
+      pPoints[3].setX(x * m.m11() + h * m.m21() + m.dx());
+      pPoints[3].setY(x * m.m12() + h * m.m22() + m.dy());
+    
+      if(PointInPoly(pPoints, 4, &pos)) {
+        return pShape->shapeData()->name();
+      }
+    }
+
+    pShape = m_pShapeList->next();
+  }
+  
+  return QString::null;
+}
+
+void KivioSMLStencil::setText(const QString& text, const QString& name)
+{
+  KivioShape* pShape = m_pShapeList->first();
+  
+  while(pShape)
+  {
+    if(pShape->shapeData()->name() == name)
+    {
+      pShape->shapeData()->setText(text);
+      return;
+    }
+
+    pShape = m_pShapeList->next();
+  }
+}
+
+QString KivioSMLStencil::text(const QString& name)
+{
+  KivioShape* pShape = m_pShapeList->first();
+  
+  while(pShape)
+  {
+    if(pShape->shapeData()->name() == name)
+    {
+      return pShape->shapeData()->text();
+    }
+
+    pShape = m_pShapeList->next();
+  }
+}

@@ -118,10 +118,10 @@ public:
     KivioPoint *position() { return &m_position; }
     KivioPoint *dimensions() { return &m_dimensions; }
 
-    float x() { return m_position.x(); }
-    float y() { return m_position.y(); }
-    float w() { return m_dimensions.x(); }
-    float h() { return m_dimensions.y(); }
+    double x() { return m_position.x(); }
+    double y() { return m_position.y(); }
+    double w() { return m_dimensions.x(); }
+    double h() { return m_dimensions.y(); }
 
 
 

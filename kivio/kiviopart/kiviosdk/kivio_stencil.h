@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -248,7 +249,15 @@ class KivioStencil
     virtual int generateIds( int );
 
     virtual int resizeHandlePositions() { return krhpNone; }
+    
+    /**
+      Returns the name of the text box that is at the specified point.
+      If there exist no text box at the specified point then it returns QString::null.
+    */
+    virtual QString getTextBoxName(const KoPoint& /*p*/) { return QString::null; }
 
+    virtual void setText(const QString& /*text*/, const QString& /*name*/) { ; }
+    virtual QString text(const QString& /*name*/) { return QString(""); }
 
     /****** ARROW HEAD STUFF *******/
     virtual void setStartAHType( int ) { ; }

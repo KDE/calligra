@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti,
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,19 +25,19 @@
 #include <klocale.h>
 #include <config.h>
 
-static const char* description=I18N_NOOP("KOffice Flowchart And Diagram Tool");
-static const char* version=VERSION;
+static const char* description = I18N_NOOP("KOffice Flowchart And Diagram Tool");
+static const char* version = VERSION;
 
 KAboutData * newKivioAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kivio", I18N_NOOP("Kivio"),
                                            version, description, KAboutData::License_GPL,
-                                           "(c)2000-2003, The Kivio Team");
+                                           "(C) 2000-2003, The Kivio Team");
     aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Maintainer"), "psn@linux.se");
     aboutData->addAuthor("Ian Reinhart Geiser", I18N_NOOP("Development"), "geiseri@kde.org");
     aboutData->addAuthor("Laurent Montel", I18N_NOOP("Development"), "montel@kde.org");
     aboutData->addAuthor("Frauke Oster", I18N_NOOP("Development/Documentation"), "frauke@frsv.de");
-    aboutData->addAuthor("Kristof Borrey", "", "borrey@kde.org");
+    aboutData->addAuthor("Kristof Borrey", I18N_NOOP("Stencils"), "borrey@kde.org");
     aboutData->addAuthor("Dave Marotti", I18N_NOOP("Initial idea, development and basic stencil sets."),"lndshark@verticaladdiction.net");
     aboutData->addAuthor("The Kompany.com - \"Where Open Source is at Home\"(TM)", I18N_NOOP("Development and additional stencil sets."), "info@thekompany.com");
     return aboutData;
