@@ -54,7 +54,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, boo
 	connect(header(), SIGNAL(clicked(int)), this, SLOT(moveEditor()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
 
-	m_defaults = new KPushButton(this);
+	m_defaults = new KPushButton(viewport());
 	m_defaults->setPixmap(SmallIcon("reload"));
 	m_defaults->hide();
 	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
@@ -175,8 +175,8 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 	else
 	{
 	m_defaults->resize(geometry.height(), geometry.height());
-	QPoint p = viewport()->mapTo(this, QPoint(geometry.x() + geometry.width() - m_defaults->width(), geometry.y()));
-	m_defaults->move(p.x(), p.y());
+	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
+	m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
 	editor->resize(geometry.width()-m_defaults->width(), geometry.height());
 	m_defaults->show();
 	}
@@ -360,13 +360,11 @@ KexiPropertyEditor::resetItem()
 void
 KexiPropertyEditor::moveEditor()
 {
+	QPoint p = contentsToViewport(QPoint(0, itemPos(m_editItem)));
 	if(m_currentEditor)
-		m_currentEditor->move(m_currentEditor->x(), itemPos(m_editItem));
+		m_currentEditor->move(m_currentEditor->x(), p.y());
 	if(m_defaults->isVisible())
-	{
-		QPoint p = viewport()->mapToParent(QPoint(0, itemPos(m_editItem)) );
 		m_defaults->move(m_defaults->x(), p.y());
-	}
 }
 
 void
@@ -376,8 +374,8 @@ KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
 	if(m_defaults->isVisible())
 	{
 		QRect r = itemRect(m_editItem);
-		QPoint p = viewport()->mapTo(this, QPoint(r.x() + r.width() - m_defaults->width(), r.y()));
-		m_defaults->move(p.x(), p.y());
+		if(r.y()) // r.y() == 0 if the item is not visible on the screen
+			m_defaults->move(r.x() + r.width() - m_defaults->width(), r.y());
 		if(m_currentEditor)
 			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
 	}
