@@ -3438,10 +3438,10 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
   	 	}
 
   	}
-    QDomElement comment = cell.namedItem( "comment" ).toElement();
+    QDomCDATASection comment = cell.namedItem( "comment" ).firstChild().toCDATASection();
     if ( !comment.isNull() && ( pm == ::Normal ||pm == ::Comment || pm == ::NoBorder ))
         {
-        QString t = comment.text();
+        QString t = comment.data();
 	//t = t.stripWhiteSpace();
         setComment(t);
         }
