@@ -487,7 +487,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   return true;
 }
 
-void KSpreadCanvas::gotoLocation( QPoint location, KSpreadSheet* table,
+void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
                                   bool extendSelection)
 {
   kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
@@ -4828,7 +4828,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
   //Align to the offset
   xPos = xPos - m_pCanvas->xOffset();
-  int height = m_pCanvas->doc()->zoomItY( XBORDER_HEIGHT );
+  int height = m_pCanvas->doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 );
 
   QFont normalFont = painter.font();
   if ( m_pCanvas->doc()->zoom() < 100 )

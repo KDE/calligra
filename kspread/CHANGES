@@ -23,13 +23,12 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
     - font formating, text alignment
     - format parsing (date, time, numbers,...), cell height, width
     - print range, page setup, hidden columns/row, comments
-- OpenCalc export and import filter
+- new OpenCalc export and import filter
 - Added subtotal dialog and formula
 - Paper layout can now be applied to all sheets
 - now you can define the default cell style
 - Autoscroll while selecting now also available for columns and row headers
 - When cell is too short, then the content is now available in the tooltip
-- added OpenCalc export and import filter
 - Drag 'n' Drop of selections
 - Protection of sheets or of the document structure (with or without password)
 - Protection tab in layout dialog: you unprotect certain cells, hide their
@@ -42,6 +41,11 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
   + Improved WYSIWYG
   + Zoom support on printout
 - New direction mode when pressing Enter: you can jump now to the first cell of the next row
+- hierachical style support
+  - builtin styles
+  - creation of custom styles
+  - creation of custom styles using a cell as template
+- insert special characters
 
 
 New functions:

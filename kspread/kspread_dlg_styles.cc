@@ -33,6 +33,7 @@
 
 #include <qheader.h>
 #include <qlayout.h>
+#include <qmap.h>
 
 StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
   : QWidget( parent, name, fl )
@@ -91,9 +92,51 @@ KSpreadStyleDlg::~KSpreadStyleDlg()
 {
 }
 
+void KSpreadStyleDlg::fillComboBox()
+{
+  class Map : public QMap<KSpreadCustomStyle *, KListViewItem *> {};
+  Map entries;
+
+  entries.clear();
+  entries[m_styleManager->defaultStyle()] = new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
+
+  KSpreadStyleManager::Styles::const_iterator iter = m_styleManager->m_styles.begin();
+  KSpreadStyleManager::Styles::const_iterator end  = m_styleManager->m_styles.end();
+  uint count = m_styleManager->m_styles.count() + 1;
+
+  while ( entries.count() != count )
+  {
+    if ( entries.find( iter.data() ) == entries.end() )
+    {
+      if ( iter.data()->parent() == 0 )
+        entries[iter.data()] = new KListViewItem( m_dlg->m_styleList, iter.data()->name() );
+      else 
+      {
+        Map::const_iterator i = entries.find( iter.data()->parent() );
+        if ( i != entries.end() )
+          entries[iter.data()] = new KListViewItem( i.data(), iter.data()->name() );
+      }
+    }
+
+    ++iter;
+    if ( iter == end )
+      iter = m_styleManager->m_styles.begin();
+  }
+  entries.clear();
+}
+
 void KSpreadStyleDlg::slotDisplayMode( int mode )
 {
   m_dlg->m_styleList->clear();
+
+  if ( mode != 3 )
+    m_dlg->m_styleList->setRootIsDecorated( false );
+  else
+  {
+    m_dlg->m_styleList->setRootIsDecorated( true );
+    fillComboBox();
+    return;
+  }
 
   if ( mode != 2 )
     new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
@@ -184,7 +227,15 @@ void KSpreadStyleDlg::slotUser1()
   else
     s = m_styleManager->defaultStyle();
 
-  KSpreadCustomStyle * style = new KSpreadCustomStyle( i18n( "style%1" ).arg( m_styleManager->count() + 1 ), s );
+  int i = 1;
+  QString newName( i18n( "style%1" ).arg( m_styleManager->count() + i ) );
+  while ( m_styleManager->style( newName ) != 0 )
+  {
+    ++i;
+    newName = i18n( "style%1" ).arg( m_styleManager->count() + i );
+  }
+
+  KSpreadCustomStyle * style = new KSpreadCustomStyle( newName, s );
   style->setType( KSpreadStyle::TENTATIVE );
 
   CellFormatDlg dlg( m_view, style, m_styleManager, m_view->doc() );

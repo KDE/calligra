@@ -60,6 +60,7 @@
   <Action name="insertFormula"/>
   <Action name="series"/>
   <Action name="insertHyperlink"/>
+  <Action name="insertSpecialChar"/>
   <Separator/>       
   <Action name="insertPart"/>
   <Action name="insertChart"/>

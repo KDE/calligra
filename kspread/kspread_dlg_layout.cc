@@ -217,7 +217,6 @@ bool GeneralTab::checkParent( const QString & parentName )
   if ( m_dlg->getStyle()->parentName() != parentName 
        && m_parentBox->isEnabled() && parentName != i18n( "<None>" ) && !parentName.isEmpty() )
   {
-    kdDebug() << "Checking..." << endl;
     if ( m_nameEdit->text() == parentName )
     {
       KMessageBox::sorry( this, i18n( "A style cannot inherit from itself." ) );
@@ -895,15 +894,15 @@ void CellFormatDlg::init()
   fontPage = new CellFormatPageFont( tab, this );
   tab->addTab( fontPage, i18n("&Text") );
   
-  borderPage = new CellFormatPageBorder( tab, this );
-  tab->addTab( borderPage, i18n("&Border") );
-
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
   positionPage = new CellFormatPagePosition( tab, this);
   tab->addTab( positionPage, i18n("&Position") );
   
+  borderPage = new CellFormatPageBorder( tab, this );
+  tab->addTab( borderPage, i18n("&Border") );
+
   patternPage=new CellFormatPagePattern(tab,this);
   tab->addTab( patternPage,i18n("Back&ground"));
   
@@ -5364,7 +5363,6 @@ void CellFormatPagePattern::apply( KSpreadCustomStyle * style )
     style->changeBgColor( QColor() );
   else 
   */
-  kdDebug() << "BGColor: " << bgColor.name() << ", old: " << dlg->getStyle()->bgColor().name() << endl;
   if ( bgColor != dlg->getStyle()->bgColor() )
     style->changeBgColor( bgColor );
 }

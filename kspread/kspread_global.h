@@ -5,6 +5,37 @@
 
 #include "kspread_factory.h"
 
+#include <qdatetime.h>
+#include <kdebug.h>
+
+class ElapsedTime
+{
+ public:
+  ElapsedTime()
+  {
+    m_time.start();  
+  }
+
+  ElapsedTime( QString const & name )
+    : m_name( name )
+  {
+    m_time.start();  
+  }
+  
+  ~ElapsedTime()
+  {
+    if ( m_name.isNull() )
+      kdDebug() << "Elapsed time (in milliseconds): " << m_time.elapsed() << endl;
+    else      
+      kdDebug() << "(" << m_name << ") Elapsed time (in milliseconds): " << m_time.elapsed() << endl;
+  }
+
+ private:
+  QTime   m_time;
+  QString m_name;
+};
+
+
 #define KSBarIcon( x ) BarIcon( x, KSpreadFactory::global() )
 #define colWidth 60.0
 #define heightOfRow 20.0
@@ -24,8 +55,10 @@ enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Bet
 enum Action { Stop, Warning, Information};
 enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength};
 enum Series { Column,Row,Linear,Geometric };
-namespace KSpread {  // necessary due to QDock* enums (Werner)
-enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
+namespace KSpread 
+{  // necessary due to QDock* enums (Werner)
+  enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
 }
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc};
+
 #endif

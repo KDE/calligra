@@ -24,6 +24,8 @@
 #include "kspread_map.h"
 #include "kspread_util.h"
 #include "kspread_sheetprint.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
 
 /****************************************************************************
  *
@@ -1955,19 +1957,24 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
     else
     {
       KSpreadCell * cell;
-      for ( int y = m_rctRect.top(); y <= bottom; ++y )
-        for ( int x = m_rctRect.left(); x <= right; ++x )
+      for ( int x = m_rctRect.left(); x <= right; ++x )
+      {
+        cell = table->getFirstCellColumn( x );
+        if ( !cell )
+          continue;
+        while ( cell && cell->row() <= bottom )
         {
-          cell = table->nonDefaultCell( x, y );
           if ( !cell->isObscured() )
           {
             textOfCell tmpText;
-            tmpText.col = x;
-            tmpText.row = y;
+            tmpText.col  = x;
+            tmpText.row  = cell->row();
             tmpText.text = cell->text();
-            list.append(tmpText);
+            list.append( tmpText );
           }
+          cell = table->getNextCellDown( x, cell->row() );
         }
+      }
     }
 }
 
@@ -1986,42 +1993,110 @@ void KSpreadUndoChangeAreaTextCell::undo()
     createList( m_lstRedoTextCell, table );
 
 
-    QValueList<textOfCell>::Iterator it2;
-    for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
+    if ( !util_isRowSelected( m_rctRect ) 
+         && !util_isColumnSelected( m_rctRect ) )
     {
+      int bottom = m_rctRect.bottom();
+      int right  = m_rctRect.right();
+      int y      = m_rctRect.top();
+      KSpreadCell * cell = 0;
+      bool done = false;
+
+      QValueList<textOfCell>::Iterator it  = m_lstTextCell.begin();
+      QValueList<textOfCell>::Iterator end = m_lstTextCell.end();
+
+      for ( int x = m_rctRect.left(); x <= right; ++x )
+      {
+        for ( ; y <= bottom; ++y )
+        {
+          cell = table->nonDefaultCell( x, y );
+          if ( (*it).col == x && (*it).row == y && !done)
+          {
+            cell->setCellText( (*it).text );
+            ++it;
+            if ( it == end )
+              done = true;
+          }
+          else
+            cell->setCellText( "", true, true );
+        }
+      }      
+    }
+    else
+    {
+      QValueList<textOfCell>::Iterator it2;
+      for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
+      {
         KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
         if ( (*it2).text.isEmpty() )
-                {
-                if(!cell->text().isEmpty())
-	                cell->setCellText( "" );
-                }
+        {
+          if ( !cell->text().isEmpty() )
+            cell->setCellText( "" );
+        }
         else
-	       cell->setCellText( (*it2).text );
+          cell->setCellText( (*it2).text );
+      }
     }
+
     doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
 void KSpreadUndoChangeAreaTextCell::redo()
 {
-    KSpreadSheet* table = doc()->map()->findTable( m_tableName );
+    KSpreadSheet * table = doc()->map()->findTable( m_tableName );
+
     if ( !table )
 	return;
 
     doc()->undoBuffer()->lock();
     doc()->emitBeginOperation();
-    QValueList<textOfCell>::Iterator it2;
-    for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
+
+    if ( !util_isRowSelected( m_rctRect ) 
+         && !util_isColumnSelected( m_rctRect ) )
     {
+      int bottom = m_rctRect.bottom();
+      int right  = m_rctRect.right();
+      int y      = m_rctRect.top();
+      bool done  = false;
+      KSpreadCell * cell = 0;
+
+      QValueList<textOfCell>::Iterator it  = m_lstRedoTextCell.begin();
+      QValueList<textOfCell>::Iterator end = m_lstRedoTextCell.end();
+
+      for ( int x = m_rctRect.left(); x <= right; ++x )
+      {
+        for ( ; y <= bottom; ++y )
+        {
+          cell = table->nonDefaultCell( x, y );
+          if ( (*it).col == x && (*it).row == y && !done)
+          {
+            cell->setCellText( (*it).text );
+            ++it;
+            if ( it == end )
+              done = true;
+          }
+          else
+            cell->setCellText( "", true, true );
+        }
+      }      
+    }
+    else
+    {
+      QValueList<textOfCell>::Iterator it2;
+      for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
+      {
         KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
         if ( (*it2).text.isEmpty() )
-                {
-                if(!cell->text().isEmpty())
-	                cell->setCellText( "" );
-                }
+        {
+          if ( !cell->text().isEmpty() )
+            cell->setCellText( "" );
+        }
         else
-	       cell->setCellText( (*it2).text );
+          cell->setCellText( (*it2).text );
+      }
     }
+
     doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }

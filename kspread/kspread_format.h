@@ -117,11 +117,11 @@ public:
     //
     ////////////////////////////////
 
-    bool load( const QDomElement& f, PasteMode pm );
-    bool loadFormat( const QDomElement& f, PasteMode pm=Normal);
-    QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false ) const;
-    QDomElement saveFormat( QDomDocument& doc, bool force = false ) const;
-    QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force=false ) const;
+    bool load( const QDomElement & f, PasteMode pm, bool paste = false );
+    bool loadFormat( const QDomElement & f, PasteMode pm = Normal, bool paste = false );
+    QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
+    QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
+    QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
 
 
     ////////////////////////////////
@@ -163,6 +163,8 @@ public:
 
     static void setGlobalColWidth( double width );
     static void setGlobalRowHeight( double height );
+    static double globalRowHeight();
+    static double globalColWidth();
 
 
     virtual void setKSpreadStyle( KSpreadStyle * style );
@@ -440,8 +442,8 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    virtual QDomElement save( QDomDocument&, int yshift = 0 ) const;
-    virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp=Normal );
+    virtual QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
+    virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp = Normal, bool paste = false );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -576,8 +578,8 @@ public:
     ColumnFormat( KSpreadSheet *_table, int _column );
     ~ColumnFormat();
 
-    virtual QDomElement save( QDomDocument&, int xshift = 0 ) const;
-    virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp=Normal );
+    virtual QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
+    virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp = Normal, bool paste = false );
     virtual DCOPObject* dcopObject();
 
     /**

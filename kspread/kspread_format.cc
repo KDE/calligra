@@ -93,6 +93,16 @@ void KSpreadFormat::setGlobalRowHeight( double height )
   g_rowHeight = height;
 }
 
+double KSpreadFormat::globalRowHeight()
+{
+  return g_rowHeight;
+}
+
+double KSpreadFormat::globalColWidth()
+{
+  return g_colWidth;
+}
+
 void KSpreadFormat::copy( const KSpreadFormat & _l )
 {
   if ( m_pStyle && m_pStyle->release() )
@@ -116,6 +126,7 @@ void KSpreadFormat::setKSpreadStyle( KSpreadStyle * style )
        || style->type() == KSpreadStyle::BUILTIN )
   {
     kdDebug() << "Setting new Properties" << endl;
+    /*
     if ( style->hasFeature( KSpreadStyle::SAlignX ) )
       m_mask |= (Q_UINT32) PAlign;
     else
@@ -228,6 +239,7 @@ void KSpreadFormat::setKSpreadStyle( KSpreadStyle * style )
       m_mask |= (Q_UINT32) PHideFormula;
     else
       m_mask &= ~(Q_UINT32) PHideFormula;
+    */
     kdDebug() << "New Mask: " << m_mask << endl;
   }
   m_bNoFallBack = 0;
@@ -309,7 +321,7 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 //
 /////////////
 
-QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, bool force ) const
+QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const
 {
   QDomElement format( doc.createElement( "format" ) );
   
@@ -317,9 +329,8 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, b
   {
     format.setAttribute( "style-name", ((KSpreadCustomStyle *) m_pStyle)->name() );
     
-#warning TODO: save in old KSpread format (1.1 / 1.2) on demand
-    return format; 
-#warning TODO: return here only if not copied to clipboard
+    if ( !copy && m_pTable->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)      
+      return format; 
   }
   else
   {
@@ -433,7 +444,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, b
 }
 
 
-QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
+QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force, bool copy ) const
 {
   QDomElement format( doc.createElement( "format" ) );
   
@@ -441,9 +452,8 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
   {
     format.setAttribute( "style-name", ((KSpreadCustomStyle *) m_pStyle)->name() );
     
-#warning TODO: save in old KSpread format (1.1 / 1.2) on demand
-#warning TODO: return here only if not copied to clipboard
-    return format;
+    if ( !copy && m_pTable->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)      
+      return format;
   }
   else
   {
@@ -556,13 +566,13 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
   return format;
 }
 
-QDomElement KSpreadFormat::save( QDomDocument & doc, int _col, int _row, bool force ) const
+QDomElement KSpreadFormat::save( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const
 {
-  QDomElement format = saveFormat( doc, _col, _row, force );
+  QDomElement format = saveFormat( doc, _col, _row, force, copy );
   return format;
 }
 
-bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm )
+bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste )
 {
     if ( f.hasAttribute( "style-name" ) )
     {
@@ -573,11 +583,9 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm )
       {
         setKSpreadStyle( s );
 
-#warning TODO: do not return if data got pasted
         return true;
       }
-      else
-#warning TODO: do not return if data got pasted
+      else if ( !paste )
         return false;
     }
     else
@@ -795,9 +803,9 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm )
     return true;
 }
 
-bool KSpreadFormat::load( const QDomElement & f, PasteMode pm )
+bool KSpreadFormat::load( const QDomElement & f, PasteMode pm, bool paste )
 {
-    if ( !loadFormat( f, pm ) )
+    if ( !loadFormat( f, pm, paste ) )
         return false;
     return true;
 }
@@ -2207,7 +2215,7 @@ double RowFormat::mmHeight() const
     return POINT_TO_MM ( dblHeight() );
 }
 
-QDomElement RowFormat::save( QDomDocument& doc, int yshift ) const
+QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
 {
     QDomElement row = doc.createElement( "row" );
     row.setAttribute( "height", m_fHeight );
@@ -2215,12 +2223,12 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift ) const
     if( m_bHide )
         row.setAttribute( "hide", (int) m_bHide );
 
-    QDomElement format( saveFormat( doc ) );
+    QDomElement format( saveFormat( doc, false, copy ) );
     row.appendChild( format );
     return row;
 }
 
-bool RowFormat::load( const QDomElement & row, int yshift, PasteMode sp )
+bool RowFormat::load( const QDomElement & row, int yshift, PasteMode sp, bool paste )
 {
     bool ok;
 
@@ -2261,7 +2269,7 @@ bool RowFormat::load( const QDomElement & row, int yshift, PasteMode sp )
 
     if ( !f.isNull() && ( sp == Normal || sp == Format || sp == NoBorder ) )
     {
-        if ( !loadFormat( f, sp ) )
+        if ( !loadFormat( f, sp, paste ) )
             return false;
         return true;
     }
@@ -2450,7 +2458,7 @@ double ColumnFormat::mmWidth() const
 }
 
 
-QDomElement ColumnFormat::save( QDomDocument& doc, int xshift ) const
+QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
 {
   QDomElement col( doc.createElement( "column" ) );
   col.setAttribute( "width", m_fWidth );
@@ -2459,13 +2467,13 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift ) const
   if ( m_bHide )
         col.setAttribute( "hide", (int) m_bHide );
 
-  QDomElement format( saveFormat( doc ) );
+  QDomElement format( saveFormat( doc, false, copy ) );
   col.appendChild( format );
 
   return col;
 }
 
-bool ColumnFormat::load( const QDomElement & col, int xshift, PasteMode sp )
+bool ColumnFormat::load( const QDomElement & col, int xshift, PasteMode sp, bool paste )
 {
     bool ok;
     if ( col.hasAttribute( "width" ) )
@@ -2506,7 +2514,7 @@ bool ColumnFormat::load( const QDomElement & col, int xshift, PasteMode sp )
 
     if ( !f.isNull() && ( sp == Normal || sp == Format || sp == NoBorder ))
     {
-        if ( !loadFormat( f, sp ) )
+        if ( !loadFormat( f, sp, paste ) )
             return false;
         return true;
     }

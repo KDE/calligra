@@ -1626,6 +1626,8 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
     undoRegion.setRight( x - 1 );
   }
 
+  kdDebug() << "Saving undo information" << endl;
+
   if ( !m_pDoc->undoBuffer()->isLocked() )
   {
     KSpreadUndoChangeAreaTextCell *undo = new
@@ -1633,6 +1635,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
     m_pDoc->undoBuffer()->appendUndo( undo );
   }
 
+  kdDebug() << "Saving undo information done" << endl;
 
   x = _marker.x();
   y = _marker.y();
@@ -5155,7 +5158,7 @@ void KSpreadSheet::copySelection( KSpreadSelection* selectionInfo )
 
     rct = selectionInfo->selection();
 
-    QDomDocument doc = saveCellRect( rct );
+    QDomDocument doc = saveCellRect( rct, true );
 
     // Save to buffer
     QBuffer buffer;
@@ -5179,9 +5182,9 @@ void KSpreadSheet::cutSelection( KSpreadSelection* selectionInfo )
 }
 
 void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
-                          PasteMode sp, Operation op, bool insert, int insertTo )
+                          PasteMode sp, Operation op, bool insert, int insertTo, bool pasteFC )
 {
-    QMimeSource* mime = QApplication::clipboard()->data();
+    QMimeSource * mime = QApplication::clipboard()->data();
     if ( !mime )
         return;
 
@@ -5204,7 +5207,7 @@ void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
     else
         return;
     doc()->emitBeginOperation();
-    paste( b, pasteArea, makeUndo, sp, op, insert, insertTo );
+    paste( b, pasteArea, makeUndo, sp, op, insert, insertTo, pasteFC );
     doc()->emitEndOperation();
 
 }
@@ -5293,8 +5296,8 @@ void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
   emit sig_updateVBorder( this );
 }
 
-void KSpreadSheet::paste( const QByteArray& b, const QRect &pasteArea, bool makeUndo,
-                          PasteMode sp, Operation op, bool insert, int insertTo )
+void KSpreadSheet::paste( const QByteArray & b, const QRect & pasteArea, bool makeUndo,
+                          PasteMode sp, Operation op, bool insert, int insertTo, bool pasteFC )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
@@ -5310,13 +5313,13 @@ void KSpreadSheet::paste( const QByteArray& b, const QRect &pasteArea, bool make
     int my = pasteArea.top();
 
     loadSelection( doc, pasteArea, mx - 1, my - 1, makeUndo, sp, op, insert,
-                   insertTo );
+                   insertTo, pasteFC );
 }
 
 bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                                   int _xshift, int _yshift, bool makeUndo,
                                   PasteMode sp, Operation op, bool insert,
-                                  int insertTo)
+                                  int insertTo, bool pasteFC )
 {
     QDomElement e = doc.documentElement();
 
@@ -5364,7 +5367,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             if ( c.tagName() == "column" )
             {
                 ColumnFormat *cl = new ColumnFormat( this, 0 );
-                if ( cl->load( c, _xshift,sp ) )
+                if ( cl->load( c, _xshift, sp, pasteFC ) )
                     insertColumnFormat( cl );
                 else
                     delete cl;
@@ -5391,7 +5394,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             if ( c.tagName() == "row" )
             {
                 RowFormat *cl = new RowFormat( this, 0 );
-                if ( cl->load( c, _yshift,sp ) )
+                if ( cl->load( c, _yshift, sp, pasteFC ) )
                     insertRowFormat( cl );
                 else
                     delete cl;
@@ -5425,7 +5428,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             cellBackup = new KSpreadCell(this, cell->column(), cell->row());
             cellBackup->copyAll(cell);
 
-            if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
+            if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op, pasteFC ) )
             {
               cell->copyAll(cellBackup);
             }
@@ -5805,7 +5808,7 @@ bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
 
 
 
-QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
+QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy )
 {
     QDomDocument doc( "spreadsheet-snippet" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -5831,7 +5834,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( doc, 0, _rect.top() - 1 ) );
+                    spread.appendChild( c->save( doc, 0, _rect.top() - 1, copy ) );
             }
         }
 
@@ -5843,7 +5846,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
             lay = rowFormat( y );
             if ( lay && !lay->isDefault() )
             {
-                QDomElement e = lay->save( doc, _rect.top() - 1 );
+                QDomElement e = lay->save( doc, _rect.top() - 1, copy );
                 if ( !e.isNull() )
                     spread.appendChild( e );
             }
@@ -5869,7 +5872,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( doc, _rect.left() - 1, 0 ) );
+                    spread.appendChild( c->save( doc, _rect.left() - 1, 0, copy ) );
             }
         }
 
@@ -5881,7 +5884,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
             lay = columnFormat( x );
             if ( lay && !lay->isDefault() )
             {
-                QDomElement e = lay->save( doc, _rect.left() - 1 );
+                QDomElement e = lay->save( doc, _rect.left() - 1, copy );
                 if ( !e.isNull() )
                     spread.appendChild( e );
             }
@@ -5908,7 +5911,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
 		insertCell( cell );
 		insert=true;
 	    }
-	    spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
+	    spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1, true, copy ) );
 	    if( insert )
 	        m_cells.remove(i,j);
 	}

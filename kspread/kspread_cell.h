@@ -165,10 +165,10 @@ public:
      * @param force if set to true, all the properties of the format are stored (used for "Copy")
      * Usually this is false, to only store the properties explicitely set.
      */
-    QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false );
+    QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
-	       Operation op = OverWrite );
+	       Operation op = OverWrite, bool paste = false );
 
     QTime toTime(const QDomElement &element) ;
     QDate toDate(const QDomElement &element);
@@ -1039,6 +1039,7 @@ private:
   bool loadCellData(const QDomElement &text, Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString str );
+  void update();
 };
 
 #endif

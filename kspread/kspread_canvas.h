@@ -177,7 +177,7 @@ public:
      *                        selected, and the selection anchor will be reset
      *                        to this cell.
      */
-    void gotoLocation( QPoint location, KSpreadSheet* table = NULL,
+    void gotoLocation( QPoint const & location, KSpreadSheet* table = NULL,
                        bool extendSelection = false);
 
     /**

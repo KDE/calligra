@@ -23,12 +23,12 @@
 #include <time.h>
 #include <assert.h>
 
-#include <qtoolbutton.h>
-#include <qtimer.h>
 #include <qcursor.h>
+#include <qlayout.h>
 #include <qpaintdevicemetrics.h>
 #include <qregexp.h>
-#include <qlayout.h>
+#include <qtimer.h>
+#include <qtoolbutton.h>
 
 #include <klineeditdlg.h>
 #include <kprocio.h>
@@ -53,6 +53,7 @@
 #include <kreplace.h>
 #include <kfinddialog.h>
 #include <kreplacedialog.h>
+#include <koCharSelectDia.h>
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
 #include <koTemplateCreateDia.h>
@@ -555,6 +556,12 @@ void KSpreadView::initializeInsertActions()
                               SLOT( insertHyperlink() ), actionCollection(),
                               "insertHyperlink" );
   m_insertLink->setToolTip(i18n("Insert an internet hyperlink."));
+
+  m_insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char", this,
+                                     SLOT( insertSpecialChar() ), actionCollection(),
+                                     "insertSpecialChar" );
+  m_insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
+
 
   m_insertPart=new KoPartSelectAction( i18n("&Object"), "frame_query", this,
                                        SLOT( insertObject() ),
@@ -1155,7 +1162,7 @@ void KSpreadView::initializeTableActions()
   /* basically the same action here, but it's in the insert menu so we don't
      want to also have 'insert' in the caption
   */
-  m_menuInsertTable = new KAction( i18n("Sheet"),"inserttable", 0, this,
+  m_menuInsertTable = new KAction( i18n("&Sheet"),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "menuInsertTable" );
   m_menuInsertTable->setToolTip(i18n("Insert a new sheet."));
@@ -2594,6 +2601,50 @@ void KSpreadView::verticalText(bool b)
     m_pDoc->emitEndOperation();
 }
 
+void KSpreadView::insertSpecialChar()
+{
+    QString f = m_selectFont->font(); 
+    QChar c=' ';
+    if ( m_specialCharDlg == 0 )
+    {
+        m_specialCharDlg = new KoCharSelectDia( this, "insert special char", f, c, false );
+        connect( m_specialCharDlg, SIGNAL( insertChar( QChar, const QString & ) ),
+                 this, SLOT( slotSpecialChar( QChar, const QString & ) ) );
+        connect( m_specialCharDlg, SIGNAL( finished() ),
+                 this, SLOT( slotSpecialCharDlgClosed() ) );
+    }
+    m_specialCharDlg->show();
+}
+
+void KSpreadView::slotSpecialCharDlgClosed()
+{
+    if ( m_specialCharDlg )
+    {
+        disconnect( m_specialCharDlg, SIGNAL(insertChar(QChar,const QString &)),
+                    this, SLOT(slotSpecialChar(QChar,const QString &)));
+        disconnect( m_specialCharDlg, SIGNAL( finished() ),
+                    this, SLOT( slotSpecialCharDlgClosed() ) );
+        m_specialCharDlg->deleteLater();
+        m_specialCharDlg = 0L;
+    }
+}
+
+void KSpreadView::slotSpecialChar( QChar c, const QString & _font )
+{
+    if ( m_pTable )
+    {
+      QPoint marker( selectionInfo()->marker() );
+      KSpreadCell * cell = m_pTable->nonDefaultCell( marker );
+      if ( cell->textFont( marker.x(), marker.y() ).family() != _font )
+      {
+        cell->setTextFontFamily( _font );
+      }
+      KSpreadEditWidget * edit = m_pCanvas->editWidget();
+      QKeyEvent ev( QEvent::KeyPress, 0, 0, 0, QString( c ) );
+      QApplication::sendEvent( edit, &ev );
+    }
+}
+
 void KSpreadView::insertMathExpr()
 {
     if ( m_pTable == 0L )
@@ -3246,7 +3297,7 @@ void KSpreadView::paste()
     m_pDoc->emitBeginOperation(false);
     if( !m_pCanvas->editor() )
     {
-        m_pTable->paste( selection() );
+        m_pTable->paste( selection(), true, Normal, OverWrite, false, 0, true );
         resultOfCalc();
         updateEditWidget();
     }
@@ -4069,6 +4120,7 @@ void KSpreadView::adjustActions( bool mode )
   m_replaceAction->setEnabled( mode );
   m_insertSeries->setEnabled( mode );
   m_insertLink->setEnabled( mode );
+  m_insertSpecialChar->setEnabled( mode );
   m_insertFunction->setEnabled( mode );
   m_removeComment->setEnabled( mode );
   m_decreaseIndent->setEnabled( mode );
@@ -4563,7 +4615,7 @@ int KSpreadView::rightBorder() const
 
 int KSpreadView::topBorder() const
 {
-    return m_pToolWidget->height() + int( m_pCanvas->doc()->zoomItX( XBORDER_HEIGHT ) );
+    return m_pToolWidget->height() + int( m_pCanvas->doc()->zoomItX( KSpreadFormat::globalRowHeight() + 2 ) );
 }
 
 int KSpreadView::bottomBorder() const
@@ -4682,7 +4734,7 @@ void KSpreadView::refreshView()
     m_pVBorderWidget->hide();
   }
 
-  int heightColHeader = int( m_pCanvas->doc()->zoomItY( XBORDER_HEIGHT ) );
+  int heightColHeader = int( m_pCanvas->doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );
   if ( m_pDoc->getShowColHeader() )
     m_pHBorderWidget->show();
   else

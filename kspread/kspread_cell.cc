@@ -3585,10 +3585,11 @@ void KSpreadCell::setDate( QDate const & date )
   m_content = Text;
   
   m_value.setValue( KSpreadValue( date ) );
+  m_strText = locale()->formatDate( date, true );
   setFlag( Flag_LayoutDirty );
   setFlag( Flag_TextFormatDirty );
-  setCalcDirtyFlag();
   checkNumberFormat();
+  update();
 }
 
 void KSpreadCell::setNumber( double number )
@@ -3601,10 +3602,11 @@ void KSpreadCell::setNumber( double number )
   m_content = Text;
   
   m_value.setValue( KSpreadValue( number ) );
-  setFlag(Flag_LayoutDirty);
-  setFlag(Flag_TextFormatDirty);
-  setCalcDirtyFlag();
+  m_strText.setNum( number );
+  setFlag( Flag_LayoutDirty );
+  setFlag( Flag_TextFormatDirty );
   checkNumberFormat();
+  update();
 }
 
 void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool asText )
@@ -3629,7 +3631,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
 
       setFlag(Flag_LayoutDirty);
       setFlag(Flag_TextFormatDirty);
-      setCalcDirtyFlag();
+      update();
 
       return;
     }
@@ -3712,6 +3714,13 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
       // setFlag(Flag_LayoutDirty);
   }
 
+  update();
+
+  m_pTable->doc()->emitEndOperation();
+}
+
+void KSpreadCell::update()
+{
   /* those obscuring us need to redo their layout cause they can't obscure us
      now that we've got text.
      This includes cells obscuring cells that we are obscuring
@@ -3731,11 +3740,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
 
   /* TODO - is this a good place for this? */
   updateChart(true);
-
-
-  m_pTable->doc()->emitEndOperation();
-
-
 }
 
 bool KSpreadCell::testValidity() const
@@ -4334,7 +4338,7 @@ bool KSpreadCell::cellDependsOn(KSpreadSheet *table, int col, int row)
   return isdep;
 }
 
-QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool force )
+QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool force, bool copy )
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
@@ -4347,7 +4351,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     //
     // Save the formatting information
     //
-    QDomElement format = KSpreadFormat::save( doc, m_iColumn, m_iRow, force );
+    QDomElement format = KSpreadFormat::save( doc, m_iColumn, m_iRow, force, copy );
     if ( format.hasChildNodes() || format.attributes().length() ) // don't save empty tags
         cell.appendChild( format );
 
@@ -4520,7 +4524,8 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
   return true; /* really isn't much of a way for this function to fail */
 }
 
-bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm, Operation op )
+bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift, 
+                        PasteMode pm, Operation op, bool paste )
 {
     bool ok;
 
@@ -4557,7 +4562,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
 
-        if ( !KSpreadFormat::load( f, pm ) )
+        if ( !KSpreadFormat::load( f, pm, paste ) )
             return false;
 
         if ( f.hasAttribute( "colspan" ) )

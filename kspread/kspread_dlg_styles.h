@@ -63,6 +63,8 @@ class KSpreadStyleDlg : public KDialogBase
   KSpreadView         * m_view;
   KSpreadStyleManager * m_styleManager;
   StyleWidget         * m_dlg;
+
+  void fillComboBox();
 };
 
 #endif

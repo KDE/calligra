@@ -45,6 +45,7 @@ class KSpreadChild;
 class KSpreadCell;
 class KSpreadLocationEditWidget;
 class KoDocumentEntry;
+class KoCharSelectDia;
 class KStatusBarLabel;
 class TKSelectColorAction;
 class KAction;
@@ -242,6 +243,7 @@ public slots:
     void insertFromDatabase();
     void insertFromTextfile();
     void insertFromClipboard();
+    void insertSpecialChar();
     void editGlobalScripts();
     void editLocalScripts();
     void reloadScripts();
@@ -430,6 +432,9 @@ protected slots:
      */
     void slotReplace( const QString &newText, int, int, int );
 
+    void slotSpecialChar( QChar c, const QString & _font );
+    void slotSpecialCharDlgClosed();
+
 protected slots:
 
     void slotChildSelected( KoDocumentChild* ch );
@@ -513,7 +518,7 @@ private:
     QButton *m_pCancelButton;
     KSpreadTabBar *m_pTabBar;
     KSpreadLocationEditWidget *m_pPosWidget;
-
+    KoCharSelectDia * m_specialCharDlg;
     KToggleAction* m_bold;
     KToggleAction* m_italic;
     KToggleAction* m_underline;
@@ -533,6 +538,7 @@ private:
     KAction* m_insertSeries;
     KAction* m_insertLink;
     KAction* m_insertFunction;
+    KAction* m_insertSpecialChar;
     KAction* m_transform;
     KAction* m_copy;
     KAction* m_findAction;

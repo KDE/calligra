@@ -546,11 +546,12 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QRect &pasteArea, bool makeUndo=true, PasteMode=Normal,
-                Operation=OverWrite,bool insert=false,int insertTo=0 );
-    void paste( const QByteArray& data, const QRect &pasteArea,
-                bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,
-                bool insert=false, int insertTo=0 );
+    void paste( const QRect & pasteArea, bool makeUndo = true, PasteMode = Normal,
+                Operation = OverWrite, bool insert = false, int insertTo = 0,
+                bool pasteFC = false );
+    void paste( const QByteArray & data, const QRect & pasteArea,
+                bool makeUndo = false, PasteMode= Normal, Operation = OverWrite,
+                bool insert = false, int insertTo = 0, bool pasteFC = false );
     void defaultSelection( KSpreadSelection* selectionInfo );
 
     /**
@@ -830,7 +831,7 @@ public:
     /**
      * @see #copy
      */
-    QDomDocument saveCellRect( const QRect& );
+    QDomDocument saveCellRect( const QRect &, bool copy = false );
 
     /**
     * insertTo defined if you insert to the bottom or right
@@ -842,7 +843,7 @@ public:
     bool loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                         int _xshift, int _yshift, bool makeUndo,
                         PasteMode = Normal, Operation = OverWrite,
-                        bool insert = false, int insertTo = 0 );
+                        bool insert = false, int insertTo = 0, bool paste = false );
 
     void loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
                             int _xshift, int _yshift,bool insert,int insertTo);

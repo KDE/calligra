@@ -24,10 +24,11 @@
 #include <dirent.h>
 #include <pwd.h>
 
-#include <qregexp.h>
-#include <qfileinfo.h>
-#include <qpair.h>
 #include <qapplication.h>
+#include <qfileinfo.h>
+#include <qfont.h>
+#include <qpair.h>
+#include <qregexp.h>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -35,18 +36,16 @@
 #include <kmessagebox.h>
 #include <ksconfig.h>
 
+#include "koDocumentInfo.h"
 #include <koTemplateChooseDia.h>
 
+#include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
-#include "kspread_undo.h"
-#include "kspread_view.h"
-#include "kspread_canvas.h"
 #include "kspread_sheetprint.h"
 #include "kspread_style_manager.h"
-
-#include "koDocumentInfo.h"
-
+#include "kspread_undo.h"
+#include "kspread_view.h"
 #include "KSpreadDocIface.h"
 
 using namespace std;
@@ -76,6 +75,11 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
     m_pStyleManager( new KSpreadStyleManager() ),
     m_pageBorderColor( Qt::red )
 {
+  QFont f( KoGlobal::defaultFont() );
+
+  KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
+  KSpreadFormat::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
+
   m_bDelayCalculation = false;
   m_syntaxVersion = CURRENT_SYNTAX_VERSION;
 
