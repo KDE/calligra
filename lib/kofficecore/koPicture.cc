@@ -27,10 +27,7 @@
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureImage.h"
-//#include "koPictureEps.h"
-//#include "koPictureJpeg.h"
 #include "koPictureClipart.h"
-//#include "koPictureSvg.h"
 #include "koPicture.h"
 
 KoPicture::KoPicture(void) : m_base(NULL)
