@@ -105,8 +105,8 @@ QDomElement KWFormatCollection::save( QDomDocument &doc )
 
     QDictIterator<KWFormat> it( formats );
     for ( int i = 0; it.current(); ++it ) {
-	indexMap[ it.current() ] = i++;
-	QDomElement f = it.current()->save( doc, i );
+	indexMap[ it.current() ] = i;
+	QDomElement f = it.current()->save( doc, i++ );
 	if ( f.isNull() )
 	    return f;
 	formats_.appendChild( f );
