@@ -2089,7 +2089,13 @@ void KPresenterDoc::recalcPageNum()
     KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->recalcPageNum();
-    m_stickyPage->recalcPageNum();
+    //specific sticky page recalc
+    QPtrListIterator<KPObject> it( m_stickyPage->objectList() );
+    for ( ; it.current() ; ++it )
+    {
+	if ( it.current()->getType() == OT_TEXT )
+	    ( (KPTextObject*)it.current() )->recalcPageNum( this, m_kpresenterView->getCanvas()->activePage() );
+    }
 }
 
 void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
