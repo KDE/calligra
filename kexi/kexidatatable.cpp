@@ -23,10 +23,13 @@
 #include <qsqlcursor.h>
 #include <qsqlquery.h>
 #include <qsqlerror.h>
+#include <qsqlindex.h>
 #include <qvariant.h>
 #include <qlayout.h>
 #include <qstatusbar.h>
 #include <qdatetime.h>
+#include <qstringlist.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,6 +44,7 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 {
 	QGridLayout *g = new QGridLayout(this);
 	m_tableView = new KexiTableView(this);
+	m_tableView->m_editOnDubleClick = true;
 	m_statusBar = new QStatusBar(this);
 
 	setCaption(i18n(caption + " - table"));
@@ -58,6 +62,18 @@ KexiDataTable::executeQuery(QString queryStatement)
 	QSqlDatabase *db = kexi->project()->db();
 	QSqlQuery query(queryStatement);
 
+	QSqlCursor cursor;
+
+	QStringList tables = getInvolvedTables(queryStatement);
+	for(QStringList::Iterator it = tables.begin(); it != tables.end(); it++)
+	{
+		cursor = QSqlCursor((*it), true, db);
+	}
+
+	QSqlIndex index = cursor.primaryIndex();
+	kdDebug() << "index: " << index.fieldName(0) << endl;
+
+
 	QSqlRecord record = db->record(query);
 
 	QSqlError error = query.lastError();
@@ -68,14 +84,11 @@ KexiDataTable::executeQuery(QString queryStatement)
 		return false; 
 	}
 
-	kdDebug() << record.count() << " column(s) to execute" << endl;
 	unsigned int fields = record.count();
 
 	for (unsigned int i = 0; i < record.count(); i++)
 	{
 		//WARNING: look for the type!!!
-		kdDebug() << "KexiDataTable::executeQuery: " << record.field(i)->name() << endl;
-		
 		m_tableView->addColumn(record.field(i)->name(), record.field(i)->type(), true);
 	}
 
@@ -97,6 +110,36 @@ void
 KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 {
 	kdDebug() << "CHANGED!!!" << endl;
+}
+
+QStringList
+KexiDataTable::getInvolvedTables(QString query)
+{
+	// switching to perl-mode :)
+	// for now it's enought to get the main table
+	// rest comes later...
+
+	QStringList tableList;
+
+	QStringList queryFrags = QStringList::split(" ", query);
+
+	bool from = false;
+	for(QStringList::Iterator it = queryFrags.begin(); it != queryFrags.end(); it++)
+	{
+		if(from)
+		{
+			tableList.append(*it);
+			kdDebug() << "used table: '" << *it << "'" << endl;
+			break;
+		}
+
+		if(*it == "from")
+			from = true;
+
+	}
+
+
+	return tableList;
 }
 
 KexiDataTable::~KexiDataTable()

@@ -104,6 +104,8 @@ public:
 
 	void		emitSelected();
 
+	bool		m_editOnDubleClick;
+
 	KexiTableList	*contents() { return &m_contents; }
 
 	enum AdditionPolicy

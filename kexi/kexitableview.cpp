@@ -44,6 +44,10 @@
 #include "kexitablerm.h"
 #include "kexitableview.h"
 
+#ifdef USE_KDE
+#include "kexidatetableedit.h"
+#endif
+
 KexiTableView::KexiTableView(QWidget *parent, const char *name)
 :QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
 {
@@ -527,7 +531,13 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 	contentsMousePressEvent(e);
 
 	if(m_pCurrentItem)
+	{	if(m_editOnDubleClick)
+		{
+			createEditor(m_curRow, m_curCol);
+		}
+
 		emit itemDblClicked(m_pCurrentItem, m_curCol);
+	}
 }
 
 void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
@@ -762,19 +772,40 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 		case QVariant::Date:
 			#ifdef USE_KDE
 			val = KGlobal::_locale->formatDate(m_pCurrentItem->getDate(col), true);
+
 			#else
 			val = m_pCurrentItem->getDate(col).toString(Qt::LocalDate);
 			#endif
 			break;
+
 		default:
 			val = m_pCurrentItem->getText(m_curCol);
+
+
 			break;
 	}
 
-	m_pEditor = new QLineEdit(val + addText, viewport(), "inPlaceEd");
-	m_pEditor->end(false);
-	if(backspace)
-		m_pEditor->backspace();
+
+	//it's getting ugly :)
+
+	switch(columnType(col))
+	{
+		case QVariant::Date:
+			#ifdef USE_KDE
+			m_pEditor = new KexiDateTableEdit(m_pCurrentItem->getValue(col), viewport(), "inPlaceEd");
+			qDebug("date editor created...");
+			break;
+			#endif
+
+		default:
+			m_pEditor = new QLineEdit(val + addText, viewport(), "inPlaceEd");
+			m_pEditor->end(false);
+			if(backspace)
+				m_pEditor->backspace();
+
+			break;
+	}
+
 	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
 	QPalette p(m_pEditor->palette());

@@ -18,33 +18,38 @@
    Boston, MA 02111-1307, USA.
  */
 
-#ifndef KEXIDATATABLE_H
-#define KEXIDATATABLE_H
+#ifndef KEXIDATETABLEEDIT_H
+#define KEXIDATETABLEEDIT_H
 
-#include "kexiwidget.h"
-#include "kexitableview.h"
+#include <qlineedit.h>
 
-class KexiTableItem;
-class QStatusBar;
- 
-class KexiDataTable : public KexiWidget
+/*
+  this class represents an editor for QVariant::Date
+*/
+
+
+class KexiDateTableEdit : public QLineEdit
 {
+
 	Q_OBJECT
-	
+
 	public:
-		KexiDataTable(QWidget *parent, QString content, const char *name=0);
-		~KexiDataTable();
-		
-		bool executeQuery(QString query);
+		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
+		~KexiDateTableEdit();
 
 	protected:
-		QStringList getInvolvedTables(QString query);
+		void paintEvent(QPaintEvent *ev);
+		void mousePressEvent(QMouseEvent *ev);
+		void mouseReleaseEvent(QMouseEvent *ev);
+		void mouseMoveEvent(QMouseEvent *ev);
+		/* gruml, we have to overwrite the cursor */
 
-		KexiTableView	*m_tableView;
-		QStatusBar	*m_statusBar;
+		DatePicker	m_datePicker;
 
-	protected slots:
-		void slotItemChanged(KexiTableItem *i, int col);
+		QVariant	m_data;
+		QString		m_text;
+
+		bool		m_mouseDown;
 };
- 
+
 #endif
