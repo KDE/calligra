@@ -155,7 +155,7 @@ public slots:
     void reloadScripts();
     void runLocalScript();
     void newView();
-    void togglePageBorders();
+    void togglePageBorders( bool );
     void gotoCell();
     void replace();
     void sort();
@@ -401,6 +401,7 @@ private:
     KAction* m_tableFormat;
     KAction* m_oszi;
     KAction* m_autoSum;
+    KToggleAction* m_showPageBorders;
     
     /**
      * Pointer to the last popup menu.

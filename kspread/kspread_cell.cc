@@ -2319,6 +2319,82 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
   }
 }
 
+QDomElement KSpreadCell::saveBottomMostBorder( QDomDocument& doc, int _x_offset, int _y_offset )
+{
+    QDomElement cell = doc.createElement( "bottom-most-border" );
+    cell.setAttribute( "row", m_iRow - _y_offset );
+    cell.setAttribute( "column", m_iColumn - _x_offset );
+
+    cell.appendChild( doc.createElement( "pen", m_topBorderPen ) );
+
+    return cell;
+}
+
+QDomElement KSpreadCell::saveRightMostBorder( QDomDocument& doc, int _x_offset, int _y_offset )
+{
+    QDomElement cell = doc.createElement( "right-most-border" );
+    cell.setAttribute( "row", m_iRow - _y_offset );
+    cell.setAttribute( "column", m_iColumn - _x_offset );
+
+    cell.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
+  
+    return cell;
+}
+
+bool KSpreadCell::loadBottomMostBorder( const QDomElement& cell, int _xshift, int _yshift )
+{
+    bool ok;
+    m_iRow = cell.attribute( "row" ).toInt( &ok ) + _yshift;
+    if ( !ok ) return false;
+    m_iColumn = cell.attribute( "column" ).toInt( &ok ) + _xshift;
+    if ( !ok ) return false;
+
+    // Validation
+    if ( m_iRow < 1 || m_iRow > 0xFFFF )
+    {
+	cerr << "Value out of Range Cell:row=" << m_iRow << endl;
+	return false;
+    }
+    if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
+    {
+	cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
+	return false;
+    }
+
+    QDomElement pen = cell.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+	setTopBorderPen( pen.toPen() );
+
+    return true;
+}
+
+bool KSpreadCell::loadRightMostBorder( const QDomElement& cell, int _xshift, int _yshift )
+{
+    bool ok;
+    m_iRow = cell.attribute( "row" ).toInt( &ok ) + _yshift;
+    if ( !ok ) return false;
+    m_iColumn = cell.attribute( "column" ).toInt( &ok ) + _xshift;
+    if ( !ok ) return false;
+
+    // Validation
+    if ( m_iRow < 1 || m_iRow > 0xFFFF )
+    {
+	cerr << "Value out of Range Cell:row=" << m_iRow << endl;
+	return false;
+    }
+    if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
+    {
+	cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
+	return false;
+    }
+
+    QDomElement pen = cell.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+	setLeftBorderPen( pen.toPen() );
+
+    return true;
+}
+
 QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 {
   QDomElement cell = doc.createElement( "cell" );

@@ -33,6 +33,9 @@ public:
     QString nativeFormatPattern() const { return "*.ksp"; }
     QString nativeFormatName() const { return "KSpread"; }
 
+public slots:
+    void slotFilePrint();
+    
 protected:
     virtual QString configFile() const;
     virtual KoDocument* createDoc();

@@ -42,6 +42,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <pwd.h>
 
 #include <kscript_context.h>
 #include <kstddirs.h>
@@ -548,28 +549,46 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     if ( _table )
 	ta = _table;
 
-    QString tmp = _data;
+    // Read user specific informations....
+    KConfig *config = KGlobal::config();
+    char hostname[80];
+    struct passwd *p;
+ 
+    p = getpwuid(getuid());
+    gethostname(hostname, 80);
+ 
+    config->setGroup("UserInfo");
+    QString full_name = config->readEntry("FullName", p->pw_gecos);
+    QString tmp = p->pw_name;
+    tmp += "@"; tmp += hostname;
+    QString email_addr = config->readEntry("EmailAddress", tmp );
+    QString organization = config->readEntry("Organization");
+  
+    tmp = _data;
     int pos = 0;
     while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
-	tmp.replace( pos, 6, page.data() );
+	tmp.replace( pos, 6, page );
     pos = 0;
     while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
-	tmp.replace( pos, 6, f.data() );
+	tmp.replace( pos, 6, f );
     pos = 0;
     while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
-	tmp.replace( pos, 6, n.data() );
+	tmp.replace( pos, 6, n );
     pos = 0;
     while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
-	tmp.replace( pos, 6, t.data() );
+	tmp.replace( pos, 6, t );
     pos = 0;
     while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
-	tmp.replace( pos, 6, d.data() );
+	tmp.replace( pos, 6, d );
     pos = 0;
     while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
-	tmp.replace( pos, 8, "??" );
+	tmp.replace( pos, 8, full_name );
     pos = 0;
     while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
-	tmp.replace( pos, 7, "??" );
+	tmp.replace( pos, 7, email_addr );
+    pos = 0;
+    while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
+	tmp.replace( pos, 5, organization );
     pos = 0;
     while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
 	tmp.replace( pos, 7, ta.data() );
@@ -737,37 +756,37 @@ void KSpreadDoc::printMap( QPainter & )
 
 void KSpreadDoc::paperLayoutDlg()
 {
-  KoPageLayout pl;
-  pl.format = paperFormat();
-  pl.orientation = orientation();
-  pl.unit = PG_MM;
-  pl.width = m_paperWidth;
-  pl.height = m_paperHeight;
-  pl.left = leftBorder();
-  pl.right = rightBorder();
-  pl.top = topBorder();
-  pl.bottom = bottomBorder();
+    KoPageLayout pl;
+    pl.format = paperFormat();
+    pl.orientation = orientation();
+    pl.unit = PG_MM;
+    pl.width = m_paperWidth;
+    pl.height = m_paperHeight;
+    pl.left = leftBorder();
+    pl.right = rightBorder();
+    pl.top = topBorder();
+    pl.bottom = bottomBorder();
 
-  KoHeadFoot hf;
-  hf.headLeft = headLeft();
-  hf.headRight = headRight();
-  hf.headMid = headMid();
-  hf.footLeft = footLeft();
-  hf.footRight = footRight();
-  hf.footMid = footMid();
+    KoHeadFoot hf;
+    hf.headLeft = headLeft();
+    hf.headRight = headRight();
+    hf.headMid = headMid();
+    hf.footLeft = footLeft();
+    hf.footRight = footRight();
+    hf.footMid = footMid();
 
-  if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
-    return;
+    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
+	return;
 
-  if ( pl.format == PG_CUSTOM )
-  {
-    m_paperWidth = pl.width;
-    m_paperHeight = pl.height;
-  }
+    if ( pl.format == PG_CUSTOM )
+    {
+	m_paperWidth = pl.width;
+	m_paperHeight = pl.height;
+    }
 
-  setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
+    setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
 
-  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
+    setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 }
 
 QString KSpreadDoc::configFile() const

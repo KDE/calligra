@@ -101,8 +101,12 @@ public:
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     ~KSpreadCell();
 
+    virtual QDomElement saveRightMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
+    virtual QDomElement saveBottomMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
-
+    
+    bool loadRightMostBorder( const QDomElement& cell, int _xshift, int _yshift );
+    bool loadBottomMostBorder( const QDomElement& cell, int _xshift, int _yshift );
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal, Operation op = OverWrite );
 
     /**

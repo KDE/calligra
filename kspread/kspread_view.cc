@@ -129,7 +129,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPosWidget->setMinimumWidth( 50 );
     hbox->addWidget( m_pPosWidget );
     hbox->addSpacing( 6 );
-    
+
     m_pCancelButton = newIconButton( "abort", TRUE, m_pToolWidget );
     hbox->addWidget( m_pCancelButton );
     m_pOkButton = newIconButton( "done", TRUE, m_pToolWidget );
@@ -224,6 +224,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
     m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
     m_gotoCell = new KAction( i18n("Goto Cell"), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
+    m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
+    connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePagexbBorders( bool ) ) );
     m_replace = new KAction( i18n("Replace"), 0, this, SLOT( replace() ), actionCollection(), "replace" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_createAnchor = new KAction( i18n("Create Anchor"), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
@@ -740,11 +742,11 @@ void KSpreadView::autoSum()
     // when canvas has a running editor
     if ( m_pCanvas->editor() )
 	return;
-    
+
     m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
     m_pCanvas->editor()->setText( "=sum()" );
     m_pCanvas->editor()->setCursorPosition( 5 );
-    
+
     // Try to find numbers above
     if ( m_pCanvas->markerRow() > 1 )
     {
@@ -762,7 +764,7 @@ void KSpreadView::autoSum()
 	    return;
 	}
     }
-    
+
     // Try to find numbers left
     if ( m_pCanvas->markerColumn() > 1 )
     {
@@ -974,7 +976,7 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     KSpreadcreate* dlg = new KSpreadcreate( this, _math );
     dlg->show();
-    
+
     /* if ( !m_pCanvas->editor() )
     {
 	m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
@@ -1438,22 +1440,18 @@ void KSpreadView::newView()
 
 bool KSpreadView::printDlg()
 {
-  // Open some printer dialog
-  /* QPrinter prt;
-  if ( !KoPrintDia::print( prt, m_pDoc, SLOT( paperLayoutDlg() ) ) )
-    return true; */
+    QPrinter prt;
+    if ( QPrintDialog::getPrinterSetup( &prt ) )
+    {
+	prt.setFullPage( TRUE );
+	QPainter painter;
+	painter.begin( &prt );
+	// Print the table and tell that m_pDoc is NOT embedded.
+	m_pTable->print( painter, &prt );
+	painter.end();
+    }
 
-  QPrinter prt;
-  if ( QPrintDialog::getPrinterSetup( &prt ) )
-  {
-    QPainter painter;
-    painter.begin( &prt );
-    // Print the table and tell that m_pDoc is NOT embedded.
-    m_pTable->print( painter, &prt );
-    painter.end();
-  }
-
-  return true;
+    return true;
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
@@ -1548,23 +1546,20 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild *_child )
     */
 }
 
-void KSpreadView::togglePageBorders()
+void KSpreadView::togglePageBorders( bool mode )
 {
    if ( !m_pTable )
        return;
 
-   // ######### TODO
-   // m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, !m_pTable->isShowPageBorders() );
-   m_pTable->setShowPageBorders( !m_pTable->isShowPageBorders() );
+   m_pTable->setShowPageBorders( mode );
 }
 
 void KSpreadView::editCell()
 {
-    qDebug("EDIT CELL");
     if ( m_pCanvas->editor() )
 	return;
+
     m_pCanvas->createEditor();
-    // m_pEditWidget->setFocus();
 }
 
 // ############## Torben: Do we need that ?

@@ -3064,6 +3064,40 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    if ( n )
 		insertCell( cell );
 	}
+	else if ( c.tagName() == "right-most-border" )
+        {
+	    int row = c.attribute( "row" ).toInt() + _yshift;
+	    int col = c.attribute( "column" ).toInt() + _xshift;
+
+	    bool n = FALSE;
+	    KSpreadCell* cell = nonDefaultCell( col, row );
+	    if ( !cell )
+	    {
+		cell = new KSpreadCell( this, 0, 0 );
+		n = TRUE;
+	    }
+	    if ( !cell->loadRightMostBorder( c, _xshift, _yshift ) )
+		return FALSE;
+	    if ( n )
+		insertCell( cell );
+	}
+	else if ( c.tagName() == "bottom-most-border" )
+        {
+	    int row = c.attribute( "row" ).toInt() + _yshift;
+	    int col = c.attribute( "column" ).toInt() + _xshift;
+
+	    bool n = FALSE;
+	    KSpreadCell* cell = nonDefaultCell( col, row );
+	    if ( !cell )
+	    {
+		cell = new KSpreadCell( this, 0, 0 );
+		n = TRUE;
+	    }
+	    if ( !cell->loadBottomMostBorder( c, _xshift, _yshift ) )
+		return FALSE;
+	    if ( n )
+		insertCell( cell );
+	}
     }
 
     m_pDoc->setModified( true );
@@ -3209,150 +3243,153 @@ void KSpreadTable::draw( QPaintDevice* _dev, long int _width, long int _height,
 
 void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
-  QPen gridPen;
-  gridPen.setStyle( NoPen );
+    QPen gridPen;
+    gridPen.setStyle( NoPen );
 
-  unsigned int pages = 1;
+    unsigned int pages = 1;
 
-  QRect cell_range;
-  cell_range.setCoords( 1, 1, 1, 1 );
+    QRect cell_range;
+    cell_range.setCoords( 1, 1, 1, 1 );
 
-  // Find maximum right/bottom cell with content
-  QIntDictIterator<KSpreadCell> it( m_dctCells );
-  for ( ; it.current(); ++it )
-  {
-    if ( it.current()->column() > cell_range.right() )
-      cell_range.setRight( it.current()->column() );
-    if ( it.current()->row() > cell_range.bottom() )
-      cell_range.setBottom( it.current()->row() );
-  }
-
-  QList<QRect> page_list;
-  page_list.setAutoDelete( TRUE );
-
-  QRect rect;
-  rect.setCoords( 0, 0, MM_TO_POINT * (int)m_pDoc->printableWidth(),
-		  MM_TO_POINT * (int)m_pDoc->printableHeight() );
-
-  // Up to this row everything is already printed
-  int bottom = 0;
-  // Start of the next page
-  int top = 1;
-  // Calculate all pages, but if we are embedded, print only the first one
-  while ( bottom < cell_range.bottom() && page_list.count() == 0 )
-  {
-    // Up to this column everything is already printed
-    int right = 0;
-    // Start of the next page
-    int left = 1;
-    while ( right < cell_range.right() )
+    // Find maximum right/bottom cell with content
+    QIntDictIterator<KSpreadCell> it( m_dctCells );
+    for ( ; it.current(); ++it )
     {
-      QRect *page_range = new QRect;
-      page_list.append( page_range );
-      page_range->setLeft( left );
-      page_range->setTop( top );
-
-      int col = left;
-      int x = columnLayout( col )->width();
-      while ( x < rect.width() )
-      {
-	col++;
-	x += columnLayout( col )->width();
-      }
-      // We want to print at least one column
-      if ( col == left )
-	col = left + 1;
-      page_range->setRight( col - 1 );
-	
-      int row = top;
-      int y = rowLayout( row )->height();
-      while ( y < rect.height() )
-      {
-	row++;
-	y += rowLayout( row )->height();
-      }
-      // We want to print at least one row
-      if ( row == top )
-	row = top + 1;
-      page_range->setBottom( row - 1 );
-
-      right = page_range->right();
-      left = page_range->right() + 1;
-      bottom = page_range->bottom();
+	if ( it.current()->column() > cell_range.right() )
+	    cell_range.setRight( it.current()->column() );
+	if ( it.current()->row() > cell_range.bottom() )
+	    cell_range.setBottom( it.current()->row() );
     }
 
-    top = bottom + 1;
-  }
+    QList<QRect> page_list;
+    page_list.setAutoDelete( TRUE );
 
-  int pagenr = 1;
+    QRect rect;
+    rect.setCoords( 0, 0, (int)( MM_TO_POINT * m_pDoc->printableWidth() ),
+		    (int)( MM_TO_POINT * m_pDoc->printableHeight() ) );
 
-  // Print all pages in the list
-  QRect *p;
-  for ( p = page_list.first(); p != 0L; p = page_list.next() )
-  {
-    // print head line
-    QFont font( "Times", 10 );
-    painter.setFont( font );
-    QFontMetrics fm = painter.fontMetrics();
-    int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
-    if ( w > 0 )
-      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-			(int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
-    w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
-    if ( w > 0 )
-      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-			       ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-			(int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
-    w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
-    if ( w > 0 )
-      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-			       MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-			(int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
-
-    // print foot line
-    w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
-    if ( w > 0 )
-      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-			(int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-			m_pDoc->footLeft( pagenr, m_strName ) );
-    w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
-    if ( w > 0 )
-      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-			       ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-			(int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-			m_pDoc->footMid( pagenr, m_strName ) );
-    w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
-    if ( w > 0 )
-      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-			       MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-			(int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-			m_pDoc->footRight( pagenr, m_strName ) );
+    // Up to this row everything is already printed
+    int bottom = 0;
+    // Start of the next page
+    int top = 1;
+    // Calculate all pages, but if we are embedded, print only the first one
+    while ( bottom < cell_range.bottom() /* && page_list.count() == 0 */ )
+    {
+	qDebug("bottom=%i bottom_range=%i", bottom, cell_range.bottom() );
 	
-    painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
-		       MM_TO_POINT * m_pDoc->rightBorder() );
-    // Print the page
-    printPage( painter, p, gridPen );
-    painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
-		       - MM_TO_POINT * m_pDoc->rightBorder() );
+	// Up to this column everything is already printed
+	int right = 0;
+	// Start of the next page
+	int left = 1;
+	while ( right < cell_range.right() )
+        {
+	    qDebug("right=%i right_range=%i", right, cell_range.right() );
+		
+	    QRect *page_range = new QRect;
+	    page_list.append( page_range );
+	    page_range->setLeft( left );
+	    page_range->setTop( top );
 
-    if ( pages < page_list.count() )
-      _printer->newPage();
-    pagenr++;
-  }
+	    int col = left;
+	    int x = columnLayout( col )->width();
+	    while ( x < rect.width() )
+            {
+		col++;
+		x += columnLayout( col )->width();
+	    }
+	    // We want to print at least one column
+	    if ( col == left )
+		col = left + 1;
+	    page_range->setRight( col - 1 );
+	
+	    int row = top;
+	    int y = rowLayout( row )->height();
+	    while ( y < rect.height() )
+            {
+		row++;
+		y += rowLayout( row )->height();
+	    }
+	    // We want to print at least one row
+	    if ( row == top )
+		row = top + 1;
+	    page_range->setBottom( row - 1 );
+
+	    right = page_range->right();
+	    left = page_range->right() + 1;
+	    bottom = page_range->bottom();
+	}
+
+	top = bottom + 1;
+    }
+
+    int pagenr = 1;
+
+    // Print all pages in the list
+    QRect *p;
+    for ( p = page_list.first(); p != 0L; p = page_list.next() )
+    {
+	// print head line
+	QFont font( "Times", 10 );
+	painter.setFont( font );
+	QFontMetrics fm = painter.fontMetrics();
+	int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
+	if ( w > 0 )
+	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
+			      (int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
+	w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
+	if ( w > 0 )
+	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				     ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
+			      (int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
+	w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
+	if ( w > 0 )
+	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				     MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
+			      (int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
+
+	// print foot line
+	w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
+	if ( w > 0 )
+	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
+			      (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			      m_pDoc->footLeft( pagenr, m_strName ) );
+	w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
+	if ( w > 0 )
+	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				     ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
+			      (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			      m_pDoc->footMid( pagenr, m_strName ) );
+	w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
+	if ( w > 0 )
+	    painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				     MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
+			      (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			      m_pDoc->footRight( pagenr, m_strName ) );
+	
+	painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
+			   MM_TO_POINT * m_pDoc->topBorder() );
+	// Print the page
+	printPage( painter, p, gridPen );
+	painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
+			   - MM_TO_POINT * m_pDoc->topBorder() );
+
+	if ( pages < page_list.count() )
+	    _printer->newPage();
+	pagenr++;
+    }
 }
 
 void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen& _grid_pen )
 {
-  int xpos;
   int ypos = 0;
-  int x,y;
 
-  for ( y = page_range->top(); y <= page_range->bottom() + 1; y++ )
+  qDebug("Rect x=%i y=%i, w=%i h=%i",page_range->left(), page_range->top(), page_range->width(), page_range->height() );
+  for ( int y = page_range->top(); y <= page_range->bottom() + 1; y++ )
   {
     RowLayout *row_lay = rowLayout( y );
-    xpos = 0;
+    int xpos = 0;
 
-    for ( x = page_range->left(); x <= page_range->right() + 1; x++ )
+    for ( int x = page_range->left(); x <= page_range->right() + 1; x++ )
     {
       ColumnLayout *col_lay = columnLayout( x );
 
@@ -3402,6 +3439,9 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     QDomElement spread = doc.createElement( "spreadsheet-snippet" );
     doc.appendChild( spread );
 
+    QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
+    QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
+	
     // Save all cells.
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
@@ -3411,6 +3451,10 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	    QPoint p( it.current()->column(), it.current()->row() );
 	    if ( _rect.contains( p ) )
 		spread.appendChild( it.current()->save( doc, _rect.left() - 1, _rect.top() - 1 ) );
+	    else if ( rightMost.contains( p ) )
+		spread.appendChild( it.current()->saveRightMostBorder( doc, _rect.left() - 1, _rect.top() - 1 ) );
+	    else if ( bottomMost.contains( p ) )
+		spread.appendChild( it.current()->saveBottomMostBorder( doc, _rect.left() - 1, _rect.top() - 1 ) );
 	}
     }
 
@@ -3553,13 +3597,13 @@ bool KSpreadTable::loadChildren( KoStore* _store )
   return true;
 }
 
-void KSpreadTable::setShowPageBorders( bool _b )
+void KSpreadTable::setShowPageBorders( bool b )
 {
-  if ( _b != m_bShowPageBorders )
-  {
-    m_bShowPageBorders = _b;
+    if ( b == m_bShowPageBorders )
+	return;
+    
+    m_bShowPageBorders = b;
     emit sig_updateView( this );
-  }
 }
 
 bool KSpreadTable::isOnNewPageX( int _column )

@@ -53,6 +53,7 @@
  <Menu name="View"><text>View</text>
   <Action name="newView"/>
   <Action name="gotoCell"/>
+  <Action name="showPageBorders"/>
  </Menu>
  <Menu name="Folder"><text>Folder</text>
   <Action name="insertTable"/>

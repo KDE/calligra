@@ -19,6 +19,7 @@
 
 #include "kspread_shell.h"
 #include "kspread_doc.h"
+#include "kspread_view.h"
 #include "kspread_factory.h"
 
 #include <kstddirs.h>
@@ -40,6 +41,11 @@ QString KSpreadShell::configFile() const
 KoDocument* KSpreadShell::createDoc()
 {
     return new KSpreadDoc;
+}
+
+void KSpreadShell::slotFilePrint()
+{
+    ((KSpreadView*)rootView())->printDlg();
 }
 
 #include "kspread_shell.moc"
