@@ -1783,61 +1783,55 @@ void KivioView::viewZoom(const QString& s)
   }
 }
 
-void KivioView::changeZoomMenu(int z)
+void KivioView::changeZoomMenu(int zoom)
 {
-  QStringList zl;
+  QStringList lst;
 
-  if(z > 0) {
+  if(zoom > 0) {
     // This code is taken from KWords changeZoomMenu
     QValueList<int> list;
-    QString zs;
-    int val;
     bool ok;
-    QStringList itemsList = m_viewZoom->items();
+    const QStringList itemsList ( m_viewZoom->items() );
+    QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
 
-    for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
-    {
-      zs = (*it).replace( "%", "" );
-      zs = zs.simplifyWhiteSpace();
-      val = zs.toInt(&ok);
-
-      if(ok && val > 9  &&list.contains(val) == 0)
-        list.append( val );
+    for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it) {
+      regexp.search(*it);
+      const int val=regexp.cap(1).toInt(&ok);
+      //zoom : limit inferior=10
+      if(ok && val>9 && list.contains(val)==0)
+      list.append( val );
     }
     //necessary at the beginning when we read config
     //this value is not in combo list
-    if(list.contains(z) == 0) {
-      list.append( z );
-    }
+    if(list.contains(zoom)==0)
+      list.append( zoom );
 
     qHeapSort( list );
 
-    for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it) {
-      zl.append( (QString::number(*it)+'%') );
-    }
+    for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+      lst.append( i18n("%1%").arg(*it) );
   } else {
-    zl << "33%"
-      << "50%"
-      << "75%"
-      << "100%"
-      << "125%"
-      << "150%"
-      << "200%"
-      << "250%"
-      << "300%"
-      << "350%"
-      << "400%"
-      << "450%"
-      << "500%";
+    lst << i18n("%1%").arg("33");
+    lst << i18n("%1%").arg("50");
+    lst << i18n("%1%").arg("75");
+    lst << i18n("%1%").arg("100");
+    lst << i18n("%1%").arg("125");
+    lst << i18n("%1%").arg("150");
+    lst << i18n("%1%").arg("200");
+    lst << i18n("%1%").arg("250");
+    lst << i18n("%1%").arg("350");
+    lst << i18n("%1%").arg("400");
+    lst << i18n("%1%").arg("450");
+    lst << i18n("%1%").arg("500");
   }
 
-  m_viewZoom->setItems(zl);
+  m_viewZoom->setItems(lst);
 }
 
 void KivioView::showZoom(int z)
 {
   QStringList list = m_viewZoom->items();
-  QString zoomStr = QString::number(z) + '%';
+  QString zoomStr( i18n("%1%").arg( z ) );
   m_viewZoom->setCurrentItem(list.findIndex(zoomStr));
 }
 

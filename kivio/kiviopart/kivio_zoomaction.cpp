@@ -20,6 +20,8 @@
 #include "tkcombobox.h"
 #include <qregexp.h>
 
+#include <klocale.h>
+
 using namespace Kivio;
 
 ZoomAction::ZoomAction(QObject* parent, const char* name)
@@ -27,16 +29,18 @@ ZoomAction::ZoomAction(QObject* parent, const char* name)
 {
   setEditable(true);
   QStringList lst;
-  lst << "50%";
-  lst << "75%";
-  lst << "100%";
-  lst << "150%";
-  lst << "200%";
-  lst << "250%";
-  lst << "350%";
-  lst << "400%";
-  lst << "450%";
-  lst << "500%";
+  lst << i18n("%1%").arg("33");
+  lst << i18n("%1%").arg("50");
+  lst << i18n("%1%").arg("75");
+  lst << i18n("%1%").arg("100");
+  lst << i18n("%1%").arg("125");
+  lst << i18n("%1%").arg("150");
+  lst << i18n("%1%").arg("200");
+  lst << i18n("%1%").arg("250");
+  lst << i18n("%1%").arg("350");
+  lst << i18n("%1%").arg("400");
+  lst << i18n("%1%").arg("450");
+  lst << i18n("%1%").arg("500");
   setItems(lst);
 }
 
@@ -46,42 +50,48 @@ ZoomAction::~ZoomAction()
 
 void ZoomAction::slotActivated( const QString& text )
 {
-  QString zt(text);
-  zt = zt.replace(QRegExp("%"),"");
-  zt = zt.simplifyWhiteSpace();
-  int zoom = QMIN(10000,QMAX(5,zt.toInt()));
+  QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+  regexp.search(text);
+  bool ok=false;
+  // Use templates, not macro to avoid to call the functiosn many times.
+  const int zoom=kMin(10000,kMax(10,regexp.cap(1).toInt(&ok)));
   insertItem(zoom);
 
   emit zoomActivated(zoom);
 }
 
-void ZoomAction::insertItem( int item )
+void ZoomAction::insertItem( int zoom )
 {
-  QString zt = QString("%1%").arg(item);
+  // This code is taken from KWords changeZoomMenu
+  QValueList<int> list;
+  bool ok;
+  const QStringList itemsList(items());
+  QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
 
-  QStringList i = items();
-  if (i.contains(zt)==0) {
-    i.append(zt);
-
-    // sort items
-    QStringList::Iterator it;
-    for( it = i.begin(); it != i.end(); ++it ) {
-      QString base;
-      base.fill(' ',7-(*it).length());
-      (*it) = base + (*it);
-    }
-    i.sort();
-    for( it = i.begin(); it != i.end(); ++it ) {
-      (*it) = (*it).simplifyWhiteSpace();
-    }
+  for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it) {
+    regexp.search(*it);
+    const int val=regexp.cap(1).toInt(&ok);
+    //zoom : limit inferior=10
+    if(ok && val>9 && list.contains(val)==0)
+      list.append( val );
   }
-  setItems(i);
-  setCurrentItem(i.findIndex(zt));
+  //necessary at the beginning when we read config
+  //this value is not in combo list
+  if(list.contains(zoom)==0)
+    list.append( zoom );
+
+  qHeapSort( list );
+
+  QStringList lst;
+  for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+    lst.append( i18n("%1%").arg(*it) );
+  setItems(lst);
+  setCurrentItem(lst.findIndex(i18n("%1%").arg(zoom)));
 }
 
 void ZoomAction::setEditZoom( int zoom )
 {
-  QString zt = QString("%1%").arg(zoom);
+  const QString zt(i18n("%1%").arg(zoom));
   setEditText(zt);
 }
 #include "kivio_zoomaction.moc"
