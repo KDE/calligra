@@ -3,7 +3,6 @@ KFormula (frameType==4)
 <PAPER>, <PAPERBORDERS>
 <ATTRIBUTES>
 Generate Manifest file
-<meta:image-count>
 <style:text-underline> (verify that all modes are generated.)
 <style:wrap> with "none" for pictures?
 ...
@@ -24,7 +23,6 @@ Spellcheck settings?
 Cursor position
 
 === KWord 0.8 ===
-Make OOWriter load correctly the converted file (page size?)
 Some files have not even a syntax version
 Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
