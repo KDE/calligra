@@ -81,12 +81,15 @@ class KexiMainWindow::Private
 #endif
 
 		KMdiToolViewAccessor* navToolWindow;
+
+		bool block_KMdiMainFrm_eventFilter : 1;
 	Private()
 		: dialogs(401)
 	{
 		navToolWindow=0;
 		prj = 0;
 		curDialogGUIClient=0;
+		block_KMdiMainFrm_eventFilter=false;
 	}
 };
 
@@ -697,7 +700,10 @@ void KexiMainWindow::slotViewNavigator()
 
 	d->navToolWindow->wrapperWidget()->raise();
 //
-	d->nav->setFocus();
+	d->block_KMdiMainFrm_eventFilter=true;
+		d->nav->setFocus();
+	d->block_KMdiMainFrm_eventFilter=false;
+
 }
 
 void
@@ -756,9 +762,11 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	//keep focus in main window:
 	if (obj==d->nav && e->type()==QEvent::Hide) {
 		setFocus();
+		return false;
 	}
-	return false;
-//	return KMdiMainFrm::eventFilter(obj,e);
+	if (d->block_KMdiMainFrm_eventFilter)//we don't want KMDI to eat our event!
+		return false;
+	return KMdiMainFrm::eventFilter(obj,e);//let KMDI do its work
 }
 
 #include "keximainwindow.moc"

@@ -68,6 +68,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 
 		void startup(KexiProjectData* pdata);
+
+		virtual bool eventFilter( QObject *obj, QEvent * e );
+
 	public slots:
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
@@ -117,8 +120,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		bool createBlankDatabase();
 
 		void setWindowMenu(QPopupMenu *menu);
-
-		virtual bool eventFilter( QObject *obj, QEvent * e );
 
 	protected slots:
 
