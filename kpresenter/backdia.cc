@@ -315,7 +315,7 @@ void BackDia::selectPic()
     radioClip->setChecked( false );
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							kimgio_patterns(),
+							KImageIO::pattern(KImageIO::Reading),
 							0 );
 
     if ( !file.isEmpty() ) openPic( file.data() );

@@ -51,7 +51,7 @@ KPresenterShell::KPresenterShell()
         KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
 	KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
 	
-	QStringList list = kimgio_types();
+	QStringList list = KImageIO::types(KImageIO::Reading);
 	QStringList::ConstIterator it;
 	for (it = list.begin(); it != list.end(); it++) 
 	  KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );

@@ -504,7 +504,7 @@ void KPresenterView::insertPicture()
     page->deSelectAllObj();
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							kimgio_patterns(), 0);
+							KImageIO::pattern(KImageIO::Reading), 0);
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
@@ -2727,7 +2727,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     QFileInfo fileInfo( filename );
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							kimgio_patterns(), 0);
+							KImageIO::pattern(KImageIO::Reading), 0);
 
     if ( !file.isEmpty() ) m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
 }
