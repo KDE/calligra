@@ -48,6 +48,7 @@ void Cell::analyse(const QDomNode balise)
 {
 	_row = getAttr(balise, "row").toLong();
 	_col = getAttr(balise, "column").toLong();
+	kdDebug() << getRow() << "-" << getCol() << endl;
 	Format::analyse(getChild(balise, "format"));
 	analyseText(balise);
 }
@@ -69,24 +70,18 @@ void Cell::generate(QTextStream& out, Table* table)
 	else*/ if (getMultirow() > 0)
 		out << "\\multirow{" << getMultirow() << "}{";
 	kdDebug() << "Generate cell..." << endl;
-	if(hasBorder())
-	{
-		
-		if(hasLeftBorder() || hasRightBorder())
-		{
-			out << "\\multicolumn{1}{";
-			if(hasLeftBorder())
-				out << "|";
-			out << "m{" << table->searchColumn(_col)->getWidth() << "pt}";
-			if(hasRightBorder())
-				out << "|";
-			out << "}{" << endl;
-		}
-	}
+
+	out << "\\multicolumn{1}{";
+	Format::generate(out, table->searchColumn(_col));
+	out << "}{" << endl;
+	
 	if(getTextDataType() == "Str")
-		out << getText();
-	if(hasLeftBorder() || hasRightBorder())
-		out << "}" << endl;
+	{
+		generateTextFormat(out, getText());
+		//out << getText();
+	}
+	
+	out << "}" << endl;
 	
 	/*if(getColSpan() > 0)
 		out << "}" << endl;

@@ -41,4 +41,5 @@ void Pen::analyse(const QDomNode balise)
 
 void Pen::generate(QTextStream&)
 {
+	
 }

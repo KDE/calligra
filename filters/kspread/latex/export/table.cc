@@ -22,6 +22,7 @@
 #include <kdebug.h>		/* for kdDebug stream */
 #include "cell.h"
 #include "column.h"
+#include "row.h"
 #include "table.h"
 
 /*******************************************/
@@ -85,31 +86,31 @@ void Table::analyse(const QDomNode balise)
 	for(int index = 0; index < max; index++)
 	{
 		QString name = getChildName(balise, index);		
-		kdDebug() << "name : " << name << endl;
 		if(name == "cell")
 		{
-			kdDebug() << "new cell" << endl;
+			kdDebug() << "----- cell -----" << endl;
 			Cell* cell = new Cell();
 			cell->analyse(getChild(balise, index));
 			_cells.append(cell);
-			kdDebug() << cell->getRow() << "-" << cell->getCol() << endl;
 			setMaxColumn(cell->getCol());
 			setMaxRow(cell->getRow());
 		}
 		else if(name == "column")
 		{
-			kdDebug() << "new column" << endl;
+			kdDebug() << "----- column -----" << endl;
 			Column* column = new Column();
 			column->analyse(getChild(balise, index));
 			_columns.append(column);
 		}
-		/*else if(name == "row")
+		else if(name == "row")
 		{
-			kdDebug() << "new row" << endl;
+			kdDebug() << "----- row -----" << endl;
 			Row* row = new Row();
 			row->analyse(getChild(balise, index));
 			_rows.append(row);
-		}*/
+		}
+		else
+			kdDebug() << "name : " << name << endl;
 	}
 }
 
@@ -130,8 +131,8 @@ Cell* Table::searchCell(int col, int row)
 {
 	QPtrListIterator<Cell> it(_cells);
 
-	kdDebug() << "search in list of " << _cells.count() << "cells" << endl;
-	Cell *cell;
+	kdDebug() << "search in list of " << _cells.count() << " cells" << endl;
+	Cell *cell = 0;
 	while ( (cell = it.current()) != 0 )
 	{
 		++it;
@@ -156,6 +157,20 @@ Column* Table::searchColumn(int col)
 	return NULL;
 }
 
+Row* Table::searchRow(int rowNumber)
+{
+	QPtrListIterator<Row> it(_rows);
+
+	Row *row;
+	while ( (row = it.current()) != 0 )
+	{
+		++it;
+		if(row->getRow() == rowNumber)
+			return row;
+	}
+	return NULL;
+}
+
 /*******************************************/
 /* generate                                */
 /*******************************************/
@@ -175,20 +190,26 @@ void Table::generate(QTextStream& out)
 	generateTableHeader(out);
 	out << endl;
 	indent();
-	for(int row = 1; row <= getMaxRow(); row++)
+	int rowNumber = 1;
+	while(rowNumber <= getMaxRow())
 	{
-		generateTopLineBorder(out, row);
+		generateTopLineBorder(out, rowNumber);
+		Row* row = searchRow(rowNumber);
+		if(row != NULL)
+			row->generate(out);
+		
 		for(int col = 1; col <= getMaxColumn(); col++)
 		{
 			writeIndent(out);
-			generateCell(out, row, col);
+			generateCell(out, rowNumber, col);
 			
 			if(col < getMaxColumn())
-				out << " & ";
+				out << " & "<< endl;
 		}
 		out << "\\\\" << endl;
+		rowNumber++;
 	}
-	generateBottomLineBorder(out, row - 1);
+	generateBottomLineBorder(out, rowNumber - 1);
 	desindent();
 	writeIndent(out);
 	out << "\\end{tabular}" << endl << endl;
@@ -256,18 +277,13 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 		kdDebug() << "search " << row << ", " << index << endl;
 		cell = searchCell(index, row);
 
-		kdDebug() << endl << "name (" << row << ", " << index << ")" << endl;
-		
+		if(cell == NULL)
+			cell = new Cell(row, index);
+
 		/* If the element has a border display it here */
-		if(cell->hasTopBorder())
-		{
-			border[index] = true;
-		}
-		else
-		{
-			border[index] = false;
+		border[index - 1] = cell->hasTopBorder();
+		if(!border[index - 1])
 			fullLine = false;
-		}
 	}
 
 	if(fullLine)
@@ -279,22 +295,28 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 	else
 	{
 		int index = 0;
-		while(index <= getMaxColumn())
+		while(index < getMaxColumn())
 		{
 			if(border[index])
 			{
 				int begin = index;
-				int end = index;
+				int end;
+				index = index + 1;
 				while(border[index] == true && index < getMaxColumn())
 				{
 					index = index + 1;
 				}
 				end = index - 1;
-				out << "\\cline{" << (begin + 1) << "-" << (end + 1) << "} " << endl;
+				out << "\\cline{" << begin << "-" << end << "} " << endl;
 			}
 			index = index + 1;
 		}
 	}
+	
+	/*Row * row;
+	row = searchRow(row);
+	if(row != NULL)
+		row->generate(out);*/
 }
 
 /*******************************************/
@@ -311,39 +333,37 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 		/* Search the cell in the list */
 		cell = searchCell(index, row);
 
+		if(cell == NULL)
+			cell = new Cell(row, index);
+
 		/* If the element has a border display it here */
-		if(cell->hasBottomBorder())
-		{
-			border[index] = true;
-		}
-		else
-		{
-			border[index] = false;
+		border[index - 1] = cell->hasBottomBorder();
+		if(!border[index - 1])
 			fullLine = false;
-		}
 	}
 
 	if(fullLine)
 	{
-		/* All column have a top border */
+		/* All column have a bottom border */
 		writeIndent(out);
 		out << "\\hline" << endl;
 	}
 	else
 	{
 		int index = 0;
-		while(index <= getMaxColumn())
+		while(index < getMaxColumn())
 		{
 			if(border[index])
 			{
 				int begin = index;
-				int end = index;
-				while(border[index] == true && index <= getMaxColumn())
+				int end;
+				index = index + 1;
+				while(border[index] == true && index < getMaxColumn())
 				{
 					index = index + 1;
 				}
 				end = index - 1;
-				out << "\\cline{" << (begin + 1) << "-" << (end + 1) << "} " << endl;
+				out << "\\cline{" << begin << "-" << end << "} " << endl;
 			}
 			index = index + 1;
 		}
@@ -355,7 +375,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 /*******************************************/
 void Table::generateCell(QTextStream& out, int row, int col)
 {
-	kdDebug() << "NEW CELL : " << row << "," << col << endl;
+	kdDebug() << "GENERATE CELL : " << row << "," << col << endl;
 
 	/* Search the cell in the list */
 	Cell *cell = searchCell(col, row);

@@ -195,9 +195,13 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 		case TC_MORE:
 			out << "";
 	}
-	/* The font and the type of the doc. can not be changed, hmm ? */
-	out << "11pt]{";
+	
+	out << Config::instance()->getDefaultFontSize() << "pt";
+	if(Config::instance()->getQuality() == "draft")
+		out << ", draft";
+	out << "]{";
 	out << Config::instance()->getClass() << "}" << endl;
+	out << "\\usepackage[" << Config::instance()->getEncoding() << "]{inputenc}" << endl << endl;
 }
 
 /*******************************************/
@@ -260,8 +264,11 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 		case TC_MORE:
 			out << "";
 	}
-	/* The font and the type of the doc. can not be changed, hmm ? */
-	out << "11pt]{";
+	
+	out << Config::instance()->getDefaultFontSize() << "pt";
+	if(Config::instance()->getQuality() == "draft")
+		out << ", draft";
+	out << "]{";
 	out << Config::instance()->getClass() << "}" << endl;
 }
 
@@ -279,7 +286,7 @@ void FileHeader::generatePackage(QTextStream &out)
 	if(hasFooter() || hasHeader())
 		out << "\\usepackage{fancyhdr}" << endl;
 	if(hasColor())
-		out << "\\usepackage{color}" << endl;
+		out << "\\usepackage{colortbl}" << endl;
 	if(hasUnderline())
 		out << "\\usepackage{ulem}" << endl;
 	if(hasEnumerate())
@@ -289,8 +296,19 @@ void FileHeader::generatePackage(QTextStream &out)
 	out << "\\usepackage{array}" << endl;
 	out << "\\usepackage{multirow}" << endl;
 	out << "\\usepackage{textcomp}" << endl;
+	out << "\\usepackage{rotating}" << endl;
+	out << endl;
+	QStringList langs = Config::instance()->getLanguagesList();
+	if(langs.count() > 0)
+	{
+		out << "\\usepackage[" << langs.join( ", " ) << "]{babel}" << endl;
+	}
+	out << "\\usepackage{textcomp}" << endl;
 	out << endl;
 
+	if(langs.count() > 1)
+		out <<"\\selectlanguage{" << Config::instance()->getDefaultLanguage() 
+			<< "}" << endl << endl;
 }
 
 FileHeader* FileHeader::instance()

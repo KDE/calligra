@@ -50,7 +50,17 @@ void Column::analyse(const QDomNode balise)
 /*******************************************/
 void Column::generate(QTextStream& out)
 {
+	//generateLeftBorder(out);
+	if(getBrushStyle() >= 1)
+	{
+		out << ">{\\columncolor";
+		generateColor(out);
+		out << "}";
+	}
+	//generateRightBorder(out);
+		
 	out << "m{" << getWidth() << "pt}";
 	
 }
+
 

@@ -33,6 +33,9 @@
 /* Class: Format                                                       */
 /***********************************************************************/
 
+class Column;
+class Row;
+
 /**
  * This class describe a cell, row or column format.
  */
@@ -50,9 +53,9 @@ class Format: public XmlParser
 	bool _dontprinttext;
 
 	/* pen */
-	double _width;
-	int _style;
-	QColor _color;
+	double _penWidth;
+	int _penStyle;
+	QColor _penColor;
 
 	/* font */
 	int _size;
@@ -65,6 +68,9 @@ class Format: public XmlParser
 	Pen *_leftBorder;
 	Pen *_rightBorder;
 	
+	/* */
+	bool _isValidFormat;
+
 	public:
 		/**
 		 * Constructors
@@ -96,15 +102,26 @@ class Format: public XmlParser
 		int getIndent() const { return _indent; }
 		bool getDontPrintText() const { return _dontprinttext; }
 	
-		bool hasBorder() { return (hasTopBorder() || hasBottomBorder() || hasLeftBorder() || hasRightBorder()); }
-		bool hasTopBorder() { return (_topBorder != NULL); }
-		bool hasBottomBorder() { return (_bottomBorder != NULL); }
-		bool hasLeftBorder() { return (_leftBorder != NULL); }
-		bool hasRightBorder() { return (_rightBorder != NULL); }
+		bool hasBorder() const { return (hasTopBorder() || hasBottomBorder() || hasLeftBorder() || hasRightBorder()); }
+		bool hasTopBorder() const;
+		//Pen* getTopBorder() const { return _topBorder; }
+		bool hasBottomBorder() const;
+		//Pen* getBottomBorder() const { return _bottomBorder; }
+		bool hasLeftBorder() const;
+		//Pen* getLeftBorder() const { return _leftBorder; }
+		bool hasRightBorder() const;
+		//Pen* getRightBorder() const { return _rightBorder; }
 		
+		/* pen */
+		double getPenWidth() const { return _penWidth; }
+		int getPenStyle()    const { return _penStyle; }
+		QColor getPenColor() const { return _penColor; }
+		
+		/* font */
 		int getFontSize() const { return _size; }
 		QString getFontFamily() const { return _family; }
 		int getFontWeight() const { return _weight; }
+		bool isValidFormat() const { return _isValidFormat; }
 
 		/**
 		 * setters
@@ -120,6 +137,12 @@ class Format: public XmlParser
 		void setIndent(int indent) { _indent = indent; }
 		void setDontPrintText(bool dpt) { _dontprinttext = dpt; }
 
+		/* pen */
+		void setPenWidth(double pw) { _penWidth = pw; }
+		void setPenStyle(int ps)    { _penStyle = ps; }
+		void setPenColor(QString pc) { _penColor.setNamedColor(pc); }
+
+		/* font */
 		void setFontSize(int s) { _size = s; }
 		void setFontFamily(QString f) { _family = f; }
 		void setFontWeight(int w) { _weight = w; }
@@ -135,8 +158,29 @@ class Format: public XmlParser
 		virtual void analysePen(const QDomNode);
 		virtual void analyseFont(const QDomNode);
 
-		virtual void generate(QTextStream&);
+		/**
+		 * Generate the cell format inherited from the row or the colum format or
+		 * use its own format.
+		 *
+		 * @param out The output stream.
+		 * @param col The column of this cell.
+		 * @param row The row of this cell.
+		 */
+		void generate(QTextStream& out, Column* col = NULL, Row* row = NULL);
 
+		/**
+		 * Generate the text cell format (color and font).
+		 */
+		void generateTextFormat(QTextStream& out, QString text);
+
+		/**
+		 * Generate the color format for a column or a row.
+		 *
+		 * The command can be either columncolor or rowcolor.
+		 * 
+		 * @param out The output stream
+		 */
+		void generateColor(QTextStream& out);
 };
 
 #endif /* __KSPREAD_LATEX_FORMAT_H__ */

@@ -32,6 +32,7 @@
 /***********************************************************************/
 
 class Table;
+class Column;
 
 /**
  * This class hold a cell.
@@ -59,6 +60,12 @@ class Cell: public Format
 		 */
 		Cell();
 
+		Cell(long row, long col)
+		{
+			_row = row;
+			_col = col;
+		}
+		
 		/* 
 		 * Destructor
 		 *
@@ -67,9 +74,7 @@ class Cell: public Format
 
 		virtual ~Cell();
 
-		/**
-		 * getters
-		 */
+		/* ==== getters ==== */
 
 		long     getRow() const { return _row; }
 		long     getCol() const { return _col; }
@@ -78,9 +83,7 @@ class Cell: public Format
 		QString  getResult() const { return _result; }
 		QString  getResultDataType() const { return _resultDataType; }
 
-		/**
-		 * setters
-		 */
+		/* ==== setters ==== */
 		void setRow(int r) { _row = r; }
 		void setCol(int c) { _col = c; }
 		void setText(QString text) { _text = text; }
@@ -95,7 +98,7 @@ class Cell: public Format
 		void     analyseText (const QDomNode);
 		void     analyseResult (const QDomNode);
 		void     generate  (QTextStream&, Table*);
-
+		
 	private:
 
 };

@@ -32,6 +32,7 @@
 
 class Cell;
 class Column;
+class Row;
 
 /***********************************************************************/
 /* Class: Table                                                        */
@@ -44,7 +45,7 @@ class Column;
  */
 class Table: public XmlParser, Config
 {
-	/*QPtrList<Row> _rows;*/
+	QPtrList<Row> _rows;
 	QPtrList<Column> _columns;
 	QPtrList<Cell> _cells;
 	
@@ -150,15 +151,25 @@ class Table: public XmlParser, Config
 
 		/**
 		 * Return one specific cell.
+		 * 
 		 * @param col Cell column.
 		 * @param row Row cell.
 		 */
 		Cell* searchCell(int,int);
+		
 		/**
 		 * Return one specific column which describe the format of the column.
+		 * 
 		 * @param col the column.
 		 */
 		Column* searchColumn(int);
+
+		/**
+		 * Return one specific row which describe the format of the row.
+		 *
+		 * @param row The row number.
+		 */
+		Row* searchRow(int);
 		void     analyse (const QDomNode);
 		void     analysePaper (const QDomNode);
 		void     generate  (QTextStream&);

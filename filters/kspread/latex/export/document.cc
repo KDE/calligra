@@ -58,7 +58,7 @@ void Document::generate()
 		kdDebug() << "GENERATION" << endl;
 		_out.setDevice(&_file);
 		_document.generate(_out, !isEmbeded());
-		_out << getDocument();
+		//_out << getDocument();
 		_file.close();
 	}
 	else

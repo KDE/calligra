@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2002 Robert JACOLIN
+** Copyright (C) 2002-2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "config.h"
 
-/** Static variable */
+/* Static variable */
 const char Config::SPACE_CHAR = ' ';
 Config* Config::_instance = 0;
 
@@ -33,23 +33,19 @@ Config::Config()
 {
 	_tabSize = 4;
 	_tabulation = 0;
-	_useUnicode = false;
-	_useLatin1 = true;
 	_useLatexStyle = true;
 	_isEmbeded = false;
-	_convertPictures = true;
+	_convertPictures = false;
 }
 
 Config::Config(const Config &config)
 {
 	setTabSize(config.getTabSize());
 	setIndentation(config.getIndentation());
-	kdDebug() << "class : " << config.getClass() << endl;
 	setClass(config.getClass());
 	setEmbeded(config.isEmbeded());
 
-	if(config.mustUseUnicode())	  useUnicodeEnc();
-	if(config.mustUseLatin1())    useLatin1Enc();
+	setEncoding(config.getEncoding());
 	if(config.isKwordStyleUsed())	useKwordStyle();
 }
 

@@ -10,12 +10,13 @@ kde_module_LTLIBRARIES = libkspreadlatexexport.la
 
 libkspreadlatexexport_la_SOURCES = cell.cc column.cc config.cc document.cc fileheader.cc \
 				 format.cc latexexportdia.ui kspreadlatexexportdiaImpl.cc \
-				 latexexport.cc xmlparser.cc \
-                                 latexexportdia.skel map.cc pen.cc spreadsheet.cc table.cc
+				 latexexport.cc \
+				 map.cc pen.cc row.cc spreadsheet.cc table.cc \
+				 xmlparser.cc
 
 noinst_HEADERS = cell.h column.h config.h document.h fileheader.h format.h \
 					kspreadlatexexportdiaImpl.h latexexport.h \
-					map.h pen.h spreadsheet.h table.h xmlparser.h
+					map.h pen.h row.h spreadsheet.h table.h xmlparser.h
 
 ######## Debug
 #check_PROGRAMS = texlauncher

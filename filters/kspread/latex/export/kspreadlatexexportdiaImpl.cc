@@ -116,6 +116,7 @@ void KSpreadLatexExportDiaImpl::accept()
 	hide();
 	kdDebug() << "KSPREAD LATEX EXPORT FILTER --> BEGIN" << endl;
 	Config* config = Config::instance();
+	
 	/* Document tab */
 	if(embededButton == typeGroup->selected())
 		config->setEmbeded(true);
@@ -132,9 +133,25 @@ void KSpreadLatexExportDiaImpl::accept()
 	/* Pictures tab */
 	if(pictureCheckBox->isChecked())
 		config->convertPictures();
-	//config->setPicturesDir(pathPictures.text());
+	config->setPicturesDir(pathPictures->url());
 	
 	/* Language tab */
+	config->setEncoding(encodingComboBox->currentText());
+	for(unsigned int index = 0; index < langUsedList->count(); index++)
+	{
+		kdDebug() << "lang. : " << langUsedList->item(index)->text() << endl;
+		config->addLanguage(langUsedList->item(index)->text());
+	}
+	
+	/* The default language is the first language in the list */
+	if(langUsedList->item(0) != NULL)
+		config->setDefaultLanguage(langUsedList->item(0)->text());
+	if(langUsedList->currentText() != "")
+	{
+		kdDebug() << "default lang. : " << langUsedList->currentText() << endl;
+		config->setDefaultLanguage(langUsedList->currentText());
+	}
+
 	Document doc(_in, _fileOut);	
 	kdDebug() << "---------- analyse file -------------" << endl;
 	doc.analyse();
