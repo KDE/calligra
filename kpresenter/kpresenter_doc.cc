@@ -84,7 +84,7 @@
 #include <koDocumentInfo.h>
 #include "kprvariable.h"
 #include "kpbackground.h"
-
+#include "notebar.h"
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
@@ -2443,5 +2443,18 @@ void KPresenterDoc::updateRulerPageLayout()
     }
 
 }
+
+void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView)
+{
+    m_pageList.at(page)->setNoteText(text );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        KPresenterView* view=(KPresenterView*)it.current();
+        if ( view != exceptView && (view->getCurrPgNum()-1 == page))
+            view->getNoteBar()->setCurrentNoteText(text );
+    }
+}
+
 
 #include <kpresenter_doc.moc>

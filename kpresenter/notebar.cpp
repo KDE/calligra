@@ -84,7 +84,7 @@ void NoteBar::slotTextChanged()
 {
     int currentPageNum = view->getCurrPgNum(); // 1 base.
     if ( currentPageNum > 0 && !initialize ) {
-        view->kPresenterDoc()->pageList().at(currentPageNum - 1)->setNoteText(textEdit->text() );
+        view->kPresenterDoc()->refreshAllNoteBar(currentPageNum -1,textEdit->text() , view);
         textEdit->setModified( true );
     }
 

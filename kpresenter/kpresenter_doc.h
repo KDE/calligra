@@ -316,6 +316,9 @@ public:
 
     void emitSigChangedActivePage(KPrPage *page) {sig_changeActivePage(page );}
 
+    void refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView);
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
