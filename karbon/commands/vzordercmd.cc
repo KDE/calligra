@@ -141,6 +141,30 @@ VZOrderCmd::execute()
 void
 VZOrderCmd::unexecute()
 {
+	if( m_state == sendToBack )
+	{
+		m_state = bringToFront;
+		execute();
+		m_state = sendToBack;
+	}
+	else if( m_state == bringToFront )
+	{
+		m_state = sendToBack;
+		execute();
+		m_state = bringToFront;
+	}
+	else if( m_state == up )
+	{
+		m_state = down;
+		execute();
+		m_state = up;
+	}
+	else if( m_state == down )
+	{
+		m_state = up;
+		execute();
+		m_state = down;
+	}
 	setSuccess( false );
 }
 
