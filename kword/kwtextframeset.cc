@@ -2453,6 +2453,8 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
             currentFormat->addRef();
             cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
             if ( cursor->parag()->length() == 1 ) {
+                currentFormat->addRef();
+                cursor->parag()->setFormat( currentFormat );
                 cursor->parag()->invalidate(0);
                 cursor->parag()->format();
                 emit repaintChanged( this );

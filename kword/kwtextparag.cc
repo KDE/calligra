@@ -385,7 +385,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
         // Don't copy the hard-frame-break setting though
         m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreakBefore;
         m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreakAfter;
-        setFormat( parag->paragFormat() );
+        // set parag format to the format of the trailing space of the previous parag
+        setFormat( parag->at( parag->length()-1 )->format() );
         // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
         // for the chars in the new parag
     }
