@@ -324,11 +324,12 @@ Table View
 - fixed displaying "autonumber" cell on row inserting
 - row editing is accepted on sorting
 - on failed sorting, sort indicator is reverted
+- Key_Tab, Key_BackTab work again; 
+  skipping to next/previous row added
 Table Designer
 - before switching to design view, row editing is accepted 
-
-Table View
-- Key_Tab, Key_BackTab work again
+Main
+- PropertyEditor/FontSize setting is now stored
 
 2004-08-19
 KexiDB

@@ -905,13 +905,17 @@ void KexiMainWindowImpl::initPropertyEditor()
 	d->propEditorToolWindow = addToolWindow(d->propEditor,
 		KDockWidget::DockRight, getMainDockWidget(), 20);
 
+	d->config->setGroup("PropertyEditor");
+	int size = d->config->readNumEntry("FontSize", -1);
 	QFont f(d->propEditor->font());
-	//this gives:
-	// -2/3 of base font size (6 point minimum)
-	// if the current screen width is > 1300, +1 point is added to every 100 points greater than 1300
-	// maximum size is the base size
-	int size = QMAX( 6 + QMAX(0, KGlobalSettings::desktopGeometry(this).width() - 1300) / 100 , f.pointSize()*2/3 );
-	f.setPointSize( QMIN( size, f.pointSize() ) );
+	if (size<0) {
+		//this gives:
+		// -2/3 of base font size (6 point minimum)
+		// if the current screen width is > 1300, +1 point is added to every 100 points greater than 1300
+		// maximum size is the base size
+		size = QMAX( 6 + QMAX(0, KGlobalSettings::desktopGeometry(this).width() - 1100) / 100 , f.pointSize()*2/3 );
+		f.setPointSize( QMIN( size, f.pointSize() ) );
+	}
 	d->propEditor->setFont(f);
 
 	if (mdiMode()==KMdi::ChildframeMode) {
@@ -1183,6 +1187,9 @@ KexiMainWindowImpl::storeSettings()
 			d->config->writeEntry("RightDockPosition", d->propEditorDockSeparatorPos);
 		}
 	}
+
+	d->config->setGroup("PropertyEditor");
+	d->config->writeEntry("FontSize", d->propEditor->font().pointSize());
 }
 
 void
