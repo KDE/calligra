@@ -507,6 +507,8 @@ void KSpreadView::updateEditWidget()
     m_selectFont->setFont( cell->textFontFamily() );
     m_bold->setChecked( cell->textFontBold() );
     m_italic->setChecked( cell->textFontItalic() );
+    m_textColor->setColor( cell->textColor() );
+    m_bgColor->setColor( cell->bgColor() );
 
     if ( cell->align() == KSpreadLayout::Left )
 	m_alignLeft->setChecked( TRUE );

@@ -117,3 +117,18 @@ reference.
 cell, now it works.
 -Now you can ajust one cell
 
+ 1999-10-30 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Refresh icon text color and icon background color
+
+Summary 1999-10-17 ->1999-10-30
+
+Torben weis has installed posibility to make script in kspread.
+You can test it :
+	- execute kspread &
+	- kscript example15.ks
+	
+We can write in a specific table, create new table change name ...
+
+thanks .
+
