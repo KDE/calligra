@@ -44,7 +44,7 @@ public:
 	void shear( const double& sh, const double& sv );
 	void skew( const double& ang );
 
-	void mul( const VAffineMap& affmap );
+	void mul( const VAffineMap& affMap );
 
 	VPoint map( const VPoint& point ) const;
 

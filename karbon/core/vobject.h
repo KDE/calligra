@@ -22,7 +22,7 @@ public:
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor ) = 0;
 
-	virtual VObject& transform( const VAffineMap& affmap ) = 0;
+	virtual VObject& transform( const VAffineMap& affMap ) = 0;
 
 	const VRect& boundingBox() const { return m_boundingBox; }
 

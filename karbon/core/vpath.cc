@@ -14,43 +14,44 @@
 // TODO:
 // - make sure that lastpoint==currenpoint doesnt get removed
 // - set m_isDirty everywhere
-// - add "zoomFactor != oldZoomFactor"
-// - can we remove m_isDirty-checking on VPoint-level?
+// - reimplement quadBezier() ?
 
+double
+VSegment::s_lastZoomFactor = 0.0;
 
 VSegment:: VSegment()
-	: m_isDirty( true )
+	: m_QPointArray(1), m_isDirty( true )
 {
 }
 
-VSegment:: VSegment( const double lp_x, const double lp_y )
-	: m_lastPoint( lp_x, lp_y ), m_isDirty( true )
+VSegment:: VSegment( const double lpX, const double lpY )
+	: m_lastPoint( lpX, lpY ), m_QPointArray(1), m_isDirty( true )
 {
 }
 
 // -----------------------------------
 
-VFirstPoint::VFirstPoint( const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y )
+VFirstPoint::VFirstPoint( const double lpX, const double lpY )
+	: VSegment( lpX, lpY )
 {
 }
 
 void
-VFirstPoint::transform( const VAffineMap& affmap )
+VFirstPoint::transform( const VAffineMap& affMap )
 {
-	m_lastPoint = affmap.map( m_lastPoint );
-
+	m_lastPoint = affMap.map( m_lastPoint );
 	m_isDirty = true;
 }
 
 const QPointArray&
-VFirstPoint::getQPointArray( const VSegment& prevSeg, const double zoomFactor )
- const
+VFirstPoint::getQPointArray( const VSegment& prevSeg,
+	const double zoomFactor ) const
 {
-	if ( m_isDirty )
+	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
 		m_QPointArray.setPoint( 0, m_lastPoint.getQPoint( zoomFactor ) );
 
+		s_lastZoomFactor = zoomFactor;
 		m_isDirty = false;
 	}
 	return m_QPointArray;
@@ -58,8 +59,8 @@ VFirstPoint::getQPointArray( const VSegment& prevSeg, const double zoomFactor )
 
 // -----------------------------------
 
-VLine::VLine( const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y )
+VLine::VLine( const double lpX, const double lpY )
+	: VSegment( lpX, lpY )
 {
 }
 
@@ -72,20 +73,20 @@ VLine::revert( const VSegment& prevSeg )
 }
 
 void
-VLine::transform( const VAffineMap& affmap )
+VLine::transform( const VAffineMap& affMap )
 {
-	m_lastPoint = affmap.map( m_lastPoint );
-
+	m_lastPoint = affMap.map( m_lastPoint );
 	m_isDirty = true;
 }
 
 const QPointArray&
 VLine::getQPointArray( const VSegment& prevSeg, const double zoomFactor ) const
 {
-	if ( m_isDirty )
+	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
 		m_QPointArray.setPoint( 0, m_lastPoint.getQPoint( zoomFactor ) );
 
+		s_lastZoomFactor = zoomFactor;
 		m_isDirty = false;
 	}
 	return m_QPointArray;
@@ -94,12 +95,12 @@ VLine::getQPointArray( const VSegment& prevSeg, const double zoomFactor ) const
 // -----------------------------------
 
 VCurve::VCurve(
-		const double fcp_x, const double fcp_y,
-		const double lcp_x, const double lcp_y,
-		const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y ),
-	  m_firstCtrlPoint( fcp_x, fcp_y ),
-	  m_lastCtrlPoint( lcp_x, lcp_y )
+		const double fcpX, const double fcpY,
+		const double lcpX, const double lcpY,
+		const double lpX, const double lpY )
+	: VSegment( lpX, lpY ),
+	  m_firstCtrlPoint( fcpX, fcpY ),
+	  m_lastCtrlPoint( lcpX, lcpY )
 {
 }
 
@@ -113,11 +114,11 @@ VCurve::revert( const VSegment& prevSeg )
 }
 
 void
-VCurve::transform( const VAffineMap& affmap )
+VCurve::transform( const VAffineMap& affMap )
 {
-	m_firstCtrlPoint	= affmap.map( m_firstCtrlPoint );
-	m_lastCtrlPoint		= affmap.map( m_lastCtrlPoint );
-	m_lastPoint			= affmap.map( m_lastPoint );
+	m_firstCtrlPoint	= affMap.map( m_firstCtrlPoint );
+	m_lastCtrlPoint		= affMap.map( m_lastCtrlPoint );
+	m_lastPoint			= affMap.map( m_lastPoint );
 
 	m_isDirty = true;
 }
@@ -126,18 +127,23 @@ const QPointArray&
 VCurve::getQPointArray( const VSegment& prevSeg,
 	const double zoomFactor ) const
 {
-	if ( m_isDirty )
+	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
-/*		QPointArray pa(4);
-		pa.setPoint( 0, prevPoint->getQPoint( zoomFactor ) );
-		pa.setPoint( 1, segment->p1->getQPoint( zoomFactor ) );
-		pa.setPoint( 2, segment->p2->getQPoint( zoomFactor ) );
-		pa.setPoint( 3, segment->p3->getQPoint( zoomFactor ) );
+		// calc all QPoints via a temporary QPointArray and quadBezier():
+		QPointArray pa(4);
+		pa.setPoint( 0, firstPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, firstCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, lastCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 3, lastPoint()->getQPoint( zoomFactor ) );
 
-		pa = pa.quadBezier(); // is this a memory leak ?
-*/
-		m_QPointArray.setPoint( 0, m_lastPoint.getQPoint( zoomFactor ) );
+		pa = pa.quadBezier();
 
+		// copy pa=>m_QPointArray but skip first point:
+		m_QPointArray.resize( pa.size() - 1 );
+		for ( uint i = 0; i < m_QPointArray.size() ; ++i )
+			m_QPointArray.setPoint( i, pa.point( i + 1 ) );
+
+		s_lastZoomFactor = zoomFactor;
 		m_isDirty = false;
 	}
 	return m_QPointArray;
@@ -146,8 +152,8 @@ VCurve::getQPointArray( const VSegment& prevSeg,
 // -----------------------------------
 
 VCurve1::VCurve1(
-		const double lcp_x, const double lcp_y, const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y ), m_lastCtrlPoint( lcp_x, lcp_y )
+		const double lcpX, const double lcpY, const double lpX, const double lpY )
+	: VSegment( lpX, lpY ), m_lastCtrlPoint( lcpX, lcpY )
 {
 }
 
@@ -158,10 +164,10 @@ VCurve1::revert( const VSegment& prevSeg )
 }
 
 void
-VCurve1::transform( const VAffineMap& affmap )
+VCurve1::transform( const VAffineMap& affMap )
 {
-	m_lastCtrlPoint		= affmap.map( m_lastCtrlPoint );
-	m_lastPoint			= affmap.map( m_lastPoint );
+	m_lastCtrlPoint		= affMap.map( m_lastCtrlPoint );
+	m_lastPoint			= affMap.map( m_lastPoint );
 
 	m_isDirty = true;
 }
@@ -170,8 +176,23 @@ const QPointArray&
 VCurve1::getQPointArray( const VSegment& prevSeg,
 	const double zoomFactor ) const
 {
-	if ( m_isDirty )
+	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
+		// calc all QPoints via a temporary QPointArray and quadBezier():
+		QPointArray pa(4);
+		pa.setPoint( 0, firstPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, firstCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, lastCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 3, lastPoint()->getQPoint( zoomFactor ) );
+
+		pa = pa.quadBezier();
+
+		// copy pa=>m_QPointArray but skip first point:
+		m_QPointArray.resize( pa.size() - 1 );
+		for ( uint i = 0; i < m_QPointArray.size() ; ++i )
+			m_QPointArray.setPoint( i, pa.point( i + 1 ) );
+
+		s_lastZoomFactor = zoomFactor;
 		m_isDirty = false;
 	}
 	return m_QPointArray;
@@ -180,8 +201,8 @@ VCurve1::getQPointArray( const VSegment& prevSeg,
 // -----------------------------------
 
 VCurve2::VCurve2(
-		const double fcp_x, const double fcp_y, const double lp_x, const double lp_y )
-	: VSegment( lp_x, lp_y ), m_firstCtrlPoint( fcp_x, fcp_y )
+		const double fcpX, const double fcpY, const double lpX, const double lpY )
+	: VSegment( lpX, lpY ), m_firstCtrlPoint( fcpX, fcpY )
 {
 }
 
@@ -192,10 +213,10 @@ VCurve2::revert( const VSegment& prevSeg )
 }
 
 void
-VCurve2::transform( const VAffineMap& affmap )
+VCurve2::transform( const VAffineMap& affMap )
 {
-	m_firstCtrlPoint	= affmap.map( m_firstCtrlPoint );
-	m_lastPoint			= affmap.map( m_lastPoint );
+	m_firstCtrlPoint	= affMap.map( m_firstCtrlPoint );
+	m_lastPoint			= affMap.map( m_lastPoint );
 
 	m_isDirty = true;
 }
@@ -204,8 +225,23 @@ const QPointArray&
 VCurve2::getQPointArray( const VSegment& prevSeg,
 	const double zoomFactor ) const
 {
-	if ( m_isDirty )
+	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
+		// calc all QPoints via a temporary QPointArray and quadBezier():
+		QPointArray pa(4);
+		pa.setPoint( 0, firstPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, firstCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, lastCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 3, lastPoint()->getQPoint( zoomFactor ) );
+
+		pa = pa.quadBezier();
+
+		// copy pa=>m_QPointArray but skip first point:
+		m_QPointArray.resize( pa.size() - 1 );
+		for ( uint i = 0; i < m_QPointArray.size() ; ++i )
+			m_QPointArray.setPoint( i, pa.point( i + 1 ) );
+
+		s_lastZoomFactor = zoomFactor;
 		m_isDirty = false;
 	}
 	return m_QPointArray;
@@ -238,90 +274,32 @@ VPath::~VPath()
 void
 VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 {
-// TODO:
-// - have a deep look at Qt's quadBezier()
-/*
 	painter.save();
 
-	// walk down all Segments and add their QPoints into a QPointArray
-	QListIterator<Segment> i( m_segments );
-	VPoint* prevPoint( 0L );	// previous point (for calculating beziers)
+	// >>> draw the path contour >>>
+	QListIterator<VSegment> i( m_segments );
 	QPointArray qpa;
 
-	if ( i.current() )
+	// skip first point when path is closed:
+	if ( isClosed() )
+		++i;
+
+	const VSegment* prev_seg( 0L );	// pointer to previous segment
+
+	for ( ; i.current(); ++i )
 	{
-		prevPoint = i.current()->p3;
+		const QPointArray& seg_qpa =
+			i.current()->getQPointArray( *prev_seg, zoomFactor);
 
-		if ( !isClosed() ) // only paint first point if path isnt closed:
-		{
-			qpa.resize( qpa.size()+1 );
-			qpa.setPoint( qpa.size()-1, segment->p3->getQPoint( zoomFactor ) );
+		uint old_size( qpa.size() );
+		uint add_size( seg_qpa.size() );
 
-// demo-hack: draw controll points
-			painter.setPen( Qt::black );
-			painter.drawRect(
-				segment->p3->getQPoint( zoomFactor ).x()-3,
-				segment->p3->getQPoint( zoomFactor ).y()-3, 6, 6 );
+		qpa.resize( old_size + add_size );
 
-		}
-	}
+		for ( uint j = 0; j < add_size; ++j )
+			qpa.setPoint( old_size + j, seg_qpa.point( j ) );
 
-	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
-	{
-		// draw bezier-curve if all points are available:
-		if ( prevPoint!=0L && segment->p1!=0L && segment->p2!=0L && segment->p3!=0L )
-		{
-			// let qt calculate bezier-qpoints for us:
-			QPointArray pa(4);
-			pa.setPoint( 0, prevPoint->getQPoint( zoomFactor ) );
-			pa.setPoint( 1, segment->p1->getQPoint( zoomFactor ) );
-			pa.setPoint( 2, segment->p2->getQPoint( zoomFactor ) );
-			pa.setPoint( 3, segment->p3->getQPoint( zoomFactor ) );
-			pa = pa.quadBezier(); // is this a memory leak ?
-
-			// can this part be made more efficient ? i bet it could...
-			unsigned int size1(qpa.size()), size2(pa.size());
-			qpa.resize( size1+size2 );
-			for ( unsigned int i=0; i<size2; i++ )
-				qpa.setPoint( size1+i, pa.point(i) );
-// demo-hack: draw controll points
-			painter.setPen( Qt::black );
-			painter.drawRect(
-				prevPoint->getQPoint( zoomFactor ).x()-3,
-				prevPoint->getQPoint( zoomFactor ).y()-3, 6, 6 );
-			painter.drawRect(
-				segment->p1->getQPoint( zoomFactor ).x()-3,
-				segment->p1->getQPoint( zoomFactor ).y()-3, 6, 6 );
-			painter.drawRect(
-				segment->p2->getQPoint( zoomFactor ).x()-3,
-				segment->p2->getQPoint( zoomFactor ).y()-3, 6, 6 );
-			painter.drawRect(
-				segment->p3->getQPoint( zoomFactor ).x()-3,
-				segment->p3->getQPoint( zoomFactor ).y()-3, 6, 6 );
-
-
-// demo-hack: draw bezier control-lines
-			painter.setPen( QPen( Qt::black, 1, Qt::DotLine ) );
-			painter.drawLine(
-				prevPoint->getQPoint( zoomFactor ),
-				segment->p1->getQPoint( zoomFactor ) );
-			painter.drawLine(
-				segment->p2->getQPoint( zoomFactor ),
-				segment->p3->getQPoint( zoomFactor ) );
-
-		}
-		else
-		{
-			// draw a line:
-			qpa.resize( qpa.size()+1 );
-			qpa.setPoint( qpa.size()-1, segment->p3->getQPoint( zoomFactor ) );
-
-// demo-hack: draw controll points
-			painter.setPen( Qt::black );
-			painter.drawPoint( segment->p3->getQPoint( zoomFactor ) );
-
-		}
-		prevPoint = segment->p3; // need previous point to calculate bezier-qpoints
+		prev_seg = i.current();	// remember previous segment
 	}
 
 	painter.setPen( Qt::black );
@@ -333,8 +311,72 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 	else
 		painter.drawPolyline( qpa );
 
+	// <<< draw the path contour <<<
+
+
+	// >>> draw the points >>>
+	i.toFirst();	// reset iterator
+	prev_seg = 0L;	// reset previous segment
+	painter.setBrush( Qt::NoBrush );
+
+	for ( ; i.current(); ++i )
+	{
+		// draw boxes:
+		painter.setPen( Qt::black );
+		const uint handleSize = 3;
+
+		if ( i.current()->firstPoint( prev_seg ) )
+			painter.drawRect(
+				i.current()->firstPoint( prev_seg )->
+					getQPoint( zoomFactor ).x() - handleSize,
+				i.current()->firstPoint( prev_seg )->
+					getQPoint( zoomFactor ).y() - handleSize,
+				handleSize*2 + 1,
+				handleSize*2 + 1 );
+		if ( i.current()->firstCtrlPoint( prev_seg ) )
+			painter.drawRect(
+				i.current()->firstCtrlPoint( prev_seg )->
+					getQPoint( zoomFactor ).x() - handleSize,
+				i.current()->firstCtrlPoint( prev_seg )->
+					getQPoint( zoomFactor ).y() - handleSize,
+				handleSize*2 + 1,
+				handleSize*2 + 1 );
+		if ( i.current()->lastCtrlPoint( prev_seg ) )
+			painter.drawRect(
+				i.current()->lastCtrlPoint( prev_seg )->
+					getQPoint( zoomFactor ).x() - handleSize,
+				i.current()->lastCtrlPoint( prev_seg )->
+					getQPoint( zoomFactor ).y() - handleSize,
+				handleSize*2 + 1,
+				handleSize*2 + 1 );
+		if ( i.current()->lastPoint( prev_seg ) )
+			painter.drawRect(
+				i.current()->lastPoint( prev_seg )->
+					getQPoint( zoomFactor ).x() - handleSize,
+				i.current()->lastPoint( prev_seg )->
+					getQPoint( zoomFactor ).y() - handleSize,
+				handleSize*2 + 1,
+				handleSize*2 + 1 );
+
+		// draw control-lines of beziers:
+		painter.setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+
+		if ( i.current()->firstCtrlPoint( prev_seg ) )
+			painter.drawLine(
+				i.current()->firstPoint( prev_seg )->getQPoint( zoomFactor ),
+				i.current()->firstCtrlPoint( prev_seg )->getQPoint( zoomFactor ) );
+
+		if ( i.current()->lastCtrlPoint( prev_seg ) )
+			painter.drawLine(
+				i.current()->lastCtrlPoint( prev_seg )->getQPoint( zoomFactor ),
+				i.current()->lastPoint( prev_seg )->getQPoint( zoomFactor ) );
+
+		prev_seg = i.current();	// remember previous segment
+	}
+
+	// <<< draw the points <<<
+
 	painter.restore();
-*/
 }
 
 const VPoint*
@@ -348,24 +390,17 @@ VPath::moveTo( const double x, const double y )
 {
 // TODO: what is the exact postscript-beaviour?
 	if ( isClosed() ) return *this;
-/*
-	m_segments.getLast()->lastPoint()->moveTo( x, y ); */
+
+//	m_segments.getLast()->lastPoint()->moveTo( x, y );
 	return *this;
 }
 
 VPath&
 VPath::lineTo( const double x, const double y )
 {
-
 	if ( isClosed() ) return *this;
-/*
-	VPoint* fp = lastSegment()->lastPoint();
-	fp->ref();
 
-	VPoint* lp = new VPoint( x, y );
-	m_pointPool.append( lp );
-
-	m_segments.append( new VLine( fp, lp ) ); */
+	m_segments.append( new VLine( x, y ) );
 	return *this;
 }
 
@@ -374,27 +409,18 @@ VPath::curveTo( const double x1, const double y1,
 	const double x2, const double y2, const double x3, const double y3 )
 {
 	if ( isClosed() ) return *this;
-/*
-	VPoint* fp = lastSegment()->lastPoint();
-	fp->ref();
 
-	VPoint* fcp = new VPoint( x1, y1 );
-	VPoint* lcp = new VPoint( x2, y2 );
-	VPoint* lp  = new VPoint( x3, y3 );
-	m_pointPool.append( fcp );
-	m_pointPool.append( lcp );
-	m_pointPool.append( lp );
-
-	m_segments.append( new VBezier( fp, fcp, lcp, lp ) );
-*/
+	m_segments.append( new VCurve( x1, y1, x2, y2, x3, y3 ) );
 	return *this;
 }
 
 VPath&
 VPath::curve1To( const double x2, const double y2,
-	const double x3, const double y3 ) {
+	const double x3, const double y3 )
+{
 	if ( isClosed() ) return *this;
-//
+
+	m_segments.append( new VCurve1( x2, y2, x3, y3 ) );
 	return *this;
 }
 
@@ -403,7 +429,8 @@ VPath::curve2To( const double x1, const double y1,
 	const double x3, const double y3 )
 {
 	if ( isClosed() ) return *this;
-//
+
+	m_segments.append( new VCurve( x1, y1, x3, y3 ) );
 	return *this;
 }
 
@@ -414,11 +441,11 @@ VPath::arcTo( const double x1, const double y1,
 	// parts of this routine are inspired by GNU ghostscript
 
 	if ( isClosed() ) return *this;
-/*
+
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
-	double dx10 = m_segments.getLast()->p3->x() - x1;
-	double dy10 = m_segments.getLast()->p3->y() - y1;
+	double dx10 = m_segments.getLast()->lastPoint()->x() - x1;
+	double dy10 = m_segments.getLast()->lastPoint()->y() - y1;
 	double dx12 = x2 - x1;
 	double dy12 = y2 - y1;
 
@@ -448,9 +475,12 @@ VPath::arcTo( const double x1, const double y1,
 
 		// if (bx0,by0) deviates from current point, add a line to it:
 // TODO: decide via radius<XXX or sthg?
-		if ( bx0 != m_segments.getLast()->p3->x() || by0 !=
- m_segments.getLast()->p3->y() )
+		if (
+			bx0 != m_segments.getLast()->lastPoint()->x() ||
+			by0 != m_segments.getLast()->lastPoint()->y() )
+		{
 			lineTo( bx0, by0 );
+		}
 
 		double bx3 = x1 + dx12*d1t1;
 		double by3 = y1 + dy12*d1t1;
@@ -463,7 +493,7 @@ VPath::arcTo( const double x1, const double y1,
 
 // TODO: make this nicer? check the exact meaning of this formula
 
-		if ( distsq >= rsq * VPoint::s_fractScale ) // r is very small
+		if ( distsq >= rsq * 1.0e8 ) // r is very small
 			fract = 0.0; // dist==r==0
 		else
 			fract = (4.0 / 3.0) / (1 + sqrt(1 + distsq / rsq));
@@ -474,11 +504,8 @@ VPath::arcTo( const double x1, const double y1,
 		double by2 = by3 + (y1 - by3) * fract;
 
 		// finally add the bezier-segment:
-		m_segments.append( new Segment );
-		m_segments.getLast()->p1 = new VPoint( bx1, by1 );
-		m_segments.getLast()->p2 = new VPoint( bx2, by2 );
-		m_segments.getLast()->p3 = new VPoint( bx3, by3 );
-	} */
+		m_segments.append( new VCurve( bx1, by1, bx2, by2, bx3, by3 ) );
+	}
 	return *this;
 }
 
@@ -486,32 +513,28 @@ VPath&
 VPath::close()
 {
 	if ( isClosed() ) return *this;
-/*
-// TODO: dont "close" a single line
-	// draw a line if last point differs from first point
-	if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
-		lineTo( m_segments.getFirst()->p3->x(), m_segments.getFirst()->p3->y() );
 
-	// do nothing if first and last point are the same (eg only first point
-	// exists):
-	if ( m_segments.getFirst()->p3!=m_segments.getLast()->p3 )
+	// draw a line if last point differs from first point:
+	if (
+		*(m_segments.getFirst()->firstPoint() ) !=
+		*(m_segments.getLast()->lastPoint() ) )
 	{
-		if ( m_segments.getLast()->p3->unref()==0 )
-			delete m_segments.getLast()->p3;
+		lineTo(
+			m_segments.getFirst()->firstPoint()->x(),
+			m_segments.getFirst()->firstPoint()->y() );
+	}
 
-		m_segments.getLast()->p3 = m_segments.getFirst()->p3;
+	m_isClosed = true;
 
-		m_isClosed = true;
-	} */
 	return *this;
 }
 
 VObject&
-VPath::transform( const VAffineMap& affmap )
+VPath::transform( const VAffineMap& affMap )
 {
 	QListIterator<VSegment> i( m_segments );
 	for ( ; i.current() ; ++i )
-		i.current()->transform( affmap );
+		i.current()->transform( affMap );
 
 	return *this;
 }

@@ -43,9 +43,7 @@ private:
 	double m_x;
 	double m_y;
 
-	mutable bool m_isDirty;				// have to recalc QPoint?
-	static double m_lastZoomFactor;		// cache last zoomFactor
-	mutable QPoint m_QPoint;			// for painting
+	mutable QPoint m_QPoint;	// for painting
 };
 
 inline bool operator ==( const VPoint& l, const VPoint& r )

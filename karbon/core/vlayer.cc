@@ -23,7 +23,5 @@ VLayer::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 {
 	QListIterator<VObject> i = m_objects;
 	for ( ; i.current() ; ++i )
-	{
 		i.current()->draw( painter, rect, zoomFactor );
-	}
 }

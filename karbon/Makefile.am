@@ -14,7 +14,7 @@ libkarbonpart_la_SOURCES = \
 libkarbonpart_la_LDFLAGS = -module -avoid-version -no-undefined
 libkarbonpart_la_LIBADD = \
 	../../koffice/lib/kofficeui/libkofficeui.la \
-	./core/libkarboncore.la
+	$(srcdir)/core/libkarboncore.la
 libkarbonpart_la_METASOURCES = AUTO
 
 karbon_la_SOURCES = main.cc

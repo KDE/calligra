@@ -11,6 +11,8 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 
+#include "vaffinemap.h"
+
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
@@ -21,12 +23,16 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	VPath* path = new VPath();
-	path->moveTo( 200.0, 100.0 );
-	path->arcTo( 300.0, 100.0, 300.0, 200.0,100.0 );
-	path->arcTo( 300.0, 300.0, 200.0, 300.0, 100.0 );
-	path->arcTo( 100.0, 300.0, 100.0, 200.0, 100.0 );
-	path->arcTo( 100.0, 100.0, 200.0, 100.0 ,100.0);
-	path->close();
+//	path->moveTo( 200.0, 100.0 );
+//	path->arcTo( 300.0, 100.0, 300.0, 200.0, 100.0 );
+//	path->arcTo( 300.0, 300.0, 200.0, 300.0, 100.0 );
+//	path->arcTo( 100.0, 300.0, 100.0, 200.0, 100.0 );
+//	path->arcTo( 100.0, 100.0, 200.0, 100.0, 100.0 );
+	path->lineTo( 100, 100 ).curve1To( 200, 200, 100, 200 );
+//	path->close();
+	VAffineMap aff_map;
+	aff_map.translate( 100.0, 100.0 );
+	path->transform( aff_map );
 	m_layers.last()->objects().append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

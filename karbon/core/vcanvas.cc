@@ -33,11 +33,9 @@ void
 VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
 	QListIterator<VLayer> i = m_part->layers();
-	for ( ; i.current() ; ++i )
-	{
+	for ( ; i.current(); ++i )
 		if ( i.current()->isVisible() )
 			i.current()->draw( *painter, rect, m_zoomFactor );
-	}
 }
 
 void
