@@ -55,8 +55,8 @@ VGradient::load( const QDomElement& element )
 	m_origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
 	m_vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
 	m_vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
-	m_type = element.attribute( "type", 0 ).toInt();
-	m_spreadMethod = element.attribute( "spreadMethod", 0 ).toInt();
+	m_type = (VGradientType)element.attribute( "type", 0 ).toInt();
+	m_spreadMethod = (VGradientSpreadMethod)element.attribute( "spreadMethod", 0 ).toInt();
 
 	m_colorStops.clear();
 
