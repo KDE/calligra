@@ -298,3 +298,4 @@ Changes after KWord-1.2
 - Improve statistic dialogbox : count number of lines.
 - Now we can add directly a personal expression
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
+- Add horizontal line
