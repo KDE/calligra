@@ -39,15 +39,12 @@ public:
     GraphitePart(QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent=0, const char *name=0, bool singleViewMode=false);
     virtual ~GraphitePart();
 
-    virtual KoMainWindow *createShell();
-
     virtual void paintContent(QPainter &painter, const QRect &rect, bool transparent=false);
 
     virtual bool initDoc();
 
     virtual bool loadXML( QIODevice *, const QDomDocument & ) { return false; }
 
-    virtual QCString mimeType() const;
     GCommandHistory *history() { return m_history; }
 
     // The canvas forwards the Events to us. We test if any

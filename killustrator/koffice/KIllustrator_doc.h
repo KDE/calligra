@@ -67,19 +67,9 @@ public:
     bool loadChildren (KoStore* store);
 
     /**
-     * Overloaded @ref Part::createShell
-     */
-    KoMainWindow* createShell();
-
-    /**
      * Overloaded @ref KoDocument::initDoc.
      */
     bool initDoc ();
-
-    /**
-     * Overloaded @ref KoDocument::mimeType.
-     */
-    QCString mimeType() const { return "application/x-killustrator"; }
 
     /**
      * Overloaded @ref ContainerPart::insertChild.

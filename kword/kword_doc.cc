@@ -48,7 +48,6 @@
 
 #include "kword_doc.h"
 #include "kword_page.h"
-#include "kword_shell.h"
 #include "defs.h"
 #include "font.h"
 #include "kword_doc.moc"
@@ -156,7 +155,7 @@ bool KWordChild::save( QTextStream& out )
   assert( document() );
 
   out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
-      << document()->mimeType() << "\">"
+      << document()->nativeFormatMimeType() << "\">"
       << geometry() << "</OBJECT>" << endl;
 
   return true;
@@ -1815,15 +1814,6 @@ void KWordDocument::removeView( KoView *_view )
     m_lstViews.removeRef( static_cast<KWordView*>(_view) );
     m_lstViews.setAutoDelete( TRUE );
     KoDocument::removeView( _view );
-}
-
-/*================================================================*/
-KoMainWindow* KWordDocument::createShell()
-{
-    KoMainWindow* shell = new KWordShell;
-    shell->show();
-
-    return shell;
 }
 
 /*================================================================*/

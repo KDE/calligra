@@ -24,7 +24,6 @@
 
 #include <KIllustrator_doc.h>
 #include <KIllustrator_view.h>
-#include <KIllustrator_shell.h>
 #include <KIllustrator_factory.h>
 
 #include <GDocument.h>
@@ -166,13 +165,6 @@ bool KIllustratorDocument::initDoc()
 KoView* KIllustratorDocument::createViewInstance( QWidget* parent, const char* name )
 {
     return new KIllustratorView( parent, name, this );
-}
-
-KoMainWindow* KIllustratorDocument::createShell()
-{
-    KoMainWindow* shell = new KIllustratorShell;
-    shell->show();
-    return shell;
 }
 
 void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, bool transparent )

@@ -53,6 +53,7 @@
 #include <kedittoolbar.h>
 #include <kprogress.h>
 #include <kdebug.h>
+#include <kmimetype.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
@@ -148,7 +149,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
 
     if ( instance )
-      setInstance( instance );
+        setInstance( instance, false ); // don't load plugins! we don't want
+    // the part's plugins with this shell, even though we are using the
+    // part's instance! (Simon)
 
     setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
     setLocalXMLFile( locateLocal( "data", "koffice/koffice_shell.rc" ) );
@@ -394,7 +397,8 @@ bool KoMainWindow::openDocument( const KURL & url )
         // Open in a new shell
         // (Note : could create the shell first and the doc next for this
         // particular case, that would give a better user feedback...)
-       KoMainWindow *s = newdoc->createShell();
+//       KoMainWindow *s = newdoc->createShell();
+        KoMainWindow *s = new KoMainWindow( newdoc->instance() );
        s->show();
        s->setRootDocument( newdoc );
     }
@@ -531,7 +535,8 @@ void KoMainWindow::slotFileNew()
     }
     else if ( doc && !doc->isEmpty() )
     {
-        KoMainWindow *s = newdoc->createShell();
+//        KoMainWindow *s = newdoc->createShell();
+        KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
         s->setRootDocument( newdoc );
         return;
@@ -846,6 +851,46 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 QLabel * KoMainWindow::statusBarLabel() const
 {
   return d->statusBarLabel;
+}
+
+QString KoMainWindow::nativeFormatName()
+{
+    QString serviceType;
+
+    if ( rootDocument() )
+        serviceType = QString::fromLatin1( rootDocument()->nativeFormatMimeType() );
+    else
+        serviceType = QString::fromLatin1( KoDocument::readNativeFormatMimeType() );
+
+    if ( serviceType.isEmpty() )
+        return QString::null;
+
+    KMimeType::Ptr mimeType = KMimeType::mimeType( serviceType );
+
+    if ( !mimeType )
+        return QString::null;
+
+    return mimeType->comment();
+}
+
+QString KoMainWindow::nativeFormatPattern()
+{
+    QString serviceType;
+
+    if ( rootDocument() )
+        serviceType = QString::fromLatin1( rootDocument()->nativeFormatMimeType() );
+    else
+        serviceType = QString::fromLatin1( KoDocument::readNativeFormatMimeType() );
+
+    if ( serviceType.isEmpty() )
+        return QString::null;
+
+    KMimeType::Ptr mimeType = KMimeType::mimeType( serviceType );
+
+    if ( !mimeType )
+        return QString::null;
+
+    return *mimeType->patterns().begin();
 }
 
 #include <koMainWindow.moc>

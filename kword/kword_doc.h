@@ -115,11 +115,8 @@ public:
     virtual bool loadChildren( KoStore *_store );
     virtual bool saveToStream( QIODevice * dev );
     virtual bool completeSaving( KoStore *_store );
-    KoMainWindow* createShell();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
-
-    virtual QCString mimeType() const { return MIME_TYPE; }
 
     virtual QStrList outputFormats();
     virtual QStrList inputFormats();

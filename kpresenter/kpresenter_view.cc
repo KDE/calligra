@@ -60,7 +60,6 @@
 
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
-#include "kpresenter_shell.h"
 #include "page.h"
 #include "webpresentation.h"
 #include "footer_header.h"

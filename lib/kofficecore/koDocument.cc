@@ -835,17 +835,24 @@ QDomDocument KoDocument::saveXML()
     return QDomDocument();
 }
 
+KService::Ptr KoDocument::nativeService()
+{
+  if ( !m_nativeService )
+      m_nativeService = readNativeService( instance() );
+
+  return m_nativeService;
+}
+
 QCString KoDocument::nativeFormatMimeType()
 {
-  if ( m_nativeFormatMimeType.isEmpty() )
-  {
-    m_nativeFormatMimeType = readNativeFormatMimeType( instance() );
-  }
-  return m_nativeFormatMimeType;
+    KService::Ptr service = nativeService();
+    if ( !service )
+        return QCString();
+    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
 //static
-QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
+KService::Ptr KoDocument::readNativeService( KInstance *instance )
 {
   QString instname = instance ? instance->instanceName() : kapp->instanceName();
 
@@ -859,12 +866,20 @@ QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
   }
 
   if ( !service )
-    return QCString();
+    return service;
 
-  QCString str = service->property( "X-KDE-NativeMimeType" ).toString().latin1();
-  if ( str.isEmpty() )
-    kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
-  return str;
+  if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
+      kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
+
+  return service;
+}
+
+QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
+{
+    KService::Ptr service = readNativeService( instance );
+    if ( !service )
+        return QCString();
+    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
 void KoDocument::addShell( KoMainWindow *shell )

@@ -20,7 +20,6 @@
 #include "kppartobject.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
-#include "kpresenter_shell.h"
 #include "kpgradient.h"
 
 #include <qpicture.h>

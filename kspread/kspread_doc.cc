@@ -45,7 +45,6 @@
 #include <koStoreDevice.h>
 
 #include "kspread_doc.h"
-#include "kspread_shell.h"
 #include "kspread_interpreter.h"
 #include "kspread_map.h"
 #include "kspread_undo.h"
@@ -137,14 +136,6 @@ bool KSpreadDoc::initDoc()
         return true;
     } else
         return false;
-}
-
-KoMainWindow* KSpreadDoc::createShell()
-{
-    KoMainWindow* shell = new KSpreadShell;
-    shell->show();
-
-    return shell;
 }
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )

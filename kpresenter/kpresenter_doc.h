@@ -98,8 +98,6 @@ public:
     KPresenterDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* doc = 0, const char* name = 0, bool singleViewMode = false );
     ~KPresenterDoc();
 
-    KoMainWindow* createShell();
-
     // Drawing
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
 
@@ -114,9 +112,6 @@ public:
 
     virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }
     void initEmpty();
-
-    // get mime type
-    virtual QCString mimeType() const { return QCString( MIME_TYPE ); }
 
     // get output- and inputformats [obsolete?]
     virtual QStrList outputFormats();

@@ -23,7 +23,6 @@
 */
 
 #include <kdebug.h>
-#include <KIllustrator_shell.h>
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
 #include <KIllustrator_factory.h>
@@ -83,6 +82,7 @@
 #include <kcoloractions.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
+#include <kxmlgui.h>
 #include <kparts/event.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,

@@ -125,7 +125,7 @@ QDomElement GPart::writeToXml (QDomDocument &document) {
     element.setAttribute ("width", oldGeom.width ());
     element.setAttribute ("height", oldGeom.height ());
     element.setAttribute ("url", child->url().url() );
-    element.setAttribute ("mime", child->document()->mimeType ());
+    element.setAttribute ("mime", child->document()->nativeFormatMimeType ());
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

@@ -34,23 +34,9 @@ bool ExamplePart::initDoc()
     return TRUE;
 }
 
-QCString ExamplePart::mimeType() const
-{
-    return "application/x-example";
-}
-
 KoView* ExamplePart::createViewInstance( QWidget* parent, const char* name )
 {
     return new ExampleView( this, parent, name );
-}
-
-KoMainWindow* ExamplePart::createShell()
-{
-    KoMainWindow* shell = new ExampleShell;
-    shell->setRootDocument( this );
-    shell->show();
-
-    return shell;
 }
 
 bool ExamplePart::loadXML( QIODevice *, const QDomDocument & )

@@ -9,7 +9,6 @@
 #include <qbuffer.h>
 #include "kchart_part.h"
 #include "kchart_view.h"
-#include "kchart_shell.h"
 #include "kchart_factory.h"
 #include "kchartWizard.h"
 #include <kstddirs.h>
@@ -84,25 +83,10 @@ void KChartPart::initRandomData()
 
 
 
-QCString KChartPart::mimeType() const
-{
-  return "application/x-kchart";
-}
-
 KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
 {
   return new KChartView( this, parent, name );
 }
-
-KoMainWindow* KChartPart::createShell()
-{
-  KoMainWindow* shell = new KChartShell();
-  shell->setRootDocument( this );
-  shell->show();
-
-  return shell;
-}
-
 
 void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent )
 {
@@ -956,6 +940,13 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.48  2000/09/22 20:59:48  hausmann
+   * - don't link kspread against kchart. instead use some shared interface
+   *   (which probably needs some finetuning :-}
+   *   Posted to koffice-devel last week, approved by David (locally in
+   *   Erlangen ;-)
+   *   no translations/messages touched!
+   *
    * Revision 1.47  2000/08/10 09:40:39  kalle
    * Fixed #7834 and #7380
    *

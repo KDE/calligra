@@ -435,7 +435,8 @@ void KoView::newView() {
     assert( ( d!=0L && d->m_doc != 0L ) );
 
     KoDocument *thisDocument = d->m_doc;
-    KoMainWindow *shell = thisDocument->createShell();
+//    KoMainWindow *shell = thisDocument->createShell();
+    KoMainWindow *shell = new KoMainWindow( thisDocument->instance() );
     shell->setRootDocument(thisDocument);
     shell->show();
 }

@@ -5,7 +5,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(a
 bin_PROGRAMS = kchart
 lib_LTLIBRARIES = kchart.la libkchartpart.la
 
-libkchartpart_la_SOURCES = kchart_shell.cc kchart_part.cc \
+libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	engine.cc \
 	enginehelper.cc \
@@ -60,7 +60,7 @@ kchart_LDADD = kchart.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS =  kchart_shell.h kchart_part.h \
+noinst_HEADERS =  kchart_part.h \
 		  kchart_view.h kchart_factory.h	\
 	          engine.h \
 		kchartBarConfigDialog.h \

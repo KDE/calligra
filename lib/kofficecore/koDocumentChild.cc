@@ -195,7 +195,7 @@ QDomElement KoDocumentChild::save( QDomDocument& doc )
     assert( document() );
     QDomElement e = doc.createElement( "object" );
     e.setAttribute( "url", document()->url().url() );
-    e.setAttribute( "mime", document()->mimeType() );
+    e.setAttribute( "mime", document()->nativeFormatMimeType() );
     QDomElement rect = doc.createElement( "rect" );
     rect.setAttribute( "x", geometry().left() );
     rect.setAttribute( "y", geometry().top() );

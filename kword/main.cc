@@ -18,7 +18,6 @@
 */
 
 #include "kword_doc.h"
-#include "kword_shell.h"
 
 #include <koApplication.h>
 #include <kaboutdata.h>

@@ -20,7 +20,6 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_doc.moc"
 #include "kpresenter_view.h"
-#include "kpresenter_shell.h"
 #include "page.h"
 #include "ktextedit.h"
 #include "footer_header.h"
@@ -197,7 +196,7 @@ bool KPresenterChild::save( QTextStream& out )
   assert( document() );
 
   out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
-      << document()->mimeType() << "\">"
+      << document()->nativeFormatMimeType() << "\">"
       << geometry() << "</OBJECT>" << endl;
 
   return true;
@@ -3920,15 +3919,6 @@ void KPresenterDoc::makeUsedPixmapList()
             usedPixmaps.append( kpbackground->getKey() );
         }
     }
-}
-
-/*================================================================*/
-KoMainWindow* KPresenterDoc::createShell()
-{
-    KoMainWindow* shell = new KPresenterShell;
-    shell->show();
-
-    return shell;
 }
 
 /*================================================================*/

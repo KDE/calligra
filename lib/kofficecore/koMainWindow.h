@@ -81,13 +81,13 @@ public:
     /**
      * The pattern of the native file format, for example "*.ksp".
      */
-    virtual QString nativeFormatPattern() const = 0;
+    QString nativeFormatPattern();
 
     /**
      * The name of the native file format. Usually the name of
      * your component, for example i18n("KSpread") or i18n("KWord").
      */
-    virtual QString nativeFormatName() const = 0;
+    QString nativeFormatName();
 
     virtual KParts::PartManager *partManager();
 

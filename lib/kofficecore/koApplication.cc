@@ -80,7 +80,8 @@ void KoApplication::start()
         KoDocument* doc = entry.createDoc( 0, "Document" );
         if ( !doc )
             ::exit(1);
-        KoMainWindow* shell = doc->createShell();
+//        KoMainWindow* shell = doc->createShell();
+        KoMainWindow *shell = new KoMainWindow( doc->instance() );
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         if ( doc->initDoc() )
@@ -101,7 +102,8 @@ void KoApplication::start()
             if ( doc )
             {
                 // show a shell asap
-                KoMainWindow* shell = doc->createShell();
+//                KoMainWindow* shell = doc->createShell();
+                KoMainWindow *shell = new KoMainWindow( doc->instance() );
                 shell->show();
                 // now try to load
                 QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));

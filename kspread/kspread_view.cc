@@ -34,6 +34,7 @@
 #include <qframe.h>
 #include <qscrollbar.h>
 #include <qbutton.h>
+#include <qpopupmenu.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -56,7 +57,6 @@
 #include "kspread_table.h"
 #include "kspread_dlg_scripts.h"
 #include "kspread_doc.h"
-#include "kspread_shell.h"
 #include "kspread_dlg_cons.h"
 #include "kspread_util.h"
 #include "kspread_canvas.h"

@@ -60,10 +60,6 @@ bool GraphitePart::initDoc() {
     return true;
 }
 
-QCString GraphitePart::mimeType() const {
-    return "application/x-graphite";
-}
-
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     // kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
     // TODO: setGlobalZoom()
@@ -107,14 +103,6 @@ void GraphitePart::keyReleaseEvent(QKeyEvent *e, GraphiteView */*view*/) {
 
 KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
     return new GraphiteView(this, parent, name);
-}
-
-KoMainWindow *GraphitePart::createShell() {
-
-    KoMainWindow *shell = new GraphiteShell;
-    shell->setRootDocument(this);
-    shell->show();
-    return shell;
 }
 
 void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {

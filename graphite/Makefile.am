@@ -8,7 +8,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 bin_PROGRAMS = graphite
 lib_LTLIBRARIES = graphite.la libgraphitepart.la
 
-libgraphitepart_la_SOURCES = graphiteshell.cc graphitepart.cc \
+libgraphitepart_la_SOURCES = graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
     gcanvas.cc gobjectfactory.cc gcommand.cc gline.cc \
     graphiteglobal.cc ggroup.cc gprimitivecmds.cc
@@ -27,7 +27,7 @@ graphite_LDADD = graphite.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS =  graphiteglobal.h graphiteshell.h \
+noinst_HEADERS =  graphiteglobal.h \
     graphitepart.h graphiteview.h graphitefactory.h \
     gobject.h gcanvas.h gobjectfactory.h gcommand.h \
     gline.h ggroup.h gprimitivecmds.h

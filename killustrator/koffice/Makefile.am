@@ -6,7 +6,7 @@ bin_PROGRAMS = killustrator
 lib_LTLIBRARIES = killustrator.la libkillustratorpart.la
 
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
-	KIllustrator_shell.cc KIllustrator_view.cc \
+	KIllustrator_view.cc \
 	InsertPartTool.cc GPart.cc KIllustrator_factory.cc
 libkillustratorpart_la_LDFLAGS = -avoid-version -module -no-undefined
 libkillustratorpart_la_LIBADD = $(all_libraries) $(top_builddir)/killustrator/share/libkillu.la $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
@@ -22,7 +22,7 @@ killustrator_LDADD = killustrator.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS = KIllustrator_shell.h KIllustrator_doc.h \
+noinst_HEADERS = KIllustrator_doc.h \
 		 KIllustrator_view.h InsertPartTool.h GPart.h \
 		 KIllustrator_factory.h
 

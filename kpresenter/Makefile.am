@@ -25,7 +25,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
 	grpobjcmd.cc commandhistory.cc preview.cc gotopage.cc footer_header.cc \
-	kpresenter_shell.cc kpresenter_factory.cc \
+	kpresenter_factory.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
@@ -63,7 +63,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
 		grpobjcmd.h commandhistory.h preview.h gotopage.h webpresentation.h \
-		footer_header.h kpresenter_shell.h kpresenter_factory.h \
+		footer_header.h kpresenter_factory.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
 		KPresenterBackgroundIface.h textdialog.h
 

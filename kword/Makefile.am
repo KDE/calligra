@@ -8,7 +8,7 @@ bin_PROGRAMS = kword
 lib_LTLIBRARIES = kword.la libkwordpart.la
 
 libkwordpart_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
-                kword_shell.cc fc.cc font.cc format.cc kword_page.cc parag.cc \
+                fc.cc font.cc format.cc kword_page.cc parag.cc \
                 paraglayout.cc formatcollection.cc paragdia.cc \
                 imagecollection.cc image.cc kword_frame.cc framedia.cc \
                 stylist.cc kcharselectdia.cc kword_utils.cc preview.cc \
@@ -31,7 +31,7 @@ kword_LDADD = kword.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS = char.h kword_doc.h kword_view.h kword_shell.h \
+noinst_HEADERS = char.h kword_doc.h kword_view.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
 		kword_frame.h framedia.h stylist.h  kcharselectdia.h \

@@ -236,8 +236,6 @@ public:
   void setDefaultGridPen( const QPen& );
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
-  KoMainWindow* createShell();
-
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
 
