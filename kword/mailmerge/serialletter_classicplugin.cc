@@ -530,9 +530,22 @@ void KWClassicMailMergeEditor::removeRecord()
     if ( db->getNumRecords() > 0 ) {
         records->setRange( records->minValue(), records->maxValue() - 1 );
         records->setValue( 1 );
+        dbList->clear();
         dbList->updateItems();
     } else
+    {
+        dbList->clear();
         records->setEnabled( FALSE );
+    }
+
+    if ( db->getNumRecords() == 0 )
+    {
+        newRecord->setEnabled(false);
+        deleteEntry->setEnabled(false);
+        deleteRecord->setEnabled(false);
+        records->setEnabled(true);
+    }
+
     updateButton();
 }
 
