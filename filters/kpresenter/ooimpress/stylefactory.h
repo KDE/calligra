@@ -209,7 +209,7 @@ private:
     ParagraphStyle() {};
 
     QString m_name, m_margin_left, m_margin_right, m_text_indent, m_text_align,
-        m_enable_numbering;
+        m_enable_numbering,  m_text_shadow;
 };
 
 class StyleFactory

@@ -660,7 +660,6 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
             // gradient
             m_fill = "gradient";
             m_fill_gradient_name = styleFactory->createGradientStyle( e );
-            kdDebug() << m_fill_gradient_name << endl;
         }
     }
     else
@@ -781,6 +780,7 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
     QDomNode linebegin = e.namedItem( "LINEBEGIN" );
     QDomNode lineend = e.namedItem( "LINEEND" );
     QDomNode gradient = e.namedItem( "GRADIENT" );
+    QDomNode shadow = e.namedItem( "SHADOW" );
 
     m_name = QString( "gr%1" ).arg( index );
     if ( !pen.isNull() )
@@ -840,6 +840,51 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
 
         int style = le.attribute( "value" ).toInt();
         m_marker_end = styleFactory->createMarkerStyle( style );
+    }
+
+    if ( !shadow.isNull() )
+    {
+        QDomElement s = shadow.toElement();
+        m_shadow = "visible";
+        m_shadow_color = s.attribute( "color" );
+
+        int direction = s.attribute( "direction" ).toInt();
+        QString distance = StyleFactory::toCM( s.attribute( "distance" ) );
+        switch ( direction )
+        {
+        case 1:
+            m_shadow_offset_x = "-" + distance;
+            m_shadow_offset_y = "-" + distance;
+            break;
+        case 2:
+            m_shadow_offset_x = "0cm";
+            m_shadow_offset_y = "-" + distance;
+            break;
+        case 3:
+            m_shadow_offset_x = distance;
+            m_shadow_offset_y = "-" + distance;
+            break;
+        case 4:
+            m_shadow_offset_x = distance;
+            m_shadow_offset_y = "0cm";
+            break;
+        case 5:
+            m_shadow_offset_x = distance;
+            m_shadow_offset_y = distance;
+            break;
+        case 6:
+            m_shadow_offset_x = "0cm";
+            m_shadow_offset_y = distance;
+            break;
+        case 7:
+            m_shadow_offset_x = "-" + distance;
+            m_shadow_offset_y = distance;
+            break;
+        case 8:
+            m_shadow_offset_x = "-" + distance;
+            m_shadow_offset_y = "0cm";
+            break;
+        }
     }
 }
 
@@ -1008,6 +1053,8 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
     m_margin_right = "0cm";
     m_text_indent = "0cm";
 
+    QDomNode shadow = e.namedItem( "SHADOW" );
+
     m_name = QString( "P%1" ).arg( index );
     if ( e.hasAttribute( "align" ) )
     {
@@ -1022,7 +1069,18 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
             break;
         case 4: // center
             m_text_align = "center";
+            break;
+        case 8: // justify
+            m_text_align = "justify";
+            break;
         }
+    }
+
+    if ( !shadow.isNull() )
+    {
+        QDomElement s = shadow.toElement();
+        QString distance = QString( "%1pt" ).arg( s.attribute( "distance" ) );
+        m_text_shadow = distance + " " + distance;
     }
 }
 
@@ -1043,6 +1101,8 @@ void ParagraphStyle::toXML( QDomDocument & doc, QDomElement & e ) const
         properties.setAttribute( "fo:text-align", m_text_align );
     if ( m_enable_numbering != QString::null )
         properties.setAttribute( "text:enable-numbering", m_enable_numbering );
+    if ( m_text_shadow != QString::null )
+        properties.setAttribute( "fo:text-shadow", m_text_shadow );
 
     style.appendChild( properties );
     e.appendChild( style );
@@ -1054,6 +1114,7 @@ bool ParagraphStyle::operator==( const ParagraphStyle & paragraphStyle ) const
              m_margin_right == paragraphStyle.m_margin_right &&
              m_text_indent == paragraphStyle.m_text_indent &&
              m_text_align == paragraphStyle.m_text_align &&
-             m_enable_numbering == paragraphStyle.m_enable_numbering );
+             m_enable_numbering == paragraphStyle.m_enable_numbering &&
+             m_text_shadow == paragraphStyle.m_text_shadow );
 }
 
