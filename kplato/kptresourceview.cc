@@ -58,11 +58,11 @@ KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
     resList->addColumn(i18n("Name"));
     resList->addColumn(i18n("Type"));
     resList->setColumnAlignment(1, AlignHCenter);
-    resList->addColumn(i18n("Normal rate"));
+    resList->addColumn(i18n("Normal Rate"));
     resList->setColumnAlignment(2, AlignRight);
-    resList->addColumn(i18n("Overtime rate"));
+    resList->addColumn(i18n("Overtime Rate"));
     resList->setColumnAlignment(3, AlignRight);
-    resList->addColumn(i18n("Fixed cost"));
+    resList->addColumn(i18n("Fixed Cost"));
     resList->setColumnAlignment(4, AlignRight);
 
     draw(view->getPart()->getProject());
@@ -72,8 +72,8 @@ KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
     appList = new QListView(app, "Appointments view");
     appList->addColumn(i18n("Task"));
     appList->addColumn(i18n("Responsible"));
-    appList->addColumn(i18n("Start date"));
-    appList->addColumn(i18n("End date"));
+    appList->addColumn(i18n("Start Date"));
+    appList->addColumn(i18n("End Date"));
     appList->addColumn(i18n("Duration"));
     appList->setColumnAlignment(4, AlignRight);
 

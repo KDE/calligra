@@ -35,7 +35,7 @@
 #include <kdebug.h>
 
 KPTStandardWorktimeDialog::KPTStandardWorktimeDialog(KPTProject &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Standard worktime"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( Swallow, i18n("Standard Worktime"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
     //kdDebug()<<k_funcinfo<<&p<<endl;

@@ -82,9 +82,9 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()), 0, MenuDelete);
 	m_popup->insertSeparator(MenuDelete + 1);
 
-	m_popup->insertItem( i18n("&Lay out horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
-	m_popup->insertItem( i18n("&Lay out vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
-	m_popup->insertItem( i18n("&Lay out in a grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
+	m_popup->insertItem( i18n("&Lay Out Horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
+	m_popup->insertItem( i18n("&Lay Out Vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
+	m_popup->insertItem( i18n("&Lay Out in Grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
 	m_popup->insertSeparator(MenuGrid + 1);
 
 	m_treeview = 0;

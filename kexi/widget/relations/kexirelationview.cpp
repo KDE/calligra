@@ -69,7 +69,7 @@ KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, co
 	m_connectionPopup->insertTitle(i18n("Relation"));
 	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
 	
-	plugSharedAction("edit_delete", i18n("Hide table"), m_tableQueryPopup);
+	plugSharedAction("edit_delete", i18n("Hide Table"), m_tableQueryPopup);
 	plugSharedAction("edit_delete",m_connectionPopup);
 	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
 */	

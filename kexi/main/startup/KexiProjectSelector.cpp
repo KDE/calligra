@@ -208,7 +208,7 @@ bool KexiProjectSelectorWidget::isSelectable() const
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
 	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialogBase( Plain, i18n("Open recent project"), Help | Ok | Cancel, Ok, parent, name )
+	: KDialogBase( Plain, i18n("Open Recent Project"), Help | Ok | Cancel, Ok, parent, name )
 {
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
 }
@@ -216,7 +216,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const cha
 KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
 	KexiDB::ConnectionData* cdata, 
 	bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialogBase( Plain, i18n("Open project"), Help | Ok | Cancel, Ok, parent, name )
+	: KDialogBase( Plain, i18n("Open Project"), Help | Ok | Cancel, Ok, parent, name )
 {
 	assert(cdata);
 	if (!cdata)

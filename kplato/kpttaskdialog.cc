@@ -96,7 +96,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
 
 
 KMacroCommand *KPTTaskDialog::buildCommand() {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Modify task"));
+    KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task"));
     bool modified = false;
 
     KPTDuration dt = KPTDuration();

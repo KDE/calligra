@@ -357,12 +357,12 @@ StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 
 	if((classname == "QLabel") || (classname == "KTextEdit"))
 	{
-		menu->insertItem(SmallIconSet("edit"), i18n("Edit rich text"), this, SLOT(editText()));
+		menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
 	else if(classname == "KListView")
 	{
-		menu->insertItem(SmallIconSet("edit"), i18n("Edit listview contents"), this, SLOT(editListContents()));
+		menu->insertItem(SmallIconSet("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
 		return true;
 	}
 

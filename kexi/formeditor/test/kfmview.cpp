@@ -52,7 +52,7 @@ KFMView::KFMView()
 
 	manager->setEditors(editor, view);
 
-	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
+	new KAction(i18n("Print Object Tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
 	KStdAction::save(manager, SLOT(saveForm()), actionCollection());
 	KStdAction::saveAs(manager, SLOT(saveFormAs()), actionCollection());
 	KStdAction::open(manager, SLOT(loadForm()), actionCollection());
@@ -61,7 +61,7 @@ KFMView::KFMView()
 	KStdAction::copy(manager, SLOT(copyWidget()), actionCollection());
 	KStdAction::paste(manager, SLOT(pasteWidget()), actionCollection());
 	KStdAction::quit( kapp, SLOT(quit()), actionCollection());
-	new KAction(i18n("Edit tab order"), "tab_order", KShortcut(0), manager, SLOT(editTabOrder()), actionCollection(), "taborder");
+	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust");
 	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)

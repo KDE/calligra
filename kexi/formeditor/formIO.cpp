@@ -62,7 +62,7 @@ FormIO::saveForm(Form *form, const QString &filename)
 	QString m_filename;
 	if(filename.isNull())
 	{
-		m_filename = KFileDialog::getSaveFileName(QString::null, i18n("*.ui|Qt Designer UI files"));
+		m_filename = KFileDialog::getSaveFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
 		if(m_filename.isNull())
 			return 0;
 	}
@@ -167,7 +167,7 @@ FormIO::loadForm(Form *form, QWidget *container, const QString &filename)
 
 	if(filename.isNull())
 	{
-		m_filename = KFileDialog::getOpenFileName(QString::null, i18n("*.ui|Qt Designer UI files"));
+		m_filename = KFileDialog::getOpenFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
 		if(m_filename.isNull())
 			return 0;
 	}

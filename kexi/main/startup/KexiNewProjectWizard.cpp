@@ -79,7 +79,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 , d(new KexiNewProjectWizardPrivate() )
 {
 	setIcon( DesktopIcon("filenew") );
-	setCaption( i18n("Creating a new project") );
+	setCaption( i18n("Creating New Project") );
 	finishButton()->setText(i18n("Create"));
 
 	//page: type selector
@@ -102,12 +102,12 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertWidget(1,d->lv_types);
 	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertStretch(3,1);
 
-	addPage(m_prjtype_sel, i18n("Select a storage method"));
+	addPage(m_prjtype_sel, i18n("Select Storage Method"));
 	d->lv_types->setMinimumHeight(QMAX(d->lvi_file->height(),d->lvi_server->height())+25);
 
 	//page: db title
 	m_db_title = new KexiDBTitlePage(this, "KexiDBTitlePage");
-	addPage(m_db_title, i18n("Select project's caption"));
+	addPage(m_db_title, i18n("Select Project's Caption"));
 
 	//page: connection selector
 	m_conn_sel = new KexiConnSelectorWidget(conn_set, this, "KexiConnSelectorWidget");
@@ -135,7 +135,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	connect(m_conn_sel,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(next()));
 
-	addPage(m_conn_sel, i18n("Select project's location"));
+	addPage(m_conn_sel, i18n("Select Project's Location"));
 
 	//page: server db name
 	m_server_db_name = new KexiServerDBNamePage(this, "KexiServerDBNamePage");
@@ -156,7 +156,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	m_project_selector->setFocusPolicy(NoFocus);
 	m_project_selector->setSelectable(false);
 
-	addPage(m_server_db_name, i18n("Select project's caption and database name"));
+	addPage(m_server_db_name, i18n("Select Project's Caption & Database Name"));
 	setFinishEnabled(m_server_db_name,true);
 
 	//finish:

@@ -55,7 +55,7 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   (void) new KAction(i18n("&Properties..."), 0, 0, this, SLOT(showProperties()), actionCollection(), "properties");
   
-  KAction* textAction = new KAction(i18n("&Edit text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
+  KAction* textAction = new KAction(i18n("&Edit Text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
   textActionList.append(textAction);
 
   m_mode = stmNone;

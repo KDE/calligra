@@ -165,7 +165,7 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
 
 KMacroCommand *KPTCalendarListDialog::buildCommand() {
     //kdDebug()<<k_funcinfo<<endl;
-    KMacroCommand *cmd = new KMacroCommand(i18n("Modify calendars"));
+    KMacroCommand *cmd = new KMacroCommand(i18n("Modify Calendars"));
     bool modified = false;
     QPtrListIterator<CalendarListViewItem> it = dia->deletedItems();
     for (; it.current(); ++it) {

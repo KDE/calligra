@@ -444,11 +444,11 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to next page"), this, SLOT(nextStackPage()));
+		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(SmallIconSet("previous"), i18n("Jump to previous page"), this, SLOT(prevStackPage()));
+		id = menu->insertItem(SmallIconSet("previous"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget()) -1) )
 			menu->setItemEnabled(id, false);
 		return true;

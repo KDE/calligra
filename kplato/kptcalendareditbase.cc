@@ -70,7 +70,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
     groupBox4Layout->setAlignment( Qt::AlignTop );
 
     intervalList = new QListView( groupBox4, "intervalList" );
-    intervalList->addColumn( tr2i18n( "Work interval" ) );
+    intervalList->addColumn( tr2i18n( "Work Interval" ) );
     groupBox4Layout->addWidget( intervalList );
 
     layout6 = new QHBoxLayout( 0, 0, 6, "layout6"); 

@@ -290,7 +290,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 			menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
 	}
 
-	m_pTaskBar->setCaption(i18n("Task bar"));	//js TODO: move this to KMDIlib
+	m_pTaskBar->setCaption(i18n("Task Bar"));	//js TODO: move this to KMDIlib
 
 	invalidateActions();
 
@@ -345,7 +345,7 @@ KexiMainWindowImpl::initActions()
 	connect(d->action_open_recent->popupMenu(), SIGNAL(aboutToShow()),this,SLOT(slotProjectOpenRecentAboutToShow()));
 	d->action_open_recent->popupMenu()->insertSeparator();
 	d->action_open_recent_more_id = d->action_open_recent->popupMenu()
-		->insertItem(i18n("&More projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
+		->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
 
 	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
 		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
@@ -357,7 +357,7 @@ KexiMainWindowImpl::initActions()
 	d->action_save_as->setToolTip(i18n("Save object as"));
 	d->action_save_as->setWhatsThis(i18n("Saves object changes from currently selected window under a new name (within the same project)."));
 
-	d->action_project_properties = new KAction(i18n("Project properties"), "info", 0,
+	d->action_project_properties = new KAction(i18n("Project Properties"), "info", 0,
 		this, SLOT(slotProjectProperties()), actionCollection(), "project_properties");
 
 	d->action_close = new KAction(i18n("&Close Project"), 0, KStdAccel::shortcut(KStdAccel::Close),
@@ -384,7 +384,7 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), 0/*SmallIcon("button_cancel")*/,
 		SHIFT+Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table."));
-	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table ."));
+	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
 
 	//VIEW MENU
 	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(),
@@ -408,13 +408,13 @@ KexiMainWindowImpl::initActions()
 	d->action_view_text_mode->setToolTip(i18n("Switch to Text View mode"));
 	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View mode."));
 
-	d->action_view_nav = new KAction(i18n("Project navigator"), "", ALT + Key_1,
+	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 	d->action_view_nav->setToolTip(i18n("Go to Project navigator panel"));
 	d->action_view_nav->setWhatsThis(i18n("Goes to Project navigator panel."));
 
 #ifdef KEXI_PROP_EDITOR
-	d->action_view_propeditor = new KAction(i18n("Property editor"), "", ALT + Key_2,
+	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Key_2,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
 	d->action_view_propeditor->setToolTip(i18n("Go to Property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to Property editor panel."));
@@ -472,7 +472,7 @@ KexiMainWindowImpl::initActions()
 	KStdAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
 		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
 #endif
-	new KAction(i18n("Important information"), "messagebox_info", 0,
+	new KAction(i18n("Important Information"), "messagebox_info", 0,
 		this, SLOT(slotImportantInfo()), actionCollection(), "help_show_important_info");
 
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
@@ -2262,7 +2262,7 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 		if (fname.isEmpty())//back to default
 			fname = locate("data", "kexi/readme_en");
 		KTipDialog tipDialog(new KTipDatabase(QString::null), 0);
-		tipDialog.setCaption(i18n("Important information"));
+		tipDialog.setCaption(i18n("Important Information"));
 		QObjectList *l = tipDialog.queryList( "KPushButton" );//hack: hide <- -> buttons
 		int i=0;
 		for (QObjectListIt it( *l ); it.current() && i<2; ++it, i++ )

@@ -89,10 +89,10 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 bool
 WidgetFactory::editList(QWidget *w, QStringList &list)
 {
-	KDialogBase dialog(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit list of items"),
+	KDialogBase dialog(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit List of Items"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
-	KEditListBox *edit = new KEditListBox(i18n("%1 contents").arg(w->name()), &dialog, "editlist");
+	KEditListBox *edit = new KEditListBox(i18n("%1 Contents").arg(w->name()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(list);
 //	edit->show();

@@ -70,7 +70,7 @@ PropertyEditorFile::setValue(const QVariant &value)
 void
 PropertyEditorFile::selectFile()
 {
-	m_url = KFileDialog::getOpenFileName(QString::null, m_filter, this, i18n("Choose a file"));
+	m_url = KFileDialog::getOpenFileName(QString::null, m_filter, this, i18n("Choose File"));
 	m_lineedit->setText(m_url.filename());
 	emit changed(this);
 }

@@ -72,7 +72,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Always &amp;use files for creating new projects.</string>
+                <string>Always &amp;use files for creating new projects</string>
             </property>
         </widget>
         <spacer>

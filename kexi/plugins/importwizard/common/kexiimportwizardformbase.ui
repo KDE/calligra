@@ -145,7 +145,7 @@
             <cstring>existingTablePage</cstring>
         </property>
         <attribute name="title">
-            <string>Mapping Between source and destination Fields</string>
+            <string>Mapping Between Source and Destination Fields</string>
         </attribute>
         <vbox>
             <property name="name">

@@ -94,7 +94,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_designSelectedTableAction->plug( m_tableQueryPopup );
 	m_tableQueryPopup->insertSeparator();
 
-	KAction* hide_action = plugSharedAction("edit_delete", i18n("&Hide table"), m_tableQueryPopup);
+	KAction* hide_action = plugSharedAction("edit_delete", i18n("&Hide Table"), m_tableQueryPopup);
 	hide_action->setIconSet(QIconSet());
 
 	plugSharedAction("edit_delete",m_connectionPopup);

@@ -107,7 +107,7 @@
             </column>
             <column>
                 <property name="text">
-                    <string>Server information</string>
+                    <string>Server Information</string>
                 </property>
                 <property name="clickable">
                     <bool>true</bool>

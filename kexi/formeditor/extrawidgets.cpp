@@ -52,7 +52,7 @@ namespace KFormDesigner {
 //////////////////////////////////////////////////////////////////////////////////
 
 RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
-: KDialogBase(parent, "richtext_dialog", true, i18n("Edit rich text"), Ok|Cancel, Ok, false)
+: KDialogBase(parent, "richtext_dialog", true, i18n("Edit Rich Text"), Ok|Cancel, Ok, false)
 {
 	QFrame *frame = makeMainWidget();
 	QVBoxLayout *l = new QVBoxLayout(frame);
@@ -645,7 +645,7 @@ EditListViewDialog::MoveRowDown()
 //////////////////////////////////////////////////////////////////////////////////
 
 TabStopDialog::TabStopDialog(Form *form, QWidget *parent)
-: KDialogBase(parent, "tabstop_dialog", true, i18n("Edit tab order"), Ok|Cancel, Ok, false)
+: KDialogBase(parent, "tabstop_dialog", true, i18n("Edit Tab Order"), Ok|Cancel, Ok, false)
 {
 	QFrame *frame = makeMainWidget();
 	QGridLayout *l = new QGridLayout(frame, 2, 2, 0, 6);

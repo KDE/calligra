@@ -67,7 +67,7 @@ void PgConfDia::setupPageGeneral()
     QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, KDialog::marginHint(), KDialog::spacingHint() );
     generalLayout->setAutoAdd( true );
 
-    QVButtonGroup *switchGroup = new QVButtonGroup( i18n("&Transition type"), generalPage );
+    QVButtonGroup *switchGroup = new QVButtonGroup( i18n("&Transition Type"), generalPage );
     QWhatsThis::add( switchGroup, i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
 					  "then each transition and effect on a slide, or transition from "
 					  "one slide to the next, will require an action. Typically this "

@@ -56,17 +56,17 @@
                 <widget class="KComboBox" row="3" column="1" rowspan="1" colspan="2">
                     <item>
                         <property name="text">
-                            <string>End of selection</string>
+                            <string>End of Selection</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>First empty row/column within selection</string>
+                            <string>First Empty Row/Column Within Selection</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Expand selection if needed until first empty Row/Column</string>
+                            <string>Expand Selection if Needed Until First Empty Row/Column</string>
                         </property>
                     </item>
                     <property name="name">

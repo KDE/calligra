@@ -39,7 +39,7 @@ KPTCalendarListDialogBase::KPTCalendarListDialogBase( QWidget* parent, const cha
 
     calendarList = new QListView( this, "calendarList" );
     calendarList->setMaximumWidth(150);
-    calendarList->addColumn( tr2i18n( "Calendar name" ) );
+    calendarList->addColumn( tr2i18n( "Calendar Name" ) );
 
     layout6->addMultiCellWidget( calendarList, 0, 0, 0, 1 );
 

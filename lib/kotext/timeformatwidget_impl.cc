@@ -21,7 +21,7 @@
 TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags fl )
     : TimeDateFormatWidgetPrototype( parent, name, fl )
 {
-    setCaption( i18n( "TimeFormat", "This dialog allows you to set the format of the time variable" ) );
+    setCaption( i18n( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
 
     QStringList listTimeFormat = KoVariableTimeFormat::staticTranslatedFormatPropsList();
     combo1->insertStringList(listTimeFormat);
