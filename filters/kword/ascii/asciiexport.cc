@@ -154,9 +154,14 @@ void ASCIIWorker::ProcessParagraphData (const QString& paraText,
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
-            if (1==(*paraFormatDataIt).id)
+            if (1==(*paraFormatDataIt).id) // Normal text
             {
                 *m_streamOut << paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+            }
+            else if (4==(*paraFormatDataIt).id) // Variable
+            {
+                // Just write the result of the variable
+                *m_streamOut << (*paraFormatDataIt).variable.m_text;
             }
             else
             {

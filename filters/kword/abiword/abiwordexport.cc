@@ -462,6 +462,10 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
                     *m_streamOut << partialText << "</c>";
                 }
             }
+            else if (4==(*paraFormatDataIt).id)
+            {
+                *m_streamOut << (*paraFormatDataIt).variable.m_text;
+            }
             else if (6==(*paraFormatDataIt).id)
             {
                 // We have an image or a table
