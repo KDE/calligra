@@ -2,7 +2,7 @@
  *  layerview.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
- *                1999 Michael Koch    <mkoch@kde.org>
+ *                1999 Michael Koch    <koch@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

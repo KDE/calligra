@@ -1,7 +1,7 @@
 /*
  *  kimageshop_main.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Michael Koch    <mkoch@kde.org>
+ *  Copyright (c) 1999 Michael Koch    <koch@kde.org>
  *                1999 Matthias Elter  <me@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
