@@ -504,7 +504,7 @@ public:
 
     /** get the frame whose settings apply for @p frame
         (usually @p frame, but can also be the real frame if frame is a copy) */
-    static KWFrame * settingsFrame(KWFrame* frame);
+    static KWFrame * settingsFrame( const KWFrame* frame );
 
     /** Iterator over the child frames */
     const QPtrList<KWFrame> &frameIterator() const { return frames; }

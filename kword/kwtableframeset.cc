@@ -742,7 +742,7 @@ void KWTableFrameSet::resizeRow( unsigned int row, double y )
 
     //move all rows under 'row'
     if (row != 0)
-       for (int i=row+1; i<= getRows(); i++)
+       for (unsigned int i=row+1; i<= getRows(); i++)
            m_rowPositions[i] = m_rowPositions[i] + difference;
 
     // move all cells under 'row'

@@ -41,7 +41,14 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
 #ifdef DEBUG_FRAMELAYOUT
     //kdDebug(32002) << " Final cleanup: frameset " << m_frameset->getName() << ": lastFrame=" << lastFrame << endl;
 #endif
+
     KWTextFrameSet* fs = m_frameset;
+
+    // Special case for odd/even headers: keep at least one frame even if it doesn't appear,
+    // otherwise the frame properties are lost.
+    if ( fs->isHeaderOrFooter() && lastFrame == -1 )
+        lastFrame = 0;
+
     bool deleted = false;
     while ( (int)fs->getNumFrames() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
