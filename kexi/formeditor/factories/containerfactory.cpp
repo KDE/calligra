@@ -343,7 +343,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 }
 
 QWidget*
-ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
+ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
 	if(c == "QButtonGroup")
 	{

@@ -67,7 +67,7 @@
 
 using namespace KFormDesigner;
 
-FormManager::FormManager(QObject *parent, 
+FormManager::FormManager(QObject *parent,
 	const QStringList& supportedFactoryGroups, const char *name)
    : QObject(parent, name)
 {
@@ -221,7 +221,7 @@ FormManager::insertWidget(const QString &classname)
 	}
 
 	m_inserting = true;
-	m_insertClass = classname;
+	m_insertClass = classname.local8Bit();
 	m_pointer->setChecked(false);
 }
 

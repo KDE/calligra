@@ -297,7 +297,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 }
 
 QWidget*
-StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
+StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
 	QWidget *w=0;
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);

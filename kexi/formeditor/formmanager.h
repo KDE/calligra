@@ -47,12 +47,12 @@ class Connection;
 typedef QPtrList<KAction> ActionList;
 
 //! A class to manage (create/load/save) Forms
-/** This is Form Designer's main class, which is used by external APIs to access FormDesigner. 
+/** This is Form Designer's main class, which is used by external APIs to access FormDesigner.
    This is the class you have to use to integrate FormDesigner into another program.
    It deals with creating, saving and loading Form, as well as widget insertion and copying.
-   It also ensures all the components (ObjectTreeView, Form and PropertyEditor) are synced, 
+   It also ensures all the components (ObjectTreeView, Form and PropertyEditor) are synced,
    and link them.
-   It holds the WidgetLibrary, the ObjectPropertyBuffer, links to ObjectTreeView and PropertyEditor, 
+   It holds the WidgetLibrary, the ObjectPropertyBuffer, links to ObjectTreeView and PropertyEditor,
    as well as the copied widget and the insert state.
  **/
 class KFORMEDITOR_EXPORT FormManager : public QObject
@@ -60,10 +60,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	Q_OBJECT
 
 	public:
-		/*! Constructs FormManager object. 
-		 See WidgetLibrary's constructor documentation for information about 
+		/*! Constructs FormManager object.
+		 See WidgetLibrary's constructor documentation for information about
 		 \a supportedFactoryGroups parameter. */
-		FormManager(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList(), 
+		FormManager(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList(),
 			const char *name=0);
 
 		virtual ~FormManager();
@@ -83,7 +83,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		bool              isInserting() const { return m_inserting; }
 		/*! \return The name of the class being inserted, corresponding to the menu item or the toolbar button clicked.
 		 */
-		QString           insertClass() const { return m_insertClass; }
+		QCString           insertClass() const { return m_insertClass; }
 
 		/*! Sets the point where the pasted widget should be moved to. */
 		void              setInsertPoint(const QPoint &p);
@@ -291,7 +291,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		// Insertion
 		bool			m_inserting;
-		QString			m_insertClass;
+		QCString			m_insertClass;
 
 		// Connection stuff
 		bool			m_drawingSlot;

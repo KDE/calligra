@@ -95,7 +95,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_layType = NoLayout;
 	m_state = DoingNothing;
 
-	QString classname = container->className();
+	QCString classname = container->className();
 	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
 		m_margin = 2; // those containers don't have frames, so little margin
 	else
@@ -440,7 +440,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 						drawRect.moveBy(p.x(), p.y());
 						rectList.append(drawRect);
 					}
-					
+
 					m_form->formWidget()->drawRects(rectList, 2);
 				}
 				return true;

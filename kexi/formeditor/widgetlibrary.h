@@ -57,12 +57,12 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 	Q_OBJECT
 
 	public:
-		/*! Constructs WidgetLibrary object. 
-		 In \a supportedFactoryGroups you can provide 
-		 factory group list to be supported. Factory groups are defined by 
+		/*! Constructs WidgetLibrary object.
+		 In \a supportedFactoryGroups you can provide
+		 factory group list to be supported. Factory groups are defined by
 		 "X-KFormDesigner-FactoryGroup" field in every factory serviece's .desktop file.
 		 By default (when supportedFactoryGroups is empty) only factories having empty
-		 "X-KFormDesigner-FactoryGroup" field will be loaded. 
+		 "X-KFormDesigner-FactoryGroup" field will be loaded.
 		 Factory group names are case-insensitive. */
 		WidgetLibrary(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList());
 
@@ -82,34 +82,34 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * searches the right factory and creates a widget.
 		 * @returns the widget or 0 if something falid
 		 */
-		QWidget	*createWidget(const QString &w, QWidget *parent, const char *name, Container *c);
+		QWidget	*createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c);
 
-		bool createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, 
+		bool createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
 			KFormDesigner::Container *container, QValueVector<int> *menuIds);
 
-		QString displayName(const QString &classname);
-		QString namePrefix(const QString &classname);
-		QString textForWidgetName(const QString &name, const QString &className);
+		QString displayName(const QCString &classname);
+		QString namePrefix(const QCString &classname);
+		QString textForWidgetName(const QCString &name, const QCString &className);
 
-		/*! Checks if the \a classname is an alternate classname, 
-		 and returns the good classname. 
+		/*! Checks if the \a classname is an alternate classname,
+		 and returns the good classname.
 		 If \a classname is not alternate, it is returned. */
-		QString checkAlternateName(const QString &classname);
-		QString icon(const QString &classname);
-		QString includeFileName(const QString &classname);
-		QString savingName(const QString &classname);
+		QCString checkAlternateName(const QCString &classname);
+		QString icon(const QCString &classname);
+		QString includeFileName(const QCString &classname);
+		QString savingName(const QCString &classname);
 
-		void startEditing(const QString &classname, QWidget *w, Container *container);
-		void previewWidget(const QString &classname, QWidget *widget, Container *container);
-		void clearWidgetContent(const QString &classname, QWidget *w);
+		void startEditing(const QCString &classname, QWidget *w, Container *container);
+		void previewWidget(const QCString &classname, QWidget *widget, Container *container);
+		void clearWidgetContent(const QCString &classname, QWidget *w);
 
-		void saveSpecialProperty(const QString &classname, const QString &name, 
+		void saveSpecialProperty(const QCString &classname, const QString &name,
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-		bool readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, 
+		bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
 			ObjectTreeItem *item);
-		bool showProperty(const QString &classname, QWidget *w, 
+		bool showProperty(const QCString &classname, QWidget *w,
 			const QString &property, bool multiple);
-		QStringList autoSaveProperties(const QString &classname);
+		QStringList autoSaveProperties(const QCString &classname);
 
 		WidgetFactory* factoryForClassName(const char* className);
 

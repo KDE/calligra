@@ -73,7 +73,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		 */
 		void setForm(Form *form);
 		//! Return the pixmap for a given class, to be shown next to the widget name.
-		QString  pixmapForClass(const QString &classname);
+		QString  pixmapForClass(const QCString &classname);
 
 	public slots:
 		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */

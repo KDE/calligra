@@ -1016,7 +1016,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	}
 
 	QWidget *w;
-	QString classname, alternate;
+	QCString classname, alternate;
 
 	// We translate some name (for compatibility)
 	if(el.tagName() == "spacer")
@@ -1039,7 +1039,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	else
 	// We check if this classname is an alternate one, and replace it if necessary
 	{
-		classname = el.attribute("class");
+		classname = el.attribute("class").local8Bit();
 		alternate = lib->checkAlternateName(classname);
 	}
 

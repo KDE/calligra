@@ -85,36 +85,36 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		void setNamePrefix(const QString &n) { m_prefixName = n; }
 		void setDescription(const QString &desc) { m_desc = desc;}
 
-		/*! Sets the C++ include file corresponding to this class, 
+		/*! Sets the C++ include file corresponding to this class,
 		 that uic will need to add when creating the file. */
 		void setIncludeFileName(const QString &name) { m_include = name;}
 
 		/*! Sets alternate names for this class.
 		 If this name is found when loading a .ui file, the className() will be used instead.
-		 It allows to support both KDE and Qt versions of widget, without duplicating code. 
+		 It allows to support both KDE and Qt versions of widget, without duplicating code.
 		 As a rule, className() should always return a class name which is inherited from
 		 alternate class. For example KListView class has alternate QListView class.
 
 		 \a override parameter overrides class name of a widget,
 		 even if it was implemented in other factory.
-		 By default it's set to false, what means that no other class is overridden 
-		 by this widget class if there is already a class implementing it 
+		 By default it's set to false, what means that no other class is overridden
+		 by this widget class if there is already a class implementing it
 		 (no matter in which factory).
 		 By forced overriding existing class with other - custom, user
 		 will be able to see more or less properties and experience different behaviour.
-		 For example, in Kexi application, KLineEdit class contains additional 
+		 For example, in Kexi application, KLineEdit class contains additional
 		 "datasource" property for binding to database sources.
 		*/
 		void addAlternateClassName(const QString& alternateName, bool override = false);
 
-		/*! \return true is a class \a alternateName is defined as alternate name with 
-		 'override' flag set to true, using addAlternateClassName(). 
-		 If this flag is set to false (the default) or there's no such alternate class 
+		/*! \return true is a class \a alternateName is defined as alternate name with
+		 'override' flag set to true, using addAlternateClassName().
+		 If this flag is set to false (the default) or there's no such alternate class
 		 name defined. */
 		bool isOverriddenClassName(const QString& alternateName) const;
 
-		/*! Sets the name that will be written in the .ui file when saving. 
-		 This name must be one of alternate names (or loading will be impossible). 
+		/*! Sets the name that will be written in the .ui file when saving.
+		 This name must be one of alternate names (or loading will be impossible).
 
 		 On form data saving to XML .ui format, saveName is used instead,
 		 so .ui format is not broken and still usable with other software as Qt Designer.
@@ -197,7 +197,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 * \param name the name of the created widget
 		 * \param toplevel the toplevel Container (if a container should get created)
 		 */
-		virtual QWidget*	create(const QString &classname, QWidget *parent, const char *name,
+		virtual QWidget*	create(const QCString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
 		/*! This function can be used to add custom items in widget \a w context
@@ -239,7 +239,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		only show properties shared by widgets (eg font, color). By default,
 		all properties are shown if multiple == true, and none if multiple == false.
 		*/
-		virtual bool showProperty(const QString &classname, QWidget *w, const QString &property, 
+		virtual bool showProperty(const QString &classname, QWidget *w, const QString &property,
 			bool multiple);
 
 		/*! You need to return here a list of the properties that should automatically be saved
@@ -247,7 +247,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		for label or button, "contents" for combobox...). */
 		virtual QStringList autoSaveProperties(const QString &classname)=0;
 
-		/*! \return The i18n'ed name of the property whose name is \a name, 
+		/*! \return The i18n'ed name of the property whose name is \a name,
 		 that will be displayed in PropertyEditor. */
 		inline QString propertyDescForName(const QCString &name) { return m_propDesc[name]; };
 

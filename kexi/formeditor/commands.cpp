@@ -569,7 +569,7 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container/*, QPoint p*/)
 	m_class = container->form()->manager()->insertClass();
 	m_insertRect = container->m_insertRect;
 	m_point = container->m_insertBegin;
-	m_name = container->form()->objectTree()->genName(container->form()->manager()->lib()->namePrefix(m_class));
+	m_name = container->form()->objectTree()->genName(container->form()->manager()->lib()->namePrefix(m_class)).local8Bit();
 }
 
 void
@@ -578,7 +578,7 @@ InsertWidgetCommand::execute()
 	if (!m_form->objectTree())
 		return;
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
-	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name.latin1(), m_container);
+	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name, m_container);
 
 	if(!w)
 	{
@@ -687,7 +687,7 @@ CreateLayoutCommand::execute()
 	if(!container)
 		container = m_form->toplevelContainer(); // use toplevelContainer by default
 
-	QString classname;
+	QCString classname;
 	switch(m_type)
 	{
 		case Container::HBox:
@@ -834,12 +834,12 @@ PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *containe
 			if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
 				rect = n.firstChild().toElement();
 		}
-	
+
 		QDomElement x = rect.namedItem("x").toElement();
 		QDomElement y = rect.namedItem("y").toElement();
 		QDomElement wi = rect.namedItem("width").toElement();
 		QDomElement h = rect.namedItem("height").toElement();
-	
+
 		int rx = x.text().toInt();
 		int ry = y.text().toInt();
 		int rw = wi.text().toInt();
@@ -1046,7 +1046,7 @@ PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, const QP
 	int rw = wi.text().toInt();
 	int rh = h.text().toInt();
 	QRect r(rx + p.x(), ry + p.y(), rw, rh);
-	kdDebug() << "Moving widget by " << p << " from " << rx << "  " << ry << " to " << r.topLeft() << endl; 
+	kdDebug() << "Moving widget by " << p << " from " << rx << "  " << ry << " to " << r.topLeft() << endl;
 
 	QWidget *w = m_form->widget()->childAt(r.x() + 6, r.y() + 6, false);
 

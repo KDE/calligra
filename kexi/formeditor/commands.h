@@ -165,8 +165,8 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 		Form *m_form;
 		QString m_containername;
 		QPoint m_point;
-		QString  m_name;
-		QString  m_class;
+		QCString  m_name;
+		QCString  m_class;
 		QRect  m_insertRect;
 };
 

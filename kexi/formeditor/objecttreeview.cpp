@@ -177,7 +177,7 @@ ObjectTreeView::sizeHint() const
 }
 
 QString
-ObjectTreeView::pixmapForClass(const QString &classname)
+ObjectTreeView::pixmapForClass(const QCString &classname)
 {
 	return m_form->manager()->lib()->icon(classname);
 }
