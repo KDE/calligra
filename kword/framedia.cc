@@ -1115,7 +1115,10 @@ bool KWFrameDia::applyChanges()
                     macroCmd->addCommand(cmd);
                     doc->frameChanged( frame );
                 }
-                // else TODO message box after 1.1
+                else
+                {
+                    KMessageBox::sorry( this,i18n("Frame will not be resize, because new frame is out of page"));
+                }
             }
         }
 
