@@ -299,7 +299,8 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_removeView->setEnabled(false);
     d->m_orientation->setEnabled(false);
     // Add entry to recent documents list (doing here makes it work with cmd line too etc.)
-    m_recent->addURL( doc->url() );
+    if ( !doc->url().isEmpty() )
+      m_recent->addURL( doc->url() );
   }
 
   bool enable = d->m_rootDoc != 0 ? true : false;
