@@ -105,6 +105,8 @@ void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avai
 
 void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool avail, QObject *obj)
 {
+	if (!d)
+		return; //sanity
 	QWidget *fw = d->mainWin->focusWidget();
 	while (fw && obj!=fw)
 		fw = fw->parentWidget();
