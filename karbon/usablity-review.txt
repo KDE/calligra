@@ -1,3 +1,11 @@
+Since I think the following link is closely related, I am including it here :
+
+http://dan.ostrowski.cc/suggestions.html
+
+Rob Buis <buis@kde.org>
+17-12-2003
+
+
 On 27-sept 2003 I did a usabiltiy review of karbon.
 This is during the feature and message freeze of KOffice (pending the 1.3 
 release) so many of these issues will probably have to wait. Hence this
