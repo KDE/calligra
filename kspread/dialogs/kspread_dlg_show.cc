@@ -24,7 +24,6 @@
 #include "kspread_view.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
-#include "kspread_tabbar.h"
 #include "kspread_undo.h"
 #include <qlayout.h>
 #include <klocale.h>

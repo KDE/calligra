@@ -66,6 +66,7 @@
 #include <koPartSelectAction.h>
 #include <kocommandhistory.h>
 #include <kozoomaction.h>
+#include <kotabbar.h>
 #include <koTemplateCreateDia.h>
 
 #include <kparts/partmanager.h>
@@ -80,7 +81,6 @@
 //#include "kspread_dlg_multipleop.h"
 #include "kspread_dlg_subtotal.h"
 #include "kspread_canvas.h"
-#include "kspread_tabbar.h"
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_sort.h"
@@ -313,7 +313,7 @@ public:
     KSpreadEditWidget *editWidget;
     QButton *okButton;
     QButton *cancelButton;
-    KSpread::TabBar *tabBar;
+    KoTabBar *tabBar;
     KSpreadLocationEditWidget *posWidget;
     KStatusBarLabel* calcLabel;
 
@@ -1552,7 +1552,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
 
-    d->tabBar = new KSpread::TabBar( this );
+    d->tabBar = new KoTabBar( this );
     d->tabBar->setReadOnly( !d->doc->isReadWrite() );
     QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
     QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
@@ -1766,7 +1766,7 @@ KSpreadLocationEditWidget* KSpreadView::posWidget()const
     return d->posWidget;
 }
 
-KSpread::TabBar* KSpreadView::tabBar() const
+KoTabBar* KSpreadView::tabBar() const
 {
     return d->tabBar;
 }

@@ -28,7 +28,6 @@
 #include "kspread_sheetprint.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
-#include "kspread_tabbar.h"
 
 #include <kconfig.h>
 #include <kstatusbar.h>
@@ -37,6 +36,7 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kcolorbutton.h>
+#include <kotabbar.h>
 #include <koSpellConfig.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)

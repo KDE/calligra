@@ -37,6 +37,7 @@
 class QScrollBar;
 
 class KoDocumentEntry;
+class KoTabBar;
 
 class KSpreadCanvas;
 class KSpreadCell;
@@ -50,11 +51,6 @@ class KSpreadSheet;
 class KSpreadSpell;
 class KSpreadVBorder;
 class KSpreadView;
-
-namespace KSpread
-{
-class TabBar;
-};
 
 class ViewPrivate;
 
@@ -129,7 +125,7 @@ public:
     /**
      * Returns the tab bar.
      */
-    KSpread::TabBar* tabBar() const;
+    KoTabBar* tabBar() const;
 
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 

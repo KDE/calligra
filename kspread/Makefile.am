@@ -45,7 +45,6 @@ libkspreadpart_la_SOURCES =  \
         kspread_selection.cc \
         kspread_style.cc  \
         kspread_style_manager.cc \
-        kspread_tabbar.cc \
         kspread_undo.cc  \
         kspread_value.cc  \
         kspread_view.cc  \
