@@ -512,6 +512,11 @@ public:
 
 protected slots:
     void slotReset();
+    virtual void slotOk();
+    virtual void slotApply();
+signals:
+     void apply();
+
 private:
     KoIndentSpacingWidget * m_indentSpacingWidget;
     KoParagAlignWidget * m_alignWidget;
