@@ -33,7 +33,7 @@ public:
     void storePresentationAnimation( QDomElement * element, const QString& id ) {
         m_animationsDict.insert( id , element );
     }
-    void clear() {
+    void clearAnimationDict() {
       m_animationsDict.clear();
     }
 private:

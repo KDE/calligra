@@ -997,7 +997,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     {
         dp = drawPage.toElement();
         m_styleStack.clear(); // remove all styles
-	m_loadingInfo->clear(); // clear all animations 
         fillStyleStack( dp, oasisStyles );
         m_styleStack.save();
 
@@ -1106,6 +1105,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             m_styleStack.restore();
         }
         m_styleStack.restore();
+	m_loadingInfo->clearAnimationDict(); // clear all animations 
     }
 
     setModified(false);
