@@ -54,10 +54,11 @@ private:
     void insertStyles( const QDomElement& element );
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
-    void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
     void appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos);
+    void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
+        const QString& key, int type, QDomElement& child);
 
-
+    
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;

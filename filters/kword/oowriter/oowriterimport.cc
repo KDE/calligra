@@ -683,15 +683,49 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 
         if (tagName == "text:s")
             textData = OoUtils::expandWhitespace(n.toElement());
-        else if (tagName == "text:date" // fields
-                 || tagName == "text:time"
-                 || tagName == "text:page-number"
-                 || tagName == "text:file-name"
-                 || tagName == "text:author-name"
+        else if (tagName == "text:date")
+        {
+            textData = '#';     // field placeholder
+            QDomElement dateElement ( doc.createElement("DATE") );
+            // As we have no idea about the current date, use the *nix epoch 1970-01-01
+            dateElement.setAttribute("year",1970);
+            dateElement.setAttribute("month",1);
+            dateElement.setAttribute("day",1);
+            dateElement.setAttribute("fix",0);  // Does OOWriter have fixed dates?
+            appendKWordVariable(doc, formats, ts, pos, "DATE0Locale", 0, dateElement);
+        }
+        else if (tagName == "text:time")
+        {
+            textData = '#';     // field placeholder
+            QDomElement timeElement (doc.createElement("TIME") );
+            // We cannot calculate the time, so default to midnight
+            timeElement.setAttribute("hour",0);
+            timeElement.setAttribute("minute",0);
+            timeElement.setAttribute("second",0);
+            timeElement.setAttribute("fix",0); // Does OOWriter have fixed times?
+            appendKWordVariable(doc, formats, ts, pos, "TIMELocale", 2, timeElement);
+        }
+        else if ( tagName == "text:page-number" )
+        {
+            textData = '#';     // field placeholder
+            QDomElement pgnumElement ( doc.createElement("PGNUM") );
+            pgnumElement.setAttribute("subtype",0);
+            pgnumElement.setAttribute("value",1);
+            appendKWordVariable(doc, formats, ts, pos, "NUMBER", 4, pgnumElement);
+        }
+        else if ( tagName == "text:file-name" )
+        {
+            textData = '#';     // field placeholder
+            QDomElement fieldElement ( doc.createElement("FIELD") );
+            fieldElement.setAttribute("subtype",0);
+            fieldElement.setAttribute("value","?");
+            appendKWordVariable(doc, formats, ts, pos, "STRING", 8, fieldElement);
+        }
+        else if ( tagName == "text:author-name"
                  || tagName == "text:author-initials")
         {
             textData = '#';     // field placeholder
-            appendField(doc, p, ts, pos);
+            // ### TODO
         }
         else if ( tagName == "text:tab-stop" )
         {
@@ -1066,11 +1100,6 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
 
 }
 
-void OoWriterImport::appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos)
-{
-    // TODO
-}
-
 void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos)
 {
     const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
@@ -1233,5 +1262,29 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     anchor.setAttribute("instance",frameName);
     formatElementOut.appendChild(anchor);
 }
+
+void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
+    const QString& key, int type, QDomElement& child)
+{
+    QDomElement variableElement ( doc.createElement("VARIABLE") );
+    
+    QDomElement typeElement ( doc.createElement("TYPE") );
+    typeElement.setAttribute("key",key);
+    typeElement.setAttribute("type",type);
+    typeElement.setAttribute("text","-"); // Just a dummy, KWord will do the work
+    variableElement.appendChild(typeElement); //Append to <VARIABLE>
+
+    variableElement.appendChild(child); //Append to <VARIABLE>
+
+    QDomElement formatElement ( doc.createElement("FORMAT") );
+    formatElement.setAttribute("id",4); // Variable
+    formatElement.setAttribute("pos",pos); // Start position
+    formatElement.setAttribute("len",1);
+    
+    formatElement.appendChild(variableElement);
+    
+    formats.appendChild(formatElement);
+}
+
 
 #include "oowriterimport.moc"
