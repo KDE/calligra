@@ -150,3 +150,4 @@ Changes after KPresenter 1.2
 - Web presentation: better HTML generation, usability improvement of the wizard
 - Display an "End of presentation"-slide at end of presentation
 - Ability to go with a per-slide default when inserting a new one (wishlist #22629)
+- Support for drawing images having alpha channels

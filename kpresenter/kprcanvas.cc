@@ -2443,7 +2443,6 @@ void KPrCanvas::deSelectAllObj()
     emit objectSelectedChanged();
 }
 
-
 void KPrCanvas::setMouseSelectedObject(bool b)
 {
     mouseSelectedObject = b;
@@ -2721,7 +2720,6 @@ void KPrCanvas::setTextSuperScript( bool b )
     if ( macroCmd )
         m_view->kPresenterDoc()->addCommand( macroCmd );
 }
-
 
 void KPrCanvas::setTextDefaultFormat( )
 {

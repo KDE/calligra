@@ -407,7 +407,7 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
     double ow = ext.width();
     double oh = ext.height();
     bool headerFooter=doc->isHeaderFooter(this);
-    KoZoomHandler *_zoomHandler=doc->zoomHandler();
+    //KoZoomHandler *_zoomHandler=doc->zoomHandler();
     KoRect r( orig, ext );
     if ( angle != 0.0 )
     {

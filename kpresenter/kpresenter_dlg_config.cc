@@ -472,7 +472,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Grid"));
 
-    grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+    grid = new QGridLayout( tmpQGroupBox, 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     KoRect rect = doc->stickyPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()),  tmpQGroupBox);
@@ -480,7 +480,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     KoUnit::Unit unit = doc->getUnit();
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
     resolutionX->setValue( KoUnit::ptToUnit( doc->getGridX(), unit ) );
-    resolutionX->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width() , unit), KoUnit::ptToUnit(1, unit ), false);
+    resolutionX->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit(1, unit ), false);
 
     grid->addWidget(resolutionX ,1,0);
 
@@ -489,20 +489,19 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
     resolutionY->setValue( KoUnit::ptToUnit( doc->getGridY(), unit ) );
-    resolutionY->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width() , unit), KoUnit::ptToUnit( 1,unit ), false);
+    resolutionY->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit( 1,unit ), false);
 
-    grid->addWidget(resolutionY , 3,0);
+    grid->addWidget(resolutionY, 3, 0);
 
 
     tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Sidebar"));
 
-    grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+    grid = new QGridLayout( tmpQGroupBox, 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     cbSideBarRefresh = new QCheckBox( i18n("Refresh sidebar item"), tmpQGroupBox);
     cbSideBarRefresh->setChecked(m_oldRefreshSideBar);
     grid->addWidget(cbSideBarRefresh, 0, 0);
-
 }
 
 KCommand * ConfigureMiscPage::apply()
@@ -530,11 +529,10 @@ KCommand * ConfigureMiscPage::apply()
     if(b_new!=b)
     {
         if(!macroCmd)
-        {
             macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
-        }
 
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, b_new ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYLINK);
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand(
+            i18n("Change Display Link Command"), doc, b_new, b, KPrChangeVariableSettingsCommand::VS_DISPLAYLINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -543,10 +541,11 @@ KCommand * ConfigureMiscPage::apply()
     if(doc->getVariableCollection()->variableSetting()->underlineLink()!=b)
     {
         if(!macroCmd)
-        {
             macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
-        }
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink() ,b, KPrChangeVariableSettingsCommand::VS_UNDERLINELINK);
+
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand(
+            i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink(),
+            b, KPrChangeVariableSettingsCommand::VS_UNDERLINELINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -555,10 +554,11 @@ KCommand * ConfigureMiscPage::apply()
     if(doc->getVariableCollection()->variableSetting()->displayComment()!=b)
     {
         if(!macroCmd)
-        {
             macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
-        }
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
+
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand(
+            i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment(),
+            b, KPrChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -567,16 +567,17 @@ KCommand * ConfigureMiscPage::apply()
     if(doc->getVariableCollection()->variableSetting()->displayFieldCode()!=b)
     {
         if(!macroCmd)
-        {
             macroCmd=new KMacroCommand(i18n("Change Display Field Code Command"));
-        }
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Field Code Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYFIELDCODE);
+
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand(
+            i18n("Change Display Field Code Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment(),
+            b, KPrChangeVariableSettingsCommand::VS_DISPLAYFIELDCODE);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
 
-
-    doc->setGridValue( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ), KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ), true);
+    doc->setGridValue( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ),
+                       KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ), true);
     doc->repaint( false );
     return macroCmd;
 }
@@ -594,9 +595,7 @@ void ConfigureMiscPage::slotDefault()
 
     resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
     resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
-
 }
-
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *box, char *name )
     : QObject( box->parent(), name )

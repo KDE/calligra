@@ -507,7 +507,6 @@ void KPresenterView::print( KPrinter &prt )
         m_pKPresenterDoc->recalcVariables( VT_ALL );
     }
 
-
     m_canvas->repaint();
     kdDebug(33001) << "KPresenterView::print zoom&res reset" << endl;
     m_pKPresenterDoc->getVariableCollection()->variableSetting()->setLastPrint(QDate::currentDate());

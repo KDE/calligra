@@ -2495,7 +2495,7 @@ void KPrPage::setBackPicture( const KoPictureKey & key )
     kpbackground->setBackPicture( key );
 }
 
-bool KPrPage::getBackUnbalanced(  )const
+bool KPrPage::getBackUnbalanced() const
 {
     return kpbackground->getBackUnbalanced();
 }
@@ -2510,87 +2510,87 @@ void KPrPage::setBackType( BackType backType )
     kpbackground->setBackType( backType );
 }
 
-void KPrPage::setPageEffect(  PageEffect pageEffect )
+void KPrPage::setPageEffect( PageEffect pageEffect )
 {
     kpbackground->setPageEffect( pageEffect );
 }
 
-void KPrPage::setPageTimer(  int pageTimer )
+void KPrPage::setPageTimer( int pageTimer )
 {
     kpbackground->setPageTimer( pageTimer );
 }
 
-void KPrPage::setPageSoundEffect(  bool soundEffect )
+void KPrPage::setPageSoundEffect( bool soundEffect )
 {
     kpbackground->setPageSoundEffect( soundEffect );
 }
 
-void KPrPage::setPageSoundFileName(  const QString &fileName )
+void KPrPage::setPageSoundFileName( const QString &fileName )
 {
     kpbackground->setPageSoundFileName( fileName );
 }
 
-BackType KPrPage::getBackType(  )const
+BackType KPrPage::getBackType() const
 {
     return kpbackground->getBackType();
 }
 
-BackView KPrPage::getBackView( )const
+BackView KPrPage::getBackView() const
 {
     return kpbackground->getBackView();
 }
 
-KoPictureKey KPrPage::getBackPictureKey( )const
+KoPictureKey KPrPage::getBackPictureKey() const
 {
     return kpbackground->getBackPictureKey();
 }
 
-KoPicture KPrPage::getBackPicture( )const
+KoPicture KPrPage::getBackPicture() const
 {
     return kpbackground->getBackPicture();
 }
 
-QColor KPrPage::getBackColor1( )const
+QColor KPrPage::getBackColor1() const
 {
     return kpbackground->getBackColor1();
 }
 
-QColor KPrPage::getBackColor2(  )const
+QColor KPrPage::getBackColor2() const
 {
     return kpbackground->getBackColor2();
 }
 
-int KPrPage::getBackXFactor(  )const
+int KPrPage::getBackXFactor() const
 {
     return kpbackground->getBackXFactor();
 }
 
-int KPrPage::getBackYFactor(  )const
+int KPrPage::getBackYFactor() const
 {
     return kpbackground->getBackYFactor();
 }
 
-BCType KPrPage::getBackColorType( )const
+BCType KPrPage::getBackColorType() const
 {
     return kpbackground->getBackColorType();
 }
 
-PageEffect KPrPage::getPageEffect( )const
+PageEffect KPrPage::getPageEffect() const
 {
     return kpbackground->getPageEffect();
 }
 
-int KPrPage::getPageTimer( )const
+int KPrPage::getPageTimer() const
 {
     return kpbackground->getPageTimer();
 }
 
-bool KPrPage::getPageSoundEffect( )const
+bool KPrPage::getPageSoundEffect() const
 {
     return kpbackground->getPageSoundEffect();
 }
 
-QString KPrPage::getPageSoundFileName(  )const
+QString KPrPage::getPageSoundFileName() const
 {
     return kpbackground->getPageSoundFileName();
 }
@@ -2671,8 +2671,8 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _ora
         kpobject = m_objectList.at( i );
         ox = kpobject->getOrig().x();
         oy = kpobject->getOrig().y();
-        ox = static_cast<int>(( ox / m_doc->getGridX() )) * m_doc->getGridX();
-        oy = static_cast<int>(( oy / m_doc->getGridY() )) * m_doc->getGridY();
+        ox = static_cast<int>(ox / m_doc->getGridX() * m_doc->getGridX());
+        oy = static_cast<int>(oy / m_doc->getGridY() * m_doc->getGridY());
 
         _diffs.append( KoPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
         _objects.append( kpobject );
@@ -2687,8 +2687,7 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _ora
     return 0L;
 }
 
-
-QString KPrPage::manualTitle()const
+QString KPrPage::manualTitle() const
 {
     return m_manualTitle;
 }
@@ -2753,8 +2752,7 @@ QString KPrPage::pageTitle( const QString &_title ) const
     return txt;
 }
 
-
-void KPrPage::setNoteText(  const QString &_text )
+void KPrPage::setNoteText( const QString &_text )
 {
     m_noteText=_text;
     m_doc->setModified(true);
@@ -3339,10 +3337,8 @@ bool KPrPage::differentProtect( bool p) const
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
         if(it.current()->isSelected())
-        {
             if ( p != it.current()->isProtect())
                 return true;
-        }
     }
     return false;
 }
@@ -3356,10 +3352,8 @@ bool KPrPage::differentKeepRatio( bool p) const
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
         if(it.current()->isSelected())
-        {
             if ( p != it.current()->isKeepRatio())
                 return true;
-        }
     }
     return false;
 }
