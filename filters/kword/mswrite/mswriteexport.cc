@@ -480,7 +480,7 @@ public:
 	{
 		if (para.count () == 1)
 		{
-			if ((*para.begin ()).text.isEmpty ())
+			if (para.first ().text.isEmpty ())
 				return true;
 		}
 		
