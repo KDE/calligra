@@ -28,7 +28,6 @@
 #include <kcolordialog.h>
 #include <koFrameButton.h>
 #include <koColorSlider.h>
-#include <kdebug.h>
 
 KoColorChooser::KoColorChooser(QWidget *parent, const char *name):
 QWidget(parent, name)
@@ -36,9 +35,13 @@ QWidget(parent, name)
   mGrid = new QGridLayout(this, 2, 5);
   btn_RGB = new KoFrameButton("RGB", this);
   btn_CMYK = new KoFrameButton("CMYK", this);
+  btn_CMYK->setEnabled(false);
   btn_Grey = new KoFrameButton("Grey", this);
+  btn_Grey->setEnabled(false);
   btn_HSB = new KoFrameButton("HSB", this);
+  btn_HSB->setEnabled(false);
   btn_LAB = new KoFrameButton("LAB", this);
+  btn_LAB->setEnabled(false);
   clr_patch = new KColorPatch(this);
   mRGBWidget = new RGBWidget(this, this);
   btn_RGB->setMaximumHeight(20);
@@ -55,9 +58,14 @@ QWidget(parent, name)
   mGrid->addWidget(clr_patch, 1, 0);
   
   connect(mRGBWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(slotChangeColor(const KoColor &)));
+  connect(clr_patch, SIGNAL(colorChanged(const QColor &)), this, SLOT(slotChangeColor(const QColor &)));
   connect(this, SIGNAL(colorChanged(const KoColor &)), mRGBWidget, SLOT(slotChangeColor()));
-  //TODO D&D color to KColorPatch
   slotChangeColor(KoColor::black());
+}
+
+void KoColorChooser::slotChangeColor(const QColor &c)
+{
+  slotChangeColor(KoColor(c));
 }
 
 void KoColorChooser::slotChangeColor(const KoColor &c)
@@ -71,8 +79,6 @@ RGBWidget::RGBWidget(KoColorChooser *aCC, QWidget *parent):
 QWidget(parent)
 {
   mCC = aCC;
-
-  kdDebug() << "RGB WIDGET!!!" << parent << endl;
 
   QGridLayout *mGrid = new QGridLayout(this, 3, 3);
   /* setup color sliders */
@@ -157,14 +163,6 @@ void RGBWidget::slotRSliderChanged(int r)
 {
   int g = mCC->color().G();
   int b = mCC->color().B();
-/*  mGSlider->slotSetColor1( QColor( r, 0, b ) );
-  mGSlider->slotSetColor2( QColor( r, 255, b ) );
-
-  mBSlider->slotSetColor1( QColor( r, g, 0 ) );
-  mBSlider->slotSetColor2( QColor( r, g, 255 ) );
-
-  mRIn->setValue( r );*/
-
   emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
 }
 
@@ -172,13 +170,6 @@ void RGBWidget::slotGSliderChanged(int g)
 {
   int r = mCC->color().R();
   int b = mCC->color().B();
-/*  mRSlider->slotSetColor1( QColor( 0, g, b ) );
-  mRSlider->slotSetColor2( QColor( 255, g, b ) );
-
-  mBSlider->slotSetColor1( QColor( r, g, 0 ) );
-  mBSlider->slotSetColor2( QColor( r, g, 255 ) );
-
-  mGIn->setValue( g );*/
   emit colorChanged(KoColor( r, g, b, KoColor::cs_RGB ));
 }
 
@@ -186,13 +177,6 @@ void RGBWidget::slotBSliderChanged(int b)
 {
   int r = mCC->color().R();
   int g = mCC->color().G();
-/*  mRSlider->slotSetColor1( QColor( 0, g, b ) );
-  mRSlider->slotSetColor2( QColor( 255, g, b ) );
-
-  mGSlider->slotSetColor1( QColor( r, 0, b ) );
-  mGSlider->slotSetColor2( QColor( r, 255, b ) );
-
-  mBIn->setValue( b );*/
   emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
 }
 
@@ -200,13 +184,6 @@ void RGBWidget::slotRInChanged(int r)
 {
   int g = mCC->color().G();
   int b = mCC->color().B();
-/*  mGSlider->slotSetColor1( QColor( r, 0, b ) );
-  mGSlider->slotSetColor2( QColor( r, 255, b ) );
-
-  mBSlider->slotSetColor1( QColor( r, g, 0 ) );
-  mBSlider->slotSetColor2( QColor( r, g, 255 ) );
-
-  mRSlider->slotSetValue( r );*/
   emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
 }
 
@@ -214,13 +191,6 @@ void RGBWidget::slotGInChanged(int g)
 {
   int r = mCC->color().R();
   int b = mCC->color().B();
-/*  mRSlider->slotSetColor1( QColor( 0, g, b ) );
-  mRSlider->slotSetColor2( QColor( 255, g, b ) );
-
-  mBSlider->slotSetColor1( QColor( r, g, 0 ) );
-  mBSlider->slotSetColor2( QColor( r, g, 255 ) );
-
-  mGSlider->slotSetValue( g );*/
   emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
 }
 
@@ -228,13 +198,6 @@ void RGBWidget::slotBInChanged(int b)
 {
   int r = mCC->color().R();
   int g = mCC->color().G();
-/*  mRSlider->slotSetColor1( QColor( 0, g, b ) );
-  mRSlider->slotSetColor2( QColor( 255, g, b ) );
-
-  mGSlider->slotSetColor1( QColor( r, 0, b ) );
-  mGSlider->slotSetColor2( QColor( r, 255, b ) );
-
-  mBSlider->slotSetValue( b );*/
   emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
 }
 

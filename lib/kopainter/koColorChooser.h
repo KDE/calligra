@@ -46,6 +46,7 @@ signals:
 
 protected slots:
   void slotChangeColor(const KoColor &c);
+  void slotChangeColor(const QColor &c);
 
 private:
   KoColor     mColor;
