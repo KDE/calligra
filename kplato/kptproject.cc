@@ -490,8 +490,13 @@ bool KPTProject::canIndentTask(KPTNode* node)
         kdError()<<k_funcinfo<<"Tasknot found???"<<endl;
         return false;
     }
-    if (!node->siblingBefore()) {
+    KPTNode *sib = node->siblingBefore();
+    if (!sib) {
         kdDebug()<<k_funcinfo<<"new parent node not found"<<endl;
+        return false;
+    }
+    if (node->findParentRelation(sib) || node->findChildRelation(sib)) {
+        kdDebug()<<k_funcinfo<<"Cannot have relations to parent"<<endl;
         return false;
     }
     return true;
