@@ -1382,6 +1382,19 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
         } else if(! getGroupManager(i)->getFrameSet(0,0)) {
             kdDebug () << "GroupManager " << i << " has no frames" << endl;
             delGroupManager(getGroupManager(i));
+        } else {
+            KWGroupManager *gm = getGroupManager(i);
+            for (int j=0; j < gm->getNumCells() ; j++) {
+                KWFrame *frame = gm->getCell(j)->frameSet->getFrame(0);
+                if(frame->getFrameBehaviour()==AutoCreateNewFrame) {
+                    frame->setFrameBehaviour(AutoExtendFrame);
+                    kdDebug() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
+                }
+                if(frame->getNewFrameBehaviour()!=NoFollowup) {
+                    kdDebug() << "Table cell property newFrameBehaviour was incorrect; fixed" << endl;
+                    frame->setNewFrameBehaviour(NoFollowup);
+                }
+            }
         }
     }
 
