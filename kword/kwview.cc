@@ -1281,7 +1281,9 @@ void KWView::updatePageInfo()
         m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
 
         QString oldText = m_sbPageLabel->text();
-        QString newText = QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ';
+        QString newText;
+
+        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' : QString::null;
         if ( newText != oldText )
         {
             m_sbPageLabel->setText( newText );
