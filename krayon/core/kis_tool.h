@@ -34,6 +34,8 @@
 #include "kis_cursor.h"
 #include "kis_pattern.h"
 
+class QEvent;
+class QPaintEvent;
 class QPainter;
 class QMouseEvent;
 class KisDoc;
@@ -50,7 +52,6 @@ public:
 
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
-	virtual void update(QPainter& gc);
 
 	virtual void optionsDialog();
 	virtual void clearOld();
@@ -70,10 +71,13 @@ public:
 	void setMoveCursor();
 
 public slots:
-	virtual void toolSelect();
+	virtual void paintEvent(QPaintEvent *e);
+	virtual void enterEvent(QEvent *e);
+	virtual void leaveEvent(QEvent *e);
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
+	virtual void toolSelect();
 
 protected:
 	int zoomed(int n) const;

@@ -100,7 +100,7 @@ public:
 	KisBrush    *currentBrush()     { return m_pBrush; }
 
 	void activateTool(KisTool*);
-	void updateCanvas(QRect & ur);
+	void updateCanvas(const QRect& rc);
 	void showScrollBars();
 	void layerScale(bool smooth);
         
@@ -124,12 +124,6 @@ public:
 	void setZoomFactor(float zf);
 
 signals:
-	void canvasMousePressEvent(QMouseEvent *);
-	void canvasMouseMoveEvent(QMouseEvent *);
-	void canvasMouseReleaseEvent(QMouseEvent *);
-	void canvasEnterEvent(QEvent *);
-	void canvasLeaveEvent(QEvent *);
-
 	void bgColorChanged(const KisColor &);
 	void fgColorChanged(const KisColor &);     
 
@@ -228,15 +222,18 @@ protected slots:
 	void canvasGotMousePressEvent(QMouseEvent *);
 	void canvasGotMouseMoveEvent (QMouseEvent *);
 	void canvasGotMouseReleaseEvent (QMouseEvent *);
-	void canvasGotPaintEvent(QPaintEvent*);
+	void canvasGotPaintEvent(QPaintEvent *);
 	void canvasGotEnterEvent(QEvent *);
 	void canvasGotLeaveEvent(QEvent *);
 	void canvasGotMouseWheelEvent(QWheelEvent *);
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
+
 	void appendToDocImgList(QImage& loadedImg, KURL& u);
 	void addHasNewLayer(QImage& loadedImg, KURL& u);
+	void paintView(const QRect& rc);
+	void clearCanvas(const QRect& rc);
              
 protected:
    	// krayon box floating dialog actions
@@ -287,7 +284,6 @@ protected:
 	float	    m_zoomFactor;
 	int         m_xPaintOffset;
 	int         m_yPaintOffset;    
-	bool        buttonIsDown;
 
 	DCOPObject *m_dcop;
 };

@@ -441,9 +441,16 @@ bool KisTool::loadSettings(QDomElement& /*elem*/)
 	return false;
 }
 
-void KisTool::update(QPainter& /*gc*/)
+void KisTool::paintEvent(QPaintEvent *)
 {
-	kdDebug() << "KisTool::update\n";
+}
+
+void KisTool::enterEvent(QEvent *)
+{
+}
+
+void KisTool::leaveEvent(QEvent *)
+{
 }
 
 bool KisTool::setClip()
