@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,22 +15,21 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <iostream.h>
-#include "CreatePolygonCmd.h"
-#include "CreatePolygonCmd.moc"
+#include <CreatePolygonCmd.h>
+
 #include <klocale.h>
 
-#include "GDocument.h"
-#include "GPolygon.h"
+#include <GDocument.h>
+#include <GPolygon.h>
 
-CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj) 
+CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj)
   : Command(i18n("Create Polygon"))
 {
   document = doc;
@@ -38,9 +37,9 @@ CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj)
   object->ref ();
 }
 
-CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, const Coord& p0, 
-				    const Coord& p1, int num, int sval, 
-				    bool concaveFlag) 
+CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, const Coord& p0,
+                                    const Coord& p1, int num, int sval,
+                                    bool concaveFlag)
   : Command(i18n("Create Polygon"))
 {
   document = doc;
@@ -70,3 +69,5 @@ void CreatePolygonCmd::execute () {
 void CreatePolygonCmd::unexecute () {
   document->deleteObject (object);
 }
+
+#include <CreatePolygonCmd.moc>

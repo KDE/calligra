@@ -22,15 +22,14 @@
 
 */
 
-#include <iostream.h>
-#include <strstream.h>
+#include <CutCmd.h>
+
 #include <qclipboard.h>
-#include "CutCmd.h"
-#include "CutCmd.moc"
+#include <kapp.h>
 #include <klocale.h>
 
-#include "GDocument.h"
-#include "GObject.h"
+#include <GDocument.h>
+#include <GObject.h>
 
 using namespace std;
 
@@ -62,11 +61,11 @@ void CutCmd::execute () {
     docu.appendChild(doc);
 
     for (list<pair<int, GObject*> >::iterator it = objects.begin ();
-	 it != objects.end (); it++) {
-	doc.appendChild(it->second->writeToXml(docu));
-	document->deleteObject (it->second);
+         it != objects.end (); it++) {
+        doc.appendChild(it->second->writeToXml(docu));
+        document->deleteObject (it->second);
     }
-    QApplication::clipboard ()->setText (docu.toCString());
+    QApplication::clipboard()->setText(docu.toCString());
 }
 
 void CutCmd::unexecute () {
@@ -84,3 +83,4 @@ void CutCmd::unexecute () {
   }
 }
 
+#include <CutCmd.moc>

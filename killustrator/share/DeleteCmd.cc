@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,20 +15,19 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <iostream.h>
-#include "DeleteCmd.h"
-#include "DeleteCmd.moc"
+#include <DeleteCmd.h>
+
 #include <klocale.h>
 
-#include "GDocument.h"
-#include "GObject.h"
+#include <GDocument.h>
+#include <GObject.h>
 
 using namespace std;
 
@@ -75,3 +74,4 @@ void DeleteCmd::unexecute () {
   document->setAutoUpdate (true);
 }
 
+#include <DeleteCmd.moc>

@@ -460,7 +460,7 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
 }
 
 void GObject::printInfo () {
-    cout << className () << " bbox = [" << boundingBox () << "]" << endl;
+    //cout << className () << " bbox = [" << boundingBox () << "]" << endl;
 }
 
 void GObject::invalidateClipRegion  () {

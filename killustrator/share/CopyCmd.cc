@@ -22,15 +22,14 @@
 
 */
 
-#include <iostream.h>
+#include <CopyCmd.h>
+
 #include <qclipboard.h>
-#include <strstream.h>
-#include "CopyCmd.h"
-#include "CopyCmd.moc"
+#include <kapp.h>
 #include <klocale.h>
 
-#include "GDocument.h"
-#include "GObject.h"
+#include <GDocument.h>
+#include <GObject.h>
 
 CopyCmd::CopyCmd (GDocument* doc)
   : Command(i18n("Copy"))
@@ -58,8 +57,8 @@ void CopyCmd::execute () {
     docu.appendChild(doc);
 
     for (list<GObject*>::iterator it = objects.begin ();
-	 it != objects.end (); it++)
-	doc.appendChild((*it)->writeToXml (docu));
+         it != objects.end (); it++)
+        doc.appendChild((*it)->writeToXml (docu));
     QApplication::clipboard ()->setText (docu.toCString());
 }
 
@@ -67,3 +66,4 @@ void CopyCmd::unexecute () {
   QApplication::clipboard ()->clear ();
 }
 
+#include <CopyCmd.moc>
