@@ -66,6 +66,8 @@ public:
 
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
 
+    virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
+
     /**
      * Paint this frameset
      */

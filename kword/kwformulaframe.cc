@@ -232,6 +232,11 @@ void KWFormulaFrameSet::slotErrorMessage( const QString& msg )
     KMessageBox::error( /*m_widget*/ 0, msg );
 }
 
+MouseMeaning KWFormulaFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
+{
+    return MEANING_MOUSE_INSIDE_TEXT;
+}
+
 QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
