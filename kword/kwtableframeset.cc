@@ -84,6 +84,7 @@ void KWTableFrameSet::updateFrames()
     for (unsigned int i =0; i < m_cells.count(); i++)
     {
         m_cells.at(i)->updateFrames();
+        m_cells.at(i)->layout();
     }
     KWFrameSet::updateFrames();
 }
