@@ -856,7 +856,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "VARP",             194,  0 },
 	{ "DSTDEVP",          195,  3 },
 	{ "DVARP",            196,  3 },
-	{ "ENT",              197,  0 },  /* EXCEL: TRUNC */
+	{ "TRUNC",            197,  0 },  
 	{ "ISLOGICAL",        198,  1 },
 	{ "DCOUNTA",          199,  3 },
 	{ "ROUNDUP",          212,  2 }, 
