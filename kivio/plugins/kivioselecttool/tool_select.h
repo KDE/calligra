@@ -84,7 +84,7 @@ class SelectTool : public Kivio::MouseTool
 
     void continueDragging(const QPoint&, bool ignoreGridGuides = false);
     void continueCustomDragging(const QPoint&);
-    void continueResizing(const QPoint&);
+    void continueResizing(const QPoint&, bool ignoreGridGuides = false);
     void continueRubberBanding(const QPoint&);
 
     void endResizing(const QPoint&);

@@ -103,7 +103,7 @@ bool SelectTool::processEvent( QEvent* e )
       if( m->button() == RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
-        if((m->state() & ShiftButton) || (m->state() & ControlButton)) {
+        if(m->state() & ControlButton) {
           m_shiftKey = true;
         } else {
           m_shiftKey = false;
@@ -468,7 +468,7 @@ void SelectTool::mouseMove(QMouseEvent* e)
             break;
 
         case stmResizing:
-            continueResizing(pos);
+            continueResizing(pos, ignoreGridGuides);
             break;
 
         default:
@@ -613,10 +613,15 @@ void SelectTool::continueCustomDragging(const QPoint &pos)
 }
 
 
-void SelectTool::continueResizing(const QPoint &pos)
+void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
 {
   KivioCanvas* canvas = view()->canvasWidget();
-  KoPoint pagePoint = canvas->snapToGridAndGuides( canvas->mapFromScreen(pos) );
+  KoPoint pagePoint = canvas->mapFromScreen(pos);
+  
+  if(!ignoreGridGuides) {
+    pagePoint = canvas->snapToGridAndGuides( pagePoint );
+  }
+  
   KivioSelectDragData *pData = m_lstOldGeometry.first();
 
   QWMatrix m;
