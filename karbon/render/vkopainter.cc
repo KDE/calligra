@@ -269,6 +269,8 @@ VKoPainter::fillPath()
 void
 VKoPainter::strokePath()
 {
+	if( m_stroke && m_stroke->lineWidth() == 0 )
+		return;
 	if( m_path[ m_index ].code != ART_END)
 		m_path[ m_index ].code = ART_END;
 
