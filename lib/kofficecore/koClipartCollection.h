@@ -65,7 +65,7 @@ public:
      * Generate the <CLIPARTS> tag, that saves the key and the related
      * relative path in the store (e.g. pictures/picture1.wmf) for each clipart.
      */
-    QDomElement KoClipartCollection::saveXML( QDomDocument &doc, QValueList<KoClipartKey> keys, const QString & prefix );
+    QDomElement saveXML( QDomDocument &doc, QValueList<KoClipartKey> keys, const QString & prefix );
 
     typedef QMap<KoClipartKey, QString> StoreMap;
     /**
