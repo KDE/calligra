@@ -78,7 +78,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		void checkConnection(KexiTableItem *item);
 
 		/*! Hides the dialog and allow the user to create the Connection by drag-and-drop in the Form itself. Currently disabled in the GUI.
-		 \sa FormManager::startDraggingConnection()  */
+		 \sa FormManager::startCreatingConnection()  */
 		void newItemByDragnDrop();
 		/*! Creates a new item. It just moves the cursor to the last empty row. */
 		void newItem();

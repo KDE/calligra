@@ -569,7 +569,7 @@ InsertWidgetCommand::execute()
 
 	if (!m_container->form()->objectTree()->lookup(m_name))
 	{
-		m_container->form()->objectTree()->addChild(m_container->m_tree,
+		m_container->form()->objectTree()->addItem(m_container->m_tree,
 		   new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w, m_container));
 	}
 
@@ -577,7 +577,7 @@ InsertWidgetCommand::execute()
 	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
 	QStringList list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
-		item->addModProperty(*it, w->property((*it).latin1()));
+		item->addModifiedProperty(*it, w->property((*it).latin1()));
 
 	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 
@@ -676,7 +676,7 @@ CreateLayoutCommand::execute()
 	tree->container()->setLayout((Container::LayoutType)m_type);
 	tree->widget()->resize(tree->container()->layout()->sizeHint()); // the layout doesn't have its own size
 	container->setSelectedWidget(w, false);
-	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget()); // to reload the ObjectTreeView
+	m_form->manager()->windowChanged(m_form->widget()); // to reload the ObjectTreeView
 }
 
 void
@@ -704,7 +704,7 @@ CreateLayoutCommand::unexecute()
 		return;
 	QWidget *w = m_form->objectTree()->lookup(m_name)->widget();
 	parent->container()->deleteWidget(w); // delete the layout widget
-	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget()); // to reload ObjectTreeView
+	m_form->manager()->windowChanged(m_form->widget()); // to reload ObjectTreeView
 }
 
 QString
@@ -785,28 +785,39 @@ PasteWidgetCommand::execute()
 		return;
 	}
 
-	FormIO::setCurrentForm(m_container->form());
+	//FormIO::setCurrentForm(m_container->form());
 
 	kdDebug() << domDoc.toString() << endl;
 	if(!domDoc.namedItem("UI").hasChildNodes()) // nothing in the doc
 		return;
 	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget") // only one widget, so we can paste it at cursor pos
 	{
-		QDomElement widg = domDoc.namedItem("UI").firstChild().toElement();
+		QDomElement el = domDoc.namedItem("UI").firstChild().toElement();
+		fixNames(el);
 		if(m_point.isNull())
-			m_container->form()->pasteWidget(widg, m_container);
+			fixPos(el, m_container);
 		else
-			m_container->form()->pasteWidget(widg, m_container,  m_point);
+			changePos(el, m_point);
+
+		m_form->setInteractiveMode(false);
+		FormIO::loadWidget(m_container, m_form->manager()->lib(), el);
+		m_form->setInteractiveMode(true);
 	}
 	else for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) // more than one widget
 	{
 		if(n.toElement().tagName() != "widget")
 			continue;
-		QDomElement widg = n.toElement();
-		m_container->form()->pasteWidget(widg, m_container);
+		QDomElement el = n.toElement();
+		fixNames(el);
+		fixPos(el, m_container);
+
+		m_form->setInteractiveMode(false);
+		FormIO::loadWidget(m_container, m_form->manager()->lib(), el);
+		m_form->setInteractiveMode(true);
+
 	}
 
-	FormIO::setCurrentForm(0);
+	//FormIO::setCurrentForm(0);
 	m_names.clear();
 	// We store the names of all the created widgets, to delete them later
 	for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
@@ -850,6 +861,119 @@ PasteWidgetCommand::name() const
 	return i18n("Paste");
 }
 
+void
+//QDomElement
+PasteWidgetCommand::changePos(QDomElement &el, const QPoint &newpos)
+{
+	//QDomElement el = widg.cloneNode(true).toElement();
+	QDomElement rect;
+	// Find the widget geometry if there is one
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+			rect = n.firstChild().toElement();
+	}
+
+	QDomElement x = rect.namedItem("x").toElement();
+	x.removeChild(x.firstChild());
+	QDomText valueX = el.ownerDocument().createTextNode(QString::number(newpos.x()));
+	x.appendChild(valueX);
+
+	QDomElement y = rect.namedItem("y").toElement();
+	y.removeChild(y.firstChild());
+	QDomText valueY = el.ownerDocument().createTextNode(QString::number(newpos.y()));
+	y.appendChild(valueY);
+
+	//return el;
+}
+
+void
+//QDomElement
+PasteWidgetCommand::fixPos(QDomElement &el, Container *container)
+{
+	QDomElement rect;
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+			rect = n.firstChild().toElement();
+	}
+
+	QDomElement x = rect.namedItem("x").toElement();
+	QDomElement y = rect.namedItem("y").toElement();
+	QDomElement wi = rect.namedItem("width").toElement();
+	QDomElement h = rect.namedItem("height").toElement();
+
+	int rx = x.text().toInt();
+	int ry = y.text().toInt();
+	int rw = wi.text().toInt();
+	int rh = h.text().toInt();
+	QRect r(rx, ry, rw, rh);
+
+	QWidget *w = m_form->widget()->childAt(r.x() + 6, r.y() + 6, false);
+	if(!w)
+		return;
+
+	while((w->geometry() == r) && (w != 0))// there is already a widget there, with the same size
+	{
+		w = m_form->widget()->childAt(w->x() + 16, w->y() + 16, false);
+		r.moveBy(10,10);
+	}
+
+	// the pasted wigdet should stay inside container's boudaries
+	if(r.x() < 0)
+		r.setX(0);
+	else if(r.right() > container->widget()->width())
+		r.setX(container->widget()->width() - r.width());
+
+	if(r.y() < 0)
+		r.setY(0);
+	else if(r.bottom() > container->widget()->height())
+		r.setY(container->widget()->height() - r.height());
+
+	if(r != QRect(rx, ry, rw, rh))
+		//return el;
+	//else
+		changePos(el, QPoint(r.x(), r.y()));
+
+}
+
+void
+PasteWidgetCommand::fixNames(QDomElement &el)
+{
+	QString wname;
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name"))
+		{
+			wname = n.toElement().text();
+			while(m_form->objectTree()->lookup(wname)) // name already exists
+			{
+				bool ok;
+				int num = wname.right(1).toInt(&ok, 10);
+				if(ok)
+					wname = wname.left(wname.length()-1) + QString::number(num+1);
+				else
+					wname += "2";
+			}
+			if(wname != n.toElement().text()) // we change the name, so we recreate the element
+			{
+				n.removeChild(n.firstChild());
+				QDomElement type = el.ownerDocument().createElement("string");
+				QDomText valueE = el.ownerDocument().createTextNode(wname);
+				type.appendChild(valueE);
+				n.toElement().appendChild(type);
+			}
+
+		}
+		if(n.toElement().tagName() == "widget") // fix child widgets names
+		{
+			QDomElement child = n.toElement();
+			fixNames(child);
+		}
+	}
+
+}
+
 // DeleteWidgetCommand
 
 DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
@@ -887,14 +1011,12 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 			widg = list.next();
 	}
 
-	FormIO::setCurrentForm(m_form);
-
 	for(QWidget *w = list.first(); w; w = list.next())
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
 		if (!item)
 			return;
-		FormIO::setCurrentItem(item);
+
 		// We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
 		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
 		m_parents.insert(item->name(), item->parent()->name());
@@ -902,16 +1024,7 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 		form->connectionBuffer()->saveAllConnectionsForWidget(w->name(), m_domDoc);
 	}
 
-	FormIO::setCurrentForm(0);
-	FormIO::setCurrentItem(0);
-	// remove includehints element not needed
-	if(!parent.namedItem("includehints").isNull())
-		parent.removeChild(parent.namedItem("includehints"));
-	// and ensure images and connection are at the end
-	if(!parent.namedItem("connections").isNull())
-		parent.insertAfter(parent.namedItem("connections"), QDomNode());
-	if(!parent.namedItem("images").isNull())
-		parent.insertAfter(parent.namedItem("images"), QDomNode());
+	FormIO::cleanClipboard(parent);
 }
 
 void

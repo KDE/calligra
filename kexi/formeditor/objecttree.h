@@ -36,10 +36,10 @@ namespace KFormDesigner {
 class ObjectTreeItem;
 class Container;
 class EventEater;
-typedef QPtrList<ObjectTreeItem> ObjectTreeC;
-typedef QDict<ObjectTreeItem> TreeDict;
-typedef QDictIterator<ObjectTreeItem> TreeDictIterator;
-typedef QMap<QString, int> Names;
+typedef QPtrList<ObjectTreeItem> ObjectTreeList;
+typedef QDict<ObjectTreeItem> ObjectTreeDict;
+typedef QDictIterator<ObjectTreeItem> ObjectTreeDictIterator;
+typedef QMap<QString, QVariant> QVariantMap;
 
 /*! This class holds the properties of a widget (classname, name, parent, children ..).
     \author Lucijan Busch <lucijan@kde.org>
@@ -57,23 +57,26 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QWidget*	widget() const { return m_widget; }
 		EventEater*     eventEater() const { return m_eater; }
 		ObjectTreeItem* parent() const { return m_parent; }
-		ObjectTreeC*	children() { return &m_children; }
-		QMap<QString, QVariant>* modifProp() { return &m_props;}
+		ObjectTreeList*	children() { return &m_children; }
+		/*! \return a QMap<QString, QVariant> of all modified properties for this widget.
+		  The QVariant is the old value (ie first value) of the property whose name is the QString. */
+		const QVariantMap* modifiedProperties() { return &m_props;}
+		//! \return the widget's Container, or 0if the widget is not a Container.
 		Container*	container() const { return m_container;}
 
 		void		setWidget(QWidget *w) { m_widget = w; }
 		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
 
 		void		debug(int ident);
-		virtual void	rename(const QString &name);
+		void		rename(const QString &name);
 
-		virtual void	addChild(ObjectTreeItem *it);
-		void 		remChild(ObjectTreeItem *it);
+		void		addChild(ObjectTreeItem *it);
+		void 		removeChild(ObjectTreeItem *it);
 
 		/*! Adds \a property in the list of the modified properties for this object.
 		    These modified properties are written in the .ui files when saving the form.
 		*/
-		void		addModProperty(const QString &property, const QVariant &value);
+		void		addModifiedProperty(const QString &property, const QVariant &value);
 
 		void		addPixmapName(const QString &property, const QString &name);
 		QString		pixmapName(const QString &property);
@@ -88,7 +91,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 	protected:
 		QString		m_className;
 		QString		m_name;
-		ObjectTreeC	m_children;
+		ObjectTreeList	m_children;
 		QGuardedPtr<Container> m_container;
 		QMap<QString, QVariant> m_props;
 		QMap<QString, QString>  m_pixmapNames;
@@ -109,29 +112,27 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget=0, Container *container=0);
 		virtual ~ObjectTree();
 
-		/**
-		 * renames a item and returns false if name is doublicated
-		 */
-		virtual bool	rename(const QString &oldname, const QString &newname );
+		/*! Renames the item named \a oldname to \a newname. \return false if widget named \a newname
+		 already exists and renaming failed. */
+		bool		rename(const QString &oldname, const QString &newname );
 		/*! Sets \a newparent as new parent for the item whose name is \a name. */
 		bool		reparent(const QString &name, const QString &newparent);
 
-		ObjectTreeItem	*lookup(const QString &name);
-		TreeDict	*dict() { return &m_treeDict; }
+		/*! \return the ObjectTreeItem named \a name, or 0 if doesn't exist. */
+		ObjectTreeItem*	lookup(const QString &name);
+		/*! \return a dict containing all ObjectTreeItem in this ObjectTree. If you want to iterate on
+		this dict, iterate on a copy. */
+		const ObjectTreeDict*	dict() { return &m_treeDict; }
 
-		void		addChild(ObjectTreeItem *parent, ObjectTreeItem *c);
-		void		addChild(ObjectTreeItem *c);
-
-		void		removeChild(const QString &);
+		void		addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
+		void		removeItem(const QString &name);
 
 		/*! Generates a new name with \a base as beginning (eg if base is "QLineEdit", it returns "QLineEdit1"). */
 		QString		genName(const QString &base);
 
-		void		debug();
-
 	private:
-		TreeDict	m_treeDict;
-		Names		m_names;
+		ObjectTreeDict	m_treeDict;
+		//QMap<QString, int>	m_names;
 };
 
 }

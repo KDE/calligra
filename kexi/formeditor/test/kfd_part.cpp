@@ -248,7 +248,7 @@ KFormDesignerPart::openFile()
 	FormWidgetBase *w = new FormWidgetBase(this, m_workspace);
 	form->createToplevel(w, w);
 
-	if(!KFormDesigner::FormIO::loadForm(form, w, m_file))
+	if(!KFormDesigner::FormIO::loadFormFromFile(form, w, m_file))
 	{
 		delete form;
 		delete w;
@@ -263,7 +263,7 @@ KFormDesignerPart::openFile()
 bool
 KFormDesignerPart::saveFile()
 {
-	KFormDesigner::FormIO::saveForm(m_manager->activeForm(), m_file);
+	KFormDesigner::FormIO::saveFormToFile(m_manager->activeForm(), m_file);
 	return true;
 }
 
@@ -519,7 +519,7 @@ FormWidgetBase::drawRect(const QRect& r, int type)
 }
 
 void
-FormWidgetBase::initRect()
+FormWidgetBase::initBuffer()
 {
 	repaintAll(this);
 	buffer.resize( width(), height() );
@@ -528,7 +528,7 @@ FormWidgetBase::initRect()
 }
 
 void
-FormWidgetBase::clearRect()
+FormWidgetBase::clearForm()
 {
 	QPainter p;
 	p.begin(this, true);

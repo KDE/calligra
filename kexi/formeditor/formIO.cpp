@@ -76,13 +76,17 @@ bool    FormIO::m_savePixmapsInline = false;
 
 // FormIO itself
 
+/////////////////////////////////////////////////////////////////////////////
+///////////// Saving/loading functions //////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
 FormIO::FormIO(QObject *parent, const char *name=0)
    : QObject(parent, name)
 {
 }
 
 int
-FormIO::saveForm(Form *form, const QString &filename)
+FormIO::saveFormToFile(Form *form, const QString &filename)
 {
 	QString m_filename;
 	if(!form->filename().isNull() && filename.isNull())
@@ -234,7 +238,7 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 }
 
 int
-FormIO::loadForm(Form *form, QWidget *container, const QString &filename)
+FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename)
 {
 	QString errMsg;
 	int errLine;
@@ -319,6 +323,10 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	return 1;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+///////////// Functions to save/load properties /////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 void
 FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib)
@@ -800,6 +808,10 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 		return QVariant();
 }
 
+/////////////////////////////////////////////////////////////////////////////
+///////////// Functions to save/load widgets ////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
 void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout)
 {
@@ -813,7 +825,14 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		return;
 	}
 
+	bool resetCurrentForm = false;
 	m_currentItem = item;
+	if(!m_currentForm) // copying widget
+	{
+		resetCurrentForm = true;
+		m_currentForm = item->container() ? item->container()->form() : item->parent()->container()->form();
+	}
+
 	// We create the "widget" element
 	QDomElement tclass = domDoc.createElement("widget");
 	parent.appendChild(tclass);
@@ -852,7 +871,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		lib = item->parent()->container()->form()->manager()->lib();
 
 	// We save every property in the modifProp list of the ObjectTreeItem
-	for(QMap<QString,QVariant>::Iterator it = item->modifProp()->begin(); it != item->modifProp()->end(); ++it)
+	QVariantMap *map = new QVariantMap( *(item->modifiedProperties()) );
+	for(QMap<QString,QVariant>::Iterator it = map->begin(); it != map->end(); ++it)
 	{
 		QString name = it.key();
 		if((name == QString("hAlign")) || (name == QString("vAlign")) || (name == QString("wordbreak")))
@@ -867,6 +887,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		else if((name != "name") && (name != "geometry") && (name != "layout")) // these have already been saved
 			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget(), lib);
 	}
+	delete map;
 
 	// Saving container 's layout if there is one
 	QDomElement layout;
@@ -898,9 +919,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		{
 			layout = domDoc.createElement(nodeName);
 			prop(layout, domDoc, "name", "unnamed", item->widget());
-			if(item->modifProp()->contains("layoutMargin"))
+			if(item->modifiedProperties()->contains("layoutMargin"))
 				saveProperty(layout, domDoc, "property", "margin", item->container()->layoutMargin());
-			if(item->modifProp()->contains("layoutSpacing"))
+			if(item->modifiedProperties()->contains("layoutSpacing"))
 				saveProperty(layout, domDoc, "property", "spacing", item->container()->layoutSpacing());
 			tclass.appendChild(layout);
 		}
@@ -938,11 +959,35 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 
 	addIncludeFile(lib->includeFile(item->widget()->className()), domDoc);
+
+	if(resetCurrentForm)
+		m_currentForm = 0;
+	m_currentItem = 0;
+}
+
+void
+FormIO::cleanClipboard(QDomElement &uiElement)
+{
+	// remove includehints element not needed
+	if(!uiElement.namedItem("includehints").isNull())
+		uiElement.removeChild(uiElement.namedItem("includehints"));
+	// and ensure images and connection are at the end
+	if(!uiElement.namedItem("connections").isNull())
+		uiElement.insertAfter(uiElement.namedItem("connections"), QDomNode());
+	if(!uiElement.namedItem("images").isNull())
+		uiElement.insertAfter(uiElement.namedItem("images"), QDomNode());
 }
 
 void
 FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
 {
+	bool resetCurrentForm = false;
+	if(!m_currentForm) // pasting widget
+	{
+		resetCurrentForm = true;
+		m_currentForm = container->form();
+	}
+
 	// We first look for the widget's name
 	QString wname;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -1007,12 +1052,12 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		{
 			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());
 			if(pItem)
-				container->form()->objectTree()->addChild(pItem, tree);
+				container->form()->objectTree()->addItem(pItem, tree);
 			else
 				kdDebug() << "FORMIO :: ERROR no parent widget "  << endl;
 		}
 		else
-			container->form()->objectTree()->addChild(container->tree(), tree);
+			container->form()->objectTree()->addItem(container->tree(), tree);
 	}
 	else
 		tree = container->form()->objectTree()->lookup(wname); // the ObjectTreeItem has already been created, so we just use it
@@ -1043,7 +1088,11 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	QStringList list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
-		tree->addModProperty(*it, w->property((*it).latin1()));
+		tree->addModifiedProperty(*it, w->property((*it).latin1()));
+
+	if(resetCurrentForm)
+		m_currentForm = 0;
+	m_currentItem = 0;
 }
 
 void
@@ -1088,6 +1137,8 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 	}
 	delete m_buddies;
 	m_buddies = oldBuddies; // and restore it
+
+	m_currentItem = 0;
 
 	form->setInteractiveMode(true);
 }
@@ -1144,7 +1195,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			{
 				QVariant val = readProp(node.firstChild(), w, name);
 				w->setProperty(name.latin1(), val);
-				tree->addModProperty(name, val);
+				tree->addModifiedProperty(name, val);
 			}
 		}
 		else if(tag == "widget") // a child widget
@@ -1182,6 +1233,10 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			w->move(w->x(), tree->parent()->children()->count()); // just under the previous widget
 	}
 }
+
+/////////////////////////////////////////////////////////////////////////////
+///////////// Helper functions //////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 void
 FormIO::createGridLayout(const QDomElement &el, ObjectTreeItem *tree)
@@ -1356,16 +1411,6 @@ FormIO::loadImage(QDomDocument domDoc, QString name)
 }
 
 //////// End of Qt Designer code ////////////////////////////////////////////////////////
-
-void FormIO::setCurrentForm(Form *form)
-{
-	m_currentForm = form;
-}
-
-void FormIO::setCurrentItem(ObjectTreeItem *item)
-{
-	m_currentItem = item;
-}
 
 }
 

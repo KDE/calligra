@@ -43,12 +43,12 @@ class FormManager;
 class ObjectTree;
 class ObjectTreeItem;
 class ConnectionBuffer;
-typedef QPtrList<ObjectTreeItem> ObjectTreeC;
+typedef QPtrList<ObjectTreeItem> ObjectTreeList;
 
 //! Base (virtual) class for all form widgets
 /*! You need to inherit this class, and implement the drawing functions. This is necessary
  because you cannot inherit QWidget twice, and we want form widgets to be any widget.
- See FormWidgetBase in test/kfd_part.cpp and just copy functions here. */
+ See FormWidgetBase in test/kfd_part.cpp and just copy functions there. */
 class KFORMEDITOR_EXPORT FormWidget
 {
 	public:
@@ -58,9 +58,9 @@ class KFORMEDITOR_EXPORT FormWidget
 		 or 2 (insert rect, dotted). */
 		virtual void drawRect(const QRect& r, int type) = 0;
 		/*! This function inits the buffer used for double-buffering. Called before drawing rect. */
-		virtual void initRect() = 0;
+		virtual void initBuffer() = 0;
 		/*! Clears the form, ie pastes the whole buffer to repaint the Form. */
-		virtual void clearRect() = 0;
+		virtual void clearForm() = 0;
 		/*! This function highlights two widgets (to is optional), which are
 		sender and receiver, and draws a link between them. */
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
@@ -89,14 +89,15 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void	createToplevel(QWidget *container, FormWidget *formWidget =0, const QString &classname="QWidget");
 
-		/*!
-		 * \return the toplevel Container or 0 if there isn't any.
-		 */
-		Container		*toplevelContainer() const { return m_toplevel; }
-
+		/*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
+		   has not been called yet. */
+		Container*		toplevelContainer() const { return m_toplevel; }
+		//! \return the FormWidget that holds this Form
 		FormWidget*		formWidget() { return m_formWidget; }
 		//! \return a pointer to this form's ObjectTree.
-		ObjectTree		*objectTree() const { return m_topTree; }
+		ObjectTree*		objectTree() const { return m_topTree; }
+		//! \return the form's toplevel widget, or 0 if designMode() == false.
+		QWidget*		widget() const;
 		//! \return the FormManager parent of this form.
 		FormManager*		manager() const { return m_manager; }
 
@@ -109,14 +110,14 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		  it will also return the parent Container if the widget itself is a Container.
 		 */
 		Container*		parentContainer(QWidget *w=0);
+		/*! \return The \ref Container which is a parent of all widgets in \a wlist.
+		 Used by \ref activeContainer(), and to find where
+		 to paste widgets when multiple widgets are selected. */
+		ObjectTreeItem*   commonParentContainer(WidgetList *wlist);
 
 		//! \return the widget currently selected in this form, or 0 if there is not.
 		WidgetList* 		selectedWidgets() {return &m_selected;}
-		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list
-		and its resizeHandle is removed. */
-		void			unSelectWidget(QWidget *w);
-		/*! Resets the form selection, ie set form widget as unique selected widget. */
-		void			resetSelection();
+
 		/*! Emits the action signals, and optionaly the undo/redo related signals
 		 if \a withUndoAction == true. See \a FormManager for signals description. */
 		void			emitActionSignals(bool withUndoAction=true);
@@ -160,7 +161,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		    If \a cont is 0, the Form::activeContainer() is used, otherwise
 		    the widgets are pasted in the \a cont Container.
 		 */
-		void			pasteWidget(QDomElement &widg, Container *cont=0, QPoint pos=QPoint());
+		//void			pasteWidget(QDomElement &widg, Container *cont=0, QPoint pos=QPoint());
 
 		/*! This function is used by ObjectTree to emit childAdded() signal (as it is not a QObject). */
 		void			emitChildAdded(ObjectTreeItem *item);
@@ -184,7 +185,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! \return A pointer to this Form tabstops list : it contains all the widget
 		that can have focus ( ie no labels, etc)
 		    in the order of the tabs.*/
-		ObjectTreeC*		tabStops() { return &m_tabstops; }
+		ObjectTreeList*		tabStops() { return &m_tabstops; }
 		/*! Adds the widget at the end of tabstops list. Called on widget creation. */
 		void			addWidgetToTabStops(ObjectTreeItem *c);
 		/*! \return True if the Form automatically handles tab stops. */
@@ -204,22 +205,29 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		It renames the ObjectTreeItem associated to this widget.
 		 */
 		void			changeName(const QString &oldname, const QString &newname);
+
 		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
 		  The form widget is always selected alone.
 		 */
-		void		setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
+		void			setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
+		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list
+		and its resizeHandle is removed. */
+		void			unSelectWidget(QWidget *w);
+		/*! Resets the form selection, ie set form widget as unique selected widget. */
+		void			resetSelection();
 
 	protected slots:
 		/*! This slot is called when the toplevel widget of this Form is deleted
 		(ie the window closed) so that the Form gets deleted at the same time.
 		 */
 		void			formDeleted();
+
+		void			emitUndoEnabled();
+		void			emitRedoEnabled();
 		/*! This slot is called when a command is executed. The undo/redo signals
 		  are emitted to update actions. */
 		void			slotCommandExecuted();
-		void			emitUndoEnabled();
-		void			emitRedoEnabled();
 		/*! This slot is called when form is restored, ie when the user has undone
 		  all actions. The form modified flag is updated, and
 		\ref FormManager::dirty() is called. */
@@ -231,8 +239,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		   \a w is the newly selected widget.
 		  */
 		void			selectionChanged(QWidget *w, bool add);
-		/*! This signal is emitted when the widget \a w is added to the list of selected widgets. */
-		//void			addedSelectedWidget(QWidget *w);
+
 		/*! This signal is emitted when a new widget is created, to update ObjectTreeView.
 		 \a it is the ObjectTreeItem representing this new widget.
 		 */
@@ -241,33 +248,6 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 \a it is the ObjectTreeItem representing this deleted widget.
 		 */
 		void			childRemoved(ObjectTreeItem *it);
-
-	protected:
-		/*! Internal function used to fix the coordinates of a widget before pasting it
-		   (to paste it at the position of the contextual menu). It modifies
-		   the "geometry" property of the QDomElement representing the widget.
-		   \return the modified QDomElement.
-		 */
-		QDomElement  fixPos(QDomElement el, QPoint newpos);
-		/*! Internal function used to fix the coordinates of a widget before pasting it
-		   (to avoid to have two widgets at the same position). It moves the widget by
-		   (10, 10) increment (several times if there are already pasted widgets at this position).
-		   \return the modified QDomElement.
-		 */
-		QDomElement  fixPos(QDomElement el, Container *container);
-		/*! Internal function used to fix the names of the widgets before pasting them.
-		  It prevents from pasting a widget with
-		  the same name as an actual widget. The child widgets are also fixed recursively.\n
-		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is
-		  just incremented by one (eg becomes "QLineEdit2"). Otherwise, a "2" is just
-		  appended at the end of the name (eg "myWidget" becomes "myWidget2").
-		 */
-		void  fixNames(QDomElement el);
-
-		/*! \return The \ref Container which is a parent of all widgets in \a wlist.
-		 Used by \ref activeContainer(), and to find where
-		 to paste widgets when multiple widgets are selected. */
-		ObjectTreeItem*   commonParentContainer(WidgetList *wlist);
 
 	private:
 		FormManager		*m_manager;
@@ -285,7 +265,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		KCommandHistory		*m_history;
 		KActionCollection	*m_collection;
 
-		ObjectTreeC		m_tabstops;
+		ObjectTreeList		m_tabstops;
 		bool			m_autoTabstops;
 		ConnectionBuffer	*m_connBuffer;
 

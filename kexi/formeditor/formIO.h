@@ -80,7 +80,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    a Save File dialog will be shown to choose dest file.
 		    \todo Add errors code and error dialog
 		*/
-		static int saveForm(Form *form, const QString &filename=QString::null);
+		static int saveFormToFile(Form *form, const QString &filename=QString::null);
 		static int saveFormToString(Form *form, QString &dest);
 		/*! \return 0 if saving failed, 1 otherwise\n
 		 *  Saves the \a form inside the \a dest QByteArray.
@@ -105,7 +105,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   createToplevelWidget() is used to load the Form's toplevel widget.
 		   \todo Add errors code and error dialog
 		*/
-		static int loadForm(Form *form, QWidget *container, const QString &filename=QString::null);
+		static int loadFormFromFile(Form *form, QWidget *container, const QString &filename=QString::null);
 
 		/*! Save the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc,
 		    with \a parent as parent node.
@@ -114,6 +114,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    This is used to copy/paste widgets.
 		*/
 		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout=false);
+		/*! Cleans the "UI" QDomElement after saving widget. It deletes the "includes" element not needed when pasting, and
+		  make sure all the "widget" elements are at the beginning. Calls this after copying a widget, before pasting.*/
+		static void         cleanClipboard(QDomElement &uiElement);
 		/*! Loads the widget associated to the QDomElement \a el into the Container \a container,
 		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
 		    If parent = 0, the Container::widget() is used as parent widget.
@@ -138,9 +141,6 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   \param w       the widget whose property is being saved
 		*/
 		static void   prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
-
-		static void    setCurrentForm(Form *form);
-		static void    setCurrentItem(ObjectTreeItem *item);
 
 	protected:
 		/*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/

@@ -73,6 +73,10 @@ class WidgetLibrary;
 class ObjectTreeItem;
 class Form;
 
+/*! This helper function install an event filter on \a object and all of its children, directed to \a container.
+  This is necessary to filter events for composed widgets. */
+void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
+
 /**
  * This class is used to filter the events from any widget (and all its subwidgets)
  and direct it to the Container.
@@ -115,32 +119,30 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
 		~Container();
 
-		//! \return a pointer to the toplevel Container.
-		Container	*toplevel();
+		//! \return a pointer to the toplevel Container, or 0 if this Container is toplevel
+		Container*	toplevel();
+		//! \return The form this Container belongs to.
+		Form*		form() const { return m_form; }
+		//! \return The watched widget.
+		QWidget*	widget() { return m_container; }
+		//! \return The ObjectTreeItem assosiated with this Container's widget.
+		ObjectTreeItem*	tree() const { return m_tree; }
 
-		/**
-		 * Sets the ObjectTree of this Container.\n
-		 * NOTE: this is needed only if we are toplevel.
-		 */
+		//! Sets the Form which this Container belongs to.
+		void		setForm(Form *form);
+		/*!  Sets the ObjectTree of this Container.\n
+		 * NOTE: this is needed only if we are toplevel. */
 		void		setObjectTree(ObjectTreeItem *t) { m_tree = t; }
-
-		/**
-		 * \return The ObjectTreeItem assosiated with this Container's widget.
-		 */
-		ObjectTreeItem	*tree() const { return m_tree; }
 
 		//! \return a pointer to the QLayout of this Container, or 0 if there is not.
 		QLayout*        layout() const { return m_layout; }
 		//! \return the type of the layout associated to this Container's widget (see LayoutType enum).
 		LayoutType      layoutType() const { return m_layType; }
-		//! \return the string representing the layoutType \a type.
-		static QString  layoutTypeToString(int type);
-		//! \return the LayoutType (an int) for a given layout name.
-		static LayoutType stringToLayoutType(const QString &name);
 		//! \return the margin of this Container.
 		int             layoutMargin() { return m_margin; }
 		//! \return the spacing of this Container.
 		int             layoutSpacing() { return m_spacing; }
+
 		/*! Sets this Container to use \a type of layout. The widget are inserted
 		 automatically in the layout following their positions.
 		  \sa createBoxLayout(), createGridLayout()
@@ -150,6 +152,11 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void            setLayoutSpacing(int spacing) { m_spacing = spacing;}
 		//! Sets the margin of this Container.
 		void            setLayoutMargin(int margin) { m_margin = margin;}
+
+		//! \return the string representing the layoutType \a type.
+		static QString  layoutTypeToString(int type);
+		//! \return the LayoutType (an int) for a given layout name.
+		static LayoutType stringToLayoutType(const QString &name);
 
 		/*! Stops the inline editing of the current widget (as when you click
 		 on another widget or press Esc). */
@@ -163,15 +170,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		virtual bool	eventFilter(QObject *o, QEvent *e);
 
 	public slots:
-		//! \return The watched widget.
-		QWidget		*widget() { return m_container; }
-
-		//! Sets the Form which this Container belongs to.
-		void		setForm(Form *form);
-
-		//! \return The form this Container belongs to.
-		Form		*form() const { return m_form; }
-
 		/*! Sets \a selected to be the selected widget of this container
 		  (and so of the Form). If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected

@@ -23,13 +23,14 @@
 
 
 #include <qobject.h>
-#include <qptrlist.h>
 #include <qguardedptr.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 
 // class QPixmap;
 template<class type> class QValueVector;
+template<class type> class QPtrList;
+template<class type> class QDict;
 class QWidget;
 class KLineEdit;
 class QDomElement;
@@ -97,11 +98,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 };
 
 typedef QPtrList<WidgetInfo> WidgetInfoList;
-
-/*! This helper function install an event filter on \a object and all of its children, directed to \a container.
-  This is necessary to filter events for composed widgets. */
-void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
-
+typedef QDict<WidgetInfo> WidgetInfoDict;
 
 //! The base class for all widget Factories
 /*! This is the class you need to inherit to create a new Factory. There are few

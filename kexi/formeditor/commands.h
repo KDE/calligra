@@ -212,6 +212,23 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 		virtual QString name() const;
 
 	protected:
+		/*! Internal function used to change the coordinates of a widget to \a newpos
+		 before pasting it (to paste it at the position of the contextual menu). It modifies
+		   the "geometry" property of the QDomElement representing the widget. */
+		void changePos(QDomElement &widg, const QPoint &newpos);
+		/*! Internal function used to fix the coordinates of a widget before pasting it
+		   (to avoid having two widgets at the same position). It moves the widget by
+		   (10, 10) increment (several times if there are already pasted widgets at this position). */
+		void fixPos(QDomElement &el, Container *container);
+		/*! Internal function used to fix the names of the widgets before pasting them.
+		  It prevents from pasting a widget with
+		  the same name as an actual widget. The child widgets are also fixed recursively.\n
+		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is
+		  just incremented by one (eg becomes "QLineEdit2"). Otherwise, a "2" is just
+		  appended at the end of the name (eg "myWidget" becomes "myWidget2"). */
+		void fixNames(QDomElement &el);
+
+	protected:
 		Form *m_form;
 		QCString    m_data;
 		QString     m_containername;

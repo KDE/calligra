@@ -65,6 +65,17 @@ Form::Form(FormManager *manager, const char *name)
 	connect(m_history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
 }
 
+QWidget*
+Form::widget() const
+{
+	if(m_topTree)
+		return m_topTree->widget();
+	else if(m_toplevel)
+		return m_toplevel->widget();
+	else
+		return 0;
+}
+
 
 //////////////// Container -related functions ///////////////////////
 
@@ -82,8 +93,8 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &
 	m_pixcollection = new PixmapCollection(container->name(), this);
 
 	m_topTree->setWidget(container);
-	m_topTree->addModProperty("caption", name());
-	//m_topTree->addModProperty("icon");
+	m_topTree->addModifiedProperty("caption", name());
+	//m_topTree->addModifiedProperty("icon");
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 
@@ -176,10 +187,11 @@ Form::setDesignMode(bool design)
 	m_design = design;
 	if(!design)
 	{
-		TreeDict dict = *(m_topTree->dict());
-		TreeDictIterator it(dict);
+		ObjectTreeDict *dict = new ObjectTreeDict( *(m_topTree->dict()) );
+		ObjectTreeDictIterator it(*dict);
 		for(; it.current(); ++it)
 			m_manager->lib()->previewWidget(it.current()->widget()->className(), it.current()->widget(), m_toplevel);
+		delete dict;
 
 		delete m_topTree;
 		m_topTree = 0;
@@ -307,6 +319,7 @@ Form::changeName(const QString &oldname, const QString &newname)
 void
 Form::emitChildAdded(ObjectTreeItem *item)
 {
+	addWidgetToTabStops(item);
 	emit childAdded(item);
 }
 
@@ -434,139 +447,6 @@ Form::autoAssignTabStops()
 		nextw = list.prev();
 		hlist.clear();
 	}
-}
-
-
-///////////// Functions to paste widgets ///////////////////
-
-void
-Form::pasteWidget(QDomElement &widg, Container *cont, QPoint pos)
-{
-	Container *container = cont ? cont : activeContainer();
-	if (!container)
-		return;
-
-	fixNames(widg); // to avoid name clash
-	if(pos.isNull())
-		widg = fixPos(widg, cont); // to avoid widget being at the same location
-	else
-		widg = fixPos(widg, pos);
-	m_inter = false;
-	FormIO::loadWidget(container, m_manager->lib(), widg);
-	m_inter = true;
-}
-
-void
-Form::fixNames(QDomElement el)
-{
-	QString wname;
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name"))
-		{
-			wname = n.toElement().text();
-			while(m_topTree->lookup(wname)) // name already exists
-			{
-				bool ok;
-				int num = wname.right(1).toInt(&ok, 10);
-				if(ok)
-					wname = wname.left(wname.length()-1) + QString::number(num+1);
-				else
-					wname += "2";
-			}
-			if(wname != n.toElement().text()) // we change the name, so we recreate the element
-			{
-				n.removeChild(n.firstChild());
-				QDomElement type = el.ownerDocument().createElement("string");
-				QDomText valueE = el.ownerDocument().createTextNode(wname);
-				type.appendChild(valueE);
-				n.toElement().appendChild(type);
-			}
-
-		}
-		if(n.toElement().tagName() == "widget") // fix child widgets names
-		{
-			fixNames(n.toElement());
-		}
-	}
-
-}
-
-QDomElement
-Form::fixPos(QDomElement widg, QPoint newpos)
-{
-	QDomElement el = widg.cloneNode(true).toElement();
-	QDomElement rect;
-	// Find the widget geometry if there is one
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
-		{
-			rect = n.firstChild().toElement();
-		}
-	}
-
-	QDomElement x = rect.namedItem("x").toElement();
-	x.removeChild(x.firstChild());
-	QDomText valueX = el.ownerDocument().createTextNode(QString::number(newpos.x()));
-	x.appendChild(valueX);
-
-	QDomElement y = rect.namedItem("y").toElement();
-	y.removeChild(y.firstChild());
-	QDomText valueY = el.ownerDocument().createTextNode(QString::number(newpos.y()));
-	y.appendChild(valueY);
-
-	return el;
-}
-
-QDomElement
-Form::fixPos(QDomElement el, Container *container)
-{
-	QDomElement rect;
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
-		{
-			rect = n.firstChild().toElement();
-		}
-	}
-
-	QDomElement x = rect.namedItem("x").toElement();
-	QDomElement y = rect.namedItem("y").toElement();
-	QDomElement w = rect.namedItem("width").toElement();
-	QDomElement h = rect.namedItem("height").toElement();
-
-	int rx = x.text().toInt();
-	int ry = y.text().toInt();
-	int rw = w.text().toInt();
-	int rh = h.text().toInt();
-	QRect r(rx, ry, rw, rh);
-
-	QWidget *widg = m_toplevel->widget()->childAt(r.x()+6, r.y()+6, false);
-	if(!widg)
-		return el;
-
-	while((widg->geometry() == r) && (widg != 0))// there is already a widget there, with the same size
-	{
-		widg = m_toplevel->widget()->childAt(widg->x() + 16, widg->y() + 16, false);
-		r.moveBy(10,10);
-	}
-
-	if(r.x() < 0)
-		r.setX(0);
-	else if(r.right() > container->widget()->width())
-		r.setX(container->widget()->width() - r.width());
-
-	if(r.y() < 0)
-		r.setY(0);
-	else if(r.bottom() > container->widget()->height())
-		r.setY(container->widget()->height() - r.height());
-
-	if(r == QRect(rx, ry, rw, rh))
-		return el;
-	else
-		return fixPos(el, QPoint(r.x(), r.y()));
-
 }
 
 Form::~Form()

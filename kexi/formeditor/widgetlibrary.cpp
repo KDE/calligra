@@ -115,10 +115,10 @@ WidgetLibrary::createXML()
 	return doc.toString();
 }
 
-Actions
+ActionList
 WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, const char *slot)
 {
-	Actions actions;
+	ActionList actions;
 	QDictIterator<WidgetInfo> it(m_widgets);
 	for(; it.current(); ++it)
 	{

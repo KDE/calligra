@@ -97,6 +97,8 @@ FormManager::FormManager(QObject *parent=0, const char *name=0)
 	m_treeview = 0;
 	m_editor = 0;
 
+	kdDebug() << "Sizes of Form == " << sizeof(Form) << " , of Container == " << sizeof(Container) << " , of ObjectTreeItem == " << sizeof(ObjectTreeItem) << endl;
+
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
 	connect( this, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)));
@@ -115,14 +117,14 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 		connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), treeview, SLOT(renameItem(const QString&, const QString&)));
 }
 
-Actions
+ActionList
 FormManager::createActions(KActionCollection *parent)
 {
 	m_collection = parent;
 
-	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
+	ActionList actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
 
-	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "signalslot", KShortcut(0), this, SLOT(startDraggingConnection()), parent, "drag_connection");
+	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent, "drag_connection");
 	m_dragConnection->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_dragConnection->setChecked(false);
 	actions.append(m_dragConnection);
@@ -192,15 +194,15 @@ void
 FormManager::insertWidget(const QString &classname)
 {
 	if(m_drawingSlot)
-		stopDraggingConnection();
+		stopCreatingConnection();
 
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		form->m_cursors = new QMap<QString, QCursor>();
 		if (form->toplevelContainer())
-			form->toplevelContainer()->widget()->setCursor(QCursor(CrossCursor));
-		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+			form->widget()->setCursor(QCursor(CrossCursor));
+		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
 			if( ((QWidget*)o)->ownCursor() )
@@ -222,15 +224,15 @@ void
 FormManager::stopInsert()
 {
 	if(m_drawingSlot)
-		stopDraggingConnection();
+		stopCreatingConnection();
 	if(!m_inserting)
 		return;
 
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		form->toplevelContainer()->widget()->unsetCursor();
-		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		form->widget()->unsetCursor();
+		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
 			if( ((QWidget*)o)->ownCursor())
@@ -250,11 +252,11 @@ FormManager::slotPointerClicked()
 	if(m_inserting)
 		stopInsert();
 	else if(m_dragConnection)
-		stopDraggingConnection();
+		stopCreatingConnection();
 }
 
 void
-FormManager::startDraggingConnection()
+FormManager::startCreatingConnection()
 {
 	if(m_inserting)
 		stopInsert();
@@ -267,10 +269,10 @@ FormManager::startDraggingConnection()
 		form->m_mouseTrackers = new QStringList();
 		if (form->toplevelContainer())
 		{
-			form->toplevelContainer()->widget()->setCursor(QCursor(PointingHandCursor));
-			form->toplevelContainer()->widget()->setMouseTracking(true);
+			form->widget()->setCursor(QCursor(PointingHandCursor));
+			form->widget()->setMouseTracking(true);
 		}
-		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
 			QWidget *w = (QWidget*)o;
@@ -298,25 +300,25 @@ FormManager::resetCreatedConnection()
 	m_connection = new Connection();
 
 	if(m_active && m_active->formWidget())
-		m_active->formWidget()->clearRect();
-	m_active->toplevelContainer()->widget()->repaint();
+		m_active->formWidget()->clearForm();
+	m_active->widget()->repaint();
 }
 
 void
-FormManager::stopDraggingConnection()
+FormManager::stopCreatingConnection()
 {
 	if(!m_drawingSlot)
 		return;
 
 	if(m_active && m_active->formWidget())
-		m_active->formWidget()->clearRect();
+		m_active->formWidget()->clearForm();
 
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		form->toplevelContainer()->widget()->unsetCursor();
-		form->toplevelContainer()->widget()->setMouseTracking(false);
-		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		form->widget()->unsetCursor();
+		form->widget()->setMouseTracking(false);
+		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
 			QWidget *w = (QWidget*)o;
@@ -354,8 +356,8 @@ FormManager::windowChanged(QWidget *w)
 		if(m_treeview)
 			m_treeview->setForm(0);
 		showPropertyBuffer(0);
-		if(draggingConnection())
-			stopDraggingConnection();
+		if(isCreatingConnection())
+			stopCreatingConnection();
 
 		emit noFormSelected();
 		return;
@@ -365,7 +367,7 @@ FormManager::windowChanged(QWidget *w)
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		if(form->toplevelContainer() && form->toplevelContainer()->widget() == w)
+		if(form->toplevelContainer() && form->widget() == w)
 		{
 			if(m_treeview)
 				m_treeview->setForm(form);
@@ -378,7 +380,7 @@ FormManager::windowChanged(QWidget *w)
 			{
 				// update the 'style' action
 				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
-				const QString currentStyle = form->toplevelContainer()->widget()->style().name();
+				const QString currentStyle = form->widget()->style().name();
 				const QStringList styles = m_style->items();
 
 				int idx = 0;
@@ -392,7 +394,7 @@ FormManager::windowChanged(QWidget *w)
 				}
 			}
 
-			if((form != previousActive) && draggingConnection())
+			if((form != previousActive) && isCreatingConnection())
 				resetCreatedConnection();
 
 			m_active = form;
@@ -419,7 +421,7 @@ FormManager::formForWidget(QWidget *w)
 {
 	for(Form *form = m_forms.first(); form; form = m_forms.next())
 	{
-		if(form->toplevelContainer() && form->toplevelContainer()->widget() == w)
+		if(form->toplevelContainer() && form->widget() == w)
 			return form;
 	}
 
@@ -464,7 +466,7 @@ FormManager::initForm(Form *form)
 
 	m_active = form;
 
-	//m_buffer->setSelectedWidget(form->toplevelContainer()->widget());
+	//m_buffer->setSelectedWidget(form->widget());
 
 	connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_buffer, SLOT(setSelectedWidget(QWidget*, bool)));
 	if(m_treeview)
@@ -475,8 +477,8 @@ FormManager::initForm(Form *form)
 	}
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
 
-	form->setSelectedWidget(form->objectTree()->widget());
-	windowChanged(form->toplevelContainer()->widget());
+	form->setSelectedWidget(form->widget());
+	windowChanged(form->widget());
 }
 
 void
@@ -563,7 +565,6 @@ FormManager::copyWidget()
 	m_domDoc.setContent(QString(), true);
 	QDomElement parent = m_domDoc.createElement("UI");
 	m_domDoc.appendChild(parent);
-	FormIO::setCurrentForm(activeForm());
 
 	QWidget *w;
 	for(w = list->first(); w; w = list->next())
@@ -571,19 +572,11 @@ FormManager::copyWidget()
 		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
 		if (!it)
 			continue;
-		FormIO::setCurrentItem(it);
+
 		FormIO::saveWidget(it, parent, m_domDoc);
 	}
 
-	FormIO::setCurrentForm(0);
-	FormIO::setCurrentItem(0);
-
-	// remove includehints element not needed
-	if(!parent.namedItem("includehints").isNull())
-		parent.removeChild(parent.namedItem("includehints"));
-	// and ensure images is at the end
-	if(!parent.namedItem("images").isNull())
-		parent.insertAfter(parent.namedItem("images"), QDomNode());
+	FormIO::cleanClipboard(parent);
 
 	activeForm()->emitActionSignals(); // to update 'Paste' item state
 }
@@ -630,7 +623,6 @@ FormManager::createSignalMenu(QWidget *w)
 	QStrListIterator it(list);
 	for(; it.current() != 0; ++it)
 		m_sigSlotMenu->insertItem(*it);
-	//connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
 
 	int result = m_sigSlotMenu->exec(QCursor::pos());
 	if(result == -1)
@@ -662,7 +654,6 @@ FormManager::createSlotMenu(QWidget *w)
 
 		m_sigSlotMenu->insertItem(*it);
 	}
-	//connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
 
 	int result = m_sigSlotMenu->exec(QCursor::pos());
 	if(result == -1)
@@ -678,7 +669,7 @@ void
 FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/)
 {
 	bool multiple = (container->form()->selectedWidgets()->count() > 1);
-	bool enableRemove = (w != m_active->objectTree()->widget());
+	bool enableRemove = (w != m_active->widget());
 	// We only enablelayout creation if more than one widget with the same parent are selected
 	bool enableLayout = ((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()));
 
@@ -688,7 +679,7 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 
 	if(!multiple)
 	{
-		if(w == container->form()->objectTree()->widget())
+		if(w == container->form()->widget())
 			m_popup->changeTitle(MenuTitle, SmallIcon("form"), i18n("Form: ") + w->name() );
 		else
 			m_popup->changeTitle(MenuTitle, SmallIcon(m_lib->icon(w->className())), n + ": " + w->name() );
@@ -717,7 +708,7 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		sub->insertSeparator();
 
 		// We add al the widgets that can have focus
-		ObjectTreeC *list = container->form()->tabStops();
+		ObjectTreeList *list = container->form()->tabStops();
 		for(ObjectTreeItem *item = list->first(); item; item = list->next())
 		{
 			int index = sub->insertItem(item->name());
@@ -797,7 +788,7 @@ FormManager::menuSignalChoosed(int id)
 			kdDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
 			  "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot() << endl;
 			emit connectionCreated(activeForm(), *m_connection);
-			stopDraggingConnection();
+			stopCreatingConnection();
 		}
 	}
 	else if(m_menuWidget)
@@ -853,7 +844,7 @@ FormManager::createLayout(int layoutType)
 		kdDebug() << "comparing widget " << w->name() << " whose parent is " << w->parentWidget()->name() << " insteaed of " << parent->name() << endl;
 		if(w->parentWidget() != parent)
 		{
-			KMessageBox::sorry(m_active->toplevelContainer()->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
+			KMessageBox::sorry(m_active->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
 		   "All selected widgets must have the same parent."));
 			kdDebug() << "FormManager::createLayout() widgets don't have the same parent widget" << endl;
 			return;
@@ -888,13 +879,6 @@ FormManager::breakLayout()
 }
 
 void
-FormManager::debugTree()
-{
-	if (activeForm() && activeForm()->objectTree())
-		activeForm()->objectTree()->debug();
-}
-
-void
 FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
 {
 	if(m_editor)
@@ -908,7 +892,7 @@ FormManager::editTabOrder()
 {
 	if(!m_active)
 		return;
-	TabStopDialog dlg(m_active->toplevelContainer()->widget()->topLevelWidget());
+	TabStopDialog dlg(m_active->widget()->topLevelWidget());
 	dlg.exec(m_active);
 }
 
@@ -920,9 +904,9 @@ FormManager::slotStyle()
 
 	KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 	QString style = m_style->currentText();
-	activeForm()->toplevelContainer()->widget()->setStyle( style);
+	activeForm()->widget()->setStyle( style);
 
-	QObjectList *l = activeForm()->toplevelContainer()->widget()->queryList( "QWidget" );
+	QObjectList *l = activeForm()->widget()->queryList( "QWidget" );
 	for(QObject *o = l->first(); o; o = l->next())
 		(static_cast<QWidget*>(o))->setStyle( style );
 	delete l;
@@ -934,7 +918,7 @@ FormManager::editFormPixmapCollection()
 	if(!activeForm())
 		return;
 
-	PixmapCollectionEditor dialog(activeForm()->pixmapCollection(), activeForm()->toplevelContainer()->widget()->topLevelWidget());
+	PixmapCollectionEditor dialog(activeForm()->pixmapCollection(), activeForm()->widget()->topLevelWidget());
 	dialog.exec();
 }
 
@@ -944,7 +928,7 @@ FormManager::editConnections()
 	if(!activeForm())
 		return;
 
-	ConnectionDialog *dialog = new ConnectionDialog(activeForm()->toplevelContainer()->widget()->topLevelWidget());
+	ConnectionDialog *dialog = new ConnectionDialog(activeForm()->widget()->topLevelWidget());
 	dialog->exec(activeForm());
 }
 

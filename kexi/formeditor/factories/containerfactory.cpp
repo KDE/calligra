@@ -161,7 +161,7 @@ InsertPageCommand::execute()
 		tab->showPage(page);
 
 		KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
-		item->addModProperty("title", n);
+		item->addModifiedProperty("title", n);
 	}
 	else if(classname == "QWidgetStack")
 	{
@@ -171,7 +171,7 @@ InsertPageCommand::execute()
 		m_pageid = stack->id(page);
 
 		KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
-		item->addModProperty("id", stack->id(page));
+		item->addModifiedProperty("id", stack->id(page));
 	}
 }
 
@@ -320,7 +320,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		tab->setTabReorderingEnabled(true);
 #endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
-		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
+		container->form()->objectTree()->addItem(container->tree(), new KFormDesigner::ObjectTreeItem(
 		        container->form()->manager()->lib()->displayName(c), n, tab, container));
 		m_manager = container->form()->manager();
 
@@ -360,7 +360,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		QWidgetStack *stack = new QWidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
+		container->form()->objectTree()->addItem(container->tree(), new KFormDesigner::ObjectTreeItem(
 		     container->form()->manager()->lib()->displayName(c), n, stack, container));
 
 		if(container->form()->interactiveMode())
@@ -400,7 +400,7 @@ ContainerFactory::previewWidget(const QString &classname, QWidget *widget, KForm
 	{
 		QWidgetStack *stack = ((QWidgetStack*)widget);
 		KFormDesigner::ObjectTreeItem *tree = container->form()->objectTree()->lookup(widget->name());
-		if(!tree->modifProp()->contains("frameShape"))
+		if(!tree->modifiedProperties()->contains("frameShape"))
 			stack->setFrameStyle(QFrame::NoFrame);
 	}
 	else if(classname == "HBox")
@@ -507,7 +507,7 @@ ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidge
 	{
 		QTabWidget *tab = (QTabWidget*)w->parentWidget();
 		tab->addTab(w, node.firstChild().toElement().text());
-		item->addModProperty("title", node.firstChild().toElement().text());
+		item->addModifiedProperty("title", node.firstChild().toElement().text());
 	}
 	else if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
@@ -515,7 +515,7 @@ ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidge
 		int id = KFormDesigner::FormIO::readProp(node.firstChild(), w, name).toInt();
 		stack->addWidget(w, id);
 		stack->raiseWidget(w);
-		item->addModProperty("id", id);
+		item->addModifiedProperty("id", id);
 	}
 }
 

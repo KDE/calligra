@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +22,10 @@
 #define KFORMDESIGNERWIDGETLIBRARY_H
 
 #include <qobject.h>
-#include <qdict.h>
 #include <qmap.h>
+#include <qdict.h>
+
+#include "widgetfactory.h"
 
 template<class type> class QPtrList;
 template<class type> class QValueVector;
@@ -36,13 +39,10 @@ class QDomElement;
 
 namespace KFormDesigner {
 
-class WidgetInfo;
-class WidgetFactory;
 class Container;
 class ObjectTreeItem;
 
-typedef QDict<WidgetInfo> Widgets;
-typedef QPtrList<KAction> Actions;
+typedef QPtrList<KAction> ActionList;
 
 /**
  * This class searches for factories and provides KActions for widget creation.
@@ -82,7 +82,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		/**
 		 * creates actions
 		 */
-		Actions	createActions(KActionCollection *parent, QObject *receiver, const char *slot);
+		ActionList	createActions(KActionCollection *parent, QObject *receiver, const char *slot);
 
 		/**
 		 * creates the XML for widget actions
@@ -119,7 +119,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 	private:
 		// dict which associates a class name with a Widget class
-		Widgets	m_widgets;
+		WidgetInfoDict	m_widgets;
 		QMap<QString, QString>  m_alternates;
 };
 

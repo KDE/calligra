@@ -42,7 +42,7 @@ namespace KFormDesigner {
 static void setRecursiveCursor(QWidget *w, Form *form)
 {
 	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
-	if(tree && ((tree->modifProp()->contains("cursor")) || !tree->children()->isEmpty()) )
+	if(tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty()) )
 			return; // if the user has set a cursor for this widget or this is a container, don't change it
 
 	if(w->ownCursor())
@@ -78,6 +78,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, Container *containe
 	editor->setMargin(2); //to move away from resize handle
 	editor->show();
 	editor->setFocus();
+	editor->selectAll();
 	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
 	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));

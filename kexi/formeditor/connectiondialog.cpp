@@ -191,8 +191,8 @@ void
 ConnectionDialog::updateTableData()
 {
 	// First we update the columns data
-	TreeDict dict = *(m_form->objectTree()->dict());
-	TreeDictIterator it(dict);
+	ObjectTreeDict *dict = new ObjectTreeDict( *(m_form->objectTree()->dict()) );
+	ObjectTreeDictIterator it(*dict);
 	for(; it.current(); ++it)
 	{
 		KexiTableItem *item = new KexiTableItem(2);
@@ -200,6 +200,7 @@ ConnectionDialog::updateTableData()
 		(*item)[1] = (*item)[0];
 		m_widgetsColumnData->append(item);
 	}
+	delete dict;
 
 	// Then we fill the columns with the form connections
 	for(Connection *c = m_form->connectionBuffer()->first(); c ; c = m_form->connectionBuffer()->next())
@@ -366,7 +367,7 @@ void
 ConnectionDialog::newItemByDragnDrop()
 {
 	FormManager *manager = m_form->manager();
-	m_form->manager()->startDraggingConnection();
+	m_form->manager()->startCreatingConnection();
 	connect(manager, SIGNAL(connectionAborted(Form*)), this, SLOT(slotConnectionAborted(Form*)));
 	connect(manager, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)) );
 

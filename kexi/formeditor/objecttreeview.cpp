@@ -317,7 +317,7 @@ ObjectTreeView::setForm(Form *form)
 	if(!form->selectedWidgets()->isEmpty())
 		setSelectedWidget(form->selectedWidgets()->first());
 	else
-		setSelectedWidget(form->toplevelContainer()->widget());
+		setSelectedWidget(form->widget());
 }
 
 ObjectTreeViewItem*
@@ -334,7 +334,7 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 		last = last->nextSibling();
 	treeItem->moveItem(last);
 
-	ObjectTreeC *list = item->children();
+	ObjectTreeList *list = item->children();
 	for(ObjectTreeItem *it = list->first(); it; it = list->next())
 		loadTree(it, treeItem);
 

@@ -56,30 +56,17 @@ void
 ObjectTreeItem::addChild(ObjectTreeItem *c)
 {
 	m_children.append(c);
+	c->setParent(this);
 }
 
 void
-ObjectTreeItem::remChild(ObjectTreeItem *c)
+ObjectTreeItem::removeChild(ObjectTreeItem *c)
 {
 	m_children.remove(c);
 }
 
 void
-ObjectTreeItem::debug(int ident)
-{
-	for(ObjectTreeItem *it = m_children.first(); it; it = m_children.next())
-	{
-		QString str;
-		for(int i=0; i < ident; i++)
-			str += " ";
-
-		kdDebug() << str << it->className().latin1() << " : " << it->name().latin1() << " (" << it->parent()->name().latin1() << ")" << endl;
-		it->debug(ident + 4);
-	}
-}
-
-void
-ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue)
+ObjectTreeItem::addModifiedProperty(const QString &property, const QVariant &oldValue)
 {
 	if(property == "name")
 		return;
@@ -159,9 +146,8 @@ ObjectTree::reparent(const QString &name, const QString &newparent)
 	ObjectTreeItem *parent = lookup(newparent);
 	if(!parent)   return false;
 
-	item->parent()->remChild(item);
+	item->parent()->removeChild(item);
 	parent->addChild(item);
-	item->setParent(parent);
 	return true;
 }
 
@@ -175,41 +161,31 @@ ObjectTree::lookup(const QString &name)
 }
 
 void
-ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
+ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
 {
 	m_treeDict.insert(c->name(), c);
+
 	if(!parent)
-	{
-		kdDebug() << "*************************************************" << endl;
-		kdDebug() << "* ObjectTree::addChild(): no parent!            *" << endl;
-		kdDebug() << "*************************************************" << endl;
-	}
-	else
-	{
-		parent->addChild(c);
-		c->setParent(parent);
-	}
-	kdDebug() << "ObjectTree::addChild(): adding " << c->name() << " to " << parent->name() << endl;
-	m_container->form()->addWidgetToTabStops(c);
+		parent = this;
+	parent->addChild(c);
 	m_container->form()->emitChildAdded(c);
+
+	kdDebug() << "ObjectTree::addItem(): adding " << c->name() << " to " << parent->name() << endl;
 }
 
 void
-ObjectTree::addChild(ObjectTreeItem *c)
-{
-	ObjectTreeItem::addChild(c);
-}
-
-void
-ObjectTree::removeChild(const QString &name)
+ObjectTree::removeItem(const QString &name)
 {
 	ObjectTreeItem *c = lookup(name);
+
 	if (m_container && m_container->form())
 		m_container->form()->emitChildRemoved(c);
+
 	for(ObjectTreeItem *it = c->children()->first(); it; it = c->children()->next())
-		removeChild(it->name());
+		removeItem(it->name());
+
 	m_treeDict.remove(name);
-	c->parent()->remChild(c);
+	c->parent()->removeChild(c);
 	delete c;
 }
 
@@ -233,16 +209,10 @@ ObjectTree::genName(const QString &c)
 	return name;
 }
 
-void
-ObjectTree::debug()
-{
-	ObjectTreeItem::debug(0);
-}
-
 ObjectTree::~ObjectTree()
 {
 	for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
-		removeChild(it->name());
+		removeItem(it->name());
 }
 
 }

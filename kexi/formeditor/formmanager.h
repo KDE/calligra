@@ -44,7 +44,7 @@ class Container;
 class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
-typedef QPtrList<KAction> Actions;
+typedef QPtrList<KAction> ActionList;
 
 //! A class to manage (create/load/save) Forms
 /** This is Form Designer's top class, which is used by external APIs to access FormDesigner. This is the class you have to use
@@ -66,34 +66,24 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
-		Actions createActions(KActionCollection *parent);
-
-		/*! Sets the external editors used by FormDesigner (as they may be docked). This function also connects
-		  appropriate signals and slots to ensure sync with the current Form.
-		 */
-		void setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview);
+		ActionList createActions(KActionCollection *parent);
+		bool              isPasteEnabled();
 
 		//! \return A pointer to the WidgetLibrary owned by this Manager.
 		WidgetLibrary*    lib() const { return m_lib; }
 		//! \return A pointer to the ObjectPropertyBuffer owned by this Manager.
 		ObjectPropertyBuffer*  buffer() const { return m_buffer; }
 		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget. */
-		bool              inserting() const { return m_inserting; }
+		bool              isInserting() const { return m_inserting; }
 		/*! \return The name of the class being inserted, corresponding to the menu item or the toolbar button clicked.
 		 */
 		QString           insertClass() const { return m_insertClass; }
 
-		/*! \return The popup menu to be shown when right-clicking on the form. Each container adds a widget-specific part
-		  to this one before showing it. This menu contains Copy/cut/paste/remove/delete and custom actions.
-		 */
-		KPopupMenu*       popupMenu() const { return m_popup; }
-		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the
-		  pasted widgets.
-		 */
+		/*! Sets the point where the pasted widget should be moved to. */
 		void              setInsertPoint(const QPoint &p);
 
 		//! \return If we are creating a Connection by drag-and-drop or not.
-		bool              draggingConnection() { return m_drawingSlot; }
+		bool              isCreatingConnection() { return m_drawingSlot; }
 		//! \return the \ref Connection being created.
 		Connection*       createdConnection() { return m_connection; }
 		/*! Resets the Connection being created. We stay in Connection creation mode,
@@ -104,6 +94,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void              createSignalMenu(QWidget *w);
 		//! Creates and display a menu with all the slots of widget \a w.
 		void              createSlotMenu(QWidget *w);
+		//! Emits the signal \ref createFormSlot(). Used by \ref ObjectPropertyBuffer.
+		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
 
 		/*! \return The Form actually active and focused.
 		 */
@@ -114,33 +106,32 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 an icon ...)
 		*/
 		bool              isTopLevel(QWidget *w);
-		bool              isPasteEnabled();
 
 		//! \return A pointer to the KexiPropertyEditor we use.
-		KexiPropertyEditor* editor() const { return m_editor; }
+		KexiPropertyEditor* propertyEditor() const { return m_editor; }
+		/*! Shows a propertybuffer in PropertyBuffer */
+		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
+		/*! Sets the external editors used by FormDesigner (as they may be docked). This function also connects
+		  appropriate signals and slots to ensure sync with the current Form.
+		 */
+		void setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview);
 
+		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
+		void previewForm(Form *form, QWidget *w, Form *toForm=0);
 		/*! Adds a existing form w and changes it to a container */
 		void importForm(Form *form=0, bool preview=false);
-
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
 
-		/*! Shows a propertybuffer in PropertyBuffer */
-		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
 		/*! This function creates and displays the context menu corresponding to the widget \a w.
 		    The menu item are disabled if necessary, and
 		    the widget specific part is added (menu from the factory and buddy selection). */
 		void  createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/);
 
-		//! Emits the signal \ref createFormSlot(). Used by \ref ObjectPropertyBuffer.
-		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
-
 		//! \return If we align widgets to grid or not.
 		bool  snapWidgetsToGrid();
 
 	public slots:
-		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
-		void previewForm(Form *form, QWidget *w, Form *toForm=0);
 		/*! Deletes the selected widget in active Form and all of its children. */
 		void deleteWidget();
 		/*! Copies the slected widget and all its children of the active Form using an XML representation. */
@@ -199,18 +190,15 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  creation of a new widget (ie changes cursor ...).
 		 */
 		void insertWidget(const QString &classname);
-		/*! Stopts the current widget insertion (ie unset the cursor ...). */
+		/*! Stops the current widget insertion (ie unset the cursor ...). */
 		void stopInsert();
 		//! Slot called when the user presses 'Pointer' icon. Switch to Default mode.
 		void slotPointerClicked();
 
 		//! Enter the Connection creation mode.
-		void startDraggingConnection();
+		void startCreatingConnection();
 		//! Leave the Connection creation mode.
-		void stopDraggingConnection();
-
-		/*! Print to the command line the ObjectTree of the active Form (ie a line for each widget, with parent and name). */
-		void debugTree();
+		void stopCreatingConnection();
 
 		/*! Calls this slot when the window activated changes (eg connect
 		  to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
@@ -237,6 +225,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	protected:
 		/*! Inits the Form, adds it to m_forms, and conects slots. */
 		void initForm(Form *form);
+
 		/*! Function called by the "Lay out in..." menu items. It creates a layout from the
 		  currently selected widgets (that must have the same parent).
 		  Calls \ref CreateLayoutCommand. */

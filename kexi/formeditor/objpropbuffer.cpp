@@ -97,7 +97,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			// If the property is changed, we add it in ObjectTreeItem modifProp
 			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 			if((*this)[property.latin1()].changed())
-				tree->addModProperty(property, m_widgets.first()->property(property.latin1()));
+				tree->addModifiedProperty(property, m_widgets.first()->property(property.latin1()));
 
 			m_widgets.first()->setProperty(property.latin1(), value);
 			emit propertyChanged(m_widgets.first(), property, value);
@@ -122,7 +122,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			{
 				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
 				if((*this)[property.latin1()].changed())
-					tree->addModProperty(property, w->property(property.latin1()));
+					tree->addModifiedProperty(property, w->property(property.latin1()));
 
 				w->setProperty(property.latin1(), value);
 				emit propertyChanged(w, property, value);
@@ -141,8 +141,8 @@ ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &, KexiProperty &prop
 	for(QWidget *w = m_widgets.first(); w; w = m_widgets.next())
 	{
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
-		if(tree->modifProp()->contains(prop.name()))
-			w->setProperty(prop.name(), tree->modifProp()->find(prop.name()).data());
+		if(tree->modifiedProperties()->contains(prop.name()))
+			w->setProperty(prop.name(), tree->modifiedProperties()->find(prop.name()).data());
 	}
 }
 
@@ -397,7 +397,7 @@ ObjectPropertyBuffer::checkModifiedProp()
 			{
 				name = it.current()->name();
 				if(it.current()->changed())
-					treeIt->addModProperty(name, it.current()->oldValue());
+					treeIt->addModifiedProperty(name, it.current()->oldValue());
 			}
 		}
 	}
@@ -568,7 +568,7 @@ ObjectPropertyBuffer::saveAlignProperty(const QString &property)
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 	if(tree && (*this)[property.latin1()].changed())
-		tree->addModProperty(property, (*this)[property.latin1()].oldValue());
+		tree->addModifiedProperty(property, (*this)[property.latin1()].oldValue());
 }
 
 // Layout-related functions  //////////////////////////
@@ -659,19 +659,19 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 	if(tree && (*this)[prop.latin1()].changed())
-		tree->addModProperty(prop, (*this)[prop.latin1()].oldValue());
+		tree->addModifiedProperty(prop, (*this)[prop.latin1()].oldValue());
 }
 
 void
 ObjectPropertyBuffer::updateOldValue(ObjectTreeItem *tree, const char *property)
 {
-	if(tree->modifProp()->contains(property))
+	if(tree->modifiedProperties()->contains(property))
 	{
 		if(!(*this)[property])
 			return;
 		blockSignals(true);
 		QVariant v = (*this)[property].value();
-		(*this)[property].setValue( tree->modifProp()->find(property).data() , false);
+		(*this)[property].setValue( tree->modifiedProperties()->find(property).data() , false);
 		(*this)[property].setValue(v, true);
 		blockSignals(false);
 	}
