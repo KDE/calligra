@@ -46,11 +46,13 @@ GStyle::GStyle(const QDomElement &style)
   mStroked = style.attribute("stroked").toInt();;
   mOutline->width(style.attribute("width").toDouble());
   mOutlineOpacity = style.attribute("oopacity").toInt();
+  mOutline->color(KoColor(style.attribute("fcolor")));
   mOutline->opacity(static_cast<int>(255.0 * static_cast<double>(mOutlineOpacity) / 100.0));
   mOutline->join(static_cast<KoOutline::Join>(style.attribute("join").toInt()));
   mOutline->cap(static_cast<KoOutline::Cap>(style.attribute("cap").toInt()));
   mFilled = style.attribute("ftype").toInt();
   mFillOpacity = style.attribute("fopacity").toInt();
+  mFill->color(KoColor(style.attribute("fcolor")));
   mFill->opacity(static_cast<int>(255.0 * static_cast<double>(mFillOpacity) / 100.0));
 }
 
