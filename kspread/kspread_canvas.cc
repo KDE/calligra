@@ -2943,7 +2943,24 @@ void KSpreadCanvas::paintUpdates()
     return;
   }
   QPainter painter(this);
+
+  //Save clip region
+  QRegion rgnComplete( painter.clipRegion() );
+  QWMatrix matrix( painter.worldMatrix() );
+  if ( m_pView )
+  {
+    matrix.scale( m_pDoc->zoomedResolutionX(),
+                  m_pDoc->zoomedResolutionY() );
+    matrix.translate( - xOffset(),
+                      - yOffset() );
+  }
+  else
+  {
+    matrix = painter.worldMatrix();
+  }
+
   painter.save();
+  clipoutChildren( painter, matrix );
 
   KoRect unzoomedRect = doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
 //  unzoomedRect.moveBy( xOffset(), yOffset() );
@@ -2987,21 +3004,49 @@ void KSpreadCanvas::paintUpdates()
   /* now paint the selection and choose selection */
   paintChooseRect(painter, unzoomedRect);
   paintNormalMarker(painter, unzoomedRect);
+
+  //restore clip region with children area
+  painter.restore();
+  painter.setClipRegion( rgnComplete );
+  paintChildren( painter, matrix );
 }
 
+void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
+{
+  QRegion rgn = painter.clipRegion();
+  if ( rgn.isEmpty() )
+    rgn = QRegion( QRect( 0, 0, width(), height() ) );
 
+  QPtrListIterator<KoDocumentChild> itChild( m_pDoc->children() );
+  for( ; itChild.current(); ++itChild )
+  {
+//    if ( ((KSpreadChild*)it.current())->table() == table &&
+//         !m_pView->hasDocumentInWindow( it.current()->document() ) )
+    if ( ( ( KSpreadChild*)itChild.current() )->table() == activeTable() )
+    {
+      rgn -= itChild.current()->region( matrix );
+    }
+  }
+  painter.setClipRegion( rgn );
+}
 
-
-
-
-
-
-
-
-
-
-
-
+void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
+{
+  painter.setWorldMatrix( matrix );
+  QPtrListIterator<KoDocumentChild> itChild( m_pDoc->children() );
+  itChild.toFirst();
+  for( ; itChild.current(); ++itChild )
+  {
+    if ( ( ( KSpreadChild*)itChild.current() )->table() == activeTable() &&
+         ( m_pView && !m_pView->hasDocumentInWindow( itChild.current()->document() ) ) )
+    {
+      // #### todo: paint only if child is visible inside rect
+      painter.save();
+      m_pDoc->paintChild( itChild.current(), painter, m_pView );
+      painter.restore();
+    }
+  }
+}
 
 void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
 {

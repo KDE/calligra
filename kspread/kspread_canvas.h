@@ -312,6 +312,16 @@ private:
     void drawChooseMarker( const QRect& );
 
     /**
+     * Clips out the children region from the painter
+     */
+    void clipoutChildren( QPainter& painter, QWMatrix& matrix );
+
+    /**
+     * Paints the children
+     */
+    void paintChildren( QPainter& painter, QWMatrix& matrix );
+
+    /**
      * @see #setLastEditorWithFocus
      */
     EditorType lastEditorWithFocus() const { return m_focusEditorType; }
