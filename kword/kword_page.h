@@ -139,6 +139,7 @@ public:
   void editPaste(QString _string);
 
   void recalcText();
+  void recalcWholeText();
   void drawBorders(QPainter &_painter,QRect v_area);
   void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
   void setMouseMode(MouseMode _mm);

@@ -1052,29 +1052,6 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Objects..."), this, "insertPart", 0, -1, -1 );
 
-  // format menu
-  _menubar->insertMenu( i18n( "&Format" ), m_vMenuFormat, -1, -1 );
-
-  m_idMenuFormat_Font = m_vMenuFormat->insertItem4( i18n("&Font..."), this, "formatFont", 0, -1, -1 );
-  m_idMenuFormat_Color = m_vMenuFormat->insertItem4( i18n("&Color..."), this, "formatColor", 0, -1, -1 );
-  m_idMenuFormat_Paragraph = m_vMenuFormat->insertItem4( i18n("Paragraph..."), this, "formatParagraph", 0, -1, -1 );
-  m_idMenuFormat_Page = m_vMenuFormat->insertItem4( i18n("Page..."), this, "formatPage", 0, -1, -1 );
-
-  m_vMenuFormat->insertSeparator( -1 );
-
-  m_idMenuFormat_Numbering = m_vMenuFormat->insertItem4( i18n("Numbering..."), this, "formatNumbering", 0, -1, -1 );
-  m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", 0, -1, -1 );
-
-  // extra menu
-  _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
-
-  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4( i18n("&Spelling..."), this, "extraSpelling", 0, -1, -1 );
-  m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4( i18n("&Stylist..."), this, "extraStylist", 0, -1, -1 );
-
-  m_vMenuExtra->insertSeparator( -1 );
-
-  m_idMenuExtra_Options = m_vMenuExtra->insertItem4( i18n("&Options..."), this, "extraOptions", 0, -1, -1 );
-
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 
@@ -1100,6 +1077,29 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuTools->setCheckable(true);
   m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
+
+  // format menu
+  _menubar->insertMenu( i18n( "&Format" ), m_vMenuFormat, -1, -1 );
+
+  m_idMenuFormat_Font = m_vMenuFormat->insertItem4( i18n("&Font..."), this, "formatFont", 0, -1, -1 );
+  m_idMenuFormat_Color = m_vMenuFormat->insertItem4( i18n("&Color..."), this, "formatColor", 0, -1, -1 );
+  m_idMenuFormat_Paragraph = m_vMenuFormat->insertItem4( i18n("Paragraph..."), this, "formatParagraph", 0, -1, -1 );
+  m_idMenuFormat_Page = m_vMenuFormat->insertItem4( i18n("Page..."), this, "formatPage", 0, -1, -1 );
+
+  m_vMenuFormat->insertSeparator( -1 );
+
+  m_idMenuFormat_Numbering = m_vMenuFormat->insertItem4( i18n("Numbering..."), this, "formatNumbering", 0, -1, -1 );
+  m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", 0, -1, -1 );
+
+  // extra menu
+  _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
+
+  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4( i18n("&Spelling..."), this, "extraSpelling", 0, -1, -1 );
+  m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4( i18n("&Stylist..."), this, "extraStylist", 0, -1, -1 );
+
+  m_vMenuExtra->insertSeparator( -1 );
+
+  m_idMenuExtra_Options = m_vMenuExtra->insertItem4( i18n("&Options..."), this, "extraOptions", 0, -1, -1 );
 
   // help menu
   m_vMenuHelp = _menubar->helpMenu();
@@ -1204,6 +1204,45 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
   m_vToolBarInsert->enable( OpenPartsUI::Show );
 
+  // TOOLBAR Tools
+  m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarTools->setFullWidth( false );
+ 
+  // edit
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/edittool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Edit = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT, SIGNAL( clicked() ), this, "toolsEdit", 
+							 true, i18n("Edit Text Tool"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
+  m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
+
+  // edit frame
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/editframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT_FRAME, SIGNAL( clicked() ), this, "toolsEditFrame", 
+							      true, i18n("Edit Frames Tool"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
+
+  // create text frame
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/textframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_CreateText = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TEXT, SIGNAL( clicked() ), this, "toolsCreateText", 
+							       true, i18n("Create Text Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
+
+  // create pix frame
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/picframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ), this, "toolsCreatePix", 
+							       true, i18n("Create Picture Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
+
+  m_vToolBarTools->enable( OpenPartsUI::Show );
+
   // TOOLBAR Text
   m_vToolBarText = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarText->setFullWidth( false );
@@ -1225,7 +1264,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     sizelist[i-4] = CORBA::string_dup( buffer );
   }
   m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const char* ) ),
-							this, "fontSizeSelected", true,
+							this, "textSizeSelected", true,
 							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,8);
   tbFont.setPointSize(12);
@@ -1421,45 +1460,6 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmpBrd.style = KWParagLayout::SOLID;
 
   m_vToolBarText->enable( OpenPartsUI::Show );
-
-  // TOOLBAR Tools
-  m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-  m_vToolBarTools->setFullWidth( false );
- 
-  // edit
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/edittool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonTools_Edit = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT, SIGNAL( clicked() ), this, "toolsEdit", 
-							 true, i18n("Edit Text Tool"), -1);
-  m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
-  m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
-
-  // edit frame
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/editframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT_FRAME, SIGNAL( clicked() ), this, "toolsEditFrame", 
-							      true, i18n("Edit Frames Tool"), -1);
-  m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
-
-  // create text frame
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/textframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonTools_CreateText = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TEXT, SIGNAL( clicked() ), this, "toolsCreateText", 
-							       true, i18n("Create Text Frame"), -1);
-  m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
-
-  // create pix frame
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/picframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ), this, "toolsCreatePix", 
-							       true, i18n("Create Picture Frame"), -1);
-  m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
-
-  m_vToolBarTools->enable( OpenPartsUI::Show );
 
   return true;
 }      
@@ -1670,7 +1670,11 @@ void KWordView::setMode( KOffice::View::Mode _mode)
   else
     m_bShowGUI = true;
 
-  if (gui) gui->showGUI(m_bShowGUI);
+  if (gui) 
+    {
+      gui->showGUI(m_bShowGUI);
+      gui->getPaperWidget()->recalcText();
+    }
 }
 
 /*================================================================*/

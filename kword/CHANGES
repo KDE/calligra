@@ -298,7 +298,12 @@ Reggie, 27.10.1998:
 - Added the possibility to set the Run Around Gap for each frame
   with the frame setting dialog
 
-Reggie, 28.10.1998:
--------------------
+Reggie, 1.11.1998:
+------------------
 - Lots of fixes
 - It's possible to choose the editing mode with the toolbar and menu now
+
+Reggie, 2.11.1998:
+------------------
+- Fixed a bug when loading files with more than one framesets
+- Some fixes in the toolbars

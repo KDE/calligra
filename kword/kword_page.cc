@@ -55,7 +55,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   inKeyEvent = false;
   recalcAll = false;
 
-  recalcText();
+  recalcWholeText();
   mouseMode = MM_EDIT;
 
   setupMenus();
@@ -741,6 +741,26 @@ void KWPage::recalcText()
 
   while (!bend)
     bend = !_fc.makeNextLineLayout(painter);
+
+  painter.end();
+}
+
+/*================================================================*/
+void KWPage::recalcWholeText()
+{
+  QPainter painter;
+  painter.begin(this);
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      KWFormatContext _fc(doc,i + 1);
+      _fc.init(doc->getFirstParag(i),painter,true);
+
+      bool bend = false;
+      
+      while (!bend)
+	bend = !_fc.makeNextLineLayout(painter);
+    }
 
   painter.end();
 }

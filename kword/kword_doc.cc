@@ -180,8 +180,8 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl)
   if (processingType == WP)
     recalcFrames();
 
-  updateAllCursors(); 
   updateAllFrames();
+  updateAllCursors(); 
 }
 
 /*================================================================*/
