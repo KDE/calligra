@@ -1450,7 +1450,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
-                                  .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) );
+                                  .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ) );
             res=false;
         }
 

@@ -1610,7 +1610,8 @@ bool StructureParser::fatalError (const QXmlParseException& exception)
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     m_fatalerror=true;
     KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
-        .arg(exception.lineNumber()).arg(exception.columnNumber()).arg(i18n(exception.message().utf8())),
+        .arg(exception.lineNumber()).arg(exception.columnNumber())
+        .arg( i18n( "QXml", exception.message().utf8() ) ),
         i18n("AbiWord Import Filter"),0);
     return false; // Stop parsing now, we do not need further errors.
 }
