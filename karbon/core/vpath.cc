@@ -21,6 +21,9 @@
 VPath::VPath()
 	: VObject(), m_isClosed( false )
 {
+	m_segments.setAutoDelete( true );
+	m_holes.setAutoDelete( true );
+
 	// add a initial segment at (0,0):
 	m_segments.append( new VSegment() );
 
@@ -30,20 +33,41 @@ VPath::VPath()
 VPath::VPath( const VPath& path )
 	: VObject()
 {
-// TODO: implement copy-ctor
-    m_segments.clear();
-    VSegmentListIterator itr( path.m_segments );
-    for( ; itr.current() ; ++itr )
-    {
-        m_segments.append( new VSegment( *( itr.current() ) ) );
-    }
+	// outline:
+	m_segments.setAutoDelete( true );
+	m_segments.clear();
+
+	VSegmentListIterator itr( path.m_segments );
+	for( ; itr.current() ; ++itr )
+	{
+		m_segments.append( new VSegment( *( itr.current() ) ) );
+	}
+
+
+	// holes:
+	m_holes.setAutoDelete( true );
+	m_holes.clear();
+
+	VSegmentList* hole;
+
+	QPtrListIterator<VSegmentList> holeItr( path.m_holes );
+	for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+	{
+		hole = new VSegmentList();
+		hole->setAutoDelete( true );
+
+		VSegmentListIterator itr2( *( holeItr.current() ) );
+		for( ; itr2.current() ; ++itr2 )
+		{
+			hole->append( new VSegment( *( itr2.current() ) ) );
+		}
+
+		m_holes.append( hole );
+	}
 }
 
 VPath::~VPath()
 {
-	VSegmentListIterator itr( m_segments );
-	for( ; itr.current() ; ++itr )
-		delete( itr.current() );
 }
 
 void
@@ -57,54 +81,44 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		return;
 
 	painter.save();
-
 	QPtrListIterator<VSegmentList> holeItr( m_holes );
 
-	// paint fill:
-	if( state() == normal || state() == selected )
+	if( state() != edit )
 	{
+		// paint fill:
 		m_fill.begin_draw( painter, zoomFactor );
-
-		// draw outline:
+		// "outer shape":
 		m_fill.draw( m_segments );
-
-		// draw holes:
+		// holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
 			m_fill.draw( *( holeItr.current() ), true );
 		}
-
 		m_fill.end_draw();
-	}
 
-	// paint contour:
-	if( state() == edit )	// draw just simplistic contours.
-	{
-		painter.setPen( Qt::yellow );
-		painter.setRasterOp( Qt::XorROP );
-
-		// draw outline:
-		m_contour.draw( painter, zoomFactor, m_segments, true );
-
-		// draw holes:
-		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
-		{
-kdDebug() << "edit yes" << endl;
-			m_contour.draw( painter, zoomFactor, *( holeItr.current() ), true );
-		}
-	}
-	else
-	{
-		// draw outline:
+		// draw contour:
+		// "outer shape":
 		m_contour.draw( painter, zoomFactor, m_segments );
-
-		// draw holes:
+		// holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
-kdDebug() << "contour yes" << endl;
 			m_contour.draw( painter, zoomFactor, *( holeItr.current() ) );
 		}
 	}
+
+	// draw simplistic contour:
+	if( state() == edit || state() == selected )
+	{
+		// contour:
+		m_contour.draw( painter, zoomFactor, m_segments, true );
+
+		// holes:
+		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		{
+			m_contour.draw( painter, zoomFactor, *( holeItr.current() ), true );
+		}
+	}
+
 
 
 // TODO: convert the following to Traversers:
@@ -112,22 +126,24 @@ kdDebug() << "contour yes" << endl;
 
 	if( state() == selected )
 	{
+		painter.setRasterOp( Qt::CopyROP );
+		painter.setPen( Qt::NoPen );
+		painter.setBrush( Qt::blue.light() );
+
 		// draw small boxes for path nodes
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			// draw boxes:
-			painter.setPen( Qt::NoPen );
-			painter.setBrush( Qt::blue.light() );
-
 			drawBox( painter,
 				qRound( zoomFactor * itr.current()->point( 3 ).x() ),
 				qRound( zoomFactor * itr.current()->point( 3 ).y() ), 3 );
 
 		}
-
 	}
-	if( state() == edit )
+	else if( state() == edit )
 	{
+		painter.setRasterOp( Qt::XorROP );
+		painter.setPen( Qt::yellow );
 		painter.setBrush( Qt::NoBrush );
 
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -348,15 +364,18 @@ VPath::booleanOp( const VPath* path, int /*type*/ ) const
 void
 VPath::combine( const VPath& path )
 {
-	VSegmentList* holes = new VSegmentList();
+// TODO: inside/intersection checks needed
+	VSegmentList* hole = new VSegmentList();
 	VSegmentListIterator itr( path.m_segments );
+
+	hole->setAutoDelete( true );
 
 	for( ; itr.current(); ++itr )
 	{
-		holes->append( new VSegment( *( itr.current() ) ) );
+		hole->append( new VSegment( *( itr.current() ) ) );
 	}
 
-	m_holes.append( holes );
+	m_holes.append( hole );
 }
 
 VObject&

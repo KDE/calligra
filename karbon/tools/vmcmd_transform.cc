@@ -40,7 +40,7 @@ VMCmdTranslate::VMCmdTranslate( KarbonPart* part, QPtrList<VObject> objects, dou
 }
 
 VMCmdScale::VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double s1, double s2 )
-	: VMCmdTransform( part, objects, i18n("Translate Object") )
+	: VMCmdTransform( part, objects, i18n("Scale Object") )
 {
 	m_mat.translate( p.x(), p.y() );
 	m_mat.scale( s1, s2 );

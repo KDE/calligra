@@ -42,7 +42,13 @@ VContour::draw( QPainter& painter, const double zoomFactor, const VSegmentList& 
 		else if( m_lineCap == cap_square )
 			pen.setCapStyle( Qt::SquareCap );
 
+		painter.setRasterOp( Qt::CopyROP );
 		painter.setPen( pen );
+	}
+	else
+	{
+		painter.setRasterOp( Qt::XorROP );
+		painter.setPen( Qt::yellow );
 	}
 
 	painter.setBrush( Qt::NoBrush );

@@ -37,6 +37,7 @@ VFill::draw( const VSegmentList& list, bool hole )
 void
 VFill::end_draw()
 {
+	m_painter->setRasterOp( Qt::CopyROP );
 	m_painter->setPen( Qt::NoPen );
 	m_painter->setBrush( QColor( 210, 210, 210 ) );
 	m_painter->drawPolygon( m_pa, !m_hasHoles );	// otherwise spirals suck
