@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # fast parser testing using sqlite database
 # Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
