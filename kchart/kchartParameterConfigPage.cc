@@ -62,32 +62,45 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     grid1->addWidget(llabel,8,0);
 
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
-    QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
+    QGridLayout *grid2 = new QGridLayout(gb2,10,2,15,8);
     QLabel *tmpLabel = new QLabel( i18n( "Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,0,0);
 
-    title= new QLineEdit( gb2 );
-    title->setMaximumWidth(130);
-    grid2->addWidget(title,1,0);
+
+
+
+    header= new QLineEdit( gb2 );
+    header->setMaximumWidth(130);
+    grid2->addWidget(header,1,0);
+
+    header2= new QLineEdit( gb2 );
+    header2->setMaximumWidth(130);
+    grid2->addWidget(header2,2,0);
+
+    footer= new QLineEdit( gb2 );
+    footer->setMaximumWidth(130);
+    grid2->addWidget(footer,3,0);
+
+
 
 
     tmpLabel = new QLabel( i18n( "Y-Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    grid2->addWidget(tmpLabel,2,0);
+    grid2->addWidget(tmpLabel,4,0);
 
     ytitle= new QLineEdit( gb2 );
     ytitle->setMaximumWidth(130);
-    grid2->addWidget(ytitle,3,0);
+    grid2->addWidget(ytitle,5,0);
     ytitle->setEnabled(false);
 
     tmpLabel = new QLabel( i18n( "X-Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    grid2->addWidget(tmpLabel,4,0);
+    grid2->addWidget(tmpLabel,6,0);
 
     xtitle= new QLineEdit( gb2 );
     xtitle->setMaximumWidth(130);
-    grid2->addWidget(xtitle,5,0);
+    grid2->addWidget(xtitle,7,0);
     xtitle->setEnabled(false);
 
     tmpLabel = new QLabel( i18n( "Y-Label format" ), gb2 );
@@ -101,19 +114,19 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
 
     tmpLabel = new QLabel( i18n( "Y-Title 2" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    grid2->addWidget(tmpLabel,2,1);
+    grid2->addWidget(tmpLabel,4,1);
 
     ytitle2= new QLineEdit( gb2 );
     ytitle2->setMaximumWidth(130);
-    grid2->addWidget(ytitle2,3,1);
+    grid2->addWidget(ytitle2,5,1);
 
     tmpLabel = new QLabel( i18n( "Y-Label format 2" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    grid2->addWidget(tmpLabel,4,1);
+    grid2->addWidget(tmpLabel,6,1);
 
     ylabel2_fmt= new QLineEdit( gb2 );
     ylabel2_fmt->setMaximumWidth(130);
-    grid2->addWidget(ylabel2_fmt,5,1);
+    grid2->addWidget(ylabel2_fmt,7,1);
 
     QButtonGroup* gb3 = new QButtonGroup( i18n("Annotation"), this );
     QGridLayout *grid3 = new QGridLayout(gb3,8,1,15,8);
@@ -232,7 +245,9 @@ void KChartParameterConfigPage::init()
     shelf->setEnabled(false);
 
 
-    title->setText(_params->header1Text());
+    header->setText( _params->headerFooterText( KDChartParams::HdFtPosHeader  ));
+    header2->setText(_params->headerFooterText( KDChartParams::HdFtPosHeader2 ));
+    footer->setText( _params->headerFooterText( KDChartParams::HdFtPosFooter  ));
 
     // PENDING(kalle) Adapt this
     //     xtitle->setText(_params->xtitle);
@@ -285,7 +300,9 @@ void KChartParameterConfigPage::apply()
     //     	_params->ytitle2=ytitle2->text();
     //     	}
 
-    _params->setHeader1Text(title->text());
+    _params->setHeaderFooterText(KDChartParams::HdFtPosHeader,  header->text());
+    _params->setHeaderFooterText(KDChartParams::HdFtPosHeader2, header2->text());
+    _params->setHeaderFooterText(KDChartParams::HdFtPosFooter,  footer->text());
 
     // PENDING(kalle) Adapt this
     //     if(grid->isChecked())

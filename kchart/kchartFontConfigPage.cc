@@ -62,7 +62,18 @@ KChartFontConfigPage::KChartFontConfigPage( KDChartParams* params,
 
 void KChartFontConfigPage::initList()
 {
-  list->insertItem(i18n("Title"));
+  const QString titleStr = i18n("Title");
+
+  // this 'titleStr' and 'ti' thing is only for not breaking i18n from KOffice 1.1 to 1.1.1
+  // it will be removed by sophisticated handling of headers and footers (khz,9.12.2001)
+
+  QString ti( titleStr );
+  list->insertItem( ti );
+  ti += " 2";
+  list->insertItem( ti );
+  ti[ ti.length()-1 ] = '3';
+  list->insertItem( ti );
+  
   if( _params->chartType() != KDChartParams::Pie &&
       _params->chartType() != KDChartParams::Ring ) {
     list->insertItem(i18n("X-Title"));
@@ -137,9 +148,25 @@ void KChartFontConfigPage::changeIndex(int newindex)
 
 void KChartFontConfigPage::changeLabelFont()
 {
-  if(list->currentText()==i18n("Title")) {
-	if (KFontDialog::getFont( title,false,this ) == QDialog::Rejected )
+  const QString ti = i18n("Title");
+  
+  // this 'ti', 'ti2', 'ti3' thing is only for not breaking i18n from KOffice 1.1 to 1.1.1
+  // it will be removed by sophisticated handling of headers and footers (khz,9.12.2001)
+
+  QString ti2( ti );
+  ti2 += " 2";
+  QString ti3( ti );
+  ti3 += " 3";
+  if( list->currentText()==ti ) {
+	if (KFontDialog::getFont( fontHeader,false,this ) == QDialog::Rejected )
 	  return;
+  } else if( list->currentText()==ti2 ) {
+	if (KFontDialog::getFont( fontHeader2,false,this ) == QDialog::Rejected )
+	  return;
+  } else if( list->currentText()==ti3 ) {
+	if (KFontDialog::getFont( fontFooter,false,this ) == QDialog::Rejected )
+	  return;
+
   } else if(list->currentText()==i18n("X-Title")) {
 	if (KFontDialog::getFont( xtitle,false,this ) == QDialog::Rejected )
 	  return;
@@ -169,10 +196,20 @@ void KChartFontConfigPage::init()
     xaxis = bottomparms.axisLabelsFont();
     yaxis = leftparms.axisLabelsFont();
 
-    title=_params->header1Font();
+    fontHeader = _params->headerFooterFont(  KDChartParams::HdFtPosHeader );
+    if( _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader ) )
+        fontHeader.setPointSize( _params->headerFooterFontRelSize( KDChartParams::HdFtPosHeader ) );
+
+    fontHeader2 = _params->headerFooterFont( KDChartParams::HdFtPosHeader2 );
+    if( _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader2 ) )
+        fontHeader2.setPointSize( _params->headerFooterFontRelSize( KDChartParams::HdFtPosHeader2 ) );
+
+    fontFooter = _params->headerFooterFont(  KDChartParams::HdFtPosFooter );
+    if( _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosFooter ) )
+        fontFooter.setPointSize( _params->headerFooterFontRelSize( KDChartParams::HdFtPosFooter ) );
+
     // PENDING(kalle) Adapt
 
-    //   title = _params->titleFont();
 //   xtitle = _params->xTitleFont();
 //   ytitle = _params->yTitleFont();
 //   label = _params->labelFont();
@@ -204,10 +241,15 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
 //    _params->setHeader1Font(title);
 
-bool bUseRelSize = true;
-int nRelSize = title.pointSize();
-
-    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader, title, bUseRelSize, nRelSize );
+    bool bUseRelSize = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader );
+    int nRelSize = fontHeader.pointSize();
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader, fontHeader, bUseRelSize, nRelSize );
+    bUseRelSize = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader2 );
+    nRelSize = fontHeader2.pointSize();
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader2, fontHeader2, bUseRelSize, nRelSize );
+    bUseRelSize = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosFooter );
+    nRelSize = fontFooter.pointSize();
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosFooter, fontFooter, bUseRelSize, nRelSize );
 
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);

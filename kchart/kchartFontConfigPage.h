@@ -38,7 +38,9 @@ private:
     QListBox *listColor;
     QPushButton *fontButton;
     KColorButton *colorButton;
-    QFont title;
+    QFont fontHeader;
+    QFont fontHeader2;
+    QFont fontFooter;
     QFont xtitle;
     QFont ytitle;
     QFont label;
