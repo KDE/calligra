@@ -828,9 +828,16 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
             escapedText += "\\\'";   // escape upper page character to 7 bit
             escapedText += QString::number ( ch, 16 );
         }
-        else if ( ch >= 127 ) // check for a non-ASCII character (127 is already non-ASCII)
+        else if ( ch >= 127 && ch < 256) // check for a 8 bit non-ASCII character (127 is already non-ASCII)
         {
-            escapedText += "\\u";
+			// bp: added for OpenOffice compatibility
+			escapedText += "\\\'";
+            escapedText += QString::number ( ch, 16 );
+        }
+        else if ( ch >= 256) // check for a higher code non-ASCII character
+        {
+			// encode this as decimal unicode
+			escapedText += "\\u";
             escapedText += QString::number ( ch, 10 );
             escapedText += " ";
         }
