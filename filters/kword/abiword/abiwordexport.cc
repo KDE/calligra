@@ -484,16 +484,16 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
 
 bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
 {
+#if 0
     *m_streamOut << "</p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
     *m_streamOut << "<table>\n";
+#endif
 
     QValueList<TableCell>::ConstIterator itCell;
-
-
-
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
+#if 0
         // ### TODO: rowspan, colspan
 
         // AbiWord seems to work by attaching to the cell borders
@@ -503,18 +503,19 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
         *m_streamOut << "top-attach:" << (*itCell).row << "; ";
         *m_streamOut << "bot-attach:" << (*itCell).row + 1;
         *m_streamOut << "\">\n";
-
+#endif
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
             return false;
         }
-
+#if 0
         *m_streamOut << "</cell>\n";
+#endif
     }
-
+#if 0
     *m_streamOut << "</table>\n";
     *m_streamOut << "<p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
-
+#endif
     return true;
 }
 
@@ -1096,7 +1097,7 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     QString strVersion("$Revision$");
     // Remove the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    *m_streamOut << strVersion.mid(10).replace('$',"");
+    *m_streamOut << strVersion.mid(10).remove('$');
 
     *m_streamOut << "</m>\n";
 

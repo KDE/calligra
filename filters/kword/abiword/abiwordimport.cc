@@ -1068,6 +1068,7 @@ static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
 bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackCurrent*/,
     const QXmlAttributes& attributes)
 {
+#if 0
     stackItem->elementType=ElementTypeFoot;
 
     const QString id(attributes.value("endnote-id").stripWhiteSpace());
@@ -1080,7 +1081,7 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
         return true;
     }
 
-    // We need to create a frameset for the foot note.    
+    // We need to create a frameset for the foot note.
     QDomElement framesetElement(mainDocument.createElement("FRAMESET"));
     framesetElement.setAttribute("frameType",1);
     framesetElement.setAttribute("frameInfo",7);
@@ -1096,9 +1097,11 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
     frameElementOut.setAttribute("runaround",1);
     // ### TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
-    
-    stackItem->m_frameset=framesetElement;
 
+    stackItem->m_frameset=framesetElement;
+#else
+    stackItem->elementType=ElementTypeIgnore;
+#endif
     return true;
 }
 
@@ -1106,34 +1109,35 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
 
 bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCurrent)
 {
+#if 0
     // In KWord, inline tables are inside a paragraph.
     // In AbiWord, tables are outside any paragraph.
 
     const uint tableNumber(++m_tableGroupNumber);
     const QString tableName(i18n("Table %1").arg(tableNumber));
-        
+
     QDomElement elementText=stackCurrent->stackElementText;
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
     stackCurrent->m_frameset.appendChild(paragraphElementOut);
-    
+
     QDomElement textElementOut(mainDocument.createElement("TEXT"));
     textElementOut.appendChild(mainDocument.createTextNode("#"));
     paragraphElementOut.appendChild(textElementOut);
-    
+
     QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
     paragraphElementOut.appendChild(formatsPluralElementOut);
-    
+
     QDomElement elementFormat(mainDocument.createElement("FORMAT"));
     elementFormat.setAttribute("id",6);
     elementFormat.setAttribute("pos",0);
     elementFormat.setAttribute("len",1);
     formatsPluralElementOut.appendChild(elementFormat);
-    
+
     QDomElement elementAnchor(mainDocument.createElement("ANCHOR"));
     elementAnchor.setAttribute("type","frameset");
     elementAnchor.setAttribute("instance",tableName);
     elementFormat.appendChild(elementAnchor);
-    
+
     stackItem->elementType=ElementTypeTable;
     stackItem->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackItem->stackElementText=textElementOut; // <TEXT>
@@ -1149,7 +1153,9 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     AbiPropsMap abiPropsMap;
     styleDataMap.useOrCreateStyle("Normal"); // We might have to create the "Normal" style.
     AddLayout("Normal", layoutElement, stackItem, mainDocument, abiPropsMap, 0, false);
-
+#else
+    stackItem->elementType=ElementTypeIgnore;
+#endif
     return true;
 }
 
@@ -1157,12 +1163,13 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
 bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCurrent,
     const QXmlAttributes& attributes)
 {
+#if 0
     if (stackCurrent->elementType!=ElementTypeTable)
     {
         kdError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)" << endl;
         return false;
     }
-    
+
     stackItem->elementType=ElementTypeCell;
 
     const QString tableName(stackCurrent->strTemp1);
@@ -1176,15 +1183,15 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 
     AbiPropsMap abiPropsMap;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props")); // Do not check PROPS
-    
+
     // We abuse the attach number to know the row and col numbers.
     const uint row=abiPropsMap["top-attach"].getValue().toUInt();
     const uint col=abiPropsMap["left-attach"].getValue().toUInt();
-    
+
     const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
         .arg(row).arg(col).arg(stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
-    
-    // We need to create a frameset for the cell    
+
+    // We need to create a frameset for the cell
     QDomElement framesetElement(mainDocument.createElement("FRAMESET"));
     framesetElement.setAttribute("frameType",1);
     framesetElement.setAttribute("frameInfo",0);
@@ -1212,6 +1219,9 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     stackItem->stackElementText=nullDummy; // <TEXT>
     stackItem->stackElementFormatsPlural=nullDummy; // <FORMATS>
 
+#else
+    stackItem->elementType=ElementTypeIgnore;
+#endif
     return true;
 }
 
@@ -1633,7 +1643,7 @@ void StructureParser :: createDocument(void)
     elementDoc.appendChild(element);
 
     // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    // default paper format of AbiWord is "Letter"
+    // Default paper format of AbiWord is "Letter"
     m_paperElement=mainDocument.createElement("PAPER");
     m_paperElement.setAttribute("format",PG_US_LETTER);
     m_paperElement.setAttribute("width",MillimetresToPoints(KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT)));
