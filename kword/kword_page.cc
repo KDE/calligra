@@ -926,6 +926,8 @@ void KWPage::paintEvent(QPaintEvent* e)
 		bool bend = false;
 		while (!bend)
 		  {
+		    if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+			static_cast<int>(paintfc->getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
 			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 		      break;
@@ -1306,6 +1308,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	while (!bend)
 	  {
+	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 	    if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 	      break;
@@ -1440,6 +1444,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	while (!bend)
 	  {
+	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 	    if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 	      break;
@@ -1550,6 +1556,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    
 	    while (!bend)
 	      {
+		if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+		    static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 		if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 		  break;
@@ -2094,6 +2102,16 @@ void KWPage::applyStyle(QString _style)
   recalcAll = false; 
 }
 /*================================================================*/
+void KWPage::setCounter(KWParagLayout::Counter _counter)
+{ 
+  fc->getParag()->getParagLayout()->setCounter(_counter); 
+  dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(fc->getFrameSet() - 1))->updateCounters();
+  recalcAll = true; 
+  recalcText(); 
+  recalcCursor(); 
+  recalcAll = false; 
+}
+/*================================================================*/
 void KWPage::setEnumList()
 {
   int f = doc->getApplyStyleTemplate();
@@ -2128,3 +2146,4 @@ void KWPage::setNormalText()
   doc->setApplyStyleTemplate(f);
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
 }
+

@@ -36,8 +36,7 @@ KWStyleManager::KWStyleManager(QWidget *_parent,KWordDocument *_doc,QStrList _fo
   setupTab1();
   setupTab2();
 
-  setCancelButton(i18n("Cancel"));
-  setOkButton(i18n("OK"));
+  setOkButton(i18n("Close"));
 
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(apply()));
 }
@@ -53,13 +52,13 @@ void KWStyleManager::setupTab1()
   for (unsigned int i = 0;i < doc->paragLayoutList.count();i++)
     lStyleList->insertItem(doc->paragLayoutList.at(i)->getName());
   connect(lStyleList,SIGNAL(selected(int)),this,SLOT(editStyle(int)));
-  lStyleList->setCurrentItem(0);
   grid1->addWidget(lStyleList,0,0);
 
   bButtonBox = new KButtonBox(tab1,KButtonBox::VERTICAL);
   bAdd = bButtonBox->addButton(i18n("&Add.."),false);
   connect(bAdd,SIGNAL(clicked()),this,SLOT(addStyle()));
   bDelete = bButtonBox->addButton(i18n("&Delete"),false);
+  connect(bDelete,SIGNAL(clicked()),this,SLOT(deleteStyle()));
   bButtonBox->addStretch();
   bEdit = bButtonBox->addButton(i18n("&Edit..."),false);
   connect(bEdit,SIGNAL(clicked()),this,SLOT(editStyle()));
@@ -81,6 +80,9 @@ void KWStyleManager::setupTab1()
   grid1->activate();
 
   addTab(tab1,i18n("Style Manager"));
+
+  connect(lStyleList,SIGNAL(highlighted(const char*)),this,SLOT(updateButtons(const char*)));
+  lStyleList->setCurrentItem(0);
 }
 
 /*================================================================*/
@@ -175,11 +177,13 @@ void KWStyleManager::editStyle()
 {
   if (editor)
     {
+      disconnect(editor,SIGNAL(updateStyleList()),this,SLOT(updateStyleList()));
       delete editor;
       editor = 0L;
     }
 
   editor = new KWStyleEditor(0L,doc->paragLayoutList.at(lStyleList->currentItem()),doc,fontList);
+  connect(editor,SIGNAL(updateStyleList()),this,SLOT(updateStyleList()));
   editor->setCaption(i18n("KWord - Stylist"));
   editor->show();
 }
@@ -189,11 +193,18 @@ void KWStyleManager::addStyle()
 {
   QString str;
   str.sprintf("%s (%d)",i18n("New Style Template"),doc->paragLayoutList.count());
-  KWParagLayout *pl = new KWParagLayout(doc,true,str);
+  (void)new KWParagLayout(doc,true,str);
   lStyleList->insertItem(str);
   lStyleList->setCurrentItem(lStyleList->count() - 1);
   editStyle();
-  //doc->updateStyleList();
+  doc->updateAllStyleLists();
+}
+
+/*================================================================*/
+void KWStyleManager::deleteStyle()
+{
+  doc->paragLayoutList.remove(lStyleList->currentItem());
+  updateStyleList();
 }
 
 /*================================================================*/
@@ -222,6 +233,31 @@ void KWStyleManager::apply()
     f = f | KWordDocument::U_INDENT;
 
   doc->setApplyStyleTemplate(f);
+}
+
+/*================================================================*/
+void KWStyleManager::updateStyleList()
+{
+  lStyleList->clear();
+  for (unsigned int i = 0;i < doc->paragLayoutList.count();i++)
+    lStyleList->insertItem(doc->paragLayoutList.at(i)->getName());
+  doc->updateAllStyleLists();
+  lStyleList->setCurrentItem(0);
+}
+
+/*================================================================*/
+void KWStyleManager::updateButtons(const char *s)
+{
+  if (s == QString("Standard") ||
+      s == QString("Head 1") ||
+      s == QString("Head 2") ||
+      s == QString("Head 3") ||
+      s == QString("Enumerated List") ||
+      s == QString("Bullet List") ||
+      s == QString("Alphabetical List"))
+    bDelete->setEnabled(false);
+  else
+    bDelete->setEnabled(true);
 }
 
 /******************************************************************/
@@ -519,4 +555,20 @@ void KWStyleEditor::paragDiaOk()
 void KWStyleEditor::apply()
 { 
   *ostyle = *style; 
+
+  if (eName->text() != style->getName())
+    {
+      bool same = false;
+      for (unsigned int i = 0;i < doc->paragLayoutList.count();i++)
+	{	
+	  if (doc->paragLayoutList.at(i)->getName() == eName->text())
+	    same = true;
+	}
+      
+      if (!same)
+	{
+	  ostyle->setName(eName->text());
+	  emit updateStyleList();
+	}
+    }
 }

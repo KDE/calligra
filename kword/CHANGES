@@ -399,3 +399,9 @@ Reggie, 25.11.1998:
 - Style Templates are saved and loaded now
 - Initialization of the GUI work correctly now
 - New Style Templates can be added
+
+Reggie, 26.11.1998:
+-------------------
+- Adding new style templates works correctly now
+- Removing style templates works now
+- Setting the numbering stuff for paragraphs works correctly now

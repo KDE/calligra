@@ -1171,6 +1171,20 @@ void KWordDocument::updateAllCursors()
 }
 
 /*================================================================*/
+void KWordDocument::updateAllStyleLists()
+{
+  KWordView *viewPtr;
+
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  viewPtr->updateStyleList();
+	}
+    }
+}
+
+/*================================================================*/
 void KWordDocument::drawAllBorders(QPainter *_painter = 0)
 {
   KWordView *viewPtr;

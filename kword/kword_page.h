@@ -137,10 +137,11 @@ public:
 
   KWParagLayout::Counter getCounter()
     { return fc->getParag()->getParagLayout()->getCounter(); }
-  void setCounter(KWParagLayout::Counter _counter)
-    { fc->getParag()->getParagLayout()->setCounter(_counter); }
+  void setCounter(KWParagLayout::Counter _counter);
 
   void applyStyle(QString _style);
+
+  KWParagLayout *getParagLayout() { return fc->getParag()->getParagLayout(); }
 
   void setEnumList();
   void setBulletList();

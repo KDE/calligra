@@ -323,6 +323,7 @@ public:
   void setApplyStyleTemplate(int _f) { applyStyleTemplate = _f; }
 
   void updateAllStyles();
+  void updateAllStyleLists();
 
 signals:
   void sig_imageModified();

@@ -165,6 +165,7 @@ public:
   void uncheckAllTools();
   void setTool(MouseMode _mouseMode);
   void updateStyle(QString _styleName);
+  void updateStyleList();
 
 public slots:
   void slotInsertObject(KWordChild *_child);

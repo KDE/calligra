@@ -467,6 +467,9 @@ void KWordView::setTool(MouseMode _mouseMode)
 void KWordView::updateStyle(QString _styleName)
 {
   styleList.find(_styleName);
+
+  if (styleList.at() == -1) return;
+
   if (!CORBA::is_nil(m_vToolBarText))
     m_vToolBarText->setCurrentComboItem(ID_STYLE_LIST,styleList.at());
 
@@ -480,6 +483,22 @@ void KWordView::updateStyle(QString _styleName)
     m_vToolBarText->setButton(ID_USORT_LIST,true);  
 
   setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false);
+}
+
+/*===============================================================*/
+void KWordView::updateStyleList()
+{
+  m_vToolBarText->clearCombo(ID_STYLE_LIST);
+
+  OpenPartsUI::StrList stylelist;
+  stylelist.length(m_pKWordDoc->paragLayoutList.count());
+  for (unsigned int i = 0;i < m_pKWordDoc->paragLayoutList.count();i++)
+    {
+      styleList.append(QString(m_pKWordDoc->paragLayoutList.at(i)->getName()));
+      stylelist[i] = CORBA::string_dup(m_pKWordDoc->paragLayoutList.at(i)->getName());
+    }
+  m_vToolBarText->insertComboList(ID_STYLE_LIST,stylelist,0);
+  updateStyle(gui->getPaperWidget()->getParagLayout()->getName());
 }
 
 /*===============================================================*/

@@ -73,6 +73,9 @@ protected slots:
   void editStyle();
   void editStyle(int) { editStyle(); }
   void addStyle();
+  void deleteStyle();
+  void updateStyleList();
+  void updateButtons(const char*);
 
 };
 
@@ -125,7 +128,7 @@ protected:
   QStrList fontList;
 
 signals:
-  void updateStyles();
+  void updateStyleList();
 
 protected slots:
   void changeFont();
