@@ -125,8 +125,10 @@ void KoAutoFormatExceptionWidget::slotRemoveException()
 
 KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
-      oBegin( autoFormat->getConfigTypographicQuotes().begin ),
-      oEnd( autoFormat->getConfigTypographicQuotes().end ),
+      oSimpleBegin( autoFormat->getConfigTypographicSimpleQuotes().begin ),
+      oSimpleEnd( autoFormat->getConfigTypographicSimpleQuotes().end ),
+      oDoubleBegin( autoFormat->getConfigTypographicDoubleQuotes().begin ),
+      oDoubleEnd( autoFormat->getConfigTypographicDoubleQuotes().end ),
       bulletStyle( autoFormat->getConfigBulletStyle()),
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
@@ -134,6 +136,7 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, KoAutoForma
     setupTab1();
     setupTab2();
     setupTab3();
+    setupTab4();
     setInitialSize( QSize(500, 300) );
 }
 
@@ -142,45 +145,6 @@ void KoAutoFormatDia::setupTab1()
     tab1 = addPage( i18n( "Simple Autocorrection" ) );
     QVBoxLayout *grid = new QVBoxLayout(tab1, 10, 5);
     grid->setAutoAdd( true );
-
-    cbTypographicQuotes = new QCheckBox( tab1 );
-    cbTypographicQuotes->setText( i18n( "Replace &Quotes by Typographical Quotes:" ) );
-    cbTypographicQuotes->resize( cbTypographicQuotes->sizeHint() );
-
-    bool state=m_autoFormat.getConfigTypographicQuotes().replace;
-    cbTypographicQuotes->setChecked( state );
-
-    connect( cbTypographicQuotes,SIGNAL(toggled ( bool)),this,SLOT(slotChangeState(bool)));
-
-    QHBox *quotes = new QHBox( tab1 );
-    quotes->setSpacing( 5 );
-    pbQuote1 = new QPushButton( quotes );
-
-    pbQuote1->setText( oBegin );
-
-    pbQuote1->resize( pbQuote1->sizeHint() );
-    pbQuote2 = new QPushButton( quotes );
-
-    pbQuote2->setText(oEnd );
-
-    pbQuote2->resize( pbQuote2->sizeHint() );
-    ( void )new QWidget( quotes );
-    quotes->setMaximumHeight( pbQuote1->sizeHint().height() );
-
-
-    pbDefault = new QPushButton( quotes );
-
-    pbDefault->setText(i18n("Default"));
-
-    pbDefault->resize( pbDefault->sizeHint() );
-    ( void )new QWidget( quotes );
-
-
-    connect( pbQuote1, SIGNAL( clicked() ), this, SLOT( chooseQuote1() ) );
-    connect( pbQuote2, SIGNAL( clicked() ), this, SLOT( chooseQuote2() ) );
-    connect( pbDefault, SIGNAL( clicked()), this, SLOT( defaultQuote() ) );
-
-    ( void )new QWidget( tab1 );
 
     cbUpperCase = new QCheckBox( tab1 );
     cbUpperCase->setText( i18n( "Convert first letter from the first word of a sentence automatically\n"
@@ -242,7 +206,7 @@ void KoAutoFormatDia::setupTab1()
     ( void )new QWidget( tab1 );
 
 
-    quotes = new QHBox( tab1 );
+    QHBox *quotes = new QHBox( tab1 );
     quotes->setSpacing( 5 );
     pbBulletStyle = new QPushButton( quotes );
 
@@ -259,17 +223,106 @@ void KoAutoFormatDia::setupTab1()
 
     connect( pbBulletStyle, SIGNAL( clicked() ), this, SLOT( chooseBulletStyle() ) );
     connect( pbDefaultBulletStyle, SIGNAL( clicked()), this, SLOT( defaultBulletStyle() ) );
-
-    slotChangeState(state);
 }
 
 void KoAutoFormatDia::setupTab2()
 {
-    tab2 = addPage( i18n( "Advanced Autocorrection" ) );
-    QHBoxLayout *grid = new QHBoxLayout(tab2, 10, 5);
+    tab2 = addPage( i18n( "Custom Quotes" ) );
+    QVBoxLayout *grid = new QVBoxLayout(tab2, 10, 5);
     grid->setAutoAdd( true );
 
-    QVBox *left = new QVBox( tab2 );
+    cbTypographicDoubleQuotes = new QCheckBox( tab2 );
+    cbTypographicDoubleQuotes->setText( i18n( "Replace Double &Quotes by Typographical Quotes:" ) );
+    cbTypographicDoubleQuotes->resize( cbTypographicDoubleQuotes->sizeHint() );
+
+    bool state=m_autoFormat.getConfigTypographicDoubleQuotes().replace;
+    cbTypographicDoubleQuotes->setChecked( state );
+
+    connect( cbTypographicDoubleQuotes,SIGNAL(toggled ( bool)),this,SLOT(slotChangeStateDouble(bool)));
+
+    QHBox *doubleQuotes = new QHBox( tab2 );
+    doubleQuotes->setSpacing( 5 );
+    pbDoubleQuote1 = new QPushButton( doubleQuotes );
+
+    pbDoubleQuote1->setText( oDoubleBegin );
+
+    pbDoubleQuote1->resize( pbDoubleQuote1->sizeHint() );
+    pbDoubleQuote2 = new QPushButton( doubleQuotes );
+
+    pbDoubleQuote2->setText(oDoubleEnd );
+
+    pbDoubleQuote2->resize( pbDoubleQuote2->sizeHint() );
+    ( void )new QWidget( doubleQuotes );
+    doubleQuotes->setMaximumHeight( pbDoubleQuote1->sizeHint().height() );
+
+
+    pbDoubleDefault = new QPushButton( doubleQuotes );
+
+    pbDoubleDefault->setText(i18n("Default"));
+
+    pbDoubleDefault->resize( pbDoubleDefault->sizeHint() );
+    ( void )new QWidget( doubleQuotes );
+
+
+    connect( pbDoubleQuote1, SIGNAL( clicked() ), this, SLOT( chooseDoubleQuote1() ) );
+    connect( pbDoubleQuote2, SIGNAL( clicked() ), this, SLOT( chooseDoubleQuote2() ) );
+    connect( pbDoubleDefault, SIGNAL( clicked()), this, SLOT( defaultDoubleQuote() ) );
+
+    ( void )new QWidget( tab2 );
+
+    slotChangeStateDouble(state);
+
+
+    cbTypographicSimpleQuotes = new QCheckBox( tab2 );
+    cbTypographicSimpleQuotes->setText( i18n( "Replace Simple &Quotes by Typographical Quotes:" ) );
+    cbTypographicSimpleQuotes->resize( cbTypographicSimpleQuotes->sizeHint() );
+
+    state=m_autoFormat.getConfigTypographicSimpleQuotes().replace;
+    cbTypographicSimpleQuotes->setChecked( state );
+
+    connect( cbTypographicSimpleQuotes,SIGNAL(toggled ( bool)),this,SLOT(slotChangeStateSimple(bool)));
+
+    QHBox *simpleQuotes = new QHBox( tab2 );
+    simpleQuotes->setSpacing( 5 );
+    pbSimpleQuote1 = new QPushButton( simpleQuotes );
+
+    pbSimpleQuote1->setText( oSimpleBegin );
+
+    pbSimpleQuote1->resize( pbSimpleQuote1->sizeHint() );
+    pbSimpleQuote2 = new QPushButton( simpleQuotes );
+
+    pbSimpleQuote2->setText(oSimpleEnd );
+
+    pbSimpleQuote2->resize( pbSimpleQuote2->sizeHint() );
+    ( void )new QWidget( simpleQuotes );
+    simpleQuotes->setMaximumHeight( pbSimpleQuote1->sizeHint().height() );
+
+
+    pbSimpleDefault = new QPushButton( simpleQuotes );
+
+    pbSimpleDefault->setText(i18n("Default"));
+
+    pbSimpleDefault->resize( pbSimpleDefault->sizeHint() );
+    ( void )new QWidget( simpleQuotes );
+
+
+    connect( pbSimpleQuote1, SIGNAL( clicked() ), this, SLOT( chooseSimpleQuote1() ) );
+    connect( pbSimpleQuote2, SIGNAL( clicked() ), this, SLOT( chooseSimpleQuote2() ) );
+    connect( pbSimpleDefault, SIGNAL( clicked()), this, SLOT( defaultSimpleQuote() ) );
+
+    ( void )new QWidget( tab2 );
+    slotChangeStateSimple(state);
+
+}
+
+
+void KoAutoFormatDia::setupTab3()
+{
+    tab3 = addPage( i18n( "Advanced Autocorrection" ) );
+    QHBoxLayout *grid = new QHBoxLayout(tab3, 10, 5);
+    grid->setAutoAdd( true );
+
+    QVBox *left = new QVBox( tab3 );
     cbAdvancedAutoCorrection=new QCheckBox(i18n("Active autocorrection"),left);
     cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
     QHBox *text = new QHBox( left );
@@ -310,7 +363,7 @@ void KoAutoFormatDia::setupTab2()
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
 
-    QVBox *buttons = new QVBox( tab2 );
+    QVBox *buttons = new QVBox( tab3 );
     buttons->setSpacing( 5 );
     buttons->setMargin( 5 );
 
@@ -325,16 +378,16 @@ void KoAutoFormatDia::setupTab2()
 }
 
 
-void KoAutoFormatDia::setupTab3()
+void KoAutoFormatDia::setupTab4()
 {
-    tab3 = addPage( i18n( "Exceptions" ) );
-    QVBoxLayout *grid = new QVBoxLayout(tab3, 5, 5);
+    tab4 = addPage( i18n( "Exceptions" ) );
+    QVBoxLayout *grid = new QVBoxLayout(tab4, 5, 5);
     grid->setAutoAdd( true );
 
-    abbreviation=new KoAutoFormatExceptionWidget(tab3,i18n("Do not treat as the end of a sentence:"),m_autoFormat.listException(),true);
-    ( void )new QWidget( tab3 );
-    twoUpperLetter=new KoAutoFormatExceptionWidget(tab3,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException());
-    ( void )new QWidget( tab3 );
+    abbreviation=new KoAutoFormatExceptionWidget(tab4,i18n("Do not treat as the end of a sentence:"),m_autoFormat.listException(),true);
+    ( void )new QWidget( tab4 );
+    twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException());
+    ( void )new QWidget( tab4 );
 }
 
 
@@ -469,11 +522,18 @@ void KoAutoFormatDia::slotEditEntry()
 bool KoAutoFormatDia::applyConfig()
 {
     // First tab
-    KoAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
-    tq.replace = cbTypographicQuotes->isChecked();
-    tq.begin = pbQuote1->text()[ 0 ];
-    tq.end = pbQuote2->text()[ 0 ];
-    m_docAutoFormat->configTypographicQuotes( tq );
+    KoAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicSimpleQuotes();
+    tq.replace = cbTypographicSimpleQuotes->isChecked();
+    tq.begin = pbSimpleQuote1->text()[ 0 ];
+    tq.end = pbSimpleQuote2->text()[ 0 ];
+    m_docAutoFormat->configTypographicSimpleQuotes( tq );
+
+    tq = m_autoFormat.getConfigTypographicDoubleQuotes();
+    tq.replace = cbTypographicDoubleQuotes->isChecked();
+    tq.begin = pbDoubleQuote1->text()[ 0 ];
+    tq.end = pbDoubleQuote2->text()[ 0 ];
+    m_docAutoFormat->configTypographicDoubleQuotes( tq );
+
 
     m_docAutoFormat->configUpperCase( cbUpperCase->isChecked() );
     m_docAutoFormat->configUpperUpper( cbUpperUpper->isChecked() );
@@ -509,37 +569,64 @@ void KoAutoFormatDia::slotOk()
     }
 }
 
-void KoAutoFormatDia::chooseQuote1()
+void KoAutoFormatDia::chooseDoubleQuote1()
 {
     QString f = font().family();
-    QChar c = oBegin;
+    QChar c = oDoubleBegin;
     if ( KoCharSelectDia::selectChar( f, c, false ) )
     {
-        pbQuote1->setText( c );
+        pbDoubleQuote1->setText( c );
     }
 }
 
-void KoAutoFormatDia::chooseQuote2()
+void KoAutoFormatDia::chooseDoubleQuote2()
 {
     QString f = font().family();
-    QChar c = oEnd;
+    QChar c = oDoubleEnd;
     if ( KoCharSelectDia::selectChar( f, c, false ) )
     {
-        pbQuote2->setText( c );
+        pbDoubleQuote2->setText( c );
     }
 }
 
 
-void KoAutoFormatDia::defaultQuote()
+void KoAutoFormatDia::defaultDoubleQuote()
 {
-    pbQuote1->setText("«");
-    pbQuote2->setText("»");
+    pbDoubleQuote1->setText("«");
+    pbDoubleQuote2->setText("»");
 }
+
+void KoAutoFormatDia::chooseSimpleQuote1()
+{
+    QString f = font().family();
+    QChar c = oSimpleBegin;
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
+    {
+        pbSimpleQuote1->setText( c );
+    }
+}
+
+void KoAutoFormatDia::chooseSimpleQuote2()
+{
+    QString f = font().family();
+    QChar c = oSimpleEnd;
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
+    {
+        pbSimpleQuote2->setText( c );
+    }
+}
+
+void KoAutoFormatDia::defaultSimpleQuote()
+{
+    pbSimpleQuote1->setText("'");
+    pbSimpleQuote2->setText("'");
+}
+
 
 void KoAutoFormatDia::chooseBulletStyle()
 {
     QString f = font().family();
-    QChar c = oBegin;
+    QChar c = oSimpleBegin;
     if ( KoCharSelectDia::selectChar( f, c, false ) )
     {
         pbBulletStyle->setText( c );
@@ -551,9 +638,16 @@ void KoAutoFormatDia::defaultBulletStyle()
     pbBulletStyle->setText( "" );
 }
 
-void KoAutoFormatDia::slotChangeState(bool b)
+void KoAutoFormatDia::slotChangeStateSimple(bool b)
 {
-    pbQuote1->setEnabled(b);
-    pbQuote2->setEnabled(b);
-    pbDefault->setEnabled(b);
+    pbSimpleQuote1->setEnabled(b);
+    pbSimpleQuote2->setEnabled(b);
+    pbSimpleDefault->setEnabled(b);
+}
+
+void KoAutoFormatDia::slotChangeStateDouble(bool b)
+{
+    pbDoubleQuote1->setEnabled(b);
+    pbDoubleQuote2->setEnabled(b);
+    pbDoubleDefault->setEnabled(b);
 }

@@ -94,20 +94,28 @@ protected:
     void setupTab1();
     void setupTab2();
     void setupTab3();
+    void setupTab4();
+
     void refreshEntryList();
 
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;
-    QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper, *cbDetectUrl,
+    QWidget *tab4;
+    QCheckBox *cbTypographicSimpleQuotes, *cbTypographicDoubleQuotes,*cbUpperCase, *cbUpperUpper, *cbDetectUrl,
         *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle;
-    QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
+    QPushButton *pbDoubleQuote1, *pbDoubleQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDoubleDefault,
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
+
+    QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
+
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
     KListView *m_pListView;
 
-    QChar oBegin, oEnd;
+    QChar oSimpleBegin, oSimpleEnd;
+    QChar oDoubleBegin, oDoubleEnd;
+
     QChar bulletStyle;
     KoAutoFormat m_autoFormat; // The copy we're working on
     KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
@@ -124,10 +132,17 @@ protected slots:
     void slotfind2( const QString & );
     void chooseSpecialChar1();
     void chooseSpecialChar2();
-    void chooseQuote1();
-    void chooseQuote2();
-    void defaultQuote();
-    void slotChangeState(bool);
+    void chooseDoubleQuote1();
+    void chooseDoubleQuote2();
+    void defaultDoubleQuote();
+
+    void chooseSimpleQuote1();
+    void chooseSimpleQuote2();
+    void defaultSimpleQuote();
+
+    void slotChangeStateSimple(bool);
+    void slotChangeStateDouble(bool);
+
     void slotAddEntry();
     void chooseBulletStyle();
     void defaultBulletStyle();

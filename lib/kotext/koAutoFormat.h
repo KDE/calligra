@@ -98,7 +98,9 @@ public:
     };
 
     // Configuration (on/off/settings). Called by the dialog.
-    void configTypographicQuotes( TypographicQuotes _tq );
+    void configTypographicDoubleQuotes( TypographicQuotes _tq );
+    void configTypographicSimpleQuotes( TypographicQuotes _tq );
+
     void configUpperCase( bool _uc );
     void configUpperUpper( bool _uu );
     void configAdvancedAutocorrect( bool _aa );
@@ -115,8 +117,12 @@ public:
 
     void configAutoNumberStyle( bool b );
 
-    TypographicQuotes getConfigTypographicQuotes() const
-    { return m_typographicQuotes; }
+    TypographicQuotes getConfigTypographicSimpleQuotes() const
+    { return m_typographicSimpleQuotes; }
+
+    TypographicQuotes getConfigTypographicDoubleQuotes() const
+    { return m_typographicDoubleQuotes; }
+
     bool getConfigUpperCase() const
     { return m_convertUpperCase; }
     bool getConfigUpperUpper() const
@@ -194,7 +200,7 @@ public:
 protected:
     bool doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
     void doUpperCase( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
-    void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
+    void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes );
     void buildMaxLen();
 
     void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
@@ -221,7 +227,10 @@ private:
 
     QChar bulletStyle;
 
-    TypographicQuotes m_typographicQuotes;
+    TypographicQuotes m_typographicSimpleQuotes;
+
+    TypographicQuotes m_typographicDoubleQuotes;
+
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
     KoAutoFormatEntryMap m_entries;

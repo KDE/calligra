@@ -50,7 +50,8 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_advancedAutoCorrect( true ),
       m_autoDetectUrl( false ),
       m_ignoreDoubleSpace( false ),
-      m_typographicQuotes(),
+      m_typographicSimpleQuotes(),
+      m_typographicDoubleQuotes(),
       m_maxlen( 0 ),
       m_ignoreUpperCase(false)
 {
@@ -84,12 +85,21 @@ void KoAutoFormat::readConfig()
     m_useAutoNumberStyle = config.readBoolEntry( "AutoNumberStyle", false );
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
-    m_typographicQuotes.begin = begin[0];
+    m_typographicDoubleQuotes.begin = begin[0];
     QString end = config.readEntry( "TypographicQuotesEnd", "»" );
-    m_typographicQuotes.end = end[0];
-    m_typographicQuotes.replace = config.readBoolEntry( "TypographicQuotesEnabled", false )
+    m_typographicDoubleQuotes.end = end[0];
+    m_typographicDoubleQuotes.replace = config.readBoolEntry( "TypographicQuotesEnabled", false )
                                   && !begin.isEmpty()
                                   && !end.isEmpty();
+
+    begin = config.readEntry( "TypographicSimpleQuotesBegin", "'" );
+    m_typographicSimpleQuotes.begin = begin[0];
+    end = config.readEntry( "TypographicSimpleQuotesEnd", "'" );
+    m_typographicSimpleQuotes.end = end[0];
+    m_typographicSimpleQuotes.replace = config.readBoolEntry( "TypographicSimpleQuotesEnabled", false )
+                                  && !begin.isEmpty()
+                                  && !end.isEmpty();
+
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
     config.setGroup( "AutoFormatEntries" );
@@ -156,9 +166,13 @@ void KoAutoFormat::saveConfig()
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     config.writeEntry( "ConvertUpperCase", m_convertUpperCase );
     config.writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
-    config.writeEntry( "TypographicQuotesBegin", QString( m_typographicQuotes.begin ) );
-    config.writeEntry( "TypographicQuotesEnd", QString( m_typographicQuotes.end ) );
-    config.writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
+    config.writeEntry( "TypographicQuotesBegin", QString( m_typographicDoubleQuotes.begin ) );
+    config.writeEntry( "TypographicQuotesEnd", QString( m_typographicDoubleQuotes.end ) );
+    config.writeEntry( "TypographicQuotesEnabled", m_typographicDoubleQuotes.replace );
+    config.writeEntry( "TypographicSimpleQuotesBegin", QString( m_typographicSimpleQuotes.begin ) );
+    config.writeEntry( "TypographicSimpleQuotesEnd", QString( m_typographicSimpleQuotes.end ) );
+    config.writeEntry( "TypographicSimpleQuotesEnabled", m_typographicSimpleQuotes.replace );
+
     config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
     config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
 
@@ -266,8 +280,8 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         readConfig();
 
     if ( !m_useBulletStyle && !m_removeSpaceBeginEndLine && !m_autoDetectUrl
-         && !m_convertUpperUpper && !m_convertUpperCase
-         && !m_typographicQuotes.replace && m_entries.count()==0)
+         && !m_convertUpperUpper && !m_convertUpperCase && ! m_autoReplaceNumber && m_autoChangeFormat
+         && !m_typographicDoubleQuotes.replace && !m_typographicSimpleQuotes.replace && m_entries.count()==0)
         return;
 
     if( ch.isSpace())
@@ -315,9 +329,13 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
                 doUpperCase( textEditCursor, parag, index, lastWord, txtObj );
         }
     }
-    if ( ch == '"' && m_typographicQuotes.replace )
+    if ( ch == '"' && m_typographicDoubleQuotes.replace )
     {
-        doTypographicQuotes( textEditCursor, parag, index,txtObj );
+        doTypographicQuotes( textEditCursor, parag, index,txtObj, true /*double quote*/ );
+    }
+    else if ( ch == '\'' && m_typographicDoubleQuotes.replace )
+    {
+        doTypographicQuotes( textEditCursor, parag, index,txtObj, false /* simple quote*/ );
     }
 }
 
@@ -380,7 +398,7 @@ bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *para
     return false;
 }
 
-void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
+void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
 {
     kdDebug() << "KoAutoFormat::doTypographicQuotes" << endl;
     KoTextDocument * textdoc = parag->textDocument();
@@ -396,9 +414,19 @@ void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag
     // MSWord does the latter afaics...
     QString replacement;
     if ( index > 0 && !parag->at( index - 1 )->c.isSpace() )
-        replacement = m_typographicQuotes.end;
+    {
+        if( doubleQuotes )
+            replacement = m_typographicDoubleQuotes.end;
+        else
+            replacement = m_typographicSimpleQuotes.end;
+    }
     else
-        replacement = m_typographicQuotes.begin;
+    {
+        if( doubleQuotes )
+            replacement = m_typographicDoubleQuotes.begin;
+        else
+            replacement = m_typographicSimpleQuotes.begin;
+    }
     txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
                               KoTextObject::HighlightSelection,
                               i18n("Typographic quote") ));
@@ -725,7 +753,6 @@ void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextPara
                 macroCmd->addCommand(cmd);
             txtObj->emitNewCommand(macroCmd);
         }
-
     }
 }
 
@@ -810,9 +837,14 @@ bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
     return false;
 }
 
-void KoAutoFormat::configTypographicQuotes( TypographicQuotes _tq )
+void KoAutoFormat::configTypographicSimpleQuotes( TypographicQuotes _tq )
 {
-    m_typographicQuotes = _tq;
+    m_typographicSimpleQuotes = _tq;
+}
+
+void KoAutoFormat::configTypographicDoubleQuotes( TypographicQuotes _tq )
+{
+    m_typographicDoubleQuotes = _tq;
 }
 
 void KoAutoFormat::configUpperCase( bool _uc )
