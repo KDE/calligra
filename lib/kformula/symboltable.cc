@@ -47,7 +47,7 @@ SymbolFontCharTable::SymbolFontCharTable()
 QChar SymbolFontCharTable::unicodeFromSymbolFont( QChar pos ) const
 {
     if ( compatibility.contains( pos ) ) {
-        return compatibility[ pos ];
+        return compatibility[ pos.latin1() ];
     }
     return QChar::null;
 }

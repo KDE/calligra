@@ -19,9 +19,9 @@
 #include <koprinter.h> // has to be first
 
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <cassert>
+#include <stdlib.h>
+#include <time.h>
+#include <assert.h>
 
 #include <qlayout.h>
 #include <qwidgetstack.h>

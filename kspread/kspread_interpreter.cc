@@ -372,7 +372,7 @@ static bool kspreadfunc_logn( KSContext& context )
   if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
     return false;
 
-  context.setValue( new KSValue( log( args[0]->doubleValue() ) /log(args[1]->intValue() )) );
+  context.setValue( new KSValue( log( args[0]->doubleValue() ) /log((double)args[1]->intValue() )) );
 
   return true;
 }
@@ -2509,7 +2509,7 @@ static bool kspreadfunc_rounddown( KSContext& context )
                 return false;
         digits=args[1]->intValue();
         }
-  result=floor(args[0]->doubleValue()*pow(10,digits))/pow(10,digits);
+  result=floor(args[0]->doubleValue()*pow(10.0,digits))/pow(10.0,digits);
   context.setValue( new KSValue( result) );
 
   return true;
@@ -2539,7 +2539,7 @@ static bool kspreadfunc_roundup( KSContext& context )
         }
   // This is not correct solution for problem with floating point numbers and probably
   // will fail in platforms where float and double lenghts are same.
-  if (floor((float)(args[0]->doubleValue()*pow(10,digits))) == (float)(args[0]->doubleValue()*pow(10,digits)))
+  if (floor((float)(args[0]->doubleValue()*pow(10.0,digits))) == (float)(args[0]->doubleValue()*pow(10.0,digits)))
       result = args[0]->doubleValue();
   else
       result=floor(args[0]->doubleValue()*pow(10,digits)+1)/pow(10,digits);
@@ -2570,7 +2570,7 @@ static bool kspreadfunc_round( KSContext& context )
                 return false;
         digits=args[1]->intValue();
         }
-  result=floor(args[0]->doubleValue()*pow(10,digits)+0.5)/pow(10,digits);
+  result=floor(args[0]->doubleValue()*pow(10.0,digits)+0.5)/pow(10.0,digits);
   context.setValue( new KSValue( result) );
 
   return true;
@@ -3792,7 +3792,7 @@ static bool kspreadfunc_even( KSContext& context )
         val=-val;
         }
  double valsup=ceil( val );
- if(fmod(valsup,2)==0)
+ if(fmod(valsup,2.0)==0)
         {
         if(val>valsup)
                 result=(int)(sign*(valsup+2));
@@ -3826,7 +3826,7 @@ static bool kspreadfunc_odd( KSContext& context )
         val = -val;
         }
   valsup = ceil(val);
-  if (fmod(valsup, 2) == 1)
+  if (fmod(valsup, 2.0) == 1)
         {
         if (val > valsup)
                 result=(int) (sign * (valsup + 2));
@@ -3852,10 +3852,10 @@ static bool kspreadfunc_isodd( KSContext& context )
   if(result)
         {
         //it's a integer => test if it's an odd integer
-        if(fmod(args[0]->intValue(),2)==0)
-                result=false;
-        else
+        if(args[0]->intValue() & 1)
                 result=true;
+        else
+                result=false;
         }
 
  context.setValue( new KSValue(result));
@@ -3874,10 +3874,10 @@ static bool kspreadfunc_iseven( KSContext& context )
   if(result)
         {
         //it's a integer => test if it's an even integer
-        if(fmod(args[0]->intValue(),2)==0)
-                result=true;
-        else
+        if(args[0]->intValue() & 1)
                 result=false;
+        else
+                result=true;
         }
 
  context.setValue( new KSValue(result));

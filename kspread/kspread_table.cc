@@ -1048,7 +1048,7 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
 
 struct SetSelectionUpperLowerWorker : public KSpreadTable::CellWorker {
     int _type;
-    SetSelectionUpperLowerWorker( int type ) : CellWorker( false ), _type( type ) { }
+    SetSelectionUpperLowerWorker( int type ) : KSpreadTable::CellWorker( false ), _type( type ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -1076,7 +1076,7 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker, int _type )
 
 
 struct SetSelectionFirstLetterUpperWorker : public KSpreadTable::CellWorker {
-    SetSelectionFirstLetterUpperWorker( ) : CellWorker( false ) { }
+    SetSelectionFirstLetterUpperWorker( ) : KSpreadTable::CellWorker( false ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -1104,7 +1104,7 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
 
 struct SetSelectionVerticalTextWorker : public KSpreadTable::CellWorker {
     bool _b;
-    SetSelectionVerticalTextWorker( bool b ) : CellWorker( ), _b( b ) { }
+    SetSelectionVerticalTextWorker( bool b ) : KSpreadTable::CellWorker( ), _b( b ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Vertical Text");
@@ -1131,7 +1131,7 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker, bool _b )
 
 struct SetSelectionCommentWorker : public KSpreadTable::CellWorker {
     QString _comment;
-    SetSelectionCommentWorker( QString comment ) : CellWorker( ), _comment( comment ) { }
+    SetSelectionCommentWorker( QString comment ) : KSpreadTable::CellWorker( ), _comment( comment ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Add comment");
@@ -1194,7 +1194,7 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker, int _value )
 }
 
 struct SetSelectionRemoveCommentWorker : public KSpreadTable::CellWorker {
-    SetSelectionRemoveCommentWorker( ) : CellWorker( false ) { }
+    SetSelectionRemoveCommentWorker( ) : KSpreadTable::CellWorker( false ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Remove comment");
@@ -1293,7 +1293,7 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
 
 struct SetSelectionBorderColorWorker : public KSpreadTable::CellWorker {
     const QColor& bd_Color;
-    SetSelectionBorderColorWorker( const QColor& _bd_Color ) : CellWorker( false ), bd_Color( _bd_Color ) { }
+    SetSelectionBorderColorWorker( const QColor& _bd_Color ) : KSpreadTable::CellWorker( false ), bd_Color( _bd_Color ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Change border color");
@@ -3127,7 +3127,7 @@ bool KSpreadTable::areaIsEmpty()
 
 struct SetSelectionMultiRowWorker : public KSpreadTable::CellWorker {
     bool enable;
-    SetSelectionMultiRowWorker( bool _enable ) : CellWorker( ), enable( _enable ) { }
+    SetSelectionMultiRowWorker( bool _enable ) : KSpreadTable::CellWorker( ), enable( _enable ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Multirow");
@@ -3228,7 +3228,7 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
 
 struct SetSelectionPrecisionWorker : public KSpreadTable::CellWorker {
     int _delta;
-    SetSelectionPrecisionWorker( int delta ) : CellWorker( ), _delta( delta ) { }
+    SetSelectionPrecisionWorker( int delta ) : KSpreadTable::CellWorker( ), _delta( delta ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Change precision");
@@ -3607,7 +3607,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 }
 
 struct ClearTextSelectionWorker : public KSpreadTable::CellWorker {
-    ClearTextSelectionWorker( ) : CellWorker( ) { }
+    ClearTextSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -3630,7 +3630,7 @@ void KSpreadTable::clearTextSelection( const QPoint &_marker )
 
 
 struct ClearValiditySelectionWorker : public KSpreadTable::CellWorker {
-    ClearValiditySelectionWorker( ) : CellWorker( ) { }
+    ClearValiditySelectionWorker( ) : KSpreadTable::CellWorker( ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoConditional( doc, table, r );
@@ -3653,7 +3653,7 @@ void KSpreadTable::clearValiditySelection( const QPoint &_marker )
 
 
 struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker {
-    ClearConditionalSelectionWorker( ) : CellWorker( ) { }
+    ClearConditionalSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoConditional( doc, table, r );
@@ -3678,7 +3678,7 @@ void KSpreadTable::clearConditionalSelection( const QPoint &_marker )
 
 
 struct DefaultSelectionWorker : public KSpreadTable::CellWorker {
-    DefaultSelectionWorker( ) : CellWorker( true, false, true ) { }
+    DefaultSelectionWorker( ) : KSpreadTable::CellWorker( true, false, true ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
         QString title=i18n("Default parameters");
@@ -3723,7 +3723,7 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
 
 struct SetConditionalWorker : public KSpreadTable::CellWorker {
     KSpreadConditional* tmp;
-    SetConditionalWorker( KSpreadConditional* _tmp ) : CellWorker( ), tmp( _tmp ) { }
+    SetConditionalWorker( KSpreadConditional* _tmp ) : KSpreadTable::CellWorker( ), tmp( _tmp ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoConditional( doc, table, r );
@@ -3771,7 +3771,7 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
 
 struct SetValidityWorker : public KSpreadTable::CellWorker {
     KSpreadValidity tmp;
-    SetValidityWorker( KSpreadValidity _tmp ) : CellWorker( ), tmp( _tmp ) { }
+    SetValidityWorker( KSpreadValidity _tmp ) : KSpreadTable::CellWorker( ), tmp( _tmp ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoConditional( doc, table, r );
@@ -3813,7 +3813,7 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
 
 struct GetWordSpellingWorker : public KSpreadTable::CellWorker {
     QString& listWord;
-    GetWordSpellingWorker( QString& _listWord ) : CellWorker( false, false, true ), listWord( _listWord ) { }
+    GetWordSpellingWorker( QString& _listWord ) : KSpreadTable::CellWorker( false, false, true ), listWord( _listWord ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc*, KSpreadTable*, QRect& ) {
 	return 0L;
@@ -3845,7 +3845,7 @@ QString KSpreadTable::getWordSpelling(const QPoint &_marker )
 struct SetWordSpellingWorker : public KSpreadTable::CellWorker {
     QStringList& list;
     int pos;
-    SetWordSpellingWorker( QStringList& _list ) : CellWorker( false, false, true ), list( _list ), pos( 0 ) { }
+    SetWordSpellingWorker( QStringList& _list ) : KSpreadTable::CellWorker( false, false, true ), list( _list ), pos( 0 ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );

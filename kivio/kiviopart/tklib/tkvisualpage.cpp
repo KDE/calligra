@@ -158,14 +158,14 @@ QPixmap TKVisualPage::makeShadow(QSize s)
   /* repeat first line*/
   tw = sw-2*dx;
   th = QMAX(h-2*dy,1);
-  for ( int y = h-dy; y < sh; y+=th )
-    bitBlt( &backgroundPix,dx,y,&backgroundPix,dx,dy,tw,th );
+  for ( int y1 = h-dy; y1 < sh; y1+=th )
+    bitBlt( &backgroundPix,dx,y1,&backgroundPix,dx,dy,tw,th );
 
   /* paint bottom segment*/
   tw = QMAX(w-2*dx,1);
   th = dy;
-  for ( int x = dx; x < sw-dx; x +=tw )
-    bitBlt( &backgroundPix,x,sh-dy,&backgroundTemplate,dx,h-dy,tw,th );
+  for ( int x1 = dx; x1 < sw-dx; x1 +=tw )
+    bitBlt( &backgroundPix,x1,sh-dy,&backgroundTemplate,dx,h-dy,tw,th );
 
   /* paint top-right segment*/
   bitBlt( &backgroundPix,sw-dx,0,&backgroundTemplate,w-dx,0,dx,dy );
@@ -173,8 +173,8 @@ QPixmap TKVisualPage::makeShadow(QSize s)
   /* paint right segment*/
   tw = dx;
   th = QMAX(h-2*dy,1);
-  for ( int y = dy; y < sh-dy; y+=th )
-    bitBlt( &backgroundPix,sw-dx,y,&backgroundTemplate,w-dx,dy,tw,th );
+  for ( int y2 = dy; y2 < sh-dy; y2+=th )
+    bitBlt( &backgroundPix,sw-dx,y2,&backgroundTemplate,w-dx,dy,tw,th );
 
   /* paint bottom-right segment*/
   bitBlt( &backgroundPix,sw-dx,sh-dy,&backgroundTemplate,w-dx,h-dy,dx,dy );

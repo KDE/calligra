@@ -200,7 +200,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 {
 //??? cope with relative/absolute references
 
-   strstream lOut(pText, 20); // ??? ard coded len
+   strstream lOut(pText, 20, ios::out); // ??? ard coded len
    int       lPageRelative = pRow & 0x8000;
    int       lColRelative  = pRow & 0x4000;
    int       lRowRelative  = pRow & 0x2000;

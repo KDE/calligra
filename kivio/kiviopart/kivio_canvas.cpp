@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <kcursor.h>
 
-#include <cassert>
+#include <assert.h>
 #include <stdio.h>
 #include <qlabel.h>
 #include <qpixmap.h>

@@ -89,8 +89,8 @@ void KWmf::genericArc(
 
     QRect ellipse(topLeft, bottomRight);
     QPoint centre = ellipse.center();
-    double startAngle = atan2(centre.y() - start.y(), centre.x() - start.x());
-    double stopAngle = atan2(centre.y() - end.y(), centre.x() - end.x());
+    double startAngle = atan2((double)(centre.y() - start.y()), (double)(centre.x() - start.x()));
+    double stopAngle = atan2((double)(centre.y() - end.y()), (double)(centre.x() - end.x()));
 
     startAngle = 180 * startAngle / PI;
     stopAngle = 180 * stopAngle / PI;

@@ -48,7 +48,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kapp.h>
-#include <cassert>
+#include <assert.h>
 #include <qdatetime.h>
 #include <klocale.h>
 #include <sys/types.h>

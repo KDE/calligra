@@ -1320,14 +1320,14 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
      if      ((colstr[p] >= 'A') && (colstr[p] <= 'Z'))
      {
        printf (" UPPER\n");
-       icol = icol + ((int)pow (x, 26) * (colstr[p].latin1() - 'A' + 1)  );
+       icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'A' + 1)  );
        x++;
      }
      // lower chars
      else if ((colstr[p] >= 'a') && (colstr[p] <= 'z'))
      {
        printf (" lower\n");
-       icol = icol + ((int)pow (x, 26) * (colstr[p].latin1() - 'a' + 1)  );
+       icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'a' + 1)  );
        x++;
      }
      p--;

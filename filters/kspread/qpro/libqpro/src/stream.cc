@@ -30,8 +30,11 @@ QpIStream::~QpIStream()
 
 #else
 #include <string.h>
-#include <fstream>
+#include <fstream.h>
 #include <strstream.h>
+
+// For IRIX
+namespace std {}
 
 using namespace std;
 
