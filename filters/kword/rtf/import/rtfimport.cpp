@@ -85,6 +85,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
         // \bin is handled in the tokenizer
+	PROP(	"@pict",	"@blipuid",	parseBlipUid,	0, 0 ),
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
 	MEMBER(	0L,		"brdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[3]) ),
@@ -1238,6 +1239,25 @@ void RTFImport::parseColorTable( RTFProperty * )
 }
 
 /**
+ * Parse the picture identifier
+ */
+void RTFImport::parseBlipUid( RTFProperty * )
+{
+    if (token.type == RTFTokenizer::OpenGroup)
+    {
+        picture.identifier.resize(0);
+    }
+    else if (token.type == RTFTokenizer::PlainText)
+    {
+        picture.identifier += token.text;
+    }
+    else if (token.type == RTFTokenizer::CloseGroup)
+    {
+        kdDebug(30515) << "\\blipuid: " << picture.identifier << endl;
+    }
+}
+
+/**
  * Picture destination callback.
  */
 void RTFImport::parsePicture( RTFProperty * )
@@ -1260,6 +1280,7 @@ void RTFImport::parsePicture( RTFProperty * )
 	picture.cropBottom	= 0;
 	picture.nibble		= 0;
 	picture.bits.truncate( 0 );
+	picture.identifier.resize(0);
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
@@ -1318,6 +1339,17 @@ void RTFImport::parsePicture( RTFProperty * )
         sprintf( pictName, "pictures/picture%d.%s", id, ext );
         sprintf( frameName, "Picture %d", id );
 
+        if (picture.identifier.isEmpty())
+        {
+            picture.identifier = pictName;
+        }
+        else
+        {
+            picture.identifier.stripWhiteSpace();
+            picture.identifier += '.';
+            picture.identifier += ext;
+        }
+
         kdDebug(30515) << "Picture: " << pictName << " Frame: " << frameName << endl;
         // Store picture
         writeOutPart( pictName, picture.bits );
@@ -1329,7 +1361,7 @@ void RTFImport::parsePicture( RTFProperty * )
         QDateTime dt(QDateTime::currentDateTime());
 
         // Add pixmap or clipart (key)
-        pictures.addKey( dt, pictName, pictName );
+        pictures.addKey( dt, picture.identifier, pictName );
 
         // Add picture or clipart frameset
         frameSets.addFrameSet( frameName, 2, 0 );
@@ -1340,9 +1372,10 @@ void RTFImport::parsePicture( RTFProperty * )
                 (picture.desiredHeight * picture.scaley) /100 , 0, 1, 0 );
         frameSets.closeNode( "FRAME" );
         frameSets.addNode( "PICTURE" );
-        frameSets.addKey( dt, pictName );
+        frameSets.addKey( dt, picture.identifier );
         frameSets.closeNode( "PICTURE" );
         frameSets.closeNode( "FRAMESET" );
+        picture.identifier.resize(0);
     }
 }
 

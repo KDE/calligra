@@ -103,6 +103,7 @@ struct RTFPicture
     int scalex, scaley;
     int nibble;
     bool scaled;
+    QCString identifier; // \blipuid
 };
 
 // Paragraph-formatting properties
@@ -242,6 +243,7 @@ public:
     void insertSymbol( RTFProperty *property );
     void insertHexSymbol( RTFProperty * );
     void insertUnicodeSymbol( RTFProperty * );
+    void parseBlipUid( RTFProperty* );
     void parseField( RTFProperty* );
     void parseFldinst( RTFProperty* );
     void parseFldrslt( RTFProperty* );
