@@ -191,7 +191,7 @@ private slots:
     void afterTripleClickTimeout();
 protected:
     KoTextViewIface *dcop;
-private:
+ public: // necessary to be public to allow script action in KoTextViewIface
     enum CursorAction { // keep in sync with QTextEdit
         MoveBackward,
         MoveForward,

@@ -146,3 +146,54 @@ void KoTextViewIface::showCursor()
 {
     m_textView->showCursor();
 }
+
+void KoTextViewIface::moveCursorLeft(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveBackward,select);
+}
+
+void KoTextViewIface::moveCursorRight(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveForward,select);
+}
+
+void KoTextViewIface::moveCursorUp(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveUp,select);
+}
+
+void KoTextViewIface::moveCursorDown(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveDown,select);
+}
+
+void KoTextViewIface::moveCursorHome(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveHome,select);
+}
+
+void KoTextViewIface::moveCursorEnd(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveEnd,select);
+}
+
+void KoTextViewIface::moveCursorWordLeft(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveWordBackward,select);
+}
+
+void KoTextViewIface::moveCursorWordRight(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveWordForward,select);
+}
+
+void KoTextViewIface::moveCursorLineEnd(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveLineEnd,select);
+}
+
+void KoTextViewIface::moveCursorLineStart(bool select)
+{
+  m_textView->moveCursor(KoTextView::MoveLineStart,select);
+}
+

@@ -61,6 +61,17 @@ k_dcop:
     void hideCursor();
     void showCursor();
 
+    void moveCursorLeft(bool select);
+    void moveCursorRight(bool select);
+    void moveCursorUp(bool select);
+    void moveCursorDown(bool select);
+    void moveCursorHome(bool select);
+    void moveCursorEnd(bool select);
+    void moveCursorWordRight(bool select);
+    void moveCursorWordLeft(bool select);
+    void moveCursorLineEnd(bool select);
+    void moveCursorLineStart(bool select);
+
 private:
     KoTextView *m_textView;
 
