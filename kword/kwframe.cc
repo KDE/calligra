@@ -1578,6 +1578,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     } else {
         kdWarning(32001) << "Error in text-box: neither height nor min-height specified!" << endl;
     }
+    //kdDebug(32001) << k_funcinfo << "width=" << width << " height=" << height << " pt" << endl;
 
     KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
     KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
@@ -1926,7 +1927,9 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
 KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& tag, KoOasisContext& context )
     : KWFrameSet( doc ), m_keepAspectRatio( true ), m_finalSize( false )
 {
-    m_name = doc->generateFramesetName( tag.attribute( "draw:name" ) );
+    m_name = tag.attribute( "draw:name" );
+    if ( doc->frameSetByName( m_name ) ) // already exists!
+        m_name = doc->generateFramesetName( m_name + " %1" );
     loadOasis( tag, context );
 }
 

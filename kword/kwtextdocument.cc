@@ -68,22 +68,31 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
     bool textFoo = tagName.startsWith( "text:" );
     kdDebug() << k_funcinfo << tagName << endl;
 
-    if ( tagName == "draw:image" )
+    if ( textFoo )
     {
-        KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, context );
-        fs->setAnchored( m_textfs, parag, pos, true, false /*don't repaint yet*/ );
-        m_textfs->kWordDocument()->addFrameSet( fs, false );
+        // TODO
     }
-    else if ( tagName == "draw:text-box" )
+    else // non "text:" tags
     {
-        textData = '#'; // anchor placeholder
-        // TODO new KWTextFrameSet
-        // TODO anchorFrameset( frameName, parag, pos );
+        if ( tagName == "draw:image" )
+        {
+            KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, context );
+            m_textfs->kWordDocument()->addFrameSet( fs, false );
+            fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
+            return true;
+        }
+        if ( tagName == "draw:text-box" )
+        {
+            textData = '#'; // anchor placeholder
+            // TODO new KWTextFrameSet
+            // TODO anchorFrameset( frameName, parag, pos );
+            return false;
+        }
     }
 
 #if 0 // TODO
-        else if ( textFoo &&
-                  ( tagName == "text:footnote" || tagName == "text:endnote" ) )
+    if ( textFoo &&
+         ( tagName == "text:footnote" || tagName == "text:endnote" ) )
         {
             textData = '#'; // anchor placeholder
             importFootnote( doc, ts, outputFormats, pos, tagName );
