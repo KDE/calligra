@@ -763,18 +763,22 @@ QSizePolicy KexiTableView::sizePolicy() const
 QSize KexiTableView::sizeHint() const
 {
 	const QSize &ts = tableSize();
-	kdDebug() << "KexiTableView::sizeHint()= " << 
-		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) )
-		<< ", " <<
-		QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
-			minimumSizeHint().height() ) << endl;
+	int w = QMAX( ts.width() + leftMargin()+ verticalScrollBar()->sizeHint().width() + 2*2, 
+		(d->navPanel ? d->navPanel->width() : 0) );
+	int h = QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
+		minimumSizeHint().height() );
+	w = QMIN( w, qApp->desktop()->width()*3/4 ); //stretch
+	h = QMIN( h, qApp->desktop()->height()*3/4 ); //stretch
 
-	return QSize(
+	kdDebug() << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
+
+	return QSize(w, h);
+		/*QSize(
 		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) ),
 		//+ QMIN(d->pVerticalHeader->width(),d->rowHeight) + margin()*2,
 		QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
 			minimumSizeHint().height() )
-	);
+	);*/
 //		QMAX(ts.height() + topMargin(), minimumSizeHint().height()) );
 }
 
