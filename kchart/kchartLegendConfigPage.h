@@ -7,7 +7,7 @@
 
 #include <qwidget.h>
 
-class KDChartParams;
+class KChartParams;
 class QRadioButton;
 class QLineEdit;
 class KColorButton;
@@ -17,13 +17,13 @@ class KChartLegendConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartLegendConfigPage( KDChartParams* params,
+    KChartLegendConfigPage( KChartParams* params,
                                  QWidget* parent );
     void init();
     void apply();
 
 private:
-    KDChartParams* _params;
+    KChartParams* _params;
     QRadioButton *noLegend,*lTop,*lBottom,*lLeft,*lRight,*lTopLeft,*lTopRight,*lBottomRight,*lBottomLeft;
     QLineEdit *title;
     KColorButton *legendTitleColor, *legendTextColor;

@@ -11,9 +11,9 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
+KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

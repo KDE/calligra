@@ -11,19 +11,19 @@
 
 class QRadioButton;
 
-class KDChartParams;
+class KChartParams;
 
 class KChartComboPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartComboPage( KDChartParams* params,QWidget* parent );
+    KChartComboPage( KChartParams* params,QWidget* parent );
     void init();
     void apply();
 
 private:
-    KDChartParams* _params;
+    KChartParams* _params;
     QRadioButton *diamond;
     QRadioButton *closeconnected;
     QRadioButton *connecting;

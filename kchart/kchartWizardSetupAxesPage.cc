@@ -21,7 +21,7 @@
 
 
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
                                                       KChartPart* chart ) :

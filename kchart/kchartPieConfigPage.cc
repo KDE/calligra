@@ -18,9 +18,9 @@
 #include <qfont.h>
 #include <qspinbox.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
+KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

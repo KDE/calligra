@@ -8,7 +8,7 @@
 #include <koChart.h>
 #include <kconfig.h>
 
-class KDChartParams;
+class KChartParams;
 
 class KChartPart : public KoChart::Part
 {
@@ -28,7 +28,7 @@ class KChartPart : public KoChart::Part
   void saveConfig(KConfig *conf);
   void defaultConfig();
   KoChart::Data *data() {return &currentData; };
-  KDChartParams* params() const { return _params; };
+  KChartParams* params() const { return _params; };
   // save and load
   virtual QDomDocument saveXML();
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
@@ -50,7 +50,7 @@ class KChartPart : public KoChart::Part
   QDomElement createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const;
   QFont toFont(QDomElement &element) const;
   KoChart::Data currentData;
-  KDChartParams* _params;
+  KChartParams* _params;
   QWidget* _parentWidget;
 };
 

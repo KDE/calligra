@@ -18,9 +18,9 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartParameterPieConfigPage::KChartParameterPieConfigPage( KDChartParams* params,
+KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params,
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

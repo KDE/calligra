@@ -15,7 +15,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
                              bool modal, WFlags f ) :

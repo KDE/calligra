@@ -15,9 +15,9 @@
 #include <qbuttongroup.h>
 #include <kfontdialog.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
+KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

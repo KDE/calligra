@@ -11,9 +11,9 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartBarConfigDialog::KChartBarConfigDialog( KDChartParams* params,
+KChartBarConfigDialog::KChartBarConfigDialog( KChartParams* params,
 					      QWidget* parent, int flag, KoChart::Data *dat ) :
     KChartConfigDialog( params, parent, flag,dat  )
 {

@@ -13,9 +13,9 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartComboPage::KChartComboPage( KDChartParams* params,
+KChartComboPage::KChartComboPage( KChartParams* params,
                                   QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

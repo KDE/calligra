@@ -15,7 +15,7 @@
 #include <kglobal.h>
 #include <kdebug.h> // "ported" to kdDebug(35001)
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 #include "kdchart/KDChart.h"
 
 using namespace std;
@@ -61,7 +61,7 @@ bool KChartPart::initDoc()
 {
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "InitDOC" << endl;
-    _params = new KDChartParams();
+    _params = new KChartParams();
     _params->setThreeDBars( true );
 
     return TRUE;
@@ -242,7 +242,7 @@ void KChartPart::loadConfig( KConfig *conf )
 void KChartPart::defaultConfig(  )
 {
     delete _params;
-    _params = new KDChartParams();
+    _params = new KChartParams();
 }
 
 void KChartPart::saveConfig( KConfig *conf )

@@ -12,7 +12,7 @@
 #include <qpushbutton.h>
 #include <qcolor.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
     QWidget( parent ),

@@ -15,7 +15,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
                                                                         KChartPart* chart ) :

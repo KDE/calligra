@@ -8,7 +8,7 @@ class QPushButton;
 class QButtonGroup;
 class KChartPart;
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 class KChartWizardSelectChartTypePage : public QWidget
 {

@@ -24,9 +24,9 @@ namespace std {}
 
 using namespace std;
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartFontConfigPage::KChartFontConfigPage( KDChartParams* params,
+KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
                                             QWidget* parent, KoChart::Data *dat) :
     QWidget( parent ),_params( params ), data(dat)
 {

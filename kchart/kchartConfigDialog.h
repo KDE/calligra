@@ -25,7 +25,7 @@ class KChartConfigDialog : public QTabDialog
 
 public:
     enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8 };
-    KChartConfigDialog( KDChartParams* params,
+    KChartConfigDialog( KChartParams* params,
                         QWidget* parent, int flags,KoChart::Data *dat );
 
     void setCurrentPage( int page );
@@ -33,7 +33,7 @@ signals:
 	void dataChanged();
 
 protected:
-    KDChartParams* _params;
+    KChartParams* _params;
     //KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
     KChartParameterConfigPage*_parameterpage;

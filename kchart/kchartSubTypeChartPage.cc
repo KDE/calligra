@@ -18,11 +18,11 @@
 #include <qlayout.h>
 #include <stdlib.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 #include "kchart_factory.h"
 
-KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KDChartParams* params,
+KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KChartSubTypeChartPage(  params, parent )
 {
@@ -99,7 +99,7 @@ void KChartHiloSubTypeChartPage::apply()
     }
 }
 
-KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KDChartParams* params,
+KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KChartSubTypeChartPage(  params, parent )
 {
@@ -177,7 +177,7 @@ void KChartAreaSubTypeChartPage::apply()
     }
 }
 
-KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KDChartParams* params,
+KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
                                                       QWidget* parent ) :
     KChartSubTypeChartPage( params, parent )
 {
@@ -253,7 +253,7 @@ void KChartBarSubTypeChartPage::apply()
     }
 }
 
-KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KDChartParams* params,
+KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KChartSubTypeChartPage(  params, parent )
 {

@@ -22,9 +22,9 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KDChartParams* params, QWidget* parent )
+KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams* params, QWidget* parent )
     : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
       _params( params )
 {

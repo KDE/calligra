@@ -6,7 +6,7 @@
 #include "sheetdlg.h"  
 #include <qstrlist.h>
 
-class KDChartParams;
+class KChartParams;
 
 class kchartDataEditor : public KDialog 
 {
@@ -15,9 +15,9 @@ public:
     kchartDataEditor();
     void setData(KoChart::Data* dat);
     void getData(KoChart::Data* dat);
-    void getLegend(KDChartParams* params);
+    void getLegend(KChartParams* params);
     void setLegend(const QStringList &legend);
-    void getXLabel(KDChartParams* params);
+    void getXLabel(KChartParams* params);
     void setXLabel(const QStringList &xlbl);
 private:
     SheetDlg *_widget;

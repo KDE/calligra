@@ -17,14 +17,14 @@ class QPushButton;
 class QFont;
 class QRadioButton;
 
-class KDChartParams;
+class KChartParams;
 
 class KChartPieConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartPieConfigPage( KDChartParams* params, QWidget* parent );
+    KChartPieConfigPage( KChartParams* params, QWidget* parent );
     void init();
     void apply();
     void initList();
@@ -35,7 +35,7 @@ public slots:
     
 private:
     int col;
-    KDChartParams* _params;
+    KChartParams* _params;
     QSpinBox *dist;
     QSpinBox *column;
     QListView *list;

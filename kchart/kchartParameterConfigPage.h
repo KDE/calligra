@@ -12,14 +12,14 @@ class QSpinBox;
 class QCheckBox;
 class QLineEdit;
 
-class KDChartParams;
+class KChartParams;
 
 class KChartParameterConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameterConfigPage( KDChartParams* params, QWidget* parent );
+    KChartParameterConfigPage( KChartParams* params, QWidget* parent );
     void init();
     void apply();
 public slots:
@@ -27,7 +27,7 @@ public slots:
     void changeXaxisState( bool );
     void changeFont();
 private:
-    KDChartParams* _params;
+    KChartParams* _params;
     QCheckBox *grid;
     QCheckBox *border;
     QCheckBox *xaxis;

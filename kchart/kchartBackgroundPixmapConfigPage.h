@@ -10,7 +10,7 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
-class KDChartParams;
+class KChartParams;
 class QSpinBox;
 class QCheckBox;
 class QComboBox;
@@ -21,7 +21,7 @@ class KChartBackgroundPixmapConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartBackgroundPixmapConfigPage( KDChartParams* params,
+    KChartBackgroundPixmapConfigPage( KChartParams* params,
                                       QWidget* parent );
     void init();
     void apply();
@@ -35,7 +35,7 @@ private slots:
 private:
     void loadWallPaper();
 
-    KDChartParams* _params;
+    KChartParams* _params;
     QComboBox* wallCB;
     QWidget* wallWidget;
     QSpinBox* intensitySB;

@@ -24,9 +24,9 @@
 
 #include <qradiobutton.h>
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
+KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 					QWidget* parent, int flags,KoChart::Data *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),

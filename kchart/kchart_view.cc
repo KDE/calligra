@@ -11,7 +11,7 @@
 #include "kchartBarConfigDialog.h"
 #include "KChartViewIface.h"
 
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 #include <qpainter.h>
 #include <qcursor.h>
@@ -180,7 +180,7 @@ void KChartView::createTempData()
 void KChartView::edit()
 {
     kchartDataEditor ed;
-    KDChartParams* params=((KChartPart*)koDocument())->params();
+    KChartParams* params=((KChartPart*)koDocument())->params();
 
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
     kdDebug(35001)<<"***Before calling editor: cols ="<<dat->cols()<<" , rows = "<<dat->rows()<<" , usedCols = "<<dat->usedCols()<<"  usedRows = "<<dat->usedRows()<<endl;
@@ -260,7 +260,7 @@ void KChartView::slotConfig()
 void KChartView::config(int flags)
 {
     // open a config dialog depending on the chart type
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
+    KChartParams* params = ((KChartPart*)koDocument())->params();
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
     KChartConfigDialog* d = new KChartConfigDialog( params, this, flags, dat );
     connect( d, SIGNAL( dataChanged() ),
@@ -300,7 +300,7 @@ void KChartView::pieChart()
 {
   if ( m_chartpie->isChecked() )
     {
-      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Pie );
       params->setThreeDPies( true );
       params->setExplodeFactor( 0 );
@@ -315,7 +315,7 @@ void KChartView::lineChart()
 {
   if ( m_chartline->isChecked() )
     {
-      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Line );
       params->setLineChartSubType( KDChartParams::LineNormal );
       repaint();
@@ -329,7 +329,7 @@ void KChartView::barsChart()
 {
   if ( m_chartbars->isChecked() )
     {
-      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Bar );
       params->setBarChartSubType( KDChartParams::BarNormal );
       params->setThreeDBars( true );
@@ -343,7 +343,7 @@ void KChartView::areasChart()
 {
   if ( m_chartareas->isChecked() )
     {
-      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Area );
       params->setAreaChartSubType( KDChartParams::AreaNormal );
       repaint();
@@ -358,7 +358,7 @@ void KChartView::hiLoChart()
 {
 if ( m_charthilo->isChecked() )
     {
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
+    KChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::HiLo );
     params->setHiLoChartSubType( KDChartParams::HiLoNormal );
     repaint();
@@ -372,7 +372,7 @@ void KChartView::ringChart()
 {
   if ( m_chartring->isChecked() )
     {
-      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Ring );
       repaint();
     }

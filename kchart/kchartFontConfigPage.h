@@ -14,14 +14,14 @@ class QListBox;
 class QPushButton;
 class KColorButton;
 
-class KDChartParams;
+class KChartParams;
 
 class KChartFontConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartFontConfigPage( KDChartParams* params,QWidget* parent, KoChart::Data *dat);
+    KChartFontConfigPage( KChartParams* params,QWidget* parent, KoChart::Data *dat);
     void init();
     void apply();
     void initList();
@@ -30,7 +30,7 @@ public slots:
     void changeIndex(int index);
     void changeLabelFont();
 private:
-    KDChartParams* _params;
+    KChartParams* _params;
     QLineEdit *font;
     QListBox *list;
     QListBox *listColor;

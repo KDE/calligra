@@ -13,20 +13,18 @@ class QLabel;
 class QRadioButton;
 class KChartParams;
 
-class KDChartParams;
-
 class KChartSubTypeChartPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartSubTypeChartPage( KDChartParams* params, QWidget* parent ) :
+    KChartSubTypeChartPage( KChartParams* params, QWidget* parent ) :
         QWidget( parent ), _params( params ) {}
     virtual void init() = 0;
     virtual void apply() = 0;
 
 protected:
-    KDChartParams* _params;
+    KChartParams* _params;
 };
 
 class KChartLineSubTypeChartPage : public KChartSubTypeChartPage
@@ -34,7 +32,7 @@ class KChartLineSubTypeChartPage : public KChartSubTypeChartPage
     Q_OBJECT
 
 public:
-    KChartLineSubTypeChartPage( KDChartParams* params,
+    KChartLineSubTypeChartPage( KChartParams* params,
                                 QWidget* parent );
     virtual void init();
     virtual void apply();
@@ -55,7 +53,7 @@ class KChartAreaSubTypeChartPage : public KChartSubTypeChartPage
     Q_OBJECT
 
 public:
-    KChartAreaSubTypeChartPage( KDChartParams* params,
+    KChartAreaSubTypeChartPage( KChartParams* params,
                                 QWidget* parent );
     virtual void init();
     virtual void apply();
@@ -75,7 +73,7 @@ class KChartBarSubTypeChartPage : public KChartSubTypeChartPage
     Q_OBJECT
 
 public:
-    KChartBarSubTypeChartPage( KDChartParams* params, QWidget* parent );
+    KChartBarSubTypeChartPage( KChartParams* params, QWidget* parent );
     virtual void init();
     virtual void apply();
 
@@ -96,7 +94,7 @@ class KChartHiloSubTypeChartPage : public KChartSubTypeChartPage
     Q_OBJECT
 
 public:
-    KChartHiloSubTypeChartPage( KDChartParams* params,
+    KChartHiloSubTypeChartPage( KChartParams* params,
                                 QWidget* parent );
     virtual void init();
     virtual void apply();

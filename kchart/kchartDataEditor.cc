@@ -4,7 +4,7 @@
 #include <kdebug.h>
 
 #include "kdchart/KDChartAxisParams.h"
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
 kchartDataEditor::kchartDataEditor() :
     KDialog(0,"KChart Data Editor",true)
@@ -90,7 +90,7 @@ void kchartDataEditor::setLegend( const QStringList &legend )
 }
 
 
-void kchartDataEditor::getLegend( KDChartParams* params )
+void kchartDataEditor::getLegend( KChartParams* params )
 {
     for( int row = 0; row < _widget->rows(); row++ ) {
         if(! (row >= _widget->usedRows()) ) {
@@ -110,7 +110,7 @@ void kchartDataEditor::setXLabel( const QStringList & xlbl )
     }
 }
 
-void kchartDataEditor::getXLabel( KDChartParams* params )
+void kchartDataEditor::getXLabel( KChartParams* params )
 {
     KDChartAxisParams bottomparms = params->axisParams( KDChartAxisParams::AxisPosBottom );
     static QStringList longlabels, shortlabels;

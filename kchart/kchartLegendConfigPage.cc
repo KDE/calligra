@@ -13,9 +13,9 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
-#include "kdchart/KDChartParams.h"
+#include "kchart_params.h"
 
-KChartLegendConfigPage::KChartLegendConfigPage( KDChartParams* params,
+KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
                                                 QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

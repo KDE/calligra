@@ -14,21 +14,21 @@ class QRadioButton;
 class QLineEdit;
 class QSpinBox;
 
-class KDChartParams;
+class KChartParams;
 
 class KChartParameterPieConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameterPieConfigPage( KDChartParams* params,QWidget* parent );
+    KChartParameterPieConfigPage( KChartParams* params,QWidget* parent );
     void init();
     void apply();
 
 public slots:
     void changeState(bool );	
 private:
-    KDChartParams* _params;
+    KChartParams* _params;
     QRadioButton *_typeNone;
     QRadioButton *_typeAbove;
     QRadioButton *_typeBelow;

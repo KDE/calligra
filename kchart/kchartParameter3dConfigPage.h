@@ -10,20 +10,20 @@
 #include <qwidget.h>
 #include <knuminput.h>
 
-class KDChartParams;
+class KChartParams;
 
 class KChartParameter3dConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameter3dConfigPage( KDChartParams* params,
+    KChartParameter3dConfigPage( KChartParams* params,
                                  QWidget* parent );
     void init();
     void apply();
 
 private:
-    KDChartParams* _params;
+    KChartParams* _params;
     KIntNumInput* angle3d;
     KDoubleNumInput* depth;
 };
