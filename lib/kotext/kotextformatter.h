@@ -84,6 +84,13 @@ protected:
     void moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
                    int deltaX, int deltaPixelX );
 
+    // Total left margin for a given line
+    // Takes into account parag's leftmargin, firstlinemargin and counter,
+    // but not adjustMargins (application hook)
+    int leftMargin( bool firstLine ) const;
+    int rightMargin( bool firstLine ) const;
+
+
 private:
     KoTextFormatter* settings;
     KoTextDocument* doc;

@@ -7,6 +7,7 @@
 #include "kotextformat.h"
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
+#include "koparagcounter.h"
 
 #include <assert.h>
 
@@ -20,6 +21,7 @@ public:
     }
 
     void speedTest();
+    void counterAndBigChar();
     void oneLineTest();
     void noHeightTest();
     void noWidthEverTest();
@@ -131,6 +133,35 @@ void KoTextFormatterTest::oneLineTest()
     doc->clear(false);
     doc->setFlow( new KoTextFlow ); // default
 }
+
+void KoTextFormatterTest::counterAndBigChar()
+{
+    kdDebug() << k_funcinfo << endl;
+    // Only one line, with a counter and a big char.
+    // Bug #82609: the new height led to "formatting again" which restarted without taking the counter into account
+    // Expected: the char starts after the counter
+    doc->setFlow( new TextFlow( 2000, 200 ) );
+    doc->clear(true);
+    KoTextParag* parag = doc->firstParag();
+    parag->append( "aB" );
+    KoTextFormat f( *parag->at( 0 )->format() );
+    f.setPointSize( 48 );
+    parag->setFormat( 1, 1, doc->formatCollection()->format( &f ), true );
+    KoParagCounter counter;
+    counter.setNumbering( KoParagCounter::NUM_LIST );
+    counter.setStyle( KoParagCounter::STYLE_NUM );
+    parag->setCounter( &counter );
+    parag->format();
+    parag->printRTDebug( 1 );
+    assert( parag->lines() == 1 );
+    assert( parag->isValid() );
+    assert( parag->rect().width() == 2000 );
+    assert( parag->widthUsed() < 2000 );
+    assert( parag->at(0)->x > 0 );
+    doc->clear(false);
+    doc->setFlow( new KoTextFlow ); // default
+}
+
 int main (int argc, char ** argv)
 {
     KApplication app(argc, argv, "KoTextFormatter test");
@@ -138,6 +169,7 @@ int main (int argc, char ** argv)
     KoTextFormatterTest test;
     //test.speedTest();
     test.oneLineTest();
+    test.counterAndBigChar();
     test.noHeightTest();
     test.noWidthEverTest();
 
