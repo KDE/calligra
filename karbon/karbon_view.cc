@@ -649,7 +649,7 @@ KarbonView::eventFilter( QObject* object, QEvent* event )
 {
 	if ( object == m_canvas->viewport() )
 	{
-
+		s_currentTool->m_part = m_part;
 		return s_currentTool->eventFilter( this, event );
 	}
 	else

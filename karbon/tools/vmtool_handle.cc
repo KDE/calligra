@@ -34,6 +34,7 @@ VMToolHandle::instance( KarbonPart* part )
 		s_instance = new VMToolHandle( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

@@ -28,6 +28,7 @@ public:
 	KarbonPart* part() const { return m_part; }
 
 protected:
+	friend class KarbonView;
 	// that's our part:
 	KarbonPart* m_part;
 };
