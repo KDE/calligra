@@ -58,7 +58,7 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0)
+    m_footnoteNumber(0), m_tableNumber(0)
 {
 }
 
@@ -870,18 +870,49 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
-    const QString tableName( anchor.key.toString() ); // ### FIXME: we do not need the date stamp
+    const QString tableName( QString( "Table" ) + QString:.number( ++m_tableNumber ) );
+    kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
     *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
     *m_streamOut << "<table:table table:name=\""
-        << escapeOOText( anchor.key.toString() )
+        << escapeOOText( tableName )
         << "\ table:style-name=\""
         << "Table1" // ### TODO: we need an automatic table style
         << "\" >\n";
+
     // ### TODO: table:table-column (how do we count?)
+    // (Perhaps iterating on the first row to get each width. This would make a two pass generation.)
+    QValueList<TableCell>::ConstIterator itCell;
+    for ( itCell=anchor.table.cellList.begin();
+        itCell!=anchor.table.cellList.end(); ++itCell )
+    {
+        if ( (*itCell).row != 1 )
+            break; // We have finished the first line
+        const double width = (*itCell).frame.right - (*itCell).frame.left;
+
+        QString automaticStyle ( makeAutomaticStyleName( tableName + ".Column", m_automaticTextStyleNumber ) );
+        kdDebug(30520) << "Creating automatic cell style: " << automaticStyle /* << " key: " */ << styleKey << endl;
+
+        m_contentAutomaticStyles += "  <style:style";
+        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticStyle ) + "\"";
+        m_contentAutomaticStyles += " style:family=\"table-column\"";
+        m_contentAutomaticStyles += ">\n";
+        m_contentAutomaticStyles += "   <style:properties ";
+        // ### TODO: style:column-width (OOWriter 1.1) or fo:width (OO specification)
+        // ### TODO: and what about style:column-width-rel (same problem, it would be nice if we could skip it)
+        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
+        m_contentAutomaticStyles += "/>\n";
+        m_contentAutomaticStyles += "  </style:style>\n";
+
+
+        *m_streamOut << "<table:column table:style-name=\""
+            << escapeOOText( automaticStyle )
+            << "\" table:number-columns-repeated=\"1\"/>\n";
+    }
+
     // ### TODO: automatic styles
 
-    *m_streamOut << "<table:row>\n" << endl;
+    *m_streamOut << "<table:row>\n";
     int rowCurrent = 1; // Not 0 as for the other filters, as we have already opened the first row
 
 
@@ -894,8 +925,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         if ( rowCurrent != (*itCell).row )
         {
             rowCurrent = (*itCell).row;
-            *m_streamOut << "</table:row>\n" << endl;
-            *m_streamOut << "<table:row>\n" << endl;
+            *m_streamOut << "</table:row>\n";
+            *m_streamOut << "<table:row>\n";
         }
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\"### TODO\">\n";
@@ -908,7 +939,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         *m_streamOut << "</table:table-cell>\n";
     }
 
-    *m_streamOut << "</table:row>\n" << endl;
+    *m_streamOut << "</table:row>\n";
     *m_streamOut << "</table:table>\n";
     *m_streamOut << "<text:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
 #endif
