@@ -82,7 +82,8 @@ KexiRelationViewTable::dragObject()
 	qDebug("KexiRelationViewTable::dragObject()");
 	if(selectedItem())
 	{
-		KexiFieldDrag *drag = new KexiFieldDrag(m_table, selectedItem()->text(1), this);
+		KexiFieldDrag *drag = new KexiFieldDrag(
+			"kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
 		return drag;
 	}
 
@@ -107,10 +108,13 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 	QListViewItem *recever = itemAt(ev->pos());
 	if(recever)
 	{
-		KexiRelationViewTable *sourceTable = static_cast<KexiRelationViewTable *>(ev->source());
 
-		QString srcTable = sourceTable->table();
-		QString srcField(ev->encodedData("kexi/field"));
+
+		QString srcTable;
+		QString dummy;
+		QString srcField;
+		//better check later if the source is really a table
+		KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
 		kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
 		QString rcvField = recever->text(1);
