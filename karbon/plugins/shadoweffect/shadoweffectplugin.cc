@@ -41,7 +41,7 @@ ShadowEffectPlugin::ShadowEffectPlugin( KarbonViewBase *parent, const char* name
 : Plugin( parent, name )
 {
 	new KAction(
-		i18n( "&Shadow Effect" ), 0, 0, this,
+		i18n( "&Shadow Effect" ), "shadowRB", 0, this,
 		SLOT( slotShadowEffect() ), actionCollection(), "object_shadow" );
 
 	m_shadowEffectDlg = new VShadowEffectDlg();
