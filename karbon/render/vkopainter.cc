@@ -31,6 +31,8 @@
 #include <kdebug.h>
 #include <math.h>
 
+#include <koPoint.h>
+
 VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_target( target )
 {
 	kdDebug() << "w : " << w << endl;
@@ -38,6 +40,7 @@ VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h
 	m_width = ( w > 0 ) ? w : target->width();
 	m_height= ( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
+	m_path = 0L;
 	resize( m_width, m_height );
 	clear();
 
@@ -57,6 +60,8 @@ VKoPainter::~VKoPainter()
 
 	delete m_stroke;
 	delete m_fill;
+	if( m_path )
+		art_free( m_path );
 
 	if( gc )
 		XFreeGC( m_target->x11Display(), gc );
@@ -99,67 +104,84 @@ VKoPainter::setWorldMatrix( const QWMatrix &mat )
 	m_matrix = mat;
 }
 
-void
-VKoPainter::drawPolygon( const QPointArray &pa, bool winding )
+void 
+VKoPainter::moveTo( const KoPoint &p )
 {
-	ArtVpath *polygon;
-	polygon = art_new( ArtVpath, pa.count() + 2 );
+	if( m_path )
+		art_free( m_path );
 
-	// start
-	polygon[ 0 ].code	= ART_MOVETO;
-	polygon[ 0 ].x		= pa.point( 0 ).x();
-	polygon[ 0 ].y		= pa.point( 0 ).y();
+	m_path = art_new( ArtBpath, 100 );
 
-	// all segments
-	int index;
-	for( index = 1; index < pa.count() ; index++ )
-	{
-		QPoint point = pa.point( index );
-		polygon[ index ].code	= ART_LINETO;
-		polygon[ index ].x		= point.x();
-		polygon[ index ].y		= point.y();
-	}
+	m_index = 0;
 
-	// close
-    polygon[ index ].code	= ART_LINETO;
-    polygon[ index ].x		= pa.point( 0 ).x();
-    polygon[ index ].y		= pa.point( 0 ).y();
+	m_path[ m_index ].code = ART_MOVETO;
+	m_path[ m_index ].x3	= p.x();
+	m_path[ m_index ].y3	= p.y();
 
-	polygon[ ++index ].code = ART_END;
+	m_index++;
+}
 
-	drawVPath( polygon );
+void 
+VKoPainter::lineTo( const KoPoint &p )
+{
+	m_path[ m_index ].code = ART_LINETO;
+	m_path[ m_index ].x3	= p.x();
+	m_path[ m_index ].y3	= p.y();
 
-	art_free( polygon );
+	m_index++;
 }
 
 void
-VKoPainter::drawPolyline( const QPointArray &pa )
+VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 {
-	// TODO : look at closing this thing
-	ArtVpath *polyline;
-	polyline = art_new( ArtVpath, pa.count() + 1 );
+	m_path[ m_index ].code = ART_CURVETO;
+	m_path[ m_index ].x1	= p1.x();
+	m_path[ m_index ].y1	= p1.y();
+	m_path[ m_index ].x2	= p2.x();
+	m_path[ m_index ].y2	= p2.y();
+	m_path[ m_index ].x3	= p3.x();
+	m_path[ m_index ].y3	= p3.y();
 
-	// start
-	polyline[ 0 ].code	= ART_MOVETO;
-	polyline[ 0 ].x		= pa.point( 0 ).x();
-	polyline[ 0 ].y		= pa.point( 0 ).y();
+	m_index++;
+}
 
-	// all segments
-	int index;
-	for( index = 1; index < pa.count() ; index++ )
-	{
-		QPoint point = pa.point( index );
-		polyline[ index ].code	= ART_LINETO;
-		polyline[ index ].x		= point.x();
-		polyline[ index ].y		= point.y();
-	}
+void
+VKoPainter::fillPath()
+{
+	// for now, always close
+	m_path[ m_index ].code = ART_LINETO;
+	m_path[ m_index ].x3	= m_path[ 0 ].x3;
+	m_path[ m_index ].y3	= m_path[ 0 ].y3;
 
-	// close
-	polyline[ index ].code = ART_END;
+	m_index++;
 
-	drawVPath( polyline );
+	//if( m_path[ m_index ].code != ART_END)
+		m_path[ m_index ].code = ART_END;
 
-	art_free( polyline );
+	ArtVpath *path;
+	path = art_bez_path_to_vec( m_path , 0.25 );
+
+	delete m_stroke;
+	m_stroke = 0L;
+
+	drawVPath( path );
+	art_free( path );
+}
+
+void
+VKoPainter::strokePath()
+{
+	if( m_path[ m_index ].code != ART_END)
+		m_path[ m_index ].code = ART_END;
+
+	ArtVpath *path;
+	path = art_bez_path_to_vec( m_path , 0.25 );
+
+	delete m_fill;
+	m_fill = 0L;
+
+	drawVPath( path );
+	art_free( path );
 }
 
 void
@@ -348,4 +370,3 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	m_stroke = 0L;
 	m_fill = 0L;
 }
-

@@ -13,6 +13,7 @@
 
 #include <art_misc.h>
 #include <art_vpath.h>
+#include <art_bpath.h>
 
 class QPainter;
 
@@ -31,9 +32,12 @@ public:
 	virtual void setWorldMatrix( const QWMatrix & );
 
 	// drawing
-	virtual void drawPolygon( const QPointArray &, bool winding = false );
-	virtual void drawPolyline( const QPointArray & );
 	virtual void drawRect( double x, double y, double w, double h );
+    virtual void moveTo( const KoPoint & );
+    virtual void lineTo( const KoPoint & );
+    virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );
+    virtual void fillPath();
+    virtual void strokePath();
 
 	// pen + brush
 	virtual void setPen( const VStroke & );
@@ -55,6 +59,8 @@ private:
 	void drawVPath( ArtVpath * );
 
 private:
+	ArtBpath *m_path;
+	unsigned int m_index;
 	art_u8 *m_buffer;
 	QWidget *m_target;
 	unsigned int m_width;

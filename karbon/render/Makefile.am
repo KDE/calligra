@@ -3,6 +3,7 @@ INCLUDES = \
 	-I$(srcdir)/../../ksvg/impl/libs/art \
 	-I$(srcdir)/../../ksvg/impl/libs/xrgbrender \
 	-I$(srcdir)/../core \
+	-DLIBART_COMPILATION \
 	$(all_includes)
 
 libvpainter_la_LIBADD = -lksvgart -lksvgxrgbrender

@@ -13,8 +13,12 @@
 #include <qwidget.h>
 #include <qpen.h>
 
+#include <koPoint.h>
+#include <kdebug.h>
+
 VQPainter::VQPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
 {
+	m_index = 0;
 	m_painter = new QPainter( target );
 }
 
@@ -52,16 +56,59 @@ VQPainter::setWorldMatrix( const QWMatrix &mat )
 	//m_painter->setWorldMatrix( mat );
 }
 
-void
-VQPainter::drawPolygon( const QPointArray &pa, bool winding )
+void 
+VQPainter::moveTo( const KoPoint &p )
 {
-	m_painter->drawPolygon( pa, winding );
+	//m_index = 0;
+	if( m_pa.size() <= m_index )
+		m_pa.resize( m_index + 10 );
+
+	m_pa.setPoint( m_index, p.x(), p.y() );
+
+	m_index++;
+}
+
+void 
+VQPainter::lineTo( const KoPoint &p )
+{
+	if( m_pa.size() <= m_index )
+		m_pa.resize( m_index + 10 );
+
+	m_pa.setPoint( m_index, p.x(), p.y() );
+
+	m_index++;
 }
 
 void
-VQPainter::drawPolyline( const QPointArray &pa )
+VQPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 {
-	m_painter->drawPolyline( pa );
+	// calculate cubic bezier using a temp QPointArray
+	QPointArray pa( 4 );
+	pa.setPoint( 0, m_pa.point( m_index - 1 ).x(), m_pa.point( m_index - 1 ).y() );
+	pa.setPoint( 1, p1.x(), p1.y() );
+	pa.setPoint( 2, p2.x(), p2.y() );
+	pa.setPoint( 3, p3.x(), p3.y() );
+
+	QPointArray pa2( pa.cubicBezier() );
+
+	m_pa.resize( m_index + pa2.size() );
+	m_pa.putPoints( m_index, pa2.size(), pa2 );
+
+	m_index += pa2.size();
+}
+
+void
+VQPainter::fillPath()
+{
+	// we probably dont need filling for qpainter
+	m_index = 0;
+}
+
+void
+VQPainter::strokePath()
+{
+	m_painter->drawPolyline( m_pa, 0, m_index );
+	m_index = 0;
 }
 
 void

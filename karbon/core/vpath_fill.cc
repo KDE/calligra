@@ -38,13 +38,16 @@ VPathFill::end_draw()
 	m_painter->setRasterOp( Qt::CopyROP );
 	m_painter->setPen( Qt::NoPen );
 	m_painter->setBrush( QColor( 210, 210, 210 ) );
-	m_painter->drawPolygon( m_pa );
+	//m_painter->drawPolygon( m_pa );
 //		m_fillRule == evenOdd ? false : true );
+	m_painter->fillPath();
 }
 
 bool
 VPathFill::begin( const KoPoint& p )
 {
+	m_painter->moveTo( p );
+	return true;
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint(
 		m_pa.size() - 1,
@@ -59,6 +62,8 @@ VPathFill::begin( const KoPoint& p )
 bool
 VPathFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
+	m_painter->curveTo( p1, p2, p3 );
+	return true;
 	QPointArray pa( 4 );
 	pa.setPoint(
 		0,
@@ -90,6 +95,8 @@ VPathFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 bool
 VPathFill::lineTo( const KoPoint& p )
 {
+	m_painter->lineTo( p );
+	return true;
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,
 		qRound( m_zoomFactor * p.x() ),

@@ -11,7 +11,6 @@
 #include <qnamespace.h>
 
 class QWMatrix;
-class QPointArray;
 class QWidget;
 class QColor;
 class QPen;
@@ -19,6 +18,8 @@ class QBrush;
 
 class VStroke;
 class VFill;
+
+class KoPoint;
 
 class VPainter
 {
@@ -35,9 +36,12 @@ public:
 	virtual void setWorldMatrix( const QWMatrix & ) = 0;
 
 	// drawing
-	virtual void drawPolygon( const QPointArray &, bool winding = false ) = 0;
-	virtual void drawPolyline( const QPointArray & ) = 0;
 	virtual void drawRect( double x, double y, double w, double h ) = 0;
+	virtual void moveTo( const KoPoint & ) = 0;
+	virtual void lineTo( const KoPoint & ) = 0;
+	virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & ) = 0;
+	virtual void strokePath() = 0;
+	virtual void fillPath() = 0;
 
 	// pen + brush
 	virtual void setPen( const VStroke & ) = 0;

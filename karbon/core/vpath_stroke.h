@@ -32,6 +32,7 @@ public:
 		{ return lineTo( p ); }
 
 private:
+	VPainter *m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;
 };

@@ -22,6 +22,7 @@ VPathStroke::draw( VPainter *painter, const double zoomFactor, const VSegmentLis
 	bool plain )
 {
 	m_zoomFactor = zoomFactor;
+	m_painter = painter;
 
 	traverse( list );
 
@@ -55,19 +56,21 @@ VPathStroke::draw( VPainter *painter, const double zoomFactor, const VSegmentLis
 	}
 
 	painter->setBrush( Qt::NoBrush );
-	painter->drawPolyline( m_pa );
+	painter->strokePath();
 }
 
 bool
 VPathStroke::begin( const KoPoint& p )
 {
-	m_pa.resize( 1 );
+	m_painter->moveTo( p );
+
+	/*m_pa.resize( 1 );
 	m_pa.setPoint(
 		0,
 		qRound( m_zoomFactor * p.x() ),
 		qRound( m_zoomFactor * p.y() ) );
 
-	setPreviousPoint( p );
+	setPreviousPoint( p );*/
 
 	return true;
 }
@@ -75,7 +78,9 @@ VPathStroke::begin( const KoPoint& p )
 bool
 VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
-	QPointArray pa( 4 );
+	m_painter->curveTo( p1, p2, p3 );
+
+	/*QPointArray pa( 4 );
 	pa.setPoint(
 		0,
 		qRound( m_zoomFactor * previousPoint().x() ),
@@ -98,7 +103,7 @@ VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 	m_pa.resize( m_pa.size() + pa2.size() );
 	m_pa.putPoints( m_pa.size() - pa2.size(), pa2.size(), pa2 );
 
-	setPreviousPoint( p3 );
+	setPreviousPoint( p3 );*/
 
 	return true;
 }
@@ -106,12 +111,14 @@ VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 bool
 VPathStroke::lineTo( const KoPoint& p )
 {
-	m_pa.resize( m_pa.size() + 1 );
+	m_painter->lineTo( p );
+
+	/*m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,
 		qRound( m_zoomFactor * p.x() ),
 		qRound( m_zoomFactor * p.y() ) );
 
-	setPreviousPoint( p );
+	setPreviousPoint( p );*/
 
 	return true;
 }

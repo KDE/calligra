@@ -9,6 +9,7 @@
 // qpainter wrapper
 
 #include "vpainter.h"
+#include "qpointarray.h"
 
 class QPainter;
 
@@ -27,9 +28,12 @@ public:
 	virtual void setWorldMatrix( const QWMatrix & );
 
 	// drawing
-	virtual void drawPolygon( const QPointArray &, bool winding = false );
-	virtual void drawPolyline( const QPointArray & );
 	virtual void drawRect( double x, double y, double w, double h );
+    virtual void moveTo( const KoPoint & );
+    virtual void lineTo( const KoPoint & );
+	virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );
+    virtual void strokePath();
+    virtual void fillPath();
 
 	// pen + brush
 	virtual void setPen( const VStroke & );
@@ -47,6 +51,8 @@ public:
 	virtual void setRasterOp( Qt::RasterOp );
 
 private:
+	unsigned int m_index;
+	QPointArray m_pa;
 	QPainter *m_painter;
 	QWidget  *m_target;
 	int m_width;
