@@ -1489,11 +1489,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		return;
 	}
 	
-	if(d->pCurrentItem == 0 && m_data->count() > 0)
+	if(d->pCurrentItem == 0 && (m_data->count() > 0 || isInsertingEnabled()))
 	{
 		setCursor(0,0);
 	}
-	else if(m_data->count() == 0)
+	else if(m_data->count() == 0 && !isInsertingEnabled())
 	{
 		e->accept();
 		return;
@@ -2185,7 +2185,7 @@ QRect KexiTableView::cellGeometry(int row, int col) const
 
 QSize KexiTableView::tableSize() const
 {
-	if (rows() > 0 && columns() > 0) {
+	if ((rows()+ (isInsertingEnabled()?1:0) ) > 0 && columns() > 0) {
 /*		kdDebug() << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
 			<< ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
 //			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())

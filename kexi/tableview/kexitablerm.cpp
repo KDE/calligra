@@ -148,11 +148,10 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 			colorGroup(), QStyle::Style_Raised |
 			(isEnabled() ? QStyle::Style_Enabled : 0));
 	}
-
 	if (m_editRow!=-1 && m_editRow >= first && m_editRow <= (last/*+1 for insert row*/)) {
 		//show pen when editing
 		int ofs = m_rowHeight / 4;
-		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+1;
+		int pos = ((m_rowHeight*(m_currentRow>=0?m_currentRow:0))-m_offset)-ofs/2+1;
 		p.drawImage((m_rowHeight-m_penImg.width())/2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
 	}
 	else if (m_currentRow >= first && m_currentRow <= last 
@@ -177,47 +176,15 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-m_plusImg.height())/2;
 		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
 	}
-	
-#if 0
-
-	p.setPen(QColor(0,0,99));
-/*	if(m_insertRow >= first && m_insertRow <= last)
-	{
-		int pos = ((m_rowHeight*m_insertRow)-m_offset)-1;
-		for(int i=0; i < (m_rowHeight - 2)/ 2; i++)
-		{
-			p.drawLine(i + 2, pos - m_rowHeight + 2 + i, i + 2, pos - 2 - i);
-		}
-
-	}
-*/
-
-	if(m_insertRow >= first && m_insertRow <= last)
-	{
-		int poss = ((m_insertRow*m_rowHeight)-m_offset)-1;
-		p.drawLine(2, poss - (m_rowHeight/2) - 1, width() - 4, poss - (m_rowHeight/2) - 1);
-		p.drawLine(2, poss - (m_rowHeight/2), width() - 4, poss - (m_rowHeight/2));
-		p.drawLine(2, poss - (m_rowHeight/2) + 1, width() - 4, poss - (m_rowHeight/2) + 1);
-
-		p.drawLine((m_rowHeight - 4)/2 - 1, poss - m_rowHeight + 3, (m_rowHeight- 4)/2 - 1, poss - 3);
-		p.drawLine((m_rowHeight - 4)/2, poss - m_rowHeight + 3, (m_rowHeight- 4)/2, poss - 3);
-		p.drawLine((m_rowHeight - 4)/2 + 1, poss - m_rowHeight + 3, (m_rowHeight- 4)/2 + 1, poss - 3);
-	}
-#endif
 }
 
 void KexiTableRM::setCurrentRow(int row)
 {
 	int oldRow = m_currentRow;
-	m_currentRow=row;//+1;
+	m_currentRow=row;
 	
 	update(0,(m_rowHeight*(oldRow))-m_offset-1, width()+2, m_rowHeight+2);
-//	update(0,(m_rowHeight*row)-m_offset, width(), m_rowHeight);
 	update(0,(m_rowHeight*row)-m_offset-1, width()+2, m_rowHeight+2);
-//	update(0,(m_rowHeight*row+1)-m_offset, width(), m_rowHeight);
-	
-//	update();
-//	update(0, (m_rowHeight*(row+1))-m_offset, width(), m_rowHeight);
 }
 
 void KexiTableRM::setOffset(int offset)
