@@ -134,15 +134,14 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, int offset )
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
     QDomElement objs=doc.createElement("OBJECTS");
     fragment.appendChild(objs);
-
-    KPObject *kpobject = 0;
-    for ( unsigned int i = 0; i < objects.count() ; ++i ) {
-        kpobject = objects.at( i );
-        if ( kpobject->getType() == OT_PART )
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->getType() == OT_PART )
             continue;
         QDomElement object=doc.createElement("OBJECT");
-        object.setAttribute("type", static_cast<int>( kpobject->getType() ));
-        object.appendChild(kpobject->save( doc,offset ));
+        object.setAttribute("type", static_cast<int>( it.current()->getType() ));
+        object.appendChild(it.current()->save( doc,offset ));
         objs.appendChild(object);
     }
     return fragment;
@@ -246,10 +245,10 @@ int KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 /*================================================================*/
 void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool drawSelection )
 {
-    KPObject *kpobject = 0;
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        kpobject = objects.at( i );
-        kpobject->draw( _painter, _zoomhandler, drawSelection );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->draw( _painter, _zoomhandler, drawSelection );
     }
 
     KPObject::draw( _painter, _zoomhandler, drawSelection );
@@ -260,31 +259,26 @@ void KPGroupObject::updateSizes( double fx, double fy )
 {
     if ( !updateObjs )
         return;
-#if 0 //FIXME
-    KPObject *kpobject = 0;
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        kpobject = objects.at( i );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        double _x = ( it.current()->getOrigPointInGroup().x() - origTopLeftPointInGroup.x() ) * fx;
+        double _y = ( it.current()->getOrigPointInGroup().y() - origTopLeftPointInGroup.y() ) * fy;
 
-        int _x = (int)( (double)( kpobject->getOrigPointInGroup().x() - origTopLeftPointInGroup.x() ) * fx );
-        int _y = (int)( (double)( kpobject->getOrigPointInGroup().y() - origTopLeftPointInGroup.y() ) * fy );
+        KoRect origObjectRect = KoRect( KoPoint( it.current()->getOrigPointInGroup().x(), it.current()->getOrigPointInGroup().y() ),it.current()->getOrigSizeInGroup() );
+        KoPoint bottomRight = origObjectRect.bottomRight();
+        double _bottomRightX = ( bottomRight.x() - origTopLeftPointInGroup.x() ) * fx;
+        double _bottomRightY = ( bottomRight.y() - origTopLeftPointInGroup.y() ) * fy;
 
-        QRect origObjectRect = QRect( QPoint( kpobject->getOrigPointInGroup().x(), kpobject->getOrigPointInGroup().y() ),
-                                      kpobject->getOrigSizeInGroup() );
-        QPoint bottomRight = origObjectRect.bottomRight();
-        int _bottomRightX = (int)( (double)( bottomRight.x() - origTopLeftPointInGroup.x() ) * fx );
-        int _bottomRightY = (int)( (double)( bottomRight.y() - origTopLeftPointInGroup.y() ) * fy );
-
-        QRect objectRect = QRect( QPoint( _x, _y ), QPoint( _bottomRightX, _bottomRightY ) );
-        int _w = objectRect.width();
-        int _h = objectRect.height();
+        KoRect objectRect = KoRect( KoPoint( _x, _y ), KoPoint( _bottomRightX, _bottomRightY ) );
+        double _w = objectRect.width();
+        double _h = objectRect.height();
 
         _x = orig.x() + _x;
         _y = orig.y() + _y;
-        kpobject->setOrig( _x, _y );
-
-        kpobject->setSize( _w, _h );
+        it.current()->setOrig( _x, _y );
+        it.current()->setSize( _w, _h );
     }
-#endif
 }
 
 /*================================================================*/
@@ -292,9 +286,9 @@ void KPGroupObject::updateCoords( double dx, double dy )
 {
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->moveBy( dx, dy );
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->moveBy( dx, dy );
 }
 
 /*================================================================*/
@@ -304,9 +298,9 @@ void KPGroupObject::rotate( float _angle )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->rotate( _angle );
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->rotate( _angle );
 }
 
 /*================================================================*/
@@ -316,9 +310,9 @@ void KPGroupObject::setShadowDistance( int _distance )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setShadowDistance( _distance );
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->setShadowDistance( _distance );
 }
 
 /*================================================================*/
@@ -328,9 +322,9 @@ void KPGroupObject::setShadowDirection( ShadowDirection _direction )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setShadowDirection( _direction );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setShadowDirection( _direction );
 }
 
 /*================================================================*/
@@ -340,9 +334,9 @@ void KPGroupObject::setShadowColor( const QColor &_color )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setShadowColor( _color );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setShadowColor( _color );
 }
 
 /*================================================================*/
@@ -352,9 +346,9 @@ void KPGroupObject::setEffect( Effect _effect )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setEffect( _effect );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setEffect( _effect );
 }
 
 /*================================================================*/
@@ -364,9 +358,9 @@ void KPGroupObject::setEffect2( Effect2 _effect2 )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setEffect2( _effect2 );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setEffect2( _effect2 );
 }
 
 /*================================================================*/
@@ -376,9 +370,9 @@ void KPGroupObject::setPresNum( int _presNum )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setPresNum( _presNum );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setPresNum( _presNum );
 }
 
 /*================================================================*/
@@ -388,9 +382,9 @@ void KPGroupObject::setDisappear( bool b )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setDisappear( b );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setDisappear( b );
 }
 
 /*================================================================*/
@@ -400,9 +394,9 @@ void KPGroupObject::setDisappearNum( int num )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setDisappearNum( num );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setDisappearNum( num );
 }
 
 /*================================================================*/
@@ -412,9 +406,9 @@ void KPGroupObject::setEffect3( Effect3 _effect3)
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setEffect3( _effect3 );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setEffect3( _effect3 );
 }
 
 /*================================================================*/
@@ -424,9 +418,9 @@ void KPGroupObject::setAppearTimer( int _appearTimer )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setAppearTimer( _appearTimer );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setAppearTimer( _appearTimer );
 }
 
 /*================================================================*/
@@ -436,9 +430,9 @@ void KPGroupObject::setDisappearTimer( int _disappearTimer )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setDisappearTimer( _disappearTimer );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setDisappearTimer( _disappearTimer );
 }
 
 
@@ -449,9 +443,9 @@ void KPGroupObject::setOwnClipping( bool _ownClipping )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setOwnClipping( _ownClipping );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setOwnClipping( _ownClipping );
 }
 
 /*================================================================*/
@@ -461,9 +455,9 @@ void KPGroupObject::setSubPresStep( int _subPresStep )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setSubPresStep( _subPresStep );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setSubPresStep( _subPresStep );
 }
 
 /*================================================================*/
@@ -473,9 +467,9 @@ void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->doSpecificEffects( _specEffects, _onlyCurrStep );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->doSpecificEffects( _specEffects, _onlyCurrStep );
 }
 
 /*================================================================*/
@@ -485,9 +479,9 @@ void KPGroupObject::setAppearSoundEffect( bool b )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setAppearSoundEffect( b );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->setAppearSoundEffect( b );
 }
 
 /*================================================================*/
@@ -497,9 +491,9 @@ void KPGroupObject::setDisappearSoundEffect( bool b )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setDisappearSoundEffect( b );
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->setDisappearSoundEffect( b );
 }
 
 /*================================================================*/
@@ -509,9 +503,9 @@ void KPGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setAppearSoundEffectFileName( _a_fileName );
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->setAppearSoundEffectFileName( _a_fileName );
 }
 
 /*================================================================*/
@@ -521,7 +515,7 @@ void KPGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName 
 
     if ( !updateObjs )
         return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->setDisappearSoundEffectFileName( _d_fileName );
+    QPtrListIterator<KPObject> it( objects);
+    for ( ; it.current() ; ++it )
+        it.current()->setDisappearSoundEffectFileName( _d_fileName );
 }
