@@ -684,6 +684,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
+    KoRect rect = doc->stickyPage()->getPageRect();
+
+    m_tabStopWidth->setRange( 0.0, KoUnit::ptToUnit( rect.width(), doc->getUnit() ) , 0.1, false);
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
