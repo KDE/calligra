@@ -89,7 +89,7 @@ void KPTRelationDialog::init()
     relationTypeLayout->addWidget(b, 1, 0);
     b = new QRadioButton(QString("Start-Start"), relationType);
     relationTypeLayout->addWidget(b, 2, 0);
-
+/*
     timingType = new QButtonGroup(0, Qt::Vertical,i18n("Timing Type"),page);
     timingType->layout()->setSpacing(KDialog::spacingHint());
     timingType->layout()->setMargin(KDialog::marginHint());
@@ -107,16 +107,16 @@ void KPTRelationDialog::init()
     timingTypeLayout->addWidget(b, 3, 0);
     b = new QRadioButton(QString("Percent Of Project"), timingType);
     timingTypeLayout->addWidget(b, 4, 0);
-    
+    */
     if (m_relation == 0)
     {
         relationType->setButton(FINISH_START);
-        timingType->setButton(START_ON_DATE);
+//        timingType->setButton(START_ON_DATE);
     }
     else
     {
         relationType->setButton(m_relation->timingRelation());
-        timingType->setButton(m_relation->timingType());
+//        timingType->setButton(m_relation->timingType());
     }
     
 }
@@ -138,10 +138,10 @@ void KPTRelationDialog::slotOk()
     if (m_relation)
     {
         m_relation->setTimingRelation((TimingRelation)relationType->id(r));
-        m_relation->setTimingType((TimingType)timingType->id(t));
+//        m_relation->setTimingType((TimingType)timingType->id(t));
     }
     else
-        m_child->addDependParentNode(m_parent, (TimingType)timingType->id(t), (TimingRelation)relationType->id(r));
+        m_child->addDependParentNode(m_parent, (TimingType)0/*timingType->id(t)*/, (TimingRelation)relationType->id(r));
 
     accept();
 }
