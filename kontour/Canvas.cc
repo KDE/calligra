@@ -155,10 +155,10 @@ void Canvas::updateBuf(const QRect &rect)
   p.save();
   p.scale(document()->zoomFactor(), document()->zoomFactor());
   document()->activePage()->drawContents(p, false, mOutlineMode);
-  p.restore();
 
   if(!document()->activePage()->selectionIsEmpty())
     document()->activePage()->handle().draw(p);
+  p.restore();
 
   p.restore();
 
