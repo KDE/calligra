@@ -3417,6 +3417,8 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
   if (d->activeSheet != NULL)
   {
     d->savedAnchors.replace(d->activeSheet, selectionInfo()->selectionAnchor());
+    kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
+    kdDebug() << "Saving marker pos: " << selectionInfo()->marker() << endl;
     d->savedMarkers.replace(d->activeSheet, selectionInfo()->marker());
   }
 
@@ -4308,7 +4310,7 @@ void KSpreadView::print( KPrinter &prt )
     //Restore original orientation
     print->setPaperOrientation( _orient );
 
-    d->doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    d->doc->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     d->doc->newZoomAndResolution( true, false );
 
     // Repaint at correct zoom
@@ -4558,7 +4560,7 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
   // Set the zoom in KoView (for embedded views)
   d->doc->emitBeginOperation( false );
 
-  d->doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  d->doc->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
   KoView::setZoom( d->doc->zoomedResolutionY() /* KoView only supports one zoom */ );
 
   d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
@@ -4868,11 +4870,14 @@ void KSpreadView::refreshView()
                                    top,
                                    widthVScrollbar,
                                    height() - top );
-  else
+  else{
+      kdDebug() << k_funcinfo << "setting geom of vertScrollBar, height=" <<
+                height() - heightHScrollbar - top << endl;
     d->vertScrollBar->setGeometry( left,
                                    top,
                                    widthVScrollbar,
                                    height() - heightHScrollbar - top );
+  }
   d->vertScrollBar->setSteps( 20 /*linestep*/, d->vertScrollBar->height() /*pagestep*/);
 
   if ( d->doc->showVerticalScrollBar() )

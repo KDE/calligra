@@ -349,7 +349,7 @@ void KSpreadDoc::initConfig()
     else
       m_zoom = 100;
 
-    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
 KSpreadMap* KSpreadDoc::workbook() const
@@ -1239,7 +1239,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
 
     // only one zoom is supported
     double d_zoom = 1.0;
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     if ( m_zoomedResolutionX != zoomX )
         d_zoom *= ( zoomX / m_zoomedResolutionX );
 
@@ -1249,7 +1249,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     QRect prect = rect;
     prect.setWidth( prect.width() * painter.worldMatrix().m11() );
     prect.setHeight( prect.height() * painter.worldMatrix().m22() );
-    setZoomAndResolution( d_zoom * 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    setZoomAndResolution( d_zoom * 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
 
     // paint the content, now zoom is correctly set
     kdDebug(36001)<<"paintContent-------------------------------------\n";
@@ -1260,7 +1260,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
 
     // restore zoom
     m_zoom = oldZoom;
-    setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadSheet* table, bool drawCursor )
