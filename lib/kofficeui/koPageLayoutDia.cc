@@ -628,8 +628,8 @@ void KoPageLayoutDia::setupTab3()
     grid3->addWidget( nCSpacing, 3, 0 );
 
     nCSpacing->setValue( KoUnit::ptToUnit( cl.ptColumnSpacing, m_unit ) );
-    connect( nCSpacing, SIGNAL( textChanged( const QString & ) ),
-             this, SLOT( nSpaceChanged( const QString & ) ) );
+    connect( nCSpacing, SIGNAL( valueChanged(double) ),
+             this, SLOT( nSpaceChanged( double ) ) );
 
     // ------------- preview -----------
     pgPreview2 = new KoPagePreview( tab3, "Preview", layout );
@@ -914,9 +914,9 @@ void KoPageLayoutDia::nColChanged( int _val )
 }
 
 /*==================================================================*/
-void KoPageLayoutDia::nSpaceChanged( const QString &_val )
+void KoPageLayoutDia::nSpaceChanged( double _val )
 {
-    cl.ptColumnSpacing = KoUnit::fromUserValue( _val, m_unit );
+    cl.ptColumnSpacing = KoUnit::ptFromUnit( _val, m_unit );
     updatePreview( layout );
 }
 

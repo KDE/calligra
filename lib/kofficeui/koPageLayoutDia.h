@@ -228,7 +228,7 @@ private slots:
 
     // spinboxes
     void nColChanged( int );
-    void nSpaceChanged( const QString & );
+    void nSpaceChanged( double );
 
 private:
     void changed(QLineEdit *line, double &pt);
