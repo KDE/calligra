@@ -106,7 +106,11 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
     KoStoreDevice dev( store );
     KoXmlWriter xmlWriter( &dev, "office:document-meta" );
     xmlWriter.startElement( "office:meta" );
-    // TODO implement
+
+    //<meta:generator>OpenOffice.org 1.1.0 (Linux)</meta:generator>
+    xmlWriter.startElement( "meta:generator");
+    xmlWriter.addTextNode( "Koffice" ); //todo found a better name for it, perhaps add version
+    xmlWriter.endElement();
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
