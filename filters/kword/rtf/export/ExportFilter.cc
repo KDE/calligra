@@ -35,6 +35,7 @@
 #include <qdatetime.h>
 
 #include <klocale.h>
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
@@ -432,17 +433,41 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     || (2==(*paraFormatDataIt).variable.m_type) ) // time
                 {
                     // ### TODO: fixed/variable date
-                    QString key((*paraFormatDataIt).variable.m_key.mid(4));
-                    if (key.startsWith("locale"))
-                        key = QString::null; // ###TODO: exact locale formats
                     str += "{\\field{\\*\\fldinst ";
                     if (0==(*paraFormatDataIt).variable.m_type)
                         str += "DATE ";
                     else
                         str += "TIME ";
-                   if (!key.isEmpty())
+                    QString key((*paraFormatDataIt).variable.m_key.mid(4));
+                    kdDebug(30515) << "Time format: " << key << endl;
+                    if (key.startsWith("locale"))
                     {
-                        kdDebug(30515) << "Time format: " << key << endl;
+                        if (key == "locale" )
+                        {
+                            if (0==(*paraFormatDataIt).variable.m_type)
+                                key = KGlobal::locale()->dateFormat();
+                            else
+                                key = KGlobal::locale()->timeFormat();
+                        }
+                        else if ( key == "localeshort" )
+                            key = KGlobal::locale()->dateFormatShort();
+                        else if ( key == "localedatetime" )
+                        {
+                            key = KGlobal::locale()->dateFormat();
+                            key += ' ';
+                            key += KGlobal::locale()->timeFormat();
+                        }
+                        else if ( key == "localedatetimeshort" )
+                        {
+                            key = KGlobal::locale()->dateFormat();
+                            key += ' ';
+                            key += KGlobal::locale()->timeFormat();
+                        }
+                        kdDebug(30515) << "KDE format:  " << key << endl;
+                        key=QString::null; // ### FIXME: KControl's key seems to differ from KWord :-(
+                    }
+                    if (!key.isEmpty())
+                    {
                         QRegExp regexp("AP");
                         regexp.setCaseSensitive(false);
                         if (regexp.search(key)!=-1)
