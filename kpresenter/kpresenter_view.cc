@@ -3319,7 +3319,7 @@ void KPresenterView::confPieOk()
 void KPresenterView::confRectOk()
 {
     bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Rectangle values" ));
     KCommand *cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
     if( cmd)
     {
@@ -3346,7 +3346,7 @@ void KPresenterView::confRectOk()
 void KPresenterView::confPolygonOk()
 {
     bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Polygon Settings" ));
     KCommand *cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
                                                 confPolygonDia->getCornersValue(),
                                                 confPolygonDia->getSharpnessValue() );

@@ -2206,7 +2206,6 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
 {
     bool changed = false;
     PolygonSettingCmd *polygonSettingCmd=0L;
-    KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<PolygonSettingCmd::PolygonSettings> _oldSettings;
     PolygonSettingCmd::PolygonSettings _newSettings, *tmp;
@@ -2226,10 +2225,10 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
             if ( it.current()->isSelected() ) {
                 tmp = new PolygonSettingCmd::PolygonSettings;
                 dynamic_cast<KPPolygonObject*>( it.current() )->getPolygonSettings( &tmp->checkConcavePolygon,
-                                                                                &tmp->cornersValue,
-                                                                                &tmp->sharpnessValue );
+                                                                                    &tmp->cornersValue,
+                                                                                    &tmp->sharpnessValue );
                 _oldSettings.append( tmp );
-                _objects.append( kpobject );
+                _objects.append( it.current() );
 
                 if( !changed && ( tmp->checkConcavePolygon !=_newSettings.checkConcavePolygon
                                   || tmp->cornersValue != _newSettings.cornersValue
@@ -2241,7 +2240,7 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
 
     if ( !_objects.isEmpty() && changed ) {
         polygonSettingCmd = new PolygonSettingCmd( i18n( "Change Polygon Settings" ), _oldSettings,
-                                                                      _newSettings, _objects, m_doc );
+                                                   _newSettings, _objects, m_doc );
         polygonSettingCmd->execute();
     }
     else {
