@@ -737,15 +737,42 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
 {
     //kdDebug (30508) << "Entering ProcessDocTag" << endl;
 
+    QString editor, author;
+    
     QValueList<AttrProcessing> attrProcessingList;
 
-    attrProcessingList << AttrProcessing ( "xmlns" )
-                       << AttrProcessing ( "editor" )
-                       << AttrProcessing ( "mime" )
-                       << AttrProcessing ( "syntaxVersion" );
+    attrProcessingList
+        << AttrProcessing ( "xmlns" )
+        << AttrProcessing ( "editor", editor )
+        << AttrProcessing ( "mime" )
+        << AttrProcessing ( "syntaxVersion", leader->m_syntaxVersion )
+        << AttrProcessing ( "author", author )
+        << AttrProcessing ( "email" )
+        ;
 
     ProcessAttributes( myNode, attrProcessingList );
-    // TODO: verify syntax version and perhaps mime
+
+    kdDebug(30508) << "Document written by " << editor << endl;
+    kdDebug(30508) << "Document of syntax version " << leader->m_syntaxVersion << endl;
+
+    if ( leader->m_syntaxVersion == 1 )
+    {
+        leader->m_oldSyntax = true; // Syntax 1 is old syntax
+    }
+    else if ( leader->m_syntaxVersion == -1 )
+    {
+        // We do not know the version, but it still might be an old syntax.
+        // However such old documents have still an author attribute, so check its value
+        if ( author == "Reginald Stadlbauer and Torben Weis" )
+        {
+            kdDebug(30508) << "No syntax version but author attribute matches => assuming old syntax" << endl;
+            leader->m_oldSyntax = true;
+        }
+        else
+        {
+            kdWarning(30508) << "No syntax version found, author attribute does not match => assuming new syntax" << endl;
+        }
+    }
 
     leader->doOpenHead();
 

@@ -79,6 +79,11 @@ class KWEFKWordLeader
         bool doAbortFile (void);
         bool doOpenDocument (void);
         bool doCloseDocument (void);
+    public:
+        /// -1: unknown, 1: KWord 0.8, 2: KWord 1.1 & 1.2, 3: KWord 1.3
+        int m_syntaxVersion;
+        /// true if oldSyntax (KWord 0.8)
+        bool m_oldSyntax;
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;
