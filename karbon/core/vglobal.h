@@ -51,7 +51,7 @@ namespace VGlobal
 	 * A range for KoPoint::isNear() check, to decide if a KoPoint "is the same"
 	 * as another.
 	 */
-	const double isNearRange = 0.01;
+	const double isNearRange = 0.001;
 
 
 	const short copyOffset = 10;        /// the amount at which copied objects get offset in x and y direction

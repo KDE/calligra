@@ -382,41 +382,25 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
 	VSegmentList s( 0L );
 	s.moveTo( KoPoint(100,100) );
-	s.lineTo( KoPoint(300,100) );
-	s.getLast()->convertToCurve();
-	s.getLast()->setCtrlPoint1(
-		s.getLast()->ctrlPoint1() + KoPoint(0,200) );
+	s.lineTo( KoPoint(100,300) );
+	s.lineTo( KoPoint(400,300) );
+	s.lineTo( KoPoint(400,100) );
+	s.close();
+kdDebug() << "***" << s.counterClockwise() << endl;
 
-	VPath* p = new VPath( 0L );
-	p->combineSegmentList( s );
+	VSegmentList t( 0L );
+	t.moveTo( KoPoint(100,100) );
+	t.lineTo( KoPoint(400,100) );
+	t.lineTo( KoPoint(400,300) );
+	t.lineTo( KoPoint(100,300) );
+	t.close();
 
-	m_part->document().append( p );
-
-	KoPoint P;
-	KoPoint T;
-	KoPoint N;
-
-	double length = s.getLast()->length() / 10.0;
-
-	for( uint i = 0; i < 10; ++i )
-	{
-		s.getLast()->pointTangentNormal(
-			s.getLast()->param( i * length ),
-			&P, &T, &N );
-
-		p = new VPath( 0L );
-		p->moveTo( P );
-		p->lineTo( P + 10 * T );
-		m_part->document().append( p );
-
-		p = new VPath( 0L );
-		p->moveTo( P );
-		p->lineTo( P + 10 * N );
-		m_part->document().append( p );
-	}
+kdDebug() << "***" << t.counterClockwise() << endl;
 
 
-	m_part->repaintAllViews();
+//	m_part->document().append( p );
+
+//	m_part->repaintAllViews();
 }
 
 void

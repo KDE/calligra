@@ -52,19 +52,9 @@ public:
 	void sendToBack( const VObject& object );
 
 	const QString& name() { return m_name; }
-	
-	bool isLocked() { return m_locked; }
-	bool isPrintable() { return m_printable; }
-	bool isVisible() { return m_visible; }
-	
-	void setLocked( bool locked ) { m_locked = locked; }
-	void setName( const QString& name ) { m_name = name; }
-	void setPrintable( bool printable ) { m_printable = printable; }
-	void setVisible( bool visible ) { m_visible = visible; }
 
 private:
 	QString m_name;  /// id for the layer
-	bool m_locked, m_printable, m_visible; //is layer editable, printable, visible
 };
 
 #endif

@@ -46,6 +46,11 @@ public:
 	bool isClosed() const { return m_isClosed; }
 	void close();
 
+	/**
+	 *  Return false if segmentlist is oriented clockwise.
+	 */
+	bool counterClockwise() const;
+
 	virtual void draw( VPainter*, const KoRect& ) {}
 
 	virtual void transform( const QWMatrix& m );

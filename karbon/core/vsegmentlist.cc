@@ -360,6 +360,61 @@ VSegmentList::close()
 	}
 }
 
+bool
+VSegmentList::counterClockwise() const
+{
+	// The idea for this algorithm is taken from the faq of comp.graphics.algorithms:
+	// "Find the lowest vertex (or, if there is more than one vertex with the
+	// same lowest coordinate, the rightmost of those vertices) and then take
+	// the cross product of the edges fore and aft of it."
+
+	if( !m_isClosed )
+		return false;
+
+	VSegment* segment = m_first;
+
+	// We save the segment not the knot itself. Intialize it with the
+	// first segment:
+	const VSegment* bottomRight = m_first;
+
+	while( segment )
+	{
+		if( segment->knot().y() < bottomRight->knot().y() )
+			bottomRight = segment;
+		else if( segment->knot().y() - bottomRight->knot().y()
+			< VGlobal::isNearRange )
+		{
+			if( segment->knot().x() > bottomRight->knot().x() )
+				bottomRight = segment;
+		}
+
+		segment = segment->m_next;
+	}
+
+
+	// Catch boundary case (bottomRight is first or last segment):
+	const VSegment* current;
+	const VSegment* next;
+
+	if( bottomRight == m_first )
+		current = m_last;
+	else
+		current = bottomRight;
+
+	if( bottomRight == m_last )
+		next = m_first->next();
+	else
+		next = bottomRight->next();
+
+	// Check "z-component" of cross product:
+	return
+		( next->knot().x() - next->prev()->knot().x() ) *
+		( current->knot().y() - current->prev()->knot().y() )
+		-
+		( next->knot().y() - next->prev()->knot().y() ) *
+		( current->knot().x() - current->prev()->knot().x() ) < 0.0;
+}
+
 const KoRect&
 VSegmentList::boundingBox() const
 {
