@@ -151,35 +151,39 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	initActions();
 
+	m_strokeFillPreview = 0L;
 	VToolDocker *_toolContainer = m_part->toolContainer();
-	if( !_toolContainer )
+	if( shell() )
 	{
-		_toolContainer = new VToolDocker( m_part, this );
-		mainWindow()->addDockWindow( _toolContainer, DockLeft );
-		m_part->setToolContainer( _toolContainer );
-	}
-	connect( _toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
-	connect( _toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
-	connect( _toolContainer, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
-	connect( _toolContainer, SIGNAL( shearToolActivated() ),		this, SLOT( shearTool() ) );
-	connect( _toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
-	connect( _toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
-	connect( _toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
-   	connect( _toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
-	connect( _toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
-	connect( _toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
-	connect( _toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
-	connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
-	connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
-	m_part->toolContainer()->show();
-	m_strokeFillPreview = _toolContainer->strokeFillPreview();
-	connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
-	connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
+		if( !_toolContainer )
+		{
+			_toolContainer = new VToolDocker( m_part, this );
+			mainWindow()->addDockWindow( _toolContainer, DockLeft );
+			m_part->setToolContainer( _toolContainer );
+		}
+		connect( _toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
+		connect( _toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
+		connect( _toolContainer, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
+		connect( _toolContainer, SIGNAL( shearToolActivated() ),		this, SLOT( shearTool() ) );
+		connect( _toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
+		connect( _toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
+		connect( _toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
+   		connect( _toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
+		connect( _toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
+		connect( _toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
+		connect( _toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
+		connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
+		connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
+		m_part->toolContainer()->show();
+		m_strokeFillPreview = _toolContainer->strokeFillPreview();
+		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
+		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 
-	//Create Dockers
-	m_ColorManager = new VColorDocker( m_part, this );
-	connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-	connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+		//Create Dockers
+		m_ColorManager = new VColorDocker( m_part, this );
+		connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+	}
 
 	m_objectDlg = new VObjectDlg( m_part, this );
 	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
@@ -203,7 +207,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	selectTool();
 	zoomChanged();
-	selectionChanged();
+	if( shell() ) selectionChanged();
 }
 
 KarbonView::~KarbonView()
