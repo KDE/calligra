@@ -210,6 +210,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_emptyPen.setStyle( Qt::NoPen );
 
   m_marker = QPoint(1,1);
+  m_cursorPosition = QPoint(1,1);
 
   m_pMap = _map;
   m_pDoc = _map->doc();
@@ -702,12 +703,32 @@ void KSpreadTable::setMarker( QPoint _point, KSpreadCanvas *_canvas )
 
 QPoint KSpreadTable::marker() const
 {
-    return m_marker;
+  return m_marker;
 }
 
 QRect KSpreadTable::selection() const
 {
   return m_rctSelection;
+}
+
+QPoint KSpreadTable::getCursorPosition()
+{
+  return m_cursorPosition;
+}
+
+bool KSpreadTable::setCursorPosition(QPoint position)
+{
+  KSpreadCell* cell = cellAt(m_marker);
+
+  QRect markerArea(m_marker, QPoint(m_marker.x() + cell->extraXCells(),
+                                    m_marker.y() + cell->extraYCells()));
+
+  if (markerArea.contains(position))
+  {
+    m_cursorPosition = position;
+    return true;
+  }
+  return false;
 }
 
 QPoint KSpreadTable::selectionAnchor()
@@ -773,6 +794,12 @@ void KSpreadTable::setSelection( QRect  newSelection, QPoint newMarker,
   QRect oldSelection( m_rctSelection );
   m_rctSelection = newSelection;
   m_marker = newMarker;
+
+  /* see if the cursor position is still valid */
+  if (!setCursorPosition(m_cursorPosition))
+  {
+    setCursorPosition(newMarker);
+  }
 
   emit sig_changeSelection( this, oldSelection, oldMarker );
 }

@@ -470,6 +470,28 @@ public:
    */
    QPoint selectionAnchor();
 
+  /**
+   * The 'cursor position' is used to keep track of where on the spreadsheet the
+   * user is with the arrow keys.  It's basically the same as the marker, except
+   * when the selection moves into a merged area.  If we use the down arrow key to
+   * enter a merged area 3 columns over, we want to come out the bottom 3 columns
+   * over if we keep pressing the down arrow.
+   *
+   * If the given position is not within the merged cell area of the marker, this
+   * function call will be ignored.
+   *
+   * @return true if the position was valid, false if it wasn't.  In other words,
+   *         true if something changed, false if there is no change.
+   */
+  bool setCursorPosition(QPoint position);
+
+  /**
+   * @see setCursorPosition for a description of what the cursor position is
+   *
+   * You are probably wanting to use marker(), not this function
+   */
+  QPoint getCursorPosition();
+
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
                            signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,
                            signed char _strike = -1 );
@@ -1201,6 +1223,7 @@ protected:
      */
     QRect m_rctSelection;
     QPoint m_marker;
+    QPoint m_cursorPosition;
 
     /**
      * Contains the selection of a choose. If @ref QRect::left() returns 0, then

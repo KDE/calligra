@@ -1378,9 +1378,9 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
 void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelection)
 {
   QPoint destination;
-  QPoint marker = activeTable()->marker();
-  QPoint cellCorner = marker;
-  KSpreadCell* cell = activeTable()->cellAt(marker.x(), marker.y());
+  QPoint cursor = activeTable()->getCursorPosition();
+  QPoint cellCorner = cursor;
+  KSpreadCell* cell = activeTable()->cellAt(cursor.x(), cursor.y());
 
   /* cell is either the same as the marker, or the cell that is forced obscuring
      the marker cell
@@ -1403,49 +1403,50 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
     */
   {
     case KSpread::Bottom:
-      offset = cell->mergedYCells() - (marker.y() - cellCorner.y()) + 1;
-      rl = activeTable()->rowLayout( marker.y() + offset );
-      while ( ((marker.y() + offset) <= KS_rowMax) && rl->isHide())
+      offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
+      rl = activeTable()->rowLayout( cursor.y() + offset );
+      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
       {
         offset++;
-        rl = activeTable()->rowLayout( marker.y() + offset );
+        rl = activeTable()->rowLayout( cursor.y() + offset );
       }
 
-      destination = QPoint(marker.x(), QMIN(marker.y() + offset, KS_rowMax));
+      destination = QPoint(cursor.x(), QMIN(cursor.y() + offset, KS_rowMax));
       break;
     case KSpread::Top:
-      offset = (cellCorner.y() - marker.y()) - 1;
-      rl = activeTable()->rowLayout( marker.y() + offset );
-      while ( ((marker.y() + offset) >= 1) && rl->isHide())
+      offset = (cellCorner.y() - cursor.y()) - 1;
+      rl = activeTable()->rowLayout( cursor.y() + offset );
+      while ( ((cursor.y() + offset) >= 1) && rl->isHide())
       {
         offset--;
-        rl = activeTable()->rowLayout( marker.y() + offset );
+        rl = activeTable()->rowLayout( cursor.y() + offset );
       }
-      destination = QPoint(marker.x(), QMAX(marker.y() + offset, 1));
+      destination = QPoint(cursor.x(), QMAX(cursor.y() + offset, 1));
       break;
     case KSpread::Left:
-      offset = (cellCorner.x() - marker.x()) - 1;
-      cl = activeTable()->columnLayout( marker.x() + offset );
-      while ( ((marker.x() + offset) >= 1) && cl->isHide())
+      offset = (cellCorner.x() - cursor.x()) - 1;
+      cl = activeTable()->columnLayout( cursor.x() + offset );
+      while ( ((cursor.x() + offset) >= 1) && cl->isHide())
       {
         offset--;
-        cl = activeTable()->columnLayout( marker.x() + offset );
+        cl = activeTable()->columnLayout( cursor.x() + offset );
       }
-      destination = QPoint(QMAX(marker.x() + offset, 1), marker.y());
+      destination = QPoint(QMAX(cursor.x() + offset, 1), cursor.y());
       break;
     case KSpread::Right:
-      offset = cell->extraXCells() - (marker.x() - cellCorner.x()) + 1;
-      cl = activeTable()->columnLayout( marker.x() + offset );
-      while ( ((marker.x() + offset) <= KS_colMax) && cl->isHide())
+      offset = cell->extraXCells() - (cursor.x() - cellCorner.x()) + 1;
+      cl = activeTable()->columnLayout( cursor.x() + offset );
+      while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
       {
         offset++;
-        cl = activeTable()->columnLayout( marker.x() + offset );
+        cl = activeTable()->columnLayout( cursor.x() + offset );
       }
-      destination = QPoint(QMIN(marker.x() + offset, KS_colMax), marker.y());
+      destination = QPoint(QMIN(cursor.x() + offset, KS_colMax), cursor.y());
       break;
   }
 
   gotoLocation(destination, activeTable(), extendSelection);
+  activeTable()->setCursorPosition(destination);
 }
 
 void KSpreadCanvas::processEnterKey(QKeyEvent* event)
