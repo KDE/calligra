@@ -2657,7 +2657,7 @@ void KPresenterView::setupActions()
     actionToolsMouse->setExclusiveGroup( "tools" );
     actionToolsMouse->setChecked( true );
 
-    actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate", 0,
+    actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate_cw", 0,
 					   this, SLOT( toolsRotate() ),
 					   actionCollection(), "tools_rotate" );
     actionToolsRotate->setExclusiveGroup( "tools" );
@@ -2911,7 +2911,7 @@ void KPresenterView::setupActions()
 
 
 
-    actionExtraRotate = new KAction( i18n( "R&otate Objects..." ), "rotate", 0,
+    actionExtraRotate = new KAction( i18n( "R&otate Objects..." ), "rotate_cw", 0,
 				     this, SLOT( extraRotate() ),
 				     actionCollection(), "extra_rotate" );
 
