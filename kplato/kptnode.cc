@@ -53,6 +53,13 @@ void KPTNode::addChildNode( KPTNode *node) {
 }
 
 
+const KPTNode &KPTNode::getChildNode(int number) const {
+    // Work around missing const at() method in QPtrList
+    const QPtrList<KPTNode> &nodes = m_nodes;
+    return *(const_cast<QPtrList<KPTNode> &>(nodes)).at(number);
+}
+
+
 KPTDuration *KPTNode::getDelay() {
     /* TODO
        Calculate the delay of this node. Use the calculated startTime and the setted startTime.

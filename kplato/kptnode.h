@@ -70,11 +70,12 @@ public:
     KPTNode *getParent() const { return m_parent; }
     const QPtrList<KPTNode> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
-    virtual void addChildNode( KPTNode *node);
-    virtual void insertChildNode( unsigned int index, KPTNode *node);
-    void delChildNode( KPTNode *node, bool remove=true);
-    void delChildNode( int number, bool remove=true);
-    KPTNode *getChildNode( int number) { return m_nodes.at(number); }
+    virtual void addChildNode(KPTNode *node);
+    virtual void insertChildNode(unsigned int index, KPTNode *node);
+    void delChildNode(KPTNode *node, bool remove=true);
+    void delChildNode(int number, bool remove=true);
+    KPTNode &getChildNode(int number) { return *m_nodes.at(number); }
+    const KPTNode &getChildNode(int number) const;
 
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.
