@@ -82,7 +82,7 @@ protected:
     QWidget *tab2;
     QWidget *tab3;
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
-    QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd;
+    QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd, *pbDefault;
     KCharSelect *charselect;
     KListView * m_pListView;
 
@@ -101,6 +101,8 @@ protected slots:
     void slotEditEntry();
     void chooseQuote1();
     void chooseQuote2();
+    void defaultQuote();
+    void slotChangeState(bool);
     void slotAddEntry();
     void slotChangeItem( QListViewItem * );
 

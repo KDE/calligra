@@ -39,6 +39,9 @@
 #include <qlabel.h>
 
 
+/******************************************************************/
+/* Class: KWAutoFormatExceptionWidget                             */
+/******************************************************************/
 
 KWAutoFormatExceptionWidget::KWAutoFormatExceptionWidget(QWidget *parent, const QString &name,const QStringList &_list,bool _abreviation)
     :QWidget( parent )
@@ -121,7 +124,10 @@ void KWAutoFormatDia::setupTab1()
     cbTypographicQuotes->setText( i18n( "Replace &Quotes by Typographical Quotes:" ) );
     cbTypographicQuotes->resize( cbTypographicQuotes->sizeHint() );
 
-    cbTypographicQuotes->setChecked( m_autoFormat.getConfigTypographicQuotes().replace );
+    bool state=m_autoFormat.getConfigTypographicQuotes().replace;
+    cbTypographicQuotes->setChecked( state );
+
+    connect( cbTypographicQuotes,SIGNAL(toggled ( bool)),this,SLOT(slotChangeState(bool)));
 
     QHBox *quotes = new QHBox( tab1 );
     quotes->setSpacing( 5 );
@@ -138,8 +144,18 @@ void KWAutoFormatDia::setupTab1()
     ( void )new QWidget( quotes );
     quotes->setMaximumHeight( pbQuote1->sizeHint().height() );
 
+
+    pbDefault = new QPushButton( quotes );
+
+    pbDefault->setText(i18n("Default"));
+
+    pbDefault->resize( pbDefault->sizeHint() );
+    ( void )new QWidget( quotes );
+
+
     connect( pbQuote1, SIGNAL( clicked() ), this, SLOT( chooseQuote1() ) );
     connect( pbQuote2, SIGNAL( clicked() ), this, SLOT( chooseQuote2() ) );
+    connect( pbDefault, SIGNAL( clicked()), this, SLOT( defaultQuote() ) );
 
     ( void )new QWidget( tab1 );
 
@@ -158,6 +174,9 @@ void KWAutoFormatDia::setupTab1()
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
     cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );
+
+
+    slotChangeState(state);
 }
 
 void KWAutoFormatDia::setupTab2()
@@ -335,6 +354,20 @@ void KWAutoFormatDia::chooseQuote2()
     {
         pbQuote2->setText( c );
     }
+}
+
+
+void KWAutoFormatDia::defaultQuote()
+{
+    pbQuote1->setText("«");
+    pbQuote2->setText("»");
+}
+
+void KWAutoFormatDia::slotChangeState(bool b)
+{
+    pbQuote1->setEnabled(b);
+    pbQuote2->setEnabled(b);
+    pbDefault->setEnabled(b);
 }
 
 KWAutoFormatEditDia::KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *name, const QString &title,const QString &findStr,const QString &replaceStr,bool _replaceEntry, const QString & _str )
