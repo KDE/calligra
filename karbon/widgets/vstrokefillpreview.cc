@@ -77,8 +77,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		{
 			VFill fill;
 			fill.gradient() = s.gradient();
-			fill.gradient().setOrigin( KoPoint( 20, 10 ) );
-			fill.gradient().setVector( KoPoint( 20, 40 ) );
+			if( s.gradient().type() == gradient_linear )
+			{
+				fill.gradient().setOrigin( KoPoint( 20, 10 ) );
+				fill.gradient().setVector( KoPoint( 20, 40 ) );
+			}
+			else if( s.gradient().type() == gradient_radial )
+			{
+				fill.gradient().setOrigin( KoPoint( 20, 25 ) );
+				fill.gradient().setVector( KoPoint( 20, 40 ) );
+			}
 			fill.setType( fill_gradient );
 			m_painter->setBrush( fill );
 		}
@@ -100,8 +108,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		{
 			VFill fill;
 			fill = f;
-			fill.gradient().setOrigin( KoPoint( 30, 20 ) );
-			fill.gradient().setVector( KoPoint( 30, 50 ) );
+			if( f.gradient().type() == gradient_linear )
+			{
+				fill.gradient().setOrigin( KoPoint( 30, 20 ) );
+				fill.gradient().setVector( KoPoint( 30, 50 ) );
+			}
+			else if( f.gradient().type() == gradient_radial )
+			{
+				fill.gradient().setOrigin( KoPoint( 30, 35 ) );
+				fill.gradient().setVector( KoPoint( 30, 50 ) );
+			}
 			m_painter->setBrush( fill );
 		}
 		else
