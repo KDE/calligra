@@ -2960,10 +2960,10 @@ void KPresenterView::setupActions()
     new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
                  this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
-    new KAction( i18n( "Increase Outline Level" ), ALT+Key_Right,
-                 this, SLOT( slotIncreaseOutlineLevel() ), actionCollection(), "increase_outline_level" );
-    new KAction( i18n( "Decrease Outline Level" ), ALT+Key_Left,
-                 this, SLOT( slotDecreaseOutlineLevel() ), actionCollection(), "decrease_outline_level" );
+    new KAction( i18n( "Increase Numbering Level" ), ALT+Key_Right,
+                 this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
+    new KAction( i18n( "Decrease Numbering Level" ), ALT+Key_Left,
+                 this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
 
 
     actionInsertComment = new KAction( i18n( "Comment..." ), 0,
@@ -4730,20 +4730,20 @@ void KPresenterView::slotLineBreak()
         edit->insertLineBreak();
 }
 
-void KPresenterView::slotIncreaseOutlineLevel()
+void KPresenterView::slotIncreaseNumberingLevel()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
     {
-        edit->increaseOutlineLevel( m_pKPresenterDoc->styleCollection() );
+        edit->increaseNumberingLevel( m_pKPresenterDoc->styleCollection() );
     }
 }
 
-void KPresenterView::slotDecreaseOutlineLevel()
+void KPresenterView::slotDecreaseNumberingLevel()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
-        edit->decreaseOutlineLevel( m_pKPresenterDoc->styleCollection() );
+        edit->decreaseNumberingLevel( m_pKPresenterDoc->styleCollection() );
 }
 
 void KPresenterView::extraAutoFormat()

@@ -233,7 +233,7 @@ public:
     void display( const KoParagLayout & lay );
     void changeKWSpinboxType(KoParagCounter::Style st);
     const KoParagCounter & counter() const { return m_counter; }
-    void setCounter (KoParagCounter counter );
+    void setCounter( const KoParagCounter& counter );
 
 public slots:
     void numTypeChanged( int nType );

@@ -217,8 +217,8 @@ k_dcop:
     void customSlideShow();
 
     void insertLineBreak();
-    void increaseOutlineLevel();
-    void decreaseOutlineLevel();
+    void increaseNumberingLevel();
+    void decreaseNumberingLevel();
 
 
 private:

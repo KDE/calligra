@@ -29,7 +29,9 @@
 /******************************************************************/
 
 KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
-    : KoStyleManager(_parent,unit,style, activeStyleName)
+    : KoStyleManager( _parent, unit,
+                      style, activeStyleName,
+                      ShowIncludeInToc )
 {
     m_doc = _doc;
 }

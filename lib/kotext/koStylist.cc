@@ -61,7 +61,9 @@ public:
     QCheckBox* cbIncludeInTOC;
 };
 
-KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
+KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
+                                const QPtrList<KoParagStyle> & style, const QString & activeStyleName,
+                                int flags )
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
@@ -73,7 +75,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     m_origStyles.setAutoDelete(false);
     m_changedStyles.setAutoDelete(false);
     setupWidget(style); // build the widget with the buttons and the list selector.
-    addGeneralTab();
+    addGeneralTab( flags );
     KoStyleFontTab * fontTab = new KoStyleFontTab( m_tabs );
     addTab( fontTab );
 
@@ -176,7 +178,7 @@ void KoStyleManager::setupWidget(const QPtrList<KoParagStyle> & styleList)
     connect( m_tabs, SIGNAL( currentChanged ( QWidget * ) ), this, SLOT( switchTabs() ) );
 }
 
-void KoStyleManager::addGeneralTab() {
+void KoStyleManager::addGeneralTab( int flags ) {
     QWidget *tab = new QWidget( m_tabs );
 
     QGridLayout *tabLayout = new QGridLayout( tab );
@@ -215,12 +217,19 @@ void KoStyleManager::addGeneralTab() {
 
     tabLayout->addWidget( inheritStyleLabel, 2, 0 );
 
-    d->cbIncludeInTOC = new QCheckBox( i18n("Include in table of contents"), tab );
-    tabLayout->addMultiCellWidget( d->cbIncludeInTOC, 3, 3, 0, 1 );
+    int row = 3;
+
+    if ( flags & ShowIncludeInToc ) {
+        d->cbIncludeInTOC = new QCheckBox( i18n("Include in table of contents"), tab );
+        tabLayout->addMultiCellWidget( d->cbIncludeInTOC, row, row, 0, 1 );
+        ++row;
+    } else {
+        d->cbIncludeInTOC = 0;
+    }
 
     d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog" ), tab, "stylepreview" );
 
-    tabLayout->addMultiCellWidget( d->preview, 4, 4, 0, 1 );
+    tabLayout->addMultiCellWidget( d->preview, row, row, 0, 1 );
 
     m_tabs->insertTab( tab, i18n( "General" ) );
 
@@ -322,7 +331,8 @@ void KoStyleManager::updateGUI() {
             m_inheritCombo->setCurrentItem( 0 );//none !!!
     }
 
-    d->cbIncludeInTOC->setChecked( m_currentStyle->isOutline() );
+    if ( d->cbIncludeInTOC )
+        d->cbIncludeInTOC->setChecked( m_currentStyle->isOutline() );
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
@@ -358,7 +368,8 @@ void KoStyleManager::save() {
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
         m_currentStyle->setFollowingStyle( m_origStyles.at( indexNextStyle ) ); // point to orig, not changed! (#47377)
         m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
-        m_currentStyle->setOutline( d->cbIncludeInTOC->isChecked() );
+        if ( d->cbIncludeInTOC )
+            m_currentStyle->setOutline( d->cbIncludeInTOC->isChecked() );
     }
 }
 

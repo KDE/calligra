@@ -78,6 +78,9 @@ public:
     /// @return the [first] outline style for a given level. Can be 0 if not found.
     KoParagStyle* outlineStyleForLevel( int level ) const;
 
+    /// @return the [first] non-outline numbered style for a given level. Can be 0 if not found.
+    KoParagStyle* numberedStyleForLevel( int level ) const;
+
     /// @return the "default" format. There isn't really such a notion at the moment
     /// (how would the user define it? etc.), and it's usually not needed, except
     /// in very specific cases (e.g. in increaseOutlineLevel() for "not a heading")

@@ -141,8 +141,8 @@ k_dcop:
 
     void lineBreak();
 
-    void increaseOutlineLevel();
-    void decreaseOutlineLevel();
+    void increaseNumberingLevel();
+    void decreaseNumberingLevel();
 
 private:
     KWView *view;

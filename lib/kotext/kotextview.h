@@ -130,8 +130,8 @@ public:
     void insertSoftHyphen();
     void insertLineBreak();
     void insertNonbreakingSpace();
-    void increaseOutlineLevel( const KoStyleCollection* styleCollection );
-    void decreaseOutlineLevel( const KoStyleCollection* styleCollection );
+    void increaseNumberingLevel( const KoStyleCollection* styleCollection );
+    void decreaseNumberingLevel( const KoStyleCollection* styleCollection );
     void insertSpecialChar(QChar _c, const QString& font);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
 

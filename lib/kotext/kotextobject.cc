@@ -2049,7 +2049,6 @@ QColor KoTextFormatInterface::textColor() const
     return currentFormat()->color();
 }
 
-
 bool KoTextFormatInterface::textUnderline()const
 {
     return currentFormat()->underline();
@@ -2107,22 +2106,22 @@ KoTextFormat::AttributeStyle KoTextFormatInterface::fontAttribute() const
 
 double KoTextFormatInterface::relativeTextSize() const
 {
-    return ( currentFormat()->relativeTextSize());
+    return currentFormat()->relativeTextSize();
 }
 
 int KoTextFormatInterface::offsetFromBaseLine()const
 {
-    return ( currentFormat()->offsetFromBaseLine());
+    return currentFormat()->offsetFromBaseLine();
 }
 
 bool KoTextFormatInterface::wordByWord()const
 {
-    return ( currentFormat()->wordByWord());
+    return currentFormat()->wordByWord();
 }
 
 bool KoTextFormatInterface::hyphenation()const
 {
-    return ( currentFormat()->hyphenation());
+    return currentFormat()->hyphenation();
 }
 
 KoTextFormat::UnderlineType KoTextFormatInterface::underlineType()const
@@ -2251,7 +2250,6 @@ KCommand *KoTextFormatInterface::setWordByWordCommand( bool _b )
     format.setWordByWord( _b );
     return setFormatCommand( &format, KoTextFormat::WordByWord );
 }
-
 
 #if 0
 void KoTextFormatInterface::setAlign(int align)

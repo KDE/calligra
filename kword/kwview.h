@@ -397,8 +397,8 @@ public slots:
     void slotLineBreak();
     void slotNonbreakingSpace();
 
-    void slotIncreaseOutlineLevel();
-    void slotDecreaseOutlineLevel();
+    void slotIncreaseNumberingLevel();
+    void slotDecreaseNumberingLevel();
 
     void refreshAllVariable();
 

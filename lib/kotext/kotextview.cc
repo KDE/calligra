@@ -1155,41 +1155,79 @@ KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout, int
                                                 flags, marginIndex, true /*createUndoRedo*/ );
 }
 
-// Heading1 -> Heading2 -> Heading3 -> normal
-void KoTextView::increaseOutlineLevel( const KoStyleCollection* styleCollection )
+// Heading1 -> Heading2 -> Heading3 -> normal -> 1 -> 1.1 -> 1.1.1
+void KoTextView::increaseNumberingLevel( const KoStyleCollection* styleCollection )
 {
     // TODO: do this for each paragraph in the selection
-    KoParagStyle* currentStyle = m_cursor->parag()->style();
-    if ( !currentStyle->isOutline() )
-        return;
-    int level = 0;
-    if ( currentStyle->paragLayout().counter )
-        level = currentStyle->paragLayout().counter->depth() + 1;
-    QValueVector<KoParagStyle *> outlineStyles = styleCollection->outlineStyles();
     KoParagStyle* style = 0;
-    while ( level < 10 && !style ) {
-        style = outlineStyles[ level ];
-        ++level;
+    int level = 0;
+    KoParagCounter* counter = m_cursor->parag()->counter();
+    if ( counter )
+        level = counter->depth() + 1;
+    if ( m_cursor->parag()->style()->isOutline() )
+    {
+        QValueVector<KoParagStyle *> outlineStyles = styleCollection->outlineStyles();
+        while ( level < 10 && !style ) {
+            style = outlineStyles[ level ];
+            ++level;
+        }
+        if ( !style ) // no lower-level heading exists, use standard style
+            style = styleCollection->defaultStyle();
     }
-    if ( !style ) // no lower-level heading exists, use standard style
-        style = styleCollection->defaultStyle();
+    else // non-outline, just a numbered list
+    {
+        //if ( !counter )
+        //    return;
+        // Try to find a style with this depth, to know if the user wants display-levels etc.
+        style = styleCollection->numberedStyleForLevel( level );
+        if ( !style ) { // not found. Make the change though.
+            KoParagCounter c( *counter );
+            c.setDepth( level );
+            c.setDisplayLevels( c.displayLevels() + 1 );
+            KCommand* command = textObject()->setCounterCommand( m_cursor, c );
+            textObject()->emitNewCommand( command );
+        }
+    }
     if ( style ) // can't be 0
         textObject()->applyStyle( m_cursor, style );
 }
 
-// normal -> Heading3 -> Heading2 -> Heading1
-void KoTextView::decreaseOutlineLevel( const KoStyleCollection* styleCollection )
+// 1.1.1 -> 1.1 -> 1 -> normal -> Heading3 -> Heading2 -> Heading1
+void KoTextView::decreaseNumberingLevel( const KoStyleCollection* styleCollection )
 {
     // TODO: do this for each paragraph in the selection
-    KoParagStyle* currentStyle = m_cursor->parag()->style();
+    KoParagCounter* counter = m_cursor->parag()->counter();
     int level = 9;
-    if ( currentStyle->isOutline() && currentStyle->paragLayout().counter )
-        level = currentStyle->paragLayout().counter->depth() - 1;
-    QValueVector<KoParagStyle *> outlineStyles = styleCollection->outlineStyles();
+    if ( counter )
+        level = counter->depth() - 1;
     KoParagStyle* style = 0;
-    while ( level >= 0 && !style ) {
-        style = outlineStyles[ level ];
-        --level;
+    if ( m_cursor->parag()->style()->isOutline() || !counter ) // heading or normal
+    {
+        if ( level == -1 ) // nothing higher than Heading1
+            return;
+        QValueVector<KoParagStyle *> outlineStyles = styleCollection->outlineStyles();
+        while ( level >= 0 && !style ) {
+            style = outlineStyles[ level ];
+            --level;
+        }
+    }
+    else // non-outline, numbered list
+    {
+        if ( level == -1 )
+            style = styleCollection->defaultStyle();
+        else
+        {
+            style = styleCollection->numberedStyleForLevel( level );
+            if ( !style ) { // not found. Make the change though.
+                KoParagCounter c( *counter );
+                c.setDepth( level );
+                if ( c.displayLevels() > 1 ) {
+                    c.setDisplayLevels( c.displayLevels() - 1 );
+                }
+                KCommand* command = textObject()->setCounterCommand( m_cursor, c );
+                textObject()->emitNewCommand( command );
+            }
+        }
     }
     if ( style )
         textObject()->applyStyle( m_cursor, style );

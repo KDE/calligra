@@ -369,8 +369,8 @@ public slots:
     void slotSoftHyphen();
     void slotNonbreakingSpace();
     void slotLineBreak();
-    void slotIncreaseOutlineLevel();
-    void slotDecreaseOutlineLevel();
+    void slotIncreaseNumberingLevel();
+    void slotDecreaseNumberingLevel();
 
     void extraAutoFormat();
     void slotSpellCheck();

@@ -240,9 +240,28 @@ QValueVector<KoParagStyle *> KoStyleCollection::outlineStyles() const
 
 KoParagStyle* KoStyleCollection::outlineStyleForLevel( int level ) const
 {
-    for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p ) {
-        if ( (*p)->isOutline() && (*p)->paragLayout().counter ) {
+    for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p )
+    {
+        if ( (*p)->isOutline() && (*p)->paragLayout().counter )
+        {
             int styleLevel = (*p)->paragLayout().counter->depth();
+            if ( styleLevel == level )
+                return *p;
+        }
+    }
+    return 0;
+}
+
+KoParagStyle* KoStyleCollection::numberedStyleForLevel( int level ) const
+{
+    for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p )
+    {
+        KoParagCounter* counter = (*p)->paragLayout().counter;
+        if ( !(*p)->isOutline() && counter
+             && counter->numbering() != KoParagCounter::NUM_NONE
+             && !counter->isBullet() )
+        {
+            int styleLevel = counter->depth();
             if ( styleLevel == level )
                 return *p;
         }

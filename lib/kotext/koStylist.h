@@ -51,7 +51,10 @@ class KoStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoParagStyle> & style, const QString & activeStyleName );
+    enum { ShowIncludeInToc = 1 }; // bitfield for flags
+    KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
+                    const QPtrList<KoParagStyle> & style, const QString & activeStyleName,
+                    int flags = 0 );
     virtual ~KoStyleManager();
 
     virtual KoParagStyle* addStyleTemplate(KoParagStyle *style)=0;
@@ -66,7 +69,7 @@ protected:
     void updateFollowingStyle( KoParagStyle *s );
     void updateInheritStyle( KoParagStyle *s );
     void setupWidget(const QPtrList<KoParagStyle> & style);
-    void addGeneralTab();
+    void addGeneralTab( int flags );
     void apply();
     void updateGUI();
     void updatePreview();

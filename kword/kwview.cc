@@ -1120,10 +1120,10 @@ void KWView::setupActions()
 
     new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
-    new KAction( i18n( "Increase Outline Level" ), ALT+Key_Right,
-                 this, SLOT( slotIncreaseOutlineLevel() ), actionCollection(), "increase_outline_level" );
-    new KAction( i18n( "Decrease Outline Level" ), ALT+Key_Left,
-                 this, SLOT( slotDecreaseOutlineLevel() ), actionCollection(), "decrease_outline_level" );
+    new KAction( i18n( "Increase Numbering Level" ), ALT+Key_Right,
+                 this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
+    new KAction( i18n( "Decrease Numbering Level" ), ALT+Key_Left,
+                 this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
 
 
     // --------
@@ -6074,18 +6074,18 @@ void KWView::slotLineBreak()
         edit->insertLineBreak();
 }
 
-void KWView::slotIncreaseOutlineLevel()
+void KWView::slotIncreaseNumberingLevel()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->increaseOutlineLevel( m_doc->styleCollection() );
+        edit->increaseNumberingLevel( m_doc->styleCollection() );
 }
 
-void KWView::slotDecreaseOutlineLevel()
+void KWView::slotDecreaseNumberingLevel()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->decreaseOutlineLevel( m_doc->styleCollection() );
+        edit->decreaseNumberingLevel( m_doc->styleCollection() );
 }
 
 void KWView::refreshAllVariable()

@@ -670,12 +670,12 @@ void KPresenterViewIface::insertLineBreak()
     view->slotLineBreak();
 }
 
-void KPresenterViewIface::increaseOutlineLevel()
+void KPresenterViewIface::increaseNumberingLevel()
 {
-    view->slotIncreaseOutlineLevel();
+    view->slotIncreaseNumberingLevel();
 }
 
-void KPresenterViewIface::decreaseOutlineLevel()
+void KPresenterViewIface::decreaseNumberingLevel()
 {
-    view->slotDecreaseOutlineLevel();
+    view->slotDecreaseNumberingLevel();
 }

@@ -465,12 +465,12 @@ void KWordViewIface::lineBreak()
     view->slotLineBreak();
 }
 
-void KWordViewIface::increaseOutlineLevel()
+void KWordViewIface::increaseNumberingLevel()
 {
-    view->slotIncreaseOutlineLevel();
+    view->slotIncreaseNumberingLevel();
 }
 
-void KWordViewIface::decreaseOutlineLevel()
+void KWordViewIface::decreaseNumberingLevel()
 {
-    view->slotDecreaseOutlineLevel();
+    view->slotDecreaseNumberingLevel();
 }

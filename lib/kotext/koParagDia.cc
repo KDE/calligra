@@ -199,7 +199,7 @@ void KoCounterStyleWidget::alignmentChanged(const QString& s)
     emit sig_alignmentChanged(a);
 }
 
-void KoCounterStyleWidget::setCounter (KoParagCounter counter )
+void KoCounterStyleWidget::setCounter( const KoParagCounter& counter )
 {
     noSignals = true;
     KoParagCounter::Style st = counter.style();
