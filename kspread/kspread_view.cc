@@ -743,6 +743,8 @@ CORBA::Boolean KSpreadView::printDlg()
 
 void KSpreadView::insertChart( const QRect& _geometry )
 {
+  // HACK: Ask the trader for the server name
+  m_pTable->insertChart( _geometry, "KChart", m_pTable->selection() );
 }
 
 void KSpreadView::insertChild( const QRect& _geometry, const char *_arg )

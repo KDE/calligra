@@ -37,6 +37,14 @@ class QPainter;
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
 
+#include "../lib/interfaces/chart.h"
+
+/********************************************************************
+ *
+ * CellBinding
+ *
+ ********************************************************************/
+
 /**
  * @short This is an abstract base class only.
  */
@@ -44,7 +52,7 @@ class CellBinding : public QObject
 {
     Q_OBJECT
 public:
-    CellBinding( KSpreadTable *_table, int _left, int _top, int _right, int _bottom );
+    CellBinding( KSpreadTable *_table, const QRect& _area );
     virtual ~CellBinding();
     
     bool contains( int _x, int _y );
@@ -58,16 +66,23 @@ public:
     
     virtual void setIgnoreChanges( bool _ignore ) { m_bIgnoreChanges = _ignore; }
     
-    QRect& rect() { return m_rctRect; }
-    
+    virtual QRect& dataArea() { return m_rctDataArea; }
+    virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
+  
 signals:
     void changed( KSpreadCell *_obj );
 
 protected:
-    QRect m_rctRect;
+    QRect m_rctDataArea;
     KSpreadTable *m_pTable;
     bool m_bIgnoreChanges;
 };
+
+/********************************************************************
+ *
+ * KSpreadChild
+ *
+ ********************************************************************/
 
 /**
  * Holds an embedded object.
@@ -86,6 +101,52 @@ protected:
   KSpreadDoc *m_pDoc;
   KSpreadTable *m_pTable;
 };
+
+/********************************************************************
+ *
+ * Charts
+ *
+ ********************************************************************/
+
+class ChartChild;
+
+class ChartBinding : public CellBinding
+{
+  Q_OBJECT
+public:
+
+  ChartBinding( KSpreadTable *_table, const QRect& _area, ChartChild *_child );
+  virtual ~ChartBinding();
+
+  void setChart( Chart::SimpleChart_ptr _chart ) { m_vChart = Chart::SimpleChart::_duplicate( _chart ); }
+
+  virtual void cellChanged( KSpreadCell *_obj );
+
+protected:
+  ChartChild *m_pChild;
+  Chart::SimpleChart_var m_vChart;
+};
+
+class ChartChild : public KSpreadChild
+{
+public:
+  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc );
+  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
+  ~ChartChild();
+
+  void setChart( Chart::SimpleChart_ptr );
+  void setDataArea( const QRect& _data );
+  void update();
+  
+protected:
+  ChartBinding *m_pBinding;
+};
+
+/********************************************************************
+ *
+ * Table
+ *
+ ********************************************************************/
 
 /**
  */
@@ -334,6 +395,7 @@ public:
 
     void print( QPainter &painter, bool _asChild, QPrinter *_printer );
 
+    void insertChart( const QRect& _geometry, const char *_arg, const QRect& _data );
     void insertChild( const QRect& _geometry, const char *_arg );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
     QListIterator<KSpreadChild> childIterator();

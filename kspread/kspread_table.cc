@@ -34,14 +34,14 @@
  *
  *****************************************************************************/
 
-CellBinding::CellBinding( KSpreadTable *_table, int _left, int _top, int _right, int _bottom )
+CellBinding::CellBinding( KSpreadTable *_table, const QRect& _area )
 {
-  m_rctRect.setCoords( _left, _top, _right, _bottom );
+  m_rctDataArea = _area;
     
   m_pTable = _table;
   m_pTable->addCellBinding( this );
 
-  m_bIgnoreChanges = FALSE;
+  m_bIgnoreChanges = false;
 }
 
 CellBinding::~CellBinding()
@@ -59,7 +59,63 @@ void CellBinding::cellChanged( KSpreadCell *_cell )
 
 bool CellBinding::contains( int _x, int _y )
 {
-    return m_rctRect.contains( QPoint( _x, _y ) );
+  return m_rctDataArea.contains( QPoint( _x, _y ) );
+}
+
+/*****************************************************************************
+ *
+ * ChartBinding
+ *
+ *****************************************************************************/
+
+ChartBinding::ChartBinding( KSpreadTable *_table, const QRect& _area, ChartChild *_child )
+  : CellBinding( _table, _area )
+{
+  m_pChild = _child;
+}
+
+ChartBinding::~ChartBinding()
+{
+}
+
+void ChartBinding::cellChanged( KSpreadCell* )
+{
+  cout << "######### void ChartBinding::cellChanged( KSpreadCell* )" << endl;
+  
+  if ( m_bIgnoreChanges || CORBA::is_nil( m_vChart ) )
+    return;
+
+  cout << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
+  
+  Chart::Matrix matrix;
+  matrix.columns = m_rctDataArea.width() - 1;
+  matrix.rows = m_rctDataArea.height() - 1;
+
+  matrix.matrix.length( ( m_rctDataArea.width() - 1 ) * ( m_rctDataArea.height() - 1 ) );
+  for ( int y = 0; y < m_rctDataArea.height() - 1; y++ )
+    for ( int x = 0; x < m_rctDataArea.width() - 1; x++ )
+      matrix.matrix[ y * ( m_rctDataArea.width() - 1 ) + x ] =
+	m_pTable->cellAt( m_rctDataArea.left() + x + 1, m_rctDataArea.top() + y + 1 )->valueDouble();
+  
+  matrix.columnDescription.length( m_rctDataArea.width() - 1 );
+  int i = 0;
+  for ( i = 0; i < m_rctDataArea.width() - 1; i++ )
+    matrix.columnDescription[i] = 
+      CORBA::string_dup( m_pTable->cellAt( m_rctDataArea.left() + i + 1, m_rctDataArea.top() )->valueString() );
+
+  matrix.rowDescription.length( m_rctDataArea.height() - 1 );
+  for ( i = 0; i < m_rctDataArea.height() - 1; i++ )
+    matrix.rowDescription[i] =
+      CORBA::string_dup( m_pTable->cellAt( m_rctDataArea.left(), m_rctDataArea.top() + i + 1 )->valueString() );
+
+  Chart::Range range;
+  range.top = m_rctDataArea.top();
+  range.left = m_rctDataArea.left();
+  range.right = m_rctDataArea.right();
+  range.bottom = m_rctDataArea.bottom();
+  range.table = CORBA::string_dup( m_pTable->name() );
+  
+  m_vChart->fill( range, matrix );
 }
 
 /*****************************************************************************
@@ -2188,10 +2244,36 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int )
   _layout->clearDisplayDirtyFlag();
 }
 
+void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRect& _data )
+{
+  OPParts::Document_var doc = imr_createDocByServerName( _arg );
+  doc->init();
+  CORBA::Object_var obj = doc->getInterface( "IDL:Chart/SimpleChart:1.0" );
+  if ( CORBA::is_nil( obj ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "The server %s does not support the required interface" ), _arg );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n("Ok" ) );
+    return;
+  }
+  Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
+  if ( CORBA::is_nil( chart ) )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ),
+			   i18n("The chart application seems to have an internal error" ), i18n("Ok" ) );
+    return;
+  }
+  
+  ChartChild* ch = new ChartChild( m_pDoc, this, _rect, doc );
+  ch->setDataArea( _data );
+  ch->setChart( chart );
+  ch->update();
+  
+  insertChild( ch );
+}
+
 void KSpreadTable::insertChild( const QRect& _rect, const char *_arg )
 {
-  cout << "void KSpreadTable::insertChild( const QRect& _rect, const char *_arg = '" << _arg << "' )" << endl;
-  
   OPParts::Document_var doc = imr_createDocByServerName( _arg );
   doc->init();
   
@@ -2276,6 +2358,50 @@ KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table ) : KoDocu
 
 KSpreadChild::~KSpreadChild()
 {
+}
+
+/**********************************************************
+ *
+ * ChartChild
+ *
+ **********************************************************/
+
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc )
+  : KSpreadChild( _spread, _table, _rect, _doc )
+{
+  m_pBinding = 0L;
+}
+
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table ) :
+  KSpreadChild( _spread, _table )
+{
+  m_pBinding = 0L;
+}
+
+ChartChild::~ChartChild()
+{
+  if ( m_pBinding )
+    delete m_pBinding;
+}
+
+void ChartChild::setDataArea( const QRect& _data )
+{
+  if ( m_pBinding == 0L )
+    m_pBinding = new ChartBinding( m_pTable, _data, this );
+  else
+    m_pBinding->setDataArea( _data );
+}
+
+void ChartChild::setChart( Chart::SimpleChart_ptr _chart )
+{
+  if ( m_pBinding )
+    m_pBinding->setChart( _chart );
+}
+
+void ChartChild::update()
+{
+  if ( m_pBinding )
+    m_pBinding->cellChanged( 0L );
 }
 
 #include "kspread_table.moc"

@@ -12,14 +12,16 @@ kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread.cc kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_python.cc kspread_autofill.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
-	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc
+	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
+	chart.cc
 
 noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_shell.h kspread_doc.h \
 	kspread.h kspread_undo.h kspread_view.h kspread_tabbar.h \
 	kspread_python.h kspread_autofill.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
-	kspread_dlg_scripts.h kspread_table.h kspread_cell.h
+	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
+	chart.h
 
 SRCMETA = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_view.moc kspread_tabbar.moc \
