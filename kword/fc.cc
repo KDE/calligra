@@ -179,7 +179,7 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter )
     // Are we at the end of a paragraph ?
     if ( isCursorAtParagEnd() )
     {
-	// The last paragraph ?
+     	// The last paragraph ?
 	if ( parag->getNext() == 0L )
 	    return;
 	// Skip the current line
@@ -188,6 +188,12 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter )
 	enterNextParag( _painter );
 	cursorGotoLineStart( _painter );
 	return;
+    }
+    else if (isCursorInLastLine())
+    {
+      textPos++;
+      cursorGotoPos( textPos, _painter );
+      return;
     }
 
     // If the cursor is in the last line of some paragraph,
@@ -308,7 +314,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
     while (ptPos < WantedPtPos && !isCursorAtLineEnd()){
 	cursorGotoRight( _painter);
     }
-    during_vertical_cursor_movement = TRUE;
+    //during_vertical_cursor_movement = TRUE;
 }
 
 void KWFormatContext::cursorGotoDown( QPainter &_painter )
@@ -340,7 +346,7 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
 	   !isCursorAtLineEnd() ){
 	cursorGotoRight( _painter);
     }
-    during_vertical_cursor_movement = TRUE;
+    //during_vertical_cursor_movement = TRUE;
 }
 
 void KWFormatContext::cursorGotoLineStart( QPainter &_painter )

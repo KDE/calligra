@@ -79,6 +79,20 @@ public:
   KWParagDia(QWidget*,const char*);
   ~KWParagDia();              
 
+  void setLeftIndent(float _left);
+  void setFirstLineIndent(float _first);
+  void setSpaceAfterParag(float _after);
+  void setSpaceBeforeParag(float _before);
+
+  float getLeftIndent()
+    { return atof(eLeft->text()); } 
+  float getFirstLineIndent()
+    { return atof(eFirstLine->text()); } 
+  float getSpaceBeforeParag()
+    { return atof(eBefore->text()); } 
+  float getSpaceAfterParag()
+    { return atof(eAfter->text()); } 
+
 protected:
   void setupTab1();
   void setupTab2();

@@ -92,3 +92,10 @@ Reggie, 19.9.1998:
 - Some improvements with linebreaking
 - Fixed bug in cursor navigation
 - Fixed bug in "Blocksatz"
+
+Reggie, 20.9.1998:
+------------------
+- Implemented configurable left indent and first line left indent
+- Fixed some bugs in cursor navigation
+- Fixed a bug in Key_Backspace
+ 

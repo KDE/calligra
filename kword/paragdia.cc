@@ -42,7 +42,7 @@ void KWPagePreview::drawContents(QPainter* p)
 
   int dl = static_cast<int>(left / 2);
   int dr = static_cast<int>(right / 2);
-  int df = static_cast<int>(first / 2 + left / 2);
+  int df = static_cast<int>(first / 2);
 
   int spc = static_cast<int>(POINT_TO_MM(spacing) / 5);
 
@@ -98,6 +98,42 @@ KWParagDia::~KWParagDia()
 }
 
 /*================================================================*/
+void KWParagDia::setLeftIndent(float _left)
+{
+  QString str;
+  str.sprintf("%g",_left);
+  eLeft->setText(str);
+  prev1->setLeft(_left);
+}
+
+/*================================================================*/
+void KWParagDia::setFirstLineIndent(float _first)
+{
+  QString str;
+  str.sprintf("%g",_first);
+  eFirstLine->setText(str);
+  prev1->setFirst(_first);
+}
+
+/*================================================================*/
+void KWParagDia::setSpaceBeforeParag(float _before)
+{
+  QString str;
+  str.sprintf("%g",_before);
+  eBefore->setText(str);
+  prev1->setBefore(_before);
+}
+
+/*================================================================*/
+void KWParagDia::setSpaceAfterParag(float _after)
+{
+  QString str;
+  str.sprintf("%g",_after);
+  eAfter->setText(str);
+  prev1->setAfter(_after);
+}
+
+/*================================================================*/
 void KWParagDia::setupTab1()
 {
   tab1 = new QWidget(this);
@@ -135,6 +171,7 @@ void KWParagDia::setupTab1()
   eRight->resize(eLeft->size());
   indentGrid->addWidget(eRight,2,1);
   connect(eRight,SIGNAL(textChanged(const char*)),this,SLOT(rightChanged(const char*)));
+  eRight->setEnabled(false);
 
   lFirstLine = new QLabel(i18n("First Line (mm):"),indentFrame);
   lFirstLine->resize(lFirstLine->sizeHint());

@@ -329,14 +329,18 @@ void KWordView_impl::formatParagraph()
 {
   if (paragDia)
     {
-      //QObject::disconnect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
+      QObject::disconnect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
       paragDia->close();
       delete paragDia;
       paragDia = 0;
     }
   paragDia = new KWParagDia(0,"");
   paragDia->setCaption(i18n("KWord - Paragraph settings"));
-  //QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
+  QObject::connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+  paragDia->setLeftIndent(gui->getPaperWidget()->getLeftIndent());
+  paragDia->setFirstLineIndent(gui->getPaperWidget()->getFirstLineIndent());
+  paragDia->setSpaceBeforeParag(gui->getPaperWidget()->getSpaceBeforeParag());
+  paragDia->setSpaceAfterParag(gui->getPaperWidget()->getSpaceAfterParag());
   paragDia->show();
 }
 
@@ -1048,6 +1052,15 @@ void KWordView_impl::slotMoveEnd(PartFrame_impl* _frame)
   KWordFrame *f = (KWordFrame*)_frame;
   // TODO scaling
   m_pKWordDoc->changeChildGeometry(f->child(),_frame->partGeometry());
+}
+
+/*================================================================*/
+void KWordView_impl::paragDiaOk()
+{
+  gui->getPaperWidget()->setLeftIndent(paragDia->getLeftIndent());
+  gui->getPaperWidget()->setFirstLineIndent(paragDia->getFirstLineIndent());
+  gui->getPaperWidget()->setSpaceBeforeParag(paragDia->getSpaceBeforeParag());
+  gui->getPaperWidget()->setSpaceAfterParag(paragDia->getSpaceAfterParag());
 }
 
 /*================================================================*/

@@ -151,6 +151,7 @@ public slots:
   void slotUpdateChildGeometry(KWordChild *_child);
   void slotGeometryEnd(PartFrame_impl*);
   void slotMoveEnd(PartFrame_impl*);
+  void paragDiaOk();
   
 protected:
   virtual void cleanUp();

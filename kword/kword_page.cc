@@ -362,7 +362,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		// HACK
 		fc->gotoStartOfParag(painter);
 		fc->cursorGotoLineStart(painter);
-		for (unsigned int i = 0;i < paraLen - 1;i++)
+		for (unsigned int i = 0;i < paraLen;i++)
 		  fc->cursorGotoRight(painter);
 	      }
 	    else
