@@ -501,7 +501,8 @@ if (layout.counter.style)
         markup += "{\\pntxta ";
         markup += layout.counter.righttext;  
         markup += " }";
-        
+
+        // ### FIXME: that is too late! And why at every list paragraph? (See bug #88241)
         if (layout.counter.start!=0)
         {
         markup += "\\pnstart";
