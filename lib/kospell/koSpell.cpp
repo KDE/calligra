@@ -385,6 +385,21 @@ void KOSpell::testIgnoreWord( QString & word )
     if (!word.isEmpty() &&ignorelist.findIndex(word.lower())!=-1)
         word ="";
 
+    //
+    QStringList::Iterator it = replacelist.begin();
+    for(;it != replacelist.end(); ++it, ++it) // Skip two entries at a time.
+    {
+        if (word == *it) // Word matches
+        {
+            QString origWord = *it;
+            ++it;
+            word = *it;   // Replace it with the next entry
+            emit corrected (origWord ,  word, lastpos+offset-origWord.length());
+            offset+=word.length()-origWord.length();
+            newbuffer.replace (lastpos+offset, word.length(), word );
+            word ="";
+        }
+    }
 }
 
 void KOSpell::previousWord()
@@ -504,6 +519,7 @@ void KOSpell::dialog2 (int result)
 
     dlgreplacement=ksdlg->replacement();
     bool testNextWord = true;
+    QString _replacement;
     switch (dlgresult)
     {
     case KS_IGNORE:
@@ -522,10 +538,14 @@ void KOSpell::dialog2 (int result)
         ignorelist.prepend(dlgorigword.lower());
         break;
     case KS_REPLACEALL:
-        emit replaceall( dlgorigword ,  replacement() );
-        emit corrected (dlgorigword ,  replacement(), lastpos+offset-dlgorigword.length());
+        replacelist.append (dlgorigword);
+        _replacement = replacement();
+        replacelist.append (_replacement);
+
+        emit replaceall( dlgorigword ,  _replacement );
+        emit corrected (dlgorigword ,  _replacement, lastpos+offset-dlgorigword.length());
         offset+=replacement().length()-dlgorigword.length();
-        newbuffer.replace (lastpos + offset, replacement().length(), replacement() );
+        newbuffer.replace (lastpos + offset, _replacement.length(), _replacement );
         break;
     case KS_ADDAUTOCORRECT:
         //todo add new word ????
