@@ -1113,7 +1113,7 @@ MsWord::MsWord(
     // being present until we are destroyed.
 
     m_mainStream = mainStream.data;
-kdDebug(s_area) << "MsWord::MsWord: mainStream.data"<<m_mainStream << endl;
+kdDebug(s_area) << "MsWord::MsWord: mainStream.data"<< (const char*)m_mainStream << endl;
     if (table0Stream.data && table1Stream.data)
     {
         // If and only if both table streams are present, the FIB tells us which
