@@ -174,6 +174,12 @@ public:
     QCString mimeType() const;
 
     /**
+     * Set the mimetype of the document.  You should _not_ call this.
+     * Support will be dropped.  Used by KoMainWindow to Export files.
+     */
+    void setMimeType( const QCString &mimeType );
+
+    /**
      * Set the format in which the document should be saved.
      * This is called on loading, and in "save as", so you shouldn't
      * have to call it.
@@ -194,6 +200,7 @@ public:
      * with Save As).
      */
     bool confirmNonNativeSave() const;
+    void setConfirmNonNativeSave( const bool );
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
@@ -580,6 +587,10 @@ public:
      */
     void setURL( const KURL& url ) { m_url = url; }
 
+    /**
+     * Do _not_ call file() or setFile().
+     * Future support is not guaranteed.  To quote QT "we mean it"!
+     */
     QString &file() { return m_file; }
     void setFile( const QString &file ) { m_file = file; }
 

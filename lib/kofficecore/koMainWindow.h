@@ -237,6 +237,12 @@ public slots:
      */
     void slotReloadFile();
 
+    /**
+     * Import/Export file
+     */
+    void slotImportFile();
+    void slotExportFile();
+
 protected:
 
     /**

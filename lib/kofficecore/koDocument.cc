@@ -364,6 +364,11 @@ QCString KoDocument::mimeType() const
     return d->mimeType;
 }
 
+void KoDocument::setMimeType( const QCString &mimeType )
+{
+    d->mimeType = mimeType;
+}
+
 void KoDocument::setOutputMimeType( const QCString & mimeType, int specialOutputFlag )
 {
     d->outputMimeType = mimeType;
@@ -383,6 +388,11 @@ int KoDocument::specialOutputFlag() const
 bool KoDocument::confirmNonNativeSave() const
 {
     return d->m_confirmNonNativeSave;
+}
+
+void KoDocument::setConfirmNonNativeSave( bool b)
+{
+    d->m_confirmNonNativeSave = b;
 }
 
 void KoDocument::setCheckAutoSaveFile( bool b )
@@ -1538,7 +1548,7 @@ void KoDocument::setTitleModified()
     //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" extern: "<<isStoredExtern()<<" current: "<<d->m_current<<endl;
     KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
     QString caption;
-    if ( isStoredExtern() && d->m_current )
+    if ( (url().isEmpty() || isStoredExtern()) && d->m_current )
     {
         // Get caption from document info (title(), in about page)
         if ( documentInfo() )
