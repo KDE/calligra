@@ -109,7 +109,7 @@ namespace KOffice {
         // debug
         void dump() const
         {
-            kdDebug() << "++++++++++ PriorityQueue::dump ++++++++++" << endl;
+            kdDebug( 30500 ) << "++++++++++ PriorityQueue::dump ++++++++++" << endl;
             QString out;
             int size = static_cast<int>( m_vector.size() );
             for ( int i = 0; i < size; ++i ) {
@@ -121,8 +121,8 @@ namespace KOffice {
             }
             if ( out.isEmpty() )
                 out = "(empty)";
-            kdDebug() << out << endl;
-            kdDebug() << "++++++++++ PriorityQueue::dump (done) ++++++++++" << endl;
+            kdDebug( 30500 ) << out << endl;
+            kdDebug( 30500 ) << "++++++++++ PriorityQueue::dump (done) ++++++++++" << endl;
         }
 
     private:
