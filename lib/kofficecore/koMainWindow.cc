@@ -1126,7 +1126,11 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   }
 
   if ( !d->bMainWindowGUIBuilt )
+  {
+    // Load mainwindow plugins
+    KParts::Plugin::loadPlugins( this, this, instance(), true );
     createShellGUI();
+  }
 
   if ( newPart && d->m_manager->activeWidget() && d->m_manager->activeWidget()->inherits( "KoView" ) )
   {
