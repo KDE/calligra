@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 2002 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,38 +24,69 @@
 
 #include <kdialogbase.h>
 #include <qrect.h>
-#include <qbuttongroup.h>
-#include <qstringlist.h>
+
+// #include <qvariant.h>
+// #include <qdialog.h>
 
 class KSpreadView;
-class KSpreadTable;
-class KSpreadCell;
-class QComboBox;
-class QRadioButton;
+
 class QCheckBox;
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class QRadioButton;
+class QTabWidget;
+class QWidget;
 
-class KSpreadSortDlg : public KDialogBase
-{
+class KSpreadSortDlg : public QDialog
+{ 
   Q_OBJECT
-public:
-  KSpreadSortDlg( KSpreadView* parent, const char* name );
 
-private slots:
+ public:
+  KSpreadSortDlg( KSpreadView * parent, const char * name = 0, 
+                  bool modal = false, WFlags fl = 0 );
+  ~KSpreadSortDlg();
+
+ private slots:
+  void sortKey2textChanged( int );
+  void useCustomListsStateChanged( int );
   void slotOk();
-  void slotpress(int id);
+  void slotOrientationChanged(int id);
 
-private:
+ private:
   void init();
 
   KSpreadView  * m_pView;
-  QButtonGroup * m_grp;
-  QRadioButton * m_rb_row;
-  QRadioButton * m_rb_column;
-  QComboBox    * m_combo;
-  QStringList    m_list_column;
-  QStringList    m_list_row;
-  QCheckBox    * m_decrease;
-  QCheckBox    * m_cpLayout;
+
+  QStringList    m_listColumn;
+  QStringList    m_listRow;
+
+  QWidget      * m_page1;
+  QWidget      * m_page2;
+
+  QTabWidget   * m_tabWidget;
+
+  QComboBox    * m_sortKey1;
+  QComboBox    * m_sortOrder1;
+  QComboBox    * m_sortKey2;
+  QComboBox    * m_sortOrder2;
+  QComboBox    * m_sortKey3;
+  QComboBox    * m_sortOrder3;
+
+  QCheckBox    * m_useCustomLists;
+  QComboBox    * m_customList;
+
+  QRadioButton * m_sortColumn;
+  QRadioButton * m_sortRow;
+
+  QCheckBox    * m_copyLayout;
+
+  QComboBox    * m_outputTable;
+  QLineEdit    * m_outputCell;
+
+  QPushButton  * m_buttonOk;
+  QPushButton  * m_buttonCancel;
 };
 
-#endif
+#endif 

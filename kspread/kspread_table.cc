@@ -3018,214 +3018,269 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
 }
 
 
-void KSpreadTable::sortByRow( int ref_row, SortingOrder mode, bool cpLayout )
+void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 {
-    QRect r( selectionRect() );
-    Q_ASSERT( mode == Increase || mode == Decrease );
+  KSpreadPoint point;
+  point.table = this;
+  point.tableName = m_strName;
+  point.pos = QPoint( selectionRect().left(), selectionRect().top() );
+  point.columnFixed = false;
+  point.rowFixed = false;
 
-    // It may not happen that entire columns are selected.
-    Q_ASSERT( isRowSelected() == FALSE );
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-    {
-        KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-    }
-    // Are entire rows selected ?
-    if ( isRowSelected() )
-    {
-        r.setLeft( KS_colMax );
-        r.setRight( 0 );
-
-        // Determine a correct left and right.
-        // Iterate over all cells to find out which cells are
-        // located in the selected rows.
-        KSpreadCell* c = m_cells.firstCell();
-        int row;
-        int col;
-        for( ; c; c = c->nextCell() )
-        {
-            row = c->row();
-            col = c->column();
-
-            // Is the cell in the selected columns ?
-            if ( !c->isEmpty() && row >= r.top() && row <= r.bottom())
-            {
-                if ( col > r.right() )
-                    r.rRight() = col;
-                if ( col < r.left() )
-                    r.rLeft() = col;
-            }
-        }
-
-        // Any cells to sort here ?
-        if ( r.right() < r.left() )
-            return;
-    }
-
-    doc()->emitBeginOperation();
-    // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
-    // For each column, we look for all cells right hand of it and we find the one to swap with it.
-    // Much faster than the awful bubbleSort...
-    KSpreadCell *cell;
-    KSpreadCell *cell1;
-    KSpreadCell *cell2;
-    KSpreadCell *bestCell;
-    for ( int d = r.left();  d <= r.right(); d++ )
-    {
-        cell1 = cellAt( d, ref_row );
-        if ( cell1->isObscured() && cell1->isObscuringForced() )
-        {
-            int moveX = cell1->obscuringCellsColumn();
-            cell = cellAt( moveX, ref_row );
-            cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
-            d = moveX + cell->extraXCells() + 1;
-        }
-
-        // Look for which column we want to swap with the one number d
-        bestCell = cell1;
-        int bestX = d;
-        for ( int x = d + 1 ; x <= r.right(); x++ )
-        {
-            cell2 = cellAt( x, ref_row );
-
-            if ( cell2->isEmpty() )
-            { /* No need to swap */ }
-            else if ( cell2->isObscured() && cell2->isObscuringForced() )
-            { /* No need to swap */}
-            else if ( bestCell->isEmpty() )
-            {
-                // empty cells are always shifted to the end
-                bestCell = cell2;
-                bestX = x;
-            }
-            // Here we use the operators < and > for cells, which do it all.
-            else if ( (mode == Increase && *cell2 < *bestCell) ||
-                      (mode == Decrease && *cell2 > *bestCell) )
-            {
-                bestCell = cell2;
-                bestX = x;
-            }
-        }
-
-        // Swap columns cell1 and bestCell (i.e. d and bestX)
-        if ( d != bestX )
-        {
-            for( int y = r.bottom(); y >= r.top(); --y )
-            {
-              if ( y != ref_row )
-                swapCells( d, y, bestX, y, cpLayout );
-            }
-            swapCells( d, ref_row, bestX, ref_row, cpLayout );
-        }
-
-    }
-    doc()->emitEndOperation();
+  sortByRow( ref_row, 0, 0, mode, mode, mode, 0, false, point );
 }
 
-void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode, bool cpLayout )
+void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode )
 {
-    Q_ASSERT( mode == Increase || mode == Decrease );
+  KSpreadPoint point;
+  point.table = this;
+  point.tableName = m_strName;
+  point.pos = QPoint( selectionRect().left(), selectionRect().top() );
+  point.columnFixed = false;
+  point.rowFixed = false;
 
-    QRect r( selectionRect() );
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+  sortByColumn( ref_column, 0, 0, mode, mode, mode, 0, false, point );
+}
+
+void KSpreadTable::sortByRow( int key1, int key2, int key3,
+                              SortingOrder order1, SortingOrder order2, SortingOrder order3,
+                              QStringList const * firstKey, bool copyLayout,
+                              KSpreadPoint const & outputPoint )
+{
+  // This is still work in progress (Norbert)
+  QRect r( selectionRect() );
+  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+
+  Q_ASSERT( order1 == Increase || order1 == Decrease );
+  
+  // It may not happen that entire columns are selected.
+  Q_ASSERT( isColumnSelected() == FALSE );
+
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r ); // change r to target!
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+
+  // Are entire rows selected ?
+  if ( isRowSelected() )
+  {
+    r.setLeft( KS_colMax );
+    r.setRight( 0 );
+    
+    // Determine a correct left and right.
+    // Iterate over all cells to find out which cells are
+    // located in the selected rows.
+    KSpreadCell * c = m_cells.firstCell();
+    for( ; c; c = c->nextCell() )
     {
-        KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r );
-        m_pDoc->undoBuffer()->appendUndo( undo );
+      int row = c->row();
+      int col = c->column();
+      
+      // Is the cell in the selected columns ?
+      if ( !c->isEmpty() && row >= r.top() && row <= r.bottom())
+      {
+        if ( col > r.right() )
+          r.rRight() = col;
+        if ( col < r.left() )
+          r.rLeft() = col;
+      }
     }
-    // It may not happen that entire rows are selected.
-    Q_ASSERT( isRowSelected() == FALSE );
+    
+    // Any cells to sort here ?
+    if ( r.right() < r.left() )
+      return;
+  }
+  
+  doc()->emitBeginOperation();
 
-    // Are entire columns selected ?
-    if ( isColumnSelected() )
+  // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
+  // For each column, we look for all cells right hand of it and we find the one to swap with it.
+  // Much faster than the awful bubbleSort...
+  KSpreadCell * cell;
+  KSpreadCell * cell1;
+  KSpreadCell * cell2;
+  KSpreadCell * bestCell;
+
+  for ( int d = r.left();  d <= r.right(); d++ )
+  {
+    cell1 = cellAt( d, key1 );
+    if ( cell1->isObscured() && cell1->isObscuringForced() )
     {
-        r.setTop( KS_rowMax );
-        r.setBottom( 0 );
-
-        // Determine a correct top and bottom.
-        // Iterate over all cells to find out which cells are
-        // located in the selected columns.
-        KSpreadCell* c = m_cells.firstCell();
-        int row;
-        int col;
-        for( ; c; c = c->nextCell() )
-        {
-            row = c->row();
-            col = c->column();
-
-            // Is the cell in the selected columns ?
-            if ( !c->isEmpty() && col >= r.left() && col <= r.right())
-            {
-                if ( row > r.bottom() )
-                    r.rBottom() = row;
-                if ( row < r.top() )
-                    r.rTop() = row;
-            }
-        }
-
-        // Any cells to sort here ?
-        if ( r.bottom() < r.top() )
-            return;
+      int moveX = cell1->obscuringCellsColumn();
+      cell = cellAt( moveX, key1 );
+      cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
+      d = moveX + cell->extraXCells() + 1;
     }
-   doc()->emitBeginOperation();
-    // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
-    // For each row, we look for all rows under it and we find the one to swap with it.
-    // Much faster than the awful bubbleSort...
-    // Torben: Asymptotically it is alltogether O(n^2) :-)
-
-   KSpreadCell *cell;
-   KSpreadCell *cell1;
-   KSpreadCell *cell2;
-   KSpreadCell *bestCell;
-   for ( int d = r.top(); d <= r.bottom(); d++ )
+    
+    // Look for which column we want to swap with the one number d
+    bestCell = cell1;
+    int bestX = d;
+    for ( int x = d + 1 ; x <= r.right(); x++ )
     {
-        // Look for which row we want to swap with the one number d
-        cell1 = cellAt( ref_column, d );
-        if ( cell1->isObscured() && cell1->isObscuringForced() )
-        {
-            int moveY=cell1->obscuringCellsRow();
-            cell = cellAt( ref_column, moveY );
-            cell1 = cellAt( ref_column, moveY+cell->extraYCells()+1 );
-            d=moveY+cell->extraYCells()+1;
-        }
-        bestCell = cell1;
-        int bestY = d;
-
-        for ( int y = d + 1 ; y <= r.bottom(); y++ )
-        {
-            cell2 = cellAt( ref_column, y );
-            
-            if ( cell2->isEmpty() )
-            { /* No need to swap */ }
-            else if ( cell2->isObscured() && cell2->isObscuringForced() )
-            { /* No need to swap */}
-            else if ( bestCell->isEmpty() )
-            {
-                // empty cells are always shifted to the end
-                bestCell = cell2;
-                bestY = y;
-            }
-            // Here we use the operators < and > for cells, which do it all.
-            else if ( (mode==Increase && *cell2 < *bestCell) ||
-                 (mode==Decrease && *cell2 > *bestCell) )
-            {
-                bestCell = cell2;
-                bestY = y;
-            }
-        }
-
-        // Swap rows cell1 and bestCell (i.e. d and bestY)
-        if ( d != bestY )
-        {
-            for (int x = r.left(); x <= r.right(); x++)
-            {
-              if ( x != ref_column )
-                swapCells( x, d, x, bestY, cpLayout );
-            }
-            swapCells( ref_column, d, ref_column, bestY, cpLayout );
-        }
+      cell2 = cellAt( x, key1 );
+      
+      if ( cell2->isEmpty() )
+      { /* No need to swap */ }
+      else if ( cell2->isObscured() && cell2->isObscuringForced() )
+      { /* No need to swap */}
+      else if ( bestCell->isEmpty() )
+      {
+        // empty cells are always shifted to the end
+        bestCell = cell2;
+        bestX = x;
+      }
+      // Here we use the operators < and > for cells, which do it all.
+      else if ( (order1 == Increase && *cell2 < *bestCell) 
+                || (order1 == Decrease && *cell2 > *bestCell) )
+      {
+        bestCell = cell2;
+        bestX = x;
+      }
+      else
+      {
+        // *cell2 equals *bestCell
+      }
     }
-   doc()->emitEndOperation();
+    
+    // Swap columns cell1 and bestCell (i.e. d and bestX)
+    if ( d != bestX )
+    {
+      for( int y = r.bottom(); y >= r.top(); --y )
+      {
+        if ( y != key1 && y != key2 && y != key3 )
+          swapCells( d, y, bestX, y, copyLayout );
+      }
+      if (key3 > 0)
+        swapCells( d, key3, bestX, key3, copyLayout );
+      if (key2 > 0)
+        swapCells( d, key2, bestX, key2, copyLayout );
+      swapCells( d, key1, bestX, key1, copyLayout );
+    }    
+  }
+
+  doc()->emitEndOperation();
+}
+
+void KSpreadTable::sortByColumn( int key1, int key2, int key3,
+                                 SortingOrder order1, SortingOrder order2, SortingOrder order3,
+                                 QStringList const * firstKey, bool copyLayout,
+                                 KSpreadPoint const & outputPoint )
+{
+  // This is still work in progress (Norbert)
+
+  QRect r( selectionRect() );
+  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+
+  Q_ASSERT( order1 == Increase || order1 == Decrease );
+  
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r ); // change r to target!
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+  // It may not happen that entire rows are selected.
+  Q_ASSERT( isRowSelected() == FALSE );
+  
+  // Are entire columns selected ?
+  if ( isColumnSelected() )
+  {
+    r.setTop( KS_rowMax );
+    r.setBottom( 0 );
+    
+    // Determine a correct top and bottom.
+    // Iterate over all cells to find out which cells are
+    // located in the selected columns.
+    KSpreadCell * c = m_cells.firstCell();
+    for( ; c; c = c->nextCell() )
+    {
+      int row = c->row();
+      int col = c->column();
+      
+      // Is the cell in the selected columns ?
+      if ( !c->isEmpty() && col >= r.left() && col <= r.right())
+      {
+        if ( row > r.bottom() )
+          r.rBottom() = row;
+        if ( row < r.top() )
+          r.rTop() = row;
+      }
+    }
+    
+    // Any cells to sort here ?
+    if ( r.bottom() < r.top() )
+      return;
+  }
+
+  doc()->emitBeginOperation();
+
+  // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
+  // For each row, we look for all rows under it and we find the one to swap with it.
+  // Much faster than the awful bubbleSort...
+  // Torben: Asymptotically it is alltogether O(n^2) :-)
+  
+  KSpreadCell * cell;
+  KSpreadCell * cell1;
+  KSpreadCell * cell2;
+  KSpreadCell * bestCell;
+
+  for ( int d = r.top(); d <= r.bottom(); ++d )
+  {
+    // Look for which row we want to swap with the one number d
+    cell1 = cellAt( key1, d );
+    if ( cell1->isObscured() && cell1->isObscuringForced() )
+    {
+      int moveY=cell1->obscuringCellsRow();
+      cell  = cellAt( key1, moveY );
+      cell1 = cellAt( key1, moveY+cell->extraYCells() + 1 );
+      d = moveY + cell->extraYCells() + 1;
+    }
+    bestCell  = cell1;
+    int bestY = d;
+    
+    for ( int y = d + 1 ; y <= r.bottom(); ++y )
+    {
+      cell2 = cellAt( key1, y );
+      
+      if ( cell2->isEmpty() )
+      { /* No need to swap */ }
+      else if ( cell2->isObscured() && cell2->isObscuringForced() )
+      { /* No need to swap */}
+      else if ( bestCell->isEmpty() )
+      {
+        // empty cells are always shifted to the end
+        bestCell = cell2;
+        bestY = y;
+      }
+      // Here we use the operators < and > for cells, which do it all.
+      else if ( (order1 == Increase && *cell2 < *bestCell) ||
+                (order1 == Decrease && *cell2 > *bestCell) )
+      {
+        bestCell = cell2;
+        bestY = y;
+      }
+      else
+      {
+        // TODO: *cell2 == *bestCell
+      }
+    }
+    
+    // Swap rows cell1 and bestCell (i.e. d and bestY)
+    if ( d != bestY )
+    {
+      for (int x = r.left(); x <= r.right(); x++)
+      {
+        if ( x != key1 && x != key2 && x != key3)
+          swapCells( x, d, x, bestY, copyLayout );
+      }
+      if (key3 > 0)
+        swapCells( key3, d, key3, bestY, copyLayout );
+      if (key2 > 0)
+        swapCells( key2, d, key2, bestY, copyLayout );
+      swapCells( key1, d, key1, bestY, copyLayout );
+    }
+  }
+  doc()->emitEndOperation();  
 }
 
 void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
@@ -4168,13 +4223,14 @@ void KSpreadTable::setConditional( const QRect & _marker,
     for (int y = t; y <= b; ++y)
     {
       cell = cellAt( x, y );
-      if ( cell->isObscuringForced() )
-        continue;
       if ( cell->isDefault() )
       {
         cell = new KSpreadCell( this, x, y );
         insertCell( cell );
       }
+
+      if ( cell->isObscuringForced() )
+        continue;
 
       cell->SetConditionList(newConditions);
       cell->setDisplayDirtyFlag();

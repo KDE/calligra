@@ -25,11 +25,13 @@ class RowLayout;
 class KSpreadCell;
 class KSpreadTable;
 class KSpreadView;
+class KSpreadPoint;
 class KSpreadMap;
 class KSpreadCanvas;
 class KSpreadDoc;
 class KoDocumentEntry;
 
+class QStingList;
 class QWidget;
 class QPainter;
 class QDomElement;
@@ -527,8 +529,16 @@ public:
      */
     void replace( const QPoint &_marker, QString _find, QString _replace, long options, KSpreadCanvas *canvas );
 
-    void sortByRow( int ref_row, SortingOrder, bool cpLayout = false );
-    void sortByColumn( int ref_column, SortingOrder, bool cpLayout = false );
+    void sortByRow( int ref_row, SortingOrder );
+    void sortByRow( int key1, int key2, int key3,
+                    SortingOrder order1, SortingOrder order2, SortingOrder order3,
+                    QStringList const * firstKey, bool copyLayout,
+                    KSpreadPoint const & outputPoint );
+    void sortByColumn( int ref_column, SortingOrder );
+    void sortByColumn( int key1, int key2, int key3,
+                       SortingOrder order1, SortingOrder order2, SortingOrder order3,
+                       QStringList const * firstKey, bool copyLayout,
+                       KSpreadPoint const & outputPoint );
     void swapCells( int x1, int y1, int x2, int y2, bool cpLayout );
     void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
 
