@@ -7001,7 +7001,10 @@ void KPresenterView::insertFile()
                                 i18n("Insert File"));
             return;
         }
+        m_pKPresenterDoc->insertFile(url.path());
     }
+    else
+        return;
     m_pKPresenterDoc->insertFile(url.path());
 }
 
