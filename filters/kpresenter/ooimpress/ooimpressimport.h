@@ -36,12 +36,12 @@ public:
 
 private:
     void createDocumentInfo( QDomDocument &docinfo );
+    void createDocumentContent( QDomDocument &doccontent );
     KoFilter::ConversionStatus openFile();
 
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
-
 };
 
 #endif

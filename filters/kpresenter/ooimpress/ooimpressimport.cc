@@ -25,6 +25,7 @@
 #include "ooimpressimport.h"
 
 #include <kdebug.h>
+#include <koUnit.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
 
@@ -69,9 +70,21 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
     if( out )
     {
         QCString info = docinfo.toCString();
-        kdDebug()<<" info :"<<info<<endl;
+        //kdDebug() << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
+    }
+
+    QDomDocument doccontent;
+    createDocumentContent( doccontent );
+
+    // store document content
+    out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
+    if( out )
+    {
+        QCString content = doccontent.toCString();
+        //kdDebug() << " content :" << content << endl;
+        out->writeBlock( content , content.length() );
     }
 
     kdDebug() << "######################## OoImpressImport::convert done ####################" << endl;
@@ -93,7 +106,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
   kdDebug() << "Trying to open content.xml" << endl;
   if ( !store->open( "content.xml" ) )
   {
-    kdWarning() << "This file doesn't seem to be a valid OpenCalc file" << endl;
+    kdWarning() << "This file doesn't seem to be a valid OoImpress file" << endl;
     delete store;
     return KoFilter::WrongFormat;
   }
@@ -115,8 +128,8 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
   m_content.setContent( totalString );
   totalString = "";
   store->close();
-  kdDebug()<<" m_content.toCString() :"<<m_content.toCString()<<endl;
-  kdDebug() << "file content.xml loaded " << endl;
+  //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
+  kdDebug() << "File content.xml loaded " << endl;
 
   if ( store->open( "styles.xml" ) )
   {
@@ -132,8 +145,8 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
     styles.setContent( totalString );
     totalString = "";
     store->close();
-    kdDebug()<<" styles.toCString() :"<<styles.toCString()<<endl;
-    kdDebug() << "file containing styles loaded" << endl;
+    //kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
+    kdDebug() << "File containing styles loaded" << endl;
   }
   else
     kdWarning() << "Style definitions do not exist!" << endl;
@@ -223,7 +236,113 @@ void OoImpressImport::createDocumentInfo( QDomDocument &docinfo )
 #endif
     docinfo.appendChild(doc);
 
-    kdDebug()<<" meta-info :"<<m_meta.toCString()<<endl;
+    //kdDebug() << " meta-info :" << m_meta.toCString() << endl;
+}
+
+void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
+{
+    QDomDocument doc = KoDocument::createDomDocument( "kpresenter", "DOC", "1.2" );
+    QDomElement docElement = doc.documentElement();
+    docElement.setAttribute( "editor", "KPresenter" );
+    docElement.setAttribute( "mime", "application/x-kpresenter" );
+    docElement.setAttribute( "syntaxVersion", "2" );
+
+    QDomElement content = m_content.documentElement();
+    QDomNode body = content.namedItem( "office:body" );
+
+    if ( body.isNull() )
+        return;
+
+    // at the moment use some default settings for paper
+    QDomElement paperElement = doc.createElement( "PAPER" );
+    paperElement.setAttribute( "ptWidth", CM_TO_POINT(28)/*680*/ );
+    paperElement.setAttribute( "ptHeight", CM_TO_POINT(21)/*510*/ );
+    paperElement.setAttribute( "unit", 0 );
+    paperElement.setAttribute( "format", 5 );
+    paperElement.setAttribute( "tabStopValue", 42.5198 );
+    paperElement.setAttribute( "orientation", 0 );
+    double pageHeight = 21;
+
+    QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
+    paperBorderElement.setAttribute( "ptRight", 0 );
+    paperBorderElement.setAttribute( "ptBottom", 0 );
+    paperBorderElement.setAttribute( "ptLeft", 0 );
+    paperBorderElement.setAttribute( "ptTop", 0 );
+    paperElement.appendChild( paperBorderElement );
+
+    QDomElement objectElement = doc.createElement( "OBJECTS" );
+    QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
+
+    // parse all pages
+    for ( QDomNode drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
+    {
+        QDomElement dp = drawPage.toElement();
+
+        // set the pagetitle
+        QDomElement titleElement = doc.createElement( "Title" );
+        titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
+        pageTitleElement.appendChild( titleElement );
+
+        double offset = ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight;
+
+        // parse all objects
+        for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
+        {
+            QDomElement e = object.toElement();
+
+            // check if we support this object
+            QString name = e.tagName();
+            if ( name != "draw:text-box" )
+                continue;
+
+            // get origin, size, pen and brush of the object
+            // this code is identical for all objects
+            QDomElement o = doc.createElement( "OBJECT" );
+            QDomElement orig = doc.createElement( "ORIG" );
+            orig.setAttribute( "x", CM_TO_POINT(e.attribute("svg:x").toDouble()) );
+            orig.setAttribute( "y", CM_TO_POINT(e.attribute("svg:y").toDouble() + offset) );
+            o.appendChild( orig );
+            QDomElement size = doc.createElement( "SIZE" );
+            size.setAttribute( "width", CM_TO_POINT(e.attribute("svg:width").toDouble()) );
+            size.setAttribute( "height", CM_TO_POINT(e.attribute("svg:height").toDouble()) );
+            o.appendChild( size );
+            QDomElement pen = doc.createElement( "PEN" );
+            o.appendChild( pen );
+            QDomElement brush = doc.createElement( "BRUSH" );
+            o.appendChild( brush );
+
+            if ( name == "draw:text-box" ) // textbox
+            {
+                o.setAttribute( "type", 4 );
+                QDomElement textobj = doc.createElement( "TEXTOBJ" );
+                o.appendChild( textobj );
+                for ( QDomNode paragraph = object.firstChild(); !paragraph.isNull();
+                      paragraph = paragraph.nextSibling() )
+                {
+                    QDomElement pa = paragraph.toElement();
+
+                    // only parse paragraphs
+                    if ( pa.tagName() != "text:p" )
+                        continue;
+
+                    QDomElement p = doc.createElement( "P" );
+                    textobj.appendChild( p );
+                    QDomElement name = doc.createElement( "NAME" );
+                    name.setAttribute( "value", pa.attribute( "text:style-name" ) );
+                    p.appendChild( name );
+                    QDomElement text = doc.createElement( "TEXT" );
+                    text.appendChild( doc.createTextNode( pa.text() ) );
+                    p.appendChild( text );
+                }
+            }
+            objectElement.appendChild( o );
+        }
+    }
+
+    docElement.appendChild( paperElement );
+    docElement.appendChild( pageTitleElement );
+    docElement.appendChild( objectElement );
+    doccontent.appendChild( doc );
 }
 
 #include <ooimpressimport.moc>
