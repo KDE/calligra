@@ -1067,21 +1067,21 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     }
 
     // TODO check versions and mimetypes etc.
-    // TODO page format (old paper and paperborder and attributes)
+
     QString masterPageName = "Standard"; // use default layout as fallback
     // In theory the page format is the style:master-page-name of the first paragraph...
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
     QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
-    QDomElement *style = masterPage ? oasisStyles.styles()[masterPage->attribute( "style:page-master-name" )] : 0;
-    Q_ASSERT( style );
-    if ( style )
+    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attribute( "style:page-master-name" )] : 0;
+    Q_ASSERT( masterPageStyle );
+    if ( masterPageStyle )
     {
-        QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        QDomElement properties( masterPageStyle->namedItem( "style:properties" ).toElement() );
         __pgLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
         double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
-        if ( width <= 0 || height <= 0 )
+        if ( width <= 1e-13 || height <= 1e-13 )
         {
             setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( width ).arg( height ) );
             return false;
@@ -1103,11 +1103,31 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         //__hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
 
-        // TODO QDomElement footnoteSep = properties.namedItem( "style:footnote-sep" ).toElement();
-        // m_iFootNoteSeparatorLineLength = ...
-        // m_footNoteSeparatorLineWidth = ...
-        // m_footNoteSeparatorLineType = ...
-        // m_footNoteSeparatorLinePos = ...
+        QDomElement footnoteSep = properties.namedItem( "style:footnote-sep" ).toElement();
+        if ( !footnoteSep.isNull() ) {
+            // style:width="0.018cm" style:distance-before-sep="0.101cm"
+            // style:distance-after-sep="0.101cm" style:adjustment="left"
+            // style:rel-width="25%" style:color="#000000"
+            QString width = footnoteSep.attribute( "style:width" );
+
+            m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
+            QString pageWidth = footnoteSep.attribute( "style:rel-width" );
+            if ( pageWidth.endsWith( "%" ) ) {
+                pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
+                m_iFootNoteSeparatorLineLength = qRound( pageWidth.toDouble() );
+            }
+            // Not in KWord: color, distance before and after separator
+            // Not in OOo: line type of separator (solid, dot, dash etc.)
+            // m_footNoteSeparatorLineType = ...  // TODO
+
+            QString pos = footnoteSep.attribute( "style:adjustment" );
+            if ( pos =="centered" )
+                m_footNoteSeparatorLinePos = SLP_CENTERED;
+            else if ( pos =="right")
+                m_footNoteSeparatorLinePos = SLP_RIGHT;
+            else if ( pos =="left" )
+                m_footNoteSeparatorLinePos = SLP_LEFT;
+        }
 
         __columns.columns = 1; // TODO
         __columns.ptColumnSpacing = 2; // TODO
@@ -1117,6 +1137,13 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         __hf.footer = HF_SAME;
         m_headerVisible = false;
         m_footerVisible = false;
+
+
+        // TODO columns  (style:columns, attribute fo:column-count)
+        // TODO columnspacing (style:column-sep ?)
+        // TODO hType/fType (no support for first-page)
+        // TODO spHeadBody (where is this in OOo?)
+        // TODO spFootBody (where is this in OOo?)
     }
 
     m_loadingInfo = new KWLoadingInfo;
@@ -1160,7 +1187,33 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         fs->addFrame( frame );
     }
 
-    // TODO pictures
+#if 0 // TODO
+        // Header/Footer
+        QDomElement headerStyle = masterPageStyle->namedItem( "style:header-style" ).toElement();
+        QDomElement footerStyle = masterPageStyle->namedItem( "style:footer-style" ).toElement();
+        QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
+        if ( !headerLeftElem.isNull() ) {
+            kdDebug() << "Found header-left" << endl;
+            hasEvenOddHeader = true;
+            importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader, headerStyle );
+        }
+        QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
+        if ( !headerElem.isNull() ) {
+            kdDebug() << "Found header" << endl;
+            importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader, headerStyle );
+        }
+        QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
+        if ( !footerLeftElem.isNull() ) {
+            kdDebug() << "Found footer-left" << endl;
+            importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter, footerStyle );
+        }
+        QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
+        if ( !footerElem.isNull() ) {
+            kdDebug() << "Found footer" << endl;
+            importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
+        }
+#endif
+
     // TODO embedded objects
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;

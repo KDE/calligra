@@ -22,9 +22,14 @@
 #include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
+#include "kwvariable.h"
+#include "kwloadinginfo.h"
+
 #include <kovariable.h>
 #include <koparagcounter.h>
-#include "kwvariable.h"
+#include <kooasiscontext.h>
+#include <koOasisStyles.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <assert.h>
@@ -767,3 +772,32 @@ void KWTextParag::join( KoTextParag *parag )
     KoTextParag::join( parag );
 }
 
+void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& context, KoStyleCollection *styleCollection )
+{
+    KoTextParag::loadOasis( paragElement, context, styleCollection );
+
+    KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
+    QString& currentMasterPageRef = doc->loadingInfo()->m_currentMasterPage;
+    QDomElement* paragraphStyle = context.oasisStyles().styles()[paragElement.attribute( "text:style-name" )];
+    QString masterPageName = paragraphStyle ? paragraphStyle->attribute( "style:master-page-name" ) : QString::null;
+    if ( masterPageName.isEmpty() )
+        masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+    if ( masterPageName != currentMasterPageRef )
+    {
+        // Detected a change in the master page -> this means we have to use a new page layout
+        // and insert a frame break if not on the first paragraph.
+        // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
+        if ( currentMasterPageRef.isEmpty() ) {
+            currentMasterPageRef = masterPageName; // do this first to avoid recursion
+            // Disabled. See loadOasis, we do this up front.
+            //doc->loadOasisPageLayout( masterPageName, context );
+        }
+        else
+        {
+            currentMasterPageRef = masterPageName;
+            // [see also KoParagLayout for the 'normal' way to insert page breaks]
+            m_layout.pageBreaking |= KoParagLayout::HardFrameBreakBefore;
+            // We have no way to load/use the new page layout, KWord doesn't have "sections".
+        }
+    }
+}

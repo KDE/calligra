@@ -55,29 +55,31 @@ public:
     bool hardFrameBreakBefore() const { return m_layout.pageBreaking & KoParagLayout::HardFrameBreakBefore; }
     bool hardFrameBreakAfter() const { return m_layout.pageBreaking & KoParagLayout::HardFrameBreakAfter; }
 
-    /** Public for loading a style */
+    /** Public for loading a style (KWord-1.3 XML) */
     static KoTextFormat loadFormat( QDomElement &formatElem, KoTextFormat *refFormat, const QFont &defaultFont, const QString & defaultLanguage, bool hyphanation );
-    /** Public for saving a style */
+    /** Public for saving a style (KWord-1.3 XML) */
     static QDomElement saveFormat( QDomDocument &doc, KoTextFormat *curFormat, KoTextFormat *refFormat, int pos, int len );
 
 
-    /** Save the whole paragraph */
+    /** Save (to KWord-1.3 XML) the whole paragraph */
     void save( QDomElement &parentElem, bool saveAnchorsFramesets = false );
 
-    /** Save a portion of the paragraph */
+    /** Save (to KWord-1.3 XML) a portion of the paragraph */
     void save( QDomElement &parentElem, int from, int to, bool saveAnchorsFramesets = false );
 
-    /** Load the paragraph */
+    /** Load (from KWord-1.3 XML) the paragraph */
     void load( QDomElement &attributes );
 
-    /** Load and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand) */
+    /** Load (from KWord-1.3 XML) and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand) */
     void loadFormatting( QDomElement &attributes, int offset = 0, bool loadFootNote=true );
 
-    /** Load and apply paragraph layout */
+    /** Load (from KWord-1.3 XML) and apply paragraph layout */
     void loadLayout( QDomElement & attributes );
 
-    /** Load from XML, optionally using styles from document. */
+    /** Load (from KWord-1.3 XML), optionally using styles from document. */
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
+
+    virtual void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
 
     virtual void join( KoTextParag *parag );
 protected:

@@ -27,7 +27,10 @@ public:
     KWLoadingInfo() {}
     ~KWLoadingInfo() {}
 
-    // Bookmarks (kword-1.3 XML: they need all framesets to be loaded first)
+    /// Current master-page name (OASIS loading)
+    QString m_currentMasterPage;
+
+    /// Bookmarks (kword-1.3 XML: they need all framesets to be loaded first)
     struct BookMark
     {
         QString bookname;
@@ -41,7 +44,7 @@ public:
     typedef QValueList<BookMark> BookMarkList;
     BookMarkList bookMarkList;
 
-    // Bookmarks (OASIS XML). Only need to store bookmark starts, until hitting bookmark ends
+    /// Bookmarks (OASIS XML). Only need to store bookmark starts, until hitting bookmark ends
     struct BookmarkStart {
         BookmarkStart() {} // for stupid QValueList
         BookmarkStart( KWTextDocument* _doc, KoTextParag* par, int ind )
