@@ -201,7 +201,7 @@ signals:
 protected slots:
     // All those slots are connected to KoTextObject
     void slotAvailableHeightNeeded();
-    void slotAfterFormatting( int bottom, QTextParag *lastFormatted );
+    void slotAfterFormatting( int bottom, QTextParag *lastFormatted, bool* abort );
     void slotNewCommand( KCommand *cmd );
     void slotRepaintChanged();
 

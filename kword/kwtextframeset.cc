@@ -106,8 +106,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
              SLOT( slotAvailableHeightNeeded() ) );
-    connect( m_textobj, SIGNAL( afterFormatting( int, QTextParag* ) ),
-             SLOT( slotAfterFormatting( int, QTextParag* ) ) );
+    connect( m_textobj, SIGNAL( afterFormatting( int, QTextParag*, bool* ) ),
+             SLOT( slotAfterFormatting( int, QTextParag*, bool* ) ) );
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
@@ -1487,7 +1487,7 @@ void KWTextFrameSet::ensureFormatted( QTextParag * parag )
     m_textobj->ensureFormatted( parag );
 }
 
-void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted )
+void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted, bool* abort )
 {
     int availHeight = availableHeight();
     if ( ( bottom > availHeight ) ||   // this parag is already off page
@@ -1505,6 +1505,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted 
         if ( frames.isEmpty() )
         {
             kdWarning(32002) << "formatMore no more space, but no frame !" << endl;
+            *abort = true;
             return;
         }
 
@@ -1581,9 +1582,9 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted 
         case KWFrame::AutoCreateNewFrame:
         {
             // We need a new frame in this frameset.
-#ifdef DEBUG_FORMAT_MORE
+//#ifdef DEBUG_FORMAT_MORE
             kdDebug(32002) << "formatMore creating new frame in frameset " << getName() << endl;
-#endif
+//#endif
             uint oldCount = frames.count();
             // First create a new page for it if necessary
             if ( frames.last()->pageNum() == m_doc->getPages() - 1 )
@@ -1620,6 +1621,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted 
                 //interval = 0;
                 // not good enough, we need to keep formatting right now
                 m_textobj->formatMore(); // that, or a goto ?
+                *abort = true;
                 return;
             }
             QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
