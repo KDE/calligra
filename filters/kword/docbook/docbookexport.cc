@@ -740,8 +740,8 @@ bool DocBookWorker::doCloseFile ( void )
 // the current tag level. It is used by ProcessDocumentIntoTag () to
 // assemble the diverse levels of information of the BOOKINFO tag.
 
-static void ProcessInfoData ( QString tagName,
-                              QString tagText,
+static void ProcessInfoData ( const QString &tagName,
+                              const QString & tagText,
                               QString &outputText)
 {
     if ( tagText.length () )
