@@ -606,13 +606,13 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
           return false;
       }
     }
-
     return true;
 }
 
 bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
     ignoreSticky = FALSE;
+    bool b=false;
     QDomElement docelem = doc.documentElement();
     int syntaxVersion = docelem.attribute( "syntaxVersion" ).toInt();
     if ( (syntaxVersion == 0 || syntaxVersion == 1) && CURRENT_SYNTAX_VERSION > 1 )
@@ -637,7 +637,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
 	if (cmd.isEmpty())
 	{
-	    KMessageBox::error(0L,"You don't appear to have perl installed.\nIt is needed to convert this document.\nInstall perl and try again.");
+	    KMessageBox::error(0L,"You don't appear to have perl installed.\nIt is needed to convert this document.\nPlease install perl and try again.");
 	    return false;
 	}
 	cmd += " ";
@@ -650,17 +650,17 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	QDomDocument newdoc;
 	newdoc.setContent( tmpFileOut.file() );
 	KOMLParser parser( newdoc );
-	bool b = loadXML( parser );
+	b = loadXML( parser );
 	ignoreSticky = TRUE;
-	return b;
     }
     else
     {
 	KOMLParser parser( doc );
-	bool b = loadXML( parser );
+	b = loadXML( parser );
 	ignoreSticky = TRUE;
-	return b;
     }
+    setModified(false);
+    return b;
 }
 
 /*========================== load ===============================*/
@@ -975,7 +975,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	    while ( parser.open( QString::null, tag ) ) {
 		KPPixmapDataCollection::Key key;
-                int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
+		int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
 		parser.parseTag( tag, name, lst );
@@ -1026,7 +1026,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	    while ( parser.open( QString::null, tag ) ) {
 		KPClipartCollection::Key key;
-                int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
+		int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
 		parser.parseTag( tag, name, lst );
@@ -3859,40 +3859,40 @@ int KPresenterDoc::getPenBrushFlags()
 /*================================================================*/
 QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, float fakt )
 {
-    QList<KPObject> objs;
-    objs.setAutoDelete( false );
-
+    QList<KPTextObject> objs;
     QRect rect = getPageSize( pgNum, 0, 0, fakt );
 
-    KPObject *kpobject = 0L, *obj = 0L;
+    KPObject *kpobject = 0L;
+    KPTextObject *tmp = 0L;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
-	if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) &&
-	     dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->lines() > 0 )
-	    objs.append( kpobject );
+        if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) ) {
+            tmp=static_cast<KPTextObject*>( kpobject );
+            if(tmp->getKTextObject()->lines() > 0)
+                objs.append( tmp );
+        }
 
     if ( objs.isEmpty() )
-	return QString( _title );
+        return QString( _title );
 
-    obj = objs.first();
-
-    kpobject = objs.first();
-    for ( kpobject = objs.next(); kpobject; kpobject = objs.next() )
-	if ( kpobject->getOrig().y() < obj->getOrig().y() )
-	    obj = kpobject;
+    tmp = objs.first();
+    KPTextObject *textobject=tmp;
+    for ( tmp = objs.next(); tmp; tmp = objs.next() )
+        if ( tmp->getOrig().y() < textobject->getOrig().y() )
+            textobject = tmp;
 
     // this can't happen, but you never know :- )
-    if ( !obj )
-	return QString( _title );
+    if ( !textobject )
+        return QString( _title );
 
-    KTextEdit *txtObj = dynamic_cast<KPTextObject*>( obj )->getKTextObject();
-
-    QString txt = txtObj->text();
-    if ( txt.stripWhiteSpace().isEmpty() )
-	return _title;
-    int i = txt.find( '\n' );
-    if ( i == -1 )
-	return txt;
-    return txt.left( i );
+    QString txt = textobject->getKTextObject()->text().stripWhiteSpace();
+    if ( txt.isEmpty() )
+        return _title;
+    unsigned int i=0;
+    for( ; i<txt.length(), txt[i]=='\n'; ++i);
+    int j=txt.find('\n', i);
+    if(i==0 && j==-1)
+        return txt;
+    return txt.mid(i, j);
 }
 
 /*================================================================*/
