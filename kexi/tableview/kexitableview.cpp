@@ -1033,8 +1033,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	else
 		cell_value = item->at(col);*/
 
-	if (KexiDB::Field::isNumericType( ctype )) {
-		if (KexiDB::Field::isFPNumericType( ctype )) {
+	if (KexiDB::Field::isFPNumericType( ctype )) {
 #ifdef Q_WS_WIN
 #else
 			x = 0;
@@ -1056,8 +1055,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		align |= AlignRight;
 //js		p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, f);
 #endif
-		}
-		else {
+	}
+	else if (KexiDB::Field::isIntegerType( ctype )) {
 //		case QVariant::UInt:
 //		case QVariant::Int:
 			int num = cell_value.toInt();
@@ -1067,9 +1066,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //			qDebug("KexiTableView::paintCell(): mode: %i", d->pColumnModes->at(col));
 #ifdef Q_WS_WIN
 //			y_offset = 1;
-			x = 1;
+		x = 1;
 #else
-			x = 0;
+		x = 0;
 #endif
 #if 0 //todo(js)
 			if(item->isInsertItem() && m_data->column(col)......... d->pColumnModes.at(col) == 3)  //yes that isn't beautiful
@@ -1087,7 +1086,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			txt = QString::number(num);
 //js				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, QString::number(num));
 #endif
-		}
 	}
 	else if (ctype == KexiDB::Field::Boolean) {
 //		case QVariant::Bool:

@@ -409,7 +409,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			data[i] = QVariant();
 		else if (f->isTextType())
 			data[i] = QVariant( *col );
-		else if (f->isNumericType())
+		else if (f->isIntegerType())
 			data[i] = QVariant( QCString(*col).toInt() );
 		else if (f->isFPNumericType())
 			data[i] = QVariant( QCString(*col).toDouble() );
@@ -428,7 +428,7 @@ QVariant SQLiteCursor::value(uint i)
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
-	else if (f->isNumericType())
+	else if (f->isIntegerType())
 		return QVariant( QCString(d->curr_coldata[i]).toInt() );
 	else if (f->isFPNumericType())
 		return QVariant( QCString(d->curr_coldata[i]).toDouble() );

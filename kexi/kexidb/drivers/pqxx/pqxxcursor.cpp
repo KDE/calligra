@@ -190,7 +190,7 @@ QVariant pqxxSqlCursor::pValue(uint pos) const
 	{
 		return QVariant((*m_res)[at()][pos].c_str());
 	}
-	else if (f->isNumericType())
+	else if (f->isIntegerType())
 	{
 		return QVariant((*m_res)[at()][pos].as(int()));
 	}

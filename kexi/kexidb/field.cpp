@@ -156,6 +156,18 @@ QString Field::typeName(uint type)
 	return m_typeNames.at(type);
 }
 
+bool Field::isIntegerType( uint type )
+{
+	switch (type) {
+	case Field::ShortInteger:
+	case Field::Integer:
+	case Field::BigInteger:
+		return true;
+	default:;
+	}
+	return false;
+}
+
 bool Field::isNumericType( uint type )
 {
 	switch (type) {
@@ -207,10 +219,10 @@ Field::TypeGroup Field::typeGroup(uint type)
 {
 	if (Field::isTextType(type))
 		return TextGroup;
+	else if (Field::isIntegerType(type))
+		return IntegerGroup;
 	else if (Field::isFPNumericType(type))
 		return FloatGroup;
-	else if (Field::isNumericType(type))
-		return IntegerGroup;
 	else if (type==Boolean)
 		return BooleanGroup;
 	else if (Field::isDateTimeType(type))

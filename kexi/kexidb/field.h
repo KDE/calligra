@@ -172,11 +172,17 @@ class KEXI_DB_EXPORT Field
 		/*! @return true if the field is not allowed to be null */
 		inline bool isNotEmpty() const { return constraints() & NotEmpty; }
 
-		/*! @return true if the field is of any numeric type */
+		/*! @return true if the field is of any numeric type (integer of floating-point) */
 		inline bool isNumericType() const { return Field::isNumericType(m_type); }
 		
 		/*! static version of isNumericType() method */
 		static bool isNumericType(uint type);
+
+		/*! @return true if the field is of any integer type */
+		inline bool isIntegerType() const { return Field::isIntegerType(m_type); }
+		
+		/*! static version of isIntegerType() method */
+		static bool isIntegerType(uint type);
 		
 		/*! @return true if the field is of any floating-point-numeric type */
 		inline bool isFPNumericType() const { return Field::isFPNumericType(m_type); }

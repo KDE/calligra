@@ -220,6 +220,16 @@ TABLE VIEW TODO:
 - add support for enums (combo boxes)
 - shrink viewport area after each row removing (so scrollbars can be updated)
 
+2004-01-10
+- KexiDB::Field::isIntegerType() added. Now It's easier to detect if a field is integer.
+- Fixed loading and saving values of type Float or Double in database tables.
+- Row updating/inserting: Fixed converting decimal symbol from locale back to db backend format
+
+2004-01-09
+- PartManager: Parts are sorted using definition stored in kexirc 
+  (code taken from the old API)
+- .ui files can be now translated
+
 2004-01-08
 - KexiInternalPart introduced (as generalized KexiRelationPart): 
   produces internal Kexi dialogs and widgets ON DEMAND

@@ -124,7 +124,7 @@ void KexiInputTableEdit::init(const QString& add)
 #endif
 		QString tmp_val = m_origValue.toString();
 
-		if (m_field->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+		if (m_field->isFPNumericType()) {
 			if (m_origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
@@ -143,7 +143,7 @@ void KexiInputTableEdit::init(const QString& add)
 			QValidator *validator = new KDoubleValidator(m_cview);
 			m_cview->setValidator( validator );
 		}
-		else if (m_field->isNumericType()) {
+		else if (m_field->isIntegerType()) {
 			if (m_origValue.toInt() == 0) {
 				tmp_val=add; //eat 0
 			}
@@ -243,10 +243,10 @@ QVariant KexiInputTableEdit::value(bool &ok)
 		//! js @todo PRESERVE PRECISION!
 		QString txt = m_cview->text();
 		if (m_decsym!=".")
-			txt.replace(m_decsym,".");//convert back
+			txt = txt.replace(m_decsym,".");//convert back
 		return QVariant( txt.toDouble(&ok) );
 	}
-	else if (m_field->isNumericType()) {
+	else if (m_field->isIntegerType()) {
 		//check constraints
 		return QVariant( m_cview->text().toInt(&ok) );
 	}
