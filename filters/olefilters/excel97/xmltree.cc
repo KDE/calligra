@@ -318,7 +318,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
       format.setAttribute("indent", (indent*10));
     if ((xfs[xf]->align >> 3) & 0x01 == 1)
         format.setAttribute("multirow", "yes");
-
+  
     switch (xfs[xf]->ifmt)
     {
         case 0x00:  // We need this to avoid 'default'
@@ -358,11 +358,11 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
             break;
         case 0x0C:  // Fraction 1 number  e.g. 1/2, 1/3
             format.setAttribute("precision", "-1");
-            format.setAttribute("format", "0");
+            format.setAttribute("format", "76");
             break;
         case 0x0D:  // Fraction 2 numbers  e.g. 1/50, 25/33
             format.setAttribute("precision", "-1");
-            format.setAttribute("format", "0");
+            format.setAttribute("format", "77");
             break;
         case 0x0E:	// Date
             format.setAttribute("format", "35");
@@ -403,30 +403,34 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
         case 0x2F:  // Time: mm:ss.0
             format.setAttribute("format", "51");
             break;
-        case 0xA4:	// Date
-            format.setAttribute("format", "215");
+        case 0xA4:	// fraction 3 digits
+	    format.setAttribute("format", "78");
             break;
-        case 0xA5:	// Date
-            format.setAttribute("format", "204");
+        case 0xA5:	// number fraction 1/2
+            format.setAttribute("format", "70");
             break;
-        case 0xA6:	// Date
-            format.setAttribute("format", "200");
+        case 0xA6:	// number fraction 1/4
+            format.setAttribute("format", "71");
             break;
-        case 0xA7:	// Date
-            format.setAttribute("format", "212");
+        case 0xA7:	// number fraction 1/8
+            format.setAttribute("format", "72");
             break;
-        case 0xA8:	// Date
-            format.setAttribute("format", "203");
+        case 0xA8:	// number fraction 1/16
+            format.setAttribute("format", "73");
             break;
-        case 0xA9:	// Date
-            format.setAttribute("format", "202");
+        case 0xA9:	// number fraction 1/10
+            format.setAttribute("format", "74");
             break;
-        case 0xAA:	// Date
-            format.setAttribute("format", "207");
+        case 0xAA:	// number fraction 1/100
+            format.setAttribute("format", "75");
             break;
-        case 0xAB:	// Date
-            format.setAttribute("format", "209");
-            break;
+        case 0xAB:	// number only neg signed red
+	  format.setAttribute("format", "0");
+	  format.setAttribute("faktor", "1");
+	  format.setAttribute("precision", "2");
+	  format.setAttribute("float","3");
+	  format.setAttribute("floatcolor","1");
+	  break;
         default:
             s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
                                     formats[xfs[xf]->ifmt]->cch);
@@ -1360,7 +1364,7 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
   e.appendChild(getFormat(xf));
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
-
+  
   s = m_locale.formatNumber(value);
 
   QDomElement text = root->createElement("text");
