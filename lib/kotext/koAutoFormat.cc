@@ -762,7 +762,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
         }
         // We are now at the first non-space char before the word
         if ( !beginningOfSentence )
-            beginningOfSentence = isMark( backCursor.parag()->at( backCursor.index() )->c );
+            beginningOfSentence = isMark( backCursor.parag()->at( backCursor.index() )->c ) && backCursor.parag()->at( backCursor.index()+1 )->c.isSpace();
 
         // Now look for exceptions
         if ( beginningOfSentence )
