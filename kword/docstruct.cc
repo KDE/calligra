@@ -17,7 +17,7 @@
 #include "kword_view.h"
 #include "kword_page.h"
 #include "parag.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "docstruct.h"
 #include "docstruct.moc"
 

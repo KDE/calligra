@@ -1,0 +1,165 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="paste"/>
+  <Action name="specialPaste"/>
+  <Action name="replace"/>
+  <Separator/>
+  <Action name="insertColumn"/>
+  <Action name="insertRow"/>
+  <Action name="deleteColumn"/>
+  <Action name="deleteRow"/>
+  <Separator/>
+  <Action name="sort"/>
+  <Action name="sortInc"/>
+  <Action name="sortDec"/>
+  <Separator/>
+  <Action name="createAnchor"/>
+  <Action name="editCell"/>
+  <Separator/>
+  <Action name="insertChart"/>
+  <Action name="insert_part"/>
+  <Action name="transform"/>
+ </Menu>
+ <Menu name="Format"><text>Format</text>
+  <Action name="bold"/>
+  <Action name="italic"/>
+  <Action name="selectFont"/>
+  <Action name="selectFontSize"/>
+  <Separator/>
+  <Action name="percent"/>
+  <Action name="precplus"/>
+  <Action name="precminus"/>
+  <Action name="money"/>
+  <Separator/>
+  <Action name="left"/>
+  <Action name="center"/>
+  <Action name="right"/>
+  <Action name="multiRow"/>
+  <Separator/>
+  <Action name="cellLayout"/>
+  <Action name="paperLayout"/>
+ </Menu>
+ <Menu name="View"><text>View</text>
+  <Action name="newView"/>
+  <Action name="gotoCell"/>
+ </Menu>
+ <Menu name="Folder"><text>Folder</text>
+  <Action name="insertTable"/>
+  <Action name="removeTable"/>
+  <Action name="hideTable"/>
+  <Action name="showTable"/>
+ </Menu>
+ <Menu name="Data"><text>Data</text>
+  <Action name="consolidate"/>
+ </Menu>
+ <Menu name="Extra"><text>Extra</text>
+  <PluginAction name="kspreadcalc" plugin="libkspreadcalc" major="1" minor="0"/>
+ </Menu>
+ <Menu name="Scripts"><text>Scripts</text>
+  <Action name="editGlobalScripts"/>
+  <Action name="editLocalScripts"/>
+  <Action name="reloadScripts"/>
+ </Menu>
+ <Menu name="Help"><text>Help</text>
+  <Action name="help"/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="paste"/>
+  <Separator/>
+  <Action name="insertColumn"/>
+  <Action name="insertRow"/>
+  <Action name="deleteColumn"/>
+  <Action name="deleteRow"/>
+  <Separator/>
+  <Action name="sortInc"/>
+  <Action name="sortDec"/>
+  <Separator/>
+  <Action name="insertChart"/>
+  <Action name="insert_part"/>
+  <Action name="transform"/>
+ </ToolBar>
+ <ToolBar>
+  <Action name="bold"/>
+  <Action name="italic"/>
+  <Action name="selectFont"/>
+  <Action name="selectFontSize"/>
+ </ToolBar>
+ <ToolBar>
+  <Action name="percent"/>
+  <Action name="precplus"/>
+  <Action name="precminus"/>
+  <Action name="money"/>
+  <Separator/>
+  <Action name="left"/>
+  <Action name="center"/>
+  <Action name="right"/>
+  <Action name="multiRow"/>
+ </ToolBar>
+ <ToolBar>
+  <Action name="function"/>
+  <Action name="formulaSelection"/>
+ </ToolBar>
+ <ToolBar>
+  <PluginAction name="kspreadcalc" plugin="libkspreadcalc" major="1" minor="0"/>
+ </ToolBar>
+ <ToolBar>
+  <Action name="formulaPower"/>
+  <Action name="formulaSubscript"/>
+  <Action name="formulaParentheses"/>
+  <Action name="formulaAbsValue"/>
+  <Action name="formulaBrackets"/>
+  <Action name="formulaFraction"/>
+  <Action name="formulaRoot"/>
+  <Action name="formulaIntegral"/>
+  <Action name="formulaMatrix"/>
+  <Action name="formulaLeftSuper"/>
+  <Action name="formulaLeftSub"/>
+  <Action name="formulaSum"/>
+  <Action name="formulaProduct"/>
+ </ToolBar>
+ <ToolBar>
+  <Action name="textColor"/>
+  <Action name="backgroundColor"/>
+  <Separator/>
+  <Action name="borderLeft"/>
+  <Action name="borderTop"/>
+  <Action name="borderRight"/>
+  <Action name="borderBottom"/>
+  <Action name="borderOutline"/>
+  <Action name="borderAll"/>
+  <Action name="borderRemove"/>
+  <Action name="borderColor"/>
+ </ToolBar>
+</ToolBars>
+<InPlaceEditing>
+ <MenuBar>
+  <Menu name="View"><text>View</text>
+   <Action name="newView"/>
+  </Menu>
+  <Menu name="Extra"><text>Extra</text>
+   <PluginAction name="qcalc_show" plugin="qcalc" major="1" minor="0"/>
+  </Menu>
+  <Menu name="Help"><text>Help</text>
+   <Action name="about"/>
+  </Menu>
+ </MenuBar>
+ <ToolBars>
+  <ToolBar>
+   <Action name="about"/>
+  </ToolBar>
+ </ToolBars>
+</InPlaceEditing>
+</QConfig>

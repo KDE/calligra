@@ -30,6 +30,7 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qlistbox.h>
+#include <qcombobox.h>
 
 #include <kapp.h>
 #include <kcolorbtn.h>
@@ -59,7 +60,7 @@ void KWTablePreview::paintEvent( QPaintEvent * )
         for ( int j = 0; j < cols; j++ )
             p.drawRect( j * wid + 5, i * hei + 5, wid + 1, hei + 1 );
     }
-    
+
     p.end();
 }
 
@@ -108,7 +109,8 @@ void KWTableConf::setupPage()
     bgBody = new QButtonGroup( i18n( "Apply for Body" ), this );
     grid1->addWidget( bgBody, 2, 2 );
 
-    cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, copy header to each page begin" ), this );
+    cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, "
+					      "copy header to each page begin" ), this );
     cbHeaderOnAllPages->resize( cbHeaderOnAllPages->sizeHint() );
     grid1->addMultiCellWidget( cbHeaderOnAllPages, 3, 3, 0, 2 );
 
@@ -143,13 +145,14 @@ void KWTableConf::setupPage()
 /******************************************************************/
 
 /*================================================================*/
-KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordDocument *_doc, int rows, int cols )
+KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordDocument *_doc, 
+			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
     : QTabDialog( parent, name, true )
 {
     page = _page;
     doc = _doc;
 
-    setupTab1( rows, cols );
+    setupTab1( rows, cols, wid, hei );
     setupTab2();
 
     setCancelButton( i18n( "Cancel" ) );
@@ -159,11 +162,11 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordD
 }
 
 /*================================================================*/
-void KWTableDia::setupTab1( int rows, int cols )
+void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
 {
     tab1 = new QWidget( this );
 
-    grid1 = new QGridLayout( tab1, 5, 2, 15, 7 );
+    grid1 = new QGridLayout( tab1, 9, 2, 15, 7 );
 
     lRows = new QLabel( i18n( "Number of Rows:" ), tab1 );
     lRows->resize( lRows->sizeHint() );
@@ -183,25 +186,59 @@ void KWTableDia::setupTab1( int rows, int cols )
     nCols->setValue( cols );
     grid1->addWidget( nCols, 3, 0 );
 
+    lHei = new QLabel( i18n( "Cell Heights:" ), tab1 );
+    lHei->resize( lHei->sizeHint() );
+    grid1->addWidget( lHei, 4, 0 );
+
+    cHei = new QComboBox( FALSE, tab1 );
+    cHei->resize( cHei->sizeHint() );
+    cHei->insertItem( i18n( "Automatic" ) );
+    cHei->insertItem( i18n( "Manual" ) );
+    cHei->setCurrentItem( (int)hei );
+    grid1->addWidget( cHei, 5, 0 );
+
+    lWid = new QLabel( i18n( "Cell Widths:" ), tab1 );
+    lWid->resize( lWid->sizeHint() );
+    grid1->addWidget( lWid, 6, 0 );
+
+    cWid = new QComboBox( FALSE, tab1 );
+    cWid->resize( cWid->sizeHint() );
+    cWid->insertItem( i18n( "Automatic" ) );
+    cWid->insertItem( i18n( "Manual" ) );
+    cWid->setCurrentItem( (int)wid );
+    grid1->addWidget( cWid, 7, 0 );
+
     preview = new KWTablePreview( tab1, rows, cols );
     preview->setBackgroundColor( white );
-    grid1->addMultiCellWidget( preview, 0, 4, 1, 1 );
+    grid1->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
     grid1->addRowSpacing( 0, lRows->height() );
     grid1->addRowSpacing( 1, nRows->height() );
     grid1->addRowSpacing( 2, lCols->height() );
     grid1->addRowSpacing( 3, nCols->height() );
-    grid1->addRowSpacing( 4, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
+    grid1->addRowSpacing( 4, lHei->height() );
+    grid1->addRowSpacing( 5, cHei->height() );
+    grid1->addRowSpacing( 6, lWid->height() );
+    grid1->addRowSpacing( 7, cWid->height() );
+    grid1->addRowSpacing( 8, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
     grid1->setRowStretch( 0, 0 );
     grid1->setRowStretch( 1, 0 );
     grid1->setRowStretch( 2, 0 );
     grid1->setRowStretch( 3, 0 );
-    grid1->setRowStretch( 4, 1 );
+    grid1->setRowStretch( 4, 0 );
+    grid1->setRowStretch( 5, 0 );
+    grid1->setRowStretch( 6, 0 );
+    grid1->setRowStretch( 7, 0 );
+    grid1->setRowStretch( 8, 1 );
 
     grid1->addColSpacing( 0, lRows->width() );
     grid1->addColSpacing( 0, nRows->width() );
     grid1->addColSpacing( 0, lCols->width() );
     grid1->addColSpacing( 0, nCols->width() );
+    grid1->addColSpacing( 0, lHei->width() );
+    grid1->addColSpacing( 0, cHei->width() );
+    grid1->addColSpacing( 0, lWid->width() );
+    grid1->addColSpacing( 0, cWid->width() );
     grid1->addColSpacing( 1, 150 );
     grid1->setColStretch( 0, 0 );
     grid1->setColStretch( 1, 1 );
@@ -225,7 +262,9 @@ void KWTableDia::setupTab2()
 /*================================================================*/
 void KWTableDia::insertTable()
 {
-    page->setTableConfig( nRows->value(), nCols->value() );
+    page->setTableConfig( nRows->value(), nCols->value(),
+			  (KWTblCellSize)cWid->currentItem(),
+			  (KWTblCellSize)cHei->currentItem() );
     page->mmTable();
 }
 

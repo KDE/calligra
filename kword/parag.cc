@@ -3,7 +3,7 @@
 #include "defs.h"
 #include "fc.h"
 #include "formatcollection.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "kword_utils.h"
 #include "variable.h"
 #include "footnote.h"

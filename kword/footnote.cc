@@ -16,7 +16,7 @@
 #include "footnote.h"
 #include "kword_doc.h"
 #include "fc.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "parag.h"
 #include "char.h"
 #include "defs.h"

@@ -16,7 +16,7 @@
 #include "kword_undo.h"
 #include "kword_undo.moc"
 #include "kword_doc.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "fc.h"
 
 /******************************************************************/

@@ -60,15 +60,15 @@ public:
 	LeftDown,
 	Left
     };
-    
+
     KWResizeHandle( KWPage *p, Direction d, KWFrame *frm );
-    void updateGeometry();    
-    
+    void updateGeometry();
+
 protected:
     void mouseMoveEvent( QMouseEvent *e );
     void mousePressEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
-    
+
     bool mousePressed;
     int oldX, oldY;
     KWPage *page;
@@ -195,8 +195,11 @@ public:
     void removeSelection();
     void addLen() { currFindPos += currFindLen; }
 
-    void setTableConfig( unsigned int rows, unsigned int cols )
-    { trows = rows; tcols = cols; }
+    void setTableConfig( unsigned int rows, unsigned int cols,
+			 KWTblCellSize wid, KWTblCellSize hei ) { 
+	trows = rows; tcols = cols; 
+	twid = wid; thei = hei;
+    }
 
     void setLeftFrameBorder( KWParagLayout::Border _brd, bool _enable );
     void setRightFrameBorder( KWParagLayout::Border _brd, bool _enable );
@@ -223,7 +226,7 @@ public:
     void insertFormulaChar( int c );
     bool formulaIsActive() const;
     void updateSelections();
-    
+
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );
@@ -253,6 +256,19 @@ public slots:
     void editDeleteFrame();
     void editReconnectFrame();
 
+    int tableRows() const {
+	return trows;
+    }
+    int tableCols() const {
+	return tcols;
+    }
+    KWTblCellSize tableWidthMode() const {
+	return twid;
+    }
+    KWTblCellSize tableHeightMode() const {
+	return thei;
+    }
+    
 protected slots:
     void frameDiaClosed();
     void startBlinkCursor();
@@ -395,7 +411,8 @@ protected:
     int currFindFS;
     int selectedFrameSet, selectedFrame;
     unsigned int tcols, trows;
-
+    KWTblCellSize twid, thei;
+    
     bool recalcingText;
     bool mouseMoved;
     bool maybeDrag;
@@ -420,7 +437,7 @@ protected:
     QByteArray pasteLaterData;
     QString pasteLaterMimeType;
     QRect scrollClipRect;
-    
+
 };
 
 #endif

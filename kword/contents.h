@@ -14,6 +14,7 @@
 /******************************************************************/
 
 #ifndef contents_h
+#define contents_h
 
 #include <qstringlist.h>
 

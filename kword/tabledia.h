@@ -21,6 +21,7 @@
 
 #include "paraglayout.h"
 #include "format.h"
+#include "defs.h"
 
 class KWPage;
 class KWordDocument;
@@ -30,6 +31,7 @@ class QListBox;
 class QWidget;
 class QCheckBox;
 class QButtonGroup;
+class QComboBox;
 
 /******************************************************************/
 /* Class: KWTablePreview                                          */
@@ -65,8 +67,7 @@ public:
     KWTableConf( QWidget *_parent, KWordDocument *_doc );
 
 protected:
-    struct TableStyle
-    {
+    struct TableStyle {
         bool hasHeader, hasFirstCol;
 
         KWParagLayout::Border hTop, hBottom, hRight, hLeft;
@@ -106,20 +107,22 @@ class KWTableDia : public QTabDialog
     Q_OBJECT
 
 public:
-    KWTableDia( QWidget *parent, const char *name, KWPage *_page, KWordDocument *_doc, int rows, int cols );
+    KWTableDia( QWidget *parent, const char *name, KWPage *_page, KWordDocument *_doc, 
+		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
 
 protected:
-    void setupTab1( int rows, int cols );
+    void setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
     void setupTab2();
     void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
 
     QWidget *tab1;
     QGridLayout *grid1;
-    QLabel *lRows, *lCols;
+    QLabel *lRows, *lCols, *lWid, *lHei;
     QSpinBox *nRows, *nCols;
     KWTablePreview *preview;
     KWTableConf *tab2;
-
+    QComboBox *cWid, *cHei;
+    
     KWPage *page;
     KWordDocument *doc;
 

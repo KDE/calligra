@@ -3,6 +3,7 @@
 
 #include <iostream.h>
 #include <qstring.h>
+#include "kword_factory.h"
 
 #define MIME_TYPE "application/x-kword"
 #define KWordRepoID "IDL:KWord/KWordDocument:1.0"
@@ -45,16 +46,45 @@
 #define STANDARD_COLUMNS 2
 #define STANDARD_COLUMN_SPACING 3
 
-enum MouseMode {MM_EDIT = 0, MM_EDIT_FRAME = 1, MM_CREATE_TEXT = 2, MM_CREATE_PIX = 3, MM_CREATE_CLIPART = 4, MM_CREATE_TABLE = 5, \
-                MM_CREATE_FORMULA = 6, MM_CREATE_PART = 7, MM_CREATE_KSPREAD_TABLE = 8};
+enum MouseMode { 
+    MM_EDIT = 0, 
+    MM_EDIT_FRAME = 1, 
+    MM_CREATE_TEXT = 2, 
+    MM_CREATE_PIX = 3, 
+    MM_CREATE_CLIPART = 4, 
+    MM_CREATE_TABLE = 5, 
+    MM_CREATE_FORMULA = 6, 
+    MM_CREATE_PART = 7, 
+    MM_CREATE_KSPREAD_TABLE = 8 
+};
 
-enum EditMode {EM_INSERT, EM_DELETE, EM_BACKSPACE, EM_CMOVE, EM_NONE, EM_RETURN};
+enum EditMode { 
+    EM_INSERT, 
+    EM_DELETE, 
+    EM_BACKSPACE, 
+    EM_CMOVE, 
+    EM_NONE, 
+    EM_RETURN 
+};
 
-enum InsertPos {I_BEFORE, I_AFTER};
+enum InsertPos { 
+    I_BEFORE, 
+    I_AFTER 
+};
 
-enum KWUnits {U_MM, U_PT, U_INCH};
+enum KWUnits {
+    U_MM, U_PT, 
+    U_INCH 
+};
+
+enum KWTblCellSize { 
+    TblAuto = 0, 
+    TblManual 
+};
 
 const QChar KWSpecialChar( static_cast<char>( 0 ) );
+
+#define KWBarIcon( x ) BarIcon( x, KWordFactory::global() )
 
 class KWUnit
 {

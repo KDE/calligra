@@ -1564,7 +1564,7 @@ Reggie, 2.10.1999:
 
 Reggie, 3.10.1999:
 --------------
-- All necesarry operations work now in the serial letter 
+- All necesarry operations work now in the serial letter
   database editor (removing records or entries crashes sometimes,
   looks like a QValueList prob. - I´ll look into that later)
 - Implemented saving and loading serial letter db => serial letters are
@@ -1578,7 +1578,7 @@ Reggie, 4.10.1999:
 Reggie, 5.10.1999:
 --------------
 - As text runaround contur didn´t work anyway, I removed
-  that option and added option to skip height of intersecting frames 
+  that option and added option to skip height of intersecting frames
 - Improved speed of text running around frames a bit
 - quite some speed improvements in formatting
 - fixes in formatting
@@ -1588,3 +1588,7 @@ Reggie, 5.10.1999:
 Reggie, 6.10.1999:
 --------------
 - More fixes in line cache => more flicker freeness
+
+Reggie, 19.10.1999:
+-----------------
+- Improvements for tables, still more needed

@@ -16,7 +16,7 @@
 #include "kword_doc.h"
 #include "kword_view.h"
 #include "kword_page.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "image.h"
 #include "parag.h"
 #include "defs.h"
@@ -25,7 +25,6 @@
 #include "font.h"
 
 #include <komlMime.h>
-#include <koView.h>
 #include <koPageLayoutDia.h>
 
 #include <strstream>
@@ -39,6 +38,8 @@
 #include <qfile.h>
 #include <qscrollview.h>
 #include <qarray.h>
+
+#include <frame.h>
 
 /******************************************************************/
 /* Class: KWFrame						  */
@@ -54,7 +55,7 @@ KWFrame::KWFrame()
     runAroundGap = 1;
     mostRight = false;
     emptyRegionDirty = TRUE;
-    
+
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
     brd_left.style = KWParagLayout::SOLID;
@@ -210,19 +211,19 @@ KWFrame::~KWFrame()
 void KWFrame::addIntersect( QRect &_r )
 {
     emptyRegionDirty = TRUE;
-    
+
     intersections.append( new QRect( _r.x(), _r.y(), _r.width(), _r.height() ) );
 }
 
 /*================================================================*/
 int KWFrame::getLeftIndent( int _y, int _h )
 {
-    if ( runAround == RA_NO || intersections.isEmpty() ) 
+    if ( runAround == RA_NO || intersections.isEmpty() )
 	return 0;
 
     if ( emptyRegionDirty )
 	getEmptyRegion();
-    
+
     int _left = 0;
     QRect line( x(), _y, width(), _h );
     QRegion reg = emptyRegion.intersect( line );
@@ -233,14 +234,14 @@ int KWFrame::getLeftIndent( int _y, int _h )
 	_left += runAroundGap.pt();
     if ( _left > 0 && runAround == RA_SKIP )
 	_left = width();
-    
+
     return _left;
 }
 
 /*================================================================*/
 int KWFrame::getRightIndent( int _y, int _h )
 {
-    if ( runAround == RA_NO || intersections.isEmpty() ) 
+    if ( runAround == RA_NO || intersections.isEmpty() )
 	return 0;
 
     if ( emptyRegionDirty )
@@ -283,18 +284,18 @@ QRegion KWFrame::getEmptyRegion( bool useCached )
 {
     if ( !emptyRegionDirty && useCached )
 	return emptyRegion;
-    
+
     emptyRegion = QRegion( x(), y(), width(), height() );
     QRect rect;
 
     for ( unsigned int i = 0; i < intersections.count(); i++ ) {
 	rect = *intersections.at( i );
-	emptyRegion = emptyRegion.subtract( QRect( rect.x() - 1, rect.y() - 1, 
+	emptyRegion = emptyRegion.subtract( QRect( rect.x() - 1, rect.y() - 1,
 						   rect.width() + 2, rect.height() + 2 ) );
     }
 
     emptyRegionDirty = FALSE;
-    
+
     return emptyRegion;
 }
 
@@ -1428,44 +1429,44 @@ KWPartFrameSet::KWPartFrameSet( KWordDocument *_doc, KWordChild *_child )
 /*================================================================*/
 KWPartFrameSet::~KWPartFrameSet()
 {
-    if ( frame ) {
-	frame->detach();
-	delete frame;
-    }
 }
 
 /*================================================================*/
 QPicture *KWPartFrameSet::getPicture()
 {
-    if ( !_enableDrawing ) return 0L;
+    if ( !_enableDrawing )
+	return 0;
 
-    return child->draw( 1.0, false );
+    update();
+    QPainter p( &pic );
+    //child->transform( p );
+
+    if ( child )
+	child->part()->paintEverything( p, QRect( QPoint( 0, 0 ),
+						  QSize( frames.at( 0 )->width(), frames.at( 0 )->height() ) ),
+					TRUE, 0 );
+
+    return &pic;
 }
 
 /*================================================================*/
 void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffxx )
 {
-    if ( !frame ) {
-	frame = new KWordFrame( dynamic_cast<KWordView*>( _widget ), child );
-	frame->attachView( view );
-	frame->show();
-    }
-    frame->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20,
-			frames.at( 0 )->width(), frames.at( 0 )->height() );
-    frame->view()->mainWindow()->setActivePart( frame->view()->id() );
-    frame->setFocus();
-
-    parentID = dynamic_cast<KWordView*>( _widget )->getID();
+//     child->setGeometry( QRect( frames.at( 0 )->x() - diffxx - diffx, frames.at( 0 )->y() - diffy,
+// 			       frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    update();
+    KWordView *view = (KWordView*)_widget;
+    Part* part = child->part();
+    if ( !part )
+	return;
+    view->shell()->setActiveView( view, part );
+    view->child( part )->frame()->move( frames.at( 0 )->x() - diffx - diffxx,
+					frames.at( 0 )->y() - diffy );
 }
 
 /*================================================================*/
 void KWPartFrameSet::deactivate()
 {
-    if ( frame ) {
-	frame->view()->mainWindow()->setActivePart( parentID );
-	// HACK!
-	frame->setGeometry( -10, -10, 1, 1 );
-    }
 }
 
 /*================================================================*/
@@ -1880,15 +1881,25 @@ bool KWGroupManager::isTableHeader( KWFrameSet *fs )
 }
 
 /*================================================================*/
-void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, unsigned int height )
+void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, unsigned int height,
+			   KWTblCellSize widm, KWTblCellSize heim )
 {
     unsigned int wid = width / cols - 2;
     unsigned int hei = height / rows - 2;
 
-    // some error checking to avoid infinite loops
-    if ( static_cast<int>( hei ) < doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 )
-	hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10;
-    if ( wid < 60 ) wid = 60;
+    if ( heim == TblAuto ||
+	 static_cast<int>( hei ) < doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 5 )
+	hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 5;
+    
+    if ( widm == TblAuto ) {
+	x = doc->getPTLeftBorder();
+	width = doc->getPTPaperWidth() - 
+		( doc->getPTLeftBorder() + doc->getPTRightBorder() );
+	wid = width / cols - 5;
+    }
+    
+    if ( wid < 40 ) 
+	wid = 40;
 
     unsigned int _wid, _hei;
 
@@ -2018,7 +2029,8 @@ void KWGroupManager::recalcRows()
 	    if ( j > 0 && y + getFrameSet( j, i )->getFrame( 0 )->height() >
 		 ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
 		 doc->getPTPaperHeight() - doc->getPTBottomBorder() ) {
-		y = ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * doc->getPTPaperHeight() + doc->getPTTopBorder();
+		y = ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * 
+		    doc->getPTPaperHeight() + doc->getPTTopBorder();
 		_addRow = true;
 	    }
 	} else {
@@ -2088,8 +2100,6 @@ void KWGroupManager::recalcRows()
 		    int h = 0;
 		    for ( unsigned int k = 0; k < cell->rows; k++ )
 			h += *hs.at( k + cell->row );
-
-		    debug( "expanded %d/%d", cell->row, cell->col );
 
 		    cell->frameSet->getFrame( 0 )->setHeight( h + ( cell->rows - 2 ) * 2 + 2 );
 		}

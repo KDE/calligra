@@ -1,10 +1,31 @@
 TODO-List:
 ----------
 
+Missing or incomplete stuff:
+----------------------------------------
 - Tab in the parag layout dialog for configuration of tabulators (adding/deleting/modifying them)
 - Preview widget for numbering
 - Preview widget for style templates editor
+- Tabulators don't work correctly in "Blocksatz"
+- Table configuration dialog
+
+Optimations:
+----------------------------------------
 - Make recalculation of frames (after resizing frames) and calculation of text running around frames much FASTER. Espacially the
   recalculation of the whole text in these cases is very slow in long docs
+
+Bugs to fix:
+----------------------------------------
+- When pasting text the cursor is not set correctly
+- When selection text with the keyboard, Key_Home/End doesn't work
+- When deleting text, empty pages (frames) are not removed
+- Selection text with the mouse is fucked up (and fuckes up the text easily :-)
+- Tables have to be in the textflow of the first frameset (some hack needed here)
+- Border of frames is not drawn correctly if the width is > 1 (I think it is drawn correctly,
+  but the background, which is drawn after the frame, overwrites it)
+- Do not allow to make frames too small as this can result in an endless loop
+- When moving/resizing tables and the go over multiple pages there are some redraw problems - but nothing really bad :-))
+- When a frame grows there are sometimes redraw errors
+- When removing text in a table cell shrink table cells
 
 Reginald Stadlbauer <reggie@kde.org>

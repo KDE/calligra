@@ -1,8 +1,16 @@
 [Desktop Entry]
 Name=KWordHTMLImportFilter
+Name[ja]=KWordHTMLインポートフィルター
+Name[sv]=OrdbehandlarHTMLImportFilter
 Exec=foo
 CORBAExec=kword_html --server
 Comment=Reggie's KWord HTML Filter
+Comment[ca]=Filtre HTML pel KWord de Reggie
+Comment[de]=Reggies KWord HTML-Filter
+Comment[eo]=HTML-filtrilo por la programo Vorto
+Comment[fi]=KWord HTML suodatin
+Comment[ja]=Reggie's KWord Ascii Filter
+Comment[sv]=Reggies KWord-HTML-filter
 Export=application/x-kword
 ExportDescription=KWord
 Import=text/html
@@ -10,6 +18,6 @@ ImportDescription=HTML
 X-KDE-RepoIds=IDL:KOffice/FilterFactory:1.0#KWordHTML
 X-KDE-ActivationMode=shared
 Type=OpenPart
-Icon=unknown.xpm
-MiniIcon=unknown.xpm
+Icon=unknown
+MiniIcon=unknown
 ServiceTypes=KOfficeFilter

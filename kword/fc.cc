@@ -975,6 +975,9 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
     if ( !pFrameSet->isVisible() )
 	return FALSE;
 
+    if ( !parag )
+	return FALSE;
+    
     if ( lineEndPos == parag->getTextLen() ) {
 	if ( parag->getNext() == 0L || outOfFrame ) {
 	    ptY += getLineHeight();
@@ -1296,7 +1299,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
 
     // Does this line still fit in this frame or do we have to make a hard break?
     if ( !doc->isPTYInFrame( frameSet - 1, frame - 1, ptY + getLineHeight() ) ||
-	 ( parag->hasHardBreak() && isCursorInFirstLine() ) && 
+	 ( parag->hasHardBreak() && isCursorInFirstLine() ) &&
 	 parag->getPrev() && parag->getPrev()->getEndPage() == page ) {
 	// Are we a header or footer?
 	if ( isAHeader( pFrameSet->getFrameInfo() ) ||
@@ -1408,7 +1411,7 @@ void KWFormatContext::makeCounterLayout()
 /*================================================================*/
 void KWFormatContext::apply( const KWFormat &_format )
 {
-    if ( compare_formats && _format == *( ( KWFormat* )this ) ) 
+    if ( compare_formats && _format == *( ( KWFormat* )this ) )
 	return;
 
     KWFormat::apply( _format );
@@ -1492,8 +1495,8 @@ void KWFormatContext::setFrameSet( unsigned int _frameSet )
     else
 	pFrameSet = 0;
 
-    if ( !pFrameSet )
-	qWarning( "KWFormatContext::setFrameSet: pFrameSet is NULL, KWord will crash soon or at least behave strange!" );
+//     if ( !pFrameSet )
+// 	qWarning( "KWFormatContext::setFrameSet: pFrameSet is NULL, KWord will crash soon or at least behave strange!" );
 
     setFrame( 1 );
 }
@@ -1512,12 +1515,12 @@ void KWFormatContext::setFrame( unsigned int _frame )
     } else
 	pFrame = 0;
 
-    if ( !pFrame )
-	qWarning( "KWFormatContext::setFrame: pFrame is NULL, KWord will crash soon or at least behave strange!" );
+//     if ( !pFrame )
+// 	qWarning( "KWFormatContext::setFrame: pFrame is NULL, KWord will crash soon or at least behave strange!" );
 }
 
 /*================================================================*/
-QRegion KWFormatContext::getEmptyRegion() const 
+QRegion KWFormatContext::getEmptyRegion() const
 {
     return emptyRegion;
 }

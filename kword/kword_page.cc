@@ -31,7 +31,7 @@
 #include "footnote.h"
 #include "clipbrd_dnd.h"
 #include "char.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "framedia.h"
 #include "font.h"
 #include "docstruct.h"
@@ -70,6 +70,11 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     setFocusPolicy( QWidget::StrongFocus );
     viewport()->setFocusProxy( this );
 
+    trows = 7;
+    tcols = 5;
+    twid = TblAuto;
+    thei = TblAuto;
+    
     editNum = -1;
     recalcingText = FALSE;
     maybeDrag = FALSE;
@@ -375,7 +380,7 @@ void KWPage::vmmEditFrameSizeVert( int, int my )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() ) {
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
 	    frame->setHeight( frame->height() - ( oldMy - my ) );
 	    frame->moveBy( 0, -my + oldMy );
 	}
@@ -390,7 +395,7 @@ void KWPage::vmmEditFrameSizeVert( int, int my )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 )
 	    frame->setHeight( frame->height() - ( my - oldMy ) );
     }
     p.drawRect( !doc->getFrameSet( frameset )->getGroupManager() ? frame->x() - contentsX() :
@@ -435,7 +440,7 @@ void KWPage::vmmEditFrameSizeHorz( int mx, int )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() ) {
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
 	    frame->setWidth( frame->width() - ( oldMx - mx ) );
 	    frame->moveBy( -mx + oldMx, 0 );
 	}
@@ -448,7 +453,7 @@ void KWPage::vmmEditFrameSizeHorz( int mx, int )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 )
 	    frame->setWidth( frame->width() - ( mx - oldMx ) );
     }
     p.drawRect( frame->x() - contentsX(),
@@ -489,7 +494,7 @@ void KWPage::vmmEditFrameFDiag( int mx, int my )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() ) {
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
 	    frame->setWidth( frame->width() - ( oldMx - mx ) );
 	    frame->setHeight( frame->height() - ( oldMy - my ) );
 	    frame->moveBy( -mx + oldMx, -my + oldMy );
@@ -504,7 +509,7 @@ void KWPage::vmmEditFrameFDiag( int mx, int my )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() ) {
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
 	    frame->setWidth( frame->width() - ( mx - oldMx ) );
 	    frame->setHeight( frame->height() - ( my - oldMy ) );
 	}
@@ -544,7 +549,7 @@ void KWPage::vmmEditFrameBDiag( int mx, int my )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() ) {
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
 	    frame->setWidth( frame->width() - ( mx - oldMx ) );
 	    frame->setHeight( frame->height() - ( oldMy - my ) );
 	    frame->moveBy( 0, -my + oldMy );
@@ -560,7 +565,7 @@ void KWPage::vmmEditFrameBDiag( int mx, int my )
 	     frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
 				 + 1 ) *
 	     static_cast<int>( ptPaperHeight() ) ||
-	     frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() ) {
+	     frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
 	    frame->setWidth( frame->width() - ( oldMx - mx ) );
 	    frame->setHeight( frame->height() - ( my - oldMy ) );
 	    frame->moveBy( -mx + oldMx, 0 );
@@ -801,7 +806,7 @@ void KWPage::vmpEditFrame( QMouseEvent *e, int mx, int my )
 	    }
 	}
     }
-    
+
     mousePressed = FALSE;
     mouseMoveEvent( e );
     mousePressed = TRUE;
@@ -1002,7 +1007,7 @@ void KWPage::vmrEdit()
 void KWPage::vmrEditFrame( int mx, int my )
 {
     for ( unsigned int i = 0; i < doc->getNumGroupManagers(); i++ ) {
-	if ( !doc->getGroupManager( i )->isActive() ) 
+	if ( !doc->getGroupManager( i )->isActive() )
 	    continue;
 
 	doc->getGroupManager( i )->recalcCols();
@@ -1140,7 +1145,8 @@ void KWPage::vmrCreateTable()
 		    grpMgr->addFrameSet( _frameSet, i, j );
 		}
 	    }
-	    grpMgr->init( insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
+	    grpMgr->init( insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height(),
+			  twid, thei );
 	    grpMgr->recalcRows();
 	}
 	recalcWholeText( TRUE );
@@ -1804,6 +1810,8 @@ void KWPage::paintPart( QPainter &painter, int i )
 
     painter.save();
     QRect r = painter.viewport();
+    painter.setClipRect( frame->x() - contentsX(), frame->y() - contentsY(),
+			 frame->width() - 1, frame->height() - 1 );
     painter.setViewport( frame->x() - contentsX(), frame->y() - contentsY(), r.width(), r.height() );
     if ( pic )
 	painter.drawPicture( *pic );
@@ -2173,12 +2181,12 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 			    gui->getView()->getViewFormattingChars(), TRUE,
 			    _x + li, paintfc.getPTY() - contentsY(), _wid - li - re, paintfc.getLineHeight(),
 			    QBrush( frame->getBackgroundColor() ) );
-	} 
+	}
 // 	qDebug( "append: %d %s", pty, str.latin1() );
 	tmpCachedLines.append( str );
 
 // 	qDebug( "----------------------" );
-	    
+	
 	bend = !paintfc.makeNextLineLayout();
 
 	if ( paintfc.getFrame() - 1 != currFrameNum )
@@ -3270,7 +3278,7 @@ void KWPage::setMouseMode( MouseMode _mm )
 	    viewport()->setFocus();
 	    recalcCursor( FALSE );
 	    editNum = -1;
-	} if ( doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA ) {
+	} else if ( doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA ) {
 	    gui->getView()->showFormulaToolbar( FALSE );
 	    dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( editNum ) )->deactivate();
 	    setFocusProxy( 0 );
@@ -3287,7 +3295,6 @@ void KWPage::setMouseMode( MouseMode _mm )
 
     mouseMode = _mm;
     mmUncheckAll();
-    gui->getView()->uncheckAllTools();
     gui->getView()->setTool( mouseMode );
 
     switch ( mouseMode ) {
@@ -4914,7 +4921,10 @@ bool KWPage::focusNextPrevChild( bool )
 /*================================================================*/
 void KWPage::formatMore()
 {
-    if ( inKeyEvent )
+    if ( inKeyEvent || !formatFC )
+	return;
+
+    if ( doc->getFrameSet( formatFC->getFrameSet() - 1)->getGroupManager() )
 	return;
 
     //qDebug( "formatMore" );
@@ -4955,7 +4965,7 @@ void KWPage::updateSelections()
 {
     if ( mouseMode != MM_EDIT_FRAME )
 	return;
-    
+
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
 	for ( unsigned int j = 0; j < doc->getFrameSet( i )->getNumFrames(); ++j ) {
 	    if ( doc->getFrameSet( i )->getFrame( j )->isSelected() ) {
@@ -5004,7 +5014,7 @@ KWResizeHandle::KWResizeHandle( KWPage *p, Direction d, KWFrame *frm )
 	setCursor( Qt::sizeHorCursor );
 	break;
     }
-    
+
     updateGeometry();
     show();
 }
@@ -5015,7 +5025,7 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
     if ( !mousePressed )
 	return;
     page->mouseMoved = TRUE;
-    
+
     int my = y() + e->y();
     int mx = x() + e->x();
     mx += page->contentsX();
@@ -5076,7 +5086,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     oldY = e->y();
     page->mouseMoved = FALSE;
     page->mousePressed = TRUE;
-    page->vmpEditFrame( 0, x() + e->x() + page->contentsX(), 
+    page->vmpEditFrame( 0, x() + e->x() + page->contentsX(),
 			y() + e->y() + page->contentsY() );
 }
 
@@ -5084,7 +5094,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 {
     mousePressed = FALSE;
-    page->vmrEditFrame( x() + e->x() + page->contentsX(), 
+    page->vmrEditFrame( x() + e->x() + page->contentsX(),
 			y() + e->y() + page->contentsY() );
     page->mousePressed = FALSE;
 }
@@ -5103,15 +5113,15 @@ void KWResizeHandle::updateGeometry()
 	page->moveChild( this, frame->x() + frame->width() - 6, frame->y() );
 	break;
     case Right:
-	page->moveChild( this, frame->x() + frame->width() - 6, 
+	page->moveChild( this, frame->x() + frame->width() - 6,
 		     frame->y() + frame->height() / 2 - 3 );
 	break;
     case RightDown:
-	page->moveChild( this, frame->x() + frame->width() - 6, 
+	page->moveChild( this, frame->x() + frame->width() - 6,
 		     frame->y() + frame->height() - 6 );
 	break;
     case Down:
-	page->moveChild( this, frame->x() + frame->width() / 2 - 3, 
+	page->moveChild( this, frame->x() + frame->width() / 2 - 3,
 		     frame->y() + frame->height() - 5 );
 	break;
     case LeftDown:

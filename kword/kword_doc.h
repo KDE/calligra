@@ -25,7 +25,6 @@ class KWSerialLetterDataBase;
 class KWContents;
 
 #include <koDocument.h>
-#include <koPrintExt.h>
 #include <koPageLayoutDia.h>
 #include <koQueryTypes.h>
 
@@ -37,7 +36,7 @@ class KWContents;
 #include "paraglayout.h"
 #include "formatcollection.h"
 #include "imagecollection.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "variable.h"
 #include "footnote.h"
 #include "autoformat.h"
@@ -59,7 +58,7 @@ class KWContents;
 class KWordChild : public KoDocumentChild
 {
 public:
-    KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy );
+    KWordChild( KWordDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy );
     KWordChild( KWordDocument *_wdoc );
     ~KWordChild();
 
@@ -75,18 +74,13 @@ protected:
 /* Class: KWordDocument						  */
 /******************************************************************/
 
-class KWordDocument : public QObject,
-		      virtual public KoDocument,
-		      virtual public KoPrintExt,
-		      virtual public KWord::KWordDocument_skel
+class KWordDocument : public KoDocument
 {
     Q_OBJECT
 
 public:
-    KWordDocument();
+    KWordDocument( KoDocument* doc = 0, const char* name = 0 );
     ~KWordDocument();
-
-    virtual void cleanUp();
 
     enum ProcessingType {WP = 0, DTP = 1};
     static const int U_FONT_FAMILY_SAME_SIZE = 1;
@@ -109,28 +103,24 @@ public:
     virtual bool initDoc();
 
     // C++
-    virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
-    virtual bool loadChildren( KOStore::Store_ptr _store );
+    virtual bool loadXML( KOMLParser& parser, KoStore *_store );
+    virtual bool loadChildren( KoStore *_store );
     virtual bool save( ostream& out, const char* _format );
-    virtual bool completeSaving( KOStore::Store_ptr _store );
+    virtual bool completeSaving( KoStore *_store );
 
     virtual bool loadTemplate( const char *_url );
 
     // IDL
-    virtual OpenParts::View_ptr createView();
-    // C++
-    KWordView* createWordView( QWidget* _parent = 0 );
+    Shell* createShell();
+    View* createView( QWidget* parent, const char* name );
+    virtual QString configFile() const;
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
-    // IDL
-    virtual void viewList( KOffice::Document::ViewList & _list );
-
-    virtual QCString mimeType()
+    virtual QCString mimeType() const
     { return MIME_TYPE; }
 
     virtual bool isModified()
     { return m_bModified; }
-
-    virtual KOffice::MainWindow_ptr createMainWindow();
 
     // C++
     virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
@@ -398,10 +388,9 @@ protected slots:
     void slotUndoRedoChanged( QString, QString );
 
 protected:
-    virtual void insertChild( KWordChild* );
-    virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
+    virtual bool saveChildren( KoStore *_store, const char *_path );
 
-    virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
+    virtual bool completeLoading( KoStore* /* _store */ );
 
     virtual void draw( QPaintDevice*, long int _width, long int _height,
 		       float _scale );

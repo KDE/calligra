@@ -26,12 +26,12 @@
 #include <qpainter.h>
 
 #include "paraglayout.h"
+#include "defs.h"
 
 #include <iostream>
 #include <koStream.h>
 
 #include <koMainWindow.h>
-#include <openparts.h>
 
 class KWFrame;
 class KWordDocument;
@@ -56,7 +56,7 @@ enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 class KWFrame : public QRect
 {
     friend class KWPage;
-    
+
 public:
     KWFrame();
     KWFrame( const QPoint &topleft, const QPoint &bottomright );
@@ -65,7 +65,7 @@ public:
     KWFrame( int left, int top, int width, int height, RunAround _ra, KWUnit _gap );
     KWFrame( const QRect &_rect );
     virtual ~KWFrame();
-    
+
     void setRunAround( RunAround _ra ) { runAround = _ra; }
     RunAround getRunAround() { return runAround; }
 
@@ -142,7 +142,7 @@ protected:
     QList<QRect> intersections;
     QRegion emptyRegion;
     bool emptyRegionDirty;
-    
+
     KWParagLayout::Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
 
@@ -353,9 +353,6 @@ public:
     virtual void activate( QWidget *_widget, int diffx, int diffy, int diffxx );
     virtual void deactivate();
 
-    void setView( KOffice::View_var kv )
-    { view = KOffice::View::_narrow( kv ); }
-
     KWordChild *getChild() { return child; }
 
     virtual void update();
@@ -365,8 +362,7 @@ public:
 protected:
     KWordFrame *frame;
     KWordChild *child;
-    OpenParts::Id parentID;
-    KOffice::View_var view;
+    QPicture pic;
 
     bool _enableDrawing;
 
@@ -435,7 +431,9 @@ public:
 
     bool isTableHeader( KWFrameSet *fs );
 
-    void init( unsigned int x, unsigned int y, unsigned int width, unsigned int height );
+    void init( unsigned int x, unsigned int y, 
+	       unsigned int width, unsigned int height,
+	       KWTblCellSize wid, KWTblCellSize hei );
     void init();
     void recalcCols();
     void recalcRows();

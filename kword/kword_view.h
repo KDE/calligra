@@ -16,9 +16,6 @@
 #ifndef kword_view_h
 #define kword_view_h
 
-#include <koView.h>
-#include <koFrame.h>
-
 #include <qwidget.h>
 #include <qlist.h>
 #include <qcolor.h>
@@ -26,12 +23,13 @@
 #include <qbrush.h>
 #include <qstringlist.h>
 
-#include "kword.h"
 #include "format.h"
 #include "paraglayout.h"
 #include "searchdia.h"
 
 #include <koPageLayoutDia.h>
+
+#include <container.h>
 
 class KWPartFrameSet;
 class KWordView;
@@ -57,36 +55,35 @@ class KWDocStruct;
 class KSpell;
 class QScrollView;
 class QSplitter;
+class QAction;
 
-/******************************************************************/
-/* Class: KWordFrame						  */
-/******************************************************************/
+// /******************************************************************/
+// /* Class: KWordFrame						  */
+// /******************************************************************/
 
-class KWordFrame : public KoFrame
-{
-    Q_OBJECT
+// class KWordFrame : public KoFrame
+// {
+//     Q_OBJECT
 
-public:
-    KWordFrame( KWordView*, KWordChild* );
+// public:
+//     KWordFrame( KWordView*, KWordChild* );
 
-    KWordChild* child()
-    { return m_pKWordChild; }
-    KWordView* wordView()
-    { return m_pKWordView; }
+//     KWordChild* child()
+//     { return m_pKWordChild; }
+//     KWordView* wordView()
+//     { return m_pKWordView; }
 
-protected:
-    KWordChild *m_pKWordChild;
-    KWordView *m_pKWordView;
+// protected:
+//     KWordChild *m_pKWordChild;
+//     KWordView *m_pKWordView;
 
-};
+// };
 
 /******************************************************************/
 /* Class: KWordView						  */
 /******************************************************************/
 
-class KWordView : public QWidget,
-		  virtual public KoViewIf,
-		  virtual public KWord::KWordView_skel
+class KWordView : public ContainerView
 {
     Q_OBJECT
 
@@ -94,9 +91,47 @@ public:
     // C++
     KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
     virtual ~KWordView();
+    virtual void createGUI();
+    virtual void construct();
+    virtual void setFormat( const KWFormat &_format, bool _check = true,
+			    bool _update_page = true, bool _redraw = true );
+    virtual void setFlow( KWParagLayout::Flow _flow );
+    virtual void setLineSpacing( int _spc );
+    virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
+				  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
 
-    void setShell( KWordShell *_shell ) { shell = _shell; }
+    KWordGUI *getGUI() { return gui; }
+    void setTool( MouseMode _mouseMode );
+    void updateStyle( QString _styleName, bool _updateFormat = true );
+    void updateStyleList();
 
+    bool getViewFormattingChars() { return _viewFormattingChars; }
+    bool getViewFrameBorders() { return _viewFrameBorders; }
+    bool getViewTableGrid() { return _viewTableGrid; }
+
+    void setSearchEntry( KWSearchDia::KWSearchEntry *e ) { searchEntry = e; }
+    void setReplaceEntry( KWSearchDia::KWSearchEntry *e ) { replaceEntry = e; }
+
+    void initGui();
+    
+    /**
+     * Overloaded from View
+     */
+    bool doubleClickActivation() const;
+    /**
+     * Overloaded from View
+     */
+    QWidget* canvas();
+    /**
+     * Overloaded from View
+     */
+    int canvasXOffset() const;
+    /**
+     * Overloaded from View
+     */
+    int canvasYOffset() const;
+
+public slots:
     // IDL
     virtual void editUndo();
     virtual void editRedo();
@@ -134,11 +169,8 @@ public:
     virtual void insertContents();
 
     virtual void formatFont();
-    virtual void formatColor();
     virtual void formatParagraph();
     virtual void formatPage();
-    virtual void formatNumbering();
-    virtual void formatStyle();
     virtual void formatFrameSet();
 
     virtual void extraSpelling();
@@ -170,9 +202,9 @@ public:
     virtual void helpAboutKOffice();
     virtual void helpAboutKDE();
 
-    virtual void textStyleSelected( const QString &style );
-    virtual void textSizeSelected( const QString &size );
-    virtual void textFontSelected( const QString &font );
+    virtual void textStyleSelected( const QString & );
+    virtual void textSizeSelected( const QString & );
+    virtual void textFontSelected( const QString & );
     virtual void textBold();
     virtual void textItalic();
     virtual void textUnderline();
@@ -181,7 +213,7 @@ public:
     virtual void textAlignCenter();
     virtual void textAlignRight();
     virtual void textAlignBlock();
-    virtual void textLineSpacing( const QString &spc );
+    virtual void textLineSpacing( const QString & );
     virtual void textEnumList();
     virtual void textUnsortList();
     virtual void textSuperScript();
@@ -191,8 +223,8 @@ public:
     virtual void textBorderTop();
     virtual void textBorderBottom();
     virtual void textBorderColor();
-    virtual void textBorderWidth( const QString &width );
-    virtual void textBorderStyle( const QString &style );
+    virtual void textBorderWidth( const QString & );
+    virtual void textBorderStyle( const QString & );
     virtual void frameBorderLeft();
     virtual void frameBorderRight();
     virtual void frameBorderTop();
@@ -214,45 +246,17 @@ public:
     virtual void formulaLeftSuper();
     virtual void formulaLeftSub();
 
-    virtual void setMode( KOffice::View::Mode _mode );
-    virtual void setFocus( bool mode );
-
     // C++
     virtual bool printDlg();
 
-    virtual void setFormat( const KWFormat &_format, bool _check = true,
-			    bool _update_page = true, bool _redraw = true );
-    virtual void setFlow( KWParagLayout::Flow _flow );
-    virtual void setLineSpacing( int _spc );
-    virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
-				  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
-
-    KWordGUI *getGUI() { return gui; }
-    void uncheckAllTools();
-    void setTool( MouseMode _mouseMode );
-    void updateStyle( QString _styleName, bool _updateFormat = true );
-    void updateStyleList();
-
-    bool getViewFormattingChars() { return _viewFormattingChars; }
-    bool getViewFrameBorders() { return _viewFrameBorders; }
-    bool getViewTableGrid() { return _viewTableGrid; }
-
-    void setSearchEntry( KWSearchDia::KWSearchEntry *e ) { searchEntry = e; }
-    void setReplaceEntry( KWSearchDia::KWSearchEntry *e ) { replaceEntry = e; }
-
     void changeUndo( QString, bool );
     void changeRedo( QString, bool );
-
-    KOffice::MainWindow_var getMainWindow() { return m_vKoMainWindow; }
-    OpenParts::Id getID() { return OPPartIf::m_id; }
 
     void showFormulaToolbar( bool show );
 
 public slots:
     void slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf );
     void slotUpdateChildGeometry( KWordChild *_child );
-    void slotGeometryEnd( KoFrame* );
-    void slotMoveEnd( KoFrame* );
     void paragDiaOk();
     void styleManagerOk();
     void openPageLayoutDia()  { formatPage(); }
@@ -266,16 +270,7 @@ public slots:
     void clipboardDataChanged();
 
 protected:
-    // C++
-    virtual void init();
-    // IDL
-    virtual bool event( const QCString & _event, const CORBA::Any& _value );
-    // C++
-    bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-    bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-
-    virtual void cleanUp();
-
+    void setupActions();
     void resizeEvent( QResizeEvent *e );
     void keyPressEvent( QKeyEvent *e );
     void keyReleaseEvent( QKeyEvent *e );
@@ -293,181 +288,116 @@ protected:
 
     KWordDocument *m_pKWordDoc;
 
-    bool m_bUnderConstruction;
+    bool m_bUnderConstruction, m_bKWordModified;
 
-    // edit menu
-    OpenPartsUI::Menu_var m_vMenuEdit;
-    long int m_idMenuEdit_Undo;
-    long int m_idMenuEdit_Redo;
-    long int m_idMenuEdit_Cut;
-    long int m_idMenuEdit_Copy;
-    long int m_idMenuEdit_Paste;
-    long int m_idMenuEdit_SelectAll;
-    long int m_idMenuEdit_Find;
-    long int m_idMenuEdit_DeleteFrame;
-    long int m_idMenuEdit_ReconnectFrame;
-    long int m_idMenuEdit_CustomVars;
-    long int m_idMenuEdit_SerialLetterDataBase;
+    QAction *actionEditUndo;
+    QAction *actionEditRedo;
+    QAction *actionEditCut;
+    QAction *actionEditCopy;
+    QAction *actionEditPaste;
+    QAction *actionEditFind;
+    QAction *actionEditSelectAll;
+    QAction *actionEditDelFrame;
+    QAction *actionEditReconnectFrame;
+    QAction *actionEditCustomVars;
+    QAction *actionEditSlDataBase;
 
-    // view menu
-    OpenPartsUI::Menu_var m_vMenuView;
-    long int m_idMenuView_NewView;
-    long int m_idMenuView_FormattingChars;
-    long int m_idMenuView_FrameBorders;
-    long int m_idMenuView_TableGrid;
-    long int m_idMenuView_Header;
-    long int m_idMenuView_Footer;
-    long int m_idMenuView_FootNotes;
-    long int m_idMenuView_EndNotes;
+    QAction *actionViewNewView;
+    QAction *actionViewFormattingChars;
+    QAction *actionViewFrameBorders;
+    QAction *actionViewTableGrid;
+    QAction *actionViewHeader;
+    QAction *actionViewFooter;
+    QAction *actionViewFootNotes;
+    QAction *actionViewEndNotes;
 
-    // insert menu
-    OpenPartsUI::Menu_var m_vMenuInsert;
-    long int m_idMenuInsert_Picture;
-    long int m_idMenuInsert_Clipart;
-    long int m_idMenuInsert_SpecialChar;
-    long int m_idMenuInsert_FrameBreak;
-    long int m_idMenuInsert_Variable;
-    OpenPartsUI::Menu_var m_vMenuInsert_Variable;
-    long int m_idMenuInsert_VariableDateFix;
-    long int m_idMenuInsert_VariableDateVar;
-    long int m_idMenuInsert_VariableTimeFix;
-    long int m_idMenuInsert_VariableTimeVar;
-    long int m_idMenuInsert_VariablePageNum;
-    long int m_idMenuInsert_VariableCustom;
-    long int m_idMenuInsert_VariableSerialLetter;
-    long int m_idMenuInsert_FootNoteEndNote;
-    long int m_idMenuInsert_Contents;
+    QAction *actionInsertPicture;
+    QAction *actionInsertClipart;
+    QAction *actionInsertSpecialChar;
+    QAction *actionInsertFrameBreak;
+    QAction *actionInsertFootEndNote;
+    QAction *actionInsertContents;
+    QAction *actionInsertVarDateFix;
+    QAction *actionInsertVarDate;
+    QAction *actionInsertVarTimeFix;
+    QAction *actionInsertVarTime;
+    QAction *actionInsertVarPgNum;
+    QAction *actionInsertVarCustom;
+    QAction *actionInsertVarSerialLetter;
 
-    // format menu
-    OpenPartsUI::Menu_var m_vMenuFormat;
-    long int m_idMenuFormat_Font;
-    long int m_idMenuFormat_Color;
-    long int m_idMenuFormat_Paragraph;
-    long int m_idMenuFormat_Page;
-    long int m_idMenuFormat_Numbering;
-    long int m_idMenuFormat_Style;
-    long int m_idMenuFormat_FrameSet;
+    QAction *actionToolsEdit;
+    QAction *actionToolsEditFrames;
+    QAction *actionToolsCreateText;
+    QAction *actionToolsCreatePix;
+    QAction *actionToolsCreateClip;
+    QAction *actionToolsCreateTable;
+    QAction *actionToolsCreateKSpreadTable;
+    QAction *actionToolsCreateFormula;
+    QAction *actionToolsCreatePart;
 
-    // extra menu
-    OpenPartsUI::Menu_var m_vMenuExtra;
-    long int m_idMenuExtra_Spelling;
-    long int m_idMenuExtra_AutoFormat;
-    long int m_idMenuExtra_Stylist;
-    long int m_idMenuExtra_Options;
+    QAction *actionFormatFont;
+    QAction *actionFormatFontSize;
+    QAction *actionFormatFontFamily;
+    QAction *actionFormatStyle;
+    QAction *actionFormatBold;
+    QAction *actionFormatItalic;
+    QAction *actionFormatUnderline;
+    QAction *actionFormatColor;
+    QAction *actionFormatAlignLeft;
+    QAction *actionFormatAlignCenter;
+    QAction *actionFormatAlignRight;
+    QAction *actionFormatAlignBlock;
+    QAction *actionFormatParag;
+    QAction *actionFormatFrameSet;
+    QAction *actionFormatPage;
+    QAction *actionFormatLineSpacing;
+    QAction *actionFormatEnumList;
+    QAction *actionFormatUnsortList;
+    QAction *actionFormatSuper;
+    QAction *actionFormatSub;
+    QAction *actionFormatBrdLeft;
+    QAction *actionFormatBrdRight;
+    QAction *actionFormatBrdTop;
+    QAction *actionFormatBrdBottom;
+    QAction *actionFormatBrdColor;
+    QAction *actionFormatBrdWidth;
+    QAction *actionFormatBrdStyle;
 
-    // tools menu
-    OpenPartsUI::Menu_var m_vMenuTools;
-    long int m_idMenuTools_Edit;
-    long int m_idMenuTools_EditFrame;
-    long int m_idMenuTools_CreateText;
-    long int m_idMenuTools_CreatePix;
-    long int m_idMenuTools_Clipart;
-    long int m_idMenuTools_Table;
-    long int m_idMenuTools_KSpreadTable;
-    long int m_idMenuTools_Formula;
-    long int m_idMenuTools_Part;
-
-    // table menu
-    OpenPartsUI::Menu_var m_vMenuTable;
-    long int m_idMenuTable_InsertRow;
-    long int m_idMenuTable_InsertCol;
-    long int m_idMenuTable_DeleteRow;
-    long int m_idMenuTable_DeleteCol;
-    long int m_idMenuTable_JoinCells;
-    long int m_idMenuTable_SplitCells;
-    long int m_idMenuTable_UngroupTable;
-    long int m_idMenuTable_Delete;
-
-    // help menu
-    OpenPartsUI::Menu_var m_vMenuHelp;
-    long int m_idMenuHelp_Contents;
-
-    // edit toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarEdit;
-    long int m_idButtonEdit_Undo;
-    long int m_idButtonEdit_Redo;
-    long int m_idButtonEdit_Cut;
-    long int m_idButtonEdit_Copy;
-    long int m_idButtonEdit_Paste;
-    long int m_idButtonEdit_Spelling;
-    long int m_idButtonEdit_Find;
-
-    // insert toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarInsert;
-    long int m_idButtonInsert_Picture;
-    long int m_idButtonInsert_Clipart;
-    long int m_idButtonInsert_SpecialChar;
-
-    // text toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarText;
-    long int m_idComboText_Style;
-    long int m_idComboText_FontSize;
-    long int m_idComboText_FontList;
-    long int m_idComboText_LineSpacing;
-    long int m_idButtonText_Bold;
-    long int m_idButtonText_Italic;
-    long int m_idButtonText_Underline;
-    long int m_idButtonText_Color;
-    long int m_idButtonText_ARight;
-    long int m_idButtonText_ACenter;
-    long int m_idButtonText_ALeft;
-    long int m_idButtonText_ABlock;
-    long int m_idButtonText_EnumList;
-    long int m_idButtonText_UnsortList;
-    long int m_idButtonText_SuperScript;
-    long int m_idButtonText_SubScript;
-    long int m_idButtonText_BorderLeft;
-    long int m_idButtonText_BorderRight;
-    long int m_idButtonText_BorderTop;
-    long int m_idButtonText_BorderBottom;
-    long int m_idButtonText_BorderColor;
-    long int m_idComboText_BorderWidth;
-    long int m_idComboText_BorderStyle;
-
-    // tools toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarTools;
-    long int m_idButtonTools_Edit;
-    long int m_idButtonTools_EditFrame;
-    long int m_idButtonTools_CreateText;
-    long int m_idButtonTools_CreatePix;
-    long int m_idButtonTools_Clipart;
-    long int m_idButtonTools_Table;
-    long int m_idButtonTools_KSpreadTable;
-    long int m_idButtonTools_Formula;
-    long int m_idButtonTools_Part;
-
-    // frame toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarFrame;
-    long int m_idButtonFrame_BorderLeft;
-    long int m_idButtonFrame_BorderRight;
-    long int m_idButtonFrame_BorderTop;
-    long int m_idButtonFrame_BorderBottom;
-    long int m_idButtonFrame_BorderColor;
-    long int m_idComboFrame_BorderWidth;
-    long int m_idComboFrame_BorderStyle;
-    long int m_idButtonFrame_BackColor;
-
-    // table toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarTable;
-    long int m_idButtonTable_InsertRow;
-    long int m_idButtonTable_DeleteRow;
-    long int m_idButtonTable_InsertCol;
-    long int m_idButtonTable_DeleteCol;
-
-    // formula toolbar
-    OpenPartsUI::ToolBar_var m_vToolBarFormula;
-    long int m_idButtonFormula_Power;
-    long int m_idButtonFormula_Subscript;
-    long int m_idButtonFormula_Parentheses;
-    long int m_idButtonFormula_AbsValue;
-    long int m_idButtonFormula_Brackets;
-    long int m_idButtonFormula_Fraction;
-    long int m_idButtonFormula_Root;
-    long int m_idButtonFormula_Integral;
-    long int m_idButtonFormula_Matrix;
-    long int m_idButtonFormula_LeftSuper;
-    long int m_idButtonFormula_LeftSub;
-
+    QAction *actionFrameBrdLeft;
+    QAction *actionFrameBrdRight;
+    QAction *actionFrameBrdTop;
+    QAction *actionFrameBrdBottom;
+    QAction *actionFrameBrdColor;
+    QAction *actionFrameBrdWidth;
+    QAction *actionFrameBrdStyle;
+    QAction *actionFrameBackColor;
+    
+    QAction *actionFormulaPower;
+    QAction *actionFormulaSubscript;
+    QAction *actionFormulaParentheses;
+    QAction *actionFormulaAbs;
+    QAction *actionFormulaBrackets;
+    QAction *actionFormulaFraction;
+    QAction *actionFormulaRoot;
+    QAction *actionFormulaIntegral;
+    QAction *actionFormulaMatrix;
+    QAction *actionFormulaLeftSuper;
+    QAction *actionFormulaLeftSub;
+    
+    QAction *actionTableDelRow;
+    QAction *actionTableDelCol;
+    QAction *actionTableInsertRow;
+    QAction *actionTableInsertCol;
+    QAction *actionTableJoinCells;
+    QAction *actionTableSplitCells;
+    QAction *actionTableUngroup;
+    QAction *actionTableDelete;
+    
+    QAction *actionExtraSpellCheck;
+    QAction *actionExtraAutocorrection;
+    QAction *actionExtraStylist;
+    QAction *actionExtraOptions;
+    
     // text toolbar values
     QFont tbFont;
     QColor tbColor;
@@ -495,59 +425,6 @@ protected:
     KWParag *currParag;
     int currFrameSetNum;
     int lastTextPos;
-    OpenPartsUI::BarPosition oldFramePos, oldTextPos;
-
-    KWordShell *shell;
-
-    static const int ID_TOOL_EDIT = 2;
-    static const int ID_TOOL_EDIT_FRAME = 3;
-    static const int ID_TOOL_CREATE_TEXT = 4;
-    static const int ID_TOOL_CREATE_PIX = 5;
-    static const int ID_TEXT_COLOR = 6;
-    static const int ID_BORDER_COLOR = 7;
-    static const int ID_FONT_SIZE = 8;
-    static const int ID_FONT_LIST = 9;
-    static const int ID_STYLE_LIST = 10;
-    static const int ID_BOLD = 11;
-    static const int ID_ITALIC = 12;
-    static const int ID_UNDERLINE = 13;
-    static const int ID_ALEFT = 14;
-    static const int ID_ACENTER = 15;
-    static const int ID_ARIGHT = 16;
-    static const int ID_ABLOCK = 17;
-    static const int ID_BRD_LEFT = 18;
-    static const int ID_BRD_RIGHT = 19;
-    static const int ID_BRD_TOP = 20;
-    static const int ID_BRD_BOTTOM = 21;
-    static const int ID_SUBSCRIPT = 22;
-    static const int ID_SUPERSCRIPT = 23;
-    static const int ID_BRD_STYLE = 24;
-    static const int ID_BRD_WIDTH = 25;
-    static const int ID_REDO = 26;
-    static const int ID_UNDO = 27;
-    static const int ID_ENUM_LIST = 28;
-    static const int ID_USORT_LIST = 29;
-    static const int ID_TOOL_CREATE_TABLE = 30;
-    static const int ID_TOOL_CREATE_FORMULA = 31;
-    static const int ID_TOOL_CREATE_PART = 32;
-    static const int ID_TOOL_CREATE_CLIPART = 33;
-    static const int ID_TOOL_CREATE_KSPREAD_TABLE = 34;
-    static const int ID_FBRD_STYLE = 35;
-    static const int ID_FBRD_WIDTH = 36;
-    static const int ID_FBORDER_COLOR = 37;
-    static const int ID_FBRD_LEFT = 38;
-    static const int ID_FBRD_RIGHT = 39;
-    static const int ID_FBRD_TOP = 40;
-    static const int ID_FBRD_BOTTOM = 41;
-    static const int ID_FBACK_COLOR = 42;
-    static const int ID_LINE_SPC = 43;
-    static const int ID_EDIT_CUT = 44;
-    static const int ID_EDIT_COPY = 45;
-    static const int ID_EDIT_PASTE = 46;
-    static const int ID_TABLE_INSROW = 47;
-    static const int ID_TABLE_DELROW = 48;
-    static const int ID_TABLE_INSCOL = 49;
-    static const int ID_TABLE_DELCOL = 50;
 
 };
 

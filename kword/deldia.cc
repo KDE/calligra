@@ -14,7 +14,7 @@
 /******************************************************************/
 
 #include "kword_doc.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "kword_page.h"
 #include "deldia.h"
 #include "deldia.moc"

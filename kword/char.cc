@@ -1,6 +1,6 @@
 #include "char.h"
 #include "kword_doc.h"
-#include "frame.h"
+#include "kword_frame.h"
 #include "font.h"
 #include "defs.h"
 
@@ -61,7 +61,7 @@ KWString &KWString::operator=( const KWString &_string )
     _max_ = _string._max_;
     doc = _string.doc;
     cache = _string.cache;
-    
+
     return *this;
 }
 
@@ -307,7 +307,7 @@ QString KWString::toString( unsigned int _pos, unsigned int _len, bool cached )
 	}
     }
     cached = str;
-    
+
     return str;
 }
 
@@ -545,7 +545,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 	    return;
 	}
     }
-    
+
     // build cache
     toString( FALSE );
 }

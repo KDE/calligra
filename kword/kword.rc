@@ -1,0 +1,187 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <Separator/>
+  <Action name="edit_selectall"/>
+  <Separator/>
+  <Action name="edit_delframe"/>
+  <Action name="edit_reconnect"/>
+  <Separator/>
+  <Action name="edit_customvars"/>
+  <Action name="edit_sldatabase"/>
+ </Menu>
+ <Menu name="View"><text>View</text>
+  <Action name="view_newview"/>
+  <Separator/>
+  <Action name="view_formattingchars"/>
+  <Action name="view_frameborders"/>
+  <Action name="view_tablegrid"/>
+  <Separator/>
+  <Action name="view_header"/>
+  <Action name="view_footer"/>
+  <Separator/>
+  <Action name="view_footnotes"/>
+  <Action name="view_endnotes"/>
+ </Menu>
+ <Menu name="Insert"><text>Insert</text>
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+  <Separator/>
+  <Action name="insert_specialchar"/>
+  <Action name="insert_framebreak"/>
+  <Action name="insert_footendnote"/>
+  <Action name="insert_contents"/>
+  <Menu name="Variable"><text>Variable</text>
+   <Action name="insert_var_datefix"/>
+   <Action name="insert_var_datevar"/>
+   <Action name="insert_var_timefix"/>
+   <Action name="insert_var_timevar"/>
+   <Action name="insert_var_pgnum"/>
+   <Separator/>
+   <Action name="insert_var_custom"/>
+   <Separator/>
+   <Action name="insert_var_serialletter"/>
+ </Menu>
+ </Menu>
+ <Menu name="Tools"><text>Tools</text>
+  <Action name="tools_edit"/>
+  <Action name="tools_editframes"/>
+  <Separator/>
+  <Action name="tools_createtext"/>
+  <Action name="tools_createpix"/>
+  <Action name="tools_createclip"/>
+  <Action name="tools_table"/>
+  <Action name="tools_kspreadtable"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_part"/>
+ </Menu>
+ <Menu name="Format"><text>Format</text>
+  <Action name="format_font"/>
+  <Action name="format_color"/>
+  <Action name="format_paragraph"/>
+  <Action name="format_frameset"/>
+  <Action name="format_page"/>
+  <Separator/>
+  <Action name="format_style"/>
+ </Menu>
+ <Menu name="Table"><text>Table</text>
+  <Action name="table_insrow"/>
+  <Action name="table_inscol"/>
+  <Action name="table_delrow"/>
+  <Action name="table_delcol"/>
+  <Separator/>
+  <Action name="table_joincells"/>
+  <Action name="table_splitcells"/>
+  <Action name="table_ungroup"/>
+  <Separator/>
+  <Action name="table_delete"/>
+ </Menu>
+ <Menu name="Extra"><text>Extra</text>
+  <Action name="extra_spellcheck"/>
+  <Action name="extra_autocorrection"/>
+  <Action name="extra_stylist"/>
+  <Separator/>
+  <Action name="extra_options"/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar name="edit_toolbar">
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="extra_spellcheck"/>
+  <Action name="edit_find"/>
+ </ToolBar>
+ <ToolBar name="insert_toolbar">
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+  <Separator/>
+  <Action name="insert_specialchar"/>
+ </ToolBar>
+ <ToolBar name="tools_toolbar">
+  <Action name="tools_edit"/>
+  <Action name="tools_editframes"/>
+  <Separator/>
+  <Action name="tools_createtext"/>
+  <Action name="tools_createpix"/>
+  <Action name="tools_createclip"/>
+  <Action name="tools_table"/>
+  <Action name="tools_kspreadtable"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_part"/>
+ </ToolBar>
+ <ToolBar name="table_toolbar">
+  <Action name="table_insrow"/>
+  <Action name="table_inscol"/>
+  <Action name="table_delrow"/>
+  <Action name="table_delcol"/>
+ </ToolBar>
+ <ToolBar name="format_toolbar">
+  <Action name="format_style"/>
+  <Action name="format_fontsize"/>
+  <Action name="format_fontfamily"/>
+  <Separator/>
+  <Action name="format_bold"/>
+  <Action name="format_italic"/>
+  <Action name="format_underline"/>
+  <Separator/>
+  <Action name="format_color"/>
+  <Separator/>
+  <Action name="format_alignleft"/>
+  <Action name="format_aligncenter"/>
+  <Action name="format_alignright"/>
+  <Action name="format_alignblock"/>
+  <Separator/>
+  <Action name="format_linespacing"/>
+  <Separator/>
+  <Action name="format_enumlist"/>
+  <Action name="format_unsortlist"/>
+  <Separator/>
+  <Action name="format_super"/>
+  <Action name="format_sub"/>
+  <Separator/>
+  <Action name="format_brdleft"/>
+  <Action name="format_brdright"/>
+  <Action name="format_brdtop"/>
+  <Action name="format_brdbottom"/>
+  <Action name="format_brdcolor"/>
+  <Action name="format_brdwidth"/>
+  <Action name="format_brdstyle"/>
+ </ToolBar>
+ <ToolBar name="frame_toolbar">
+  <Action name="frame_brdleft"/>
+  <Action name="frame_brdright"/>
+  <Action name="frame_brdtop"/>
+  <Action name="frame_brdbottom"/>
+  <Action name="frame_brdcolor"/>
+  <Action name="frame_brdwidth"/>
+  <Action name="frame_brdstyle"/>
+  <Action name="frame_backcolor"/>
+ </ToolBar>
+ <ToolBar name="formula_toolbar">
+  <Action name="formula_power"/>
+  <Action name="formula_subscript"/>
+  <Action name="formula_parentheses"/>
+  <Action name="formula_abs"/>
+  <Action name="formula_brackets"/>
+  <Action name="formula_fraction"/>
+  <Action name="formula_root"/>
+  <Action name="formula_integral"/>
+  <Action name="formula_matrix"/>
+  <Action name="formula_leftsup"/>
+  <Action name="formula_leftsub"/>
+ </ToolBar>
+</ToolBars>
+</QConfig>

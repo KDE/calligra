@@ -35,6 +35,7 @@
 #include "kword_utils.h"
 #include "serialletter.h"
 #include "contents.h"
+#include "kword_factory.h"
 
 #include <komlMime.h>
 #include <koStream.h>
@@ -55,25 +56,22 @@
 #include <koTemplateChooseDia.h>
 #include <kstddirs.h>
 #include <koStoreStream.h>
+#include <shell.h>
 
 /******************************************************************/
 /* Class: KWordChild						  */
 /******************************************************************/
 
 /*================================================================*/
-KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy )
-    : KoDocumentChild( _rect, _doc )
+KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy )
+    : KoDocumentChild( _wdoc, _doc, QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) )
 {
-    m_pKWordDoc = _wdoc;
-    m_rDoc = KOffice::Document::_duplicate( _doc );
-    setGeometry( QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) );
 }
 
 /*================================================================*/
 KWordChild::KWordChild( KWordDocument *_wdoc )
-    : KoDocumentChild()
+    : KoDocumentChild( _wdoc )
 {
-    m_pKWordDoc = _wdoc;
 }
 
 /*================================================================*/
@@ -87,13 +85,12 @@ KWordChild::~KWordChild()
 /******************************************************************/
 
 /*================================================================*/
-KWordDocument::KWordDocument()
-    : formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
+KWordDocument::KWordDocument(KoDocument* parent, const char* name )
+    : KoDocument( parent, name ),
+      formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( BarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
 {
-    ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
-
     // Use CORBA mechanism for deleting views
     m_lstViews.setAutoDelete( FALSE );
     m_lstChildren.setAutoDelete( TRUE );
@@ -161,7 +158,7 @@ bool KWordDocument::initDoc()
 								false );
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(
-	"kword_template", _template, TRUE, FALSE, filter, "application/x-kword" );
+	"kword_template", KWordFactory::global(), _template, TRUE, FALSE, filter, "application/x-kword" );
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
@@ -175,7 +172,7 @@ bool KWordDocument::initDoc()
 	_loaded = TRUE;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-	QString fileName( locate("kword_template", "Wordprocessing/PlainText.kwt") );
+	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
 	bool ok = loadTemplate( fileName.data() );
 	setURL( QString::null );
 	return ok;
@@ -594,21 +591,6 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 /*================================================================*/
 KWordDocument::~KWordDocument()
 {
-    cerr << "KWordDocument::~KWordDocument()" << endl;
-    cleanUp();
-    cerr << "...KWordDocument::~KWordDocument()" << endl;
-}
-
-/*================================================================*/
-void KWordDocument::cleanUp()
-{
-    if ( m_bIsClean ) return;
-
-    assert( m_lstViews.count() == 0 );
-
-    m_lstChildren.clear();
-
-    KoDocument::cleanUp();
 }
 
 /*================================================================*/
@@ -620,7 +602,7 @@ bool KWordDocument::hasToWriteMultipart()
 }
 
 /*================================================================*/
-bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
+bool KWordDocument::loadChildren( KoStore *_store )
 {
     cerr << "bool KWordDocument::loadChildren" << endl;
 
@@ -637,7 +619,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 {
     _loaded = TRUE;
     pixmapKeys.clear();
@@ -1379,7 +1361,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 }
 
 /*===================================================================*/
-bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
+bool KWordDocument::completeLoading( KoStore *_store )
 {
     if ( _store ) {
 	QString str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
@@ -1508,7 +1490,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	    format = "BMP";
         QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
         if ( !isStoredExtern() )
-          pictureName.prepend( m_strURL + "/" );
+          pictureName.prepend( url() + "/" );
 
 	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1()
 	    << "\" name=\"" << pictureName.latin1()
@@ -1529,7 +1511,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << otag << "<SERIALL>" << endl;
     slDataBase->save( out );
     out << etag << "</SERIALL>" << endl;
-    
+
 
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
@@ -1542,7 +1524,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 }
 
 /*==============================================================*/
-bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
+bool KWordDocument::completeSaving( KoStore *_store )
 {
     if ( !_store )
 	return TRUE;
@@ -1567,7 +1549,7 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	QCString mime ( "image/" );
         mime += format.lower().ascii();
         if ( !isStoredExtern() )
-          u2.prepend( m_strURL + "/" );
+          u2.prepend( url() + "/" );
 	
 	if ( _store->open( u2, mime.lower() ) ) {
 	    ostorestream out( _store );
@@ -1595,19 +1577,14 @@ void KWordDocument::enableEmbeddedParts( bool f )
 }
 
 /*================================================================*/
-bool KWordDocument::saveChildren( KOStore::Store_ptr _store, const char *_path )
+bool KWordDocument::saveChildren( KoStore *_store, const char *_path )
 {
-    cerr << "void KWordDocument::saveChildren( const char *_path )" << endl;
-
     int i = 0;
 
-    QListIterator<KWordChild> it( m_lstChildren );
-    for( ; it.current(); ++it )
-    {
-	// set the child document's url to an internal url (ex: "tar:/0/1")
+    QListIterator<PartChild> it( children() );
+    for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-	KOffice::Document_var doc = it.current()->document();
-        if ( !doc->saveToStore( _store, "", internURL ) )
+	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
           return false;
     }
     return true;
@@ -1626,28 +1603,6 @@ QStrList KWordDocument::inputFormats()
 }
 
 /*================================================================*/
-KOffice::MainWindow_ptr KWordDocument::createMainWindow()
-{
-    KWordShell* shell = new KWordShell;
-    shell->show();
-    shell->setDocument( this );
-
-    return KOffice::MainWindow::_duplicate( shell->koInterface() );
-}
-
-/*================================================================*/
-void KWordDocument::viewList( OpenParts::Document::ViewList & _list )
-{
-    _list.clear();
-
-    QListIterator<KWordView> it( m_lstViews );
-    for( ; it.current(); ++it )
-    {
-	_list.append ( OpenParts::View::_duplicate( it.current() ) );
-    }
-}
-
-/*================================================================*/
 void KWordDocument::addView( KWordView *_view )
 {
     m_lstViews.append( _view );
@@ -1662,50 +1617,87 @@ void KWordDocument::removeView( KWordView *_view )
 }
 
 /*================================================================*/
-KWordView* KWordDocument::createWordView( QWidget* _parent )
+Shell* KWordDocument::createShell()
 {
-    KWordView *p = new KWordView( _parent, 0L, this );
-    //p->QWidget::show();
-    m_lstViews.append( p );
+    Shell* shell = new KWordShell;
+    shell->setRootPart( this );
+    shell->show();
 
-    return p;
+    return shell;
 }
 
 /*================================================================*/
-OpenParts::View_ptr KWordDocument::createView()
+View* KWordDocument::createView( QWidget* parent, const char* name )
 {
-    return OpenParts::View::_duplicate( createWordView() );
+    KWordView* view = new KWordView( parent, name, this );
+    addView( view );
+
+    return view;
 }
 
 /*================================================================*/
-void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy )
+QString KWordDocument::configFile() const
 {
-    KOffice::Document_var doc = _e.createDoc();
-    if ( CORBA::is_nil( doc ) )
-	return;
+    return readConfigFile( locate( "data", "kword/kword.rc", KWordFactory::global() ) );
+}
 
-    if ( !doc->initDoc() ) {
+/*================================================================*/
+void KWordDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
+{
+    qDebug("------------------ ::paintContent still unimplemented ----------" );
+}
+
+/*================================================================*/
+void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
+{
+
+    KoDocument* doc = _e.createDoc( this );
+    if ( !doc || !doc->initDoc() ) {
 	QMessageBox::critical( ( QWidget* )0L, i18n( "KWord Error" ), i18n( "Could not init" ), i18n( "OK" ) );
 	return;
     }
 
-    KWordChild* ch = new KWordChild( this, _rect, doc, diffx, diffy );
+    KWordChild* ch = new KWordChild( this, _rect, doc, _diffx, _diffy );
 
     insertChild( ch );
-    m_bModified = TRUE;
+    setModified( TRUE );
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
-    KWFrame *frame = new KWFrame( _rect.x() + diffx, _rect.y() + diffy, _rect.width(), _rect.height() );
+    KWFrame *frame = new KWFrame( _rect.x() + _diffx, _rect.y() + _diffy, _rect.width(), _rect.height() );
     frameset->addFrame( frame );
     addFrameSet( frameset );
 
-    emit sig_insertObject( ch, frameset );
-}
+//     InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, this );
+//     insertCmd->execute();
+//     _commands.addCommand( insertCmd );
 
-/*================================================================*/
-void KWordDocument::insertChild( KWordChild *_child )
-{
-    m_lstChildren.append( _child );
+    insertChild( ch );
+
+    emit sig_insertObject( ch, frameset );
+
+    updateAllViews( 0 );
+
+    // ##########################
+    //     KOffice::Document_var doc = _e.createDoc();
+//     if ( CORBA::is_nil( doc ) )
+// 	return;
+
+//     if ( !doc->initDoc() ) {
+// 	QMessageBox::critical( ( QWidget* )0L, i18n( "KWord Error" ), i18n( "Could not init" ), i18n( "OK" ) );
+// 	return;
+//     }
+
+//     KWordChild* ch = new KWordChild( this, _rect, doc, diffx, diffy );
+
+//     insertChild( ch );
+//     m_bModified = TRUE;
+
+//     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
+//     KWFrame *frame = new KWFrame( _rect.x() + diffx, _rect.y() + diffy, _rect.width(), _rect.height() );
+//     frameset->addFrame( frame );
+//     addFrameSet( frameset );
+
+//     emit sig_insertObject( ch, frameset );
 }
 
 /*================================================================*/
@@ -3246,6 +3238,8 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 		QPicture *pic = partFS->getPicture();
 
 		painter->save();
+		painter->setClipRect( frame->x(), frame->y() - i * getPTPaperHeight(),
+				      frame->width() - 1, frame->height() - 1 );
 		QRect r = painter->viewport();
 		painter->setViewport( frame->x(), frame->y() - i * getPTPaperHeight(), r.width(), r.height() );
 		if ( pic ) painter->drawPicture( *pic );

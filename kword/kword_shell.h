@@ -13,23 +13,12 @@
 /* Module: Shell (header)                                         */
 /******************************************************************/
 
-/*********
- * KWordShell is copied from KSpread. Bug reports regarding the
- * shell should be sent to weis@kde.org
- *********/
-
-#ifndef kword_shell_h
-#define kword_shell_h
-
-class KWordShell;
+#ifndef KWORD_SHELL
+#define KWORD_SHELL
 
 #include <koMainWindow.h>
 
-class KWordDocument;
-class KWordView;
-
-#include <qlist.h>
-#include <qstring.h>
+class QAction;
 
 /******************************************************************/
 /* Class: KWordShell                                              */
@@ -39,49 +28,21 @@ class KWordShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    // C++
-    KWordShell();
+    KWordShell( QWidget* parent = 0, const char* name = 0 );
     ~KWordShell();
 
-    // C++
-    virtual void cleanUp();
-    void setDocument( KWordDocument *_doc );
+    QString nativeFormatMimeType() const { return "application/x-kword"; }
+    QString nativeFormatPattern() const { return "*.kwd"; }
+    QString nativeFormatName() const { return "KWord"; }
 
-    // C++
-    virtual bool newDocument();
-    virtual bool openDocument( const char *_filename );
-    virtual bool saveDocument();
-    virtual bool closeDocument();
-    virtual bool closeAllDocuments();
+    virtual void setRootPart( Part* );
 
-protected slots:
-    void slotFileNew();
-    void slotFileOpen();
-    void slotFileSave();
-    void slotFileSaveAs();
+public slots:
     void slotFilePrint();
-    void slotFileClose();
-    void slotFileQuit();
-
+    
 protected:
-    // C++
-    virtual KOffice::Document_ptr document();
-    virtual KOffice::View_ptr view();
-
-    virtual bool printDlg();
-    virtual void helpAbout();
-    virtual int documentCount();
-
-    bool isModified();
-    bool requestClose();
-
-    void releaseDocument();
-
-    KWordDocument* m_pDoc;
-    KWordView* m_pView;
-
-    static QList<KWordShell>* s_lstShells;
-    static bool previewHandlerRegistered;
+    virtual QString configFile() const;
+    virtual KoDocument* createDoc();
 };
 
 #endif

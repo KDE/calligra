@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=KWord
+Name[da]=Ord
+Name[is]=Ritvinnsla
+Name[ro]=Word
+Name[ru]=Ù≈À”‘œ◊Ÿ  –“œ√≈””œ“
+Name[sv]=KOrd
 Exec=kword
-CORBAExec=kword --server
 Comment=Word Processor with many features
+Comment[ca]=Processador de text amb moltes caracterÌstiques
+Comment[de]=Textverarbeitung mit breitem Leistungsspektrum
+Comment[eo]=Multkapabla tekstprocezilo
+Comment[fi]=Tekstink‰sittelyohjelma
+Comment[ja]=π‚µ°«Ω§Œ•Ô°º•◊•Ì
+Comment[sv]=Ordbehandlare med mÂnga finesser
 MimeType=application/x-kword
-X-KDE-RepoIds=IDL:KWord/DocumentFactory:1.0#KWord
-X-KDE-ActivationMode=shared
-Type=OpenPart
-Icon=unknown.png
-MiniIcon=unknown.png
-ServiceTypes=KOfficeDocument
+Type=Application
+Icon=kword.png
+ServiceTypes=KOfficePart,KPart
