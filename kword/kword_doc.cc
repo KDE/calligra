@@ -3337,7 +3337,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
     getPageLayout( pgLayout, cl, hf );
     if ( tmpZoom != zoom )
 	setPageLayout( pgLayout, cl, hf );
-    
+
     printer->setFullPage( TRUE );
     QList<KWFormatContext> fcList;
     fcList.setAutoDelete( TRUE );
@@ -4062,29 +4062,29 @@ bool KWordDocument::canRemovePage( int num, KWFrame *f )
 
 void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
 {
-    _layout = pageLayout; 
-    _cl = pageColumns; 
+    _layout = pageLayout;
+    _cl = pageColumns;
     _hf = pageHeaderFooter;
-    
+
     if ( zoom != 100 ) {
 	_layout.ptWidth = zoomIt( _layout.ptWidth );
-	_layout.ptWidth = zoomIt( _layout.ptHeight );
-	_layout.ptWidth = zoomIt( _layout.ptLeft );
-	_layout.ptWidth = zoomIt( _layout.ptRight );
-	_layout.ptWidth = zoomIt( _layout.ptTop );
-	_layout.ptWidth = zoomIt( _layout.ptBottom );
+	_layout.ptHeight = zoomIt( _layout.ptHeight );
+	_layout.ptLeft = zoomIt( _layout.ptLeft );
+	_layout.ptRight = zoomIt( _layout.ptRight );
+	_layout.ptTop = zoomIt( _layout.ptTop );
+	_layout.ptBottom = zoomIt( _layout.ptBottom );
 	_layout.mmWidth = zoomIt( _layout.mmWidth );
-	_layout.mmWidth = zoomIt( _layout.mmHeight );
-	_layout.mmWidth = zoomIt( _layout.mmLeft );
-	_layout.mmWidth = zoomIt( _layout.mmRight );
-	_layout.mmWidth = zoomIt( _layout.mmTop );
-	_layout.mmWidth = zoomIt( _layout.mmBottom );
+	_layout.mmHeight = zoomIt( _layout.mmHeight );
+	_layout.mmLeft = zoomIt( _layout.mmLeft );
+	_layout.mmRight = zoomIt( _layout.mmRight );
+	_layout.mmTop = zoomIt( _layout.mmTop );
+	_layout.mmBottom = zoomIt( _layout.mmBottom );
 	_layout.inchWidth = zoomIt( _layout.inchWidth );
-	_layout.inchWidth = zoomIt( _layout.inchHeight );
-	_layout.inchWidth = zoomIt( _layout.inchLeft );
-	_layout.inchWidth = zoomIt( _layout.inchRight );
-	_layout.inchWidth = zoomIt( _layout.inchTop );
-	_layout.inchWidth = zoomIt( _layout.inchBottom );
+	_layout.inchHeight = zoomIt( _layout.inchHeight );
+	_layout.inchLeft = zoomIt( _layout.inchLeft );
+	_layout.inchRight = zoomIt( _layout.inchRight );
+	_layout.inchTop = zoomIt( _layout.inchTop );
+	_layout.inchBottom = zoomIt( _layout.inchBottom );
 	
 	_cl.ptColumnSpacing = zoomIt( _cl.ptColumnSpacing );
 	_cl.mmColumnSpacing = zoomIt( _cl.mmColumnSpacing );
@@ -4098,4 +4098,3 @@ void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHe
 	_hf.inchFooterBodySpacing = zoomIt( _hf.inchFooterBodySpacing );
     }
 }
-
