@@ -33,7 +33,7 @@ KoTarStore::KoTarStore( const QString & _filename, KoStore::Mode _mode )
   m_stream = 0L;
 
   kdDebug(30002) << "KoTarStore Constructor filename = " << _filename
-		 << " mode = " << _mode << endl;
+		 << " mode = " << int(_mode) << endl;
 
   m_pTar = new KTarGz( _filename );
 

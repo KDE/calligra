@@ -32,7 +32,7 @@ KoBinaryStore::KoBinaryStore( const QString & _filename, KoStore::Mode _mode )
   m_mode = _mode;
 
   kdDebug(30002) << "KoBinaryStore Constructor filename = " << _filename
-		 << " mode = " << _mode << endl;
+		 << " mode = " << int(_mode) << endl;
 
   /*
   if ( _mode == Write )
