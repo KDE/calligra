@@ -14,9 +14,6 @@
   <Action name="mergecell"/>
   <Action name="dissociatecell"/>
   <Separator/>
-  <Action name="RecalcWorkSheet"/>
-  <Action name="RecalcWorkBook"/>
-  <Separator/>
   <Action name="conditional"/>
   <Action name="editCell"/>
   <Separator/>

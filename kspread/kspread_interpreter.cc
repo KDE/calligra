@@ -139,21 +139,6 @@ static bool kspreadfunc_sin( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_rand( KSContext& context ){
-
-  //  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  //  if ( !KSUtil::checkArgumentsCount( context, 1, "sin", true ) )
-  //    return false;
-
-  //  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-  //    return false;
-
-  context.setValue( new KSValue(  (double) ((double)rand()/(RAND_MAX+1.0))) ) ;
-
-  return true;
-}
-
 
 static bool kspreadfunc_cos( KSContext& context )
 {
@@ -2000,8 +1985,6 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 
   module->addObject( "cos", new KSValue( new KSBuiltinFunction( module, "cos", kspreadfunc_cos ) ) );
   module->addObject( "sin", new KSValue( new KSBuiltinFunction( module, "sin", kspreadfunc_sin ) ) );
-  module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand", kspreadfunc_rand ) ) );
-
   module->addObject( "sum", new KSValue( new KSBuiltinFunction( module, "sum", kspreadfunc_sum ) ) );
   module->addObject( "sqrt", new KSValue( new KSBuiltinFunction( module, "sqrt", kspreadfunc_sqrt ) ) );
   module->addObject( "fabs", new KSValue( new KSBuiltinFunction( module, "fabs", kspreadfunc_fabs ) ) );
