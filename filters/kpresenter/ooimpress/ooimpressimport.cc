@@ -198,8 +198,20 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     if ( drawPage.isNull() ) // no slides? give up.
         return;
 
+    QDomElement objectElement = doc.createElement( "OBJECTS" );
+    QDomElement pictureElement = doc.createElement( "PICTURES" );
+    QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
+    QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
+    QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
+    QDomElement soundElement = doc.createElement( "SOUNDS" );
+    QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
+
+
     QDomElement dp = drawPage.toElement();
     QDomElement *master = m_styles[dp.attribute( "draw:master-page-name" )];
+
+    appendObject(*master, doc, soundElement,pictureElement,pageNoteElement,objectElement, 0, true);
+
     QDomElement *style = m_styles[master->attribute( "style:page-master-name" )];
     QDomElement properties = style->namedItem( "style:properties" ).toElement();
     QDomElement *backgroundStyle = m_styles[ "Standard-background"];
@@ -251,13 +263,6 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         paperElement.appendChild( paperBorderElement );
     }
 
-    QDomElement objectElement = doc.createElement( "OBJECTS" );
-    QDomElement pictureElement = doc.createElement( "PICTURES" );
-    QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
-    QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
-    QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
-    QDomElement soundElement = doc.createElement( "SOUNDS" );
-    QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
 
     // parse all pages
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
@@ -323,7 +328,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     doccontent.appendChild( doc );
 }
 
-void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement, double offset)
+void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement, double offset, bool sticky)
 {
     for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
     {
@@ -338,6 +343,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             fillStyleStack( o );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 4 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             append2DGeometry( doc, e, o, (int)offset );
             appendName(doc, e, o);
             appendPen( doc, e );
@@ -352,6 +359,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             fillStyleStack( o );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 2 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             append2DGeometry( doc, e, o, (int)offset );
             appendName(doc, e, o);
             appendPen( doc, e );
@@ -365,6 +374,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         {
             fillStyleStack( o );
             e = doc.createElement( "OBJECT" );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             append2DGeometry( doc, e, o, (int)offset );
             appendName(doc, e, o);
             appendPen( doc, e );
@@ -407,6 +418,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             fillStyleStack( o );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 1 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             bool orderEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
             appendName(doc, e, o);
             appendPen( doc, e );
@@ -419,6 +432,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             fillStyleStack(o);
             e = doc.createElement("OBJECT");
             e.setAttribute("type", 12);
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             append2DGeometry(doc, e, o, (int)offset);
             appendName(doc, e, o);
             appendPoints(doc, e, o);
@@ -432,6 +447,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             fillStyleStack(o);
             e = doc.createElement("OBJECT");
             e.setAttribute("type", 16);
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             append2DGeometry(doc, e, o, (int)offset);
             appendName(doc, e, o);
             appendPoints(doc, e, o);
@@ -446,6 +463,8 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             fillStyleStack( o );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 0 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
             append2DGeometry( doc, e, o, (int)offset );
             appendName(doc, e, o);
             appendImage( doc, e, pictureElement, o );
