@@ -254,6 +254,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* 
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
+        if(! frameset->isVisible()) continue;
         drawFrameSet( frameset, painter, crect, false, true, viewMode );
     }
 
@@ -957,6 +958,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     for ( ; framesetIt.current(); ++framesetIt, bFirst=false )
     {
         KWFrameSet *frameset = framesetIt.current();
+        if(! frameset->isVisible()) continue;
         // Can't move main frameset of a WP document
         if ( m_doc->processingType() == KWDocument::WP && bFirst ||
              frameset->type() == FT_TEXT && frameset->frameSetInfo() != KWFrameSet::FI_BODY )
@@ -1711,6 +1713,7 @@ bool KWCanvas::selectAllFrames( bool select )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
+        if(! fs->isVisible()) continue;
         QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -2107,6 +2110,7 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
+        if(! fit.current()->isVisible()) continue;
         KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(fit.current());
         if ( fs )
         {

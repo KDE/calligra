@@ -458,6 +458,7 @@ KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
+        if(fit.current()->isDeleted()) continue;
         if(fit.current()->type()==FT_TEXT)
         {
             if(i==_num)
@@ -892,6 +893,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         // DTP mode: calculate the number of pages from the frames.
         double height=0;
         for (QPtrListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
+            if(fit.current()->isDeleted()) continue;
             if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY && !fit.current()->isFloating()) {
                 KWFrameSet * fs = fit.current();
                 for (QPtrListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
@@ -2268,7 +2270,7 @@ QDomDocument KWDocument::saveXML()
         for ( ; fit.current() ; ++fit )
         {
             KWFrameSet * fs = fit.current();
-            if ( fs->type() == FT_PART &&
+            if ( !fs->isDeleted() && fs->type() == FT_PART &&
                  dynamic_cast<KWPartFrameSet*>( fs )->getChild() == curr )
                 fs->save( settingsElem );
         }
@@ -3253,6 +3255,10 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
 
 void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
 {
+    if(m_lstFrameSet.contains(f) > 0) {
+        kdWarning(32001) << "Frameset " << f << " " << f->getName() << " already in list!" << endl;
+        return;
+    }
     m_lstFrameSet.append(f);
     if ( finalize )
         f->finalize();
@@ -3347,8 +3353,8 @@ void KWDocument::printDebug()
     {
         KWFrameSet * frameset = fit.current();
         kdDebug() << "Frameset " << iFrameset << ": '" <<
-            frameset->getName() << "' (" << frameset << ")" <<endl;
-        if ( frameset->isVisible() )
+            frameset->getName() << "' (" << frameset << ")" << (frameset->isDeleted()?" Deleted":"")<<endl;
+        if ( frameset->isVisible())
             frameset->printDebug();
     }
 
@@ -3774,7 +3780,7 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
         KWFrameSet *frm=0L;
         for ( frm=m_lstFrameSet.at(pos); frm != 0; frm=m_lstFrameSet.next() ){
             KWTextFrameSet *newFrm = frm->nextTextObject( obj );
-            if(newFrm && newFrm->textObject()->needSpellCheck())
+            if(newFrm && !newFrm->isDeleted() && newFrm->textObject()->needSpellCheck())
             {
                 bgFrameSpellChecked = frm;
                 return newFrm;
@@ -3786,7 +3792,7 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
         KWFrameSet *frm=0L;
         for ( frm=m_lstFrameSet.first(); frm != 0; frm=m_lstFrameSet.next() ){
             KWTextFrameSet *newFrm = frm->nextTextObject( obj );
-            if(newFrm && newFrm->textObject()->needSpellCheck())
+            if(newFrm && !newFrm->isDeleted() && newFrm->textObject()->needSpellCheck())
             {
                 bgFrameSpellChecked = frm;
                 return newFrm;
@@ -3930,6 +3936,7 @@ int KWDocument::numberOfTextFrameSet( KWFrameSet* fs )
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
+        if(fit.current()->isDeleted()) continue;
         fit.current()->addTextFrameSets(textFramesets);
     }
     return textFramesets.findRef( static_cast<KWTextFrameSet*>(fs) );
@@ -3940,6 +3947,7 @@ KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num )
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
+        if(fit.current()->isDeleted()) continue;
         fit.current()->addTextFrameSets(textFramesets);
     }
     return textFramesets.at( _num );
@@ -3993,9 +4001,9 @@ void KWDocument::setTabStopValue ( double _tabStop )
     m_tabStop = _tabStop;
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
+    for ( ; fit.current() ; ++fit )
         fit.current()->addTextFrameSets(textFramesets);
-    }
+
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->textDocument()->setTabStops( ptToLayoutUnitPixX( _tabStop ));
