@@ -1,3 +1,11 @@
+Wed Aug 18 01:05:01 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
+
+	* kfloatingdialog.cc (paintEvent): 
+	call QPainter::setClipping() and setClipRect() _after_ QPainter::begin()
+
+	* iconchooser.cc:
+	a few tiny cleanups
+
 Tue Aug 17 01:10:54 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
 
 	* started ChangeLog :o)

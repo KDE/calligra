@@ -40,7 +40,7 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
   m_resizing = false;
   m_cursor = false;
   m_active = true;
-  
+
   if (m_pParent)
     {
       m_docked = true;
@@ -51,7 +51,7 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
       m_docked = false;
       m_dockedPos = QPoint(0,0);
     }
-  
+
   setMouseTracking(true);
   setFrameStyle(QFrame::Panel | QFrame::Raised);
   setLineWidth(FRAMEBORDER);
@@ -91,7 +91,7 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
 
   m_titleLook = gradient;
   m_gradientType = KPixmapEffect::HorizontalGradient;
-  
+
   if( key == "shadedHorizontal")
     m_gradientType = KPixmapEffect::HorizontalGradient;
   else if( key == "shadedVertical")
@@ -117,15 +117,15 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
     {
       m_pActivePm = new QPixmap;
       m_pInactivePm = new QPixmap;
-      
+
       KIconLoader* iconLoader = new KIconLoader(0, "kwm");
-    
+
       *(m_pActivePm) = iconLoader->reloadIcon("activetitlebar.xpm");
       *(m_pInactivePm) = iconLoader->reloadIcon("inactivetitlebar.xpm");
-      
+
       if (m_pInactivePm->size() == QSize(0,0))
 	*m_pInactivePm = *m_pActivePm;
-      
+
       if (m_pActivePm->size() == QSize(0,0))
 	m_titleLook = plain;
     }
@@ -146,10 +146,10 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
   QRect r(FRAMEBORDER, FRAMEBORDER, _width(), GRADIENT_HEIGHT);
 
   QPainter p;
+  p.begin(this);
+
   p.setClipRect(r);
   p.setClipping(true);
-
-  p.begin(this);
 
   // pixmap
  if (m_titleLook == pixmap)
@@ -179,7 +179,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 	 if (m_inactiveShadePm.size() != r.size())
 	   {
 	     m_inactiveShadePm.resize(r.width(), r.height());
-	     KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(), 
+	     KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(),
 				     m_inactiveBlend, m_gradientType);
 	   }
 	 pm = &m_inactiveShadePm;
@@ -189,7 +189,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
  // plain
  else
    {
-     p.setBackgroundColor(m_active ? kapp->activeTitleColor() 
+     p.setBackgroundColor(m_active ? kapp->activeTitleColor()
 			  : kapp->inactiveTitleColor());
      p.eraseRect(r);
    }
@@ -206,7 +206,7 @@ void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
       QRect title(0,0, width(), TITLE_HEIGHT);
       if(!title.contains(e->pos()))
 		return;
-      
+
       if (m_shaded)
 	setShaded(false);
       else
@@ -245,7 +245,7 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 		}
 	  else if(title.contains(pos))
 	      m_dragging = true;
-		  
+		
 	  if(m_resizing || m_dragging)
 		m_start = e->globalPos();
 	}
@@ -257,18 +257,18 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
     {
       QPoint dist = m_start - e->globalPos();
       QPoint newPos = pos() - dist;
-	  
+	
       if (newPos.x() < 0)
 		newPos.setX(0);
-	  
+	
       if (newPos.y() < 0)
 		newPos.setY(0);
-      
+
       if(m_pParent && m_docked)
 		{
 		  if (newPos.x() + width() > m_pParent->width())
 			newPos.setX(m_pParent->width() - width());
-		  
+		
 		  if (newPos.y()+ height() > m_pParent->height())
 			newPos.setY(m_pParent->height() - height());
 		}
@@ -294,11 +294,11 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 
       if(m_shaded)
 		newSize.setY(height());
-      
+
       resize(newSize.x(), newSize.y());
       m_start = e->globalPos();
     }
-				  
+				
   if (bottomRect().contains(e->pos()) && !m_shaded)
 	{
 	  if (!QApplication::overrideCursor() || QApplication::overrideCursor()->shape() != SizeVerCursor)
@@ -385,7 +385,7 @@ void KFloatingDialog::setActive(bool value)
 {
   if (m_active == value)
     return;
-  
+
   m_active = value;
   if (m_active)
     emit sigActivated();
@@ -396,7 +396,7 @@ void KFloatingDialog::setShaded(bool value)
 {
   if (m_shaded == value)
     return;
-  
+
   m_shaded = value;
 
   if (m_shaded)
@@ -412,7 +412,7 @@ void KFloatingDialog::setDocked(bool value)
 {
   if (m_docked == value)
     return;
-  
+
   m_docked = value;
 
   if (m_docked) // dock

@@ -108,7 +108,7 @@ IconItem* IconChooser::itemAt( int index )
 }
 
 
-// returns 0L if there is no current item
+// return 0L if there is no current item
 IconItem* IconChooser::currentItem()
 {
   return itemAt( curRow, curCol );
@@ -160,8 +160,8 @@ void IconChooser::calculateCells()
 void IconChooser::resizeEvent ( QResizeEvent *e )
 {
   QTableView::resizeEvent( e );
-
   ASSERT( cellWidth() > 0 );
+
   IconItem *item = currentItem();
   int oldNCols = nCols;
   nCols = viewWidth() / cellWidth();
@@ -176,6 +176,7 @@ void IconChooser::resizeEvent ( QResizeEvent *e )
 
 // paint one cell
 // mark the current item and center items smaller than the cellSize
+// TODO: scale down big pixmaps and paint the size as text into the pixmap
 void IconChooser::paintCell( QPainter *p, int row, int col )
 {
   IconItem *item = itemAt( row, col );
@@ -192,12 +193,11 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
     if ( ph < itemHeight )
       y = (cw - ph) / 2;
 
+    p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
+
     if ( row == curRow && col == curCol ) { // highlight current item
-      p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
       p->drawRect( 0, 0, cw, ch );
     }
-    else
-      p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
   }
 
   else { // empty cell
@@ -219,8 +219,6 @@ int IconChooser::cellIndex( int row, int col )
 
 
 // eventually select the item, clicked on
-// FIXME: improve behavior for big items, larger than cellSize
-// Photoshop scales down the pixmap and shows the scalingfactor
 void IconChooser::mousePressEvent( QMouseEvent *e )
 {
   QTableView::mousePressEvent( e );
@@ -231,9 +229,7 @@ void IconChooser::mousePressEvent( QMouseEvent *e )
     int row = findRow( p.y() );
     int col = findCol( p.x() );
 
-    int index = cellIndex( row, col );
-
-    IconItem *item = itemAt( index );
+    IconItem *item = itemAt( row, col );
     if ( item ) {
       const QPixmap& pix = item->pixmap();
       if ( pix.width() > itemWidth || pix.height() > itemHeight )
@@ -307,6 +303,7 @@ void PixmapWidget::paintEvent( QPaintEvent *e )
 {
   QFrame::paintEvent( e );
   QPainter p( this );
+  p.setClipRect( e->rect() );
   p.drawPixmap( lineWidth(), lineWidth(), pixmap );
 }
 
