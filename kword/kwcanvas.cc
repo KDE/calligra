@@ -157,6 +157,9 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
 {
     //kdDebug() << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
+    if ( painter->device()->devType() == QInternal::Printer )
+        focus = false;
+
     bool onlyChanged = (onlyFrameset != 0L);
 
     QRect crect( cx, cy, cw, ch );
@@ -305,33 +308,38 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
         }
     }
 
-    // Draw page borders (red)
-    painter->setPen( red );
-    painter->setBrush( Qt::NoBrush );
+    // Draw page borders (red), unless when printing
+    if ( !painter->device()->devType() == QInternal::Printer )
+    {
+        painter->setPen( red );
+        painter->setBrush( Qt::NoBrush );
 
-    QRegion pageContentsReg;
+        QRegion pageContentsReg;
 
-    for ( int k = 0; k < doc->getPages(); k++ ) {
-        QRect pageRect( 0, ( k * doc->ptPaperHeight() ),
-                        doc->ptPaperWidth(), doc->ptPaperHeight() );
-        if ( crect.intersects( pageRect ) )
-            painter->drawRect( pageRect );
-        // Exclude red border line
-        pageRect.rLeft() += 1;
-        pageRect.rTop() += 1;
-        pageRect.rRight() -= 2;
-        pageRect.rBottom() -= 2;
-        pageContentsReg += pageRect; // unite
-    }
+        for ( int k = 0; k < doc->getPages(); k++ ) {
+            QRect pageRect( 0, ( k * doc->ptPaperHeight() ),
+                            doc->ptPaperWidth(), doc->ptPaperHeight() );
+            if ( crect.intersects( pageRect ) )
+                painter->drawRect( pageRect );
+            // Exclude red border line
+            pageRect.rLeft() += 1;
+            pageRect.rTop() += 1;
+            pageRect.rRight() -= 2;
+            pageRect.rBottom() -= 2;
+            pageContentsReg += pageRect; // unite
+        }
 
-    if ( clearEmptySpace ) {
-        // clear empty space
-        painter->save();
+        if ( clearEmptySpace ) {
+            // Clear empty space. This is also disabled when printing because
+            // 1 - it needs pageContentsReg,  2 - not needed, this is probably only
+            // needed when moving/resizing frames.
+            painter->save();
 
-        region &= pageContentsReg; // intersect
-        painter->setClipRegion( region );
-        painter->fillRect( region.boundingRect(), Qt::white );
-        painter->restore();
+            region &= pageContentsReg; // intersect
+            painter->setClipRegion( region );
+            painter->fillRect( region.boundingRect(), Qt::white );
+            painter->restore();
+        }
     }
 
     painter->restore();
