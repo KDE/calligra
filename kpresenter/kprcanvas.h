@@ -327,11 +327,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     KoRect zoomAllObject();
 
-
-    ///@return pos of kptextobj
-    int textObjectNum( KPTextObject * obj ) const;
-    KPTextObject * textObjectByPos( int pos ) const;
-
     /**
      * Align all selected and not protected objects on the
      * active and on the sticky page according to the AlignType

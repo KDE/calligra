@@ -32,14 +32,6 @@ QByteArray KPrTextDrag::encodedData( const char *mime ) const
 {
     if ( ( strcmp( selectionMimeType(), mime ) == 0 ) || QString( mime ).startsWith( KoTextObject::acceptSelectionMimeType()) )
         return kpresenter;
-    else if( strcmp( "application/x-kpresenter-textobjectnumber", mime ) == 0)
-    {
-        QByteArray a;
-        QCString s (  QString::number(m_textObjectNumber).local8Bit() );
-        a.resize( s.length() + 1 ); // trailing zero
-        memcpy( a.data(), s.data(), s.length() + 1 );
-        return a;
-    }
     else
         return QTextDrag::encodedData(mime);
 }
@@ -80,18 +72,4 @@ const char* KPrTextDrag::format( int i ) const
 const char * KPrTextDrag::selectionMimeType()
 {
     return "application/vnd.oasis.opendocument.presentation";
-}
-
-void KPrTextDrag::setTextObjectNumber( int number )
-{
-    m_textObjectNumber = number;
-}
-
-int KPrTextDrag::decodeTextObjectNumber( QMimeSource *e )
-{
-    QByteArray a =  e->encodedData("application/x-kpresenter-textobjectnumber");
-    if(!a.isEmpty())
-        return QCString(a, a.count()+1).toInt();
-    else
-        return -1;
 }

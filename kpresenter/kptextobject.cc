@@ -2427,7 +2427,6 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
 #endif
     KPrTextDrag *kd = new KPrTextDrag( parent );
     kd->setPlain( plainText );
-    kd->setTextObjectNumber( m_canvas->textObjectNum(kpTextObject()) );
     kd->setKPresenter( cstr );
     kdDebug(33001) << "KPTextView::newDrag " << cstr << endl;
     return kd;
@@ -2461,7 +2460,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 
 void KPTextView::dropEvent( QDropEvent * e )
 {
-    KPresenterDoc *doc= kpTextObject()->kPresenterDocument();
+    KPresenterDoc *doc = kpTextObject()->kPresenterDocument();
     if ( doc->isReadWrite() && KPrTextDrag::canDecode( e ) )
     {
         e->acceptAction();
@@ -2473,29 +2472,22 @@ void KPTextView::dropEvent( QDropEvent * e )
         kdDebug(33001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
         if ( ( e->source() == m_canvas ) &&
-             e->action() == QDropEvent::Move ) {
+             e->action() == QDropEvent::Move &&
+             // this is the indicator that the source and dest text objects are the same
+             textDocument()->hasSelection( KoTextDocument::Standard )
+            ) {
             //kdDebug(33001)<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
-            int objTextNum=-1;
-            objTextNum=KPrTextDrag::decodeTextObjectNumber( e );
-            KPTextObject * obj = m_canvas->textObjectByPos( objTextNum );
-
-            obj =obj  ? obj : kpTextObject();
-            if ( obj )
+            KCommand *cmd = textView()->prepareDropMove( dropCursor );
+            if(cmd)
             {
-                bool dropInSameObj= ( obj == kpTextObject());
-                KCommand *cmd=textView()->dropEvent(obj->textObject(), dropCursor, dropInSameObj );
-                if(cmd)
-                {
-                    obj->layout();
-                    kpTextObject()->layout();
-                    macroCmd->addCommand(cmd);
-                    addMacroCmd = true;
-                }
-                else
-                {
-                    delete macroCmd;
-                    return;
-                }
+                kpTextObject()->layout();
+                macroCmd->addCommand(cmd);
+                addMacroCmd = true;
+            }
+            else
+            {
+                delete macroCmd;
+                return;
             }
         }
         else

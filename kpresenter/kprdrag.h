@@ -45,14 +45,10 @@ public:
 
     static const char * selectionMimeType();
 
-    void setTextObjectNumber( int number );
-
-    static int decodeTextObjectNumber( QMimeSource *e );
     static bool provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime);
 
 protected:
     QCString kpresenter;
-    int m_textObjectNumber;
 };
 
 #endif

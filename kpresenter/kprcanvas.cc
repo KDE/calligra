@@ -5616,27 +5616,6 @@ QPtrList<KPTextObject> KPrCanvas::listOfTextObjs() const
     return lst;
 }
 
-KPTextObject * KPrCanvas::textObjectByPos( int pos ) const
-{
-    if ( pos < 0 )
-        return 0L;
-    return listOfTextObjs().at( pos );
-}
-
-int KPrCanvas::textObjectNum( KPTextObject * obj ) const
-{
-    int num = 0;
-    QPtrList<KPTextObject> obj2 = listOfTextObjs();
-    QPtrListIterator<KPTextObject> it2(obj2 );
-    for ( ; it2.current() ; ++it2, num++ ) {
-        if ( it2.current() == obj )
-        {
-            return num;
-        }
-    }
-    return -1;
-}
-
 KPTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
 {
     QPtrList<KPTextObject> obj = listOfTextObjs();
