@@ -13,6 +13,7 @@
   <!ENTITY guides4 SYSTEM "kwordguides4.docbook">
   <!ENTITY mbtb SYSTEM "kwordmbtb.docbook">
   <!ENTITY opt SYSTEM "kwordopt.docbook">
+  <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
@@ -31,7 +32,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2001-31-07</date>
+<date>2002-05-01</date>
 <releaseinfo>1.01.00</releaseinfo>
 
 <abstract>
@@ -51,71 +52,8 @@
 </bookinfo>
 
 <!-- **************************************************************************************************** -->
-<chapter id="todo">
-<title>Current status of this manual</title>
 
-<warning>
-<para>This documentation is not current with the status of &kword;.</para>
-<para>Due to circumstances outside of my control, I have not been able to keep the manual in step with the tremendous
-rate of improvement and change that &kword; has gone through.</para>
-<para>If anyone is interested in helping with the documentation of &kword; or any other application for &kde;, please visit the
-<ulink url="http://i18n.kde.org/doc/">documenters web site</ulink>.</para>
-</warning>
-
-<!--
-<para>This is a list of things which still need
-work in this manual:</para>
-
-<itemizedlist>
-<listitem><para>Continue to review previously written
-sections.</para></listitem>
-<listitem><para>Finish Detailed Guides</para></listitem>
-<listitem><para>Write Answers to Questions in Q and A</para></listitem>
-<listitem><para>Make sure the <quote>Collate</quote> is correctly
-described when printing works again.</para></listitem>
-<listitem><para>Determine if formatting characters and patterns work in
-Search and Replace.</para></listitem>
-<listitem><para>Return to Format->Frame/Frame set when automatic new page
-is working.</para></listitem>
-<listitem><para>Serial characters still not clear how/if that
-works.</para></listitem>
-<listitem><para>Ungrouping a table still causes a segfault.  Still need
-to write about that section.</para></listitem>
-<listitem><para>Variables editor not working on first pass
-through.</para></listitem>
-<listitem><para>Determine if "Side Head" dialog works under
-Frames->Frame set->Options.</para></listitem>
-<listitem><para>Determine if "Line Spacing" drop-down box works under
-Format->Paragraph->Indents and Spacing.</para></listitem>
-<listitem><para>Re-evaluate the need for the section on "Text Edit vs
-Frame Edit Modes".</para></listitem>
-<listitem><para>Rework all chapters to account for the elimination of
-text edit/frame edit mode buttons.</para></listitem>
-<listitem><para>Check definition in Settings->Kword->spelling->Create
-root/apex?</para></listitem>
-<listitem><para>Finish Settings->KWord
-Options->Interfaces.</para></listitem>
-</itemizedlist>
-
-</sect2>
-
-<sect2>
-<title>Just before release of &koffice;.......</title>
-
-<itemizedlist>
-<listitem><para>Complete section on authors.....</para></listitem>
-<listitem><para>Write a section for each of the import/export filters
-(ASCII, HTML, Word97, etc).</para></listitem>
-<listitem><para>Check all screen-shots for new features, different
-looks</para></listitem>
-<listitem><para>Recheck all default key-bindings.</para></listitem>
-
-</itemizedlist>
--->
-
-
-
-</chapter>
+&deleteme;
 
 <!-- **************************************************************************************************** -->
 
@@ -137,21 +75,22 @@ Word-processor/Desktop Publishing Program.
 Environment.  Other applications in &koffice; include:
 </para>
 
-<simplelist type="vert" columns="1">
-<member>&kspread; (A fully functional spreadsheet.)</member>
-<member>&kpresenter; (A presentation creator.)</member>
-<member>&killustrator; (A vector drawing program.)</member>
-<member>&krayon; (A bitmap image editor)</member>
-<member>&kivio; (A flowchart creator)</member>
-<member>&kugar; (A report generation tool.)  </member>
-<member>and a simple integrated office desktop, to help organize your
-work.</member>
-</simplelist>
+<itemizedlist>
+<listitem>&kspread; (A fully functional spreadsheet.)</listitem>
+<listitem>&kpresenter; (A presentation creator.)</listitem>
+<listitem>&killustrator; (A vector drawing program.)</listitem>
+<listitem>&krayon; (A bitmap image editor)</listitem>
+<listitem>&kivio; (A flowchart creator)</listitem>
+<listitem>&kugar; (A report generation tool.)  </listitem>
+<listitem>&kchart; (A chart and graph creator.)  </listitem>
+<listitem>and a simple integrated office desktop, to help organize your
+work.</listitem>
+</itemizedlist>
 
 <para>
 All &koffice; applications were designed from the beginning to take
-advantage of the features of &kde; 2.0. Because of this, &kword; (like
-all of &koffice;), supports drag and drop, themes, and many other
+advantage of the features of &kde;. Because of this, &kword; (like
+all of &koffice;), supports drag and drop, theming, and many other
 advanced features you expect from todays desktop environment.
 </para>
 
@@ -217,14 +156,6 @@ automatically while you edit.
 <textobject><phrase>Button</phrase></textobject>
 </mediaobject>
 
-
-<para>
-&kword; simplifies the creation of new pages (at the users option), by
-automatically creating frames for the next page, using the current page
-as a blueprint. This eliminates the need for the user to re-define the
-frame boundaries each page.
-</para>
-
 <para>
 As a word-processor, &kword; includes the most used options of many other
 word processors, while maintaining a simple interface. In addition to
@@ -288,6 +219,15 @@ easier on any computer, and with any font size. </para>
 <para>You can embed formulas directly into &kword; using the integrated
 formula editor.</para>
 </listitem>
+<listitem>
+<para>You can have KWord auto-correct many of the most common spelling and puntuation mistakes.</para>
+</listitem>
+<listitem>
+<para>KWord can check the spelling of your document.</para>
+</listitem>
+<listitem>
+<para>You can access an on-line thesaurus (English only) to find the exact word you are looking for.</para>
+</listitem>
 </itemizedlist>
 
 <para>The best part about &kword;, is the effort that has been placed to
@@ -296,27 +236,12 @@ letter, to the most complex document you might need to work on.</para>
 
 </sect1>
 
-<!--
-<sect1 id="Conventions">
-<title>Conventions Used Throughout this User Guide</title>
-
-<para>Right Mouse Click
-</para>
-
-<para>Left Mouse Click</para>
-
-<para>Not sure I still need this section.....</para>
-
-</sect1>
-
-Currently commented out, will probably be removed eventually -->
-
 <sect1 id="who-reads">
 <title>What parts of this guide should I read?</title>
 
 <para>Anyone who has looked at the table of contents has surely come to
 the conclusion that reading this manual from cover to cover, is an
-unreasonable (and fortunately unnecessary).</para>
+unreasonable (and fortunately unnecessary) task.</para>
 
 <para>Since different users will have different needs, each section of
 this manual is self-contained.  You are not expected to have read all of
@@ -362,7 +287,7 @@ start using &kword;, you will find that using &kword; is easy.</para>
 <entry>Intermediate</entry>
 <entry>Comfortable with other page based word processors (&Microsoft;
 <application>Word</application>, <application>Word Perfect</application>
-and <application>Applixware</application>.)</entry>
+or <application>Applixware</application>.)</entry>
 <entry><simplelist type="vert" columns="1">
 <member><link linkend="fundamentals">Fundamentals</link></member>
 <member><link linkend="tutorial">Step by Step Tutorial</link></member>
@@ -379,13 +304,13 @@ and <application>Applixware</application>.)</entry>
 </tbody></tgroup>
 </informaltable>
 
-<para>Obviously this will not cover everyones needs.  What I hope it
-will do, however, is help you determine which parts of the manual you
-need to read before you begin using &kword;.</para>
-
 <para>These sections will help you get started initially. You can then
 refer to the other parts of this manual as needed to help you with
 specific questions or situations.</para>
+
+<para>Obviously this will not cover everyones needs.  What I hope it
+will do, however, is help you determine which parts of the manual you
+need to read before you begin using &kword;.</para>
 
 </sect1>
 

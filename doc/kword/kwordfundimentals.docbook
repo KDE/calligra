@@ -19,13 +19,11 @@ some basic but important concepts you should understand when using
 
 <listitem>
 <para>If you are in a terminal program (&konsole;, <application>Xterm</application>, &etc;), you can type:
-<screen><prompt>$</prompt> <userinput><command>kword
-&amp;</command></userinput></screen></para>
+<screen><prompt>$</prompt> <userinput><command>kword &amp;</command></userinput></screen></para>
 
 <para>Or</para>
 
-<para><screen><prompt>$</prompt> <userinput><command>kword</command>
-<replaceable>filename</replaceable> &amp;</userinput></screen></para>
+<para><screen><prompt>$</prompt> <userinput><command>kword</command> <replaceable>filename</replaceable> &amp;</userinput></screen></para>
 </listitem>
 
 <listitem>
@@ -104,13 +102,13 @@ will not limit your work.</para>
 <para><emphasis>Working with frames (aka Your First
 Document)</emphasis></para>
 
-<para>The following section, consists of two fundamental topics which
+<para>The following section, consists of one important topic which
 you should understand before we continue, followed by a step by step
 walk through of the most important functions you will need to understand
 to complete a complex document. We will generate the start of a
 newsletter using this tutorial. If you do not want to complete the
 tutorial, or have questions about a specific aspect of frames, you can
-use the following to jump directly to that section of the
+use the following list of steps to jump directly to that section of the
 tutorial:</para>
 
 <orderedlist numeration="arabic">
