@@ -13,16 +13,16 @@ class ElapsedTime
  public:
   ElapsedTime()
   {
-    m_time.start();  
+    m_time.start();
   }
 
   ElapsedTime( QString const & name )
     : m_name( name )
   {
-    m_time.start();  
+    m_time.start();
     kdDebug() << "*** (" << name << ")... Starting measuring... " << endl;
   }
-  
+
   ~ElapsedTime()
   {
     uint milliSec = m_time.elapsed();
@@ -30,10 +30,10 @@ class ElapsedTime
     milliSec -= ( min * 60 * 1000 );
     uint sec = (uint) ( milliSec / 1000 );
     milliSec -= sec * 1000;
-    
+
     if ( m_name.isNull() )
       kdDebug() << "*** Elapsed time: " << min << " min, " << sec << " sec, " << milliSec << " msec" << endl;
-    else      
+    else
       kdDebug() << "*** (" << m_name << ") Elapsed time " << min << " min, " << sec << " sec, " << milliSec << " msec" << endl;
   }
 
@@ -58,11 +58,11 @@ class ElapsedTime
 enum PasteMode { Normal, Text, Format, NoBorder, Comment, Result, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };
-enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};
+enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different, DifferentTo};
 enum Action { Stop, Warning, Information};
 enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength};
 enum Series { Column,Row,Linear,Geometric };
-namespace KSpread 
+namespace KSpread
 {  // necessary due to QDock* enums (Werner)
   enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
 }

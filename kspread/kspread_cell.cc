@@ -4324,6 +4324,11 @@ bool KSpreadCell::testValidity() const
 		      && d->value.asFloat() - d->extra()->validity->valMin >
 		      (0.0 - DBL_EPSILON));
 	    break;
+	  case DifferentTo:
+	    valid = !(  ( d->value.asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+		      && d->value.asFloat() - d->extra()->validity->valMin >
+		      (0.0 - DBL_EPSILON)) );
+	    break;
           case Superior:
 	    valid = ( d->value.asFloat() > d->extra()->validity->valMin);
 	    break;
@@ -4363,6 +4368,10 @@ bool KSpreadCell::testValidity() const
 	      if (len == d->extra()->validity->valMin)
 		valid = true;
 	      break;
+	    case DifferentTo:
+	      if (len != d->extra()->validity->valMin)
+		valid = true;
+	      break;
 	    case Superior:
 	      if(len > d->extra()->validity->valMin)
 		valid = true;
@@ -4399,6 +4408,9 @@ bool KSpreadCell::testValidity() const
 	  case Equal:
 	    valid = (value().asTime() == d->extra()->validity->timeMin);
 	    break;
+	  case DifferentTo:
+	    valid = (value().asTime() != d->extra()->validity->timeMin);
+	    break;
 	  case Superior:
 	    valid = (value().asTime() > d->extra()->validity->timeMin);
 	    break;
@@ -4430,6 +4442,9 @@ bool KSpreadCell::testValidity() const
 	{
 	  case Equal:
 	    valid = (value().asDate() == d->extra()->validity->dateMin);
+	    break;
+	  case DifferentTo:
+	    valid = (value().asDate() != d->extra()->validity->dateMin);
 	    break;
 	  case Superior:
 	    valid = (value().asDate() > d->extra()->validity->dateMin);
@@ -5387,9 +5402,10 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             else if (valExpression.contains( "!=" ) )
             {
                 //not implemented into kspread !!!!!!!!!!!!
+                //add Differentto attribute
                 QString value = valExpression.remove( "!=" );
                 kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = Different;
+                d->extra()->validity->m_cond = DifferentTo;
                 d->extra()->validity->valMin = value.toDouble();
             }
             else
