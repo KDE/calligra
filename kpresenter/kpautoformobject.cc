@@ -193,15 +193,17 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     else {
 	pen2 = pen;
 	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
-   }
+    }
 
     _painter->setPen( pen2 );
-    pwOrig = pen2.width() + 3;
+    pwOrig = pen2.width();
     _painter->setBrush( brush );
 
     QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),_zoomHandler->zoomItY( ext.height() ) );
     QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
     QPointArray pntArray2( pntArray.size() );
+    int ex = _zoomHandler->zoomItX(ext.width());
+    int ey = _zoomHandler->zoomItY(ext.height());
     for ( unsigned int i = 0; i < pntArray.size(); i++ )
     {
         px = pntArray.at( i ).x();
@@ -209,10 +211,8 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
         if ( atrLs.at( i )->pwDiv > 0 )
         {
             pw = pwOrig / atrLs.at( i )->pwDiv;
-            if ( px < static_cast<unsigned int>( ext.width() ) / 2 ) px += pw;
-            if ( py < static_cast<unsigned int>( ext.height() ) / 2 ) py += pw;
-            if ( px > static_cast<unsigned int>( ext.width() ) / 2 ) px -= pw;
-            if ( py > static_cast<unsigned int>( ext.height() ) / 2 ) py -= pw;
+            px = (int)((double)(ex - pw) / (double)ex * px + pw / 2); 
+            py = (int)((double)(ey - pw) / (double)ey * py + pw / 2);
         }
         pntArray2.setPoint( i, px, py );
     }
