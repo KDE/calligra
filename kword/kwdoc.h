@@ -403,6 +403,9 @@ public:
     /** calls layout() on all framesets  */
     void layout();
 
+    /** call by undo/redo frame border => update all button border frame **/ 
+    void refreshFrameBorderButton();
+
     bool getViewFormattingChars() { return _viewFormattingChars; }
     void setViewFormattingChars(bool _b) {_viewFormattingChars=_b;}
     bool getViewFrameBorders() { return _viewFrameBorders; }

@@ -444,6 +444,7 @@ void KWFrameBorderCommand::execute()
                 break;
         }
     }
+    m_pDoc->refreshFrameBorderButton();
     m_pDoc->repaintAllViews();
 }
 
@@ -473,6 +474,7 @@ void KWFrameBorderCommand::unexecute()
                 break;
         }
     }
+    m_pDoc->refreshFrameBorderButton();
     //update frames
     m_pDoc->repaintAllViews();
 }

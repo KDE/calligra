@@ -2639,4 +2639,16 @@ void KWDocument::slotRepaintChanged( KWFrameSet * frameset )
         it.current()->getGUI()->canvasWidget()->repaintChanged( frameset, it.atLast() );
 }
 
+void KWDocument::refreshFrameBorderButton()
+{
+
+    KWFrame *frame= getFirstSelectedFrame();
+    if (frame)
+    {
+        QListIterator<KWView> it( m_lstViews );
+        for ( ; it.current() ; ++it )
+            it.current()->getGUI()->getView()->showFrameBorders( frame->getLeftBorder(), frame->getRightBorder(), frame->getTopBorder(), frame->getBottomBorder() );
+    }
+}
+
 #include "kwdoc.moc"

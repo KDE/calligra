@@ -1518,9 +1518,7 @@ void KWCanvas::frameDiaClosed() // get rid of this?
 
 void KWCanvas::updateFrameFormat()
 {
-    KWFrame *frame= doc->getFirstSelectedFrame();
-    if (frame)
-        m_gui->getView()->showFrameBorders( frame->getLeftBorder(), frame->getRightBorder(), frame->getBottomBorder(), frame->getTopBorder() );
+    doc->refreshFrameBorderButton();
 }
 
 void KWCanvas::selectAllFrames( bool select )

@@ -112,6 +112,9 @@ public:
 
     void updateCurrentFormat();
 
+    void updateFrameFormat();
+
+
     // Table creation support.
     unsigned int tableRows() { return m_table.rows; }
     unsigned int tableCols() { return m_table.cols; }
@@ -186,8 +189,7 @@ protected:
 
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );
-    void updateFrameFormat();
-
+   
 private slots:
     void frameDiaClosed();
     void slotContentsMoving( int, int );
