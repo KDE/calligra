@@ -696,7 +696,7 @@ void KoAutoFormatDia::initTab4()
         abbreviation->setAutoInclude( m_docAutoFormat->getConfigIncludeAbbreviation() );
         twoUpperLetter->setAutoInclude( m_docAutoFormat->getConfigIncludeTwoUpperUpperLetterException() );
     }
-    twoUpperLetter->setListException( !changeLanguage ? m_autoFormat.listException():m_docAutoFormat->listTwoUpperLetterException() );
+    twoUpperLetter->setListException( !changeLanguage ? m_autoFormat.listTwoUpperLetterException():m_docAutoFormat->listTwoUpperLetterException() );
 }
 
 void KoAutoFormatDia::slotClearTextFormatEntry()
