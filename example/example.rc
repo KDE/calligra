@@ -1,10 +1,10 @@
-<!DOCTYPE QConfig ><QConfig name="Example">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Example">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="cut"/>
  </Menu>
 </MenuBar>
-<ToolBar>
+<ToolBar name="mainToolBar">
   <Action name="cut"/>
 </ToolBar>
-</QConfig>
+</kpartgui>
