@@ -2,7 +2,7 @@
  *  kimageshop_view.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
+ *                1999 Michael Koch    <mkoch@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1001,7 +1001,7 @@ void KImageShopView::slotPreferences()
 
 void KImageShopView::changeUndo( QString _text, bool _enable )
 {
-  cout << "KImageShopView::changeUndo : ";
+  cout << "KImageShopView::changeUndo : " << endl;
 
   CORBA::WString_var text;
 
@@ -1025,7 +1025,7 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
 
 void KImageShopView::changeRedo( QString _text, bool _enable )
 {
-  cout << "KImageShopView::changeRedo : ";
+  cout << "KImageShopView::changeRedo : " << endl;
 
   CORBA::WString_var text;
 
@@ -1058,3 +1058,4 @@ void  KImageShopView::slotSetBGColor(const KColor& c)
 }
 
 #include "kimageshop_view.moc"
+
