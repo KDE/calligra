@@ -241,7 +241,6 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
 /*========================== save ===============================*/
 bool KPresenterDoc::save(ostream& out,const char * /* format */)
 {
-    QApplication::setOverrideCursor( waitCursor );
     KPObject *kpobject = 0L;
 
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
@@ -361,7 +360,6 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << etag << "</DOC>" << endl;
 
     setModified( false );
-    QApplication::restoreOverrideCursor();
 
     return true;
 }
