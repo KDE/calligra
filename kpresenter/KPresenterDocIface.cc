@@ -47,6 +47,12 @@ DCOPRef KPresenterDocIface::page( int num )
 		    doc->pageList().at( num )->dcopObject()->objId() );
 }
 
+DCOPRef KPresenterDocIface::stickyPage()
+{
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    doc->stickyPage()->dcopObject()->objId() );
+}
+
 double KPresenterDocIface::indentValue()
 {
     return doc->getIndentValue();

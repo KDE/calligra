@@ -36,6 +36,9 @@ public:
 k_dcop:
     virtual int numPages();
     virtual DCOPRef page( int num );
+
+    virtual DCOPRef stickyPage();
+
     bool selectPage( int page,bool select);
 
     virtual double indentValue();
