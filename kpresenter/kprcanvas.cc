@@ -4744,7 +4744,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 
     QPainter p;
     p.begin( this );
-    kpobject->moveBy(-diffx(),-diffy());
+    kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
     kpobject->draw( &p,m_view->zoomHandler() );
 
     switch ( _modType ) {
@@ -4812,7 +4812,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     default: break;
     }
     kpobject->draw( &p,m_view->zoomHandler() );
-    kpobject->moveBy(diffx(),diffy());
+    kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     p.end();
 
     _repaint( oldBoundingRect );
