@@ -1287,6 +1287,11 @@ void KPresenterDoc::loadOasisPresentationSettings( QDomNode &settingsDoc )
 
     if (settings.attributeNS( KoXmlNS::presentation, "force-manual", QString::null)=="true")
         _spManualSwitch = true;
+    if ( settings.hasAttributeNS( KoXmlNS::presentation, "start-page" ) )
+    {
+        //TODO allow to start presentation to specific page
+        //???? = settings.attributeNS( KoXmlNS::presentation, "start-page", QString::null );
+    }
     if ( settings.hasAttributeNS( KoXmlNS::presentation, "show" ) )
     {
         m_presentationName = settings.attributeNS( KoXmlNS::presentation, "show", QString::null );
