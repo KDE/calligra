@@ -1814,42 +1814,56 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   { //control button pressed
       if(!make_select)
 	  table->unselect();
-      int x, x0, y, y0 ;
-      bool emptycell;
+      int x, y;
 
       switch(_ev->key()){
+
+      //Ctrl+Key_Up
       case Key_Up:
-	  if ( !m_bChoose && markerRow() == 1 )
+	  //If we are already at the end, we skip
+	  if ( !m_bChoose && markerRow() <= 1 )
 	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 1 )
-		  return;
+	  //If we are already at the end, we skip
+	  if ( m_bChoose && chooseMarkerRow() <= 1 )
+	      return;
 
 	  if ( m_bChoose )
+	      //If we are in choose mode, we only go 1 up
 	      chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
 	  else{
 
-	      x = x0 =  markerColumn();
-	      y = y0 =  markerRow();
+	      x = markerColumn();
+	      y = markerRow();
 
-	      emptycell = activeTable()->cellAt(x,y)->isEmpty();
-              // HELP! This is by far to slow and inefficent!
-	      if(!emptycell){
-		  while (!emptycell && !(activeTable()->cellAt( x,y - 1 ))->isEmpty() && y >= 0 ){
-		      y --;
+	      //If we are at the end of a filled or empty block, then move one up
+	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x, y-1, true)->isEmpty() )
+		  y --;
+	      else
+		  {
+		  // HELP! This is by far to slow and inefficent!
+
+		  // if this is a filled cell
+		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		      //Then we search as long as the previous pervios field is filled
+		      while ( (y-1 >= 1) && !(activeTable()->cellAt(x, y-1, true))->isEmpty() ){
+			  y --;
+		      }
+		  }
+		  else{
+		      //Otherwise we search as long as the previous pervios field is empty
+		      while ( (y-1 >= 1) && (activeTable()->cellAt(x, y-1, true))->isEmpty() ){
+			  y --;
+		      }
 		  }
 	      }
-	      else{
-		  while (emptycell && (activeTable()->cellAt( x,y))->isEmpty() && y >= 0 ){
-		      y --;
-		  }
-	      }
 
-	      gotoLocation( markerColumn(), QMAX( 1, y  ), 0, make_select,true,true );
+	      gotoLocation( x, QMAX( 1, y ), 0, make_select, true, true );
 	      repaint();
 	  }
 
 	  return;
 
+      //Ctrl+Key_Down
       case Key_Down:
 	  //If we are already at the end, we skip
 	  if ( !m_bChoose && markerRow() >= KS_rowMax )
@@ -1860,165 +1874,137 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	  if ( m_bChoose )
 	      //If we are in choose mode, we only go 1 down
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select);
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
 	  else{
-	      x = x0 =  markerColumn();
-	      y = y0 =  markerRow();
 
-              // HELP! This is by far to slow and inefficent!
+	      x = markerColumn();
+	      y = markerRow();
 
-	      // Check wether we are in an empty field and the next one is filled
-	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMIN(y+1,KS_rowMax))->isEmpty())
-		  {
-		  gotoLocation( x, QMIN(KS_rowMax, y+1), 0, make_select, true, true );
-		  }
+	      //If we are at the end of a filled or empty block, then move one down
+	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x, y+1, true)->isEmpty() )
+		  y ++;
 	      else
 		  {
-		  //Check if the current field is filled and the next is empty
-		  if(!(activeTable()->cellAt(x,y))->isEmpty() && (activeTable()->cellAt(x,QMIN(y+1, KS_rowMax)))->isEmpty())
-		      {
-		      //Search the next filled field, otherwise go to the last one
-		      while ( (y+1 <= KS_rowMax) && (activeTable()->cellAt( x, y+1 ))->isEmpty() )
-			  {
-			      y ++;
-			  }
-		      gotoLocation( x, QMIN(KS_rowMax, y), 0, make_select, true, true );
-		      }
-		  else
-		      {
-		      //Check wether the current is filled an the next is filled too
-		      if( !(activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y+1, KS_rowMax))->isEmpty()))
-			  {
-			  //Search the next empty field
-			  while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt( x, y+1 ))->isEmpty() )
-			      {
-				  y ++;
-			      }
-			  //Goto the last filled field
-			  gotoLocation( x, QMIN(KS_rowMax, y), 0, make_select, true, true );
-			  }
-		      else
-			  {
-			  //Check wether the current is empty and the next is empty
-			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax))->isEmpty()))
-			      {
-			      //Search for the next non empty field, otherwise go to the last one
-			      while ( (y+1 <= KS_rowMax) && (activeTable()->cellAt( x, y+1 ))->isEmpty() )
-				  {
-				      y ++;
-				  }
-			      // Goto the field if it's not empty
-			      gotoLocation( x, QMIN(KS_rowMax, y), 0, make_select, true, true );
-			      }
-			  }
+		  // HELP! This is by far to slow and inefficent!
+
+		  // if this is a filled cell
+		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		      //Then we search as long as the next field is filled
+		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() ){
+			  y ++;
 		      }
 		  }
+		  else{
+		      //Otherwise we search as long as the next field is empty
+		      while ( (y+1 <= KS_rowMax) && (activeTable()->cellAt(x, y+1, true))->isEmpty() ){
+			  y ++;
+		      }
+		  }
+	      }
+
+	      gotoLocation( x, QMIN( KS_rowMax, y ), 0, make_select, true, true );
+	      repaint();
 	  }
-	  repaint();
 
 	  return;
 
+      //Ctrl+Key_Right
       case Key_Right:
+	  //If we are already at the end, we skip
 	  if ( !m_bChoose && markerColumn() >= KS_colMax )
 	      return;
+	  //If we are already at the end, we skip
 	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
 	      return;
 
 	  if ( m_bChoose )
+	      //If we are in choose mode, we only go 1 right
 	      chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
-	  else
-	      {
+	  else{
 
-	      x = x0 =  markerColumn();
-	      y = y0 =  markerRow();
+	      x = markerColumn();
+	      y = markerRow();
 
-	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x+1,y)->isEmpty())
-		  {
-		  gotoLocation( x+1, markerRow()  , 0, make_select,true,true  );
-		  }
+	      //If we are at the end of a filled or empty block, then move one right
+	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x+1, y, true)->isEmpty() )
+		  x ++;
 	      else
 		  {
-		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y))->isEmpty())
-		      {
-              // HELP! This is by far to slow and inefficent!
+		  // HELP! This is by far to slow and inefficent!
 
-		      while ( (activeTable()->cellAt(x+1,y))->isEmpty() && x < KS_colMax  )
-			  {
+		  // if this is a filled cell
+		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		      //Then we search as long as the next field is filled
+		      while ( (x+1 <= KS_colMax) && !(activeTable()->cellAt(x+1, y, true))->isEmpty() ){
 			  x ++;
-			  }
-		      gotoLocation( x, markerRow() , 0, make_select,true,true  );
 		      }
-		  else
-		      {
-			  if(!(activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x + 1,y)->isEmpty()))
-			      {
-				  while ( !(activeTable()->cellAt(x+1,y))->isEmpty() && x < KS_colMax )
-				      {
-					  x ++;
-				      }
-				  gotoLocation( x, markerRow(), 0, make_select,true,true  );
-			      }
-			  else
-			      {
-				  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty()))
-				      {
-
-					  while ( (activeTable()->cellAt(x+1,y))->isEmpty() && x < KS_colMax )
-					      {
-
-						  x ++;
-					      }
-					  gotoLocation( x, markerRow(), 0, make_select,true,true  );
-
-				      }
-			      }
+		  }
+		  else{
+		      //Otherwise we search as long as the next field is empty
+		      while ( (x+1 <= KS_colMax) && (activeTable()->cellAt(x+1, y, true))->isEmpty() ){
+			  x ++;
 		      }
 		  }
 	      }
-	  repaint();
+
+	      gotoLocation( QMIN( KS_colMax, x ), y, 0, make_select, true, true );
+	      repaint();
+	  }
+
 	  return;
 
+      //Ctrl+Key_Left
       case Key_Left:
-
-	  if ( !m_bChoose && markerColumn() == 1 )
+	  //If we are already at the end, we skip
+	  if ( !m_bChoose && markerColumn() <= 1 )
 	      return;
-	  if ( m_bChoose && chooseMarkerColumn() == 1 )
+	  //If we are already at the end, we skip
+	  if ( m_bChoose && chooseMarkerColumn() <= 1 )
 	      return;
 
 	  if ( m_bChoose )
+	      //If we are in choose mode, we only go 1 left
 	      chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
 	  else{
-	      x = x0 =  markerColumn();
-	      y = y0 =  markerRow();
 
-	      emptycell = activeTable()->cellAt(x,y)->isEmpty();
+	      x = markerColumn();
+	      y = markerRow();
 
-	      if(!emptycell)
-		  {
-		      while (!emptycell && !(activeTable()->cellAt( x - 1,y  ))->isEmpty() && x >= 0 )
-			  {
-			  // HELP! This is by far to slow and inefficent!
-			  x --;
-			  }
-		  }
+	      //If we are at the end of a filled or empty block, then move one left
+	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x-1, y, true)->isEmpty() )
+		  x --;
 	      else
 		  {
-		      while (emptycell && (activeTable()->cellAt( x,y))->isEmpty() && x >= 0 )
-			  {
-			      x--;
-			  }
+		  // HELP! This is by far to slow and inefficent!
+
+		  // if this is a filled cell
+		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		      //Then we search as long as the previous field is filled
+		      while ( (x-1 >= 1) && !(activeTable()->cellAt(x-1, y, true))->isEmpty() ){
+			  x --;
+		      }
 		  }
-	      gotoLocation( QMAX(x,1),markerRow()  , 0, make_select,true,true );
+		  else{
+		      //Otherwise we search as long as the previous field is empty
+		      while ( (x-1 >= 1) && (activeTable()->cellAt(x-1, y, true))->isEmpty() ){
+			  x --;
+		      }
+		  }
+	      }
+
+	      gotoLocation( QMAX( 1, x ), y, 0, make_select, true, true );
 	      repaint();
 	  }
+
 	  return;
+
+      //Ctrl+Key_Home
       case Key_Home:
 
-	      gotoLocation( 1,1 , 0, make_select,true,true );
-	      repaint();
+	  gotoLocation( 1, 1 , 0, make_select, true, true );
+	  repaint();
 
 	  return;
-
       }
 
   }
