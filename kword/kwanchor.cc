@@ -110,20 +110,6 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     KWFrame* containingFrame = fs->currentDrawnFrame(); // always set, except in the textviewmode
     KoPoint topLeftPt = fs->internalToDocumentKnowingFrame( topLeftLU, containingFrame );
 
-#if 0 // not needed anymore, I think. There's no more ITD that can fail.
-    if ( containingFrame )
-    {
-        // Look at the bottom-right of the containing frame - to intersect, if we get out of it
-        int rightFrameLU = zh->ptToLayoutUnitPixX( containingFrame->innerWidth() );
-        int bottomFrameLU = zh->ptToLayoutUnitPixY( containingFrame->internalY() + containingFrame->innerHeight() );
-        //kdDebug() << "KWAnchor::draw rightFrameLU " << rightFrameLU << " bottomFrameLU=" << bottomFrameLU << endl;
-
-        crectLU &= QRect( topLeftLU, QPoint( rightFrameLU, bottomFrameLU ) );
-        //kdDebug() << "KWAnchor::draw crectLU now " << crectLU << endl;
-        bottomRightLU = crectLU.bottomRight();
-    }
-#endif
-
     // Now we can convert the bottomright
     KoPoint bottomRightPt = fs->internalToDocumentKnowingFrame( bottomRightLU, containingFrame );
     KoRect crectPt( topLeftPt, bottomRightPt );
@@ -183,9 +169,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         // To draw the inline frame as selected, we need to look at the inline frame's own size.
         QRect frameRect = crect;
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw selected frame. (frameRect&crect) = " << frameRect << endl;
+        kdDebug() << "KWAnchor::draw selected frame. frameRect=" << frameRect << endl;
 #endif
-            p->fillRect( frameRect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        p->fillRect( frameRect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }
     p->restore();
 
@@ -196,7 +182,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
 QSize KWAnchor::size() const
 {
-    KoSize kosz = m_frameset->floatingFrameKoRect( m_frameNum ).size();
+    KoSize kosz = m_frameset->floatingFrameSize( m_frameNum );
     //kdDebug() << "KWAnchor::size " << kosz.width() << "x" << kosz.height() << endl;
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixX( kosz.height() ) );

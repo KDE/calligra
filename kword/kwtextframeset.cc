@@ -378,16 +378,23 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     return 0L;
 }
 
-KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const QPoint &iPoint, KWFrame* theFrame ) const
+// relPoint is in relative coordinates (pt)
+KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const KoPoint &relPoint, KWFrame* theFrame ) const
 {
     // It's ok to have theFrame == 0 in the text viewmode, but not in other modes
     if ( m_doc->viewMode()->hasFrames() )
         Q_ASSERT( theFrame );
     if ( theFrame )
-        return KoPoint( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->innerRect().x(),
-                        m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) - theFrame->internalY() + theFrame->innerRect().y() );
+        return KoPoint( relPoint.x() + theFrame->innerRect().x(),
+                        relPoint.y() - theFrame->internalY() + theFrame->innerRect().y() );
     else
-        return KoPoint( m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ) );
+        return relPoint;
+}
+
+KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const QPoint &iPoint, KWFrame* theFrame ) const
+{
+    // Convert LU to relative coordinates (pt), then call the real internalToDocumentKnowingFrame().
+    return internalToDocumentKnowingFrame( m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ), theFrame );
 }
 
 QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
@@ -1479,13 +1486,13 @@ int KWTextFrameSet::availableHeight() const
     return m_textobj->availableHeight();
 }
 
-KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPoint ) const
+KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &dPoint ) const
 {
 #ifdef DEBUG_ITD
-    kdDebug() << getName() << " ITD called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+    kdDebug() << getName() << " ITD called for relPoint=" << relPoint.x() << "," << relPoint.y() << endl;
 #endif
     if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
-        dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
+        dPoint = relPoint;
         return frames.getFirst();
     }
     // This does a binary search in the m_framesInPage array, with internalY as criteria
@@ -1494,7 +1501,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
     int len = m_framesInPage.count();
     int n1 = 0;
     int n2 = len - 1;
-    int internalY = 0;
+    double internalY = 0.0;
     int mid = 0;
     bool found = FALSE;
     while ( n1 <= n2 ) {
@@ -1509,11 +1516,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         else
         {
             KWFrame * theFrame = m_framesInPage[mid]->first();
-            internalY = m_doc->ptToLayoutUnitPixY( theFrame->internalY() ); // in LU (pixels)
+            internalY = theFrame->internalY();
 #ifdef DEBUG_ITD
-            kdDebug() << "ITD: iPoint.y=" << iPoint.y() << " internalY=" << internalY << endl;
+            kdDebug() << "ITD: relPoint.y=" << relPoint.y() << " internalY=" << internalY << endl;
 #endif
-            res = iPoint.y() - internalY;
+            res = relPoint.y() - internalY;
 #ifdef DEBUG_ITD
             kdDebug() << "ITD: res=" << res << endl;
 #endif
@@ -1521,11 +1528,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             // (Using the next page's first frame's internalY only works if there is a frame on the next page)
             if ( res >= 0 )
             {
-                int height = m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() );
+                double height = theFrame->innerHeight();
 #ifdef DEBUG_ITD
                 kdDebug() << "ITD: height=" << height << " -> the bottom is at " << internalY+height << endl;
 #endif
-                if ( iPoint.y() < internalY + height )
+                if ( relPoint.y() < internalY + height )
                 {
 #ifdef DEBUG_ITD
                     kdDebug() << "ITD: found a match " << mid << endl;
@@ -1556,10 +1563,10 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         if ( mid < 0 )
         {
 #ifdef DEBUG_ITD
-            kdDebug(32002) << "KWTextFrameSet::internalToDocument " << iPoint.x() << "," << iPoint.y()
+            kdDebug(32002) << "KWTextFrameSet::internalToDocument " << relPoint.x() << "," << relPoint.y()
                            << " before any frame of " << (void*)this << endl;
 #endif
-            dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ); // "bah", I said above :)
+            dPoint = relPoint; // "bah", I said above :)
             return 0L;
         }
     }
@@ -1575,7 +1582,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
 #ifdef DEBUG_ITD
             kdDebug() << "KWTextFrameSet::internalToDocument going back to page " << mid << " - frame: " << theFrame->internalY() << endl;
 #endif
-            if ( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) == internalY ) // same internalY as the frame we found before
+            if ( theFrame->internalY() == internalY ) // same internalY as the frame we found before
                 result = mid;
             else
                 break;
@@ -1587,26 +1594,29 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        // Calculate frame's rect in LU. The +1 gives some tolerance for QRect's semantics.
-        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ),
-                 m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ) +1,
-                 m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() )+1 );
+        KoRect relRect( 0, theFrame->internalY(), theFrame->innerWidth(), theFrame->innerHeight() );
 #ifdef DEBUG_ITD
-        kdDebug() << "KWTextFrameSet::internalToDocument frame's LU-rect:" << r << endl;
+        kdDebug() << "KWTextFrameSet::internalToDocument frame's relative rect:" << relRect << endl;
 #endif
-        // r is the frame in qrt coords
-        if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
+        if ( relRect.contains( relPoint ) ) // both relRect and relPoint are in "relative coordinates"
         {
-            dPoint = internalToDocumentKnowingFrame( iPoint, theFrame );
+            dPoint = internalToDocumentKnowingFrame( relPoint, theFrame );
             return theFrame;
         }
     }
 #ifdef DEBUG_ITD
-    kdDebug(32002) << "KWTextFrameSet::internalToDocument " << iPoint.x() << "," << iPoint.y()
+    kdDebug(32002) << "KWTextFrameSet::internalToDocument " << relPoint.x() << "," << relPoint.y()
                    << " not in any frame of " << (void*)this << " (looked on page " << result << ")" << endl;
 #endif
-    dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ); // bah again
+    dPoint = relPoint; // bah again
     return 0L;
+}
+
+// same but with iPoint in LU
+KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPoint ) const
+{
+    KoPoint relPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
+    return internalToDocument( relPoint, dPoint );
 }
 
 #ifndef NDEBUG

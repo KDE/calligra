@@ -666,7 +666,7 @@ public:
     void setAnchored( KWTextFrameSet* textfs );
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
-    /** Return true if this frameset is floating, false if it's fixed */
+    /** Return true if this frameset is floating (inline), false if it's fixed */
     bool isFloating() const { return m_anchorTextFs; }
     /** Return the frameset in which our anchor is - assuming isFloating() */
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
@@ -681,10 +681,13 @@ public:
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-    /** Get the [zoomed, in view pixels] rect of the "floating frame" identified by frameNum.
+    /** Get the size of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
-    virtual QRect floatingFrameRect( int frameNum );
-    virtual KoRect floatingFrameKoRect( int frameNum );
+    virtual KoSize floatingFrameSize( int frameNum = 0 );
+    /** Get the rect of the "floating frame" identified by frameNum,
+        in coordinates RELATIVE TO THE PARENT FRAMESET.
+        This is especially important for multi-parent inline frames. */
+    KoRect floatingFrameRect( int frameNum = 0 );
     /** Get the 'baseline' to use for the "floating frame" identified by frameNum.
         -1 means same as the height (usual case) */
     virtual int floatingFrameBaseline( int /*frameNum*/ ) { return -1; }

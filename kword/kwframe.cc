@@ -799,6 +799,8 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 KWAnchor * KWFrameSet::findAnchor( int frameNum )
 {
     Q_ASSERT( m_anchorTextFs );
+    // Yes, a linear search, but only among all customitems of the correct textdoc,
+    // whose number is assumed to be quite small.
     QPtrListIterator<KoTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
@@ -910,18 +912,27 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     invalidate();
 }
 
-QRect KWFrameSet::floatingFrameRect( int frameNum )
+KoRect KWFrameSet::floatingFrameRect( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     Q_ASSERT( frame );
-    return frame->outerRect();
+    Q_ASSERT( isFloating() );
+
+    KWAnchor* anchor = findAnchor( frameNum );
+    Q_ASSERT( anchor );
+    QRect paragRect = anchor->paragraph()->rect();
+    int x = anchor->x() + paragRect.x(); // in LU
+    int y = anchor->y() + paragRect.y(); // in LU
+
+    KoPoint topLeft( m_doc->layoutUnitToPixelX( x ), m_doc->layoutUnitToPixelY( y ) );
+    return KoRect( topLeft, frame->outerKoRect().size() );
 }
 
-KoRect KWFrameSet::floatingFrameKoRect( int frameNum )
+KoSize KWFrameSet::floatingFrameSize( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     Q_ASSERT( frame );
-    return frame->outerKoRect();
+    return frame->outerKoRect().size();
 }
 
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )

@@ -122,7 +122,7 @@ public:
                                KWFrameSetEdit *edit, KWViewMode *viewMode );
     // Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QRect&,
-                           const QPoint& translationOffset,
+                           const QPoint&,
                            KWFrame *, const QColorGroup &, bool, bool,
                            KWFrameSetEdit *, KWViewMode *, bool ) {}
 
@@ -286,8 +286,7 @@ public:
 
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-    virtual QRect floatingFrameRect( int frameNum );
-    virtual KoRect floatingFrameKoRect( int frameNum );
+    virtual KoSize floatingFrameSize( int frameNum = 0 );
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
     virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );

@@ -90,6 +90,8 @@ public:
     /** Convert the @p in the internal qtextdoc coordinates (in layout units)
      * into a point in the document coordinate system (in pt).
      * Also returns the frame in which this point is. */
+    KWFrame * internalToDocument( const KoPoint &relPoint, KoPoint &dPoint ) const;
+    // version taking a LU point as input
     KWFrame * internalToDocument( const QPoint &iPoint, KoPoint &dPoint ) const;
 
     /** Same as internalToDocument, but goes directly to the normal coords (zoomed)
@@ -102,6 +104,8 @@ public:
     /** A variant of internalToDocument, when the frame is already known.
      * Both faster, and more correct for inline frames that spawn over multiple containing frames
      */
+    KoPoint internalToDocumentKnowingFrame( const KoPoint &relPoint, KWFrame* theFrame ) const;
+    // [deprecated?] version taking a LU point as input
     KoPoint internalToDocumentKnowingFrame( const QPoint &iPoint, KWFrame* theFrame ) const;
 
     /** Implementation of Ctrl+PageUp/PageDown
