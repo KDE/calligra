@@ -492,74 +492,82 @@ void KoPageLayoutDia::setValuesTab1Helper()
 void KoPageLayoutDia::setupTab2()
 {
     QWidget *tab2 = addPage(i18n( "H&eader && Footer" ));
-    QGridLayout *grid2 = new QGridLayout( tab2, 8, 6, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid2 = new QGridLayout( tab2, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     // ------------- header ---------------
-    QLabel *lHead = new QLabel( i18n( "Head Line" ), tab2 );
-    grid2->addMultiCellWidget( lHead, 0, 0, 0, 5 );
+    QGroupBox *gHead = new QGroupBox( 0, Qt::Vertical, i18n( "Head Line" ), tab2 );
+    gHead->layout()->setSpacing(KDialog::spacingHint());
+    gHead->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *headGrid = new QGridLayout( gHead->layout(), 2, 3 );
 
-    QLabel *lHeadLeft = new QLabel( i18n( "Left:" ), tab2 );
-    grid2->addMultiCellWidget( lHeadLeft, 1, 1, 0, 1 );
+    QLabel *lHeadLeft = new QLabel( i18n( "Left:" ), gHead );
+    headGrid->addWidget( lHeadLeft, 0, 0 );
 
-    eHeadLeft = new QLineEdit( tab2 );
-    grid2->addMultiCellWidget( eHeadLeft, 2, 2, 0, 1 );
+    eHeadLeft = new QLineEdit( gHead );
+    headGrid->addWidget( eHeadLeft, 1, 0 );
     eHeadLeft->setText( hf.headLeft );
 
-    QLabel *lHeadMid = new QLabel( i18n( "Mid:" ), tab2 );
-    grid2->addMultiCellWidget( lHeadMid, 1, 1, 2, 3 );
+    QLabel *lHeadMid = new QLabel( i18n( "Mid:" ), gHead );
+    headGrid->addWidget( lHeadMid, 0, 1 );
 
-    eHeadMid = new QLineEdit( tab2 );
-    grid2->addMultiCellWidget( eHeadMid, 2, 2, 2, 3 );
+    eHeadMid = new QLineEdit( gHead );
+    headGrid->addWidget( eHeadMid, 1, 1 );
     eHeadMid->setText( hf.headMid );
 
-    QLabel *lHeadRight = new QLabel( i18n( "Right:" ), tab2 );
-    grid2->addMultiCellWidget( lHeadRight, 1, 1, 4, 5 );
+    QLabel *lHeadRight = new QLabel( i18n( "Right:" ), gHead );
+    headGrid->addWidget( lHeadRight, 0, 2 );
 
-    eHeadRight = new QLineEdit( tab2 );
-    grid2->addMultiCellWidget( eHeadRight, 2, 2, 4, 5 );
+    eHeadRight = new QLineEdit( gHead );
+    headGrid->addWidget( eHeadRight, 1, 2 );
     eHeadRight->setText( hf.headRight );
 
+    grid2->addMultiCellWidget( gHead, 0, 1, 0, 1 );
+
     // ------------- footer ---------------
-    QLabel *lFoot = new QLabel( i18n( "Foot Line" ), tab2 );
-    grid2->addMultiCellWidget( lFoot, 3, 3, 0, 5 );
+    QGroupBox *gFoot = new QGroupBox( 0, Qt::Vertical, i18n( "Foot Line" ), tab2 );
+    gFoot->layout()->setSpacing(KDialog::spacingHint());
+    gFoot->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *footGrid = new QGridLayout( gFoot->layout(), 2, 3 );
 
-    QLabel *lFootLeft = new QLabel( i18n( "Left:" ), tab2 );
-    grid2->addMultiCellWidget( lFootLeft, 4, 4, 0, 1 );
+    QLabel *lFootLeft = new QLabel( i18n( "Left:" ), gFoot );
+    footGrid->addWidget( lFootLeft, 0, 0 );
 
-    eFootLeft = new QLineEdit( tab2 );
-    grid2->addMultiCellWidget( eFootLeft, 5, 5, 0, 1 );
+    eFootLeft = new QLineEdit( gFoot );
+    footGrid->addWidget( eFootLeft, 1, 0 );
     eFootLeft->setText( hf.footLeft );
 
-    QLabel *lFootMid = new QLabel( i18n( "Mid:" ), tab2 );
-    grid2->addMultiCellWidget( lFootMid, 4, 4, 2, 3 );
+    QLabel *lFootMid = new QLabel( i18n( "Mid:" ), gFoot );
+    footGrid->addWidget( lFootMid, 0, 1 );
 
-    eFootMid = new QLineEdit( tab2 );
-    grid2->addMultiCellWidget( eFootMid, 5, 5, 2, 3 );
+    eFootMid = new QLineEdit( gFoot );
+    footGrid->addWidget( eFootMid, 1, 1 );
     eFootMid->setText( hf.footMid );
 
-    QLabel *lFootRight = new QLabel( i18n( "Right:" ), tab2 );
-    grid2->addMultiCellWidget( lFootRight, 4, 4, 4, 5 );
+    QLabel *lFootRight = new QLabel( i18n( "Right:" ), gFoot );
+    footGrid->addWidget( lFootRight, 0, 2 );
 
-    eFootRight = new QLineEdit( tab2 );
-    grid2->addMultiCellWidget( eFootRight, 5, 5, 4, 5 );
+    eFootRight = new QLineEdit( gFoot );
+    footGrid->addWidget( eFootRight, 1, 2 );
     eFootRight->setText( hf.footRight );
 
+    grid2->addMultiCellWidget( gFoot, 2, 3, 0, 1 );
+
     QLabel *lMacros2 = new QLabel( i18n( "You can insert several tags in the text:" ), tab2 );
-    grid2->addMultiCellWidget( lMacros2, 6, 6, 0, 5 );
+    grid2->addMultiCellWidget( lMacros2, 4, 4, 0, 1 );
 
     QLabel *lMacros3 = new QLabel( i18n("<qt><ul><li>&lt;sheet&gt; The sheet name</li>"
                            "<li>&lt;page&gt; The current page</li>"
                            "<li>&lt;pages&gt; The total number of pages</li>"
                            "<li>&lt;name&gt; The filename or URL</li>"
                            "<li>&lt;file&gt; The filename with complete path or the URL</li></ul></qt>"), tab2 );
-    grid2->addMultiCellWidget( lMacros3, 7, 7, 0, 2, Qt::AlignTop );
+    grid2->addMultiCellWidget( lMacros3, 5, 6, 0, 0, Qt::AlignTop );
 
     QLabel *lMacros4 = new QLabel( i18n("<qt><ul><li>&lt;time&gt; The current time</li>"
                            "<li>&lt;date&gt; The current date</li>"
                            "<li>&lt;author&gt; Your full name</li>"
                            "<li>&lt;org&gt; Your organization</li>"
                            "<li>&lt;email&gt; Your email address</li></ul></qt>"), tab2 );
-    grid2->addMultiCellWidget( lMacros4, 7, 7, 3, 5, Qt::AlignTop );
+    grid2->addMultiCellWidget( lMacros4, 5, 6, 1, 1, Qt::AlignTop );
 }
 
 /*================================================================*/
