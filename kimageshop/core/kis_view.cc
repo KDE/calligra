@@ -32,7 +32,9 @@
 #include <kruler.h>
 #include <klocale.h>
 #include <khelpmenu.h>
+#include <kfiledialog.h>
 
+#include "kis_core.h"
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
@@ -320,29 +322,32 @@ void KisView::setupActions()
 
   // layer actions
 
-  m_layer_rotate180 = new KAction( i18n("Rotate 1&80"), 0, this,
+  (void) new KAction( i18n("&Insert layer..."), 0, this,
+                      SLOT( insert_layer() ), actionCollection(), "insert_layer" );
+
+  (void) new KAction( i18n("Rotate &180"), 0, this,
 				   SLOT( layer_rotate180() ),actionCollection(), "layer_rotate180");
 
-  m_layer_rotateleft90 = new KAction( i18n("&Rotate &270"), 0, this,
+  (void) new KAction( i18n("Rotate &270"), 0, this,
 				      SLOT( layer_rotateleft90() ),actionCollection(), "layer_rotateleft90");
 
-  m_layer_rotateright90 = new KAction( i18n("&Rotate &90"), 0, this,
+  (void) new KAction( i18n("Rotate &90"), 0, this,
 				       SLOT( layer_rotateright90() ),actionCollection(), "layer_rotateright90");
 
-  m_layer_mirrorX = new KAction( i18n("Mirror &X"), 0, this,
+  (void) new KAction( i18n("Mirror &X"), 0, this,
 				 SLOT( layer_mirrorX() ),actionCollection(), "layer_mirrorX");
 
-  m_layer_mirrorY = new KAction( i18n("Mirror &Y"), 0, this,
+  (void) new KAction( i18n("Mirror &Y"), 0, this,
 				 SLOT( layer_mirrorY() ),actionCollection(), "layer_mirrorY");
 
   // image actions
-  m_merge_all_layers = new KAction( i18n("Merge &all layers"), 0, this,
+  (void) new KAction( i18n("Merge &all layers"), 0, this,
 				    SLOT( merge_all_layers() ),actionCollection(), "merge_all_layers");
 
-  m_merge_visible_layers = new KAction( i18n("Merge &visible layers"), 0, this,
+  (void) new KAction( i18n("Merge &visible layers"), 0, this,
 				    SLOT( merge_visible_layers() ),actionCollection(), "merge_visible_layers");
 
-  m_merge_linked_layers = new KAction( i18n("Merge &linked layers"), 0, this,
+  (void) new KAction( i18n("Merge &linked layers"), 0, this,
 				    SLOT( merge_linked_layers() ),actionCollection(), "merge_linked_layers");
 
   // setting actions
@@ -783,6 +788,20 @@ void KisView::updateToolbarButtons()
  * layer action slots
  */
 
+void KisView::insert_layer()
+{
+  debug("KisView::insert_layer");
+  
+  QString fileName;
+
+  fileName = KFileDialog::getOpenFileName( getenv("HOME"),KisCore::readFilters(),0,i18n("Image file for layer") );
+
+  if( !fileName.isEmpty() )
+  {
+    // TODO : insert layer
+  }
+}
+
 void KisView::layer_rotate180()
 {
   m_pDoc->rotateLayer180(0);
@@ -893,11 +912,13 @@ void KisView::slotSetBrush(const KisBrush* b)
 void KisView::slotSetFGColor(const KisColor& c)
 {
   m_fg = c;
+  m_pSideBar->slotSetFGColor( c );
 }
 
 void KisView::slotSetBGColor(const KisColor& c)
 {
   m_bg = c;
+  m_pSideBar->slotSetBGColor( c );
 }
 
 void KisView::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )

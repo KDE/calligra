@@ -27,7 +27,6 @@ ColorPicker::ColorPicker(KisDoc *doc, KisView *view)
   : KisTool(doc, view)
 {
   m_Cursor = KisCursor::pickerCursor();
-  m_dragging = false;
 }
 
 ColorPicker::~ColorPicker() {}
@@ -60,39 +59,8 @@ void ColorPicker::mousePress(QMouseEvent *e)
   if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
     return;
   
-  m_dragging = true;
-  
   if (e->button() == QMouseEvent::LeftButton)
     m_pView->slotSetFGColor(pick(e->pos().x(), e->pos().y()));
   else if (e->button() == QMouseEvent::RightButton)
     m_pView->slotSetBGColor(pick(e->pos().x(), e->pos().y()));
-}
-
-void ColorPicker::mouseMove(QMouseEvent *e)
-{
-  if ( m_pDoc->isEmpty() )
-    return;
-
-  if(m_dragging)
-    {
-      if( !m_pDoc->getCurrentLayer()->isVisible() )
-	return;
-      
-      if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
-	  return;
-
-      if (e->button() == QMouseEvent::LeftButton)
-	m_pView->slotSetFGColor(pick(e->pos().x(), e->pos().y()));
-      else if (e->button() == QMouseEvent::RightButton)
-	m_pView->slotSetBGColor(pick(e->pos().x(), e->pos().y()));
-    }
-}
-
-void ColorPicker::mouseRelease(QMouseEvent *e)
-{
-  if (e->button() != QMouseEvent::LeftButton
-      && e->button() != QMouseEvent::RightButton)
-    return;
-  
-  m_dragging = false;
 }

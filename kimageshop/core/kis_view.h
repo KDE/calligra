@@ -103,6 +103,7 @@ class KisView : public KoView
   void updateToolbarButtons();
 
   // layer action slots
+  void insert_layer();
   void layer_rotate180();
   void layer_rotateleft90();
   void layer_rotateright90();
@@ -169,12 +170,8 @@ class KisView : public KoView
   // dialog actions
   KToggleAction *m_dialog_layer, *m_dialog_color, *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
   // tool actions
-  KToggleAction *m_tool_select_rect, *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen
-    , *m_tool_gradient, *m_tool_colorpicker, *m_tool_airbrush, *m_tool_eraser;
-  // layer actions
-  KAction *m_layer_rotate180, *m_layer_rotateleft90, *m_layer_rotateright90, *m_layer_mirrorX, *m_layer_mirrorY;
-  // image actions
-  KAction *m_merge_all_layers, *m_merge_visible_layers, *m_merge_linked_layers;
+  KToggleAction *m_tool_select_rect, *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen,
+    *m_tool_gradient, *m_tool_colorpicker, *m_tool_airbrush, *m_tool_eraser;
 
   KisDoc               *m_pDoc;
   KisTool              *m_pTool; // currently active tool

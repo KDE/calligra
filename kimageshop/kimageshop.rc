@@ -21,6 +21,8 @@
   <Action name="merge_linked_layers"/>
  </Menu>
  <Menu name="Layer"><text>Layer</text>
+  <Action name="insert_layer"/>
+  <Separator/>
   <Action name="layer_rotateright90"/>
   <Action name="layer_rotate180"/>
   <Action name="layer_rotateleft90"/>

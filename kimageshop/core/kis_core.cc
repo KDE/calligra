@@ -1,7 +1,7 @@
 /*
- *  colorpicker.h - part of KImageShop
+ *  core.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter
+ *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,27 +18,16 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __colorpicker_h__
-#define __colorpicker_h__
+#include <kimgio.h>
 
-#include <qpoint.h>
+#include "kis_core.h"
 
-#include "kis_color.h"
-#include "kis_tool.h"
-
-class ColorPicker : public KisTool
+QString KisCore::readFilters()
 {
+  return KImageIO::pattern( KImageIO::Reading ) + "\n*.kis|KImageShop picture\n";
+}
 
- public:
-  ColorPicker(KisDoc *doc, KisView *view);
-  ~ColorPicker();
-  
-  QString toolName() { return QString("Color picker"); }
-
-  KisColor pick(int x, int y);
-
- public slots:
-  virtual void mousePress(QMouseEvent*); 
-};
-
-#endif //__colorpicker_h__
+QString KisCore::writeFilters()
+{
+  return KisCore::readFilters();
+}
