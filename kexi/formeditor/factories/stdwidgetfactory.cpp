@@ -108,7 +108,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wLabel);
 
 	KFormDesigner::Widget *wPixLabel = new KFormDesigner::Widget(this);
-	wPixLabel->setPixmap("label");
+	wPixLabel->setPixmap("pixmaplabel");
 	wPixLabel->setClassName("MyPicLabel");
 	wPixLabel->setName(i18n("Picture Label"));
 	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
