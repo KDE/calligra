@@ -329,7 +329,7 @@ protected:
 
     KoTabulatorList m_tabList;
     KWUnit::Unit m_unit;
-
+    double m_toplimit;
     bool noSignals;
 };
 

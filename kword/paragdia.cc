@@ -1379,6 +1379,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
         frameWidth=KWUnit::userValue(frameWidth,m_unit);
         length=i18n("\nFrame width : %1").arg(frameWidth);
     }
+    m_toplimit=KWUnit::fromUserValue(frameWidth,m_unit);
     QVBoxLayout* Form1Layout = new QVBoxLayout( this );
     Form1Layout->setSpacing( 6 );
     Form1Layout->setMargin( 11 );
@@ -1557,12 +1558,16 @@ void KWParagTabulatorsWidget::newClicked() {
         if(m_unit==KWUnit::U_INCH) // inches are 25 times as big as mm, take it easy with adding..
             add=0.1;
 
-        newTab->ptPos=pos + KWUnit::fromUserValue( add , m_unit );
-        newTab->type=m_tabList[selected].type;
-        m_tabList.insert(m_tabList.at(selected), *newTab);
-        lstTabs->insertItem( tabToString(newTab), selected);
-        lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
-        sortLists();
+        pos=pos + KWUnit::fromUserValue( add , m_unit );
+        if(pos<m_toplimit)
+        {
+            newTab->ptPos=pos + KWUnit::fromUserValue( add , m_unit );
+            newTab->type=m_tabList[selected].type;
+            m_tabList.insert(m_tabList.at(selected), *newTab);
+            lstTabs->insertItem( tabToString(newTab), selected);
+            lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
+            sortLists();
+        }
     }
 }
 
