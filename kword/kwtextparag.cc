@@ -1420,9 +1420,18 @@ void KoParagLayout::save( QDomElement & parentElem )
     parentElem.appendChild( element );
     int a = alignment;
     element.setAttribute( "align", a==Qt::AlignRight ? "right" : a==Qt::AlignCenter ? "center" : a==Qt3::AlignJustify ? "justify" : "left" );
-    if ( margins[QStyleSheetItem::MarginFirstLine] != 0 ||
+
+    // Disabled the tests, because when loading the default is the style,
+    // not 0. So if someone puts e.g. a margin in a style and removes it
+    // for a given paragraph, the margin of the style would be applied when
+    // re-loading the document.
+    // The other option, omitting when saving if it matches the style's layout,
+    // would be consistent with the loading code, but would make writing filters
+    // more difficult (e.g. plain text and html filters don't care about styles)
+
+    /*if ( margins[QStyleSheetItem::MarginFirstLine] != 0 ||
          margins[QStyleSheetItem::MarginLeft] != 0 ||
-         margins[QStyleSheetItem::MarginRight] != 0 )
+         margins[QStyleSheetItem::MarginRight] != 0 )*/
     {
         element = doc.createElement( "INDENTS" );
         parentElem.appendChild( element );
@@ -1434,8 +1443,8 @@ void KoParagLayout::save( QDomElement & parentElem )
             element.setAttribute( "right", margins[QStyleSheetItem::MarginRight] );
     }
 
-    if ( margins[QStyleSheetItem::MarginTop] != 0 ||
-         margins[QStyleSheetItem::MarginBottom] != 0 )
+    /*if ( margins[QStyleSheetItem::MarginTop] != 0 ||
+         margins[QStyleSheetItem::MarginBottom] != 0 )*/
     {
         element = doc.createElement( "OFFSETS" );
         parentElem.appendChild( element );
@@ -1445,7 +1454,7 @@ void KoParagLayout::save( QDomElement & parentElem )
             element.setAttribute( "after", margins[QStyleSheetItem::MarginBottom] );
     }
 
-    if ( lineSpacing != 0 )
+    /*if ( lineSpacing != 0 )*/
     {
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
@@ -1457,7 +1466,7 @@ void KoParagLayout::save( QDomElement & parentElem )
             element.setAttribute( "value", lineSpacing );
     }
 
-    if ( pageBreaking != 0 )
+    /*if ( pageBreaking != 0 )*/
     {
         element = doc.createElement( "PAGEBREAKING" );
         parentElem.appendChild( element );
@@ -1469,31 +1478,31 @@ void KoParagLayout::save( QDomElement & parentElem )
             element.setAttribute( "hardFrameBreakAfter", "true" );
     }
 
-    if ( leftBorder.ptWidth > 0 )
+    /*if ( leftBorder.ptWidth > 0 )*/
     {
         element = doc.createElement( "LEFTBORDER" );
         parentElem.appendChild( element );
         leftBorder.save( element );
     }
-    if ( rightBorder.ptWidth > 0 )
+    /*if ( rightBorder.ptWidth > 0 )*/
     {
         element = doc.createElement( "RIGHTBORDER" );
         parentElem.appendChild( element );
         rightBorder.save( element );
     }
-    if ( topBorder.ptWidth > 0 )
+    /*if ( topBorder.ptWidth > 0 )*/
     {
         element = doc.createElement( "TOPBORDER" );
         parentElem.appendChild( element );
         topBorder.save( element );
     }
-    if ( bottomBorder.ptWidth > 0 )
+    /*if ( bottomBorder.ptWidth > 0 )*/
     {
         element = doc.createElement( "BOTTOMBORDER" );
         parentElem.appendChild( element );
         bottomBorder.save( element );
     }
-    if ( counter && counter->numbering() != KoParagCounter::NUM_NONE )
+    /*if ( counter && counter->numbering() != KoParagCounter::NUM_NONE )*/
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
