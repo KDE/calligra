@@ -162,48 +162,43 @@ void WmfExport::visitVSubpath( VSubpath& path ) {
     int  nbrPoint=0;      // number of points in the path
     
     for( ; itr.current(); ++itr ) {
-        switch( itr.current()->type() ) {
-            case VSegment::curve:   // convert curveTo into lineTo
-                newPath = new VSubpath( mDoc );
+	VSegment *segment= itr.current();
+	if (segment->isCurve()) {
+	    newPath = new VSubpath( mDoc );
                 
-                // newPath duplicate the list of curve
-                newPath->moveTo( itr.current()->prev()->knot() );
-                newPath->append( itr.current()->clone() );
-                while( itr.current()->next() ) {
-                    if ( itr.current()->next()->type() == VSegment::curve ) {
-                        newPath->append( itr.current()->next()->clone() );
-                    }
-                    else {
-                        break;
-                    }
-                    ++itr;
-                }
-                
-                // flatten the curve
-                cmd.visit( *newPath );
+	    // newPath duplicate the list of curve
+	    newPath->moveTo( itr.current()->prev()->knot() );
+	    newPath->append( itr.current()->clone() );
+	    while( itr.current()->next() ) {
+		if ( itr.current()->next()->isCurve() ) {
+		    newPath->append( itr.current()->next()->clone() );
+		}
+		else {
+		    break;
+		}
+		++itr;
+	    }
 
-                // adjust the number of points                
-                pa->resize( pa->size() + newPath->count() - 2 );
-                
-                // Ommit the first segment and insert points
-                newPath->first();
-                while( newPath->next() ) {
-                    pa->setPoint( nbrPoint++, coordX( newPath->current()->knot().x() ), 
-                                        coordY( newPath->current()->knot().y() ) );
-                }
-                delete newPath;
-            break;
-            case VSegment::line:
-                pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ), 
-                                    coordY( itr.current()->knot().y() ) );
-            break;
-            case VSegment::begin:
-                // start a new polygon
-                pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ), 
-                                    coordY( itr.current()->knot().y() ) );
-            break;
-            default:
-            break;
+	    // flatten the curve
+	    cmd.visit( *newPath );
+
+	    // adjust the number of points                
+	    pa->resize( pa->size() + newPath->count() - 2 );
+
+	    // Ommit the first segment and insert points
+	    newPath->first();
+	    while( newPath->next() ) {
+		pa->setPoint( nbrPoint++, coordX( newPath->current()->knot().x() ), 
+			coordY( newPath->current()->knot().y() ) );
+	    }
+	    delete newPath;
+	} else if (segment->isLine()) {
+	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ), 
+		    coordY( itr.current()->knot().y() ) );
+	} else if (segment->isBegin()) {
+	    // start a new polygon
+	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ), 
+		    coordY( itr.current()->knot().y() ) );
         }
     }
     
