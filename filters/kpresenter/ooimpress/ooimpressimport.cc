@@ -375,11 +375,32 @@ QDomElement OoImpressImport::parseObject( QDomDocument& doc, const QDomElement& 
     size.setAttribute( "height", CM_TO_POINT(object.attribute("svg:height").toDouble()) );
     objectElement.appendChild( size );
 
+    m_styleStack.clear();
+    fillStyleStack( object );
+    m_styleStack.setMark();
+
+    // parse the pen- & brush-properties
     QDomElement pen = doc.createElement( "PEN" );
     objectElement.appendChild( pen );
 
+    if ( m_styleStack.hasAttribute( "draw:stroke" ) )
+        if ( m_styleStack.attribute( "draw:stroke" ) == "solid" ) // TODO check for other styles
+            pen.setAttribute( "style", 1 );
+        else
+            pen.setAttribute( "style", 0 );
+    if ( m_styleStack.hasAttribute( "svg:stroke-width" ) )
+        pen.setAttribute( "width", (int) CM_TO_POINT( m_styleStack.attribute( "svg:stroke-width" ).toDouble() ) );
+    if ( m_styleStack.hasAttribute( "svg:stroke-color" ) )
+        pen.setAttribute( "color", m_styleStack.attribute( "svg:stroke-color" ) );
+
     QDomElement brush = doc.createElement( "BRUSH" );
     objectElement.appendChild( brush );
+
+    if ( m_styleStack.hasAttribute( "draw:fill" ) )
+        if ( m_styleStack.attribute( "draw:fill" ) == "solid" ) // TODO check for other styles
+            brush.setAttribute( "style", 1 );
+    if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
+        brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
 
     return objectElement;
 }
@@ -416,6 +437,10 @@ QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomEleme
 
     objectElement.appendChild( linetype );
 
+    m_styleStack.clear();
+    fillStyleStack( object );
+    m_styleStack.setMark();
+
     QDomElement pen = doc.createElement( "PEN" );
     objectElement.appendChild( pen );
 
@@ -430,6 +455,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
 {
     QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
     //lukas: TODO the text box can have a style as well (presentation:style-name)!
+    //percy: this should be fixed with the new StyleStack
 
     for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
     {
@@ -450,7 +476,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         }
 
         textObjectElement.appendChild( e );
-
+        m_styleStack.clearMark(); // remove the styles added by the child-object
     }
 
     return textObjectElement;
@@ -466,7 +492,11 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     {
         e = n.toElement();
         if ( e.tagName() == "text:unordered-list" || e.tagName() == "text:ordered-list" )
+        {
             indentation += 10;
+            // parse the list-properties
+            fillStyleStack( e );
+        }
         if ( e.tagName() == "text:p" )
             break;
     }
@@ -476,6 +506,9 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     {
         QDomElement indent = doc.createElement( "INDENTS" );
         indent.setAttribute( "left", MM_TO_POINT( indentation ) ); //lukas: is MM always correct?
+        // percy: MM is correct as I count the number of indentations and take 10mm for every
+        // indentation-level. But we could use the values from the corresponding list-style instead.
+        // See styles L1, L2, L3...
         p.appendChild( indent );
     }
 
@@ -493,18 +526,17 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     QDomElement p = doc.createElement( "P" );
 
     // parse the paragraph-properties
-    QDomElement *style = m_styles[paragraph.attribute( "text:style-name" )];
-    QDomElement properties = style->namedItem( "style:properties" ).toElement();
+    fillStyleStack( paragraph );
 
-    if ( properties.hasAttribute( "fo:text-align" ) )
+    if ( m_styleStack.hasAttribute( "fo:text-align" ) )
     {
-        if ( properties.attribute( "fo:text-align" ) == "center" )
+        if ( m_styleStack.attribute( "fo:text-align" ) == "center" )
             p.setAttribute( "align", 4 );
-        else if ( properties.attribute( "fo:text-align" ) == "justify" )
+        else if ( m_styleStack.attribute( "fo:text-align" ) == "justify" )
             p.setAttribute( "align", 8 );
-        else if ( properties.attribute( "fo:text-align" ) == "start" )
+        else if ( m_styleStack.attribute( "fo:text-align" ) == "start" )
             p.setAttribute( "align", 0 );
-        else if ( properties.attribute( "fo:text-align" ) == "end" )
+        else if ( m_styleStack.attribute( "fo:text-align" ) == "end" )
             p.setAttribute( "align", 2 );
     }
     else
@@ -513,34 +545,35 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraph.text() ) );
 
-    kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
+    //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
 
-    // parse the text-properties if available
+    // if we have a 'text:span' we add its style to the stack
     QDomNode textSpan = paragraph.namedItem( "text:span" );
     if ( !textSpan.isNull() )
-    {
-        QDomElement ts = textSpan.toElement();
-        QDomElement *style = m_styles[ts.attribute( "text:style-name" )];
-        QDomElement properties = style->namedItem( "style:properties" ).toElement();
+        fillStyleStack( textSpan.toElement() );
 
-        if ( properties.hasAttribute( "fo:color" ) )
-            text.setAttribute( "color", properties.attribute( "fo:color" ) );
-        if ( properties.hasAttribute( "fo:font-family" ) )
-            text.setAttribute( "family", properties.attribute( "fo:font-family" ).remove( "'" ) );
-        if ( properties.hasAttribute( "fo:font-size" ) )
-            text.setAttribute( "pointSize", properties.attribute( "fo:font-size" ).toDouble() );
-        if ( properties.hasAttribute( "fo:font-weight" ) )
-            if ( properties.attribute( "fo:font-weight" ) == "bold" )
-                text.setAttribute( "bold", 1 );
-        if ( properties.hasAttribute( "fo:font-style" ) )
-            if ( properties.attribute( "fo:font-style" ) == "italic" )
-                text.setAttribute( "italic", 1 );
-        if ( properties.hasAttribute( "style:text-underline" ) )
+    // parse the text-properties
+    if ( m_styleStack.hasAttribute( "fo:color" ) )
+        text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
+    if ( m_styleStack.hasAttribute( "fo:font-family" ) )
+        text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
+    if ( m_styleStack.hasAttribute( "fo:font-size" ) )
+        text.setAttribute( "pointSize", m_styleStack.attribute( "fo:font-size" ).toDouble() );
+    if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
+        if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
+            text.setAttribute( "bold", 1 );
+    if ( m_styleStack.hasAttribute( "fo:font-style" ) )
+        if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
+            text.setAttribute( "italic", 1 );
+    if ( m_styleStack.hasAttribute( "style:text-underline" ) )
+    {
+        if ( m_styleStack.attribute( "style:text-underline" ) == "single" )
         {
             text.setAttribute( "underline", 1 );
             text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
         }
     }
+
     p.appendChild( text );
 
     return p;
@@ -578,6 +611,103 @@ void OoImpressImport::insertStyles( const QDomElement& styles )
         m_styles.insert( name, new QDomElement( e ) );
         //kdDebug() << "Style: '" << name << "' loaded " << endl;
     }
+}
+
+void OoImpressImport::fillStyleStack( const QDomElement& object )
+{
+    // find all styles associated with an object and push them on the stack
+    if ( object.hasAttribute( "presentation:style-name" ) )
+    {
+        QDomElement *style = m_styles[object.attribute( "presentation:style-name" )];
+        if ( style->hasAttribute( "style:parent-style-name" ) )
+            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
+        m_styleStack.push( style );
+    }
+    if ( object.hasAttribute( "draw:text-style-name" ) )
+    {
+        QDomElement *style = m_styles[object.attribute( "draw:text-style-name" )];
+        if ( style->hasAttribute( "style:parent-style-name" ) )
+            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
+        m_styleStack.push( style );
+    }
+    if ( object.hasAttribute( "draw:style-name" ) )
+    {
+        QDomElement *style = m_styles[object.attribute( "draw:style-name" )];
+        if ( style->hasAttribute( "style:parent-style-name" ) )
+            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
+        m_styleStack.push( style );
+    }
+    if ( object.hasAttribute( "text:style-name" ) )
+    {
+        QDomElement *style = m_styles[object.attribute( "text:style-name" )];
+        if ( style->hasAttribute( "style:parent-style-name" ) )
+            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
+        m_styleStack.push( style );
+    }
+}
+
+StyleStack::StyleStack()
+    : m_mark(0)
+{
+    m_stack.setAutoDelete(false);
+}
+
+StyleStack::~StyleStack()
+{
+}
+
+void StyleStack::clear()
+{
+    m_mark = 0;
+    m_stack.clear();
+}
+
+void StyleStack::clearMark()
+{
+    uint index;
+    for (index = m_stack.count() - 1; index >= m_mark; --index)
+        m_stack.remove(index);
+}
+
+void StyleStack::setMark()
+{
+    m_mark = m_stack.count();
+}
+
+void StyleStack::pop()
+{
+    m_stack.removeLast();
+}
+
+void StyleStack::push(const QDomElement* style)
+{
+    m_stack.append(style);
+}
+
+bool StyleStack::hasAttribute(const QString& name)
+{
+    // TODO: has to be fixed for complex styles like list-styles
+    for (QDomElement *style = m_stack.last(); style; style = m_stack.prev())
+    {
+        QDomElement properties = style->namedItem("style:properties").toElement();
+        if (properties.hasAttribute(name))
+            return true;
+    }
+
+    return false;
+}
+
+QString StyleStack::attribute(const QString& name)
+{
+    // TODO: has to be fixed for complex styles like list-styles
+    for (QDomElement *style = m_stack.last(); style; style = m_stack.prev())
+    {
+        QDomElement properties = style->namedItem("style:properties").toElement();
+        if (properties.hasAttribute(name))
+            return properties.attribute(name);
+    }
+
+    return QString::null;
 }
 
 #include <ooimpressimport.moc>
