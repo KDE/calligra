@@ -760,6 +760,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
             else if ( format.startsWith( "PPPP" ) )
             {
                 addTextNumber( text, elementWriter );
+                //<number:month number:possessive-form="true" number:textual="true" number:style="long"/>
                 //elementWriter.startElement( "number:month" );
                 //elementWriter.addAttribute( "number:style", "short" );
                 //elementWriter.addAttribute( "number:textual", "false");
@@ -770,6 +771,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
             else if ( format.startsWith( "PPP" ) )
             {
                 addTextNumber( text, elementWriter );
+                //<number:month number:possessive-form="true" number:textual="true" number:style="short"/>
                 //elementWriter.startElement( "number:month" );
                 //elementWriter.addAttribute( "number:style", "short" );
                 //elementWriter.addAttribute( "number:textual", "false");
@@ -892,6 +894,9 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     elementWriter.addAttribute( "number:min-integer-digits", integer );
     elementWriter.addAttribute( "number:min-numerator-digits",numerator );
     elementWriter.addAttribute( "number:min-denominator-digits",denominator );
+
+    //TODO add for future
+    //elementWriter.addAttribute( "number:denominator-value", denominatorValue );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
