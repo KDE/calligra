@@ -39,10 +39,11 @@ extern "C" {
 typedef struct _ArtPattern ArtPattern;
 
 struct _ArtPattern {
-  int twidth;		/* width of tile */
-  int theight;		/* height of tile */
+  unsigned int twidth;		/* width of tile */
+  unsigned int theight;		/* height of tile */
+  art_u8 opacity; 			/* opacity level */
   double angle;
-  art_u8 *buffer;	/* image source */
+  art_u8 *buffer;			/* image source */
 };
 
 void

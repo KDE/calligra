@@ -54,6 +54,7 @@ art_render_pattern_render (ArtRenderCallback *self, ArtRender *render,
   art_u8 *bufp = render->image_buf;
 
   double angle = pattern->angle;
+  double opacity = pattern->opacity;
   double cosangle = cos(angle);
   double sinangle = sin(angle);
 
@@ -74,7 +75,7 @@ art_render_pattern_render (ArtRenderCallback *self, ArtRender *render,
           bufp[0] = pattern->buffer[index + 2];
           bufp[1] = pattern->buffer[index + 1];
           bufp[2] = pattern->buffer[index + 0];
-          bufp[3] = pattern->buffer[index + 3];
+          bufp[3] = opacity;
 		/*}*/
       bufp += pixstride;
   }
