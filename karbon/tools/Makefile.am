@@ -9,8 +9,6 @@ noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
 	vccommand.h \
-	vmcmd_select.h \
-	vmcmd_delete.h \
 	vccmd_ellipse.h \
 	vccmd_polygon.h \
 	vccmd_rectangle.h \
@@ -18,18 +16,18 @@ noinst_HEADERS = \
 	vccmd_sinus.h \
 	vccmd_spiral.h \
 	vccmd_star.h \
-	vctool_select.h \
 	vctool_ellipse.h \
 	vctool_rectangle.h \
 	vctool_roundrect.h \
 	vctool_sinus.h \
 	vctool_star.h \
+	vmcmd_delete.h \
+	vmcmd_select.h \
+	vmtool_select.h \
 	vtool.h
 
 libkarbontools_la_SOURCES = \
 	vccommand.cc \
-	vmcmd_select.cc \
-	vmcmd_delete.cc \
 	vccmd_ellipse.cc \
 	vccmd_polygon.cc \
 	vccmd_rectangle.cc \
@@ -37,15 +35,17 @@ libkarbontools_la_SOURCES = \
 	vccmd_sinus.cc \
 	vccmd_spiral.cc \
 	vccmd_star.cc \
-	vctool_select.cc \
 	vctool_ellipse.cc \
 	vctool_rectangle.cc \
 	vctool_roundrect.cc \
 	vctool_sinus.cc \
-	vctool_star.cc 
+	vctool_star.cc \
+	vmcmd_delete.cc \
+	vmcmd_select.cc \
+	vmtool_select.cc
 
 libkarbontools_la_LIBADD = \
-        ../ui/libkarbonui.la
+	../ui/libkarbonui.la
 
 libkarbontools_la_METASOURCES = \
 	AUTO

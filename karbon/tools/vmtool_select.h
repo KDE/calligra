@@ -2,8 +2,8 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCTOOLSELECT_H__
-#define __VCTOOLSELECT_H__
+#ifndef __VMTOOLSELECT_H__
+#define __VMTOOLSELECT_H__
 
 #include <qpainter.h>
 #include <qpoint.h>
@@ -13,30 +13,28 @@
 #include "vtool.h"
 
 class KarbonPart;
-//class VCDlgSelect;
 
 // A singleton state to select object(s)
 
-class VCToolSelect : public VTool
+class VMToolSelect : public VTool
 {
 public:
-	virtual ~VCToolSelect();
-	static VCToolSelect* instance( KarbonPart* part );
+	virtual ~VMToolSelect();
+	static VMToolSelect* instance( KarbonPart* part );
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
 protected:
-	VCToolSelect( KarbonPart* part );
+	VMToolSelect( KarbonPart* part );
 
 private:
 	// inline helper functions:
 	void recalcCoords();
 	void drawTemporaryObject( KarbonView* view );
 
-	static VCToolSelect* s_instance;
+	static VMToolSelect* s_instance;
 
 	KarbonPart* m_part;
-	//VCDlgSelect* m_dialog;
 
 	bool m_isDragging;
 	bool m_isSquare;
@@ -51,7 +49,7 @@ private:
 };
 
 inline void
-VCToolSelect::recalcCoords()
+VMToolSelect::recalcCoords()
 {
 	int width;
 	int height;
@@ -89,7 +87,7 @@ VCToolSelect::recalcCoords()
 }
 
 inline void
-VCToolSelect::drawTemporaryObject( KarbonView* view )
+VMToolSelect::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 

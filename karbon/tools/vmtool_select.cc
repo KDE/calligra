@@ -2,40 +2,34 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include "vcdlg_rectangle.h"	// dialog
-#include "vctool_select.h"
+#include "vmtool_select.h"
 #include "vmcmd_select.h"
 
-VCToolSelect* VCToolSelect::s_instance = 0L;
+VMToolSelect* VMToolSelect::s_instance = 0L;
 
-VCToolSelect::VCToolSelect( KarbonPart* part )
+VMToolSelect::VMToolSelect( KarbonPart* part )
 	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
 	  m_isCentered( false )
 {
-	// create config dialog:
-	//m_dialog = new VCDlgSelect();
-	//m_dialog->setValueWidth( 100.0 );
-	//m_dialog->setValueHeight( 100.0 );
 }
 
-VCToolSelect::~VCToolSelect()
+VMToolSelect::~VMToolSelect()
 {
-	//delete( m_dialog );
 }
 
-VCToolSelect*
-VCToolSelect::instance( KarbonPart* part )
+VMToolSelect*
+VMToolSelect::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolSelect( part );
+		s_instance = new VMToolSelect( part );
 	}
 
 	return s_instance;
 }
 
 bool
-VCToolSelect::eventFilter( KarbonView* view, QEvent* event )
+VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 {
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )

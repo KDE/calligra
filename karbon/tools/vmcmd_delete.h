@@ -2,8 +2,8 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCCMDDELETE_H__
-#define __VCCMDDELETE_H__
+#ifndef __VMCMDDELETE_H__
+#define __VMCMDDELETE_H__
 
 #include "vcommand.h"
 #include <qptrlist.h>

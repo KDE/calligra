@@ -2,8 +2,8 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCCMDSELECT_H__
-#define __VCCMDSELECT_H__
+#ifndef __VMCMDSELECT_H__
+#define __VMCMDSELECT_H__
 
 #include "vcommand.h"
 

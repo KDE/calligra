@@ -18,7 +18,7 @@
 #include "vctool_roundrect.h"
 #include "vctool_sinus.h"
 #include "vctool_star.h"
-#include "vctool_select.h"
+#include "vmtool_select.h"
 
 #include "vmcmd_delete.h"
 
@@ -123,7 +123,7 @@ KarbonView::roundRectTool()
 void
 KarbonView::selectTool()
 {
-	s_currentTool = VCToolSelect::instance( m_part );
+	s_currentTool = VMToolSelect::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( ArrowCursor ) );
 }
 
