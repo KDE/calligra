@@ -31,7 +31,6 @@ class KEXI_DB_EXPORT ConnectionData
 {
 	public:
 		typedef QPtrList<ConnectionData> List;
-//		typedef QPtrList<const ConnectionData> ConstList;
 
 		ConnectionData();
 
