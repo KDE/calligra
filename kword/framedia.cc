@@ -1072,7 +1072,8 @@ bool KWFrameDia::applyChanges()
     if ( !frame )
         return false;
     KWFrame *frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)
-    bool isNewFrame = frame->frameSet() == 0L; // true if we are creating a new frame
+    bool isNewFrame = frame->frameSet() == 0L; // true if we are creating a newframe
+    QString name=QString::null;
     if ( tab3 )
     {
         // Frame/Frameset belonging, and frameset naming
@@ -1089,7 +1090,7 @@ bool KWFrameDia::applyChanges()
         int _num = str.toInt() - 1;
         KWFrameSet * fs = frame->frameSet();
 
-        QString name = eFrameSetName->text();
+        name = eFrameSetName->text();
         if ( name.isEmpty() ) // Don't allow empty names
             name = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
 
@@ -1151,17 +1152,8 @@ bool KWFrameDia::applyChanges()
         }
         // Do not use 'fs' past this, the above might have changed the frame's frameset
 
-        if(frame->frameSet() == 0L) { // if there is no frameset (anymore)
-            if ( createFrameset )
-            {
-                kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
-                KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
-                _frameSet->addFrame( frame );
-                doc->addFrameSet( _frameSet );
-                KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), frame) ;
-                doc->addCommand(cmd);
-            }
-            else
+        if(frame->frameSet() == 0L ) { // if there is no frameset (anymore)
+            if( !createFrameset)
             {
                 kdDebug() << "KWFrameDia::applyChanges attaching to frameset " << _num << endl;
                 // attach frame to frameset number _num
@@ -1260,6 +1252,17 @@ bool KWFrameDia::applyChanges()
     else
     {
         delete frameCopy;
+
+        if(frame->frameSet() == 0L && isNewFrame)
+        { // if there is no frameset (anymore)
+            kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
+            KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
+            _frameSet->addFrame( frame );
+            doc->addFrameSet( _frameSet );
+            KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), frame) ;
+            doc->addCommand(cmd);
+        }
+
     }
     frameCopy = 0L; // don't even think about using it below this point :)
 
