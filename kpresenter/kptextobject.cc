@@ -552,6 +552,9 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute(attrTextBackColor, tmpTextBackColor);
     if(tmpVerticalAlign!=-1)
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
+
+    if ( !lastFormat->shadowText() )
+        element.setAttribute("shadowtext", false);
 }
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
@@ -845,8 +848,8 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     }
     if(n.hasAttribute(attrVertAlign))
         format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
-
-
+    if ( n.hasAttribute("shadowtext") )
+        format.setShadowText( static_cast<int>(n.attribute("shadowtext").toInt() ) );
     //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;
     return format;
 }

@@ -3202,6 +3202,7 @@ void KWView::formatFont()
     m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
                                actionFormatSub->isChecked(),
                                actionFormatSuper->isChecked(),
+                               textIface->textShadow(),
                                textIface->textColor(),
                                col,
                                textIface->textUnderlineColor(),
@@ -3240,6 +3241,7 @@ void KWView::slotApplyFont()
                                                          m_fontDlg->getUnderlineLineType(),
                                                          m_fontDlg->getStrikeOutLineType(),
                                                          m_fontDlg->getStrikeOutLineStyle(),
+                                                         m_fontDlg->getShadowText(),
                                                          flags);
             if (cmd)
                 globalCmd->addCommand(cmd);

@@ -503,7 +503,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #IMPLIED
@@ -660,6 +660,15 @@ don't put a </?xml...> at the end of the file!).
     EMPTY>
 <!ATTLIST VERTALIGN
     value CDATA #REQUIRED>
+
+<!-- SHADOWTEXT
+        Value is either 0 or 1 with 1=true and 0=false
+-->
+<!ELEMENT SHADOWTEXT
+    EMPTY>
+<!ATTLIST SHADOWTEXT
+    value CDATA #REQUIRED>
+
 
 <!-- NAME
         The name of a style.

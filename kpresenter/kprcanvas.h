@@ -97,7 +97,7 @@ public:
     void deSelectAllObj();
     void selectObj( KPObject* );
     void deSelectObj( KPObject* );
-    void setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType nblineType, KoTextFormat::UnderlineLineStyle underlineType, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutNblineType, int flags);
+    void setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType nblineType, KoTextFormat::UnderlineLineStyle underlineType, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutNblineType, bool _shadowText, int flags);
 
     void setTextColor( const QColor & );
     void setTextBackgroundColor( const QColor & );
@@ -487,7 +487,7 @@ private:
     bool checkCurrentTextEdit( KPTextObject * textObj );
 
     void rectSymetricalObjet();
-    QPoint applyGrid( const QPoint &pos,bool offset );
+    QPoint applyGrid( const QPoint &pos,bool offset);
     int applyGridOnPosX( int pos ) const;
     int applyGridOnPosY( int pos ) const;
 

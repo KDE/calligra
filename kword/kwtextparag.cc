@@ -330,6 +330,12 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
         }
 
+    if( !refFormat || curFormat->shadowText() != refFormat->shadowText())
+    {
+        elem = doc.createElement( "SHADOWTEXT" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", static_cast<int>(curFormat->shadowText()) );
+    }
     return formatElem;
 }
 
@@ -554,6 +560,9 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
                     elem.attribute("blue").toInt() );
         format.setTextBackgroundColor( col );
     }
+    elem = formatElem.namedItem( "SHADOWTEXT" ).toElement();
+    if ( !elem.isNull() )
+        format.setShadowText( elem.attribute("value").toInt());
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;
