@@ -22,12 +22,17 @@ Boston, MA 02111-1307, USA.
 #define MYSQLDB_H
 
 #include "../../kexiDB/kexidb.h"
+#include "../../kexiDB/kexidbresult.h"
+
+typedef struct st_mysql MYSQL;
+
 
 /*!
  * should overwrite kexiDB/kexiDB
  * all other members ar done by the
  * baseclass
  */
+
 class MySqlDB : public KexiDB
 {
 	Q_OBJECT
@@ -35,6 +40,57 @@ class MySqlDB : public KexiDB
 	public:
 		MySqlDB(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
 		~MySqlDB();
+		
+		/*!
+		 *  connect to mysql-database
+		 */
+		 
+		int		connect(const char *host, const char *user, const char *passwd,
+					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
+
+		/*!
+		 *  get the last error
+		 */
+		QString		error();
+		
+		/*!
+		 * execute a query
+		 */
+		int		query(QString statement);
+		int		realQuery(const char *statement, unsigned int length);
+		
+		QString		realEscape(const QString &str);
+		QByteArray	realEscape(const QByteArray &a); 
+
+		/*!
+		 * mysql_store_result
+		 */
+		KexiDBResult	*storeResult();
+		KexiDBResult	*useResult();
+		KexiDBResult	*listProcesses();
+		
+		int		threadID();
+		 
+		unsigned long	insertID();
+		unsigned long	affectedRows();
+		QString		updateString(const QString &field, const QString &val, const bool nullable=true);
+		QString		updateString(const QString &field, const int val);
+		QString		updateString(const QString &field, const QDate &dat);
+		void		tableUpdate(const QString &table, unsigned long id, char op);
+
+	protected:
+		int		reconnect();
+		void		initCheckUpdate();
+		
+		MYSQL		*m_mysql;
+		bool		m_connected;
+		const char	*m_host;
+		const char	*m_user;
+		const char	*m_passwd;
+		const char	*m_db;
+		unsigned int    m_port;
+		const char	*m_unix_socket;
+		unsigned int	m_client_flag;
 };
 
 #endif

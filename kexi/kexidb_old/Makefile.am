@@ -8,7 +8,7 @@ LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 libkexidb_la_METASOURCES = AUTO
 
-libkexidb_la_SOURCES = kexidbdriver.cpp kexidbinterfacemanager.cpp kexidb.cpp
+libkexidb_la_SOURCES = kexidbdriver.cpp kexidbinterfacemanager.cpp kexidbresult.cpp kexidb.cpp
 
 libkexidb_la_LIBADD = $(LIB_KPARTS)
 

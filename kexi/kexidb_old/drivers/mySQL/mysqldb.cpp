@@ -18,6 +18,8 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
+#include <mysql/mysql.h>
+
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
@@ -27,11 +29,20 @@ K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqli
 
 MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &args) : KexiDB(parent, name)
 {
-	kdDebug() << "mysql plugin loaded secessfully" << endl;
+	kdDebug() << "MySqlDB::MySqlDB()" << endl;
+	
+	m_mysql = 0;
+	m_connected = 0;
+	
 }
 
 MySqlDB::~MySqlDB()
 {
+	if(m_connected)
+	{
+		mysql_close(m_mysql);
+	}
+	m_mysql = 0;
 }
 
 #include "mysqldb.moc"
