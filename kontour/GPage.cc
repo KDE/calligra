@@ -49,10 +49,10 @@ mHandle(this)
   mPageLayout.mmRight = 0;
   mPageLayout.mmTop = 0;
   mPageLayout.mmBottom = 0;
-  mPageLayout.unit = PG_MM;
+  mPageLayout.unit = KoUnit::U_MM;
 
   mBGColor = white;
-  
+
   mCurLayerNum = 0;
 
   // in pt !!
@@ -99,15 +99,15 @@ void GPage::pageLayout(const KoPageLayout &layout)
   mPageLayout = layout;
   switch(layout.unit)
   {
-  case PG_MM:
+  case KoUnit::U_MM:
     mPaperWidth = static_cast<int>(cvtMmToPt(mPageLayout.mmWidth));
     mPaperHeight = static_cast<int>(cvtMmToPt(mPageLayout.mmHeight));
     break;
-  case PG_PT:
+  case KoUnit::U_PT:
     mPaperWidth = static_cast<int>(mPageLayout.ptWidth);
     mPaperHeight = static_cast<int>(mPageLayout.ptHeight);
     break;
-  case PG_INCH:
+  case KoUnit::U_INCH:
     mPaperWidth = static_cast<int>(cvtInchToPt(mPageLayout.inchWidth));
     mPaperHeight = static_cast<int>(cvtInchToPt(mPageLayout.inchHeight));
     break;
@@ -324,7 +324,7 @@ void GPage::moveObjectToIndex(GObject *obj, unsigned int idx)
     emit selectionChanged ();
   }
 }
-  
+
 void GPage::selectObject(GObject *obj)
 {
   if(selection.containsRef(obj)==0)
@@ -385,7 +385,7 @@ void GPage::selectAllObjects()
 //    emit selectionChanged();
 //  }
 }
-  
+
 void GPage::unselectAllObjects()
 {
   if(selection.isEmpty())
@@ -401,7 +401,7 @@ void GPage::unselectAllObjects()
 //    emit selectionChanged();
 //  }
 }
-  
+
 void GPage::selectNextObject()
 {
   GObject *newSel = 0L;
@@ -430,7 +430,7 @@ void GPage::selectNextObject()
 void GPage::selectPrevObject()
 {
 }
-  
+
 void GPage::deleteSelectedObjects()
 {
   if (! selectionIsEmpty ())
@@ -453,7 +453,7 @@ void GPage::deleteSelectedObjects()
     }
   }
 }
-  
+
 KoRect GPage::boundingBoxForSelection()
 {
   if(!selBoxIsValid)
