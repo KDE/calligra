@@ -5,7 +5,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qstring.h>
-
+#include <qvbox.h>
 #include <klocale.h>
 #include <knuminput.h>
 
@@ -14,10 +14,8 @@
 EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "EPS Export" ), Ok | Cancel )
 {
-	QWidget* page = new QWidget( this );
-	setMainWidget( page );
-
-	m_psLevelButtons = new QButtonGroup( i18n( "Options" ), page );
+        QVBox *page = makeVBoxMainWidget();
+        m_psLevelButtons = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Options" ),page );
 
 	QRadioButton* radio;
 	radio = new QRadioButton( i18n( "PostScript Level 1" ), m_psLevelButtons );
@@ -25,6 +23,7 @@ EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
 	radio->setEnabled( false );
 	radio = new QRadioButton( i18n( "PostScript Level 3" ), m_psLevelButtons );
 	radio->setEnabled( false );
+        m_psLevelButtons->setRadioButtonExclusive( TRUE );
 }
 
 uint
