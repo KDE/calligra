@@ -1138,7 +1138,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	else
 	    setPageLayout( _pageLayout, 0, 0 );
     }
-
+    recalcVariables( VT_FIELD );
     return true;
 }
 
@@ -3882,7 +3882,6 @@ void KPresenterDoc::recalcVariables( int type )
 
 void KPresenterDoc::slotRepaintVariable()
 {
-    kdDebug()<<"*********************************************************\n";
     KPObject *kpobject;
     for ( kpobject = objectList()->first(); kpobject; kpobject = objectList()->next() )
     {
