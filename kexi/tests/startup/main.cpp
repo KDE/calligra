@@ -26,9 +26,9 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>*/
 
-#include "core/startup/KexiStartupDialog.h"
-#include "core/startup/KexiConnSelector.h"
-#include "core/startup/KexiProjectSet.h"
+#include "main/startup/KexiStartupDialog.h"
+#include "main/startup/KexiConnSelector.h"
+#include "core/kexiprojectset.h"
 #include "core/kexiprojectdata.h"
 
 int main(int argc, char* argv[])
