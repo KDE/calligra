@@ -29,6 +29,7 @@ KWStyle::KWStyle( const QString & name )
     m_paragLayout.rightBorder.ptWidth=0;
     m_paragLayout.topBorder.ptWidth=0;
     m_paragLayout.bottomBorder.ptWidth=0;
+    m_format.setColor( Qt::black );
 }
 
 KWStyle::KWStyle( QDomElement & styleElem )
