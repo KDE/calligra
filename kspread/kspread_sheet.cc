@@ -6922,6 +6922,17 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
     {
         kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
+        d->layoutDirection = ( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? LeftToRight : RightToLeft;
+        //TODO
+        //<value>lr-tb</value>
+        //<value>rl-tb</value>
+        //<value>tb-rl</value>
+        //<value>tb-lr</value>
+        //<value>lr</value>
+        //<value>rl</value>
+        //<value>tb</value>
+        //<value>page</value>
+
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-orientation" ) )
     {
