@@ -576,8 +576,10 @@ void PropertyEditor::readProperties () {
         widthField->setValue (oInfo.width);
         penColorBttn->setColor (oInfo.color);
         penStyleField->setCurrentItem(oInfo.style);
-        leftArrows->setCurrentItem (oInfo.startArrowId);
-        rightArrows->setCurrentItem (oInfo.endArrowId);
+        if(leftArrows)
+            leftArrows->setCurrentItem (oInfo.startArrowId);
+        if(rightArrows)
+            rightArrows->setCurrentItem (oInfo.endArrowId);
 
         // Fill tab
         GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
