@@ -548,7 +548,7 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
 
     pbCustomize = new QPushButton( i18n( "&Customize" ), innerHolder );
     pbCustomize->setEnabled(false);
-
+    pbCustomize->hide();
     innerGrid->addWidget( pbCustomize, 1, 0 );
 
     grid->addMultiCellWidget( innerHolder, 1, 2, 0, 0 );
