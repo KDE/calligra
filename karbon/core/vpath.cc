@@ -210,6 +210,30 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 							painter->fillPath();
 						}
 
+					//if( jtr.current()->ctrlPointFixing() == VSegment::none ||
+					//	jtr.current()->ctrlPointFixing() == VSegment::first )
+					//{
+						painter->newPath();
+						painter->setRasterOp( Qt::NotROP );
+						painter->setBrush( Qt::blue.light() );
+
+						painter->moveTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
+						painter->lineTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
+						painter->lineTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
+						painter->lineTo( KoPoint(
+							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
+							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
+
+						painter->fillPath();
+					//}
+
+
 					painter->newPath();
 				painter->setRasterOp( Qt::NotROP );
 
@@ -227,28 +251,6 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 							jtr.current()->knot().y() + 2 / zoomFactor ) );
 					painter->fillPath();
 
-
-					if( jtr.current()->ctrlPointFixing() == VSegment::none ||
-						jtr.current()->ctrlPointFixing() == VSegment::first )
-					{
-						painter->newPath();
-						painter->setRasterOp( Qt::NotROP );
-
-						painter->moveTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
-						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() - 2 / zoomFactor ) );
-						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() + 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
-						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() - 2 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
-
-						painter->fillPath();
-					}
 
 					VStroke stroke;
 					stroke.setLineWidth( 1.0 );
@@ -274,8 +276,6 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 							painter->lineTo( KoPoint(
 									jtr.current()->ctrlPoint1().x(),
 									jtr.current()->ctrlPoint1().y() ) );
-							painter->strokePath();
-							painter->newPath();
 						}
 					}
 					else if( jtr.current()->ctrlPointFixing() == VSegment::first )
