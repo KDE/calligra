@@ -194,27 +194,22 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
     autoSave->setSpecialValueText(i18n("No auto save"));
     autoSave->setSuffix(i18n("min"));
 
-    kdDebug()<<"autoSave sizeHint() width :"<<autoSave->sizeHint().width()<<" height() :"<< autoSave->sizeHint().height()<<endl;
-
     lay1->addWidget(autoSave);
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, tmpQGroupBox );
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent file:"));
-    kdDebug()<<"recentFiles sizeHint() width :"<<recentFiles->sizeHint().width()<<" height() :"<< recentFiles->sizeHint().height()<<endl;
 
     lay1->addWidget(recentFiles);
 
     gridX=new KIntNumInput( m_iGridX, tmpQGroupBox );
     gridX->setRange(1, 50, 1);
     gridX->setLabel(i18n("X grid space"));
-    kdDebug()<<"gridX sizeHint() width :"<<gridX->sizeHint().width()<<" height() :"<< gridX->sizeHint().height()<<endl;
     lay1->addWidget(gridX);
 
     gridY=new KIntNumInput(m_iGridY, tmpQGroupBox );
     gridY->setRange(1, 50, 1);
     gridY->setLabel(i18n("Y grid space"));
-    kdDebug()<<"gridY sizeHint() width :"<<gridY->sizeHint().width()<<" height() :"<< gridY->sizeHint().height()<<endl;
     lay1->addWidget(gridY);
 
     // ### move this to KWUnit
@@ -233,20 +228,16 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
       }
 
     double val = KWUnit::userValue( ptIndent, unit );
-    kdDebug() << "indent val=" << val << endl;
     indent = new KDoubleNumInput( val, tmpQGroupBox );
-    indent->setRange(1, 50, 1);
+    indent->setRange(1, 50, 0.1);
+    indent->setFormat( "%.1f" );
     indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
-
-    kdDebug()<<"indent sizeHint() width :"<<indent->sizeHint().width()<<" height() :"<< indent->sizeHint().height()<<endl;
 
     lay1->addWidget(indent);
 
     m_nbPagePerRow=new KIntNumInput(nbPagePerRow, tmpQGroupBox );
     m_nbPagePerRow->setRange(1, 10, 1);
     m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
-
-    kdDebug()<<"m_nbPagePerRow sizeHint() width :"<<m_nbPagePerRow->sizeHint().width()<<" height() :"<< m_nbPagePerRow->sizeHint().height()<<endl;
 
     lay1->addWidget(m_nbPagePerRow);
 
