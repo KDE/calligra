@@ -86,14 +86,7 @@ public:
      * Open a context menu.
      */
     void openPopupMenu( const QPoint &_global );
-    /**
-    * Remove page name from tabList and
-    * put pagename in pagehide
-    * and highlights first name in tabList
-    */
-    void hidePage();
 
-    void hidePage(const QString& pageName );
     /**
      * Shows the page. This makes only sense if
      * the page was hiddem before.

@@ -679,7 +679,22 @@ void KivioView::hidePage()
   if (!m_pActivePage)
     return;
 
-  m_pTabBar->hidePage();
+  if ( m_pDoc->map()->visiblePages().count() ==  1)
+  {
+      KMessageBox::error( this, i18n("You cannot hide the last visible page.") );
+      return;
+  }
+        
+  m_pActivePage->setHidden(true);
+  QString activeName = m_pActivePage->pageName();
+  
+  m_pTabBar->removeTab( activeName );
+        
+  KivioHidePageCommand * cmd = new KivioHidePageCommand(i18n("Hide Page"), m_pActivePage);
+  m_pDoc->addCommand( cmd );
+    
+  changePage( m_pDoc->map()->visiblePages().first() );
+  updateMenuPage();
 }
 
 void KivioView::showPage()
@@ -1713,7 +1728,7 @@ void KivioView::updateButton()
 
 void KivioView::slotPageHidden( KivioPage* page )
 {
-    m_pTabBar->hidePage( page->pageName() );
+    //m_pTabBar->hidePage( page->pageName() );
 }
 
 void KivioView::slotPageShown( KivioPage* page )

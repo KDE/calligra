@@ -539,28 +539,6 @@ void KivioTabBar::mouseDoubleClickEvent( QMouseEvent*  )
     emit doubleClicked();
 }
 
-void KivioTabBar::hidePage()
-{
-    if ( tabsList.count() ==  1)
-    {
-        KMessageBox::error( this, i18n("You cannot hide the last visible page.") );
-        return;
-    }
-    else
-    {
-        KivioPage* page = m_pView->activePage();
-        m_pView->activePage()->setHidden(true);
-        QString activeName = page->pageName();
-        removeTab( activeName );
-        pagehide.append( activeName );
-        // m_pView->setActivePage( m_pView->doc()->map()->findPage( tabsList.first()) );
-        KivioHidePageCommand * cmd = new KivioHidePageCommand(i18n("Hide Page"), page);
-        m_pView->doc()->addCommand( cmd );
-        emit tabChanged( tabsList.first() );
-    }
-    m_pView->updateMenuPage();
-}
-
 void KivioTabBar::showPage(const QString& text)
 {
     pagehide.remove( text );
@@ -573,13 +551,6 @@ void KivioTabBar::showPage(const QString& text)
 void KivioTabBar::addHiddenTab(const QString & text)
 {
     pagehide.append( text );
-}
-
-void KivioTabBar::hidePage(const QString& pageName )
-{
-  removeTab( pageName );
-  pagehide.append( pageName );
-  emit tabChanged( tabsList.first() );
 }
 
 #include "kivio_tabbar.moc"
