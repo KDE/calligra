@@ -104,7 +104,7 @@ private:
   int                     mItemWidth;
   int                     mItemHeight;
   int                     mItemCount;
-  int                     nCols;
+  int                     mNCols;
   int                     mCurRow;
   int                     mCurCol;
   int                     mMargin;

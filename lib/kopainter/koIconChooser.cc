@@ -70,7 +70,7 @@ QGridView(parent, name)
 
   mIconList.clear();
   mPixmapWidget = 0L;
-  nCols = 0;
+  mNCols = 0;
   mCurRow = 0;
   mCurCol = 0;
   mItemCount = 0;
@@ -111,11 +111,7 @@ void KoIconChooser::addItem(KoIconItem *item)
 
   if (mSort)
   {
-    for (int c = 0; c < numCols(); c++) {
-      for (int r = 0; r < numRows(); r++) {
-	updateCell(r, c);
-      }
-    }
+    updateContents();
   }
   else
   {
@@ -158,13 +154,13 @@ void KoIconChooser::setCurrentItem(KoIconItem *item)
   int index = mIconList.find(item);
 
   // item is available
-  if(index != -1 && nCols > 0)
+  if(index != -1 && mNCols > 0)
   {
     int oldRow = mCurRow;
     int oldCol = mCurCol;
 
-    mCurRow = index / nCols;
-    mCurCol = index % nCols;
+    mCurRow = index / mNCols;
+    mCurCol = index % mNCols;
 
     // repaint the old and the new item
     updateCell(oldRow, oldCol);
@@ -181,26 +177,33 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
   {
     QPoint p = e->pos();
     mDragStartPos = p;
-    int row = rowAt(contentsY() + p.y());
-    int col = columnAt(contentsX() + p.x());
+    int x = contentsX() + p.x();
+    int y = contentsY() + p.y();
+    QSize gridExtent = gridSize();
 
-    KoIconItem *item = itemAt(row, col);
-    if(item)
+    if (x < gridExtent.width() && y < gridExtent.height())
     {
-      const QPixmap &pix = item->pixmap();
-      if(pix.width() > mItemWidth || pix.height() > mItemHeight)
-      showFullPixmap(pix, p);
+      int row = rowAt(y);
+      int col = columnAt(x);
 
-      int oldRow = mCurRow;
-      int oldCol = mCurCol;
+      KoIconItem *item = itemAt(row, col);
+      if(item)
+      {
+        const QPixmap &pix = item->pixmap();
+        if(pix.width() > mItemWidth || pix.height() > mItemHeight)
+          showFullPixmap(pix, p);
 
-      mCurRow = row;
-      mCurCol = col;
+        int oldRow = mCurRow;
+        int oldCol = mCurCol;
 
-      updateCell(oldRow, oldCol);
-      updateCell(mCurRow, mCurCol);
+        mCurRow = row;
+        mCurCol = col;
 
-      emit selected( item );
+        updateCell(oldRow, oldCol);
+        updateCell(mCurRow, mCurCol);
+
+        emit selected( item );
+      }
     }
   }
 }
@@ -249,14 +252,19 @@ void KoIconChooser::resizeEvent(QResizeEvent *e)
   QGridView::resizeEvent(e);
 
   KoIconItem *item = currentItem();
-  int oldNCols = nCols;
-  nCols = numCols();
+  int oldNCols = mNCols;
 
-  if(nCols != oldNCols)
+  if (cellWidth() != 0)
   {
-    setNumCols(nCols);
+    mNCols = e -> size().width() / cellWidth();
+  }
+
+  if(mNCols != oldNCols)
+  {
+    setNumCols(mNCols);
     calculateCells();
     setCurrentItem(item);
+    updateContents();
   }
 }
 
@@ -348,23 +356,23 @@ int KoIconChooser::cellIndex(int row, int col)
   if(row < 0 || col < 0)
     return -1;
   else
-    return((row * nCols) + col);
+    return((row * mNCols) + col);
 }
 
 // calculate the grid and set the number of rows and columns
 // reorder all items approrpriately
 void KoIconChooser::calculateCells()
 {
-  if(nCols == 0)
+  if(mNCols == 0)
     return;
   bool update = isUpdatesEnabled();
-  int rows = mItemCount / nCols;
+  int rows = mItemCount / mNCols;
   setUpdatesEnabled(false);
-  if((rows * nCols) < mItemCount)
+  if((rows * mNCols) < mItemCount)
     rows++;
   setNumRows(rows);
   setUpdatesEnabled(update);
-  repaint();
+  updateContents();
 }
 
 // show the full pixmap of a large item in an extra widget
