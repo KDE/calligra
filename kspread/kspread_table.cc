@@ -3391,11 +3391,14 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
     QCString s = buffer.utf8();
+    
+    printf("COPY %s\n", s.data() );
+    
     int len = s.length();
-    char tmp = s[ len - 1 ]; 
+    char tmp = s[ len - 1 ];
     s.resize( len );
     *( s.data() + len - 1 ) = tmp;
-    
+
     buffer = QString::null;
 
     QStoredDrag* data = new QStoredDrag( "application/x-kspread-snippet" );
@@ -3417,14 +3420,14 @@ void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
     QMimeSource* mime = QApplication::clipboard()->data();
     if ( !mime )
 	return;
-    
+
     QByteArray b;
-    
+
     if ( mime->provides( "application/x-kspread-snippet" ) )
 	b = mime->encodedData( "application/x-kspread-snippet" );
     else
 	return;
-    
+
     paste( b, _marker, sp, op );
 }
 
@@ -3442,17 +3445,26 @@ void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker, PasteMode 
 
     loadSelection( doc, _marker.x() - 1, _marker.y() - 1, sp, op );
     m_pDoc->setModified( true );
-    emit sig_updateView( this );
 }
 
 bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift, PasteMode sp, Operation op )
 {
     QDomElement e = doc.documentElement();
 
-    if ( e.namedItem( "columns" ).isElement() )
+    if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
+	_yshift = 0;
+	
 	QDomElement columns = e.namedItem( "columns" ).toElement();
-		
+
+	// Clear the existing columns
+	int count = columns.attribute("count").toInt();
+	for( int i = 1; i <= count; ++i )
+        {
+	    m_cells.clearColumn( _xshift + i );
+	    m_columns.removeElement( _xshift + i );
+	}
+
 	// Insert column layouts
 	QDomElement c = e.firstChild().toElement();
 	for( ; !c.isNull(); c = c.nextSibling().toElement() )
@@ -3460,18 +3472,29 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    if ( c.tagName() == "column" )
 	    {
 		ColumnLayout *cl = new ColumnLayout( this, 0 );
-		if ( cl->load( c ) )
+		if ( cl->load( c, _xshift ) )
 		    insertColumnLayout( cl );
 		else
 		    delete cl;
 	    }
 	}
+	
     }
 
-    if ( e.namedItem( "rows" ).isElement() )
+    if ( !e.namedItem( "rows" ).toElement().isNull() )
     {
-	QDomElement columns = e.namedItem( "rows" ).toElement();
-		
+	_xshift = 0;
+	
+	QDomElement rows = e.namedItem( "rows" ).toElement();
+
+	// Clear the existing columns
+	int count = rows.attribute("count").toInt();
+	for( int i = 1; i <= count; ++i )
+        {
+	    m_cells.clearRow( _yshift + i );
+	    m_rows.removeElement( _yshift + i );
+	}
+
 	// Insert row layouts
 	QDomElement c = e.firstChild().toElement();
 	for( ; !c.isNull(); c = c.nextSibling().toElement() )
@@ -3479,7 +3502,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    if ( c.tagName() == "row" )
 	    {
 		RowLayout *cl = new RowLayout( this, 0 );
-		if ( cl->load( c ) )
+		if ( cl->load( c, _yshift ) )
 		    insertRowLayout( cl );
 		else
 		    delete cl;
@@ -3558,6 +3581,10 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 
     m_pDoc->setModified( true );
 
+    emit sig_updateView( this );
+    emit sig_updateHBorder( this );
+    emit sig_updateVBorder( this );
+    
     return true;
 }
 
@@ -3598,6 +3625,9 @@ void KSpreadTable::deleteCells( const QRect& rect )
     for( ;c; c = c->nextCell() )
 	if ( c->isForceExtraCells() && !c->isDefault() )
 	    c->forceExtraCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
+    
+    m_pDoc->setModified( true );
+	
 }
 
 void KSpreadTable::deleteSelection( const QPoint& _marker )
@@ -3609,13 +3639,27 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
     if ( r.left() == 0 )
 	r = QRect( _marker.x(), _marker.y(), 1, 1 );
 
+    // Entire rows selected ?
     if ( r.right() == 0x7fff )
     {
-      // TODO ###
+	for( int i = r.top(); i <= r.bottom(); ++i )
+        {
+	    m_cells.clearRow( i );
+	    m_rows.removeElement( i );
+	}
+	
+	emit sig_updateVBorder( this );
     }
+    // Entire columns selected ?
     else if ( r.bottom() == 0x7fff )
     {
-      // TODO ###
+	for( int i = r.left(); i <= r.right(); ++i )
+        {
+	    m_cells.clearColumn( i );
+	    m_columns.removeElement( i );
+	}
+	
+	emit sig_updateHBorder( this );
     }
     else
     {
@@ -3991,8 +4035,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	doc.appendChild( spread );
 
 	QDomElement rows = doc.createElement("rows");
-	rows.setAttribute( "top", _rect.top() );
-	rows.setAttribute( "bottom", _rect.bottom() );
+	rows.setAttribute( "count", _rect.bottom() - _rect.top() + 1 );
 	spread.appendChild( rows );
 	
 	QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
@@ -4021,13 +4064,13 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	    RowLayout* lay = rowLayout( y );
 	    if ( lay && !lay->isDefault() )
 	    {
-		QDomElement e = lay->save( doc );
+		QDomElement e = lay->save( doc, _rect.top() - 1 );
 		if ( !e.isNull() )
 		    spread.appendChild( e );
 	    }
 	}
 	
-	return doc;   
+	return doc;
     }
 
     //
@@ -4041,8 +4084,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	doc.appendChild( spread );
 
 	QDomElement columns = doc.createElement("columns");
-	columns.setAttribute( "left", _rect.left() );
-	columns.setAttribute( "right", _rect.right() );
+	columns.setAttribute( "count", _rect.right() - _rect.left() + 1 );
 	spread.appendChild( columns );
 	
 	QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
@@ -4071,15 +4113,15 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	    ColumnLayout* lay = columnLayout( x );
 	    if ( lay && !lay->isDefault() )
 	    {
-		QDomElement e = lay->save( doc );
+		QDomElement e = lay->save( doc, _rect.left() - 1 );
 		if ( !e.isNull() )
 		    spread.appendChild( e );
 	    }
 	}
 	
-	return doc;   
+	return doc;
     }
-    
+
     QDomDocument doc( "spreadsheet-snippet" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     QDomElement spread = doc.createElement( "spreadsheet-snippet" );

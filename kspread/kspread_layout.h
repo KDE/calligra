@@ -299,9 +299,9 @@ class RowLayout : public KSpreadLayout
 public:
     RowLayout( KSpreadTable *_table, int _row );
     ~RowLayout();
-    
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement& row );
+
+    virtual QDomElement save( QDomDocument&, int yshift = 0 );
+    virtual bool load( const QDomElement& row, int yshift = 0 );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -386,7 +386,7 @@ protected:
     int m_iRow;
 
     bool m_bDisplayDirtyFlag;
-    
+
     RowLayout* m_next;
     RowLayout* m_prev;
 };
@@ -398,9 +398,9 @@ class ColumnLayout : public KSpreadLayout
 public:
     ColumnLayout( KSpreadTable *_table, int _column );
     ~ColumnLayout();
-    
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement& row );
+
+    virtual QDomElement save( QDomDocument&, int xshift = 0 );
+    virtual bool load( const QDomElement& row, int xshift = 0 );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -457,7 +457,7 @@ public:
     ColumnLayout* previous() { return m_prev; }
     void setNext( ColumnLayout* c ) { m_next = c; }
     void setPrevious( ColumnLayout* c ) { m_prev = c; }
-    
+
 protected:
     /**
      * Height of the cells in unzoomed millimeters.
@@ -484,7 +484,7 @@ protected:
     int m_iColumn;
 
     bool m_bDisplayDirtyFlag;
-    
+
     ColumnLayout* m_next;
     ColumnLayout* m_prev;
 };

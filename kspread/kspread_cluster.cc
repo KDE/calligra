@@ -77,7 +77,7 @@ KSpreadCell* KSpreadCluster::lookup( int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
 	return 0;
-    
+
     int cx = x / KSPREAD_CLUSTER_LEVEL2;
     int cy = y / KSPREAD_CLUSTER_LEVEL2;
     int dx = x % KSPREAD_CLUSTER_LEVEL2;
@@ -128,7 +128,7 @@ void KSpreadCluster::remove( int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
 	return;
-    
+
     int cx = x / KSPREAD_CLUSTER_LEVEL2;
     int cy = y / KSPREAD_CLUSTER_LEVEL2;
     int dx = x % KSPREAD_CLUSTER_LEVEL2;
@@ -496,6 +496,42 @@ void KSpreadCluster::removeRow( int row )
 	bool work = TRUE;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    unshiftColumn( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
+    }
+}
+
+void KSpreadCluster::clearColumn( int col )
+{
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return;
+
+    int cx = col / KSPREAD_CLUSTER_LEVEL2;
+    int dx = col % KSPREAD_CLUSTER_LEVEL2;
+
+    for( int y1 = 0; y1 < KSPREAD_CLUSTER_LEVEL1; ++y1 )
+    {
+	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL2 + cx ];
+	if ( cl )
+	    for( int y2 = 0; y2 < KSPREAD_CLUSTER_LEVEL2; ++y2 )
+		if ( cl[ y2 * KSPREAD_CLUSTER_LEVEL2 + dx ] )
+		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL2 + y2 );
+    }
+}
+
+void KSpreadCluster::clearRow( int row )
+{
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return;
+
+    int cy = row / KSPREAD_CLUSTER_LEVEL2;
+    int dy = row % KSPREAD_CLUSTER_LEVEL2;
+
+    for( int x1 = 0; x1 < KSPREAD_CLUSTER_LEVEL1; ++x1 )
+    {
+	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + x1 ];
+	if ( cl )
+	    for( int x2 = 0; x2 < KSPREAD_CLUSTER_LEVEL2; ++x2 )
+		if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + x2 ] )
+		    remove( x1 * KSPREAD_CLUSTER_LEVEL2 + x2, row );
     }
 }
 

@@ -19,9 +19,20 @@ public:
 
     KSpreadCell* lookup( int x, int y );
 
+    /**
+     * Removes all cells from the table and frees memory that
+     * was used for the clusters.
+     */
     void clear();
 
+    /**
+     * Inserts a cell at the requested position. If there is already
+     * a cell, then @ref #remove is called on it.
+     */
     void insert( KSpreadCell* cell, int x, int y );
+    /**
+     * Removes the cell at the given position, if there is any.
+     */
     void remove( int x, int y );
 
     void setAutoDelete( bool );
@@ -30,17 +41,48 @@ public:
     KSpreadCell* firstCell();
 
     bool shiftRow( const QPoint& marker );
+    /**
+     * Moves all cells in the column marker.x() beginning with
+     * the one at marker.y() one position downwards.
+     *
+     * @return FALSE if a cell would drop out of the table because of that.
+     *         In this case the shift is not performed.
+     */
     bool shiftColumn( const QPoint& marker );
 
+    /**
+     * Moves all cells in the column marker.x() beginning with
+     * the one at marker.y() + 1 one position upwards.
+     */
     void unshiftColumn( const QPoint& marker );
     void unshiftRow( const QPoint& marker );
 
+    /**
+     * Moves all columns beginning with @p col one position
+     * to the right. If that does not work because a cell would
+     * drop out of the table, then FALSE is returned.
+     *
+     * @see #removeColumn
+     */
     bool insertColumn( int col );
     bool insertRow( int row );
 
+    /**
+     * Removes all elements from the column and
+     * move all columns right of @p col one position
+     * to the left.
+     *
+     * @see #clearColumn
+     */
     void removeColumn( int col );
     void removeRow( int row );
 
+    /**
+     * Removes all elements from the column.
+     */
+    void clearColumn( int col );
+    void clearRow( int row );
+    
 private:
     /**
      * @param work is set to TRUE if the method found some clusters

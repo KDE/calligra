@@ -181,7 +181,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
 {
     m_next = 0;
     m_prev = 0;
-    
+
     m_bDisplayDirtyFlag = false;
     m_fHeight = POINT_TO_MM(20.0);
     m_iRow = _row;
@@ -224,16 +224,16 @@ int RowLayout::height( KSpreadCanvas *_canvas )
     return (int)(MM_TO_POINT(m_fHeight));
 }
 
-QDomElement RowLayout::save( QDomDocument& doc )
+QDomElement RowLayout::save( QDomDocument& doc, int yshift )
 {
   QDomElement row = doc.createElement( "row" );
   row.setAttribute( "height", m_fHeight );
-  row.setAttribute( "row", m_iRow );
+  row.setAttribute( "row", m_iRow - yshift );
 
   return row;
 }
 
-bool RowLayout::load( const QDomElement& row )
+bool RowLayout::load( const QDomElement& row, int yshift )
 {
   bool ok;
   if ( row.hasAttribute( "height" ) )
@@ -242,7 +242,7 @@ bool RowLayout::load( const QDomElement& row )
     if ( !ok ) return false;
   }
 
-  m_iRow = row.attribute( "row" ).toInt( &ok );
+  m_iRow = row.attribute( "row" ).toInt( &ok ) + yshift;
   if ( !ok ) return false;
 
   // Validation
@@ -319,16 +319,16 @@ int ColumnLayout::width( KSpreadCanvas *_canvas )
     return (int)(MM_TO_POINT( m_fWidth ));
 }
 
-QDomElement ColumnLayout::save( QDomDocument& doc )
+QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
 {
   QDomElement col = doc.createElement( "column" );
   col.setAttribute( "width", m_fWidth );
-  col.setAttribute( "column", m_iColumn );
+  col.setAttribute( "column", m_iColumn - xshift );
 
   return col;
 }
 
-bool ColumnLayout::load( const QDomElement& col )
+bool ColumnLayout::load( const QDomElement& col, int xshift )
 {
   bool ok;
   if ( col.hasAttribute( "width" ) )
@@ -337,7 +337,9 @@ bool ColumnLayout::load( const QDomElement& col )
     if ( !ok ) return false;
   }
 
-  m_iColumn = col.attribute( "column" ).toInt( &ok );
+  m_iColumn = col.attribute( "column" ).toInt( &ok ) + xshift;
+  printf("INSERTING COL %i\n", m_iColumn );
+  
   if ( !ok ) return false;
 
   // Validation

@@ -1834,52 +1834,62 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 			      int _tx, int _ty,
 			      int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect )
 {
-  bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
+    // If this cell is obscured then draw the obscuring one instead.
+    if ( m_pObscuringCell )
+    {
+	_painter.save();
+	m_pObscuringCell->paintCell( _rect, _painter,
+				     m_iObscuringCellsColumn, m_iObscuringCellsRow, _prect );
+	_painter.restore();
+	m_bLayoutDirtyFlag = FALSE;
+	return;
+    }
 
-  if ( m_pObscuringCell )
-  {
-    _painter.save();
-    m_pObscuringCell->paintCell( _rect, _painter,
-				  m_iObscuringCellsColumn, m_iObscuringCellsRow, _prect );
-    _painter.restore();
-    m_bLayoutDirtyFlag = FALSE;
-    return;
-  }
+    // Need to recalculate ?
+    if ( m_bCalcDirtyFlag )
+	calc();
 
-  if ( m_bCalcDirtyFlag )
-    calc();
+    bool old_layoutflag = m_bLayoutDirtyFlag;
+    // Need to make a new layout ?
+    if ( m_bLayoutDirtyFlag)
+	makeLayout( _painter, _col, _row );
 
-  bool old_layoutflag = m_bLayoutDirtyFlag;
-  if ( m_bLayoutDirtyFlag)
-    makeLayout( _painter, _col, _row );
+    // Determine the dimension of the cell.
+    int w = cl->width();
+    int h = rl->height();
+    if ( m_iExtraXCells )
+	w = m_iExtraWidth;
+    if ( m_iExtraYCells )
+	h = m_iExtraHeight;
 
-  // Determine the dimension of the cell.
-  int w = cl->width();
-  int h = rl->height();
-  if ( m_iExtraXCells )
-    w = m_iExtraWidth;
-  if ( m_iExtraYCells )
-    h = m_iExtraHeight;
+    // Do we really need to display this cell ?
+    QRect r2( _tx, _ty, w, h );
+    if ( !r2.intersects( _rect ) )
+	return;
 
-  // Do we really need to display this cell ?
-  QRect r2( _tx, _ty, w, h );
-  if ( !r2.intersects( _rect ) )
-    return;
+    // Tell our caller where we painted.
+    // ## Torben: Where is this used ?
+    if ( _prect )
+	_prect->setRect( _tx, _ty, w, h );
 
-  if ( _prect )
-    _prect->setRect( _tx, _ty, w, h );
-
-  QColorGroup defaultColorGroup = QApplication::palette().active();
-  if ( selected )
-    _painter.setBackgroundColor( defaultColorGroup.highlight() );
-  else
-  {
-    if ( m_bgColor.isValid() )
-      _painter.setBackgroundColor( m_bgColor );
-    else
-      _painter.setBackgroundColor( defaultColorGroup.base() );
-  }
-  _painter.eraseRect( _tx, _ty, w, h );
+      bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
+      
+      QColorGroup defaultColorGroup = QApplication::palette().active();
+      
+      // Determine the correct background color
+      if ( selected )
+	  _painter.setBackgroundColor( defaultColorGroup.highlight() );
+      else
+      {
+	  if ( m_bgColor.isValid() )
+	      _painter.setBackgroundColor( m_bgColor );
+	  else
+	      _painter.setBackgroundColor( defaultColorGroup.base() );
+      }
+      
+      // Erase the background of the cell.
+      // ### Optimize. Dont erase where the grid is drawn.
+      _painter.eraseRect( _tx, _ty, w, h );
 
   // Draw the border
   if ( m_leftBorderPen.style() == Qt::NoPen )
