@@ -74,11 +74,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( m_deleted )
         return;
 
-    if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
-        kdDebug() << "rectifying position to " << x << "," << y << endl;
-        move( x, y );
-        finalize();
-    }
+    Q_ASSERT( x == xpos );
 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
