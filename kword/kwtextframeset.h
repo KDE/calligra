@@ -151,7 +151,7 @@ public:
     void highlightPortion( Qt3::QTextParag * parag, int index, int length, KWCanvas * canvas );
     void removeHighlight();
 
-    virtual void addTextFramesets( QPtrList<KWTextFrameSet> & /*lst*/ );
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> &lst );
 
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.

@@ -1522,7 +1522,7 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
     }
 }
 
-void KWTextFrameSet::addTextFramesets( QPtrList<KWTextFrameSet> & lst )
+void KWTextFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst )
 {
     lst.append(this);
 }
