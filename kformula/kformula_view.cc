@@ -224,6 +224,7 @@ void KFormulaPartView::formulaString()
 void KFormulaPartView::sizeSelected( int size )
 {
     document()->getFormula()->setFontSize( size );
+    formulaWidget->setFocus();
 }
 
 QStringList KFormulaPartView::readFormulaString( QString text )
