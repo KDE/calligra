@@ -296,8 +296,7 @@ void BackDia::selectCType(int i)
   
   p.begin(&pm);
   Page::_drawBackColor(color1Choose->color(),color2Choose->color(),bcType,
-		       QRect(0,0,colorPreview->width(),colorPreview->height()),&p,
-		       QRect(0,0,colorPreview->width(),colorPreview->height()));
+		       &p,QSize(colorPreview->width(),colorPreview->height()));
   p.end();
 
   colorPreview->setPixmap(pm);

@@ -148,6 +148,7 @@ void KPresenterView_impl::insertPicture()
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.gif ; *.jpg ; *.jpeg ; *.bmp ; *.xbm ; *.xpm ; *.pnm ; *.GIF ; *.JPG ; *.JPEG ; *.BMP ; *.XBM ; *.XPM ; *.PNM",0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture((const char*)file,xOffset,yOffset);
 
+
 //   QEvent ev(Event_Leave);
 //   QMouseEvent mev(Event_MouseButtonRelease,
 // 		  QCursor::pos(),LeftButton,LeftButton);
@@ -638,6 +639,12 @@ void KPresenterView_impl::createGUI()
   setRanges();
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,true);
  
+  if (m_pKPresenterDoc && page)
+    {
+      QObject::connect(m_pKPresenterDoc,SIGNAL(restoreBackColor(unsigned int)),page,SLOT(restoreBackColor(unsigned int)));
+      page->restoreBackColor(0);
+    }
+
   edeb("...void KPresenterView_impl::createGUI() %i | %i\n",refCount(),_refcnt());
 }
 
@@ -654,7 +661,7 @@ void KPresenterView_impl::construct()
   
   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
   for(;it.current();++it)
-    slotInsertObject( it.current() );
+    slotInsertObject(it.current());
 
   // We are now in sync with the document
   m_bKPresenterModified = false;
@@ -701,6 +708,9 @@ void KPresenterView_impl::slotInsertObject(KPresenterChild *_child)
   p->setGeometry(_child->geometry());
   p->show();
   m_lstFrames.append(p);
+  page->insertChild(p);
+  vert->raise();
+  horz->raise();
   //CORBA::release(p);
   
   QObject::connect(p,SIGNAL(sig_geometryEnd(PartFrame_impl*)),
@@ -972,6 +982,15 @@ void KPresenterView_impl::repaint(unsigned int x,unsigned int y,unsigned int w,
 {
   QWidget::repaint(x,y,w,h,erase);
   page->repaint(x,y,w,h,erase);
+}
+
+/*====================== change pciture =========================*/
+void KPresenterView_impl::changePicture(unsigned int,const char* filename)
+{
+  QFileInfo fileInfo(filename);
+  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),"*.gif ; *.jpg ; *.jpeg ; *.bmp ; *.xbm ; *.xpm ; *.pnm ; *.GIF ; *.JPG ; *.JPEG ; *.BMP ; *.XBM ; *.XPM ; *.PNM",0);
+
+  if (!file.isEmpty()) m_pKPresenterDoc->changePicture((const char*)file,xOffset,yOffset);
 }
 
 /*====================== change clipart =========================*/

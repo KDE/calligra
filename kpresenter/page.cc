@@ -88,15 +88,15 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 	    {
 	    case BT_COLOR: /* background color */ 
 	      {
-		drawBackColor(pagePtr->backColor1,pagePtr->backColor2,pagePtr->bcType,
-			      getPageSize(pagePtr->pageNum),painter,rect);
+		painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+				    *pagePtr->cPix);
 		pagePtr->pic->hide();
 	      } break;
 	    case BT_PIC:  /* background picture */
 	      {
 		if (pagePtr->backPicView == BV_CENTER)
-		  drawBackColor(pagePtr->backColor1,pagePtr->backColor2,pagePtr->bcType,
-				getPageSize(pagePtr->pageNum),painter,rect);
+		  painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+				      *pagePtr->cPix);
 		pagePtr->pic->hide();
 		switch (pagePtr->backPicView)
 		  {
@@ -148,8 +148,8 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 	      } break;
 	    case BT_CLIP: /* background clipart */ 
 	      {
-		drawBackColor(pagePtr->backColor1,pagePtr->backColor2,pagePtr->bcType,
-			      getPageSize(pagePtr->pageNum),painter,rect);
+		painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+				    *pagePtr->cPix);
 		r = painter->viewport();
 		painter->setViewport(getPageSize(pagePtr->pageNum).x(),
 				     getPageSize(pagePtr->pageNum).y(),
@@ -923,18 +923,20 @@ void Page::objProperties()
 /*======================= change picture  ========================*/
 void Page::chPic()
 {
-
-  // picture stuff should be done by KImage
-
-//   if (!objList()->isEmpty())
-//     {
-//       for (unsigned int i=0;i<=objList()->count()-1;i++)
-// 	{
-// 	  objPtr = objList()->at(i);
-// 	  if (objPtr->isSelected && objPtr->objType == OT_PICTURE)
-// 	    emit picProp((const char*)objPtr->graphObj->getFileName());
-// 	}
-//     }
+  if (!objList()->isEmpty())
+    {
+      for (unsigned int i=0;i<=objList()->count()-1;i++)
+	{
+	  objPtr = objList()->at(i);
+	  if (objPtr->isSelected && objPtr->objType == OT_PICTURE)
+	    {
+	      view->changePicture(i,(const char*)objPtr->graphObj->getFileName());
+	     
+	      // only the first selected picture can be changed!
+	      break;
+	    }
+	}
+    }
 }
 
 /*======================= change clipart  ========================*/
@@ -984,8 +986,8 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 }
 
 /*======================== draw back color =======================*/
-void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
-			 QPainter* painter,QRect viewRect)
+void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,
+			 QPainter* painter,QSize size)
 {
   int ncols = 4;
   int depth = QColor::numBitPlanes(),dx = 0,dy = 0;
@@ -1001,7 +1003,7 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
       {
   	painter->setPen(NoPen);
   	painter->setBrush(cb);
-  	painter->drawRect(rect);
+  	painter->drawRect(QRect(0,0,size.width(),size.height()));
       } break;
     case BCT_GHORZ: case BCT_GVERT:
       {
@@ -1009,7 +1011,7 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
 	  {
 	    painter->setPen(NoPen);
 	    painter->setBrush(cb);
-	    painter->drawRect(rect);
+	    painter->drawRect(QRect(0,0,size.width(),size.height()));
 	    break;
 	  }
 
@@ -1023,9 +1025,9 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
 	uint rgbRow;
 		
 	if (bcType == BCT_GHORZ)
-	  ySize = rect.height();
+	  ySize = size.height();
 	else
-	  ySize = rect.width();
+	  ySize = size.width();
     
 	pmCrop.resize(30,ySize);
 	QImage image(30,ySize,32);
@@ -1083,28 +1085,36 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
 	int sOffset = 5;
 	
 	if (bcType == BCT_GHORZ)
-	  s = rect.width() / sSize + 1;
+	  s = size.width() / sSize + 1;
 	else
-	  s = rect.height() / sSize + 1;
+	  s = size.height() / sSize + 1;
 	
 	if (bcType == BCT_GHORZ)	
 	  for(int i = 0;i < s;i++)
-	    {
-	      if (viewRect.intersects(QRect(sSize*i+rect.x(),rect.y(),sSize,ySize)))
-		painter->drawPixmap(sSize*i+rect.x(),rect.y(),pmCrop,sOffset,0,sSize,ySize);
-	    }
+	    painter->drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
 	else 
 	  {
  	    QWMatrix matrix;
- 	    matrix.translate((float)rect.width()+(float)rect.x(),(float)rect.y());
+ 	    matrix.translate((float)size.width(),0.0);
  	    matrix.rotate(90.0);
  	    painter->setWorldMatrix(matrix);
 	    for(int i = 0;i < s;i++)
 	      painter->drawPixmap(sSize*i,0,pmCrop,sOffset,0,sSize,ySize);
  	    matrix.rotate(-90.0);
- 	    matrix.translate(-((float)rect.width()+(float)rect.x()),-(float)rect.y());
+ 	    matrix.translate(-(float)size.width(),0.0);
  	    painter->setWorldMatrix(matrix);
 	  }
       } break;
     }
+}
+
+/*======================== restore back color ====================*/
+void Page::restoreBackColor(unsigned int pgNum)
+{
+  QPainter p;
+  p.begin(pageList()->at(pgNum)->cPix);
+  drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
+ 		pageList()->at(pgNum)->bcType,
+ 		&p,QSize(pageList()->at(pgNum)->cPix->width(),pageList()->at(pgNum)->cPix->height()));
+  p.end();
 }

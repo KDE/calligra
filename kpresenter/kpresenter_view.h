@@ -216,6 +216,7 @@ public:
   void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
 
   // properties
+  void changePicture(unsigned int,const char*);
   void changeClipart(unsigned int,const char*);
 
 public slots:

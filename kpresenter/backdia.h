@@ -34,6 +34,7 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qcombo.h>
+#include <qsize.h>
 
 #include <kcolorbtn.h>
 

@@ -76,8 +76,8 @@ public:
   void setTextAlign(TxtParagraph::HorzAlign);
   KTextObject* kTxtObj() {return txtPtr;}
 
-  static void _drawBackColor(QColor c1,QColor c2,BCType bct,QRect r1,QPainter* p,QRect r2)
-    {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,r1,p,r2); delete pg;}
+  static void _drawBackColor(QColor c1,QColor c2,BCType bct,QPainter* p,QSize s)
+    {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,p,s); delete pg;}
 
 public slots:
 
@@ -87,6 +87,7 @@ public slots:
   void clipPaste();
   void deleteObjs() {view->KPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
   void rotateObjs() {view->KPresenterDoc()->rotateObjs(); setCursor(arrowCursor);}
+  void restoreBackColor(unsigned int);
   
 protected:
 
@@ -126,7 +127,7 @@ protected:
   QList<SpPageConfiguration> *spPageConfig() {return view->KPresenterDoc()->spPageConfig();}
   QRect getPageSize(unsigned int p) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy());}
 
-  void drawBackColor(QColor,QColor,BCType,QRect,QPainter*,QRect);
+  void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu;

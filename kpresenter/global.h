@@ -56,6 +56,7 @@ struct Background
   const char *backClip; 
   QPixmap backPix;
   BackPic *pic;
+  QPixmap *cPix;
 };
 
 // page object

@@ -195,6 +195,7 @@ public:
   // insert/change objects
   void insertPicture(const char*,int,int);
   void insertClipart(const char*,int,int);
+  void changePicture(const char*,int,int);
   void changeClipart(const char*,int,int);
   void insertLine(QPen,LineType,int,int);
   void insertRectangle(QPen,QBrush,RectType,int,int);
@@ -238,6 +239,9 @@ signals:
 
   // update child geometry
   void sig_updateChildGeometry(KPresenterChild *_child);
+
+  // restore back color
+  void restoreBackColor(unsigned int);
 
 protected:
 

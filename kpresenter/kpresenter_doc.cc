@@ -267,8 +267,11 @@ void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int 
 	   pagePtr->pic->resize(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
 				getPageSize(pagePtr->pageNum,diffx,diffy).height());
 	 }
+       pagePtr->cPix->resize(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
+			     getPageSize(pagePtr->pageNum,diffx,diffy).height());
+       emit restoreBackColor(pagePtr->pageNum-1);
     }
-  
+
   repaint(true);
 }
 
@@ -276,6 +279,7 @@ void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int 
 unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
 {
   _pageNums++;
+
   pagePtr = new Background;
   pagePtr->pageNum = _pageNums;
   pagePtr->backType = BT_COLOR;
@@ -291,11 +295,17 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   pagePtr->backColor1.operator=(white);
   pagePtr->backColor2.operator=(white);
   pagePtr->bcType = BCT_PLAIN;
+  pagePtr->cPix = new QPixmap(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
+			      getPageSize(pagePtr->pageNum,diffx,diffy).height()); 
   _pageList.append(pagePtr);
+
   spPCPtr = new SpPageConfiguration;
   spPCPtr->time = 0;
   _spPageConfig.append(spPCPtr);
+
+  emit restoreBackColor(_pageNums-1);
   repaint(true);
+
   return _pageNums;
 }
 
@@ -309,6 +319,7 @@ void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor
 	  pagePtr->backColor1.operator=(backColor1);
 	  pagePtr->backColor2.operator=(backColor2);
 	  pagePtr->bcType = bcType;
+	  emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -323,6 +334,7 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
 	{
 	  pagePtr->backPic = qstrdup(backPic);
 	  pagePtr->backPix.load(pagePtr->backPic);
+	  emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -338,6 +350,7 @@ void KPresenterDocument_impl::setBackClip(unsigned int pageNum,const char* backC
 	  pagePtr->backClip = qstrdup(backClip);
 	  if (backClip)
 	    pagePtr->pic->setClipart(backClip);
+	  emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -358,6 +371,7 @@ void KPresenterDocument_impl::setBPicView(unsigned int pageNum,BackView picView)
 		      (float)getPageSize(pagePtr->pageNum,0,0).height()/pagePtr->backPix.height());
 	      pagePtr->backPix.operator=(pagePtr->backPix.xForm(m));
 	    }
+	  emit restoreBackColor(pageNum-1);
 	  return;
 	}
     }
@@ -371,6 +385,7 @@ void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType
       if (pagePtr->pageNum == pageNum)
 	{
 	  pagePtr->backType = backType;
+	  emit restoreBackColor(pageNum-1);
 	  repaint(true);
 	  return;
 	}
@@ -534,7 +549,7 @@ void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 	      _objList.take(i);
 	      _objList.insert(0,objPtr);
 	      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-		      objPtr->ow,objPtr->oh,TRUE);
+		      objPtr->ow,objPtr->oh,false);
 	    }
 	}      
       reArrangeObjs();
@@ -565,7 +580,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->graphObj->loadPixmap();
 	  _objList.append(objPtr);
 	  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-		  objPtr->ow,objPtr->oh,true);
+		  objPtr->ow,objPtr->oh,false);
 	}
     }
   QApplication::restoreOverrideCursor();
@@ -592,8 +607,47 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->graphObj->loadClipart();
       _objList.append(objPtr);
       repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-	      objPtr->ow,objPtr->oh,true);
+	      objPtr->ow,objPtr->oh,false);
     }
+  QApplication::restoreOverrideCursor();
+}
+
+/*======================= change picture ========================*/
+void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int diffy)
+{
+  QApplication::setOverrideCursor(waitCursor);
+
+  if (filename)
+    {
+      QPixmap pix(filename);
+      if (!_objList.isEmpty() && !pix.isNull())
+	{
+	  for (unsigned int i = 0;i <= _objList.count()-1;i++)
+	    {
+	      if (_objList.at(i)->isSelected)
+		{
+		  objPtr = _objList.at(i);
+		  if (objPtr->objType == OT_PICTURE)
+		    {
+		      objPtr->graphObj->setFileName(QString(filename));
+		      objPtr->graphObj->loadPixmap();
+		      objPtr->isSelected = false;
+		      objPtr->graphObj->resize(pix.size());
+		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+			      objPtr->ow,objPtr->oh,false);
+		      objPtr = _objList.at(i);
+		      objPtr->ow = pix.width();
+		      objPtr->oh = pix.height();
+		      objPtr->isSelected = true;
+		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+			      objPtr->ow,objPtr->oh,false);
+		      break;
+		    }
+		}      
+	    }
+	}
+    }
+ 
   QApplication::restoreOverrideCursor();
 }
 
@@ -617,11 +671,11 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 		      objPtr->graphObj->loadClipart();
 		      objPtr->isSelected = false;
 		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-			      objPtr->ow,objPtr->oh,true);
+			      objPtr->ow,objPtr->oh,false);
 		      objPtr = _objList.at(i);
 		      objPtr->isSelected = true;
 		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-			      objPtr->ow,objPtr->oh,true);
+			      objPtr->ow,objPtr->oh,false);
 		      break;
 		    }
 		}      
@@ -650,7 +704,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diff
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   _objList.append(objPtr);
   repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-	  objPtr->ow,objPtr->oh,true);
+	  objPtr->ow,objPtr->oh,false);
 }
 
 /*===================== insert a rectangle =======================*/
@@ -673,7 +727,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   _objList.append(objPtr);
   repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-	  objPtr->ow,objPtr->oh,true);
+	  objPtr->ow,objPtr->oh,false);
 }
 
 /*===================== insert a circle or ellipse ===============*/
@@ -694,7 +748,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   _objList.append(objPtr);
   repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-	  objPtr->ow,objPtr->oh,true);
+	  objPtr->ow,objPtr->oh,false);
 }
 
 /*===================== insert a textobject =====================*/
@@ -716,7 +770,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   objPtr->textObj->setShowCursor(false);
   _objList.append(objPtr);
   repaint(objPtr->ox-diffx,objPtr->oy-diffy,
-	  objPtr->ow,objPtr->oh,true);
+	  objPtr->ow,objPtr->oh,false);
 }
 
 /*======================= insert an autoform ====================*/
@@ -737,7 +791,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *f
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   repaint(objPtr->ox-diffx,objPtr->oy-diffy,
- 	  objPtr->ow,objPtr->oh,true);
+ 	  objPtr->ow,objPtr->oh,false);
 }
 
 /*=================== repaint all views =========================*/
