@@ -81,6 +81,9 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
         frameType = table->getFrameType();
     else
         frameType = frame->getFrameSet() ? frame->getFrameSet()->getFrameType() : (FrameType) -1;
+    // parentFs is the table in case of a table, fs otherwise
+    KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
+    frameSetFloating = parentFs->isFloating();
     doc = 0;
     init();
 }
@@ -357,6 +360,8 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     eRGap->resize( eRGap->sizeHint() );
     grid2->addWidget( eRGap, 1, 1 );
 
+    eRGap->setEnabled( false ); // ### not implemented currently
+
     RunAround ra = RA_NO;
     if ( frame )
         ra = frame->getRunAround();
@@ -389,6 +394,8 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     QString str;
     str.setNum( KWUnit::userValue( ragap, doc->getUnit() ) );
     eRGap->setText( str );
+
+    runGroup->setEnabled( !frameSetFloating );
 
     //kdDebug() << "setup tab 2 exit"<<endl;
 }
@@ -464,9 +471,6 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     grid3->addWidget( row, 2, 0 );
 
     connectListSelected( lFrameSList->firstChild() );
-
-    if ( frame && frame->getFrameSet() && frame->getFrameSet()->isFloating() )
-        tab3->setEnabled( false );
 }
 
 void KWFrameDia::setupTab4(){ // TAB Geometry
@@ -662,16 +666,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         oldW = sw->text().toDouble();
         oldH = sh->text().toDouble();
 
-        KWFrameSet * fs = theFrame->getFrameSet();
-        // parentFs is the table in case of a table, fs otherwise
-        KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
-        bool f = parentFs->isFloating();
-        floating->setChecked( f );
+        floating->setChecked( frameSetFloating );
 
-        if ( fs->getGroupManager() )
+        if ( theFrame->getFrameSet()->getGroupManager() )
             floating->setText( i18n( "Table is floating" ) );
 
-        slotFloatingToggled( f );
+        slotFloatingToggled( frameSetFloating );
 
         // Can't change geometry of main WP frame
         if ( doc->processingType() == KWDocument::WP &&
@@ -758,6 +758,10 @@ void KWFrameDia::slotFloatingToggled(bool b)
     grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
     if(tab1) tab1->setEnabled( !b ); // frame setting are irrelevant for floating frames.
     // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas)
+    // well margins are not implemented yet, anyway
+
+    if ( tab2 )
+        runGroup->setEnabled( !b ); // Runaround options don't make sense for floating frames
 }
 
 bool KWFrameDia::applyChanges()

@@ -95,8 +95,8 @@ protected:
 
     KWFrame *frame;
     KWDocument *doc;
-    //KWCanvas *canvas;
     FrameType frameType;
+    bool frameSetFloating;
 
     double oldX, oldY, oldW, oldH;
 
