@@ -33,7 +33,7 @@
 
 #include <float.h>
 
-#if defined(unix) || defined(Q_WS_MAC)
+#if defined(unix) || defined(__unix__) || defined(Q_WS_MAC) || defined(Q_WS_LINUX)
 #include  <limits.h>
 #else
 #define  MINDOUBLE DBL_MIN
