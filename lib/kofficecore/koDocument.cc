@@ -812,7 +812,7 @@ bool KoDocument::openFile()
   KURL u;
   u.setPath( m_file );
   KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
-  if ( t->name() == "application/octet-stream" ) {
+  if ( t->name() == KMimeType::defaultMimeType() ) {
       kdError(30003) << "No mimetype found for " << m_file << endl;
       return false;
   }

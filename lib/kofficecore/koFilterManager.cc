@@ -65,7 +65,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     KURL u;
     u.setPath( url );
     KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
-    if ( t->name() == "application/octet-stream" ) {
+    if ( t->name() == KMimeType::defaultMimeType() ) {
         kdError(s_area) << "No mimetype found for " << url << endl;
         status = KoFilter::BadMimeType;
         return QString::null;
@@ -126,7 +126,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
         KURL u;
         u.setPath( m_importUrl );
         KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
-        if ( t->name() == "application/octet-stream" ) {
+        if ( t->name() == KMimeType::defaultMimeType() ) {
             kdError(s_area) << "No mimetype found for " << m_importUrl << endl;
             return KoFilter::BadMimeType;
         }
