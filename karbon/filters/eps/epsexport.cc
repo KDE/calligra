@@ -78,9 +78,13 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 	// defs:
 	s <<
-		"/m {moveto} def\n"
-		"/c {curveto} def\n"
-		"/l {lineto} def" << endl;
+		"/d /def load def\n"
+		"/D {bind d} bind d\n"
+		"/m {moveto} D\n"
+		"/c {curveto} D\n"
+		"/l {lineto} D\n"
+		"/s {stroke} D\n"
+	<< endl;
 
 
 	// parse dom-tree:
@@ -135,6 +139,7 @@ EpsExport::exportLayer( QTextStream& s, const QDomElement& node )
 void
 EpsExport::exportPath( QTextStream& s, const QDomElement& node )
 {
+
 	s << "newpath" << endl;
 
 	QDomNodeList list = node.childNodes();
@@ -148,6 +153,9 @@ EpsExport::exportPath( QTextStream& s, const QDomElement& node )
 				exportSegments( s, e );
 		}
 	}
+
+	if( node.attribute( "closed" ) != 0 )
+		s << "closepath" << endl;
 
 	s << "stroke" << endl;
 }

@@ -3,6 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qdom.h>
+
 #include "vcolor.h"
 
 VColor::VColor()
@@ -191,4 +193,63 @@ VColor::convertToColorSpace( const VColorSpace colorSpace,
 	if( v4 )
 		*v4 = copy[3];
 }
+
+void
+VColor::save( QDomElement& element ) const
+{
+	QDomElement me = element.ownerDocument().createElement( "COLOR" );
+	element.appendChild( me );
+
+	me.setAttribute( "colorSpace", m_colorSpace );
+
+	if( m_colorSpace == gray )
+		me.setAttribute( "v", m_value[0] );
+	else
+	{
+		me.setAttribute( "v1", m_value[0] );
+		me.setAttribute( "v2", m_value[1] );
+		me.setAttribute( "v3", m_value[2] );
+
+		if( m_colorSpace == cmyk )
+			me.setAttribute( "v4", m_value[3] );
+	}
+}
+
+void
+VColor::load( const QDomElement& element )
+{
+	switch( element.attribute( "colorSpace" ).toUShort() )
+	{
+		case 1:
+			m_colorSpace = cmyk; break;
+		case 2:
+			m_colorSpace = hsb; break;
+		case 3:
+			m_colorSpace = gray; break;
+		default:
+			m_colorSpace = rgb;
+	}
+
+	if( m_colorSpace == gray )
+		m_value[0] = element.attribute( "v", "0.0" ).toDouble();
+	else
+	{
+		m_value[0] = element.attribute( "v1", "0.0" ).toDouble();
+		m_value[1] = element.attribute( "v2", "0.0" ).toDouble();
+		m_value[2] = element.attribute( "v3", "0.0" ).toDouble();
+
+		if( m_colorSpace == cmyk )
+			m_value[3] = element.attribute( "v4", "0.0" ).toDouble();
+	}
+
+	if( m_value[0] < 0.0 || m_value[0] > 1.0 )
+		m_value[0] = 0.0;
+	if( m_value[1] < 0.0 || m_value[1] > 1.0 )
+		m_value[1] = 0.0;
+	if( m_value[2] < 0.0 || m_value[2] > 1.0 )
+		m_value[2] = 0.0;
+	if( m_value[3] < 0.0 || m_value[3] > 1.0 )
+		m_value[3] = 0.0;
+}
+
 

@@ -11,7 +11,7 @@
 
 class QPainter;
 
-enum VFillRule { evenOdd, winding };
+enum VFillRule { evenOdd = 0, winding = 1 };
 
 class VPathFill : public VFill, VSegmentListTraverser
 {

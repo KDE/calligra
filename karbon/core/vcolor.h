@@ -8,14 +8,17 @@
 
 #include <qstring.h>
 
+class QDomElement;
+
+
 class VColor
 {
 public:
 	enum VColorSpace{
-		rgb,
-		cmyk,
-		hsb,
-		gray };
+		rgb  = 0,
+		cmyk = 1,
+		hsb  = 2,
+		gray = 3 };
 
 	VColor();
 
@@ -26,6 +29,9 @@ public:
 
 	VColorSpace colorSpace() const { return m_colorSpace; }
 	void setColorSpace( const VColorSpace colorSpace );
+
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
 
 private:
 	bool convertToColorSpace( const VColorSpace colorSpace,

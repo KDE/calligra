@@ -62,6 +62,14 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 				return false;
 			}
 		}
+		else if( itr.current()->type() == VSegment::end )
+		{
+			if( !end(
+				itr.current()->point( 3 ) ) )
+			{
+				return false;
+			}
+		}
 		// fall back:
 		else
 		{

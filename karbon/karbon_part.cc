@@ -19,6 +19,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 {
 	m_commandHistory = new VCommandHistory( this );
 
+	m_layers.setAutoDelete( true );
+
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 	m_activeLayer = m_layers.getLast();
@@ -58,6 +60,8 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 	{
 		return false;
 	}
+
+	m_layers.clear();
 
 	QDomNodeList list = doc.childNodes();
 	for( uint i = 0; i < list.count(); ++i )

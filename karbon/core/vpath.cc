@@ -155,7 +155,8 @@ VPath::drawBox( QPainter& painter, double x, double y, uint handleSize )
 const KoPoint&
 VPath::currentPoint() const
 {
-	return m_segments.getLast()->getLast()->point( 3 );
+	return
+		m_segments.getLast()->getLast()->point( 3 );
 }
 
 VPath&
@@ -317,16 +318,23 @@ VPath::arcTo(
 VPath&
 VPath::close()
 {
-	if( closed() ) return *this;
+	if( m_segments.getLast() == 0L || m_segments.getLast()->getLast() == 0L )
+		return *this;
 
-// TODO: add tolerance
-//	if( currentPoint() != m_segments.getLast()->getFirst()->point( 3 ) )
-//	{
+	// move end-segment if one already exists:
+	if( m_segments.getLast()->getLast()->type() == VSegment::end )
+	{
+		m_segments.getLast()->getLast()->
+			setPoint( 3, m_segments.getLast()->getFirst()->point( 3 ) );
+	}
+	// append one, if no end-segment exists:
+	else if( currentPoint() != m_segments.getLast()->getFirst()->point( 3 ) )
+	{
 		VSegment* s = new VSegment();
 		s->setType( VSegment::end );
 		s->setPoint( 3, m_segments.getLast()->getFirst()->point( 3 ) );
 		m_segments.getLast()->append( s );
-//	}
+	}
 
 	m_closed = true;
 
@@ -432,6 +440,10 @@ VPath::save( QDomElement& element ) const
 		element.appendChild( me );
 
 		me.setAttribute( "closed", m_closed );
+		me.setAttribute( "fillRule", m_fillRule );
+
+		m_stroke.save( me );
+		m_fill.save( me );
 
 		QPtrListIterator<VSegmentList> itr( m_segments );
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -454,26 +466,27 @@ VPath::load( const QDomElement& element )
 	m_segments.clear();
 
 	setState( normal );
-	m_closed = element.attribute( "closed" ) == 0 ? false : true;
+	m_closed   = element.attribute( "closed" ) == 0 ? false : true;
+	m_fillRule = element.attribute( "fillRule" ) == 0 ? evenOdd : winding;
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
-			QDomElement segments = list.item( i ).toElement();
+			QDomElement pathChild = list.item( i ).toElement();
 
-			if( segments.tagName() == "SEGMENTS" )
+			if( pathChild.tagName() == "SEGMENTS" )
 			{
 				VSegmentList sl;
 				sl.setAutoDelete( true );
 
-				QDomNodeList sublist = segments.childNodes();
-				for( uint j = 0; j < sublist.count(); ++j )
+				QDomNodeList segmentList = pathChild.childNodes();
+				for( uint j = 0; j < segmentList.count(); ++j )
 				{
-					if( sublist.item( j ).isElement() )
+					if( segmentList.item( j ).isElement() )
 					{
-						QDomElement segment = sublist.item( j ).toElement();
+						QDomElement segment = segmentList.item( j ).toElement();
 
 						VSegment* s = new VSegment();
 						s->load( segment );
@@ -482,6 +495,14 @@ VPath::load( const QDomElement& element )
 				}
 
 				combineSegments( sl );
+			}
+			else if( pathChild.tagName() == "STROKE" )
+			{
+				m_stroke.load( pathChild );
+			}
+			else if( pathChild.tagName() == "FILL" )
+			{
+				m_fill.load( pathChild );
 			}
 		}
 	}
