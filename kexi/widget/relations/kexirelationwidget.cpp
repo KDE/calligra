@@ -55,7 +55,10 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	g->addLayout( hlyr, 0, 0 );
 
 	m_tableCombo = new KComboBox(this, "tables_combo");
+	QLabel *lbl = new QLabel(m_tableCombo, i18n("Table")+": ", this);
+	lbl->setIndent(3);
 	m_tableCombo->setInsertionPolicy(QComboBox::NoInsertion);
+	hlyr->addWidget(lbl);
 	hlyr->addWidget(m_tableCombo);
 	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
 	QStringList tmp = m_conn->tableNames();
@@ -74,9 +77,13 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 
 	//actions
 	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
-	m_tableQueryPopup->insertTitle(i18n("Table"));
+	m_tableQueryPopupTitleID = m_tableQueryPopup->insertTitle(SmallIcon("table"), "");
+	connect(m_tableQueryPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
+
 	m_connectionPopup = new KPopupMenu(this, "m_connectionPopup");
-	m_connectionPopup->insertTitle(i18n("Relationship"));
+	m_connectionPopupTitleID = m_connectionPopup->insertTitle("");
+	connect(m_connectionPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
+
 	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
 	
 	m_openSelectedTableAction = new KAction(i18n("&Open Table"), SmallIcon("fileopen"), KShortcut(),
@@ -103,6 +110,8 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 		this, SLOT(tableContextMenuRequest( const QPoint& )));
 	connect(m_relationView, SIGNAL(connectionContextMenuRequest( const QPoint& )),
 		this, SLOT(connectionContextMenuRequest( const QPoint& )));
+	connect(m_relationView, SIGNAL(tableHidden(KexiDB::TableSchema&)),
+		this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
 
 #if 0
 	if(!embedd)
@@ -273,6 +282,34 @@ void KexiRelationWidget::designSelectedTable()
 QSize KexiRelationWidget::sizeHint() const
 {
 	return m_relationView->sizeHint();
+}
+
+void KexiRelationWidget::slotTableHidden(KexiDB::TableSchema &table)
+{
+	const QString &t = table.name().lower();
+	int i;
+	for (i=0; i<m_tableCombo->count() && t > m_tableCombo->text(i).lower(); i++)
+		;
+	m_tableCombo->insertItem(table.name(), i);
+	if (!m_tableCombo->isEnabled()) {
+		m_tableCombo->setCurrentItem(0);
+		m_tableCombo->setEnabled(true);
+		m_btnAdd->setEnabled(true);
+	}
+
+	emit tableHidden(table);
+}
+
+void KexiRelationWidget::aboutToShowPopupMenu()
+{
+	if (m_relationView->focusedTableView() && m_relationView->focusedTableView()->table()) {
+		m_tableQueryPopup->changeTitle(m_tableQueryPopupTitleID, SmallIcon("table"),
+			m_relationView->focusedTableView()->table()->name() + " : " + i18n("Table"));
+	}
+	else if (m_relationView->selectedConnection()) {
+		m_connectionPopup->changeTitle( m_connectionPopupTitleID, 
+			 m_relationView->selectedConnection()->toString() + " : " + i18n("Relationship") );
+	}
 }
 
 #include "kexirelationwidget.moc"

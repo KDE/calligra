@@ -96,6 +96,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		void tableViewGotFocus();
 		void connectionViewGotFocus();
 		void emptyAreaGotFocus();
+		void tableHidden(KexiDB::TableSchema& t);
 
 	public slots:
 		//! Clears current selection - table/query or connection
@@ -133,6 +134,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 //		void clearTableSelection();
 //		void clearConnSelection();
 
+		void hideTable(KexiRelationViewTableContainer* tableView);
 		void removeConnection(KexiRelationViewConnection *conn);
 
 		TablesDict		m_tables;

@@ -60,6 +60,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 
 	signals:
 		void tableAdded(KexiDB::TableSchema& t);
+		void tableHidden(KexiDB::TableSchema& t);
 	
 	public slots:
 		void addTable(KexiDB::TableSchema *t);
@@ -75,6 +76,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 		void emptyAreaContextMenuRequest( const QPoint& pos );
 		void openSelectedTable();
 		void designSelectedTable();
+		void slotTableHidden(KexiDB::TableSchema &table);
+		void aboutToShowPopupMenu();
 
 	protected:
 #if 0//js
@@ -98,6 +101,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 			, *m_connectionPopup //over connection
 			, *m_areaPopup; //over outer area
 		KAction *m_openSelectedTableAction, *m_designSelectedTableAction;
+
+		int m_tableQueryPopupTitleID, m_connectionPopupTitleID;
 };
 
 #endif

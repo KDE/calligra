@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,6 +56,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 
 		bool matchesPoint(const QPoint &p, int tolerance=3);
 //		SourceConnection	connection() { return m_conn; }
+
+		QString toString() const;
 
 	private:
 		QGuardedPtr<KexiRelationViewTableContainer> m_srcTable;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
+#include <kexidb/tableschema.h>
 
 #include "r1.xpm"
 #include "rn.xpm"
@@ -50,6 +52,10 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 	m_rcvField = c.rcvField;
 
 	m_selected = false;
+}
+
+KexiRelationViewConnection::~KexiRelationViewConnection()
+{
 }
 
 void
@@ -247,7 +253,16 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 	return false;
 }
 
-KexiRelationViewConnection::~KexiRelationViewConnection()
+QString
+KexiRelationViewConnection::toString() const
 {
+	QString str;
+	if (m_srcTable && m_srcTable->table()) {
+		str += (m_srcTable->table()->name() + "." + m_srcField);
+	}
+	if (m_rcvTable && m_rcvTable->table()) {
+		str += " - ";
+		str += (m_rcvTable->table()->name() + "." + m_rcvField);
+	}
+	return str;
 }
-
