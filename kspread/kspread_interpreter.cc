@@ -385,10 +385,10 @@ static bool kspreadfunc_logn( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
     return false;
 
-  context.setValue( new KSValue( log( args[0]->doubleValue() ) /log((double)args[1]->intValue() )) );
+  context.setValue( new KSValue( log( args[0]->doubleValue() ) /log( args[1]->doubleValue() )) );
 
   return true;
 }

@@ -1371,7 +1371,7 @@
       </Parameter>
       <Parameter>
 	<Comment>Base</Comment>
-	<Type>Int</Type>
+	<Type>Float</Type>
       </Parameter>
       <Help>
 	<Text>The LOGn() function returns the base n logarithm of x.</Text>
