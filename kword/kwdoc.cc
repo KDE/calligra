@@ -1208,7 +1208,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
 
     // TODO MAILMERGE
 
-    KoOasisContext context( oasisStyles );
+    KoOasisContext context( this, m_varColl, oasisStyles );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
