@@ -89,31 +89,38 @@ SvgImport::convert()
 void
 SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 {
-	VFill fill;
-	VStroke stroke;
 	QColor c;
 	GraphicsContext *gc = new GraphicsContext;
 	// set as default
 	if( m_gc.current() )
 		*gc = *( m_gc.current() );
 
+	VColor strokecolor	= gc->stroke.color();
+	VColor fillcolor	= gc->fill.color();
+
 	// try normal PA
 	if( !e.attribute( "fill" ).isEmpty() )
 	{
 		c.setNamedColor( e.attribute( "fill" ) );
-		VColor color( c );
-		fill.setColor( color );
-		gc->fill = fill;
+		fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
 	if( !e.attribute( "stroke" ).isEmpty() )
 	{
 		c.setNamedColor( e.attribute( "stroke" ) );
-		VColor color( c );
-		stroke.setColor( color );
-		gc->stroke = stroke;
+		strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
 	if( !e.attribute( "stroke-width" ).isEmpty() )
 		gc->stroke.setLineWidth( e.attribute( "stroke-width" ).toDouble() );
+	// handle opacity
+	if( !e.attribute( "stroke-opacity" ).isEmpty() )
+		strokecolor.setOpacity( e.attribute( "stroke-opacity" ).toFloat() );
+	else if( !e.attribute( "fill-opacity" ).isEmpty() )
+		fillcolor.setOpacity( e.attribute( "fill-opacity" ).toFloat() );
+	if( !e.attribute( "opacity" ).isEmpty() )
+	{
+		fillcolor.setOpacity( e.attribute( "opacity" ).toFloat() );
+		strokecolor.setOpacity( e.attribute( "opacity" ).toFloat() );
+	}
 
 	// try style attr
 	QString style = e.attribute( "style" ).simplifyWhiteSpace();
@@ -126,21 +133,19 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		if( command == "fill" )
 		{
 			c.setNamedColor( params );
-			VColor color( c );
-			fill.setColor( color );
-			gc->fill = fill;
+			fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 		}
 		else if( command == "stroke" )
 		{
 			c.setNamedColor( params );
-			VColor color( c );
-			stroke.setColor( color );
-			gc->stroke = stroke;
+			strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 		}
 		else if( command == "stroke-width" )
 			gc->stroke.setLineWidth( params.toDouble() );
 	}
 
+	gc->fill.setColor( fillcolor );
+	gc->stroke.setColor( strokecolor );
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
 	m_gc.push( gc );
