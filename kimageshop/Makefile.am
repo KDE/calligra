@@ -1,7 +1,7 @@
 
 INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
+LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO) -lqimgio -ljpeg
 
 SUBDIRS   = canvas pics
 
@@ -16,7 +16,13 @@ kimageshop_SOURCES = \
  kimageshop_doc.cc \
  kimageshop_view.cc \
  preferencesdlg.cc \
- zoomfactordlg.cc
+ zoomfactordlg.cc \
+ canvas.cc \
+ layer.cc \
+ layerlist.cc \
+ brush.cc \
+ channel.cc \
+ misc.cc
 
 noinst_HEADERS = \
  kimageshop_main.h \
@@ -24,7 +30,13 @@ noinst_HEADERS = \
  kimageshop_doc.h \
  kimageshop_view.h \
  preferencesdlg.h \
- zoomfactordlg.h
+ zoomfactordlg.h \
+ canvas.h \
+ layer.h \
+ layerlist.h \
+ brush.h \
+ channel.h \
+ misc.h
 
 METASOURCES = \
  kimageshop_main.moc \
@@ -32,7 +44,9 @@ METASOURCES = \
  kimageshop_doc.moc \
  kimageshop_view.moc \
  preferencesdlg.moc \
- zoomfactordlg.moc
+ zoomfactordlg.moc \
+ canvas.moc \
+ layer.moc
 
 idl_DATA = kimageshop.idl
 

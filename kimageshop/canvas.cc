@@ -31,7 +31,7 @@
 #define DEBUG(AREA, CMD)
 
 
-canvas::canvas(int width, int height, QWidget *parent=0) : QWidget(parent)
+canvas::canvas(int width, int height, QWidget *parent) : QWidget(parent)
 {
 	dragging=false;
 	w=width;

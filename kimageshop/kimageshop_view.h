@@ -35,7 +35,11 @@
 
 #include "kimageshop.h"
 
+class canvas;
+class layerList;
 class KImageShopDoc;
+class QScrollBar;
+class KRuler;
 
 class KImageShopView : public QWidget,
 		       virtual public KoViewIf,
@@ -43,21 +47,28 @@ class KImageShopView : public QWidget,
 {
   Q_OBJECT
     
- public:
+public:
   KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc );
   ~KImageShopView();
   
-  KImageShopDoc* doc();
-  
   virtual void cleanUp();
+  virtual void createGUI();
+
+  KImageShopDoc* doc();
   CORBA::Boolean printDlg();
 
 public slots:
-  // Document signals
   void slotUpdateView();
 
 protected:
   virtual void init();
+
+  void setupScrollbars();
+  void setupRulers();
+  void setRanges();
+
+  void scrollH( int );
+  void scrollV( int );
 
   virtual bool event( const char* _event, const CORBA::Any& _value );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
@@ -74,12 +85,14 @@ protected:
   OpenPartsUI::Menu_var m_vMenuView;
   OpenPartsUI::Menu_var m_vMenuTransform;
   OpenPartsUI::Menu_var m_vMenuPlugIns;
-  OpenPartsUI::Menu_var m_vMenuFilter;
-  OpenPartsUI::Menu_var m_vMenuExtras;
+  OpenPartsUI::Menu_var m_vMenuOptions;
   
 private:
-  KImageShopDoc* m_pDoc; 
-  QPixmap m_pixmap;
+  KImageShopDoc *m_pDoc; 
+  canvas        *m_pCanvas;
+  layerList     *m_pLayerList;
+  QScrollBar    *m_pHorz, *m_pVert;
+  KRuler        *m_pHRuler, *m_pVRuler;
 };
 
 #endif

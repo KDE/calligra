@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 		printf("p=%p\n",p.handle());
 		xi=XCreateImage( dpy, vis, displayDepth, ZPixmap, 0,0, 128,128, 32, 0 );
 		uchar *imageData=(uchar*)malloc(xi->bytes_per_line*128);
-		xi->data=imageData;
+		xi->data=(char*)imageData;
 		printf("bytes_per_line=%d\n",xi->bytes_per_line);
 
 		TIME_START;
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 			}
 		}
 		if (visual==rgb888) {
-			xi->data=(uchar*)img.bits();
+			xi->data=(char*)img.bits();
 			for(int i=0;i<10;i++) {
 				XPutImage(dpy, p.handle(), qt_xget_readonly_gc(), xi, 0,0,0,0,128,128);
 			}
