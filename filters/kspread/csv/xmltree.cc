@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999 David Faure <dfaure@kde.org>
+   Copyright (C) 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,12 +70,12 @@ const QString XMLTree::part()
 
   QTime tmr;
   tmr.start();
-  kdebug(KDEBUG_INFO, 31000, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+  kDebugInfo( 31501, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
   root->save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 :( )
 
-  kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)tmr.elapsed()));
-  kdebug(KDEBUG_INFO, 31000, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+  kDebugInfo( 31501, (const char*)QString::number((long)tmr.elapsed()));
+  kDebugInfo( 31501, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
   t << '\0';
 

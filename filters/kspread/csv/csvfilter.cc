@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999 David Faure <dfaure@kde.org>
+   Copyright (C) 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kdebug(KDEBUG_ERROR, 31000, "Unable to open input file!");
+        kDebugError( 31501, "Unable to open input file!");
         in.close();
         return false;
     }
@@ -45,7 +45,7 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     /*
     KGlobal::locale()->enableNumericLocale();
-    kdebug(KDEBUG_INFO, 31000, "Decimal Symbol : %s", KGlobal::locale()->decimalSymbol().ascii());
+    kDebugInfo( 31501, "Decimal Symbol : %s", KGlobal::locale()->decimalSymbol().ascii());
     QChar decimal_point = KGlobal::locale()->decimalSymbol()[0];
      I've dropped the idea of determining the separator automatically
      after trying to load an English CSV file into a French kspread... :-)
@@ -120,13 +120,13 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root", "")) {
-        kdebug(KDEBUG_ERROR, 31000, "Unable to open output file!");
+        kDebugError( 31501, "Unable to open output file!");
         in.close();
         out.close();
         return false;
     }
     out.write((const char*)tmp, tmp.length());
-    //kdebug(KDEBUG_INFO, 31000, "%s", tmp.data());
+    //kDebugInfo( 31501, "%s", tmp.data());
     out.close();
 
     in.close();
