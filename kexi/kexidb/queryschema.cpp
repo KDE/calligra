@@ -83,8 +83,12 @@ void QuerySchema::clear()
 
 KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
-	if (!field || (!field->isQueryAsterisk() && !field->table()))
+	if (!field)
 		return *this;
+	if (!field->isQueryAsterisk() && !field->table()) {
+		KexiDBDbg << "QuerySchema::addField(): WARNINGL field must contain table information!" <<endl;
+		return *this;
+	}
 	FieldList::addField(field);
 	if (field->isQueryAsterisk()) {
 		m_asterisks.append(field);
@@ -98,8 +102,12 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 		if (m_tables.find(field->table())==-1)
 			m_tables.append(field->table());
 	}
-	
 	return *this;
+}
+
+FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk)
+{
+	return addField(asterisk);
 }
 
 Connection* QuerySchema::connection()

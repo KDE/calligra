@@ -32,6 +32,7 @@
 namespace KexiDB {
 
 class Connection;
+class QueryAsterisk;
 
 /*! KexiDB::QuerySchema provides information about database query
 	that can be executed using SQL database engine. 
@@ -70,6 +71,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Field bust have its table assigned. 
 		 */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
+
+		/*! Adds \a asterisk at the and of field list. */
+		FieldList& addAsterisk(QueryAsterisk *asterisk);
 
 //		int id() { return m_id; }
 //		Field::List::iterator fields() { return m_fields.begin(); }
