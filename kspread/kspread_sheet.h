@@ -1170,6 +1170,8 @@ protected:
     bool loadRowFormat( const QDomElement& row, int &rowIndex, const KoOasisStyles& oasisStyles, bool isLast );
     bool loadColumnFormat(const QDomElement& row, const KoOasisStyles& oasisStyles, int & indexCol );
     bool loadTableStyleFormat( QDomElement *style );
+    void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
+
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 

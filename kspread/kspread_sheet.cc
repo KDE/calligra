@@ -6482,6 +6482,9 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                     kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
                     QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
                     kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+                    KoStyleStack styleStack;
+                    styleStack.push( *masterLayoutStyle );
+                    loadOasisMasterLayoutPage( styleStack );
                 }
             }
         }
@@ -6537,6 +6540,67 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     }
     return true;
 }
+
+
+void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
+{
+    float left = 0.0;
+    float right = 0.0;
+    float top = 0.0;
+    float bottom = 0.0;
+    float width = 0.0;
+    float height = 0.0;
+    QString orientation = "Portrait";
+    QString format;
+    if ( styleStack.hasAttribute( "fo:page-width" ) )
+    {
+        width = KoUnit::parseValue( styleStack.attribute( "fo:page-width" ) );
+    }
+    if ( styleStack.hasAttribute( "fo:page-height" ) )
+    {
+        height =  KoUnit::parseValue( styleStack.attribute( "fo:page-height" ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-top" ) )
+    {
+        top = KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-bottom" ) )
+    {
+        bottom = KoUnit::parseValue( styleStack.attribute( "fo:margin-bottom" ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-left" ) )
+    {
+        left = KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-right" ) )
+    {
+        right = KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) );
+    }
+    if ( styleStack.hasAttribute( "style:writing-mode" ) )
+    {
+        kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttribute( "style:writing-mode" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "style:print-orientation" ) )
+    {
+        orientation = ( styleStack.attribute( "style:print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+    }
+    if ( styleStack.hasAttribute("style:num-format" ) )
+    {
+        kdDebug()<<" num-format :"<<styleStack.attribute("style:num-format" )<<endl;
+        //todo fixme
+    }
+    format = QString( "%1x%2" ).arg( width ).arg( height );
+    kdDebug()<<" format : "<<format<<endl;
+    m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+
+    kdDebug()<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
+//<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
+//          QString format = paper.attribute( "format" );
+//      QString orientation = paper.attribute( "orientation" );
+//        m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+//      }
+}
+
 
 bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol )
 {
