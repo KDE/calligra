@@ -88,7 +88,7 @@
 #include "pageeffects.h"
 #include <unistd.h>
 
-#define MASTERPAGE 0
+
 
 #define HEADERFOOTERBYPAGE 0
 

@@ -158,8 +158,6 @@
 using namespace KSpell2;
 #endif
 
-#define MASTERPAGE 0
-
 #define COPYOASISFORMAT 0
 
 static const char * const pageup_xpm[] = {

@@ -25,6 +25,7 @@
 #define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
 
 #define MAX_UNDO_REDO 100
+#define MASTERPAGE 0
 
 // types
 enum AlignType {
