@@ -32,6 +32,10 @@ public:
     ~KWord13OasisGenerator( void );
     
     bool generate ( const QString& fileName, KWord13Document& kwordDocument );
-}
+    
+protected:
+    QString escapeOOText(const QString& strText) const;
+    QString escapeOOSpan(const QString& strText) const;
+};
 
 #endif // KWORD_1_3_OASIS_GENERATOR
