@@ -101,7 +101,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
     if ( !document )
         return KoFilter::StupidError;
 
-    kdDebug(30501) << "here we go... " << document->className() << endl;
+    kdDebug(30523) << "here we go... " << document->className() << endl;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
@@ -114,7 +114,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
         return KoFilter::NotImplemented;
     }
 
-    kdDebug(30501) << "...still here..." << endl;
+    kdDebug(30523) << "...still here..." << endl;
 
     // No need for a dynamic cast here, since we use Qt's moc magic
     KSpreadDoc *ksdoc=(KSpreadDoc*)document;
