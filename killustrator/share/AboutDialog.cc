@@ -36,7 +36,8 @@
 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\n\
 Contributions by\n\
 Steffen Thorhauer, Stefan Taferner\n\
-Stephan Kulow, Jost Schenck, Ben Skelton"
+Stephan Kulow, Jost Schenck, Ben Skelton\n\
+Reginald Stadlbauer"
 
 AboutDialog::AboutDialog (QWidget* parent) : 
     QDialog (parent, "About", true) {

@@ -215,6 +215,10 @@ const char* GBezier::typeName () {
 void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
   QPen pen;
   QBrush brush;
+  int sdx = 0;
+  int sdy = 0;
+  int edx = 0;
+  int edy = 0;
 
   initPen (pen);
   p.save ();
@@ -222,6 +226,20 @@ void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
   p.setWorldMatrix (tmpMatrix, true);
   unsigned num = points.count ();
   
+  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
+
+  // check for arrows
+  // (xAngle/RAD_FACTOR) doesnt work!?
+  if (sArrow != 0L) {
+    sdx = qRound (w*sArrow->length () * cos (1/(RAD_FACTOR/(sAngle))));
+    sdy = qRound (w*sArrow->length () * sin (1/(RAD_FACTOR/(sAngle))));
+  }
+
+  if (eArrow != 0L) {
+    edx = qRound (w*eArrow->length () * cos (1/(RAD_FACTOR/(eAngle))));
+    edy = qRound (w*eArrow->length () * sin (1/(RAD_FACTOR/(eAngle))));
+  }
+
 #if 0
   for (unsigned int i = 1; i + 3 < num; i += 3) {
     if (points.at (i + 1)->x () == MAXFLOAT ||
@@ -251,18 +269,25 @@ void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
     else {
       //      p.drawPolyline (ppoints);
       for (unsigned int i = 1; i + 3 < num; i += 3) {
-	if (points.at (i + 1)->x () == MAXFLOAT ||
-	    points.at (i + 2)->x () == MAXFLOAT) {
-	  p.drawLine (points.at (i)->x (), points.at (i)->y (),
-		      points.at (i + 3)->x (), points.at (i + 3)->y ());
-	}
-	else {
-	  QPointArray bpoints (4);
-	  for (unsigned int k = 0; k < 4; k++)
-	    bpoints.setPoint (k, qRound (points.at (i + k)->x ()), 
-			      qRound (points.at (i + k)-> y ()));
-	  p.drawQuadBezier (bpoints);
-	}
+      	if (points.at (i + 1)->x () == MAXFLOAT ||
+	          points.at (i + 2)->x () == MAXFLOAT) {
+	        p.drawLine (points.at (i)->x () + ((i==1) ? sdx : 0), 
+	                    points.at (i)->y () + ((i==1) ? sdy : 0), 		                  
+	                    points.at (i + 3)->x () + ((i==num-2) ? edx : 0), 
+	                    points.at (i + 3)->y () + ((i==num-2) ? edy : 0));
+ 	      }
+	      else {
+	        QPointArray bpoints (4);
+          bpoints.setPoint (0, qRound (points.at (i)->x () + ((i==1) ? sdx : 0)),
+		                           qRound (points.at (i)->y () + ((i==1) ? sdy : 0)));
+          bpoints.setPoint (1, qRound (points.at (i + 1)->x ()),
+		                           qRound (points.at (i + 1)->y ()));
+          bpoints.setPoint (2, qRound (points.at (i + 2)->x ()),
+		                           qRound (points.at (i + 2)->y ()));
+          bpoints.setPoint (3, qRound (points.at (i + 3)->x () + ((i==num-5) ? edx : 0)),
+		                           qRound (points.at (i + 3)->y () + ((i==num-5) ? edy : 0)));
+	        p.drawQuadBezier (bpoints);
+	      }
       }
     }
   }

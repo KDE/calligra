@@ -32,6 +32,8 @@
 #include <ktabctl.h>
 #include <kcombo.h>
 
+#include "UnitBox.h"
+
 class OptionDialog : public QTabDialog {
   Q_OBJECT
 public:
@@ -41,6 +43,7 @@ public:
 
 protected:
   QWidget* createGeneralWidget (QWidget* parent);
+  QWidget* createEditWidget (QWidget* parent);
 
 private slots:
   void applyPressed ();
@@ -48,6 +51,8 @@ private slots:
 
 private:
   KCombo* unit;
+  UnitBox *horiz, *vert;
+  UnitBox *smallStep, *bigStep;
 };
 
 #endif

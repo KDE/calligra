@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -49,6 +49,8 @@ LayerView::LayerView (QWidget *parent, const char *name)
   setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
   setFrameStyle (QFrame::Panel | QFrame::Sunken);
   setLineWidth (2);
+  lineEditor = NULL;
+  editorRow = -1;
 }
 
 LayerView::~LayerView () {
@@ -102,22 +104,52 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
     break;
   case 3:
     {
-      // name
-      p->fillRect (0, 0, width (), cellHeight (row),
-		   QBrush (rowIsActive ? darkBlue : white));
       QFontMetrics fm = p->fontMetrics ();
       int yPos;
       if (CELL_HEIGHT < fm.height ())
 	yPos = fm.ascent () + fm.leading () / 2;
       else
 	yPos = (CELL_HEIGHT - fm.height ()) / 2 + fm.ascent ();
-      p->drawText (5, yPos, layer->name ());
+      if (editorRow == row) {
+	if (lineEditor == NULL) {
+	  lineEditor = new QLineEdit (this);
+	  lineEditor->setMaxLength (20);
+	  lineEditor->setFrame (false);
+	  connect (lineEditor, SIGNAL(returnPressed ()),
+		   this, SLOT(lineEditorSlot ()));
+	}
+	lineEditor->setGeometry (3 * CELL1_WIDTH + 3, 
+				 CELL_HEIGHT * editorRow + 1, 
+				 CELL2_WIDTH, CELL_HEIGHT);
+	lineEditor->setEnabled (true);
+	lineEditor->show ();
+	lineEditor->setFocus ();
+	lineEditor->setText (layer->name ());
+      }
+      else {
+	// name
+	p->fillRect (0, 0, width (), cellHeight (row),
+		     QBrush (rowIsActive ? darkBlue : white));
+	p->drawText (5, yPos, layer->name ());
+      }
       break;
     }
   default:
     break;
   }
   p->restore ();
+}
+
+void LayerView::mouseDoubleClickEvent (QMouseEvent *event) {
+  int row, col;
+  
+  row = findRow (event->y ());
+  col = findCol (event->x ());
+  
+  if (row != -1 && col == 3) {
+    editorRow = row;
+    repaint ();
+  }
 }
 
 void LayerView::mousePressEvent (QMouseEvent *event) {
@@ -127,25 +159,39 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
   col = findCol (event->x ());
   
   if (row != -1 && col != -1) {
-    GLayer* layer = layers[numRows () - 1 - row];
-    
-    switch (col) {
-    case 0:
-      layer->setVisible (! layer->isVisible ());
-      break;
-    case 1:
-      layer->setEditable (! layer->isEditable ());
-      break;
-    case 2:
-      layer->setPrintable (! layer->isPrintable ());
-      break;
-    case 3:
-      document->setActiveLayer (layer);
-      break;
-    default:
-      break;
+    if (editorRow != -1) {
+      editorRow = -1;
+      lineEditor->setEnabled (false);
+      lineEditor->hide ();
+    }
+    else {
+      GLayer* layer = layers[numRows () - 1 - row];
+      
+      switch (col) {
+      case 0:
+	layer->setVisible (! layer->isVisible ());
+	break;
+      case 1:
+	layer->setEditable (! layer->isEditable ());
+	break;
+      case 2:
+	layer->setPrintable (! layer->isPrintable ());
+	break;
+      case 3:
+	document->setActiveLayer (layer);
+	break;
+      default:
+	break;
+      }
     }
     repaint ();
   }
 }
 
+void LayerView::lineEditorSlot () {
+  GLayer* layer = layers[numRows () - 1 - editorRow];
+  layer->setName (lineEditor->text ());
+  lineEditor->setEnabled (false);
+  lineEditor->hide ();
+  repaint ();
+}

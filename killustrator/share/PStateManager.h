@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -45,6 +45,14 @@ public:
   MeasurementUnit defaultMeasurementUnit ();
   void setDefaultMeasurementUnit (MeasurementUnit unit);
 
+  float smallStepSize ();
+  float bigStepSize ();
+  void setStepSizes (float small, float big);
+
+  float duplicateXOffset ();
+  float duplicateYOffset ();
+  void setDuplicateOffsets (float x, float y);
+
 signals:
   void recentFilesChanged ();
   void settingsChanged ();
@@ -56,6 +64,8 @@ private:
   QStrList recentFiles;
   static PStateManager* managerInstance;
   MeasurementUnit defaultUnit;
+  float dupXOff, dupYOff;
+  float smallStep, bigStep;
 };
 
 #endif

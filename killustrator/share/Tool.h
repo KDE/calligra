@@ -27,8 +27,16 @@
 
 #include <qobject.h>
 #include <qevent.h>
+#include <qkeycode.h>
 
 #include "GObject.h"
+#include "version.h"
+
+#if QT_VERSION >= 199
+#define QT_ESCAPE Qt::Key_Escape
+#else
+#define QT_ESCAPE Key_Escape
+#endif
 
 class GDocument;
 class Canvas;

@@ -3,11 +3,11 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,9 +26,16 @@
 #include "Coord.h"
 
 Coord Coord::transform (const QWMatrix& m) const {
+#if QT_VERSION >= 199
+  double x, y;
+
+  m.map ((double) x_, (double) y_, &x, &y);
+#else
   float x, y;
 
-  m.map ((double)x_, (double)y_, (double*)&x, (double*)&y);
+  m.map (x_, y_, &x, &y);
+#endif
+
   return Coord (x, y);
 }
 
@@ -49,7 +56,7 @@ QDataStream& operator<< (QDataStream& s, const Coord& c) {
 
 QDataStream& operator>> (QDataStream& s, Coord& c) {
   float x, y;
-
+  
   s >> x >> y;
   c.x (x); c.y (y);
   return s;
@@ -121,10 +128,10 @@ Rect Rect::transform (const QWMatrix& m) const {
   Rect result;
   if (m.m12 () == 0.0F && m.m21 () == 0.0F) {
     result = Rect (topLeft ().transform (m), bottomRight ().transform (m));
-  }
+  } 
   else {
     int i;
-    Coord p[4] = { Coord (x1_, y1_), Coord (x1_, y2_),
+    Coord p[4] = { Coord (x1_, y1_), Coord (x1_, y2_), 
 		   Coord (x2_, y2_), Coord (x2_, y1_) };
     for (i = 0; i < 4; i++)
       p[i] = p[i].transform (m);
@@ -144,8 +151,16 @@ Rect Rect::transform (const QWMatrix& m) const {
   return result;
 }
 
+Rect Rect::translate (float dx, float dy) const {
+  return Rect (left () + dx, top () + dy, width (), height ());
+}
+
+bool Rect::operator== (const Rect& r) const {
+  return (x1_ == r.x1_ && x2_ == r.x2_ && y1_ == r.y1_ && y2_ == r.y2_);
+}
+
 ostream& operator<< (ostream& os, const Rect& r) {
-    os << '[' << r.left () << ", " << r.top () << " - "
+    os << '[' << r.left () << ", " << r.top () << " - " 
        << r.right () << ", " << r.bottom () << ']';
     return os;
 }

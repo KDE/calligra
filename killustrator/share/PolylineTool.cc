@@ -3,11 +3,11 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -23,6 +23,7 @@
 */
 
 #include <iostream.h>
+#include <math.h>
 #include "PolylineTool.h"
 #include "PolylineTool.moc"
 #include "GDocument.h"
@@ -36,6 +37,7 @@
 #include <qkeycode.h>
 #include <kapp.h>
 #include <klocale.h>
+#include "version.h"
 
 PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
   line = 0L;
@@ -45,9 +47,15 @@ PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
 }
 
 void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == QEvent::KeyPress) {
+  if (e->type () == 
+#if QT_VERSION >= 199
+      QEvent::KeyPress
+#else
+      Event_KeyPress
+#endif
+      ) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape && line != 0L) {
+    if (ke->key () == QT_ESCAPE && line != 0L) {
       /*
        * Abort the last operation
        */
@@ -74,7 +82,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
         if (points.count () > 0) {
 	  if (last != 0)
 	    last = last - points.count ();
-          AddLineSegmentCmd *cmd =
+          AddLineSegmentCmd *cmd =  
             new AddLineSegmentCmd (doc, line, last, points);
           history->addCommand (cmd);
         }
@@ -85,7 +93,13 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       emit operationDone ();
     }
   }
-  else if (e->type () == QEvent::MouseButtonPress) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseButtonPress
+#else
+	   Event_MouseButtonPress
+#endif
+	   ) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () != LeftButton)
       return;
@@ -108,7 +122,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	// magnetic mode
 	GObject *o = 0L;
 	int idx = -1;
-	if (doc->findNearestObject ("GPolyline", xpos, ypos,
+	if (doc->findNearestObject ("GPolyline", xpos, ypos, 
 				    10, o, idx)) {
 	  line = (GPolyline *) o;
 	  last = (idx != 0 ? idx + 1 : idx);
@@ -131,7 +145,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	}
 	if (obj && (last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
 	    && (last == 0 || last == (int) obj->numOfPoints () - 1)) {
-	  line = obj;
+	  line = obj; 
 	  newObj = false;
 	  if (last != 0)
 	    // it's not the first point of the line, so update the
@@ -151,16 +165,37 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
     line->addPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () == QEvent::MouseMove) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseMove
+#else
+	   Event_MouseMove
+#endif
+) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
+    
+    if (me->state () & ControlButton) {
+      Coord oldp = line->getPoint (last > 0 ? last - 1 : 0);
+      if (fabs (xpos - oldp.x ()) > fabs (ypos - oldp.y ()))
+        ypos = oldp.y ();
+      else
+        xpos = oldp.x ();
+    } 
+        
     canvas->snapPositionToGrid (xpos, ypos);
 
     line->setPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () == QEvent::MouseButtonRelease) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseButtonRelease
+#else
+	   Event_MouseButtonRelease
+#endif
+	   ) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
@@ -175,10 +210,10 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (me->button () == RightButton) {
       doc->unselectAllObjects ();
 
-      if ((last > 0 && line->numOfPoints () >= 3 &&
+      if ((last > 0 && line->numOfPoints () >= 3 && 
 	  line->getNeighbourPoint (Coord (xpos, ypos)) == 0) ||
 	  ((me->state () & ShiftButton) && line->numOfPoints () > 3)) {
-	if (me->state () & ShiftButton) {
+	if (me->state () & ShiftButton) { 
 	  line->removePoint (line->numOfPoints () - 1, false);
 	  // the polyline is closed, so convert it into a polygon
 	  GPolygon* obj = new GPolygon (line->getPoints ());
@@ -229,7 +264,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	  points.removeFirst ();
 	  if (last != 0)
 	    last = last - points.count () + 1;
-	  AddLineSegmentCmd *cmd =
+	  AddLineSegmentCmd *cmd =  
 	    new AddLineSegmentCmd (doc, line, last, points);
 	  history->addCommand (cmd);
 	}

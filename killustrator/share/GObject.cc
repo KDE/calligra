@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -52,7 +52,7 @@ void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
 }
 
 void GObject::setDefaultFillInfo (const FillInfo& fi) {
-  if (fi.mask & FillInfo::Color)
+  if (fi.mask & FillInfo::Color) 
     defaultFillInfo.color = fi.color;
   if (fi.mask & FillInfo::FillStyle)
     defaultFillInfo.fstyle = fi.fstyle;
@@ -77,7 +77,7 @@ GObject::GObject () {
   wrapper = 0L;
 
   outlineInfo = defaultOutlineInfo;
-  outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style |
+  outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style | 
     OutlineInfo::Width | OutlineInfo::Custom;
   outlineInfo.roundness = 0;
   outlineInfo.shape = OutlineInfo::DefaultShape;
@@ -105,7 +105,7 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
     else if (attr == "strokecolor")
       outlineInfo.color = (*first).colorValue ();
     else if (attr == "strokestyle")
-      outlineInfo.style = (PenStyle) (*first).intValue ();
+      outlineInfo.style = (QT_PRFX::PenStyle) (*first).intValue ();
     else if (attr == "linewidth")
       outlineInfo.width = (*first).floatValue ();
     else if (attr == "fillstyle")
@@ -113,7 +113,7 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
     else if (attr == "fillcolor")
       fillInfo.color = (*first).colorValue ();
     else if (attr == "fillpattern")
-      fillInfo.pattern = (BrushStyle) (*first).intValue ();
+      fillInfo.pattern = (QT_PRFX::BrushStyle) (*first).intValue ();
     else if (attr == "gradcolor1")
       fillInfo.gradient.setColor1 ((*first).colorValue ());
     else if (attr == "gradcolor2")
@@ -124,12 +124,12 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
       id = (*first).stringValue ().c_str ();
     else if (attr == "ref")
       refid = (*first).stringValue ().c_str ();
-
+    
     first++;
   }
 }
 
-GObject::GObject (const GObject& obj) : QObject()
+GObject::GObject (const GObject& obj) : QObject() 
 {
   sflag = false;
   outlineInfo = obj.outlineInfo;
@@ -158,7 +158,7 @@ void GObject::unref () {
 
 void GObject::updateRegion (bool recalcBBox) {
   Rect newbox = redrawBox ();
-
+  
   if (recalcBBox) {
     Rect oldbox = newbox;
     calcBoundingBox ();
@@ -181,7 +181,7 @@ void GObject::transform (const QWMatrix& m, bool update) {
   iMatrix = tMatrix.invert ();
   initTmpMatrix ();
   gShape.setInvalid ();
-  if (update)
+  if (update) 
     updateRegion ();
 }
 
@@ -191,7 +191,7 @@ void GObject::initTmpMatrix () {
 
 void GObject::ttransform (const QWMatrix& m, bool update) {
   tmpMatrix = tmpMatrix * m;
-  if (update)
+  if (update) 
     updateRegion ();
 }
 
@@ -215,7 +215,7 @@ void GObject::setOutlineInfo (const GObject::OutlineInfo& info) {
 GObject::OutlineInfo GObject::getOutlineInfo () const {
   return outlineInfo;
 }
-
+  
 void GObject::setOutlineShape (OutlineInfo::Shape s) {
   outlineInfo.shape = s;
   updateRegion ();
@@ -228,7 +228,7 @@ void GObject::setOutlineColor (const QColor& color) {
   emit propertiesChanged (Prop_Outline, OutlineInfo::Color);
 }
 
-void GObject::setOutlineStyle (PenStyle style) {
+void GObject::setOutlineStyle (QT_PRFX::PenStyle style) {
   outlineInfo.style = style;
   updateRegion (false);
   emit propertiesChanged (Prop_Outline, OutlineInfo::Style);
@@ -244,7 +244,7 @@ const QColor& GObject::getOutlineColor () const {
   return outlineInfo.color;
 }
 
-Qt::PenStyle GObject::getOutlineStyle () const {
+QT_PRFX::PenStyle GObject::getOutlineStyle () const {
   return outlineInfo.style;
 }
 
@@ -269,7 +269,7 @@ void GObject::setFillInfo (const GObject::FillInfo& info) {
 GObject::FillInfo GObject::getFillInfo () const {
   return fillInfo;
 }
-
+  
 void GObject::setFillColor (const QColor& color) {
   fillInfo.color = color;
   updateRegion (false);
@@ -280,7 +280,7 @@ const QColor& GObject::getFillColor () const {
   return fillInfo.color;
 }
 
-void GObject::setFillPattern (BrushStyle b) {
+void GObject::setFillPattern (QT_PRFX::BrushStyle b) {
   fillInfo.pattern = b;
   updateRegion (false);
   emit propertiesChanged (Prop_Fill, FillInfo::Pattern);
@@ -308,7 +308,7 @@ const Gradient& GObject::getFillGradient () const {
   return fillInfo.gradient;
 }
 
-Qt::BrushStyle GObject::getFillPattern () const {
+QT_PRFX::BrushStyle GObject::getFillPattern () const {
   return fillInfo.pattern;
 }
 
@@ -361,9 +361,9 @@ void GObject::restoreState (GOState* state) {
   updateRegion ();
 }
 
-void GObject::calcUntransformedBoundingBox (const Coord& tleft,
+void GObject::calcUntransformedBoundingBox (const Coord& tleft, 
 					    const Coord& tright,
-					    const Coord& bright,
+					    const Coord& bright, 
 					    const Coord& bleft) {
   Coord p[4];
   Rect r;

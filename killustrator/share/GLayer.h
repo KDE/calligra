@@ -29,10 +29,12 @@
 #include <qobject.h>
 #include "GObject.h"
 
+class GDocument;
+
 class GLayer : public QObject {
   Q_OBJECT
 public:
-  GLayer (const char* text = 0L);
+  GLayer (GDocument* doc, const char* text = 0L);
   ~GLayer ();
 
   /*
@@ -74,6 +76,7 @@ private:
     wasEditable;    // layer was editable before the change to unvisible
 
   list<GObject*> contents; // the list of objects
+  GDocument* document;
 
   static int lastID;
 };  

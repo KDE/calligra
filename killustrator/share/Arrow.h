@@ -45,6 +45,7 @@ public:
 	     float width, float angle);
 
   Rect boundingBox (const Coord& c, float width, float angle);
+  int length ();
 
   static void install (Arrow* arrow);
   static Arrow* getArrow (long id);

@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -32,7 +32,7 @@ FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
   minval = 1;
   maxval = 10;
   step = 1;
-  
+
   format = "%3.2f";
   setValue ((float) 1);
 
@@ -40,16 +40,13 @@ FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
   connect (this, SIGNAL (valueDecreased ()), SLOT(slotDecrease ()));
   connect (_edit, SIGNAL (returnPressed ()), this,
 	   SLOT (slotValueChange ()));
-  connect (_edit, SIGNAL (textChanged (const char*)), this,
-	   SLOT (slotTextChange (const char*)));
 }
 
 FloatSpinBox::~FloatSpinBox () {
 }
 
 float FloatSpinBox::getValue () {
-  //  return atof (KSpinBox::getValue ());
-  return val;
+  return atof (KSpinBox::getValue ());
 }
 
 void FloatSpinBox::setFormatString (const char* fmt) {
@@ -61,7 +58,6 @@ void FloatSpinBox::setValue (float value) {
   if (minval <= value && value <= maxval) {
     sprintf (buf, (const char *) format, value);
     KSpinBox::setValue (buf);
-    val = value;
   }
 }
 
@@ -93,10 +89,5 @@ void FloatSpinBox::slotDecrease () {
 }
 
 void FloatSpinBox::slotValueChange () {
-  val = atof (KSpinBox::getValue ());
   emit valueChanged (getValue ());
-}
-
-void FloatSpinBox::slotTextChange (const char*) {
-  val = atof (KSpinBox::getValue ());
 }

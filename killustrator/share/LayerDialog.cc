@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -117,9 +117,10 @@ void LayerDialog::downPressed () {
 }
 
 void LayerDialog::newPressed () {
-    document->addLayer ();
-    // force update
-    layerView->setActiveDocument (document);
+  GLayer* layer = document->addLayer ();
+  document->setActiveLayer (layer);
+  // force update
+  layerView->setActiveDocument (document);
 }
 
 void LayerDialog::deletePressed () {

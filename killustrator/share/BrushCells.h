@@ -28,6 +28,7 @@
 #include <qtableview.h>
 #include <qpixmap.h>
 #include <qbrush.h>
+#include "version.h"
 
 #include <vector>
 
@@ -37,8 +38,8 @@ public:
   BrushCells (QWidget *parent = 0L, const char *name = 0);
   ~BrushCells ();
   
-  BrushStyle brushStyle ();
-  void selectBrush (BrushStyle style);
+  QT_PRFX::BrushStyle brushStyle ();
+  void selectBrush (QT_PRFX::BrushStyle style);
 
 protected:
   virtual int cellWidth (int col);

@@ -48,7 +48,7 @@ PStateManager* PStateManager::instance () {
 void PStateManager::readDefaultSettings () {
   KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
-
+  
   config->setGroup ("General");
   QString value = config->readEntry ("DefaultUnit", "pt");
   if (value == "mm")
@@ -57,8 +57,13 @@ void PStateManager::readDefaultSettings () {
     defaultUnit = UnitInch;
   else
     defaultUnit = UnitPoint;
-   UnitBox::setDefaultMeasurementUnit (defaultUnit);
-  
+  UnitBox::setDefaultMeasurementUnit (defaultUnit);
+
+  smallStep = config->readDoubleNumEntry ("SmallStep", 2.0);
+  bigStep = config->readDoubleNumEntry ("BigStep", 10.0);
+  dupXOff = config->readDoubleNumEntry ("DuplicateXOffset", 10.0);
+  dupYOff = config->readDoubleNumEntry ("DuplicateYOffset", 10.0);
+
   config->setGroup ("DefaultObjectProperties");
 
   GObject::OutlineInfo oInfo;
@@ -132,6 +137,34 @@ void PStateManager::setDefaultMeasurementUnit (MeasurementUnit unit) {
     emit settingsChanged ();
 }
 
+float PStateManager::smallStepSize () {
+  return smallStep;
+}
+
+float PStateManager::bigStepSize () {
+  return bigStep;
+}
+
+void PStateManager::setStepSizes (float small, float big) {
+  smallStep = small;
+  bigStep = big;
+  emit settingsChanged ();
+}
+
+float PStateManager::duplicateXOffset () {
+  return dupXOff;
+}
+
+float PStateManager::duplicateYOffset () {
+  return dupYOff;
+}
+
+void PStateManager::setDuplicateOffsets (float x, float y) {
+  dupXOff = x;
+  dupYOff = y;
+  emit settingsChanged ();
+}
+
 void PStateManager::saveDefaultSettings () {
   KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
@@ -148,6 +181,11 @@ void PStateManager::saveDefaultSettings () {
     config->writeEntry ("DefaultUnit", "inch");
     break;
   }
+
+  config->writeEntry ("SmallStep", smallStep);
+  config->writeEntry ("BigStep", bigStep);
+  config->writeEntry ("DuplicateXOffset", dupXOff);
+  config->writeEntry ("DuplicateYOffset", dupYOff);
 
   config->setGroup ("DefaultObjectProperties");
 

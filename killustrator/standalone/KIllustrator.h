@@ -41,6 +41,10 @@
 #include "CommandHistory.h"
 #include "MainView.h"
 
+#ifndef NEWKDE
+#include <kfm.h>
+#endif
+
 class QwViewport;
 class Canvas;
 class GDocument;
@@ -157,7 +161,9 @@ public slots:
   void setPenColor (const QBrush& b);
   void setFillColor (const QBrush& b);
 
-  void slotKFMJobDone (int id);
+  void slotKFMJobDone2 (int id);
+  void slotKFMJobDone ();
+
   void dropActionSlot (KDNDDropZone* dzone);
 
   void showCursorPosition (int x, int y);
@@ -241,6 +247,10 @@ private:
 
   // direction of file transfer
   TransferDirection ioDir;
+#ifndef NEWKDE
+  // the KFM connection
+  KFM *kfmConn;
+#endif
   // the drop zone
   KDNDDropZone *dropZone;
   

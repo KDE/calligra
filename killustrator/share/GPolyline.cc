@@ -121,19 +121,39 @@ const char* GPolyline::typeName () {
 void GPolyline::draw (Painter& p, bool withBasePoints, bool outline) {
   unsigned int i;
   QPen pen;
+  int sdx = 0;
+  int sdy = 0;
+  int edx = 0;
+  int edy = 0;
 
   initPen (pen);
   p.save ();
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
 
-  unsigned int num = points.count ();
-  for (i = 1; i < num; i++) {
-    p.drawLine (points.at (i - 1)->x (), points.at (i - 1)->y (),
-		points.at (i)->x (), points.at (i)->y ());
-  }
-  p.restore ();
   float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
+
+  // check for arrows
+  // (xAngle/RAD_FACTOR) doesnt work!?
+  if (sArrow != 0L) {
+    sdx = qRound (w*sArrow->length () * cos (1/(RAD_FACTOR/(sAngle))));
+    sdy = qRound (w*sArrow->length () * sin (1/(RAD_FACTOR/(sAngle))));
+  }
+
+  if (eArrow != 0L) {
+    edx = qRound (w*eArrow->length () * cos (1/(RAD_FACTOR/(eAngle))));
+    edy = qRound (w*eArrow->length () * sin (1/(RAD_FACTOR/(eAngle))));
+  }
+
+  unsigned int num = points.count ();
+
+  for (i = 1; i < num; i++) 
+      p.drawLine (points.at (i - 1)->x () + ((i==1) ? sdx : 0), 
+                  points.at (i - 1)->y () + ((i==1) ? sdy : 0),
+		              points.at (i)->x () + ((i==num-1) ? edx : 0), 
+		              points.at (i)->y () + ((i==num-1) ? edy : 0));     
+
+  p.restore ();
   if (sArrow != 0L) {
     Coord p1 = points.at (0)->transform (tmpMatrix);
     sArrow->draw (p, p1, outlineInfo.color, w, sAngle);
@@ -275,8 +295,8 @@ void GPolyline::calcBoundingBox () {
     r.bottom (QMAX(p.y (), r.bottom ()));
   }
 
-  r.right (r.left () == r.right () ? r.left () + 1 : r.right () + 2);
-  r.bottom (r.top () == r.bottom () ? r.top () + 1 : r.bottom () + 2);
+  r.right (r.left () == r.right () ? r.left () + 1 : r.right ()/* + 2*/);
+  r.bottom (r.top () == r.bottom () ? r.top () + 1 : r.bottom ()/* + 2*/);
 
   if (num < 2)
     return;

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -24,6 +24,7 @@
 
 #include <qcolor.h>
 #include "Arrow.h"
+#include "version.h"
 
 #if 0
 static QCOORD sysArrow_1[] = { -5, -3, 10, 0, -5, 3 };
@@ -31,14 +32,21 @@ static QCOORD sysArrow_2[] = { -5, -3, 10, 0, -5, 3, 0, 0, -5, -3 };
 static QCOORD sysArrow_3[] = { -2, -2, 4, 0, -2, 2 };
 #else
 // Ben Skelton <skeltobc@elec.canterbury.ac.nz> has proposed this:
-static QCOORD sysArrow_1[] = { -15, -3, 0, 0, -15, 3 };
-static QCOORD sysArrow_2[] = { -15, -3, 0, 0, -15, 3, -10, 0, -15, -3 };
-static QCOORD sysArrow_3[] = { -6, -2, 0, 0, -6, 2 };
+// make the first point the point where the line meets the arrow head
+static QCOORD sysArrow_1[] = { -15, 0, -15, -3, 0, 0, -15, 3 };
+static QCOORD sysArrow_2[] = { -10, 0, -15, -3, 0, 0, -15, 3 };
+static QCOORD sysArrow_3[] = { -6, 0, -6, -2, 0, 0, -6, 2 };
+// and some more arrows
+static QCOORD sysArrow_4[] = { -6, 0, -6, -3, 0, -3, 0, 3, -6, 3};
+static QCOORD sysArrow_5[] = { -10, 0, -10, -2, 0, 0, -10, 2 };
+static QCOORD sysArrow_6[] = { -15, 0, -10, -3, 0, 0, -10, 3 };
+static QCOORD sysArrow_7[] = { -10, 0, -10, -4, -1, 0, -1, -6, 0, -6,
+                               0, 6, -1, 6, -1, 0, -10, 4 };
 #endif
 
 QIntDict<Arrow> Arrow::arrows;
 
-Arrow::Arrow (long aid, int npts, const QCOORD* pts, bool fillIt) :
+Arrow::Arrow (long aid, int npts, const QCOORD* pts, bool fillIt) : 
   points (npts, pts) {
   id = aid;
   lpreview = 0L;
@@ -66,7 +74,7 @@ QPixmap& Arrow::leftPixmap () {
     p.scale (2, 2);
     p.drawLine (5, 5, 35, 5);
     //    draw (p, Coord (10, 5), black, 1, 180);
-    draw (p, Coord (0, 5), Qt::black, 1, 180);
+    draw (p, Coord (5, 5), QT_PRFX::black, 1, 180);
     p.end ();
   }
   return *lpreview;
@@ -81,8 +89,8 @@ QPixmap& Arrow::rightPixmap () {
     p.scale (2, 2);
     //    p.drawLine (0, 5, 10, 5);
     //    draw (p, Coord (10, 5), black, 1, 0);
-    p.drawLine (0, 5, 35, 5);
-    draw (p, Coord (25, 5), Qt::black, 1, 0);
+    p.drawLine (0, 5, 20, 5);
+    draw (p, Coord (20, 5), QT_PRFX::black, 1, 0);
     p.end ();
   }
   return *rpreview;
@@ -95,12 +103,12 @@ void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
   p.rotate (angle);
   if (width == 0)
     width = 1.0;
-  //  p.scale (width, width);
-  p.scale (1.0, width);
+  p.scale (width, width);
+  //p.scale (1.0, width);
   if (fill)
     p.setBrush (color);
   else
-    p.setBrush (Qt::white);
+    p.setBrush (QT_PRFX::white);
   p.setPen (color);
   p.drawPolygon (points);
   p.restore ();
@@ -147,15 +155,27 @@ Arrow* Arrow::getArrow (long id) {
 QIntDictIterator<Arrow> Arrow::getArrows () {
   if (arrows.isEmpty ())
     Arrow::initialize ();
-
+  
   return QIntDictIterator<Arrow> (arrows);
+}
+
+int Arrow::length () {
+  return points.point(0).x();
 }
 
 void Arrow::initialize () {
   // initialize system arrows
-  Arrow::install (new Arrow (1, 3, sysArrow_1));
-  Arrow::install (new Arrow (2, 5, sysArrow_2));
-  Arrow::install (new Arrow (3, 3, sysArrow_3));
-  Arrow::install (new Arrow (4, 3, sysArrow_1, false));
-  Arrow::install (new Arrow (5, 3, sysArrow_3, false));
+  Arrow::install (new Arrow (1, 4, sysArrow_1));
+  Arrow::install (new Arrow (2, 4, sysArrow_5));
+  Arrow::install (new Arrow (3, 4, sysArrow_2));
+  Arrow::install (new Arrow (4, 4, sysArrow_3));
+  Arrow::install (new Arrow (5, 5, sysArrow_4));
+  Arrow::install (new Arrow (6, 4, sysArrow_6));
+  Arrow::install (new Arrow (7, 9, sysArrow_7));  
+  Arrow::install (new Arrow (8, 4, sysArrow_1, false));
+  Arrow::install (new Arrow (9, 4, sysArrow_5, false));
+  Arrow::install (new Arrow (10, 4, sysArrow_2, false));  
+  Arrow::install (new Arrow (11, 4, sysArrow_3, false));
+  Arrow::install (new Arrow (12, 5, sysArrow_4, false));  
+  Arrow::install (new Arrow (13, 4, sysArrow_6, false));
 }

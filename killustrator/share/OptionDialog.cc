@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -29,6 +29,7 @@
 #include <qpushbt.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qgroupbox.h>
 #include "OptionDialog.h"
 #include "OptionDialog.moc"
 #include "PStateManager.h"
@@ -40,19 +41,18 @@ OptionDialog::OptionDialog (QWidget* parent, const char* name) :
   setCaption (i18n ("Option"));
 
   widget = createGeneralWidget (this);
-
   addTab (widget, i18n ("General"));
+
+  widget = createEditWidget (this);
+  addTab (widget, i18n ("Edit"));
+
   setOkButton (i18n ("OK"));
   setCancelButton (i18n ("Cancel"));
 
   adjustSize ();
  
-  setMinimumSize (300, 250);
-  setMaximumSize (300, 250);
-
-  unit->setCurrentItem ((int) 
-			PStateManager::instance ()->defaultMeasurementUnit ());
-
+  setMinimumSize (300, 310);
+  setMaximumSize (300, 310);
 }
 
 QWidget* OptionDialog::createGeneralWidget (QWidget* parent) {
@@ -72,6 +72,79 @@ QWidget* OptionDialog::createGeneralWidget (QWidget* parent) {
   unit->insertItem ("mm");
   unit->insertItem ("inch");
   unit->move (80, 20);
+
+  unit->setCurrentItem ((int) 
+			PStateManager::instance ()->defaultMeasurementUnit ());
+
+  return w;
+}
+
+QWidget* OptionDialog::createEditWidget (QWidget* parent) {
+  QWidget* w;
+  QLabel* label;
+  QGroupBox* box;
+  w = new QWidget (parent);
+
+  box = new QGroupBox (w);
+  box->setTitle (i18n ("Duplicate Offset"));
+  box->move (20, 15);
+
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Horizontal:"));
+  label->move (20, 20);
+
+  horiz = new UnitBox (box);
+  horiz->setRange (-1000.0, 1000.0);
+  horiz->setStep (0.1);
+  horiz->setEditable (true);
+  horiz->move (90, 20);
+
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Vertical:"));
+  label->move (20, 50);
+
+  vert = new UnitBox (box);
+  vert->setRange (-1000.0, 1000.0);
+  vert->setStep (0.1);
+  vert->setEditable (true);
+  vert->move (90, 50);
+  box->adjustSize ();
+
+  box = new QGroupBox (w);
+  box->setTitle (i18n ("Step Distance"));
+  box->move (20, 120);
+
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Small step:"));
+  label->move (20, 20);
+
+  smallStep = new UnitBox (box);
+  smallStep->setRange (-1000.0, 1000.0);
+  smallStep->setStep (0.1);
+  smallStep->setEditable (true);
+  smallStep->move (90, 20);
+
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Big step:"));
+  label->move (20, 50);
+
+  bigStep = new UnitBox (box);
+  bigStep->setRange (-1000.0, 1000.0);
+  bigStep->setStep (0.1);
+  bigStep->setEditable (true);
+  bigStep->move (90, 50);
+
+  PStateManager *psm = PStateManager::instance ();
+  horiz->setValue (psm->duplicateXOffset ());
+  vert->setValue (psm->duplicateYOffset ());
+  smallStep->setValue (psm->smallStepSize ());
+  bigStep->setValue (psm->bigStepSize ());
+  box->adjustSize ();
+
   return w;
 }
 
@@ -103,6 +176,10 @@ int OptionDialog::setup () {
     default:
       break;
     }
+    psm->setStepSizes (dialog.smallStep->getValue (), 
+		       dialog.bigStep->getValue ());
+    psm->setDuplicateOffsets (dialog.horiz->getValue (), 
+			      dialog.vert->getValue ());
   }
   return res;
 }

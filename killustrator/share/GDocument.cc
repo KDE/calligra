@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -53,6 +53,8 @@
 #include "xmlutils/XmlWriter.h"
 #include "xmlutils/XmlReader.h"
 
+#include "units.h"
+
 // default papersize in mm
 #define PAPER_WIDTH 210.0
 #define PAPER_HEIGHT 298.0
@@ -99,14 +101,15 @@ void GDocument::initialize () {
 
   pLayout.format = PG_DIN_A4;
   pLayout.orientation = PG_PORTRAIT;
-  pLayout.width = PG_A4_WIDTH; pLayout.height = PG_A4_HEIGHT;
+  pLayout.mmWidth = PG_A4_WIDTH;
+  pLayout.mmHeight = PG_A4_HEIGHT;
   pLayout.left = 0; pLayout.right = 0;
   pLayout.top = 0; pLayout.bottom = 0;
   pLayout.unit = PG_MM;
 
   // in pt !!
-  paperWidth = (int) (pLayout.width / 25.4 * 72.0);
-  paperHeight = (int) (pLayout.height / 25.4 * 72.0);
+  paperWidth = (int) cvtMmToPt (pLayout.mmWidth);
+  paperHeight = (int) cvtMmToPt (pLayout.mmHeight);
   last = NULL;
   modifyFlag = false;
   filename = UNNAMED_FILE;
@@ -964,8 +967,20 @@ KoPageLayout GDocument::pageLayout () {
 
 void GDocument::setPageLayout (const KoPageLayout& layout) {
   pLayout = layout;
-  paperWidth = (int) (pLayout.width / 25.4 * 72.0);
-  paperHeight = (int) (pLayout.height / 25.4 * 72.0);
+  switch (layout.unit) {
+  case PG_MM:
+    paperWidth = (int) cvtMmToPt (pLayout.mmWidth);
+    paperHeight = (int) cvtMmToPt (pLayout.mmHeight);
+    break;
+  case PG_PT:
+    paperWidth = pLayout.ptWidth;
+    paperHeight = pLayout.ptHeight;
+    break;
+  case PG_INCH:
+    paperWidth = (int) cvtInchToPt (pLayout.inchWidth);
+    paperHeight = (int) cvtInchToPt (pLayout.inchHeight);
+    break;
+  }
   modifyFlag = true;
   emit sizeChanged ();
 }
@@ -1039,7 +1054,7 @@ void GDocument::lowerLayer (GLayer *layer) {
  * Add a new layer on top of existing layers
  */
 GLayer* GDocument::addLayer () {
-  GLayer* layer = new GLayer ();
+  GLayer* layer = new GLayer (this);
   connect (layer, SIGNAL(propertyChanged ()), this, SLOT(layerChanged ()));
   layers.push_back (layer);
   return layer;
@@ -1052,7 +1067,7 @@ void GDocument::deleteLayer (GLayer *layer) {
   if (layers.size () == 1)
     // we need at least one layer
     return;
-
+  
   bool update = (active_layer == layer);
 
   vector<GLayer*>::iterator i = layers.begin ();
@@ -1079,6 +1094,7 @@ void GDocument::deleteLayer (GLayer *layer) {
       break;
     }
   }
+  emit selectionChanged ();
   emit changed ();
 }
 

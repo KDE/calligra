@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -26,6 +26,7 @@
 #include <qclipboard.h>
 #include <strstream.h>
 #include "DuplicateCmd.h"
+#include "PStateManager.h"
 
 DuplicateCmd::DuplicateCmd (GDocument* doc) 
   : Command(i18n("Duplicate"))
@@ -40,27 +41,30 @@ DuplicateCmd::DuplicateCmd (GDocument* doc)
 }
 
 DuplicateCmd::~DuplicateCmd () {
-    list<GObject*>::iterator it;
-    for (it = objects.begin (); it != objects.end (); it++)
-	(*it)->unref ();
-    for (it = new_objects.begin ();  it != new_objects.end (); it++)
-	(*it)->unref ();
+  list<GObject*>::iterator it;
+  for (it = objects.begin (); it != objects.end (); it++)
+    (*it)->unref ();
+  for (it = new_objects.begin ();  it != new_objects.end (); it++)
+    (*it)->unref ();
 }
 
 void DuplicateCmd::execute () {
-    QWMatrix m;
-    m.translate (10, 10);
+  float xoff = PStateManager::instance ()->duplicateXOffset ();
+  float yoff = PStateManager::instance ()->duplicateYOffset ();
 
-    document->unselectAllObjects ();
-    for (list<GObject*>::iterator it = objects.begin ();
-	 it != objects.end (); it++) {
-	GObject *o = (*it)->copy ();
-	o->ref ();
-	o->transform (m, true);
-	document->insertObject (o);
-	document->selectObject (o);
-	new_objects.push_back (o);
-    }
+  QWMatrix m;
+  m.translate (xoff, yoff);
+
+  document->unselectAllObjects ();
+  for (list<GObject*>::iterator it = objects.begin ();
+       it != objects.end (); it++) {
+    GObject *o = (*it)->copy ();
+    o->ref ();
+    o->transform (m, true);
+    document->insertObject (o);
+    document->selectObject (o);
+    new_objects.push_back (o);
+  }
 }
 
 void DuplicateCmd::unexecute () {

@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -26,6 +26,7 @@
 #define LayerView_h_
 
 #include <qtableview.h>
+#include <qlineedit.h>
 #include <qpixmap.h>
 
 #include <vector>
@@ -33,26 +34,32 @@
 #include "GDocument.h"
 
 class LayerView : public QTableView {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    LayerView (QWidget *parent = 0L, const char *name = 0);
-    ~LayerView ();
-
-    void setActiveDocument (GDocument* doc);
-
+  LayerView (QWidget *parent = 0L, const char *name = 0);
+  ~LayerView ();
+  
+  void setActiveDocument (GDocument* doc);
+  
 protected:
-    void showLayers (const vector<GLayer*>& lvec);
-
-    virtual int cellWidth (int col);
-    virtual int cellHeight (int row);
-    virtual void paintCell (QPainter *, int row, int col);
-
-    virtual void mousePressEvent (QMouseEvent *event);
+  void showLayers (const vector<GLayer*>& lvec);
+  
+  virtual int cellWidth (int col);
+  virtual int cellHeight (int row);
+  virtual void paintCell (QPainter *, int row, int col);
+  
+  virtual void mousePressEvent (QMouseEvent *event);
+  virtual void mouseDoubleClickEvent (QMouseEvent *event);
+  
+private slots:
+  void lineEditorSlot ();
 
 private:
-    GDocument* document;
-    vector<GLayer*> layers;
-    QPixmap pixmaps[3];
+  GDocument* document;
+  vector<GLayer*> layers;
+  QPixmap pixmaps[3];
+  QLineEdit* lineEditor;
+  int editorRow;
 };
 
 #endif

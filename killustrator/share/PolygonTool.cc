@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -34,6 +34,7 @@
 #include <qkeycode.h>
 #include <kapp.h>
 #include <klocale.h>
+#include "version.h"
 
 PolygonTool::PolygonTool (CommandHistory* history) : Tool (history) {
   obj = 0L;
@@ -43,35 +44,53 @@ PolygonTool::PolygonTool (CommandHistory* history) : Tool (history) {
 }
 
 void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == QEvent::MouseButtonPress) {
+  if (e->type () == 
+#if QT_VERSION >= 199
+      QEvent::MouseButtonPress
+#else
+      Event_MouseButtonPress
+#endif
+      ) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     obj = new GPolygon (GPolygon::PK_Polygon);
     sPoint = Coord (xpos, ypos);
-    obj->setSymmetricPolygon (sPoint, sPoint, nCorners,
+    obj->setSymmetricPolygon (sPoint, sPoint, nCorners, 
 				 createConcavePolygon, sharpValue);
     doc->insertObject (obj);
   }
-  else if (e->type () == QEvent::MouseMove) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseMove
+#else
+	   Event_MouseMove
+#endif
+	   ) {
     if (obj == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
-    obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
+    obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners, 
 			      createConcavePolygon, sharpValue);
   }
-  else if (e->type () == QEvent::MouseButtonRelease) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseButtonRelease
+#else
+	   Event_MouseButtonRelease
+#endif
+	   ) {
     if (obj == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
-    obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners,
+    obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners, 
 			      createConcavePolygon, sharpValue);
 
     if (! obj->isValid ()) {
@@ -80,15 +99,21 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     else {
       CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
       history->addCommand (cmd);
-
+      
       doc->unselectAllObjects ();
       doc->setLastObject (obj);
     }
     obj = 0L;
   }
-  else if (e->type () == QEvent::KeyPress) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::KeyPress
+#else
+	   Event_KeyPress
+#endif
+	   ) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape)
+    if (ke->key () == QT_ESCAPE)
       emit operationDone ();
   }
   return;

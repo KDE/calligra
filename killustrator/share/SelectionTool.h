@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -45,11 +45,12 @@ public:
   
   void rotate (GDocument* doc, float dx, float dy, float xp, float yp,
 	       bool permanent = false);
-  void scale (GDocument* doc, int mask, float dx, float dy, 
+  void scale (GDocument* doc, Canvas* canvas, int mask, float dx, float dy, 
 	      bool permanent = false);
   void shear (GDocument* doc, int mask, float dx, float dy, 
 	      bool permanent = false);
-  void translate (GDocument* doc, float dx, float dy, bool permanent = false);
+  void translate (GDocument* doc, Canvas* canvas,
+		  float dx, float dy, bool snap, bool permanent = false);
   
   virtual bool consumesRMBEvents () { return false; }
 

@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -71,6 +71,8 @@ public:
   float getVertGridDistance () const { return vGridDistance; }
 
   void snapPositionToGrid (float& x, float& y);
+  Rect snapTranslatedBoxToGrid (const Rect& r);
+  Rect snapScaledBoxToGrid (const Rect& r, int hmask);
 
   void setToolController (ToolController *tc);
   
@@ -90,6 +92,9 @@ public:
   static void initZoomFactors (QArray<float>& factors);
 
 protected:
+  float snapXPositionToGrid (float pos);
+  float snapYPositionToGrid (float pos);
+
   void saveGridProperties ();
   void readGridProperties ();
 

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -27,6 +27,11 @@
 #include "Preview.h"
 #include "GDocument.h"
 #include "qwmf.h"
+#include "version.h"
+
+#define PREVIEW_HEIGHT 120
+#define PREVIEW_WIDTH  270
+#define PREVIEW_BORDER 5
 
 /**
  * A preview handler for the KFilePreviewDialag that shows
@@ -46,25 +51,33 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
     if (in.fail ())
       return false;
     if (tmpDoc->readFromXml (in)) {
-      float ratio = float (tmpDoc->getPaperHeight ()) /
-                    float (tmpDoc->getPaperWidth ());
-      //      int width = 300;
-      //      int height = (int) (ratio * float (width));
-      int height = 250;
-      int width = (int) (float (height) / ratio);
-      float xscale = (float) width / (float) tmpDoc->getPaperWidth ();
-      float yscale = (float) height / (float) tmpDoc->getPaperHeight ();
-
-      pixmap = QPixmap (width, height);
+      Rect bb = tmpDoc->boundingBoxForAllObjects ();
+      
+      float scale;
+      float xscale = (float) (PREVIEW_WIDTH - 2*PREVIEW_BORDER) / (float) bb.width ();
+      float yscale = (float) (PREVIEW_HEIGHT - 2*PREVIEW_BORDER) / (float) bb.height ();       
+      if (xscale < yscale) {
+          scale = xscale;
+          pixmap = QPixmap (PREVIEW_WIDTH, bb.height () * scale + 2*PREVIEW_BORDER);
+      }
+      else {
+          scale = yscale;
+          pixmap = QPixmap (bb.width () * scale + 2*PREVIEW_BORDER, PREVIEW_HEIGHT);
+      }
+      float xtrans = - bb.left () + PREVIEW_BORDER;
+      float ytrans = - bb.top () + PREVIEW_BORDER;      
+      
       Painter p;
 
       p.begin (&pixmap);
-      p.setBackgroundColor (Qt::white);
-      pixmap.fill (Qt::white);
-
-      p.scale (xscale, yscale);
-      p.eraseRect (0, 0, tmpDoc->getPaperWidth (),
-		   tmpDoc->getPaperHeight ());
+      p.setBackgroundColor (QT_PRFX::white);
+      pixmap.fill (QT_PRFX::white);
+      
+      p.scale (scale, scale);
+      p.translate (xtrans, ytrans);
+      // what does this do?
+      // p.eraseRect (0, 0, tmpDoc->getPaperWidth (),
+	 //	   tmpDoc->getPaperHeight ());
 
       tmpDoc->drawContents (p, false);
       p.end ();
@@ -88,26 +101,24 @@ bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 
   if (fInfo->isFile () && (ext == "wmf")) {
     QWinMetaFile wmf;
-
+ 
     if (wmf.load ((const char *) fileName)) {
       QPicture pic;
-      wmf.paint (&pic);
-
-      pixmap = QPixmap (200, 200);
+      wmf.paint (&pic);                                                     
+      
+      pixmap = QPixmap (PREVIEW_HEIGHT, PREVIEW_HEIGHT);
       Painter p;
-
       p.begin (&pixmap);
-      p.setBackgroundColor (Qt::white);
-      pixmap.fill (Qt::white);
-
+      p.setBackgroundColor (QT_PRFX::white);
+      pixmap.fill (QT_PRFX::white);
       QRect oldWin = p.window ();
       QRect vPort = p.viewport ();
-      p.setViewport (0, 0, 200, 200);
+      p.setViewport (0, 0, PREVIEW_HEIGHT, PREVIEW_HEIGHT);
       p.drawPicture (pic);
       p.setWindow (oldWin);
       p.setViewport (vPort);
       p.end ();
-
+      
       res = true;
     }
   }
@@ -122,7 +133,29 @@ bool pixmapPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   bool res = false;
 
   if (fInfo->isFile ()) {
-    pixmap.load ((const char *) fileName);
+    QPixmap origPixmap;
+    origPixmap.load ((const char *) fileName);
+    
+    if (!origPixmap.isNull ()) {
+      float scale;
+      float xscale = (float) PREVIEW_WIDTH / (float) origPixmap.width ();
+      float yscale = (float) PREVIEW_HEIGHT / (float) origPixmap.height ();       
+      if (xscale < yscale) {
+        scale = xscale;
+        pixmap = QPixmap (PREVIEW_WIDTH, origPixmap.height () * scale);
+      }  
+      else { 
+        scale = yscale;
+        pixmap = QPixmap (origPixmap.width () * scale, PREVIEW_HEIGHT);
+      }
+      
+      Painter p;
+      p.begin (&pixmap);
+      p.scale (scale, scale);
+      p.drawPixmap(0, 0, origPixmap);
+      p.end ();
+    }  
+      
     return ! pixmap.isNull ();
   }
   return res;

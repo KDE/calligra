@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -39,6 +39,7 @@
 #include <qbitmap.h>
 #include <kapp.h>
 #include <klocale.h>
+#include "version.h"
 
 #define right_ptr_width 16
 #define right_ptr_height 16
@@ -62,7 +63,7 @@ EditPointTool::EditPointTool (CommandHistory* history) : Tool (history) {
   mode = MovePoint;
   cursor = new QCursor (QBitmap (right_ptr_width,
 				 right_ptr_height,
-				 right_ptr_bits, true),
+				 right_ptr_bits, true), 
 			QBitmap (right_ptrmsk_width,
 				 right_ptrmsk_height,
 				 right_ptrmsk_bits, true),
@@ -93,12 +94,18 @@ void EditPointTool::setMode (Mode m) {
   }
 }
 
-void EditPointTool::processEvent (QEvent* e, GDocument *doc,
+void EditPointTool::processEvent (QEvent* e, GDocument *doc, 
 				  Canvas* canvas) {
   if (doc->selectionIsEmpty ())
     return;
 
-  if (e->type () == QEvent::MouseButtonPress) {
+  if (e->type () == 
+#if QT_VERSION >= 199
+      QEvent::MouseButtonPress
+#else
+      Event_MouseButtonPress
+#endif
+      ) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
@@ -122,19 +129,24 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     }
     // if no currently selected object was found at the mouse position ...
     if (obj == 0L) {
-      int idx;
-      if (doc->findNearestObject (0L, xpos, ypos, 15.0, obj, idx, true)) {
+      if ((obj = doc->findContainingObject (xpos, ypos)) != 0L) {
 	// select and edit this object
 	doc->unselectAllObjects ();
 	doc->selectObject (obj);
-	pointIdx = idx;
+	pointIdx = obj->getNeighbourPoint (Coord (xpos, ypos));
 	startPos = Coord (xpos, ypos);
 	lastPos = startPos;
 	canvas->setCursor (*cursor);
       }
     }
   }
-  else if (e->type () == QEvent::MouseMove) {
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseMove
+#else
+	   Event_MouseMove
+#endif
+	   ) {
     if (mode == InsertPoint)
       return;
 
@@ -174,8 +186,14 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       }
     }
   }
-  else if (e->type () == QEvent::MouseButtonRelease) {
-    if (obj == 0L)
+  else if (e->type () == 
+#if QT_VERSION >= 199
+	   QEvent::MouseButtonRelease
+#else
+	   Event_MouseButtonRelease
+#endif
+	   ) {
+    if (obj == 0L) 
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
@@ -185,11 +203,11 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       if (pointIdx != -1) {
 	float dx = xpos - lastPos.x ();
 	float dy = ypos - lastPos.y ();
-	if (dx != 0 || dy != 0)
+	if (dx != 0 || dy != 0) 
 	  obj->movePoint (pointIdx, dx, dy);
 	
 	EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
-					      xpos - startPos.x (),
+					      xpos - startPos.x (), 
 					      ypos - startPos.y ());
 	history->addCommand (cmd);
       }
@@ -199,7 +217,6 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       // compute the segment of intersection
       int idx = pline->containingSegment (xpos, ypos);
       if (idx != -1) {
-	//	cout << "insert in segment: " << idx << endl;
 	if (obj->isA ("GBezier"))
 	  idx = (idx + 1) * 3;
 	else

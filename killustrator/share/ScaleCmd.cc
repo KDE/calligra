@@ -46,9 +46,9 @@ void ScaleCmd::execute () {
   float xoff = box.x (), yoff = box.y ();
   float xback = xoff, yback = yoff;
 
-  if (hmask & Handle_Left)
+  if (hmask & Handle::HPos_Left)
     xback = box.left () + box.width () * (1 - sx);
-  if (hmask & Handle_Top)
+  if (hmask & Handle::HPos_Top)
     yback = box.top () + box.height () * (1 - sy);
 
   m1.translate (-xoff, -yoff);

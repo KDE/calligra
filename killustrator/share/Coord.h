@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -98,6 +98,7 @@ public:
   bool contains (const Rect& r) const;
 
   Rect transform (const QWMatrix& m) const;
+  Rect translate (float dx, float dy) const;
   bool intersects (const Rect& r) const;
 
   bool empty () const { return x1_ == 0 && x2_ == 0 && y1_ == 0 && y2_ == 0; }
@@ -110,6 +111,8 @@ public:
   Coord center () const { return Coord ((x1_ + x2_) / 2, (y1_ + y2_) / 2); }
 
   void enlarge (float v);
+
+  bool operator== (const Rect& r) const;
 
 private:
   float x1_, y1_, x2_, y2_;

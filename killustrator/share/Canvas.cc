@@ -3,11 +3,11 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by
+  published by  
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,8 +32,8 @@
 #include <qpainter.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
-#include <qcolor.h>
-#include <qdatetime.h>
+#include <qcolor.h>    
+#include <qdatetime.h>    
 #include <qtimer.h>
 #include <kmsgbox.h>
 #include "Canvas.h"
@@ -47,7 +47,7 @@
 
 QArray<float> Canvas::zoomFactors;
 
-Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
+Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent, 
 		const char* name) : QWidget (parent, name) {
   document = doc;
   resolution = res;
@@ -56,7 +56,7 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   viewport = vp;
 
   connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
-  connect (document, SIGNAL (changed (const Rect&)),
+  connect (document, SIGNAL (changed (const Rect&)), 
 	   this, SLOT (updateRegion (const Rect&)));
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
   connect (&(document->handle ()), SIGNAL (handleChanged ()),
@@ -91,9 +91,9 @@ void Canvas::ensureVisibility (bool flag) {
 }
 
 void Canvas::calculateSize () {
-  width = (int) (document->getPaperWidth () * resolution *
+  width = (int) (document->getPaperWidth () * resolution * 
 		 zoomFactor / 72.0) + 4;
-  height = (int) (document->getPaperHeight () * resolution *
+  height = (int) (document->getPaperHeight () * resolution * 
 		  zoomFactor / 72.0 + 4);
   resize (width, height);
 
@@ -140,7 +140,7 @@ void Canvas::snapToGrid (bool flag) {
     saveGridProperties ();
     emit gridStatusChanged ();
     document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-  }
+  }    
 }
 
 void Canvas::setGridDistance (float hdist, float vdist) {
@@ -148,6 +148,103 @@ void Canvas::setGridDistance (float hdist, float vdist) {
   vGridDistance = vdist;
   saveGridProperties ();
   document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+}
+
+Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
+  float x1, x2, y1, y2;
+
+  if (helplinesSnapIsOn || gridSnapIsOn) {
+    x1 = snapXPositionToGrid (r.left ());
+    x2 = snapXPositionToGrid (r.right ());
+    y1 = snapYPositionToGrid (r.top ());
+    y2 = snapYPositionToGrid (r.bottom ());
+
+    float x = 0, y = 0;
+    if (fabs (r.left () - x1) < fabs (r.right () - x2)) 
+      x = x1;
+    else
+      x = x2 - r.width () + 2;
+
+    if (fabs (r.top () - y1) < fabs (r.bottom () - y2)) 
+      y = y1;
+    else 
+      y = y2 - r.height () + 2;
+    return Rect (x, y, r.width (), r.height ());
+  }
+  else
+    return r;
+}
+
+Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
+  float x1, x2, y1, y2;
+
+  if (helplinesSnapIsOn || gridSnapIsOn) {
+    x1 = snapXPositionToGrid (r.left ());
+    x2 = snapXPositionToGrid (r.right ());
+    y1 = snapYPositionToGrid (r.top ());
+    y2 = snapYPositionToGrid (r.bottom ());
+
+    Rect retval (r);
+    if (hmask & Handle::HPos_Left)
+      retval.left (x1);
+    if (hmask & Handle::HPos_Top)
+      retval.top (y1);
+    if (hmask & Handle::HPos_Right)
+      retval.right (x2 + 1);
+    if (hmask & Handle::HPos_Bottom)
+      retval.bottom (y2 + 1);
+    return retval;
+  }
+  else
+    return r;
+}
+
+float Canvas::snapXPositionToGrid (float pos) {
+  bool snap = false;
+
+  if (helplinesSnapIsOn) {
+    // try to snap to help lines
+    vector<float>::iterator i;
+    for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
+      if (fabs (*i - pos) <= 10.0) {
+	pos = *i;
+	snap = true;
+	break;
+      }
+    }
+  }
+  if (gridSnapIsOn && ! snap) {
+    int n = (int) (pos / hGridDistance);
+    float r = fmod (pos, hGridDistance);
+    if (r > (hGridDistance / 2.0))
+      n++;
+    pos = hGridDistance * n;
+  }
+  return pos;
+}
+
+float Canvas::snapYPositionToGrid (float pos) {
+  bool snap = false;
+
+  if (helplinesSnapIsOn) {
+    // try to snap to help lines
+    vector<float>::iterator i;
+    for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
+      if (fabs (*i - pos) <= 10.0) {
+	pos = *i;
+	snap = true;
+	break;
+      }
+    }
+  }
+  if (gridSnapIsOn && ! snap) {
+    int n = (int) (pos / vGridDistance);
+    float r = fmod (pos, vGridDistance);
+    if (r > (vGridDistance / 2.0))
+      n++;
+    pos = vGridDistance * n;
+  }
+  return pos;
 }
 
 void Canvas::snapPositionToGrid (float& x, float& y) {
@@ -201,20 +298,43 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
 
   // ensure visibility
   if (ensureVisibilityFlag) {
-    if (e->type () == QEvent::MouseButtonPress && e->button () == LeftButton)
+    if (e->type () == 
+#if QT_VERSION >= 199
+	QEvent::MouseButtonPress 
+#else
+	Event_MouseButtonPress 
+#endif
+	&& e->button () == LeftButton)
       dragging = true;
-    else if (e->type () == QEvent::MouseButtonRelease &&
+    else if (e->type () == 
+#if QT_VERSION >= 199
+	     QEvent::MouseButtonRelease
+#else
+	     Event_MouseButtonRelease 
+#endif
+	     && 
 	     e->button () == LeftButton)
       dragging = false;
-    else if (e->type () == QEvent::MouseMove && dragging)
+    else if (e->type () == 
+#if QT_VERSION >= 199
+	     QEvent::MouseMove
+#else
+	     Event_MouseMove 
+#endif
+	     && dragging) 
       viewport->ensureVisible (e->x (), e->y (), 10, 10);
   }
 
   if (e->button () == RightButton &&
-      e->type () == QEvent::MouseButtonPress &&
-      ! toolController->getActiveTool ()->consumesRMBEvents ()) {
+      e->type () == 
+#if QT_VERSION >= 199
+      QEvent::MouseButtonPress 
+#else
+      Event_MouseButtonPress 
+#endif
+      && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
     if (document->selectionIsEmpty ()) {
-      GObject* obj = document->findContainingObject (new_pos.x (),
+      GObject* obj = document->findContainingObject (new_pos.x (), 
 						     new_pos.y ());
       if (obj) {
 	// pop up menu for the picked object
@@ -262,10 +382,10 @@ void Canvas::keyPressEvent (QKeyEvent* e) {
 void Canvas::paintEvent (QPaintEvent* e) {
   const QRect& rect = e->rect ();
   if (pixmap != 0L)
-    bitBlt (this, rect.x (), rect.y (), pixmap,
+    bitBlt (this, rect.x (), rect.y (), pixmap, 
 	    rect.x (), rect.y (), rect.width (), rect.height ());
   else
-    // For large zoom levels there is now pixmap to copy. So we
+    // For large zoom levels there is no pixmap to copy. So we
     // have to redraw the whole document, but without to call
     // repaint !!!
     redrawView (false);
@@ -313,8 +433,8 @@ void Canvas::redrawView (bool repaintFlag) {
   Painter p;
   float s = scaleFactor ();
 
-  // setup the painter
-  pdev = ((QPaintDevice*)pixmap ? (QPaintDevice*)pixmap : this);
+  // setup the painter  
+  pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
   p.begin (pdev);
   p.setBackgroundColor (white);
   if (pixmap)
@@ -374,7 +494,7 @@ void Canvas::updateRegion (const Rect& reg) {
   if (pendingRedraws > 0) {
     regionForUpdate = regionForUpdate.unite (r);
     pendingRedraws--;
-    if (pendingRedraws > 0)
+    if (pendingRedraws > 0) 
       // not the last redraw call
       return;
     else
@@ -388,10 +508,10 @@ void Canvas::updateRegion (const Rect& reg) {
   QWMatrix m;
   m.scale (s, s);
 
-  QRect clip = m.map (QRect (int (r.left ()), int (r.top ()),
+  QRect clip = m.map (QRect (int (r.left ()), int (r.top ()), 
 			     int (r.width ()), int (r.height ())));
 
-  QPaintDevice *pdev = ((QPaintDevice*)pixmap ? (QPaintDevice*)pixmap : this);
+  QPaintDevice *pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
   if (pdev->paintingActive ()) {
     // this occurs only in KOffice, when a embedded part tries
     // to draw in our canvas
@@ -400,7 +520,7 @@ void Canvas::updateRegion (const Rect& reg) {
     return;
   }
 
-  // setup the painter
+  // setup the painter  
   p.begin (pdev);
   p.setBackgroundColor (white);
   // setup the clip region
@@ -410,9 +530,9 @@ void Canvas::updateRegion (const Rect& reg) {
   int mw = (int) ((float) document->getPaperWidth () * s);
   int mh = (int) ((float) document->getPaperHeight () * s);
 
-  if (clip.right () >= mw)
+  if (clip.right () >= mw) 
     clip.setRight (mw);
-  if (clip.bottom () >= mh)
+  if (clip.bottom () >= mh) 
     clip.setBottom (mh);
 
   //  cout << "clip: " << clip.left () << ", " << clip.top ()

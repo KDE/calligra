@@ -42,6 +42,8 @@
 #include "Painter.h"
 #include "GradientShape.h"
 
+#include "version.h"
+
 #include "xmlutils/XmlWriter.h"
 #include "xmlutils/XmlElement.h"
 
@@ -83,7 +85,7 @@ public:
     };
     unsigned int mask;   // indicates the valid fields of the structure
     QColor color;        // outline color
-    PenStyle style;      // outline style
+    QT_PRFX::PenStyle style;      // outline style
     float width;         // outline width
     // custom properties (depend on object type)
     float roundness;     // roundness for rectangles
@@ -102,7 +104,7 @@ public:
     };
     unsigned int mask;  // indicates the valid fields of the structure
     QColor color;       // fill color
-    BrushStyle pattern; // pattern
+    QT_PRFX::BrushStyle pattern; // pattern
     Style fstyle;       // fill style
     Gradient gradient;  // gradient info
   };
@@ -143,7 +145,7 @@ public:
    *
    * @param p The outline pen style.
    */
-  void setOutlineStyle (PenStyle p);
+  void setOutlineStyle (QT_PRFX::PenStyle p);
 
   /**
    * Set the ouline width.
@@ -166,7 +168,7 @@ public:
    *
    * @return The pen style.
    */
-  PenStyle getOutlineStyle () const;
+  QT_PRFX::PenStyle getOutlineStyle () const;
 
   /**
    * Retireve the width of the ouline pen.
@@ -205,7 +207,7 @@ public:
 
   void setFillGradient (const Gradient& g);
 
-  void setFillPattern (BrushStyle b);
+  void setFillPattern (QT_PRFX::BrushStyle b);
 
   /**
    * Retrieve the fill color.
@@ -223,7 +225,7 @@ public:
 
   const Gradient& getFillGradient () const;
 
-  BrushStyle getFillPattern () const;
+  QT_PRFX::BrushStyle getFillPattern () const;
 
   /**
    * Retrieve the transformation matrix associated with the object.
