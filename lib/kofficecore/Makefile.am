@@ -12,13 +12,13 @@ libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.idl \
 	koFrame.cc koFilterManager.cc \
 	koPrintExt.cc koMainWindow.cc koScanTools.cc \
 	koScanPlugins.cc koApplication.cc koQueryTrader.cc \
-	koUndo.cc qdom.cc qxml.cc qvariant.cc
+	koUndo.cc qdom.cc qxml.cc 
 
 include_HEADERS = koffice.h koView.h koFrame.h \
 	koDocument.h koPrintExt.h koFactory.h \
 	koMainWindow.h koScanTools.h koScanPlugins.h \
 	koApplication.h koQueryTypes.h \
-	koFilterManager.h qdom.h qxml.h koUndo.h qvariant.h
+	koFilterManager.h qdom.h qxml.h koUndo.h 
 
 libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc \
         koApplication.moc koUndo.moc
