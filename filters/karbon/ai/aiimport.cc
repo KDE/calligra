@@ -41,11 +41,11 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "karbonaifilter" );
+		KGlobal::locale()->insertCatalogue( "kofficefilters" );
 	}
 };
 
-K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() )
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()

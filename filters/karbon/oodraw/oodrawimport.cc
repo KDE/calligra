@@ -46,7 +46,7 @@
 #include <core/vgroup.h>
 
 typedef KGenericFactory<OoDrawImport, KoFilter> OoDrawImportFactory;
-K_EXPORT_COMPONENT_FACTORY( liboodrawimport, OoDrawImportFactory( "oodrawimport" ) );
+K_EXPORT_COMPONENT_FACTORY( liboodrawimport, OoDrawImportFactory( "kofficefilters" ) )
 
 
 OoDrawImport::OoDrawImport( KoFilter *, const char *, const QStringList & )
@@ -372,7 +372,7 @@ OoDrawImport::appendPen( VObject &obj )
 			QValueList<float> dashes;
 			stroke.setType( VStroke::solid );
 			QString style = m_styleStack.attribute( "draw:stroke-dash" );
-			if( style == "Ultrafine Dashed" || 
+			if( style == "Ultrafine Dashed" ||
 				style == "Fine Dashed (var)" || style == "Dashed (var)" )
 				stroke.dashPattern().setArray( dashes << 2 << 2 );
 			else if( style == "Fine Dashed" )

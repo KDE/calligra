@@ -47,7 +47,7 @@
 
 
 typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "karbonsvgexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilters" ) )
 
 
 SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
@@ -271,7 +271,7 @@ SvgExport::getFill( const VFill& fill )
 		*m_body << "none";
 	else if( fill.type() == VFill::grad )
 		getGradient( fill.gradient() );
-	else 
+	else
 		getHexColor( m_body, fill.color() );
 	*m_body << "\"";
 

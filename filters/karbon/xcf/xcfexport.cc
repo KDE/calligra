@@ -42,7 +42,7 @@ const unsigned XcfExport::m_tileHeight = 64;
 
 
 typedef KGenericFactory<XcfExport, KoFilter> XcfExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonxcfexport, XcfExportFactory( "karbonxcfexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkarbonxcfexport, XcfExportFactory( "kofficefilters" ) )
 
 
 XcfExport::XcfExport( KoFilter*, const char*, const QStringList& )
@@ -194,7 +194,7 @@ XcfExport::visitVLayer( VLayer& layer )
 
 	// Layer name.
 	*m_stream << layer.name().latin1();
-	
+
 	// Layer opacity.
 	*m_stream << static_cast<Q_UINT32>( 6 );
 	// Property size in bytes.
@@ -323,7 +323,7 @@ XcfExport::writeHierarchy()
 	// Color depth.
 	*m_stream << static_cast<Q_UINT32>( 3 );
 
-	
+
 	// Calculate level number.
 	int levX = levels( m_width, m_tileWidth );
 	int levY = levels( m_height, m_tileHeight );
@@ -338,17 +338,17 @@ XcfExport::writeHierarchy()
 	// Leave space for level offsets.
 	m_stream->device()->at( current + ( levels + 1 ) * 4 );
 
-	for( int i = 0; i < levels; ++i ) 
+	for( int i = 0; i < levels; ++i )
 	{
 		// Save start offset.
 		start = m_stream->device()->at();
 
-		if( i == 0 ) 
+		if( i == 0 )
 		{
 			// Write level.
 			writeLevel();
-		} 
-		else 
+		}
+		else
 		{
 			// Fake an empty level.
 			width  /= 2;
@@ -395,7 +395,7 @@ XcfExport::writeLevel()
 
 	int rows = ( m_height + m_tileHeight - 1 ) / m_tileHeight;
 	int cols = ( m_width  + m_tileWidth  - 1 ) / m_tileWidth;
-	int tiles = rows * cols;	
+	int tiles = rows * cols;
 
 	// Save current offset.
 	current = m_stream->device()->at();

@@ -45,11 +45,11 @@ TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
 */
 
 typedef KGenericFactory<WmfExport, KoFilter> WmfExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmfexport, WmfExportFactory( "wmfexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libwmfexport, WmfExportFactory( "kofficefilters" ) )
 
 
 WmfExport::WmfExport( KoFilter *, const char *, const QStringList&) :
-        KoFilter() 
+        KoFilter()
 {
 }
 
@@ -86,9 +86,9 @@ KoFilter::ConversionStatus WmfExport::convert( const QCString& from, const QCStr
 
     // Process the document.
     mDoc->accept( *this );
-    
+
     mWmf->end();
-    
+
     delete mWmf;
     delete mDoc;
 
@@ -102,20 +102,20 @@ void WmfExport::visitVDocument( VDocument& document ) {
 
     mDoc = &document;
     mListPa.setAutoDelete( true );
-    
-    // resolution 
+
+    // resolution
     mDpi = 1000;
     width = (int)(POINT_TO_INCH( document.width() ) * mDpi);
     height = (int)(POINT_TO_INCH( document.height() ) * mDpi);
-    
+
     mWmf->setDefaultDpi( mDpi );
     mWmf->setWindow( 0, 0, width, height );
-    
+
     if ( (document.width() != 0) && (document.height() != 0) ) {
         mScaleX = (double)width / document.width();
         mScaleY = (double)height / document.height();
-    }    
-    
+    }
+
     // Export layers.
     VVisitor::visitVDocument( document );
 
@@ -125,27 +125,27 @@ void WmfExport::visitVDocument( VDocument& document ) {
 void WmfExport::visitVPath( VPath& composite ) {
     QPen      pen;
     QBrush    brush;
-    
+
     getPen( pen, composite.stroke() );
     getBrush( brush, composite.fill() );
-    
+
     VVisitor::visitVPath( composite );
-    
+
     if ( mListPa.count() > 0 ) {
         mWmf->setPen( pen );
-        if( (brush.style() == Qt::NoBrush) 
+        if( (brush.style() == Qt::NoBrush)
             && (mListPa.count() == 1) ) {
-            mWmf->drawPolyline( *mListPa.first() ); 
+            mWmf->drawPolyline( *mListPa.first() );
         }
         else {
             mWmf->setBrush( brush );
-            
+
             if ( mListPa.count() == 1 ) {
-                mWmf->drawPolygon( *mListPa.first() ); 
+                mWmf->drawPolygon( *mListPa.first() );
             }
-            else { 
+            else {
                 // combined path
-                mWmf->drawPolyPolygon( mListPa ); 
+                mWmf->drawPolyPolygon( mListPa );
             }
         }
     }
@@ -157,15 +157,15 @@ void WmfExport::visitVPath( VPath& composite ) {
 void WmfExport::visitVSubpath( VSubpath& path ) {
     VSubpath *newPath;
     VSubpathIterator itr( path );
-    VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) ); 
-    QPointArray *pa = new QPointArray( path.count() );            
+    VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) );
+    QPointArray *pa = new QPointArray( path.count() );
     int  nbrPoint=0;      // number of points in the path
-    
+
     for( ; itr.current(); ++itr ) {
 	VSegment *segment= itr.current();
 	if (segment->isCurve()) {
 	    newPath = new VSubpath( mDoc );
-                
+
 	    // newPath duplicate the list of curve
 	    newPath->moveTo( itr.current()->prev()->knot() );
 	    newPath->append( itr.current()->clone() );
@@ -182,29 +182,29 @@ void WmfExport::visitVSubpath( VSubpath& path ) {
 	    // flatten the curve
 	    cmd.visit( *newPath );
 
-	    // adjust the number of points                
+	    // adjust the number of points
 	    pa->resize( pa->size() + newPath->count() - 2 );
 
 	    // Ommit the first segment and insert points
 	    newPath->first();
 	    while( newPath->next() ) {
-		pa->setPoint( nbrPoint++, coordX( newPath->current()->knot().x() ), 
+		pa->setPoint( nbrPoint++, coordX( newPath->current()->knot().x() ),
 			coordY( newPath->current()->knot().y() ) );
 	    }
 	    delete newPath;
 	} else if (segment->isLine()) {
-	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ), 
+	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ),
 		    coordY( itr.current()->knot().y() ) );
 	} else if (segment->isBegin()) {
 	    // start a new polygon
-	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ), 
+	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ),
 		    coordY( itr.current()->knot().y() ) );
         }
     }
-    
-    // adjust the number of points 
+
+    // adjust the number of points
     if ( nbrPoint > 1 ) {
-        pa->resize( nbrPoint );    
+        pa->resize( nbrPoint );
         mListPa.append( pa );
     }
     else {
@@ -242,7 +242,7 @@ void WmfExport::getPen( QPen& pen, const VStroke *stroke ) {
     if( (stroke->type() == VStroke::solid) || (stroke->type() == VStroke::grad)
         || (stroke->type() == VStroke::patt) ) {
         // TODO : Dash pattern.
-        
+
         if ( stroke->lineCap() == VStroke::capRound ) {
             pen.setCapStyle( Qt::RoundCap );
         }

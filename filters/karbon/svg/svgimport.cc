@@ -38,7 +38,7 @@
 #include <kfilterdev.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "karbonsvgimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "kofficefilters" ) )
 
 SvgImport::SvgImport(KoFilter *, const char *, const QStringList&) :
     KoFilter(),
@@ -94,7 +94,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	if ( ! parsed )
 	{
 	        kdError(30514) << "Error while parsing file: "
-		        << "at line " << line << " column: " << col 
+		        << "at line " << line << " column: " << col
 		        << " message: " << errormessage << endl;
 		// ### TODO: feedback to the user
 	        return KoFilter::ParsingError;

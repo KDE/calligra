@@ -33,11 +33,11 @@ DESCRIPTION
 #include "wmfimportparser.h"
 
 typedef KGenericFactory<WMFImport, KoFilter> WMFImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "wmfimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "kofficefilters" ) )
 
 
 WMFImport::WMFImport( KoFilter *, const char *, const QStringList&) :
-        KoFilter() 
+        KoFilter()
 {
 }
 
@@ -47,17 +47,17 @@ WMFImport::~WMFImport()
 
 KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCString& to )
 {
-    if( to != "application/x-karbon" || from != "image/x-wmf" ) 
+    if( to != "application/x-karbon" || from != "image/x-wmf" )
     return KoFilter::NotImplemented;
 
     WMFImportParser wmfParser;
     if( !wmfParser.load( m_chain->inputFile() ) ) {
         return KoFilter::WrongFormat;
     }
-    
+
     // Do the conversion!
     VDocument document;
-    if (!wmfParser.play( document )) {  
+    if (!wmfParser.play( document )) {
         return KoFilter::WrongFormat;
     }
 

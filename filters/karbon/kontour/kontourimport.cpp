@@ -36,7 +36,7 @@
 #define DPI 90
 
 typedef KGenericFactory<KontourImport, KoFilter> KontourImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "karbonkontourimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "kofficefilters" ) )
 
 KontourImport::KontourImport(KoFilter *, const char *, const QStringList&) :
     KoFilter(),
@@ -62,14 +62,14 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 		kdError(30502) << "Unable to open input stream" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	
+
 	inpdoc.setContent( inpdev );
-		            
+
 	// Do the conversion!
 	convert();
-	
+
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-	if(!out) 
+	if(!out)
 	{
 		kdError(30502) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
@@ -98,7 +98,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				fill.setColor( color );
 			}
 			break;
-			case 4: 
+			case 4:
 			{
 				VGradient grad;
 				// set color stops
@@ -161,7 +161,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 						list << 10 << 5 << 1 << 5 << 1 << 5;
 						break;
 				}
-				
+
 				dash.setArray( list );
 				stroke.dashPattern() = dash;
 			}
@@ -179,7 +179,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				  matrix.attribute( "m22" ).toDouble(),
 				  matrix.attribute( "dx" ).toDouble(),
 				  matrix.attribute( "dy" ).toDouble() );
-	
+
 	// undo y-mirroring
 	mat.scale( 1, -1 );
 	mat.translate( 0, -m_document.height() );
@@ -190,7 +190,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 
 void
 KontourImport::convert()
-{	
+{
 	QDomElement docElem = inpdoc.documentElement();
 	QDomElement lay;
 	double height;
@@ -210,7 +210,7 @@ KontourImport::convert()
 
 	m_document.setHeight( ( ( height / 72.0 ) * DPI ) );
 	m_document.setWidth( ( ( width / 72.0 ) * DPI )  );
-	
+
 	parseGroup( lay.firstChild().toElement() );
 
 	outdoc = m_document.saveXML();
@@ -221,7 +221,7 @@ KontourImport::parseGroup( const QDomElement &e )
 {
 	QDomElement b = e;
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
-	{       
+	{
 		if ( b.tagName() == "rectangle" )
 		{
 			int x = b.attribute( "x" ).toInt();
@@ -247,7 +247,7 @@ KontourImport::parseGroup( const QDomElement &e )
 			double top = ( b.attribute( "y" ).toDouble() + matrix.attribute( "dy" ).toInt() ) - ( b.attribute( "ry" ).toDouble() / 2 );
 			double bottom = top + b.attribute( "ry" ).toDouble();
 			double height =  top - bottom;
-			double width = right - left; 
+			double width = right - left;
 			// Append the ellipse to the document
 			VObject *ellipse = new VEllipse( 0L, KoPoint( left, top ),  width, height );
 			parseGObject( ellipse, object );
@@ -273,7 +273,7 @@ KontourImport::parseGroup( const QDomElement &e )
 				path->lineTo( KoPoint( x, y ) );
 			}
 			parseGObject( path, point );
-			m_document.append( path );	
+			m_document.append( path );
 		}
 		else if( b.tagName() == "polygon" )
 		{
@@ -293,7 +293,7 @@ KontourImport::parseGroup( const QDomElement &e )
 			path->close();
 			// back to first point
 			parseGObject( path, point );
-			m_document.append( path );	
+			m_document.append( path );
 		}
 		else if( b.tagName() == "bezier" )
 		{
@@ -311,7 +311,7 @@ KontourImport::parseGroup( const QDomElement &e )
 				path->lineTo( KoPoint( x, y ) );
 			}
 			parseGObject( path, point );
-			m_document.append( path );	
+			m_document.append( path );
 		}
 		else if( b.tagName() == "group" || b.tagName() == "layer" )
 		{

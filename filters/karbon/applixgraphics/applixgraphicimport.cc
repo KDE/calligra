@@ -35,7 +35,7 @@
 #include <applixgraphicimport.h>
 
 typedef KGenericFactory<APPLIXGRAPHICImport, KoFilter> APPLIXGRAPHICImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "karbonapplixgraphicsfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "kofficefilters" ) )
 
 int s_area = 30517;
 
@@ -250,7 +250,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 
             do
 	    {
-              // Get acutal position 
+              // Get acutal position
               pos = in.at ();
               // Read one line
               mystr = stream.readLine ();
@@ -279,7 +279,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
                 kdDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agLine.thickNess);
-                // 
+                //
                 kdDebug (s_area) <<  agLine.thickNess << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
@@ -459,7 +459,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
               pos = in.at ();
               // Zeile einlesen
               mystr = stream.readLine ();
-//checkSubElement() 
+//checkSubElement()
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
                 kdDebug (s_area) << "  Recolor  : ";
@@ -573,7 +573,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
                         &agRect.bf[3], &agRect.bf[4], &agRect.bf[5],
                         &agRect.bf[6]);
                 kdDebug (s_area) << agRect.bf[0] << " " << agRect.bf[1] << " "  <<
-                                    agRect.bf[2] << " " << agRect.bf[3] << " "  << 
+                                    agRect.bf[2] << " " << agRect.bf[3] << " "  <<
                                     agRect.bf[4] << " " << agRect.bf[5] << " "  <<
                                     agRect.bf[6];
 
@@ -588,7 +588,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
                         &agRect.lf[3], &agRect.lf[4], &agRect.lf[5],
                         &agRect.lf[6]);
                 kdDebug (s_area) << agRect.lf[0] << " " << agRect.lf[1] << " "  <<
-                                    agRect.lf[2] << " " << agRect.lf[3] << " "  << 
+                                    agRect.lf[2] << " " << agRect.lf[3] << " "  <<
                                     agRect.lf[4] << " " << agRect.lf[5] << " "  <<
                                     agRect.lf[6];
 
@@ -602,7 +602,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
                         &agRect.sh[0], &agRect.sh[1], &agRect.sh[2],
                         &agRect.sh[3], &agRect.sh[4]);
                 kdDebug (s_area) << agRect.sh[0] << " " << agRect.sh[1] << " "  <<
-                                    agRect.sh[2] << " " << agRect.sh[3] << " "  << 
+                                    agRect.sh[2] << " " << agRect.sh[3] << " "  <<
                                     agRect.sh[4];
 	      }
               // option PARA
@@ -615,7 +615,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
                         &agRect.pa[3], &agRect.pa[4], &agRect.pa[5],
                         &agRect.pa[6], &agRect.pa[7]);
                 kdDebug (s_area) << agRect.pa[0] << " " << agRect.pa[1] << " "  <<
-                                    agRect.pa[2] << " " << agRect.pa[3] << " "  << 
+                                    agRect.pa[2] << " " << agRect.pa[3] << " "  <<
                                     agRect.pa[4] << " " << agRect.pa[5] << " "  <<
                                     agRect.pa[6] << " " << agRect.pa[7] ;
 
@@ -739,7 +739,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
               // read one line
               mystr = stream.readLine ();
 
-//checkSubElement() 
+//checkSubElement()
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
