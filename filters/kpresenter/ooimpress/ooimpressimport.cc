@@ -464,10 +464,37 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
     if ( m_styleStack.hasAttribute( "draw:fill" ) )
     {
         QDomElement brush = doc.createElement( "BRUSH" );
-        if ( m_styleStack.attribute( "draw:fill" ) == "solid" ) // TODO check for other styles
+        if ( m_styleStack.attribute( "draw:fill" ) == "none" )
+            brush.setAttribute( "style", 0 );
+        else if ( m_styleStack.attribute( "draw:fill" ) == "solid" )
+        {
             brush.setAttribute( "style", 1 );
-        if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
-            brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
+            if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
+                brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
+        }
+        else if ( m_styleStack.attribute( "draw:fill" ) == "hatch" )
+        {
+            QString style = m_styleStack.attribute( "draw:fill-hatch-name" );
+            if ( style == "Black 0 Degrees" )
+                brush.setAttribute( "style", 9 );
+            else if ( style == "Black 90 Degrees" )
+                brush.setAttribute( "style", 10 );
+            else if ( style == "Red Crossed 0 Degrees" || style == "Blue Crossed 0 Degrees" )
+                brush.setAttribute( "style", 11 );
+            else if ( style == "Black 45 Degrees" || style == "Black 45 Degrees Wide" )
+                brush.setAttribute( "style", 12 );
+            else if ( style == "Black -45 Degrees" )
+                brush.setAttribute( "style", 13 );
+            else if ( style == "Red Crossed 45 Degrees" || style == "Blue Crossed 45 Degrees" )
+                brush.setAttribute( "style", 14 );
+
+            if ( style.left( 4 ) == "Blue" )
+                brush.setAttribute( "color", "#000080" );
+            else if ( style.left( 3 ) == "Red" )
+                brush.setAttribute( "color", "#800000" );
+            else if ( style.left( 5 ) == "Black" )
+                brush.setAttribute( "color", "#000000" );
+        }
         e.appendChild( brush );
     }
 }
