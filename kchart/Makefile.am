@@ -22,7 +22,7 @@ noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.
 SRCMETA =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
 		sheet.moc sheetdlg.moc table.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
 
 interfacedir = ../lib/interfaces
 IDL_INCLUDES = -I$(idldir) -I$(interfacedir)

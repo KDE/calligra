@@ -31,7 +31,7 @@ SRCMETA = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 idl_DATA = kspread.idl
 idl_HEADERS = kspread.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
 
 kdelnk_DATA = kspread_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
