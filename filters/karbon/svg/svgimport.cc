@@ -234,6 +234,8 @@ SvgImport::parseGradient( const QDomElement &e )
 			gradient.setRepeatMethod( VGradient::repeat );
 	}
 	parseColorStops( &gradient, e );
+	QWMatrix mat = parseTransform( "gradientTransform" );
+	gradient.transform( mat );
 	m_gradients.insert( e.attribute( "id" ), gradient );
 }
 
