@@ -75,6 +75,7 @@ KWFrame::KWFrame(KWFrame * frame)
 {
     handles.setAutoDelete(true);
     m_selected = false;
+    m_runAround = 0;
     //kdDebug() << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
     copySettings( frame );
     m_minFrameHeight=0;
@@ -664,7 +665,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QColorGroup &/*cg*/, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-    //kdDebug(32002) << "KWFrameSet::drawMargins frame: " << frame
+    //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frame
     //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
@@ -1233,6 +1234,9 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
 {
     if ( crect.isEmpty() )
         return;
+#ifdef DEBUG_DRAW
+    kdDebug(32001) << "KWFrameSet::drawFrame crect=" << crect << endl;
+#endif
     // Double-buffering
     QPixmap* pix = m_doc->doubleBufferPixmap( crect.size() );
     QPainter* doubleBufPainter = new QPainter;
@@ -1241,13 +1245,17 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
     // Transparency handling
     //QRegion region( crect );
     QRect myFrameRect( m_doc->zoomRect( *frame ) );
-    //kdDebug() << "KWFrameSet::drawFrame frame->framesBelow(): " << frame->framesBelow().count() << endl;
+#ifdef DEBUG_DRAW
+    kdDebug(32001) << "KWFrameSet::drawFrame frame->framesBelow(): " << frame->framesBelow().count() << endl;
+#endif
     QPtrListIterator<KWFrame> it( frame->framesBelow() );
     for ( ; it.current() ; ++it )
     {
         KWFrame* f = it.current();
         QRect frameRect( m_doc->zoomRect( *f ) );
-        //kdDebug() << "KWFrameSet::drawFrame " << crect.intersect( frameRect ) << " " << f->frameSet()->getName() << endl;
+#ifdef DEBUG_DRAW
+        kdDebug(32001) << "KWFrameSet::drawFrame " << crect.intersect( frameRect ) << " " << f->frameSet()->getName() << endl;
+#endif
         doubleBufPainter->save();
 
         QRect theCRect = crect;
@@ -1263,7 +1271,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
             /// m_currentDrawnCanvas can be 0L when saving!
             /// TODO: pass viewmode as param if we really need it. Or better, use translated painter in drawFrameBorder
             //f->frameSet()->drawFrameBorder( painter, f, settingsFrame, theCRect, m_currentDrawnCanvas->viewMode(), m_currentDrawnCanvas );
-            f->frameSet()->drawMargins( f, painter, theCRect, cg, m_currentDrawnCanvas->viewMode() );
+            //f->frameSet()->drawMargins( f, painter, theCRect, cg, m_currentDrawnCanvas->viewMode() );
             doubleBufPainter->translate( frameRect.x(), frameRect.y() );
             f->frameSet()->drawFrameContents( f, doubleBufPainter, theCRect, cg, 0 );
         }
@@ -1500,7 +1508,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         // This breaks when a frame is under another one, it still appears if !onlyChanged.
         // cvs log says this is about frame borders... hmm.
         /// ### if ( onlyChanged )
-	        
+
 	QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
         for ( ; fIt.current() ; ++fIt )
         {
@@ -1759,7 +1767,9 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
                                    QColorGroup &, KWFrameSetEdit * )
 {
-    //kdDebug() << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
+#ifdef DEBUG_DRAW
+    kdDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
+#endif
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }
