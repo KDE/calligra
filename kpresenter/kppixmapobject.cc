@@ -239,6 +239,22 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->restore();
     _painter->save();
 
+    // get pixmaps to draw
+    QPixmap drawImage;
+    QSize origImageSize = image.originalSize();
+    QSize imageSize = image.size();
+    QSize realImageSize = image.size();
+    bool scaleImage = _painter->device()->isExtDev()
+                      && ( imageSize.width()<origImageSize.width()
+                           || imageSize.height()<origImageSize.height() );
+
+    if( scaleImage ) {
+        // use full resolution version for printer
+        drawImage = image.scale( origImageSize ).pixmap();
+        imageSize = origImageSize;
+    } else
+	drawImage = image.pixmap();
+
     if ( angle == 0 ) {
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
@@ -248,7 +264,16 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(),
                                   0, 0, ow - 2 * penw, oh - 2 * penw );
 
-        _painter->drawPixmap( ox, oy, image.pixmap() );
+        if( scaleImage ) {
+            // draw high resolution image
+            QWMatrix oldMapping = _painter->worldMatrix();
+            _painter->translate( ox, oy );
+            _painter->scale( ((double)realImageSize.width())/imageSize.width(),
+                             ((double)realImageSize.height())/imageSize.height() );
+            _painter->drawPixmap( 0, 0, drawImage );
+            _painter->setWorldMatrix( oldMapping );
+        } else
+            _painter->drawPixmap( ox, oy, drawImage );
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
@@ -283,12 +308,19 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw,
                                   *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-        _painter->drawPixmap( rr.left() + pixXPos, rr.top() + pixYPos, image.pixmap() );
+        // create mapping to image space
+       	QWMatrix oldMapping = _painter->worldMatrix();
+       	_painter->translate( rr.left() + pixXPos, rr.top() + pixYPos );
+       	_painter->scale( ((double)realImageSize.width())/imageSize.width(),
+                         ((double)realImageSize.height())/imageSize.height() );
+        _painter->drawPixmap( 0, 0, drawImage );
+        _painter->setWorldMatrix( oldMapping );
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );
     }
+
     _painter->restore();
 
     KPObject::draw( _painter, _diffx, _diffy );
