@@ -1228,6 +1228,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     {
         table->setMarker( QPoint( col, row ) );
         table->paste( QPoint( markerColumn(), markerRow() ) );
+        table->cellAt(markerColumn(), markerRow())->update();
     }
 
     // Update the edit box
