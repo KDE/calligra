@@ -258,8 +258,8 @@ void KWAutoFormat::startAutoFormat( KWTextParag */*parag*/,
     lastWasDotSpace = false;
     lastWasUpper = false;
 
-    /*    tmpBuffer = new KWString( doc );
-          spBuffer == QString::null;*/
+    /*    tmpBuffer = new KWString( doc );*/
+    spBuffer == QString::null;
 }
 
 /*================================================================*/

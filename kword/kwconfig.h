@@ -20,11 +20,10 @@
 #ifndef __kwconfig__
 #define __kwconfig__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
 #include <kdialogbase.h>
 #include <kconfig.h>
 #include <kspell.h>
+#include <knuminput.h>
 
 class KWView;
 
@@ -40,6 +39,19 @@ private:
   KConfig* config;
 } ;
 
+class configureInterfacePage : public QWidget
+{
+  Q_OBJECT
+public:
+  configureInterfacePage( KWView *_view,QWidget *parent = 0, char *name = 0 );
+  void apply();
+  void slotDefault();
+private:
+  KWView* m_pView;
+  KIntNumInput	*gridX,*gridY;
+  KConfig* config;
+};
+
 class KWConfig : public KDialogBase
 {
   Q_OBJECT
@@ -50,6 +62,7 @@ public slots:
   void slotDefault();
 private :
  configureSpellPage *_spellPage;
+ configureInterfacePage *_interfacePage;
 };
 
 

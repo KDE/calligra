@@ -205,6 +205,8 @@ public:
 
     int gridX() { return m_gridX; }
     int gridY() { return m_gridY; }
+    void setGridX(int _gridx) {m_gridX=_gridx;}
+    void setGridY(int _gridy) {m_gridY=_gridy;}	
 
     int getApplyStyleTemplate() { return applyStyleTemplate; }
     void setApplyStyleTemplate( int _f ) { applyStyleTemplate = _f; }

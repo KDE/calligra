@@ -160,6 +160,12 @@ void KWView::initConfig()
       ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
       getGUI()->getDocument()->setKSpellConfig(ksconfig);
     }
+  if(config->hasGroup("Interface" ) )
+    {
+      config->setGroup( "Interface" );
+      getGUI()->getDocument()->setGridY(config->readNumEntry("GridY",10));
+      getGUI()->getDocument()->setGridX(config->readNumEntry("GridX",10));
+    }
 }
 
 /*=============================================================*/
