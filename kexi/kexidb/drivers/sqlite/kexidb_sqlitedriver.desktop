@@ -27,4 +27,4 @@ Type=Service
 InitialPreference=8
 X-Kexi-DriverName=SQLite
 X-Kexi-DriverType=File
-X-Kexi-FileDBDriverMime=application/x-sqlite
+X-Kexi-FileDBDriverMime=application/x-kexiproject-sqlite
