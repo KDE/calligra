@@ -1233,6 +1233,20 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
   if ( body.isNull() )
     return false;
+  if ( body.toElement().hasAttribute( "table:structure-protected" ) )
+  {
+        QCString passwd( "" );
+        if ( body.toElement().hasAttribute( "table:protection-key" ) )
+        {
+            QString p = body.toElement().attribute( "table:protection-key" );
+            QCString str( p.latin1() );
+            kdDebug(30518) << "Decoding password: " << str << endl;
+            passwd = KCodecs::base64Decode( str );
+        }
+        //todo remove me !!!!!!!! FIXME
+        kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+        m_doc->workbook()->setProtected( passwd );
+  }
 
   loadOasisAreaName( body.toElement() );
   loadOasisCellValidation( body.toElement() );
