@@ -1653,22 +1653,24 @@ void KWFormulaFrameSet::slotFormulaChanged( int width, int height )
 {
     if ( frames.isEmpty() )
         return;
-    // Did I tell you that assignment to parameters is evil?
-    width = static_cast<int>( static_cast<double>( width ) / kWordDocument()->zoomedResolutionX() ) + 1;
-    height = static_cast<int>( static_cast<double>( height ) / kWordDocument()->zoomedResolutionY() ) + 1;
+
+    int newWidth = static_cast<int>( static_cast<double>( width ) /
+                                     kWordDocument()->zoomedResolutionX() ) + 3;
+    int newHeight = static_cast<int>( static_cast<double>( height ) /
+                                      kWordDocument()->zoomedResolutionY() ) + 1;
 
     double oldWidth = frames.first()->width();
     double oldHeight = frames.first()->height();
 
-    frames.first()->setWidth( width );
-    frames.first()->setHeight( height );
-
-    if ( ( oldWidth != width ) || ( oldHeight != height ) ) {
-        kWordDocument()->repaintAllViews( false );
-    }
+    frames.first()->setWidth( newWidth );
+    frames.first()->setHeight( newHeight );
 
     updateFrames();
     kWordDocument()->layout();
+    if ( ( oldWidth != newWidth ) || ( oldHeight != newHeight ) ) {
+        kWordDocument()->repaintAllViews( false );
+    }
+
     m_changed = true;
     emit repaintChanged( this );
 }
