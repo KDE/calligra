@@ -323,9 +323,25 @@ public:
     void unexecute();
 protected:
     KWDocument *m_pDoc;
-    FrameIndex frameIndex;
     KWTableFrameSet *m_pTable;
     QList<KWFrameSet> m_ListFrame;
 };
+
+/**
+ * Command created when you delete a table
+ */
+class KWDeleteTableCommand : public KCommand
+{
+public:
+    KWDeleteTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table) ;
+    ~KWDeleteTableCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    KWTableFrameSet *m_pTable;
+};
+
 
 #endif

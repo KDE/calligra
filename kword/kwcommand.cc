@@ -769,3 +769,32 @@ void KWUngroupTableCommand::unexecute()
     m_pDoc->deleteFrameSetEditTable( m_pTable );
 }
 
+
+KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table ):
+    KCommand(name),
+    m_pDoc(_doc),
+    m_pTable(_table)
+{
+}
+
+void KWDeleteTableCommand::execute()
+{
+    m_pDoc->deSelectAllFrames();
+    m_pDoc->deleteFrameSetEditTable( m_pTable );
+    m_pDoc->delFrameSet(m_pTable,false);
+    m_pDoc->refreshDocStructure(FT_TABLE);
+    m_pDoc->updateAllFrames();
+    m_pDoc->layout();
+    m_pDoc->repaintAllViews();
+}
+
+void KWDeleteTableCommand::unexecute()
+{
+    ASSERT(m_pTable);
+    m_pDoc->addFrameSet(m_pTable);
+    m_pDoc->refreshDocStructure(FT_TABLE);
+    m_pDoc->deleteFrameSetEditTable( m_pTable );
+    m_pDoc->updateAllFrames();
+    m_pDoc->layout();
+    m_pDoc->repaintAllViews();
+}

@@ -1547,15 +1547,9 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
         return;
-    deleteFrameSetEditTable( table );
-    // ## TODO undo/redo support
-    doc->delFrameSet( table );
-
-    doc->updateAllFrames();
-    doc->layout();
-    doc->repaintAllViews();
-    emit currentFrameSetEditChanged();
-    emit docStructChanged(Tables);
+    KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), doc, table );
+    doc->addCommand( cmd );
+    cmd->execute();
 }
 
 void KWCanvas::deleteFrameSetEditTable( KWTableFrameSet *table )
