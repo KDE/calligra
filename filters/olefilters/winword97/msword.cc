@@ -1228,7 +1228,7 @@ void MsWord::readFonts()
         return;
     }
 
-    // Find the number of LSTFs from the STTBF header.
+    // Find the number of fonts from the STTBF header.
 
     ptr += MsWordGenerated::read(ptr, &m_fonts.count);
     ptr += sizeof(U16);
@@ -1902,20 +1902,19 @@ unsigned MsWord::read(const U8 *in, STTBF *out)
 
     // Get the string count. A value of 0xffff switchesus into unicode mode.
 
-    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+    bytes += MsWordGenerated::read(in + bytes, &out->stringCount);
     if (out->stringCount == 0xffff)
     {
         unicode = true;
 
         // Get the real string count.
 
-        ptr -= sizeof(U16);
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+        bytes += MsWordGenerated::read(in + bytes, &out->stringCount);
     }
 
     // Get the length of extra data.
 
-    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+    bytes += MsWordGenerated::read(in + bytes, &out->extraDataLength);
 
     // Now read each string and the associated data.
 
