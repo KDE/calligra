@@ -129,6 +129,7 @@ void ConnectorTool::setActivated(bool a)
     m_connectorAction->setChecked(false);
     m_polyLineAction->setChecked(false);
     m_permanent = false;
+    view()->setStatusBarInfo("");
   }
 }
 
@@ -340,6 +341,7 @@ void ConnectorTool::activatePolyline()
   m_type = PolyLineConnector;
   m_connectorAction->setChecked(false);
   m_polyLineAction->setChecked(true);
+  view()->setStatusBarInfo(i18n("Left mouse button to start drawing, right to end drawing."));
 }
 
 void ConnectorTool::makePermanent()
