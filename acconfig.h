@@ -9,3 +9,5 @@
 
 #undef HAVE_MINI_STL
 
+#undef ENABLE_NLS
+

@@ -52,9 +52,9 @@ KChartDocument::KChartDocument()
   m_chart.setChartData( m_pData );
 
   // some more settings
-  m_chart.setTitle( "A Simple Bar Chart" );
-  m_chart.setXLabel( "X Label" );
-  m_chart.setYLabel( "Y Label" );
+  m_chart.setTitle( i18n("A Simple Bar Chart") );
+  m_chart.setXLabel( i18n("X Label") );
+  m_chart.setYLabel( i18n("Y Label") );
   m_chart.setYMaxValue( 8 );
   m_chart.setYTicksNum( 8 );
   m_chart.setYLabelSkip( 2 );

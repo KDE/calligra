@@ -69,7 +69,7 @@ void KSpreadScripts::slotAdd()
     QString t = add2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::message( "KSpread Error", "You must enter a name" );
+	QMessageBox::message( i18n("KSpread Error"), i18n("You must enter a name") );
 	return;
     }
     
@@ -77,7 +77,7 @@ void KSpreadScripts::slotAdd()
     t2 += ".py";
     if ( nameList.find( t2 ) != -1 )
     {
-	QMessageBox::message( "KSpread Error", "The file already exists" );
+	QMessageBox::message( i18n("KSpread Error"),i18n( "The file already exists") );
 	return;
     }
 
@@ -87,7 +87,7 @@ void KSpreadScripts::slotAdd()
     FILE *f = fopen( d.data(), "w" );
     if ( f == 0L )
     {
-	QMessageBox::message( "KSpread Error", "Could not open file.\nPerhaps access denied" );
+	QMessageBox::message( i18n("KSpread Error"), i18n("Could not open file.\nPerhaps access denied") );
 	return;
     }
     fclose( f );
@@ -105,7 +105,7 @@ void KSpreadScripts::slotDelete()
 	return;
 
     QString t;
-    t.sprintf( "Do you really want to delete the script\n%s", list->text( list->currentItem() ) );
+    t.sprintf( i18n("Do you really want to delete the script\n%s"), list->text( list->currentItem() ) );
     
     if ( !QMessageBox::query( "KSpread Question", t.data() ) )
 	return;
@@ -137,7 +137,7 @@ void KSpreadScripts::slotRename()
     QString t = rename2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::message( "KSpread Error", "You must enter a name" );
+	QMessageBox::message( i18n("KSpread Error"), i18n("You must enter a name") );
 	return;
     }
 
@@ -145,7 +145,7 @@ void KSpreadScripts::slotRename()
     t2 += ".py";
     if ( nameList.find( t2 ) != -1 )
     {
-	QMessageBox::message( "KSpread Error", "The file already exists" );
+	QMessageBox::message( i18n("KSpread Error"), i18n("The file already exists") );
 	return;
     }
  
@@ -207,15 +207,15 @@ KSpreadScriptsData::KSpreadScriptsData( QWidget* parent )
 	QLabel* tmpQLabel;
 	tmpQLabel = new QLabel( parent, "Label_1" );
 	tmpQLabel->setGeometry( 10, 10, 100, 30 );
-	tmpQLabel->setText( "Scripts" );
+	tmpQLabel->setText( i18n("Scripts") );
 
 	del = new QPushButton( parent, "PushButton_1" );
 	del->setGeometry( 210, 40, 100, 30 );
-	del->setText( "Delete" );
+	del->setText( i18n("Delete") );
 
 	add = new QPushButton( parent, "PushButton_2" );
 	add->setGeometry( 210, 90, 100, 30 );
-	add->setText( "Add" );
+	add->setText( i18n("Add") );
 
 	add2 = new QLineEdit( parent, "LineEdit_1" );
 	add2->setGeometry( 210, 130, 180, 30 );
@@ -223,11 +223,11 @@ KSpreadScriptsData::KSpreadScriptsData( QWidget* parent )
 
 	edit = new QPushButton( parent, "PushButton_3" );
 	edit->setGeometry( 210, 180, 100, 30 );
-	edit->setText( "Edit" );
+	edit->setText( i18n("Edit") );
 
 	rename = new QPushButton( parent, "PushButton_4" );
 	rename->setGeometry( 210, 230, 100, 30 );
-	rename->setText( "Rename" );
+	rename->setText( i18n("Rename") );
 
 	rename2 = new QLineEdit( parent, "LineEdit_2" );
 	rename2->setGeometry( 210, 270, 180, 30 );

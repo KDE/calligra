@@ -1664,7 +1664,8 @@ void KSpreadCanvas::setAction( Actions _act )
     // Something must be selected
     if ( selection.right() == 0x7fff || selection.bottom() == 0x7fff || selection.left() == 0 )
     {
-      QMessageBox::critical( this, i18n("KSpread Error" ), i18n("You must first select the cells\nwhich contain the data." ),
+      QMessageBox::critical( this, i18n("KSpread Error" ), i18n("You must first select the cells\n"
+								"which contain the data." ),
 			     i18n( "Ok" ) );
       return;
     }

@@ -101,30 +101,30 @@ AutoFillSequenceItem::AutoFillSequenceItem( const char *_str )
     if ( month == 0L )
     {
 	month = new QStrList();
-	month->append( "January" );
-	month->append( "February" );
-	month->append( "March" );
-	month->append( "April" );
-	month->append( "Mai" );
-	month->append( "June" );
-	month->append( "Juli" );
-	month->append( "August" );
-	month->append( "September" );
-	month->append( "October" );
-	month->append( "November" );
-	month->append( "December" );
+	month->append( i18n("January") );
+	month->append( i18n("February") );
+	month->append( i18n("March") );
+	month->append( i18n("April") );
+	month->append( i18n("Mai") );
+	month->append( i18n("June") );
+	month->append( i18n("Juli") );
+	month->append( i18n("August") );
+	month->append( i18n("September") );
+	month->append( i18n("October") );
+	month->append( i18n("November") );
+	month->append( i18n("December") );
     }
     
     if ( day == 0L )
     {
 	day = new QStrList();
-	day->append( "Monday" );
-	day->append( "Tuesday" );
-	day->append( "Wednesday" );
-	day->append( "Thursday" );
-	day->append( "Friday" );
-	day->append( "Saturday" );
-	day->append( "Sunday" );
+	day->append( i18n("Monday") );
+	day->append( i18n("Tuesday") );
+	day->append( i18n("Wednesday") );
+	day->append( i18n("Thursday") );
+	day->append( i18n("Friday") );
+	day->append( i18n("Saturday") );
+	day->append( i18n("Sunday") );
     }
     
     if ( month->find( _str ) != -1 )

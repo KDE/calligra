@@ -24,14 +24,14 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   
   datarow = new QRadioButton( this, "RadioButton_1" );
   datarow->setGeometry( 270, 40, 100, 20 );
-  datarow->setText( "Rows" );
+  datarow->setText( i18n("Rows") );
   connect( datarow, SIGNAL( clicked() ), 
 		   this, SLOT( dataInRowsClicked() ) );
   tmpQGroupBox->insert( datarow );
   
   datacol = new QRadioButton( this, "RadioButton_2" );
   datacol->setGeometry( 270, 60, 100, 20 );
-  datacol->setText( "Columns" );
+  datacol->setText( i18n("Columns") );
   datacol->setChecked( true );
   connect( datarow, SIGNAL( clicked() ),
 		   this, SLOT( dataInColsClicked() ) );
@@ -40,7 +40,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_3" );
   tmpQLabel->setGeometry( 270, 20, 100, 20 );
-  tmpQLabel->setText( "Data is in:" );
+  tmpQLabel->setText( i18n("Data is in:") );
   
   QButtonGroup* descrBG = new QButtonGroup( this );
   descrBG->hide();
@@ -54,7 +54,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   
   tmpQLabel = new QLabel( this, "Label_4" );
   tmpQLabel->setGeometry( 280, 110, 100, 30 );
-  tmpQLabel->setText( "Use first row as description" );
+  tmpQLabel->setText( i18n("Use first row as description") );
   tmpQLabel->setAlignment( 1313 );
   
   rowdescript = new QCheckBox( this, "CheckBox_4" );
@@ -66,7 +66,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   
   tmpQLabel = new QLabel( this, "Label_5" );
   tmpQLabel->setGeometry( 280, 150, 100, 30 );
-  tmpQLabel->setText( "Use first column as description" );
+  tmpQLabel->setText( i18n("Use first column as description") );
   tmpQLabel->setAlignment( 1313 );
   
   QFrame* tmpQFrame;

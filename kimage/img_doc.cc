@@ -61,7 +61,7 @@ CORBA::Boolean ImageDocument_impl::import( const char *_url )
   }
   if ( !u.isLocalFile() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("OK") );
     return false;
   }
 

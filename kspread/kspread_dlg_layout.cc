@@ -279,16 +279,16 @@ void CellLayoutDlg::init()
     tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
     borderPage = new CellLayoutPageBorder( tab, this );
-    tab->addTab( borderPage, "Border" );
+    tab->addTab( borderPage, i18n("Border") );
 
     floatPage = new CellLayoutPageFloat( tab, this );
-    tab->addTab( floatPage, "Number Format" );
+    tab->addTab( floatPage, i18n("Number Format") );
 
     miscPage = new CellLayoutPageMisc( tab, this );
-    tab->addTab( miscPage, "Misc" );
+    tab->addTab( miscPage, i18n("Misc") );
 
     fontPage = new CellLayoutPageFont( tab, this );
-    tab->addTab( fontPage, "Font" );
+    tab->addTab( fontPage, i18n("Font") );
 
     // tab->setApplyButton();
     tab->setCancelButton();
@@ -369,7 +369,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( this, "Label_1" );
     tmpQLabel->setGeometry( 10, 30, 40, 30 );
-    tmpQLabel->setText( "Prefix" );
+    tmpQLabel->setText( i18n("Prefix") );
 
     postfix->raise();
     postfix->setGeometry( 70, 70, 100, 30 );
@@ -380,7 +380,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     tmpQLabel = new QLabel( this, "Label_2" );
     tmpQLabel->setGeometry( 10, 70, 50, 30 );
-    tmpQLabel->setText( "Postfix" );
+    tmpQLabel->setText( i18n("Postfix") );
 	
     precision->raise();
     precision->setGeometry( 70, 110, 100, 30 );
@@ -395,7 +395,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     tmpQLabel = new QLabel( this, "Label_3" );
     tmpQLabel->setGeometry( 10, 110, 60, 30 );
-    tmpQLabel->setText( "Precision" );
+    tmpQLabel->setText( i18n("Precision") );
 
     prefix->raise();
     prefix->setGeometry( 70, 30, 100, 30 );
@@ -416,7 +416,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     tmpQLabel = new QLabel( this, "Label_4" );
     tmpQLabel->setGeometry( 190, 0, 100, 30 );
-    tmpQLabel->setText( "Format" );
+    tmpQLabel->setText( i18n("Format") );
     
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
 	format->setCurrentItem( 5 );
@@ -483,35 +483,35 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     tmpQGroupBox = new QGroupBox( this, "GroupBox_2" );
     tmpQGroupBox->setGeometry( 135, 10, 140, 175 );
     tmpQGroupBox->setFrameStyle( 49 );
-    tmpQGroupBox->setTitle( "Pattern" );
+    tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( 1 );
     
     tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
     tmpQGroupBox->setGeometry( 10, 10, 120, 175 );
     tmpQGroupBox->setFrameStyle( 49 );
-    tmpQGroupBox->setTitle( "Border" );
+    tmpQGroupBox->setTitle( i18n("Border") );
     tmpQGroupBox->setAlignment( 1 );
     
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( this, "Label_1" );
     tmpQLabel->setGeometry( 20, 25, 50, 30 );
-    tmpQLabel->setText( "Outline" );
+    tmpQLabel->setText( i18n("Outline") );
     
     tmpQLabel = new QLabel( this, "Label_2" );
     tmpQLabel->setGeometry( 20, 55, 40, 30 );
-    tmpQLabel->setText( "Left" );
+    tmpQLabel->setText( i18n("Left") );
     
     tmpQLabel = new QLabel( this, "Label_3" );
     tmpQLabel->setGeometry( 20, 85, 40, 30 );
-    tmpQLabel->setText( "Right" );
+    tmpQLabel->setText( i18n("Right") );
     
     tmpQLabel = new QLabel( this, "Label_4" );
     tmpQLabel->setGeometry( 20, 115, 30, 30 );
-    tmpQLabel->setText( "Top" );
+    tmpQLabel->setText( i18n("Top") );
     
     tmpQLabel = new QLabel( this, "Label_5" );
     tmpQLabel->setGeometry( 20, 145, 40, 30 );
-    tmpQLabel->setText( "Bottom" );
+    tmpQLabel->setText( i18n("Bottom") );
     
     outline = new KSpreadPatternSelect( this, "Frame_3" );
     outline->setGeometry( 70, 30, 50, 20 );
@@ -662,7 +662,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     
     tmpQLabel = new QLabel( this, "Label_6" );
     tmpQLabel->setGeometry( 145, 150, 35, 30 );
-    tmpQLabel->setText( "Color" );
+    tmpQLabel->setText( i18n("Color") );
 
     // Set the color
     if ( dlg->bLeftBorderColor && dlg->bLeftBorderStyle )
@@ -945,11 +945,11 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     
     tmpQLabel = new QLabel( this, "Label_1" );
     tmpQLabel->setGeometry( 20, 20, 100, 30 );
-    tmpQLabel->setText( "Text Color" );
+    tmpQLabel->setText( i18n("Text Color") );
     
     tmpQLabel = new QLabel( this, "Label_2" );
     tmpQLabel->setGeometry( 140, 20, 120, 30 );
-    tmpQLabel->setText( "Background Color" );
+    tmpQLabel->setText( i18n("Background Color") );
     
     textColorButton = new QPushButton( this, "ComboBox_1" );
     textColorButton->setGeometry( 20, 50, 100, 30 ); 
@@ -1050,32 +1050,32 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   box1 = new QGroupBox(this, "Box1");
   box1->setGeometry(XOFFSET,YOFFSET,SIZE_X -  XOFFSET
 		   ,130);
-  box1->setTitle("Requested Font");
+  box1->setTitle(i18n("Requested Font"));
 
   box1 = new QGroupBox(this, "Box2");
   box1->setGeometry(XOFFSET,140,SIZE_X -  XOFFSET
 		   ,110);
-  box1->setTitle("Actual Font");
+  box1->setTitle(i18n("Actual Font"));
   
 
   family_label = new QLabel(this,"family");
-  family_label->setText("Family:");
+  family_label->setText(i18n("Family:"));
   family_label->setGeometry(3*XOFFSET,8*YOFFSET,LABLE_LENGTH,LABLE_HEIGHT);
 
   actual_family_label = new QLabel(this,"afamily");
-  actual_family_label->setText("Family:");
+  actual_family_label->setText(i18n("Family:"));
   actual_family_label->setGeometry(3*XOFFSET,160,40,LABLE_HEIGHT);
 
   actual_family_label_data = new QLabel(this,"afamilyd");
   actual_family_label_data->setGeometry(3*XOFFSET +50 ,160,110,LABLE_HEIGHT);
 
   size_label = new QLabel(this,"size");
-  size_label->setText("Size:");
+  size_label->setText(i18n("Size:"));
   size_label->setGeometry(6*XOFFSET + LABLE_LENGTH + 12*XOFFSET +2* FONTLABLE_LENGTH,
 			  8*YOFFSET,LABLE_LENGTH,LABLE_HEIGHT);
 
   actual_size_label = new QLabel(this,"asize");
-  actual_size_label->setText("Size:");
+  actual_size_label->setText(i18n("Size:"));
   actual_size_label->setGeometry(3*XOFFSET,160 +LABLE_HEIGHT ,
 				 LABLE_LENGTH,LABLE_HEIGHT);
 
@@ -1084,12 +1084,12 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 				      ,110,LABLE_HEIGHT);
 
   weight_label = new QLabel(this,"weight");
-  weight_label->setText("Weight:");
+  weight_label->setText(i18n("Weight:"));
   weight_label->setGeometry(3*XOFFSET,15*YOFFSET + LABLE_HEIGHT 
 			  ,LABLE_LENGTH,LABLE_HEIGHT);
 
   actual_weight_label = new QLabel(this,"aweight");
-  actual_weight_label->setText("Weight:");
+  actual_weight_label->setText(i18n("Weight:"));
   actual_weight_label->setGeometry(3*XOFFSET,160 + 2*LABLE_HEIGHT ,
 				 LABLE_LENGTH,LABLE_HEIGHT);
 
@@ -1098,7 +1098,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 				      ,110,LABLE_HEIGHT);
 
   style_label = new QLabel(this,"style");
-  style_label->setText("Style:");
+  style_label->setText(i18n("Style:"));
   style_label->setGeometry(6*XOFFSET + LABLE_LENGTH + 12*XOFFSET + 
 			   2*FONTLABLE_LENGTH,
 			   15*YOFFSET + LABLE_HEIGHT 
@@ -1106,7 +1106,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 			   LABLE_HEIGHT);
 
   actual_style_label = new QLabel(this,"astyle");
-  actual_style_label->setText("Style:");
+  actual_style_label->setText(i18n("Style:"));
   actual_style_label->setGeometry(3*XOFFSET,160 + 3*LABLE_HEIGHT ,
 				 LABLE_LENGTH,LABLE_HEIGHT);
 
@@ -1167,8 +1167,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   weight_combo = new QComboBox( this, "Weight" );
   weight_combo->insertItem( "", 0 );
-  weight_combo->insertItem( "normal" );
-  weight_combo->insertItem( "bold" );
+  weight_combo->insertItem( i18n("normal") );
+  weight_combo->insertItem( i18n("bold") );
   weight_combo->setGeometry(6*XOFFSET + LABLE_LENGTH
 			    ,19*YOFFSET - COMBO_ADJUST
 			    ,4*LABLE_LENGTH,COMBO_BOX_HEIGHT);
@@ -1179,8 +1179,8 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   style_combo = new QComboBox( this, "Style" );
   style_combo->insertItem( "", 0 );
-  style_combo->insertItem( "roman" );
-  style_combo->insertItem( "italic", 2 );
+  style_combo->insertItem( i18n("roman") );
+  style_combo->insertItem( i18n("italic"), 2 );
   style_combo->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
 			    ,19*YOFFSET- COMBO_ADJUST
 			   ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
@@ -1196,7 +1196,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   example_label->setBackgroundColor(white);
   example_label->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
   example_label->setLineWidth( 1 );
-  example_label->setText("Dolor Ipse");
+  example_label->setText(i18n("Dolor Ipse"));
   //  example_label->setAutoResize(true);
 
   connect(this,SIGNAL(fontSelected( const QFont&  )),
@@ -1240,9 +1240,9 @@ void CellLayoutPageFont::weight_chosen_slot(const char* weight)
 {
   QString weight_string = weight;
 
-  if ( weight_string == QString("normal"))
+  if ( weight_string == QString(i18n("normal")))
     selFont.setBold(false);
-  if ( weight_string == QString("bold"))
+  if ( weight_string == QString(i18n("bold")))
        selFont.setBold(true);
   // display_example();
   emit fontSelected(selFont);
@@ -1252,9 +1252,9 @@ void CellLayoutPageFont::style_chosen_slot(const char* style)
 {
   QString style_string = style;
 
-  if ( style_string == QString("roman"))
+  if ( style_string == QString(i18n("roman")))
     selFont.setItalic(false);
-  if ( style_string == QString("italic"))
+  if ( style_string == QString(i18n("italic")))
     selFont.setItalic(true);
   //  display_example();
   emit fontSelected(selFont);
@@ -1279,14 +1279,14 @@ void CellLayoutPageFont::display_example(const QFont& font)
   actual_size_label_data->setText(string);
 
   if (info.bold())
-    actual_weight_label_data->setText("Bold");
+    actual_weight_label_data->setText(i18n("Bold"));
   else
-    actual_weight_label_data->setText("Normal");
+    actual_weight_label_data->setText(i18n("Normal"));
  
   if (info.italic())
-    actual_style_label_data->setText("italic");
+    actual_style_label_data->setText(i18n("italic"));
   else
-    actual_style_label_data->setText("roman"); 
+    actual_style_label_data->setText(i18n("roman")); 
 }
 
 void CellLayoutPageFont::setCombos()
