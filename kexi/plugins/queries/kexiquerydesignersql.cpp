@@ -105,7 +105,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
 QString
 KexiQueryDesignerSQLView::getQuery()
 {
-	return m_editor->getText();
+	return m_editor->text();
 }
 
 KexiQueryDesignerSQLView::~KexiQueryDesignerSQLView()
