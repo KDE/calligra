@@ -186,7 +186,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
 
       unsigned int nonempty_cells_prev=0;
 
-      for ( currentrow = 1 ; currentrow < iMaxUsedRow ; ++currentrow, ++i )
+      for ( currentrow = 1 ; currentrow <= iMaxUsedRow ; ++currentrow, ++i )
       {
         if(i>step) {
             value+=2;
@@ -199,7 +199,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         unsigned int nonempty_cells=0;
         unsigned int colspan_cells=0;
 
-        for ( currentcolumn = 1 ; currentcolumn < iMaxUsedColumn ; currentcolumn++ )
+        for ( currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
         {
             KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
             colspan_cells=cell->extraXCells();
