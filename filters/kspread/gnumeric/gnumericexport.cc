@@ -740,7 +740,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -805,6 +805,15 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     for (table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable())
     {
+        if ( table->print()->paperFormat()==PG_CUSTOM )
+        {
+            customSize = gnumeric_doc.createElement( "gmr:Geometry" );
+            customSize.setAttribute( "Width", POINT_TO_MM ( table->print()->paperWidth() ));
+            customSize.setAttribute( "Height", POINT_TO_MM (table->print()->paperWidth() ));
+            sheets.appendChild(customSize);
+            //<gmr:Geometry Width="768" Height="365"/>
+        }
+
         sheet = gnumeric_doc.createElement("gmr:Sheet");
         sheets.appendChild(sheet);
 
