@@ -28,8 +28,10 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvgroupbox.h>
+#include <qcolor.h>
 
 #include <klocale.h>
+#include <kcolorbtn.h>
 
 #include <Canvas.h>
 #include <UnitBox.h>
@@ -42,7 +44,7 @@ GridDialog::GridDialog (QWidget* parent, const char* name) :
 
 void GridDialog::createGridWidget (QWidget* parent) {
 
-    QGridLayout *layout=new QGridLayout(parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
     QGroupBox *box=new QGroupBox(i18n("Distance"), parent);
     layout->addMultiCellWidget(box, 0, 0, 0, 1);
@@ -73,6 +75,11 @@ void GridDialog::createGridWidget (QWidget* parent) {
 
     sbutton = new QCheckBox(i18n("Show Grid"), parent);
     layout->addWidget(sbutton, 1, 1);
+    
+    cbutton = new KColorButton(parent);
+    QLabel* clabel = new QLabel(i18n("Grid Color"), this);
+    layout->addWidget(cbutton, 2, 1);
+    layout->addWidget(clabel, 2, 0);
 }
 
 float GridDialog::horizontalDistance () {
@@ -91,6 +98,11 @@ bool GridDialog::snapToGrid () {
   return gbutton->isOn ();
 }
 
+QColor GridDialog::gridColor()
+ {
+  return cbutton->color();
+ }
+
 void GridDialog::setShowGridOn (bool flag) {
   sbutton->setChecked (flag);
 }
@@ -104,20 +116,29 @@ void GridDialog::setDistances (float h, float v) {
   vspinbox->setValue (v);
 }
 
-void GridDialog::setupGrid (Canvas* canvas) {
+void GridDialog::setGridColor(QColor color)
+ {
+  cbutton->setColor(color);
+ }
+
+void GridDialog::setupGrid (Canvas* canvas)
+ {
   GridDialog dialog (0L, "Grid");
   dialog.setShowGridOn (canvas->showGrid ());
   dialog.setSnapToGridOn (canvas->snapToGrid ());
   dialog.setDistances ((float) canvas->getHorizGridDistance (),
                        (float) canvas->getVertGridDistance ());
+  dialog.setGridColor (canvas->gridColor());
 
-  if (dialog.exec() == Accepted) {
+  if (dialog.exec() == Accepted)
+   {
     canvas->setGridDistance (dialog.horizontalDistance (),
                              dialog.verticalDistance ());
     canvas->showGrid (dialog.showGrid ());
     canvas->snapToGrid (dialog.snapToGrid ());
+    canvas->setGridColor (dialog.gridColor());
     canvas->updateView ();
-  }
-}
+   }
+ }
 
 #include <GridDialog.moc>

@@ -30,6 +30,8 @@
 class QCheckBox;
 class Canvas;
 class UnitBox;
+class KColorButton;
+class QColor;
 
 class GridDialog : public KDialogBase {
 
@@ -42,10 +44,12 @@ public:
     float verticalDistance();
     bool showGrid();
     bool snapToGrid();
+    QColor gridColor();
 
     void setDistances(float h, float v);
     void setSnapToGridOn(bool flag);
     void setShowGridOn(bool flag);
+    void setGridColor(QColor color);
 
     static void setupGrid(Canvas* canvas);
 
@@ -55,6 +59,7 @@ protected:
 private:
     QCheckBox *gbutton, *sbutton;
     UnitBox *hspinbox, *vspinbox;
+    KColorButton *cbutton;
 };
 
 #endif

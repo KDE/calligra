@@ -78,6 +78,7 @@ Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
 
   helplinesAreOn = helplinesSnapIsOn = false;
   tmpHorizHelpline = tmpVertHelpline = -1;
+  mGridColor = blue;
 
   readGridProperties ();
   updateGridInfos ();
@@ -157,6 +158,12 @@ void Canvas::snapToGrid (bool flag) {
     document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
   }
 }
+
+void Canvas::setGridColor(QColor color)
+ {
+  mGridColor = color;
+  saveGridProperties ();
+ }
 
 void Canvas::setGridDistance (float hdist, float vdist) {
   hGridDistance = hdist;
@@ -587,7 +594,7 @@ void Canvas::drawGrid (QPainter& p) {
   int ph = document->getPaperHeight ();
   float h, v;
 
-  QPen pen1 (blue, 0, DotLine);
+  QPen pen1 (mGridColor, 0, DotLine);
 
   p.save ();
   p.setPen (pen1);
@@ -703,6 +710,7 @@ void Canvas::readGridProperties () {
   hGridDistance = (float) config->readDoubleNumEntry ("hGridDistance", 50.0);
   gridIsOn = config->readBoolEntry ("showGrid", false);
   gridSnapIsOn = config->readBoolEntry ("snapTopGrid", false);
+  mGridColor = config->readColorEntry ("GridColor", &mGridColor);
 
   config->setGroup ("Helplines");
   helplinesAreOn = config->readBoolEntry ("showHelplines");
@@ -722,7 +730,8 @@ void Canvas::saveGridProperties () {
   config->writeEntry ("hGridDistance", (double) hGridDistance);
   config->writeEntry ("showGrid", gridIsOn);
   config->writeEntry ("snapTopGrid", gridSnapIsOn);
-
+  config->writeEntry ("GridColor", mGridColor);
+  
   config->setGroup ("Helplines");
   config->writeEntry ("showHelplines", helplinesAreOn);
   config->writeEntry ("snapTopHelplines", helplinesSnapIsOn);

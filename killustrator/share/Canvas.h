@@ -36,6 +36,7 @@ class QScrollView;
 class QPixmap;
 class QPainter;
 class Rect;
+class QColor;
 
 class Canvas : public QWidget {
   Q_OBJECT
@@ -66,6 +67,9 @@ public:
 
   void snapToGrid (bool flag);
   bool snapToGrid () const { return gridSnapIsOn; }
+  
+  void setGridColor(QColor color);
+  QColor gridColor() const { return mGridColor; };
 
   void setGridDistance (float hdist, float vdist);
   float getHorizGridDistance () const { return hGridDistance; }
@@ -155,6 +159,7 @@ private:
   ToolController* toolController;
   bool gridIsOn;
   bool gridSnapIsOn;
+  QColor mGridColor;
   bool dragging, ensureVisibilityFlag;
   float hGridDistance, vGridDistance;
   bool drawBasePoints;
