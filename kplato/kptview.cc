@@ -357,7 +357,7 @@ void KPTView::slotAddSubTask() {
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
     KPTTask* node = new KPTTask(currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node);
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -379,7 +379,7 @@ void KPTView::slotAddSubTask() {
 
 void KPTView::slotAddTask() {
     KPTTask *node = new KPTTask(currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node);
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime());
     if (dia->exec()) {
 		KPTNode* currNode = currentTask();
 		if (currNode)
@@ -406,7 +406,7 @@ void KPTView::slotAddMilestone() {
     //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    KPTTaskDialog *dia = new KPTTaskDialog(*node);
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)

@@ -86,15 +86,22 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidg
     m_description->setText(task.description());
     m_id->setText(task.id());
     m_generalTab->setSchedulingType(task.constraint());
-    if (task.constraintStartTime().isValid())
+    if (task.constraintStartTime().isValid()) {
+        kdDebug()<<k_funcinfo<<task.constraintStartTime().toString()<<endl;
         m_generalTab->setStartTime(task.constraintStartTime());
-    else
-        m_generalTab->setStartTime(QDateTime::currentDateTime()); //TODO: proper default time
-    if (task.constraintEndTime().isValid())
+    } else {
+        QDate date = QDate::currentDate();
+        QTime time = workTime ? workTime->startOfDay(date.dayOfWeek()-1) : QTime::currentTime();
+        m_generalTab->setStartTime(QDateTime(date, time)); 
+    }
+    if (task.constraintEndTime().isValid()) {
+        kdDebug()<<k_funcinfo<<task.constraintEndTime().toString()<<endl;
         m_generalTab->setEndTime(task.constraintEndTime());
-    else
-        m_generalTab->setEndTime(QDateTime::currentDateTime()); //TODO: proper default time
-    
+    } else {
+        QDate date = QDate::currentDate();
+        QTime time = workTime ? workTime->endOfDay(date.dayOfWeek()-1) : QTime::currentTime();
+        m_generalTab->setEndTime(QDateTime(date, time)); 
+    }    
     m_generalTab->setEstimateType(task.effort()->type());
     m_generalTab->setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
     if (workTime) {
