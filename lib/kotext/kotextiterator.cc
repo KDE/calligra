@@ -20,6 +20,7 @@
 #include "kotextview.h"
 #include <kfinddialog.h>
 #include <kdebug.h>
+#include <assert.h>
 
 //// TODO connect to kotextobject's destroyed() signal (QObject)
 //// and same with the paragraph pointers (signal from kotextobject)
