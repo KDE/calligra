@@ -233,10 +233,16 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
   {
     if ( !node->branch1()->eval( context ) )
       return false;
-    if ( context.value()->cast( KSValue::IntType ) )
+
+    /* this operator is valid on numeric types so if it casts to a double it's ok.
+       I'm not sure if there is possible data loss converting from int to double
+       so avoid casting to double in that case just to be safe.
+    */
+    if ( context.value()->type() == KSValue::IntType ||
+         context.value()->cast( KSValue::DoubleType) )
+    {
       return true;
-    if ( context.value()->cast( KSValue::DoubleType ) )
-      return true;
+    }
 
     QString tmp( i18n("Unary Operator + not defined for type %1") );
     context.setException( new KSException( "UnknownOperation", tmp.arg( context.value()->typeName() ), node->getLineNo() ) );
@@ -537,7 +543,7 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
         // chance to overflow ? promote to double
         // this fixes bug #42499
         KScript::Double v = r.value()->doubleValue() * l.value()->doubleValue();
-        if( fabs( v ) > 1e9 ) 
+        if( fabs( v ) > 1e9 )
           context.value()->setValue( v );
 
         return true;
