@@ -85,7 +85,7 @@ protected:
     bool checkCollisionLineArray( KivioShape *, KivioPoint * );
     bool checkCollisionRectangle( KivioShape *, KivioPoint * );
     bool checkCollisionRoundRectangle( KivioShape *, KivioPoint * );
-    bool checkCollisionPolygon( KivioShape *, KivioPoint * );
+    bool checkCollisionPolygon( KivioShape *, KoPoint * );
     bool checkCollisionPolyline( KivioShape *, KivioPoint * );
     bool checkCollisionTextBox( KivioShape *, KivioPoint * );
 
@@ -135,7 +135,7 @@ public:
 
     virtual QFont textFont();
 
-    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
+    virtual KivioCollisionType checkForCollision( KoPoint *, double );
 
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );

@@ -26,6 +26,7 @@
 #include "kivio_rect.h"
 
 class KivioConnectorPoint;
+class KoPoint;
 
 extern "C" {
 
@@ -50,7 +51,7 @@ extern "C" {
    QString XmlReadString( const QDomElement &, const QString &, const QString & );
    void    XmlWriteString( QDomElement &,  const QString &, const QString & );
    
-   bool PointInPoly( KivioPoint *points, int numPoints, KivioPoint *hitPos );
+   bool PointInPoly( KivioPoint *points, int numPoints, KoPoint *hitPos );
    
    float shortestDistance( KivioConnectorPoint *pStart, KivioConnectorPoint *pEnd, KivioConnectorPoint *q );
 

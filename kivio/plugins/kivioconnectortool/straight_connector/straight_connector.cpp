@@ -127,7 +127,7 @@ void KivioStraightConnector::setEndPoint( double x, double y )
     m_pEnd->disconnect();
 }
 
-KivioCollisionType KivioStraightConnector::checkForCollision( KivioPoint *p, double threshold )
+KivioCollisionType KivioStraightConnector::checkForCollision( KoPoint *p, double threshold )
 {
     const double end_thresh = 4.0f;
 

@@ -52,7 +52,7 @@ public:
     virtual void setStartPoint( double, double );
     virtual void setEndPoint( double, double );
 
-    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
+    virtual KivioCollisionType checkForCollision( KoPoint *, double );
 
     virtual KivioStencil* duplicate();
 

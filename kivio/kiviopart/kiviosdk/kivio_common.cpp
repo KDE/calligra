@@ -21,6 +21,7 @@
 #include <kdebug.h>
 #include <qstringlist.h>
 #include <math.h>
+#include <koPoint.h>
 
 /**
  * Read a floating point value from a @ref QDomElement.
@@ -332,7 +333,7 @@ void XmlWriteDouble( QDomElement &e, const QString &att, const double &val )
  *   1 2
  *   4 3
  */
-bool PointInPoly( KivioPoint *points, int numPoints, KivioPoint *hitPos )
+bool PointInPoly( KivioPoint *points, int numPoints, KoPoint *hitPos )
 {
 	int edge,  next;
 	int quad, next_quad, delta, total;

@@ -358,6 +358,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
         pShape = m_pShapeList->next();
     }
+    pData->painter->restoreState();
 
     // Now iterate through anything connected to it drawing it as an outline
     KivioConnectorTarget *pTarget;
@@ -369,8 +370,6 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
         pTarget = m_pConnectorTargets->next();
     }
-
-    pData->painter->restoreState();
 }
 
 void KivioSMLStencil::drawOutlineArc( KivioShape *pShape, KivioIntraStencilData *pData )
@@ -1819,7 +1818,7 @@ int KivioSMLStencil::generateIds( int nextAvailable )
 /**
  * Check for a collision in this stencil.
  */
-KivioCollisionType KivioSMLStencil::checkForCollision( KivioPoint *pPoint, double )
+KivioCollisionType KivioSMLStencil::checkForCollision( KoPoint *pPoint, double )
 {
   KivioCollisionType type = kctNone;
 
@@ -1889,7 +1888,7 @@ bool KivioSMLStencil::checkCollisionRoundRectangle( KivioShape *, KivioPoint * )
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KivioPoint *pCheckPoint )
+bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KoPoint *pCheckPoint )
 {
   double _x, _y, defWidth, defHeight;
   KivioShapeData *pShapeData;
