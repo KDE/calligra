@@ -398,6 +398,11 @@ CCMAIL: dkite@shaw.ca
 
 ~~~~ 2004 LT ~~~~
 
+2004-11-24
+Main
+- unix: fixed problem with SIGPIPE on running another Kexi process
+  (stdin/err/out is closed now)
+
 2004-11-22
 I18N
 - pl translation updated

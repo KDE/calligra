@@ -1674,6 +1674,7 @@ KexiMainWindowImpl::slotProjectNew()
 			args << qApp->applicationFilePath() << "-create-opendb" 
 				<< new_data->connectionData()->fileName();
 			proc = new QProcess(args, this, "process");
+			proc->setCommunication((QProcess::Communication)0);
 			proc->setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
 		}
 		else {
