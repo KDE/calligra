@@ -968,14 +968,14 @@ void StyleDia::setupTabRectangle()
 
 void StyleDia::slotMarginsChanged( double val)
 {
-    if ( synchronize->isChecked() && lockUpdate)
+    if ( synchronize->isChecked() && !lockUpdate)
     {
-        lockUpdate = false;
+        lockUpdate = true;
         sml->setValue( val );
         smb->setValue( val );
         smr->setValue( val );
         smt->setValue( val );
-        lockUpdate = true;
+        lockUpdate = false;
     }
 }
 

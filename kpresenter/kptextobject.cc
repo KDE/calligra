@@ -618,6 +618,7 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
         if ( !elem.hasAttribute("pos"))
             continue;
         int index = elem.attribute("pos").toInt();
+        kdDebug()<<" index :"<<index <<endl;
         index+=offset;
         QDomElement varElem = elem.namedItem( "VARIABLE" ).toElement();
         if ( !varElem.isNull() )
