@@ -10,10 +10,12 @@ noinst_LTLIBRARIES = libkarbonvisitors.la
 
 noinst_HEADERS = \
 	vinsertknots.h \
+	vpolygonize.h \
 	vvisitor.h
 
 libkarbonvisitors_la_SOURCES = \
-	vinsertknots.cc
+	vinsertknots.cc \
+	vpolygonize.cc
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO

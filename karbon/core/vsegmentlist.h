@@ -46,12 +46,7 @@ public:
 	/// "Calculate" bounding box.
 	KoRect boundingBox() const;
 
-	/// Converts all segments to curves.
-	void convertToCurves();
-
 	void transform( const QWMatrix& m );
-
-	void whirlPinch( const KoPoint& p, double angle, double pinch );
 
 	void save( QDomElement& element ) const;
 

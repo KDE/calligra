@@ -31,9 +31,13 @@ class VVisitor;
 class VObject
 {
 public:
-	VObject()
-		: m_state( state_normal ) {}
-	VObject( const VObject &obj ) { m_fill = obj.m_fill; m_stroke = obj.m_stroke; m_state = obj.m_state; }
+	VObject( VState state = state_normal ) { m_state = state; }
+	VObject( const VObject &obj )
+	{
+		m_fill   = obj.m_fill;
+		m_stroke = obj.m_stroke;
+		m_state  = obj.m_state;
+	}
 	virtual ~VObject() {}
 
 	virtual void draw( VPainter* painter, const KoRect& rect,

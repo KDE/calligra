@@ -357,10 +357,16 @@ KarbonPart::slotCommandExecuted()
 }
 
 void
-KarbonPart::applyDefaultColors( VObject &obj ) const
+KarbonPart::applyDefaultColors( VObject& obj ) const
 {
-	obj.stroke().setColor( m_defaultStrokeColor );	
-	obj.fill().setColor( m_defaultFillColor );	
+	VStroke stroke( obj.stroke() );
+	VFill fill( obj.fill() );
+
+	stroke.setColor( m_defaultStrokeColor );
+	fill.setColor( m_defaultFillColor );
+
+	obj.setStroke( stroke );
+	obj.setFill( fill );
 }
 
 void

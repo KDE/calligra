@@ -325,19 +325,6 @@ VSegmentList::boundingBox() const
 }
 
 void
-VSegmentList::convertToCurves()
-{
-	// ommit "begin" segment:
-	VSegment* segment = m_first->m_next;
-
-	while( segment )
-	{
-		segment->convertToCurve();
-		segment = segment->m_next;
-	}
-}
-
-void
 VSegmentList::transform( const QWMatrix& m )
 {
 	VSegment* segment = m_first;
@@ -350,6 +337,7 @@ VSegmentList::transform( const QWMatrix& m )
 	}
 }
 
+/*
 void
 VSegmentList::whirlPinch( const KoPoint& p, double angle, double pinch )
 {
@@ -415,6 +403,7 @@ VSegmentList::whirlPinch( const KoPoint& p, double angle, double pinch )
 		segment = segment->m_next;
 	}
 }
+*/
 
 void
 VSegmentList::save( QDomElement& element ) const

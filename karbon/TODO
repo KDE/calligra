@@ -4,3 +4,5 @@
 2	mirror coordinate-system so origin is bottom-left
 3	reintroduce handler
 4	add validators to all tool-dialog input-fields
+5	polygonizing a sinus shapes results in a asymetric polyline
+	(probably error in sinus generation).

@@ -10,6 +10,8 @@
 #include <koPoint.h>
 #include <koRect.h>
 
+#include "vglobal.h"
+
 class QDomElement;
 
 // all classes which have to traverse a segment list should derive from this class.
@@ -80,8 +82,8 @@ public:
 	void setCtrlPoint2( const KoPoint& p ) { m_point[1] = p; }
 	void setKnot2( const KoPoint& p ) { m_point[2] = p; }
 
-	/// Returns true if segment is flat (see VGlobal for tolerance value).
-	bool isFlat() const;
+	/// Returns true if segment is flat.
+	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
 	/// Calculates the bounding box.
 	KoRect boundingBox() const;
@@ -93,7 +95,10 @@ public:
 	 */
 	VSegment* splitAt( double t );
 
-	/// Converts segment to curve.
+	/**
+	 * Converts the segment to a bezier curve. Lines obtain control points at
+	 * t = 1/3 and t = 2/3.
+	 */
 	void convertToCurve();
 
 	void save( QDomElement& element ) const;

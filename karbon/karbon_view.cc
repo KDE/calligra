@@ -48,7 +48,7 @@
 #include <kdebug.h>
 
 // TODO: only for testing:
-#include "vinsertknots.h"
+#include "vpolygonize.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -113,7 +113,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 }
 
 void
-KarbonView::setupPrinter( KPrinter &printer )
+KarbonView::setupPrinter( KPrinter& /*printer*/ )
 {
 }
 
@@ -250,13 +250,13 @@ KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	VInsertKnots ik;
-	ik.setKnots( 3 );
+	VPolygonize op;
+	op.setFlatness( 5.0 );
 
 	VObjectListIterator itr( m_part->selection() );
 	for ( ; itr.current(); ++itr )
 	{
-		itr.current()->accept( ik );
+		itr.current()->accept( op );
 	}
 
 	m_part->repaintAllViews();

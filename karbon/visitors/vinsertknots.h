@@ -11,7 +11,7 @@
 class VInsertKnots : public VVisitor
 {
 public:
-	VInsertKnots() { m_knots = 1; }
+	VInsertKnots( uint knots = 1 ) { m_knots = knots; }
 
 	uint knots() const { return m_knots; }
 	void setKnots( uint knots );

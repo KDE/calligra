@@ -6,7 +6,6 @@
 #include <math.h>
 #include <qdom.h>
 
-#include "vglobal.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 #include "vsegmenttools.h"
@@ -140,7 +139,7 @@ VSegment::VSegment( const VSegment& segment )
 }
 
 bool
-VSegment::isFlat() const
+VSegment::isFlat( double flatness ) const
 {
 	if(
 		m_prev == 0L ||
@@ -154,17 +153,17 @@ VSegment::isFlat() const
 	if( m_type == segment_curve )
 		return
 			height( m_prev->m_point[2], m_point[0], m_point[2] )
-				< VGlobal::flatnessTolerance &&
+				< flatness &&
 			height( m_prev->m_point[2], m_point[1], m_point[2] )
-				< VGlobal::flatnessTolerance;
+				< flatness;
 	else if( m_type == segment_curve1 )
 		return
 			height( m_prev->m_point[2], m_point[1], m_point[2] )
-				< VGlobal::flatnessTolerance;
+				< flatness;
 	else if( m_type == segment_curve2 )
 		return
 			height( m_prev->m_point[2], m_point[0], m_point[2] )
-				< VGlobal::flatnessTolerance;
+				< flatness;
 
 	return false;
 }
