@@ -85,18 +85,8 @@ GUnitValidator::GUnitValidator(QWidget *parent, const char *name) :
 QValidator::State GUnitValidator::validate(QString &input, int &/*pos*/) const {
 
     QString str=input.stripWhiteSpace();
-    QChar dot('.');
-    QChar comma(',');
-    QChar m('m');
-    QChar M('M');
-    QChar p('p');
-    QChar P('P');
-    QChar t('t');
-    QChar T('T');
-    QChar i('i');
-    QChar I('I');
-    QChar n('n');
-    QChar N('N');
+    QChar dot('.'), comma(','), m('m'), M('M'), p('p'), P('P'), t('t'), T('T'),
+        i('i'), I('I'), n('n'), N('N');
     unsigned int j=1;
     bool c=false;
 
