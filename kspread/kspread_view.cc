@@ -641,23 +641,29 @@ void KSpreadView::initializeGlobalOperationActions()
 
   connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
            this, SLOT( viewZoom( const QString & ) ) );
-  m_viewZoom->setEditable(true);
+
+
+  //m_viewZoom->setEditable(true);
+  m_viewZoom->setEditable(false);
 
   QStringList lst1;
-  lst1 << "33%";
+/*  lst1 << "33%";
   lst1 << "50%";
+*/
+  lst1 << "60%";
   lst1 << "75%";
   lst1 << "100%";
   lst1 << "125%";
   lst1 << "150%";
-  lst1 << "200%";
+/*  lst1 << "200%";
   lst1 << "250%";
   lst1 << "350%";
   lst1 << "400%";
   lst1 << "450%";
   lst1 << "500%";
+*/
   m_viewZoom->setItems( lst1 );
-  m_viewZoom->setCurrentItem( 3 );
+  m_viewZoom->setCurrentItem( 2 );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
@@ -3235,7 +3241,7 @@ void KSpreadView::setZoom( int zoom, bool updateViews )
   KoView::setZoom( (double) zoom / 100 );
   m_pDoc->setZoom( zoom );
   m_pDoc->newZoom();
-  
+
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvas->repaint();

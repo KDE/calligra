@@ -546,8 +546,8 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
 }
 
 void KSpreadDoc::setZoom( int zoom )
-{ 
-  m_iZoom = zoom; 
+{
+  m_iZoom = zoom;
 }
 
 void KSpreadDoc::newZoom()
@@ -733,6 +733,16 @@ void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
   /* get the world coordinates of the upper left corner of the paintRegion */
   QPoint corner(table->columnPos(paintRegion.left()),
                 table->rowPos(paintRegion.top()));
+/*
+  QPoint bottomRight(table->columnPos(paintRegion.right() + 1),
+                     table->rowPos(paintRegion.bottom() + 1));
+
+  int w = bottomRight.x() - corner.x();
+  int h = bottomRight.y() - corner.y();
+
+  if ( !painter.device()->isExtDev() )
+    painter.eraseRect( corner.x(), corner.y(), w, h);
+*/
 
   QPoint currentCellPos = corner;
 

@@ -1758,7 +1758,21 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
-
+/*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
+*/
   bool selected = false;
 
   if (view != NULL)
@@ -1789,11 +1803,11 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
 
   if (!isObscuringForced())
   {
-    paintBackground(painter, corner, cellRef, selected);
+    paintBackground(painter, view, corner, cellRef, selected);
   }
 
-  paintDefaultBorders(painter, corner, cellRef);
-  paintCellBorders(painter, corner, cellRef);
+  paintDefaultBorders(painter, view, corner, cellRef);
+  paintCellBorders(painter, view, corner, cellRef);
 
   /* paint all the cells that this one obscures */
   paintingObscured++;
@@ -1805,10 +1819,10 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
     /* don't paint content if this cell is obscured */
   {
     if ( !painter.device()->isExtDev() || m_pTable->getPrintCommentIndicator() )
-      paintCommentIndicator(painter, corner, cellRef);
+      paintCommentIndicator(painter, view, corner, cellRef);
     if ( !painter.device()->isExtDev() || m_pTable->getPrintFormulaIndicator() )
-      paintFormulaIndicator(painter, corner, cellRef);
-    paintMoreTextIndicator(painter, corner, cellRef);
+      paintFormulaIndicator(painter, view, corner, cellRef);
+    paintMoreTextIndicator(painter, view, corner, cellRef);
 
   /**
    * QML ?
@@ -1830,12 +1844,12 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
               (!painter.device()->isExtDev() ||
                !getDontprintText(cellRef.x(),cellRef.y())))
     {
-      paintText(painter, corner, cellRef);
+      paintText(painter, view, corner, cellRef);
     }
   } /* if (!isObscured()) */
 
 
-  paintPageBorders( painter,corner, cellRef);
+  paintPageBorders( painter, view, corner, cellRef);
 
 
   if (isObscured() && paintingObscured == 0)
@@ -1928,14 +1942,29 @@ void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
 }
 
 
-void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
-                                  QPoint cellRef, bool selected)
+void KSpreadCell::paintBackground(QPainter& painter, KSpreadView* view,
+                                  QPoint corner, QPoint cellRef,
+                                  bool selected)
 {
   QColorGroup defaultColorGroup = QApplication::palette().active();
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width = (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
   int height =  (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
+
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
 
   // Determine the correct background color
   if ( selected )
@@ -1982,8 +2011,8 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
 
 }
 
-void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
-                                      QPoint cellRef)
+void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
+                                      QPoint corner, QPoint cellRef)
 {
   QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
   QPen top_pen = topBorderPen( cellRef.x(), cellRef.y() );
@@ -1993,6 +2022,21 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = rowLayout->height();
   int width =  colLayout->width();
+/*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
+*/
   /* Each cell is responsible for drawing it's top and left portions of the
      "default" grid. --Or not drawing it if it shouldn't be there.
      It's even responsible to paint the right and bottom, if it is the last
@@ -2109,15 +2153,27 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
   }
 }
 
-void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
-                                        QPoint cellRef)
+void KSpreadCell::paintCommentIndicator(QPainter& painter, KSpreadView* view,
+                                        QPoint corner, QPoint cellRef)
 {
   // Point the little corner if there is a comment attached
   // to this cell.
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
-
+  /*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      width--;
+    }
+  }
+  */
   if( !comment(cellRef.x(),cellRef.y()).isEmpty() &&
       rowLayout->height() > 2 &&
       colLayout->width() > 10 &&
@@ -2135,27 +2191,64 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
 }
 
 // small blue rectangle if this cell holds a formula
-void KSpreadCell::paintFormulaIndicator(QPainter& painter, QPoint corner,
-                                        QPoint /* cellRef */)
+void KSpreadCell::paintFormulaIndicator(QPainter& painter, KSpreadView* view,
+                                        QPoint corner, QPoint cellRef )
 {
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int height = rowLayout->height();
+  int width =  colLayout->width();
+
+  /*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
+  */
+
   if( isFormula() && m_pTable->getShowFormulaIndicator() )
   {
     QPointArray point( 3 );
-    point.setPoint( 0, corner.x(), corner.y() + height() - 6 );
-    point.setPoint( 1, corner.x(), corner.y() + height() );
-    point.setPoint( 2, corner.x() + 6, corner.y() + height() );
+    point.setPoint( 0, corner.x(), corner.y() + height - 6 );
+    point.setPoint( 1, corner.x(), corner.y() + height );
+    point.setPoint( 2, corner.x() + 6, corner.y() + height );
     painter.setBrush( QBrush(Qt::blue ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
   }
 }
-void KSpreadCell::paintMoreTextIndicator(QPainter& painter, QPoint corner,
-                                         QPoint cellRef)
+void KSpreadCell::paintMoreTextIndicator(QPainter& painter, KSpreadView* view,
+                                         QPoint corner, QPoint cellRef)
 {
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+
+  /*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
+  */
   //show  a red triangle when it's not possible to write all text in cell
   //don't print the red triangle if we're printing
 
@@ -2172,12 +2265,28 @@ void KSpreadCell::paintMoreTextIndicator(QPainter& painter, QPoint corner,
   }
 }
 
-void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef)
+void KSpreadCell::paintText(QPainter& painter, KSpreadView* view,
+                            QPoint corner, QPoint cellRef)
 {
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
 
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
+
+  /*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      width--;
+    }
+  }
+  */
+
   QColorGroup defaultColorGroup = QApplication::palette().active();
 
   QColor textColorPrint = textColor( cellRef.x(), cellRef.y() );
@@ -2396,8 +2505,8 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef)
 
 }
 
-void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
-                                   QPoint cellRef)
+void KSpreadCell::paintPageBorders(QPainter& painter, KSpreadView* view,
+                                   QPoint corner, QPoint cellRef)
 {
   if ( painter.device()->isExtDev() )
     return;
@@ -2406,6 +2515,24 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+
+  /*
+
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
+
+  */
 
   // Draw page borders
   if ( m_pTable->isShowPageBorders() &&
@@ -2431,14 +2558,29 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
 }
 
 
-void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
-                                   QPoint cellRef)
+void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
+                                   QPoint corner, QPoint cellRef)
 {
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = rowLayout->height();
   int width =  colLayout->width();
 
+  /*
+  if (view != NULL)
+  {
+    if (view->zoom() > 1.5)
+    {
+      height++;
+      width++;
+    }
+    if (view->zoom() < 0.5)
+    {
+      height--;
+      width--;
+    }
+  }
+  */
   /* we might not paint some borders if this cell is merged with another in
      that direction */
   bool paintLeft = true;

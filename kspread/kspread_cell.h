@@ -970,16 +970,22 @@ private:
     static const char* s_dataTypeToString[];
 
   /* helper functions to the paintCell(...) function */
-    void paintCellBorders(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintPageBorders(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintText(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintMoreTextIndicator(QPainter& painter, QPoint corner,
-                                QPoint cellRef);
-    void paintCommentIndicator(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintFormulaIndicator(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintDefaultBorders(QPainter& painter, QPoint corner, QPoint cellRef);
-    void paintBackground(QPainter& painter, QPoint corner, QPoint cellRef,
-                         bool selected);
+    void paintCellBorders(QPainter& painter, KSpreadView* view,
+                          QPoint corner, QPoint cellRef);
+    void paintPageBorders(QPainter& painter, KSpreadView* view,
+                          QPoint corner, QPoint cellRef);
+    void paintText(QPainter& painter, KSpreadView* view, QPoint corner,
+                   QPoint cellRef);
+    void paintMoreTextIndicator(QPainter& painter, KSpreadView* view,
+                                QPoint corner, QPoint cellRef);
+    void paintCommentIndicator(QPainter& painter, KSpreadView* view,
+                               QPoint corner, QPoint cellRef);
+    void paintFormulaIndicator(QPainter& painter, KSpreadView* view,
+                               QPoint corner, QPoint cellRef);
+    void paintDefaultBorders(QPainter& painter, KSpreadView* view,
+                             QPoint corner, QPoint cellRef);
+    void paintBackground(QPainter& painter, KSpreadView* view,
+                         QPoint corner, QPoint cellRef, bool selected);
     void paintObscuredCells(const QRect& rect, QPainter& painter,
                             KSpreadView* view, QPoint corner, QPoint cellRef);
 
