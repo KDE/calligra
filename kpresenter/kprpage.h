@@ -270,6 +270,9 @@ public:
     bool savePicture( KPresenterView *_view ) const;
     bool findTextObject( KPObject *obj );
     KPObject *nextTextObject(KPTextObject *obj);
+
+    void getAllObjectSelectedList(QPtrList<KPObject> &lst );
+
 protected:
 
 private:

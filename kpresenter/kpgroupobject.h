@@ -90,6 +90,7 @@ public:
     virtual void setOwnClipping( bool _ownClipping );
     virtual void setSubPresStep( int _subPresStep );
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );
+    virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force=false );
 
 protected:
     void updateSizes( double fx, double fy );

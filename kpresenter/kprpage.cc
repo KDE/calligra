@@ -3659,3 +3659,12 @@ bool KPrPage::findTextObject( KPObject *obj )
 {
     return (m_objectList.find( obj )>=0 );
 }
+
+void KPrPage::getAllObjectSelectedList(QPtrList<KPObject> &lst )
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->getAllObjectSelectedList( lst );
+    }
+}

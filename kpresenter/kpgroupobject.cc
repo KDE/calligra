@@ -549,3 +549,13 @@ void KPGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName 
     for ( ; it.current() ; ++it )
         it.current()->setDisappearSoundEffectFileName( _d_fileName );
 }
+
+void KPGroupObject::getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force )
+{
+    if ( selected || force)
+    {
+        QPtrListIterator<KPObject> it( objects);
+        for ( ; it.current() ; ++it )
+            it.current()->getAllObjectSelectedList( lst, true );
+    }
+}

@@ -31,7 +31,7 @@
 #include <koPoint.h>
 #include <koSize.h>
 #include <koRect.h>
-
+#include <kpobject.h>
 class QPainter;
 class DCOPObject;
 class QDomDocumentFragment;
@@ -215,7 +215,7 @@ public:
 			 SelectionMode selectionMode );
 
     virtual KPTextObject *nextTextObject() { return 0L;}
-
+    virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false ) { if (selected || force ) lst.append( this );}
 protected:
     /**
      * Modifies x and y to add the shadow offsets

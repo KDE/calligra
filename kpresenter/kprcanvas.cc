@@ -3007,6 +3007,7 @@ QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
 QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
 {
     QPtrList<KoTextFormatInterface> lst;
+    QPtrList<KPObject> lstObj;
     // If we're editing a text object, then that's the one we return
     if ( m_currentTextObjectView )
     {
@@ -3015,9 +3016,10 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     }
     else
     {
-        QPtrListIterator<KPObject> it(getObjectList());
+        m_activePage->getAllObjectSelectedList(lstObj);
+        QPtrListIterator<KPObject> it(lstObj);
         for ( ; it.current(); ++it ) {
-            if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
+            if ( it.current()->getType() == OT_TEXT )
             {
                 KPTextObject * obj = static_cast<KPTextObject*>( it.current() );
                 if ( !obj->isProtectContent() )
@@ -3025,9 +3027,11 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
             }
         }
         //get sticky obj
-        it=m_view->kPresenterDoc()->stickyPage()->objectList();
+        lstObj.clear();
+        m_view->kPresenterDoc()->stickyPage()->getAllObjectSelectedList(lstObj);
+        it=QPtrListIterator<KPObject>( lstObj );
         for ( ; it.current(); ++it ) {
-            if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
+            if ( it.current()->getType() == OT_TEXT )
             {
                 KPTextObject * obj = static_cast<KPTextObject*>( it.current() );
                 if ( !obj->isProtectContent() )
