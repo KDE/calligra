@@ -127,6 +127,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	lyr->setMargin( 2 );
 
 	d->doc =  KTextEditor::EditorChooser::createDocument(fr, "sqlDoc");
+	if (!d->doc)
+		return;
 	d->view = d->doc->createView(fr, 0L);
 
 
@@ -316,6 +318,8 @@ KexiQueryDesignerSQLEditor::jump(int character)
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	const int numRows = d->view->paragraphs();
 #else
+	if (!d->doc)
+		return;
 	KTextEditor::EditInterface *ei = KTextEditor::editInterface(d->doc);
 	const int numRows = ei->numLines();
 #endif
@@ -364,6 +368,8 @@ bool KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 QString
 KexiQueryDesignerSQLEditor::text()
 {
+	if (!d->doc)
+		return QString::null;
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
 	kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
 	return eIface->text();
@@ -372,6 +378,8 @@ KexiQueryDesignerSQLEditor::text()
 void
 KexiQueryDesignerSQLEditor::setText(const QString &text)
 {
+	if (!d->doc)
+		return;
 	const bool was_dirty = dirty();
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
 	eIface->setText(text);
