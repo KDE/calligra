@@ -173,7 +173,6 @@ void SQLiteCursor::drv_getNextRecord()
 	}
 }
 
-//store currently fetched record's values in appropriate place of the buffer
 void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 {
 	if (!m_cols_pointers_mem_size)
@@ -422,14 +421,19 @@ int SQLiteCursor::at()
 */
 
 
-int SQLiteCursor::serverResult()
+int SQLiteCursor::serverResult() const
 {
 	return m_data->res;
 }
 
-QString SQLiteCursor::serverResultName()
+QString SQLiteCursor::serverResultName() const
 {
 	return QString::fromLatin1( sqlite_error_string(m_data->res) );
+}
+
+QString SQLiteCursor::serverErrorMsg() const
+{
+	return QString::fromLatin1( m_data->errmsg );
 }
 
 void SQLiteCursor::drv_clearServerResult()
@@ -437,7 +441,3 @@ void SQLiteCursor::drv_clearServerResult()
 	m_data->res = SQLITE_OK;
 }
 
-QString SQLiteCursor::serverErrorMsg()
-{
-	return QString::fromLatin1( m_data->errmsg );
-}

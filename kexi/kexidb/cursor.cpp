@@ -381,19 +381,35 @@ bool Cursor::getNextRecord()
 	return true;
 }
 
-void Cursor::debug()
+QString Cursor::debugString() const
 {
 	QString dbg = "CURSOR( ";
 	if (!m_query) {
 		dbg += "RAW STATEMENT: '";
 		dbg += m_rawStatement;
-		dbg += "'";
+		dbg += "'\n";
 	}
 	else {
 		dbg += "QuerySchema: '";
 		dbg += m_conn->selectStatement( *m_query );
-		dbg += "'";
+		dbg += "'\n";
 	}
+	if (isOpened())
+		dbg += " OPENED";
+	else
+		dbg += " NOT_OPENED";
+	if (isBuffered())
+		dbg += " BUFFERED";
+	else
+		dbg += " NOT_BUFFERED";
+	dbg += " AT=";
+	dbg += QString::number((unsigned long)at());
 	dbg += " )";
-	KexiDBDbg << dbg << endl;
+	return dbg;
 }
+
+void Cursor::debug() const
+{
+	KexiDBDbg << debugString() << endl;
+}
+

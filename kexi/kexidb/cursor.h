@@ -151,6 +151,12 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! \return number of fields available for this cursor. */
 		uint fieldCount() const { return m_fieldCount; }
 
+		/*! \return a value stored in column number \a i (counting from 0).
+		 This have unspecified behaviour if the cursor is not at valid record.
+		 Note for driver developers: 
+		 If \a i is >= than m_fieldCount, null QVariant value should be returned. 
+		 To return a value typically you can use a pointer to internal structure 
+		 that contain current row data (buffered or unbuffered). */
 		virtual QVariant value(int i) const = 0;
 
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
@@ -158,10 +164,43 @@ class KEXI_DB_EXPORT Cursor: public Object
 		
 		/*! Puts current record's data into \a data (makes a deep copy).
 		 This have unspecified behaviour if the cursor is not at valid record.
-		 Note: For reimplementation in driver's code. */
+		 Note: For reimplementation in driver's code. Shortly, this method translates
+		 a row data from internal representation (probably also used in buffer)
+		 to simple public RecordData representation. */
 		virtual void storeCurrentRecord(RecordData &data) const = 0;
 
-		void debug();
+		/*! \return a code of last executed operation's result at the server side.
+		 This code is engine dependent and may be even engine-version dependent.
+		 It can be visible in applications mainly after clicking a "Details>>" button
+		 or something like that -- this just can be useful for advanced users and 
+		 for testing. 
+		 Note for driver developers: Return here the value you usually store as result 
+		 of most lower-level operations. By default this method returns 0. */
+		virtual int serverResult() const { return 0; }
+		
+		/*! \return (not i18n'd) name of last executed operation's result at the server side.
+		 Sometimes engines have predefined its result names that can be used e.g. 
+		 to refer a documentation. SQLite is one of such engines. 
+		 Note for driver developers: Leave the default implementation (null 
+		 string is returned ) if your engine has no such capability. */
+		virtual QString serverResultName() const { return QString::null; }
+
+		/*! \return (not i18n'd) description text (message) of last operation's error/result.
+		 In most cases engines do return such a messages, any user can then use this
+		 to refer a documentation.
+		 Note for driver developers: Leave the default implementation (null 
+		 string is returned ) if your engine has no such capability. */
+		virtual QString serverErrorMsg() const { return QString::null; }
+
+		/*! Clears an internal member that is used to storing last result code, 
+		 the same that is returend by serverResult(). */
+		virtual void drv_clearServerResult() = 0;
+
+		//! \return debug information.
+		QString debugString() const;
+		
+		//! Outputs debug information.
+		void debug() const;
 
 	protected:
 		//! posible results of row fetching, used for m_result
@@ -190,9 +229,27 @@ class KEXI_DB_EXPORT Cursor: public Object
 		virtual void drv_getNextRecord() = 0;
 //unused		virtual bool drv_getPrevRecord() = 0;
 
+		/*! Stores currently fetched record's values in appropriate place of the buffer.
+		 Note for driver developers: 
+		 This place can be computed using m_at. Do not change value of m_at or any other
+		 Cursor members, only change your internal structures like pointer to current 
+		 row, etc. If your database engine's API function (for record fetching) 
+		 do not allocates such a space, you want to allocate a space for current
+		 record. Otherwise, reuse existing structure, what could be more efficient.
+		 All functions like drv_appendCurrentRecordToBuffer() operates on the buffer,
+		 i.e. array of stored rows. You are not forced to have any particular
+		 fixed structure for buffer item or buffer itself - the structure is internal and
+		 only methods like storeCurrentRecord() visible to public.
+		*/
 		virtual void drv_appendCurrentRecordToBuffer() = 0;
+		/*! Moves pointer (that points to the buffer) -- to next item in this buffer.
+		 Note for driver developers: probably just execute "your_pointer++" is enough.
+		*/
 		virtual void drv_bufferMovePointerNext() = 0;
+		/*! Like drv_bufferMovePointerNext() but execute "your_pointer--". */
 		virtual void drv_bufferMovePointerPrev() = 0;
+		/*! Moves pointer (that points to the buffer) to a new place: \a at.
+		*/
 		virtual void drv_bufferMovePointerTo(Q_LLONG at) = 0;
 
 		/*DISABLED: ! This is called only once in open(), after successful drv_open().
