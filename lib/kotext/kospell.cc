@@ -43,6 +43,7 @@ public:
     KoTextIterator *itr;
     KoTextParag    *parag;
     bool            dialog;
+    bool            needsIncrement;
 };
 
 static QString paragToText( KoTextParag *parag )
@@ -66,6 +67,7 @@ KoSpell::KoSpell( const Broker::Ptr& broker,  QObject *parent,
     d = new Private;
     d->parag = 0;
     d->itr = 0;
+    d->needsIncrement = false;
 }
 
 KoSpell::~KoSpell()
@@ -80,6 +82,7 @@ bool KoSpell::check( KoTextIterator *itr, bool dialog )
     if ( !itr )
         return ret;
     d->itr = itr;
+    d->needsIncrement = false;
     ret = !d->itr->atEnd();
     d->dialog = dialog;
 
@@ -104,7 +107,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
     if ( !parag ) {
         start = -1;
         return false;
-	}
+    }
 
     d->parag = parag;
     QString str = paragToText( parag );
@@ -122,13 +125,26 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
 
 QString KoSpell::getMoreText()
 {
-    //kdDebug()<<"here 1"<<endl;
+    kdDebug()<<"here 1 dialog = " << d->dialog << ", itr = "
+             << d->itr << ", atEnd = "
+             << ( ( d->itr ) ? d->itr->atEnd() : true )
+             << endl;
+
+    if ( d->needsIncrement ) {
+        ++( *d->itr );
+    }
+
     if ( !d->dialog && ( !d->itr || d->itr->atEnd() ) ) {
         QString str = paragToText( d->parag );
         if ( !str.isEmpty() )
             emit aboutToFeedText();
         return str;
-        }
+    }
+
+    if ( d->itr && d->itr->atEnd() )
+        return QString::null;
+
+    d->needsIncrement = true;
 
     QString text = d->itr->currentText();
     d->parag = d->itr->currentParag();
@@ -140,16 +156,15 @@ QString KoSpell::getMoreText()
              d->parag->length() > 1 )
             break;
         ++(*d->itr);
-        if ( d->itr->atEnd() )
+        if ( d->itr->atEnd() ) {
+            d->needsIncrement = false;
             return QString::null;
+        }
         d->parag = d->itr->currentParag();
         text = d->itr->currentText();
-        }
+    }
     //kdDebug()<<"here 3"<<endl;
     d->parag->string()->setNeedsSpellCheck( false );
-
-    //to always start the next run of getmoretext with a new iterator
-    ++(*d->itr);
 
     return text;
 }
@@ -166,8 +181,16 @@ KoTextParag  *KoSpell::currentParag() const
 
 KoTextObject *KoSpell::currentTextObject() const
 {
-    KoTextObject *obj = ( d->itr ) ? d->itr->currentTextObject() : 0 ;
-    return obj;
+    if ( d->itr && !d->itr->atEnd() )
+        return d->itr->currentTextObject();
+    return 0;
+}
+
+int KoSpell::currentStartIndex() const
+{
+    if ( d->itr && !d->itr->atEnd() )
+        return d->itr->currentStartIndex();
+    return 0;
 }
 
 bool KoSpell::checking() const

@@ -48,24 +48,24 @@ class KoSpell : public KSpell2::BackgroundChecker
 public:
     KoSpell( const KSpell2::Broker::Ptr& broker, QObject *parent =0,
              const char *name =0 );
-	/**
-	* The destructor instructs ISpell/ASpell to write out the personal
-	*  dictionary and then terminates ISpell/ASpell.
-	*/
-	virtual ~KoSpell();
+    /**
+     * The destructor instructs ISpell/ASpell to write out the personal
+     *  dictionary and then terminates ISpell/ASpell.
+     */
+    virtual ~KoSpell();
 
-	/**
+    /**
      * Returns whether the speller is already checking something.
-	*/
+     */
     bool checking() const;
 
-	/**
+    /**
      * Spellchecks a buffer of many words in plain text
      * format.
-	*
+     *
      * The @p _buffer is not modified.  The signal @ref done() will be
      * sent when @ref check() is finished.
-	*/
+     */
     virtual bool check( KoTextIterator *itr, bool dialog = false );
     virtual bool check( KoTextParag *parag );
     virtual bool checkWordInParagraph( KoTextParag *parag, int pos,
@@ -73,6 +73,7 @@ public:
 
     KoTextParag  *currentParag() const;
     KoTextObject *currentTextObject() const;
+    int currentStartIndex() const;
 
 signals:
 	/**
