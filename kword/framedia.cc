@@ -481,11 +481,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     cbAllFrames = new QCheckBox (i18n("Changes will be applied to all frames in frameset"),tab1);
     cbAllFrames->setChecked(frame!=0L);
-    grid1->addMultiCellWidget(cbAllFrames,++row,row+1, 0, 1);
+    row++;
+    grid1->addMultiCellWidget(cbAllFrames,row,row, 0, 1);
     cbProtectContent = new QCheckBox( i18n("Protect content"), tab1);
     QWhatsThis::add(cbProtectContent, i18n("Disallow changes to be made to the contents of the frame(s)"));
     connect( cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
-    grid1->addMultiCellWidget(cbProtectContent,++row,row+1, 0, 1);
+    row++;
+    grid1->addMultiCellWidget(cbProtectContent,row,row, 0, 1);
     if( frameType != FT_TEXT || frame!=0 && frame->frameSet()==0) {
         cbAllFrames->setChecked(false);
         cbAllFrames->hide();
