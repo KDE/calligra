@@ -70,6 +70,7 @@ private:
 	void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );
 
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
+	void appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement,double offset);
 
     QString storeImage( const QDomElement& object );
     QString storeSound(const QDomElement & object, QDomElement & p, QDomDocument & doc);
