@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kscript_ext_qstructs.h"
 #include "kscript_util.h"
 #include "kscript.h"
@@ -179,7 +198,7 @@ QRect KSQt::Rect::convert( KSContext&, const KSValue::Ptr& v )
 KSValue::Ptr KSQt::Rect::convert( KSContext& context, const QRect& rect )
 {
     KSValue::Ptr s = context.interpreter()->module( "qt" )->member( context, "QRect" );
-    ASSERT( !s.isNull() );
+    Q_ASSERT( !s.isNull() );
 
     return new KSValue( new KSBuiltinStruct( s->structClassValue(), new QRect( rect ) ) );
 }
@@ -194,7 +213,7 @@ KSQt::Rect::Rect( KSModule* module, const QString& name )
     addVariable( "width" );
     addVariable( "height" );
     addVariable( "size" );
-    
+
     addMethod( "isNull", qrect_isNull, "" );
     addMethod( "isValid", qrect_isValid, "" );
     addMethod( "isEmpty", qrect_isEmpty, "" );
@@ -252,7 +271,7 @@ KSStruct* KSQt::Rect::clone( KSBuiltinStruct* s )
 KSValue::Ptr KSQt::Rect::property( KSContext& context, void* object, const QString& name )
 {
     QRect* value = (QRect*)object;
-	
+
     if ( name == "left" )
 	return new KSValue( value->left() );
     if ( name == "right" )
@@ -351,7 +370,7 @@ QPoint KSQt::Point::convert( KSContext&, const KSValue::Ptr& v )
 KSValue::Ptr KSQt::Point::convert( KSContext& context, const QPoint& value )
 {
     KSValue::Ptr s = context.interpreter()->module( "qt" )->member( context, "QPoint" );
-    ASSERT( !s.isNull() );
+    Q_ASSERT( !s.isNull() );
 
     return new KSValue( new KSBuiltinStruct( s->structClassValue(), new QPoint( value ) ) );
 }
@@ -367,7 +386,7 @@ KSQt::Point::Point( KSModule* module, const QString& name )
 bool KSQt::Point::constructor( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
     if ( KSUtil::checkArgs( context, "", "QPoint", FALSE ) )
         context.setValue( new KSValue( new KSBuiltinStruct( this, new QPoint() ) ) );
     else if ( KSUtil::checkArgs( context, "ii", "QPoint", FALSE ) )
@@ -482,7 +501,7 @@ QSize KSQt::Size::convert( KSContext&, const KSValue::Ptr& v )
 KSValue::Ptr KSQt::Size::convert( KSContext& context, const QSize& value )
 {
     KSValue::Ptr s = context.interpreter()->module( "qt" )->member( context, "QSize" );
-    ASSERT( !s.isNull() );
+    Q_ASSERT( !s.isNull() );
 
     return new KSValue( new KSBuiltinStruct( s->structClassValue(), new QSize( value ) ) );
 }

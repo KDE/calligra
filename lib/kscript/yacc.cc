@@ -87,7 +87,7 @@
 #define	T_OR	337
 #define	T_DOLLAR	338
 
-#line 1 "yacc.yy"
+#line 20 "yacc.yy"
 
 
 #include "kscript_parsenode.h"
@@ -109,7 +109,7 @@ void yyerror( const char *s )
 }
 
 
-#line 24 "yacc.yy"
+#line 43 "yacc.yy"
 typedef union
 {
   QString        *ident;
@@ -263,23 +263,23 @@ static const short yyrhs[] = {    -1,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   173,   177,   181,   188,   192,   201,   205,   209,   213,   217,
-   222,   228,   234,   239,   246,   250,   259,   265,   273,   281,
-   285,   294,   298,   306,   311,   323,   327,   331,   335,   342,
-   346,   353,   357,   364,   368,   372,   376,   380,   384,   388,
-   396,   400,   408,   412,   420,   424,   432,   436,   440,   448,
-   452,   456,   464,   468,   472,   476,   484,   488,   492,   496,
-   500,   507,   511,   515,   519,   523,   530,   535,   542,   547,
-   554,   558,   562,   567,   572,   579,   584,   589,   597,   601,
-   605,   609,   614,   619,   620,   629,   634,   639,   644,   649,
-   654,   659,   664,   669,   673,   677,   681,   685,   689,   697,
-   701,   708,   712,   722,   730,   734,   742,   746,   750,   757,
-   762,   771,   779,   784,   794,   798,   805,   809,   817,   821,
-   825,   830,   835,   844,   851,   857,   865,   869,   876,   881,
-   886,   891,   899,   903,   910,   915,   923,   927,   934,   938,
-   946,   950,   954,   958,   962,   966,   970,   974,   981,   985,
-   993,   999,  1010,  1018,  1022,  1026,  1030,  1034,  1039,  1049,
-  1053,  1057,  1064,  1071
+   192,   196,   200,   207,   211,   220,   224,   228,   232,   236,
+   241,   247,   253,   258,   265,   269,   278,   284,   292,   300,
+   304,   313,   317,   325,   330,   342,   346,   350,   354,   361,
+   365,   372,   376,   383,   387,   391,   395,   399,   403,   407,
+   415,   419,   427,   431,   439,   443,   451,   455,   459,   467,
+   471,   475,   483,   487,   491,   495,   503,   507,   511,   515,
+   519,   526,   530,   534,   538,   542,   549,   554,   561,   566,
+   573,   577,   581,   586,   591,   598,   603,   608,   616,   620,
+   624,   628,   633,   638,   639,   648,   653,   658,   663,   668,
+   673,   678,   683,   688,   692,   696,   700,   704,   708,   716,
+   720,   727,   731,   741,   749,   753,   761,   765,   769,   776,
+   781,   790,   798,   803,   813,   817,   824,   828,   836,   840,
+   844,   849,   854,   863,   870,   876,   884,   888,   895,   900,
+   905,   910,   918,   922,   929,   934,   942,   946,   953,   957,
+   965,   969,   973,   977,   981,   985,   989,   993,  1000,  1004,
+  1012,  1018,  1029,  1037,  1041,  1045,  1049,  1053,  1058,  1068,
+  1072,  1076,  1083,  1090
 };
 #endif
 
@@ -1101,69 +1101,69 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 174 "yacc.yy"
+#line 193 "yacc.yy"
 {
 	    theParser->setRootNode( NULL );
 	  ;
     break;}
 case 2:
-#line 178 "yacc.yy"
+#line 197 "yacc.yy"
 {
 	    theParser->setRootNode( yyvsp[0].node );
 	  ;
     break;}
 case 3:
-#line 182 "yacc.yy"
+#line 201 "yacc.yy"
 {
 	    theParser->setRootNode( new KSParseNode( definitions, yyvsp[0].node ) );
 	  ;
     break;}
 case 4:
-#line 189 "yacc.yy"
+#line 208 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( definitions, yyvsp[0].node );
 	  ;
     break;}
 case 5:
-#line 193 "yacc.yy"
+#line 212 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( definitions, yyvsp[-1].node );
 	    yyval.node->setBranch( 2, yyvsp[0].node );
 	  ;
     break;}
 case 6:
-#line 202 "yacc.yy"
+#line 221 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 7:
-#line 206 "yacc.yy"
+#line 225 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 8:
-#line 210 "yacc.yy"
+#line 229 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 9:
-#line 214 "yacc.yy"
+#line 233 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 10:
-#line 218 "yacc.yy"
+#line 237 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( import );
 	    yyval.node->setIdent( yyvsp[-1].ident );
 	  ;
     break;}
 case 11:
-#line 223 "yacc.yy"
+#line 242 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( from );
 	    yyval.node->setIdent( yyvsp[-3].ident );
@@ -1171,7 +1171,7 @@ case 11:
 	  ;
     break;}
 case 12:
-#line 229 "yacc.yy"
+#line 248 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( from );
 	    yyval.node->setIdent( yyvsp[-3].ident );
@@ -1179,26 +1179,26 @@ case 12:
 	  ;
     break;}
 case 13:
-#line 235 "yacc.yy"
+#line 254 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_pragma );
 	    yyval.node->setIdent( yyvsp[0]._str );
 	  ;
     break;}
 case 14:
-#line 240 "yacc.yy"
+#line 259 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 15:
-#line 247 "yacc.yy"
+#line 266 "yacc.yy"
 {
 		yyval._str = yyvsp[0].ident;
 	  ;
     break;}
 case 16:
-#line 251 "yacc.yy"
+#line 270 "yacc.yy"
 {
 		(*yyvsp[-2].ident) += "/";
 		(*yyvsp[-2].ident) += (*yyvsp[0]._str);
@@ -1206,7 +1206,7 @@ case 16:
 	  ;
     break;}
 case 17:
-#line 260 "yacc.yy"
+#line 279 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_dcl );
 	    yyval.node->setBranch( 2, yyvsp[-1].node );
@@ -1214,53 +1214,53 @@ case 17:
 	  ;
     break;}
 case 18:
-#line 266 "yacc.yy"
+#line 285 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_dcl, yyvsp[-4].node, yyvsp[-1].node );
 	    yyval.node->setIdent( "main" );
 	  ;
     break;}
 case 19:
-#line 274 "yacc.yy"
+#line 293 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 20:
-#line 282 "yacc.yy"
+#line 301 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_qualified_names, yyvsp[0].node );
 	  ;
     break;}
 case 21:
-#line 286 "yacc.yy"
+#line 305 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_qualified_names, yyvsp[-2].node );
 	    yyval.node->setBranch( 2, yyvsp[0].node );
 	  ;
     break;}
 case 22:
-#line 295 "yacc.yy"
+#line 314 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 23:
-#line 299 "yacc.yy"
+#line 318 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( member_expr, yyvsp[-2].node );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 24:
-#line 307 "yacc.yy"
+#line 326 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( scoped_name );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 25:
-#line 312 "yacc.yy"
+#line 331 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( scoped_name );
 	    QString name = "::";
@@ -1270,554 +1270,554 @@ case 25:
 	  ;
     break;}
 case 26:
-#line 324 "yacc.yy"
+#line 343 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( assign_expr, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 27:
-#line 328 "yacc.yy"
+#line 347 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( plus_assign, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 28:
-#line 332 "yacc.yy"
+#line 351 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( minus_assign, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 29:
-#line 336 "yacc.yy"
+#line 355 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 30:
-#line 343 "yacc.yy"
+#line 362 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( bool_or, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 31:
-#line 347 "yacc.yy"
+#line 366 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 32:
-#line 354 "yacc.yy"
+#line 373 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( bool_and, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 33:
-#line 358 "yacc.yy"
+#line 377 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 34:
-#line 365 "yacc.yy"
+#line 384 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_equal, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 35:
-#line 369 "yacc.yy"
+#line 388 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_notequal, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 36:
-#line 373 "yacc.yy"
+#line 392 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_less_or_equal, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 37:
-#line 377 "yacc.yy"
+#line 396 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_greater_or_equal, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 38:
-#line 381 "yacc.yy"
+#line 400 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_less, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 39:
-#line 385 "yacc.yy"
+#line 404 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_greater, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 40:
-#line 389 "yacc.yy"
+#line 408 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 41:
-#line 397 "yacc.yy"
+#line 416 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 42:
-#line 401 "yacc.yy"
+#line 420 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_vertical_line, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 43:
-#line 409 "yacc.yy"
+#line 428 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 44:
-#line 413 "yacc.yy"
+#line 432 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_circumflex, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 45:
-#line 421 "yacc.yy"
+#line 440 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 46:
-#line 425 "yacc.yy"
+#line 444 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_ampersand, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 47:
-#line 433 "yacc.yy"
+#line 452 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 48:
-#line 437 "yacc.yy"
+#line 456 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_shiftright, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 49:
-#line 441 "yacc.yy"
+#line 460 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_shiftleft, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 50:
-#line 449 "yacc.yy"
+#line 468 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 51:
-#line 453 "yacc.yy"
+#line 472 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_plus_sign, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 52:
-#line 457 "yacc.yy"
+#line 476 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_minus_sign, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 53:
-#line 465 "yacc.yy"
+#line 484 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 54:
-#line 469 "yacc.yy"
+#line 488 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_asterik, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 55:
-#line 473 "yacc.yy"
+#line 492 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_solidus, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 56:
-#line 477 "yacc.yy"
+#line 496 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_percent_sign, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 57:
-#line 485 "yacc.yy"
+#line 504 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_minus_sign, yyvsp[0].node );
 	  ;
     break;}
 case 58:
-#line 489 "yacc.yy"
+#line 508 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_plus_sign, yyvsp[0].node );
 	  ;
     break;}
 case 59:
-#line 493 "yacc.yy"
+#line 512 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_tilde, yyvsp[0].node );
 	  ;
     break;}
 case 60:
-#line 497 "yacc.yy"
+#line 516 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_not, yyvsp[0].node );
 	  ;
     break;}
 case 61:
-#line 501 "yacc.yy"
+#line 520 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 62:
-#line 508 "yacc.yy"
+#line 527 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_array, yyvsp[-3].node, yyvsp[-1].node );
 	  ;
     break;}
 case 63:
-#line 512 "yacc.yy"
+#line 531 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_dict, yyvsp[-3].node, yyvsp[-1].node );
 	  ;
     break;}
 case 64:
-#line 516 "yacc.yy"
+#line 535 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_func_call, yyvsp[-2].node );
 	  ;
     break;}
 case 65:
-#line 520 "yacc.yy"
+#line 539 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_func_call, yyvsp[-3].node, yyvsp[-1].node );
 	  ;
     break;}
 case 66:
-#line 524 "yacc.yy"
+#line 543 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 67:
-#line 531 "yacc.yy"
+#line 550 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_call_params, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 68:
-#line 536 "yacc.yy"
+#line 555 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_call_params, yyvsp[0].node );
 	  ;
     break;}
 case 69:
-#line 543 "yacc.yy"
+#line 562 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( member_expr, yyvsp[-2].node );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 70:
-#line 548 "yacc.yy"
+#line 567 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 71:
-#line 555 "yacc.yy"
+#line 574 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_incr, yyvsp[0].node );
 	  ;
     break;}
 case 72:
-#line 559 "yacc.yy"
+#line 578 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_decr, yyvsp[0].node );
 	  ;
     break;}
 case 73:
-#line 563 "yacc.yy"
+#line 582 "yacc.yy"
 {
 	    /* Setting $1 twice indicates that this is a postfix operator */
 	    yyval.node = new KSParseNode( t_incr, yyvsp[-1].node, yyvsp[-1].node );
 	  ;
     break;}
 case 74:
-#line 568 "yacc.yy"
+#line 587 "yacc.yy"
 {
 	    /* Setting $1 twice indicates that this is a postfix operator */
 	    yyval.node = new KSParseNode( t_decr, yyvsp[-1].node, yyvsp[-1].node );
 	  ;
     break;}
 case 75:
-#line 573 "yacc.yy"
+#line 592 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 76:
-#line 580 "yacc.yy"
+#line 599 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_match, yyvsp[-1].node );
 	    yyval.node->setIdent( yyvsp[0]._str );
 	  ;
     break;}
 case 77:
-#line 585 "yacc.yy"
+#line 604 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_subst, yyvsp[-1].node );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 78:
-#line 590 "yacc.yy"
+#line 609 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 79:
-#line 598 "yacc.yy"
+#line 617 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 80:
-#line 602 "yacc.yy"
+#line 621 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 81:
-#line 606 "yacc.yy"
+#line 625 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_input );
 	  ;
     break;}
 case 82:
-#line 610 "yacc.yy"
+#line 629 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_match_line );
 	    yyval.node->setIdent( yyvsp[0]._str );
 	  ;
     break;}
 case 83:
-#line 615 "yacc.yy"
+#line 634 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_file_op, yyvsp[-1].node );
 	    yyval.node->setIdent( yyvsp[-2]._str );
 	  ;
     break;}
 case 84:
-#line 619 "yacc.yy"
+#line 638 "yacc.yy"
 { ;
     break;}
 case 85:
-#line 621 "yacc.yy"
+#line 640 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 86:
-#line 630 "yacc.yy"
+#line 649 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_integer_literal );
 	    yyval.node->setIntegerLiteral( yyvsp[0]._int );
 	  ;
     break;}
 case 87:
-#line 635 "yacc.yy"
+#line 654 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_cell );
 	    yyval.node->setStringLiteral( yyvsp[0]._str );
 	  ;
     break;}
 case 88:
-#line 640 "yacc.yy"
+#line 659 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_range );
 	    yyval.node->setStringLiteral( yyvsp[0]._str );
 	  ;
     break;}
 case 89:
-#line 645 "yacc.yy"
+#line 664 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_string_literal );
 	    yyval.node->setStringLiteral( yyvsp[0]._str );
 	  ;
     break;}
 case 90:
-#line 650 "yacc.yy"
+#line 669 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_character_literal );
 	    yyval.node->setCharacterLiteral( yyvsp[0]._char );
 	  ;
     break;}
 case 91:
-#line 655 "yacc.yy"
+#line 674 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_floating_pt_literal );
 	    yyval.node->setFloatingPtLiteral( yyvsp[0]._float );
 	  ;
     break;}
 case 92:
-#line 660 "yacc.yy"
+#line 679 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_boolean_literal );
 	    yyval.node->setBooleanLiteral( true );
 	  ;
     break;}
 case 93:
-#line 665 "yacc.yy"
+#line 684 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_boolean_literal );
 	    yyval.node->setBooleanLiteral( false );
 	  ;
     break;}
 case 94:
-#line 670 "yacc.yy"
+#line 689 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_array_const );
 	  ;
     break;}
 case 95:
-#line 674 "yacc.yy"
+#line 693 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_array_const, yyvsp[-1].node );
 	  ;
     break;}
 case 96:
-#line 678 "yacc.yy"
+#line 697 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_dict_const );
 	  ;
     break;}
 case 97:
-#line 682 "yacc.yy"
+#line 701 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_dict_const, yyvsp[-1].node );
 	  ;
     break;}
 case 98:
-#line 686 "yacc.yy"
+#line 705 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_line );
 	  ;
     break;}
 case 99:
-#line 690 "yacc.yy"
+#line 709 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_regexp_group );
 	    yyval.node->setIntegerLiteral( yyvsp[0]._int );
 	  ;
     break;}
 case 100:
-#line 698 "yacc.yy"
+#line 717 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_array_element, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 101:
-#line 702 "yacc.yy"
+#line 721 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_array_element, yyvsp[0].node  );
 	  ;
     break;}
 case 102:
-#line 709 "yacc.yy"
+#line 728 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_dict_element, yyvsp[-5].node, yyvsp[-3].node, yyvsp[0].node );
 	  ;
     break;}
 case 103:
-#line 713 "yacc.yy"
+#line 732 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_dict_element, yyvsp[-3].node, yyvsp[-1].node );
 	  ;
     break;}
 case 104:
-#line 723 "yacc.yy"
+#line 742 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_struct, yyvsp[-1].node );
 	    yyval.node->setIdent( yyvsp[-3].ident );
 	  ;
     break;}
 case 105:
-#line 731 "yacc.yy"
+#line 750 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( exports, yyvsp[0].node );
 	  ;
     break;}
 case 106:
-#line 735 "yacc.yy"
+#line 754 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( exports, yyvsp[-1].node );
 	    yyval.node->setBranch( 2, yyvsp[0].node );
 	  ;
     break;}
 case 107:
-#line 743 "yacc.yy"
+#line 762 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 108:
-#line 747 "yacc.yy"
+#line 766 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 109:
-#line 751 "yacc.yy"
+#line 770 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 110:
-#line 758 "yacc.yy"
+#line 777 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_struct_members );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 111:
-#line 763 "yacc.yy"
+#line 782 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_struct_members, yyvsp[0].node );
 	    yyval.node->setIdent( yyvsp[-2].ident );
 	  ;
     break;}
 case 112:
-#line 772 "yacc.yy"
+#line 791 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( class_dcl, yyvsp[-3].node, yyvsp[-1].node );
 	  ;
     break;}
 case 113:
-#line 780 "yacc.yy"
+#line 799 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( class_header );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 114:
-#line 785 "yacc.yy"
+#line 804 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( class_header );
 	    yyval.node->setIdent( yyvsp[-1].ident );
@@ -1825,58 +1825,58 @@ case 114:
 	  ;
     break;}
 case 115:
-#line 795 "yacc.yy"
+#line 814 "yacc.yy"
 {
 	    yyval.node = NULL;
 	  ;
     break;}
 case 116:
-#line 799 "yacc.yy"
+#line 818 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 117:
-#line 806 "yacc.yy"
+#line 825 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( exports, yyvsp[0].node );
 	  ;
     break;}
 case 118:
-#line 810 "yacc.yy"
+#line 829 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( exports, yyvsp[-1].node );
 	    yyval.node->setBranch( 2, yyvsp[0].node );
 	  ;
     break;}
 case 119:
-#line 818 "yacc.yy"
+#line 837 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 120:
-#line 822 "yacc.yy"
+#line 841 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 121:
-#line 826 "yacc.yy"
+#line 845 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( signal_dcl, yyvsp[-2].node );
 	    yyval.node->setIdent( yyvsp[-4].ident );
 	  ;
     break;}
 case 122:
-#line 831 "yacc.yy"
+#line 850 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( signal_dcl, 0 );
 	    yyval.node->setIdent( yyvsp[-3].ident );
 	  ;
     break;}
 case 123:
-#line 836 "yacc.yy"
+#line 855 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( destructor_dcl );
 	    KSParseNode* n = new KSParseNode( func_param_in );
@@ -1887,13 +1887,13 @@ case 123:
 	  ;
     break;}
 case 124:
-#line 845 "yacc.yy"
+#line 864 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 125:
-#line 852 "yacc.yy"
+#line 871 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_dcl );
 	    yyval.node->setBranch( 2, yyvsp[0].node );
@@ -1901,173 +1901,173 @@ case 125:
 	  ;
     break;}
 case 126:
-#line 858 "yacc.yy"
+#line 877 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_dcl, yyvsp[-3].node, yyvsp[0].node );
 	    yyval.node->setIdent( yyvsp[-5].ident );
 	  ;
     break;}
 case 127:
-#line 866 "yacc.yy"
+#line 885 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_params, yyvsp[0].node );
 	  ;
     break;}
 case 128:
-#line 870 "yacc.yy"
+#line 889 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_params, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 129:
-#line 877 "yacc.yy"
+#line 896 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_param_in );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 130:
-#line 882 "yacc.yy"
+#line 901 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_param_in, yyvsp[0].node );
 	    yyval.node->setIdent( yyvsp[-2].ident );
 	  ;
     break;}
 case 131:
-#line 887 "yacc.yy"
+#line 906 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_param_out );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 132:
-#line 892 "yacc.yy"
+#line 911 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_param_inout );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 133:
-#line 900 "yacc.yy"
+#line 919 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( signal_params, yyvsp[0].node );
 	  ;
     break;}
 case 134:
-#line 904 "yacc.yy"
+#line 923 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( signal_params, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 135:
-#line 911 "yacc.yy"
+#line 930 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( signal_param );
 	    yyval.node->setIdent( yyvsp[0].ident );
 	  ;
     break;}
 case 136:
-#line 916 "yacc.yy"
+#line 935 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( signal_param, yyvsp[0].node );
 	    yyval.node->setIdent( yyvsp[-2].ident );
 	  ;
     break;}
 case 137:
-#line 924 "yacc.yy"
+#line 943 "yacc.yy"
 {
 	    yyval.node = NULL;
 	  ;
     break;}
 case 138:
-#line 928 "yacc.yy"
+#line 947 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 139:
-#line 935 "yacc.yy"
+#line 954 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_lines, yyvsp[0].node );
 	  ;
     break;}
 case 140:
-#line 939 "yacc.yy"
+#line 958 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( func_lines, yyvsp[-1].node );
 	    yyval.node->setBranch( 2, yyvsp[0].node );
 	  ;
     break;}
 case 141:
-#line 947 "yacc.yy"
+#line 966 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 142:
-#line 951 "yacc.yy"
+#line 970 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_raise, yyvsp[-3].node, yyvsp[-1].node );
 	  ;
     break;}
 case 143:
-#line 955 "yacc.yy"
+#line 974 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_emit, yyvsp[-1].node );
 	  ;
     break;}
 case 144:
-#line 959 "yacc.yy"
+#line 978 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_return );
 	  ;
     break;}
 case 145:
-#line 963 "yacc.yy"
+#line 982 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_return, yyvsp[-1].node );
 	  ;
     break;}
 case 146:
-#line 967 "yacc.yy"
+#line 986 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 147:
-#line 971 "yacc.yy"
+#line 990 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_try, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 148:
-#line 975 "yacc.yy"
+#line 994 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_scope, yyvsp[-1].node );
 	  ;
     break;}
 case 149:
-#line 982 "yacc.yy"
+#line 1001 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 150:
-#line 986 "yacc.yy"
+#line 1005 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	    yyval.node->setBranch( 4, yyvsp[0].node );
 	  ;
     break;}
 case 151:
-#line 995 "yacc.yy"
+#line 1014 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_catch, yyvsp[-6].node, yyvsp[-1].node );
 	    yyval.node->setIdent( yyvsp[-4].ident );
 	  ;
     break;}
 case 152:
-#line 1001 "yacc.yy"
+#line 1020 "yacc.yy"
 {
 	    KSParseNode* x = new KSParseNode( scoped_name );
 	    x->setIdent( yyvsp[-6].ident );
@@ -2076,45 +2076,45 @@ case 152:
 	  ;
     break;}
 case 153:
-#line 1011 "yacc.yy"
+#line 1030 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( const_dcl, yyvsp[0].node );
 	    yyval.node->setIdent( yyvsp[-2].ident );
 	  ;
     break;}
 case 154:
-#line 1019 "yacc.yy"
+#line 1038 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_while, yyvsp[-1].node, yyvsp[0].node );
 	  ;
     break;}
 case 155:
-#line 1023 "yacc.yy"
+#line 1042 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_for, yyvsp[-6].node, yyvsp[-4].node, yyvsp[-2].node, yyvsp[0].node );
 	  ;
     break;}
 case 156:
-#line 1027 "yacc.yy"
+#line 1046 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_do, yyvsp[-2].node, yyvsp[-1].node );
 	  ;
     break;}
 case 157:
-#line 1031 "yacc.yy"
+#line 1050 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_if, yyvsp[-3].node, yyvsp[-1].node, yyvsp[0].node );
 	  ;
     break;}
 case 158:
-#line 1035 "yacc.yy"
+#line 1054 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_foreach, yyvsp[-2].node, yyvsp[0].node );
 	    yyval.node->setIdent( yyvsp[-4].ident );
 	  ;
     break;}
 case 159:
-#line 1040 "yacc.yy"
+#line 1059 "yacc.yy"
 {
 	    /* We set $9 twice to indicate thet this is the foreach for maps */
 	    yyval.node = new KSParseNode( t_foreach, yyvsp[-2].node, yyvsp[0].node, yyvsp[0].node );
@@ -2123,31 +2123,31 @@ case 159:
 	  ;
     break;}
 case 160:
-#line 1050 "yacc.yy"
+#line 1069 "yacc.yy"
 {
 	    yyval.node = NULL;
 	  ;
     break;}
 case 161:
-#line 1054 "yacc.yy"
+#line 1073 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_if, yyvsp[-3].node, yyvsp[-1].node, yyvsp[0].node );
 	  ;
     break;}
 case 162:
-#line 1058 "yacc.yy"
+#line 1077 "yacc.yy"
 {
 	    yyval.node = yyvsp[0].node;
 	  ;
     break;}
 case 163:
-#line 1065 "yacc.yy"
+#line 1084 "yacc.yy"
 {
 	    yyval.node = yyvsp[-1].node;
 	  ;
     break;}
 case 164:
-#line 1072 "yacc.yy"
+#line 1091 "yacc.yy"
 {
 	    yyval.node = new KSParseNode( t_scope, yyvsp[-1].node );
 	  ;
@@ -2350,7 +2350,7 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 1076 "yacc.yy"
+#line 1095 "yacc.yy"
 
 
 void kscriptParse( const char *_code, int extension )

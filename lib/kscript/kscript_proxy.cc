@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kscript_proxy.h"
 #include "kscript_struct.h"
 #include "kscript_util.h"
@@ -80,7 +99,7 @@ bool KSProxy::call( KSContext& context, const QString& name )
         QCString functions;
 	QDataStream stream( reply, IO_ReadOnly );
 	stream >> functions;
-	
+
 	m_supportsPropertyProxy = functions.contains( "property(QCString);" ) &&
 				  functions.contains( "setProperty(QCString,QVariant);" ) &&
 				  functions.contains( "propertyNames(bool);" );
@@ -117,7 +136,7 @@ bool KSProxy::call( KSContext& context, const QString& name )
 	    }
 	    else
   	      func += pack( context, str, *it );
-	
+
 	    if ( context.exception() )
 		return FALSE;
 	    first = FALSE;
@@ -169,7 +188,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
           {
 	      QValueList<KSValue::Ptr>::Iterator begin = v->listValue().begin();
 	      QValueList<KSValue::Ptr>::Iterator end = v->listValue().end();
-	
+
 	      QString ret2 = pack( context, str, *begin );
 	      if ( ret2.isEmpty() )
 		  return QString::null;
@@ -193,7 +212,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
           {
 	      QMap<QString,KSValue::Ptr>::Iterator begin = v->mapValue().begin();
 	      QMap<QString,KSValue::Ptr>::Iterator end = v->mapValue().end();
-	
+
 	      str << begin.key();
 	      QString ret2 = pack( context, str, begin.data() );
 	      if ( ret2.isEmpty() )
@@ -221,7 +240,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
 	return "DCOPRef";
     case KSValue::IntType:
 	str << (Q_INT32)v->intValue();
-	return "int";	
+	return "int";
     case KSValue::BoolType:
 	str << (Q_INT8)v->boolValue();
 	return "bool";
@@ -263,7 +282,7 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
       // TODO: Give error
       break;
     case KSValue::NTypes:
-      ASSERT( 0 );
+      Q_ASSERT( 0 );
     }
 
     return QString::null;

@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kscript_struct.h"
 #include "kscript_util.h"
 #include "kscript_object.h"
@@ -127,12 +146,12 @@ void KSBuiltinStructClass::addMethod( const QString& name, KSBuiltinStructClass:
 bool KSBuiltinStructClass::call( void* object, KSContext& context, const QString& name )
 {
     QMap<QString,Method>::Iterator it = m_methods.find( name );
-    ASSERT( it != m_methods.end() );
+    Q_ASSERT( it != m_methods.end() );
 
     if ( !it.data().m_signature.isNull() )
 	if ( !KSUtil::checkArgs( context, it.data().m_signature, name, TRUE ) )
 	    return FALSE;
-    
+
     return it.data().m_method( object, context, context.value()->listValue() );
 }
 
@@ -202,7 +221,7 @@ bool KSBuiltinStruct::setMember( KSContext& context, const QString& name, const 
 	context.setException( new KSException( "ReadOnly", tmp.arg( name ).arg( getClass()->name() ) ) );
 	return FALSE;
     }
-	
+
     return TRUE;
 }
 

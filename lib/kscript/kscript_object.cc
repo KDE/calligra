@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kscript_object.h"
 #include "kscript_struct.h"
 #include "kscript_util.h"
@@ -53,7 +72,7 @@ bool KSObject::destructor()
     disconnect();
 
     m_status = Dead;
-	
+
     return true;
 }
 
@@ -249,19 +268,19 @@ KSObject::SignalList* KSObject::findSignal( const QString& name, bool _insert )
 
 bool KSObject::emitSignal( const QString& name, KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::ListType );
+  Q_ASSERT( context.value() && context.value()->type() == KSValue::ListType );
 
   SignalList* l = findSignal( name );
   // Nobody registered for that signal until now
   if ( !l )
     return true;
-  
+
   // Remove our namespaces
   KSSubScope* scope = context.scope()->popLocalScope();
 
   // Save the parameters
   QValueList<KSValue::Ptr> params = context.value()->listValue();
-  
+
   SignalList::Iterator it = l->begin();
   for( ; it != l->end(); ++it )
   {
@@ -320,7 +339,7 @@ bool KSObject::setMember( KSContext&, const QString& name, const KSValue::Ptr& v
 {
     // If no such member is present then it is created
     KSValue* x = m_scope.object( name, true );
-    ASSERT( x );
+    Q_ASSERT( x );
     *x = *v;
 
     return true;
@@ -421,7 +440,7 @@ bool KSScriptObject::destructor()
 	}
       }
       else
-	ASSERT( 0 );
+	Q_ASSERT( 0 );
     }
   }
 
@@ -444,7 +463,7 @@ KSScriptObject::~KSScriptObject()
 
 bool KSMethod::call( KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::ListType );
+  Q_ASSERT( context.value() && context.value()->type() == KSValue::ListType );
 
   if ( m_func->type() == KSValue::FunctionType )
   {
@@ -496,7 +515,7 @@ bool KSProperty::set( KSContext& context, const KSValue::Ptr& v )
     else if ( m_module )
 	return m_module->setMember( context, m_name, v );
     else
-	ASSERT( 0 );
+	Q_ASSERT( 0 );
 
     // Never reached
     return false;
