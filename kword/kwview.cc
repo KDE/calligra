@@ -5653,6 +5653,8 @@ void KWView::editFrameSet()
     if ( m_gui->getDocStruct() )
     {
         m_gui->getDocStruct()->editFrameSet();
+        //return focus to canvas.
+        m_gui->canvasWidget()->setFocus();
     }
 }
 
@@ -5698,7 +5700,7 @@ void KWView::insertFile(const QString & path)
         m_doc->loadPictureMap( word );
         hasPictures=true; // ### TODO: we should be smarter!
         // <PIXMAPS>
-        
+
         QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
         if ( !framesets.isNull() )
         {
