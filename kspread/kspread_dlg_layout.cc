@@ -795,7 +795,7 @@ else if(time->isChecked())
         else
                 listFormat->setCurrentItem(0);
         }
-if( date->isChecked())
+if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
 else
         makeformat();

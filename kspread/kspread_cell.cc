@@ -925,10 +925,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     else if( isTime() )
     {
         m_strOutText=createTimeFormat();
-        /*if( m_eFormatNumber == Time )
-	    m_strOutText = KGlobal::locale()->formatTime(m_Time,false);
-	else if(m_eFormatNumber == SecondeTime )
-	    m_strOutText = KGlobal::locale()->formatTime(m_Time,true);*/
     }
     else if ( isValue()  )
     {
