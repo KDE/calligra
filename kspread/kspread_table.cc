@@ -7037,8 +7037,8 @@ void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
         kdDebug() << "Error inserting child!" << endl;
         return;
     }
-
-    doc->initDoc();
+    if ( !doc->initDoc() )
+        return;
 
     KSpreadChild* ch = new KSpreadChild( m_pDoc, this, doc, _rect );
 
