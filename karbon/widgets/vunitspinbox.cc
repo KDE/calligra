@@ -116,6 +116,21 @@ VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
+bool
+VUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
+{
+	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
+	{
+		bool ok;
+		double value = text().replace( ',', "." ).toDouble( &ok );
+		changeValue( value );
+		return false;
+	}
+	else
+		return QLineEdit::eventFilter( o, ev );
+}
+
+
 
 VUnitDoubleComboBox::VUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
 	: QComboBox( true, parent, name ), VUnitDoubleBase( precision ), m_value( value )
