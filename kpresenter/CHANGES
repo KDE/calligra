@@ -13,3 +13,7 @@ Reggie, 19.1.1999:
 ------------------
 - Hack to avoid this problem with the last inserted toolbar => last toolbar is on the correct place now from the beginning on
 - Fixed (or worked around :-) the strange bug when saving embedded objects
+
+Reggie, 21.1.1999:
+------------------
+- KPresenter doesn't eat all the CPU anymore after inserting some pages

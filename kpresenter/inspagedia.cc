@@ -69,8 +69,8 @@ InsPageDia::InsPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
   ok->setDefault(true);
   ok->resize(cancel->size());
   ok->move(cancel->x() - ok->width() - 10,cancel->y());
-  connect(ok,SIGNAL(clicked()),this,SLOT(okClicked()));
   connect(ok,SIGNAL(clicked()),this,SLOT(accept()));
+  connect(ok,SIGNAL(clicked()),this,SLOT(okClicked()));
 
   resize(cancel->x() + cancel->width() + 20,cancel->y() + cancel->height() + 20);
   uncheckAllPos();
