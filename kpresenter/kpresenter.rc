@@ -148,7 +148,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_object"/>
 </ToolBar>
-<ToolBar name="textToolBar"" position="bottom">
+<ToolBar name="textToolBar" position="bottom">
   <Action name="text_fontsize"/>
   <Action name="text_fontfamily"/>
   <Separator/>
