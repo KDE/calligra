@@ -183,8 +183,8 @@ extern QColor* GDCPIE_EdgeColor; /* edging on/off */
 
 extern char	GDCPIE_other_threshold;
 extern char *GDCPIE_title;		/* NLs ok here */
-extern int GDCPIE_label_dist;		/* 1+GDC_fontc[GDCPIE_label_size].h/2 */
-extern unsigned char GDCPIE_label_line;		/* from label to slice */
+
+
 
 extern int *GDCPIE_explode;	/* [num_points] */
 /* [num_points] supercedes GDCPIE_PlotColor */

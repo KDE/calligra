@@ -67,14 +67,20 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 void KChartView::createTempData()
 {
     int row, col;
+    int nbrow,nbcol;
+    
     KChartData *dat = ((KChartPart*)part())->data();
 
     // initialize some data, if there is none
-    if (dat->rows() == 0) {
+    nbrow=4;
+    nbcol=4;
+    if (dat->rows() == 0) 
+    {
 	cerr << "Initialize with some data!!!\n";
 	dat->expand(4,4);
-	for (row = 0;row < 4;row++)
-	    for (col = 0;col < 4;col++) {
+	for (row = 0;row < nbrow;row++)
+	    for (col = 0;col < nbcol;col++) 
+	    {
 		//	  _widget->fillCell(row,col,row+col);
 		KChartValue t; 
 		t.exists= true;
@@ -84,6 +90,21 @@ void KChartView::createTempData()
 	    }
 	//      _dlg->exec();
     }
+    //init for pie chart
+    
+    KChartParameters* params=((KChartPart*)part())->params();
+    QArray<int>tmp(nbrow);
+    QArray<bool>tmpbool(nbrow);
+    for (col = 0;col < nbrow;col++) 
+    	{
+    	
+    	tmp[col]=0;
+    	tmpbool[col]=FALSE;
+    	}
+    	tmp[0]=50;
+    	tmpbool[0]=TRUE;
+    params->explode=tmp;
+    params->missing=tmpbool;
 }
 
 

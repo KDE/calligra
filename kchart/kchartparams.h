@@ -126,6 +126,7 @@ struct KChartParameters
     bool threeD();
     bool has_hlc_sets();
     bool has_yaxis2();
+    bool isPie();
     
     void saveConfig(KConfig *conf);
     void loadConfig(KConfig *conf);

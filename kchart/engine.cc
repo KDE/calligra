@@ -112,33 +112,40 @@ int kchartEngine::out_graph() {
     qDebug( "Title text is coming" );   
     titleText();
     qDebug( "start drawing, first the grids" );
-    drawGridAndLabels(do_ylbl_fractions);
-    qDebug("more advanced grids");
+    if(!params->isPie())
+    	{
+    	drawGridAndLabels(do_ylbl_fractions);
+    	qDebug("more advanced grids");
+    	}
     /* interviening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */
-    if( params->grid && params->threeD() ) {
+    if( params->grid && params->threeD() && !params->isPie()) 
+    {
       qDebug("drawing 3d grids");
       draw3DGrids();
     }
     if( ( params->grid || params->shelf ) && /* line color grid at 0 */
 		( (lowest < 0.0 && highest > 0.0) ||
-		  (lowest < 0.0 && highest > 0.0) ) ) {
+		  (lowest < 0.0 && highest > 0.0) ) && !params->isPie()) {
       qDebug("drawing shelf grids");
       drawShelfGrids();
     }
     /* x ticks and xlables */
-    if( params->grid || params->xaxis )	{
-      // qDebug("drawing  x ticks and xlabels");
+    if( (params->grid || params->xaxis) &&!params->isPie() )	
+    {
+    
+      //qDebug("drawing  x ticks and xlabels");
       // Commented out because it is prone to math error
-      //      drawXTicks();
+        //    drawXTicks();
     }
     /* ----- solid poly region (volume) ----- */
     /*  so that grid lines appear under solid */
-    if( params->do_vol() ) {
+    if( params->do_vol() && !params->isPie() ) {
       qDebug("Doing volume grids");
       drawVolumeGrids();
     }		// volume polys done
-    if( params->annotation && params->threeD() ) {		/* back half of annotation line */
+    if( params->annotation && params->threeD() &&!params->isPie()) 
+    {		/* back half of annotation line */
       qDebug("drawing 3d annotation");
       draw3DAnnotation();
     }
@@ -146,29 +153,34 @@ int kchartEngine::out_graph() {
     qDebug("drawing the data!!!");
     drawData();
     setno = 0;
-    if( params->scatter ) {
+    if( params->scatter && !params->isPie()) 
+    {
       qDebug("scatter");
       drawScatter();
     }
     // overlay with a value and an arrow (e.g., total daily change)    
-    if( params->thumbnail ) {
+    if( params->thumbnail ) 
+    {
       qDebug("scatter");
       drawThumbnails();
     }
     /* box it off */
     /*  after plotting so the outline covers any plot lines */
-    if (params->border) {
+    if (params->border && !params->isPie()) 
+    {
       qDebug("scatter");
       drawBorder();
     }
 
     if( params->shelf && params->threeD() &&								/* front of 0 shelf */
 	( (lowest < 0.0 && highest > 0.0) ||
-	  (lowest < 0.0 && highest > 0.0) ) ) {
-      draw3DShelf();
-    }
+	  (lowest < 0.0 && highest > 0.0) ) &&!params->isPie())
+	   {
+      	   draw3DShelf();
+    	   }
     
-    if (params->annotation) {
+    if (params->annotation && !params->isPie()) 
+    {
       qDebug("Draw annotation");
       drawAnnotation();
     }    

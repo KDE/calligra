@@ -102,6 +102,14 @@ bool KChartParameters::threeD() {
   return val;
 }
 
+bool KChartParameters::isPie() 
+{
+  bool val = ( type == KCHARTTYPE_2DPIE ||
+	  	type == KCHARTTYPE_3DPIE );
+  return val;
+}
+
+
 bool KChartParameters::has_hlc_sets() {
   bool val =
 		( type == KCHARTTYPE_COMBO_HLC_BAR   ||

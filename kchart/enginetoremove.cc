@@ -14,9 +14,6 @@ char GDC_yval_style		= TRUE;
 char *GDC_thumblabel;
 float GDC_thumbval		= -MAXFLOAT;
 char *GDC_BGImage;
-char *GDCPIE_title = 0;		/* NLs ok here */
-int	GDCPIE_label_dist = 1+8/2;		/* 1+GDC_fontc[GDCPIE_label_size].h/2 */
-unsigned char GDCPIE_label_line = false;		/* from label to slice */
 int	*GDCPIE_explode = 0;	/* [num_points] */
 unsigned char *GDCPIE_missing = 0;	/* TRUE/FALSE */
 
@@ -47,6 +44,10 @@ QColor* GDCPIE_LineColor;
 QColor* GDCPIE_EdgeColor; /* edging on/off */
 /* [num_points] supercedes GDCPIE_PlotColor */
 QColor *GDCPIE_Color( 0 );
+char *GDCPIE_title = 0;		/* NLs ok here */
+int	GDCPIE_label_dist = 1+8/2;		/* 1+GDC_fontc[GDCPIE_label_size].h/2 */
+unsigned char GDCPIE_label_line = false;		/* from label to slice */
+
 #endif // probably not needed
 
 #ifdef WE_MIGHT_NEED_THIS_LATER_BETTER_NOT_DELETE_IT_NOW

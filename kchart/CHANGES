@@ -37,3 +37,10 @@ But Pb for writing % in label for the moment it's not good
 ------------------------------------------------------
 -Add new page for config chart : Parameter page
 -Bug fix
+
+2000-01-15 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Add new page for config pie chart
+-Pie chart works a lot but not for add in kchart for the moment
+=> when you click on PIE3D or PIE2D =>you look at anythink
+-bug fix.

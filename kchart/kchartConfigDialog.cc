@@ -26,9 +26,16 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     _colorpage = new KChartColorConfigPage( this );
     addTab( _colorpage, i18n( "&Colors" ) );
     
-    _parameterpage = new KChartParameterConfigPage(_params,this );
-    addTab( _parameterpage, i18n( "&Parameter" ) );
-
+    if(!_params->isPie())
+    	{
+    	_parameterpage = new KChartParameterConfigPage(_params,this );
+    	addTab( _parameterpage, i18n( "&Parameter" ) );
+	}
+    else
+    	{
+    	_parameterpiepage = new KChartParameterPieConfigPage(_params,this );
+    	addTab( _parameterpiepage, i18n( "&Parameter" ) );
+    	}	
     //init
     defaults();
 	// setup buttons
@@ -59,7 +66,10 @@ void KChartConfigDialog::apply()
     _params->YLabel2Color = _colorpage->yLabel2Color();
     _params->EdgeColor = _colorpage->edgeColor();
     
-    _parameterpage->apply();
+    if(!_params->isPie())
+    	_parameterpage->apply();
+    else
+    	_parameterpiepage->apply();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
 }
@@ -84,7 +94,10 @@ void KChartConfigDialog::defaults()
     _colorpage->setYLabel2Color( _params->YLabel2Color );
     _colorpage->setEdgeColor( _params->EdgeColor );
     
-    _parameterpage->init();
+    if(!_params->isPie())
+    	_parameterpage->init();
+    else
+    	_parameterpiepage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
 }

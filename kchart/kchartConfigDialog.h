@@ -10,6 +10,7 @@
 #include <qtabdialog.h>
 #include "kchartColorConfigPage.h"
 #include "kchartParameterConfigPage.h"
+#include "kchartParameterPieConfigPage.h"
 #include "kchartGeometryConfigPage.h"
 #include "kchartparams.h"
 
@@ -27,7 +28,7 @@ protected:
     KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
     KChartParameterConfigPage*_parameterpage; 
-
+    KChartParameterPieConfigPage*_parameterpiepage; 
 protected slots:
     virtual void apply();
     virtual void defaults();
