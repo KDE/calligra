@@ -26,11 +26,22 @@
 BasicElement::BasicElement(BasicElement* p)
     : parent(p)
 {
+    relativeSize = -1;
 }
 
 BasicElement::~BasicElement()
 {
 }
+
+ostream& BasicElement::output(ostream& stream)
+{
+    return stream << "BasicElement: "
+                  << position.x() << ", "
+                  << position.y() << ", "
+                  << size.width() << ", "
+                  << size.height();
+}
+
 
 /**
  * Returns the element the point is in.

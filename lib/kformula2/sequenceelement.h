@@ -155,6 +155,9 @@ public:
     virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
 
     //BasicElement* getChildAt(int pos);
+
+    // debug
+    virtual ostream& output(ostream&);
     
 private:
 

@@ -78,6 +78,9 @@ public:
      */
     virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
 
+    // debug
+    virtual ostream& output(ostream&);
+    
 private:
 
     /**

@@ -18,31 +18,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __FORMULAELEMENT_H
-#define __FORMULAELEMENT_H
+#ifndef __KFORMULACONTAINER_H
+#define __KFORMULACONTAINER_H
 
-// Formula include
-#include "sequenceelement.h"
+#include <qobject.h>
+
+#include "contextstyle.h"
+#include "formulaelement.h"
 
 class BasicElement;
-class ContextStyle;
-class KFormulaContainer;
+class FormulaCursor;
+class QKeyEvent;
+class QPainter;
 
 
-/**
- * The main element.
- * A formula consists of a FormulaElement and its children.
- * The only element that has no parent.
- */
-class FormulaElement : public SequenceElement {
+class KFormulaContainer : public QObject {
+    Q_OBJECT
+
 public:
 
-    FormulaElement(KFormulaContainer* container);
+    KFormulaContainer();
+    ~KFormulaContainer();
 
     /**
-     * Provide fast access to the rootElement for each child.
+     * Returns a new cursor. It points to the beginning of the
+     * formula.
      */
-    virtual FormulaElement* formula() { return this; }
+    FormulaCursor* createCursor();
+
+    /**
+     * Destroys the cursor. It must not be used afterwards.
+     */
+    void destroyCursor(FormulaCursor*);
 
     /**
      * Gets called just before the child is removed from
@@ -57,26 +64,42 @@ public:
     void changed();
 
     /**
-     * Calculates the formulas sizes and positions.
-     */
-    void calcSizes(ContextStyle& context);
-    
-    /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter, ContextStyle& context);
+    void draw(QPainter& painter);
+
+    /**
+     * One of our view got a key.
+     */
+    void keyPressEvent(FormulaCursor* cursor, QKeyEvent* event);
+
+    
+signals:
+
+    /**
+     * The formula has changed and needs to be redrawn.
+     */
+    void formulaChanged();
+
     
 private:
 
+    void testDirty();
+    
     /**
-     * The document that owns this formula.
+     * The element tree's root.
      */
-    KFormulaContainer* document;
+    FormulaElement rootElement;
 
     /**
-     * The root element has to know its size.
+     * The style that should be used to draw the formula.
      */
-    int size;
+    ContextStyle context;
+
+    /**
+     * If true we need to recalc the formula.
+     */
+    bool dirty;
 };
 
-#endif // __FORMULAELEMENT_H
+#endif // __KFORMULACONTAINER_H

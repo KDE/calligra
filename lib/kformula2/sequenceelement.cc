@@ -18,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
+
 #include <qpainter.h>
 
 #include "formulacursor.h"
@@ -34,6 +36,19 @@ SequenceElement::SequenceElement(BasicElement* parent)
 
 SequenceElement::~SequenceElement()
 {
+}
+
+ostream& SequenceElement::output(ostream& stream)
+{
+    stream << "SequenceElement {\n";
+    BasicElement::output(stream) << endl;
+    uint count = children.count();
+    for (uint i = 0; i < count; i++) {
+        children.at(i)->output(stream);
+        stream << '\n';
+    }
+    stream << '}';
+    return stream;
 }
 
 
@@ -166,9 +181,11 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
         painter.setRasterOp(Qt::CopyROP);
     }
     else {
-        painter.setPen(Qt::blue);
+        painter.setRasterOp(Qt::XorROP);
+        painter.setPen(Qt::white);
         painter.drawLine(point.x()+posX, point.y()-2,
                          point.x()+posX, point.y()+height+2);
+        painter.setRasterOp(Qt::CopyROP);
     }
 }
 
@@ -440,8 +457,9 @@ void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
 {
     BasicElement* child = children.at(pos);
     formula()->elementRemoval(child);
-    children.remove(pos);
+    children.take(pos);
     removedChildren.append(child);
+    //cerr << *removedChildren.at(0) << endl;
     formula()->changed();
 }
 

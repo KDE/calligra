@@ -191,7 +191,10 @@ public:
     void moveToUpperRight(FormulaCursor* cursor, Direction direction);
     void moveToLowerLeft(FormulaCursor* cursor, Direction direction);
     void moveToLowerRight(FormulaCursor* cursor, Direction direction);
-    
+
+    // debug
+    virtual ostream& output(ostream&);
+
 private:
 
     /**

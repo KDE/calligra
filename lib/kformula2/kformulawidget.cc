@@ -20,39 +20,46 @@
 
 #include <qpainter.h>
 
-#include "contextstyle.h"
-#include "formulaelement.h"
+#include "formulacursor.h"
 #include "kformulacontainer.h"
+#include "kformulawidget.h"
 
 
-FormulaElement::FormulaElement(KFormulaContainer* container)
-    : document(container)
+KFormulaWidget::KFormulaWidget(KFormulaContainer* doc)
+    : QWidget(), document(doc)
 {
+    cursor = document->createCursor();
+
+    connect(document, SIGNAL(formulaChanged()), this, SLOT(formulaChanged()));
 }
 
-void FormulaElement::elementRemoval(BasicElement* child)
+KFormulaWidget::~KFormulaWidget()
 {
-    document->elementRemoval(child);
-}
-
-void FormulaElement::changed()
-{
-    document->changed();
+    document->destroyCursor(cursor);
 }
 
 
-/**
- * Calculates the formulas sizes and positions.
- */
-void FormulaElement::calcSizes(ContextStyle& context)
+void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
-    SequenceElement::calcSizes(context, size);
+    QPainter painter;
+    painter.begin(this);
+    document->draw(painter);
+    cursor->draw(painter);
+    painter.end();
 }
 
-/**
- * Draws the whole thing.
- */
-void FormulaElement::draw(QPainter& painter, ContextStyle& context)
+void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 {
-    SequenceElement::draw(painter, context, size, QPoint());
+    QPainter painter;
+    painter.begin(this);
+    cursor->draw(painter);
+    document->keyPressEvent(cursor, event);
+    cursor->draw(painter);
+    painter.end();
+}
+
+
+void KFormulaWidget::formulaChanged()
+{
+    update();
 }

@@ -18,41 +18,40 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
+#ifndef __KFORMULAWIDGET_H
+#define __KFORMULAWIDGET_H
 
-#include "contextstyle.h"
-#include "formulaelement.h"
-#include "kformulacontainer.h"
+#include <qwidget.h>
 
-
-FormulaElement::FormulaElement(KFormulaContainer* container)
-    : document(container)
-{
-}
-
-void FormulaElement::elementRemoval(BasicElement* child)
-{
-    document->elementRemoval(child);
-}
-
-void FormulaElement::changed()
-{
-    document->changed();
-}
+class FormulaCursor;
+class KFormulaContainer;
 
 
-/**
- * Calculates the formulas sizes and positions.
- */
-void FormulaElement::calcSizes(ContextStyle& context)
-{
-    SequenceElement::calcSizes(context, size);
-}
+class KFormulaWidget : public QWidget {
+    Q_OBJECT
 
-/**
- * Draws the whole thing.
- */
-void FormulaElement::draw(QPainter& painter, ContextStyle& context)
-{
-    SequenceElement::draw(painter, context, size, QPoint());
-}
+public:
+    KFormulaWidget(KFormulaContainer*);
+    ~KFormulaWidget();
+
+protected:
+//     virtual void mousePressEvent ( QMouseEvent * );
+//     virtual void mouseReleaseEvent ( QMouseEvent * );
+//     virtual void mouseDoubleClickEvent ( QMouseEvent * );
+//     virtual void mouseMoveEvent ( QMouseEvent * );
+//     virtual void wheelEvent ( QWheelEvent * );
+
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event);
+
+protected slots:
+
+    void formulaChanged();
+    
+private:
+
+    KFormulaContainer* document;
+    FormulaCursor* cursor;
+};
+
+#endif // __KFORMULAWIDGET_H

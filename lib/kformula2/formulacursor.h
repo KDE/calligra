@@ -60,6 +60,7 @@ public:
 
     /**
      * Draws the cursor at its current position.
+     * The cursor will always be drawn in xor mode.
      */
     void draw(QPainter&);
 

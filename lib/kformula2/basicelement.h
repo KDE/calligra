@@ -21,6 +21,8 @@
 #ifndef __BASICELEMENT_H
 #define __BASICELEMENT_H
 
+#include <iostream>
+
 // Qt Include
 #include <qlist.h>
 #include <qpoint.h>
@@ -231,6 +233,9 @@ public:
 
     int getMidline() const { return midline; }
 
+
+    // debug
+    virtual ostream& output(ostream&);
     
 protected:
 

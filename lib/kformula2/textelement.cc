@@ -35,6 +35,13 @@ TextElement::TextElement(QChar ch, BasicElement* parent)
 }
 
 
+ostream& TextElement::output(ostream& stream)
+{
+    stream << "TextElement: " << character << ", ";
+    BasicElement::output(stream);
+    return stream;
+}
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.
