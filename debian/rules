@@ -96,8 +96,22 @@ install-stamp: build
 	mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
 		$(tmp)/usr/lib/kivio/libstraight_connector.so
 
-	# Generate HTML docs.
+	# Generate HTML docs from secondary docbook files (not index.docbook).
 	for i in `find $(tmp) -name "*.docbook"`; do \
+	  case "$$i" in \
+	    */index.docbook ) \
+	    ;; \
+	    * ) \
+	      pushd . > /dev/null; cd `dirname $$i`; \
+	      meinproc `basename $$i`; \
+	      popd > /dev/null; \
+	    ;; \
+	  esac; \
+	done
+
+	# Run this again for index.docbook files to ensure index.html
+	# reflects the correct set of chapter headings.
+	for i in `find $(tmp) -name "index.docbook"`; do \
 	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
 	  popd > /dev/null; done
 
