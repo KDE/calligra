@@ -24,14 +24,17 @@
 KWTextFormatCollection::KWTextFormatCollection( KWDocument * doc )
     : QTextFormatCollection(), m_cachedFormat( 0L )
 {
+    kdDebug() << "KWTextFormatCollection::KWTextFormatCollection" << endl;
+    //kdDebug() << "Deleting default format " << defaultFormat() << endl;
     delete defaultFormat();
 
     QColor color = QApplication::palette().color( QPalette::Active, QColorGroup::Text );
-    setDefaultFormat( format( doc->defaultFont(), color ) /* this inserts it in the dict as well */ );
+    setDefaultFormat( new KWTextFormat( doc->defaultFont(), color, 0L /* no coll, for no refcounting */ ) );
 }
 
-QTextFormat *KWTextFormatCollection::format( const QFont &f, const QColor &c )
+QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
 {
+    //kdDebug() << "KWTextFormatCollection::format font, color " << endl;
     if ( m_cachedFormat && m_cfont == f && m_ccol == c ) {
         m_cachedFormat->addRef();
         return m_cachedFormat;
@@ -59,7 +62,6 @@ void KWTextFormatCollection::remove( QTextFormat *f )
     kdDebug() << "KWTextFormatCollection::remove " << f << endl;
     if ( m_cachedFormat == f )
         m_cachedFormat = 0;
-    assert( defaultFormat() != f ); // well if this happens, the refcounting's busted !
     QTextFormatCollection::remove( f );
 }
 
