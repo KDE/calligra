@@ -81,16 +81,37 @@ void Border::save( QDomElement & elem )
     elem.setAttribute("width", ptWidth);
 }
 
-Border::BorderStyle Border::getStyle(const QString &style) {
-    if ( style == i18n( "dash line ( ---- )" ) )
+Border::BorderStyle Border::getStyle( const QString &style )
+{
+    if ( style == "___ ___ __" )
         return Border::DASH;
-    if ( style == i18n( "dot line ( **** )" ) )
+    if ( style == "_ _ _ _ _ _" )
         return Border::DOT;
-    if ( style == i18n( "dash dot line ( -*-* )" ) )
+    if ( style == "___ _ ___ _" )
         return Border::DASH_DOT;
-    if ( style == i18n( "dash dot dot line ( -**- )" ) )
+    if ( style == "___ _ _ ___" )
         return Border::DASH_DOT_DOT;
 
     // default
     return Border::SOLID;
+}
+
+QString Border::getStyle( const BorderStyle &style )
+{
+    switch ( style )
+    {
+    case Border::SOLID:
+        return "_________";
+    case Border::DASH:
+        return "___ ___ __";
+    case Border::DOT:
+        return "_ _ _ _ _ _";
+    case Border::DASH_DOT:
+        return "___ _ ___ _";
+    case Border::DASH_DOT_DOT:
+        return "___ _ _ ___";
+    }
+
+    // Keep compiler happy.
+    return "_________";
 }

@@ -40,7 +40,8 @@ public:
     static Border loadBorder( const QDomElement & elem );
     void save( QDomElement & elem );
     static QPen borderPen( const Border & _brd );
-    static BorderStyle getStyle(const QString &style);
+    static BorderStyle getStyle( const QString &style );
+    static QString getStyle( const BorderStyle &style );
 };
 
 #endif

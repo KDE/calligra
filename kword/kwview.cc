@@ -472,11 +472,11 @@ void KWView::setupActions()
     connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
              this, SLOT( borderStyle( const QString & ) ) );
     lst.clear();
-    lst << "_________";
-    lst << "___ ___ __";
-    lst << "_ _ _ _ _ _";
-    lst << "___ _ ___ _";
-    lst << "___ _ _ ___";
+    lst << Border::getStyle( Border::SOLID );
+    lst << Border::getStyle( Border::DASH );
+    lst << Border::getStyle( Border::DOT );
+    lst << Border::getStyle( Border::DASH_DOT );
+    lst << Border::getStyle( Border::DASH_DOT_DOT );
     actionBorderStyle->setItems( lst );
     actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
                                                  actionCollection(), "border_width" );
@@ -2288,16 +2288,7 @@ void KWView::borderWidth( const QString &width )
 /*================================================================*/
 void KWView::borderStyle( const QString &style )
 {
-    if ( style == "_________" )
-        m_border.common.style = Border::SOLID;
-    else if ( style == "___ ___ __" )
-        m_border.common.style = Border::DASH;
-    else if ( style == "_ _ _ _ _ _" )
-        m_border.common.style = Border::DOT;
-    else if ( style == "___ _ ___ _" )
-        m_border.common.style = Border::DASH_DOT;
-    else if ( style == "___ _ _ ___" )
-        m_border.common.style = Border::DASH_DOT_DOT;
+    m_border.common.style = Border::getStyle( style );
     m_border.left.style = m_border.common.style;
     m_border.right.style = m_border.common.style;
     m_border.top.style = m_border.common.style;

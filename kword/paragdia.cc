@@ -620,11 +620,11 @@ void KWParagDia::setupTab3()
     grid->addWidget( lStyle, 0, 0 );
 
     cStyle = new QComboBox( false, tab );
-    cStyle->insertItem( i18n( "solid line" ) );
-    cStyle->insertItem( i18n( "dash line ( ---- )" ) );
-    cStyle->insertItem( i18n( "dot line ( **** )" ) );
-    cStyle->insertItem( i18n( "dash dot line ( -*-* )" ) );
-    cStyle->insertItem( i18n( "dash dot dot line ( -**- )" ) );
+    cStyle->insertItem( Border::getStyle( Border::SOLID ) );
+    cStyle->insertItem( Border::getStyle( Border::DASH ) );
+    cStyle->insertItem( Border::getStyle( Border::DOT ) );
+    cStyle->insertItem( Border::getStyle( Border::DASH_DOT ) );
+    cStyle->insertItem( Border::getStyle( Border::DASH_DOT_DOT ) );
     grid->addWidget( cStyle, 1, 0 );
     connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
