@@ -117,6 +117,7 @@ KWordDocument::KWordDocument()
 /*================================================================*/
 CORBA::Boolean KWordDocument::initDoc()
 {
+    pageLayout = KoPageLayoutDia::standardLayout();
     pageLayout.unit = PG_MM;
     pages = 1;
 
@@ -134,6 +135,8 @@ CORBA::Boolean KWordDocument::initDoc()
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
+
+#if 0
     QString _template;
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, true, false );
@@ -159,6 +162,238 @@ CORBA::Boolean KWordDocument::initDoc()
 	return false;
 
     return false;
+#endif
+
+    
+    // ----------------------------- remove from here
+    _loaded = true;
+    pixmapKeys.clear();
+    imageRequests.clear();
+    imageRequests2.clear();
+
+    pageLayout.unit = PG_MM;
+    pageColumns.columns = 1; //STANDARD_COLUMNS;
+    pageColumns.ptColumnSpacing = STANDARD_COLUMN_SPACING;
+    pageColumns.mmColumnSpacing = POINT_TO_MM( STANDARD_COLUMN_SPACING );
+    pageColumns.inchColumnSpacing = POINT_TO_INCH( STANDARD_COLUMN_SPACING );
+
+    pageHeaderFooter.header = HF_SAME;
+    pageHeaderFooter.footer = HF_SAME;
+    pageHeaderFooter.ptHeaderBodySpacing = 10;
+    pageHeaderFooter.ptFooterBodySpacing = 10;
+    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
+    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
+    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
+
+    defaultUserFont = findUserFont( "times" );
+    defaultParagLayout = new KWParagLayout( this );
+    defaultParagLayout->setName( "Standard" );
+    defaultParagLayout->setCounterType( KWParagLayout::CT_NONE );
+    defaultParagLayout->setCounterDepth( 0 );
+
+    KWFormat f( this );
+    f.setUserFont( findUserFont( "helvetica" ) );
+    f.setWeight( 75 );
+    f.setPTFontSize( 24 );
+    KWParagLayout *lay = new KWParagLayout( this );
+    lay->setName( "Head 1" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NUM );
+    lay->setCounterDepth( 0 );
+    lay->setStartCounter( "1" );
+    lay->setCounterRightText( "." );
+    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
+    lay->setFormat( f );
+
+    f.setPTFontSize( 16 );
+    lay = new KWParagLayout( this );
+    lay->setName( "Head 2" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NUM );
+    lay->setCounterDepth( 1 );
+    lay->setStartCounter( "1" );
+    lay->setCounterRightText( "." );
+    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
+    lay->setFormat( f );
+
+    f.setPTFontSize( 12 );
+    lay = new KWParagLayout( this );
+    lay->setName( "Head 3" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NUM );
+    lay->setCounterDepth( 2 );
+    lay->setStartCounter( "1" );
+    lay->setCounterRightText( "." );
+    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
+    lay->setFormat( f );
+
+    lay = new KWParagLayout( this );
+    lay->setName( "Enumerated List" );
+    lay->setFollowingParagLayout( "Enumerated List" );
+    lay->setCounterType( KWParagLayout::CT_NUM );
+    lay->setCounterDepth( 0 );
+    lay->setStartCounter( "1" );
+    lay->setCounterRightText( "." );
+    lay->setNumberingType( KWParagLayout::NT_LIST );
+
+    lay = new KWParagLayout( this );
+    lay->setName( "Alphabetical List" );
+    lay->setFollowingParagLayout( "Alphabetical List" );
+    lay->setCounterType( KWParagLayout::CT_ALPHAB_L );
+    lay->setCounterDepth( 0 );
+    lay->setStartCounter( "a" );
+    lay->setCounterRightText( " )" );
+    lay->setNumberingType( KWParagLayout::NT_LIST );
+
+    lay = new KWParagLayout( this );
+    lay->setName( "Bullet List" );
+    lay->setFollowingParagLayout( "Bullet List" );
+    lay->setCounterType( KWParagLayout::CT_BULLET );
+    lay->setCounterDepth( 0 );
+    lay->setStartCounter( "1" );
+    lay->setCounterRightText( "" );
+    lay->setNumberingType( KWParagLayout::NT_LIST );
+
+    if (true /*no variable formats were loaded*/)
+    {
+	varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
+	varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
+	varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
+	varFormats.insert( VT_TIME_VAR, new KWVariableTimeFormat() );
+	varFormats.insert( VT_PGNUM, new KWVariablePgNumFormat() );
+	// ... and so on ...
+    }
+
+    pages = 1;
+
+    KoPageLayout __pgLayout;
+    __pgLayout.unit = PG_MM;
+    KoColumns __columns;
+    KoKWHeaderFooter __hf;
+    __hf.header = HF_SAME;
+    __hf.footer = HF_SAME;
+    __hf.ptHeaderBodySpacing = 10;
+    __hf.ptFooterBodySpacing = 10;
+    __hf.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    __hf.mmFooterBodySpacing = POINT_TO_MM( 10 );
+    __hf.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
+    __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
+
+    frames.clear();
+    
+    KWTextFrameSet *t = new KWTextFrameSet( this );
+    KWFrame *frm = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+				getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),
+				getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() );
+    t->addFrame( frm );
+    KWParag *pa = new KWParag( t, this, 0, 0, defaultParagLayout );
+    pa->insertText( 0, " " );
+    pa->setFormat( 0, 1, *defaultParagLayout->getFormat() );
+    frames.append( t );
+    
+    switch ( KWUnit::unitType( unit ) ) {
+    case U_MM: __pgLayout.unit = PG_MM;
+	break;
+    case U_PT: __pgLayout.unit = PG_PT;
+	break;
+    case U_INCH: __pgLayout.unit = PG_INCH;
+	break;
+    }
+    //setPageLayout( __pgLayout, __columns, __hf );
+
+    bool _first_footer = false, _even_footer = false, _odd_footer = false;
+    bool _first_header = false, _even_header = false, _odd_header = false;
+    bool _footnotes = false;
+
+    for ( unsigned int k = 0; k < getNumFrameSets(); k++ ) {
+	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER ) _first_header = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER ) _odd_header = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER ) _even_header = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER ) _first_footer = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER ) _odd_footer = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER ) _even_footer = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_FOOTNOTE ) _footnotes = true;
+    }
+
+    if ( !_first_header ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_FIRST_HEADER );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	fs->addFrame( frame );
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( false );
+    }
+
+    if ( !_even_header ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_EVEN_HEADER );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	fs->addFrame( frame );
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( false );
+    }
+
+    if ( !_odd_header ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_ODD_HEADER );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	fs->addFrame( frame );
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( false );
+    }
+
+    if ( !_first_footer ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_FIRST_FOOTER );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	fs->addFrame( frame );
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( false );
+    }
+
+    if ( !_even_footer ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_EVEN_FOOTER );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	fs->addFrame( frame );
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( false );
+    }
+
+    if ( !_odd_footer ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_ODD_FOOTER );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	fs->addFrame( frame );
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( false );
+    }
+
+    if ( !_footnotes ) {
+	KWTextFrameSet *fs = new KWTextFrameSet( this );
+	fs->setFrameInfo( FI_FOOTNOTE );
+	fs->setName( "Footnotes" );
+
+	for ( int i = 0; i < pages; i++ ) {
+	    KWFrame *frame = new KWFrame( getPTLeftBorder(), i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
+					  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	    fs->addFrame( frame );
+	}
+	frames.append( fs );
+	fs->setAutoCreateNewFrame( true );
+	fs->setVisible( false );
+    }
+
+    // ------------------------------------- remove until here
+
+    return TRUE;
 }
 
 /*================================================================*/
