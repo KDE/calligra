@@ -56,9 +56,9 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return field #id or NULL if there is no such a field. */
 		KexiDB::Field* field(unsigned int id);
 
-		const Field::ListIterator fieldsIterator() const { return Field::ListIterator(m_fields); }
+		Field::ListIterator fieldsIterator() const { return Field::ListIterator(m_fields); }
 
-		const Field::List* fields() { return &m_fields; }
+		Field::List* fields() { return &m_fields; }
 
 		/*! \return true if fields in the list are owned by this list. */
 		bool isOwner() const;

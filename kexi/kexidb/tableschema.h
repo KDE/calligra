@@ -53,7 +53,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 //		QStringList primaryKeys() const;
 //		bool hasPrimaryKeys() const;
 		
-		/*! Adds \a field to list of table fields*/
+		/*! Appends \a field to list of table fields. 
+		 'order' property of \a field is set automatically. */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
 		/*! \return list of fields that are primary key of this table.

@@ -38,6 +38,7 @@ Field::Field()
 	,m_precision(0)
 	,m_options(NoOptions)
 	,m_defaultValue( QVariant(QString::null) )
+	,m_order(-1)
 {
 	setConstraints(NoConstraints);
 }
@@ -51,6 +52,7 @@ Field::Field(TableSchema *tableSchema)
 	,m_precision(0)
 	,m_options(NoOptions)
 	,m_defaultValue( QVariant(QString::null) )
+	,m_order(tableSchema->fieldCount())
 {
 	setConstraints(NoConstraints);
 }
@@ -65,6 +67,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_precision(precision)
 	,m_options(options)
 	,m_defaultValue(defaultValue)
+	,m_order(-1)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:

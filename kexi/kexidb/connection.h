@@ -26,6 +26,8 @@
 #include <qdict.h>
 #include <qptrdict.h>
 #include <qvaluevector.h>
+#include <qvaluelist.h>
+#include <qvariant.h>
 
 #include <kexidb/object.h>
 
@@ -51,10 +53,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	public:
 
 		/*! Opened connection is automatically disconnected and removed 
-			from driver's connections list (see note). 
-			Note for driver developers: 
-			you should call disconnect() from you Connection's
-			subclass' destructor. */
+		 from driver's connections list. 
+		 Note for driver developers: you should call destroy() 
+		 from you Connection's subclass destructor. */
 		virtual ~Connection();
 
 		/*! \return parameters that had been used for create this connection. */
@@ -64,7 +65,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		Driver* driver() const { return m_driver; }
 
 		/*! Connects to driver with given parameters. 
-			\return true if successfull. */
+		 \return true if successfull. */
 		bool connect();
 
 		/*! \return true, if connection is properly estableshed. */
@@ -309,16 +310,37 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool querySingleRecord(QString sql, KexiDB::RecordData &data);
 
 		//PROTOTYPE:
-		bool insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2);
+		#define A , const QVariant&
+		#define H_INS_REC(args) \
+			bool insertRecord(KexiDB::TableSchema &tableSchema args)
+		H_INS_REC(A);
+		H_INS_REC(A A);
+		H_INS_REC(A A A);
+		H_INS_REC(A A A A);
+		H_INS_REC(A A A A A);
+		H_INS_REC(A A A A A A);
+		H_INS_REC(A A A A A A A);
+		H_INS_REC(A A A A A A A A);
+		bool insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVariant>& values);
+		#undef A
+		#undef H_INS_REC
+		
+//		bool insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2);
 
 		/*! Creates table defined by \a tableSchema.
-		 Schema information is also added into kexi system tables, for later reuse. */
-		bool createTable( const KexiDB::TableSchema& tableSchema );
+		 Schema information is also added into kexi system tables, for later reuse.
+		 \a tableSchema object is inserted to Connection structures - it is
+		 owned by Connection object now, so you shouldn't destroy the tableSchema 
+		 object by hand (or declare it as local-scope variable). 
+		*/
+		bool createTable( KexiDB::TableSchema* tableSchema );
 
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, const ConnectionData &conn_data );
 
+		/*! Method to be called form Connection's subclass destructor.
+		 \sa ~Connection() */
 		void destroy();
 
 		/*! For reimplemenation: connects to database
@@ -507,14 +529,19 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 and adds this to list of such objects (for later removal on closeDatabase()). 
 		*/
 		TableSchema* newKexiDBSystemTableSchema(const QString& tsname);
-		
+
+		/*! Called by TableSchema -- signals destruction to Connection object
+		 To avoid having deleted table object on its list. */
+		void removeMe(TableSchema *ts);
+				
 		Driver *m_driver;
 		ConnectionData m_data;
 		QString m_name;
 		bool m_is_connected : 1;
 		bool m_autoCommit : 1;
+		bool m_destructor_started : 1; //!< helper: true if destructor is started
 
-		QString m_usedDatabase; //! database name that is opened now
+		QString m_usedDatabase; //!< database name that is opened now
 
 		//! Table schemas retrieved on demand with tableSchema()
 		QIntDict<TableSchema> m_tables;
@@ -530,6 +557,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //		ConnectionInternal* m_internal;
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
+	friend class KexiDB::TableSchema; //!< for removeMe()
 
 		ConnectionPrivate *d;
 };

@@ -67,6 +67,8 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 
 TableSchema::~TableSchema()
 {
+	if (m_conn)
+		m_conn->removeMe( this );
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)
@@ -86,6 +88,7 @@ KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 {
 	assert(field);
 	FieldList::addField(field);
+	field->m_order = m_fields.count();
 	//Check for auto-generated indices:
 
 	// this is auto-generated single-field unique index

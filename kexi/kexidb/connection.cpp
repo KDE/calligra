@@ -43,7 +43,9 @@ namespace KexiDB {
 class ConnectionPrivate
 {
 	public:
-		ConnectionPrivate() { }
+		ConnectionPrivate() 
+		{
+		}
 		~ConnectionPrivate() { }
 		/*! Default transaction handle. 
 		If transactions are supported: Any operation on database (e.g. inserts)
@@ -67,6 +69,7 @@ Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	,m_data(conn_data)
 	,m_is_connected(false)
 	,m_autoCommit(true)
+	,m_destructor_started(false)
 	,d(new ConnectionPrivate())
 {
 	m_tables.setAutoDelete(true);
@@ -94,6 +97,7 @@ void Connection::destroy()
 
 Connection::~Connection()
 {
+	m_destructor_started = true;
 	KexiDBDbg << "Connection::~Connection()" << endl;
 	delete d;
 /*	if (m_driver) {
@@ -528,21 +532,45 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 	return sql;
 }
 
-//todo
-bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2)
+//yeah, it is very efficient:
+#define C_A(a) , const QVariant& c ## a
+
+#define V_A0 valueToSQL( tableSchema.field(0)->type(), c0 )
+#define V_A(a) +","+valueToSQL( tableSchema.field(a)->type(), c ## a )
+
+#define C_INS_REC(args, vals) \
+	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
+		return drv_executeSQL( \
+		 QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" \
+		); \
+	}
+
+C_INS_REC( C_A(0), V_A0 )
+C_INS_REC( C_A(0) C_A(1), V_A0 V_A(1) )
+C_INS_REC( C_A(0) C_A(1) C_A(2), V_A0 V_A(1) V_A(2) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3), V_A0 V_A(1) V_A(2) V_A(3) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_A(7) )
+
+bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVariant>& values)
 {
+	Field::List *fields = tableSchema.fields();
+	Field *f = fields->first();
+	QString s_val; 
+	s_val.setLength(1024);//TODO: move to members
+	QValueList<QVariant>::iterator it = values.begin();
+	while (f && it!=values.end()) {
+		s_val += valueToSQL( f->type(), *it );
+		++it;
+		f=fields->next();
+	}
+
 	return drv_executeSQL(
-		QString("INSERT INTO ") + tableSchema.name() + " VALUES ("
-		+ valueToSQL( tableSchema.field(0)->type(), c1 ) + ","
-		+ valueToSQL( tableSchema.field(1)->type(), c2 ) +")"
+		QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + s_val + ")"
 	);
 }
-
-/*QString Connection::insertIntoStatement( const KexiDB::TableSchema& tableSchema )
-{
-	QString sql = "INSERT INTO " + tableSchema.name() + " (";
-	
-}*/
 
 QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 {
@@ -550,20 +578,56 @@ QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 	return QString::null;
 }
 
-bool Connection::createTable( const KexiDB::TableSchema& tableSchema )
+bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 {
+	if (!checkConnected())
+		return false;
+	
 	Transaction trans;
 	if (!beginAutoCommitTransaction(trans))
 		return false;
 	
-	if (drv_createTable(tableSchema)) {
-		//TODO: add schema to kexi__* tables
-//		insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2)
-		
-		return commitAutoCommitTransaction(trans);
+	if (!drv_createTable(*tableSchema)) {
+		rollbackAutoCommitTransaction(trans);
+		return false;
 	}
-	rollbackAutoCommitTransaction(trans);
-	return false;
+	
+	//add schema info to kexi__* tables
+	TableSchema *ts;
+	ts = m_tables_byname["kexi__objects"];
+	if (!insertRecord(*ts, QVariant(), QVariant(tableSchema->type()), QVariant(tableSchema->name()),
+		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText())))
+		return false;
+
+	ts = m_tables_byname["kexi__fields"];
+	Field::List *fields = tableSchema->fields();
+	Field *f = fields->first();
+	int order = 0;
+	while (f) {
+		if (!insertRecord(*ts, 
+		QValueList<QVariant>()
+		<< QVariant() //id: TODO!!!
+		<< QVariant(f->type())
+		<< QVariant(f->name())
+		<< QVariant(f->length())
+		<< QVariant(f->precision())
+		<< QVariant(f->constraints())
+		<< QVariant(f->options())
+		<< QVariant(f->defaultValue())
+		<< QVariant(f->order())
+		<< QVariant(f->caption())
+		<< QVariant(f->helpText()) ))
+			return false;
+			
+		f = fields->next();
+		order++;
+	}
+		
+	//store objects locally:
+	m_tables.insert(tableSchema->m_id, tableSchema);
+	m_tables_byname.insert(tableSchema->m_name.lower(), tableSchema);
+			
+	return commitAutoCommitTransaction(trans);
 }
 
 bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
@@ -987,10 +1051,10 @@ QuerySchema* Connection::querySchema( const int queryId )
 
 TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 {
-	TableSchema *ts = new TableSchema(tsname);
+	TableSchema *ts = new TableSchema(tsname.lower());
 	ts->setKexiDBSystem(true);
 	m_kexiDBSystemtables.append(ts);
-	m_tables_byname.insert(tsname,ts);
+	m_tables_byname.insert(ts->name(),ts);
 	return ts;
 }
 	
@@ -1039,6 +1103,15 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("db_value", Field::LongText ) );
 	
 	return true;
+}
+
+void Connection::removeMe(TableSchema *ts)
+{
+	if (ts && !m_destructor_started) {
+		m_tables.take(ts->id());
+		m_tables.take(ts->id());
+		m_tables_byname.take(ts->name());
+	}
 }
 
 #include "connection.moc"

@@ -162,10 +162,6 @@ class KEXI_DB_EXPORT Field
 		 *	@return true if the field is not allowed to be null
 		 */
 		bool		isNotNull() const { return constraints() & NotNull; }
-		/*!
-		 *	@return the constraints defined for this field
-		 */
-		virtual int		constraints() const;
 
 //js: we have m_table for this		/*!
 //		 *	@return the table.column that this field references or QString::null if !foreign_key()
@@ -179,8 +175,20 @@ class KEXI_DB_EXPORT Field
 		virtual Type type() const;
 		QString typeName() const;
 		virtual QVariant defaultValue() const;
+		//! length of text is the field type is text
 		virtual int length() const;
-		virtual int precision() const; //! for numeric and other fields that have both length and precision
+		//! for numeric and other fields that have both length and precision
+		virtual int precision() const; 
+		//!	\return the constraints defined for this field
+		virtual int constraints() const;
+		//! \return order of this field in containing table (counting starts from 0)
+		//! (-1 if unspecified)
+		virtual int order() const { return m_order; }
+		//! \return caption of this field
+		virtual QString caption() const { return m_caption; }
+		//! \return halp text for this field
+		virtual QString helpText() const { return m_help; }
+		
 		virtual bool isUnsigned() const; //! if the type has the unsigned attribute
 //		virtual bool isBinary() const;
 
@@ -228,6 +236,7 @@ class KEXI_DB_EXPORT Field
 		int m_precision;
 		int m_options;
 		QVariant m_defaultValue;
+		int m_order;
 		QString m_caption;
 		QString m_help;
 
