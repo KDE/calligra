@@ -1,0 +1,16 @@
+2004-10-04  Inge Wallin  <ingwa@c83-250-5-110.bredband.comhem.se>
+
+	* Cleaned the following files a little.  Made the code more
+	readable, fixed indentation, added (a few) comments:
+	- kchart.la.cc
+	- main.cc
+	- kchart_dummy.cc
+	- kchart_aboutdata.h
+	- kchart_factory.h
+	- kchart_factory.cc
+	- kchart_params.h
+	- kchart_params.cc
+	- kchart_view.h
+	- kchart_view.cc
+
+
