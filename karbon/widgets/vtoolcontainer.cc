@@ -3,18 +3,21 @@
 */
 
 #include <qbuttongroup.h>
-#include <kpixmap.h>
-#include <kstandarddirs.h>
-#include <kdualcolorbtn.h>
 #include <qtoolbutton.h>
+
+#include <kdualcolorbtn.h>
 #include <kdualcolorbutton.h>
+#include <kiconloader.h>
 #include <koMainWindow.h>
 #include <koView.h>
-#include "karbon_part.h"
-#include "../karbon_factory.h"
+#include <kpixmap.h>
+#include <kstandarddirs.h>
 
+#include "karbon_part.h"
+#include "karbon_factory.h"
 #include "vtoolcontainer.h"
-#include <kiconloader.h>
+#include "vstrokefillpreview.h"
+
 
 QPtrDict< VToolContainer > VToolContainer::m_containers;
 
@@ -37,6 +40,9 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 
 	btngroup = new QButtonGroup( 2, Horizontal, this );
 	btngroup->setExclusive( true );
+	btngroup->setInsideSpacing( 2 );
+	btngroup->setInsideMargin( 5 );
+
 	button = new QToolButton( btngroup );
 	QPixmap pixmap = BarIcon( "select", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
@@ -122,11 +128,10 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
 	btngroup->insert( button, Text );
 
-	btngroup->setInsideSpacing( 2 );
-	btngroup->setInsideMargin( 5 );
-
 	//dialog buttons
 	dlggroup = new QButtonGroup( 2, Horizontal, this );
+	dlggroup->setInsideSpacing( 2 );
+	dlggroup->setInsideMargin( 5 );
 
 	// has to be a new non-toggle group (dialogs, not tools)
 	button = new QToolButton( dlggroup );
@@ -145,15 +150,14 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	pixmap = BarIcon( "gradientdlg", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	dlggroup->insert( button, Gradient );
-	dlggroup->setInsideSpacing( 2 );
-	dlggroup->setInsideMargin( 5 );
 
 	//dialog buttons
 	m_dualColorButton = new KDualColorButton( this );
+	m_strokeFillPreview = new VStrokeFillPreview( this );
 
 	connect(
 		m_dualColorButton, SIGNAL( fgChanged( const QColor& ) ),
-		this, SIGNAL(strokeColorChanged( const QColor &)));
+		this, SIGNAL(strokeColorChanged( const QColor& )));
 	connect(
 		m_dualColorButton, SIGNAL( bgChanged( const QColor& ) ),
 		this, SIGNAL( fillColorChanged( const QColor& ) ) );

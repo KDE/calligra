@@ -5,15 +5,17 @@
 #ifndef __VTOOLCONTAINER_H__
 #define __VTOOLCONTAINER_H__
 
-#include <qtoolbar.h>
 #include <qptrdict.h>
+#include <qtoolbar.h>
+
 #include <ksharedptr.h>
 
-class KoMainWindow;
 class KarbonPart;
+class KDualColorButton;
+class KoMainWindow;
 class KoView;
 class QButtonGroup;
-class KDualColorButton;
+class VStrokeFillPreview;
 
 class VToolContainer : public QToolBar, public KShared
 {
@@ -24,9 +26,30 @@ public:
 		const char* name = 0L );
 	~VToolContainer();
 
-	QButtonGroup *btngroup;
-	QButtonGroup *dlggroup;
-	KDualColorButton *m_dualColorButton;
+// TODO: why are these public?
+	QButtonGroup* btngroup;
+	QButtonGroup* dlggroup;
+	KDualColorButton* m_dualColorButton;
+	VStrokeFillPreview* m_strokeFillPreview;
+
+signals:
+	// shape tools:
+	void ellipseToolActivated();
+	void fillColorChanged( const QColor& );
+	void polygonToolActivated();
+	void rectangleToolActivated();
+	void rotateToolActivated();
+	void roundRectToolActivated();
+	void selectToolActivated();
+	void scaleToolActivated();
+	void shearToolActivated();
+	void sinusToolActivated();
+	void solidFillActivated();
+	void spiralToolActivated();
+	void starToolActivated();
+	void strokeActivated();
+	void strokeColorChanged( const QColor& );
+	void textToolActivated();
 
 private:
 	enum ButtonChoice
@@ -40,25 +63,6 @@ private:
 	static QPtrDict< VToolContainer > m_containers;
 
 	VToolContainer( KoView* parent = 0L, const char* name = 0L );
-
-signals:
-	// shape-tools:
-	void ellipseToolActivated();
-	void polygonToolActivated();
-	void rectangleToolActivated();
-	void roundRectToolActivated();
-	void selectToolActivated();
-	void rotateToolActivated();
-	void scaleToolActivated();
-	void shearToolActivated();
-	void sinusToolActivated();
-	void spiralToolActivated();
-	void starToolActivated();
-	void textToolActivated();
-	void solidFillActivated();
-	void strokeActivated();
-	void strokeColorChanged( const QColor& );
-	void fillColorChanged( const QColor& );
 };
 
 #endif
