@@ -162,8 +162,9 @@ public:
   static const int PD_FLOW = 2;
   static const int PD_BORDERS = 4;
   static const int PD_NUMBERING = 8;
+  static const int PD_TABS = 16;
 
-  KWParagDia(QWidget*,const char*,QStrList _fontList,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING);
+  KWParagDia(QWidget*,const char*,QStrList _fontList,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING | PD_TABS);
   ~KWParagDia();              
 
   int getFlags() { return flags; }
@@ -206,10 +207,11 @@ protected:
   void setupTab2();
   void setupTab3();
   void setupTab4();
+  void setupTab5();
   void clearFlows();
   void updateBorders();
 
-  QWidget *tab1,*tab2,*tab3,*tab4;
+  QWidget *tab1,*tab2,*tab3,*tab4,*tab5;
   QGridLayout *grid1,*grid2,*grid3,*grid4,*indentGrid,*spacingGrid,*pSpaceGrid,*tgrid,*txtgrid,*ogrid;
   KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
   QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor,*lDepth,*lcLeft,*lcRight,*lStart;

@@ -62,7 +62,7 @@ protected:
   QListBox *lStyleList;
   QPushButton *bEdit,*bDelete,*bAdd,*bUp,*bDown,*bCopy;
   KButtonBox *bButtonBox;
-  QComboBox *cFont,*cColor,*cBorder,*cIndent,*cAlign,*cNumbering;
+  QComboBox *cFont,*cColor,*cBorder,*cIndent,*cAlign,*cNumbering,*cTabs;
 
   KWordDocument *doc;
   KWStyleEditor *editor;
@@ -115,7 +115,7 @@ protected:
 
   QWidget *tab1,*nwid;
   QGridLayout *grid1,*grid2;
-  QPushButton *bFont,*bColor,*bSpacing,*bAlign,*bBorders,*bNumbering;
+  QPushButton *bFont,*bColor,*bSpacing,*bAlign,*bBorders,*bNumbering,*bTabulators;
   KButtonBox *bButtonBox;
   KWStylePreview *preview;
   QLabel *lName,*lFollowing;
@@ -137,6 +137,7 @@ protected slots:
   void changeAlign();
   void changeBorders();
   void changeNumbering();
+  void changeTabulators();
   void paragDiaOk();
   void apply();
   void fplChanged(const char* n) { style->setFollowingParagLayout(QString(n)); }

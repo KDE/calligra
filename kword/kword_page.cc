@@ -528,6 +528,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 					fc->getParag()->getParagLayout()->getBottomBorder());
 		      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		    }
 		}
 	      else
@@ -642,6 +643,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 					fc->getParag()->getParagLayout()->getBottomBorder());
 	gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 	gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	format = *((KWFormat*)fc);
       } break;
     case MM_EDIT_FRAME:
@@ -762,6 +764,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	{	  
 	  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 	  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	  gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	}
     }
 
@@ -1378,6 +1381,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 					    fc->getParag()->getParagLayout()->getRightBorder(),
 					    fc->getParag()->getParagLayout()->getTopBorder(),
 					    fc->getParag()->getParagLayout()->getBottomBorder());
+	    gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	  }
 	if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
 	  setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
@@ -1526,6 +1530,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
 		gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		gui->getView()->setFormat(*((KWFormat*)fc));
 		gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
 		gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
@@ -1786,6 +1791,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
 				      fc->getParag()->getParagLayout()->getBottomBorder());
+      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
     }
   if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
     setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);

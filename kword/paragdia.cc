@@ -250,7 +250,8 @@ void KWNumPreview::drawContents(QPainter* painter)
 /******************************************************************/
 
 /*================================================================*/
-KWParagDia::KWParagDia(QWidget* parent,const char* name,QStrList _fontList,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING)
+KWParagDia::KWParagDia(QWidget* parent,const char* name,QStrList _fontList,
+		       int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING | PD_TABS)
   : QTabDialog(parent,name,true)
 {
   flags = _flags;
@@ -264,6 +265,8 @@ KWParagDia::KWParagDia(QWidget* parent,const char* name,QStrList _fontList,int _
     setupTab3();
   if (_flags & PD_NUMBERING)
     setupTab4();
+  if (_flags & PD_TABS)
+    setupTab5();
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
@@ -915,6 +918,14 @@ void KWParagDia::setupTab4()
   grid4->activate();
 
   addTab(tab4,i18n("Numbering"));
+}
+
+/*================================================================*/
+void KWParagDia::setupTab5()
+{
+  tab5 = new QWidget(this);
+
+  addTab(tab5,i18n("Tabulators"));
 }
 
 /*================================================================*/

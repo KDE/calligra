@@ -34,6 +34,8 @@
 #include <kpoint.h>
 #include <qcursor.h>
 
+#include <koRuler.h>
+
 #include <X11/Xlib.h>
 #include <kapp.h>
 
@@ -181,6 +183,8 @@ public slots:
   void mmCreatePix()
     { setMouseMode(MM_CREATE_PIX); mmUncheckAll(); mm_menu->setItemChecked(mm_create_pix,true); }
   void femProps();
+  void tabListChanged(QList<KoTabulator> *_tablist)
+    { fc->getParag()->tabListChanged(_tablist); recalcCursor(); }
 
 protected slots:
   void frameDiaClosed();

@@ -455,3 +455,10 @@ Reggie, 4.12.1998:
   stays cool and doesn't get confused anymore :-)
 - When the frame width < rastX (e.g. because other frame(s) are overlapping so much and the user
   enabled 'runaround') the next line is drawn a bit more down (where we have enough space again)
+
+Reggie, 5.12.1998:
+------------------
+- Started with tabulators
+- Improved Style Templates
+- Improved applying/updating Style Templates
+- Fixed frame calculations

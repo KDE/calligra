@@ -90,7 +90,7 @@ void KWStyleManager::setupTab2()
 {
   tab2 = new QWidget(this);
 
-  grid2 = new QGridLayout(tab2,4,2,15,7);
+  grid2 = new QGridLayout(tab2,5,2,15,7);
 
   cFont = new QComboBox(false,tab2);
   cFont->insertItem(i18n("Don't update Fonts"));
@@ -131,22 +131,31 @@ void KWStyleManager::setupTab2()
   cBorder->resize(cFont->sizeHint());
   grid2->addWidget(cBorder,2,1);
 
+  cTabs = new QComboBox(false,tab2);
+  cTabs->insertItem(i18n("Don't update Tabulators"));
+  cTabs->insertItem(i18n("Update Tabulators"));
+  cTabs->resize(cFont->sizeHint());
+  grid2->addWidget(cTabs,3,0);
+
   grid2->addColSpacing(0,cFont->width());
   grid2->addColSpacing(1,cAlign->width());
   grid2->addColSpacing(0,cColor->width());
   grid2->addColSpacing(1,cNumbering->width());
   grid2->addColSpacing(0,cIndent->width());
   grid2->addColSpacing(1,cBorder->width());
+  grid2->addColSpacing(0,cTabs->width());
   grid2->setColStretch(0,1);
   grid2->setColStretch(1,1);
 
   grid2->addRowSpacing(0,cFont->height());
   grid2->addRowSpacing(1,cColor->height());
   grid2->addRowSpacing(2,cIndent->height());
+  grid2->addRowSpacing(3,cTabs->height());
   grid2->setRowStretch(0,0);
   grid2->setRowStretch(1,0);
   grid2->setRowStretch(2,0);
-  grid2->setRowStretch(3,1);
+  grid2->setRowStretch(3,0);
+  grid2->setRowStretch(4,1);
 
   grid2->activate();
 
@@ -170,6 +179,8 @@ void KWStyleManager::setupTab2()
     cAlign->setCurrentItem(1);
   if (doc->getApplyStyleTemplate() & KWordDocument::U_NUMBERING)
     cNumbering->setCurrentItem(1);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_TABS)
+    cTabs->setCurrentItem(1);
 }
 
 /*================================================================*/
@@ -231,6 +242,8 @@ void KWStyleManager::apply()
     f = f | KWordDocument::U_NUMBERING;
   if (cIndent->currentItem() == 1)
     f = f | KWordDocument::U_INDENT;
+  if (cTabs->currentItem() == 1)
+    f = f | KWordDocument::U_TABS;
 
   doc->setApplyStyleTemplate(f);
 }
@@ -317,7 +330,7 @@ void KWStyleEditor::setupTab1()
 {
   tab1 = new QWidget(this);
 
-  grid1 = new QGridLayout(tab1,3,1,15,7);
+  grid1 = new QGridLayout(tab1,2,2,15,7);
 
   nwid = new QWidget(tab1);
   grid2 = new QGridLayout(nwid,3,2,15,7);
@@ -379,35 +392,40 @@ void KWStyleEditor::setupTab1()
   preview = new KWStylePreview(i18n("Preview"),tab1,style);
   grid1->addWidget(preview,1,0);
 
-  bButtonBox = new KButtonBox(tab1);
-  bFont = bButtonBox->addButton(i18n("&Font..."),true);
+  bButtonBox = new KButtonBox(tab1,KButtonBox::VERTICAL);
+  bFont = bButtonBox->addButton(i18n("&Font..."),false);
   connect(bFont,SIGNAL(clicked()),this,SLOT(changeFont()));
   bButtonBox->addStretch();
-  bColor = bButtonBox->addButton(i18n("&Color..."),true);
+  bColor = bButtonBox->addButton(i18n("&Color..."),false);
   connect(bColor,SIGNAL(clicked()),this,SLOT(changeColor()));
   bButtonBox->addStretch();
-  bSpacing = bButtonBox->addButton(i18n("&Spacing and Indents..."),true);
+  bSpacing = bButtonBox->addButton(i18n("&Spacing and Indents..."),false);
   connect(bSpacing,SIGNAL(clicked()),this,SLOT(changeSpacing()));
   bButtonBox->addStretch();
-  bAlign = bButtonBox->addButton(i18n("&Alignment..."),true);
+  bAlign = bButtonBox->addButton(i18n("&Alignment..."),false);
   connect(bAlign,SIGNAL(clicked()),this,SLOT(changeAlign()));
   bButtonBox->addStretch();
-  bBorders = bButtonBox->addButton(i18n("&Borders..."),true);
+  bBorders = bButtonBox->addButton(i18n("&Borders..."),false);
   connect(bBorders,SIGNAL(clicked()),this,SLOT(changeBorders()));
   bButtonBox->addStretch();
-  bNumbering = bButtonBox->addButton(i18n("&Numbering..."),true);
+  bNumbering = bButtonBox->addButton(i18n("&Numbering..."),false);
   connect(bNumbering,SIGNAL(clicked()),this,SLOT(changeNumbering()));
+  bButtonBox->addStretch();
+  bTabulators = bButtonBox->addButton(i18n("&Tabulators..."),false);
+  connect(bTabulators,SIGNAL(clicked()),this,SLOT(changeTabulators()));
   bButtonBox->layout();
-  grid1->addWidget(bButtonBox,2,0);
+  grid1->addMultiCellWidget(bButtonBox,0,1,1,1);
 
   grid1->addColSpacing(0,nwid->width());
   grid1->addColSpacing(0,preview->width());
-  grid1->addColSpacing(0,bButtonBox->width());
+  grid1->addColSpacing(1,bButtonBox->width());
+  grid1->addColSpacing(1,bSpacing->width() + 10);
   grid1->setColStretch(0,1);
 
   grid1->addRowSpacing(0,nwid->height());
-  grid1->addRowSpacing(1,100);
-  grid1->addRowSpacing(2,bButtonBox->height());
+  grid1->addRowSpacing(1,120);
+  grid1->addRowSpacing(0,bButtonBox->height() / 3);
+  grid1->addRowSpacing(1,2 * bButtonBox->height() / 3);
   grid1->setRowStretch(1,1);
 
   grid1->activate();
@@ -521,6 +539,22 @@ void KWStyleEditor::changeNumbering()
 }
 
 /*================================================================*/
+void KWStyleEditor::changeTabulators()
+{
+  if (paragDia)
+    {
+      disconnect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+      paragDia->close();
+      delete paragDia;
+      paragDia = 0;
+    }
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_TABS);
+  paragDia->setCaption(i18n("KWord - Tabulators"));
+  connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+  paragDia->show();
+}
+
+/*================================================================*/
 void KWStyleEditor::paragDiaOk()
 {
   switch (paragDia->getFlags())
@@ -571,4 +605,5 @@ void KWStyleEditor::apply()
 	  emit updateStyleList();
 	}
     }
+  doc->setStyleChanged(style->getName());
 }

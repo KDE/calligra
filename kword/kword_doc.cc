@@ -80,7 +80,7 @@ KWordDocument::KWordDocument()
 
   m_bEmpty = true;
   applyStyleTemplate = 0;
-  applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN;
+  applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN | U_TABS;
 }
 
 /*================================================================*/
@@ -1246,6 +1246,7 @@ void KWordDocument::updateAllStyles()
     }
 
   updateAllViews(0L);
+  changedStyles.clear();
 }
 
 /*================================================================*/
@@ -1931,4 +1932,15 @@ void KWordDocument::addStyleTemplate(KWParagLayout *pl)
 	}
     }
   paragLayoutList.append(pl);
+}
+/*================================================================*/
+void KWordDocument::setStyleChanged(QString _name)
+{
+  changedStyles.append(_name);
+}
+
+/*================================================================*/
+bool KWordDocument::isStyleChanged(QString _name)
+{
+  return (changedStyles.find(_name) != -1);
 }

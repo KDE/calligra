@@ -47,6 +47,7 @@ class QPrinter;
 #include <qclipboard.h>
 #include <qstrlist.h>
 #include <qmessagebox.h>
+#include <qstrlist.h>
 
 #include <kurl.h>
 
@@ -102,6 +103,7 @@ public:
   static const int U_NUMBERING = 64;
   static const int U_FONT_FAMILY_ALL_SIZE = 128;
   static const int U_FONT_ALL_ALL_SIZE = 256;
+  static const int U_TABS = 512;
   
 protected:
   virtual bool hasToWriteMultipart();
@@ -325,6 +327,9 @@ public:
   void updateAllStyles();
   void updateAllStyleLists();
 
+  void setStyleChanged(QString _name);
+  bool isStyleChanged(QString _name);
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child);
@@ -402,6 +407,9 @@ protected:
   bool m_bEmpty;
 
   int applyStyleTemplate;
+  
+  QStrList changedStyles;
+
 };
 
 #endif

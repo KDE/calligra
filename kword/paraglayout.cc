@@ -50,6 +50,8 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
     if (_add)
       document->paragLayoutList.append(this);
     document->paragLayoutList.setAutoDelete(true);
+
+    tabList.setAutoDelete(false);
 }
 
 KWParagLayout::~KWParagLayout()
@@ -87,6 +89,8 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
 
   format = _layout.getFormat();
 
+  setTabList(_layout.getTabList());
+
   return *this;
 }
 
@@ -123,6 +127,10 @@ void KWParagLayout::save(ostream &out)
   out << otag << "<FORMAT>" << endl;
   format.save(out);
   out << etag << "</FORMAT> " << endl;
+  
+  for (unsigned int i = 0;i < tabList.count();i++)
+    out << indent << "<TABULATOR mmpos=\"" << tabList.at(i)->mmPos << "\" ptpos=\"" << tabList.at(i)->ptPos << "\" type=\"" 
+	<< static_cast<int>(tabList.at(i)->type) << "\"/>" << endl;
 }
 
 void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
@@ -156,6 +164,24 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      if ((*it).m_strName == "name")
 		followingParagLayout = (*it).m_strValue.c_str();
 	    }
+	}
+
+      // following parag layout
+      else if (_name == "TABULATOR")
+	{
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  KoTabulator *tab = new KoTabulator;
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "mmpos")
+		tab->mmPos = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "ptpos")
+		tab->ptPos = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "type")
+		tab->type = static_cast<KoTabulators>(atoi((*it).m_strValue.c_str()));
+	    }
+	  tabList.append(tab);
 	}
 
       // flow
@@ -389,3 +415,17 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
+void KWParagLayout::setTabList(QList<KoTabulator> *_tabList) 
+{
+  tabList.setAutoDelete(true);
+  tabList.clear(); 
+  tabList.setAutoDelete(false);
+  for (unsigned int i = 0;i < _tabList->count();i++)
+    {
+      KoTabulator *t = new KoTabulator;
+      t->type = _tabList->at(i)->type;
+      t->mmPos = _tabList->at(i)->mmPos;
+      t->ptPos = _tabList->at(i)->ptPos;
+      tabList.append(t);
+    }
+}

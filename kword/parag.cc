@@ -372,7 +372,19 @@ void KWParag::applyStyle(QString _style)
 	  pl->getFormat().setColor(c);
 	}
       
+      if (!document->getApplyStyleTemplate() & KWordDocument::U_TABS)
+	pl->setTabList(paragLayout->getTabList());
+
       delete paragLayout;
       paragLayout = pl;
     }  
 }
+
+void KWParag::tabListChanged(QList<KoTabulator>* _tabList)
+{
+  paragLayout->setTabList(_tabList);
+  debug("tabs changed: %d",paragLayout->getTabList()->count());
+}
+
+
+

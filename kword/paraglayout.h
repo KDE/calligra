@@ -9,9 +9,11 @@ class KWParagLayout;
 #include <qstring.h>
 #include <qcolor.h>
 #include <qfont.h>
+#include <qlist.h>
 
 #include <iostream>
 #include <koStream.h>
+#include <koRuler.h>
 
 /**
  * A KWParagLayout-Instance provides all information neccessary to format a given
@@ -156,6 +158,9 @@ public:
     Counter getCounter() { return counter; }
     void setCounter(Counter _counter) { counter = _counter; }
 
+    QList<KoTabulator> *getTabList() { return &tabList; }
+    void setTabList(QList<KoTabulator> *tabList);
+
 protected:
     Flow flow;
     unsigned int mmParagFootOffset;
@@ -201,6 +206,8 @@ protected:
      * The document this parag layout belongs to
      */
     KWordDocument *document;
+    QList<KoTabulator> tabList;
+
 };
 
 #endif

@@ -348,7 +348,7 @@ void KWordView::setFlow(KWParagLayout::Flow _flow)
 
 /*================================================================*/
 void KWordView::setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
-				     KWParagLayout::Border _top,KWParagLayout::Border _bottom)
+				KWParagLayout::Border _top,KWParagLayout::Border _bottom)
 {
   if (left != _left || right != _right || top != _top || bottom != _bottom)
     {
@@ -483,6 +483,8 @@ void KWordView::updateStyle(QString _styleName,bool _updateFormat = true)
     m_vToolBarText->setButton(ID_USORT_LIST,true);  
 
   setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false,_updateFormat,false);
+
+  gui->getHorzRuler()->setTabList(m_pKWordDoc->findParagLayout(_styleName)->getTabList());
 }
 
 /*===============================================================*/
@@ -740,6 +742,7 @@ void KWordView::textStyleSelected(const char *style)
   gui->getPaperWidget()->applyStyle(style);
   format = m_pKWordDoc->findParagLayout(style)->getFormat();
   gui->getPaperWidget()->formatChanged(format);
+  updateStyle(style,false);
 }
 
 /*======================= text size selected  ===================*/
@@ -1878,6 +1881,9 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
       paperWidget->setXOffset(xOffset);
       paperWidget->setYOffset(yOffset);
     }
+
+  connect(r_horz,SIGNAL(tabListChanged(QList<KoTabulator>*)),paperWidget,SLOT(tabListChanged(QList<KoTabulator>*)));
+  r_horz->setTabList(paperWidget->getParagLayout()->getTabList());
 }
 
 /*================================================================*/

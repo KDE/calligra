@@ -138,6 +138,7 @@ public:
     int *getCounterData() { return counterData; }
   
     void applyStyle(QString _style);
+    void tabListChanged(QList<KoTabulator>*);
 
 protected:
     /**
@@ -204,6 +205,7 @@ protected:
     int counterData[16];
     QString counterText;
     QString counterWidth;
+
 };
 
 #endif

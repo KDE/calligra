@@ -343,10 +343,11 @@ void KWTextFrameSet::update()
 	  FrameList *ll = new FrameList();
 	  ll->setAutoDelete(false);
 	  ll->append(l->first());
-	  for (unsigned int k = 1;k < l->count();k++)
+	  unsigned int k = 0,m = 0;
+	  for (k = 1;k < l->count();k++)
 	    {
 	      bool inserted = false;
-	      for (unsigned int m = 0;m < ll->count();m++)
+	      for (m = 0;m < ll->count();m++)
 		{ 
 		  if (l->at(k)->y() < ll->at(m)->y()) 
 		    {
@@ -357,9 +358,27 @@ void KWTextFrameSet::update()
 		}
 	      if (!inserted) ll->append(l->at(k));
 	    }
+	  FrameList *l2 = new FrameList();
+	  l2->setAutoDelete(false);
+	  l2->append(ll->first());
+	  for (k = 1;k < ll->count();k++)
+	    {
+	      bool inserted = false;
+	      for (m = 0;m < l2->count();m++)
+		{ 
+		  if (ll->at(k)->x() < l2->at(m)->x()) 
+		    {
+		      inserted = true;
+		      l2->insert(m,ll->at(k));
+		      break;
+		    }
+		}
+	      if (!inserted) l2->append(ll->at(k));
+	    }
 	  
+	  delete ll;
 	  delete l;
-	  l = ll;
+	  l = l2;
 	}
 
       frameList.append(l);
@@ -453,6 +472,8 @@ void KWTextFrameSet::insertParag(KWParag *_parag,InsertPos _pos)
     case I_AFTER:
       {
 	_new = new KWParag(this,doc,_parag,_next,doc->findParagLayout(_parag->getParagLayout()->getFollowingParagLayout()));
+	if (_new->getParagLayout()->getName() == _parag->getParagLayout()->getName())
+	  _new->getParagLayout()->setTabList(_parag->getParagLayout()->getTabList());
 	if (_next) _next->setPrev(_new);
       } break;
     case I_BEFORE:
@@ -689,7 +710,8 @@ void KWTextFrameSet::updateAllStyles()
 
   while (p)
     {
-      p->applyStyle(p->getParagLayout()->getName());
+      if (doc->isStyleChanged(p->getParagLayout()->getName()))
+	p->applyStyle(p->getParagLayout()->getName());
       p = p->getNext();
     }
 
