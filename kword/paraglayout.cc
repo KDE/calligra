@@ -80,10 +80,10 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
 /*================================================================*/
 KWParagLayout::~KWParagLayout()
 {
-    document->paragLayoutList.setAutoDelete( true );
-    document->paragLayoutList.removeRef( this );
-    document->paragLayoutList.setAutoDelete( false );
-    tabList.setAutoDelete( true ); 
+  int index = document->paragLayoutList.findRef(this);
+  if (index >= 0)
+    document->paragLayoutList.take( index );
+  tabList.setAutoDelete( true ); 
 }
 
 /*================================================================*/
