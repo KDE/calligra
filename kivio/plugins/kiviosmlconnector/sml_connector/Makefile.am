@@ -17,8 +17,8 @@ stencil_DATA = sml_connector.xpm
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(stencildir)
-	$(RM) $(DESTDIR)$(stencildir)/sml_connector.so
+	rm -f $(DESTDIR)$(stencildir)/sml_connector.so
 	$(LN_S) $(kde_moduledir)/sml_connector.so $(DESTDIR)$(stencildir)/sml_connector.so
 
 uninstall-local:
-	$(RM) $(DESTDIR)$(stencildir)/sml_connector.so
+	rm -f $(DESTDIR)$(stencildir)/sml_connector.so
