@@ -114,6 +114,7 @@ void KChartView::config()
     KChartParameters* params = ((KChartPart*)part())->params();
 
     switch( params->type ) {
+    case KCHARTTYPE_3DBAR:
     case KCHARTTYPE_BAR: {
 	KChartBarConfigDialog* d = new KChartBarConfigDialog( params, this );
 	d->exec();
@@ -132,7 +133,6 @@ void KChartView::config()
     case KCHARTTYPE_3DCOMBO_LINE_AREA:
     case KCHARTTYPE_3DCOMBO_HLC_BAR:
     case KCHARTTYPE_3DCOMBO_HLC_AREA:
-    case KCHARTTYPE_3DBAR:
     case KCHARTTYPE_3DAREA:
     case KCHARTTYPE_3DLINE:
     case KCHARTTYPE_3DPIE:

@@ -30,8 +30,6 @@ class KChartParameters;
 #define PVBLU               0x000000FF
 #define l2gdcal( c )        ((c)&PVRED)>>16 , ((c)&PVGRN)>>8 , ((c)&0x000000FF)
 #define l2gdshd( c )        (((c)&PVRED)>>16)/2 , (((c)&PVGRN)>>8)/2 , (((c)&0x000000FF))/2
-static int					_gdccfoo1;
-static unsigned long		_gdccfoo2;
 #define _gdcntrst(bg)		( ((bg)&0x800000?0x000000:0xFF0000)|	\
 							  ((bg)&0x008000?0x000000:0x00FF00)|	\
 							  ((bg)&0x000080?0x000000:0x0000FF) )
