@@ -11,8 +11,6 @@ INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart\
 		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 		-I$(top_srcdir)/kivio/kiviopart/tklib
-CXXFLAGS = -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libtools_la_METASOURCES = AUTO
 libtools_la_SOURCES = \
 		tool.cpp\

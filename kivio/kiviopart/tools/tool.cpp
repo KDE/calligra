@@ -66,3 +66,4 @@ void Tool::removeOverride()
     controller()->selectTool(m_pOldActiveTool);
 }
   ToolSelectAction* m_pTool;
+#include "tool.moc"
