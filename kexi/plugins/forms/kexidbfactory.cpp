@@ -60,7 +60,7 @@ KexiSubForm::setFormName(const QString &name)
 		return;
 
 	// we check if there is a form with this name
-	int id = KexiDB::idForObjectName(*(view->connection()), name, 3);
+	int id = KexiDB::idForObjectName(*(view->connection()), name, KexiPart::FormObjectType);
 	if((id == 0) || (id == view->parentDialog()->id())) // == our form
 		return; // because of recursion when loading
 

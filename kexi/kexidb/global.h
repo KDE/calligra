@@ -104,12 +104,12 @@ enum ObjectTypes {
 	AnyObjectType = 0,      //!< helper
 	TableObjectType = 1,
 	QueryObjectType = 2,
-	IndexObjectType = 3,
-	LastObjectType = 3, //ALWAYS UPDATE THIS
+	LastObjectType = 2, //ALWAYS UPDATE THIS
 
-	KexiDBSystemTableObjectType = 128 //!< helper, not used in storage 
+	KexiDBSystemTableObjectType = 128,//!< helper, not used in storage 
 	                                  //!< (allows to select kexidb system tables
 	                                  //!< may be or'd with TableObjectType)
+	IndexObjectType = 256 //!< special
 };
 
 }
