@@ -24,6 +24,22 @@
 
 #include <filterbase.h>
 
+// helper function to escape string for XML-ness
+static QString XMLEscape( const QString& str )
+{
+  QString result; 
+
+  for( unsigned i=0; i<str.length(); i++ )
+    if( str[i] == '&' ) result += "&amp;";
+    else if( str[i] == '<' ) result += "&lt;"; 
+    else if( str[i] == '>' ) result += "&gt;"; 
+    else if( str[i] == '"' ) result += "&quot;";
+    else if( str[i] == QChar(39) ) result += "&apos;";
+    else result += str[i]; 
+
+  return result; 
+}
+
 HancomWordFilter::HancomWordFilter( const QByteArray &prvText ):
         FilterBase()
 {
@@ -90,7 +106,7 @@ QCString HancomWordFilter::CString() const
         "   <PARAGRAPH>\n"
         "    <TEXT>");
 
-    newstr.append( m_text );
+    newstr.append( XMLEscape( m_text ) );
 
     newstr.append("</TEXT>\n"
         "   </PARAGRAPH>\n"
