@@ -18,7 +18,6 @@
 */
 
 #include <qprinter.h>
-#include <qmessagebox.h>
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>

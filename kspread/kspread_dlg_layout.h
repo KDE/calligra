@@ -21,19 +21,14 @@
 #define __kspread_dlg_layout_h__
 
 #include <qwidget.h>
-#include <qlistbox.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <qlabel.h>
-#include <qgroupbox.h>
 #include <qtabdialog.h>
-#include <qpixmap.h>
 #include <qcolor.h>
 #include <qfont.h>
 #include <qmessagebox.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qframe.h> 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qframe.h>

@@ -22,7 +22,6 @@
 #include <ctype.h>
 #include <math.h>
 
-#include <qmessagebox.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <qkeycode.h>
