@@ -109,7 +109,7 @@ Item								   Prio Status
     - Data		OK					     S1 done
     - Font		Ugly -> OK				     S1 done
     - Geometry		REMOVE					     S1 done
-    - HeaderFooter	Somewhat ugly?				     S1 --
+    - HeaderFooter	Somewhat ugly?  No, Ok.			     S1 done
     - Legend		OK					     S1 done
     - Line3d		UGLY!!  Disabled			     S1 done
     - Parameter3d	OK					     S1 done
@@ -122,6 +122,7 @@ Item								   Prio Status
   + Integrate the Colors and Font pages into Axes?		      2 ----
     - Maybe create a little combination widget that can change        2 --
       both font and color for a text item?
+  + Font page should have a buttongroup				      2	----
 
 * Wizard
   + New data page?						     S1 ----

@@ -40,14 +40,18 @@ public:
                                  QWidget* parent );
     void init();
     void apply();
+
 protected slots:
     void slotChange3DParameter(bool);
+
 private:
-    KChartParams* _params;
-    KIntNumInput* angle3d;
-    KDoubleNumInput* depth;
-    QCheckBox* bar3d;
-    QCheckBox* drawShadowColor;
+    KChartParams     *m_params;
+
+    // Widgets
+    KIntNumInput     *angle3d;
+    KDoubleNumInput  *depth;
+    QCheckBox        *bar3d;
+    QCheckBox        *drawShadowColor;
 };
 
 }  //KChart namespace

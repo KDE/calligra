@@ -35,22 +35,29 @@ namespace KChart
 
 KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
-    QWidget( parent ),_params( params )
+    QWidget( parent ),m_params( params )
 {
   QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(),KDialog::spacingHint());
 
-  QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("3D Parameters"), this );
+
+  QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, 
+				       i18n("3D Parameters"), this );
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
-  QGridLayout *grid1 = new QGridLayout(gb->layout(),3,2);
+
+  // The grid layout inside the buttongroup.
+  QGridLayout *grid1 = new QGridLayout(gb->layout(), 5, 3);
   layout->addWidget(gb,0,0);
 
+  // The main on/off checkbox.
   bar3d=new QCheckBox(i18n("3D bar"),gb);
   grid1->addWidget(bar3d,0,0);
 
-  connect(bar3d, SIGNAL(toggled ( bool )),this,SLOT(slotChange3DParameter(bool)));
+  connect(bar3d, SIGNAL(toggled ( bool )),
+	  this,  SLOT(slotChange3DParameter(bool)));
 
-  drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb);
+  // Checkbox for shadows
+  drawShadowColor=new QCheckBox(i18n("Draw dark shadow"),gb);
   grid1->addWidget(drawShadowColor,1,0);
 
   QLabel *tmpLabel = new QLabel( i18n( "Angle:" ), gb );
@@ -61,8 +68,6 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   grid1->addWidget(angle3d,2,1);
   angle3d->setRange(0, 90, 1);
 
-
-
   tmpLabel = new QLabel( i18n( "Depth:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   grid1->addWidget(tmpLabel,3,0);
@@ -71,16 +76,18 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   depth->resize(100,depth->sizeHint().height());
   grid1->addWidget(depth,3,1);
   depth->setRange(0, 2.0, 0.1);
-
+  
   gb->setAlignment(Qt::AlignLeft);
   grid1->addColSpacing(0,depth->width());
   grid1->addColSpacing(0,angle3d->width());
-  grid1->setColStretch(0,1);
-  grid1->activate();
+  grid1->setColStretch(2,1);
+  grid1->setRowStretch(4,1);
+
   //it's not good but I don't know how
   //to reduce space
-  layout->addColSpacing(1,300);
+  //layout->addColSpacing(1,300);
 }
+
 
 void KChartParameter3dConfigPage::slotChange3DParameter(bool b)
 {
@@ -89,23 +96,26 @@ void KChartParameter3dConfigPage::slotChange3DParameter(bool b)
     drawShadowColor->setEnabled(b);
 }
 
+
 void KChartParameter3dConfigPage::init()
 {
-    bool state=_params->threeDBars();
+    bool state=m_params->threeDBars();
     bar3d->setChecked(state);
 
-    drawShadowColor->setChecked(_params->threeDShadowColors());
-    angle3d->setValue( _params->threeDBarAngle() );
-    depth->setValue( _params->threeDBarDepth() );
+    drawShadowColor->setChecked(m_params->threeDShadowColors());
+    angle3d->setValue( m_params->threeDBarAngle() );
+    depth->setValue( m_params->threeDBarDepth() );
     slotChange3DParameter(state);
 }
 
+
 void KChartParameter3dConfigPage::apply()
 {
-    _params->setThreeDBars(bar3d->isChecked());
-    _params->setThreeDBarAngle( angle3d->value() );
-    _params->setThreeDBarDepth( depth->value() );
-    _params->setThreeDShadowColors( drawShadowColor->isChecked());
+    m_params->setThreeDBars(bar3d->isChecked());
+    m_params->setThreeDBarAngle( angle3d->value() );
+    m_params->setThreeDBarDepth( depth->value() );
+    m_params->setThreeDShadowColors( drawShadowColor->isChecked());
 }
+
 
 }  //KChart namespace

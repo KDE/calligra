@@ -1,3 +1,9 @@
+2005-03-18  Inge Wallin  <inge@lysator.liu.se>
+
+	Improve layout for 3D bar chart parameters.
+	* kchartParameter3dConfigPage.cc (KChartParameter3dConfigPage):
+	Improve layout.
+
 2005-03-17  Inge Wallin  <inge@lysator.liu.se>
 
 	Remove the 3D Line Parameters page from the config dialog due to
