@@ -42,7 +42,7 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
-    : KPObject(), ktextobject( doc, 0, "" )
+    : KPObject(), ktextobject( doc, this, 0, "" )
 {
     ktextobject.hide();
     brush = Qt::NoBrush;

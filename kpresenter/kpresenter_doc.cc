@@ -193,8 +193,8 @@ bool KPresenterChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs
 
 bool KPresenterChild::save( QTextStream& out )
 {
-   if (document()==0)
-      return false;
+    if (document()==0)
+        return false;
     //assert( document() );
 
     out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
@@ -335,8 +335,8 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
               {
                   QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
                   if (((KoDocumentChild*)(it.current()))->document()!=0)
-                     if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
-                        return false;
+                      if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
+                          return false;
               }
           }
       }
@@ -751,8 +751,8 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 		    //vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    //for( ; it != lst.end(); it++ ) {
 		    //}
-          if (kppartobject!=0)
-             kppartobject->load( parser, lst );
+                    if (kppartobject!=0)
+                        kppartobject->load( parser, lst );
 		} else
 		    kdError() << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
 
@@ -975,7 +975,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	    while ( parser.open( QString::null, tag ) ) {
 		KPPixmapDataCollection::Key key;
-      int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
+                int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
 		parser.parseTag( tag, name, lst );
@@ -1026,7 +1026,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	    while ( parser.open( QString::null, tag ) ) {
 		KPClipartCollection::Key key;
-      int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
+                int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
 		parser.parseTag( tag, name, lst );
@@ -1219,7 +1219,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst
 		kptextobject->load( parser, lst );
 
 		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Text" ), kptextobject, this );
+		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
 		    insertCmd->execute();
 		    _commands.addCommand( insertCmd );
 		} else
@@ -2997,7 +2997,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
     kppixmapobject->setOrig( ( ( diffx + _x ) / _rastX ) * _rastX, ( ( diffy + _y ) / _rastY ) * _rastY );
     kppixmapobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert picture" ), kppixmapobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3038,7 +3038,7 @@ void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
     kpclipartobject->setSize( 150, 150 );
     kpclipartobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert clipart" ), kpclipartobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3119,7 +3119,7 @@ void KPresenterDoc::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineT
     kplineobject->setSize( r.width(), r.height() );
     kplineobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert line" ), kplineobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3136,7 +3136,7 @@ void KPresenterDoc::insertRectangle( QRect r, QPen pen, QBrush brush, FillType f
     kprectobject->setSize( r.width(), r.height() );
     kprectobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert rectangle" ), kprectobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3153,7 +3153,7 @@ void KPresenterDoc::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, Fill
     kpellipseobject->setSize( r.width(), r.height() );
     kpellipseobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert ellipse" ), kpellipseobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3171,7 +3171,7 @@ void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QCo
     kppieobject->setSize( r.width(), r.height() );
     kppieobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert pie/arc/chord" ), kppieobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3192,7 +3192,7 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
 	kptextobject->getKTextObject()->document()->setColorToAll( _view->currColor() );
     }
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert text" ), kptextobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
@@ -3210,7 +3210,7 @@ void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb,
     kpautoformobject->setSize( r.width(), r.height() );
     kpautoformobject->setSelected( true );
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert autoform" ), kpautoformobject, this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 

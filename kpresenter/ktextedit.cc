@@ -38,6 +38,7 @@
 #include <qdragobject.h>
 #include <kglobalsettings.h>
 #include <kcharsets.h>
+#include <kdebug.h>
 
 #include <qstringlist.h>
 #include <qfont.h>
@@ -55,7 +56,9 @@
 #endif
 
 #include <stdlib.h>
-#include "kpresenter_doc.h"
+#include <kpresenter_doc.h>
+#include <commandhistory.h>
+#include <textcmd.h>
 
 QPixmap *KTextEdit::bufferPixmap( const QSize &s )
 {
@@ -71,9 +74,9 @@ QPixmap *KTextEdit::bufferPixmap( const QSize &s )
     return buf_pixmap;
 }
 
-KTextEdit::KTextEdit( KPresenterDoc *d, QWidget *parent, const char *name )
+KTextEdit::KTextEdit( KPresenterDoc *d, KPTextObject *txtobj, QWidget *parent, const char *name )
     : QWidget( parent, name, WNorthWestGravity | WRepaintNoErase ),
-      doc( new KTextEditDocument( d ) ), undoRedoInfo( doc )
+      doc( new KTextEditDocument( d, txtobj ) ), undoRedoInfo( doc )
 {
     init();
 }
@@ -1582,6 +1585,26 @@ void KTextEditCommandHistory::addCommand( KTextEditCommand *cmd )
 	history.removeFirst();
     else
 	++current;
+
+    // add a command to the global cmdhist.
+    QString cmdAction;
+    if(cmd->type()==KTextEditCommand::Invalid) {
+        cmdAction="error, not supposed to happen";
+    }
+    else if(cmd->type()==KTextEditCommand::Insert) {
+        cmdAction=i18n("Inserting Text");
+    }
+    else if(cmd->type()==KTextEditCommand::Delete) {
+        kdDebug() << "KTextEditCommandHistory::addCommand -- delete text" << endl;
+        cmdAction=i18n("Deleting Text");
+    }
+    else {
+        kdDebug() << "KTextEditCommandHistory::addCommand -- formatting" << endl;
+        cmdAction=i18n("Formatting Text");
+    }
+    document->commands()->addCommand(new TextCmd(cmdAction, document, kptextobject));
+    // mark as modified
+    document->setModified(true);
 }
 
 KTextEditCursor *KTextEditCommandHistory::undo( KTextEditCursor *c )
@@ -2071,7 +2094,7 @@ void KTextEditCursor::indent()
 
 const int KTextEditDocument::numSelections = 2; // Don't count the Temp one!
 
-KTextEditDocument::KTextEditDocument( KPresenterDoc *doc )
+KTextEditDocument::KTextEditDocument( KPresenterDoc *doc, KPTextObject *txtobj )
 {
     kpr_doc = doc;
     listMult = 15;
@@ -2092,7 +2115,7 @@ KTextEditDocument::KTextEditDocument( KPresenterDoc *doc )
     selectionColors[ Search ] = Qt::yellow;
     selectionText[ Standard ] = TRUE;
     selectionText[ Search ] = FALSE;
-    commandHistory = new KTextEditCommandHistory( 100 ); // ### max undo/redo steps should be configurable
+    commandHistory = new KTextEditCommandHistory( 100, doc, txtobj ); // ### max undo/redo steps should be configurable
 }
 
 void KTextEditDocument::clear()

@@ -27,6 +27,7 @@
 class KPresenterView;
 class KPresenterDoc;
 class QDomElement;
+class TextCmd;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -34,6 +35,7 @@ class QDomElement;
 
 class KPTextObject : public KPObject
 {
+    friend class TextCmd;
 public:
     KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject()

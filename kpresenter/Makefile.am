@@ -22,7 +22,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
-	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
+	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc textcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
 	grpobjcmd.cc commandhistory.cc preview.cc gotopage.cc footer_header.cc \
 	kpresenter_factory.cc \
@@ -66,7 +66,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		grpobjcmd.h commandhistory.h preview.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h textdialog.h sidebar.h
+		KPresenterBackgroundIface.h textdialog.h sidebar.h textcmd.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -42,18 +42,12 @@
 
 class QPainter;
 class QPaintEvent;
-class KTextEditDocument;
-class KTextEditCursor;
 class QKeyEvent;
 class QResizeEvent;
 class QMouseEvent;
 class QTimer;
-class KTextEditString;
 class QVBox;
 class QListBox;
-class KTextEditCommand;
-class KTextEditParag;
-class KTextEditFormat;
 class QFont;
 class QColor;
 class KTextEditDocument;
@@ -65,6 +59,7 @@ class KTextEditFormat;
 class KTextEditCursor;
 class KTextEditParag;
 class KTextEditFormatter;
+class KTextEditFormat;
 class KTextEditFormatCollection;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -111,11 +106,13 @@ private:
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+class KPresenterDoc;
+class KPTextObject;
 class KTextEditCommandHistory
 {
 public:
-    KTextEditCommandHistory( int s ) : current( -1 ), steps( s ) { history.setAutoDelete( TRUE ); }
+    KTextEditCommandHistory( int s, KPresenterDoc *doc, KPTextObject *txtobj ) :
+        document(doc), kptextobject(txtobj), current( -1 ), steps( s ) { history.setAutoDelete( TRUE ); }
 
     void addCommand( KTextEditCommand *cmd );
     KTextEditCursor *undo( KTextEditCursor *c );
@@ -123,6 +120,8 @@ public:
 
 private:
     QList<KTextEditCommand> history;
+    KPresenterDoc *document;
+    KPTextObject *kptextobject;
     int current, steps;
 
 };
@@ -192,7 +191,6 @@ protected:
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class KPresenterDoc;
 class KTextEditDocument
 {
 public:
@@ -212,7 +210,7 @@ public:
         OutlinedSquare
     };
 
-    KTextEditDocument( KPresenterDoc *doc );
+    KTextEditDocument( KPresenterDoc *doc, KPTextObject *txtobj );
 
     void clear();
 
@@ -626,8 +624,8 @@ public:
         EnumList
     };
 
-    KTextEdit( KPresenterDoc *doc, QWidget *parent, const QString &fn, bool tabify = FALSE );
-    KTextEdit( KPresenterDoc *doc, QWidget *parent = 0, const char *name = 0 );
+    KTextEdit( KPresenterDoc *doc, KPTextObject *txtobj, QWidget *parent, const QString &fn, bool tabify = FALSE );
+    KTextEdit( KPresenterDoc *doc, KPTextObject *txtobj, QWidget *parent = 0, const char *name = 0 );
     virtual ~KTextEdit();
 
     void clear();
