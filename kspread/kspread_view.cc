@@ -1873,7 +1873,10 @@ void KSpreadView::refreshView()
     m_pTabBarRight->show();
     m_pTabBarLast->setGeometry( 48, height() - 16, 16, 16 );
     m_pTabBarLast->show();
-    m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
+    if(!m_pDoc->getShowHorizontalScrollBar())
+        m_pTabBar->setGeometry( 64, height() - 16, width() -64, 16 );
+    else
+        m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
     m_pTabBar->show();
 
     // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
