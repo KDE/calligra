@@ -11,6 +11,8 @@ Bugfixes:
 - Fix repaint loops, when at end of range and zooming to lower resolution
 - Fix endless loop, when selecting until out of range
 - Fix autoscroll on selection with mouse, when mouse is not moved
+- Fix printout of thick borders on page borders
+- Fix flicker of embedded objects
 
 
 Changes from 1.1 to 1.2
