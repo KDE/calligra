@@ -355,3 +355,12 @@ you can't resize column or row, you can't rename table etc...
 -----------------------------------------------------
 -Add financial functions that Jonathan Singer created.
 thanks
+
+2000-03-24 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Bug fix
+-Now check spelling works => correct kspell.cpp 
+replace void slotModalDone( const char * ) by void slotModalDone( const QString & )
+-David also ,bug fix 
+thanks.
+ 

@@ -35,7 +35,7 @@
 
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
 

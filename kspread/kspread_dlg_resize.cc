@@ -32,7 +32,7 @@
 #include <iostream.h>
 
 KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize re)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
 
   m_pView=parent;

@@ -35,7 +35,7 @@
 #include <knumvalidator.h>
 
 KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* name )
-	: QWidget( _parent )
+        : QWidget( _parent )
 
 {
   tmpCond.val1=0;
@@ -155,7 +155,7 @@ switch(tmp->m_cond)
 		val=val.setNum(tmp->val1);
 		edit1->setText(val);
 		break;
-		
+
 	case Between :
 		choose->setCurrentItem(6);
 		edit1->setEnabled(true);
@@ -279,7 +279,7 @@ return result;
 }
 
 KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
   marker=_marker;

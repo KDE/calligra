@@ -759,7 +759,7 @@ void KSpreadView::formulaMatrix()
 void KSpreadView::formulaLeftSuper()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::LSUP );
 }
 
@@ -786,8 +786,22 @@ void KSpreadView::formulaProduct()
 
 void KSpreadView::tableFormat()
 {
-    KSpreadFormatDlg dlg( this );
-    dlg.exec();
+QRect r( activeTable()-> selectionRect() );
+if( r.right() ==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else if(r.bottom()==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else
+	{
+        KSpreadFormatDlg dlg( this );
+        dlg.exec();
+        }
 }
 
 void KSpreadView::autoSum()
@@ -1119,7 +1133,7 @@ else if(r.bottom()==0x7FFF)
 else
 	{
 	activeTable()->sortByColumn( r.left());
-	}	
+	}
 }
 
 

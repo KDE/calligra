@@ -215,7 +215,7 @@ void KSpreadFormulaEditor::setText(QString text)
 {
     if(m_pEdit !=0)
 	m_pEdit->setText(text);
-}	
+}
 int KSpreadFormulaEditor::cursorPosition() const
 {
     // function cursorPosition() no implanted in libkformula

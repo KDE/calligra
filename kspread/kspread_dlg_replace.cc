@@ -32,7 +32,7 @@
 
 
 KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
   marker= _marker;

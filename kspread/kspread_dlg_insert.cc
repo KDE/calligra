@@ -32,7 +32,7 @@
 #include <qbuttongroup.h>
 
 KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,Mode _mode)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
   marker=_marker;

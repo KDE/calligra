@@ -844,10 +844,10 @@ int y = r.top();
 int x = r.left();
 int posx=0;
 int posy=0;
-for ( int incr=start;incr<end;incr=incr+step )
-	{		
+for ( int incr=start;incr<=end;incr=incr+step )
+	{
 	KSpreadCell *cell = cellAt( x+posx, y+posy );
-		
+
 	if ( cell == m_pDefaultCell )
 		{
 		cell = new KSpreadCell( this, x+posx, y+posy );
@@ -856,8 +856,8 @@ for ( int incr=start;incr<end;incr=incr+step )
 		}
 	QString tmp;
 	cell->setText(tmp.setNum(incr));
-	
-	if(mode==Column)	
+
+	if(mode==Column)
 	    posy++;
 	else
 	    posx++;
