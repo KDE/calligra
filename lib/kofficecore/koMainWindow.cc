@@ -132,7 +132,7 @@ KoMainWindow::~KoMainWindow()
 	s_lstMainWindows->removeRef( this );
 
     delete d->m_manager;
-    
+
     delete d;
 }
 
@@ -142,7 +142,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   if ( d->m_rootDoc )
     d->m_rootDoc->removeShell( this );
-  
+
   d->m_rootDoc = doc;
 
   if ( doc )
@@ -321,6 +321,12 @@ bool KoMainWindow::saveDocument( bool saveas )
     QApplication::restoreOverrideCursor();
     return ret;
 }
+
+bool KoMainWindow::queryClose()
+{
+  qDebug( "queryClose!" ); 
+  return closeDocument();
+} 
 
 bool KoMainWindow::closeDocument()
 {

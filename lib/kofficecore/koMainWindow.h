@@ -178,6 +178,8 @@ protected:
      */
     virtual bool saveDocument( bool _saveas = FALSE );
 
+    virtual bool queryClose();
+
 protected slots:
     virtual void slotActivePartChanged( KParts::Part *newPart );
 
