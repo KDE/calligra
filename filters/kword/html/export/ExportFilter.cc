@@ -24,6 +24,8 @@
 #include <qregexp.h>
 #include <qtextcodec.h>
 #include <qfile.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 #include <qpicture.h>
 
 #include <klocale.h>
@@ -81,26 +83,50 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
 
 QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 {
-    // TODO: put every file in a sub-directory
-    QString strReturn(m_fileName);
-    strReturn+='.';
+    kdDebug(30503) << "HtmlWorker::getAdditionalFileName " << additionalName << endl;
 
+    QDir dir(m_strFileDir);
+    kdDebug(30503) << "Base directory: " << m_strFileDir << endl;
+
+    if (!dir.exists(m_strSubDirectoryName))
+    {
+        // Make the directory, as it does not exist yet!
+        kdDebug(30503) << "Creating directory: " << m_strSubDirectoryName << endl;
+        dir.mkdir(m_strSubDirectoryName);
+    }
+
+    QString strFileName(m_strSubDirectoryName);
+    strFileName+="/";
     const int result=additionalName.findRev("/");
     if (result>=0)
     {
-        strReturn+=additionalName.mid(result+1);
+        strFileName+=additionalName.mid(result+1);
     }
     else
     {
-        strReturn+=additionalName;
+        strFileName+=additionalName;
     }
-    kdDebug(30503) << "Add: " << additionalName << " = " << strReturn << endl;
-    return strReturn;
+
+    // Now, we have to create a backup file.
+
+    QString strBackupName(strFileName);
+    strBackupName+="~";
+    kdDebug(30503) << "Remove backup file: " << strBackupName << endl;
+    // We need to remove the backup file, as not all filesystems or ports can do it themselves on a rename.
+    dir.remove(strBackupName);
+    kdDebug(30503) << "Moving file: " << additionalName << " => " << strBackupName << endl;
+    dir.rename(strFileName,strBackupName);
+
+    return strFileName;
 }
 
 bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 {
     QString strImageName(getAdditionalFileName(anchor.picture.koStoreName));
+
+    QString strImagePath(m_strFileDir);
+    strImagePath+='/';
+    strImagePath+=strImageName;
 
     QByteArray image;
 
@@ -108,7 +134,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     if (loadKoStoreFile(anchor.picture.koStoreName,image))
     {
-        QFile file(strImageName);
+        QFile file(strImagePath);
 
         if ( !file.open (IO_WriteOnly) )
         {
@@ -147,6 +173,10 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
 
     QString strImageName(getAdditionalFileName(strAdditionalName));
 
+    QString strImagePath(m_strFileDir);
+    strImagePath+='/';
+    strImagePath+=strImageName;
+    
     const double height=anchor.bottom - anchor.top;
     const double width =anchor.right  - anchor.left;
 
@@ -171,7 +201,7 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
         // TODO: other props for image
 
         kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
-        if (!picture.save(strImageName,"svg"))
+        if (!picture.save(strImagePath,"svg"))
         {
             kdError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
                 << " to " << strImageName << endl;
@@ -230,8 +260,15 @@ void HtmlWorker::formatTextParagraph(const QString& strText,
 void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &paraText,
     const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
 {
-    if (! paraText.isEmpty() )
+    if (paraText.isEmpty())
     {
+        openParagraph(strTag,layout);
+        *m_streamOut << "&nbsp;" ; // A paragraph can never be empty in HTML
+        closeParagraph(strTag,layout);
+    }
+    else
+    {
+        bool paragraphNotOpened=true;
 
         ValueListFormatData::ConstIterator  paraFormatDataIt;
 
@@ -243,12 +280,24 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
         {
             if (1==(*paraFormatDataIt).id)
             {
+                // For normal text, we need an opened paragraph
+                if (paragraphNotOpened)
+                {
+                    openParagraph(strTag,layout);
+                    paragraphNotOpened=false;
+                }
                 //Retrieve text
                 partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
                 formatTextParagraph(partialText,layout.formatData,*paraFormatDataIt);
             }
             else if (4==(*paraFormatDataIt).id)
             {
+                // For variables, we need an opened paragraph
+                if (paragraphNotOpened)
+                {
+                    openParagraph(strTag,layout);
+                    paragraphNotOpened=false;
+                }
                 if (9==(*paraFormatDataIt).variable.m_type)
                 {
                     // A link
@@ -266,10 +315,14 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
             }
             else if (6==(*paraFormatDataIt).id)
             {
-                // We have an image or a table
+                // We have an image, a clipart or a table
 
-                // But first, we have a problem, as we must close the paragraph
-                closeParagraph(strTag,layout);
+                // But first, we must sure that the paragraph is not opened.
+                if (!paragraphNotOpened)
+                {
+                    // The paragraph was opened, so close it.
+                    closeParagraph(strTag,layout);
+                }
 
                 if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
@@ -289,9 +342,14 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                         << (*paraFormatDataIt).frameAnchor.type << endl;
                 }
 
-                // We can re-open the paragraph
-                openParagraph(strTag,layout);
+                // The paragraph will need to be opened again
+                paragraphNotOpened=true;
             }
+        }
+        if (!paragraphNotOpened)
+        {
+            // The paragraph was opened, so close it.
+            closeParagraph(strTag,layout);
         }
     }
 }
@@ -302,12 +360,6 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
     kdDebug(30503) << "Entering HtmlWorker::doFullParagraph" << endl << paraText << endl;
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
-
-    if (strParaText.isEmpty())
-    {
-        //An empty paragraph is not allowed in HTML, so add a non-breaking space!
-        strParaText=QChar(160);
-    }
 
     // As KWord has only one depth of lists (FIXME/TODO: that's wrong!), we can process lists very simply.
     if ( layout.counter.numbering == CounterData::NUM_LIST )
@@ -392,9 +444,7 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
         }
     }
 
-    openParagraph(strTag,layout);
     ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
-    closeParagraph(strTag,layout);
 
     kdDebug(30503) << "Quiting HtmlWorker::doFullParagraph" << endl;
     return true;
@@ -434,18 +484,12 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     m_streamOut->setCodec( getCodec() );
 
-    // Make the default title
-    const int result=filenameOut.findRev("/");
-    if (result>=0)
-    {
-        m_strTitle=filenameOut.mid(result+1);
-    }
-    else
-    {
-        m_strTitle=filenameOut;
-    }
-
     m_fileName=filenameOut;
+    QFileInfo base(m_fileName);
+    m_strFileDir=base.dirPath();
+    m_strTitle=base.fileName();
+    m_strSubDirectoryName=base.fileName();
+    m_strSubDirectoryName+=".dir";
 
     return true;
 }

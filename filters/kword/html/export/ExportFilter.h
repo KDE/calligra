@@ -87,6 +87,8 @@ protected:
     QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_strTitle;
     QString m_fileName; // Name of the output file
+    QString m_strFileDir; // Directory of the output file
+    QString m_strSubDirectoryName; // Name of the sub directory for the additional files
     QValueStack<ListInfo> m_listStack; // Stack for list information
     bool m_xml;
 };
