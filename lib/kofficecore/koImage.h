@@ -15,7 +15,7 @@ public:
     {
         Key() {}
 
-        Key( const QString &filename, const QDateTime &timestamp )
+        Key( const QString &filename, const QDateTime &timestamp = QDateTime() )
             : m_filename( filename ), m_timestamp( timestamp ) {}
 
         bool operator==( const Key &other ) const
@@ -55,12 +55,6 @@ private:
 class KoImagePrivate : public QShared
 {
 public:
-    KoImagePrivate()
-        {
-            m_valid = true;
-        }
-
-    bool m_valid;
     QImage m_image;
     KoImage m_originalImage;
     KoImage::Key m_key;
@@ -74,11 +68,14 @@ inline KoImage::KoImage( const KoImage &other )
 
 inline QImage KoImage::image() const
 {
+    if ( !d) return QImage();
     return d->m_image;
 }
 
 inline QPixmap KoImage::pixmap() const
 {
+    if ( !d ) return QPixmap();
+
     if ( d->m_cachedPixmap.isNull() )
         d->m_cachedPixmap = d->m_image; // automatic conversion using assignment operator
     return d->m_cachedPixmap;
@@ -86,12 +83,14 @@ inline QPixmap KoImage::pixmap() const
 
 inline KoImage::Key KoImage::key() const
 {
+    if ( !d ) return KoImage::Key();
+
     return d->m_key;
 }
 
 inline bool KoImage::isValid() const
 {
-    return d->m_valid;
+    return d != 0;
 }
 
 #endif

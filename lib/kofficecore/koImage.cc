@@ -3,13 +3,14 @@
 
 #include <qshared.h>
 
+#include <assert.h>
+
 class KoImageCollection;
 
 
 KoImage::KoImage()
 {
-    d = new KoImagePrivate;
-    d->m_valid = false;
+    d = 0;
 }
 
 KoImage::KoImage( const Key &key, const QImage &image )
@@ -21,7 +22,7 @@ KoImage::KoImage( const Key &key, const QImage &image )
 
 KoImage::~KoImage()
 {
-    if ( d->deref() )
+    if ( d && d->deref() )
         delete d;
 }
 
@@ -29,9 +30,10 @@ KoImage &KoImage::operator=( const KoImage &_other )
 {
     KoImage &other = const_cast<KoImage &>( _other );
 
-    other.d->ref();
+    if ( other.d )
+        other.d->ref();
 
-    if ( d->deref() )
+    if ( d && d->deref() )
         delete d;
 
     d = other.d;
@@ -41,6 +43,9 @@ KoImage &KoImage::operator=( const KoImage &_other )
 
 KoImage KoImage::scale( const QSize &size ) const
 {
+    if ( !d )
+        return *this;
+
     KoImage originalImage;
 
     if ( d->m_originalImage.isValid() )
@@ -54,6 +59,7 @@ KoImage KoImage::scale( const QSize &size ) const
     QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
 
     KoImage result( d->m_key, scaledImg );
+    assert( result.d );
     result.d->m_originalImage = originalImage;
 
     return result;

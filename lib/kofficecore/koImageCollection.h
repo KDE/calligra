@@ -8,6 +8,8 @@
 class KoImageCollection
 {
 public:
+    typedef QMap<KoImage::Key,KoImage> Map;
+
     KoImageCollection();
     ~KoImageCollection();
 
@@ -15,11 +17,10 @@ public:
 
     KoImage image( const KoImage::Key &key );
 
-    // ### removeme
-    QMap<KoImage::Key,KoImage> data() const { return m_images; }
+    Map data() const { return m_images; }
 
 private:
-    QMap<KoImage::Key,KoImage> m_images;
+    Map m_images;
     class KoImageCollectionPrivate;
     KoImageCollectionPrivate *d;
 };
