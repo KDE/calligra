@@ -1096,10 +1096,12 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT BOOKMARKS ( BOOKMARKITEM+ )>
 <!ATTLIST BOOKMARKS >
 <!ELEMENT BOOKMARKITEM name NMTOKEN #REQUIRED 
-                       cursorIndex NMTOKEN #REQUIRED
+                       cursorIndexStart NMTOKEN #REQUIRED
+                       cursorIndexEnd NMTOKEN #REQUIRED
                        frameset NMTOKEN #REQUIRED
-                       parag NMTOKEN #REQUIRED
-                       length NMTOKEN #REQUIRED>
+                       startparag NMTOKEN #REQUIRED
+                       endparag NMTOKEN #REQUIRED>
+
 <!--
         The key mapping to one pixmap.
         [Old attribute was named "key" (the filename).]

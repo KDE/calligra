@@ -104,35 +104,43 @@ protected:
 struct bookMark
 {
     QString bookname;
-    int paragIndex;
+    int paragStartIndex;
+    int paragEndIndex;
     QString frameSetName;
     int cursorStartIndex;
-    int length;
+    int cursorEndIndex;
 };
 
 class KWBookMark
 {
 public:
     KWBookMark(const QString &_name);
-    KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _len);
+    KWBookMark(const QString &_name, KWTextParag *_startParag, KWTextParag *_endParag, KWFrameSet *_frameSet, int _start, int _end);
     ~KWBookMark();
     QString bookMarkName()const { return m_name;}
     void setBookMarkName( const QString & _name ) { m_name = _name;}
     KWFrameSet * frameSet()const{ return m_frameSet;}
     void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
-    KWTextParag *parag() const { return m_parag;}
-    void setParag( KWTextParag *_parag ) { m_parag = _parag;}
+
+    KWTextParag *startParag() const { return m_startParag;}
+    void setStartParag( KWTextParag *_parag ) { m_startParag = _parag;}
+
+    KWTextParag *endParag() const { return m_endParag;}
+    void setEndParag( KWTextParag *_parag ) { m_endParag = _parag;}
+
     void setBookmarkStartIndex( int _pos ) { m_startIndex = _pos;}
     int bookmarkStartIndex() const  { return m_startIndex ; }
-    void setBookmarkLength( int _length ) { m_length = _length;}
-    int bookmarkLength() const  { return m_length ; }
+
+    void setBookmarkEndIndex( int _end ) { m_endIndex = _end;}
+    int bookmarkEndIndex() const  { return m_endIndex ; }
 
 private:
     QString m_name;
-    KWTextParag *m_parag;
+    KWTextParag *m_startParag;
+    KWTextParag *m_endParag;
     KWFrameSet *m_frameSet;
     int m_startIndex;
-    int m_length;
+    int m_endIndex;
 };
 
 /******************************************************************/
@@ -674,7 +682,7 @@ public:
     void setFootNoteSeparatorLineType( SeparatorLineLineType _type) {m_footNoteSeparatorLineType = _type;}
 
 
-    void insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _length);
+    void insertBookMark(const QString &_name, KWTextParag *_startparag, KWTextParag *_endparag, KWFrameSet *_frameSet, int _start, int _end);
     void deleteBookMark(const QString &_name);
     void renameBookMark(const QString &_oldname, const QString &_newName);
 

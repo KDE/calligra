@@ -130,25 +130,28 @@ public:
 
 KWBookMark::KWBookMark(const QString &_name)
     : m_name(_name),
-      m_parag(0L),
+      m_startParag(0L),
+      m_endParag(0L),
       m_frameSet(0L),
       m_startIndex( 0 ),
-      m_length( 0)
+      m_endIndex( 0)
 {
 }
 
-KWBookMark::KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _len)
+KWBookMark::KWBookMark(const QString &_name, KWTextParag *_startParag, KWTextParag *_endParag,KWFrameSet *_frameSet, int _pos, int _end)
     : m_name(_name),
-      m_parag(_parag),
+      m_startParag(_startParag),
+      m_endParag(_endParag),
       m_frameSet(_frameSet),
       m_startIndex( _pos ),
-      m_length( _len )
+      m_endIndex( _end )
 {
 }
 
 KWBookMark::~KWBookMark()
 {
-    m_parag=0L;
+    m_startParag=0L;
+    m_endParag=0L;
     m_frameSet=0L;
 }
 
@@ -1154,10 +1157,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             {
                 bookMark *tmp=new bookMark;
                 tmp->bookname=bookmarkitem.attribute("name");
-                tmp->cursorStartIndex=bookmarkitem.attribute("cursorIndex").toInt();
+                tmp->cursorStartIndex=bookmarkitem.attribute("cursorIndexStart").toInt();
                 tmp->frameSetName=bookmarkitem.attribute("frameset");
-                tmp->paragIndex = bookmarkitem.attribute("parag").toInt();
-                tmp->length = bookmarkitem.attribute("length").toInt();
+                tmp->paragStartIndex = bookmarkitem.attribute("startparag").toInt();
+                tmp->paragEndIndex = bookmarkitem.attribute("endparag").toInt();
+                tmp->cursorEndIndex = bookmarkitem.attribute("cursorIndexEnd").toInt();
                 m_tmpBookMarkList.append(tmp);
             }
             bookmarkitem=bookmarkitem.nextSibling().toElement();
@@ -2134,16 +2138,19 @@ QDomDocument KWDocument::saveXML()
         QPtrListIterator<KWBookMark> book(m_bookmarkList);
         for ( ; book.current() ; ++book )
         {
-            if ( book.current()->parag()!=0 &&
+            if ( book.current()->startParag()!=0 &&
+                 book.current()->endParag()!=0 &&
                  !book.current()->frameSet()->isDeleted())
             {
                 QDomElement bookElem = doc.createElement( "BOOKMARKITEM" );
                 bookmark.appendChild( bookElem );
                 bookElem.setAttribute( "name", book.current()->bookMarkName());
                 bookElem.setAttribute( "frameset", book.current()->frameSet()->getName());
-                bookElem.setAttribute( "parag", book.current()->parag()->paragId());
-                bookElem.setAttribute( "cursorIndex", book.current()->bookmarkStartIndex());
-                bookElem.setAttribute( "length", book.current()->bookmarkLength());
+                bookElem.setAttribute( "startparag", book.current()->startParag()->paragId());
+                bookElem.setAttribute( "endparag", book.current()->endParag()->paragId());
+
+                bookElem.setAttribute( "cursorIndexStart", book.current()->bookmarkStartIndex());
+                bookElem.setAttribute( "cursorIndexEnd", book.current()->bookmarkEndIndex());
 
             }
         }
@@ -4076,9 +4083,9 @@ void KWDocument::setCursorInProtectedArea( bool b )
     m_cursorInProtectectedArea=b;
 }
 
-void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _length)
+void KWDocument::insertBookMark(const QString &_name, KWTextParag *_startparag,KWTextParag *_endparag, KWFrameSet *_frameSet, int _start, int _end)
 {
-    KWBookMark *book =new KWBookMark( _name, _parag, _frameSet, _pos, _length);
+    KWBookMark *book =new KWBookMark( _name, _startparag,_endparag, _frameSet, _start, _end);
     m_bookmarkList.append( book );
 }
 
@@ -4153,10 +4160,12 @@ void KWDocument::paragraphDeleted( KoTextParag *_parag,  KWFrameSet *frm)
     QPtrListIterator<KWBookMark> book(m_bookmarkList);
     for ( ; book.current() ; ++book )
     {
-        if ( book.current()->parag()==_parag &&
+        if ( book.current()->startParag()==_parag &&
+             book.current()->endParag()==_parag &&
              book.current()->frameSet()==frm)
         {
-            book.current()->setParag(0L);
+            book.current()->setStartParag(0L);
+            book.current()->setEndParag(0L);
             return;
         }
     }
@@ -4179,16 +4188,19 @@ void KWDocument::initBookmarkList()
             {
                 KWBookMark *tmp =new KWBookMark( book.current()->bookname);
                 tmp->setFrameSet(frm);
-                KWTextParag* parag = dynamic_cast<KWTextParag*>(frm->textDocument()->paragAt( book.current()->paragIndex ));
-                if ( !parag )
+                KWTextParag* startparag = dynamic_cast<KWTextParag*>(frm->textDocument()->paragAt( book.current()->paragStartIndex ));
+                KWTextParag* endparag = dynamic_cast<KWTextParag*>(frm->textDocument()->paragAt( book.current()->paragEndIndex ));
+
+                if ( !startparag || !endparag)
                 {
                     delete tmp;
                 }
                 else
                 {
-                    tmp->setParag( parag );
+                    tmp->setStartParag( startparag );
+                    tmp->setEndParag( endparag );
                     tmp->setBookmarkStartIndex( book.current()->cursorStartIndex);
-                    tmp->setBookmarkLength( book.current()->length);
+                    tmp->setBookmarkEndIndex( book.current()->cursorEndIndex);
                     m_bookmarkList.append( tmp );
                 }
             }

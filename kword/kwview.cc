@@ -5860,9 +5860,11 @@ void KWView::addBookmark()
         KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(0L), this, 0 );
         if ( dia.exec() ) {
             QString bookName = dia.bookmarkName();
-            int startSel = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard ).index();
-            int endSel = edit->textDocument()->selectionEndCursor( KoTextDocument::Standard ).index();
-            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(edit->cursor()->parag()), edit->textFrameSet(), startSel, endSel-startSel);
+            KoTextCursor start = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard );
+            KoTextCursor end = edit->textDocument()->selectionEndCursor( KoTextDocument::Standard );
+            int startSel =start.index();
+            int endSel = end.index();
+            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(start.parag()),static_cast<KWTextParag*>(end.parag()), edit->textFrameSet(), startSel, endSel);
         }
     }
 }
@@ -5875,19 +5877,18 @@ void KWView::selectBookmark()
         KWBookMark * book = m_doc->bookMarkByName( bookName );
         if ( book )
         {
-            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->parag(), book->bookmarkStartIndex(),true );
-            if ( book->bookmarkLength() != 0)
+            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->startParag(), book->bookmarkStartIndex(),true );
+            KWTextFrameSetEdit * edit = currentTextEdit();
+            if ( edit )
             {
-                KWTextFrameSetEdit * edit = currentTextEdit();
-                if ( edit )
-                {
-                    edit->textDocument()->removeSelection( KoTextDocument::Standard );
-                    edit->textDocument()->setSelectionStart( KoTextDocument::Standard, edit->cursor() );
-                    edit->cursor()->setIndex(book->bookmarkStartIndex()+book->bookmarkLength() );
-                    edit->textDocument()->setSelectionEnd( KoTextDocument::Standard, edit->cursor());
-                    book->parag()->setChanged( true );
-                    m_doc->slotRepaintChanged( edit->frameSet() );
-                }
+                edit->textDocument()->removeSelection( KoTextDocument::Standard );
+                edit->textDocument()->setSelectionStart( KoTextDocument::Standard, edit->cursor() );
+                edit->cursor()->setParag( book->endParag());
+                edit->cursor()->setIndex(book->bookmarkEndIndex() );
+                edit->textDocument()->setSelectionEnd( KoTextDocument::Standard, edit->cursor());
+                book->startParag()->setChanged( true );
+                book->endParag()->setChanged( true );
+                m_doc->slotRepaintChanged( edit->frameSet() );
             }
         }
     }
