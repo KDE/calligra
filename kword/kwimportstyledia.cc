@@ -104,7 +104,7 @@ void KWImportStyleDia::loadFile()
 
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
                     m_insertStyle->insert( name, sty->name());
 
                     // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
@@ -233,7 +233,7 @@ void KWImportFrameTableStyleDia::loadFile()
                     KWFrameStyle *sty = new KWFrameStyle( styleElem );
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
                     m_frameStyleList.append( sty);
                 }
             }
@@ -245,7 +245,7 @@ void KWImportFrameTableStyleDia::loadFile()
                     KWTableStyle *sty = new KWTableStyle( styleElem,m_doc,2 );
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
                     m_tableStyleList.append( sty);
                 }
             }
