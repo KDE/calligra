@@ -1189,6 +1189,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
         return 0L; // No change needed.
 
     emit hideCursor();
+    bool borderOutline = false;
     storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId, true ) ) {
       cursor->parag()->setLeftBorder(leftBorder);
@@ -1214,6 +1215,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
           }
         end->setBottomBorder(bottomBorder);
         textDocument()->selectionStart( selectionId )->setTopBorder(topBorder);
+        borderOutline = true;
     }
     formatMore( 2 );
     emit repaintChanged( this );
@@ -1225,7 +1227,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
     KoTextParagCommand *cmd = new KoTextParagCommand(
         textdoc, undoRedoInfo.id, undoRedoInfo.eid,
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
-        KoParagLayout::Borders);
+        KoParagLayout::Borders, (QStyleSheetItem::Margin)-1, borderOutline);
     textdoc->addCommand( cmd );
 
     undoRedoInfo.clear();
