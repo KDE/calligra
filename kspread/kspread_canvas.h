@@ -138,11 +138,11 @@ public:
     /**
      * Returns the width of the columns before the current screen
      */
-    int xOffset() const { return m_iXOffset; }
+    double xOffset() const { return m_dXOffset; }
     /**
      * Returns the height of the rows before the current screen
      */
-    int yOffset() const { return m_iYOffset; }
+    double yOffset() const { return m_dYOffset; }
 
     KSpreadTable* activeTable() const;
     KSpreadTable* findTable( const QString& _name ) const;
@@ -363,18 +363,18 @@ private:
     /**
      * Non visible range left from current screen
      * Example:
-     * If the first visible column is 'E', then m_iXOffset stores
+     * If the first visible column is 'E', then m_dXOffset stores
      * the width of the invisible columns 'A' to 'D'.
      */
-    int m_iXOffset;
+    double m_dXOffset;
 
     /**
      * Non visible range on top of the current screen
      * Example:
-     * If the first visible row is '5', then m_iYOffset stores
+     * If the first visible row is '5', then m_dYOffset stores
      * the height of the invisible rows '1' to '4'.
      */
-    int m_iYOffset;
+    double m_dYOffset;
 
     KSpreadLocationEditWidget *m_pPosWidget;
     KSpreadEditWidget *m_pEditWidget;

@@ -1906,7 +1906,7 @@ void RowLayout::setDblHeight( double _h, const KSpreadCanvas *_canvas )
   UPDATE_BEGIN;
 
   // Lower maximum size by old height
-  _table->adjustSizeMaxY ( - height() );
+  _table->adjustSizeMaxY ( - dblHeight() );
 
   if ( _canvas )
     m_fHeight = ( _h / _canvas->zoom() );
@@ -1914,7 +1914,7 @@ void RowLayout::setDblHeight( double _h, const KSpreadCanvas *_canvas )
     m_fHeight = _h;
 
   // Rise maximum size by new height
-  _table->adjustSizeMaxY ( height() );
+  _table->adjustSizeMaxY ( dblHeight() );
   _table->updatePrintRepeatRowsHeight();
   _table->updateNewPageListY ( row() );
 
@@ -2054,14 +2054,14 @@ void RowLayout::setHide( bool _hide )
 	if ( _hide )
 	{
 	    // Lower maximum size by height of row
-	    m_pTable->adjustSizeMaxY ( - height() );
+	    m_pTable->adjustSizeMaxY ( - dblHeight() );
 	    m_bHide=_hide; //hide must be set after we requested the height
 	}
 	else
 	{
 	    // Rise maximum size by height of row
 	    m_bHide=_hide; //unhide must be set before we request the height
-	    m_pTable->adjustSizeMaxY ( height() );
+	    m_pTable->adjustSizeMaxY ( dblHeight() );
 	}
     }
 }
@@ -2141,7 +2141,7 @@ void ColumnLayout::setDblWidth( double _w, const KSpreadCanvas *_canvas )
   UPDATE_BEGIN;
 
   // Lower maximum size by old width
-  _table->adjustSizeMaxX ( - width() );
+  _table->adjustSizeMaxX ( - dblWidth() );
 
   if ( _canvas )
       m_fWidth = ( _w / _canvas->zoom() );
@@ -2149,7 +2149,7 @@ void ColumnLayout::setDblWidth( double _w, const KSpreadCanvas *_canvas )
       m_fWidth = _w;
 
   // Rise maximum size by new width
-  _table->adjustSizeMaxX ( width() );
+  _table->adjustSizeMaxX ( dblWidth() );
   _table->updatePrintRepeatColumnsWidth();
   _table->updateNewPageListX ( column() );
 
@@ -2295,13 +2295,13 @@ void ColumnLayout::setHide( bool _hide )
 	if ( _hide )
 	{
 	    // Lower maximum size by width of column
-	    m_pTable->adjustSizeMaxX ( - width() );
+	    m_pTable->adjustSizeMaxX ( - dblWidth() );
 	    m_bHide=_hide; //hide must be set after we requested the width
 	}
 	else
 	    // Rise maximum size by width of column
 	    m_bHide=_hide; //unhide must be set before we request the width
-	    m_pTable->adjustSizeMaxX ( width() );
+	    m_pTable->adjustSizeMaxX ( dblWidth() );
     }
 }
 

@@ -396,23 +396,23 @@ public:
     /**
      * @return the maximum size of the column range
      */
-    unsigned long sizeMaxX()const { return m_ulSizeMaxX; }
+    double sizeMaxX()const { return m_dSizeMaxX; }
     /**
      * @return the maximum size of the row range
      */
-    unsigned long sizeMaxY()const { return m_ulSizeMaxY; }
+    double sizeMaxY()const { return m_dSizeMaxY; }
 
     /**
      * Adjusts the internal reference of the sum of the widths of all columns.
      * Used in resizing of columns.
      */
-    void adjustSizeMaxX ( int _x );
+    void adjustSizeMaxX ( double _x );
 
     /**
      * Adjusts the internal reference of the sum of the heights of all rows.
      * Used in resizing of rows.
      */
-    void adjustSizeMaxY ( int _y );
+    void adjustSizeMaxY ( double _y );
 
     /**
      * Sets the @ref KSpreadCell::layoutDirtyFlag in all cells.
@@ -1210,13 +1210,13 @@ protected:
      * Max range of canvas in x direction.
      * Depends on KS_colMax and the width of all columns
      */
-    unsigned long m_ulSizeMaxX;
+    double m_dSizeMaxX;
 
     /**
      * Max range of canvas in y direction.
      * Depends on KS_rowMax and the heigth of all rows
      */
-    unsigned long m_ulSizeMaxY;
+    double m_dSizeMaxY;
 
 
     bool m_bScrollbarUpdates;

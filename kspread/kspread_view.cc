@@ -3408,7 +3408,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
     KoViewChild *viewChild;
 
     QWMatrix m = matrix();
-    m.translate( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
+    m.translate( int( m_pCanvas->xOffset() ), int( m_pCanvas->yOffset() ) );
 
     KoDocumentChild *docChild = selectedChild();
     if ( docChild )
@@ -4748,7 +4748,7 @@ void KSpreadView::repaintPolygon( const QPointArray& polygon )
 QWMatrix KSpreadView::matrix() const
 {
     QWMatrix m;
-    m.translate( -m_pCanvas->xOffset(), -m_pCanvas->yOffset() );
+    m.translate( -int( m_pCanvas->xOffset() ), -int( m_pCanvas->yOffset() ) );
     m.scale( zoom(), zoom() );
     return m;
 }
@@ -4814,12 +4814,12 @@ QWidget *KSpreadView::canvas()
 
 int KSpreadView::canvasXOffset() const
 {
-  return canvasWidget()->xOffset();
+  return int( canvasWidget()->xOffset() );
 }
 
 int KSpreadView::canvasYOffset() const
 {
-  return canvasWidget()->yOffset();
+  return int( canvasWidget()->yOffset() );
 }
 
 

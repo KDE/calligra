@@ -243,8 +243,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
-  m_ulSizeMaxX = KS_colMax * m_pDefaultColumnLayout->width(); // default is max cols * default width
-  m_ulSizeMaxY = KS_rowMax * m_pDefaultRowLayout->height(); // default is max rows * default height
+  m_dSizeMaxX = KS_colMax * m_pDefaultColumnLayout->dblWidth(); // default is max cols * default width
+  m_dSizeMaxY = KS_rowMax * m_pDefaultRowLayout->dblHeight(); // default is max rows * default height
 
   m_bScrollbarUpdates = true;
 
@@ -339,8 +339,8 @@ int KSpreadTable::leftColumn( int _xpos, double &_left,
 {
     if ( _canvas )
     {
-        _xpos += _canvas->xOffset();
-        _left = -(double)_canvas->xOffset();
+        _xpos += int( _canvas->xOffset() );
+        _left = -_canvas->xOffset();
     }
     else
         _left = 0.0;
@@ -366,7 +366,7 @@ int KSpreadTable::leftColumn( int _xpos, double &_left,
 int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
-        _xpos += _canvas->xOffset();
+        _xpos += int( _canvas->xOffset() );
 
     int col = 1;
     double x = 0.0;
@@ -390,8 +390,8 @@ int KSpreadTable::topRow( int _ypos, double & _top,
 {
     if ( _canvas )
     {
-        _ypos += _canvas->yOffset();
-        _top = (double)-_canvas->yOffset();
+        _ypos += int( _canvas->yOffset() );
+        _top = -_canvas->yOffset();
     }
     else
         _top = 0;
@@ -417,7 +417,7 @@ int KSpreadTable::topRow( int _ypos, double & _top,
 int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
-        _ypos += _canvas->yOffset();
+        _ypos += int( _canvas->yOffset() );
 
     int row = 1;
     double y = 0.0;
@@ -489,14 +489,14 @@ int KSpreadTable::rowPos( int _row, const KSpreadCanvas *_canvas ) const
 }
 
 
-void KSpreadTable::adjustSizeMaxX ( int _x )
+void KSpreadTable::adjustSizeMaxX ( double _x )
 {
-    m_ulSizeMaxX += _x;
+    m_dSizeMaxX += _x;
 }
 
-void KSpreadTable::adjustSizeMaxY ( int _y )
+void KSpreadTable::adjustSizeMaxY ( double _y )
 {
-    m_ulSizeMaxY += _y;
+    m_dSizeMaxY += _y;
 }
 
 KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar_update )
@@ -1974,16 +1974,16 @@ bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
     bool result;
     for( int i=0; i<=nbCol; i++ )
     {
-	// Recalculate range max (minus size of last column)
-	m_ulSizeMaxX -= columnLayout( KS_colMax )->width();
+        // Recalculate range max (minus size of last column)
+        m_dSizeMaxX -= columnLayout( KS_colMax )->dblWidth();
 
         result = m_cells.insertColumn( col );
         m_columns.insertColumn( col );
         if(!result)
-	    res=false;
+            res = false;
 
-	//Recalculate range max (plus size of new column)
-	m_ulSizeMaxX += columnLayout( col+i )->width();
+        //Recalculate range max (plus size of new column)
+        m_dSizeMaxX += columnLayout( col+i )->dblWidth();
     }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
@@ -2028,16 +2028,16 @@ bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
     bool result;
     for( int i=0; i<=nbRow; i++ )
     {
-	// Recalculate range max (minus size of last row)
-	m_ulSizeMaxY -= rowLayout( KS_rowMax )->height();
+        // Recalculate range max (minus size of last row)
+        m_dSizeMaxY -= rowLayout( KS_rowMax )->dblHeight();
 
-	result = m_cells.insertRow( row );
-	m_rows.insertRow( row );
-	if( !result )
-	    res = false;
+        result = m_cells.insertRow( row );
+        m_rows.insertRow( row );
+        if( !result )
+            res = false;
 
-	//Recalculate range max (plus size of new row)
-	m_ulSizeMaxY += rowLayout( row )->height();
+        //Recalculate range max (plus size of new row)
+        m_dSizeMaxY += rowLayout( row )->dblHeight();
     }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
@@ -2080,14 +2080,14 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
 
     for( int i=0; i<=nbCol; i++ )
     {
-	// Recalculate range max (minus size of removed column)
-	m_ulSizeMaxX -= columnLayout( col )->width();
+        // Recalculate range max (minus size of removed column)
+        m_dSizeMaxX -= columnLayout( col )->dblWidth();
 
-	m_cells.removeColumn( col );
-	m_columns.removeColumn( col );
+        m_cells.removeColumn( col );
+        m_columns.removeColumn( col );
 
-	//Recalculate range max (plus size of new column)
-	m_ulSizeMaxX += columnLayout( KS_colMax )->width();
+        //Recalculate range max (plus size of new column)
+        m_dSizeMaxX += columnLayout( KS_colMax )->dblWidth();
     }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
@@ -2145,14 +2145,14 @@ void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
 
     for( int i=0; i<=nbRow; i++ )
     {
-	// Recalculate range max (minus size of removed row)
-	m_ulSizeMaxY -= rowLayout( row )->height();
+        // Recalculate range max (minus size of removed row)
+        m_dSizeMaxY -= rowLayout( row )->dblHeight();
 
-	m_cells.removeRow( row );
-	m_rows.removeRow( row );
+        m_cells.removeRow( row );
+        m_rows.removeRow( row );
 
-	//Recalculate range max (plus size of new row)
-	m_ulSizeMaxY += rowLayout( KS_rowMax )->height();
+        //Recalculate range max (plus size of new row)
+        m_dSizeMaxY += rowLayout( KS_rowMax )->dblHeight();
     }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
