@@ -195,6 +195,8 @@ public:
 
     void deleteFrameSet( KWFrameSet *);
 
+    QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
+
 public slots:
     void fileStatistics();
     void editCut();
@@ -426,6 +428,7 @@ protected slots:
     void slotPageLayoutChanged( const KoPageLayout& layout );
     void slotChangeCaseState(bool b);
     void slotChangeCutState(bool b);
+    void slotCorrectWord();
 
 protected:
     void addVariableActions( int type, const QStringList & texts,

@@ -7144,6 +7144,16 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
     }
 }
 
+QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
+{
+    return QPtrList<KAction>();
+}
+
+void KWView::slotCorrectWord()
+{
+    //todo
+}
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

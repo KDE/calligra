@@ -388,6 +388,9 @@ void KWDocument::initConfig()
 {
   KConfig *config = KWFactory::global()->config();
   KSpellConfig ksconfig;
+#if HAVE_LIBASPELL
+  KOSpellConfig kosconfig;
+#endif
   if( config->hasGroup("KSpell kword" ) )
   {
       config->setGroup( "KSpell kword" );
@@ -397,6 +400,15 @@ void KWDocument::initConfig()
       ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
       ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
       ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+#if HAVE_LIBASPELL
+      kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+      kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+      kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+      kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+      kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+      setKOSpellConfig( kosconfig );
+#endif
+
       setKSpellConfig(ksconfig);
       setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
       setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
