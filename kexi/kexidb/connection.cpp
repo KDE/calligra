@@ -832,6 +832,8 @@ C_INS_REC_ALL
 	{ \
 		QString value; \
 		Field::List *flist = fields.fields(); \
+		kdDebug() << "# of fields: " << flist->count() <<endl; \
+		kdDebug() <<  fields.fields()->first()->table() << endl; \
 		vals \
 		return executeSQL( \
 			QString("INSERT INTO ") + \
@@ -1326,7 +1328,9 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 {
 	if (!isDatabaseUsed())
 		return false;
-	if (!m_driver->transactionsSupported()) {
+	if ( !m_driver->transactionsSupported()
+		&& !(m_driver->m_features & Driver::IgnoreTransactions))
+	{
 		SET_ERR_TRANS_NOT_SUPP;
 		return false;
 	}
@@ -1341,7 +1345,9 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 		t = d->m_default_trans;
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
-	bool ret = drv_commitTransaction(t.m_data);
+	bool ret;
+	if (! (m_driver->m_features & Driver::IgnoreTransactions) )
+		ret = drv_commitTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
 	if (!d->m_dont_remove_transactions) //true=transaction obj will be later removed from list
@@ -1572,6 +1578,12 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		FieldList *fl = ts->subList("o_type", "o_name", "o_caption", "o_desc");
 		if (!fl)
 			return false;
+		kdDebug() <<" ************* " <<endl;
+		kdDebug() << ts->field(1)->table() <<endl;
+		kdDebug() << fl->fields()->first()->table() <<endl;
+		fl->fields()->first()->debug();
+		kdDebug() <<" ************* " <<endl;
+		fl->debug();
 		if (!insertRecord(*fl, QVariant(sdata.type()), QVariant(sdata.name()),
 			QVariant(sdata.caption()), QVariant(sdata.description()) ))
 			return false;
@@ -1826,6 +1838,8 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("o_caption", Field::Text ) )
 	.addField( new Field("o_desc", Field::LongText ) );
 
+t_objects->debug();
+
 	TableSchema *t_objectdata = newKexiDBSystemTableSchema("kexi__objectdata");
 	t_objectdata->addField( new Field("o_id", Field::Integer, Field::NotNull, Field::Unsigned) )
 	.addField( new Field("o_data", Field::BLOB) )
@@ -2044,41 +2058,11 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		QueryFieldInfo::ListIterator fi_it(*aif_list);
 		QueryFieldInfo *fi;
 		for (uint i=0; (fi = fi_it.current()); ++fi_it, i++) {
-			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == " 
+			kdDebug() << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == " 
 				<< aif_data[i].toInt() << endl;
 			data[ fieldsOrder[ fi ] ] = aif_data[i];
 		}
 	}
-
-#if 0 //js: orig code
-	//fetch autoincremented values
-	Field::List *aif_list = query.parentTable()->autoIncrementFields();
-	if (pkey && !aif_list->isEmpty()) {
-		//now only if PKEY is present:
-		//js TODO more...
-		Field *id_field = aif_list->first();
-		int last_id = lastInsertedAutoIncValue(id_field->name(), query.parentTable()->name());
-		if (last_id==-1) {
-			//err...
-			return false;
-		}
-		KexiDB::RowData aif_data;
-		if (!querySingleRecord(QString("SELECT ")+ FieldList::sqlFieldsList( aif_list ) + " FROM " 
-			+ query.parentTable()->name() + " WHERE "+ id_field->name() + "=" + QString::number(last_id),
-			aif_data))
-		{
-			//err...
-			return false;
-		}
-		Field::ListIterator f_it(*aif_list);
-		QueryFieldInfo *fi;
-		for (uint i=0; (fi = f_it.current()); ++f_it, i++) {
-			kdDebug() << "Connection::insertRow(): AUTOINCREMENTED FIELD " << f->name() << " == " 
-				<< aif_data[i].toInt() << endl;
-			data[ fieldsOrder[ f ] ] = aif_data[i];
-		}
-	}
-#endif
 	return true;
 }
 
