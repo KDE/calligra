@@ -21,7 +21,6 @@
 #include "kspread_map.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
-
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -180,7 +179,7 @@ util_timeFormat(KLocale * locale, QTime m_Time,
     }
 
     if (tmpFormat == KSpreadCell::Time_format3) {
-	return QString("%1 %2 %3 %4")			// 9 h 01 min 28 s
+	return QString("%1 %2 %3 %4 %5 %6")			// 9 h 01 min 28 s
 		.arg(hour,2)
 		.arg(i18n("h"))
 		.arg(minute,2)

@@ -817,7 +817,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     {
         m_strOutText=util_timeFormat( locale(),m_Time, getFormatNumber(column(),row()));
     }
-    else if ( isValue()  )
+    else if ( isValue() && getFormatNumber(column(),row())!=Text_format )
     {
         // First get some locale information
         if (!decimal_point)
@@ -928,7 +928,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else
     {
-        if(m_strText[0]!='\'')
+        if(m_strText[0]!='\'' )
                 m_strOutText = m_strText;
     }
 
@@ -1218,6 +1218,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case date_format15:
     case date_format16:
     case date_format17:
+    case Text_format:
         break;
     case fraction_half:
     case fraction_quarter:
@@ -1742,7 +1743,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
-
+    //setFormatNumber(Number);
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
     m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
@@ -1755,7 +1756,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
-
+    //setFormatNumber(Number);
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
     m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
@@ -1767,6 +1768,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = true;
     m_bDate =false;
     m_bTime=false;
+    //setFormatNumber(Number);
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     // (David): i18n'ed True and False - hope it's ok
     m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
@@ -1823,6 +1825,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bDate =false;
     m_bTime=false;
     // Format the result appropriately
+    setFormatNumber(Number);
     m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
   }
   else
@@ -1844,7 +1847,9 @@ bool KSpreadCell::calc( bool _makedepend )
         {
         m_strFormularOut=m_strFormularOut.right(m_strFormularOut.length()-1);
         }
-    setFormatNumber(Number);
+    else 
+      m_strFormularOut=m_strFormularOut;
+    setFormatNumber(Text_format);
   }
   if ( m_style == ST_Select )
   {
@@ -3677,6 +3682,7 @@ bool KSpreadCell::updateChart(bool refresh)
 
 void KSpreadCell::checkValue()
 {
+  //setFormatNumber(Number);
     m_bError =false;
     m_bValue = false;
     m_dValue = 0;
@@ -3702,12 +3708,16 @@ void KSpreadCell::checkValue()
     {
       return;
     }
-
+    if(getFormatNumber(column(),row())==Text_format)
+    {
+      m_strOutText=p;
+      return;
+    }
     // Treat anything starting with a quote as a litteral text
     if( p.at(0)=='\'')
     {
         m_strOutText=p.right(p.length()-1);
-        setFormatNumber(Number); // default format
+        setFormatNumber(Text_format); // default format
         return;
     }
 
@@ -3888,7 +3898,7 @@ void KSpreadCell::checkValue()
     if(m_pTable->getFirstLetterUpper())
         m_strText=m_strText[0].upper()+m_strText.right(m_strText.length()-1);
     //default format
-    setFormatNumber(Number);
+    setFormatNumber(Text_format);
 }
 
 void KSpreadCell::checkNumberFormat()

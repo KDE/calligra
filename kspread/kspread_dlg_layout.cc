@@ -1020,7 +1020,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
 
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    grid = new QGridLayout(grp,7,2,15,7);
+    grid = new QGridLayout(grp,8,2,15,7);
     grp->setRadioButtonExclusive( TRUE );
     number=new QRadioButton(i18n("Number"),grp);
     grid->addWidget(number,0,0);
@@ -1043,6 +1043,9 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     time=new QRadioButton(i18n("Time Format"),grp);
     grid->addWidget(time,6,0);
 
+    textFormat=new QRadioButton(i18n("Text"),grp);
+    grid->addWidget(textFormat,7,0);
+
     QGroupBox *box2 = new QGroupBox( grp, "Box");
     box2->setTitle(i18n("Preview"));
     QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
@@ -1053,7 +1056,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addMultiCellWidget(box2,0,1,1,1);
 
     listFormat=new QListBox(grp);
-    grid->addMultiCellWidget(listFormat,2,6,1,1);
+    grid->addMultiCellWidget(listFormat,2,7,1,1);
     layout->addWidget(grp);
 
     cellFormatNumber=dlg->formatNumber;
@@ -1090,7 +1093,10 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
         cellFormatNumber==KSpreadCell::fraction_two_digits ||
         cellFormatNumber==KSpreadCell::fraction_three_digits)
                 fraction->setChecked(true);
+	else if(cellFormatNumber==KSpreadCell::Text_format)
+	  textFormat->setChecked(true);
         }
+
     connect(fraction,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(money,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(date,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
@@ -1098,6 +1104,8 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(number,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(percent,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(time,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(textFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
+
     connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
     connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
@@ -1218,6 +1226,10 @@ void CellLayoutPageFloat::slotChangeState()
             else
                 listFormat->setCurrentItem(0);
         }
+    else if(textFormat->isChecked())
+      {
+	listFormat->setEnabled(false);
+      }
     m_bFormatNumberChanged=true;
     if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
@@ -1474,7 +1486,11 @@ void CellLayoutPageFloat::makeformat()
                 {
                     tmp=makeFractionFormat();
                 }
-            if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 )
+	    else if(textFormat->isChecked())
+	      {
+		tmp=QString::number(dlg->m_value);
+	      }
+            if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 && !textFormat->isChecked())
                 {
                     int start=0;
                     if(tmp.find('%')!=-1)
@@ -1656,6 +1672,8 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
                 _obj->setFormatNumber(KSpreadCell::Money);
             else if(scientific->isChecked())
                 _obj->setFormatNumber(KSpreadCell::Scientific);
+	    else if(textFormat->isChecked())
+	      _obj->setFormatNumber(KSpreadCell::Text_format);
         }
 }
 

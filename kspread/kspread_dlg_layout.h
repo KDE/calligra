@@ -223,6 +223,7 @@ protected:
     QRadioButton *scientific;
     QRadioButton *fraction;
     QRadioButton *time;
+    QRadioButton *textFormat;
     QListBox *listFormat;
     QLabel *exampleLabel;
     CellLayoutDlg *dlg;
