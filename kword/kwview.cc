@@ -112,6 +112,10 @@
 #include <stdlib.h>
 #include <qtimer.h>
 #include <kurldrag.h>
+#if HAVE_LIBASPELL
+#include <koSpell.h>
+#endif
+
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -124,6 +128,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     m_personalShortCut=0L;
     fsInline=0L;
     m_spell.kspell = 0;
+#if HAVE_LIBASPELL
+    m_spell.kospell = 0;
+#endif
     m_border.left.color = white;
     m_border.left.setStyle (KoBorder::SOLID);
     m_border.left.setPenWidth( 0);
@@ -324,6 +331,21 @@ void KWView::slotSetInitialPosition()
 
 void KWView::clearSelection()
 {
+#if HAVE_LIBASPELL
+    if(m_spell.kospell)
+    {
+        KWTextFrameSet * fs = 0L;
+        if(m_spell.spellCurrFrameSetNum!=-1)
+        {
+            fs=m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
+            Q_ASSERT( fs );
+            if ( fs )
+                fs->removeHighlight();
+        }
+        delete m_spell.kospell;
+    }
+
+#else
     if(m_spell.kspell)
     {
         KWTextFrameSet * fs = 0L;
@@ -336,6 +358,7 @@ void KWView::clearSelection()
         }
         delete m_spell.kspell;
     }
+#endif
     delete m_searchEntry;
     delete m_replaceEntry;
     delete m_specialCharDlg;
@@ -3603,7 +3626,11 @@ void KWView::formatFrameSet()
 
 void KWView::extraSpelling()
 {
+#if HAVE_LIBASPELL
+    if (m_spell.kospell) return; // Already in progress
+#else
     if (m_spell.kspell) return; // Already in progress
+#endif
     m_doc->setReadWrite(false); // prevent editing text
     m_spell.spellCurrFrameSetNum = -1;
     m_spell.macroCmdSpellCheck=0L;
@@ -5179,6 +5206,33 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 
 void KWView::startKSpell()
 {
+#if HAVE_LIBASPELL
+    // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
+    if(m_doc->getKSpellConfig())
+    {
+        m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
+        m_doc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+    }
+    m_spell.kospell = new KOSpell( this, i18n( "Spell Checking" ), /*m_doc->getKSpellConfig()*/0L,true,true );
+
+    m_spell.kospell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
+    m_spell.kospell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
+
+    QObject::connect( m_spell.kospell, SIGNAL( death() ),
+                      this, SLOT( spellCheckerFinished() ) );
+    QObject::connect( m_spell.kospell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
+                      this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( corrected( const QString &, const QString &, unsigned int ) ),
+                      this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( done( const QString & ) ),
+                      this, SLOT( spellCheckerDone( const QString & ) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( ignoreall (const QString & ) ),
+                      this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+
+    QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+    QObject::connect( m_spell.kospell, SIGNAL( addAutoCorrect (const QString & originalword, const QString & newword)), this, SLOT( spellAddAutoCorrect( const QString &  ,  const QString & )));
+    spellCheckerReady();
+#else
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_doc->getKSpellConfig())
     {
@@ -5203,7 +5257,7 @@ void KWView::startKSpell()
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
     QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-
+#endif
 }
 
 void KWView::spellCheckerReady()
@@ -5231,7 +5285,11 @@ void KWView::spellCheckerReady()
             continue;
         text += '\n'; // end of last paragraph
         text += '\n'; // empty line required by kspell
+#if HAVE_LIBASPELL
+        m_spell.kospell->check( text);
+#else
         m_spell.kspell->check( text );
+#endif
         textfs->textObject()->setNeedSpellCheck(true);
         return;
     }
@@ -5239,9 +5297,14 @@ void KWView::spellCheckerReady()
 
     // Done
     m_doc->setReadWrite(true);
+#if HAVE_LIBASPELL
+    delete m_spell.kospell;
+    m_spell.kospell=0;
+#else
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+#endif
     m_spell.textFramesets.clear();
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
@@ -5300,11 +5363,18 @@ void KWView::spellCheckerDone( const QString & )
     if ( fs )
         fs->removeHighlight();
 
-    int result = m_spell.kspell->dlgResult();
+    int result;
+#if HAVE_LIBASPELL
+    result= m_spell.kospell->dlgResult();
+    delete m_spell.kospell;
+    m_spell.kospell = 0;
+#else
+    result= m_spell.kspell->dlgResult();
 
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+#endif
     if ( result != KS_CANCEL && result != KS_STOP )
     {
         if ( m_spell.bSpellSelection )
@@ -5341,10 +5411,15 @@ void KWView::clearSpellChecker()
 
 void KWView::spellCheckerFinished()
 {
+    bool kspellNotConfigured=false;
+#if HAVE_LIBASPELL
+    delete m_spell.kospell;
+    m_spell.kospell = 0;
+    //FIXME
+#else
     KSpell::spellStatus status = m_spell.kspell->status();
     delete m_spell.kspell;
     m_spell.kspell = 0;
-    bool kspellNotConfigured=false;
     if (status == KSpell::Error)
     {
         kspellNotConfigured=true;
@@ -5353,6 +5428,7 @@ void KWView::spellCheckerFinished()
     {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
+#endif
     KWTextFrameSet * fs = 0L;
     if(m_spell.spellCurrFrameSetNum!=-1)
     {

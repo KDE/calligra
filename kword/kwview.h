@@ -20,6 +20,10 @@
 #ifndef kwview_h
 #define kwview_h
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <kprinter.h>
 #include <qbrush.h>
 
@@ -72,6 +76,10 @@ class KoParagDia;
 class KWViewMode;
 class KWFrameStyle;
 class KWTableStyle;
+
+#if HAVE_LIBASPELL
+class KOSpell;
+#endif
 
 /******************************************************************/
 /* Class: KWView						  */
@@ -698,6 +706,9 @@ private:
     // Spell-checking
     struct {
 	KSpell *kspell;
+#if HAVE_LIBASPELL
+        KOSpell *kospell;
+#endif
 	int spellCurrFrameSetNum;
 	QPtrList<KWTextFrameSet> textFramesets;
 	KMacroCommand * macroCmdSpellCheck;

@@ -1,7 +1,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
-	$(KOTEXT_INCLUDES) $(all_includes)
+	$(KOTEXT_INCLUDES) $(all_includes) -I$(top_srcdir)/lib/kospell
 
 kde_module_LTLIBRARIES = libkwordpart.la
 
@@ -45,7 +45,7 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
 
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell $(LIBASPELL) ./libkwmailmerge_interface.la
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell $(LIBKOSPELL) ./libkwmailmerge_interface.la
 METASOURCES = AUTO
 
 lib_LTLIBRARIES = kword.la libkwmailmerge_interface.la
