@@ -1145,6 +1145,15 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 
         // TODO: style:border-line-width-left
     }
+    if ( styleStack.hasAttribute( "style:diagonal-tl-br" ) )
+    {
+        setFallDiagonalPen( convertOasisStringToPen( styleStack.attribute( "style:diagonal-tl-br" ) ) );
+    }
+    if ( styleStack.hasAttribute( "style:diagonal-bl-tr" ) )
+    {
+        setGoUpDiagonalPen( convertOasisStringToPen( styleStack.attribute( "style:diagonal-bl-tr" ) ) );
+    }
+
     return true;
 }
 
