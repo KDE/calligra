@@ -297,14 +297,13 @@ bool HtmlFilter(const QString &fileIn, QDomDocument& qDomDocumentOut)
 
     //Initiate QDomDocument (TODO: is there are better way?)
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    // TODO: syntaxversion 2
-    strHeader+="<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\" >\n";
+    strHeader+="<DOC editor=\"KWord's HTML Import Filter\"";
+	strHeader+=" mime=\"application/x-kword\" syntaxVersion=\"2\" >\n";
     strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
     strHeader+="<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
     strHeader+="hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" zoom=\"100\">\n";
     strHeader+="<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
-    strHeader+="</PAPER>\n";
-    strHeader+="</DOC>\n";
+    strHeader+="</PAPER>\n</DOC>\n";
 
     qDomDocumentOut.setContent(strHeader);
 
