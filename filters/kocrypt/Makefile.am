@@ -28,3 +28,5 @@ service_DATA = kword_crypto_import.desktop kword_crypto_export.desktop    \
 
 servicedir = $(kde_servicesdir)
 
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kocryptfilter.pot

@@ -28,3 +28,6 @@ METASOURCES = AUTO
 
 service_DATA = kword_html_import.desktop kword_html_export.desktop
 servicedir = $(kde_servicesdir)
+
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordhtmlfilter.pot

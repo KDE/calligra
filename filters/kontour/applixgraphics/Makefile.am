@@ -15,3 +15,6 @@ METASOURCES = AUTO
 
 service_DATA = killustrator_applixgraphic_import.desktop
 servicedir = $(kde_servicesdir)
+
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kontourapplixgraphicsfilter.pot

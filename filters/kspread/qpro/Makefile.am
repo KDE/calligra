@@ -23,3 +23,5 @@ servicedir = $(kde_servicesdir)
 kdemime_DATA = x-quattropro.desktop
 kdemimedir = $(kde_mimedir)/application
 
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kspreadqprofilter.pot

@@ -16,3 +16,5 @@ METASOURCES = AUTO
 service_DATA = kword_applixword_import.desktop
 servicedir = $(kde_servicesdir)
 
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordapplixwordfilter.pot

@@ -39,3 +39,6 @@ METASOURCES = AUTO
 service_DATA = kword_latex_export.desktop
 #kword_latex_import.desktop
 servicedir = $(kde_servicesdir)
+
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordlatexfilter.pot
