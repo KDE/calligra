@@ -803,8 +803,17 @@ void CellLayoutDlg::slotApply()
         QString title=i18n("Change layout");
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect,title );
         table->doc()->undoBuffer()->appendUndo( undo );
+
+	if( miscPage->getStyle()!=eStyle)
+	  {
+	    //make undo for style of cell
+	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect);
+	    table->doc()->undoBuffer()->appendUndo( undo3 );
+	  }
     }
     borderPage->applyOutline( left, top, right, bottom );
+
+   
 
     if(right!=0x7FFF && bottom!=0x7FFF)
     {
@@ -1986,6 +1995,22 @@ void CellLayoutPageMisc::applyRow(  )
       }
 }
 
+KSpreadCell::Style CellLayoutPageMisc::getStyle()
+{
+  switch(styleButton->currentItem())
+    {
+    case 0:
+      return KSpreadCell::ST_Normal;
+    case 1:
+      return KSpreadCell::ST_Button;
+    case 2:
+      return  KSpreadCell::ST_Select;
+    case 3 : 
+      return  KSpreadCell::ST_Undef;
+    default :
+      return KSpreadCell::ST_Normal;
+    }
+}
 
 void CellLayoutPageMisc::applyLayout( KSpreadCell *_obj )
 {

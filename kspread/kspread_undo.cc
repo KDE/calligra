@@ -2025,3 +2025,123 @@ void KSpreadUndoCellPaste::redo()
 
     doc()->undoBuffer()->unlock();
 }
+
+
+/****************************************************************************
+ *
+ * KSpreadUndoStyleCell
+ *
+ ***************************************************************************/
+
+KSpreadUndoStyleCell::KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
+    : KSpreadUndoAction( _doc )
+{
+    title=i18n("Style of cell");
+    m_tableName = table->tableName();
+    m_selection = _selection;
+    createListCell( m_lstStyleCell, table );
+
+}
+
+KSpreadUndoStyleCell::~KSpreadUndoStyleCell()
+{
+}
+
+void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpreadTable* table )
+{
+  if(m_selection.bottom()==0x7FFF)
+    {
+
+      KSpreadCell* c = table->firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_selection.left() <= col && m_selection.right() >= col
+        &&!c->isObscuringForced())
+        {	  
+	  styleCell tmpStyleCell;
+	  tmpStyleCell.row=c->row();
+	  tmpStyleCell.col=c->column();
+	  tmpStyleCell.style=c->style();
+	  tmpStyleCell.action=c->action();
+	  listCell.append(tmpStyleCell);
+        }
+      }
+    }
+  else if(m_selection.right()==0x7FFF)
+    {
+     KSpreadCell* c = table->firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_selection.top() <= row && m_selection.bottom() >= row
+        &&!c->isObscuringForced())
+        {
+	  styleCell tmpStyleCell;
+	  tmpStyleCell.row=c->row();
+	  tmpStyleCell.col=c->column();
+	  tmpStyleCell.style=c->style();
+	  tmpStyleCell.action=c->action();
+	  listCell.append(tmpStyleCell);
+        }
+      }
+    }
+  else
+    {
+      for(int i=m_selection.top();i<=m_selection.bottom();i++)
+	for(int j=m_selection.left();j<=m_selection.right();j++)
+	  {
+	    KSpreadCell *cell = table->nonDefaultCell( j, i);
+	    styleCell tmpStyleCell;
+	    tmpStyleCell.row=i;
+	    tmpStyleCell.col=j;
+	    tmpStyleCell.style=cell->style();
+	    tmpStyleCell.action=cell->action();
+	    listCell.append(tmpStyleCell);
+	  }
+    }
+}
+
+void KSpreadUndoStyleCell::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    createListCell( m_lstRedoStyleCell, table );
+
+    doc()->undoBuffer()->lock();
+
+
+    QValueList<styleCell>::Iterator it2;
+    for ( it2 = m_lstStyleCell.begin(); it2 != m_lstStyleCell.end(); ++it2 )
+      {
+	KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row);
+	cell->setStyle((*it2).style);
+	cell->setAction((*it2).action);
+      }
+    table->updateView(m_selection);
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoStyleCell::redo()
+{
+    doc()->undoBuffer()->lock();
+
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+      
+    QValueList<styleCell>::Iterator it2;
+    for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
+      {
+	KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row);
+	cell->setStyle((*it2).style);
+	cell->setAction((*it2).action);
+      }
+    table->updateView(m_selection);
+
+    doc()->undoBuffer()->unlock();
+}

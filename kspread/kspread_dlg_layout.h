@@ -175,7 +175,7 @@ public:
     void applyColumn();
     void applyRow();
     void applyLayout( KSpreadCell *_obj );
-
+    KSpreadCell::Style getStyle();
 public slots:
     void slotStyle( int );
 protected:

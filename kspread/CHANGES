@@ -1135,3 +1135,4 @@ I used ghostview.
 2000-12-29-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can change default grid color
+-Undo works when you change type of cell (combobox, button, normal)

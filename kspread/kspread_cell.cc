@@ -2618,9 +2618,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     else if ( m_style == KSpreadCell::ST_Select )
     {
-        QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
+      QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
                                                 w2 - 1, h2 - 1,
-                                                defaultColorGroup, selected );
+						defaultColorGroup, selected );
+
     }
 
     /**

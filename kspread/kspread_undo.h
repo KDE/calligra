@@ -67,6 +67,12 @@ int row;
 RowLayout *l;
 };
 
+struct styleCell {
+  int row;
+  int col;
+  KSpreadCell::Style style;
+  QString action;
+};
 
 /**
  * Abstract base class. Every undo/redo action must
@@ -502,6 +508,26 @@ protected:
     int m_iInsertTo;
     QString m_tableName;
 };
+
+
+class KSpreadUndoStyleCell : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect );
+    virtual ~KSpreadUndoStyleCell();
+
+    virtual void undo();
+    virtual void redo();
+
+    void createListCell( QValueList<styleCell> &listCell, KSpreadTable* table );
+
+protected:
+    QRect m_selection;
+    QValueList<styleCell> m_lstStyleCell;
+    QValueList<styleCell> m_lstRedoStyleCell;
+    QString m_tableName;
+};
+
 
 
 class KSpreadUndo
