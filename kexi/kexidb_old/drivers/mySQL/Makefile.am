@@ -1,6 +1,6 @@
 kde_module_LTLIBRARIES = keximysqlinterface.la
 
-INCLUDES = $(all_includes) -I$(srcdir)/../..
+INCLUDES = -I$(srcdir)/../.. $(all_includes)
 
 LDFLAGS = $(all_libraries) $(KDE_RPATH) $(MYSQL_LDFLAGS)
 
