@@ -15,6 +15,8 @@
 	<Syntax>COS(Float)</Syntax>
 	<Example>COS(0) equals 1.0</Example>
 	<Example>COS(PI()/2) equals 0</Example>
+	<Related>SIN</Related>
+	<Related>ACOS</Related>
       </Help>
     </Function>
 
@@ -30,6 +32,8 @@
 	<Syntax>SIN(Float)</Syntax>
 	<Example>SIN(0) equals 0</Example>
 	<Example>SIN(PI()/2) equals 1</Example>
+	<Related>COS</Related>
+	<Related>ASIN</Related>
       </Help>
     </Function>
 
@@ -45,6 +49,7 @@
 	<Syntax>TAN(Float)</Syntax>
 	<Example>TAN(0.7) equals 0.84228838</Example>
 	<Example>TAN(0) equals 0</Example>
+	<Related>ATAN</Related>
       </Help>
     </Function>
 
@@ -60,6 +65,7 @@
 	<Syntax>ACOS(Float)</Syntax>
 	<Example>ACOS(0.8) equals 0.6435011</Example>
 	<Example>ACOS(0) equals 1.57079633</Example>
+	<Related>COS</Related>
       </Help>
     </Function>
 
@@ -75,6 +81,7 @@
 	<Syntax>ASIN(Float)</Syntax>
 	<Example>ASIN(0.8) equals 0.92729522</Example>
 	<Example>ASIN(0) equals 0</Example>
+	<Related>SIN</Related>
       </Help>
     </Function>
 
@@ -90,6 +97,8 @@
 	<Syntax>ATAN(Float)</Syntax>
 	<Example>ATAN(0.8) equals 0.67474094</Example>
 	<Example>ATAN(0) equals 0</Example>
+	<Related>TAN</Related>
+	<Related>ATAN2</Related>
       </Help>
     </Function>
 
@@ -105,6 +114,7 @@
 	<Syntax>COSH(Float)</Syntax>
 	<Example>COSH(0.8) equals 1.33743495</Example>
 	<Example>COSH(0) equals 1</Example>
+	<Related>ACOSH</Related>
       </Help>
     </Function>
 
@@ -120,6 +130,7 @@
 	<Syntax>SINH(Float)</Syntax>
 	<Example>SINH(0.8) equals 0.88810598</Example>
 	<Example>SINH(0) equals 0</Example>
+	<Related>ASINH</Related>
       </Help>
     </Function>
 
@@ -135,6 +146,7 @@
 	<Syntax>TANH(Float)</Syntax>
 	<Example>TANH(0.8) equals 0.66403677</Example>
 	<Example>TANH(0) equals 0</Example>
+	<Related>ATANH</Related>
       </Help>
     </Function>
 
@@ -150,6 +162,7 @@
 	<Syntax>ACOSH(Float)</Syntax>
 	<Example>ACOSH(5) equals 2.29243167</Example>
 	<Example>ACOSH(0) equals NaN</Example>
+	<Related>COSH</Related>
       </Help>
     </Function>
 
@@ -165,6 +178,7 @@
 	<Syntax>ASINH(Float)</Syntax>
 	<Example>ASINH(0.8) equals 0.73266826</Example>
 	<Example>ASINH(0) equals 0</Example>
+	<Related>SINH</Related>
       </Help>
     </Function>
 
@@ -180,6 +194,7 @@
 	<Syntax>ATANH(Float)</Syntax>
 	<Example>ATANH(0.8) equals 1.09861229</Example>
 	<Example>ATANH(0) equals 0</Example>
+	<Related>TANH</Related>
       </Help>
     </Function>
 
@@ -193,8 +208,9 @@
       <Help>
 	<Text>This function calculates the arc tangent of the two variables x and y. It is similar to calculating the arc tangent of y/x, except that the signs of both arguments are used to determine the quadrant of the result.</Text>
 	<Syntax>ATAN2(value;value)</Syntax>
-	<Example>atan2(0.5;1.0) equals 1.107149</Example>
-	<Example>atan2(-0.5;2.0) equals 1.815775</Example>
+	<Example>ATAN2(0.5;1.0) equals 1.107149</Example>
+	<Example>ATAN2(-0.5;2.0) equals 1.815775</Example>
+	<Related>ATAN</Related>
       </Help>
     </Function>
 
@@ -210,6 +226,7 @@
 	<Syntax>DEGREE(Float)</Syntax>
 	<Example>DEGREE(0.78) equals 44.69</Example>
 	<Example>DEGREE(1) equals 57.29</Example>
+	<Related>RADIAN</Related>
       </Help>
     </Function>
 
@@ -225,6 +242,7 @@
 	<Syntax>RADIAN(Float)</Syntax>
 	<Example>RADIAN(75) equals 1.308</Example>
 	<Example>RADIAN(90) equals 1.5707</Example>
+	<Related>DEGREE</Related>
       </Help>
     </Function>
 
