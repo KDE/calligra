@@ -132,8 +132,10 @@ void KPAutoformObject::setFillType( FillType _fillType )
 QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc);
-    fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
-    fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    if (lineBegin!=L_NORMAL)
+        fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+    if (lineEnd!=L_NORMAL)
+        fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
 
     // The filename contains the absolute path to the autoform. This is
     // bad, so we simply remove everything but the last dir and the name.
