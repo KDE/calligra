@@ -36,6 +36,9 @@ Cell dependency - stores information about one dependency of a cell.
 
 struct CellInfo {
   int row, column;
+  
+  inline bool operator== (const CellInfo &cell) const;
+  inline bool operator< (const CellInfo &cell) const;
 };
 
 /** one range */
@@ -81,23 +84,49 @@ class DependencyManager {
   void reset ();
   
   /** handle the fact that cell's contents have changed */
-  void cellChanged (int row, int col);
-  
+  void cellChanged (const CellInfo &cell);
+  /** handle the fact that a range has been changed */
+  void rangeChanged (const Range &range);
+  /** handle the fact that a range list has been changed */
+  void rangeListChanged (const RangeList &rangeList);
  protected:
   /** update structures: cell 1 depends on cell 2 */
-  void addDependency (int row1, int col1, int row2, int col2);
+  void addDependency (const CellInfo &cell1, const CellInfo &cell2);
   /** update structures: cell depends on a range */
   void addRangeDependency (const RangeDependency &rd);
   /** remove all dependencies of a cell */
-  void removeDependencies (int row, int col);
-  
-  /** update cell dependencies of a given cell */
-  void processDependencies (int row, int col);
-  /** update all cells depending on a range containing (row,col)  */
-  void processRangeDependencies (int row, int col);
+  void removeDependencies (const CellInfo &cell);
 
-  /** retrieve a list of cells that this a given cell depends on */
-  RangeList getDependencies (int row, int col);
+  /** generate list of dependencies of a cell */
+  void generateDependencies (const CellInfo &cell);
+  /** generate list of dependencies of a range */
+  void generateDependencies (const Range &range);
+  /** generate list of dependencies of a range list */
+  void generateDependencies (const RangeList &rangeList);
+
+  /** update cells dependending on a given cell */
+  void processDependencies (const CellInfo &cell) const;
+  /** update all cells depending on a range containing this cell */
+  void processRangeDependencies (const CellInfo &cell) const;
+
+  /** update cells dependending on a cell in a given range */
+  void processDependencies (const Range &range) const;
+  /** update all cells depending on a range intersecting with this range */
+  void processRangeDependencies (const Range &range) const;
+  
+  /** update cells dependending on a given range-list */
+  void processDependencies (const RangeList &rangeList) const;
+
+  /** update one cell due to changed dependencies */
+  void updateCell (const CellInfo &cell);  
+
+  /** return a leading cell for a given cell (used to store range
+  dependencies effectively) */
+  CellInfo leadingCell (const CellInfo &cell) const;
+  /** list of leading cells of all cell chunks that this range belongs to */
+  QValueList<CellInfo> leadingCells (const Range &range) const;
+  /** retrieve a list of cells that a given cell depends on */
+  RangeList getDependencies (const CellInfo &cell) const;
   
   /** KSpreadSheet whose dependencies are managed by this instance */
   KSpreadSheet *sheet;
