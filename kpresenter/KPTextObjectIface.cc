@@ -84,11 +84,6 @@ void KPTextObjectIface::setUnderlineText( bool b )
     delete cmd;
 }
 
-void KPTextObjectIface::setDoubleUnderlineText( bool b )
-{
-    KCommand *cmd=m_textobject->textObject()->setDoubleUnderlineCommand(b);
-    delete cmd;
-}
 
 void KPTextObjectIface::setStrikeOutText( bool b )
 {
@@ -150,11 +145,6 @@ QString KPTextObjectIface::textFontFamily()const
 QColor KPTextObjectIface::textBackgroundColor() const
 {
     return m_textobject->textObject()->textBackgroundColor();
-}
-
-bool KPTextObjectIface::textDoubleUnderline() const
-{
-    return m_textobject->textObject()->textDoubleUnderline();
 }
 
 bool KPTextObjectIface::textItalic() const

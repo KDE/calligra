@@ -56,7 +56,10 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, DoubleUnderline = 2048 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024 };
+
+    enum NbLine { NONE = 0, SIMPLE = 1, DOUBLE = 2};
+    enum LineType { SOLID = 0 , DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
 
     /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
         You should NOT call this - it's a special treat for KoTextFormatter */
@@ -68,12 +71,24 @@ public:
     static QColor defaultTextColor( QPainter * painter );
 
     void setStrikeOut(bool);
-    
-    void setDoubleUnderline( bool );
-    bool doubleUnderline() const { return m_doubleUnderline;}
 
     void setTextBackgroundColor(const QColor &);
     QColor textBackgroundColor()const {return m_textBackColor;}
+
+    void setTextUnderlineColor(const QColor &);
+    QColor textUnderlineColor()const {return m_textUnderlineColor;}
+
+    void setNbLineType (NbLine _type);
+    NbLine nbLineType()const {return m_nbLine;}
+
+    void setLineType (LineType _type);
+    LineType lineType()const {return m_lineType;}
+
+    void setStrikeOutType( LineType _type );
+    LineType strikeOutType()const {return m_strikeOutType;}
+
+    bool doubleUnderline() const { return (m_nbLine==DOUBLE ); }
+    bool underline() const { return (m_nbLine==SIMPLE ); }
 
     /**
      * @return the point size to use on screen, given @p zh
@@ -122,6 +137,9 @@ public:
 
 protected:
     QColor m_textBackColor;
-    bool m_doubleUnderline;
+    QColor m_textUnderlineColor;
+    NbLine m_nbLine;
+    LineType m_lineType;
+    LineType m_strikeOutType;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

@@ -1676,7 +1676,6 @@ void KPresenterView::mtextFont()
     if (textIface)
         col = textIface->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-    bool doubleUnderline = textIface->currentFormat()->doubleUnderline();
 
     if( m_fontDlg )
     {
@@ -1686,8 +1685,13 @@ void KPresenterView::mtextFont()
     m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
                                actionFormatSub->isChecked(),
                                actionFormatSuper->isChecked(),
-                               doubleUnderline,
-                               textIface->textColor(), col );
+                               textIface->textColor(),
+                               col,
+                               textIface->textUnderlineColor(),
+                               textIface->nbLineType(),
+                               textIface->lineType(),
+                               textIface->strikeOutType());
+
     connect( m_fontDlg, SIGNAL( apply() ),
              this, SLOT( slotApplyFont() ) );
     m_fontDlg->exec();
@@ -1705,12 +1709,14 @@ void KPresenterView::slotApplyFont()
         m_canvas->setFont(m_fontDlg->getNewFont(),
                           m_fontDlg->getSubScript(),
                           m_fontDlg->getSuperScript(),
-                          m_fontDlg->getDoubleUnderline(),
                           m_fontDlg->color(),
                           m_fontDlg->backGroundColor(),
+                          m_fontDlg->underlineColor(),
+                          m_fontDlg->getNblineType(),
+                          m_fontDlg->getUnderlineType(),
+                          m_fontDlg->getStrikeOutType(),
                           flags);
     }
-
 }
 
 void KPresenterView::slotCounterStyleSelected()

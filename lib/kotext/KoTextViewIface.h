@@ -43,7 +43,6 @@ k_dcop:
     void setPointSize( int s );
     void setTextSubScript(bool on);
     void setTextSuperScript(bool on);
-    void setDoubleUnderline(bool on);
 
     void setDefaultFormat();
 

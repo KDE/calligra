@@ -50,7 +50,6 @@ k_dcop:
     void setTextPointSize( int s );
     void setTextSubScript( bool b );
     void setTextSuperScript( bool b );
-    void setDoubleUnderlineText( bool b );
     void setTextDefaultFormat();
     void setTextBackgroundColor(const QColor & col);
     void setTextFamilyFont(const QString &font);
@@ -61,7 +60,6 @@ k_dcop:
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
 
-    bool textDoubleUnderline() const;
     bool textItalic() const;
     bool textBold() const;
     bool textUnderline()const;

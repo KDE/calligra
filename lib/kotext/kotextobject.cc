@@ -1939,16 +1939,10 @@ KCommand *KoTextFormatInterface::setItalicCommand( bool on)
 KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
-    format.setUnderline( on );
+    format.setNbLineType( on ? KoTextFormat::SIMPLE : KoTextFormat::NONE);
     return setFormatCommand( &format, KoTextFormat::Underline );
 }
 
-KCommand *KoTextFormatInterface::setDoubleUnderlineCommand( bool on )
-{
-    KoTextFormat format( *currentFormat() );
-    format.setDoubleUnderline( on );
-    return setFormatCommand( &format, KoTextFormat::DoubleUnderline );
-}
 
 KCommand *KoTextFormatInterface::setStrikeOutCommand( bool on )
 {
@@ -1983,19 +1977,20 @@ QColor KoTextFormatInterface::textBackgroundColor() const
     return currentFormat()->textBackgroundColor();
 }
 
+QColor KoTextFormatInterface::textUnderlineColor()const
+{
+    return currentFormat()->textUnderlineColor();
+}
+
 QColor KoTextFormatInterface::textColor() const
 {
     return currentFormat()->color();
 }
 
-bool KoTextFormatInterface::textDoubleUnderline()const
-{
-    return currentFormat()->doubleUnderline();
-}
 
 bool KoTextFormatInterface::textUnderline()const
 {
-    return currentFormat()->font().underline();
+    return currentFormat()->underline();
 }
 
 bool KoTextFormatInterface::textBold()const
@@ -2023,6 +2018,21 @@ bool KoTextFormatInterface::textSuperScript() const
     return (currentFormat()->vAlign()==KoTextFormat::AlignSuperScript);
 }
 
+KoTextFormat::NbLine KoTextFormatInterface::nbLineType()const
+{
+    return currentFormat()->nbLineType();
+}
+
+KoTextFormat::LineType KoTextFormatInterface::lineType()const
+{
+    return currentFormat()->lineType();
+}
+
+KoTextFormat::LineType KoTextFormatInterface::strikeOutType()const
+{
+    return currentFormat()->strikeOutType();
+}
+
 QFont KoTextFormatInterface::textFont() const
 {
     QFont fn( currentFormat()->font() );
@@ -2036,13 +2046,16 @@ QString KoTextFormatInterface::textFontFamily()const
     return currentFormat()->font().family();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand( const QFont &font, bool _subscript, bool _superscript, bool _doubleUnderline, const QColor &col,const QColor &backGroundColor, int flags )
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::NbLine _nbLine, KoTextFormat::LineType _underlineType, KoTextFormat::LineType _strikeOutType,  int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
     format.setColor( col );
     format.setTextBackgroundColor(backGroundColor);
-    format.setDoubleUnderline( _doubleUnderline );
+    format.setTextUnderlineColor( underlineColor );
+    format.setNbLineType (_nbLine);
+    format.setLineType (_underlineType);
+    format.setStrikeOutType(_strikeOutType );
 
     if(!_subscript)
     {

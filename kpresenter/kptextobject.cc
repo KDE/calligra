@@ -677,9 +677,9 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     {
         QString value = n.attribute( attrUnderline );
         if ( value == "double" )
-            format.setDoubleUnderline(true);
+            format.setNbLineType ( KoTextFormat::DOUBLE);
         else if ( value == "single" )
-            underline = true;
+            format.setNbLineType ( KoTextFormat::SIMPLE);
         else
             underline = (bool)value.toInt();
     }
@@ -691,7 +691,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     fn.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
     fn.setBold( bold );
     fn.setItalic( italic );
-    fn.setUnderline( underline );
     fn.setStrikeOut( strikeOut );
     //kdDebug() << "KPTextObject::loadFormat: family=" << fn.family() << " size=" << fn.pointSize() << endl;
     QColor col( color );

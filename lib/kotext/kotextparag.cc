@@ -1064,34 +1064,106 @@ void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *form
 	// done in the formatter
 	// ### TODO scale the painter to do this, especially when printing, to gain more resolution
         //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
+        QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
 
 	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
-        p->setPen( QPen( color, KoBorder::zoomWidthY( 0.5, zh, 1 ), Qt::SolidLine ) );
+        p->save();
+        switch( format->lineType() )
+        {
+        case KoTextFormat::SOLID:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            break;
+        case KoTextFormat::DASH:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            break;
+        case KoTextFormat::DOT:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT_DOT:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
+
+            break;
+        default:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        }
+
         p->drawLine( startX, y, startX + bw, y );
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
 	y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
 	p->drawLine( startX, y, startX + bw, y );
-
+        p->restore();
         if ( font.underline() ) { // can this happen?
             font.setUnderline( FALSE );
             p->setFont( font );
         }
     }
-    else if ( font.underline() )
+    else if ( format->underline() )
     {
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
+        p->save();
+
+        switch( format->lineType() )
+        {
+        case KoTextFormat::SOLID:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            break;
+        case KoTextFormat::DASH:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            break;
+        case KoTextFormat::DOT:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT_DOT:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
+
+            break;
+        default:
+            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        }
+
         p->drawLine( startX, y, startX + bw, y );
+        p->restore();
         font.setUnderline( FALSE );
         p->setFont( font );
     }
 
     if ( font.strikeOut() )
     {
+
+        p->save();
+        switch( format->strikeOutType() )
+        {
+        case KoTextFormat::SOLID:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            break;
+        case KoTextFormat::DASH:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            break;
+        case KoTextFormat::DOT:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            break;
+        case KoTextFormat::DASH_DOT_DOT:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
+
+            break;
+        default:
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        }
+
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
         p->drawLine( startX, y - h/2 + 2 , startX + bw, y- h/2 +2 );
+        p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );
     }

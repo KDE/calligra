@@ -70,7 +70,7 @@
 #include "kwvariable.h"
 #include "KWordViewIface.h"
 #include "configfootnotedia.h"
-
+#include <qrichtext_p.h>
 #include <kaccel.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
@@ -1400,14 +1400,13 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     actionFormatFontSize->setFontSize( currentFormat.font().pointSize() );
     actionFormatBold->setChecked( currentFormat.font().bold());
     actionFormatItalic->setChecked( currentFormat.font().italic() );
-    actionFormatUnderline->setChecked( currentFormat.font().underline());
+    actionFormatUnderline->setChecked( currentFormat.underline());
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
     QColor col=currentFormat.textBackgroundColor();
     actionBackgroundColor->setEnabled(true);
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     actionBackgroundColor->setText(i18n("Text Background Color..."));
     actionFormatColor->setCurrentColor( currentFormat.color() );
-
     switch(currentFormat.vAlign())
       {
       case KoTextFormat::AlignSuperScript:
@@ -2697,7 +2696,6 @@ void KWView::formatFont()
         return;
     QColor col=textIface->textBackgroundColor();
     col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-    bool doubleUnderline = textIface->currentFormat()->doubleUnderline();
 
     if( m_fontDlg )
     {
@@ -2705,8 +2703,14 @@ void KWView::formatFont()
         m_fontDlg = 0L;
     }
     m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
-                                        actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-					doubleUnderline, textIface->textColor(), col );
+                               actionFormatSub->isChecked(),
+                               actionFormatSuper->isChecked(),
+                               textIface->textColor(),
+                               col,
+                               textIface->textUnderlineColor(),
+                               textIface->nbLineType(),
+                               textIface->lineType(),
+                               textIface->strikeOutType());
 
     connect( m_fontDlg, SIGNAL( apply() ),
                  this, SLOT( slotApplyFont() ) );
@@ -2728,11 +2732,16 @@ void KWView::slotApplyFont()
         QPtrListIterator<KoTextFormatInterface> it( lst );
         for ( ; it.current() ; ++it )
         {
+
             KCommand *cmd = it.current()->setFontCommand(m_fontDlg->getNewFont(),
                                                          m_fontDlg->getSubScript(),
                                                          m_fontDlg->getSuperScript(),
-                                                         m_fontDlg->getDoubleUnderline(),
-                                                         m_fontDlg->color(),m_fontDlg->backGroundColor(),
+                                                         m_fontDlg->color(),
+                                                         m_fontDlg->backGroundColor(),
+                                                         m_fontDlg->underlineColor(),
+                                                         m_fontDlg->getNblineType(),
+                                                         m_fontDlg->getUnderlineType(),
+                                                         m_fontDlg->getStrikeOutType(),
                                                          flags);
             if (cmd)
                 globalCmd->addCommand(cmd);

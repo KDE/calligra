@@ -56,7 +56,6 @@ k_dcop:
     void setTextBackgroundColor(const QColor & col);
     void setTextFamilyFont(const QString &font);
 
-    void setDoubleUnderlineText( bool b );
 
     void changeCaseOfText( const QString & caseType);
 
@@ -65,7 +64,6 @@ k_dcop:
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
 
-    bool textDoubleUnderline() const;
 
     bool textItalic() const;
     bool textBold() const;

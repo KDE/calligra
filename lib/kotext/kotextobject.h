@@ -70,8 +70,6 @@ public:
     KCommand *setItalicCommand(bool on);
     //void setUnderline(bool on);
     KCommand *setUnderlineCommand(bool on);
-    //void setDoubleUnderline(bool on);
-    KCommand *setDoubleUnderlineCommand(bool on);
     //void setStrikeOut(bool on);
     KCommand *setStrikeOutCommand(bool on);
     //void setTextColor(const QColor &color);
@@ -81,7 +79,7 @@ public:
     //void setFamily(const QString &font);
     KCommand *setFamilyCommand(const QString &font);
     //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript, bool _doubleUnderline, const QColor &col, const QColor &backGroundColor, int flags);
+    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::NbLine _nbLine, KoTextFormat::LineType _underlineType, KoTextFormat::LineType _strikeOutType,  int flags);
     //void setTextSubScript(bool on);
     KCommand *setTextSubScriptCommand(bool on);
     //void setTextSuperScript(bool on);
@@ -110,13 +108,21 @@ public:
     QString textFontFamily()const;
 
     QColor textBackgroundColor()const;
-    bool textDoubleUnderline()const;
+    QColor textUnderlineColor()const;
+
+    KoTextFormat::NbLine nbLineType()const;
+    KoTextFormat::LineType lineType()const;
+    KoTextFormat::LineType strikeOutType()const;
+
+
+
     bool textUnderline()const;
     bool textBold()const;
     bool textStrikeOut()const;
     bool textItalic() const;
     bool textSubScript() const;
     bool textSuperScript() const;
+
 };
 
 /**

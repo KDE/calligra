@@ -22,7 +22,7 @@
 */
 
 // #include "koparaglayout.h"
-// #include "qrichtext_p.h"
+
 // #include <qstring.h>
 // #include <qcolor.h>
 // #include "kotextformat.h"
@@ -138,7 +138,6 @@ public:
      *  for draw double/simple in variable.
      */
      static void drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y,  int h);
-
 
 #ifndef NDEBUG
     void printRTDebug( int );

@@ -128,7 +128,11 @@ KoTextFormat::KoTextFormat()
     //// kotext: WYSIWYG works much much better with scalable fonts -> force it to be scalable
     fn.setStyleStrategy( QFont::ForceOutline );
     d = new KoTextFormatPrivate;
-    m_doubleUnderline = false;
+    m_textUnderlineColor=QColor();
+    m_nbLine = NONE;
+    m_lineType = SOLID;
+    m_strikeOutType = SOLID;
+
     ////
 //#ifdef DEBUG_COLLECTION
 //    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
@@ -195,7 +199,10 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     //memset( widths, 0, 256 * sizeof( ushort ) );
     //// kotext
     d = new KoTextFormatPrivate;
-    m_doubleUnderline = false;
+    m_textUnderlineColor = QColor();
+    m_nbLine = NONE;
+    m_lineType = SOLID;
+    m_strikeOutType = SOLID;
     ////
     generateKey();
     addRef();
@@ -230,7 +237,10 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     //// kotext addition
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
-    m_doubleUnderline = f.m_doubleUnderline;
+    m_textUnderlineColor=f.m_textUnderlineColor;
+    m_nbLine = f.m_nbLine;
+    m_lineType = f.m_lineType;
+    m_strikeOutType = f.m_strikeOutType;
     ////
     addRef();
 }
@@ -276,7 +286,10 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     //// kotext addition
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
-    m_doubleUnderline=f.m_doubleUnderline;
+    m_textUnderlineColor=f.m_textUnderlineColor;
+    m_nbLine = f.m_nbLine;
+    m_lineType = f.m_lineType;
+    m_strikeOutType = f.m_strikeOutType;
     ////
     addRef();
     return *this;
@@ -366,13 +379,19 @@ void KoTextFormat::generateKey()
     //// kotext addition
     k += '/';
     k += QString::number( (int)fn.strikeOut() );
-    k += '/';
-    k += QString::number( (int)doubleUnderline() );
     //k += '/';
     //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
     if (m_textBackColor.isValid())
         k += QString::number( (uint)m_textBackColor.rgb() );
+    k += '/';
+    if ( m_textUnderlineColor.isValid())
+        k += QString::number( (uint)m_textUnderlineColor.rgb() );
+    k += '/';
+    k += QString::number( (int)m_nbLine );
+    k += '/';
+    k += QString::number( (int)m_lineType );
+    k += QString::number( (int)m_strikeOutType);
     ////
 }
 

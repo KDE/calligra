@@ -26,22 +26,30 @@
 
 #include <qgroupbox.h>
 #include <qpushbutton.h>
-
+#include <qtabwidget.h>
+#include <qlabel.h>
+#include <qcombobox.h>
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
-    : QWidget( parent, name )
+    : QTabWidget( parent, name )
 {
-    QVBoxLayout *lay1 = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+    setupTab1(_withSubSuperScript, fontListCriteria );
+    setupTab2();
+    m_changedFlags = 0;
+}
+
+void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
+{
+    QWidget *page = new QWidget( this );
+    addTab( page, i18n( "Fonts" ) );
+    QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
     QStringList list;
     KFontChooser::getFontList(list,fontListCriteria);
-    m_chooseFont = new KFontChooser(this, "FontList", false, list);
+    m_chooseFont = new KFontChooser(page, "FontList", false, list);
     lay1->addWidget(m_chooseFont);
 
-    QGroupBox *grp = new QGroupBox(this);
+    QGroupBox *grp = new QGroupBox(page);
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
-
-    m_underline = new QCheckBox(i18n("&Underline"),grp);
-    grid->addWidget(m_underline,0,1);
 
     m_superScript = new QCheckBox(i18n("SuperScript"),grp);
     grid->addWidget(m_superScript,0,0);
@@ -54,11 +62,6 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
         m_subScript->setEnabled(false);
         m_superScript->setEnabled(false);
     }
-    m_strikeOut = new QCheckBox(i18n("Strike out"),grp);
-    grid->addWidget(m_strikeOut,1,1);
-
-    m_doubleUnderline = new QCheckBox(i18n("Double underline"),grp);
-    grid->addWidget(m_doubleUnderline,0,2);
 
     m_colorButton = new QPushButton( i18n( "Change Color..." ), grp );
     grid->addWidget(m_colorButton,0,3);
@@ -66,9 +69,6 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     m_backGroundColorButton = new QPushButton( i18n( "Change Background Color..." ), grp );
     grid->addWidget(m_backGroundColorButton,1,3);
 
-    connect( m_underline, SIGNAL(clicked()), this, SLOT( slotUnderlineClicked() ) );
-    connect( m_doubleUnderline, SIGNAL(clicked()), this, SLOT( slotDoubleUnderlineClicked() ) );
-    connect( m_strikeOut, SIGNAL(clicked()), this, SLOT( slotStrikeOutClicked() ) );
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
     connect( m_colorButton, SIGNAL(clicked()), this, SLOT( slotChangeColor() ) );
@@ -78,17 +78,69 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     connect( m_chooseFont, SIGNAL( fontSelected( const QFont & )),
              this, SLOT( slotFontChanged(const QFont &) ) );
 
-    m_changedFlags = 0;
+}
+void KoFontChooser::setupTab2()
+{
+    QWidget *page = new QWidget( this );
+    addTab( page, i18n( "Fonts Effect" ) );
+
+    QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
+    QGroupBox *grp = new QGroupBox(page);
+    lay1->addWidget(grp);
+    QGridLayout *grid = new QGridLayout( grp, 10, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel * lab = new QLabel( i18n("Underlining"), grp);
+    grid->addWidget( lab, 0, 0);
+
+    m_underlining = new QComboBox( grp );
+    grid->addWidget( m_underlining, 1, 0);
+
+    QStringList lst;
+    lst <<i18n("Without");
+    lst <<i18n("Single");
+    lst <<i18n("Double");
+    m_underlining->insertStringList( lst );
+
+    m_underlineType = new QComboBox(grp );
+    grid->addWidget( m_underlineType, 1, 1);
+    lst.clear();
+    lst <<i18n("Solid line");
+    lst <<i18n("Dash line");
+    lst <<i18n("Dot line");
+    lst <<i18n("Dash Dot line");
+    lst <<i18n("Dash Dot Dot line");
+    m_underlineType->insertStringList( lst );
+
+
+    m_underlineColorButton = new QPushButton( i18n( "Change Color..." ), grp );
+    grid->addWidget(m_underlineColorButton,1,2);
+
+
+    lab = new QLabel( i18n("StrikeThrough"), grp);
+    grid->addWidget( lab, 2, 1);
+
+    m_strikeOut = new QCheckBox(i18n("Strike out"),grp);
+    grid->addWidget(m_strikeOut,3,0);
+
+    m_strikeOutType= new QComboBox(grp );
+    grid->addWidget( m_strikeOutType, 3, 1);
+    m_strikeOutType->insertStringList( lst );
+
+
+    connect( m_strikeOut, SIGNAL(clicked()), this, SLOT( slotStrikeOutClicked() ) );
+    connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
+    connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
 }
 
-void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript, bool _doubleUnderline )
+
+void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
 {
     m_newFont = _font;
-    m_underline->setChecked( _font.underline() );
     m_strikeOut->setChecked( _font.strikeOut() );
+    m_strikeOutType->setEnabled( m_strikeOut->isChecked() );
+
     m_subScript->setChecked( _subscript );
     m_superScript->setChecked( _superscript );
-    m_doubleUnderline->setChecked( _doubleUnderline );
 
     m_chooseFont->setFont( m_newFont );
     m_changedFlags = 0;
@@ -97,6 +149,12 @@ void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscr
 void KoFontChooser::setColor( const QColor & col )
 {
     m_chooseFont->setColor( col );
+    m_changedFlags = 0;
+}
+
+void KoFontChooser::setUnderlineColor( const QColor & col )
+{
+    m_underlineColor = col;
     m_changedFlags = 0;
 }
 
@@ -112,8 +170,6 @@ void KoFontChooser::slotFontChanged(const QFont & f)
         m_changedFlags |= KoTextFormat::Bold;
     if ( f.italic() != m_newFont.italic() )
         m_changedFlags |= KoTextFormat::Italic;
-    if ( f.underline() != m_newFont.underline() )
-        m_changedFlags |= KoTextFormat::Underline;
     if ( f.family() != m_newFont.family() )
         m_changedFlags |= KoTextFormat::Family;
     if ( f.pointSize() != m_newFont.pointSize() )
@@ -126,23 +182,13 @@ void KoFontChooser::slotFontChanged(const QFont & f)
     m_newFont = f;
 }
 
-void KoFontChooser::slotUnderlineClicked()
-{
-    m_newFont.setUnderline(m_underline->isChecked());
-    m_chooseFont->setFont(m_newFont);
-    m_changedFlags |= KoTextFormat::Underline;
-}
-
-void KoFontChooser::slotDoubleUnderlineClicked()
-{
-    m_changedFlags |= KoTextFormat::DoubleUnderline;
-}
 
 void KoFontChooser::slotStrikeOutClicked()
 {
     m_newFont.setStrikeOut(m_strikeOut->isChecked());
     m_chooseFont->setFont(m_newFont);
     m_changedFlags |= KoTextFormat::StrikeOut;
+    m_strikeOutType->setEnabled( m_strikeOut->isChecked() );
 }
 
 void KoFontChooser::slotSubScriptClicked()
@@ -185,18 +231,172 @@ void KoFontChooser::slotChangeBackGroundColor()
     }
 }
 
+void KoFontChooser::slotUnderlineColor()
+{
+    QColor color = m_underlineColor;
+    if ( KColorDialog::getColor( color, QApplication::palette().color( QPalette::Active, QColorGroup::Base ) ) )
+    {
+        if ( color != m_underlineColor )
+        {
+            m_changedFlags |= KoTextFormat::Underline;
+            m_underlineColor = color;
+        }
+    }
+}
+
+KoTextFormat::NbLine KoFontChooser::getNblineType()
+{
+    switch (m_underlining->currentItem () )
+    {
+    case 0:
+        return KoTextFormat::NONE;
+        break;
+    case 1:
+        return KoTextFormat::SIMPLE;
+        break;
+    case 2:
+        return KoTextFormat::DOUBLE;
+        break;
+    default:
+        return KoTextFormat::NONE;
+    }
+}
+
+KoTextFormat::LineType KoFontChooser::getTypeOfLine( int val)
+{
+    switch ( val )
+    {
+    case 0:
+        return KoTextFormat::SOLID;
+        break;
+    case 1:
+        return KoTextFormat::DASH;
+        break;
+    case 2:
+        return KoTextFormat::DOT;
+        break;
+    case 3:
+        return KoTextFormat::DASH_DOT;
+        break;
+    case 4:
+        return KoTextFormat::DASH_DOT_DOT;
+        break;
+    default:
+        return KoTextFormat::SOLID;
+    }
+}
+
+void KoFontChooser::setNblineType(KoTextFormat::NbLine nb)
+{
+    switch (nb )
+    {
+    case KoTextFormat::NONE:
+        m_underlining->setCurrentItem( 0 );
+        break;
+    case KoTextFormat::SIMPLE:
+        m_underlining->setCurrentItem( 1 );
+        break;
+    case KoTextFormat::DOUBLE:
+        m_underlining->setCurrentItem( 2 );
+        break;
+    default:
+        m_underlining->setCurrentItem( 0 );
+        break;
+    }
+    m_changedFlags = 0;
+}
+
+void KoFontChooser::setUnderlineType(KoTextFormat::LineType _t)
+{
+    switch ( _t )
+    {
+    case KoTextFormat::SOLID:
+        m_underlineType->setCurrentItem( 0 );
+        break;
+    case KoTextFormat::DASH:
+        m_underlineType->setCurrentItem( 1 );
+        break;
+    case KoTextFormat::DOT:
+        m_underlineType->setCurrentItem( 2 );
+        break;
+    case KoTextFormat::DASH_DOT:
+        m_underlineType->setCurrentItem( 3 );
+        break;
+    case KoTextFormat::DASH_DOT_DOT:
+        m_underlineType->setCurrentItem( 4 );
+        break;
+    default:
+        m_underlineType->setCurrentItem( 0 );
+        break;
+    }
+    m_underlineType->setEnabled( m_underlineType->currentItem()!= 0);
+    m_underlineColorButton->setEnabled( m_underlineType->currentItem()!=0);
+    m_changedFlags = 0;
+}
+
+void KoFontChooser::setStrikeOutType(KoTextFormat::LineType _t)
+{
+    switch ( _t )
+    {
+    case KoTextFormat::SOLID:
+        m_strikeOutType->setCurrentItem( 0 );
+        break;
+    case KoTextFormat::DASH:
+        m_strikeOutType->setCurrentItem( 1 );
+        break;
+    case KoTextFormat::DOT:
+        m_strikeOutType->setCurrentItem( 2 );
+        break;
+    case KoTextFormat::DASH_DOT:
+        m_strikeOutType->setCurrentItem( 3 );
+        break;
+    case KoTextFormat::DASH_DOT_DOT:
+        m_strikeOutType->setCurrentItem( 4 );
+        break;
+    default:
+        m_strikeOutType->setCurrentItem( 0 );
+        break;
+    }
+    m_changedFlags = 0;
+}
+
+KoTextFormat::LineType KoFontChooser::getUnderlineType()
+{
+    return getTypeOfLine( m_underlineType->currentItem());
+}
+
+KoTextFormat::LineType KoFontChooser::getStrikeOutType()
+{
+    return getTypeOfLine( m_strikeOutType->currentItem());
+}
+
+
+void KoFontChooser::slotChangeUnderlineType( int i)
+{
+    m_changedFlags |= KoTextFormat::Underline;
+    m_underlineType->setEnabled( i!= 0);
+    m_underlineColorButton->setEnabled( i!=0);
+}
 
 KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      bool _subscript, bool _superscript, bool _doubleunderline, const QColor & color,
-                      const QColor & backGroundColor ,bool _withSubSuperScript )
+                      bool _subscript, bool _superscript, const QColor & color,
+                      const QColor & backGroundColor ,
+                      const QColor & underlineColor,
+                      KoTextFormat::NbLine _nbLine,
+                      KoTextFormat::LineType _underlineType,
+                      KoTextFormat::LineType _strikeOutType,
+                      bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
       m_font(_font),
       m_subscript( _subscript ),
       m_superscript(_superscript ),
-      m_doubleunderline( _doubleunderline ),
       m_color( color),
-      m_backGroundColor( backGroundColor)
+      m_backGroundColor( backGroundColor),
+      m_underlineColor( underlineColor ),
+      m_nbLine( _nbLine ),
+      m_underlineType( _underlineType ),
+      m_strikeOutType( _strikeOutType )
 {
     setButtonText( KDialogBase::User1, i18n("Reset") );
 
@@ -220,9 +420,14 @@ void KoFontDia::slotOk()
 
 void KoFontDia::slotReset()
 {
-    m_chooser->setFont( m_font, m_subscript, m_superscript, m_doubleunderline );
+    m_chooser->setFont( m_font, m_subscript, m_superscript );
     m_chooser->setColor( m_color );
     m_chooser->setBackGroundColor(m_backGroundColor);
+    m_chooser->setUnderlineColor( m_underlineColor );
+
+    m_chooser->setNblineType(m_nbLine);
+    m_chooser->setUnderlineType(m_underlineType);
+    m_chooser->setStrikeOutType(m_strikeOutType);
 }
 
 #include "koFontDia.moc"

@@ -526,14 +526,19 @@ void KoStyleFontTab::update()
 {
     bool subScript = m_style->format().vAlign() == KoTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == KoTextFormat::AlignSuperScript;
-    bool doubleUnderline = m_style->format().doubleUnderline();
     QFont fn = m_style->format().font();
     fn.setPointSize( (int)m_zoomHandler->layoutUnitPtToPt( fn.pointSize() ) );
-    m_chooser->setFont( fn, subScript, superScript, doubleUnderline );
+    m_chooser->setFont( fn, subScript, superScript );
     m_chooser->setColor( m_style->format().color() );
     QColor col=m_style->format().textBackgroundColor();
     col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
     m_chooser->setBackGroundColor(col);
+
+    m_chooser->setUnderlineColor( m_style->format().textUnderlineColor());
+
+    m_chooser->setNblineType(m_style->format().nbLineType());
+    m_chooser->setUnderlineType(m_style->format().lineType());
+    m_chooser->setStrikeOutType(m_style->format().strikeOutType());
 }
 
 void KoStyleFontTab::save()

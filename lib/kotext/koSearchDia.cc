@@ -398,12 +398,14 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext->m_optionsMask & KoSearchContext::StrikeOut)
     {
         flags |= KoTextFormat::StrikeOut;
-        newFormat->setDoubleUnderline( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
+        newFormat->setStrikeOut( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
     {
+#if 0
         flags |= KoTextFormat::DoubleUnderline;
-        newFormat->setStrikeOut( (bool)(m_replaceContext->m_options & KoSearchContext::DoubleUnderLine));
+        newFormat->setDoubleUnderline( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
+#endif
     }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
@@ -504,8 +506,10 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
         {
+#if 0
             if ( (!format->doubleUnderline() && (m_searchContext->m_options & KoSearchContext::DoubleUnderLine)) || (format->doubleUnderline() && ((m_searchContext->m_options & KoSearchContext::DoubleUnderLine)==0)))
                 return false;
+#endif
         }
 
 
@@ -583,8 +587,10 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
         {
+#if 0
             if ( (!format->doubleUnderline() && (m_searchContext->m_options & KoSearchContext::DoubleUnderLine)) || (format->doubleUnderline() && ((m_searchContext->m_options & KoSearchContext::DoubleUnderLine)==0)))
                 return false;
+#endif
         }
 
         if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
