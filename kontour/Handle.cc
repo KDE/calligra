@@ -46,10 +46,7 @@ void Handle::show(bool flag)
 void Handle::mode(Mode m, bool propagate)
 {
   if(mMode != m || propagate)
-  {
     mMode = m;
-    //m_parentDoc->activePage()->emitHandleChanged();
-  }
 }
 
 void Handle::box(const KoRect &r)
@@ -69,14 +66,12 @@ void Handle::box(const KoRect &r)
   pos[5] = KoPoint(x2, y3);
   pos[6] = KoPoint(x1, y3);
   pos[7] = KoPoint(x1, y2);
-  // TODO implement center()
-//  mRotCenter = r.center();
+  mRotCenter = r.center();
 }
 
 void Handle::rotCenter(const KoPoint &p)
 {
   mRotCenter = p;
-//  m_parentDoc->activePage()->emitHandleChanged();
 }
 
 void Handle::draw(QPainter &p)
@@ -160,8 +155,8 @@ int Handle::contains(const KoPoint &p)
       return mask[i];
   }
   /* Maybe the rotation center ? */
-/*  if(mRotCenter.isNear(p, 5))
-    return Kontour::HPos_Center;*/
+  if(mRotCenter.isNear(p, 5.0))
+    return Kontour::HPos_Center;
   return 0;
 }
 

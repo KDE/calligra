@@ -21,8 +21,6 @@
 */
 
 #include "StylePanel.h"
-#include "GStyle.h"
-#include "BrushCells.h"
 
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -40,6 +38,9 @@
 #include <klocale.h>
 #include <ktoolbarbutton.h>
 #include <kdebug.h>
+
+#include "GStyle.h"
+#include "BrushCells.h"
 
 #define JOIN_WIDTH  30
 #define JOIN_HEIGHT 30
@@ -206,8 +207,8 @@ QTabWidget(parent, name)
 
   connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotCapPressed(int)));
 
-  insertTab(outlineColor, "Color");
-  insertTab(outlineStyle, "Style");
+  insertTab(outlineColor, i18n("Color"));
+  insertTab(outlineStyle, i18n("Style"));
 }
 
 void OutlinePanel::slotChangeLinewidth(int lwidth)
