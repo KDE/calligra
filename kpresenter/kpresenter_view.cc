@@ -330,9 +330,12 @@ KPresenterView::~KPresenterView()
     if(m_spell.kspell)
     {
         KPTextObject * objtxt = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
-        Q_ASSERT( objtxt );
-        if ( objtxt )
-            objtxt->removeHighlight();
+        if(m_spell.spellCurrTextObjNum !=-1)
+        {
+            Q_ASSERT( objtxt );
+            if ( objtxt )
+                objtxt->removeHighlight();
+        }
         delete m_spell.kspell;
     }
 
@@ -4212,9 +4215,12 @@ void KPresenterView::spellCheckerFinished()
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
-    Q_ASSERT( textobj );
-    if ( textobj )
-        textobj->removeHighlight();
+    if( m_spell.spellCurrTextObjNum!=-1 )
+    {
+        Q_ASSERT( textobj );
+        if ( textobj )
+            textobj->removeHighlight();
+    }
     m_spell.textObject.clear();
     m_ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
