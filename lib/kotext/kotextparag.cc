@@ -1134,7 +1134,8 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
     //kdDebug()<<" bw :"<<bw<<endl;
     if ( _parag->shadowY( zh ) < 0)
         lastY -=_parag->shadowY( zh );
-    if ( !format->wordByWord() )
+    if ( !format->wordByWord() ||
+         (format->wordByWord() && !format->isStrikeUnderline()))
     {
         KoTextParag::drawFontEffects( p, format, zh, font, color, startX, baseLine, bw , lastY, h);
     }

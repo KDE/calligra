@@ -120,6 +120,8 @@ public:
     bool underline() const { return (m_underlineLine==U_SIMPLE ); }
     bool strikeOut() const { return (m_strikeOutLine==S_SIMPLE ); }
     bool doubleStrikeOut() const { return (m_strikeOutLine==S_DOUBLE ); }
+    bool isStrikeUnderline() const { return ((m_underlineLine != U_NONE) ||(m_strikeOutLine!=S_NONE));}
+
     /**
      * @return the reference point size, i.e. the one in layout units used during formatting.
      * This method takes care of superscript and subscript (smaller font).
