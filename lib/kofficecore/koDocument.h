@@ -441,7 +441,10 @@ public:
 
   void emitProgress( int value ) { emit sigProgress( value ); }
 
-  /**
+  void emitBeginOperation() {emit sigBeginOperation(); }
+  void emitEndOperation() {emit sigEndOperation(); }
+
+   /**
    * Return true if url() is a real filename, false if url() is
    * an internal url in the store, like "tar:/..."
    */
@@ -459,6 +462,9 @@ signals:
   void childChanged( KoDocumentChild *child );
 
   void sigProgress(int value);
+
+  void sigBeginOperation();
+  void sigEndOperation();
 
 protected:
 

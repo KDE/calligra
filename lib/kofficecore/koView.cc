@@ -25,17 +25,20 @@
 #include <koDocumentChild.h>
 
 #include <klocale.h>
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
 #include <assert.h>
 #include <kstatusbar.h>
+#include <qapplication.h>
 
 class KoViewPrivate
 {
 public:
   KoViewPrivate()
   {
+    m_inOperation = false;
     m_zoom = 1.0;
     m_children.setAutoDelete( true );
     m_manager = 0L;
@@ -97,6 +100,7 @@ public:
       bool m_visible;  // true when the item has been added to the statusbar
   };
   QValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
+  bool m_inOperation; //in the middle of an operation (no screen refreshing)?
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
@@ -115,6 +119,13 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
   connect( d->m_doc, SIGNAL( childChanged( KoDocumentChild * ) ),
            this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
+
+  connect( d->m_doc, SIGNAL( sigBeginOperation() ),
+           this, SLOT( beginOperation() ) );
+
+  connect( d->m_doc, SIGNAL( sigEndOperation() ),
+           this, SLOT( endOperation() ) );
+  
 
   setupGlobalActions();
   QValueList<KAction*> docActions = document->actionCollection()->actions();
@@ -551,6 +562,27 @@ void KoView::newView() {
     KoMainWindow *shell = new KoMainWindow( thisDocument->instance() );
     shell->setRootDocument(thisDocument);
     shell->show();
+}
+
+bool KoView::isInOperation() const
+{
+   return d->m_inOperation;
+}
+
+void KoView::beginOperation()
+{
+   QApplication::setOverrideCursor(waitCursor);
+   d->m_inOperation = true;
+   canvas()->setUpdatesEnabled(FALSE);
+}
+
+void KoView::endOperation()
+{
+   canvas()->setUpdatesEnabled(TRUE);
+   d->m_inOperation = false;
+   QApplication::restoreOverrideCursor();
+
+   canvas()->update();
 }
 
 KoMainWindow * KoView::shell() const

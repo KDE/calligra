@@ -296,9 +296,30 @@ public:
    */
   virtual void updateReadWrite( bool readwrite ) = 0;
 
+   /**
+    * Check to see if the view is currently in the middle of an operation which means
+    * that there will be no screen refreshes until a signal from the document hits 
+    * the endOperation slot
+    */
+  bool isInOperation() const;
+   
 public slots:
 
     virtual void newView();
+   
+    /*
+     * Slot to allow code to signal the beginning of an operation where the screen should
+     * not update until it is done (see @ref KoView::endOperation)
+     */
+    void beginOperation(); /*BCI: make this a virtual function so functionality can be
+			    * extended */
+   
+    /*
+     * Slot to allow code to signal the end of an operation where the screen should
+     * not have been updating.  So now it will update. (see @ref KoView::beginOperation)
+     */
+   void endOperation(); /*BCI: make this a virtual function so functionality can be
+			 * extended */
 
     void slotActionStatusText( const QString &text );
     void slotClearStatusText();
@@ -354,6 +375,7 @@ private:
   KAction *actionNewView;
   virtual void setupGlobalActions( void );
   KoViewPrivate *d;
+   
 };
 
 class KoViewChild : public KoChild
