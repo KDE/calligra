@@ -764,7 +764,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
                 QListIterator<KWFrame> nextFrame( frameIt );
                 while ( !check && !nextFrame.atLast() )
                 {
-                    nextFrame++;
+                    ++nextFrame;
                     if ( !nextFrame.current()->isCopy() )
                         check = true; // Found a frame after us that isn't a copy => we have somewhere for our overflow
                 }

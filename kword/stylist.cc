@@ -381,6 +381,7 @@ void KWStyleManager::renameStyle(const QString &theText) {
     noSignals=false;
     bool state=!theText.isEmpty();
     enableButtonOK(state);
+    enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
 }
