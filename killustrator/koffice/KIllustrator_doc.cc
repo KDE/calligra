@@ -22,14 +22,14 @@
 
 */
 
-#include "KIllustrator_doc.h"
-#include "KIllustrator_view.h"
-#include "KIllustrator_shell.h"
-#include "KIllustrator_factory.h"
+#include <KIllustrator_doc.h>
+#include <KIllustrator_view.h>
+#include <KIllustrator_shell.h>
+#include <KIllustrator_factory.h>
 
-#include "GDocument.h"
-#include "GPart.h"
-#include "Coord.h"
+#include <GDocument.h>
+#include <GPart.h>
+#include <Coord.h>
 #include <GLayer.h>
 
 #include <kmessagebox.h>
@@ -58,9 +58,9 @@ KIllustratorChild::~KIllustratorChild ()
 KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-    //setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument();
-    GObject::registerPrototype ("object", new GPart ());
+    connect(m_gdocument, SIGNAL(wasModified(bool)), this, SLOT(modified(bool)));
+    GObject::registerPrototype ("object", new GPart());
 }
 
 KIllustratorDocument::~KIllustratorDocument()
@@ -95,7 +95,6 @@ bool KIllustratorDocument::loadChildren (KoStore* store)
     if (! ((KoDocumentChild*)it.current())->loadDocument (store))
       return false;
   }
-
   return true;
 }
 
@@ -148,7 +147,6 @@ void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 void KIllustratorDocument::insertChild( KoDocumentChild* child )
 {
     KoDocument::insertChild( child );
-
     setModified (true);
 }
 

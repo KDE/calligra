@@ -17,11 +17,9 @@ public:
 
     static KInstance* global();
     static KAboutData* aboutData();
-                                             
+
 private:
     static KInstance* s_global;
 };
-
-#define KIBarIcon( x ) BarIcon( x, KIllustratorFactory::global() )
 
 #endif

@@ -17,10 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KIllustrator_shell.h"
-#include "KIllustrator_doc.h"
-#include "KIllustrator_view.h"
-#include "KIllustrator_factory.h"
+#include <KIllustrator_shell.h>
+#include <KIllustrator_view.h>
+#include <KIllustrator_factory.h>
 
 #include <klocale.h>
 
@@ -43,4 +42,4 @@ void KIllustratorShell::slotFilePrint()
     ((KIllustratorView*)rootView())->printDlg();
 }
 
-#include "KIllustrator_shell.moc"
+#include <KIllustrator_shell.moc>

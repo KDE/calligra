@@ -97,11 +97,14 @@ public:
     void insertPart (const QRect& rect, KoDocumentEntry& e);
     void changeChildGeometry (KIllustratorChild* child, const QRect& r);
 
-  bool insertNewTemplate (int, int, bool clean = false);
+    bool insertNewTemplate (int, int, bool clean = false);
 
 signals:
     void partInserted (KIllustratorChild* child, GPart* part);
     void childGeometryChanged (KIllustratorChild* child);
+
+protected slots:
+    void modified(bool m) { setModified(m); }
 
 protected:
     /**
