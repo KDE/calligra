@@ -44,39 +44,38 @@ public:
     KoPictureFilePreviewWidget( QWidget *parent )
         : QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
 
-    void setPixmap( const QPixmap &pix ) {
-        pixmap = pix;
-        const QBitmap nullBitmap;
-        pixmap.setMask( nullBitmap );  //don't show transparency
-        resizeContents( pixmap.width(), pixmap.height() );
-        viewport()->repaint( true );
-    }
-
-    void setClipart( const QString &s ) {
+    bool setPicture( const QString & filename )
+    {
         KoPicture picture;
-        if (picture.loadFromFile(s)) {
-            viewport()->erase();
-            pixmap = QPixmap( 200, 200 );
-            pixmap.fill( Qt::white );
-
-            QPainter p;
-            p.begin( &pixmap );
-            p.setBackgroundColor( Qt::white );
-
-            picture.draw(p, 0, 0, pixmap.width(), pixmap.height());
-            p.end();
-            resizeContents( pixmap.width(), pixmap.height() );
-            viewport()->repaint( false );
+        if (picture.loadFromFile( filename ))
+        {
+            m_size = picture.getOriginalSize();
+            m_picture = picture;
+            resizeContents( m_size.width(), m_size.height() );
+            repaint( false );
+            return true;
         }
+        else
+            return false;
     }
 
-    void drawContents( QPainter *p, int, int, int, int ) {
-        p->drawPixmap( 0, 0, pixmap );
+    void setNullPicture(void)
+    {
+        m_picture=KoPicture();
+        m_size=QSize();
+    }
+
+    void drawContents( QPainter *p, int, int, int, int )
+    {
+        p->setBackgroundColor( Qt::white );
+        // Be sure that the background is white (for transparency)
+        p->fillRect(0, 0, m_size.width(), m_size.height(), QBrush( Qt::white ));
+        m_picture.draw( *p, 0 ,0, m_size.width(), m_size.height());
     }
 
 private:
-    QPixmap pixmap;
-
+    KoPicture m_picture;
+    QSize m_size;
 };
 
 KoPictureFilePreview::KoPictureFilePreview( QWidget *parent )
@@ -91,25 +90,16 @@ void KoPictureFilePreview::showPreview( const KURL &u )
 {
     if ( u.isLocalFile() ) {
         QString path = u.path();
-        QFileInfo fi( path );
-        // ## TODO use KMimeType::findByURL
-        QString extension( fi.extension().lower() );
-        if ( extension == "wmf" || extension == "emf"
-             || extension == "svg" || extension == "qpic")
-            m_widget->setClipart( path );
-        else {
-            QPixmap pix( path );
-            m_widget->setPixmap( pix );
-        }
+        m_widget->setPicture( path );
     } else {
         // ## TODO support for remote URLs
-        m_widget->setPixmap( QPixmap() );
+        m_widget->setNullPicture();
     }
 }
 
 void KoPictureFilePreview::clearPreview()
 {
-    m_widget->setPixmap( QPixmap() );
+    m_widget->setNullPicture();
 }
 
 QString KoPictureFilePreview::clipartPattern()
