@@ -6,4 +6,5 @@ data_DATA = add_point.xpm airbrush.xpm areaselect.xpm centrejust.xpm \
             editpaste.xpm ellipse.xpm eraser.xpm exit.xpm filefloppy.xpm \
             filenew.xpm fileopen.xpm line.xpm pen.xpm rectangle.xpm redo.xpm \
             roundangle.xpm spraycan.xpm undo.xpm viewmag+.xpm viewmag-.xpm \
-            viewmag.xpm viewzoom.xpm
+            viewmag.xpm viewzoom.xpm originalsize.xpm fittoview.xpm \
+            fitwithprops.xpm
