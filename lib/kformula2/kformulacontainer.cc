@@ -412,7 +412,7 @@ void KFormulaContainer::save(QString file)
 {
 	
     QFile f(file);
-    if(!f.open(IO_ReadWrite))
+    if(!f.open(IO_Truncate | IO_ReadWrite))
     cerr << "Error" << endl;   
    QCString data=domData().toCString();
     cerr << (const char *)data << endl;    
@@ -437,4 +437,7 @@ void KFormulaContainer::load(QString file)
     
     
     f.close();
+    
+//emit something to say the cursor we are new!
+
 }	

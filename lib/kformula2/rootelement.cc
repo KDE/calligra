@@ -412,5 +412,52 @@ QDomElement RootElement::getElementDom(QDomDocument *doc)
 
     return de;
 }
+
+void RootElement::buildFromDom(QDomElement *elem)
+{
+    if(!elem) return;
+
+//Only set size.
+    BasicElement::buildFromDom(elem);
+
+
+    QDomNode n = elem->firstChild();
+    while ( !n.isNull() ) {
+        if ( n.isElement() ) {
+             QDomElement e = n.toElement();
+	    // BasicElement *child=0;
+	     QString tag=e.tagName();
+	     tag=tag.upper();
+	
+	     QDomElement e1;
+	     QDomNode n1 = e.firstChild();
+	     while ( !n1.isNull() ) {
+    	 	 if ( n1.isElement() ) {
+                     e1 = n1.toElement();
+		     if(e1.tagName()=="SEQUENCE") //First sequence            
+		         break;
+		 }
+		 
+	         n1 = n1.nextSibling();
+	     }
+	     
+	     
+	     if(tag=="CONTENT") {
+		 content=new SequenceElement(this);
+		 content->buildFromDom(&e1);
+	     }
+	     else
+	     if(tag=="INDEX") 
+	     {
+	         index=new SequenceElement(this);
+		 index->buildFromDom(&e1);
+	     }
+	 }
+        
+        n = n.nextSibling();
+    }    
+    
+
+}
           
 

@@ -140,6 +140,7 @@ public:
 
     
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual void buildFromDom(QDomElement *elem);
      
 private:
 
