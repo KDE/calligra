@@ -180,6 +180,7 @@ k_dcop:
     virtual void applyAutoFormat();
     virtual void createStyleFromSelection();
 
+    virtual void closeObject();
 private:
     KPresenterView *view;
 

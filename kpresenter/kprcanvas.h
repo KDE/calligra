@@ -283,6 +283,8 @@ public:
     int getGXFactor( int _g )const;
     int getGYFactor( int _g )const;
     KCommand *setProtectContent( bool b );
+    void closeObject(bool _close);
+
 public slots:
     void exitEditMode();
 

@@ -966,7 +966,19 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPolygonObject( pnt );
-                } else if ( kpobject->getType() == OT_POLYLINE || kpobject->getType() == OT_LINE || kpobject->getType() == OT_CUBICBEZIERCURVE || kpobject->getType() == OT_QUADRICBEZIERCURVE || kpobject->getType() == OT_FREEHAND)
+                } else if ( kpobject->getType() == OT_POLYLINE ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    KPPolylineObject *tmpObj=dynamic_cast<KPPolylineObject *>(kpobject);
+                    if ( tmpObj )
+                    {
+                        if (!tmpObj->isClosed())
+                            m_view->openPopupMenuCloseObject( pnt );
+                        else
+                            m_view->openPopupMenuFlipObject( pnt );
+                    }
+                } else if ( kpobject->getType() == OT_LINE || kpobject->getType() == OT_CUBICBEZIERCURVE || kpobject->getType() == OT_QUADRICBEZIERCURVE || kpobject->getType() == OT_FREEHAND)
                 {
                     if ( state )
                         deSelectAllObj();
@@ -7453,4 +7465,31 @@ bool KPrCanvas::getProtectContent(bool prot) const
     if ( result != prot)
         return result;
     return stickyPage()->getProtectContent( prot );
+}
+
+void KPrCanvas::closeObject(bool /*close*/)
+{
+    QPtrList<KPObject> lst;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE  ))
+            lst.append( it.current()  );
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE ))
+            lst.append(  it.current() );
+    }
+    if ( lst.isEmpty())
+        return;
+
+    KMacroCommand *macro = new KMacroCommand( i18n("Close Object"));
+    QPtrListIterator<KPObject> it2( lst );
+    for ( ; it2.current() ; ++it2 ) {
+        KCommand * cmd= new KPrCloseObjectCommand(i18n("Close Object"), it2.current(), m_view->kPresenterDoc());
+        macro->addCommand(cmd);
+    }
+    macro->execute();
+    m_view->kPresenterDoc()->addCommand(macro);
 }

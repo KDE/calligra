@@ -37,7 +37,8 @@ public:
 k_dcop:
     void horizontalFlips();
     void verticalFlips();
-
+    void closeObject();
+    bool isClosed()const;
 private:
     KPPolylineObject *obj;
 };

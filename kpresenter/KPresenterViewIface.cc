@@ -606,3 +606,8 @@ void KPresenterViewIface::createStyleFromSelection()
 {
     view->createStyleFromSelection();
 }
+
+void KPresenterViewIface::closeObject()
+{
+    view->closeObject();
+}

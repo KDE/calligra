@@ -3116,6 +3116,10 @@ void KPresenterView::setupActions()
                                                   this, SLOT( createStyleFromSelection()),
                                                   actionCollection(), "create_style" );
 
+    actionCloseObject = new KAction( i18n( "Close Object" ), 0,
+                                     this, SLOT( closeObject()),
+                                     actionCollection(), "close_object" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -6613,6 +6617,18 @@ void KPresenterView::createStyleFromSelection()
         }
         delete dia;
     }
+}
+
+void KPresenterView::closeObject()
+{
+    m_canvas->closeObject(true);
+}
+
+void KPresenterView::openPopupMenuCloseObject( const QPoint &_point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    static_cast<QPopupMenu*>(factory()->container("closed_popup",this))->popup(_point);
 }
 
 

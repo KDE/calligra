@@ -2250,3 +2250,40 @@ void KPrProtectContentCommand::unexecute()
     objects->setProtectContent( !protectContent );
     doc->updateObjectSelected();
 }
+
+KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPresenterDoc *_doc )
+    : KNamedCommand( _name ),
+      objects( _obj ),
+      doc(_doc)
+{
+}
+
+KPrCloseObjectCommand::~KPrCloseObjectCommand()
+{
+}
+
+void KPrCloseObjectCommand::execute()
+{
+    if ( objects->getType()==OT_POLYLINE )
+    {
+        KPPolylineObject * obj = dynamic_cast<KPPolylineObject *>(objects);
+        if ( obj )
+        {
+            obj->closeObject( true);
+            doc->repaint( obj );
+        }
+    }
+}
+
+void KPrCloseObjectCommand::unexecute()
+{
+    if ( objects->getType()==OT_POLYLINE )
+    {
+        KPPolylineObject * obj = dynamic_cast<KPPolylineObject *>(objects);
+        if ( obj )
+        {
+            obj->closeObject( false );
+            doc->repaint( obj );
+        }
+    }
+}

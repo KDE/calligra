@@ -900,5 +900,20 @@ protected:
     KPresenterDoc * doc;
 };
 
+class KPrCloseObjectCommand : public KNamedCommand
+{
+public:
+    KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPresenterDoc *_doc );
+
+    ~KPrCloseObjectCommand();
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KPObject *objects;
+    KPresenterDoc * doc;
+};
+
+
 #endif
 

@@ -379,7 +379,7 @@ public slots:
 
     void flipHorizontal();
     void flipVertical();
-
+    void closeObject();
 
     void duplicateObj();
     void applyAutoFormat();
@@ -500,6 +500,7 @@ public:
     void openPopupMenuPicObject(const QPoint & _point);
     void openPopupMenuPolygonObject( const QPoint &_point );
     void openPopupMenuFlipObject( const QPoint &_point );
+    void openPopupMenuCloseObject( const QPoint &_point);
 
     void openPopupMenuHelpLine( const QPoint & _point );
     void openPopupMenuHelpPoint( const QPoint & _point );
@@ -972,6 +973,7 @@ private:
 
     KAction *actionFlipHorizontal;
     KAction *actionFlipVertical;
+    KAction *actionCloseObject;
 
     KAction *actionDuplicateObj;
     KAction *actionApplyAutoFormat;

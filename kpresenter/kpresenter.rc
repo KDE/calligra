@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="73">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="74">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -416,6 +416,40 @@
    <Action name="horizontal_flip"/>
    <Action name="vertical_flip"/>
   </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="closed_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Action name="close_object"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flips Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Separator/>

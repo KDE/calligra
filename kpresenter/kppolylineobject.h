@@ -62,7 +62,8 @@ public:
     virtual void resizeBy( double _dx, double _dy );
 
     virtual void flip(bool horizontal );
-
+    virtual void closeObject(bool close);
+    bool isClosed()const;
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
 			bool drawingShadow, bool drawContour = FALSE );

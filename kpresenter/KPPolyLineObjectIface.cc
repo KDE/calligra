@@ -43,3 +43,12 @@ void KPPolyLineObjectIface::verticalFlips()
     obj->flip( false );
 }
 
+void KPPolyLineObjectIface::closeObject()
+{
+    obj->closeObject(true);
+}
+
+bool KPPolyLineObjectIface::isClosed()const
+{
+    return obj->isClosed();
+}
