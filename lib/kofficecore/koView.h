@@ -257,6 +257,8 @@ public:
   virtual DCOPObject * dcopObject();
 
   virtual void setupPrinter( KPrinter &printer );
+
+  // BCI: make it return a bool, so that aborting doesn't still fire up the print preview afterwards
   virtual void print( KPrinter &printer );
 
   /**
