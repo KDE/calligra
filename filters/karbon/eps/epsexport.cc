@@ -103,7 +103,7 @@ EpsExport::exportDocument( const VDocument& document )
 
 	// print a header:
 	*m_stream <<
-		"%!PS-Adobe-2.0\n"
+		"%!PS-Adobe-2.0 EPSF-1.2\n"
 		"%%Creator: Karbon14 EPS 0.5\n"
 		"%%BoundingBox: "
 		<< rect.left() << " "
