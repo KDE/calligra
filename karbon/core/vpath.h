@@ -122,6 +122,9 @@ public:
 	virtual QRect boundingBox() const;
 
 private:
+	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
+
+private:
 	QPtrList<VSegment> m_segments;
 };
 

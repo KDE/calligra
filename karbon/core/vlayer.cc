@@ -3,6 +3,7 @@
 */
 
 #include "vlayer.h"
+#include <kdebug.h>
 
 VLayer::VLayer()
 	: m_isVisible( true ), m_isReadOnly( false )
@@ -51,7 +52,7 @@ VLayer::selectObjects( const QRect &rect )
     for ( ; itr.current() ; ++itr )
     {
 		if( itr.current()->state() != VObject::deleted &&
-			rect.contains( itr.current()->boundingBox(), true ) )
+			itr.current()->boundingBox().intersects( rect ) )
 			itr.current()->setState( VObject::selected );
     }
 }
