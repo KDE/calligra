@@ -430,100 +430,100 @@
 //	using namespace std;
 	using namespace KexiDB;
 
-	#define YY_NO_UNPUT
-	#define YYSTACK_USE_ALLOCA 1
-	#define YYMAXDEPTH 255
+#define YY_NO_UNPUT
+#define YYSTACK_USE_ALLOCA 1
+#define YYMAXDEPTH 255
 
-	Parser *parser;
-	KexiDB::Field *field;
-	bool requiresTable;
-	QPtrList<KexiDB::Field> fieldList;
+Parser *parser;
+KexiDB::Field *field;
+bool requiresTable;
+QPtrList<KexiDB::Field> fieldList;
 //	QPtrList<KexiDB::TableSchema> tableList;
 //	QDict<KexiDB::TableSchema> tableDict;
 //	KexiDB::TableSchema *dummy = 0;
-	int current = 0;
-	QString ctoken = "";
+int current = 0;
+QString ctoken = "";
 
-	int yyparse();
-	int yylex();
-	void tokenize(const char *data);
+int yyparse();
+int yylex();
+void tokenize(const char *data);
 
-	void yyerror(const char *str)
+void yyerror(const char *str)
+{
+	kdDebug() << "error: " << str << endl;
+	kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
+	parser->setOperation(KexiDB::Parser::OP_Error);
+
+	if (parser->error().type().isEmpty() 
+		&& (strlen(str)==0 
+		|| qstricmp(str, "syntax error")==0 || qstricmp(str, "parse error")==0))
 	{
-		kdDebug() << "error: " << str << endl;
-		kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
-		parser->setOperation(KexiDB::Parser::OP_Error);
+		kdDebug() << parser->statement() << endl;
+		QString ptrline = "";
+		for(int i=0; i < current; i++)
+			ptrline += " ";
 
-		if (parser->error().type().isEmpty() 
-			&& (strlen(str)==0 
-			|| qstricmp(str, "syntax error")==0 || qstricmp(str, "parse error")==0))
-		{
-			kdDebug() << parser->statement() << endl;
-			QString ptrline = "";
-			for(int i=0; i < current; i++)
-				ptrline += " ";
+		ptrline += "^";
 
-			ptrline += "^";
+		kdDebug() << ptrline << endl;
 
-			kdDebug() << ptrline << endl;
-
-			//lexer may add error messages
-			QString lexerErr = parser->error().error();
-			if (!lexerErr.isEmpty())
-				lexerErr.prepend(": ");
-				
-			KexiDB::ParserError err(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current);
-			parser->setError(err);
-		}
+		//lexer may add error messages
+		QString lexerErr = parser->error().error();
+		if (!lexerErr.isEmpty())
+			lexerErr.prepend(": ");
+			
+		KexiDB::ParserError err(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current);
+		parser->setError(err);
 	}
+}
 
-	void setError(const QString& errName, const QString& errDesc)
-	{
-		parser->setError( KexiDB::ParserError(errName, errDesc, ctoken, current) );
-		yyerror(errName.latin1());
-	}
+void setError(const QString& errName, const QString& errDesc)
+{
+	parser->setError( KexiDB::ParserError(errName, errDesc, ctoken, current) );
+	yyerror(errName.latin1());
+}
 
-	void setError(const QString& errDesc)
-	{
-		setError("", errDesc);
-	}
+void setError(const QString& errDesc)
+{
+	setError("", errDesc);
+}
 
-	void tableNotFoundError(const QString& tableName)
-	{
-		setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
-	}
+void tableNotFoundError(const QString& tableName)
+{
+	setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
+}
 
-	bool parseData(KexiDB::Parser *p, const char *data)
-	{
+bool parseData(KexiDB::Parser *p, const char *data)
+{
 /* todo: remove dummy */
 //		if (!dummy)
 			//dummy = new KexiDB::TableSchema();
 /* todo: make this REENTRANT */
-		parser = p;
-		parser->clear();
-		field = 0;
-		fieldList.clear();
-		requiresTable = false;
+	parser = p;
+	parser->clear();
+	field = 0;
+	fieldList.clear();
+	requiresTable = false;
 
-		if (!data) {
-			KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
-			parser->setError(err);
-			yyerror("");
-			parser = 0;
-			return false;
-		}
-	
-		tokenize(data);
-		if (!parser->error().type().isEmpty()) {
-			parser = 0;
-			return false;
-		}
-		yyparse();
+	if (!data) {
+		KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
+		parser->setError(err);
+		yyerror("");
+		parser = 0;
+		return false;
+	}
 
-		bool ok = true;
-		if(parser->operation() == KexiDB::Parser::OP_Select)
-		{
-			kdDebug() << "parseData(): ok" << endl;
+	tokenize(data);
+	if (!parser->error().type().isEmpty()) {
+		parser = 0;
+		return false;
+	}
+	yyparse();
+
+	bool ok = true;
+	if(parser->operation() == KexiDB::Parser::OP_Select)
+	{
+		kdDebug() << "parseData(): ok" << endl;
 //			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
 /*			KexiDB::TableSchema *ts;
 			for(QDictIterator<KexiDB::TableSchema> it(tableDict); KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
@@ -545,34 +545,20 @@
 			}*/
 			//take the dummy table out of the query
 //			parser->select()->removeTable(dummy);
-		}
-		else {
-			ok = false;
-		}
+	}
+	else {
+		ok = false;
+	}
 
 //		tableDict.clear();
-		parser = 0;
-		return ok;
-	}
+	parser = 0;
+	return ok;
+}
 
-	/*
-	void addTable(const QString &table)
-	{
-		kdDebug() << "addTable() " << table << endl;
-		KexiDB::TableSchema *s = parser->db()->tableSchema(table);
-		if(!s)
-		{
-			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' does not exist").arg(table), ctoken, current);
-			parser->setError(err);
-			yyerror("fieldlisterror");
-		}
-		else
-		{
-			tableDict.insert(s->name(), s);
-		}
-	}
+	
+/* Adds \a column to \a querySchema. \a column can be in a form of
+ table.field, tableAlias.field or field
 */
-
 bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 {
 	VariableExpr *v_e = dynamic_cast<VariableExpr*>(column);
@@ -606,8 +592,9 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 						//ambiguous field name
 						setError(i18n("Ambiguous field name"), 
 							i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-								"Use \"tableName.fieldName\" notation to specify table name.")
-								.arg(firstField->table()->name()).arg(f->table()->name()).arg(fieldName));
+								"Use \"<tableName>.%4\" notation to specify table name.")
+								.arg(firstField->table()->name()).arg(f->table()->name())
+								.arg(fieldName).arg(fieldName));
 						return false;
 					}
 				}
@@ -621,8 +608,40 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 			}
 		}
 	}
-	else {//table.fieldname
+	else {//table.fieldname or tableAlias.fieldname
+		tableName = tableName.lower();
 		KexiDB::TableSchema *ts = querySchema->table( tableName );
+		if (ts) {//table.fieldname
+			//check if "table" is covered by an alias
+			const QValueList<int> tPositions = querySchema->tablePositions(tableName);
+			QValueList<int>::ConstIterator it = tPositions.begin();
+			QCString tableAlias;
+			bool covered = true;
+			for (; it!=tPositions.end() && covered; ++it) {
+				tableAlias = querySchema->tableAlias(*it);
+				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
+					covered = false; //uncovered
+				kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
+			}
+			if (covered) {
+				setError(i18n("Could not access the table directly using its name"), 
+					i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
+					"you can write \"%3\"").arg(tableName)
+					.arg(tableName+"."+fieldName).arg(tableAlias+"."+fieldName.latin1()));
+				return false;
+			}
+		}
+		
+		int tablePosition = -1;
+		if (!ts) {//try to find tableAlias
+			tablePosition = querySchema->tablePositionForAlias( tableName.latin1() );
+			if (tablePosition>=0) {
+				ts = querySchema->tables()->at(tablePosition);
+				if (ts)
+					kdDebug() << " --it's a tableAlias.name" << endl;
+			}
+		}
+		
 		if (ts) {
 			if (fieldName=="*") {
 				querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
@@ -631,7 +650,7 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 				kdDebug() << " --it's a table.name" << endl;
 				KexiDB::Field *realField = ts->field(fieldName);
 				if (realField) {
-					querySchema->addField(realField);
+					querySchema->addField(realField, tablePosition);
 				}
 				else {
 					setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
@@ -885,6 +904,12 @@ Select ColViews
 	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
 
 	uint columnNum = 0;
+/*TODO: use this later if there are columns that use database fields, 
+        e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
+	//used to collect information about first repeated table name or alias:
+	QDict<char> tableNamesAndTableAliases(997, false);
+	QString repeatedTableNameOrTableAlias;
+	
 	for (int i=0; i<tablesList->args(); i++, columnNum++) {
 		BaseExpr *e = tablesList->arg(i);
 		VariableExpr* t_e = 0;
@@ -910,20 +935,29 @@ Select ColViews
 //			yyerror("fieldlisterror");
 			return 0;
 		}
-		else
-		{
-			kdDebug() << "addTable: " << tname << endl;
-		//	parser->select()->addTable( tname );
-			querySchema->addTable( s );
+		// 1. collect information about first repeated table name or alias
+		//    (potential ambiguity)
+		if (repeatedTableNameOrTableAlias.isEmpty()) {
+			if (tableNamesAndTableAliases[tname])
+				repeatedTableNameOrTableAlias=tname;
+			else
+				tableNamesAndTableAliases.insert(tname, (const char*)1);
 		}
 		if (!aliasString.isEmpty()) {
 			kdDebug() << "- add alias for table: " << aliasString << endl;
-			querySchema->setTableAlias(columnNum, aliasString);
+//			querySchema->setTableAlias(columnNum, aliasString);
+			//2. collect information about first repeated table name or alias
+			//   (potential ambiguity)
+			if (repeatedTableNameOrTableAlias.isEmpty()) {
+				if (tableNamesAndTableAliases[aliasString])
+					repeatedTableNameOrTableAlias=aliasString;
+				else
+					tableNamesAndTableAliases.insert(aliasString, (const char*)1);
+			}
 		}
+		kdDebug() << "addTable: " << tname << endl;
+		querySchema->addTable( s, aliasString );
 	}
-//	for (QDictIterator<KexiDB::TableSchema> it(tableDict); it.current(); ++it) {
-		//parser->select()->addTable( it.current() );
-//	}
 
 	/* set parent table if there's only one */
 //	if (parser->select()->tables()->count()==1)
