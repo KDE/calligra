@@ -32,6 +32,9 @@ PptXml::PptXml(
             mainStream,
             currentUser)
 {
+    m_isConverted = false;
+    m_success = false;
+    m_y = 0;
 }
 
 PptXml::~PptXml()
@@ -44,6 +47,7 @@ bool PptXml::convert()
     {
         m_y = 0;
         m_success = parse();
+        m_isConverted = true;
     }
     return m_success;
 }
@@ -81,7 +85,7 @@ const QString PptXml::getXml() const
     body += "</BACKGROUND>\n"
         "<HEADER show=\"0\">\n"
         "<ORIG x=\"0\" y=\"0\"/>\n"
-        "<SIZE width=\"-1\" height=\"-1\"/>\n"
+        "<SIZE width=\"20\" height=\"20\"/>\n"
         "<SHADOW distance=\"0\" direction=\"5\" red=\"160\" green=\"160\" blue=\"164\"/>\n"
         "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
         "<PRESNUM value=\"0\"/>\n"
@@ -99,7 +103,7 @@ const QString PptXml::getXml() const
         "</HEADER>\n"
         "<FOOTER show=\"0\">\n"
         "<ORIG x=\"0\" y=\"0\"/>\n"
-        "<SIZE width=\"-1\" height=\"-1\"/>\n"
+        "<SIZE width=\"20\" height=\"20\"/>\n"
         "<SHADOW distance=\"0\" direction=\"5\" red=\"160\" green=\"160\" blue=\"164\"/>\n"
         "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
         "<PRESNUM value=\"0\"/>\n"
@@ -131,6 +135,7 @@ const QString PptXml::getXml() const
         "</CLIPARTS>\n";
     body += m_embedded;
     body += "</DOC>\n";
+    //kdDebug(s_area) << body << endl;
     return body;
 }
 
