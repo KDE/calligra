@@ -223,7 +223,6 @@ void KivioCanvas::setUpdatesEnabled( bool isUpdate )
 
       blockSignals(false);
 
-      emit zoomChanges();
       emit visibleAreaChanged();
     }
   } else {
@@ -236,7 +235,7 @@ void KivioCanvas::zoomIn(const QPoint &p)
 {
   setUpdatesEnabled(false);
   KoPoint p0 = mapFromScreen(p);
-  setZoom(m_pView->zoomHandler()->zoom() + 25);
+  m_pView->viewZoom(m_pView->zoomHandler()->zoom() + 25);
   QPoint p1 = mapToScreen(p0);
   scrollDx(-p1.x()+p.x());
   scrollDy(-p1.y()+p.y());
@@ -250,7 +249,7 @@ void KivioCanvas::zoomOut(const QPoint &p)
   int newZoom = m_pView->zoomHandler()->zoom() - 25;
 
   if(newZoom > 0) {
-    setZoom(newZoom);
+    m_pView->viewZoom(newZoom);
     QPoint p1 = mapToScreen(p0);
     scrollDx(-p1.x()+p.x());
     scrollDy(-p1.y()+p.y());
@@ -395,19 +394,6 @@ void KivioCanvas::updateScrollBars()
 QSize KivioCanvas::actualSize()
 {
   return QSize(m_pScrollX, m_pScrollY);
-}
-
-void KivioCanvas::setZoom(int zoom)
-{
-  m_pView->zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
-
-  updateScrollBars();
-  erase();
-  repaint();
-
-  emit zoomChanges();
-  emit visibleAreaChanged();
 }
 
 bool KivioCanvas::event( QEvent* e )
@@ -1386,7 +1372,7 @@ void KivioCanvas::setVisibleArea(KoRect r, int margin)
   float zh = ch / (float)zoom.zoomItY(r.height());
   float z = QMIN(zw, zh);
 
-  setZoom(qRound(z * 100));
+  m_pView->viewZoom(qRound(z * 100));
 
   KoPoint c = r.center();
 
@@ -1404,7 +1390,7 @@ void KivioCanvas::setVisibleAreaByWidth(KoRect r, int margin)
   float cw = width() - 2*margin;
   float z = cw / (float)zoom.zoomItX(r.width());
 
-  setZoom(qRound(z * 100));
+  m_pView->viewZoom(qRound(z * 100));
 
   KoPoint c = r.center();
 
@@ -1422,7 +1408,7 @@ void KivioCanvas::setVisibleAreaByHeight(KoRect r, int margin)
   float ch = height() - 2*margin;
   float z = ch / (float)zoom.zoomItY(r.height());
 
-  setZoom(qRound(z * 100));
+  m_pView->viewZoom(qRound(z * 100));
 
   KoPoint c = r.center();
 

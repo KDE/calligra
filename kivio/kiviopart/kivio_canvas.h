@@ -117,7 +117,6 @@ class KivioCanvas : public QWidget
     void setVisibleAreaByHeight(KoRect, int margin = 0);
 
   signals:
-    void zoomChanges();
     void visibleAreaChanged();
 
   public slots:
@@ -135,8 +134,6 @@ class KivioCanvas : public QWidget
     void updateGuides();
 
     void updateScrollBars();
-
-    void setZoom(int);
 
     void startPasteMoving();
 

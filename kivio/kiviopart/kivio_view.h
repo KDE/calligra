@@ -50,7 +50,6 @@ class KoDocumentEntry;
 class KoTabBar;
 
 class KAction;
-class KSelectAction;
 class KFontAction;
 class KFontSizeAction;
 class KToggleAction;
@@ -67,6 +66,7 @@ class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;
+class KoZoomAction;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -144,6 +144,9 @@ class KivioView : public KoView
     QPtrList<KAction> alignActionList();
     QPtrList<KAction> groupActionList();
     QPtrList<KAction> layerActionList();
+  
+  signals:
+    void zoomChanged();
 
   protected:
     void createGeometryDock();
@@ -245,7 +248,6 @@ class KivioView : public KoView
     void slotChangeStencilSize(double, double);
     void slotChangeStencilRotation(int);
 
-    void canvasZoomChanged();
     void viewZoom(const QString& s);
 
     void addSpawnerToStackBar( KivioStencilSpawnerSet * );
@@ -284,7 +286,7 @@ class KivioView : public KoView
     KAction* m_arrowHeadsMenuAction;
     KAction* m_menuTextFormatAction;
     KAction* m_menuStencilConnectorsAction;
-    KSelectAction* m_viewZoom;
+    KoZoomAction* m_viewZoom;
 
     TKSelectColorAction *m_setFGColor;
     TKSelectColorAction *m_setBGColor;

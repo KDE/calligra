@@ -191,23 +191,21 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   canvasBase->raiseWidget(m_pCanvas);
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
 
-  // Ruler's
+  // Rulers
   vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, m_pDoc->config()
     ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
   vRuler->showMousePos(true);
-  vRuler->setFixedWidth(20);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, m_pDoc->config()
     ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
   hRuler->showMousePos(true);
-  hRuler->setFixedHeight(20);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
   connect(horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
   connect(vRuler, SIGNAL(unitChanged(QString)), SLOT(rulerChangedUnit(QString)));
   connect(hRuler, SIGNAL(unitChanged(QString)), SLOT(rulerChangedUnit(QString)));
-  connect(vRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
-  connect(hRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
+  connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
+  connect(hRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
   vRuler->installEventFilter(m_pCanvas);
   hRuler->installEventFilter(m_pCanvas);
@@ -766,6 +764,10 @@ void KivioView::print(KPrinter& ptr)
 
 void KivioView::viewZoom(int zoom)
 {
+  if(zoom < 10 || zoom > 2000 || zoom == zoomHandler()->zoom()) {
+    return;
+  }
+  
   zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
   m_pCanvas->update();
@@ -775,17 +777,10 @@ void KivioView::viewZoom(int zoom)
   KoPageLayout l = activePage()->paperLayout();
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+  KoView::setZoom(zoomHandler()->zoomedResolutionY());
   showZoom(zoom);
-}
-
-void KivioView::canvasZoomChanged()
-{
-  showZoom(zoomHandler()->zoom());
-  vRuler->setZoom(zoomHandler()->zoomedResolutionY());
-  hRuler->setZoom(zoomHandler()->zoomedResolutionX());
-  KoPageLayout l = activePage()->paperLayout();
-  vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
-  hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+  
+  emit zoomChanged();
 }
 
 KivioPage* KivioView::activePage()
@@ -1781,7 +1776,7 @@ void KivioView::viewZoom(const QString& s)
   bool ok = false;
   int zoom = z.toInt(&ok);
 
-  if(!ok || zoom < 10) {
+  if(!ok || zoom < 10 || zoom > 2000) {
     zoom = zoomHandler()->zoom();
   }
 
@@ -1792,9 +1787,7 @@ void KivioView::viewZoom(const QString& s)
 
 void KivioView::showZoom(int z)
 {
-  QStringList list = m_viewZoom->items();
-  QString zoomStr( i18n("%1%").arg( z ) );
-  m_viewZoom->setCurrentItem(list.findIndex(zoomStr));
+  m_viewZoom->setZoom(z);
 }
 
 void KivioView::textAlignLeft()
@@ -2040,7 +2033,6 @@ void KivioView::clipboardDataChanged()
   KivioDragObject decoder(this);
   bool paste = decoder.canDecode(data);
   m_editPaste->setEnabled(paste);
-  kdDebug() << "PASTE: " << paste << endl;
 }
 
 void KivioView::partActivateEvent(KParts::PartActivateEvent* event)

@@ -256,7 +256,7 @@ void ZoomTool::zoomWidth()
   float z = cw/w;
 
   canvas->setUpdatesEnabled(false);
-  canvas->setZoom(qRound(z * 100));
+  view()->viewZoom(qRound(z * 100));
   canvas->setUpdatesEnabled(true);
 }
 
@@ -272,7 +272,7 @@ void ZoomTool::zoomHeight()
   float zh = ch/h;
 
   canvas->setUpdatesEnabled(false);
-  canvas->setZoom(qRound(zh * 100));
+  view()->viewZoom(qRound(zh * 100));
   canvas->setUpdatesEnabled(true);
 }
 
@@ -292,7 +292,7 @@ void ZoomTool::zoomPage()
   float z = QMIN(cw/w,ch/h);
 
   canvas->setUpdatesEnabled(false);
-  canvas->setZoom(qRound(z * 100));
+  view()->viewZoom(qRound(z * 100));
   canvas->setUpdatesEnabled(true);
 }
 
