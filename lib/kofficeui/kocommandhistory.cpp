@@ -43,7 +43,7 @@ void KoListBox::contentsMouseMoveEvent ( QMouseEvent * e)
         int itemIndex = index( item_p );
         for ( int i = 0; i<=itemIndex;i++)
             setSelected ( i, true );
-        for ( int i = itemIndex+1; i<count();i++)
+        for ( int i = itemIndex+1; i<(int)count();i++)
             setSelected ( i, false );
         emit changeNumberOfSelectedItem( itemIndex);
     }
