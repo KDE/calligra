@@ -16,8 +16,7 @@ public:
     // Maybe all that data should go into a KWHeaderFooterFrameSet
     // (or rather a base class shared by KWFootNoteFrameSet....)
     struct HeaderFooterFrameset {
-        // Here, Odd or Even means "with a 0-based page numbering" (unlike the frameInfo in the DTD)
-        enum OddEvenAll { Odd, Even, All };
+        enum OddEvenAll { Even, Odd, All };
 
         HeaderFooterFrameset( KWTextFrameSet* fs, int start, int end,
                               double spacing, OddEvenAll oea = All );
@@ -53,14 +52,15 @@ public:
                 if ( page < m_startAtPage || ( m_endAtPage != -1 && page > m_endAtPage ) )
                     return -1;
                 int pg = page - m_startAtPage; // always >=0
+                // Note that 'page' is 0-based. This is why "Odd" looks for even numbers, and "Even" looks for odd numbers :}
                 switch (m_oddEvenAll) {
-                case Even:
+                case Odd:
                     // we test page, not bg: even/odd is for the absolute page number, too confusing otherwise
                     if ( page % 2 == 0 )
                         return pg / 2; // page 0[+start] -> frame 0, page 2[+start] -> frame 1
                     else
                         return -1;
-                case Odd:
+                case Even:
                     if ( page % 2 )
                         return pg / 2; // page 1 -> 0, page 3 -> 1
                     else
@@ -83,8 +83,8 @@ public:
                 pg -= m_startAtPage; // always >=0
                 Q_ASSERT( pg >= 0 );
                 switch (m_oddEvenAll) {
-                case Even:
                 case Odd:
+                case Even:
                     return pg / 2; // page 0 and 1 -> 0. page 2 and 3 -> 1.
                 case All:
                     return pg; // page 0 -> 0 etc. ;)

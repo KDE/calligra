@@ -6468,11 +6468,11 @@ void KWView::insertFile(const QString & path)
                         KWFrameSet::Info info = static_cast<KWFrameSet::Info>( framesetElem.attribute("frameInfo").toInt() );
                         if ( frameSetType == FT_TEXT &&
                              (info == KWFrameSet::FI_FIRST_HEADER ||
-                              info == KWFrameSet::FI_ODD_HEADER   ||
-                              info == KWFrameSet::FI_EVEN_HEADER  ||
+                              info == KWFrameSet::FI_EVEN_HEADER   ||
+                              info == KWFrameSet::FI_ODD_HEADER  ||
                               info == KWFrameSet::FI_FIRST_FOOTER ||
-                              info == KWFrameSet::FI_ODD_FOOTER   ||
-                              info == KWFrameSet::FI_EVEN_FOOTER)
+                              info == KWFrameSet::FI_EVEN_FOOTER   ||
+                              info == KWFrameSet::FI_ODD_FOOTER)
                             )
                             fsInHeader += getInlineFramesets( framesetElem );
 
@@ -6520,11 +6520,11 @@ void KWView::insertFile(const QString & path)
                     if ( !fsInHeader.contains(name) && !fsInHeader.contains(grpMgr) &&
                          !( frameSetType == FT_TEXT &&
                             (info == KWFrameSet::FI_FIRST_HEADER ||
-                             info == KWFrameSet::FI_ODD_HEADER   ||
-                             info == KWFrameSet::FI_EVEN_HEADER  ||
+                             info == KWFrameSet::FI_EVEN_HEADER   ||
+                             info == KWFrameSet::FI_ODD_HEADER  ||
                              info == KWFrameSet::FI_FIRST_FOOTER ||
-                             info == KWFrameSet::FI_ODD_FOOTER   ||
-                             info == KWFrameSet::FI_EVEN_FOOTER) )
+                             info == KWFrameSet::FI_EVEN_FOOTER   ||
+                             info == KWFrameSet::FI_ODD_FOOTER) )
                         )
                     {
                         hasFixedFramesets = true;

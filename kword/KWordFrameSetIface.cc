@@ -451,19 +451,19 @@ QString KWordFrameSetIface::frameSetInfo() const
     case KWFrameSet::FI_FIRST_HEADER:
         return QString("First header");
         break;
-    case KWFrameSet::FI_EVEN_HEADER:
+    case KWFrameSet::FI_ODD_HEADER:
         return QString("First even header");
         break;
-    case KWFrameSet::FI_ODD_HEADER:
+    case KWFrameSet::FI_EVEN_HEADER:
         return QString("First odd header");
         break;
     case KWFrameSet::FI_FIRST_FOOTER:
         return QString("First footer");
         break;
-    case KWFrameSet::FI_ODD_FOOTER:
+    case KWFrameSet::FI_EVEN_FOOTER:
         return QString("Odd footer");
         break;
-    case KWFrameSet::FI_EVEN_FOOTER:
+    case KWFrameSet::FI_ODD_FOOTER:
         return QString("Even footer");
         break;
     case KWFrameSet::FI_FOOTNOTE:
@@ -487,11 +487,11 @@ void KWordFrameSetIface::setFrameSetInfo( const QString & _type)
     }
     else if ( _type.lower() =="first even header")
     {
-        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
+        m_frame->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
     }
     else if ( _type.lower() =="first odd header")
     {
-        m_frame->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
+        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
     }
     else if ( _type.lower() =="first footer")
     {
@@ -499,15 +499,15 @@ void KWordFrameSetIface::setFrameSetInfo( const QString & _type)
     }
     else if ( _type.lower() =="odd footer")
     {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
+    }
+    else if ( _type.lower() =="even footer")
+    {
         m_frame->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
     }
     else if ( _type.lower() =="even footer")
     {
-        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
-    }
-    else if ( _type.lower() =="even footer")
-    {
-        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
+        m_frame->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
     }
     else if ( _type.lower() =="footnote")
     {

@@ -1432,11 +1432,11 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
                 // Assume that all header/footer frames in the same frameset are
                 // perfect copies. This might not be the case some day though.
                 if(frameSetInfo() == FI_FIRST_HEADER ||
-                   frameSetInfo() == FI_ODD_HEADER ||
                    frameSetInfo() == FI_EVEN_HEADER ||
+                   frameSetInfo() == FI_ODD_HEADER ||
                    frameSetInfo() == FI_FIRST_FOOTER ||
-                   frameSetInfo() == FI_ODD_FOOTER ||
                    frameSetInfo() == FI_EVEN_FOOTER ||
+                   frameSetInfo() == FI_ODD_FOOTER ||
                    frameSetInfo() == FI_FOOTNOTE) break;
             }
         }
@@ -1513,15 +1513,15 @@ bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
     {
     case FI_FIRST_HEADER:
         return ( ht == HF_FIRST_DIFF || ht == HF_FIRST_EO_DIFF );
-    case FI_EVEN_HEADER:
-        return true;
     case FI_ODD_HEADER:
+        return true;
+    case FI_EVEN_HEADER:
         return ( ht == HF_EO_DIFF || ht == HF_FIRST_EO_DIFF );
     case FI_FIRST_FOOTER:
         return ( ft == HF_FIRST_DIFF || ft == HF_FIRST_EO_DIFF );
-    case FI_EVEN_FOOTER:
-        return true;
     case FI_ODD_FOOTER:
+        return true;
+    case FI_EVEN_FOOTER:
         return ( ft == HF_EO_DIFF || ft == HF_FIRST_EO_DIFF );
     default:
         return true;
@@ -1530,12 +1530,12 @@ bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
 
 bool KWFrameSet::isAHeader() const
 {
-    return ( m_info == FI_FIRST_HEADER || m_info == FI_EVEN_HEADER || m_info == FI_ODD_HEADER );
+    return ( m_info == FI_FIRST_HEADER || m_info == FI_ODD_HEADER || m_info == FI_EVEN_HEADER );
 }
 
 bool KWFrameSet::isAFooter() const
 {
-    return ( m_info == FI_FIRST_FOOTER || m_info == FI_EVEN_FOOTER || m_info == FI_ODD_FOOTER );
+    return ( m_info == FI_FIRST_FOOTER || m_info == FI_ODD_FOOTER || m_info == FI_EVEN_FOOTER );
 }
 
 bool KWFrameSet::isFootEndNote() const
@@ -1698,8 +1698,8 @@ void KWFrameSet::printDebug()
     static const char * typeFrameset[] = { "base", "txt", "picture", "part", "formula", "clipart",
                                            "6", "7", "8", "9", "table",
                                            "ERROR" };
-    static const char * infoFrameset[] = { "body", "first header", "odd headers", "even headers",
-                                           "first footer", "odd footers", "even footers", "footnote", "ERROR" };
+    static const char * infoFrameset[] = { "body", "first header", "even headers", "odd headers",
+                                           "first footer", "even footers", "odd footers", "footnote", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
     static const char * runaround[] = { "No Runaround", "Bounding Rect", "Skip", "ERROR" };

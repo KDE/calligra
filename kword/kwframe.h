@@ -440,15 +440,15 @@ public:
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>
      * FI_FIRST_HEADER = Header on page 1<br>
-     * FI_ODD_HEADER = header on any odd page (can be including page 1)<br>
      * FI_EVEN_HEADER = header on any even page<br>
+     * FI_ODD_HEADER = header on any odd page (can be including page 1)<br>
      * FI_FIRST_FOOTER = footer on page 1<br>
-     * FI_ODD_FOOTER = footer on any odd page (can be including page 1)<br>
      * FI_EVEN_FOOTER = footer on any even page<br>
+     * FI_ODD_FOOTER = footer on any odd page (can be including page 1)<br>
      * FI_FOOTNOTE = a footnote frame.
      */
-    enum Info { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
-                FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
+    enum Info { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_EVEN_HEADER = 2, FI_ODD_HEADER = 3,
+                FI_FIRST_FOOTER = 4, FI_EVEN_FOOTER = 5, FI_ODD_FOOTER = 6,
                 FI_FOOTNOTE = 7 };
     /** Returns the type of TextFrameSet this is */
     Info frameSetInfo()const { return m_info; }
