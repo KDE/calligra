@@ -14,7 +14,8 @@ libkarboncore_la_SOURCES = \
     vcanvas.cc \
     vobject.cc \
     vpath.cc \
-    vpoint.cc
+    vpoint.cc \
+    vprimitive.cc
 
 libkarboncore_la_METASOURCES = \
     AUTO

@@ -9,6 +9,8 @@
  * Before 
  */
 
+// TODO: we really have to check if this inline-function excess for a point-class is a good idea
+
 class VPoint {
 public:
     VPoint();
@@ -17,6 +19,8 @@ public:
 
     // convert to QPoint and recalculate if necessary:
     const QPoint& getQPoint();
+
+    void moveTo( double& x, double& y ) { m_x = x; m_y = y; m_isDirty=true; }
 
     const double& x() const { return m_x; }
     void setX( double& x ) { m_x = x; m_isDirty=true; }

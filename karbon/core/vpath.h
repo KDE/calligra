@@ -6,7 +6,6 @@
 #include "vobject.h"
 #include "vprimitive.h"
 
-class QPainter;
 class VPoint;
 
 /**
@@ -19,16 +18,17 @@ public:
     VPath();
     virtual ~VPath();
     
-    virtual void draw( QPainter& p );
+    virtual void draw( QPainter& painter );
     
     // postscript-like commands:
-    void moveTo();
-    void lineTo();
+    void moveTo( double& x, double& y );
+    void lineTo( double& x, double& y );
     void curveTo();
     void close();
 
 private:
     VPoint* m_currentPoint;
+    QList<VPoint> m_points;
     QList<VPrimitive> m_primitives;
 };
 

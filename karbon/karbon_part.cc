@@ -1,14 +1,24 @@
 #include <qpainter.h>
 #include <kdebug.h>
 
+#include "vpoint.h"
+#include "vpath.h"
+
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vpoint.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
     QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+// <test-object>
+    VPath* path = new VPath();
+    double	x1(100.0*VPoint::s_fractScale), y1(100.0*VPoint::s_fractScale),
+		x2(300.0*VPoint::s_fractScale), y2(200.0*VPoint::s_fractScale);
+    path->moveTo(x1,y1);
+    path->lineTo(x2,y2);
+    m_objects.append( path );
+// </test-object>
 }
 
 bool
@@ -43,11 +53,8 @@ void
 KarbonPart::paintContent( QPainter& painter, const QRect& /*rect*/,
     bool /*transparent*/ )
 {
-//    painter.scale(VPoint::s_fractInvScale,VPoint::s_fractInvScale);
-    painter.scale(2.0,2.0);
+    painter.scale(VPoint::s_fractInvScale,VPoint::s_fractInvScale);
     painter.setPen( Qt::black );
-//    painter.drawLine(0,0,100*VPoint::s_fractScale,100*VPoint::s_fractScale);
-    painter.drawLine(100,100,200,200);
 
     // paint all objects:
     VObject* obj;
