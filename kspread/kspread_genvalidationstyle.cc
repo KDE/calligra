@@ -141,7 +141,6 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     case Allow_Number:
         break;
     case Allow_Text:
-        result = createTextValidationCondition( _val );
         break;
     case Allow_Time:
         break;
@@ -150,9 +149,9 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     case Allow_Integer:
         break;
     case Allow_TextLength:
+        result = createTextValidationCondition( _val );
          break;
     }
-    //todo
     return result;
 }
 
