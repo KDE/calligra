@@ -1,8 +1,26 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KoHTML
+Name[is]=HTML skoðari
 Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
+Comment[br]=Gweler HTML KOffice
+Comment[ca]=Visualitzador d'HTML KOffice
+Comment[cs]=Prohlí¾eè HTML pro KOffice
+Comment[da]=KOffice HTML-fremviser
+Comment[de]=KOffice HTML-Betrachter
+Comment[fi]=KOffice HTML -näyttäjä
+Comment[fr]=Visualiseur HTML de KOffice
+Comment[hr]=Koffice HTML preglednik
+Comment[hu]=KOffice HTML Nézõ
+Comment[is]=kohtml:  HTML skoðari KOffice vöndulsins
+Comment[no]=KOffice HTML-viser
+Comment[pl]=Przgl±darka HTML, element KOffice
+Comment[pt_BR]=Visualizador HTML do KOffice
+Comment[ru]=ðÒÏÓÍÏÔÒÝÉË HTML ÄÌÑ KOffice
+Comment[sk]=Prehliadaè HTML z balíka KOffice
+Comment[sl]=Pregledovalnik HTML iz paketa KOffice
+Comment[sv]=KOffice HTML-visare
 MimeTypes=application/x-kohtml,
 RepoID=IDL:KoHTML/DocumentFactory:1.0,
 ActivationMode=shared

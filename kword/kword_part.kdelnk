@@ -1,8 +1,25 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWord
+Name[da]=Ord
+Name[is]=Ritvinnsla
+Name[pt]=Palavras
+Name[ro]=Word
+Name[ru]=Ù≈À”‘œ◊Ÿ  –“œ√≈””œ“
+Name[sv]=Ord
 Exec=kword.bin --server
 Comment=KWord
+Comment[br]=Ar skridtreterez KWord
+Comment[ca]=Processador de textos KWord
+Comment[da]=KWord-programmet
+Comment[fi]=Tekstink‰sittelyohjelma
+Comment[hu]=KSzˆvegszerkesztı
+Comment[is]=kword:  Ritvinnsluforrit K vˆndulsins
+Comment[pl]=Procesor tekstu
+Comment[pt]=Processador de Texto
+Comment[ro]=Word
+Comment[ru]=Ù≈”‘œ◊Ÿ  –“œ√≈””œ“
+Comment[sv]=Ordbehandlare
 MimeTypes=application/x-kword,
 RepoID=IDL:KWord/DocumentFactory:1.0,
 ActivationMode=shared
