@@ -86,12 +86,11 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 		c.setNamedColor( e.attribute( "fillcolor" ) );
 		VColor color( c );
 		int fillstyle = e.attribute( "fillstyle" ).toInt();
-		if ( fillstyle == 1 ) // solid fill
+		switch( fillstyle )
 		{
-			// Ugly, change later (causes a warning from a 'int' to 'enum' conversion)
-			VFill::VFillType type = fillstyle;
-			fill.setType( type );
-			fill.setColor( color );
+			case 1: fill.setType( VFill::solid );
+					fill.setColor( color );
+					break;
 		}
 		object->setFill( fill );
 	}
@@ -99,9 +98,17 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 	{
 		VStroke stroke;
 		QColor c;
-		c.setNamedColor( e.attribute( "strokecolor" ) );
-		VColor color( c );
-		stroke.setColor( color );
+		int strokestyle = e.attribute( "strokestyle" ).toInt();
+		switch( strokestyle )
+		{
+			case 1:
+					{
+					c.setNamedColor( e.attribute( "strokecolor" ) );
+					VColor color( c );
+					stroke.setColor( color );
+					}
+					break;
+		}
 		float lineWidth = e.attribute( "linewidth" ).toFloat();
 		stroke.setLineWidth( lineWidth );
 		object->setStroke( stroke );
