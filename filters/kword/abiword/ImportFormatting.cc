@@ -185,7 +185,7 @@ void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument
 
 void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     StackItem* stackItem, QDomDocument& mainDocument,
-    const AbiPropsMap& abiPropsMap)
+    const AbiPropsMap& abiPropsMap, const int level)
 {
     QDomElement element;
     element=mainDocument.createElement("NAME");
@@ -208,12 +208,25 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     }
     layoutElement.appendChild(element);
 
-    // PROVISORY
+    int kwordDepth;
+    int kwordNumberingType;
+    // level is 1 based like AbiWord, any value lower than 1 means no level!
+    if ((level<=0) || (level>=15))
+    {
+        kwordDepth=0;
+        kwordNumberingType=2;
+    }
+    else
+    {
+        kwordDepth=level+1;
+        kwordNumberingType=1;
+    }
+
     element=mainDocument.createElement("COUNTER");
     element.setAttribute("type",0);
-    element.setAttribute("depth",0);
+    element.setAttribute("depth",kwordDepth);
     element.setAttribute("start",1);
-    element.setAttribute("numberingtype",2);
+    element.setAttribute("numberingtype",kwordNumberingType);
     element.setAttribute("lefttext","");
     element.setAttribute("righttext","");
     element.setAttribute("bullet",64);
@@ -333,6 +346,5 @@ void AddStyle(QDomElement& styleElement, const QString& strStyleName,
 
     PopulateProperties(&stackItem, styleData.m_props, attributes, abiPropsMap, false);
 
-    // TODO: level is missing!
-    AddLayout(strStyleName, styleElement, &stackItem, mainDocument, abiPropsMap);
+    AddLayout(strStyleName, styleElement, &stackItem, mainDocument, abiPropsMap, styleData.m_level);
 }

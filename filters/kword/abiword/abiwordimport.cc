@@ -149,13 +149,24 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
 {
     // We must prepare the style
     QString strStyle=attributes.value("style");
-
     if (strStyle.isEmpty())
     {
         strStyle="Normal";
     }
-
     StyleDataMap::ConstIterator it=styleDataMap.useOrCreateStyle(strStyle);
+
+    QString strLevel=attributes.value("level");
+    int level;
+    if (strLevel.isEmpty())
+    {
+        // We have not "level" attribute, so we must use the style's level.
+        level=it.data().m_level;
+    }
+    else
+    {
+        // We have a "level" attribute, so it overrides the style's level.
+        level=strStyle.toInt();
+    }
 
     QDomElement elementText=stackCurrent->stackElementText;
     //We use mainFramesetElement here not to be dependant that <section> has happened before
@@ -179,8 +190,8 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement layoutElement=mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
-    AddLayout("Standard",layoutElement, stackItem, mainDocument, abiPropsMap);
-    
+    AddLayout("Standard",layoutElement, stackItem, mainDocument, abiPropsMap, level);
+
     return true;
 }
 

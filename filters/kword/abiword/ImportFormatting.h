@@ -87,7 +87,7 @@ void AddFormat(QDomElement& formatElementOut, StackItem* stackItem,
     QDomDocument& mainDocument);
 void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     StackItem* stackItem, QDomDocument& mainDocument,
-    const AbiPropsMap& abiPropsMap);
+    const AbiPropsMap& abiPropsMap, const int level);
 void AddStyle(QDomElement& styleElement, const QString& strStyleName,
     const StyleData& styleData, QDomDocument& mainDocument);
 
