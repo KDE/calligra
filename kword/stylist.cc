@@ -22,6 +22,7 @@
 #include "stylist.h"
 #include "stylist.moc"
 #include "defs.h"
+#include "kwfont.h"
 
 #include <qwidget.h>
 #include <qlistbox.h>
@@ -42,7 +43,6 @@
 #include <kbuttonbox.h>
 #include <kapp.h>
 #include <kcolordlg.h>
-#include <kfontdialog.h>
 #include <klocale.h>
 
 /******************************************************************/
@@ -414,7 +414,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     f.setBold( style->format().font().weight() == 75 ? true : false );
     f.setItalic( style->format().font().italic() );
     f.setUnderline( style->format().font().underline()  );
-
+    f.setStrikeOut( style->format().font().strikeOut()  );
     QColor c( style->format().color() );
 
     painter->setPen( QPen( c ) );
@@ -564,14 +564,28 @@ void KWStyleEditor::changeFont()
     f.setItalic( style->format().font().italic() );
     f.setUnderline( style->format().font().underline() );
 
+    KWFontDia *fontDia = new KWFontDia( this, "",f,false, false,false );
+    connect( fontDia, SIGNAL( okClicked() ), this, SLOT( slotFontDiaOk() ) );
+
+    fontDia->show();
+    delete fontDia;
+#if 0
     if ( KFontDialog::getFont( f ) ) {
-	style->format().setFont(f);
+        style->format().setFont(f);
         /*style->getFormat().setPTFontSize( f.pointSize() );
-        style->getFormat().setWeight( f.bold() ? 75 : 50 );
-        style->getFormat().setItalic( static_cast<int>( f.italic() ) );
-        style->getFormat().setUnderline( static_cast<int>( f.underline() ) );*/
+          style->getFormat().setWeight( f.bold() ? 75 : 50 );
+          style->getFormat().setItalic( static_cast<int>( f.italic() ) );
+          style->getFormat().setUnderline( static_cast<int>( f.underline() ) );*/
         preview->repaint( true );
     }
+#endif
+}
+
+void KWStyleEditor::slotFontDiaOk()
+{
+     const KWFontDia * fontDia = static_cast<const KWFontDia*>(sender());
+     style->format().setFont(fontDia->getNewFont());
+     preview->repaint( true );
 }
 
 /*================================================================*/

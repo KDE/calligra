@@ -24,14 +24,13 @@
 #include <kfontdialog.h>
 #include <qcheckbox.h>
 #include <qfont.h>
-class KWView;
 
 
 class KWFontDia : public QDialog
 {
   Q_OBJECT
 public:
-  KWFontDia(  KWView* parent, const char* name, const QFont &_font, bool _subscript,bool _superscript);
+  KWFontDia(  QWidget* parent, const char* name, const QFont &_font, bool _subscript,bool _superscript, bool _withSubSuperScript=true);
 
   bool getSuperScript() const { return m_superScript->isChecked();}
   bool getSubScript() const { return m_subScript->isChecked();}

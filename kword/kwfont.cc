@@ -20,7 +20,6 @@
 #include <qgroupbox.h>
 
 #include "kwfont.h"
-#include "kwview.h"
 #include "kwdoc.h"
 
 #include <kapp.h>
@@ -30,9 +29,9 @@
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qvbox.h>
+#include <klocale.h>
 
-
-KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font,  bool _subscript,bool _superscript)
+KWFontDia::KWFontDia( QWidget* parent, const char* name, const QFont &_font,  bool _subscript,bool _superscript,bool _withSubSuperScript)
     :QDialog( parent, name, true )
 {
     newFont=_font;
@@ -60,6 +59,11 @@ KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font,  boo
     m_subScript->setChecked( _subscript);
     grid->addWidget(m_subScript,1,0);
 
+    if(!_withSubSuperScript)
+    {
+        m_subScript->setEnabled(false);
+        m_superScript->setEnabled(false);
+    }
     m_strikeOut=new QCheckBox(i18n("Strike Out"),grp);
     m_strikeOut->setChecked( _font.strikeOut());
     grid->addWidget(m_strikeOut,1,1);

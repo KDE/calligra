@@ -141,6 +141,7 @@ protected slots:
     void changeNumbering();
     void changeTabulators();
     void paragDiaOk();
+    void slotFontDiaOk();
 };
 
 #endif
