@@ -82,7 +82,6 @@
 #include <kparts/event.h>
 
 #include <stdlib.h>
-#define DEBUG
 
 #include "preview.h"
 
@@ -141,6 +140,12 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     initConfig();
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
+
+    if ( statusBar() )
+    {
+        statusBar()->insertFixedItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
+        // ...
+    }
 }
 
 /*================================================================*/
@@ -624,6 +629,12 @@ void KWView::showFormulaToolbar( bool show )
     tb->show();
   else
     tb->hide();
+}
+
+void KWView::showPageNum( int pgnum )
+{
+    if ( statusBar() )
+        statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgnum).arg(doc->getPages())+' ', statusPage );
 }
 
 /*================================================================*/

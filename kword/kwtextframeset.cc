@@ -119,10 +119,10 @@ QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
     return p;
 }
 
-QPoint KWTextFrameSet::internalToContents( QPoint p ) const
+QPoint KWTextFrameSet::internalToContents( QPoint p, int * pageNum ) const
 {
-    // ### In WP mode we could go much faster by a simple division...
     int totalHeight = 0;
+    int pg = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -133,9 +133,11 @@ QPoint KWTextFrameSet::internalToContents( QPoint p ) const
         {
             p.rx() += frame->left();
             p.ry() += frame->top() - totalHeight;
+            if (pageNum) *pageNum = pg;
             return p;
         }
         totalHeight += frame->height();
+        ++pg;
     }
 
     kdWarning() << "KWTextFrameSet::internalToContents " << p.x() << "," << p.y()
@@ -1865,8 +1867,10 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     parag->lineHeightOfChar( cursor->index(), &dummy, &y );
     y += parag->rect().y() + cursor->offsetY();
     int w = 1;
-    QPoint p = textFrameSet()->internalToContents( QPoint( x, y ) );
+    int pg;
+    QPoint p = textFrameSet()->internalToContents( QPoint( x, y ), &pg );
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
+    m_canvas->gui()->getView()->showPageNum( pg + 1 );
 }
 
 void KWTextFrameSetEdit::startDrag()

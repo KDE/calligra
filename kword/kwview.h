@@ -74,28 +74,6 @@ class QTextFormat;
 class QTextParag;
 };
 
-// /******************************************************************/
-// /* Class: KWordFrame						  */
-// /******************************************************************/
-
-// class KWordFrame : public KoFrame
-// {
-//     Q_OBJECT
-
-// public:
-//     KWordFrame( KWView*, KWChild* );
-
-//     KWChild* child()
-//     { return m_pKWChild; }
-//     KWView* wordView()
-//     { return m_pKWView; }
-
-// protected:
-//     KWChild *m_pKWChild;
-//     KWView *m_pKWView;
-
-// };
-
 /******************************************************************/
 /* Class: KWView						  */
 /******************************************************************/
@@ -120,6 +98,7 @@ public:
 
     void showStyle( const QString & styleName );
     void showRulerIndent( KWUnit _leftMargin, KWUnit _firstLine );
+    void showPageNum( int pgnum );
 
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
@@ -277,7 +256,6 @@ public slots:
 
     void configure();
 
-public slots:
     void slotInsertObject( KWChild *_child, KWPartFrameSet *_kwpf );
     void slotUpdateChildGeometry( KWChild *_child );
     void paragDiaOk();
@@ -319,8 +297,6 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
     KWDocument *doc;
-
-    //bool m_bUnderConstruction, m_bKWordModified;
 
     KAction *actionEditCut;
     KAction *actionEditCopy;
@@ -447,6 +423,12 @@ protected:
     KWTextParag *currParag;
     int currFrameSetNum;
     int lastTextPos;
+
+    // Statusbar items
+    enum StatusBarIds {
+        statusPage = 0
+        // More to be added
+    };
 };
 
 /******************************************************************/

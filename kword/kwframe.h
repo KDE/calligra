@@ -34,7 +34,6 @@
 class KWFrame;
 class KWDocument;
 class KWChild;
-class KWordFrame;
 class KWGroupManager;
 class KFormulaEdit;
 class KWResizeHandle;
@@ -464,7 +463,6 @@ public:
     virtual void load( QDomElement &attributes );
 
 protected:
-    KWordFrame *frame;
     KWChild *child;
     QPicture pic;
 

@@ -886,8 +886,6 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child )
     : KWFrameSet( _doc )
 {
     child = _child;
-    //_enableDrawing = true;
-    frame = 0L;
 }
 
 /*================================================================*/

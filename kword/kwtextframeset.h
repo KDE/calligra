@@ -58,7 +58,8 @@ public:
 
     // Convert the @p in the internal qtextdoc coordinates
     // into a point in the contents coordinates (those visible to the user).
-    QPoint internalToContents( QPoint p ) const;
+    // Also returns 0-based page number, if pageNum is non 0L
+    QPoint internalToContents( QPoint p, int * pageNum = 0L ) const;
 
     // Return the available height (sum of all frames' height)
     // Used to know if we need to create more pages.
