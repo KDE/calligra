@@ -957,6 +957,53 @@ void BoundSheetRecord::dump( std::ostream& out ) const
   out << "    BOF pos : " << d->bofPosition << std::endl;
 }
 
+// ========== COLINFO ==========
+
+const unsigned int ColInfoRecord::id = 0x007d;
+
+class ColInfoRecord::Private
+{
+public:
+  unsigned width;
+  unsigned xfIndex;
+};
+
+ColInfoRecord::ColInfoRecord():
+  Record(), ColumnSpanInfo()
+{
+  d = new ColInfoRecord::Private();
+}
+
+ColInfoRecord::~ColInfoRecord()
+{
+  delete d;
+}
+
+unsigned ColInfoRecord::width() const
+{
+  return d->width;
+}
+
+unsigned ColInfoRecord::xfIndex() const
+{
+  return d->xfIndex;
+}
+
+void ColInfoRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 10 ) return;
+
+  setFirstColumn( readU16( data ) );
+  setLastColumn( readU16( data+2 ) );
+  d->width = readU16( data+4 );
+  d->xfIndex = readU16( data+6 );
+}
+
+void ColInfoRecord::dump( std::ostream& out ) const
+{
+  out << "COLINFO" << std::endl;
+}
+
 
 // ========== DATE1904 ========== 
 

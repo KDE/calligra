@@ -510,6 +510,50 @@ private:
   Private* d;
 };
 
+class ColInfoRecord : public Record, public ColumnSpanInfo
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new ColInfo record.
+   */
+  ColInfoRecord();
+
+  /**
+   * Destroys the record.
+   */
+  virtual ~ColInfoRecord();
+  
+  unsigned xfIndex() const;
+  
+  unsigned width() const;
+
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "COLINFO"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   ColInfoRecord( const ColInfoRecord& );
+   ColInfoRecord& operator=( const ColInfoRecord& );
+
+   class Private;
+   Private *d;
+};
+
 class Date1904Record : public Record
 {
 public:
