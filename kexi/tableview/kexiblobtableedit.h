@@ -31,16 +31,23 @@ class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
-		KexiBlobTableEdit(QByteArray val, QWidget* parent = 0, const char* name = 0);
+		KexiBlobTableEdit(const QByteArray& val, QWidget* parent = 0, const char* name = 0);
 		~KexiBlobTableEdit();
 		
 		virtual QVariant value();
 	protected:
-		QByteArray m_value;
 		KTempFile* m_tempFile;
 		KProcess* m_proc;
+		
+		QString openWithDlg(const QString& file);
+		void execute(const QString& app, const QString& file);
 	protected slots:
 		void slotFinished(KProcess* p);
+		void open();
+		void openWith();
+		void menu();
+		void loadFile();
+		void saveFile();
 };
 
 #endif

@@ -23,6 +23,7 @@
 
 #include <qdatastream.h>
 #include <qfile.h>
+#include <qpopupmenu.h>
 
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -32,50 +33,43 @@
 #include <kservice.h>
 #include <kprocess.h>
 #include <kopenwith.h>
+#include <kurl.h>
+#include <karrowbutton.h>
+#include <klocale.h>
+#include <kfiledialog.h>
+#include <kio/job.h>
 
-KexiBlobTableEdit::KexiBlobTableEdit(QByteArray val, QWidget* parent, const char* name)
+KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, const char* name)
 	: KexiTableEdit(parent, name)
 {
-	m_value = val;
-	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << m_value.size() << endl;
-	m_view = new QWidget(this, "BLOB Edit");
+	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
 	m_tempFile = new KTempFile();
 	m_tempFile->setAutoDelete(true);
 	kdDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->name() << endl;
-	m_tempFile->dataStream()->writeRawBytes(m_value.data(), m_value.size());
+	m_tempFile->dataStream()->writeRawBytes(val.data(), val.size());
 	m_tempFile->close();
 	
-	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
-	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
-	KService::Ptr ptr = KServiceTypeProfile::preferredService(mmr->mimeType(), "Application");
-	QString exec;
+	m_proc = 0;
+	m_view = new KArrowButton(this, Qt::DownArrow, "Menu button");
+	connect(static_cast<KArrowButton*>(m_view), SIGNAL(clicked()), SLOT(menu()));
 	
-	if(!ptr.data())
-	{
-		KURL::List ul;
-		KOpenWithDlg* dlg = new KOpenWithDlg(ul, this);
-		if(dlg->exec() == QDialog::Accepted)
-		{
-			exec = dlg->text().section(' ', 0, 0);
-		}
-	}
-	else
-	{
-		exec = ptr->exec().section(' ', 0, 0);
-	}
-	
-	kdDebug() << "KexiBlobTableEdit: Exec = " << exec << endl;
-	m_proc = new KProcess();
-	*m_proc << exec;
-	*m_proc << m_tempFile->name();
-	connect(m_proc, SIGNAL(processExited(KProcess *)), SLOT(slotFinished(KProcess *)));
-	m_proc->start();
 }
 
 QVariant
 KexiBlobTableEdit::value()
 {
-	return QVariant(m_value);
+	QByteArray value;
+	QFile f(m_tempFile->name());
+	f.open(IO_ReadOnly);
+	QDataStream stream(&f);
+	char* data = (char*) malloc(f.size());
+	value.resize(f.size());
+	stream.readRawBytes(data, f.size());
+	value.duplicate(data, f.size());
+	free(data);
+	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
+	
+	return QVariant(value);
 }
 
 KexiBlobTableEdit::~KexiBlobTableEdit()
@@ -83,6 +77,7 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 	kdDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
 	m_tempFile->unlink();
 	delete m_proc;
+	m_proc = 0;
 	kdDebug() << "KexiBlobTableEdit: Ready." << endl;
 }
 
@@ -91,17 +86,124 @@ KexiBlobTableEdit::slotFinished(KProcess* /*p*/)
 {
 	kdDebug() << "Prorgam is finished!" << endl;
 	
-	QFile f(m_tempFile->name());
-	f.open(IO_ReadOnly);
-	QDataStream stream(&f);
-	char* data = (char*) malloc(f.size());
-	m_value.resize(0);
-	m_value.resize(f.size());
-	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << m_value.size() << endl;
-	stream.readRawBytes(data, f.size());
-	m_value.duplicate(data, f.size());
-	free(data);
-	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << m_value.size() << endl;
+	
+	// No need for m_proc now that the app has exited
+	delete m_proc;
+	m_proc = 0;
+}
+
+QString
+KexiBlobTableEdit::openWithDlg(const QString& file)
+{
+	KURL::List ul;
+	KURL url;
+	url.setPath(file);
+	ul.append(url);
+	QString exec = QString::null;
+	
+	KOpenWithDlg* dlg = new KOpenWithDlg(ul, this);
+	
+	if(dlg->exec() == QDialog::Accepted)
+	{
+		exec = dlg->text().section(' ', 0, 0);
+	}
+	
+	delete dlg;
+	dlg = 0;
+	
+	return exec;
+}
+
+void
+KexiBlobTableEdit::execute(const QString& app, const QString& file)
+{
+	kdDebug() << "KexiBlobTableEdit: App = " << app << "File = " << file << endl;
+	
+	// only execute if there isn't any other app already running
+	if(!m_proc)
+	{
+		m_proc = new KProcess();
+		*m_proc << app;
+		*m_proc << file;
+		connect(m_proc, SIGNAL(processExited(KProcess *)), SLOT(slotFinished(KProcess *)));
+		m_proc->start();
+	}
+}
+
+void
+KexiBlobTableEdit::open()
+{
+	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
+	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
+	KService::Ptr ptr = KServiceTypeProfile::preferredService(mmr->mimeType(), "Application");
+	QString exec;
+	
+	if(!ptr.data())
+	{
+		exec = openWithDlg(m_tempFile->name());
+	}
+	else
+	{
+		exec = ptr->exec().section(' ', 0, 0);
+	}
+	
+	if(!exec.isEmpty())
+	{
+		execute(exec, m_tempFile->name());
+	}
+}
+
+void
+KexiBlobTableEdit::openWith()
+{
+	QString exec = openWithDlg(m_tempFile->name());
+	
+	if(!exec.isEmpty())
+	{
+		execute(exec, m_tempFile->name());
+	}
+}
+
+void
+KexiBlobTableEdit::menu()
+{
+	QPopupMenu* menu = new QPopupMenu(this, "BLOB Menu");
+	
+	menu->insertItem(i18n("Open"), this, SLOT(open()));
+	menu->insertItem(i18n("Open With..."), this, SLOT(openWith()));
+	menu->insertSeparator();
+	menu->insertItem(i18n("Load From File..."), this, SLOT(loadFile()));
+	menu->insertItem(i18n("Save To File..."), this, SLOT(saveFile()));
+	
+	QPoint pos = mapToGlobal(m_view->pos());
+	pos.setY(pos.y() + m_view->height());
+	menu->move(pos);
+	menu->exec();
+	
+	delete menu;
+	menu = 0;
+}
+
+void
+KexiBlobTableEdit::loadFile()
+{
+	QString file = KFileDialog::getOpenFileName();
+	
+	if(!file.isEmpty())
+	{
+		KIO::FileCopyJob* job = KIO::file_copy(KURL(file), KURL(m_tempFile->name()), -1, true);
+	}
+}
+
+void
+KexiBlobTableEdit::saveFile()
+{
+	QString file = KFileDialog::getSaveFileName();
+	
+	if(!file.isEmpty())
+	{
+		KIO::FileCopyJob* job = KIO::file_copy(KURL(m_tempFile->name()), KURL(file), -1, true);
+	}
 }
 
 #include "kexiblobtableedit.moc"
