@@ -277,7 +277,7 @@ void KWTextFrameSet::setWidth( int w )
     QTextFlow::setWidth( w );
 }
 
-int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
+int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
     //kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
     QPoint p;
@@ -289,17 +289,18 @@ int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
     for ( ; fIt.current() ; ++fIt )
     {
         KWFrame * frame = fIt.current();
-        if ( p.y() >= frame->y() && p.y() < frame->bottom() &&
+        // Look for intersection between p.y() -- p.y()+h  and frame->top() -- frame->bottom()
+        if ( QMAX( p.y(), frame->top() ) <= QMIN( p.y()+h, frame->bottom() ) &&
              ( frame->left() - p.x() < middle ) ) // adjust the left margin only
                                                   // for frames which are in the
                                                   // left half
             newMargin = QMAX( newMargin, ( frame->right() - p.x() ) + space );
     }
 
-    return QTextFlow::adjustLMargin( yp, margin + newMargin, space );
+    return QTextFlow::adjustLMargin( yp, h, margin + newMargin, space );
 }
 
-int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
+int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
     QPoint p;
     (void) internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
@@ -310,14 +311,15 @@ int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
     for ( ; fIt.current() ; ++fIt )
     {
         KWFrame * frame = fIt.current();
-        if ( p.y() >= frame->y() && p.y() < frame->bottom() &&
+        // Look for intersection between p.y() -- p.y()+h  and frame->top() -- frame->bottom()
+        if ( QMAX( p.y(), frame->top() ) <= QMIN( p.y()+h, frame->bottom() ) &&
              frame->left() - p.x() >= middle ) // adjust the right margin only
                                                // for frames which are in the
                                                // right half
                 newMargin = QMAX( newMargin, m_width - ( frame->x() - p.x() ) - space );
     }
 
-    return QTextFlow::adjustRMargin( yp, margin + newMargin, space );
+    return QTextFlow::adjustRMargin( yp, h, margin + newMargin, space );
 }
 
 void KWTextFrameSet::adjustFlow( int &yp, int w, int h, bool /*pages*/ )
@@ -1433,17 +1435,19 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
 
 void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &txt, bool checkNewLine, bool removeSelected )
 {
-    QTextCursor c2 = *cursor;
+    kdDebug() << "KWTextFrameSet::insert" << endl;
+    QTextDocument *textdoc = textDocument();
     emit hideCursor();
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) && removeSelected ) {
+    if ( textdoc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
 	checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
 	if ( !undoRedoInfo.valid() ) {
-	    textDocument()->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
+	    textdoc->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
 	    undoRedoInfo.text = QString::null;
 	}
-	undoRedoInfo.text = textDocument()->selectedText( QTextDocument::Standard );
-	textDocument()->removeSelectedText( QTextDocument::Standard, cursor );
+	undoRedoInfo.text = textdoc->selectedText( QTextDocument::Standard );
+	textdoc->removeSelectedText( QTextDocument::Standard, cursor );
     }
+    QTextCursor c2 = *cursor;
     checkUndoRedoInfo( cursor, UndoRedoInfo::Insert );
     if ( !undoRedoInfo.valid() ) {
 	undoRedoInfo.id = cursor->parag()->paragId();
@@ -1452,30 +1456,38 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
         undoRedoInfo.name = i18n("Insert text");
     }
     int oldLen = undoRedoInfo.text.length();
+    m_lastFormatted = checkNewLine && cursor->parag()->prev() ?
+                      cursor->parag()->prev() : cursor->parag();
     QTextCursor oldCursor = *cursor;
     cursor->insert( txt, checkNewLine );
 
-    undoRedoInfo.text += txt;
-
-    for ( int i = 0; i < (int)txt.length(); ++i ) {
-        if ( txt[ i ] != '\n' )
-        {
-            c2.parag()->at( c2.index() )->setFormat( currentFormat );
-            currentFormat->addRef();
-            undoRedoInfo.text.setFormat( oldLen + i, currentFormat, TRUE );
-        }
-        c2.gotoRight();
+    if ( textdoc->useFormatCollection() ) { // true
+        textdoc->setSelectionStart( QTextDocument::Temp, &oldCursor );
+        textdoc->setSelectionEnd( QTextDocument::Temp, cursor );
+        textdoc->setFormat( QTextDocument::Temp, currentFormat, QTextFormat::Format );
+        textdoc->removeSelection( QTextDocument::Temp );
     }
-    m_lastFormatted = oldCursor.parag();
+
     formatMore();
     emit repaintChanged();
     ensureCursorVisible();
     emit showCursor();
+    undoRedoInfo.text += txt;
+
+    for ( int i = 0; i < (int)txt.length(); ++i ) {
+        if ( txt[ i ] == '\n' )
+            continue;
+        if ( c2.parag()->at( c2.index() )->format() ) {
+            c2.parag()->at( c2.index() )->format()->addRef();
+            undoRedoInfo.text.setFormat( oldLen + i, c2.parag()->at( c2.index() )->format(), TRUE );
+        }
+        c2.gotoRight();
+    }
 
     doc->setModified(true);
     if ( !removeSelected ) {
-        textDocument()->setSelectionStart( QTextDocument::Standard, &oldCursor );
-        textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
+        textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
+        textdoc->setSelectionEnd( QTextDocument::Standard, cursor );
         repaintChanged();
     }
 }
@@ -1490,6 +1502,10 @@ void KWTextFrameSet::undo()
 	emit showCursor();
 	return;
     }
+    // We have to set this new cursor position in all views :(
+    // It sucks a bit for useability, but otherwise one view might still have
+    // a cursor inside a deleted paragraph -> crash.
+    emit setCursor( c );
     setLastFormattedParag( 0 );
     emit ensureCursorVisible();
     emit repaintChanged();
@@ -1507,6 +1523,7 @@ void KWTextFrameSet::redo()
 	emit showCursor();
 	return;
     }
+    emit setCursor( c ); // see undo
     setLastFormattedParag( 0 );
     emit repaintChanged();
     emit ensureCursorVisible();
@@ -1521,6 +1538,7 @@ void KWTextFrameSet::clearUndoRedoInfo()
 
 void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat )
 {
+    kdDebug() << "KWTextFrameSet::pasteText" << endl;
     QString t = text;
     // Need to convert CRLF to NL
     QRegExp crlf( QString::fromLatin1("\r\n") );
@@ -1597,6 +1615,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 {
     connect( fs, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( fs, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
+    connect( fs, SIGNAL( setCursor( QTextCursor * ) ), this, SLOT( setCursor( QTextCursor * ) ) );
     connect( fs, SIGNAL( updateUI() ), this, SLOT( updateUI() ) );
     connect( fs, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
     connect( fs, SIGNAL( repaintChanged() ), this, SLOT( repaintChanged() ) );

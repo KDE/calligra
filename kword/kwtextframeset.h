@@ -127,8 +127,8 @@ public:
 
     // reimplemented from QTextFlow
     virtual void setWidth( int w );
-    virtual int adjustLMargin( int yp, int margin, int space );
-    virtual int adjustRMargin( int yp, int margin, int space );
+    virtual int adjustLMargin( int yp, int h, int margin, int space );
+    virtual int adjustRMargin( int yp, int h, int margin, int space );
     virtual void adjustFlow( int  &yp, int w, int h, bool pages = TRUE );
     virtual void draw( QPainter *p, int cx, int cy, int cw, int ch );
     virtual void eraseAfter( QTextParag *parag, QPainter *p );
@@ -136,6 +136,8 @@ public:
 signals:
     void hideCursor();
     void showCursor();
+    // Special hack for undo/redo
+    void setCursor( QTextCursor * cursor );
     // Emitted when the formatting under the cursor may have changed.
     // The Edit object should re-read settings and update the UI.
     void updateUI();
@@ -300,6 +302,7 @@ private slots:
     // This allows KWTextFrameSet to hide/show all the cursors before modifying anything
     void hideCursor() { drawCursor( false ); }
     void showCursor() { drawCursor( true ); }
+    void setCursor( QTextCursor * _cursor ) { *cursor = *_cursor; }
     void ensureCursorVisible();
     void showCurrentFormat();
     void repaintChanged();
