@@ -21,5 +21,4 @@ X-KDE-RepoIds=IDL:KformEditor/DocumentFactory:1.0#KformEditor
 X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=kformeditor
-MiniIcon=kformeditor
 ServiceTypes=KOfficeDocument

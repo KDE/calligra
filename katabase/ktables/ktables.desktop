@@ -4,7 +4,6 @@ Type=Application
 Exec=ktables
 CorbaExec=ktables --server
 Icon=ktables
-MiniIcon=ktables
 DocPath=ktables/index.html
 Comment=
 Type=Application

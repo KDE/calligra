@@ -35,6 +35,4 @@ ImportDescription=KWord
 X-KDE-RepoIds=IDL:KOffice/FilterFactory:1.0#KWordAscii
 X-KDE-ActivationMode=shared
 Type=OpenPart
-Icon=unknown
-MiniIcon=unknown
 ServiceTypes=KOfficeFilter

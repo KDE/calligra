@@ -22,6 +22,4 @@ X-KDE-Library=libolefilter
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
-Icon=unknown
-MiniIcon=unknown
 ServiceTypes=KOfficeFilter

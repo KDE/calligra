@@ -12,5 +12,4 @@ Comment[no_NY]=KOffice biletebehandling
 MimeType=application/x-kimageshop
 Type=Application
 Icon=kimageshop
-MiniIcon=kimageshop
 ServiceTypes=KOfficePart,KPart

@@ -34,5 +34,4 @@ Comment[sv]=Torbens bildvisare
 MimeType=image/gif
 Type=Application
 Icon=image
-MiniIcon=image
 ServiceTypes=KOfficePart,KPart

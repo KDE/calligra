@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=MimeType
 MimeType=application/x-excel97
-Icon=unknown
 Patterns=*.xls;*.XLS;
 Comment=MS Excel 97 File
 Comment[ca]=Fitxer MS Excel 97

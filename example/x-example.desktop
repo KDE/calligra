@@ -2,7 +2,8 @@
 [Desktop Entry]
 MimeType=application/x-example
 Comment=Canossa Example
+Comment[ca]=L'exemple Canossa
+Comment[no_NY]=Canossa-døme
 DefaultApp=Example
-Icon=unknown
 Type=MimeType
 Patterns=*.xmpl;

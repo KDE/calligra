@@ -40,5 +40,4 @@ Comment[sv]=Torbens kalkylprogram
 MimeType=application/x-kspread
 Type=Application
 Icon=kspread
-MiniIcon=kspread
 ServiceTypes=KOfficePart,KPart

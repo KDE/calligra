@@ -37,6 +37,4 @@ Comment[sr]=Editor formula
 Comment[sv]=Formeleditorn
 MimeType=application/x-kformula
 Type=Application
-Icon=unknown
-MiniIcon=unknown
 ServiceTypes=KOfficePart,KPart

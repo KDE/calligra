@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=MimeType
 MimeType=application/x-powerpoint97
-Icon=unknown
 Patterns=*.ppt;*.PPT;
 Comment=MS PowerPoint 97 File
 Comment[ca]=Fitxer MS PowerPoint 97

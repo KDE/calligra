@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=MimeType
 MimeType=text/x-csv
-Icon=unknown
 Patterns=*.csv;*.CSV;
 Comment=Text file with comma separated values
 Comment[ca]=Fitxer de text amb valors separats per comes
