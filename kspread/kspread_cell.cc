@@ -1228,7 +1228,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
             // Dont occupy additional space for right aligned or centered text or values.
             // ##### Why ?
-            if ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined )
+            if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !isValue())
             {
                 m_iExtraWidth = w;
                 for( int i = m_iColumn + 1; i <= c; ++i )
@@ -2581,6 +2581,18 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         _painter.drawPolygon( point );
     }
 
+    //show  a red triangle when it's not possible to write all text in cell
+    //don't print the red triangle
+    if(m_bCellTooShort && !_painter.device()->isExtDev() )
+    {
+        QPointArray point( 3 );
+        point.setPoint( 0,_tx + w2-4 , (_ty+h2/2)-4 );
+        point.setPoint( 1, _tx + w2,(_ty+h2/2) );
+        point.setPoint( 2, _tx + w2-4,(_ty+h2/2) + 4 );
+        _painter.setBrush( QBrush(Qt::red  ) );
+        _painter.setPen( Qt::NoPen );
+        _painter.drawPolygon( point );
+     }
     /**
      * Modification for drawing the button
      */
@@ -2678,7 +2690,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         //_painter.setFont( m_textFont );
         QString tmpText=m_strOutText;
         if(m_bCellTooShort)
-                m_strOutText="**";
+                m_strOutText=textDisplaying(_painter);
 
         conditionAlign( _painter, _col, _row );
 
@@ -2881,6 +2893,28 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         if ( _row == marker.top() - 1 && _col == marker.right() + 1 )
             paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 14, marker );
     }
+}
+
+QString KSpreadCell::textDisplaying( QPainter &_painter)
+{
+QFontMetrics fm = _painter.fontMetrics();
+
+ColumnLayout *cl = m_pTable->columnLayout( column() );
+int w = cl->width();
+if( isValue())
+        return QString("###");
+else
+        {
+        QString tmp;
+        for (int i=m_strOutText.length();i!=0;i--)
+                {
+                tmp=m_strOutText.left(i);
+                if(fm.width(tmp)<w)
+                        return tmp;
+                }
+        }
+//never here
+return  QString("**");
 }
 
 /*

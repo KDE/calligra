@@ -614,6 +614,8 @@ public:
     void conditionAlign(QPainter &painter,int _col,int _row);
 
 
+
+
     /**
      * Used for comparing cells (when sorting)
      */
@@ -657,6 +659,12 @@ protected:
      * needed for the text.
      */
     void textSize( QPainter &_paint );
+
+    /**
+    *  Called from @ref #paintCell to determine the text
+     * wich can be displaying.
+    */
+    QString textDisplaying( QPainter &painter);
 
     /**
      * Cleans up formula stuff.
