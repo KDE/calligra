@@ -40,6 +40,7 @@
 #include <klocale.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <float.h>
 #include "KWordFrameSetIface.h"
 #include <dcopobject.h>
@@ -983,7 +984,8 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         r = r.intersect( frameRect );
 #ifdef DEBUG_DRAW
-        kdDebug(32002) << "                    frame=" << frame << " framerect=" << DEBUGRECT(*frame) << endl;
+        kdDebug(32002) << "                    frame=" << frame << " " << DEBUGRECT(*frame) << endl;
+        kdDebug(32002) << "                    normalFrameRect=" << normalFrameRect << " frameRect=" << frameRect << endl;
         kdDebug(32002) << "                    crect=" << DEBUGRECT(crect) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
 #endif
         if ( !r.isEmpty() )

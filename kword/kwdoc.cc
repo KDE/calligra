@@ -2942,6 +2942,7 @@ void KWDocument::printStyleDebug()
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         kdDebug() << "Style " << p << "  " << p->name() <<endl;
+        kdDebug() << "   format: " << p->format().key() <<endl;
         kdDebug() << "   following style: " << p->followingStyle() << " "
                   << ( p->followingStyle() ? p->followingStyle()->name() : QString::null ) << endl;
     }
