@@ -3115,10 +3115,17 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
        int slideno = *it + 1;
        slideList.append( slideno );
     }
-    Q_ASSERT( slideList.count() );
+    
+    // no slide selected ? end the slide show immediately...
+    if( !slideList.count() )
+    {
+        kdDebug(33001) << "No slide: end the slide show" << endl;
+        stopScreenPresentation();
+        return;
+    }
     
     // find first selected slide after curPgNum
-    unsigned slide = -1;
+    unsigned slide = 0;
     for( unsigned i = 0; i<slideList.count(); i++ )
         if( slideList[i] >= curPgNum )
         {

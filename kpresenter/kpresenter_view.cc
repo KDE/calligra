@@ -1511,6 +1511,14 @@ void KPresenterView::screenStart()
 
 void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 {
+    // no slide is selected ?
+    if( !kPresenterDoc()->selectedSlides().count() )
+    {
+        KMessageBox::sorry( this, i18n("You do not select any slides at all." ), 
+            i18n("No Slide") );
+        return;
+    }
+
     m_canvas->setToolEditMode( TEM_MOUSE );
 
     if ( m_canvas && !presStarted ) {
