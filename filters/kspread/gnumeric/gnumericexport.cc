@@ -738,7 +738,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -840,7 +840,12 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         else
             tmp.appendChild(gnumeric_doc.createTextNode("1.0"));
         sheet.appendChild(tmp);
-
+//#if 0 //create print info
+        tmp = gnumeric_doc.createElement( "gmr:PrintInformation" );
+        margins = gnumeric_doc.createElement( "gmr:Margins" );
+        tmp.appendChild( margins );
+        sheet.appendChild(tmp);
+//#endif
         styles = gnumeric_doc.createElement("gmr:Styles");
         sheet.appendChild(styles);
 
