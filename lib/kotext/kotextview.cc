@@ -794,7 +794,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         }
         else
         {
-            text = "";
+            text = QString::null;
             m_refLink=QString::null;
         }
     }
@@ -805,7 +805,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
     // for any datatool!
     if(!text.isEmpty() && doc->dontCheckTitleCase() && text==text.upper())
     {
-        text="";
+        text=QString::null;
         m_singleWord = false;
     }
     else if(!text.isEmpty() && doc->dontCheckUpperWord() && text[0]==text[0].upper())
@@ -813,7 +813,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         QString tmp=text[0]+text.right(text.length()-1).lower();
         if(text==tmp)
         {
-            text="";
+            text=QString::null;
             m_singleWord = false;
         }
     }
