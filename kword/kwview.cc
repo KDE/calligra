@@ -369,7 +369,8 @@ void KWView::initGui()
     renameButtonTOC(m_doc->isTOC());
     //at the beginning actionBackgroundColor should be active
     actionBackgroundColor->setEnabled(true);
-    actionAllowBgSpellCheck->setChecked( m_doc->backgroundSpellCheckEnabled() );
+    updateBgSpellCheckingState();
+    updateDirectCursorButton();
     actionCreateFrameStyle->setEnabled(false);
 }
 

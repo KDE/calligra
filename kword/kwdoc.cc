@@ -4665,6 +4665,9 @@ void KWDocument::updateDirectCursorButton()
 void KWDocument::setInsertDirectCursor(bool _b)
 {
     m_bInsertDirectCursor=_b;
+    KConfig *config = KWFactory::global()->config();
+    config->setGroup( "Interface" );
+    config->writeEntry( "InsertDirectCursor", _b );
     updateDirectCursorButton();
 }
 

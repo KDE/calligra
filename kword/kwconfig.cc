@@ -830,10 +830,7 @@ KCommand *ConfigureDefaultDocPage::apply()
 
     state = m_directInsertCursor->isChecked();
     if ( state != doc->insertDirectCursor() )
-    {
-        config->writeEntry( "InsertDirectCursor", state );
         doc->setInsertDirectCursor( state );
-    }
 
     KMacroCommand * macroCmd=0L;
     int newStartingPage=m_variableNumberOffset->value();
