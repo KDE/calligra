@@ -6255,3 +6255,8 @@ unsigned int KPrCanvas::objNums() const
 {
     return (m_activePage->objNums() + m_view->kPresenterDoc()->stickyPage()->objNums());
 }
+
+void KPrCanvas::moveHelpLine()
+{
+    //todo
+}

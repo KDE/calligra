@@ -357,6 +357,8 @@ protected:
     KPrPage *stickyPage();
     void scrollCanvas(const KoRect& oldPos);
 
+    void moveHelpLine();
+
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
