@@ -1194,7 +1194,7 @@
       <Name>rand</Name>
       <Type>Float</Type>
       <Help>
-	<Text>The   rand()  function  returns  a  pseudo-random  number between 0 and 1.</Text>
+	<Text>The rand() function returns a pseudo-random number between 0 and 1.</Text>
 	<Syntax>rand()</Syntax>
 	<Example>rand() equals for example 0.78309922...</Example>
       </Help>
