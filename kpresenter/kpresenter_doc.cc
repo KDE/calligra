@@ -356,6 +356,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
     out << otag << "<CLIPARTS>" << endl;
 
+    i = 0;
     QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
 
     for( ; it2 != _clipartCollection.end(); ++it2 ) {
@@ -447,7 +448,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     }
 
     QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
-
+    i = 0;
     for( ; it2 != _clipartCollection.end(); ++it2 ) {
 	if ( _clipartCollection.references( it2.key() ) > 0 && !it2.key().filename.isEmpty() ) {
 
