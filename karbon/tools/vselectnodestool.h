@@ -25,7 +25,7 @@
 class VSelectNodesTool : public VTool
 {
 public:
-	VSelectNodesTool( KarbonView* view, const char* name, const QStringList & );
+	VSelectNodesTool( KarbonView* view, const char* name );
 	virtual ~VSelectNodesTool();
 
 	virtual void activate();

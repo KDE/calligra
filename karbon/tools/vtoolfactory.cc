@@ -18,44 +18,29 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VROTATETOOL_H__
-#define __VROTATETOOL_H__
+#include <kdebug.h>
 
+#include "karbon_view.h"
 #include "vselection.h"
-#include "vtool.h"
+#include "vtoolfactory.h"
+#include "vselecttool.h"
+#include "vselectnodestool.h"
+#include "vrotatetool.h"
+#include "vsheartool.h"
 
-
-class VRotateTool : public VTool
+VToolFactory::VToolFactory( KarbonView *view ) 
 {
-public:
-	VRotateTool( KarbonView* view, const char* name );
-	virtual ~VRotateTool();
+	m_selectTool		= new VSelectTool( view, "" );
+	m_selectNodesTool	= new VSelectNodesTool( view, "" );
+	m_rotateTool		= new VRotateTool( view, "" );
+	m_shearTool			= new VShearTool( view, "" );
+}
 
-	virtual void activate();
-
-	virtual QString name() { return i18n( "Rotate tool" ); }
-	virtual QString icon() { return "14_rotate"; }
-	virtual QString category() { return "manipulation"; }
-	virtual uint priority() { return 3; }
-
-protected:
-	virtual void draw();
-
-	virtual void mouseButtonPress();
-	virtual void mouseDrag();
-	virtual void mouseDragRelease();
-
-private:
-	void recalc();
-
-	KoPoint m_center;
-	double m_angle;
-
-	VHandleNode m_activeNode;
-
-	// A list of temporary objects:
-	VObjectList m_objects;
-};
-
-#endif
+VToolFactory::~VToolFactory()
+{
+	delete m_selectTool;
+	delete m_selectNodesTool;
+	delete m_rotateTool;
+	delete m_shearTool;
+}
 

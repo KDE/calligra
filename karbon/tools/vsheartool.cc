@@ -24,7 +24,6 @@
 #include <qlabel.h>
 
 #include <klocale.h>
-#include <kgenericfactory.h>
 #include <koRect.h>
 
 #include <karbon_part.h>
@@ -35,10 +34,7 @@
 #include "vsheartool.h"
 #include <commands/vtransformcmd.h>
 
-typedef KGenericFactory<VShearTool, KarbonView> ShearToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_sheartoolplugin, ShearToolPluginFactory( "karbonsheartoolplugin" ) );
-
-VShearTool::VShearTool( KarbonView* view, const char* name, const QStringList & ) : VTool( view, name )
+VShearTool::VShearTool( KarbonView* view, const char* name ) : VTool( view, name )
 {
 	m_objects.setAutoDelete( true );
 	registerTool( this );

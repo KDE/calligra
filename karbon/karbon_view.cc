@@ -73,6 +73,7 @@
 #include "karbon_view_iface.h"
 #include "vselection.h"
 #include "vtool.h"
+#include "vtoolfactory.h"
 #include "vgroup.h"
 #include "vpath.h"
 #include "vpainterfactory.h"
@@ -95,6 +96,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 {
 	m_toolbox = 0L;
 	m_currentTool = 0L;
+	m_toolFactory = new VToolFactory( this );
 
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
@@ -164,6 +166,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
+	delete m_toolFactory;
 	// dialogs:
 
 	if( shell() )

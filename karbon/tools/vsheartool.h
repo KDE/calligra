@@ -26,7 +26,7 @@
 class VShearTool : public VTool
 {
 public:
-	VShearTool( KarbonView* view, const char* name, const QStringList & );
+	VShearTool( KarbonView* view, const char* name );
 	virtual ~VShearTool();
 
 	virtual void activate();

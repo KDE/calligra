@@ -62,6 +62,7 @@ class VStrokeFillPreview;
 class VTransformDocker;
 
 class VTool;
+class VToolFactory;
 class VToolBox;
 
 class KarbonView : public KoView, public KXMLGUIBuilder
@@ -250,6 +251,8 @@ private:
 	QLabel* m_status;
 
 	VStrokeFillPreview *m_strokeFillPreview;
+
+	VToolFactory	*m_toolFactory;
 };
 
 #endif

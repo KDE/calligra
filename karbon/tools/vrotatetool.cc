@@ -33,14 +33,10 @@
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
 #include <commands/vtransformcmd.h>
-#include <kgenericfactory.h>
 
 #include <kdebug.h>
 
-typedef KGenericFactory<VRotateTool, KarbonView> RotateToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_rotatetoolplugin, RotateToolPluginFactory( "karbonrotatetoolplugin" ) );
-
-VRotateTool::VRotateTool( KarbonView* view, const char* name, const QStringList & )
+VRotateTool::VRotateTool( KarbonView* view, const char* name )
 	: VTool( view, name )
 {
 	m_objects.setAutoDelete( true );

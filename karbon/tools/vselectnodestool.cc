@@ -23,7 +23,6 @@
 #include <qlabel.h>
 
 #include <klocale.h>
-#include <kgenericfactory.h>
 #include <koPoint.h>
 #include <koRect.h>
 
@@ -42,10 +41,7 @@
 
 #include <kdebug.h>
 
-typedef KGenericFactory<VSelectNodesTool, KarbonView> SelectNodesToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_selectnodestoolplugin, SelectNodesToolPluginFactory( "karbonselectnodestoolplugin" ) );
-
-VSelectNodesTool::VSelectNodesTool( KarbonView* view, const char* name, const QStringList & )
+VSelectNodesTool::VSelectNodesTool( KarbonView* view, const char* name )
 	: VTool( view, name ), m_state( normal )
 {
 	registerTool( this );

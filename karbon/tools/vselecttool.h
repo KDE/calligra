@@ -46,7 +46,7 @@ class VSelectOptionsWidget : public QButtonGroup
 class VSelectTool : public VTool
 {
 public:
-	VSelectTool( KarbonView* view, const char* name, const QStringList & );
+	VSelectTool( KarbonView* view, const char* name );
 	virtual ~VSelectTool();
 
 	virtual void activate();

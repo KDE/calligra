@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 #include <koPoint.h>
-#include <kparts/plugin.h>
 
 class KarbonView;
 class QEvent;
@@ -31,7 +30,7 @@ class QWidget;
 class VPainter;
 
 
-class VTool : public KParts::Plugin
+class VTool
 {
 public:
 	VTool( KarbonView *view, const char* name );

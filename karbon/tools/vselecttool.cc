@@ -37,8 +37,6 @@
 #include <core/vselection.h>
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
-#include <kgenericfactory.h>
-
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
 	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ) ), m_view( view )
@@ -58,10 +56,7 @@ void VSelectOptionsWidget::modeChange( int mode )
 	m_view->part()->document().setSelectionMode( (VDocument::VSelectionMode)mode );
 } // VSelectOptionsWidget::modeChanged
 
-typedef KGenericFactory<VSelectTool, KarbonView> SelectToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_selecttoolplugin, SelectToolPluginFactory( "karbonselecttoolplugin" ) );
-
-VSelectTool::VSelectTool( KarbonView* view, const char* name, const QStringList & )
+VSelectTool::VSelectTool( KarbonView* view, const char* name )
 	: VTool( view, name ), m_state( normal )
 {
 	m_lock = false;

@@ -30,8 +30,7 @@
 #include "vtooloptionsdocker.h"
 
 
-VTool::VTool( KarbonView *view, const char* name )
-		: Plugin( view, name ), m_view( view )
+VTool::VTool( KarbonView *view, const char* name ) : m_view( view )
 {
 	m_mouseButtonIsDown = false;
 	m_isDragging = false;
