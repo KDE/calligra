@@ -110,4 +110,19 @@ protected:
     KSpreadDoc* doc;
 };
 
+
+class RemoveSheetCommand : public KCommand
+{
+public:
+  RemoveSheetCommand( KSpreadSheet* sheet );
+
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+    KSpreadSheet* sheet;
+    KSpreadDoc* doc;
+};
+
 #endif /* KSPREAD_COMMANDS */

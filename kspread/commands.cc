@@ -161,3 +161,29 @@ QString AddSheetCommand::name() const
 {
     return i18n("Add Table");
 }
+
+
+// ----- RemoveSheetCommand -----
+
+RemoveSheetCommand::RemoveSheetCommand( KSpreadSheet* s )
+{
+    sheet = s;
+    doc = sheet->doc();
+}
+
+void RemoveSheetCommand::execute()
+{
+    sheet->map()->takeTable( sheet );
+    doc->takeTable( sheet );
+}
+
+void RemoveSheetCommand::unexecute()
+{
+    sheet->map()->insertTable( sheet );
+    doc->insertTable( sheet );
+}
+
+QString RemoveSheetCommand::name() const
+{
+    return i18n("Remove Table");
+}

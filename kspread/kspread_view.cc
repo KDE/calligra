@@ -5996,10 +5996,17 @@ void KSpreadView::removeTable()
     }
     d->doc->setModified( true );
     KSpreadSheet * tbl = activeTable();
+    KCommand* command = new RemoveSheetCommand( tbl );
+    d->doc->addCommand( command );
+    command->execute();
+
+
+#if 0
     KSpreadUndoRemoveTable * undo = new KSpreadUndoRemoveTable( d->doc, tbl );
     d->doc->addCommand( undo );
     tbl->map()->takeTable( tbl );
     doc()->takeTable( tbl );
+#endif
     d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
 }

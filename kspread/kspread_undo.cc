@@ -3029,34 +3029,6 @@ void KSpreadUndoStyleCell::redo()
     doc()->undoUnlock();
 }
 
-
-KSpreadUndoRemoveTable::KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadSheet* _table)
-    : KSpreadUndoAction( _doc ),
-      m_table( _table )
-{
-    name=i18n("Remove Table");
-}
-
-KSpreadUndoRemoveTable::~KSpreadUndoRemoveTable()
-{
-}
-
-void KSpreadUndoRemoveTable::undo()
-{
-    doc()->undoLock();
-    m_table->map()->insertTable( m_table );
-    doc()->insertTable( m_table );
-    doc()->undoUnlock();
-}
-
-void KSpreadUndoRemoveTable::redo()
-{
-    doc()->undoLock();
-    m_table->map()->takeTable( m_table );
-    doc()->takeTable( m_table );
-    doc()->undoUnlock();
-}
-
 KSpreadUndoInsertData::KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadSheet * _table, QRect & _selection )
     : KSpreadUndoChangeAreaTextCell( _doc, _table, _selection )
 {

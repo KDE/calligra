@@ -696,18 +696,6 @@ protected:
     QString m_tableName;
 };
 
-class KSpreadUndoRemoveTable : public KSpreadUndoAction
-{
-public:
-    KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadSheet* _table);
-    virtual ~KSpreadUndoRemoveTable();
-
-    virtual void undo();
-    virtual void redo();
-protected:
-    KSpreadSheet* m_table;
-};
-
 class KSpreadUndoInsertData : public KSpreadUndoChangeAreaTextCell
 {
  public:
