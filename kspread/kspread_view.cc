@@ -3420,7 +3420,8 @@ void KSpreadView::initFindReplace()
     m_findRightColumn = region.right();
     m_findPos = QPoint( colStart, rowStart );
     m_findEnd = QPoint( colEnd, rowEnd );
-    kdDebug() << k_funcinfo << m_findPos << " to " << m_findEnd << endl;
+    //kdDebug() << k_funcinfo << m_findPos << " to " << m_findEnd << endl;
+    //kdDebug() << k_funcinfo << "leftcol=" << m_findLeftColumn << " rightcol=" << m_findRightColumn << endl;
 }
 
 void KSpreadView::findNext()
@@ -3439,6 +3440,7 @@ void KSpreadView::findNext()
         {
             findObj->setData( cell->text() );
             m_findPos = QPoint( cell->column(), cell->row() );
+            //kdDebug() << "setData(cell " << m_findPos << ")" << endl;
         }
 
         // Let KFind inspect the text fragment, and display a dialog if a match is found
@@ -3484,11 +3486,13 @@ KSpreadCell* KSpreadView::findNextCell()
     KSpreadCell* cell = 0L;
     bool forw = ! ( m_findOptions & KFindDialog::FindBackwards );
     int col = m_findPos.x();
+    int row = m_findPos.y();
+    int maxRow = sheet->maxRow();
+    //kdDebug() << "findNextCell starting at " << col << "," << row << "   forw=" << forw << endl;
 
-    // TODO: check those tests. < or <=  ?
-    for (int row = m_findPos.y() ; !cell && (forw ? row < m_findEnd.y() : row > m_findEnd.y()) ; forw ? ++row : --row )
+    while ( !cell && row != m_findEnd.y() && (forw ? row < maxRow : row >= 0) )
     {
-        while ( !cell && (forw ? col < m_findEnd.x() : col > m_findEnd.x()) )
+        while ( !cell && (forw ? col <= m_findRightColumn : col >= m_findLeftColumn) )
         {
             cell = sheet->cellAt( col, row );
             if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
@@ -3496,11 +3500,22 @@ KSpreadCell* KSpreadView::findNextCell()
             if ( forw ) ++col;
             else --col;
         }
-        col = forw ? m_findLeftColumn : m_findRightColumn;
+        if ( cell )
+            break;
+        // Prepare looking in the next row
+        if ( forw )  {
+            col = m_findLeftColumn;
+            ++row;
+        } else {
+            col = m_findRightColumn;
+            --row;
+        }
+        //kdDebug() << "next row: " << col << "," << row << endl;
     }
     // if ( !cell )
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make m_findEnd (max,max) in that case...)
+    //kdDebug() << k_funcinfo << " returning " << cell << endl;
     return cell;
 }
 
@@ -3511,6 +3526,7 @@ void KSpreadView::findPrevious()
         find();
         return;
     }
+    //kdDebug() << "findPrevious" << endl;
     int opt = m_findOptions;
     bool forw = ! ( opt & KFindDialog::FindBackwards );
     if ( forw )
