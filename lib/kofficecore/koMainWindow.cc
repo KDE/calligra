@@ -673,47 +673,57 @@ void KoMainWindow::resizeEvent( QResizeEvent * e )
 
 bool KoMainWindow::queryClose()
 {
-  if ( rootDocument() == 0 )
+    if ( rootDocument() == 0 )
+        return true;
+    //kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
+    //               << " shellcount=" << rootDocument()->shellCount() << endl;
+    if ( !d->m_forQuit && rootDocument()->shellCount() > 1 )
+        // there are more open, and we are closing just one, so no problem for closing
+        return true;
+
+    // see DTOR for a descr. of the test
+    if ( d->m_rootDoc->isEmbedded() )
+        return true;
+
+    // main doc + internally stored child documents
+    if ( d->m_rootDoc->isModified() )
+    {
+        QString name;
+        if ( rootDocument()->documentInfo() )
+        {
+            name = rootDocument()->documentInfo()->title();
+        }
+        if ( name.isEmpty() )
+            name = rootDocument()->url().fileName();
+
+        if ( name.isEmpty() )
+            name = i18n( "Untitled" );
+
+        int res = KMessageBox::warningYesNoCancel( 0L,
+                        i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name));
+
+        switch(res) {
+            case KMessageBox::Yes : {
+                d->m_rootDoc->setDoNotSaveExtDoc(); // external docs are saved later
+                bool isNative = ( d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType() );
+                if (! saveDocument( !isNative ) )
+                    return false;
+            }
+            case KMessageBox::No :
+                rootDocument()->removeAutoSaveFiles();
+                rootDocument()->setModified( false ); // Now when queryClose() is called by closeEvent it won't do anything.
+                break;
+            default : // case KMessageBox::Cancel :
+                return false;
+        }
+    }
+    
+    if ( d->m_rootDoc->queryCloseExternalChildren() == KMessageBox::Cancel )
+    {
+        return false;   
+    }
+    
     return true;
-  //kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
-  //               << " shellcount=" << rootDocument()->shellCount() << endl;
-  if ( !d->m_forQuit && rootDocument()->shellCount() > 1 )
-    // there are more open, and we are closing just one, so no problem for closing
-    return true;
-
-  // see DTOR for a descr. for the 2nd test
-  if ( d->m_rootDoc->isModified() &&
-       !d->m_rootDoc->isEmbedded())
-  {
-      QString name;
-      if ( rootDocument()->documentInfo() )
-      {
-         name = rootDocument()->documentInfo()->title();
-      }
-      if ( name.isEmpty() )
-          name = rootDocument()->url().fileName();
-
-      if ( name.isEmpty() )
-          name = i18n( "Untitled" );
-
-      int res = KMessageBox::warningYesNoCancel( 0L,
-                    i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name));
-
-      switch(res) {
-          case KMessageBox::Yes : {
-              bool isNative = ( d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType() );
-              if (! saveDocument( !isNative ) )
-                  return false;
-          }
-          case KMessageBox::No :
-              rootDocument()->removeAutoSaveFiles();
-              rootDocument()->setModified( false ); // Now when queryClose() is called by closeEvent it won't do anything.
-              break;
-          default : // case KMessageBox::Cancel :
-              return false;
-      }
-  }
-  return true;
 }
 
 void KoMainWindow::slotFileNew()

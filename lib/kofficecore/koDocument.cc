@@ -88,7 +88,8 @@ public:
         m_autosaving( false ),
         m_shouldCheckAutoSaveFile( true ),
         m_backupFile( true ),
-        m_backupPath( QString::null )
+        m_backupPath( QString::null ),
+        m_doNotSaveExtDoc( false ) 
         {}
 
     QPtrList<KoView> m_views;
@@ -114,6 +115,7 @@ public:
     bool m_shouldCheckAutoSaveFile; // usually true
     bool m_backupFile;
     QString m_backupPath;
+    bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
 };
 
 // Used in singleViewMode
@@ -265,7 +267,7 @@ KoView *KoDocument::createView( QWidget *parent, const char *name )
 
 bool KoDocument::saveFile()
 {
-    kdDebug(30003) << "KoDocument::saveFile()" << endl;
+    kdDebug(30003) << "KoDocument::saveFile() doc='" << url().url() <<"'"<< endl;
     if ( !kapp->inherits( "KoApplication" ) )
     {
         d->lastErrorMessage = i18n( "Internal error: not a KOffice application, saving not allowed" );
@@ -653,11 +655,80 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
     }
 }
 
-bool KoDocument::saveChildren( KoStore* /*_store*/ )
+bool KoDocument::isModified()
 {
-    // Lets assume that we do not have children
-    kdWarning(30003) << "KoDocument::saveChildren( KoStore* )" << endl;
-    kdWarning(30003) << "Not implemented ( not really an error )" << endl;
+    if ( KParts::ReadWritePart::isModified() )
+    {
+        kdDebug()<<k_funcinfo<<" Modified doc='"<<url().url()<<"'"<<endl;
+        return true;
+    }
+    // Then go through internally stored children (considdered to be part of this doc)
+    QPtrListIterator<KoDocumentChild> it = children();
+    for (; it.current(); ++it )
+    {
+        if ( !it.current()->isStoredExtern() && !it.current()->isDeleted() )
+        {
+            KoDocument *doc = it.current()->document();
+            if ( doc && doc->isModified() )
+                return true;
+        }
+    }
+    return false;
+}
+
+bool KoDocument::saveChildren( KoStore* _store )
+{
+    //kdDebug()<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
+    int i = 0;
+    QPtrListIterator<KoDocumentChild> it( children() );
+    for( ; it.current(); ++it ) {
+        KoDocument* childDoc = it.current()->document();
+        if (childDoc && !it.current()->isDeleted())
+        {
+            if ( !childDoc->isStoredExtern() ) 
+            {
+                //kdDebug(32001) << "KoDocument::saveChildren internal url:" << childDoc->url().url() << endl;
+                if ( !childDoc->saveToStore( _store, QString::number( i++ ) ) )
+                    return FALSE;
+                childDoc->setModified( false );
+            }
+            //else kdDebug()<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
+        } 
+    }
+    return true;
+}
+
+bool KoDocument::saveExternalChildren()
+{
+    if ( d->m_doNotSaveExtDoc )
+    {
+        //kdDebug()<<k_funcinfo<<" Don't save external docs in doc='"<<url().url()<<"'"<<endl;    
+        d->m_doNotSaveExtDoc = false;
+        return true;
+    }
+        
+    //kdDebug()<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;    
+    KoDocument *doc;
+    KoDocumentChild *ch;
+    QPtrListIterator<KoDocumentChild> it = children();
+    for (; (ch = it.current()); ++it )
+    {
+        if ( !ch->isDeleted() )
+        {
+            doc = ch->document();
+            if ( doc->isStoredExtern() && doc->isModified() )
+            {
+                kdDebug()<<k_funcinfo<<" save external doc='"<<url().url()<<"'"<<endl;
+                doc->setDoNotSaveExtDoc(); // Only save doc + it's internal children
+                if ( !doc->save() ) 
+                    return false; // error
+            }
+            //kdDebug()<<k_funcinfo<<" not modified doc='"<<url().url()<<"'"<<endl;
+            // save possible external docs inside doc 
+            if ( !doc->saveExternalChildren() )
+                return false;
+        }
+    }
     return true;
 }
 
@@ -689,7 +760,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         return false;
     }
 
-    // Save childen first since they might get a new url
+    // Save internal children first since they might get a new url
     if ( !saveChildren( store ) )
     {
         if ( d->lastErrorMessage.isEmpty() )
@@ -732,8 +803,13 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     }
 
     bool ret = completeSaving( store );
-    kdDebug(30003) << "Saving done" << endl;
+    kdDebug(30003) << "Saving done of url: " << url().url() << endl;
     delete store;
+    
+    if ( !saveExternalChildren() )
+    {        
+        return false;
+    }
     return ret;
 }
 
@@ -1298,12 +1374,13 @@ bool KoDocument::isStoredExtern()
 
 void KoDocument::setModified( bool mod )
 {
+    //kdDebug()<<k_funcinfo<<" url:" << m_url.path() << endl;
+    //kdDebug()<<k_funcinfo<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified()<<endl;
+    
     d->modifiedAfterAutosave=mod;
-
-    if ( mod == isModified() )
+    if ( mod == KParts::ReadWritePart::isModified() )
         return;
-
-    kdDebug(30003) << "KoDocument::setModified( " << (mod ? "true" : "false") << ")" << endl;
+    
     KParts::ReadWritePart::setModified( mod );
 
     if ( mod )
@@ -1313,8 +1390,89 @@ void KoDocument::setModified( bool mod )
     setTitleModified();
 }
 
+void KoDocument::setDoNotSaveExtDoc( bool on )
+{ 
+    d->m_doNotSaveExtDoc = on; 
+}
+
+int KoDocument::queryCloseDia()
+{
+    //kdDebug()<<k_funcinfo<<endl;
+
+    QString name;
+    if ( documentInfo() )
+    {
+        name = documentInfo()->title();
+    }
+    if ( name.isEmpty() )
+        name = url().fileName();
+
+    if ( name.isEmpty() )
+        name = i18n( "Untitled" );
+    
+    int res = KMessageBox::warningYesNoCancel( 0L,
+                    i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name));
+
+    switch(res)
+    {
+        case KMessageBox::Yes :
+            setDoNotSaveExtDoc(); // Let save() only save myself and my internal docs
+            save(); // NOTE: External files always in native format. ###TODO: Handle non-native format
+            setModified( false ); // Now when queryClose() is called by closeEvent it won't do anything.
+            break;
+        case KMessageBox::No :
+            removeAutoSaveFiles();
+            setModified( false ); // Now when queryClose() is called by closeEvent it won't do anything.
+            break;
+        default : // case KMessageBox::Cancel :
+            return res; // cancels the rest of the files
+    }
+    return res;
+}
+
+int KoDocument::queryCloseExternalChildren()
+{
+    //kdDebug()<<k_funcinfo<<" checking for children in: "<<url().url()<<endl;
+    setDoNotSaveExtDoc(false);
+    QPtrListIterator<KoDocumentChild> it( children() );
+    for (; it.current(); ++it )
+    {
+        if ( !it.current()->isDeleted() )
+        {
+            KoDocument *doc = it.current()->document();
+            if ( doc )
+            {
+                if ( it.current()->isStoredExtern() ) //###TODO: Handle non-native mimetype docs 
+                {
+                    if ( doc->isModified() )
+                    {   
+                        kdDebug()<<k_funcinfo<<" found modified child: "<<doc->url().url()<<endl;
+                        if ( doc->queryCloseDia() == KMessageBox::Cancel )
+                            return  KMessageBox::Cancel;
+                    }
+                }
+                if ( doc->queryCloseExternalChildren() == KMessageBox::Cancel )
+                    return KMessageBox::Cancel;
+            }
+        }
+    }
+    return KMessageBox::Ok;
+}
+
 void KoDocument::setTitleModified()
 {
+    //kdDebug()<<k_funcinfo<<" this doc: "<<url().url()<<" shells="<<shellCount()<<endl;
+    if ( !isStoredExtern() )  //###TODO: Handle caption when external embedded doc is selected/modified
+    {
+        KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
+        if ( doc )
+        {
+            //kdDebug()<<k_funcinfo<<" Embedded in: "<<doc->url().url()<<endl;
+            doc->setTitleModified();
+        }
+        return;
+    }
+        
     // Update caption in all related windows
     QPtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )

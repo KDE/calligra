@@ -810,7 +810,6 @@ protected:
     void fixZOrders();
     QString checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet*, int pageNum ) const;
     KoView* createViewInstance( QWidget* parent, const char* name );
-    virtual bool saveChildren( KoStore *_store );
 
     virtual bool completeLoading( KoStore* _store );
     virtual bool completeSaving( KoStore *_store );

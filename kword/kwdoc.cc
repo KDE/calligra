@@ -2543,32 +2543,6 @@ bool KWDocument::completeSaving( KoStore *_store )
     return TRUE;
 }
 
-bool KWDocument::saveChildren( KoStore *_store )
-{
-    int i = 0;
-    //kdDebug(32001) << "KWDocument::saveChildren: " << children().count() << " children" << endl;
-
-    QPtrListIterator<KoDocumentChild> it( children() );
-    for( ; it.current(); ++it ) {
-        KWChild* curr = static_cast<KWChild*>(it.current());
-        KoDocument* childDoc = it.current()->document();
-        if (childDoc && !curr->isDeleted())
-        {
-            kdDebug(32001) << "KWDocument::saveChildren url:" << childDoc->url().url()
-                      << " extern:" << childDoc->isStoredExtern() << endl;
-            if ( childDoc->isStoredExtern() ) {
-                if ( !childDoc->save() )
-                    return FALSE;
-            }
-            else
-                if ( !childDoc->saveToStore( _store, QString::number( i++ ) ) )
-                    return FALSE;
-        } else
-            kdWarning() << "No document to save for child document " << it.current()->url().url() << endl;
-    }
-    return true;
-}
-
 void KWDocument::addView( KoView *_view )
 {
     m_lstViews.append( (KWView*)_view );

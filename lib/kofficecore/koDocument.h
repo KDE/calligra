@@ -493,6 +493,27 @@ public:
 
     bool backupFile()const;
 
+    /**
+     * Returns true if this document or any of its internal child documents are modified.
+     */
+    bool isModified();
+    
+    int queryCloseExternalChildren();
+    int queryCloseDia();
+
+    /**
+     * Set when we do not want to save external children when saving our 'main' doc.
+     * This makes it possible to save 'main' doc + all its internal children first, then
+     * go on to save external children. Typically used by query close.
+     * Use:
+     *      doc->setDoNotSaveExtDoc();
+     *      doc->save();    // saves doc and its internal children, 
+     *                            //also calls saveExternalChildren() which sets setDoNotSaveExtDoc(false)
+     *      doc->saveExternalChildren();
+     *
+     */
+    void setDoNotSaveExtDoc( bool on = true );
+    
     void setBackupPath( const QString & );
 
     QString backupPath()const;
@@ -558,28 +579,9 @@ protected:
     virtual bool loadChildren( KoStore* );
 
     /**
-     *  Saves all children. If your document supports embedding, then you have
-     *  to overload this function. An implementation may look like this:
-     *  <PRE>
-     *  int i = 0;
-     *
-     *  QPtrListIterator<KoDocumentChild> it( children() );
-     *  for( ; it.current(); ++it ) {
-     *    KoDocument* childDoc = static_cast<KoDocumentChild*>(it.current())->document();
-     *    if ( childDoc )
-     *      if ( childDoc->isStoredExtern() )
-     *      {
-     *          if ( !childDoc->save() )
-     *              return FALSE;
-     *      }
-     *      else {
-     *          QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-     *          if ( !childDoc->saveToStore( _store, internURL ) )
-     *              return FALSE;
-     *      }
-     *  }
-     *  return true;
-     *  </PRE>
+     *  Saves all internal children (only!).
+     *  @see saveExternalChildren if you have external children.
+     *  Returns true on success.
      */
     virtual bool saveChildren( KoStore* store );
 
@@ -631,6 +633,13 @@ protected:
 
     KoPageLayout m_pageLayout;
 
+    /**
+     *  Saves all externally stored children. 
+     *  Returns true on success.
+     * @see #saveChildren for internal children
+     */
+    bool saveExternalChildren(); // BCI: make this virtual
+            
 private slots:
     void slotChildChanged( KoChild *c );
     void slotChildDestroyed();
