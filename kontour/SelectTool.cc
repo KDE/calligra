@@ -54,7 +54,7 @@ Tool(aId, tc)
   KAction *mT1 = new KAction(i18n("Select"), "selecttool", 0, actionCollection());
   select->insert(mT1);
 }
-  
+
 void SelectTool::activate()
 {
   ctype = C_Arrow;
@@ -130,7 +130,7 @@ void SelectTool::processEvent(QEvent *e)
   KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
   GPage *page = toolController()->view()->activeDocument()->activePage();
   Canvas *canvas = toolController()->view()->canvas();
-  
+
   if(!doc->isReadWrite())
     return;
   if(e->type() == QEvent::MouseButtonPress)
@@ -633,7 +633,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
   }
   else
   {
-    QListIterator<GObject> it(page->getSelection());
+    QPtrListIterator<GObject> it(page->getSelection());
     QWMatrix m;
     m.translate(dx, dy);
     for(; it.current(); ++it)
@@ -644,7 +644,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
     }
     page->updateSelection();
   }
-  
+
   MeasurementUnit unit = toolController()->view()->unit();
   QString u = unitToString(unit);
   double xval, yval;
@@ -755,7 +755,7 @@ void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permane
 
   if(permanent)
   {
-    QListIterator<GObject> it(page->getSelection());
+    QPtrListIterator<GObject> it(page->getSelection());
     for(; it.current(); ++it)
       (*it)->setWorkInProgress(false);
     KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
@@ -770,7 +770,7 @@ void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permane
     m2.shear (sx, sy);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+    for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
 
@@ -804,7 +804,7 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
 
   if(permanent)
   {
-    QListIterator<GObject> it(page->getSelection());
+    QPtrListIterator<GObject> it(page->getSelection());
     for(; it.current(); ++it)
     (*it)->setWorkInProgress(false);
     KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
@@ -818,7 +818,7 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+    for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m1);

@@ -61,7 +61,7 @@ protected:
     virtual void mousePressEvent (QMouseEvent *event);
 
 private:
-    QList<QPixmap> brushPixmaps;
+    QPtrList<QPixmap> brushPixmaps;
     int currentBrush;
 };
 
