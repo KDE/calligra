@@ -404,11 +404,12 @@ void KWFrameBackGroundColorCommand::unexecute()
         doc->repaintAllViews();
 }
 
-KWFrameStyleCommand::KWFrameStyleCommand( const QString &name, KWFrame *_frame, KWFrameStyle *_fs ) :
+KWFrameStyleCommand::KWFrameStyleCommand( const QString &name, KWFrame *_frame, KWFrameStyle *_fs, bool _repaintViews ) :
     KNamedCommand( name )
 {
     m_frame = _frame;
     m_fs = _fs;
+    repaintViews = _repaintViews;
 
     m_oldValues = new KWFrameStyle( "Old", m_frame );
 }
@@ -421,7 +422,8 @@ void KWFrameStyleCommand::execute()
     m_frame->setTopBorder( m_fs->topBorder() );
     m_frame->setBottomBorder( m_fs->bottomBorder() );
 
-    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    if ( repaintViews )
+        m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
 void KWFrameStyleCommand::unexecute()
@@ -432,17 +434,19 @@ void KWFrameStyleCommand::unexecute()
     m_frame->setTopBorder( m_oldValues->topBorder() );
     m_frame->setBottomBorder( m_oldValues->bottomBorder() );
 
-    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    if ( repaintViews )
+        m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
-KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts ) :
+KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts, bool _repaintViews ) :
     KNamedCommand( name )
 {
     m_frame = _frame;
     m_ts = _ts;
+    repaintViews = _repaintViews;
 
     // No need for i18n because it will never be displayed.
-    m_fsc = new KWFrameStyleCommand( "Apply framestyle to frame", m_frame, m_ts->pFrameStyle() );
+    m_fsc = new KWFrameStyleCommand( "Apply framestyle to frame", m_frame, m_ts->pFrameStyle(), repaintViews );
     m_sc = 0L;
 }
 
@@ -465,7 +469,8 @@ void KWTableStyleCommand::execute()
         textObject->textDocument()->removeSelection( KoTextDocument::Temp );
     }
 
-    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    if ( repaintViews )
+        m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
 void KWTableStyleCommand::unexecute()
@@ -475,7 +480,8 @@ void KWTableStyleCommand::unexecute()
     if (m_sc)
         m_sc->unexecute();
 
-    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    if ( repaintViews )
+        m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
 KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFrameSet *_table, KWTableTemplate *_tt ) :
@@ -523,7 +529,7 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
             if ( (i>0) && (j>0) && (i<(rows-1)) && (j<(cols-1)) ) // BODY
                 cell = m_tt->pBodyCell();
 
-            m_tableCommands->addCommand( new KWTableStyleCommand( "Apply tablestyle to cell", m_table->getCell(i,j)->frame(0),cell ) );
+            m_tableCommands->addCommand( new KWTableStyleCommand( "Apply tablestyle to cell", m_table->getCell(i,j)->frame(0),cell, false ) );
         }
     }
 }
@@ -537,11 +543,13 @@ KWTableTemplateCommand::~KWTableTemplateCommand()
 void KWTableTemplateCommand::execute()
 {
     m_tableCommands->execute();
+    m_table->kWordDocument()->repaintAllViews();
 }
 
 void KWTableTemplateCommand::unexecute()
 {
     m_tableCommands->unexecute();
+    m_table->kWordDocument()->repaintAllViews();
 }
 
 

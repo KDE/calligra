@@ -139,7 +139,7 @@ struct FrameResizeStruct {
 class KWFrameStyleCommand : public KNamedCommand
 {
 public:
-    KWFrameStyleCommand( const QString &name, KWFrame *_frame, KWFrameStyle *_fs );
+    KWFrameStyleCommand( const QString &name, KWFrame *_frame, KWFrameStyle *_fs, bool _repaintViews = true );
     ~ KWFrameStyleCommand() { if (m_oldValues) delete m_oldValues; }
 
     void execute();
@@ -149,6 +149,7 @@ protected:
     KWFrame *m_frame ;
     KWFrameStyle * m_fs;
     KWFrameStyle * m_oldValues;
+    bool repaintViews;
 };
 
 
@@ -158,7 +159,7 @@ protected:
 class KWTableStyleCommand : public KNamedCommand
 {
 public:
-    KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts );
+    KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts, bool _repaintViews = true );
     ~ KWTableStyleCommand();
 
     void execute();
@@ -169,6 +170,7 @@ protected:
     KWTableStyle * m_ts;
     KWFrameStyleCommand * m_fsc;
     KCommand * m_sc;
+    bool repaintViews;
 };
 
 /**
