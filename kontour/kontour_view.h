@@ -114,6 +114,8 @@ private slots:
   void changeStroked(bool stroked);
   void changeLinewidth(unsigned int lwidth);
   void changeBrushStyle(Qt::BrushStyle);
+  void changeJoinStyle(Qt::PenJoinStyle);
+  void changeCapStyle(Qt::PenCapStyle);
   void changeSelection();
 
   void slotZoomFactorChanged();

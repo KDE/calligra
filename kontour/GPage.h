@@ -139,11 +139,13 @@ public:
    * Style management
    */
   void changePaintStyles(const KoColor &c);
-  void changeOutlineStyles(const KoColor &c);
-  void changeStroked(bool stroked);
   void changeFilled(bool filled);
-  void changeLinewidth(unsigned int lwidth);
-  void changeBrushStyle(Qt::BrushStyle);
+  void changeOutlineStyles(const KoColor &c);
+  void changeOutlineStyles(Qt::BrushStyle);
+  void changeOutlineStyles(unsigned int lwidth);
+  void changeOutlineStyles(Qt::PenJoinStyle style);
+  void changeOutlineStyles(Qt::PenCapStyle style);
+  void changeStroked(bool stroked);
 
 public slots:
 //  void objectChanged ();

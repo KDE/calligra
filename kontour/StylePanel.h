@@ -24,11 +24,13 @@
 #define __StylePanel_h__
 
 #include <qtabwidget.h>
+#include <qpen.h>
 
 class GStyle;
 class KoColor;
 class QCheckBox;
 class QSpinBox;
+class QButtonGroup;
 class PaintPanel : public QTabWidget
 {
   Q_OBJECT
@@ -55,11 +57,15 @@ public:
 
 public slots:
   void slotStyleChanged(const GStyle &);
+  void slotJoinPressed(int);
+  void slotCapPressed(int);
 
 signals:
   void changeOutlineColor(const KoColor &);
   void changeStroked(bool);
   void changeLinewidth(unsigned int);
+  void changeJoinStyle(Qt::PenJoinStyle);
+  void changeCapStyle(Qt::PenCapStyle);
 
 private slots:
   void slotChangeLinewidth(int lwidth);
@@ -67,6 +73,8 @@ private slots:
 private:
   QCheckBox *mStroked;
   QSpinBox *mlwidthBox;
+  QButtonGroup *mJoinBox;
+  QButtonGroup *mCapBox;
 };
 
 #endif

@@ -152,6 +152,8 @@ public:
   void changeFilled(bool filled);
   void changeOutlineWidth(unsigned int lwidth);
   void changeBrushStyle(Qt::BrushStyle bstyle);
+  void changeJoinStyle(Qt::PenJoinStyle style);
+  void changeCapStyle(Qt::PenCapStyle style);
 
   /**
    * Control points.
@@ -244,7 +246,10 @@ protected:
   void updateRegion(bool recalcBBox = true);
   void setPen(QPainter *p);
   void setBrush(QPainter *p);
-  
+
+  /* Adjust the bounding box by taking into account linewidth */
+  void adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft);
+
 protected:
   unsigned int rcount;            // the reference counter
   unsigned int mId;               // object ID

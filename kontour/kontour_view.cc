@@ -345,6 +345,8 @@ void KontourView::setupPanels()
   connect(mOutlinePanel, SIGNAL(changeStroked(bool)), this, SLOT(changeStroked(bool)));
   connect(mOutlinePanel, SIGNAL(changeOutlineColor(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
   connect(mOutlinePanel, SIGNAL(changeLinewidth(unsigned int)), this, SLOT(changeLinewidth(unsigned int)));
+  connect(mOutlinePanel, SIGNAL(changeJoinStyle(Qt::PenJoinStyle)), this, SLOT(changeJoinStyle(Qt::PenJoinStyle)));
+  connect(mOutlinePanel, SIGNAL(changeCapStyle(Qt::PenCapStyle)), this, SLOT(changeCapStyle(Qt::PenCapStyle)));
   connect(this, SIGNAL(changedStyle(const GStyle &)), mOutlinePanel, SLOT(slotStyleChanged(const GStyle &)));
   win2->setWidget(mOutlinePanel);
   win2->setResizeEnabled(false);
@@ -596,7 +598,7 @@ void KontourView::changeLinewidth(unsigned int lwidth)
   if(activeDocument() && activeDocument()->activePage() &&
       !activeDocument()->activePage()->selectionIsEmpty())
   {
-    activeDocument()->activePage()->changeLinewidth(lwidth);
+    activeDocument()->activePage()->changeOutlineStyles(lwidth);
   }
 }
 
@@ -605,7 +607,25 @@ void KontourView::changeBrushStyle(Qt::BrushStyle bstyle)
   if(activeDocument() && activeDocument()->activePage() &&
       !activeDocument()->activePage()->selectionIsEmpty())
   {
-    activeDocument()->activePage()->changeBrushStyle(bstyle);
+    activeDocument()->activePage()->changeOutlineStyles(bstyle);
+  }
+}
+
+void KontourView::changeJoinStyle(Qt::PenJoinStyle style)
+{
+  if(activeDocument() && activeDocument()->activePage() &&
+      !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changeOutlineStyles(style);
+  }
+}
+
+void KontourView::changeCapStyle(Qt::PenCapStyle style)
+{
+  if(activeDocument() && activeDocument()->activePage() &&
+      !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changeOutlineStyles(style);
   }
 }
 
@@ -635,8 +655,7 @@ void KontourView::changeSelection()
     m_forwardOne->setEnabled(true);
     m_backOne->setEnabled(true);
     m_duplicate->setEnabled(true);
-    // set selection style here
-    //mPaintPanel->slotChangeColor(page->getSelection().first()->style().fillColor());
+
 	emit changedStyle(page->getSelection().first()->style());
   }
   if(page->objectCount() == page->selectionCount())

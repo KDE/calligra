@@ -319,4 +319,26 @@ void GObject::changeBrushStyle(Qt::BrushStyle bstyle)
   st.brushStyle(bstyle);
 }
 
+void GObject::changeJoinStyle(Qt::PenJoinStyle style)
+{
+  st.joinStyle(style);
+}
+
+void GObject::changeCapStyle(Qt::PenCapStyle style)
+{
+  st.capStyle(style);
+}
+
+void GObject::adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft)
+{
+  tleft.setX(tleft.x()   - st.outlineWidth() / 2);
+  tleft.setY(tleft.y()   - st.outlineWidth() / 2);
+  tright.setX(tright.x() + st.outlineWidth() / 2);
+  tright.setY(tright.y() - st.outlineWidth() / 2);
+  bright.setX(bright.x() + st.outlineWidth() / 2);
+  bright.setY(bright.y() + st.outlineWidth() / 2);
+  bleft.setX(bleft.x()   - st.outlineWidth() / 2);
+  bleft.setY(bleft.y()   + st.outlineWidth() / 2);
+}
+
 #include "GObject.moc"
