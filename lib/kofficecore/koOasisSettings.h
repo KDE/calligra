@@ -74,19 +74,36 @@ public:
     bool selectItemSet( const QString &itemSetName );
 
     /**
-     * Select the config-item-map named @p mapItemName, inside the item-set previously selected by selectItemSet.
-     * @return false if no such item map was found
+     * Select the config-item-map-indexed named @p mapItemName, (for instance
+     * inside the item-set previously selected by selectItemSet).
+     *
+     * An indexed map is an array (or sequence), i.e. items are supposed to
+     * be retrieved by index. TODO: some API for that.
+     * @return false if no such map was found
      */
     bool selectItemMap( const QString &itemMapName );
 
+    /**
+     * Select the config-item-map-named named @p mapItemName, inside the item-set
+     * previously selected by selectItemSet.
+     *
+     * A named map is a map where items are retrieved by entry name, @see selectItemMapEntry
+     * @return false if no such map was found
+     */
+    bool selectItemMapNamed( const QString &itemMapName );
+
+    /**
+     * Select an entry in a named map
+     */
+    bool selectItemMapEntry( const QString& entryName );
+
+    // TODO: remove last argument, use selectItemMapEntry instead
     int parseConfigItemInt( const QString & configName, const QString &itemNameEntry = QString::null ) const;
     double parseConfigItemDouble( const QString & configName, const QString &itemNameEntry = QString::null ) const;
     QString parseConfigItemString( const QString & configName, const QString &itemNameEntry = QString::null ) const;
     bool parseConfigItemBool( const QString & configName, const QString &itemNameEntry = QString::null ) const;
     short parseConfigItemShort( const QString & configName, const QString &itemNameEntry = QString::null ) const;
     long parseConfigItemLong( const QString & configName, const QString &itemNameEntry = QString::null ) const;
-
-    bool selectItemMapNamed( const QString &itemMapName );
 
 private:
     /// @internal

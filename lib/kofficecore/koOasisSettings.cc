@@ -30,7 +30,7 @@ KoOasisSettings::KoOasisSettings( const QDomDocument &doc )
 bool KoOasisSettings::selectItemSet( const QString &itemSetName )
 {
     QDomElement contents = m_doc.documentElement();
-    QDomNode settingsElement = KoDom::namedItemNS( contents, "settings", KoXmlNS::office ).toElement();
+    QDomElement settingsElement = KoDom::namedItemNS( contents, KoXmlNS::office, "settings" );
     if ( settingsElement.isNull() )
     {
         m_element = QDomElement();
@@ -76,20 +76,12 @@ bool KoOasisSettings::selectItemMapNamed( const QString &itemMapName )
     QDomElement element;
     forEachElement( element, m_element )
     {
-        if ( element.localName() == "config-item-map-entry" &&
-             element.namespaceURI() == KoXmlNS::config )
+        if ( element.localName() == "config-item-map-named" &&
+             element.namespaceURI() == KoXmlNS::config &&
+             element.attributeNS( KoXmlNS::config, "name", QString::null ) == itemMapName )
         {
-            QDomElement viewItem;
-            forEachElement( viewItem, element )
-            {
-                if ( viewItem.localName() == "config-item-map-named" &&
-                     viewItem.namespaceURI() == KoXmlNS::config &&
-                     viewItem.attributeNS( KoXmlNS::config, "name", QString::null ) == itemMapName )
-                {
-                    m_element = viewItem;
-                    return true;
-                }
-            }
+            m_element = element;
+            return true;
         }
     }
     return false;
@@ -97,43 +89,40 @@ bool KoOasisSettings::selectItemMapNamed( const QString &itemMapName )
 
 QString KoOasisSettings::parseConfigItemName( const QDomElement & element, const QString &item ) const
 {
-    QDomElement viewItem;
-    forEachElement( viewItem, element )
+    QDomElement it;
+    forEachElement( it, element )
     {
-        if ( viewItem.localName() == "config-item" &&
-             viewItem.namespaceURI() == KoXmlNS::config &&
-             viewItem.attributeNS( KoXmlNS::config, "name", QString::null ) == item )
+        if ( it.localName() == "config-item" &&
+             it.namespaceURI() == KoXmlNS::config &&
+             it.attributeNS( KoXmlNS::config, "name", QString::null ) == item )
         {
-            return viewItem.text();
+            return it.text();
         }
     }
     return QString::null;
 }
 
-QString KoOasisSettings::parseConfigItem( const QString &item, const QString &itemNameEntry ) const
+bool KoOasisSettings::selectItemMapEntry( const QString& entryName )
 {
-    if ( m_element.isNull() )
-        return QString::null;
     QDomElement element;
     forEachElement( element, m_element )
     {
         if ( element.localName() == "config-item-map-entry" &&
-             element.namespaceURI() == KoXmlNS::config )
+             element.namespaceURI() == KoXmlNS::config &&
+             element.attributeNS( KoXmlNS::config, "name", QString::null ) == entryName )
         {
-            if ( itemNameEntry.isEmpty() )
-            {
-                return parseConfigItemName( element, item );
-            }
-            else
-            {
-                if ( element.attributeNS( KoXmlNS::config, "name", QString::null ) == itemNameEntry )
-                {
-                    return parseConfigItemName( element, item );
-                }
-            }
+            m_element = element;
+            return true;
         }
     }
-    return QString::null;
+    return false;
+}
+
+QString KoOasisSettings::parseConfigItem( const QString &item, const QString & /*TODO remove*/ ) const
+{
+    if ( m_element.isNull() )
+        return QString::null;
+    return parseConfigItemName( m_element, item );
 }
 
 
