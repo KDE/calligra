@@ -65,6 +65,7 @@ void
 VSelectTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
+	view()->canvasWidget()->setYMirroring( true );
 	painter->setRasterOp( Qt::NotROP );
 
 	//KoPoint current = view()->canvasWidget()->toContents( QPoint( m_current.x(), m_current.y() ) );
