@@ -3580,7 +3580,7 @@ public:
         else if( string == "LegendBottomRightRight" )
             return LegendBottomRightRight;
         else // default, should not happen
-            return LegendLeft;
+            return LegendRight;
     }
 
 
