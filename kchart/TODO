@@ -101,7 +101,7 @@ Item								   Prio Status
   + Smaller column widths?						DONE
   + Transfer the Tooltips and WhatsThis from the old editor.	      1	DONE
   + Better keyboard shortcuts?					      1 ----
-    - Moving within the data table				      1 ----
+    - Moving within the data table				      1 DONE
   + Remove the spinboxes from the buddy list.			      1 ----
 
 * Config dialog

@@ -86,6 +86,66 @@ bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
 }
 
 
+// ================================================================
+//                    Class kchartDataTable
+
+
+// Used for the keyboard navigation
+//
+kchartDataTable::kchartDataTable(QWidget *parent)
+    : QTable(parent)
+{
+}
+
+
+kchartDataTable::~kchartDataTable()
+{
+}
+
+bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
+{
+    if (ev->type() == QEvent::KeyPress && strcmp(obj->name(), "qt_tableeditor")==0 ) {
+        QKeyEvent *e = (QKeyEvent *)ev;
+
+        switch ( e->key() ) {
+            case Qt::Key_Up:
+            {
+                if ( currentRow() > 0 ) {
+                    setCurrentCell( currentRow()-1, currentColumn() );
+                    editCell(currentRow(), currentColumn() );
+                    return true;
+                }
+                break;
+            }
+            case Qt::Key_Down: {
+                if ( currentRow() < numRows()-1 ) {
+                    setCurrentCell( currentRow()+1, currentColumn() );
+                    editCell(currentRow(), currentColumn() );
+                    return true;
+                }
+                break;
+            }
+            case Qt::Key_Right: {
+                if ( currentColumn() < numCols()-1 ) {
+                    setCurrentCell( currentRow(), currentColumn()+1 );
+                    editCell(currentRow(), currentColumn() );
+                    return true;
+                }
+                break;
+            }
+            case Qt::Key_Left:
+            {
+                if ( currentColumn() > 0 ) {
+                    setCurrentCell( currentRow(), currentColumn()-1 );
+                    editCell(currentRow(), currentColumn() );
+                    return true;
+                }
+                break;
+            }
+        }
+    }
+    return QTable::eventFilter( obj, ev );
+}
 
 // ================================================================
 //                    Class kchartDataEditor
@@ -104,7 +164,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     setMainWidget(page);
 
     // Create the main table.
-    m_table = new QTable(page);
+    m_table = new kchartDataTable(page);
     m_table->setSelectionMode(QTable::NoSelection);
 	m_table->setFocus();
 

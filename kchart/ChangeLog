@@ -1,5 +1,6 @@
 2005-04-05  Fredrik Edemar  <f_edemar@linux.se>
     * Use a better layout in KChartParameterPieConfigPage and KChartParameterPolarConfigPage.
+    * Keyboard navigation when editing cells in the data editor.
 
 2005-04-04  Fredrik Edemar  <f_edemar@linux.se>
     * Add the "Create Template From Document" feature to the File menu.

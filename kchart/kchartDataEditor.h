@@ -63,7 +63,21 @@ private:
     bool  m_ignore;
 };
 
+// ----------------------------------------------------------------
 
+
+// The reason for having a special Table class is to implement keyboard navigation in editing mode.
+class kchartDataTable : public QTable
+{
+    Q_OBJECT
+public:
+    kchartDataTable(QWidget *);
+    ~kchartDataTable();
+
+protected:
+    // handles keyboard navigation
+    bool eventFilter( QObject *obj, QEvent *ev );
+};
 // ----------------------------------------------------------------
 
 
@@ -103,7 +117,7 @@ private slots:
 
 private:
     // Widgets in the editor
-    QTable             *m_table;
+    kchartDataTable    *m_table;
     QLabel             *m_rowsLA;
     kchartDataSpinBox  *m_rowsSB;
     QLabel             *m_colsLA;
