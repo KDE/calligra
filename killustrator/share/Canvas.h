@@ -46,6 +46,7 @@ public:
   ~Canvas ();
 
   QWidget *viewport(void)const { return scrollview->viewport();};
+  QScrollView *scrollView(void)const { return scrollview;};
 
   void setZoomFactor (float factor);
   float getZoomFactor () const;
