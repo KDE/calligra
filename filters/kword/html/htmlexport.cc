@@ -380,6 +380,14 @@ class FormatData
         }
 };
 
+class ValueListFormatData : public QValueList<FormatData>
+{
+public:
+    ValueListFormatData (void) { }
+    virtual ~ValueListFormatData (void) { }
+};
+
+
 // FORMAT's subtags
 
 static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
@@ -493,7 +501,7 @@ static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&
 
 static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
 {
-    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+    ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
     int formatId (-1);
     FormatData formatData (-1,-1);
@@ -546,7 +554,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassEx
 
 static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
-    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+    ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
     AllowNoAttributes (myNode);
 
@@ -590,7 +598,7 @@ class ClassExportFilterBase
         virtual bool isXML(void) const {return false;}
         virtual QString getDocType(void) const = 0;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText) = 0;
+        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void) {return QString::null;} //Default is no style
     protected:
         QDomDocument qDomDocumentIn;
@@ -606,9 +614,9 @@ QString ClassExportFilterBase::getHtmlOpeningTagExtraAttributes(void) const
 	return QString::null;
 }
 
-static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+static void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
 {
-    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    ValueListFormatData::Iterator  paraFormatDataIt;
     int lastPos=0; // last position
 
     paraFormatDataIt = paraFormatDataList.begin ();
@@ -633,347 +641,12 @@ static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &p
     }
 }
 
-// ProcessParagraphData () mangles the pure text through the
-// formatting information stored in the FormatData list and prints it
-// out to the export file.
-
-static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
-                                                 ClassExportFilterBase* exportFilter)
-{
-    if (! paraText.isEmpty() )
-    {
-        CreateMissingFormatData(paraText,paraFormatDataList);
-
-        QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
-
-        QString partialText;
-
-        for ( paraFormatDataIt = paraFormatDataList.begin ();
-              paraFormatDataIt != paraFormatDataList.end ();
-              paraFormatDataIt++ )
-        {
-            //Retrieve text
-            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-
-            if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only tha layout
-                // So it is only the text
-                if (outputText==" ")
-                {//Just a space as text. Therefore we must use a non-breaking space.
-                    outputText += "&nbsp;";
-                }
-                else
-                {
-                    //Code all possible predefined HTML entities
-                    outputText += exportFilter->escapeText(partialText);
-                }
-                continue; // And back to the loop
-            }
-
-            // TODO: first and last characters of partialText should not be a space (white space problems!)
-            // TODO: replace multiples spaces in non-breaking spaces!
-            // Opening elements
-
-            // <font> is always set
-            outputText+="<font face=\"";
-            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
-            outputText+="\"";
-            // Give the font size relatively (be kind with people with impered vision)
-            // TODO: option to give absolute font sizes
-            int size=(*paraFormatDataIt).fontSize;
-            // 12pt is considered the normal size // TODO: relative to layout!
-            if (size>0)
-            {
-                size /= 4;
-                size -= 3;
-                //if (size<-4) size=-4; // Cannot be triggered
-                if (size>4) size=4;
-                if (size)
-                {
-                    outputText+=" size=\""; // in XML numbers must be quoted!
-                    if (size>0)
-                    {
-                        outputText+="+";
-                    }
-                    outputText+=QString::number(size,10);
-                    outputText+="\"";
-                }
-            }
-            // Give colour
-            outputText+=" color=\"#";
-            //We must have two hex digits for each colour channel!
-            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
-            outputText+="\">";
-            // end of <font> tag
-            if ( (*paraFormatDataIt).weight >= 75 )
-            {
-                outputText+="<b>";
-            }
-            if ( (*paraFormatDataIt).italic )
-            {
-                outputText+="<i>";
-            }
-            if ( (*paraFormatDataIt).underline )
-            {
-                outputText+="<u>";
-            }
-            if ( (*paraFormatDataIt).strikeout )
-            {
-                outputText+="<s>";
-            }
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="<sub>"; //Subscript
-            }
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="<sup>"; //Superscript
-            }
-
-            // The text
-            if (outputText==" ")
-            {//Just a space as text. Therefore we must use a non-breaking space.
-                outputText += "&nbsp;";
-            }
-            else
-            {
-                //Code all possible predefined HTML entities
-                outputText += exportFilter->escapeText(partialText);
-            }
-            // Closing elements
-
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="</sup>"; //Superscript
-            }
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="</sub>"; //Subscript
-            }
-            if ( (*paraFormatDataIt).strikeout )
-            {
-                outputText+="</s>";
-            }
-            if ( (*paraFormatDataIt).underline )
-            {
-                outputText+="</u>";
-            }
-            if ( (*paraFormatDataIt).italic )
-            {
-                outputText+="</i>";
-            }
-            if ( (*paraFormatDataIt).weight >= 75 )
-            {
-                outputText+="</b>";
-            }
-            // <font> is always set, so close it unconditionaly
-            outputText+="</font>";
-       }
-
-    }
-}
-
-static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
-                                                 ClassExportFilterBase* exportFilter)
-{
-    if (! paraText.isEmpty() )
-    {
-
-        CreateMissingFormatData(paraText,paraFormatDataList);
-
-        QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
-
-        QString partialText;
-
-        for ( paraFormatDataIt = paraFormatDataList.begin ();
-              paraFormatDataIt != paraFormatDataList.end ();
-              paraFormatDataIt++ )
-        {
-            //Retrieve text
-            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-
-            if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only tha layout
-                // So it is only the text
-                if (outputText==" ")
-                {//Just a space as text. Therefore we must use a non-breaking space.
-                    outputText += "&nbsp;";
-                }
-                else
-                {
-                    //Code all possible predefined HTML entities
-                    outputText += exportFilter->escapeText(partialText);
-                }
-                continue; // And back to the loop
-            }
-
-            // TODO: first and last characters of partialText should not be a space (white space problems!)
-            // TODO: replace multiples spaces in non-breaking spaces!
-            // Opening elements
-            outputText+="<span style=\"";
-
-            // Font name
-            outputText+="font-family: ";
-            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
-            outputText+="; ";
-
-            // Font style
-            outputText+="font-style: ";
-            if ( (*paraFormatDataIt).italic )
-            {
-                outputText+="italic";
-            }
-            else
-            {
-                outputText+="normal";
-            }
-            outputText+="; ";
-
-            outputText+="font-weight: ";
-            if ( (*paraFormatDataIt).weight >= 75 )
-            {
-                outputText+="bold";
-            }
-            else
-            {
-                outputText+="normal";
-            }
-            outputText+="; ";
-
-            // Give the font size relatively (be kind with people with impered vision)
-            // TODO: option to give absolute font sizes
-            int size=(*paraFormatDataIt).fontSize;
-            // 12pt is considered the normal size // TODO: relative to layout!
-            if (size>0)
-            {
-                // TODO: decide if we use absolute or relative font sizes
-#if 1
-                //For now we use absolute font sizes
-                outputText+="font-size: ";
-                outputText+=QString::number(size,10);
-                outputText+="pt; ";
-#else
-                // Algorithm is not good enough!
-                outputText+="font-size: ";
-                size /= 4;
-                size -= 3;
-                if (!size)
-                {
-                    outputText+="medium";
-                }
-                else if (1==size)
-                {
-                    outputText+="large";
-                }
-                else if (-1==size)
-                {
-                    outputText+="small";
-                }
-                else if (2==size)
-                {
-                    outputText+="x-large";
-                }
-                else if (-2==size)
-                {
-                    outputText+="x-small";
-                }
-                else if (size>=3)
-                {
-                    outputText+="xx-large";
-                }
-                else if (size<=-3)
-                {
-                    outputText+="xx-small";
-                }
-                else
-                {// Should not happen!
-                    outputText+="medium";
-                }
-                outputText+="; ";
-#endif
-            }
-
-            // Give colour
-            outputText+="color: #";
-            //We must have two hex digits for each colour channel!
-            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
-            outputText+="; ";
-
-            outputText+="text-decoration: ";
-            if ( (*paraFormatDataIt).underline )
-            {
-                outputText+="underline";
-            }
-			else if ( (*paraFormatDataIt).strikeout )
-			{
-                outputText+="line-through";
-			}
-            else
-            {
-                outputText+="none";
-            }
-            //outputText+="; ";
-            outputText+="\">"; // close span opening tag
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="<sub>"; //Subscript
-            }
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="<sup>"; //Superscript
-            }
-
-            // The text
-            if (outputText==" ")
-            {//Just a space as text. Therefore we must use a non-breaking space.
-                outputText += "&nbsp;";
-            }
-            else
-            {
-                //Code all possible predefined HTML entities
-                outputText += exportFilter->escapeText(partialText);
-            }
-            // Closing elements
-
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="</sup>"; //Superscript
-            }
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="</sub>"; //Subscript
-            }
-            outputText+="</span>";
-       }
-
-    }
-}
-
-static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText, ClassExportFilterBase* exportFilter)
-{
-    exportFilter->ProcessParagraphData(paraText,paraFormatDataList,outputText);
-}
-
 static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
 {
     AllowNoAttributes (myNode);
 
     QString paraText;
-    QValueList<FormatData> paraFormatDataList;
+    ValueListFormatData paraFormatDataList;
     QString paraLayout;
     QValueList<TagProcessing> tagProcessingList;
 
@@ -984,7 +657,9 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 
     QString strParaText;
-    ProcessParagraphData ( paraText, paraFormatDataList, strParaText, exportFilter );
+
+    exportFilter->ProcessParagraphData ( paraText, paraFormatDataList, strParaText);
+
     if (strParaText.isEmpty())
     {
         //An empty paragraph is not allowed in HTML, so add a non-breaking space!
@@ -1222,7 +897,7 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
 };
 
 QString ClassExportFilterHtmlTransitional::getDocType(void) const
@@ -1237,9 +912,145 @@ QString ClassExportFilterHtmlTransitional::getBodyOpeningTagExtraAttributes(void
     return " bgcolor=\"#FFFFFF\""; // Leading space is important!
 }
 
-void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
-    ProcessParagraphDataTransitional(paraText,paraFormatDataList,outputText,this);
+    if (! paraText.isEmpty() )
+    {
+        CreateMissingFormatData(paraText,paraFormatDataList);
+
+        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+
+        QString partialText;
+
+        for ( paraFormatDataIt = paraFormatDataList.begin ();
+              paraFormatDataIt != paraFormatDataList.end ();
+              paraFormatDataIt++ )
+        {
+            //Retrieve text
+            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+
+            if ((*paraFormatDataIt).missing)
+            {   //Format is not issued from KWord. Therefore is only tha layout
+                // So it is only the text
+                if (outputText==" ")
+                {//Just a space as text. Therefore we must use a non-breaking space.
+                    outputText += "&nbsp;";
+                }
+                else
+                {
+                    //Code all possible predefined HTML entities
+                    outputText += escapeText(partialText);
+                }
+                continue; // And back to the loop
+            }
+
+            // TODO: first and last characters of partialText should not be a space (white space problems!)
+            // TODO: replace multiple spaces in non-breaking spaces!
+            // Opening elements
+
+            // <font> is always set
+            outputText+="<font face=\"";
+            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
+            outputText+="\"";
+            // Give the font size relatively (be kind with people with impered vision)
+            // TODO: option to give absolute font sizes
+            int size=(*paraFormatDataIt).fontSize;
+            // 12pt is considered the normal size // TODO: relative to layout!
+            if (size>0)
+            {
+                size /= 4;
+                size -= 3;
+                //if (size<-4) size=-4; // Cannot be triggered
+                if (size>4) size=4;
+                if (size)
+                {
+                    outputText+=" size=\""; // in XML numbers must be quoted!
+                    if (size>0)
+                    {
+                        outputText+="+";
+                    }
+                    outputText+=QString::number(size,10);
+                    outputText+="\"";
+                }
+            }
+            // Give colour
+            outputText+=" color=\"#";
+            //We must have two hex digits for each colour channel!
+            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
+            outputText+="\">";
+            // end of <font> tag
+            if ( (*paraFormatDataIt).weight >= 75 )
+            {
+                outputText+="<b>";
+            }
+            if ( (*paraFormatDataIt).italic )
+            {
+                outputText+="<i>";
+            }
+            if ( (*paraFormatDataIt).underline )
+            {
+                outputText+="<u>";
+            }
+            if ( (*paraFormatDataIt).strikeout )
+            {
+                outputText+="<s>";
+            }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sub>"; //Subscript
+            }
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sup>"; //Superscript
+            }
+
+            // The text
+            if (outputText==" ")
+            {//Just a space as text. Therefore we must use a non-breaking space.
+                outputText += "&nbsp;";
+            }
+            else
+            {
+                //Code all possible predefined HTML entities
+                outputText += escapeText(partialText);
+            }
+            // Closing elements
+
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sup>"; //Superscript
+            }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sub>"; //Subscript
+            }
+            if ( (*paraFormatDataIt).strikeout )
+            {
+                outputText+="</s>";
+            }
+            if ( (*paraFormatDataIt).underline )
+            {
+                outputText+="</u>";
+            }
+            if ( (*paraFormatDataIt).italic )
+            {
+                outputText+="</i>";
+            }
+            if ( (*paraFormatDataIt).weight >= 75 )
+            {
+                outputText+="</b>";
+            }
+            // <font> is always set, so close it unconditionaly
+            outputText+="</font>";
+        }
+    }
 }
 
 // ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
@@ -1271,7 +1082,7 @@ class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
 };
 
 QString ClassExportFilterHtmlSpartan::getDocType(void) const
@@ -1285,9 +1096,74 @@ QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) con
     return QString::null;
 }
 
-void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &, QString &outputText)
+void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
-    outputText += escapeText(paraText); //TODO: do the real implementation
+    if (! paraText.isEmpty() )
+    {
+
+        CreateMissingFormatData(paraText,paraFormatDataList);
+
+        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+
+        QString partialText;
+
+        for ( paraFormatDataIt = paraFormatDataList.begin ();
+              paraFormatDataIt != paraFormatDataList.end ();
+              paraFormatDataIt++ )
+        {
+            //Retrieve text
+            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+
+            if ((*paraFormatDataIt).missing)
+            {   //Format is not issued from KWord. Therefore is only tha layout
+                // So it is only the text
+                if (outputText==" ")
+                {//Just a space as text. Therefore we must use a non-breaking space.
+                    outputText += "&nbsp;";
+                }
+                else
+                {
+                    //Code all possible predefined HTML entities
+                    outputText += escapeText(partialText);
+                }
+                continue; // And back to the loop
+            }
+
+            // TODO: first and last characters of partialText should not be a space (white space problems!)
+            // TODO: replace multiples spaces in non-breaking spaces!
+            // Opening elements
+            // <sub> and <sup> are not really considered being formatting by HTML, so we keep them here!
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sub>"; //Subscript
+            }
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sup>"; //Superscript
+            }
+
+            // The text
+            if (outputText==" ")
+            {//Just a space as text. Therefore we must use a non-breaking space.
+                outputText += "&nbsp;";
+            }
+            else
+            {
+                //Code all possible predefined HTML entities
+                outputText += escapeText(partialText);
+            }
+
+            // Closing elements
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sup>"; //Superscript
+            }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sub>"; //Subscript
+            }
+        }
+    }
 }
 
 // ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
@@ -1317,7 +1193,7 @@ class ClassExportFilterHtmlStyle : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
 };
 
@@ -1327,9 +1203,144 @@ QString ClassExportFilterHtmlStyle::getDocType(void) const
     return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
 }
 
-void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
-    ProcessParagraphDataStyle(paraText,paraFormatDataList,outputText,this);
+    if (! paraText.isEmpty() )
+    {
+
+        CreateMissingFormatData(paraText,paraFormatDataList);
+
+        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+
+        QString partialText;
+
+        for ( paraFormatDataIt = paraFormatDataList.begin ();
+              paraFormatDataIt != paraFormatDataList.end ();
+              paraFormatDataIt++ )
+        {
+            //Retrieve text
+            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+
+            if ((*paraFormatDataIt).missing)
+            {   //Format is not issued from KWord. Therefore is only tha layout
+                // So it is only the text
+                if (outputText==" ")
+                {//Just a space as text. Therefore we must use a non-breaking space.
+                    outputText += "&nbsp;";
+                }
+                else
+                {
+                    //Code all possible predefined HTML entities
+                    outputText += escapeText(partialText);
+                }
+                continue; // And back to the loop
+            }
+
+            // TODO: first and last characters of partialText should not be a space (white space problems!)
+            // TODO: replace multiples spaces in non-breaking spaces!
+            // Opening elements
+            outputText+="<span style=\"";
+
+            // Font name
+            outputText+="font-family: ";
+            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
+            outputText+="; ";
+
+            // Font style
+            outputText+="font-style: ";
+            if ( (*paraFormatDataIt).italic )
+            {
+                outputText+="italic";
+            }
+            else
+            {
+                outputText+="normal";
+            }
+            outputText+="; ";
+
+            outputText+="font-weight: ";
+            if ( (*paraFormatDataIt).weight >= 75 )
+            {
+                outputText+="bold";
+            }
+            else
+            {
+                outputText+="normal";
+            }
+            outputText+="; ";
+
+            // Give the font size relatively (be kind with people with impered vision)
+            // TODO: option to give absolute font sizes
+            int size=(*paraFormatDataIt).fontSize;
+            // 12pt is considered the normal size // TODO: relative to layout!
+            if (size>0)
+            {
+                // We use absolute font sizes.
+                outputText+="font-size: ";
+                outputText+=QString::number(size,10);
+                outputText+="pt; ";
+            }
+
+            // Give colour
+            outputText+="color: #";
+            //We must have two hex digits for each colour channel!
+            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
+            outputText+="; ";
+
+            outputText+="text-decoration: ";
+            if ( (*paraFormatDataIt).underline )
+            {
+                outputText+="underline";
+            }
+            else if ( (*paraFormatDataIt).strikeout )
+            {
+                outputText+="line-through";
+            }
+            else
+            {
+                outputText+="none";
+            }
+            //outputText+="; ";
+            outputText+="\">"; // close span opening tag
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sub>"; //Subscript
+            }
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sup>"; //Superscript
+            }
+
+            // The text
+            if (outputText==" ")
+            {//Just a space as text. Therefore we must use a non-breaking space.
+                outputText += "&nbsp;";
+            }
+            else
+            {
+                //Code all possible predefined HTML entities
+                outputText += escapeText(partialText);
+            }
+            // Closing elements
+
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sup>"; //Superscript
+            }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sub>"; //Subscript
+            }
+            outputText+="</span>";
+        }
+    }
 }
 
 QString ClassExportFilterHtmlStyle::getStyleElement(void)
