@@ -108,7 +108,7 @@ module KPresenter
     {
     };
 
-  interface Factory : KOffice::DocumentFactory
+  interface DocumentFactory : KOffice::DocumentFactory
     {
     };
 };

@@ -22,6 +22,10 @@ module KDiagramm
 	interface Document : KOffice::Document, KOffice::Print, Chart::SimpleChart
 	{
 	};
+
+	interface DocumentFactory : KOffice::DocumentFactory
+	{
+	};
 };
 
 #endif

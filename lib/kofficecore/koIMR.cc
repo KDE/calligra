@@ -19,6 +19,7 @@
 
 #include "koIMR.h"
 #include "koMediator.h"
+#include "koPOAMediator.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -37,9 +38,11 @@
  */
 
 CORBA::OAMediator_ptr med;
+CORBA::POAMediator_ptr pmd;
 
 void imr_init()
 {
+  pmd = new POAMediatorImpl( opapp_orb );
   med = new MediatorImpl;
 }
 
@@ -162,9 +165,9 @@ CORBA::Object_ptr imr_activate( const char *_server, const char *_repoid, CORBA:
   return CORBA::Object::_duplicate( obj );
 }
 
-KOffice::Document_ptr imr_createDocByServerName( const char *_server_name )
+KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repoid )
 {
-  CORBA::Object_var obj = imr_activate( _server_name );
+  CORBA::Object_var obj = imr_activate( _server_name, _repoid );
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
@@ -173,12 +176,47 @@ KOffice::Document_ptr imr_createDocByServerName( const char *_server_name )
     return 0L;
   }
   
-  KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( obj );
-  assert( !CORBA::is_nil( factory ) );
-  KOffice::Document_ptr doc = factory->create();
-  assert( !CORBA::is_nil( doc ) );
+  cerr << "1" << endl;
   
+  KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( obj );
+  if( CORBA::is_nil( factory ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Server %s does not implement a KOffice factory" ), _server_name );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return 0L;
+  }
+
+  cerr << "2" << endl;
+
+  KOffice::Document_ptr doc = factory->create();
+  if( CORBA::is_nil( doc ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Server %s did not create a document" ), _server_name );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return 0L;
+  }
+
+  cerr << "3" << endl;
+
   return doc;
+}
+
+KOffice::Document_ptr imr_createDocByServerName( const char *_server_name )
+{
+  QListIterator<KoPartEntry> it( *g_plstPartEntries );
+  for( ; it.current(); ++it )
+  {
+    if ( strcmp( it.current()->name(), _server_name ) == 0 )
+    {
+      QStrListIterator sit = it.current()->repoID();
+      assert ( sit.current() != 0L );
+      return imr_createDoc( it.current()->name(), sit.current() );
+    }
+  }
+
+  return 0L;
 }
 
 KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type )
@@ -187,7 +225,11 @@ KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type )
   for( ; it.current(); ++it )
   {
     if ( it.current()->supports( _mime_type ) )
-      return imr_createDocByServerName( it.current()->name() );
+    {
+      QStrListIterator sit = it.current()->repoID();
+      assert ( sit.current() != 0L );
+      return imr_createDoc( it.current()->name(), sit.current() );
+    }
   }
 
   return 0L;

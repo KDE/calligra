@@ -3,12 +3,17 @@
 
 #include "koffice.h"
 
-#define KOFFICE_DOCUMENT_FACTORY( DOC, NAME ) \
-class NAME : virtual public KOffice::DocumentFactory_skel \
+class KoDocumentFactory : public KOffice::DocumentFactory_skel
+{
+};
+
+#define KOFFICE_DOCUMENT_FACTORY( DOC, NAME, SKEL ) \
+class NAME : virtual public KoDocumentFactory, \
+             virtual public SKEL \
 { \
 public: \
-  NAME( const CORBA::BOA::ReferenceData &refdata ) : KOffice::DocumentFactory_skel( refdata ) { } \
-  NAME( CORBA::Object_ptr _obj ) : KOffice::DocumentFactory_skel( _obj ) { } \
+  NAME( const CORBA::BOA::ReferenceData &refdata ) : SKEL( refdata ) { } \
+  NAME( CORBA::Object_ptr _obj ) : SKEL( _obj ) { } \
   virtual ~NAME() { } \
   virtual KOffice::Document_ptr create()  \
   { \

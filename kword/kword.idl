@@ -73,6 +73,10 @@ module KWord
   interface KWordDocument : KOffice::Document, KOffice::Print
     {
     };
+
+    interface DocumentFactory : KOffice::DocumentFactory
+    {
+    };
 };
 
 #endif

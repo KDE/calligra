@@ -291,47 +291,109 @@ void KoPluginEntry::addToolBarEntry( const KoPluginEntry::Entry& _entry )
   m_lstToolBarEntries.append( e );
 }
 
-int KoPluginManager::s_id = 0;
+KoPluginCallback::KoPluginCallback( KoPluginProxy* _proxy, KoPluginEntry::Entry *_entry )
+{
+  m_pProxy = _proxy;
+  m_pEntry = _entry;
+}
+  
+void KoPluginCallback::callback()
+{
+  KOM::Plugin_var obj = m_pProxy->ref();
+  if ( CORBA::is_nil( obj ) )
+    return;
+  
+  CORBA::Request_var _req = obj->_request( m_pEntry->m_strSlot );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->invoke();
+}
+
+KoPluginProxy::KoPluginProxy( KoPluginManager *_manager, KoPluginEntry *_entry )
+{  
+  m_pManager = _manager;
+  m_pEntry = _entry;
+  
+  m_lstToolBarCallbacks.setAutoDelete( false );
+  m_lstMenuBarCallbacks.setAutoDelete( false );
+  
+  QListIterator<KoPluginEntry::Entry> it = _entry->toolBarEntries();
+  for( ; it.current() != 0L; ++it )
+  {
+    m_lstToolBarCallbacks.append( new KoPluginCallback( this, it.current() ) );
+  }
+
+  it = _entry->menuEntries();
+  for( ; it.current() != 0L; ++it )
+  {
+    m_lstMenuBarCallbacks.append( new KoPluginCallback( this, it.current() ) );
+  }
+}
+
+KoPluginProxy::~KoPluginProxy()
+{
+  cleanUp();
+}
+
+void KoPluginProxy::cleanUp()
+{
+  QListIterator<KoPluginCallback> it( m_lstToolBarCallbacks );
+  for( ; it.current() != 0L; ++it )
+    CORBA::release( it );
+  m_lstToolBarCallbacks.clear();
+  
+  it = m_lstMenuBarCallbacks;
+  for( ; it.current() != 0L; ++it )
+    CORBA::release( it );  
+  m_lstMenuBarCallbacks.clear();
+}
+
+KOM::Plugin_ptr KoPluginProxy::ref()
+{
+  if ( !CORBA::is_nil( m_vPlugin ) )
+    return KOM::Plugin::_duplicate( m_vPlugin );
+  
+  CORBA::Object_var obj = imr_activate( m_pEntry->name(), "IDL:KOM/PluginFactory:1.0" );
+  if ( CORBA::is_nil( obj ) )
+  {
+    QString tmp;
+    ksprintf( &tmp, i18n("Could not activate plugin %s"), m_pEntry->name() );
+    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
+    return 0L;
+  }
+  
+  KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
+  if ( CORBA::is_nil( factory ) )
+  {
+    QString tmp;
+    ksprintf( &tmp, i18n("%s is not a plugin"), m_pEntry->name() );
+    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
+    return 0L;
+  }
+  
+  KOM::RequestedInterfaces ifaces;
+  ifaces.length( 1 );
+  ifaces[0].repoid = CORBA::string_dup( "IDL:OpenParts/View:1.0" );
+  ifaces[0].obj = m_pManager->view();
+  m_vPlugin = factory->create( ifaces );
+  if ( CORBA::is_nil( m_vPlugin ) )
+  {    
+    QString tmp;
+    ksprintf( &tmp, i18n("Could not create plugin of type %s"), m_pEntry->name() );
+    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
+    return 0L;
+  }
+
+  return KOM::Plugin::_duplicate( m_vPlugin );
+}
 
 KoPluginManager::KoPluginManager()
-{  
+{ 
   m_lstPlugins.setAutoDelete( true );
-
-  /*
-   * Obtain a reference to the RootPOA and its Manager
-   */
-
-  CORBA::Object_var poaobj = opapp_orb->resolve_initial_references ("RootPOA");
-  PortableServer::POA_var poa = PortableServer::POA::_narrow (poaobj);
-  PortableServer::POAManager_var mgr = poa->the_POAManager();
-
-  /*
-   * The RootPOA has the USE_ACTIVE_OBJECT_MAP_ONLY policy; to register
-   * our ServantManager, we must create our own POA with the
-   * USE_SERVANT_MANAGER policy
-   */
-
-  CORBA::PolicyList pl;
-  pl.length(1);
-  pl[0] = poa->create_request_processing_policy (PortableServer::USE_SERVANT_MANAGER);
-  QString name;
-  name.sprintf( "KoPluginManagerPOA%i", s_id++ );
-  m_vPoa = poa->create_POA( name, mgr, pl);
-
-  /*
-   * Activate our ServantManager
-   */
-  PortableServer::ServantManager_var servref = _this();
-  m_vPoa->set_servant_manager( servref );
-
-  mgr->activate();
-
+   
   QListIterator<KoPluginEntry> it = KoPluginEntry::plugins();
   for( ; it.current() != 0L; ++it )
   {
-    Plugin *p = new Plugin;
-    p->m_vPlugin = createReference( it.current()->name(), "IDL:KOM/Plugin:1.0" );
-    p->m_pEntry = it.current();
+    KoPluginProxy *p = new KoPluginProxy( this, it.current() );
     m_lstPlugins.append( p );
   }
 }
@@ -344,91 +406,7 @@ KoPluginManager::~KoPluginManager()
 void KoPluginManager::cleanUp()
 {
   m_vView = 0L;
-
-  if ( !CORBA::is_nil( m_vPoa ) )
-  {    
-    m_vPoa->destroy( true, true );
-    m_vPoa = 0L;
-  }
-}
-
-CORBA::Object_ptr KoPluginManager::createReference( const char *_implreponame, const char* _repoid )
-{
-  PortableServer::ObjectId id;
-  unsigned int l = strlen( _implreponame );
-  id.length( l );
-  for( unsigned int i = 0; i < l; i++ )
-    id[i] = _implreponame[i];
-  
-  CORBA::Object_ptr obj = m_vPoa->create_reference_with_id ( id, _repoid );
-  assert( !CORBA::is_nil( obj ) );
-  
-  return obj;
-}
-
-PortableServer::Servant KoPluginManager::incarnate( const PortableServer::ObjectId & _oid,
-						    PortableServer::POA_ptr )
-{
-  cerr << "Incarnating ...." << endl;
-  
-  /*
-   * Incarnate the object
-   */
-  char buffer[ _oid.length() + 1 ];
-  for( CORBA::ULong l = 0; l < _oid.length(); ++l )
-    buffer[ l ] = _oid[ l ];
-  buffer[ _oid.length() ] = 0;
-
-  cerr << "Incarnating " << buffer << endl;
-  
-  CORBA::Object_var obj = imr_activate( buffer, "IDL:KOM/PluginFactory:1.0" );
-  if ( CORBA::is_nil( obj ) )
-  {
-    QString tmp;
-    ksprintf( &tmp, i18n("Could not activate plugin %s"), buffer );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
-    return 0L;
-  }
-  
-  KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
-  if ( CORBA::is_nil( factory ) )
-  {
-    QString tmp;
-    ksprintf( &tmp, i18n("%s is not a plugin"), buffer );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
-    return 0L;
-  }
-  
-  KOM::RequestedInterfaces ifaces;
-  ifaces.length( 1 );
-  ifaces[0].repoid = CORBA::string_dup( "IDL:OpenParts/View:1.0" );
-  ifaces[0].obj = m_vView;
-  KOM::Plugin_var plugin = factory->create( ifaces );
-  if ( CORBA::is_nil( plugin ) )
-  {    
-    QString tmp;
-    ksprintf( &tmp, i18n("Could not create plugin of type %s"), buffer );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
-    return 0L;
-  }
-  
-  PortableServer::ForwardRequest fw;
-  fw.forward_reference = CORBA::Object::_duplicate( plugin );
-  mico_throw( fw );
-  
-  cerr << "OOOOOOOOooooooooooooppppppppssss" << endl;
-  
-  // Never reached
-  return 0L;
-}
-
-void KoPluginManager::etherealize( const PortableServer::ObjectId & oid,
-				   PortableServer::POA_ptr poa,
-				   PortableServer::Servant serv,
-				   CORBA::Boolean cleanup_in_progress,
-				   CORBA::Boolean remaining_activations)
-{
-  /* Not needed, since we never create a servant */
+  m_lstPlugins.clear();
 }
 
 void KoPluginManager::fillMenuBar( OpenPartsUI::MenuBar_ptr _menubar )
@@ -443,17 +421,17 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
     return;
   }
   
-  Plugin *p;
+  KoPluginProxy *p;
   for( p = m_lstPlugins.first(); p != 0L; p = m_lstPlugins.next() )
   {
-    QListIterator<KoPluginEntry::Entry> it = p->m_pEntry->toolBarEntries();
+    QListIterator<KoPluginCallback> it( p->m_lstToolBarCallbacks );
     for( ; it.current() != 0L; ++it )
     {
       if ( CORBA::is_nil( m_vToolBar ) )
 	m_vToolBar = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-      if ( !it.current()->m_strMiniIcon.isEmpty() )
+      if ( !it.current()->entry()->m_strMiniIcon.isEmpty() )
       {
-	QString tmp = it.current()->m_strMiniIcon.data();
+	QString tmp = it.current()->entry()->m_strMiniIcon.data();
 	if ( tmp[0] != '/' )
 	{
 	  QString t2 = tmp;
@@ -462,8 +440,8 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
 	  tmp += t2;
 	}
 	OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
-	(void)m_vToolBar->insertButton2( pix, 1, SIGNAL( clicked() ), p->m_vPlugin,
-					 it.current()->m_strSlot, true, it.current()->m_strName, -1 );
+	(void)m_vToolBar->insertButton2( pix, 1, SIGNAL( clicked() ), it.current(),
+					 "callback", true, it.current()->entry()->m_strName, -1 );
 
       }
     }
@@ -472,3 +450,15 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
   if ( !CORBA::is_nil( m_vToolBar ) )
     m_vToolBar->enable( OpenPartsUI::Show );
 }
+
+
+
+
+
+
+
+
+
+
+
+

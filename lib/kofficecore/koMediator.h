@@ -229,7 +229,7 @@ public:
 };
 
 class UnsharedImplRec : public ImplRec {
-    ServerRec *find_empty_server ();
+    ServerRec *find_empty_server (ServerRec *except_this_one);
     ServerRec *find_active_server ();
 public:
     UnsharedImplRec (MediatorImpl *, CORBA::ImplementationDef_ptr);
@@ -341,5 +341,6 @@ public:
 		   MsgId,
 		   CORBA::ORBCallback::Event);
 };
+
 
 #endif // __mediator_h__

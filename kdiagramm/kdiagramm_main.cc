@@ -8,6 +8,7 @@
 #include <opAutoLoader.h>
 #include "kdiagramm_shell.h"
 #include "kdiagramm_doc.h"
+#include "kdiagramm.h"
 
 // DEBUG
 #include <iostream>
@@ -16,7 +17,7 @@ bool g_bWithGUI = true;
 
 list<string> g_openFiles;
 
-KOFFICE_DOCUMENT_FACTORY( KDiagrammDoc, KDiagrammFactory )
+KOFFICE_DOCUMENT_FACTORY( KDiagrammDoc, KDiagrammFactory, KDiagramm::DocumentFactory_skel )
 typedef OPAutoLoader<KDiagrammFactory> KDiagrammAutoLoader;
 
 KDiagrammApp::KDiagrammApp( int &argc, char** argv ) : 
@@ -57,7 +58,7 @@ void KDiagrammApp::start()
 
 int main( int argc, char **argv )
 {
-  KDiagrammAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KDiagramm" );
+  KDiagrammAutoLoader loader( "IDL:KDiagramm/DocumentFactory:1.0", "KDiagramm" );
 
   KDiagrammApp app( argc, argv );
 

@@ -51,6 +51,10 @@ module KSpread
 	{
 	};
 
+	interface DocumentFactory : KOffice::DocumentFactory
+	{
+	};
+
 	struct DataToolsId
 	{
 		unsigned long time;

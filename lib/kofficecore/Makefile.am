@@ -7,17 +7,18 @@ LIBADD  = -lkom $(LIB_KFILE) $(LIBMICO)
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la
+
 BUILT_SOURCES =  moc_koFrame.cc moc_koMainWindow.cc moc_koApplication.cc
 
 libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.cc \
 	koFrame.cc koIMR.cc koScanParts.cc koStream.cc \
 	koMediator.cc koPrintExt.cc koMainWindow.cc koScanTools.cc \
-	koScanPlugins.cc koApplication.cc $(BUILT_SOURCES)
+	koScanPlugins.cc koApplication.cc koPOAMediator.cc $(BUILT_SOURCES)
 
 include_HEADERS = koffice.h koView.h koFrame.h koIMR.h koScanParts.h \
 	koStream.h koDocument.h koPrintExt.h koFactory.h \
 	koMainWindow.h koMediator.h koScanTools.h koScanPlugins.h \
-	koApplication.h
+	koApplication.h koPOAMediator.h
 
 idl_DATA = koffice.idl
 idl_HEADERS =  koffice.h

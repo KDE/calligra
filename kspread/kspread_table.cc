@@ -2351,6 +2351,12 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRect& _data )
 {
   KOffice::Document_var doc = imr_createDocByServerName( _arg );
+  if ( CORBA::is_nil( doc ) )
+    // Error message is already displayed, so just return
+    return;
+
+  cerr << "NOW FETCHING INTERFACE" << endl;
+  
   // doc->init();
   CORBA::Object_var obj = doc->getInterface( "IDL:Chart/SimpleChart:1.0" );
   if ( CORBA::is_nil( obj ) )
@@ -2381,6 +2387,10 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
 void KSpreadTable::insertChild( const QRect& _rect, const char *_arg )
 {
   KOffice::Document_var doc = imr_createDocByServerName( _arg );
+  if ( CORBA::is_nil( doc ) )
+    // Error message is already displayed, so just return
+    return;
+
   doc->init();
   
   KSpreadChild* ch = new KSpreadChild( m_pDoc, this, _rect, doc );

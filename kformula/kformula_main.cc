@@ -17,7 +17,7 @@ bool g_bWithGUI = true;
 
 list<string> g_openFiles;
 
-KOFFICE_DOCUMENT_FACTORY( KFormulaDoc, KFormulaFactory )
+KOFFICE_DOCUMENT_FACTORY( KFormulaDoc, KFormulaFactory, KFormula::DocumentFactory_skel )
 typedef OPAutoLoader<KFormulaFactory> KFormulaAutoLoader;
 
 KFormulaApp::KFormulaApp( int &argc, char** argv ) : 
@@ -59,7 +59,7 @@ void KFormulaApp::start()
 
 int main( int argc, char **argv )
 {
-  KFormulaAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KFormula" );
+  KFormulaAutoLoader loader( "IDL:KFormula/DocumentFactory:1.0", "KFormula" );
 
   KFormulaApp app( argc, argv );
 

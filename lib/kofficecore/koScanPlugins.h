@@ -27,6 +27,7 @@
 #include <opApplication.h>
 #include <openparts_ui.h>
 #include <CORBA.h>
+#include <komBase.h>
 
 #include "koffice.h"
 
@@ -91,8 +92,42 @@ void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr );
 void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr );
 
 class KoViewIf;
+class KoPluginManager;
+class KoPluginProxy;
 
-class KoPluginManager : public virtual POA_PortableServer::ServantActivator
+class KoPluginCallback : virtual public KOMBase,
+			 virtual public KOffice::Callback_skel
+{
+public:
+  KoPluginCallback( KoPluginProxy*, KoPluginEntry::Entry * );
+  
+  virtual void callback();
+  
+  KoPluginEntry::Entry* entry() { return m_pEntry; }
+
+protected:
+  KoPluginEntry::Entry* m_pEntry;
+  KoPluginProxy *m_pProxy;
+};
+
+struct KoPluginProxy
+{
+  KoPluginProxy( KoPluginManager *_manager, KoPluginEntry* _entry );
+  ~KoPluginProxy();
+  
+  void cleanUp();
+  
+  KOM::Plugin_ptr ref();
+    
+  KoPluginEntry* m_pEntry;
+  KoPluginManager* m_pManager;
+  
+  QList<KoPluginCallback> m_lstToolBarCallbacks;
+  QList<KoPluginCallback> m_lstMenuBarCallbacks;
+  KOM::Plugin_var m_vPlugin;
+};
+
+class KoPluginManager
 {
 public:
   KoPluginManager();
@@ -101,34 +136,16 @@ public:
   void cleanUp();
   
   void setView( KOffice::View_ptr _view ) { m_vView = KOffice::View::_duplicate( _view ); }
+  KOffice::View_ptr view() { return KOffice::View::_duplicate( m_vView ); }
   
   void fillMenuBar( OpenPartsUI::MenuBar_ptr _menubar );
   void fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory );
-
-  PortableServer::Servant incarnate( const PortableServer::ObjectId &,
-				     PortableServer::POA_ptr );
-  void etherealize( const PortableServer::ObjectId & oid,
-		    PortableServer::POA_ptr poa,
-		    PortableServer::Servant serv,
-		    CORBA::Boolean cleanup_in_progress,
-		    CORBA::Boolean remaining_activations);
-  CORBA::Object_ptr createReference( const char *_implreponame, const char* _repoid );
   
-protected:
-  struct Plugin
-  {
-    CORBA::Object_var m_vPlugin;
-    KoPluginEntry* m_pEntry;
-  };
-  
-  QList<Plugin> m_lstPlugins;
-
-  PortableServer::POA_var m_vPoa;
+protected:  
+  QList<KoPluginProxy> m_lstPlugins;
 
   OpenPartsUI::ToolBar_var m_vToolBar;
   KOffice::View_var m_vView;
-  
-  static int s_id;
 };
 
 #endif

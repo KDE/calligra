@@ -30,7 +30,7 @@ bool g_bWithGUI = true;
 
 list<string> g_openFiles;
 
-KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory )
+KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory, KWord::DocumentFactory_skel )
 typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
 
 
@@ -84,7 +84,7 @@ int main(int argc,char **argv)
   formatMngr = new FormatManager();
   
   // Publish our factory
-  KWordAutoLoader loader("IDL:KOffice/DocumentFactory:1.0", "KWord");
+  KWordAutoLoader loader("IDL:KWord/DocumentFactory:1.0", "KWord");
 
   // Lets rock
   KWordApp app(argc,argv);

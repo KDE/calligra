@@ -65,6 +65,10 @@ module KFormula
 	interface Document : KOffice::Document
 	{
 	};
+
+	interface DocumentFactory : KOffice::DocumentFactory
+	{
+	};
 };
 
 #endif

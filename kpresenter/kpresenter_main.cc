@@ -28,7 +28,7 @@ bool g_bWithGUI = true;
 
 list<string> g_openFiles;
 
-KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory )
+KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory, KPresenter::DocumentFactory_skel )
 typedef OPAutoLoader<KPresenterFactory> KPresenterAutoLoader;
 
 /******************************************************************/
@@ -76,7 +76,7 @@ void KPresenterApp::start()
 /*======================== main ==================================*/
 int main(int argc,char **argv)
 {
-  KPresenterAutoLoader loader("IDL:KOffice/DocumentFactory:1.0", "KPresenter" );
+  KPresenterAutoLoader loader("IDL:KPresenter/DocumentFactory:1.0", "KPresenter" );
 
   KPresenterApp app(argc,argv);
 

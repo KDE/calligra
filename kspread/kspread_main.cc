@@ -10,6 +10,7 @@
 #include <opAutoLoader.h>
 #include "kspread_shell.h"
 #include "kspread_doc.h"
+#include "kspread.h"
 
 // DEBUG
 #include <iostream>
@@ -18,7 +19,7 @@ bool g_bWithGUI = true;
 
 list<string> g_openFiles;
 
-KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory )
+KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory, KSpread::DocumentFactory_skel )
 typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
 
 KSpreadApp::KSpreadApp( int &argc, char** argv ) : 
@@ -61,7 +62,7 @@ void KSpreadApp::start()
 
 int main( int argc, char **argv )
 {
-  KSpreadAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KSpread" );
+  KSpreadAutoLoader loader( "IDL:KSpread/DocumentFactory:1.0", "KSpread" );
 
   KSpreadApp app( argc, argv );
 

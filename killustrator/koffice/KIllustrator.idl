@@ -68,6 +68,10 @@ module KIllustrator {
   
   interface Document : KOffice::Document, KOffice::Print {
   };
+
+  interface DocumentFactory : KOffice::DocumentFactory
+  {
+  };
 };
 
 #endif

@@ -283,8 +283,7 @@ ImplRec::create (MediatorImpl *med, CORBA::ImplementationDef_ptr impl)
 	return new PermethodImplRec (med, impl);
 
     default:
-	assert (0);
-	return 0;
+        return 0;
     }
 }
 
@@ -471,7 +470,6 @@ void
 ImplRec::orphan_obj (ObjectRec *orec, ServerId svid)
 {
     orec->state (ObjectOrphaned);
-    orec->server (0);
     exec_requests ();
 }
 
@@ -803,7 +801,7 @@ UnsharedImplRec::~UnsharedImplRec ()
 }
 
 ServerRec *
-UnsharedImplRec::find_empty_server ()
+UnsharedImplRec::find_empty_server (ServerRec *except_this_one)
 {
     set<ServerRec *, less<ServerRec *> > used_servers;
 
@@ -815,7 +813,8 @@ UnsharedImplRec::find_empty_server ()
 
     for (ImplRec::MapIdServer::iterator i1 = _servers.begin();
 	 i1 != _servers.end(); ++i1) {
-        if (used_servers.count ((*i1).second) == 0)
+        if ((*i1).second != except_this_one &&
+	    used_servers.count ((*i1).second) == 0)
             return (*i1).second;
     }
     return 0;
@@ -837,7 +836,7 @@ UnsharedImplRec::before_invoke (ObjectRec *orec, CORBA::ORBRequest *,
 {
     switch (orec->state()) {
     case ObjectOrphaned: {
-        ServerRec *sv = find_empty_server();
+        ServerRec *sv = find_empty_server (orec->server());
         if (!sv) {
 	    sv = create_server ();
 
@@ -1180,21 +1179,23 @@ MediatorImpl::bind (MsgId id, const char *repoid,
 
     CORBA::ImplRepository::ImplDefSeq_var ims = _imr->find_by_repoid (repoid);
 
-    if (ims->length() == 0) {
-	// no match
-	_orbnc()->answer_bind (id, CORBA::LocateUnknown,
-			       CORBA::Object::_nil());
-	return TRUE;
-    }
-
     /*
      * make sure all implementations that implement object with
      * the requested repoid have an active server ...
      */
     for (CORBA::ULong i0 = 0; i0 < ims->length(); ++i0) {
+        if (ims[i0]->mode() != CORBA::ImplementationDef::ActivateShared &&
+	    ims[i0]->mode() != CORBA::ImplementationDef::ActivateUnshared &&
+	    ims[i0]->mode() != CORBA::ImplementationDef::ActivatePerMethod &&
+	    ims[i0]->mode() != CORBA::ImplementationDef::ActivatePersistent &&
+	    ims[i0]->mode() != CORBA::ImplementationDef::ActivateLibrary) {
+	  continue;
+	}
+
 	ImplRec *irec = find_impl (ims[i0]);
 	if (!irec) {
 	    irec = ImplRec::create (this, ims[i0]);
+	    assert (irec);
 	    _impls.push_back (irec);
 	}
 
@@ -1232,8 +1233,19 @@ MediatorImpl::bind (MsgId id, const char *repoid,
      * we can decide in the callback() whether there are more
      * outstanding requests or not.
      */
+
     vector<MsgId> msgids;
+    CORBA::ULong count = 0;
+
     for (CORBA::ULong i1 = 0; i1 < ims->length(); ++i1) {
+        if (ims[i1]->mode() != CORBA::ImplementationDef::ActivateShared &&
+	    ims[i1]->mode() != CORBA::ImplementationDef::ActivateUnshared &&
+	    ims[i1]->mode() != CORBA::ImplementationDef::ActivatePerMethod &&
+	    ims[i1]->mode() != CORBA::ImplementationDef::ActivatePersistent &&
+	    ims[i1]->mode() != CORBA::ImplementationDef::ActivateLibrary) {
+	  continue;
+	}
+
 	ImplRec *irec = find_impl (ims[i1]);
 	assert (irec);
 
@@ -1245,13 +1257,29 @@ MediatorImpl::bind (MsgId id, const char *repoid,
 		msgids.push_back (_orbnc()->new_msgid());
 		_requests[msgids.back()] = id;
 	    }
+	    count++;
 	}
+    }
+
+    if (!count) {
+      /*
+       * No servers available
+       */
+      return FALSE;
     }
 
     /*
      * now send the requests
      */
     for (CORBA::ULong i2 = 0; i2 < ims->length(); ++i2) {
+        if (ims[i2]->mode() != CORBA::ImplementationDef::ActivateShared &&
+	    ims[i2]->mode() != CORBA::ImplementationDef::ActivateUnshared &&
+	    ims[i2]->mode() != CORBA::ImplementationDef::ActivatePerMethod &&
+	    ims[i2]->mode() != CORBA::ImplementationDef::ActivatePersistent &&
+	    ims[i2]->mode() != CORBA::ImplementationDef::ActivateLibrary) {
+	  continue;
+	}
+
 	ImplRec *irec = find_impl (ims[i2]);
 	assert (irec);
 
@@ -1446,6 +1474,7 @@ MediatorImpl::migrate_obj (CORBA::Object_ptr objref,
     ImplRec *irec = find_impl (impl);
     if (!irec) {
 	irec = ImplRec::create (this, impl);
+	assert (irec);
 	_impls.push_back (irec);
     }
     orec->impl()->migrate_obj (orec, svid, irec);
@@ -1478,6 +1507,7 @@ MediatorImpl::create_impl (CORBA::ImplementationDef_ptr impl,
     if (!irec) {
 	// this happens for servers not activated by the mediator
 	irec = ImplRec::create (this, impl);
+	assert (irec);
 	_impls.push_back (irec);
     }
     irec->create_impl (server, id);
@@ -1526,6 +1556,9 @@ MediatorImpl::force_activation (CORBA::ImplementationDef_ptr impl)
     ImplRec *irec = find_impl (impl);
     if (!irec) {
 	irec = ImplRec::create (this, impl);
+	if (!irec) {
+	  return FALSE;
+	}
 	_impls.push_back (irec);
     }
 

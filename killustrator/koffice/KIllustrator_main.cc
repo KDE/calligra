@@ -36,7 +36,7 @@
 
 bool withGUI = true;
 
-KOFFICE_DOCUMENT_FACTORY(KIllustratorDocument, KIllustratorFactory)
+KOFFICE_DOCUMENT_FACTORY(KIllustratorDocument, KIllustratorFactory, KIllustrator::DocumentFactory_skel )
 
 typedef OPAutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
 
@@ -62,7 +62,7 @@ void KIllustratorApp::start () {
 }
 
 int main (int argc, char** argv) {
-  KIllustratorAutoLoader loader ("IDL:KOffice/DocumentFactory:1.0", 
+  KIllustratorAutoLoader loader ("IDL:KIllustrator/DocumentFactory:1.0", 
                                  "KIllustrator");
   KIllustratorApp app (argc, argv);
   for (int i = 1; i < argc; i++) {
@@ -76,3 +76,5 @@ int main (int argc, char** argv) {
 
   return 0;
 }
+
+

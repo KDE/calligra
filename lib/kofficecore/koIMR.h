@@ -31,5 +31,6 @@ CORBA::Object_ptr imr_activate( const char *_server, const char *_repoid = "IDL:
 				CORBA::ImplRepository_ptr imr = 0L, const char *_addr = 0L );
 KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type );
 KOffice::Document_ptr imr_createDocByServerName( const char *_server_name );
+KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repoid );
 
 #endif

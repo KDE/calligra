@@ -98,6 +98,14 @@ module KOffice
 		Document document();
 		View view();
 	};
+
+	/**
+	 * For internal use only
+	 */
+	interface Callback : KOM::Base
+	{
+		slot void callback();
+	};
 };
 
 #endif
