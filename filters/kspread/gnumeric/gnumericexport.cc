@@ -34,6 +34,8 @@
 #include <kspread_table.h>
 #include <kspread_doc.h>
 
+#include <koDocumentInfo.h>
+
 #include <zlib.h>
 
 class Cell {
@@ -70,7 +72,8 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 		     QString font_name = "Helvetica";
 
-		     if (defaultColorGroup.background()!=cell->bgColor(currentcolumn, currentrow))
+		     //		     if (defaultColorGroup.background()!=cell->bgColor(currentcolumn, currentrow))
+		     if (cell->hasProperty(KSpreadCell::PBackgroundColor))
 		       {
 			 int red, green, blue; 
 
@@ -270,11 +273,17 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-const bool GNUMERICExport::E_filter(const QString &file, const KoDocument * const document,
-                               const QString &from, const QString &to,
-                               const QString &config) {
+bool GNUMERICExport::filterExport(const QString &file, 
+					KoDocument * document,
+					const QString &from, 
+					const QString &to,
+					const QString &config) {
+
+  qDebug("Exporting GNUmeric");
 
   QDomDocument gnumeric_doc=QDomDocument("gmr:Workbook");
+
+
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
@@ -303,16 +312,77 @@ const bool GNUMERICExport::E_filter(const QString &file, const KoDocument * cons
   workbook.setAttribute("xmlns:gmr","http://www.gnome.org/gnumeric/v5");
   gnumeric_doc.appendChild(workbook);
 
-    
-    /* End Made into a function */
+  /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles;
+  QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles;
 
-    sheets = gnumeric_doc.createElement("gmr:Sheets");
-    workbook.appendChild(sheets);
+  KoDocumentInfo *DocumentInfo = document->documentInfo();
+  KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
 
-    QString str;
-    KSpreadTable * table;
+  KoDocumentInfoAuthor *authorPage = static_cast<KoDocumentInfoAuthor*>(DocumentInfo->page( "author" ));
+
+    /* Start document information. */
+  QDomElement summary =  gnumeric_doc.createElement("gmr:Summary");
+  workbook.appendChild(summary);
+
+  //  QDomNode gmr_item = summary.namedItem("gmr:Item");
+
+  QDomElement gmr_item, gmr_name,gmr_val_string;
+  gmr_item = gnumeric_doc.createElement("gmr:Item");
+  summary.appendChild(gmr_item);
+
+  /* Title */
+  gmr_name = gnumeric_doc.createElement("gmr:name");
+  gmr_val_string = gnumeric_doc.createElement("gmr:val-string");
+
+  gmr_name.appendChild(gnumeric_doc.createTextNode("title"));
+  gmr_val_string.appendChild(gnumeric_doc.createTextNode(aboutPage->title()));
+
+  //	      
+  //	      
+  //	      
+	      
+
+  gmr_item.appendChild(gmr_name);
+  gmr_item.appendChild(gmr_val_string);
+
+  gmr_name = gnumeric_doc.createElement("gmr:name");
+  gmr_val_string = gnumeric_doc.createElement("gmr:val-string");
+
+  gmr_name.appendChild(gnumeric_doc.createTextNode("company"));
+  gmr_val_string.appendChild(gnumeric_doc.createTextNode(authorPage->company()));
+
+  gmr_item.appendChild(gmr_name);
+  gmr_item.appendChild(gmr_val_string);
+
+
+  gmr_name = gnumeric_doc.createElement("gmr:name");
+  gmr_val_string = gnumeric_doc.createElement("gmr:val-string");
+
+  gmr_name.appendChild(gnumeric_doc.createTextNode("author"));
+  gmr_val_string.appendChild(gnumeric_doc.createTextNode(authorPage->fullName()
+));
+
+  gmr_item.appendChild(gmr_name);
+  gmr_item.appendChild(gmr_val_string);
+
+
+  gmr_name = gnumeric_doc.createElement("gmr:name");
+  gmr_val_string = gnumeric_doc.createElement("gmr:val-string");
+
+  gmr_name.appendChild(gnumeric_doc.createTextNode("comments"));
+  gmr_val_string.appendChild(gnumeric_doc.createTextNode(aboutPage->abstract()));
+
+  gmr_item.appendChild(gmr_name);
+  gmr_item.appendChild(gmr_val_string);
+
+  /* End document information. */
+
+  sheets = gnumeric_doc.createElement("gmr:Sheets");
+  workbook.appendChild(sheets);
+
+  QString str;
+  KSpreadTable * table;
 
       for ( table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable() )
        {
@@ -384,15 +454,41 @@ const bool GNUMERICExport::E_filter(const QString &file, const KoDocument * cons
 
 	 /* End selection info. */
 
-	 /* Start COLS */
-	 /*
-	 QDomElement colinfo = gnumeric_doc.createElement("gmr:ColInfo");
-	 //	 RowLayout *rl=table->m_cells.firstCell;
 
-	 RowLayout *rl=table->m_cells->first();
-	 
-	 rl=rl->next();
-	 */
+	 /* Start COLS */
+	 ColumnLayout *cl=table->firstCol();
+	 while (cl)
+	   {
+	     QDomElement colinfo = gnumeric_doc.createElement("gmr:ColInfo");
+	     cols.appendChild(colinfo);
+	     colinfo.setAttribute("No", QString::number(cl->column()-1));
+	     colinfo.setAttribute("Hidden", QString::number(cl->isHide()));
+	     colinfo.setAttribute("Unit", QString::number((cl->width()*3)/4));
+	     
+	     cl=cl->next();
+	   }
+
+	 /* End COLS */
+
+	 //	 RowLayout *rl=table->m_cells.firstCell;
+	 //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
+	   
+
+	 /* Start ROWS */
+
+	 RowLayout *rl=table->firstRow();
+	 while (rl)
+	   {
+	     QDomElement rowinfo = gnumeric_doc.createElement("gmr:RowInfo");
+	     rows.appendChild(rowinfo);
+	     rowinfo.setAttribute("No", QString::number(rl->row()-1));
+	     rowinfo.setAttribute("Hidden", QString::number(rl->isHide()));
+	     rowinfo.setAttribute("Unit", QString::number((rl->height()*3)/4));
+
+	     rl=rl->next();
+	   }
+
+	 /* End ROWS */
 
 	 //rl->setHeight
 	 //	 colinfo.info();

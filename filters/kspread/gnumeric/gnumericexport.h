@@ -42,7 +42,7 @@ public:
     virtual ~GNUMERICExport() {}
     /** do the filtering :) */
 
-    virtual const bool E_filter(const QString &file, const KoDocument * const document,
+    virtual bool filterExport(const QString &file, KoDocument * document,
                                 const QString &from, const QString &to,
                                 const QString &config=QString::null);
 
