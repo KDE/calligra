@@ -73,25 +73,30 @@ public:
 
 	/**
 	 * Returns the point on this segment for 0 <= t <= 1.
+	 * Convenience wrapper for pointDerivatives().
 	 */
 	KoPoint point( double t ) const;
 
 	/**
-	 * Returns the derivative of this segment for 0 <= t <= 1.
-	 */
-	KoPoint derive( double t ) const;
-
-	/**
-	 * The same as derive() but normalized.
+	 * Returns the tangent vector on this segment for 0 <= t <= 1.
+	 * Convenience wrapper for pointTangentNormal().
 	 */
 	KoPoint tangent( double t ) const;
 
 	/**
-	 * In case you need the point and the derivative at the same time
-	 * for 0 <= t <= 1, use this function since it is more efficient.
-	 * First KoPoint is the point, the second KoPoint is the derivative.
+	 * Calculates point and/or derivative(s) at the same time
+	 * for 0 <= t <= 1. Returns: the point and derivatives
+	 * of first and second order.
 	 */
-	void pointAndDerive( double t, KoPoint& p, KoPoint& der ) const;
+	void pointDerivatives( double t, KoPoint* p = 0L,
+		KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
+
+	/**
+	 * Returns the point, the tangent and the normal vector for
+	 * 0 <= t <= 1.
+	 */
+	void pointTangentNormal( double t, KoPoint* p = 0L,
+		KoPoint* tn = 0L, KoPoint* n = 0L ) const;
 
 	/**
 	 * Returns the arc length from 0 to 0 <= t <= 1.

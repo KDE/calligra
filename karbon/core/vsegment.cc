@@ -21,18 +21,18 @@ height(
 	const KoPoint& p,
 	const KoPoint& b )
 {
-	// calculate determinant of AP and AB to obtain projection of vector AP to
+	// Calculate determinant of AP and AB to obtain projection of vector AP to
 	// the orthogonal vector of AB:
 	const double det =
 		p.x() * a.y() + b.x() * p.y() - p.x() * b.y() -
 		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
 
-	// calculate norm = length(AB):
+	// Calculate norm = length(AB):
 	const double norm = sqrt(
 		( b.x() - a.x() ) * ( b.x() - a.x() ) +
 		( b.y() - a.y() ) * ( b.y() - a.y() ) );
 
-	// if norm is very small, simply use distance AP:
+	// If norm is very small, simply use distance AP:
 	if( norm < VGlobal::verySmallNumber )
 		return
 			sqrt(
@@ -56,8 +56,8 @@ VSegment::VSegment()
 
 VSegment::VSegment( const VSegment& segment )
 {
-	// copying m_prev/m_next has some advantages ( see vsegment::length() ).
-	// inserting a segment into a vsegmentlist overwrites these anyway:
+	// Copying m_prev/m_next has some advantages ( see vsegment::length() ).
+	// Inserting a segment into a vsegmentlist overwrites these anyway:
 	m_prev = segment.m_prev;
 	m_next = segment.m_next;
 
@@ -94,115 +94,104 @@ VSegment::isFlat( double flatness ) const
 KoPoint
 VSegment::point( double t ) const
 {
-	if( !m_prev || m_type == segment_begin )
-		return KoPoint();
+	KoPoint p;
+	pointDerivatives( t, &p );
+	return p;
+}
 
-	// lines:
+void
+VSegment::pointDerivatives( double t, KoPoint* p,
+	KoPoint* d1, KoPoint* d2 ) const
+{
+	if( !m_prev || m_type == segment_begin )
+		return;
+
+	// Lines:
 	if( m_type == segment_line )
 	{
-		return
-			m_prev->m_point[2] +
-			( m_point[2] - m_prev->m_point[2] ) * t;
+		if( p )
+			*p = m_prev->m_point[2] +
+				( m_point[2] - m_prev->m_point[2] ) * t;
+		if( d1 )
+			*d1 = m_point[2] - m_prev->m_point[2];
+		if( d2 )
+			*d2 = KoPoint( 0.0, 0.0 );
+
+		return;
 	}
 
-	// beziers:
+	// Beziers:
 	KoPoint q[4];
 	q[0] = m_prev->m_point[2];
 	q[1] = m_point[0];
 	q[2] = m_point[1];
 	q[3] = m_point[2];
 
-	// de casteljau algorithm:
+	// The De Casteljau algorithm:
 	for( uint j = 1; j <= 3; ++j )
 	{
 		for( uint i = 0; i <= 3 - j; ++i )
 		{
 			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
 		}
-	}
 
-	return q[0];
-}
-
-KoPoint
-VSegment::derive( double t ) const
-{
-	if( !m_prev || m_type == segment_begin )
-		return KoPoint();
-
-	// lines:
-	if( m_type == segment_line )
-	{
-		return
-			( m_point[2] - m_prev->m_point[2] );
-	}
-
-	// beziers:
-	KoPoint q[3];
-	q[0] = m_point[0] - m_prev->m_point[2];
-	q[1] = m_point[1] - m_point[0];
-	q[2] = m_point[2] - m_point[1];
-
-	// de casteljau algorithm:
-	for( uint j = 1; j <= 2; ++j )
-	{
-		for( uint i = 0; i <= 2 - j; ++i )
+		if( j == 1 )
 		{
-			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
+			if( d2 )
+				*d2 = 6 * ( q[2] - 2 * q[1] + q[0] );
+		}
+		else if( j == 2 )
+		{
+			if( d1 )
+				*d1 = 3 * ( q[1] - q[0] );
 		}
 	}
 
-	return 3 * q[0];
+	if( p )
+		*p = q[0];
+
+	return;
+}
+
+void
+VSegment::pointTangentNormal( double t, KoPoint* p,
+	KoPoint* tn, KoPoint* n ) const
+{
+	// Calculate derivative if necessary:
+	KoPoint d;
+
+	pointDerivatives( t, p, tn || n ? &d : 0L );
+
+
+	// Normalize derivative:
+	if( tn || n )
+	{
+		const double norm =
+			sqrt( d.x() * d.x() + d.y() * d.y() );
+
+		d = norm ? d * ( 1.0 / norm ) : KoPoint( 0.0, 0.0 );
+	}
+
+	// Assign tangent vector:
+	if( tn )
+		*tn = d;
+
+	// Calculate normal vector:
+	if( n )
+	{
+		// Calculate vector product of "binormal" x tangent
+		// (0,0,1) x (d1,d2,0), which is simply (d2,-d1,0):
+		n->setX(  d.y() );
+		n->setY( -d.x() );
+	}
 }
 
 KoPoint
 VSegment::tangent( double t ) const
 {
-	KoPoint p( derive( t ) );
-
-	const double norm =
-		sqrt( p.x() * p.x() + p.y() * p.y() );
-
-	return norm ? p * ( 1.0 / norm ) : KoPoint( 0.0, 0.0 );
-}
-
-void
-VSegment::pointAndDerive( double t, KoPoint& p, KoPoint& der ) const
-{
-	if( !m_prev || m_type == segment_begin )
-		return;
-
-	// lines:
-	if( m_type == segment_line )
-	{
-		der = m_point[2] - m_prev->m_point[2];
-		p = m_prev->m_point[2] + der * t;
-
-		return;
-	}
-
-	// beziers:
-	KoPoint q[4];
-	q[0] = m_prev->m_point[2];
-	q[1] = m_point[0];
-	q[2] = m_point[1];
-	q[3] = m_point[2];
-
-	// de casteljau algorithm:
-	for( uint j = 1; j <= 3; ++j )
-	{
-		for( uint i = 0; i <= 3 - j; ++i )
-		{
-			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
-		}
-
-		if( j == 2 )
-			der = 3 * ( q[1] - q[0] );
-	}
-
-	p = q[0];
-
-	return;
+	KoPoint tn;
+	pointTangentNormal( t, 0L, &tn );
+	return tn;
 }
 
 double
@@ -211,7 +200,7 @@ VSegment::length( double t ) const
 	if( !m_prev )
 		return 0.0;
 
-	// length of a line:
+	// Length of a line:
 	if( m_type == segment_line )
 	{
 		return
@@ -222,7 +211,7 @@ VSegment::length( double t ) const
 					( m_point[2].y() - m_prev->m_point[2].y() ) *
 					( m_point[2].y() - m_prev->m_point[2].y() ) ) );
 	}
-	// length of a bezier:
+	// Length of a bezier:
 	else if( m_type == segment_curve )
 	{
 		// This algortihm is based on an idea by Jens Gravesen <gravesen@mat.dth.dk>.
@@ -233,11 +222,12 @@ VSegment::length( double t ) const
 		// and add up the subresults.
 
 
-		// "copy segment" splitted a t into a vsegmentlist:
+		// "Copy segment" splitted at t into a vsegmentlist:
 		VSegmentList list( 0L );
 		list.moveTo( prev()->knot() );
 
-		// most of the time we'll need the length of the whole segment:
+		// Optimize a bit: most of the time we'll need the
+		// length of the whole segment:
 		if( t == 1.0 )
 			list.append( this->clone() );
 		else
@@ -303,7 +293,7 @@ VSegment::length( double t ) const
 				poly &&
 				( poly - chord ) / poly > VGlobal::lengthTolerance )
 			{
-				// split at midpoint:
+				// Split at midpoint:
 				list.insert(
 					list.current()->splitAt( 0.5 ) );
 			}
@@ -323,7 +313,7 @@ VSegment::length( double t ) const
 KoRect
 VSegment::boundingBox() const
 {
-	// initialize with p3:
+	// Initialize with p3:
 	KoRect rect( m_point[2], m_point[2] );
 
 	if( m_prev )
@@ -370,7 +360,7 @@ VSegment::splitAt( double t )
 
 	VSegment* segment = new VSegment();
 
-	// lines are easy: no need to change the current segment:
+	// Lines are easy: no need to change the current segment:
 	if( m_type == segment_line )
 	{
 		segment->m_point[2] =
@@ -381,13 +371,13 @@ VSegment::splitAt( double t )
 		return segment;
 	}
 
-	// these references make our life a bit easier:
+	// These references make our life a bit easier:
 	KoPoint& p0 = m_prev->m_point[2];
 	KoPoint& p1 = m_point[0];
 	KoPoint& p2 = m_point[1];
 	KoPoint& p3 = m_point[2];
 
-	// calculate the 2 new beziers:
+	// Calculate the 2 new beziers:
 	segment->m_point[0] = p0 + ( p1 - p0 ) * t;
 	segment->m_point[1] = p1 + ( p2 - p1 ) * t;
 
@@ -399,7 +389,7 @@ VSegment::splitAt( double t )
 	segment->m_point[2] =
 		segment->m_point[1] + ( p1 - segment->m_point[1] ) * t;
 
-	// set the new segment type:
+	// Set the new segment type:
 	segment->m_type = segment_curve;
 
 	return segment;

@@ -376,14 +376,32 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	s.lineTo( KoPoint(300,100) );
 	s.getLast()->convertToCurve();
 	s.getLast()->setCtrlPoint1(
-		s.getLast()->ctrlPoint1() + KoPoint(0,30) );
-
-kdDebug() << s.getLast()->length() << endl;
+		s.getLast()->ctrlPoint1() + KoPoint(0,200) );
 
 	VPath* p = new VPath( 0L );
 	p->combineSegmentList( s );
 
 	m_part->document().append( p );
+
+	KoPoint P;
+	KoPoint T;
+	KoPoint N;
+
+	for( uint i = 0; i < 10; ++i )
+	{
+		s.getLast()->pointTangentNormal( i / 10.0, &P, &T, &N );
+
+		p = new VPath( 0L );
+		p->moveTo( P );
+		p->lineTo( P + 10 * T );
+		m_part->document().append( p );
+
+		p = new VPath( 0L );
+		p->moveTo( P );
+		p->lineTo( P + 10 * N );
+		m_part->document().append( p );
+	}
+
 
 	m_part->repaintAllViews();
 }
