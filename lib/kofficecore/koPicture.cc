@@ -188,9 +188,9 @@ QSize KoPicture::getOriginalSize(void) const
     return QSize(0,0);
 }
 
-QPixmap KoPicture::generatePixmap(const QSize& size)
+QPixmap KoPicture::generatePixmap(const QSize& size, bool smoothScale)
 {
     if (m_sharedData)
-        return m_sharedData->generatePixmap(size);
+        return m_sharedData->generatePixmap(size, smoothScale);
     return QPixmap();
 }

@@ -81,7 +81,7 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
     if ( !rect.intersects( QRect( cx, cy, cw, ch ) ) )
         return;
 
-    QPixmap pixmap=m_image.generatePixmap( imgSize );
+    QPixmap pixmap=m_image.generatePixmap( imgSize, true );
     //if ( placement() == PlaceInline )
         p->drawPixmap( x, y, pixmap );
     //else

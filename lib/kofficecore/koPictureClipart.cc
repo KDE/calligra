@@ -167,7 +167,7 @@ QSize KoPictureClipart::getOriginalSize(void) const
     return m_clipart.boundingRect().size();
 }
 
-QPixmap KoPictureClipart::generatePixmap(const QSize& size)
+QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/)
 {
     // Not sure if it works, but it worked for KoPictureFilePreviewWidget::setClipart
     QPixmap pixmap(size);

@@ -307,7 +307,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         (int)( _zoomHandler->zoomItY( oy ) + penw ),
                         (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
                         (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-            QPixmap _pixmap = image.generatePixmap( rect.size() );
+            QPixmap _pixmap = image.generatePixmap( rect.size(), true );
 
 	    QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
 
@@ -360,7 +360,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         (int)penw,
                         (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
                         (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-            QPixmap _pixmap = image.generatePixmap( rect.size() );
+            QPixmap _pixmap = image.generatePixmap( rect.size(), true );
 
 	    QPixmap tmpPix = changePictureSettings( _pixmap );
 
@@ -382,7 +382,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 QPixmap KPPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    QPixmap _pixmap = image.generatePixmap( _pixSize );
+    QPixmap _pixmap = image.generatePixmap( _pixSize, true );
 
     return _pixmap;
 }

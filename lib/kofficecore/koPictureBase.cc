@@ -84,7 +84,7 @@ QSize KoPictureBase::getOriginalSize(void) const
     return QSize(0,0);
 }
 
-QPixmap KoPictureBase::generatePixmap(const QSize&)
+QPixmap KoPictureBase::generatePixmap(const QSize&, bool /*smoothScale*/)
 {
     return QPixmap();
 }

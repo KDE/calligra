@@ -136,7 +136,7 @@ public:
      *
      * To be replaced by @ref KoPicture::draw
      */
-    QPixmap generatePixmap(const QSize& size);
+    QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
 protected:
     /**

@@ -192,8 +192,8 @@ QSize KoPictureImage::getOriginalSize(void) const
     return m_originalImage.size();
 }
 
-QPixmap KoPictureImage::generatePixmap(const QSize& size)
+QPixmap KoPictureImage::generatePixmap(const QSize& size, bool smoothScale)
 {
-    scaleAndCreatePixmap(size,true); // Always fast mode!
+    scaleAndCreatePixmap(size,!smoothScale);
     return m_cachedPixmap;
 }

@@ -100,7 +100,7 @@ public:
 
     virtual QSize getOriginalSize(void) const;
 
-    virtual QPixmap generatePixmap(const QSize& size);
+    virtual QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
     /**
      * @internal

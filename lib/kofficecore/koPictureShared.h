@@ -136,7 +136,7 @@ public:
      *
      * @p size is the wanted size for the QPixmap
      */
-    QPixmap generatePixmap(const QSize& size);
+    QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
 protected:
     /**

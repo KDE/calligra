@@ -469,16 +469,16 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         switch ( backView )
         {
         case BV_ZOOM:
-            backPix=backImage.generatePixmap( ext );
+            backPix=backImage.generatePixmap( ext, true );
             _painter->drawPixmap( QRect( 0, 0, ext.width(), ext.height() ), backPix );
             break;
         case BV_TILED:
-            backPix=backImage.generatePixmap( _pixSize );
+            backPix=backImage.generatePixmap( _pixSize, true );
             _painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), backPix );
             break;
         case BV_CENTER:
         {
-            backPix=backImage.generatePixmap( _pixSize );
+            backPix=backImage.generatePixmap( _pixSize, true );
 
             QPixmap *pix = new QPixmap( ext.width(), ext.height() );
             bool delPix = true;
