@@ -31,28 +31,6 @@ class KDoubleNumInput;
 class KarbonPart;
 class QLabel;
 
-class VRectangleOptionsWidget : public QGroupBox
-{
-	Q_OBJECT
-
-public:
-	VRectangleOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
-
-	double width() const;
-	double height() const;
-	void setWidth( double value );
-	void setHeight( double value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_width;
-	KDoubleNumInput* m_height;
-	KarbonPart*m_part;
-	QLabel *m_heightLabel;
-	QLabel *m_widthLabel;
-
-};
-
-
 class VRectangleTool : public VShapeTool
 {
 public:
@@ -67,6 +45,25 @@ public:
     void refreshUnit();
 
 private:
+	class VRectangleOptionsWidget : public QGroupBox
+	{
+	public:
+		VRectangleOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+
+		double width() const;
+		double height() const;
+		void setWidth( double value );
+		void setHeight( double value );
+		void refreshUnit ();
+
+	private:
+		KDoubleNumInput	*m_width;
+		KDoubleNumInput	*m_height;
+		KarbonPart		*m_part;
+		QLabel			*m_heightLabel;
+		QLabel			*m_widthLabel;
+	};
+
 	VRectangleOptionsWidget* m_optionsWidget;
 };
 

@@ -29,49 +29,50 @@
 #include "vrectangletool.h"
 
 
-VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
+VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
 {
 	// add width/height-input:
-	m_widthLabel =new QLabel( i18n( "Width:" ), this );
+	m_widthLabel = new QLabel( i18n( "Width:" ), this );
 	m_width = new KDoubleNumInput( 0, this );
-	m_width->setSuffix(m_part->getUnitName());
-	m_heightLabel =new QLabel( i18n( "Height:" ), this );
+	m_width->setSuffix( m_part->getUnitName() );
+	m_heightLabel = new QLabel( i18n( "Height:" ), this );
 	m_height = new KDoubleNumInput( 0, this );
-	m_height->setSuffix(m_part->getUnitName());
-	
+	m_height->setSuffix( m_part->getUnitName() );
+
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
 }
 
 double
-VRectangleOptionsWidget::width() const
+VRectangleTool::VRectangleOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit() );
 }
 
 double
-VRectangleOptionsWidget::height() const
+VRectangleTool::VRectangleOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit() );
 }
 
 void
-VRectangleOptionsWidget::setWidth( double value )
+VRectangleTool::VRectangleOptionsWidget::setWidth( double value )
 {
-	m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+	m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
-VRectangleOptionsWidget::setHeight( double value )
+VRectangleTool::VRectangleOptionsWidget::setHeight( double value )
 {
 	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
-void VRectangleOptionsWidget::refreshUnit ()
+void
+VRectangleTool::VRectangleOptionsWidget::refreshUnit ()
 {
-	m_width->setSuffix(m_part->getUnitName());
-	m_height->setSuffix(m_part->getUnitName());
+	m_width->setSuffix( m_part->getUnitName() );
+	m_height->setSuffix( m_part->getUnitName() );
 }
 
 VRectangleTool::VRectangleTool( KarbonView* view )
@@ -88,12 +89,13 @@ VRectangleTool::~VRectangleTool()
 	delete( m_optionsWidget );
 }
 
-void VRectangleTool::refreshUnit()
+void
+VRectangleTool::refreshUnit()
 {
     m_optionsWidget->refreshUnit();
 }
 
-VComposite*
+VComposite *
 VRectangleTool::shape( bool interactive ) const
 {
 	if( interactive )

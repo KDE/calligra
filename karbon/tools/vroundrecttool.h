@@ -31,44 +31,42 @@ class KDoubleNumInput;
 class KarbonPart;
 class QLabel;
 
-class VRoundRectOptionsWidget : public QGroupBox
-{
-	Q_OBJECT
-
-public:
-	VRoundRectOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
-
-	double width() const;
-	double height() const;
-	double round() const;
-	void setWidth( double value );
-	void setHeight( double value );
-	void setRound( double value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_width;
-	KDoubleNumInput* m_height;
-	KDoubleNumInput* m_round;
-	KarbonPart*m_part;
-	QLabel *m_heightLabel;
-	QLabel *m_widthLabel;
-};
-
-
 class VRoundRectTool : public VShapeTool
 {
 public:
 	VRoundRectTool( KarbonView* view );
 	virtual ~VRoundRectTool();
 
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Round rectangle tool" ); }
-	
+
 	virtual VComposite* shape( bool interactive = false ) const;
 
     void refreshUnit();
 
 private:
+	class VRoundRectOptionsWidget : public QGroupBox
+	{
+	public:
+		VRoundRectOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
+
+		double width() const;
+		double height() const;
+		double round() const;
+		void setWidth( double value );
+		void setHeight( double value );
+		void setRound( double value );
+		void refreshUnit ();
+
+	private:
+		KDoubleNumInput		*m_width;
+		KDoubleNumInput		*m_height;
+		KDoubleNumInput		*m_round;
+		KarbonPart			*m_part;
+		QLabel				*m_heightLabel;
+		QLabel				*m_widthLabel;
+	};
+
 	VRoundRectOptionsWidget* m_optionsWidget;
 };
 

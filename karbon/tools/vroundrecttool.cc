@@ -29,67 +29,68 @@
 #include "vroundrecttool.h"
 
 
-VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )
+VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part)
 {
 	// add width/height-input:
-	m_widthLabel=new QLabel( i18n( "Width:" ), this );
+	m_widthLabel = new QLabel( i18n( "Width:" ), this );
 
-	m_width = new KDoubleNumInput(0,this);
-	m_width->setSuffix(m_part->getUnitName());
-	m_width->setRange(0, 1000, 0.1);
+	m_width = new KDoubleNumInput( 0,this );
+	m_width->setSuffix( m_part->getUnitName() );
+	m_width->setRange( 0, 1000, 0.1 );
 
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
 
-	m_height = new KDoubleNumInput(0,this);
-	m_height->setSuffix(m_part->getUnitName());
-	m_height->setRange(0, 1000, 0.1);
+	m_height = new KDoubleNumInput( 0, this );
+	m_height->setSuffix( m_part->getUnitName() );
+	m_height->setRange( 0, 1000, 0.1 );
 
 	new QLabel( i18n( "Edge radius:" ), this );
-	m_round = new KDoubleNumInput(0,this);
-	m_round->setRange(0, 1000, 0.1);
-	
+	m_round = new KDoubleNumInput( 0,this );
+	m_round->setRange( 0, 1000, 0.1 );
+
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
 }
 
 double
-VRoundRectOptionsWidget::width() const
+VRoundRectTool::VRoundRectOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit() );
 }
 
 double
-VRoundRectOptionsWidget::height() const
+VRoundRectTool::VRoundRectOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit() );
 }
 
 double
-VRoundRectOptionsWidget::round() const
+VRoundRectTool::VRoundRectOptionsWidget::round() const
 {
 	return m_round->value();
 }
 
 void
-VRoundRectOptionsWidget::setWidth( double value )
+VRoundRectTool::VRoundRectOptionsWidget::setWidth( double value )
 {
-    m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+    m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
-VRoundRectOptionsWidget::setHeight( double value )
+VRoundRectTool::VRoundRectOptionsWidget::setHeight( double value )
 {
     m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
-VRoundRectOptionsWidget::setRound( double value )
+VRoundRectTool::VRoundRectOptionsWidget::setRound( double value )
 {
     m_round->setValue( value);
 }
 
-void VRoundRectOptionsWidget::refreshUnit ()
+void
+VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 {
     m_width->setSuffix(m_part->getUnitName());
     m_height->setSuffix(m_part->getUnitName());
