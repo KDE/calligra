@@ -4,7 +4,7 @@
 #include <config.h>
 
 #ifdef HAVE_KDEPRINT
-#include <koprinter.h>
+#include <kprinter.h>
 #else
 #include <qprinter.h>
 #define KPrinter QPrinter
