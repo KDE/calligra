@@ -95,7 +95,10 @@ void XMLTree::getFont(Q_UINT16, QDomElement &f, Q_UINT16 fontid)
 
     if ((fonts[fontid]->grbit & 0x02) == 2)
         font.setAttribute("italic", "yes");
-
+      
+    if ((fonts[fontid]->grbit & 0x08) == 8)
+	font.setAttribute("strikeout", "yes" );
+    
     if (fonts[fontid]->uls != 0)
         font.setAttribute("underline", "yes");
 
