@@ -36,6 +36,7 @@
 #include <kio/netaccess.h>
 #include <ksimpleconfig.h>
 #include <mycanvas.h>
+#include <kurl.h>
 
 //BEGIN KuKexiDataSourceComboBox
 
@@ -253,7 +254,7 @@ bool KuKexi::store(KoStore*) {
 	getStorageFile(filename);
 	if (filename.isEmpty()) return false;
 	if (KIO::NetAccess::exists(filename)) {
-		if (!KIO::NetAccess::del(filename,0)) {
+		if (!KIO::NetAccess::del(KURL(filename))) {
 			kdDebug()<<"Couldn't delete temporary file template.kukexi file"<<endl;
 			return false;
 		}
