@@ -1551,7 +1551,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 frameElem = elem.namedItem( "FRAME" ).toElement();
             }
             //when we paste a header/footer we transforme it in a body frame
-            if(fs->isHeaderOrFooter())
+            if(fs->isHeaderOrFooter() || fs->isFootEndNote())
                 fs->setFrameSetInfo(KWFrameSet::FI_BODY);
         }
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
@@ -1809,7 +1809,7 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QValueList<KoPictureKey> saveImages;
     QValueList<KoPictureKey> saveCliparts;
-    
+
     // At first, we must process the data of the KWTextImage classes.
     QMapIterator<KoPictureKey,KWTextImage *> textIt;
     for ( textIt  = m_imageRequests.begin(); textIt != m_imageRequests.end(); ++textIt )

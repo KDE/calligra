@@ -4213,7 +4213,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(actionConfigureHeaderFooter);
             }
 
-            bool state = !frameSet->isHeaderOrFooter();
+            bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote();
             state = state && (m_doc->processingType() == KWDocument::WP &&frameSet!=m_doc->frameSet( 0 ));
             if(state)
             {
