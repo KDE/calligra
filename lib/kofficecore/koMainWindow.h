@@ -91,20 +91,6 @@ public:
 
     virtual KParts::PartManager *partManager();
 
-    /**
-     *  Retrieves the first MainWindow.
-     *
-     *  @ref nextMainWindow
-     */
-    static KoMainWindow* firstMainWindow();
-
-    /**
-     *  Retrieves the next window.
-     *
-     *  @ref firstMeinWindow
-     */
-    static KoMainWindow* nextMainWindow();
-
 public slots:
 
     /**
@@ -237,8 +223,6 @@ protected slots:
 private:
 
     void buildMainWindowGUI();
-
-    static QList<KoMainWindow>* s_lstMainWindows;
 
     KoMainWindowPrivate *d;
 

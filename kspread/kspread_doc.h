@@ -306,11 +306,6 @@ protected:
   QString completeHeading( const char *_data, int _page, const char *_KSpreadTable );
 
   /**
-   * Overloaded function of @ref KoDocument.
-   */
-  virtual const char* copyright() { return "kspread (c) Torben Weis, <weis@kde.org> 1998,1999"; }
-
-  /**
    * Pointer to the map that holds all the tables.
    */
   KSpreadMap *m_pMap;

@@ -529,21 +529,6 @@ protected:
    */
   virtual bool save( ostream&, const char* format );
 
-
-  // ######### Now that we've got aboutdata this seems to be obsolete (Werner)
-  /**
-   *  Overload this function with your personal text.
-   *  By default an empty string is returned.
-   */
-  virtual QString copyright() const;
-
-  // ######### Now that we've got aboutdata this seems to be obsolete (Werner)
-  /**
-   *  Retrieves a comment of the document.
-   *  By default an empty string is returned.
-   */
-  virtual QString comment() const;
-
   /**
    * Return true if url() is a real filename, false if url() is
    * an internal url in the store, like "tar:/..."

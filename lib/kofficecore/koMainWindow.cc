@@ -60,8 +60,6 @@
 #endif
 #include <stdlib.h>
 
-QList<KoMainWindow>* KoMainWindow::s_lstMainWindows = 0;
-
 class KoMainWindowPrivate
 {
 public:
@@ -104,10 +102,6 @@ public:
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     : KParts::MainWindow( name )
 {
-    if ( !s_lstMainWindows )
-	s_lstMainWindows = new QList<KoMainWindow>;
-    s_lstMainWindows->append( this );
-
     d = new KoMainWindowPrivate;
 
     d->m_manager = new KParts::PartManager( this );
@@ -209,9 +203,6 @@ KoMainWindow::~KoMainWindow()
     m_recent->saveEntries( config );
     config->sync();
 
-    if ( s_lstMainWindows )
-	s_lstMainWindows->removeRef( this );
-
     delete d->m_manager;
     delete d->m_splitter;
     d->m_splitter=0L;
@@ -300,22 +291,6 @@ KoView *KoMainWindow::rootView() const
 KParts::PartManager *KoMainWindow::partManager()
 {
   return d->m_manager;
-}
-
-KoMainWindow* KoMainWindow::firstMainWindow()
-{
-    if ( !s_lstMainWindows )
-	return 0;
-
-    return s_lstMainWindows->first();
-}
-
-KoMainWindow* KoMainWindow::nextMainWindow()
-{
-    if ( !s_lstMainWindows )
-	return 0;
-
-    return s_lstMainWindows->next();
 }
 
 bool KoMainWindow::openDocument( const KURL & url )
@@ -442,16 +417,17 @@ bool KoMainWindow::queryClose(bool forQuit)
   return true;
 }
 
+
 bool KoMainWindow::closeAllDocuments()
 {
-    KoMainWindow* win = firstMainWindow();
-    for( ; win; win = nextMainWindow() )
-    {
-	if ( !win->queryClose() )
-	    return false;
-        else
-            win->setRootDocument( 0L );
-    }
+    //KoMainWindow* win = firstMainWindow();
+    //for( ; win; win = nextMainWindow() )
+    //{
+    //    if ( !win->queryClose() )
+    //        return false;
+    //    else
+    //        win->setRootDocument( 0L );
+    //}
     return true;
 }
 

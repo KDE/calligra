@@ -831,16 +831,6 @@ bool KoDocument::save( ostream&, const char* )
     return false;
 }
 
-QString KoDocument::copyright() const
-{
-    return "";
-}
-
-QString KoDocument::comment() const
-{
-    return "";
-}
-
 QCString KoDocument::nativeFormatMimeType()
 {
   if ( m_nativeFormatMimeType.isEmpty() )
