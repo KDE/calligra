@@ -142,6 +142,11 @@ public:
     { i_first = makeIntern( _first ); repaint( false ); }
 
     /**
+     * Set the [paragraph] right indent to the specified position (in the current unit)
+     */
+    void setRightIndent( double _right );
+
+    /**
      * Set the list of tabulators to show in the ruler.
      */
     void setTabList( const KoTabulatorList & tabList );
@@ -166,13 +171,14 @@ signals:
     void newPageLayout( KoPageLayout );
     void newLeftIndent( double );
     void newFirstIndent( double );
+    void newRightIndent( double );
     void openPageLayoutDia();
     void tabListChanged( const KoTabulatorList & );
     void unitChanged( QString );
 
 protected:
     enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM,
-                 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
+                 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB, A_RIGHT_INDENT};
 
     void drawContents( QPainter *_painter )
     { orientation == Qt::Horizontal ? drawHorizontal( _painter ) : drawVertical( _painter ); }
