@@ -243,10 +243,10 @@ void KoTemplateChooseDia::chosen()
 	if ( !groupList.isEmpty() ) {
 	    for ( grpPtr = groupList.first();grpPtr != 0;grpPtr = groupList.next() ) {
 		if ( grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty() ) {
-		    emit templateChosen( QString( grpPtr->name + "/" + grpPtr->loadWid->getCurrent() ) );
-		    templateName = QString( grpPtr->name + "/" + grpPtr->loadWid->getCurrent() );
-		    fullTemplateName = QString( grpPtr->dir.dirPath( TRUE ) + "/" +
-						grpPtr->name + "/" + grpPtr->loadWid->getCurrent() );
+		    QFileInfo f(grpPtr->loadWid->getCurrent());
+		    emit templateChosen( QString( grpPtr->name + "/" + f.fileName() ) );
+		    templateName = QString( grpPtr->name + "/" + f.fileName() );
+		    fullTemplateName = grpPtr->loadWid->getCurrent();	    
 		    accept();
 		}
 	    }
