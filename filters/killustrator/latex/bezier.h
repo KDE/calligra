@@ -69,9 +69,10 @@ class Bezier: public Element
 		void setArrow2(int a)  { _arrow2   = (EArrow) a; }
 		void setClosed(bool c) { _closed   = c;          }
 
-		void  analyse(const QDomNode);
+		void analyse(const QDomNode);
 
-		void  generatePSTRICKS(QTextStream&);
+		void generatePSTRICKS(QTextStream&);
+		void generatePSTRICKSParam(QTextStream&);
 
 	private:
 		void  analyseParam(const QDomNode);

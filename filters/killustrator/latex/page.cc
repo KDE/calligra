@@ -77,8 +77,8 @@ void Page::analyseLayout(const QDomNode balise)
 /*******************************************/
 void Page::generatePSTRICKS(QTextStream &out)
 {
-	out << "\\psset{origin={0,-" << getHeight() << "mm}}" << endl;
-	out << "\\psset{yunit=-1pt}" << endl;
+	//out << "\\psset{origin={0,-" << getHeight() << "mm}}" << endl;
+	//out << "\\psset{yunit=-1pt}" << endl;
 	_layer.generatePSTRICKS(out);
 }
 

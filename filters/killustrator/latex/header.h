@@ -147,6 +147,8 @@ class Header: public XmlParser
 		void useGradient    ()           { _hasGradient  = true;     }
 		QString addNewColor(QString);
 
+		double convert(double);
+
 		void analyse            (const QDomNode);
 		void generate           (QTextStream &);
 

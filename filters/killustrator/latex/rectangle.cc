@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "rectangle.h"
+#include "header.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -89,6 +90,8 @@ void Rectangle::generatePSTRICKS(QTextStream& out)
 
 	getMatrix().map(getX(), getY(), &x1, &y1);
 	getMatrix().map(getX() + getWidth(), getY() + getHeight(), &x2, &y2);
+	y1 = getFileHeader()->convert(y1);
+	y2 = getFileHeader()->convert(y2);
 	out << "(" << x1 << "," << y1 << ")(";
 	out << x2 << ",";
 	out << y2 << ")" << endl;

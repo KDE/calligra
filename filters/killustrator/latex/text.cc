@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "text.h"
+#include "header.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -44,34 +45,19 @@ Text::~Text()
 /*******************************************/
 void Text::analyse(const QDomNode balise)
 {
+	Font *font;
 	/* Get parameters */
 	kdDebug() << "BEGIN OF ANALYSE OF A TEXT" << endl;
 
 	Element::analyse(balise);
 	analyseParam(balise);
 
-	for(int index= 0; index < getNbChild(balise); index++)
-	{
-		Font *font = 0;
-		kdDebug() << getChildName(balise, index) << endl;
-		if(getChildName(balise, index).compare("font")== 0)
-		{
-			font = new Font;
-			font->analyse(balise);
-			_fonts.append(font);
-		}
-		else if(getChild(balise, index).isCDATASection())
-		{
-			QDomCDATASection txt = getChild(balise, index).toCDATASection();
-			kdDebug() << txt.data() << endl;
-			_text = txt.data();
-		}
-		else if(getChildName(balise, index).compare("gobject")== 0)
-		{
-			Element::analyseGObject(getChild(balise, index));
-		}
-	}
-	
+	Element::analyseGObject(getChild(balise, "gobject"));
+	font = new Font;
+	font->analyse(getChild(balise, "font"));
+	_fonts.append(font);
+	_text =  getChild(balise, 1).toCharacterData().data();
+	kdDebug() << "TEXT : " << _text << endl;
 	kdDebug() << "END OF ANALYSE OF A TEXT" << endl;
 }
 
@@ -93,7 +79,7 @@ void Text::generatePSTRICKS(QTextStream& out)
 {
 	double x, y;
 
-	out << "\\rput";
+	out << "\\put";
 	
 	/* Options */
 	QString param = getBaseContentAttr();
@@ -103,7 +89,7 @@ void Text::generatePSTRICKS(QTextStream& out)
 	generateList(out, "[", params, "]");
 
 	getMatrix().map(getX(), getY(), &x, &y);
-
+	y = getFileHeader()->convert(y);
 	/* Coord */
 	out << "(" << x << "," << y << ")";
 

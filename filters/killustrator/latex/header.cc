@@ -49,6 +49,15 @@ Header::~Header()
 }
 
 /*******************************************/
+/* Convert                                 */
+/* Note : 844 is the picture width in pt.  */
+/*******************************************/
+double Header::convert(double y)
+{
+	return (844 - y);
+}
+
+/*******************************************/
 /* Analyse                                 */
 /*******************************************/
 void Header::analyse(const QDomNode balise)

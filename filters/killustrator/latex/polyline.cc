@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "polyline.h"
+#include "header.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -89,6 +90,7 @@ void Polyline::generatePSTRICKS(QTextStream& out)
 	{
 		QString coord;
 		getMatrix().map(point->getX(), point->getY(), &x, &y);
+		y = getFileHeader()->convert(y);
 		concat(coord, x);
 		concat(coord, y);
 		generateList(out, QString("("), coord, QString(")"));

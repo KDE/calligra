@@ -24,6 +24,7 @@
 #include <kdebug.h>
 
 #include "ellipse.h"
+#include "header.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -102,6 +103,8 @@ void Ellipse::generatePSTRICKS(QTextStream& out)
 
 	getMatrix().map(getX(), getY(), &x, &y);
 	getMatrix().map(getX() + getRx(), getY() + getRy(), &rx, &ry);
+	y = getFileHeader()->convert(y);
+	ry = getFileHeader()->convert(ry);
 	out << "(" << x << "," << y << ")";
 	if(getKind() == EK_FULL && (rx -x) != (ry - y))
 		out << "(" << (rx - x) << "," << (ry - y) << ")";

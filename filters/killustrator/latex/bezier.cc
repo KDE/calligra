@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "bezier.h"
+#include "header.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -77,6 +78,49 @@ void Bezier::analyseParam(const QDomNode balise)
 /*******************************************/
 void Bezier::generatePSTRICKS(QTextStream& out)
 {
+	double x, y;
+	kdDebug() << "Generate a bezier" << endl;
+	out << "\\psbezier";
+	generatePSTRICKSParam(out);
+	for(Point* point = _points.first(); point != 0; point = _points.next())
+	{
+		QString coord;
+		getMatrix().map(point->getX(), point->getY(), &x, &y);
+		y = getFileHeader()->convert(y);
+		concat(coord, x);
+		concat(coord, y);
+		generateList(out, QString("("), coord, QString(")"));
+	}
+	out << endl;
+	kdDebug() << "Bezier generated" << endl;
+	
+}
 
+/*******************************************/
+/* GeneratePSTRICKSParam                   */
+/*******************************************/
+void Bezier::generatePSTRICKSParam(QTextStream& out)
+{
+	bool toClose= false;
+	QString param1 = getBaseContentAttr();
+	QString params;
+	QString arrows;
+
+	concat(params, param1);
+
+	if(!params.isEmpty())
+		out << "[" << params << "]";
+	if(getArrow1() != EF_NONE)
+	{
+		concat(arrows, "<");
+	}
+
+	if(getArrow2() != EF_NONE)
+	{
+		concat(arrows, ">");
+	}
+	generateList(out, "{", arrows, "}");
+	/*if(!arrows.isEmpty())
+		out << "{" << arrows << "}";*/
 }
 

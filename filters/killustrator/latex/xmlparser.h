@@ -23,7 +23,6 @@
 #ifndef __KILLU_XMLPARSER_H__
 #define __KILLU_XMLPARSER_H__
 
-//#include "xmlparse.h"
 #include "qstring.h"
 #include "qdom.h"
 
@@ -48,8 +47,8 @@ class XmlParser
 		XmlParser();
 		virtual ~XmlParser();
 
-		QString     getFilename     () const  { return _filename;      }
-		QString     getDocument     () const  { return _document.toString(); };
+		QString     getFilename     () const { return _filename;      }
+		QString     getDocument     () const { return _document.toString(); };
 		Header*     getFileHeader   () const { return _fileHeader; }
 		/*QDomNode getChild(QString);
 		QDomNode getChild(QString, int);
