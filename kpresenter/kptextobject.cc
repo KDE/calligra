@@ -1027,7 +1027,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         element.setAttribute( "width", (*it).ptWidth );
     }
 
-    if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
+    if(layout.shadowDistance!=0 || layout.shadowDirection!=static_cast<int>(KoParagLayout::SD_RIGHT_BOTTOM))
     {
         element = doc.createElement( "SHADOW" );
         parentElem.appendChild( element );
