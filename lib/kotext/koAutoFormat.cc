@@ -738,6 +738,13 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
 
 void KoAutoFormat::addAutoFormatEntry( const QString &key, const QString &replace )
 {
+    KoAutoFormatEntry *findEntry = m_entries.find( key);
+    if ( findEntry )
+    {
+        if ( findEntry->replace() == replace )
+            return;
+    }
+
     KoAutoFormatEntry *tmp = new KoAutoFormatEntry( replace );
     m_entries.insert( key, tmp );
     saveConfig();
