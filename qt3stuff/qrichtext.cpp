@@ -1170,7 +1170,27 @@ bool QTextCursor::remove()
 	    doc->nextDoubleBuffered = TRUE;
 	return FALSE;
     } else if ( string->next() ) {
-	string->join( string->next() );
+
+	if ( string->length() == 1 ) {
+	    string->next()->setPrev( string->prev() );
+	    if ( string->prev() )
+		string->prev()->setNext( string->next() );
+	    QTextParag *p = string->next();
+	    delete string;
+	    string = p;
+	    string->invalidate( 0 );
+	    QTextParag *s = string;
+	    while ( s ) {
+		s->id = s->p ? s->p->id + 1 : 0;
+		s->state = -1;
+		s->needPreProcess = TRUE;
+		s->changed = TRUE;
+		s = s->n;
+	    }
+	    string->format();
+	} else {
+	    string->join( string->next() );
+	}
 	invalidateNested();
 	return TRUE;
     }
@@ -4761,7 +4781,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		tminw = marg;
 	    continue;
 	}
-	if ( isWrapEnabled() && ( lastBreak != -1 || allowBreakInWords() ) &&
+	if ( isWrapEnabled() && !isBreakable( string, i ) && ( lastBreak != -1 || allowBreakInWords() ) &&
 	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||

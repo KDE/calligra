@@ -1054,6 +1054,7 @@ public:
 class Q_EXPORT QTextParag
 {
     friend class QTextDocument;
+    friend class QTextCursor;
 
 public:
     QTextParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
