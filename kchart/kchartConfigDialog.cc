@@ -207,6 +207,9 @@ void KChartConfigDialog::apply()
     if(_parameterfontpage)
         _parameterfontpage->apply();
 
+    if(_colorpage)
+        _colorpage->apply();
+
     if( _subTypePage )
         _subTypePage->apply();
 

@@ -202,10 +202,6 @@ void KChartColorConfigPage::initDataColorList()
 void KChartColorConfigPage::apply()
 {
     extColor.setColor(index,_dataColorCB->color());
-    // PENDING(kalle) Adapt
-    //   for(unsigned int i=0;i<extColor.count();i++)
-//     _params->ExtColor.setColor(i,extColor.color(i));
-
     for(uint i =0;i<data->rows();i++)
         if(i<_params->maxDataColor())
             _params->setDataColor(i,extColor.color(i));
