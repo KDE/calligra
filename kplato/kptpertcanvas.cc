@@ -171,7 +171,7 @@ void KPTPertCanvas::mapNode(KPTPertNodeItem *item)
 	//kdDebug()<<k_funcinfo<<endl;
     if (! m_rows.at(item->row()) || m_rows.at(item->row())->count() <= item->column())
     {
-        kdError()<<k_funcinfo<<"Non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;
+        kdError()<<k_funcinfo<<item->node().name()<<": non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;
         return;
     }
     m_rows.at(item->row())->at(item->column()) = true;
@@ -190,7 +190,7 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
     int chRow = childItem->row();
     int chCol = childItem->column();
     bool chMapped = (chRow > -1 && chCol > -1);
-	//kdDebug()<<k_funcinfo<<"Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
+	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" at ("<<row<<","<<col<<"): Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
 
     if (type == START_START ||
         type == FINISH_FINISH)
@@ -202,7 +202,7 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
             if (chRow <= row)
             {
                 chRow = row+1;
-                if (!m_rows.count() <= chRow)
+                if (!(m_rows.count() <= chRow))
                     m_rows.append(new QMemArray<bool>(1)); // make a new row
             }
             if (chCol < col)
@@ -238,9 +238,9 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
             if (chCol <= col)
             {
                 chCol = col+1;
-                if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
-                    m_rows.at(chRow)->resize(chCol+1);
             }
+            if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
+                m_rows.at(chRow)->resize(chCol+1);
         }
         else
         {
