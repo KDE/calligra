@@ -18,6 +18,7 @@
 */
 
 #include <winworddoc.h>
+#include <qregexp.h>
 
 WinWordDoc::WinWordDoc(
     QDomDocument &part,
@@ -69,7 +70,7 @@ const bool WinWordDoc::convert()
     {
         QString newstr;
 
-        newstr = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n"
+        newstr = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC >\n"
             "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n"
             " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
             "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"28\" ptTop=\"42\" ptRight=\"28\" ptBottom=\"42\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
@@ -99,12 +100,27 @@ const bool WinWordDoc::convert()
     return m_success;
 }
 
+void WinWordDoc::encode(QString &text)
+{
+  // When encoding the stored form of text to its run-time form,
+  // be sure to do the conversion for "&amp;" to "&" first to avoid
+  // accidentally converting user text into one of the other escape
+  // sequences.
+
+  text.replace(QRegExp("&"), "&amp;");
+  text.replace(QRegExp("<"), "&lt;");
+  text.replace(QRegExp(">"), "&gt;");
+}
+
 void WinWordDoc::gotError(const QString &text)
 {
     if (m_phase == TEXT_PASS)
     {
+        QString xml_friendly = text;
+
+        encode(xml_friendly);
         m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(text);
+        m_body.append(xml_friendly);
         m_body.append("</TEXT>\n</PARAGRAPH>\n");
     }
     m_success = false;
@@ -114,8 +130,11 @@ void WinWordDoc::gotParagraph(const QString &text, PAP &style)
 {
     if (m_phase == TEXT_PASS)
     {
+        QString xml_friendly = text;
+
+        encode(xml_friendly);
         m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(text);
+        m_body.append(xml_friendly);
         m_body.append("</TEXT>\n</PARAGRAPH>\n");
     }
 }
@@ -124,8 +143,11 @@ void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
 {
     if (m_phase == TEXT_PASS)
     {
+        QString xml_friendly = text;
+
+        encode(xml_friendly);
         m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(text);
+        m_body.append(xml_friendly);
         m_body.append("</TEXT>\n"
             " <LAYOUT>\n"
             "  <NAME value=\"Head ");
@@ -144,8 +166,11 @@ void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
 {
     if (m_phase == TEXT_PASS)
     {
+        QString xml_friendly = text;
+
+        encode(xml_friendly);
         m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(text);
+        m_body.append(xml_friendly);
         m_body.append("</TEXT>\n"
             " <LAYOUT>\n"
             "  <COUNTER type=\"");
@@ -189,6 +214,7 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP styles[], TAP &row
     if (m_phase == TABLE_PASS)
     {
         int offset = -row.rgdxaCenter[0];
+        QString xml_friendly;
 
         for (unsigned i = 0; i < row.itcMac; i++)
         {
@@ -209,7 +235,9 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP styles[], TAP &row
             m_body.append(QString::number(500 + m_tableRow * 30));
             m_body.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
             m_body.append("<PARAGRAPH>\n<TEXT>");
-            m_body.append(texts[i]);
+            xml_friendly = texts[i];
+            encode(xml_friendly);
+            m_body.append(xml_friendly);
             m_body.append("</TEXT>\n </PARAGRAPH>\n");
             m_body.append("</FRAMESET>\n");
 

@@ -16,6 +16,11 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
+
+    The code in this file is mostly derived from the Microsoft specifications,
+    but some of the workarounds for the broken specifications etc. come from
+    the pioneering work on the "wvWare" library by Caolan McNamara (see
+    http://www.wvWare.com).
 */
 
 #include <kdebug.h>
@@ -361,7 +366,6 @@ void MsWord::getListStyles()
         LSTF data;
         unsigned levelCount;
 
-        kdDebug(s_area) << "MsWord::getListStyles: LSTF begins: " << (unsigned long)ptr << endl;
         ptr += MsWordGenerated::read(ptr, &data);
         if (data.fSimpleList)
             levelCount = 1;
@@ -381,12 +385,10 @@ void MsWord::getListStyles()
             U16 numberTextLength;
             QString numberText;
 
-            kdDebug(s_area) << "MsWord::getListStyles: LVLF" << j << " begins: " << (unsigned long)ptr2 << endl;
             ptr2 += MsWordGenerated::read(ptr2, &level);
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            kdDebug(s_area) << "MsWord::getListStyles: LVLF" << j << " numberTextLength: " << numberTextLength << endl;
             ptr2 += read(ptr2, &numberText, numberTextLength, true);
         }
     }
@@ -417,7 +419,6 @@ void MsWord::getStyles()
     // Fetch the STSHI.
 
     ptr += MsWordGenerated::read(ptr, &cbStshi);
-    kdDebug(s_area) << "MsWord::getStyles: max STSHI size " << sizeof(stshi) << ", actual " << cbStshi << endl;
     if (cbStshi > sizeof(stshi))
     {
         kdError(s_area) << "MsWord::getStyles: unsupported STSHI size " << cbStshi << endl;
@@ -427,7 +428,6 @@ void MsWord::getStyles()
     // We know that older/smaller STSHIs can simply be zero extended into our STSHI.
     // So, we overwrite anything that is not valid with zeros.
 
-    kdDebug(s_area) << "MsWord::getStyles: STSHI begins: " << (unsigned long)ptr << endl;
     ptr += MsWordGenerated::read(ptr, &stshi);
     memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
     ptr -= sizeof(stshi) - cbStshi;
@@ -440,7 +440,6 @@ void MsWord::getStyles()
         U16 cbStd;
         STD std;
 
-        kdDebug(s_area) << "MsWord::getStyles: STD begins: " << (unsigned long)ptr << endl;
         ptr += MsWordGenerated::read(ptr, &cbStd);
         if (cbStd)
         {
@@ -578,7 +577,6 @@ void MsWord::paragraphStyleModify(PAP *pap, unsigned style)
 
 // Apply a grpprl.
 
-#include <stdio.h>
 void MsWord::paragraphStyleModify(PAP *pap, TAP *tap, const U8 *grpprl, unsigned count)
 {
     // Encodings of all Word97 sprms.
@@ -1772,6 +1770,7 @@ void MsWord::Plex<T, word6Size>::startIteration(const U8 *plex, const U32 byteCo
     m_i = 0;
 }
 
+// Read a string, converting to unicode if needed.
 unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
 {
     U16 char16;
@@ -1783,19 +1782,18 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
     {
         for (unsigned i = 0; i < count; i++)
         {
-           bytes += MsWordGenerated::read(in + bytes, &char16);
-           *out += QChar(char16);
+            bytes += MsWordGenerated::read(in + bytes, &char16);
+            *out += QChar(char16);
         }
     }
     else
     {
         for (unsigned i = 0; i < count; i++)
         {
-           bytes += MsWordGenerated::read(in + bytes, &char8);
-           *out += QChar(char2unicode(char8));
+            bytes += MsWordGenerated::read(in + bytes, &char8);
+            *out += QChar(char2unicode(char8));
         }
     }
-    //kdDebug(s_area) << "MsWord::read: " << *out << endl;
     return bytes;
 }
 

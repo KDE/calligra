@@ -81,6 +81,10 @@ private:
     } m_phase;
     bool m_success;
 
+    // Convert from Word text into XML-friendly text.
+
+    void encode(QString &text);
+
     // Convert from Word number format codes to our own number format.
 
     char numberingType(unsigned nfc);
