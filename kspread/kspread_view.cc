@@ -3602,7 +3602,6 @@ void KSpreadView::insertTable()
   KSpreadSheet * t = d->doc->createTable();
   KCommand* command = new AddSheetCommand( t );
   d->doc->addCommand( command );
-  command->execute();
   updateEditWidget();
   setActiveTable( t );
 
