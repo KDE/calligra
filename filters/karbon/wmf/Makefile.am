@@ -1,6 +1,12 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KWMF_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= \
+	-I$(srcdir) \
+	$(KWMF_INCLUDES) \
+	$(KOFFICE_INCLUDES) \
+	$(KOPAINTER_INCLUDES) \
+	$(all_includes)
+
 libwmfimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
 libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 

@@ -17,6 +17,7 @@ libkarbonepsimport_la_LIBADD  = $(LIB_KOFFICEUI)
 
 INCLUDES = \
 	$(KOFFICE_INCLUDES) \
+	$(KOPAINTER_INCLUDES) \
 	-I$(top_srcdir)/karbon \
 	-I$(top_srcdir)/karbon/core \
 	-I$(top_srcdir)/karbon/visitors \

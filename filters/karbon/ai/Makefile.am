@@ -11,6 +11,7 @@ libkarbonaiimport_la_LDFLAGS = \
 
 INCLUDES = \
 	$(KOFFICE_INCLUDES) \
+	$(KOPAINTER_INCLUDES) \
 	-I$(top_srcdir)/karbon \
 	-I$(top_srcdir)/karbon/core \
 	$(all_includes)
