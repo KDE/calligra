@@ -171,6 +171,7 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
+    m_printRange=_table->printRange();
     QRect selection;
     selection.setCoords( _column, 1, _column+m_iNbCol, KS_rowMax );
     QDomDocument doc = _table->saveCellRect( selection );
@@ -207,6 +208,8 @@ void KSpreadUndoRemoveColumn::undo()
 
     table->paste( m_data, QPoint( m_iColumn, 1 ) );
     if(table->getAutoCalc()) table->recalc();
+    
+    table->setPrintRange( m_printRange );
 
     doc()->undoBuffer()->unlock();
 }
@@ -279,6 +282,8 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     m_tableName = _table->tableName();
     m_iRow = _row;
     m_iNbRow=  _nbRow;
+    m_printRange=_table->printRange();
+    
     QRect selection;
     selection.setCoords( 1, _row, KS_colMax, _row+m_iNbRow );
     QDomDocument doc = _table->saveCellRect( selection );
@@ -320,6 +325,9 @@ void KSpreadUndoRemoveRow::undo()
     table->insertRow( m_iRow,m_iNbRow );
 
     table->paste( m_data, QPoint( 1, m_iRow ) );
+    
+    table->setPrintRange( m_printRange );
+
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -376,7 +384,6 @@ void KSpreadUndoInsertRow::redo()
 
     doc()->undoBuffer()->lock();
     table->insertRow( m_iRow,m_iNbRow );
-
     doc()->undoBuffer()->unlock();
 }
 
@@ -606,6 +613,123 @@ void KSpreadUndoShowColumn::redo()
 
     doc()->undoBuffer()->lock();
     table->showColumn(0,-1,listCol);
+    doc()->undoBuffer()->unlock();
+}
+
+
+/****************************************************************************
+ *
+ * KSpreadUndoPaperLayout
+ *
+ ***************************************************************************/
+
+KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadTable *_table )
+    : KSpreadUndoAction( _doc )
+{
+    name=i18n("Set Paper Layout");
+    m_tableName = _table->tableName();
+    
+    m_pl = _table->getPaperLayout();
+    m_hf = _table->getHeadFootLine();
+    m_unit = doc()->getUnit();
+    m_printGrid = _table->getPrintGrid();
+    m_printRange = _table->printRange();
+}
+
+KSpreadUndoPaperLayout::~KSpreadUndoPaperLayout()
+{
+}
+
+void KSpreadUndoPaperLayout::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    
+    m_plRedo = table->getPaperLayout();
+    table->setPaperLayout( m_pl.ptLeft,  m_pl.ptTop, 
+                           m_pl.ptRight, m_pl.ptBottom, 
+                           m_pl.format,  m_pl.orientation );
+    
+    m_hfRedo = table->getHeadFootLine();
+    table->setHeadFootLine( m_hf.headLeft, m_hf.headMid, m_hf.headRight,
+                            m_hf.footLeft, m_hf.footMid, m_hf.footRight );
+    
+    m_unitRedo = doc()->getUnit();
+    doc()->setUnit( m_unit );
+    
+    m_printGridRedo = table->getPrintGrid();
+    table->setPrintGrid( m_printGrid );
+
+    m_printRangeRedo = table->printRange();
+    table->setPrintRange( m_printRange );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoPaperLayout::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop, 
+                           m_plRedo.ptRight, m_plRedo.ptBottom, 
+                           m_plRedo.format, m_plRedo.orientation );
+    
+    table->setHeadFootLine( m_hfRedo.headLeft, m_hfRedo.headMid, m_hfRedo.headRight,
+                            m_hfRedo.footLeft, m_hfRedo.footMid, m_hfRedo.footRight );
+    
+    doc()->setUnit( m_unitRedo );
+
+    table->setPrintGrid( m_printGridRedo );
+
+    table->setPrintRange( m_printRangeRedo );
+    doc()->undoBuffer()->unlock();
+}
+
+
+/****************************************************************************
+ *
+ * KSpreadUndoDefinePrintRange
+ *
+ ***************************************************************************/
+
+KSpreadUndoDefinePrintRange::KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadTable *_table )
+    : KSpreadUndoAction( _doc )
+{
+    name=i18n("Set Paper Layout");
+    m_tableName = _table->tableName();
+    
+    m_printRange = _table->printRange();
+}
+
+KSpreadUndoDefinePrintRange::~KSpreadUndoDefinePrintRange()
+{
+}
+
+void KSpreadUndoDefinePrintRange::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    m_printRangeRedo = table->printRange();
+    table->setPrintRange( m_printRange );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoDefinePrintRange::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->setPrintRange( m_printRangeRedo );
     doc()->undoBuffer()->unlock();
 }
 

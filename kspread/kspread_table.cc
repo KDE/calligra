@@ -7343,6 +7343,12 @@ void KSpreadTable::paperLayoutDlg()
     int result = dlg.exec();
     if ( result == QDialog::Accepted )
     {
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+             KSpreadUndoAction* undo = new KSpreadUndoPaperLayout( doc(), this );
+             m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
         pl = dlg.getLayout();
         hf = dlg.getHeadFoot();
         unit = dlg.unit();
@@ -7403,7 +7409,13 @@ void KSpreadTable::definePrintRange ()
 {
     if ( !singleCellSelection() )
     {
-        m_printRange=selection();
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+             KSpreadUndoAction* undo = new KSpreadUndoDefinePrintRange( doc(), this );
+             m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+        setPrintRange( selection() );
     }
 }
 
@@ -7458,8 +7470,23 @@ QString KSpreadTable::delocalizeHeadFootLine ( const QString &_text )
     return tmp;
 }
 
+
+KoHeadFoot KSpreadTable::getHeadFootLine() const
+{
+  KoHeadFoot hf;
+  hf.headLeft  = m_headLeft;
+  hf.headRight = m_headRight;
+  hf.headMid   = m_headMid;
+  hf.footLeft  = m_footLeft;
+  hf.footRight = m_footRight;
+  hf.footMid   = m_footMid;
+
+  return hf;
+}
+
+
 void KSpreadTable::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
-                                  const QString &_footl, const QString &_footm, const QString &_footr )
+                                    const QString &_footl, const QString &_footm, const QString &_footr )
 {
   m_headLeft  = _headl;
   m_headRight = _headr;
@@ -7471,10 +7498,25 @@ void KSpreadTable::setHeadFootLine( const QString &_headl, const QString &_headm
   m_pDoc->setModified( TRUE );
 }
 
-void KSpreadTable::setPaperOrientation(KoOrientation _orient)
+void KSpreadTable::setPaperOrientation( KoOrientation _orient )
 {
   m_orientation = _orient;
   calcPaperSize();
+}
+
+
+KoPageLayout KSpreadTable::getPaperLayout() const
+{
+  KoPageLayout pl;
+  pl.format = m_paperFormat;
+  pl.orientation = m_orientation;
+  pl.ptWidth  =  m_paperWidth;
+  pl.ptHeight =  m_paperHeight;
+  pl.ptLeft   =  m_leftBorder;
+  pl.ptRight  =  m_rightBorder;
+  pl.ptTop    =  m_topBorder;
+  pl.ptBottom =  m_bottomBorder;
+  return pl;
 }
 
 

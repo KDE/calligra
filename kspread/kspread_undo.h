@@ -29,6 +29,8 @@ class ColumnLayout;
 class RowLayout;
 
 #include "kspread_cell.h"
+#include "koGlobal.h"
+
 #include <qptrstack.h>
 #include <qstring.h>
 #include <qrect.h>
@@ -134,6 +136,7 @@ protected:
     QCString m_data;
     int m_iColumn;
     int m_iNbCol;
+    QRect m_printRange;
 };
 
 class KSpreadUndoInsertColumn : public KSpreadUndoAction
@@ -165,6 +168,7 @@ protected:
     QCString m_data;
     int m_iRow;
     int m_iNbRow;
+    QRect m_printRange;
 };
 
 class KSpreadUndoInsertRow : public KSpreadUndoAction
@@ -251,6 +255,45 @@ protected:
     QValueList<int> listRow;
 };
 
+
+class KSpreadUndoPaperLayout : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadTable *_table );
+    virtual ~KSpreadUndoPaperLayout();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    KoPageLayout m_pl;
+    KoPageLayout m_plRedo;
+    KoHeadFoot m_hf;
+    KoHeadFoot m_hfRedo;
+    KoUnit::Unit m_unit;   
+    KoUnit::Unit m_unitRedo;
+    bool m_printGrid;
+    bool m_printGridRedo;
+    QRect m_printRange;
+    QRect m_printRangeRedo;
+};
+
+
+class KSpreadUndoDefinePrintRange : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadTable *_table );
+    virtual ~KSpreadUndoDefinePrintRange();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+    QRect m_printRange;
+    QRect m_printRangeRedo;
+};
 
 
 class KSpreadUndoSetText : public KSpreadUndoAction

@@ -1380,7 +1380,7 @@ public:
     /**
      * @return the orientation of the paper.
      */
-    KoOrientation orientation() { return m_orientation; }
+    KoOrientation orientation()const { return m_orientation; }
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
      */
@@ -1399,6 +1399,11 @@ public:
 
     void setPaperOrientation(KoOrientation _orient);
 
+    /**
+     * Returns the page layout
+     */
+    KoPageLayout getPaperLayout() const;
+    
      /**
      * Changes the paper layout and repaints the currently displayed KSpreadTable.
      */
@@ -1456,6 +1461,14 @@ public:
      */
     QString delocalizeHeadFootLine ( const QString &_text );
 
+    /**
+     * Returns the head and foot line of the print out
+     */
+    KoHeadFoot getHeadFootLine() const;
+    
+    /**
+     * Sets the head and foot line of the print out
+     */
     void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                           const QString &_footl, const QString &_footm, const QString &_footr );
 
