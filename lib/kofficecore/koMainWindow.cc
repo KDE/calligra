@@ -102,6 +102,7 @@ public:
     m_paSaveAs = 0;
     m_paPrint = 0;
     m_paPrintPreview = 0;
+    statusBarLabel = 0L;
   }
   ~KoMainWindowPrivate()
   {
