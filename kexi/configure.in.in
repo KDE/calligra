@@ -1,4 +1,42 @@
 
-# commentout this to compile Kexi 
 
 #DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
+
+
+# -- Check for KDE 3.1 and enable the compat dir --------------------
+
+AC_MSG_CHECKING([for kdelibs newer than 3.1.x])
+
+kcompat_save_CXXFLAGS="$CXXFLAGS"
+kcompat_safe_LIBS="$LIBS"
+LIBS="$LIBS $X_EXTRA_LIBS"
+if test "$GXX" = "yes"; then
+CXXFLAGS="$CXXFLAGS $all_includes"
+fi
+
+AC_TRY_COMPILE([
+#include <kdeversion.h>
+#if !( KDE_IS_VERSION( 3, 1, 90 ) )
+#error Need to enable kexi_compat
+#endif
+],
+[
+],
+	use_kexi_compat_qextmdi="no"
+	AC_SUBST(LIB_KEXI_KMDI, '-lkmdi')
+	AC_MSG_RESULT(yes)
+,
+	use_kexi_compat_qextmdi="yes"
+	AC_SUBST(LIB_KEXI_KMDI_INCLUDES, '-I$(top_srcdir)/../kexi_compat/qextmdi')
+	AC_SUBST(LIB_KEXI_KMDI, -lkexi_compat_qextmdi)
+	
+	AC_MSG_RESULT(no)
+	echo "  libkexi_compat_qextmdi will be used instead of libkmdi."
+)
+CXXFLAGS="$kcompat_save_CXXFLAGS"
+LIBS="$kcompat_safe_LIBS"
+
+AM_CONDITIONAL(use_kexi_compat_qextmdi, test "$use_kexi_compat_qextmdi" == "yes")
+
+# -- End KDE 3.1 check ----------------------------------------------
+
