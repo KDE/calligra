@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 1998 - 2001 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ KAboutData * newKWordAboutData()
                                            I18N_NOOP("(c) 1998-2001, The KWord Team"), 0, 
 					   "http://www.koffice.org/kword/" );
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
-    aboutData->addAuthor("Thomas Zander", 0, "zander@earthling.net");
+    aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
     aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
     aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
     return aboutData;

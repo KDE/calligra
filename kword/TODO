@@ -125,6 +125,6 @@ or file:// or tar:// for remote, local, internal storage respectively.
 Last note: this proposal does not propose any gui/printing issues at all.
 
 Thanx to: Reginald Stadlbauer <reggie@kde.org>
-Author: Thomas Zander <zander@earthling.net>
+Author: Thomas Zander <zander@kde.org>
 New maintainer: David Faure <david@mandrakesoft.com>
 
