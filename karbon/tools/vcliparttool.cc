@@ -256,9 +256,33 @@ void VClipartTool::mouseButtonPress()
 	draw();
 } // VClipartTool::mouseButtonPress
 
+#define DEFAULTSIZE	100
 void VClipartTool::mouseButtonRelease()
 {
-	cancel();
+	if ( m_clipart )
+	{
+		//draw();
+
+		if ( m_keepRatio )
+		{
+			double s = QMAX( DEFAULTSIZE, DEFAULTSIZE );
+			m_last.setCoords( first().x() + s, first().y() - s );
+		}
+		else
+			m_last = last();
+
+		QWMatrix mat( DEFAULTSIZE, 0, 0, -DEFAULTSIZE, first().x() - ( DEFAULTSIZE / 2), first().y() + ( DEFAULTSIZE / 2) );
+		m_clipart->transform( mat );
+		VClipartCmd* cmd = new VClipartCmd(
+			&view()->part()->document(),
+			name(),
+			m_clipart );
+
+		view()->part()->addCommand( cmd, true );
+		view()->selectionChanged();
+
+		delete m_clipart;
+	}
 } // VClipartTool::mouseButtonRelease
 
 void VClipartTool::mouseDrag()
