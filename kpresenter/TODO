@@ -35,6 +35,37 @@ KOffice in general:
   - Restart with last presentation (suggesting it in initial "open" dialog)
     (using kapp->getConfig)
 
+KPresenter Oasis Format:
+========================
+Done:
+->save/load object:
+        -> rectangle
+        -> pie
+        -> text object
+        -> ellipse
+        -> group objet
+        -> polygone object
+        -> polyline object
+-> save/load  page background
+-> save/load object background
+-> save/load page effect (hide/show effect)
+-> save/load object effect
+-> save/load notes
+-> save/load stroke line
+-> save/load shadow object
+-> save/load page layout
+
+Todo:
+-> save/load part element (necessary to modify koDocumentChild)
+-> save/load cubic/quadric/freehand object (define as svg object)
+-> save/load sticky object
+
+Bugs:
+-> load text layout format (bug into kpresenter)
+-> fix load: we load "page + 1" page
+-> fix default value
+-> fix some arrow style  
 
 
 Reginald Stadlbauer <reggie@kde.org>
+Laurent Montel <montel@kde.org>
