@@ -1118,9 +1118,7 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 #endif
             }
 	}
-qDebug("Calling truncate");
 	string->truncate( idx );
-qDebug("truncate called");
 	if ( ind ) {
 	    int oi, ni;
 	    s->indent( &oi, &ni );
@@ -2860,7 +2858,10 @@ void QTextStringChar::setCustomItem( QTextCustomItem *i )
 void QTextStringChar::loseCustomItem()
 {
     if ( isCustom() )
+    {
+        type = Regular;
         d.custom->custom = 0;
+    }
 }
 
 int QTextString::width(int idx) const
@@ -3595,7 +3596,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 void QTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
 				      int lastY, int baseLine, int bw, int h, bool drawSelections,
 				      QTextFormat *lastFormat, int i, const QArray<int> &selectionStarts,
-				      const QArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
+				      const QArray<int> &selectionEnds, const QColorGroup &cg, bool /*rightToLeft*/ )
 {
     QString str( s );
     if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
@@ -4132,7 +4133,7 @@ QTextFormatter::QTextFormatter()
 
 /* only used for bidi or complex text reordering
  */
-QTextParagLineStart *QTextFormatter::formatLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line,
+QTextParagLineStart *QTextFormatter::formatLine( QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
 						   QTextStringChar *startChar, QTextStringChar *lastChar, int align, int space )
 {
 //QT2HACK
@@ -4691,7 +4692,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		lastBreak = i;
 	} else {
 	    tminw += ww;
+            //qDebug( "BLBUG: tmpBaseLine = max ( tmpBaseLine=%d, c->ascent()=%d )",  tmph, c->ascent() );
 	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
+            //qDebug( "BLBUG: tmph = max ( tmph=%d, c->height()+ls=%d )",  tmph, c->height() + ls );
 	    tmph = QMAX( tmph, c->height() + ls );
 	}
 
@@ -5233,12 +5236,10 @@ QTextFormat QTextFormat::makeTextFormat( const QStyleSheetItem *style, const QMa
 QTextCustomItem::QTextCustomItem( QTextDocument *p )
       :  xpos(0), ypos(-1), width(-1), height(0), parent( p )
 {
-    qDebug("QTextCustomItem::QTextCustomItem %p", this );
 }
 
 QTextCustomItem::~QTextCustomItem()
 {
-    qDebug("QTextCustomItem::~QTextCustomItem %p", this );
 }
 
 struct QPixmapInt
@@ -5254,7 +5255,6 @@ QTextImage::QTextImage( QTextDocument *p, const QMap<QString, QString> &attr, co
 			QMimeSourceFactory &factory )
     : QTextCustomItem( p )
 {
-    qDebug( "QTextImage::QTextImage %p", this );
 #if defined(PARSER_DEBUG)
     qDebug( debug_indent + "new QTextImage (pappi: %p)", p );
 #endif
@@ -5349,7 +5349,6 @@ QTextImage::QTextImage( QTextDocument *p, const QMap<QString, QString> &attr, co
 
 QTextImage::~QTextImage()
 {
-    qDebug( "QTextImage::~QTextImage %p", this );
     if ( pixmap_map && pixmap_map->contains( imgId ) ) {
 	QPixmapInt& pmi = pixmap_map->operator[](imgId);
 	pmi.ref--;
@@ -5924,6 +5923,7 @@ void QTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch, 
 
 void QTextFlow::updateHeight( QTextCustomItem *i )
 {
+    qDebug("QTextFlow::updateHeight item=%p currenth=%d item's ypos=%d + item's height=%d", i, height, i->ypos, i->height);
     height = QMAX( height, i->ypos + i->height );
 }
 
