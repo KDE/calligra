@@ -282,6 +282,33 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
         val = ( int )( 255.0 *val/100.0 );
         m_ie_par1 = QVariant(val);
     }
+    if ( styleStack.hasAttribute( "draw:red" ) && styleStack.attribute( "draw:red" ) != "0%" )
+    {
+        QString str( styleStack.attribute( "draw:red" ) );
+        str = str.remove( "%" );
+        int val = str.toInt();
+        m_effect = IE_CHANNEL_INTENSITY;
+        m_ie_par1 = QVariant(val);
+        m_ie_par2 = QVariant( ( int )KImageEffect::Red );
+    }
+    if ( styleStack.hasAttribute( "draw:green" ) && styleStack.attribute( "draw:green" ) != "0%" )
+    {
+        QString str( styleStack.attribute( "draw:green" ) );
+        str = str.remove( "%" );
+        int val = str.toInt();
+        m_effect = IE_CHANNEL_INTENSITY;
+        m_ie_par1 = QVariant(val);
+        m_ie_par2 = QVariant( ( int )KImageEffect::Green );
+    }
+    if ( styleStack.hasAttribute( "draw:blue" ) && styleStack.attribute( "draw:blue" ) != "0%" )
+    {
+        QString str( styleStack.attribute( "draw:blue" ) );
+        str = str.remove( "%" );
+        int val = str.toInt();
+        m_effect = IE_CHANNEL_INTENSITY;
+        m_ie_par1 = QVariant(val);
+        m_ie_par2 = QVariant( ( int )KImageEffect::Blue );
+    }
 }
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
