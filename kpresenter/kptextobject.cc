@@ -447,7 +447,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false,tmpVerticalAlign=false;
 
     tmpFamily=lastFormat->font().family();
-    tmpPointSize=lastFormat->font().pointSize();
+    tmpPointSize=KoZoomHandler::layoutUnitToPt( lastFormat->font().pointSize());
     tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
     tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
     tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
