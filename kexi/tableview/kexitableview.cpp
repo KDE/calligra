@@ -324,9 +324,13 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 		//add columns
 		d->pTopHeader->setUpdatesEnabled(false);
 		{
-			for (KexiTableViewColumnListIterator it(m_data->columns);
+			for (KexiTableViewColumn::ListIterator it(m_data->columns);
 				it.current(); ++it) {
-				d->pTopHeader->addLabel(it.current()->caption, it.current()->width);
+				int wid = it.current()->field->width();
+				if (wid==0)
+					wid=100;//default col width in pixels
+//js: TODO - add col width configuration and storage
+				d->pTopHeader->addLabel(it.current()->field->captionOrName(), wid);
 			}
 		}
 		d->pTopHeader->setUpdatesEnabled(true);
@@ -989,7 +993,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 #else
 			x = 0;
 #endif
-		txt = KGlobal::locale()->formatNumber(cell_value.toDouble());
+//js TODO: ADD OPTION to desplaying NULL VALUES as e.g. "(null)"
+		if (!cell_value.isNull())
+			txt = KGlobal::locale()->formatNumber(cell_value.toDouble());
 #if 0 //todo(js)
 			if(item->isInsertItem() && d->pColumnModes.at(col) == 3)  //yes that isn't beautiful
 			{
@@ -1031,7 +1037,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 #else
 		w -= 6;
 		align |= AlignRight;
-		txt = QString::number(num);
+		if (!cell_value.isNull())
+			txt = QString::number(num);
 //js				p->drawText(x, y_offset, w - (x+x) - 6, h, AlignRight, QString::number(num));
 #endif
 		}
@@ -1068,7 +1075,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 #ifdef USE_KDE
 			txt = KGlobal::locale()->formatDate(cell_value.toDate(), true);
 #else
-			txt = cell_value.toDate().toString(Qt::LocalDate);
+			if (!cell_value.isNull())
+				txt = cell_value.toDate().toString(Qt::LocalDate);
 #endif
 //js			p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
 //				p->drawText(x, -1, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
@@ -1094,14 +1102,15 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		x = 5;
 		y_offset = 0;
 #endif
-		txt = cell_value.toString();
+		if (!cell_value.isNull())
+			txt = cell_value.toString();
 		align |= AlignLeft;
 	}
 	
 	// draw selection background
 	
 	if (!txt.isEmpty() && d->pCurrentItem == item 
-		&& col == d->curCol && !m_data->column(col)->readOnly) //js: && !d->recordIndicator)
+		&& col == d->curCol && !m_data->column(col)->readOnly()) //js: && !d->recordIndicator)
 	{
 //		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
@@ -1585,7 +1594,7 @@ void KexiTableView::selectPrevRow()
 void KexiTableView::createEditor(int row, int col, const QString& addText, bool removeOld)
 {
 	kdDebug(44021) << "KexiTableView::createEditor('"<<addText<<"',"<<removeOld<<")"<<endl;
-	if (m_data->column(col)->readOnly)//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
+	if (m_data->column(col)->readOnly())//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
 		return;
 	
 //	QString val;
@@ -1646,7 +1655,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 
 	int t = columnType(col);
 	if (t==KexiDB::Field::BLOB) {
-			d->pEditor = new KexiBlobTableEdit(val.toByteArray(), viewport(), "inPlaceEd");
+			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, addText, viewport());
 			d->pEditor->resize(columnWidth(d->curCol)-1, 150);
 			moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
 	} 
@@ -1665,13 +1674,11 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			d->pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd",
 			 d->pColumnDefaults.at(col)->toStringList());
 #else
-			d->pEditor = new KexiInputTableEdit(val, t, addText, viewport(), "inPlaceEd",
-			 QStringList());
+			d->pEditor = new KexiInputTableEdit(val, *m_data->column(col)->field, addText, viewport());
+//			d->pEditor = new KexiInputTableEdit(val, t, addText, viewport(), "inPlaceEd",
+//			 QStringList());
 #endif
-			static_cast<KexiInputTableEdit*>(d->pEditor)->end(false);
-//			if(backspace)
-//				static_cast<KexiInputTableEdit*>(d->pEditor)->backspace();
-
+//already done in editor			static_cast<KexiInputTableEdit*>(d->pEditor)->end(false);
 	}
 
 #ifdef Q_WS_WIN
@@ -2013,28 +2020,69 @@ void KexiTableView::acceptEditor()
 {
 	if (!d->pEditor)
 		return;
-	QVariant oldValue=d->pCurrentItem->at(d->curCol);
-	if (!d->pEditor->valueChanged()) {
-		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
-		removeEditor();
-		return;
+
+	QVariant newval;
+	bool setNull = false;
+	if (d->pEditor->valueIsNull()) {//null value entered
+		if (d->pEditor->field()->isNotNull()) {
+			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
+			removeEditor();
+			return;
+		}
+		else {
+			kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET" << endl;
+			//ok, just leave newval as NULL
+			setNull = true;
+		}
 	}
-	bool ok;
-	QVariant newval = d->pEditor->value(ok);
-	if (!ok) {
-		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
-		removeEditor();
-		return;
+	else if (d->pEditor->valueIsEmpty()) {//empty value entered
+		if (d->pEditor->field()->hasEmptyProperty()) {
+			if (d->pEditor->field()->isNotEmpty()) {
+				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
+				removeEditor();
+				return;
+			}
+			else {
+				kdDebug() << "KexiTableView::acceptEditor(): EMPTY VALUE WILL BE SET" << endl;
+			}
+		}
+		else {
+			if (d->pEditor->field()->isNotNull()) {
+				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
+				removeEditor();
+				return;
+			}
+			else {
+				kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED" << endl;
+				//ok, just leave newval as NULL
+				setNull = true;
+			}
+		}
 	}
 
+	if (!setNull) {//get new value 
+		if (!d->pEditor->valueChanged()) {
+			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
+			removeEditor();
+			return;
+		}
+		bool ok;
+		newval = d->pEditor->value(ok);
+		if (!ok) {
+			kdDebug() << "KexiTableView::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
+			removeEditor();
+			return;
+		}
+	}
+
+	//send changes to the backend
 	m_data->updateRowEditBuffer(d->curCol,newval);
-//	d->pCurrentItem->at(d->curCol) = newval;
 
 	kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 	m_data->rowEditBuffer()->debug();
 
 	removeEditor();
-	emit itemChanged(d->pCurrentItem, d->curCol,oldValue);
+	emit itemChanged(d->pCurrentItem, d->curCol, d->pCurrentItem->at(d->curCol));
 	emit itemChanged(d->pCurrentItem, d->curCol);
 }
 
@@ -2305,12 +2353,12 @@ void KexiTableView::triggerUpdate()
 
 int KexiTableView::columnType(int col) const
 {
-	return m_data->column(col)->type;
+	return m_data->column(col)->field->type();
 }
 
 bool KexiTableView::columnEditable(int col) const
 {
-	return !m_data->column(col)->readOnly;
+	return !m_data->column(col)->readOnly();
 }
 
 QVariant KexiTableView::columnDefaultValue(int col) const
@@ -2542,13 +2590,14 @@ QVariant* KexiTableView::bufferedValueAt(int col)
 	{
 		KexiTableViewColumn* tvcol = m_data->column(col);
 		if (tvcol->isDBAware) {
-			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
+//			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
+			QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->field );
 			if (cv)
 				return cv;
 
 			return &d->pCurrentItem->at(col);
 		}
-		QVariant *cv = m_data->rowEditBuffer()->at( tvcol->caption );
+		QVariant *cv = m_data->rowEditBuffer()->at( tvcol->field->name() );
 		if (cv)
 			return cv;
 	}

@@ -18,15 +18,32 @@
  */
 
 #include "kexitableedit.h"
+#include <kexidb/field.h>
 
 #include <qpalette.h>
 
-KexiTableEdit::KexiTableEdit(QWidget* parent, const char* name)
-	: QWidget(parent, name), m_view(0)
+KexiTableEdit::KexiTableEdit(QVariant value, KexiDB::Field &f, QWidget* parent, const char* name)
+: QWidget(parent, name)
+ ,m_origValue(value)
+ ,m_field(&f)
+// ,m_type(f.type()) //copied because the rest of code uses m_type
+ ,m_view(0)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
-//	installEventFilter(this);
 }
+
+/*KexiTableEdit::KexiTableEdit(QVariant value, QWidget* parent, const char* name)
+: QWidget(parent, name)
+ ,m_origValue(value), 
+ ,m_field(0)
+ ,m_type(f.type()) //copied because the rest of code uses m_type
+ ,m_view(0)
+{
+	m_type = f.type(); //copied because the rest of code uses m_type
+	m_field = &f;
+	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
+//	installEventFilter(this);
+}*/
 
 void KexiTableEdit::setView(QWidget *v)
 {

@@ -23,15 +23,28 @@
 #include <qvariant.h>
 #include <qwidget.h>
 
+namespace KexiDB {
+	class Field;
+}
+
 class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 {
 	public:
-		KexiTableEdit(QWidget* parent = 0, const char* name = 0);
+		KexiTableEdit(QVariant value, KexiDB::Field &f, QWidget* parent = 0, const char* name = 0);
 
 		//! @return true if editor's value is changed (compared to original value)
 		virtual bool valueChanged();
 
+		//! \return true is editor's value is null (not empty)
+		virtual bool valueIsNull() = 0;
+		//! \return true is editor's value is empty (not null). 
+		//! Only few field types can accept "EMPTY" property 
+		//! (check this with KexiDB::Field::hasEmptyProperty()), 
+		virtual bool valueIsEmpty() = 0;
+
 		virtual QVariant value(bool &ok) = 0;
+
+		inline KexiDB::Field *field() const { return m_field; }
 
 		virtual void resize(int w, int h);
 		virtual bool eventFilter(QObject* watched, QEvent* e);
@@ -42,6 +55,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 	//		virtual void paintEvent( QPaintEvent *pe );
 		QVariant m_origValue;
+		KexiDB::Field *m_field;
+//		int m_type; //! one of KexiDB::Field
 
 		QWidget* m_view;
 };

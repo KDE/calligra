@@ -31,10 +31,19 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 	public:
 //		KexiInputTableEdit(QVariant value, int type, QString ov=QString::null, bool mark=false,
-		KexiInputTableEdit(QVariant value, int type, const QString& add=QString::null,
-		 QWidget *parent=0, const char *name=0, QStringList comp = QStringList());
+//		KexiInputTableEdit(QVariant value, int type, const QString& add=QString::null,
+//		 QWidget *parent=0);
+		KexiInputTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
+		 QWidget *parent=0);
 
 		virtual bool valueChanged();
+
+		//! \return true is editor's value is null (not empty)
+		virtual bool valueIsNull();
+		//! \return true is editor's value is empty (not null). 
+		//! Only few field types can accept "EMPTY" property 
+		//! (check this with KexiDB::Field::hasEmptyProperty()), 
+		virtual bool valueIsEmpty();
 
 		virtual QVariant value(bool &ok);
 
@@ -49,11 +58,10 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 	protected:
 		void showHintButton();
-
-		int m_type; //! one of KexiDB::Field
+		void init(const QString& add);
 
 		bool		m_calculatedCell;
-		QStringList	m_comp;
+//js		QStringList	m_comp;
 
 		QString m_decsym; //! decimal symbol
 		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing

@@ -49,7 +49,9 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
+		KexiDateTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
+			QWidget *parent=0);
+//		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
 
 		virtual QVariant value(bool &ok);
 	

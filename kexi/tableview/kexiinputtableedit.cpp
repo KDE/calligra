@@ -34,36 +34,58 @@
 #include <knumvalidator.h>
 	
 
-//KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, QString ov, bool mark, 
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& add,
-	QWidget *parent, const char *name, QStringList comp)
- : KexiTableEdit()
+KexiInputTableEdit::KexiInputTableEdit(QVariant value, KexiDB::Field &f, const QString& add,
+ QWidget *parent)
+ : KexiTableEdit(value, f, parent,"KexiInputTableEdit")
 {
-	m_type = type; //TODO(js) remove m_type !
-	kdDebug() << "KexiInputTableEdit: value.typeName()==" << value.typeName() << endl;
-	kdDebug() << "KexiInputTableEdit: type== " << m_type << endl;
+//	m_type = f.type(); //copied because the rest of code uses m_type
+//	m_field = &f;
+//	m_origValue = value;//original value
+	init(add);
+}
+
+/*
+//KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& add,
+//	QWidget *parent, const char *name, QStringList comp)
+KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& add,
+	QWidget *parent)
+ : KexiTableEdit(parent,"KexiInputTableEdit")
+{
+	m_type = type;
 	m_origValue = value;//original value
-	QString m_decsym = KGlobal::locale()->decimalSymbol();
+	init(add);
+}*/
+
+void KexiInputTableEdit::init(const QString& add)
+{
+	kdDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
+	kdDebug() << "KexiInputTableEdit: type== " << m_field->typeName() << endl;
+
+	//init settings
+	m_decsym = KGlobal::locale()->decimalSymbol();
 	if (m_decsym.isEmpty())
 		m_decsym=".";//default
 
+	//create layer for internal editor
 	QHBoxLayout *lyr = new QHBoxLayout(this);
 	lyr->addSpacing(4);
 	lyr->setAutoAdd(true);
-	m_cview = new KLineEdit(this, "tableLineEdit");
 
+	//create internal editor
+	m_cview = new KLineEdit(this, "KexiInputTableEdit-KLineEdit");
 	setView(m_cview);
 	m_cview->setFrame(false);
 	m_calculatedCell = false;
 
+#if 0 //js TODO
 	connect(m_cview->completionBox(), SIGNAL(activated(const QString &)),
 	 this, SLOT(completed(const QString &)));
 	connect(m_cview->completionBox(), SIGNAL(highlighted(const QString &)),
 	 this, SLOT(completed(const QString &)));
-
 	 m_cview->completionBox()->setTabHandling(true);
+#endif
 
-	if (KexiDB::Field::isNumericType(m_type)) {
+	if (m_field->isNumericType()) {
 		m_cview->setAlignment(AlignRight);
 	}
 	
@@ -101,7 +123,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 #endif
 		QString tmp_val = m_origValue.toString();
 
-		if (KexiDB::Field::isFPNumericType(m_type)) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+		if (m_field->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
 			if (m_origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
@@ -116,50 +138,62 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 				}
 				tmp_val+=add;
 			}
-			m_cview->setText(tmp_val);
+//			m_cview->setText(tmp_val);
 			QValidator *validator = new KDoubleValidator(m_cview);
 			m_cview->setValidator( validator );
 		}
-		else if (KexiDB::Field::isNumericType(m_type)) {
+		else if (m_field->isNumericType()) {
 			if (m_origValue.toInt() == 0) {
 				tmp_val=add; //eat 0
 			}
 			else {
 				tmp_val += add;
 			}
-			m_cview->setText(tmp_val);
+//			m_cview->setText(tmp_val);
 			//js: @todo implement ranges here!
 			QValidator *validator = new KIntValidator(m_cview);
 			m_cview->setValidator( validator );
 		}
 		else {//default: text
 			tmp_val+=add;
+//			m_cview->setText(tmp_val);
+		}
+
+		if (tmp_val.isEmpty()) {
+			if (m_origValue.isNull()) {
+				//we have to set NULL initial value:
+				m_cview->setText(QString::null);
+			}
+		}
+		else {
 			m_cview->setText(tmp_val);
 		}
-		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! "
-			<< m_cview->text().length() << endl;
+		
+		kdDebug() << "KexiInputTableEdit:  " << m_cview->text().length() << endl;
 //		m_cview->setSelection(0, m_cview->text().length());
 //		QTimer::singleShot(0, m_view, SLOT(selectAll()));
 
 #if 0
 //move to end is better by default
-//TODO(js): add configuration for this
 		m_cview->selectAll();
 #else
+//js TODO: by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
 		m_cview->end(false);
 #endif
 //		setRestrictedCompletion();
 
-	m_comp = comp;
+//	m_comp = comp;
 	setFocusProxy(m_cview);
 
+	//orig. editor's text
 	m_origText = m_cview->text();
 }
 
 void
 KexiInputTableEdit::setRestrictedCompletion()
 {
-	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
+#if 0 //js TODO
+kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
 //	KLineEdit *content = static_cast<KLineEdit*>(m_view);
 	if(m_cview->text().isEmpty())
 		return;
@@ -175,6 +209,7 @@ KexiInputTableEdit::setRestrictedCompletion()
 			newC.append(*it);
 	}
 	m_cview->setCompletedItems(newC);
+#endif
 }
 
 void
@@ -191,17 +226,26 @@ bool KexiInputTableEdit::valueChanged()
 	return KexiTableEdit::valueChanged();
 }
 
-QVariant
-KexiInputTableEdit::value(bool &ok)
+bool KexiInputTableEdit::valueIsNull()
 {
-	if (KexiDB::Field::isFPNumericType(m_type)) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+	return m_cview->text().isNull();
+}
+
+bool KexiInputTableEdit::valueIsEmpty()
+{
+	return !m_cview->text().isNull() && m_cview->text().isEmpty();
+}
+
+QVariant KexiInputTableEdit::value(bool &ok)
+{
+	if (m_field->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
 		//! js @todo PRESERVE PRECISION!
 		QString txt = m_cview->text();
 		if (m_decsym!=".")
 			txt.replace(m_decsym,".");//convert back
 		return QVariant( txt.toDouble(&ok) );
 	}
-	else if (KexiDB::Field::isNumericType(m_type)) {
+	else if (m_field->isNumericType()) {
 		//check constraints
 		return QVariant( m_cview->text().toInt(&ok) );
 	}

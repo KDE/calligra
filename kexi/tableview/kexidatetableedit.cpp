@@ -43,10 +43,13 @@
 
 #include "kexidatetableedit.h"
 
-KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *name)
-  : KexiTableEdit(parent, name)
+//KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *name)
+//  : KexiTableEdit(parent, name)
+KexiDateTableEdit::KexiDateTableEdit(
+	QVariant value, KexiDB::Field &f, const QString& add, QWidget *parent)
+ : KexiTableEdit(value, f, parent,"KexiDateTableEdit")
 {
-	kdDebug() << "KexiDateTableEdit: Date = " << v.toString() << endl;
+	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
 	m_datePicker = 0;
 	m_view = new QWidget(this);
 //	m_edit = new KLineEdit(m_view);
@@ -76,7 +79,7 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 	layout->addWidget(btn, 0);
 
 	bool ok;
-	QDate date = KGlobal::locale()->readDate(v.toString(), &ok);
+	QDate date = KGlobal::locale()->readDate(value.toString(), &ok);
 
 	if(!ok)
 	{

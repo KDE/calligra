@@ -22,13 +22,17 @@
 #include "kexicomboboxtableedit.h"
 
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list, QWidget *parent,
- const char *name) : KexiTableEdit(parent, name)
+//KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list, QWidget *parent,
+// const char *name) : KexiTableEdit(parent, name)
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(
+	QVariant value, KexiDB::Field &f, const QString& add, QWidget *parent)
+ : KexiTableEdit(value, f, parent,"KexiComboBoxTableEdit")
 {
 	m_view = new KComboBox(this, "tableCombo");
 	static_cast<KComboBox*>(m_view)->clear();
-	static_cast<KComboBox*>(m_view)->insertStringList(list);
-	static_cast<KComboBox*>(m_view)->setCurrentItem(static_cast<int>(t));
+//js:	TODO
+//js	static_cast<KComboBox*>(m_view)->insertStringList(list);
+//js	static_cast<KComboBox*>(m_view)->setCurrentItem(static_cast<int>(t));
 }
 
 

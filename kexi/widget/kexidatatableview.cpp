@@ -92,10 +92,10 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	uint i = 0;
 	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded();
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
-	KexiDBTableViewColumn* col;
+	KexiTableViewColumn* col;
 	for (i=0;i<vector.count();i++) {
 		KexiDB::Field *f = vector[i];// = list->first();
-		col=new KexiDBTableViewColumn(*m_cursor->query(), *f);
+		col=new KexiTableViewColumn(*m_cursor->query(), *f);
 /*		col.type = f->type();
 		if (!f->caption().isEmpty())
 			col.caption = f->caption();

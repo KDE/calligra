@@ -45,9 +45,13 @@
 #include <kfiledialog.h>
 #include <kio/job.h>
 
-KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, const char* name)
-	: KexiTableEdit(parent, name)
+//KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, const char* name)
+//	: KexiTableEdit(parent, name)
+KexiBlobTableEdit::KexiBlobTableEdit(
+	QVariant value, KexiDB::Field &f, const QString& add, QWidget *parent)
+ : KexiTableEdit(value, f, parent,"KexiBlobTableEdit")
 {
+	QByteArray val = value.toByteArray();
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
 	m_tempFile = new KTempFile();
 	m_tempFile->setAutoDelete(true);
@@ -101,6 +105,19 @@ KexiBlobTableEdit::KexiBlobTableEdit(const QByteArray& val, QWidget* parent, con
 	g->addWidget(menu, 3, 0);
 	connect(menu, SIGNAL(clicked()), SLOT(menu()));
 
+}
+
+
+bool KexiBlobTableEdit::valueIsNull()
+{
+//TODO
+	return m_content->text().isNull();
+}
+
+bool KexiBlobTableEdit::valueIsEmpty()
+{
+//TODO
+	return m_content->text().isEmpty();
 }
 
 QVariant

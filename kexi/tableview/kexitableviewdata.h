@@ -42,17 +42,38 @@ class Cursor;
 /*! Single column definition. */
 class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 	public:
-		KexiTableViewColumn();
+		typedef QPtrList<KexiTableViewColumn> List;
+		typedef QPtrListIterator<KexiTableViewColumn> ListIterator;
+
+	//		KexiTableViewColumn();
+		KexiTableViewColumn(KexiDB::Field& f);
+		//! db-aware version
+		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& f);
 		virtual ~KexiTableViewColumn();
 
 		virtual bool acceptsFirstChar(const QChar& ch) const;
 
-		QString caption;
+		/*! \return true is the column is read-only
+		 For db-aware column this can depend on whether the column 
+		 is in parent table of this query. \sa setReadOnly() */
+		inline bool readOnly() const { return m_readOnly; }
+
+		//! forces readOnly flag to be set to \a ro
+		inline void setReadOnly(bool ro) { m_readOnly=ro; }
+
+		//! returns whatever is available: field's caption or field's alias (from query) 
+		//! or finally - field's name
+		inline QString nameOrCaption() const { return m_nameOrCaption; }
+
+		KexiDB::Field* field;
+
+		bool isDBAware : 1; //!< true if data is stored in DB, not only in memeory
+
+/*		QString caption;
 		int type; //!< one of KexiDB::Field::Type
 		uint width;
-		bool readOnly : 1;
-		bool isDBAware : 1; //!< true for KexiDBTableViewColumn object
-		bool isNull() const;
+*/
+//		bool isNull() const;
 		
 /*		virtual QString caption() const;
 		virtual void setCaption(const QString& c);
@@ -60,12 +81,14 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 	protected:
 		//! special ctor that do not allocate d member;
 		KexiTableViewColumn(bool);
+
+		QString m_nameOrCaption;
+		bool m_readOnly : 1;
 		
-//		class Private;
-//		Private *d;
 	friend class KexiTableViewData;
 };
 
+#if 0 //merged with KexiTableViewColumn
 /*! KexiDBTableViewColumn reimplements KexiTableViewColumn for db-aware data. */
 class KEXIDATATABLE_EXPORT KexiDBTableViewColumn : public KexiTableViewColumn {
 	public:
@@ -76,10 +99,9 @@ class KEXIDATATABLE_EXPORT KexiDBTableViewColumn : public KexiTableViewColumn {
 		KexiDB::Field* field;
 	protected:
 };
+#endif
 
 /*! List of column definitions. */
-typedef QPtrList<KexiTableViewColumn> KexiTableViewColumnList;
-typedef QPtrListIterator<KexiTableViewColumn> KexiTableViewColumnListIterator;
 //typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
 
 typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
@@ -130,7 +152,7 @@ public:
 	inline KexiTableViewColumn* column(uint c) { return columns.at(c); }
 
 	/*! Columns information */
-	KexiTableViewColumnList columns;
+	KexiTableViewColumn::List columns;
 
 	virtual bool isReadOnly() const { return m_readOnly; }
 	virtual void setReadOnly(bool set) { m_readOnly = set; }

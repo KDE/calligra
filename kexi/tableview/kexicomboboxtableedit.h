@@ -32,8 +32,10 @@
 class KexiComboBoxTableEdit : public KexiTableEdit
 {
 	public:
-		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
-			QWidget *parent=0, const char *name=0);
+		KexiComboBoxTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
+			QWidget *parent=0);
+//		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
+//			QWidget *parent=0, const char *name=0);
 		
 		virtual QVariant value(bool &ok);
 };

@@ -32,8 +32,13 @@ class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
-		KexiBlobTableEdit(const QByteArray& val, QWidget* parent = 0, const char* name = 0);
+		KexiBlobTableEdit(QVariant value, KexiDB::Field &f, const QString& add=QString::null,
+			QWidget *parent=0);
+//		KexiBlobTableEdit(const QByteArray& val, QWidget* parent = 0, const char* name = 0);
 		~KexiBlobTableEdit();
+
+		bool valueIsNull();
+		bool valueIsEmpty();
 
 		virtual QVariant value(bool &ok);
 	protected:
