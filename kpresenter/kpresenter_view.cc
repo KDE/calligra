@@ -3362,7 +3362,7 @@ void KPresenterView::setupActions()
                                        this, SLOT( duplicateObj() ),
                                        actionCollection(), "duplicate_obj" );
 
-    actionApplyAutoFormat= new KAction( i18n( "Apply Autoformat..." ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply Autocorrection..." ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
 
