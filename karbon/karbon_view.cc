@@ -784,16 +784,16 @@ KarbonView::initActions()
 
 	// object ----->
 	new KAction(
-		i18n( "Bring to &Front" ), 0, QKeySequence( "Shift+PgUp" ), this,
+		i18n( "Bring to &Front" ), "bring_forward", QKeySequence( "Shift+PgUp" ), this,
 		SLOT( selectionBringToFront() ), actionCollection(), "object_move_totop" );
 	new KAction(
-		i18n( "&Raise" ), 0, QKeySequence( "Ctrl+PgUp" ), this,
+		i18n( "&Raise" ), "raise", QKeySequence( "Ctrl+PgUp" ), this,
 		SLOT( selectionMoveUp() ), actionCollection(), "object_move_up" );
 	new KAction(
-		i18n( "&Lower" ), 0, QKeySequence( "Ctrl+PgDown" ), this,
+		i18n( "&Lower" ), "lower", QKeySequence( "Ctrl+PgDown" ), this,
 		SLOT( selectionMoveDown() ), actionCollection(), "object_move_down" );
 	new KAction(
-		i18n( "Send to &Back" ), 0, QKeySequence( "Shift+PgDown" ), this,
+		i18n( "Send to &Back" ), "send_backward", QKeySequence( "Shift+PgDown" ), this,
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 
 	new KAction(
