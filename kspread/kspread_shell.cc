@@ -203,7 +203,7 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
 
 bool KSpreadShell::saveDocument()
 {
-  return KoMainWindow::saveDocument( "application/x-kspread", "*.ksp" );
+  return KoMainWindow::saveDocument( "application/x-kspread", "*.ksp", "KSpread" );
 }
 
 bool KSpreadShell::printDlg()

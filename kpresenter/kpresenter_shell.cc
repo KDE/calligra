@@ -239,7 +239,7 @@ bool KPresenterShell::openDocument( const char *_url, const char *_format )
 /*================================================================*/
 bool KPresenterShell::saveDocument()
 {
-    return KoMainWindow::saveDocument( "application/x-kpresenter", "*.kpr" );
+    return KoMainWindow::saveDocument( "application/x-kpresenter", "*.kpr", "KPresenter" );
 }
 
 /*================================================================*/

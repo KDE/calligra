@@ -205,7 +205,7 @@ bool KformEditorShell::openDocument( const char *_url, const char *_format )
 bool KformEditorShell::saveDocument()
 {
   ASSERT( m_pDoc != 0L );
-  return KoMainWindow::saveDocument( "application/x-kformeditor", "*.kfe" );
+  return KoMainWindow::saveDocument( "application/x-kformeditor", "*.kfe", "KFormEditor" );
   // choose your suffix :)  (David)
 }
 

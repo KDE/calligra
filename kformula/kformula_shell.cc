@@ -176,7 +176,7 @@ bool KFormulaShell::openDocument( const char *_url, const char *_format )
 
 bool KFormulaShell::saveDocument()
 {
-    return KoMainWindow::saveDocument( "application/x-kformula", "*.kfo" );
+    return KoMainWindow::saveDocument( "application/x-kformula", "*.kfo", "KFormula" );
 }
 
 bool KFormulaShell::printDlg()

@@ -193,7 +193,7 @@ bool KDiagrammShell::openDocument( const char *_url, const char *_format )
 
 bool KDiagrammShell::saveDocument()
 {
-  return KoMainWindow::saveDocument( "application/x-kdiagramm", "*.kdg" );
+  return KoMainWindow::saveDocument( "application/x-kdiagramm", "*.kdg", "KDiagramm" );
 }
 
 bool KDiagrammShell::printDlg()

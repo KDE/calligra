@@ -204,7 +204,7 @@ bool KformViewerShell::openDocument( const char *_url, const char *_format )
 bool KformViewerShell::saveDocument()
 {
   ASSERT( m_pDoc != 0L );
-  return KoMainWindow::saveDocument( "application/x-kformviewer", "*.kfv" );
+  return KoMainWindow::saveDocument( "application/x-kformviewer", "*.kfv", "KFormViewer" );
   // choose your suffix :)  (David)
 }
 

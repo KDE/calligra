@@ -258,7 +258,7 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
 
 bool KIllustratorShell::saveDocument () {
   assert (m_pDoc != 0L);
-  return KoMainWindow::saveDocument( "application/x-killustrator", "*.kil" );
+  return KoMainWindow::saveDocument( "application/x-killustrator", "*.kil", "KIllustrator" );
 }
 
 bool KIllustratorShell::closeDocument () {

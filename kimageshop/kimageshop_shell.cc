@@ -207,7 +207,7 @@ bool KImageShopShell::openDocument( const char *_url, const char *_format )
 bool KImageShopShell::saveDocument()
 {
   ASSERT( m_pDoc != 0L );
-  return KoMainWindow::saveDocument( "application/x-kimageshop", "*.kis" );
+  return KoMainWindow::saveDocument( "application/x-kimageshop", "*.kis", "KImageShop" );
 }
 
 bool KImageShopShell::printDlg()

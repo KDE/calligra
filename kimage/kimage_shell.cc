@@ -200,7 +200,7 @@ bool KImageShell::openDocument( const char *_url, const char *_format )
 
 bool KImageShell::saveDocument()
 {
-  return KoMainWindow::saveDocument( "application/x-kimage", "*.kim" );
+  return KoMainWindow::saveDocument( "application/x-kimage", "*.kim", "KImage" );
 }
 
 bool KImageShell::printDlg()
