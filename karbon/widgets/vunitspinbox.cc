@@ -37,11 +37,13 @@ VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int &pos ) const
 	{
 		if( s.endsWith( "mm" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_MM ), m_unit );
+		else if( s.endsWith( "cm" ) )
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CM ), m_unit );
 		else if( s.endsWith( "in" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_unit );
 		else if( s.endsWith( "pt" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_unit );
-		else if( s.at( pos - 2 ).isDigit() && ( s.endsWith( "m" ) || s.endsWith( "i" ) || s.endsWith( "p" ) ) )
+		else if( s.at( pos - 2 ).isDigit() && ( s.endsWith( "m" ) || s.endsWith( "c" ) || s.endsWith( "i" ) || s.endsWith( "p" ) ) )
 			result = Intermediate;
 		else
 			newVal = value;
