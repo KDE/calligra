@@ -49,7 +49,7 @@ class Document : public XmlParser, Config
 		 * @param in tar file.
 		 * @param fileOut Output latex filename.
 		 */
-		Document(const KoStore*, QString);
+		Document(const KoStore* in, QString fileOut);
 
 		virtual ~Document();
 

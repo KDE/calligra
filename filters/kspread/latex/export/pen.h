@@ -46,8 +46,6 @@ class Pen: public XmlParser
 		 * Constructors
 		 *
 		 * Creates a new instance of Format.
-		 *
-		 * @param Para the parent class of the format.
 		 */
 		Pen();
 
