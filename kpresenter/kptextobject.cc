@@ -1830,12 +1830,16 @@ void KPTextView::drawCursor( bool b )
     kpTextObject()->drawCursor( &painter, cursor(), b, m_canvas );
 }
 
+QPoint KPTextView::cursorPosition( const QPoint & pos )
+{
+    QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
+    return iPoint;
+}
+
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
-    QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
-
-    handleMousePressEvent( e, iPoint );
+    handleMousePressEvent( e, cursorPosition( e->pos() ) );
 }
 
 void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)
@@ -1849,7 +1853,7 @@ void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint &_pos )
         return;
     if ( _pos.y() > 0  )
     {
-        textView()->handleMouseMoveEvent( e,_pos );
+        textView()->handleMouseMoveEvent( e,cursorPosition( e->pos() ) );
     }
 }
 

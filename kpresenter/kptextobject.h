@@ -267,6 +267,8 @@ protected:
     virtual void pgUpKeyPressed();
     virtual void pgDownKeyPressed();
 
+    QPoint cursorPosition( const QPoint & pos );
+
     KPTextObject *m_kptextobj;
     KPrCanvas *m_canvas;
     KoParagLayout m_paragLayout;
