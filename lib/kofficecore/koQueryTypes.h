@@ -49,8 +49,7 @@ public:
   QString comment;
   QString name;
   QString libname;
-  QPixmap miniIcon;
-  QPixmap icon;
+  QString icon;
 
   bool isEmpty() const { return name.isEmpty(); }
 };

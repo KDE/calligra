@@ -54,7 +54,6 @@ const KoComponentEntry& KoComponentEntry::operator=( const KoComponentEntry& e )
   comment = e.comment;
   name = e.name;
   libname = e.libname;
-  miniIcon = e.miniIcon;
   icon = e.icon;
 
   return *this;
@@ -74,20 +73,12 @@ static KoComponentEntry koParseComponentProperties( KService::Ptr service )
 {
   KoComponentEntry e;
 
+  // ### Somehow I wonder if KoComponentEntry shouldn't be (or contain)
+  // a KService::Ptr, directly ;-) (David)
   e.name = service->name();
   e.comment = service->comment();
   e.libname = service->library();
-
-  QStringList lst = KGlobal::dirs()->resourceDirs("icon");
-  QStringList::ConstIterator it = lst.begin();
-  while (!e.icon.load( *it + "/" + service->icon() ) && it != lst.end() )
-    it++;
-
-  lst = KGlobal::dirs()->resourceDirs("mini");
-  it = lst.begin();
-  while (!e.miniIcon.load( *it + "/" + service->icon() ) && it != lst.end() )
-    it++;
-
+  e.icon = service->icon();
   return e;
 }
 
@@ -156,12 +147,13 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
+  kdDebug() << "KoDocumentEntry::query " << _constr << " got " << max << " offers " << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
     // Parse the service
     KoDocumentEntry d( koParseComponentProperties( *it ) );
 
-    //HACK
+    //HACK   // Why ? (David)
     d.mimeTypes = (*it)->serviceTypes();
 
     // Append converted offer

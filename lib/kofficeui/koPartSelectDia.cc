@@ -21,6 +21,7 @@
 
 #include "koPartSelectDia.h"
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
 #include <qpainter.h>
@@ -54,7 +55,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
 	QListViewItem *item = new QListViewItem( listview, ( *it ).name, ( *it ).comment );
-	item->setPixmap( 0, ( *it ).miniIcon );
+	item->setPixmap( 0, SmallIcon( ( *it ).icon ) );
     }
 
     selectionChanged( 0 );
