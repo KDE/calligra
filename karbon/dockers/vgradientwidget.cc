@@ -173,13 +173,13 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
 		if ( nextstop )
 		{
 			m = ( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * ( width() - 4 );
-			if ( ( e->x() + 2 > m - 4 ) && ( e->x() + 2 < m + 4 ) )
+			if ( ( e->x() - 2 > m - 4 ) && ( e->x() - 2 < m + 4 ) )
 			{
 				currentPoint = 2*i + 2;
 				return;
 			}
 		}
-		if ( ( e->x() + 2 > r - 5 ) && ( e->x() + 2 < r + 5 ) )
+		if ( ( e->x() - 2 > r - 5 ) && ( e->x() - 2 < r + 5 ) )
 		{
 			currentPoint = 2*i + 1;
 			return;

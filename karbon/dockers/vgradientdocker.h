@@ -30,6 +30,8 @@ class VGradientWidget;
 class KListBox;
 class QListBoxItem;
 class QPushButton;
+class QTabWidget;
+class QGroupBox;
 
 class VGradientPreview : public QWidget
 {
@@ -60,12 +62,12 @@ class VGradientDocker : public VDocker
 		void setGradient( VGradient& gradient );
 
 		VGradientTarget target();
-		void setTarget(VGradientTarget target);
+		void setTarget( VGradientTarget target );
 
 	public slots:
-		void combosChange(int);
+		void combosChange( int );
 		void addGradientToPredefs();
-		void changeToPredef(QListBoxItem*);
+		void changeToPredef( QListBoxItem* );
 		void deletePredef();
 		
 	protected:
@@ -74,6 +76,8 @@ class VGradientDocker : public VDocker
 		void setupConnections();
 		
 	private:
+		QTabWidget*       m_tabWidget;
+		QGroupBox*        m_editGroup;
 		VGradientWidget*  m_gradientWidget;
 		KComboBox*        m_gradientTarget;
 		KComboBox*        m_gradientRepeat;

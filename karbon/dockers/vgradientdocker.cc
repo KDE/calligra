@@ -29,6 +29,7 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qgroupbox.h>
+#include <qtabwidget.h>
 #include <klistbox.h>
 #include <qpushbutton.h>
 #include <qdom.h>    
@@ -42,10 +43,10 @@
 #include "vfill.h"
 
 VGradientPreview::VGradientPreview( VGradient*& gradient, QWidget* parent, const char* name )
-		: QWidget( parent, name ), m_lpgradient(&gradient)
+		: QWidget( parent, name ), m_lpgradient( &gradient )
 {  
 	setBackgroundMode( Qt::NoBackground );
-	setMinimumSize(70, 70);
+	setMinimumSize( 70, 70 );
 } // VGradientPreview::VGradientPreview
 
 VGradientPreview::~VGradientPreview()
@@ -54,52 +55,52 @@ VGradientPreview::~VGradientPreview()
 
 void VGradientPreview::paintEvent( QPaintEvent* )
 {
-	VKoPainter gp(this, width(), height());
+	VKoPainter gp( this, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
-	VGradient gradient(**m_lpgradient);
+	VGradient gradient( **m_lpgradient );
 	if ( gradient.type() == VGradient::radial )
 	{
-		gradient.setOrigin( KoPoint(width()/2, height()/2) );
-		gradient.setVector( KoPoint(width()/4, height()/4) );
+		gradient.setOrigin( KoPoint( width() / 2, height() / 2 ) );
+		gradient.setVector( KoPoint( width() / 4, height() / 4 ) );
 	}
 	else
 	{
-		gradient.setOrigin( KoPoint(width()/3, 2*(height()/3)) );
-		gradient.setVector( KoPoint(2*(width()/3), height()/3) );
+		gradient.setOrigin( KoPoint( width() / 3, 2 * ( height() / 3 ) ) );
+		gradient.setVector( KoPoint( 2 * ( width() / 3 ), height() / 3 ) );
 	}
 	VFill fill;
 	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath("karbon.png", KIcon::Small) );
+	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
 	fill.setType( VFill::patt );
-	gp.setBrush(fill);
+	gp.setBrush( fill );
 	gp.fillPath();
 	fill.gradient() = gradient;
 	fill.setType( VFill::grad );
-	gp.setBrush(fill);
-	gp.moveTo(KoPoint(2, 2));
-	gp.lineTo(KoPoint(2, height()-2));
-	gp.lineTo(KoPoint(width()-2, height()-2));
-	gp.lineTo(KoPoint(width()-2, 2));
-	gp.lineTo(KoPoint(2, 2));
+	gp.setBrush( fill );
+	gp.moveTo( KoPoint( 2, 2 ) );
+	gp.lineTo( KoPoint( 2, height() - 2 ) );
+	gp.lineTo( KoPoint( width() - 2, height() - 2 ) );
+	gp.lineTo( KoPoint( width() - 2, 2 ) );
+	gp.lineTo( KoPoint( 2, 2 ) );
 	gp.fillPath();
 	gp.end();
 	
-	QPainter p(this);
+	QPainter p( this );
 	
-	p.setPen(colorGroup().light());
-	p.moveTo(1, height()-1);
-	p.lineTo(1, 1);
-	p.lineTo(width()-1, 1);
-	p.lineTo(width()-1, height()-1);
-	p.lineTo(1, height()-1);
-	p.setPen(colorGroup().dark());
-	p.moveTo(0, height()-1);
-	p.lineTo(0, 0);
-	p.lineTo(width()-1, 0);
-	p.moveTo(width()-2, 2);
-	p.lineTo(width()-2, height()-2);
-	p.lineTo(2, height()-2);    
+	p.setPen( colorGroup().light() );
+	p.moveTo( 1, height() - 1 );
+	p.lineTo( 1, 1 );
+	p.lineTo( width() - 1, 1 );
+	p.lineTo( width() - 1, height() - 1 );
+	p.lineTo( 1, height() - 1 );
+	p.setPen( colorGroup().dark() );
+	p.moveTo( 0, height() - 1 );
+	p.lineTo( 0, 0 );
+	p.lineTo( width() - 1, 0 );
+	p.moveTo( width() - 2, 2 );
+	p.lineTo( width() - 2, height() - 2 );
+	p.lineTo( 2, height() - 2 );    
 } // VGradientPreview::paintEvent
 
 VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const char* name )
@@ -114,14 +115,14 @@ VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const ch
 	if ( !KStandardDirs::exists( fn ) )
 		fn = locate( "appdata", "gradients.predef" );
 	QFile f( fn );
-	if (!(f.open(IO_ReadOnly)))
+	if ( !( f.open( IO_ReadOnly ) ) )
 	{
 		m_predefGradients.append( new VGradient() );
 	}
 	else
 	{
 		QDomDocument doc;
-		if (!(doc.setContent(&f)))
+		if ( !( doc.setContent( &f ) ) )
 		{
 			f.close();
 			m_predefGradients.append( new VGradient() );
@@ -130,10 +131,10 @@ VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const ch
 		{
 			QDomElement e;
 			QDomNode n = doc.documentElement().firstChild();
-			while (!n.isNull())
+			while ( !n.isNull() )
 			{
 				e = n.toElement();
-				if (!e.isNull())
+				if ( !e.isNull() )
 				{
 					if ( e.tagName() == "GRADIENT" )
 					{
@@ -155,64 +156,66 @@ VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const ch
 VGradientDocker::~VGradientDocker()
 {
 		// Save the predefined gradients.
-	QDomDocument doc("PredefGradients");
-	QDomElement root = doc.createElement("predefGradients");
-	doc.appendChild(root);
-	for (VGradient* g = m_predefGradients.first(); g != NULL; g = m_predefGradients.next())
+	QDomDocument doc( "PredefGradients" );
+	QDomElement root = doc.createElement( "predefGradients" );
+	doc.appendChild( root );
+	for ( VGradient* g = m_predefGradients.first(); g != NULL; g = m_predefGradients.next() )
 		g->save( root );
 	
-	QFile f( locateLocal("appdata", "gradients.predef") );
-	if (!(f.open(IO_WriteOnly)))
+	QFile f( locateLocal( "appdata", "gradients.predef" ) );
+	if ( !( f.open( IO_WriteOnly ) ) )
 		return;
-	QTextStream ts(&f);
-	doc.save(ts, 2);
+	QTextStream ts( &f );
+	doc.save( ts, 2 );
 	f.flush();
 	f.close();
 } // VGradientDocker::~VGradientDocker
 
 void VGradientDocker::setupUI()
 {
-	setCaption( i18n("Edit Gradient") );
-	QWidget* mainWidget = new QVBox(this);
+	setCaption( i18n( "Edit Gradient" ) );
+	m_tabWidget = new QTabWidget( this );
 	
-	QGroupBox* predefGroup  = new QGroupBox( 1, Qt::Horizontal, i18n("Predefined gradients:"), mainWidget );
-	m_predefGradientsView   = new KListBox( predefGroup );
-	m_predefDelete          = new QPushButton( i18n("&Delete"), predefGroup );
-	
-	QGroupBox* editGroup    = new QGroupBox( i18n("Edit gradient:"), mainWidget );
-	QGridLayout* editLayout = new QGridLayout( editGroup, 6, 3 );
-	editLayout->setSpacing(3);
-	editLayout->setMargin(6);
-	editLayout->addRowSpacing(0, 12);
-	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget(m_gradient, editGroup), 1, 1, 0, 2 );
-	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview(m_gradient, editGroup), 2, 4, 0, 0 );
-	editLayout->addWidget( new QLabel(i18n("Type:"), editGroup), 2, 1 );
-	editLayout->addWidget( new QLabel(i18n("Repeat:"), editGroup), 3, 1 );
-	editLayout->addWidget( new QLabel(i18n("Target:"), editGroup), 4, 1 );
-	editLayout->addWidget( m_gradientType = new KComboBox(false, editGroup), 2, 2 );
+	m_editGroup    = new QGroupBox( i18n( "Edit gradient:" ) );
+	QGridLayout* editLayout = new QGridLayout( m_editGroup, 6, 3 );
+	editLayout->setSpacing( 3 );
+	editLayout->setMargin( 6 );
+	editLayout->addRowSpacing( 0, 12 );
+	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 1, 1, 0, 2 );
+	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_editGroup ), 2, 4, 0, 0 );
+	editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editGroup ), 2, 1 );
+	editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editGroup ), 3, 1 );
+	editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editGroup ), 4, 1 );
+	editLayout->addWidget( m_gradientType = new KComboBox( false, m_editGroup ), 2, 2 );
 	m_gradientType->insertItem( i18n( "Linear" ), 0 );
 	m_gradientType->insertItem( i18n( "Radial" ), 1 );
 	m_gradientType->insertItem( i18n( "Conical" ), 2 );
-	editLayout->addWidget( m_gradientRepeat = new KComboBox(false, editGroup), 3, 2 );
+	editLayout->addWidget( m_gradientRepeat = new KComboBox( false, m_editGroup ), 3, 2 );
 	m_gradientRepeat->insertItem( i18n( "None" ), 0 );
 	m_gradientRepeat->insertItem( i18n( "Reflect" ), 1 );
 	m_gradientRepeat->insertItem( i18n( "Repeat" ), 2 );
-	editLayout->addWidget( m_gradientTarget = new KComboBox(false, editGroup), 4, 2 );
+	editLayout->addWidget( m_gradientTarget = new KComboBox( false, m_editGroup ), 4, 2 );
 	m_gradientTarget->insertItem( i18n( "Stroke" ), 0 );
 	m_gradientTarget->insertItem( i18n( "Fill" ), 1 );
-	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton(i18n("&Add to predefined gradients"), editGroup), 5, 5, 0, 2 );
+	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to predefined gradients" ), m_editGroup ), 5, 5, 0, 2 );
+	m_tabWidget->addTab( m_editGroup, i18n( "Edit" ) );
+
+	QGroupBox* predefGroup  = new QGroupBox( 1, Qt::Horizontal, i18n( "Predefined gradients:" ) );
+	m_predefGradientsView   = new KListBox( predefGroup );
+	m_predefDelete          = new QPushButton( i18n( "&Delete" ), predefGroup );
+	m_tabWidget->addTab( predefGroup, i18n( "Predefined" ) );
 	
-	setWidget(mainWidget);
+	setWidget( m_tabWidget );
 } // VGradientDocker::setupUI
 
 void VGradientDocker::setupConnections()
 {
-	connect(m_gradientType, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
-	connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
-	connect(m_gradientWidget, SIGNAL(changed()), m_gradientPreview, SLOT(update()));
-	connect(m_addToPredefs, SIGNAL(clicked()), this, SLOT(addGradientToPredefs()));
-	connect(m_predefGradientsView, SIGNAL(executed(QListBoxItem*)), this, SLOT(changeToPredef(QListBoxItem*)));
-	connect(m_predefDelete, SIGNAL(clicked()), this, SLOT(deletePredef()));
+	connect( m_gradientType, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
+	connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
+	connect( m_gradientWidget, SIGNAL( changed() ), m_gradientPreview, SLOT( update() ) );
+	connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
+	connect( m_predefGradientsView, SIGNAL( executed( QListBoxItem* ) ), this, SLOT( changeToPredef( QListBoxItem* ) ) );
+	connect( m_predefDelete, SIGNAL( clicked() ), this, SLOT( deletePredef() ) );
 } // VGradientDocker::setupConnection
 
 void VGradientDocker::initUI()
@@ -221,31 +224,31 @@ void VGradientDocker::initUI()
 	m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
 	m_gradientTarget->setCurrentItem( FILL );
 	
-	for (VGradient* g = m_predefGradients.first(); g != NULL; g = m_predefGradients.next())
+	for ( VGradient* g = m_predefGradients.first(); g != NULL; g = m_predefGradients.next() )
 	{
 		QPixmap p;
 		p.resize( 160, 16 );
-		VKoPainter gp(&p, width(), height());
+		VKoPainter gp( &p, width(), height() );
 		gp.setRasterOp( Qt::XorROP );
 		gp.newPath();
-		VGradient gradient(*g);
-		gradient.setOrigin( KoPoint(0, 0) );
-		gradient.setVector( KoPoint(p.width()-1, 0) );
+		VGradient gradient( *g );
+		gradient.setOrigin( KoPoint( 0, 0 ) );
+		gradient.setVector( KoPoint( p.width() - 1, 0 ) );
 		gradient.setType( VGradient::linear );
 		VFill fill;
 		KIconLoader il;
-		fill.pattern() = VPattern( il.iconPath("karbon.png", KIcon::Small) );
+		fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
 		fill.setType( VFill::patt );
-		gp.setBrush(fill);
+		gp.setBrush( fill );
 		gp.fillPath();
 		fill.gradient() = gradient;
 		fill.setType( VFill::grad );
-		gp.setBrush(fill);
-		gp.moveTo(KoPoint(0, 0));
-		gp.lineTo(KoPoint(0, p.height()-1));
-		gp.lineTo(KoPoint(p.width()-1, p.height()-1));
-		gp.lineTo(KoPoint(p.width()-1, 0));
-		gp.lineTo(KoPoint(0, 0));
+		gp.setBrush( fill );
+		gp.moveTo( KoPoint( 0, 0 ) );
+		gp.lineTo( KoPoint( 0, p.height() - 1 ) );
+		gp.lineTo( KoPoint( p.width() - 1, p.height() - 1 ) );
+		gp.lineTo( KoPoint( p.width() - 1, 0 ) );
+		gp.lineTo( KoPoint( 0, 0 ) );
 		gp.fillPath();
 		gp.end();
 		m_predefGradientsView->insertItem( p );
@@ -269,12 +272,12 @@ VGradientDocker::VGradientTarget VGradientDocker::target()
 	return (VGradientTarget)m_gradientTarget->currentItem();
 } // VGradientDocker::target
 
-void VGradientDocker::setTarget(VGradientTarget target)
+void VGradientDocker::setTarget( VGradientTarget target )
 {
 	m_gradientTarget->setCurrentItem( target );
 } // VGradientDocker::setTarget
 
-void VGradientDocker::combosChange(int)
+void VGradientDocker::combosChange( int )
 {
 	m_gradient->setType( (VGradient::VGradientType)m_gradientType->currentItem() );
 	m_gradient->setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentItem() );
@@ -284,36 +287,39 @@ void VGradientDocker::combosChange(int)
 
 void VGradientDocker::addGradientToPredefs()
 {
-	m_predefGradients.append( new VGradient(*m_gradient) );
+	m_predefGradients.append( new VGradient( *m_gradient ) );
 		
 	QPixmap p;
 	p.resize( 160, 16 );
-	VKoPainter gp(&p, width(), height());
+	VKoPainter gp( &p, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
-	VGradient gradient(*m_gradient);
-	gradient.setOrigin( KoPoint(0, 0) );
-	gradient.setVector( KoPoint(p.width()-1, 0) );
+	VGradient gradient( *m_gradient );
+	gradient.setOrigin( KoPoint( 0, 0 ) );
+	gradient.setVector( KoPoint( p.width() - 1, 0 ) );
 	gradient.setType( VGradient::linear );
 	VFill fill;
 	fill.gradient() = gradient;
 	fill.setType( VFill::grad );
-	gp.setBrush(fill);
-	gp.moveTo(KoPoint(0, 0));
-	gp.lineTo(KoPoint(0, p.height()-1));
-	gp.lineTo(KoPoint(p.width()-1, p.height()-1));
-	gp.lineTo(KoPoint(p.width()-1, 0));
-	gp.lineTo(KoPoint(0, 0));
+	gp.setBrush( fill );
+	gp.moveTo( KoPoint( 0, 0 ) );
+	gp.lineTo( KoPoint( 0, p.height() - 1 ) );
+	gp.lineTo( KoPoint( p.width() - 1, p.height() - 1 ) );
+	gp.lineTo( KoPoint( p.width() - 1, 0 ) );
+	gp.lineTo( KoPoint( 0, 0 ) );
 	gp.fillPath();
 	gp.end();
 	m_predefGradientsView->insertItem( p );
 } // VGradientDocker::addGradientToPredefs()
 
-void VGradientDocker::changeToPredef(QListBoxItem*) 
+void VGradientDocker::changeToPredef( QListBoxItem* ) 
 {
-	*m_gradient = *(m_predefGradients.at(m_predefGradientsView->currentItem()));
+	*m_gradient = *( m_predefGradients.at( m_predefGradientsView->currentItem() ) );
+	m_gradientType->setCurrentItem( m_gradient->type() );
+	m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
 	m_gradientPreview->update();
 	m_gradientWidget->update();
+	m_tabWidget->showPage( m_editGroup );
 } // VGradientDocker::changeToPredef
 
 void VGradientDocker::deletePredef()
