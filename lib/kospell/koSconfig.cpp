@@ -50,6 +50,7 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
   , dictlist(0)
   , dictcombo(0)
   , encodingcombo(0)
+    ,clientcombo(0)
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
@@ -531,10 +532,10 @@ void KOSpellConfig::setClient (int c)
   iclient = c;
   kdDebug()<<" c :"<<c<<endl;
   //kdDebug()<<" clientcombo :"<<clientcombo<<endl;
-#if 0 //fixme !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//#if 0 //fixme !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   if (clientcombo)
       clientcombo->setCurrentItem(c);
-#endif
+//#endif
 }
 
 int KOSpellConfig::client () const
