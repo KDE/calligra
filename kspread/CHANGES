@@ -1026,3 +1026,8 @@ some fixes
 2000-10-24-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Add indent functions used when text is aligned to left
+
+2000-10-25-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can see text when text is align to right or middle, and show a red triangle
+when text is too large and you align to right or left.

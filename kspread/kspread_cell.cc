@@ -1190,9 +1190,21 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     offsetAlign(_col,_row);
 
     m_fmAscent = fm.ascent();
+    int indent=0;
+    int a = m_eAlign;
+    if ( a == KSpreadCell::Undefined )
+        {
+        if ( m_bValue || m_bDate || m_bTime)
+                a = KSpreadCell::Right;
+        else
+                a = KSpreadCell::Left;
+        }
+    //apply indent if text is align to left not when text is at right or middle
+    if(  a==KSpreadCell::Left)
+        indent=m_indent;
 
     // Do we have to occupy additional cells right hand ?
-    if ( m_iOutTextWidth+m_indent > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+    if ( m_iOutTextWidth+indent > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
          rightBorderWidth( _col, _row ) )
     {
         // No chance. We can not obscure more/less cells.
@@ -1217,7 +1229,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                     c++;
 
                     // Enough space ?
-                    if ( m_iOutTextWidth+m_indent <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+                    if ( m_iOutTextWidth+indent <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
                          rightBorderWidth( _col, _row ) )
                         end = 1;
                 }
