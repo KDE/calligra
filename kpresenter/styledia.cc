@@ -396,6 +396,8 @@ void StyleDia::setupTab2()
 StyleDia::~StyleDia()
 {
     delete gradient;
+    delete penPrev;
+    delete brushPrev;
 }
 
 /*==============================================================*/
