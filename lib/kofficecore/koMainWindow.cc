@@ -41,6 +41,7 @@
 #include <kprogress.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
+#include <kglobalsettings.h>
 #include <ktempfile.h>
 #include <krecentdocument.h>
 
@@ -315,9 +316,10 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     if ( !initialGeometrySet() )
     {
         // Default size
-        if (QApplication::desktop()->width() > 1100) // very big desktop ?
+        QRect desk = KGlobalSettings::desktopGeometry(this);
+        if (desk.width() > 1100) // very big desktop ?
             resize( 1000, 800 );
-        if (QApplication::desktop()->width() > 850) // big desktop ?
+        if (desk.width() > 850) // big desktop ?
             resize( 800, 600 );
         else // small (800x600, 640x480) desktop
             resize( 600, 400 );

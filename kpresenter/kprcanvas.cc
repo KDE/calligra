@@ -59,6 +59,7 @@
 #include <kiconloader.h>
 #include <kprinter.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kprcommand.h>
@@ -2363,7 +2364,7 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     if ( editMode )
         QWidget::resizeEvent( e );
     else
-        QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->size(),
+        QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );
     if ( editMode ) // ### what happens in fullscreen mode ? No double-buffering !?!?
         buffer.resize( size() );
@@ -3218,7 +3219,8 @@ bool KPrCanvas::pNext( bool )
             return false;
         }
 
-        QPixmap _pix1( QApplication::desktop()->width(), QApplication::desktop()->height() );
+        QRect desk = KGlobalSettings::desktopGeometry(this);
+        QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
 
         currPresPage = *( ++slideListIterator );
@@ -3236,7 +3238,7 @@ bool KPrCanvas::pNext( bool )
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
-        QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
+        QPixmap _pix2( desk.width(), desk.height() );
         int pageHeight = m_view->kPresenterDoc()->pageList().at(currPresPage-1)->getZoomPageRect().height();
         int yOffset = ( presPage() - 1 ) * pageHeight;
         if ( height() > pageHeight )
@@ -3279,7 +3281,8 @@ bool KPrCanvas::pNext( bool )
     {
         m_view->setPresentationDuration( currPresPage - 1 );
 
-        QPixmap lastSlide( QApplication::desktop()->width(), QApplication::desktop()->height() );
+        QRect desk = KGlobalSettings::desktopGeometry(this);
+        QPixmap lastSlide( desk.width(), desk.height() );
         QFont font( m_view->kPresenterDoc()->defaultFont().family() );
         QPainter p( &lastSlide );
 
@@ -4940,7 +4943,8 @@ void KPrCanvas::gotoPage( int pg )
         //recalculate the page numbers
         m_view->kPresenterDoc()->recalcPageNum();
 
-        resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
+        QRect desk = KGlobalSettings::desktopGeometry(this);
+        resize( desk.width(), desk.height() );
         repaint( false );
         setFocus();
         m_view->refreshPageButton();
@@ -5344,8 +5348,9 @@ void KPrCanvas::picViewOrigFactor()
 void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
                                        const QSize &presSize, KPPixmapObject *obj )
 {
-    double faktX = (double)presSize.width() / (double)QApplication::desktop()->width();
-    double faktY = (double)presSize.height() / (double)QApplication::desktop()->height();
+    QRect desk = KGlobalSettings::desktopGeometry(this);
+    double faktX = (double)presSize.width() / (double)desk.width();
+    double faktY = (double)presSize.height() / (double)desk.height();
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
 

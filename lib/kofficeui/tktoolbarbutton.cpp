@@ -441,7 +441,8 @@ QSize TKToolBarButton::minimumSizeHint() const
 void TKToolBarButton::showMenu()
 {
   QPoint p ( mapToGlobal( QPoint( 0, 0 ) ) );
-  if ( p.y() + height() + d->m_popup->height() > KApplication::desktop()->height() )
+  QRect desk = KGlobalSettings::desktopGeometry(this);
+  if ( p.y() + height() + d->m_popup->height() > desk.height() )
       p.setY( p.y() - d->m_popup->height() );
   else
       p.setY( p.y() + height( ));

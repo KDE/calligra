@@ -33,6 +33,7 @@
 #include <stdlib.h>
 using namespace std;
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
@@ -421,10 +422,12 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         // NOTE: make all multiplications before any division
         double w = _origSize.width();
         w *= ext.width();
-        w /= QApplication::desktop()->width();
+        // QCursor::pos() is not right.  What is right?
+        QRect desk = KGlobalSettings::desktopGeometry(QCursor::pos());
+        w /= desk.width();
         double h = _origSize.height();
         h *= ext.height();
-        h /= QApplication::desktop()->height();
+        h /= desk.height();
         const QSize _pixSize = QSize( (int)w, (int)h );
         QPixmap backPix;
 
