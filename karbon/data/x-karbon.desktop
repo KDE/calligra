@@ -1,21 +1,25 @@
 # KDE Config File
 [Desktop Entry]
 MimeType=application/x-karbon
+Icon=karbon
 Comment=Karbon14 Document
+Comment[ar]=مستند Karbon14
 Comment[az]=Karbon14 Sənədi
+Comment[be]=Дакумэнт Karbon14
+Comment[bg]=Документ Karbon14
 Comment[da]=Karbon14-dokument
 Comment[de]=Karbon14-Dokument
 Comment[es]=Documento de Karbon14
 Comment[fi]=Karbon14-asiakirja
 Comment[fr]=Document Karbon14
 Comment[he]=מסמך Karbon14
-Comment[hr]=Karbon14 dokument
 Comment[hu]=Karbon14 dokumentum
 Comment[it]=Documento Karbon14
 Comment[lt]=Karbon14 dokumentas
 Comment[lv]=Karbon14 Dokuments
 Comment[pt]=Documento do Karbon14
-Comment[pt_BR]=Documento do Karbon14
+Comment[pt_BR]=Documento Karbon
+Comment[ro]=Document Karbon14
 Comment[sk]=Dokument darbon14
 Comment[sl]=Dokument za Karbon14
 Comment[sv]=Karbon14-dokument
