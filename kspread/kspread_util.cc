@@ -1103,6 +1103,7 @@ QString convertRefToRange( const QString & table, const QRect & rect )
   return s;
 }
 
+//used in KSpreadCell::convertFormulaToOasisFormat
 void insertBracket( QString & s )
 {
   QChar c;

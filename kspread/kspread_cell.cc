@@ -363,7 +363,7 @@ void KSpreadCell::setValue( const KSpreadValue& v )
 {
   if (v.type() != KSpreadValue::Error)
     clearAllErrors();
-    
+
   d->value = v;
 
   // Free all content data
@@ -376,13 +376,13 @@ void KSpreadCell::setValue( const KSpreadValue& v )
   //set the displayed text, if we hold an error value
   if (d->value.type() == KSpreadValue::Error)
     d->strOutText = d->value.errorMessage ();
-  
+
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
 
   //value of the cell has changed - trigger necessary actions
   valueChanged ();
-      
+
   m_pTable->setRegionPaintDirty(cellRect());
 }
 
@@ -411,7 +411,7 @@ KSpreadValidity* KSpreadCell::getValidity( int newStruct  )
     if ( (!newStruct) && (!d->hasExtra()))
       //we don't have validity struct and we don't want one
       return 0;
-      
+
     if( ( d->extra()->validity == 0 ) && ( newStruct == -1 ) )
         d->extra()->validity = new KSpreadValidity;
     return  d->extra()->validity;
@@ -421,7 +421,7 @@ void KSpreadCell::removeValidity()
 {
     if (!d->hasExtra())
       return;
-    
+
     delete d->extra()->validity;
     d->extra()->validity = 0;
 }
@@ -622,7 +622,7 @@ void KSpreadCell::move( int col, int row )
 
     //cell value has been changed (because we're another cell now)
     valueChanged ();
-    
+
     // Reobscure cells if we are forced to do so.
     //if ( m_bForceExtraCells )
       //  forceExtraCells( col, row, ex, ey );
@@ -636,12 +636,12 @@ void KSpreadCell::setLayoutDirtyFlag( bool format )
 
     if (!d->hasExtra())
       return;
-    
+
     QValueList<KSpreadCell*>::iterator it  = d->extra()->obscuringCells.begin();
     QValueList<KSpreadCell*>::iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it )
     {
-	(*it)->setLayoutDirtyFlag( format );
+  (*it)->setLayoutDirtyFlag( format );
     }
 }
 
@@ -976,7 +976,7 @@ void KSpreadCell::freeAllObscuredCells()
 
   if (!d->hasExtra())
     return;
-  
+
   for ( int x = d->column + d->extra()->mergedXCells; x <= d->column + d->extra()->extraXCells; ++x )
     for ( int y = d->row + d->extra()->mergedYCells; y <= d->row + d->extra()->extraYCells; ++y )
       if ( x != d->column || y != d->row )
@@ -1430,7 +1430,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 void KSpreadCell::valueChanged ()
 {
   update();
-  
+
   m_pTable->valueChanged (this);
 }
 
@@ -1689,7 +1689,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     return localizedNumber;
 }
 
-
+//used in makeLayout() and calculateTextParameters()
 void KSpreadCell::offsetAlign( int _col, int _row )
 {
     int    a;
@@ -1875,6 +1875,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     }
 }
 
+//used in makeLayout() and calculateTextParameters()
 void KSpreadCell::textSize( QPainter &_paint )
 {
     QFontMetrics fm = _paint.fontMetrics();
@@ -1887,7 +1888,7 @@ void KSpreadCell::textSize( QPainter &_paint )
     bool   fontUnderlined;
     AlignY ay;
 
-    if ( d->hasExtra() && d->extra()->conditions && 
+    if ( d->hasExtra() && d->extra()->conditions &&
         d->extra()->conditions->matchedStyle() )
     {
       if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
@@ -1962,6 +1963,7 @@ void KSpreadCell::textSize( QPainter &_paint )
 }
 
 
+//used in makeLayout() and calculateTextParameters()
 void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
 {
     QFont tmpFont( textFont( _col, _row ) );
@@ -2002,6 +2004,7 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
     painter.setFont( tmpFont );
 }
 
+//used in KSpreadSheet::adjustColumnHelper and KSpreadSheet::adjustRow
 void KSpreadCell::calculateTextParameters( QPainter &_paint, int _col, int _row )
 {
     applyZoomedFont( _paint, _col, _row );
@@ -2069,7 +2072,7 @@ bool KSpreadCell::makeFormula()
   //our value has been changed
   //TODO: is this necessary?
   valueChanged ();
-  
+
   return true;
 }
 
@@ -2208,7 +2211,7 @@ bool KSpreadCell::calc(bool delay)
     {
         d->strOutText=d->strOutText.right(d->strOutText.length()-1);
     }
-    
+
     setFormatType(Text_format);
   }
 
@@ -2228,7 +2231,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 {
   if ( testFlag( Flag_PaintingCell ) )
     return;
-  
+
   setFlag( Flag_PaintingCell );
 
   static int paintingObscured = 0;
@@ -2250,13 +2253,13 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 
   ColumnFormat * colFormat = m_pTable->columnFormat( cellRef.x() );
   RowFormat    * rowFormat = m_pTable->rowFormat( cellRef.y() );
-  
+
   double width, height;
   if (d->hasExtra())
   {
-    width  = d->extra()->extraXCells ? d->extra()->extraWidth  : 
+    width  = d->extra()->extraXCells ? d->extra()->extraWidth  :
       colFormat->dblWidth();
-    height = d->extra()->extraYCells ? d->extra()->extraHeight : 
+    height = d->extra()->extraYCells ? d->extra()->extraHeight :
       rowFormat->dblHeight();
   }
   else
@@ -2264,10 +2267,10 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
     width = colFormat->dblWidth();
     height = rowFormat->dblHeight();
   }
-  
+
   if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft && view && view->canvasWidget() )
   {
-    double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width()); 
+    double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
     left = dwidth - coordinate.x() - width;
   }
 
@@ -2395,7 +2398,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
         KSpreadCell *obscuringCell = *it;
         listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
       }
-  
+
       QValueList<QPoint>::iterator it1 = listPoints.begin();
       QValueList<QPoint>::iterator end1 = listPoints.end();
       for ( ; it1 != end1; ++it1 )
@@ -2411,15 +2414,15 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
             x -= view->canvasWidget()->xOffset();
             y -= view->canvasWidget()->yOffset();
           }
-  
+
           KoPoint corner( x, y );
           painter.save();
-  
+
           QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
           QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
           QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
           QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
-  
+
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef, true, true, true, true, rp, bp, lp, tp );
           painter.restore();
@@ -2456,7 +2459,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
     {
       QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
                                                 w2 - 1, h2 - 1,
-						defaultColorGroup, selected );
+            defaultColorGroup, selected );
     }
 */
 
@@ -3240,7 +3243,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       int yDiff = cellRef.y() - cell->row();
       paintLeft = paintLeft && xDiff == 0;
       paintTop  = paintTop  && yDiff == 0;
-  
+
       paintRight  = paintRight  && cell->extraXCells() == xDiff;
       paintBottom = paintBottom && cell->extraYCells() == yDiff;
     }
@@ -3581,6 +3584,8 @@ int KSpreadCell::effAlignX()
   return defineAlignX();
 }
 
+//used in paintText
+//cuts strOutText, so that it only holds the part that can be displayed
 QString KSpreadCell::textDisplaying( QPainter &_painter )
 {
   QFontMetrics fm = _painter.fontMetrics();
@@ -4097,6 +4102,8 @@ uint KSpreadCell::effTopBorderValue( int col, int row ) const
 
 void KSpreadCell::incPrecision()
 {
+  //TODO: This is ugly. Why not simply regenerate the text to display? Tomas
+
   if ( !value().isNumber() )
     return;
   int tmpPreci = precision( column(), row() );
@@ -4131,6 +4138,8 @@ void KSpreadCell::incPrecision()
 
 void KSpreadCell::decPrecision()
 {
+  //TODO: This is ugly. Why not simply regenerate the text to display? Tomas
+
   if ( !value().isNumber() )
     return;
   int preciTmp = precision( column(), row() );
@@ -4162,6 +4171,7 @@ void KSpreadCell::decPrecision()
   setFlag( Flag_LayoutDirty );
 }
 
+//NOT USED ANYWHERE YET - date setting done by checkTextInput
 void KSpreadCell::setDate( QString const & dateString )
 {
   QString str( dateString );
@@ -4169,7 +4179,7 @@ void KSpreadCell::setDate( QString const & dateString )
   if ( tryParseDate( dateString ) )
   {
     //tryParseDate has already called setValue(), so we needn't worry about that
-    
+
     FormatType tmpFormat = formatType();
     if ( tmpFormat != TextDate_format &&
          !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
@@ -4199,18 +4209,21 @@ void KSpreadCell::setDate( QString const & dateString )
   setCalcDirtyFlag();
 }
 
+//NOT USED ANYWHERE YET
 void KSpreadCell::setDate( QDate const & date )
 {
   setValue( KSpreadValue( date ) );
-  
+
   d->strText = locale()->formatDate( date, true );
-    checkNumberFormat();
+  checkNumberFormat();
 }
 
+//set numerical value
+//used in KSpreadSheet::setSeries (nowhere else yet)
 void KSpreadCell::setNumber( double number )
 {
   setValue( KSpreadValue( number ) );
-  
+
   d->content = Text;
   d->strText.setNum( number );
   checkNumberFormat();
@@ -4261,7 +4274,7 @@ void KSpreadCell::setDisplayText( const QString& _text )
     {
       if ( !makeFormula() )
       {
-	kdError(36001) << "ERROR: Syntax ERROR" << endl;
+  kdError(36001) << "ERROR: Syntax ERROR" << endl;
       }
     }
   }
@@ -4323,163 +4336,163 @@ bool KSpreadCell::testValidity() const
             return true;
 
       if( value().isNumber() &&
-	  (d->extra()->validity->m_allow == Allow_Number ||
-	   (d->extra()->validity->m_allow == Allow_Integer &&
-	    value().asFloat() == ceil(value().asFloat()))))
+    (d->extra()->validity->m_allow == Allow_Number ||
+     (d->extra()->validity->m_allow == Allow_Integer &&
+      value().asFloat() == ceil(value().asFloat()))))
       {
-	switch( d->extra()->validity->m_cond)
-	{
-	  case Equal:
-	    valid = ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
-		      && value().asFloat() - d->extra()->validity->valMin >
-		      (0.0 - DBL_EPSILON));
-	    break;
-	  case DifferentTo:
-	    valid = !(  ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
-		      && value().asFloat() - d->extra()->validity->valMin >
-		      (0.0 - DBL_EPSILON)) );
-	    break;
+  switch( d->extra()->validity->m_cond)
+  {
+    case Equal:
+      valid = ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+          && value().asFloat() - d->extra()->validity->valMin >
+          (0.0 - DBL_EPSILON));
+      break;
+    case DifferentTo:
+      valid = !(  ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+          && value().asFloat() - d->extra()->validity->valMin >
+          (0.0 - DBL_EPSILON)) );
+      break;
           case Superior:
-	    valid = ( value().asFloat() > d->extra()->validity->valMin);
-	    break;
+      valid = ( value().asFloat() > d->extra()->validity->valMin);
+      break;
           case Inferior:
-	    valid = ( value().asFloat()  <d->extra()->validity->valMin);
-	    break;
+      valid = ( value().asFloat()  <d->extra()->validity->valMin);
+      break;
           case SuperiorEqual:
-	    valid = ( value().asFloat() >= d->extra()->validity->valMin);
+      valid = ( value().asFloat() >= d->extra()->validity->valMin);
             break;
           case InferiorEqual:
-	    valid = (value().asFloat() <= d->extra()->validity->valMin);
-	    break;
-	  case Between:
-	    valid = ( value().asFloat() >= d->extra()->validity->valMin &&
-		      value().asFloat() <= d->extra()->validity->valMax);
-	    break;
-	  case Different:
-	    valid = (value().asFloat() < d->extra()->validity->valMin ||
-		     value().asFloat() > d->extra()->validity->valMax);
-	    break;
-	  default :
-	    break;
+      valid = (value().asFloat() <= d->extra()->validity->valMin);
+      break;
+    case Between:
+      valid = ( value().asFloat() >= d->extra()->validity->valMin &&
+          value().asFloat() <= d->extra()->validity->valMax);
+      break;
+    case Different:
+      valid = (value().asFloat() < d->extra()->validity->valMin ||
+         value().asFloat() > d->extra()->validity->valMax);
+      break;
+    default :
+      break;
         }
       }
       else if(d->extra()->validity->m_allow==Allow_Text)
       {
-	valid = value().isString();
+  valid = value().isString();
       }
       else if(d->extra()->validity->m_allow==Allow_TextLength)
       {
-	if( value().isString() )
+  if( value().isString() )
         {
-	  int len = d->strOutText.length();
-	  switch( d->extra()->validity->m_cond)
-	  {
-	    case Equal:
-	      if (len == d->extra()->validity->valMin)
-		valid = true;
-	      break;
-	    case DifferentTo:
-	      if (len != d->extra()->validity->valMin)
-		valid = true;
-	      break;
-	    case Superior:
-	      if(len > d->extra()->validity->valMin)
-		valid = true;
-	      break;
-	    case Inferior:
-	      if(len < d->extra()->validity->valMin)
-		valid = true;
-	      break;
-	    case SuperiorEqual:
-	      if(len >= d->extra()->validity->valMin)
-		valid = true;
-	      break;
-	    case InferiorEqual:
-	      if(len <= d->extra()->validity->valMin)
-		valid = true;
-	      break;
-	    case Between:
-	      if(len >= d->extra()->validity->valMin && len <= d->extra()->validity->valMax)
-		valid = true;
-	      break;
-	    case Different:
-	      if(len <d->extra()->validity->valMin || len >d->extra()->validity->valMax)
-		valid = true;
-	      break;
-	    default :
-	      break;
-	  }
-	}
+    int len = d->strOutText.length();
+    switch( d->extra()->validity->m_cond)
+    {
+      case Equal:
+        if (len == d->extra()->validity->valMin)
+    valid = true;
+        break;
+      case DifferentTo:
+        if (len != d->extra()->validity->valMin)
+    valid = true;
+        break;
+      case Superior:
+        if(len > d->extra()->validity->valMin)
+    valid = true;
+        break;
+      case Inferior:
+        if(len < d->extra()->validity->valMin)
+    valid = true;
+        break;
+      case SuperiorEqual:
+        if(len >= d->extra()->validity->valMin)
+    valid = true;
+        break;
+      case InferiorEqual:
+        if(len <= d->extra()->validity->valMin)
+    valid = true;
+        break;
+      case Between:
+        if(len >= d->extra()->validity->valMin && len <= d->extra()->validity->valMax)
+    valid = true;
+        break;
+      case Different:
+        if(len <d->extra()->validity->valMin || len >d->extra()->validity->valMax)
+    valid = true;
+        break;
+      default :
+        break;
+    }
+  }
       }
       else if(d->extra()->validity->m_allow == Allow_Time && isTime())
       {
-	switch( d->extra()->validity->m_cond)
-	{
-	  case Equal:
-	    valid = (value().asTime() == d->extra()->validity->timeMin);
-	    break;
-	  case DifferentTo:
-	    valid = (value().asTime() != d->extra()->validity->timeMin);
-	    break;
-	  case Superior:
-	    valid = (value().asTime() > d->extra()->validity->timeMin);
-	    break;
-	  case Inferior:
-	    valid = (value().asTime() < d->extra()->validity->timeMin);
-	    break;
-	  case SuperiorEqual:
-	    valid = (value().asTime() >= d->extra()->validity->timeMin);
-	    break;
-	  case InferiorEqual:
-	    valid = (value().asTime() <= d->extra()->validity->timeMin);
-	    break;
-	  case Between:
-	    valid = (value().asTime() >= d->extra()->validity->timeMin &&
-		     value().asTime() <= d->extra()->validity->timeMax);
-	    break;
-  	  case Different:
-	    valid = (value().asTime() < d->extra()->validity->timeMin ||
-		     value().asTime() > d->extra()->validity->timeMax);
-	    break;
-	  default :
-	    break;
+  switch( d->extra()->validity->m_cond)
+  {
+    case Equal:
+      valid = (value().asTime() == d->extra()->validity->timeMin);
+      break;
+    case DifferentTo:
+      valid = (value().asTime() != d->extra()->validity->timeMin);
+      break;
+    case Superior:
+      valid = (value().asTime() > d->extra()->validity->timeMin);
+      break;
+    case Inferior:
+      valid = (value().asTime() < d->extra()->validity->timeMin);
+      break;
+    case SuperiorEqual:
+      valid = (value().asTime() >= d->extra()->validity->timeMin);
+      break;
+    case InferiorEqual:
+      valid = (value().asTime() <= d->extra()->validity->timeMin);
+      break;
+    case Between:
+      valid = (value().asTime() >= d->extra()->validity->timeMin &&
+         value().asTime() <= d->extra()->validity->timeMax);
+      break;
+      case Different:
+      valid = (value().asTime() < d->extra()->validity->timeMin ||
+         value().asTime() > d->extra()->validity->timeMax);
+      break;
+    default :
+      break;
 
-	}
+  }
       }
       else if(d->extra()->validity->m_allow == Allow_Date && isDate())
       {
-	switch( d->extra()->validity->m_cond)
-	{
-	  case Equal:
-	    valid = (value().asDate() == d->extra()->validity->dateMin);
-	    break;
-	  case DifferentTo:
-	    valid = (value().asDate() != d->extra()->validity->dateMin);
-	    break;
-	  case Superior:
-	    valid = (value().asDate() > d->extra()->validity->dateMin);
-	    break;
-	  case Inferior:
-	    valid = (value().asDate() < d->extra()->validity->dateMin);
-	    break;
-	  case SuperiorEqual:
-	    valid = (value().asDate() >= d->extra()->validity->dateMin);
-	    break;
-	  case InferiorEqual:
-	    valid = (value().asDate() <= d->extra()->validity->dateMin);
-	    break;
-	  case Between:
-	    valid = (value().asDate() >= d->extra()->validity->dateMin &&
-		     value().asDate() <= d->extra()->validity->dateMax);
-	    break;
-	  case Different:
-	    valid = (value().asDate() < d->extra()->validity->dateMin ||
-		     value().asDate() > d->extra()->validity->dateMax);
-	    break;
-	  default :
-	    break;
+  switch( d->extra()->validity->m_cond)
+  {
+    case Equal:
+      valid = (value().asDate() == d->extra()->validity->dateMin);
+      break;
+    case DifferentTo:
+      valid = (value().asDate() != d->extra()->validity->dateMin);
+      break;
+    case Superior:
+      valid = (value().asDate() > d->extra()->validity->dateMin);
+      break;
+    case Inferior:
+      valid = (value().asDate() < d->extra()->validity->dateMin);
+      break;
+    case SuperiorEqual:
+      valid = (value().asDate() >= d->extra()->validity->dateMin);
+      break;
+    case InferiorEqual:
+      valid = (value().asDate() <= d->extra()->validity->dateMin);
+      break;
+    case Between:
+      valid = (value().asDate() >= d->extra()->validity->dateMin &&
+         value().asDate() <= d->extra()->validity->dateMax);
+      break;
+    case Different:
+      valid = (value().asDate() < d->extra()->validity->dateMin ||
+         value().asDate() > d->extra()->validity->dateMax);
+      break;
+    default :
+      break;
 
-	}
+  }
       }
     }
     else
@@ -4493,16 +4506,16 @@ bool KSpreadCell::testValidity() const
       {
         case Stop:
             KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
-			     d->extra()->validity->title);
-	  break;
+           d->extra()->validity->title);
+    break;
         case Warning:
-	  KMessageBox::warningYesNo((QWidget*)0L, d->extra()->validity->message,
-				    d->extra()->validity->title);
-	  break;
+    KMessageBox::warningYesNo((QWidget*)0L, d->extra()->validity->message,
+            d->extra()->validity->title);
+    break;
         case Information:
-	  KMessageBox::information((QWidget*)0L, d->extra()->validity->message,
-				   d->extra()->validity->title);
-	  break;
+    KMessageBox::information((QWidget*)0L, d->extra()->validity->message,
+           d->extra()->validity->title);
+    break;
       }
     }
     if (!d->hasExtra())
@@ -4792,13 +4805,13 @@ bool KSpreadCell::tryParseDate( const QString& str )
     if (valid)
     {
         // Note: if shortdate format only specifies 2 digits year, then 3/4/1955 will
-	// be treated as in year 3055, while 3/4/55 as year 2055 (because 55 < 69,
-	// see KLocale) and thus there's no way to enter for year 1995
+  // be treated as in year 3055, while 3/4/55 as year 2055 (because 55 < 69,
+  // see KLocale) and thus there's no way to enter for year 1995
 
-	// The following fixes the problem, 3/4/1955 will always be 1955
+  // The following fixes the problem, 3/4/1955 will always be 1955
 
-	QString fmt = locale()->dateFormatShort();
-	if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
+  QString fmt = locale()->dateFormatShort();
+  if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
              tmpDate = tmpDate.addYears( -1900 );
 
         // this is another HACK !
@@ -4887,6 +4900,7 @@ bool KSpreadCell::tryParseTime( const QString& str )
     return valid;
 }
 
+//used in calc, setDate, setNumber, checkTextInput
 void KSpreadCell::checkNumberFormat()
 {
     if ( formatType() == Number_format && value().isNumber() )
@@ -5354,24 +5368,24 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     {
         QDomElement subText = textP.firstChild().toElement();
         if ( !subText.isNull() )
-	{
+  {
             // something in <text:p>, e.g. links
             text = subText.text();
 
             if ( subText.hasAttribute( "xlink:href" ) )
-	    {
+      {
                 QString link = subText.attribute( "xlink:href" );
                 text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
                 d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
                 d->strText = text;
-	    }
-	}
+      }
+  }
         else
-	{
+  {
             text = textP.text(); // our text, could contain formating for value or result of formul
             setCellText( text );
             setValue( text );
-	}
+  }
     }
     bool isFormula = false;
     if ( element.hasAttribute( "table:formula" ) )
@@ -6228,28 +6242,28 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         bool ok = false;
         setValue ( KSpreadValue( t.toDouble(&ok) ) ); // We save in non-localized format
         if ( !ok )
-	{
+  {
           kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
-	}
-	/* We will need to localize the text version of the number */
-	KLocale* locale = m_pTable->doc()->locale();
+  }
+  /* We will need to localize the text version of the number */
+  KLocale* locale = m_pTable->doc()->locale();
 
         /* KLocale::formatNumber requires the precision we want to return.
         */
         int precision = t.length() - t.find('.') - 1;
 
-	if ( formatType() == Percentage_format )
+  if ( formatType() == Percentage_format )
         {
           setFactor( 100.0 ); // should have been already done by loadFormat
           t = locale->formatNumber( value().asFloat() * 100.0, precision );
-	  d->strText = pasteOperation( t, d->strText, op );
+    d->strText = pasteOperation( t, d->strText, op );
           d->strText += '%';
         }
         else
-	{
+  {
           t = locale->formatNumber(value().asFloat(), precision);
-	  d->strText = pasteOperation( t, d->strText, op );
-	}
+    d->strText = pasteOperation( t, d->strText, op );
+  }
       }
 
       // date ?
@@ -6319,6 +6333,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 
 QTime KSpreadCell::toTime(const QDomElement &element)
 {
+    //TODO: can't we use tryParseTime (after modification) instead?
     QString t = element.text();
     t = t.stripWhiteSpace();
     int hours = -1;
@@ -6503,7 +6518,7 @@ KSpreadCell::~KSpreadCell()
         if ( cell )
             cell->unobscure(this);
     }
-    
+
     d->value = KSpreadValue::empty();
     valueChanged ();
 
