@@ -25,40 +25,35 @@
 
 using namespace KexiDB;
 using namespace KexiMigration;
-/*
-This is the implementation for the pqxx specific import routines
-This is currently pre alpha and in no way is it meant
-to compile, let alone work.  This is meant as an example of
-what the system might be and is a work in progress
-*/
 
 KexiMigrate::KexiMigrate()
 {
-  
 }
-KexiMigrate::KexiMigrate(QObject *parent, const char *name, 
-	const QStringList &args) : QObject( parent, name )
+
+KexiMigrate::KexiMigrate(QObject *parent, const char *name,
+  const QStringList &args) : QObject( parent, name )
 {
 }
 
 //==================================================================================
-//Data setup
+// Migration parameters
 void KexiMigrate::setData(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
 {
 	m_externalData = externalConnectionData;
 	m_kexiDB = kexiConnection;
 	m_keepData = keep_data;
 	m_dbName = dbname;
-        m_todbname = newdbname;
+	m_todbname = newdbname;
 }
 
 //==================================================================================
-//Destructor
+// Destructor
 KexiMigrate::~KexiMigrate()
-{}
+{
+}
 
 //==================================================================================
-//Perform Import operation
+// Perform Import operation
 bool KexiMigrate::performImport()
 {
 	QStringList tables;
@@ -95,14 +90,14 @@ bool KexiMigrate::performImport()
 				kdDebug() << "There were no tables to import" << endl;
 				failure = true;
 			}
-			//Only create a database if all tables were successfully read
+			// Only create a database if all tables were successfully read
 			if(failure)
 			{
 				return false;
 			}
 			else
 			{
-				//Create new database as we have all required info ;)
+				// Create new database as we have all required info ;)
 				if (createDatabase(m_todbname)) {
 					for(uint i = 0; i < v_tableSchemas.size(); i++)
 					{
@@ -142,7 +137,7 @@ bool KexiMigrate::copyData(const QString& table,
 }
 
 //==================================================================================
-//Create the final database
+// Create the final database
 bool KexiMigrate::createDatabase(const QString& dbname)
 {
 	bool failure = false;
@@ -157,7 +152,7 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 				//Right, were connected..create the tables
 				for(uint i = 0; i < v_tableSchemas.size(); i++)
 				{
-/*! @todo: check this earlier: on creating table list! */
+/*! @todo check this earlier: on creating table list! */
 					if (m_kexiDB->driver()->isSystemObjectName( v_tableSchemas[i]->name() ))
 						continue;
 					if(!m_kexiDB->createTable(v_tableSchemas[i]))
@@ -189,7 +184,7 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 }
 
 //==================================================================================
-//Get the table names
+// Get the table names
 bool KexiMigrate::tableNames(QStringList & tn)
 {
 	kdDebug() << "Reading list of tables..." << endl;
@@ -197,7 +192,7 @@ bool KexiMigrate::tableNames(QStringList & tn)
 }
 
 //==================================================================================
-//Get the table names
+// Get the table schema
 bool KexiMigrate::readTableSchema(const QString& t, int i)
 {
 	kdDebug() << "Reading table schema for [" << t << "]" << endl;
@@ -205,7 +200,7 @@ bool KexiMigrate::readTableSchema(const QString& t, int i)
 }
 
 //==================================================================================
-//Prompt the user to choose a field type
+// Prompt the user to choose a field type
 KexiDB::Field::Type KexiMigrate::userType()
 {
 KInputDialog *dlg;

@@ -34,7 +34,7 @@ namespace KexiMigration {
 
 class MigrateManagerInternal;
 
-//! Database migration management, e.g. finding and loading drivers.
+//! Migration library management, e.g. finding and loading drivers.
 class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 {
 	public:

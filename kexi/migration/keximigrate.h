@@ -26,92 +26,107 @@
 #include <qstringlist.h>
 #include <vector>
 
+/*!
+ * \namespace KexiMigration
+ * \brief Framework for importing databases into native KexiDB databases.
+ */
 namespace KexiMigration 
 {
-	/*! This class provides a generic api for importing data from an existing
-	database into a kexi project.
-	
+  //! Imports non-native databases into Kexi projects.
+	/*! A generic API for importing data from an existing
+	database into a new Kexi project.
+
 	Basic idea is this:
-	1. User specifies existing db on server and new project (file or server based)
-	2. user specifies whether or not to read data aswell
-	3. Import tool connects to db
-	4. Checks if it is already a kexi project
-	5. If not then read tables/columns and construct new project
-	6. Ask user what to do if column type is not supported
-	7. See kexi/doc/dec/kexi_import.txt for more info
+	-# User selects an existing DB and new project (file or server based)
+	-# User specifies whether to import structure and data or structure only.
+	-# Import tool connects to db
+	-# Checks if it is already a kexi project (not implemented yet)
+	-# If not, then read structure and construct new project
+	-# Ask user what to do if column type is not supported
+
+	See kexi/doc/dev/kexi_import.txt for more info.
 	*/
 	class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 	{
 		Q_OBJECT
-	
+
 		public:
 			//Destructor
 			~KexiMigrate();
-			
+
 			//Constructor
 			KexiMigrate();
 			KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
-			
-			//Data Setup.  Requires two connection objects, a name and a bool
-			void setData(KexiDB::ConnectionData* externalConnectionData, QString dbFrom, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data);
-			
-			//Performs an import operation
+
+			//! Data Setup.  Requires two connection objects, a name and a bool
+			void setData(KexiDB::ConnectionData* externalConnectionData,
+			             QString dbFrom, KexiDB::Connection* kexiConnection,
+			             QString newdbname, bool keep_data);
+
+			//! Perform an import operation
 			bool performImport();
-			
-			//Perform an export operation
+
+			//! Perform an export operation
 			bool performExport();
-			
+
 			virtual int versionMajor() const = 0;
 			virtual int versionMinor() const = 0;
 		protected:
 
-			//! Driver specific connection function
+			//! Connect to source database (driver specific)
 			virtual bool drv_connect() = 0;
+			//! Disconnect from source database (driver specific)
 			virtual bool drv_disconnect() = 0;
 
-			//! Driver specific function to return table names
+			//! Get table names in source database (driver specific)
 			virtual bool drv_tableNames(QStringList& tablenames) = 0;
 
-			//! Driver specific implementation to read a table schema
+			//! Read schema for a given table (driver specific)
 			virtual bool drv_readTableSchema(const QString table) = 0;
 
-			//! Driver specific implementation to copy a table
+			//! Copy a table from source DB to target DB (driver specific)
 			virtual bool drv_copyTable(const QString& srcTable,
 			                           KexiDB::TableSchema* dstTable) = 0;
 
-			//Generic helper functions
+			//! Prompt user to select a field type for unrecognised fields
 			KexiDB::Field::Type userType();
 
-			//Protected data members
-			//Connextiondata for external (non kexi) db
+			// Protected data members
+			//! Connection data for external (non Kexi) database.
 			KexiDB::ConnectionData* m_externalData;
-
-			QString m_dbName;
-			QString m_todbname;
-			KexiDB::TableSchema* m_table;
-			KexiDB::Field* m_f;
-
 			//! Destination KexiDB database.
 			KexiDB::Connection* m_kexiDB;
 
-		private:		
-			//Get the list of tables
+			//! Name of the source DB (server based DBs only)
+			QString m_dbName;
+			//! Name of the target DB
+			/*! Should be the same as m_kexiDB->filename() for file based projects. */
+			QString m_todbname;
+
+			// Temporary values used during import (set by driver specific methods)
+			KexiDB::TableSchema* m_table;
+			KexiDB::Field* m_f;
+
+		private:
+			//! Get the list of tables
 			bool tableNames(QStringList& tablenames);
-			
-			//Get a table schema object for a table
+
 			//Perform general functionality and rely on drv_ReadTableSchema()
 			//to do the real work
+			//! Read a table schema object for a table (into m_table)
 			bool readTableSchema(const QString& tabl, int i);
-			
-			//Copies data from original table to new table if required
+
+			//! Copy data from original table to new table if required
 			bool copyData(const QString& table, KexiDB::TableSchema* dstTable);
-			
-			//Create the final database
+
+			//! Create the target database
 			bool createDatabase(const QString& dbname);
-			 
+
 			//Private data members
+			//! Flag indicating whether data should be copied
 			bool m_keepData;
-			
+
+			//! Table schemas from source DB
 			std::vector<KexiDB::TableSchema*>v_tableSchemas;
 	};
 
@@ -123,6 +138,5 @@ namespace KexiMigration
 	int class_name::versionMinor() const { return 0; } \
 	K_EXPORT_COMPONENT_FACTORY(keximigrate_ ## internal_name, \
 	  KGenericFactory<KexiMigration::class_name>( "keximigrate_" #internal_name ))
-    
 #endif
 

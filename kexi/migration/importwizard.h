@@ -36,6 +36,7 @@ class KexiDBTitlePage;
 
 namespace KexiMigration {
 
+//! GUI for importing non-native databases.
 /**
 @author Adam Pigg
 */
@@ -77,7 +78,7 @@ private slots:
     void nextClicked(const QString &);
     virtual void accept();
     void helpClicked();
-    
+
 public:
     importWizard(QWidget *parent = 0, const char *name = 0);
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Martin Ellis <kde@martinellis.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -82,7 +83,7 @@ importWizard::importWizard(QWidget *parent, const char *name)
     conndata->driverName = "mysql";
     conndata->hostName = "localhost"; // -- default //"host.net";
     Kexi::connset().addConnectionData(conndata);
-    
+
     //============================================================
 
     setMinimumSize(400, 300);
@@ -135,10 +136,10 @@ void importWizard::setupintro()
 //
 void importWizard::setupsrcType()
 {
-    
+
     QVBox *srcTypeControls = new QVBox(srcTypePage);
     srcTypeCombo = new KComboBox(srcTypeControls);
-    
+
     MigrateManager manager;
 
     QStringList names = manager.migrateDriverNames();
@@ -204,17 +205,17 @@ void importWizard::setupdst()
 		this,SLOT(next()));
 
     dstConn->hideHelpers();
-		dstConn->showSimpleConn();
-	//anyway, db files will be _saved_
-		dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+    dstConn->showSimpleConn();
+    //anyway, db files will be _saved_
+    dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
     dstConn->m_file->btn_advanced->hide();
     dstConn->m_file->label->hide();
     dstConn->m_file->lbl->hide();
-//    dstConn->m_file->spacer7->hide();
-    
+    //dstConn->m_file->spacer7->hide();
 
-//js    dstNewDBName = new KLineEdit(dstControls);
-//    dstNewDBName->setText(i18n("Enter new database name here"));
+
+    //js dstNewDBName = new KLineEdit(dstControls);
+    //   dstNewDBName->setText(i18n("Enter new database name here"));
 }
 
 //===========================================================
@@ -268,11 +269,11 @@ bool importWizard::checkUserInput()
 void importWizard::arriveSrcConnPage()
 {
   srcConnPage->hide();
-  
+
   checkIfSrcTypeFileBased(srcTypeCombo->currentText());
   if (fileBasedSrc) {
     srcConn->showSimpleConn();
-    /*! @todo: KexiStartupFileDialog needs "open file" and "open server" modes
+    /*! @todo KexiStartupFileDialog needs "open file" and "open server" modes
     in addition to just "open" */
     srcConn->m_file->label->hide();
     srcConn->m_file->btn_advanced->hide();
@@ -280,15 +281,15 @@ void importWizard::arriveSrcConnPage()
   } else {
     srcConn->showAdvancedConn();
   }
-  /*! @todo: Support different file extensions based on MigrationDriver */
-  /*! @todo: Hide the 'Advanced' button on the connection selector here. */
+  /*! @todo Support different file extensions based on MigrationDriver */
+  /*! @todo Hide the 'Advanced' button on the connection selector here. */
   srcConnPage->show();
 }
 
 void importWizard::arriveSrcDBPage()
 {
   if (fileBasedSrc) {
-    //! @todo: Back button doesn't work after selecting a file to import
+    //! @todo Back button doesn't work after selecting a file to import
     showPage(dstTypePage);
   }
   else {
@@ -350,7 +351,7 @@ void importWizard::arriveFinishPage() {
 }
 
 void importWizard::checkIfSrcTypeFileBased(const QString& srcType) {
-  //! @todo: Use MigrateManager to get src type property
+  //! @todo Use MigrateManager to get src type property
   if ((srcType == "PostgreSQL") || (srcType == "MySQL")) {
     fileBasedSrc = false;
   } else {
@@ -359,7 +360,7 @@ void importWizard::checkIfSrcTypeFileBased(const QString& srcType) {
 }
 
 void importWizard::checkIfDstTypeFileBased(const QString& dstType) {
-  //! @todo: Use DriverManager to get dst type property
+  //! @todo Use DriverManager to get dst type property
   if ((dstType == "PostgreSQL") || (dstType == "MySQL")) {
     fileBasedDst = false;
   } else {
@@ -375,28 +376,28 @@ void importWizard::accept()
     KexiMigrate* import;
     KexiDB::ConnectionData *cdata;
     QString dbname;
-    
+
     kdDebug() << "Creating managers..." << endl;
-    //Start with a driver manager
+    // Start with a driver manager
     KexiDB::DriverManager manager;
     MigrateManager mmanager;
-    
+
     kdDebug() << "Creating destination driver..." << endl;
-    //get a driver to the destination database
+    // Get a driver to the destination database
     KexiDB::Driver *driver = manager.driver(dstTypeCombo->currentText());
-    
-    
+
+
     //Check for errors
     if (!driver || manager.error())
     {
-      	kdDebug() << "Manager error..." << endl;
+        kdDebug() << "Manager error..." << endl;
         manager.debugError();
     }
-    
+
     if (dstConn->selectedConnectionData())
     {
         //server-based project
-      	kdDebug() << "Server destination..." << endl;
+        kdDebug() << "Server destination..." << endl;
         cdata = dstConn->selectedConnectionData();
         dbname = dstNewDBName->text();
     }
@@ -418,14 +419,14 @@ void importWizard::accept()
         return;
     }
 
-    
+
     kdDebug() << "Creating connection to destination..." << endl;
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*cdata);
 
     kdDebug() << "Creating source driver..." << endl;
     import = mmanager.migrateDriver(srcTypeCombo->currentText());
-    
+
     kdDebug() << "Setting import data.." << endl;
     if(fileBasedSrc) {
       KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
