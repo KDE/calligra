@@ -26,30 +26,30 @@ bool KSUtil::checkArgumentsCount( KSContext& context, uint count, const QString&
 
 bool KSUtil::checkType( KSContext& context, KSValue* v, KSValue::Type t, bool fatal )
 {
-  if ( !v->cast( t ) )
-  {
-    if ( !fatal )
-      return false;
+    if ( !v->implicitCast( t ) )
+    {
+	if ( !fatal )
+	    return false;
 
-    castingError( context, v, t );
-    return false;
-  }
+	castingError( context, v, t );
+	return false;
+    }
 
-  return true;
+    return true;
 }
 
 bool KSUtil::checkType( KSContext& context, const KSValue::Ptr& v, KSValue::Type t, bool fatal )
 {
-  if ( v->type() != t )
-  {
-    if ( !fatal )
-      return false;
+    if ( !v->implicitCast( t ) )
+    {
+	if ( !fatal )
+	    return false;
 
-    castingError( context, v, t );
-    return false;
-  }
+	castingError( context, v, t );
+	return false;
+    }
 
-  return true;
+    return true;
 }
 
 void KSUtil::castingError( KSContext& context, const QString& from, const QString& to )

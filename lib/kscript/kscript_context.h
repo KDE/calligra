@@ -22,49 +22,75 @@ typedef QMap<QString,KSValue::Ptr> KSNamespace;
 class KSModule : public QShared
 {
 public:
-  typedef KSSharedPtr<KSModule> Ptr;
+    typedef KSSharedPtr<KSModule> Ptr;
 
-  KSModule( KSInterpreter*, const QString& name, KSParseNode* = 0 );
-  virtual ~KSModule();
+    KSModule( KSInterpreter*, const QString& name, KSParseNode* = 0 );
+    virtual ~KSModule();
 
-  bool eval( KSContext& );
-  // void setCode( KSParseNode* n ) { if ( m_code ) delete m_code; m_code = n; }
+    /**
+     * Executes the code of the module. This method is usually called
+     * after the module has been loaded.
+     */
+    virtual bool eval( KSContext& );
 
-  /**
-   * If @ref KSContext::leftExpr retruns TRUE for the given context,
-   * then a new member is added to the object if it did not exist.
-   * Otherwise 0 is returned for a non existing member.
-   * This function may nevertheless set a exception if a member is known but if
-   * it could not be read for some reason.
-   */
-  virtual KSValue::Ptr member( KSContext&, const QString& name );
-  /**
-   * May set a exception if the member could not be set.
-   */
-  virtual bool setMember( KSContext&, const QString& name, const KSValue::Ptr& v );
+    /**
+     * If @ref KSContext::leftExpr returns TRUE for the given context,
+     * then a new member is added to the object if it did not exist.
+     * Otherwise 0 is returned for a non existing member.
+     * This function may nevertheless set an exception if a member is known but if
+     * it could not be read for some reason.
+     */
+    virtual KSValue::Ptr member( KSContext&, const QString& name );
+    /**
+     * May set a exception if the member could not be set.
+     */
+    virtual bool setMember( KSContext&, const QString& name, const KSValue::Ptr& v );
 
-  QString name() const { return m_name; }
+    /**
+     * Reimplemented by KSPebblesModule.
+     */
+    virtual bool isPebbles() const { return FALSE; }
+    
+    /**
+     * @return the modules name.
+     */
+    QString name() const { return m_name; }
 
-  KSNamespace* nameSpace() { return &m_space; }
+    /**
+     * @return the namespace that contains all members of the module.
+     *
+     * This method is INTERNAL. Dont use!
+     */
+    KSNamespace* nameSpace() { return &m_space; }
 
-  /**
-   * Find a symbol in the modules namespace.
-   */
-  KSValue* object( const QString& name );
-  /**
-   * Insert a symbol in the modules namespace.
-   */
-  void addObject( const QString& name, const KSValue::Ptr& v );
-  /**
-   * @return the interpreter that started the interpreter.
-   */
-  KSInterpreter* interpreter() { return m_interpreter; }
+    /**
+     * Find a symbol in the modules namespace. If the symbol is not known 0
+     * is returned.
+     *
+     * This method is INTERNAL. Dont use!
+     *
+     * @see #member
+     */
+    KSValue* object( const QString& name );
+    /**
+     * Insert a symbol in the modules namespace.
+     *
+     * This method is INTERNAL. Dont use!
+     */
+    void addObject( const QString& name, const KSValue::Ptr& v );
+    /**
+     * @return the interpreter that loaded and executed the module.
+     */
+    KSInterpreter* interpreter() { return m_interpreter; }
+
+protected:
+    void setCode( KSParseNode* node );
 
 private:
-  QString m_name;
-  KSNamespace m_space;
-  KSParseNode* m_code;
-  KSInterpreter* m_interpreter;
+    QString m_name;
+    KSNamespace m_space;
+    KSParseNode* m_code;
+    KSInterpreter* m_interpreter;
 };
 
 

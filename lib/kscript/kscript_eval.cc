@@ -5,9 +5,8 @@
 #include "kscript_class.h"
 #include "kscript_object.h"
 #include "kscript_struct.h"
-#include "kscript_interface.h"
-#include "kscript_corbafunc.h"
 #include "kscript_proxy.h"
+#include "kscript_qobject.h"
 #include "kscript.h"
 #include "kscript_parsenode.h"
 #include "kscript_util.h"
@@ -1132,8 +1131,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
   }
 
   if ( !l.value()->cast( KSValue::FunctionType ) && !l.value()->cast( KSValue::ClassType ) &&
-       !l.value()->cast( KSValue::MethodType ) && !l.value()->cast( KSValue::StructClassType ) &&
-       !l.value()->cast( KSValue::InterfaceType ) )
+       !l.value()->cast( KSValue::MethodType ) && !l.value()->cast( KSValue::StructClassType ) )
   {
     QString tmp( "From %1 to Function" );
     context.setException( new KSException( "CastingError", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
@@ -1323,6 +1321,11 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
   else if ( l.value()->cast( KSValue::ProxyType ) )
   {
     v = l.value()->proxyValue()->member( context, node->getIdent() );
+    module = context.scope()->module();
+  }
+  else if ( l.value()->cast( KSValue::QObjectType ) )
+  {
+    v = l.value()->qobjectValue()->member( context, node->getIdent() );
     module = context.scope()->module();
   }
   // Special handling for all kind of built in data types
@@ -2101,7 +2104,7 @@ bool KSEval_import( KSParseNode* node, KSContext& context )
 
   KSContext d( context );
   // This function puts a KSModule in d.value()
-  if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks", QStringList() ) )
+  if ( !context.interpreter()->runModule( d, node->getIdent() ) )
   {
     context.setException( d );
     return false;
@@ -2493,14 +2496,14 @@ bool KSEval_t_regexp_group( KSParseNode* node, KSContext& context )
 bool KSEval_t_input( KSParseNode*, KSContext& context )
 {
     context.setValue( new KSValue( context.interpreter()->readInput() ) );
-    
+
     return TRUE;
 }
 
 bool KSEval_t_line( KSParseNode* /*node*/, KSContext& context )
 {
     context.setValue( context.interpreter()->lastInputLine() );
-    
+
     return TRUE;
 }
 
@@ -2549,6 +2552,6 @@ bool KSEval_t_file_op( KSParseNode* node, KSContext& context )
 	context.setValue( new KSValue( (KScript::Long)info.size() ) );
     else
 	ASSERT( 0 );
-    
+
     return TRUE;
 }

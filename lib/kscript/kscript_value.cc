@@ -5,8 +5,7 @@
 #include "kscript_context.h"
 #include "kscript_struct.h"
 #include "kscript_proxy.h"
-#include "kscript_interface.h"
-#include "kscript_typecode.h"
+#include "kscript_qobject.h"
 
 KSValue* KSValue::s_null = 0;
 
@@ -46,10 +45,8 @@ KSValue::KSValue( Type _type )
     case ModuleType:
     case StructType:
     case StructClassType:
-    case TypeCodeType:
     case ProxyType:
-    case InterfaceType:
-    case AttributeType:
+    case QObjectType:
       val.ptr = 0;
       break;
     case BuiltinMethodType:
@@ -131,10 +128,8 @@ KSValue& KSValue::operator= ( const KSValue& p )
     case PropertyType:
     case ModuleType:
     case StructClassType:
-    case TypeCodeType:
     case ProxyType:
-    case InterfaceType:
-    case AttributeType:
+    case QObjectType:
       val.ptr = p.val.ptr;
       ((QShared*)val.ptr)->ref();
       break;
@@ -298,35 +293,19 @@ void KSValue::setValue( KSProxy* _value )
   val.ptr = _value;
 }
 
-void KSValue::setValue( KSInterface* _value )
-{
-  clear();
-  typ = InterfaceType;
-  // Do not call ref() since we take over ownership
-  val.ptr = _value;
-}
-
-void KSValue::setValue( KSTypeCode* _value )
-{
-  clear();
-  typ = TypeCodeType;
-  // Do not call ref() since we take over ownership
-  val.ptr = _value;
-}
-
-void KSValue::setValue( KSAttribute* _value )
-{
-  clear();
-  typ = AttributeType;
-  // Do not call ref() since we take over ownership
-  val.ptr = _value;
-}
-
 void KSValue::setValue( KSProxyBuiltinMethod _value )
 {
   clear();
   typ = ProxyBuiltinMethodType;
   val.pm = _value;
+}
+
+void KSValue::setValue( KSQObject* _value )
+{
+  clear();
+  typ = QObjectType;
+  // Do not call ref() since we take over ownership
+  val.ptr = _value;
 }
 
 void KSValue::clear()
@@ -342,33 +321,15 @@ void KSValue::clear()
     case StructBuiltinMethodType:
     case ProxyBuiltinMethodType:
       break;
-    case TypeCodeType:
-#if 0
-	if ( val.ptr )
-	if ( typeCodeValue()->deref() )
-	  delete ((KSTypeCode*)val.ptr);
-#endif
-      break;
     case ProxyType:
-#if 0
-	if ( val.ptr )
+      if ( val.ptr )
 	if ( proxyValue()->deref() )
 	  delete ((KSProxy*)val.ptr);
-#endif
       break;
-    case InterfaceType:
-#if 0
+    case QObjectType:
       if ( val.ptr )
-	if ( interfaceValue()->deref() )
-	  delete ((KSInterface*)val.ptr);
-#endif
-      break;
-    case AttributeType:
-#if 0
-      if ( val.ptr )
-	if ( attributeValue()->deref() )
-	  delete ((KSAttribute*)val.ptr);
-#endif
+	if ( qobjectValue()->deref() )
+	  delete ((KSQObject*)val.ptr);
       break;
     case FunctionType:
       if ( val.ptr )
@@ -458,10 +419,8 @@ void KSValue::initTypeNameMap()
     typ_to_name[(int)StructClassType] = QString::fromLatin1("StructClass");
     typ_to_name[(int)StructBuiltinMethodType] = QString::fromLatin1("StructBuiltinMethod");
     typ_to_name[(int)ProxyType] = QString::fromLatin1("Proxy");
-    typ_to_name[(int)InterfaceType] = QString::fromLatin1("Interface");
     typ_to_name[(int)ProxyBuiltinMethodType] = QString::fromLatin1("ProxyBuiltinMethod");
-    typ_to_name[(int)TypeCodeType] = QString::fromLatin1("TypeCode");
-    typ_to_name[(int)AttributeType] = QString::fromLatin1("Attribute");
+    typ_to_name[(int)QObjectType] = QString::fromLatin1("QObject");
 }
 
 QString KSValue::typeToName( KSValue::Type _typ )
@@ -553,10 +512,8 @@ bool KSValue::cast( Type _typ )
     case StructType:
     case StructClassType:
     case ModuleType:
-    case TypeCodeType:
     case ProxyType:
-    case InterfaceType:
-    case AttributeType:
+    case QObjectType:
     case ProxyBuiltinMethodType:
       // They can be casted to nothing
       return false;
@@ -592,17 +549,15 @@ QString KSValue::toString( KSContext& context )
     case ModuleType:
       return ( QString( "<module " ) + moduleValue()->name() + ">" );
       break;
-    case TypeCodeType:
-      return QString( "<typecode>" );
-      break;
     case ProxyType:
       return QString( "<proxy>" );
       break;
-    case InterfaceType:
-      return QString( "<interface>" );
-      break;
-    case AttributeType:
-      return QString( "<attribute>" );
+    case QObjectType:
+      {
+	  QString str = QString( "<qobject %1>" );
+	  str = str.arg( qobjectValue()->className() );
+	  return str;
+      }
       break;
     case ProxyBuiltinMethodType:
       return QString( "<proxy builtin method>" );
@@ -792,9 +747,7 @@ bool KSValue::cmp( const KSValue& v ) const
     case StructType:
     case StructClassType:
     case ProxyType:
-    case InterfaceType:
-    case AttributeType:
-    case TypeCodeType:
+    case QObjectType:
       return ( val.ptr == v.val.ptr );
     case BuiltinMethodType:
       return ( val.m == v.val.m );
@@ -810,7 +763,7 @@ bool KSValue::cmp( const KSValue& v ) const
   return false;
 }
 
-bool KSValue::implicitCast( Type _typ )
+bool KSValue::implicitCast( Type _typ ) const
 {
     if ( typ == _typ )
 	return true;
@@ -849,11 +802,9 @@ bool KSValue::implicitCast( Type _typ )
     case StructType:
     case StructClassType:
     case ModuleType:
-    case TypeCodeType:
     case ProxyType:
-    case InterfaceType:
-    case AttributeType:
     case ProxyBuiltinMethodType:
+    case QObjectType:
       // They can be casted to nothing
       return false;
     case NTypes:

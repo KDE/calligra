@@ -18,7 +18,8 @@ class KSUtil
 public:
     static bool checkArgumentsCount( KSContext& context, uint count, const QString& method, bool fatal = true );
     /**
-     * @return TRUE if the value matches the requested type @p t.
+     * @return TRUE if the value matches the requested type @p t or if KSValue will seamlessly
+     *         convert to that type.
      *
      * @param context is used if @p fatal is TRUE and an exception has to be created.
      * @param v is the value that is to be tested.
@@ -27,7 +28,8 @@ public:
      */
     static bool checkType( KSContext&, KSValue* v, KSValue::Type t, bool fatal = true );
     /**
-     * @return TRUE if the value matches the requested type @p t.
+     * @return TRUE if the value matches the requested type @p t or if KSValue will seamlessly
+     *         convert to that type.
      *
      * @param context is used if @p fatal is TRUE and an exception has to be created.
      * @param v is the value that is to be tested.

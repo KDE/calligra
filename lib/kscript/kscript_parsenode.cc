@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 extern QString idl_lexFile;
 extern QString toplevelFile;
 extern int idl_line_no;

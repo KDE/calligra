@@ -103,12 +103,18 @@ public:
    * Internal function for implementing the <> operator.
    */
   QString readInput();
-    
+
   /**
    * Internal function used for implementin the $_ operator.
    */
   KSValue::Ptr lastInputLine() const;
-    
+
+  /**
+   * Internal function that returns the global namespace
+   * of this interpreter.
+   */
+  KSNamespace* globalNamespace() { return m_global; }
+
 protected:
   /**
    * A pointer to the namespace of the KScript module.

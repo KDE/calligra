@@ -466,10 +466,10 @@ bool KSMethod::call( KSContext& context )
   }
   else if ( m_func->type() == KSValue::ProxyBuiltinMethodType )
   {
-    KSProxyBuiltinMethod m = m_func->proxyBuiltinMethodValue();
-    KSProxy* o = m_object->proxyValue();
-    if ( ! (o->*m)( context, name() ) )
-      return false;
+      KSProxyBuiltinMethod m = m_func->proxyBuiltinMethodValue();
+      KSProxy* o = m_object->proxyValue();
+      if ( ! (o->*m)( context, name() ) )
+	  return false;
   }
 
   return true;
@@ -489,6 +489,8 @@ bool KSProperty::set( KSContext& context, const KSValue::Ptr& v )
 	return m_struct->setMember( context, m_name, v );
     else if ( m_proxy )
 	return m_proxy->setMember( context, m_name, v );
+    else if ( m_qobject )
+	return m_qobject->setMember( context, m_name, v );
     else if ( m_module )
 	return m_module->setMember( context, m_name, v );
     else

@@ -240,6 +240,14 @@ KSValue* KSModule::object( const QString& name )
   return 0;
 }
 
+void KSModule::setCode( KSParseNode* node )
+{
+    if ( m_code )
+	delete m_code;
+    
+    m_code = node;
+}
+
 /**************************************************
  *
  * KSSubScope

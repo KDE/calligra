@@ -3,7 +3,7 @@
 #include "kscript_func.h"
 #include "kscript_class.h"
 #include "kscript.h"
-#include "kscript_ext_qt.h"
+#include "kscript_qt.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +14,9 @@
 #include <qfile.h>
 #include <qtextstream.h>
 
+#include <kglobal.h>
+#include <kstddirs.h>
+
 KSInterpreter::KSInterpreter()
 {
     m_outStream = 0;
@@ -21,7 +24,7 @@ KSInterpreter::KSInterpreter()
     m_outDevice = 0;
     m_lastInputLine = new KSValue( QString() );
     m_lastInputLine->setMode( KSValue::LeftExpr );
-    
+
     KSModule::Ptr m = ksCreateModule_KScript( this );
     m_modules.insert( m->name(), m );
 
@@ -66,7 +69,7 @@ QString KSInterpreter::runScript( const QString& filename, const QStringList& ar
 {
     // Save for usage by the <> operator
     m_args = args;
-    
+
     KSContext context( m_globalContext );
     // The "" indicates that this is not a module but
     // a script in its original meaning.
@@ -88,6 +91,10 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
     return true;
   }
 
+  QString ksname = name + ".ks";
+  QString qdlname = name + ".qdl";
+  QString pname = name + ".la";
+
   QStringList::Iterator it = m_searchPaths.begin();
   for( ; it != m_searchPaths.end(); ++it )
   {
@@ -100,7 +107,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
 
     while ( ( ep = readdir( dp ) ) != 0L )
     {
-      if ( name == ep->d_name )
+      if ( ksname == ep->d_name || qdlname == ep->d_name || pname == ep->d_name )
       {
 	QString f = *it;
 	f += "/";
@@ -109,12 +116,22 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
 	if ( ( stat( f, &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
 	{
 	  QStringList lst;
+	  qDebug("RUN MODULE %s %s", name.latin1(), f.latin1() );
 	  return runModule( context, name, f, lst );
 	}
       }
     }
 
     closedir( dp );
+  }
+
+  // Search in /opt/kde/lib
+  QString libfile = KGlobal::dirs()->findResource( "lib", pname );
+  if ( !libfile.isEmpty() )
+  {
+      QStringList lst;
+      qDebug("RUN PEBBLES MODULE %s %s", name.latin1(), libfile.latin1() );
+      return runModule( context, name, libfile, lst );
   }
 
   QString tmp( "Could not find module %1" );
@@ -146,25 +163,46 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
     return false;
   }
 
-  // Create the parse tree.
-  KSParser parser;
-  if ( !parser.parse( f, filename.ascii() ) )
+  KSModule::Ptr module;
+  /* if ( filename.right(4) == ".qdl" )
   {
-    fclose( f );
-    result.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
-    return false;
+      QFile file( filename );
+      file.open( IO_ReadOnly, f );
+
+      // ### TODO: Check for parser errors
+      QDomDocument doc( &file );
+
+      // Create a module
+      module = new KSWinModule( this, name, doc );
+  }
+  else if ( filename.right(3) == ".la" )
+  {
+      // Create a module
+      module = new KSPebblesModule( this, name );
+  }
+  else */
+  {
+      // Create the parse tree.
+      KSParser parser;
+      if ( !parser.parse( f, filename.ascii() ) )
+      {
+	  fclose( f );
+	  result.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
+	  return false;
+      }
+      // Create a module
+      module = new KSModule( this, name, parser.donateParseTree() );
   }
   fclose( f );
   // parser.print( true );
 
-  // Create a module
-  KSModule::Ptr module = new KSModule( this, name, parser.donateParseTree() );
   // Put the module in the return value
   module->ref();
   result.setValue( new KSValue( &*module ) );
 
   // Put all global functions etc. in the scope
   KSContext context;
+  // ### TODO: Do we create a memory leak here ?
   context.setScope( new KSScope( m_global, module ) );
 
   // Travers the parse tree to find functions and classes etc.
@@ -188,6 +226,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
     // for the main function ( the list is empty currently ).
     KSContext context;
     context.setValue( new KSValue( KSValue::ListType ) );
+    // ### TODO: Do we create a memory leak here ?
     context.setScope( new KSScope( m_global, module ) );
 
     // Insert parameters
@@ -283,18 +322,18 @@ QString KSInterpreter::readInput()
     }
 
     QString tmp = m_outStream->readLine();
-    
+
     if ( !tmp.isNull() )
     {
 	tmp += "\n";
 	m_lastInputLine->setValue( tmp );
 	return tmp;
     }
-    
+
     m_lastInputLine->setValue( tmp );
 	
     // Ended reading a file ...
-    
+
     // Did we scan the last file ?
     if ( m_currentArg == (int)m_args.count() - 1 )
 	return QString();
@@ -309,7 +348,7 @@ QString KSInterpreter::readInput()
 	m_outDevice->open( IO_ReadOnly );
 	m_outStream = new QTextStream( m_outDevice );
     }
-    
+
     return readInput();
 }
 

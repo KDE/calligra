@@ -19,9 +19,7 @@ class KSModule;
 class KSStruct;
 class KSStructClass;
 class KSProxy;
-class KSInterface;
-class KSAttribute;
-class KSTypeCode;
+class KSQObject;
 
 typedef bool (KSObject::*KSBuiltinMethod)( KSContext& );
 typedef bool (KSStruct::*KSStructBuiltinMethod)( KSContext&, const QString& );
@@ -58,10 +56,8 @@ public:
       StructClassType,
       StructBuiltinMethodType,
       ProxyType,
-      InterfaceType,
-      AttributeType,
-      TypeCodeType,
       ProxyBuiltinMethodType,
+      QObjectType,
       NTypes
     };
 
@@ -96,10 +92,8 @@ public:
     KSValue( KSStructClass* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSStructBuiltinMethod _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSProxy* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSInterface* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSProxyBuiltinMethod _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSTypeCode* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSAttribute* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSQObject* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
 
     KSValue& operator= ( const KSValue& );
 
@@ -123,10 +117,8 @@ public:
     void setValue( KSStructClass* );
     void setValue( KSStructBuiltinMethod );
     void setValue( KSProxy* );
-    void setValue( KSInterface* );
     void setValue( KSProxyBuiltinMethod );
-    void setValue( KSTypeCode* );
-    void setValue( KSAttribute* );
+    void setValue( KSQObject* );
 
     void suck( KSValue* );
 
@@ -149,7 +141,7 @@ public:
                                          return !stringValue().isEmpty(); }
     KScript::Double doubleValue() const { ASSERT( typ == DoubleType || typ == IntType ); if ( typ == DoubleType ) return val.d;
                                           return (double)val.i; }
-    KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);
+    const KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);
                                             ASSERT( typ == CharType ); return QChar( val.c ); }
     KScript::CharRef& charRefValue() { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
     const KScript::CharRef& charRefValue() const { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
@@ -171,15 +163,11 @@ public:
     KSStruct* structValue() { ASSERT( typ == StructType ); return ((KSStruct*)val.ptr); }
     const KSStruct* structValue() const { ASSERT( typ == StructType ); return ((KSStruct*)val.ptr); }
     KSStructBuiltinMethod structBuiltinMethodValue() { ASSERT( typ == StructBuiltinMethodType ); return val.sm; }
-    KSInterface* interfaceValue() { ASSERT( typ == InterfaceType ); return ((KSInterface*)val.ptr); }
-    const KSInterface* interfaceValue() const { ASSERT( typ == InterfaceType ); return ((KSInterface*)val.ptr); }
     KSProxy* proxyValue() { ASSERT( typ == ProxyType ); return ((KSProxy*)val.ptr); }
     const KSProxy* proxyValue() const { ASSERT( typ == ProxyType ); return ((KSProxy*)val.ptr); }
     KSProxyBuiltinMethod proxyBuiltinMethodValue() { ASSERT( typ == ProxyBuiltinMethodType ); return val.pm; }
-    KSTypeCode* typeCodeValue() { ASSERT( typ == TypeCodeType ); return ((KSTypeCode*)val.ptr); }
-    const KSTypeCode* typeCodeValue() const { ASSERT( typ == TypeCodeType ); return ((KSTypeCode*)val.ptr); }
-    KSAttribute* attributeValue() { ASSERT( typ == AttributeType ); return ((KSAttribute*)val.ptr); }
-    const KSAttribute* attributeValue() const { ASSERT( typ == AttributeType ); return ((KSAttribute*)val.ptr); }
+    KSQObject* qobjectValue() { ASSERT( typ == QObjectType ); return ((KSQObject*)val.ptr); }
+    const KSQObject* qobjectValue() const { ASSERT( typ == QObjectType ); return ((KSQObject*)val.ptr); }
 
     /**
      * DO NOT USE ANY MORE.
@@ -190,8 +178,8 @@ public:
      * @return TRUE if the stored value is of type @p typ or can be implicit
      *         casted to that type.
      */
-    bool implicitCast( Type typ );
-    
+    bool implicitCast( Type typ ) const;
+
     QString toString( KSContext& context );
 
     bool operator==( const KSValue& v ) const;

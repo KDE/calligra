@@ -12,6 +12,7 @@
 #include "kscript_func.h"
 #include "kscript_struct.h"
 #include "kscript_proxy.h"
+#include "kscript_qobject.h"
 
 #include <string.h>
 
@@ -167,6 +168,7 @@ public:
   KSProperty( const KSStruct::Ptr& struc, const QString& name ) { m_struct = struc; m_name = name; }
   KSProperty( const KSProxy::Ptr& proxy, const QString& name ) { m_proxy = proxy; m_name = name; }
   KSProperty( const KSModule::Ptr& m, const QString& name ) { m_module = m; m_name = name; }
+  KSProperty( const KSQObject::Ptr& m, const QString& name ) { m_qobject = m; m_name = name; }
     
   virtual ~KSProperty() { }
 
@@ -179,6 +181,7 @@ private:
   KSStruct::Ptr m_struct;
   KSProxy::Ptr m_proxy;
   KSModule::Ptr m_module;
+  KSQObject::Ptr m_qobject;
   QString m_name;
 };
 

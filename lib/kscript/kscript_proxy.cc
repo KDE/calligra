@@ -2,7 +2,7 @@
 #include "kscript_struct.h"
 #include "kscript_util.h"
 #include "kscript_object.h"
-#include "kscript_ext_qstructs.h"
+#include "kscript_qstructs.h"
 
 #include <dcopclient.h>
 #include <kapp.h>
@@ -193,9 +193,6 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
     case KSValue::PropertyType:
     case KSValue::ModuleType:
     case KSValue::StructClassType:
-    case KSValue::TypeCodeType:
-    case KSValue::InterfaceType:
-    case KSValue::AttributeType:
     case KSValue::BuiltinMethodType:
     case KSValue::ProxyBuiltinMethodType:
     case KSValue::StructBuiltinMethodType:
