@@ -28,6 +28,9 @@
   *@author Frank Dekervel
   */
 
+
+class KoZoomHandler;
+
 class KWDWriter {
 public: 
 	KWDWriter(KoStore *store);
@@ -187,6 +190,7 @@ protected:
 	QDomDocument *_doc;
 	QDomDocument *_docinfo;
 	QDomElement _docinfoMain;
+	KoZoomHandler *_zoomhandler;
 	int tableNo;
 	
 };

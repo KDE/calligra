@@ -19,8 +19,12 @@
 #include "kwdwriter.h"
 #include <stdlib.h>
 #include "qrect.h"
+#include <kozoomhandler.h>
+#include <qpaintdevice.h>
 
 KWDWriter::KWDWriter(KoStore *store){
+	_zoomhandler = new KoZoomHandler();
+
 	_store=store;
 	_doc= new QDomDocument("DOC");
 	_docinfo = new QDomDocument("document-info");
@@ -331,6 +335,7 @@ QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClon
 	paragraph.appendChild(text);
 	parent.appendChild(paragraph);
 	paragraph.appendChild(layout);
+	layoutAttribute(paragraph,"NAME","value","Standard");
 	return paragraph;
 }
 
@@ -499,10 +504,10 @@ QDomElement KWDWriter::mainFrameset() {
 
 
 void KWDWriter::addRect(QDomElement e,QRect rect) {
-     e.setAttribute("top",rect.top());
-     e.setAttribute("left",rect.left());
-     e.setAttribute("bottom",rect.bottom());
-     e.setAttribute("right",rect.right());
+     e.setAttribute("top",_zoomhandler->pixelYToPt( rect.top()));
+     e.setAttribute("left",_zoomhandler->pixelXToPt(rect.left()));
+     e.setAttribute("bottom",_zoomhandler->pixelYToPt(rect.bottom()));
+     e.setAttribute("right",_zoomhandler->pixelXToPt(rect.right()));
 }
 
 
@@ -510,4 +515,5 @@ void KWDWriter::addRect(QDomElement e,QRect rect) {
 
 
 KWDWriter::~KWDWriter(){
+	delete(_zoomhandler);
 }
