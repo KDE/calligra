@@ -693,7 +693,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
 
 bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 {
-  kdDebug(30003) << "Saving document to store" << endl;
+  kdDebug(30003) << "Saving document to store " << _path << endl;
 
   // Use the path as the internal url
   m_url = _path;

@@ -157,7 +157,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
 {
     assert( !m_tmpURL.isEmpty() );
 
-    kdDebug(30003) << "Trying to load " << m_tmpURL << endl;
+    kdDebug(30003) << "KoDocumentChild::loadDocument: trying to load " << m_tmpURL << endl;
 
     if ( m_tmpMimeType == "application/x-killustrator" )
         m_tmpMimeType = "application/x-kontour";
@@ -165,7 +165,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
     if ( e.isEmpty() )
     {
-        kdWarning(30003) << "ERROR: Could not create child document with type " << m_tmpMimeType << endl;
+        kdWarning(30003) << "Could not create child document with type " << m_tmpMimeType << endl;
         bool res = createUnavailDocument( store, true );
         if ( res )
         {
@@ -184,9 +184,12 @@ bool KoDocumentChild::loadDocument( KoStore* store )
 
 bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL )
 {
+    kdDebug(30003) << "KoDocumentChild::loadDocumentInternal doOpenURL=" << doOpenURL << " m_tmpURL=" << m_tmpURL << endl;
     KoDocument * doc = e.createDoc( d->m_parent );
-    if (!doc)
+    if (!doc) {
+        kdWarning(30003) << "createDoc failed" << endl;
         return false;
+    }
     setDocument( doc, m_tmpGeometry );
 
     bool res = true;
@@ -206,7 +209,10 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
                 // Not found -> use a kounavail instead
                 res = createUnavailDocument( _store, false /* the URL doesn't exist, don't try to open it */ );
                 if ( res )
+                {
+                    d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
                     d->m_doc->setProperty( "unavailReason", i18n( "External document not found:\n%1" ).arg( tmpURL ) );
+                }
                 return res;
             }
             // Still waiting...
@@ -256,7 +262,9 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
     assert( document() );
     QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
     e.setAttribute( "url", document()->url().url() );
+    kdDebug() << "KoDocumentChild::save url=" << document()->url().url() << endl;
     e.setAttribute( "mime", document()->nativeFormatMimeType() );
+    kdDebug() << "KoDocumentChild::save mime=" << document()->nativeFormatMimeType() << endl;
     QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
     rect.setAttribute( "x", geometry().left() );
     rect.setAttribute( "y", geometry().top() );

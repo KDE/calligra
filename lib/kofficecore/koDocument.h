@@ -441,6 +441,11 @@ public:
 
   void emitProgress( int value ) { emit sigProgress( value ); }
 
+  /**
+   * Return true if url() is a real filename, false if url() is
+   * an internal url in the store, like "tar:/..."
+   */
+  virtual bool isStoredExtern();
 
 signals:
   /**
@@ -506,9 +511,17 @@ protected:
    *
    *  QPtrListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it ) {
-   *    QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-   *    if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
-   *      return false;
+   *    KoDocument* childDoc = static_cast<KoDocumentChild*>(it.current())->document();
+   *    if ( childDoc->isStoredExtern() )
+   *    {
+   *        if ( !childDoc->save() )
+   *            return FALSE;
+   *    }
+   *    else {
+   *        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+   *        if ( !childDoc->saveToStore( _store, internURL ) )
+   *            return FALSE;
+   *    }
    *  }
    *  return true;
    *  </PRE>
@@ -533,12 +546,6 @@ protected:
    *  If it is, then the pictures should be saved to tar:/pictures.
    */
   virtual bool completeSaving( KoStore* store );
-
-  /**
-   * Return true if url() is a real filename, false if url() is
-   * an internal url in the store, like "tar:/..."
-   */
-  virtual bool isStoredExtern();
 
   /**
    * Sets the document URL to empty URL
