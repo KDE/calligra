@@ -706,23 +706,24 @@ void CellLayoutPageFloat::slotChangeState()
 {
 QStringList list;
 listFormat->clear();
-precision->setEnabled(true);
-prefix->setEnabled(true);
-postfix->setEnabled(true);
+if(dlg->m_bValue)
+        {
+        precision->setEnabled(true);
+        prefix->setEnabled(true);
+        postfix->setEnabled(true);
+        }
+else
+        {
+        precision->setEnabled(false);
+        prefix->setEnabled(false);
+        postfix->setEnabled(false);
+        }
 if(number->isChecked())
         listFormat->setEnabled(false);
 else if(percent->isChecked())
-        {
         listFormat->setEnabled(false);
-        /*if(dlg->precision==-1)
-                precision->setValue(2);*/
-        }
 else if(money->isChecked())
-        {
         listFormat->setEnabled(false);
-        /*if(dlg->precision==-1)
-                precision->setValue(2);*/
-        }
 else if(scientific->isChecked())
         listFormat->setEnabled(false);
 else if(date->isChecked())
@@ -945,10 +946,6 @@ else if(dlg->m_bValue)
                         else
                                 tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
 
-                        if ( strcmp( prefix->text(), "########" ) != 0 )
-                                tmp=prefix->text()+" "+tmp;
-                        if ( strcmp( postfix->text(), "########" ) != 0 )
-                                tmp+=" "+postfix->text();
                         }
                 }
                 }
@@ -979,12 +976,15 @@ else if(dlg->m_bValue)
                         tmp.remove(--i,1);
                 }
             }
-        if ( strcmp( prefix->text(), "########" ) != 0 )
-                tmp=prefix->text()+" "+tmp;
-        if ( strcmp( postfix->text(), "########" ) != 0 )
-                tmp+=" "+postfix->text();
-        }
 
+        }
+        if(dlg->m_bValue && !time->isChecked() && !date->isChecked())
+        {
+                if ( strcmp( prefix->text(), "########" ) != 0 )
+                        tmp=prefix->text()+" "+tmp;
+                if ( strcmp( postfix->text(), "########" ) != 0 )
+                        tmp+=" "+postfix->text();
+        }
         exampleLabel->setText(tmp);
         }
         else

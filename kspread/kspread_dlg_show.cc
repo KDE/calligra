@@ -39,7 +39,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
 {
   m_pView = parent;
 
-  
+
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
@@ -69,7 +69,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
-  
+
 }
 
 void KSpreadshow::slotDoubleClicked(QListBoxItem *)
@@ -86,6 +86,7 @@ void KSpreadshow::slotOk()
 	{
 	text=list->text(list->currentItem());
         m_pView->tabBar()->showTable(text);
+        m_pView->changeTable(text);
         }
   accept();
 }
