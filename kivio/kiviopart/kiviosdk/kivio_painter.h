@@ -116,6 +116,7 @@ public:
 
     virtual void setFont( const QFont & ) {;}
     virtual void drawText( int, int, int, int, int, const QString & ) {;}
+    virtual QRect boundingRect( int, int, int, int, int, const QString & ) { return QRect(0,0,100,100); }
     
     
     // These shouldn't be used for anything except the screen painter right now...

@@ -88,13 +88,18 @@ Kivio1DStencil::Kivio1DStencil()
     m_pRight = new KivioConnectorPoint(this, false);
     m_pRight->setPosition(36.0f, 0.0f, false);
 
+    m_pTextConn = new KivioConnectorPoint(this, false);
+    m_pTextConn->setPosition(36.0f, 18.0f, false);
+
     m_connectorWidth = 36.0f;
     m_needsWidth = true;
-    
+    m_needsText = false;
+
     m_pConnectorPoints->append( m_pStart );
     m_pConnectorPoints->append( m_pEnd );
     m_pConnectorPoints->append( m_pLeft );
     m_pConnectorPoints->append( m_pRight );
+    m_pConnectorPoints->append( m_pTextConn );
 }
 
 
@@ -273,6 +278,7 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 {
     KivioPainter *painter = pData->painter;
     float x1, y1, scale;
+    int flag;
 
     scale = pData->scale;
 
@@ -281,27 +287,36 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
     {
        // If we don't need width connectors and we are on a width connector,
        // ignore it.
-       if( (m_needsWidth==false) &&
-	   (
-	      (p==m_pLeft) ||
-	      (p==m_pRight)
-	   )
-	 )
+       x1 = p->x() * scale;
+       y1 = p->y() * scale;
+       
+       flag = (p->target()) ? KivioPainter::cpfConnected : 0;
+       
+       if( p==m_pTextConn )
        {
-	  ;
+	  if( m_needsText==true )
+	  {
+	     painter->drawHandle( x1, y1, 0 );
+	  }
+       }
+       else if( p==m_pLeft || p==m_pRight )
+       {
+	  if( m_needsWidth==true )
+	  {
+	     painter->drawHandle( x1, y1, 0 );
+	  }
+       }
+       else if( p==m_pStart )
+       {
+	  painter->drawHandle( x1, y1, KivioPainter::cpfStart | flag );
+       }
+       else if( p==m_pEnd )
+       {
+	  painter->drawHandle( x1, y1, KivioPainter::cpfEnd | flag );
        }
        else
        {
-	  x1 = p->x() * scale;
-	  y1 = p->y() * scale;
-
-	  int flag = (p->target()) ? KivioPainter::cpfConnected : 0;
-
-	  if( p == m_pStart )
-	     painter->drawHandle( x1, y1, KivioPainter::cpfStart | flag );
-	  else if( p == m_pEnd )
-	     painter->drawHandle( x1, y1, KivioPainter::cpfEnd | flag );
-	  else if( p->connectable() )
+	  if( p->connectable() )
 	     painter->drawHandle( x1, y1, KivioPainter::cpfConnectable | flag );
 	  else
 	     painter->drawHandle( x1, y1, flag );
@@ -344,7 +359,11 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
     int id = pData->id;
     float oldX, oldY;
     bool doneSearching = false;
-    bool foundConnection = false;
+    bool foundConnection = false; 
+
+    float oldStencilX, oldStencilY;
+
+    
 
     KivioConnectorPoint *p;
 
@@ -361,7 +380,6 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
 
     oldX = p->x();
     oldY = p->y();
-//    p->setPosition( _x, _y, true );
     p->setPosition(_x,_y,true);
 
     if( p->connectable()==true )
@@ -403,6 +421,14 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
     if( id == kctCustom+1 ||
 	id == kctCustom+2 )
     {
+       // If it's the end connector, then update the text point
+       if( p==m_pEnd && m_needsText==true )
+       {
+	  m_pTextConn->setPosition( m_pTextConn->x() + (m_pEnd->x() - oldX),
+			            m_pTextConn->y() + (m_pEnd->y() - oldY),
+				    false );
+       }
+
        updateConnectorPoints(p, oldX, oldY);
     }
     // If it is one of the width handles, then fix the width and update the opposite point
@@ -428,6 +454,11 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
 
        updateConnectorPoints(p, oldX, oldY);
        return;
+    }
+    // Text handle
+    else if( id == kctCustom+5 )
+    {
+       updateConnectorPoints(p, oldX, oldY);
     }
 }
 
@@ -682,6 +713,25 @@ bool Kivio1DStencil::loadConnectors( const QDomElement &e )
     m_pEnd = m_pConnectorPoints->next();
     m_pLeft = m_pConnectorPoints->next();
     m_pRight = m_pConnectorPoints->next();
+    m_pTextConn = m_pConnectorPoints->next();
+
+    // Hopefully this will help with backwards compatibility
+    if( m_pStart == NULL ) {
+       m_pStart = new KivioConnectorPoint(this, true);
+    }
+    if( m_pEnd == NULL ) {
+       m_pEnd = new KivioConnectorPoint(this, true);
+    }
+    if( m_pLeft == NULL ) {
+       m_pLeft = new KivioConnectorPoint(this, false);
+    }
+    if( m_pRight == NULL ) {
+       m_pRight = new KivioConnectorPoint(this, false);
+    }
+    if( m_pTextConn == NULL ) {
+       m_pTextConn = new KivioConnectorPoint(this, false);
+    }
+    
 
     return true;
 }
@@ -803,3 +853,37 @@ void Kivio1DStencil::copyBasicInto( Kivio1DStencil *pStencil )
     *(pStencil->m_pProtection) = *m_pProtection;
     *(pStencil->m_pCanProtect) = *m_pCanProtect;
 }
+
+void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
+{
+   float scale = pData->scale;
+   KivioPainter *painter = pData->painter;
+
+   int tf;
+   float _x, _y, _w, _h;
+   QRect boundRect;
+
+   _x = m_pTextConn->x() * scale;
+   _y = m_pTextConn->y() * scale;
+   _w = 10000000.0f;
+   _h = 10000000.0f;
+
+   QFont f = m_pTextStyle->font();
+   kdDebug() << "Pre: " << _x << " " << _y << "\n";
+   kdDebug()  << "Point: " << (f.pointSize()*scale) << "\n";
+
+   f.setPointSize( f.pointSize() * scale);
+   painter->setFont(f);
+   painter->setTextColor(m_pTextStyle->color());
+   
+
+   tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
+
+   boundRect = painter->boundingRect( (int)_x, (int)_y, (int)_w, (int)_h, tf, m_pTextStyle->text() );
+
+   kdDebug() << "Drawing text " << boundRect.width() << " " << boundRect.height()  << " scale: " << scale << " " << m_pTextStyle->text() << "\n";
+
+   painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
+//   painter->drawText( boundRect, tf, m_pTextStyle->text() );
+}
+

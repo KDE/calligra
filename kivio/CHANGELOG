@@ -159,18 +159,23 @@
       in and out.
 
 (Dave Marotti)
-01/14/2000
+01/14/2001
     - Started work on the protection dialog box
     - Deletion protection works
 
 (Dave Marotti)
-01/18/2000
+01/18/2001
     - Width/Height protection now works.
     - Little pictures of padlocks are now drawn in place of resize handles when
       protected.
       
 (Dave Marotti)
-01/23/2000
+01/23/2001
     - Width/height/x/y/deletion protection works, there are some flaws though.
       If you protect something, then group it, things can act funny when you
       move or resize the group.
+
+(Dave Marotti)
+02/04/2001
+    - Below 50% zoom, the targets are no longer drawn
+    - Added a text handle to connector stencils

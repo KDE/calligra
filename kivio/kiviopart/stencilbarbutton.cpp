@@ -138,10 +138,11 @@ void DragBarButton::drawButton( QPainter* paint )
   p2 += QPoint(2,0);
   qDrawShadeLine( paint, p1, p2, g, true, 0, 1 );
 
-  if (m_bMouseOn) {
+// Temporary fix
+//  if (m_bMouseOn) {
     int z = m_bClose ? 1:0;
     paint->drawPixmap(width()-20+z, (height()-m_pClosePix->height())/2+z, *m_pClosePix );
-  }
+//  }
 }
 
 void DragBarButton::setIcon( const QString& name )

@@ -81,6 +81,7 @@ KivioStraightConnector::KivioStraightConnector()
    m_startAH = new KivioArrowHead();
    m_endAH = new KivioArrowHead();
    m_needsWidth = false;
+   m_needsText = true;
 
    m_pCanProtect->clearBit( kpAspect );
    m_pCanProtect->clearBit( kpWidth );
@@ -100,6 +101,13 @@ void KivioStraightConnector::setStartPoint( float x, float y )
 {
     m_pStart->setPosition( x, y, false );
     m_pStart->disconnect();
+
+    if( m_needsText )
+    {
+       m_pTextConn->setPosition( (m_pEnd->x()+m_pStart->x())/2.0f,
+				 (m_pEnd->y()+m_pStart->y())/2.0f,
+				 false );
+    }
 }
 
 void KivioStraightConnector::setEndPoint( float x, float y )
@@ -222,6 +230,9 @@ void KivioStraightConnector::paint( KivioIntraStencilData *pData )
         m_startAH->paint( painter, m_pStart->x(), m_pStart->y(), -vecX, -vecY, scale );
         m_endAH->paint( painter, m_pEnd->x(), m_pEnd->y(), vecX, vecY, scale );
     }
+
+    // Text
+    drawText(pData);
 }
 
 void KivioStraightConnector::paintOutline( KivioIntraStencilData *pData )

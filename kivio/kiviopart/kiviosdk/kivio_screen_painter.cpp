@@ -894,6 +894,13 @@ void KivioScreenPainter::drawText( int x, int y, int w, int h, int tf, const QSt
     m_pPainter->drawText( x, y, w, h, tf, str );
 }
 
+QRect KivioScreenPainter::boundingRect( int x, int y, int w, int h, int tf, const QString &str )
+{
+   PAINTER_CHECK();
+
+   return m_pPainter->boundingRect( x,y,w,h, tf, str );
+}
+
 void KivioScreenPainter::drawPixmap( float x, float y, const QPixmap &pix )
 {
    PAINTER_CHECK();

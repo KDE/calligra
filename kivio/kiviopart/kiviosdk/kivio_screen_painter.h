@@ -84,6 +84,7 @@ public:
     void setFont( const QFont & );
     void drawText( int x, int y, int w, int h, int tf,
                 const QString &str );
+    virtual QRect boundingRect( int, int, int, int, int, const QString & );
 
     void drawPixmap( float, float, const QPixmap & );    
 

@@ -331,16 +331,20 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
 
 
     // Now the second iteration - connection targets
-    if( drawHandles )
+    // Only draw targets if the zoom is higher than a certain value
+    if( zoom >= 0.5 )
     {
-       m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-       pLayer = m_lstLayers.first();
-       while( pLayer )
+       if( drawHandles )
        {
-	  if( pLayer->connectable() )
-	     pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-	  
-	  pLayer = m_lstLayers.next();
+	  m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
+	  pLayer = m_lstLayers.first();
+	  while( pLayer )
+	  {
+	     if( pLayer->connectable() )
+		pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
+	     
+	     pLayer = m_lstLayers.next();
+	  }
        }
     }
 

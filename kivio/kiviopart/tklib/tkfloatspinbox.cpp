@@ -30,6 +30,7 @@
 #include <qvalidator.h>
 #include <qpixmapcache.h>
 #include <qapplication.h>
+#include <kdebug.h>
 
 TKFloatSpinBox::TKFloatSpinBox( QWidget * parent , const char *name )
 : QFrame( parent, name ), TKFloatRangeControl()
@@ -323,6 +324,7 @@ void TKFloatSpinBox::resizeEvent( QResizeEvent* )
 
 void TKFloatSpinBox::wheelEvent( QWheelEvent* e )
 {
+   kdDebug() << "WHEEL EVENT **************************************\n";
   e->accept();
   static float offset = 0;
   static TKFloatSpinBox* offset_owner = 0;
