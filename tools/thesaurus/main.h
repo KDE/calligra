@@ -28,7 +28,6 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qobject.h>
-#include <qpushbutton.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -54,6 +53,8 @@
 #include <krun.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+
+class QToolButton;
 
 class Thesaurus : public KDataTool
 {
@@ -117,8 +118,8 @@ protected:
     QVBox *vbox;
     QVBox *vbox2;
 
-    QPushButton *m_back;
-    QPushButton *m_forward;
+    QToolButton *m_back;
+    QToolButton *m_forward;
 
     KHistoryCombo *m_edit;
     QLabel *m_edit_label;

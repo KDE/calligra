@@ -44,6 +44,9 @@ NOT TODO:
 
 #include "main.h"
 
+#include <qtoolbutton.h>
+#include <kiconloader.h>
+
 /***************************************************
  *
  * Factory
@@ -79,15 +82,12 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_edit_label = new QLabel(m_edit, i18n("&Search for:"), m_page);
     row1->addWidget(m_edit_label, 0);
     row1->addWidget(m_edit, 1);
-    //KGuiItem back = KStdGuiItem::back();
-    //KGuiItem forward = KStdGuiItem::forward();
-    // fixme: button's too wide
-    //m_back = new QPushButton(back.iconSet(KIcon::MainToolbar), QString::null, m_page);
-    m_back = new QPushButton("<", m_page);
+    m_back = new QToolButton(m_page);
+    m_back->setPixmap(BarIcon(QString::fromLatin1("1leftarrow")));
     QToolTip::add(m_back, i18n("Back"));
     row1->addWidget(m_back, 0);
-    //m_forward = new QPushButton(forward.iconSet(KIcon::MainToolbar), QString::null, m_page);
-    m_forward = new QPushButton(">", m_page);
+    m_forward = new QToolButton(m_page);
+    m_forward ->setPixmap(BarIcon(QString::fromLatin1("1rightarrow")));
     QToolTip::add(m_forward, i18n("Forward"));
     row1->addWidget(m_forward, 0);
 
