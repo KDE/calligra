@@ -309,8 +309,6 @@ KoTextFormat & KoCharStyle::format()
 KoParagStyle::KoParagStyle( const QString & name )
     : KoCharStyle( name )
 {
-    m_name = name;
-    m_shortCutName = QString::null;
     m_followingStyle = this;
 
     // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
@@ -331,8 +329,6 @@ void KoParagStyle::operator=( const KoParagStyle &rhs )
 {
     KoCharStyle::operator=( rhs );
     m_paragLayout = rhs.m_paragLayout;
-    m_name = rhs.m_name;
-    m_shortCutName = rhs.m_shortCutName;
     m_followingStyle = rhs.m_followingStyle;
     m_paragLayout.style = this; // must always be "this"
     m_parentStyle = rhs.m_parentStyle;
@@ -367,9 +363,10 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
 
     // Load name
     QDomElement nameElem = parentElem.namedItem("NAME").toElement();
-    if ( !nameElem.isNull() )
+    if ( !nameElem.isNull() ) {
         m_name = nameElem.attribute("value");
-    else
+        m_displayName = i18n( "Style name", m_name.utf8() );
+    } else
         kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
     // The followingStyle stuff has to be done after loading all styles.
@@ -380,7 +377,8 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
 void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
 {
     // Load name
-    m_name = styleElem.attribute( "style:display-name" );
+    m_name = styleElem.attribute( "style:name" );
+    m_displayName = styleElem.attribute( "style:display-name" );
 
     // OOo hack
     //m_bOutline = m_name.startsWith( "Heading" );
@@ -439,7 +437,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
 {
     KoGenStyle gs( styleType, "paragraph", parentStyleName );
 
-    gs.addAttribute( "style:display-name", m_name );
+    gs.addAttribute( "style:display-name", m_displayName );
     // TODO: check that this is correct
     if ( m_paragLayout.counter && m_paragLayout.counter->depth() ) {
         if ( m_bOutline )
