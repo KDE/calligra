@@ -23,6 +23,8 @@
 
 class QDateTime;
 class QString;
+class QTime;
+class QDate;
 
 class KSpreadValueData;
 
@@ -113,6 +115,18 @@ class KSpreadValue
     KSpreadValue( const QDateTime& dt );
 
     /**
+     * Create a floating-point value from date.
+     * See also note above.
+     */
+    KSpreadValue( const QTime& time );
+
+    /**
+     * Create a floating-point value from time.
+     * See also note above.
+     */
+    KSpreadValue( const QDate& date );
+
+    /**
      * Returns the type of the value.
      */
     Type type() const;
@@ -153,6 +167,8 @@ class KSpreadValue
      */
     bool isError() const { return type() == Error; }
 
+    void setValue( const KSpreadValue& v );
+
     /**
      * Sets this value to boolean value.
      */
@@ -182,6 +198,16 @@ class KSpreadValue
      * Sets this value to floating-point number representing the date/time.
      */
     void setValue( const QDateTime& dt );
+
+    /**
+     * Sets this value to floating-point number representing the date.
+     */
+    void setValue( const QTime& dt );
+
+    /**
+     * Sets this value to floating-point number representing the time.
+     */
+    void setValue( const QDate& dt );
 
     /**
      * Returns the boolean value of this value.

@@ -97,6 +97,7 @@ KSpreadValue::KSpreadValue( KSpreadValue::Type _type )
 // copy constructor
 KSpreadValue::KSpreadValue( const KSpreadValue& _value )
 {
+  d = KSpreadValueData::null();
   assign( _value );
 }
 
@@ -136,6 +137,20 @@ KSpreadValue::KSpreadValue( const QString& s )
 
 // create a floating-point value from date/time
 KSpreadValue::KSpreadValue( const QDateTime& dt )
+{
+  d = KSpreadValueData::null();
+  setValue( dt );
+}
+
+// create a floating-point value from time
+KSpreadValue::KSpreadValue( const QTime& dt )
+{
+  d = KSpreadValueData::null();
+  setValue( dt );
+}
+
+// create a floating-point value from date
+KSpreadValue::KSpreadValue( const QDate& dt )
 {
   d = KSpreadValueData::null();
   setValue( dt );
@@ -196,6 +211,11 @@ int KSpreadValue::asInteger() const
     result = static_cast<int>(d->f);
 
   return result;
+}
+
+void KSpreadValue::setValue( const KSpreadValue& v )
+{
+  assign( v );
 }
 
 // set the value as floating-point
@@ -269,6 +289,24 @@ void KSpreadValue::setValue( const QDateTime& dt )
 
   double f = refDate.daysTo( dt.date() ) + 1;
   f += refTime.secsTo( dt.time() ) / 86400.0;
+
+  setValue( f );
+}
+
+void KSpreadValue::setValue( const QTime& time )
+{
+  // reference time is midnight
+  QTime refTime = QTime( 0, 0 );
+  double f = refTime.secsTo( time ) / 86400.0;
+
+  setValue( f );
+}
+
+void KSpreadValue::setValue( const QDate& date )
+{
+  // reference date is 31 Dec, 1899
+  QDate refDate = QDate( 1899, 12, 31 );
+  double f = refDate.daysTo( date ) + 1;
 
   setValue( f );
 }
