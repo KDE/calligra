@@ -107,6 +107,10 @@ public slots:
     void slotItemSelected( int _id );
 };
 
+
+class CellPrivate;
+
+
 /**
  * For every cell in the spread sheet there is a KSpreadCell object.
  *
@@ -343,7 +347,7 @@ public:
     /**
      * @return the text the user entered.
      */
-    QString text() const { return m_strText; }
+    QString text() const;
 
     QString strOutText() const {return m_strOutText;}
 
@@ -449,7 +453,7 @@ public:
      * Note that this is "how the user would like the data to be displayed if possible".
      * If he selects a date format, and the cell contains a string, we won't apply that format.
      */
-    FormatType formatType() const { return getFormatType( m_iColumn, m_iRow ); }
+    FormatType formatType() const;
 
     bool isDate() const;
     bool isTime() const;
@@ -884,29 +888,8 @@ protected:
     void NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending);
 
 private:
-    /**
-     * This cell's row.
-     * If it is 0, this is the default cell and its row/column can
-     * not be determined.
-     *
-     * @persistent
-     */
-    int m_iRow;
-    /**
-     * This cell's column.
-     * If it is 0, this is the default cell and its row/column can
-     * not be determined.
-     *
-     * @persistent
-     */
-    int m_iColumn;
 
-    /**
-     * Holds the user's input
-     *
-     * @persistent
-     */
-    QString m_strText;
+    CellPrivate* d;
 
     /**
      * This is the text we want to display

@@ -36,6 +36,7 @@
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
+#include "kspread_format.h"
 #include "kspread_global.h"
 #include "kspread_map.h"
 #include "kspread_sheetprint.h"
@@ -60,6 +61,24 @@ namespace KSpreadCell_LNS
 
 using namespace KSpreadCell_LNS;
 
+
+class CellPrivate
+{
+public:
+
+    // This cell's row. If it is 0, this is the default cell and its row/column can
+    // not be determined.
+    int row;
+    
+    // This cell's column. If it is 0, this is the default cell and its row/column can
+    // not be determined.
+    int column;
+
+    // Holds the user's input
+    QString strText;
+};
+
+
 /*****************************************************************************
  *
  * KSpreadCell
@@ -68,8 +87,6 @@ using namespace KSpreadCell_LNS;
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_iRow( _row ),
-    m_iColumn( _column ),
     m_dOutTextWidth( 0.0 ),
     m_dOutTextHeight( 0.0 ),
     m_dTextX( 0.0 ),
@@ -92,6 +109,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
     m_nextCell( 0 ),
     m_previousCell( 0 )
 {
+  d = new CellPrivate;
+  d->row = _row;
+  d->column = _column;
+
   m_ObscuringCells.clear();
 
   m_lstDepends.setAutoDelete( true );
@@ -102,8 +123,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row )
   : KSpreadFormat( _table, _style ),
-    m_iRow( _row ),
-    m_iColumn( _column ),
     m_dOutTextWidth( 0.0 ),
     m_dOutTextHeight( 0.0 ),
     m_dTextX( 0.0 ),
@@ -126,6 +145,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
     m_nextCell( 0 ),
     m_previousCell( 0 )
 {
+  d = new CellPrivate;
+  d->row = _row;
+  d->column = _column;
+
   m_ObscuringCells.clear();
 
   m_lstDepends.setAutoDelete( true );
@@ -136,8 +159,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
 
 KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row )
   : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_iRow( _row ),
-    m_iColumn( _column ),
     m_dOutTextWidth( 0.0 ),
     m_dOutTextHeight( 0.0 ),
     m_dTextX( 0.0 ),
@@ -160,6 +181,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
     m_nextCell( 0 ),
     m_previousCell( 0 )
 {
+  d = new CellPrivate;
+  d->row = _row;
+  d->column = _column;
+
   m_ObscuringCells.clear();
 
   m_lstDepends.setAutoDelete( true );
@@ -184,7 +209,7 @@ int KSpreadCell::row() const
     kdWarning(36001) << "Error: Calling KSpreadCell::row() for default cell" << endl;
     return 0;
   }
-  return m_iRow;
+  return d->row;
 }
 
 int KSpreadCell::column() const
@@ -197,7 +222,7 @@ int KSpreadCell::column() const
     kdWarning(36001) << "Error: Calling KSpreadCell::column() for default cell" << endl;
     return 0;
   }
-  return m_iColumn;
+  return d->column;
 }
 
 void KSpreadCell::copyFormat( KSpreadCell * _cell )
@@ -368,16 +393,16 @@ void KSpreadCell::move( int col, int row )
     m_ObscuringCells.clear();
 
     // Unobscure the objects we obscure right now
-    for( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
-        for( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
-            if ( x != m_iColumn || y != m_iRow )
+    for( int x = d->column; x <= d->column + m_iExtraXCells; ++x )
+        for( int y = d->row; y <= d->row + m_iExtraYCells; ++y )
+            if ( x != d->column || y != d->row )
             {
                 KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
                 cell->unobscure(this);
             }
 
-    m_iColumn = col;
-    m_iRow    = row;
+    d->column = col;
+    d->row    = row;
 
     //    m_iExtraXCells = 0;
     //    m_iExtraYCells = 0;
@@ -408,7 +433,7 @@ bool KSpreadCell::needsPrinting() const
     if ( isDefault() )
         return FALSE;
 
-    if ( !m_strText.isEmpty() )
+    if ( !d->strText.isEmpty() )
         return TRUE;
 
     if ( hasProperty( PTopBorder ) || hasProperty( PLeftBorder ) ||
@@ -422,7 +447,7 @@ bool KSpreadCell::needsPrinting() const
 
 bool KSpreadCell::isEmpty() const
 {
-    return isDefault() || m_strText.isEmpty();
+    return isDefault() || d->strText.isEmpty();
 }
 
 
@@ -553,91 +578,91 @@ void KSpreadCell::clicked( KSpreadCanvas * _canvas )
 QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
 {
     if ( _col == -1 )
-        _col = m_iColumn;
+        _col = d->column;
     if ( _row == -1 )
-        _row = m_iRow;
+        _row = d->row;
 
     QString erg = "";
 
-    if(m_strText.isEmpty())
-        return m_strText;
+    if(d->strText.isEmpty())
+        return d->strText;
 
     bool fix1 = FALSE;
     bool fix2 = FALSE;
     bool onNumber = false;
     unsigned int pos = 0;
-    const unsigned int length = m_strText.length();
+    const unsigned int length = d->strText.length();
 
     // All this can surely be made 10 times faster, but I just "ported" it to QString
     // without any attempt to optimize things -- this is really brittle (Werner)
     while ( pos < length )
     {
-        if ( m_strText[pos] == '"' )
+        if ( d->strText[pos] == '"' )
         {
-            erg += m_strText[pos++];
-            while ( pos < length && m_strText[pos] != '"' )  // till the end of the world^H^H^H "string"
+            erg += d->strText[pos++];
+            while ( pos < length && d->strText[pos] != '"' )  // till the end of the world^H^H^H "string"
             {
-                erg += m_strText[pos++];
+                erg += d->strText[pos++];
                 // Allow escaped double quotes (\")
-                if ( pos < length && m_strText[pos] == '\\' && m_strText[pos+1] == '"' )
+                if ( pos < length && d->strText[pos] == '\\' && d->strText[pos+1] == '"' )
                 {
-                    erg += m_strText[pos++];
-                    erg += m_strText[pos++];
+                    erg += d->strText[pos++];
+                    erg += d->strText[pos++];
                 }
             }
             if ( pos < length )  // also copy the trailing double quote
-                erg += m_strText[pos++];
+                erg += d->strText[pos++];
 
             onNumber = false;
         }
-        else if ( m_strText[pos].isDigit() )
+        else if ( d->strText[pos].isDigit() )
         {
-          erg += m_strText[pos++];
+          erg += d->strText[pos++];
           fix1 = fix2 = FALSE;
           onNumber = true;
         }
-        else if ( m_strText[pos] != '$' && !m_strText[pos].isLetter() )
+        else if ( d->strText[pos] != '$' && !d->strText[pos].isLetter() )
         {
-            erg += m_strText[pos++];
+            erg += d->strText[pos++];
             fix1 = fix2 = FALSE;
             onNumber = false;
         }
         else
         {
             QString tmp = "";
-            if ( m_strText[pos] == '$' )
+            if ( d->strText[pos] == '$' )
             {
                 tmp = "$";
                 pos++;
                 fix1 = TRUE;
             }
-            if ( m_strText[pos].isLetter() )
+            if ( d->strText[pos].isLetter() )
             {
                 QString buffer;
                 unsigned int pos2 = 0;
-                while ( pos < length && m_strText[pos].isLetter() )
+                while ( pos < length && d->strText[pos].isLetter() )
                 {
-                    tmp += m_strText[pos];
-                    buffer[pos2++] = m_strText[pos++];
+                    tmp += d->strText[pos];
+                    buffer[pos2++] = d->strText[pos++];
                 }
-                if ( m_strText[pos] == '$' )
+                if ( d->strText[pos] == '$' )
                 {
                     tmp += "$";
                     pos++;
                     fix2 = TRUE;
                 }
-                if ( m_strText[pos].isDigit() )
+                if ( d->strText[pos].isDigit() )
                 {
                     const unsigned int oldPos = pos;
-                    while ( pos < length && m_strText[pos].isDigit() ) ++pos;
+                    while ( pos < length && d->strText[pos].isDigit() ) ++pos;
                     int row = 0;
                     if ( pos != oldPos )
-                        row = m_strText.mid(oldPos, pos-oldPos).toInt();
+                        row = d->strText.mid(oldPos, pos-oldPos).toInt();
                     // Is it a table name || is it a function name like DEC2HEX
                     /* or if we're parsing a number, this could just be the
                        exponential part of it  (1.23E4) */
-                    if ( ( m_strText[pos] == '!' ) ||
-                         m_strText[pos].isLetter() ||
+                    if ( ( d->strText[pos] == '!' ) ||
+                         d->strText[pos].isLetter() ||
                          onNumber )
                     {
                         erg += tmp;
@@ -687,9 +712,9 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
 QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
 {
     if ( _col == -1 )
-        _col = m_iColumn;
+        _col = d->column;
     if ( _row == -1 )
-        _row = m_iRow;
+        _row = d->row;
 
     QString erg = "";
     unsigned int pos = 0;
@@ -775,9 +800,9 @@ void KSpreadCell::freeAllObscuredCells()
     // Free all obscured cells.
     //
 
-  for ( int x = m_iColumn + m_iMergedXCells; x <= m_iColumn + m_iExtraXCells; ++x )
-    for ( int y = m_iRow + m_iMergedYCells; y <= m_iRow + m_iExtraYCells; ++y )
-      if ( x != m_iColumn || y != m_iRow )
+  for ( int x = d->column + m_iMergedXCells; x <= d->column + m_iExtraXCells; ++x )
+    for ( int y = d->row + m_iMergedYCells; y <= d->row + m_iExtraYCells; ++y )
+      if ( x != d->column || y != d->row )
       {
         KSpreadCell *cell = m_pTable->cellAt( x, y );
         cell->unobscure(this);
@@ -792,7 +817,7 @@ void KSpreadCell::freeAllObscuredCells()
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
     // Yes they are: they are useful if this is the default layout,
-    // in which case m_iRow and m_iColumn are 0 and 0, but col and row
+    // in which case d->row and d->column are 0 and 0, but col and row
     // are the real coordinates of the cell.
 
     // due to QSimpleRichText, always make layout for QML
@@ -805,7 +830,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     freeAllObscuredCells();
     /* but reobscure the ones that are forced obscuring */
-    forceExtraCells( m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells );
+    forceExtraCells( d->column, d->row, m_iMergedXCells, m_iMergedYCells );
 
     ColumnFormat *cl1 = m_pTable->columnFormat( _col );
     RowFormat *rl1 = m_pTable->rowFormat( _row );
@@ -847,7 +872,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         //if( _painter.font().italic() ) qml_text += "<i>";
         //if( _painter.font().underline() ) qml_text += "<u>";
 
-        qml_text += m_strText.mid(1);
+        qml_text += d->strText.mid(1);
         m_pQML = new QSimpleRichText( qml_text, _painter.font() );
 
         setFlag( Flag_LayoutDirty );
@@ -978,8 +1003,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     // Calculate the size of the cell
     //
-    RowFormat *rl = m_pTable->rowFormat( m_iRow );
-    ColumnFormat *cl = m_pTable->columnFormat( m_iColumn );
+    RowFormat *rl = m_pTable->rowFormat( d->row );
+    ColumnFormat *cl = m_pTable->columnFormat( d->column );
 
     double w = cl->dblWidth();
     double h = rl->dblHeight();
@@ -1106,13 +1131,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if ( m_dOutTextWidth + indent > w - 2 * BORDER_SPACE -
          leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
     {
-      int c = m_iColumn;
+      int c = d->column;
       int end = 0;
       // Find free cells right hand to this one
       while ( !end )
       {
         ColumnFormat *cl2 = m_pTable->columnFormat( c + 1 );
-        KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, m_iRow );
+        KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, d->row );
         if ( cell->isEmpty() )
         {
           w += cl2->dblWidth() - 1;
@@ -1139,13 +1164,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       if( align( _col, _row ) == KSpreadCell::Left ||
           align( _col, _row ) == KSpreadCell::Undefined )
       {
-        if( c - m_iColumn > m_iMergedXCells )
+        if( c - d->column > m_iMergedXCells )
         {
-          m_iExtraXCells = c - m_iColumn;
+          m_iExtraXCells = c - d->column;
           m_dExtraWidth = w;
-          for( int i = m_iColumn + 1; i <= c; ++i )
+          for( int i = d->column + 1; i <= c; ++i )
           {
-            KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
+            KSpreadCell *cell = m_pTable->nonDefaultCell( i, d->row );
             cell->obscure( this );
           }
           //Not enough space
@@ -1170,13 +1195,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
          m_dOutTextHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
     {
-      int r = m_iRow;
+      int r = d->row;
       int end = 0;
       // Find free cells bottom to this one
       while ( !end )
       {
         RowFormat *rl2 = m_pTable->rowFormat( r + 1 );
-        KSpreadCell *cell = m_pTable->visibleCellAt( m_iColumn, r + 1 );
+        KSpreadCell *cell = m_pTable->visibleCellAt( d->column, r + 1 );
         if ( cell->isEmpty() )
         {
           h += rl2->dblHeight() - 1.0;
@@ -1195,13 +1220,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       /* Check to make
          sure we haven't already force-merged enough cells
       */
-      if( r - m_iRow > m_iMergedYCells )
+      if( r - d->row > m_iMergedYCells )
       {
-        m_iExtraYCells = r - m_iRow;
+        m_iExtraYCells = r - d->row;
         m_dExtraHeight = h;
-        for( int i = m_iRow + 1; i <= r; ++i )
+        for( int i = d->row + 1; i <= r; ++i )
         {
-          KSpreadCell *cell = m_pTable->nonDefaultCell( m_iColumn, i );
+          KSpreadCell *cell = m_pTable->nonDefaultCell( d->column, i );
           cell->obscure( this );
         }
         //Not enough space
@@ -1270,9 +1295,9 @@ void KSpreadCell::setOutputText()
   //
 
   if ( isFormula() && m_pTable->getShowFormula()
-       && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) )
+       && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) )
   {
-    m_strOutText = m_strText;
+    m_strOutText = d->strText;
   }
   else if ( m_style == ST_Select )
   {
@@ -1374,7 +1399,7 @@ void KSpreadCell::setOutputText()
   }
   else // When does this happen ?
   {
-//    kdDebug(36001) << "Please report: final case of makeLayout ...  m_strText=" << m_strText << endl;
+//    kdDebug(36001) << "Please report: final case of makeLayout ...  d->strText=" << d->strText << endl;
     m_strOutText = m_value.asString();
   }
   if ( m_conditions )
@@ -1778,7 +1803,7 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
        *
       if ( m_conditions && m_conditions->currentCondition( condition )
         && !(m_pTable->getShowFormula()
-              && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
+              && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
       {
         if ( condition.fontcond )
             tmpFont = *(condition.fontcond);
@@ -1829,13 +1854,13 @@ bool KSpreadCell::makeFormula()
   // using ',' as a decimal separator...
   // Sounds like kscript should have configurable argument separator...
   //
-  /*QString sDelocalizedText ( m_strText );
+  /*QString sDelocalizedText ( d->strText );
     int pos=0;
     while ( ( pos = sDelocalizedText.find( decimal_point, pos ) ) >= 0 )
     sDelocalizedText.replace( pos++, 1, "." );
     // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
   */
-  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/m_strText, m_lstDepends );
+  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText, m_lstDepends );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
@@ -1987,7 +2012,7 @@ bool KSpreadCell::calc(bool delay)
     clearAllErrors();
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    m_strFormulaOut = createFormat( m_value.asFloat(), m_iColumn, m_iRow );
+    m_strFormulaOut = createFormat( m_value.asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -1995,7 +2020,7 @@ bool KSpreadCell::calc(bool delay)
     clearAllErrors();
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    m_strFormulaOut = createFormat( m_value.asFloat(), m_iColumn, m_iRow );
+    m_strFormulaOut = createFormat( m_value.asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
@@ -2044,7 +2069,7 @@ bool KSpreadCell::calc(bool delay)
     m_value = KSpreadValue::empty();
     // Format the result appropriately
     setFormatType(Number);
-    m_strFormulaOut = createFormat( 0.0, m_iColumn, m_iRow );
+    m_strFormulaOut = createFormat( 0.0, d->column, d->row );
   }
   else
   {
@@ -2106,7 +2131,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   /* the cellref passed in should be this cell -- except if this is the default
      cell */
 
-  Q_ASSERT(!(((cellRef.x() != m_iColumn) || (cellRef.y() != m_iRow)) && !isDefault()));
+  Q_ASSERT(!(((cellRef.x() != d->column) || (cellRef.y() != d->row)) && !isDefault()));
 
   double left = coordinate.x();
 
@@ -2749,7 +2774,7 @@ void KSpreadCell::paintText( QPainter& painter,
   {
     if ( m_value.isNumber()
          && !( m_pTable->getShowFormula()
-               && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
+               && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
     {
       double v = m_value.asFloat() * factor( column(),row() );
       if ( floatColor( cellRef.x(), cellRef.y()) == KSpreadCell::NegRed && v < 0.0 )
@@ -2920,7 +2945,7 @@ void KSpreadCell::paintText( QPainter& painter,
       }
 
       int a = effAlignX();
-      if ( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) )
+      if ( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) )
         a = KSpreadCell::Left;
 
       // #### Torben: This looks duplicated for me
@@ -3543,7 +3568,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
        }
      }
      if ( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w
-          && !( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
+          && !( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) ) )
      {
        return localizedNumber;
      }
@@ -3579,7 +3604,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
 double KSpreadCell::dblWidth( int _col, const KSpreadCanvas *_canvas ) const
 {
   if ( _col < 0 )
-    _col = m_iColumn;
+    _col = d->column;
 
   if ( _canvas )
   {
@@ -3605,7 +3630,7 @@ int KSpreadCell::width( int _col, const KSpreadCanvas *_canvas ) const
 double KSpreadCell::dblHeight( int _row, const KSpreadCanvas *_canvas ) const
 {
   if ( _row < 0 )
-    _row = m_iRow;
+    _row = d->row;
 
   if ( _canvas )
   {
@@ -4007,14 +4032,14 @@ void KSpreadCell::setDate( QString const & dateString )
     m_value.setValue( KSpreadValue( dateString ) );
 
     // convert first letter to uppercase ?
-    if (m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
+    if (m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
     {
         str = m_value.asString();
         m_value.setValue( KSpreadValue( str[0].upper()
                                         + str.right( str.length() - 1 ) ) );
     }
   }
-  m_strText = str;
+  d->strText = str;
 
   setFlag( Flag_LayoutDirty );
   setFlag( Flag_TextFormatDirty );
@@ -4031,7 +4056,7 @@ void KSpreadCell::setDate( QDate const & date )
   m_content = Text;
 
   m_value.setValue( KSpreadValue( date ) );
-  m_strText = locale()->formatDate( date, true );
+  d->strText = locale()->formatDate( date, true );
   setFlag( Flag_LayoutDirty );
   setFlag( Flag_TextFormatDirty );
   checkNumberFormat();
@@ -4048,7 +4073,7 @@ void KSpreadCell::setNumber( double number )
   m_content = Text;
 
   m_value.setValue( KSpreadValue( number ) );
-  m_strText.setNum( number );
+  d->strText.setNum( number );
   setFlag( Flag_LayoutDirty );
   setFlag( Flag_TextFormatDirty );
   checkNumberFormat();
@@ -4072,7 +4097,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
       m_pQML = 0L;
 
       m_strOutText = ctext;
-      m_strText    = ctext;
+      d->strText    = ctext;
       m_value.setValue( KSpreadValue( ctext ) );
 
       setFlag(Flag_LayoutDirty);
@@ -4083,7 +4108,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
       return;
     }
 
-    QString oldText = m_strText;
+    QString oldText = d->strText;
     setDisplayText( ctext, updateDepends );
     if(!m_pTable->isLoading() && !testValidity() )
     {
@@ -4098,7 +4123,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
 {
   m_pTable->doc()->emitBeginOperation( false );
   clearAllErrors();
-  m_strText = _text;
+  d->strText = _text;
 
   // Free all content data
   delete m_pQML;
@@ -4107,7 +4132,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
   /**
    * A real formula "=A1+A2*3" was entered.
    */
-  if ( !m_strText.isEmpty() && m_strText[0] == '=' )
+  if ( !d->strText.isEmpty() && d->strText[0] == '=' )
   {
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
@@ -4124,9 +4149,9 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
   /**
    * QML
    */
-  else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
+  else if ( !d->strText.isEmpty() && d->strText[0] == '!' )
   {
-    m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
+    m_pQML = new QSimpleRichText( d->strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
     m_content = RichText;
@@ -4154,7 +4179,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
       if ( m_content == Formula )
           s->parse( m_strFormulaOut );
       else
-          s->parse( m_strText );
+          s->parse( d->strText );
       kdDebug(36001) << "SELECT " << s->text() << endl;
       checkTextInput(); // is this necessary?
       // setFlag(Flag_LayoutDirty);
@@ -4162,7 +4187,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
 
   update();
 
-  m_pTable->doc()->emitEndOperation( QRect( m_iColumn, m_iRow, 1, 1 ) );
+  m_pTable->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
 }
 
 void KSpreadCell::update()
@@ -4171,9 +4196,9 @@ void KSpreadCell::update()
      now that we've got text.
      This includes cells obscuring cells that we are obscuring
   */
-  for (int x = m_iColumn; x <= m_iColumn + extraXCells(); x++)
+  for (int x = d->column; x <= d->column + extraXCells(); x++)
   {
-    for (int y = m_iRow; y <= m_iRow + extraYCells(); y++)
+    for (int y = d->row; y <= d->row + extraYCells(); y++)
     {
       KSpreadCell* cell = m_pTable->cellAt(x,y);
       cell->setLayoutDirtyFlag();
@@ -4364,6 +4389,16 @@ bool KSpreadCell::testValidity() const
     return (valid || m_Validity == NULL || m_Validity->m_action != Stop);
 }
 
+KSpreadFormat::FormatType KSpreadCell::formatType() const
+{
+  return getFormatType( d->column, d->row );
+}
+
+QString KSpreadCell::text() const
+{
+  return d->strText;
+}
+
 const KSpreadValue KSpreadCell::value() const
 {
   return m_value;
@@ -4376,7 +4411,7 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     m_value = v;
 
     if( m_value.isBoolean() )
-        m_strOutText = m_strText  = ( m_value.asBoolean() ? i18n("True") : i18n("False") );
+        m_strOutText = d->strText  = ( m_value.asBoolean() ? i18n("True") : i18n("False") );
 
     // Free all content data
     delete m_pQML;
@@ -4456,12 +4491,12 @@ void KSpreadCell::setCalcDirtyFlag()
 bool KSpreadCell::updateChart(bool refresh)
 {
     // Update a chart for example if it depends on this cell.
-    if ( m_iRow != 0 && m_iColumn != 0 )
+    if ( d->row != 0 && d->column != 0 )
     {
         CellBinding *bind;
         for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
         {
-            if ( bind->contains( m_iColumn, m_iRow ) )
+            if ( bind->contains( d->column, d->row ) )
             {
                 if (!refresh)
                     return true;
@@ -4485,7 +4520,7 @@ void KSpreadCell::checkTextInput()
     Q_ASSERT( m_content == Text );
 
     // Get the text from that cell (using result of formula if any)
-    QString str = m_strText;
+    QString str = d->strText;
     if ( m_style == ST_Select )
         str = (static_cast<SelectPrivate*>(m_pPrivate))->text();
     else if ( isFormula() )
@@ -4496,10 +4531,10 @@ void KSpreadCell::checkTextInput()
     // then we don't parse as a value, but as string.
     if ( str.isEmpty() || formatType() == Text_format || str.at(0)=='\'' )
     {
-        if(m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
-            m_strText=m_strText[0].upper()+m_strText.right(m_strText.length()-1);
+        if(m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
+            d->strText=d->strText[0].upper()+d->strText.right(d->strText.length()-1);
 
-        m_value.setValue(m_strText);
+        m_value.setValue(d->strText);
         //setFormatType(Text_format); // shouldn't be necessary. Won't apply with StringData anyway.
         return;
     }
@@ -4565,7 +4600,7 @@ void KSpreadCell::checkTextInput()
                 setFormatType(ShortDate);
         }
 
-        m_strText = str;
+        d->strText = str;
         return;
     }
 
@@ -4580,17 +4615,17 @@ void KSpreadCell::checkTextInput()
              && tmpFormat != Time_format8 )
           setFormatType(Time);
 
-        // Parsing as time acts like an autoformat: we even change m_strText
+        // Parsing as time acts like an autoformat: we even change d->strText
         if ( tmpFormat != Time_format7 ) // [h]:mm:ss -> might get set by tryParseTime(str)
-          m_strText = locale()->formatTime( m_value.asDateTime().time(), true);
+          d->strText = locale()->formatTime( m_value.asDateTime().time(), true);
         return;
     }
 
     // Nothing particular found, then this is simply a string
-    m_value.setValue( KSpreadValue( m_strText ) );
+    m_value.setValue( KSpreadValue( d->strText ) );
 
     // convert first letter to uppercase ?
-    if (m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
+    if (m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
     {
         QString str = m_value.asString();
         m_value.setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
@@ -4788,8 +4823,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
-    cell.setAttribute( "row", m_iRow - _y_offset );
-    cell.setAttribute( "column", m_iColumn - _x_offset );
+    cell.setAttribute( "row", d->row - _y_offset );
+    cell.setAttribute( "column", d->column - _x_offset );
 
     if ( !action().isEmpty() )
         cell.setAttribute( "action", action() );
@@ -4797,7 +4832,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     //
     // Save the formatting information
     //
-    QDomElement format = KSpreadFormat::save( doc, m_iColumn, m_iRow, force, copy );
+    QDomElement format = KSpreadFormat::save( doc, d->column, d->row, force, copy );
     if ( format.hasChildNodes() || format.attributes().length() ) // don't save empty tags
         cell.appendChild( format );
 
@@ -4884,7 +4919,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     //
     // Save the text
     //
-    if ( !m_strText.isEmpty() )
+    if ( !d->strText.isEmpty() )
     {
         // Formulas need to be encoded to ensure that they
         // are position independent.
@@ -4906,14 +4941,14 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         else if ( content() == RichText )//|| content() == VisualFormula )
         {
             QDomElement text = doc.createElement( "text" );
-            text.appendChild( doc.createCDATASection( m_strText ) );
+            text.appendChild( doc.createCDATASection( d->strText ) );
             cell.appendChild( text );
         }
         else
         {
             // Save the cell contents (in a locale-independent way)
             QDomElement text = doc.createElement( "text" );
-            saveCellResult( doc, text, m_strText );
+            saveCellResult( doc, text, d->strText );
             cell.appendChild( text );
         }
     }
@@ -4997,23 +5032,23 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
     // First of all determine in which row and column this
     // cell belongs.
     //
-    m_iRow = cell.attribute( "row" ).toInt( &ok ) + _yshift;
+    d->row = cell.attribute( "row" ).toInt( &ok ) + _yshift;
     if ( !ok ) return false;
-    m_iColumn = cell.attribute( "column" ).toInt( &ok ) + _xshift;
+    d->column = cell.attribute( "column" ).toInt( &ok ) + _xshift;
     if ( !ok ) return false;
 
     if ( cell.hasAttribute( "action" ) )
         setAction( cell.attribute("action") );
 
     // Validation
-    if ( m_iRow < 1 || m_iRow > KS_rowMax )
+    if ( d->row < 1 || d->row > KS_rowMax )
     {
-        kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:row=" << m_iRow << endl;
+        kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:row=" << d->row << endl;
         return false;
     }
-    if ( m_iColumn < 1 || m_iColumn > KS_colMax )
+    if ( d->column < 1 || d->column > KS_colMax )
     {
-        kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:column=" << m_iColumn << endl;
+        kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:column=" << d->column << endl;
         return false;
     }
 
@@ -5065,7 +5100,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
 
         if ( testFlag( Flag_ForceExtra ) )
         {
-            forceExtraCells( m_iColumn, m_iRow, m_iExtraXCells, m_iExtraYCells );
+            forceExtraCells( d->column, d->row, m_iExtraXCells, m_iExtraYCells );
         }
 
     }
@@ -5288,8 +5323,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   if( t[0] == '=' )
   {
     clearFormula();
-    t = decodeFormula( t, m_iColumn, m_iRow );
-    m_strText = pasteOperation( t, m_strText, op );
+    t = decodeFormula( t, d->column, d->row );
+    d->strText = pasteOperation( t, d->strText, op );
 
     setFlag(Flag_CalcDirty);
     clearAllErrors();
@@ -5303,7 +5338,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   else if (t[0] == '!' )
   {
       m_pQML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
-      m_strText = t;
+      d->strText = t;
   }
   else
   {
@@ -5332,7 +5367,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         dataType = "Time";
       else
       {
-        m_strText = pasteOperation( t, m_strText, op );
+        d->strText = pasteOperation( t, d->strText, op );
         checkTextInput();
         //kdDebug(36001) << "KSpreadCell::load called checkTextInput, got dataType=" << dataType << "  t=" << t << endl;
         newStyleLoading = false;
@@ -5375,13 +5410,13 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         {
           setFactor( 100.0 ); // should have been already done by loadFormat
           t = locale->formatNumber( m_value.asFloat() * 100.0, precision );
-	  m_strText = pasteOperation( t, m_strText, op );
-          m_strText += '%';
+	  d->strText = pasteOperation( t, d->strText, op );
+          d->strText += '%';
         }
         else
 	{
           t = locale->formatNumber(m_value.asFloat(), precision);
-	  m_strText = pasteOperation( t, m_strText, op );
+	  d->strText = pasteOperation( t, d->strText, op );
 	}
       }
 
@@ -5395,10 +5430,10 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         int day = t.right(t.length()-pos1-1).toInt();
         m_value.setValue( QDate(year,month,day) );
         if ( valueDate().isValid() ) // Should always be the case for new docs
-          m_strText = locale()->formatDate( valueDate(), true );
+          d->strText = locale()->formatDate( valueDate(), true );
         else // This happens with old docs, when format is set wrongly to date
         {
-          m_strText = pasteOperation( t, m_strText, op );
+          d->strText = pasteOperation( t, d->strText, op );
           checkTextInput();
         }
       }
@@ -5417,10 +5452,10 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         second = t.right(t.length()-pos1-1).toInt();
         m_value.setValue( QTime(hours,minutes,second) );
         if ( valueTime().isValid() ) // Should always be the case for new docs
-          m_strText = locale()->formatTime( valueTime(), true );
+          d->strText = locale()->formatTime( valueTime(), true );
         else  // This happens with old docs, when format is set wrongly to time
         {
-          m_strText = pasteOperation( t, m_strText, op );
+          d->strText = pasteOperation( t, d->strText, op );
           checkTextInput();
         }
       }
@@ -5428,8 +5463,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
       else
       {
         // Set the cell's text
-        m_strText = pasteOperation( t, m_strText, op );
-        m_value.setValue( m_strText );
+        d->strText = pasteOperation( t, d->strText, op );
+        m_value.setValue( d->strText );
       }
     }
   }
@@ -5442,7 +5477,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   }
 
   if ( !m_pTable->isLoading() )
-    setCellText( m_strText );
+    setCellText( d->strText );
 
   if ( m_conditions )
     m_conditions->checkMatches();
@@ -5574,7 +5609,7 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
         }
 
         clearFormula();
-        tmp_op = decodeFormula( tmp_op, m_iColumn, m_iRow );
+        tmp_op = decodeFormula( tmp_op, d->column, d->row );
         setFlag(Flag_LayoutDirty);
         clearAllErrors();
         m_content = Formula;
@@ -5582,7 +5617,7 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
         return tmp_op;
     }
 
-    tmp = decodeFormula( new_text, m_iColumn, m_iRow );
+    tmp = decodeFormula( new_text, d->column, d->row );
     setFlag(Flag_LayoutDirty);
     clearAllErrors();
     m_content = Formula;
@@ -5610,7 +5645,7 @@ void KSpreadCell::setStyle( Style _s )
   if ( isFormula() )
       s->parse( m_strFormulaOut );
   else
-      s->parse( m_strText );
+      s->parse( d->strText );
   checkTextInput(); // is this necessary?
   setFlag(Flag_LayoutDirty);
 
@@ -5653,11 +5688,12 @@ KSpreadCell::~KSpreadCell()
         for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
              y <= m_iExtraYCells; ++y )
     {
-        KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
+        KSpreadCell* cell = m_pTable->cellAt( d->column + x, d->row + y );
         if ( cell )
             cell->unobscure(this);
     }
-
+    
+    delete d;
 }
 
 bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
@@ -5729,12 +5765,12 @@ bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
 QRect KSpreadCell::cellRect()
 {
   Q_ASSERT(!isDefault());
-  return QRect(QPoint(m_iColumn, m_iRow), QPoint(m_iColumn, m_iRow));
+  return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
 bool KSpreadCell::isDefault() const
 {
-    return ( m_iColumn == 0 );
+    return ( d->column == 0 );
 }
 
 void KSpreadCell::NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending )
@@ -5772,15 +5808,15 @@ void KSpreadCell::NotifyDepending( int col, int row, KSpreadSheet* table, bool i
 
 void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending)
 {
-  KSpreadDependency *d = NULL;
+  KSpreadDependency *dep = NULL;
 
-  for (d = lst.first(); d != NULL; d = lst.next())
+  for (dep = lst.first(); dep != NULL; dep = lst.next())
   {
-    for (int c = d->Left(); c <= d->Right(); c++)
+    for (int c = dep->Left(); c <= dep->Right(); c++)
     {
-      for (int r = d->Top(); r <= d->Bottom(); r++)
+      for (int r = dep->Top(); r <= dep->Bottom(); r++)
       {
-	d->Table()->nonDefaultCell( c, r )->NotifyDepending(m_iColumn, m_iRow, m_pTable, isDepending);
+	dep->Table()->nonDefaultCell( c, r )->NotifyDepending(d->column, d->row, m_pTable, isDepending);
       }
     }
   }
@@ -5789,11 +5825,11 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
 QPtrList<KSpreadDependency> KSpreadCell::getDepending ()
 {
   QPtrList<KSpreadDependency> retval ;
-  KSpreadDependency *d = NULL ;
+  KSpreadDependency *dep = NULL ;
 
-  for (d = m_lstDependingOnMe.first() ; d != NULL ; d = m_lstDependingOnMe.next())
+  for (dep = m_lstDependingOnMe.first() ; dep != NULL ; dep = m_lstDependingOnMe.next())
   {
-    KSpreadDependency *d_copy = new KSpreadDependency (*d) ;
+    KSpreadDependency *d_copy = new KSpreadDependency (*dep) ;
 	retval.prepend (d_copy) ;
   }
 
@@ -5925,12 +5961,12 @@ KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
 
 QString KSpreadCell::name() const
 {
-    return name( m_iColumn, m_iRow );
+    return name( d->column, d->row );
 }
 
 QString KSpreadCell::fullName() const
 {
-    return fullName( table(), m_iColumn, m_iRow );
+    return fullName( table(), d->column, d->row );
 }
 
 QString KSpreadCell::name( int col, int row )
