@@ -448,26 +448,9 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 }
 
 
-bool KWFrame::frameAtPos( QPoint point, bool borderOfFrameOnly) {
-    QRect outerRect( outerRect() );
-    // Give the user a bit of margin for clicking on it :)
-    const int margin = 2;
-    outerRect.rLeft() -= margin;
-    outerRect.rTop() -= margin;
-    outerRect.rRight() += margin;
-    outerRect.rBottom() += margin;
-    if ( outerRect.contains( point ) ) {
-        if(borderOfFrameOnly && frameSet()) {
-            QRect innerRect( frameSet()->kWordDocument()->zoomRect( *this ) );
-            innerRect.rLeft() += margin;
-            innerRect.rTop() += margin;
-            innerRect.rRight() -= margin;
-            innerRect.rBottom() -= margin;
-            return (!innerRect.contains(point) );
-        }
-        return true;
-    }
-    return false;
+bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
+    // Forwarded to KWFrameSet to make it virtual
+    return frameSet()->isFrameAtPos( this, point, borderOfFrameOnly );
 }
 
 /******************************************************************/
@@ -1375,6 +1358,27 @@ void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight,
     frame->setHeight( newHeight );
 }
 
+bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) {
+    QRect outerRect( frame->outerRect() );
+    // Give the user a bit of margin for clicking on it :)
+    const int margin = 2;
+    outerRect.rLeft() -= margin;
+    outerRect.rTop() -= margin;
+    outerRect.rRight() += margin;
+    outerRect.rBottom() += margin;
+    if ( outerRect.contains( point ) ) {
+        if(borderOfFrameOnly) {
+            QRect innerRect( m_doc->zoomRect( *frame ) );
+            innerRect.rLeft() += margin;
+            innerRect.rTop() += margin;
+            innerRect.rRight() -= margin;
+            innerRect.rBottom() -= margin;
+            return (!innerRect.contains(point) );
+        }
+        return true;
+    }
+    return false;
+}
 
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
@@ -1547,18 +1551,11 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
                   crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
-KWFrame *KWPictureFrameSet::frameByBorder( const QPoint & nPoint )
+bool KWPictureFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
 {
     // For pictures/cliparts there is nothing to do when clicking
     // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    QPtrListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
-    {
-        QRect outerRect( frameIt.current()->outerRect() );
-        if ( outerRect.contains( nPoint ) )
-            return frameIt.current();
-    }
-    return 0L;
+    return KWFrameSet::isFrameAtPos( frame, nPoint, false );
 }
 
 #ifndef NDEBUG
@@ -1652,18 +1649,11 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
                     crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
-KWFrame *KWClipartFrameSet::frameByBorder( const QPoint & nPoint )
+bool KWClipartFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
 {
     // For pictures/cliparts there is nothing to do when clicking
     // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    QPtrListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
-    {
-        QRect outerRect( frameIt.current()->outerRect() );
-        if ( outerRect.contains( nPoint ) )
-            return frameIt.current();
-    }
-    return 0L;
+    return KWFrameSet::isFrameAtPos( frame, nPoint, false );
 }
 
 /******************************************************************/

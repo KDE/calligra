@@ -221,10 +221,10 @@ public:
     double minFrameHeight(void) {return m_minFrameHeight;}
 
     /** Return if the point is on the frame.
-        @param point the point in real pt
+        @param point the point in normal coordinates.
         @param borderOfFrameOnly when true an additional check is done if the point
           is on the border.  */
-    bool frameAtPos( QPoint point, bool borderOfFrameOnly=false);
+    bool frameAtPos( const QPoint& nPoint, bool borderOfFrameOnly=false );
 
 private:
     SheetSide m_sheetSide;
@@ -377,8 +377,15 @@ public:
 
     /** retrieve frame from x and y coords (unzoomed coords) */
     KWFrame *frameAtPos( double _x, double _y );
+
+    /** Return if the point is on the frame.
+        @param point the point in normal coordinates.
+        @param borderOfFrameOnly when true an additional check is done if the point
+          is on the border.  */
+    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
+
     /** return a frame if nPoint in on one of its borders */
-    virtual KWFrame *frameByBorder( const QPoint & nPoint );
+    KWFrame *frameByBorder( const QPoint & nPoint );
 
     /** get a frame by number */
     KWFrame *frame( unsigned int _num );
@@ -682,7 +689,7 @@ public:
     // Pixmaps can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
-    virtual KWFrame *frameByBorder( const QPoint & nPoint );
+    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
 #ifndef NDEBUG
     virtual void printDebug( KWFrame* frame );
 #endif
@@ -726,7 +733,7 @@ public:
     // Cliparts can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
-    virtual KWFrame *frameByBorder( const QPoint & nPoint );
+    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
 protected:
     KoPicture m_clipart;
 };
