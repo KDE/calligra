@@ -319,6 +319,16 @@ signals:
      */
     void afterFormatting( int bottom, KoTextParag* m_lastFormatted, bool* abort );
 
+    /**
+     * Emitted by formatMore() when formatting a "Head 1" paragraph.
+     * Used for the Section variable
+     */
+    void chapterParagraphFormatted( KoTextParag* parag );
+
+    /** Emitted by formatMore() when formatting the first paragraph.
+     */
+    void formattingFirstParag();
+
     /** Emitted when a new command has been created and should be added to
      * the main list of commands (usually in the KoDocument).
      * Make sure to connect to that one, otherwise the commands will just leak away...

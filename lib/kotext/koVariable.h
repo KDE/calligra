@@ -458,6 +458,9 @@ protected:
 
 /**
  * "current page number" and "number of pages" variables
+ * This is a base class, it must be inherited by applications,
+ * to provide recalc().
+ * TODO: rename KoPageVariable.
  */
 class KoPgNumVariable : public KoVariable
 {
@@ -467,18 +470,22 @@ public:
     virtual VariableType type() const
     { return VT_PGNUM; }
 
-    enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1 };
+    enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1, VST_CURRENT_SECTION = 2 };
     static QStringList actionTexts();
 
     virtual QStringList subTypeText();
 
     virtual void setVariableSubType( short int type){m_subtype=type;}
 
-    // For the 'current page' variable. This is called by KWTextFrameSet::drawFrame.
+    // For the 'current page' variable. This is called by the app e.g. when painting
+    // a given page (see KWTextFrameSet::drawFrame and KPTextObject::recalcPageNum)
     void setPgNum( int pgNum ) { m_pgNum = pgNum; }
+    // For the 'current section title' variable. Same thing.
+    void setSectionTitle( const QString& title ) { m_str = title; }
+
     short int subtype() const { return m_subtype; }
 
-    virtual void recalc();
+    virtual void recalc() = 0;
     virtual QString text();
 
     virtual void saveVariable( QDomElement &parentElem );
@@ -486,6 +493,7 @@ public:
 protected:
     short int m_subtype;
     int m_pgNum;
+    QString m_str;
 };
 
 class KoLinkVariable : public KoVariable

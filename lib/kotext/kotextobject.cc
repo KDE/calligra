@@ -1390,13 +1390,14 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                        << " to=" << to << " viewsBottom=" << viewsBottom
                        << " availableHeight=" << m_availableHeight << endl;
 #endif
-#ifdef TIMING_FORMAT
         if ( m_lastFormatted->prev() == 0 )
         {
+            emit formattingFirstParag();
+#ifdef TIMING_FORMAT
             kdDebug(32002) << "formatMore " << name() << ". First parag -> starting timer" << endl;
             m_time.start();
-        }
 #endif
+        }
 
         // Stop if we have formatted everything or if we need more space
         // Otherwise, stop formatting after "to" paragraphs,
@@ -1417,6 +1418,12 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                       << " height=" << parag->rect().height()
                       << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
 #endif
+
+            // Check for Head 1 (i.e. section) titles, and emit them - for the Section variable
+            if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_CHAPTER
+                 && parag->counter()->depth() == 0 )
+                emit chapterParagraphFormatted( parag );
+
             if ( parag != m_lastFormatted )
                 kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId();
             else if (!parag->isValid())

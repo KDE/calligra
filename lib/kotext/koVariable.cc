@@ -669,7 +669,8 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             var = new KoTimeVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_PGNUM:
-            var = new KoPgNumVariable( textdoc, subtype, varFormat, this );
+            kdError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
+            //var = new KoPgNumVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_FIELD:
             var = new KoFieldVariable( textdoc, subtype, varFormat,this,doc );
@@ -962,7 +963,7 @@ QStringList KoMailMergeVariable::actionTexts()
 /* Class: KoPgNumVariable                                         */
 /******************************************************************/
 KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
-        : KoVariable( textdoc, varFormat,_varColl ), m_subtype( subtype ), m_pgNum( 0 )
+        : KoVariable( textdoc, varFormat, _varColl ), m_subtype( subtype ), m_pgNum( 0 )
 {
 }
 
@@ -971,7 +972,10 @@ void KoPgNumVariable::saveVariable( QDomElement& parentElem )
     QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
     parentElem.appendChild( pgNumElem );
     pgNumElem.setAttribute( "subtype", m_subtype );
-    pgNumElem.setAttribute( "value", m_pgNum );
+    if ( m_subtype == VST_PGNUM_CURRENT || m_subtype == VST_PGNUM_TOTAL )
+        pgNumElem.setAttribute( "value", m_pgNum );
+    else
+        pgNumElem.setAttribute( "value", m_str );
 }
 
 void KoPgNumVariable::load( QDomElement& elem )
@@ -981,22 +985,22 @@ void KoPgNumVariable::load( QDomElement& elem )
     if (!pgNumElem.isNull())
     {
         m_subtype = pgNumElem.attribute("subtype").toInt();
-        m_pgNum = pgNumElem.attribute("value").toInt();
+        if ( m_subtype == VST_PGNUM_CURRENT || m_subtype == VST_PGNUM_TOTAL )
+            m_pgNum = pgNumElem.attribute("value").toInt();
+        else
+            m_str = pgNumElem.attribute("value");
     }
-}
-
-void KoPgNumVariable::recalc()
-{
-    m_pgNum = 1;
-    resize();
 }
 
 QString KoPgNumVariable::text()
 {
+    // ## This should be all ported to QVariant
     KoVariableNumberFormat * format = dynamic_cast<KoVariableNumberFormat *>( m_varFormat );
-    Q_ASSERT( format );
     if ( format )
         return format->convert( m_pgNum );
+    KoVariableStringFormat * formatString = dynamic_cast<KoVariableStringFormat *>( m_varFormat );
+    if ( formatString )
+        return formatString->convert( m_str );
     // make gcc happy
     return QString::null;
 }
@@ -1006,6 +1010,7 @@ QStringList KoPgNumVariable::actionTexts()
     QStringList lst;
     lst << i18n( "Page Number" );
     lst << i18n( "Number Of Pages" );
+    lst << i18n( "Section Title" );
     return lst;
 }
 
