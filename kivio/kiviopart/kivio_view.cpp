@@ -926,12 +926,25 @@ void KivioView::setLineWidth()
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
+    bool createMacro = false ;
     while( pStencil )
     {
-        pStencil->setLineWidth( m_setLineWidth->value() );
-        pStencil = m_pActivePage->selectedStencils()->next();
+        int newValue = m_setLineWidth->value();
+        if ( newValue != pStencil->lineWidth() )
+        {
+            KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"), m_pActivePage, pStencil, pStencil->lineWidth(), newValue );
+
+            pStencil->setLineWidth( newValue );
+            pStencil = m_pActivePage->selectedStencils()->next();
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
     }
+    if ( createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 

@@ -415,3 +415,29 @@ void KivioChangeStencilTextColorCommand::unexecute()
     m_stencil->setTextColor( oldColor );
     m_page->doc()->updateView(m_page);
 }
+
+
+KivioChangeLineWidthCommand::KivioChangeLineWidthCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldValue,  int _newValue)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldValue( _oldValue),
+     newValue( _newValue)
+{
+}
+
+KivioChangeLineWidthCommand::~KivioChangeLineWidthCommand()
+{
+}
+
+void KivioChangeLineWidthCommand::execute()
+{
+    m_stencil->setLineWidth( newValue );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioChangeLineWidthCommand::unexecute()
+{
+    m_stencil->setLineWidth( oldValue );
+    m_page->doc()->updateView(m_page);
+}

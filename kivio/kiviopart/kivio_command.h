@@ -288,5 +288,21 @@ protected:
     QColor newColor;
 };
 
+class KivioChangeLineWidthCommand : public KNamedCommand
+{
+public:
+    KivioChangeLineWidthCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldValue,  int _newValue);
+    ~KivioChangeLineWidthCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    int oldValue;
+    int newValue;
+};
+
 #endif
 
