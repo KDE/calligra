@@ -300,15 +300,37 @@ Detailed TODO for Beta3:
 -add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
 -KexiProperty: make it really shared (using QShared?)
+-allow to remove a field-row by clearing field name
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
 - double editor should be klineedit with doublevalidator, not spinbox
-- update parent property (e.g. Rect) on child's change
 - add a hint for propertybuffer to allow properties to be displayed side-by-side
   e.g. width, height properties ca be displayed this way. See also property editor 
 	at http://freshmeat.net/screenshots/41728/
 
+2004-02-27
+Kexi Property Editor, Kexi Property Framework
+	-propertyChanged() signal is received from assigned property buffer, 
+	 and values are visually updated (including children)
+	-changeProperty() code (for checking for changes)
+	 moved from buffer to property setValue to avoid mistakes in class usage
+	-property editor class now has a dict of all items, based on its names
+	-each KexiProperty now has a pointer to its buffer, ans uses it to emit 
+	 signals on value changes
+	-fixed crash on moveEditor() when called from ctor
+	-KexiPropertyEditor is safely updated right before PropertyBuffer destroying
+Kexi Validator
+	-allows to define whether empty values are ok or not
+Alter Table Dialog:
+	-'name' and 'type' columns can be empty now (that just means the row is empty)
+	-buffer and 'type' column is cleared when 'name' column is cleared
+	-row deleting works (buffer is destroyed as well)
+Table View's Data
+	-aboutToDeleteRow() signal is emited before row deleting and rowDeleted() -after
+Table View
+	-contents size is updated after row deleting
+	
 
 2004-02-26
 Kexi Property Editor
