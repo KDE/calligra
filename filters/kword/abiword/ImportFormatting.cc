@@ -1,7 +1,7 @@
-// $Header$
+// 
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -306,7 +306,12 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
 
         if (flag)
         {
-            if (lineHeight==1.5)
+            if ( lineHeight == 1.0 )
+            {
+                element.setAttribute( "value", "single" );
+                element.setAttribute( "type", "single" );
+            }
+            else if (lineHeight==1.5)
             {
                 element.setAttribute( "value", "oneandhalf" );
                 element.setAttribute( "type", "oneandhalf" );
