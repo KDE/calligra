@@ -36,7 +36,7 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
     aboutData->addAuthor("Laurent Montel", I18N_NOOP("current maintainer"), "montel@kde.org");
     aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    aboutData->addAuthor("David Faure", 0, "dfaure@kde.org");
+    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
     aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
     aboutData->addAuthor("Lukáš Tinkl", 0, "lukas@kde.org");
     aboutData->addAuthor("Thorsten Zachmann", 0, "t.zachmann@zagge.de");
