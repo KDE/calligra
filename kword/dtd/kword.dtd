@@ -315,7 +315,7 @@ don't put a </?xml...> at the end of the file!).
                             5...Clipart frame (contains a CLIPART tag, only for KWord 1.1)
                             10..reserved (internally for tables)
 
-            frameInfo:      0...normal text (TODO: also for non-text frames?)
+            frameInfo:      0...normal text (or non-text frame)
                             1...header for first page
                             2...header for odd pages
                             3...header for even pages
@@ -403,7 +403,7 @@ don't put a </?xml...> at the end of the file!).
                                 between overlapping frames and runaround text
 
             autoCreateNewFrame: What to do if the text is bigger than the frame:
-                                0...AutoExtendFrame
+                                0...AutoExtendFrame (use this for headers/footers)
                                     Make frame bigger to fit text.
                                 1...AutoCreateNewFrame (use this for the normal text body)
                                     Place a new frame on next page.
@@ -439,7 +439,7 @@ don't put a </?xml...> at the end of the file!).
             bkStyle : style of a frame background color
             SolidPattern = 0, Dense1Pattern = 1, Dense2Pattern = 2, Dense3Pattern = 3, Dense4Pattern = 4 etc... (look at in qbrush documentation)
 
-            bleftpt, brightpt, btoppt, bbottompt: frame margins - not supported at the moment
+            bleftpt, brightpt, btoppt, bbottompt: frame margins
 -->
 <!ATTLIST FRAME
     left CDATA #REQUIRED
