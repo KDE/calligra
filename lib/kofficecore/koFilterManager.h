@@ -180,12 +180,14 @@ public:
     PreviewStack(QWidget *parent, const char *name, KoFilterManager *m);
     virtual ~PreviewStack();
 
+    const bool isHidden() const { return hidden; }
+
 public slots:
     void showPreview(const KURL &url);
-    void slotInfo();
 
 private:
     const KoFilterManager * const mgr;
+    bool hidden;
 };
 #endif
 #endif  // __koffice_filter_manager_h__

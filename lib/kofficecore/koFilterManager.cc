@@ -210,30 +210,6 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     ps=new PreviewStack(0L, "preview stack", this);
 
-    // create a nice default dialog with and info button (-> info dia)
-    QWidget *d=new QWidget(ps, "default preview");
-    QBoxLayout *mbox=new QVBoxLayout(d, 10);
-    QBoxLayout *centered1=new QHBoxLayout(d);
-    mbox->addStretch(2);
-    mbox->addLayout(centered1);
-    QString tmp=i18n("Sorry, no dialog available.");
-    QLabel *l=new QLabel(tmp, d);
-    centered1->addStretch(5);
-    centered1->addWidget(l, 3);
-    centered1->addStretch(5);
-    mbox->addStretch(2);
-    QBoxLayout *centered2=new QHBoxLayout(d);
-    mbox->addLayout(centered2);
-    QPushButton *info=new QPushButton(i18n("Info"), d);
-    ps->connect(info, SIGNAL(clicked()), ps, SLOT(slotInfo()));
-    centered2->addStretch(5);
-    centered2->addWidget(info, 3);
-    centered2->addStretch(5);
-    mbox->addStretch(5);
-    mbox->activate();
-
-    ps->addWidget(d, 0);  // default Widget
-
     unsigned long id;                 // id for the next widget
 
     for(i=0, id=1; i<vec1.count(); ++i) {
@@ -270,18 +246,16 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             ++id;
         }
     }
-    if(!dialogMap.isEmpty()) {
-        ps->raiseWidget(0);
+    if(!dialogMap.isEmpty())
         dialog->setPreviewWidget(ps);
-    }
     return true;
 }
 
 void KoFilterManager::cleanUp() {
 
-    if(!dialogMap.isEmpty() && ps!=0L) {
+    if(!dialogMap.isEmpty() && ps!=0L && !ps->isHidden()) {
         long id=ps->id(ps->visibleWidget());
-        if(id!=0L) {
+        if(id!=0) {
             KoFilterDialog *dia=originalDialogs.find(id).data();
             if(dia!=0L) {
                 config=dia->state();
@@ -439,7 +413,7 @@ const bool KoFilterManager::export_() {
 
 PreviewStack::PreviewStack(QWidget *parent, const char *name,
                            KoFilterManager *m) : QWidgetStack(parent, name),
-                           mgr(m) {
+                           mgr(m), hidden(false) {
 }
 
 PreviewStack::~PreviewStack() {
@@ -448,32 +422,37 @@ PreviewStack::~PreviewStack() {
 void PreviewStack::showPreview(const KURL &url) {
 
     QString tmp=url.url();
-    QString extension;
-    unsigned short k=0;
+    unsigned short k=0, id;
     unsigned long foo=tmp.length();
 
+    // try to find the extension
     while(tmp[foo-k]!=QChar('.') && k<=foo) {
         ++k;
     }
-    if(tmp[foo-k]==QChar('.')) {
-        extension=tmp.right(k);
-        //kDebugInfo(30003, extension);
-        raiseWidget(mgr->findWidget(extension));
-    }
-    else
-        raiseWidget(0);
-}
 
-void PreviewStack::slotInfo() {
-    //kDebugInfo(30003, "PreviewStack::slotInfo(): Info clicked...");
-    KMessageBox::information(0L, i18n("The new K File Dialog supports a preview mode which\n"
-                                      "enables applications to show previews or dialogs to\n"
-                                      "configure the opening/saving process.\n\n"
-                                      "KOffice uses this feature to let the user adjust the\n"
-                                      "behaviour of some filters. However you don't need\n"
-                                      "this feature for e.g. ASCII import and we can't provide\n"
-                                      "such a dialog for each and every mime type. Therefore\n"
-                                      "we added this default dialog which is shown when\n"
-                                      "nothing else is appropriate."), i18n("Basic Information"));
+    // did we find the extension?
+    if(tmp[foo-k]!=QChar('.')) {
+        if(!hidden) {
+            hide();
+            hidden=true;
+        }
+        return;
+    }
+    // do we have a dialog for that extension? (0==we don't have one)
+    id=mgr->findWidget(tmp.right(k));
+    if(id==0) {
+        if(!hidden) {
+            hide();
+            hidden=true;
+        }
+        return;
+    }
+    else {
+        raiseWidget(id);
+        if(hidden) {
+            show();
+            hidden=false;
+        }
+    }
 }
 #endif
