@@ -23,18 +23,18 @@
 #include "koBgSpellCheck.moc"
 #include <qtimer.h>
 #include <kdebug.h>
+#include <kospell.h>
+#include <koSconfig.h>
+#include <ksconfig.h>
 #include <kotextobject.h>
 #include <klocale.h>
-#include <koSconfig.h>
-#include <koSpell.h>
-
 
 //#define DEBUG_BGSPELLCHECKING
 
 class KoBgSpellCheck::KoBgSpellCheckPrivate
 {
 public:
-    KOSpellConfig * m_pKOSpellConfig;
+    KSpellConfig * m_pKSpellConfig;
     QTimer * startTimer;
     QTimer * nextParagraphTimer;
 };
@@ -45,7 +45,7 @@ KoBgSpellCheck::KoBgSpellCheck()
     kdDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
 #endif
     d = new KoBgSpellCheck::KoBgSpellCheckPrivate;
-    d->m_pKOSpellConfig=0L;
+    d->m_pKSpellConfig=0L;
     d->startTimer = new QTimer( this );
     connect( d->startTimer, SIGNAL( timeout() ),
              this, SLOT( startBackgroundSpellCheck() ) );
@@ -65,7 +65,7 @@ KoBgSpellCheck::KoBgSpellCheck()
 KoBgSpellCheck::~KoBgSpellCheck()
 {
     delete m_bgSpell.kspell;
-    delete d->m_pKOSpellConfig;
+    delete d->m_pKSpellConfig;
     delete d;
 }
 
@@ -174,33 +174,11 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
         d->startTimer->start( 1000, true );
         return;
     }
-#if 0
+
+    bool needsWait = false;
     if ( !m_bgSpell.kspell ) // reuse if existing
     {
-#if 0
-        if(m_doc->getKOSpellConfig())
-        {
-            m_doc->getKOSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
-            m_doc->getKOSpellConfig()->setReplaceAllList(m_spell.replaceAll);
-        }
-#endif
-        m_bgSpell.kspell = KOSpell::createKoSpell( 0L, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,spellConfig(), true,true /*FIXME !!!!!!!!!*/ );
-
-        connect( m_bgSpell.kspell, SIGNAL( death() ),
-                 this, SLOT( spellCheckerFinished() ) );
-        connect( m_bgSpell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
-                 this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
-        connect( m_bgSpell.kspell, SIGNAL( done( const QString & ) ),
-                 this, SLOT( spellCheckerDone( const QString & ) ) );
-
-        connect( m_bgSpell.kspell, SIGNAL( spellCheckerReady()), this, SLOT( spellCheckerReady()));
-        m_bgSpell.kspell->hide ();
-    }
-#endif
-#if 0
-    if ( !m_bgSpell.kspell ) // reuse if existing
-    {
-        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), d->m_pKOSpellConfig );
+        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), d->m_pKSpellConfig );
 
         needsWait = true; // need to wait for ready()
         connect( m_bgSpell.kspell, SIGNAL( death() ),
@@ -214,7 +192,6 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     m_bgSpell.kspell->setIgnoreTitleCase( m_bDontCheckTitleCase );
     if ( !needsWait )
         spellCheckerReady();
-#endif
 }
 
 void KoBgSpellCheck::spellCheckerReady()
@@ -380,12 +357,12 @@ void KoBgSpellCheck::spellCheckerFinished()
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
 #endif
-    KOSpell::spellStatus status = m_bgSpell.kspell->status();
+    KoSpell::spellStatus status = m_bgSpell.kspell->status();
     delete m_bgSpell.kspell;
     m_bgSpell.kspell = 0;
     m_bgSpell.currentParag = 0;
     m_bgSpell.currentTextObj = 0;
-    if (status == KOSpell::Error)
+    if (status == KoSpell::Error)
     {
         // KSpell badly configured... what to do?
         kdWarning() << "ISpell/ASpell not configured correctly." << endl;
@@ -396,7 +373,7 @@ void KoBgSpellCheck::spellCheckerFinished()
         }
         return;
     }
-    else if (status == KOSpell::Crashed)
+    else if (status == KoSpell::Crashed)
     {
         kdWarning() << "ISpell/ASpell seems to have crashed." << endl;
         return;
@@ -404,32 +381,24 @@ void KoBgSpellCheck::spellCheckerFinished()
     // Normal death - nothing to do
 }
 
-KOSpellConfig* KoBgSpellCheck::spellConfig()
+KSpellConfig* KoBgSpellCheck::spellConfig()
 {
-  if ( !d->m_pKOSpellConfig )
-    d->m_pKOSpellConfig = new KOSpellConfig();
-  return d->m_pKOSpellConfig;
+  if ( !d->m_pKSpellConfig )
+    d->m_pKSpellConfig = new KSpellConfig();
+  return d->m_pKSpellConfig;
 }
 
-void KoBgSpellCheck::setKSpellConfig(KOSpellConfig _kspell)
+void KoBgSpellCheck::setKSpellConfig(const KOSpellConfig &_kspell)
 {
   (void)spellConfig();
   stopSpellChecking();
 
-  d->m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  d->m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
-  d->m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
-  d->m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
-  d->m_pKOSpellConfig->setEncoding(_kspell.encoding());
-  d->m_pKOSpellConfig->setEncoding(_kspell.encoding());
-  d->m_pKOSpellConfig->setIgnoreCase ( _kspell.ignoreCase ());
-  d->m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
-  d->m_pKOSpellConfig->setDontCheckTitleCase( _kspell.dontCheckTitleCase());
-  d->m_pKOSpellConfig->setDontCheckUpperWord( _kspell.dontCheckUpperWord() );
-  d->m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
-  d->m_pKOSpellConfig->setClient (_kspell.client());
-
-
+  d->m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  d->m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
+  d->m_pKSpellConfig->setDictionary(_kspell.dictionary ());
+  d->m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
+  d->m_pKSpellConfig->setEncoding(_kspell.encoding());
+  d->m_pKSpellConfig->setClient(_kspell.client());
   m_bSpellCheckConfigure = false;
   startBackgroundSpellCheck();
 }

@@ -24,10 +24,10 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
-#include <koSpell.h>
 class KoTextObject;
-class KOSpell;
+class KoSpell;
 class KoDocument;
+class KSpellConfig;
 class KOSpellConfig;
 class KoTextParag;
 
@@ -44,7 +44,7 @@ public:
     void setIgnoreUpperWords( bool b);
     void setIgnoreTitleCase( bool b);
 
-    void setKSpellConfig(KOSpellConfig _kspell);
+    void setKSpellConfig(const KOSpellConfig &_kspell);
 
     //repaint object when we spell check
     virtual void slotRepaintChanged(KoTextObject *obj)=0;
@@ -68,7 +68,7 @@ protected slots:
     void spellCheckNextParagraph();
 
 protected:
-    KOSpellConfig* spellConfig();
+    KSpellConfig* spellConfig();
     void nextParagraphNeedingCheck();
     void stopSpellChecking();
     // Structure holding the background spellcheck data
@@ -76,7 +76,7 @@ protected:
         KoBGSpell() : kspell(0L), currentTextObj(0L), currentParag(0L) {}
 
         // KSpell object for the background spellcheck
-	KOSpell *kspell;
+	KoSpell *kspell;
         // The text frameset currently being checked
 	// TODO change current text frameset, and implementing nextTextFrameSet, see kwview.cc
         // TODO implement "skip unchanged framesets" and "stop timer after all checked and until
