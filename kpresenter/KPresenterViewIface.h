@@ -220,6 +220,11 @@ k_dcop:
     void increaseNumberingLevel();
     void decreaseNumberingLevel();
 
+    void increaseFontSize();
+    void decreaseFontSize();
+
+    void flipHorizontal();
+    void flipVertical();
 
 private:
     KPresenterView *view;

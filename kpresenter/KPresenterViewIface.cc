@@ -679,3 +679,23 @@ void KPresenterViewIface::decreaseNumberingLevel()
 {
     view->slotDecreaseNumberingLevel();
 }
+
+void KPresenterViewIface::increaseFontSize()
+{
+    view->increaseFontSize();
+}
+
+void KPresenterViewIface::decreaseFontSize()
+{
+    view->decreaseFontSize();
+}
+
+void KPresenterViewIface::flipHorizontal()
+{
+    view->flipHorizontal();
+}
+
+void KPresenterViewIface::flipVertical()
+{
+    view->flipVertical();
+}
