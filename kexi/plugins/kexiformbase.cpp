@@ -67,8 +67,9 @@
 class KexiFormBase::EditGUIClient: public KXMLGUIClient
 {
 	public:
-		EditGUIClient():KXMLGUIClient()
+		EditGUIClient(KInstance *inst):KXMLGUIClient()
 		{
+			setInstance(inst);
 			m_formMode = new KToggleAction(i18n("Edit Form"),"form_edit",
 				0,actionCollection(),"form_edit");
 
@@ -162,8 +163,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 class KexiFormBase::ViewGUIClient: public KXMLGUIClient
 {
 	public:
-		ViewGUIClient():KXMLGUIClient()
+		ViewGUIClient(KInstance *inst):KXMLGUIClient()
 		{
+			setInstance(inst);
 			m_formMode = new KToggleAction(i18n("Edit Form"),"form_edit",
 				0,actionCollection(),"form_edit");
 
@@ -298,7 +300,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 KXMLGUIClient *KexiFormBase::guiClient()
 {
 	if (!m_editGUIClient)
-		m_editGUIClient=new EditGUIClient();
+		m_editGUIClient=new EditGUIClient(kexiProject()->instance());
 	return m_editGUIClient;
 }
 
