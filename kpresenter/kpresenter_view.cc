@@ -741,7 +741,8 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
                                 i18n("Save Picture"));
             return;
         }
-        QFile file( url.path() ); // ### TODO: network transparency (kio/netaccess.h)
+        // ### TODO: (JJ:) network transparency, use KIO::NetAccess::upload
+        QFile file( url.path() );
         if ( file.open( IO_ReadWrite ) ) {
             picture.save( &file );
             file.close();
