@@ -30,7 +30,7 @@
 KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
-
+	m_names["instance"] = i18n("Query");
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -44,10 +44,16 @@ KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, b
 	return d;
 }
 
-QString
+/*QString
 KexiQueryPart::instanceName() const
 {
 	return i18n("Query");
+}*/
+
+bool KexiQueryPart::remove(KexiMainWindow *win, const KexiPart::Item &item)
+{
+	//TODO
+	return false;
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )

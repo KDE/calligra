@@ -33,8 +33,11 @@ class KexiQueryPart : public KexiPart::Part
 		KexiQueryPart(QObject *parent, const char *name, const QStringList &);
 		~KexiQueryPart();
 
+		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
+
+	protected:
 		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool design);
-		virtual QString instanceName() const;
+//		virtual QString instanceName() const;
 };
 
 #endif

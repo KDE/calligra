@@ -51,7 +51,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public QWidget
 		KTextEditor::Document	*m_doc;
 		KTextEditor::View	*m_view;
 #else
-		KTextEdit *m_editor;
+		KTextEdit *m_view;
 #endif
 };
 

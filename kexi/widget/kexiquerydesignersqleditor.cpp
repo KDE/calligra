@@ -39,7 +39,7 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 	, m_doc( KTextEditor::EditorChooser::createDocument(this, "sqlDoc") )
 	, m_view( m_doc->createView(this, 0L) )
 #else
-	, m_editor( new  KTextEdit( "", QString::null, this, "sqlDoc_editor" ) )
+	, m_view( new  KTextEdit( "", QString::null, this, "sqlDoc_editor" ) )
 #endif
 {
 #ifndef Q_WS_WIN //(TEMP)
@@ -67,8 +67,12 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 #ifndef Q_WS_WIN //(TEMP)
 	g->addWidget(m_view,		0, 0);
 #else
-	g->addWidget(m_editor,		0, 0);
+	g->addWidget(m_view,		0, 0);
 #endif
+}
+
+KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
+{
 }
 
 QString
@@ -79,7 +83,7 @@ KexiQueryDesignerSQLEditor::getText()
 	kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
 	return eIface->text();
 #else
-	return m_editor->text();
+	return m_view->text();
 #endif
 }
 
@@ -103,12 +107,13 @@ KexiQueryDesignerSQLEditor::eventFilter(QObject *, QEvent *ev)
 void
 KexiQueryDesignerSQLEditor::jump(int col)
 {
+#ifndef Q_WS_WIN //(TEMP)
 	KTextEditor::ViewCursorInterface *ci = viewCursorInterface(m_view);
 	ci->setCursorPosition(0, col);
+#else
+	m_view->setCursorPosition(0, col);
+#endif
 }
 
-KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
-{
-}
 
 #include "kexiquerydesignersqleditor.moc"
