@@ -38,13 +38,13 @@
 #include <qgrid.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
-  : KDialogBase(KDialogBase::IconList,i18n("Configure Kspread") ,
+  : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
 		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
 		KDialogBase::Ok)
 
 {
   m_pView=parent;
-  QVBox *page=addVBoxPage(i18n("Preference"), QString::null,BarIcon("looknfeel",KIcon::SizeMedium));
+  QVBox *page=addVBoxPage(i18n("Preferences"), QString::null,BarIcon("looknfeel",KIcon::SizeMedium));
 
   _preferenceConfig = new  preference(parent,page );
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
@@ -403,7 +403,7 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
   lay1->addWidget(typeOfMove);
-  msgError= new QCheckBox(i18n("Show message of error"),tmpQGroupBox);
+  msgError= new QCheckBox(i18n("Show error message"),tmpQGroupBox);
   msgError->setChecked(m_bMsgError);
   lay1->addWidget(msgError);
 
@@ -675,7 +675,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   config = KSpreadFactory::global()->config();
 
   QLabel *label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default size page:"));
+  label->setText(i18n("Default page size:"));
   //lay1->addWidget(label);
   grid1->addWidget(label,0,0);
   
