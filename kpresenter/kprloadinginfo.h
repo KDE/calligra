@@ -30,7 +30,7 @@ struct lstAnimation
 class KPRLoadingInfo
 {
 public:
-    KPRLoadingInfo() { presSpeed = -1; }
+    KPRLoadingInfo( bool oldFormat = false) { m_oldFormat = oldFormat; presSpeed = -1; }
     ~KPRLoadingInfo() {}
 
     lstAnimation* animationShowById( const QString& id ) const {
@@ -62,12 +62,15 @@ public:
         }
         m_animationsHideDict.clear();
     }
-
+    bool oldFormat() const { return m_oldFormat; }
     int presSpeed;
     CustomListMap m_tmpCustomListMap;
+    bool m_header;
+    bool m_footer;
 private:
     QDict<lstAnimation> m_animationsShowDict;
     QDict<lstAnimation> m_animationsHideDict;
+    bool m_oldFormat;
 };
 
 #endif /* KPRLOADINGINFO_H */

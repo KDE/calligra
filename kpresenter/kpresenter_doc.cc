@@ -720,7 +720,7 @@ void KPresenterDoc::compatibilityFromOldFileFormat()
 {
     //function to keep compatibility with old file format
     //for example for presSpeed
-    if ( m_loadingInfo && m_loadingInfo->presSpeed != - 1 )
+    if ( m_loadingInfo && m_loadingInfo->oldFormat() )
     {
         if ( m_loadingInfo->presSpeed != -1 )
         {
@@ -1905,7 +1905,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
     QTime dt;
     dt.start();
-    m_loadingInfo = new KPRLoadingInfo;
+    m_loadingInfo = new KPRLoadingInfo( true );
 
     ignoreSticky = FALSE;
     bool b=false;
