@@ -5,8 +5,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/killustrator/filter -I$(top_srcd
 
 #EXTRA_DIST = README kil.dtd killustrator.lsm
 
-messages:
-	$(EXTRACTRC) *.rc >> rc.cpp
+messages: rc.cpp
 	$(XGETTEXT) -kI18N -kSI18N rc.cpp *.cc -o $(podir)/killustrator.pot
 
 kdelnk_DATA = killustrator.desktop
