@@ -125,12 +125,21 @@ class KoGenStyle
 {
 public:
     /**
+     * Possible values for the "type" argument of the KoGenStyle constructor.
+     * Those values can be extended by applications (starting at number 20),
+     * it's for their own consumption anyway.
+     * (The reason for having the very common ones here, is to make it possible to
+     * use them from libkotext).
+     */
+    enum { STYLE_PAGELAYOUT = 0,
+           STYLE_USER = 1,
+           STYLE_AUTO = 2 };
+    /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
      * but first you must define its properties and attributes.
      *
      * @param type this is a hook for the application to categorize styles
-     * E.g. one could use an enum here, with values for automatic styles,
-     * user styles, page layout, master-page, etc. Ignored when writing out the style.
+     * See the STYLE_* enum. Ignored when writing out the style.
      *
      * @param familyName The value for style:family, e.g. text, paragraph, graphic etc.
      * The family is for style:style elements only; number styles and list styles don't have one.
@@ -297,6 +306,9 @@ private:
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_properties[N_NumTypes];
     QMap<QString, QString> m_attributes;
+
+    // For lookup
+    friend class KoGenStyles;
 };
 
 #endif /* KOGENSTYLES_H */

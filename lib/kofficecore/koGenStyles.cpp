@@ -33,6 +33,19 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, bool 
 {
     StyleMap::iterator it = m_styles.find( style );
     if ( it == m_styles.end() ) {
+        // Not found, try if this style is in fact equal to its parent (the find above
+        // wouldn't have found it, due to m_parentName being set).
+        if ( !style.parentName().isEmpty() ) {
+            KoGenStyle testStyle( style );
+            const KoGenStyle* parentStyle = this->style( style.parentName() ); // ## linear search
+            Q_ASSERT( parentStyle ); // hmm? parent not in collection yet?
+            if ( parentStyle ) {
+                testStyle.m_parentName = parentStyle->m_parentName;
+                if ( *parentStyle == testStyle )
+                    return style.parentName();
+            }
+        }
+
         QString styleName( name );
         if ( styleName.isEmpty() ) {
             styleName = 'A'; // for "auto".

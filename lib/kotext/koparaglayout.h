@@ -22,6 +22,7 @@
 
 #include <koRuler.h> // for KoTabulatorList
 #include "koborder.h"
+class KoGenStyle;
 class KoParagCounter;
 class KoStyle;
 class KoOasisContext;
@@ -122,6 +123,8 @@ public:
 
     /// Load this parag layout from Oasis XML
     static void loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context );
+    /// Save this parag layout to Oasis XML
+    void saveOasis( KoGenStyle& gs ) const;
 
 private:
     KoTabulatorList m_tabList;

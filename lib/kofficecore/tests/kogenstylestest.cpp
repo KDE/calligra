@@ -26,9 +26,7 @@ int main( int, char** ) {
 
     KoGenStyles coll;
 
-    enum { STYLE_USER, STYLE_AUTO, STYLE_OTHER };
-
-    KoGenStyle first( STYLE_AUTO, "paragraph" );
+    KoGenStyle first( KoGenStyle::STYLE_AUTO, "paragraph" );
     first.addAttribute( "style:master-page-name", "Standard" );
     first.addProperty( "style:page-number", "0" );
     first.addProperty( "style:foobar", "2", KoGenStyle::TextType );
@@ -36,9 +34,9 @@ int main( int, char** ) {
     QString firstName = coll.lookup( first );
     kdDebug() << "The first style got assigned the name " << firstName << endl;
     assert( firstName == "A1" ); // it's fine if it's something else, but the koxmlwriter tests require a known name
-    assert( first.type() == STYLE_AUTO );
+    assert( first.type() == KoGenStyle::STYLE_AUTO );
 
-    KoGenStyle second( STYLE_AUTO, "paragraph" );
+    KoGenStyle second( KoGenStyle::STYLE_AUTO, "paragraph" );
     second.addAttribute( "style:master-page-name", "Standard" );
     second.addProperty( "style:page-number", "0" );
     second.addProperty( "style:foobar", "2", KoGenStyle::TextType );
@@ -55,7 +53,7 @@ int main( int, char** ) {
     s = coll.style( "foobarblah" ); // check lookup of non-existing style
     assert( !s );
 
-    KoGenStyle third( STYLE_AUTO, "paragraph", secondName ); // inherited style
+    KoGenStyle third( KoGenStyle::STYLE_AUTO, "paragraph", secondName ); // inherited style
     third.addProperty( "style:margin-left", "1.249cm" );
     third.addProperty( "style:page-number", "0" ); // same as parent
     third.addProperty( "style:foobar", "3", KoGenStyle::TextType ); // different from parent
@@ -65,16 +63,25 @@ int main( int, char** ) {
     kdDebug() << "The third style got assigned the name " << thirdName << endl;
     assert( thirdName == "P1" );
 
-    KoGenStyle user( STYLE_USER ); // differs from third since it doesn't inherit second, and has a different type
+    KoGenStyle user( KoGenStyle::STYLE_USER ); // differs from third since it doesn't inherit second, and has a different type
     user.addProperty( "style:margin-left", "1.249cm" );
 
     QString userStyleName = coll.lookup( user, "User", false );
     kdDebug() << "The user style got assigned the name " << userStyleName << endl;
     assert( userStyleName == "User" );
 
+    KoGenStyle sameAsParent( KoGenStyle::STYLE_AUTO, "paragraph", secondName ); // inherited style
+    sameAsParent.addAttribute( "style:master-page-name", "Standard" );
+    sameAsParent.addProperty( "style:page-number", "0" );
+    sameAsParent.addProperty( "style:foobar", "2", KoGenStyle::TextType );
+    QString sapName = coll.lookup( sameAsParent, "foobar" );
+    kdDebug() << "The 'same as parent' style got assigned the name " << sapName << endl;
+
+    assert( sapName == secondName );
+
     assert( coll.styles().count() == 3 );
-    assert( coll.styles( STYLE_AUTO ).count() == 2 );
-    assert( coll.styles( STYLE_USER ).count() == 1 );
+    assert( coll.styles( KoGenStyle::STYLE_AUTO ).count() == 2 );
+    assert( coll.styles( KoGenStyle::STYLE_USER ).count() == 1 );
 
     TEST_BEGIN( 0, 0 );
     first.writeStyle( &writer, coll, "style:style", firstName, "style:paragraph-properties" );

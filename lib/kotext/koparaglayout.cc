@@ -22,6 +22,8 @@
 #include "koparagcounter.h"
 #include "kostyle.h"
 #include "kooasiscontext.h"
+#include <koGenStyles.h>
+
 #include <qdom.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -736,4 +738,16 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "width", (*it).ptWidth );
         element.setAttribute( "alignchar", QString((*it).alignChar) );
     }
+}
+
+void KoParagLayout::saveOasis( KoGenStyle& gs ) const
+{
+    gs.addProperty( "fo:text-align",
+            alignment == Qt::AlignLeft ? "left" :
+            alignment == Qt::AlignRight ? "right" :
+            alignment == Qt::AlignHCenter ? "center" :
+            alignment == Qt::AlignJustify ? "justify" :
+            "start" // i.e. direction-dependent
+        );
+    // TODO finish
 }

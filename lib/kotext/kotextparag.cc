@@ -28,6 +28,7 @@
 #include "kovariable.h"
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
+#include <koGenStyles.h>
 
 //#define DEBUG_PAINT
 
@@ -1795,11 +1796,18 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
 void KoTextParag::saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
 {
-    // TODO Write paraglayout to styles (with parent == the parag's style)
+    // Write paraglayout to styles (with parent == the parag's style)
+    QString parentStyleName;
+    if ( m_layout.style )
+        parentStyleName = m_layout.style->name();
+    KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
+    m_layout.saveOasis( autoStyle );
+    QString autoStyleName = mainStyles.lookup( autoStyle, "P", true );
 
     // TODO Write parag default format to styles
 
     writer.startElement( "text:p" );
+    writer.addAttribute( "text:style-name", autoStyleName );
 
     // TODO Write spans of similar format (see KWTextParag::save)
     QString text = string()->toString(); // HACK

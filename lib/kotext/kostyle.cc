@@ -109,6 +109,10 @@ void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType ) const
         if ( refStyleName.isEmpty() ) // i.e. first style
             refStyleName = name;
     }
+    // Now edit the kogenstyle and set the next-style-name. This works here
+    // because the style's m_name is already unique so there's no risk of
+    // "two styles being only different due to their following-style"; the
+    // display-name will also be different, and will ensure they get two kogenstyles.
     for( QPtrListIterator<KoStyle> p( m_styleList ); *p; ++p ) {
         if ( (*p)->followingStyle() && (*p)->followingStyle() != (*p) ) {
             QString fsname = autoNames[ (*p)->followingStyle() ];
@@ -395,7 +399,7 @@ QString KoStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QString
             gs.addAttribute( "style:default-level", m_paragLayout.counter->depth() );
     }
 
-    // TODO m_paragLayout.saveParagLayout( gs, m_paragLayout.alignment );
+    m_paragLayout.saveOasis( gs );
 
     m_format.save( gs );
 
