@@ -2722,7 +2722,7 @@ int KoTextDocument::length() const
 
 KoTextString::KoTextString()
 {
-    bidiDirty = FALSE;
+    bidiDirty = TRUE;
     bNeedsSpellCheck = true;
     bidi = FALSE;
     rightToLeft = FALSE;
@@ -2736,7 +2736,13 @@ KoTextString::KoTextString( const KoTextString &s )
     bidi = s.bidi;
     rightToLeft = s.rightToLeft;
     dir = s.dir;
-    data = s.subString();
+    data = s.data;
+    data.detach();
+    for ( int i = 0; i < (int)data.size(); ++i ) {
+        KoTextFormat *f = data[i].format();
+        if ( f )
+            f->addRef();
+    }
 }
 
 void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
@@ -2748,20 +2754,21 @@ void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
 		 sizeof( KoTextStringChar ) * ( os - index ) );
     }
     for ( int i = 0; i < (int)s.length(); ++i ) {
-	data[ (int)index + i ].x = 0;
-	data[ (int)index + i ].pixelxadj = 0;
-	data[ (int)index + i ].pixelwidth = 0;
-	data[ (int)index + i ].width = 0;
-	data[ (int)index + i ].lineStart = 0;
-	data[ (int)index + i ].d.format = 0;
-	data[ (int)index + i ].type = KoTextStringChar::Regular;
-	data[ (int)index + i ].rightToLeft = 0;
-	data[ (int)index + i ].startOfRun = 0;
-        data[ (int)index + i ].c = s[ i ];
+	KoTextStringChar &ch = data[ (int)index + i ];
+	ch.x = 0;
+	ch.pixelxadj = 0;
+	ch.pixelwidth = 0;
+	ch.width = 0;
+	ch.lineStart = 0;
+	ch.d.format = 0;
+	ch.type = KoTextStringChar::Regular;
+	ch.rightToLeft = 0;
+	ch.startOfRun = 0;
+        ch.c = s[ i ];
 #ifdef DEBUG_COLLECTION
 	kdDebug(32500) << "KoTextString::insert setting format " << f << " to character " << (int)index+i << endl;
 #endif
-	data[ (int)index + i ].setFormat( f );
+	ch.setFormat( f );
     }
     bidiDirty = TRUE;
     bNeedsSpellCheck = true;
@@ -2780,16 +2787,17 @@ void KoTextString::insert( int index, KoTextStringChar *c )
 	memmove( data.data() + index + 1, data.data() + index,
 		 sizeof( KoTextStringChar ) * ( os - index ) );
     }
-    data[ (int)index ].c = c->c;
-    data[ (int)index ].x = 0;
-    data[ (int)index ].pixelxadj = 0;
-    data[ (int)index ].pixelwidth = 0;
-    data[ (int)index ].width = 0;
-    data[ (int)index ].lineStart = 0;
-    data[ (int)index ].rightToLeft = 0;
-    data[ (int)index ].d.format = 0;
-    data[ (int)index ].type = KoTextStringChar::Regular;
-    data[ (int)index ].setFormat( c->format() );
+    KoTextStringChar &ch = data[ (int)index ];
+    ch.c = c->c;
+    ch.x = 0;
+    ch.pixelxadj = 0;
+    ch.pixelwidth = 0;
+    ch.width = 0;
+    ch.lineStart = 0;
+    ch.rightToLeft = 0;
+    ch.d.format = 0;
+    ch.type = KoTextStringChar::Regular;
+    ch.setFormat( c->format() );
     bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
@@ -2800,14 +2808,15 @@ void KoTextString::truncate( int index )
     index = QMIN( index, (int)data.size() - 1 );
     if ( index < (int)data.size() ) {
 	for ( int i = index + 1; i < (int)data.size(); ++i ) {
-	    if ( data[ i ].isCustom() ) {
-		delete data[ i ].customItem();
-		if ( data[ i ].d.custom->format )
-		    data[ i ].d.custom->format->removeRef();
-		delete data[ i ].d.custom;
-		data[ i ].d.custom = 0;
-	    } else if ( data[ i ].format() ) {
-		data[ i ].format()->removeRef();
+	    KoTextStringChar &ch = data[ i ];
+	    if ( ch.isCustom() ) {
+		delete ch.customItem();
+		if ( ch.d.custom->format )
+		    ch.d.custom->format->removeRef();
+		delete ch.d.custom;
+		ch.d.custom = 0;
+	    } else if ( ch.format() ) {
+		ch.format()->removeRef();
 	    }
 	}
     }
@@ -2819,19 +2828,20 @@ void KoTextString::truncate( int index )
 void KoTextString::remove( int index, int len )
 {
     for ( int i = index; i < (int)data.size() && i - index < len; ++i ) {
-	if ( data[ i ].isCustom() ) {
-	    delete data[ i ].customItem();
-	    if ( data[ i ].d.custom->format )
-		data[ i ].d.custom->format->removeRef();
-            delete data[ i ].d.custom;
-	    data[ i ].d.custom = 0;
-	} else if ( data[ i ].format() ) {
-	    data[ i ].format()->removeRef();
+	KoTextStringChar &ch = data[ i ];
+	if ( ch.isCustom() ) {
+	    delete ch.customItem();
+	    if ( ch.d.custom->format )
+		ch.d.custom->format->removeRef();
+            delete ch.d.custom;
+	    ch.d.custom = 0;
+	} else if ( ch.format() ) {
+	    ch.format()->removeRef();
 	}
     }
     memmove( data.data() + index, data.data() + index + len,
 	     sizeof( KoTextStringChar ) * ( data.size() - index - len ) );
-    data.resize( data.size() - len );
+    data.resize( data.size() - len, QGArray::SpeedOptim );
     bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
@@ -2839,14 +2849,15 @@ void KoTextString::remove( int index, int len )
 void KoTextString::clear()
 {
     for ( int i = 0; i < (int)data.count(); ++i ) {
-	if ( data[ i ].isCustom() ) {
-	    delete data[ i ].customItem();
-	    if ( data[ i ].d.custom->format )
-		data[ i ].d.custom->format->removeRef();
-	    delete data[ i ].d.custom;
-	    data[ i ].d.custom = 0;
-	} else if ( data[ i ].format() ) {
-	    data[ i ].format()->removeRef();
+	KoTextStringChar &ch = data[ i ];
+	if ( ch.isCustom() ) {
+	    delete ch.customItem();
+	    if ( ch.d.custom->format )
+		ch.d.custom->format->removeRef();
+	    delete ch.d.custom;
+	    ch.d.custom = 0;
+	} else if ( ch.format() ) {
+	    ch.format()->removeRef();
 	}
     }
     data.resize( 0 );
@@ -2854,13 +2865,14 @@ void KoTextString::clear()
 
 void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection )
 {
+    KoTextStringChar &ch = data[ index ];
 //    kdDebug(32500) << "KoTextString::setFormat index=" << index << " f=" << f << endl;
-    if ( useCollection && data[ index ].format() )
+    if ( useCollection && ch.format() )
     {
-	//kdDebug(32500) << "KoTextString::setFormat removing ref on old format " << data[ index ].format() << endl;
-	data[ index ].format()->removeRef();
+	//kdDebug(32500) << "KoTextString::setFormat removing ref on old format " << ch.format() << endl;
+	ch.format()->removeRef();
     }
-    data[ index ].setFormat( f );
+    ch.setFormat( f );
 }
 
 void KoTextString::checkBidi() const
