@@ -34,19 +34,13 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
                     << " mimetype = " << appIdentification << endl;
 
     m_pZip = new KZip( _filename );
-    if (!m_pZip)
-      m_bGood = false;
-    else
-      m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
 {
     m_pZip = new KZip( dev );
-    if (!m_pZip)
-      m_bGood = false;
-    else
-      m_bGood = init( mode, appIdentification );
+    m_bGood = init( mode, appIdentification );
 }
 
 KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
@@ -72,10 +66,7 @@ KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _fil
     }
 
     m_pZip = new KZip( m_localFileName );
-    if (!m_pZip)
-      m_bGood = false;
-    else
-      m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
