@@ -1,7 +1,7 @@
 stencildir = $(kde_datadir)/kivio/autoloadStencils
-
-stencil_LTLIBRARIES =libstraight_connector.la
 stencil_DATA = straight_connector.xpm
+
+kde_module_LTLIBRARIES =libstraight_connector.la
 
 libstraight_connector_la_LDFLAGS = -version-info 1
 
@@ -22,14 +22,10 @@ EXTRA_DIST = \
 		straight_connector.h\
 		straight_connector.xpm
 
-## This is a very bad hack..... why is this needed ? (David)
+install-data-local:
+	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
+	$(LN_S) $(DESTDIR)$(kde_moduledir)/libstraight_connector.so $(DESTDIR)$(stencildir)/straight_connector.ksp
 
-#install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-#	@$(NORMAL_INSTALL)
-#	$(mkinstalldirs) $(DESTDIR)$(libdir)
-#	$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/straight_connector.ksp;
-#
-#uninstall-libLTLIBRARIES:
-#	@$(NORMAL_UNINSTALL)
-#	$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/straight_connector.ksp;
+uninstall-data-local:
+	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
 
