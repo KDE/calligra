@@ -24,7 +24,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 #include <kotextobject.h>
 #include <kotextview.h>
 #include <koSearchDia.h>

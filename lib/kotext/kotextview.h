@@ -39,7 +39,7 @@ class KDataToolInfo;
 class KoLinkVariable;
 class KoVariable;
 class KoTextViewIface;
-#include "qrichtext_p.h"
+#include "korichtext.h"
 class KoBorder;
 class KoStyle;
 

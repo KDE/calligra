@@ -22,7 +22,7 @@
 
 #include <kfontdialog.h>
 #include <qtabwidget.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 #include <qradiobutton.h>
 class QComboBox;
 

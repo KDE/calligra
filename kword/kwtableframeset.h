@@ -32,7 +32,7 @@ DESCRIPTION
 #include <qptrlist.h>
 #include <qobject.h>
 #include <qstring.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 
 class KWDocument;
 class KWTableFrameSetEdit;

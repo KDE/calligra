@@ -20,7 +20,7 @@
 #ifndef kwtextframeset_h
 #define kwtextframeset_h
 
-#include "qrichtext_p.h"
+#include "korichtext.h"
 #include "kwframe.h"
 #include <kotextview.h>
 #include <koparaglayout.h>

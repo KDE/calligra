@@ -4,7 +4,7 @@ INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 lib_LTLIBRARIES = libkotext.la
-libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp \
+libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
 	kozoomhandler.cc koborder.cc \
 	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
 	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \

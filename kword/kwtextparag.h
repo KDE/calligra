@@ -21,7 +21,7 @@
 #define kwtextparag_h
 
 //#include <kotextparag.h>
-#include "qrichtext_p.h"
+#include "korichtext.h"
 
 class QDomDocument;
 class KWTextFrameSet;

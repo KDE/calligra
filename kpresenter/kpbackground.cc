@@ -28,7 +28,7 @@
 #include <qpicture.h>
 #include <qfileinfo.h>
 
-#include <qrichtext_p.h>
+#include <korichtext.h>
 #include <kotextobject.h>
 // for getenv ()
 #include <stdlib.h>

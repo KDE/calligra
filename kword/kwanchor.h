@@ -58,7 +58,7 @@ public:
     virtual void resize();
     virtual void finalize();
 
-    /* overloaded methods, see qrichtext_p.h for docu*/
+    /* overloaded methods, see korichtext.h for docu*/
     virtual Placement placement() const { return PlaceInline; }
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }

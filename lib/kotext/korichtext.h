@@ -1,5 +1,5 @@
 /**
- * This file comes from Qt's internal qrichtext_p.h file, with s/Q/Ko/ applied
+ * This file comes from Qt's internal korichtext.h file, with s/Q/Ko/ applied
  * everywhere to avoid symbol conflicts.
  * Please try to minimize the changes done to this file, and to change the #include'd
  * files instead, to make updates to this file easier.

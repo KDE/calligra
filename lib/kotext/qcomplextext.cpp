@@ -37,7 +37,7 @@
 
 
 #ifndef QT_NO_COMPLEXTEXT
-#include "qrichtext_p.h"
+#include "korichtext.h"
 //#include "qfontdata_p.h"
 #include "qfontmetrics.h"
 #include "qrect.h"

@@ -21,7 +21,7 @@
 #ifndef KOTEXTDOCUMENT_H
 #define KOTEXTDOCUMENT_H
 
-#include "qrichtext_p.h"
+#include "korichtext.h"
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN

@@ -105,7 +105,7 @@
 #include "KPresenterViewIface.h"
 #include "kpresenter_dlg_config.h"
 
-#include <qrichtext_p.h>
+#include <korichtext.h>
 #include <kotextobject.h>
 #include "kprcommand.h"
 #include <koFontDia.h>

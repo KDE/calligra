@@ -33,7 +33,7 @@
 #include "koPointArray.h"
 #include "global.h"
 #include <koRect.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 
 class KURL;
 class KoTextFormatInterface;

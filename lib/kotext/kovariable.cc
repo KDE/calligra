@@ -652,7 +652,7 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, 
 void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, const QColorGroup& cg, bool selected, int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
 {
     // Important: the y value already includes the difference between the parag baseline
-    // and the char's own baseline (ascent) (see paintDefault in qrichtext.cpp)
+    // and the char's own baseline (ascent) (see paintDefault in korichtext.cpp)
     // So we just draw the text there. But we need the baseline for drawFontEffects...
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
 

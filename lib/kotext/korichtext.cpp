@@ -33,7 +33,7 @@
 **
 **********************************************************************/
 
-#include "qrichtext_p.h"
+#include "korichtext.h"
 #include "qclipboard.h"
 #include "qdragobject.h"
 #include "qpaintdevicemetrics.h"

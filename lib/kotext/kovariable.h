@@ -27,7 +27,7 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <kaction.h>
-#include "qrichtext_p.h"
+#include "korichtext.h"
 #include <qvariant.h>
 
 class QDomElement;

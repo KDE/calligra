@@ -18,7 +18,7 @@
 */
 
 #include "koFontDia.h"
-#include "qrichtext_p.h"
+#include "korichtext.h"
 
 #include <kcolordialog.h>
 #include <klocale.h>

@@ -18,7 +18,7 @@
 */
 
 //#include "kotextformat.h"
-#include "qrichtext_p.h" // for KoTextFormat
+#include "korichtext.h" // for KoTextFormat
 #include "kozoomhandler.h"
 #include <kdebug.h>
 #include <klocale.h>

@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "qrichtext_p.h"
+#include "korichtext.h"
 #include "kozoomhandler.h"
 #include "kotextdocument.h"
 #include <kdebug.h>

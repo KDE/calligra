@@ -22,7 +22,7 @@
 #define kptextobject_h
 
 #include "kpobject.h"
-#include "qrichtext_p.h"
+#include "korichtext.h"
 #include <kotextview.h>
 #include <kostyle.h>
 

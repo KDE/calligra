@@ -20,7 +20,7 @@
 #ifndef kotextformatter_h
 #define kotextformatter_h
 
-#include "qrichtext_p.h"
+#include "korichtext.h"
 class KoZoomHandler;
 class KoHyphenator;
 

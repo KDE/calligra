@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include "kozoomhandler.h"
 //#include "kotextformat.h"
-#include "qrichtext_p.h" // for KoTextFormat
+#include "korichtext.h" // for KoTextFormat
 
 KoBorder::KoBorder()
     : color(), style( SOLID )

@@ -25,7 +25,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 class KoTextView;
 
 class KoTextViewIface :  public DCOPObject

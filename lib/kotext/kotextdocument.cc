@@ -29,7 +29,7 @@
 
 //#define DEBUG_PAINTING
 
-//// Note that many methods are implemented in qrichtext.cpp
+//// Note that many methods are implemented in korichtext.cpp
 //// Those are the ones that come from Qt, and that mostly work :)
 
 KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollection *fc,
@@ -43,7 +43,7 @@ KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollecti
       tArray( 0 ), tStopWidth( 0 )
 {
     fCollection = fc;
-    init(); // see qrichtext.cpp
+    init(); // see korichtext.cpp
 
     m_drawingFlags = 0;
     setAddMargins( true );                 // top margin and bottom are added, not max'ed

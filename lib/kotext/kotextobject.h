@@ -20,7 +20,7 @@
 #ifndef kotextobject_h
 #define kotextobject_h
 
-#include <qrichtext_p.h>
+#include <korichtext.h>
 #include "koChangeCaseDia.h"
 #include "kostyle.h"
 #include "kotextdocument.h"

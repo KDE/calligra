@@ -3,7 +3,7 @@
 #ifndef _KOTEXTFORMAT_H
 #define _KOTEXTFORMAT_H
 
-// File included by qrichtext_p.h
+// File included by korichtext.h
 
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>

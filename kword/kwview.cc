@@ -59,7 +59,7 @@
 #include "kwanchor.h"
 #include "kwinserthorizontallinedia.h"
 
-#include <qrichtext_p.h>
+#include <korichtext.h>
 #include <koAutoFormat.h>
 #include <koAutoFormatDia.h>
 #include <koChangeCaseDia.h>

@@ -21,7 +21,7 @@
 #ifndef kprtextdocument_h
 #define kprtextdocument_h
 
-#include "qrichtext_p.h"
+#include <korichtext.h>
 #include "kotextdocument.h"
 
 class KPTextObject;

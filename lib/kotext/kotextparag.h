@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// File included by qrichtext_p.h to add our own methods to KoTextParag
+// File included by korichtext.h to add our own methods to KoTextParag
 // Method implementations are in kotextparag.cc
 
 /* This file is part of the KDE project

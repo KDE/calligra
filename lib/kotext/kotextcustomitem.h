@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// File included by qrichtext_p.h to add our own methods to KoTextCustomItem
+// File included by korichtext.h to add our own methods to KoTextCustomItem
 
 /**
  * KoTextCustomItem is the base class for custom items (i.e. special chars)

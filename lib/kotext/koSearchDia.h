@@ -31,7 +31,7 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 
 class QPushButton;
 class QRadioButton;

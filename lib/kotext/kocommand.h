@@ -21,7 +21,7 @@
 #define kocommand_h
 
 #include <kcommand.h>
-#include <qrichtext_p.h>
+#include <korichtext.h>
 class KoTextObject;
 class KoTextDocument;
 class KoVariable;
