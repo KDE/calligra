@@ -132,10 +132,23 @@ CORBA::Boolean KWordDocument::init()
   QString _globalTemplatePath = kapp->kde_datadir() + "/kword/templates/";
   QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kword/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,false))
+  KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,false,false);
+  if (ret == KoTemplateChooseDia::Template)
     {
       QFileInfo fileInfo(_template);
       QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kwt");
+      loadTemplate(fileName.data());
+    }
+  else if (ret == KoTemplateChooseDia::File)
+    {
+      QString fileName(_template);
+      loadTemplate(fileName.data());
+      _loaded = true;
+      setURL(fileName);
+    }
+  else if (ret == KoTemplateChooseDia::Empty)
+    {
+      QString fileName(_globalTemplatePath + "Wordprocessing/PlainText.kwt");
       loadTemplate(fileName.data());
     }
   else
