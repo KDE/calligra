@@ -7183,14 +7183,23 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
                    false )
 {
     QFrame *pageAll = 0;
+    QFrame *pageGeneral = 0;
     QFrame *pageSelected = 0;
     for (int i=0; i < 7; ++i) {
         resultLabelAll[i] = 0;
         resultLabelSelected[i] = 0;
+        if ( i < 5 )
+            resultGeneralLabel[i]=0;
     }
     m_doc = _doc;
     m_parent = _parent;
     m_canceled = true;
+
+
+    // add Tab "General"
+    pageGeneral = addPage( i18n( "General" ) );
+    addBoxGeneral( pageGeneral, resultGeneralLabel );
+    calcGeneral( resultGeneralLabel );
 
     // add Tab "All"
     pageAll = addPage( i18n( "All" ) );
@@ -7207,15 +7216,45 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
             return;
         if ( !calcStats( resultLabelAll, false ) )
             return;
-        showPage( 1 );
+        showPage( 2 );
     } else {
         // assign results
         if ( !calcStats( resultLabelAll, false ) )
             return;
         //if ( !calcStats( resultLabelAll, false ) ) return;
-        showPage( 0 );
+        showPage( 1 );
     }
     m_canceled = false;
+}
+
+void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
+{
+    KLocale *locale = KGlobal::locale();
+
+    resultLabel[0]->setText( locale->formatNumber( m_doc->numPages(), 0) );
+    int table =0;
+    int picture = 0;
+    int part = 0;
+    int nbFrameset = 0;
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
+        KWFrameSet *frameSet = framesetIt.current();
+        if ( frameSet && frameSet->isVisible())
+        {
+            if ( frameSet->type() == FT_TABLE)
+                table++;
+            else if ( frameSet->type() == FT_PICTURE)
+                picture++;
+            else if ( frameSet->type() == FT_PART )
+                part++;
+            nbFrameset++;
+        }
+    }
+
+    resultLabel[1]->setText( locale->formatNumber( nbFrameset, 0 ) );
+    resultLabel[2]->setText( locale->formatNumber( picture, 0 ) );
+    resultLabel[3]->setText( locale->formatNumber( table, 0 ) );
+    resultLabel[4]->setText( locale->formatNumber( part, 0 ) );
 }
 
 bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
@@ -7294,6 +7333,48 @@ double KWStatisticsDialog::calcFlesch( ulong sentences, ulong words, ulong sylla
     if( words > 0 && sentences > 0 )
         flesch_score = 206.835 - (1.015 * (words / sentences)) - (84.6 * syllables / words);
     return flesch_score;
+}
+
+void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
+{
+    // Layout Managers
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
+    QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
+    QGridLayout *grid = new QGridLayout( box, 8, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    // margins
+    int fHeight = box->fontMetrics().height();
+    grid->setMargin( fHeight );
+    grid->addColSpacing( 1, fHeight );
+    grid->addRowSpacing( 0, fHeight );
+
+    // insert labels
+    QLabel *label1 = new QLabel( i18n( "Number Of Page:" ), box );
+    grid->addWidget( label1, 1, 0, 1 );
+    resultLabel[0] = new QLabel( "", box );
+    grid->addWidget( resultLabel[0], 1, 2, 2 );
+
+    QLabel *label2 = new QLabel( i18n( "Number Of Frame:" ), box );
+    grid->addWidget( label2, 2, 0, 1 );
+    resultLabel[1] = new QLabel( "", box );
+    grid->addWidget( resultLabel[1], 2, 2, 2 );
+
+    QLabel *label3 = new QLabel( i18n( "Number Of Picture:" ), box );
+    grid->addWidget( label3, 3, 0, 1 );
+    resultLabel[2] = new QLabel( "", box );
+    grid->addWidget( resultLabel[2], 3, 2, 2 );
+
+
+    QLabel *label4 = new QLabel( i18n( "Number Of Table:" ), box );
+    grid->addWidget( label4, 4, 0, 1 );
+    resultLabel[3] = new QLabel( "", box );
+    grid->addWidget( resultLabel[3], 4, 2, 2 );
+
+    QLabel *label5 = new QLabel( i18n( "Number Of Embedded Object:" ), box );
+    grid->addWidget( label5, 5, 0, 1 );
+    resultLabel[4] = new QLabel( "", box );
+    grid->addWidget( resultLabel[4], 5, 2, 2 );
+
+    topLayout->addWidget( box );
 }
 
 void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel )

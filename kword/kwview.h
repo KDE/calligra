@@ -780,9 +780,12 @@ private:
     bool m_canceled;
     QLabel *resultLabelAll[7];
     QLabel *resultLabelSelected[7];
-
+    QLabel *resultGeneralLabel[5];
     void addBox( QFrame *page, QLabel **resultLabel );
+    void addBoxGeneral( QFrame *page, QLabel **resultLabel );
+
     bool calcStats( QLabel **resultLabel, bool selection );
+    void calcGeneral( QLabel **resultLabel );
     bool docHasSelection();
     double calcFlesch(ulong sentences, ulong words, ulong syllables);
 
