@@ -43,7 +43,7 @@
   <Action name="tableFormat"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
-  <Menu name="Comment"><text>Co&amp;mment</text>
+  <Menu name="Comment"><text>Commen&amp;t</text>
     <Action name="addmodifycomment"/>
     <Action name="showcomment"/>
     <Action name="removecomment"/>
