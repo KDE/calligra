@@ -2334,21 +2334,21 @@ a task from the menubar.  Click on that task for more details. </para>
 <variablelist>
 <varlistentry>
 <term>Spectrum selectors</term>
-<listitem><para>The spectrum selectors consists of a square to adjust <link linkend="defhue">Hue</link> and
-<link linkend="defsaturation">Saturation</link>, and a tall narrow box to adjust <link linkend="defvalue">Value</link>.</para>
+<listitem><para>The spectrum selectors consists of a square to adjust <glossterm linkend="defhue">Hue</glossterm> and
+<glossterm linkend="defsaturation">Saturation</glossterm>, and a tall narrow box to adjust <glossterm linkend="defvalue">Value</glossterm>.</para>
 <para>The white cross hairs in the box show the currently selected color on the spectrum.  Drag the cross hairs up to increase
-<link linkend="defsaturation">saturation</link>.  Drag down to decrease <link linkend="defsaturation">saturation</link>.  Move the
-cross hairs left or right to change the <link linkend="defhue">hue</link>.</para>
-<para>To adjust the <link linkend="defvalue">value</link> of the color, use the tall, narrow box to move the black arrow.  Sliding the
-arrow up increases the color's <link linkend="defvalue">value</link>.  Sliding the arrow down decreases the color's
-<link linkend="defvalue">value</link>.</para>
+<glossterm linkend="defsaturation">saturation</glossterm>.  Drag down to decrease <glossterm linkend="defsaturation">saturation</glossterm>.  Move the
+cross hairs left or right to change the <glossterm linkend="defhue">hue</glossterm>.</para>
+<para>To adjust the <glossterm linkend="defvalue">value</glossterm> of the color, use the tall, narrow box to move the black arrow.  Sliding the
+arrow up increases the color's <glossterm linkend="defvalue">value</glossterm>.  Sliding the arrow down decreases the color's
+<glossterm linkend="defvalue">value</glossterm>.</para>
 <para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term>Hue, Saturation and Value</term>
 <listitem><para>Using the three spin boxes labled <guilabel>H</guilabel>,<guilabel>S</guilabel> and <guilabel>V</guilabel>, a user can
-specify the <link linkend="defhue">Hue</link> (Range 0-359), <link linkend="defsaturation">Saturation</link> (Range 0-255) 
-and <link linkend="defvalue">Value</link> (Range 0-255)
+specify the <glossterm linkend="defhue">Hue</glossterm> (Range 0-359), <glossterm linkend="defsaturation">Saturation</glossterm> (Range 0-255) 
+and <glossterm linkend="defvalue">Value</glossterm> (Range 0-255)
 respectively.</para>
 <para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
 </listitem>

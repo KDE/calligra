@@ -1379,7 +1379,7 @@ in certain instances.  For more details, see the section entitled
 <term><guilabel>Autoformat URLs</guilabel></term>
 <listitem>
 <para>When selected, &kword; will scan text for patterns which suggest a certain section
-of text is a <link linkend="defurl">URL</link> and automatically creates a link.</para>
+of text is a <glossterm linkend="defurl">URL</glossterm> and automatically creates a link.</para>
 <para>For more details on links, see the section entitled
 <link linkend="links">Document Links</link>.</para>
 </listitem>

@@ -255,7 +255,7 @@ where the frame goes and how large it is.</para>
 
 <para>If you put a mark in the checkbox labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
 be determined by the location of the placeholder in the text.  For a definition of inline frames, click
-<link linkend="definlineframe">here</link>.</para>
+<glossterm linkend="definlineframe">here</glossterm>.</para>
 
 <para>If you put a mark in the checkbox labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
 be fixed at their current location.  You will not be able to move the frame on the page until this box is unchecked.</para>

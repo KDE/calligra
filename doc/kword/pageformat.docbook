@@ -62,8 +62,8 @@ deserve special mention.</para>
 <varlistentry>
 <term><guilabel>Screen</guilabel></term>
 <listitem><para>This format is used to generate a document where
-each page has an <link linkend="defaspectratio">aspect
-ratio</link> (shape) which matches the aspect ratios of computer
+each page has an <glossterm linkend="defaspectratio">aspect
+ratio</glossterm> (shape) which matches the aspect ratios of computer
 monitors. This might be useful for documents which will never be printed, but will appear only on a computer screen.</para></listitem>
 </varlistentry>
 
@@ -210,8 +210,8 @@ deserve special mention.</para>
 <varlistentry>
 <term><guilabel>Screen</guilabel></term>
 <listitem><para>This format is used to generate a document where
-each page has an <link linkend="defaspectratio">aspect
-ratio</link> (shape) which matches the aspect ratios of computer
+each page has an <glossterm linkend="defaspectratio">aspect
+ratio</glossterm> (shape) which matches the aspect ratios of computer
 monitors. This might be useful for documents which will never be printed, but will appear only on a computer screen.</para></listitem>
 </varlistentry>
 

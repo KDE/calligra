@@ -456,6 +456,11 @@ will assume you are familiar with the basic operation of &kword;.</para>
 </chapter>
 
 <!-- **************************************************************************************************** -->
+<chapter id="migration">
+<title>Migrating to &kword;</title>
+<para></para>
+</chapter>
+<!-- **************************************************************************************************** -->
 <chapter id="quickdirty">
 <title>How do I...</title>
 <para>The next part of &kword; documentation is designed to provide examples on how to solve specific
@@ -581,6 +586,11 @@ onto any website.</para>
 <link linkend="template-delete-group">Removing template group</link>.</para>
 </sect1>
 
+<sect1 id="qd-watermark">
+<title>How do I create a watermark for my document</title>
+<para></para>
+</sect1>
+
 </chapter>
 
 <!-- **************************************************************************************************** -->
@@ -680,6 +690,15 @@ the best way to do this ?</para>
 <answer>
 <para>What you and your friend need to do is agree on a file format that both word processors 
 can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</link> is probably a good choice.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="multiedit">
+<para>How can I edit multiple files at once?</para>
+</question>
+<answer>
+<para></para>
 </answer>
 </qandaentry>
 
@@ -1055,7 +1074,7 @@ or <ulink url="http://www.isilo.com">iSilo</ulink>.</para></note>
 <ulink url="http://www.koffice.org/filters/1.2/kword/palmdoc.phtml">PalmDoc filter table</ulink></para>
 </sect2>
 
-<sect2 id="filters-plaintext"><title>Plain Text (ASCII Text)</title>
+<sect2 id="filters-plaintext"><title>Plain Text (<glossterm linkend="defascii">ASCII</glossterm> Text)</title>
 
 <para>&kword; can save the document in plain text format, and also load plain text 
 document. When saving or loading, there will be a dialog to specify text 
@@ -1491,8 +1510,8 @@ distortion to the picture.</para>
 <para>Binary code is the actual instructions for the computer. So if we
 refer to <emphasis>binaries</emphasis> we mean the executable &kword;
 program.  While computers have no difficulties reading binary files,
-they are not easily understood by people.  Compare to <link
-linkend="defsourcecode">Source Code</link>.</para>
+they are not easily understood by people.  Compare to <glossterm
+linkend="defsourcecode">Source Code</glossterm>.</para>
 </glossdef> 
 </glossentry>
 
@@ -1504,8 +1523,8 @@ file is very good for photographs and complex drawings. The downside of
 using bitmap images, is that when you change the size of the image on
 the page, there is a loss of detail. The file names of such pictures
 often end in <emphasis>jpeg</emphasis>, <emphasis>png</emphasis> or 
-<emphasis>gif</emphasis>. Compare to <link
-linkend="defclipart">Clipart</link>.</para>
+<emphasis>gif</emphasis>. Compare to <glossterm
+linkend="defclipart">Clipart</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1527,8 +1546,8 @@ be made larger or smaller, without any loss in quality. The downside of
 vector formats, is that it can be quite difficult to describe certain
 types of photographs using only lines and curves.  These images result in
 difficult, complicated files and most of the benefits of vector formats
-are lost.  Compare to <link linkend="defbitmap">Bitmap
-images</link>.</para>
+are lost.  Compare to <glossterm linkend="defbitmap">Bitmap
+images</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1648,7 +1667,7 @@ is available in the section entitled <link linkend="filters">Import/Export Filte
 it contains the page numbering and maybe some additional
 information. The contents of the footer are normally the same for most
 pages, and changing the footer on one page will change all other pages
-as well. See <link linkend="defheader">Header</link>.</para>
+as well. See <glossterm linkend="defheader">Header</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1698,7 +1717,7 @@ the break.</para>
 it contains the page numbering and maybe some additional
 information. The contents of the header normally are the same for most
 pages, and changing the header on one page will change all other pages
-as well. See <link linkend="deffooter">Footer</link>.</para>
+as well. See <glossterm linkend="deffooter">Footer</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1770,7 +1789,7 @@ Landscape.</para>
 fileref="landscape.png"
 format="PNG"/></imageobject></inlinemediaobject></para>
 <para> Compare
-with <link linkend="defportrait">Portrait</link>.</para>
+with <glossterm linkend="defportrait">Portrait</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1795,8 +1814,8 @@ Portrait.</para>
 <para>Example: <inlinemediaobject><imageobject><imagedata
 fileref="portrait.png" format="PNG"
 align="center"/></imageobject></inlinemediaobject></para>
-<para>Compare with <link
-linkend="deflandscape">Landscape</link>.</para>
+<para>Compare with <glossterm
+linkend="deflandscape">Landscape</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1837,7 +1856,7 @@ the frame which surrounds the graphic.</para>
 <glossdef>
 <para>Source code is the human readable version of an application (such
 as &kword;).  Computers cannot use source code directly.  Instead,
-source code must be <link linkend="defcompiling">compiled</link> into
+source code must be <glossterm linkend="defcompiling">compiled</glossterm> into
 binary code, before use.</para>
 </glossdef>
 </glossentry>
@@ -1848,17 +1867,17 @@ binary code, before use.</para>
 <para>Tar is a tool used for the archiving of files in so-called
 <emphasis>tar-files</emphasis> which you recognize by their suffix
 <literal role="extension">.tar</literal>.  You'll find &koffice; source
-and binary distributions as <link linkend="deftgz">gzipped
-tar-files</link>. However, you shouldn't use them if there are special
-packages for your system and package manager. See <link
-linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para>
+and binary distributions as <glossterm linkend="deftgz">gzipped
+tar-files</glossterm>. However, you shouldn't use them if there are special
+packages for your system and package manager. See <glossterm
+linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</para>
 </glossdef>
 </glossentry>
 
 <glossentry id="deftargz">
 <glossterm><literal role="extension">tar.gz</literal></glossterm>
 <glossdef>
-<para>See <link linkend="deftgz"><acronym>TGZ</acronym></link>.</para>
+<para>See <glossterm linkend="deftgz"><acronym>TGZ</acronym></glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1866,13 +1885,13 @@ linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para>
 <glossterm><acronym>TGZ</acronym></glossterm>
 <glossdef>
 <para>Files ending in <literal role="extension">.tar.gz</literal> or
-<literal role="extension">.tgz</literal> are <link
-linkend="deftar">tar-files</link> compressed with the
+<literal role="extension">.tgz</literal> are <glossterm
+linkend="deftar">tar-files</glossterm> compressed with the
 <command>gzip</command> program.  This makes the tar files smaller and
 quicker to download.  You'll find &koffice; source and binary
 distributions in this format. However, you shouldn't use them if there
-are special packages for your system and package manager. See <link
-linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para>
+are special packages for your system and package manager. See <glossterm
+linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</para>
 </glossdef>
 </glossentry>
 
@@ -1914,8 +1933,8 @@ fileref="value.png" format="PNG"/></imageobject></inlinemediaobject></para>
 <glossterm>Vector Image</glossterm>
 <glossdef>
 <para>A vector based graphic is described in terms of lines and shapes,
-not in terms of dots.  These files are often referred to as <link
-linkend="defclipart">clip-art</link>. Because of this, clipart usually
+not in terms of dots.  These files are often referred to as <glossterm
+linkend="defclipart">clip-art</glossterm>. Because of this, clipart usually
 scales better than bit-mapped images. </para>
 </glossdef>
 </glossentry>

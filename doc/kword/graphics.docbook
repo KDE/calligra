@@ -64,7 +64,7 @@ created.  For details on the differences, see the <link linkend="graphics">intro
 </varlistentry>
 <varlistentry>
 <term><guilabel>Retain original aspect ratio</guilabel></term>
-<listitem><para>Aspect ratio is defined in the &kword; <link linkend="defaspectratio">glossary</link>..</para>
+<listitem><para><glossterm linkend="defaspectratio">Aspect ratio</glossterm> is defined in the &kword; glossary.</para>
 <para>If a there is a mark in this checkbox, &kword; will not allow any change the aspect ratio of the picture.  This prevents
 inappropriate stretching and compressing of the image.  It will still be possible to change the overall size of the image, but it 
 will not be possible to change the horizontal measurement without also changing the vertical measurement.</para>
