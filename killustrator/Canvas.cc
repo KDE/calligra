@@ -472,6 +472,9 @@ bool Canvas::eventFilter (QObject *o, QEvent *e)
       else if(toolController->getActiveTool ()->id()!=Tool::ToolText
               && ke->key()== Key_Backspace)
           emit backSpaceCalled();
+      else if(toolController->getActiveTool()->id()!=Tool::ToolText
+              && ke->key()== Key_Delete)
+          emit backSpaceCalled();
       else
          keyPressEvent (ke);
       return true;

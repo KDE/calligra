@@ -171,7 +171,7 @@ void KIllustratorView::createMyGUI()
     m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
     m_duplicate=new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
-    m_delete=new KAction( i18n("&Delete"), "editdelete", Key_Delete, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    m_delete=new KAction( i18n("&Delete"), "editdelete", /*Key_Delete*/0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     KStdAction::selectAll( this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
@@ -862,6 +862,11 @@ void KIllustratorView::slotDelete()
 {
    if(tcontroller->getActiveTool ()->id()!=Tool::ToolText)
        cmdHistory.addCommand (new DeleteCmd (m_pDoc->gdoc()), true);
+   else
+   {
+/*       QKeyEvent *new_ev=QKeyEvent ( QEvent::KeyPress, Qt::Key_Delete, int ascii, int state);
+         toolController->delegateEvent (new_ev, document, this);*/
+   }
 }
 
 void KIllustratorView::slotSelectAll()

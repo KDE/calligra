@@ -120,6 +120,8 @@ protected:
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
 
+public slots:
+   void slotDelete();
 protected slots:
    void toolActivated(Tool::ToolID, bool show);
    void setUndoStatus( bool undoPossible, bool redoPossible );
@@ -149,7 +151,6 @@ private slots:
     void slotUndo();
     void slotRedo();
     void slotDuplicate();
-    void slotDelete();
     void slotSelectAll();
     void slotProperties();
     void slotOutline( );
