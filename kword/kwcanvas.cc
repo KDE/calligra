@@ -696,9 +696,6 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
 
 void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 {
-    //mx -= contentsX();
-    //my -= contentsY();
-
     /*if ( doRaster )*/ {
         mx = ( mx / doc->gridX() ) * doc->gridX();
         my = ( my / doc->gridY() ) * doc->gridY();
@@ -706,6 +703,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 
     QPainter p;
     p.begin( viewport() );
+    p.translate( -contentsX(), -contentsY() );
     p.setRasterOp( NotROP );
     p.setPen( black );
     p.setBrush( NoBrush );

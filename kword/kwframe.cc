@@ -897,10 +897,10 @@ QPicture *KWPartFrameSet::getPicture()
     QPainter p( &pic );
     //child->transform( p );
 
-    if ( child && child->document() )
-        child->document()->paintEverything( p, QRect( QPoint( 0, 0 ),
-                                            QSize( frames.at( 0 )->width(), frames.at( 0 )->height() ) ),
-                                        TRUE, 0 );
+    if ( child && child->document() && !frames.isEmpty() )
+        child->document()->paintEverything( p, QRect( 0, 0,
+                                            frames.first()->width(), frames.first()->height() ),
+                                            TRUE, 0 );
 
     return &pic;
 }
