@@ -5,7 +5,7 @@
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2002 - 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -23,250 +23,45 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug() stream */
-#include <qregexp.h>		/* for QRegExp() --> escapeLatin1 */
+#include <kdebug.h>				/* for kdDebug() stream */
 
 #include "variablezone.h"
 #include "para.h"
 #include "document.h"
 
-#define CSTART 0x00C0
-
 /*******************************************/
-/* VariableZone                                */
+/* VariableZone                            */
 /*******************************************/
-VariableZone::VariableZone(Para *para)
+VariableZone::VariableZone(Para* para): VariableFormat(para)
 {
 	setPara(para);
 	setSize(para->getSize());
 	setWeight(para->getWeight());
 	setItalic(para->isItalic());
-	setUnderlined(para->isUnderlined());
+	setUnderlined(para->getUnderlineType());
 	setStrikeout(para->isStrikeout());
 }
 
 /*******************************************/
-/* VariableZone                                */
+/* VariableZone                             */
 /*******************************************/
-VariableZone::VariableZone(QString texte, Para *para): _texte(texte)
+VariableZone::VariableZone(QString text, Para* para): VariableFormat(para)
 {
-	setPara(para);
+	setTexte(text);
+	/*setPara(para);
 	setSize(para->getSize());
 	setWeight(para->getWeight());
 	setItalic(para->isItalic());
-	setUnderlined(para->isUnderlined());
-	setStrikeout(para->isStrikeout());
+	setUnderlined(para->getUnderlineType());
+	setStrikeout(para->isStrikeout());*/
 }
 
 /*******************************************/
-/* ~VariableZone                               */
+/* ~VariableZone                           */
 /*******************************************/
 VariableZone::~VariableZone()
 {
-	kdDebug() << "Destruction of a area" << endl;
-}
-
-/*******************************************/
-/* useFormat                               */
-/*******************************************/
-/* Use the format only if teh user wants   */
-/* that and it's not a title.              */
-/*******************************************/
-bool VariableZone::useFormat() const
-{
-	return !getPara()->isChapter();
-}
-
-/*******************************************/
-/* escapeLatin1                            */
-/*******************************************/
-/* Convert special caracters (unicode) in  */
-/* latex usable caracters.                 */
-/*******************************************/
-QString VariableZone::escapeLatin1(QString text)
-{
-	static const char *escapes[64] =
-	{
-		"\\`{A}", "\\'{A}", "\\^{A}", "\\~{A}",
-		"\\\"{A}", "\\AA", "\\AE", "\\c{C}",
-		"\\`{E}", "\\'{E}", "\\^{E}", "\\\"{E}",
-		"\\`{I}", "\\'{I}", "\\^{I}", "\\\"{I}",
-
-		"\\DH{}", "\\~{N}", "\\`{O}", "\\'{O}",
-		"\\^{O}", "\\~{O}", "\\\"{O}", "\\texttimes{}",
-		"\\O{}", "\\`{U}", "\\'{U}", "\\^{U}",
-		"\\\"{U}", "\\'{Y}", "\\TH{}", "\\ss{}",
-
-		"\\`{a}", "\\'{a}", "\\^{a}", "\\~{a}",
-		"\\\"{a}", "\\aa", "\\ae{}", "\\c{c}",
-		"\\`{e}", "\\'{e}", "\\^{e}", "\\\"{e}",
-		"\\`{\\i}", "\\'{\\i}", "\\^{\\i}", "\\\"{\\i}",
-
-		"\\dh{}", "\\~{n}", "\\`{o}", "\\'{o}",
-		"\\^{o}", "\\~{o}", "\\\"{o}", "\\textdiv{}",
-		"\\o{}", "\\`{u}", "\\'{u}", "\\^{u}",
-		"\\\"{u}", "\\'{y}", "\\th{}", "\\\"{y}"
-	};
-
-	QString escapedText;
-	int unicode;         /* the character to be escaped */
-
-	escapedText = text;  /* copy input text */
-	
-	/***************************************************************************
-	 * Escape the special punctuation and other symbols in the Latin1 supplement
-	****************************************************************************/
-	/* We must begin by this char because else, all special char will
-	 * be backslahed !
-	 */
-	convert(escapedText, 0X005C, "\\textbackslash{}");
-
-	//convert(escapedText, 0X22, "\\textquotestraightdblbase");/* textcomp */
-	convert(escapedText, 0X0023, "\\#{}");
-	convert(escapedText, 0X0024, "\\${}");	/* add a \$ at the end of the paragraphes ! */
-	convert(escapedText, 0X0025, "\\%{}");
-	convert(escapedText, 0X0026, "\\&{}");
-	//convert(escapedText, 0X0027, "\\textquotestraightbase");	/* textcomp */
-//	convert(escapedText, 0X002A, "\\textasteriskcentered");	/* textcomp */
-
-	convert(escapedText, 0X003C, "\\textless{}");
-	convert(escapedText, 0X003E, "\\textgreater{} ");
-
-	convert(escapedText, 0X005E, "\\^{}");
-	convert(escapedText, 0X005F, "\\_{}");		
-	
-	convert(escapedText, 0X007B, "\\{");
-	convert(escapedText, 0X007C, "\\textbar{}");
-	convert(escapedText, 0X007D, "\\}");
-	convert(escapedText, 0X007E, "\\textasciitilde{}");
-	
-	convert(escapedText, 0X00A1, "!`{}");
-	convert(escapedText, 0X00A2, "\\textcent{}");		/* textcomp */
-	convert(escapedText, 0X00A3, "\\pounds{}");
-	convert(escapedText, 0X00A4, "\\textcurrency{}");	/* textcomp */
-	convert(escapedText, 0X00A5, "\\textyen{}");		/* textcomp */
-	convert(escapedText, 0X00A6, "\\textbrokenbar{}");
-	convert(escapedText, 0X00A7, "\\S{}");
-	convert(escapedText, 0X00A8, "\\textasciidieresis{}");	/*? not good */
-	convert(escapedText, 0X00A9, "\\copyright{}");
-	convert(escapedText, 0X00AA, "\\textordfeminine{}");	/* textcomp */
-	convert(escapedText, 0X00AB, "\\guillemotleft{}");	/* textcomp */
-	convert(escapedText, 0X00AC, "\\textlnot{}");		/* textcomp */
-
-	convert(escapedText, 0X00AE, "\\textregistered{}");
-	convert(escapedText, 0X00AF, "\\textmacron{}");		/* textcomp */
-	convert(escapedText, 0X00B0, "\\textdegree{}");		/* textcomp */
-	convert(escapedText, 0X00B1, "\\textpm{}");		/* textcomp */
-	convert(escapedText, 0X00B2, "\\texttwosuperior{}");	/* textcomp */
-	convert(escapedText, 0X00B3, "\\textthreesuperior{}");	/* textcomp */
-	convert(escapedText, 0X00B4, "' ");			/* textcomp */
-	convert(escapedText, 0X00B5, "\\textmu{}");		/* textcomp */
-	convert(escapedText, 0X00B6, "\\P{}");
-	convert(escapedText, 0X00B7, "\\textperiodcentered{}");	/* not good textcomp */
-//	convert(escapedText, 0X00B8, "\\textthreesuperior{}");	/* textcomp */
-	convert(escapedText, 0X00B9, "\\textonesuperior{}");	/* textcomp */
-	convert(escapedText, 0X00BA, "\\textordmasculine{}");	/* textcomp */
-	convert(escapedText, 0X00BB, "\\guillemotright{}");	/* textcomp */
-	convert(escapedText, 0X00BC, "\\textonequarter{}");	/* textcomp */
-	convert(escapedText, 0X00BD, "\\textonehalf{}");	/* textcomp */
-	convert(escapedText, 0X00BE, "\\textthreequarters{}");	/* textcomp */
-	convert(escapedText, 0X00BF, "?`{}");
-	
-	
-	/* begin making escape sequences for the 64 consecutive letters starting at C0
-	 * LaTeX has a different escape code when a char is followed by a space so
-	 * two escape sequences are needed for each character.
-	 */
-
-	for(int index = 0; index < 64; index++)
-	{
-		unicode = CSTART + index;
-		convert(escapedText, unicode, escapes[index]);
-	}
-
-	convert(escapedText, 0X2020, "\\textdied{}");		/* textcomp */
-	convert(escapedText, 0X2021, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2022, "'' ");			/* textcomp */
-	convert(escapedText, 0X2023, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2024, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2025, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2026, "\\&{}");			/* textcomp */
-	convert(escapedText, 0X2027, "\\textperiodcentered{}");	/* textcomp */
-	convert(escapedText, 0X2030, "\\textperthousand{}");	/* textcomp */
-	convert(escapedText, 0X2031, "\\textpertenthousand{}");	/* textcomp */
-	convert(escapedText, 0X2032, "\\textasciiacute{}");	/* textcomp */
-	convert(escapedText, 0X2033, "\\textgravedbl{}");	/* textcomp */
-	convert(escapedText, 0X2034, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2035, "\\textasciigrave{}");	/* textcomp */
-	convert(escapedText, 0X2036, "\\textacutedbl{}");	/* textcomp */
-	convert(escapedText, 0X2037, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2038, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X2039, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X203A, "\\textdaggerdbl{}");	/* textcomp */
-	convert(escapedText, 0X203B, "\\textreferencemark{}");	/* textcomp */
-	convert(escapedText, 0X203D, "\\textinterrobang{}");	/* textcomp */
-
-	convert(escapedText, 0X2045, "\\textlquill{}");		/* textcomp */
-	convert(escapedText, 0X2046, "\\textrquill{}");		/* textcomp */
-
-
-	convert(escapedText, 0X2080, "\\textzerooldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2081, "\\textoneoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2082, "\\texttwooldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2083, "\\textthreeoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2084, "\\textfouroldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2085, "\\textfiveoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2086, "\\textsixoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2087, "\\textsevenoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2088, "\\texteightoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X2089, "\\textnineoldstyle{}");	/* textcomp */
-	convert(escapedText, 0X208C, "\\textdblhyphen{}");	/* textcomp */
-
-	convert(escapedText, 0X20A4, "\\textsterling{}");	/* textcomp */
-	convert(escapedText, 0X20A6, "\\textnaria{}");		/* textcomp */
-	convert(escapedText, 0X20AA, "\\textwon{}");		/* textcomp */
-	convert(escapedText, 0X20AB, "\\textdong{}");		/* textcomp */
-	convert(escapedText, 0X20AC, "\\texteuro{}");		/* textcomp */
-
-	convert(escapedText, 0X2103, "\\textcelsius{}");	/* textcomp */
-	convert(escapedText, 0X2116, "\\textnumero{}");		/* textcomp */
-	convert(escapedText, 0X2117, "\\textcircledP{}");	/* textcomp */
-	convert(escapedText, 0X2120, "\\textservicemark{}");	/* textcomp */
-	convert(escapedText, 0X2122, "\\texttrademark{}");	/* textcomp */
-	convert(escapedText, 0X2126, "\\textohm{}");		/* textcomp */
-	convert(escapedText, 0X2127, "\\textmho{}");		/* textcomp */
-	convert(escapedText, 0X212E, "\\textestimated{}");	/* textcomp */
-
-	convert(escapedText, 0X2190, "\\textleftarrow{}");	/* textcomp */
-	convert(escapedText, 0X2191, "\\textuparrow{}");	/* textcomp */
-	convert(escapedText, 0X2192, "\\textrightarrow{}");	/* textcomp */
-	convert(escapedText, 0X2193, "\\textdownarrow{}");	/* textcomp */
-//	convert(escapedText, 0X2194, "\\texteuro{}");		/* textcomp */
-//	convert(escapedText, 0X2195, "\\texteuro{}");		/* textcomp */
-//	convert(escapedText, 0X2196, "\\texteuro{}");		/* textcomp */
-
-	return escapedText;
-}
-
-/*******************************************/
-/* convert                                 */
-/*******************************************/
-/* Convert all the instance of one         */
-/* character in latex usable caracter.     */
-/*******************************************/
-void VariableZone::convert(QString& texte, int unicode, const char* escape)
-{
-	QString expression;
-	QString texte_temp;
-	QString value;
-
-	expression = QString("\\x") + value.setNum(unicode, 16);
-
-	if(QString(escape) != "")
-	{
-		/*1. translate special characters with a space after. */
-		texte = texte.replace( QRegExp( expression), QString(escape));
-	}
+	kdDebug() << "Destruction of an area" << endl;
 }
 
 /*******************************************/
@@ -282,32 +77,14 @@ void VariableZone::analyse(const QDomNode balise)
 	 * Get infos. to format the text
 	 */
 	//if(balise != 0)
-		analyseVariableFormat(balise);
+		analyseFormat(balise);
 	
 	/* Format the text */
-	_texte = _texte.mid(getPos(), getLength());
+	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kdDebug() << _texte.length() << endl;
-	kdDebug() << _texte.latin1() << endl;
+	kdDebug() << getTexte().length() << endl;
+	kdDebug() << getTexte().latin1() << endl;
 	kdDebug() << "END FORMAT" << endl;
-}
-
-/*******************************************/
-/* analyse                                 */
-/*******************************************/
-/* Analyse a text format, get the text used*/
-/* by this format.                         */
-/*******************************************/
-void VariableZone::analyse()
-{
-	kdDebug() << "ZONE" << endl;
-	
-	/* Format the text */
-	_texte = _texte.mid(getPos(), getLength());
-	
-	kdDebug() << "Chaine de " << _texte.length() << " caractères :" << endl;
-	kdDebug() << _texte.latin1() << endl;
-	kdDebug() << "END ZONE" << endl;
 }
 
 /*******************************************/
@@ -315,7 +92,7 @@ void VariableZone::analyse()
 /*******************************************/
 /* Generate the text formated (if needed). */
 /*******************************************/
-void VariableZone::generate(QTextStream &out, int tab)
+void VariableZone::generate(QTextStream &out)
 {
 
 	if(useFormat())
@@ -333,151 +110,31 @@ void VariableZone::generate(QTextStream &out, int tab)
 			out << "\\,\\endnote{";
 		/* Get the footnote and generate it. */
 		Element* footnote = getRoot()->searchFootnote(getFrameset());
-		footnote->generate(out);
+		if(footnote != NULL)
+		{
+			footnote->generate(out);
+		}
 		Config::instance()->writeIndent(out);
 		out << "}";
+	}
+	else if(getType() == VAR_NOTE)
+	{
+		out << "\\marginpar{\\scriptsize ";
+		if(Config::instance()->mustUseLatin1())
+			display(escapeLatin1(getNote()), out);
+		else if(Config::instance()->mustUseUnicode())
+			display(getNote(), out);
+		out << "}" << endl;
 	}
 	else
 	{
 		if(Config::instance()->mustUseLatin1())
-			display(escapeLatin1(getText()), out, tab);
+			display(escapeLatin1(getText()), out);
 		else if(Config::instance()->mustUseUnicode())
-			display(getText(), out, tab);
+			display(getText(), out);
 	}
 	if(useFormat())
 		generate_format_end(out);
 	
 }
 
-/*******************************************/
-/* display                                 */
-/*******************************************/
-/* Trunc the text in about 80 caracters of */
-/* width except if there are not spaces.   */
-/*******************************************/
-void VariableZone::display(QString texte, QTextStream& out, int tab)
-{
-	QString line;
-	int index = 0, end = 0;
-	end = texte.find(' ', 60, false);
-	if(end != -1)
-		line = texte.mid(index, end - index);
-	else
-		line = texte;
-	while(end < (signed int) texte.length() && end != -1)
-	{
-		/* There are something to display */
-		if(Config::instance()->mustUseUnicode())
-			out << line.utf8() << endl;
-		else if(Config::instance()->mustUseLatin1())
-			out << line << endl;
-		out.fill(tab);
-		index = end;
-		end = texte.find(' ', index + 60, false);
-		line = texte.mid(index, end - index);
-	}
-	if(Config::instance()->mustUseUnicode())
-		out << line.utf8();
-	else if(Config::instance()->mustUseLatin1())
-		out << line;
-}
-
-/*******************************************/
-/* generate_format_begin                   */
-/*******************************************/
-/* Write the begining format markup.       */
-/*******************************************/
-void VariableZone::generate_format_begin(QTextStream & out)
-{
-	kdDebug() << "GENERATE FORMAT BEGIN" << endl;
-
-	/* Bold, Italic or underlined */
-	if(getWeight() > 50)
-		out << "\\textbf{";
-	if(isItalic())
-		out << "\\textit{";
-	if(isUnderlined())
-		out << "\\uline{";
-	if (isStrikeout())
-		out << "\\sout{";
-	/* Size */
-	if(getSize() != 11)
-	{
-		out << "\\fontsize{" << getSize() << "}{1}%" << endl;
-		out << "\\selectfont" << endl;
-	}
-
-	/* Color */
-	if(isColor())
-	{
-		double red, green, blue;
-
-		red   = getColorRed()  / 255;
-		green = getColorGreen()/ 255;
-		blue  = getColorBlue() / 255;
-
-		out << "\\textcolor[rgb]{";
-		out << red << ", " << green << ", " << blue << "}{";
-	}
-
-	/* Alignement */
-	switch(getAlign())
-	{
-		case EA_NONE:
-			break;
-		case EA_SUB: /* pass in math mode !! */
-			out << "$_{";
-			break;
-		case EA_SUPER:
-			out << "\\textsuperscript{";
-			break;
-	}
-}
-
-/*******************************************/
-/* generate_format_end                     */
-/*******************************************/
-/* Write the format end markup.            */
-/*******************************************/
-void VariableZone::generate_format_end(QTextStream & out)
-{
-	kdDebug() << "GENERATE FORMAT END" << endl;
-	/* Alignement */
-	if(getAlign() == EA_SUPER)
-		out << "}";
-	if(getAlign() == EA_SUB)
-		out << "}$";
-
-	/* Color */
-	if(isColor())
-		out << "}";
-
-	/* Size */
-	if(getSize() != 11)
-	{
-		out << "\\fontsize{11}{1}%" << endl;
-		out << "\\selectfont" << endl;
-	}
-
-	/* Bold, Italic or underlined */
-	if(isUnderlined())
-		out << "}";
-	if(isItalic())
-		out << "}";
-	if(getWeight() > 50)
-		out << "}";
-	if(isStrikeout())
-		out << "}";
-}
-
-/*QString convertSpecialChar(int c)
-{
-	QString output;
-
-	switch(c)
-	{
-		case 183: return output = "\\textminus";
-			break;
-		default: return output.setNum(c);
-	}
-}*/

@@ -63,6 +63,7 @@ KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent,
 	int i = 0;
 
 	kapp->restoreOverrideCursor();
+	pathPictures->setMode(KFile::Directory);
 
 	/* Recent files */
 	_config = new KConfig("kwordlatexexportdialog");
@@ -116,6 +117,7 @@ void KWordLatexExportDia::accept()
 	hide();
 	kdDebug() << "KWORD LATEX EXPORT FILTER --> BEGIN" << endl;
 	Config* config = Config::instance();
+	
 	/* Document tab */
 	if(embededButton == typeGroup->selected())
 		config->setEmbeded(true);
@@ -132,9 +134,20 @@ void KWordLatexExportDia::accept()
 	/* Pictures tab */
 	if(pictureCheckBox->isChecked())
 		config->convertPictures();
-	//config->setPicturesDir(pathPictures.text());
+	config->setPicturesDir(pathPictures->url());
 	
 	/* Language tab */
+	config->setEncoding(encodingComboBox->currentText());
+	for(unsigned int index = 0; index < langUsedList->count(); index++)
+	{
+		kdDebug() << "lang. : " << langUsedList->item(index)->text() << endl;
+		config->addLanguage(langUsedList->item(index)->text());
+	}
+	
+	/* The default language is the first language in the list */
+	config->setDefaultLanguage(langUsedList->item(0)->text());
+	kdDebug() << "default lang. : " << langUsedList->currentText() << endl;
+	config->setDefaultLanguage(langUsedList->currentText());
 
 	Xml2LatexParser LATEXParser(_in, _fileOut, config);
 	LATEXParser.analyse();
@@ -155,7 +168,7 @@ void KWordLatexExportDia::addLanguage()
 
 void KWordLatexExportDia::removeLanguage()
 {
-	kdDebug() << "remove a lanugage" << langUsedList->currentText() << endl;
+	kdDebug() << "remove the language" << langUsedList->currentText() << endl;
 	QString text = langUsedList->currentText();
 	langUsedList->removeItem(langUsedList->currentItem());
 	languagesList->insertItem(text);

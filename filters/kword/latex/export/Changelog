@@ -1,20 +1,35 @@
+02 March 2003
+- features
+	o note support;
+	o wave and double underline support;
+	o encoding (latin1, unicode, ascii) + package encod;
+	o language with babel package;
+	o add more option in the dialog box.
+
+- internal
+	o clean code for variablezone (inherit from textzone).
+	
+23 February 2003
+- features
+	o support pictures path.
+	
 22 February 2003
 - bugs
-	o don't close koStore if not open
-	o the kword document is no more added at the end of latex file
-	o text color work again
+	o don't close koStore if not open;
+	o the kword document is no more added at the end of latex file;
+	o text color work again.
 
--features
-	o Define default font size
-	o Change font only in kword mode.
-	o background color
+- features
+	o Define default font size;
+	o Change font only in kword mode;
+	o background color.
 
 3 November 2002
 - features
 	o Convert picture in eps picture.
 	
 - internal
-	o Use the config class.
+	o Use the config class;
 	o Clean up the code.
 	
 12 September 2002

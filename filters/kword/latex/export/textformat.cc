@@ -107,7 +107,7 @@ void TextFormat::setBkColor (const int r, const int g, const int b)
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void TextFormat::analyseTextFormat(const QDomNode balise)
+void TextFormat::analyseFormat(const QDomNode balise)
 {
 	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
@@ -204,7 +204,7 @@ void TextFormat::analyseUnderlined(const QDomNode balise)
 {
 	/* <UNDERLINE value="1"> */
 
-	setUnderlined(getAttr(balise, "value").toInt());
+	setUnderlined(getAttr(balise, "value"));
 	if(isUnderlined())
 		FileHeader::instance()->useUnderline();
 	kdDebug() << "Underlined ? " << isUnderlined() << endl;

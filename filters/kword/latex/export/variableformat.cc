@@ -75,7 +75,7 @@
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void VariableFormat::analyseVariableFormat(const QDomNode balise)
+void VariableFormat::analyseFormat(const QDomNode balise)
 {
 	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
@@ -104,134 +104,12 @@ void VariableFormat::analyseVariableFormat(const QDomNode balise)
 		analyseDate(getChild(balise, "DATE"));
 	if(isChild(balise, "FOOTNOTE"))
 		analyseFootnote(getChild(balise, "FOOTNOTE"));
+	if(isChild(balise, "NOTE"))
+		analyseNote(getChild(balise, "NOTE"));
 	if(isChild(balise, "TYPE"))
 		analyseType(getChild(balise, "TYPE"));
 	kdDebug() << "END OF A FORMAT" << endl;
 }
-
-/*******************************************/
-/* analyseParam                            */
-/*******************************************/
-/* Get the zone where the format is applied*/
-/*******************************************/
-/*void VariableFormat::analyseParam(const QDomNode balise)
-{
-	/ <FORMAT id="1" pos="0" len="17"> /
-
-	//setId(getAttr(balise, "id").toInt());
-	//setPos(getAttr(balise, "pos").toInt());
-	//setLength(getAttr(balise, "len").toInt());
-	Format::analyse(balise);
-}*/
-
-/*******************************************/
-/* analyseFont                             */
-/*******************************************/
-/* Get the text font!                      */
-/*******************************************/
-/*void VariableFormat::analyseFont(const QDomNode balise)
-{
-	/ <FONT name="times"> /
-	setPolice(getAttr(balise, "name"));
-}*/
-
-/*******************************************/
-/* analyseItalic                           */
-/*******************************************/
-/* Verify if it's a italic text.           */
-/*******************************************/
-/*void VariableFormat::analyseItalic(const QDomNode balise)
-{
-	/ <ITALIC value="1"> /
-	setItalic(getAttr(balise, "value").toInt());
-}*/
-
-/*******************************************/
-/* analyseUnderlined                       */
-/*******************************************/
-/* Verify if it's a underlined text.       */
-/*******************************************/
-/*void VariableFormat::analyseUnderlined(const QDomNode balise)
-{
-	/ <UNDERLINE value="1"> /
-
-	setUnderlined(getAttr(balise, "value").toInt());
-	if(isUnderlined())
-		_fileHeader->useUnderline();
-	kdDebug() << "Underlined ? " << isUnderlined() << endl;
-}*/
-
-/*******************************************/
-/* analyseStrikeout                        */
-/*******************************************/
-/* Verify if it's a strikeout text.        */
-/*******************************************/
-/*void VariableFormat::analyseStrikeout(const QDomNode balise)
-{
-	/ <STRIKEOUT value="1" /> /
-	setStrikeout(getAttr(balise, "value").toInt());
-	if(isStrikeout())
-		_fileHeader->useUnderline();
-	kdDebug() << "Strikeout ? " << isUnderlined() << endl;
-}*/
-
-/*******************************************/
-/* analyseWeigth                           */
-/*******************************************/
-/* Get the text weigth.                    */
-/*******************************************/
-/*void VariableFormat::analyseWeight(const QDomNode balise)
-{
-	/ <WEIGHT value="75" /> /
-	setWeight(getAttr(balise, "value").toInt());
-}*/
-
-/*******************************************/
-/* analyseAlign                            */
-/*******************************************/
-/* Get the text align.                     */
-/*******************************************/
-/*void VariableFormat::analyseAlign(const QDomNode balise)
-{
-	/ <VERTALIGN value="0"> /
-
-	setAlign(getAttr(balise, "value").toInt());
-}*/
-
-/*******************************************/
-/* analyseColor                            */
-/*******************************************/
-/* Get the text color.                     */
-/*******************************************/
-/*void VariableFormat::analyseColor(const QDomNode balise)
-{
-	/ <COLOR red="0" green="0" blue="0"> /
-	int  red   = 0, 
-	     blue  = 0,
-	     green = 0;
-
-	red = getAttr(balise, "red").toInt();
-	green = getAttr(balise, "green").toInt();
-	blue = getAttr(balise, "blue").toInt();
-
-	if(!(red == green == blue == 0))
-	{
-		/ black color is default value /
-		setColor(red, green, blue);
-		_fileHeader->useColor();
-	}
-}*/
-
-/*******************************************/
-/* analyseSize                             */
-/*******************************************/
-/* Get the text size.                      */
-/*******************************************/
-/*void VariableFormat::analyseSize(const QDomNode balise)
-{
-	/ <SIZE value="11"> /
-	setSize(getAttr(balise, "value").toInt());
-}*/
 
 /*******************************************/
 /* analyseDate                             */
@@ -265,6 +143,11 @@ void VariableFormat::analyseFootnote(const QDomNode balise)
 	setNotetype(getAttr(balise, "notetype"));
 	setFrameset(getAttr(balise, "frameset"));
 	setValue(getAttr(balise, "value"));
+}
+
+void VariableFormat::analyseNote(const QDomNode balise)
+{
+	setNote(getAttr(balise, "note"));
 }
 
 /*******************************************/

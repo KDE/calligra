@@ -10,7 +10,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>434</width>
+            <width>471</width>
             <height>364</height>
         </rect>
     </property>
@@ -34,6 +34,9 @@
             <property name="name">
                 <cstring>_tab</cstring>
             </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>Widget2</cstring>
@@ -41,120 +44,6 @@
                 <attribute name="title">
                     <string>Document</string>
                 </attribute>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>typeGroup</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>12</x>
-                            <y>86</y>
-                            <width>378</width>
-                            <height>75</height>
-                        </rect>
-                    </property>
-                    <property name="title">
-                        <string>Document Type</string>
-                    </property>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>fullDocButton</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>14</x>
-                                <y>21</y>
-                                <width>349</width>
-                                <height>23</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Independent document</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>The document will be able to be compiled alone.</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>The document will be generated as a full latex document since all the include will be generated before the \begin[document} and \end{document} commands.</string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>embededButton</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>14</x>
-                                <y>45</y>
-                                <width>351</width>
-                                <height>23</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Document to include</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Don't generate neither the latex header nor the document environment.</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>The document will be generated as a latex document which will have to incldue in a main latex document. It's allow you to generate several little files for each chapter of your document.</string>
-                        </property>
-                    </widget>
-                </widget>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>styleGroup</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>13</x>
-                            <y>9</y>
-                            <width>378</width>
-                            <height>73</height>
-                        </rect>
-                    </property>
-                    <property name="title">
-                        <string>Document Style</string>
-                    </property>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>kwordStyleButton</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>11</x>
-                                <y>43</y>
-                                <width>354</width>
-                                <height>23</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>KWord style</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>latexStyleButton</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>11</x>
-                                <y>20</y>
-                                <width>354</width>
-                                <height>23</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Latex style</string>
-                        </property>
-                    </widget>
-                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>TextLabel1_2</cstring>
@@ -286,6 +175,120 @@
                         </rect>
                     </property>
                 </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>styleGroup</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>13</x>
+                            <y>9</y>
+                            <width>378</width>
+                            <height>73</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Document Style :</string>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>kwordStyleButton</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>11</x>
+                                <y>43</y>
+                                <width>354</width>
+                                <height>23</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>KWord style</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>latexStyleButton</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>11</x>
+                                <y>20</y>
+                                <width>354</width>
+                                <height>23</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Latex style</string>
+                        </property>
+                    </widget>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>typeGroup</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>86</y>
+                            <width>378</width>
+                            <height>75</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Document Type :</string>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>fullDocButton</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>14</x>
+                                <y>21</y>
+                                <width>349</width>
+                                <height>23</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Independent document</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>The document will be able to be compiled alone.</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The document will be generated as a full latex document since all the include will be generated before the \begin[document} and \end{document} commands.</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>embededButton</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>14</x>
+                                <y>45</y>
+                                <width>351</width>
+                                <height>23</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Document to include</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Don't generate neither the latex header nor the document environment.</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The document will be generated as a latex document which will have to incldue in a main latex document. It's allow you to generate several little files for each chapter of your document.</string>
+                        </property>
+                    </widget>
+                </widget>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -366,7 +369,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Encoding</string>
+                        <string>Encoding :</string>
                     </property>
                     <widget class="KComboBox">
                         <item>
@@ -471,6 +474,9 @@
                     <property name="name">
                         <cstring>GroupBox4</cstring>
                     </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
                     <property name="geometry">
                         <rect>
                             <x>19</x>
@@ -480,7 +486,7 @@
                         </rect>
                     </property>
                     <property name="title">
-                        <string>Language</string>
+                        <string>Language :</string>
                     </property>
                     <widget class="QPushButton">
                         <property name="name">
@@ -512,6 +518,19 @@
                         </property>
                         <property name="text">
                             <string>Add</string>
+                        </property>
+                    </widget>
+                    <widget class="KListBox">
+                        <property name="name">
+                            <cstring>langUsedList</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>246</x>
+                                <y>30</y>
+                                <width>96</width>
+                                <height>101</height>
+                            </rect>
                         </property>
                     </widget>
                     <widget class="KListBox">
@@ -687,17 +706,120 @@
                             </rect>
                         </property>
                     </widget>
-                    <widget class="KListBox">
+                </widget>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Contents</string>
+                </attribute>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>exportAuthor</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>26</x>
+                            <y>14</y>
+                            <width>376</width>
+                            <height>29</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Export informations about author</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>tableContents</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>26</x>
+                            <y>49</y>
+                            <width>377</width>
+                            <height>39</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Add a table of content</string>
+                    </property>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>note</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>20</x>
+                            <y>91</y>
+                            <width>272</width>
+                            <height>103</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Notes :</string>
+                    </property>
+                    <widget class="QRadioButton">
                         <property name="name">
-                            <cstring>langUsedList</cstring>
+                            <cstring>RadioButton7</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>246</x>
-                                <y>30</y>
-                                <width>96</width>
-                                <height>101</height>
+                                <x>16</x>
+                                <y>19</y>
+                                <width>251</width>
+                                <height>23</height>
                             </rect>
+                        </property>
+                        <property name="text">
+                            <string>Don't export</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>RadioButton6</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>17</x>
+                                <y>64</y>
+                                <width>251</width>
+                                <height>23</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Export notes in comments</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>RadioButton5</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>17</x>
+                                <y>40</y>
+                                <width>248</width>
+                                <height>23</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Export notes in margin notes</string>
                         </property>
                     </widget>
                 </widget>

@@ -115,6 +115,8 @@ int Para::getNbCharPara() const
 					break;
 				case EF_ANCHOR:
 					break;
+				case EF_ERROR:
+					break;
 			}
 		}
 	}
@@ -458,6 +460,8 @@ void Para::generateBeginEnv(QTextStream &out)
 			break;
 		case ENV_JUSTIFY: out << endl;
 			break;
+		case ENV_NONE:
+			break;
 	}
 	
 	Config::instance()->indent();
@@ -562,6 +566,8 @@ void Para::generateEndEnv(QTextStream &out)
 				out << "\\end{center}";
 			break;
 		case ENV_JUSTIFY:
+			break;
+		case ENV_NONE:
 			break;
 	}
 

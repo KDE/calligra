@@ -5,7 +5,7 @@
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2000, 2001, 2002 Robert JACOLIN
+** Copyright (C) 2000 - 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -37,11 +37,14 @@
 TextZone::TextZone(Para *para)
 {
 	setPara(para);
-	setSize(para->getSize());
-	setWeight(para->getWeight());
-	setItalic(para->isItalic());
-	setUnderlined(para->isUnderlined());
-	setStrikeout(para->isStrikeout());
+	if(para != NULL)
+	{
+		setSize(para->getSize());
+		setWeight(para->getWeight());
+		setItalic(para->isItalic());
+		setUnderlined(para->getUnderlineType());
+		setStrikeout(para->isStrikeout());
+	}
 }
 
 /*******************************************/
@@ -50,11 +53,14 @@ TextZone::TextZone(Para *para)
 TextZone::TextZone(QString texte, Para *para): _texte(texte)
 {
 	setPara(para);
-	setSize(para->getSize());
-	setWeight(para->getWeight());
-	setItalic(para->isItalic());
-	setUnderlined(para->isUnderlined());
-	setStrikeout(para->isStrikeout());
+	if(para != NULL)
+	{
+		setSize(para->getSize());
+		setWeight(para->getWeight());
+		setItalic(para->isItalic());
+		setUnderlined(para->getUnderlineType());
+		setStrikeout(para->isStrikeout());
+	}
 }
 
 /*******************************************/
@@ -68,7 +74,7 @@ TextZone::~TextZone()
 /*******************************************/
 /* useFormat                               */
 /*******************************************/
-/* Use the format only if teh user wants   */
+/* Use the format only if the user wants   */
 /* that and it's not a title.              */
 /*******************************************/
 bool TextZone::useFormat() const
@@ -253,10 +259,9 @@ QString TextZone::escapeLatin1(QString text)
 /* Convert all the instance of one         */
 /* character in latex usable caracter.     */
 /*******************************************/
-void TextZone::convert(QString& texte, int unicode, const char* escape)
+void TextZone::convert(QString& text, int unicode, const char* escape)
 {
 	QString expression;
-	QString texte_temp;
 	QString value;
 
 	expression = QString("\\x") + value.setNum(unicode, 16);
@@ -264,7 +269,7 @@ void TextZone::convert(QString& texte, int unicode, const char* escape)
 	if(QString(escape) != "")
 	{
 		/*1. translate special characters with a space after. */
-		texte = texte.replace( QRegExp( expression), QString(escape));
+		text = text.replace( QRegExp( expression), QString(escape));
 	}
 }
 
@@ -281,13 +286,13 @@ void TextZone::analyse(const QDomNode balise)
 	 * Get infos. to format the text
 	 */
 	//if(balise != 0)
-		analyseTextFormat(balise);
+		analyseFormat(balise);
 	
 	/* Format the text */
-	_texte = _texte.mid(getPos(), getLength());
+	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kdDebug() << _texte.length() << endl;
-	kdDebug() << _texte.latin1() << endl;
+	kdDebug() << getTexte().length() << endl;
+	kdDebug() << getTexte().latin1() << endl;
 	kdDebug() << "END FORMAT" << endl;
 }
 
@@ -302,10 +307,10 @@ void TextZone::analyse()
 	kdDebug() << "ZONE" << endl;
 	
 	/* Format the text */
-	_texte = _texte.mid(getPos(), getLength());
+	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kdDebug() << "String of " << _texte.length() << " caracters :" << endl;
-	kdDebug() << _texte.latin1() << endl;
+	kdDebug() << "String of " << getTexte().length() << " caracters :" << endl;
+	kdDebug() << getTexte().latin1() << endl;
 	kdDebug() << "END ZONE" << endl;
 }
 
@@ -321,10 +326,12 @@ void TextZone::generate(QTextStream &out)
 		generate_format_begin(out);
 
 	/* Display the text */
-	if(Config::instance()->mustUseLatin1())
-		display(escapeLatin1(_texte), out);
+	if(Config::instance()->getEncoding() == "latin1")
+		display(_texte, out);
 	else if(Config::instance()->mustUseUnicode())
 		display(_texte, out);
+	else
+		display(escapeLatin1(_texte), out);	
 
 	if(useFormat())
 		generate_format_end(out);
@@ -360,7 +367,9 @@ void TextZone::display(QString texte, QTextStream& out)
 	kdDebug() << line << endl;
 	if(Config::instance()->mustUseUnicode())
 		out << line.utf8();
-	else if(Config::instance()->mustUseLatin1())
+	else if(Config::instance()->getEncoding() == "ascii")
+		out << line.ascii();
+	else
 		out << line;
 }
 
@@ -378,8 +387,12 @@ void TextZone::generate_format_begin(QTextStream & out)
 		out << "\\textbf{";
 	if(isItalic())
 		out << "\\textit{";
-	if(isUnderlined())
+	if(getUnderlineType() == UNDERLINE_SIMPLE)
 		out << "\\uline{";
+	else if(getUnderlineType() == UNDERLINE_DOUBLE)
+		out << "\\uuline{";
+	else if(getUnderlineType() == UNDERLINE_WAVE)
+		out << "\\uwave{";
 	if (isStrikeout())
 		out << "\\sout{";
 	

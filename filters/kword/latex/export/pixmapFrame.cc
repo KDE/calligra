@@ -22,12 +22,12 @@
 #include <qdir.h>
 #include <kdebug.h>		/* for kdDebug() stream */
 /* Needed to convert picture in eps file. Use ImageMagick. */
-#ifdef HAVE_MAGICK
+//#ifdef HAVE_MAGICK
 	#include <stdio.h>
 	#include <time.h>
 	#include <sys/types.h>
 	#include <magick/api.h>
-#endif
+//#endif
 
 #include "document.h"
 #include "pixmapFrame.h"
@@ -133,7 +133,7 @@ void PixmapFrame::analyseParamFrame(const QDomNode balise)
  */
 void PixmapFrame::convert()
 {
-#ifdef HAVE_LIBMAGICK
+//#ifdef HAVE_LIBMAGICK
 	kdDebug() << "CONVERT PICTURE IN EPS" << endl;
 	ExceptionInfo exception;
 
@@ -160,8 +160,15 @@ void PixmapFrame::convert()
 			Write the image as EPS and destroy it.
 		  Copy image file in the same directory than the tex file.
 		*/
-		QString dir = getFilename();
-		dir.truncate(getFilename().findRev('/'));
+		QString dir = "";
+		if(Config::instance()->getPicturesDir() == "" || 
+				Config::instance()->getPicturesDir() == NULL)
+		{
+			dir = getFilename();
+			dir.truncate(getFilename().findRev('/'));
+		}
+		else
+			dir = Config::instance()->getPicturesDir();
 		kdDebug() << "file " << getFilename() << endl;
 		kdDebug() << "path " << dir << endl;
 		(void) strcpy(image->filename, (dir + "/" + getFilenamePS()).latin1());
@@ -172,7 +179,7 @@ void PixmapFrame::convert()
 	DestroyExceptionInfo(&exception);
 	DestroyMagick();
 	kdDebug() << "CONVERTION DONE" << endl;
-#endif
+//#endif
 }
 
 /*******************************************/

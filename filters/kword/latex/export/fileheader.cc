@@ -193,6 +193,9 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 			break;
 		case TC_MORE:
 			out << "";
+			break;
+		case TC_NONE;
+			break;
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
 	out << Config::instance()->getDefaultFontSize() << "pt";
@@ -200,6 +203,7 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 		out << ", draft";
 	out << "]{";
 	out << Config::instance()->getClass() << "}" << endl;
+	out << "\\usepackage[" << Config::instance()->getEncoding() << "]{inputenc}" << endl << endl;
 }
 
 /*******************************************/
@@ -261,6 +265,9 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 			break;
 		case TC_MORE:
 			out << "";
+			break;
+		case TC_NONE;
+			break;
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
 	out << Config::instance()->getDefaultFontSize() << "pt";
@@ -296,9 +303,16 @@ void FileHeader::generatePackage(QTextStream &out)
 		out << "\\usepackage{array}" << endl;
 		out << "\\usepackage{multirow}" << endl;
 	}
+	QStringList langs = Config::instance()->getLanguagesList();
+	if(langs.count() > 0)
+	{
+		out << "\\usepackage[" << langs.join( ", " ) << "]{babel}" << endl;
+	}
 	out << "\\usepackage{textcomp}" << endl;
 	out << endl;
 
+	if(langs.count() > 1)
+			out <<"\\selectLanguage{" << Config::instance()->getDefaultLanguage() << "}" << endl << endl;
 }
 
 FileHeader* FileHeader::instance()

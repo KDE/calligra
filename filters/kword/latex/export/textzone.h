@@ -43,10 +43,7 @@ class TextZone: public TextFormat
 	QString _texte;
 
 	public:
-		/**
-		 * Constructors
-		 *
-		 */
+		/* === Constructors ==== */
 
 		/**
 		 *  Creates a new instance of TextZone.
@@ -69,10 +66,7 @@ class TextZone: public TextFormat
 		 */
 		virtual ~TextZone();
 
-		/**
-		 * Accessors
-		 */
-
+		/* ==== Getters ==== */
 		/**
 		 * @return Specify if the text must be formated.
 		 *
@@ -80,15 +74,12 @@ class TextZone: public TextFormat
 		bool    useFormat() const;
 		QString getTexte()  const { return _texte; }
 
-		/**
-		 * Modifiers
-		 */
-
+		/* ==== Setters ==== */
+		
 		void setTexte(QString texte) { _texte = texte; }
 
-		/**
-		 * Helpfull functions
-		 */
+		/* ==== Helpfull functions ==== */
+
 		/**
 		 * convert a unicode text in latin1 enconding ala latex.
 		 */
@@ -96,17 +87,19 @@ class TextZone: public TextFormat
 		
 		void analyse(const QDomNode);
 		void analyse();
-		void generate(QTextStream&);
+		virtual void generate(QTextStream&);
 
 		void generate_format_begin(QTextStream &);
 		void generate_format_end(QTextStream &);
 
+	protected:
+		void display(QString, QTextStream&);
+
 	private:
 		/**
-		 * convert a special character in a markup latex.
+		 * convert a special character in a latex command.
 		 */
 		void convert(QString&, int, const char*);
-		void display(QString, QTextStream&);
 };
 
 

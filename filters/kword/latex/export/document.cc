@@ -202,6 +202,14 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		out << "\\begin{document}" << endl;
 		Config::instance()->indent();
 	}
+	QString dir = "";
+	if(Config::instance()->getPicturesDir() != "" && 
+			Config::instance()->getPicturesDir() != NULL && 
+			FileHeader::instance()->hasGraphics())
+	{
+		out << endl << "\\graphicspath{{" << Config::instance()->getPicturesDir() << "}}" << endl;
+	}
+
 	if(_corps.getFirst() != 0)
 		_corps.getFirst()->generate(out);
 

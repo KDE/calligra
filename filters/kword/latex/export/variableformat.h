@@ -25,7 +25,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
-#include "textformat.h"
+#include "textzone.h"
 
 enum _EVarType
 {
@@ -53,7 +53,7 @@ typedef enum _EVarType EVarType;
  * This class hold informations formating the textzone. It may be incorporated
  * in few time in textzone.
  */
-class VariableFormat: public TextFormat
+class VariableFormat: public TextZone
 {
 	/*QString      _police;
 	unsigned int _size;*/			/* Size of the police   */
@@ -86,6 +86,9 @@ class VariableFormat: public TextFormat
 	QString _frameset;
 	QString _value;
 
+	/* NOTE */
+	QString _note;
+
 	public:
 		/**
 		 * Constructors
@@ -93,7 +96,7 @@ class VariableFormat: public TextFormat
 		 * Creates a new instance of VariableFormat.
 		 *
 		 */
-		VariableFormat()
+		VariableFormat(Para* para): TextZone(para)
 		{
 			setSize(11);
 			setWeight(0);
@@ -112,15 +115,7 @@ class VariableFormat: public TextFormat
 		 */
 		virtual ~VariableFormat() {}
 
-		/**
-		 * Accessors
-		 */
-		/*unsigned int getSize      () const { return _size;      }
-		unsigned int getWeight    () const { return _weight;    }
-		EAlign       getAlign     () const { return _vertalign; }
-		int          getColorBlue () const;
-		int          getColorGreen() const;
-		int          getColorRed  () const;*/
+		/* ==== Getters ==== */
 		QString      getKey       () const { return _key;     }
 		QString      getText      () const { return _text;    }
 		EVarType     getType      () const { return _varType; }
@@ -133,24 +128,12 @@ class VariableFormat: public TextFormat
 		QString      getNumberingtype() const { return _numberingtype; }
 		QString      getNotetype  () const { return _notetype; }
 		QString      getFrameset  () const { return _frameset; }
-		QString      getValue     () const { return _value; }
+		QString      getValue     () const { return _value;    }
+		QString      getNote      () const { return _note;     }
 		
 		bool         isFix        () const { return (_fix       == true); }
-		/*bool         isItalic     () const { return (_italic    == true); }
-		bool         isUnderlined () const { return (_underline == true); }
-		bool         isStrikeout  () const { return (_strikeout == true); }
-		bool         isColor      () const { return (_textcolor != 0);    }*/
 
-		/**
-		 * Modifiers
-		 */
-		/*void setSize       (const unsigned int t)  { _size      = t; }
-		void setWeight     (const unsigned int w)  { _weight    = w; }
-		void setItalic     (bool i)                { _italic    = i; }
-		void setUnderlined (bool u)                { _underline = u; }
-		void setStrikeout  (bool s)                { _strikeout = s; }
-		void setPolice     (QString p)             { _police    = p; }
-		void setAlign      (const int a)           { _vertalign = (EAlign) a; }*/
+		/* ==== Setters ==== */
 		void setType       (const int t)           { _varType   = (EVarType) t; }
 		void setKey        (QString k)             { _key       = k; }
 		void setText       (QString t)             { _text      = t; }
@@ -163,26 +146,17 @@ class VariableFormat: public TextFormat
 		void setSeconde    (const int s)           { _seconde   = s; }
 		void setColor      (const int, const int, const int);
     void setNumberingtype(const QString nt) { _numberingtype = nt; }
-		void setNotetype  (const QString nt)  { _notetype = nt; }
-		void setFrameset  (const QString fs)  { _frameset = fs; }
-		void setValue     (const QString val) { _value = val; }
+		void setNotetype  (const QString nt)    { _notetype = nt; }
+		void setFrameset  (const QString fs)    { _frameset = fs; }
+		void setValue     (const QString val)   { _value = val;   }
+		void setNote      (const QString note)  { _note  = note;  }
 
-		/**
-		 * Helpfull functions
-		 */
-		void analyseVariableFormat(const QDomNode);
-		/*void analyseParam     (const QDomNode);
-		void analyseFont      (const QDomNode);
-		void analyseItalic    (const QDomNode);
-		void analyseUnderlined(const QDomNode);
-		void analyseStrikeout (const QDomNode);
-		void analyseWeight    (const QDomNode);
-		void analyseAlign     (const QDomNode);
-		void analyseColor     (const QDomNode);
-		void analyseSize      (const QDomNode);*/
+		/* ==== Helpfull functions ==== */
+		void analyseFormat(const QDomNode);
 		void analyseDate      (const QDomNode);
 		void analyseTime      (const QDomNode);
 		void analyseFootnote  (const QDomNode);
+		void analyseNote      (const QDomNode);
 		void analyseType      (const QDomNode);
 };
 

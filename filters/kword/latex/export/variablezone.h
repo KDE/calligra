@@ -5,7 +5,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2002, 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -31,7 +31,7 @@
 #include "variableformat.h"
 
 /***********************************************************************/
-/* Class: VariableZone                                                     */
+/* Class: VariableZone                                                 */
 /***********************************************************************/
 
 /**
@@ -39,78 +39,37 @@
  */
 class VariableZone: public VariableFormat
 {
-	/* TEXT MARKUP */
-	QString _texte;
 
 	public:
-		/**
-		 * Constructors
-		 *
-		 */
+		/* ==== Constructors ==== */
 
 		/**
 		 *  Creates a new instance of VariableZone.
 		 *
 		 * @param Para which is the parent class.
 		 */
-		VariableZone(Para *para = 0);
+		VariableZone(Para* para);
+		
 		/**
-		 *
 		 * Creates a new instance of TextZOne.
 		 *
 		 * @param QStrign the text in this zone.
 		 * @param Para which is the parent class.
 		 */
-		VariableZone(QString, Para *para = 0);
+		VariableZone(QString, Para* para);
 
-		/* 
-		 * Destructor
-		 *
-		 */
+		/* ==== Destructor ==== */
 		virtual ~VariableZone();
 
-		/**
-		 * Accessors
-		 */
+		/* ==== Getters ==== */
 
-		/**
-		 * @return Specify if the text must be formated.
-		 *
-		 */
-		bool    useFormat() const;
-		QString getTexte()  const { return _texte; }
+		/* ==== Setters ==== */
 
-		/**
-		 * Modifiers
-		 */
+		/* ==== Helpfull functions ==== */
 
-		void setTexte(QString texte) { _texte = texte; }
-
-		/**
-		 * Helpfull functions
-		 */
-		/**
-		 * convert a unicode text in latin1 enconding ala latex.
-		 */
-		QString escapeLatin1(QString);
-		
 		void analyse(const QDomNode);
-		void analyse();
-		void generate(QTextStream&, int = 0);
-		void generate(QTextStream& out) { generate(out, 0); };
+		void generate(QTextStream&);
 
-		void generate_format_begin(QTextStream &);
-		void generate_format_end(QTextStream &);
-
-	private:
-		/**
-		 * convert a special character in a markup latex.
-		 */
-		void convert(QString&, int, const char*);
-		void display(QString, QTextStream&, int = 0);
 };
-
-
-//QString convertSpecialChar(int);
 
 #endif /* __KWORD_VARIABLEZONE_H__ */

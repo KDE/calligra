@@ -89,7 +89,7 @@ void Layout::analyseLayout(const QDomNode balise)
 		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			kdDebug() << "FORMAT : " << endl;
-			analyseTextFormat(getChild(balise, index));
+			analyseFormat(getChild(balise, index));
 		}
 	}
 	kdDebug() << "END OF THE BEGINING OF A LAYOUT" << endl;
