@@ -106,7 +106,8 @@ private:
     int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out
     int m_endNoteNumber; // number of endnote _vars_ written out
-    int m_previousLSID; // The list id of the previous list item
+    int m_previousOutlineLSID; // The list id of the previous outline-list item
+    int m_previousEnumLSID; // The list id of the previous enum-list item
 
     // Current paragraph
     QString m_paragraph;
