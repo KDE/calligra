@@ -5,6 +5,78 @@
     <GroupName>Statistical</GroupName>
 
     <Function>
+      <Name>CORREL</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The CORREL function calculates the correlation coefficient of two cell ranges.</Text>
+	<Syntax>CORREL(range1; range2)</Syntax>
+	<Example>CORREL(A1:A3; B1:B3)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COVAR</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The COVAR function calculates the covariance of two cell ranges.</Text>
+	<Syntax>COVAR(range1; range2)</Syntax>
+	<Example>COVAR(A1:A3; B1:B3)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LARGE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position (from the largest)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The LARGE function returns the k-th largest value from the data set.</Text>
+	<Syntax>LARGE(range; k)</Syntax>
+	<Example>A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) returns 3</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SMALL</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position (from the smallest)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SMALL function returns the k-th smallest value from the data set.</Text>
+	<Syntax>SMALL(range; k)</Syntax>
+	<Example>A1: 3, A2: 1, A3: 5 => SMALL(A1:A3; 1) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>STANDARDIZE</Name>
       <Type>Float</Type>
       <Parameter>

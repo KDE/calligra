@@ -24,6 +24,8 @@
 #include <math.h>
 #include <float.h>
 
+#include <qvaluelist.h>
+
 #include <kdebug.h>
 
 #include <koscript_parser.h>
@@ -47,6 +49,8 @@ bool kspreadfunc_bino_inv( KSContext& context );
 bool kspreadfunc_chidist( KSContext& context );
 bool kspreadfunc_combin( KSContext& context );
 bool kspreadfunc_confidence( KSContext& context );
+bool kspreadfunc_correl_pop( KSContext & context );
+bool kspreadfunc_covar( KSContext & context );
 bool kspreadfunc_devsq( KSContext & context );
 bool kspreadfunc_expondist(KSContext& context );
 bool kspreadfunc_fdist( KSContext& context );
@@ -60,6 +64,7 @@ bool kspreadfunc_harmean( KSContext & context );
 bool kspreadfunc_hypgeomdist( KSContext & context );
 bool kspreadfunc_kurtosis_est( KSContext & context );
 bool kspreadfunc_kurtosis_pop( KSContext & context );
+bool kspreadfunc_large(KSContext& context );
 bool kspreadfunc_loginv(KSContext& context );
 bool kspreadfunc_lognormdist(KSContext& context );
 bool kspreadfunc_median( KSContext& context );
@@ -69,6 +74,7 @@ bool kspreadfunc_norminv( KSContext& context );
 bool kspreadfunc_normsinv( KSContext& context );
 bool kspreadfunc_phi(KSContext& context);
 bool kspreadfunc_poisson( KSContext& context );
+bool kspreadfunc_small(KSContext& context );
 bool kspreadfunc_standardize( KSContext & context );
 bool kspreadfunc_stddev( KSContext& context );
 bool kspreadfunc_stddevp( KSContext& context );
@@ -87,6 +93,8 @@ static bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue:
 static bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
                                        double & result, double & avera );
 
+typedef QValueList<double> List;
+
 // registers all statistical functions
 void KSpreadRegisterStatisticalFunctions()
 {
@@ -101,8 +109,11 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "CHIDIST", kspreadfunc_chidist );
   repo->registerFunction( "COMBIN", kspreadfunc_combin );
   repo->registerFunction( "CONFIDENCE", kspreadfunc_confidence );
+  repo->registerFunction( "CORREL", kspreadfunc_correl_pop );
+  repo->registerFunction( "COVAR", kspreadfunc_covar );
   repo->registerFunction( "DEVSQ", kspreadfunc_devsq );
   repo->registerFunction( "EXPONDIST", kspreadfunc_expondist );
+  repo->registerFunction( "FDIST", kspreadfunc_fdist );
   repo->registerFunction( "FISHER", kspreadfunc_fisher );
   repo->registerFunction( "FISHERINV", kspreadfunc_fisherinv );
   repo->registerFunction( "GAMMADIST", kspreadfunc_gammadist );
@@ -111,8 +122,8 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "GEOMEAN", kspreadfunc_geomean );
   repo->registerFunction( "HARMEAN", kspreadfunc_harmean );
   repo->registerFunction( "HYPGEOMDIST", kspreadfunc_hypgeomdist );
-  repo->registerFunction( "FDIST", kspreadfunc_fdist );
   repo->registerFunction( "INVBINO", kspreadfunc_bino_inv );
+  repo->registerFunction( "LARGE", kspreadfunc_large );
   repo->registerFunction( "LOGINV", kspreadfunc_loginv );
   repo->registerFunction( "LOGNORMDIST", kspreadfunc_lognormdist );
   repo->registerFunction( "KURT", kspreadfunc_kurtosis_est );
@@ -126,6 +137,7 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "PERMUT", kspreadfunc_arrang );
   repo->registerFunction( "PHI", kspreadfunc_phi );
   repo->registerFunction( "POISSON", kspreadfunc_poisson );
+  repo->registerFunction( "SMALL", kspreadfunc_small );
   repo->registerFunction( "STANDARDIZE", kspreadfunc_standardize );
   repo->registerFunction( "STDEV", kspreadfunc_stddev );
   repo->registerFunction( "STDEVP", kspreadfunc_stddevp );
@@ -181,12 +193,288 @@ static double gaussinv_helper (double x)
   return z;
 }
 
-bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, int & number)
+
+bool kspreadfunc_covar_helper( KSContext & context, QValueList<KSValue::Ptr> & args1, 
+                               QValueList<KSValue::Ptr> & args2, 
+                               double & result, double avg1, double avg2 )
+{
+  QValueList<KSValue::Ptr>::Iterator it1 = args1.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args1.end();
+  QValueList<KSValue::Ptr>::Iterator it2 = args2.begin();
+
+  for( ; it1 != end; ++it1 )
+  {
+    if ( ( KSUtil::checkType( context, *it1, KSValue::ListType, false ) )
+         && ( KSUtil::checkType( context, *it2, KSValue::ListType, false ) ) )
+    {
+      if ( !kspreadfunc_covar_helper( context, (*it1)->listValue(), (*it2)->listValue(), result, avg1, avg2 ) )
+        return false;
+    }
+    else
+    {
+      if ( !KSUtil::checkType( context, *it1, KSValue::DoubleType, true ) )
+        return false;
+      if ( !KSUtil::checkType( context, *it2, KSValue::DoubleType, true ) )
+        return false;
+      
+      result += ( (*it1)->doubleValue() - avg1 ) * ( (*it2)->doubleValue() - avg2 );
+    }
+    ++it2;
+  }
+
+  return true;
+}
+
+bool kspreadfunc_correl_pop( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "CORREL",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
+    return false;
+
+  double res1 = 0.0;
+  double stdevp1 = 0.0;
+  double res2 = 0.0;
+  double stdevp2 = 0.0;
+  int number = 0;
+  int number2 = 0;
+
+  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number) )
+    return false;
+
+  if ( number <= 0 )
+    return false;
+
+  double avg1 = res1 / (double) number;
+
+  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2) )
+    return false;
+
+  if ( number2 <= 0 || number2 != number )
+    return false;
+
+  double avg2 = res2 / (double) number;
+
+  if ( !kspreadfunc_stddev_helper( context, args[0]->listValue(), stdevp1, avg1 ) )
+    return false;
+  if ( !kspreadfunc_stddev_helper( context, args[1]->listValue(), stdevp2, avg2 ) )
+    return false;
+
+  stdevp1 = sqrt( stdevp1 / number );
+  stdevp2 = sqrt( stdevp2 / number );
+
+  if ( stdevp1 == 0 || stdevp2 == 0 )
+    return false;
+
+  double covar = 0.0;
+
+  if ( !kspreadfunc_covar_helper( context, args[0]->listValue(), args[1]->listValue(),
+                                  covar, avg1, avg2 ) )
+    return false;
+
+  covar = covar / number;
+
+  context.setValue( new KSValue( covar / ( stdevp1 * stdevp2 ) ) );
+  return true;
+}
+
+bool kspreadfunc_covar( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "COVAR",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
+    return false;
+
+  double res1 = 0.0;
+  double res2 = 0.0;
+  int number = 0;
+  int number2 = 0;
+
+  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number) )
+    return false;
+
+  if ( number <= 0 )
+    return false;
+
+  double avg1 = res1 / (double) number;
+
+  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2) )
+    return false;
+
+  if ( number2 <= 0 || number2 != number )
+    return false;
+
+  double avg2 = res2 / (double) number;
+  
+  double covar = 0.0;
+
+  if ( !kspreadfunc_covar_helper( context, args[0]->listValue(), args[1]->listValue(),
+                                  covar, avg1, avg2 ) )
+    return false;
+
+  covar = covar / number;
+
+  context.setValue( new KSValue( covar ) );
+  return true;
+}
+
+bool kspreadfunc_array_helper( KSContext & context, QValueList<KSValue::Ptr> & args, List & array, int & number )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
 
-  for( ; it != end; ++it )
+  for ( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
+    {
+      if ( !kspreadfunc_array_helper( context, (*it)->listValue(), array, number ) )
+        return false;
+    }
+    else
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    {
+      array << (*it)->doubleValue();
+      ++number;
+    }
+  }
+  
+  return true;
+}
+
+bool kspreadfunc_large( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "LARGE", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  int k = args[1]->intValue();
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+  {
+    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true )  && k == 1 )
+    {
+      context.setValue( new KSValue( args[0]->doubleValue() ) );
+      return true;
+    }
+    return false;
+  }
+
+  if ( k < 1 )
+    return false;
+
+  QValueList<KSValue::Ptr>::Iterator it  = args[0]->listValue().begin();
+  QValueList<KSValue::Ptr>::Iterator end = args[0]->listValue().end();
+
+  List array;
+  int number = 1;
+
+  for ( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
+    {
+      if ( !kspreadfunc_array_helper( context, (*it)->listValue(), array, number ) )
+        return false;
+    }
+    else
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    {
+      array << (*it)->doubleValue();
+      ++number;
+    }
+  }
+
+  if ( k > number )
+    return false;
+  
+  qHeapSort( array );
+
+  double d = *array.at( number - k - 1 );
+
+  context.setValue( new KSValue( d ) );
+  return true;
+}
+
+bool kspreadfunc_small( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "SMALL", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  int k = args[1]->intValue();
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+  {
+    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true )  && k == 1 )
+    {
+      context.setValue( new KSValue( args[0]->doubleValue() ) );
+      return true;
+    }
+    return false;
+  }
+
+  if ( k < 1 )
+    return false;
+
+  QValueList<KSValue::Ptr>::Iterator it  = args[0]->listValue().begin();
+  QValueList<KSValue::Ptr>::Iterator end = args[0]->listValue().end();
+
+  typedef QValueList<double> List;
+
+  List array;
+
+  int number = 1;
+
+  for ( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
+    {
+      if ( !kspreadfunc_array_helper( context, (*it)->listValue(), array, number ) )
+        return false;
+    }
+    else
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    {
+      array << (*it)->doubleValue();
+      ++number;
+    }
+  }
+
+  if ( k > number )
+    return false;
+  
+  qHeapSort( array );
+
+  context.setValue( new KSValue( (double) (*array.at( k - 1 )) ) );
+  return true;
+}
+
+bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                                 double & result, int & number)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for ( ; it != end; ++it )
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
@@ -411,11 +699,9 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
 
   kdDebug() << "Average: " << avg << endl;
 
-  res = 0.0;
   if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
     return false;
 
-  res = sqrt( res / ( (double) (number - 1) ) );
   kdDebug() << "Stdev: " << res << endl;
 
   if ( res == 0.0 )
@@ -450,12 +736,9 @@ bool kspreadfunc_kurtosis_pop( KSContext & context )
   double avg = res / (double) number;
 
   kdDebug() << "Average: " << avg << endl;
-  res = 0.0;
 
   if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
     return false;
-
-  res = sqrt( res / number );
 
   kdDebug() << "Stdev: " << res << endl;
 
