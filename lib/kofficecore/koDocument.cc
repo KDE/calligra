@@ -910,7 +910,7 @@ const KoMainWindow *KoDocument::nextShell()
     return d->m_shells.next();
 }
 
-KoDocumentIface * KoDocument::dcopObject()
+DCOPObject * KoDocument::dcopObject()
 {
   if ( !d->m_dcopObject )
     d->m_dcopObject = new KoDocumentIface( this );

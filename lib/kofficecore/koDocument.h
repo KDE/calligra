@@ -39,7 +39,7 @@ class KoDocumentChildPicture;
 class KoView;
 class KoDocumentPrivate;
 class KoDocumentInfo;
-class KoDocumentIface;
+class DCOPObject;
 
 using std::istream;
 using std::ostream;
@@ -412,7 +412,7 @@ public:
    * KOffice Application are strongly recommended to reimplement this method,
    * so that their dcop interface provides more functionality than the basic KoDocumentIface
    */
-  virtual KoDocumentIface * dcopObject();
+  virtual DCOPObject * dcopObject();
 
 signals:
   /**
