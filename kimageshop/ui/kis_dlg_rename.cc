@@ -63,3 +63,5 @@ QString KisDlgRename::name()
 {
     return m_pEdit->text();
 }
+
+#include "kis_dlg_rename.moc"

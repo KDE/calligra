@@ -406,5 +406,5 @@ void KisPainter::drawEllipse(int x, int y, int w, int h)
          kdDebug() << "error drawing ellipse" << endl;          
 }
 
-//#include "kis_painter.moc"
+#include "kis_painter.moc"
 

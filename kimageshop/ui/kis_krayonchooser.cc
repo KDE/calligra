@@ -146,4 +146,5 @@ void KisKrayonChooser::slotSetKrayonSpacing( int /* spacing */ )
     // if ( pattern ) pattern->setSpacing( spacing );
 }
 
-// #include "kis_krayonchooser.moc"
+#include "kis_krayonchooser.moc"
+
