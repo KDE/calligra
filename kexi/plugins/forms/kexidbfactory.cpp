@@ -56,7 +56,7 @@ KexiSubForm::setFormName(const QString &name)
 		return;
 
     QWidget *pw = parentWidget();
-    QWidget *parentformview = 0;
+    KexiFormView *view = 0;
     QStringList list;
     while(pw) {
         if(pw->isA("KexiSubForm")) {
@@ -64,11 +64,10 @@ KexiSubForm::setFormName(const QString &name)
                 return; // Be sure to don't run into a endless-loop cause of recursive subforms.
             list.append(pw->name());
         }
-        else if(! parentformview && pw->isA("KexiFormView"))
-            parentformview = pw; // we need a KexiFormView*
+        else if(! view && pw->isA("KexiFormView"))
+            view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
         pw = pw->parentWidget();
     }
-    KexiFormView *view = static_cast<KexiFormView*>(parentformview);
 
 	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin()
 		|| !view->parentDialog()->mainWin()->project()->dbConnection())
