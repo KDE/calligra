@@ -32,7 +32,11 @@
 #include <qbuffer.h>
 #include <qdom.h>
 #include <qdir.h>
+#include <qpushbutton.h>
 
+#include <kabc/addressee.h>
+#include <kabc/stdaddressbook.h>
+#include <kdeversion.h>
 #include <klocale.h>
 #include <ktar.h>
 #include <koStore.h>
@@ -56,7 +60,7 @@ public:
   KoDocumentInfo *m_info;
 
   QLineEdit *m_leFullName;
-    QLineEdit *m_leInitial;
+  QLineEdit *m_leInitial;
   QLineEdit *m_leAuthorTitle;
   QLineEdit *m_leCompany;
   QLineEdit *m_leEmail;
@@ -66,6 +70,7 @@ public:
   QLineEdit *m_lePostalCode;
   QLineEdit *m_leCity;
   QLineEdit *m_leStreet;
+  QPushButton *m_pbLoadKABC;
 
   QLineEdit *m_leDocTitle;
   QMultiLineEdit *m_meAbstract;
@@ -135,14 +140,50 @@ KDialogBase *KoDocumentInfoDlg::dialog() const
   return d->m_dialog;
 }
 
+void KoDocumentInfoDlg::loadFromKABC()
+{
+#if KDE_IS_VERSION( 3, 1, 90 )
+  KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
+                             ( KABC::StdAddressBook::self() );
+
+  if ( !ab )
+    return;
+
+  KABC::Addressee addr = ab->whoAmI();
+  if ( addr.isEmpty() )
+    return;
+
+  d->m_leFullName->setText( addr.formattedName() );
+  d->m_leInitial->setText( addr.givenName()[ 0 ] + ". " +
+                           addr.familyName()[ 0 ] + "." );
+  d->m_leAuthorTitle->setText( addr.title() );
+  d->m_leCompany->setText( addr.organization() );
+  d->m_leEmail->setText( addr.preferredEmail() );
+
+  KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home );
+  d->m_leTelephone->setText( phone.number() );
+  phone = addr.phoneNumber( KABC::PhoneNumber::Fax );
+  d->m_leFax->setText( phone.number() );
+
+  KABC::Address a = addr.address( KABC::Address::Home ); 
+  d->m_leCountry->setText( a.country() );
+  d->m_lePostalCode->setText( a.postalCode() );
+  d->m_leCity->setText( a.locality() );
+  d->m_leStreet->setText( a.street() );
+
+  emit changed();
+#endif
+}
+
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
-  QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "Author" ) );
-  grid->setMargin(KDialog::marginHint());
-  grid->setSpacing(KDialog::spacingHint());
+  QFrame *page = d->m_dialog->addPage( i18n( "Author" ) );
+  QGridLayout *layout = new QGridLayout( page, 11, 2, KDialog::marginHint(),
+                                         KDialog::spacingHint() );
 
-  (void) new QLabel( i18n( "Name:" ), grid );
-  d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
+  layout->addWidget( new QLabel( i18n( "Name:" ), page ), 0, 0 );
+  d->m_leFullName = new QLineEdit( authorInfo->fullName(), page );
+  layout->addWidget( d->m_leFullName, 0, 1 );
 
   if ( authorInfo->fullName().isNull() ) // only if null. Empty means the user made it explicitly empty.
   {
@@ -151,14 +192,17 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leFullName->setText( name );
   }
 
-  (void) new QLabel( i18n( "Initials:" ), grid );
-  d->m_leInitial = new QLineEdit( authorInfo->initial(), grid );
+  layout->addWidget( new QLabel( i18n( "Initials:" ), page ), 1, 0 );
+  d->m_leInitial = new QLineEdit( authorInfo->initial(), page );
+  layout->addWidget( d->m_leInitial, 1, 1 );
 
-  (void) new QLabel( i18n( "Title:" ), grid );
-  d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), grid );
+  layout->addWidget( new QLabel( i18n( "Title:" ), page ), 2, 0 );
+  d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), page );
+  layout->addWidget( d->m_leAuthorTitle, 2, 1 );
 
-  (void) new QLabel( i18n( "Company:" ), grid );
-  d->m_leCompany = new QLineEdit( authorInfo->company(), grid );
+  layout->addWidget( new QLabel( i18n( "Company:" ), page ), 3, 0 );
+  d->m_leCompany = new QLineEdit( authorInfo->company(), page );
+  layout->addWidget( d->m_leCompany, 3, 1 );
 
   if ( authorInfo->company().isNull() )
   {
@@ -167,8 +211,9 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leCompany->setText( name );
   }
 
-  (void) new QLabel( i18n( "Email:" ), grid );
-  d->m_leEmail = new QLineEdit( authorInfo->email(), grid );
+  layout->addWidget( new QLabel( i18n( "Email:" ), page ), 4, 0 );
+  d->m_leEmail = new QLineEdit( authorInfo->email(), page );
+  layout->addWidget( d->m_leEmail, 4, 1 );
 
   if ( authorInfo->email().isNull() )
   {
@@ -177,23 +222,32 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leEmail->setText( email );
   }
 
-  (void) new QLabel( i18n( "Telephone:" ), grid );
-  d->m_leTelephone = new QLineEdit( authorInfo->telephone(), grid );
+  layout->addWidget( new QLabel( i18n( "Telephone:" ), page ), 5, 0 );
+  d->m_leTelephone = new QLineEdit( authorInfo->telephone(), page );
+  layout->addWidget( d->m_leTelephone, 5, 1 );
 
-  (void) new QLabel( i18n( "Fax:" ), grid );
-  d->m_leFax = new QLineEdit( authorInfo->fax(), grid );
+  layout->addWidget( new QLabel( i18n( "Fax:" ), page ), 6, 0 );
+  d->m_leFax = new QLineEdit( authorInfo->fax(), page );
+  layout->addWidget( d->m_leFax, 6, 1 );
 
-  (void) new QLabel( i18n( "Street:" ), grid );
-  d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
+  layout->addWidget( new QLabel( i18n( "Street:" ), page ), 7, 0 );
+  d->m_leStreet = new QLineEdit( authorInfo->street(), page );
+  layout->addWidget( d->m_leStreet, 7, 1 );
 
-  (void) new QLabel( i18n( "Postal code:" ), grid );
-  d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), grid );
+  layout->addWidget( new QLabel( i18n( "Postal code:" ), page ), 8, 0 );
+  d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), page );
+  layout->addWidget( d->m_lePostalCode, 8, 1 );
 
-  (void) new QLabel( i18n( "City:" ), grid );
-  d->m_leCity = new QLineEdit( authorInfo->city(), grid );
+  layout->addWidget( new QLabel( i18n( "City:" ), page ), 9, 0 );
+  d->m_leCity = new QLineEdit( authorInfo->city(), page );
+  layout->addWidget( d->m_leCity, 9, 1 );
 
-  (void) new QLabel( i18n( "Country:" ), grid );
-  d->m_leCountry = new QLineEdit( authorInfo->country(), grid );
+  layout->addWidget( new QLabel( i18n( "Country:" ), page ), 10, 0 );
+  d->m_leCountry = new QLineEdit( authorInfo->country(), page );
+  layout->addWidget( d->m_leCountry, 10, 1 );
+
+  d->m_pbLoadKABC = new QPushButton( i18n( "Load from Address Book" ), page );
+  layout->addMultiCellWidget( d->m_pbLoadKABC, 11, 11, 0, 1 );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
@@ -218,6 +272,8 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
            this, SIGNAL( changed() ) );
   connect( d->m_leStreet, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
+  connect( d->m_pbLoadKABC, SIGNAL( clicked() ),
+           this, SLOT( loadFromKABC() ) );
 }
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )

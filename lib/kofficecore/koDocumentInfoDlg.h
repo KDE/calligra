@@ -46,6 +46,9 @@ public:
 signals:
   void changed();
 
+private slots:
+  void loadFromKABC();
+
 private:
   void addAuthorPage( KoDocumentInfoAuthor *authorInfo );
   void addAboutPage( KoDocumentInfoAbout *aboutInfo );

@@ -23,10 +23,6 @@
 #include <qobjectlist.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kdeversion.h>
-
-#include <kabc/address.h>
-#include <kabc/stdaddressbook.h>
 
 /*****************************************
  *
@@ -205,18 +201,8 @@ KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
 
 void KoDocumentInfoAuthor::initParameters()
 {
-#if KDE_IS_VERSION( 3, 1, 90 )
-    KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
-                                           ( KABC::StdAddressBook::self() );
-
-    if ( !ab )
-      return;
-
-    KABC::Addressee addr = ab->whoAmI();
-    if ( addr.isEmpty() ) { // fallback
-#endif
-      KConfig config( "kofficerc" );
-      if ( config.hasGroup( "Author" ) ) {
+    KConfig config( "kofficerc" );
+    if ( config.hasGroup( "Author" ) ) {
         config.setGroup( "Author" );
         m_telephone=config.readEntry( "telephone" );
         m_fax=config.readEntry( "fax" );
@@ -224,27 +210,7 @@ void KoDocumentInfoAuthor::initParameters()
         m_postalCode=config.readEntry( "postal-code" );
         m_city=config.readEntry( "city" );
         m_street=config.readEntry( "street" );
-      }
-#if KDE_IS_VERSION( 3, 1, 90 )
-    } else {
-      m_fullName = addr.formattedName();
-      m_initial = addr.givenName()[0] + ". " + addr.familyName()[0] + ".";
-      m_title = addr.title();
-      m_company = addr.organization();
-      m_email = addr.preferredEmail();
-
-      KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home );
-      m_telephone = phone.number();
-      phone = addr.phoneNumber( KABC::PhoneNumber::Fax );
-      m_fax = phone.number();
-
-      KABC::Address a = addr.address( KABC::Address::Home ); 
-      m_country = a.country();
-      m_postalCode = a.postalCode();
-      m_city = a.locality();
-      m_street = a.street();
     }
-#endif
 }
 
 bool KoDocumentInfoAuthor::load( const QDomElement& e )
