@@ -680,9 +680,6 @@ public:
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
 
-    /// Apply the new zoom/resolution - values are to be taken from kWordDocument()
-    virtual void zoom( bool forPrint );
-
     //virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
 
     /** Called once the frameset has been completely loaded or constructed.

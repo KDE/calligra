@@ -75,6 +75,26 @@ protected:
     KoParagLayout* m_oldParagLayout;
 };
 
+/**
+ * Command created when pasting oasis-formatted text
+ */
+class KWOasisPasteCommand : public KoTextDocCommand
+{
+public:
+    KWOasisPasteCommand( KoTextDocument *d, int parag, int idx,
+                             const QCString & data );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
+protected:
+    int m_parag;
+    int m_idx;
+    QCString m_data;
+    // filled in by execute(), for unexecute()
+    int m_lastParag;
+    int m_lastIndex;
+    KoParagLayout* m_oldParagLayout;
+};
+
 struct ParagBookmark {
     QString m_bookName;
     int m_startParagIndex;

@@ -78,9 +78,6 @@ public:
     virtual void saveOasis(KoXmlWriter&, KoSavingContext&) const;
     void paste( QDomNode& formulaElem );
 
-    /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
-    virtual void zoom( bool forPrint );
-
     KFormula::Container* getFormula() const { return formula; }
 
     void setChanged() { m_changed = true; }

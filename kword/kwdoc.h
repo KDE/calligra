@@ -320,6 +320,9 @@ public:
 
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();
+    void completeOasisPasting();
+
+    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles );
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
     KWFrameStyleCollection * frameStyleCollection()const  { return m_frameStyleColl;}

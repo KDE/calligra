@@ -1186,41 +1186,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
-
-#if 0 // this is wrong - the contents of body is loaded above already
-        QDomNode frameElement( body );
-        QDomElement fr;
-        for ( frameElement = frameElement.firstChild(); !frameElement.isNull(); frameElement = frameElement.nextSibling() )
-        {
-            fr = frameElement.toElement();
-            if ( fr.tagName()== "draw:frame"  )
-            {
-                QDomNode tmp = fr.namedItem( "draw:text-box" );
-                if ( !tmp.isNull() )
-                {
-                    kdDebug()<<" text object  :"<<endl;
-                    KWTextFrameSet *fs = new KWTextFrameSet( this, fr.attribute( "draw:name" ) );
-                    m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-
-                    kdDebug()<<"fr.attribute( svg:x )"<<fr.attribute( "svg:x" )<<" fr.attribute( svg:y ) "<<fr.attribute( "svg:y" )<<" fr.attribute( svg:width ) :"<<fr.attribute( "svg:width" )<<" fr.attribute( svg:height ) :"<< fr.attribute( "svg:height" )<<endl;
-//kdDebug()<<" fr.attribute( svg:x ) :"<<fr.attribute( "svg:x" )<<" fr.attribute( svg:y ) :"<<fr.attribute( "svg:y" )<<" fr.attribute( svg:width ) :"<<" fr.attribute( "svg:width" )<<endl;
-                    frame = new KWFrame( fs, KoUnit::parseValue(fr.attribute( "svg:x" ) ), KoUnit::parseValue(fr.attribute( "svg:y" ) ), KoUnit::parseValue(fr.attribute( "svg:width" ) ), KoUnit::parseValue(fr.attribute( "svg:height" ) ) );
-                    frame->loadCommonOasisProperties( context, fs );
-                    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-                    frame->setNewFrameBehavior( KWFrame::Copy );
-                    fs->addFrame( frame );
-                    kdDebug()<<" tmp.firstChild().isNull() :"<<tmp.firstChild().isNull()<<endl;
-                    fs->loadOasisContent( tmp.firstChild().toElement(), context );
-
-                }
-                tmp = fr.namedItem( "draw:image" );
-                if ( !tmp.isNull() )
-                {
-                    kdDebug()<<" image object  :"<<endl;
-                }
-            }
-        }
-#endif
     }
 
     // Header/Footer
@@ -2551,6 +2516,14 @@ void KWDocument::completePasting()
     m_pasteFramesetsMap = 0L;
 }
 
+void KWDocument::completeOasisPasting()
+{
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->finalize();
+    repaintAllViews();
+}
+
 void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset )
 {
     if ( !m_pasteFramesetsMap ) // may have been created by pasteFrames
@@ -2642,26 +2615,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.endElement(); // office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    contentWriter.startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-    }
-
-    contentWriter.endElement(); // office:automatic-styles
-
+    writeAutomaticStyles( contentWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
@@ -2714,6 +2668,29 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
     return true;
+}
+
+void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
+{
+    contentWriter.startElement( "office:automatic-styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+
+    contentWriter.endElement(); // office:automatic-styles
 }
 
 void KWDocument::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ )

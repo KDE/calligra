@@ -113,13 +113,13 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         updateFrames();
         const int newPageNumberStart = getCell(0,0)->frame(0)->pageNum();
         const int newPageNumberEnd = getCell( getRows(), 0 )->frame( 0 )->pageNum();
-        
+
         // First modified page
         const int startPageNumber = kMin( oldPageNumberStart, newPageNumberStart );
         // Last modified page
         const int endPageNumber = kMax( oldPageNumberEnd, newPageNumberEnd );
 
-        // ### TODO: can the end page change while processing? Probably, yes, so this code is not right        
+        // ### TODO: can the end page change while processing? Probably, yes, so this code is not right
         for ( int i = startPageNumber; i <= endPageNumber; ++i ) {
             m_doc->updateFramesOnTopOrBelow( i );
         }
@@ -366,7 +366,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 void KWTableFrameSet::recalcRows(int _col, int _row) {
     kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
-    
+
 #ifdef SUPPORT_MULTI_PAGE_TABLES
     kdDebug(32004) << "Has temporary headers: " << m_hasTmpHeaders << endl;
 #endif
@@ -622,7 +622,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 #endif
 
             double topOfPage = m_doc->ptPaperHeight() * pageNumber + m_doc->ptTopBorder();
-            
+
             QValueList<double>::iterator tmp = m_rowPositions.at(breakRow);
             diff += topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
 //kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
@@ -677,7 +677,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             (*j) = (*j) + diff;
 #endif
         lineNumber++;
-        
+
 #if 0 // def SUPPORT_MULTI_PAGE_TABLES
         // Note: produces much ouput!
         int i = 1; // DEBUG
@@ -685,8 +685,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         {
             kdDebug(32004) << "m_rowPosition[" << i << "]= " << (*itDebug) << endl;
         }
-#endif    
-    
+#endif
+
     }
 #if 0
 { QValueList<unsigned int>::iterator pb = m_pageBoundaries.begin();
@@ -2124,12 +2124,6 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
     //kdDebug(32004) << "drawContents()" << endl;
 }
 
-void KWTableFrameSet::zoom( bool forPrint )
-{
-    for (TableIter cell(this) ; cell ; ++cell)
-        cell->zoom( forPrint );
-}
-
 #if 0
 void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags )
 {
@@ -2449,6 +2443,7 @@ void KWTableFrameSet::setZOrder()
 
 void KWTableFrameSet::convertTableToText()
 {
+    // TODO port to OASIS
     QDomDocument domDoc( "PARAGRAPHS" );
     QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
     domDoc.appendChild( elem );

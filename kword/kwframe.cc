@@ -1846,15 +1846,10 @@ bool KWFrameSet::isMoveable() const
     return !isMainFrameset() && !isFloating();
 }
 
-void KWFrameSet::zoom( bool )
-{
-}
-
 void KWFrameSet::finalize()
 {
     //kdDebug(32001) << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
     updateFrames();
-    zoom( false );
 }
 
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,

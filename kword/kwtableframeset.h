@@ -501,7 +501,6 @@ public:
     virtual QDomElement toXML( QDomElement &parentElem, bool saveFrames = true );
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool useNames = true );
 
-    virtual void zoom( bool forPrint );
     //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     /** Contribute to the document statistics */

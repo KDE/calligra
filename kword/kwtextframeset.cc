@@ -58,6 +58,9 @@
 #include <assert.h>
 #include "kwloadinginfo.h"
 #include <koxmlwriter.h>
+#include <ktempfile.h>
+#include <qbuffer.h>
+#include <qfile.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
@@ -680,8 +683,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     int lineY;
     // Cursor height, in pixels
     int cursorHeight = m_doc->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
-    QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
-                   topLeft.y() - cursor->totalOffsetY() + lineY );
+    QPoint iPoint( topLeft.x() + cursor->x(),
+                   topLeft.y() + lineY );
 
 #ifdef DEBUG_CURSOR
     kdDebug() << "KWTextFrameSet::drawCursor topLeft=" << topLeft.x() << "," << topLeft.y()
@@ -1758,7 +1761,6 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return QDomElement();
-    unzoom();
 
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
@@ -1785,7 +1787,6 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
         start = static_cast<KWTextParag *>( start->next() );
     }
 
-    zoom( false );
     return framesetElem;
 }
 
@@ -1947,15 +1948,6 @@ void KWTextFrameSet::finalize()
     // which come from an import filter, which didn't give them the right size.
     // However it shouldn't start _now_ (so we use 0), because e.g. main frames
     // don't have the right size yet (KWFrameLayout not done yet).
-}
-
-void KWTextFrameSet::zoom( bool forPrint )
-{
-    KWFrameSet::zoom( forPrint );
-}
-
-void KWTextFrameSet::unzoom()
-{
 }
 
 void KWTextFrameSet::setVisible(bool visible)
@@ -2609,15 +2601,15 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( KoTextCursor * cursor, int pa
     return new KoTextCommand( m_textobj, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
-KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KWTextFrameSet::pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     if (protectContent() )
-        return 0L;
+        return 0;
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
 
-    //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
+    //kdDebug(32001) << "KWTextFrameSet::pasteOasis" << endl;
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
     m_textobj->emitHideCursor();
@@ -2626,7 +2618,7 @@ KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & d
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
-    KWPasteTextCommand * cmd = new KWPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
+    KWOasisPasteCommand * cmd = new KWOasisPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
 
     macroCmd->addCommand( new KoTextCommand( m_textobj, /*cmd, */QString::null ) );
@@ -2975,9 +2967,9 @@ KoTextDocCommand *KWTextFrameSet::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
+// Old koffice-1.3 method, to be removed once KWTableFrameSet::convertTableToText is ported
 QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
 {
-    unzoom();
     KoTextCursor c1 = textDocument()->selectionStartCursor( selectionId );
     KoTextCursor c2 = textDocument()->selectionEndCursor( selectionId );
     QString text;
@@ -3001,7 +2993,6 @@ QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
         text += c2.parag()->toString( 0, c2.index() );
         static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1, true );
     }
-    zoom( false );
     return text;
 }
 
@@ -3170,7 +3161,7 @@ void KWTextFrameSetEdit::paste()
         QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
         if ( arr.size() )
         {
-            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), QCString( arr, arr.size()+1 ), true );
+            KCommand *cmd =textFrameSet()->pasteOasis( cursor(), QCString( arr, arr.size()+1 ), true );
             if ( cmd )
                 frameSet()->kWordDocument()->addCommand(cmd);
         }
@@ -3258,15 +3249,56 @@ void KWTextFrameSetEdit::startDrag()
 
 KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
 {
+    KWTextFrameSet* fs = textFrameSet();
+#if 0 // old koffice-1.3 format
     QDomDocument domDoc( "PARAGRAPHS" );
     QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
     domDoc.appendChild( elem );
-    QString text = textFrameSet()->copyTextParag( elem, KoTextDocument::Standard );
+    const QString plainText = fs->copyTextParag( elem, KoTextDocument::Standard );
+    const QCString cstr = domDoc.toCString();
+#else // oasis format
+    KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles );
+
+    // Save user styles as KoGenStyle objects ######### needed?
+    KWDocument * doc = frameSet()->kWordDocument();
+    KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    savingContext.setStyleNameMap( map );
+
+    QBuffer buff;
+    buff.open( IO_WriteOnly );
+    KoXmlWriter contentWriter( &buff, "office:document-content" );
+    // not sure how to avoid copy/pasting that code...
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+    KoXmlWriter contentTmpWriter( tmpFile, 1 );
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:text" );
+
+    const QString plainText = fs->textDocument()->copySelection( contentTmpWriter, savingContext, KoTextDocument::Standard );
+
+    contentTmpWriter.endElement(); // office:text
+    contentTmpWriter.endElement(); // office:body
+
+    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
+    KWDocument::writeAutomaticStyles( contentWriter, mainStyles );
+
+    // And now we can copy over the contents from the tempfile to the real one
+    tmpFile->close();
+    contentWriter.addCompleteElement( tmpFile );
+    contentTmpFile.close();
+    contentWriter.endElement(); // document-content
+    contentWriter.endDocument();
+
+    const QByteArray data = buff.buffer();
+    const QCString cstr( data.data(), data.size() + 1 ); // null-terminate
+#endif
     KWTextDrag *kd = new KWTextDrag( parent );
-    kd->setPlain( text );
-    kd->setFrameSetNumber( textFrameSet()->kWordDocument()->numberOfTextFrameSet( textFrameSet(), false ) );
-    kd->setKWord( domDoc.toCString() );
-    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
+    kd->setPlain( plainText );
+    kd->setFrameSetNumber( fs->kWordDocument()->numberOfTextFrameSet( fs, false ) );
+    kd->setKWord( cstr );
+    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << cstr << endl;
     return kd;
 }
 
@@ -3282,7 +3314,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     //kdDebug() << "parag->rect().x()=" << parag->rect().x() << " x=" << cursor()->x() << endl;
     int y = 0; int dummy;
     parag->lineHeightOfChar( idx, &dummy, &y );
-    y += parag->rect().y() + cursor()->offsetY();
+    y += parag->rect().y();
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible y=" << y << endl;
     // make sure one char is visible before, and one after
     KoTextStringChar *chrLeft = idx > 0 ? chr-1 : chr;
@@ -3536,7 +3568,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             QByteArray arr = e->encodedData( KWTextDrag::selectionMimeType() );
             if ( arr.size() )
             {
-                KCommand *cmd=textFrameSet()->pasteKWord( cursor(), QCString(arr, arr.size()+1 ), false );
+                KCommand *cmd=textFrameSet()->pasteOasis( cursor(), QCString(arr, arr.size()+1 ), false );
                 if ( cmd )
                 {
                     macroCmd->addCommand(cmd);

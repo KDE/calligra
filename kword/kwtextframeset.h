@@ -158,8 +158,6 @@ public:
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     virtual void finalize();
-    virtual void zoom( bool forPrint );
-    void unzoom();
     //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     /** return true if some text is selected */
@@ -185,7 +183,7 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
-    KCommand* pasteKWord( KoTextCursor * cursor, const QCString & data, bool removeSelected );
+    KCommand* pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( KoTextCursor * cursor );
     KNamedCommand* insertFrameBreakCommand( KoTextCursor *cursor );
     void insertFrameBreak( KoTextCursor * cursor );
@@ -298,6 +296,7 @@ public:
     KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
     QString copyTextParag( QDomElement & elem, int selectionId );
+    QString copyTextParag( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
     bool sortText(sortType type);
 
     KWFrame* loadOasisTextBox( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context );

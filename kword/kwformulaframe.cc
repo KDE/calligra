@@ -278,13 +278,6 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
     }
 }
 
-void KWFormulaFrameSet::zoom( bool forPrint )
-{
-    if ( !frames.isEmpty() ) {
-        KWFrameSet::zoom( forPrint );
-    }
-}
-
 void KWFormulaFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     kdDebug() << k_funcinfo << endl;

@@ -24,6 +24,7 @@
 #include "kwtabletemplate.h"
 #include "kwtableframeset.h"
 #include "kwpartframeset.h"
+#include "kwtextdocument.h"
 #include "kwtextparag.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
@@ -31,6 +32,8 @@
 #include <kotextobject.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <koOasisStyles.h>
+#include <kooasiscontext.h>
 
 
 KWPasteTextCommand::KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
@@ -134,13 +137,12 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
             parag->setFormat( 0, len, parag->paragFormat(), TRUE );
             parag->loadFormatting( paragElem, 0, (textFs->isMainFrameset()) );
         }
-        parag->invalidate(0); // the formatting will be done by caller (either KWTextFrameSet::pasteKWord or KoTextObject::undo/redo)
+        parag->invalidate(0); // the formatting will be done by caller (either KWTextFrameSet::pasteOasis or KoTextObject::undo/redo)
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
     textFs->textObject()->setNeedSpellCheck( true );
-    textFs->zoom( false );
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
     doc->processPictureRequests();
@@ -185,6 +187,104 @@ public:
 };
 
 KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
+{
+    KoTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    doc->setSelectionStart( KoTextDocument::Temp, &cursor );
+
+    KoTextParag *lastParag = doc->paragAt( m_lastParag );
+    if ( !lastParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    Q_ASSERT( lastParag->document() );
+    // Get hold of the document before deleting the parag
+    KoTextDocument* textdoc = lastParag->document();
+
+    //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
+
+    cursor.setParag( lastParag );
+    cursor.setIndex( m_lastIndex );
+    doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
+    // Delete all custom items
+    KWDeleteCustomItemVisitor visitor;
+    doc->visitSelection( KoTextDocument::Temp, &visitor );
+
+    doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
+
+    KWTextFrameSet * textFs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
+
+    textFs->renumberFootNotes();
+    if ( m_idx == 0 ) {
+        Q_ASSERT( m_oldParagLayout );
+        if ( m_oldParagLayout )
+            firstParag->setParagLayout( *m_oldParagLayout );
+    }
+    return c;
+}
+
+// ###### TODO: this command can probably move to kotext
+// (it would take as additional arguments: KoDocument *, KoVariableCollection& varColl, KoStyleCollection&)
+KWOasisPasteCommand::KWOasisPasteCommand( KoTextDocument *d, int parag, int idx,
+                                const QCString & data )
+    : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )
+{
+}
+
+KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
+{
+    KoTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    //kdDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    c->setParag( firstParag );
+    c->setIndex( m_idx );
+    QDomDocument domDoc;
+    domDoc.setContent( m_data );
+    QDomElement content = domDoc.documentElement();
+
+    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    if ( body.isNull() ) {
+        kdError(30518) << "No office:body found!" << endl;
+        return 0;
+    }
+    body = body.namedItem( "office:text" ).toElement();
+    if ( body.isNull() ) {
+        kdError(30518) << "No office:text found!" << endl;
+        return 0;
+    }
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
+    KWTextFrameSet * textFs = textdoc->textFrameSet();
+    KWDocument * doc = textFs->kWordDocument();
+
+    KoOasisStyles oasisStyles;
+    oasisStyles.createStyleMap( domDoc );
+    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
+    *c = textdoc->pasteOasisText( body, context, cursor, doc->styleCollection() );
+
+    textFs->textObject()->setNeedSpellCheck( true );
+    // In case loadFormatting queued any image request
+
+    //kdDebug() << "KWOasisPasteCommand::execute calling doc->pasteFrames" << endl;
+    doc->completePasting();
+
+    m_lastParag = c->parag()->paragId();
+    m_lastIndex = c->index();
+    return c;
+}
+
+KoTextCursor * KWOasisPasteCommand::unexecute( KoTextCursor *c )
 {
     KoTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {

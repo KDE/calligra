@@ -6485,6 +6485,9 @@ void KWView::insertFile(const KURL& _url)
     KMacroCommand* macroCmd = 0L;
     bool hasFixedFramesets = false;
     KoStore* store=KoStore::createStore( this, _url, KoStore::Read );
+
+    // ###### All of this should be ported to use the pasting code instead.
+
     QString maindoc = "maindoc.xml";
     if ( store )
     {
@@ -6755,7 +6758,7 @@ void KWView::insertFile(const KURL& _url)
                 }
 
                 // insert paragraphs and inline framesets (we always have at least one paragraph)
-                KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
+                KCommand *cmd = textFrameSet->pasteOasis( &insertionCursor, domDoc.toCString(), true );
 
                 if ( cmd ) {
                     macroCmd->addCommand( cmd );
@@ -6945,7 +6948,7 @@ void KWView::convertTableToText()
                     KWTextFrameSetEdit* edit = currentTextEdit();
                     if ( edit && edit->textFrameSet())
                     {
-                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr , arr.count()), true );
+                        KCommand *cmd =edit->textFrameSet()->pasteOasis( edit->cursor(), QCString( arr , arr.count()), true );
                         if ( cmd )
                             macro->addCommand( cmd);
                         m_doc->addCommand(cmd);
@@ -6991,7 +6994,7 @@ void KWView::convertToTextBox()
                 QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
                 if ( arr.size() )
                 {
-                    cmd =edit->textFrameSet()->pasteKWord( edit->textView()->cursor(), QCString( arr, arr.size()+1 ), true );
+                    cmd =edit->textFrameSet()->pasteOasis( edit->textView()->cursor(), QCString( arr, arr.size()+1 ), true );
                     if ( cmd )
                     {
                         if ( ! macro )
@@ -7029,7 +7032,7 @@ void KWView::sortText()
                     QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
                     if ( arr.size() )
                     {
-                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr , arr.size()+1), true );
+                        KCommand *cmd =edit->textFrameSet()->pasteOasis( edit->cursor(), QCString( arr , arr.size()+1), true );
                         if ( cmd )
                             m_doc->addCommand(cmd);
                     }
