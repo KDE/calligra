@@ -23,6 +23,7 @@
 #include "kprcanvas.h"
 
 #include <kstandarddirs.h>
+#include <kprocess.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/types.h>
@@ -184,12 +185,16 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     uint index = 0;
 
     QString filename;
+    QString fullpath;
 
     while ( pics[ index ] ) {
         filename = pics[index] + format;
-        system( QFile::encodeName( QString( "cp %1 %2/pics/%3" ).
-                arg( locate( "slideshow", filename, KPresenterFactory::global() ) ).
-                arg( path ).arg( filename ) ) );
+        fullpath = path + "/pics/" + filename;
+        QString cmd("cp ");
+        cmd += KProcess::quote(locate( "slideshow", filename, KPresenterFactory::global() ));
+        cmd += " ";
+        cmd += KProcess::quote(fullpath);
+        system( QFile::encodeName( cmd ) );
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
