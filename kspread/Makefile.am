@@ -1,4 +1,3 @@
-
 INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/store -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui -I../lib/interface -I../tools $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la \
@@ -40,7 +39,7 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
 kdelnk_DATA = kspread_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = pics scripts
+SUBDIRS = pics scripts dtd
 
 ####### Implicit rules
 
