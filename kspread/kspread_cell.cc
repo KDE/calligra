@@ -2417,11 +2417,12 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
                                          const QPoint &cellRef,
                                          QColor &backgroundColor )
 {
-  KSpreadDoc* doc = table()->doc();
+  KSpreadDoc * doc = table()->doc();
 
   // Point the little corner if there is a comment attached
   // to this cell.
-  if ( hasProperty( PComment )
+  if ( m_strComment 
+       && !m_strComment->isEmpty() 
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0 
        && ( table()->print()->printCommentIndicator()
@@ -2429,9 +2430,9 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
   {
     QColor penColor = Qt::red;
     //If background has high red part, switch to blue
-    if( qRed( backgroundColor.rgb() ) > 127 &&
-        qGreen( backgroundColor.rgb() ) < 80 &&
-        qBlue( backgroundColor.rgb() ) < 80 )
+    if ( qRed( backgroundColor.rgb() ) > 127 &&
+         qGreen( backgroundColor.rgb() ) < 80 &&
+         qBlue( backgroundColor.rgb() ) < 80 )
     {
         penColor = Qt::blue;
     }
