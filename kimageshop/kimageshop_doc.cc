@@ -212,7 +212,7 @@ void KImageShopDoc::slotNewImage()
   m_pNewDialog->show();
   
   if(!m_pNewDialog->result() == QDialog::Accepted)
-    return 0;
+    return;
 
   int w = m_pNewDialog->newwidth();
   int h = m_pNewDialog->newheight();
