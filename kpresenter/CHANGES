@@ -503,5 +503,8 @@ Reggie, 3.11.1999:
 
 Reggie, 4.11.1999:
 ------------------
-- Implemented Saving/Loading group objects 
+- Implemented Saving/Loading group objects
 
+Reggie, 6.11.1999:
+------------------
+- Fixed some crashing code
