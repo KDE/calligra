@@ -18,20 +18,20 @@
 */
 
 #include <qpainter.h>
-#include <qprinter.h>
+//#include <qprinter.h>
 #include <qrect.h>
+#include <qdom.h>
+#include <qtextstream.h>
+#include <qbuffer.h>
 
 #include <kstddirs.h>
 #include <kmimetype.h>
 #include <kdebug.h>
+#include <kimgio.h>
 
-/*
-#include <komlParser.h>
-#include <komlStreamFeed.h>
-#include <komlWriter.h>
-#include <komlMime.h>
-*/
-
+#include <koStream.h>
+#include <koStore.h>
+#include <koStoreStream.h>
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <koQueryTypes.h>
@@ -41,8 +41,8 @@
 #include "kimage_shell.h"
 #include "kimage_factory.h"
 
-#define MM_TO_POINT 2.83465
-#define POINT_TO_MM 0.3527772388
+//#define MM_TO_POINT 2.83465
+//#define POINT_TO_MM 0.3527772388
 
 KImageDocument::KImageDocument( KoDocument* parent, const char* name )
   : KoDocument( parent, name )
@@ -91,18 +91,12 @@ Shell* KImageDocument::createShell()
 
 void KImageDocument::paintContent( QPainter& _painter, const QRect& _rect, bool /* _transparent */ )
 {
-  // TODO : paint image here
-  // draw only the rect given in _rect
-
-  //cout << "KImageDocument::paintContent" << endl;
+  cout << "KImageDocument::paintContent()" << endl;
 
   if( isEmpty() )
     return;
 
   QPixmap pix;
-  //pix.convertFromImage( m_image );
-
-  // TODO: zoom image if needed, depends on the draw mode
   double dh, dw, d;
 	
   switch ( m_drawMode )
@@ -134,7 +128,7 @@ void KImageDocument::paintContent( QPainter& _painter, const QRect& _rect, bool 
 
 QCString KImageDocument::mimeType() const
 {
-  // FIXME: save the same file type as loaded, not allways KImmage file format ;-)
+  // FIXME: save the same file type as loaded, not allways KImage file format ;-)
 
   return "application/x-kimage";
 }
@@ -148,13 +142,10 @@ bool KImageDocument::loadFromURL( const QString& _url )
 {
   cout << "KImageDocument::loadFromURL" << endl;
 
-  QString mimetype = KMimeType::findByURL( _url )->mimeType();
-
-  if( ( mimetype == "image/png" ) ||
-      ( mimetype == "image/jpeg" ) ||
-      ( mimetype == "image/bmp" ) ||
-      ( mimetype == "image/gif" ) )
+  if( KImageIO::isSupported( KImageIO::mimeType( _url ) ) )
   {
+    initDoc();
+
     if( !m_image.load( _url ) )
       return false;
 
@@ -166,45 +157,92 @@ bool KImageDocument::loadFromURL( const QString& _url )
   return KoDocument::loadFromURL( _url );
 }
 
-/*
-bool KImageDocument::save( ostream& out, const char* format )
+bool KImageDocument::save( ostream& out, const char* )
 {
-  out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Michael Koch" << "\" email=\"" << "koch@kde.org" << "\" editor=\"" << "kimage"
-      << "\" mime=\"" << "application/x-kimage" << "\" >" << endl;
+  QDomDocument doc( "image" );
+  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement spread = doc.createElement( "image" );
+  spread.setAttribute( "author", "Michael Koch" );
+  spread.setAttribute( "email", "koch@kde.org" );
+  spread.setAttribute( "editor", "KImage" );
+  spread.setAttribute( "mime", "application/x-kimage" );
+  doc.appendChild( spread );
+  QDomElement paper = doc.createElement( "paper" );
+  paper.setAttribute( "format", paperFormatString() );
+  paper.setAttribute( "orientation", orientationString() );
+  spread.appendChild( paper );
+  QDomElement borders = doc.createElement( "borders" );
+  borders.setAttribute( "left", leftBorder() );
+  borders.setAttribute( "top", topBorder() );
+  borders.setAttribute( "right", rightBorder() );
+  borders.setAttribute( "bottom", bottomBorder() );
+  paper.appendChild( borders );
+  QDomElement head = doc.createElement( "head" );
+  paper.appendChild( head );
+  if ( !headLeft().isEmpty() )
+  {
+    QDomElement left = doc.createElement( "left" );
+    head.appendChild( left );
+    left.appendChild( doc.createTextNode( headLeft() ) );
+  }
+  if ( !headMid().isEmpty() )
+  {
+    QDomElement center = doc.createElement( "center" );
+    head.appendChild( center );
+    center.appendChild( doc.createTextNode( headMid() ) );
+  }
+  if ( !headRight().isEmpty() )
+  {
+    QDomElement right = doc.createElement( "right" );
+    head.appendChild( right );
+    right.appendChild( doc.createTextNode( headRight() ) );
+  }
+  QDomElement foot = doc.createElement( "foot" );
+  paper.appendChild( foot );
+  if ( !footLeft().isEmpty() )
+  {
+    QDomElement left = doc.createElement( "left" );
+    foot.appendChild( left );
+    left.appendChild( doc.createTextNode( footLeft() ) );
+  }
+  if ( !footMid().isEmpty() )
+  {
+    QDomElement center = doc.createElement( "center" );
+    foot.appendChild( center );
+    center.appendChild( doc.createTextNode( footMid() ) );
+  }
+  if ( !footRight().isEmpty() )
+  {
+    QDomElement right = doc.createElement( "right" );
+    foot.appendChild( right );
+    right.appendChild( doc.createTextNode( footRight() ) );
+  }
 
-  out << otag << "<PAPER format=\"" << paperFormatString().ascii() << "\" orientation=\"" << orientationString().ascii() << "\">" << endl;
-  out << indent << "<PAPERBORDERS left=\"" << leftBorder() << "\" top=\"" << topBorder() << "\" right=\"" << rightBorder()
-      << " bottom=\"" << bottomBorder() << "\"/>" << endl;
-  out << indent << "<HEAD left=\"" << headLeft().ascii() << "\" center=\"" << headMid().ascii() << "\" right=\"" << headRight().ascii() << "\"/>" << endl;
-  out << indent << "<FOOT left=\"" << footLeft().ascii() << "\" center=\"" << footMid().ascii() << "\" right=\"" << footRight().ascii() << "\"/>" << endl;
-  out << etag << "</PAPER>" << endl;
-
-  out << etag << "</DOC>" << endl;
-
-  setModified( FALSE );
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer );
+  str << doc;
+  buffer.close();
+  out.write( buffer.buffer().data(), buffer.buffer().size() );
+  setModified( false );
 
   return true;
 }
-*/
 
-/*
-bool KImageDocument::completeSaving( KOStore::Store_ptr _store )
+bool KImageDocument::completeSaving( KoStore* _store )
 {
-  QString u = url();
-  u += "/image";
+  QString file = "image.bmp";
 
-  if ( _store->open( u, "image/bmp" ) )
+  if ( _store->open( file, "image/bmp" ) )
   {
     ostorestream out( _store );
-    out << m_image;
+    writeImageToStream( out, m_image, "BMP" );
     out.flush();
     _store->close();
   }
 
   return true;
 }
-*/
 
 /*
 bool KImageDocument::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
@@ -217,11 +255,77 @@ bool KImageDocument::loadBinary( istream& _stream, bool _randomaccess, KOStore::
 }
 */
 
-/*
-bool KImageDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+bool KImageDocument::load( istream& in, KoStore* store )
 {
-  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
+  int anz;
+  char buf[ 4096 ];
+  QBuffer buffer;
 
+  buffer.open( IO_WriteOnly );
+  do
+  {
+    in.read( buf, 4096 );
+    anz = in.gcount();
+    buffer.writeBlock( buf, anz );
+  } while( anz > 0 );
+  buffer.close();
+
+  buffer.open( IO_ReadOnly );
+  QDomDocument doc( &buffer );
+  bool b = loadXML( doc, store );
+  buffer.close();
+
+  m_bEmpty = false;
+  setModified( false );
+
+  return b;
+}
+
+bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
+//bool KImageDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+{
+  kdebug( KDEBUG_INFO, 0, "KImageDocument::loadXML()" );
+
+  if( doc.doctype().name() != "image" )
+    return false;
+
+  QDomElement image = doc.documentElement();
+  if( image.attribute( "mime" ) != "application/x-kimage" )
+    return false;
+
+  QDomElement paper = image.namedItem("paper").toElement();
+  setPaperFormatString( paper.attribute( "format" ) );
+  setOrientationString( paper.attribute( "orientation" ) );
+
+  QDomElement borders = image.namedItem("borders").toElement();
+  m_leftBorder = borders.attribute( "left" ).toFloat();
+  m_topBorder = borders.attribute( "top" ).toFloat();
+  m_rightBorder = borders.attribute( "right" ).toFloat();
+  m_bottomBorder = borders.attribute( "bottom" ).toFloat();
+
+  QDomElement head = image.namedItem("head").toElement();
+  head.attribute( "left" );
+  // hier dann schauen of vorhanden : left center right
+
+  QDomElement foot = image.namedItem("foot").toElement();
+  foot.attribute( "left" );
+  // hier dann schauen of vorhanden : left center right
+  
+/*
+  int cols = data.attribute("cols").toInt(&ok);
+  cerr << "cols readed as:" << cols << "\n";
+  if (!ok)  { return false; }
+  int rows = data.attribute("rows").toInt(&ok);
+  if (!ok)  { return false; }
+  cerr << rows << " x " << cols << "\n";
+  currentData.expand(rows, cols);
+  cerr << "Expanded!";
+  QDomNode n = data.firstChild();
+*/
+
+  return true;
+
+/*
   string tag;
   vector<KOMLAttrib> lst;
   string name;
@@ -378,31 +482,38 @@ bool KImageDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING DONE --------------------" );
 
   return true;
-}
 */
+}
 
-/*
-bool KImageDocument::completeLoading( KOStore::Store_ptr _store )
+bool KImageDocument::completeLoading( KoStore* _store )
 {
-  kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
+  kdebug( KDEBUG_INFO, 0, "KImageDocument::completeLoading()" );
 
-  QString u = url();
-  u += "/image";
-  if ( _store->open( u, "" ) )
+  QString file = "image.bmp";
+
+  if( _store->open( file, "" ) )
   {
     istorestream in( _store );
     in >> m_image;
     _store->close();
   }
 
+  if( m_image.isNull() )
+    cout << "Image is NULL, don't ask me why" << endl;
+  else
+    cout << "Image is not NULL, don't know why it does not do it right" << endl;
+
   setModified( false );
   m_bEmpty = false;
 
+  cout << "Michael : Laden fertig" << endl;
+
   emit sigUpdateView();
+
+  cout << "Michael : Signal gesendet" << endl;
 
   return true;
 }
-*/
 
 /*
 void KImageDocument::print( QPaintDevice* _dev )
@@ -508,15 +619,14 @@ void KImageDocument::draw( QPaintDevice* _dev, long int _width, long int _height
 }
 */
 
-/*
 void KImageDocument::paperLayoutDlg()
 {
   KoPageLayout pl;
   pl.format = paperFormat();
   pl.orientation = orientation();
   pl.unit = PG_MM;
-  pl.width = m_paperWidth;
-  pl.height = m_paperHeight;
+  pl.width = paperWidth();
+  pl.height = paperHeight();
   pl.left = leftBorder();
   pl.right = rightBorder();
   pl.top = topBorder();
@@ -583,8 +693,6 @@ void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float 
 	f = PG_SCREEN;
     else if ( strcmp( "Custom", _paper ) == 0L )
     {
-      m_paperWidth = 0.0;
-      m_paperHeight = 0.0;
       f = PG_CUSTOM;
       QString tmp( _paper );
       m_paperWidth = atof( _paper );
@@ -619,7 +727,6 @@ void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float 
 
   setModified( TRUE );
 }
-*/
 
 QString KImageDocument::completeHeading( const char* _data,
 				    int /* _page */, const char* /* _table */ )
@@ -671,7 +778,6 @@ QString KImageDocument::completeHeading( const char* _data,
 
 void KImageDocument::calcPaperSize()
 {
-/*
     switch( m_paperFormat )
     {
     case PG_DIN_A5:
@@ -708,10 +814,8 @@ void KImageDocument::calcPaperSize()
     case PG_CUSTOM:
         return;
     }
-*/
 }
 
-/*
 QString KImageDocument::paperFormatString()
 {
   QString paperFormatStr;
@@ -743,28 +847,88 @@ QString KImageDocument::paperFormatString()
 	  paperFormatStr = "Screen";
 	  break;
     case PG_CUSTOM:
-      QString tmp;
-      tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
-      paperFormatStr = tmp;
+      {
+        QString tmp;
+        tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
+        paperFormatStr = tmp;
+        break;
+      }
+    default :
+      cout << "KImageDocument::paperFormatString() - unknown paper format type" << endl;
+
+      paperFormatStr = "error";
+      break;
   }
   return paperFormatStr;
 }
-*/
+
+void KImageDocument::setPaperFormatString( QString _format )
+{
+  if( _format == "A3" )
+    m_paperFormat = PG_DIN_A3;
+  else if( _format == "A4" )
+    m_paperFormat = PG_DIN_A4;
+  else if( _format == "A5" )
+    m_paperFormat = PG_DIN_A5;
+  else if( _format == "B5" )
+    m_paperFormat = PG_DIN_B5;
+  else if( _format == "EXECUTIVE" )
+    m_paperFormat = PG_US_EXECUTIVE;
+  else if( _format == "LETTER" )
+    m_paperFormat = PG_US_LETTER;
+  else if( _format == "LEGAL" )
+    m_paperFormat = PG_US_LEGAL;
+  else if( _format == "SCREEN" )
+    m_paperFormat = PG_SCREEN;
+  else // customized
+  {
+    m_paperFormat = PG_CUSTOM;
+
+    // format : "%fx%f"
+
+    // TODO : set the right values
+
+    m_paperWidth = 10.0;
+    m_paperHeight = 10.0;
+  }
+}
 
 QString KImageDocument::orientationString()
 {
   QString orientationStr;
 
+  cout << "Orientation " << (int) m_orientation << endl;
+
   switch( m_orientation )
   {
-    case QPrinter::Portrait :
+    case PG_PORTRAIT :
       orientationStr = "Portrait";
       break;
-    case QPrinter::Landscape :
+    case PG_LANDSCAPE :
       orientationStr = "Landscape";
+      break;
+  default :
+      cout << "KImageDocument::orientationString() - unknown orientation type" << endl;
+
+      orientationStr = "error";
       break;
   }
   return orientationStr;
+}
+
+void KImageDocument::setOrientationString( QString _orient )
+{
+  if( _orient == "Portrait" )
+    m_orientation = PG_PORTRAIT;
+  else if( _orient == "Landscape" )
+    m_orientation = PG_LANDSCAPE;
+  else
+  {
+    cout << "KImageDocument::setOrientationString() - unknown orientation string" << endl;
+    cout << "KImageDocument::setOrientationString() - using portrait" << endl;
+
+    m_orientation = PG_PORTRAIT;
+  }
 }
 
 void KImageDocument::transformImage( const QWMatrix& matrix )
@@ -831,7 +995,6 @@ KoFormat KImageDocument::paperFormat()
   return m_paperFormat;
 }
 
-/*
 QString KImageDocument::headLeft( int _p, const char* _t )
 {
   if( m_headLeft.isNull() )
@@ -939,7 +1102,6 @@ QString KImageDocument::footRight()
   }
   return m_footRight.data();
 }
-*/
 
 const QImage& KImageDocument::image()
 {

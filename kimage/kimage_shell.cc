@@ -64,7 +64,7 @@ void KImageShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  if( KImageIO::isSupported( KImageIO::mimeType( file ) ) )
+  if( !KImageIO::isSupported( KImageIO::mimeType( file ) ) )
   {
     file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
     if( file.isNull() )

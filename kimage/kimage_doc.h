@@ -28,20 +28,23 @@
 
 #include "kimage_view.h"
 
+class KoStore;
+
 class KImageDocument : public KoDocument
 {
   Q_OBJECT
 
 public:
+
   KImageDocument( KoDocument* parent = 0, const char* name = 0 );
   ~KImageDocument();
 
   virtual bool loadFromURL( const QString& );
+  virtual bool loadXML( const QDomDocument& doc, KoStore* store );
+  virtual bool load( istream& in, KoStore* _store );
 
 public:
-  // IDL
 
-  // document
   virtual View* createView( QWidget* parent = 0, const char* name = 0 );
   virtual Shell* createShell();
   virtual QString configFile() const;
@@ -51,17 +54,21 @@ public:
 
   float printableWidth();
   float printableHeight();
+
   float paperHeight();
   float paperWidth();
   float leftBorder();
   float rightBorder();
   float topBorder();
   float bottomBorder();
+
   KoOrientation orientation();
   KoFormat paperFormat();
-  //void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder, KoFormat _paper, KoOrientation orientation );
-  //void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder, const char * _paper, const char* _orientation );
-  //void setHeadFootLine( const char* _headl, const char* _headm, const char* _headr,	const char* _footl, const char* _footm, const char* _footr );
+
+  void paperLayoutDlg();
+  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder, KoFormat _paper, KoOrientation orientation );
+  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder, const char * _paper, const char* _orientation );
+  void setHeadFootLine( const char* _headl, const char* _headm, const char* _headr,	const char* _footl, const char* _footm, const char* _footr );
   QString headLeft( int _p, const char* _t );
   QString headMid( int _p, const char* _t );
   QString headRight( int _p, const char* _t );
@@ -77,7 +84,9 @@ public:
   QString footRight();
   void calcPaperSize();
   QString orientationString();
+  void setOrientationString( QString );
   QString paperFormatString();
+  void setPaperFormatString( QString );
   const QImage& image();
   void transformImage( const QWMatrix& matrix );
 
@@ -92,12 +101,16 @@ public:
   QPoint zoomFactor() { return m_zoomFactorValue; };
   
 signals:
-  // Document signals
+
   void sigUpdateView();
   
 protected:
 
-  //virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
+  virtual bool save( ostream&, const char* );
+  virtual bool completeLoading( KoStore* );
+  virtual bool completeSaving( KoStore* );
+  virtual bool hasToWriteMultipart() { return true; };
+
   bool m_bEmpty;
   KoOrientation m_orientation;
   KoFormat m_paperFormat;
@@ -114,7 +127,7 @@ protected:
   QString m_footRight;
   QString m_footMid;
 
-  QImage       m_image; // the image
+  QImage       m_image;
   DrawMode     m_drawMode;
   PositionMode m_posMode;
   QPoint       m_zoomFactorValue;

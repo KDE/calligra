@@ -17,15 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kimage_gui_h__
-#define __kimage_gui_h__
+#ifndef __kimage_view_h__
+#define __kimage_view_h__
 
 #include <container.h>
 
+class QPaintEvent;
 class KAction;
 class KToggleAction;
-class QPaintEvent;
-
 class KImageDocument;
 
 class KImageView : public ContainerView
@@ -38,13 +37,8 @@ public:
   KImageDocument* doc();
 
 /*
-public slots:
-//void slotDocUpdated();
-//void slotDocUpdated(const QRect&);
-*/
-
-/*
 signals:
+
   void mousePressed(QMouseEvent *);
   void mouseMoved(QMouseEvent *);
   void mouseReleased(QMouseEvent *);
@@ -91,6 +85,11 @@ protected slots:
 
 public slots:
 
+/*
+  void slotDocUpdated();
+  void slotDocUpdated(const QRect&);
+*/
+
   // Document signals
   void slotUpdateView();
 
@@ -104,7 +103,7 @@ protected:
   virtual void mouseMoveEvent ( QMouseEvent * );
 */
 
- private:
+private:
 
   // edit menu
   KAction *m_undo, *m_redo, *m_import, *m_export, *m_pageSetup, *m_preferences;
@@ -120,95 +119,4 @@ protected:
   KAction *m_helpAbout, *m_helpUsing;
 };
 
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif // __kimage_view_h__

@@ -100,9 +100,14 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
 
 void KImageView::paintEvent( QPaintEvent* /* _event */ )
 {
-  if( doc()->isEmpty() )
-    return;
+  cout << "KImageView::paintEvent()" << endl;
 
+  if( doc()->isEmpty() )
+  {
+    cout << "document empty" << endl;
+    return;
+  }
+  
   QPainter painter;
   painter.begin( this );
 
