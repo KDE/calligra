@@ -19,8 +19,11 @@
 */
 
 #include <qbuttongroup.h>
+#include <qnamespace.h>
 #include <qtoolbutton.h>
+#include <qlayout.h>
 #include <qlabel.h>
+#include <qtooltip.h>
 #include <qlayout.h>
 #include <qpixmap.h>
 
@@ -36,125 +39,104 @@
 #include "vtoolbox.h"
 #include "vstrokefillpreview.h"
 
-VToolBox::VToolBox( KarbonPart* part, QWidget* parent, const char* /*name*/ ) : QWidget( parent )
+VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) : QToolBar( mainWin )
 {
-	//setOrientation( Vertical );
-	QToolButton *button;
+	setLabel(name);
+	buttonGroup = new QButtonGroup(0L);
+	buttonGroup->setExclusive (true);
 
-	m_btngroup = new QButtonGroup( 2, Horizontal, this );
-	m_btngroup->setExclusive( true );
-	m_btngroup->setInsideSpacing( 2 );
-	m_btngroup->setInsideMargin( 5 );
+	QBoxLayout::Direction d=orientation()==Qt::Vertical?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom;
+	QWidget *base= new QWidget(this);
+	columnsLayouter = new QBoxLayout(base, d);
+    columnsLayouter->setSpacing(2);
 
-	button = new QToolButton( m_btngroup );
-	QPixmap pixmap = BarIcon( "14_select", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	d=orientation()==Qt::Horizontal?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom;
+	left= new QWidget(base);
+	leftLayout = new QBoxLayout(left, d);
+    leftLayout->setSpacing(2);
+	columnsLayouter->addWidget(left);
+
+	right= new QWidget(base);
+	rightLayout = new QBoxLayout(right, d);
+    rightLayout->setSpacing(2);
+	columnsLayouter->addWidget(right);
+
+	insertLeft=true;
+	QToolButton *button = addButton("14_select", i18n("Select tool"));
 	button->toggle();
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_selectnodes", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_selectnodes", i18n("Select nodes tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectNodesToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_rotate", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_rotate", i18n("rotate tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( rotateToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_shear", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_shear", i18n("shear tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( shearToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_rectangle", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_rectangle", i18n("create rectangle tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( rectangleToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_roundrect", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_roundrect", i18n("create rounded rectangle tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( roundRectToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_ellipse", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_ellipse", i18n("create ellipse tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( ellipseToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap=BarIcon( "14_polygon", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_polygon", i18n("create poligon tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polygonToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_star", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_star", i18n("create star tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( starToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_sinus", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_sinus", i18n("create sinus wave tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( sinusToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_spiral", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_spiral", i18n("create spiral tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( spiralToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap = BarIcon( "14_gradient", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_gradient", i18n("fill with gradient tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap=BarIcon( "14_polyline", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	button = addButton("14_polyline", i18n("create polyline tool"));
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
-	m_btngroup->insert( button );
 
-	button = new QToolButton( m_btngroup );
-	pixmap=BarIcon( "14_clipart", KarbonFactory::instance() );
+	button = addButton("14_clipart", i18n("insert clipart tool"));
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
+
+	m_strokeFillPreview = new VStrokeFillPreview( part,this );
+}
+
+QToolButton *
+VToolBox::addButton(const char* iconName, QString tooltip)
+{
+	QToolButton *button = new QToolButton( insertLeft?left:right );
+	QPixmap pixmap=BarIcon( iconName, KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
-	m_btngroup->insert( button );
+	QToolTip::add(button, tooltip);
+	if(insertLeft)
+		leftLayout->addWidget( button );
+	else
+		rightLayout->addWidget( button );
 
-	m_strokeFillPreview = new VStrokeFillPreview( part, this );
+	buttonGroup->insert(button);
+	insertLeft=!insertLeft;
 
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 2 );
-	mainWidgetLayout->addWidget( m_btngroup );
-	mainWidgetLayout->addWidget( m_strokeFillPreview );
-	mainWidgetLayout->activate();
-	//mainWidget->setMaximumHeight( 164 );
-	//mainWidget->setMinimumWidth( 194 );
+	return button;
+}
 
-	//setWidget( mainWidget );
+
+void
+VToolBox::setOrientation ( Qt::Orientation o )
+{
+	QBoxLayout::Direction d=orientation()==Qt::Vertical?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom;
+	columnsLayouter->setDirection(d);
+	d=o==Qt::Horizontal?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom;
+	leftLayout->setDirection(d);
+	rightLayout->setDirection(d);
+	QDockWindow::setOrientation(o);
 }
 
 VStrokeFillPreview *

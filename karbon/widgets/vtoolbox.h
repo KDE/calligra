@@ -20,20 +20,21 @@
 
 #ifndef __VTOOLBOX_H__
 #define __VTOOLBOX_H__
+#include <qtoolbutton.h>
 
 class QWidget;
 class KarbonPart;
 class VStrokeFillPreview;
 
-class VToolBox : public QWidget
+class VToolBox : public QToolBar
 {
 	Q_OBJECT
 
 public:
-	VToolBox( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
+	VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name = 0L );
 
 	VStrokeFillPreview *strokeFillPreview();
-  
+
 signals:
 	void selectToolActivated();
 	void rotateToolActivated();
@@ -50,10 +51,18 @@ signals:
 	void gradToolActivated();
 	void clipartToolActivated();
 
+public slots:
+	virtual void setOrientation ( Orientation o );
+
 private:
-	QButtonGroup		*m_btngroup;
 	KarbonPart			*m_part;
 	VStrokeFillPreview	*m_strokeFillPreview;
+	QBoxLayout *leftLayout,*rightLayout,*columnsLayouter;
+	QWidget *left, *right;
+	QButtonGroup *buttonGroup;
+	bool insertLeft;
+
+	QToolButton *addButton(const char* iconName, QString tooltip);
 };
 
 #endif

@@ -250,11 +250,11 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 {
 	if( element.attribute( "name" ) == "toolbox" )
 	{
-		QWidget *toolbar = KXMLGUIBuilder::createContainer( parent, index, element, id );
+		//QWidget *toolbar = KXMLGUIBuilder::createContainer( parent, index, element, id );
 		//if( !m_toolbox )
 		//{
-		kdDebug() << "GOT IT! toolbar :" << toolbar << endl;
-			m_toolbox = new VToolBox( m_part, toolbar );
+		//kdDebug() << "GOT IT! toolbar :" << toolbar << endl;
+			m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox");
 			connect( m_toolbox, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
 			connect( m_toolbox, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
 			connect( m_toolbox, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
@@ -280,7 +280,8 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 				selectionChanged();
 			}
 		//}
-		return toolbar;
+        mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0);
+		return m_toolbox;
 	}
 
 	return KXMLGUIBuilder::createContainer( parent, index, element, id );
