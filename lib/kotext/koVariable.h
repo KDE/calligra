@@ -299,7 +299,7 @@ public:
      * It doesn't need to be cached, convert() is fast, and it's the actual
      * value (date, time etc.) that is cached in the variable already.
      */
-    virtual QString text();
+    virtual QString text(bool realValue=false);
 
     virtual QString fieldCode();
 
@@ -455,7 +455,7 @@ public:
     virtual void recalc();
     virtual QString fieldCode();
 
-    virtual QString text();
+    virtual QString text(bool realValue=false);
 
     QString value() const;
     void setValue( const QString &v );
@@ -493,7 +493,7 @@ public:
     virtual QString fieldCode();
 
     virtual void recalc();
-    virtual QString text();
+    virtual QString text(bool realValue=false);
 
     QString value() const { return m_varValue.toString(); }
 
@@ -529,7 +529,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual QString text();
+    virtual QString text(bool realValue=false);
     QString name() const { return m_varValue.toString(); }
     virtual QString value() const;
 
@@ -589,7 +589,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual QString text();
+    virtual QString text(bool realValue=false);
     QString value() const { return m_varValue.toString(); }
     QString url() const { return m_url;}
 
@@ -621,7 +621,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual QString text();
+    virtual QString text(bool realValue=false);
     QString note() const { return m_varValue.toString(); }
     void setNote( const QString & _note) { m_varValue = QVariant(_note); }
     virtual void recalc();

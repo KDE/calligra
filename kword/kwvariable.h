@@ -76,7 +76,7 @@ public:
 
     virtual void recalc();
     virtual void setVariableSubType( short int type);
-    virtual QString text();
+    virtual QString text(bool realValue=false);
 
     QPtrList<KAction> actionList();
 
@@ -96,7 +96,7 @@ class KWMailMergeVariable : public KoMailMergeVariable
 public:
     KWMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc );
 
-    virtual QString text();
+    virtual QString text(bool realValue=false);
     virtual QString value() const;
     virtual void recalc();
  private:
@@ -133,7 +133,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual QString text();
+    virtual QString text(bool realValue=false);
     // Nothing to do here. Numbering done by KWTextFrameSet::renumberFootNotes
     virtual void recalc() { }
 

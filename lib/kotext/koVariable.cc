@@ -471,9 +471,9 @@ QString KoVariable::fieldCode()
     return i18n("Variable");
 }
 
-QString KoVariable::text()
+QString KoVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
         return fieldCode();
     else
         return m_varFormat->convert( m_varValue );
@@ -546,7 +546,7 @@ void KoVariable::save( QDomElement &parentElem )
     variableElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
     typeElem.setAttribute( "key", m_varFormat->key() );
-    typeElem.setAttribute( "text", text() );
+    typeElem.setAttribute( "text", text(true) );
     saveVariable( variableElem );
 }
 
@@ -983,9 +983,9 @@ QString KoCustomVariable::fieldCode()
     return i18n("Custom Variable");
 }
 
-QString KoCustomVariable::text()
+QString KoCustomVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
         return fieldCode();
     else
         return value();
@@ -1067,7 +1067,7 @@ QString KoMailMergeVariable::value() const
     return QString();//m_doc->getMailMergeDataBase()->getValue( m_name );
 }
 
-QString KoMailMergeVariable::text()
+QString KoMailMergeVariable::text(bool realValue)
 {
     // ## should use a format maybe
     QString v = value();
@@ -1207,9 +1207,9 @@ QString KoFieldVariable::fieldCode()
     return i18n("Field");
 }
 
-QString KoFieldVariable::text()
+QString KoFieldVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
         return fieldCode();
     else
         return value();
@@ -1424,9 +1424,9 @@ QString KoLinkVariable::fieldCode()
     return i18n("Link");
 }
 
-QString KoLinkVariable::text()
+QString KoLinkVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
         return fieldCode();
     else
         return value();
@@ -1518,9 +1518,9 @@ QStringList KoNoteVariable::actionTexts()
     return QStringList( i18n( "Note..." ) );
 }
 
-QString KoNoteVariable::text()
+QString KoNoteVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
         return fieldCode();
     else
         //for a note return just a "space" we can look at

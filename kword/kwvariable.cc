@@ -152,11 +152,11 @@ void KWPgNumVariable::recalc()
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()
 }
 
-QString KWPgNumVariable::text()
+QString KWPgNumVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&& !realValue)
         return fieldCode();
-    else if ( m_subtype !=  VST_CURRENT_SECTION && m_doc->viewMode()->type() == "ModeText")
+    else if ( m_subtype !=  VST_CURRENT_SECTION && m_doc->viewMode()->type() == "ModeText" && !realValue)
         return fieldCode();
     else
         return m_varFormat->convert( m_varValue );
@@ -228,9 +228,9 @@ QString KWMailMergeVariable::value() const
     return m_doc->getMailMergeDataBase()->getValue( m_varValue.toString() );
 }
 
-QString KWMailMergeVariable::text()
+QString KWMailMergeVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&& !realValue)
         return fieldCode();
     // ## should use a format maybe
     QString v = value();
@@ -362,9 +362,9 @@ QString KWFootNoteVariable::applyStyle(  )
     return tmp;
 }
 
-QString KWFootNoteVariable::text()
+QString KWFootNoteVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode())
+    if (m_varColl->variableSetting()->displayFiedCode()&& !realValue)
         return fieldCode();
     return m_varFormat->convert( m_varValue );
 }
