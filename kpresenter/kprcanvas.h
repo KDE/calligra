@@ -205,6 +205,8 @@ public:
     int numberOfObjectSelected();
     KPObject *getSelectedObj();
 
+    int getPenBrushFlags();
+
 public slots:
     void exitEditMode();
 

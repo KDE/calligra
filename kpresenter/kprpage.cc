@@ -2168,9 +2168,6 @@ int KPrPage::getPenBrushFlags() const
             }
         }
     }
-
-    if ( flags == 0 )
-	flags = StyleDia::SdAll;
     return flags;
 }
 

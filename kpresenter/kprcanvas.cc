@@ -33,7 +33,7 @@
 #include <qrect.h>
 #include <qsize.h>
 #include <qpoint.h>
-
+#include "styledia.h"
 #include "kprcanvas.h"
 #include "kprcanvas.moc"
 
@@ -5198,4 +5198,14 @@ KPObject *KPrCanvas::getSelectedObj()
         return obj;
     obj=m_view->kPresenterDoc()->stickyPage()->getSelectedObj();
     return obj;
+}
+
+int KPrCanvas::getPenBrushFlags()
+{
+    int flags=0;
+    flags=activePage()->getPenBrushFlags();
+    flags=flags |m_view->kPresenterDoc()->stickyPage()->getPenBrushFlags();
+    if(flags==0)
+      flags = StyleDia::SdAll;
+    return flags;
 }

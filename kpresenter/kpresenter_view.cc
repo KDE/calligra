@@ -884,7 +884,7 @@ void KPresenterView::extraPenBrush()
         styleDia = 0;
     }
     KPrPage * page=m_canvas->activePage();
-    styleDia = new StyleDia( this, "StyleDia", page->getPenBrushFlags() );
+    styleDia = new StyleDia( this, "StyleDia", m_canvas->getPenBrushFlags() );
     styleDia->setPen( page->getPen( pen ) );
     styleDia->setBrush( page->getBrush( brush ) );
     styleDia->setLineBegin( page->getLineBegin( lineBegin ) );
