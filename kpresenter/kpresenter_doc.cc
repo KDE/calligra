@@ -82,7 +82,6 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _pageLayout.bottom = 0;
   _pageLayout.unit = PG_MM;
   objStartY = 0;
-  objStartNum = 0;
   setPageLayout(_pageLayout,0,0);
   _presPen = QPen(red,3,SolidLine);
 }
@@ -120,7 +119,6 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _pageLayout.unit = PG_MM;
   setPageLayout(_pageLayout,0,0);
   objStartY = 0;
-  objStartNum = 0;
   insertNewTemplate(0,0,true);
   _presPen = QPen(red,3,SolidLine);
 }
@@ -301,7 +299,8 @@ bool KPresenterDocument_impl::load_template(const char *_url)
   
   if (!load(parser))
     return false;
-  
+ 
+  m_bModified = true;
   return true;
 }
 
@@ -333,25 +332,25 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
     }
 
   // DOC
-  if ( !parser.open( "DOC", tag ) )
-  {
-    cerr << "Missing DOC" << endl;
-    return false;
-  }
+  if (!parser.open("DOC",tag))
+    {
+      cerr << "Missing DOC" << endl;
+      return false;
+    }
   
   KOMLParser::parseTag( tag.c_str(), name, lst );
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for(;it != lst.end();it++)
-  {
-    if ( (*it).m_strName == "mime" )
     {
-      if ( (*it).m_strValue != "application/x-kpresenter" )
-      {
-	cerr << "Unknown mime type " << (*it).m_strValue << endl;
-	return false;
-      }
+      if ((*it).m_strName == "mime")
+	{
+	  if ((*it).m_strValue != "application/x-kpresenter")
+	    {
+	      cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	      return false;
+	    }
+	}
     }
-  }
 
   // PAPER
   while (parser.open(0L,tag))
@@ -376,9 +375,9 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	      else if ((*it).m_strName == "orientation")
 		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "width")
-		__pgLayout.width = (double)atof((*it).m_strValue.c_str());
+		__pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "height")
-		__pgLayout.height = (double)atof((*it).m_strValue.c_str());
+		__pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
 	      else
 		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
 	    }
@@ -472,7 +471,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "value")
-		_spInfinitLoop = (bool)atoi((*it).m_strValue.c_str());
+		_spInfinitLoop = static_cast<bool>(atoi((*it).m_strValue.c_str()));
 	    }
 	}
 
@@ -483,7 +482,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "value")
-		_spManualSwitch = (bool)atoi((*it).m_strValue.c_str());
+		_spManualSwitch = static_cast<bool>(atoi((*it).m_strValue.c_str()));
 	    }
 	}
 
@@ -535,6 +534,7 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 {
   string tag;
   string name;
+  ObjType t = OT_LINE;
 
   while (parser.open(0L,tag))
     {
@@ -548,60 +548,58 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "type")
-		{
-		  ObjType t = (ObjType)atoi((*it).m_strValue.c_str());
-	  
-		  switch (t)
-		    {
-		    case OT_LINE:
-		      {
-			KPLineObject *kplineobject = new KPLineObject();
-			kplineobject->load(parser,lst);
-			_objectList.append(kplineobject);
-		      } break;
-		    case OT_RECT:
-		      {
-			KPRectObject *kprectobject = new KPRectObject();
-			kprectobject->load(parser,lst);
-			kprectobject->setRnds(_xRnd,_yRnd);
-			_objectList.append(kprectobject);
-		      } break;
-		    case OT_ELLIPSE:
-		      {
-			KPEllipseObject *kpellipseobject = new KPEllipseObject();
-			kpellipseobject->load(parser,lst);
-			_objectList.append(kpellipseobject);
-		      } break;
-		    case OT_AUTOFORM:
-		      {
-			KPAutoformObject *kpautoformobject = new KPAutoformObject();
-			kpautoformobject->load(parser,lst);
-			_objectList.append(kpautoformobject);
-		      } break;
-		    case OT_CLIPART:
-		      {
-			KPClipartObject *kpclipartobject = new KPClipartObject();
-			kpclipartobject->load(parser,lst);
-			_objectList.append(kpclipartobject);
-		      } break;
-		    case OT_TEXT:
-		      {
-			KPTextObject *kptextobject = new KPTextObject();
-			kptextobject->load(parser,lst);
-			_objectList.append(kptextobject);
-		      } break;
-		    case OT_PICTURE:
-		      {
-			KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection);
-			kppixmapobject->load(parser,lst);
-			_objectList.append(kppixmapobject);
-		      } break;
-		    default: break;
-		    }
-
-		  if (objStartY > 0) _objectList.last()->moveBy(0,objStartY);
-		}
+		t = (ObjType)atoi((*it).m_strValue.c_str());
 	    }
+
+	  switch (t)
+	    {
+	    case OT_LINE:
+	      {
+		KPLineObject *kplineobject = new KPLineObject();
+		kplineobject->load(parser,lst);
+		_objectList.append(kplineobject);
+	      } break;
+	    case OT_RECT:
+	      {
+		KPRectObject *kprectobject = new KPRectObject();
+		kprectobject->load(parser,lst);
+		kprectobject->setRnds(_xRnd,_yRnd);
+		_objectList.append(kprectobject);
+	      } break;
+	    case OT_ELLIPSE:
+	      {
+		KPEllipseObject *kpellipseobject = new KPEllipseObject();
+		kpellipseobject->load(parser,lst);
+		_objectList.append(kpellipseobject);
+	      } break;
+	    case OT_AUTOFORM:
+	      {
+		KPAutoformObject *kpautoformobject = new KPAutoformObject();
+		kpautoformobject->load(parser,lst);
+		_objectList.append(kpautoformobject);
+	      } break;
+	    case OT_CLIPART:
+	      {
+		KPClipartObject *kpclipartobject = new KPClipartObject();
+		kpclipartobject->load(parser,lst);
+		_objectList.append(kpclipartobject);
+	      } break;
+	    case OT_TEXT:
+	      {
+		KPTextObject *kptextobject = new KPTextObject();
+		kptextobject->load(parser,lst);
+		_objectList.append(kptextobject);
+	      } break;
+	    case OT_PICTURE:
+	      {
+		KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection);
+		kppixmapobject->load(parser,lst);
+		_objectList.append(kppixmapobject);
+	      } break;
+	    default: break;
+	    }
+	  
+	  if (objStartY > 0) _objectList.last()->moveBy(0,objStartY);
 	}
       else
 	cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;    
@@ -676,14 +674,16 @@ void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _serv
   KPresenterChild* ch = new KPresenterChild(this,_rect,doc,_diffx,_diffy);
 
   insertChild( ch );
+  m_bModified = true;
 }
 
 /*========================= insert a child object =====================*/
 void KPresenterDocument_impl::insertChild(KPresenterChild *_child)
 {
-  m_lstChildren.append( _child );
+  m_lstChildren.append(_child);
   
-  emit sig_insertObject( _child );
+  emit sig_insertObject(_child);
+  m_bModified = true;
 }
 
 /*======================= change child geometry ==================*/
@@ -693,6 +693,7 @@ void KPresenterDocument_impl::changeChildGeometry(KPresenterChild *_child,const 
   _child->_setGeometry(QRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom()));
 
   emit sig_updateChildGeometry(_child);
+  m_bModified = true;
 }
 
 /*======================= child iterator =========================*/
@@ -713,6 +714,7 @@ void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int 
       _backgroundList.at(i)->restore();
     }
 
+  m_bModified = true;
   repaint(false);
 }
 
@@ -731,6 +733,7 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy,bool _re
       repaint(false);
     }
 
+  m_bModified = true;
   return getPageNums();
 }
 
@@ -742,12 +745,11 @@ unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool
   QString file = KFilePreviewDialog::getOpenFileName(templateDir + "/kpresenter/templates/plain.kpt","*.kpt|KPresenter templates",0);
   _clean = clean;
   objStartY = getPageSize(_backgroundList.count() - 1,0,0).y() + getPageSize(_backgroundList.count() - 1,0,0).height();
-  objStartNum = _objectList.count();
   if (!file.isEmpty()) load_template(file);
-  objStartNum = 0;
   objStartY = 0;
   _clean = true;
 
+  m_bModified = true;
   return 0;
 }
 
@@ -763,6 +765,7 @@ void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor
       kpbackground->setBackColor2(backColor2);
       kpbackground->setBackColorType(bcType);
     }
+  m_bModified = true;
 }
 
 /*==================== set background picture ====================*/
@@ -770,6 +773,7 @@ void KPresenterDocument_impl::setBackPixFilename(unsigned int pageNum,QString ba
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackPixFilename(backPix);
+  m_bModified = true;
 }
 
 /*==================== set background clipart ====================*/
@@ -777,6 +781,7 @@ void KPresenterDocument_impl::setBackClipFilename(unsigned int pageNum,QString b
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackClipFilename(backClip);
+  m_bModified = true;
 }
 
 /*================= set background pic view ======================*/
@@ -784,6 +789,7 @@ void KPresenterDocument_impl::setBackView(unsigned int pageNum,BackView backView
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackView(backView);
+  m_bModified = true;
 }
 
 /*==================== set background type =======================*/
@@ -791,6 +797,7 @@ void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackType(backType);
+  m_bModified = true;
 }
 
 /*========================== set page effect =====================*/
@@ -798,6 +805,7 @@ void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect page
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setPageEffect(pageEffect);
+  m_bModified = true;
 }
 
 /*===================== set pen and brush ========================*/
@@ -849,6 +857,7 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineE
 	}
     }
 
+  m_bModified = true;
   return ret;
 }
 
@@ -1052,6 +1061,8 @@ void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 	  repaint(kpobject);
 	}
     }      
+
+  m_bModified = true;
 }
 
 /*========================= raise object =========================*/
@@ -1069,6 +1080,8 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 	  repaint(kpobject);
 	}
     }      
+
+  m_bModified = true;
 }
 
 /*=================== insert a picture ==========================*/
@@ -1081,6 +1094,7 @@ void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy
   _objectList.append(kppixmapobject);
 
   repaint(kppixmapobject);
+  m_bModified = true;
 }
 
 /*=================== insert a clipart ==========================*/
@@ -1094,6 +1108,7 @@ void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy
   _objectList.append(kpclipartobject);
 
   repaint(kpclipartobject);
+  m_bModified = true;
 }
 
 /*======================= change picture ========================*/
@@ -1111,6 +1126,8 @@ void KPresenterDocument_impl::changePicture(QString filename,int diffx,int diffy
 	  break;
 	}
     }
+
+  m_bModified = true;
 }
 
 /*======================= change clipart ========================*/
@@ -1128,6 +1145,8 @@ void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy
 	  break;
 	}
     }
+
+  m_bModified = true;
 }
 
 /*===================== insert a line ===========================*/
@@ -1141,6 +1160,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
   _objectList.append(kplineobject);
 
   repaint(kplineobject);
+  m_bModified = true;
 }
 
 /*===================== insert a rectangle =======================*/
@@ -1154,6 +1174,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   _objectList.append(kprectobject);
 
   repaint(kprectobject);
+  m_bModified = true;
 }
 
 /*===================== insert a circle or ellipse ===============*/
@@ -1167,6 +1188,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   _objectList.append(kpellipseobject);
 
   repaint(kpellipseobject);
+  m_bModified = true;
 }
 
 /*===================== insert a textobject =====================*/
@@ -1180,6 +1202,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   _objectList.append(kptextobject);
 
   repaint(kptextobject);
+  m_bModified = true;
 }
 
 /*======================= insert an autoform ====================*/
@@ -1193,6 +1216,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   _objectList.append(kpautoformobject);
 
   repaint(kpautoformobject);
+  m_bModified = true;
 }
 
 /*=================== repaint all views =========================*/
@@ -1278,6 +1302,7 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
 	}
     }
   
+  m_bModified = true;
   return orderList;
 }
 
@@ -1378,394 +1403,48 @@ void KPresenterDocument_impl::deleteObjs()
 	}
     }
  
+  m_bModified = true;
   if (changed) repaint(false);
 }
 
 /*========================== copy objects ========================*/
 void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
 {
-//   QClipboard *cb = QApplication::clipboard();
-//   QString clipStr = "";
-//   char str[255];
+  QClipboard *cb = QApplication::clipboard();
+  string clip_str;
+  tostrstream out(clip_str);
+  KPObject *kpobject = 0;
   
-//   clipStr += "[KPRESENTER-DATA]";
+  out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
+      << "\" mime=\"" << "application/x-kpresenter-selection" << "\">" << endl;
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  out << otag << "<OBJECT type=\"" << static_cast<int>(kpobject->getType()) << "\">" << endl;
+	  kpobject->save(out);
+	  out << etag << "</OBJECT>" << endl;
+	}
+    }
+  out << etag << "</DOC>" << endl;
 
-//   if (!_objList.isEmpty())
-//     {
-//       for (unsigned int i=0;i < _objList.count();i++)
-// 	{
-// 	  objPtr = _objList.at(i);
-// 	  if (objPtr->isSelected)
-// 	    {
-// 	      if (objPtr->objType == OT_TEXT)
-// 		debug("At the moment text can't be copied to the clipboard. SORRY!");
-// 	      else
-// 		{
-// 		  clipStr += "[NEW_OBJECT_START]";
-		  
-// 		  clipStr += "[OBJ_TYPE]{";
-// 		  sprintf(str,"%d",(int)objPtr->objType);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[OBJ_X]{";
-// 		  sprintf(str,"%d",objPtr->ox - diffx);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[OBJ_Y]{";
-// 		  sprintf(str,"%d",objPtr->oy - diffy);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[OBJ_W]{";
-// 		  sprintf(str,"%d",objPtr->ow);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[OBJ_H]{";
-// 		  sprintf(str,"%d",objPtr->oh);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[OBJ_PRESNUM]{";
-// 		  sprintf(str,"%d",objPtr->presNum);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[OBJ_EFFECT]{";
-// 		  sprintf(str,"%d",(int)objPtr->effect);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[OBJ_EFFECT2]{";
-// 		  sprintf(str,"%d",(int)objPtr->effect2);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[GRAPHOBJ]";
-		  
-// 		  clipStr += "[LINE_BEGIN]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineBegin());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-		  
-// 		  clipStr += "[LINE_END]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineEnd());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[LINE_TYPE]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getLineType());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[RECT_TYPE]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getRectType());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[PEN_WIDTH]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().width());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[PEN_STYLE]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getObjPen().style());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[PEN_RED]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().red());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[PEN_GREEN]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().green());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[PEN_BLUE]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getObjPen().color().blue());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[BRUSH_STYLE]{";
-// 		  sprintf(str,"%d",(int)objPtr->graphObj->getObjBrush().style());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[BRUSH_RED]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().red());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[BRUSH_GREEN]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().green());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[BRUSH_BLUE]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getObjBrush().color().blue());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[FILENAME]{";
-// 		  sprintf(str,"%s",(const char*)objPtr->graphObj->getFileName());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[RND_X]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getRndX());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[RND_Y]{";
-// 		  sprintf(str,"%d",objPtr->graphObj->getRndY());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[ANGLE]{";
-// 		  sprintf(str,"%f",objPtr->angle);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[SHADOW_DIRECTION]{";
-// 		  sprintf(str,"%d",(int)objPtr->shadowDirection);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[SHADOW_DISTANCE]{";
-// 		  sprintf(str,"%d",objPtr->shadowDistance);
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[SHADOW_RED]{";
-// 		  sprintf(str,"%d",objPtr->shadowColor.red());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[SHADOW_GREEN]{";
-// 		  sprintf(str,"%d",objPtr->shadowColor.green());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[SHADOW_BLUE]{";
-// 		  sprintf(str,"%d",objPtr->shadowColor.blue());
-// 		  clipStr += str;
-// 		  clipStr += "}";
-
-// 		  clipStr += "[NEW_OBJECT_END]";
-// 		}
-// 	    }
-// 	}
-//     }
-  
-//   cb->setText((const char*)clipStr);
-
+  cb->setText(clip_str.c_str());
 }
 
 /*========================= paste objects ========================*/
 void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 {
-//   QClipboard *cb = QApplication::clipboard();
-//   QString clipStr = cb->text(),tag,value;
-//   bool tagStarted = false,valueStarted = false;
-//   QPen pen;
-//   QBrush brush;
-//   QColor color;
+  deSelectAllObj();
+
+  string clip_str = QApplication::clipboard()->text();
+
+  if (clip_str.empty()) return;
   
-//   objPtr = 0;
+  istrstream in(clip_str.c_str());
+  loadStream(in);
 
-
-//   if (!clipStr.isEmpty() && clipStr.left(strlen("[KPRESENTER-DATA]")) == "[KPRESENTER-DATA]")
-//     {
-//       for (unsigned int i = 0;i < clipStr.length();i++)
-// 	{
-	  
-// 	  // start tag
-// 	  if (clipStr.mid(i,1) == "[")
-// 	    {
-// 	      tagStarted = true;
-// 	      tag = "";
-// 	    }
-
-// 	  // end tag
-// 	  else if (clipStr.mid(i,1) == "]")
-// 	    {
-// 	      if (tagStarted)
-// 		{
-// 		  tagStarted = false;
-// 		  if (tag == "NEW_OBJECT_START")
-// 		    {
-// 		      objPtr = new PageObjects;
-// 		      objPtr->isSelected = true;
-// 		      objPtr->textObj = 0;
-// 		    }
-// 		  else if (tag == "NEW_OBJECT_END")
-// 		    {
-// 		      //_objNums++;
-// 		      //objPtr->objNum = _objNums;
-// 		      objPtr->graphObj->hide();
-// 		      _objList.append(objPtr);
-// 		      //repaint(objPtr->ox,objPtr->oy,
-// 		      //      objPtr->ow,objPtr->oh,_objNums,false);
-// 		      objPtr = 0;
-// 		    }
-// 		  else if (tag == "GRAPHOBJ")
-// 		    {
-// 		      objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType,"");
-// 		      objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-// 		    }
-// 		}
-// 	    }
-
-// 	  // start value
-// 	  else if (clipStr.mid(i,1) == "{")
-// 	    {
-// 	      valueStarted = true;
-// 	      value = "";
-// 	    }
-
-// 	  // end value
-// 	  else if (clipStr.mid(i,1) == "}")
-// 	    {
-// 	      if (valueStarted)
-// 		{
-// 		  valueStarted = false;
-// 		  if (tag == "OBJ_TYPE" && objPtr)
-// 		    objPtr->objType = (ObjType)atoi(value);
-// 		  else if (tag == "OBJ_X" && objPtr)
-// 		    objPtr->ox = atoi(value) + diffx;
-// 		  else if (tag == "ANGLE" && objPtr)
-// 		    objPtr->angle = atof(value);
-// 		  else if (tag == "SHADOW_DIRECTION" && objPtr)
-// 		    objPtr->shadowDirection = (ShadowDirection)atoi(value);
-// 		  else if (tag == "SHADOW_DISTANCE" && objPtr)
-// 		    objPtr->shadowDistance = atoi(value);
-// 		  else if (tag == "SHADOW_RED" && objPtr)
-// 		    {
-// 		      color = objPtr->shadowColor;
-// 		      color.setRgb(atoi(value),color.green(),color.blue());
-// 		      objPtr->shadowColor = color;
-// 		    }
-// 		  else if (tag == "SHADOW_GREEN" && objPtr)
-// 		    {
-// 		      color = objPtr->shadowColor;
-// 		      color.setRgb(color.red(),atoi(value),color.blue());
-// 		      objPtr->shadowColor = color;
-// 		    }
-// 		  else if (tag == "SHADOW_BLUE" && objPtr)
-// 		    {
-// 		      color = objPtr->shadowColor;
-// 		      color.setRgb(color.red(),color.green(),atoi(value));
-// 		      objPtr->shadowColor = color;
-// 		    }
-// 		  else if (tag == "OBJ_Y" && objPtr)
-// 		    objPtr->oy = atoi(value) + diffy;
-// 		  else if (tag == "OBJ_W" && objPtr)
-// 		    objPtr->ow = atoi(value);
-// 		  else if (tag == "OBJ_H" && objPtr)
-// 		    objPtr->oh = atoi(value);
-// 		  else if (tag == "OBJ_PRESNUM" && objPtr)
-// 		    objPtr->presNum = atoi(value);
-// 		  else if (tag == "OBJ_EFFECT" && objPtr)
-// 		    objPtr->effect = (Effect)atoi(value);
-// 		  else if (tag == "OBJ_EFFECT2" && objPtr)
-// 		    objPtr->effect2 = (Effect2)atoi(value);
-// 		  else if (tag == "LINE_TYPE" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setLineType((LineType)atoi(value));
-// 		  else if (tag == "LINE_BEGIN" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setLineBegin((LineEnd)atoi(value));
-// 		  else if (tag == "LINE_END" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setLineEnd((LineEnd)atoi(value));
-// 		  else if (tag == "RECT_TYPE" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setRectType((RectType)atoi(value));
-// 		  else if (tag == "PEN_WIDTH" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      pen = objPtr->graphObj->getObjPen();
-// 		      pen.setWidth(atoi(value));
-// 		      objPtr->graphObj->setObjPen(pen);
-// 		    }
-// 		  else if (tag == "PEN_STYLE" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      pen = objPtr->graphObj->getObjPen();
-// 		      pen.setStyle((PenStyle)atoi(value));
-// 		      objPtr->graphObj->setObjPen(pen);
-// 		    }
-// 		  else if (tag == "PEN_RED" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      pen = objPtr->graphObj->getObjPen();
-// 		      color = pen.color();
-// 		      color.setRgb(atoi(value),color.green(),color.blue());
-// 		      pen.setColor(color);
-// 		      objPtr->graphObj->setObjPen(pen);
-// 		    }
-// 		  else if (tag == "PEN_GREEN" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      pen = objPtr->graphObj->getObjPen();
-// 		      color = pen.color();
-// 		      color.setRgb(color.red(),atoi(value),color.blue());
-// 		      pen.setColor(color);
-// 		      objPtr->graphObj->setObjPen(pen);
-// 		    }
-// 		  else if (tag == "PEN_BLUE" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      pen = objPtr->graphObj->getObjPen();
-// 		      color = pen.color();
-// 		      color.setRgb(color.red(),color.green(),atoi(value));
-// 		      pen.setColor(color);
-// 		      objPtr->graphObj->setObjPen(pen);
-// 		    }
-// 		  else if (tag == "BRUSH_STYLE" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      brush = objPtr->graphObj->getObjBrush();
-// 		      brush.setStyle((BrushStyle)atoi(value));
-// 		      objPtr->graphObj->setObjBrush(brush);
-// 		    }
-// 		  else if (tag == "BRUSH_RED" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      brush = objPtr->graphObj->getObjBrush();
-// 		      color = brush.color();
-// 		      color.setRgb(atoi(value),color.green(),color.blue());
-// 		      brush.setColor(color);
-// 		      objPtr->graphObj->setObjBrush(brush);
-// 		    }
-// 		  else if (tag == "BRUSH_GREEN" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      brush = objPtr->graphObj->getObjBrush();
-// 		      color = brush.color();
-// 		      color.setRgb(color.red(),atoi(value),color.blue());
-// 		      brush.setColor(color);
-// 		      objPtr->graphObj->setObjBrush(brush);
-// 		    }
-// 		  else if (tag == "BRUSH_BLUE" && objPtr && objPtr->graphObj)
-// 		    {
-// 		      brush = objPtr->graphObj->getObjBrush();
-// 		      color = brush.color();
-// 		      color.setRgb(color.red(),color.green(),atoi(value));
-// 		      brush.setColor(color);
-// 		      objPtr->graphObj->setObjBrush(brush);
-// 		    }
-// 		  else if (tag == "FILENAME" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setFileName(value);
-// 		  else if (tag == "RND_X" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setRnds(atoi(value),objPtr->graphObj->getRndY());
-// 		  else if (tag == "RND_Y" && objPtr && objPtr->graphObj)
-// 		    objPtr->graphObj->setRnds(objPtr->graphObj->getRndX(),atoi(value));
-// 		}
-// 	    }
-	  
-// 	  // get char
-// 	  else
-// 	    {
-// 	      if (valueStarted)
-// 		value += clipStr.mid(i,1);
-// 	      else if (tagStarted)
-// 		tag += clipStr.mid(i,1);
-// 	    }
-// 	}
-//     }
+  m_bModified = true;
 }
 
 /*====================== replace objects =========================*/
@@ -1787,6 +1466,8 @@ void KPresenterDocument_impl::replaceObjs()
       if (kpobject->getType() == OT_RECT && dynamic_cast<KPRectObject*>(kpobject)->getRectType() == RT_ROUND)
 	dynamic_cast<KPRectObject*>(kpobject)->setRnds(_xRnd,_yRnd);
     }
+
+  m_bModified = true;
 }
 
 /*========================= restore background ==================*/
@@ -1796,3 +1477,49 @@ void KPresenterDocument_impl::restoreBackground(int pageNum)
     backgroundList()->at(pageNum)->restore();
 }
 
+/*==================== load stream ==============================*/
+void KPresenterDocument_impl::loadStream(istream &in)
+{
+  KOMLStreamFeed feed(in);
+  KOMLParser parser(&feed);
+  
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+ 
+  // DOC
+  if (!parser.open("DOC",tag))
+    {
+      cerr << "Missing DOC" << endl;
+      return;
+    }
+  
+  KOMLParser::parseTag(tag.c_str(),name,lst);
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for(;it != lst.end();it++)
+    {
+      if ((*it).m_strName == "mime")
+	{
+	  if ((*it).m_strValue != "application/x-kpresenter-selection")
+	    {
+	      cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	      return;
+	    }
+	}
+    }
+    
+  loadObjects(parser,lst);
+
+  repaint(false);
+  m_bModified = true;
+}
+
+/*================= deselect all objs ===========================*/
+void KPresenterDocument_impl::deSelectAllObj()
+{
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	viewPtr->getPage()->deSelectAllObj();
+    }
+}

@@ -214,7 +214,7 @@ void KPBackGround::save(ostream& out)
       << backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl; 
   out << indent << "<BCTYPE value=\"" << bcType << "\"/>" << endl; 
 
-  if (!backPixFilename.isEmpty())
+  if (!backPixFilename.isEmpty() && backType == BT_PICTURE)
     {
       QString _data;
       pixmapCollection->getPixmap(backPixFilename,pixSize,_data);
@@ -224,7 +224,7 @@ void KPBackGround::save(ostream& out)
 	  << _data << "\"/>" << endl;
     }
 
-  if (!backClipFilename.isEmpty())
+  if (!backClipFilename.isEmpty() && backType == BT_CLIPART)
     out << indent << "<BACKCLIP filename=\"" << backClipFilename << "\"/>" << endl; 
   
   out << indent << "<PGEFFECT value=\"" << pageEffect << "\"/>" << endl; 

@@ -71,6 +71,8 @@ class KPresenterView_impl;
 
 #include <iostream.h>
 #include <fstream.h>
+#include <torben.h>
+#include <strstream.h>
 
 #include <math.h>
 
@@ -129,7 +131,7 @@ public:
   // load
   virtual bool load_template(const char *_url);
   virtual bool load(KOMLParser&);
-  virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
+  virtual bool loadChildren(OPParts::MimeMultipartDict_ptr _dict);
 
   // ------ IDL ------
   virtual CORBA::Boolean init() {insertNewTemplate(0,0); return true;}
@@ -274,6 +276,9 @@ public:
   KPObject* getSelectedObj();
 
   void restoreBackground(int);
+  void loadStream(istream&);
+
+  void deSelectAllObj();
 
   KPPixmapCollection *getPixmapCollection()
     { return &_pixmapCollection; }

@@ -558,8 +558,8 @@ void Page::setupMenus()
   graphMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
   graphMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
-  pixmap.load(pixdir+"/editpaste.xpm");
-  graphMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+//   pixmap.load(pixdir+"/editpaste.xpm");
+//   graphMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
   graphMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
@@ -584,8 +584,8 @@ void Page::setupMenus()
   picMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
   picMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
-  pixmap.load(pixdir+"/editpaste.xpm");
-  picMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+//   pixmap.load(pixdir+"/editpaste.xpm");
+//   picMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
   picMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
@@ -610,8 +610,8 @@ void Page::setupMenus()
   clipMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
   clipMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
-  pixmap.load(pixdir+"/editpaste.xpm");
-  clipMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+//   pixmap.load(pixdir+"/editpaste.xpm");
+//   clipMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
   clipMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
@@ -636,8 +636,8 @@ void Page::setupMenus()
   txtMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
   txtMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
-  pixmap.load(pixdir+"/editpaste.xpm");
-  txtMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+//   pixmap.load(pixdir+"/editpaste.xpm");
+//   txtMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
   txtMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
