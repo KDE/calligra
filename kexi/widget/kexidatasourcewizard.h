@@ -23,17 +23,13 @@
 #include <qlabel.h>
 #include <kwizard.h>
 #include <kexipartitem.h>
+#include <kexidb/fieldlist.h>
 
 class KexiMainWindow;
 
 namespace KexiPart
 {
 	class DataSource;
-};
-
-namespace KexiDB
-{
-	class FieldList;
 };
 
 typedef QPair<KexiPart::DataSource*, KexiPart::Item> DSInfo;
