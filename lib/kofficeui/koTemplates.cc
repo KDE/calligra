@@ -123,7 +123,7 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 }
 
 
-KoTemplateTree::KoTemplateTree(const QString &templateType,
+KoTemplateTree::KoTemplateTree(const QCString &templateType,
                                KInstance *instance, const bool &readTree) :
     m_templateType(templateType), m_instance(instance), m_defaultGroup(0L) {
 
@@ -140,7 +140,7 @@ void KoTemplateTree::readTemplateTree() {
 
 void KoTemplateTree::writeTemplateTree() {
 
-    QString localDir=m_instance->dirs()->saveLocation(QFile::encodeName(m_templateType));
+    QString localDir=m_instance->dirs()->saveLocation(m_templateType);
 
     for(KoTemplateGroup *group=m_groups.first(); group!=0L; group=m_groups.next()) {
         //kdDebug() << "---------------------------------" << endl;
@@ -208,7 +208,7 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
 
 void KoTemplateTree::readGroups() {
 
-    QStringList dirs = m_instance->dirs()->resourceDirs(QFile::encodeName(m_templateType));
+    QStringList dirs = m_instance->dirs()->resourceDirs(m_templateType);
     for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
         //kdDebug() << "dir: " << *it << endl;
         QDir dir(*it);

@@ -80,7 +80,7 @@ public:
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance *instance,
+KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) :
     KDialogBase( parent, "template create dia", true, i18n( "Create a Template" ),
                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
@@ -158,7 +158,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     updatePixmap();
 }
 
-void KoTemplateCreateDia::createTemplate( const QString &templateType, KInstance *instance,
+void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) {
 
     KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, instance, file, pix, parent );
@@ -200,7 +200,7 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir=d->m_tree->instance()->dirs()->saveLocation(QFile::encodeName(d->m_tree->templateType()));
+    QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
     dir+=KoTemplates::stripWhiteSpace(group->name());
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -344,7 +344,7 @@ void KoTemplateCreateDia::slotAddGroup() {
     if(group && !group->isHidden())
         return;
 
-    QString dir=d->m_tree->instance()->dirs()->saveLocation(QFile::encodeName(d->m_tree->templateType()));
+    QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, true);
     d->m_tree->add(newGroup);

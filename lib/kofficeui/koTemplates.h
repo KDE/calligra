@@ -96,11 +96,11 @@ private:
 class KoTemplateTree {
 
 public:
-    KoTemplateTree(const QString &templateType, KInstance *instance,
+    KoTemplateTree(const QCString &templateType, KInstance *instance,
 		   const bool &readTree=false);
     ~KoTemplateTree() {}
 
-    QString templateType() const { return m_templateType; }
+    QCString templateType() const { return m_templateType; }
     KInstance *instance() const { return m_instance; }
     void readTemplateTree();
     void writeTemplateTree();
@@ -122,7 +122,7 @@ private:
     void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
 		       const QString &localDir);
 
-    QString m_templateType;
+    QCString m_templateType;
     KInstance *m_instance;
     QList<KoTemplateGroup> m_groups;
     KoTemplateGroup *m_defaultGroup;

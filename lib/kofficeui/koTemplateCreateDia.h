@@ -42,10 +42,10 @@ class KoTemplateCreateDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KoTemplateCreateDia( const QString &templateType, KInstance *instance,
+    KoTemplateCreateDia( const QCString &templateType, KInstance *instance,
 			 const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
-    static void createTemplate( const QString &templateType, KInstance *instance,
+    static void createTemplate( const QCString &templateType, KInstance *instance,
 				const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
 protected:

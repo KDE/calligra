@@ -89,7 +89,7 @@ public:
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
 					 const char *format, const QString &nativePattern,
 					 const QString &nativeName, const DialogType &dialogType,
-					 const QString& templateType) :
+					 const QCString& templateType) :
     KDialogBase(parent, name, true, i18n("Choose"), KDialogBase::Ok | KDialogBase::Cancel,
 		KDialogBase::Ok) {
 
@@ -120,7 +120,7 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, Q
 							    const char *format, const QString &nativePattern,
 							    const QString &nativeName,
 							    const KoTemplateChooseDia::DialogType &dialogType,
-							    const QString& templateType) {
+							    const QCString& templateType) {
     bool res = false;
     KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, format, nativePattern,
 							nativeName, dialogType, templateType);

@@ -109,7 +109,7 @@ public:
 			const QString &nativePattern=QString::null,
 			const QString &nativeName=QString::null,
 			const DialogType &dialogType=Everything,
-			const QString& templateType=QString::null);
+			const QCString& templateType="");
     ~KoTemplateChooseDia();
 
     /**
@@ -131,7 +131,7 @@ public:
 			     const QString &nativePattern=QString::null,
 			     const QString &nativeName=QString::null,
 			     const DialogType &dialogType=Everything,
-			     const QString& templateType=QString::null);
+			     const QCString& templateType="");
 
     /**
      * Method to get the current template
