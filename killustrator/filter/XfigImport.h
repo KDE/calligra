@@ -26,6 +26,7 @@
 #define XfigImport_h_
 
 #include <qintdict.h>
+#include <list>
 #include <qcolor.h>
 #include "GDocument.h"
 #include "ImportFilter.h"
@@ -46,10 +47,13 @@ private:
   void parseSpline (istream& fin, GDocument* doc);
   void parseText (istream& fin, GDocument* doc);
   void parseCompoundObject (istream& fin, GDocument* doc);
+  void buildDocument (GDocument *doc);
 
   float fig_resolution;
   int coordinate_system;
   QIntDict<QColor> colorTable;
+  
+  list<pair<int, GObject*> > objList;
 };
   
 #endif

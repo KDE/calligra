@@ -31,6 +31,12 @@
 #include <fstream.h>
 #include <limits.h>
 #include <math.h>
+#include <algorithm>
+
+bool greater_than (const pair<int, GObject*>& x, 
+		const pair<int, GObject*>& y) {
+  return x.first > y.first;
+}
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -53,6 +59,9 @@ bool XfigImport::setup (GDocument* doc, const char* format) {
   colorTable.insert (6, new QColor (yellow));
   colorTable.insert (7, new QColor (white));
   // TODO: up to 31 !!
+
+  objList.clear ();
+
   return true;
 }
 
@@ -134,9 +143,11 @@ bool XfigImport::importFromFile (GDocument *doc) {
   while (! fin.eof ()) {
     int tag = -1;
     fin >> tag;
-    if (tag == -1)
+    if (tag == -1) {
       // EOF
+      buildDocument (doc);
       return true;
+    }
 
     switch (tag) {
     case 0:
@@ -165,7 +176,10 @@ bool XfigImport::importFromFile (GDocument *doc) {
       break;
     case 6:
       // a compound object
-      cout << "compound object\n";
+      parseCompoundObject (fin, doc);
+      break;
+    case -6:
+      // end of compound object --> ignore it
       break;
     default:
       // should not occur
@@ -173,6 +187,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
       break;
     }
   }
+  buildDocument (doc);
   return true;
 }
 
@@ -204,8 +219,7 @@ void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
   obj->setStartPoint (p1);
   obj->setEndPoint (p2);
   fin.ignore (INT_MAX, '\n');
-  obj->ref ();
-  doc->insertObject (obj);
+  objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
 void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
@@ -298,8 +312,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
   }
 
   // and insert the object
-  obj->ref ();
-  doc->insertObject (obj);
+  objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
 void XfigImport::parseSpline (istream& fin, GDocument* doc) {
@@ -400,9 +413,26 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
     obj->transform (m3, true);
   }
 
-  obj->ref ();
-  doc->insertObject (obj);
+  objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
 void XfigImport::parseCompoundObject (istream& fin, GDocument* doc) {
+  int upperright_x, upperright_y, lowerleft_x, lowerleft_y;
+
+  fin >> upperright_x >> upperright_y >> lowerleft_x >> lowerleft_y;
+  fin.ignore (INT_MAX, '\n');
+}
+
+
+/**
+ * Copy all parsed objects from the sorted list to the document.
+ */
+void XfigImport::buildDocument (GDocument *doc) {
+  objList.sort (greater_than);
+  list<pair<int, GObject*> >::iterator i = objList.begin ();
+  for (; i != objList.end (); i++) {
+    GObject* obj = i->second;
+    obj->ref ();
+    doc->insertObject (obj);
+  }
 }
