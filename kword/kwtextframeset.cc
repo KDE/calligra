@@ -2041,7 +2041,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
                 }
                 break;
             case Format:
-                cmd = new QTextFormatCommand( textdoc, id, index, eid, eindex, text.rawData(), format, flags );
+                cmd = new KWTextFormatCommand( textdoc, id, index, eid, eindex, text.rawData(), format, flags );
                 break;
             case Alignment:
                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::Alignment );
@@ -2261,7 +2261,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
             undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
             readFormats( c1, c2 ); // gather char-format info but not paraglayouts nor customitems
 
-            QTextCommand * cmd = new QTextFormatCommand( textdoc, firstParag->paragId(), 0,
+            QTextCommand * cmd = new KWTextFormatCommand( textdoc, firstParag->paragId(), 0,
                                                          lastParag->paragId(), c2.index(),
                                                          undoRedoInfo.text.rawData(), newFormat,
                                                          formatFlags );
@@ -2286,6 +2286,12 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         //currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( newFormat ) );
         //kdDebug() << "KWTextFrameSet::applyStyle currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
     }
+
+    //resize all variables after applied style
+    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+        static_cast<KWTextCustomItem *>( cit.current() )->resize();
+
 
     if ( interactive )
     {

@@ -391,6 +391,109 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     return c;
 }
 
+KWTextFormatCommand::KWTextFormatCommand(QTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<QTextStringChar> &old, QTextFormat *f, int fl )
+    : QTextFormatCommand(d, sid, sidx, eid, eidx, old, f, fl)
+{
+}
+
+
+KWTextFormatCommand::~KWTextFormatCommand()
+{
+}
+
+void KWTextFormatCommand::resizeCustomItem()
+{
+    QTextParag *sp = doc->paragAt( startId );
+    QTextParag *ep = doc->paragAt( endId );
+    if ( !sp || !ep )
+	return;
+
+    QTextCursor start( doc );
+    start.setParag( sp );
+    start.setIndex( startIndex );
+    QTextCursor end( doc );
+    end.setParag( ep );
+    end.setIndex( endIndex );
+
+    doc->setSelectionStart( QTextDocument::Temp, &start );
+    doc->setSelectionEnd( QTextDocument::Temp, &end );
+
+
+    if ( start == end )
+    {
+        QString text = start.parag()->string()->toString().mid( start.index(), end.index() - start.index() );
+        for ( int i = start.index(); i < end.index(); ++i )
+        {
+            if( start.parag()->at(i)->isCustom())
+            {
+                static_cast<KWTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
+            }
+        }
+    }
+    else
+    {
+        int i;
+        QString text;
+        // Replace the trailing spaces with '\n'. That char carries the formatting for the trailing space.
+        text = start.parag()->string()->toString().mid( start.index(), start.parag()->length() - 1 - start.index() );
+        for ( i = start.index(); i < start.parag()->length(); ++i )
+            if( start.parag()->at(i)->isCustom())
+            {
+                static_cast<KWTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
+            }
+
+        QTextParag *p = start.parag()->next();
+        while ( p && p != end.parag() )
+        {
+	    text = p->string()->toString().left( p->length() - 1 );
+            for ( i = 0; i < p->length(); ++i )
+            {
+               if( p->at(i)->isCustom())
+               {
+                   static_cast<KWTextCustomItem *>(p->at(i)->customItem() )->resize();
+               }
+            }
+            p = p->next();
+        }
+        text = end.parag()->string()->toString().left( end.index() );
+        for ( i = 0; i < end.index(); ++i )
+        {
+            if( end.parag()->at(i)->isCustom())
+            {
+                static_cast<KWTextCustomItem *>( end.parag()->at(i)->customItem() )->resize();
+            }
+        }
+    }
+}
+
+QTextCursor *KWTextFormatCommand::execute( QTextCursor *c )
+{
+    QTextCursor *tmp=QTextFormatCommand::execute( c );
+    QTextParag *sp = doc->paragAt( startId );
+    QTextParag *ep = doc->paragAt( endId );
+    if ( !sp || !ep )
+	return c;
+
+    resizeCustomItem();
+
+    return tmp;
+}
+
+QTextCursor *KWTextFormatCommand::unexecute( QTextCursor *c )
+{
+    QTextCursor*tmp= QTextFormatCommand::unexecute( c );
+
+    QTextParag *sp = doc->paragAt( startId );
+    QTextParag *ep = doc->paragAt( endId );
+    if ( !sp || !ep )
+	return c;
+
+    resizeCustomItem();
+
+    return tmp;
+}
+
+
 ////////////////////////// Frame commands ////////////////////////////////
 
 FrameIndex::FrameIndex( KWFrame *frame )

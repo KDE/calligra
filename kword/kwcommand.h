@@ -157,6 +157,21 @@ protected:
     KWParagLayout m_oldParagLayout;
 };
 
+/**
+ * Command created when changing formatted text
+ */
+class KWTextFormatCommand : public QTextFormatCommand
+{
+public:
+    KWTextFormatCommand( QTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<QTextStringChar> &old, QTextFormat *f, int fl );
+    virtual ~KWTextFormatCommand();
+
+    QTextCursor *execute( QTextCursor *c );
+    QTextCursor *unexecute( QTextCursor *c );
+    void resizeCustomItem();
+};
+
+
 ////////////////////////// Frame commands ////////////////////////////////
 
 // Identifies a frame
