@@ -164,16 +164,295 @@ void KPresenterDocument_impl::cleanUp()
   Document_impl::cleanUp();
 }
 
+/*========================== save ===============================*/
+bool KPresenterDocument_impl::save(const char *_url)
+{
+  KURL u(_url);
+  if (u.isMalformed())
+    {
+      cerr << "malformed URL" << endl;
+      return false;
+    }
+  
+  if (!u.isLocalFile())
+    {
+      QMessageBox::critical((QWidget*)0L,i18n("KSpread Error"),i18n("Can not save to remote URL\n"),i18n("OK"));
+      return false;
+    }
+
+  ofstream out(u.path());
+  if (!out)
+    {
+      QString tmp;
+      tmp.sprintf(i18n("Could not write to\n%s"),u.path());
+      cerr << tmp << endl;
+      return false;
+    }
+
+  out << "<?xml version=\"1.0\"?>" << endl;
+  
+  save(out);
+  
+  m_strFileURL = _url;
+    
+  return true;
+}
+
+/*========================== save ===============================*/
+bool KPresenterDocument_impl::save(ostream& out)
+{
+  out << otag << "<DOC author=\"" << "Reginals Stadlbauer" << "\" email=" << "reggie@kde.org" << " editor=" << "KPresenter"
+      << " mime=" << "\"application/x-kpresenter\"" << " >" << endl;
+  
+  out << otag << "<PAPER format=" << paperFormatString() << " orientation=" << orientationString() << '>' << endl;
+  out << indent << "<PAPERBORDERS left=" << pageLayout().left << " top=" << pageLayout().top << " right=" << pageLayout().right
+      << " bottom=" << pageLayout().bottom << "/>" << endl;
+  out << etag << "</PAPER>" << endl;
+  
+  out << etag << "</DOC>" << endl;
+    
+  setModified(false);
+    
+  return true;
+}
+
+/*========================== load ===============================*/
+bool KPresenterDocument_impl::load(const char *_url)
+{
+//   KURL u( _url );
+//   if ( u.isMalformed() )
+//     return FALSE;
+  
+//   if ( !u.isLocalFile() )
+//   {
+//     cerr << "Can not save to remote URL" << endl;
+//     return false;
+//   }
+
+//   ifstream in( u.path() );
+//   if ( !in )
+//   {
+//     cerr << "Could not open" << u.path() << endl;
+//     return false;
+//   }
+
+//   KOMLStreamFeed feed( &in );
+//   KOMLParser parser( &feed );
+  
+//   string tag;
+//   vector<KOMLAttrib> lst;
+//   string name;
+
+//   // DOC
+//   if ( !parser.open( "DOC", tag ) )
+//   {
+//     cerr << "Missing DOC" << endl;
+//     return false;
+//   }
+  
+//   KOMLParser::parseTag( tag.c_str(), name, lst );
+//   vector<KOMLAttrib>::const_iterator it = lst.begin();
+//   for( ; it != lst.end(); it++ )
+//   {
+//     if ( (*it).m_strName == "mime" )
+//     {
+//       if ( (*it).m_strValue != "application/x-kspread" )
+//       {
+// 	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+// 	return false;
+//       }
+//     }
+//   }
+
+//   if ( !load( parser ) )
+//     return false;
+    
+//   parser.close( tag );
+
+//   m_strFileURL = _url;
+  
+//   return true;
+  return false;
+}
+
+/*========================== load ===============================*/
+bool KPresenterDocument_impl::load(KOMLParser& parser)
+{
+//   string tag;
+//   vector<KOMLAttrib> lst;
+//   string name;
+  
+//   // PAPER, MAP
+//   while( parser.open( 0L, tag ) )
+//   {
+//     KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+//     if ( name == "PAPER" )
+//     {
+//       KOMLParser::parseTag( tag.c_str(), name, lst );
+//       vector<KOMLAttrib>::const_iterator it = lst.begin();
+//       for( ; it != lst.end(); it++ )
+//       {
+// 	if ( (*it).m_strName == "format" )
+// 	{
+// 	}
+// 	else if ( (*it).m_strName == "orientation" )
+// 	{
+// 	}
+// 	else
+// 	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
+//       }
+
+//       // PAPERBORDERS, HEAD, FOOT
+//       while( parser.open( 0L, tag ) )
+//       {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+
+// 	if ( name == "PAPERBORDERS" )
+// 	{    
+// 	  KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	  for( ; it != lst.end(); it++ )
+// 	  {
+// 	    if ( (*it).m_strName == "left" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "top" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "right" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "bottom" )
+// 	    {
+// 	    }
+// 	    else
+// 	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
+// 	  } 
+// 	}
+//       	else if ( name == "HEAD" )
+// 	{
+// 	  KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	  for( ; it != lst.end(); it++ )
+// 	  {
+// 	    if ( (*it).m_strName == "left" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "center" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "right" )
+// 	    {
+// 	    }
+// 	    else
+// 	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
+// 	  } 
+// 	}
+//       	else if ( name == "FOOT" )
+// 	{
+// 	  KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	  for( ; it != lst.end(); it++ )
+// 	  {
+// 	    if ( (*it).m_strName == "left" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "center" )
+// 	    {
+// 	    }
+// 	    else if ( (*it).m_strName == "right" )
+// 	    {
+// 	    }
+// 	    else
+// 	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
+// 	  } 
+// 	}
+// 	else
+// 	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;    
+	
+// 	if ( !parser.close( tag ) )
+//         {
+// 	  cerr << "ERR: Closing Child" << endl;
+// 	  return false;
+// 	}
+//       }
+//     }
+//     else if ( name == "MAP" )
+//     {
+//       if ( !m_pMap->load( parser, lst ) )
+// 	return false;
+//     }
+//     else
+//       cerr << "Unknown tag '" << tag << "' in TABLE" << endl;    
+
+//     if ( !parser.close( tag ) )
+//     {
+//       cerr << "ERR: Closing Child" << endl;
+//       return false;
+//     }
+//   }
+
+//   return true;
+
+//   /*
+//     KSpreadMap *map2 = new XclMap( this );
+
+//     printf("Loading map ....\n");
+
+//     // For use as values in the ObjectType property
+//     TYPE t_map = _korb->findType( "KDE:kxcl:Map" );
+//     if ( !t_map || !KPart::load( _korb, _map, t_map ) )
+// 	return FALSE;
+    
+//     bool ret = map2->load( _korb, _map );
+
+//     if ( ret )
+//     {
+// 	tableId = 1;
+	
+// 	printf("Adding to gui\n");
+
+// 	if ( pGui )
+// 	    pGui->removeAllKSpreadTables();
+// 	delete pMap;
+
+// 	pMap = map2;
+
+// 	if ( pGui )
+// 	{
+// 	    KSpreadTable *t;
+// 	    for ( t = pMap->firstKSpreadTable(); t != 0L; t = pMap->nextTable() )
+// 		pGui->addKSpreadTable( t );
+// 	}
+	
+// 	pMap->initAfterLoading();
+// 	tableId = pMap->count() + 1;
+	
+// 	if ( pGui )
+// 	    pGui->setActiveKSpreadTable( pMap->firstTable() );
+//     }
+//     else
+// 	delete map2;
+
+//     printf("... Done map\n");
+
+//     return TRUE;
+// */
+  return false;
+}
+
+
 /*========================== open ================================*/
 CORBA::Boolean KPresenterDocument_impl::open(const char *_filename)
 {
-  return false;
+  return open(_filename);;
 }
 
 /*========================== save as =============================*/
 CORBA::Boolean KPresenterDocument_impl::saveAs(const char *_filename,const char *_format)
 {
-  return false;
+  return save(_filename);
 }
   
 /*========================= create a view ========================*/
@@ -194,6 +473,44 @@ void KPresenterDocument_impl::viewList(OPParts::Document::ViewList*& _list)
   QListIterator<KPresenterView_impl> it(m_lstViews);
   for(;it.current();++it)
     (*_list)[i++] = OPParts::View::_duplicate(it.current());
+}
+
+/*======================== paperformatstring =====================*/
+QString KPresenterDocument_impl::paperFormatString()
+{
+  switch(pageLayout().format)
+    {
+    case PG_DIN_A5:
+      return QString("A5");
+    case PG_DIN_A4:
+      return QString("A4");
+    case PG_DIN_A3:
+      return QString("A3");
+    case PG_US_LETTER:
+      return QString("Letter");
+    case PG_US_LEGAL:
+	return QString("Legal");
+    case PG_SCREEN:
+      return QString("Screen");
+    case PG_CUSTOM:
+      QString tmp;
+      tmp.sprintf("%fx%f",pageLayout().width,pageLayout().height);
+      return QString(tmp);
+    }
+  assert(0);
+}
+
+/*=================== orientation ================================*/
+const char* KPresenterDocument_impl::orientationString()
+{
+  switch(pageLayout().orientation)
+    {
+    case PG_PORTRAIT:
+      return "Portrait";
+    case PG_LANDSCAPE:
+      return "Landscape";
+    }
+  assert(0);
 }
 
 /*========================== output formats ======================*/

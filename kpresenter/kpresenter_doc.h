@@ -34,9 +34,13 @@ class KPresenterView_impl;
 #include <qpen.h>
 #include <qpopmenu.h>
 #include <qcursor.h>
+#include <qmsgbox.h>
+#include <qstring.h>
 
 #include <koPageLayoutDia.h>
 #include <koIMR.h>
+
+#include <kurl.h>
 
 #include "kpresenter_view.h"
 #include "global.h"
@@ -44,7 +48,12 @@ class KPresenterView_impl;
 #include "graphobj.h"
 #include "ktextobject.h"
 
-#include <koIMR.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
+#include <iostream.h>
+#include <fstream.h>
 
 #define MIME_TYPE "application/x-kpresenter"
 #define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
@@ -125,6 +134,14 @@ public:
   // clean
   virtual void cleanUp();
   
+  // save
+  virtual bool save(const char*);
+  virtual bool save(ostream&);
+
+  // load
+  virtual bool load(const char*);
+  virtual bool load(KOMLParser&);
+
   // ------ IDL ------
   // open - save document
   virtual CORBA::Boolean open(const char *_filename);
@@ -141,6 +158,14 @@ public:
   
   // ask, if document is modified
   virtual CORBA::Boolean isModified() {return m_bModified;}
+  virtual void setModified(bool _c) {m_bModified = _c;}
+  
+  // url of part
+  const char* url() {return m_strFileURL.data();}
+
+  const char* orientationString();
+  
+  QString paperFormatString();
   
   // ------ C++ ------
   // get output- and unputformats
@@ -285,6 +310,8 @@ protected:
   Background *pagePtr;
   SpPageConfiguration *spPCPtr;
   
+  // url
+  QString m_strFileURL;
 };
 
 #endif
