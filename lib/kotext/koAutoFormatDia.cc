@@ -106,13 +106,17 @@ void KoAutoFormatExceptionWidget::slotAddException()
     {
         if(text.at(text.length()-1)!='.' && m_bAbbreviation)
             text=text+".";
-        m_listException<<text;
+        if( m_listException.findIndex( text )==-1)
+        {
+            m_listException<<text;
 
-        exceptionList->clear();
-        exceptionList->insertStringList(m_listException);
-        pbRemoveException->setEnabled(m_listException.count()>0);
+            exceptionList->clear();
+            exceptionList->insertStringList(m_listException);
+            pbRemoveException->setEnabled(m_listException.count()>0);
+            pbAddException->setEnabled(false);
+        }
         exceptionLine->clear();
-        pbAddException->setEnabled(false);
+
     }
 }
 
