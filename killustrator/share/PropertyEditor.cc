@@ -235,7 +235,6 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
 
   widthField = new FloatSpinBox (w);
   widthField->setFormatString ("%-3.3f");
-  widthField->setEditable (true);
   widthField->setRange (0, 20);
   widthField->move (80, 20);
 

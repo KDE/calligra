@@ -38,6 +38,7 @@
 #include <qlayout.h>
 #include <qgrpbox.h>
 #include <qframe.h>
+#include <qspinbox.h>
 
 PolygonConfigDialog::PolygonConfigDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, true) {
@@ -99,9 +100,7 @@ QWidget* PolygonConfigDialog::createWidget (QWidget* parent) {
   label->setText (i18n ("Corners:"));
   label->move (10, 90);
 
-  spinbox = new KNumericSpinBox (w);
-  spinbox->setRange (3, 100);
-  spinbox->setStep (1);
+  spinbox = new QSpinBox (3, 100, 1, w);
   spinbox->move (90, 90);
 
   label = new QLabel (w);
@@ -143,12 +142,12 @@ void PolygonConfigDialog::helpPressed () {
 }
 
 unsigned int PolygonConfigDialog::numCorners () {
-  return spinbox->getValue ();
+  return spinbox->value ();
 }
 
 void PolygonConfigDialog::setNumCorners (unsigned int num) {
   spinbox->setValue (num);
-  preview->setNumOfCorners (spinbox->getValue ());
+  preview->setNumOfCorners (spinbox->value ());
 }
 
 unsigned int PolygonConfigDialog::sharpness () {

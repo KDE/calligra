@@ -22,21 +22,17 @@
 
 */
 
+#include <qcheckbox.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
 #include "GridDialog.h"
 #include "GridDialog.moc"
 
-#include <stdio.h>
-
 #include <klocale.h>
-#include <kapp.h>
 #include <kbuttonbox.h>
 #include <kseparator.h>
-
-#include <qpushbt.h>
-#include <qbttngrp.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qgrpbox.h>
 
 GridDialog::GridDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, true) {

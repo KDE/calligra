@@ -25,9 +25,9 @@
 #ifndef FloatSpinBox_h_
 #define FloatSpinBox_h_
 
-#include <kspinbox.h>
+#include <qspinbox.h>
 
-class FloatSpinBox : public KSpinBox {
+class FloatSpinBox : public QSpinBox {
   Q_OBJECT
 public:
   FloatSpinBox (QWidget* parent = 0L, const char* name = 0L, 

@@ -22,22 +22,25 @@
 
 */
 
+#include <qpushbutton.h>
+#include <qcheckbox.h>
+
 #include "TransformationDialog.h"
 #include "TransformationDialog.moc"
 
-#include <stdio.h>
+//#include <stdio.h>
 
 #include <klocale.h>
-#include <kapp.h>
+//#include <kapp.h>
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
 
-#include <qpushbt.h>
-#include <qbttngrp.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qgrpbox.h>
+//#include <qpushbt.h>
+//#include <qbttngrp.h>
+//#include <qlabel.h>
+//#include <qlayout.h>
+//#include <qgrpbox.h>
 
 #include "TranslateCmd.h"
 #include "RotateCmd.h"
@@ -106,7 +109,6 @@ QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
   horizPosition = new UnitBox (w);
   horizPosition->setRange (-1000.0, 1000.0);
   horizPosition->setStep (0.1);
-  horizPosition->setEditable (true);
   horizPosition->move (90, 20);
 
   label = new QLabel (w);
@@ -117,7 +119,6 @@ QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
   vertPosition = new UnitBox (w);
   vertPosition->setRange (-1000.0, 1000.0);
   vertPosition->setStep (0.1);
-  vertPosition->setEditable (true);
   vertPosition->move (90, 50);
 
   relativePosition = new QCheckBox (w);
@@ -175,7 +176,6 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   horizDim = new UnitBox (w);
   horizDim->setRange (-1000.0, 1000.0);
   horizDim->setStep (0.1);
-  horizDim->setEditable (true);
   horizDim->move (90, 65);
   connect (horizDim, SIGNAL(valueChanged (float)),
 	   this, SLOT(updateProportionalDimension (float)));
@@ -187,7 +187,6 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   vertDim = new UnitBox (w);
   vertDim->setRange (-1000.0, 1000.0);
   vertDim->setStep (0.1);
-  vertDim->setEditable (true);
   vertDim->move (90, 95);
   connect (vertDim, SIGNAL(valueChanged (float)),
 	   this, SLOT(updateProportionalDimension (float)));
@@ -231,7 +230,6 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   rotAngle = new FloatSpinBox (w);
   rotAngle->setRange (-360.0, +360.0);
   horizPosition->setStep (0.1);
-  rotAngle->setEditable (true);
   rotAngle->move (90, 20);
 
   box = new QGroupBox (w);
@@ -246,7 +244,6 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   horizRotCenter = new UnitBox (box);
   horizRotCenter->setRange (-1000.0, 1000.0);
   horizRotCenter->setStep (0.1);
-  horizRotCenter->setEditable (true);
   horizRotCenter->move (90, 20);
 
   label = new QLabel (box);
@@ -257,7 +254,6 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   vertRotCenter = new UnitBox (box);
   vertRotCenter->setRange (-1000.0, 1000.0);
   vertRotCenter->setStep (0.1);
-  vertRotCenter->setEditable (true);
   vertRotCenter->move (90, 50);
 
   relativeRotCenter = new QCheckBox (box);

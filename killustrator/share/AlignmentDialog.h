@@ -29,7 +29,6 @@
 #include <qradiobt.h>
 #include <qchkbox.h>
 #include <ktabctl.h>
-#include <kspinbox.h>
 #include "GDocument.h"
 #include "GObject.h"
 #include "AlignCmd.h"

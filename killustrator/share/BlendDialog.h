@@ -26,7 +26,8 @@
 #define BlendDialog_h
 
 #include <qdialog.h>
-#include <kspinbox.h>
+
+class QSpinBox;
 
 class BlendDialog : public QDialog {
   Q_OBJECT
@@ -42,7 +43,7 @@ private slots:
   void helpPressed ();
   
 private:
-  KNumericSpinBox *spinbox;
+  QSpinBox *spinbox;
 };
 
 #endif

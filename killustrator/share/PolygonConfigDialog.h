@@ -28,11 +28,12 @@
 #include <qdialog.h>
 #include <qradiobt.h>
 
-#include <kspinbox.h>
 #include <kslider.h>
 
 #include "PolygonTool.h"
 #include "PolygonPreview.h"
+
+class QSpinBox;
 
 class PolygonConfigDialog : public QDialog {
   Q_OBJECT
@@ -58,7 +59,7 @@ private slots:
   void slotConvexPolygon ();
 
 private:
-  KNumericSpinBox *spinbox;
+  QSpinBox *spinbox;
   KSlider *slider;
   QRadioButton *concaveButton, *convexButton;
   PolygonPreview *preview;

@@ -24,11 +24,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <qlineedit.h>
+
 #include "FloatSpinBox.h"
 #include "FloatSpinBox.moc"
 
-FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name, 
-			    int align) : KSpinBox (parent, name, align) {
+FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
+                            int /*align*/) : QSpinBox (parent, name) {
   minval = 1;
   maxval = 10;
   step = 1;
@@ -38,7 +40,7 @@ FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
 
   connect (this, SIGNAL (valueIncreased ()), SLOT(slotIncrease ()));
   connect (this, SIGNAL (valueDecreased ()), SLOT(slotDecrease ()));
-  connect (_edit, SIGNAL (returnPressed ()), this,
+  connect (editor(), SIGNAL (returnPressed ()), this,
 	   SLOT (slotValueChange ()));
 }
 
@@ -46,7 +48,7 @@ FloatSpinBox::~FloatSpinBox () {
 }
 
 float FloatSpinBox::getValue () {
-  return atof (KSpinBox::getValue ());
+  return atof (QString(editor()->text()).ascii());
 }
 
 void FloatSpinBox::setFormatString (const char* fmt) {
@@ -57,7 +59,7 @@ void FloatSpinBox::setValue (float value) {
   char buf[20];
   if (minval <= value && value <= maxval) {
     sprintf (buf, (const char *) format, value);
-    KSpinBox::setValue (buf);
+    editor()->setText(buf);
   }
 }
 
