@@ -24,7 +24,6 @@
 #include "vfillcmd.h"
 #include "vselection.h"
 
-
 VFillCmd::VFillCmd( VDocument *doc, const VFill &fill, const QString &icon )
 	: VCommand( doc, i18n( "Fill Objects" ), icon ), m_fill( fill )
 {
@@ -43,7 +42,7 @@ void
 VFillCmd::execute()
 {
 	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 	{
 		//if( m_opacity == -1 )
 		//	m_color.setOpacity( itr.current()->fill().color().opacity() );
@@ -63,7 +62,7 @@ VFillCmd::unexecute()
 
 	int i = 0;
 
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 	{
 		itr.current()->setFill( m_oldcolors[ i++ ] );
 	}

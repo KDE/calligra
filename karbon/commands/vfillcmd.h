@@ -26,13 +26,9 @@
 
 #include <qvaluevector.h>
 
-
 class VSelection;
 
-
 // Fill object(s)
-
-class VPath;
 
 class VFillCmd : public VCommand
 {
