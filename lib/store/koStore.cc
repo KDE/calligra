@@ -162,7 +162,7 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
   default:
     kdWarning(s_area) << "Unsupported backend requested for KoStore (KURL) : " << backend << endl;
     KMessageBox::sorry( window,
-        i18n("The directory mode is not suported for remote locations."),
+        i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));
     return 0L;
   }
