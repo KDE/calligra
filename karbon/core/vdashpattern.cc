@@ -34,7 +34,8 @@ VDashPattern::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "DASHPATTERN" );
 		element.appendChild( me );
 
-		me.setAttribute( "offset", m_offset );
+		if( m_offset != 0.0 )
+			me.setAttribute( "offset", m_offset );
 
 		QDomElement dash;
 
