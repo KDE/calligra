@@ -71,6 +71,8 @@ Manager::lookup()
 //<TEMP>: disable some parts if needed
 		if (!Kexi::tempShowForms() && mime=="kexi/form")
 			continue;
+		if (!Kexi::tempShowReports() && mime=="kexi/report")
+			continue;
 //</TEMP>
 		int idx = sl_order.findIndex( ptr->library() );
 		if (idx!=-1)

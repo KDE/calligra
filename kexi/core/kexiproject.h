@@ -143,6 +143,11 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 \return newly created part item or NULL on any error. */
 		KexiPart::Item* createPartItem(KexiPart::Info *info);
 
+		/*! Adds item \a item after it is succesfully stored as an instance of part
+		 pointed by \a info. Used by KexiDialogBase::storeNewData(). 
+		 @internal */
+		void addStoredItem(KexiPart::Info *info, KexiPart::Item *item);
+
 #if 0 //remove?
 		/*! Creates object using data provided by \a dlg dialog. 
 		 Dialog's \a item (KexiDialog::partItem()) must not be stored 

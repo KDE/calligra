@@ -701,7 +701,12 @@ KexiMainWindowImpl::initActions()
 	}
 	connect(toggleaction, SIGNAL(toggled(bool)), this, SLOT(slotOptionsEnableForms(bool)));
 # endif //0
+#endif
 
+#ifdef KEXI_REPORTS_SUPPORT
+	Kexi::tempShowReports() = true;
+#else
+	Kexi::tempShowReports() = false;
 #endif
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -1025,6 +1030,8 @@ KexiMainWindowImpl::initNavigator()
 		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
+			if (!it->addTree())
+				continue;
 			kdDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
 			d->nav->addGroup(it);
 
@@ -2192,6 +2199,10 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 	}
 
 	//data was never saved in the past -we need to create a new object at the backend
+#ifdef KEXI_ADD_CUSTOM_OBJECT_CREATION
+	KexiPart::Info *info = dlg->part()->info();
+# include "keximainwindowimpl_customobjcreation.h"
+#endif
 	if (!d->nameDialog) {
 		d->nameDialog = new KexiNameDialog(
 			messageWhenAskingForName, this, "nameDialog");
@@ -2690,6 +2701,10 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " << info->projectPartID()  << endl;
 	}
 
+#ifdef KEXI_ADD_CUSTOM_OBJECT_CREATION
+# include "keximainwindowimpl_customobjcreation.h"
+#endif
+
 	KexiPart::Item *it = d->prj->createPartItem(info); //this, *item, viewMode);
 	if (!it) {
 		//js: todo: err
@@ -2899,6 +2914,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 {
 //TODO
 	Kexi::tempShowForms() = true;
+	Kexi::tempShowReports() = true;
 	if(!projectData)
 		return false;
 

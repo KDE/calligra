@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -289,6 +289,16 @@ KexiProject::items(KexiPart::Info *i)
 //	kdDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
 	m_itemDictsCache.insert( i->projectPartID(), dict );
 	return dict;
+}
+
+void
+KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
+{
+	if (!info || !item)
+		return;
+	KexiPart::ItemDict *dict = items(info);
+	m_unstoredItems.take(item->mime()+" "+item->name().latin1()); //no longer unstored
+	dict->insert( item->identifier(), item );
 }
 
 KexiPart::ItemDict*

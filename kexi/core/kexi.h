@@ -66,6 +66,9 @@ namespace Kexi
 	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowForms(); 
 
+	//! false by default, flag loaded on main window startup
+	KEXICORE_EXPORT bool& tempShowReports(); 
+
 	//some utils
 	
 	//! \return valid filename based on \a s

@@ -91,6 +91,13 @@ bool& Kexi::tempShowForms() {
 	return _tempShowForms;
 }
 
+bool _tempShowReports = true;
+bool& Kexi::tempShowReports() { 
+#ifndef KEXI_REPORTS_SUPPORT
+	_tempShowReports = false; 
+#endif
+	return _tempShowReports;
+}
 
 //--------------------------------------------------------------------------------
 QString Kexi::nameForViewMode(int m)

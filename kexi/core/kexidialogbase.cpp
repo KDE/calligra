@@ -452,6 +452,7 @@ tristate KexiDialogBase::storeNewData()
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
 	m_item->setNeverSaved(false);
+	m_parentWindow->project()->addStoredItem( part()->info(), partItem() );
 	return true;
 }
 
