@@ -145,4 +145,8 @@ void KoTabChooser::setupMenu()
     rb_menu->setCheckable( false );
 }
 
+KoTabChooser::~KoTabChooser() {
+    delete rb_menu;
+}
+
 #include <koTabChooser.moc>

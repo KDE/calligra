@@ -42,6 +42,7 @@ public:
     static const int TAB_ALL = TAB_LEFT | TAB_CENTER | TAB_RIGHT | TAB_DEC_PNT;
 
     KoTabChooser( QWidget *parent, int _flags );
+    ~KoTabChooser();
 
     int getCurrTabType() { return currType; }
 
