@@ -59,7 +59,7 @@ METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc
 
 KPresenterDocIface.kidl: KPresenterDocIface.h
-	( kidl KPresenterDocIface.h >KPresenterDocIface.kidl; kidl2cpp --no-stub KPresenterDocIface.kidl )
+	( dcopidl KPresenterDocIface.h >KPresenterDocIface.kidl; dcopidl2cpp --no-stub KPresenterDocIface.kidl )
 KPresenterDocIface_skel.cpp: KPresenterDocIface.kidl
 
 kdelnk_DATA = kpresenter.desktop

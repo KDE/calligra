@@ -69,16 +69,16 @@ rc_DATA = kspread.rc kspread_shell.rc
 SUBDIRS =  . plugins pics dtd toolbar
 
 KSpreadDocIface.kidl: KSpreadDocIface.h
-	( kidl KSpreadDocIface.h >KSpreadDocIface.kidl; kidl2cpp --no-stub KSpreadDocIface.kidl )
+	( dcopidl KSpreadDocIface.h >KSpreadDocIface.kidl; dcopidl2cpp --no-stub KSpreadDocIface.kidl )
 KSpreadDocIface_skel.cpp: KSpreadDocIface.kidl
 KSpreadTableIface.kidl: KSpreadTableIface.h
-	( kidl KSpreadTableIface.h >KSpreadTableIface.kidl; kidl2cpp --no-stub KSpreadTableIface.kidl )
+	( dcopidl KSpreadTableIface.h >KSpreadTableIface.kidl; dcopidl2cpp --no-stub KSpreadTableIface.kidl )
 KSpreadTableIface_skel.cpp: KSpreadTableIface.kidl
 KSpreadMapIface.kidl: KSpreadMapIface.h
-	( kidl KSpreadMapIface.h >KSpreadMapIface.kidl; kidl2cpp --no-stub KSpreadMapIface.kidl )
+	( dcopidl KSpreadMapIface.h >KSpreadMapIface.kidl; dcopidl2cpp --no-stub KSpreadMapIface.kidl )
 KSpreadMapIface_skel.cpp: KSpreadMapIface.kidl
 KSpreadCellIface.kidl: KSpreadCellIface.h
-	( kidl KSpreadCellIface.h >KSpreadCellIface.kidl; kidl2cpp --no-stub KSpreadCellIface.kidl )
+	( dcopidl KSpreadCellIface.h >KSpreadCellIface.kidl; dcopidl2cpp --no-stub KSpreadCellIface.kidl )
 KSpreadCellIface_skel.cpp: KSpreadCellIface.kidl
 
 parser:
