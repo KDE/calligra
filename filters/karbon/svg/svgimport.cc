@@ -110,6 +110,12 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 			gc->fill.setType( VFill::solid );
 		}
 	}
+	if( !e.attribute( "fill-rule" ).isEmpty() )
+		if( e.attribute( "fill-rule" ) == "nonzero" )
+			gc->fill.setFillRule( VFill::winding );
+		else if( e.attribute( "fill-rule" ) == "evenodd" )
+			gc->fill.setFillRule( VFill::evenOdd );
+
 	if( !e.attribute( "stroke" ).isEmpty() )
 	{
 		if( e.attribute( "stroke" ) == "none" )
@@ -153,6 +159,11 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 				gc->fill.setType( VFill::solid );
 			}
 		}
+		if( command == "fill-rule" )
+			if( params == "fill-rule" )
+				gc->fill.setFillRule( VFill::winding );
+			else if( params == "fill-rule" )
+				gc->fill.setFillRule( VFill::evenOdd );
 		else if( command == "stroke" )
 		{
 			if( params == "none" )
