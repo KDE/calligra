@@ -5,9 +5,13 @@ Legend
 DONE	Task is all done
 KDCH	Must be fixed in KDChart (new version will be out before 1.4).
 KSPR	Must be fixed in KSpread
-done	This part of the task is done
-kdch	This part of the task must be fixed in KDChart
-kspr	This part of the task must be fixed in KSpread
+done	This subtask is done
+kdch	This subtask must be fixed in KDChart
+kspr	This subtask must be fixed in KSpread
+
+INGE	Inge has taken this task
+inge	Inge has taken this subtask
+RAPH	Raphael has taken this task
 
 
 Before release of KOffice 1.4
@@ -20,7 +24,7 @@ Item								   Prio Status
 * Bugs
   + 41612: No titles for axes					      1	----
      - Fixed by new KDChart version					kdch
-     - Enable and activate settings in the config dialog.		--
+     - Enable and activate settings in the config dialog.		inge
   + 55606: [modified] tag doesn't work correctly.		      2 DONE
      - Set modified when data is changed.			      2 done
      - Set modified when the chart is changed through config.	      2 done
@@ -29,7 +33,7 @@ Item								   Prio Status
   + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.
        Fixed by new KDChart version
-  + 100004: Manual should describe stand-alone charting  	      2	----
+  + 100004: Manual should describe stand-alone charting  	      2	RAPH
             (see below also)
   + 101007: Error in reading back axis labels.			      1 ----
       - Store row and column labels separately in the document		done
@@ -61,7 +65,7 @@ Item								   Prio Status
   + Labels are no longer generated correctly.			      1	DONE
 
 * Miscellaneous fixes
-  + Make setting of line width nicer / more well-placed		     S1 ----
+  + Make setting of line width nicer / more well-placed		     S1 INGE
   + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 DONE
       Issue: What is an empty chart document?
@@ -98,15 +102,14 @@ Item								   Prio Status
   + Transfer the Tooltips and WhatsThis from the old editor.	      1	DONE
   + Better keyboard shortcuts?					      1 ----
     - Moving within the data table				      1 ----
-    - Remove the spinboxes from the buddy list.			      1 ----
   + Remove the spinboxes from the buddy list.			      1 ----
 
 * Config dialog
   + Make Data page work.						DONE
-  + Pie settings at the same place as Subtype?			      1 ----
-  + Type specific settings for each type?			      2 ----
-  + Move Line Marker from Axes page?				      2 ----
-  + Check *all* subpages for uglyness and bugs			     S1 ----
+  + Pie settings at the same place as Subtype?			      1 INGE
+  + Type specific settings for each type?			      2 INGE
+  + Move Line Marker from Axes page?				      2 INGE
+  + Check *all* subpages for uglyness and bugs			     S1 INGE
     - BackgroundPixmap						     S1 --
     - Bar		REMOVE					     S1 done
     - Color		Ugly					     S1 --
@@ -124,11 +127,11 @@ Item								   Prio Status
     - Pie		Remove?					     S1 --
     - SubtypeChartPage						     S1 --
   + Check handling of defaults.					      1 DONE
-  + Integrate the Colors and Font pages into Axes?		      2 ----
+  + Integrate the Colors and Font pages into Axes?		      2 INGE
     - Maybe create a little combination widget that can change        2 --
       both font and color for a text item?
-  + Font page should have a buttongroup				      2	----
-  + Bring back "line width" for line charts.			      1 ----
+  + Font page should have a buttongroup				      2	INGE
+  + Bring back "line width" for line charts.			      1 INGE
 	Used to be on the Line3d page.
 
 * Wizard
@@ -153,7 +156,7 @@ Item								   Prio Status
     - Polar							      1 --
 
 * Manual
-  + Describe stand-alone charting.				     S1 ----
+  + Describe stand-alone charting.				     S1 DONE
   + New screen shots.						     S1 ----
   + Describe all chart types					     S1 ----
   + Other enhancements?						     S2 ----
