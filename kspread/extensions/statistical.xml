@@ -190,6 +190,25 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>AVERAGEA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+	  <Parameter optional="true">
+	  <Comment>String values</Comment>
+	  <Type>String</Type>
+	  </Parameter>
+      <Help>
+	<Text>The AVERAGEA() calculates the average of the given arguments.  Numbers, text and logical values are included in the calculation too. If the cell contains text or the argument evaluates to FALSE, it is counted as value zero (0).  If the argument evaluates to TRUE, it is counted as one (1). Note that empty cells are not counted.</Text>
+	<Syntax>AVERAGEA(value;value;...)</Syntax>
+	<Example>AVERAGEA(11.4;17.3;"sometext";25.9;40.1) equals 18.94</Example>
+      </Help>
+    </Function>
+
+
 	<Function>
 	<Name>AVEDEV</Name>
 	<Type>Float</Type>

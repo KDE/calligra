@@ -1443,3 +1443,65 @@ bool kspreadfunc_avedev(KSContext &context)
 
 	return b;
 }
+
+static bool kspreadfunc_averagea_helper(KSContext &context, QValueList<KSValue::Ptr> &args, double &result, int &number)
+{
+	QValueList<KSValue::Ptr>::Iterator it = args.begin();
+	QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+	for(; it != end; ++it)
+	{
+		if(KSUtil::checkType(context, *it, KSValue::ListType, false))
+		{
+			if(!kspreadfunc_averagea_helper(context, (*it)->listValue(), result, number))
+				return false;
+		}
+		else if(!KSUtil::checkType(context, *it, KSValue::Empty, false))
+		{
+			if(KSUtil::checkType(context, *it, KSValue::StringType, false))
+				number++;
+			else if(KSUtil::checkType(context, *it, KSValue::DoubleType, false))
+			{
+				// Empty cells are not empty but are double...0
+				if((*it)->doubleValue() != 0)
+				{
+					result += (*it)->doubleValue();
+					number++;
+				}
+			}
+			else if(KSUtil::checkType(context, *it, KSValue::BoolType, false))
+			{
+				result += ((*it)->boolValue() ? 1 : 0);
+				number++;
+			}
+		}
+	}
+
+	return true;
+}
+
+// Function: averagea
+bool kspreadfunc_averagea(KSContext &context)
+{
+	double result = 0.0;
+	int number = 0;
+
+	// First sum the range into one double
+	bool b = kspreadfunc_averagea_helper(context, context.value()->listValue(), result, number);
+
+	if(number == 0)
+	{
+		context.setValue(new KSValue(0));
+		return true;
+	}
+
+	if(!b)
+		return false;
+
+	// Devide by the number of values
+	result /= number;
+
+	context.setValue(new KSValue(result));
+
+	return b;
+}

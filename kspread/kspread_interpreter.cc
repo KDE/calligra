@@ -228,6 +228,7 @@ bool kspreadfunc_euro( KSContext& context );
 // defined in kspread_functions_statistical.cc
 bool kspreadfunc_arrang( KSContext& context );
 bool kspreadfunc_average( KSContext& context );
+bool kspreadfunc_averagea( KSContext& context );
 bool kspreadfunc_avedev( KSContext& context );
 bool kspreadfunc_median( KSContext& context );
 bool kspreadfunc_variance( KSContext& context );
@@ -602,6 +603,7 @@ static const functionEntry funcTab[] = {
 
   // statistical
   { "AVERAGE", kspreadfunc_average },
+  { "AVERAGEA", kspreadfunc_averagea },
   { "AVEDEV", kspreadfunc_avedev },
   { "MEDIAN", kspreadfunc_median },
   { "VARIANCE", kspreadfunc_variance },
