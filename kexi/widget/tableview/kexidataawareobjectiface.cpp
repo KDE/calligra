@@ -1048,8 +1048,9 @@ KexiTableItem *KexiDataAwareObjectInterface::insertEmptyRow(int row)
 
 void KexiDataAwareObjectInterface::insertItem(KexiTableItem *newItem, int row)
 {
-	const bool changeCurrent = (row==-1 || row==m_curRow);
-	if (changeCurrent) {
+	const bool changeCurrentRow = row==-1 || row==m_curRow;
+	if (changeCurrentRow) {
+		//change current row
 		row = (m_curRow >= 0 ? m_curRow : 0);
 		m_currentItem = newItem;
 		m_curRow = row;
@@ -1057,8 +1058,14 @@ void KexiDataAwareObjectInterface::insertItem(KexiTableItem *newItem, int row)
 	else if (m_curRow >= row) {
 		m_curRow++;
 	}
+
 	m_data->insertRow(*newItem, row, true /*repaint*/);
 
+	if (changeCurrentRow) {
+		//update iter...
+		m_itemIterator->toFirst();
+		(*m_itemIterator)+=m_curRow;
+	}
 /*
 	QSize s(tableSize());
 	resizeContents(s.width(),s.height());

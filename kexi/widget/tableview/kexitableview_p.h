@@ -213,8 +213,8 @@ class KexiTableViewPrivate
 	int autonumberTextWidth;
 	QPixmap autonumberIcon;
 
-	//! Actions pluged for this table view. \sa plugSharedAction()
-	QAsciiDict<KAction> sharedActions;
+//moved	//! Actions pluged for this table view. \sa plugSharedAction()
+//moved	QAsciiDict<KAction> sharedActions;
 
 //moved	/*! Row number that over which user drags a mouse pointer.
 //moved	 Used to indicate dropping possibility for that row. 

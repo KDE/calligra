@@ -2112,7 +2112,7 @@ void KexiTableView::plugSharedAction(KAction* a)
 
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 {
-	KAction *action = d->sharedActions[action_name];
+	KAction *action = m_sharedActions[action_name];
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
 			return false; 
