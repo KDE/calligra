@@ -584,12 +584,17 @@ bool EndElementP (StackItem* stackItem)
 
 // <pagesize>
 
-inline double MillimetersToPoints(const double d)
+static inline double CentimetresToPoints(const double d)
 {
     return d * 72.0 / 2.54;
 }
 
-inline double InchesToPoints(const double d)
+static inline double MillimetresToPoints(const double d)
+{
+    return d * 72.0 / 25.4;
+}
+
+static inline double InchesToPoints(const double d)
 {
     return d * 72.0;
 }
@@ -618,31 +623,31 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
         kwordOrientation=0;
     }
 
-    double kwordHeight=0.0;
-    double kwordWidth=0.0;
+    double kwordHeight=0.0; // Security value!
+    double kwordWidth=0.0;  // Security value!
     int kwordFormat;
 
     QString strPageType=attributes.value("pagetype").stripWhiteSpace();
 
     // Do we know the page size or do we need to measure
-    // For page format we know, use our own values in case the values in the file would be wrong.
+    // For page format that KWord knows, use our own values in case the values in the file would be wrong.
 
     if (strPageType=="Custom")
     {
         // We have a Custom page.
-        // For now (CVS 2001-04-24), AbiWord cannot handle custom pages
-        //  and the height and width value are null, therefore useless.
+        // FIXME/TODO: AbiWord CVS 2001-04-24 cannot handle custom pages
+        // The height and width values are null, therefore useless.
         // We prefer to set a A4 page size!
-        kwordHeight = MillimetersToPoints(29.7);
-        kwordWidth  = MillimetersToPoints(21.0);
+        kwordHeight = CentimetresToPoints(29.7);
+        kwordWidth  = CentimetresToPoints(21.0);
         kwordFormat = 6; // At least, say that we are a custom format!
         kdWarning(30506) << "Custom page format found! Ignored!" << endl;
     }
     // The two most used formats first: A4 and Letter
     else if (strPageType=="A4")
     {
-        kwordHeight = MillimetersToPoints(29.7);
-        kwordWidth  = MillimetersToPoints(21.0);
+        kwordHeight = CentimetresToPoints(29.7);
+        kwordWidth  = CentimetresToPoints(21.0);
         kwordFormat = 1; // A4
     }
     else if (strPageType=="Letter")
@@ -651,19 +656,82 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
         kwordWidth  = InchesToPoints( 8.5);
         kwordFormat = 3; // US Letter
     }
-    // TODO: more formats that KWord knows
-    else
-        // We do not know the format, use the values in the attributes
+    // Other European formats that KWord knows
+    else if (strPageType=="A3")
     {
-        kdWarning(30506) << "Unknown page format found: " << strPageType << endl;
-        // TODO: do a real implementation, for now it is only A4
-        kwordHeight = MillimetersToPoints(29.7);
-        kwordWidth  = MillimetersToPoints(21.0);
-        kwordFormat = 6; // At least, say that we are a custom format!
+        kwordHeight = CentimetresToPoints(42.0);
+        kwordWidth  = CentimetresToPoints(29.7);
+        kwordFormat = 0; // A3
+    }
+    else if (strPageType=="A5")
+    {
+        kwordHeight = CentimetresToPoints(21.0);
+        kwordWidth  = CentimetresToPoints(14.8);
+        kwordFormat = 2; // A5
+    }
+    else if (strPageType=="B5")
+    {
+        kwordHeight = CentimetresToPoints(25.0);
+        kwordWidth  = CentimetresToPoints(17.6);
+        kwordFormat = 7; // B5
+    }
+    // Other American format that KWord knows
+    else if (strPageType=="Legal")
+    {
+        kwordHeight = InchesToPoints(14.0);
+        kwordWidth  = InchesToPoints( 8.5);
+        kwordFormat = 4; // US Legal
+    }
+    // Note: KWord's "US Executive" format is not known by AbiWord (CVS 2001-04-24)
+    else
+        // We do not know the format, so we must use the values in the attributes
+    {
+        kdDebug(30506) << "Other page format found: " << strPageType << endl;
+
+        double height = attributes.value("height").toDouble();
+        double width  = attributes.value("width" ).toDouble();
+
+        QString strUnits = attributes.value("units").stripWhiteSpace();
+
+        kdDebug(30506) << "Explicit page size: "
+         << height << " " << strUnits << " x " << width << " " << strUnits
+         << endl;
+
+        if (strUnits=="cm")
+        {
+            kwordHeight = CentimetresToPoints(height);
+            kwordWidth  = CentimetresToPoints(width);
+        }
+        else if (strUnits=="inch")
+        {
+            kwordHeight = InchesToPoints(height);
+            kwordWidth  = InchesToPoints(width);
+        }
+        else if (strUnits=="mm")
+        {
+            kwordHeight = MillimetresToPoints(height);
+            kwordWidth  = MillimetresToPoints(width);
+        }
+        else
+        {
+            kdWarning(30506) << "Unknown unit type: " << strUnits << endl;
+        }
+
+        if ((kwordHeight <= 1.0) || (kwordWidth <=1.0))
+            // At least one of the two values is ridiculous
+        {
+            kdWarning(30506) << "Page width or height is too small: "
+             << kwordHeight << "x" << kwordWidth << endl;
+            // As we have no correct page size, we assume we have A4
+            kwordHeight = CentimetresToPoints(29.7);
+            kwordWidth  = CentimetresToPoints(21.0);
+        }
+
+        kwordFormat = 6; // Say that we are a custom format!
     }
 
 
-    // Now that we have gathered all the data, put it in the right element!
+    // Now that we have gathered all the page size data, put it in the right element!
 
     QDomNodeList nodeList=mainDocument.elementsByTagName("PAPER");
 
