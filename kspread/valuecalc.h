@@ -20,10 +20,11 @@
 #ifndef KSPREAD_VALUECALC
 #define KSPREAD_VALUECALC
 
-#include "docbase.h"
 #include "kspread_value.h"
 
 namespace KSpread {
+
+class ValueConverter;
 
 /**
 The ValueCalc class is used to perform all sorts of calculations.
@@ -35,9 +36,9 @@ on all datatypes, but since all of them can be applied on both
 doubles and GnuMP-based numbers, that is not of much concern ;)
 */
 
-class ValueCalc : public DocBase {
+class ValueCalc {
  public:
-  ValueCalc (DocInfo *docinfo);
+  ValueCalc (ValueConverter* converter);
 
   /** basic arithmetic operations */
   KSpreadValue add (const KSpreadValue &a, const KSpreadValue &b);
@@ -65,6 +66,7 @@ class ValueCalc : public DocBase {
   KSpreadValue min (const KSpreadValue &range);
 
  protected:
+  ValueConverter* converter;
   /** return result formatting, based on these two values */
   KSpreadValue::Format format (KSpreadValue::Format a, KSpreadValue::Format b);
 };

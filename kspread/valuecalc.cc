@@ -25,16 +25,15 @@
 
 using namespace KSpread;
 
-ValueCalc::ValueCalc (DocInfo *docinfo) : DocBase (docinfo)
+ValueCalc::ValueCalc (ValueConverter* conv): converter( conv )
 {
 }
 
 KSpreadValue ValueCalc::add (const KSpreadValue &a, const KSpreadValue &b)
 {
-  ValueConverter *vc = converter();
   double aa, bb;
-  aa = vc->asFloat (a).asFloat();
-  bb = vc->asFloat (b).asFloat();
+  aa = converter->asFloat (a).asFloat();
+  bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (aa + bb);
 
   if (a.isNumber())
@@ -45,10 +44,9 @@ KSpreadValue ValueCalc::add (const KSpreadValue &a, const KSpreadValue &b)
 
 KSpreadValue ValueCalc::sub (const KSpreadValue &a, const KSpreadValue &b)
 {
-  ValueConverter *vc = converter();
   double aa, bb;
-  aa = vc->asFloat (a).asFloat();
-  bb = vc->asFloat (b).asFloat();
+  aa = converter->asFloat (a).asFloat();
+  bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (aa - bb);
 
   if (a.isNumber())
@@ -59,10 +57,9 @@ KSpreadValue ValueCalc::sub (const KSpreadValue &a, const KSpreadValue &b)
 
 KSpreadValue ValueCalc::mul (const KSpreadValue &a, const KSpreadValue &b)
 {
-  ValueConverter *vc = converter();
   double aa, bb;
-  aa = vc->asFloat (a).asFloat();
-  bb = vc->asFloat (b).asFloat();
+  aa = converter->asFloat (a).asFloat();
+  bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (aa * bb);
 
   if (a.isNumber())
@@ -73,10 +70,9 @@ KSpreadValue ValueCalc::mul (const KSpreadValue &a, const KSpreadValue &b)
 
 KSpreadValue ValueCalc::div (const KSpreadValue &a, const KSpreadValue &b)
 {
-  ValueConverter *vc = converter();
   double aa, bb;
-  aa = vc->asFloat (a).asFloat();
-  bb = vc->asFloat (b).asFloat();
+  aa = converter->asFloat (a).asFloat();
+  bb = converter->asFloat (b).asFloat();
   KSpreadValue res;
   if (bb == 0.0)
     return KSpreadValue::errorDIV0();
@@ -91,10 +87,9 @@ KSpreadValue ValueCalc::div (const KSpreadValue &a, const KSpreadValue &b)
 
 KSpreadValue ValueCalc::pow (const KSpreadValue &a, const KSpreadValue &b)
 {
-  ValueConverter *vc = converter();
   double aa, bb;
-  aa = vc->asFloat (a).asFloat();
-  bb = vc->asFloat (b).asFloat();
+  aa = converter->asFloat (a).asFloat();
+  bb = converter->asFloat (b).asFloat();
   KSpreadValue res = KSpreadValue (::pow (aa, bb));
 
   if (a.isNumber())
@@ -105,8 +100,7 @@ KSpreadValue ValueCalc::pow (const KSpreadValue &a, const KSpreadValue &b)
 
 KSpreadValue ValueCalc::add (const KSpreadValue &a, double b)
 {
-  ValueConverter *vc = converter();
-  KSpreadValue res = KSpreadValue (vc->asFloat(a).asFloat() + b);
+  KSpreadValue res = KSpreadValue (converter->asFloat(a).asFloat() + b);
 
   if (a.isNumber())
     res.setFormat (a.format());
@@ -116,8 +110,7 @@ KSpreadValue ValueCalc::add (const KSpreadValue &a, double b)
 
 KSpreadValue ValueCalc::sub (const KSpreadValue &a, double b)
 {
-  ValueConverter *vc = converter();
-  KSpreadValue res = KSpreadValue (vc->asFloat(a).asFloat() - b);
+  KSpreadValue res = KSpreadValue (converter->asFloat(a).asFloat() - b);
 
   if (a.isNumber())
     res.setFormat (a.format());
@@ -127,8 +120,7 @@ KSpreadValue ValueCalc::sub (const KSpreadValue &a, double b)
 
 KSpreadValue ValueCalc::mul (const KSpreadValue &a, double b)
 {
-  ValueConverter *vc = converter();
-  KSpreadValue res = KSpreadValue (vc->asFloat(a).asFloat() * b);
+  KSpreadValue res = KSpreadValue (converter->asFloat(a).asFloat() * b);
 
   if (a.isNumber())
     res.setFormat (a.format());
@@ -138,12 +130,11 @@ KSpreadValue ValueCalc::mul (const KSpreadValue &a, double b)
 
 KSpreadValue ValueCalc::div (const KSpreadValue &a, double b)
 {
-  ValueConverter *vc = converter();
   KSpreadValue res;
   if (b == 0.0)
     return KSpreadValue::errorDIV0();
 
-  res = KSpreadValue (vc->asFloat(a).asFloat() / b);
+  res = KSpreadValue (converter->asFloat(a).asFloat() / b);
 
   if (a.isNumber())
     res.setFormat (a.format());
@@ -153,8 +144,7 @@ KSpreadValue ValueCalc::div (const KSpreadValue &a, double b)
 
 KSpreadValue ValueCalc::pow (const KSpreadValue &a, double b)
 {
-  ValueConverter *vc = converter();
-  KSpreadValue res = KSpreadValue (::pow (vc->asFloat(a).asFloat(), b));
+  KSpreadValue res = KSpreadValue (::pow (converter->asFloat(a).asFloat(), b));
 
   if (a.isNumber())
     res.setFormat (a.format());
@@ -165,16 +155,14 @@ KSpreadValue ValueCalc::pow (const KSpreadValue &a, double b)
 KSpreadValue ValueCalc::log (const KSpreadValue &number,
     const KSpreadValue &base)
 {
-  ValueConverter *vc = converter();
-
-  double logbase = vc->asFloat (base).asFloat();
+  double logbase = converter->asFloat (base).asFloat();
   if (logbase == 1.0)
     return KSpreadValue::errorDIV0();
   if (logbase <= 0.0)
     return KSpreadValue::errorNA();
 
   logbase = log10 (logbase);
-  KSpreadValue res = KSpreadValue (log10 (vc->asFloat (number).asFloat()) / logbase);
+  KSpreadValue res = KSpreadValue (log10 (converter->asFloat (number).asFloat()) / logbase);
 
   if (number.isNumber())
     res.setFormat (number.format());
@@ -184,8 +172,7 @@ KSpreadValue ValueCalc::log (const KSpreadValue &number,
 
 KSpreadValue ValueCalc::ln (const KSpreadValue &number)
 {
-  ValueConverter *vc = converter();
-  KSpreadValue res = KSpreadValue (::log (vc->asFloat (number).asFloat()));
+  KSpreadValue res = KSpreadValue (::log (converter->asFloat (number).asFloat()));
 
   if (number.isNumber())
     res.setFormat (number.format());
@@ -195,14 +182,12 @@ KSpreadValue ValueCalc::ln (const KSpreadValue &number)
 
 KSpreadValue ValueCalc::log (const KSpreadValue &number, double base)
 {
-  ValueConverter *vc = converter();
-
   if (base <= 0.0)
     return KSpreadValue::errorNA();
   if (base == 1.0)
     return KSpreadValue::errorDIV0();
 
-  double num = vc->asFloat (number).asFloat();
+  double num = converter->asFloat (number).asFloat();
   KSpreadValue res = KSpreadValue (log10 (num) / log10 (base));
 
   if (number.isNumber())
@@ -215,10 +200,8 @@ KSpreadValue ValueCalc::log (const KSpreadValue &number, double base)
 
 KSpreadValue ValueCalc::sum (const KSpreadValue &range)
 {
-  ValueConverter *vc = converter();
-
   if (!range.isArray())
-    return vc->asFloat (range);
+    return converter->asFloat (range);
 
   //if we are here, we have an array
   KSpreadValue res;
@@ -299,10 +282,8 @@ KSpreadValue ValueCalc::avg (const KSpreadValue &range)
 
 KSpreadValue ValueCalc::max (const KSpreadValue &range)
 {
-  ValueConverter *vc = converter();
-
   if (!range.isArray())
-    return vc->asFloat (range);
+    return converter->asFloat (range);
 
   //if we are here, we have an array
   KSpreadValue res;
@@ -334,10 +315,8 @@ KSpreadValue ValueCalc::max (const KSpreadValue &range)
 
 KSpreadValue ValueCalc::min (const KSpreadValue &range)
 {
-  ValueConverter *vc = converter();
-
   if (!range.isArray())
-    return vc->asFloat (range);
+    return converter->asFloat (range);
 
   //if we are here, we have an array
   KSpreadValue res;
