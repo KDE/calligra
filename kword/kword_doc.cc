@@ -184,7 +184,6 @@ bool KWordDocument::initDoc()
 	QString fileName( _template );
         KURL::encode( fileName );
 	ok = openURL( KURL( fileName ) );
-	resetURL();
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
 	resetURL();
