@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexikugarhandler" version="0.1">
+
+<MenuBar>
+	<Menu name="widgets">
+		<text>&amp;Create</text>
+		<Action name="kugarhandler_create"/>
+	</Menu>
+</MenuBar>
+
+</kpartgui>
