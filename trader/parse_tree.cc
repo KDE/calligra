@@ -436,7 +436,7 @@ bool ParseTreeIN::eval( ParseContext *_context )
 
   if ( c1.type == ParseContext::T_FLOAT && c2.type == ParseContext::T_FLOAT_SEQ )
   {
-    int max = c2.numSeq.length();
+    int max = c2.floatSeq.length();
     int i;
     for( i = 0; i < max; i++ )
     {
@@ -452,7 +452,7 @@ bool ParseTreeIN::eval( ParseContext *_context )
 
   if ( c1.type == ParseContext::T_STRING && c2.type == ParseContext::T_STR_SEQ )
   {
-    int max = c2.numSeq.length();
+    int max = c2.strSeq.length();
     int i;
     for( i = 0; i < max; i++ )
     {
