@@ -120,10 +120,10 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
     if ( type == wvWare::FootnoteData::Endnote )
         // Keep name in sync with Document::startFootnote
-        footnoteElem.setAttribute( "frameset", i18n("EndNote %1").arg( ++m_endNoteNumber ) );
+        footnoteElem.setAttribute( "frameset", i18n("Endnote %1").arg( ++m_endNoteNumber ) );
     else
         // Keep name in sync with Document::startFootnote
-        footnoteElem.setAttribute( "frameset", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
+        footnoteElem.setAttribute( "frameset", i18n("Footnote %1").arg( ++m_footNoteNumber ) );
     varElem.appendChild( footnoteElem );
 
     // Remember to parse the footnote text later

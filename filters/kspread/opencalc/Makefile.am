@@ -19,3 +19,6 @@ METASOURCES = AUTO
 service_DATA = kspread_opencalc_import.desktop kspread_opencalc_export.desktop
 
 servicedir = $(kde_servicesdir)
+
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/opencalcfilter.pot

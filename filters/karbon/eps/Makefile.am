@@ -38,3 +38,5 @@ noinst_HEADERS = \
 
 METASOURCES = AUTO
 
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/karbonepsfilter.pot

@@ -47,7 +47,7 @@
 #define SECSPERDAY (24 * 60 * 60)
 
 typedef KGenericFactory<OpenCalcImport, KoFilter> OpenCalcImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libopencalcimport, OpenCalcImportFactory( "opencalcimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libopencalcimport, OpenCalcImportFactory( "opencalcfilter" ) );
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
   : isRange( false )
@@ -519,7 +519,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       QString psName( "Default" );
       if ( e.hasAttribute( "style:parent-style-name" ) )
         psName = e.attribute( "style:parent-style-name" );
-     
+
       kdDebug() << "Default style: " << psName << endl;
       KSpreadFormat * layout = m_defaultStyles[psName];
 
@@ -528,7 +528,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
 
       QDomElement * st = 0;
       if ( e.hasAttribute( "table:style-name" ) )
-      { 
+      {
         kdDebug() << "Style: " << e.attribute( "table:style-name" ) << endl;
         st = m_styles[ e.attribute( "table:style-name" ) ];
       }
@@ -1332,7 +1332,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     {
       QCString passwd( "" );
       if ( t.hasAttribute( "table:protection-key" ) )
-      {        
+      {
         QString p = t.attribute( "table:protection-key" );
         QCString str( p.latin1() );
         kdDebug() << "Decoding password: " << str << endl;
