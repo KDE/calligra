@@ -1,5 +1,6 @@
 kde_module_LTLIBRARIES = kexidb_pqxxsqldriver.la
 
+##### FIXME: hardcoded paths are NOT a good idea. Write a configure check!
 INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I/usr/local/pqxx/include -I/usr/local/pgsql/include
 
 kexidb_pqxxsqldriver_la_METASOURCES = AUTO
