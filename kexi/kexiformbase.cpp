@@ -271,6 +271,9 @@ KexiFormBaseResizeHandleSet::~KexiFormBaseResizeHandleSet()
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier)
 	: KexiDialogBase(parent,name)
 {
+	setMinimumWidth(50);
+	setMinimumHeight(50);
+
 //	initActions();
 	
 	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
