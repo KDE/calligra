@@ -713,6 +713,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( !(e->state() & ShiftButton)) {
                         selectObj( kpobject );
                         raiseObject( kpobject );
+                        m_initBoundingRect = objectSelectedBoundingRect();
                     }
                     else
                         deSelectObj( kpobject );
