@@ -927,7 +927,82 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 // ### TODO: make it a member of OOWriterWorker (when table support will work)
 static QString cellToProperties( const TableCell& cell, QString& key)
 {
-    return " fo:vertical-align=\"bottom\""; // Just a dummy to avoid an endless loop in OOWriter (### FIXME)
+    const FrameData& frame = cell.frame;
+    QString properties;
+
+    key += "!L"; // left border
+    key += frame.lColor.name();
+    key += ",";
+    key += QString::number( frame.lWidth );
+    properties += " fo:border-left=\"";
+    if ( frame.lColor.isValid() && frame.lWidth > 0.0 )
+    {
+        properties += QString::number( frame.lWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.lColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!R"; // right border
+    key += frame.rColor.name();
+    key += ",";
+    key += QString::number( frame.rWidth );
+    properties += " fo:border-right=\"";
+    if ( frame.rColor.isValid() && frame.rWidth > 0.0 )
+    {
+        properties += QString::number( frame.rWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.rColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!T"; // top border
+    key += frame.tColor.name();
+    key += ",";
+    key += QString::number( frame.tWidth );
+    properties += " fo:border-top=\"";
+    if ( frame.tColor.isValid() && frame.tWidth > 0.0 )
+    {
+        properties += QString::number( frame.tWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.tColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!B"; // bottom border
+    key += frame.bColor.name();
+    key += ",";
+    key += QString::number( frame.bWidth );
+    properties += " fo:border-bottom=\"";
+    if ( frame.bColor.isValid() && frame.bWidth > 0.0 )
+    {
+        properties += QString::number( frame.bWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.bColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    return properties;
 }
 #endif
 
@@ -972,8 +1047,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         delayedAutomaticStyles += " style:family=\"table-column\"";
         delayedAutomaticStyles += ">\n";
         delayedAutomaticStyles += "   <style:properties ";
-        // ### TODO: style:column-width (OOWriter 1.1) or fo:width (OO specification)
-        // ### TODO:  and what about style:column-width-rel (same problem, it would be nice if we could skip it)
+        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
+        //  and/or the relative variant: style:rel-column-width
         delayedAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
         delayedAutomaticStyles += "/>\n";
         delayedAutomaticStyles += "  </style:style>\n";
