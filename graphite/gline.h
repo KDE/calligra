@@ -38,7 +38,7 @@ public:
 
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
-    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const;
+    virtual void draw(QPainter &p, const QRegion &reg, const bool toPrinter=false);
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual const bool intersects(const QRect &r) const;
@@ -74,8 +74,8 @@ public:
     GLineM9r(GLine *line, const Mode &mode);
     virtual ~GLineM9r();
 
-    virtual void draw(const QPainter &p, const QRegion &reg,
-		      const bool toPrinter=false) const;
+    virtual void draw(QPainter &p, const QRegion &reg,
+		      const bool toPrinter=false);
 
     virtual const bool mouseMoveEvent(QMouseEvent *e, const GraphiteView *view,
 				      QRect &dirty);

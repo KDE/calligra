@@ -70,8 +70,8 @@ public:
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
 
-    virtual void draw(const QPainter &p, const QRegion &reg,
-		      const bool toPrinter=false) const = 0;
+    virtual void draw(QPainter &p, const QRegion &reg,
+		      const bool toPrinter=false) = 0;
 
     virtual const bool mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
 				      QRect &/*dirty*/) { return false; }
@@ -124,7 +124,7 @@ public slots:
 
 protected:
     G1DObjectM9r(const Mode &mode) : GObjectM9r(mode) {}
-    
+
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
 };
 
@@ -173,7 +173,7 @@ public:
 
     // toPrinter is set when we print the document - this means we don't
     // have to paint "invisible" (normally they are colored gray) objects
-    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const = 0;
+    virtual void draw(QPainter &p, const QRegion &reg, const bool toPrinter=false) = 0;
 
     const int &zoom() const { return m_zoom; }
     virtual void setZoom(const short &zoom=100) { m_zoom=zoom; }
@@ -246,7 +246,7 @@ protected:
     void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
 		    const QPoint &center);
 
-    const int double2Int(const double &value);   // convert back to int
+    const int double2Int(const double &value) const;   // convert back to int
 
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
@@ -295,9 +295,13 @@ inline const QPoint GObject::zoomIt(const QPoint &point) const {
 
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
 
+    double alpha=angle/2;
     double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    y+=double2Int(r*std::sin(angle));
-    x+=double2Int(r*(1-std::cos(angle)));
+    double s=2*r*std::sin(alpha);
+    double gamma=std::asin( static_cast<double>(y-center.y()) / r );
+    double beta=90.0-gamma+alpha;
+    y+=double2Int(s*std::sin(beta));
+    x+=double2Int(s*std::cos(beta));
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
@@ -311,9 +315,13 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
 
+    double alpha=angle/2;
     double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    y+=r*std::sin(angle);
-    x+=r*(1-std::cos(angle));
+    double s=2*r*std::sin(alpha);
+    double gamma=std::asin( static_cast<double>(y-center.y()) / r );
+    double beta=90.0-gamma+alpha;
+    y+=s*std::sin(beta);
+    x+=s*std::cos(beta);
 }
 
 inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
@@ -350,7 +358,7 @@ inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &
     scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
 }
 
-inline const int GObject::double2Int(const double &value) {
+inline const int GObject::double2Int(const double &value) const {
 
     if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
 	return static_cast<int>(value)+1;

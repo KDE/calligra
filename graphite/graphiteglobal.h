@@ -24,12 +24,39 @@
 
 class QColor;
 
-typedef struct Gradient {
+struct Gradient {
     QColor ca;
     QColor cb;
     KImageEffect::GradientType type;
     short xfactor;
     short yfactor;
     short ncols;
+};
+
+
+// This class is used to access some configurable values.
+// We also use this class to save the rc file.
+// Note: Follows the singleton pattern!
+class GraphiteGlobal {
+
+public:
+    static GraphiteGlobal *self();
+
+    const int &fuzzyBorder() const { return m_fuzzyBorder; }
+    void setFuzzyBorder(const int &fuzzyBorder) { m_fuzzyBorder=fuzzyBorder; }
+
+    // more to come...
+    // maybe I'll add a init(...) method which takes a KConfig file
+    // and initializes all the "global" vars.
+
+private:
+    GraphiteGlobal() : m_fuzzyBorder(2) {}
+    GraphiteGlobal(const GraphiteGlobal &rhs);
+    GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
+
+    ~GraphiteGlobal() {}
+
+    static GraphiteGlobal *m_self;
+    int m_fuzzyBorder;
 };
 #endif // GRAPHITE_GLOBAL_H

@@ -19,6 +19,7 @@
 
 #include <qdom.h>
 #include <qapp.h>
+#include <qpainter.h>
 
 #include <gline.h>
 
@@ -35,75 +36,49 @@ GLine::GLine(const GLine &rhs) : GObject(rhs), m_a(rhs.a()), m_b(rhs.b()) {
 
 GLine::GLine(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()) {
 
-    // TODO - check whether the gobject was initialized correctly (isOk())
-    //bool ok;
-    //static QString tagName=QString::fromLatin1("name");
+    if(!m_ok)
+	return;
 
-    //if(m_ok) // loading was successful
+    bool ok;
+    static QString tagStart=QString::fromLatin1("start");
+    static QString tagEnd=QString::fromLatin1("end");
+    static QString attrX=QString::fromLatin1("x");
+    static QString attrY=QString::fromLatin1("y");
 
-    /*
-    if(element.hasAttribute(tagName))
-	m_name=element.attribute(tagName);
-    else
-	m_name="no name";
+    if(element.tagName()!="gline") {
+	m_ok=false;
+	return;
+    }
 
-    m_state=static_cast<State>(element.attribute(tagState).toInt(&ok));
-    if(!ok)
-	m_state=Visible;
-
-    QDomElement format=element.namedItem(tagFormat).toElement();
-    if(!format.isNull()) {
-	m_fillStyle=static_cast<FillStyle>(format.attribute(tagFillStyle).toInt(&ok));
+    QDomElement point=element.namedItem(tagStart).toElement();
+    if(!point.isNull()) {
+	m_a.setX(point.attribute(attrX).toInt(&ok));
 	if(!ok)
-	    m_fillStyle=Brush;
+	    m_a.setX(0);
 	
-	int tmp=format.attribute(tagBrushStyle).toInt(&ok);
+	m_a.setY(point.attribute(attrY).toInt(&ok));
 	if(!ok)
-	    tmp=0;
-	m_brush.setStyle(static_cast<QBrush::BrushStyle>(tmp));
-	if(format.hasAttribute(tagBrushColor))
-	    m_brush.setColor(QColor(format.attribute(tagBrushColor)));
-	
-	QDomElement gradient=format.namedItem(tagGradient).toElement();
-	if(!gradient.isNull()) {
-	    if(gradient.hasAttribute(tagColorA))
-		m_gradient.ca=QColor(gradient.attribute(tagColorA));
-	    if(gradient.hasAttribute(tagColorB))
-		m_gradient.cb=QColor(gradient.attribute(tagColorB));
-	
-	    m_gradient.type=static_cast<KImageEffect::GradientType>(gradient.attribute(tagType).toInt(&ok));
-	    if(!ok)
-		m_gradient.type=static_cast<KImageEffect::GradientType>(0);
-	
-	    m_gradient.xfactor=gradient.attribute(tagXFactor).toInt(&ok);
-	    if(!ok)
-		m_gradient.xfactor=1;
-	    m_gradient.yfactor=gradient.attribute(tagYFactor).toInt(&ok);
-	    if(!ok)
-		m_gradient.yfactor=1;
-	    m_gradient.ncols=gradient.attribute(tagNCols).toInt(&ok);
-	    if(!ok)
-		m_gradient.ncols=1;	
-	}
-	else {
-	    m_gradient.type=static_cast<KImageEffect::GradientType>(0);
-	    m_gradient.xfactor=1;
-	    m_gradient.yfactor=1;
-	    m_gradient.ncols=1;
-	}
-	
-	QDomElement pen=format.namedItem(tagPen).toElement();
-	if(!pen.isNull())
-	    m_pen=pen.toPen();	
+	    m_a.setX(0);
     }
     else {
-	m_fillStyle=Brush;
-	m_gradient.type=static_cast<KImageEffect::GradientType>(0);
-	m_gradient.xfactor=1;
-	m_gradient.yfactor=1;
-	m_gradient.ncols=1;	
-    }	
-    */
+	m_a.setX(0);
+	m_a.setY(0);
+    }
+
+    point=element.namedItem(tagEnd).toElement();
+    if(!point.isNull()) {
+	m_b.setX(point.attribute(attrX).toInt(&ok));
+	if(!ok)
+	    m_b.setX(0);
+	
+	m_b.setY(point.attribute(attrY).toInt(&ok));
+	if(!ok)
+	    m_b.setX(0);
+    }
+    else {
+	m_b.setX(0);
+	m_b.setY(0);
+    }
 }
 
 GLine *GLine::clone() const {
@@ -116,29 +91,77 @@ GLine *GLine::instantiate(const QDomElement &element) const {
 
 QDomElement GLine::save(QDomDocument &doc) const {
 
-    // TODO
     QDomElement e=doc.createElement("gline");
+    QDomElement point=doc.createElement("start");
+    point.setAttribute("x", m_a.x());
+    point.setAttribute("y", m_a.y());
+    e.appendChild(point);
+    point=doc.createElement("end");
+    point.setAttribute("x", m_b.x());
+    point.setAttribute("y", m_b.y());
+    e.appendChild(point);
     e.appendChild(GObject::save(doc));
     return e;
 }
 
-void GLine::draw(const QPainter &/*p*/, const QRegion &/*reg*/, const bool /*toPrinter*/) const {
-    // TODO
+void GLine::draw(QPainter &p, const QRegion &reg, const bool toPrinter) {
+
+    if(m_state!=GObject::Visible && (!toPrinter && m_state!=GObject::Invisible))
+	return;
+
+    if(!reg.contains(boundingRect()))
+	return;
+
+    p.save();
+    p.setPen(m_pen);
+    p.drawLine(m_a, m_b);
+    p.restore();
 }
 
-const GLine *GLine::hit(const QPoint &/*p*/) const {
-    // TODO
+const GLine *GLine::hit(const QPoint &p) const {
+
+    if(p==m_a)
+	return this;
+    else if(p==m_b)
+	return this;
+    /*
+    else {
+	double dx=m_b.x()-m_a.x();
+	double dy=m_b.y()-m_a.y();
+	double r=std::sqrt( dx*dx + dy*dy );
+	int ir=double2Int(r);
+	double alpha=std::asin( dy/r );
+
+	// make it easier for the user to select something by
+	// adding a (configurable) "fuzzy zone" :)
+	QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x()+ir ) - GraphiteGlobal::self()->fuzzyBorder(),
+			       m_a.y() - GraphiteGlobal::self()->fuzzyBorder(),
+			       ir + 2 * GraphiteGlobal::self()->fuzzyBorder(),
+			       2 * GraphiteGlobal::self()->fuzzyBorder());
+	
+    }
+    */
     return 0L;
 }
 
-const bool GLine::intersects(const QRect &/*r*/) const {
+const bool GLine::intersects(const QRect &r) const {
+
+    if(r.contains(m_a) || r.contains(m_b))
+	return true;
     // TODO
+    //else if()
+    //	return true;
     return false;
 }
 
 const QRect &GLine::boundingRect() const {
-    // TODO - check flag!
-    return m_boundingRect;
+
+    if(!m_boundingRectDirty)
+	return m_boundingRect;
+    m_boundingRect=QRect( QMIN(m_a.x(), m_b.x()), QMIN(m_a.y(), m_b.y()),
+			  QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y()));
+    m_boundingRectDirty=false;
+    return m_boundingRect;				
 }
 
 GObjectM9r *GLine::createM9r(const GObjectM9r::Mode &mode) {
@@ -186,7 +209,7 @@ GLineM9r::~GLineM9r() {
     QApplication::restoreOverrideCursor();
 }
 
-void GLineM9r::draw(const QPainter &p, const QRegion &reg, const bool toPrinter) const {
+void GLineM9r::draw(QPainter &p, const QRegion &reg, const bool toPrinter) {
     m_line->draw(p, reg, toPrinter);
 }
 

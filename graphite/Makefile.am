@@ -17,7 +17,8 @@ lib_LTLIBRARIES = libgraphite.la
 
 libgraphite_la_SOURCES = graphiteshell.cc graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
-    gcanvas.cc gobjectfactory.cc gcommand.cc gline.cc
+    gcanvas.cc gobjectfactory.cc gcommand.cc gline.cc \
+    graphiteglobal.cc
 
 graphite_SOURCES = main.cc
 
