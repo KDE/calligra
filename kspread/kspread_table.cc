@@ -3043,25 +3043,37 @@ void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode )
   sortByColumn( ref_column, 0, 0, mode, mode, mode, 0, false, point );
 }
 
+void KSpreadTable::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret)
+{
+  if ( cell1->isEmpty() )
+  { 
+    ret = 1;
+    return;
+  }
+  else if ( cell1->isObscured() && cell1->isObscuringForced() )
+  { 
+    ret = 1;
+    return;
+  }
+  else if ( cell2->isEmpty() )
+  {
+    ret = 2;
+    return;
+  }
+  ret = 0;
+}
+
 void KSpreadTable::sortByRow( int key1, int key2, int key3,
                               SortingOrder order1, SortingOrder order2, SortingOrder order3,
                               QStringList const * firstKey, bool copyLayout,
                               KSpreadPoint const & outputPoint )
 {
-  // This is still work in progress (Norbert)
   QRect r( selectionRect() );
-  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
 
   Q_ASSERT( order1 == Increase || order1 == Decrease );
   
   // It may not happen that entire columns are selected.
   Q_ASSERT( isColumnSelected() == FALSE );
-
-  if ( !m_pDoc->undoBuffer()->isLocked() )
-  {
-    KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r ); // change r to target!
-    m_pDoc->undoBuffer()->appendUndo( undo );
-  }
 
   // Are entire rows selected ?
   if ( isRowSelected() )
@@ -3093,6 +3105,14 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
       return;
   }
   
+  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, target );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+
   doc()->emitBeginOperation();
 
   // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
@@ -3102,8 +3122,9 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
   KSpreadCell * cell1;
   KSpreadCell * cell2;
   KSpreadCell * bestCell;
+  int status = 0;
 
-  for ( int d = r.left();  d <= r.right(); d++ )
+  for ( int d = r.left();  d <= r.right(); ++d )
   {
     cell1 = cellAt( d, key1 );
     if ( cell1->isObscured() && cell1->isObscuringForced() )
@@ -3121,44 +3142,242 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     {
       cell2 = cellAt( x, key1 );
       
-      if ( cell2->isEmpty() )
-      { /* No need to swap */ }
-      else if ( cell2->isObscured() && cell2->isObscuringForced() )
-      { /* No need to swap */}
-      else if ( bestCell->isEmpty() )
+      checkCellContent(cell2, bestCell, status);
+      if (status == 1)
+        continue;
+      else if (status == 2)
       {
         // empty cells are always shifted to the end
         bestCell = cell2;
         bestX = x;
+        continue;     
       }
+      
+      if ( firstKey )
+      {
+        int i1 = firstKey->findIndex( cell2->text() );
+        int i2 = firstKey->findIndex( bestCell->text() );
+        
+        if ( i1 != -1 && i2 != -1 )
+        {
+          if ( (order1 == Increase && i1 < i2 ) 
+               || (order1 == Decrease && i1 > i2) )
+          {
+            bestCell = cell2;
+            bestX = x;
+            continue;
+          }
+          
+          if ( i1 == i2 )
+          {
+            // check 2nd key
+            KSpreadCell * cell22 = cellAt( d, key2 );
+            KSpreadCell * bestCell2 = cellAt( x, key2 );
+            
+            if ( cell22->isEmpty() )
+            { 
+              /* No need to swap */ 
+              continue;
+            }
+            else if ( cell22->isObscured() && cell22->isObscuringForced() )
+            { 
+              /* No need to swap */
+              continue;
+            }
+            else if ( bestCell2->isEmpty() )
+            {
+              // empty cells are always shifted to the end
+              bestCell = cell2;
+              bestX = x;
+              continue;     
+            }
+
+            if ( (order2 == Increase && *cell22 < *bestCell2)
+                 || (order2 == Decrease && *cell22 > *bestCell2) )
+            {
+              bestCell = cell2;
+              bestX = x;
+              continue;
+            }
+            else if ( (order2 == Increase && *bestCell2 < *cell22)
+                      || (order2 == Decrease && *bestCell2 > *cell22) )
+            {
+              // already in right order
+              continue;
+            }
+            else
+            {
+              // they are equal, check 3rd key
+              KSpreadCell * cell23 = cellAt( d, key3 );
+              KSpreadCell * bestCell3 = cellAt( x, key3 );
+
+              if ( cell23->isEmpty() )
+              { 
+                /* No need to swap */ 
+                continue;
+              }
+              else if ( cell23->isObscured() && cell23->isObscuringForced() )
+              { 
+                /* No need to swap */
+                continue;
+              }
+              else if ( bestCell3->isEmpty() )
+              {
+                // empty cells are always shifted to the end
+                bestCell = cell2;
+                bestX = x;
+                continue;     
+              }
+              
+              if ( (order3 == Increase && *cell23 < *bestCell3)
+                   || (order3 == Decrease && *cell23 > *bestCell3) )
+              {
+                bestCell = cell2;
+                bestX = x;
+                continue;
+              }
+              else
+              {
+                // they are really equal or in the right order
+                // no swap necessary
+                continue;
+              }
+            }
+          }
+        }
+        else if ( i1 != -1 && i2 == -1 )
+        {
+          // only text of cell2 is in the list so it is smaller than bestCell
+          /* No need to swap */ 
+          continue;
+        }
+        else if ( i2 != -1 && i1 == -1 )
+        {
+          // if not in the key list, the cell is shifted to the end - always
+          bestCell = cell2;
+          bestX = x;
+          continue;
+        }
+
+        // if i1 and i2 are equals -1 go on:
+      } // end if (firstKey)
+
       // Here we use the operators < and > for cells, which do it all.
-      else if ( (order1 == Increase && *cell2 < *bestCell) 
-                || (order1 == Decrease && *cell2 > *bestCell) )
+      if ( (order1 == Increase && *cell2 < *bestCell) 
+           || (order1 == Decrease && *cell2 > *bestCell) )
       {
         bestCell = cell2;
         bestX = x;
+        continue;
+      }
+      else if ( (order1 == Increase && *cell2 > *bestCell) 
+                || (order1 == Decrease && *cell2 < *bestCell) )
+      {
+        // no change necessary
+        continue;
       }
       else
       {
         // *cell2 equals *bestCell
+        // check 2nd key
+        if (key2 <= 0)
+          continue;
+        KSpreadCell * cell22 = cellAt( d, key2 );
+        KSpreadCell * bestCell2 = cellAt( x, key2 );
+
+        //        kdDebug() << "Equality! Testing now " << d << ", " << x << " in " << key2 << endl;
+
+        checkCellContent(cell2, bestCell, status);
+        if (status == 1)
+          continue;
+        else if (status == 2)
+        {
+          // empty cells are always shifted to the end
+          bestCell = cell2;
+          bestX = x;
+          continue;     
+        }
+
+        //        kdDebug() << "Not empty: " << cell22->text() << " <=> " << bestCell2->text() << " O: " << order2 << endl;
+        if ( (order2 == Increase && *cell22 > *bestCell2)
+             || (order2 == Decrease && *cell22 < *bestCell2) )
+        {
+          bestCell = cell2;
+          bestX = x;
+          continue;
+        }
+        else
+        if ( (order2 == Increase && *cell22 > *bestCell2)
+             || (order2 == Decrease && *cell22 < *bestCell2) )
+        {
+          // already in right order
+          //          kdDebug() << "Right order" << endl;
+          continue;
+        }
+        else
+        {
+          // they are equal, check 3rd key
+          //          kdDebug() << "equals "<< endl;
+          if (key3 == 0)
+            continue;
+          KSpreadCell * cell23 = cellAt( d, key3 );
+          KSpreadCell * bestCell3 = cellAt( x, key3 );
+
+          checkCellContent(cell2, bestCell, status);
+          if (status == 1)
+            continue;
+          else if (status == 2)
+          {
+            // empty cells are always shifted to the end
+            bestCell = cell2;
+            bestX = x;
+            continue;     
+          }
+          if ( (order3 == Increase && *cell23 > *bestCell3)
+               || (order3 == Decrease && *cell23 < *bestCell3) )
+          {
+            bestCell = cell2;
+            bestX = x;
+            continue;
+          }
+          else
+          {
+            // they are really equal
+            // no swap necessary
+            continue;
+          }
+        }
       }
     }
     
-    // Swap columns cell1 and bestCell (i.e. d and bestX)
-    if ( d != bestX )
+    if (target.topLeft() == r.topLeft())
     {
-      for( int y = r.bottom(); y >= r.top(); --y )
+      // Swap columns cell1 and bestCell (i.e. d and bestX)
+      if ( d != bestX )
       {
-        if ( y != key1 && y != key2 && y != key3 )
-          swapCells( d, y, bestX, y, copyLayout );
+        for( int y = r.bottom(); y >= r.top(); --y )
+        {
+          if ( y != key1 && y != key2 && y != key3 )
+            swapCells( d, y, bestX, y, copyLayout );
+        }
+        if (key3 > 0)
+          swapCells( d, key3, bestX, key3, copyLayout );
+        if (key2 > 0)
+          swapCells( d, key2, bestX, key2, copyLayout );
+        swapCells( d, key1, bestX, key1, copyLayout );
       }
-      if (key3 > 0)
-        swapCells( d, key3, bestX, key3, copyLayout );
-      if (key2 > 0)
-        swapCells( d, key2, bestX, key2, copyLayout );
-      swapCells( d, key1, bestX, key1, copyLayout );
+    }
+    else
+    {
+      int right = target.right();
+      int top   = target.top() + d - r.left() + 1;
+      
+      for( int y = target.bottom(); y >= top; --y )
+      {
+        copyCells( bestX, y, right, y, copyLayout );
+      }        
     }    
-  }
+  } // for (d = ...; ...; ++d)
 
   doc()->emitEndOperation();
 }
@@ -3168,18 +3387,10 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
                                  QStringList const * firstKey, bool copyLayout,
                                  KSpreadPoint const & outputPoint )
 {
-  // This is still work in progress (Norbert)
-
-  QRect r( selectionRect() );
-  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+  QRect r( m_rctSelection );
 
   Q_ASSERT( order1 == Increase || order1 == Decrease );
   
-  if ( !m_pDoc->undoBuffer()->isLocked() )
-  {
-    KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r ); // change r to target!
-    m_pDoc->undoBuffer()->appendUndo( undo );
-  }
   // It may not happen that entire rows are selected.
   Q_ASSERT( isRowSelected() == FALSE );
   
@@ -3212,6 +3423,16 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
     if ( r.bottom() < r.top() )
       return;
   }
+  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+
+  //  kdDebug() << "Sel rect: " << r.left() << "; " << r.top() << " - " << r.right() << ", " << r.bottom() << endl;
+  //  kdDebug() << "Target rect: " << target.left() << "; " << target.top() << " - " << target.right() << ", " << target.bottom() << endl;
+
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, target );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
 
   doc()->emitBeginOperation();
 
@@ -3224,6 +3445,10 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
   KSpreadCell * cell1;
   KSpreadCell * cell2;
   KSpreadCell * bestCell;
+  int status = 0;
+
+  //  kdDebug() << "Key1: " << key1 << ", Key2 " << key2 << ", Key3 " << key3 
+  //            << ", Rect TL: " << r.top() << ", " << r.left() << endl;
 
   for ( int d = r.top(); d <= r.bottom(); ++d )
   {
@@ -3231,58 +3456,329 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
     cell1 = cellAt( key1, d );
     if ( cell1->isObscured() && cell1->isObscuringForced() )
     {
-      int moveY=cell1->obscuringCellsRow();
+      int moveY = cell1->obscuringCellsRow();
       cell  = cellAt( key1, moveY );
       cell1 = cellAt( key1, moveY+cell->extraYCells() + 1 );
-      d = moveY + cell->extraYCells() + 1;
+      d     = moveY + cell->extraYCells() + 1;
     }
+    
     bestCell  = cell1;
     int bestY = d;
+    //    kdDebug() << "Testing cell in row: " << d << ", Text: " << cell1->text() << endl;
     
     for ( int y = d + 1 ; y <= r.bottom(); ++y )
     {
       cell2 = cellAt( key1, y );
+      //      kdDebug() << "Testing cell (key1, y) " << key1 << ", " << y << ", Text: " << cell2->text() << endl;
       
       if ( cell2->isEmpty() )
-      { /* No need to swap */ }
+      { 
+        /* No need to swap */ 
+        continue;
+      }
       else if ( cell2->isObscured() && cell2->isObscuringForced() )
-      { /* No need to swap */}
+      { 
+        /* No need to swap */
+        continue;
+      }
       else if ( bestCell->isEmpty() )
       {
         // empty cells are always shifted to the end
         bestCell = cell2;
         bestY = y;
+        continue;
       }
-      // Here we use the operators < and > for cells, which do it all.
-      else if ( (order1 == Increase && *cell2 < *bestCell) ||
-                (order1 == Decrease && *cell2 > *bestCell) )
+      
+      if ( firstKey )
       {
+        int i1 = firstKey->findIndex( cell2->text() );
+        int i2 = firstKey->findIndex( bestCell->text() );
+        
+        if ( i1 != -1 && i2 != -1 )
+        {
+          if ( (order1 == Increase && i1 < i2 ) 
+               || (order1 == Decrease && i1 > i2) )
+          {
+            bestCell = cell2;
+            bestY = y;
+            continue;
+          }
+          
+          if ( i1 == i2 )
+          {
+            // check 2nd key
+            if (key2 <= 0)
+              continue;
+            KSpreadCell * cell22 = cellAt( key2, d );
+            KSpreadCell * bestCell2 = cellAt( key2, y );
+
+            if ( cell22->isEmpty() )
+            { 
+              /* No need to swap */ 
+              continue;
+            }
+            else if ( cell22->isObscured() && cell22->isObscuringForced() )
+            { 
+              /* No need to swap */
+              continue;
+            }
+            else if ( bestCell2->isEmpty() )
+            {
+              // empty cells are always shifted to the end
+              bestCell = cell2;
+              bestY = y;
+              continue;     
+            }
+
+            if ( (order2 == Increase && *cell22 < *bestCell2)
+                 || (order2 == Decrease && *cell22 > *bestCell2) )
+            {
+              bestCell = cell2;
+              bestY = y;
+              continue;
+            }
+            else if ( (order2 == Increase && *bestCell2 < *cell22)
+                      || (order2 == Decrease && *bestCell2 > *cell22) )
+            {
+              // already in right order
+              continue;
+            }
+            else
+            {
+              // they are equal, check 3rd key
+              if (key3 <= 0)
+                continue;
+              KSpreadCell * cell23 = cellAt( key3, d );
+              KSpreadCell * bestCell3 = cellAt( key3, y );
+
+              checkCellContent(cell2, bestCell, status);
+              if (status == 1)
+                continue;
+              else if (status == 2)
+              {
+                // empty cells are always shifted to the end
+                bestCell = cell2;
+                bestY = y;
+                continue;     
+              }
+
+              if ( (order3 == Increase && *cell23 < *bestCell3)
+                   || (order3 == Decrease && *cell23 > *bestCell3) )
+              {
+                bestCell = cell2;
+                bestY = y;
+                continue;
+              }
+              else
+              {
+                // they are really equal or in the correct order
+                // no swap necessary
+                continue;
+              }
+            }
+          }
+        }
+        else if ( i1 != -1 && i2 == -1 )
+        {
+          // only text of cell2 is in the list so it is smaller than bestCell
+          /* No need to swap */ 
+          continue;
+        }
+        else if ( i2 != -1 && i1 == -1 )
+        {
+          // if not in the key list, the cell is shifted to the end - always
+          bestCell = cell2;
+          bestY = y;
+          continue;
+        }
+        
+        // if i1 and i2 are equals -1 go on:
+      } // if (firstKey)
+      
+      
+      // Here we use the operators < and > for cells, which do it all.
+      if ( (order1 == Increase && *cell2 < *bestCell) 
+           || (order1 == Decrease && *cell2 > *bestCell) )
+      {
+        //        kdDebug() << "Second cell smaller if increase, greater if decrease " << cell2->text() << ", " << bestCell->text() 
+        //                  << ", bestY " << bestY << " => ... " << endl;
         bestCell = cell2;
         bestY = y;
       }
+      else if ( (order1 == Increase && *cell2 > *bestCell) 
+                || (order1 == Decrease && *cell2 < *bestCell) )
+      {
+        // no change necessary
+        //        kdDebug() << "Second cell greater if increase, lesser if decrease " << cell2->text() << ", " << bestCell->text() << " => no change" << endl;
+        continue;
+      }
       else
       {
-        // TODO: *cell2 == *bestCell
+        //        kdDebug() << "Cell2 equals bestCell!" << endl;
+        // *cell2 equals *bestCell
+        // check 2nd key
+        if (key2 == 0)
+          continue;
+        KSpreadCell * cell22 = cellAt( key2, d );
+        KSpreadCell * bestCell2 = cellAt( key2, y );
+
+        //        kdDebug() << "Text: " << cell22->row() << ": " << cell22->text() << " <=> " 
+        //                  << bestCell2->row() << ": " << bestCell2->text() << endl;
+
+        // TODO: check if empty...
+        if ( (order2 == Increase && *cell22 > *bestCell2)
+             || (order2 == Decrease && *cell22 < *bestCell2) )
+        {
+          //          kdDebug() << "Cell22 greater if increase, lesser if decrease " << cell22->text() << ", " << bestCell2->text() 
+          //                    << ", bestY: " << bestY << endl;
+
+          bestCell = cell2;
+          bestY = y;
+          continue;
+        }
+        else if ( (order2 == Increase && *cell22 < *bestCell2)
+                  || (order2 == Decrease && *cell22 > *bestCell2) )
+        {
+          // correct order
+          //          kdDebug() << "Key2 in correct order: " << cell22->text() << ", " << bestCell2->text() << endl;
+          continue;
+        }
+        else
+        {
+          // they are equal, check 3rd key
+          if (key3 == 0)
+            continue;
+          KSpreadCell * cell23 = cellAt( key3, d );
+          KSpreadCell * bestCell3 = cellAt( key3, y );
+          // TODO: check if empty...
+          if ( (order3 == Increase && *cell23 > *bestCell3)
+               || (order3 == Decrease && *cell23 < *bestCell3) )
+          {
+            //            kdDebug() << "First cell greater if increase, lesser if decrease " << cell23->text() << ", " << bestCell3->text() 
+            //                      << ", bestY: " << bestY << endl;
+            bestCell = cell2;
+            bestY = y;
+            continue;
+          }
+          else
+          {
+            // they are really equal or already in the correct order
+            // no swap necessary
+            //            kdDebug() << "Key2 in correct order" << endl;
+            continue;
+          }
+        }
       }
     }
-    
-    // Swap rows cell1 and bestCell (i.e. d and bestY)
-    if ( d != bestY )
+
+    //    kdDebug() << "R: " << r.left() << ", " << r.right() << ", T: " << target.left() << ", " << target.right() << endl;
+    if (target.topLeft() == r.topLeft())
     {
-      for (int x = r.left(); x <= r.right(); x++)
+      // Swap rows cell1 and bestCell (i.e. d and bestY)
+      if ( d != bestY )
       {
-        if ( x != key1 && x != key2 && x != key3)
-          swapCells( x, d, x, bestY, copyLayout );
+        for (int x = r.left(); x <= r.right(); ++x)
+        {
+          if ( x != key1 && x != key2 && x != key3)
+            swapCells( x, d, x, bestY, copyLayout );
+        }
+        if (key3 > 0)
+          swapCells( key3, d, key3, bestY, copyLayout );
+        if (key2 > 0)
+          swapCells( key2, d, key2, bestY, copyLayout );
+        swapCells( key1, d, key1, bestY, copyLayout );
       }
-      if (key3 > 0)
-        swapCells( key3, d, key3, bestY, copyLayout );
-      if (key2 > 0)
-        swapCells( key2, d, key2, bestY, copyLayout );
-      swapCells( key1, d, key1, bestY, copyLayout );
     }
-  }
+    else
+    {
+      int right = target.right();
+      int top   = target.top() + d - r.top() + 1;
+      //      kdDebug() << "Left: " << target.left() << ", right: " << right << ", top: " << top  << endl;
+
+      for( int x = target.left(); x <= right; ++x )
+      {
+        // from - to
+        //    kdDebug() << "Copy cell (" << x << ", " << bestY << ") to (" << x << ", " << top << ")" << endl;
+        copyCells( x, bestY, x, top, copyLayout );
+      }        
+    }
+  } // for (d = ...; ...; ++d)
   doc()->emitEndOperation();  
 }
+
+// from - to - copyLayout
+void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
+{
+  KSpreadCell * sourceCell = cellAt( x1, y1 );
+  KSpreadCell * targetCell = cellAt( x2, y2 );
+
+  //  kdDebug() << "Source: (" << x1 << ", " << y1 << ") " << sourceCell->text() << endl;
+
+  if ( sourceCell->isDefault() )
+  {
+    // if the source is default there is nothing to copy
+    targetCell = nonDefaultCell( x2, y2 );
+    return;
+  }
+
+  if ( targetCell->isDefault() )
+  {
+    targetCell = new KSpreadCell( this, x2, y2 );
+    insertCell( targetCell );
+  }
+
+
+  // TODO: check if this enough
+  targetCell->copyContent( sourceCell );
+  //  kdDebug() << "Target: (" << x2 << ", " << y2 << ") " << sourceCell->text() << endl;
+
+  /*
+    if ( !sourceCell->isFormula() )
+    {
+    targetCell->copyContent( sourceCell );
+    }
+    else
+    {
+    targetCell->setCellText( targetCell->decodeFormula( sourceCell->encodeFormula() ) );
+    targetCell->setCalcDirtyFlag();
+    targetCell->calc(false);
+  }
+  */
+
+  if (cpLayout)
+  {
+    targetCell->copyLayout( sourceCell );
+    /*
+    targetCell->setAlign( sourceCell->align( x1, y1 ) );
+    targetCell->setAlignY( sourceCell->alignY( x1, y1 ) );
+    targetCell->setTextFont( sourceCell->textFont( x1, y1 ) );
+    targetCell->setTextColor( sourceCell->textColor( x1, y1 ) );
+    targetCell->setBgColor( sourceCell->bgColor( x1, y1 ) );
+    targetCell->setLeftBorderPen( sourceCell->leftBorderPen( x1, y1 ) );
+    targetCell->setTopBorderPen( sourceCell->topBorderPen( x1, y1 ) );
+    targetCell->setBottomBorderPen( sourceCell->bottomBorderPen( x1, y1 ) );
+    targetCell->setRightBorderPen( sourceCell->rightBorderPen( x1, y1 ) );
+    targetCell->setFallDiagonalPen( sourceCell->fallDiagonalPen( x1, y1 ) );
+    targetCell->setGoUpDiagonalPen( sourceCell->goUpDiagonalPen( x1, y1 ) );
+    targetCell->setBackGroundBrush( sourceCell->backGroundBrush( x1, y1 ) );
+    targetCell->setPrecision( sourceCell->precision( x1, y1 ) );
+    targetCell->setPrefix( sourceCell->prefix( x1, y1 ) );
+    targetCell->setPostfix( sourceCell->postfix( x1, y1 ) );
+    targetCell->setFloatFormat( sourceCell->floatFormat( x1, y1 ) );
+    targetCell->setFloatColor( sourceCell->floatColor( x1, y1 ) );
+    targetCell->setFactor( sourceCell->factor( x1, y1 ) );
+    targetCell->setMultiRow( sourceCell->multiRow( x1, y1 ) );
+    targetCell->setVerticalText( sourceCell->verticalText( x1, y1 ) );
+    targetCell->setStyle( sourceCell->style() );
+    targetCell->setDontPrintText( sourceCell->getDontprintText( x1, y1 ) );
+    targetCell->setIndent( sourceCell->getIndent( x1, y1 ) );
+    targetCell->SetConditionList(sourceCell->GetConditionList());
+    targetCell->setComment( sourceCell->comment( x1, y1 ) );
+    targetCell->setAngle( sourceCell->getAngle( x1, y1 ) );
+    targetCell->setFormatType( sourceCell->getFormatType( x1, y1 ) );
+    */
+  }  
+}        
 
 void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
 {
@@ -3353,7 +3849,6 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
           ref1->calc(false);
         }
 
-  // I'll put this in the sort dlg after feature freeze
   if (cpLayout)
   {
     KSpreadLayout::Align a = ref1->align( ref1->column(), ref1->row() );
@@ -5531,9 +6026,19 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
     QPtrListIterator<KoDocumentChild> chl( m_pDoc->children() );
     for( ; chl.current(); ++chl )
     {
-        if ( ((KSpreadChild*)chl.current())->table() == this )
+       if ( ((KSpreadChild*)chl.current())->table() == this )
         {
-            QDomElement e = chl.current()->save( doc );
+            QDomElement e;
+            KSpreadChild * child = (KSpreadChild *) chl.current();
+
+            // stupid hack :-( has anybody a better solution?
+            if ( child->inherits("ChartChild") )
+            {
+                e = ((ChartChild *) child)->save( doc );
+            }
+            else
+                e = chl.current()->save( doc );
+
             if ( e.isNull() )
                 return QDomElement();
             table.appendChild( e );

@@ -117,7 +117,7 @@ public:
 
   KSpreadDoc* parent() { return (KSpreadDoc*)parent(); }
   KSpreadTable* table() { return m_pTable; }
-
+  
 protected:
   KSpreadTable *m_pTable;
 };
@@ -147,6 +147,7 @@ private:
 
 class ChartChild : public KSpreadChild
 {
+    Q_OBJECT
 public:
     ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect );
     ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
@@ -540,6 +541,13 @@ public:
                        QStringList const * firstKey, bool copyLayout,
                        KSpreadPoint const & outputPoint );
     void swapCells( int x1, int y1, int x2, int y2, bool cpLayout );
+
+    /**
+     * @param x1, y1: values from source cell, 
+     * @param x2, y2: values from target cell
+     * @param cpLayout: if true: cell layout (format) gets copied, too
+     */
+  void copyCells( int x1, int y1, int x2, int y2, bool cpLayout );
     void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
 
     /**
@@ -1322,6 +1330,7 @@ private:
                                bool down);
 
     void convertObscuringBorders();
+    void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
 };
 
 #endif

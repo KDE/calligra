@@ -84,7 +84,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   page1Layout->addWidget( sort1Box, 0, 0 );
 
   QGroupBox * sort2Box = new QGroupBox( m_page1, "sort2Box" );
-  sort2Box->setTitle( i18n( "Then by - still working on implementation" ) );
+  sort2Box->setTitle( i18n( "Then by" ) );
   sort2Box->setColumnLayout(0, Qt::Vertical );
   sort2Box->layout()->setSpacing( 6 );
   sort2Box->layout()->setMargin( 11 );
@@ -93,13 +93,11 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   m_sortKey2 = new QComboBox( false, sort2Box, "m_sortKey2" );
   m_sortKey2->insertItem( i18n( "None" ) );
-  m_sortKey2->setEnabled( false );
   sort2BoxLayout->addWidget( m_sortKey2 );
 
   m_sortOrder2 = new QComboBox( false, sort2Box, "m_sortOrder2" );
   m_sortOrder2->insertItem( i18n( "Ascending" ) );
   m_sortOrder2->insertItem( i18n( "Descending" ) );
-  m_sortOrder2->setEnabled ( false );
   sort2BoxLayout->addWidget( m_sortOrder2 );
 
   page1Layout->addWidget( sort2Box, 1, 0 );
@@ -142,10 +140,10 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   m_useCustomLists = new QCheckBox( firstKeyBox, "m_useCustomLists_2" );
   m_useCustomLists->setText( i18n( "&Use custom list" ) );
+  m_useCustomLists->setEnabled( false );
   firstKeyBoxLayout->addWidget( m_useCustomLists );
 
   m_customList = new QComboBox( false, firstKeyBox, "m_customList" );
-  m_customList->setEnabled( false );
   m_customList->setMaximumSize( 230, 30 );
   firstKeyBoxLayout->addWidget( m_customList );
 
@@ -182,11 +180,11 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   resultToBox->setColumnLayout(0, Qt::Vertical );
   resultToBox->layout()->setSpacing( 6 );
   resultToBox->layout()->setMargin( 11 );
-  resultToBox->setEnabled( false ); // TODO: remove this later
   QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox->layout() );
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
   m_outputTable = new QComboBox( false, resultToBox, "m_outputTable" );
+  m_outputTable->setEnabled(false);
   resultToBoxLayout->addWidget( m_outputTable );
   QSpacerItem * spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   resultToBoxLayout->addItem( spacer );
@@ -197,7 +195,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   m_outputCell = new QLineEdit( resultToBox, "m_outputCell" );
   m_outputCell->setMaximumSize( QSize( 60, 32767 ) );
-  m_outputCell->setEnabled( false ); // TODO: remove this later
+  m_outputCell->setEnabled(false);
   resultToBoxLayout->addWidget( m_outputCell );
 
   page2Layout->addMultiCellWidget( resultToBox, 1, 1, 0, 1 );
@@ -440,21 +438,31 @@ void KSpreadSortDlg::slotOk()
   order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadTable::Increase
              : KSpreadTable::Decrease );
 
+  kdDebug() << "O1: " << order1 << ", O2: " << order2 << ", O3: " << order3 << endl;
+
   if ( m_sortRow->isChecked() )
   {
+    kdDebug() << r.top() << ", " 
+              << m_sortKey1->currentItem() << ", " 
+              << m_sortKey2->currentItem() << ", " 
+              << m_sortKey3->currentItem() << endl;
     key1 = m_sortKey1->currentItem() + r.top();
     if (m_sortKey2->currentItem() > 0)
-      key2 = m_sortKey2->currentItem() + r.top() + 1; // cause there is "None"
+      key2 = m_sortKey2->currentItem() + r.top() - 1; // cause there is "None"
     if (m_sortKey3->currentItem() > 0)
-      key3 = m_sortKey3->currentItem() + r.top() + 1; // cause there is "None"
+      key3 = m_sortKey3->currentItem() + r.top() - 1; // cause there is "None"
   }
   else
   {
+    kdDebug() << r.left() << ", " 
+              << m_sortKey1->currentItem() << ", " 
+              << m_sortKey2->currentItem() << ", " 
+              << m_sortKey3->currentItem() << endl;
     key1 = m_sortKey1->currentItem() + r.left();
     if (m_sortKey2->currentItem() > 0)
-      key2 = m_sortKey2->currentItem() + r.left() + 1; // cause there is "None"
+      key2 = m_sortKey2->currentItem() + r.left() - 1; // cause there is "None"
     if (m_sortKey3->currentItem() > 0)
-      key3 = m_sortKey3->currentItem() + r.left() + 1; // cause there is "None"
+      key3 = m_sortKey3->currentItem() + r.left() - 1; // cause there is "None"
   }
 
   if ( m_useCustomLists->isChecked() )
