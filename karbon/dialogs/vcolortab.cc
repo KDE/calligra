@@ -69,9 +69,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
-	new QLabel( i18n("H:"), cgroupbox );
-	new QLabel( i18n("S:"), cgroupbox );
-	new QLabel( i18n("V:"), cgroupbox );
+	new QLabel( i18n("Hue:", "H:"), cgroupbox );
+	new QLabel( i18n("Saturation:", "S:"), cgroupbox );
+	new QLabel( i18n("Value:", "V:"), cgroupbox );
 	mHue = new QSpinBox( 0, 359, 1, cgroupbox );
 	mSaturation = new QSpinBox( 0, 255, 1, cgroupbox );
 	mValue = new QSpinBox( 0, 255, 1, cgroupbox );
