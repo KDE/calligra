@@ -22,7 +22,6 @@ SHAPES = \
 	or.xpm \
 	xor.sml \
 	xor.xpm \
-	desc \
 	icon.xpm
 
 EXTRA_DIST = $(SHAPES)
