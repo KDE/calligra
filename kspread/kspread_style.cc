@@ -124,6 +124,11 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     styleStack.push( element );
     styleStack.setTypeProperties( "cell" );
     QString str;
+    if ( styleStack.hasAttribute( "style:data-style-name" ) )
+    {
+        kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<styleStack.attribute( "style:data-style-name" )<<endl;
+        kdDebug()<<" oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attribute( "style:data-style-name" )]<<endl;
+    }
     if ( styleStack.hasAttribute( "fo:text-align" ) )
     {
 
