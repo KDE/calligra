@@ -70,5 +70,6 @@ kspread_part.cc: kspread.h kspread_part.moc
 kspread_shell.cc: kspread.h kspread_shell.moc
 kspread_tabbar.cc: kspread.h kspread_tabbar.moc
 kspread_table.cc: kspread.h kspread_table.moc
-kspread_view.cc: kspread.h kspread_view.moc
+kspread_view.cc: kspread.h kspread_view.moc kspread_table.h chart.h
 kspread_table.h: chart.h
+
