@@ -1209,6 +1209,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
 }
 
 KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QList<KWFrameSet> listFrameSet, QList<KWFrame>listFrame) {
+    kdDebug()<<"intoRows :"<<intoRows<<" intoCols :"<<intoCols<<" _col :"<<_col<<" _row"<<_row<<endl;
     if(intoRows < 1 || intoCols < 1)
         return 0L;
         //return false; // assertion.
@@ -1229,10 +1230,9 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
 
     Cell *cell=getCell(row,col);
     KWFrame *firstFrame = cell->getFrame(0);
-    kdDebug()<<"row :"<<row <<" col :"<<col<<" cell->m_cols :"<<cell->m_cols<<" cell->m_rows :"<<cell->m_rows<<endl;
     // unselect frame.
     firstFrame->setSelected(false);
-    firstFrame->removeResizeHandles(); 
+    firstFrame->removeResizeHandles();
 
     double height = (firstFrame->height() -  tableCellSpacing * (intoRows-1)) / intoRows ;
     double width = (firstFrame->width() -  tableCellSpacing * (intoCols-1))/ intoCols  ;
@@ -1250,7 +1250,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
 
     int rowsDiff = intoRows-cell->m_rows;
     int colsDiff = ((int) intoCols)-cell->m_cols;
-
 
     // adjust cellspan and rowspan on other cells.
     for (unsigned int i=0; i< m_cells.count() ; i++) {
@@ -1275,7 +1274,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         }
     }
 
-    // set new row and col-span. Use intermediate ints otherwise we get strange results as the 
+    // set new row and col-span. Use intermediate ints otherwise we get strange results as the
     // intermediate result could be negative (which goes wrong with unsigned ints)
     int r = (cell->m_rows +1) - intoRows;
     if(r < 1) r=1;
@@ -1289,7 +1288,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     if(rowsDiff>0) m_rows+= rowsDiff;
     if(colsDiff>0) m_cols+= colsDiff;
     int i=0;
-
+    kdDebug()<<"create new cell*****************\n";
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
         for (unsigned int x = 0; x < intoCols; x++){
@@ -1307,6 +1306,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             }
             else
             {
+                kdDebug()<<"add cell******** :"<<i<<endl;
                 lastFrameSet = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
                 addCell( lastFrameSet );
             }
@@ -1324,7 +1324,11 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 frame->setNewFrameBehaviour(KWFrame::NoFollowup);
                 lastFrameSet->addFrame( frame );
             }
-
+            else
+            {
+                frame=listFrame.at(i);
+                lastFrameSet->addFrame( frame );
+            }
             i++;
 
             // if the orig cell spans more rows/cols than it is split into, make first col/row wider.
