@@ -256,7 +256,7 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
 
 #endif
     }
-#if 0 //hide object 
+#if 0 //hide object
     if( animation)
     {
         kdDebug()<<" load animation style **************************************\n";
@@ -1077,6 +1077,147 @@ void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & 
     }
     else
         pen = defaultPen();
+    if ( styleStack.hasAttribute( "draw:fill" ) )
+    {
+
+#if 0
+        QBrush brush;
+        brush.setColor(retrieveColor(element));
+        if(element.hasAttribute(attrStyle))
+            brush.setStyle(static_cast<Qt::BrushStyle>(element.attribute(attrStyle).toInt()));
+        return brush;
+#endif
+
+        const QString fill = styleStack.attribute( "draw:fill" );
+        kdDebug()<<" fill :"<<fill<<endl;
+        QBrush tmpBrush;
+        if ( fill == "solid" )
+        {
+            tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
+            if ( styleStack.hasAttribute( "draw:fill-color" ) )
+                tmpBrush.setColor(styleStack.attribute( "draw:fill-color" ) );
+            setBrush(tmpBrush );
+        }
+        else if ( fill == "hatch" )
+        {
+            QString style = styleStack.attribute( "draw:fill-hatch-name" );
+            kdDebug()<<" style hatch :"<<style<<endl;
+            if ( style == "Black 0 Degrees" )
+                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
+            else if ( style == "Black 90 Degrees" )
+                tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
+            else if ( style == "Red Crossed 0 Degrees" || style == "Blue Crossed 0 Degrees" )
+                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 11 ) );
+            else if ( style == "Black 45 Degrees" || style == "Black 45 Degrees Wide" )
+                tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
+            else if ( style == "Black -45 Degrees" )
+                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
+            else if ( style == "Red Crossed 45 Degrees" || style == "Blue Crossed 45 Degrees" )
+                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
+            else
+                kdDebug()<<" hatch style not supported !!!!!!!!!!!!\n";
+            setBrush( tmpBrush );
+#if 0
+            QDomElement* draw = m_draws[style];
+            if ( draw && draw->hasAttribute( "draw:color" ) )
+                brush.setAttribute( "color", draw->attribute( "draw:color" ) );
+            e.appendChild( brush );
+#endif
+        }
+        else if ( fill == "gradient" )
+        {
+#if 0
+            // We have to set a brush with brushstyle != no background fill
+            // otherwise the properties dialog for the object won't
+            // display the preview for the gradient.
+            QDomElement brush = doc.createElement( "BRUSH" );
+            brush.setAttribute( "style", 1 );
+            e.appendChild( brush );
+
+            QDomElement gradient = doc.createElement( "GRADIENT" );
+            QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
+
+            QDomElement* draw = m_draws[style];
+            if ( draw )
+            {
+                gradient.setAttribute( "color1", draw->attribute( "draw:start-color" ) );
+                gradient.setAttribute( "color2", draw->attribute( "draw:end-color" ) );
+
+                QString type = draw->attribute( "draw:style" );
+                if ( type == "linear" )
+                {
+                    int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+
+                    // make sure the angle is between 0 and 359
+                    angle = abs( angle );
+                    angle -= ( (int) ( angle / 360 ) ) * 360;
+
+                    // What we are trying to do here is to find out if the given
+                    // angle belongs to a horizontal, vertical or diagonal gradient.
+                    int lower, upper, nearAngle = 0;
+                    for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
+                    {
+                        if ( upper >= angle )
+                        {
+                            int distanceToUpper = abs( angle - upper );
+                            int distanceToLower = abs( angle - lower );
+                            nearAngle = distanceToUpper > distanceToLower ? lower : upper;
+                            break;
+                        }
+                    }
+
+                    // nearAngle should now be one of: 0, 45, 90, 135, 180...
+                    if ( nearAngle == 0 || nearAngle == 180 )
+                        gradient.setAttribute( "type", 1 ); // horizontal
+                    else if ( nearAngle == 90 || nearAngle == 270 )
+                        gradient.setAttribute( "type", 2 ); // vertical
+                    else if ( nearAngle == 45 || nearAngle == 225 )
+                        gradient.setAttribute( "type", 3 ); // diagonal 1
+                    else if ( nearAngle == 135 || nearAngle == 315 )
+                        gradient.setAttribute( "type", 4 ); // diagonal 2
+                }
+                else if ( type == "radial" || type == "ellipsoid" )
+                    gradient.setAttribute( "type", 5 ); // circle
+                else if ( type == "square" || type == "rectangular" )
+                    gradient.setAttribute( "type", 6 ); // rectangle
+                else if ( type == "axial" )
+                    gradient.setAttribute( "type", 7 ); // pipecross
+
+                // Hard to map between x- and y-center settings of ooimpress
+                // and (un-)balanced settings of kpresenter. Let's try it.
+                int x, y;
+                if ( draw->hasAttribute( "draw:cx" ) )
+                    x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+                else
+                    x = 50;
+
+                if ( draw->hasAttribute( "draw:cy" ) )
+                    y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+                else
+                    y = 50;
+
+                if ( x == 50 && y == 50 )
+                {
+                    gradient.setAttribute( "unbalanced", 0 );
+                    gradient.setAttribute( "xfactor", 100 );
+                    gradient.setAttribute( "yfactor", 100 );
+                }
+                else
+                {
+                    gradient.setAttribute( "unbalanced", 1 );
+                    // map 0 - 100% to -200 - 200
+                    gradient.setAttribute( "xfactor", 4 * x - 200 );
+                    gradient.setAttribute( "yfactor", 4 * y - 200 );
+                }
+            }
+            e.appendChild( gradient );
+
+            QDomElement fillType = doc.createElement( "FILLTYPE" );
+            fillType.setAttribute( "value", 1 );
+            e.appendChild( fillType );
+#endif
+        }
+    }
     kdDebug()<<"pen style :"<<pen<<endl;
 }
 
