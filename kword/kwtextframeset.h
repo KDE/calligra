@@ -44,7 +44,7 @@ public:
 
     virtual FrameType getFrameType() { return FT_TEXT; }
 
-    KWTextDocument *textDocument() const { return text; }
+    KWTextDocument *textDocument() const { return textdoc; }
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
 
@@ -169,7 +169,8 @@ private slots:
 
 protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
-    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool copyParagLayouts = false, bool moveCustomItems = false );
+    void copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems );
+    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
     QTextFormat * zoomFormatFont( const QTextFormat * f );
 
@@ -209,7 +210,7 @@ private:
     };
     void checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t );
 
-    KWTextDocument *text;
+    KWTextDocument *textdoc;
     UndoRedoInfo undoRedoInfo;                 // Currently built undo/redo info
     QTextParag *m_lastFormatted;               // Idle-time-formatting stuff
     QTimer *formatTimer, *changeIntervalTimer; // Same

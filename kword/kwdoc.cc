@@ -1839,7 +1839,7 @@ void KWDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _dif
 
     emit sig_insertObject( ch, frameset );
 
-    repaintAllViews();
+    frameChanged( frame ); // repaint etc.
 }
 
 /*================================================================*/
@@ -1906,15 +1906,14 @@ bool KWDocument::isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsi
 /*================================================================*/
 /* Update all views of this document, area can be cleared
    before redrawing with the _erase flag. (false implied)
-   All views EXCEPT the argument _view are updated
+   All views EXCEPT the argument _view are updated ( 0L = all )
  */
 void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 {
     for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
-            if ( viewPtr != _view ) {
+            if ( viewPtr != _view )
                 viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
-            }
         }
     }
 }
@@ -2480,10 +2479,8 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
     updateAllFrames();
     if ( !frame || frame->getRunAround() != RA_NO )
-    {
         layout();
-        repaintAllViewsExcept( view );
-    }
+    repaintAllViewsExcept( view );
 }
 
 void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )

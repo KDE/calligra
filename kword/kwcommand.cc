@@ -98,6 +98,7 @@ QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
             {
                 kdDebug() << "KWTextDeleteCommand::unexecute setting custom item " << it.data() << endl;
                 cursor.parag()->at( cursor.index() )->setCustomItem( it.data() );
+                cursor.parag()->invalidate( 0 );
             }
             cursor.gotoRight();
         }

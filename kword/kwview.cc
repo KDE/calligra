@@ -715,15 +715,20 @@ void KWView::setupPrinter( KPrinter &prt )
 
 void KWView::print( KPrinter &prt )
 {
+    // Repaint behind the print dialog right now, before zooming the doc
+    kapp->processEvents();
+
     gui->canvasWidget()->viewport()->setCursor( waitCursor );
 
     prt.setFullPage( true );
 
     int oldZoom = doc->zoom();
+    // We don't get valid metrics from the printer - and we want a better resolution
+    // anyway (it's the PS driver that takes care of the printer resolution).
     QPaintDeviceMetrics metrics( &prt );
-    double hackFactor = 1.0; // 2.0 for the hack (improving print-preview's quality)
-    // The real solution is Qt-3.0's KPrinter::setResolution.
-    doc->setZoomAndResolution( 100, metrics.logicalDpiX()*hackFactor, metrics.logicalDpiY()*hackFactor, false );
+    //doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY(), false );
+    doc->setZoomAndResolution( 100, 300, 300, false );
+    kdDebug() << "KWView::print zoom&res set" << endl;
 
     bool serialLetter = FALSE;
 #if 0
@@ -762,7 +767,7 @@ void KWView::print( KPrinter &prt )
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
-        //painter.scale( 1.0/hackFactor, 1.0/hackFactor );
+        painter.scale( metrics.logicalDpiX() / 300.0, metrics.logicalDpiY() / 300.0 );
         gui->canvasWidget()->print( &painter, &prt );
         painter.end();
     } else {
@@ -784,6 +789,7 @@ void KWView::print( KPrinter &prt )
         doc->setPageLayout( oldPGLayout, cl, hf );
 
     doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
+    kdDebug() << "KWView::print zoom&res reset" << endl;
 
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
 }

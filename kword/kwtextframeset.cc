@@ -37,21 +37,21 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     //kdDebug() << "KWTextFrameSet::KWTextFrameSet " << this << endl;
     m_width = 0;
     m_availableHeight = -1;
-    text = new KWTextDocument( this, 0 );
-    text->setFormatter( new QTextFormatterBreakWords );
-    text->setFlow( this );
-    text->setVerticalBreak( true );              // get QTextFlow methods to be called
-    text->setAddMargins( true );                 // top margin and bottom are added, not max'ed
+    textdoc = new KWTextDocument( this, 0 );
+    textdoc->setFormatter( new QTextFormatterBreakWords );
+    textdoc->setFlow( this );
+    textdoc->setVerticalBreak( true );              // get QTextFlow methods to be called
+    textdoc->setAddMargins( true );                 // top margin and bottom are added, not max'ed
 
     /* if ( QFile::exists( "bidi.txt" ) ) {
        QFile fl( "bidi.txt" );
        fl.open( IO_ReadOnly );
        QByteArray array = fl.readAll();
        QString text = QString::fromUtf8( array.data() );
-       this->text->setText( text, QString::null );
+       textdoc->setText( text, QString::null );
     }*/
 
-    m_lastFormatted = text->firstParag();
+    m_lastFormatted = textdoc->firstParag();
 
     interval = 0;
     changeIntervalTimer = new QTimer( this );
@@ -140,7 +140,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
     //kdDebug(32002) << "KWTextFrameSet::drawContents drawCursor=" << drawCursor << endl;
     //if ( !cursorVisible )
     //drawCur = FALSE;
-    if ( !text->firstParag() )
+    if ( !textdoc->firstParag() )
         return;
 
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -175,16 +175,16 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->translate( frameRect.left(), frameRect.top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
-                QTextParag * lastDrawn = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
+                QTextParag * lastDrawn = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
 
                 // NOTE: QTextView sets m_lastFormatted to lastDrawn here
                 // But when scrolling up, this causes to reformat a lot of stuff for nothing.
                 // And updateViewArea takes care of formatting things before we even arrive here.
 
                 // Blank area under the last paragraph
-                if ( (lastDrawn == text->lastParag() || !m_lastFormatted) && !onlyChanged)
+                if ( (lastDrawn == textdoc->lastParag() || !m_lastFormatted) && !onlyChanged)
                 {
-                    int docHeight = text->height();
+                    int docHeight = textdoc->height();
                     QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
                     //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
                     p->fillRect( blank, gb.brush( QColorGroup::Base ) );
@@ -241,7 +241,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                 QPixmap *pix = 0;
                 QColorGroup cg = QApplication::palette().active();
                 cg.setBrush(QColorGroup::Base, frame->getBackgroundColor());
-                text->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
+                textdoc->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
                                  topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
                                  pix, cg, cursorVisible, cursor );
                 p->restore();
@@ -254,16 +254,16 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         totalHeight += frameRect.height();
     }
     // Well this is a no-op currently (we don't use QTextFlow::draw)
-    //if ( text->flow() )
-    //text->flow()->draw( p, r.x() - cursor->totalOffsetX(),
+    //if ( textdoc->flow() )
+    //textdoc->flow()->draw( p, r.x() - cursor->totalOffsetX(),
     //                        r.y() - cursor->totalOffsetX(), r.width(), r.height() );
 
 }
 
 void KWTextFrameSet::layout()
 {
-    m_lastFormatted = text->firstParag();
-    text->invalidate(); // lazy layout, real update follows upon next repaint
+    m_lastFormatted = textdoc->firstParag();
+    textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
 void KWTextFrameSet::setWidth( int w )
@@ -441,7 +441,7 @@ void KWTextFrameSet::updateFrames()
     if ( !frames.isEmpty() )
     {
         kdDebug(32002) << "KWTextFrameSet::updateFrames " << this << " setWidth=" << frames.first()->width() << endl;
-        text->setWidth( kWordDocument()->zoomItX( frames.first()->width() ) );
+        textdoc->setWidth( kWordDocument()->zoomItX( frames.first()->width() ) );
         // ## we need support for variable width.... (could be done in adjustRMargin in fact)
     } else kdWarning(32002) << "KWTextFrameSet::update no frames" << endl;
 
@@ -596,7 +596,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
 {
     KWFrameSet::load( attributes );
 
-    text->clear(false); // Get rid of dummy paragraph (and more if any)
+    textdoc->clear(false); // Get rid of dummy paragraph (and more if any)
     KWTextParag *lastParagraph = 0L;
 
     // <PARAGRAPH>
@@ -606,19 +606,19 @@ void KWTextFrameSet::load( QDomElement &attributes )
     {
         QDomElement paragraph = listParagraphs.item( item ).toElement();
 
-        KWTextParag *parag = new KWTextParag( text, lastParagraph );
+        KWTextParag *parag = new KWTextParag( textdoc, lastParagraph );
         parag->load( paragraph );
         if ( !lastParagraph )        // First parag
-            text->setFirstParag( parag );
+            textdoc->setFirstParag( parag );
         lastParagraph = parag;
         doc->progressItemLoaded();
     }
 
     if ( !lastParagraph )                // We created no paragraph
-        text->setFirstParag( 0L );
+        textdoc->setFirstParag( 0L );
 
-    text->setLastParag( lastParagraph );
-    m_lastFormatted = text->firstParag();
+    textdoc->setLastParag( lastParagraph );
+    m_lastFormatted = textdoc->firstParag();
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 
     zoom();
@@ -628,7 +628,7 @@ void KWTextFrameSet::zoom()
 {
     if ( !m_origFontSizes.isEmpty() )
         unzoom();
-    QTextFormatCollection * coll = text->formatCollection();
+    QTextFormatCollection * coll = textdoc->formatCollection();
     double factor = kWordDocument()->zoomedResolutionY();
     //kdDebug(32002) << "KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
     QDictIterator<QTextFormat> it( coll->dict() );
@@ -640,7 +640,7 @@ void KWTextFrameSet::zoom()
     }
 
     // Zoom all custom items
-    QListIterator<QTextCustomItem> cit( text->allCustomItems() );
+    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         // ## This is only valid as long as we only have KWTextImage, which updates
@@ -650,20 +650,20 @@ void KWTextFrameSet::zoom()
     }
 
     // Mark all paragraphs as changed !
-    for ( KWTextParag * s = static_cast<KWTextParag *>( text->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
+    for ( KWTextParag * s = static_cast<KWTextParag *>( textdoc->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
     {
         s->setChanged( TRUE );
         s->invalidate( 0 );
         if ( s->counter() )
             s->counter()->invalidate();
     }
-    m_lastFormatted = text->firstParag();
+    m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
 }
 
 void KWTextFrameSet::unzoom()
 {
-    QTextFormatCollection * coll = text->formatCollection();
+    QTextFormatCollection * coll = textdoc->formatCollection();
 
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
@@ -824,11 +824,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
             undoRedoInfo.name = i18n("Delete text");
 	}
 	undoRedoInfo.text += parag->at( cursor->index() )->c;
-        if ( cursor->parag()->at( cursor->index() )->format() ) {
- 	    cursor->parag()->at( cursor->index() )->format()->addRef();
- 	    undoRedoInfo.text.at( undoRedoInfo.text.length() - 1 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
- 	}
-        // TODO customitem !
+        copyCharFormatting( parag->at( cursor->index() ), undoRedoInfo.text.length()-1, true );
 	if ( cursor->remove() )
 	    undoRedoInfo.text += "\n";
 	break;
@@ -851,11 +847,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	}
 	cursor->gotoLeft();
 	undoRedoInfo.text.prepend( QString( cursor->parag()->at( cursor->index() )->c ) );
-        if ( cursor->parag()->at( cursor->index() )->format() ) {
- 	    cursor->parag()->at( cursor->index() )->format()->addRef();
- 	    undoRedoInfo.text.at( 0 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
- 	}
-        //TODO customitem
+        copyCharFormatting( parag->at( cursor->index() ), 0, true );
 	undoRedoInfo.index = cursor->index();
 	if ( cursor->remove() ) {
 	    undoRedoInfo.text.remove( 0, 1 );
@@ -888,23 +880,14 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	}
 	if ( cursor->atParagEnd() ) {
 	    undoRedoInfo.text += cursor->parag()->at( cursor->index() )->c;
-	    if ( cursor->parag()->at( cursor->index() )->format() ) {
-		cursor->parag()->at( cursor->index() )->format()->addRef();
-                undoRedoInfo.text.at( undoRedoInfo.text.length() - 1 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
-	    }
-
+            copyCharFormatting( parag->at( cursor->index() ), undoRedoInfo.text.length()-1, true );
             if ( cursor->remove() )
 		undoRedoInfo.text += "\n";
 	} else {
             int oldLen = undoRedoInfo.text.length();
 	    undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
-              for ( int i = cursor->index(); i < cursor->parag()->length(); ++i ) {
-		if ( cursor->parag()->at( i )->format() ) {
-		    cursor->parag()->at( i )->format()->addRef();
-		    undoRedoInfo.text.at( oldLen + i - cursor->index() ).setFormat( cursor->parag()->at( i )->format() );
-		}
-                // TODO custom item stuff
-	    }
+            for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
+                copyCharFormatting( cursor->parag()->at( i ), oldLen + i - cursor->index(), true );
 	    cursor->killLine();
 	}
 	break;
@@ -1023,7 +1006,7 @@ void KWTextFrameSet::doChangeInterval()
 
 void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
 {
-    //kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " text->height()=" << text->height() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;
     if ( maxY >= m_availableHeight ) // Speedup
         maxY = m_availableHeight;
     else
@@ -1110,82 +1093,53 @@ bool KWTextFrameSet::UndoRedoInfo::valid() const
     return text.length() > 0  && id >= 0 && index >= 0;
 }
 
-// Based on QTextView::readFormats
-void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool copyParagLayouts, bool moveCustomItems )
+// Copies a formatted char, <ch>, into undoRedoInfo.text, at position <index>.
+void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems )
+{
+    if ( ch->format() ) {
+        ch->format()->addRef();
+        undoRedoInfo.text.at( index ).setFormat( ch->format() );
+    }
+    if ( moveCustomItems && ch->isCustom() )
+    {
+        kdDebug(32001) << "KWTextFrameSet::copyCharFormatting moving custom item " << ch->customItem() << " to text's " << index << " char"  << endl;
+        undoRedoInfo.customItemsMap.insert( index, ch->customItem() );
+        ch->loseCustomItem();
+    }
+}
+
+// Based on QTextView::readFormats - with all code duplication moved to copyCharFormatting
+void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts, bool moveCustomItems )
 {
     c2.restoreState();
     c1.restoreState();
     if ( c1.parag() == c2.parag() ) {
-        for ( int i = c1.index(); i < c2.index(); ++i ) {
-            QTextStringChar * ch = c1.parag()->at( i );
-            if ( ch->format() ) {
-                ch->format()->addRef();
-                text.at( oldLen + i - c1.index() ).setFormat( ch->format() );
-            }
-            if ( moveCustomItems && ch->isCustom() )
-            {
-                kdDebug() << "KWTextFrameSet::readFormats moving custom item " << ch->customItem() << " to text's " << oldLen + i - c1.index() << " char"  << endl;
-                undoRedoInfo.customItemsMap.insert( oldLen + i - c1.index(), ch->customItem() );
-                ch->loseCustomItem();
-            }
-        }
-        if ( copyParagLayouts ) {
-            undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(c1.parag())->createParagLayout();
-        }
+        for ( int i = c1.index(); i < c2.index(); ++i )
+            copyCharFormatting( c1.parag()->at( i ), oldLen + i - c1.index(), moveCustomItems );
     } else {
         int lastIndex = oldLen;
         int i;
-        for ( i = c1.index(); i < c1.parag()->length(); ++i ) {
-            QTextStringChar * ch = c1.parag()->at( i );
-            if ( ch->format() ) {
-                ch->format()->addRef();
-                text.at( lastIndex ).setFormat( ch->format() );
-                lastIndex++;
-            }
-            if ( moveCustomItems && ch->isCustom() )
-            {
-                undoRedoInfo.customItemsMap.insert( lastIndex, ch->customItem() );
-                ch->loseCustomItem();
-            }
-        }
-        lastIndex++;
+        for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
+            copyCharFormatting( c1.parag()->at( i ), lastIndex, moveCustomItems );
+        lastIndex++; // '\n'
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            for ( int i = 0; i < p->length(); ++i ) {
-                QTextStringChar * ch = p->at( i );
-                if ( ch->format() ) {
-                    ch->format()->addRef();
-                    text.at( i + lastIndex ).setFormat( ch->format() );
-                }
-                if ( moveCustomItems && ch->isCustom() )
-                {
-                    undoRedoInfo.customItemsMap.insert( i + lastIndex, ch->customItem() );
-                    ch->loseCustomItem();
-                }
-            }
+            for ( i = 0; i < p->length(); ++i )
+                copyCharFormatting( p->at( i ), i + lastIndex, moveCustomItems );
             lastIndex += p->length() + 1;
             p = p->next();
         }
-        for ( i = 0; i < c2.index(); ++i ) {
-            QTextStringChar * ch = c2.parag()->at( i );
-            if ( ch->format() ) {
-                ch->format()->addRef();
-                text.at( i + lastIndex ).setFormat( ch->format() );
-            }
-            if ( moveCustomItems && ch->isCustom() )
-            {
-                undoRedoInfo.customItemsMap.insert( i + lastIndex, ch->customItem() );
-                ch->loseCustomItem();
-            }
-        }
-        if ( copyParagLayouts ) {
-            QTextParag *p = c1.parag();
-            while ( p ) {
-                undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
-                if ( p == c2.parag() )
-                    break;
-                p = p->next();
-            }
+        for ( i = 0; i < c2.index(); ++i )
+            copyCharFormatting( c2.parag()->at( i ), i + lastIndex, moveCustomItems );
+    }
+
+    if ( copyParagLayouts ) {
+        QTextParag *p = c1.parag();
+        while ( p ) {
+            undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
+            if ( p == c2.parag() )
+                break;
+            p = p->next();
         }
     }
 }
@@ -1260,7 +1214,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     undoRedoInfo.clear();
     undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
     undoRedoInfo.text = str;
-    readFormats( c1, c2, 0, undoRedoInfo.text ); // gather char-format info but not paraglayouts nor customitems
+    readFormats( c1, c2, 0 ); // gather char-format info but not paraglayouts nor customitems
 
     QTextFormat * newFormat = zoomFormatFont( & newStyle->format() );
 
@@ -1559,7 +1513,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     undoRedoInfo.text = textdoc->selectedText( QTextDocument::Standard );
     QTextCursor c1 = textdoc->selectionStartCursor( QTextDocument::Standard );
     QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
-    readFormats( c1, c2, oldLen, undoRedoInfo.text, true, true );
+    readFormats( c1, c2, oldLen, true, true );
 
     textdoc->removeSelectedText( QTextDocument::Standard, cursor );
 
@@ -1578,13 +1532,6 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
     QTextDocument *textdoc = textDocument();
     emit hideCursor();
     if ( textdoc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
-	/*checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
-	if ( !undoRedoInfo.valid() ) {
-	    textdoc->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
-	    undoRedoInfo.text = QString::null;
-	}
-	undoRedoInfo.text = textdoc->selectedText( QTextDocument::Standard );
-	textdoc->removeSelectedText( QTextDocument::Standard, cursor );*/
         removeSelectedText( cursor );
     }
     QTextCursor c2 = *cursor;
@@ -1615,10 +1562,8 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
     undoRedoInfo.text += txt;
 
     for ( int i = 0; i < (int)txt.length(); ++i ) {
-        if ( txt[ i ] != '\n' && c2.parag()->at( c2.index() )->format() ) {
-            c2.parag()->at( c2.index() )->format()->addRef();
-            undoRedoInfo.text.setFormat( oldLen + i, c2.parag()->at( c2.index() )->format(), TRUE );
-        }
+        if ( txt[ oldLen + i ] != '\n' )
+            copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, true );
         c2.gotoRight();
     }
 
@@ -1644,11 +1589,12 @@ void KWTextFrameSet::undo()
     // It sucks a bit for useability, but otherwise one view might still have
     // a cursor inside a deleted paragraph -> crash.
     emit setCursor( c );
-    setLastFormattedParag( 0 ); // ??
+    setLastFormattedParag( textdoc->firstParag() );
     emit ensureCursorVisible();
     emit repaintChanged( this );
     emit updateUI();
     emit showCursor();
+    formatMore();
 }
 
 void KWTextFrameSet::redo()
@@ -1662,11 +1608,12 @@ void KWTextFrameSet::redo()
 	return;
     }
     emit setCursor( c ); // see undo
-    setLastFormattedParag( 0 );
+    setLastFormattedParag( textdoc->firstParag() );
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit updateUI();
     emit showCursor();
+    formatMore();
 }
 
 void KWTextFrameSet::clearUndoRedoInfo()
@@ -1778,7 +1725,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFor
         undoRedoInfo.eid = c2.parag()->paragId();
         undoRedoInfo.eindex = c2.index();
         undoRedoInfo.text = str;
-        readFormats( c1, c2, 0, undoRedoInfo.text ); // read previous formatting info
+        readFormats( c1, c2, 0 ); // read previous formatting info
         undoRedoInfo.format = format;
         undoRedoInfo.flags = flags;
         undoRedoInfo.clear();
@@ -2188,8 +2135,8 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
     placeCursor( mousePos );
     ensureCursorVisible();
 
-    QTextDocument * text = textDocument();
-    if ( text->inSelection( QTextDocument::Standard, mousePos ) ) {
+    QTextDocument * textdoc = textDocument();
+    if ( textdoc->inSelection( QTextDocument::Standard, mousePos ) ) {
         mightStartDrag = TRUE;
         emit showCursor();
         dragStartTimer->start( QApplication::startDragTime(), TRUE );
@@ -2198,24 +2145,24 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
     }
 
     bool redraw = FALSE;
-    if ( text->hasSelection( QTextDocument::Standard ) ) {
+    if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
         if ( !( e->state() & ShiftButton ) ) {
-            redraw = text->removeSelection( QTextDocument::Standard );
-            text->setSelectionStart( QTextDocument::Standard, cursor );
+            redraw = textdoc->removeSelection( QTextDocument::Standard );
+            textdoc->setSelectionStart( QTextDocument::Standard, cursor );
         } else {
-            redraw = text->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+            redraw = textdoc->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
         }
     } else {
         if ( !( e->state() & ShiftButton ) ) {
-            text->setSelectionStart( QTextDocument::Standard, cursor );
+            textdoc->setSelectionStart( QTextDocument::Standard, cursor );
         } else {
-            text->setSelectionStart( QTextDocument::Standard, &oldCursor );
-            redraw = text->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+            textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
+            redraw = textdoc->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
         }
     }
 
-    for ( int i = 1; i < text->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
-        redraw = text->removeSelection( i ) || redraw;
+    for ( int i = 1; i < textdoc->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
+        redraw = textdoc->removeSelection( i ) || redraw;
 
     if ( !redraw ) {
         emit showCursor();
