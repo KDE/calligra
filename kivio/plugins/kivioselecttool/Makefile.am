@@ -1,10 +1,9 @@
-SUBDIRS = select_pics 
+SUBDIRS = select_pics
 lib_LTLIBRARIES =libkivioselecttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkivioselecttool_la_METASOURCES = AUTO

@@ -46,7 +46,7 @@ TextTool::TextTool( KivioView* view )
   setSortNum(2);
 
   ToolSelectAction* text = new ToolSelectAction( actionCollection(), "ToolAction" );
-  KAction* m_z1 = new KAction( i18n("Edit Stencil Text..."), "kivio_text", CTRL+Key_T, actionCollection(), "text" );
+  KAction* m_z1 = new KAction( i18n("Edit Stencil Text..."), "kivio_text", Key_F2, actionCollection(), "text" );
   text->insert(m_z1);
 
   m_mode = stmNone;
@@ -161,13 +161,13 @@ void TextTool::text(QRect r)
 
     // Calculate the w/h of the textion box
     float w = releasePoint.x() - startPoint.x();
-    
+
     if( w < 0.0 ) {
         w *= -1.0;
     }
 
     float h = releasePoint.y() - startPoint.y();
-    
+
     if( h < 0.0 ) {
         h *= -1.0;
     }
@@ -176,7 +176,7 @@ void TextTool::text(QRect r)
     KivioPage* page = m_pCanvas->activePage();
 
     KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Text");
-    
+
     if (!ss) {
         return;
     }

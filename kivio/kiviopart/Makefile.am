@@ -1,9 +1,8 @@
-SUBDIRS = ui kiviosdk tklib tools pics tiles stencils .
+SUBDIRS = ui kiviosdk tools pics tiles stencils .
 
 kde_module_LTLIBRARIES = libkiviopart.la
 libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/tools/libtools.la\
-		$(top_builddir)/kivio/kiviopart/tklib/libtklib.la\
 		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
 		$(top_builddir)/kivio/kiviopart/ui/libui.la \
 		$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
@@ -11,7 +10,6 @@ libkiviopart_la_LIBADD = \
 INCLUDES = -I$(srcdir)/ui\
 	-Iui\
 	-I$(srcdir)/kiviosdk\
-	-I$(srcdir)/tklib\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
 	$(KOTEXT_INCLUDES)\

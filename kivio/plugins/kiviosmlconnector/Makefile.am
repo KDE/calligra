@@ -3,7 +3,6 @@ lib_LTLIBRARIES =libkiviosmlconnector.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	-I$(top_srcdir)/kivio/plugins/kiviosmlconnector/sml_connector \
 	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)

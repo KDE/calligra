@@ -1,14 +1,8 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
-
 lib_LTLIBRARIES =libkiviotexttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	$(KOFFICE_INCLUDES) $(all_includes)
 libkiviotexttool_la_METASOURCES = AUTO
@@ -26,9 +20,6 @@ EXTRA_DIST = \
 		kivio_text_cursor.xpm\
 		Text.sml\
 		Text.xpm
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
 libkiviotexttool_la_LDFLAGS = -module $(KDE_PLUGIN)
 libkiviotexttool_la_LIBADD = $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 

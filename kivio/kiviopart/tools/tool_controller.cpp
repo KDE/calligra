@@ -25,6 +25,7 @@
 #include <ktoolbarbutton.h>
 #include <ktoolbar.h>
 #include <kxmlguifactory.h>
+#include <kpopupmenu.h>
 
 ToolSelectAction::ToolSelectAction( QObject* parent, const char* name )
 :KActionMenu("",parent,name)
@@ -38,11 +39,13 @@ ToolSelectAction::ToolSelectAction( QObject* parent, const char* name )
 void ToolSelectAction::insert( KAction* a, int index )
 {
   m_count++;
-  KActionMenu::insert(a,index);
+  KActionMenu::insert(a, index);
+
   if (!m_init) {
     setDefaultAction(a);
     m_init = true;
   }
+
   connect(a,SIGNAL(activated()),SLOT(childActivated()));
 }
 

@@ -1,9 +1,8 @@
-SUBDIRS = zoom_pics 
+SUBDIRS = zoom_pics
 lib_LTLIBRARIES =libkiviozoomtool.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkiviozoomtool_la_METASOURCES = AUTO
