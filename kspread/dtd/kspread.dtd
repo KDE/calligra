@@ -175,7 +175,7 @@
 		row	the row number of the cell (starts at 1)
 		column	the column number of the cell (starts at 1)
 -->
-<!ELEMENT cell (text|format|validity)*>
+<!ELEMENT cell (text|format|validity|condition)*>
 <!ATTLIST cell  row      CDATA #REQUIRED
                 column   CDATA #REQUIRED>
 

@@ -2425,14 +2425,16 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else if ( !m_strOutText.isEmpty() && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
     {
         QPen tmpPen(textPen(_col,_row));
+        /*
         if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
             QPen p( textPen(_col,_row) );
             p.setColor( defaultColorGroup.highlightedText() );
             _painter.setPen( p );
         }
-        else
-            _painter.setPen( textPen(_col,_row) );
+        else*/
+
+        _painter.setPen( textPen(_col,_row) );
 
         // #### Torben: This looks like duplication to me
         verifyCondition();
@@ -2469,7 +2471,15 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 tmpPen.setColor( textColor( _col, _row) );
         }
         _painter.setPen(tmpPen);
-        //_painter.setFont( textFont(_col,_row ) );
+
+        if ( selected && ( _col != m.left() || _row != m.top() )  )
+        {
+            QPen p( tmpPen );
+            p.setColor( defaultColorGroup.highlightedText() );
+            _painter.setPen( p );
+        }
+        else
+            _painter.setPen(tmpPen);
 
         QString tmpText=m_strOutText;
 	int tmpHeight=m_iOutTextHeight;
