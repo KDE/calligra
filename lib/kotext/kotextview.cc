@@ -617,10 +617,10 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i/* 
     inDoubleClick = TRUE;
     *m_cursor = selectWordUnderCursor();
     textObject()->selectionChangedNotify();
-    // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
-    // But auto-copy in readonly mode, since there is no action available in that case.
-    if ( !m_bReadWrite )
-        emit copy();
+    // Copy the selection.
+    QApplication::clipboard()->setSelectionMode( true );
+    emit copy();
+    QApplication::clipboard()->setSelectionMode( false );
 
     possibleTripleClick=true;
 
@@ -644,10 +644,10 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
     inDoubleClick = FALSE;
     *m_cursor = selectParagUnderCursor();
     textObject()->selectionChangedNotify();
-    // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
-    // But auto-copy in readonly mode, since there is no action available in that case.
-    if ( !m_bReadWrite )
-        emit copy();
+    // Copy the selection.
+    QApplication::clipboard()->setSelectionMode( true );
+    emit copy();
+    QApplication::clipboard()->setSelectionMode( false );
     QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(afterTripleClickTimeout()));
 
 }
