@@ -18,13 +18,23 @@
    </FORMAT>
   </STYLE>
   <STYLE>
+   <NAME value="Document Title" />
+   <FLOW align="center" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <!-- Use KDE settings for the font family -->
+    <WEIGHT value="75" />
+    <SIZE value="24" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
    <NAME value="Head 1" />
    <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="0" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
     <!-- Use KDE settings for the font family -->
-    <SIZE value="24" />
+    <SIZE value="20" />
     <WEIGHT value="75" />
    </FORMAT>
   </STYLE>

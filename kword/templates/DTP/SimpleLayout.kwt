@@ -28,7 +28,7 @@
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
     <!-- Use KDE settings for the font family -->
-    <SIZE value="24" />
+    <SIZE value="20" />
     <WEIGHT value="75" />
    </FORMAT>
   </STYLE>
