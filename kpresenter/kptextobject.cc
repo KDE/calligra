@@ -458,17 +458,16 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     KoTextParag *lastParag = static_cast<KoTextParag *>(textDocument()->firstParag());
     int i = 0;
     int listNum = 0;
-    int lineSpacing = 0, paragSpacing = 0;
+    // Initialize lineSpacing and paragSpacing with the values of the object-level attributes
+    // (KOffice-1.1 file format)
+    int lineSpacing = elem.attribute( attrLineSpacing ).toInt();
+    int bottomBorder = elem.attribute( attrParagSpacing ).toInt();
+    int topBorder = 0;
+
     while ( !e.isNull() ) {
         if ( e.tagName() == tagP ) {
             QDomElement n = e.firstChild().toElement();
 
-#if 0
-            if ( type != -1 )
-                lastParag->setType( (KTextEditParag::Type)type );
-            else
-                lastParag->setType( (KTextEditParag::Type)e.attribute( attrType ).toInt() );
-#endif
             KoParagLayout paragLayout = loadParagLayout(e);
             //compatibility
             if(type!=-1)
@@ -489,8 +488,23 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     paragLayout.counter->setStyle(KoParagCounter::STYLE_DISCBULLET);
                 }
             }
-            lastParag->setParagLayout( paragLayout );
+            // This is for very old (KOffice-1.0) documents.
+            if ( e.hasAttribute( attrLineSpacing ) )
+                lineSpacing = e.attribute( attrLineSpacing ).toInt();
+            if ( e.hasAttribute( "distBefore" ) )
+                topBorder = e.attribute( "distBefore" ).toInt();
+            if ( e.hasAttribute( "distAfter" ) )
+                bottomBorder = e.attribute( "distAfter" ).toInt();
 
+            // Apply values coming from 1.0 or 1.1 documents
+            if ( paragLayout.lineSpacing == 0 )
+                paragLayout.lineSpacing = lineSpacing;
+            if ( paragLayout.margins[ QStyleSheetItem::MarginTop ] == 0 )
+                paragLayout.margins[ QStyleSheetItem::MarginTop ] = topBorder;
+            if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
+                paragLayout.margins[ QStyleSheetItem::MarginBottom ] = bottomBorder;
+
+            lastParag->setParagLayout( paragLayout );
 
             if(e.hasAttribute(attrAlign))
             {
@@ -508,8 +522,6 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             }
             // ## lastParag->setListDepth( e.attribute( attrDepth ).toInt() );
             // TODO check/convert values
-            lineSpacing = QMAX( e.attribute( attrLineSpacing ).toInt(), lineSpacing );
-            paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
             bool firstTextTag = true;
             while ( !n.isNull() ) {
                 if ( n.tagName() == tagTEXT ) {
@@ -550,13 +562,6 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
         if ( !lastParag->length() == 0 )
             lastParag = new KoTextParag( textDocument(), lastParag, 0 );
     }
-
-#if 0
-    settings.lineSpacing = lineSpacing;
-    settings.paragSpacing = QMAX( ktextobject.document()->paragSpacing(), paragSpacing );
-    ktextobject.document()->setTextSettings( settings );
-    ktextobject.updateCurrentFormat();
-#endif
 }
 
 KoTextFormat KPTextObject::loadFormat( QDomElement &n )
