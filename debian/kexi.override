@@ -1,9 +1,0 @@
-# There is no -dev package.
-kexi: non-dev-pkg-with-shlib-symlink usr/lib/kexi.so.0.0.0 usr/lib/kexi.so
-kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkexicore.so.0.0.0 usr/lib/libkexicore.so
-kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkexidatatable.so.0.0.0 usr/lib/libkexidatatable.so
-kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkexidb.so.0.0.0 usr/lib/libkexidb.so
-kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkexiextendedwidgets.so.0.0.0 usr/lib/libkexiextendedwidgets.so
-kexi: non-dev-pkg-with-shlib-symlink usr/lib/libkformeditor.so.0.0.0 usr/lib/libkformeditor.so
-# Menu item.
-kexi: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kexi:9
