@@ -69,6 +69,7 @@ protected:
     QPushButton *m_okButton;
     QPushButton *m_cancelButton;
     QPushButton *m_deleteButton;
+    QPushButton *m_newButton;
     KWStylePreview *preview;
 
     KWStyle *m_currentStyle;

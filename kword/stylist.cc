@@ -121,11 +121,11 @@ kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at
 
     Frame1Layout->addWidget( m_deleteButton, 1, 1 );
 
-    QPushButton *newButton = new QPushButton( Frame1, "newButton" );
-    newButton->setText( i18n( "New" ) );
-    connect( newButton, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
+    m_newButton = new QPushButton( Frame1, "newButton" );
+    m_newButton->setText( i18n( "New" ) );
+    connect( m_newButton, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
 
-    Frame1Layout->addWidget( newButton, 1, 0 );
+    Frame1Layout->addWidget( m_newButton, 1, 0 );
 
     m_tabs = new QTabWidget( Frame1);
     Frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
@@ -354,6 +354,10 @@ void KWStyleManager::renameStyle(const QString &theText) {
     }
     m_stylesList->changeItem(theText, m_stylesList->currentItem());
     noSignals=false;
+    bool state=!theText.isEmpty();
+    m_okButton->setEnabled(state);
+    m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
+    m_newButton->setEnabled(state);
 }
 
 /******************************************************************/
