@@ -961,17 +961,28 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
         else if ( ch == 0x201c ) escapedText += "\\ldblquote ";
         else if ( ch == 0x201d ) escapedText += "\\rdblquote ";
         else if ( ch == 0x2022 ) escapedText += "\\bullet ";
-        else if ( ch >= 160 && ch < 256) // check for ISO-8859-1 characters (needed for OOWriter 1.0x)
+        else if ( ch >= 160 && ch < 256) // check for characters common between ISO-8859-1 and CP1252
         {   // NOTE: 128 to 159 in CP1252 are somewhere else in UTF-8 and do not exist in ISO-8859-1 (### TODO?)
             escapedText += "\\\'";   // escape upper page character to 7 bit
             escapedText += QString::number ( ch, 16 );
         }
         else if ( ch >= 256) // check for a higher code non-ASCII character
         {
-			// encode this as decimal unicode
-			escapedText += "\\u";
+            // encode this as decimal unicode with a replacement character.
+            escapedText += "\\u";
             escapedText += QString::number ( ch, 10 );
-            escapedText += "?"; // The \uc1 dummy character.
+            // We decompose the character. If it works, the first character is whitout any accents.
+            // (Of course this only works with Latin letters.)
+            // WARNING: QChar::decomposition is not re-entrant in Qt 3.x
+            QChar replacement ( QCh.decomposition().at(0) );
+            kdDebug(30515) << "Proposed replacement character: " << QString(replacement) << endl;
+
+            if (replacement.isNull() || replacement<=' ' || replacement>=char(127)
+                || replacement=='{' || replacement=='}' || replacement=='\\')
+                replacement='?'; // Not a normal ASCII character, so default to show a ? sign
+
+            escapedText += replacement; // The \uc1 dummy character.
+
         }
         else
             escapedText += QCh ;
