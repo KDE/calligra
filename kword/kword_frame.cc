@@ -555,8 +555,16 @@ void KWFrameSet::save( QTextStream&out )
 
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
         frame = getFrame( i );
-        out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
-            << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() << "\" ";
+        if(getGroupManager() && getGroupManager()->isAnchored()) {
+            // set the frame cooridinates to the offset.
+            out << indent << "<FRAME left=\"" << frame->left() 
+                << "\" top=\"" << frame->top() - getGroupManager()->getOrigin().y()
+                << "\" right=\"" << frame->right()
+                << "\" bottom=\"" << frame->bottom() - getGroupManager()->getOrigin().y() << "\" ";
+        } else {
+            out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
+                << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() << "\" ";
+        }
         if(frame->getRunAround()!=RA_NO) {
             out << "runaround=\"" << static_cast<int>( frame->getRunAround() ) << "\" ";
         }
@@ -2975,7 +2983,7 @@ void KWGroupManager::viewFormatting( QPainter &painter, int )
 
     // If we have been populated, then draw a line from the origin to the
     // top left corner.
-    if ( cells.at( 0 ) )
+    if ( cells.count() > 0 )
     {
         topLeftFrame = cells.at( 0 )->frameSet->getFrame( 0 );
         painter.drawLine( origin.x(), origin.y(), topLeftFrame->x(), topLeftFrame->y());
