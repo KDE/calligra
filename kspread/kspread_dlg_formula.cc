@@ -500,9 +500,7 @@ static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescriptio
       break;
     case KSpread_Float:
         validate=new KFloatValidator (edit);
-#ifdef KFLOATVALIDATOR_HAS_USEDLOCALPARAMETER
         validate->setAcceptLocalizedNumbers(true);
-#endif
         edit->setValidator(validate);
       break;
     case KSpread_Int:
