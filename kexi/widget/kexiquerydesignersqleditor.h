@@ -21,6 +21,7 @@
 #define KEXIQUERYDESIGNERSQLEDITOR_H
 
 #include <qwidget.h>
+class KTextEdit;
 
 namespace KTextEditor
 {
@@ -39,8 +40,12 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public QWidget
 		QString		getText();
 
 	private:
+#ifndef Q_WS_WIN //(TEMP)
 		KTextEditor::Document	*m_doc;
 		KTextEditor::View	*m_view;
+#else
+		KTextEdit *m_editor;
+#endif
 };
 
 #endif

@@ -28,15 +28,20 @@
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/editinterface.h>
 
+#include <ktextedit.h>//TEMP
 
 #include "kexiquerydesignersqleditor.h"
 
 KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const char *name)
  : QWidget(parent, name)
+#ifndef Q_WS_WIN //(TEMP)
+	, m_doc( KTextEditor::EditorChooser::createDocument(this, "sqlDoc") )
+	, m_view( m_doc->createView(this, 0L) )
+#else
+	, m_editor( new  KTextEdit( "", QString::null, this, "sqlDoc_editor" ) )
+#endif
 {
-	m_doc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
-	m_view = m_doc->createView(this, 0L);
-
+#ifndef Q_WS_WIN //(TEMP)
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_doc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
 	{
@@ -47,7 +52,7 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 		}
 		i++;
 	}
-
+#endif
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);
 //	QPushButton *btnClear = new QPushButton(i18n("&Clear"), this);
@@ -57,15 +62,23 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 //	g->addWidget(btnQuery,		0, 0);
 //	g->addWidget(btnClear,		0, 1);
 //	g->addMultiCellWidget(m_view,	1, 1, 0, 1);
+#ifndef Q_WS_WIN //(TEMP)
 	g->addWidget(m_view,		0, 0);
+#else
+	g->addWidget(m_editor,		0, 0);
+#endif
 }
 
 QString
 KexiQueryDesignerSQLEditor::getText()
 {
+#ifndef Q_WS_WIN //(TEMP)
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_doc);
 	kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
 	return eIface->text();
+#else
+	return m_editor->text();
+#endif
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
