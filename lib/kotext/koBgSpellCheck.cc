@@ -349,14 +349,15 @@ void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
     KoTextFormat format( *ch->format() );
     format.setMisspelled( true );
     parag->setFormat( pos, old.length(), &format, true, KoTextFormat::Misspelled );
-
-    // set the repaint flags
-    parag->setChanged( true );
-    m_bgSpell.needsRepaint=true;
 }
 
 void KoBgSpellCheck::spellCheckerDone()
 {
+    // Set the repaint flags. This needs to be done even if no misspelling was found,
+    // so that words added to the dictionary become ok again (#56506,#57357)
+    m_bgSpell.currentParag->setChanged( true );
+    m_bgSpell.needsRepaint=true;
+
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "KoBgSpellCheck::spellCheckerDone" << endl;
 #endif
