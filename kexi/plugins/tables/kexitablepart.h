@@ -43,8 +43,6 @@ class KexiTablePart : public KexiProjectPart
 		virtual void store (KoStore *){;}
 		virtual void load  (KoStore *){;}
 
-		virtual void executeItem(KexiView* view, QString identifier);
-
 
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();

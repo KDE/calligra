@@ -1,5 +1,5 @@
 kde_module_LTLIBRARIES = kexihandler_table.la
-kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp
+kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp kexialtertable.cpp
 
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_table_la_LIBADD = ../core/libkexicore.la ../datatable/libkexidatatable.la ../widget/libkexiextendedwidgets.la
@@ -30,7 +30,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 # set the include path for X, qt and KDE
 INCLUDES= $(KOFFICE_INCLUDES) $(all_includes) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
-		-I$(top_srcdir)/kexi/widget
+		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/datatable
 
 METASOURCES = AUTO
 
