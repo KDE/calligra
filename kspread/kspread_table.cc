@@ -7546,16 +7546,6 @@ void KSpreadTable::paperLayoutDlg()
     grid->addWidget( ePrintRange, 1, 1 );
     ePrintRange->setText( util_rangeName( m_printRange ) );
 
-    QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
-    grid->addWidget( pRepeatRows, 2, 0 );
-
-    QLineEdit *eRepeatRows = new QLineEdit( tab );
-    grid->addWidget( eRepeatRows, 2, 1 );
-    if ( m_printRepeatRows.first != 0 )
-        eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) +
-                              ":" +
-                              QString().setNum( m_printRepeatRows.second ) );
-
     QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
     grid->addWidget( pRepeatCols, 3, 0 );
 
@@ -7565,6 +7555,16 @@ void KSpreadTable::paperLayoutDlg()
         eRepeatCols->setText( util_encodeColumnLabelText( m_printRepeatColumns.first ) +
                               ":" +
                               util_encodeColumnLabelText( m_printRepeatColumns.second ) );
+
+    QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
+    grid->addWidget( pRepeatRows, 2, 0 );
+
+    QLineEdit *eRepeatRows = new QLineEdit( tab );
+    grid->addWidget( eRepeatRows, 2, 1 );
+    if ( m_printRepeatRows.first != 0 )
+        eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) +
+                              ":" +
+                              QString().setNum( m_printRepeatRows.second ) );
 
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pPrintGrid->width() );
@@ -7650,7 +7650,7 @@ void KSpreadTable::paperLayoutDlg()
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored.\nMust be in format column:column (eg. 2:3)" ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored.\nMust be in format column:column (eg. B:C)" ) );
         }
 
         if ( tmpRepeatRows.isEmpty() )
@@ -7675,7 +7675,7 @@ void KSpreadTable::paperLayoutDlg()
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. B:D)" ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. 2:3)" ) );
         }
         m_pDoc->setModified( true );
     }
@@ -8032,58 +8032,64 @@ void KSpreadTable::setPrintGrid( bool _printGrid )
 
 void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
 {
-  //Bring arguments in order
-  if ( _printRepeatColumns.first > _printRepeatColumns.second )
-  {
-    int tmp = _printRepeatColumns.first;
-    _printRepeatColumns.first = _printRepeatColumns.second;
-    _printRepeatColumns.second = tmp;
-  }
+    //Bring arguments in order
+    if ( _printRepeatColumns.first > _printRepeatColumns.second )
+    {
+        int tmp = _printRepeatColumns.first;
+        _printRepeatColumns.first = _printRepeatColumns.second;
+        _printRepeatColumns.second = tmp;
+    }
 
-  //If old are equal to the new setting, nothing is to be done at all
-  if ( m_printRepeatColumns == _printRepeatColumns )
-    return;
+    //If old are equal to the new setting, nothing is to be done at all
+    if ( m_printRepeatColumns == _printRepeatColumns )
+        return;
 
-  m_printRepeatColumns = _printRepeatColumns;
+    m_printRepeatColumns = _printRepeatColumns;
 
-  //Recalcualte the space needed for the repeated columns
-  m_dPrintRepeatColumnsWidth = 0.0;
-  for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
-  {
-    m_dPrintRepeatColumnsWidth += columnLayout( i )->mmWidth();
-  }
+    //Recalcualte the space needed for the repeated columns
+    m_dPrintRepeatColumnsWidth = 0.0;
+    if ( m_printRepeatColumns.first != 0 )
+    {
+        for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
+        {
+            m_dPrintRepeatColumnsWidth += columnLayout( i )->mmWidth();
+        }
+    }
 
-  //Refresh view, if page borders are shown
-  if ( m_bShowPageBorders ) emit sig_updateView( this );
-  m_pDoc->setModified( true );
+    //Refresh view, if page borders are shown
+    if ( m_bShowPageBorders ) emit sig_updateView( this );
+    m_pDoc->setModified( true );
 }
 
 void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 {
-  //Bring arguments in order
-  if ( _printRepeatRows.first > _printRepeatRows.second )
-  {
-    int tmp = _printRepeatRows.first;
-    _printRepeatRows.first = _printRepeatRows.second;
-    _printRepeatRows.second = tmp;
-  }
+    //Bring arguments in order
+    if ( _printRepeatRows.first > _printRepeatRows.second )
+    {
+        int tmp = _printRepeatRows.first;
+        _printRepeatRows.first = _printRepeatRows.second;
+        _printRepeatRows.second = tmp;
+    }
 
-  //If old are equal to the new setting, nothing is to be done at all
-  if ( m_printRepeatRows == _printRepeatRows )
-    return;
+    //If old are equal to the new setting, nothing is to be done at all
+    if ( m_printRepeatRows == _printRepeatRows )
+        return;
 
-  m_printRepeatRows = _printRepeatRows;
+    m_printRepeatRows = _printRepeatRows;
   
-  //Recalcualte the space needed for the repeated rows
-  m_dPrintRepeatRowsHeight += 0.0;
-  for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
-  {
-    m_dPrintRepeatRowsHeight += rowLayout( i )->mmHeight();
-  }
+    //Recalcualte the space needed for the repeated rows
+    m_dPrintRepeatRowsHeight += 0.0;
+    if ( m_printRepeatRows.first != 0 )
+    {
+        for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
+        {
+            m_dPrintRepeatRowsHeight += rowLayout( i )->mmHeight();
+        }
+    }
 
-  //Refresh view, if page borders are shown
-  if ( m_bShowPageBorders ) emit sig_updateView( this );
-  m_pDoc->setModified( true );
+    //Refresh view, if page borders are shown
+    if ( m_bShowPageBorders ) emit sig_updateView( this );
+    m_pDoc->setModified( true );
 }
 
 QRect KSpreadTable::getSelectionHandleArea(KSpreadCanvas* canvas)
