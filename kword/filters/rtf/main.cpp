@@ -1,9 +1,10 @@
 /**
- * $Id:$
+ * $Id$
  */
 
 #include "KRTFTokenizer.h"
 #include "KRTFToken.h"
+#include "KRTFFileParser.h"
 
 #include <qfile.h>
 
@@ -27,28 +28,12 @@ int main( int argc, char* argv[] )
     }
 	
     KRTFTokenizer tokenizer( &in );
-    KRTFToken* token;
-    while( !in.atEnd() ) {
-	token = tokenizer.nextToken();
-	switch( token->_type ) {
-	case ControlWord:
-	    debug( "Control word found: %s, param: %s", token->_text.data(), token->_param.data() );
-	    break;
-	case ControlSymbol:
-	    debug( "Control symbol found: %s", token->_text.data() );
-	    break;
-	case OpenGroup:
-	    debug( "Open group found" );
-	    break;
-	case CloseGroup:
-	    debug( "Close group found" );
-	    break;
-	case PlainText:
-	    debug( "Plain text found: %s", token->_text.data() );
-	}
-	delete token;
-    }
 
+    KRTFFileParser parser( &tokenizer );
+    if( !parser.parse() ) {
+	warning( "Error in RTF file" );
+	exit( -124 );
+    }
 
     in.close();
     out.close();

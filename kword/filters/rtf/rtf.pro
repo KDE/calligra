@@ -7,7 +7,9 @@
 TEMPLATE = app
 CONFIG = console debug qt
 TARGET = rtf2kword
-SOURCES =	main.cpp KRTFTokenizer.cpp
-HEADERS =	KRTFTokenizer.h KRTFToken.h
+SOURCES =	main.cpp KRTFTokenizer.cpp KRTFParser.h KRTFFileParser.h	\
+		KRTFHeaderParser.cpp KRTFDocumentParser.cpp
+HEADERS =	KRTFTokenizer.h KRTFToken.h KRTFParser.cpp KRTFFileParser.h \
+		KRTFHeaderParser.h KRTFDocumentParser.h
 #DEFINES = PARSERDEBUG
 
