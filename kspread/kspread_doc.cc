@@ -146,34 +146,34 @@ bool KSpreadDoc::initDoc()
 
     if ( ret == KoTemplateChooseDia::File )
     {
-        KURL url;
-        url.setPath(f);
-        return openURL( url );
+	KURL url;
+	url.setPath(f);
+	return openURL( url );
     }
-    else if ( ret == KoTemplateChooseDia::Empty )
+    
+    if ( ret == KoTemplateChooseDia::Empty )
     {
-    KConfig *config = KSpreadFactory::global()->config();
-    int _page=1;
-    if( config->hasGroup("Parameters" ))
-        {
-        config->setGroup( "Parameters" );
-        _page=config->readNumEntry( "NbPage",1 ) ;
-        }
+	KConfig *config = KSpreadFactory::global()->config();
+	int _page=1;
+	if( config->hasGroup("Parameters" ))
+	{
+		config->setGroup( "Parameters" );
+		_page=config->readNumEntry( "NbPage",1 ) ;
+	}
 
-    for(int i=0;i<_page;i++)
-        {
-        KSpreadTable *t = createTable();
-        m_pMap->addTable( t );
-        }
-    resetURL();
-    setEmpty();
-
-    initConfig();
-
-    return true;
+	for(int i=0;i<_page;i++)
+	{
+		KSpreadTable *t = createTable();
+		m_pMap->addTable( t );
+	}
+	
+	resetURL();
+	setEmpty();
+	initConfig();
+	return true;
     }
-    else
-        return false;
+    
+    return false;
 }
 
 
@@ -516,6 +516,7 @@ QString KSpreadDoc::paperFormatString()
       tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
       return tmp;
     }
+
     return KoPageFormat::formatString( m_paperFormat );
 }
 
@@ -535,55 +536,48 @@ const char* KSpreadDoc::orientationString()
 
 QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QString &_table )
 {
-    QString page=QString::number(_page);
-    QString pathFileName = url().path();
+    QString page(QString::number(_page));
 
+    QString pathFileName(url().path());
     if ( pathFileName.isNull() )
-        pathFileName = "";
+        pathFileName="";
 
-    QString fileName = url().filename();
+    QString fileName(url().filename());
     if( fileName.isNull())
         fileName="";
 
-    QString t = QTime::currentTime().toString().copy();
-    QString d = QDate::currentDate().toString().copy();
-    QString ta = "";
+    QString t(QTime::currentTime().toString());
+    QString d(QDate::currentDate().toString());
+    QString ta;
     if ( !_table.isEmpty() )
         ta = _table;
 
-     KoDocumentInfo * info = documentInfo();
-     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-     QString full_name;
-     QString email_addr;
-     QString organization;
-     QString tmp;
-     if ( !authorPage )
-         kdWarning() << "Author information not found in documentInfo !" << endl;
-     else
-     {
-         full_name = authorPage->fullName();
-         email_addr = authorPage->email();
-         organization = authorPage->company();
-     }
+    KoDocumentInfo * info = documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    QString full_name;
+    QString email_addr;
+    QString organization;
+    QString tmp;
+    if ( !authorPage )
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    else
+    {
+        full_name = authorPage->fullName();
+        email_addr = authorPage->email();
+        organization = authorPage->company();
+    }
 
-      char hostname[80];
-      struct passwd *p;
+    char hostname[80];
+    struct passwd *p;
 
-      p = getpwuid(getuid());
-      gethostname(hostname, 80);
+    p = getpwuid(getuid());
+    gethostname(hostname, sizeof(hostname));
 
-      if(full_name.isEmpty())
-      {
-          full_name=p->pw_gecos;
-      }
-      if( email_addr.isEmpty())
-      {
-           tmp = p->pw_name;
-           tmp += "@";
-           tmp += hostname;
-           email_addr=tmp;
-      }
-
+    if(full_name.isEmpty())
+ 	full_name=p->pw_gecos;
+      
+    if( email_addr.isEmpty())
+	email_addr = QString("%1@%2").arg(p->pw_name).arg(hostname);
 
     tmp = _data;
     int pos = 0;
@@ -614,7 +608,7 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
     while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
         tmp.replace( pos, 7, ta );
 
-    return QString( tmp );
+    return tmp;
 }
 
 void KSpreadDoc::resetInterpreter()
@@ -871,8 +865,7 @@ QRect KSpreadDoc::getRectArea(const QString  &_tableName)
                 return (*it2).rect;
                 }
         }
-  QRect tmp(-1,-1,-1,-1);
-  return tmp;
+  return QRect(-1,-1,-1,-1);
 }
 
 QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
@@ -950,7 +943,7 @@ void KSpreadDoc::addStringCompletion(const QString &stringCompletion)
 
 void KSpreadDoc::refreshInterface()
 {
-emit sig_refreshView();
+   emit sig_refreshView();
 }
 
 void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
@@ -967,5 +960,5 @@ void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
 }
 
 
-
 #include "kspread_doc.moc"
+
