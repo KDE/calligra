@@ -898,3 +898,18 @@ bool IndexElement::readContentFromDom(QDomNode& node)
 
     return true;
 }
+
+ElementIndexPtr IndexElement::getIndex(int position)
+{
+    switch (position) {
+	case IndexElement::upperRightPos:
+	    return getUpperRight();
+	case IndexElement::lowerRightPos:
+	    return getLowerRight();
+	case IndexElement::lowerLeftPos:
+	    return getLowerLeft();
+	case IndexElement::upperLeftPos:
+	    return getUpperLeft();
+    }
+    return getUpperRight();
+}

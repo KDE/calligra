@@ -346,7 +346,6 @@ KFCAddIndex::KFCAddIndex(KFormulaContainer *document,FormulaCursor *cursor,int p
 		        : KFormulaCommand(document,cursor)
 {
     indexExists=true;
-    nothing=false;
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
         element = new IndexElement;
@@ -355,56 +354,25 @@ KFCAddIndex::KFCAddIndex(KFormulaContainer *document,FormulaCursor *cursor,int p
 	enclosingcursor=cursor->getCursorData();
 	indexExists=false;
     } 
-    ElementIndexPtr index;
+    ElementIndexPtr index = element->getIndex(position);
 
-    switch (position) 
-    {
-	case IndexElement::upperRightPos:
-	    index=element->getUpperRight();
-	    break;
-	
-	case IndexElement::lowerRightPos:
-	    index=element->getLowerRight();
-	    break;
-	
-	case IndexElement::lowerLeftPos:
-	    index=element->getLowerLeft();
-	    break;
-	
-	case IndexElement::upperLeftPos:
-	    index=element->getUpperLeft();
-	    break;
-        
-	default:
-	    nothing=true;
-    	    break;	        
-	
-    }
     
+    if (!index->hasIndex()) {
+        SequenceElement* indexContent = new SequenceElement;
+        index->setToIndex(cursor);
+        indexcursor=cursor->getCursorData();  	
     
-
-    if(!nothing) {
-    
-	if (!index->hasIndex()) {
-	    SequenceElement* indexContent = new SequenceElement;
-	    index->setToIndex(cursor);
-	    indexcursor=cursor->getCursorData();  	
-    
-            cursor->insert(indexContent);
+        cursor->insert(indexContent);
             //cursor->goInsideElement(indexContent);
-        }
-        else {
-            //We are doing nothing relevant here!   
-            nothing=true;
-            index->moveToIndex(cursor, BasicElement::afterCursor);
-            cursor->setSelection(false);
-        }	
     }
+    else {
+            //We are doing nothing relevant here!   
+        nothing=true;
+        index->moveToIndex(cursor, BasicElement::afterCursor);
+        cursor->setSelection(false);
+    }	
     
     undocursor=cursor->getCursorData();
-
-
-
 }
 
 bool KFCAddIndex::undo(FormulaCursor *cursor)

@@ -209,6 +209,12 @@ public:
     ElementIndexPtr getLowerLeft() { return ElementIndexPtr(new LowerLeftIndex(this)); }
     ElementIndexPtr getUpperRight() { return ElementIndexPtr(new UpperRightIndex(this)); }
     ElementIndexPtr getLowerRight() { return ElementIndexPtr(new LowerRightIndex(this)); }
+
+    /**
+     * Returns the index at the position. Defaults to upperRight.
+     */
+    ElementIndexPtr getIndex(int position);
+
     
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);
