@@ -40,11 +40,15 @@ VAlignCmd::~VAlignCmd()
 void
 VAlignCmd::execute()
 {
-	if( document()->selection()->objects().count() < 2 )
+	if( document()->selection()->objects().count() == 0 )
 		return;
 	double dx, dy;
 	KoRect bbox;
-	KoRect r = document()->selection()->boundingBox();
+	KoRect r;
+	if( document()->selection()->objects().count() == 1 )
+		r = document()->boundingBox();
+	else
+		r = document()->selection()->boundingBox();
 	VObjectList objs = document()->selection()->objects();
 	VObjectListIterator itr( objs );
 	VTranslateCmd *trafoCmd = 0L;
