@@ -4737,10 +4737,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    continue;
 	}
 	if ( isWrapEnabled() && ( lastBreak != -1 || allowBreakInWords() ) &&
-	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
-	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
-	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
-	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
+	      ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
+	      wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
+	      wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
+	      parag->isNewLinesAllowed() && lastChr == '\n' ) {
 	    if ( wrapAtColumn() != -1 )
 		minw = QMAX( minw, x + ww );
 	    if ( lastBreak < 0 ) {
@@ -4805,7 +4805,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		continue;
 	    }
 	} else if ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
-	    if ( len < 2 || i < len - 1 ) {
+	    if ( len <= 2 || i < len - 1 ) {
 		tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 		tmph = QMAX( tmph, c->height() + ls );
 	    }
@@ -4818,9 +4818,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		lastBreak = i;
 	} else {
 	    tminw += ww;
-            //qDebug( "BLBUG: tmpBaseLine = max ( tmpBaseLine=%d, c->ascent()=%d )",  tmph, c->ascent() );
-	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
-            //qDebug( "BLBUG: tmph = max ( tmph=%d, c->height()+ls=%d )",  tmph, c->height() + ls );
+            if ( c->ascent() > tmpBaseLine )
+                tmpBaseLine = c->ascent() + tmpBaseLine - tmph;
+	    //tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = QMAX( tmph, c->height() + ls );
 	}
 
@@ -6738,7 +6738,7 @@ QTextFormat::QTextFormat()
 //    qDebug("QTextFormat simple ctor, no addRef ! %p",this);
 //#endif
 }
- 
+
 QTextFormat::QTextFormat( const QStyleSheetItem *style )
     : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() ),
       painter( 0 ), different( NoFlags )
@@ -6770,7 +6770,7 @@ QTextFormat::QTextFormat( const QStyleSheetItem *style )
     addRef();
     updateStyleFlags();
 }
- 
+
 QTextFormat::QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
     : fn( f ), col( c ), fm( QFontMetrics( f ) ), linkColor( TRUE ),
       logicalFontSize( 3 ), stdPointSize( f.pointSize() ), painter( 0 ),
@@ -6793,7 +6793,7 @@ QTextFormat::QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection
     addRef();
     updateStyleFlags();
 }
- 
+
 QTextFormat::QTextFormat( const QTextFormat &f )
     : fm( f.fm )
 {
@@ -6823,7 +6823,7 @@ QTextFormat::QTextFormat( const QTextFormat &f )
     different = f.different;
     addRef();
 }
- 
+
 QTextFormat& QTextFormat::operator=( const QTextFormat &f )
 {
 #ifdef DEBUG_COLLECTION
@@ -6853,7 +6853,7 @@ QTextFormat& QTextFormat::operator=( const QTextFormat &f )
     addRef();
     return *this;
 }
- 
+
 void QTextFormat::update()
 {
     fm = QFontMetrics( fn );
@@ -6875,7 +6875,7 @@ void QTextFormat::addRef()
         qDebug( "  add ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
 #endif
 }
- 
+
 void QTextFormat::removeRef()
 {
     ref--;
@@ -6894,7 +6894,7 @@ void QTextParag::setTabArray( int *a )
         delete [] tArray;
     tArray = a;
 }
- 
+
 void QTextParag::setTabStops( int tw )
 {
     if ( doc )
