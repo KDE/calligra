@@ -684,11 +684,13 @@ void KexiTableView::updateWidgetContentsSize()
 	resizeContents(s.width(), s.height());
 }
 
+/* moved
 void KexiTableView::slotDataDestroying()
 {
 	m_data = 0;
 }
 
+*/
 void KexiTableView::slotRowsDeleted( const QValueList<int> &rows )
 {
 	viewport()->repaint();

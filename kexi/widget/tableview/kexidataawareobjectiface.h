@@ -389,6 +389,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void connectToReloadDataSlot(const QObject* sender, 
 			const char* voidSignal) = 0;
 
+		virtual void slotDataDestroying();
+
 	protected:
 		/*! Reimplementation for KexiDataAwareObjectInterface
 		 Initializes data contents (resizes it, sets cursor at 1st row).
@@ -513,6 +515,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		//! Like above, not db-aware version
 		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint) {}
+
+		virtual void slotRowsDeleted( const QValueList<int> & ) {}
 
 		//! for sanity checks (return true if m_data is present; else: outputs warning)
 		inline bool hasData() const;

@@ -1312,3 +1312,8 @@ void KexiDataAwareObjectInterface::boolToggled()
 //	emit itemChanged(m_currentItem, m_curRow, m_curCol);*/
 }
 
+void KexiDataAwareObjectInterface::slotDataDestroying()
+{
+	m_data = 0;
+}
+

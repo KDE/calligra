@@ -640,9 +640,13 @@ signals:
 	void reloadActions();
 
 protected slots:
-	void slotDataDestroying();
-	void slotRowsDeleted( const QValueList<int> & ); //!< updates display after many rows deletion
+	virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
+
+	virtual void slotRowsDeleted( const QValueList<int> & ); 
+
+	//! updates display after many rows deletion
 	void slotColumnWidthChanged( int col, int os, int ns );
+
 	void slotSectionHandleDoubleClicked( int section );
 
 //moved	/*! Typically handles pressing Enter or F2 key: 
