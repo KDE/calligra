@@ -19,6 +19,7 @@
 */
 
 #include <qcheckbox.h>
+#include <qcursor.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>

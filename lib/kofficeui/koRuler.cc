@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <qcursor.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <koUnit.h>
