@@ -1036,34 +1036,32 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
     KPObject *kpobject = 0;
 
     if ( (int)objectList()->count() - 1 >= 0 ) {
-        for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
-            kpobject = objectList()->at( i );
-            if ( kpobject->contains( QPoint( e->x(), e->y() ), diffx(), diffy() ) ) {
-                if ( kpobject->getType() == OT_TEXT ) {
-                    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+	for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
+	    kpobject = objectList()->at( i );
+	    if ( kpobject->contains( QPoint( e->x(), e->y() ), diffx(), diffy() ) ) {
+		if ( kpobject->getType() == OT_TEXT ) {
+		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
-                    kpobject->activate( this, diffx(), diffy() );
-                    QPalette pal( kptextobject->getKTextObject()->palette() );
-                    pal.setColor( QColorGroup::Base, txtBackCol() );
-                    kptextobject->getKTextObject()->setPalette( pal );
-                    connect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-                             this, SLOT( toFontChanged( const QFont & ) ) );
-                    connect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-                             this, SLOT( toColorChanged( const QColor & ) ) );
-                    connect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-                             this, SLOT( toAlignChanged( int ) ) );
-                    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-                             this, SLOT( exitEditMode() ) );
-                    kptextobject->getKTextObject()->setFocus();
-                    editNum = i;
-                    break;
-                } else if ( kpobject->getType() == OT_PART ) {
-                    kpobject->activate( view, diffx(), diffy() );
-                    editNum = i;
-                    break;
-                }
-            }
-        }
+		    kpobject->activate( this, diffx(), diffy() );
+		    setTextBackground( kptextobject );
+		    connect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+			     this, SLOT( toFontChanged( const QFont & ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+			     this, SLOT( toColorChanged( const QColor & ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+			     this, SLOT( toAlignChanged( int ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			     this, SLOT( exitEditMode() ) );
+		    kptextobject->getKTextObject()->setFocus();
+		    editNum = i;
+		    break;
+		} else if ( kpobject->getType() == OT_PART ) {
+		    kpobject->activate( view, diffx(), diffy() );
+		    editNum = i;
+		    break;
+		}
+	    }
+	}
     }
 }
 /*====================== key press event =========================*/
@@ -3321,29 +3319,27 @@ void Page::editSelectedTextArea()
     KPObject *kpobject = 0;
 
     if ( (int)objectList()->count() - 1 >= 0 ) {
-        for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
-            kpobject = objectList()->at( i );
-            if ( kpobject->isSelected() ) {
-                if ( kpobject->getType() == OT_TEXT ) {
-                    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+	for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
+	    kpobject = objectList()->at( i );
+	    if ( kpobject->isSelected() ) {
+		if ( kpobject->getType() == OT_TEXT ) {
+		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
-                    kpobject->activate( this, diffx(), diffy() );
-                    QPalette pal( kptextobject->getKTextObject()->palette() );
-                    pal.setColor( QColorGroup::Base, txtBackCol() );
-                    kptextobject->getKTextObject()->setPalette( pal );
-                    connect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-                             this, SLOT( toFontChanged( const QFont & ) ) );
-                    connect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-                             this, SLOT( toColorChanged( const QColor & ) ) );
-                    connect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-                             this, SLOT( toAlignChanged( int ) ) );
-                    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-                             this, SLOT( exitEditMode() ) );
-                    editNum = i;
-                    break;
-                }
-            }
-        }
+		    kpobject->activate( this, diffx(), diffy() );
+		    setTextBackground( kptextobject );
+		    connect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+			     this, SLOT( toFontChanged( const QFont & ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+			     this, SLOT( toColorChanged( const QColor & ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+			     this, SLOT( toAlignChanged( int ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			     this, SLOT( exitEditMode() ) );
+		    editNum = i;
+		    break;
+		}
+	    }
+	}
     }
 }
 
@@ -4139,4 +4135,18 @@ void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
                                           obj, view->kPresenterDoc() );
     resizeCmd->execute();
     view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+}
+
+void Page::setTextBackground( KPTextObject *obj )
+{
+    QPixmap pix( getPageSize( 0 ).size() );
+    QPainter painter( &pix );
+    backgroundList()->at( view->getCurrPgNum() - 1 )->draw( &painter, QPoint( 0, 0 ), FALSE );
+    QPixmap bpix( obj->getSize() );
+    bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() - 
+	    getPageSize( 0 ).height() * ( view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
+    QBrush b( white, bpix );
+    QPalette pal( obj->getKTextObject()->palette() );
+    pal.setBrush( QColorGroup::Base, b );
+    obj->getKTextObject()->setPalette( pal );
 }

@@ -104,8 +104,9 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
 
     /* build dialog */
     addTab( general, i18n( "General" ) );
-    addTab( objects, i18n( "Objects" ) );
-
+//     addTab( objects, i18n( "Objects" ) );
+    objects->hide();
+    
     setCancelButton( i18n( "Cancel" ) );
     setApplyButton( i18n( "Apply" ) );
     setOkButton( i18n( "OK" ) );

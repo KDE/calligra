@@ -215,7 +215,8 @@ protected:
     void scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
 				const QSize &presSize, KPPixmapObject *obj );
     QSize getPixmapOrigSize( KPPixmapObject *&obj );
-
+    void setTextBackground( KPTextObject *obj );
+    
     // variables
     QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
     QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;

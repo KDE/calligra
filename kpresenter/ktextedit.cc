@@ -177,7 +177,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     QSize s( doc->firstParag()->rect().size() );
 
     p->fillRect( 0, 0, width(), doc->y(),
-		 colorGroup().color( QColorGroup::Base ) );
+		 colorGroup().brush( QColorGroup::Base ) );
 
     if ( !doubleBuffer ) {
 	doubleBuffer = bufferPixmap( s );
@@ -218,7 +218,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	    painter.begin( doubleBuffer );
 	}
 	painter.fillRect( QRect( 0, 0, s.width(), s.height() ),
-			  colorGroup().color( QColorGroup::Base ) );
+			  colorGroup().brush( QColorGroup::Base ) );
 
 	parag->paint( painter, colorGroup(), drawCur ? cursor : 0, TRUE );
 
@@ -611,7 +611,7 @@ void KTextEdit::drawCursor( bool visible )
 
     if ( fill )
 	painter.fillRect( chr->x, y, cw, h,
-			  colorGroup().color( QColorGroup::Base ) );
+			  colorGroup().brush( QColorGroup::Base ) );
 
     if ( chr->c != '\t' )
 	painter.drawText( chr->x, y + bl, chr->c );
@@ -619,7 +619,7 @@ void KTextEdit::drawCursor( bool visible )
     if ( visible ) {
 	int x = chr->x;
 	int w = 1;
-	painter.fillRect( QRect( x, y, w, h ), black );
+	painter.fillRect( QRect( x, y, w, h ), red );
     }
 
     p.drawPixmap( cursor->parag()->rect().topLeft() + QPoint( chr->x, y ), *doubleBuffer,
@@ -3104,7 +3104,7 @@ void KTextEditParag::paint( QPainter &painter, const QColorGroup &cg, KTextEditC
 
     // if we should draw a cursor, draw it now
     if ( curx != -1 && cursor )
-	painter.fillRect( QRect( curx, cury, 1, curh ), Qt::black );
+	painter.fillRect( QRect( curx, cury, 1, curh ), Qt::red );
 }
 
 void KTextEditParag::drawParagBuffer( QPainter &painter, const QString &buffer, int startX,
