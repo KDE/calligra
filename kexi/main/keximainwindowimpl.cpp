@@ -458,7 +458,7 @@ KexiMainWindowImpl::initActions()
 	KStdAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
 		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
 #endif
-	new KAction(i18n("Important information"), "", 0,
+	new KAction(i18n("Important information"), "messagebox_info", 0,
 		this, SLOT(slotImportantInfo()), actionCollection(), "help_show_important_info");
 
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
@@ -2202,7 +2202,7 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 		QString fname = locate("data", QString("kexi/readme_")+lang);
 		if (fname.isEmpty())//back to default 
 			fname = locate("data", "kexi/readme_en");
-		KTipDialog tipDialog(new KTipDatabase(""), 0);
+		KTipDialog tipDialog(new KTipDatabase(QString::null), 0);
 		tipDialog.setCaption(i18n("Important information"));
 		QObjectList *l = tipDialog.queryList( "KPushButton" );//hack: hide <- -> buttons
 		int i=0;
