@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <qdom.h>
 #include <qdict.h>
 #include <qptrlist.h>
+#include <qcolor.h>
 
 /**
  *  This class implements a stack for the different styles of an object.
@@ -139,7 +141,8 @@ private:
     void appendLineEnds( QDomDocument& doc, QDomElement& e );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
 
-    double toPoint( QString value );
+    double toPoint( QString value, double defaultVal = 0.0 );
+    bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
 
     QString storeImage( const QDomElement& object );
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
