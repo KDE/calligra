@@ -189,6 +189,30 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   }
 
   if ( tmpFile ) {
+    //if the laoded file has been a temporary file
+    //we need to correct a few document settings
+    //see description of bug #77574 for additional information
+  
+    //correct (output) mime type: we need to set it to the non-native format
+    //to make sure the user knows about saving to a non-native mime type
+    //setConfirmNonNativeSave is set to true below
+    newdoc->setMimeType( mimeType->name().latin1() );
+    newdoc->setOutputMimeType( mimeType->name().latin1() );
+    
+    //the next time the user saves the document he should be warned
+    //because of mime type settings done above;
+    newdoc->setConfirmNonNativeSave(true,true); //exporting,warn_on
+    newdoc->setConfirmNonNativeSave(false,true); //save/save as,warn_on
+    
+    //correct document file (should point to URL)
+    newdoc->setFile( url.path() );
+    
+    //correct document URL
+    newdoc->setURL( url );
+    
+    //update caption to represent the correct URL in the window titlebar
+    updateCaption();
+  
     tmpFile->unlink();
     delete tmpFile;
   }

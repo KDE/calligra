@@ -460,6 +460,11 @@ QCString KoDocument::mimeType() const
     return d->mimeType;
 }
 
+void KoDocument::setMimeType( const QCString & mimeType )
+{
+    d->mimeType = mimeType;
+}
+
 void KoDocument::setOutputMimeType( const QCString & mimeType, int specialOutputFlag )
 {
     d->outputMimeType = mimeType;
