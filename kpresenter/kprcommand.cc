@@ -2512,6 +2512,15 @@ void KPrFlipObjectCommand::flipObject()
             m_doc->repaint( obj );
         }
     }
+    else if ( m_object->getType() == OT_CLOSED_LINE )
+    {
+        KPClosedLineObject *obj=dynamic_cast<KPClosedLineObject *>(m_object);
+        if ( obj)
+        {
+            obj->flip(horizontal);
+            m_doc->repaint( obj );
+        }
+    }
 
     if ( m_doc->refreshSideBar())
     {

@@ -65,6 +65,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
 
+    virtual void flip(bool horizontal );
+
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
 			bool drawingShadow, bool drawContour );

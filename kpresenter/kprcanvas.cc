@@ -68,6 +68,7 @@
 #include <stdlib.h>
 #include <qclipboard.h>
 #include "kppolylineobject.h"
+#include "kpclosedlineobject.h"
 #include "kprpage.h"
 #include <kmessagebox.h>
 #include <math.h>
@@ -1028,6 +1029,15 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuFlipObject( pnt );
+                } else if ( kpobject->getType() == OT_CLOSED_LINE ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    KPClosedLineObject *tmpObj=dynamic_cast<KPClosedLineObject *>(kpobject);
+                    if ( tmpObj )
+                    {
+                        m_view->openPopupMenuFlipObject( pnt );
+                    }
                 } else {
                     if ( state )
                         deSelectAllObj();
@@ -6110,13 +6120,13 @@ void KPrCanvas::flipObject( bool _horizontal )
     QPtrList<KPObject> lst;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE) )
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE || it.current()->getType() == OT_CLOSED_LINE) )
             lst.append( it.current()  );
     }
     //get sticky obj
     it=m_view->kPresenterDoc()->stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE))
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE|| it.current()->getType() == OT_CLOSED_LINE))
             lst.append(  it.current() );
     }
     if ( lst.isEmpty())
