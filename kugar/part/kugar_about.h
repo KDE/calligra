@@ -38,10 +38,13 @@ KAboutData *newKugarAboutData()
 	aboutData->addAuthor("Joseph Wenninger",
         	I18N_NOOP("smaller fixes and kexi integration"), "jowenn@kde.org",
 	        "");
+	aboutData->addAuthor("Joris Marcillac",
+        	I18N_NOOP("Direct database support"), "joris@marcillac.com",
+	        "");
 	aboutData->addAuthor("Phil Thompson",
         	I18N_NOOP("Former maintainer"), "phil@river-bank.demon.co.uk",
         	"");                                                       
-	aboutData->addAuthor("Keith Davis (Mutiny Bay Software",
+	aboutData->addAuthor("Keith Davis (Mutiny Bay Software)",
         	I18N_NOOP("Original author of Metaphrast"), "info@mutinybaysoftware.com",
         	"http://www.mutinybaysoftware.com");
         aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
