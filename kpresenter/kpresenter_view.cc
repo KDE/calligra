@@ -315,6 +315,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     //statusbar stuff
     connect( m_pKPresenterDoc, SIGNAL( pageNumChanged() ), this, SLOT( pageNumChanged()) );
     connect( this, SIGNAL( currentPageChanged(int) ), this, SLOT( pageNumChanged()) );
+    connect( m_canvas, SIGNAL( objectSizeChanged() ), this, SLOT( updateObjectStatusBarItem() ));
     connect( m_canvas, SIGNAL( objectSelectedChanged() ), this, SLOT( updateObjectStatusBarItem() ));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
@@ -4365,10 +4366,11 @@ void KPresenterView::updateObjectStatusBarItem()
 
     if (nbSelected == 1) {
       KPObject * obj = m_canvas->getSelectedObj();
-      m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 -  (width: %2, height: %3)" )
+      m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 -  (width: %2, height: %3)(%4)" )
                                 .arg(obj->getTypeString())
                                 .arg(obj->getSize().width())
                                 .arg(obj->getSize().height())
+                                .arg(m_pKPresenterDoc->getUnitName())
                                 );
     }
     else

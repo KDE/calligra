@@ -299,6 +299,7 @@ signals:
     void updateSideBarItem( int );
     void stopPres();
     void objectSelectedChanged();
+    void objectSizeChanged();
     // Emitted when the current frameset edit changes
     void currentObjectEditChanged();
 

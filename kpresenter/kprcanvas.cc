@@ -6324,7 +6324,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 
     _repaint( oldBoundingRect );
     _repaint( kpobject );
-
+    emit objectSizeChanged();
     oldBoundingRect = getOldBoundingRect(kpobject);
 }
 
