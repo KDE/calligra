@@ -723,10 +723,17 @@ void RTFImport::setCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
     QCString cp;
-    cp.setNum( token.value );
-    cp.prepend("CP");
+    if ( token.value == 10000 )
+    {
+    	cp = "Apple Roman"; // ### TODO: how to support the other ones (Qt does not know them!)
+    } 
+    else
+    {
+        cp.setNum( token.value );
+        cp.prepend("CP");
+    }
     textCodec=QTextCodec::codecForName(cp);
-    kdDebug(30515) << "\\ansicpg: asked: " << cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kdDebug(30515) << "\\ansicpg: codepage: " << token.value << "asked: "<< cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
