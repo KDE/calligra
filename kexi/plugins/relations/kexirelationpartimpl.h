@@ -20,7 +20,6 @@
 #ifndef KEXIRELATIONPARTIMPL_H
 #define KEXIRELATIONPARTIMPL_H
 
-#include <kgenericfactory.h>
 #include <kexiinternalpart.h>
 
 class KexiRelationPartImpl : public KexiInternalPart

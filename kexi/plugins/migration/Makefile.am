@@ -14,4 +14,7 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 
 METASOURCES = AUTO
 
+servicesdir=$(kde_servicesdir)/kexi
+services_DATA=keximigrationhandler.desktop
+
 include ../Makefile.common

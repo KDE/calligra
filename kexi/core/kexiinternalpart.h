@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #include <qguardedptr.h>
 
 class KexiMainWindow;
+class KexiMessageHandler;
 class KexiDialogBase;
 class KexiViewBase;
 class QWidget;
@@ -48,37 +50,63 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 	
 		KexiDialogBase *instance(KexiMainWindow *parent);
 
-		/*! Creates a new widget instance using pare \a partName.
-		 \a widgetClass is a pseudo clas in used in case when the part offers more widgets.
+		/*! Creates a new widget instance using part \a partName.
+		 \a widgetClass is a pseudo class used in case when the part offers more 
+		 than one widget type.
+		 \a msgHdr is a message handler for displaying error messages.
 		 Created widget will have assigned \a parent widget and \a objName name. */
 		static QWidget* createWidgetInstance(const char* partName, const char* widgetClass, 
-		 KexiMainWindow* mainWin, QWidget *parent, const char *objName = 0);
+			KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, 
+			QWidget *parent, const char *objName = 0);
 
 		/*! For convenience. */
 		static QWidget* createWidgetInstance(const char* partName,
-		 KexiMainWindow* mainWin, QWidget *parent, const char *objName = 0)
-		 { return createWidgetInstance(partName, 0, mainWin, parent, objName); }
+			KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, 
+			QWidget *parent, const char *objName = 0)
+		 { return createWidgetInstance(partName, 0, msgHdr, mainWin, parent, objName); }
 
 		/*! Creates a new dialog instance. If such instance already exists, 
-		 it is just returned, if this part is unique (see m_unique).
-		 The part know about destroying its dialog instance, (if it is uinque), 
+		 and is unique (see uniqueDialog()) it is just returned.
+		 The part knows about destroying its dialog instance, (if it is uinque), 
 		 so on another call the dialog will be created again. 
-		 Dialog is assigned \a mainWin as its main window, and \a objName name. */
-		static KexiDialogBase* createDialogInstance(const char* partName, 
-		 KexiMainWindow* mainWin, const char *objName = 0);
-		
+		 \a msgHdr is a message handler for displaying error messages.
+		 The dialog is assigned to \a mainWin as its parent, 
+		 and \a objName name is set. */
+		static KexiDialogBase* createKexiDialogInstance(const char* partName, 
+			KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0);
+
+		/*! Creates a new modal dialog instance (QDialog or a subclass). 
+		 If such instance already exists, and is unique (see uniqueDialog()) 
+		 it is just returned.
+		 \a dialogClass is a pseudo class used in case when the part offers more 
+		 than one dialog type.
+		 \a msgHdr is a message handler for displaying error messages.
+		 The part knows about destroying its dialog instance, (if it is uinque), 
+		 so on another call the dialog will be created again. 
+		 The dialog is assigned to \a mainWin as its parent, 
+		 and \a objName name is set. */
+		static QDialog* createModalDialogInstance(const char* partName, 
+			const char* dialogClass, KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, 
+			const char *objName = 0);
+
+		static QDialog* createModalDialogInstance(const char* partName, 
+		 KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0)
+		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName); }
+
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
-		static const KexiInternalPart* part(const char* partName);
+		static const KexiInternalPart* part(KexiMessageHandler *msgHdr, const char* partName);
 
 		/*! \return true if the part can create only one (unique) dialog. */
 		inline bool uniqueDialog() const { return m_uniqueDialog; }
 
-		/*! Used internally */
-		KexiDialogBase *findOrCreateDialog(KexiMainWindow* mainWin, 
-		 const char *objName);
 		
 	protected:
-		//! Reimplement this if your internal part has to return widgets
+		/*! Used internally */
+		KexiDialogBase *findOrCreateKexiDialog(KexiMainWindow* mainWin, 
+		 const char *objName);
+
+		/*! Reimplement this if your internal part has to return widgets 
+		 or QDialog objects. */
 		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* /*mainWin*/, 
 		 QWidget * /*parent*/, const char * /*objName*/ =0) { return 0; }
 		
@@ -91,10 +119,11 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 const char * /*objName */=0) { return 0; }
 		
 		//! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
-		QGuardedPtr<KexiDialogBase> m_dialog; 
+		QGuardedPtr<QWidget> m_uniqueWidget; 
 		
 		bool m_uniqueDialog : 1; //!< true if createDialogInstance() should return only one dialog
 	
+	friend class KexiInternalPart;
 };
 
 #endif

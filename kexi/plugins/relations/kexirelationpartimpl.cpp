@@ -24,6 +24,7 @@
 #include <kexidialogbase.h>
 #include <keximainwindow.h>
 
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 
@@ -77,7 +78,8 @@ KexiRelationPartImpl::createView(KexiMainWindow* mainWin, QWidget *parent, const
 }
 
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, KGenericFactory<KexiRelationPartImpl>("kexihandler_relation") )
+K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, 
+	KGenericFactory<KexiRelationPartImpl>("kexihandler_relation") )
 
 #include "kexirelationpartimpl.moc"
 
