@@ -155,7 +155,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Do &amp;not use the hint! (Recommanded!)</string>
+                        <string>Do &amp;not use the hint! (Recommended!)</string>
                     </property>
                     <property stdset="1">
                         <name>checked</name>
