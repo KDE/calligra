@@ -408,6 +408,7 @@ void miscParameters::slotDefault()
 valIndent->setValue(10);
 typeCompletion->setCurrentItem(3);
 typeOfMove->setCurrentItem(0);
+msgError->setChecked(true);
 }
 
 

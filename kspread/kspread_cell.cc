@@ -2001,7 +2001,7 @@ bool KSpreadCell::calc( bool _makedepend )
         if ( cell == 0L )
           return false;
         if ( !cell->calc( _makedepend ) )
-        {
+	  {
           m_bError = true;
           m_strFormularOut = "####";
           m_bValue = false;
@@ -2028,7 +2028,7 @@ bool KSpreadCell::calc( bool _makedepend )
   {
     // If we got an error during evaluation ...
     if ( m_pCode )
-    {
+      {
       m_bError = true;
       m_strFormularOut = "####";
       m_bValue = false;
