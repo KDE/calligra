@@ -766,7 +766,7 @@ QString KWordDocIface::configAutoFormatLanguage( )const
 QStringList KWordDocIface::personalExpressionPath()const
 {
     //return all list
-    return doc->personalExpresssionPath();
+    return doc->personalExpressionPath();
 }
 
 QString KWordDocIface::picturePath()const

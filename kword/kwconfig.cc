@@ -874,7 +874,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
-    (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpresssionPath().join(";") );
+    (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
     (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
 
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
@@ -932,16 +932,23 @@ void ConfigurePathPage::apply()
     if ( item )
     {
         QStringList lst = QStringList::split(QString(";"), item->text(1));
-        m_pView->kWordDocument()->setPersonalExpressionPath(lst);
-        config->setGroup( "Kword Path" );
-        config->writeEntry( "expression path", lst);
+        if ( lst != m_pView->kWordDocument()->personalExpressionPath())
+        {
+            m_pView->kWordDocument()->setPersonalExpressionPath(lst);
+            config->setGroup( "Kword Path" );
+            config->writeEntry( "expression path", lst);
+        }
     }
     item = m_pPathView->findItem(i18n("Picture path"), 0);
     if ( item )
     {
-        config->setGroup( "Kword Path" );
-        m_pView->kWordDocument()->setPicturePath( item->text(1) );
-        config->writeEntry( "picture path",item->text(1) );
+        QString res = item->text(1 );
+        if ( res != m_pView->kWordDocument()->picturePath())
+        {
+            config->setGroup( "Kword Path" );
+            m_pView->kWordDocument()->setPicturePath( res );
+            config->writeEntry( "picture path",res );
+        }
     }
 }
 

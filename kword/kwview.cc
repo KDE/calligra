@@ -1164,7 +1164,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     }
 
     parentMenu->popupMenu()->clear();
-    QStringList path =  m_doc->personalExpresssionPath();
+    QStringList path =  m_doc->personalExpressionPath();
     QStringList files;
     for ( QStringList::Iterator it = path.begin(); it != path.end(); ++it )
     {

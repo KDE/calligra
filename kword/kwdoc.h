@@ -724,7 +724,7 @@ public:
 
     QPtrListIterator<KWBookMark> bookmarkIterator() const { return QPtrListIterator<KWBookMark>(m_bookmarkList); }
 
-    QStringList personalExpresssionPath() const { return m_personalExpressionPath;}
+    QStringList personalExpressionPath() const { return m_personalExpressionPath;}
     void setPersonalExpressionPath( const QStringList & );
 
     QString picturePath()const { return m_picturePath; }
