@@ -67,16 +67,11 @@ See the INSTALL file for details.
 
 RUNNING A SAMPLE REPORT WITH KUGAR:
 
-There are tree sample templates and matching datafiles in ./samples.
+There are three sample templates and matching datafiles in ./samples.
 
-The kugar program takes two commandline arguments:
-	-d <xml data file>
-	-r <xml report template URL>
+The kugar program takes one or more data files on the commandline.
 
-Example: kugar -d samples/sample1.kud -r samples/sample1.kut
-
-If the template file is omitted then any template specified in the data file
-will be used.
+Example: kugar samples/sample1.kud
 
 To use Konqueror to display a sample, just click on the data file (with the
 .kud extension) from within Konqueror.
