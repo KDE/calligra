@@ -562,7 +562,23 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
 {
-    //todo
+    //todo Laurent just init for the moment
+    // format for oasis is not implemented
+    QTime dt;
+    dt.start();
+
+    emit sigProgress( 0 );
+    d->isLoading = TRUE;
+    d->spellListIgnoreAll.clear();
+
+    d->refs.clear();
+
+    emit sigProgress( 90 );
+    initConfig();
+    emit sigProgress(-1);
+
+    kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+
     return true;
 }
 
