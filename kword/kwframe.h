@@ -97,21 +97,21 @@ public:
      * - which is actually pretty bad in terms of doc/view design (DF)
      */
     void setSelected( bool _selected );
-    bool isSelected() { return selected; }
+    bool isSelected()const { return selected; }
 
     QCursor getMouseCursor( const KoPoint& docPoint, bool table, QCursor defaultCursor );
 
-    double runAroundGap() { return m_runAroundGap; }
+    double runAroundGap()const { return m_runAroundGap; }
     void setRunAroundGap( double gap ) { m_runAroundGap = gap; }
 
-    RunAround runAround() { return m_runAround; }
+    RunAround runAround()const { return m_runAround; }
     void setRunAround( RunAround _ra ) { m_runAround = _ra; }
 
 
     /** what should happen when the frame is full */
     enum FrameBehavior { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-    FrameBehavior frameBehavior() { return m_frameBehavior; }
+    FrameBehavior frameBehavior()const { return m_frameBehavior; }
     void setFrameBehavior( FrameBehavior fb ) { m_frameBehavior = fb; }
 
     /* Frame duplication properties */

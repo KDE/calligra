@@ -1303,6 +1303,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
+
     Q_ASSERT( frame );
     if ( clipFrame )
     {
