@@ -156,6 +156,8 @@ void VLayersDocker::addLayer()
 void VLayersDocker::raiseLayer()
 {
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
+	if( !layerItem || !layerItem->layer() )
+		return;
 	VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Raise layer"), 
 			layerItem->layer(), VLayerCommand::RaiseLayer );
 	m_view->part()->addCommand( cmd, true );
@@ -165,6 +167,8 @@ void VLayersDocker::raiseLayer()
 void VLayersDocker::lowerLayer()
 {
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
+	if( !layerItem || !layerItem->layer() )
+		return;
 	VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Lower layer"), 
 			layerItem->layer(), VLayerCommand::LowerLayer );
 	m_view->part()->addCommand( cmd, true );
@@ -174,6 +178,8 @@ void VLayersDocker::lowerLayer()
 void VLayersDocker::deleteLayer()
 {
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
+	if( !layerItem || !layerItem->layer() )
+		return;
 	VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Delete layer"), 
 			layerItem->layer(), VLayerCommand::DeleteLayer );
 	m_view->part()->addCommand( cmd, true );
