@@ -145,6 +145,8 @@ SlideTransitionDia::SlideTransitionDia( QWidget *parent, const char *name, KPres
     m_dialog->soundCheckBox->setChecked( m_soundEffect );
     m_dialog->soundRequester->setURL( m_soundFileName );
     soundEffectChanged();
+    m_dialog->playButton->setPixmap( BarIcon( "player_play", KIcon::SizeSmall ) );
+    m_dialog->stopButton->setPixmap( BarIcon( "player_stop", KIcon::SizeSmall ) );
     connect( m_dialog->playButton, SIGNAL( clicked() ), this, SLOT( playSound() ) );
     connect( m_dialog->stopButton, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 
