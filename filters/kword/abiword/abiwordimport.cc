@@ -198,7 +198,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement layoutElement=mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
-    AddLayout(strStyle,layoutElement, stackItem, mainDocument, abiPropsMap, level);
+    AddLayout(strStyle,layoutElement, stackItem, mainDocument, abiPropsMap, level, false);
 
     return true;
 }
@@ -225,14 +225,31 @@ bool EndElementP (StackItem* stackItem)
     return true;
 }
 
-bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
+static void InsertTimeVariable(QDomDocument& mainDocument,
+    QDomElement& variableElement, QString strKey, QString strText)
+{
+    QDomElement typeElement=mainDocument.createElement("TYPE");
+    typeElement.setAttribute("key",strKey);
+    typeElement.setAttribute("type",2); // Time
+    typeElement.setAttribute("text",strText);
+    variableElement.appendChild(typeElement); //Append to <VARIABLE>
+    QDomElement timeElement=mainDocument.createElement("TIME");
+    // We cannot calculate the time, so default to midnight
+    timeElement.setAttribute("hour",0);
+    timeElement.setAttribute("minute",0);
+    timeElement.setAttribute("second",0);
+    timeElement.setAttribute("fix",0); // AbiWord's <field> is never fixed
+    variableElement.appendChild(timeElement); //Append to <VARIABLE>
+}
+
+static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     QDomDocument& mainDocument, const QXmlAttributes& attributes)
 {
     // <field> element elements can be nested in <p>
     if (stackCurrent->elementType==ElementTypeParagraph)
     {
         QString strType=attributes.value("type").stripWhiteSpace();
-        kdDebug()<<"field type ****************************:"<<strType<<endl;
+        kdDebug(30506)<<"<field> type:"<<strType<<endl;
         // TODO: a <field> can have formating in  the props attribute. Can KWord follow?
         AbiPropsMap abiPropsMap;
         PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
@@ -240,25 +257,15 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         stackItem->elementType=ElementTypeEmpty;
 
         // We create a format element
-        QDomElement formatElement=mainDocument.createElement("FORMAT");
-        formatElement.setAttribute("id",4); // Variable
-        formatElement.setAttribute("pos",stackItem->pos); // Start position
-        formatElement.setAttribute("len",1); // Start position
+        QDomElement variableElement=mainDocument.createElement("VARIABLE");
 
         if (strType=="time")
         {
-            QDomElement typeElement=mainDocument.createElement("TYPE");
-            typeElement.setAttribute("key","TIMELocale");
-            typeElement.setAttribute("type",2); // Time
-            typeElement.setAttribute("text","00:00");
-            formatElement.appendChild(typeElement); //Append to <FORMAT>
-            QDomElement timeElement=mainDocument.createElement("TIME");
-            // We cannot calculate the time, so default to midnight
-            timeElement.setAttribute("hour",0);
-            timeElement.setAttribute("minute",0);
-            timeElement.setAttribute("second",0);
-            timeElement.setAttribute("fix",0);
-            formatElement.appendChild(timeElement); //Append to <FORMAT>
+            InsertTimeVariable(mainDocument, variableElement, "TIMELocale", "00:00");
+        }
+        else if (strType=="time_miltime")
+        {
+            InsertTimeVariable(mainDocument, variableElement, "TIMEhh:mm", "00:00");
         }
         else if ((strType=="page_number")||(strType=="page_count"))
         {
@@ -266,17 +273,25 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
             typeElement.setAttribute("key","NUMBER");
             typeElement.setAttribute("type",4); // page number/count
             typeElement.setAttribute("text",1); // We cannot count the pages, so give a default value
-            formatElement.appendChild(typeElement); //Append to <FORMAT>
+            variableElement.appendChild(typeElement); //Append to <VARIABLE>
             QDomElement pgnumElement=mainDocument.createElement("PGNUM"); // TODO: not documented in KWord's DTD
             pgnumElement.setAttribute("subtype",(strType=="page_count")?1:0);
             pgnumElement.setAttribute("value",1);
-            formatElement.appendChild(pgnumElement); //Append to <FORMAT>
+            variableElement.appendChild(pgnumElement); //Append to <VARIABLE>
         }
         else
         {
             kdWarning(30506) << "Unknown <field> type: " << strType << endl;
             return true;
         }
+
+        // We create a format element
+        QDomElement formatElement=mainDocument.createElement("FORMAT");
+        formatElement.setAttribute("id",4); // Variable
+        formatElement.setAttribute("pos",stackItem->pos); // Start position
+        formatElement.setAttribute("len",1); // Start position
+        
+        formatElement.appendChild(variableElement);
 
         // Now insert the elemnt into the document (we work on stackCurrent)
         stackCurrent->stackElementFormatsPlural.appendChild(formatElement);

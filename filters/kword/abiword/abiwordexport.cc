@@ -615,6 +615,7 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 
     // TODO: cook the style name to the standard style names in AbiWord
     *m_streamOut << " name=\"" << EscapeXmlText(layout.styleName,true,true) << "\"";
+    *m_streamOut << " followedby=\"" << EscapeXmlText(layout.styleFollowing,true,true) << "\"";
 
     if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
         && (layout.counter.depth<10) )

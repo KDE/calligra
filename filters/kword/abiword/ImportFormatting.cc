@@ -185,16 +185,32 @@ void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument
 
 void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     StackItem* stackItem, QDomDocument& mainDocument,
-    const AbiPropsMap& abiPropsMap, const int level)
+    const AbiPropsMap& abiPropsMap, const int level, const bool isStyle)
 {
     QDomElement element;
     element=mainDocument.createElement("NAME");
     element.setAttribute("value",strStyleName);
     layoutElement.appendChild(element);
 
-    element=mainDocument.createElement("FOLLOWING");
-    element.setAttribute("value","Standard"); // TODO: would be "Normal" better?
-    layoutElement.appendChild(element);
+    QString strFollowing=abiPropsMap["followedby"].getValue();
+    QDomElement followingElement=mainDocument.createElement("FOLLOWING");
+    followingElement.setAttribute("name",strFollowing);
+    if (strFollowing.isEmpty())
+    {
+        // We have no idea what style follows
+        if (isStyle)
+        {
+            // We are a style, so we need a default
+            followingElement.setAttribute("name","Normal");
+            layoutElement.appendChild(followingElement);
+        }
+        // Else: we are a layout, so we leave the work to KWord (from the style)
+    }
+    else
+    {
+        // Following style is defined
+        layoutElement.appendChild(followingElement);
+    }
 
     QString strFlow=abiPropsMap["text-align"].getValue();
     element=mainDocument.createElement("FLOW");
@@ -350,6 +366,5 @@ void AddStyle(QDomElement& styleElement, const QString& strStyleName,
     AbiPropsMap abiPropsMap;
 
     PopulateProperties(&stackItem, styleData.m_props, attributes, abiPropsMap, false);
-
-    AddLayout(strStyleName, styleElement, &stackItem, mainDocument, abiPropsMap, styleData.m_level);
+    AddLayout(strStyleName, styleElement, &stackItem, mainDocument, abiPropsMap, styleData.m_level, true);
 }
