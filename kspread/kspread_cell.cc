@@ -2077,7 +2077,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 		dl = ( l.width() - 1 ) / 2 + 1;
 	    int dr = 0;
 	    if ( r.style() != Qt::NoPen )
-		dr = ( r.width() - 1 ) / 2 + 1; //  + ( ( r.width() - 1 ) % 2 );
+		dr = r.width() / 2;
+		// dr = ( r.width() - 1 ) / 2 + 1 - ( ( r.width() - 1 ) % 2 );
 
 	    _painter.setPen( table()->doc()->defaultGridPen() );
 	    _painter.drawLine( _tx + dl, _ty, _tx + w - dr, _ty );
