@@ -1125,6 +1125,10 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
             };
 
             strElement+= ul;
+            if (formatData.underlineColor.isValid())
+            {
+                strElement+=lookupColor("\\ulc",formatData.underlineColor);
+            }
         }
         else
         {
@@ -1137,7 +1141,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         if ( formatData.strikeout )
         {
             if( formatData.strikeoutType == "double" )
-                strElement+="\\striked";
+                strElement+="\\striked1"; // 1 needed! (The exception that confirm the rule!)
             else
                 strElement+="\\strike";
         }
