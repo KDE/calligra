@@ -814,9 +814,11 @@ void KWTextFrameSet::updateFrames()
 
 const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 {
-    if ( pageNum >= m_framesInPage.size() + m_firstPage )
+    if ( pageNum < m_firstPage || pageNum >= m_framesInPage.size() + m_firstPage )
     {
-        kdWarning() << "framesInPage called for pageNum=" << pageNum << ". Max value:" << m_framesInPage.size() + m_firstPage - 1 << endl;
+        kdWarning() << "framesInPage called for pageNum=" << pageNum << ". "
+                    << " Min value: " << m_firstPage
+                    << " Max value:" << m_framesInPage.size() + m_firstPage - 1 << endl;
         return m_emptyList; // QList<KWFrame>() doesn't work, it's a temporary
     }
     return * m_framesInPage[pageNum - m_firstPage];
@@ -1551,7 +1553,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     // Find last page that is visible
     int maxPage = ( nPointBottom.y() + m_doc->paperHeight() /*equiv. to ceil()*/ ) / m_doc->paperHeight();
     int maxY = 0;
-    if ( maxPage >= m_framesInPage.size() + m_firstPage )
+    if ( maxPage < m_firstPage || maxPage >= m_framesInPage.size() + m_firstPage )
         maxY = m_availableHeight;
     else
     {
