@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwdoc.h"
-
 #include <koApplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
