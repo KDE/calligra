@@ -312,7 +312,7 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 	  we do this by incrementing the 'environment depth' and changing the numbering type to 'no numbering'
 	 **/
 	QString ct=_writer->getLayoutAttribute(state()->paragraph,"COUNTER","type");
-	if ((ct != QString::null) && (ct != "0")) {
+	if ((!ct.isNull()) && (ct != "0")) {
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","0");
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","0");
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
