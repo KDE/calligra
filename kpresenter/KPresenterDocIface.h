@@ -122,6 +122,9 @@ k_dcop:
     virtual bool configRemoveSpaceBeginEndLine() const;
     virtual bool configUseBulletSyle() const;
 
+    virtual bool configAutoChangeFormat() const;
+    virtual void setConfigAutoChangeFormat( bool _auto);
+
 
 private:
     KPresenterDoc *doc;

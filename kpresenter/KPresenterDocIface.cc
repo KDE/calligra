@@ -410,3 +410,13 @@ bool KPresenterDocIface::configUseBulletSyle() const
 {
     return doc->getAutoFormat()->getConfigUseBulletSyle();
 }
+
+bool KPresenterDocIface::configAutoChangeFormat() const
+{
+    return doc->getAutoFormat()->getConfigAutoChangeFormat();
+}
+
+void KPresenterDocIface::setConfigAutoChangeFormat( bool _auto)
+{
+    doc->getAutoFormat()->configAutoChangeFormat(_auto);
+}
