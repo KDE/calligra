@@ -1,5 +1,5 @@
 
-SUBDIRS = lib servicetypes filters $(KATABASE_DIR) kspread kpresenter kword kformula kchart killustrator kimage kimageshop tools plugins koshell pics
+SUBDIRS = lib servicetypes filters $(KATABASE_DIR) kspread kpresenter kword kchart killustrator kimage kimageshop tools plugins koshell pics
 
 AUTOMAKE_OPTIONS = foreign # 1.4
 
