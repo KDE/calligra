@@ -799,12 +799,13 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     QRect newRect( frame->outerRect() );
 
                     QRect frameRect( m_viewMode->normalToView( newRect ) );
-                    /*ensureVisible( (frameRect.left()+frameRect.right()) / 2,  // point = center of the rect
-                                   (frameRect.top()+frameRect.bottom()) / 2,
-                                   (frameRect.right()-frameRect.left()) / 2,  // margin = half-width of the rect
-                                   (frameRect.bottom()-frameRect.top()) / 2);*/
-                    // This ensureVisible doesn't work as it should.
                     // With frames bigger than the viewport, we end scrolling up/down like nonsense.
+                    if ( frameRect.height() < visibleHeight() )
+
+                        ensureVisible( (frameRect.left()+frameRect.right()) / 2,  // point = center of the rect
+                                       (frameRect.top()+frameRect.bottom()) / 2,
+                                       (frameRect.right()-frameRect.left()) / 2,  // margin = half-width of the rect
+                                       (frameRect.bottom()-frameRect.top()) / 2);
 
                     // Repaint only the changed rects (oldRect U newRect)
                     repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
