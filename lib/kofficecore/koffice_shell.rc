@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOfficeShell" version="10">
+<kpartgui name="KOfficeShell" version="11">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -22,7 +22,8 @@
  <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
   <DefineGroup name="settings_top"/>
   <Merge/>
-  <ActionList name="toolbarlist"/>
+  <Action name="toolbars_showhide"/>
+<!--  <ActionList name="toolbarlist"/> -->
   <Separator/>
   <Action name="options_configure_keybinding"/>
   <Action name="options_configure_toolbars"/>
