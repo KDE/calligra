@@ -325,8 +325,10 @@ bool KOSpell::spellWord( const QString &_word )
     QStringList lst =resultCheckWord( _word );
     if ( lst.isEmpty() && ((lastpos >= (int)origbuffer.length()-1)|| lastpos<0) )
     {
-        emit done( origbuffer );
+        //change m_status before to emit signal otherwise
+        //kword + multiframe doesn't work
         m_status = Finished;
+        emit done( origbuffer );
         return false;
     }
     if ( lst.contains( _word ))
@@ -420,6 +422,7 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
     lastpos = -1;
     usedialog = _usedialog;
     origbuffer = _buffer;
+    m_status = Starting;
     if ( ( totalpos = origbuffer.length() ) == 0 )
     {
         emit done(origbuffer);
