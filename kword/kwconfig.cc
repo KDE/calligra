@@ -48,6 +48,7 @@
 #include <float.h>
 #include <kmessagebox.h>
 #include <klistview.h>
+#include <kstandarddirs.h>
 #include <kdeversion.h>
 
 // little helper stolen from kmail
@@ -870,17 +871,21 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpresssionPath().join(";") );
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
-
 }
 
 void ConfigurePathPage::slotModifyPath()
 {
-    //todo
+    if ( m_pPathView->currentItem ())
+    {
+        //todo
+    }
 }
 
 void ConfigurePathPage::slotDefault()
 {
-    //todo
+    QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
+    if ( item )
+        item->setText(1, KWFactory::global()->dirs()->resourceDirs("expression").join(";"));
 }
 
 #include "kwconfig.moc"
