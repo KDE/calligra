@@ -471,7 +471,7 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
 }
 
 KWordFrameSetIface* KWFrameSet::dcopObject()
-{
+ {
     if ( !m_dcop )
 	m_dcop = new KWordFrameSetIface( this );
 

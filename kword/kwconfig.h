@@ -93,6 +93,7 @@ class ConfigureDefaultDocPage : public QObject
     Q_OBJECT
 public:
     ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name = 0 );
+    ~ConfigureDefaultDocPage();
     void apply();
     void slotDefault();
 public slots:

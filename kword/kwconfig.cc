@@ -469,6 +469,11 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
 }
 
+ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
+{
+    delete font;
+}
+
 void ConfigureMiscPage::apply()
 {
     config->setGroup( "Misc" );

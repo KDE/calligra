@@ -572,6 +572,11 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
 }
 
+ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
+{
+    delete font;
+}
+
 void ConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
@@ -617,5 +622,5 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
     }
 }
 
-
 #include <kpresenter_dlg_config.moc>
+
