@@ -48,6 +48,7 @@ KAboutData * newKSpreadAboutData()
     aboutData->addAuthor("Phillip Ezolt", 0, "phillipezolt@hotmail.com");
     aboutData->addAuthor("Enno Bartels", 0, "ebartels@nwn.de");
     aboutData->addAuthor("Graham Short", 0, "grahshrt@netscape.net");
+    aboutData->addAuthor("Lukáš Tinkl", 0, "lukas@kde.org");
 
     return aboutData;
 }
