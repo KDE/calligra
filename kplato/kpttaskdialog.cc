@@ -87,7 +87,6 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidg
     m_id->setText(task.id());
     m_generalTab->setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
-        kdDebug()<<k_funcinfo<<task.constraintStartTime().toString()<<endl;
         m_generalTab->setStartTime(task.constraintStartTime());
     } else {
         QDate date = QDate::currentDate();
@@ -95,7 +94,6 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidg
         m_generalTab->setStartTime(QDateTime(date, time)); 
     }
     if (task.constraintEndTime().isValid()) {
-        kdDebug()<<k_funcinfo<<task.constraintEndTime().toString()<<endl;
         m_generalTab->setEndTime(task.constraintEndTime());
     } else {
         QDate date = QDate::currentDate();
