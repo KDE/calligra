@@ -90,12 +90,13 @@ void GraphiteView::slotViewZoom(const QString &t) {
     QChar dot('.');
     QChar colon(',');
     double zoomValue=1.0;
+    unsigned int textLength=text.length();
 
     // analyze the new text and decide it we can use it
     unsigned int start=0;
     bool comma=false;
     // get rid of leading garbage
-    while(!text[start].isDigit() && text[start]!=dot && text[start]!=colon && start<text.length())
+    while(!text[start].isDigit() && text[start]!=dot && text[start]!=colon && start<textLength)
         ++start;
 
     // QString::toDouble() doesn't like colons
@@ -109,7 +110,7 @@ void GraphiteView::slotViewZoom(const QString &t) {
     // now get the number and determine whether we use percent values or not
     unsigned int end=start+1;
     bool percent=false;
-    while(end<text.length()) {
+    while(end<textLength) {
         if(text[end].isDigit())
             ++end;
         else if(!comma && text[end]==dot) {
@@ -130,7 +131,7 @@ void GraphiteView::slotViewZoom(const QString &t) {
     }
 
     // get hold of the number and perform some sanity checks
-    if(start<text.length()) {
+    if(start<textLength) {
         corrected=text.mid(start, end-start);
         zoomValue=corrected.toDouble();
 

@@ -53,13 +53,14 @@ int MySpinBox::mapTextToValue(bool* ok) {
     QChar colon(',');
     double value=0.0;
     int ret=0;
+    unsigned int textLength=t.length();
 
     // analyze the new text and decide it we can use it
     unsigned int start=0;
     bool comma=false;
     // get rid of leading garbage
     while(!t[start].isDigit() && t[start]!=dot && t[start]!=colon &&
-          t[start]!=KGlobal::locale()->decimalSymbol()[0] && start<t.length())
+          t[start]!=KGlobal::locale()->decimalSymbol()[0] && start<textLength)
         ++start;
 
     // QString::toDouble() doesn't like colons
@@ -72,7 +73,7 @@ int MySpinBox::mapTextToValue(bool* ok) {
 
     // now get the number
     unsigned int end=start+1;
-    while(end<t.length()) {
+    while(end<textLength) {
         if(t[end].isDigit())
             ++end;
         else if(!comma && t[end]==dot) {
@@ -89,7 +90,7 @@ int MySpinBox::mapTextToValue(bool* ok) {
     }
 
     // get hold of the number..
-    if(start<t.length()) {
+    if(start<textLength) {
         corrected=t.mid(start, end-start);
         value=corrected.toDouble(ok);
 

@@ -86,6 +86,7 @@ GUnitValidator::GUnitValidator(QWidget *parent, const char *name) :
 QValidator::State GUnitValidator::validate(QString &input, int &/*pos*/) const {
 
     QString str=input.stripWhiteSpace();
+    unsigned int strLength=str.length();
     QChar dot('.'), comma(','), m('m'), M('M'), p('p'), P('P'), t('t'), T('T'),
         i('i'), I('I'), n('n'), N('N');
     unsigned int j=1;
@@ -94,7 +95,7 @@ QValidator::State GUnitValidator::validate(QString &input, int &/*pos*/) const {
     if(!str.isEmpty() && !str[0].isDigit() && str[0]!=dot && str[0]!=comma && str[0]!=KGlobal::locale()->decimalSymbol()[0])
         return QValidator::Invalid;
 
-    while(j<str.length()) {
+    while(j<strLength) {
         if(str[j].isDigit() || str[j].isSpace())
             ++j;
         else if(!c && (str[j]==dot || str[j]==comma || str[j]==KGlobal::locale()->decimalSymbol()[0])) {
@@ -102,37 +103,37 @@ QValidator::State GUnitValidator::validate(QString &input, int &/*pos*/) const {
             c=true;
         }
         else if(str[j]==m || str[j]==M) {
-            if(j+1<str.length() && (str[j+1]==m || str[j+1]==M)) {
-                if(j+2>=str.length())
+            if(j+1<strLength && (str[j+1]==m || str[j+1]==M)) {
+                if(j+2>=strLength)
                     return QValidator::Acceptable;
                 else
                     return QValidator::Invalid;
             }
-            else if(j+1>=str.length())
+            else if(j+1>=strLength)
                 return QValidator::Intermediate;
             else
                 return QValidator::Invalid;
         }
         else if(str[j]==p || str[j]==P) {
-            if(j+1<str.length() && (str[j+1]==t || str[j+1]==T)) {
-                if(j+2>=str.length())
+            if(j+1<strLength && (str[j+1]==t || str[j+1]==T)) {
+                if(j+2>=strLength)
                     return QValidator::Acceptable;
                 else
                     return QValidator::Invalid;
             }
-            else if(j+1>=str.length())
+            else if(j+1>=strLength)
                 return QValidator::Intermediate;
             else
                 return QValidator::Invalid;
         }
         else if(str[j]==i || str[j]==I) {
-            if(j+1<str.length() && (str[j+1]==n || str[j+1]==N)) {
-                if(j+2>=str.length())
+            if(j+1<strLength && (str[j+1]==n || str[j+1]==N)) {
+                if(j+2>=strLength)
                     return QValidator::Acceptable;
                 else
                     return QValidator::Invalid;
             }
-            else if(j+1>=str.length())
+            else if(j+1>=strLength)
                 return QValidator::Intermediate;
             else
                 return QValidator::Invalid;
