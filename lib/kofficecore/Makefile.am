@@ -18,7 +18,7 @@ include_HEADERS = koffice.h koView.h koFrame.h \
 	koDocument.h koPrintExt.h koFactory.h \
 	koMainWindow.h koScanTools.h koScanPlugins.h \
 	koApplication.h koQueryTypes.h \
-	koFilterManager.h qdom.h qxml.h koUnd.h qvariant.h
+	koFilterManager.h qdom.h qxml.h koUndo.h qvariant.h
 
 libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc \
         koApplication.moc koUndo.moc

@@ -3469,7 +3469,13 @@ QDomElement QDomDocument::createElement( const QString& tagname, const QPen& pen
     return QDomElement();
   QDomElement e( createElement( tagname ) );
 
-  e.setAttribute( "color", pen.color().name() );
+  QString c("#%1%2%3");
+  c = c.arg( pen.color().red(), 2, 16 ).arg( pen.color().green(), 2, 16 ).arg( pen.color().blue(), 2, 16 );
+  for( uint i = 0; i < c.length(); ++i )
+    if ( c[i].isSpace() )
+      c[i] = '0';
+
+  e.setAttribute( "color", c );
   e.setAttribute( "style", (int)pen.style() );
   e.setAttribute( "width", (int)pen.width() );
 
