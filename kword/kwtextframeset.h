@@ -221,6 +221,7 @@ public:
     /** Let KoTextFormatInterface set a modified current parag layout */
     virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
 
+    virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
 
 signals:
     /** Tell the Edit object that this frame got deleted */

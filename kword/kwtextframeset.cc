@@ -2072,6 +2072,18 @@ KoTextFormat *KWTextFrameSet::currentFormat() const
     return m_textobj->currentFormat();
 }
 
+KCommand *KWTextFrameSet::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)
+{
+    KoTextDocument *textdoc = m_textobj->textDocument();
+    textdoc->selectAll( KoTextDocument::Standard );
+    QTextCursor *cursor = new QTextCursor( textDocument() );
+    KCommand* cmd = m_textobj->changeCaseOfText(cursor, _type);
+    textdoc->removeSelection( KoTextDocument::Standard );
+    delete cursor;
+    return cmd;
+}
+
+
 KCommand *KWTextFrameSet::setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont )
 {
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );

@@ -3457,13 +3457,27 @@ void KWView::textSubScript()
 
 void KWView::changeCaseOfText()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if(!edit)
-        return;
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    bool createmacro=false;
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        edit->changeCaseOfText(caseDia->getTypeOfCase());
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change case of text") );
+        for ( ; it.current() ; ++it )
+        {
+            KCommand *cmd = it.current()->setChangeCaseOfTextCommand(caseDia->getTypeOfCase());
+            if (cmd)
+            {
+                createmacro=true;
+                macroCmd->addCommand(cmd);
+            }
+        }
+        if( createmacro )
+            m_doc->addCommand(macroCmd);
+        else
+            delete macroCmd;
     }
     delete caseDia;
 }
@@ -4109,7 +4123,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignRight->setEnabled( rw );
     actionFormatAlignBlock->setEnabled( rw );
     actionFormatIncreaseIndent->setEnabled(state);
-    actionChangeCase->setEnabled( edit && hasSelection && state);
+    actionChangeCase->setEnabled( rw);
     actionInsertLink->setEnabled(state);
 
     bool goodleftMargin=false;
