@@ -446,7 +446,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	    break;
 	default: break;
 	}
-	_tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart) ));
+	_tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart)) ));
 	_tab->mmPos = cPOINT_TO_MM( _tab->ptPos );
 	_tab->inchPos = cPOINT_TO_INCH( _tab->ptPos );
 
