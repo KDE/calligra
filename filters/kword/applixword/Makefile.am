@@ -1,7 +1,7 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-libapplixwordimport_la_LDFLAGS	= -module -avoid-version -no-undefined 
+libapplixwordimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined 
 
 ####### Files
 

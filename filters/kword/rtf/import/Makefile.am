@@ -1,7 +1,7 @@
 ####### General stuff
 
 INCLUDES= $(KOFFICE_INCLUDES) $(all_includes)
-librtfimport_la_LDFLAGS	= -module -avoid-version -no-undefined
+librtfimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 librtfimport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
