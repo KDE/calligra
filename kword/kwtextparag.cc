@@ -21,6 +21,7 @@
 #include "kwutils.h"
 #include "kwstyle.h"
 #include "kwdoc.h"
+#include "kwformat.h"
 #include "kwtextframeset.h"
 #include "counter.h"
 #include <kdebug.h>
@@ -992,6 +993,15 @@ void KWParagLayout::save( QDomElement & parentElem )
 void KWParagLayout::setStyleName( const QString &styleName )
 {
     m_styleName = styleName;
+}
+
+KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
+    : QTextDocument( p, fc ), m_textfs( textfs )
+{
+    // QTextDocument::QTextDocument creates a parag, but too early for our createParag to get called !
+    // So we have to get rid of it.
+    clear( true );
+    // Using clear( false ) is a bit dangerous, since we don't always check cursor->parag() for != 0
 }
 
 #include "kwtextparag.moc"

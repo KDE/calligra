@@ -140,7 +140,6 @@ public:
     virtual void layout();
 
     // reimplemented from QTextFlow
-    virtual void setWidth( int w );
     virtual int adjustLMargin( int yp, int h, int margin, int space );
     virtual int adjustRMargin( int yp, int h, int margin, int space );
     virtual void adjustFlow( int &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
@@ -213,7 +212,6 @@ private:
     QTextParag *m_lastFormatted;               // Idle-time-formatting stuff
     QTimer *formatTimer, *changeIntervalTimer; // Same
     int interval;                              // Same
-    int m_width;                               // Copy of private QTextFlow::width
     int m_availableHeight;                     // Sum of the height of all our frames
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.

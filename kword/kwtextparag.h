@@ -180,6 +180,7 @@ private:
     KWParagLayout m_layout;
 };
 
+class KWTextFormatCollection;
 /**
  * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
  * and to relate it to the text frameset it's in.
@@ -188,12 +189,7 @@ class KWTextDocument : public QTextDocument
 {
     Q_OBJECT
 public:
-    KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p ) : QTextDocument( p ), m_textfs( textfs ) {
-        // QTextDocument::QTextDocument creates a parag, but too early for our createParag to get called !
-        // So we have to get rid of it.
-        clear( true );
-        // Using clear( false ) is a bit dangerous, since we don't always check cursor->parag() for != 0
-    }
+    KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc );
 
     virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE )
     {

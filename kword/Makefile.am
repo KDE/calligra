@@ -14,7 +14,7 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwimage.cc kwdrag.cc kwconfig.cc \
                 contents.cc counter.cc stylist.cc \
                 border.cc resizehandles.cc kwcommand.cc \
-		autoformat.cc autoformatdia.cc kwfont.cc 
+		autoformat.cc autoformatdia.cc kwfont.cc kwformat.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/libkformula2.la ../qt3stuff/libqt3stuff.la -lkspell

@@ -28,6 +28,7 @@
 #include "kwgroupmanager.h"
 #include "kwdrag.h"
 #include "kwstyle.h"
+#include "kwformat.h"
 #include "counter.h"
 #include <qclipboard.h>
 #include <qdragobject.h>
@@ -39,9 +40,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     : KWFrameSet( _doc ), undoRedoInfo( this )
 {
     //kdDebug() << "KWTextFrameSet::KWTextFrameSet " << this << endl;
-    m_width = 0;
     m_availableHeight = -1;
-    textdoc = new KWTextDocument( this, 0 );
+    textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection );
     textdoc->setFormatter( new QTextFormatterBreakWords );
     textdoc->setFlow( this );
     textdoc->setVerticalBreak( true );              // get QTextFlow methods to be called
@@ -290,19 +290,14 @@ void KWTextFrameSet::layout()
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
-void KWTextFrameSet::setWidth( int w )
-{
-    //kdDebug(32002) << "KWTextFrameSet " << this << " setWidth " << w << endl;
-    m_width = w;
-    QTextFlow::setWidth( w );
-}
-
 int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
-    //kdDebug(32002) << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " adjustLMargin" << endl;
     QPoint p;
-    (void) internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
-    int middle = m_width / 2;
+    KWFrame * frame = internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
+    ASSERT(frame);
+    int width = frame ? kWordDocument()->zoomItX( frame->width() ) : 0; // the available width at this height
+    int middle = width / 2;
     int newMargin = 0;
 
     QListIterator<KWFrame> fIt( m_framesOnTop );
@@ -324,7 +319,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
             QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
-                newMargin = QMAX( newMargin, m_width + 1 ); // bigger than the width -> no text here
+                newMargin = QMAX( newMargin, width + 1 ); // bigger than the width -> no text here
         }
         break;
         default: // case RA_NO:
@@ -338,8 +333,12 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
     QPoint p;
-    (void) internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
-    int middle = m_width / 2;
+    KWFrame *frame = internalToContents( QPoint(0, yp), p );
+    ASSERT(frame);
+    int width = frame ? kWordDocument()->zoomItX( frame->width() ) : 0; // the available width at this height
+    if ( frame )
+        p.setX( width );
+    int middle = width / 2;
     int newMargin = 0;
 
     QListIterator<KWFrame> fIt( m_framesOnTop );
@@ -351,9 +350,12 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
             QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
-                 frameRect.left() - p.x() >= middle ) // adjust the right margin only
+                 p.x() - frameRect.right() < middle ) // adjust the right margin only
                 // for frames which are in the right half
-                newMargin = QMAX( newMargin, m_width - ( frameRect.x() - p.x() ) - space );
+            {
+                newMargin = QMAX( newMargin, p.x() - frameRect.left() + space );
+                kdDebug() << "KWTextFrameSet::adjustRMargin newMargin=" << newMargin << endl;
+            }
         }
         break;
         case RA_SKIP:
@@ -361,7 +363,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
             QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
-                newMargin = QMAX( newMargin, m_width + 1 ); // bigger than the width -> no text here
+                newMargin = QMAX( newMargin, width + 1 ); // bigger than the width -> no text here
         }
         break;
         default: // case RA_NO:
@@ -675,10 +677,11 @@ void KWTextFrameSet::zoom()
     //kdDebug(32002) << "KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
-        QTextFormat * format = it.current();
+        KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
+        ASSERT( format );
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
         //kdDebug(32002) << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
-        format->setPointSize( static_cast<int>( static_cast<float>( format->font().pointSize() ) * factor ) );
+        format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
     }
 
     // Zoom all custom items
