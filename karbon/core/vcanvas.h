@@ -24,8 +24,8 @@
 
 #include <qscrollview.h>
 
-class KarbonPart;
-class KarbonView;
+class KarbonPartBase;
+class KarbonViewBase;
 class KoRect;
 class KoPoint;
 class VPainter;
@@ -36,7 +36,7 @@ class VCanvas : public QScrollView
 {
 	Q_OBJECT
 public:
-	VCanvas( KarbonView* view, KarbonPart* part );
+	VCanvas( KarbonViewBase* view, KarbonPartBase* part );
 
 	void repaintAll( const KoRect & );
 	void repaintAll( bool drawVObjects = true );
@@ -72,8 +72,8 @@ signals:
 
 private:
 	QPixmap *m_pixmap;
-	KarbonPart* m_part;
-	KarbonView* m_view;
+	KarbonPartBase* m_part;
+	KarbonViewBase* m_view;
 
 	bool m_bScrolling;
 	int	m_scrollX;

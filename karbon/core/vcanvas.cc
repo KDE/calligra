@@ -23,9 +23,10 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
+#include "karbon_view_base.h"
+#include "karbon_part_base.h"
 #include "vcanvas.h"
+#include "vdocument.h"
 #include "vpainter.h"
 #include "vqpainter.h"
 #include "vpainterfactory.h"
@@ -36,7 +37,7 @@
 #define PAGE_OFFSETX	20
 #define PAGE_OFFSETY	20
 
-VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
+VCanvas::VCanvas( KarbonViewBase* view, KarbonPartBase* part )
     : QScrollView( view, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
 	  WRepaintNoErase ), m_part( part ), m_view( view )
 {

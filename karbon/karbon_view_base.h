@@ -31,6 +31,7 @@ class KarbonPartBase;
 class VPainterFactory;
 class VCanvas;
 class VTool;
+class KoPoint;
 
 class KarbonViewBase : public KoView
 {
@@ -45,6 +46,9 @@ public:
 
 	// manage tools
 	virtual void registerTool( VTool * ) {}
+
+	virtual bool mouseEvent( QMouseEvent* , const KoPoint & ) = 0;
+	virtual bool keyEvent( QEvent* ) = 0;
 
 protected:
 	KarbonPartBase* m_part;
