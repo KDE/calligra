@@ -245,7 +245,6 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
     }
     else
     {
-
         QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
@@ -274,15 +273,14 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
 QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
     const double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
-    
+
     QSize size( _zoomHandler->zoomSize( ext ) );
     QPixmap pixmap(size);
     QPainter paint;
 
     paint.begin( &pixmap );
 
-    // First, fill with a white background
-    paint.setBackgroundColor( Qt::white );
+    paint.setBackgroundMode(Qt::TransparentMode);
     pixmap.fill( Qt::white );
 
     // Draw background
@@ -290,8 +288,8 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     paint.setBrush( brush );
 
     QRect rect( (int)( penw ), (int)( penw ),
-                (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
-                (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
+                (int)( _zoomHandler->zoomItX( ext.width() ) - 2.0 * penw ),
+                (int)( _zoomHandler->zoomItY( ext.height() ) - 2.0 * penw ) );
 
     if ( fillType == FT_BRUSH || !gradient )
         paint.drawRect( rect );
@@ -299,9 +297,9 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
         // ### TODO: this was also drawn for drawContour==true, but why?
         gradient->setSize( size );
         paint.drawPixmap( (int)( penw ), (int)( penw ),
-                            gradient->pixmap(), 0, 0,
-                            (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
-                            (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
+                          gradient->pixmap(), 0, 0,
+                          (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
+                          (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
     }
 
     image.draw( paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
@@ -380,9 +378,12 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         QPixmap _pixmap = generatePixmap( _zoomHandler );
 #endif
 
-        QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
-
-        _painter->drawPixmap( rect, tmpPix );
+        if (mirrorType != PM_NORMAL || swapRGB || grayscal || bright != 0) {
+            QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
+            _painter->drawPixmap( rect, tmpPix );
+        }
+        else
+            _painter->drawPixmap( rect, _pixmap );
     }
 
     // Draw border
@@ -417,11 +418,11 @@ QPixmap KPPixmapObject::getOriginalPixmap()
 
 QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 {
-
-  if (mirrorType == PM_NORMAL && !swapRGB && !grayscal && bright == 0)
-    return _tmpPixmap;
-
     QImage _tmpImage = _tmpPixmap.convertToImage();
+
+    if (_tmpImage.isNull())
+        return _tmpPixmap;
+
     bool _horizontal = false;
     bool _vertical = false;
     if ( mirrorType == PM_HORIZONTAL )

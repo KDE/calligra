@@ -49,7 +49,11 @@ public:
     ~KPBackGround() {}
 
     void setBackType( BackType _backType )
-    { backType = _backType; }
+    {
+        backType = _backType;
+        if (backType==BT_PICTURE || backType==BT_CLIPART)
+            removeGradient();
+    }
     void setBackView( BackView _backView )
     { backView = _backView; }
     void setBackColor1( const QColor &_color )
@@ -144,7 +148,7 @@ private:
 
     // Background picture
     KoPicture backPicture;
-    
+
     // Pixmap used to cache the drawing of the gradient, at the current size
     const QPixmap *gradientPixmap;
 

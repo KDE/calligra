@@ -73,11 +73,11 @@ void RotationDialogImpl::angleMode( int id )
 {
     double a = 0;
     if ( id == 1 )
-	a = 0;
+        a = 0;
     else if ( id == 90 || id == 180 || id == 270 )
-	a = id;
+        a = id;
     else
-	a = customInput->value();
+        a = customInput->value();
     _preview->setAngle( a );
 }
 #include "rotationdialogimpl.moc"

@@ -124,7 +124,6 @@ void KPBackGround::reload()
         setBackPicture( backPicture.getKey() );
     else
         backPicture.clear();
-
 }
 
 /*================================================================*/
@@ -182,7 +181,7 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
         }
         else
             element = doc.createElement( "BACKPICTUREKEY" );
-        
+
         backPicture.getKey().saveAttributes( element );
         page.appendChild( element );
     }
@@ -402,18 +401,19 @@ void KPBackGround::load( const QDomElement &element )
 /*================================================================*/
 void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect )
 {
-    if ( bcType == BCT_PLAIN || backColor1 == backColor2 )
+    if ( (backType == BT_COLOR && bcType == BCT_PLAIN) || backColor1 == backColor2 ) //plain color
     {
         //kdDebug(33001) << "KPBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
         _painter->fillRect( crect, QBrush( getBackColor1() ) );
     }
-    else if ( backType == BT_COLOR || ( backType == BT_CLIPART ||
-              backType == BT_PICTURE ) && backView == BV_CENTER ) {
-        // Draw gradient
+    else if (backType == BT_COLOR && bcType != BCT_PLAIN) { //gradient
         if ( !gradientPixmap || gradientPixmap->size() != ext )
             generateGradient( ext );
         _painter->drawPixmap( crect.topLeft(), *gradientPixmap, crect );
     }
+    else /*if ( backType == BT_CLIPART || backType == BT_PICTURE )*/ //no gradient or bg color
+        _painter->fillRect( crect, QBrush( Qt::white ) );
+        return;
 }
 
 /*================================================================*/
@@ -505,7 +505,7 @@ void KPBackGround::generateGradient( const QSize& size )
     }
 
     // Avoid keeping an unused gradient around
-    if ( backType == BT_PICTURE && backView != BV_CENTER && gradientPixmap )
+    if ( (backType == BT_PICTURE || backType==BT_CLIPART) && gradientPixmap )
         removeGradient();
 }
 

@@ -51,7 +51,7 @@ public:
     virtual ~BackPreview();
 
     KPBackGround *backGround() const {
-	return back;
+        return back;
     }
 
 protected:

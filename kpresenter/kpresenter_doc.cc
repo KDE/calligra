@@ -1999,8 +1999,8 @@ void KPresenterDoc::layout()
 {
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
-	KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
-	canvas->layout();
+        KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+        canvas->layout();
     }
 }
 
@@ -2026,10 +2026,10 @@ QRect KPresenterDoc::getPageRect( bool decBorders ) const
     int hei = static_cast<int>(m_pageLayout.ptHeight);
 
     if ( !decBorders ) {
-	br = 0;
-	bt = 0;
-	bl = 0;
-	bb = 0;
+        br = 0;
+        bt = 0;
+        bl = 0;
+        bb = 0;
     }
 
     pw = wid  - ( bl + br );
@@ -2163,8 +2163,8 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
     } else {
 	QString _template;
 	if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-					   "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
-					   "kpresenter_template") == KoTemplateChooseDia::Cancel )
+                                       "", QString::null, QString::null, KoTemplateChooseDia::OnlyTemplates,
+                                       "kpresenter_template") == KoTemplateChooseDia::Cancel )
 	    return QString("");
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
@@ -2281,15 +2281,14 @@ void KPresenterDoc::deSelectAllObj()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KPresenterView*)it.current())->getCanvas()->deSelectAllObj();
-
+        ((KPresenterView*)it.current())->getCanvas()->deSelectAllObj();
 }
 
 void KPresenterDoc::deSelectObj(KPObject *obj)
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KPresenterView*)it.current())->getCanvas()->deSelectObj(obj );
+        ((KPresenterView*)it.current())->getCanvas()->deSelectObj(obj );
 }
 
 void KPresenterDoc::setHeader( bool b )
@@ -2324,7 +2323,7 @@ void KPresenterDoc::updateHeaderFooterButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KPresenterView*)it.current())->updateHeaderFooterButton();
+        ((KPresenterView*)it.current())->updateHeaderFooterButton();
 }
 
 void KPresenterDoc::makeUsedPixmapList()
@@ -2658,7 +2657,7 @@ void KPresenterDoc::reorganizeGUI()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KPresenterView*)it.current())->reorganize();
+        ((KPresenterView*)it.current())->reorganize();
 }
 
 int KPresenterDoc::undoRedoLimit() const

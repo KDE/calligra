@@ -1508,25 +1508,25 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
     if ( m_canvas && !presStarted ) {
         QByteArray data;
         QByteArray replyData;
-	QCString replyType;
-	m_screenSaverWasEnabled = false;
+        QCString replyType;
+        m_screenSaverWasEnabled = false;
         // is screensaver enabled?
         if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
-	    && replyType=="bool")
-	{
+            && replyType=="bool")
+        {
             QDataStream replyArg(replyData, IO_ReadOnly);
-	    replyArg >> m_screenSaverWasEnabled;
-	    if ( m_screenSaverWasEnabled )
-	    {
+            replyArg >> m_screenSaverWasEnabled;
+            if ( m_screenSaverWasEnabled )
+            {
                 // disable screensaver
                 QDataStream arg(data, IO_WriteOnly);
                 arg << false;
                 if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
                     kdWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
-		else
+                else
                     kdDebug(33001) << "Screensaver successfully disabled" << endl;
-	    }
-	}
+            }
+        }
 
         m_canvas->deSelectAllObj();
         presStarted = true;
@@ -1554,11 +1554,11 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         // Center the slide in the screen, if it's smaller...
         pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
         kdDebug(33001) << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
-                  << " " << pgRect.width() << "x" << pgRect.height() << endl;
+                       << " " << pgRect.width() << "x" << pgRect.height() << endl;
         /*if ( deskw > pgRect.width() )
-            xOffset -= ( deskw - pgRect.width() ) / 2;
-        if ( deskh > pgRect.height() )
-            yOffset -= ( deskh - pgRect.height() ) / 2;*/
+          xOffset -= ( deskw - pgRect.width() ) / 2;
+          if ( deskh > pgRect.height() )
+          yOffset -= ( deskh - pgRect.height() ) / 2;*/
 
         vert->setEnabled( false );
         horz->setEnabled( false );
@@ -3217,7 +3217,7 @@ void KPresenterView::setupActions()
     actionViewZoom->setEditable(true);
     changeZoomMenu( );
 
-    actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager..." ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
 
@@ -4032,8 +4032,8 @@ void KPresenterView::reorganize()
 
         horz->show();
         vert->show();
-	pgNext->show();
-	pgPrev->show();
+        pgNext->show();
+        pgPrev->show();
 
         if(kPresenterDoc()->showRuler())
         {
@@ -4076,36 +4076,35 @@ void KPresenterView::reorganize()
     }
     else
     {
-	horz->hide();
-	vert->hide();
-	pgNext->hide();
-	pgPrev->hide();
-	h_ruler->hide();
-	v_ruler->hide();
+        horz->hide();
+        vert->hide();
+        pgNext->hide();
+        pgPrev->hide();
+        h_ruler->hide();
+        v_ruler->hide();
         getTabChooser()->hide();
-	m_canvas->move( 0, 0 );
+        m_canvas->move( 0, 0 );
     }
 }
 
 void PageBase::resizeEvent( QResizeEvent *e )
 {
     if ( !view->presStarted )
-	QWidget::resizeEvent( e );
+        QWidget::resizeEvent( e );
 
     QSize s = e ? e->size() : size();
 
     if ( view->m_bShowGUI ) {
-
         view->m_canvas->resize( s.width() - 36, s.height() - 36 );
-	view->vert->setGeometry( s.width() - 16, 0, 16, s.height() - 32 );
-	view->pgPrev->setGeometry( s.width() - 15, s.height() - 32, 15, 16 );
-	view->pgNext->setGeometry( s.width() - 15, s.height() - 16, 15, 16 );
-	view->horz->setGeometry( 0, s.height() - 16, s.width() - 16, 16 );
+        view->vert->setGeometry( s.width() - 16, 0, 16, s.height() - 32 );
+        view->pgPrev->setGeometry( s.width() - 15, s.height() - 32, 15, 16 );
+        view->pgNext->setGeometry( s.width() - 15, s.height() - 16, 15, 16 );
+        view->horz->setGeometry( 0, s.height() - 16, s.width() - 16, 16 );
     }
     else
     {
-	view->m_canvas->move( 0, 0 );
-	view->m_canvas->resize( s.width(), s.height() );
+        view->m_canvas->move( 0, 0 );
+        view->m_canvas->resize( s.width(), s.height() );
     }
     view->reorganize();
 }
@@ -4144,9 +4143,9 @@ void KPresenterView::getPageMouseWheelEvent( QWheelEvent *e )
 void KPresenterView::keyPressEvent( QKeyEvent *e )
 {
     if ( e->key() == Key_Delete && !m_canvas->currentTextObjectView() )
-	editDelete();
+        editDelete();
     else
-	QApplication::sendEvent( m_canvas, e );
+        QApplication::sendEvent( m_canvas, e );
 }
 
 /*====================== do automatic screenpresentation ========*/
@@ -4435,7 +4434,7 @@ void KPresenterView::setRanges()
 void KPresenterView::skipToPage( int num )
 {
     if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 /*|| m_pKPresenterDoc->isEmbedded()*/ || !m_canvas )
-	return;
+        return;
     m_canvas->exitEditMode();
     vert->setValue( 0 );
     currPg = num;
@@ -4686,7 +4685,7 @@ bool KPresenterView::gotoPresPage( int pg )
 void KPresenterView::nextPage()
 {
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
- 	return;
+        return;
 
     //kdDebug(33001)<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
     skipToPage( currPg+1 );
@@ -4695,7 +4694,7 @@ void KPresenterView::nextPage()
 void KPresenterView::prevPage()
 {
     if ( currPg == 0 )
- 	return;
+        return;
     skipToPage( currPg-1 );
 }
 
@@ -4704,7 +4703,7 @@ void KPresenterView::updateSideBar()
     if ( sidebar )
     {
         sidebar->blockSignals( TRUE );
-	sidebar->thumbBar()->uptodate = false;
+        sidebar->thumbBar()->uptodate = false;
         sidebar->outline()->rebuildItems();
         sidebar->thumbBar()->rebuildItems();
         sidebar->blockSignals( FALSE );
@@ -4775,10 +4774,10 @@ void KPresenterView::updateObjectStatusBarItem()
     if (nbSelected == 1) {
       KPObject * obj = m_canvas->getSelectedObj();
       KoSize size = obj->getSize();
-      m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 -  (width: %2, height: %3)(%4)" )
+      m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 - (width: %2; height: %3)(%4)" )
                                 .arg(obj->getTypeString())
-                                .arg(KoUnit::ptToUnit( size.width(), m_pKPresenterDoc->getUnit() ))
-                                .arg(KoUnit::ptToUnit( size.height(), m_pKPresenterDoc->getUnit() ))
+                                .arg(KGlobal::locale()->formatNumber(KoUnit::ptToUnit( size.width(), m_pKPresenterDoc->getUnit())), 2)
+                                .arg(KGlobal::locale()->formatNumber(KoUnit::ptToUnit( size.height(), m_pKPresenterDoc->getUnit())), 2)
                                 .arg(m_pKPresenterDoc->getUnitName())
                                 );
     }
@@ -5086,7 +5085,9 @@ void KPresenterView::changeLink()
                     if( ref != oldhref || link!=oldLinkName)
                     {
 
-                        KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change Link"), m_pKPresenterDoc,oldhref, ref, oldLinkName,link, var);
+                        KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change Link"),
+                                                                             m_pKPresenterDoc, oldhref,
+                                                                             ref, oldLinkName,link, var);
                         cmd->execute();
                         m_pKPresenterDoc->addCommand(cmd);
                     }
@@ -5113,27 +5114,27 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
     actionTextColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
-      {
-      case KoTextFormat::AlignSuperScript:
+    {
+    case KoTextFormat::AlignSuperScript:
 	{
-	  actionFormatSub->setChecked( false );
-	  actionFormatSuper->setChecked( true );
-	  break;
+        actionFormatSub->setChecked( false );
+        actionFormatSuper->setChecked( true );
+        break;
 	}
-      case KoTextFormat::AlignSubScript:
+    case KoTextFormat::AlignSubScript:
 	{
-	  actionFormatSub->setChecked( true );
-	  actionFormatSuper->setChecked( false );
-	  break;
+        actionFormatSub->setChecked( true );
+        actionFormatSuper->setChecked( false );
+        break;
 	}
-      case KoTextFormat::AlignNormal:
-      default:
+    case KoTextFormat::AlignNormal:
+    default:
 	{
-	  actionFormatSub->setChecked( false );
-	  actionFormatSuper->setChecked( false );
-	  break;
+        actionFormatSub->setChecked( false );
+        actionFormatSuper->setChecked( false );
+        break;
 	}
-      }
+    }
 }
 
 void KPresenterView::slotSoftHyphen()
@@ -5217,8 +5218,8 @@ void KPresenterView::startKSpell()
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
 
 
-     m_spell.kspell->setIgnoreUpperWords(m_pKPresenterDoc->dontCheckUpperWord());
-     m_spell.kspell->setIgnoreTitleCase(m_pKPresenterDoc->dontCheckTitleCase());
+    m_spell.kspell->setIgnoreUpperWords(m_pKPresenterDoc->dontCheckUpperWord());
+    m_spell.kspell->setIgnoreTitleCase(m_pKPresenterDoc->dontCheckTitleCase());
 
     QObject::connect( m_spell.kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
@@ -5231,7 +5232,7 @@ void KPresenterView::startKSpell()
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 #if KDE_VERSION >= 305
-    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
 #endif
 
 }
@@ -5448,8 +5449,10 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
         }
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
-                                     KoParagDia::PD_BORDERS |
-                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS |KoParagDia::PD_SHADOW , m_pKPresenterDoc->getUnit(),edit->kpTextObject()->getSize().width(),false );
+                                     KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
+                                     KoParagDia::PD_TABS | KoParagDia::PD_SHADOW,
+                                     m_pKPresenterDoc->getUnit(),
+                                     edit->kpTextObject()->getSize().width(),false );
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -6034,8 +6037,8 @@ void KPresenterView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
-	if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
-	    lst << i18n( "Zoom to Width" );
+        if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
+            lst << i18n( "Zoom to Width" );
         if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
             lst << i18n( "Zoom to Whole Page" );
         QValueList<int> list;
@@ -6064,20 +6067,20 @@ void KPresenterView::changeZoomMenu( int zoom )
     }
     else
     {
-          lst << i18n( "Zoom to Width" );
-          lst << i18n( "Zoom to Whole Page" );
-          lst << "33%";
-          lst << "50%";
-          lst << "75%";
-          lst << "100%";
-          lst << "125%";
-          lst << "150%";
-          lst << "200%";
-          lst << "250%";
-          lst << "350%";
-          lst << "400%";
-          lst << "450%";
-          lst << "500%";
+        lst << i18n( "Zoom to Width" );
+        lst << i18n( "Zoom to Whole Page" );
+        lst << "33%";
+        lst << "50%";
+        lst << "75%";
+        lst << "100%";
+        lst << "125%";
+        lst << "150%";
+        lst << "200%";
+        lst << "250%";
+        lst << "350%";
+        lst << "400%";
+        lst << "450%";
+        lst << "500%";
     }
     actionViewZoom->setItems( lst );
 }
@@ -6102,7 +6105,8 @@ void KPresenterView::viewZoom( const QString &s )
     int zoom = 0;
     if ( z == i18n("Zoom to Width") )
     {
-        zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
+        zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) /
+                       (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
         ok = true;
     }
     else if ( z == i18n("Zoom to Whole Page") )
@@ -6144,7 +6148,7 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
         double height = zoomHandler()->resolutionY() * zoomHandler()->unzoomItY( rect.height() );
         double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
         zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                         qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
         //zoom before croll canvas.
         viewZoom( QString::number(zoom ) );
         m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
@@ -6159,7 +6163,8 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
 
 void KPresenterView::setZoom( int zoom, bool updateViews )
 {
-    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(),
+                                                           QPaintDevice::x11AppDpiY());
     m_pKPresenterDoc->newZoomAndResolution(updateViews,false);
     m_pKPresenterDoc->updateZoomRuler();
 
@@ -6200,7 +6205,8 @@ void KPresenterView::openThePresentationDurationDialog()
 {
     int totalTime = 0;
     QStringList presentationDurationStringList;
-    for ( QValueList<int>::Iterator it = m_presentationDurationList.begin(); it != m_presentationDurationList.end(); ++it ) {
+    for ( QValueList<int>::Iterator it = m_presentationDurationList.begin();
+          it != m_presentationDurationList.end(); ++it ) {
         int _time = *it;
         QString presentationDurationString = presentationDurationDataFormatChange( _time );
         presentationDurationStringList.append( presentationDurationString );
@@ -6233,24 +6239,9 @@ void KPresenterView::pddClosed()
 // change from milliseconds to hh:mm:ss
 QString KPresenterView::presentationDurationDataFormatChange( int _time )
 {
-    int hours = 0, minutes = 0, seconds = 0;
-
-    _time = _time / 1000;
-    seconds = _time;
-    if ( _time >= 60 ) {
-        seconds = _time % 60;
-        _time = _time - seconds;
-        _time = _time / 60;
-        minutes = _time;
-
-        if ( _time >= 60 ) {
-            minutes = _time % 60;
-            _time = _time - minutes;
-            hours = _time / 60;
-        }
-    }
-
-    return KGlobal::locale()->formatTime( QTime( hours, minutes, seconds ), true );
+    QTime time;
+    time.addMSecs(_time);
+    return KGlobal::locale()->formatTime( time, true );
 }
 
 
@@ -6369,7 +6360,8 @@ void KPresenterView::extraStylist()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         edit->hideCursor();
-    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(),m_pKPresenterDoc, m_pKPresenterDoc->styleCollection()->styleList());
+    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(), m_pKPresenterDoc,
+                                                          m_pKPresenterDoc->styleCollection()->styleList());
     styleManager->exec();
     delete styleManager;
     if ( edit )
@@ -6404,12 +6396,15 @@ void KPresenterView::textStyleSelected( int index )
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
         QPtrListIterator<KPTextObject> it( selectedFrames );
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") : i18n("Apply Style to Frames"));
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") :
+                                                      i18n("Apply Style to Frames"));
         for ( ; it.current() ; ++it )
         {
             KoTextObject *textObject = it.current()->textObject();
             textObject->textDocument()->selectAll( KoTextDocument::Temp );
-            KCommand *cmd = textObject->applyStyle( 0L, m_pKPresenterDoc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
+            KCommand *cmd = textObject->applyStyle( 0L, m_pKPresenterDoc->styleCollection()->styleAt( index ),
+                                                    KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format,
+                                                    true, true );
             textObject->textDocument()->removeSelection( KoTextDocument::Temp );
             if (cmd)
                 globalCmd->addCommand( cmd );
@@ -6732,7 +6727,8 @@ void KPresenterView::zoomMinus()
 
 void KPresenterView::zoomPageWidth()
 {
-    int zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
+    int zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) /
+                       (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
     viewZoom( QString::number(zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
 }
@@ -6777,7 +6773,8 @@ void KPresenterView::zoomSelectedObject()
 
 void KPresenterView::zoomPageHeight()
 {
-    int zoom = qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptHeight ) );
+    int zoom = qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) /
+                       (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptHeight ) );
     viewZoom( QString::number(zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
 }
@@ -6811,7 +6808,6 @@ void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
     if(!koDocument()->isReadWrite() )
         return;
     static_cast<QPopupMenu*>(factory()->container("flip_popup",this))->popup(_point);
-
 }
 
 void KPresenterView::slotObjectEditChanged()
@@ -6938,8 +6934,8 @@ void KPresenterView::duplicateObj()
         QString clip_str = QString::fromUtf8( data->encodedData("application/x-kpresenter-selection") );
         if ( data->provides( "application/x-kpresenter-selection" ) )
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"), nbCopy, angle, increaseX,increaseY, moveX, moveY );
-
+            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
+                                               nbCopy, angle, increaseX,increaseY, moveX, moveY );
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
         }
@@ -7127,7 +7123,6 @@ void KPresenterView::changeVerticalAlignmentStatus(VerticalAlignmentType _type )
         actionAlignVerticalBottom->setChecked( true );
         break;
     }
-
 }
 
 void KPresenterView::autoSpellCheck()

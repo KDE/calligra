@@ -53,7 +53,6 @@ BackPreview::BackPreview( QWidget *parent, KPrPage *page )
     setFrameStyle( WinPanel | Sunken );
     back = new KPBackGround( page );
     setMinimumSize( 300, 200 );
-
 }
 
 BackPreview::~BackPreview()
@@ -307,7 +306,7 @@ void BackDia::updateConfiguration()
         color2Choose->setEnabled( true );
     }
 
-    picChanged = getBackType() == BT_PICTURE;
+    picChanged = (getBackType() == BT_PICTURE);
     preview->backGround()->setBackType( getBackType() );
     preview->backGround()->setBackView( getBackView() );
     preview->backGround()->setBackColor1( getBackColor1() );
@@ -321,7 +320,7 @@ void BackDia::updateConfiguration()
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
         preview->backGround()->reload();
-        preview->repaint( false );
+        preview->repaint( true );
     }
 
     picChanged  = false;
