@@ -469,26 +469,22 @@ void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
 /*======================== paint =================================*/
 void KPEllipseObject::paint( QPainter* _painter )
 {
+    int ow = ext.width();
+    int oh = ext.height();
+    int pw = pen.width() / 2;
+
     if ( drawShadow || fillType == FT_BRUSH || !gradient )
     {
-        int ow = ext.width();
-        int oh = ext.height();
-
         _painter->setPen( pen );
-        int pw = pen.width() / 2;
         _painter->setBrush( brush );
         _painter->drawEllipse( pw, pw, ow - 2 * pw, oh - 2 * pw );
     }
     else
     {
-        int ow = ext.width();
-        int oh = ext.height();
-        int pw = pen.width() / 2;
-
         int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() ) + pw;
         int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() ) + pw;
 
-        if ( angle == 0 )
+        if ( angle == 0 || angle==360 )
         {
             _painter->save();
 
@@ -497,29 +493,30 @@ void KPEllipseObject::paint( QPainter* _painter )
             if ( _painter->hasClipping() )
                 clipregion = _painter->clipRegion().intersect( clipregion );
 
-//            _painter->setClipRegion( clipregion );
+            _painter->setClipRegion( clipregion );
             setupClipRegion( _painter, clipregion );
 
             _painter->drawPixmap( pw, pw, *gradient->getGradient() );
 
             _painter->restore();
         }
-        else
+        else    //lukas: fixme; drawing of gradient backgrounds for rotated ellipses
         {
             if ( redrawPix )
             {
                 redrawPix = false;
                 QRegion clipregion( 0, 0, ow - 2 * pw, oh - 2 * pw, QRegion::Ellipse );
+
                 QPicture pic;
                 QPainter p;
 
                 p.begin( &pic );
-//                p.setClipRegion( clipregion );
+                p.setClipRegion( clipregion );
                 setupClipRegion( &p, clipregion );
                 p.drawPixmap( 0, 0, *gradient->getGradient() );
                 p.end();
 
-                pix.fill( Qt::white );
+                pix.fill( Qt::white );          //kinda hack... does not work with other page backgrounds (like pixmap)
                 QPainter p2;
                 p2.begin( &pix );
                 p2.drawPicture( pic );
@@ -532,6 +529,7 @@ void KPEllipseObject::paint( QPainter* _painter )
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawEllipse( pw, pw, ow - 2 * pw, oh - 2 * pw );
+
     }
 }
 

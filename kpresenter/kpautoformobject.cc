@@ -632,7 +632,7 @@ void KPAutoformObject::paint( QPainter* _painter )
                 _painter->drawPolygon( pntArray2 );
             else
             {
-                if ( angle == 0 )
+                if ( angle == 0 || angle==360 )
                 {
                     int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() );
                     int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() );
@@ -646,14 +646,14 @@ void KPAutoformObject::paint( QPainter* _painter )
                     if ( _painter->hasClipping() )
                         clipregion = _painter->clipRegion().intersect( clipregion );
 
-//                    _painter->setClipRegion( clipregion );
+                    _painter->setClipRegion( clipregion );
                     setupClipRegion( _painter, clipregion );
 
                     _painter->drawPixmap( 0, 0, *gradient->getGradient() );
 
                     _painter->restore();
                 }
-                else
+                else  //lukas: FIXME rotated autoforms && gradient bg
                 {
                     if ( redrawPix )
                     {
@@ -663,7 +663,7 @@ void KPAutoformObject::paint( QPainter* _painter )
                         QPainter p;
 
                         p.begin( &pic );
-//                        p.setClipRegion( clipregion );
+                        p.setClipRegion( clipregion );
                         setupClipRegion( &p, clipregion );
                         p.drawPixmap( 0, 0, *gradient->getGradient() );
                         p.end();
@@ -673,6 +673,7 @@ void KPAutoformObject::paint( QPainter* _painter )
                         p2.begin( &pix );
                         p2.drawPicture( pic );
                         p2.end();
+
                     }
 
                     _painter->drawPixmap( 0, 0, pix );
