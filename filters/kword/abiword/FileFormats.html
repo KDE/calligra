@@ -44,11 +44,7 @@ official, it is just how I have named them.</p>
 <p>They might be also other variations of the file format than those described below.</p>
 
 <p>The CVS dates are the dates when I have tested and found out things. So any
-feature described must have appeared (a little) erlier. The dates are in format year-month-day.</p>
-
-<p>
-<a href="maito:nicog@snafu.de">Nicolas GOUTTE</a>
-(maintainer of KWord's AbiWord filters)</p>
+feature described must have appeared earlier. The dates are in format year-month-day.</p>
 
 <h1>2 AbiWord's File Formats<h1>
 
@@ -109,6 +105,19 @@ The "correct doctype": (AbiWord CVS 2001-08-21) with a DOCTYPE of:
 <span class="doctype">&lt;!DOCTYPE abw PUBLIC
 "-//ABISOURCE//DTD ABW 1.0 Strict//EN" "http://www.abisource.com/awml.dtd"&gt;
 </span>
+</dd>
+
+<dt>New Doc Type / Wrong Name Space Definition</dt>
+<dd>
+The "new doctype": (AbiWord CVS 2002-02-??) with a DOCTYPE of:
+<span class="doctype">&lt;!DOCTYPE abiword PUBLIC
+"-//ABISOURCE//DTD AWML 1.0 Strict//EN" "http://www.abisource.com/awml.dtd"&gt;
+</span>
+The name space definition is wrong because it uses <span class="attribute">xmlns:awml</span>.
+However it is the default name space of the file so it should be defined by
+<span class="attribute">xmlns</span>. The <span class="tags">&lt;abiword&gt;</span>
+tag has new attributes: <span class="attribute">version</span> and
+<span class="attribute">styles</span>.
 </dd>
 
 </body>

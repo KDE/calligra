@@ -31,5 +31,4 @@
 
  You must really look into AbiWord's source code, as you will have the surprise
  to find that the documented file format (also in the source distribution) does
- not tell everything, e.g. the "mime-type" and "base64" attributes in the <d>
- tag.
+ not tell everything.
