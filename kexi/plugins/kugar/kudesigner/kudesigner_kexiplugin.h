@@ -84,6 +84,8 @@ public:
 
 	virtual QString value() const;
 	virtual void setValue(const QString value, bool emitChange=true);
+	static QString convertFromStorageName(const QString& stn);
+	static QString convertToStorageName(const QString& displayname);
 signals:
     void propertyChanged(QString name, QString newValue);
     void propertyChanged(int level, int value);
