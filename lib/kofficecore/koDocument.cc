@@ -362,8 +362,8 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
     if ( (QWidget *)it.current() == widget )
     {
       QPoint canvasPos( it.current()->canvas()->mapFromGlobal( globalPos ) );
-      canvasPos.rx() -= it.current()->canvasXOffset();
-      canvasPos.ry() -= it.current()->canvasYOffset();
+      canvasPos.rx() += it.current()->canvasXOffset();
+      canvasPos.ry() += it.current()->canvasYOffset();
 
       KParts::Part *part = it.current()->hitTest( canvasPos );
       if ( part )

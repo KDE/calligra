@@ -479,13 +479,15 @@ bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsi
     }
 
     if ( _best != -1 ) {
-        _tabPos = static_cast<int>(tabList.at( _best )->ptPos) + _lBorder;
+        _tabPos = static_cast<int>(tabList.at( _best )->ptPos * document->getZoom()) / 100
+                  + _lBorder;
         _tabType = tabList.at( _best )->type;
         return true;
     }
 
     if ( _mostLeft != -1 ) {
-        _tabPos = static_cast<int>(tabList.at( _mostLeft )->ptPos) + _lBorder;
+        _tabPos = static_cast<int>(tabList.at( _mostLeft )->ptPos * document->getZoom()) / 100
+                  + _lBorder;
         _tabType = tabList.at( _mostLeft )->type;
         return true;
     }

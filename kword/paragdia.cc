@@ -1212,13 +1212,9 @@ void KWParagDia::setCounter( KWParagLayout::Counter _counter )
 void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
 {
     lTabs->clear();
-    QString str;
-
     QListIterator<KoTabulator> it(*tabList);
-    for ( it.toFirst(); !it.atLast(); ++it ) {
-        str.sprintf( "%f", tabList->current()->ptPos );
-        lTabs->insertItem( str );
-    }
+    for ( ; it.current(); ++it )
+        lTabs->insertItem(QString::number((*it)->ptPos));
 }
 
 /*================================================================*/

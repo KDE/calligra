@@ -138,6 +138,10 @@ public:
      * Overloaded from View
      */
     int canvasYOffset() const;
+    /**
+     * Overloaded vrom View
+     */
+    void canvasAddChild( KoViewChild *child );
 
 public slots:
     // TEMP function. Pure for debugging.

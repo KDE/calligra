@@ -184,6 +184,16 @@ public:
   virtual int canvasYOffset() const;
 
   /**
+   * Overload this function if You need to perform some actions
+   * after KoView (the part widget) is inserted into canvas.
+   * You should call for example addChild(QWidget*) method
+   * of QScrollView here, if canvas is a viewport of QScrollView.
+   *
+   * By default this function does nothing.
+   */
+  virtual void canvasAddChild( KoViewChild *child );
+
+  /**
    * @return the selected child. The function returns 0 if
    *         no direct child is currently selected.
    */
@@ -286,10 +296,11 @@ class KoViewChild : public KoChild
 {
   Q_OBJECT
 public:
-  KoViewChild( KoDocumentChild *child, KoFrame *frame );
+  KoViewChild( KoDocumentChild *child, KoView *_parentView );
   virtual ~KoViewChild();
 
   KoDocumentChild *documentChild() const { return m_child; }
+  KoView *parentView() const { return m_parentView; }
   KoFrame *frame() const { return m_frame; }
 
 private slots:
@@ -298,6 +309,7 @@ private slots:
 private:
   QGuardedPtr<KoDocumentChild> m_child;
   QGuardedPtr<KoFrame> m_frame;
+  QGuardedPtr<KoView> m_parentView;
   class KoViewChildPrivate;
   KoViewChildPrivate *d;
 };

@@ -67,43 +67,53 @@ void OptionDialog::createGeneralWidget (QWidget* parent) {
 void OptionDialog::createEditWidget (QWidget* parent) {
 
     QBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
-    QGroupBox *box = new QVGroupBox(i18n("Duplicate Offset"), parent);
+    QGroupBox *box = new QGroupBox(i18n("Duplicate Offset"), parent);
     layout->addWidget(box);
 
-    QHBox *hbox=new QHBox(box);
-    QLabel *label = new QLabel(i18n("Horizontal:"), hbox);
+    QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    vboxlayout->addSpacing(box->fontMetrics().height()/2);
+    QGridLayout *grid=new QGridLayout(vboxlayout, 2, 2);
+    QLabel *label = new QLabel(i18n("Horizontal:"), box);
+    grid->addWidget(label, 0, 0);
 
-    horiz = new UnitBox(hbox);
+    horiz = new UnitBox(box);
     horiz->setRange (-1000.0, 1000.0);
     horiz->setStep (0.1);
     horiz->setEditable (true);
+    grid->addWidget(horiz, 0, 1);
 
-    hbox=new QHBox(box);
-    label = new QLabel(i18n("Vertical:"), hbox);
+    label = new QLabel(i18n("Vertical:"), box);
+    grid->addWidget(label, 1, 0);
 
-    vert = new UnitBox(hbox);
+    vert = new UnitBox(box);
     vert->setRange (-1000.0, 1000.0);
     vert->setStep (0.1);
     vert->setEditable (true);
+    grid->addWidget(vert, 1, 1);
 
-    box = new QVGroupBox(i18n("Step Distance"), parent);
+    box = new QGroupBox(i18n("Step Distance"), parent);
     layout->addWidget(box);
 
-    hbox=new QHBox(box);
-    label = new QLabel(i18n("Small step:"), hbox);
+    vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    vboxlayout->addSpacing(box->fontMetrics().height()/2);
+    grid=new QGridLayout(vboxlayout, 2, 2);
+    label = new QLabel(i18n("Small step:"), box);
+    grid->addWidget(label, 0, 0);
 
-    smallStep = new UnitBox(hbox);
+    smallStep = new UnitBox(box);
     smallStep->setRange (-1000.0, 1000.0);
     smallStep->setStep (0.1);
     smallStep->setEditable (true);
+    grid->addWidget(smallStep, 0, 1);
 
-    hbox=new QHBox(box);
-    label = new QLabel(i18n("Big step:"), hbox);
+    label = new QLabel(i18n("Big step:"), box);
+    grid->addWidget(label, 1, 0);
 
-    bigStep = new UnitBox(hbox);
+    bigStep = new UnitBox(box);
     bigStep->setRange (-1000.0, 1000.0);
     bigStep->setStep (0.1);
     bigStep->setEditable (true);
+    grid->addWidget(bigStep, 1, 1);
 
     PStateManager *psm = PStateManager::instance ();
     horiz->setValue (psm->duplicateXOffset ());

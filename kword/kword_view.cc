@@ -61,6 +61,7 @@
 #include <koPartSelectDia.h>
 #include <kformulaedit.h>
 #include <koTemplateCreateDia.h>
+#include <koFrame.h>
 
 #include <kapp.h>
 #include <kfiledialog.h>
@@ -2804,7 +2805,7 @@ bool KWordView::doubleClickActivation() const
 /*================================================================*/
 QWidget* KWordView::canvas()
 {
-    return gui->getPaperWidget();
+    return gui->getPaperWidget()->viewport();
 }
 
 /*================================================================*/
@@ -2817,7 +2818,11 @@ int KWordView::canvasYOffset() const
 {
     return gui->getPaperWidget()->contentsY();
 }
-
+/*================================================================*/
+void KWordView::canvasAddChild( KoViewChild *child )
+{
+    gui->getPaperWidget()->addChild( child->frame() );
+}
 
 /*===============================================================*/
 void KWordView::printDebug() {

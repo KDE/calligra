@@ -216,7 +216,7 @@ void KIllustratorView::createMyGUI()
 
     // Extra menu
     new KAction( i18n("&Blend..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
-    new KAction( i18n("&Load Palette..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" );
+    //new KAction( i18n("&Load Palette..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" ); // not implemented yet (Werner)
 
     // Settings
     new KAction( i18n("&Configure..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
