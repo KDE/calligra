@@ -363,18 +363,7 @@ void KoStyleManager::moveUpStyle()
         save();
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
-    for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next(), ++pos )
-    {
-        if ( p->name() == currentStyleName )
-        {
-            // We have "prev" "p" and we want "p" "prev"
-            m_changedStyles.insert( pos-1, p ); // "p" "prev" "p"
-            m_changedStyles.take( pos+1 );      // Remove last "p"
-            m_origStyles.insert( pos-1, p ); // "p" "prev" "p"
-            m_origStyles.take( pos+1 );      // Remove last "p"
-            break;
-        }
-    }
+
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
@@ -402,21 +391,6 @@ void KoStyleManager::moveDownStyle()
         save();
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
-    for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next(), ++pos )
-    {
-        if ( p->name() == currentStyleName )
-        {
-            KoStyle * next = m_changedStyles.at(pos+1);
-            if (!next) return;
-            // We have "p" "next" and we want "next" "p"
-            m_changedStyles.insert( pos, next ); // "next", "p", "next"
-            m_changedStyles.take( pos+2 );       // Remove last "next"
-            m_origStyles.insert( pos, next ); // "next", "p", "next"
-            m_origStyles.take( pos+2 );       // Remove last "next"
-            break;
-        }
-    }
-
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
