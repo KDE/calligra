@@ -6,14 +6,62 @@
 #define __VPATH_H__
 
 #include <qlist.h>
+#include <qpointarray.h>
 
 #include "vobject.h"
+#include "vrect.h"
 
 class VAffineMap;
 class VPoint;
 
-// VPaths are the most common high-level objects. They consist of lines and
-// bezier-curves.
+// VPaths are the most common high-level objects. They consist of
+// VSegments, which are VLines or VBeziers.
+
+// VSegment is the abstract base class for VLine and VBezier
+class VSegment
+{
+public:
+	VSegment() {}
+	virtual ~VSegment();
+
+	virtual const QPointArray& getQPointArray( const double& zoomFactor ) = 0;
+
+protected:
+	// m_firstPoint is actually a waste, but helps making segments "autarc"
+	VPoint* m_firstPoint;
+	VPoint* m_lastPoint;
+
+	mutable QPointArray m_QPointArray;
+};
+
+
+class VLine : VSegment
+{
+public:
+	VLine() {}
+	~VLine() {}
+
+	const QPointArray& getQPointArray( const double& zoomFactor ) {};
+};
+
+
+class VBezier : VSegment
+{
+public:
+	VBezier() {}
+	virtual ~VBezier() {}
+
+	const QPointArray& getQPointArray( const double& zoomFactor ) {};
+
+private:
+	VPoint* m_firstCtrlPoint;
+	VPoint* m_lastCtrlPoint;
+
+	// a bezier lies completely inside the "minmax box" (this information is
+	// usefull for speeding up intersection-calculations):
+	VRect m_minMaxBox;
+};
+
 
 class VPath : public VObject
 {
@@ -25,6 +73,7 @@ public:
 		const double& zoomFactor );
 
 	const VPoint* currentPoint() const;
+	const QList<VSegment>& segments() { return m_segments; }
 
 	// postscript-compliant commands:
 	void moveTo( const double& x, const double& y );
@@ -48,22 +97,16 @@ public:
 	virtual void skew( const double& ang );
 	virtual void apply( const VAffineMap& affmap );
 
-	virtual const VRect& boundingBox() const;
-
 private:
-	// a segment is either a line with coordinates p0 and p1 or a bezier-curve with
-	// coordinates p0, p1, p2 and p3. Because all segments share one point (in our
-	// case it's p3), we skip p0 for each segment. The very first
-	// segment is therefor special and only represents the first path-point (p3).
-	struct Segment {
-		// (skipping p0)
-		VPoint* p1;	// control point
-		VPoint* p2;	// control point
-		VPoint* p3;	// end point
-	};
+	// we store all used VPoints in m_pointPool. this way, we can apply
+	// operations on them without having to fear dong that unwished multiple times
+	// for shared points.
+ 	QList<VPoint>	m_pointPool;
+
+	// m_segments store all segemnts ( lines or beziers)
+	QList<VSegment>	m_segments;
 
 	bool m_isClosed;
-	mutable QList<Segment> m_segments;
 };
 
 #endif

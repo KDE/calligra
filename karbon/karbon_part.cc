@@ -16,7 +16,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	// create a layer. we need at least one:
-	layers().append( new VLayer() );
+	m_layers.append( new VLayer() );
 
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -40,16 +40,17 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	path->arcTo(x1,y1,x2,y2,100.0);
 	path->close();
 	path->scale( 2.0, 1.0 );
-	layers().last()->objects().append( path );
+	m_layers.last()->objects().append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
 KarbonPart::~KarbonPart()
 {
-	for ( VLayer* layer = layers().first(); layer != 0L; layer = layers().next() )
+	QListIterator<VLayer> i( m_layers );
+	for ( ; i.current() ; ++i )
 	{
-		delete( layer );
+		delete( i.current() );
 	}
 }
 

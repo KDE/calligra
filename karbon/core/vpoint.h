@@ -16,9 +16,8 @@
 class VPoint
 {
 public:
-	VPoint();
+	VPoint( const double x = 0.0, const double y = 0.0 );
 	VPoint( const VPoint& point );
-	VPoint( const double& x, const double& y );
 
 	// convert to QPoint and recalculate if necessary:
 	const QPoint& getQPoint( const double& zoomFactor ) const;
@@ -50,9 +49,10 @@ public:
 private:
 	double m_x;
 	double m_y;
-	mutable QPoint m_QPoint;	// for painting
 
 	unsigned int m_refCount;	// how many objects use this vpoint ?
+
+	mutable QPoint m_QPoint;	// for painting
 };
 
 inline bool operator ==( const VPoint& l, const VPoint& r )

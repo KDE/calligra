@@ -17,6 +17,7 @@ class VObject
 {
 public:
 	VObject();
+	virtual ~VObject() {}
 
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double& zoomFactor ) = 0;
@@ -29,7 +30,7 @@ public:
 	virtual void skew( const double& ang ) = 0;
 	virtual void apply( const VAffineMap& affmap ) = 0;
 
-	virtual const VRect& boundingBox() const = 0;
+	const VRect& boundingBox() const { return m_boundingBox; }
 
 protected:
 	// QRect as boundingBox is sufficent since it's not used for calculating

@@ -33,8 +33,8 @@ KarbonFactory::~KarbonFactory()
 {
 	if ( s_instance )
 	{
-	delete s_instance;
-	s_instance = 0L;
+		delete s_instance;
+		s_instance = 0L;
 	}
 
 	if ( s_aboutData )
@@ -49,11 +49,14 @@ KarbonFactory::createPart( QWidget *parentWidget, const char *widgetName,
 	QObject* parent, const char* name, const char* classname, const QStringList & )
 {
 	// If classname is "KoDocument", our host is a koffice application
-	// otherwise, the host wants us as a simple part, so switch to readonly and single view.
+	// otherwise, the host wants us as a simple part, so switch to readonly and
+ 	// single view.
 	bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-	// parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
-	KarbonPart* part = new KarbonPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
+	// parentWidget and widgetName are used by KoDocument for the
+ 	// "readonly+singleView" case.
+	KarbonPart* part =
+		new KarbonPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
 	if ( !bWantKoDocument )
 	  part->setReadWrite( false );
@@ -70,10 +73,19 @@ KarbonFactory::aboutData()
 	if ( !s_aboutData )
 	{
 		s_aboutData = new KAboutData(
-			"karbon",I18N_NOOP("Karbon"),
-			"0.0.1", I18N_NOOP("A Vector Graphics Program"), KAboutData::License_GPL,
-			"(c) 2001, The Karbon Developers" );
-		s_aboutData->addAuthor( "Lennart Kudling", 0, "kudling@kde.org" );
+			"karbon",I18N_NOOP( "Karbon" ),
+			"0.0.1", I18N_NOOP( "Yet Another Vector Graphics Program" ),
+			KAboutData::License_GPL,
+			I18N_NOOP( "(c) 2001, The Karbon Developers" ) );
+		s_aboutData->addAuthor(
+			"Lennart Kudling",
+			I18N_NOOP( "Idea, current maintainer" ),
+			"kudling@kde.org",
+			"http://www.kudling.de" );
+
+		s_aboutData->addCredit( "Simon Hausmann" );
+		s_aboutData->addCredit( "Frerich Raabe" );
+		s_aboutData->addCredit( "Nikolas Zimmermann" );
 	}
 	return s_aboutData;
 }
@@ -87,7 +99,7 @@ KarbonFactory::instance()
 		// Add any application-specific resource directories here
 
 		// Tell the iconloader about share/apps/koffice/icons
-		s_instance->iconLoader()->addAppDir("koffice");
+		s_instance->iconLoader()->addAppDir( "koffice" );
 	}
 	return s_instance;
 }

@@ -9,3 +9,11 @@ VRect::VRect()
 
 }
 
+const QRect&
+VRect::getQRect( const double& zoomFactor ) const
+{
+	m_QRect.moveTopLeft( topLeft().getQPoint( zoomFactor ) );
+	m_QRect.moveBottomRight( bottomRight().getQPoint( zoomFactor ) );
+
+	return m_QRect;
+}

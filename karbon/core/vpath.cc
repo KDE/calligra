@@ -5,35 +5,36 @@
 #include <kdebug.h>
 
 #include <qpainter.h>
-#include <qpointarray.h>
 #include <math.h>
 
 #include "vaffinemap.h"
 #include "vpath.h"
 #include "vpoint.h"
 
+
+VSegment::~VSegment()
+{
+	// delete first and last point, if we are the remaining referer:
+	if ( m_firstPoint && m_firstPoint->unref() > 0 )
+		delete( m_firstPoint );
+	if ( m_lastPoint && m_lastPoint->unref() > 0 )
+		delete( m_lastPoint );
+}
+
+
 VPath::VPath()
 	: VObject(), m_isClosed(false)
 {
-	// we always need a current point ( 0.0, 0.0 ):
-	m_segments.append( new Segment );
-	m_segments.getLast()->p1 = 0L;
-	m_segments.getLast()->p2 = 0L;
-	m_segments.getLast()->p3 = new VPoint();
+	// create a current point( 0.0, 0.0 ):
+	m_pointPool.append( new VPoint() );
 }
 
 VPath::~VPath()
 {
-	for ( Segment* segment=m_segments.first(); segment!=0L;
- segment=m_segments.next() )
-	{
-		if ( segment->p1 )	// control-points are never shared
-			delete( segment->p1 );
-		if ( segment->p2 )
-			delete( segment->p2 );
-		if ( segment->p3 && segment->p3->unref()==0 )
-			delete( segment->p3 );
-	}
+// TODO: should we be polite and destruct the QLists as well ?
+	// delete segments. they are then deleting their points.
+	for ( QListIterator<VSegment> i( m_segments ); i.current() ; ++i )
+		delete( i.current() );
 }
 
 void
@@ -41,20 +42,18 @@ VPath::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 {
 // TODO:
 // - think about QPoint-Caching
-// - Qt's quadBezier() looks ugly for small arcs. think about stealing
-//   a better routine from someone
-
+// - have a deep look at Qt's quadBezier()
+/*
 	painter.save();
 
 	// walk down all Segments and add their QPoints into a QPointArray
-
-	Segment* segment = m_segments.first();	// first segment
+	QListIterator<Segment> i( m_segments );
 	VPoint* prevPoint( 0L );	// previous point (for calculating beziers)
 	QPointArray qpa;
 
-	if ( segment!=0L )
+	if ( i.current() )
 	{
-		prevPoint = segment->p3;
+		prevPoint = i.current()->p3;
 
 		if ( !isClosed() ) // only paint first point if path isnt closed:
 		{
@@ -138,12 +137,13 @@ VPath::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 		painter.drawPolyline( qpa );
 
 	painter.restore();
+*/
 }
 
 const VPoint*
 VPath::currentPoint() const
 {
-	return( m_segments.getLast()->p3 );
+	return( m_pointPool.getLast() );
 }
 
 void
@@ -152,7 +152,7 @@ VPath::moveTo( const double& x, const double& y )
 // TODO: should it affect last point of a primitive or not ?
 	if ( isClosed() ) return;
 
-	m_segments.getLast()->p3->moveTo( x, y );
+	m_pointPool.last()->moveTo( x, y );
 }
 
 void
@@ -160,18 +160,18 @@ VPath::rmoveTo( const double& dx, const double& dy )
 {
 	if ( isClosed() ) return;
 
-	m_segments.getLast()->p3->rmoveTo( dx, dy );
+	m_pointPool.last()->rmoveTo( dx, dy );
 }
 
 void
 VPath::lineTo( const double& x, const double& y )
 {
 	if ( isClosed() ) return;
-
+/*
 	m_segments.append( new Segment );
 	m_segments.getLast()->p1 = 0L;
 	m_segments.getLast()->p2 = 0L;
-	m_segments.getLast()->p3 = new VPoint( x, y );
+	m_segments.getLast()->p3 = new VPoint( x, y ); */
 }
 
 void
@@ -179,11 +179,11 @@ VPath::curveTo( const double& x1, const double& y1, const double& x2,
 	const double& y2, const double& x3, const double& y3 )
 {
 	if ( isClosed() ) return;
-
+/*
 	m_segments.append( new Segment );
 	m_segments.getLast()->p1 = new VPoint( x1, y1 );
 	m_segments.getLast()->p2 = new VPoint( x2, y2 );
-	m_segments.getLast()->p3 = new VPoint( x3, y3 );
+	m_segments.getLast()->p3 = new VPoint( x3, y3 ); */
 }
 
 void
@@ -193,7 +193,7 @@ VPath::arcTo( const double& x1, const double& y1,
 	// parts of this routine are inspired by GNU ghostscript
 
 	if ( isClosed() ) return;
-
+/*
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
 	double dx10 = m_segments.getLast()->p3->x() - x1;
@@ -257,14 +257,14 @@ VPath::arcTo( const double& x1, const double& y1,
 		m_segments.getLast()->p1 = new VPoint( bx1, by1 );
 		m_segments.getLast()->p2 = new VPoint( bx2, by2 );
 		m_segments.getLast()->p3 = new VPoint( bx3, by3 );
-	}
+	} */
 }
 
 void
 VPath::close()
 {
 	if ( isClosed() ) return;
-
+/*
 // TODO: dont "close" a single line
 	// draw a line if last point differs from first point
 	if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
@@ -280,7 +280,7 @@ VPath::close()
 		m_segments.getLast()->p3 = m_segments.getFirst()->p3;
 
 		m_isClosed = true;
-	}
+	} */
 }
 
 void
@@ -334,25 +334,22 @@ VPath::skew( const double& ang )
 void
 VPath::apply( const VAffineMap& affmap )
 {
-	Segment* segment = m_segments.first();	// first segment
+/*
+	QListIterator<Segment> i( m_segments );
 
 	// only apply map to first point if path isnt closed:
 	if ( !isClosed() && segment->p3 )
-		*(segment->p3) = affmap.map( *(segment->p3) );
+		*(i.current()->p3) = affmap.map( *(i.current()->p3) );
 
-	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
+	++i;
+
+	for ( ; i.current() ; ++i )
 	{
-		if ( segment->p1 )
-			*(segment->p1) = affmap.map( *(segment->p1) );
-		if ( segment->p2 )
-			*(segment->p2) = affmap.map( *(segment->p2) );
-		if ( segment->p3 )
-			*(segment->p3) = affmap.map( *(segment->p3) );
-	}
-}
-
-const VRect&
-VPath::boundingBox() const
-{
-	return m_boundingBox;
+		if ( i.current()->p1 )
+			*(i.current()->p1) = affmap.map( *(i.current()->p1) );
+		if ( i.current()->p2 )
+			*(i.current()->p2) = affmap.map( *(i.current()->p2) );
+		if ( i.current()->p3 )
+			*(i.current()->p3) = affmap.map( *(i.current()->p3) );
+	} */
 }

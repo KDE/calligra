@@ -7,18 +7,14 @@
 const double
 VPoint::s_fractInvScale = 1.0/s_fractScale;
 
-VPoint::VPoint()
-	: m_x( 0.0 ), m_y( 0.0 ), m_refCount( 1 )
+
+VPoint::VPoint( const double x, const double y )
+	: m_x( x ), m_y( y ), m_refCount( 1 )
 {
 }
 
 VPoint::VPoint( const VPoint& point )
 	: m_x( point.m_x ), m_y( point.m_y ), m_refCount( 1 )
-{
-}
-
-VPoint::VPoint( const double& x, const double& y )
-	: m_x( x ), m_y( y ), m_refCount( 1 )
 {
 }
 
