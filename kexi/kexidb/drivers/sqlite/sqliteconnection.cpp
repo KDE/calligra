@@ -104,7 +104,7 @@ bool SQLiteConnection::drv_disconnect()
 bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 {
 	//this is one-db-per-file database
-	list.append( m_data->dbFileName() );
+	list.append( m_data->fileName() ); //more consistent than dbFileName() ?
 	return true;
 }
 
