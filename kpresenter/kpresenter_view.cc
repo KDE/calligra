@@ -1951,8 +1951,8 @@ void KPresenterView::initGui()
     actionTextColor->setCurrentColor( Qt::black );
     actionBrushColor->setCurrentColor( Qt::white );
     actionPenColor->setCurrentColor( Qt::black );
-    ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
-    ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
+    actionScreenPenColor->setColor( Qt::red );
+    actionScreenPenWidth->setCurrentItem( 2 );
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
     objectSelectedChanged();
     refreshPageButton();
@@ -2485,9 +2485,11 @@ void KPresenterView::objectSelectedChanged()
     actionFormatStrikeOut->setEnabled(isText);
     actionFormatSuper->setEnabled(isText);
     actionFormatSub->setEnabled(isText);
-    actionInsertSpecialChar->setEnabled(isText);
-    actionInsertLink->setEnabled(isText);
-    actionEditFind->setEnabled(isText && page->currentTextObjectView());
+
+    KPTextView *edit=page->currentTextObjectView();
+    actionInsertSpecialChar->setEnabled(edit && isText);
+    actionInsertLink->setEnabled(edit && isText);
+    actionEditFind->setEnabled(isText && edit);
 
     state=state || isText;
     actionEditCopy->setEnabled(state);
