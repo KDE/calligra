@@ -4808,7 +4808,6 @@ void KPresenterView::editCustomVars()
     if(dia.exec())
     {
         m_pKPresenterDoc->recalcVariables( VT_CUSTOM );
-        //temporaly hack, for the moment we can't undo/redo change custom variables
         QPtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
         KMacroCommand * macroCommand = 0L;
         int i=0;
@@ -5250,8 +5249,7 @@ QString KPresenterView::presentationDurationDataFormatChange( int _time )
         seconds = _time;
     }
 
-    QString presentationDurationString = "";
-    return presentationDurationString.sprintf( "%02d:%02d:%02d", hours, minutes, seconds );
+    return KGlobal::locale()->formatTime(QTime(hours, minutes, seconds) );
 }
 
 
