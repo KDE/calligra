@@ -96,6 +96,8 @@ VZoomTool::mouseButtonPress()
 void
 VZoomTool::mouseButtonRelease()
 {
+	view()->setZoom( view()->zoom() * 1.5 );
+	view()->part()->repaintAllViews();
 }
 
 void

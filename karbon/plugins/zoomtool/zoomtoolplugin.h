@@ -42,7 +42,7 @@ public:
 
 	virtual QString name() { return i18n( "Zoom Tool" ); }
 	virtual QString contextHelp();
-	virtual QString icon() { return "zoom"; }
+	virtual QString icon() { return "14_zoom"; }
 
 protected:
 	void draw();
