@@ -21,6 +21,8 @@
 #include "kudesigner_factory.h"
 #include "kudesigner_part.h"
 
+#include <map>
+
 #include <qpainter.h>
 #include <qiconset.h>
 #include <qinputdialog.h>
@@ -41,6 +43,7 @@
 #include "cspecialfield.h"
 #include "mycanvas.h"
 #include "propertyeditor.h"
+#include "property.h"
 
 KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
@@ -63,6 +66,10 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
         pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
         shell()->addDockWindow(pe, DockRight);
         pe->show();
+
+        connect(rc, SIGNAL( selectionMade(std::map<QString, Property>*) ), pe,
+            SLOT( populateProperties(std::map<QString, Property>*) ));
+        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
     }
 
     rc->itemToInsert = 0;

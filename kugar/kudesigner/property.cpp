@@ -67,21 +67,25 @@ void Property::setValue(QString value)
 }
 
 
-QWidget *editorOfType(int type, QWidget *parent)
+QWidget *Property::editorOfType(int type, QWidget *parent)
 {
     switch (type)
     {
         case IntegerValue:
+            return new QLineEdit(parent);
             break;
 
         case CheckedValue:
         case LineStyle:
+            return new QLineEdit(parent);
             break;
 
         case Color:
+            return new QLineEdit(parent);
             break;
 
         case FontName:
+            return new QLineEdit(parent);
             break;
 
         case StringValue:

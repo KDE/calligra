@@ -20,6 +20,13 @@
 
 #include <qdockwindow.h>
 
+#include <map>
+
+class QWidget;
+class QTable;
+class QString;
+class Property;
+
 /**
   *@author Alexander Dymo
   Docked window that contains property editor - QTable with customized editors
@@ -31,6 +38,14 @@ class PropertyEditor : public QDockWindow  {
 public: 
     PropertyEditor( Place p = InDock, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
     ~PropertyEditor();
+
+public slots:
+    void populateProperties(std::map<QString, Property> *v_props);
+    void clearProperties();
+            
+private:
+    QTable *table;
+    std::map<QString, Property> *props;
 };
 
 #endif

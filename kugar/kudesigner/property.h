@@ -65,7 +65,8 @@ enum PropertyType {
   for various elements and then display them in a property editor. 
 */
 class Property {
-public: 
+public:
+    Property() {}
     Property(int type, QString name, QString value);
     ~Property();
 
@@ -84,7 +85,6 @@ protected:
     int m_type;
     QString m_name;
     QString m_value;
-
 };
 
 

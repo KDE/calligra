@@ -37,6 +37,8 @@
 #include "ccalcfield.h"
 #include "cline.h"
 
+#include "property.h"
+
 void SelectionRect::draw(QPainter & painter)
 {
 //    painter.setPen(Qt::NoPen);
@@ -482,6 +484,12 @@ void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
         unselectAll();
     selected.append(it);
     it->setSelected(true);
+
+    std::map<QString, Property> selProps;
+    Property p(StringValue, "Text", "");
+    selProps["Text"] = p;
+    
+    emit selectionMade(&selProps);
 }
 
 void ReportCanvas::unselectItem(CanvasBox *it)

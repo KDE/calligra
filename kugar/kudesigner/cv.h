@@ -1,4 +1,4 @@
-                /***************************************************************************
+/***************************************************************************
                           cv.h  -  description
                              -------------------
     begin                : 07.06.2002
@@ -17,6 +17,8 @@
 #ifndef CV_H
 #define CV_H
 
+#include <map>
+
 #include <qcanvas.h>
 #include <kglobalsettings.h>
 #include <qpainter.h>
@@ -26,6 +28,7 @@ class CanvasReportItem;
 class QMouseEvent;
 class QCanvasItemList;
 class CanvasBox;
+class Property;
 
 class SelectionRect: public QCanvasRectangle{
 public:
@@ -81,6 +84,11 @@ be unchecked. */
   void selectedActionProcessed();
   void selectedEditActionProcessed();
   void modificationPerformed();
+
+  /** Emitted when selection is made, so that property editor can display properties
+      for the selected items. */
+  void selectionMade(std::map<QString, Property> *v_props);
+  void selectionClear();
 };
 
 #endif
