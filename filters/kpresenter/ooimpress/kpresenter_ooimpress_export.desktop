@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=OpenOffice.org Impress Export Filter for KPresenter
+X-KDE-Export=application/vnd.sun.xml.impress
+X-KDE-Import=application/x-kpresenter
+X-KDE-Weight=1
+X-KDE-Library=libooimpressexport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
