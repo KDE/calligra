@@ -1305,6 +1305,7 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
   {
     selectionInfo()->setCursorPosition(destination);
   }
+  m_pView->updateEditWidget();
 }
 
 void KSpreadCanvas::processEnterKey(QKeyEvent* event)
