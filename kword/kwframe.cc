@@ -1726,6 +1726,7 @@ void KWFormulaFrameSet::slotFormulaChanged( int width, int height )
     kWordDocument()->layout();
     if ( ( oldWidth != newWidth ) || ( oldHeight != newHeight ) ) {
         kWordDocument()->repaintAllViews( false );
+        kWordDocument()->updateRulerFrameStartEnd();
     }
 
     m_changed = true;
@@ -1832,8 +1833,7 @@ void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
             break;
         }
     }
-    formulaView->keyPressEvent( event );
-    m_canvas->kWordDocument()->updateRulerFrameStartEnd();
+    formulaView->keyPressEvent( event );;
 }
 
 void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
