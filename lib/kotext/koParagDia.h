@@ -236,6 +236,7 @@ signals:
     void sig_startChanged( int );
     void sig_restartChanged(bool);
     void sig_depthChanged(int);
+    void sig_displayLevelsChanged(int);
     void sig_suffixChanged(const QString &);
     void sig_prefixChanged(const QString &);
     void sig_numTypeChanged( int );
@@ -245,6 +246,7 @@ protected slots:
     void startChanged(int i) {m_counter.setStartNumber(i);emit sig_startChanged(i);}
     void restartChanged(bool b) {m_counter.setRestartCounter(b);emit sig_restartChanged(b);}
     void depthChanged(int i) {m_counter.setDepth(i);emit sig_depthChanged(i);}
+    void displayLevelsChanged(int i) {m_counter.setDisplayLevels(i);emit sig_displayLevelsChanged(i);}
     void suffixChanged(const QString & txt) {m_counter.setSuffix(txt);emit sig_suffixChanged(txt); }
     void prefixChanged(const QString & txt) {m_counter.setPrefix(txt);emit sig_prefixChanged(txt); }
 
@@ -299,6 +301,7 @@ protected slots:
     void startChanged(int i) {m_counter.setStartNumber(i); updatePreview();}
     void restartChanged(bool b) {m_counter.setRestartCounter(b); }
     void depthChanged(int i) {m_counter.setDepth(i); updatePreview();}
+    void displayLevelsChanged(int i) {m_counter.setDisplayLevels(i); updatePreview();}
     void slotChangeCustomBullet( const QString & f, QChar c);
     void styleChanged (KoParagCounter::Style st );
 
