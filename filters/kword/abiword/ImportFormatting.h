@@ -40,10 +40,10 @@
  * States
  *
  * Tags that we do not care of:
- *  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>, <metadata>
+ *  \<abiword\> (or \<awml\>), \<data\>, \<styles\>, \<ignorewords\>, \<lists\>, \<metadata\>
  *
  * Tags that we do not support (however KWord could):
- *  <bookmark>, <l>
+ *  \<bookmark\>, \<l\>
  *
  * Tags that we cannot support (lack of support in KWord):
  *  N/A
@@ -86,7 +86,7 @@ public:
     int         fontSize;
     int         pos; ///< Position
     bool        italic;
-    bool        bold;   ///< bold but for <d>: is base64 coded?
+    bool        bold;   ///< bold but for \<d\>: is base64 coded?
     bool        underline;
     bool        strikeout;
     QColor      fgColor;
