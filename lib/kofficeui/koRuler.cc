@@ -892,7 +892,7 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
 
 double KoRuler::makeIntern( double _v )
 {
-    return KoUnit::fromUserValue( _v, m_unit );
+    return KoUnit::fromUserValue( QString::number(_v), m_unit );
 }
 
 void KoRuler::setupMenu()

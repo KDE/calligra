@@ -20,6 +20,7 @@
 //#include <koGlobal.h>
 #include "koUnit.h"
 #include <klocale.h>
+#include <kglobal.h>
 
 QString KoUnit::unitDescription( Unit _unit )
 {
@@ -34,4 +35,41 @@ QString KoUnit::unitDescription( Unit _unit )
     default:
         return i18n("Error!");
     }
+}
+
+double KoUnit::ptToUnit( double ptValue, Unit unit )
+{
+    switch ( unit ) {
+    case U_MM:
+        return toMM( ptValue );
+    case U_INCH:
+        return toInch( ptValue );
+    case U_PT:
+    default:
+        return toPoint( ptValue );
+    }
+}
+
+QString KoUnit::userValue( double ptValue, Unit unit )
+{
+    return KGlobal::locale()->formatNumber( ptToUnit( ptValue, unit ) );
+}
+
+double KoUnit::ptFromUnit( double value, Unit unit )
+{
+    switch ( unit ) {
+    case U_MM:
+        return MM_TO_POINT( value );
+    case U_INCH:
+        return INCH_TO_POINT( value );
+    case U_PT:
+    default:
+        return value;
+    }
+}
+
+double KoUnit::fromUserValue( const QString& value, Unit unit )
+{
+    bool ok; // TODO pass as parameter
+    return ptFromUnit( KGlobal::locale()->readNumber( value, &ok ), unit );
 }

@@ -249,7 +249,7 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 KoColumns KoPageLayoutDia::getColumns()
 {
     cl.columns = nColumns->value();
-    cl.ptColumnSpacing = KoUnit::fromUserValue( nCSpacing->text().toDouble(), m_unit  );
+    cl.ptColumnSpacing = KoUnit::fromUserValue( nCSpacing->text(), m_unit  );
     return cl;
 }
 
@@ -263,8 +263,8 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     else if ( rhEvenOdd->isChecked() )
         kwhf.header = HF_EO_DIFF;
 
-    kwhf.ptHeaderBodySpacing = KoUnit::fromUserValue( nHSpacing->text().toDouble(), m_unit );
-    kwhf.ptFooterBodySpacing = KoUnit::fromUserValue( nFSpacing->text().toDouble(), m_unit );
+    kwhf.ptHeaderBodySpacing = KoUnit::fromUserValue( nHSpacing->text(), m_unit );
+    kwhf.ptFooterBodySpacing = KoUnit::fromUserValue( nFSpacing->text(), m_unit );
 
     if ( rfSame->isChecked() )
         kwhf.footer = HF_SAME;
@@ -338,7 +338,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit width
     epgWidth = new QLineEdit( formatFrame, "Width" );
-    epgWidth->setValidator( new KFloatValidator( 0,9999,epgWidth ) );
+    epgWidth->setValidator( new KFloatValidator( 0,9999,true,epgWidth ) );
     epgWidth->setText( i18n("000.00") );
     epgWidth->setMaxLength( 6 );
     epgWidth->setEchoMode( QLineEdit::Normal );
@@ -356,7 +356,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit height
     epgHeight = new QLineEdit( formatFrame, "Height" );
-    epgHeight->setValidator( new KFloatValidator( 0,9999,epgHeight ) );
+    epgHeight->setValidator( new KFloatValidator( 0,9999,true,epgHeight ) );
     epgHeight->setText( i18n("000.00") );
     epgHeight->setMaxLength( 6 );
     epgHeight->setEchoMode( QLineEdit::Normal );
@@ -400,7 +400,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit left
     ebrLeft = new QLineEdit( borderFrame, "Left" );
-    ebrLeft->setValidator( new KFloatValidator( 0,9999,ebrLeft ) );
+    ebrLeft->setValidator( new KFloatValidator( 0,9999,true,ebrLeft ) );
     ebrLeft->setText( i18n("000.00") );
     ebrLeft->setMaxLength( 6 );
     ebrLeft->setEchoMode( QLineEdit::Normal );
@@ -417,7 +417,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit right
     ebrRight = new QLineEdit( borderFrame, "Right" );
-    ebrRight->setValidator( new KFloatValidator( 0,9999,ebrRight ) );
+    ebrRight->setValidator( new KFloatValidator( 0,9999,true,ebrRight ) );
     ebrRight->setText( i18n("000.00") );
     ebrRight->setMaxLength( 6 );
     ebrRight->setEchoMode( QLineEdit::Normal );
@@ -434,7 +434,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit top
     ebrTop = new QLineEdit( borderFrame, "Top" );
-    ebrTop->setValidator( new KFloatValidator( 0,9999,ebrTop ) );
+    ebrTop->setValidator( new KFloatValidator( 0,9999,true,ebrTop ) );
     ebrTop->setText( i18n("000.00") );
     ebrTop->setMaxLength( 6 );
     ebrTop->setEchoMode( QLineEdit::Normal );
@@ -451,7 +451,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit bottom
     ebrBottom = new QLineEdit( borderFrame, "Bottom" );
-    ebrBottom->setValidator( new KFloatValidator( 0,9999,ebrBottom ) );
+    ebrBottom->setValidator( new KFloatValidator( 0,9999,true,ebrBottom ) );
     ebrBottom->setText( i18n("000.00") );
     ebrBottom->setMaxLength( 6 );
     ebrBottom->setEchoMode( QLineEdit::Normal );
@@ -527,12 +527,12 @@ void KoPageLayoutDia::setValuesTab1()
 }
 
 void KoPageLayoutDia::setValuesTab1Helper() {
-    epgWidth->setText( QString::number( KoUnit::userValue( layout.ptWidth, m_unit ) ) );
-    epgHeight->setText( QString::number( KoUnit::userValue( layout.ptHeight, m_unit ) ) );
-    ebrLeft->setText( QString::number( KoUnit::userValue( layout.ptLeft, m_unit ) ) );
-    ebrRight->setText( QString::number( KoUnit::userValue( layout.ptRight, m_unit ) ) );
-    ebrTop->setText( QString::number( KoUnit::userValue( layout.ptTop, m_unit ) ) );
-    ebrBottom->setText( QString::number( KoUnit::userValue( layout.ptBottom, m_unit ) ) );
+    epgWidth->setText( KoUnit::userValue( layout.ptWidth, m_unit ) );
+    epgHeight->setText( KoUnit::userValue( layout.ptHeight, m_unit ) );
+    ebrLeft->setText( KoUnit::userValue( layout.ptLeft, m_unit ) );
+    ebrRight->setText( KoUnit::userValue( layout.ptRight, m_unit ) );
+    ebrTop->setText( KoUnit::userValue( layout.ptTop, m_unit ) );
+    ebrBottom->setText( KoUnit::userValue( layout.ptBottom, m_unit ) );
 }
 
 /*================ setup header and footer tab ===================*/
@@ -624,16 +624,14 @@ void KoPageLayoutDia::setupTab3()
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new QLineEdit( tab3, "" );
-    nCSpacing->setValidator( new KFloatValidator( 0,9999,nCSpacing ) );
+    nCSpacing->setValidator( new KFloatValidator( 0,9999,true,nCSpacing ) );
     nCSpacing->setText( i18n("0.00") );
     nCSpacing->setMaxLength( 5 );
     nCSpacing->setEchoMode( QLineEdit::Normal );
     nCSpacing->setFrame( true );
     grid3->addWidget( nCSpacing, 3, 0 );
 
-    double columnSpacing = KoUnit::userValue( cl.ptColumnSpacing , m_unit );
-
-    nCSpacing->setText( QString::number( columnSpacing ) );
+    nCSpacing->setText( KoUnit::userValue( cl.ptColumnSpacing, m_unit ) );
     connect( nCSpacing, SIGNAL( textChanged( const QString & ) ),
              this, SLOT( nSpaceChanged( const QString & ) ) );
 
@@ -691,14 +689,14 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
     nHSpacing = new QLineEdit( gHeader, "" );
-    nHSpacing->setValidator( new KFloatValidator( 0,9999,nHSpacing ) );
+    nHSpacing->setValidator( new KFloatValidator( 0,9999,true,nHSpacing ) );
     nHSpacing->setText( i18n("0.00") );
     nHSpacing->setMaxLength( 5 );
     nHSpacing->setEchoMode( QLineEdit::Normal );
     nHSpacing->setFrame( true );
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
-    nHSpacing->setText( QString::number( KoUnit::userValue( kwhf.ptHeaderBodySpacing, m_unit ) ) );
+    nHSpacing->setText( KoUnit::userValue( kwhf.ptHeaderBodySpacing, m_unit ) );
 
     headerGrid->addColSpacing( 0, rhSame->width() / 2 );
     headerGrid->addColSpacing( 1, rhSame->width() / 2 );
@@ -748,14 +746,14 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
     nFSpacing = new QLineEdit( gFooter, "" );
-    nFSpacing->setValidator( new KFloatValidator( 0,9999,nFSpacing ));
+    nFSpacing->setValidator( new KFloatValidator( 0,9999,true,nFSpacing ));
     nFSpacing->setText( i18n("0.00") );
     nFSpacing->setMaxLength( 5 );
     nFSpacing->setEchoMode( QLineEdit::Normal );
     nFSpacing->setFrame( true );
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
-    nFSpacing->setText( QString::number( KoUnit::userValue( kwhf.ptFooterBodySpacing, m_unit ) ) );
+    nFSpacing->setText( KoUnit::userValue( kwhf.ptFooterBodySpacing, m_unit ) );
 
     footerGrid->addColSpacing( 0, rfSame->width() / 2 );
     footerGrid->addColSpacing( 1, rfSame->width() / 2 );
@@ -830,8 +828,8 @@ void KoPageLayoutDia::formatChanged( int _format )
         layout.ptWidth = w;
         layout.ptHeight = h;
 
-        epgWidth->setText( QString::number( KoUnit::userValue( layout.ptWidth, m_unit ) ) );
-        epgHeight->setText( QString::number( KoUnit::userValue( layout.ptHeight, m_unit ) ) );
+        epgWidth->setText( KoUnit::userValue( layout.ptWidth, m_unit ) );
+        epgHeight->setText( KoUnit::userValue( layout.ptHeight, m_unit ) );
 
         updatePreview( layout );
     }
@@ -842,12 +840,12 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
 {
     if ( ( KoOrientation )_orientation != layout.orientation ) {
 
-        layout.ptWidth = KoUnit::fromUserValue( epgWidth->text().toDouble(), m_unit );
-        layout.ptHeight = KoUnit::fromUserValue( epgHeight->text().toDouble(), m_unit );
-        layout.ptLeft = KoUnit::fromUserValue( ebrLeft->text().toDouble(), m_unit );
-        layout.ptRight = KoUnit::fromUserValue( ebrRight->text().toDouble(), m_unit );
-        layout.ptTop = KoUnit::fromUserValue( ebrTop->text().toDouble(), m_unit );
-        layout.ptBottom = KoUnit::fromUserValue( ebrBottom->text().toDouble(), m_unit );
+        layout.ptWidth = KoUnit::fromUserValue( epgWidth->text(), m_unit );
+        layout.ptHeight = KoUnit::fromUserValue( epgHeight->text(), m_unit );
+        layout.ptLeft = KoUnit::fromUserValue( ebrLeft->text(), m_unit );
+        layout.ptRight = KoUnit::fromUserValue( ebrRight->text(), m_unit );
+        layout.ptTop = KoUnit::fromUserValue( ebrTop->text(), m_unit );
+        layout.ptBottom = KoUnit::fromUserValue( ebrBottom->text(), m_unit );
 
         qSwap( layout.ptWidth, layout.ptHeight );
 
@@ -877,7 +875,7 @@ void KoPageLayoutDia::changed(QLineEdit *line, double &pt) {
         line->setText( i18n("0.00") );
     if ( line->text().toDouble()<0)
         line->setText( i18n("0.00") );
-    pt = KoUnit::fromUserValue( line->text().toDouble(), m_unit );
+    pt = KoUnit::fromUserValue( line->text(), m_unit );
     retPressed = false;
 }
 
@@ -933,7 +931,7 @@ void KoPageLayoutDia::nColChanged( int _val )
 /*==================================================================*/
 void KoPageLayoutDia::nSpaceChanged( const QString &_val )
 {
-    cl.ptColumnSpacing = KoUnit::fromUserValue( _val.toDouble(), m_unit );
+    cl.ptColumnSpacing = KoUnit::fromUserValue( _val, m_unit );
     updatePreview( layout );
 }
 

@@ -66,31 +66,19 @@ public:
 
     // This method is the one to use to display a value in a dialog
     // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
-    static double userValue( double ptValue, Unit unit ) {
-        switch ( unit ) {
-        case U_MM:
-            return toMM( ptValue );
-        case U_INCH:
-            return toInch( ptValue );
-        case U_PT:
-        default:
-            return toPoint( ptValue );
-        }
-    }
+    static double ptToUnit( double ptValue, Unit unit );
+
+    // This method is the one to use to display a value in a dialog
+    // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
+    static QString userValue( double ptValue, Unit unit );
 
     // This method is the one to use to read a value from a dialog
     // Return the value in @p unit, converted to points for internal use
-    static double fromUserValue( double value, Unit unit ) {
-        switch ( unit ) {
-        case U_MM:
-            return MM_TO_POINT( value );
-        case U_INCH:
-            return INCH_TO_POINT( value );
-        case U_PT:
-        default:
-            return value;
-        }
-    }
+    static double ptFromUnit( double value, Unit unit );
+
+    // This method is the one to use to read a value from a dialog
+    // Return the value in @p unit, converted to points for internal use
+    static double fromUserValue( const QString& value, Unit unit );
 
     // Convert a unit name into a Unit enum
     static Unit unit( const QString &_unitName ) {
