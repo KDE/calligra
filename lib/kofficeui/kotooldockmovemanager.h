@@ -88,7 +88,7 @@ protected:
     void setWidget( QWidget* );
     void drawRectangle (int x, int y, int w, int h);
     void paintProcess( bool onlyDeelete = true, int _x = 0, int _y = 0, int _w = 0, int _h = 0 );
-    bool check(int& x, int& y, int& w, int& h, bool change =false);
+    bool check(int& x, int& y, int& w, int& h, bool change = false);
 
 private slots:
 

@@ -239,7 +239,7 @@ public:
     virtual ~KoToolDockBase();
 
     void activate();
-
+    void restore();
 protected:
 
     KoToolDockBase( QWidget* parent, const char* name = 0 );

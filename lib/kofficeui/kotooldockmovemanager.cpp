@@ -99,8 +99,8 @@ void KoToolDockMoveManager::doMoveInternal()
     if (!pauseMoveY)
         ry = QCursor::pos().y();
 
-    xp = rx-offX;
-    yp = ry-offY;
+    xp = rx - offX;
+    yp = ry - offY;
 
     emit positionChanged();
 
@@ -264,7 +264,7 @@ void KoToolDockMoveManager::doResizeInternal()
 
     emit sizeChanged();
 
-    if (check(xp, yp, w, h)) {
+   if (check(xp, yp, w, h)) {
         paintProcess(false,xp, yp, w, h);
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
@@ -315,8 +315,9 @@ void KoToolDockMoveManager::doResize( QWidget* _w )
 
 bool KoToolDockMoveManager::check(int& x, int& y, int& w, int& h, bool change)
 {
-    int w1 = QMIN(QMAX(minSize.width(),w),maxSize.width());
-    int h1 = QMIN(QMAX(minSize.height(),h),maxSize.height());
+
+    int w1 = QMIN(QMAX(minSize.width(), w), maxSize.width());
+    int h1 = QMIN(QMAX(minSize.height(), h), maxSize.height());
 
     bool f1 = (w1-w)+(h1-h) == 0;
 

@@ -18,11 +18,8 @@
  */
 #include <kdebug.h>
 
-#include "kotooldockbase.h"
-#include "kotooldockmanager.h"
-#include "kotooldockmovemanager.h"
-
 #include <kdrawutil.h>
+#include <kconfig.h>
 #include <kapplication.h>
 
 #include <qbitmap.h>
@@ -33,6 +30,10 @@
 #include <qapplication.h>
 #include <qobjectlist.h>
 #include <qtabwidget.h>
+
+#include "kotooldockbase.h"
+#include "kotooldockmanager.h"
+#include "kotooldockmovemanager.h"
 
 /******************************************************************************/
 
@@ -268,14 +269,14 @@ KoToolDockBaseCaption::KoToolDockBaseCaption( KoToolDockPosition pos, KoToolDock
 
     stickButton = new KoToolDockButton( this );
     closeButton = new KoToolDockButton( this );
-    lockButton = new KoToolDockButton( this );
+//     lockButton = new KoToolDockButton( this );
 
     connect( closeButton,SIGNAL(clicked()),SLOT(slotClose()));
     connect( stickButton,SIGNAL(toggled(bool)),SLOT(slotStick(bool)));
-    connect( lockButton,  SIGNAL( toggled( bool ) ),  SLOT( slotLock( bool ) ) );
+//     connect( lockButton,  SIGNAL( toggled( bool ) ),  SLOT( slotLock( bool ) ) );
 
     stickButton -> setToggled(true);
-    lockButton -> setToggled( true );
+//     lockButton -> setToggled( true );
 
     const char* close_xpm[] = {
         "5 5 2 1",
@@ -300,28 +301,28 @@ KoToolDockBaseCaption::KoToolDockBaseCaption( KoToolDockPosition pos, KoToolDock
         "...#...."};
 
     const char* lock_xmp[] = {
-        "8 7 2 1",
+        "7 8 2 1",
         "# c black",
         ". c None",
         "..###..",
         "..#.#..",
         ".#####.",
-        ".#####.",
         ".##.##.",
-        ".## ##.",
+        ".#...#.",
+        ".##.##.",
         ".#####.",
         "..###.."};
 
     stickButton -> setPixmap( stick_xpm );
     closeButton -> setPixmap( close_xpm );
-    lockButton -> setPixmap( lock_xmp );
+//     lockButton -> setPixmap( lock_xmp );
 
     if ( pos == KoToolDockTop || pos == KoToolDockBottom ) {
         setFixedHeight(14);
         setMinimumWidth(100);
         QHBoxLayout* layout = new QHBoxLayout(this,1,2);
         layout -> addStretch(1);
-        layout -> addWidget( lockButton );
+        //layout -> addWidget( lockButton );
         layout -> addWidget( stickButton );
         layout -> addWidget( closeButton );
 
@@ -330,13 +331,13 @@ KoToolDockBaseCaption::KoToolDockBaseCaption( KoToolDockPosition pos, KoToolDock
         setMinimumHeight(100);
         QVBoxLayout* layout = new QVBoxLayout(this,1,2);
         if ( pos == KoToolDockLeft ) {
-            layout -> addWidget( lockButton );
+            //layout -> addWidget( lockButton );
             layout -> addWidget(closeButton);
             layout -> addWidget(stickButton);
             layout -> addStretch(1);
         } else {
             layout -> addStretch(1);
-            layout -> addWidget( lockButton );
+            //layout -> addWidget( lockButton );
             layout -> addWidget(stickButton);
             layout -> addWidget(closeButton);
         }
@@ -404,7 +405,7 @@ void KoToolDockBaseCaption::paintEvent( QPaintEvent* )
     int textw = p.fontMetrics().width(t);
     int lw = 10 + QMAX(0,tw-textw);
 
-    p.drawText(3,0,w-40,h,AlignLeft|AlignVCenter,t);
+    p.drawText(3, 0, w-40, h, AlignLeft | AlignVCenter, t);
 
     QPoint p1(w-lw-25, (h-5)/2+dl);
     QPoint p2(p1);
@@ -554,9 +555,9 @@ void KoToolDockButton::setPixmap( const QPixmap& p )
 /***************************************************************************/
 
 KoToolDockBase::KoToolDockBase( QWidget* parent, const char* name )
-    : QWidget(parent,name,WStyle_Customize|WStyle_NoBorder|WResizeNoErase|WRepaintNoErase)
+    : QWidget(parent,name,
+              WStyle_Customize | WStyle_NoBorder | WResizeNoErase | WRepaintNoErase)
 {
-
     QFont f;
     f.setPointSize(8);
     setFont(f);
@@ -624,10 +625,53 @@ KoToolDockBase::KoToolDockBase( QWidget* parent, const char* name )
     m_pLayout -> addWidget(m_pBorderBottomRight,4,4);
 
     m_pCaptionManager -> setView(KoToolDockTop);
+
 }
+
+void KoToolDockBase::restore()
+{
+
+    KApplication *app = KApplication::kApplication();
+    Q_ASSERT(app);
+    KConfig * cfg = app -> config() ;
+    Q_ASSERT( cfg );
+
+    cfg -> setGroup( QString( "ToolDock-" ) + name() );
+
+    QPoint p = QPoint( cfg -> readNumEntry( "x", 0 ),
+                       cfg -> readNumEntry( "y", 0 ) );
+
+    QSize s = QSize( cfg -> readNumEntry( "w",  250 ),
+                     cfg -> readNumEntry( "h",  150 ) );
+    resize( s );
+    move( p );
+
+    makeVisible( cfg -> readBoolEntry( "visible", false ) );
+
+    slotStick( cfg -> readBoolEntry( "stick", false ) );
+    slotLock( cfg -> readBoolEntry( "lock", true ) );
+}
+
 
 KoToolDockBase::~KoToolDockBase()
 {
+    KApplication *app = KApplication::kApplication();
+    Q_ASSERT(app);
+    KConfig * cfg = app -> config() ;
+    Q_ASSERT( cfg );
+    cfg -> setGroup( QString( "ToolDock-" ) + name() );
+    cfg -> writeEntry( "x",  x() );
+    cfg -> writeEntry( "y",  y() );
+    cfg -> writeEntry( "w",  width() );
+    cfg -> writeEntry( "h",  width() );
+    cfg -> writeEntry( "visible",  isVisible() );
+    cfg -> writeEntry( "lock",  isLocked() );
+    cfg -> writeEntry( "stick", isStick() );
+
+    // XXX: write current snap? Or does the docker
+    // resnap based on position.
+
+
 }
 
 void KoToolDockBase::updateCaption()
