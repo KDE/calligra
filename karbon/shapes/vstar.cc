@@ -81,12 +81,27 @@ VStar::VStar( VObject* parent,
 		innerRadius = sqrt( x * x + y * y );//0.4 * outerRadius;
 		jumpto = 0;
 		bool discontinueous = ( edges % 4 == 2 );
+
+		double innerRoundness = ( VGlobal::twopi * innerRadius * roundness ) / edges;
+		double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+
 		for ( uint i = 1; i < edges + 1; ++i )
 		{
 			double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 );
 			p.setX( innerRadius * cos( nextInnerAngle ) );
 			p.setY( innerRadius * sin( nextInnerAngle ) );
-			lineTo( p );
+			if( roundness == 0.0 )
+				lineTo( p );
+			else
+			{
+				nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+				p2.setX( outerRadius * cos( nextOuterAngle ) -
+					cos( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+				p2.setY( outerRadius * sin( nextOuterAngle ) -
+					sin( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+
+				curveTo( p2, p, p );
+			}
 
 			jumpto = ( i * j ) % edges;
 			nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 );
@@ -97,7 +112,21 @@ VStar::VStar( VObject* parent,
 			nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
 			p.setX( outerRadius * cos( nextOuterAngle ) );
 			p.setY( outerRadius * sin( nextOuterAngle ) );
-			lineTo( p );
+
+			if( roundness == 0.0 )
+				lineTo( p );
+			else
+			{
+				p2.setX( innerRadius * cos( nextInnerAngle ) ); 
+				p2.setY( innerRadius * sin( nextInnerAngle ) );
+
+				p3.setX( outerRadius * cos( nextOuterAngle ) +
+					cos( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+				p3.setY( outerRadius * sin( nextOuterAngle ) +
+					sin( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+
+				curveTo( p2, p3, p );
+			}
 			if( discontinueous && i == ( edges / 2 ) )
 			{
 				angle += VGlobal::pi;
@@ -115,6 +144,7 @@ VStar::VStar( VObject* parent,
 
 		double innerRoundness = ( VGlobal::twopi * innerRadius * roundness ) / edges;
 		double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+
 		for ( uint i = 0; i < edges; ++i )
 		{
 			double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
