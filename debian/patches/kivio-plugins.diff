@@ -10,7 +10,7 @@
 --- koffice/kivio/plugins/kivioselecttool/Makefile.am	2002/08/30 10:01:35	1.9
 +++ koffice/kivio/plugins/kivioselecttool/Makefile.am	2002/09/08 00:33:32
 @@ -1,5 +1,5 @@
- SUBDIRS = select_pics 
+ SUBDIRS = select_pics
 -lib_LTLIBRARIES =libkivioselecttool.la
 +kde_module_LTLIBRARIES =libkivioselecttool.la
  
@@ -26,10 +26,7 @@
  INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 --- koffice/kivio/plugins/kiviotexttool/Makefile.am	2002/08/30 10:01:35	1.9
 +++ koffice/kivio/plugins/kiviotexttool/Makefile.am	2002/09/08 00:33:32
-@@ -3,7 +3,7 @@
- #### WARNING! All changes made in this part will be lost! ####
- ##############################################################
- 
+@@ -1,4 +1,4 @@
 -lib_LTLIBRARIES =libkiviotexttool.la
 +kde_module_LTLIBRARIES =libkiviotexttool.la
  
@@ -38,7 +35,7 @@
 --- koffice/kivio/plugins/kiviozoomtool/Makefile.am	2002/08/30 10:01:35	1.10
 +++ koffice/kivio/plugins/kiviozoomtool/Makefile.am	2002/09/08 00:33:32
 @@ -1,5 +1,5 @@
- SUBDIRS = zoom_pics 
+ SUBDIRS = zoom_pics
 -lib_LTLIBRARIES =libkiviozoomtool.la
 +kde_module_LTLIBRARIES =libkiviozoomtool.la
  
