@@ -426,7 +426,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
   resizeObjNum = 0;
   mouseMoveEvent(e);
   drawBack = false;
-  _repaint(false);
+  //_repaint(false);
   drawBack = true;
 }
 
@@ -738,7 +738,7 @@ void Page::deSelectObj(int num)
       for (i=1;i<=objList()->count();i++)
      	{
 	  objPtr = objList()->at(i-1);
-	  if (i == (unsigned int)num)
+	  if (i == (unsigned int)num && objPtr->isSelected)
 	    {
 	      objPtr->isSelected = false;
 	      drawBack = true;
