@@ -659,18 +659,18 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     styles = mainStyles.styles( STYLE_COLUMN );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:column-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
     }
     styles = mainStyles.styles( STYLE_ROW );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:row-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
     }
 
     styles = mainStyles.styles( STYLE_CELL );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
     }
 
     //TODO FIXME !!!!
