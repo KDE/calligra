@@ -147,6 +147,10 @@ SvgExport::visitVComposite( VComposite& composite )
 	getFill( *( composite.fill() ) );
 	getStroke( *( composite.stroke() ) );
 
+	QString d;
+	composite.saveSvgPath( d );
+	*m_body << " d=\"" << d << "\" " << endl;
+
 	*m_body << " />" << endl;
 
 }
@@ -154,43 +158,6 @@ SvgExport::visitVComposite( VComposite& composite )
 void
 SvgExport::visitVPath( VPath& path )
 {
-
-	*m_body << " d=\"";
-
-	// export segments:
-	VPathIterator itr( path );
-	for( ; itr.current(); ++itr )
-	{
-		switch( itr.current()->type() )
-		{
-			case VSegment::curve:
-				*m_body << " C " <<
-					itr.current()->point( 0 ).x() << " " <<
-					itr.current()->point( 0 ).y() << " " <<
-					itr.current()->point( 1 ).x() << " " <<
-					itr.current()->point( 1 ).y() << " " <<
-					itr.current()->knot().x() << " " <<
-					itr.current()->knot().y();
-			break;
-			case VSegment::line:
-				*m_body << " L " <<
-					itr.current()->knot().x() << " " <<
-					itr.current()->knot().y();
-			break;
-			case VSegment::begin:
-				*m_body << " M " <<
-					itr.current()->knot().x() << " " <<
-					itr.current()->knot().y();
-			break;
-			default:
-			break;
-		}
-	}
-
-	if( path.isClosed() )
-		*m_body << "Z";
-
-	*m_body << "\"";
 }
 
 QString createUID()
