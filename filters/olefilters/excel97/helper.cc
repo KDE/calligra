@@ -722,8 +722,22 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x17:  // ptgStr
-				kdDebug(30511) << "WARNING: ptgStr formula not supported, yet" << endl;
-				return "N/A"; // Return _error_ formula-string
+				char *buffer8bit;
+				QString *s;
+				
+				Q_UINT16 cch;				
+				rgce >> cch;
+				
+				buffer8bit = new char[cch + 1];
+				rgce.readRawBytes(buffer8bit, cch);
+
+				buffer8bit[cch] = '\0';
+				s = new QString(buffer8bit);
+
+				delete []buffer8bit;
+
+				parsedFormula.append("\"" + *s + "\"");
+				parsedFormula.append("");
 				break;
 			case 0x18:  // ptgExtended
 				kdDebug(30511) << "WARNING: ptgExtended formula not supported, yet" << endl;
@@ -1029,7 +1043,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 			case 0x3a: // ptgRef3d
 				if(biff == BIFF_8)
 				{
-					Q_UINT16 pRow, pCol, sheetNumber;
+					Q_UINT16 sheetNumber;
 					rgce >> sheetNumber;
 				
 					rgce >> refRow >> refColumn;
