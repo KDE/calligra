@@ -8,14 +8,14 @@ SUBDIRS   = pics data
 
 bin_PROGRAMS = kimageshop
 
-kimageshop_SOURCES = kimageshop.idl kimageshop_main.cc \
+kimageshop_SOURCES = integerwidget.cc kimageshop.idl kimageshop_main.cc \
 	kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
 	kimageshop_undo.cc kvector.cc canvas.cc canvasview.cc \
 	layer.cc layerview.cc layerdlg.cc brush.cc \
 	channel.cc channelview.cc misc.cc tool.cc movetool.cc \
 	brushtool.cc zoomtool.cc kfloatingdialog.cc \
 	colordialog.cc kfloatingtabdialog.cc kcolor.cc \
-	integerwidget.cc brusheswidget.cc brushdialog.cc \
+	brusheswidget.cc brushdialog.cc \
 	iconchooser.cc kfloatingdialogowner.cc preferencesdlg.cc \
 	gradientdlg.cc gradienteditordlg.cc gradientview.cc \
 	newdialog.cc
