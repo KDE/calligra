@@ -259,6 +259,107 @@ bool KWord13OasisGenerator::zipWriteData(const QString& str)
     return zipWriteData(str.utf8());
 }
 
+void KWord13OasisGenerator::writeStartOfFile(const QString& type)
+{
+    const bool noType=type.isEmpty();
+    zipWriteData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+
+    zipWriteData("<!DOCTYPE office:document");
+    if (!noType)
+    {
+        // No type might happen for raw XML documents (which this filter does not support yet.)
+        zipWriteData("-");
+        zipWriteData(type);
+    }
+    zipWriteData(" PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\"");
+    zipWriteData(" \"office.dtd\"");
+    zipWriteData(">\n");
+
+    zipWriteData("<office:document");
+    if (!noType)
+    {
+        zipWriteData("-");
+        zipWriteData(type);
+    }
+
+    // The name spaces used by OOWriter (those not used by this filter are commented out)
+
+    // General namespaces
+    zipWriteData(" xmlns:office=\"http://openoffice.org/2000/office\"");
+    zipWriteData(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
+
+    // Namespaces for context.xml and style.xml
+    if ( type == "content" || type == "styles" || type.isEmpty() )
+    {
+        zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
+        zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
+        zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
+        zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
+        zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
+
+        //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
+        zipWriteData(" xmlns:svg=\"http://www.w3.org/2000/svg\"");
+        //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
+        //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
+        //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
+        //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
+        //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
+    }
+
+    // Namespaces For meta.xml
+    if ( type == "meta" || type.isEmpty() )
+    {
+        zipWriteData(" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");
+        zipWriteData(" xmlns:meta=\"http://openoffice.org/2000/meta\"");
+    }
+
+
+    zipWriteData(" office:class=\"text\"");
+
+#ifdef STRICT_OOWRITER_VERSION_1
+    zipWriteData(" office:version=\"1.0\"");
+#else
+    // We are using an (rejected draft OASIS) extension compared to version 1.0, so we cannot write the version string.
+    // (We do not even write it for context.xml and meta.xml, as OOWriter 1.0.1 does not like it in this case.)
+#endif
+
+    zipWriteData(">\n");
+}
+
+void KWord13OasisGenerator::writeContentXml(void)
+{
+    if (!m_zip)
+        return;
+
+    kdDebug(30520) << "content.xml: preparing..." << endl;
+    zipPrepareWriting("content.xml");
+
+    kdDebug(30520) << "content.xml: start file..." << endl;
+    writeStartOfFile("content");
+
+    kdDebug(30520) << "content.xml: declare fonts..." << endl;
+    // ### TODO writeFontDeclaration();
+
+    kdDebug(30520) << "content.xml: writing automatical styles..." << endl;
+    zipWriteData(" <office:automatic-styles>\n");
+
+    zipWriteData(m_contentAutomaticStyles);
+    m_contentAutomaticStyles = QString::null; // Release memory
+
+    zipWriteData(" </office:automatic-styles>\n");
+
+    kdDebug(30520) << "content.xml: writing body..." << endl;
+    zipWriteData("<office:body>\n");
+    zipWriteData(m_contentBody);
+    m_contentBody.resize( 0 ); // Release memory
+    zipWriteData("</office:body>\n");
+
+    zipWriteData( "</office:document-content>\n" );
+
+    kdDebug(30520) << "content.xml: closing file..." << endl;
+    zipDoneWriting();
+    kdDebug(30520) << "content.xml: done!" << endl;
+}
 
 
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
@@ -291,7 +392,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     if (m_zip)
     {
         kdDebug(30520) << "Writing content..." << endl;
-    // ### TODO        writeContentXml();
+        writeContentXml();
         kdDebug(30520) << "Writing meta..." << endl;
     // ### TODO        writeMetaXml();
         kdDebug(30520) << "Writing styles..." << endl;

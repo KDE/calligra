@@ -22,6 +22,8 @@
 #ifndef KWORD_1_3_OASIS_GENERATOR
 #define KWORD_1_3_OASIS_GENERATOR
 
+#define STRICT_OOWRITER_VERSION_1
+
 class QString;
 class QTextStream;
 class KZip;
@@ -46,11 +48,14 @@ protected: // ZIP methods
     bool zipWriteData(const QByteArray& array);
     bool zipWriteData(const QCString& cstr);
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
+    void writeStartOfFile( const QString& type );
+    void writeContentXml( void );
 protected:
     KZip* m_zip; ///< Output OOWriter file
     uint m_size; ///< Size of ZIP entry
     QTextStream* m_streamOut;
     QByteArray m_contentBody; ///< office:body element of content.xml
+    QString m_contentAutomaticStyles; ///< Automatic styles for content.xml (in OO format)
 };
 
 #endif // KWORD_1_3_OASIS_GENERATOR
