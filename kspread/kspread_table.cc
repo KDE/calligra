@@ -4469,6 +4469,8 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
     // m_pDoc->insertChild( ch );
     insertChild( ch );
+    
+    ch->chart()->showWizard();
 }
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
