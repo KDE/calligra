@@ -180,8 +180,7 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
     }
 
     setWidth( content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2 );
-    setHeight( content->getHeight() + distY + rootOffset.y() );
-    //setMidline( getHeight() - content->getHeight() + content->getMidline() );
+    setHeight( content->getHeight() + distY*2 + rootOffset.y() );
 
     content->setX( rootOffset.x() + unit+unit/3 );
     content->setY( rootOffset.y() + distY );
@@ -220,7 +219,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
     painter.setPen( QPen( style.getDefaultColor(),
                           style.layoutUnitToPixelX( 2*style.getLineWidth() ) ) );
     painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
-                      style.layoutUnitToPixelY( y+unit+distY/2 ),
+                      style.layoutUnitToPixelY( y+unit+distY/3 ),
                       style.layoutUnitToPixelX( x+unit/2+unit/3 ),
                       style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
 
@@ -228,13 +227,13 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                           style.layoutUnitToPixelY( style.getLineWidth() ) ) );
 
     painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
-                      style.layoutUnitToPixelY( y+distY/2 ),
+                      style.layoutUnitToPixelY( y+distY/3 ),
                       style.layoutUnitToPixelX( x+unit/2+unit/3 ),
                       style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
     painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
-                      style.layoutUnitToPixelY( y+distY/2 ),
+                      style.layoutUnitToPixelY( y+distY/3 ),
                       style.layoutUnitToPixelX( x+unit+unit/3+content->getWidth() ),
-                      style.layoutUnitToPixelY( y+distY/2 ) );
+                      style.layoutUnitToPixelY( y+distY/3 ) );
     painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
                       style.layoutUnitToPixelY( y+unit+distY/2 ),
                       style.layoutUnitToPixelX( x ),
