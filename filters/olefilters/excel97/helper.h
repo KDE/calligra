@@ -20,6 +20,7 @@
 #define HELPER_H
 
 #include <qdatastream.h>
+#include <qptrlist.h>
 #include <qintdict.h>
 #include <qdom.h>
 
@@ -61,7 +62,7 @@ private:
 class Helper
 {
 public:
-	Helper(QDomDocument *root);
+	Helper(QDomDocument *root, QPtrList<QDomElement> *tables);
 	~Helper();
 
 	void addDict(Dictionary dict, int index, void *obj);
@@ -81,6 +82,7 @@ public:
 	
 private:
 	QDomDocument *m_root;
+	QPtrList<QDomElement> *m_tables;
 	
 	QIntDict<xfrec> m_xfrec;
 	QIntDict<QString> m_sstrec;

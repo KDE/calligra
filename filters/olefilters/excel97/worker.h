@@ -20,7 +20,6 @@
 #define WORKER_H
 
 #include <qdatastream.h>
-#include <qptrqueue.h>
 #include <qptrlist.h>
 #include <qintdict.h>
 #include <qdom.h>
@@ -104,7 +103,7 @@ private:
 	QDomDocument *m_root;
 	QDomElement m_doc, m_paper, m_map, m_borders, *m_table;
 
-	QPtrQueue<QDomElement> m_tables;
+	QPtrList<QDomElement> m_tables;
     QPtrList<MergeInfo> m_mergeList;
 
 	Helper *m_helper;

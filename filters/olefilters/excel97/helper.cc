@@ -23,7 +23,7 @@
 #include "helper.h"
 #include "definitions.h"
 
-Helper::Helper(QDomDocument *root)
+Helper::Helper(QDomDocument *root, QPtrList<QDomElement> *tables)
 : m_locale("koffice")
 {
 	// ### David: I added m_locale to xmltree.h to make this compile
@@ -31,6 +31,7 @@ Helper::Helper(QDomDocument *root)
 	m_locale.setLanguage(QString("C")); // ##### FIXME
 
 	m_root = root;
+	m_tables = tables;
 }
 
 Helper::~Helper()
@@ -970,6 +971,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 						refColumn += -1*column;
 					}
 				}
+
 				str = "#";
 				str += QString::number((int) refColumn);
 				str += "#";
@@ -1024,6 +1026,41 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				parsedFormula.append(str);
 				parsedFormula.append("");
 				break;
+			case 0x3a: // ptgRef3d
+				if(biff == BIFF_8)
+				{
+					Q_UINT16 pRow, pCol, sheetNumber;
+					rgce >> sheetNumber;
+				
+					rgce >> refRow >> refColumn;
+					if(refColumn & 0x8000)
+						refRow += -1*row;
+					
+					if(refColumn & 0x4000)
+					{
+						refColumn &= 0x3fff;
+						refColumn += -1*column;
+					}
+					
+					QDomElement *sheet = m_tables->at(sheetNumber);
+
+					if(!sheet)
+						return "N/A";
+
+					str = sheet->attribute("name") + "!#";
+					str += QString::number((int) refColumn);
+					str += "#";
+					str += QString::number((int) refRow);
+					str += "#";
+					parsedFormula.append(str);
+					parsedFormula.append("");
+				}
+				else
+				{
+					kdDebug() << "WARNING: External sheet references not done for Excel 95!" << endl;
+					return "N/A";
+				}				
+				break;			
 			default:
 				kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
 				return "N/A"; // Return _error_ formula-string

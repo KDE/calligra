@@ -47,7 +47,7 @@ Worker::Worker()
 
 	m_mergeList.setAutoDelete(true);
 	
-	m_helper = new Helper(m_root);
+	m_helper = new Helper(m_root, &m_tables);
 
 	m_chartSeriesCount = 0;
 	m_footerCount = 0;
@@ -130,7 +130,7 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 				kdDebug(30511) << "BOF: Workbook globals" << endl;
 				break;
 			case 0x10:
-				m_table = m_tables.dequeue();
+				m_table = m_tables.take(m_tables.find(m_tables.getFirst()));
 				
 				// FIXME: can happen as long as
 				//        the boundsheet stuff isn't _fully_ implemented
@@ -141,7 +141,7 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 				kdDebug(30511) << "BOF: Worksheet: " << m_table->attribute("name") << endl;
 				break;
 			case 0x20:
-				m_table = m_tables.dequeue();
+				m_table = m_tables.take(m_tables.find(m_tables.getFirst()));
 				// FIXME: can happen as long as
 				//        the boundsheet stuff isn't _fully_ implemented
 				//		  (macrosheet etc..) (Niko)
@@ -152,7 +152,7 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 				break;
 			default:
 				kdWarning(30511) << "BOF: Unsupported substream: 0x" << QString::number(dt, 16) << endl;
-				//        m_table = m_tables.dequeue();
+				//        m_table = m_tables.first();
 				//        delete m_table;
 				m_table = 0;
 				break;
@@ -209,7 +209,7 @@ bool Worker::op_boundsheet(Q_UINT32, QDataStream &body)
 			e->setAttribute("hide",true);
 		
 		m_map.appendChild(*e);
-		m_tables.enqueue(e);
+		m_tables.append(e);
 	}
 	else if((grbit & 0x0f) == 1)
 	{
