@@ -1726,11 +1726,36 @@ void KWView::deleteFrame( bool _warning )
 void KWView::editCustomVars()
 {
     KoCustomVariablesDia dia( this, m_doc->getVariableCollection()->getVariables() );
+    QStringList listOldCustomValue;
+    QPtrListIterator<KoVariable> oldIt( m_doc->getVariableCollection()->getVariables() );
+    for ( ; oldIt.current() ; ++oldIt )
+    {
+        if(oldIt.current()->type()==VT_CUSTOM)
+            listOldCustomValue.append(((KoCustomVariable*)oldIt.current())->value());
+    }
     if(dia.exec())
     {
         m_doc->recalcVariables( VT_CUSTOM );
-        //temporaly hack, for the moment we can't undo/redo change custom variable
-        m_doc->setModified(true);
+        //temporaly hack, for the moment we can't undo/redo change custom variables
+        QPtrListIterator<KoVariable> it( m_doc->getVariableCollection()->getVariables() );
+        KMacroCommand * macroCommand = 0L;
+        int i=0;
+        for ( ; it.current() ; ++it )
+        {
+            if(it.current()->type() == VT_CUSTOM )
+            {
+                if(((KoCustomVariable*)it.current())->value()!=*(listOldCustomValue.at(i)))
+                {
+                    if(!macroCommand)
+                        macroCommand = new KMacroCommand( i18n( "Change custom variable" ) );
+                    KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change custom variable" ),m_doc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
+                    macroCommand->addCommand(cmd);
+                }
+                i++;
+            }
+        }
+        if(macroCommand)
+            m_doc->addCommand(macroCommand);
     }
 }
 

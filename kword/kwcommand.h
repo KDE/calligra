@@ -28,7 +28,7 @@
 class KWFrameSet;
 class KWTableFrameSet;
 class KWDocument;
-
+class KoCustomVariable;
 /**
  * Command created when pasting formatted text
  * [relies on KWord's XML structure, so not moved to kotext]
@@ -452,6 +452,21 @@ protected:
     KWDocument *m_doc;
     int oldStartingPage;
     int newStartingPage;
+};
+
+
+class KWChangeCustomVariableValue : public KCommand
+{
+ public:
+    KWChangeCustomVariableValue( const QString &name, KWDocument *_doc,const QString & _oldValue, const QString & _newValue, KoCustomVariable *var);
+    ~KWChangeCustomVariableValue();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    QString newValue;
+    QString oldValue;
+    KoCustomVariable *m_var;
 };
 
 #endif

@@ -1190,3 +1190,32 @@ void KWChangeVariableSettingCommand::unexecute()
     m_doc->getVariableCollection()->variableSetting()->setStartingPage(oldStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
+
+
+KWChangeCustomVariableValue::KWChangeCustomVariableValue( const QString &name, KWDocument *_doc,const QString & _oldValue, const QString & _newValue,KoCustomVariable *var):
+    KCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+    kdDebug()<<"newValue :"<<newValue <<" oldValue :"<<oldValue<<endl;
+}
+
+KWChangeCustomVariableValue::~KWChangeCustomVariableValue()
+{
+}
+
+void KWChangeCustomVariableValue::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setValue(newValue);
+    m_doc->recalcVariables( VT_CUSTOM );
+}
+
+void KWChangeCustomVariableValue::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setValue(oldValue);
+    m_doc->recalcVariables( VT_CUSTOM );
+}
