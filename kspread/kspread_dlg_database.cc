@@ -589,23 +589,29 @@ void KSpreadDatabaseDlg::accept()
       queryStr += " ";
   }
 
-  //  if ( queryStr[queryStr.length() - 1] != ';' )
-  //    queryStr += ";";
+  KSpreadCell * cell;
+  QSqlQuery query( QString::null, m_dbConnection );
 
   if ( ( queryStr.find("DELETE", 0, false) != -1 )
        || ( queryStr.find("INSERT", 0, false) != -1 )
-       || ( queryStr.find("UPDATE", 0, false) != -1 ) )
+       || ( queryStr.find("UPDATE", 0, false) != -1 ) 
+       || ( !query.isSelect() ) )
   {
     KMessageBox::error( this, i18n("You are not allowed to change data in the database!") );
     m_sqlQuery->setFocus();
     return;
   }
 
-  KSpreadCell * cell;
-  QSqlQuery query( QString::null, m_dbConnection );
   if ( !query.exec( queryStr ) )
   {
-    KMessageBox::error( this, i18n("Executing query failed!") );
+    KMessageBox::error( this, i18n( "Executing query failed!" ) );
+    m_sqlQuery->setFocus();
+    return;
+  }
+
+  if ( query.size() == 0 )
+  {
+    KMessageBox::error( this, i18n( "You don't get any results with this query." ) );
     m_sqlQuery->setFocus();
     return;
   }
