@@ -33,7 +33,6 @@
 #include <koPoint.h>
 #include <koSize.h>
 #include <koRect.h>
-#include "kpobject.h"
 #include <koStyleStack.h>
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
