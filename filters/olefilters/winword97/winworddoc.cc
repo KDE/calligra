@@ -47,7 +47,7 @@ WinWordDoc::WinWordDoc(
     m_body = "";
     m_tables = "";
     m_pixmaps = "";
-    m_pixmapCount = 0;
+    m_pictureCount = 0;
     m_embedded = "";
     m_embeddedCount = 0;
     m_extraFrameSets = "";
@@ -388,17 +388,17 @@ QString WinWordDoc::generateFormats(
 
             // Add an anchor for this frameset.
 
-            m_pixmapCount++;
+            m_pictureCount++;
             formats.append("<FORMAT id=\"6\" pos=\"");
             formats.append(QString::number(image->start));
             formats.append("\" len=\"1\">\n");
             formats.append("<ANCHOR type=\"frameset\" instance=\"");
-            formats.append(i18n("Picture %1").arg(m_pixmapCount));
+            formats.append(i18n("Picture %1").arg(m_pictureCount));
             formats.append("\"/>\n");
             formats.append("</FORMAT>\n");
 
             m_extraFrameSets.append("<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"");
-            m_extraFrameSets.append(i18n("Picture %1").arg(m_pixmapCount));
+            m_extraFrameSets.append(i18n("Picture %1").arg(m_pictureCount));
             m_extraFrameSets.append("\">\n");
             m_extraFrameSets.append("<FRAME runaround=\"1\" right=\"74.92\" left=\"32.68\" newFrameBehaviour=\"0\" bottom=\"87.4\" runaroundGap=\"2.83465\" top=\"45.16\" />\n");
             m_extraFrameSets.append("<IMAGE>\n");
@@ -422,6 +422,7 @@ QString WinWordDoc::generateFormats(
 #ifdef __GNUC__
 #warning: disabling killustrator-embedded images
 #endif
+//#define KILLUSTRATOR_WORKS_AGAIN
 #ifdef KILLUSTRATOR_WORKS_AGAIN
             VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run.data());
             QString ourKey;
@@ -448,6 +449,17 @@ QString WinWordDoc::generateFormats(
                     vectorGraphic->length,
                     vectorGraphic->data);
 
+            // Add an anchor for this frameset.
+
+            m_pictureCount++;
+            formats.append("<FORMAT id=\"6\" pos=\"");
+            formats.append(QString::number(vectorGraphic->start));
+            formats.append("\" len=\"1\">\n");
+            formats.append("<ANCHOR type=\"frameset\" instance=\"");
+            formats.append(i18n("Picture %1").arg(m_pictureCount));
+            formats.append("\"/>\n");
+            formats.append("</FORMAT>\n");
+
             // Add an entry to the list of embedded objects too. TBD: fix
             // RECT and FRAME settings.
 
@@ -459,7 +471,9 @@ QString WinWordDoc::generateFormats(
             m_embedded.append(mimeType);
             m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
             m_embedded.append("</OBJECT>\n");
-            m_embedded.append("<SETTINGS>\n");
+            m_embedded.append("<SETTINGS name=\"");
+            m_embedded.append(i18n("Picture %1").arg(m_pictureCount));
+            m_embedded.append("\">\n");
             m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
             m_embedded.append("</SETTINGS>\n");
             m_embedded.append(
@@ -701,7 +715,7 @@ void WinWordDoc::gotStyle(
         styleDef.append("/>\n");
         styleDef.append(
             "   <COUNTER numberingtype=\"1\" type=\"1\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\".\" start=\"1\" depth=\"");
-        styleDef.append(QString::number(styleIndex - stiLev1));
+        styleDef.append(QString::number(style.getPap()->ilvl));
         styleDef.append("\" customdef=\"\"/>\n");
     }
     else

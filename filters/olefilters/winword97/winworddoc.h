@@ -187,7 +187,7 @@ private:
     QString m_body;
     QString m_tables;
     QString m_pixmaps;
-    unsigned m_pixmapCount;
+    unsigned m_pictureCount;
     QString m_embedded;
     unsigned m_embeddedCount;
     QString m_extraFrameSets;
