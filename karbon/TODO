@@ -1,3 +1,18 @@
+BIG TOPICS:
+1) create a consistent tool/plugin system
+	plugin input:
+	-	canvas (drawing, connecting to mouse/keyboard signals)
+	plugin output:
+	- icon
+	- help text
+	- options widget
+	- command
+	- kaction?
+2) selection redesign
+	- unify object and or node selection?
+	- achieve tight selection (exact selection-object collision test)
+3) reintroduce nodetool
+
 GUI:
 -	split the dialog under "Object->Transform" into different non-tabbed dialogs
 -	remove the "Selection property" docker, this is basically the same as the above docker
