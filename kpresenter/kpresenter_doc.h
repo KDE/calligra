@@ -510,6 +510,7 @@ class KPresenterDoc : public KoDocument
     //return selected slide when presentation name is empty
     //otherwise return list of custom slide show
     QValueList<int> displaySelectedSlides();
+    QValueList<int> listOfDisplaySelectedSlides( const QValueList<KPrPage*>& lst );
 
 public slots:
     void movePage( int from, int to );

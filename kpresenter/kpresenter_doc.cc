@@ -49,6 +49,9 @@
 #include <qdom.h>
 #include <qdict.h>
 
+#include <kodom.h>
+#include <koxmlns.h>
+
 #include <kurl.h>
 #include <kdebug.h>
 #include <koGlobal.h>
@@ -1454,14 +1457,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     emit sigProgress( 5 );
 
     QDomElement content = doc.documentElement();
-    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    QDomElement body (KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() )
     {
         kdError(33001) << "No office:body found!" << endl;
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     }
-    body = body.namedItem( "office:presentation" ).toElement();
+    body = KoDom::namedItemNS( body, KoXmlNS::office, "presentation" );
     if ( body.isNull() )
     {
         kdError(33001) << "No office:presentation found!" << endl;
@@ -1469,14 +1472,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
        return false;
     }
 	//load settings
-    QDomNode settings = body.namedItem("presentation:settings");
+    QDomNode settings  = KoDom::namedItemNS( content, KoXmlNS::presentation, "settings" );
     kdDebug()<<"settings :"<<settings.isNull()<<endl;
     if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
         loadOasisPresentationSettings( settings );
 
 // it seems that ooimpress has different paper-settings for every slide.
     // we take the settings of the first slide for the whole document.
-    QDomNode drawPage = body.namedItem( "draw:page" );
+    QDomNode drawPage = KoDom::namedItemNS( body, KoXmlNS::draw, "page" );
     if ( drawPage.isNull() ) // no slides? give up.
         return false;
     QDomElement dp = drawPage.toElement();
@@ -3732,6 +3735,24 @@ bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ )
     return m_pageList.at(pgNum)->isSlideSelected();
 }
 
+QValueList<int> KPresenterDoc::listOfDisplaySelectedSlides( const QValueList<KPrPage*> & lst) /* returned list is 0-based */
+{
+    QValueList<int> result;
+    QValueListConstIterator<KPrPage*> itPage;
+    QValueListConstIterator<KPrPage*> itPageEnd = lst.end();
+    for( itPage =  lst.begin() ; itPage != itPageEnd; ++itPage )
+    {
+        int pageNum = m_pageList.find(*itPage );
+        if ( pageNum != -1 )
+        {
+            kdDebug()<<" KPresenterDoc::displaySelectedSlide : add slide number :"<<pageNum<<endl;
+            result << pageNum;
+        }
+    }
+    return result;
+}
+
+
 QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-based */
 {
     QValueList<int> result;
@@ -3740,17 +3761,7 @@ QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-ba
     else
     {
         kdDebug()<<" KPresenterDoc::displaySelectedSlide m_presentationName : "<<m_presentationName<<endl;
-        QValueListIterator<KPrPage*> itPage;
-        QValueListIterator<KPrPage*> itPageEnd = m_customListSlideShow[m_presentationName].end();
-        for( itPage =  m_customListSlideShow[m_presentationName].begin() ; itPage != itPageEnd; ++itPage )
-        {
-            int pageNum = m_pageList.find(*itPage );
-            if ( pageNum != -1 )
-            {
-                kdDebug()<<" KPresenterDoc::displaySelectedSlide : add slide number :"<<pageNum<<endl;
-                result << pageNum;
-            }
-        }
+        result = listOfDisplaySelectedSlides( m_customListSlideShow[m_presentationName]);
     }
     return result;
 }
