@@ -26,10 +26,10 @@ KPTMilestone::KPTMilestone() : KPTNode() {
 KPTMilestone::~KPTMilestone() {
 }
 
-QDateTime *KPTMilestone::getStartTime() {
+KPTDuration *KPTMilestone::getStartTime() {
     return 0L;
 }
 
-QDateTime *KPTMilestone::getFloat() {
+KPTDuration *KPTMilestone::getFloat() {
     return 0L;
 }

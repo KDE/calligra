@@ -19,26 +19,48 @@
 
 #include "kpttask.h"
 
+#include <kdebug.h>
+
 KPTTask::KPTTask() : KPTNode(), m_resource() {
-     m_resource.setAutoDelete(true); m_nodeType=TASK;
+    m_resource.setAutoDelete(true);
+    m_nodeType=TASK;
 }
 
 KPTTask::~KPTTask() {
 }
 
-QDateTime *KPTTask::getExpectedDuration() {
+KPTDuration *KPTTask::getExpectedDuration() {
+    // I have no idea if this is correct...
+    KPTDuration *ed= new KPTDuration();
+    if(m_effort) {
+        ed->add(m_effort->expected());
+    } else {
+        QListIterator<KPTNode> it(m_nodes); // iterator for employee list
+        for ( ; it.current(); ++it ) {
+            KPTNode *node = it.current();
+            KPTDuration *childDuration = node->getExpectedDuration();
+            ed->add(*childDuration);
+            delete childDuration;
+        } 
+    }
+    return ed;
+}
+
+KPTDuration *KPTTask::getRandomDuration() {
     return 0L;
 }
 
-QDateTime *KPTTask::getRandomDuration() {
-    return 0L;
+KPTDuration *KPTTask::getStartTime() {
+    if(m_startTime == KPTDuration()) {
+        // starttime not set, ask our parents!
+        // TODO
+        return 0L;
+    } else {
+        return new KPTDuration(m_startTime);
+    }
 }
 
-QDateTime *KPTTask::getStartTime() {
-    return 0L;
-}
-
-QDateTime *KPTTask::getFloat() {
+KPTDuration *KPTTask::getFloat() {
     return 0L;
 }
 
@@ -56,11 +78,3 @@ void KPTTask::removeResource( int number ){
 void KPTTask::insertResource( unsigned int index, KPTResourceGroup *resource ) {
 }
 
-KPTEffort::KPTEffort( QDateTime e, QDateTime p, QDateTime o) {
-  m_expectedDuration = e;
-  m_pessimisticDuration = p;
-  m_optimisticDuration = o;
-}
-
-KPTEffort::~KPTEffort() {
-}

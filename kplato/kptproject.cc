@@ -25,19 +25,26 @@ KPTProject::KPTProject() : KPTNode() {
 KPTProject::~KPTProject() {
 }
 
-QDateTime *KPTProject::getExpectedDuration() {
+KPTDuration *KPTProject::getExpectedDuration() {
+    KPTDuration *ed= new KPTDuration();
+    QListIterator<KPTNode> it(m_nodes); // iterator for employee list
+    for ( ; it.current(); ++it ) {
+        KPTNode *node = it.current();
+        KPTDuration *childDuration = node->getExpectedDuration();
+        ed->add(*childDuration);
+        delete childDuration;
+    } 
+    return ed;
+}
+
+KPTDuration *KPTProject::getRandomDuration() {
     return 0L;
 }
 
-QDateTime *KPTProject::getRandomDuration() {
+KPTDuration *KPTProject::getStartTime() {
     return 0L;
 }
 
-QDateTime *KPTProject::getStartTime() {
+KPTDuration *KPTProject::getFloat() {
     return 0L;
 }
-
-QDateTime *KPTProject::getFloat() {
-    return 0L;
-}
-

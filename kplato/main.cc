@@ -22,7 +22,7 @@
 #include "kpttask.h"
 
 #include <kdebug.h>
-#include <qdatetime.h>
+#include <kptduration.h>
 
 int main( int /*argc*/, char /***argv */) {
     // new project
@@ -43,32 +43,33 @@ int main( int /*argc*/, char /***argv */) {
     KPTTask *tb = new KPTTask();
     tb->setName("Task B");
     p->addChildNode(tb);
-    tb->setEffort( new KPTEffort(QDateTime(QDate(0,1,1), QTime(2,0,0))));
+    tb->setEffort( new KPTEffort(KPTDuration(2,0)));
     kdDebug() << "\n";
     kdDebug() << "Added task B with effort of 2 hours \n";
     kdDebug() << "  Project\n";
     kdDebug() << "  +-- > Task A\n";
     kdDebug() << "  +-- > Task B\n";
-    kdDebug() << "          ->"<< tb->getExpectedDuration() << endl;
+    kdDebug() << "          -> "<< tb->getExpectedDuration()->toString() << endl;
 
     // new subtask, we let it be a subtask of taskA, and name it Subtask A1
     KPTTask *ta1 = new KPTTask();
-    ta1->setEffort(new KPTEffort(QDateTime(QDate(0,1,1),QTime(1,0,0))));
+    ta1->setEffort(new KPTEffort(KPTDuration(1,0)));
     ta1->setName("Subtask A1");
     p->addChildNode(ta1);
+    ta->addChildNode(ta1);
     kdDebug() << "\n";
     kdDebug() << "Added subtask A1 with effort 1 hour\n";
     kdDebug() << "  Project\n";
     kdDebug() << "  +-- > Task A\n";
-    kdDebug() << "          ->"<< ta->getExpectedDuration() << endl;
+    kdDebug() << "          -> "<< ta->getExpectedDuration()->toString() << endl;
     kdDebug() << "          +-- > Task A1\n";
-    kdDebug() << "                  ->"<< ta1->getExpectedDuration() << endl;
+    kdDebug() << "                  -> "<< ta1->getExpectedDuration()->toString() << endl;
     kdDebug() << "  +-- > Task B\n";
-    kdDebug() << "          ->"<< tb->getExpectedDuration() << endl;
+    kdDebug() << "          -> "<< tb->getExpectedDuration()->toString() << endl;
 
     // Make task B dependent on the finish of subtask A1, and make it start 1 hour 45 minutes after 
     // Subtask A1 has finished.
-    tb->addDependChildNode(ta1, START_ON_DATE, FINISH_START, QDateTime(QDate(0,1,1),QTime(1,45)));
+    tb->addDependChildNode(ta1, START_ON_DATE, FINISH_START, KPTDuration(1,45));
     kdDebug() << "\n";
     kdDebug() << "Setting Task B to start 1h45m after A finished" << endl;
     kdDebug() << "  Task A1 -- Task B" << endl;
@@ -81,7 +82,7 @@ int main( int /*argc*/, char /***argv */) {
     // Total: 4 hour 45 minutes.
 
     kdDebug() << "\n";
-    kdDebug() << "Total running time: " << p->getExpectedDuration() << endl;
+    kdDebug() << "Total running time: " << p->getExpectedDuration()->toString() << endl;
      
     return 0;
 }

@@ -21,8 +21,8 @@
 
 KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_name="";
-    m_startTime = QDateTime(QDate(0,1,1));
-    m_endTime = QDateTime(QDate(0,1,1));
+    m_startTime = KPTDuration();
+    m_endTime = KPTDuration();
 }
 
 KPTNode::~KPTNode() {
@@ -53,7 +53,7 @@ void KPTNode::addChildNode( KPTNode *node) {
 }
 
 
-QDateTime *KPTNode::getDelay() {
+KPTDuration *KPTNode::getDelay() {
     /* TODO
        Calculate the delay of this node. Use the calculated startTime and the setted startTime.
     */
@@ -61,15 +61,15 @@ QDateTime *KPTNode::getDelay() {
 }
 
 void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p) {
-    addDependChildNode(node,t,p,QDateTime(QDate(0,1,1)));
+    addDependChildNode(node,t,p,KPTDuration());
 }
 
-void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime lag) {
+void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
     m_dependChildNodes.append(new KPTRelation(this, node, t, p, lag));
 }
 
 void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
-    m_dependChildNodes.insert(index, new KPTRelation(this, node, t, p, QDateTime(QDate(0,1,1))));
+    m_dependChildNodes.insert(index, new KPTRelation(this, node, t, p, KPTDuration()));
 
 }
 
@@ -91,15 +91,15 @@ void KPTNode::delDependChildNode( int number, bool remove) {
 
 
 void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p) {
-    addDependParentNode(node,t,p,QDateTime(QDate(0,1,1)));
+    addDependParentNode(node,t,p,KPTDuration());
 }
 
-void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime lag) {
+void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
     m_dependChildNodes.append(new KPTRelation(node, this, t, p, lag));
 }
 
 void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
-    m_dependParentNodes.insert(index,new KPTRelation(this, node, t, p, QDateTime(QDate(0,1,1))));
+    m_dependParentNodes.insert(index,new KPTRelation(this, node, t, p, KPTDuration()));
 }
 
 void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
@@ -118,3 +118,11 @@ void KPTNode::delDependParentNode( int number, bool remove) {
         m_dependParentNodes.take(number);
 }
 
+KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
+  m_expectedDuration = e;
+  m_pessimisticDuration = p;
+  m_optimisticDuration = o;
+}
+
+KPTEffort::~KPTEffort() {
+}

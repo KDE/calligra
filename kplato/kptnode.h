@@ -20,11 +20,11 @@
 #ifndef kptnode_h
 #define kptnode_h
 
-#include <qdatetime.h> 
 #include <qlist.h> 
 #include <qstring.h> 
 #include "defs.h"
 #include "kptrelation.h"
+#include "kptduration.h"
 
 class KPTEffort;
 
@@ -66,7 +66,7 @@ class KPTNode {
 
         int numDependChildNodes() const { return m_dependChildNodes.count(); }
         virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime lag);
+        virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag);
         virtual void insertDependChildNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependChildNode( KPTNode *node, bool remove=false);
         void delDependChildNode( int number, bool remove=false);
@@ -74,16 +74,16 @@ class KPTNode {
 
         int numDependParentNodes() const { return m_dependParentNodes.count(); }
         virtual void addDependParentNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime lag);
+        virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag);
         virtual void insertDependParentNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependParentNode( KPTNode *node, bool remove=false);
         void delDependParentNode( int number, bool remove=false);
         KPTRelation *getDependParentNode( int number) { return m_dependParentNodes.at(number); } 
 
-        void setStartTime(QDateTime startTime) { m_startTime=startTime; }
-        const QDateTime &startTime() const { return m_startTime; }
-        void setEndTime(QDateTime endTime) { m_endTime=endTime; }
-        const QDateTime &endTime() const { return m_endTime; }
+        void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
+        const KPTDuration &startTime() const { return m_startTime; }
+        void setEndTime(KPTDuration endTime) { m_endTime=endTime; }
+        const KPTDuration &endTime() const { return m_endTime; }
 
 
         void setEffort(KPTEffort* e) { m_effort = e; }
@@ -96,24 +96,24 @@ class KPTNode {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        virtual QDateTime *getExpectedDuration() = 0;
+        virtual KPTDuration *getExpectedDuration() = 0;
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
          */
-        virtual QDateTime *getRandomDuration() = 0;
+        virtual KPTDuration *getRandomDuration() = 0;
 
         /** Calculate the start time, use startTime() for the actually started time.
          */
-        virtual QDateTime *getStartTime() = 0;
+        virtual KPTDuration *getStartTime() = 0;
 
         /** Retrieve the calculated float of this node
          */
-        virtual QDateTime *getFloat() =0;
+        virtual KPTDuration *getFloat() =0;
 
         /** Calculate the delay of this node. Use the calculated startTime and the setted startTime.
          */
-        QDateTime *getDelay();
+        KPTDuration *getDelay();
 
         void setName(QString name) { m_name=name; }
         QString name() const { return m_name; }
@@ -126,7 +126,7 @@ class KPTNode {
         NodeType m_nodeType;
         QString m_name;
 
-        QDateTime m_startTime, m_endTime; // both entered during the project, not at the initial calculation.
+        KPTDuration m_startTime, m_endTime; // both entered during the project, not at the initial calculation.
         // effort variables.
         KPTEffort* m_effort;
 };
@@ -134,17 +134,17 @@ class KPTNode {
 class KPTEffort {
 
     public:
-        KPTEffort ( QDateTime e = QDateTime(QDate(0,1,1)), QDateTime p = QDateTime(QDate(0,1,1)), QDateTime o = QDateTime(QDate(0,1,1)) );
+        KPTEffort ( KPTDuration e = KPTDuration(), KPTDuration p = KPTDuration(), KPTDuration o = KPTDuration() );
         ~KPTEffort();
 
-        const QDateTime& optimistic() {return m_optimisticDuration;}
-        const QDateTime& pessimistic() {return m_pessimisticDuration;}
-        const QDateTime& expected() {return m_expectedDuration;}
+        const KPTDuration& optimistic() {return m_optimisticDuration;}
+        const KPTDuration& pessimistic() {return m_pessimisticDuration;}
+        const KPTDuration& expected() {return m_expectedDuration;}
 
     private:
-       QDateTime m_optimisticDuration;
-       QDateTime m_pessimisticDuration;
-       QDateTime m_expectedDuration;
+       KPTDuration m_optimisticDuration;
+       KPTDuration m_pessimisticDuration;
+       KPTDuration m_expectedDuration;
 };
 
 #endif

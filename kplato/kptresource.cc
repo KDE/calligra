@@ -16,7 +16,6 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <qdatetime.h>
 #include "kptresource.h"
 #include "kpttask.h"
 
@@ -60,34 +59,34 @@ KPTResource::~KPTResource() {
 void KPTResource::setName(QString) {
 }
 
-void KPTResource::addWorkingHour(QDateTime from, QDateTime until) {
+void KPTResource::addWorkingHour(KPTDuration from, KPTDuration until) {
 }
 
-QDateTime *KPTResource::getFirstAvailableTime(QDateTime after) {
+KPTDuration *KPTResource::getFirstAvailableTime(KPTDuration after) {
     return 0L;
 }
 
-QDateTime *KPTResource::getBestAvailableTime(QDateTime duration) {
+KPTDuration *KPTResource::getBestAvailableTime(KPTDuration duration) {
     return 0L;
 }
 
 
-KPTAppointment::KPTAppointment(QDateTime startTime, QDateTime duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
+KPTAppointment::KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
     m_startTime=startTime;
     m_duration=duration;
     m_task=taskNode;
     m_resource=resource;
-    m_repeatInterval=QDateTime(QDate(0,1,1));
+    m_repeatInterval=KPTDuration();
     m_repeatCount=0;
 }
 
 KPTAppointment::~KPTAppointment() {
 }
 
-void KPTAppointment::deleteAppointmentFromRepeatList(QDateTime time) {
+void KPTAppointment::deleteAppointmentFromRepeatList(KPTDuration time) {
 }
 
-void KPTAppointment::addAppointmentToRepeatList(QDateTime time) {
+void KPTAppointment::addAppointmentToRepeatList(KPTDuration time) {
 }
 
 

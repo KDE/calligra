@@ -20,7 +20,6 @@
 #ifndef kptmilestone_h
 #define kptmilestone_h
 
-#include <qdatetime.h> 
 #include "kptnode.h"
 #include "defs.h"
 
@@ -45,7 +44,7 @@ class KPTMilestone : public KPTNode {
         // No child time dependencies permitted
 
         void addDependChildNode( KPTNode*, TimingType, TimingRelation) {}
-        void addDependChildNode( KPTNode*, TimingRelation, QDateTime) {}
+        void addDependChildNode( KPTNode*, TimingRelation, KPTDuration) {}
         void insertDependChildNode( unsigned int, KPTNode*, TimingType, TimingRelation) {}
 
 
@@ -56,21 +55,21 @@ class KPTMilestone : public KPTNode {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        QDateTime *getExpectedDuration() { return new QDateTime(QDate(0,1,1)); }
+        KPTDuration *getExpectedDuration() { return new KPTDuration(); }
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
          */
-        QDateTime *getRandomDuration() { return getExpectedDuration(); }
+        KPTDuration *getRandomDuration() { return getExpectedDuration(); }
 
         /** Retrive the time this node starts. This is either implied from the set time, or calculated
          *  by asking the parents.
          */
-        QDateTime *getStartTime();
+        KPTDuration *getStartTime();
 
         /** Retrieve the calculated float of this node
          */
-        QDateTime *getFloat();
+        KPTDuration *getFloat();
 
 };
 #endif

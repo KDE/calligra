@@ -20,7 +20,7 @@
 #ifndef kptrelation_h
 #define kptrelation_h
 
-#include <qdatetime.h> 
+#include "kptduration.h"
 #include "defs.h"
 
 class KPTNode;
@@ -28,7 +28,7 @@ class KPTNode;
 class KPTRelation {
     public:
 
-        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, QDateTime lag);
+        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag);
         KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
         ~KPTRelation();
 
@@ -41,7 +41,7 @@ class KPTRelation {
          *  The lag of a relation is the time it takes between the parent starting/stopping
          *  and the start of the child.
          */
-        const QDateTime &lag() const { return m_lag; }
+        const KPTDuration &lag() const { return m_lag; }
 
         enum Result {
           SUCCESS = 0l,
@@ -55,6 +55,6 @@ class KPTRelation {
         KPTNode *m_child;
         TimingType m_timingType;
         TimingRelation m_timingRelation;
-        QDateTime m_lag;
+        KPTDuration m_lag;
 };
 #endif

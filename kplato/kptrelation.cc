@@ -19,7 +19,7 @@
 #include "kptrelation.h"
 #include "defs.h"
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, QDateTime lag) {
+KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) {
     m_parent=parent;
     m_child=child;
     m_timingType=tt;
@@ -32,7 +32,7 @@ KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingR
     m_child=child;
     m_timingType=tt;
     m_timingRelation=tr;
-    m_lag=QDateTime(QDate(0,1,1));
+    m_lag=KPTDuration();
 }
 
 KPTRelation::~KPTRelation() {

@@ -20,7 +20,7 @@
 #ifndef kpttask_h
 #define kpttask_h
 
-#include <qdatetime.h> 
+#include "kptduration.h" 
 #include "kptnode.h"
 #include "kptresource.h"
 #include "defs.h"
@@ -40,21 +40,21 @@ class KPTTask : public KPTNode {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        QDateTime *getExpectedDuration();
+        KPTDuration *getExpectedDuration();
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
          */
-        QDateTime *getRandomDuration();
+        KPTDuration *getRandomDuration();
 
         /** Retrive the time this node starts. This is either implied from the set time, or calculated
          *  by asking the parents.
          */
-        QDateTime *getStartTime();
+        KPTDuration *getStartTime();
 
         /** Retrieve the calculated float of this node
          */
-        QDateTime *getFloat();
+        KPTDuration *getFloat();
 
        // resources management
         /** The resources are provided as a list, each having an associated risk.
@@ -65,8 +65,6 @@ class KPTTask : public KPTNode {
         virtual void insertResource( unsigned int index, KPTResourceGroup *resource );
         void removeResource( KPTResourceGroup *resource );
         void removeResource( int number );
-
-
 
   private:
         QList<KPTResourceGroup> m_resource;

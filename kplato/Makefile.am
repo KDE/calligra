@@ -9,5 +9,5 @@ INCLUDES = $(all_includes)
 bin_PROGRAMS = kplato
 kplato_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
                 kptrelation.cc kptresource.cc kpttask.cc \
-                main.cc
+                main.cc kptduration.cc
 kplato_LDADD =  $(all_libraries) $(LIB_KDECORE)
