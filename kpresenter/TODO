@@ -76,6 +76,7 @@ Done:
 -> save/load general config (GridIsVisible etc.)
 -> save/load object transparency
 -> save/load header/footer object
+-> save/load display header/footer
 
 Todo:
 -> save/load cubic/quadric/freehand object (define as svg object)
