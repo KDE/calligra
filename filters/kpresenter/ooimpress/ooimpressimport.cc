@@ -415,21 +415,14 @@ bool OoImpressImport::parseSettings( QDomDocument &doc,const QDomElement &settin
     selectedPage = parseConfigItem( configItem, "SelectedPage" ).toInt();
 
     attributeElement.setAttribute( "activePage", selectedPage );
+    attributeElement.setAttribute("gridx", MM_TO_POINT( gridX / 100.0 ) );
 
-    QString pt_x;
-    pt_x.setNum(( gridX/100.0 ));
-    pt_x+="mm";
-    attributeElement.setAttribute("gridx", KoUnit::parseValue(pt_x) );
-
-    QString pt_y;
-    pt_y.setNum(( gridY/100.0 ));
-    pt_y+="mm";
-    attributeElement.setAttribute("gridy", KoUnit::parseValue(pt_y) );
+    attributeElement.setAttribute("gridy", MM_TO_POINT( gridY / 100.0 ) );
     attributeElement.setAttribute("snaptogrid", (int)snapToGrid );
 
 
 
-    kdDebug()<<" gridX :"<<gridX<<" gridY :"<<gridY<<" snapToGrid :"<<snapToGrid<<" selectedPage :"<<selectedPage<<endl;
+    //kdDebug()<<" gridX :"<<gridX<<" gridY :"<<gridY<<" snapToGrid :"<<snapToGrid<<" selectedPage :"<<selectedPage<<endl;
     return foundElement;
 }
 
@@ -450,14 +443,8 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             QStringList listVal = QStringList::split( ",", str );
             int posX = ( listVal[0].toInt()/100 );
             int posY = ( listVal[1].toInt()/100 );
-            QString pt_x;
-            QString pt_y;
-            pt_x.setNum(posX);
-            pt_x+="mm";
-            pt_y.setNum(posY);
-            pt_y+="mm";
-            point.setAttribute("posX", KoUnit::parseValue(pt_x));
-            point.setAttribute("posY", KoUnit::parseValue(pt_y));
+            point.setAttribute("posX", MM_TO_POINT(  posX ));
+            point.setAttribute("posY", MM_TO_POINT(  posY ));
 
             helpLineElement.appendChild( point );
             newPos = pos-1;
@@ -469,10 +456,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             str = text.mid( pos+1, ( newPos-pos ) );
             //kdDebug()<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
-            QString pt_x;
-            pt_x.setNum(posX);
-            pt_x+="mm";
-            lines.setAttribute( "value",  KoUnit::parseValue(pt_x) );
+            lines.setAttribute( "value",  MM_TO_POINT( posX ) );
             helpLineElement.appendChild( lines );
 
             newPos = ( pos-1 );
@@ -485,11 +469,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             str = text.mid( pos+1, ( newPos-pos ) );
             //kdDebug()<<" horizontal  :"<< str <<endl;
             int posY = ( str.toInt()/100 );
-            QString pt_y;
-            pt_y.setNum(posY);
-            pt_y+="mm";
-
-            lines.setAttribute( "value", KoUnit::parseValue(pt_y)  );
+            lines.setAttribute( "value", MM_TO_POINT(  posY )  );
             helpLineElement.appendChild( lines );
             newPos = pos-1;
         }
