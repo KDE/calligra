@@ -2230,16 +2230,17 @@ void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int d
     /// We don't want to start from the beginning every time !
     ////m_doc->invalidate();
 
+    // Reformat the last paragraph. If it's over the two pages, it will need
+    // the new page (e.g. for inline frames that need internalToDocument to work)
+    if ( lastFormatted )
+        lastFormatted = lastFormatted->prev();
+    else
+        lastFormatted = textDocument()->lastParag();
+
     if ( lastFormatted )
     {
-        // Reformat the last paragraph. If it's over the two pages, it will need
-        // the new page (e.g. for inline frames that need internalToDocument to work)
-        if ( lastFormatted->prev() )
-        {
-            m_textobj->setLastFormattedParag( lastFormatted->prev() );
-            lastFormatted->invalidate( 0 );
-        }
-
+        m_textobj->setLastFormattedParag( lastFormatted );
+        lastFormatted->invalidate( 0 );
         m_textobj->formatMore( 2 );
         *abort = true;
         return;
