@@ -81,7 +81,7 @@ public:
     // Communication with Document, without having to know about Document
 signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
-    void subDocFound( const wvWare::FunctorBase* parsingFunctor );
+    void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );
@@ -95,6 +95,7 @@ private:
     QDomElement m_framesetElement;
     int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out
+    int m_endNoteNumber; // number of endnote _vars_ written out
 
     // Current paragraph
     QString m_paragraph;

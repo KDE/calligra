@@ -64,20 +64,20 @@ public:
     typedef const wvWare::FunctorBase* FunctorPtr;
     struct SubDocument
     {
-        SubDocument( FunctorPtr ptr ) : functorPtr(ptr) {}
+        SubDocument( FunctorPtr ptr, int d ) : functorPtr(ptr), data(d) {}
         ~SubDocument() {}
         FunctorPtr functorPtr;
+        int data;
     };
     bool hasSubDocument() const;
-    SubDocument popSubDocument();
 
 protected slots:
     // Connected to the KWordTextHandler only when parsing the body
     void slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
 
-    // Our parsing queue, for headers, footers, footnotes, text boxes etc.
+    // Add to our parsing queue, for headers, footers, footnotes, text boxes etc.
     // Note that a header functor will parse ALL the header/footers (of the section)
-    void pushSubDocument( const wvWare::FunctorBase* functor /*const SubDocument& subdoc*/ );
+    void slotSubDocFound( const wvWare::FunctorBase* functor, int data );
 
 private:
     void processStyles();
@@ -92,6 +92,7 @@ private:
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     bool m_bodyFound;
     int m_footNoteNumber; // number of footnote _framesets_ written out
+    int m_endNoteNumber; // number of endnote _framesets_ written out
 };
 
 #endif // DOCUMENT_H

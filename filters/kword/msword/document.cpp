@@ -37,13 +37,14 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ), m_textHandler( 0 ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ),
-      m_headerFooters( 0 ), m_bodyFound( false ), m_footNoteNumber( 0 )
+      m_headerFooters( 0 ), m_bodyFound( false ),
+      m_footNoteNumber( 0 ), m_endNoteNumber( 0 )
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
         m_textHandler = new KWordTextHandler( m_parser );
-        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase* ) ),
-                 this, SLOT( pushSubDocument( const wvWare::FunctorBase* ) ) );
+        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
+                 this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
@@ -82,11 +83,12 @@ void Document::finishDocument()
     element = m_mainDocument.createElement("FOOTNOTESETTING");
     elementDoc.appendChild(element);
     element.setAttribute( "start", dop.nFtn ); // initial footnote number for document. Starts at 1.
-    kdDebug() << "nfcFtnRef=" << dop.nfcFtnRef << " nfcFtnRef2=" << dop.nfcFtnRef2 << endl;
-    // There's nfcFtnRef and nfcFtnRef2 !! And a quick test seems to indicate that the 2nd one is used (at least in Word97)
     element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcFtnRef2 ) );
 
-    // TODO same for ENDNOTESETTING
+    element = m_mainDocument.createElement("ENDNOTESETTING");
+    elementDoc.appendChild(element);
+    element.setAttribute( "start", dop.nEdn ); // initial endnote number for document. Starts at 1.
+    element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcEdnRef2 ) );
 
     // Done at the end: write the type of headers/footers,
     // depending on which kind of headers and footers we received.
@@ -257,11 +259,20 @@ void Document::endHeader()
 
 void Document::startFootnote()
 {
+    // Grab data that was stored with the functor, that triggered this parsing
+    SubDocument subdoc( m_subdocQueue.front() );
+    int type = subdoc.data;
+
+    // Create footnote/endnote frameset
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     framesetElement.setAttribute( "frameType", 1 /* text */ );
-    framesetElement.setAttribute( "frameInfo", 7 /* footnote */ );
-    // Keep name in sync with KWordTextHandler::footnoteFound
-    framesetElement.setAttribute("name", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
+    framesetElement.setAttribute( "frameInfo", 7 /* footnote/endnote */ );
+    if ( type == wvWare::FootnoteData::Endnote )
+        // Keep name in sync with KWordTextHandler::footnoteFound
+        framesetElement.setAttribute("name", i18n("EndNote %1").arg( ++m_endNoteNumber ) );
+    else
+        // Keep name in sync with KWordTextHandler::footnoteFound
+        framesetElement.setAttribute("name", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
     m_framesetsElement.appendChild(framesetElement);
 
     createInitialFrame( framesetElement, 567, 567+41, true );
@@ -283,14 +294,14 @@ void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int
     frameElementOut.setAttribute( "top", top );
     frameElementOut.setAttribute( "bottom", bottom );
     frameElementOut.setAttribute( "runaround", 1 );
-    // AutoExtendFrame for header/footer/footnote, AutoCreateNewFrame for body text
+    // AutoExtendFrame for header/footer/footnote/endnote, AutoCreateNewFrame for body text
     frameElementOut.setAttribute( "autoCreateNewFrame", autoExtend ? 0 : 1 );
     parentFramesetElem.appendChild( frameElementOut );
 }
 
-void Document::pushSubDocument( const wvWare::FunctorBase* functor )
+void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
 {
-    SubDocument subdoc( functor );
+    SubDocument subdoc( functor, data );
     m_subdocQueue.push( subdoc );
 }
 
@@ -299,21 +310,15 @@ bool Document::hasSubDocument() const
     return !m_subdocQueue.empty();
 }
 
-Document::SubDocument Document::popSubDocument()
-{
-    SubDocument subdoc( m_subdocQueue.front() );
-    m_subdocQueue.pop();
-    return subdoc;
-}
-
 void Document::processSubDocQueue()
 {
     while ( hasSubDocument() )
     {
-        SubDocument subdoc = popSubDocument();
+        SubDocument subdoc( m_subdocQueue.front() );
         Q_ASSERT( subdoc.functorPtr );
         (*subdoc.functorPtr)(); // call it
         delete subdoc.functorPtr; // delete it
+        m_subdocQueue.pop();
     }
 }
 

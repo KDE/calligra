@@ -51,7 +51,7 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
-    : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ),
+    : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
       m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 )
 {
 }
@@ -99,7 +99,7 @@ void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
     // Currently we only care about headers in the first section
     if ( m_sectionNumber == 1 )
     {
-        emit subDocFound( new wvWare::HeaderFunctor( parseHeaders ) );
+        emit subDocFound( new wvWare::HeaderFunctor( parseHeaders ), 0 );
     }
 }
 
@@ -116,12 +116,16 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
         footnoteElem.setAttribute( "value", QString(QChar(character.unicode())) );
     footnoteElem.setAttribute( "notetype", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote" );
     footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
-    // Keep name in sync with Document::startFootnote
-    footnoteElem.setAttribute( "frameset", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
+    if ( type == wvWare::FootnoteData::Endnote )
+        // Keep name in sync with Document::startFootnote
+        footnoteElem.setAttribute( "frameset", i18n("EndNote %1").arg( ++m_endNoteNumber ) );
+    else
+        // Keep name in sync with Document::startFootnote
+        footnoteElem.setAttribute( "frameset", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
     varElem.appendChild( footnoteElem );
 
     // Remember to parse the footnote text later
-    emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ) );
+    emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
 }
 
 QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format )
