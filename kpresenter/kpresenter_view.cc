@@ -1621,7 +1621,7 @@ void KPresenterView::setupActions()
     actionEditDelete = new KAction( i18n( "&Delete" ), KPBarIcon( "delete" ), CTRL + Key_Delete,
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
-    actionEditSelectAll = new KAction( i18n( "&Select All" ), CTRL + Key_A,
+    actionEditSelectAll = new KAction( i18n( "&Select All" ), ALT + Key_A,
 				       this, SLOT( editSelectAll() ),
 				       actionCollection(), "edit_selectall" );
     actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), KPBarIcon( "newslide" ), 0,

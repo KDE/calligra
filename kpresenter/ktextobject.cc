@@ -4225,9 +4225,8 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 		    cursorChanged = TRUE;
 		    break;
 		case Key_A:
-		    // ######### hmmm, problem with logic here
-// 		    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
-// 		    cursorChanged = TRUE;
+		    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
+		    cursorChanged = TRUE;
 		    break;
 		}
 	    }

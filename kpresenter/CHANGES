@@ -582,4 +582,5 @@ Reggie, 9.12.1999:
   select all, but it could also mean the same as pos1....
 - Cleaned up TODO list
 - Got rid of a warning
+- CTRL + A == Home and ALT + A select all now
 
