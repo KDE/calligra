@@ -31,9 +31,10 @@
 
 VDocument::VDocument()
 	: VObject( 0L ),
-		m_mime( "application/x-karbon" ), m_version( "0.1" ),
-		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" ),
-		m_selectionMode( VDocument::ActiveLayer )
+	  m_selectionMode( VDocument::ActiveLayer ),
+	  m_mime( "application/x-karbon" ),
+	  m_version( "0.1" ), m_editor( "karbon14 0.0.1" ),
+	  m_syntaxVersion( "0.1" )
 {
 	m_selection = new VSelection( this );
 
@@ -87,7 +88,7 @@ void
 VDocument::raiseLayer( VLayer* layer )
 {
 	int pos = m_layers.find( layer );
-	if ( pos != m_layers.count() - 1 && pos >= 0 )
+	if( pos != int( m_layers.count() ) - 1 && pos >= 0 )
 	{
 		VLayer* layer = m_layers.take( pos );
 		m_layers.insert( pos + 1, layer );
