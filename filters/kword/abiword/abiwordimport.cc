@@ -144,6 +144,7 @@ public:
 	textIndent=0;
 	margin_bottom=0;
         margin_top=0;
+	line_height=0;
     }
     ~StackItem()
     {
@@ -172,6 +173,7 @@ public:
     double      textIndent;
     double      margin_bottom;
     double      margin_top;
+    double      line_height;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
@@ -263,7 +265,13 @@ static inline double IndentPos( QString _str)
     }
   else 
     {
-      kdWarning(30506) << "unknown indent pos: " << _str << endl;
+      bool b=false;
+      d=_str.toDouble(&b);
+      if(!b)
+	{
+	  d=0;
+	  kdWarning(30506) << "unknown indent pos: " << _str << endl;
+	}
     }
   return d;
 }
@@ -396,10 +404,10 @@ void PopulateProperties(StackItem* stackItem,
 	stackItem->margin_top=IndentPos(strTopMargin);
       }
 
-    QString strBottomMargin=abiPropsMap["margin-bottom"].getValue();
-    if(!strBottomMargin.isEmpty())
+    QString strLineHeight=abiPropsMap["line-height"].getValue();
+    if(!strLineHeight.isEmpty())
       {
-	stackItem->margin_bottom=IndentPos(strBottomMargin);
+	stackItem->line_height=IndentPos(strLineHeight);
       }
 }
 
@@ -591,6 +599,29 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
 	 if(stackItem->margin_top)
 	   element.setAttribute("before",stackItem->margin_top);
 	 layoutElement.appendChild(element);
+    }
+
+    if ( stackItem->line_height)
+    {
+         element=mainDocument.createElement("LINESPACING");
+	 if(stackItem->line_height==1.0)
+	   {
+	     //nothing
+	   }
+	 else if(stackItem->line_height==1.5)
+	   {
+	      element.setAttribute("value","oneandhalf");
+	   }
+	 else if(stackItem->line_height==2.0)
+	   {
+	     element.setAttribute("value","double");
+	   }
+	 else
+	   {
+	     element.setAttribute("value",stackItem->line_height);
+	   }
+	 if(stackItem->line_height!=1.0)
+	   layoutElement.appendChild(element);
     }
 
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");
