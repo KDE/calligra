@@ -457,7 +457,7 @@ void KoVariable::resize()
 
 QString KoVariable::text()
 {
-    return m_varFormat->convert( m_varType );
+    return m_varFormat->convert( m_varValue );
 }
 
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
@@ -750,12 +750,12 @@ KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariable
 void KoDateVariable::recalc()
 {
     if ( m_subtype == VST_DATE_CURRENT )
-        m_varType = QVariant(QDate::currentDate());
+        m_varValue = QVariant(QDate::currentDate());
     else
     {
         // Only if never set before (i.e. upon insertion)
-        if ( m_varType.toDate().isNull() )
-            m_varType= QVariant(QDate::currentDate());
+        if ( m_varValue.toDate().isNull() )
+            m_varValue= QVariant(QDate::currentDate());
     }
     resize();
 }
@@ -764,7 +764,7 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
 {
     QDomElement elem = varElem.ownerDocument().createElement( "DATE" );
     varElem.appendChild( elem );
-    QDate date = m_varType.toDate();
+    QDate date = m_varValue.toDate();
     elem.setAttribute( "year", date.year() );
     elem.setAttribute( "month", date.month() );
     elem.setAttribute( "day", date.day() );
@@ -786,7 +786,7 @@ void KoDateVariable::load( QDomElement& elem )
         {
             QDate date;
             date.setYMD( y, m, d );
-            m_varType = QVariant( date );
+            m_varValue = QVariant( date );
         }
         m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
     }
@@ -837,12 +837,12 @@ KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariable
 void KoTimeVariable::recalc()
 {
     if ( m_subtype == VST_TIME_CURRENT )
-        m_varType = QVariant( QTime::currentTime());
+        m_varValue = QVariant( QTime::currentTime());
     else
     {
         // Only if never set before (i.e. upon insertion)
-        if ( m_varType.toTime().isNull() )
-            m_varType = QVariant( QTime::currentTime());
+        if ( m_varValue.toTime().isNull() )
+            m_varValue = QVariant( QTime::currentTime());
     }
     resize();
 }
@@ -852,7 +852,7 @@ void KoTimeVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
-    QTime time = m_varType.toTime();
+    QTime time = m_varValue.toTime();
     elem.setAttribute( "hour", time.hour() );
     elem.setAttribute( "minute", time.minute() );
     elem.setAttribute( "second", time.second() );
@@ -876,7 +876,7 @@ void KoTimeVariable::load( QDomElement& elem )
         {
             QTime time;
             time.setHMS( h, m, s, ms );
-            m_varType = QVariant( time);
+            m_varValue = QVariant( time);
         }
         m_subtype = fix ? VST_TIME_FIX : VST_TIME_CURRENT;
     }
@@ -914,14 +914,14 @@ QStringList KoTimeVariable::subTypeFormat()
 KoCustomVariable::KoCustomVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat, KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat,_varColl )
 {
-    m_varType = QVariant( name );
+    m_varValue = QVariant( name );
 }
 
 void KoCustomVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "name", m_varType.toString() );
+    elem.setAttribute( "name", m_varValue.toString() );
     elem.setAttribute( "value", value() );
 }
 
@@ -931,19 +931,19 @@ void KoCustomVariable::load( QDomElement& elem )
     QDomElement e = elem.namedItem( "CUSTOM" ).toElement();
     if (!e.isNull())
     {
-        m_varType = QVariant (e.attribute( "name" ));
+        m_varValue = QVariant (e.attribute( "name" ));
         setValue( e.attribute( "value" ) );
     }
 }
 
 QString KoCustomVariable::value() const
 {
-    return m_varColl->getVariableValue( m_varType.toString() );
+    return m_varColl->getVariableValue( m_varValue.toString() );
 }
 
 void KoCustomVariable::setValue( const QString &v )
 {
-    m_varColl->setVariableValue( m_varType.toString(), v );
+    m_varColl->setVariableValue( m_varValue.toString(), v );
 }
 
 QStringList KoCustomVariable::actionTexts()
@@ -962,14 +962,14 @@ void KoCustomVariable::recalc()
 KoMailMergeVariable::KoMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat, _varColl )
 {
-    m_varType = QVariant ( name );
+    m_varValue = QVariant ( name );
 }
 
 void KoMailMergeVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "MAILMERGE" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "name", m_varType.toString() );
+    elem.setAttribute( "name", m_varValue.toString() );
 }
 
 void KoMailMergeVariable::load( QDomElement& elem )
@@ -977,7 +977,7 @@ void KoMailMergeVariable::load( QDomElement& elem )
     KoVariable::load( elem );
     QDomElement e = elem.namedItem( "MAILMERGE" ).toElement();
     if (!e.isNull())
-        m_varType = QVariant( e.attribute( "name" ) );
+        m_varValue = QVariant( e.attribute( "name" ) );
 }
 
 QString KoMailMergeVariable::value() const
@@ -1013,9 +1013,9 @@ void KoPgNumVariable::saveVariable( QDomElement& parentElem )
     parentElem.appendChild( pgNumElem );
     pgNumElem.setAttribute( "subtype", m_subtype );
     if ( m_subtype == VST_PGNUM_CURRENT || m_subtype == VST_PGNUM_TOTAL )
-        pgNumElem.setAttribute( "value", m_varType.toInt() );
+        pgNumElem.setAttribute( "value", m_varValue.toInt() );
     else
-        pgNumElem.setAttribute( "value", m_varType.toString() );
+        pgNumElem.setAttribute( "value", m_varValue.toString() );
 }
 
 void KoPgNumVariable::load( QDomElement& elem )
@@ -1026,9 +1026,9 @@ void KoPgNumVariable::load( QDomElement& elem )
     {
         m_subtype = pgNumElem.attribute("subtype").toInt();
         if ( m_subtype == VST_PGNUM_CURRENT || m_subtype == VST_PGNUM_TOTAL )
-            m_varType = QVariant(pgNumElem.attribute("value").toInt());
+            m_varValue = QVariant(pgNumElem.attribute("value").toInt());
         else
-            m_varType = QVariant(pgNumElem.attribute("value"));
+            m_varValue = QVariant(pgNumElem.attribute("value"));
     }
 }
 
@@ -1065,7 +1065,7 @@ void KoFieldVariable::saveVariable( QDomElement& parentElem )
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
     elem.setAttribute( "subtype", m_subtype );
-    elem.setAttribute( "value", m_varType.toString() );
+    elem.setAttribute( "value", m_varValue.toString() );
 }
 
 void KoFieldVariable::load( QDomElement& elem )
@@ -1077,7 +1077,7 @@ void KoFieldVariable::load( QDomElement& elem )
         m_subtype = e.attribute( "subtype" ).toInt();
         if ( m_subtype == VST_NONE )
             kdWarning() << "Field subtype of -1 found in the file !" << endl;
-        m_varType = QVariant( e.attribute( "value" ) );
+        m_varValue = QVariant( e.attribute( "value" ) );
     } else
         kdWarning() << "FIELD element not found !" << endl;
 }
@@ -1165,7 +1165,7 @@ void KoFieldVariable::recalc()
 
     if ( value.isEmpty() )
         value = i18n("<None>");
-    m_varType = QVariant( value );
+    m_varValue = QVariant( value );
     resize();
 }
 
@@ -1202,14 +1202,14 @@ KoLinkVariable::KoLinkVariable( KoTextDocument *textdoc, const QString & _linkNa
     : KoVariable( textdoc, varFormat,_varColl )
     ,m_url(_ulr)
 {
-    m_varType = QVariant( _linkName );
+    m_varValue = QVariant( _linkName );
 }
 
 void KoLinkVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement linkElem = parentElem.ownerDocument().createElement( "LINK" );
     parentElem.appendChild( linkElem );
-    linkElem.setAttribute( "linkName", m_varType.toString() );
+    linkElem.setAttribute( "linkName", m_varValue.toString() );
     linkElem.setAttribute( "hrefName", m_url );
 }
 
@@ -1219,7 +1219,7 @@ void KoLinkVariable::load( QDomElement& elem )
     QDomElement linkElem = elem.namedItem( "LINK" ).toElement();
     if (!linkElem.isNull())
     {
-        m_varType = QVariant(linkElem.attribute("linkName"));
+        m_varValue = QVariant(linkElem.attribute("linkName"));
         m_url = linkElem.attribute("hrefName");
     }
 }
@@ -1256,14 +1256,14 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
 KoNoteVariable::KoNoteVariable( KoTextDocument *textdoc, const QString & _note,KoVariableFormat *varFormat,KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat,_varColl )
 {
-    m_varType = QVariant( _note );
+    m_varValue = QVariant( _note );
 }
 
 void KoNoteVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement linkElem = parentElem.ownerDocument().createElement( "NOTE" );
     parentElem.appendChild( linkElem );
-    linkElem.setAttribute( "note", m_varType.toString() );
+    linkElem.setAttribute( "note", m_varValue.toString() );
 }
 
 void KoNoteVariable::load( QDomElement& elem )
@@ -1272,7 +1272,7 @@ void KoNoteVariable::load( QDomElement& elem )
     QDomElement linkElem = elem.namedItem( "NOTE" ).toElement();
     if (!linkElem.isNull())
     {
-        m_varType = QVariant(linkElem.attribute("note"));
+        m_varValue = QVariant(linkElem.attribute("note"));
     }
 }
 

@@ -315,7 +315,7 @@ protected:
     virtual void saveVariable( QDomElement &parentElem ) = 0;
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
-    QVariant m_varType;
+    QVariant m_varValue;
 };
 
 /**
@@ -334,7 +334,7 @@ public:
 
     virtual void recalc();
 
-    void setDate( const QDate & _date ) { m_varType = QVariant(_date); }
+    void setDate( const QDate & _date ) { m_varValue = QVariant(_date); }
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -362,7 +362,7 @@ public:
 
     virtual void recalc();
 
-    void setTime( const QTime & _time ) { m_varType = QVariant(_time); }
+    void setTime( const QTime & _time ) { m_varValue = QVariant(_time); }
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -392,7 +392,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    QString name() const { return m_varType.toString(); }
+    QString name() const { return m_varValue.toString(); }
     virtual void recalc();
     virtual QString text() { return value(); } // use a format when they are customizable
     QString value() const;
@@ -430,7 +430,7 @@ public:
 
     virtual void recalc();
     virtual QString text() { return value(); } // use a format when they are customizable
-    QString value() const { return m_varType.toString(); }
+    QString value() const { return m_varValue.toString(); }
 
     static QStringList actionTexts();
 
@@ -455,7 +455,7 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text();
-    QString name() const { return m_varType.toString(); }
+    QString name() const { return m_varValue.toString(); }
     virtual QString value() const;
 
 protected:
@@ -484,9 +484,9 @@ public:
 
     // For the 'current page' variable. This is called by the app e.g. when painting
     // a given page (see KWTextFrameSet::drawFrame and KPTextObject::recalcPageNum)
-    void setPgNum( int pgNum ) { m_varType = QVariant( pgNum); }
+    void setPgNum( int pgNum ) { m_varValue = QVariant( pgNum); }
     // For the 'current section title' variable. Same thing.
-    void setSectionTitle( const QString& title ) { m_varType = QVariant( title); }
+    void setSectionTitle( const QString& title ) { m_varValue = QVariant( title); }
 
     short int subtype() const { return m_subtype; }
 
@@ -513,14 +513,14 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text() { return value(); }
-    QString value() const { return m_varType.toString(); }
+    QString value() const { return m_varValue.toString(); }
     QString url() const { return m_url;}
 
     virtual void recalc();
 
     void setLink(const QString & _linkName, const QString &_url)
 	{
-	    m_varType=QVariant(_linkName);
+	    m_varValue=QVariant(_linkName);
 	    m_url=_url;
 	}
 
@@ -544,8 +544,8 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text();
-    QString note() const { return m_varType.toString(); }
-    void setNote( const QString & _note) { m_varType = QVariant(_note); }
+    QString note() const { return m_varValue.toString(); }
+    void setNote( const QString & _note) { m_varValue = QVariant(_note); }
     virtual void recalc();
 };
 

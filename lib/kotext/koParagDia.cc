@@ -85,7 +85,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
     spnDepth = new QSpinBox( 0, 15, 1, gStyle );
     grid->addWidget( spnDepth, 1, 2);
 
-    if ( ! displayDepth )
+    if ( !displayDepth )
         spnDepth->hide();
     lCustom = new QLabel( gStyle, "lCustom" );
     lCustom->setText( i18n( "Custom character" ) );
