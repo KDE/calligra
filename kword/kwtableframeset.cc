@@ -1287,7 +1287,7 @@ bool KWTableFrameSet::contains( double mx, double my ) {
         first = m_cells.at((m_pageBoundaries[i-1]))->getFrame( 0 );
         last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
 
-        KoRect rect(first->x(), first->y(), last->right(), last->bottom());
+        KoRect rect( KoPoint( first->x(), first->y() ), KoPoint( last->right(), last->bottom() ) );
         if(rect.contains(mx,my))
             return true;
     }
@@ -1537,45 +1537,46 @@ KWFrameSetEdit* KWTableFrameSetEdit::currentTextEdit()
 }
 
 
-void  KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
+void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
 {
-    KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_currentCell->frameSet());
-    KWFrameSet *fs;
-    KWTableFrameSet* tableFrame=tableFrameSet();
-    bool moveToOtherCell=false;
-    switch( e->key() )
-    {
+    if ( !m_currentCell )
+        return;
+    KWTableFrameSet::Cell *cell = static_cast<KWTableFrameSet::Cell *>(m_currentCell->frameSet());
+    KWFrameSet *fs = 0L;
+    switch( e->key() ) {
         case QKeyEvent::Key_Up:
         {
-            if ( cell->m_col > 0 )
-               fs = tableFrame->getCell(  cell->m_row, cell->m_col - 1 );
-            else if ( cell->m_row > 0 )
-                fs = tableFrame->getCell(  cell->m_row - 1,tableFrame->getCols() - 1 );
-            else
-                fs = tableFrame->getCell( tableFrame->getRows() - 1,tableFrame->getCols() - 1 );
             if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->prev())
-                moveToOtherCell=true;
+            {
+                KWTableFrameSet* tableFrame=tableFrameSet();
+                if ( cell->m_col > 0 )
+                    fs = tableFrame->getCell(  cell->m_row, cell->m_col - 1 );
+                else if ( cell->m_row > 0 )
+                    fs = tableFrame->getCell(  cell->m_row - 1,tableFrame->getCols() - 1 );
+                else
+                    fs = tableFrame->getCell( tableFrame->getRows() - 1,tableFrame->getCols() - 1 );
+            }
         }
         break;
         case QKeyEvent::Key_Down:
         {
-            if ( cell->m_col < tableFrame->getCols() - 1 )
-                fs = tableFrame->getCell( cell->m_row, cell->m_col + 1 );
-            else if ( cell->m_row < tableFrame->getRows() - 1 )
-                fs = tableFrame->getCell( cell->m_row + 1, 0 );
-            else
-                fs = tableFrame->getCell( 0, 0 );
-
             if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->next())
-                moveToOtherCell=true;
+            {
+                KWTableFrameSet* tableFrame=tableFrameSet();
+                if ( cell->m_col < tableFrame->getCols() - 1 )
+                    fs = tableFrame->getCell( cell->m_row, cell->m_col + 1 );
+                else if ( cell->m_row < tableFrame->getRows() - 1 )
+                    fs = tableFrame->getCell( cell->m_row + 1, 0 );
+                else
+                    fs = tableFrame->getCell( 0, 0 );
+            }
         }
         break;
     }
 
-    if(moveToOtherCell)
+    if ( fs )
         setCurrentCell( fs );
-
-    if ( m_currentCell && !moveToOtherCell)
+    else
         m_currentCell->keyPressEvent( e );
 }
 

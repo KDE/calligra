@@ -2053,6 +2053,9 @@ KWFrameSet * KWDocument::getFrameSet( double mx, double my )
     {
         KWFrameSet *frameSet = fit.current();
         if ( frameSet->contains( mx, my ) ) {
+
+            kdDebug() << "KWDocument::getFrameSet found frameset " << frameSet << " at position " << mx << "," << my << endl;
+
             if ( !frameSet->isVisible() )
                 continue;
             if ( frameSet->isRemoveableHeader() )
