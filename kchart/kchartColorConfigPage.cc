@@ -89,7 +89,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     _titleCB = new KColorButton( gb );
 	titleLA->setBuddy( _titleCB );
     grid->addWidget( _titleCB, 2, 3 );
-	wtstr = i18n( "This color is used for displaying titles for the axes." 
+	wtstr = i18n( "This color is used for displaying titles for the axes. " 
 				  "This setting can be overwritten by the settings for the "
 				  "individual axes." );
 	QWhatsThis::add( titleLA, wtstr );
