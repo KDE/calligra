@@ -388,7 +388,6 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
             kdDebug() << "Found footer" << endl;
             importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
         }
-        m_styleStack.pop();
     }
     else
     {
