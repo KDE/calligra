@@ -38,14 +38,14 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     : KDialogBase( parent, name, true, QString::null, Ok|Cancel|User1, Ok, true )
 {
     m_doc =_doc;
-    setButtonOKText(i18n("&Insert"));
+    //setButtonOKText(i18n("&Insert"));
 
     setCaption( i18n("Insert Footnote/Endnote") );
 
     QVBox *page = makeVBoxMainWidget();
 
-    QButtonGroup *grp = new QButtonGroup(  page );
-    QGridLayout *grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QButtonGroup *grp = new QButtonGroup( i18n("Numbering"), page );
+    QGridLayout *grid = new QGridLayout( grp, 9, 4, KDialog::marginHint(), KDialog::spacingHint());
     m_rbAuto = new QRadioButton( i18n("&Automatic"), grp );
     m_rbManual= new QRadioButton( i18n("&Manual"), grp );
 
@@ -63,7 +63,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     grid->addWidget( m_footLine, 1, 1);
 
 
-    grp = new QButtonGroup( 2, Qt::Vertical, page );
+    grp = new QButtonGroup( 4, Qt::Vertical, page );
     m_rbFootNote = new QRadioButton( i18n("&Footnote"), grp );
     m_rbEndNote = new QRadioButton( i18n("&Endnote"), grp );
 
