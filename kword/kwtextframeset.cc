@@ -381,17 +381,17 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
     {
         if ( !parag || linesTogether ) // Paragraph-level breaking
         {
-            kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
-                           << " breakEnd [new value for yp]=" << breakEnd << endl;
+            //kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
+            //               << " breakEnd [new value for yp]=" << breakEnd << endl;
             yp = breakEnd;
             return true;
         }
         else // Line-level breaking
         {
             QMap<int, QTextParagLineStart*>& lineStarts = parag->lineStartList();
-            kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+            /*kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                            << ". lineStarts has " << lineStarts.count()
-                           << " items" << endl;
+                           << " items" << endl;*/
 
             int dy = 0;
             int line = 0;
@@ -412,14 +412,14 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
                     {
                         if ( line == 0 ) // First line ? It's like a paragraph breaking then
                         {
-                            kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
-                                           << " BREAKING first line -> parag break" << endl;
+                            //kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                            //               << " BREAKING first line -> parag break" << endl;
                             yp = breakEnd;
                             return true;
                         }
                         dy = breakEnd - y;
-                        kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
-                                       << " BREAKING at line " << line << " dy=" << dy << endl;
+                        //kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                        //               << " BREAKING at line " << line << " dy=" << dy << endl;
                         ls->y = breakEnd - parag->rect().y();
                     }
                 }
@@ -441,13 +441,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     // to implement page-break at the paragraph level and at the line level.
     // It's cumulative (the space of one break will be included in the further
     // paragraph's y position), which makes it easy to implement.
-
-    // Nothing to do for header/footer. Well, this is probably a quick hack ?
-    //if ( getFrameInfo() != FI_BODY )
-    // {
-    //    QTextFlow::adjustFlow( yp, w, h, parag, FALSE );
-    //    return;
-    // }
 
     int breaked = false;
     bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
@@ -659,8 +652,7 @@ void KWTextFrameSet::updateFrames()
             }
         }
     }
-    //if ( getFrameInfo() == FI_BODY )
-        kdDebug(32002) << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
+    kdDebugBody(32002) << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames();
@@ -753,7 +745,10 @@ void KWTextFrameSet::zoom()
         KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
         ASSERT( format );
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-        kdDebug(32002) << "KWTextFrameSet::zooming format " << format->key() << " from " << format->font().pointSizeFloat() << " to " << format->font().pointSizeFloat() * factor << endl;
+        /*kdDebugBody(32002) << this << " KWTextFrameSet::zooming format " << format
+                           << " key=" << format->key()
+                           << " from " << format->font().pointSizeFloat()
+                           << " to " << format->font().pointSizeFloat() * factor << endl;*/
         format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
     }
 
@@ -787,14 +782,16 @@ void KWTextFrameSet::unzoom()
 
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
-        QTextFormat * format = it.current();
+        KWTextFormat * format = static_cast<KWTextFormat *>(it.current());
         int * oldSize = m_origFontSizes.find( format );
         if ( !oldSize )
-            kdDebug() << "Can't unzoom: " << it.current()->key() << endl;
+            kdWarning() << "Can't unzoom: format=" << format << " " << it.current()->key() << endl;
         else
         {
-            //kdDebug() << "KWTextFrameSet::unzoom format=" << format->key() << " oldSize=" << *oldSize << endl;
-            format->setPointSize( *oldSize );
+            /*kdDebugBody(32002) << "KWTextFrameSet::unzoom format=" << format
+                               << " key=" << format->key()
+                               << " oldSize=" << *oldSize << endl;*/
+            format->setPointSizeFloat( *oldSize );
         }
     }
 
