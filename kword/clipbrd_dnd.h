@@ -33,7 +33,7 @@ class KWParag;
 /******************************************************************/
 
 
-class KWordDrag : public QDragObject
+class KWordDrag : public QTextDrag
 {
     Q_OBJECT
 
@@ -44,15 +44,13 @@ public:
     void setKWord( const QString &_kword );
     void setHTML( const QString &_html );
 
-    const char *format( int i ) const;
     QByteArray encodedData( const char *mime ) const;
 
     static bool canDecode( QMimeSource* e );
     static bool decode( QMimeSource* e, QString& s );
 
 protected:
-    QString kword, plain, html;
-
+    QString plain, kword, html;
 };
 
 

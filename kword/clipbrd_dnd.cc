@@ -22,7 +22,7 @@
 #include "parag.h"
 #include "defs.h"
 
-static const char *MimeTypes[] = {"text/plain", "text/html", MIME_TYPE, 0};
+static const char *MimeTypes[2] = { MIME_TYPE, "text/html" };
 
 /******************************************************************/
 /* Class: KWordDrag                                               */
@@ -30,13 +30,14 @@ static const char *MimeTypes[] = {"text/plain", "text/html", MIME_TYPE, 0};
 
 /*================================================================*/
 KWordDrag::KWordDrag( QWidget *dragSource, const char *name )
-    : QDragObject( dragSource, name ), kword(), plain(), html()
+    : QTextDrag( dragSource, name )
 {
 }
 
 /*================================================================*/
 void KWordDrag::setPlain( const QString &_plain )
 {
+    setText(_plain);
     plain = _plain;
 }
 
@@ -53,56 +54,44 @@ void KWordDrag::setHTML( const QString &_html )
 }
 
 /*================================================================*/
-const char *KWordDrag::format( int i ) const
-{
-    for ( int j = 0; MimeTypes[ j ]; j++ )
-    {
-        if ( i == j )
-            return MimeTypes[ j ];
-    }
-
-    return 0L;
-}
-
-/*================================================================*/
 QByteArray KWordDrag::encodedData( const char *mime ) const
 {
-    QCString str;
+    if ( strcmp(mime, MimeTypes[ 1 ]) == 0 )
+    {
+        KWordDrag *non_const_this = const_cast<KWordDrag *>(this);
+        non_const_this->setText(html);
+    }
+    else if ( strcmp( mime, MimeTypes[ 0 ]) == 0 )
+    {
+        QCString result = kword.utf8();
+        return result;
+    }
+    else
+    {
+        KWordDrag *non_const_this = const_cast<KWordDrag *>(this);
+        non_const_this->setText(plain);
+    }
 
-    if ( QString( mime ) == QString::fromLatin1(MimeTypes[ 0 ]) )
-        str = plain.ascii();
-    else if ( QString( mime ) == QString::fromLatin1(MimeTypes[ 1 ]) )
-        str = html.ascii();
-    else if ( QString( mime ) == QString::fromLatin1(MimeTypes[ 2 ]) )
-        str = kword.ascii();
-
-    return str;
+    return QTextDrag::encodedData(mime);
 }
 
 /*================================================================*/
 bool KWordDrag::canDecode( QMimeSource* e )
 {
-    for ( unsigned int i = 0; MimeTypes[ i ]; i++ )
-    {
-        if ( e->provides( QString::fromLatin1(MimeTypes[ i ]) ) )
-            return true;
-    }
-    return false;
+    if ( e->provides( MimeTypes[ 0 ] ) )
+       return true;
+    return QTextDrag::canDecode(e);
 }
 
 /*================================================================*/
 bool KWordDrag::decode( QMimeSource* e, QString& s )
 {
-    for ( unsigned int i = 0; MimeTypes[ i ]; i++ )
+    QByteArray ba = e->encodedData( MimeTypes[ 0 ] );
+    if ( ba.size() )
     {
-        QByteArray ba = e->encodedData( QString::fromLatin1(MimeTypes[ i ]) );
-        if ( ba.size() )
-        {
-            s = QString( ba );
-            return true;
-        }
+        s = QString::fromUtf8( ba.data(), ba.size() );
+        return true;
     }
-
-    return false;
+    return QTextDrag::decode(e, s);
 }
 
