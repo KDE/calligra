@@ -257,16 +257,16 @@ void KIllustratorView::createMyGUI()
     // Node Toolbar
     m_moveNode = new KToggleAction( i18n("Move Node "), "moveNode", 0, actionCollection(), "moveNode" );
     m_moveNode->setExclusiveGroup( "Node" );
-    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotMoveNode( bool ) ) );
+    connect( m_moveNode, SIGNAL( toggled( bool ) ), this, SLOT( slotMoveNode( bool ) ) );
     m_newNode = new KToggleAction( i18n("New Node"), "newNode", 0, actionCollection(), "newNode" );
     m_newNode->setExclusiveGroup( "Node" );
-    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotNewNode( bool ) ) );
+    connect( m_newNode, SIGNAL( toggled( bool ) ), this, SLOT( slotNewNode( bool ) ) );
     m_deleteNode = new KToggleAction( i18n("Delete Node "), "deleteNode", 0, actionCollection(), "deleteNode" );
     m_deleteNode->setExclusiveGroup( "Node" );
-    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotDeleteNode( bool ) ) );
+    connect( m_deleteNode, SIGNAL( toggled( bool ) ), this, SLOT( slotDeleteNode( bool ) ) );
     m_splitLine = new KToggleAction( i18n("Split line"), "split", 0, actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
-    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
+    connect( m_splitLine, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
 
     m_selectTool->setChecked( true );
     m_normal->setChecked( true );
