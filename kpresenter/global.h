@@ -159,11 +159,9 @@ enum FillType
     FT_BRUSH = 0,
     FT_GRADIENT = 1
 };
-enum PresSpeed {
-    PS_SLOW = 0,
-    PS_NORMAL = 1,
-    PS_FAST = 2
-};
+
+typedef int PresSpeed;
+
 enum InsertPos {
     IP_BEFORE = 0,
     IP_AFTER = 1
@@ -187,8 +185,8 @@ enum ToolEditMode {
     INS_AUTOFORM = 10
 };
 
-static const float ObjSpeed[] = { 70.0, 50.0, 30.0 };
-static const float PageSpeed[] = { 8.0, 16.0, 32.0 };
+//static const float ObjSpeed[] = { 70.0, 50.0, 30.0 };
+//static const float PageSpeed[] = { 8.0, 16.0, 32.0 };
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;

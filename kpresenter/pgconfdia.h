@@ -35,6 +35,7 @@ class KPresenterDoc;
 class QRadioButton;
 class QComboBox;
 class QCheckBox;
+class QSpinBox;
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -63,7 +64,8 @@ protected:
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
     QLabel *label1, *label2, *label3, *label4;
     QPushButton *cancelBut, *okBut;
-    QComboBox *effectCombo, *speedCombo;
+    QComboBox *effectCombo;
+    QSpinBox *speedSpinBox;
     QVBox *back;
     QListView *lSlides;
 

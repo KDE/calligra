@@ -3824,13 +3824,23 @@ int Page::getPageOfObj( int i, float fakt )
 /*================================================================*/
 float Page::objSpeedFakt()
 {
-    return ObjSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ];
+    /*
+      Used to be 0(slow)->70, 1(medium)->50, 2(fast)->30.
+      It's now 0->75, 1->50, 2->37, etc. That's the reason for this strange formula :)
+     */
+    return 150.0 / static_cast<float>( view->kPresenterDoc()->getPresSpeed() + 2 );
+    //return ObjSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ];
 }
 
 /*================================================================*/
 float Page::pageSpeedFakt()
 {
-    return PageSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ];
+    /*
+      Used to be 0(slow)->8, 1(medium)->16, 2(fast)->32.
+      It's now 0->10, 1->20, 2->30, 3->40, 4->50......
+     */
+    return 10.0 * ( view->kPresenterDoc()->getPresSpeed() + 1 );
+    //return PageSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ];
 }
 
 /*================================================================*/

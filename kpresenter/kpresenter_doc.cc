@@ -249,7 +249,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     objStartY = 0;
     setPageLayout( _pageLayout, 0, 0 );
     _presPen = QPen( red, 3, SolidLine );
-    presSpeed = PS_NORMAL;
+    presSpeed = 2;
     pasting = false;
     pasteXOffset = pasteYOffset = 0;
     ignoreSticky = TRUE;
@@ -1115,7 +1115,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst
 	    for( ; it != lst.end(); ++it ) {
 		if ( ( *it ).m_strName == "type" )
 		    t = ( ObjType )( *it ).m_strValue.toInt();
-		
+
 		if ( ( *it ).m_strName == "sticky" )
 		    sticky = (bool)( *it ).m_strValue.toInt();
 	    }
@@ -1234,7 +1234,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst
 	    }
  	    if ( !ignoreSticky )
 		_objectList->last()->setSticky( sticky );
-	
+
 	} else
 	    kdWarning() << "Unknown tag '" << tag << "' in OBJECTS" << endl;
 

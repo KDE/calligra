@@ -30,6 +30,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qheader.h>
+#include <qspinbox.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -60,11 +61,8 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
 
     label4 = new QLabel( i18n( "Speed of the presentation:" ), general );
 
-    speedCombo = new QComboBox( false, general );
-    speedCombo->insertItem( i18n( "Slow" ) );
-    speedCombo->insertItem( i18n( "Normal" ) );
-    speedCombo->insertItem( i18n( "Fast" ) );
-    speedCombo->setCurrentItem( static_cast<int>( presSpeed ) );
+    speedSpinBox = new QSpinBox( general, "speedSpinBox" );
+    speedSpinBox->setValue( presSpeed );
 
     page = new QButtonGroup( 1, Qt::Horizontal, i18n( "Page Configuration" ), back, "page" );
     page->setFrameStyle( QFrame::Box | QFrame::Sunken );
@@ -162,6 +160,6 @@ PageEffect PgConfDia::getPageEffect()
 /*================================================================*/
 PresSpeed PgConfDia::getPresSpeed()
 {
-    return static_cast<PresSpeed>( speedCombo->currentItem() );
+    return speedSpinBox->value();
 }
 
