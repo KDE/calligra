@@ -30,6 +30,8 @@
 #include <kcommand.h>
 #include <kotextview.h>
 #include <kfontcombo.h>
+#include <kseparator.h>
+
 KoSearchContext::KoSearchContext()
 {
     m_family = "times";
@@ -604,7 +606,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
 
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
 
-    QGridLayout *m_grid = new QGridLayout( page, 10, 2, 0, 6 );
+    QGridLayout *m_grid = new QGridLayout( page, 12, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size" ), page );
     m_checkColor = new QCheckBox( i18n( "Color" ), page );
@@ -665,6 +667,9 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_grid->addWidget( m_strikeOutItem, 8, 1 );
     m_grid->addWidget( m_doubleLineItem, 9, 1 );
     m_grid->addWidget( m_vertAlignItem, 10, 1 );
+
+    KSeparator *tmpSep = new KSeparator( page );
+    m_grid->addMultiCellWidget( tmpSep, 11, 11, 0, 1 );
 
     // signals and slots connections
     QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
