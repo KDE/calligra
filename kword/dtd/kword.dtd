@@ -209,14 +209,15 @@ don't put a </?xml...> at the end of the file!).
 
 
 <!--    One frameset that bundles a number of FRAME elements.
+        In addition it can have a more specific element, depending on frameType.
 
         Attributes:
 
             frameType:      0...Base frame (for internal use only!!!)
-                            1...Text frame
-                            2...Picture frame
-                            3...Part frame (e.g. KImage-Part)
-                            4...Formula
+                            1...Text frame (contains PARAGRAPH tags)
+                            2...Picture frame (contains an IMAGE tag)
+                            3...Part frame (defined in EMBEDDED at the doc level)
+                            4...Formula frame (contains a FORMULA tag)
 
             frameInfo:      0...normal text
                             1...header for first page
@@ -259,7 +260,7 @@ don't put a </?xml...> at the end of the file!).
 
 -->
 <!ELEMENT FRAMESET
-    (FRAME|PARAGRAPH)*>  <!-- missing: IMAGE, FORMULA -->
+    (FRAME|PARAGRAPH|IMAGE|FORMULA)*>  <!-- missing: defining FORMULA -->
 <!ATTLIST FRAMESET
     name CDATA
     frameType CDATA #REQUIRED
@@ -351,21 +352,21 @@ don't put a </?xml...> at the end of the file!).
 
                                     0...none (mustn't be in a file)
                                     1..."normal" text
-                                    2...a picture
-                                    3...tabulator
-                                    4...a variable
-                                    5...a footnote
-                                    6...an anchor for a floating frame.
+                                    2...a picture - in that case, only IMAGE is specified
+                                    3...tabulator [DEPRECATED]
+                                    4...a variable - ...
+                                    5...a footnote - ...
+                                    6...an anchor for a floating frame - in that case, only ANCHOR is specified.
 
             pos:                position where the format starts. This is a
                                 zero-based index into the text of the
                                 paragraph.
 
             len:                number of characters after pos for which the
-                                format is used.
+                                format is used. 1 for all ids except "normal text".
 -->
 <!ELEMENT FORMAT
-    (ANCHOR|COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN|ANCHOR|IMAGE)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #REQUIRED
@@ -385,24 +386,6 @@ don't put a </?xml...> at the end of the file!).
      LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
      COUNTER|FORMAT|TABULATOR)*>
 
-<!--    An anchor describes an object which is anchored.
-
-        Attributes:
-
-            type:               What kind of object is being anchored?
-
-                                    grpMgr...a table
-
-            instance:           An identifier that uniquely names the
-                                particular instance of the type of object
-                                being anchored.
--->
-
-<!ELEMENT ANCHOR
-    EMPTY>
-<!ATTLIST ANCHOR
-    type CDATA #REQUIRED
-    instance CDATA #REQUIRED>
 <!ELEMENT COLOR
     EMPTY>
 <!ATTLIST COLOR
@@ -634,6 +617,40 @@ don't put a </?xml...> at the end of the file!).
     mmpos CDATA #REQUIRED
     ptpos CDATA #REQUIRED
     type CDATA #REQUIRED>
+
+<!--    An anchor describes an object which is anchored.
+
+        Attributes:
+
+            type:               What kind of object is being anchored?
+
+                                    grpMgr...a table
+
+            instance:           An identifier that uniquely names the
+                                particular instance of the type of object
+                                being anchored.
+-->
+<!ELEMENT ANCHOR
+    EMPTY>
+<!ATTLIST ANCHOR
+    type CDATA #REQUIRED
+    instance CDATA #REQUIRED>
+
+<!--    Definition of an image
+-->
+<!ELEMENT IMAGE
+    (FILENAME)>
+<!--    Key of the image - not really the filename, but a way to identify the
+        image in the image collection.
+        The images are defined in the PIXMAPS element and saved in the tar file.
+
+        Attributes:
+            value:              Key identifying the image
+-->
+<!ELEMENT FILENAME
+    EMPTY>
+<!ATTLIST FILENAME
+    value CDATA #REQUIRED>
 
 <!--
         Embedded object
