@@ -57,6 +57,9 @@ VStar::init()
 	if( m_innerRadius < 0.0 )
 		m_innerRadius = -m_innerRadius;
 
+	// trick for spoke, wheel (libart bug?)
+	if( m_type == spoke || m_type == wheel && m_roundness == 0.0 )
+		m_roundness = 0.01;
 
 	// We start at angle + VGlobal::pi_2:
 	KoPoint p2, p3;
