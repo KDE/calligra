@@ -54,6 +54,10 @@ class KPresenterDocument_impl;
 #define min(a,b) ((a)<(b)?(a):(b))
 #endif
 
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
+
 /******************************************************************/
 /* class Page - Page                                              */
 /******************************************************************/
@@ -149,6 +153,8 @@ protected:
   // changing pages with effects
   void drawPageInPix(QPixmap&,int);
   void changePages(QPixmap,QPixmap,PageEffect);
+  void doObjEffects();
+  void drawObject(PageObjects*,QPixmap*,int,int);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;

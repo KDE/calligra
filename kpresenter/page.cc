@@ -1166,10 +1166,6 @@ void Page::startScreenPresentation()
       pgNum = getPageOfObj(objPtr->objNum,_presFakt);
       objPtr = objList()->at(i);
 
-      // igiiiiiiit - but it helps a little bit....
-      //objPtr->oy -= (int)(_presFakt * (float)(pgNum) * (float)(QApplication::desktop()->height() / 
-      //(400 - (QApplication::desktop()->height()/5))));
-
       objPtr->ow = (int)((float)objPtr->ow * _presFakt);
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);
 
@@ -1267,7 +1263,9 @@ bool Page::pNext(bool manual)
   if ((int*)currPresStep < presStepList.last())
     {
 
-      for (unsigned int i = 0;i < objList()->count();i++)
+      unsigned int i;
+
+      for (i = 0;i < objList()->count();i++)
 	{
 	  objPtr = objList()->at(i);
 	  if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
@@ -1283,9 +1281,7 @@ bool Page::pNext(bool manual)
       if (addSubPres)
 	{
 	  subPresStep++;
-	  drawBack = false;
-	  repaint(drawBack);
-	  drawBack = true;
+	  doObjEffects();
 	  return false;
 	}
       else if (clearSubPres)
@@ -1293,10 +1289,16 @@ bool Page::pNext(bool manual)
 
       presStepList.find((int*)currPresStep);
       currPresStep = (int)presStepList.next();
-      drawBack = false;
-      repaint(drawBack);
-      drawBack = true;
-      return false;
+
+      if (currPresStep > 0)
+	doObjEffects();
+      else
+	{
+	  drawBack = false;
+	  repaint(drawBack);
+	  drawBack = true;
+	  return false;
+	}
     }
   else
     {
@@ -1320,17 +1322,13 @@ bool Page::pNext(bool manual)
 	  if (addSubPres)
 	    {
 	      subPresStep++;
-	      drawBack = false;
-	      repaint(drawBack);
-	      drawBack = true;
+	      doObjEffects();
 	      return false;
 	    }
 
 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
 	  currPresStep = (int)presStepList.last();
-	  drawBack = false;
-	  repaint(drawBack);
-	  drawBack = true;
+	  doObjEffects();
 	  return false;
 	}
 
@@ -1350,9 +1348,7 @@ bool Page::pNext(bool manual)
       if (addSubPres)
 	{
 	  subPresStep++;
-	  drawBack = false;
-	  repaint(drawBack);
-	  drawBack = true;
+	  doObjEffects();
 	  return false;
 	}
       else if (clearSubPres)
@@ -1637,13 +1633,13 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_HORZ:
       {
-	_steps = kapp->desktop()->height() / 12;
+	_steps = kapp->desktop()->height() / 16;
 	_time.start();
 
 	for (;;)
 	  {
 	    kapp->processEvents();
-	    if (_time.elapsed() >= 5)
+	    if (_time.elapsed() >= 1)
 	      {
 		_step++;
 		_h = (_pix2.height()/(2 * _steps)) * _step;
@@ -1659,13 +1655,13 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_VERT:
       {
-	_steps = kapp->desktop()->width() / 12;
+	_steps = kapp->desktop()->width() / 16;
 	_time.start();
 
 	for (;;)
 	  {
 	    kapp->processEvents();
-	    if (_time.elapsed() >= 5)
+	    if (_time.elapsed() >= 1)
 	      {
 		_step++;
 		_w = (_pix2.width()/(2 * _steps)) * _step;
@@ -1680,6 +1676,158 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	  }
       } break;
     }
+}
+
+/*======================= do object effects ======================*/
+void Page::doObjEffects()
+{
+  QPixmap screen_orig(kapp->desktop()->width(),kapp->desktop()->height());
+  QList<PageObjects> _objList;
+  unsigned int i;
+  QTime _time;
+  int _step = 0,_steps = 0,x_pos = 0,y_pos = 0;
+  bool effects = false;
+
+  bitBlt(&screen_orig,0,0,this,0,0,kapp->desktop()->width(),kapp->desktop()->height());
+  QPixmap *screen = new QPixmap(screen_orig);
+
+  for (i = 0;i < objList()->count();i++)
+    {
+      objPtr = objList()->at(i);
+      if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep)
+	{
+	  if (objPtr->effect != EF_NONE)
+	    {
+	      _objList.append(objPtr);
+	      x_pos = max(x_pos,objPtr->ox - diffx() + objPtr->ow);
+	      y_pos = max(y_pos,objPtr->oy - diffy() + objPtr->oh);
+	      effects = true;
+	    }
+	}
+    }
+  
+  if (effects)
+    {
+      _steps = (x_pos > y_pos ? x_pos : y_pos) / 16;
+      _time.start();
+      
+      for (;;)
+	{
+	  kapp->processEvents();
+	  if (_step == _steps)
+	    {
+	      break;
+	    }
+	  
+	  if (_time.elapsed() >= 1)
+	    {
+	      _step++;
+	      
+	      for (i = 0;i < _objList.count();i++)
+		{
+		  objPtr = _objList.at(i);
+		  
+		  switch (objPtr->effect)
+		    {
+		    case EF_FROM_LEFT:
+		      {
+			x_pos = 16 * _step < objPtr->ox - diffx() + objPtr->ow ? objPtr->ox - diffx() + objPtr->ow - 16 * _step : 0;
+			y_pos = 0;
+			drawObject(objPtr,screen,-x_pos,y_pos);
+		      } break;
+		    }
+		}
+	      
+	      bitBlt(this,0,0,screen);
+	      delete screen;
+	      screen = new QPixmap(screen_orig);
+	      
+	      _time.restart();
+	    }
+	}
+    }
+
+  if (!effects)
+    {
+      QPainter p;
+      p.begin(this);
+      p.drawPixmap(0,0,screen_orig);
+      paintObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
+      p.end();  
+    }
+  else
+    {
+      QPainter p;
+      p.begin(screen);
+      paintObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
+      p.end();
+      bitBlt(this,0,0,screen);
+    }
+
+  delete screen;
+}
+
+/*======================= draw object ============================*/
+void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
+{
+  QPainter p;
+  p.begin(screen);
+  QRect r = p.viewport();
+
+  switch (_objPtr->objType)
+    {
+    case OT_PICTURE:
+      {
+	p.drawPixmap(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+		     _objPtr->graphObj->getPix());
+      } break;
+    case OT_TEXT:
+      {
+	if (!editMode && currPresStep == _objPtr->presNum && !goingBack)
+	  {
+	    switch (_objPtr->effect2)
+	      {
+	      case EF2T_PARA:
+		_objPtr->objPic = _objPtr->textObj->getPic(0,0,_objPtr->ox - diffx() + _objPtr->ow,
+							   _objPtr->oy - diffy() + _objPtr->oh,!editMode,
+							   subPresStep,subPresStep);
+		break;
+	      default:
+		_objPtr->objPic = _objPtr->textObj->getPic(0,0,_objPtr->ox - diffx() + _objPtr->ow,
+							   _objPtr->oy - diffy() + _objPtr->oh,!editMode);
+	      }
+	  }
+	else
+	  _objPtr->objPic = _objPtr->textObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),
+						   _objPtr->ow,_objPtr->oh,!editMode);
+	p.translate((float)_objPtr->ox - (float)diffx() + (float)_x,(float)_objPtr->oy - (float)diffy() + (float)_y);
+	_objPtr->objPic->play(&p);
+	p.resetXForm();
+      } break;
+    default:
+      {
+	if (_objPtr->objType != OT_CLIPART)
+	  p.translate((float)_objPtr->ox - (float)diffx() + (float)_x,(float)_objPtr->oy - (float)diffy() + (float)_y);
+	
+	if (_objPtr->objType == OT_CLIPART)
+	  {
+	    r = p.viewport();
+	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+			  _objPtr->ow,_objPtr->oh);
+	  }
+	
+	_objPtr->objPic = _objPtr->graphObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),_objPtr->ow,_objPtr->oh);
+	
+	_objPtr->objPic->play(&p);
+	
+	if (_objPtr->objType == OT_CLIPART)
+	  p.setViewport(r);
+	
+	p.resetXForm();
+      } break;
+    }
+
+  p.end();
 }
 
 
