@@ -42,7 +42,6 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
         m_db = new KexiDB(this);
         m_formManager=new KexiFormManager(this);
         m_url = "";
-        m_modified = false;
 
 }
 
@@ -209,7 +208,7 @@ KexiProject::saveProject()
 		}
 
 		delete store;
-		m_modified = false;
+                setModified( false);
 //		kexi->mainWindow()->slotProjectModified();
 		return true;
 	}
@@ -320,9 +319,8 @@ KexiProject::loadProject(const QString& url)
 	}
 
 	initDbConnection(parsedCred);
+        setModified( mod );
 
-	m_modified = mod;
-	emit docModified();
 //	kexi->mainWindow()->slotProjectModified();
 
 	kdDebug() << "File opened!" << endl;
@@ -351,9 +349,8 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 	{
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
-		m_modified = true;
+                setModified( false );
 //		kexi->mainWindow()->slotProjectModified();
-		emit docModified();
 		emit dbAvaible();
 		kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
 		return true;
@@ -383,7 +380,7 @@ KexiProject::initHostConnection(const Credentials &cred)
 	if(!m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port))
 	{
 		m_cred = cred;
-		m_modified = true;
+                setModified( true );
 		return false;
 	}
 	else
@@ -397,22 +394,14 @@ void
 KexiProject::clear()
 {
 	m_url = "";
-	m_modified = false;
+        setModified( false);
 //	kexi->mainWindow()->slotProjectModified();
-	emit docModified();
 }
 
 void
 KexiProject::addFileReference(FileReference fileref)
 {
 	m_fileReferences.append(fileref);
-}
-
-void
-KexiProject::setModified()
-{
-	m_modified = true;
-	emit docModified();
 }
 
 QString

@@ -274,12 +274,12 @@ void KexiBrowser::slotCreateQuery()
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
 //		kexi->project()->addFileReference("/query/" + name + ".query");
 
-		m_view->project()->setModified();
+		m_view->project()->setModified(true);
 
 		m_queries->setOpen(true);
 		kqd->show();
 
-		m_view->project()->setModified();
+		m_view->project()->setModified(true);
 	}
 }
 

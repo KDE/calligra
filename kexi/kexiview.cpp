@@ -86,7 +86,6 @@ KexiProject *KexiView::project() const
 void KexiView::solveDeps()
 {
 #if 0
-	connect(kexi->project(), SIGNAL(docModified()), this, SLOT(slotProjectModified()));
 	connect(kexi->project(), SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
 #endif
 }
