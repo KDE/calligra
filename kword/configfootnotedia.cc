@@ -116,7 +116,7 @@ void KWConfigFootNoteDia::setupTab3()
     // use this when the message freeze is lifted.
     //QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1)").arg("pt"), page );
     //lSize->setBuddy( spWidth );
-    QLabel *lSize = new QLabel( i18n("Separator Line Length")+QString(" (pt)"), page );
+    QLabel *lSize = new QLabel( i18n("Separator Line Width")+QString(" (pt)"), page );
     layout->addWidget( lSize, 1, 0 );
 
     QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -125,7 +125,7 @@ void KWConfigFootNoteDia::setupTab3()
     // use this when the message freeze is lifted.
     //QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
     //lWidth->setBuddy( spLength );
-    QLabel *lWidth = new QLabel( i18n("Separator Line Width"), page, "lWidth" );
+    QLabel *lWidth = new QLabel( i18n("Separator Line Length"), page, "lWidth" );
     layout->addWidget( lWidth, 0, 0 );
     pageLayout->addLayout( layout );
 
