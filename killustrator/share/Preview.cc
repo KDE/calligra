@@ -42,9 +42,10 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 
     // load it
     if (tmpDoc->readFromXml ((const char *) fileName)) {
-      float ratio = tmpDoc->getPaperHeight () / tmpDoc->getPaperWidth ();
+      float ratio = float (tmpDoc->getPaperHeight ()) / 
+                    float (tmpDoc->getPaperWidth ());
       int width = 300;
-      int height = (int) (ratio * width);
+      int height = (int) (ratio * float (width));
       float xscale = (float) width / (float) tmpDoc->getPaperWidth ();
       float yscale = (float) height / (float) tmpDoc->getPaperHeight ();
 
