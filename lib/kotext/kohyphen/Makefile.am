@@ -8,10 +8,9 @@ noinst_HEADERS = hnjalloc.h hyphen.h kohyphen.h
 noinst_LTLIBRARIES = libkohyphen.la
 libkohyphen_la_SOURCES = hnjalloc.c hyphen.c kohyphen.cpp
 
-dicts_DATA = dicts.xml hyph_cs.dic hyph_en.dic hyph_ru.dic
 dictsdir = $(kde_datadir)/koffice/hyphdicts
 
-EXTRA_DIST = $(dicts_DATA)
+SUBDIRS = . hyphdicts
 
 check_PROGRAMS = kohyphentest
 
