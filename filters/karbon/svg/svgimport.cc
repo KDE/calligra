@@ -659,7 +659,6 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 
 					//if( lastCommand == 'z' || lastCommand == 'Z' )
 					//	path->close();
-					obj->end();
 					obj->moveTo( KoPoint( curx, cury ) );
 					break;
 				}
