@@ -2267,7 +2267,9 @@ static void createFontNode( QDomDocument& doc, QDomNode& parent,
     createIntNode( doc, fontElement, "PointSize", font.pointSize() );
     createIntNode( doc, fontElement, "Weight", font.weight() );
     createBoolNode( doc, fontElement, "Italic", font.italic() );
+#if QT_VERSION < 300
     createIntNode( doc, fontElement, "CharSet", font.charSet() );
+#endif
 }
 
 
@@ -2435,8 +2437,10 @@ static bool readFontNode( const QDomElement& element, QFont& font )
                 ok = ok & readIntNode( element, weight );
             } else if( tagName == "Italic" ) {
                 ok = ok & readBoolNode( element, italic );
+#if QT_VERSION < 300
             } else if( tagName == "CharSet" ) {
                 ok = ok & readIntNode( element, charSet );
+#endif
             } else {
                 qDebug( "Unknown tag in color map" );
             }
@@ -2449,7 +2453,9 @@ static bool readFontNode( const QDomElement& element, QFont& font )
         font.setPointSize( pointSize );
         font.setWeight( weight );
         font.setItalic( italic );
+#if QT_VERSION < 300
         font.setCharSet( (QFont::CharSet)charSet );
+#endif
     }
 
     return ok;

@@ -30,6 +30,7 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <qtextstream.h>
+#include <qstringlist.h>
 
 #include "KDChartData.h"
 class KDChartParams;
