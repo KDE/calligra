@@ -98,7 +98,6 @@
 #include "stencilbardockmanager.h"
 #include "kivio_common.h"
 #include "kivio_painter.h"
-#include "kivio_rect.h"
 #include "kivio_stencil.h"
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_screen_painter.h"
@@ -998,7 +997,7 @@ void KivioView::setLineWidth()
 void KivioView::groupStencils()
 {
     m_pActivePage->groupSelectedStencils();
-    KivioRect r = m_pActivePage->getRectForAllStencils();
+    KoRect r = m_pActivePage->getRectForAllStencils();
 
     m_pDoc->updateView(m_pActivePage);
 }
@@ -1474,9 +1473,9 @@ void KivioView::slotChangeStencilSize(double newW, double newH)
 
   if ( pStencil )
   {
-    KivioRect oldPos(pStencil->rect());
+    KoRect oldPos(pStencil->rect());
     pStencil->setDimensions(newW, newH);
-    if ((oldPos.w() != pStencil->rect().w()) || (oldPos.h() != pStencil->rect().h()))
+    if ((oldPos.width() != pStencil->rect().width()) || (oldPos.height() != pStencil->rect().height()))
     {
       KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Resize Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
       m_pDoc->updateView(m_pActivePage);
@@ -1491,7 +1490,7 @@ void KivioView::slotChangeStencilPosition(double newW, double newH)
 
   if ( pStencil )
   {
-    KivioRect oldPos(pStencil->rect());
+    KoRect oldPos(pStencil->rect());
     pStencil->setPosition(newW, newH);
     if ((oldPos.x() != pStencil->rect().x()) || (oldPos.y() != pStencil->rect().y()))
     {

@@ -22,16 +22,14 @@
 #include <qdom.h>
 #include <qcolor.h>
 
-#include "kivio_point.h"
-#include "kivio_rect.h"
-
 class KivioConnectorPoint;
 class KoPoint;
+class KoRect;
 
 extern "C" {
 
-   KivioRect XmlReadRect( const QDomElement &, const QString &, const KivioRect & );
-   void  XmlWriteRect( QDomElement &, const QString &, const KivioRect & );
+   KoRect XmlReadRect( const QDomElement &, const QString &, const KoRect & );
+   void  XmlWriteRect( QDomElement &, const QString &, const KoRect & );
    
    QColor XmlReadColor( const QDomElement &, const QString &, const QColor & );
    void  XmlWriteColor( QDomElement &, const QString &, const QColor & );
@@ -51,7 +49,7 @@ extern "C" {
    QString XmlReadString( const QDomElement &, const QString &, const QString & );
    void    XmlWriteString( QDomElement &,  const QString &, const QString & );
    
-   bool PointInPoly( KivioPoint *points, int numPoints, KoPoint *hitPos );
+   bool PointInPoly( KoPoint *points, int numPoints, KoPoint *hitPos );
    
    float shortestDistance( KivioConnectorPoint *pStart, KivioConnectorPoint *pEnd, KivioConnectorPoint *q );
 

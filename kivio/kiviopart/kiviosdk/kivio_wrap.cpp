@@ -440,7 +440,7 @@ SWIG_InstallConstants(PyObject *d, _swig_const_info constants[]) {
 #define  SWIGTYPE_KivioPage_p _swig_types[0] 
 #define  SWIGTYPE_float_p _swig_types[1] 
 #define  SWIGTYPE_KivioFillStyle_p _swig_types[2] 
-#define  SWIGTYPE_KivioRect_p _swig_types[3] 
+#define  SWIGTYPE_KoRect_p _swig_types[3] 
 #define  SWIGTYPE_KivioStencil_p _swig_types[4] 
 #define  SWIGTYPE_KivioLayer_p _swig_types[5] 
 static _swig_type_info *_swig_types[7];
@@ -909,14 +909,14 @@ static PyObject *_wrap_KivioStencil_setH(PyObject *self, PyObject *args) {
 #define KivioStencil_rect(_swigobj)  (_swigobj->rect())
 static PyObject *_wrap_KivioStencil_rect(PyObject *self, PyObject *args) {
     PyObject  *_resultobj,*_argo0=0;
-    KivioRect  *_result;
+    KoRect  *_result;
     KivioStencil  *_arg0;
     self = self;
     if(!PyArg_ParseTuple(args,"O:KivioStencil_rect",&_argo0)) 
         return NULL;
     if ((SWIG_ConvertPtr(_argo0,(void **) &_arg0,SWIGTYPE_KivioStencil_p,1)) == -1) return NULL;
-    _result = new KivioRect (KivioStencil_rect(_arg0));
-    _resultobj = SWIG_NewPointerObj((void *)_result, SWIGTYPE_KivioRect_p);
+    _result = new KoRect (KivioStencil_rect(_arg0));
+    _resultobj = SWIG_NewPointerObj((void *)_result, SWIGTYPE_KoRect_p);
     return _resultobj;
 }
 
@@ -1731,7 +1731,7 @@ static PyMethodDef kiviocMethods[] = {
 static _swig_type_info _swigt__KivioPage_p[] = {{"_KivioPage_p",0},{"_KivioPage_p",0},{0}};
 static _swig_type_info _swigt__float_p[] = {{"_float_p",0},{"_float_p",0},{0}};
 static _swig_type_info _swigt__KivioFillStyle_p[] = {{"_KivioFillStyle_p",0},{"_KivioFillStyle_p",0},{0}};
-static _swig_type_info _swigt__KivioRect_p[] = {{"_KivioRect_p",0},{"_KivioRect_p",0},{0}};
+static _swig_type_info _swigt__KoRect_p[] = {{"_KoRect_p",0},{"_KoRect_p",0},{0}};
 static _swig_type_info _swigt__KivioStencil_p[] = {{"_KivioStencil_p",0},{"_KivioStencil_p",0},{0}};
 static _swig_type_info _swigt__KivioLayer_p[] = {{"_KivioLayer_p",0},{"_KivioLayer_p",0},{0}};
 
@@ -1739,7 +1739,7 @@ static _swig_type_info *_swig_types_initial[] = {
 _swigt__KivioPage_p, 
 _swigt__float_p, 
 _swigt__KivioFillStyle_p, 
-_swigt__KivioRect_p, 
+_swigt__KoRect_p, 
 _swigt__KivioStencil_p, 
 _swigt__KivioLayer_p, 
 0

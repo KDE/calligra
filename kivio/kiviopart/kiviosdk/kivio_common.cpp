@@ -22,6 +22,7 @@
 #include <qstringlist.h>
 #include <math.h>
 #include <koPoint.h>
+#include <koRect.h>
 
 /**
  * Read a floating point value from a @ref QDomElement.
@@ -333,11 +334,11 @@ void XmlWriteDouble( QDomElement &e, const QString &att, const double &val )
  *   1 2
  *   4 3
  */
-bool PointInPoly( KivioPoint *points, int numPoints, KoPoint *hitPos )
+bool PointInPoly( KoPoint *points, int numPoints, KoPoint *hitPos )
 {
 	int edge,  next;
 	int quad, next_quad, delta, total;
-	
+
 	edge = 0;
 
 	quad = WHICH_QUAD( points[ edge ], hitPos );
@@ -383,7 +384,7 @@ bool PointInPoly( KivioPoint *points, int numPoints, KoPoint *hitPos )
 		return false;
 }
 
-KivioRect XmlReadRect( const QDomElement &e, const QString &att, const KivioRect &def )
+KoRect XmlReadRect( const QDomElement &e, const QString &att, const KoRect &def )
 {
     // Check if this value exists, if not, return the default
     if( e.hasAttribute( att )==false )
@@ -400,29 +401,29 @@ KivioRect XmlReadRect( const QDomElement &e, const QString &att, const KivioRect
         bool allOk = true;
         bool ok = false;
 
-        float x = vlist[0].toFloat(&ok);
+        double x = vlist[0].toDouble(&ok);
         allOk = allOk & ok;
 
-        float y = vlist[1].toFloat(&ok);
+        double y = vlist[1].toDouble(&ok);
         allOk = allOk & ok;
 
-        float w = vlist[2].toFloat(&ok);
+        double w = vlist[2].toDouble(&ok);
         allOk = allOk & ok;
 
-        float h = vlist[3].toFloat(&ok);
+        double h = vlist[3].toDouble(&ok);
         allOk = allOk & ok;
 
         if (allOk)
-          return KivioRect(x, y, w, h);
+          return KoRect(x, y, w, h);
       }
     }
 
     return def;
 }
 
-void  XmlWriteRect( QDomElement &e, const QString &att, const KivioRect &val )
+void  XmlWriteRect( QDomElement &e, const QString &att, const KoRect &val )
 {
-    e.setAttribute( att, QString("[%1,%2,%3,%4]").arg(val.x()).arg(val.y()).arg(val.w()).arg(val.h()) );
+    e.setAttribute( att, QString("[%1,%2,%3,%4]").arg(val.x()).arg(val.y()).arg(val.width()).arg(val.height()) );
 }
 
 

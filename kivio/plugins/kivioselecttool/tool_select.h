@@ -21,9 +21,8 @@
 
 #include <qptrlist.h>
 #include <koPoint.h>
+#include <koRect.h>
 #include "kivio_mousetool.h"
-
-#include "kivio_rect.h"
 
 class KivioView;
 class KivioPage;
@@ -36,7 +35,7 @@ class KivioStencil;
 class KivioSelectDragData
 {
 public:
-    KivioRect rect;
+    KoRect rect;
 };
 
 enum {
@@ -117,7 +116,7 @@ class SelectTool : public Kivio::MouseTool
     bool m_shiftKey;
     int m_customDragID;
     QPtrList <KivioSelectDragData> m_lstOldGeometry;
-    KivioRect m_selectedRect;
+    KoRect m_selectedRect;
     
     KRadioAction* m_selectAction;
     KPopupMenu *m_pMenu;

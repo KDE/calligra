@@ -42,6 +42,7 @@
 #include <kozoomhandler.h>
 #include <koSize.h>
 #include <koRuler.h>
+#include <koPoint.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -1365,10 +1366,10 @@ void KivioCanvas::setViewCenterPoint(const KoPoint &p)
 {
   setUpdatesEnabled(false);
 
-  KivioRect va = visibleArea();
+  KoRect va = visibleArea();
 
-  float x = QMAX(0, p.x() - (va.w() / 2));
-  float y = QMAX(0, p.y() - (va.h() / 2));
+  float x = QMAX(0, p.x() - (va.width() / 2));
+  float y = QMAX(0, p.y() - (va.height() / 2));
 
   m_pVertScrollBar->setValue(m_pView->zoomHandler()->zoomItY(y));
   m_pHorzScrollBar->setValue(m_pView->zoomHandler()->zoomItX(x));
@@ -1376,15 +1377,15 @@ void KivioCanvas::setViewCenterPoint(const KoPoint &p)
   setUpdatesEnabled(true);
 }
 
-KivioRect KivioCanvas::visibleArea()
+KoRect KivioCanvas::visibleArea()
 {
   KoPoint p0 = mapFromScreen(QPoint(0,0));
   KoPoint p1 = mapFromScreen(QPoint(width()-1,height()-1));
 
-  return KivioRect(p0.x(), p0.y(), p1.x() - p0.x(), p1.y() - p0.y());
+  return KoRect(p0.x(), p0.y(), p1.x() - p0.x(), p1.y() - p0.y());
 }
 
-void KivioCanvas::setVisibleArea(KivioRect r, int margin)
+void KivioCanvas::setVisibleArea(KoRect r, int margin)
 {
   setUpdatesEnabled(false);
   KoZoomHandler zoom;
@@ -1394,19 +1395,19 @@ void KivioCanvas::setVisibleArea(KivioRect r, int margin)
   float cw = width() - 2 * margin;
   float ch = height() - 2 * margin;
 
-  float zw = cw / (float)zoom.zoomItX(r.w());
-  float zh = ch / (float)zoom.zoomItY(r.h());
+  float zw = cw / (float)zoom.zoomItX(r.width());
+  float zh = ch / (float)zoom.zoomItY(r.height());
   float z = QMIN(zw, zh);
 
   setZoom(qRound(z * 100));
 
-  KivioPoint c = r.center();
+  KoPoint c = r.center();
 
   setViewCenterPoint(KoPoint(c.x(), c.y()));
   setUpdatesEnabled(true);
 }
 
-void KivioCanvas::setVisibleAreaByWidth(KivioRect r, int margin)
+void KivioCanvas::setVisibleAreaByWidth(KoRect r, int margin)
 {
   setUpdatesEnabled(false);
   KoZoomHandler zoom;
@@ -1414,17 +1415,17 @@ void KivioCanvas::setVisibleAreaByWidth(KivioRect r, int margin)
     QPaintDevice::x11AppDpiY());
 
   float cw = width() - 2*margin;
-  float z = cw / (float)zoom.zoomItX(r.w());
+  float z = cw / (float)zoom.zoomItX(r.width());
 
   setZoom(qRound(z * 100));
 
-  KivioPoint c = r.center();
+  KoPoint c = r.center();
 
   setViewCenterPoint(KoPoint(c.x(), c.y()));
   setUpdatesEnabled(true);
 }
 
-void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
+void KivioCanvas::setVisibleAreaByHeight(KoRect r, int margin)
 {
   setUpdatesEnabled(false);
   KoZoomHandler zoom;
@@ -1432,11 +1433,11 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
     QPaintDevice::x11AppDpiY());
 
   float ch = height() - 2*margin;
-  float z = ch / (float)zoom.zoomItY(r.h());
+  float z = ch / (float)zoom.zoomItY(r.height());
 
   setZoom(qRound(z * 100));
 
-  KivioPoint c = r.center();
+  KoPoint c = r.center();
 
   setViewCenterPoint(KoPoint(c.x(), c.y()));
   setUpdatesEnabled(true);
@@ -1445,7 +1446,7 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
 void KivioCanvas::startPasteMoving()
 {
   setEnabled(false);
-  KivioPoint p = activePage()->getRectForAllSelectedStencils().center();
+  KoPoint p = activePage()->getRectForAllSelectedStencils().center();
   m_origPoint.setCoords(p.x(), p.y());
 
   // Create a new painter object
@@ -1453,13 +1454,13 @@ void KivioCanvas::startPasteMoving()
   drawSelectedStencilsXOR();
 
   // Build the list of old geometry
-  KivioRect *pData;
+  KoRect *pData;
   m_lstOldGeometry.clear();
   KivioStencil* pStencil = activePage()->selectedStencils()->first();
 
   while( pStencil )
   {
-    pData = new KivioRect;
+    pData = new KoRect;
     *pData = pStencil->rect();
     m_lstOldGeometry.append(pData);
 
@@ -1488,7 +1489,7 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
 
   // Translate to the new position
   KoPoint p;
-  KivioRect selectedRect = activePage()->getRectForAllSelectedStencils();
+  KoRect selectedRect = activePage()->getRectForAllSelectedStencils();
 
   newX = selectedRect.x() + dx;
   newY = selectedRect.y() + dy;
@@ -1501,15 +1502,15 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
   newY = p.y();
 
   // Now the guides override the grid so we attempt to snap to them
-  p.setCoords(selectedRect.x() + dx + selectedRect.w(), selectedRect.y() + dy + selectedRect.h());
+  p.setCoords(selectedRect.x() + dx + selectedRect.width(), selectedRect.y() + dy + selectedRect.height());
   p = snapToGuides(p, snappedX, snappedY);
 
   if(snappedX) {
-    newX = p.x() - selectedRect.w();
+    newX = p.x() - selectedRect.width();
   }
 
   if(snappedY) {
-    newY = p.y() - selectedRect.h();
+    newY = p.y() - selectedRect.height();
   }
 
   p.setCoords(selectedRect.x() + dx, selectedRect.y() + dy);
@@ -1528,7 +1529,7 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
 
   // Translate to the new position
   KivioStencil *pStencil = activePage()->selectedStencils()->first();
-  KivioRect* pData = m_lstOldGeometry.first();
+  KoRect* pData = m_lstOldGeometry.first();
   // bool move = true;
 
   while( pStencil && pData )
@@ -1555,7 +1556,7 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
 void KivioCanvas::endPasteMoving()
 {
   KivioStencil *pStencil = activePage()->selectedStencils()->first();
-  KivioRect *pData = m_lstOldGeometry.first();
+  KoRect *pData = m_lstOldGeometry.first();
 
   while( pStencil && pData )
   {

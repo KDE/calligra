@@ -3,7 +3,7 @@
 
 #include <qlistview.h>
 #include <qptrlist.h>
-#include "kivio_rect.h"
+#include <koRect.h>
 
 class KAction;
 class KivioView;
@@ -16,7 +16,7 @@ struct ViewItemData
   QString name;
   int id;
   int pageId;
-  KivioRect rect;
+  KoRect rect;
   bool isZoom;
   bool isPage;
 };

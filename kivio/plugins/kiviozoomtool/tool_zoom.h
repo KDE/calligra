@@ -20,7 +20,6 @@
 #define TOOL_ZOOM_H
 
 #include "kivio_mousetool.h"
-#include "kivio_rect.h"
 
 class KivioView;
 class KivioPage;

@@ -23,10 +23,8 @@
 #include <kcommand.h>
 #include <qfont.h>
 #include <qcolor.h>
-#include "kivio_rect.h"
+#include <koRect.h>
 
-class KivioPage;
-class KivioLayer;
 class KivioPage;
 class KivioLayer;
 class KivioStencil;
@@ -179,7 +177,7 @@ protected:
 class KivioResizeStencilCommand : public KNamedCommand
 {
 public:
-    KivioResizeStencilCommand(const QString &_name, KivioStencil *_stencil, KivioRect _initSize, KivioRect _endSize, KivioPage *_page );
+    KivioResizeStencilCommand(const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page );
     ~KivioResizeStencilCommand();
 
     virtual void execute();
@@ -187,15 +185,15 @@ public:
 
 protected:
     KivioStencil *m_stencil;
-    KivioRect initSize;
-    KivioRect endSize;
+    KoRect initSize;
+    KoRect endSize;
     KivioPage *m_page;
 };
 
 class KivioMoveStencilCommand : public KNamedCommand
 {
 public:
-    KivioMoveStencilCommand(const QString &_name, KivioStencil *_stencil, KivioRect _initSize, KivioRect _endSize, KivioPage *_page );
+    KivioMoveStencilCommand(const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page );
     ~KivioMoveStencilCommand();
 
     virtual void execute();
@@ -203,8 +201,8 @@ public:
 
 protected:
     KivioStencil *m_stencil;
-    KivioRect initSize;
-    KivioRect endSize;
+    KoRect initSize;
+    KoRect endSize;
     KivioPage *m_page;
 };
 

@@ -129,7 +129,7 @@ void KivioDragObject::setStencilList(QPtrList<KivioStencil> l)
   }
 }
 
-void KivioDragObject::setStencilRect(KivioRect r)
+void KivioDragObject::setStencilRect(KoRect r)
 {
   m_stencilRect = r;
 }
@@ -157,7 +157,7 @@ QByteArray KivioDragObject::imageEncoded(const char* mimetype) const
 {
   KoZoomHandler zoomHandler;
   zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
-  QPixmap buffer(zoomHandler.zoomItX(m_stencilRect.w()), zoomHandler.zoomItY(m_stencilRect.h()));
+  QPixmap buffer(zoomHandler.zoomItX(m_stencilRect.width()), zoomHandler.zoomItY(m_stencilRect.height()));
   buffer.fill(Qt::white);
   KivioScreenPainter p;
   p.start( &buffer );

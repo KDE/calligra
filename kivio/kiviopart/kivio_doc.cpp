@@ -475,10 +475,10 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  KivioRect r = page->getRectForAllStencils();
+  KoRect r = page->getRectForAllStencils();
 
-  float zw = (float) rect.width() / (float)zoom.zoomItX(r.w());
-  float zh = (float) rect.height() / (float)zoom.zoomItY(r.h());
+  float zw = (float) rect.width() / (float)zoom.zoomItX(r.width());
+  float zh = (float) rect.height() / (float)zoom.zoomItY(r.height());
   float z = QMIN(zw, zh);
   kdDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
 

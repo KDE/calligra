@@ -34,7 +34,6 @@ libkiviosdk_la_SOURCES = \
 		kivio_shape_painter.cpp\
 		kivio_arrowhead.cpp\
 		kivio_base_connector_stencil.cpp\
-		kivio_rect.cpp\
 		kivio_line_style.cpp\
 		kivio_text_style.cpp\
 		kivio_base_target_stencil.cpp\
@@ -94,8 +93,6 @@ EXTRA_DIST = \
 		kivio_arrowhead.h\
 		kivio_base_connector_stencil.cpp\
 		kivio_base_connector_stencil.h\
-		kivio_rect.cpp\
-		kivio_rect.h\
 		kivio_line_style.cpp\
 		kivio_line_style.h\
 		kivio_text_style.cpp\

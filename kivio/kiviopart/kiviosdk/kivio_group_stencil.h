@@ -27,7 +27,6 @@ class KivioIntraStencilData;
 class KivioLayer;
 class KivioPage;
 class KivioPainter;
-class KivioRect;
 
 class KivioGroupStencil : public KivioStencil
 {

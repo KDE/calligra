@@ -32,7 +32,6 @@ class KivioIntraStencilData;
 class KivioLineStyle;
 class KivioPage;
 class KivioPoint;
-class KivioRect;
 class KivioStencilSpawner;
 class KivioTextStyle;
 

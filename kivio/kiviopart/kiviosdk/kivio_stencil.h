@@ -37,7 +37,7 @@ class KivioFillStyle;
 class KivioIntraStencilData;
 class KivioPage;
 class KoPoint;
-class KivioRect;
+class KoRect;
 class KivioStencilSpawner;
 class KivioStencil;
 class KivioStencilIface;
@@ -163,7 +163,7 @@ class KivioStencil
     virtual double h() { return m_h; }
     virtual void setH( double f ) { if( f > 0 ) { m_h=f;  updateGeometry(); } }
 
-    virtual KivioRect rect();
+    virtual KoRect rect();
 
     virtual void setPosition( double f1, double f2 ) { m_x=f1; m_y=f2;  updateGeometry(); }
     virtual void setDimensions( double f1, double f2 ) { m_w=f1; m_h=f2;  updateGeometry(); }

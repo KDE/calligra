@@ -76,18 +76,18 @@ protected:
     void drawPolyline( KivioShape *, KivioIntraStencilData * );
     void drawTextBox( KivioShape *, KivioIntraStencilData * );
 
-    bool checkCollisionArc( KivioShape *, KivioPoint * );
-    bool checkCollisionBezier( KivioShape *, KivioPoint * );
-    bool checkCollisionOpenPath( KivioShape *, KivioPoint * );
-    bool checkCollisionClosedPath( KivioShape *, KivioPoint * );
-    bool checkCollisionPie( KivioShape *, KivioPoint * );
-    bool checkCollisionEllipse( KivioShape *, KivioPoint * );
-    bool checkCollisionLineArray( KivioShape *, KivioPoint * );
-    bool checkCollisionRectangle( KivioShape *, KivioPoint * );
-    bool checkCollisionRoundRectangle( KivioShape *, KivioPoint * );
+    bool checkCollisionArc( KivioShape *, KoPoint * );
+    bool checkCollisionBezier( KivioShape *, KoPoint * );
+    bool checkCollisionOpenPath( KivioShape *, KoPoint * );
+    bool checkCollisionClosedPath( KivioShape *, KoPoint * );
+    bool checkCollisionPie( KivioShape *, KoPoint * );
+    bool checkCollisionEllipse( KivioShape *, KoPoint * );
+    bool checkCollisionLineArray( KivioShape *, KoPoint * );
+    bool checkCollisionRectangle( KivioShape *, KoPoint * );
+    bool checkCollisionRoundRectangle( KivioShape *, KoPoint * );
     bool checkCollisionPolygon( KivioShape *, KoPoint * );
-    bool checkCollisionPolyline( KivioShape *, KivioPoint * );
-    bool checkCollisionTextBox( KivioShape *, KivioPoint * );
+    bool checkCollisionPolyline( KivioShape *, KoPoint * );
+    bool checkCollisionTextBox( KivioShape *, KoPoint * );
 
 
     KivioShape *locateShape( const QString & );

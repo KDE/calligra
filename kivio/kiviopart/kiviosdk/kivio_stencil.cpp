@@ -21,11 +21,10 @@
 #include "kivio_fill_style.h"
 #include "kivio_intra_stencil_data.h"
 #include "kivio_painter.h"
-//#include "kivio_point.h"
-#include "kivio_rect.h"
 #include "kivio_stencil.h"
 
 #include <kozoomhandler.h>
+#include <koRect.h>
 #include <KIvioStencilIface.h>
 
 KivioStencil::KivioStencil()
@@ -74,9 +73,9 @@ KivioStencil::~KivioStencil()
     m_pSpawner = NULL;
 }
 
-KivioRect KivioStencil::rect()
+KoRect KivioStencil::rect()
 {
-    return KivioRect( m_x, m_y, m_w, m_h );
+    return KoRect( m_x, m_y, m_w, m_h );
 }
 
 

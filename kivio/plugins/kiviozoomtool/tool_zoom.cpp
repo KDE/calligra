@@ -313,7 +313,7 @@ void ZoomTool::showPopupMenu(const QPoint& p )
 void ZoomTool::zoomSelected()
 {
   KivioCanvas* canvas = view()->canvasWidget();
-  KivioRect r = canvas->activePage()->getRectForAllSelectedStencils();
+  KoRect r = canvas->activePage()->getRectForAllSelectedStencils();
 
   if (!r.isNull() && r.isValid()) {
     canvas->setVisibleArea(r);
@@ -323,7 +323,7 @@ void ZoomTool::zoomSelected()
 void ZoomTool::zoomAllobjects()
 {
   KivioCanvas* canvas = view()->canvasWidget();
-  KivioRect r = canvas->activePage()->getRectForAllStencils();
+  KoRect r = canvas->activePage()->getRectForAllStencils();
 
   if (!r.isNull() && r.isValid()) {
     canvas->setVisibleArea(r);
@@ -340,7 +340,7 @@ void ZoomTool::zoomRect(QRect r)
   }
 
   KoPoint p0 = canvas->mapFromScreen(r.topLeft());
-  canvas->setVisibleArea(KivioRect(p0.x(), p0.y(), view()->zoomHandler()
+  canvas->setVisibleArea(KoRect(p0.x(), p0.y(), view()->zoomHandler()
     ->unzoomItX(r.width()), view()->zoomHandler()->unzoomItY(r.height())));
 }
 #include "tool_zoom.moc"

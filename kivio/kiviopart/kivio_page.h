@@ -46,13 +46,13 @@ class DCOPObject;
 #include <qwidget.h>
 #include <koPoint.h>
 
-#include "kivio_rect.h"
 #include "kivio_stencil.h"
 
 class KivioPainter;
 class KPrinter;
 class KivioView;
 class KoZoomHandler;
+class KoRect;
 
 #define BORDER_SPACE 1
 
@@ -123,8 +123,8 @@ class KivioPage : public QObject
     bool stencilInRect( double, double, double, double, KivioStencil * );
     QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
 
-    KivioRect getRectForAllSelectedStencils();
-    KivioRect getRectForAllStencils();
+    KoRect getRectForAllSelectedStencils();
+    KoRect getRectForAllStencils();
 
     int generateStencilIds( int );
 

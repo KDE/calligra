@@ -57,7 +57,7 @@ void ViewItemList::load(const QDomElement& element)
     d->name = XmlReadString(e, "name", "NoName");
     d->id = freeId++;
     d->pageId = XmlReadInt(e, "pageId", 0);
-    d->rect = XmlReadRect(e, "rect", KivioRect());
+    d->rect = XmlReadRect(e, "rect", KoRect());
     d->isZoom = (bool)XmlReadInt(e, "zoom", 0);
     d->isPage = (bool)XmlReadInt(e, "page", 0);
     list.append(d);

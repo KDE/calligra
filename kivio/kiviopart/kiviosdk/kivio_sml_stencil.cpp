@@ -1828,62 +1828,65 @@ KivioCollisionType KivioSMLStencil::checkForCollision( KoPoint *pPoint, double )
   m.rotate(m_rotation);
   m.translate(-m_w / 2.0, -m_h / 2.0);
 
-  KivioPoint* pPoints = new KivioPoint[4];
-  pPoints[0].set(0 * m.m11() + 0 * m.m21() + m.dx(), 0 * m.m12() + 0 * m.m22() + m.dy());
-  pPoints[1].set(m_w * m.m11() + 0 * m.m21() + m.dx(), m_w * m.m12() + 0 * m.m22() + m.dy());
-  pPoints[2].set(m_w * m.m11() + m_h * m.m21() + m.dx(), m_w * m.m12() + m_h * m.m22() + m.dy());
-  pPoints[3].set(0 * m.m11() + m_h * m.m21() + m.dx(), 0 * m.m12() + m_h * m.m22() + m.dy());
+  KoPoint pPoints[4];
+  pPoints[0].setX(0 * m.m11() + 0 * m.m21() + m.dx());
+  pPoints[0].setY(0 * m.m12() + 0 * m.m22() + m.dy());
+  pPoints[1].setX(m_w * m.m11() + 0 * m.m21() + m.dx());
+  pPoints[1].setY(m_w * m.m12() + 0 * m.m22() + m.dy());
+  pPoints[2].setX(m_w * m.m11() + m_h * m.m21() + m.dx());
+  pPoints[2].setY(m_w * m.m12() + m_h * m.m22() + m.dy());
+  pPoints[3].setX(0 * m.m11() + m_h * m.m21() + m.dx());
+  pPoints[3].setY(0 * m.m12() + m_h * m.m22() + m.dy());
 
   if(PointInPoly(pPoints, 4, pPoint)) {
     type = kctBody;
   }
 
-  delete [] pPoints;
   return type;
 }
 
-bool KivioSMLStencil::checkCollisionArc( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionArc( KivioShape *, KoPoint * )
 {
     return false;
 }
 
 
-bool KivioSMLStencil::checkCollisionBezier( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionBezier( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionOpenPath( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionOpenPath( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionClosedPath( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionClosedPath( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionPie( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionPie( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionEllipse( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionEllipse( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionLineArray( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionLineArray( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionRectangle( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionRectangle( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionRoundRectangle( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionRoundRectangle( KivioShape *, KoPoint * )
 {
     return false;
 }
@@ -1893,7 +1896,7 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KoPoint *pCheck
   double _x, _y, defWidth, defHeight;
   KivioShapeData *pShapeData;
   QPtrList<KivioPoint> *pList;
-  KivioPoint *pPoints;
+  KoPoint *pPoints;
 
   pShapeData = pShape->shapeData();
 
@@ -1902,7 +1905,7 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KoPoint *pCheck
 
   pList = pShapeData->pointList();
 
-  pPoints = new KivioPoint[pList->count()];
+  pPoints = new KoPoint[pList->count()];
 
   KivioPoint *pPoint;
   int i=0;
@@ -1912,7 +1915,8 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KoPoint *pCheck
     _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
     _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
-    pPoints[i].set(_x,_y);
+    pPoints[i].setX(_x);
+    pPoints[i].setY(_y);
 
     i++;
 
@@ -1930,12 +1934,12 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KoPoint *pCheck
   return false;
 }
 
-bool KivioSMLStencil::checkCollisionPolyline( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionPolyline( KivioShape *, KoPoint * )
 {
     return false;
 }
 
-bool KivioSMLStencil::checkCollisionTextBox( KivioShape *, KivioPoint * )
+bool KivioSMLStencil::checkCollisionTextBox( KivioShape *, KoPoint * )
 {
     return false;
 }

@@ -511,15 +511,15 @@ void SelectTool::continueDragging(const QPoint &pos)
   newY = p.y();
 
   // Now the guides override the grid so we attempt to snap to them
-  p.setCoords(m_selectedRect.x() + dx + m_selectedRect.w(), m_selectedRect.y() + dy + m_selectedRect.h());
+  p.setCoords(m_selectedRect.x() + dx + m_selectedRect.width(), m_selectedRect.y() + dy + m_selectedRect.height());
   p = canvas->snapToGuides(p, snappedX, snappedY);
 
   if(snappedX) {
-    newX = p.x() - m_selectedRect.w();
+    newX = p.x() - m_selectedRect.width();
   }
 
   if(snappedY) {
-    newY = p.y() - m_selectedRect.h();
+    newY = p.y() - m_selectedRect.height();
   }
 
   p.setCoords(m_selectedRect.x() + dx, m_selectedRect.y() + dy);
@@ -632,8 +632,8 @@ void SelectTool::continueResizing(const QPoint &pos)
 
   double sx = pData->rect.x();
   double sy = pData->rect.y();
-  double sw = pData->rect.w();
-  double sh = pData->rect.h();
+  double sw = pData->rect.width();
+  double sh = pData->rect.height();
   double ratio = sw / sh;
 
   switch( m_resizeHandle )

@@ -45,6 +45,7 @@
 #include <kmessagebox.h>
 #include <koUnit.h>
 #include <koPoint.h>
+#include <koRect.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
 
@@ -1104,7 +1105,7 @@ void KivioPage::alignStencils(AlignData d)
 
         while( pStencil )
         {
-            KivioRect oldRect = pStencil->rect();
+            KoRect oldRect = pStencil->rect();
 
             switch (d.v) {
                 case AlignData::Top:
@@ -1146,14 +1147,14 @@ void KivioPage::alignStencils(AlignData d)
         KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
         double w = m_pPageLayout.ptWidth;
         double h = m_pPageLayout.ptHeight;
-        KivioRect r = getRectForAllSelectedStencils();
-        double dx = ((w - r.w()) / 2.0) - r.x();
-        double dy = ((h - r.h()) / 2.0) - r.y();
+        KoRect r = getRectForAllSelectedStencils();
+        double dx = ((w - r.width()) / 2.0) - r.x();
+        double dy = ((h - r.height()) / 2.0) - r.y();
         pStencil = m_lstSelection.first();
 
         while( pStencil )
         {
-            KivioRect oldRect = pStencil->rect();
+            KoRect oldRect = pStencil->rect();
             pStencil->setPosition(pStencil->x() + dx, pStencil->y() + dy);
             KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
               pStencil, oldRect, pStencil->rect(), this);
@@ -1207,7 +1208,7 @@ void KivioPage::distributeStencils(DistributeData d)
 
   XYSortedStencilList xSortList(true);
   XYSortedStencilList ySortList(false);
-  QValueList<KivioRect> oldRects;
+  QValueList<KoRect> oldRects;
 
   while( pStencil )
   {
@@ -1396,7 +1397,7 @@ void KivioPage::distributeStencils(DistributeData d)
 
   if(d.v != DistributeData::None || d.h != DistributeData::None) {
     KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
-    QValueListIterator<KivioRect> it;
+    QValueListIterator<KoRect> it;
     pStencil = m_lstSelection.first();
 
     for(it = oldRects.begin(); it != oldRects.end(); ++it) {
@@ -1414,9 +1415,9 @@ void KivioPage::distributeStencils(DistributeData d)
 /**
  * Returns a rectangle representing the bounds of all the selected stencils (in points).
  */
-KivioRect KivioPage::getRectForAllSelectedStencils()
+KoRect KivioPage::getRectForAllSelectedStencils()
 {
-    KivioRect rTotal, r;
+    KoRect rTotal, r;
 
     KivioStencil *pStencil = m_lstSelection.first();
 
@@ -1444,9 +1445,9 @@ KivioRect KivioPage::getRectForAllSelectedStencils()
 /**
  * Returns a rectangle representing the bounds of all the selected stencils (in points).
  */
-KivioRect KivioPage::getRectForAllStencils()
+KoRect KivioPage::getRectForAllStencils()
 {
-    KivioRect rTotal, r;
+    KoRect rTotal, r;
 
     bool firstTime = true;
 

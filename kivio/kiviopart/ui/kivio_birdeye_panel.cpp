@@ -2,7 +2,6 @@
 
 #include "kivio_screen_painter.h"
 
-#include "kivio_rect.h"
 #include "kivio_view.h"
 #include "kivio_doc.h"
 #include "kivio_page.h"
@@ -222,7 +221,7 @@ void KivioBirdEyePanel::updateVisibleArea()
 {
   bitBlt(canvas,0,0,m_buffer);
 
-  KivioRect vr = m_pCanvas->visibleArea();
+  KoRect vr = m_pCanvas->visibleArea();
   QSize s1 = canvas->size();
   KoPageLayout pl = m_pView->activePage()->paperLayout();
   int pw = m_zoomHandler->zoomItX(pl.ptWidth);
@@ -232,8 +231,8 @@ void KivioBirdEyePanel::updateVisibleArea()
 
   int x = m_zoomHandler->zoomItX(vr.x()) + px0;
   int y = m_zoomHandler->zoomItY(vr.y()) + py0;
-  int w = m_zoomHandler->zoomItX(vr.w());
-  int h = m_zoomHandler->zoomItX(vr.h());
+  int w = m_zoomHandler->zoomItX(vr.width());
+  int h = m_zoomHandler->zoomItX(vr.height());
 
   QPainter painter(canvas,canvas);
   painter.setPen(red);
@@ -307,34 +306,24 @@ void KivioBirdEyePanel::handleMouseMoveAction(QPoint p)
   double dx = m_zoomHandler->unzoomItX(p.x());
   double dy = m_zoomHandler->unzoomItY(p.y());
 
+  KoRect vr = m_pCanvas->visibleArea();
   if (apos == AlignRight) {
-    KivioRect vr = m_pCanvas->visibleArea();
-    vr.setW(QMAX(10.0, vr.w() + dx));
+    vr.setWidth(QMAX(10.0, vr.width() + dx));
     m_pCanvas->setVisibleAreaByWidth(vr);
-    return;
   }
-
-  if (apos == AlignLeft) {
-    KivioRect vr = m_pCanvas->visibleArea();
+  else if (apos == AlignLeft) {
     vr.setX(vr.x() + dx);
-    vr.setW(QMAX(10.0, vr.w() - dx));
+    vr.setWidth(QMAX(10.0, vr.width() - dx));
     m_pCanvas->setVisibleAreaByWidth(vr);
-    return;
   }
-
-  if (apos == AlignTop) {
-    KivioRect vr = m_pCanvas->visibleArea();
+  else if (apos == AlignTop) {
     vr.setY(vr.y() + dy);
-    vr.setH(QMAX(10.0 ,vr.h() - dy));
+    vr.setHeight(QMAX(10.0 ,vr.height() - dy));
     m_pCanvas->setVisibleAreaByHeight(vr);
-    return;
   }
-
-  if (apos == AlignBottom) {
-    KivioRect vr = m_pCanvas->visibleArea();
-    vr.setH(QMAX(10.0 ,vr.h() + dy));
+  else if (apos == AlignBottom) {
+    vr.setHeight(QMAX(10.0 ,vr.height() + dy));
     m_pCanvas->setVisibleAreaByHeight(vr);
-    return;
   }
 }
 

@@ -19,7 +19,6 @@
 #include "kivio_group_stencil.h"
 #include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
-#include "kivio_rect.h"
 
 #include <kdebug.h>
 

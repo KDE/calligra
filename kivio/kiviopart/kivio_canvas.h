@@ -30,8 +30,8 @@
 
 #include <koQueryTrader.h>
 #include <koPoint.h>
+#include <koRect.h>
 
-#include "kivio_rect.h"
 #include "kivio_intra_stencil_data.h"
 
 class KivioView;
@@ -51,6 +51,7 @@ class QScrollBar;
 class QTimer;
 
 class KoSize;
+class KoRect;
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
@@ -110,10 +111,10 @@ class KivioCanvas : public QWidget
 
     void setViewCenterPoint(const KoPoint &);
 
-    KivioRect visibleArea();
-    void setVisibleArea(KivioRect, int margin = 0);
-    void setVisibleAreaByWidth(KivioRect, int margin = 0);
-    void setVisibleAreaByHeight(KivioRect, int margin = 0);
+    KoRect visibleArea();
+    void setVisibleArea(KoRect, int margin = 0);
+    void setVisibleAreaByWidth(KoRect, int margin = 0);
+    void setVisibleAreaByHeight(KoRect, int margin = 0);
 
   signals:
     void zoomChanges();
@@ -209,7 +210,7 @@ class KivioCanvas : public QWidget
     QPoint lastPoint;
 
     bool m_pasteMoving;
-    QPtrList<KivioRect> m_lstOldGeometry;
+    QPtrList<KoRect> m_lstOldGeometry;
     KoPoint m_origPoint;
 };
 

@@ -24,7 +24,7 @@
 #include <qptrlist.h>
 
 #include "kivio_stencil.h"
-#include "kivio_rect.h"
+#include <koRect.h>
 
 class KivioPage;
 
@@ -39,7 +39,7 @@ class KivioDragObject : public QDragObject
     bool canDecode(QMimeSource*);
     bool decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPage* page);
     void setStencilList(QPtrList<KivioStencil> l);
-    void setStencilRect(KivioRect r);
+    void setStencilRect(KoRect r);
 
   protected:
     QByteArray kivioEncoded() const;
@@ -50,7 +50,7 @@ class KivioDragObject : public QDragObject
     enum { NumEncodeFormats = 4 };
     QCString m_encodeMimeList[NumEncodeFormats];
     QPtrList<KivioStencil> m_stencilList;
-    KivioRect m_stencilRect;
+    KoRect m_stencilRect;
 };
 
 #endif
