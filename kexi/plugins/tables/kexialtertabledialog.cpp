@@ -411,12 +411,19 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* result)
 {
 	if (colnum==0) {//'name'
-		//if 'type' is not filled yet
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
+		//if 'type' is not filled yet
 		if (item->at(1).isNull()) {
 			//auto select 1st row of 'type' column
 			m_view->data()->updateRowEditBuffer(item, 1, QVariant((int)0));
 		}
+
+		if (propertyBuffer()) {
+			//update field name
+			KexiPropertyBuffer &buf = *propertyBuffer();
+			buf["name"]->setValue(item->at(0));
+		}
+		
 		//save row
 //		m_view->acceptRowEdit();
 	}
@@ -461,6 +468,11 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 				}
 			}
 		}
+	}
+	else if (colnum==2) {//'description'
+		//update field desc.
+		KexiPropertyBuffer &buf = *propertyBuffer();
+		buf["description"]->setValue(item->at(2));
 	}
 }
 
