@@ -120,7 +120,6 @@ protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );
     void drawBackPix( QPainter *_painter, const QSize& ext, const QRect& crect );
     void drawBorders( QPainter *_painter, const QSize& ext, const QRect& crect );
-    void drawHeaderFooter( QPainter *_painter, const QSize& ext, const QRect& crect );
     // The current gradient isn't valid anymore (e.g. size or settings changed) -> discard it
     void removeGradient();
     // Generate a new gradient pixmap, for the given size

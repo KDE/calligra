@@ -197,10 +197,11 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     _header = new KPTextObject( this );
     _header->setDrawEditRect( false );
+    _header->setDrawEmpty( false );
+
     _footer = new KPTextObject( this );
     _footer->setDrawEditRect( false );
     _footer->setDrawEmpty( false );
-    _header->setDrawEmpty( false );
 
 
     saveOnlyPage = -1;
@@ -307,9 +308,6 @@ void KPresenterDoc::initConfig()
     zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     newZoomAndResolution(false,false);
 
-    //add header/footer in stickyPage
-    m_stickyPage->appendObject(_header);
-    m_stickyPage->appendObject(_footer);
 
 }
 
@@ -713,8 +711,21 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     }
 
     kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-
     return b;
+}
+
+void KPresenterDoc::createHeaderFooter()
+{
+    //add header/footer to sticky page
+    KoRect pageRect=m_stickyPage->getPageRect();
+    _header->setOrig(pageRect.topLeft ());
+    _header->setSize(pageRect.width(),20); //80 why not ?
+
+    _footer->setOrig(pageRect.left(),pageRect.bottom()-80);
+    _footer->setSize(pageRect.width(),20); //80 why not ?
+
+    m_stickyPage->appendObject(_header);
+    m_stickyPage->appendObject(_footer);
 }
 
 /*========================== load ===============================*/
@@ -1465,7 +1476,10 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	}
 
 	if ( _clean )
+        {
 	    setPageLayout( __pgLayout );
+            createHeaderFooter();
+        }
 	//else {
             //m_pageList.last()->updateBackgroundSize();
 	//}
@@ -1477,7 +1491,9 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
     } else {
 	if ( _clean )
+        {
 	    setPageLayout( __pgLayout );
+        }
 	else
 	    setPageLayout( _pageLayout );
     }

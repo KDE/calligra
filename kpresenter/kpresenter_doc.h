@@ -115,6 +115,8 @@ public:
 
     // page layout
     void setPageLayout( KoPageLayout );
+    void createHeaderFooter();
+
     KoPageLayout pageLayout() const { return _pageLayout; }
 
     bool insertNewTemplate( bool clean=false );

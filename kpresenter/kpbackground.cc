@@ -130,8 +130,6 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
     if ( _drawBorders )
         drawBorders( _painter, ext, crect );
 
-    drawHeaderFooter( _painter, ext, crect );
-
     _painter->restore();
 }
 
@@ -498,67 +496,6 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
 }
 
 /*================================================================*/
-void KPBackGround::drawHeaderFooter( QPainter *_painter, const QSize& /*ext*/, const QRect& /*crect*/ )
-{
-    if ( m_page->kPresenterDoc()->hasHeader() ) {
-#if 0
-        QSize s( doc->header()->textObject()->size() );
-
-        QPoint pnt( doc->header()->textObject()->x(), doc->header()->textObject()->y() );
-
-        // #### Reggie: not very efficient but ok for now
-        if ( true /*doc->header()->textObject()->isModified()*/ ) {
-            doc->header()->setSize( ext.width(), 10 );
-            //qDebug( "resize h" );
-        }
-        doc->header()->setOrig( _offset.x(), _offset.y() );
-
-        int pgnum = doc->backgroundList()->findRef( this );
-        if ( pgnum == -1 )
-            pgnum = 0;
-
-        doc->header()->textObject()->setPageNum( ++pgnum );
-
-
-        doc->header()->setSize( ext.width(), doc->header()->textObject()->document()->lastParag()->rect().bottom() + 1 );
-#endif
-        m_page->kPresenterDoc()->header()->draw( _painter, m_page->kPresenterDoc()->zoomHandler(), true );
-#if 0
-        if ( doc->header()->textObject()->isModified() )
-            doc->header()->textObject()->resize( s );
-        doc->header()->textObject()->move( pnt.x(), pnt.y() );
-#endif
-    }
-
-    if ( m_page->kPresenterDoc()->hasFooter() ) {
-#if 0
-        QSize s( doc->footer()->textObject()->size() );
-        QPoint pnt( doc->footer()->textObject()->x(), doc->footer()->textObject()->y() );
-
-        // #### Reggie: not very efficient but ok for now
-        if ( true ) { //doc->footer()->getKTextObject()->isModified() || footerHeight <= 0 )
-            doc->footer()->setSize( ext.width(), 10 );
-
-            footerHeight = doc->footer()->textObject()->document()->lastParag()->rect().bottom() + 1;
-            doc->footer()->setSize( ext.width(), footerHeight );
-        }
-
-        doc->footer()->setOrig( _offset.x(), _offset.y() + ext.height() - footerHeight );
-
-        int pgnum = doc->backgroundList()->findRef( this );
-        if ( pgnum == -1 )
-            pgnum = 0;
-        doc->footer()->textObject()->setPageNum( ++pgnum );
-#endif
-        m_page->kPresenterDoc()->footer()->draw( _painter, m_page->kPresenterDoc()->zoomHandler(), true );
-#if 0
-        if ( doc->footer()->textObject()->isModified() )
-            doc->footer()->textObject()->resize( s.width(), s.height() );
-        doc->footer()->textObject()->move( pnt.x(), pnt.y() );
-#endif
-    }
-
-}
 
 void KPBackGround::drawBorders( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
