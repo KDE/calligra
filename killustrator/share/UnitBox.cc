@@ -74,11 +74,14 @@ float UnitBox::getStep () const {
 }
 
 void UnitBox::setRange (float minVal, float maxVal) {
-  valueBox->setRange (minVal, maxVal);
+  ptMinVal = minVal;
+  ptMaxVal = maxVal;
+  valueBox->setRange (cvtPtToUnit (unit, minVal), cvtPtToUnit (unit, maxVal));
 }
-
+ 
 void UnitBox::getRange (float& minVal, float& maxVal) {
-  valueBox->getRange (minVal, maxVal);
+  minVal = ptMinVal;
+  maxVal = ptMaxVal;  
 }
 
 void UnitBox::setEditable (bool flag) {
