@@ -543,26 +543,22 @@ void OOWriterWorker::writeMetaXml(void)
         zipWriteData("</meta:print-date>\n");
     }
 
-    zipWriteData( "  <meta:document-statistic meta:page-count=\"" );
+    zipWriteData( "  <meta:document-statistic" );
 
+    // KWord files coming from import filters mostly do not have the correct page count
     if ( m_numPages > 0 )
     {
-        zipWriteData( escapeOOText( QString::number ( m_numPages ) ) );
-    }
-    else
-    {
-        zipWriteData( "0" );
+        zipWriteData( " meta:page-count=\"" );
+        zipWriteData( QString::number ( m_numPages ) );
+        zipWriteData( "\"" );
     }
 
-    zipWriteData( "\"" );
-
-    // ### TODO: any reasons not to generate it?
     zipWriteData( " meta:image-count=\"" ); // This not specified in the OO specification section 2.1.19 (### TODO)
-    zipWriteData( escapeOOText( QString::number ( m_pictureNumber ) ) );
+    zipWriteData( QString::number ( m_pictureNumber ) );
     zipWriteData( "\"" );
 
     zipWriteData( " meta:table-count=\"" );
-    zipWriteData( escapeOOText( QString::number ( m_tableNumber ) ) );
+    zipWriteData( QString::number ( m_tableNumber ) );
     zipWriteData( "\"" );
 
     zipWriteData( "/>\n" ); // meta:document-statistic

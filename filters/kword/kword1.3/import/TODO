@@ -57,3 +57,5 @@ Table
 <SERIALL>, <SAMPLE>, <DB>
 ...
 
+=== Long term ===
+Make the filter use less memory
