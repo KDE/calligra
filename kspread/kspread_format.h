@@ -125,7 +125,7 @@ public:
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
     virtual bool loadOasisStyleProperties( const QDomElement & property, const KoOasisStyles& oasisStyles );
     bool loadFontOasisStyle( const QDomElement * font );
-    void loadOasisBorder( const QString & borderDef/*, bPos pos*/ );
+    QPen loadOasisBorder( const QString & borderDef );
     ////////////////////////////////
     //
     // Properties

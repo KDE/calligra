@@ -873,99 +873,86 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
            layout->setMultiRow( true );
         */
     }
-#if 0
     if ( property.hasAttribute( "fo:border-bottom" ) )
     {
-        loadOasisBorder( property.attribute( "fo:border-bottom" ), Bottom );
+        setBottomBorderPen( loadOasisBorder( property.attribute( "fo:border-bottom" ) ) );
         // TODO: style:border-line-width-bottom if double!
     }
 
     if ( property.hasAttribute( "fo:border-right" ) )
     {
-        loadOasisBorder(  property.attribute( "fo:border-right" ), Right );
+        setRightBorderPen( loadOasisBorder(  property.attribute( "fo:border-right" ) ) );
         // TODO: style:border-line-width-right
     }
 
     if ( property.hasAttribute( "fo:border-top" ) )
     {
-        loadOasisBorder(  property.attribute( "fo:border-top" ), Top );
+        setTopBorderPen( loadOasisBorder(  property.attribute( "fo:border-top" ) ) );
         // TODO: style:border-line-width-top
     }
 
     if ( property.hasAttribute( "fo:border-left" ) )
     {
-        loadOasisBorder( property.attribute( "fo:border-left" ), Left );
+        setLeftBorderPen( loadOasisBorder( property.attribute( "fo:border-left" ) ) );
         // TODO: style:border-line-width-left
     }
 
     if ( property.hasAttribute( "fo:border" ) )
     {
-        loadOasisBorder( property.attribute( "fo:border" ), Border );
+        QPen pen = loadOasisBorder( property.attribute( "fo:border" ) );
+        setLeftBorderPen( pen );
+        setRightBorderPen( pen );
+        setTopBorderPen( pen );
+        setBottomBorderPen( pen );
+
         // TODO: style:border-line-width-left
     }
-#endif
     return true;
 }
 
-void KSpreadFormat::loadOasisBorder( const QString & borderDef/*, bPos pos*/ )
+QPen KSpreadFormat::loadOasisBorder( const QString & borderDef  )
 {
-#if 0
+    QPen pen;
     if ( borderDef == "none" )
-    return;
+        return pen;
 
-  int p = borderDef.find( ' ' );
-  if ( p < 0 )
-    return;
+    int p = borderDef.find( ' ' );
+    if ( p < 0 )
+        return pen;
 
-  QPen pen;
-  QString w = borderDef.left( p );
-  pen.setWidth( (int) KoUnit::parseValue( w ) );
+    QString w = borderDef.left( p );
+    pen.setWidth( (int) KoUnit::parseValue( w ) );
 
 
-  ++p;
-  int p2 = borderDef.find( ' ', p );
-  QString s = borderDef.mid( p, p2 - p );
+    ++p;
+    int p2 = borderDef.find( ' ', p );
+    QString s = borderDef.mid( p, p2 - p );
 
-  kdDebug(30518) << "Borderstyle: " << s << endl;
+    kdDebug(30518) << "Borderstyle: " << s << endl;
 
-  if ( s == "solid" || s == "double" )
-    pen.setStyle( Qt::SolidLine );
-  else
-  {
+    if ( s == "solid" || s == "double" )
+        pen.setStyle( Qt::SolidLine );
+    else
+    {
 #if 0
-    // TODO: not supported by oocalc
-    pen.setStyle( Qt::DashLine );
-    pen.setStyle( Qt::DotLine );
-    pen.setStyle( Qt::DashDotLine );
-    pen.setStyle( Qt::DashDotDotLine );
+        // TODO: not supported by oocalc
+        pen.setStyle( Qt::DashLine );
+        pen.setStyle( Qt::DotLine );
+        pen.setStyle( Qt::DashDotLine );
+        pen.setStyle( Qt::DashDotDotLine );
 #endif
-    pen.setStyle( Qt::SolidLine ); //default.
-  }
+        pen.setStyle( Qt::SolidLine ); //default.
+    }
 
-  ++p2;
-  p = borderDef.find( ' ', p2 );
-  if ( p == -1 )
-    p = borderDef.length();
+    ++p2;
+    p = borderDef.find( ' ', p2 );
+    if ( p == -1 )
+        p = borderDef.length();
 
-  pen.setColor( QColor( borderDef.right( p - p2 ) ) );
+    pen.setColor( QColor( borderDef.right( p - p2 ) ) );
 
-  if ( pos == Left )
-    layout->setLeftBorderPen( pen );
-  else if ( pos == Top )
-    layout->setTopBorderPen( pen );
-  else if ( pos == Right )
-    layout->setRightBorderPen( pen );
-  else if ( pos == Bottom )
-    layout->setBottomBorderPen( pen );
-  else if ( pos == Border )
-  {
-    layout->setLeftBorderPen( pen );
-    layout->setTopBorderPen( pen );
-    layout->setRightBorderPen( pen );
-    layout->setBottomBorderPen( pen );
-  }
-  // TODO Diagonals not supported by oocalc
-#endif
+    // TODO Diagonals not supported by oocalc
+    return pen;
 }
 
 

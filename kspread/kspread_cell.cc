@@ -5290,6 +5290,11 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             setComment( comment );
     }
 
+    if ( element.hasAttribute( "table:style-name" ) )
+    {
+        //todo
+        kdDebug()<<" cell has a style name :"<<element.attribute( "table:style-name" )<<endl;
+    }
     return true;
 }
 
