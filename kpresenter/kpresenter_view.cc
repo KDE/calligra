@@ -4821,8 +4821,13 @@ void KPresenterView::editReplace()
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
 
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry,hasSelection );
+    QPtrList<KoTextObject> list=m_canvas->objectText();
+    if( list.count()==0)
+        KMessageBox::sorry( this, i18n( "Sorry, there is not text object!" ) );
+    return;
     if ( dialog.exec() == QDialog::Accepted )
     {
+
         m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,m_canvas->objectText());
         doFindReplace();
     }
