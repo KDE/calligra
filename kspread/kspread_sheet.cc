@@ -6343,19 +6343,19 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         QDomElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
-
             if ( rowElement.tagName()=="table:table-column" )
             {
-                kdDebug ()<<" table-column found \n";
+                kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
                 loadColumnFormat( rowElement, oasisStyles, indexCol );
-                kdDebug()<<"loadColumnFormat :"<<indexCol<<endl;
+                kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
             }
             else if( rowElement.tagName() == "table:table-row" )
             {
+                kdDebug()<<" table-row found :index row before "<<rowIndex<<endl;
                 loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
+                kdDebug()<<" table-row found :index row after "<<rowIndex<<endl;
             }
         }
-
         rowNode = rowNode.nextSibling();
     }
 
@@ -6416,8 +6416,24 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         width = KoUnit::parseValue( styleStack.attribute( "style:column-width" ) , -1 );
         kdDebug()<<" style:column-width : width :"<<width<<endl;
     }
+
+    bool insertPageBreak = false;
+    if ( styleStack.hasAttribute( "fo:break-before" ) )
+    {
+        QString str = styleStack.attribute( "fo:break-before" );
+        if ( str == "page" )
+        {
+            insertPageBreak = true;
+        }
+        else
+            kdDebug()<<" str :"<<str<<endl;
+    }
+
+
     if ( number>30 )
         number = 30; //todo fixme !
+
+
 
     for ( int i = 0; i < number; ++i )
     {
@@ -6433,7 +6449,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
             col->setHide( true );
 
         insertColumnFormat( col );
-        indexCol++;
+        ++indexCol;
         kdDebug()<<" après !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
     }
     return true;
@@ -6492,6 +6508,18 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
             number = 256;
     }
 
+    bool insertPageBreak = false;
+    if ( styleStack.hasAttribute( "fo:break-before" ) )
+    {
+        QString str = styleStack.attribute( "fo:break-before" );
+        if ( str == "page" )
+        {
+            insertPageBreak = true;
+        }
+        else
+            kdDebug()<<" str :"<<str<<endl;
+    }
+
     for ( int i = 0; i < number; ++i )
     {
         kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
@@ -6506,7 +6534,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
             if ( collapse )
                 rowL->setHide( true );
         }
-        rowIndex++;
+        ++rowIndex;
     }
 
     int columnIndex = 0;
@@ -6539,20 +6567,6 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         }
         cellNode = cellNode.nextSibling();
     }
-
-    return true;
-}
-
-bool KSpreadSheet::loadCellsOasis( const QDomElement &rowElement, const KoOasisStyles& oasisStyles )
-{
-    kdDebug()<<"bool KSpreadSheet::loadCellsOasis( const QDomElement &element )*****************\n";
-#if 0
-    KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-    if ( cell->loadOasis( e, 0, 0 ) )
-        insertCell( cell );
-    else
-        delete cell; // Allow error handling: just skip invalid cells
-#endif
 
     return true;
 }
