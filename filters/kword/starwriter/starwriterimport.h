@@ -30,10 +30,6 @@ class StarWriterImport: public KoFilter
     Q_OBJECT
 
 public:
-    // needed for ATTRIBUTES
-    bool hasHeader;
-    bool hasFooter;
-
     StarWriterImport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~StarWriterImport();
     KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
@@ -42,6 +38,13 @@ private:
     // most important OLE streams
     QByteArray SwPageStyleSheets;
     QByteArray StarWriterDocument;
+
+    // supplementary frames count
+    Q_UINT8 frames;
+
+    // needed for ATTRIBUTES
+    bool hasHeader;
+    bool hasFooter;
 
     // Preliminary check
     bool checkDocumentVersion();
@@ -56,8 +59,8 @@ private:
     QString convertToKWordString(QByteArray s);
 
     // Node routines
-    bool parseNodes(QByteArray n, QString caption);
-    bool parseText(QByteArray n, QString caption);
+    bool parseNodes(QByteArray n);
+    bool parseText(QByteArray n);
     bool parseTable(QByteArray n);
     bool parseGraphics(QByteArray n);
 

@@ -39,8 +39,11 @@ static inline Q_UINT32 readU24(QByteArray array, Q_UINT32 p)
    return (Q_UINT32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
 }
 
-StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter(), hasHeader(false), hasFooter(false)
+StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter()
 {
+    hasHeader = false;
+    hasFooter = false;
+    frames = 0;
 }
 
 StarWriterImport::~StarWriterImport()
@@ -114,7 +117,7 @@ bool StarWriterImport::checkDocumentVersion()
     if (StarWriterDocument[0x05] != 'R') return false;
 
     // Password-protection is not supported for the moment
-    Q_UINT16 flags = StarWriterDocument[0x0A] + 0x0100*StarWriterDocument[0x0D];
+    Q_UINT16 flags = StarWriterDocument[0x0A] + 0x0100*StarWriterDocument[0x0B];
     if (flags & 0x0008) return false;
 
     return true;
@@ -191,7 +194,7 @@ bool StarWriterImport::addBody()
     QByteArray data(len);
     for (Q_UINT32 k=0; k<len; k++)
       data[k] = StarWriterDocument[p+k];
-    return parseNodes(data, "Text Frameset");
+    return parseNodes(data);
 }
 
 QString StarWriterImport::convertToKWordString(QByteArray s)
@@ -212,9 +215,8 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
     return result;
 }
 
-bool StarWriterImport::parseNodes(QByteArray n, QString caption)
+bool StarWriterImport::parseNodes(QByteArray n)
 {
-    // textTable and textGraphics are not necessary
     QByteArray s;
 
     // Loop
@@ -230,7 +232,7 @@ bool StarWriterImport::parseNodes(QByteArray n, QString caption)
 
         switch (c) {
             case 'T':
-                if (!parseText(s, caption)) return false;
+                if (!parseText(s)) return false;
                 break;
             case 'E':
                 if (!parseTable(s)) return false;
@@ -247,7 +249,7 @@ bool StarWriterImport::parseNodes(QByteArray n, QString caption)
     return true;
 }
 
-bool StarWriterImport::parseText(QByteArray n, QString caption)
+bool StarWriterImport::parseText(QByteArray n)
 {
     QByteArray s;
     Q_UINT32 len;
@@ -278,7 +280,8 @@ bool StarWriterImport::parseTable(QByteArray n)
 
 bool StarWriterImport::parseGraphics(QByteArray n)
 {
-    return (n[0x00] == 'G');
+    // return (n[0x00] == 'G');
+    return true;
 }
 
 #include <starwriterimport.moc>
