@@ -103,6 +103,9 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     frameType = fs->type();
     frameSetFloating = fs->isFloating();
     frameSetProtectedSize = fs->isProtectSize();
+    m_mainFrameSetIncluded = fs->isMainFrameset();
+    m_defaultFrameSetIncluded = fs->isMainFrameset() || fs->isHeaderOrFooter() || fs->isFootEndNote();
+
     doc = 0;
     init();
 }
@@ -117,6 +120,8 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     frame= _frame;
     frameSetFloating = false;
     frameSetProtectedSize = false;
+    m_mainFrameSetIncluded = false;
+    m_defaultFrameSetIncluded = false;
     if(frame==0) {
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
@@ -164,6 +169,18 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
     }
     if(allFrames.count()==0)
         allFrames.append(listOfFrames.first());
+
+    // Now that allFrames is set, calculate m_mainFrameSetIncluded and m_defaultFrameSetIncluded
+    m_mainFrameSetIncluded = false;
+    m_defaultFrameSetIncluded = false;
+    for ( f = allFrames.first(); f; f = allFrames.next() ) {
+        fs = f->frameSet();
+        if ( !m_mainFrameSetIncluded )
+            m_mainFrameSetIncluded = fs->isMainFrameset();
+        if ( !m_defaultFrameSetIncluded )
+            m_defaultFrameSetIncluded = fs->isMainFrameset() || fs->isHeaderOrFooter() || fs->isFootEndNote();
+    }
+
 
     init();
 }
@@ -980,7 +997,6 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     }
 
 
-    bool isMainFrame = false;
     if ( frame ) {
         // is single frame dia. Fill position strings and checkboxes now.
 
@@ -1002,10 +1018,6 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         oldH = sh->value();
 
         KWFrameSet * fs = frame->frameSet();
-        // Can't change geometry of main WP frame or headers/footers
-        if ( fs && fs->isMainFrameset() )
-            isMainFrame = true;
-
         if ( fs && fs->getGroupManager() )
             floating->setText( i18n( "Table is inline" ) );
 
@@ -1018,15 +1030,16 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         bool ps=fs->isProtectSize();
         protectSize->setChecked( ps );
 
-        if ( fs->isMainFrameset() ) {
-            isMainFrame = true;
-        }
-
         bool table=fs->getGroupManager();
         if(table)
             fs=fs->getGroupManager();
         bool inlineframe =fs->isFloating();
         floating->setChecked( inlineframe );
+
+        double commonWidth = f->width();
+        double commonHeight = f->height();
+        sw->setEnabled( true );
+        sh->setEnabled( true );
 
         f=allFrames.next();
         while(f) {
@@ -1034,9 +1047,6 @@ void KWFrameDia::setupTab4() { // TAB Geometry
             if(ps != fs->isProtectSize()) {
                 protectSize->setTristate();
                 protectSize->setNoChange();
-            }
-            if ( fs->isMainFrameset() ) {
-                isMainFrame = true;
             }
             if(fs->getGroupManager()) //table
                 fs=fs->getGroupManager();
@@ -1048,29 +1058,46 @@ void KWFrameDia::setupTab4() { // TAB Geometry
                 floating->setNoChange();
             }
 
+            if ( kAbs( f->width() - commonWidth ) > 1E-6 ) {
+                kdDebug() << k_funcinfo << "width differs:" << f->width() << " " << commonWidth << endl;
+                sw->setEnabled( false );
+            }
+            if ( kAbs( f->height() - commonHeight ) > 1E-6 ) {
+                kdDebug() << k_funcinfo << "height differs:" << f->height() << " " << commonHeight << endl;
+                sh->setEnabled( false );
+            }
+
             f=allFrames.next();
         }
+        // TODO port to KoUnitDoubleSpinBox
+        // and TODO show a special value when frames have a different width/height
+        if ( sw->isEnabled() )
+            sw->setValue( KoUnit::toUserValue( commonWidth, doc->getUnit() ) );
+        if ( sh->isEnabled() )
+            sh->setValue( KoUnit::toUserValue( commonHeight, doc->getUnit() ) );
         if(table)
             floating->setText( i18n( "Table is inline" ) );
     }
 
-    if ( !frame || frame->frameSet() && ( frame->frameSet()->isHeaderOrFooter() ||
-            isMainFrame || frame->frameSet()->isFootEndNote())) {
+    if ( !frame || m_defaultFrameSetIncluded ) {
         // is multi frame, positions don't work for that..
         // also not for default frames.
         sx->setEnabled( false );
         sy->setEnabled( false );
-        sw->setEnabled( false );
-        sh->setEnabled( false );
         lx->setEnabled( false );
         ly->setEnabled( false );
         lw->setEnabled( false );
         lh->setEnabled( false );
-        grp1->setEnabled( false );
         floating->setEnabled( false );
     }
+    if ( m_defaultFrameSetIncluded ) { // the multiframe case is handled before
+        sw->setEnabled( false );
+        sh->setEnabled( false );
+        grp1->setEnabled( false );
+    }
 
-    if ( isMainFrame )
+
+    if ( m_mainFrameSetIncluded )
     {
         grp1->hide();
         floating->hide( );
@@ -1371,14 +1398,28 @@ void KWFrameDia::setFrameBehaviorInputOff() {
     }
 }
 
-void KWFrameDia::slotProtectSizeToggled(bool b)
+void KWFrameDia::enableSizeAndPosition()
 {
-    grp1->setEnabled( !b && !floating->isChecked());
+    bool canMove = ( floating->state() == QButton::Off ) // can move if no frame is floating
+                   && ( protectSize->state() == QButton::Off ) // protects size too
+                   && !m_defaultFrameSetIncluded // those can't be moved
+                   && frame; // can't move if multiple frames selected
+    sx->setEnabled( canMove );
+    sy->setEnabled( canMove );
+    bool canResize = ( protectSize->state() == QButton::Off ) // can resize if no frame is protect-size'd
+                     && !m_defaultFrameSetIncluded; // those can't be resized
+    sw->setEnabled( canResize );
+    sh->setEnabled( canResize );
+}
+
+void KWFrameDia::slotProtectSizeToggled(bool)
+{
+    enableSizeAndPosition();
 }
 
 void KWFrameDia::slotFloatingToggled(bool b)
 {
-    grp1->setEnabled( !b && !protectSize->isChecked()); // Position doesn't make sense for a floating frame
+    enableSizeAndPosition();
     if (tab1 && rAppendFrame && rResizeFrame && rNoShow ) {
         cbCopy->setEnabled( !b ); // 'copy' irrelevant for floating frames.
         if ( rAppendFrame )
@@ -1761,12 +1802,14 @@ bool KWFrameDia::applyChanges()
     double uTop = 0.0;
     double uBottom = 0.0;
     double uRight = 0.0;
-    if(tab4 && frame) { // TAB Geometry
-        px = QMAX(0,KoUnit::fromUserValue( sx->value(), doc->getUnit() ));
-        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
-        py = QMAX(0, KoUnit::fromUserValue(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
-        pw = QMAX(KoUnit::fromUserValue( sw->value(), doc->getUnit() ),0);
-        ph = QMAX(KoUnit::fromUserValue(sh->value(), doc->getUnit() ),0);
+    if(tab4) { // TAB Geometry
+        if ( frame ) {
+            px = QMAX( 0, KoUnit::fromUserValue( sx->value(), doc->getUnit() ) );
+            int pageNum = QMIN( static_cast<int>( frame->y() / doc->ptPaperHeight() ), doc->numPages() - 1 );
+            py = QMAX( 0, KoUnit::fromUserValue( sy->value(),doc->getUnit() ) ) + pageNum * doc->ptPaperHeight();
+        }
+        pw = QMAX( KoUnit::fromUserValue( sw->value(), doc->getUnit() ), 0 );
+        ph = QMAX( KoUnit::fromUserValue( sh->value(), doc->getUnit() ), 0 );
         if ( m_paddingConfigWidget )
         {
             uLeft = m_paddingConfigWidget->leftValue();
@@ -1879,46 +1922,49 @@ bool KWFrameDia::applyChanges()
                 cmd->execute();
 
             }
-            if ( frame ) {
-                if ( !frame->frameSet()->isMainFrameset() &&
-                     (oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() )) {
-                    //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
-                    //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
-                    //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
+            if ( !fs->isMainFrameset() &&
+                ( oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() ) )
+            {
+                //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
+                //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
+                //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
-                    if( !doc->isOutOfPage( rect , f->pageNum() ) )
-                    {
-                        FrameIndex index( f );
-                        KoRect initialRect = f->normalize();
-                        double initialMinFrameHeight = f->minFrameHeight();
-                        f->setRect( px, py, pw, ph );
-                        FrameResizeStruct tmpResize( initialRect, initialMinFrameHeight, frame->normalize() );
-                        if(!macroCmd)
-                            macroCmd = new KMacroCommand( i18n("Resize Frame") );
-
-                        KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
-                        macroCmd->addCommand(cmd);
-                        doc->frameChanged( f );
-                    }
-                    else
-                    {
-                        KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
-                    }
-                }
-                if (m_paddingConfigWidget && (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())))
+                if( !doc->isOutOfPage( rect, f->pageNum() ) )
                 {
-                    if ( m_paddingConfigWidget->changed() )
-                    {
-                        FrameIndex index( f );
-                        FramePaddingStruct tmpMargBegin(f);
-                        FramePaddingStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
-                        if(!macroCmd)
-                            macroCmd = new KMacroCommand( i18n("Change Margin Frame") );
-                        KWFrameChangeFramePaddingCommand *cmd = new KWFrameChangeFramePaddingCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
-                        cmd->execute();
-                        macroCmd->addCommand(cmd);
+                    FrameIndex index( f );
+                    KoRect initialRect = f->normalize();
+                    double initialMinFrameHeight = f->minFrameHeight();
+                    if ( frame ) // single frame: can be moved and resized
+                        f->setRect( px, py, pw, ph );
+                    else { // multiple frames: can only be resized
+                        f->setWidth( pw );
+                        f->setHeight( ph );
                     }
+                    FrameResizeStruct tmpResize( initialRect, initialMinFrameHeight, f->normalize() );
+                    if(!macroCmd)
+                        macroCmd = new KMacroCommand( i18n("Resize Frame") );
+
+                    KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
+                    macroCmd->addCommand(cmd);
+                    doc->frameChanged( f );
                 }
+                else
+                {
+                    KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
+                }
+            }
+            if ( m_paddingConfigWidget &&
+                 (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())) &&
+                 m_paddingConfigWidget->changed() )
+            {
+                FrameIndex index( f );
+                FramePaddingStruct tmpMargBegin(f);
+                FramePaddingStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
+                if(!macroCmd)
+                    macroCmd = new KMacroCommand( i18n("Change Margin Frame") );
+                KWFrameChangeFramePaddingCommand *cmd = new KWFrameChangeFramePaddingCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
+                cmd->execute();
+                macroCmd->addCommand(cmd);
             }
             f=allFrames.next();
         }

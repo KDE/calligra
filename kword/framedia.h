@@ -114,6 +114,7 @@ protected:
     void enableOnNewPageOptions();
     void initComboStyleBrush();
     bool mayDeleteFrameSet(KWTextFrameSet *fs);
+    void enableSizeAndPosition();
 
     QBrush frameBrushStyle();
     void calcRatio();
@@ -184,6 +185,8 @@ private:
     FrameSetType frameType;
     bool frameSetFloating;
     bool frameSetProtectedSize;
+    bool m_mainFrameSetIncluded;
+    bool m_defaultFrameSetIncluded; // header, footer or footnote
     double oldX, oldY, oldW, oldH;
     double heightByWidthRatio;
     int /*FrameBehavior*/ frameBehavior;
