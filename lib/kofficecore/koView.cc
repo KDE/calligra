@@ -21,6 +21,7 @@
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include <koFrame.h>
+#include <KoViewIface.h>
 
 #include <kinstance.h>
 #include <kstddirs.h>
@@ -38,6 +39,7 @@ public:
     m_children.setAutoDelete( true );
     m_manager = 0L;
     m_tempActiveWidget = 0L;
+    m_dcopObject = 0;
   }
   ~KoViewPrivate()
   {
@@ -52,6 +54,8 @@ public:
   QList<KoViewChild> m_children;
 
   QWidget *m_tempActiveWidget;
+
+  KoViewIface *m_dcopObject;
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
@@ -82,6 +86,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
+  delete d->m_dcopObject;
   if ( !koDocument()->isSingleViewMode() )
   {
     if ( d->m_manager )
@@ -435,6 +440,13 @@ void KoView::newView() {
     shell->show();
 }
 
+DCOPObject *KoView::dcopObject()
+{
+    if ( !d->m_dcopObject )
+        d->m_dcopObject = new KoViewIface( this );
+
+    return d->m_dcopObject;
+}
 
 class KoViewChild::KoViewChildPrivate
 {

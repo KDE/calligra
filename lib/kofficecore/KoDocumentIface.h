@@ -51,6 +51,9 @@ k_dcop:
 
   bool isModified();
 
+  int viewCount();
+  DCOPRef view( int idx );
+
 protected:
   KoDocument * m_pDoc;
 };

@@ -19,6 +19,8 @@
 
 #include "koDocument.h"
 #include "KoDocumentIface.h"
+#include "koView.h"
+#include <kapp.h>
 #include <dcopclient.h>
 #include <kdebug.h>
 
@@ -39,4 +41,23 @@ QString KoDocumentIface::url()
 bool KoDocumentIface::isModified()
 {
   return m_pDoc->isModified();
+}
+
+int KoDocumentIface::viewCount()
+{
+  return m_pDoc->viewCount();
+}
+
+DCOPRef KoDocumentIface::view( int idx )
+{
+  KoView *v = m_pDoc->view( idx );
+  if ( !v )
+    return DCOPRef();
+
+  DCOPObject *obj = v->dcopObject();
+
+  if ( !obj )
+    return DCOPRef();
+
+  return DCOPRef( kapp->dcopClient()->appId(), obj->objId() );
 }

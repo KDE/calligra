@@ -310,6 +310,11 @@ unsigned int KoDocument::viewCount()
   return d->m_views.count();
 }
 
+KoView *KoDocument::view( int idx )
+{
+  return d->m_views.at( idx );
+}
+
 void KoDocument::insertChild( const KoDocumentChild *child )
 {
   setModified( true );

@@ -203,6 +203,8 @@ public:
    */
   virtual unsigned int viewCount();
 
+  virtual KoView *view( int idx );
+
   /**
    * Reimplemented from @ref KParts::Part
    */

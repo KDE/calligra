@@ -38,6 +38,7 @@ class KoViewPrivate;
 class KoViewChild;
 class KoFrame;
 class KInstance;
+class DCOPObject;
 
 namespace KParts
 {
@@ -224,6 +225,13 @@ public:
    * @ref KoView that in turn holds the @p document.
    */
   KoViewChild *child( KoDocument *document );
+
+  /**
+   * Return a DCOP interface for this view
+   * KOffice Application are strongly recommended to reimplement this method,
+   * so that their dcop interface provides more functionality than the basic KoViewIface
+   */
+  virtual DCOPObject * dcopObject();
 
 public slots:
 
