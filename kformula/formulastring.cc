@@ -58,7 +58,7 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     QHBoxLayout* Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
 
     buttonHelp = new QPushButton( this, "buttonHelp" );
-    buttonHelp->setText( i18n( "Help" ) );
+    buttonHelp->setText( i18n( "&Help" ) );
     buttonHelp->setAccel( 4144 );
     buttonHelp->setAutoDefault( TRUE );
     Layout1->addWidget( buttonHelp );
@@ -66,14 +66,14 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     Layout1->addItem( spacer );
 
     buttonOk = new QPushButton( this, "buttonOk" );
-    buttonOk->setText( i18n( "OK" ) );
+    buttonOk->setText( i18n( "&OK" ) );
     buttonOk->setAccel( 0 );
     buttonOk->setAutoDefault( TRUE );
     buttonOk->setDefault( TRUE );
     Layout1->addWidget( buttonOk );
 
     buttonCancel = new QPushButton( this, "buttonCancel" );
-    buttonCancel->setText( i18n( "Cancel" ) );
+    buttonCancel->setText( i18n( "&Cancel" ) );
     buttonCancel->setAccel( 0 );
     buttonCancel->setAutoDefault( TRUE );
     Layout1->addWidget( buttonCancel );
