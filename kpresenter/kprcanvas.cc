@@ -18,27 +18,49 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <stdlib.h>
+#include <math.h>
+
 #include <qprogressdialog.h>
-#include <qdragobject.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qapplication.h>
-#include "koPointArray.h"
 #include <qpopupmenu.h>
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qdropsite.h>
-
 #include <qrect.h>
 #include <qsize.h>
 #include <qpoint.h>
-#include <kurl.h>
-#include "styledia.h"
-#include "kprcanvas.h"
-#include "kprcanvas.moc"
+#include <qclipboard.h>
 
+#include <kapplication.h>
+#include <kmimemagic.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kprinter.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <ktempfile.h>
+#include <kdebug.h>
+#include <kcursor.h>
+#include <kmessagebox.h>
+#include <kmultipledrag.h>
+#include <kconfig.h>
+#include <kurl.h>
+#include <kurldrag.h>
+#include <kio/netaccess.h>
+
+#include <koparagcounter.h>
+#include <koPoint.h>
+#include <kozoomhandler.h>
+#include <koStore.h>
+#include <koStoreDrag.h>
+#include <koPointArray.h>
+
+#include "styledia.h"
 #include "kpresenter_view.h"
 #include "kpbackground.h"
 #include "kppixmapobject.h"
@@ -52,34 +74,16 @@
 #include "kppartobject.h"
 #include "kpresenter_utils.h"
 #include "kppageeffects.h"
-#include <koparagcounter.h>
-#include <kapplication.h>
-#include <kmimemagic.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kprinter.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <ktempfile.h>
-#include <kdebug.h>
 #include "kprcommand.h"
-#include <kcursor.h>
-#include <koPoint.h>
-#include <kozoomhandler.h>
-#include <stdlib.h>
-#include <qclipboard.h>
 #include "kppolylineobject.h"
 #include "kpclosedlineobject.h"
 #include "kprpage.h"
-#include <kmessagebox.h>
-#include <math.h>
 #include "kprvariable.h"
 #include "kpgroupobject.h"
 
-#include <koStore.h>
-#include <koStoreDrag.h>
-#include <kmultipledrag.h>
-#include <kconfig.h>
+#include "kprcanvas.h"
+#include "kprcanvas.moc"
+
 
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
@@ -4745,7 +4749,7 @@ void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
         m_currentTextObjectView->dragEnterEvent( e );
     else if ( QTextDrag::canDecode( e )
               || QImageDrag::canDecode( e )
-              || QUriDrag::canDecode(e)) {
+              || KURLDrag::canDecode(e)) {
         e->accept();
     }
     else
@@ -4769,7 +4773,7 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
     }
     else if ( QTextDrag::canDecode( e )
               || QImageDrag::canDecode( e )
-              || QUriDrag::canDecode(e)) {
+              || KURLDrag::canDecode(e)) {
         e->accept();
     }
     else
@@ -4812,21 +4816,21 @@ void KPrCanvas::dropEvent( QDropEvent *e )
     if ( QImageDrag::canDecode( e ) ) {
         dropImage( e, true, e->pos().x(), e->pos().y() );
         e->accept();
-    } else if ( QUriDrag::canDecode( e ) ) {
+    } else if ( KURLDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
         deSelectAllObj();
 
-        QStringList lst;
-        QUriDrag::decodeToUnicodeUris( e, lst );
+        KURL::List lst;
+        KURLDrag::decode( e, lst );
 
-        QStringList::ConstIterator it = lst.begin();
+        KURL::List::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {
-            KURL url( *it );
+            const KURL &url( *it );
 
             QString filename;
             if ( !url.isLocalFile() ) {
-                filename = QString::null;
-                // #### todo download file
+                if ( !KIO::NetAccess::download( url, filename ) )
+                    continue;
             } else {
                 filename = url.path();
             }
@@ -4861,6 +4865,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                     setCursor( c );
                 }
             }
+            KIO::NetAccess::removeTempFile( filename );
         }
     }
     else if (m_currentTextObjectView)
