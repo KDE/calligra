@@ -20,10 +20,9 @@
 #ifndef KEXISECTIONHEADER_H
 #define KEXISECTIONHEADER_H
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <qwidget.h>
 
-class BoxLayout;
+class KexiSectionHeaderPrivate;
 
 class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
@@ -31,6 +30,11 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 	public:
 		KexiSectionHeader(const QString &caption, Orientation o, 
 			QWidget* parent = 0, const char * name = 0 );
+
+		virtual ~KexiSectionHeader();
+
+		void addButton(const QString& icon, const QString& toolTip,
+			const QObject * receiver, const char * member);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
@@ -40,9 +44,7 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 		void slotFocus(bool in);
 
 	protected:
-		Orientation m_orientation;
-		QLabel *m_lbl;
-		BoxLayout *m_lyr;
+		KexiSectionHeaderPrivate *d;
 };
 
 #endif
