@@ -18,6 +18,7 @@
 */
 
 #include <qiodevice.h>
+#include <koStore.h>
 
 /**
  * This class implements a QIODevice around KoStore, so that
