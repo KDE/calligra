@@ -18,6 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <qdom.h>
 
 #include <koRect.h>
@@ -28,6 +32,9 @@
 #include "vlayer.h"
 #include "vstroke.h"
 #include "vvisitor.h"
+#ifdef HAVE_KARBONTEXT
+#include "vtext.h"
+#endif
 
 #include <kdebug.h>
 
@@ -187,9 +194,11 @@ VGroup::load( const QDomElement& element )
 			}
 			else if( e.tagName() == "TEXT" )
 			{
-				/*VText* text = new VText( this );
+#ifdef HAVE_KARBONTEXT
+				VText *text = new VText( this );
 				text->load( e );
-				append( text );*/
+				append( text );
+#endif
 			}
 		}
 	}
