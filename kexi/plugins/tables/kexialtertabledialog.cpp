@@ -57,8 +57,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 		m_newTable = new KexiDB::TableSchema(*m_table); 
 	else //new, empty table
 		m_newTable = new KexiDB::TableSchema(m_dialog->partItem()->name());
-	m_fields.resize(MAX_FIELDS);
-	m_fields.setAutoDelete(true);
+	m_buffers.resize(MAX_FIELDS);
+	m_buffers.setAutoDelete(true);
 	m_row = -99;
 	m_currentBufferCleared = false;
 	init();
@@ -126,7 +126,7 @@ void KexiAlterTableDialog::init()
 
 //	QSplitter *splitter = new QSplitter(Vertical, this);
 
-	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_fields.size() << " items" << endl;
+	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_buffers.size() << " items" << endl;
 
 	m_view->setData(data);
 
@@ -264,7 +264,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 
 	updatePropertiesVisibility(field->type(), *buff);
 
-	m_fields.insert(row, buff);
+	m_buffers.insert(row, buff);
 	return buff;
 }
 
@@ -299,7 +299,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 		for(KexiTableItem *it = data->first(); it; it = data->next(), i++)
 		{
 			if (!(*it)[0].toString().isEmpty()) {//for nonempty names:
-				KexiProperty *prop = (*m_fields.at(i))["pkey"];
+				KexiProperty *prop = (*m_buffers.at(i))["pkey"];
 				if (prop && !it->at(0).toString().isEmpty())
 				{
 					KexiDB::Field *f = new KexiDB::Field(nt);
@@ -338,19 +338,19 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
 {
 	return (m_view->currentRow() >= 0) ? 
-		m_fields.at( m_view->currentRow() ) : 0;
-//	return m_currentBufferCleared ? 0 : m_fields.at(m_view->currentRow());
+		m_buffers.at( m_view->currentRow() ) : 0;
+//	return m_currentBufferCleared ? 0 : m_buffers.at(m_view->currentRow());
 }
 
 void KexiAlterTableDialog::removeCurrentPropertyBuffer()
 {
 	const int r = m_view->currentRow();
-	KexiPropertyBuffer *buf = m_fields.at(r);
+	KexiPropertyBuffer *buf = m_buffers.at(r);
 	if (!buf)
 		return;
 	buf->debug();
 //	m_currentBufferCleared = true;
-	m_fields.remove(r);
+	m_buffers.remove(r);
 	propertyBufferSwitched();
 //	delete buf;
 //	m_currentBufferCleared = false;
@@ -473,7 +473,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 		QString description = item->at(2).toString();
 
-		KexiDB::Field *field = new KexiDB::Field(
+		KexiDB::Field field( //tmp
 			fieldName,
 			(KexiDB::Field::Type)fieldType,
 			KexiDB::Field::NoConstraints,
@@ -484,13 +484,12 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			/*caption*/QString::null,
 			description,
 			/*width*/0);
+//		m_newTable->addField( field );
 
-		m_newTable->addField( field );
-
-		kdDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field->debugString() << endl;
+		kdDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
 
 		//create new property buffer:
-		KexiPropertyBuffer *newbuff = createPropertyBuffer( m_view->currentRow(), field );
+		KexiPropertyBuffer *newbuff = createPropertyBuffer( m_view->currentRow(), &field );
 		//add a special property indicating that this is brand new buffer, 
 		//not just changed
 		KexiProperty* prop = new KexiProperty("newrow", QVariant());
@@ -516,14 +515,14 @@ void KexiAlterTableDialog::slotRowDeleted()
 	removeCurrentPropertyBuffer();
 
 	//let's move up all buffers that are below that deleted
-	m_fields.setAutoDelete(false);//to avoid auto deleting in insert()
+	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
 	const int r = m_view->currentRow();
-	for (int i=r;i<int(m_fields.size()-1);i++) {
-		KexiPropertyBuffer *b = m_fields[i+1];
-		m_fields.insert( i , b );
+	for (int i=r;i<int(m_buffers.size()-1);i++) {
+		KexiPropertyBuffer *b = m_buffers[i+1];
+		m_buffers.insert( i , b );
 	}
-	m_fields.insert( m_fields.size()-1, 0 );
-	m_fields.setAutoDelete(true);
+	m_buffers.insert( m_buffers.size()-1, 0 );
+	m_buffers.setAutoDelete(true);
 
 	propertyBufferSwitched();
 }
@@ -547,8 +546,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	int i;
 	QDict<char> names(101, false);
 	char dummy;
-	for (i=0;i<(int)m_fields.size();i++) {
-		b = m_fields[i];
+	for (i=0;i<(int)m_buffers.size();i++) {
+		b = m_buffers[i];
 		if (b) {
 			no_fields = false;
 			const QString name = (*b)["name"]->value().toString();
@@ -568,7 +567,7 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 		KMessageBox::information(this, i18n("You have added no fields.\nEvery table should have at least one field.") );
 		return 0;
 	}
-	if (b && i<(int)m_fields.size()) {//found a duplicate
+	if (b && i<(int)m_buffers.size()) {//found a duplicate
 		m_view->setCursor(i, 0);
 		m_view->startEditCurrentCell();
 		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
@@ -577,8 +576,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	}
 
 	//for every field, create KexiDB::Field definition
-	for (i=0;i<(int)m_fields.size();i++) {
-		KexiPropertyBuffer *b = m_fields[i];
+	for (i=0;i<(int)m_buffers.size();i++) {
+		KexiPropertyBuffer *b = m_buffers[i];
 		if (!b)
 			continue;
 		KexiPropertyBuffer &buf = *b;
@@ -596,14 +595,19 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 		if (buf["unsigned"]->value().toBool())
 			options |= KexiDB::Field::Unsigned;
 			
-		int type = buf["type"]->value().toInt();
-		if (type < 0 || type > (int)KexiDB::Field::LastType)
+//		int type = buf["type"]->value().toInt();
+//		if (type < 0 || type > (int)KexiDB::Field::LastType)
+//			type = KexiDB::Field::Text;
+		kdDebug() << buf["subType"]->value().toString() << endl;
+//		int typeGroup = KexiDB::typeGroup(type);
+		QString typeString = buf["subType"]->value().toString();
+		KexiDB::Field::Type type = KexiDB::Field::typeForString(typeString);
+		if (type==KexiDB::Field::InvalidType)
 			type = KexiDB::Field::Text;
-		int subType = buf["subType"]->value().toInt();
 
 		KexiDB::Field *f = new KexiDB::Field( 
 			buf["name"]->value().toString(),
-			static_cast<KexiDB::Field::Type>(1), //buf["type"]->value().toInt(),
+			type,
 			constraints,
 			options,
 			buf["length"]->value().toInt(),

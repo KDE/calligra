@@ -114,7 +114,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		const KexiDB::TableSchema *m_table; //!< original table schema
 		KexiDB::TableSchema *m_newTable; //!< new table schema
 //		KexiPropertyEditor *m_properties;
-		FieldsBuffer m_fields; //!< buffer
+		FieldsBuffer m_buffers; //!< buffer
+//		QPtrDict<KexiDB::Field> m_newFields; //!< newly created fields 
+//		                                     //!< assigned for property buffers
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
 		bool m_currentBufferCleared : 1;
 };
