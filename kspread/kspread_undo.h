@@ -94,8 +94,8 @@ public:
 
     QString tableName() const { return m_tableName; }
     QString formula() const { return m_formula; }
-    int col() { return m_col; }
-    int row() { return m_row; }
+    int col() const { return m_col; }
+    int row() const { return m_row; }
 
 private:
     QString m_tableName;
