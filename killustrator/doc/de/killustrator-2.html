@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Das KIllustrator Handbuch: Installation</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="killustrator">
+<META NAME="description" CONTENT="German documentation for killustrator">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000"> 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment" WIDTH=102 HEIGHT=27></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+<P ALIGN="RIGHT"><A HREF="killustrator-3.html">n&auml;chste</A> <A HREF="killustrator-1.html">vorherige</A> <A HREF="index.html#toc2">Inhaltsverzeichnis</A>
+<H3><A NAME="s2">2. Installation</A></H3>
+<P>
+<H3><A NAME="ss2.1">2.1 Woher bekommt man den KIllustrator?</A></H3>
+Die aktuellste Version des KIllustrators befindet sich im CVS auf der KDE-Internetseite (<A HREF="http://www.kde.org">http://www.kde.org</a>).
+Da es sich bei dieser Version meist nicht um ein offizielles Release handelt, empfehle ich ein Download von der
+KIllustrator-Seite (<A HREF="http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html">http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator</A>).
+<H3><A NAME="ss2.2">2.2 Systemanforderungen</A></H3>
+Die Systemvoraussetzungen f&uuml;r den KIllustrator sind recht hoch gesteck. Dies liegt daran, da&szlig; sich das Programm noch in
+der Entwicklung befindet und mit aktueller Software entwickelt wird. Da die notwendigen Softwarepakete ihrerseits schon
+bestimmte Hardwarevoraussetzungen stellen, m&ouml;chte ich diese hier nicht noch einmal auff&uuml;hren. <BR>
+Die gemachten Angaben sind als Mindestvoraussetzungen zu sehen. Da gerade im Linuxbreich eine Version die n&auml;chste jagt,
+macht es wenig Sinn alle folgenden Versionen aufzuf&uuml;hren. <BR>
+Notwendig zur Installation und zum Benutzen des KIllustrators sind:
+<ul>
+	<li> KDE 1.1
+	<li> QT 1.41
+	<li> gcc 2.8.x oder egcs 1.x
+</ul>
+<H3><A NAME="ss2.3">2.3 &Uuml;bersetzung und Installation</A></H3>
+Um den Quellcode des KIllustrators zu &uuml;bersetzen, geht man wie folgt vor:
+<ol>
+	<li>Entpacken des tar-Archives <code>tar xfvz killustrator.tar.gz</code></li>
+	<li>Wechseln in das Quellcodeverzeichnis <code>cd killustrator</code></li>
+	<li>Erstellen der Makefiles <code>./configure</code></li>
+	<li>&Uuml;bersetzen des Quellcodes <code>make all</code></li> 
+</ol>
+Sollte man ROOT-Rechte besitzen, kann man jetzt mittels <code>make install</code> das &uuml;bersetzte Programm in das
+System-KDE-Verzeichnis installieren.
+<P>Ich habe die Installation auf verschiedenen Systemen getestet und bin unter S.u.S.E. Linux 5.3 nicht zum Erfolg gekommen.
+Sollte jemand es geschafft haben, den KIllustrator auf dieser Distribution zum Laufen zu bringen, bitte ich ihn, mir
+mitzuteilen, wie er es gemacht hat.
+<P>Folgende Plattformen wurden erfolgreich getestet:
+<P>
+<table cellpadding="10">
+<TR><TD><FONT FACE="Helvetica"><u>Plattform</U><BR>
+	RedHat 5.1<BR>
+	RedHat 5.2<BR>
+	SuSE 6.0<BR>
+	SuSE 6.1 Cebit Beta<BR>
+	SuSE 6.1</FONT></TD>
+	
+<TD><FONT FACE="Helvetica"><u>getestet von</U><BR>
+	Hagen H&ouml;pfner<BR>
+	Hagen H&ouml;pfner<BR>
+	Hagen H&ouml;pfner<BR>
+	Hagen H&ouml;pfner<BR>
+	Hagen H&ouml;pfner</FONT></TD>
+	</TR>
+</table>
+<P>
+<P>Sollten Sie auf Probleme sto&szlig;en, bitte ich Sie, mir diese zu melden.
+<H3><A NAME="ss2.4">2.4 Installation der vor&uuml;bersetzen Pakete</A></H3>
+Die Installation von vorkompilierter Software unter Linux ist abh&auml;ngig vom verwendeten Paketformat. Der KIllustrator ist
+in <code>rpm</code>- und <code>deb</code>-Paketen verf&uuml;gbar. Da diese Pakete f&uuml;r verschiedene Linuxdistributionen
+erstellt werden, ist darauf zu achten, da&szlig; man auch das richtige Paket vorliegen hat.<BR>
+Die Parameter, die in den unten beschriebene Installationsanleitungen
+    verwendet werden, sind wie folgt zu interpretieren:
+<ul>
+      <li><code>DATEINAME</CODE> = Name der Paketdatei (z.B.:
+	<code>killustrator_0.6.5-1_i386.deb</code>)
+      <li><code>PAKETNAME</CODE> = beim Erstellen des Paketes
+	angegebener Name (hier in der Regel <code>killustrator</code>)
+</ul>
+<H4><code>rpm</code></H4>
+Zur Installation von <code>.rpm</code>-Dateien reicht es, den Befehl <code>rpm -i DATEINAME</code> zu verwenden. Will man das
+Paket sp&auml;ter deinstallieren, mu&szlig; man den Befehl <code>rpm
+      -e PAKETNAME</code> verwenden.
+<H4><code>deb</code></H4>
+Die Installation von <code>.deb</code>-Dateien funktioniert mittels
+    des Befehles <code>dpkg -i DATEINAME</code>. F&uuml;r die
+    Deinstallation kann <code>dpkg -r PAKETNAME</code> verwendet werden.
+<P>
+<P>
+<P ALIGN="RIGHT">
+<A HREF="killustrator-3.html">n&auml;chste</A> <A HREF="killustrator-1.html">vorherige</A> <A HREF="index.html#toc2">Inhaltsverzeichnis</A>
+<p><CENTER><HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE></CENTER>    
+</FONT>
+</BODY>
+</HTML>
