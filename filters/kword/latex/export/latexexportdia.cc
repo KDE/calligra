@@ -36,6 +36,7 @@
 #include <latexexportdia.h>
 #include <latexexportdia.moc>
 #include <dcopclient.h>
+#include <qcombobox.h>
 
 LATEXExportDia::LATEXExportDia(const KoStore* in, QWidget *parent, const char *name) :
 						KDialogBase(parent, name, true, i18n("Latex Export Filter Parameters"),
@@ -123,7 +124,7 @@ void LATEXExportDia::createDialog()
 
 	QBoxLayout *classLayout = new QVBoxLayout(page);
 
-	classList = new QComboBox(true, styleBox);
+	classList = new QComboBox(true, styleBox); // ## why not KComboBox? (completion etc.)
 	classList->insertItem("article");
 	classList->insertItem("book");
 	classList->insertItem("letter");
@@ -163,23 +164,24 @@ void LATEXExportDia::createDialog()
 void LATEXExportDia::slotOk()
 {
 	hide();
-	kdDebug() << "config : " << state() << endl;
+	//kdDebug() << "config : " << state() << endl;
 	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
 	//Xml2LatexParser LATEXParser(_arrayIn, _fileOut, state());
-	Xml2LatexParser LATEXParser(_in, _fileOut, state());
+	Xml2LatexParser LATEXParser(_in, _fileOut /*,state()*/);
 	if(embededRBtn == docBox->selected())
-		LATEXParser->setEmbeded(true);
+		LATEXParser.setEmbeded(true);
 	else
-		LATEXParser->setEmbeded(false);
+		LATEXParser.setEmbeded(false);
 	if(unicodeRBtn == langBox->selected())
-		LATEXParser->useLatinEnc();
+		/*LATEXParser.useLatinEnc()*/;
+#warning "doesn't exist!"
 	else
-		LATEXParser->useUnicodeEnc();
+		LATEXParser.useUnicodeEnc();
 	if(latexStyleRBtn == styleBox->selected())
-		LATEXParser->useLatexStyle();
+		LATEXParser.useLatexStyle();
 	else
-		LATEXParser->useKwordStyle();
-	LATEXParser->setClass(classList->currentText());
+		LATEXParser.useKwordStyle();
+	LATEXParser.setClass(classList->currentText());
 	
 	LATEXParser.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;

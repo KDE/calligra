@@ -32,6 +32,7 @@ bool XmlParser::_useLatin1 = true;
 bool XmlParser::_useUnicode = false;
 bool XmlParser::_useLatexStyle = true;
 KoStore* XmlParser::_in = NULL;
+QString XmlParser::_class; /// static objects in libraries are evil!! Don't do that!
 
 XmlParser::XmlParser(QString filename):
 		_filename(filename)

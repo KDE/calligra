@@ -55,7 +55,7 @@ class Xml2LatexParser : public XmlParser
 		bool isEmbeded() const { return _isEmbeded; }
 
 		/* Modifiors */
-		void setEmbeded(bool emb) const { _isEmbeded = emb; }
+		void setEmbeded(bool emb) { _isEmbeded = emb; }
 		
 		/**
 		 * Get options from the options dialog box.
