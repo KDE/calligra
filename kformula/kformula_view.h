@@ -12,8 +12,10 @@ class KFormulaDocument;
 
 #include "kformula.h"
 
+
 #include <qwidget.h>
 #include <qlist.h>
+#include <qkeycode.h>
 
 class KFormulaView : public QWidget,
 		   virtual public View_impl,
@@ -44,8 +46,10 @@ protected:
 			       const char* tooltip,
 			       const char* func);
 
+    void mousePressEvent(QMouseEvent *a);
     void paintEvent( QPaintEvent *_ev );
     void resizeEvent( QResizeEvent *_ev );
+    void keyPressEvent( QKeyEvent *k );
 
     KFormulaDocument *m_pDoc;
 

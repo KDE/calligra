@@ -73,10 +73,36 @@ void KFormulaView::paintEvent( QPaintEvent *_ev )
 {
     m_pDoc->paintEvent(_ev, this);
 }
+void KFormulaView::mousePressEvent( QMouseEvent *_ev )
+{
+    m_pDoc->mousePressEvent(_ev);
+}
 
 void KFormulaView::resizeEvent( QResizeEvent *_ev )
 {
 }
+
+void KFormulaView::keyPressEvent( QKeyEvent *k )
+{
+    m_pDoc->keyPressEvent(k);
+ /*int c,prev,next,c1,c2,c3,len,type;
+ c=m_pDoc->getCurrent();
+ warning(c);
+ prev=m_pDoc->Blocks[c]->getprev();
+ next=m_pDoc->Blocks[c]->getnext();
+ c1=m_pDoc->Blocks[c]->getchild1();
+ c2=m_pDoc->Blocks[c]->getchild2();
+ c3=m_pDoc->Blocks[c]->getchild3();
+ type=m_pDoc->Blocks[c]->gettype();
+ len=m_pDoc->Blocks[c]->getcont().length();
+
+ if(k->key()==Key_Left) {
+			warning("LEFT ;-)");
+m_pDoc->Blocks[0]->setcont("ca**o");
+  */
+  }
+
+
 
 void KFormulaView::slotModified()
 {
@@ -236,22 +262,37 @@ void KFormulaView::addB4bis()
 
 void KFormulaView::addB3()
 {
+    debug("addB3");
+    m_pDoc->addB3();
+
 }
 
 void KFormulaView::addB2()
 {
+    debug("addB2");
+    m_pDoc->addB4();
+
 }
 
 void KFormulaView::addB5()
 {
+    debug("addB5");
+    m_pDoc->addB5();
+
 }
 
 void KFormulaView::reduce()
 {
+    debug("reduce");
+    m_pDoc->reduce();
+
 }
 
 void KFormulaView::enlarge()
 {
+    debug("enlarge");
+    m_pDoc->enlarge();
+
 }
 
 void KFormulaView::reduceRecur()
@@ -272,14 +313,23 @@ void KFormulaView::setGreek()
 
 void KFormulaView::addCh1()
 {
+    debug("addCh1");
+    m_pDoc->addCh1();
+
 }
 
 void KFormulaView::addCh2()
 {
+    debug("addCh2");
+    m_pDoc->addCh2();
+
 }
 
 void KFormulaView::addCh3()
 {
+    debug("addCh3");
+    m_pDoc->addCh3();
+
 }
 
 #include "kformula_view.moc"

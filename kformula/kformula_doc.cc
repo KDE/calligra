@@ -7,7 +7,7 @@
 #include <kurl.h>
 #include <kiconloader.h>
 #include <kapp.h>
-
+#include <qpopupmenu.h>
 #include <qmsgbox.h>
 #include <qwmatrix.h>
 #include <qcolor.h>
@@ -30,6 +30,7 @@ KFormulaDocument::KFormulaDocument()
 	isFree[firstfree] = true;
     // Blocks[firstfree]=NULL;
     isFree[0]=false;
+    firstfree=1;
     pos = current = 0;
 }
 
@@ -188,6 +189,7 @@ void KFormulaDocument::enlargeAll()
 
 void KFormulaDocument::addCh3()
 {   
+    warning("Add Ch3");
     int nextold=Blocks[getCurrent()]->getchild3();
     int Id=addBlock(-1,-1,nextold,getCurrent(),"");
     Blocks[getCurrent()]->setchild3(Id);
@@ -208,6 +210,7 @@ void KFormulaDocument::line(int i)
 
 void KFormulaDocument::addCh2()
 {   
+    warning("Add Ch2");
     int nextold=Blocks[getCurrent()]->getchild2();
     int Id=addBlock(-1,-1,nextold,getCurrent(),"");
     Blocks[getCurrent()]->setchild2(Id); 
@@ -217,7 +220,8 @@ void KFormulaDocument::addCh2()
     emit sig_modified();
 }
 void KFormulaDocument::addCh1()
-{   
+{
+       warning("Add Ch1");
     int nextold=Blocks[getCurrent()]->getchild1();
     int Id=addBlock(-1,-1,nextold,getCurrent(),"");
     Blocks[getCurrent()]->setchild1(Id); 	
@@ -284,13 +288,17 @@ void KFormulaDocument::addB2()
 
 void KFormulaDocument::addB0()
 {   
+warning("call");
     int cur=getCurrent();
+    warning("get cur");
     int nextold=Blocks[cur]->getnext();
     int Id=addBlock(-1,-1,nextold,cur,"");
     Blocks[cur]->setnext(Id); 
-    
+    warning("Aggiungo Block type 0");
     setCurrent(Id);	
+    warning("Current ID impostato");
     emit sig_modified();
+    warning("Sig emitted");
 }
 
 void KFormulaDocument::addB5()
@@ -364,15 +372,18 @@ void KFormulaDocument::addB3()
     Id=cur;
     if( Blocks[cur]->gettype() != -1 )
 	{
+           warning("create"); 
 	    nextold=Blocks[cur]->getnext();
 	    Id=addBlock(3,-1,nextold,cur,"()");
 	    Blocks[cur]->setnext(Id);
 	}
     else
 	{
+            warning("change only");
 	    Blocks[cur]->settype(3);
 	    Blocks[cur]->setcont("()");
 	    checkAndCreate(Blocks[cur]);   
+            warning("C&C called");
 	}
     setCurrent(Blocks[Id]->getchild1());	
     emit sig_modified();
@@ -386,9 +397,9 @@ int KFormulaDocument::addBlock(int Type,int ID,int nextID,int prevID,
 	ID=firstfree;
     isFree[ID]=FALSE;  
     for( firstfree=1; !isFree[firstfree]; firstfree++ );
-    //QString s;  
-    //s.sprintf("First free block: %i",firstfree);    
-    //    warning(s);   
+    QString s;  
+    s.sprintf("First free block: %i",firstfree);    
+        warning(s);   
     
     Blocks[ID]= new FormulaBlock(this,Type,ID,nextID,prevID,Cont,Child1,Child2,Child3);
     checkAndCreate(Blocks[ID]);
@@ -435,6 +446,109 @@ void KFormulaDocument::deleteIt(FormulaBlock *bl)
 	QMessageBox::critical( 0L, i18n("Error"), i18n("Can not delete First Block !!"), i18n( "Ok" ) );
 }
 
+void KFormulaDocument::mousePressEvent( QMouseEvent *a)
+{
+   setCurrent(Blocks[0]->getClick(a->pos()));
+   emit sig_modified();
+/*if(a->button()==RightButton){
+   QPopupMenu *mousepopup = new QPopupMenu;
+   QPopupMenu *convert = new QPopupMenu;
+   QPopupMenu *fontpopup = new QPopupMenu;    
+       fontpopup->insertItem(klocale("Font +"), this, SLOT(enlarge()), ALT+Key_K);
+    fontpopup->insertItem(i18n("Font -"), this, SLOT(reduce()), ALT+Key_K);
+    fontpopup->insertItem(i18n("Font + (also Children)"), this, SLOT(enlargeRecur()), ALT+Key_K);
+    fontpopup->insertItem(i18n("Font - (also Children)"), this, SLOT(reduceRecur()), ALT+Key_K);
+    fontpopup->insertItem(i18n("All Font +"), this, SLOT(enlargeAll()), ALT+Key_K);
+    fontpopup->insertItem(i18n("All Font -"), this, SLOT(reduceAll()), ALT+Key_K);
+//    convert->insertItem(klocale("Simple Text"), parent->_part, SLOT(slotQuit()), ALT+Key_E);
+//    convert->insertItem("AAAARGGHHH", _part, SLOT(slotQuit()), ALT+Key_E);
+    mousepopup->insertItem(i18n("Proprieties"), this,SLOT(pro()), ALT+Key_E);
+    mousepopup->insertItem(i18n("Delete"), this,SLOT(dele()), ALT+Key_E);
+    mousepopup->insertSeparator();
+    mousepopup->insertItem(i18n("Change font.."),fontpopup);    
+    mousepopup->insertItem(i18n("Convert to.."),convert);
+//    mousepopup->insertSeparator();
+//    mousepopup->insertItem(i18n("Quit"), _part, SLOT(slotQuit()), ALT+Key_Q);
+    mousepopup->popup(mapToGlobal(a->pos()));*/
+ //}
+}
+
+void KFormulaDocument::keyPressEvent( QKeyEvent *k )
+{
+
+
+ int c,prev,next,c1,c2,c3,len,type;
+ c=getCurrent(); 
+ prev=Blocks[c]->getprev();
+ next=Blocks[c]->getnext();
+ c1=Blocks[c]->getchild1();
+ c2=Blocks[c]->getchild2();
+ c3=Blocks[c]->getchild3();
+ type=Blocks[c]->gettype();
+ len=Blocks[c]->getcont().length();
+ warning("Get everything...process key pressed...");
+ if(k->key()==Key_Left) {
+		       if((type==0)&&(pos>0)) pos--;
+		    else  
+                       if(prev!=-1)setCurrent(prev);
+				     }
+ if(k->key()==Key_Right) { 
+                        if((type==0)&&(pos<len)) pos++;
+			else
+			 if(next!=-1)  setCurrent(next);
+			else
+			 if(c1!=-1)    setCurrent(c1);
+			else
+			 if(c2!=-1)    setCurrent(c2);
+			  }			
+if(k->key()==Key_Up) {
+		      if(c1!=-1)    setCurrent(c1);                        
+	   	    else
+		      if(prev!=-1)  setCurrent(prev);						 
+    		     }  
+
+if(k->key()==Key_Down) {
+		      if(c2!=-1)    setCurrent(c2);                        
+	   	    else
+		      if(prev!=-1)  setCurrent(prev);						 
+    		     }  
+
+if(k->key()==Key_Backspace) {
+	                 if(pos>0) { pos--;
+		                     Blocks[c]->getcont().remove(pos,1);
+				   }
+			    }
+ else 
+ if(k->key()==Key_Delete) {
+    if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);  
+    }    else 
+ 
+ if((k->ascii()>32)&&(k->ascii()<127))
+  { 
+    warning("Ascii");
+c1=c;
+c2=c1;
+if(Blocks[c1]->gettype()>0) {    
+    next=Blocks[c1]->getnext();
+    c2=addBlock(0,-1,next,c1,"");
+    Blocks[c1]->setnext(c2);
+    warning("Add a block type0"); 
+     }
+       else Blocks[c1]->settype(0);
+    setCurrent(c2);	   
+    warning("Set current");
+    Blocks[getCurrent()]->getcont().insert(pos,k->ascii());
+    warning("insert success");
+    pos++; 
+    warning("pos ++");
+  } 
+//ChText(Blocks[getCurrent()]->getcont());
+//ChType(Blocks[getCurrent()]->gettype());
+//update();
+	    emit sig_modified();
+}
+
+
 void KFormulaDocument::paintEvent( QPaintEvent *_ev, QWidget *paintGround )
 {
     QPainter painter(paintGround);
@@ -450,20 +564,24 @@ void KFormulaDocument::checkAndCreate(FormulaBlock *bl)
     switch ( bl->gettype() )
 	{
 	case 1:
+            warning("case 1"); 
 	    if ( bl->getchild1() == -1 )
 		bl->setchild1(addBlock(-1,-1,-1,ID,""));
 	    break;
 	case 2:
+            warning("case 2"); 
 	    if ( bl->getchild1() == -1 )
 		bl->setchild1(addBlock(-1,-1,-1,ID,""));
 	    break;
 	case 3:
+            warning("case 3"); 
 	    if( bl->getcont() == "" )
 		bl->setcont("()");      
 	    if ( bl->getchild1() == -1 )
 		bl->setchild1(addBlock(-1,-1,-1,ID,""));
 	    break;
 	case 4:
+            warning("case 4"); 
 	    if ( bl->getcont() == "" )
 		bl->setcont("line");
 	    if ( bl->getchild1() == -1 )
@@ -474,6 +592,7 @@ void KFormulaDocument::checkAndCreate(FormulaBlock *bl)
 		bl->setsp(10);  
 	    break;
 	case 5:
+            warning("case 5"); 
 	    if ( bl->getcont() == "" )
 		bl->setcont(">");
 	    if ( bl->getchild1() == -1 )
