@@ -77,6 +77,8 @@ public:
 
   virtual void setReadWrite( bool readwrite = true );
 
+  static QCString nativeFormatMimeType( KInstance *instance = 0L );
+
   /**
    *  Create a new view for the document.
    *

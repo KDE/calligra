@@ -29,7 +29,7 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kword", "application/x-kword" );
+    KoApplication app( argc, argv, "kword" );
 
     init_libkword();
 

@@ -28,7 +28,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kspread", "application/x-kspread" );
+    KoApplication app( argc, argv, "kspread" );
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kspread" );

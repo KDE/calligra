@@ -28,10 +28,9 @@
 #include <qstringlist.h>
 #include <qdir.h>
 
-KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName, const QCString& rNativeMimeType)
+KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName )
     : KApplication(argc, argv, rAppName)
     , m_params( argc, argv )
-    , m_nativeMimeType( rNativeMimeType )
 {
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
@@ -44,7 +43,7 @@ KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName, c
 
 void KoApplication::start()
 {
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( m_nativeMimeType );
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( KoDocument::nativeFormatMimeType() );
 
     ASSERT( !entry.isEmpty() );
 

@@ -21,7 +21,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kchart", "application/x-kchart" );
+    KoApplication app( argc, argv, "kchart" );
 
     app.start();
 

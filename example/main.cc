@@ -24,7 +24,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "example", "application/x-example" );
+    KoApplication app( argc, argv, "example" );
     app.start(); // parses command line args, create initial docs and shells
     app.exec();
     return 0;

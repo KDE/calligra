@@ -26,7 +26,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "killustrator", "application/x-killustrator" );
+    KoApplication app( argc, argv, "killustrator" );
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "killustrator" );

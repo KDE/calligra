@@ -223,7 +223,7 @@ bool KoMainWindow::saveDocument( bool saveas )
     KoDocument* pDoc = rootDocument();
 
     KURL url = pDoc->url();
-    QCString _native_format ( KOAPP->nativeFormatMimeType() );
+    QCString _native_format ( KoDocument::nativeFormatMimeType() );
     QCString outputMimeType ( _native_format );
 
 #ifndef USE_QFD
@@ -387,12 +387,12 @@ void KoMainWindow::slotFileOpen()
 {
 #ifdef USE_QFD
     QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-								KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
+								KoDocument::nativeFormatMimeType(), nativeFormatPattern(),
 								nativeFormatName(), TRUE );
 #else
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
-                                           KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
+                                           KoDocument::nativeFormatMimeType(), nativeFormatPattern(),
                                            nativeFormatName(), true);
 #endif
 

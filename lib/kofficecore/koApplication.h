@@ -48,9 +48,8 @@ public:
      *  @param argc     Number of arguments on the command line.
      *  @param argv     Array of arguments on the comment line.
      *  @param rappName Name of the app.
-     *  @param rNativeMimeType Name of the native mimetype, for instance "application/x-kspread"
      */
-    KoApplication( int &argc, char **argv, const QCString& rAppName, const QCString& rNativeMimeType );
+    KoApplication( int &argc, char **argv, const QCString& rAppName );
 
     /**
      *  Destructor.
@@ -70,22 +69,12 @@ public:
      */
     void aboutKDE() { /*aboutKDE();*/ }
 
-    /**
-     * MimeType of the native file format for this application
-     * For example "application/x-kspread".
-     */
-    QCString nativeFormatMimeType() { return m_nativeMimeType; }
-
 protected:
 
     /**
      *  Saves all arguments given on the command line.
      */
     KStartParams m_params;
-    /**
-     *  Native mimetype
-     */
-    QCString m_nativeMimeType;
 };
 
 #endif

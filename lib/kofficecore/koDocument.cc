@@ -110,7 +110,7 @@ bool KoDocument::saveFile()
   if ( !kapp->inherits( "KoApplication" ) )
     return false;
 
-  return saveToURL( KURL( m_file ), KOAPP->nativeFormatMimeType() );
+  return saveToURL( KURL( m_file ), nativeFormatMimeType( instance() ) );
 }
 
 bool KoDocument::openFile()
@@ -166,17 +166,17 @@ void KoDocument::setManager( KParts::PartManager *manager )
 
 void KoDocument::setReadWrite( bool readwrite )
 {
-  KParts::ReadWritePart::setReadWrite( readwrite ); 
-  
+  KParts::ReadWritePart::setReadWrite( readwrite );
+
   QListIterator<KoView> vIt( d->m_views );
   for (; vIt.current(); ++vIt )
     vIt.current()->updateReadWrite( readwrite );
-  
+
   QListIterator<KoDocumentChild> dIt( d->m_children );
   for (; dIt.current(); ++dIt )
     if ( dIt.current()->document() )
       dIt.current()->document()->setReadWrite( readwrite );
-} 
+}
 
 void KoDocument::addView( KoView *view )
 {
@@ -187,8 +187,8 @@ void KoDocument::addView( KoView *view )
 
   connect( view, SIGNAL( destroyed() ),
 	   this, SLOT( slotViewDestroyed() ) );
-  
-  view->updateReadWrite( isReadWrite() );  
+
+  view->updateReadWrite( isReadWrite() );
 }
 
 KoView *KoDocument::firstView()
@@ -443,11 +443,7 @@ bool KoDocument::loadFromURL( const KURL & url )
 
 
   // Launch a filter if we need one for this url ?
-  QString importedFile = file;
-
-  if ( kapp->inherits( "KoApplication" ) ) // we can use the KoFilterManager only if we are inside KOffice! (Simon)
-    importedFile = KoFilterManager::self()->import( file, KOAPP->nativeFormatMimeType() );
-
+  QString importedFile = KoFilterManager::self()->import( file, nativeFormatMimeType( instance() ) );
 
   // The filter, if any, has been applied. It's all native format now.
   bool loadOk = (!importedFile.isEmpty()) &&        // Empty = an error occured in the filter
@@ -688,5 +684,21 @@ bool KoDocument::hasToWriteMultipart()
 {
     return FALSE;
 }
+
+QCString KoDocument::nativeFormatMimeType( KInstance *instance )
+{
+  QString instname = kapp->instanceName();
+  if ( instance )
+    instname = instance->instanceName();
+  
+  KService::Ptr service = KService::service( instname );
+  
+  if ( !service )
+    return QCString();
+  
+  KDesktopFile deFile( service->desktopEntryPath(), true );
+  
+  return deFile.readEntry( "MimeType" ).utf8(); // ??????????
+} 
 
 #include "koDocument.moc"

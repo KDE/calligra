@@ -32,7 +32,7 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-  KoApplication app( argc, argv, "kimage", "application/x-kimage" );
+  KoApplication app( argc, argv, "kimage" );
 
   app.dcopClient()->attach();
   app.dcopClient()->registerAs( "kimage" );
