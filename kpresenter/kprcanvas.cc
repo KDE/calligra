@@ -2456,8 +2456,12 @@ bool KPrCanvas::exportPage( int nPage,
         if( bLocalFile || 0 == tmpFile->status() ){
             QFile file( bLocalFile ? fileURL.path(0) : tmpFile->name() );
             if ( file.open( IO_ReadWrite ) ) {
-                res = pix.save( &file, format, quality );
-                file.close();
+#if KDE_IS_VERSION(3,0,90)
+		res = pix.save( file.name(), format, quality );
+#else		    
+		res = pix.save( &file, format, quality );
+#endif
+		file.close();
             }
             if( !bLocalFile ){
                 if( res ){
