@@ -246,8 +246,8 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual bool input( Container* container, QChar ch );
-    virtual bool input( Container* container, QKeyEvent* event );
+    virtual Command* input( Container* container, QChar ch );
+    virtual Command* input( Container* container, QKeyEvent* event );
 
     /**
      * Stores the given childrens dom in the element.
@@ -416,7 +416,7 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual bool input( Container* container, QChar ch );
+    virtual Command* input( Container* container, QChar ch );
 
     /**
      * Sets a new type. This is done during parsing.

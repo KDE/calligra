@@ -274,25 +274,11 @@ public:
     /**
      * General input.
      */
-    bool input( QKeyEvent* event );
+    void input( QKeyEvent* event );
 
     void performRequest( Request* request );
 
     // There are a lot of thing we can do with the formula.
-
-    void addText(QChar ch, bool isSymbol = false);
-    void addText(const QString& text);
-
-    void addNameSequence();
-
-    //void addMatrix(int rows, int columns);
-
-    void remove(Direction = beforeCursor);
-
-    /**
-     * Replaces the current name with its text symbol if it has one.
-     */
-    void compactExpression();
 
     /**
      * Insert data from the clipboard.
@@ -319,6 +305,11 @@ private:
      * Execute the command if it makes sense.
      */
     void execute(Command *command);
+
+    /**
+     * Emits a signal if the cursor had moved.
+     */
+    void checkCursor();
 
     /**
      * Insert data from the document.

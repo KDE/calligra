@@ -250,15 +250,20 @@ void Container::draw(QPainter& painter, const QRect& r)
 }
 
 
-bool Container::input( QKeyEvent* event )
+void Container::checkCursor()
+{
+    if ( impl->cursorMoved ) {
+        impl->cursorMoved = false;
+        emit cursorMoved( activeCursor() );
+    }
+}
+
+void Container::input( QKeyEvent* event )
 {
     if ( !hasValidCursor() )
-        return false;
-    SequenceElement* current = activeCursor()->normal();
-    if ( current != 0 ) {
-        return current->input( this, event );
-    }
-    return false;
+        return;
+    execute( activeCursor()->getElement()->input( this, event ) );
+    checkCursor();
 }
 
 
@@ -267,61 +272,7 @@ void Container::performRequest( Request* request )
     if ( !hasValidCursor() )
         return;
     execute( activeCursor()->getElement()->buildCommand( this, request ) );
-    if ( impl->cursorMoved ) {
-        impl->cursorMoved = false;
-        emit cursorMoved( activeCursor() );
-    }
-}
-
-
-void Container::addText(QChar ch, bool isSymbol)
-{
-    if (!hasValidCursor())
-        return;
-    KFCReplace* command = new KFCReplace(i18n("Add text"), this);
-    TextElement* element = new TextElement( ch, isSymbol );
-    command->addElement(element);
-    execute(command);
-}
-
-void Container::addText(const QString& text)
-{
-    if (!hasValidCursor())
-        return;
-    KFCReplace* command = new KFCReplace(i18n("Add text"), this);
-    for (uint i = 0; i < text.length(); i++) {
-        command->addElement(new TextElement(text[i]));
-    }
-    execute(command);
-}
-
-void Container::addNameSequence()
-{
-    Request r( req_addNameSequence );
-    performRequest( &r );
-}
-
-// void Container::addMatrix(int rows, int columns)
-// {
-//     if ( !hasMightyCursor() )
-//         return;
-//     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add matrix"), this);
-//     command->setElement(new MatrixElement(rows, columns));
-//     execute(command);
-// }
-
-
-void Container::remove( Direction direction )
-{
-    DirectedRemove r( req_remove, direction );
-    performRequest( &r );
-}
-
-
-void Container::compactExpression()
-{
-    Request r( req_compactExpression );
-    performRequest( &r );
+    checkCursor();
 }
 
 
@@ -375,7 +326,7 @@ void Container::cut()
     FormulaCursor* cursor = activeCursor();
     if (cursor->isSelection()) {
         copy();
-        remove();
+        //remove();
     }
 }
 

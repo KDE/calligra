@@ -178,6 +178,9 @@ KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHigh
 
 Container* Document::formula() const { return impl->formula; }
 
+char Document::leftBracketChar() const  { return impl->leftBracketChar; }
+char Document::rightBracketChar() const { return impl->rightBracketChar; }
+
 
 Document::Document( KConfig* config,
                     KActionCollection* collection,
@@ -666,10 +669,12 @@ void Document::insertSymbol()
     if ( hasFormula() && impl->table.contains( impl->selectedName ) ) {
         QChar ch = impl->table.unicode( impl->selectedName );
         if ( ch != QChar::null ) {
-            formula()->addText( ch, true );
+            TextCharRequest r( ch, true );
+            formula()->performRequest( &r );
         }
         else {
-            formula()->addText( impl->selectedName );
+            TextRequest r( impl->selectedName );
+            formula()->performRequest( &r );
         }
     }
 }

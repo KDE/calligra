@@ -32,6 +32,8 @@
 #include "contextstyle.h"
 #include "kformuladefs.h"
 
+class QKeyEvent;
+
 KFORMULA_NAMESPACE_BEGIN
 
 class Command;
@@ -288,6 +290,12 @@ public:
      */
     virtual Command* buildCommand( Container*, Request* ) { return 0; }
 
+    /**
+     * Parses the input. It's the container which does create
+     * new elements because it owns the undo stack. But only the
+     * sequence knows what chars are allowed.
+     */
+    virtual Command* input( Container*, QKeyEvent* ) { return 0; }
 
     // basic support
 

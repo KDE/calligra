@@ -25,6 +25,7 @@
 
 #include <qpoint.h>
 #include <qrect.h>
+#include <qstring.h>
 
 #include <koPoint.h>
 #include <koRect.h>
@@ -98,6 +99,17 @@ enum SymbolType {
  * Word means move by whole words  (usually Control key)
  */
 enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
+
+inline MoveFlag movementFlag( int state )
+{
+    int flag = NormalMovement;
+    if ( state & Qt::ControlButton )
+        flag |= WordMovement;
+    if ( state & Qt::ShiftButton )
+        flag |= SelectMovement;
+    return static_cast<MoveFlag>( flag );
+}
+
 
 
 /**
@@ -191,6 +203,8 @@ enum RequestID {
     req_addRoot,
     req_addSpace,
     req_addSymbol,
+    req_addText,
+    req_addTextChar,
     req_changeMatrix,
     req_compactExpression,
     req_copy,
@@ -247,6 +261,21 @@ public:
     Direction direction() const { return m_direction; }
 };
 
+class TextCharRequest : public Request {
+    QChar m_ch;
+    bool m_isSymbol;
+public:
+    TextCharRequest( QChar ch, bool isSymbol=false ) : Request( req_addTextChar ), m_ch( ch ), m_isSymbol( isSymbol ) {}
+    QChar ch() const { return m_ch; }
+    bool isSymbol() const { return m_isSymbol; }
+};
+
+class TextRequest : public Request {
+    QString m_text;
+public:
+    TextRequest( QString text ) : Request( req_addText ), m_text( text ) {}
+    QString text() const { return m_text; }
+};
 
 KFORMULA_NAMESPACE_END
 

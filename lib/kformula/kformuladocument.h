@@ -131,7 +131,7 @@ public:
     KAction* getAddBracketAction();
     KAction* getAddSBracketAction();
     KAction* getAddCBracketAction();
-    KAction* getAddAbsAction(); 
+    KAction* getAddAbsAction();
     KAction* getAddFractionAction();
     KAction* getAddRootAction();
     KAction* getAddSumAction();
@@ -153,6 +153,9 @@ public:
     KSelectAction* getRightBracketAction();
     KSelectAction* getSymbolNamesAction();
     KToggleAction* getSyntaxHighlightingAction();
+
+    char leftBracketChar() const;
+    char rightBracketChar() const;
 
 public slots:
 

@@ -123,13 +123,6 @@ public slots:
 
     void slotSelectAll();
 
-    void slotMoveLeft(MoveFlag flag);
-    void slotMoveRight(MoveFlag flag);
-    void slotMoveUp(MoveFlag flag);
-    void slotMoveDown(MoveFlag flag);
-    void slotMoveHome(MoveFlag flag);
-    void slotMoveEnd(MoveFlag flag);
-
 protected slots:
 
     /**
@@ -148,14 +141,6 @@ protected slots:
      * our cursor must not be inside it.
      */
     void slotElementWillVanish(BasicElement*);
-
-protected:
-
-    /**
-     * Convert Qt style key state modifiers to local
-     * movement flags.
-     */
-    MoveFlag movementFlag(int state);
 
 private:
 

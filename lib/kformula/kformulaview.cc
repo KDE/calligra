@@ -133,32 +133,7 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 
 void View::keyPressEvent( QKeyEvent* event )
 {
-    if ( !container()->input( event ) ) {
-        int action = event->key();
-        int state = event->state();
-	MoveFlag flag = movementFlag(state);
-
-	switch (action) {
-	case Qt::Key_Left:
-            slotMoveLeft(flag);
-            break;
-        case Qt::Key_Right:
-            slotMoveRight(flag);
-            break;
-        case Qt::Key_Up:
-            slotMoveUp(flag);
-            break;
-        case Qt::Key_Down:
-            slotMoveDown(flag);
-            break;
-        case Qt::Key_Home:
-            slotMoveHome(flag);
-            break;
-        case Qt::Key_End:
-            slotMoveEnd(flag);
-            break;
-        }
-    }
+    container()->input( event );
 }
 
 
@@ -306,56 +281,6 @@ void View::slotSelectAll()
     emitCursorChanged();
 }
 
-
-void View::slotMoveLeft(MoveFlag flag)
-{
-    cursor()->moveLeft(flag);
-    emitCursorChanged();
-}
-
-void View::slotMoveRight(MoveFlag flag)
-{
-    cursor()->moveRight(flag);
-    emitCursorChanged();
-}
-
-void View::slotMoveUp(MoveFlag flag)
-{
-    cursor()->moveUp(flag);
-    emitCursorChanged();
-}
-
-void View::slotMoveDown(MoveFlag flag)
-{
-    cursor()->moveDown(flag);
-    emitCursorChanged();
-}
-
-void View::slotMoveHome(MoveFlag flag)
-{
-    cursor()->moveHome(flag);
-    emitCursorChanged();
-}
-
-void View::slotMoveEnd(MoveFlag flag)
-{
-    cursor()->moveEnd(flag);
-    emitCursorChanged();
-}
-
-
-MoveFlag View::movementFlag(int state)
-{
-    int flag = NormalMovement;
-
-    if (state & Qt::ControlButton)
-        flag |= WordMovement;
-
-    if (state & Qt::ShiftButton)
-        flag |= SelectMovement;
-
-    return static_cast<MoveFlag>(flag);
-}
 
 void View::setSmallCursor(bool small)
 {

@@ -811,6 +811,21 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 Command* SequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
+    case req_addText: {
+        KFCReplace* command = new KFCReplace( i18n("Add text"), container );
+        TextRequest* tr = static_cast<TextRequest*>( request );
+        for ( uint i = 0; i < tr->text().length(); i++ ) {
+            command->addElement( new TextElement( tr->text()[i] ) );
+        }
+        return command;
+    }
+    case req_addTextChar: {
+        KFCReplace* command = new KFCReplace( i18n("Add text"), container );
+        TextCharRequest* tr = static_cast<TextCharRequest*>( request );
+        TextElement* element = new TextElement( tr->ch(), tr->isSymbol() );
+        command->addElement( element );
+        return command;
+    }
     case req_addNameSequence:
         if ( onlyTextSelected( container->activeCursor() ) ) {
             //kdDebug( DEBUGID ) << "SequenceElement::buildCommand" << endl;
@@ -942,7 +957,7 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
 }
 
 
-bool SequenceElement::input( Container* container, QKeyEvent* event )
+Command* SequenceElement::input( Container* container, QKeyEvent* event )
 {
     QChar ch = event->text().at( 0 );
     if ( ch.isPrint() ) {
@@ -951,26 +966,63 @@ bool SequenceElement::input( Container* container, QKeyEvent* event )
     else {
         int action = event->key();
         int state = event->state();
+        MoveFlag flag = movementFlag(state);
 
 	switch ( action ) {
-        case Qt::Key_BackSpace:
-            container->remove( beforeCursor );
-            return true;
-        case Qt::Key_Delete:
-            container->remove( afterCursor );
-            return true;
+        case Qt::Key_BackSpace: {
+            DirectedRemove r( req_remove, beforeCursor );
+            return buildCommand( container, &r );
+        }
+        case Qt::Key_Delete: {
+            DirectedRemove r( req_remove, afterCursor );
+            return buildCommand( container, &r );
+        }
+	case Qt::Key_Left: {
+            FormulaCursor* cursor = container->activeCursor();
+            cursor->moveLeft( flag );
+            formula()->cursorHasMoved( cursor );
+            break;
+        }
+        case Qt::Key_Right: {
+            FormulaCursor* cursor = container->activeCursor();
+            cursor->moveRight( flag );
+            formula()->cursorHasMoved( cursor );
+            break;
+        }
+        case Qt::Key_Up: {
+            FormulaCursor* cursor = container->activeCursor();
+            cursor->moveUp( flag );
+            formula()->cursorHasMoved( cursor );
+            break;
+        }
+        case Qt::Key_Down: {
+            FormulaCursor* cursor = container->activeCursor();
+            cursor->moveDown( flag );
+            formula()->cursorHasMoved( cursor );
+            break;
+        }
+        case Qt::Key_Home: {
+            FormulaCursor* cursor = container->activeCursor();
+            cursor->moveHome( flag );
+            formula()->cursorHasMoved( cursor );
+            break;
+        }
+        case Qt::Key_End: {
+            FormulaCursor* cursor = container->activeCursor();
+            cursor->moveEnd( flag );
+            formula()->cursorHasMoved( cursor );
+            break;
+        }
         default:
             if ( state & Qt::ControlButton ) {
                 switch ( event->key() ) {
                 case Qt::Key_AsciiCircum: {
                     IndexRequest r( upperLeftPos );
-                    container->performRequest( &r );
-                    return true;
+                    return buildCommand( container, &r );
                 }
                 case Qt::Key_Underscore: {
                     IndexRequest r( lowerLeftPos );
-                    container->performRequest( &r );
-                    return true;
+                    return buildCommand( container, &r );
                 }
                 default:
                     break;
@@ -978,56 +1030,57 @@ bool SequenceElement::input( Container* container, QKeyEvent* event )
             }
         }
     }
-    return false;
+    return 0;
 }
 
 
-bool SequenceElement::input( Container* container, QChar ch )
+Command* SequenceElement::input( Container* container, QChar ch )
 {
     int latin1 = ch.latin1();
     switch (latin1) {
-    case '(':
-        container->document()->addDefaultBracket();
-        break;
+    case '(': {
+        BracketRequest r( container->document()->leftBracketChar(),
+                          container->document()->rightBracketChar() );
+        return buildCommand( container, &r );
+    }
     case '[': {
         BracketRequest r( '[', ']' );
-        container->performRequest( &r );
-        break;
+        return buildCommand( container, &r );
     }
     case '{': {
         BracketRequest r( '{', '}' );
-        container->performRequest( &r );
-        break;
+        return buildCommand( container, &r );
     }
     case '|': {
         BracketRequest r( '|', '|' );
-        container->performRequest( &r );
-        break;
+        return buildCommand( container, &r );
     }
     case '^': {
         IndexRequest r( upperRightPos );
-        container->performRequest( &r );
-        break;
+        return buildCommand( container, &r );
     }
     case '_': {
         IndexRequest r( lowerRightPos );
-        container->performRequest( &r );
-        break;
+        return buildCommand( container, &r );
     }
-    case ' ':
-        container->compactExpression();
-        break;
+    case ' ': {
+        Request r( req_compactExpression );
+        return buildCommand( container, &r );
+    }
     case '}':
     case ']':
     case ')':
         break;
-    case '\\':
-        container->addNameSequence();
-        break;
-    default:
-        container->addText(ch);
+    case '\\': {
+        Request r( req_addNameSequence );
+        return buildCommand( container, &r );
     }
-    return true;
+    default: {
+        TextCharRequest r( ch );
+        return buildCommand( container, &r );
+    }
+    }
+    return 0;
 }
 
 /**
@@ -1261,7 +1314,7 @@ Command* NameSequence::buildCommand( Container* container, Request* request )
 }
 
 
-bool NameSequence::input( Container* container, QChar ch )
+Command* NameSequence::input( Container* container, QChar ch )
 {
     int latin1 = ch.latin1();
     switch (latin1) {
@@ -1276,13 +1329,16 @@ bool NameSequence::input( Container* container, QChar ch )
     case '\\':
         break;
     case '{':
-    case ' ':
-        container->compactExpression();
-        break;
-    default:
-        container->addText( ch );
+    case ' ': {
+        Request r( req_compactExpression );
+        return buildCommand( container, &r );
     }
-    return true;
+    default: {
+        TextCharRequest r( ch );
+        return buildCommand( container, &r );
+    }
+    }
+    return 0;
 }
 
 void NameSequence::setElementType( ElementType* t )

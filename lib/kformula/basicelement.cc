@@ -209,14 +209,14 @@ SequenceElement* BasicElement::buildChild( SequenceElement* child, QDomNode node
             QDomNode nodeInner = e.firstChild();
             if (nodeInner.isElement()) {
                 QDomElement element = nodeInner.toElement();
-                if (!child->buildFromDom(element)) {
-                    delete child;
-                    child = 0;
+                if ( child->buildFromDom( element ) ) {
+                    return child;
                 }
             }
         }
     }
-    return child;
+    delete child;
+    return 0;
 }
 
 QString BasicElement::toLatex()
