@@ -16,6 +16,7 @@ Fixes:
 - Fixed drawing of rect with round corners when zoomed and gradient filling
 - Fixed no alpha channel set on mirrored pictures
 - Fixed objects placed on wrong page after saving and loading in kpr file format
+- Fixed picture not updated when only depth is changed
 
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis

@@ -657,7 +657,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         }
         else
         {
-            if (mirrorType != PM_NORMAL || swapRGB || grayscal || bright != 0 || m_effect!=IE_NONE)
+            if (mirrorType != PM_NORMAL || depth != 0 || swapRGB || grayscal || bright != 0 || m_effect!=IE_NONE)
                 m_cachedPixmap = changePictureSettings( generatePixmap( _zoomHandler ) );
             else
                 m_cachedPixmap = generatePixmap( _zoomHandler );
