@@ -31,7 +31,6 @@ LayerDialog::LayerDialog( Canvas* _canvas, QWidget* _parent, const char* _name, 
   QGridLayout* layout = new QGridLayout( this, 6, 2, 15, 7 );
 
   LayerList* layerlist = new LayerList( _canvas, this, "layerlist" );
-  layerlist->resize( layerlist->sizeHint() );
   layout->addMultiCellWidget( layerlist, 0, 5, 0, 0 );
 
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
@@ -53,7 +52,7 @@ LayerDialog::LayerDialog( Canvas* _canvas, QWidget* _parent, const char* _name, 
   QPushButton* pbClose = new QPushButton( this, "closebutton" );
   pbClose->setText( i18n( "Close" ) );
   layout->addWidget( pbClose, 5, 1 );
-  QObject::connect( pbClose, SIGNAL( clicked() ), this, SLOT( reject() ) );
+  QObject::connect( pbClose, SIGNAL( clicked() ), this, SLOT( hide() ) );
 
   layout->setRowStretch( 4, 1 );
   layout->setColStretch( 0, 1 );

@@ -13,7 +13,8 @@
 #include <qtableview.h>
 #include <qrect.h>
 
-#include "canvas.h"
+class Canvas;
+class QPopupMenu;
 
 class LayerList : public QTableView
 {
@@ -26,8 +27,20 @@ public:
 
   void updateTable();
   void updateList();
+  void update_contextmenu( int _index );
+
+  void selectLayer( int _index );
+  void inverseVisibility( int _index );
+  void inverseLinking( int _index );
+  void renameLayer( int _index );
+  void addLayer( int _index );
+  void removeLayer( int _index );
 
   virtual QSize sizeHint() const;
+
+public slots:
+
+  void slotMenuAction( int );
 
 protected:
 
@@ -42,6 +55,7 @@ private:
   int m_items, m_selected;
   static QPixmap *m_eyeIcon, *m_linkIcon;
   static QRect m_eyeRect, m_linkRect;
+  QPopupMenu* m_contextmenu;
 };
 
 #endif // __layerlist_h__

@@ -15,15 +15,17 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qmessagebox.h>
+#include <qpopupmenu.h>
 
 #include <kstddirs.h>
 #include <kglobal.h>
 #include <klocale.h>
 
 #include "misc.h"
+#include "canvas.h"
 #include "layerlist.h"
 
-#define WIDTH   150
+#define WIDTH   200
 #define HEIGHT  40
 #define MAXROWS 8
 
@@ -56,7 +58,7 @@ void LayerList::init( Canvas* _canvas )
   m_selected = m_canvas->layerList().count() - 1;
   if( !m_eyeIcon )
   {
-    QString _icon = locate( "data", "kimageshop/pics/eye.xpm" );
+    QString _icon = locate( "appdata", "pics/eye.xpm" );
     m_eyeIcon = new QPixmap;
     if( !m_eyeIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find eye.xpm" );
@@ -64,12 +66,30 @@ void LayerList::init( Canvas* _canvas )
   }
   if( !m_linkIcon )
   {
-    QString _icon = locate( "data", "kimageshop/pics/link.xpm" );
+    QString _icon = locate( "appdata", "pics/link.xpm" );
     m_linkIcon = new QPixmap;
     if( !m_linkIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find link.xpm" );
     m_linkRect = QRect( QPoint( 25,( cellHeight() - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
   }
+
+  m_contextmenu = new QPopupMenu();
+
+  m_contextmenu->setCheckable(TRUE);
+
+  m_contextmenu->insertItem( i18n( "Visible" ), 1 );
+  m_contextmenu->insertItem( i18n( "Linked"), 2 );
+  m_contextmenu->insertItem( i18n( "Opacity"), 3 );
+  m_contextmenu->insertItem( i18n( "Rename"), 4 );
+
+  m_contextmenu->insertSeparator();
+
+  m_contextmenu->insertItem( i18n( "Add Layer" ), 11 );
+  m_contextmenu->insertItem( i18n( "Remove Layer"), 12 );
+  m_contextmenu->insertItem( i18n( "Add Mask" ), 13 );
+  m_contextmenu->insertItem( i18n( "Remove Mask"), 14 );
+
+  connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
 }
 
 void LayerList::paintCell( QPainter* p, int _row, int )
@@ -108,6 +128,87 @@ void LayerList::updateTable()
   resize( sizeHint() );
 }
 
+void LayerList::update_contextmenu( int _index )
+{
+  m_contextmenu->setItemChecked( 1, m_canvas->layerList().at( _index )->isVisible() );
+  m_contextmenu->setItemChecked( 2, m_canvas->layerList().at( _index )->isLinked() );
+}
+
+void LayerList::selectLayer( int _index )
+{
+  int currentSel = m_selected;
+  m_selected = -1;
+  updateCell( currentSel, 0 );
+  m_selected = _index;
+  m_canvas->setCurrentLayer( m_selected );
+  updateCell( m_selected, 0 );
+}
+
+void LayerList::inverseVisibility( int _index )
+{
+  m_canvas->layerList().at( _index )->setVisible( !m_canvas->layerList().at( _index )->isVisible() );
+  updateCell( _index, 0 );
+  m_canvas->compositeImage( m_canvas->layerList().at( _index )->imageExtents() );
+  m_canvas->repaint( m_canvas->layerList().at( _index )->imageExtents(), false );
+}
+
+void LayerList::inverseLinking( int _index )
+{
+  m_canvas->layerList().at( _index )->setLinked( !m_canvas->layerList().at( _index )->isLinked() );
+  updateCell( _index, 0 );
+}
+
+void LayerList::renameLayer( int _index )
+{
+  QString layername = m_canvas->layerList().at( _index )->name();
+
+  if( layername.left( 3 ) == "___" )
+    layername = layername.right( layername.length() - 3 );
+  else
+    layername = "___" + layername;
+
+  m_canvas->layerList().at( _index )->setName( layername );
+  updateCell( _index, 0 );
+}
+
+void LayerList::addLayer( int _index )
+{
+  cerr << "Michael : Add Layer" << endl;
+}
+
+void LayerList::removeLayer( int _index )
+{
+  cerr << "Michael : Remove Layer" << endl;
+}
+
+void LayerList::slotMenuAction( int _id )
+{
+  switch( _id )
+  {
+    case 1:
+      inverseVisibility( m_selected );
+      break;
+    case 2:
+      inverseLinking( m_selected );
+      break;
+    case 3:
+      cerr << "Michael : Opacity" << endl;
+      break;
+    case 4:
+      renameLayer( m_selected );
+      break;
+    case 11:
+      addLayer( m_selected );
+      break;
+    case 12:
+      removeLayer( m_selected );
+      break;
+    default:
+      cerr << "Michael : unknown context menu action" << endl;
+      break;
+  }
+}
+
 QSize LayerList::sizeHint() const
 {
   return QSize( WIDTH, HEIGHT * MAXROWS );
@@ -115,34 +216,31 @@ QSize LayerList::sizeHint() const
 
 void LayerList::mousePressEvent( QMouseEvent* _event )
 {
+  int row = findRow( _event->pos().y() );
   QPoint localPoint( _event->pos().x() % cellWidth(), _event->pos().y() % cellHeight() );
 
-//SHOW_POINT( localPoint );
-
-  int row = findRow( _event->pos().y() );
-
-  if( m_eyeRect.contains( localPoint ) )
+  if( _event->button() & LeftButton )
   {
-    m_canvas->layerList().at( row )->setVisible( !m_canvas->layerList().at( row )->isVisible() );
-    updateCell( row, 0 );
-    m_canvas->compositeImage( m_canvas->layerList().at( row )->imageExtents() );
-    m_canvas->repaint( m_canvas->layerList().at( row )->imageExtents(), false );
-    return;
+    if( m_eyeRect.contains( localPoint ) )
+    {
+      inverseVisibility( row );
+    }
+    else if( m_linkRect.contains( localPoint ) )
+    {
+      inverseLinking( row );
+    }
+    else if( row != -1 )
+    {
+      selectLayer( row );
+    }
   }
-  if( m_linkRect.contains( localPoint ) )
+  else if( _event->button() & RightButton )
   {
-    m_canvas->layerList().at( row )->setLinked( !m_canvas->layerList().at( row )->isLinked() );
-    updateCell( row, 0 );
-    return;
-  }
-  if( row != -1 )
-  {
-    int currentSel = m_selected;
-    m_selected = -1;
-    updateCell( currentSel, 0 );
-    m_selected = row;
-    m_canvas->setCurrentLayer( m_selected );
-    updateCell( m_selected, 0 );
+    // TODO: Should the Layer under the cursor selected when clicking RMB ?
+
+    selectLayer( row );
+    update_contextmenu( row );
+    m_contextmenu->popup( mapToGlobal( _event->pos() ) );
   }
 }
 

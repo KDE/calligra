@@ -29,6 +29,8 @@ module KImageShop
 {
 	interface View : KOffice::View
 	{
+                // View menu
+                slot void viewLayerDialog();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

@@ -80,14 +80,20 @@ protected:
   virtual void resizeEvent( QResizeEvent* _ev );
   virtual void paintEvent( QPaintEvent* _ev );
 
+  void viewLayerDialog();
+
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   OpenPartsUI::Menu_var m_vMenuEdit;
+
   OpenPartsUI::Menu_var m_vMenuView;
+  CORBA::Long m_idMenuView_LayerDialog;
+
   OpenPartsUI::Menu_var m_vMenuTransform;
   OpenPartsUI::Menu_var m_vMenuPlugIns;
   OpenPartsUI::Menu_var m_vMenuOptions;
   
 private:
+
   KImageShopDoc *m_pDoc; 
   CanvasView    *m_pCanvasView;
   LayerDialog   *m_pLayerDialog;

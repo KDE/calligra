@@ -164,7 +164,7 @@ bool KImageShopView::event( const char* _event, const CORBA::Any& _value )
 
 bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  kdebug( KDEBUG_INFO, 0, "ImageShopView::mappingCreateToolbar" );
+  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar" );
 
   if ( CORBA::is_nil( _factory ) )
   {
@@ -175,10 +175,9 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   }
 
   // create and enable edit toolbar
-  m_vToolBarEdit  = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
-  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar : done" );
   return true;
 }
 
@@ -208,6 +207,10 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   // view menu
   text = Q2C( i18n( "&View" ) );
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
+  m_vMenuView->setCheckable( true );
+
+  text = Q2C( i18n( "&Layer dialog" ) );
+  m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
 
   // transform menu
   text = Q2C( i18n( "&Transform" ) );
@@ -234,8 +237,6 @@ void KImageShopView::createGUI()
   // layerlist
   m_pLayerDialog = new LayerDialog( m_pDoc->canvas_() );
   m_pLayerDialog->show();
-  m_pLayerDialog->resize(150,200);
-
   
   // setup GUI
   setupScrollbars();
@@ -400,6 +401,23 @@ void KImageShopView::paintEvent( QPaintEvent * )
   painter.drawPixmap( 0, 0, m_pixmap );
   painter.end();
   */
+}
+
+void KImageShopView::viewLayerDialog()
+{
+  if( m_pLayerDialog )
+  {
+    if( m_pLayerDialog->isVisible() )
+    {
+      m_pLayerDialog->hide();
+    }
+    else
+    {
+      m_pLayerDialog->show();
+    }
+//  m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, m_pLayerDialog->isVisible() );
+    m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, TRUE );
+  }
 }
 
 #include "kimageshop_view.moc"
