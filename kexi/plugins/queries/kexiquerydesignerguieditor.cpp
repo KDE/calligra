@@ -31,6 +31,7 @@
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/connection.h>
+#include <kexidb/parser/parser.h>
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -85,7 +86,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	m_buffers = new KexiTableViewPropertyBuffer( this, m_dataTable->tableView() );
 	initTableColumns();
 	initTableRows();
-	m_dataTable->tableView()->setData(m_data);
+//	m_dataTable->tableView()->setData(m_data);
 
 //	m_buffers = new KexiTableViewPropertyBuffer( this, m_dataTable->tableView() );
 
@@ -129,13 +130,6 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 //	m_spl->setResizeMode(m_relations, QSplitter::KeepSize);
 //	m_spl->setResizeMode(m_head, QSplitter::FollowSizeHint);
 	m_spl->setSizes(QValueList<int>()<< 800<<400);
-
-/* moved to afterSwitchFrom
-	if (!m_dialog->neverSaved()) {
-		QTimer::singleShot(1,this,SLOT(loadLayout()));
-	}
-	*/
-//	setDirty(false);
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
@@ -203,6 +197,7 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 		KexiTableItem *item = new KexiTableItem(columns);
 		m_data->append(item);
 	}
+	m_dataTable->tableView()->setData(m_data);
 
 	updateColumsData();
 }
@@ -388,10 +383,14 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			QString fieldName = (*buf)["field"]->value().toString();
 			bool fieldVisible = (*buf)["visible"]->value().toBool();
 			if (fieldName=="*") {
-				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+				//all tables asterisk
+				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
 				fieldsFound = true;
 			}
-			else {
+			else if (fieldName.find(".*")!=-1) {
+				//single-table asterisk: <tablename> + ".*" + number
+				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+			} else {
 				KexiDB::Field *f = t->field( fieldName );
 				if (!f) {
 					kdWarning() << "query designer: NO FIELD '" << fieldName << "'" << endl;
@@ -425,14 +424,16 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 			KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
 			return true;
 		}
-		//remember current design in a temporary structure
-		dontStore=true;
-		QString errMsg;
-		//build schema; problems are not allowed
-		if (!buildSchema(&errMsg)) {
-			cancelled=true;
-			KMessageBox::information(this, errMsg);
-			return false;
+		if (dirty() || !tempData()->query) {
+			//remember current design in a temporary structure
+			dontStore=true;
+			QString errMsg;
+			//build schema; problems are not allowed
+			if (!buildSchema(&errMsg)) {
+				cancelled=true;
+				KMessageBox::information(this, errMsg);
+				return false;
+			}
 		}
 		//TODO
 		return true;
@@ -441,11 +442,11 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 		dontStore=true;
 		//build schema; ignore problems
 		buildSchema();
-		if (tempData()->query && tempData()->query->fieldCount()==0) {
+/*		if (tempData()->query && tempData()->query->fieldCount()==0) {
 			//no fields selected: let's add "*" (all-tables asterisk), 
 			// otherwise SQL statement will be invalid
 			tempData()->query->addAsterisk( new KexiDB::QueryAsterisk( tempData()->query ) );
-		}
+		}*/
 		//todo
 		return true;
 	}
@@ -456,8 +457,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 bool
 KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 {
-//	restore();
-	if (mode==Kexi::NoViewMode) {
+	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query)) {
 		//this is not a SWITCH but fresh opening in this view mode
 		if (!m_dialog->neverSaved()) {
 			if (!loadLayout()) {
@@ -465,7 +465,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 				parentDialog()->setStatus(i18n("Query definition loading failed."), i18n("Query data may be corrupted."));
 				return false;
 			}
-			//todo: load columns
+			showFieldsForQuery( static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData()) );
 			//todo: load global query properties
 		}
 	}
@@ -498,13 +498,15 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 					conn.detailsField = detailsField->name();
 					m_relations->addConnection( conn );
 				}
+				//-show fields
+				showFieldsForQuery( tempData()->query );
 			}
 		}
-
-		//todo: generate layout
 		//todo: load global query properties
 	}
 	else if (mode==Kexi::DataViewMode) {
+		m_dataTable->tableView()->ensureCellVisible(0,0);
+		m_dataTable->tableView()->setCursor(0,0);
 	}
 	tempData()->queryChangedInPreviousView = false;
 	return true;
@@ -514,19 +516,136 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 KexiDB::SchemaData*
 KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 {
-	KexiQueryPart::TempData * temp = tempData();
 	buildSchema();
-	KexiDB::QuerySchema *query = temp->query;
-	temp->query = 0; //will be returend, so: don't keep it
-	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
+	KexiQueryPart::TempData * temp = tempData();
+	(KexiDB::SchemaData&)*temp->query = sdata; //copy main attributes
 
-	if (!m_mainWin->project()->dbConnection()
-			->storeObjectSchemaData( *query, true /*newObject*/ ))
-	{
+	bool ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *temp->query, true /*newObject*/ );
+	m_dialog->setId( temp->query->id() );
+
+	if (ok)
+		ok = storeLayout();
+
+	KexiDB::QuerySchema *query = temp->query;
+	temp->query = 0; //will be returned, so: don't keep it
+	if (!ok) {
 		delete query;
 		return 0;
 	}
-	m_dialog->setId( query->id() );
+	return query;
+}
+
+bool KexiQueryDesignerGuiEditor::storeData()
+{
+	bool ok = KexiViewBase::storeData();
+	if (ok) {
+		buildSchema();
+		ok = storeLayout();
+	}
+	return ok;
+}
+
+/*KexiDB::SchemaData*
+KexiQueryDesignerGuiEditor::loadData(const KexiDB::SchemaData& sdata)
+{
+	KexiQueryPart::TempData * temp = tempData();
+	QString sqlText;
+	if (!loadDataBlock( sqlText, "sql" )) {
+		return 0;
+	}
+	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
+	parser->parse( sqlText );
+	KexiDB::QuerySchema *query = temp->query;
+	query = parser->query();
+	//error?
+	if (!query) {
+		//todo
+		return 0;
+	}
+	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
+
+	return query;
+}*/
+
+void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
+{
+	const bool was_dirty = dirty();
+	
+	//add fields
+	int row_num = 0;
+	KexiDB::Field *field;
+	for (KexiDB::Field::ListIterator it(*query->fields()); (field = it.current()); ++it, row_num++) {
+		//add row
+		KexiTableItem *newItem;
+		if (field->isQueryAsterisk()) {
+			if (field->table()) {//single-table asterisk
+				newItem = createNewRow(field->table()->name(), "*");
+			}
+			else {//all-tables asterisk
+				newItem = createNewRow("*", "");
+			}
+		}
+		else {
+			newItem = createNewRow(field->table()->name(), field->name());
+		}
+		m_dataTable->tableView()->insertItem(newItem, row_num);
+		//create buffer
+		createPropertyBuffer( row_num, field->table()->name(), field->name(), true/*new one*/ );
+	}
+	propertyBufferSwitched();
+
+	if (!was_dirty)
+		setDirty(false);
+	m_dataTable->tableView()->ensureCellVisible(0,0);
+}
+
+bool KexiQueryDesignerGuiEditor::loadLayout()
+{
+	QString xml;
+	if (!loadDataBlock( xml, "query_layout" )) {
+		//TODO errmsg
+		return false;
+	}
+	QDomDocument doc;
+	doc.setContent(xml);
+	QDomElement doc_el = doc.documentElement(), el;
+	if (doc_el.tagName()!="query_layout") {
+		//TODO errmsg
+		return false;
+	}
+
+	const bool was_dirty = dirty();
+
+	//add tables and relations to the relation view
+	for (el = doc_el.firstChild().toElement(); !el.isNull(); el=el.nextSibling().toElement()) {
+		if (el.tagName()=="table") {
+			KexiDB::TableSchema *t = m_conn->tableSchema(el.attribute("name"));
+			QRect rect(el.attribute("x").toInt(),el.attribute("y").toInt(),
+				el.attribute("width").toInt(),el.attribute("height").toInt());
+			m_relations->addTable( t, rect );
+		}
+		else if (el.tagName()=="conn") {
+			SourceConnection src_conn;
+			src_conn.masterTable = el.attribute("mtable");
+			src_conn.masterField = el.attribute("mfield");
+			src_conn.detailsTable = el.attribute("dtable");
+			src_conn.detailsField = el.attribute("dfield");
+			m_relations->addConnection(src_conn);
+		}
+	}
+
+	if (!was_dirty)
+		setDirty(false);
+	return true;
+}
+
+bool KexiQueryDesignerGuiEditor::storeLayout()
+{
+	KexiQueryPart::TempData * temp = tempData();
+	QString sqlText = mainWin()->project()->dbConnection()->selectStatement( *temp->query );
+	if (!storeDataBlock( sqlText, "sql" )) {
+		return false;
+	}
 
 	//serialize detailed XML query definition
 	QString xml = "<query_layout>", tmp;
@@ -550,55 +669,8 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 	}
 	xml += "</query_layout>";
 	if (!storeDataBlock( xml, "query_layout" )) {
-		delete query;
-		return 0;
-	}
-	
-	return query;
-}
-
-bool KexiQueryDesignerGuiEditor::loadLayout()
-{
-	QString xml;
-	if (!loadDataBlock( xml, "query_layout" )) {
-		//TODO errmsg
 		return false;
 	}
-	QDomDocument doc;
-	doc.setContent(xml);
-	QDomElement doc_el = doc.documentElement(), el;
-	if (doc_el.tagName()!="query_layout") {
-		//TODO errmsg
-		return false;
-	}
-
-	const bool was_dirty = dirty();
-
-	//add tables
-	for (el = doc_el.firstChild().toElement(); !el.isNull(); el=el.nextSibling().toElement()) {
-		if (el.tagName()=="table") {
-			KexiDB::TableSchema *t = m_conn->tableSchema(el.attribute("name"));
-			QRect rect(el.attribute("x").toInt(),el.attribute("y").toInt(),
-				el.attribute("width").toInt(),el.attribute("height").toInt());
-			m_relations->addTable( t, rect );
-		}
-		else if (el.tagName()=="conn") {
-			SourceConnection src_conn;
-			src_conn.masterTable = el.attribute("mtable");
-			src_conn.masterField = el.attribute("mfield");
-			src_conn.detailsTable = el.attribute("dtable");
-			src_conn.detailsField = el.attribute("dfield");
-			m_relations->addConnection(src_conn);
-		}
-	}
-	if (!was_dirty)
-		setDirty(false);
-	m_dataTable->tableView()->ensureCellVisible(0,0);
-	return true;
-}
-
-bool KexiQueryDesignerGuiEditor::storeData()
-{
 	return true;
 }
 
@@ -764,6 +836,7 @@ void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked( KexiDB::TableSchem
 	//create buffer
 	createPropertyBuffer( row_num, table->name(), fieldName, true/*new one*/ );
 	propertyBufferSwitched();
+	m_dataTable->setFocus();
 }
 
 KexiPropertyBuffer *KexiQueryDesignerGuiEditor::propertyBuffer()

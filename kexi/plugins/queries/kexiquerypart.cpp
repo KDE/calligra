@@ -56,7 +56,6 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 		dialog->setTempData( new KexiQueryPart::TempData(dialog) );
 	}
 	if (viewMode == Kexi::DataViewMode) {
-//		return new KexiQueryView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "dataview");
 		return new KexiQueryView(dialog->mainWin(), parent, "dataview");
 	}
 	else if (viewMode == Kexi::DesignViewMode) {
@@ -159,6 +158,28 @@ void KexiQueryPart::initActions()
 	a->setWhatsThis(i18n("Shows or hides SQL editor's history."));
 
 //	setActionAvailable("querypart_check_query", true);
+}
+
+KexiDB::SchemaData*
+KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata)
+{
+	KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(dlg->tempData());
+	QString sqlText;
+	if (!loadDataBlock( dlg, sqlText, "sql" )) {
+		return 0;
+	}
+	KexiDB::Parser *parser = dlg->mainWin()->project()->sqlParser();
+	parser->parse( sqlText );
+	KexiDB::QuerySchema *query = parser->query();
+	//error?
+	if (!query) {
+		//todo
+		return 0;
+	}
+	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
+
+	query->debug();
+	return query;
 }
 
 //----------------

@@ -314,11 +314,12 @@ KexiAlterTableDialog::initActions()
 
 bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
-	if (mode==Kexi::DesignViewMode) {
+/*	if (mode==Kexi::DesignViewMode) {
 		initData();
 		return true;
 	}
-	else if (mode==Kexi::DataViewMode) {
+	else */
+	if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
 			cancelled=true;
 			KMessageBox::information(this, i18n("Cannot switch to data view, because table design is empty.\n"
@@ -331,7 +332,16 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 	else if (mode==Kexi::TextViewMode) {
 		//todo
 	}
-	return false;
+	return true;
+}
+
+bool
+KexiAlterTableDialog::afterSwitchFrom(int mode, bool &cancelled)
+{
+	if (mode==Kexi::NoViewMode) {
+		initData();
+	}
+	return true;
 }
 
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()

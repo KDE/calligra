@@ -118,6 +118,11 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Loads layout of relation GUI diagram. */
 		bool loadLayout();
 
+		/*! Stores layout of relation GUI diagram. */
+		bool storeLayout();
+
+		void showFieldsForQuery(KexiDB::QuerySchema *query);
+
 	private:
 		KexiTableViewData *m_data;
 		KexiDataTable *m_dataTable;

@@ -31,31 +31,44 @@ KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *n
 {
 	tableView()->setInsertingEnabled(false); //default
 
-	bool c = false;
-	afterSwitchFrom(0, c);
+//	bool c = false;
+//	afterSwitchFrom(0, c);
 }
 
 KexiQueryView::~KexiQueryView()
 {
 }
 
+bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
+{
+	if (!query)
+		return false;
+	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*query);
+	if (!rec) {
+		//todo: error
+		return false;
+	}
+	setData(rec);
+	//TODO: maybe allow writing and inserting for single-table relations?
+	tableView()->setReadOnly( true );
+	tableView()->setInsertingEnabled( false );
+	return true;
+}
+
 bool
 KexiQueryView::afterSwitchFrom(int mode, bool &cancelled)
 {
-	if (mode==Kexi::DesignViewMode) {
-		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
-		if (!temp->query)
-			return false;
-		//we've designed query
-		KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*temp->query);
-		if (!rec) {
-			//todo: error
+	if (mode==Kexi::NoViewMode) {
+		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+		if (!executeQuery(querySchema)) {
 			return false;
 		}
-		setData(rec);
-		//TODO: maybe allow writing and inserting for single-table relations?
-		tableView()->setReadOnly( true );
-		tableView()->setInsertingEnabled( false );
+	}
+	else if (mode==Kexi::DesignViewMode) {
+		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		if (!executeQuery(temp->query)) {
+			return false;
+		}
 	}
 
 #if 0

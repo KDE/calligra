@@ -38,8 +38,6 @@ namespace KexiDB
 class KexiQueryDataSource;
 class KexiProject;
 
-//typedef QMap<int, KexiQueryDocument *> QueryData;
-
 class KexiQueryPart : public KexiPart::Part
 {
 	Q_OBJECT
@@ -74,8 +72,7 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual void initActions();
 
-	private:
-//		QueryData		m_data;
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
 };
 
 class KexiQueryDataSource : public KexiPart::DataSource
