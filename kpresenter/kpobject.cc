@@ -31,7 +31,7 @@
 #include <kapplication.h>
 
 #include <stdlib.h>
-#include <fstream.h>
+#include <fstream>
 #include <math.h>
 
 #include <kozoomhandler.h>
@@ -378,7 +378,7 @@ KoRect KPObject::rotateRectObject() const
     double xPos = -rr.x();
     rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
     QWMatrix m;
-    m.translate( pw / 2.0,ph / 2.0 );
+    m.translate( pw / 2.0, ph / 2.0 );
     m.rotate( angle );
     m.translate( rr.left() + xPos, rr.top() + yPos );
     KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() )); // see above TODO
@@ -445,26 +445,24 @@ bool KPObject::intersects( const KoRect &_rect ) const
 QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
                              KPresenterDoc *doc ) const
 {
-    double px = _point.x();
-    double py = _point.y();
+    KoZoomHandler * zh = doc->zoomHandler();
+    int px = zh->zoomItX(_point.x());
+    int py = zh->zoomItY(_point.y());
+    int ox = zh->zoomItX(orig.x());
+    int oy = zh->zoomItY(orig.y());
+    int ow = zh->zoomItX(ext.width());
+    int oh = zh->zoomItY(ext.height());
 
-    double ox = orig.x() ;
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
     bool headerFooter=doc->isHeaderFooter(this);
-    //KoZoomHandler *_zoomHandler=doc->zoomHandler();
-    KoRect r( orig, ext );
+    KoRect r( ox, oy, ow, oh );
     if ( angle != 0.0 )
     {
-        r=rotateRectObject();
-        ox = r.x() ;
-        oy = r.y();
-        ow = r.width();
-        oh = r.height();
+        QRect rr = zh->zoomRect( rotateRectObject() );
+        ox = rr.x();
+        oy = rr.y();
+        ow = rr.width();
+        oh = rr.height();
     }
-    if ( !r.contains( _point ) )
-        return Qt::arrowCursor;
 
     int sz = 4;
     if ( px >= ox && py >= oy && px <= ox + QMIN( ow / 3, sz ) && py <= oy + QMIN( oh / 3, sz ) )
