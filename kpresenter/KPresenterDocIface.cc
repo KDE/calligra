@@ -25,7 +25,7 @@
 
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include "kprvariable.h"
 #include <koAutoFormat.h>
 

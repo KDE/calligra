@@ -52,7 +52,7 @@
 #include <koparagcounter.h>
 #include <kaction.h>
 #include <qpopupmenu.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <koVariableDlgs.h>
 #include "kprvariable.h"
 #include <koRuler.h>

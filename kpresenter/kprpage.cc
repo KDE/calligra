@@ -54,7 +54,7 @@
 #include <koRect.h>
 #include <qapplication.h>
 #include <kostyle.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <qrichtext_p.h>
 #include <qbuffer.h>
 #include <qregexp.h>

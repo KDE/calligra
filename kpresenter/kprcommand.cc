@@ -44,7 +44,6 @@
 #include "kpresenter_view.h"
 #include <kotextobject.h>
 #include "kprtextdocument.h"
-#include <koVariable.h>
 #include <kdebug.h>
 #include "kprvariable.h"
 #include <koRect.h>

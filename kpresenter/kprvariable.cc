@@ -19,7 +19,7 @@
 */
 
 #include "kprvariable.h"
-#include <koVariable.h>
+#include <kovariable.h>
 #include "kpresenter_doc.h"
 #include "kprcommand.h"
 #include <klocale.h>

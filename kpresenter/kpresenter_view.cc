@@ -114,7 +114,7 @@
 #include <koAutoFormatDia.h>
 #include <koparagcounter.h>
 #include <koParagDia.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <koVariableDlgs.h>
 
 #include <kspell.h>

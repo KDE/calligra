@@ -81,7 +81,7 @@
 #include "KPresenterDocIface.h"
 #include <kspell.h>
 
-#include <koVariable.h>
+#include <kovariable.h>
 #include <koAutoFormat.h>
 #include <koDocumentInfo.h>
 #include "kprvariable.h"
