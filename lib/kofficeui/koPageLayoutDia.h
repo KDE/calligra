@@ -136,14 +136,13 @@ public:
      *  Show page layout dialog.
      *  See constructor for documentation on the parameters
      */
-    static bool pageLayout( KoPageLayout&, KoHeadFoot&, int tabs, KoUnit::Unit& unit);
+    static bool pageLayout( KoPageLayout&, KoHeadFoot&, int tabs, KoUnit::Unit& unit, QWidget* parent = 0 );
 
     /**
      *  Show page layout dialog.
      *  See constructor for documentation on the parameters
      */
-    static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int tabs, KoUnit::Unit& unit );
-
+    static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int tabs, KoUnit::Unit& unit, QWidget* parent = 0 );
     /**
      *  Retrieves a standard page layout.
      */

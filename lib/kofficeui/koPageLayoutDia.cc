@@ -183,10 +183,10 @@ KoPageLayoutDia::~KoPageLayoutDia()
 }
 
 /*======================= show dialog ============================*/
-bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _tabs, KoUnit::Unit& unit )
+bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _tabs, KoUnit::Unit& unit, QWidget* parent )
 {
     bool res = false;
-    KoPageLayoutDia *dlg = new KoPageLayoutDia( 0, "PageLayout", _layout, _hf, _tabs, unit );
+    KoPageLayoutDia *dlg = new KoPageLayoutDia( parent, "PageLayout", _layout, _hf, _tabs, unit );
 
     if ( dlg->exec() == QDialog::Accepted ) {
         res = true;
@@ -202,10 +202,10 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _t
 
 /*======================= show dialog ============================*/
 bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, KoColumns& _cl,
-                                  KoKWHeaderFooter &_kwhf, int _tabs, KoUnit::Unit& unit )
+                                  KoKWHeaderFooter &_kwhf, int _tabs, KoUnit::Unit& unit, QWidget* parent )
 {
     bool res = false;
-    KoPageLayoutDia *dlg = new KoPageLayoutDia( 0, "PageLayout", _layout, _hf, _cl, _kwhf, _tabs, unit );
+    KoPageLayoutDia *dlg = new KoPageLayoutDia( parent, "PageLayout", _layout, _hf, _cl, _kwhf, _tabs, unit );
 
     if ( dlg->exec() == QDialog::Accepted ) {
         res = true;

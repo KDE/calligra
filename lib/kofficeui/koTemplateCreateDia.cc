@@ -329,7 +329,7 @@ void KoTemplateCreateDia::slotSelect() {
     d->m_default->setChecked(false);
     d->m_custom->setChecked(true);
 
-    KFileDialog fd(QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true);
+    KFileDialog fd(QString::null, KImageIO::pattern(KImageIO::Reading), this, 0, true);
     fd.setCaption(i18n("Select Picture"));
     KURL url;
     if (fd.exec()==QDialog::Accepted)
@@ -342,7 +342,7 @@ void KoTemplateCreateDia::slotSelect() {
         }
         return;
     }
-    
+
     // ### TODO: do a better remote loading without having to have d->m_tempFile
     if ( url.isLocalFile() )
     {
