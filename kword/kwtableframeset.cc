@@ -267,7 +267,6 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 
     redrawFromCol=m_cols; // possible reposition col starting with this one, done in recalcRows
     if(difference!=0) {
-kdDebug() << "KWTableFrameSet::recalcCols  difference: " << difference << endl;
         double last=col==0?0:m_colPositions[col-1];
         for(unsigned int i=col; i < m_colPositions.count(); i++) {
             double &colPos = m_colPositions[i];
@@ -305,32 +304,81 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     Cell *activeCell = getCell(row,col);
     double difference = 0;
 
-    if(activeCell->frame(0)->height() > activeCell->frame(0)->minFrameHeight() &&
+    if(activeCell->frame(0)->height() != activeCell->frame(0)->minFrameHeight() &&
           activeCell->type() == FT_TEXT) {
         // when the amount of text changed and the frame has to be rescaled we are also called.
         // lets check the minimum size for all the cells in this row.
 
-        double minHeight=activeCell->frame(0)->minFrameHeight();
-
-        for(unsigned int i=getCols(); i > 0; i--) {
-            if(i > activeCell->m_col && i <= activeCell->m_col + activeCell->m_cols) continue; // don't do ourselves.
-            double height=0.0;
-            for(unsigned int r=activeCell->m_row+activeCell->m_rows; r > activeCell->m_row; r--) {
-                Cell *theCell = getCell(r-1,i-1);
-                if(theCell->m_row >= activeCell->m_row && 
-                      theCell->m_rows+theCell->m_row <= activeCell->m_row + activeCell->m_rows) {
-                    // only use cells that are inside the top and bottom of our activeCell.
-                    height+=theCell->frame(0)->minFrameHeight();
-                    if( theCell->m_row != activeCell->m_row)
-                        height+=theCell->bottomBorder(); // add border.
+        // Take a square of table cells which depend on each others height. It is always the full 
+        // width of the table and the height is determened by joined cells, the minimum is one row. 
+        double minHeightOtherCols=0;    // The minimum height which the whole square of table cells can take
+        double minHeightActiveRow=0;    // The minimum height our cell can get because of cells in his row
+        double minHeightMyCol=0;        // The minimum height our column can get in the whole square
+        unsigned int rowSpan=activeCell->m_rows;
+        unsigned int startRow=activeCell->m_row;
+        int colCount=0;
+        do {
+            unsigned int rowCount=startRow;
+            double thisColHeight=0;     // the total height of this column
+            double thisColActiveRow=0;  // the total height of all cells in this col, completely in the 
+                                        // row of the activeCell
+            do {
+                Cell *thisCell=getCell(rowCount,colCount);
+                if(thisCell->m_row < startRow) {
+                    rowSpan+=startRow-thisCell->m_row;
+                    startRow=thisCell->m_row;
+                    colCount=-1;
+                    break;
                 }
+                if(thisCell->m_row + thisCell->m_rows > startRow + rowSpan) {
+                    rowSpan = thisCell->m_row + thisCell->m_rows - startRow;
+                    colCount=-1;
+                    break;
+                }
+                thisColHeight+=thisCell->frame(0)->minFrameHeight();
+                if(thisCell->m_row >= activeCell->m_row && thisCell->m_row + thisCell->m_rows <= activeCell->m_row + activeCell->m_rows)
+                    thisColActiveRow+=thisCell->frame(0)->minFrameHeight();
+                rowCount+=thisCell->m_rows;
+            } while (rowCount < rowSpan+startRow);
+
+            if(static_cast<unsigned int>(colCount) >= activeCell->m_col && 
+                  static_cast<unsigned int>(colCount) < activeCell->m_col + activeCell->m_cols)
+                minHeightMyCol=thisColHeight;
+            else {
+                minHeightOtherCols = QMAX(minHeightOtherCols, thisColHeight);
+                minHeightActiveRow = QMAX(minHeightActiveRow, thisColActiveRow);
             }
-            minHeight=QMAX(minHeight, height);
-        }
-        double diff = activeCell->frame(0)->height() - minHeight;
-        if(!(diff > -0.01 && diff < 0.01)) { // there was an update, lets shrink cells to fit.
-            activeCell->frame(0)->setHeight(minHeight);
-            redrawFromCol=0;
+            colCount++;
+        } while(static_cast<unsigned int>(colCount) < m_colPositions.count()-1);
+
+#if 0
+    kdDebug() << "activeCell: " << activeCell->m_row << ","<< activeCell->m_col << endl;
+    kdDebug() << "activeCell height. Cur:  " << activeCell->frame(0)->height() << ", new "<< activeCell->frame(0)->minFrameHeight() << endl;
+    kdDebug() << "minHeightOtherCols: " << minHeightOtherCols << endl;
+    kdDebug() << "minHeightActiveRow: " << minHeightActiveRow << endl;
+    kdDebug() << "minHeightMyCol: " << minHeightMyCol << endl;
+    kdDebug() << "rowSpan: " << rowSpan << endl;
+    kdDebug() << "startRow: " << startRow << endl;
+#endif
+
+
+        bool bottomRow=startRow+rowSpan == activeCell->m_row+activeCell->m_rows;
+        if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
+            activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
+            if(!bottomRow && minHeightOtherCols > minHeightMyCol) {
+                Cell *bottomCell=getCell(activeCell->m_col, startRow+rowSpan-1);
+            //    kdDebug() << "should shrink bottom cell..: " << bottomCell->m_row << "," << bottomCell->m_col << endl;
+            }
+        } else { // wants to shrink
+            double newHeight=QMAX(activeCell->frame(0)->minFrameHeight(),minHeightActiveRow);
+            if(bottomRow) // I'm a strech cell
+                newHeight=QMAX(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minFrameHeight()));
+            activeCell->frame(0)->setHeight(newHeight);
+            if(!bottomRow && minHeightOtherCols > minHeightMyCol) {
+                Cell *bottomCell=getCell(activeCell->m_col, startRow+rowSpan-1);
+
+                //kdDebug() << "should grow bottom cell..: " << bottomCell->m_row << "," << bottomCell->m_col << endl;
+            }
         }
     }
 
@@ -357,7 +405,6 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     unsigned int fromRow=m_rows; // possible reposition rows starting with this one, default to no repositioning
     unsigned int untilRow=0;     // possible reposition rows ending with this one
     if(difference!=0) {
-kdDebug() << "KWTableFrameSet::recalcRows  difference: " << difference << endl;
         untilRow=m_rows;
         unsigned int adjustment=0;
         QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();

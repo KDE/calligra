@@ -1610,9 +1610,9 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
                 {
                     if(theFrame->frameSet()->getGroupManager()) {
 #ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "is table cell; setting new minFrameHeight" << endl;
+                        kdDebug(32002) << "is table cell; just setting new minFrameHeight" << endl;
 #endif
-                        theFrame->setMinFrameHeight(theFrame->height());
+                        theFrame->setMinFrameHeight(newPosition - theFrame->top());
                     } else {
 #ifdef DEBUG_FORMAT_MORE
                         kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
@@ -1721,7 +1721,9 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
         // The + 2 here leaves 2 pixels below the last line. Without it we hit
         // the "break at end of frame" case in formatVertically (!!).
         int difference = availHeight - ( bottom + 2 );
+#ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "formatMore less text than space (AutoExtendFrame) difference=" << difference << endl;
+#endif
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
         if ( theFrame->frameSet()->isAFooter() )
@@ -1737,7 +1739,9 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
         else
         {
             double wantedPosition = theFrame->bottom() - m_doc->layoutUnitToPt( difference );
+#ifdef DEBUG_FORMAT_MORE
             kdDebug() << "formatMore wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
+#endif
             wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
             if ( wantedPosition != theFrame->bottom()) {
                 if(theFrame->frameSet()->getGroupManager() ) {
@@ -1786,7 +1790,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 
 void KWTextFrameSet::frameResized( KWFrame *theFrame )
 {
-    kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
+    //kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
     if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
         m_doc->recalcFrames();
 
