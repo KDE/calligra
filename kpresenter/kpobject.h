@@ -330,8 +330,6 @@ public:
                   bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KP2DObject() { delete gradient; }
 
-    KP2DObject &operator=( const KP2DObject & );
-
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( const QColor &_gColor1 )
     { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }

@@ -315,7 +315,7 @@ public:
     // Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KPTextObject * textObj )
     { emit sig_terminateEditing( textObj ); }
-    KPrPage * initialActivePage();
+    KPrPage * initialActivePage() const;
 
     void updateZoomRuler();
     void newZoomAndResolution( bool updateViews, bool forPrint );

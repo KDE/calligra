@@ -99,12 +99,12 @@ public:
     virtual DCOPObject* dcopObject();
 
     // for dcop interface
-    int getCurrentPresPage();
-    int getCurrentPresStep();
-    int getPresStepsOfPage();
-    int getNumPresPages();
+    int getCurrentPresPage() const;
+    int getCurrentPresStep() const;
+    int getPresStepsOfPage() const;
+    int getNumPresPages() const;
     bool gotoPresPage( int pg );
-    float getCurrentFaktor();
+    float getCurrentFaktor() const;
 
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
@@ -117,7 +117,7 @@ public:
     void showStyle( const QString & styleName );
     void updateStyleList();
 
-    KoZoomHandler *zoomHandler();
+    KoZoomHandler *zoomHandler() const;
 
     //used this function when we when to print/create web presentation etc...
     //=>we unzoom it.
@@ -359,7 +359,7 @@ public:
     void changePicture( const QString & );
     void changeClipart( const QString & );
 
-    KPrCanvas* getCanvas() { return m_canvas;}
+    KPrCanvas* getCanvas() const { return m_canvas;}
 
     void setRulerMouseShow( bool _show );
     void setRulerMousePos( int mx, int my );
@@ -397,8 +397,8 @@ public:
     int getRndX() const { return rndX; }
     int getRndY() const { return rndY; }
 
-    QFont &currFont() { return tbFont; }
-    QColor &currColor() { return tbColor; }
+//     QFont &currFont() { return tbFont; }
+//     QColor &currColor() { return tbColor; }
 
     void enableWebPres();
 
@@ -409,7 +409,7 @@ public:
     /**
      * Overloaded from View
      */
-    QWidget* canvas();
+    QWidget* canvas() const;
     /**
      * Overloaded from View
      */
@@ -460,7 +460,7 @@ public:
     void reorganize();
 
     // For NoteBar
-    NoteBar *getNoteBar() { return notebar; }
+    NoteBar *getNoteBar() const { return notebar; }
 
     // Used by Page to plug/unplug the datatool actions
     QPtrList<KAction>& actionList() { return m_actionList; }
@@ -468,15 +468,15 @@ public:
     QPtrList<KAction> &variableActionList() { return m_variableActionList; }
 
     // for Polygon object
-    bool getCheckConcavePolygon() { return checkConcavePolygon; }
-    int getCornersValue() { return cornersValue; }
-    int getSharpnessValue() { return sharpnessValue; }
+    bool getCheckConcavePolygon() const { return checkConcavePolygon; }
+    int getCornersValue() const { return cornersValue; }
+    int getSharpnessValue() const { return sharpnessValue; }
 
-    int getPresentationDuration();
+    int getPresentationDuration() const;
     void setPresentationDuration( int _pgNum );
     void restartPresentationDuration();
 
-    KPrPage * stickyPage();
+    KPrPage * stickyPage() const;
 
     void updatePageParameter();
 

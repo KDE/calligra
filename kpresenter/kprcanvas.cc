@@ -451,7 +451,7 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject
     }
 }
 
-QRect KPrCanvas::getOldBoundingRect(KPObject *obj)
+QRect KPrCanvas::getOldBoundingRect( const KPObject *obj )
 {
     KoRect oldKoBoundingRect = obj->getBoundingRect(m_view->zoomHandler());
     double _dx = oldKoBoundingRect.x() - 5.0;
@@ -900,8 +900,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     if ( modType != MT_NONE && modType != MT_MOVE ) {
         KPObject *kpobject=resizeObjNum;
         if ( kpobject ) {
-            ratio = static_cast<double>( static_cast<double>( kpobject->getSize().width() ) /
-                                         static_cast<double>( kpobject->getSize().height() ) );
+            ratio = static_cast<double>( kpobject->getSize().width() ) /
+                    static_cast<double>( kpobject->getSize().height() );
             //oldRect = QRect( kpobject->getOrig().x(), kpobject->getOrig().y(),
             //                 kpobject->getSize().width(), kpobject->getSize().height() );
             oldRect = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect(m_view->zoomHandler()) );
@@ -1673,7 +1673,7 @@ void KPrCanvas::limitSizeOfObject()
         insRect.setBottom(pageRect.top()+1);
 }
 
-QPoint KPrCanvas::limitOfPoint(const QPoint& _point)
+QPoint KPrCanvas::limitOfPoint(const QPoint& _point) const
 {
     QRect pageRect=m_activePage->getZoomPageRect();
     QPoint point(_point);
@@ -2369,28 +2369,22 @@ void KPrCanvas::printRTDebug( int info )
 }
 #endif
 
-bool KPrCanvas::haveASelectedPictureObj()
+bool KPrCanvas::haveASelectedPictureObj() const
 {
-    bool state=m_activePage->haveASelectedPictureObj();
-    if(state)
-        return true;
-    return stickyPage()->haveASelectedPictureObj();
+    return m_activePage->haveASelectedPictureObj() ||
+	stickyPage()->haveASelectedPictureObj();
 }
 
-bool KPrCanvas::haveASelectedPartObj()
+bool KPrCanvas::haveASelectedPartObj() const
 {
-    bool state = m_activePage->haveASelectedPartObj();
-    if ( state )
-        return true;
-    return stickyPage()->haveASelectedPartObj();
+    return m_activePage->haveASelectedPartObj() ||
+	stickyPage()->haveASelectedPartObj();
 }
 
-bool KPrCanvas::haveASelectedGroupObj()
+bool KPrCanvas::haveASelectedGroupObj() const
 {
-    bool state = m_activePage->haveASelectedGroupObj();
-    if ( state )
-        return true;
-    return stickyPage()->haveASelectedGroupObj();
+    return m_activePage->haveASelectedGroupObj() ||
+	stickyPage()->haveASelectedGroupObj();
 }
 
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
@@ -2704,7 +2698,7 @@ bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
 }
 
 /*================================================================*/
-bool KPrCanvas::isOneObjectSelected()
+bool KPrCanvas::isOneObjectSelected() const
 {
     bool state=m_activePage->isOneObjectSelected();
     if( state)
@@ -5401,7 +5395,7 @@ void KPrCanvas::leaveEvent( QEvent * /*e*/ )
 
 
 /*================================================================*/
-QPtrList<KPObject> KPrCanvas::objectList()
+QPtrList<KPObject> KPrCanvas::objectList() const
 {
     return m_activePage->objectList();
 }
@@ -5447,20 +5441,20 @@ bool KPrCanvas::spManualSwitch() const
 }
 
 /*================================================================*/
-QRect KPrCanvas::getPageRect( bool decBorders )
+QRect KPrCanvas::getPageRect( bool decBorders ) const
 {
     // ### TODO remove diffx, diffy
     return m_view->kPresenterDoc()->getPageRect( decBorders );
 }
 
 /*================================================================*/
-unsigned int KPrCanvas::pageNums()
+unsigned int KPrCanvas::pageNums() const
 {
     return m_view->kPresenterDoc()->getPageNums();
 }
 
 /*================================================================*/
-float KPrCanvas::objSpeedFakt()
+float KPrCanvas::objSpeedFakt() const
 {
     /*
       Used to be 0(slow)->70, 1(medium)->50, 2(fast)->30.
@@ -5471,7 +5465,7 @@ float KPrCanvas::objSpeedFakt()
 }
 
 /*================================================================*/
-float KPrCanvas::pageSpeedFakt()
+float KPrCanvas::pageSpeedFakt() const
 {
     /*
       Used to be 0(slow)->8, 1(medium)->16, 2(fast)->32.
@@ -6161,15 +6155,13 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
 }
 
 
-bool KPrCanvas::oneObjectTextExist()
+bool KPrCanvas::oneObjectTextExist() const
 {
-    bool state=m_activePage->oneObjectTextExist();
-    if(state)
-        return true;
-    return stickyPage()->oneObjectTextExist();
+    return m_activePage->oneObjectTextExist() ||
+	stickyPage()->oneObjectTextExist();
 }
 
-KPrPage* KPrCanvas::activePage()
+KPrPage* KPrCanvas::activePage() const
 {
     return m_activePage;
 }
@@ -6189,21 +6181,21 @@ void KPrCanvas::slotSetActivePage( KPrPage* _active)
 }
 
 //return true if object is a header/footer hidden
-bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj)
+bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
 {
     if((obj==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(obj==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
         return true;
     return false;
 }
 
-int KPrCanvas::numberOfObjectSelected()
+int KPrCanvas::numberOfObjectSelected() const
 {
     int nb=activePage()->numSelected();
     nb+=stickyPage()->numSelected();
     return nb;
 }
 
-KPObject *KPrCanvas::getSelectedObj()
+KPObject *KPrCanvas::getSelectedObj() const
 {
     KPObject *obj=activePage()->getSelectedObj();
     if(obj)
@@ -6212,7 +6204,7 @@ KPObject *KPrCanvas::getSelectedObj()
     return obj;
 }
 
-int KPrCanvas::getPenBrushFlags()
+int KPrCanvas::getPenBrushFlags() const
 {
     int flags=0;
     flags=activePage()->getPenBrushFlags(activePage()->objectList());
@@ -6234,7 +6226,7 @@ void KPrCanvas::groupObjects()
     stickyPage()->groupObjects();
 }
 
-KPrPage *KPrCanvas::stickyPage()
+KPrPage *KPrCanvas::stickyPage() const
 {
     return m_view->kPresenterDoc()->stickyPage();
 }

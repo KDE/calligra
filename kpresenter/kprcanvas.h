@@ -150,12 +150,12 @@ public:
 
     void gotoPage( int pg );
 
-    KPrPage* activePage();
+    KPrPage* activePage() const;
     void setActivePage( KPrPage* _active);
 
-    bool oneObjectTextExist();
+    bool oneObjectTextExist() const;
 
-    bool isOneObjectSelected();
+    bool isOneObjectSelected() const;
     /** Returns the list of selected text objects */
     QPtrList<KPTextObject> selectedTextObjs() const;
     /**
@@ -171,13 +171,13 @@ public:
 
     void setMouseSelectedObject(bool b);
 
-    bool haveASelectedPictureObj();
-    bool haveASelectedPartObj();
-    bool haveASelectedGroupObj();
+    bool haveASelectedPictureObj() const;
+    bool haveASelectedPartObj() const;
+    bool haveASelectedGroupObj() const;
 
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
-    QPtrList<KPObject> objectList();
+    QPtrList<KPObject> objectList() const;
 
     // get - set data
     const QPtrList<KPObject> & getObjectList() const;
@@ -204,11 +204,11 @@ public:
     void changeClipart( const QString &file );
     void changePicture( const QString & filename );
 
-    int numberOfObjectSelected();
-    KPObject *getSelectedObj();
+    int numberOfObjectSelected() const;
+    KPObject *getSelectedObj() const;
 
-    int getPenBrushFlags();
-    bool getEditMode() { return editMode; }
+    int getPenBrushFlags() const;
+    bool getEditMode() const { return editMode; }
 
     void ungroupObjects();
     void groupObjects();
@@ -291,7 +291,7 @@ protected:
     void drawHelplines(QPainter *painter, const QRect &rect2);
 
 
-    QRect getOldBoundingRect(KPObject *obj);
+    QRect getOldBoundingRect( const KPObject *obj );
 
     void drawCurrentPageInPix( QPixmap& );
     virtual void mousePressEvent( QMouseEvent *e );
@@ -323,10 +323,10 @@ protected:
     QColor txtBackCol() const;
     bool spInfinitLoop() const;
     bool spManualSwitch() const;
-    QRect getPageRect( bool decBorders = true );
-    unsigned int pageNums();
-    float objSpeedFakt();
-    float pageSpeedFakt();
+    QRect getPageRect( bool decBorders = true ) const;
+    unsigned int pageNums() const;
+    float objSpeedFakt() const;
+    float pageSpeedFakt() const;
     void calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const;
 
     void _repaint( bool erase=true );
@@ -364,7 +364,7 @@ protected:
     void printRTDebug( int info );
 #endif
 
-    KPrPage *stickyPage();
+    KPrPage *stickyPage() const;
     void scrollCanvas(const KoRect& oldPos);
 
     void moveHelpLine(const QPoint & pos);
@@ -391,10 +391,10 @@ private:
     void drawPieObject(QPainter *p);
     void limitSizeOfObject();
 
-    QPoint limitOfPoint(const QPoint& _point);
+    QPoint limitOfPoint(const QPoint& _point) const;
 
     void calcBoundingRect();
-    bool objectIsAHeaderFooterHidden(KPObject *obj);
+    bool objectIsAHeaderFooterHidden(KPObject *obj) const;
 
 
 private slots:

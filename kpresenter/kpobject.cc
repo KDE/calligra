@@ -839,11 +839,6 @@ KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillTy
         gradient = 0;
 }
 
-KP2DObject &KP2DObject::operator=( const KP2DObject & )
-{
-    return *this;
-}
-
 void KP2DObject::setFillType( FillType _fillType )
 {
     fillType = _fillType;

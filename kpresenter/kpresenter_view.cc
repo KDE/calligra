@@ -2276,7 +2276,7 @@ void KPresenterView::createGUI()
     pageBase = new PageBase( splitterVertical, this );
     pageBase->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
-    m_canvas=new KPrCanvas( pageBase, "Canvas", (KPresenterView*)this );
+    m_canvas=new KPrCanvas( pageBase, "Canvas", this );
 
     QObject::connect( m_canvas, SIGNAL( fontChanged( const QFont & ) ),
 		      this, SLOT( fontChanged( const QFont & ) ) );
@@ -2335,11 +2335,9 @@ void KPresenterView::createGUI()
         }
     }
     KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
-    if (initPage)
-        skipToPage(m_pKPresenterDoc->pageList().findRef( initPage));
-    else
-        //activate first page
-        skipToPage(m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->pageList().at(0)));
+    if ( !initPage )
+	m_pKPresenterDoc->pageList().at( 0 ); // first page
+    skipToPage( m_pKPresenterDoc->pageList().findRef( initPage ) );
 }
 
 /*=============================================================*/
@@ -4090,7 +4088,7 @@ bool KPresenterView::doubleClickActivation() const
 }
 
 /*================================================================*/
-QWidget* KPresenterView::canvas()
+QWidget* KPresenterView::canvas() const
 {
     return m_canvas;
 }
@@ -4120,7 +4118,7 @@ void KPresenterView::setCanvasYOffset( int _y )
 }
 
 /*================================================================*/
-int KPresenterView::getCurrentPresPage()
+int KPresenterView::getCurrentPresPage() const
 {
     if ( !presStarted )
 	return -1;
@@ -4129,7 +4127,7 @@ int KPresenterView::getCurrentPresPage()
 }
 
 /*================================================================*/
-int KPresenterView::getCurrentPresStep()
+int KPresenterView::getCurrentPresStep() const
 {
     if ( !presStarted )
 	return -1;
@@ -4138,7 +4136,7 @@ int KPresenterView::getCurrentPresStep()
 }
 
 /*================================================================*/
-int KPresenterView::getPresStepsOfPage()
+int KPresenterView::getPresStepsOfPage() const
 {
     if ( !presStarted )
 	return -1;
@@ -4147,7 +4145,7 @@ int KPresenterView::getPresStepsOfPage()
 }
 
 /*================================================================*/
-int KPresenterView::getNumPresPages()
+int KPresenterView::getNumPresPages() const
 {
     if ( !presStarted )
 	return -1;
@@ -4156,7 +4154,7 @@ int KPresenterView::getNumPresPages()
 }
 
 /*================================================================*/
-float KPresenterView::getCurrentFaktor()
+float KPresenterView::getCurrentFaktor() const
 {
     if ( !presStarted )
 	return 1.0;
@@ -5501,12 +5499,12 @@ void KPresenterView::slotUpdateScrollBarRanges()
     setRanges();
 }
 
-KoZoomHandler *KPresenterView::zoomHandler()
+KoZoomHandler *KPresenterView::zoomHandler() const
 {
     return m_pKPresenterDoc->zoomHandler();
 }
 
-int KPresenterView::getPresentationDuration()
+int KPresenterView::getPresentationDuration() const
 {
     return m_presentationDuration.elapsed();
 }
@@ -5581,7 +5579,7 @@ QString KPresenterView::presentationDurationDataFormatChange( int _time )
 }
 
 
-KPrPage * KPresenterView::stickyPage()
+KPrPage * KPresenterView::stickyPage() const
 {
     return m_pKPresenterDoc->stickyPage();
 }

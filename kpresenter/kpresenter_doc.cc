@@ -2484,7 +2484,7 @@ void KPresenterDoc::insertClipartKey( KoPictureKey key )
         usedCliparts.append( key );
 }
 
-KPrPage * KPresenterDoc::initialActivePage()
+KPrPage * KPresenterDoc::initialActivePage() const
 {
     return m_initialActivePage;
 }

@@ -26,7 +26,6 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <kozoomhandler.h>
-using namespace std;
 
 /******************************************************************/
 /* Class: KPRectObject                                            */
