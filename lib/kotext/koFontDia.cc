@@ -207,6 +207,7 @@ void KoFontChooser::setupTab2()
     lst <<i18n("Without");
     lst <<i18n("Uppercase");
     lst <<i18n("LowerCase");
+    lst <<i18n("Small caps");
     d->m_fontAttribute->insertStringList( lst );
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
@@ -250,6 +251,9 @@ KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
     case 2:
         return KoTextFormat::ATT_LOWER;
         break;
+    case 3:
+        return KoTextFormat::ATT_SMALL_CAPS;
+        break;
     default:
         return KoTextFormat::ATT_NONE;
     }
@@ -263,6 +267,9 @@ void KoFontChooser::setFontAttribute( KoTextFormat::AttributeStyle _att)
         d->m_fontAttribute->setCurrentItem( 1 );
     else if ( _att ==KoTextFormat::ATT_LOWER )
         d->m_fontAttribute->setCurrentItem( 2 );
+    else if ( _att ==KoTextFormat::ATT_SMALL_CAPS )
+        d->m_fontAttribute->setCurrentItem( 3 );
+
 }
 
 bool KoFontChooser::getWordByWord()const

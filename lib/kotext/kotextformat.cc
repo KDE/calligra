@@ -356,6 +356,8 @@ QString KoTextFormat::displayedString( QString str )const
         return str.upper();
     else if ( m_attributeFont== ATT_LOWER)
         return str.lower();
+    else if ( m_attributeFont== ATT_SMALL_CAPS)
+        return str;
     else
     {
         kdDebug()<<" Error in AttributeStyle \n";
@@ -371,6 +373,8 @@ QChar KoTextFormat::displayedChar( QChar c )const
         return c.upper();
     else if ( m_attributeFont== ATT_LOWER)
         return c.lower();
+    else if ( m_attributeFont== ATT_SMALL_CAPS)
+        return c;
     else
     {
         kdDebug()<<" Error in AttributeStyle \n";
@@ -507,6 +511,8 @@ QString KoTextFormat::attributeFontToString( KoTextFormat::AttributeStyle _attr 
         return QString("uppercase");
     else if ( _attr == KoTextFormat::ATT_LOWER )
         return QString("lowercase");
+    else if ( _attr == KoTextFormat::ATT_SMALL_CAPS )
+        return QString("smallcaps");
     else
         return QString("none");
 }
@@ -519,6 +525,8 @@ KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString 
         return KoTextFormat::ATT_UPPER;
     else if ( _str == "lowerlower")
         return KoTextFormat::ATT_LOWER;
+    else if ( _str == "smallcaps" )
+        return KoTextFormat::ATT_SMALL_CAPS;
     else
         return KoTextFormat::ATT_NONE;
 }
