@@ -22,35 +22,35 @@
 
 #include "defs.h"
 
-class KWParag; 
+class KWParag;
 
 /******************************************************************/
 /* Class: KWordDrag                                               */
 /******************************************************************/
 
-static const QString MimeTypes[] = {"text/plain", "text/html", MIME_TYPE, QString::null}; 
+static const QString MimeTypes[] = {"text/plain", "text/html", MIME_TYPE, QString::null};
 
 class KWordDrag : public QDragObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KWordDrag( QWidget *dragSource = 0L, const char *name = 0L ); 
+    KWordDrag( QWidget *dragSource = 0L, const char *name = 0L );
 
-	void setPlain( const QString &_plain ); 
-	void setKWord( const QString &_kword ); 
-	void setHTML( const QString &_html ); 
+    void setPlain( const QString &_plain );
+    void setKWord( const QString &_kword );
+    void setHTML( const QString &_html );
 
-	const char *format( int i ) const; 
-	QByteArray encodedData( const char *mime ) const; 
+    const char *format( int i ) const;
+    QByteArray encodedData( const char *mime ) const;
 
-	static bool canDecode( QMimeSource* e ); 
-	static bool decode( QMimeSource* e, QString& s ); 
+    static bool canDecode( QMimeSource* e );
+    static bool decode( QMimeSource* e, QString& s );
 
 protected:
-	QString kword, plain, html; 
+    QString kword, plain, html;
 
-}; 
+};
 
 
 #endif

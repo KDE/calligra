@@ -24,13 +24,13 @@
 
 class KWordApp : public KoApplication
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KWordApp( int &argc, char** argv ); 
-	~KWordApp(); 
+    KWordApp( int &argc, char** argv );
+    ~KWordApp();
 
-	virtual void start(); 
-}; 
+    virtual void start();
+};
 
 #endif

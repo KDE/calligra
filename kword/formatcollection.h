@@ -21,7 +21,7 @@
 #include <qdict.h>
 #include <qstring.h>
 
-class KWordDocument; 
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWFormatCollection                                      */
@@ -30,22 +30,22 @@ class KWordDocument;
 class KWFormatCollection
 {
 public:
-	KWFormatCollection( KWordDocument *_doc ); 
-	~KWFormatCollection(); 
+    KWFormatCollection( KWordDocument *_doc );
+    ~KWFormatCollection();
 
-	KWFormat *getFormat( const KWFormat &_format ); 
-	void removeFormat( KWFormat *_format ); 
+    KWFormat *getFormat( const KWFormat &_format );
+    void removeFormat( KWFormat *_format );
 
-	QString generateKey( KWFormat *_format )
+    QString generateKey( KWFormat *_format )
     { return generateKey( *_format ); }
 
 protected:
-	QString generateKey( const KWFormat &_format ); 
-	KWFormat *findFormat( QString _key ); 
-	KWFormat *insertFormat( QString _key, const KWFormat &_format ); 
+    QString generateKey( const KWFormat &_format );
+    KWFormat *findFormat( QString _key );
+    KWFormat *insertFormat( QString _key, const KWFormat &_format );
 
-	QDict<KWFormat> formats; 
-	KWordDocument *doc; 
-}; 
+    QDict<KWFormat> formats;
+    KWordDocument *doc;
+};
 
 #endif

@@ -18,15 +18,15 @@
 
 #include <qtabdialog.h>
 
-class KWGroupManager; 
-class KWordDocument; 
-class KWPage; 
-class QWidget; 
-class QGridLayout; 
-class QButtonGroup; 
-class QRadioButton; 
-class QLabel; 
-class QSpinBox; 
+class KWGroupManager;
+class KWordDocument;
+class KWPage;
+class QWidget;
+class QGridLayout;
+class QButtonGroup;
+class QRadioButton;
+class QLabel;
+class QSpinBox;
 
 /******************************************************************/
 /* Class: KWInsertDia                                             */
@@ -34,32 +34,32 @@ class QSpinBox;
 
 class KWInsertDia : public QTabDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	enum InsertType {ROW, COL}; 
-	KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWordDocument *_doc, InsertType _type, KWPage *_page ); 
+    enum InsertType {ROW, COL};
+    KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWordDocument *_doc, InsertType _type, KWPage *_page );
 
 protected:
-	void setupTab1(); 
-	void closeEvent( QCloseEvent *e ) { emit cancelButtonPressed(); }
+    void setupTab1();
+    void closeEvent( QCloseEvent *e ) { emit cancelButtonPressed(); }
 
-	QWidget *tab1; 
-	QGridLayout *grid1, *grid2; 
-	QButtonGroup *grp; 
-	QRadioButton *rBefore, *rAfter; 
-	QLabel *rc; 
-	QSpinBox *value; 
+    QWidget *tab1;
+    QGridLayout *grid1, *grid2;
+    QButtonGroup *grp;
+    QRadioButton *rBefore, *rAfter;
+    QLabel *rc;
+    QSpinBox *value;
 
-	KWGroupManager *grpMgr; 
-	KWordDocument *doc; 
-	InsertType type; 
-	KWPage *page; 
+    KWGroupManager *grpMgr;
+    KWordDocument *doc;
+    InsertType type;
+    KWPage *page;
 
 protected slots:
-	void doInsert(); 
+    void doInsert();
 
-}; 
+};
 
 #endif
 

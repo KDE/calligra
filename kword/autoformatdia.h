@@ -18,12 +18,12 @@
 
 #include <qtabdialog.h>
 
-class KWordDocument; 
-class KWPage; 
-class QPushButton; 
-class QCheckBox; 
-class QVBox; 
-class KCharSelect; 
+class KWordDocument;
+class KWPage;
+class QPushButton;
+class QCheckBox;
+class QVBox;
+class KCharSelect;
 
 /******************************************************************/
 /* Class: KWAutoFormatDia                                         */
@@ -31,31 +31,31 @@ class KCharSelect;
 
 class KWAutoFormatDia : public QTabDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page ); 
+    KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page );
 
 protected:
-	void setupTab1(); 
+    void setupTab1();
 
-	QVBox *tab1; 
-	QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper; 
-	QPushButton *pbQuote1, *pbQuote2; 
-	KCharSelect *charselect; 
-	QChar oBegin, oEnd; 
-	bool quotesChanged; 
+    QVBox *tab1;
+    QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
+    QPushButton *pbQuote1, *pbQuote2;
+    KCharSelect *charselect;
+    QChar oBegin, oEnd;
+    bool quotesChanged;
 
-	KWordDocument *doc; 
-	KWPage *page; 
+    KWordDocument *doc;
+    KWPage *page;
 
 protected slots:
-	void applyConfig(); 
+    void applyConfig();
 
-	void chooseQuote1(); 
-	void chooseQuote2(); 
+    void chooseQuote1();
+    void chooseQuote2();
 
-}; 
+};
 
 #endif
 

@@ -25,118 +25,118 @@
 
 /*================================================================*/
 KWImageCollection::KWImageCollection( KWordDocument *_doc )
-	: images( 1999, true, true )
+    : images( 1999, true, true )
 {
-	images.setAutoDelete( true );
-	doc = _doc;
+    images.setAutoDelete( true );
+    doc = _doc;
 }
 
 /*================================================================*/
 KWImageCollection::~KWImageCollection()
 {
-	images.clear();
+    images.clear();
 }
 
 /*================================================================*/
 KWImage *KWImageCollection::getImage( KWImage &_image, QString &key )
 {
-	key = "";
+    key = "";
 
-	key = generateKey( _image );
+    key = generateKey( _image );
 
-	KWImage *image = findImage( key );
-	if ( image )
+    KWImage *image = findImage( key );
+    if ( image )
     {
-		image->incRef();
+        image->incRef();
 
-		return image;
+        return image;
     }
-	else
-		return insertImage( key, _image );
+    else
+        return insertImage( key, _image );
 }
 
 /*================================================================*/
 KWImage *KWImageCollection::getImage( KWImage &_image, QString &key, KSize _imgSize )
 {
-	key = "";
+    key = "";
 
-	key = generateKey( _image, _imgSize );
+    key = generateKey( _image, _imgSize );
 
-	KWImage *image = findImage( key );
-	if ( image )
+    KWImage *image = findImage( key );
+    if ( image )
     {
-		image->incRef();
+        image->incRef();
 
-		return image;
+        return image;
     }
-	else
-		return insertImage( key, _image, _imgSize );
+    else
+        return insertImage( key, _image, _imgSize );
 }
 
 /*================================================================*/
 void KWImageCollection::removeImage( KWImage *_image )
 {
-	QString key = generateKey( *_image );
+    QString key = generateKey( *_image );
 
-	images.remove( key );
+    images.remove( key );
 }
 
 /*================================================================*/
 QString KWImageCollection::generateKey( KWImage &_image )
 {
-	QString key;
+    QString key;
 
-	// Key: filename-width-height
-	// e.g. /home/reggie/pics/kde.gif-40-36
-	key.sprintf( "%s--%d-%d", _image.getFilename().data(),
-				 _image.width(), _image.height() );
-	return key;
+    // Key: filename-width-height
+    // e.g. /home/reggie/pics/kde.gif-40-36
+    key.sprintf( "%s--%d-%d", _image.getFilename().data(),
+                 _image.width(), _image.height() );
+    return key;
 }
 
 /*================================================================*/
 QString KWImageCollection::generateKey( KWImage &_image, KSize _imgSize )
 {
-	QString key;
+    QString key;
 
-	// Key: filename-width-height
-	// e.g. /home/reggie/pics/kde.gif-40-36
-	key.sprintf( "%s--%d-%d", _image.getFilename().data(),
-				 _imgSize.width(), _imgSize.height() );
-	return key;
+    // Key: filename-width-height
+    // e.g. /home/reggie/pics/kde.gif-40-36
+    key.sprintf( "%s--%d-%d", _image.getFilename().data(),
+                 _imgSize.width(), _imgSize.height() );
+    return key;
 }
 
 /*================================================================*/
 KWImage *KWImageCollection::findImage( QString _key )
 {
-	return images.find( _key.data() );
+    return images.find( _key.data() );
 }
 
 /*================================================================*/
 KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image )
 {
-	KWImage *image = new KWImage( doc, _image );
+    KWImage *image = new KWImage( doc, _image );
 
-	images.insert( _key.data(), image );
-	image->incRef();
+    images.insert( _key.data(), image );
+    image->incRef();
 
-	return image;
+    return image;
 }
 
 /*================================================================*/
 KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image, KSize _imgSize )
 {
-	KWImage *image = new KWImage( doc, _image );
-	if ( image->size() != _imgSize )
+    KWImage *image = new KWImage( doc, _image );
+    if ( image->size() != _imgSize )
     {
-		QImage __image = image->smoothScale( _imgSize.width(), _imgSize.height() );
-		delete image;
-		image = new KWImage( doc, __image, _image.getFilename() );
+        QImage __image = image->smoothScale( _imgSize.width(), _imgSize.height() );
+        delete image;
+        image = new KWImage( doc, __image, _image.getFilename() );
     }
 
-	images.insert( _key.data(), image );
-	image->incRef();
+    images.insert( _key.data(), image );
+    image->incRef();
 
-	return image;
+    return image;
 }
 
 
