@@ -758,7 +758,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "CHAR",             111,  1 },
 	{ "LOWER",            112,  1 },
 	{ "UPPER",            113,  1 },
-	{ "PROPPER",          114,  1 },
+	{ "PROPER",           114,  1 },
 	{ "LEFT",             115,  0 },
 	{ "RIGHT",            116,  0 },
 	{ "EXACT",            117,  2 },
