@@ -26,13 +26,14 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	KoMainWindowIface.cc KoMainWindowIface.skel
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
-include_HEADERS = koFilter.h koFilterChain.h \
+include_HEADERS = handler.h \
+	koFilter.h koFilterChain.h \
 	koGlobal.h koUnit.h koDocument.h \
 	koMainWindow.h \
 	koApplication.h koQueryTrader.h \
 	koFilterManager.h \
 	koDocumentInfo.h \
-	koView.h koFrame.h handler.h koDocumentChild.h \
+	koView.h koFrame.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
 	koPictureKey.h koPictureBase.h koPicture.h koPictureShared.h \
