@@ -1287,7 +1287,7 @@ void KWordDocument::drawSelection(QPainter &_painter,int xOffset,int yOffset)
 			tmpFC1.getPTLeft() + tmpFC1.getPTWidth() - tmpFC1.getPTPos(),tmpFC1.getLineHeight());
       tmpFC1.makeNextLineLayout(_painter);
       
-      while (tmpFC1.getPTY() < tmpFC2.getPTY())
+      while (tmpFC1.getPTY() < tmpFC2.getPTY() || tmpFC1.getFrame() != tmpFC2.getFrame())
 	{
 	  _painter.drawRect(tmpFC1.getPTLeft() - xOffset,tmpFC1.getPTY() - yOffset,tmpFC1.getPTWidth(),tmpFC1.getLineHeight());
 	  tmpFC1.makeNextLineLayout(_painter);
