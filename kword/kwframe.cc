@@ -544,13 +544,18 @@ KoPoint KWFrameSet::floatingFrameSize( int frameNum )
     return KoPoint( frame->width(), frame->height() ); // well maybe we should have a KoSize after all :)
 }
 
-void KWFrameSet::addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd )
+KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
-    KWDeleteFrameCommand * cmd = new KWDeleteFrameCommand( QString::null, kWordDocument(), frame );
-    macroCmd->addCommand( cmd );
-    cmd->execute(); // deletes the frame
+    return new KWCreateFrameCommand( QString::null, kWordDocument(), frame );
+}
+
+KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
+{
+    KWFrame * frame = frames.at( frameNum );
+    ASSERT( frame );
+    return new KWDeleteFrameCommand( QString::null, kWordDocument(), frame );
 }
 
 KWFrame * KWFrameSet::getFrame( double _x, double _y )

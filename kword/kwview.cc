@@ -1712,16 +1712,16 @@ void KWView::toolsFormula()
     if (edit)
     {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, QString::null );
+        doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
-        doc->addFrameSet( frameset ); // last since it triggers a redraw
-#if 0
-        // Strange, seems we need this
-        cursor->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
-        cursor->parag()->setChanged( true );
-        frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
-#endif
+        frameset->finalize(); // done last since it triggers a redraw
+
+        // Strange, seems we need this - hmm, do we, still ?
+        edit->getCursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
+        edit->getCursor()->parag()->setChanged( true );
+        doc->slotRepaintChanged( edit->frameSet() );
     }
 }
 

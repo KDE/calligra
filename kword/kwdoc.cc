@@ -2409,10 +2409,11 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
     _hf = m_pageHeaderFooter;
 }
 
-void KWDocument::addFrameSet( KWFrameSet *f )
+void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
 {
     frames.append(f);
-    f->finalize();
+    if ( finalize )
+        f->finalize();
     setModified( true );
 }
 

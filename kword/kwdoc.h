@@ -162,7 +162,7 @@ public:
 
     // Prefer this over getFrameSet(i), if iterating over all of them
     QListIterator<KWFrameSet> framesetsIterator() const { return QListIterator<KWFrameSet>(frames); }
-    void addFrameSet( KWFrameSet *f );
+    void addFrameSet( KWFrameSet *f, bool finalize = true );
     void delFrameSet( KWFrameSet *f, bool deleteit = true );
 
     // Those distances are in _pixels_, i.e. with zoom and resolution applied.

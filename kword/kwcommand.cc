@@ -700,6 +700,7 @@ KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWDocument *_do
     ASSERT( frameSet );
     frameIndex.m_iFrameIndex = frameSet->getFrameFromPtr( frame );
     frameIndex.m_iFrameSetIndex = _doc->getFrameSetNum( frameSet );
+    ASSERT( frameIndex.m_iFrameSetIndex != -1 );
     copyFrame = frame->getCopy();
 }
 
@@ -709,14 +710,6 @@ void KWCreateFrameCommand::execute()
     KWFrame * frame = copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
-
-    // Shouldn't have any anchored frames here anymore, we create an
-    // insert-text command instead of a KWCreateFrameCommand.
-    ASSERT(!frame->anchor());
-#if 0
-    if(frame->anchor())
-        frame->anchor()->setDeleted(false);
-#endif
 
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )

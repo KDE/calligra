@@ -106,10 +106,16 @@ KWTextDocument * KWAnchor::textDocument() const
     return static_cast<KWTextDocument *>( parent );
 }
 
-void KWAnchor::addDeleteCommand( KMacroCommand * macroCmd )
+KCommand * KWAnchor::createCommand()
+{
+    kdDebug() << "KWAnchor::addCreateCommand" << endl;
+    return m_frameset->anchoredObjectCreateCommand( m_frameNum );
+}
+
+KCommand * KWAnchor::deleteCommand()
 {
     kdDebug() << "KWAnchor::addDeleteCommand" << endl;
-    m_frameset->addDeleteAnchorCommand( m_frameNum, macroCmd );
+    return m_frameset->anchoredObjectDeleteCommand( m_frameNum );
 }
 
 void KWAnchor::save( QDomElement &formatElem )

@@ -24,7 +24,7 @@
 using namespace Qt3;
 class KWTextFrameSet;
 class KWTextFormatCollection;
-class KMacroCommand;
+class KCommand;
 class QDomElement;
 
 /**
@@ -51,6 +51,10 @@ private:
 
 /**
  * KWord's base class for QRT custom items (i.e. special chars)
+ * Custom items include:
+ * - variables ( KWVariable, variable.h )
+ * - inline images ( KWTextImage, kwtextimage.h )
+ * - anchors, i.e. floating frames ( KWAnchor, kwanchor.h )
  */
 class KWTextCustomItem : public QTextCustomItem
 {
@@ -58,13 +62,18 @@ public:
     KWTextCustomItem( KWTextDocument *textdoc ) : QTextCustomItem( textdoc )
     { m_deleted = false; }
 
-    // Called when the item is 'deleted' by the user
-    virtual void addDeleteCommand( KMacroCommand * ) {}
-
     // When the user deletes a custom item, it isn't destroyed but
     // moved into the undo/redo history - setDeleted( true )
     // and it can be then copied back from there into the real world - setDeleted( false ).
     virtual void setDeleted( bool b ) { m_deleted = b; }
+
+    // Called when the item is created or 'deleted' by the user
+    // Most custom items don't need to reimplement those, since
+    // the custom item is simply moved into the undo/redo history
+    // when deleting (or undoing a creation).
+    // It is not deleted and re-created later.
+    virtual KCommand * createCommand() { return 0L; }
+    virtual KCommand * deleteCommand() { return 0L; }
 
     // Save to XML
     virtual void save( QDomElement & /*formatElem*/ ) = 0;

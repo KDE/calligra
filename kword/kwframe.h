@@ -32,7 +32,7 @@
 
 class KFormulaContainer;
 class KFormulaView;
-class KMacroCommand;
+class KCommand;
 class KWAnchor;
 class KWCanvas;
 class KWChild;
@@ -429,9 +429,10 @@ public:
     /** Get the size of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
     virtual KoPoint floatingFrameSize( int frameNum );
-    /** Called by KWAnchor when it gets deleted - not sure how we want to handle
-        this for tables... */
-    virtual void addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd );
+    /** Store command for creating an anchored object */
+    virtual KCommand * anchoredObjectCreateCommand( int frameNum );
+    /** Store command for deleting an anchored object */
+    virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
 
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet

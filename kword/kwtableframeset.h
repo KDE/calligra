@@ -212,7 +212,10 @@ public:
 
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     virtual KoPoint floatingFrameSize( int frameNum );
-    virtual void addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd );
+    /** Store command for creating an anchored object */
+    virtual KCommand * anchoredObjectCreateCommand( int frameNum );
+    /** Store command for deleting an anchored object */
+    virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );

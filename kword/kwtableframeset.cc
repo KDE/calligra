@@ -123,11 +123,19 @@ KoPoint KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     return KoPoint( r.width(), r.height() );
 }
 
-void KWTableFrameSet::addDeleteAnchorCommand( int /*unused*/, KMacroCommand * /*macroCmd*/ )
+KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
+{
+    // TODO, to fix undo after creating an anchored table
+    // For that, we need a KWCreateTableCommand, I think
+    return 0L;
+}
+
+KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
 {
     // Do we really want to delete the whole table with a single 'Del' keystroke ? (honest question)
     // If yes, implement this method
     // If not, we need an "allowed to delete" bool in KWAnchor and test for it in KWTextFrameSet.
+    return 0L;
 }
 
 void KWTableFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used when loading*/ )

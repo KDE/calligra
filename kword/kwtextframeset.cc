@@ -1367,6 +1367,23 @@ void KWTextFrameSet::UndoRedoInfo::clear()
             case Insert:
             case Return:
                 cmd = new KWTextInsertCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+                // Inserting any custom items -> macro command, to let custom items add their command
+                if ( !customItemsMap.isEmpty() )
+                {
+                    textdoc->addCommand( cmd );
+                    KMacroCommand * macroCmd = new KMacroCommand( name );
+                    CustomItemsMap::Iterator it = customItemsMap.begin();
+                    for ( ; it != customItemsMap.end(); ++it )
+                    {
+                        KWTextCustomItem * item = it.data();
+                        KCommand * itemCmd = item->createCommand();
+                        if ( itemCmd )
+                            macroCmd->addCommand( itemCmd );
+                    }
+                    macroCmd->addCommand( new KWTextCommand( textfs, /*cmd, */name ) );
+                    textfs->kWordDocument()->addCommand( macroCmd );
+                    cmd = 0L;
+                }
                 break;
             case Delete:
             case RemoveSelected:
@@ -1381,7 +1398,10 @@ void KWTextFrameSet::UndoRedoInfo::clear()
                     for ( ; it != customItemsMap.end(); ++it )
                     {
                         KWTextCustomItem * item = it.data();
-                        item->addDeleteCommand( macroCmd );
+                        KCommand * itemCmd = item->deleteCommand();
+                        if ( itemCmd )
+                            macroCmd->addCommand( itemCmd );
+                        itemCmd->execute(); // the item-specific delete stuff hasn't been done
                         item->setDeleted( true );
                     }
                     textfs->kWordDocument()->addCommand( macroCmd );
