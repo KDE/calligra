@@ -615,41 +615,79 @@ QBrush KPrPage::getBrush( const QBrush &brush )const
 /*================================================================*/
 FillType KPrPage::getFillType( FillType ft )
 {
-    KPObject *kpobject = 0;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
         {
-            kpobject=it.current();
-    	    switch ( kpobject->getType() ) {
+    	    switch ( it.current()->getType() ) {
 	    case OT_RECT:
-		return dynamic_cast<KPRectObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPRectObject*obj=dynamic_cast<KPRectObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+            break;
 	    case OT_ELLIPSE:
-		return dynamic_cast<KPEllipseObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPEllipseObject*obj=dynamic_cast<KPEllipseObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+            break;
 	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+            break;
 	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+            break;
 	    case OT_PART:
-		return dynamic_cast<KPPartObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPPartObject*obj=dynamic_cast<KPPartObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+
+            break;
 	    case OT_PICTURE:
-		return dynamic_cast<KPPixmapObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPPixmapObject*obj=dynamic_cast<KPPixmapObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+
+            break;
 	    case OT_CLIPART:
-		return dynamic_cast<KPClipartObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPClipartObject*obj=dynamic_cast<KPClipartObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+            break;
 	    case OT_TEXT:
-		return dynamic_cast<KPTextObject*>( kpobject )->getFillType();
-		break;
+            {
+                KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+
+            break;
             case OT_POLYGON:
-                return dynamic_cast<KPPolygonObject*>( kpobject )->getFillType();
-                break;
+            {
+                KPPolygonObject*obj=dynamic_cast<KPPolygonObject*>( it.current() );
+                if(obj)
+                    return obj->getFillType();
+            }
+
+            break;
 	    default: break;
 	    }
 	}
