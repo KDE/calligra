@@ -29,7 +29,7 @@
 class QPainter;
 class QSize;
 
-class KoPictureBase;
+class KoPictureShared;
 
 /**
  * KoPicture is a container class
@@ -121,7 +121,7 @@ public:
      * Load a potentially broken XPM file (for KPresenter)
      */
     bool loadXpm(QIODevice* io);
-    
+
     /**
      * @deprecated
      * Returns a QPixmap from an image
@@ -132,18 +132,23 @@ public:
 protected:
     /**
      * @internal
-     * Load a WMF file (a .wmf file could be a QPicture file)
+     * Unregister shared data
      */
-    bool loadWmf(QIODevice* io);
+    void unlinkSharedData(void);
     /**
      * @internal
-     * Do a normal load
+     * Register shared data
      */
-    bool load(QIODevice* io);
+    void linkSharedData(void) const;
+    /**
+     * @internal
+     * Creare the shared data if needed
+     */
+    void KoPicture::createSharedData(void);
 
 protected:
     KoPictureKey m_key;
-    KoPictureBase* m_base;
+    KoPictureShared* m_sharedData;
 };
 
 #endif /* __koPicture_h__ */

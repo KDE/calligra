@@ -18,8 +18,8 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koFilter.cc koFilterChain.cpp \
 	koImage.cc koImageCollection.cc \
 	koClipart.cc koClipartCollection.cc \
-	koPictureKey.cc koPictureBase.cc koPicture.cc koPictureImage.cc \
-	koPictureClipart.cc koPictureCollection.cc \
+	koPictureKey.cc koPictureBase.cc koPicture.cc koPictureShared.cc \
+	koPictureImage.cc koPictureClipart.cc koPictureCollection.cc \
 	koDocumentInfo.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
@@ -38,11 +38,11 @@ include_HEADERS = koFilter.h koFilterChain.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
 	koImage.h koImageCollection.h koClipart.h koClipartCollection.h \
-	koPictureKey.h koPictureBase.h koPicture.h koPictureImage.h \
-	koPictureClipart.h koPictureCollection.h
+	koPictureKey.h koPictureBase.h koPicture.h koPictureShared.h \
+	koPictureImage.h koPictureClipart.h koPictureCollection.h
 
 noinst_HEADERS = koDocument_p.h \
-	koPictureBase.h koPictureImage.h koPictureClipart.h koPictureCollection.h
+	koPictureImage.h koPictureBase.h koPictureImage.h koPictureClipart.h
 
 kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
 kodocinfopropspage_la_LIBADD = ./libkofficecore.la

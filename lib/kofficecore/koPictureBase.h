@@ -74,21 +74,10 @@ public:
 
     virtual bool save(QIODevice* io);
 
-    virtual QString getExtension(void) const;
-
-    virtual void setExtension(const QString& extension);
-
     virtual QSize getOriginalSize(void) const;
-
-    virtual QSize getSize(void) const;
-
-    virtual void setSize(const QSize& size);
 
     virtual QPixmap generatePixmap(const QSize& size);
 
-protected:
-    QSize m_size;
-    QString m_extension;
 };
 
 #endif /* __koPictureBase_h__ */

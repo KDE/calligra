@@ -29,46 +29,12 @@
 #include "koPictureBase.h"
 #include "koPictureClipart.h"
 
-class KoPictureClipartPrivate : public QShared
-{
-public:
-    KoPictureClipartPrivate(void) : m_clipart(KoPictureType::formatVersionQPicture) {}
-    KoPictureClipartPrivate(QPicture& picture) : m_clipart(picture) {}
-public:
-    QPicture m_clipart;
-    QByteArray m_rawData;
-    QSize m_size;
-    QString m_extension;
-};
-
-
-KoPictureClipart::KoPictureClipart(void) : d(NULL)
+KoPictureClipart::KoPictureClipart(void) : m_clipart(KoPictureType::formatVersionQPicture)
 {
 }
 
 KoPictureClipart::~KoPictureClipart(void)
 {
-    if ( d && d->deref() )
-        delete d;
-}
-
-KoPictureClipart::KoPictureClipart(const KoPictureClipart& other)
-{
-    d = 0;
-    (*this) = other;
-}
-
-KoPictureClipart& KoPictureClipart::operator=(const KoPictureClipart& other)
-{
-    if (other.d)
-        other.d->ref();
-
-    if (d && d->deref())
-        delete d;
-
-    d=other.d;
-
-    return *this;
 }
 
 KoPictureBase* KoPictureClipart::newCopy(void) const
@@ -83,9 +49,7 @@ KoPictureType::Type KoPictureClipart::getType(void) const
 
 bool KoPictureClipart::isNull(void) const
 {
-    if (!d)
-        return true;
-    return d->m_clipart.isNull();
+    return m_clipart.isNull();
 }
 
 void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
@@ -110,31 +74,22 @@ void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
 
 void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    if ( !d )
-    {
-        kdWarning(30003) << "No private data " << this << endl;
-        return;
-    }
-    drawQPicture(d->m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
+    drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
 bool KoPictureClipart::load(QIODevice* io)
 {
-    if ( d && d->deref() )
-        delete d;
-
-    d = new KoPictureClipartPrivate;
     // First, read the raw data
-    d->m_rawData=io->readAll();
+    m_rawData=io->readAll();
 
     // Second, create the original clipart
-    kdDebug(30003) << "Trying to load clipart... (Size:" << d->m_rawData.size() << ")" << endl;
-    QBuffer buffer(d->m_rawData);
+    kdDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
+    QBuffer buffer(m_rawData);
     buffer.open(IO_ReadWrite);
     bool check = true;
-    if (d->m_extension=="svg")
+    if (m_extension=="svg")
     {
-        if (!d->m_clipart.load(&buffer, "svg"))
+        if (!m_clipart.load(&buffer, "svg"))
         {
             kdWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)" << endl;
             check = false;
@@ -142,7 +97,7 @@ bool KoPictureClipart::load(QIODevice* io)
     }
     else
     {
-        if (!d->m_clipart.load(&buffer, NULL))
+        if (!m_clipart.load(&buffer, NULL))
         {
             kdWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)" << endl;
             check = false;
@@ -154,61 +109,23 @@ bool KoPictureClipart::load(QIODevice* io)
 
 bool KoPictureClipart::save(QIODevice* io)
 {
-    if (!d)
-        return false;
-
     // We save the raw data, as the SVG supposrt in QPicture is poor
-    Q_ULONG size=io->writeBlock(d->m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
-    return (size==d->m_rawData.size());
+    Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    return (size==m_rawData.size());
 }
 
 bool KoPictureClipart::loadQPicture(QPicture& picture)
 {
-    if ( d && d->deref() )
-        delete d;
-
-    d = new KoPictureClipartPrivate(picture);
+    m_clipart=picture;
     return true;
 }
 
-void KoPictureClipart::setRawData( QIODevice* io )
+void KoPictureClipart::setRawData(const QByteArray& newRawData)
 {
-    if ( d ) {
-        io->open( IO_ReadOnly );
-        d->m_rawData = io->readAll();
-        io->close();
-    }
+    m_rawData=newRawData;
 }
 
 QSize KoPictureClipart::getOriginalSize(void) const
 {
-    if (!d)
-        return QSize(0,0);
-    return d->m_clipart.boundingRect().size();
-}
-
-QString KoPictureClipart::getExtension(void) const
-{
-    if ( !d )
-        return "null";
-    return d->m_extension;
-}
-
-void KoPictureClipart::setExtension(const QString& extension)
-{
-    if ( d )
-        d->m_extension = extension;
-}
-
-QSize KoPictureClipart::getSize(void) const
-{
-    if ( !d )
-        return QSize( -1, -1 );
-    return d->m_size;
-}
-
-void KoPictureClipart::setSize(const QSize& size)
-{
-    if ( d )
-        d->m_size = size;
+    return m_clipart.boundingRect().size();
 }

@@ -17,43 +17,53 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef __koPictureClipart_h__
-#define __koPictureClipart_h__
+#ifndef __koPictureShared_h__
+#define __koPictureShared_h__
 
+#include <qshared.h>
 #include <qstring.h>
-#include <qpicture.h>
+#include <qiodevice.h>
+#include <qpixmap.h>
+
+#include "koPictureKey.h"
 
 class QPainter;
 class QSize;
-class KoPictureClipartPrivate;
 
-// TODO: fix documentation
+class KoPictureBase;
 
 /**
- * KoPictureClipart is a container class
+ * KoPictureShared is the class that has the shared part of KoPicture
  */
-class KoPictureClipart : public KoPictureBase
+class KoPictureShared : public QShared
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureClipart();
+    KoPictureShared(void);
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureClipart();
+    ~KoPictureShared(void);
 
-    virtual KoPictureType::Type getType(void) const;
+    /**
+     * Copy constructor
+     */
+    KoPictureShared(const KoPictureShared &other);
 
-    virtual KoPictureBase* newCopy(void) const;
+    /**
+     * Assignment operator
+     */
+    KoPictureShared& operator=(const KoPictureShared& other);
 
+    KoPictureType::Type getType(void) const;
 
     /**
      * Returns true if the picture is null.
      */
-    virtual bool isNull(void) const;
+    bool isNull(void) const;
 
     /**
      * Draw the image in a painter.
@@ -70,39 +80,64 @@ public:
      * (@p sw, @p sh) specify the size of the pixmap that is to be drawn. The default, (-1, -1), means all the way to the bottom
      * right of the pixmap.
      */
-    virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
+    void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
 
-    virtual bool load(QIODevice* io);
+    bool load(QIODevice* io, const QString& extension);
 
-    virtual bool save(QIODevice* io);
+    bool save(QIODevice* io);
+
+    void setExtension(const QString& extension);
+
+    QString getExtension(void) const;
+
+    QSize getOriginalSize(void) const;
+
+    QSize getSize(void) const;
+
+    void setSize(const QSize& size);
 
     /**
-     * @internal
-     * (For KoPicture::loadWmf)
+     * Clear and set the mode of this KoPictureShared
+     *
+     * @p newMode is a file extension (like "png") giing the wanted mode
      */
-    bool loadQPicture(QPicture& picture);
+    void clearAndSetMode(const QString& newMode);
 
     /**
-     * @internal
-     * (For KoPicture::loadWmf)
+     * Reset the KoPictureShared (but not the key!)
      */
+    void clear(void);
 
-    void setRawData(const QByteArray& newRawData);
+    bool loadFromFile(const QString& fileName);
 
-    virtual QSize getOriginalSize(void) const;
+    /**
+     * Load a potentially broken XPM file (for KPresenter)
+     */
+    bool loadXpm(QIODevice* io);
+
+    /**
+     * @deprecated
+     * Returns a QPixmap from an image
+     * Returns an empty QPixmap if the KoPictureShared is not an image.
+     */
+    QPixmap generatePixmap(const QSize& size);
 
 protected:
-    QPixmap getPixmap(QImage& image);
     /**
-     * @internal (Draw a QPicture)
+     * @internal
+     * Load a WMF file (a .wmf file could be a QPicture file)
      */
-    void drawQPicture(QPicture& clipart, QPainter& painter,
-        int x, int y, int width, int height, int sx, int sy, int sw, int sh);
+    bool loadWmf(QIODevice* io);
+    /**
+     * @internal
+     * Do a normal load
+     */
+    bool load(QIODevice* io);
+
 protected:
-    QPicture m_clipart;
-    QByteArray m_rawData;
+    KoPictureBase* m_base;
     QSize m_size;
     QString m_extension;
 };
 
-#endif /* __koPictureClipart_h__ */
+#endif /* __koPictureShared_h__ */

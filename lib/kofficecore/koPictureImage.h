@@ -44,16 +44,6 @@ public:
      */
     virtual ~KoPictureImage();
 
-    /**
-     * Copy constructor
-     */
-    KoPictureImage(const KoPictureImage& other);
-
-    /**
-     * Assignment operator
-     */
-    KoPictureImage& operator=(const KoPictureImage& other);
-
     KoPictureType::Type getType(void) const;
 
     KoPictureBase* newCopy(void) const;
@@ -89,20 +79,16 @@ public:
 
     virtual QPixmap generatePixmap(const QSize& size);
 
-    virtual QString getExtension(void) const;
-
-    virtual void setExtension(const QString& extension);
-
-    virtual QSize getSize(void) const;
-
-    virtual void setSize(const QSize& size);
-
 protected:
     QPixmap getPixmap(QImage& image);
-    void scaleAndCreatePixmap(const QSize& size, bool fastMode=false) const;
-
-private:
-    KoPictureImagePrivate *d;
+    void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
+protected:
+public:
+    QImage  m_originalImage;
+    QByteArray m_rawData;
+    // No idea why it is a mutable, but as it was in KoImage I suppose that there is a reason.
+    mutable QPixmap m_cachedPixmap;
+    QSize m_cachedSize;
 };
 
 #endif /* __koPictureImage_h__ */

@@ -31,48 +31,12 @@
 #include "koPictureBase.h"
 #include "koPictureImage.h"
 
-class KoPictureImagePrivate : public QShared
-{
-public:
-    KoPictureImagePrivate() {}
-public:
-    QImage  m_originalImage;
-    QByteArray m_rawData;
-    // No idea why it is a mutable, but as it was in KoImage I suppose that there is a reason.
-    mutable QPixmap m_cachedPixmap;
-    QSize m_cachedSize;
-    QSize m_size;
-    QString m_extension;
-};
-
-
-KoPictureImage::KoPictureImage(void) : d(NULL)
+KoPictureImage::KoPictureImage(void)
 {
 }
 
 KoPictureImage::~KoPictureImage(void)
 {
-    if ( d && d->deref() )
-        delete d;
-}
-
-KoPictureImage::KoPictureImage(const KoPictureImage& other)
-{
-    d = 0;
-    (*this) = other;
-}
-
-KoPictureImage& KoPictureImage::operator=(const KoPictureImage& other)
-{
-    if (other.d)
-        other.d->ref();
-
-    if (d && d->deref())
-        delete d;
-
-    d=other.d;
-
-    return *this;
 }
 
 KoPictureBase* KoPictureImage::newCopy(void) const
@@ -87,17 +51,12 @@ KoPictureType::Type KoPictureImage::getType(void) const
 
 bool KoPictureImage::isNull(void) const
 {
-    if (!d)
-        return true;
-    return d->m_originalImage.isNull();
+    return m_originalImage.isNull();
 }
 
-void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode) const
+void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 {
-    if ( !d )
-        return;
-
-    if (size==d->m_cachedSize)
+    if (size==m_cachedSize)
     {
         // The cached pixmap has already the right size
         return;
@@ -117,13 +76,13 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode) cons
     // Use QImage::scale if we have fastMode==true
     if ( fastMode )
     {
-        image = d->m_originalImage.smoothScale( size );
+        image = m_originalImage.smoothScale( size );
     }
     else
     {
         //kdDebug() << "KoPictureImage::scale loading from raw data" << endl;
         QApplication::setOverrideCursor( Qt::waitCursor );
-        QBuffer buffer( d->m_rawData );
+        QBuffer buffer( m_rawData );
         buffer.open( IO_ReadOnly );
         QImageIO io( &buffer, 0 );
         QCString params;
@@ -144,14 +103,12 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode) cons
     }
 
     // Now create and cache the new pixmap
-    d->m_cachedPixmap=image;
-    d->m_cachedSize=size;
+    m_cachedPixmap=image;
+    m_cachedSize=size;
 }
 
 void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    if ( !d )
-        return;
     //kdDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
     if ( !width || !height )
         return;
@@ -168,7 +125,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
         painter.translate( x, y );
         painter.scale( xScale, yScale );
          // Note that sx, sy, sw and sh are unused in this case. Not a problem, since it's about printing.
-        painter.drawPixmap(0, 0, QPixmap(d->m_originalImage));
+        painter.drawPixmap(0, 0, QPixmap(m_originalImage));
         painter.restore();
 
     }
@@ -176,92 +133,52 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     {
         QSize screenSize( width, height );
         //kdDebug() << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
-        if  (screenSize!=d->m_cachedSize)
+        if  (screenSize!=m_cachedSize)
         {
             scaleAndCreatePixmap(screenSize);
         }
 
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
         // translates it to the (x,y) point -> we need (x+sx, y+sy).
-        painter.drawPixmap( x + sx, y + sy, d->m_cachedPixmap, sx, sy, sw, sh );
+        painter.drawPixmap( x + sx, y + sy, m_cachedPixmap, sx, sy, sw, sh );
     }
 }
 
 bool KoPictureImage::load(QIODevice* io)
 {
-    if ( d && d->deref() )
-        delete d;
-
-    d = new KoPictureImagePrivate;
-
     // First, read the raw data
-    d->m_rawData=io->readAll();
+    m_rawData=io->readAll();
 
     // Second, create the original image
-    QBuffer buffer(d->m_rawData);
+    QBuffer buffer(m_rawData);
     buffer.open(IO_ReadWrite);
     QImageIO imageIO(&buffer,NULL); // JPEG
 
     if (!imageIO.read())
     {
-        delete d;
-        d=NULL;
+        buffer.close();
         return false;
     }
     buffer.close();
-    d->m_originalImage=imageIO.image();
+    m_originalImage=imageIO.image();
 
     return true;
 }
 
 bool KoPictureImage::save(QIODevice* io)
 {
-    if (!d)
-        return false;
     // We save the raw data, to avoid damaging the file by many load/save cyvles (especially for JPEG)
-    Q_ULONG size=io->writeBlock(d->m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
-    return (size==d->m_rawData.size());
+    Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    return (size==m_rawData.size());
 }
 
 QSize KoPictureImage::getOriginalSize(void) const
 {
-    if (!d)
-        return QSize(0,0);
-    return d->m_originalImage.size();
+    return m_originalImage.size();
 }
 
 QPixmap KoPictureImage::generatePixmap(const QSize& size)
 {
-    if (d)
-    {
-        scaleAndCreatePixmap(size,true); // Alwas fast mode!
-        return d->m_cachedPixmap;
-    }
-    return QPixmap();
-}
-
-QString KoPictureImage::getExtension(void) const
-{
-    if ( !d )
-        return "null";
-    return d->m_extension;
-}
-
-void KoPictureImage::setExtension(const QString& extension)
-{
-    if ( d )
-        d->m_extension = extension;
-}
-
-QSize KoPictureImage::getSize(void) const
-{
-    if ( !d )
-        return QSize( -1, -1 );
-    return d->m_size;
-}
-
-void KoPictureImage::setSize(const QSize& size)
-{
-    if ( d )
-        d->m_size = size;
+    scaleAndCreatePixmap(size,true); // Alwas fast mode!
+    return m_cachedPixmap;
 }

@@ -27,7 +27,7 @@
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 
-KoPictureBase::KoPictureBase(void) : m_extension("null")
+KoPictureBase::KoPictureBase(void)
 {
 }
 
@@ -73,29 +73,9 @@ bool KoPictureBase::save(QIODevice*)
     return false;
 }
 
-QString KoPictureBase::getExtension(void) const
-{
-    return m_extension;
-}
-
-void KoPictureBase::setExtension(const QString& extension)
-{
-    m_extension=extension;
-}
-
 QSize KoPictureBase::getOriginalSize(void) const
 {
     return QSize(0,0);
-}
-
-QSize KoPictureBase::getSize(void) const
-{
-    return m_size;
-}
-
-void KoPictureBase::setSize(const QSize& size)
-{
-    m_size=size;
 }
 
 QPixmap KoPictureBase::generatePixmap(const QSize&)
