@@ -226,4 +226,12 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "2^3", KSpreadValue(8) );
   CHECK_EVAL( "2^3^2", KSpreadValue(512) );
   
+  // lead to division by zero
+  CHECK_EVAL( "0/0", KSpreadValue::errorDIV0() );
+  CHECK_EVAL( "1/0", KSpreadValue::errorDIV0() );
+  CHECK_EVAL( "-4/0", KSpreadValue::errorDIV0() );
+  CHECK_EVAL( "(2*3)/(6-2*3)", KSpreadValue::errorDIV0() );
+  CHECK_EVAL( "1e3+7/0", KSpreadValue::errorDIV0() );
+  CHECK_EVAL( "2^(99/0)", KSpreadValue::errorDIV0() );
+  
 }
