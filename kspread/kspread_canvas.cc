@@ -2536,6 +2536,7 @@ void KSpreadCanvas::updateSelection( const QRect & oldSelection,
 
 void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
 {
+kdDebug(36001)<<"+++paintSelectionChange"<<endl;
   const KSpreadTable *table = activeTable();
   if ( !table )
     return;
@@ -2552,13 +2553,15 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   bool bottomLeftSame = !newLeft && !newBottom;
   bool bottomRightSame = !newBottom && !newRight;
 
-
+kdDebug(36001)<<"area1: left: "<<area1.left()<<"  top: "<<area1.top()<<"  right: "<<area1.right()<<"  bottom: "<<area1.bottom()<<endl;
+kdDebug(36001)<<"area2: left: "<<area2.left()<<"  top: "<<area2.top()<<"  right: "<<area2.right()<<"  bottom: "<<area2.bottom()<<endl;
   if (!topLeftSame && !topRightSame && !bottomLeftSame && !bottomRightSame)
   {
     /* the two areas are not related. */
     /* since the marker/selection border extends into neighboring cells, we
        want to calculate all the cells bordering these regions.
     */
+kdDebug(36001)<<"+++paintSelectionChange1"<<endl;
     ExtendRectBorder(area1);
     ExtendRectBorder(area2);
     cellRegions.append(area1);
@@ -2566,6 +2569,7 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   }
   else
   {
+kdDebug(36001)<<"+++paintSelectionChange2"<<endl;
     /* at least one corner is the same -- let's only paint the extension
        on corners that are not the same
     */
