@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes) -I../libexport
+INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
 
 libhtmlimport_la_LDFLAGS = -module -avoid-version -no-undefined
 libhtmlexport_la_LDFLAGS = -module -avoid-version -no-undefined

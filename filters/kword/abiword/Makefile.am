@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes) -I../libexport
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
 
 libabiwordimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 libabiwordimport_la_LIBADD = $(KOFFICE_LIBS)
