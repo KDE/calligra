@@ -88,7 +88,7 @@ public:
     virtual QRect& dataArea() { return m_rctDataArea; }
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
 
-    KSpreadTable* table() { return m_pTable; }
+    KSpreadTable* table()const { return m_pTable; }
 
 signals:
     void changed( KSpreadCell *_obj );
@@ -619,19 +619,19 @@ public:
     /**
     * Check wether an entire row is selected in the current selection
     */
-    bool isRowSelected ();
+    bool isRowSelected ()const;
     /**
     * Check wether an entire row is selected in the selection rect of the argument
     */
-    bool isRowSelected (const QRect &_rect);
+    bool isRowSelected (const QRect &_rect)const;
     /**
     * Check wether an entire column is selected in the current selection
     */
-    bool isColumnSelected ();
+    bool isColumnSelected ()const;
     /**
     * Check wether the entire column is selected in the selection rect of the argument
     */
-    bool isColumnSelected (const QRect &_rect);
+    bool isColumnSelected (const QRect &_rect)const;
 
 
     /**
@@ -790,7 +790,7 @@ public:
      *
      * @see #painter
      */
-    QWidget* widget() { return m_pWidget; }
+    QWidget* widget()const { return m_pWidget; }
 
     /**
      * @return a flag that indicates whether the table should paint the page breaks.
@@ -884,7 +884,7 @@ public:
     * it's used to select if you want to insert at the bottom or right
     * @see #paste
      */
-    bool testAreaPasteInsert();
+    bool testAreaPasteInsert()const;
 
     /**
      * Deletes all cells in the given rectangle.

@@ -585,7 +585,6 @@ private:
       unsigned int    spellEndCellY;
       bool            spellCheckSelection;
       QStringList     ignoreWord;
-      //      KMacroCommand * macroCmdSpellCheck;
     } m_spell;
 
     bool spellSwitchToOtherTable();

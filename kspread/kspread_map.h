@@ -79,9 +79,9 @@ public:
   KSpreadTable* nextTable( KSpreadTable* );
   KSpreadTable* previousTable( KSpreadTable* );
 
-  KSpreadTable* initialActiveTable() { return m_initialActiveTable; }
-  int initialMarkerColumn() { return m_initialMarkerColumn; }
-  int initialMarkerRow() { return m_initialMarkerRow; }
+  KSpreadTable* initialActiveTable()const { return m_initialActiveTable; }
+  int initialMarkerColumn()const { return m_initialMarkerColumn; }
+  int initialMarkerRow()const { return m_initialMarkerRow; }
 
   /**
    * Use the @ref #nextTable function to get all the other tables.
@@ -112,7 +112,7 @@ public:
   /**
    * @return amount of tables in this map.
    */
-  int count() { return m_lstTables.count(); }
+  int count()const { return m_lstTables.count(); }
 
   void update();
 

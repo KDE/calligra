@@ -184,6 +184,12 @@ void KSpreadDoc::initConfig()
         setDontCheckUpperWord(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
         setDontCheckTitleCase(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
     }
+    if( config->hasGroup("KSpread Page Layout" ))
+    {
+      config->setGroup( "KSpread Page Layout" );
+      setUnit( (KoUnit::Unit)config->readNumEntry( "Default unit page" ,0));
+    }
+
 }
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
@@ -219,14 +225,14 @@ QDomDocument KSpreadDoc::saveXML()
 
   /* Backwards compatibility with KSpread < 1.2
      Looks like a hack, but it saves us to define an export filter for this issue.
-  
+
      In KSpread < 1.2, the paper format was per map, since 1.2 it's per sheet.
-     To enable KSpread < 1.2 to open these files, we store the page layout of the first sheet 
+     To enable KSpread < 1.2 to open these files, we store the page layout of the first sheet
      for the whole map as the map paper layout. */
   if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
   {
     KSpreadTable* firstTable = m_pMap->firstTable();
-    
+
     QDomElement paper = doc.createElement( "paper" );
     paper.setAttribute( "format", firstTable->paperFormatString() );
     paper.setAttribute( "orientation", firstTable->orientationString() );
@@ -278,7 +284,7 @@ QDomDocument KSpreadDoc::saveXML()
       right.appendChild( doc.createTextNode( firstTable->footRight() ) );
     }
   }
-  
+
   QDomElement locale = m_locale.save( doc );
   spread.appendChild( locale );
 
@@ -380,15 +386,15 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
           float right = borders.attribute( "right" ).toFloat();
           float top = borders.attribute( "top" ).toFloat();
           float bottom = borders.attribute( "bottom" ).toFloat();
-          
-          //apply to all tables  
+
+          //apply to all tables
           QPtrListIterator<KSpreadTable> it ( m_pMap->tableList() );
           for( ; it.current(); ++it )
           {
             it.current()->setPaperLayout( left, top, right, bottom, format, orientation );
           }
       }
-      
+
       QString hleft, hright, hcenter;
       QString fleft, fright, fcenter;
       // <head>
@@ -425,9 +431,9 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
         it.current()->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
       }
     }
-    
+
   }
-  
+
   emit sigProgress( 90 );
   initConfig();
   emit sigProgress(-1);

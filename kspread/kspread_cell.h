@@ -415,8 +415,8 @@ public:
     /**
      * return size of the text
      */
-    int textWidth() {return m_iOutTextWidth; }
-    int textHeight() {return m_iOutTextHeight; }
+    int textWidth()const {return m_iOutTextWidth; }
+    int textHeight()const {return m_iOutTextHeight; }
 
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
@@ -552,13 +552,13 @@ public:
    * @return the number of obscured cells in the horizontal direction as a
    *         result of cell merging (forced obscuring)
    */
-  int mergedXCells() {return m_iMergedXCells; }
+  int mergedXCells()const {return m_iMergedXCells; }
 
   /**
    * @return the number of obscured cells in the vertical direction as a
    *         result of cell merging (forced obscuring)
    */
-  int mergedYCells() {return m_iMergedYCells; }
+  int mergedYCells()const {return m_iMergedYCells; }
 
     /**
      * @return the amount of obscured cells in the horizontal direction
