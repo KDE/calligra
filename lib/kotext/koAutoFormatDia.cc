@@ -35,6 +35,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qtooltip.h>
 #include <kdebug.h>
 #include <knuminput.h>
 #include <kcompletion.h>
@@ -562,6 +563,7 @@ void KoAutoFormatDia::setupTab3()
              SLOT( slotAddEntry()));
 
     pbSpecialChar1 = new QPushButton( "...", tab3 );
+    QToolTip::add( pbSpecialChar1, i18n( "Insert a special character..." ) );
     pbSpecialChar1->setFixedWidth( 40 );
     grid->addWidget( pbSpecialChar1, 3, 2 );
 
@@ -581,6 +583,7 @@ void KoAutoFormatDia::setupTab3()
             SLOT( slotAddEntry()));
 
     pbSpecialChar2 = new QPushButton( "...", tab3 );
+    QToolTip::add( pbSpecialChar2, i18n( "Insert a special character..." ) );
     pbSpecialChar2->setFixedWidth( 40 );
     grid->addWidget( pbSpecialChar2, 3, 5 );
 
@@ -935,8 +938,16 @@ void KoAutoFormatDia::chooseSpecialChar1()
 {
     QString f = font().family();
     QChar c = ' ';
+    bool const focus = m_find->hasFocus();
     if ( KoCharSelectDia::selectChar( f, c, false ) )
-        m_find->setText( c );
+    {
+        int const cursorpos = m_find->cursorPosition();
+        if (focus)
+            m_find->setText( m_find->text().insert( cursorpos, c ) );
+        else
+            m_find->setText( m_find->text().append(c) );
+        m_find->setCursorPosition( cursorpos+1 );
+    }
 }
 
 
@@ -944,8 +955,16 @@ void KoAutoFormatDia::chooseSpecialChar2()
 {
     QString f = font().family();
     QChar c = ' ';
+    bool const focus = m_replace->hasFocus();
     if ( KoCharSelectDia::selectChar( f, c, false ) )
-        m_replace->setText( c );
+    {
+        int const cursorpos = m_replace->cursorPosition();
+        if (focus)
+            m_replace->setText( m_replace->text().insert(m_replace->cursorPosition(),  c ) );
+        else
+        m_replace->setText( m_replace->text().append(c) );
+        m_replace->setCursorPosition( cursorpos+1 );
+    }
 }
 
 
