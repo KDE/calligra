@@ -24,11 +24,14 @@ public:
 
 	void pseudoValues( int& v1, int& v2, int& v3 ) const;
 	void values(
-		double* v1 = 0L, double* v2 = 0L,
-		double* v3 = 0L, double* v4 = 0L ) const;
+		float* v1 = 0L, float* v2 = 0L,
+		float* v3 = 0L, float* v4 = 0L ) const;
 	void setValues(
-		const double* v1 = 0L, const double* v2 = 0L,
-		const double* v3 = 0L, const double* v4 = 0L );
+		const float* v1 = 0L, const float* v2 = 0L,
+		const float* v3 = 0L, const float* v4 = 0L );
+
+	float opacity() const { return m_opacity; }
+	void setOpacity( float opacity ) { m_opacity = opacity; }
 
 	VColorSpace colorSpace() const { return m_colorSpace; }
 	void setColorSpace( const VColorSpace colorSpace );
@@ -38,11 +41,12 @@ public:
 
 private:
 	void convertToColorSpace( const VColorSpace colorSpace,
-		double* v1 = 0L, double* v2 = 0L,
-		double* v3 = 0L, double* v4 = 0L ) const;
+		float* v1 = 0L, float* v2 = 0L,
+		float* v3 = 0L, float* v4 = 0L ) const;
 
 	VColorSpace m_colorSpace;
-	double m_value[4];
+	float m_value[4];
+	float m_opacity;
 
 	QString m_name;
 };

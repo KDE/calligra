@@ -7,10 +7,10 @@
 
 #include "vstroke.h"
 
-VStroke::VStroke( const double width, const VLineCap cap, const VLineJoin join,
-			const double miterLimit )
+VStroke::VStroke( float width, const VLineCap cap, const VLineJoin join,
+			float miterLimit )
 	: m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
-		m_miterLimit( miterLimit ), m_opacity( 255 )
+		m_miterLimit( miterLimit ), m_opacity( 1.0 ), m_dashOffset( 0.0 )
 {
 }
 

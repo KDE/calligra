@@ -8,6 +8,7 @@
 #include "vfill.h"
 
 VFill::VFill()
+	: m_opacity( 1.0 )
 {
 }
 

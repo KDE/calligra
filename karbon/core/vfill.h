@@ -14,11 +14,14 @@ class VFill
 public:
 	VFill();
 
+	float opacity() const { return m_opacity; }
+	void setOpacity( float opacity ) { m_opacity = opacity; }
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
 private:
-
+	float m_opacity;
 };
 
 #endif

@@ -31,14 +31,15 @@ public:
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	virtual QRect boundingBox( const double /*zoomFactor*/ ) const { return QRect(); }
+	virtual QRect boundingBox( const double /*zoomFactor*/ ) const
+		{ return QRect(); }
 	virtual bool intersects( const QRect& /*rect*/, const double /*zoomFactor*/ ) const
 		{ return false; };
 
-	void setState( const VState state ) { m_state = state; }
 	VState state() const { return m_state; }
+	void setState( const VState state ) { m_state = state; }
 
-	virtual VObject *clone() = 0;
+	virtual VObject* clone() = 0;
 
 	virtual void save( QDomElement& element ) const = 0;
 	virtual void load( const QDomElement& element ) = 0;

@@ -8,7 +8,7 @@
 #include "vcolor.h"
 
 VColor::VColor()
-	: m_colorSpace( rgb )
+	: m_colorSpace( rgb ), m_opacity( 1.0 )
 {
 	m_value[0] = 0.0;
 	m_value[1] = 0.0;
@@ -27,7 +27,7 @@ VColor::pseudoValues( int& v1, int& v2, int& v3 ) const
 	}
 	else
 	{
-		double copy[3];
+		float copy[3];
 
 		convertToColorSpace( rgb, &copy[0], &copy[1], &copy[2] );
 
@@ -39,8 +39,8 @@ VColor::pseudoValues( int& v1, int& v2, int& v3 ) const
 
 void
 VColor::values(
-	double* v1, double* v2,
-	double* v3, double* v4 ) const
+	float* v1, float* v2,
+	float* v3, float* v4 ) const
 {
 	if( v1 )
 		*v1 = m_value[0];
@@ -54,8 +54,8 @@ VColor::values(
 
 void
 VColor::setValues(
-	const double* v1, const double* v2,
-	const double* v3, const double* v4 )
+	const float* v1, const float* v2,
+	const float* v3, const float* v4 )
 {
 	if( v1 )
 		m_value[0] = *v1;
@@ -81,9 +81,9 @@ VColor::setColorSpace( const VColorSpace colorSpace )
 
 void
 VColor::convertToColorSpace( const VColorSpace colorSpace,
-	double* v1, double* v2, double* v3, double* v4 ) const
+	float* v1, float* v2, float* v3, float* v4 ) const
 {
-	double copy[4];
+	float copy[4];
 
 	if( colorSpace == rgb )
 	{
@@ -246,15 +246,15 @@ VColor::load( const QDomElement& element )
 	}
 
 	if( m_colorSpace == gray )
-		m_value[0] = element.attribute( "v", "0.0" ).toDouble();
+		m_value[0] = element.attribute( "v", "0.0" ).toFloat();
 	else
 	{
-		m_value[0] = element.attribute( "v1", "0.0" ).toDouble();
-		m_value[1] = element.attribute( "v2", "0.0" ).toDouble();
-		m_value[2] = element.attribute( "v3", "0.0" ).toDouble();
+		m_value[0] = element.attribute( "v1", "0.0" ).toFloat();
+		m_value[1] = element.attribute( "v2", "0.0" ).toFloat();
+		m_value[2] = element.attribute( "v3", "0.0" ).toFloat();
 
 		if( m_colorSpace == cmyk )
-			m_value[3] = element.attribute( "v4", "0.0" ).toDouble();
+			m_value[3] = element.attribute( "v4", "0.0" ).toFloat();
 	}
 
 	if( m_value[0] < 0.0 || m_value[0] > 1.0 )

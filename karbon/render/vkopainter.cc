@@ -186,9 +186,9 @@ VKoPainter::setPen( const QColor &c )
 	delete m_stroke;
 	m_stroke = new VStroke;
 	VColor color;
-	double r = double( c.red()   ) / 255.0;
-	double g = double( c.green() ) / 255.0;
-	double b = double( c.blue()  ) / 255.0;
+	float r = static_cast<float>( c.red()   ) / 255.0;
+	float g = static_cast<float>( c.green() ) / 255.0;
+	float b = static_cast<float>( c.blue()  ) / 255.0;
 	color.setValues( &r, &g, &b );
 	m_stroke->setColor( color );
 }
@@ -291,7 +291,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		// TODO : non rgb support ?
 
 		m_stroke->color().pseudoValues( r, g, b );
-		a = m_stroke->opacity();
+		a = qRound( 255 * m_stroke->opacity() );
 
 		// caps translation karbon -> art
 		if( m_stroke->lineCap() == VStroke::cap_butt )
