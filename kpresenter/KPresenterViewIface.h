@@ -43,7 +43,7 @@ k_dcop:
     virtual void editDelPage();
     virtual void editFind();
     virtual void editReplace();
-
+    virtual void editDeSelectAll();
     // view menu
     virtual void newView();
     virtual void viewShowSideBar();

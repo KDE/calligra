@@ -597,3 +597,7 @@ void KPresenterViewIface::applyAutoFormat()
     view->applyAutoFormat();
 }
 
+void KPresenterViewIface::editDeSelectAll()
+{
+    view->editDeSelectAll();
+}
