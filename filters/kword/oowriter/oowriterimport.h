@@ -52,6 +52,7 @@ private:
     void createStyles( QDomDocument &doc );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
+    void parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );

@@ -189,15 +189,9 @@ void OoWriterImport::createStyles( QDomDocument& doc )
     }
 }
 
-void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )
+void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
 {
-    QDomElement content = m_content.documentElement();
-
-    QDomNode body = content.namedItem( "office:body" );
-    if ( body.isNull() )
-        return;
-
-    for ( QDomNode text = body.firstChild(); !text.isNull(); text = text.nextSibling() )
+    for ( QDomNode text (parent.firstChild()); !text.isNull(); text = text.nextSibling() )
     {
         m_styleStack.save();
         QDomElement t = text.toElement();
@@ -214,6 +208,12 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
         else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
             e = parseList( doc, t );
         // TODO text:sequence-decls
+        else if ( name == "text:section" ) // Provisory support (###TODO)
+        {
+            kdDebug(30518) << "Section found!" << endl;
+            fillStyleStack( t );
+            parseBodyOrSimilar( doc, t, currentFramesetElement);
+        }
         else
         {
             kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
@@ -221,9 +221,23 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
             continue;
         }
 
-        mainFramesetElement.appendChild( e );
+        currentFramesetElement.appendChild( e );
         m_styleStack.restore(); // remove the styles added by the paragraph or list
     }
+}
+
+void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )
+{
+    QDomElement content = m_content.documentElement();
+
+    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    if ( body.isNull() )
+    {
+        kdError(30518) << "No office:body found!" << endl;
+        return;
+    }
+
+    parseBodyOrSimilar( doc, body, mainFramesetElement);
 }
 
 void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString& masterPageName )
