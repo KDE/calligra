@@ -151,7 +151,7 @@ void KSpreadSeriesDlg::slotOk()
     dstart = KGlobal::locale()->readNumber(start->text(), &ok);
     if (!ok)
     {
-      KMessageBox::error(this, i18n("The start value is no valid number!"));
+      KMessageBox::error(this, i18n("The start value is not a valid number!"));
       start->setFocus();
       return;
     }
@@ -159,7 +159,7 @@ void KSpreadSeriesDlg::slotOk()
     dend   = KGlobal::locale()->readNumber(end->text(),   &ok);
     if (!ok)
     {
-      KMessageBox::error(this, i18n("The end value is no valid number!"));
+      KMessageBox::error(this, i18n("The end value is not a valid number!"));
       end->setFocus();
       return;
     }
@@ -167,7 +167,7 @@ void KSpreadSeriesDlg::slotOk()
     dstep  = KGlobal::locale()->readNumber(step->text(),  &ok);
     if (!ok)
     {
-      KMessageBox::error(this, i18n("The step value is no valid number!"));
+      KMessageBox::error(this, i18n("The step value is not a valid number!"));
       step->setFocus();
       return;
     }

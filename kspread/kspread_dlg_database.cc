@@ -436,7 +436,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   if ( str.isEmpty() )
   {
     KMessageBox::error( this, i18n("No database drivers available! You need "
-                                   "to compile QT with the necessary drivers.") );
+                                   "to compile Qt with the necessary drivers.") );
   }
 
   helpButton()->hide();
@@ -722,7 +722,7 @@ bool KSpreadDatabaseDlg::databaseDoNext()
       
       if ( tableList.isEmpty() )
       {
-        KMessageBox::error( this, i18n("This database contains no table") );
+        KMessageBox::error( this, i18n("This database contains no tables") );
         return false;
       }
 
@@ -764,7 +764,7 @@ bool KSpreadDatabaseDlg::databaseDoNext()
   }
   else
   {
-    KMessageBox::error( this, i18n("Driver couldn't be loaded") );
+    KMessageBox::error( this, i18n("Driver could not be loaded") );
     m_databaseStatus->setText( " " );
     return false;
   }
@@ -964,8 +964,8 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     if ( ( m_operatorValue_1->text().find('*') != -1 )
          || ( m_operatorValue_1->text().find('?') != -1 ) )
     {
-      int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are no valid wildcards in SQL. "
-                                                      " The proper replacements are '%' or '_'. Do you want to replace them?") );
+      int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
+                                                      "The proper replacements are '%' or '_'. Do you want to replace them?") );
 
       if ( res == KMessageBox::Yes )
         m_operatorValue_1->setText(exchangeWildcards(m_operatorValue_1->text()));
@@ -977,8 +977,8 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     if ( ( m_operatorValue_2->text().find('*') != -1 )
          || ( m_operatorValue_2->text().find('?') != -1 ) )
     {
-      int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are no valid wildcards in SQL. "
-                                                      " The proper replacements are '%' or '_'. Do you want to replace them?") );
+      int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
+                                                      "The proper replacements are '%' or '_'. Do you want to replace them?") );
 
       if ( res == KMessageBox::Yes )
         m_operatorValue_2->setText(exchangeWildcards(m_operatorValue_2->text()));
@@ -990,8 +990,8 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     if ( ( m_operatorValue_3->text().find('*') != -1 )
          || ( m_operatorValue_3->text().find('?') != -1 ) )
     {
-      int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are no valid wildcards in SQL. "
-                                                      " The proper replacements are '%' or '_'. Do you want to replace them?") );
+      int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
+                                                      "The proper replacements are '%' or '_'. Do you want to replace them?") );
 
       if ( res == KMessageBox::Yes )
         m_operatorValue_3->setText(exchangeWildcards(m_operatorValue_3->text()));

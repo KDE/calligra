@@ -426,7 +426,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcSum, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcSum->setExclusiveGroup( "Calc" );
-  m_menuCalcSum->setToolTip(i18n("Calculate using sum."));
+  m_menuCalcSum->setToolTip(i18n("Calculate using sum"));
 
   /*******************************/
   m_menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(),
@@ -434,7 +434,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcMin, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcMin->setExclusiveGroup( "Calc" );
-  m_menuCalcMin->setToolTip(i18n("Calculate using minimum."));
+  m_menuCalcMin->setToolTip(i18n("Calculate using minimum"));
 
   /*******************************/
   m_menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(),
@@ -442,7 +442,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcMax, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcMax->setExclusiveGroup( "Calc" );
-  m_menuCalcMax->setToolTip(i18n("Calculate using maximum."));
+  m_menuCalcMax->setToolTip(i18n("Calculate using maximum"));
 
   /*******************************/
   m_menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(),
@@ -450,7 +450,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcAverage, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcAverage->setExclusiveGroup( "Calc" );
-  m_menuCalcAverage->setToolTip(i18n("Calculate using average."));
+  m_menuCalcAverage->setToolTip(i18n("Calculate using average"));
 
   /*******************************/
   m_menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(),
@@ -458,7 +458,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcCount, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcCount->setExclusiveGroup( "Calc" );
-  m_menuCalcCount->setToolTip(i18n("Calculate using the count."));
+  m_menuCalcCount->setToolTip(i18n("Calculate using the count"));
 
 
   /*******************************/
@@ -467,7 +467,7 @@ void KSpreadView::initializeCalcActions()
   connect( m_menuCalcNone, SIGNAL( toggled( bool ) ), this,
            SLOT( menuCalc( bool ) ) );
   m_menuCalcNone->setExclusiveGroup( "Calc" );
-  m_menuCalcNone->setToolTip(i18n("No calculation."));
+  m_menuCalcNone->setToolTip(i18n("No calculation"));
 
   /*******************************/
 }

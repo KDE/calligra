@@ -122,7 +122,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   sort3BoxLayout->addWidget( m_sortOrder3 );
 
   page1Layout->addWidget( sort3Box, 2, 0 );
-  m_tabWidget->insertTab( m_page1, i18n( "Sort criterions" ) );
+  m_tabWidget->insertTab( m_page1, i18n( "Sort criteria" ) );
 
 
   // options page
