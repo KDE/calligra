@@ -469,6 +469,9 @@ bool Canvas::eventFilter (QObject *o, QEvent *e)
             ((SelectionTool *)
              toolController->getActiveTool ())->processTabKeyEvent (document,this);
       }
+      else if(toolController->getActiveTool ()->id()!=Tool::ToolText
+              && ke->key()== Key_Backspace)
+          emit backSpaceCalled();
       else
          keyPressEvent (ke);
       return true;

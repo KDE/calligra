@@ -137,6 +137,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
     connect (activeDocument(),SIGNAL(pageChanged()),canvas,SLOT(repaint()));
     connect (activeDocument(),SIGNAL(pageChanged()),this,SLOT(refreshLayerPanel()));
+    connect (canvas, SIGNAL( backSpaceCalled()),this,SLOT(slotDelete()));
     readConfig();
 }
 

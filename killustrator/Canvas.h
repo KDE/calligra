@@ -52,16 +52,16 @@ public:
 
   void setDocument (GDocument* doc);
   GDocument* getDocument () const { return document; };
-  
+
   void setZoomFactor (float factor, int centerX, int centerY);
   void setZoomFactor (float factor);
   float getZoomFactor () const { return zoomFactor; };
 
   float scaleFactor () const { return resolution * zoomFactor / 72.0; };
-  
+
   //int xOffset () const {return mXOffset; };
   //int yOffset () const {return mYOffset; };
-  
+
   //put the given point in the center of the canvas
   //x and y are relative to the center of the paper
   void center(int x=0, int y=0);
@@ -108,7 +108,7 @@ protected:
   void adjustScrollBarPositions3(int x, int y);
   void adjustVisibleArea4();
   void adjustRelativePaperArea5();
-  
+
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
 
@@ -121,7 +121,7 @@ protected:
   void paintEvent (QPaintEvent *e);
   void moveEvent (QMoveEvent *e);
   void resizeEvent (QResizeEvent *e);
-  
+
 signals:
   void rightButtonAtObjectClicked (int x, int y, GObject *obj);
   void rightButtonAtSelectionClicked (int x, int y);
@@ -133,11 +133,12 @@ signals:
 
   void mousePositionChanged (int x, int y);
 
+    void backSpaceCalled();
 public slots:
   void updateRegion (const Rect& r);
   void ensureVisibility (bool flag);
   void docSizeChanged();
-  
+
   void addHelpline (int x, int y, bool horizH);
   void drawTmpHelpline (int x, int y, bool horizH);
 
@@ -147,8 +148,8 @@ private slots:
 
 private:
   GDocument *document;
-  
-  
+
+
   void propagateMouseEvent (QMouseEvent *e);
   void drawGrid (QPainter& p);
   void drawHelplines (QPainter& p);
@@ -167,7 +168,7 @@ private:
 
   float tmpHorizHelpline, tmpVertHelpline;
 
-  
+
   bool dragging:1;
   bool ensureVisibilityFlag:1;
   bool drawBasePoints:1;
