@@ -109,7 +109,7 @@ void
 drawPage( VPainter *p )
 {
 #define LEFT   20
-#define RIGHT  600
+#define RIGHT  550
 #define BOTTOM 20
 #define TOP    830
 
