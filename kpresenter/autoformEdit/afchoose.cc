@@ -192,4 +192,10 @@ void AFChoose::cancelClicked()
     emit afchooseCanceled();
 }
 
+void AFChoose::closeEvent ( QCloseEvent *e )
+{
+    emit afchooseCanceled();
+    QTabDialog::closeEvent ( e );
+}
+
 #include <afchoose.moc>

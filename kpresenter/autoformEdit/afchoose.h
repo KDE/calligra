@@ -78,6 +78,9 @@ private slots:
 
   void cancelClicked();
 
+protected:
+  void closeEvent ( QCloseEvent * );
+
 signals:
 
   //autoform chosen
