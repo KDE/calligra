@@ -11,7 +11,7 @@ Fixes:
 - Fixed that the width/height of an rotated object could be negative
 - Fixed copy and paste when one pic is in the copied objects
 - Fixed crash in history of group/ungroup commands
-
+- Ignore sticky objects when duplicating a page
 
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis

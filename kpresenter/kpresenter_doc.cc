@@ -3545,13 +3545,13 @@ void KPresenterDoc::movePage( int from, int to )
 void KPresenterDoc::copyOasisPage( int from )
 {
     _clean = false;
-    _duplicatePage=true;
+    _duplicatePage=true; // ### now also set via saveOasisPage() parameter below
 
     kdDebug(33001) << "KPresenterDoc::copyOasisPage from=" << from << " to=" << from + 1 << endl;
     bool wasSelected = isSlideSelected( from );
     KTempFile tempFile( QString::null, ".oop" );
     tempFile.setAutoDelete( true );
-    saveOasisPage( tempFile.name(), from );
+    saveOasisPage( tempFile.name(), from, true );
 
     //insert page.
     KPrPage *newpage = new KPrPage( this, m_masterPage );
@@ -3575,13 +3575,13 @@ void KPresenterDoc::copyOasisPage( int from )
 void KPresenterDoc::copyPage( int from )
 {
     _clean = false;
-    _duplicatePage=true;
+    _duplicatePage=true; // ### now also set via savePage() parameter below
 
     kdDebug(33001) << "KPresenterDoc::copyPage from=" << from << " to=" << from + 1 << endl;
     bool wasSelected = isSlideSelected( from );
     KTempFile tempFile( QString::null, ".kpr" );
     tempFile.setAutoDelete( true );
-    savePage( tempFile.name(), from );
+    savePage( tempFile.name(), from, true );
 
     //insert page.
     KPrPage *newpage = new KPrPage( this, m_masterPage );
