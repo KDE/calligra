@@ -372,14 +372,13 @@ void KWDocStructRootItem::setupFormulaFrames()
     QString _name;
     KWDocStructFormulaItem *child;
 
-    int j = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
         if ( frameset->type() == FT_FORMULA &&
             frameset->getNumFrames()>0  )
         {
-            _name=i18n("Formula frame %1").arg(QString::number(++j));
+            _name=i18n("Formula frame %1").arg(QString::number(i+1));
             child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
         }
