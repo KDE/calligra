@@ -1,5 +1,5 @@
 usr/bin/krita
-usr/lib/krita*
+usr/lib/krita.*
 usr/lib/kde3/libkritapart.la
 usr/lib/kde3/libkritapart.so
 usr/lib/kde3/libmagickimport.la

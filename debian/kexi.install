@@ -7,7 +7,6 @@ usr/lib/kde3/kwmailmerge_kexi.so
 usr/lib/kde3/libkexipart.la
 usr/lib/kde3/libkexipart.so
 usr/lib/kexi.*
-usr/lib/kexicsvimport.*
 usr/lib/kexitablefilters.*
 usr/lib/libcql.*
 usr/lib/libcqlcommon.*

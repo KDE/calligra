@@ -230,6 +230,9 @@ binary-common:
 	      DH_OPTIONS='' dh_shlibdeps -p$$pkg ;; \
 	    koffice-* ) \
 	      DH_OPTIONS='' dh_shlibdeps -p$$pkg -ldebian/koffice-libs/usr/lib ;; \
+	    kexi ) \
+	      DH_OPTIONS='' dh_shlibdeps -p$$pkg \
+	        -ldebian/koffice-libs/usr/lib:debian/kugar/usr/lib:debian/$$pkg/usr/lib ;; \
 	    * ) \
 	      DH_OPTIONS='' dh_shlibdeps -p$$pkg \
 	        -ldebian/koffice-libs/usr/lib:debian/$$pkg/usr/lib ;; \
