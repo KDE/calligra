@@ -293,7 +293,7 @@ void KWView::setupActions()
     // -------------- Insert actions
     (void) new KAction( i18n( "&Table" ), "table", 0,
                         this, SLOT( insertTable() ),
-                        actionCollection(), "inline_table" );
+                        actionCollection(), "insert_table" );
 
     actionInsertPicture = new KAction( i18n( "&Picture Inline..." ),"inline_image", Key_F2,
                         this, SLOT( insertPicture() ),
