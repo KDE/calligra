@@ -1056,7 +1056,7 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
     width=QMAX(width,minFrameWidth);
 
     if(! redoFrame.isEmpty()) {
-        KWFrame *f=redoFrameset.at(0)->frame(0);
+        KWFrame *f = redoFrame.at(0);
         width=f->width() + f->leftBorder().width() + f->rightBorder().width();
     }
 
