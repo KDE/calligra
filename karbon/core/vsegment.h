@@ -12,10 +12,18 @@
 // all classes which have to traverse a segment list should derive from this class.
 // it hides the implementation details of segments.
 
+
+class VSegment;
+typedef QPtrList<VSegment> VSegmentList;
+typedef QPtrListIterator<VSegment> VSegmentListIterator;
+
+
 class VSegmentListTraverser
 {
 public:
 	VSegmentListTraverser();
+
+	bool traverse( const VSegmentList& list );
 
 	// if one of these operations should fail, it returns false:
 	virtual bool begin( const KoPoint& p ) = 0;
@@ -31,11 +39,6 @@ public:
 private:
 	KoPoint m_previousPoint;
 };
-
-
-class VSegment;
-typedef QPtrList<VSegment> VSegmentList;
-typedef QPtrListIterator<VSegment> VSegmentListIterator;
 
 
 // line- and all the various other (bezier-)segment types are so similar in practise
@@ -72,8 +75,6 @@ public:
 
 	void setPoint( uint i, const KoPoint& p )
 		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
-
-	static bool traverse( const VSegmentList& list, VSegmentListTraverser& traverser );
 
 private:
 	VSegmentType m_type;

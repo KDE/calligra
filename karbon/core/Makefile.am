@@ -18,6 +18,7 @@ noinst_HEADERS = \
 	vpath_fill.h \
 	vpath_stroke.h \
 	vsegment.h \
+	vsegment_tools.h \
 	vstroke.h
 
 libkarboncore_la_SOURCES = \
@@ -30,6 +31,7 @@ libkarboncore_la_SOURCES = \
 	vpath_fill.cc \
 	vpath_stroke.cc \
 	vsegment.cc \
+	vsegment_tools.cc \
 	vstroke.cc
 
 libkarboncore_la_METASOURCES = \

@@ -198,7 +198,7 @@ KarbonView::zoomChanged()
 void
 KarbonView::initActions()
 {
-	// edit
+	// edit ----->
 	KStdAction::cut( this,
 		SLOT( editCut() ), actionCollection(), "edit_cut" );
 	KStdAction::copy( this,
@@ -216,8 +216,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&History" ), 0, 0, this,
 		SLOT( editPurgeHistory() ), actionCollection(), "edit_purge_history" );
+	// edit <-----
 
-	// tools:
+	// tools ----->
 	m_ellipseToolAction = new KToggleAction(
 		i18n( "&Ellipse" ), "ellipse", 0, this,
 		SLOT( ellipseTool() ), actionCollection(), "tool_ellipse" );
@@ -251,8 +252,9 @@ KarbonView::initActions()
 	m_selectToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
+	// tools <-----
 
-	// zoom:
+	// zoom ----->
 	m_zoomAction = new KSelectAction(
 		i18n( "&Zoom" ), 0, this,
 		SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
@@ -269,6 +271,7 @@ KarbonView::initActions()
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );
+	// zoom <-----
 }
 
 void

@@ -3,9 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <koRect.h>
-
 #include "vpath_bounding.h"
+#include "vsegment_tools.h"
 
 VPathBounding::VPathBounding()
 	: VSegmentListTraverser()
@@ -13,52 +12,93 @@ VPathBounding::VPathBounding()
 }
 
 void
-VPathBounding::calculate( KoRect& rect, const VSegmentList& list  )
+VPathBounding::calculate( QRect& rect, const double zoomFactor, const VSegmentList& list )
 {
-	m_rect = &rect;
+	m_zoomFactor = zoomFactor;
+	traverse( list );
+	rect = m_pa.boundingRect();
+}
 
-	VSegment::traverse( list, *this );
+bool
+VPathBounding::intersects( const QRect& rect, const double zoomFactor, const VSegmentList& list )
+{
+	m_zoomFactor = zoomFactor;
+	traverse( list );
+
+	if( !m_pa.boundingRect().intersects( rect ) )
+		return false;
+
+	// check for line intersections:
+	for( uint i = 1; i < m_pa.count(); ++i )
+	{
+		if( VSegmentTools::linesIntersect(
+			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
+			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
+			KoPoint( rect.left(), rect.top() ),
+			KoPoint( rect.right(), rect.top() ) ) )
+				return true;
+		if( VSegmentTools::linesIntersect(
+			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
+			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
+			KoPoint( rect.right(), rect.top() ),
+			KoPoint( rect.right(), rect.bottom() ) ) )
+				return true;
+		if( VSegmentTools::linesIntersect(
+			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
+			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
+			KoPoint( rect.right(), rect.bottom() ),
+			KoPoint( rect.left(), rect.bottom() ) ) )
+				return true;
+		if( VSegmentTools::linesIntersect(
+			KoPoint( m_pa.point( i - 1 ).x(), m_pa.point( i - 1 ).y() ),
+			KoPoint( m_pa.point( i ).x(), m_pa.point( i ).y() ),
+			KoPoint( rect.left(), rect.bottom() ),
+			KoPoint( rect.left(), rect.top() ) ) )
+				return true;
+	}
+
+	// check if rect is completely inside m_pa:
+
+	return false;
 }
 
 bool
 VPathBounding::begin( const KoPoint& p )
 {
-	m_rect->setCoords( p.x(), p.y(), p.x(), p.y() );
-
-	setPreviousPoint( p );
+	m_pa.resize( 1 );
+	m_pa.setPoint(
+		0,
+		qRound( m_zoomFactor * p.x() ),
+		qRound( m_zoomFactor * p.y() ) );
 
 	return true;
 }
 
 bool
-VPathBounding::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathBounding::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
-	if( p1.x() < m_rect->left() )
-		m_rect->setLeft( p1.x() );
-	else if( p1.x() > m_rect->right() )
-		m_rect->setRight( p1.x() );
-	if( p1.y() > m_rect->top() )
-		m_rect->setTop( p1.y() );
-	else if( p1.y() < m_rect->bottom() )
-		m_rect->setBottom( p1.y() );
+	QPointArray pa( 4 );
+	pa.setPoint(
+		0,
+		qRound( m_zoomFactor * previousPoint().x() ),
+		qRound( m_zoomFactor * previousPoint().y() ) );
+	pa.setPoint(
+		1,
+		qRound( m_zoomFactor * p1.x() ),
+		qRound( m_zoomFactor * p1.y() ) );
+	pa.setPoint(
+		2,
+		qRound( m_zoomFactor * p2.x() ),
+		qRound( m_zoomFactor * p2.y() ) );
+	pa.setPoint(
+		3,
+		qRound( m_zoomFactor * p3.x() ),
+		qRound( m_zoomFactor * p3.y() ) );
 
-	if( p2.x() < m_rect->left() )
-		m_rect->setLeft( p2.x() );
-	else if( p2.x() > m_rect->right() )
-		m_rect->setRight( p2.x() );
-	if( p2.y() > m_rect->top() )
-		m_rect->setTop( p2.y() );
-	else if( p2.y() < m_rect->bottom() )
-		m_rect->setBottom( p2.y() );
+	QPointArray pa2( pa.cubicBezier() );
 
-	if( p3.x() < m_rect->left() )
-		m_rect->setLeft( p3.x() );
-	else if( p3.x() > m_rect->right() )
-		m_rect->setRight( p3.x() );
-	if( p3.y() > m_rect->top() )
-		m_rect->setTop( p3.y() );
-	else if( p3.y() < m_rect->bottom() )
-		m_rect->setBottom( p3.y() );
+	m_pa.resize( m_pa.size() + pa2.size() );
+	m_pa.putPoints( m_pa.size() - pa2.size(), pa2.size(), pa2 );
 
 	setPreviousPoint( p3 );
 
@@ -68,14 +108,10 @@ VPathBounding::curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3
 bool
 VPathBounding::lineTo( const KoPoint& p )
 {
-	if( p.x() < m_rect->left() )
-		m_rect->setLeft( p.x() );
-	else if( p.x() > m_rect->right() )
-		m_rect->setRight( p.x() );
-	if( p.y() > m_rect->top() )
-		m_rect->setTop( p.y() );
-	else if( p.y() < m_rect->bottom() )
-		m_rect->setBottom( p.y() );
+	m_pa.resize( m_pa.size() + 1 );
+	m_pa.setPoint( m_pa.size() - 1,
+		qRound( m_zoomFactor * p.x() ),
+		qRound( m_zoomFactor * p.y() ) );
 
 	setPreviousPoint( p );
 

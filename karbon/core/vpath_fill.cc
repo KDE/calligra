@@ -18,7 +18,6 @@ VPathFill::begin_draw( QPainter& painter, const double zoomFactor )
 {
 	m_painter = &painter;
 	m_zoomFactor = zoomFactor;
-	m_pa.resize( 0 );
 	m_hasHoles = false;
 }
 
@@ -28,7 +27,7 @@ VPathFill::draw( const VSegmentList& list, bool hole )
 	if( hole )
 		m_hasHoles = true;
 
-	VSegment::traverse( list, *this );
+	traverse( list );
 
 	// append the first point again to avoid mess with holes:
 	m_pa.resize( m_pa.size() + 1 );
@@ -47,8 +46,9 @@ VPathFill::end_draw()
 bool
 VPathFill::begin( const KoPoint& p )
 {
-	m_pa.resize( m_pa.size() + 1 );
-	m_pa.setPoint( m_pa.size() - 1,
+	m_pa.resize( 1 );
+	m_pa.setPoint(
+		0,
 		qRound( m_zoomFactor * p.x() ),
 		qRound( m_zoomFactor * p.y() ) );
 
@@ -61,16 +61,20 @@ bool
 VPathFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	QPointArray pa( 4 );
-	pa.setPoint( 0,
+	pa.setPoint(
+		0,
 		qRound( m_zoomFactor * previousPoint().x() ),
 		qRound( m_zoomFactor * previousPoint().y() ) );
-	pa.setPoint( 1,
+	pa.setPoint(
+		1,
 		qRound( m_zoomFactor * p1.x() ),
 		qRound( m_zoomFactor * p1.y() ) );
-	pa.setPoint( 2,
+	pa.setPoint(
+		2,
 		qRound( m_zoomFactor * p2.x() ),
 		qRound( m_zoomFactor * p2.y() ) );
-	pa.setPoint( 3,
+	pa.setPoint(
+		3,
 		qRound( m_zoomFactor * p3.x() ),
 		qRound( m_zoomFactor * p3.y() ) );
 

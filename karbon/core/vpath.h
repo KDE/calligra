@@ -6,13 +6,14 @@
 #ifndef __VPATH_H__
 #define __VPATH_H__
 
-#include <qptrlist.h>
 #include <qpointarray.h>
+#include <qptrlist.h>
+
 #include <koPoint.h>
 
-#include "vpath_stroke.h"
-#include "vpath_fill.h"
 #include "vobject.h"
+#include "vpath_fill.h"
+#include "vpath_stroke.h"
 #include "vsegment.h"
 
 class QWMatrix;
@@ -123,8 +124,8 @@ public:
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
 
-	virtual KoRect boundingBox() const;
 	virtual QRect boundingBox( const double zoomFactor ) const;
+	virtual bool intersects( const QRect& rect, const double zoomFactor ) const;
 
 	virtual VObject* clone();
 

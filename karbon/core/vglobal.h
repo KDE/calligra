@@ -18,7 +18,7 @@ namespace VGlobal
 	const double sqrt2		=  1.41421356237309504880;	// sqrt(2)
 	const double one_7		=  0.14285714285714285714;	// 1/7
 
-	const double bezierFlatnessTolerance	= 0.5;
+	const double flatnessTolerance	= 0.5;
 }
 
 #endif

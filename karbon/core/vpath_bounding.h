@@ -6,16 +6,19 @@
 #ifndef __VPATHBOUNDING_H__
 #define __VPATHBOUNDING_H__
 
+#include <qpointarray.h>
+
 #include "vsegment.h"
 
-class KoRect;
+class QRect;
 
 class VPathBounding : public VSegmentListTraverser
 {
 public:
 	VPathBounding();
 
-	void calculate( KoRect& rect, const VSegmentList& list  );
+	void calculate( QRect& rect, const double zoomFactor, const VSegmentList& list );
+	bool intersects( const QRect& rect, const double zoomFactor, const VSegmentList& list );
 
 	virtual bool begin( const KoPoint& p );
 	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
@@ -28,7 +31,8 @@ public:
 		{ return lineTo( p ); }
 
 private:
-	KoRect* m_rect;
+	double m_zoomFactor;
+	QPointArray m_pa;
 };
 
 #endif

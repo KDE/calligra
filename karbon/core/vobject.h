@@ -9,8 +9,6 @@
 #include <qptrlist.h>
 #include <qrect.h>
 
-#include <koRect.h>
-
 class QPainter;
 class QWMatrix;
 
@@ -32,8 +30,9 @@ public:
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	virtual KoRect boundingBox() const { return KoRect(); }
 	virtual QRect boundingBox( const double zoomFactor ) const { return QRect(); }
+	virtual bool intersects( const QRect& rect, const double zoomFactor ) const
+		{ return false; };
 
 	void setState( const VState state ) { m_state = state; }
 	VState state() const { return m_state; }

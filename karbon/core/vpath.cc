@@ -4,12 +4,13 @@
 */
 
 #include <math.h>
-#include <koPoint.h>
-#include <koRect.h>
+
 #include <qpainter.h>
 #include <qwmatrix.h>
 
-#include "vglobal.h"
+#include <koPoint.h>
+#include <koRect.h>
+
 #include "vpath.h"
 #include "vpath_bounding.h"
 
@@ -403,32 +404,24 @@ VPath::transform( const QWMatrix& m )
 	return *this;
 }
 
-KoRect
-VPath::boundingBox() const
-{
-	KoRect rect;
-	VPathBounding bb;
-
-	bb.calculate( rect, m_segments );
-// TODO: swap coords to optimize normalize() away
-	return rect.normalize();
-}
-
 QRect
 VPath::boundingBox( const double zoomFactor ) const
 {
-	KoRect rect = boundingBox();
-
-	return QRect(
-		qRound( zoomFactor * rect.left() ),
-		qRound( zoomFactor * rect.top() ),
-		qRound( zoomFactor * rect.right() ),
-		qRound( zoomFactor * rect.bottom() ) );
+	QRect rect;
+	VPathBounding bb;
+	bb.calculate( rect, zoomFactor, m_segments );
+	return rect;
 }
 
-VObject *
+bool
+VPath::intersects( const QRect& rect, const double zoomFactor ) const
+{
+	VPathBounding bb;
+	return bb.intersects( rect, zoomFactor, m_segments );
+}
+
+VObject*
 VPath::clone()
 {
 	return new VPath( *this );
 }
-

@@ -11,8 +11,6 @@
 
 #include "vobject.h"
 
-class KoRect;
-
 // all vobjects exist inside a layer.
 
 class VLayer
@@ -21,11 +19,13 @@ public:
 	VLayer();
 	~VLayer();
 
-	void draw( QPainter& painter, const QRect& rect, const double& zoomFactor );
+	void draw( QPainter& painter, const QRect& rect,
+		const double zoomFactor );
 
 	void insertObject( const VObject* object );
 
-	VObjectList objectsWithinRect( const KoRect& rect );
+	VObjectList objectsWithinRect( const QRect& rect,
+		const double zoomFactor ) const;
 
 	// clean up object list:
 	void removeDeletedObjects();

@@ -9,6 +9,7 @@
 #include "vtool.h"
 
 class KarbonPart;
+class KarbonView;
 
 // A singleton state to select object(s)
 
@@ -28,6 +29,7 @@ protected:
 
 private:
 	static VMToolSelect* s_instance;
+	KarbonView* m_view;	// to get zoomFactor
 	enum { NoTransform, Moving, Scaling, Rotating } m_TransformState;
 };
 

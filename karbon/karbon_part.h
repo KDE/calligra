@@ -11,7 +11,7 @@
 
 #include "vlayer.h"
 
-class KoRect;
+class QRect;
 
 class VCommand;
 class VCommandHistory;
@@ -36,7 +36,8 @@ public:
 	const VObjectList& selection() const { return m_selection; }	// r/o access
 	void selectObject( VObject& object, bool exclusive = false );
 	void deselectObject( VObject& object );
-	void selectObjectsWithinRect( const KoRect& rect, bool exclusive = false );
+	void selectObjectsWithinRect( const QRect& rect,
+		const double zoomFactor, bool exclusive = false );
 	void selectAllObjects();	// select all vobjects period.
 	void deselectAllObjects();	// unselect all vobjects from all vlayers.
 

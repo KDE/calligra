@@ -38,11 +38,13 @@ void
 VMToolSelect::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
+	m_view = view;
+
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setRasterOp( Qt::NotROP );
    // already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
-		&& part()->selection().getFirst()->boundingBox().contains( p ) 
+		&& part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( p )
 	) // && ( m_TransformState != NoTransform ||
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
@@ -67,8 +69,10 @@ VMToolSelect::drawTemporaryObject(
 		{
 			itr2.current()->transform( mat );
 			itr2.current()->setState( VObject::edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox().toQRect(),
-						view->zoomFactor() );
+			itr2.current()->draw(
+				painter,
+				itr2.current()->boundingBox( view->zoomFactor() ),
+				view->zoomFactor() );
 		}
 	}
 	else
@@ -101,7 +105,13 @@ VMToolSelect::createCmd( double x, double y, double d1, double d2 )
 	else
 	{
 		part()->selectObjectsWithinRect(
-			KoRect( x, y, x + d1, y + d2 ).normalize(), true );
+			QRect(
+				qRound( m_view->zoomFactor() * x ),
+				qRound( m_view->zoomFactor() * y ),
+				qRound( m_view->zoomFactor() * ( x + d1) ),
+				qRound( m_view->zoomFactor() * ( y + d2 ) ) ).normalize(),
+			m_view->zoomFactor(),
+			true );
 	}
 
 	return 0L;

@@ -188,7 +188,8 @@ KarbonPart::selectAllObjects()
 }
 
 void
-KarbonPart::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
+KarbonPart::selectObjectsWithinRect( const QRect& rect,
+	const double zoomFactor, bool exclusive )
 {
 	if( exclusive )
 		deselectAllObjects();
@@ -198,7 +199,7 @@ KarbonPart::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 
 	for ( ; itr.current(); ++itr )
 	{
-		objects = itr.current()->objectsWithinRect( rect );
+		objects = itr.current()->objectsWithinRect( rect, zoomFactor );
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
