@@ -207,6 +207,9 @@ k_dcop:
     double footNoteSeparatorLineWidth() const;
     void setFootNoteSeparatorLineWidth( double _width);
 
+    void deleteBookMark(const QString &_name);
+    void renameBookMark(const QString &_oldname, const QString &_newName);
+    QStringList listOfBookmarkName()const;
 
 private:
     KWDocument *doc;

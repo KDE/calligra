@@ -727,3 +727,18 @@ void KWordDocIface::setFootNoteSeparatorLineWidth( double _width)
     doc->setFootNoteSeparatorLineWidth( _width );
     doc->repaintAllViews();
 }
+
+void KWordDocIface::deleteBookMark(const QString &_name)
+{
+    doc->deleteBookMark( _name );
+}
+
+void KWordDocIface::renameBookMark(const QString &_oldname, const QString &_newName)
+{
+    doc->renameBookMark( _oldname, _newName);
+}
+
+QStringList KWordDocIface::listOfBookmarkName()const
+{
+    return doc->listOfBookmarkName();
+}
