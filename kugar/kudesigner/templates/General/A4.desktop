@@ -3,4 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/A4.ktm
 Name=A4
+Name[bg]=А4
+Name[ru]=А4
+Name[zu]=u-A4
 Icon=.icon/A4.png
