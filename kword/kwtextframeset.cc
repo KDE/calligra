@@ -2830,19 +2830,23 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
-    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << " cursor->index()=" << cursor()->index() << endl;
     KoTextParag * parag = cursor()->parag();
+    int idx = cursor()->index();
     textFrameSet()->ensureFormatted( parag );
-    KoTextStringChar *chr = parag->at( cursor()->index() );
-    int h = parag->lineHeightOfChar( cursor()->index() );
-    int x = parag->rect().x() + chr->x + cursor()->offsetX();
-    //kdDebug() << "parag->rect().x()=" << parag->rect().x() << " chr->x=" << chr->x
-    //          << " cursor()->offsetX()=" << cursor()->offsetX() << endl;
+    KoTextStringChar *chr = parag->at( idx );
+    int cursorHeight = parag->lineHeightOfChar( idx );
+    int x = parag->rect().x() + cursor()->x(); // this includes +charwidth for an RTL char
+    //kdDebug() << "parag->rect().x()=" << parag->rect().x() << " x=" << cursor()->x() << endl;
     int y = 0; int dummy;
-    parag->lineHeightOfChar( cursor()->index(), &dummy, &y );
+    parag->lineHeightOfChar( idx, &dummy, &y );
     y += parag->rect().y() + cursor()->offsetY();
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible y=" << y << endl;
-    int w = 1;
+    // make sure one char is visible before, and one after
+    KoTextStringChar *chrLeft = index > 0 ? chr-1 : chr;
+    // which char is on the left and which one is on the right depends on chr->rightToLeft
+    int areaLeft = chr->rightToLeft ? chr->width : chrLeft->width;
+    int areaRight = chr->rightToLeft ? chrLeft->width : chr->width;
     KoPoint pt;
     KoPoint hintDPoint;
     if ( m_currentFrame )
@@ -2854,12 +2858,14 @@ void KWTextFrameSetEdit::ensureCursorVisible()
         m_currentFrame = theFrame;
         m_canvas->gui()->getView()->updatePageInfo();
     }
-    QPoint p = textFrameSet()->kWordDocument()->zoomPoint( pt );
-    p = m_canvas->viewMode()->normalToView( p );
-    w = textFrameSet()->kWordDocument()->layoutUnitToPixelX( w );
-    h = textFrameSet()->kWordDocument()->layoutUnitToPixelY( h );
-    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible pt=" << pt << " p=" << p << " w=" << w << " y=" << y << endl;
-    m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
+    QPoint cursorPos = textFrameSet()->kWordDocument()->zoomPoint( pt );
+    cursorPos = m_canvas->viewMode()->normalToView( cursorPos );
+    areaLeft = textFrameSet()->kWordDocument()->layoutUnitToPixelX( areaLeft ) + 1;
+    areaRight = textFrameSet()->kWordDocument()->layoutUnitToPixelX( areaRight ) + 1;
+    cursorHeight = textFrameSet()->kWordDocument()->layoutUnitToPixelY( cursorHeight );
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible pt=" << pt << " cursorPos=" << cursorPos
+    //          << " areaLeft=" << areaLeft << " areaRight=" << areaRight << " y=" << y << endl;
+    m_canvas->ensureVisible( cursorPos.x() - areaLeft, cursorPos.y() + cursorHeight / 2, areaLeft + areaRight, cursorHeight / 2 + 2 );
 }
 
 bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fromRight )
