@@ -54,6 +54,9 @@ public:
 
     virtual void closeObject( bool close );
     virtual bool isClosed() const;
+    virtual QString saveOasisStrokeElement( KoGenStyles& mainStyles );
+    virtual void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
+    QString saveOasisMarkerStyle( KoGenStyles &mainStyles );
 
 protected:
     void loadOasisMarker( KoOasisContext & context );

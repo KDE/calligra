@@ -64,6 +64,7 @@ bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& m
 {
     kdDebug()<<"bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     //todo
+    //KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles );
     //call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
     return true;
 }

@@ -20,6 +20,7 @@
 
 #include "kplineobject.h"
 #include "kpresenter_utils.h"
+#include "kpresenter_doc.h"
 #include "KPLineObjectIface.h"
 #include "koPointArray.h"
 #include <koStyleStack.h>
@@ -64,14 +65,43 @@ DCOPObject* KPLineObject::dcopObject()
     return dcop;
 }
 
+
+//necessary to duplicate it from kppointobject.
+// a line object is not a kppointobject
+QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
+{
+    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+    KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
+    return mainStyles.lookup( styleobjectauto, "gr" );
+}
+
+void KPLineObject::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
+{
+    //TODO
+    //FIXME
+    if ( lineBegin != L_NORMAL )
+    {
+        styleobjectauto.addAttribute( "draw:marker-start", saveOasisMarkerStyle( mainStyles ) );
+        //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
+    }
+    if ( lineEnd != L_NORMAL )
+    {
+        styleobjectauto.addAttribute( "draw:marker-end", saveOasisMarkerStyle( mainStyles ) );
+        //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
+    }
+}
+
+QString KPLineObject::saveOasisMarkerStyle( KoGenStyles &mainStyles )
+{
+    //todo
+    return "";
+}
+
+
 bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     xmlWriter.startElement( "draw:line" );
-    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
-    //save object name and other generic attribute
-    //KPObject::saveOasis( xmlWriter );
-//save style
-    //call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
+    xmlWriter.addAttribute( "draw:style-name",  saveOasisStrokeElement( mainStyles ) );
 
     float x1 = orig.x();
     float y1 = orig.y();

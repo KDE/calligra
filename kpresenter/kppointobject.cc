@@ -20,6 +20,7 @@
 
 #include "kppointobject.h"
 #include "kpresenter_utils.h"
+#include "kpresenter_doc.h"
 #include <kozoomhandler.h>
 #include <koUnit.h>
 #include <qdom.h>
@@ -93,6 +94,35 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
+{
+    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
+    KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
+    return mainStyles.lookup( styleobjectauto, "gr" );
+}
+
+void KPPointObject::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
+{
+    //TODO
+    //FIXME
+    if ( lineBegin != L_NORMAL )
+    {
+        styleobjectauto.addAttribute( "draw:marker-start", saveOasisMarkerStyle( mainStyles ) );
+        //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
+    }
+    if ( lineEnd != L_NORMAL )
+    {
+        styleobjectauto.addAttribute( "draw:marker-end", saveOasisMarkerStyle( mainStyles ) );
+        //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
+    }
+}
+
+QString KPPointObject::saveOasisMarkerStyle( KoGenStyles &mainStyles )
+{
+    //todo
+    return "";
+}
+
 bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     QString listOfPoint;
@@ -118,6 +148,7 @@ bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 
 void KPPointObject::loadOasisMarker( KoOasisContext & context )
 {
+    //FIXME me ! it's not good we doesn't use style :(
     KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {

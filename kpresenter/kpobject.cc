@@ -1296,9 +1296,10 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles,  KoGenStyl
 QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
 {
     //todo
+    //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
+
     return "";
 }
-
 
 void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {

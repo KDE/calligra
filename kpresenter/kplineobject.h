@@ -71,6 +71,10 @@ public:
     virtual KoPoint getRealOrig() const;
 
 protected:
+    QString saveOasisStrokeElement( KoGenStyles& mainStyles );
+    void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
+    QString saveOasisMarkerStyle( KoGenStyles &mainStyles );
+
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );
 
