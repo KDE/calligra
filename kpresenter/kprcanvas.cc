@@ -408,7 +408,6 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
             {
                 it.current()->draw( painter, m_view->zoomHandler(), selectionMode,
 				    ((it.current())->isSelected()) && drawContour );
-
             }
 	    it.current()->setSubPresStep( 0 );
 	    it.current()->doSpecificEffects( false );
@@ -1035,11 +1034,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             presMenu->popup( pnt );
         }
     }
-
+#if 0 // Where do you need this ? (toshitaka)
     // ME: I have no idea why this is needed at all
     if ( toolEditMode == TEM_MOUSE )
 	mouseMoveEvent( e );
-
+#endif
     if ( modType != MT_NONE && modType != MT_MOVE ) {
         KPObject *kpobject=resizeObjNum;
         if ( kpobject ) {
