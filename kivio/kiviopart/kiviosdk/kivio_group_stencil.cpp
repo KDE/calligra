@@ -261,153 +261,177 @@ QDomElement KivioGroupStencil::saveXML( QDomDocument &doc )
 
 void KivioGroupStencil::setX( double newX )
 {
-   double dx = newX - m_x;
+  double dx = newX - m_x;
 
-   m_x = newX;
-   KivioStencil *pStencil = m_pGroupList->first();
-   while( pStencil )
-   {
+  m_x = newX;
+  KivioStencil *pStencil = m_pGroupList->first();
+  while( pStencil )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
+    {
       if( pStencil->protection()->at(kpX)==false )
       {
-	 pStencil->setX( pStencil->x() + dx );
+        pStencil->setX( pStencil->x() + dx );
       }
+    }
 
-      pStencil = m_pGroupList->next();
-   }
+    pStencil = m_pGroupList->next();
+  }
 
 }
 
 void KivioGroupStencil::setY( double newY )
 {
-   double dy = newY - m_y;
+  double dy = newY - m_y;
 
-   m_y = newY;
-   KivioStencil *pStencil = m_pGroupList->first();
-   while( pStencil )
-   {
+  m_y = newY;
+  KivioStencil *pStencil = m_pGroupList->first();
+  while( pStencil )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
+    {
       if( pStencil->protection()->at(kpY)==false )
       {
-	 pStencil->setY( pStencil->y() + dy );
+        pStencil->setY( pStencil->y() + dy );
       }
+    }
 
-      pStencil = m_pGroupList->next();
-   }
+    pStencil = m_pGroupList->next();
+  }
 
 }
 
 void KivioGroupStencil::setPosition( double newX, double newY )
 {
-   double dx = newX - m_x;
-   double dy = newY - m_y;
+  double dx = newX - m_x;
+  double dy = newY - m_y;
 
-   double newX2, newY2;
+  double newX2, newY2;
 
-   m_x = newX;
-   m_y = newY;
+  m_x = newX;
+  m_y = newY;
 
-   KivioStencil *pStencil = m_pGroupList->first();
-   while( pStencil )
-   {
+  KivioStencil *pStencil = m_pGroupList->first();
+  while( pStencil )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
+    {
       if( pStencil->protection()->at(kpX)==false ) {
-	 newX2 = pStencil->x() + dx;
+        newX2 = pStencil->x() + dx;
       } else {
-	 newX2 = pStencil->x();
+        newX2 = pStencil->x();
       }
 
       if( pStencil->protection()->at(kpY)==false ) {
-	 newY2 = pStencil->y() + dy;
+        newY2 = pStencil->y() + dy;
       } else {
-	 newY2 = pStencil->y();
+        newY2 = pStencil->y();
       }
 
       pStencil->setPosition( newX2, newY2 );
+    }
 
-      pStencil = m_pGroupList->next();
-   }
+    pStencil = m_pGroupList->next();
+  }
 
 }
 
 void KivioGroupStencil::setW( double newW )
 {
-    double percInc = newW / m_w;
+  double percInc = newW / m_w;
 
-    if( newW > 0.0f ) {
-       m_w = newW;
-    }
+  if( newW > 0.0f ) {
+    m_w = newW;
+  }
 
-    KivioStencil *pStencil = m_pGroupList->first();
-    while( pStencil )
+  KivioStencil *pStencil = m_pGroupList->first();
+  while( pStencil )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
     {
-       if( pStencil->protection()->at(kpX)==false ) {
-	  pStencil->setX( ((pStencil->x() - m_x) * percInc) + m_x );
-       }
+      if( pStencil->protection()->at(kpX)==false ) {
+        pStencil->setX( ((pStencil->x() - m_x) * percInc) + m_x );
+      }
 
-       if( pStencil->protection()->at(kpWidth)==false ) {
-	  pStencil->setW( pStencil->w() * percInc );
-       }
-
-        pStencil = m_pGroupList->next();
+      if( pStencil->protection()->at(kpWidth)==false ) {
+        pStencil->setW( pStencil->w() * percInc );
+      }
     }
+
+    pStencil = m_pGroupList->next();
+  }
 }
 
 void KivioGroupStencil::setH( double newH )
 {
-    double percInc = newH / m_h;
+  double percInc = newH / m_h;
 
-    if( newH > 0.0f ) {
-       m_h = newH;
-    }
+  if( newH > 0.0f ) {
+    m_h = newH;
+  }
 
-    KivioStencil *pStencil = m_pGroupList->first();
-    while( pStencil )
+  KivioStencil *pStencil = m_pGroupList->first();
+  while( pStencil )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
     {
-       if( pStencil->protection()->at(kpY)==false ) {
-	  pStencil->setY( ((pStencil->y() - m_y) * percInc) + m_y );
-       }
+      if( pStencil->protection()->at(kpY)==false ) {
+        pStencil->setY( ((pStencil->y() - m_y) * percInc) + m_y );
+      }
 
-       if( pStencil->protection()->at(kpHeight)==false ) {
-	  pStencil->setH( pStencil->h() * percInc );
-       }
-
-        pStencil = m_pGroupList->next();
+      if( pStencil->protection()->at(kpHeight)==false ) {
+        pStencil->setH( pStencil->h() * percInc );
+      }
     }
+
+    pStencil = m_pGroupList->next();
+  }
 }
 
 void KivioGroupStencil::setDimensions( double newW, double newH )
 {
-    double percIncX = newW / m_w;
-    double percIncY = newH / m_h;
+  double percIncX = newW / m_w;
+  double percIncY = newH / m_h;
 
-    if( newW > 0.0f ) {
-       m_w = newW;
-    }
-    if( newH > 0.0f ) {
-       m_h = newH;
-    }
+  if( newW > 0.0f ) {
+    m_w = newW;
+  }
+  if( newH > 0.0f ) {
+    m_h = newH;
+  }
 
-    KivioStencil *pStencil = m_pGroupList->first();
-    while( pStencil )
+  KivioStencil *pStencil = m_pGroupList->first();
+  while( pStencil )
+  {
+    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
+      pStencil->type() != kstConnector)
     {
-       if( newW > 0.0f ) {
-	  if( pStencil->protection()->at(kpX)==false ) {
-	     pStencil->setX( ((pStencil->x() - m_x) * percIncX) + m_x );
-	  }
-	  if( pStencil->protection()->at(kpWidth)==false ) {
-	     pStencil->setW( pStencil->w() * percIncX );
-	  }
-       }
+      if( newW > 0.0f ) {
+        if( pStencil->protection()->at(kpX)==false ) {
+          pStencil->setX( ((pStencil->x() - m_x) * percIncX) + m_x );
+        }
+        if( pStencil->protection()->at(kpWidth)==false ) {
+          pStencil->setW( pStencil->w() * percIncX );
+        }
+      }
 
-       if( newH > 0.0f ) {
-	  if( pStencil->protection()->at(kpY)==false ) {
-	     pStencil->setY( ((pStencil->y() - m_y) * percIncY) + m_y );
-	  }
-	  if( pStencil->protection()->at(kpHeight)==false ) {
-	     pStencil->setH( pStencil->h() * percIncY );
-	  }
-       }
-
-        pStencil = m_pGroupList->next();
+      if( newH > 0.0f ) {
+        if( pStencil->protection()->at(kpY)==false ) {
+          pStencil->setY( ((pStencil->y() - m_y) * percIncY) + m_y );
+        }
+        if( pStencil->protection()->at(kpHeight)==false ) {
+          pStencil->setH( pStencil->h() * percIncY );
+        }
+      }
     }
+
+    pStencil = m_pGroupList->next();
+  }
 
 }
 

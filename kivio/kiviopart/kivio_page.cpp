@@ -745,77 +745,78 @@ void KivioPage::groupSelectedStencils()
 */
 void KivioPage::ungroupSelectedStencils()
 {
-    KivioStencil *pSelStencil, *pStencil;
-    QPtrList<KivioStencil> *pList;
-    QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
+  KivioStencil *pSelStencil, *pStencil;
+  QPtrList<KivioStencil> *pList;
+  QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
 
-    pSelectThese->setAutoDelete(false);
+  pSelectThese->setAutoDelete(false);
 
-    // Iterate through all selected stencils
-    pSelStencil = m_lstSelection.first();
-    while( pSelStencil )
+  // Iterate through all selected stencils
+  pSelStencil = m_lstSelection.first();
+  while( pSelStencil )
+  {
+    // If there is a list, it is a group stencil
+    pList = pSelStencil->groupList();
+    if( pList )
     {
-        // If there is a list, it is a group stencil
-        pList = pSelStencil->groupList();
-        if( pList )
-        {
-            pList->first();
-            pStencil = pList->take();
-            while( pStencil )
-            {
-                addStencil( pStencil );
+      pList->first();
+      pStencil = pList->take();
 
-                pSelectThese->append( pStencil );
+      while( pStencil )
+      {
+        addStencil( pStencil );
+        pSelectThese->append( pStencil );
 
-                pStencil = pList->take();
-            }
+        pStencil = pList->take();
+      }
 
-            /*
-             *  The following is commented out because the group should be on the
-             * current layer since selections must be on the current layer.
-             */
-            // Since this was a group, it is now an empty stencil, so we remove it
-            // from the selection list, and then remove it from the layer it came
-            // from, but we have to search for that.
-            /*
-            pSelStencil = m_lstSelection.take();
-            KivioLayer *pLayer = m_lstLayers.first();
-            while( pLayer )
-            {
-                if( pLayer->removeStencil( pSelStencil )==true )
-                    break;
+      /*
+      *  The following is commented out because the group should be on the
+      * current layer since selections must be on the current layer.
+      */
+      // Since this was a group, it is now an empty stencil, so we remove it
+      // from the selection list, and then remove it from the layer it came
+      // from, but we have to search for that.
+      /*
+      pSelStencil = m_lstSelection.take();
+      KivioLayer *pLayer = m_lstLayers.first();
+      while( pLayer )
+      {
+          if( pLayer->removeStencil( pSelStencil )==true )
+              break;
 
-                pLayer = m_lstLayers.next();
-            }
-            */
+          pLayer = m_lstLayers.next();
+      }
+      */
 
-            // Remove the current stencil from the selection list(the group we just disassembled)
-            m_lstSelection.take();
+      // Remove the current stencil from the selection list(the group we just disassembled)
+      m_lstSelection.take();
 
-            // Remove it permanently from the layer
-            if( m_pCurLayer->removeStencil( pSelStencil )==false )
-            {
-	       kdDebug() << "KivioPage::ungroupSelectedStencil() - Failed to locate the group shell for deletion" << endl;
-            }
-        }
-
-
-        pSelStencil = m_lstSelection.next();
-    }
-
-    // Now iterate through the selectThese list and select
-    // those stencils
-    pStencil = pSelectThese->first();
-    while( pStencil )
-    {
-        selectStencil( pStencil );
-
-        pStencil = pSelectThese->next();
+      // Remove it permanently from the layer
+      if( m_pCurLayer->removeStencil( pSelStencil )==false )
+      {
+        kdDebug() << "KivioPage::ungroupSelectedStencil() - Failed to locate the group shell for deletion"
+          << endl;
+      }
     }
 
 
+    pSelStencil = m_lstSelection.next();
+  }
 
-    delete pSelectThese;
+  // Now iterate through the selectThese list and select
+  // those stencils
+  pStencil = pSelectThese->first();
+  while( pStencil )
+  {
+    selectStencil( pStencil );
+
+    pStencil = pSelectThese->next();
+  }
+
+
+
+  delete pSelectThese;
 }
 
 void KivioPage::bringToFront()
