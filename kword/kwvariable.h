@@ -34,10 +34,31 @@ class KoMailMergeVariable;
 class QDomElement;
 class KoTextFormat;
 
+
+class KWVariableSettings : public KoVariableSettings
+{
+ public:
+    KWVariableSettings();
+    virtual ~KWVariableSettings() {}
+    enum FootNoteAutoNumberingType { FN_NUMBER = 0, FN_ALPHAB_L = 2, FN_ALPHAB_U = 3, FN_ROM_NUM_L = 4, FN_ROM_NUM_U = 5};
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+    int startFootNoteValue()const { return m_startFootNoteVal;}
+    void setStartFootNoteValue( int _val) { m_startFootNoteVal = _val;}
+
+    FootNoteAutoNumberingType footNoteAutoNumberingType()const { return m_autoNumberType;}
+
+    void setFootNoteAutoNumberingType( FootNoteAutoNumberingType _type ) { m_autoNumberType = _type;}
+
+ private:
+    int m_startFootNoteVal;
+    FootNoteAutoNumberingType m_autoNumberType;
+};
+
 class KWVariableCollection : public KoVariableCollection
 {
  public:
-    KWVariableCollection();
+    KWVariableCollection(KWVariableSettings *_settings);
     virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
 };
 

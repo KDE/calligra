@@ -680,7 +680,6 @@ private:
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
     KoStyleCollection *m_styleColl;
-
     /** Page number -> section title array, for the Section variable.
      * Note that pages without a section title don't appear in the array. */
     QValueVector< QString > m_sectionTitles;

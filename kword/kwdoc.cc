@@ -187,7 +187,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
-    m_varColl=new KWVariableCollection;
+    m_varColl=new KWVariableCollection(new KWVariableSettings() );
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
 

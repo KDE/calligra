@@ -26,12 +26,29 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <qdom.h>
 
+KWVariableSettings::KWVariableSettings() : KoVariableSettings()
+{
+    m_startFootNoteVal=0;
+    m_autoNumberType=FN_NUMBER;
+}
 
-KWVariableCollection::KWVariableCollection()
-    : KoVariableCollection()
+void KWVariableSettings::save( QDomElement &parentElem )
+{
+    KoVariableSettings::save( parentElem );
+}
+
+void KWVariableSettings::load( QDomElement &elem )
+{
+    KoVariableSettings::load( elem );
+}
+
+KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting)
+    : KoVariableCollection(_setting)
 {
 }
+
 
 KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
 {
