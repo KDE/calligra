@@ -42,14 +42,14 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     marker=_marker;
    QFrame *page1 = addPage(i18n("Values"));
    QVBoxLayout *lay1 = new QVBoxLayout( page1 );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
+    lay1->setMargin( KDialogBase::marginHint()  );
+    lay1->setSpacing( KDialogBase::spacingHint() );
 
     QButtonGroup* tmpQButtonGroup;
     tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_1" );
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Validity criteria :") );
-    QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
+    QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,KDialogBase::marginHint(),KDialogBase::spacingHint());
 
     QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
     tmpQLabel->setText(i18n("Allow:" ));
