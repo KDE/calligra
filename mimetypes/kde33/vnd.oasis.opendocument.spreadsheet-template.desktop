@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.opendocument.spreadsheet-template
+Patterns=*.ots;*.OTS
+Icon=spreadsheet
+Comment=OASIS Open Office SpreadSheet Template
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.ots

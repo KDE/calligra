@@ -1,0 +1,23 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.opendocument.spreadsheet
+Patterns=*.ods;*.ODS
+Icon=spreadsheet
+Comment=OASIS Open Office SpreadSheet
+Comment[bg]=OASIS електронни таблици на Open Office
+Comment[br]=Loger OASIS Open Office
+Comment[da]=OASIS Open Office regneark
+Comment[es]=OASIS de hoja de cálculo de Open Office
+Comment[et]=OASIS OpenOffice'i tabel
+Comment[fr]=Tableur d'Open Office OASIS
+Comment[pt]=Folha de Cálculo OASIS do Open Office
+Comment[pt_BR]=Planilha do Open Office no formato OASIS
+Comment[ru]=Таблица OASIS Open Office
+Comment[sv]=OASIS Open Office-kalkylark
+Comment[ta]=OASIS ஓபன் ஆபிஃஸ் விரிதாள்
+Comment[tr]=OASIS Open Office HesapTablosu
+Comment[xx]=xxOASIS Open Office SpreadSheetxx
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.ods

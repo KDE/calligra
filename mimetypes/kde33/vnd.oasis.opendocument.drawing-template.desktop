@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.opendocument.drawing-template
+Patterns=*.otg;*.OTG;
+Icon=drawing
+Comment=OASIS Open Office Drawing Template
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.otg

@@ -1,0 +1,22 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.opendocument.text
+Patterns=*.odt;*.ODT
+Icon=wordprocessing
+Comment=OASIS Open Office Text
+Comment[bg]=OASIS текст на Open Office
+Comment[da]=OASIS Open Office tekst
+Comment[es]=OASIS de texto de Open Office
+Comment[et]=OASIS OpenOffice'i tekst
+Comment[fr]=Texte OASIS d'Open Office
+Comment[pt]=Texto OASIS do Open Office
+Comment[pt_BR]=Documento Texto do Open Office no formato OASIS
+Comment[ru]=Текстовый документ OASIS Open Office
+Comment[sv]=OASIS Open Office-text
+Comment[ta]=OASIS ஓபன் ஆஃபிஸ் உரை
+Comment[tr]=OASIS Open Office Metni
+Comment[xx]=xxOASIS Open Office Textxx
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.odt

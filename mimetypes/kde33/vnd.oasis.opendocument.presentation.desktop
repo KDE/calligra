@@ -1,0 +1,22 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.opendocument.presentation
+Patterns=*.odp;*.ODP
+Icon=presentation
+Comment=OASIS Open Office Presentation
+Comment[bg]=OASIS презентация на Open Office
+Comment[da]=OASIS Open Office præsentation
+Comment[es]=OASIS de presentación de Open Office
+Comment[et]=OASIS OpenOffice'i esitlus
+Comment[fr]=Présentation OASIS d'Open Office
+Comment[pt]=Apresentação OASIS do Open Office
+Comment[pt_BR]=Apresentação do Open Office no formato OASIS
+Comment[ru]=Презентация OASIS Open Office
+Comment[sv]=OASIS Open Office-presentation
+Comment[ta]=OASIS ஓபன் ஆபிஃஸ் முன்வைப்பு
+Comment[tr]=OASIS Open Office Sunusu
+Comment[xx]=xxOASIS Open Office Presentationxx
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.odp

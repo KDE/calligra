@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.opendocument.formula
+Patterns=*.odf;*.ODF;
+Icon=formula
+Comment=OASIS Open Office Formula
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.odf
