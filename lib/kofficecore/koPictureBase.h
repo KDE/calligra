@@ -124,6 +124,8 @@ public:
         { ; }
     virtual QImage createAlphaMask(int conversion_flags = 0) const
         { return QImage(); }
+
+    virtual void clearCache(void);
 };
 
 #endif /* __koPictureBase_h__ */

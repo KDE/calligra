@@ -174,6 +174,12 @@ public:
     void setAlphaBuffer(bool enable);
     QImage createAlphaMask(int conversion_flags = 0) const;
 
+    /**
+     * Clear any cache (to avoid using too much memory
+     * especially if the application somehow also caches the KoPicture's output)
+     */
+    void clearCache(void);
+
 protected:
     /**
      * @internal

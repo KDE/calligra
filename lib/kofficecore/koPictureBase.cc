@@ -133,3 +133,8 @@ QImage KoPictureBase::generateImage(const QSize& size)
 {
     return generatePixmap(size,true).convertToImage();
 }
+
+void KoPictureBase::clearCache(void)
+{
+    // Nothign to do!
+}

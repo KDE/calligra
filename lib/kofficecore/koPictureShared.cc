@@ -435,3 +435,9 @@ QImage KoPictureShared::createAlphaMask(int conversion_flags) const
         return m_base->createAlphaMask(conversion_flags);
     return QImage();
 }
+
+void KoPictureShared::clearCache(void)
+{
+    if (m_base)
+        m_base->clearCache();
+}

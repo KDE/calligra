@@ -97,6 +97,8 @@ public:
     virtual QImage createAlphaMask(int conversion_flags = 0) const
         { return m_originalImage.createAlphaMask(conversion_flags); }
 
+    virtual void clearCache(void);
+
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);

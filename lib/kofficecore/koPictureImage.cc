@@ -182,3 +182,10 @@ QImage KoPictureImage::generateImage(const QSize& size)
     // We do not cache the image, as we will seldom need it again.
     return m_originalImage.smoothScale( size );
 }
+
+void KoPictureImage::clearCache(void)
+{
+    m_cachedPixmap.resize(0, 0);
+    m_cacheIsInFastMode=true;
+    m_cachedSize=QSize();
+}

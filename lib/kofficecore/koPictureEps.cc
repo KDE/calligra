@@ -190,7 +190,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
     {
         QTime time;
         time.start();
-        
+
         QApplication::setOverrideCursor( Qt::waitCursor );
         m_cachedPixmap = scaleWithGhostScript( size, resolutionx, resolutiony );
         QApplication::restoreOverrideCursor();
@@ -346,4 +346,11 @@ QImage KoPictureEps::generateImage(const QSize& size)
 {
     // 0, 0 == resolution unknown
     return scaleWithGhostScript(size, 0, 0);
+}
+
+void KoPictureEps::clearCache(void)
+{
+    m_cachedPixmap.resize(0, 0);
+    m_cacheIsInFastMode=true;
+    m_cachedSize=QSize();
 }
