@@ -5534,7 +5534,6 @@ void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
     }
     else if (valExpression.contains( "!=" ) )
     {
-        //not implemented into kspread !!!!!!!!!!!!
         //add Differentto attribute
         QString value = valExpression.remove( "!=" );
         kdDebug()<<" value :"<<value<<endl;
