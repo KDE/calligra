@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+Copyright (C) 2002   Peter Simonsson <psn@linux.se>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -17,34 +17,29 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXICREATEPROJECTPAGELOCATION_H
-#define KEXICREATEPROJECTPAGELOCATION_H
+#ifndef KEXICREATEPROJECTPAGEAUTH_H
+#define KEXICREATEPROJECTPAGEAUTH_H
 
 #include "kexicreateprojectpage.h"
 
-class QSpinBox;
 class KLineEdit;
+class QCheckBox;
 
-class KexiCreateProjectPageLocation : public KexiCreateProjectPage
+class KexiCreateProjectPageAuth : public KexiCreateProjectPage
 {
 	Q_OBJECT
 
 	public:
-		KexiCreateProjectPageLocation(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
-		~KexiCreateProjectPageLocation();
+		KexiCreateProjectPageAuth(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
 
 	protected:
-		KLineEdit* m_sock;
-		KLineEdit* m_host;
-		QSpinBox* m_port;
+		KLineEdit* m_userEdit;
+		KLineEdit* m_passwordEdit;
+		QCheckBox* m_savePassChk;
 	
 	protected slots:
-		void slotHostChanged(const QString & t);
-		void slotSockChanged(const QString & t);
-		void slotPortChanged(const QString & t);
-		void slotUseCustomSock(bool b);
-		void slotUseCustomPort(bool b);
-		void slotSetLocal(bool b);
+		void slotUserChanged(const QString &);
+		void slotPassChanged(const QString &);
 };
 
 #endif

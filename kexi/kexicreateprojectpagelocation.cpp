@@ -19,7 +19,6 @@ Boston, MA 02111-1307, USA.
 
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -27,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <klineedit.h>
 
 #include "kexicreateprojectpagelocation.h"
 
@@ -41,48 +41,116 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
 	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
+	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
 	//widgets
-	m_localRBtn = new QRadioButton(i18n("Local"), this);
-	m_remoteRBtn = new QRadioButton(i18n("Remote"), this);
+	QRadioButton *localRBtn = new QRadioButton(i18n("Local"), this);
+	QRadioButton *remoteRBtn = new QRadioButton(i18n("Remote"), this);
 
-	#warning make it global
-	QCheckBox *m_customSockChk = new QCheckBox(i18n("Custom socket:"), this);
-	QLineEdit *m_sock = new QLineEdit(this);
+	QCheckBox *customSockChk = new QCheckBox(i18n("Custom socket:"), this);
+	m_sock = new QLineEdit(this);
 	
 	QLabel *lHost = new QLabel(i18n("Host:"), this);
-	QLineEdit *m_host = new QLineEdit(this);
-	QCheckBox *m_customPortChk = new QCheckBox(i18n("Custom port:"), this);
-	QSpinBox *m_port = new QSpinBox(0, 9999, 1, this);
+	m_host = new QLineEdit(this);
+	QCheckBox *customPortChk = new QCheckBox(i18n("Custom port:"), this);
+	m_port = new QSpinBox(0, 9999, 1, this);
 
 	//buttongroup hinting
 	QButtonGroup* selectBGrp = new QButtonGroup(this);
 	selectBGrp->hide();
-	selectBGrp->insert(m_localRBtn);
-	selectBGrp->insert(m_remoteRBtn);
+	selectBGrp->insert(localRBtn);
+	selectBGrp->insert(remoteRBtn);
 	
 	// layout
-	QSpacerItem *identH = new QSpacerItem(16, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+	QGridLayout *m = new QGridLayout(0);
+	m->addMultiCellWidget(localRBtn,	0,	0,	0,	2);
+	m->addWidget(customSockChk,		1,	1);
+	m->addWidget(m_sock,			1,	2);
+	m->addMultiCellWidget(remoteRBtn,	2,	2,	0,	2);
+	m->addWidget(lHost,			3,	1);
+	m->addWidget(m_host,			3,	2);
+	m->addWidget(customPortChk,		4,	1);
+	m->addWidget(m_port,			4,	2);
+	m->setSpacing(KDialog::spacingHint());
 	
 	QGridLayout *g = new QGridLayout(this);
-	g->addMultiCellWidget(lPic,		0,	5,	0,	0);
-	g->addMultiCellWidget(m_localRBtn,	0,	0,	1,	2);
-	g->addWidget(m_customSockChk,		1,	2);
-	g->addWidget(m_sock,			1,	3);
-	g->addMultiCellWidget(m_remoteRBtn,	2,	2,	1,	2);
-	g->addWidget(lHost,			3,	2);
-	g->addWidget(m_host,			3,	3);
-	g->addWidget(m_customPortChk,		4,	2);
-	g->addWidget(m_port,			4,	3);
-	
-	g->addItem(identH,			5,	1);
-
+	g->addMultiCellWidget(lPic,		0,	1,	0,	0);
+	g->addLayout(m,		0,	1);
 	g->setSpacing(KDialog::spacingHint());
+	
+	//Connections
+	connect(localRBtn, SIGNAL(toggled(bool)), this, SLOT(slotSetLocal(bool)));
+	connect(customSockChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomSock(bool)));
+	connect(customPortChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomPort(bool)));
+	connect(m_host, SIGNAL(textChanged(const QString &)), this, SLOT(slotHostChanged(const QString &)));
+	connect(m_port, SIGNAL(valueChanged(const QString &)), this, SLOT(slotPortChanged(const QString &)));
+	connect(m_sock, SIGNAL(textChanged(const QString &)), this, SLOT(slotSockChanged(const QString &)));
+
+	// Default values
+	localRBtn->setChecked(true);
+	customPortChk->setChecked(false);
+	customSockChk->setChecked(false);
 }
 
 KexiCreateProjectPageLocation::~KexiCreateProjectPageLocation()
 {
+}
+
+void
+KexiCreateProjectPageLocation::slotHostChanged(const QString & t)
+{
+	setProperty("host", QVariant(t));
+}
+
+void
+KexiCreateProjectPageLocation::slotSockChanged(const QString & t)
+{
+	setProperty("socket", QVariant(t));
+}
+
+void
+KexiCreateProjectPageLocation::slotPortChanged(const QString & t)
+{
+	setProperty("port", QVariant(t));
+}
+
+void
+KexiCreateProjectPageLocation::slotUseCustomSock(bool b)
+{
+	if(b)
+	{
+		slotSockChanged(m_sock->text());
+	}
+	else
+	{
+		slotSockChanged("");
+	}
+}
+
+void
+KexiCreateProjectPageLocation::slotUseCustomPort(bool b)
+{
+	if(b)
+	{
+		slotPortChanged(m_port->cleanText());
+	}
+	else
+	{
+		slotPortChanged("0");
+	}
+}
+
+void
+KexiCreateProjectPageLocation::slotSetLocal(bool b)
+{
+	if(b)
+	{
+		slotHostChanged("localhost");
+	}
+	else
+	{
+		slotHostChanged(m_host->text());
+	}
 }
 
 #include "kexicreateprojectpagelocation.moc"

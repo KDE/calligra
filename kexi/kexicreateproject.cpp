@@ -24,6 +24,7 @@
 #include "kexicreateprojectpageengine.h"
 //#include "kexicreateprojectpageconnection.h"
 #include "kexicreateprojectpagelocation.h"
+#include "kexicreateprojectpageauth.h"
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateprojectpagefile.h"
 
@@ -41,6 +42,8 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 	addItem(m_pageEngine, i18n("Engine"));
 	m_pageLocation = new KexiCreateProjectPageLocation(this, m_wpic, "page_location");
 	addItem(m_pageLocation, i18n("Location"));
+	m_pageAuth = new KexiCreateProjectPageAuth(this, m_wpic, "page_auth");
+	addItem(m_pageAuth, i18n("Authentication"));
 	m_pageDatabase = new KexiCreateProjectPageDB(this, m_wpic, "page_db");
 	m_pageDatabase->hide();
 	m_pageFile = new KexiCreateProjectPageFile(this, m_wpic, "page_file");
@@ -89,20 +92,19 @@ KexiCreateProject::next()
 			KWizard::next();
 		}
 	}
-/*	else if(currentPage() == m_pageConnection)
+	else if(currentPage() == m_pageAuth)
 	{
 		kdDebug() << "KexiCreateProject::next(): time to connect..." << endl;
-		#warning implement after changes
-//		QString engine = m_pageEngine->data("engine").toString();
-//		QString host = m_pageConnection->data("host").toString();
-//		QString user = m_pageConnection->data("user").toString();
-//		QString pass = m_pageConnection->data("password").toString();
-//		QString port = m_pageConnection->data("port").toString();
-//		QString socket = m_pageConnection->data("socket").toString();
+		QString engine = m_pageEngine->data("engine").toString();
+		QString host = m_pageLocation->data("host").toString();
+		QString port = m_pageLocation->data("port").toString();
+		QString socket = m_pageLocation->data("socket").toString();
+		QString user = m_pageAuth->data("user").toString();
+		QString pass = m_pageAuth->data("password").toString();
 		
-// 		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket, port);
+		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket, port);
 	}
-*/
+
 	KWizard::next();
 }
 
