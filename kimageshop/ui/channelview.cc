@@ -82,6 +82,7 @@ void ChannelView::init( KisDoc* doc )
 
 void ChannelView::paintCell( QPainter* _painter, int _row, int )
 {
+/*
   QString tmp;
 
   switch( _row )
@@ -112,6 +113,7 @@ void ChannelView::paintCell( QPainter* _painter, int _row, int )
 
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
   _painter->drawText( 80, 20, tmp );
+*/
 }
 
 void ChannelView::updateTable()
@@ -143,12 +145,14 @@ void ChannelView::update_contextmenu( int _index )
 
 void ChannelView::selectChannel( int _index )
 {
+/*
   unsigned int currentSel = m_selected;
   m_selected = -1;
   updateCell( currentSel, 0 );
   m_selected = _index;
   m_doc->setCurrentLayer( m_selected );
   updateCell( m_selected, 0 );
+*/
 }
 
 void ChannelView::slotInverseVisibility( int _index )
