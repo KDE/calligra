@@ -41,8 +41,6 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 {
 	setCaption(i18n("Relations"));
 
-	if(!embedd)
-		registerAs(DocumentWindow);
 
 	m_db = kexi->project()->db();
 
@@ -79,6 +77,10 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 	QVBoxLayout *g = new QVBoxLayout(this);
 	g->addWidget(hbox);
 	g->addWidget(m_view);
+
+	if(!embedd)
+		registerAs(DocumentWindow);
+
 }
 
 void

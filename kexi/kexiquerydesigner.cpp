@@ -84,7 +84,6 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 	m_activeTab = -1;
 
 	setCaption(i18n("Query"));
-	registerAs(DocumentWindow);
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 
@@ -122,6 +121,8 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 //	activateActions();
 //	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));
 	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
+	registerAs(DocumentWindow);
+
 }
 
 KXMLGUIClient *KexiQueryDesigner::guiClient()
