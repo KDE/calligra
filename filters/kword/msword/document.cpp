@@ -214,56 +214,61 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     kdDebug() << "runOfText: " << newText.string() << endl;
     m_paragraph += newText.string();
 
-    writeFormat( m_formats, chp, 0L /*TODO*/, m_index, text.length() );
+    writeFormat( m_formats, chp, m_paragStyle ? &m_paragStyle->chp() : 0, m_index, text.length() );
 
     m_index += text.length();
 }
 
-void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* /*refChp TODO*/, int pos, int len )
+void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len )
 {
     QDomElement format( m_mainDocument.createElement( "FORMAT" ) );
     format.setAttribute( "id", 1 );
     format.setAttribute( "pos", pos );
     format.setAttribute( "len", len );
 
-    // TODO: change the if()s below, to add attributes if different from paragraph format
-    // (not if different from 'plain text')
-    // This is also why the code below seems to test stuff twice ;)
-
-    QColor color = Conversion::color( chp->ico, -1 );
-    QDomElement colorElem( m_mainDocument.createElement( "COLOR" ) );
-    colorElem.setAttribute( "red", color.red() );
-    colorElem.setAttribute( "blue", color.blue() );
-    colorElem.setAttribute( "green", color.green() );
-    format.appendChild( colorElem );
+    if ( !refChp || refChp->ico != chp->ico )
+    {
+        QColor color = Conversion::color( chp->ico, -1 );
+        QDomElement colorElem( m_mainDocument.createElement( "COLOR" ) );
+        colorElem.setAttribute( "red", color.red() );
+        colorElem.setAttribute( "blue", color.blue() );
+        colorElem.setAttribute( "green", color.green() );
+        format.appendChild( colorElem );
+    }
 
     // Font name
     // TBD: We only use the Ascii font code. We should work out how/when to use the FE and Other font codes.
-    QString fontName = getFont( chp->ftcAscii );
-
-    if ( !fontName.isEmpty() )
+    if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
     {
-        QDomElement fontElem( m_mainDocument.createElement( "FONT" ) );
-        fontElem.setAttribute( "name", fontName );
-        format.appendChild( fontElem );
+        QString fontName = getFont( chp->ftcAscii );
+
+        if ( !fontName.isEmpty() )
+        {
+            QDomElement fontElem( m_mainDocument.createElement( "FONT" ) );
+            fontElem.setAttribute( "name", fontName );
+            format.appendChild( fontElem );
+        }
     }
 
-    //kdDebug() << "        font size: " << chp->hps/2 << endl;
-    QDomElement fontSize( m_mainDocument.createElement( "SIZE" ) );
-    fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
-    format.appendChild( fontSize );
+    if ( !refChp || refChp->hps != chp->hps )
+    {
+        //kdDebug() << "        font size: " << chp->hps/2 << endl;
+        QDomElement fontSize( m_mainDocument.createElement( "SIZE" ) );
+        fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
+        format.appendChild( fontSize );
+    }
 
-    if ( chp->fBold ) {
+    if ( !refChp || refChp->fBold != chp->fBold ) {
         QDomElement weight( m_mainDocument.createElement( "WEIGHT" ) );
         weight.setAttribute( "value", chp->fBold ? 75 : 50 );
         format.appendChild( weight );
     }
-    if ( chp->fItalic ) {
+    if ( !refChp || refChp->fItalic != chp->fItalic ) {
         QDomElement italic( m_mainDocument.createElement( "ITALIC" ) );
         italic.setAttribute( "value", chp->fItalic ? 1 : 0 );
         format.appendChild( italic );
     }
-    if ( chp->kul ) {
+    if ( !refChp || refChp->kul != chp->kul ) {
         QDomElement underline( m_mainDocument.createElement( "UNDERLINE" ) );
         QString val = (chp->kul == 0) ? "0" : "1";
         switch ( chp->kul ) {
@@ -298,7 +303,7 @@ void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CH
         underline.setAttribute( "value", val );
         format.appendChild( underline );
     }
-    if ( chp->fStrike || chp->fDStrike ) {
+    if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike ) {
         QDomElement strikeout( m_mainDocument.createElement( "STRIKEOUT" ) );
         if ( chp->fDStrike ) // double strikethrough
         {
@@ -315,7 +320,7 @@ void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CH
         format.appendChild( strikeout );
     }
 
-    if ( chp->iss ) { // superscript/subscript
+    if ( !refChp || refChp->iss != chp->iss ) { // superscript/subscript
         QDomElement vertAlign( m_mainDocument.createElement( "VERTALIGN" ) );
         // Obviously the values are reversed between the two file formats :)
         int kwordVAlign = (chp->iss==1 ? 2 : chp->iss==2 ? 1 : 0);
@@ -323,15 +328,24 @@ void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CH
         format.appendChild( vertAlign );
     }
 
-    if ( chp->fHighlight ) { // background color is known as "highlight" in msword
-        QColor color = Conversion::color( chp->icoHighlight, -1 );
+    // background color is known as "highlight" in msword
+    if ( !refChp || refChp->fHighlight != chp->fHighlight || refChp->icoHighlight != chp->icoHighlight ) {
         QDomElement bgcolElem( m_mainDocument.createElement( "TEXTBACKGROUNDCOLOR" ) );
-        bgcolElem.setAttribute( "red", color.red() );
-        bgcolElem.setAttribute( "blue", color.blue() );
-        bgcolElem.setAttribute( "green", color.green() );
+        if ( chp->fHighlight )
+        {
+            QColor color = Conversion::color( chp->icoHighlight, -1 );
+            bgcolElem.setAttribute( "red", color.red() );
+            bgcolElem.setAttribute( "blue", color.blue() );
+            bgcolElem.setAttribute( "green", color.green() );
+        } else {
+            bgcolElem.setAttribute( "red", -1 );
+            bgcolElem.setAttribute( "blue", -1 );
+            bgcolElem.setAttribute( "green", -1 );
+        }
         format.appendChild( bgcolElem );
     }
-    if ( chp->fShadow ) {
+    // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
+    if ( !refChp || refChp->fShadow != chp->fShadow ) {
         QDomElement weight( m_mainDocument.createElement( "SHADOWTEXT" ) );
         weight.setAttribute( "value", "1" );
         format.appendChild( weight );
@@ -523,7 +537,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
             const wvWare::Word97::TabDescriptor &td = pap->rgdxaTab[i];
             QDomElement tabElement = m_mainDocument.createElement( "TABULATOR" );
             tabElement.setAttribute( "ptpos", (double)td.dxaTab / 20.0 );
-            kdDebug() << "ptpos=" << (double)td.dxaTab / 20.0 << endl;
+            //kdDebug() << "ptpos=" << (double)td.dxaTab / 20.0 << endl;
             // Wow, lucky here. The type enum matches. Only, MSWord has 4=bar,
             // which kword doesn't support. We map it to 0 with a clever '%4' :)
             tabElement.setAttribute( "type", td.tbd.jc % 4 );
@@ -549,5 +563,6 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
 
     // TODO: COUNTER
     // TODO? FORMAT - unless it all comes from the style, or is all specified for all chars
-    // TODO: SHADOW - does MSWord allow defining those properties?
+    // TODO: SHADOW - if any SHADOWTEXT was generated, generate <SHADOW> with hardcoded
+    // values that make it look like in MSWord.
 }
