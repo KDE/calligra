@@ -45,7 +45,15 @@ KWord13OasisGenerator::~KWord13OasisGenerator( void )
 
 bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
+    if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
+    {
+        kdWarning(30520) << "KWord Document is different!" <<endl;
+    }
+    
+    m_kwordDocument = &kwordDocument;
+
     // ### TODO
+    
     return true;
 }
 
