@@ -32,7 +32,9 @@
 class GDocument;
 class GObject;
 class QColor;
+#ifndef __DECCXX
 class istream;
+#endif
 
 class XfigImport : public ImportFilter {
 public:

@@ -22,7 +22,6 @@
 
 */
 
-#include <XfigImport.h>
 #include <GDocument.h>
 #include <GGroup.h>
 #include <GPolyline.h>
@@ -33,6 +32,7 @@
 #include <fstream.h>
 #include <limits.h>
 #include <math.h>
+#include <XfigImport.h>
 
 using namespace std;
 
