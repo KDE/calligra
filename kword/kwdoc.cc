@@ -1320,10 +1320,14 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem, this, m_defaultFont );
-        //kdDebug() << "KWDocument::loadStyleTemplates " << sty->name() << endl;
+        kdDebug() << "KWDocument::loadStyleTemplates " << sty->name() << endl;
         addStyleTemplate( sty );
         if(m_styleList.count() > followingStyles.count() )
-            followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
+        {
+            QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
+            kdDebug() << " following=" << following << endl;
+            followingStyles.append( following );
+        }
         else
             kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
@@ -1348,7 +1352,7 @@ void KWDocument::addStyleTemplate( KWStyle * sty )
     {
         if ( p->name() == sty->name() )
         {
-            //kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
+            kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
             // Replace existing style
             *p = *sty;
             //if ( p->name() == "Standard" ) defaultParagLayout = p;
@@ -1409,20 +1413,30 @@ void KWDocument::progressItemLoaded()
     }
 }
 
-void KWDocument::loadFrameSets( QDomElement framesets )
+void KWDocument::loadFrameSets( QDomElement framesetsElem )
 {
     // <FRAMESET>
     // First prepare progress info
     m_nrItemsToLoad = 0; // total count of items (mostly paragraph and frames)
-    QDomNodeList listFramesets = framesets.elementsByTagName( "FRAMESET" );
-    for (unsigned int item = 0; item < listFramesets.count(); item++)
-        m_nrItemsToLoad += listFramesets.item( item ).childNodes().count();
+    QDomElement framesetElem = framesetsElem.firstChild().toElement();
+    // Workaround the slowness of QDom's elementsByTagName
+    QValueList<QDomElement> framesets;
+    for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
+    {
+        if ( framesetElem.tagName() == "FRAMESET" )
+        {
+            framesets.append( framesetElem );
+            m_nrItemsToLoad += framesetElem.childNodes().count();
+        }
+    }
+
     m_itemsLoaded = 0;
 
-    for (unsigned int item = 0; item < listFramesets.count(); item++)
+    QValueList<QDomElement>::Iterator it = framesets.begin();
+    QValueList<QDomElement>::Iterator end = framesets.end();
+    for ( ; it != end ; ++it )
     {
-        QDomElement framesetElem = listFramesets.item( item ).toElement();
-        (void) loadFrameSet( framesetElem );
+        (void) loadFrameSet( *it );
     }
 }
 
