@@ -1,25 +1,23 @@
 
-INCLUDES = $(all_includes) $(MICO_INCLUDES) 
-LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = -lkom -lcutesti $(LIB_KIMGIO) -lkspell $(LIBMICO) $(LIB_KFILE)
+INCLUDES = -I$(srcdir)/../../lib/kofficecore -I$(idldir) $(all_includes)
+# LDFLAGS	= $(all_libraries) $(KDE_RPATH)
+libkspelltool_la_LIBADD = $(all_libraries) ../../lib/kofficecore/libkofficecore.la -lkspell
 
 ####### Files
 
-bin_PROGRAMS = spell_tool
+lib_LTLIBRARIES = libkspelltool.la
 
-spell_tool_SOURCES = main.cc datatools.idl
+libkspelltool_la_SOURCES = main.cc
 
-noinst_HEADERS = main.h datatools.h
+libkspelltool_la_LDFLAGS = -version-info 1:0:0
 
-METASOURCES = main.moc
+noinst_HEADERS = main.h
 
-service_DATA = spell_tool.desktop
+libkspelltool_la_METASOURCES = main.moc
+
+service_DATA = kspelltool.desktop
 servicedir = $(kde_servicesdir)
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../po/spell_tool.pot
-
-IDL_FLAGS = --relative-paths --any -I$(idldir)
-
-datatools_IDLDIR = $(idldir)
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../po/kspelltool.pot
 

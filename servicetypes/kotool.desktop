@@ -1,9 +1,21 @@
 [Desktop Entry]
-X-KDE-ServiceType=KOfficeTool
+X-KDE-ServiceType=KoDataTool
 Comment=KOffice Tool
+Comment[de]=KOffice Werkzeug
+Comment[eo]=Ilo por la programo Oficejo
+Comment[fi]=Koffice työkalu
+Comment[hu]=KOffice Segédeszköz
+Comment[ja]=KOffice¥Ä¡¼¥ë
+Comment[sv]=Verktyg till KOffice
 
 [PropertyDef::Commands]
 Type=QStringList
 
 [PropertyDef::CommandsI18N]
+Type=QStringList
+
+[PropertyDef::DataType]
+Type=QString
+
+[PropertyDef::DataMimeTypes]
 Type=QStringList

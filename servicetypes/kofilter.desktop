@@ -1,6 +1,11 @@
 [Desktop Entry]
 X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
+Comment[eo]=filtrilo por Oficejo
+Comment[fi]=KOffice suodatin
+Comment[hu]=KOffice Szûrõ
+Comment[ja]=KOffice¥Õ¥£¥ë¥¿¡¼
+Comment[sv]=KOffice-filter
 
 [PropertyDef::Import]
 Type=QString
