@@ -335,7 +335,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
             /*Qt3::QTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
                 cg, zoomHandler,
-                onlyChanged, cursor != 0, cursor, resetChanged );
+                onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() );
         }
     }
     else
@@ -344,7 +344,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
         /*Qt3::QTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, zoomHandler,
-            onlyChanged, cursor != 0, cursor, resetChanged );
+            onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() );
     }
 }
 
@@ -868,7 +868,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
-        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ /*, resetChanged*/ );
+        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ ,true/*, resetChanged*/,m_doc->backgroundSpellCheckEnabled() );
 }
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
