@@ -23,7 +23,7 @@
 #include <qevent.h>
 #include <qfile.h>
 #include <qpainter.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qstring.h>
 #include <qtextstream.h>
 
@@ -608,7 +608,7 @@ bool KFormulaContainer::load(QDomDocument doc)
 }
 
 
-void KFormulaContainer::print(QPrinter& printer)
+void KFormulaContainer::print(KPrinter& printer)
 {
     //printer.setFullPage(true);
     QPainter painter;

@@ -44,7 +44,7 @@ class KFormulaCommand;
 class KFormulaDocument;
 class QKeyEvent;
 class QPainter;
-class QPrinter;
+class KPrinter;
 
 
 /**
@@ -133,7 +133,7 @@ public:
     /**
      * Prints the formula.
      */
-    void print(QPrinter& printer);
+    void print(KPrinter& printer);
 
 
     /**
