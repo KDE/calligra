@@ -31,8 +31,8 @@
 
 static KCmdLineOptions options[] =
 {
-  { "+script", I18N_NOOP("Script to run."), 0 },
-  { "+-- [options]", I18N_NOOP("Options to pass to the script."), 0 },
+  { "+script", I18N_NOOP("Script to run"), 0 },
+  { "+-- [options]", I18N_NOOP("Options to pass to the script"), 0 },
   { 0, 0, 0 }
 };
 
