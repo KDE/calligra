@@ -169,6 +169,15 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 	m_container = container;
 	m_editor = 0;
 
+	// widget is disabled, so we re-enable it while editing
+	if(!tree->isEnabled()) {
+		QPalette p = w->palette();
+		QColorGroup cg = p.active();
+		p.setActive(p.disabled());
+		p.setDisabled(cg);
+		w->setPalette(p);
+	}
+
 	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 }
 
@@ -274,6 +283,15 @@ WidgetFactory::resetEditor()
 		tree->eventEater()->setContainer(m_container);
 		if(!m_editor && m_widget)
 			setRecursiveCursor(m_widget, m_container->form());
+
+		// disable again the widget
+		if(!m_editor && !tree->isEnabled()) {
+			QPalette p = m_widget->palette();
+			QColorGroup cg = p.active();
+			p.setActive(p.disabled());
+			p.setDisabled(cg);
+			m_widget->setPalette(p);
+		}
 	}
 	if(m_editor)
 	{

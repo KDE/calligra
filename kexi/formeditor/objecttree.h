@@ -82,6 +82,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		void		addPixmapName(const QString &property, const QString &name);
 		QString		pixmapName(const QString &property);
 
+		void  setEnabled(bool enabled)  { m_enabled = enabled; }
+		bool  isEnabled()  { return m_enabled; }
+
 		int gridRow() const { return m_row; }
 		int gridCol() const { return m_col; }
 		int gridRowSpan() const { return m_rowspan; }
@@ -100,6 +103,8 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeItem* m_parent;
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<EventEater> m_eater;
+
+		bool  m_enabled;
 
 		int m_row, m_col, m_rowspan, m_colspan;
 		bool m_span;

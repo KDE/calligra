@@ -81,6 +81,25 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 	{
 		saveLayoutProperty(property, value);
 	}
+	else if(property == "enabled")
+	{
+		for(QWidget *w = m_widgets.first(); w; w = m_widgets.next()) {
+			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
+			if(tree->isEnabled() == value.toBool())
+				continue;
+
+			QPalette p = w->palette();
+			QColorGroup cg = p.active();
+			p.setActive(p.disabled());
+			p.setDisabled(cg);
+			w->setPalette(p);
+
+			tree->setEnabled(value.toBool());
+			emit propertyChanged(w, property, value);
+			return;
+		}
+		return;
+	}
 	else
 	{
 		if(!m_multiple) // one widget selected
@@ -196,6 +215,11 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	QStrList pList = w->metaObject()->propertyNames(true);
 	bool isTopLevel = m_manager->isTopLevel(w);
 
+	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
+			return;
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
+	if(!tree)  return;
+
 	int count = 0;
 	QStrListIterator it(pList);
 	// We go through the list of properties
@@ -231,12 +255,12 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 
 		if(QString(meta->name()) == "name")
 			(*this)["name"].setAutoSync(0); // name should be updated only when pressing Enter
-		if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
-			return;
-		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
-		if(!tree)  return;
+
 		updateOldValue(tree, meta->name()); // update the KexiProperty.oldValue using the value in modifProp
 	}
+
+
+	(*this)["enabled"].setValue( QVariant(tree->isEnabled(), 3));
 
 	// add the signals property
 	QStrList strlist = w->metaObject()->signalNames(true);
