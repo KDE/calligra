@@ -337,7 +337,6 @@ private:
 
     /**
      * The cursor that is used if there is no view.
-     * Please consider this a dirty hack.
      */
     FormulaCursor* internCursor;
 

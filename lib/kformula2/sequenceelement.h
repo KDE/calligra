@@ -81,7 +81,7 @@ public:
     /**
      * If the cursor is inside a sequence it needs to be drawn.
      */
-    void drawCursor(FormulaCursor* cursor, QPainter& painter);
+    void drawCursor(FormulaCursor* cursor, QPainter& painter, bool smallCursor);
     
     // navigation
     // 
@@ -280,9 +280,10 @@ protected:
      * @param point the elements upper left corner corner
      * @param pos the position the cursor points to
      * @param mark the position the mark points to
+     * @param smallCursor whether the cursor might be bigger that the formula
      */
     virtual void drawSelectionCursor(QPainter& painter, QPoint& point,
-                                     uint pos, uint mark);
+                                     uint pos, uint mark, bool smallCursor);
 
     /**
      * draws the cursor if it is not selecting.
@@ -290,8 +291,10 @@ protected:
      * @param painter the painter
      * @param point the elements upper left corner corner
      * @param pos the position the cursor points to
+     * @param smallCursor whether the cursor might be bigger that the formula
      */
-    virtual void drawSingleCursor(QPainter& painter, QPoint& point, uint pos);
+    virtual void drawSingleCursor(QPainter& painter, QPoint& point,
+                                  uint pos, bool smallCursor);
 
     /**
      * @returns the position where the child starts.

@@ -64,7 +64,7 @@ void FormulaCursor::setMark(int mark)
 }
 
 
-void FormulaCursor::draw(QPainter& painter)
+void FormulaCursor::draw(QPainter& painter, bool smallCursor)
 {
     if (readOnly && !isSelection())
         return;
@@ -73,7 +73,7 @@ void FormulaCursor::draw(QPainter& painter)
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
     if (sequence != 0) {
-        sequence->drawCursor(this, painter);
+        sequence->drawCursor(this, painter, smallCursor);
     }
 }
 

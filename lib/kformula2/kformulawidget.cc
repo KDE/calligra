@@ -73,7 +73,7 @@ void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter;
     painter.begin(this);
-    formulaView.draw(painter, event->rect());
+    formulaView.draw(painter, event->rect(), colorGroup());
     painter.end();
 }
 

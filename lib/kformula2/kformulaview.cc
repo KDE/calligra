@@ -33,7 +33,8 @@
 
 
 KFormulaView::KFormulaView(KFormulaContainer* doc, QWidget* w)
-        : cursorVisible(false), cursorHasChanged(true), document(doc), widget(w)
+        : smallCursor(false), cursorVisible(false), cursorHasChanged(true),
+          document(doc), widget(w)
 {
     
     // This is buggy. We do need more/other messages.
@@ -64,29 +65,12 @@ void KFormulaView::setReadOnly(bool ro)
 }
 
 
-#if 0
-void KFormulaView::paintEvent(QPaintEvent* event)
+void KFormulaView::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 {
-    //cerr << "void KFormulaView::paintEvent(QPaintEvent*): " << cursorVisible << " " << hasFocus() << endl;
     hideCursor();
-    
-    QPainter painter;
-    painter.begin(widget);
-    painter.fillRect(event->rect(), widget->backgroundColor());
+    painter.fillRect(rect, cg.base());
     document->draw(painter);
-    painter.end();
-
     showCursor();
-    emitCursorChanged();
-}
-#endif
-
-void KFormulaView::draw(QPainter& painter, const QRect& rect)
-{
-    hideCursor(&painter);
-    painter.fillRect(rect, widget->backgroundColor());
-    document->draw(painter);
-    showCursor(&painter);
     emitCursorChanged();
 }
 
@@ -328,6 +312,15 @@ MoveFlag KFormulaView::movementFlag(int state)
     return static_cast<MoveFlag>(flag);
 }
 
+void KFormulaView::setSmallCursor(bool small)
+{
+    bool wasVisible = cursorVisible;
+    hideCursor();
+    smallCursor = small;
+    if (wasVisible) {
+        showCursor();
+    }
+}
 
 void KFormulaView::hideCursor(QPainter* painter)
 {
@@ -336,12 +329,12 @@ void KFormulaView::hideCursor(QPainter* painter)
         cursorVisible = false;
 
         if (painter != 0) {
-            cursor->draw(*painter);
+            cursor->draw(*painter, smallCursor);
         }
         else {
             QPainter painter;
             painter.begin(widget);
-            cursor->draw(painter);
+            cursor->draw(painter, smallCursor);
             painter.end();
         }
     }
@@ -354,12 +347,12 @@ void KFormulaView::showCursor(QPainter* painter)
         cursorVisible = true;
 
         if (painter != 0) {
-            cursor->draw(*painter);
+            cursor->draw(*painter, smallCursor);
         }
         else {
             QPainter painter;
             painter.begin(widget);
-            cursor->draw(painter);
+            cursor->draw(painter, smallCursor);
             painter.end();
         }
     }

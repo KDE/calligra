@@ -31,6 +31,7 @@ class BasicElement;
 class FormulaCursor;
 class FormulaElement;
 class KFormulaContainer;
+class QColorGroup;
 class QWidget;
 
 
@@ -71,7 +72,7 @@ public:
     void focusInEvent(QFocusEvent* event);
     void focusOutEvent(QFocusEvent* event);
 
-    void draw(QPainter& painter, const QRect& rect);
+    void draw(QPainter& painter, const QRect& rect, const QColorGroup& cg);
 
     /**
      * The document we show.
@@ -100,6 +101,8 @@ public slots:
      * Our cursor.
      */
     FormulaCursor* getCursor() { return cursor; }
+
+    void setSmallCursor(bool small);
     
 protected slots:
 
@@ -138,6 +141,11 @@ private:
      */
     void emitCursorChanged();
 
+    /**
+     * If set the cursor will never be bigger that the formula.
+     */
+    bool smallCursor;
+    
     /**
      * Whether you can see the cursor. This has to be kept
      * in sync with reality.

@@ -232,17 +232,17 @@ void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
 /**
  * If the cursor is inside a sequence it needs to be drawn.
  */
-void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
+void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter, bool smallCursor)
 {
     QPoint point = widgetPos();
     uint pos = cursor->getPos();
 
     if (cursor->isSelection()) {
         uint mark = cursor->getMark();
-        drawSelectionCursor(painter, point, pos, mark);
+        drawSelectionCursor(painter, point, pos, mark, smallCursor);
     }
     else {
-        drawSingleCursor(painter, point, pos);
+        drawSingleCursor(painter, point, pos, smallCursor);
     }
 
     int posX = getChildPosition(pos);
@@ -251,7 +251,7 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
 }
 
 
-void SequenceElement::drawSelectionCursor(QPainter& painter, QPoint& point, uint pos, uint mark)
+void SequenceElement::drawSelectionCursor(QPainter& painter, QPoint& point, uint pos, uint mark, bool smallCursor)
 {
     int posX = getChildPosition(pos);
     int markX = getChildPosition(mark);
@@ -259,20 +259,31 @@ void SequenceElement::drawSelectionCursor(QPainter& painter, QPoint& point, uint
     int x = QMIN(posX, markX);
     int width = abs(posX - markX);
     painter.setRasterOp(Qt::XorROP);
-    painter.fillRect(point.x()+x, point.y()-2, width, height+4, Qt::white);
+    if (smallCursor) {
+        painter.fillRect(point.x()+x, point.y(), width, height, Qt::white);
+    }
+    else {
+        painter.fillRect(point.x()+x, point.y()-2, width, height+4, Qt::white);
+    }
     painter.setRasterOp(Qt::CopyROP);
 }
 
-void SequenceElement::drawSingleCursor(QPainter& painter, QPoint& point, uint pos)
+void SequenceElement::drawSingleCursor(QPainter& painter, QPoint& point, uint pos, bool smallCursor)
 {
     int posX = getChildPosition(pos);
     int height = getHeight();
     painter.setRasterOp(Qt::XorROP);
     painter.setPen(Qt::white);
-    painter.drawLine(point.x()+posX, point.y()-2,
-                     point.x()+posX, point.y()+height+2);
-    painter.drawLine(point.x(), point.y()+height+3,
-                     point.x()+getWidth(), point.y()+height+3);
+    if (smallCursor) {
+        painter.drawLine(point.x()+posX, point.y(),
+                         point.x()+posX, point.y()+height);
+    }
+    else {
+        painter.drawLine(point.x()+posX, point.y()-2,
+                         point.x()+posX, point.y()+height+2);
+        painter.drawLine(point.x(), point.y()+height+3,
+                         point.x()+getWidth(), point.y()+height+3);
+    }
     painter.setRasterOp(Qt::CopyROP);
 }
 

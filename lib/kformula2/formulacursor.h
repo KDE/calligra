@@ -93,7 +93,7 @@ public:
      * Draws the cursor at its current position.
      * The cursor will always be drawn in xor mode.
      */
-    void draw(QPainter&);
+    void draw(QPainter&, bool smallCursor);
 
     
     // simple cursor movement.
