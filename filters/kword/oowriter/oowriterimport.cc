@@ -186,7 +186,13 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     elementPaper.setAttribute("zoom",100);
     docElement.appendChild(elementPaper);
 
-    // ## TODO use fo:margin-{left/right/top/bottom}
+    // Page margins
+    QDomElement element = mainDocument.createElement("PAPERBORDERS");
+    element.setAttribute("left", OoUtils::toPoint(properties.attribute("fo:margin-left")));
+    element.setAttribute("top", OoUtils::toPoint(properties.attribute("fo:margin-top")));
+    element.setAttribute("right", OoUtils::toPoint(properties.attribute("fo:margin-right")));
+    element.setAttribute("bottom", OoUtils::toPoint(properties.attribute("fo:margin-bottom")));
+    elementPaper.appendChild(element);
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
     docElement.appendChild(framesetsElem);
