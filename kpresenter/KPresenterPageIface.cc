@@ -673,3 +673,25 @@ void KPresenterPageIface::rotateAllObjSelected(float _newAngle)
     KCommand *cmd= m_page->rotateObj( _newAngle);
     delete cmd;
 }
+
+void KPresenterPageIface::stickyAllObjSelected(bool sticky)
+{
+    KCommand *cmd=m_page->stickyObj(sticky, m_page);
+    delete cmd;
+}
+
+void KPresenterPageIface::moveAllObjectSelected( int diffx,int diffy)
+{
+    KPresenterView *_view=m_page->kPresenterDoc()->getKPresenterView();
+    if(_view)
+    {
+        KCommand *cmd=m_page->moveObject(_view, diffx,diffy);
+        delete cmd;
+    }
+}
+
+void KPresenterPageIface::deleteAllObjectSelected()
+{
+    KCommand * cmd=m_page->deleteObjs();
+    delete cmd;
+}
