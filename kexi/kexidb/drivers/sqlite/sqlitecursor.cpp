@@ -24,6 +24,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <kdebug.h>
 
 using namespace KexiDB;
 
@@ -118,11 +119,11 @@ bool SQLiteCursor::drv_getRecord()
 ///	debug(">>>> %s", dd);
 
 		for (int i=0;i<m_data->curr_cols;i++) {
-			debug("column %d: %s %s", i, m_data->curr_colname[i], m_data->curr_colname[m_data->curr_cols+i]);
+			kdDebug()<<"column "<< i<<","<< m_data->curr_colname[i]<<","<< m_data->curr_colname[m_data->curr_cols+i]<<endl;
 		}
 
 		if (res!=SQLITE_ROW) {
-			debug("res!=SQLITE_ROW ********");
+			kdDebug()<<"res!=SQLITE_ROW ********"<<endl;
 			m_validRecord = false;
 			m_afterLast = true;
 			return false;
@@ -134,9 +135,9 @@ bool SQLiteCursor::drv_getRecord()
 	m_at++;
 	
 	for (int i=0;i<m_data->curr_cols;i++) {
-		debug("%d: %s == %s", i, m_data->curr_colname[i], m_data->curr_coldata[i]);
+		kdDebug()<<i<<": "<< m_data->curr_colname[i]<<" == "<< m_data->curr_coldata[i]<<endl;
 	}
-	debug("m_at == %d",m_at);
+	kdDebug()<<"m_at == "<<m_at<<endl;
 	m_validRecord = true;
 	return true;
 }
@@ -149,7 +150,7 @@ void SQLiteCursor::drv_storeCurrentRecord()
 	m_data->rec_stored = true;
 	m_data->next_cols = m_data->curr_cols;
 	for (int i=0;i<m_data->curr_cols;i++) {
-		debug("[COPY] %d: %s", i, m_data->curr_coldata[i]);
+		kdDebug()<<"[COPY] "<<i<<": "<< m_data->curr_coldata[i]<<endl;
 		if (m_data->curr_coldata[i])
 			m_data->next_coldata[i] = strdup( m_data->curr_coldata[i] );
 		else

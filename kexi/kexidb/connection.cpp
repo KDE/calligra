@@ -59,6 +59,7 @@ Connection::~Connection()
 			//delete own cursors:
 			m_cursors.clear();
 		}
+
 		//do not allow the driver to touch me: I will kill myself.
 		m_driver->m_connections.take( this );
 	}

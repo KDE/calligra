@@ -50,8 +50,8 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 
 		virtual QStringList tableNames();
 		virtual Cursor* executeQuery( const QString& statement = QString::null);
-		virtual QString escapeString(const QString& str);
-		virtual QCString escapeString(const QCString& str);
+		virtual QString escapeString(const QString& str) const;
+		virtual QCString escapeString(const QCString& str) const;
 
 	protected:
 		/*! Used by driver */
@@ -60,7 +60,7 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 //		virtual KexiDB::ConnectionInternal* createConnectionInternalObject( KexiDB::Connection& conn );
 		virtual bool drv_connect();
 		virtual bool drv_disconnect();
-		virtual void drv_getDatabasesList( QStringList &list );
+		virtual bool drv_getDatabasesList( QStringList &list );
 		/*! Creates new database using connection. Note: Do not pass \a dbName 
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. */

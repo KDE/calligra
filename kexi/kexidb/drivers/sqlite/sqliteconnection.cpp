@@ -23,6 +23,7 @@
 
 #include <kexidb/driver.h>
 #include <kexidb/cursor.h>
+#include <kexidb/error.h>
 
 #include <qfile.h>
 #include <qdir.h>
@@ -75,10 +76,11 @@ bool SQLiteConnection::drv_disconnect()
 	return true;
 }
 
-void SQLiteConnection::drv_getDatabasesList( QStringList &list )
+bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 {
 	//this is one-db-per-file database
 	list.append( m_data.dbFileName() );
+	return true;
 }
 
 bool SQLiteConnection::drv_createDatabase( const QString &dbName )
@@ -111,20 +113,20 @@ bool SQLiteConnection::drv_closeDatabase()
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (!QDir().remove(dbName)) {
-		setErrorMsg( i18n("Can't remove '%1'").arg(dbName) );
+		setErrorMsg(ERR_ACCESS_RIGHTS, i18n("Can't remove '%1'").arg(dbName) );
 		return false;
 	}
 	return true;
 }
 
-QString SQLiteConnection::escapeString(const QString& str)
+QString SQLiteConnection::escapeString(const QString& str) const
 {
 //	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length());
 //	qstrcpy( target, str.local8Bit() );
 	return str;
 }
 
-QCString SQLiteConnection::escapeString(const QCString& str)
+QCString SQLiteConnection::escapeString(const QCString& str) const
 {
 	return str;
 }
