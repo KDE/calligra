@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kexidbrecordset.h>
 
-KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *handler, const QString& ident, 
+KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *handler, const QString& ident,
 	const QString& mime, const QString& title)
  : KexiProjectHandlerItem(handler,ident,mime,title)
 	, m_client(0)
@@ -77,6 +77,7 @@ void KexiQueryPartItem::store(KoStore* store)
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
 	QDomElement docElement = domDoc.createElement("query");
+	docElement.setAttribute("version", "1");
 	domDoc.appendChild(docElement);
 	QDomElement nameElement = domDoc.createElement("name");
 	QDomText attrName = domDoc.createTextNode(fullIdentifier());
@@ -97,7 +98,11 @@ void KexiQueryPartItem::store(KoStore* store)
 		{
 			QDomElement item = domDoc.createElement("item");
 			kdDebug() << "KexiQueryPartItem::store(): source=" << it->getValue(0).toString() << endl;
-			item.setAttribute("source", it->getValue(0).toString());
+
+			QStringList tables = handler()->kexiProject()->db()->tableNames();
+			tables.prepend("<NONE>");
+
+			item.setAttribute("source", (*tables.at(it->getValue(0).toInt())));
 			item.setAttribute("field", it->getValue(1).toString());
 			item.setAttribute("shown", it->getValue(2).toBool()?"true":"false");
 			item.setAttribute("orC", it->getValue(3).toString());
@@ -155,7 +160,9 @@ KexiQueryPartItem::load(KoStore* store)
 		doc.setContent(store->device());
 		store->close();
 		QDomElement el=doc.documentElement();
-		kdDebug()<<"document tag name: "<<el.tagName()<<endl;
+		kdDebug()<<"KexiQueryPartItem::load(): document tag name: "<< el.tagName() <<endl;
+		QString version = el.attribute("version", "0");
+		kdDebug()<<"KexiQueryPartItem::load(): version: " << version <<endl;
 		for (QDomElement readTag=el.firstChild().toElement();
 		 !readTag.isNull();readTag=readTag.nextSibling().toElement())
 		{
@@ -168,7 +175,20 @@ KexiQueryPartItem::load(KoStore* store)
 				!itemTag.isNull(); itemTag=itemTag.nextSibling().toElement())
 				{
 					KexiTableItem *tableItem = new KexiTableItem(5);
-					tableItem->setValue(0, QVariant(itemTag.attribute("source")));
+					if(version == "0")
+					{
+						//this is a quite unsave method... but still implemented for older
+						//documents... see else for the newer, safer method
+						tableItem->setValue(0, QVariant(itemTag.attribute("source")));
+					}
+					else if(version == "1")
+					{
+						//close your eyes and jump over some lines
+						QStringList tables = handler()->kexiProject()->db()->tableNames();
+						tables.prepend("<NONE>");
+						tableItem->setValue(0, tables.findIndex(itemTag.attribute("source")));
+					}
+
 					tableItem->setValue(1, QVariant(itemTag.attribute("field")));
 					tableItem->setValue(2, QVariant(true));
 					tableItem->setValue(3, QVariant(itemTag.attribute("orC")));
