@@ -2821,6 +2821,7 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     KoPageLayout layout = doc->pageLayout();
 
     tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
+    tabChooser->setReadWrite(doc->isReadWrite());
 
     r_horz = new KoRuler( left, canvas->viewport(), Qt::Horizontal, layout,
                           KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
