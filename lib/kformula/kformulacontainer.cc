@@ -400,7 +400,7 @@ void Container::save(QString file)
 {
     QFile f(file);
     if(!f.open(IO_Truncate | IO_ReadWrite)) {
-        kdDebug( DEBUGID ) << "Error opening file " << file.latin1() << endl;
+        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
         return;
     }
     QCString data=domData().toCString();
@@ -425,7 +425,7 @@ void Container::load(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        kdDebug( DEBUGID ) << "Error opening file " << file.latin1() << endl;
+        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
         return;
     }
     QTextStream stream(&f);
@@ -447,7 +447,7 @@ void Container::loadMathMl(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        kdDebug( DEBUGID ) << "Error opening file " << file.latin1() << endl;
+        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
         return;
     }
     QDomDocument doc;
@@ -485,7 +485,7 @@ bool Container::load(QDomNode doc)
         }
         else {
             delete root;
-            kdDebug( DEBUGID ) << "Error constructing element tree." << endl;
+            kdWarning( DEBUGID ) << "Error constructing element tree." << endl;
         }
     }
     return false;

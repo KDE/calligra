@@ -145,7 +145,7 @@ Command* MatrixSequenceElement::buildCommand( Container* container, Request* req
                 }
             }
         }
-        kdDebug( DEBUGID ) << "MatrixSequenceElement::buildCommand: Sequence not found." << endl;
+        kdWarning( DEBUGID ) << "MatrixSequenceElement::buildCommand: Sequence not found." << endl;
         break;
     }
     default:
@@ -737,7 +737,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
         rows = rowStr.toInt();
     }
     if (rows == 0) {
-        kdDebug( DEBUGID ) << "Rows <= 0 in MatrixElement." << endl;
+        kdWarning( DEBUGID ) << "Rows <= 0 in MatrixElement." << endl;
         return false;
     }
 
@@ -747,7 +747,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
         cols = columnStr.toInt();
     }
     if (cols == 0) {
-        kdDebug( DEBUGID ) << "Columns <= 0 in MatrixElement." << endl;
+        kdWarning( DEBUGID ) << "Columns <= 0 in MatrixElement." << endl;
         return false;
     }
 

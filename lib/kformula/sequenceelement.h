@@ -46,7 +46,7 @@ public:
     /**
      * @returns true if the sequence contains only text.
      */
-    bool isTextOnly() const { return textSequence; }
+    virtual bool isTextOnly() const { return textSequence; }
 
     /**
      * Sets the cursor and returns the element the point is in.
@@ -367,6 +367,18 @@ class NameSequence : public SequenceElement {
 public:
 
     NameSequence( BasicElement* parent = 0 );
+
+    /**
+     * @returns true if the sequence contains only text.
+     */
+    //virtual bool isTextOnly() const { return true; }
+
+    /**
+     * @returns the character that represents this element. Used for
+     * parsing a sequence.
+     * This is guaranteed to be QChar::null for all non-text elements.
+     */
+    virtual QChar getCharacter() const { return '\\'; }
 
     /**
      * @returns the type of this element. Used for

@@ -682,7 +682,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdDebug( DEBUGID ) << "Empty content in SymbolElement." << endl;
+        kdWarning( DEBUGID ) << "Empty content in SymbolElement." << endl;
         return false;
     }
     node = node.nextSibling();

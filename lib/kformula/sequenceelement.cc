@@ -1131,7 +1131,7 @@ BasicElement* SequenceElement::createElement( QString type )
     else if ( type == "SYMBOL" )       return new SymbolElement();
     else if ( type == "NAMESEQUENCE" ) return new NameSequence();
     else if ( type == "SEQUENCE" ) {
-        kdDebug( DEBUGID ) << "malformed data: sequence inside sequence." << endl;
+        kdWarning( DEBUGID ) << "malformed data: sequence inside sequence." << endl;
         return 0;
     }
     return 0;

@@ -394,13 +394,13 @@ bool FractionElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( numerator, node, "NUMERATOR" ) ) {
-        kdDebug( DEBUGID ) << "Empty numerator in FractionElement." << endl;
+        kdWarning( DEBUGID ) << "Empty numerator in FractionElement." << endl;
         return false;
     }
     node = node.nextSibling();
 
     if ( !buildChild( denominator, node, "DENOMINATOR" ) ) {
-        kdDebug( DEBUGID ) << "Empty denominator in FractionElement." << endl;
+        kdWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
         return false;
     }
     node = node.nextSibling();

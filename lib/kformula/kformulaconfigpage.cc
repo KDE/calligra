@@ -48,7 +48,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     // fonts
 
     QWidget* fontWidget = new QWidget( box );
-    QGridLayout* fontLayout = new QGridLayout( fontWidget, 4, 1 );
+    QGridLayout* fontLayout = new QGridLayout( fontWidget, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     defaultFont = contextStyle.getDefaultFont();
     nameFont = contextStyle.getNameFont();
@@ -67,7 +67,6 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     connect( buildFontLine( fontWidget, fontLayout, 3,
                             operatorFont, i18n( "Operator font" ), operatorFontName ), SIGNAL( clicked() ),
              this, SLOT( selectNewOperatorFont() ) );
-
 
     // syntax highlighting
 

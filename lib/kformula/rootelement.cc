@@ -513,7 +513,7 @@ bool RootElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdDebug( DEBUGID ) << "Empty content in RootElement." << endl;
+        kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
         return false;
     }
     node = node.nextSibling();

@@ -160,7 +160,7 @@ QDomElement BasicElement::getElementDom(QDomDocument& doc)
 bool BasicElement::buildFromDom(QDomElement& element)
 {
     if (element.tagName() != getTagName()) {
-        kdDebug( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
+        kdWarning( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
         return false;
     }
     if (!readAttributesFromDom(element)) {

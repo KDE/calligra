@@ -54,12 +54,6 @@ public:
     virtual ~ElementType();
 
     /**
-     * @returns the name of the type. Only name types are allowed
-     * to have a name.
-     */
-    //virtual QString getName() const { return QString::null; }
-
-    /**
      * @returns whether we want to see this element.
      */
     virtual bool isInvisible(const TextElement&) const { return false; }
@@ -222,32 +216,11 @@ public:
     NameType( SequenceParser* parser );
 
     /**
-     * @returns the name of the type. Only name types are allowed
-     * to have a name.
-     */
-    //virtual QString getName() const { return name; }
-
-    /**
-     * @returns whether we want to see this element.
-     */
-    virtual bool isInvisible( const TextElement& element ) const;
-
-    /**
      * @returns the font to be used for this kind of element
      */
     virtual QFont getFont( const ContextStyle& context );
 
 private:
-
-    /**
-     * The symbol table entry this name referres to.
-     */
-    //SymbolTableEntry* entry;
-
-    /**
-     * Our name.
-     */
-    //QString name;
 };
 
 

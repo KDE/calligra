@@ -137,6 +137,8 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& r,
     font.setPointSize( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
 
+    //kdDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;
+
     QChar ch = getRealCharacter();
     if ( ch != QChar::null ) {
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),

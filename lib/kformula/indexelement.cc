@@ -1132,7 +1132,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdDebug( DEBUGID ) << "Empty content in IndexElement." << endl;
+        kdWarning( DEBUGID ) << "Empty content in IndexElement." << endl;
         return false;
     }
     node = node.nextSibling();

@@ -239,13 +239,6 @@ NameType::NameType( SequenceParser* parser )
 }
 
 
-bool NameType::isInvisible( const TextElement& element ) const
-{
-    // Only this first char of a name might be a backslash.
-    return element.getCharacter() == QChar( '\\' );
-}
-
-
 QFont NameType::getFont(const ContextStyle& context)
 {
     return context.getNameFont();

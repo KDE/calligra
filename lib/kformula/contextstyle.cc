@@ -51,6 +51,13 @@ ContextStyle::ContextStyle()
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
       emptyColor(Qt::blue)
 {
+    kdDebug() << "ContextStyle::ContextStyle" << endl
+              << "defaultFont: " << defaultFont.rawName() << endl
+              << "nameFont: " << nameFont.rawName() << endl
+              << "numberFont: " << numberFont.rawName() << endl
+              << "operatorFont: " << operatorFont.rawName() << endl
+              << "symbolFont: " << symbolFont.rawName() << endl;
+
     m_baseTextStyle = displayStyle;
 
     lineWidth = 1;
