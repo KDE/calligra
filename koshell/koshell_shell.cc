@@ -115,6 +115,8 @@ bool KoShellWindow::openDocument( const KURL & url )
 {
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
+  if ( m_documentEntry.isEmpty() )
+    return false;
 
   m_recent->addURL( url );
 	
