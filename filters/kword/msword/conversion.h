@@ -20,7 +20,7 @@
 #ifndef CONVERSION_H
 #define CONVERSION_H
 
-#include <ustring.h>
+#include <wv2/ustring.h>
 #include <qstring.h>
 #include <qcolor.h>
 

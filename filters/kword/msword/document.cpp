@@ -20,18 +20,18 @@
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
-#include "associatedstrings.h"
 
 #include <koRect.h>
 #include <koGlobal.h>
 #include <kdebug.h>
 
-#include <styles.h>
-#include <ustring.h>
-#include <word97_generated.h>
-#include <parser.h>
-#include <parserfactory.h>
-#include <paragraphproperties.h>
+#include <wv2/styles.h>
+#include <wv2/ustring.h>
+#include <wv2/word97_generated.h>
+#include <wv2/parser.h>
+#include <wv2/parserfactory.h>
+#include <wv2/paragraphproperties.h>
+#include <wv2/associatedstrings.h>
 #include <klocale.h>
 
 

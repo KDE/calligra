@@ -20,14 +20,14 @@
 #include "texthandler.h"
 #include "conversion.h"
 
-#include <styles.h>
-#include <lists.h>
-#include <paragraphproperties.h>
-#include <functor.h>
-#include <functordata.h>
-#include <ustring.h>
-#include <parser.h>
-#include <fields.h>
+#include <wv2/styles.h>
+#include <wv2/lists.h>
+#include <wv2/paragraphproperties.h>
+#include <wv2/functor.h>
+#include <wv2/functordata.h>
+#include <wv2/ustring.h>
+#include <wv2/parser.h>
+#include <wv2/fields.h>
 
 #include <qfont.h>
 #include <qfontinfo.h>

@@ -19,7 +19,7 @@
 
 #include "tablehandler.h"
 
-#include <word97_generated.h>
+#include <wv2/word97_generated.h>
 
 #include <kdebug.h>
 #include <koRect.h>

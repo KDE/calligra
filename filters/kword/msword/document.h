@@ -22,8 +22,8 @@
 
 #include "tablehandler.h"
 
-#include <handlers.h>
-#include <functor.h>
+#include <wv2/handlers.h>
+#include <wv2/functor.h>
 
 #include <qstring.h>
 #include <qdom.h>

@@ -20,9 +20,9 @@
 #ifndef TABLEHANDLER_H
 #define TABLEHANDLER_H
 
-#include <functor.h>
-#include <word97_generated.h> // for TAP
-#include <handlers.h>
+#include <wv2/functor.h>
+#include <wv2/word97_generated.h> // for TAP
+#include <wv2/handlers.h>
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qobject.h>

@@ -22,7 +22,7 @@
 
 #include "tablehandler.h"
 
-#include <handlers.h>
+#include <wv2/handlers.h>
 #include <qstring.h>
 #include <qobject.h>
 #include <qdom.h>
