@@ -92,7 +92,7 @@ KAboutData* PluginInsertCalendar::createAboutData()
     I18N_NOOP("(c) 2005, The KSpread Team"),  //copyright
     0,//I18N_NOOP("The Insert Calendar plugin can be used in spreadsheets"),  //text
     "http://www.koffice.org/kspread/");
-  aboutData->addAuthor("Raphael Langerhorst", 0, "raphael-langerhorst@gmx.at");
+  aboutData->addAuthor("Raphael Langerhorst", 0, "Raphael.Langerhorst@kdemail.net");
   
   return aboutData;
 }
@@ -197,8 +197,6 @@ void PluginInsertCalendar::slotInsertCalendar(QDate start, QDate end)
   
   table->setText(row,colstart,i18n("Calendar from %1 to %2").arg(start.toString()).arg(end.toString()));
   
-  row += 2;
-  
   QDate current(start);
 //   QDate previous(current);
   bool yearheader = true;
@@ -209,6 +207,27 @@ void PluginInsertCalendar::slotInsertCalendar(QDate start, QDate end)
   //@todo formatting of cells - each day occupies QRect(row,col,row,col+1)
   while (current <= end)
   {
+
+    //let's see if any header is required
+    if (cs->dayOfWeek(current)==1)
+    {
+      col=colstart;
+      row++;
+      weekheader=true;
+    }
+    if (cs->day(current)==1)
+    {
+      row+=2;
+      col=colstart + (cs->dayOfWeek(current)-1)*2;
+      monthheader=true;
+      weekheader=true;
+      if (cs->month(current)==1)
+      {
+        row++;
+        yearheader=true;
+      }
+    }
+
     if (yearheader)
     {
       kdDebug() << "inserting year " + QString::number(current.year()) << endl;      
@@ -236,8 +255,14 @@ void PluginInsertCalendar::slotInsertCalendar(QDate start, QDate end)
       table->setText(row,colstart,QString::number(cs->weekNumber(current)));
       col++;
       weekheader=false;
+
+      //if we are at the beginning of the month we might need an offset
+      if (cs->day(current)==1)
+      {
+        col=colstart + (cs->dayOfWeek(current)-1)*2 + 1;
+      }
     }
-    
+
     table->setText(row,col,QString::number(cs->day(current)));    
     
     //go to the next date
@@ -246,25 +271,6 @@ void PluginInsertCalendar::slotInsertCalendar(QDate start, QDate end)
     current.setYMD(next.year(),next.month(),next.day());
     col+=2;
     
-    //let's see if any header is required
-    if (cs->dayOfWeek(current)==1)
-    {
-      col=colstart;
-      row++;
-      weekheader=true;
-    }
-    if (cs->day(current)==1)
-    {
-      row+=2;
-      col=colstart + (cs->dayOfWeek(current)-1)*2;
-      monthheader=true;
-      weekheader=true;
-      if (cs->month(current)==1)
-      {
-        row++;
-        yearheader=true;
-      }
-    }
   }
   
   document->emitEndOperation();
