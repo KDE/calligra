@@ -31,7 +31,7 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-PolygonalSelectTool::PolygonalSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas) : KisTool(doc, view)
+PolygonalSelectTool::PolygonalSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
 	m_dragging = false;
 	m_canvas = canvas;

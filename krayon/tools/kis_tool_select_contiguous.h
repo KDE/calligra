@@ -22,7 +22,6 @@
 #define __selecttoolcontiguous_h__
 
 #include <qpoint.h>
-#include "kis_view.h"
 #include "kis_tool.h"
 
 class KisDoc;
@@ -31,10 +30,11 @@ class KisView;
 
 class ContiguousSelectTool : public KisTool {
 public:
-	ContiguousSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	ContiguousSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~ContiguousSelectTool();
 
 	virtual void setupAction(QObject *collection);
+
 	virtual void clearOld();
 	virtual bool willModify() const;
 

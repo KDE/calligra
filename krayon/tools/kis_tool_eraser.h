@@ -30,10 +30,13 @@ class KisDoc;
 
 class EraserTool : public KisTool {
 public:
-	EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush);
+	EraserTool(KisDoc *doc, KisBrush *brush);
 	virtual ~EraserTool();
   
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+
 	virtual void optionsDialog();
 
 	void setBrush(KisBrush *_brush);
@@ -45,15 +48,9 @@ public slots:
 	virtual void mouseRelease(QMouseEvent*);
 
 protected:
-    QPoint  m_dragStart;
-    bool    m_dragging;
-    float   m_dragdist;
-    
-    // tool options
-    
-    bool usePattern;
-    bool useGradient;
-    int lineOpacity;
+	QPoint  m_dragStart;
+	bool    m_dragging;
+	float   m_dragdist;
 };
 
 #endif

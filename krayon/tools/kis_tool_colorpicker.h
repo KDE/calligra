@@ -28,7 +28,7 @@
 
 class ColorPicker : public KisTool {
 public:
-	ColorPicker(KisDoc *doc, KisView *view);
+	ColorPicker(KisDoc *doc);
 	virtual ~ColorPicker();
   
 	KisColor pick(int x, int y);

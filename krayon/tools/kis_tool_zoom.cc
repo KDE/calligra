@@ -28,11 +28,9 @@
 #include "kis_tool_zoom.h"
 #include "kis_view.h"
 
-ZoomTool::ZoomTool( KisView *view )
-  : KisTool( 0L, view )
+ZoomTool::ZoomTool(KisDoc *doc) : KisTool(doc)
 {
-    // set custom cursor.
-    setCursor();
+	setCursor();
 }
 
 ZoomTool::~ZoomTool()
@@ -51,11 +49,11 @@ void ZoomTool::mousePress(QMouseEvent *e)
       m_pView->zoom_out();
 }
 
-void ZoomTool::mouseMove(QMouseEvent *)
+void ZoomTool::mouseMove(QMouseEvent*)
 {
 }
 
-void ZoomTool::mouseRelease(QMouseEvent *)
+void ZoomTool::mouseRelease(QMouseEvent*)
 {
 }
 

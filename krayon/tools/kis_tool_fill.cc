@@ -30,72 +30,54 @@
 #include "kis_dlg_toolopts.h"
 
 
-FillTool::FillTool(KisDoc *doc, KisView *view)
-  : KisTool(doc, view)
+FillTool::FillTool(KisDoc *doc) : KisTool(doc)
 {
-    // set custom cursor.
-    setCursor();
-    m_pDoc = doc;
+	// set custom cursor.
+	setCursor();
+	m_pDoc = doc;
 
-    // initialize filler tool settings
-    KisDoc::FillerToolSettings s = m_pDoc->getFillerToolSettings();  
-    fillOpacity = s.opacity;
-    usePattern  = s.fillWithPattern;
-    useGradient = s.fillWithGradient;
-        
-    toleranceRed = 0;
-    toleranceGreen = 0;
-    toleranceBlue = 0;
-
-    layerAlpha = true;
+	// initialize filler tool settings
+	fillOpacity = 255;
+	usePattern  = false;
+	useGradient = false;
+	toleranceRed = 0;
+	toleranceGreen = 0;
+	toleranceBlue = 0;
+	layerAlpha = true;
 }
 
-FillTool::~FillTool() {}
+FillTool::~FillTool() 
+{
+}
 
 // floodfill based on GPL code in gpaint by Li-Cheng (Andy) Tai
-
 int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 {
-   unsigned char o_r = fLayer->pixel(0, x, y);
-   unsigned char o_g = fLayer->pixel(1, x, y);   
-   unsigned char o_b = fLayer->pixel(2, x, y);   
+	unsigned char o_r = fLayer -> pixel(0, x, y);
+	unsigned char o_g = fLayer -> pixel(1, x, y);   
+	unsigned char o_b = fLayer -> pixel(2, x, y);   
 
-   if ((o_r == info->o_r) 
-   && (o_g == info->o_g) 
-   && (o_b == info->o_b))
-      return 1;
-   
-   return 0;
+	return o_r == info -> o_r && o_g == info->o_g && o_b == info->o_b;
 }
-
 
 void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
-    // fill with pattern
-    if(useGradient)
-    {
-        m_pDoc->frameBuffer()->setGradientToPixel(fLayer, x, y);
-    }
-
-    // fill with pattern
-    else if(usePattern)
-    {
-        m_pDoc->frameBuffer()->setPatternToPixel(fLayer, x, y, 0);
-    }
-
-    // fill with color
-    else
-    {
-        fLayer->setPixel(0, x, y, info->r);
-        fLayer->setPixel(1, x, y, info->g);   
-        fLayer->setPixel(2, x, y, info->b);
-    }
+	// fill with pattern
+	if(useGradient)
+		m_pDoc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
+	// fill with pattern
+	else if(usePattern)
+		m_pDoc -> frameBuffer() -> setPatternToPixel(fLayer, x, y, 0);
+	// fill with color
+	else {
+		fLayer -> setPixel(0, x, y, info -> r);
+		fLayer -> setPixel(1, x, y, info -> g);   
+		fLayer -> setPixel(2, x, y, info -> b);
+	}
     
-    // alpha adjustment with either fill method
-    if(layerAlpha)
-    {
-        fLayer->setPixel(3, x, y, fillOpacity);
-    }    
+	// alpha adjustment with either fill method
+	if (layerAlpha)
+		fLayer -> setPixel(3, x, y, fillOpacity);
 }
 
 
@@ -171,8 +153,7 @@ skip:
    	 
 }   
    
-
-void FillTool::seed_flood_fill( int x, int y, QRect & frect )
+void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
 {
     struct fillinfo fillinfo;
    
@@ -301,41 +282,27 @@ void FillTool::optionsDialog()
     bool old_usePattern   = usePattern;
     bool old_useGradient  = useGradient;
 
-    ToolOptionsDialog *pOptsDialog 
-        = new ToolOptionsDialog(tt_filltool, ts);
-
-    pOptsDialog->exec();
+    ToolOptionsDialog OptsDialog(tt_filltool, ts);
     
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        fillOpacity     = pOptsDialog->fillToolTab()->opacity();
-        usePattern      = pOptsDialog->fillToolTab()->usePattern();
-        useGradient     = pOptsDialog->fillToolTab()->useGradient();
+    OptsDialog.exec();
+    
+    if (OptsDialog.result() != QDialog::Accepted)
+	    return;
+        
+    fillOpacity     = OptsDialog.fillToolTab()->opacity();
+    usePattern      = OptsDialog.fillToolTab()->usePattern();
+    useGradient     = OptsDialog.fillToolTab()->useGradient();
 
-        //toleranceRed    = pOptsDialog->ToleranceRed();
-        //toleranceGreen  = pOptsDialog->ToleranceGreen();    
-        //toleranceBlue   = pOptsDialog->ToleranceBlue();
-
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity ) {
-            // set filler tool settings
-            KisDoc::FillerToolSettings s = m_pDoc->getFillerToolSettings();
-            s.opacity              = fillOpacity;
-            s.fillWithPattern      = usePattern;
-            s.fillWithGradient     = useGradient;
-
-            m_pDoc->setFillerToolSettings( s );
-
-            m_pDoc->setModified( true );
-        }
-    }    
+    // User change value ?
+    if (old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity)
+	    // set filler tool settings
+            m_pDoc -> setModified( true );
 }
 
 void FillTool::setCursor()
 {
-    m_pView->kisCanvas()->setCursor( KisCursor::fillerCursor() );
-    m_Cursor = KisCursor::fillerCursor();
+	m_pView -> kisCanvas() -> setCursor(KisCursor::fillerCursor());
+	m_Cursor = KisCursor::fillerCursor();
 }
 
 void FillTool::setupAction(QObject *collection)
@@ -345,3 +312,26 @@ void FillTool::setupAction(QObject *collection)
 	toggle -> setExclusiveGroup("tools");
 }
 
+QDomElement FillTool::saveSettings(QDomDocument& doc) const
+{
+	// filler tool element
+	QDomElement fillerTool = doc.createElement("fillerTool");
+
+	fillerTool.setAttribute("opacity", opacity);
+	fillerTool.setAttribute("fillWithPattern", static_cast<int>(usePattern));
+	fillerTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	return fillerTool;
+}
+
+bool FillTool::loadSettings(QDomElement& elem)
+{
+	bool rc = elem.tagName() == "fillerTool";
+
+	if (rc) {
+		opacity = elem.attribute("opacity").toInt();
+		usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
+		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+	}
+
+	return rc;
+}

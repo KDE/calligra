@@ -46,11 +46,13 @@ struct fillpixelinfo
 
 class FillTool : public KisTool {
 public:
-	FillTool(KisDoc *doc, KisView *view);
+	FillTool(KisDoc *doc);
 	virtual ~FillTool();
   
-	virtual void optionsDialog();
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+	virtual void optionsDialog();
 
 	// set custom cursor.
 	virtual void setCursor();
@@ -61,34 +63,30 @@ public slots:
 	virtual void mousePress(QMouseEvent*); 
       
 protected:
+	// from gpaint
+	int is_old_pixel_value(struct fillinfo *info, int x, int y);  
+	void set_new_pixel_value(struct fillinfo *info, int x, int y);      
+	void flood_fill(struct fillinfo *info, int x, int y);
+	void seed_flood_fill(int x, int y, const QRect& frect);    
 
-    // from gpaint
-    int is_old_pixel_value(struct fillinfo *info, int x, int y);  
-    void set_new_pixel_value(struct fillinfo *info, int x, int y);      
-    void flood_fill(struct fillinfo *info, int x, int y);
-    void seed_flood_fill( int x, int y, QRect & frect );    
-                
-    // new colors (desired)
-    int nRed;
-    int nGreen;
-    int nBlue;
+	// new colors (desired)
+	int nRed;
+	int nGreen;
+	int nBlue;
 
-    // source colors (existing)
-    int sRed;
-    int sGreen;
-    int sBlue;
+	// source colors (existing)
+	int sRed;
+	int sGreen;
+	int sBlue;
 
-    int  fillOpacity;
-    bool layerAlpha;
+	int  fillOpacity;
+	bool layerAlpha;
 
-    bool usePattern;
-    bool useGradient;
-            
-    int toleranceRed;
-    int toleranceGreen;    
-    int toleranceBlue;
+	int toleranceRed;
+	int toleranceGreen;    
+	int toleranceBlue;
 
-    KisLayer *fLayer;
+	KisLayer *fLayer;
 };
 
 #endif //__filltool_h__

@@ -31,12 +31,15 @@ class KisCanvas;
 
 class PolyGonTool : public KisTool {
 public:
-	PolyGonTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+	PolyGonTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~PolyGonTool();
+
+	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
 
 	virtual void toolSelect();
 	virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
 
 public slots:
 	virtual void mousePress(QMouseEvent *event);
@@ -54,9 +57,6 @@ private:
     int         cornersValue;
     int         sharpnessValue;
 
-    bool        usePattern;
-    bool        useGradient;
-    bool        useRegions;
     bool        checkPolygon;
     bool        checkConcavePolygon;
         

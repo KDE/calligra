@@ -31,10 +31,13 @@ class KisCanvas;
 
 class EllipseTool : public KisTool {
 public:
-	EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+	EllipseTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~EllipseTool();
 
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+
 	virtual void optionsDialog();
 	virtual void toolSelect();
 
@@ -51,10 +54,6 @@ protected:
     int     lineThickness;
     int     lineOpacity;
 
-    bool    fillSolid;
-    bool    usePattern;
-    bool    useGradient;
-    
     QPoint  m_dragStart;
     QPoint  m_dragEnd;
 

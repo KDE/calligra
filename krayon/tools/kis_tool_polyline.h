@@ -31,10 +31,12 @@ class KisCanvas;
 
 class PolyLineTool : public KisTool {
 public:
-	PolyLineTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	PolyLineTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~PolyLineTool();
 
 	virtual void optionsDialog();
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
 	virtual void setupAction(QObject *collection);
 
 	void start(QPoint p);
@@ -54,10 +56,6 @@ private:
     int         lineThickness;
     int         lineOpacity;
 
-    bool        usePattern;
-    bool        useGradient;
-    bool        useRegions;
-        
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
     QPoint      mStart;

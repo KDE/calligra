@@ -32,7 +32,7 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas) : KisTool(doc, view)
+RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
 	m_dragging = false;
 	m_canvas = canvas;

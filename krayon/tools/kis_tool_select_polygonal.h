@@ -24,7 +24,6 @@
 #include <qpoint.h>
 #include <qpointarray.h>
 
-#include "kis_view.h"
 #include "kis_tool.h"
 
 
@@ -34,10 +33,11 @@ class KisView;
 
 class PolygonalSelectTool : public KisTool {
 public:
-	PolygonalSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	PolygonalSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~PolygonalSelectTool();
 
 	virtual void setupAction(QObject *collection);
+
 	virtual void clearOld();
 	virtual bool willModify() const;
 

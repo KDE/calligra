@@ -29,8 +29,7 @@
 #include "kis_tool_select_contiguous.h"
 #include "kis_view.h"
 
-ContiguousSelectTool::ContiguousSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas)
-	: KisTool(doc, view)
+ContiguousSelectTool::ContiguousSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
 	m_dragging = false;
 	m_canvas = canvas;
@@ -176,4 +175,5 @@ bool ContiguousSelectTool::willModify() const
 {
 	return false;
 }
+
 

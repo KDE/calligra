@@ -24,7 +24,6 @@
 #include <qpoint.h>
 #include <qpointarray.h>
 
-#include "kis_view.h"
 #include "kis_tool.h"
 
 
@@ -34,10 +33,11 @@ class KisView;
 
 class FreehandSelectTool : public KisTool {
 public:
-	FreehandSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	FreehandSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~FreehandSelectTool();
 
 	virtual void setupAction(QObject *collection);
+
 	virtual void clearOld();
 	virtual bool willModify() const;
 

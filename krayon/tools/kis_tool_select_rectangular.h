@@ -22,7 +22,6 @@
 #define __selecttoolrectangular_h__
 
 #include <qpoint.h>
-#include "kis_view.h"
 #include "kis_tool.h"
 
 class KisDoc;
@@ -31,10 +30,11 @@ class KisView;
 
 class RectangularSelectTool : public KisTool {
 public:
-	RectangularSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	RectangularSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~RectangularSelectTool();
 
 	virtual void setupAction(QObject *collection);
+
 	virtual void clearOld();
 	virtual bool willModify() const;
 

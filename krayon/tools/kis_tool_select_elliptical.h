@@ -22,7 +22,6 @@
 #define __selecttoolelliptical_h__
 
 #include <qpoint.h>
-#include "kis_view.h"
 #include "kis_tool.h"
 
 class KisDoc;
@@ -31,10 +30,11 @@ class KisView;
 
 class EllipticalSelectTool : public KisTool {
 public:
-	EllipticalSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	EllipticalSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~EllipticalSelectTool();
 
 	virtual void setupAction(QObject *collection);
+
 	virtual void clearOld();
 	virtual bool willModify() const;
 

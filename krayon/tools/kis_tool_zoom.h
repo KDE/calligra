@@ -27,7 +27,7 @@
 
 class ZoomTool : public KisTool {
 public:
-	ZoomTool(KisView *view);
+	ZoomTool(KisDoc *doc);
 	virtual ~ZoomTool();
 
 	virtual void setCursor();

@@ -25,8 +25,7 @@
 #include "kis_view.h"
 #include "kis_cursor.h"
 
-ColorPicker::ColorPicker(KisDoc *doc, KisView *view)
-  : KisTool(doc, view)
+ColorPicker::ColorPicker(KisDoc *doc) : KisTool(doc)
 {
     m_Cursor = KisCursor::pickerCursor();
 }

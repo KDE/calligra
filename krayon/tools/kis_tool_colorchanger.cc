@@ -29,39 +29,38 @@
 #include "kis_dlg_toolopts.h"
 
 
-ColorChangerTool::ColorChangerTool(KisDoc *doc, KisView *view)
-  : KisTool(doc, view)
+ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 {
-    // set custom cursor.
-    setCursor();
-    m_pDoc = doc;
+	// set custom cursor.
+	setCursor();
+	m_pDoc = doc;
 
-    // initialize color changer settings
-    KisDoc::ColorChangerSettings s = m_pDoc->getColorChangerSettings();  
-    fillOpacity = s.opacity;
-    usePattern  = s.fillWithPattern;
-    useGradient = s.fillWithGradient;
-    
-    toleranceRed = 0;
-    toleranceGreen = 0;
-    toleranceBlue = 0;
+	// initialize color changer settings
+	fillOpacity = 255;
+	usePattern  = false;
+	useGradient = false;
 
-    layerAlpha = true;
-    
-    // get current colors
-    KisColor startColor( m_pView->fgColor().R(), m_pView->fgColor().G(), m_pView->fgColor().B() );
-    KisColor endColor( m_pView->bgColor().R(), m_pView->bgColor().G(), m_pView->bgColor().B() );        
-    
-    // prepare for painting with pattern
-    if( usePattern )
-        m_pDoc->frameBuffer()->setPattern( m_pView->currentPattern() );
+	toleranceRed = 0;
+	toleranceGreen = 0;
+	toleranceBlue = 0;
 
-    // prepare for painting with gradient
-    m_pDoc->frameBuffer()->setGradientPaint( useGradient, startColor, endColor );
+	layerAlpha = true;
+    
+	// get current colors
+	KisColor startColor( m_pView->fgColor().R(), m_pView->fgColor().G(), m_pView->fgColor().B() );
+	KisColor endColor( m_pView->bgColor().R(), m_pView->bgColor().G(), m_pView->bgColor().B() );        
+    
+	// prepare for painting with pattern
+	if( usePattern )
+		m_pDoc->frameBuffer()->setPattern( m_pView->currentPattern() );
+
+	// prepare for painting with gradient
+	m_pDoc->frameBuffer()->setGradientPaint( useGradient, startColor, endColor );
 }
 
-ColorChangerTool::~ColorChangerTool() {}
-
+ColorChangerTool::~ColorChangerTool() 
+{
+}
 
 bool ColorChangerTool::changeColors(int startX, int startY)
 {
@@ -163,71 +162,62 @@ void ColorChangerTool::mousePress(QMouseEvent *e)
 
 void ColorChangerTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
+	ToolOptsStruct ts;    
     
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.opacity          = fillOpacity;
+	ts.usePattern       = usePattern;
+	ts.useGradient      = useGradient;
+	ts.opacity          = fillOpacity;
 
-    int old_fillOpacity   = fillOpacity;
-    bool old_usePattern   = usePattern;
-    bool old_useGradient  = useGradient;
+	int old_fillOpacity   = fillOpacity;
+	bool old_usePattern   = usePattern;
+	bool old_useGradient  = useGradient;
 
-    ToolOptionsDialog *pOptsDialog 
-        = new ToolOptionsDialog(tt_filltool, ts);
+	ToolOptionsDialog OptsDialog(tt_filltool, ts);
 
-    pOptsDialog->exec();
-    
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        /* the following values should be unique for each tool.
-        To change global tool options that will over-ride these
-        local ones for individual tools, we need a master tool
-        options tabbed dialog */
-    
-        fillOpacity     = pOptsDialog->fillToolTab()->opacity();
-        usePattern      = pOptsDialog->fillToolTab()->usePattern();
-        useGradient     = pOptsDialog->fillToolTab()->useGradient();
-    
-        // we need HSV tolerances even more
-        //toleranceRed    = pOptsDialog->ToleranceRed();
-        //toleranceGreen  = pOptsDialog->ToleranceGreen();    
-        //toleranceBlue   = pOptsDialog->ToleranceBlue();
+	OptsDialog.exec();
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity ) {
-            // note that gradients amd patterns are not associated with a
-            // particular tool, unlike the other options
+	if (OptsDialog.result() != QDialog::Accepted)
+		return;
+	
+	/* the following values should be unique for each tool.
+	   To change global tool options that will over-ride these
+	   local ones for individual tools, we need a master tool
+	   options tabbed dialog */
 
-            // get current colors
-            KisColor startColor( m_pView->fgColor().R(), m_pView->fgColor().G(), m_pView->fgColor().B() );
-            KisColor endColor( m_pView->bgColor().R(), m_pView->bgColor().G(), m_pView->bgColor().B() );        
-            
-            // prepare for painting with pattern
-            if( usePattern )
-                m_pDoc->frameBuffer()->setPattern( m_pView->currentPattern() );
+	fillOpacity     = OptsDialog.fillToolTab()->opacity();
+	usePattern      = OptsDialog.fillToolTab()->usePattern();
+	useGradient     = OptsDialog.fillToolTab()->useGradient();
 
-            // prepare for painting with gradient
-            m_pDoc->frameBuffer()->setGradientPaint( useGradient, startColor, endColor );
+	// we need HSV tolerances even more
+	//toleranceRed    = OptsDialog->ToleranceRed();
+	//toleranceGreen  = OptsDialog->ToleranceGreen();    
+	//toleranceBlue   = OptsDialog->ToleranceBlue();
 
-            // set color changer settings
-            KisDoc::ColorChangerSettings s = m_pDoc->getColorChangerSettings();
-            s.opacity              = fillOpacity;
-            s.fillWithPattern      = usePattern;
-            s.fillWithGradient     = useGradient;
+	// User change value ?
+	if ( old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity ) {
+		// note that gradients amd patterns are not associated with a
+		// particular tool, unlike the other options
 
-            m_pDoc->setColorChangerSettings( s );
+		// get current colors
+		KisColor startColor( m_pView->fgColor().R(), m_pView->fgColor().G(), m_pView->fgColor().B() );
+		KisColor endColor( m_pView->bgColor().R(), m_pView->bgColor().G(), m_pView->bgColor().B() );        
 
-            m_pDoc->setModified( true );
-        }
-    }        
+		// prepare for painting with pattern
+		if( usePattern )
+			m_pDoc->frameBuffer()->setPattern( m_pView->currentPattern() );
+
+		// prepare for painting with gradient
+		m_pDoc->frameBuffer()->setGradientPaint( useGradient, startColor, endColor );
+
+		// set color changer settings
+		m_pDoc->setModified( true );
+	}        
 }
 
 void ColorChangerTool::setCursor()
 {
-    m_pView->kisCanvas()->setCursor( KisCursor::colorChangerCursor() );
-    m_Cursor = KisCursor::colorChangerCursor();
+	m_pView -> kisCanvas() -> setCursor(KisCursor::colorChangerCursor());
+	m_Cursor = KisCursor::colorChangerCursor();
 }
 
 void ColorChangerTool::setupAction(QObject *collection)
@@ -235,5 +225,29 @@ void ColorChangerTool::setupAction(QObject *collection)
 	KToggleAction * toggle = new KToggleAction(i18n("Color changer"), "colorize", 0, this, SLOT(toolSelect()), collection, "tool_colorchanger");
 
 	toggle -> setExclusiveGroup("tools");
+}
+
+QDomElement ColorChangerTool::saveSettings(QDomDocument& doc) const
+{
+	// Color changer element
+	QDomElement colorChanger = doc.createElement("colorChanger");
+
+	colorChanger.setAttribute("opacity", opacity);
+	colorChanger.setAttribute("fillWithPattern", static_cast<int>(usePattern));
+	colorChanger.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	return colorChanger;
+}
+
+bool ColorChangerTool::loadSettings(QDomElement& elem)
+{
+	bool rc = elem.tagName() == "colorChanger";
+
+	if (rc) {
+		opacity = elem.attribute("opacity").toInt();
+		usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
+		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+	}
+
+	return rc;
 }
 

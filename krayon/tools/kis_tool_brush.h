@@ -30,10 +30,13 @@ class KisDoc;
 
 class BrushTool : public KisTool {
 public:
-	BrushTool(KisDoc *doc, KisView *view, KisBrush *_brush);
+	BrushTool(KisDoc *doc, KisBrush *brush);
 	virtual ~BrushTool();
   
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+
 	virtual void optionsDialog();
 	virtual void setBrush(KisBrush *brush);
 	
@@ -60,10 +63,6 @@ protected:
     int spacing;
     bool alpha;
     
-    // options - needs brush-secific members
-    bool usePattern;
-    bool useGradient;
-    int  opacity;
 };
 
 #endif //__brushtool_h__

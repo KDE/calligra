@@ -30,7 +30,7 @@ class KisSelection;
 
 class PasteTool : public KisTool {
 public:
-	PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	PasteTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~PasteTool();
   
 	virtual void setupAction(QObject *collection);

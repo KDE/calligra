@@ -61,8 +61,7 @@ void MoveCommand::moveTo( QPoint _pos )
   img->markDirty( oldRect );
 }
 
-MoveTool::MoveTool( KisDoc *doc, KisView *view )
-  : KisTool( doc, view )
+MoveTool::MoveTool(KisDoc *doc) : KisTool(doc)
 {
     // set custom cursor.
     setCursor();

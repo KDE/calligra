@@ -31,7 +31,7 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-FreehandSelectTool::FreehandSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas) : KisTool(doc, view)
+FreehandSelectTool::FreehandSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
 	m_dragging = false;
 	m_canvas = canvas;

@@ -32,10 +32,7 @@
 #include "kis_dlg_toolopts.h"
 #include "kis_canvas.h"
 
-
-
-AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
-  :KisTool(doc, view)
+AirBrushTool::AirBrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 {
     m_dragging = false;
     m_Cursor = KisCursor::airbrushCursor();
@@ -44,10 +41,9 @@ AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
     m_pDoc = doc;
 
     // initialize airbrush tool settings
-    KisDoc::AirbrushToolSettings s = m_pDoc->getAirbrushToolSettings();
-    opacity           = s.opacity;
-    usePattern        = s.useCurrentPattern;
-    useGradient       = s.useCurrentGradient;
+    opacity = 255;
+    usePattern = false;
+    useGradient = false;
 
     setBrush(brush);
 
@@ -60,7 +56,6 @@ AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
 
 AirBrushTool::~AirBrushTool()
 {
-    delete timer;
 }
 
 void AirBrushTool::timeoutPaint()
@@ -342,7 +337,7 @@ void AirBrushTool::optionsDialog()
 
     bool old_usePattern   = usePattern;
     bool old_useGradient  = useGradient;
-    int  old_opacity      = opacity;
+    unsigned int  old_opacity      = opacity;
 
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_airbrushtool, ts);
@@ -359,13 +354,6 @@ void AirBrushTool::optionsDialog()
         // User change value ?
         if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
             // set airbrush tool settings
-            KisDoc::AirbrushToolSettings s = m_pDoc->getAirbrushToolSettings();
-            s.useCurrentPattern   = usePattern;
-            s.useCurrentGradient  = useGradient;
-            s.opacity             = opacity;
-
-            m_pDoc->setAirbrushToolSettings( s );
-
             m_pDoc->setModified( true );
         }
     }
@@ -377,6 +365,29 @@ void AirBrushTool::setupAction(QObject *collection)
 			SLOT(toolSelect()), collection, "tool_airbrush");
 
         toggle -> setExclusiveGroup("tools");
+}
+
+QDomElement AirBrushTool::saveSettings(QDomDocument& doc) const
+{
+	QDomElement tool = doc.createElement("tool");
+
+	tool.setAttribute("opacity", opacity);
+	tool.setAttribute("useCurrentGradient", static_cast<int>(useGradient));
+	tool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
+	return tool;
+}
+
+bool AirBrushTool::loadSettings(QDomElement& tool)
+{
+	bool rc = tool.tagName() == "airbrushTool";
+
+	if (rc) {
+		opacity = tool.attribute("opacity").toInt();
+		useGradient = static_cast<bool>(tool.attribute("useCurrentGradient").toInt());
+		usePattern = static_cast<bool>(tool.attribute("useCurrentPattern").toInt());
+	}
+
+	return rc;
 }
 
 #include "kis_tool_airbrush.moc"

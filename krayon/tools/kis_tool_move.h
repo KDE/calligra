@@ -47,7 +47,7 @@ private:
 
 class MoveTool : public KisTool {
 public:
-	MoveTool(KisDoc *doc, KisView *view);
+	MoveTool(KisDoc *doc);
 	virtual ~MoveTool();
 
 	virtual void setCursor();

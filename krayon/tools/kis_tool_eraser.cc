@@ -33,19 +33,16 @@
 #include "kis_tool_eraser.h"
 #include "kis_dlg_toolopts.h"
 
-
-EraserTool::EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush)
-  : KisTool(doc, view)
+EraserTool::EraserTool(KisDoc *doc, KisBrush *_brush) : KisTool(doc)
 {
     m_dragging = false;
     m_dragdist = 0;
     m_pDoc = doc;
 
     // initialize eraser tool settings
-    KisDoc::EraserToolSettings s = m_pDoc->getEraserToolSettings();
-    usePattern = s.blendWithCurrentPattern;
-    useGradient = s.blendWithCurrentGradient;
-    lineOpacity = s.opacity;
+    usePattern = false;
+    useGradient = true;
+    opacity = 255;
 
     setBrush(_brush);
 }
@@ -278,11 +275,11 @@ void EraserTool::optionsDialog()
 
     ts.usePattern  = usePattern;
     ts.useGradient = useGradient;
-    ts.opacity     = lineOpacity;
+    ts.opacity     = opacity;
 
     bool old_usePattern     = usePattern;
     bool old_useGradient    = useGradient;
-    int  old_lineOpacity    = lineOpacity;
+    unsigned int  old_opacity    = opacity;
 
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_erasertool, ts);
@@ -292,21 +289,14 @@ void EraserTool::optionsDialog()
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
     else {
-        lineOpacity   = pOptsDialog->eraserToolTab()->opacity();
+        opacity   = pOptsDialog->eraserToolTab()->opacity();
         usePattern    = pOptsDialog->eraserToolTab()->usePattern();
         useGradient   = pOptsDialog->eraserToolTab()->useGradient();
 
         // User change value ?
         if ( old_usePattern != usePattern || old_useGradient != useGradient 
-             || old_lineOpacity != lineOpacity ) {
+             || old_opacity != opacity ) {
             // set eraser tool settings
-            KisDoc::EraserToolSettings s = m_pDoc->getEraserToolSettings();
-            s.blendWithCurrentPattern   = usePattern;
-            s.blendWithCurrentGradient  = useGradient;
-            s.opacity                   = lineOpacity;
-
-            m_pDoc->setEraserToolSettings( s );
-
             m_pDoc->setModified( true );
         }
     }
@@ -317,5 +307,28 @@ void EraserTool::setupAction(QObject *collection)
 	KToggleAction *toggle = new KToggleAction(i18n("&Eraser tool"), "eraser", 0, this, SLOT(toolSelect()), collection, "tool_eraser");
 
 	toggle -> setExclusiveGroup("tools");
+}
+
+QDomElement EraserTool::saveSettings(QDomDocument& doc) const
+{
+	QDomElement eraserTool = doc.createElement("eraserTool");
+
+	eraserTool.setAttribute("opacity", opacity);
+	eraserTool.setAttribute("blendWithCurrentGradient", static_cast<int>(useGradient));
+	eraserTool.setAttribute("blendWithCurrentPattern", static_cast<int>(usePattern));
+	return eraserTool;
+}
+
+bool EraserTool::loadSettings(QDomElement& elem)
+{
+        bool rc = elem.tagName() == "eraserTool";
+
+	if (rc) {
+		opacity = elem.attribute("opacity").toInt();
+		useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
+		usePattern = static_cast<bool>(elem.attribute("blendWithCurrentPattern" ).toInt());
+	}
+
+	return rc;
 }
 

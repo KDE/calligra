@@ -31,25 +31,21 @@
 #include "kis_tool_polyline.h"
 #include "kis_dlg_toolopts.h"
 
-PolyLineTool::PolyLineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
-  : KisTool( _doc, _view )
-  , m_dragging( false )
-  , pCanvas( _canvas )
+PolyLineTool::PolyLineTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
-    m_pDoc = _doc;
+	m_pDoc = doc;
+	m_dragging = false;
+	pCanvas = canvas;
 
-    // initialize polyline tool settings
-    KisDoc::PolylineToolSettings s = m_pDoc->getPolyLineToolSettings();
-    lineThickness = s.thickness;
-    lineOpacity = s.opacity;
-    usePattern = s.useCurrentPattern;
-    useGradient = s.fillWithGradient;
-    useRegions = s.fillInteriorRegions;
-        
-    mStart  = QPoint(-1, -1);
-    mFinish = QPoint(-1, -1);     
+	// initialize polyline tool settings
+	lineThickness = 4;
+	lineOpacity = 255;
+	usePattern = false;
+	useGradient = false;
+	useRegions = false;
+	mStart  = QPoint(-1, -1);
+	mFinish = QPoint(-1, -1);     
 }
-
 
 PolyLineTool::~PolyLineTool()
 {
@@ -57,98 +53,82 @@ PolyLineTool::~PolyLineTool()
 
 void PolyLineTool::start(QPoint p)
 {
-    mStart = p;
+	mStart = p;
 }
 
 void PolyLineTool::finish(QPoint p)
 {
-    mFinish = p;
+	mFinish = p;
 }
 
-void PolyLineTool::mousePress( QMouseEvent* event )
+void PolyLineTool::mousePress(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    // start the polyline, and/or complete the 
-    // polyline segment
-    if( event->button() == LeftButton )
-    {
-        if( m_dragging )
-        {
-            // erase old line on canvas
-            drawLine( m_dragStart, m_dragEnd );
-            m_dragEnd = event->pos();
+	// start the polyline, and/or complete the 
+	// polyline segment
+	if (event -> button() == LeftButton) {
+		if (m_dragging) {
+			// erase old line on canvas
+			drawLine(m_dragStart, m_dragEnd);
+			m_dragEnd = event -> pos();
  
-            // draw final line into layer
-            KisPainter *p = m_pView->kisPainter();
-            p->drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
-                zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
-        }
-        else
-        {
-            start(event->pos());
-        }
+			// draw final line into layer
+			KisPainter *p = m_pView -> kisPainter();
+			p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
+		}
+		else
+			start(event -> pos());
         
-        m_dragging = true;
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
-    }
-    // stop drawing on right or middle click
-    else
-    {   
-        m_dragging = false;
-
-        m_dragEnd = event->pos();
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+	}
+	// stop drawing on right or middle click
+	else {   
+		m_dragging = false;
+		m_dragEnd = event -> pos();
  
-        // draw final line into layer
-        KisPainter *p = m_pView->kisPainter();
-        p->drawLine( zoomed( m_dragStart.x() ), zoomed( m_dragStart.y() ),
-                     zoomed( m_dragEnd.x() ), zoomed( m_dragEnd.y() ) );
-    }    
+		// draw final line into layer
+		KisPainter *p = m_pView -> kisPainter();
+		p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()), zoomed(m_dragEnd.y()));
+	}    
 }
 
-
-void PolyLineTool::mouseMove( QMouseEvent* event )
+void PolyLineTool::mouseMove(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if( m_dragging )
-    {
-        drawLine( m_dragStart, m_dragEnd );
-        m_dragEnd = event->pos();
-        drawLine( m_dragStart, m_dragEnd );
-    }
+	if (m_dragging) {
+		drawLine(m_dragStart, m_dragEnd);
+		m_dragEnd = event -> pos();
+		drawLine(m_dragStart, m_dragEnd);
+	}
 }
 
-
-void PolyLineTool::mouseRelease( QMouseEvent* /* event */ )
+void PolyLineTool::mouseRelease(QMouseEvent * /*event*/)
 {
 }
 
-
-void PolyLineTool::drawLine( const QPoint& start, const QPoint& end )
+void PolyLineTool::drawLine(const QPoint& start, const QPoint& end)
 {
-    QPainter p;
-    QPen pen;
-    pen.setWidth(lineThickness);
-    
-    p.begin( pCanvas );
-    p.setPen(pen);
-    p.setRasterOp( Qt::NotROP );
-    float zF = m_pView->zoomFactor();
+	QPainter p;
+	QPen pen;
 
-    p.drawLine( QPoint( start.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        start.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())), 
-                QPoint( end.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        end.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())) );
+	pen.setWidth(lineThickness);
+	p.begin(pCanvas);
+	p.setPen(pen);
+	p.setRasterOp(Qt::NotROP);
+	float zF = m_pView -> zoomFactor();
 
-    p.end();
+	p.drawLine(
+			QPoint(start.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
+				start.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset())), 
+			QPoint(end.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
+				end.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset())));
+	p.end();
 }
 
 /*
@@ -197,15 +177,6 @@ void PolyLineTool::optionsDialog()
             p->setGradientFill( useGradient );
 
             // set polyline tool settings
-            KisDoc::PolylineToolSettings s = m_pDoc->getPolyLineToolSettings();
-            s.thickness            = lineThickness;
-            s.opacity              = lineOpacity;
-            s.useCurrentPattern    = usePattern;
-            s.fillWithGradient     = useGradient;
-            s.fillInteriorRegions  = useRegions;
-
-            m_pDoc->setPolylineToolSettings( s );
-
             m_pDoc->setModified( true );
         }
     }
@@ -216,5 +187,32 @@ void PolyLineTool::setupAction(QObject *collection)
 	KToggleAction *toggle = new KToggleAction(i18n("&Polyline tool"), "polyline", 0, this, SLOT(toolSelect()), collection, "tool_polyline");
 
 	toggle -> setExclusiveGroup("tools");
+}
+
+QDomElement PolyLineTool::saveSettings(QDomDocument& doc) const
+{
+	QDomElement polylineTool = doc.createElement("polylineTool");
+
+	polylineTool.setAttribute("thickness", lineThickness);
+	polylineTool.setAttribute("opacity", opacity);
+	polylineTool.setAttribute("fillInteriorRegions", static_cast<int>(useRegions));
+	polylineTool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
+	polylineTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	return polylineTool;
+}
+
+bool PolyLineTool::loadSettings(QDomElement& elem)
+{
+	bool rc = elem.tagName() == "polylineTool";
+
+	if (rc) {
+		lineThickness = elem.attribute("thickness").toInt();
+		lineOpacity = elem.attribute("opacity").toInt();
+		useRegions = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
+		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
+		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+	}
+
+	return rc;
 }
 

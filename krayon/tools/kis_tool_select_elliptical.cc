@@ -31,7 +31,7 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-EllipticalSelectTool::EllipticalSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas) : KisTool(doc, view)
+EllipticalSelectTool::EllipticalSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
 	m_dragging = false;
 	m_canvas = canvas;

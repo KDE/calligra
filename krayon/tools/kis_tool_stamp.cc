@@ -36,56 +36,52 @@
 #include "kis_dlg_toolopts.h"
 
 
-StampTool::StampTool(KisDoc *doc, KisView *view,
-    KisCanvas *canvas, KisPattern *pattern)
-  : KisTool(doc, view)
+StampTool::StampTool(KisDoc *doc, KisCanvas *canvas, KisPattern *pattern) : KisTool(doc)
 {
-    m_dragging = false;
-    m_dragdist = 0;
-    m_pView = view;
-    m_pCanvas = canvas;
-    m_pDoc = doc;
+	m_dragging = false;
+	m_dragdist = 0;
+	m_pCanvas = canvas;
+	m_pDoc = doc;
 
-    // initialize stamp tool settings
-    KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();
-    opacity = s.opacity;
-    useGradient = s.blendWithCurrentGradient;
-
-    setPattern(pattern);
+	// initialize stamp tool settings
+	opacity = 255;
+	useGradient = false;
+	setPattern(pattern);
 }
 
-StampTool::~StampTool() {}
-
+StampTool::~StampTool() 
+{
+}
 
 void StampTool::setPattern(KisPattern *pattern)
 {
-    m_pPattern = pattern;
+	m_pPattern = pattern;
 
-    /* Use this to establish pattern size and the
-    "hot spot" in center of image. This will be the
-    same for all stamps, no need to vary it.
-    when tiling patterns, use point 0,0 instead
-    these are simple variables for speed to avoid
-    copy constructors within loops. */
+	/* Use this to establish pattern size and the
+	   "hot spot" in center of image. This will be the
+	   same for all stamps, no need to vary it.
+	   when tiling patterns, use point 0,0 instead
+	   these are simple variables for speed to avoid
+	   copy constructors within loops. */
 
-    patternWidth = m_pPattern->width();
-    patternHeight = m_pPattern->height();
-    mPatternSize = QSize(patternWidth, patternHeight);
-    mHotSpotX = patternWidth/2;
-    mHotSpotY = patternHeight/2;
-    mHotSpot = QPoint(mHotSpotX, mHotSpotY);
-    spacing = m_pPattern->spacing();
-    if (spacing < 1) spacing = 3;
+	patternWidth = m_pPattern->width();
+	patternHeight = m_pPattern->height();
+	mPatternSize = QSize(patternWidth, patternHeight);
+	mHotSpotX = patternWidth/2;
+	mHotSpotY = patternHeight/2;
+	mHotSpot = QPoint(mHotSpotX, mHotSpotY);
+	spacing = m_pPattern->spacing();
+
+	if (spacing < 1) 
+		spacing = 3;
 }
-
 
 void StampTool::setOpacity(int /* opacity */)
 {
-    /* this will allow, eventually, for a global
-    opacity setting for painting tools which
-    overrides individual settings */
+	/* this will allow, eventually, for a global
+	   opacity setting for painting tools which
+	   overrides individual settings */
 }
-
 
 /*
     On mouse press, the image is stamped or pasted
@@ -94,52 +90,53 @@ void StampTool::setOpacity(int /* opacity */)
 
 void StampTool::mousePress(QMouseEvent *e)
 {
-    if (e->button() != QMouseEvent::LeftButton) return;
+	if (e->button() != QMouseEvent::LeftButton) 
+		return;
 
-    // do sanity checking here, if possible, not inside loops
-    // when moving mouse!
+	// do sanity checking here, if possible, not inside loops
+	// when moving mouse!
+	KisImage *img = m_pDoc -> current();
 
-    KisImage *img = m_pDoc->current();
-    if (!img)  return;
+	if (!img)  
+		return;
 
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-    {
-        kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
-	    return;
-    }
+	if (!img -> colorMode() == cm_RGB && !img -> colorMode() == cm_RGBA) {
+		kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
+		return;
+	}
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)  return;
+	KisLayer *lay = img -> getCurrentLayer();
 
-    if(!lay->visible()) return;
+	if (!lay || !lay -> visible())
+		return;
 
-    QImage qImage = *(m_pPattern->image());
-    if(qImage.isNull())
-    {
-        kdDebug(0) << "Stamptool::no pattern image!" << endl;
-        return;
-    }
-    if(qImage.depth() < 32)
-    {
-        kdDebug(0) << "Stamptool::pattern less than 32 bit!" << endl;
-        return;
-    }
+	QImage qImage = *(m_pPattern -> image());
 
-    spacing = m_pPattern->spacing();
-    if (spacing < 1) spacing = 3;
+	if (qImage.isNull()) {
+		kdDebug(0) << "Stamptool::no pattern image!" << endl;
+		return;
+	}
 
-    m_dragging = true;
+	if(qImage.depth() < 32) {
+		kdDebug(0) << "Stamptool::pattern less than 32 bit!" << endl;
+		return;
+	}
 
-    QPoint pos = e->pos();
+	spacing = m_pPattern -> spacing();
 
-    m_dragStart = pos;
-    m_dragdist = 0;
+	if (spacing < 1) 
+		spacing = 3;
 
-    // stamp the pattern image into the layer memory
-    if(stampColor(zoomed(pos) - mHotSpot))
-    {
-        img->markDirty(QRect(zoomed(pos) - mHotSpot, mPatternSize));
-    }
+	m_dragging = true;
+
+	QPoint pos = e -> pos();
+
+	m_dragStart = pos;
+	m_dragdist = 0;
+
+	// stamp the pattern image into the layer memory
+	if(stampColor(zoomed(pos) - mHotSpot))
+		img -> markDirty(QRect(zoomed(pos) - mHotSpot, mPatternSize));
 }
 
 
@@ -451,46 +448,34 @@ void StampTool::mouseMove(QMouseEvent *e)
 
 void StampTool::mouseRelease(QMouseEvent *e)
 {
-    if (e->button() != LeftButton)
-        return;
+	if (e -> button() != LeftButton)
+		return;
 
-    m_dragging = false;
+	m_dragging = false;
 }
 
 
 void StampTool::optionsDialog()
 {
-    ToolOptsStruct ts;
+	ToolOptsStruct ts;
+	bool old_useGradient = useGradient;
+	unsigned int  old_opacity = opacity;
 
-    ts.useGradient      = useGradient;
-    ts.opacity          = opacity;
+	ts.useGradient = useGradient;
+	ts.opacity = opacity;
 
-    bool old_useGradient = useGradient;
-    int  old_opacity     = opacity;
+	ToolOptionsDialog OptsDialog(tt_stamptool, ts);
 
-    ToolOptionsDialog *pOptsDialog
-        = new ToolOptionsDialog(tt_stamptool, ts);
+	OptsDialog.exec();
 
-    pOptsDialog->exec();
+	if (OptsDialog.result() != QDialog::Accepted)
+		return;
+        
+	opacity = OptsDialog.stampToolTab() -> opacity();
+	useGradient = OptsDialog.stampToolTab() -> useGradient();
 
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        opacity       = pOptsDialog->stampToolTab()->opacity();
-        useGradient   = pOptsDialog->stampToolTab()->useGradient();
-
-        // User change value ?
-        if ( old_useGradient != useGradient || old_opacity != opacity ) {
-            // set stamp tool settings
-            KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();
-            s.opacity                   = opacity;
-            s.blendWithCurrentGradient  = useGradient;
-
-            m_pDoc->setStampToolSettings( s );
-
-            m_pDoc->setModified( true );
-        }
-    }
+        if (old_useGradient != useGradient || old_opacity != opacity)
+		m_pDoc -> setModified(true);
 }
 
 void StampTool::setupAction(QObject *collection)
@@ -505,4 +490,27 @@ bool StampTool::shouldRepaint()
 {
 	return true;
 }
+
+QDomElement StampTool::saveSettings(QDomDocument& doc) const
+{
+	// Stamp (Pattern) tool element
+	QDomElement stampTool = doc.createElement("stampTool");
+
+	stampTool.setAttribute("opacity", opacity);
+	stampTool.setAttribute("blendWithCurrentGradient", static_cast<int>(useGradient));
+	return stampTool;
+}
+
+bool StampTool::loadSettings(QDomElement& elem)
+{
+        bool rc = elem.tagName() == "stampTool";
+
+	if (rc) {
+		opacity = elem.attribute("opacity").toInt();
+		useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
+	}
+
+	return rc;
+}
+
 

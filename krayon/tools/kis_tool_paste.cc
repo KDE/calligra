@@ -36,14 +36,10 @@
 #include "kis_util.h"
 #include "kis_tool_paste.h"
 
-
-
-PasteTool::PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas)
-    : KisTool(doc, view)
+PasteTool::PasteTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
     m_dragging = false;
     m_dragdist = 0;
-    m_pView = view;
     m_pCanvas = canvas;
 
     m_Cursor = KisCursor::crossCursor();

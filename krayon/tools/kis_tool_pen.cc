@@ -23,6 +23,7 @@
 #include <qpainter.h>
 
 #include <kaction.h>
+#include <kdebug.h>
 
 #include "kis_brush.h"
 #include "kis_doc.h"
@@ -33,24 +34,19 @@
 #include "kis_tool_pen.h"
 #include "kis_dlg_toolopts.h"
 
-PenTool::PenTool(KisDoc *doc, KisView *view,
-    KisCanvas *canvas, KisBrush *_brush)
-  : KisTool(doc, view)
+PenTool::PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *_brush) : KisTool(doc)
 {
     m_dragging = false;
-    m_pView  = view;
     m_pCanvas = canvas;
     m_pDoc = doc;
 
     // initialize pen tool settings
-    KisDoc::PenToolSettings s = m_pDoc->getPenToolSettings();
-    penColorThreshold = s.paintThreshold;
-    penOpacity        = s.opacity;
-    usePattern        = s.paintWithPattern;
-    useGradient       = s.paintWithGradient;
+    penColorThreshold = 128;
+    opacity = 255;
+    usePattern = false;
+    useGradient = false;
 
     lineThickness = 1;
-    lineOpacity = 1;
 
     setBrush(_brush);
 }
@@ -265,46 +261,35 @@ void PenTool::mouseRelease(QMouseEvent *e)
 
 void PenTool::optionsDialog()
 {
-    ToolOptsStruct ts;
+	ToolOptsStruct ts;
 
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.penThreshold     = penColorThreshold;
-    ts.opacity          = penOpacity;
+	ts.usePattern       = usePattern;
+	ts.useGradient      = useGradient;
+	ts.penThreshold     = penColorThreshold;
+	ts.opacity          = opacity;
 
-    bool old_usePattern         = usePattern;
-    bool old_useGradient        = useGradient;
-    int old_penColorThreshold   = penColorThreshold;
-    int old_penOpacity          = penOpacity;
+	bool old_usePattern         = usePattern;
+	bool old_useGradient        = useGradient;
+	int old_penColorThreshold   = penColorThreshold;
+	unsigned int old_opacity          = opacity;
 
-    ToolOptionsDialog *pOptsDialog
-        = new ToolOptionsDialog(tt_pentool, ts);
+	ToolOptionsDialog opt_dlg(tt_pentool, ts);
 
-    pOptsDialog->exec();
+	opt_dlg.exec();
 
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        usePattern          = pOptsDialog->penToolTab()->usePattern();
-        useGradient         = pOptsDialog->penToolTab()->useGradient();
-        penColorThreshold   = pOptsDialog->penToolTab()->penThreshold();
-        penOpacity          = pOptsDialog->penToolTab()->opacity();
+	if(!opt_dlg.result() != QDialog::Accepted)
+		return;
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient
-             || old_penColorThreshold != penColorThreshold || old_penOpacity != penOpacity ) {
-            // set pen tool settings
-            KisDoc::PenToolSettings s;
-            s.paintThreshold     = penColorThreshold;
-            s.opacity            = penOpacity;
-            s.paintWithPattern   = usePattern;
-            s.paintWithGradient  = useGradient;
+	usePattern          = opt_dlg.penToolTab()->usePattern();
+	useGradient         = opt_dlg.penToolTab()->useGradient();
+	penColorThreshold   = opt_dlg.penToolTab()->penThreshold();
+	opacity          = opt_dlg.penToolTab()->opacity();
 
-            m_pDoc->setPenToolSettings( s );
-
-            m_pDoc->setModified( true );
-        }
-    }
+	// User change value ?
+	if ( old_usePattern != usePattern || old_useGradient != useGradient
+			|| old_penColorThreshold != penColorThreshold || old_opacity != opacity ) {
+		m_pDoc->setModified( true );
+	}
 }
 
 void PenTool::setupAction(QObject *collection)
@@ -314,4 +299,29 @@ void PenTool::setupAction(QObject *collection)
 	toggle -> setExclusiveGroup("tools");
 }
 
+QDomElement PenTool::saveSettings(QDomDocument& doc) const
+{ 
+	QDomElement tool = doc.createElement("penTool");
+
+	tool.setAttribute("opacity", opacity);
+	tool.setAttribute("paintThreshold", penColorThreshold);
+	tool.setAttribute("paintWithPattern", static_cast<int>(usePattern));
+	tool.setAttribute("paintWithGradient", static_cast<int>(useGradient));
+	return tool;
+}
+
+bool PenTool::loadSettings(QDomElement& tool)
+{
+	bool rc = tool.tagName() == "penTool";
+
+	if (rc) {
+		kdDebug() << "PenTool::loadSettings\n";
+		opacity = tool.attribute("opacity").toInt();
+		penColorThreshold = tool.attribute("paintThreshold").toInt();
+		usePattern = static_cast<bool>(tool.attribute("paintWithPattern").toInt());
+		useGradient = static_cast<bool>(tool.attribute("paintWithGradient").toInt());
+	}
+
+	return rc;
+}
 

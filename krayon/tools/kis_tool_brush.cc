@@ -35,24 +35,23 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
-  : KisTool(doc, view)
+BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 {
     m_pDoc = doc;
     m_dragging = false;
     m_dragdist = 0;
 
     // initialize brush tool settings
-    KisDoc::BrushToolSettings s = m_pDoc->getBrushToolSettings();
-    usePattern = s.blendWithCurrentPattern;
-    useGradient = s.blendWithCurrentGradient;
-    opacity = s.opacity;
+    usePattern = false;
+    useGradient = false;
+    opacity = 255;
 
     setBrush(brush);
 }
 
-BrushTool::~BrushTool() {}
-
+BrushTool::~BrushTool() 
+{
+}
 
 void BrushTool::setBrush(KisBrush *brush)
 {
@@ -277,7 +276,7 @@ void BrushTool::optionsDialog()
 
     bool old_usePattern   = usePattern;
     bool old_useGradient  = useGradient;
-    int  old_opacity      = opacity;
+    unsigned int  old_opacity      = opacity;
 
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_brushtool, ts);
@@ -294,13 +293,6 @@ void BrushTool::optionsDialog()
         // User change value ?
         if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
             // set brush tool settings
-            KisDoc::BrushToolSettings s = m_pDoc->getBrushToolSettings();
-            s.blendWithCurrentPattern   = usePattern;
-            s.blendWithCurrentGradient  = useGradient;
-            s.opacity                   = opacity;
-
-            m_pDoc->setBrushToolSettings( s );
-
             m_pDoc->setModified( true );
         }
     }
@@ -312,5 +304,28 @@ void BrushTool::setupAction(QObject *collection)
 			collection, "tool_brush");
 
 	toggle -> setExclusiveGroup("tools");
+}
+
+QDomElement BrushTool::saveSettings(QDomDocument& doc) const
+{
+	QDomElement tool = doc.createElement("brushTool");
+
+	tool.setAttribute("opacity", opacity);
+	tool.setAttribute("blendWithCurrentGradient", static_cast<int>(useGradient));
+	tool.setAttribute("blendWithCurrentPattern", static_cast<int>(usePattern));
+	return tool;
+}
+
+bool BrushTool::loadSettings(QDomElement& elem)
+{
+	bool rc = elem.tagName() == "brushTool";
+
+	if (rc) {
+		opacity = elem.attribute("opacity").toInt();
+		useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
+		usePattern = static_cast<bool>(elem.attribute("blendWithCurrentPattern").toInt());
+	}
+
+	return rc;
 }
 

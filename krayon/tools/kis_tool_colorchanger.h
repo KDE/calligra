@@ -33,10 +33,12 @@ class KisDoc;
 
 class ColorChangerTool : public KisTool {
 public:
-	ColorChangerTool(KisDoc *doc, KisView *view);
+	ColorChangerTool(KisDoc *doc);
 	virtual ~ColorChangerTool();
   
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
 	virtual void optionsDialog();
 	virtual void setCursor();
 
@@ -60,9 +62,6 @@ protected:
     int fillOpacity;
     bool layerAlpha;
 
-    bool usePattern;
-    bool useGradient;
-            
     int toleranceRed;
     int toleranceGreen;    
     int toleranceBlue;

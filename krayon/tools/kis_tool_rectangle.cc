@@ -31,113 +31,94 @@
 #include "kis_tool_rectangle.h"
 #include "kis_dlg_toolopts.h"
 
-RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
-  : KisTool( _doc, _view )
-  , m_dragging( false )
-  , pCanvas( _canvas )
+RectangleTool::RectangleTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
-    m_pDoc = _doc;
+	m_pDoc = doc;
+	m_dragging = false;
+	pCanvas = canvas;
 
-    // initialize rectangle tool settings
-    KisDoc::RectangleToolSettings s = m_pDoc->getRectangleToolSettings();
-    lineThickness = s.thickness;
-    lineOpacity = s.opacity;
-    usePattern = s.useCurrentPattern;
-    useGradient = s.fillWithGradient;
-    fillSolid = s.fillInteriorRegions;
-
-
-    KisPainter *p = m_pView->kisPainter();
-    
-    p->setLineThickness( lineThickness );
-    p->setLineOpacity( lineOpacity );
-    p->setFilledRectangle( fillSolid );
-    p->setGradientFill( useGradient );
-    p->setPatternFill( usePattern );   
+	// initialize rectangle tool settings
+	lineThickness = 4;
+	lineOpacity = 255;
+	usePattern = false;
+	useGradient = false;
+	fillSolid = false;
 }
 
 RectangleTool::~RectangleTool()
 {
 }
 
-
-void RectangleTool::mousePress( QMouseEvent* event )
+void RectangleTool::mousePress(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if( event->button() == LeftButton )
-    {
-        m_dragging = true;
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
-    }
+	if (event -> button() == LeftButton) {
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+	}
 }
 
-
-void RectangleTool::mouseMove( QMouseEvent* event )
+void RectangleTool::mouseMove(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if( m_dragging )
-    {
-        // erase old lines on canvas
-        drawRectangle( m_dragStart, m_dragEnd );
-        // get current mouse position
-        m_dragEnd = event->pos();
-        // draw new lines on canvas
-        drawRectangle( m_dragStart, m_dragEnd );
-    }
+	if (m_dragging) {
+		// erase old lines on canvas
+		drawRectangle(m_dragStart, m_dragEnd);
+		// get current mouse position
+		m_dragEnd = event -> pos();
+		// draw new lines on canvas
+		drawRectangle(m_dragStart, m_dragEnd);
+	}
 }
 
-
-void RectangleTool::mouseRelease( QMouseEvent* event )
+void RectangleTool::mouseRelease(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if(( m_dragging) 
-    && ( event->state() == LeftButton))
-    {
-        // erase old lines on canvas
-        drawRectangle( m_dragStart, m_dragEnd );
-        m_dragging = false;
-    }
+	if (m_dragging && event -> state() == LeftButton) {
+		// erase old lines on canvas
+		drawRectangle(m_dragStart, m_dragEnd);
+		m_dragging = false;
+	}
     
-    // get topLeft and bottomRight.
-    int maxX = 0, maxY = 0;
-    int minX = 0, minY = 0;
+	// get topLeft and bottomRight.
+	int maxX = 0, maxY = 0;
+	int minX = 0, minY = 0;
 
-    if ( m_dragStart.x() > m_dragEnd.x() ) {
-        maxX = m_dragStart.x();
-        minX = m_dragEnd.x();
-    }
-    else {
-        maxX = m_dragEnd.x();
-        minX = m_dragStart.x();
-    }
+	if (m_dragStart.x() > m_dragEnd.x()) {
+		maxX = m_dragStart.x();
+		minX = m_dragEnd.x();
+	}
+	else {
+		maxX = m_dragEnd.x();
+		minX = m_dragStart.x();
+	}
 
-    if ( m_dragStart.y() > m_dragEnd.y() ) {
-        maxY = m_dragStart.y();
-        minY = m_dragEnd.y();
-    }
-    else {
-        maxY = m_dragEnd.y();
-        minY = m_dragStart.y();
-    }
+	if (m_dragStart.y() > m_dragEnd.y()) {
+		maxY = m_dragStart.y();
+		minY = m_dragEnd.y();
+	}
+	else {
+		maxY = m_dragEnd.y();
+		minY = m_dragStart.y();
+	}
 
-    QPoint topLeft = QPoint( minX, minY );
-    QPoint bottomRight = QPoint( maxX, maxY );
-    QRect rect = QRect( zoomed( topLeft ), zoomed( bottomRight ) );
+	QPoint topLeft = QPoint(minX, minY);
+	QPoint bottomRight = QPoint(maxX, maxY);
+	QRect rect = QRect(zoomed(topLeft), zoomed(bottomRight));
 
-    // draw final lines onto layer
-    KisPainter *p = m_pView->kisPainter();
-    p->drawRectangle( rect );
+	// draw final lines onto layer
+	KisPainter *p = m_pView -> kisPainter();
+	p -> drawRectangle( rect );
 }
 
-
-void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
+void RectangleTool::drawRectangle(const QPoint& start, const QPoint& end )
 {
     QPainter p;
     QPen pen;
@@ -158,60 +139,49 @@ void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 
 void RectangleTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
+	ToolOptsStruct ts;    
 
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.lineThickness    = lineThickness;
-    ts.lineOpacity      = lineOpacity;
-    ts.opacity          = lineOpacity;
-    ts.fillShapes       = fillSolid;
+	ts.usePattern = usePattern;
+	ts.useGradient      = useGradient;
+	ts.lineThickness    = lineThickness;
+	ts.lineOpacity      = lineOpacity;
+	ts.opacity          = lineOpacity;
+	ts.fillShapes       = fillSolid;
 
-    bool old_usePattern       = usePattern;
-    bool old_useGradient      = useGradient;
-    int  old_lineThickness    = lineThickness;
-    int  old_lineOpacity      = lineOpacity;
-    bool old_fillSolid        = fillSolid;
+	bool old_usePattern       = usePattern;
+	bool old_useGradient      = useGradient;
+	int  old_lineThickness    = lineThickness;
+	int  old_lineOpacity      = lineOpacity;
+	bool old_fillSolid        = fillSolid;
 
-    ToolOptionsDialog *pOptsDialog 
-        = new ToolOptionsDialog(tt_linetool, ts);
+	ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
-    pOptsDialog->exec();
+	OptsDialog.exec();
     
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        lineThickness = pOptsDialog->lineToolTab()->thickness();
-        lineOpacity   = pOptsDialog->lineToolTab()->opacity();
-        usePattern    = pOptsDialog->lineToolTab()->usePattern();
-        useGradient   = pOptsDialog->lineToolTab()->useGradient();
-        fillSolid     = pOptsDialog->lineToolTab()->solid();  
+	if (OptsDialog.result() != QDialog::Accepted)
+		return;
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient 
-             || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
-             || old_fillSolid != fillSolid ) {    
-            KisPainter *p = m_pView->kisPainter();
-    
-            p->setLineThickness( lineThickness );
-            p->setLineOpacity( lineOpacity );
-            p->setFilledRectangle( fillSolid );
-            p->setPatternFill( usePattern );
-            p->setGradientFill( useGradient );
+	lineThickness = OptsDialog.lineToolTab()->thickness();
+	lineOpacity   = OptsDialog.lineToolTab()->opacity();
+	usePattern    = OptsDialog.lineToolTab()->usePattern();
+	useGradient   = OptsDialog.lineToolTab()->useGradient();
+	fillSolid     = OptsDialog.lineToolTab()->solid();  
 
-            // set rectangle tool settings
-            KisDoc::RectangleToolSettings s = m_pDoc->getRectangleToolSettings();
-            s.thickness            = lineThickness;
-            s.opacity              = lineOpacity;
-            s.useCurrentPattern    = usePattern;
-            s.fillWithGradient     = useGradient;
-            s.fillInteriorRegions  = fillSolid;
+	// User change value ?
+	if ( old_usePattern != usePattern || old_useGradient != useGradient 
+			|| old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+			|| old_fillSolid != fillSolid) {    
+		KisPainter *p = m_pView->kisPainter();
 
-            m_pDoc->setRectangleToolSettings( s );
+		p->setLineThickness(lineThickness);
+		p->setLineOpacity(lineOpacity);
+		p->setFilledRectangle(fillSolid);
+		p->setPatternFill(usePattern);
+		p->setGradientFill(useGradient);
 
-            m_pDoc->setModified( true );
-        }
-    }
+		// set rectangle tool settings
+		m_pDoc->setModified( true );
+	}
 }
 
 void RectangleTool::setupAction(QObject *collection)
@@ -224,16 +194,45 @@ void RectangleTool::setupAction(QObject *collection)
 void RectangleTool::toolSelect()
 {
 	if (m_pView) {
-		KisDoc::RectangleToolSettings s = m_pDoc -> getRectangleToolSettings();
 		KisPainter *gc = m_pView -> kisPainter();
 
-		gc -> setLineThickness(s.thickness);
-		gc -> setLineOpacity(s.opacity);
-		gc -> setFilledRectangle(s.fillInteriorRegions);
-		gc -> setGradientFill(s.useCurrentPattern);
-		gc -> setPatternFill(s.useCurrentPattern);
+		gc -> setLineThickness(lineThickness);
+		gc -> setLineOpacity(opacity);
+		gc -> setFilledRectangle(fillSolid);
+		gc -> setGradientFill(useGradient);
+		gc -> setPatternFill(usePattern);
 
 		m_pView -> activateTool(this);
 	}
 }
+
+QDomElement RectangleTool::saveSettings(QDomDocument& doc) const
+{
+	// rectangle tool element
+	QDomElement rectangleTool = doc.createElement("rectangleTool");
+
+	rectangleTool.setAttribute("thickness", lineThickness);
+	rectangleTool.setAttribute("opacity", opacity);
+	rectangleTool.setAttribute("fillInteriorRegions", static_cast<int>(fillSolid));
+	rectangleTool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
+	rectangleTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	return rectangleTool;
+
+}
+
+bool RectangleTool::loadSettings(QDomElement& elem)
+{
+	bool rc = elem.tagName() == "rectangleTool";
+
+	if (rc) {
+		lineThickness = elem.attribute("thickness").toInt();
+		opacity = elem.attribute("opacity").toInt();
+		fillSolid = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
+		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
+		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+	}
+
+	return rc;
+}
+
 

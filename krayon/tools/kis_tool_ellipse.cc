@@ -31,189 +31,157 @@
 #include "kis_tool_ellipse.h"
 #include "kis_dlg_toolopts.h"
 
-EllipseTool::EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
-  : KisTool( _doc, _view )
-  , m_dragging( false )
-  , pCanvas( _canvas )
+EllipseTool::EllipseTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
-    m_pDoc = _doc;
+	m_pDoc = doc;
+	m_dragging = false;
+	pCanvas = canvas;
 
-    // initialize ellipse tool settings
-    KisDoc::EllipseToolSettings s = m_pDoc->getEllipseToolSettings();
-    lineThickness = s.thickness;
-    lineOpacity = s.opacity;
-    usePattern = s.useCurrentPattern;
-    useGradient = s.fillWithGradient;
-    fillSolid = s.fillInteriorRegions;
-
-
-    KisPainter *p = m_pView->kisPainter();
-    
-    p->setLineThickness( lineThickness );
-    p->setLineOpacity( lineOpacity );
-    p->setFilledEllipse( fillSolid );
-    p->setGradientFill( useGradient );
-    p->setPatternFill( usePattern );
+	// initialize ellipse tool settings
+	lineThickness = 4;
+	lineOpacity = 255;
+	usePattern = false;
+	useGradient = false;
+	fillSolid = false;
 }
 
 EllipseTool::~EllipseTool()
 {
 }
 
-
-void EllipseTool::mousePress( QMouseEvent* event )
+void EllipseTool::mousePress(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if( event->button() == LeftButton )
-    {
-        m_dragging = true;
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
-    }
+	if (event -> button() == LeftButton) {
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+	}
 }
 
-
-void EllipseTool::mouseMove( QMouseEvent* event )
+void EllipseTool::mouseMove(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if( m_dragging )
-    {
-        // erase old ellipse on canvas
-        drawEllipse( m_dragStart, m_dragEnd );
-        // get current mouse position
-        m_dragEnd = event->pos();
-        // draw new ellipse on canvas
-        drawEllipse( m_dragStart, m_dragEnd );
-    }
+	if (m_dragging) {
+		// erase old ellipse on canvas
+		drawEllipse(m_dragStart, m_dragEnd);
+		// get current mouse position
+		m_dragEnd = event -> pos();
+		// draw new ellipse on canvas
+		drawEllipse(m_dragStart, m_dragEnd);
+	}
 }
 
-
-void EllipseTool::mouseRelease( QMouseEvent* event )
+void EllipseTool::mouseRelease(QMouseEvent *event)
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+	if (m_pDoc -> isEmpty())
+		return;
 
-    if(( m_dragging) 
-    && ( event->state() == LeftButton))
-    {
-        // erase old ellipse on canvas
-        drawEllipse( m_dragStart, m_dragEnd );
-        m_dragging = false;
+	if (m_dragging && event -> state() == LeftButton) {
+		// erase old ellipse on canvas
+		drawEllipse(m_dragStart, m_dragEnd);
+		m_dragging = false;
 
-        // get topLeft and bottomRight.
-        int maxX = 0, maxY = 0;
-        int minX = 0, minY = 0;
+		// get topLeft and bottomRight.
+		int maxX = 0, maxY = 0;
+		int minX = 0, minY = 0;
 
-        if ( m_dragStart.x() > m_dragEnd.x() ) {
-            maxX = m_dragStart.x();
-            minX = m_dragEnd.x();
-        }
-        else {
-            maxX = m_dragEnd.x();
-            minX = m_dragStart.x();
-        }
+		if (m_dragStart.x() > m_dragEnd.x()) {
+			maxX = m_dragStart.x();
+			minX = m_dragEnd.x();
+		}
+		else {
+			maxX = m_dragEnd.x();
+			minX = m_dragStart.x();
+		}
 
-        if ( m_dragStart.y() > m_dragEnd.y() ) {
-            maxY = m_dragStart.y();
-            minY = m_dragEnd.y();
-        }
-        else {
-            maxY = m_dragEnd.y();
-            minY = m_dragStart.y();
-        }
+		if ( m_dragStart.y() > m_dragEnd.y() ) {
+			maxY = m_dragStart.y();
+			minY = m_dragEnd.y();
+		}
+		else {
+			maxY = m_dragEnd.y();
+			minY = m_dragStart.y();
+		}
 
-        QPoint topLeft = QPoint( minX, minY );
-        QPoint bottomRight = QPoint( maxX, maxY );
-        QRect rect = QRect( zoomed( topLeft ), zoomed( bottomRight ) );
+		QPoint topLeft = QPoint(minX, minY);
+		QPoint bottomRight = QPoint(maxX, maxY);
+		QRect rect = QRect(zoomed(topLeft), zoomed(bottomRight));
 
-        // draw final ellipse onto layer    
-        KisPainter *p = m_pView->kisPainter();
-        p->drawEllipse( rect );
-    }    
+		// draw final ellipse onto layer    
+		KisPainter *p = m_pView -> kisPainter();
+		p -> drawEllipse(rect);
+	}    
 }
 
-
-void EllipseTool::drawEllipse( const QPoint & start, const QPoint &end )
+void EllipseTool::drawEllipse(const QPoint& start, const QPoint& end)
 {
-    QPainter p;
-    QPen pen;
-    pen.setWidth(lineThickness);
-    
-    p.begin( pCanvas );
-    p.setPen(pen);
-    p.setRasterOp( Qt::NotROP );
-    float zF = m_pView->zoomFactor();
+	QPainter p;
+	QPen pen;
 
-    p.drawEllipse( QRect(start.x() + m_pView->xPaintOffset() 
-                                - (int)(zF * m_pView->xScrollOffset()),
-                      start.y() + m_pView->yPaintOffset() 
-                                - (int)(zF * m_pView->yScrollOffset()), 
-                      end.x() - start.x(), 
-                      end.y() - start.y()) );
+	pen.setWidth(lineThickness);
+	p.begin(pCanvas);
+	p.setPen(pen);
+	p.setRasterOp(Qt::NotROP);
+	float zF = m_pView -> zoomFactor();
 
-    p.end();
+	p.drawEllipse( 
+			QRect(start.x() + m_pView->xPaintOffset() - (int)(zF * m_pView->xScrollOffset()),
+				start.y() + m_pView->yPaintOffset() - (int)(zF * m_pView->yScrollOffset()), 
+				end.x() - start.x(), 
+				end.y() - start.y()));
+	p.end();
 }
 
 void EllipseTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
-    
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.lineThickness    = lineThickness;
-    ts.lineOpacity      = lineOpacity;
-    ts.fillShapes       = fillSolid;
-    ts.opacity          = lineOpacity;
+	ToolOptsStruct ts;    
 
-    bool old_usePattern       = usePattern;
-    bool old_useGradient      = useGradient;
-    int  old_lineThickness    = lineThickness;
-    int  old_lineOpacity      = lineOpacity;
-    bool old_fillSolid        = fillSolid;
+	ts.usePattern       = usePattern;
+	ts.useGradient      = useGradient;
+	ts.lineThickness    = lineThickness;
+	ts.lineOpacity      = lineOpacity;
+	ts.fillShapes       = fillSolid;
+	ts.opacity          = lineOpacity;
+
+	bool old_usePattern       = usePattern;
+	bool old_useGradient      = useGradient;
+	int  old_lineThickness    = lineThickness;
+	int  old_lineOpacity      = lineOpacity;
+	bool old_fillSolid        = fillSolid;
+
+	ToolOptionsDialog OptsDialog(tt_linetool, ts);
+
+	OptsDialog.exec();
+    
+	if (OptsDialog.result() != QDialog::Accepted)
+		return;
         
-    ToolOptionsDialog *pOptsDialog 
-        = new ToolOptionsDialog(tt_linetool, ts);
+	lineThickness = OptsDialog.lineToolTab()->thickness();
+        lineOpacity   = OptsDialog.lineToolTab()->opacity();
+        usePattern    = OptsDialog.lineToolTab()->usePattern();
+        fillSolid     = OptsDialog.lineToolTab()->solid(); 
+        useGradient   = OptsDialog.lineToolTab()->useGradient();
 
-    pOptsDialog->exec();
-    
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        lineThickness = pOptsDialog->lineToolTab()->thickness();
-        lineOpacity   = pOptsDialog->lineToolTab()->opacity();
-        usePattern    = pOptsDialog->lineToolTab()->usePattern();
-        fillSolid     = pOptsDialog->lineToolTab()->solid(); 
-        useGradient   = pOptsDialog->lineToolTab()->useGradient();
+	// User change value ?
+	if ( old_usePattern != usePattern || old_useGradient != useGradient 
+			|| old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+			|| old_fillSolid != fillSolid ) {    
+		KisPainter *p = m_pView->kisPainter();
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient 
-             || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
-             || old_fillSolid != fillSolid ) {    
-            KisPainter *p = m_pView->kisPainter();
-    
-            p->setLineThickness( lineThickness );
-            p->setLineOpacity( lineOpacity );
-            p->setFilledEllipse( fillSolid );
-            p->setPatternFill( usePattern );
-            p->setGradientFill( useGradient );
+		p->setLineThickness( lineThickness );
+		p->setLineOpacity( lineOpacity );
+		p->setFilledEllipse( fillSolid );
+		p->setPatternFill( usePattern );
+		p->setGradientFill( useGradient );
 
-            // set ellipse tool settings
-            KisDoc::EllipseToolSettings s = m_pDoc->getEllipseToolSettings();
-            s.thickness            = lineThickness;
-            s.opacity              = lineOpacity;
-            s.useCurrentPattern    = usePattern;
-            s.fillWithGradient     = useGradient;
-            s.fillInteriorRegions  = fillSolid;
-
-            m_pDoc->setEllipseToolSettings( s );
-
-            m_pDoc->setModified( true );
-        }
-    }    
+		// set ellipse tool settings
+		m_pDoc->setModified( true );
+	}
 }
 
 void EllipseTool::setupAction(QObject *collection)
@@ -226,17 +194,43 @@ void EllipseTool::setupAction(QObject *collection)
 void EllipseTool::toolSelect()
 {
 	if (m_pView) {
-		KisDoc::EllipseToolSettings s = m_pDoc -> getEllipseToolSettings();
 		KisPainter *gc = m_pView -> kisPainter();
 
-		gc -> setLineThickness(s.thickness);
-	        gc -> setLineOpacity(s.opacity);
-		gc -> setFilledEllipse(s.useCurrentPattern);
-		gc -> setGradientFill(s.fillWithGradient);
-		gc -> setPatternFill(s.fillInteriorRegions);
+		gc -> setLineThickness(lineThickness);
+	        gc -> setLineOpacity(opacity);
+		gc -> setFilledEllipse(usePattern);
+		gc -> setGradientFill(useGradient);
+		gc -> setPatternFill(fillSolid);
 
 		m_pView -> activateTool(this);
 	}
 }
 
+QDomElement EllipseTool::saveSettings(QDomDocument& doc) const
+{
+	// ellipse tool element
+	QDomElement ellipseTool = doc.createElement("ellipseTool");
+
+	ellipseTool.setAttribute("thickness", lineThickness);
+	ellipseTool.setAttribute("opacity", opacity);
+	ellipseTool.setAttribute("fillInteriorRegions", static_cast<int>(fillSolid));
+	ellipseTool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
+	ellipseTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	return ellipseTool;
+}
+
+bool EllipseTool::loadSettings(QDomElement& elem)
+{
+        bool rc = elem.tagName() == "ellipseTool";
+
+	if (rc) {
+		lineThickness = elem.attribute("thickness").toInt();
+		opacity = elem.attribute("opacity").toInt();
+		fillSolid = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
+		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
+		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+	}
+
+	return rc;
+}
 

@@ -33,11 +33,13 @@ class KisDoc;
 
 class PenTool : public KisTool {
 public:
-	PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *brush);
+	PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *brush);
 	virtual ~PenTool();
   
-	virtual void optionsDialog();
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+	virtual void optionsDialog();
 	virtual void setBrush(KisBrush *brush);
 
 	bool paint(QPoint pos);
@@ -48,28 +50,21 @@ public slots:
 	virtual void mouseRelease(QMouseEvent*);
 
 protected:
+	QPoint m_dragStart;
+	bool m_dragging;
+	float m_dragdist;
 
-    QPoint 	        m_dragStart;
-    bool   	        m_dragging;
-    float           m_dragdist;
-    
-    KisCanvas       *m_pCanvas;
-    KisFrameBuffer  *fb;
-    
-    QPen pen;
-    int  penW;
-    QPixmap *buffer;
-    
-    // tool options
-    
-    bool usePattern;
-    bool useGradient;
-    int lineThickness;
-    int lineOpacity;
-    
-    int penColorThreshold;
-    int penOpacity;
-    bool penPattern;
+	KisCanvas *m_pCanvas;
+	KisFrameBuffer *fb;
+
+	QPen pen;
+	int penW;
+	QPixmap *buffer;
+
+	// tool options
+	int lineThickness;
+
+	int penColorThreshold;
 };
 
 #endif //__pentool_h__

@@ -33,10 +33,13 @@ class AirBrushTool : public KisTool {
 Q_OBJECT
     
 public:
-	AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush);
+	AirBrushTool(KisDoc *doc, KisBrush *brush);
 	virtual ~AirBrushTool();
   
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+
 	virtual void setBrush(KisBrush *brush);
 	virtual void optionsDialog();
     
@@ -63,11 +66,6 @@ protected:
          
     unsigned int brushWidth;
     unsigned int brushHeight;
-    
-    // options
-    int opacity;
-    bool usePattern;
-    bool useGradient;
 };
 
 #endif //__airbrushtool_h__

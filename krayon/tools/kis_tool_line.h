@@ -31,11 +31,14 @@ class KisCanvas;
 
 class LineTool : public KisTool {
 public:
-	LineTool(KisDoc *_doc, KisView *_view, KisCanvas *_canvas);
+	LineTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~LineTool();
 
-	virtual void optionsDialog();
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+
+	virtual void optionsDialog();
 	virtual void toolSelect();
 
 public slots:
@@ -50,10 +53,6 @@ protected:
 
 	int         lineThickness;
 	int         lineOpacity;
-
-	bool        usePattern;
-	bool        useGradient;
-	bool        useRegions;
 
 	QPoint      m_dragStart;
 	QPoint      m_dragEnd;

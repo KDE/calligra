@@ -33,11 +33,14 @@ class KisDoc;
 
 class StampTool : public KisTool {
 public:
-	StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisPattern *pattern);
+	StampTool(KisDoc *doc, KisCanvas *canvas, KisPattern *pattern);
 	virtual ~StampTool();
-  
-	virtual bool shouldRepaint();
+ 
 	virtual void setupAction(QObject *collection);
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+ 
+	virtual bool shouldRepaint();
 	virtual void setPattern(KisPattern *pattern);
 	virtual void optionsDialog();
 
@@ -67,11 +70,6 @@ protected:
 	bool        m_dragging;
 	float       m_dragdist;
 	int         spacing;
-
-	// options
-	int         opacity;
-	bool        useGradient;
-	bool        useBlend;
 };
 
 #endif //__stamptool_h__

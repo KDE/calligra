@@ -31,11 +31,14 @@ class KisCanvas;
 
 class RectangleTool : public KisTool {
 public:
-	RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
+	RectangleTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~RectangleTool();
 
-	virtual void toolSelect();
 	virtual void optionsDialog();
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
+
+	virtual void toolSelect();
 	virtual void setupAction(QObject *collection);
 
 public slots:
@@ -52,10 +55,6 @@ protected:
     int         lineThickness;
     int         lineOpacity;
 
-    bool        fillSolid;
-    bool        usePattern;
-    bool        useGradient;
-                
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
  
