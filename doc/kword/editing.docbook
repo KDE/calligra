@@ -1537,7 +1537,7 @@ used abbreviations that you want spelled out, or abbreviations.</para>
 
 <para>&kword; uses different autocorrection strings depending on the language.  
 Set the correct language using the drop down box labeled 
-<guilabel>Replacement and exception for langauge</guilabel>.</para>
+<guilabel>Replacement and exception for language</guilabel>.</para>
 
 <para>The checkbox labeled <guilabel>Enable word replacement</guilabel> is used to 
 toggle on and off the autoreplacment features of &kword;.  If there is no mark in the checkbox, 
@@ -1573,7 +1573,7 @@ strings are now added to the table.</para>
 <para>&kword; does not allow you to change the text to search for.
 This is to prevent disastrous mistakes.</para>
 <para>Instead, you must delete the current autocorrection rule and
-add a new text string with the corrected text to find</para>
+add a new text string with the corrected text to find.</para>
 
 <para><emphasis>Changing the text you want to replace.</emphasis></para>
 <para>Begin by clicking once on the string you want to edit.  It will be
