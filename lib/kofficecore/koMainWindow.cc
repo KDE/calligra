@@ -480,6 +480,10 @@ void KoMainWindow::updateCaption()
           caption = url;
 
       setCaption( caption, rootDocument()->isModified() );
+      if ( !rootDocument()->url().fileName(false).isEmpty() )
+        d->m_paSave->setToolTip( i18n("Save as %1").arg(rootDocument()->url().fileName(false)) );
+      else
+        d->m_paSave->setToolTip( i18n("Save") );
   }
 }
 
