@@ -41,16 +41,8 @@ KSpreadFactory::~KSpreadFactory()
   }
 }
 
-QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KSpreadFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-/*    if ( parent && !parent->inherits("KoDocument") )
-    {
-	kdDebug(36001) << "KSpreadFactory: parent does not inherit KoDocument" << endl;
-	return 0;
-    }
-*/
-//    return new KSpreadDoc( (KoDocument*)parent, name );
-
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
   KSpreadDoc *doc = new KSpreadDoc( parent, name, !bWantKoDocument );
@@ -59,7 +51,6 @@ QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* 
     doc->setReadWrite( false );
 
   emit objectCreated( doc );
-
   return doc;
 }
 
