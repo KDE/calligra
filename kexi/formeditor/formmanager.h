@@ -99,7 +99,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KexiPropertyEditor* editor() const { return m_editor; }
 
 		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
-		void createBlankForm(const QString &classname, const char *name);
+		QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
+
+		/*! Adds a existing form w and changes it to a container */
+		void importForm(QWidget *w);
 
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);

@@ -578,6 +578,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 				nodeName = "grid";
 				break;
 			}
+			default:
+				break;
 		}
 		if(!nodeName.isNull())
 		{

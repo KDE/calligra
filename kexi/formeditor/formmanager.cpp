@@ -189,16 +189,19 @@ FormManager::createBlankForm()
 	createBlankForm("QWidget",0);
 }
 
-void
-FormManager::createBlankForm(const QString &classname, const char *name)
+QWidget *
+FormManager::createBlankForm(const QString &classname, const char *name, QWidget *parent)
 {
+	if(!parent)
+		parent = m_parent;
+
 	Form *form = new Form(this, name);
 
 	QWidget *w=0;
 	QString n;
 
 	n = "Form" + QString::number(m_count + 1);
-	w = new QWidget(m_parent, n.latin1());
+	w = new QWidget(parent, n.latin1());
 
 	form->createToplevel(w, classname);
 	w->setCaption(n);
@@ -207,6 +210,8 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 	w->show();
 	w->setFocus();
 	initForm(form);
+
+	return 0;
 /*
 	m_forms.append(form);
 	m_treeview->setForm(form);
@@ -219,7 +224,24 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));*/
+	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
+
+	return w;
+*/
+}
+
+void
+FormManager::importForm(QWidget *w)
+{
+	Form *form = new Form(this, w->name());
+	form->createToplevel(w, w->className());
+	w->setCaption(w->name());
+	w->setIcon(SmallIcon("kexi"));
+	w->resize(350, 300);
+	w->show();
+	w->setFocus();
+
+	initForm(form);
 }
 
 void
