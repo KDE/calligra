@@ -384,8 +384,11 @@ void KPFooterHeaderEditor::slotCloseDia()
 void KPFooterHeaderEditor::slotHeaderPenBrush()
 {
     KPTextObject *header = doc->header();
+    int flags = 0;
+    flags = flags | StyleDia::SdPen;
+    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
 
-    StyleDia *styleDia = new StyleDia( 0, "StyleDia" );
+    StyleDia *styleDia = new StyleDia( 0, "StyleDia",flags );
     styleDia->setMaximumSize( styleDia->width(), styleDia->height() );
     styleDia->setMinimumSize( styleDia->width(), styleDia->height() );
     styleDia->setPen( header->getPen() );
@@ -421,8 +424,10 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 void KPFooterHeaderEditor::slotFooterPenBrush()
 {
     KPTextObject *footer = doc->footer();
-
-    StyleDia *styleDia = new StyleDia( 0, "StyleDia" );
+    int flags = 0;
+    flags = flags | StyleDia::SdPen;
+    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+    StyleDia *styleDia = new StyleDia( 0, "StyleDia",flags );
     styleDia->setMaximumSize( styleDia->width(), styleDia->height() );
     styleDia->setMinimumSize( styleDia->width(), styleDia->height() );
     styleDia->setPen( footer->getPen() );
