@@ -155,8 +155,8 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
 
     insRect.setX( colpos*wid + globalRect.x() );
     insRect.setY( rowpos*hei + globalRect.y() );
-    insRect.setWidth( wid + ts->pFrameStyle()->rightBorder().width() );
-    insRect.setHeight( hei + ts->pFrameStyle()->bottomBorder().width() );
+    insRect.setWidth( static_cast<int>(wid + ts->pFrameStyle()->rightBorder().width()) );
+    insRect.setHeight( static_cast<int>(hei + ts->pFrameStyle()->bottomBorder().width()) );
 
     // 2. Set background
     // caching
@@ -190,9 +190,14 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
         m_textdoc->setWidth( widthLU );
         parag->invalidate(0);
     }
+    double x_add = ( (rb < ts->pFrameStyle()->rightBorder().width()) ? 
+        ts->pFrameStyle()->rightBorder().width() : rb ) +1;
+    double y_add = ( (bb < ts->pFrameStyle()->topBorder().width()) ? 
+        ts->pFrameStyle()->topBorder().width() : bb ) + 1;
+
     QRect textRect = parag->pixelRect( m_zoomHandler );
-    textRect.moveTopLeft( QPoint( insRect.x() + ( (rb<ts->pFrameStyle()->rightBorder().width()) ? ts->pFrameStyle()->rightBorder().width() : rb ) +1,
-                                  insRect.y() + ( (bb<ts->pFrameStyle()->topBorder().width()) ? ts->pFrameStyle()->topBorder().width() : bb ) + 1 ) );
+    textRect.moveTopLeft( QPoint( insRect.x() + static_cast<int>(x_add),
+                                  insRect.y() + static_cast<int>(y_add)) );
 
 
     textRect.setWidth(wid-2);
@@ -210,27 +215,39 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     p->setClipping( false );
 
     QRect cell(globalRect.x(), globalRect.y(),
-                  globalRect.width() + ts->pFrameStyle()->rightBorder().width(),
-                  globalRect.height() + ts->pFrameStyle()->bottomBorder().width() );
+        int( globalRect.width() + ts->pFrameStyle()->rightBorder().width() ),
+        int( globalRect.height() + ts->pFrameStyle()->bottomBorder().width() ));
     p->setClipRect( insRect.intersect( cell ) );
 
     p->translate( insRect.x(), insRect.y() );
 
     if (ts->pFrameStyle()->topBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->topBorder(), ts->pFrameStyle()->topBorder().width(),black) ); // Top border
-        p->drawLine( 0, int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ), wid + ts->pFrameStyle()->rightBorder().width(), int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ) );
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->topBorder(), 
+            int(ts->pFrameStyle()->topBorder().width()), black) ); // Top border
+
+        p->drawLine( 0, int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ), 
+            int(wid + ts->pFrameStyle()->rightBorder().width()), int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ) );
     }
     if (ts->pFrameStyle()->leftBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->leftBorder(), ts->pFrameStyle()->leftBorder().width(),black) ); // Left border
-        p->drawLine( int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), 0, int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), hei + ts->pFrameStyle()->bottomBorder().width() );
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->leftBorder(),
+            int(ts->pFrameStyle()->leftBorder().width()), black) ); // Left border
+
+        p->drawLine( int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), 0, 
+            int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), hei + int(ts->pFrameStyle()->bottomBorder().width()) );
     }
     if (ts->pFrameStyle()->bottomBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->bottomBorder(), ts->pFrameStyle()->bottomBorder().width(),black) ); // Bottom border
-        p->drawLine( 0, hei+int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ), wid + ts->pFrameStyle()->rightBorder().width(), hei + int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ) );
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->bottomBorder(), 
+            int(ts->pFrameStyle()->bottomBorder().width()), black) ); // Bottom border
+
+        p->drawLine( 0, hei+int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ), 
+            int(wid + ts->pFrameStyle()->rightBorder().width()), hei + int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ) );
     }
     if (ts->pFrameStyle()->rightBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->rightBorder(), ts->pFrameStyle()->rightBorder().width(),black) ); // Right border
-        p->drawLine( wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), 0, wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), hei + ts->pFrameStyle()->bottomBorder().width() );
+        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->rightBorder(), 
+            int(ts->pFrameStyle()->rightBorder().width()), black) ); // Right border
+
+        p->drawLine( wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), 0, 
+            wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), hei + int(ts->pFrameStyle()->bottomBorder().width()) );
     }
 }
 
