@@ -3,8 +3,6 @@ For bugs: look into the KBugBuster if somebody else is working on it.d
 
 Grave bugs:
 
-#27224: page borders do NOT show real page borders       (Philipp)
-
 
 Crashes:
 
@@ -106,9 +104,7 @@ Wishlist items
 
 Others bugs not in BT system (Report by - taken by):
 
-- Crash in open/save dialog when you try to create a directory          (Philipp - open)
-- Crash in print preview, when you make second preview                  (Philipp - Philipp)
-- Clicking into canvas causes to much flickering if many items 
+- Clicking into canvas causes to much flickering if many items
         (especially multirow cells) are in visible rect
 - MultiRow cells will only be drawn if obscuring is forced!
 - Far too much flickering: merge about 20 cells. Click in merged        (Norbert)
