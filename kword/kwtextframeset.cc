@@ -2780,7 +2780,7 @@ bool KWTextFrameSet::sortText(sortType type)
         }
         else
         {
-            for (unsigned int i =listOfText.count()-1 ; i > 0; --i)
+            for (int i =listOfText.count()-1 ; i >= 0; --i)
             {
                 parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
                 parag->save(elem);
