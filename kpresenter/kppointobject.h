@@ -56,6 +56,7 @@ public:
     virtual bool isClosed() const;
 
 protected:
+    void loadOasisMarker( KoOasisContext & context );
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );
     virtual void updatePoints( double _fx, double _fy );

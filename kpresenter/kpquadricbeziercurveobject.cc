@@ -67,6 +67,15 @@ bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles&
     return true;
 }
 
+void KPQuadricBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )
+{
+    //todo
+    //we use draw:path
+
+    //load marker
+    loadOasisMarker( context );
+}
+
 QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
 {
     return KPPointObject::save( doc, offset );

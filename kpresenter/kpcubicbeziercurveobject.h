@@ -45,6 +45,7 @@ public:
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
     virtual double load( const QDomElement &element );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation );
 
     virtual void flip(bool horizontal );
     void closeObject(bool _close);

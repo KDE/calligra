@@ -44,6 +44,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation );
 
     virtual double load( const QDomElement &element );
 

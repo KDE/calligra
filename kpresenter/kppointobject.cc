@@ -116,29 +116,8 @@ bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
     return true;
 }
 
-void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )
+void KPPointObject::loadOasisMarker( KoOasisContext & context )
 {
-    kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
-    KPShadowObject::loadOasis( element, context, animation );
-    //load point.
-    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
-    QString pt_x, pt_y;
-    double tmp_x, tmp_y;
-    unsigned int index = 0;
-    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
-    {
-        tmp_x = (*it).section(',',0,0).toInt() / 100;
-        tmp_y = (*it).section(',',1,1).toInt() / 100;
-
-        pt_x.setNum(tmp_x);
-        pt_x+="mm";
-
-        pt_y.setNum(tmp_y);
-        pt_y+="mm";
-
-        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
-        ++index;
-    }
     KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {
@@ -181,6 +160,32 @@ void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & cont
             kdDebug()<<"end line unknown :"<<type<<endl;
         //todo ADD L_DOUBLE_ARROW;
     }
+}
+
+void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )
+{
+    kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
+    KPShadowObject::loadOasis( element, context, animation );
+    //load point.
+    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
+    QString pt_x, pt_y;
+    double tmp_x, tmp_y;
+    unsigned int index = 0;
+    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+    {
+        tmp_x = (*it).section(',',0,0).toInt() / 100;
+        tmp_y = (*it).section(',',1,1).toInt() / 100;
+
+        pt_x.setNum(tmp_x);
+        pt_x+="mm";
+
+        pt_y.setNum(tmp_y);
+        pt_y+="mm";
+
+        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
+        ++index;
+    }
+    loadOasisMarker( context );
 }
 
 double KPPointObject::load( const QDomElement &element )

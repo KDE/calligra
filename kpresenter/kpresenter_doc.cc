@@ -1303,6 +1303,19 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kppixmapobject);
         }
+        else if ( name == "draw:path" )
+        {
+            fillStyleStack( o, context );
+            //we have 3 elements to use here.
+            //Cubicbeziercurve/Quadricbeziercurve/closeline
+            //we must parse svd:d argument
+            // "z" close element
+            // "c" cubic element
+            // "q" quadic element
+            // parse line we use relative position
+            // see http://www.w3.org/TR/SVG/paths.html#PathData
+            // see svgpathparser.cc (ksvg)
+        }
         else if ( name == "draw:g" )
         {
             fillStyleStack( o, context );
