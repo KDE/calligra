@@ -75,7 +75,7 @@ KWFrame::KWFrame(KWFrame * frame)
 {
     handles.setAutoDelete(true);
     m_selected = false;
-    m_runAround = 0;
+    m_runAround = RA_NO;
     //kdDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
     copySettings( frame );
     m_minFrameHeight=0;
