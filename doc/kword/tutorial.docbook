@@ -34,23 +34,20 @@ document</link> after &kword; is running), a dialog appears.</para>
 <textobject><phrase>Screen shot</phrase></textobject>
 </mediaobject>
 
-<para><emphasis>This dialog box is used to:</emphasis></para>
+<para><emphasis>This dialog box is used to either:</emphasis></para>
 <orderedlist numeration="arabic">
 <listitem>
 <para><emphasis>Select the initial template for your new
-document</emphasis></para>
+document.</emphasis></para>
 </listitem>
 <listitem>
 <para><emphasis>Open a &kword; Document saved to your hard
 drive or network.</emphasis></para>
 </listitem>
-<listitem>
-<para><emphasis>Start &kword; without any document
-started.</emphasis></para>
-</listitem>
+
 </orderedlist>
 
-<para>Step 1: Click on the <guilabel>Page Layout</guilabel> tab.</para>
+<para>Step 1: Click on the <guilabel>Page Layout</guilabel> icon.</para>
 
 <mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut1.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
@@ -115,10 +112,9 @@ Make sure you do not see the <emphasis>frame select pointer</emphasis></para>
 fileref="Tut4.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
-<para><emphasis>This tells &kword; to insert text into this frame.  A cursor appears in the upper left
-corner of the frame. </emphasis></para>
+<para><emphasis>This tells &kword; to insert text into this frame.  A cursor inside the frame near your mouse click. Click in the upper left corner of the frame. </emphasis></para>
 
-<para>Step 6: Enter the following text into the keyboard: <userinput>KWord Press Release</userinput>.</para>
+<para>Step 6: Enter the following text using the keyboard: <userinput>KWord Press Release</userinput>.</para>
 
 <para><emphasis>This is some sample text for our
 newsletter.</emphasis></para>
@@ -126,7 +122,7 @@ newsletter.</emphasis></para>
 <para>Step 7: Select <emphasis>KWord Press Release</emphasis> by placing
 the mouse cursor on the right end of the text.  Click once with the
 &LMB; and drag the mouse cursor
-to the left..  Selected text will be white text on dark
+to the left..  Selected text will be black text on a yellow
 background.  When all the text has been selected, release the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -159,11 +155,11 @@ once with the &LMB;.</para>
 re-shaped.</emphasis></para>
 
 <para><emphasis>You will now notice the frame is outlined in black, with
-8 dark squares on the outline.  These squares are used for re-sizing the
+8 yellow squares on the outline.  These squares are used for re-sizing the
 frame.</emphasis></para>
 
-<para>Step 10: Place the mouse pointer over the dark square in the lower
-right corner of the frame. Click with the left mouse button and hold it
+<para>Step 10: Place the mouse pointer over the yellow square in the lower
+right corner of the frame. Click with the &LMB; and hold it
 down. Drag the mouse up and to the right.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -182,7 +178,7 @@ fileref="Tut11b.png"/></imageobject>
 </sect1>
 
 <sect1 id="tutorial-move-frame"> 
-<title>Tutorial: Moving a frame on the page</title>
+<title>Tutorial: Moving a frame on the page and layering frames</title>
 
 <para>Now that we have created a title block, we will center it at the
 top of the page.</para>
@@ -203,14 +199,24 @@ location, release the mouse button.</para>
 fileref="Tut13.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
+<para>Notice how the right side of the title block has slid behind the empty frame on the right. This is easily corrected.</para>
+
+<para>Step 13: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Raise
+Frame</guimenuitem></menuchoice>.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut13a.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>This will place the title on top of the other frame. You can raise and lower frames to give you the look you need.</para>
 </sect1>
 
 <sect1 id="tutorial-add-frame"> 
 <title>Tutorial: Adding a new frame/Making text flow between two frames</title>
-<para>Now we will add a new text frame for our first story.</para>
-<para>Step 13: Begin by selecting
+<para>Now we will add a new text frame to our document for our first article.</para>
+<para>Step 14: Begin by selecting
 <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
-Frame</guimenuitem></menuchoice></para>
+Frame</guimenuitem></menuchoice> from the menubar.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut14.png"/></imageobject>
@@ -243,8 +249,8 @@ frame)</emphasis></para>
 <para><emphasis>Notice that the default name for this frameset is <guilabel>
 Text Frameset 3</guilabel></emphasis></para>
 
-<para>Step 14: For the purposes of this tutorial, the default value of
-<guilabel>Create new frameset with this frame</guilabel> is good.  Simply select
+<para>Step 15: For the purposes of this tutorial, the default value of
+<guilabel>Create a new frameset with this frame</guilabel> is good.  Simply select
 <guibutton>OK</guibutton>.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -256,7 +262,7 @@ fileref="Tut15.png"/></imageobject>
 
 <para><emphasis>Now we are going to create another small frame right next to this one.</emphasis></para>
 
-<para>Step 15: Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
+<para>Step 16: Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
 Frame</guimenuitem></menuchoice></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -271,13 +277,13 @@ fileref="Tut14b.png"/></imageobject>
 
 <para>A dialog box will appear.</para>
 
-<para>Step 16: Select <guilabel>Text Frameset 3</guilabel> using your mouse.</para>
+<para>Step 17: Select <guilabel>Text Frameset 3</guilabel> by clicking with the $LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut15b.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
-<para>Step 17: Select <guibutton>OK</guibutton>.</para>
+<para>Step 18: Select <guibutton>OK</guibutton>.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut16.png"/></imageobject>
@@ -286,16 +292,13 @@ fileref="Tut16.png"/></imageobject>
 <para><emphasis>What you have just done, is connect this new textframe, to the last frame you created.
   To test this:</emphasis></para>
 
-<para>Step 18: Click once inside the new frame with the &LMB;.</para>
+<para>Step 19: Click once inside the leftmost frame with the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut18.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
-<para><emphasis>Notice that your cursor immediately jumps to the frame
-to the left.  That is because the left frame is the first frame in the current frameset.</emphasis></para>
-
-<para>Step 19: Begin typing.  You will need to type quite a bit, but
+<para>Step 20: Begin typing.  You will need to type quite a bit, but
 keep typing.  When you run out of space in the text frame, you will see
 your new text is moved immediately into your new text frame.</para>
 
@@ -312,7 +315,7 @@ fileref="Tut19.png"/></imageobject>
 a new frame, but &kword; will forgive an indecisive user.).  We will delete
 the long text frame on the right side of the page.</para>
 
-<para>Step 20: Place the mouse pointer over the frame border of the right
+<para>Step 21: Place the mouse pointer over the frame border of the right
 hand text frame (Remember: watch for the pointer to change), and click with the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -321,7 +324,7 @@ fileref="Tut21.png"/></imageobject>
 
 <para><emphasis>This selects the frame.</emphasis></para>
 
-<para>Step 21: Select
+<para>Step 22: Select
 <menuchoice><guimenu>Frames</guimenu><guimenuitem>Delete
 Frame</guimenuitem></menuchoice></para>
 
@@ -330,7 +333,7 @@ fileref="Tut22.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>A small dialog box appears, checking you really intended to delete this frame.</emphasis></para>
-<para>Step 22: Select <guibutton>Delete</guibutton>.</para>
+<para>Step 23: Select <guibutton>Delete</guibutton>.</para>
 
 <para><emphasis>This deletes the frame.</emphasis></para>
 

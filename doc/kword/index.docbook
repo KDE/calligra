@@ -54,14 +54,14 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 <copyright>
-<year>2000</year> <year>2001</year> <year>2002</year> <year>2003</year>
+<year>2000</year> <year>2001</year> <year>2002</year> <year>2003</year> <year>2004</year>
 <holder>Michael McBride</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2003-02-01</date>
-<releaseinfo>1.02.00</releaseinfo>
+<date>2004-09-09</date>
+<releaseinfo>1.4</releaseinfo>
 
 <abstract>
 <para>
@@ -69,7 +69,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes &kword; 1.3.
+This manual describes &kword; 1.4.
 </para>
 </abstract>
 
@@ -139,7 +139,7 @@ Environment.  Other applications in &koffice; include:
 <itemizedlist>
 <listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
-<listitem><para>&kontour; (A vector drawing program.)</para></listitem>
+<listitem><para><application>Karbon14</application> (A vector drawing program.)</para></listitem>
 <listitem><para>&kivio; (A flowchart creator)</para></listitem>
 <listitem><para>&krita; (A raster drawing program.)</para></listitem>
 <listitem><para>&kugar; (A report generation tool.)  </para></listitem>
@@ -159,7 +159,7 @@ all of &koffice;), supports many advanced features you expect from todays deskto
 processor, or as a simple but powerful desktop publishing
 application. This is possible because &kword; is a frame oriented word
 processor, not a page oriented word processor (&Microsoft;
-<application>Word</application>, <application>Word Perfect</application>
+<application>Word</application>,&Wordperfect;
 and <application>Applixware</application> are all page oriented word
 processors).
 </para>
