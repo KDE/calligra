@@ -1,5 +1,6 @@
 INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
+lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkugarpart.la
 libkugarpart_la_SOURCES = kugar_part.cpp kugar_factory.cpp kugar_view.cpp
 libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version

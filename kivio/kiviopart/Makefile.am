@@ -10,6 +10,7 @@ INCLUDES = -I$(srcdir)/ui\
 	$(all_includes)
 
 
+lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkiviopart.la
 
 libkiviopart_la_LDFLAGS = -avoid-version -module $(all_libraries) -no-undefined

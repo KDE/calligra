@@ -4,6 +4,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(top_srcdir)/lib/kospell -I
 bin_SCRIPTS = kprconverter.pl
 
 ## The part
+lib_LTLIBRARIES =
 kde_module_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia.cc backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \

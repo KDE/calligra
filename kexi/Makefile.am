@@ -1,5 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
+lib_LTLIBRARIES = 
 kdeinit_LTLIBRARIES = kexi.la
 bin_PROGRAMS =
 kexi_la_SOURCES = main.cpp

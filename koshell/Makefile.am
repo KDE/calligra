@@ -2,6 +2,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) $(all_includes)
 
 ## The kdeinit loadable module and executable
+lib_LTLIBRARIES = 
 kdeinit_LTLIBRARIES = koshell.la
 bin_PROGRAMS =
 koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
