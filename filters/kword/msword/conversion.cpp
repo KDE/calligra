@@ -20,9 +20,12 @@
 #include "conversion.h"
 
 #include <word97_generated.h>
+#include <functordata.h>
+
 #include <kdebug.h>
 #include <qregexp.h>
 #include <qdom.h>
+#include <klocale.h>
 
 QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
@@ -171,4 +174,42 @@ int Conversion::numberFormatCode( int nfc )
     }
     kdWarning() << k_funcinfo << "Unknown NFC: " << nfc << endl;
     return 1;
+}
+
+int Conversion::headerTypeToFrameInfo( unsigned char type )
+{
+    switch (type) {
+    case wvWare::HeaderData::HeaderEven:
+        return 3;
+    case wvWare::HeaderData::HeaderOdd:
+        return 2;
+    case wvWare::HeaderData::FooterEven:
+        return 6;
+    case wvWare::HeaderData::FooterOdd:
+        return 5;
+    case wvWare::HeaderData::HeaderFirst:
+        return 1;
+    case wvWare::HeaderData::FooterFirst:
+        return 4;
+    }
+    return 0;
+}
+
+QString Conversion::headerTypeToFramesetName( unsigned char type )
+{
+    switch (type) {
+    case wvWare::HeaderData::HeaderEven:
+        return i18n("Even Pages Header");
+    case wvWare::HeaderData::HeaderOdd:
+        return i18n("Odd Pages Header");
+    case wvWare::HeaderData::FooterEven:
+        return i18n("Even Pages Footer");
+    case wvWare::HeaderData::FooterOdd:
+        return i18n("Odd Pages Footer");
+    case wvWare::HeaderData::HeaderFirst:
+        return i18n("First Page Header");
+    case wvWare::HeaderData::FooterFirst:
+        return i18n("First Page Footer");
+    }
+    return QString::null;
 }

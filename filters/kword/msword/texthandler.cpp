@@ -95,10 +95,11 @@ void KWordTextHandler::pageBreak()
 
 void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
 {
-    // The functor is a first-class "citicen" (value semantics)
-    //wvWare::Functor<wvWare::Parser97, wvWare::HeaderData> myFunctor( parseHeaders );
-    //myFunctor(); // just copy it and it still works ;)
-    parseHeaders(); // for now ;)
+    // Currently we only care about headers in the first section
+    if ( m_sectionNumber == 1 )
+    {
+        emit subDocFound( parseHeaders );
+    }
 }
 
 void KWordTextHandler::paragLayoutBegin()

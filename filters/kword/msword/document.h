@@ -21,10 +21,14 @@
 #define DOCUMENT_H
 
 #include <handlers.h>
+#include <functor.h>
+#include <functordata.h>
+
 #include <qstring.h>
 #include <qdom.h>
 #include <qobject.h>
 
+#include <queue>
 #include <string>
 
 namespace wvWare {
@@ -37,27 +41,42 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement );
+    Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement );
     virtual ~Document();
 
     virtual void startBody();
     virtual void endBody();
 
+    virtual void startHeader( unsigned char type );
+    virtual void endHeader();
+
     bool parse();
+
+    void processSubDocQueue();
+
+    typedef wvWare::HeaderFunctor SubDocument;
+    bool hasSubDocument() const;
+    SubDocument popSubDocument();
 
 protected slots:
     // Connected to the KWordTextHandler only when parsing the body
     void slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
 
+    // Our parsing queue, for headers, footers, footnotes, text boxes etc.
+    // Note that a header functor will parse ALL the header/footers (of the section)
+    void pushSubDocument( const wvWare::HeaderFunctor& functor /*const SubDocument& subdoc*/ );
+
 private:
     void prepareDocument();
     void processStyles();
+    void createInitialFrame( QDomElement& parentFramesetElem );
 
     QDomDocument& m_mainDocument;
-    QDomElement& m_mainFramesetElement;
+    QDomElement& m_framesetsElement;
     KWordReplacementHandler* m_replacementHandler;
     KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+    std::queue<SubDocument> m_subdocQueue;
 };
 
 #endif // DOCUMENT_H

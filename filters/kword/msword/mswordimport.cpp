@@ -50,11 +50,12 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     kdDebug() << "######################## MSWordImport::convert ########################" << endl;
 
     QDomDocument mainDocument;
-    QDomElement mainFramesetElement;
-    prepareDocument( mainDocument, mainFramesetElement );
+    QDomElement framesetsElem;
+    prepareDocument( mainDocument, framesetsElem );
 
-    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, mainFramesetElement );
+    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, framesetsElem );
     document.parse();
+    document.processSubDocQueue();
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if ( !out ) {
@@ -69,7 +70,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     return KoFilter::OK;
 }
 
-void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mainFramesetElement )
+void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem )
 {
     mainDocument.appendChild( mainDocument.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
 
@@ -80,25 +81,8 @@ void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mai
     elementDoc.setAttribute("syntaxVersion",2);
     mainDocument.appendChild(elementDoc);
 
-    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
-    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
-
-    mainFramesetElement=mainDocument.createElement("FRAMESET");
-    mainFramesetElement.setAttribute("frameType",1);
-    mainFramesetElement.setAttribute("frameInfo",0);
-    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
-    mainFramesetElement.setAttribute("removable",0);
-    // TODO: "name" attribute (needs I18N)
-    framesetsPluralElementOut.appendChild(mainFramesetElement);
-
-    QDomElement frameElementOut=mainDocument.createElement("FRAME");
-    ///// Those values are unused. The paper margins make recalcFrames() resize this frame.
-    frameElementOut.setAttribute("left",28);
-    frameElementOut.setAttribute("top",42);
-    frameElementOut.setAttribute("bottom",566);
-    frameElementOut.setAttribute("right",798);
-    frameElementOut.setAttribute("runaround",1);
-    mainFramesetElement.appendChild(frameElementOut);
+    framesetsElem=mainDocument.createElement("FRAMESETS");
+    mainDocument.documentElement().appendChild(framesetsElem);
 }
 
 #include <mswordimport.moc>

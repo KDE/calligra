@@ -62,6 +62,12 @@ namespace Conversion
     // Set all border attributes in the XML element, from a BRC structure
     void setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc );
 
+    // Convert wv2's Header Type to a KWord frameInfo value
+    int headerTypeToFrameInfo( unsigned char type );
+
+    // Convert wv2's Header Type to a KWord frameset name
+    QString headerTypeToFramesetName( unsigned char type );
+
 };
 
 #endif

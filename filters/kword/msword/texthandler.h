@@ -74,8 +74,12 @@ public:
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
     void writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
 
+    // Communication with Document, without having to know about Document
 signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
+    // Note: it would be easier for us if headersFound was in SubDocumentHandler...
+    // (But it also makes sense to have it in sectionStart)
+    void subDocFound( const wvWare::HeaderFunctor& parseHeaders );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );

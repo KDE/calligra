@@ -31,14 +31,16 @@
 #include <parserfactory.h>
 
 
-Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
-    : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ),
+Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement )
+    : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
         m_textHandler = new KWordTextHandler( m_parser );
+        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::HeaderFunctor& ) ),
+                 this, SLOT( pushSubDocument( const wvWare::HeaderFunctor& ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
@@ -128,7 +130,16 @@ bool Document::parse()
 void Document::startBody()
 {
     kdDebug() << k_funcinfo << endl;
-    m_textHandler->setFrameSetElement( m_mainFramesetElement );
+
+    QDomElement mainFramesetElement = m_mainDocument.createElement("FRAMESET");
+    mainFramesetElement.setAttribute("frameType",1);
+    mainFramesetElement.setAttribute("frameInfo",0);
+    // TODO: "name" attribute (needs I18N)
+    m_framesetsElement.appendChild(mainFramesetElement);
+
+    createInitialFrame( mainFramesetElement );
+
+    m_textHandler->setFrameSetElement( mainFramesetElement );
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
@@ -139,6 +150,7 @@ void Document::endBody()
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
+
 
 void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
@@ -177,6 +189,66 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
 
     // TODO apply brcTop/brcLeft etc. to the main FRAME
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
+}
+
+void Document::startHeader( unsigned char type )
+{
+    kdDebug() << k_funcinfo << type << endl;
+    QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
+    framesetElement.setAttribute("frameType",1);
+    framesetElement.setAttribute("frameInfo",Conversion::headerTypeToFrameInfo(type));
+    // TODO: "name" attribute (needs I18N)
+    m_framesetsElement.appendChild(framesetElement);
+
+    createInitialFrame( framesetElement );
+
+    m_textHandler->setFrameSetElement( framesetElement );
+
+}
+
+void Document::endHeader()
+{
+    kdDebug() << k_funcinfo << endl;
+
+}
+
+void Document::createInitialFrame( QDomElement& parentFramesetElem )
+{
+    QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
+    // Those values are unused. The paper margins make recalcFrames() resize this frame.
+    frameElementOut.setAttribute("left",28);
+    frameElementOut.setAttribute("top",42);
+    frameElementOut.setAttribute("bottom",566);
+    frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("runaround",1);
+    frameElementOut.setAttribute("autoCreateNewFrame",1);
+    parentFramesetElem.appendChild(frameElementOut);
+}
+
+void Document::pushSubDocument( const wvWare::HeaderFunctor& functor /*const SubDocument& subdoc*/ )
+{
+    m_subdocQueue.push( functor );
+}
+
+bool Document::hasSubDocument() const
+{
+    return !m_subdocQueue.empty();
+}
+
+Document::SubDocument Document::popSubDocument()
+{
+    SubDocument subdoc = m_subdocQueue.front();
+    m_subdocQueue.pop();
+    return subdoc;
+}
+
+void Document::processSubDocQueue()
+{
+    while ( hasSubDocument() )
+    {
+        SubDocument subdoc = popSubDocument();
+        subdoc(); // call it
+    }
 }
 
 #include "document.moc"

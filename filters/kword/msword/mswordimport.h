@@ -35,7 +35,7 @@ public:
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-    void prepareDocument( QDomDocument& mainDocument, QDomElement& mainFramesetElement );
+    void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
 };
 
 #endif // MSWORDIMPORT_H
