@@ -1346,7 +1346,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
-	       tmpSize.columnWidth=cl->mmWidth();
+	       tmpSize.columnWidth=cl->width();
 	       listCol.append(tmpSize);
 	     }
         }
@@ -1360,7 +1360,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
-	       tmpSize.rowHeight=rw->mmHeight();
+	       tmpSize.rowHeight=rw->height();
 	       listRow.append(tmpSize);
 	     }
         }
@@ -1374,7 +1374,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
-	       tmpSize.columnWidth=cl->mmWidth();
+	       tmpSize.columnWidth=cl->width();
 	       listCol.append(tmpSize);
 	     }
         }
@@ -1385,7 +1385,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
-	       tmpSize.rowHeight=rw->mmHeight();
+	       tmpSize.rowHeight=rw->height();
 	       listRow.append(tmpSize);
 	     }
         }
@@ -1413,7 +1413,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setMMWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     }
     else if( table->isRowSelected( m_rctRect ) ) // complete row(s)
@@ -1422,7 +1422,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowLayout *rw=table->rowLayout((*it2).rowNumber);
-           rw->setMMHeight((*it2).rowHeight);
+           rw->setHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1431,13 +1431,13 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setMMWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
            RowLayout *rw=table->rowLayout((*it1).rowNumber);
-           rw->setMMHeight((*it1).rowHeight);
+           rw->setHeight((*it1).rowHeight);
         }
     }
 
@@ -1457,7 +1457,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setMMWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     }
     else if( table->isRowSelected( m_rctRect ) ) // complete row(s)
@@ -1466,7 +1466,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowLayout *rw=table->rowLayout((*it2).rowNumber);
-           rw->setMMHeight((*it2).rowHeight);
+           rw->setHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1475,13 +1475,13 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setMMWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
            RowLayout *rw=table->rowLayout((*it1).rowNumber);
-           rw->setMMHeight((*it1).rowHeight);
+           rw->setHeight((*it1).rowHeight);
         }
     }
 
