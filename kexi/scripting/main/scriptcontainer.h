@@ -130,12 +130,12 @@ namespace Kross { namespace Api {
             /**
              * Connect QObject signal with function.
              */
-            bool connect(QObject *sender, const char *signal, const QString& functionname);
+            bool connect(QObject *sender, const QCString& signal, const QString& functionname);
 
             /**
              * Disconnect QObject signal from function.
              */
-            bool disconnect(QObject *sender, const char *signal, const QString& functionname);
+            bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
 
         signals:
             //void done(const QVariant& result);

@@ -90,12 +90,12 @@ namespace Kross { namespace Api {
              * \param function The name of the scriptfunction to
              *       call if the signal got emitted.
              */
-            bool connect(QObject *sender, const char *signal, const QString& functionname);
+            bool connect(QObject *sender, const QCString& signal, const QString& functionname);
 
             /**
              * Disconnect a QObject signal from a script function.
              */
-            bool disconnect(QObject *sender, const char *signal, const QString& functionname);
+            bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
 
         private:
             /// The \a ScriptContainer connected with this EventManager.

@@ -112,14 +112,14 @@ Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, K
     return m_script->callFunction(functionname, arguments);
 }
 
-bool ScriptContainer::connect(QObject *sender, const char *signal, const QString& functionname)
+bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QString& functionname)
 {
     if(! m_eventmanager) // create instance on demand
         m_eventmanager = new EventManager(this);
     return m_eventmanager->connect(sender, signal, functionname);
 }
 
-bool ScriptContainer::disconnect(QObject *sender, const char *signal, const QString& functionname)
+bool ScriptContainer::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
 {
     if(! m_eventmanager) return false;
     return m_eventmanager->disconnect(sender, signal, functionname);

@@ -37,7 +37,7 @@ EventManager::~EventManager()
 {
 }
 
-bool EventManager::connect(QObject *sender, const char *signal, const QString& functionname)
+bool EventManager::connect(QObject *sender, const QCString& signal, const QString& functionname)
 {
     // create the matching EventSlot
     EventSlot* eventslot = new EventSlot(this);
@@ -52,7 +52,7 @@ bool EventManager::connect(QObject *sender, const char *signal, const QString& f
     return true;
 }
 
-bool EventManager::disconnect(QObject *sender, const char *signal, const QString& functionname)
+bool EventManager::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
 {
     bool ok = false;
     for(QValueList<EventSlot*>::Iterator it = m_slots.begin(); it != m_slots.end(); ++it) {
