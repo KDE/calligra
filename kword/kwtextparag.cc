@@ -409,17 +409,16 @@ void KWTextParag::setTabList( const KoTabulatorList &tabList )
     if ( !tabList.isEmpty() )
     {
         KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        int * tabs = new int( tabList.count() + 1 ); // will be deleted by ~QTextParag
+        int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
         KoTabulatorList::Iterator it = lst.begin();
         int i = 0;
         for ( ; it != lst.end() ; ++it, ++i )
             tabs[i] = (int)doc->zoomItX( (*it).ptPos );
         tabs[i] = 0;
-        delete [] tabArray();
+        assert( i == tabList.count() );
         setTabArray( tabs );
     } else
     {
-        delete [] tabArray();
         setTabArray( 0 );
     }
     invalidate( 0 );
