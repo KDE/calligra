@@ -880,25 +880,25 @@ bool GDocument::readFromXml (istream& is) {
     // check mime type
     list<XmlAttribute>::const_iterator first = 
       elem.attributes ().begin ();
-//    QString strComment, strKeywords;
+    QString strComment="", strKeywords="";
     while (first != elem.attributes ().end ()) {
       if ((*first).name () == "mime") {
 	const string& v = (*first).stringValue ();
 	if (v != KILLUSTRATOR_MIMETYPE)
 	  return false;
       }
-/*      if ((*first).name () == "comment") {
-        const string& v = (*first).stringValue();
-#warning "This should be done better"
-	strComment = strdup(v);
+      if ((*first).name () == "comment") {
+	strComment =  (*first).stringValue().data();
+	debug(":"+strComment+":");
       }
       if ((*first).name () == "keywords") {
-        strKeywords = (*first).stringValue();
-      }*/
+        strKeywords = (*first).stringValue().data();
+	debug(":"+strKeywords+":");
+      }
       first++;
     }
-/*    comment  = strComment;
-    keywords = strKeywords;*/
+    comment  = strComment;
+    keywords = strKeywords;
   }
 
   if (! xml.readElement (elem) || elem.tag () != "head") return false;

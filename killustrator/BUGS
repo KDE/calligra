@@ -12,8 +12,15 @@ Bugs from above bug page:
   and resize it to fit an A4 page. 
 ------------------------------------
 
-* Keyword/Comment support (see GDocument and DocumentInfo) doesn't work yet
-  (Problem: readFromXml doesn't work, yet)
+* Keyword/Comment support (see GDocument and DocumentInfo) doesn't really work.
+  readFromXml
+  Somehow older entries are saved! This can be seen with the new comment and
+  keyword fields: create two files, where the length of the fields differ,
+  open now the files alternating!
+
+* KIll. crashes sometimes (always) on empty files. (i.e. Kil-File, but without
+  anything between  </head> and </doc>.
+  Solution: Don't save these files and don't crash, when loading them!
 
 * KO: View: Grid and Helpline are initialy unchecked, despite their status
 
@@ -74,3 +81,4 @@ Bugs from above bug page:
   More bugs: You cannot select a point using a fine grid
 
 * Arrange|Transform: Choosing relative should reset the values to 0
+  Proportional doesn't seem to work
