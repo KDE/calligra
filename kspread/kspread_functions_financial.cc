@@ -24,6 +24,8 @@
 #include <math.h>
 #include <float.h>
 
+#include <kdebug.h>
+
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
@@ -34,23 +36,28 @@
 #include <kspread_util.h>
 #include <kspread_table.h>
 
-// prototypes
-bool kspreadfunc_fv( KSContext& context );
+// prototypes (sorted)
 bool kspreadfunc_compound( KSContext& context );
 bool kspreadfunc_continuous( KSContext& context );
-bool kspreadfunc_pv( KSContext& context );
-bool kspreadfunc_pv_annuity( KSContext& context );
-bool kspreadfunc_fv_annuity( KSContext& context );
-bool kspreadfunc_effective( KSContext& context );
-bool kspreadfunc_zero_coupon( KSContext& context );
-bool kspreadfunc_level_coupon( KSContext& context );
-bool kspreadfunc_nominal( KSContext& context );
-bool kspreadfunc_ppmt( KSContext& context );
-bool kspreadfunc_sln( KSContext& context );
-bool kspreadfunc_syd( KSContext& context );
 bool kspreadfunc_db( KSContext& context );
 bool kspreadfunc_ddb( KSContext& context );
+bool kspreadfunc_duration( KSContext& context );
+bool kspreadfunc_effective( KSContext& context );
 bool kspreadfunc_euro( KSContext& context );
+bool kspreadfunc_fv( KSContext& context );
+bool kspreadfunc_fv_annuity( KSContext& context );
+bool kspreadfunc_ipmt( KSContext& context );
+bool kspreadfunc_ispmt( KSContext& context );
+bool kspreadfunc_level_coupon( KSContext& context );
+bool kspreadfunc_nominal( KSContext& context );
+bool kspreadfunc_nper( KSContext& context );
+bool kspreadfunc_pmt( KSContext& context );
+bool kspreadfunc_ppmt( KSContext& context );
+bool kspreadfunc_pv( KSContext& context );
+bool kspreadfunc_pv_annuity( KSContext& context );
+bool kspreadfunc_sln( KSContext& context );
+bool kspreadfunc_syd( KSContext& context );
+bool kspreadfunc_zero_coupon( KSContext& context );
 
 // registers all financial functions
 void KSpreadRegisterFinancialFunctions()
@@ -59,20 +66,273 @@ void KSpreadRegisterFinancialFunctions()
 
   repo->registerFunction( "COMPOUND", kspreadfunc_compound );
   repo->registerFunction( "CONTINUOUS", kspreadfunc_continuous );
+  repo->registerFunction( "DB", kspreadfunc_db );
+  repo->registerFunction( "DDB", kspreadfunc_ddb );
+  repo->registerFunction( "DURATION", kspreadfunc_duration );
   repo->registerFunction( "EFFECTIVE", kspreadfunc_effective );
-  repo->registerFunction( "NOMINAL", kspreadfunc_nominal );
+  repo->registerFunction( "EURO", kspreadfunc_euro );  // KSpread-specific, Gnumeric-compatible
   repo->registerFunction( "FV", kspreadfunc_fv );
   repo->registerFunction( "FV_ANNUITY", kspreadfunc_fv_annuity );
+  repo->registerFunction( "IPMT", kspreadfunc_ipmt );
+  repo->registerFunction( "ISPMT", kspreadfunc_ispmt );
+  repo->registerFunction( "LEVEL_COUPON", kspreadfunc_level_coupon );
+  repo->registerFunction( "NOMINAL", kspreadfunc_nominal );
+  repo->registerFunction( "NPER", kspreadfunc_nper );
+  repo->registerFunction( "PMT", kspreadfunc_pmt );
   repo->registerFunction( "PPMT", kspreadfunc_ppmt );
   repo->registerFunction( "PV", kspreadfunc_pv );
   repo->registerFunction( "PV_ANNUITY", kspreadfunc_pv_annuity );
-  repo->registerFunction( "ZERO_COUPON", kspreadfunc_zero_coupon );
-  repo->registerFunction( "LEVEL_COUPON", kspreadfunc_level_coupon );
   repo->registerFunction( "SLN", kspreadfunc_sln );
   repo->registerFunction( "SYD", kspreadfunc_syd );
-  repo->registerFunction( "DB", kspreadfunc_db );
-  repo->registerFunction( "DDB", kspreadfunc_ddb );
-  repo->registerFunction( "EURO", kspreadfunc_euro );  // KSpread-specific, Gnumeric-compatible
+  repo->registerFunction( "ZERO_COUPON", kspreadfunc_zero_coupon );
+}
+
+static double getPay( double rate, double nper, double pv, double fv, int type )
+{
+  double pvif, fvifa;
+
+  pvif  = ( pow ( 1 + rate, nper ) );
+  fvifa = ( pow( 1 + rate, nper ) - 1 ) / rate;
+
+  return ( ( -pv * pvif - fv ) / ( ( 1.0 + rate * type ) * fvifa ) );
+}
+
+static double getPrinc( double start, double pay,
+                        double rate, double period )
+{
+  return ( start * pow( 1.0 + rate, period) + pay 
+           * ( ( pow( 1 + rate, period ) - 1 ) / rate ) );
+}
+
+// Function: DURATION
+bool kspreadfunc_duration( KSContext& context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DURATION", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  double rate = args[0]->doubleValue();
+  double pv   = args[1]->doubleValue();
+  double fv   = args[2]->doubleValue();
+
+  if ( rate <= 0.0 )
+    return false;
+  if ( fv == 0.0 || pv == 0.0 )
+    return false;
+  if ( fv / pv < 0 )
+    return false;
+
+  context.setValue( new KSValue( log( fv / pv ) / log( 1.0 + rate ) ) );
+  return true;
+}
+
+// Function: PMT
+bool kspreadfunc_pmt( KSContext& context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  int type = -1;
+  double fv = -1.0;
+
+  if ( !KSUtil::checkArgumentsCount( context, 5, "PMT", false ) )
+  {
+    type = 0;
+
+    if ( !KSUtil::checkArgumentsCount( context, 4, "PMT", false ) )
+    {
+      fv = 0.0;
+
+      if ( !KSUtil::checkArgumentsCount( context, 3, "PMT", true ) )
+        return false;
+    }
+  }
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( fv == -1.0 )
+  {
+    if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+      return false;
+    fv = args[3]->doubleValue();
+  }
+  if ( type == -1 )
+  {
+    if ( !KSUtil::checkType( context, args[4], KSValue::IntType, true ) )
+      return false;
+    type = args[4]->intValue();
+  }
+
+  double rate = args[0]->doubleValue();
+  double nper = args[1]->doubleValue();
+  double pv   = args[2]->doubleValue();
+
+  context.setValue( new KSValue( getPay( rate, nper, pv, fv, type ) ) );
+  return true;
+}
+
+// Function: NPER
+bool kspreadfunc_nper( KSContext& context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double fv = 0.0;
+  int type  = 0;
+
+  if ( KSUtil::checkArgumentsCount( context, 5, "NPER", true ) )
+  {
+    kdDebug() << "Here" << endl;
+    if ( !KSUtil::checkType( context, args[4], KSValue::IntType, true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+      return false;
+
+    fv   = args[3]->doubleValue();
+    type = args[4]->intValue();
+  }
+  else
+  if ( KSUtil::checkArgumentsCount( context, 4, "NPER", true ) )
+  {
+    kdDebug() << "Here 2" << endl;
+    type = 0;
+    if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+      return false;
+
+    fv   = args[3]->doubleValue();
+  }
+  else
+  if ( !KSUtil::checkArgumentsCount( context, 3, "NPER", false ) )
+    return false;
+  kdDebug() << "Here 3" << endl;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  double rate = args[0]->doubleValue();
+  double pmt  = args[1]->doubleValue();
+  double pv   = args[2]->doubleValue();
+
+  if ( rate <= 0.0 )
+    return false;
+  kdDebug() << "Here 4" << endl;
+
+  // taken from Gnumeric
+  double d  = ( pmt * ( 1.0 + rate * type ) - fv * rate );
+  double d2 = pv * rate + pmt * ( 1.0 + rate * type );
+
+  double res = d / d2;
+  double tmp = (pmt * (1.0 + rate * type) - fv * rate) /
+	  (pv * rate + pmt * (1.0 + rate * type));
+
+  kdDebug() << "Res: " << res << ", tmp: " << tmp << endl;
+        
+  if ( res <= 0.0 )
+    return false;
+  kdDebug() << "Here 5" << endl;
+
+  context.setValue( new KSValue( log( res ) / log( 1.0 + rate ) ) );
+  return true;
+}
+
+// Function: ISPMT
+bool kspreadfunc_ispmt( KSContext& context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 4, "ISPMT", false ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+
+  double rate = args[0]->doubleValue();
+  int    per  = args[1]->intValue();
+  int    nper = args[2]->intValue();
+  double pv   = args[3]->doubleValue();
+
+  if ( per < 1 || per > nper )
+    return false;
+
+  double d = -pv * rate;
+
+  context.setValue( new KSValue( d - ( d / nper * per ) ) );
+  return true;
+}
+
+// Function: IPMT
+bool kspreadfunc_ipmt( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  double rate;
+  double per;
+  double nper;
+  double pv;
+  double fv = 0.0;
+  int type  = 0;
+
+  if ( KSUtil::checkArgumentsCount( context, 6, "IPMT", true ) )
+  {
+    if ( !KSUtil::checkType( context, args[5], KSValue::IntType, true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
+      return false;
+    type = args[5]->intValue();
+    fv   = args[4]->doubleValue();    
+  }
+  else
+  if ( KSUtil::checkArgumentsCount( context, 5, "IPMT", true ) )
+  {
+    if ( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
+      return false;
+
+    fv = args[4]->doubleValue();
+  }
+  else
+  if ( !KSUtil::checkArgumentsCount( context, 4, "IPMT", false ) )
+    return false;
+  
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+
+  rate = args[0]->doubleValue();
+  per  = args[1]->doubleValue();
+  nper = args[2]->doubleValue();
+  pv   = args[3]->doubleValue();
+
+  double payment = getPay( rate, nper, pv, fv, type );
+  double ipmt    = -getPrinc( pv, payment, rate, per - 1 );
+
+  context.setValue( new KSValue( ipmt * rate ) );
+  return true;
 }
 
 // Function: FV
@@ -525,23 +785,6 @@ bool kspreadfunc_ddb( KSContext& context )
   return true;
 }
 
-static double getPay( double rate, double nper, double pv, double fv, int type )
-{
-  double pvif, fvifa;
-
-  pvif  = ( pow ( 1 + rate, nper ) );
-  fvifa = ( pow( 1 + rate, nper ) - 1 ) / rate;
-
-  return ( ( -pv * pvif - fv ) / ( ( 1.0 + rate * type ) * fvifa ) );
-}
-
-static double getPrinc( double start, double pay,
-                        double rate, double period )
-{
-  return ( start * pow( 1.0 + rate, period) + pay 
-           * ( ( pow( 1 + rate, period ) - 1 ) / rate ) );
-}
-
 bool kspreadfunc_ppmt( KSContext & context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -582,20 +825,23 @@ Type (optional) defines the due date. F=1 for payment at the beginning of a peri
     return false;
   if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
     return false;
-  if ( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[5], KSValue::IntType, true ) )
-    return false;
+  if ( fv == -1 )
+  {
+    if ( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
+      return false;
+    fv = args[4]->doubleValue();
+  }
+  if ( type == -1 )
+  {
+    if ( !KSUtil::checkType( context, args[5], KSValue::IntType, true ) )
+      return false;
+    type = args[5]->intValue();
+  }
 
   double rate   = args[0]->doubleValue();
   double period = args[1]->doubleValue();
   double nper   = args[2]->doubleValue();
   double pv     = args[3]->doubleValue();
-
-  if ( fv == -1 )
-    fv = args[4]->doubleValue();
-  if ( type == -1 )
-    type = args[5]->intValue();
 
   double pay  = getPay( rate, nper, pv, fv, type );
   double ipmt = -getPrinc( pv, pay, rate, period - 1 ) * rate;

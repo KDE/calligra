@@ -27,6 +27,94 @@
     </Function>
 
     <Function>
+      <Name>DURATION</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present Value (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future Value (FV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the number of periods needed for an investment to retain a desired value.</Text>
+	<Syntax>DURATION(rate; pv; fv)</Syntax>
+ 	<Example>DURATION(0.1; 1000; 2000) returns 7.27</Example>
+        <Related>FV</Related>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NPER</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Payment</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present Value (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future Value (FV - optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the number of periods of an investment.</Text>
+	<Syntax>NPER(rate;payment;pv;fv;type)</Syntax>
+	<Example>NPER(0.1; -100; 1000) equals 11</Example>
+	<Example>NPER(0.06; 0; -10000; 20000 ;0) returns 11.906</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of Periods (NPer)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present Value (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future Value (FV - optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the payment for a loan.</Text>
+	<Syntax>PMT(rate; nper ; pv; fv; type)</Syntax>
+	<Example>PMT(0.1; 4; 10000) equals -3154.71</Example>
+        <Related>NPER</Related>
+        <Related>PPMT</Related>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>PV</Name>
       <Type>Float</Type>
       <Parameter>
@@ -60,19 +148,19 @@
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>NPer</Comment>
+	<Comment>Number of Periods</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>PV</Comment>
+	<Comment>Present Value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>FV</Comment>
+	<Comment>Future Value (optional)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Type</Comment>
+	<Comment>Type (optional)</Comment>
 	<Type>IntType</Type>
       </Parameter>
       <Help>
@@ -85,9 +173,90 @@ NPER is the total number of periods during which annuity is paid.
 PV is the present value in the sequence of payments.  
 FV (optional) is the desired (future) value.  default: 0. 
 Type (optional) defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.
+        </Text>
+	<Syntax>PPMT(Rate; Period; NPer; PV; FV; Type)</Syntax>
+	<Example>PPMT(0.0875;1;36;5000;8000;1) equals -18.48</Example>
+        <Related>IPMT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISPMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of Periods</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present Values (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>
+Calculates the interest paid on a given period of an investment.
+
+Rate is the periodic interest rate.
+Period is the amortizement period. 1 for the first and NPer for the last period.  
+NPer is the total number of periods during which annuity is paid.  
+PV is the present value in the sequence of payments.  
+        </Text>
+	<Syntax>ISPMT(Rate; Period; NPer; PV)</Syntax>
+	<Example>ISPMT(0.1; 1; 3; 8000000) equals -533333</Example>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IPMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present Values</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future Value (optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>
+Calculates the amount of a payment of a period for an investment.
+
+Rate is the periodic interest rate.
+Period is the amortizement period. 1 for the first and NPER for the last period.  
+NPER is the total number of periods during which annuity is paid.  
+PV is the present value in the sequence of payments.  
+FV (optional) is the desired (future) value.  default: 0. 
+Type (optional) defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.
+The example shows the interest to pay in the last year of a three year loan. The interest rate is 10 percent.
 </Text>
-	<Syntax>PPMT(Rate; Period; NPER; PV; FV; Type)</Syntax>
-	<Example>PPMT(0.0875;1;36;5000;8000;1) equals -18,48</Example>
+	<Syntax>IPMT(Rate; Period; NPer; PV; FV; Type)</Syntax>
+	<Example>IPMT(0.1;3;3;8000) equals -292.45</Example>
+        <Related>PPMT</Related>
+        <Related>PV</Related>
       </Help>
     </Function>
 
