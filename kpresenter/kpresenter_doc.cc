@@ -2082,7 +2082,7 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
     return ret;
 }
 
-/*=================== get background type ========================*/
+/*=============================================================*/
 BackType KPresenterDoc::getBackType( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2091,7 +2091,7 @@ BackType KPresenterDoc::getBackType( unsigned int pageNum )
     return BT_COLOR;
 }
 
-/*=================== get background pic view ====================*/
+/*=============================================================*/
 BackView KPresenterDoc::getBackView( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2100,7 +2100,7 @@ BackView KPresenterDoc::getBackView( unsigned int pageNum )
     return BV_TILED;
 }
 
-/*=================== get background picture =====================*/
+/*=============================================================*/
 QString KPresenterDoc::getBackPixFilename( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2109,7 +2109,7 @@ QString KPresenterDoc::getBackPixFilename( unsigned int pageNum )
     return QString::null;
 }
 
-/*=================== get background clipart =====================*/
+/*=============================================================*/
 QString KPresenterDoc::getBackClipFilename( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2118,7 +2118,25 @@ QString KPresenterDoc::getBackClipFilename( unsigned int pageNum )
     return QString::null;
 }
 
-/*=================== get background color 1 ======================*/
+/*=============================================================*/
+QDateTime KPresenterDoc::getBackPixLastModified( unsigned int pageNum )
+{
+    if ( pageNum < _backgroundList.count() )
+	return backgroundList()->at( pageNum )->getKey().lastModified;
+
+    return QDateTime();
+}
+
+/*=============================================================*/
+QDateTime KPresenterDoc::getBackClipLastModified( unsigned int pageNum )
+{
+    if ( pageNum < _backgroundList.count() )
+	return backgroundList()->at( pageNum )->getKey().lastModified;
+
+    return QDateTime();
+}
+
+/*=============================================================*/
 QColor KPresenterDoc::getBackColor1( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2127,7 +2145,7 @@ QColor KPresenterDoc::getBackColor1( unsigned int pageNum )
     return white;
 }
 
-/*=================== get background color 2 ======================*/
+/*=============================================================*/
 QColor KPresenterDoc::getBackColor2( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2163,7 +2181,7 @@ int KPresenterDoc::getBackYFactor( unsigned int pageNum )
     return 100;
 }
 
-/*=================== get background color type ==================*/
+/*=============================================================*/
 BCType KPresenterDoc::getBackColorType( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2172,7 +2190,7 @@ BCType KPresenterDoc::getBackColorType( unsigned int pageNum )
     return BCT_PLAIN;
 }
 
-/*====================== get page effect =========================*/
+/*=============================================================*/
 PageEffect KPresenterDoc::getPageEffect( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
@@ -2181,7 +2199,7 @@ PageEffect KPresenterDoc::getPageEffect( unsigned int pageNum )
     return PEF_NONE;
 }
 
-/*========================= get pen ==============================*/
+/*=============================================================*/
 QPen KPresenterDoc::getPen( QPen pen )
 {
     KPObject *kpobject = 0;
@@ -3787,7 +3805,7 @@ void KPresenterDoc::addToRecentlyOpenedList( const QString &file )
 {
     if ( file.right( 3 ) == "kpt" )
 	return;
-    
+
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup( "Global" );
     QStringList lst = config->readListEntry( "recently opened" );
@@ -3795,7 +3813,7 @@ void KPresenterDoc::addToRecentlyOpenedList( const QString &file )
 	lst << file;
 	config->writeEntry( "recently opened", lst );
 	config->sync();
-    } 
+    }
 }
 
 /*================================================================*/

@@ -233,14 +233,16 @@ QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bo
     QPixmap *pixmap = new QPixmap;
     pixmap->convertFromImage( image );
 
-    QSize size = key.size;
-    if ( size != pixmap->size() && size != orig_size && pixmap->width() != 0 && pixmap->height() != 0 ) {
-	QWMatrix m;
-	m.scale( static_cast<float>( size.width() ) / static_cast<float>( pixmap->width() ),
-		 static_cast<float>( size.height() ) / static_cast<float>( pixmap->height() ) );
-	*pixmap = pixmap->xForm( m );
+    if ( !pixmap->isNull() ) {
+	QSize size = key.size;
+	if ( size != pixmap->size() && size != orig_size && pixmap->width() != 0 && pixmap->height() != 0 ) {
+	    QWMatrix m;
+	    m.scale( static_cast<float>( size.width() ) / static_cast<float>( pixmap->width() ),
+		     static_cast<float>( size.height() ) / static_cast<float>( pixmap->height() ) );
+	    *pixmap = pixmap->xForm( m );
+	}
     }
-
+    
     if ( insert ) {
 	pixmaps.insert( Key( key ), *pixmap );
 	int ref = 1;

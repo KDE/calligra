@@ -530,7 +530,8 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 		pix = backPix;
 	    }
 
-	    _painter->drawPixmap( _x, _y, *pix );
+	    if ( pix && !pix->isNull() )
+		_painter->drawPixmap( _x, _y, *pix );
 	    if ( delPix ) delete pix;
 	}
 	break;

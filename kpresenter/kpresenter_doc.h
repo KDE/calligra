@@ -33,6 +33,7 @@ class DCOPObject;
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qmap.h>
+#include <qdatetime.h>
 
 #include <koPageLayoutDia.h>
 
@@ -158,6 +159,8 @@ public:
     BackView getBackView( unsigned int );
     QString getBackPixFilename( unsigned int );
     QString getBackClipFilename( unsigned int );
+    QDateTime getBackPixLastModified( unsigned int );
+    QDateTime getBackClipLastModified( unsigned int );
     QColor getBackColor1( unsigned int );
     QColor getBackColor2( unsigned int );
     bool getBackUnbalanced( unsigned int );
@@ -315,7 +318,7 @@ public:
     KPresenterView *getNextView() {
 	return (KPresenterView*)nextView();
     }
-    
+
     void groupObjects();
     void ungroupObjects();
 
@@ -367,7 +370,7 @@ protected:
 
     void addToRecentlyOpenedList( const QString &file );
     QStringList getRecentryOpenedList();
-    
+
     // ************ variables ************
 
     struct PixCache

@@ -24,6 +24,7 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qframe.h>
+#include <qdatetime.h>
 
 #include "global.h"
 
@@ -77,9 +78,10 @@ class BackDia : public QDialog
 
 public:
     BackDia( QWidget* parent, const char* name,
-	     BackType backType, QColor backColor1,
-	     QColor backColor2, BCType _bcType,
-	     QString backPic, QString backClip,
+	     BackType backType, const QColor &backColor1,
+	     const QColor &backColor2, BCType _bcType,
+	     const QString &backPic, const QDateTime &picLM,
+	     const QString &backClip, const QDateTime &clipLM,
 	     BackView backPicView, bool _unbalanced,
 	     int _xfactor, int _yfactor, KPresenterDoc *doc );
 
@@ -109,7 +111,8 @@ private:
     QString chosenClip;
     BackPreview *preview;
     bool picChanged, clipChanged, lockUpdate;
-
+    QDateTime picLastModified, clipLastModified;
+    
 private slots:
     void selectPic();
     void selectClip();

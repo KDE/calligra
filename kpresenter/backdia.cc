@@ -88,12 +88,14 @@ void BackPreview::resizeEvent( QResizeEvent *e )
 /******************************************************************/
 
 /*=============================================================*/
-BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
-		  QColor backColor1, QColor backColor2, BCType _bcType,
-		  QString backPic, QString backClip,
-		  BackView backPicView, bool _unbalanced, int _xfactor, int _yfactor,
-		  KPresenterDoc *doc )
-    : QDialog( parent, name, true )
+BackDia::BackDia( QWidget* parent, const char* name,
+		  BackType backType, const QColor &backColor1,
+		  const QColor &backColor2, BCType _bcType,
+		  const QString &backPic, const QDateTime &picLM,
+		  const QString &backClip, const QDateTime &clipLM,
+		  BackView backPicView, bool _unbalanced,
+		  int _xfactor, int _yfactor, KPresenterDoc *doc )
+    : QDialog( parent, name, true ), picLastModified( picLM ), clipLastModified( clipLM )
 {
     lockUpdate = TRUE;
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -308,9 +310,9 @@ void BackDia::updateConfiguration()
     preview->backGround()->setBackXFactor( getBackXFactor() );
     preview->backGround()->setBackYFactor( getBackYFactor() );
     if ( !chosenPic.isEmpty() && picChanged )
-	preview->backGround()->setBackPixmap( getBackPixFilename(), QDateTime() );
+	preview->backGround()->setBackPixmap( getBackPixFilename(), picLastModified );
     if ( !chosenClip.isEmpty() && clipChanged )
-	preview->backGround()->setBackClipFilename( getBackClipFilename(), QDateTime() );
+	preview->backGround()->setBackClipFilename( getBackClipFilename(), clipLastModified );
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
 	preview->backGround()->restore();
@@ -393,6 +395,7 @@ void BackDia::selectPic()
 	lPicName->setText( chosenPic );
 	backCombo->setCurrentItem( 1 );
 	picChanged = TRUE;
+	picLastModified = QDateTime();
 	updateConfiguration();
     }
 }
@@ -407,6 +410,7 @@ void BackDia::selectClip()
 	lClipName->setText( chosenClip );
 	backCombo->setCurrentItem( 2 );
 	clipChanged = TRUE;
+	clipLastModified = QDateTime();
 	updateConfiguration();
     }
 }
