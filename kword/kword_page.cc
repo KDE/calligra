@@ -4074,7 +4074,7 @@ void KWPage::startDrag()
   QClipboard *cb = QApplication::clipboard();
   drag->setKWord(cb->data()->encodedData(MIME_TYPE));
   drag->setPlain(cb->data()->encodedData("text/plain"));
-  drag->setPixmap(ICON("txt.xpm"),KPoint(10,10));
+  //drag->setPixmap(ICON("txt.xpm"),KPoint(10,10));
   drag->dragCopy();
 }
 
