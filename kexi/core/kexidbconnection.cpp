@@ -52,6 +52,7 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, c
 	m_host = host;
 	m_dbname = dbname;
 	m_user = user;
+	m_pass = pass;
 	m_socket = socket;
 	m_port = port;
 }

@@ -100,16 +100,6 @@ void
 KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host, const QString &user, const QString &password,
 	const QString &socket, const QString &port, bool savePass)
 {
-//	m_cred.driver = driver;
-//	m_cred.host = host;
-//	m_cred.user = user;
-//	m_cred.password = password;
-//	m_cred.socket = socket;
-//	m_cred.port = port;
-//	m_cred.savePassword = savePass;
-//	if(project()->initHostConnection(m_cred))
-//	{
-
 	m_driver = driver;
 	m_host = host;
 	m_user = user;
