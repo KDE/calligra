@@ -68,10 +68,10 @@ class KexiMainWindow::Private
 #ifndef KEXI_NO_CTXT_HELP
 		KexiContextHelp *ctxH;
 #endif
-		KexiBrowser	*nav;
-		KexiDialogDict	dialogs;
+		KexiBrowser *nav;
+		KexiDialogDict dialogs;
 		KXMLGUIClient   *curDialogGUIClient;
-		KexiDialogBase	*curDialog;
+		QGuardedPtr<KexiDialogBase> curDialog;
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties;
@@ -555,36 +555,38 @@ KexiMainWindow::registerChild(KexiDialogBase *dlg)
 void
 KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 {
-       kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
-        KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-       kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
+	kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
+	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
+	kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
 
 
-       KXMLGUIClient *client;
+	KXMLGUIClient *client;
 
-       if (!dlg) client=0;
-       else if ( !dlg->isRegistered()) return;
-       else client=dlg->guiClient();
+	if (!dlg)
+		client=0;
+	else if ( !dlg->isRegistered())
+		return;
+	else
+		client=dlg->guiClient();
 
-       if (client!=d->curDialogGUIClient) {
-	       kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "
-			<<client<<endl;
-               if (d->curDialogGUIClient) {
+	if (client!=d->curDialogGUIClient) {
+		kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
+		if (d->curDialogGUIClient) {
 			guiFactory()->removeClient(d->curDialogGUIClient);
 			d->curDialog->detachFromGUIClient();
 		}
-               if (client) {
+		if (client) {
 			guiFactory()->addClient(client);
 			dlg->attachToGUIClient();
 		}
-       } else {
-	 if (d->curDialog!=dlg) {
-		if (d->curDialog) d->curDialog->detachFromGUIClient();
-		if (dlg) dlg->attachToGUIClient();
-	 }
-       }
-       d->curDialogGUIClient=client;
-       d->curDialog=dlg;
+	} else {
+		if ((KexiDialogBase*)d->curDialog!=dlg) {
+			if (d->curDialog) d->curDialog->detachFromGUIClient();
+			if (dlg) dlg->attachToGUIClient();
+		}
+	}
+	d->curDialogGUIClient=client;
+	d->curDialog=dlg;
 }
 
 bool
@@ -845,7 +847,8 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 	if (d->curDialogGUIClient==client) {
 		d->curDialogGUIClient=0;
 	}
-	guiFactory()->removeClient(client);
+	if (client)
+		guiFactory()->removeClient(client);
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
 }
 
@@ -858,12 +861,27 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
-//	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
+	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
+	if (e->type()==QEvent::KeyPress) {
+		kdDebug() << "KEY EVENT" << endl;
+	}
+	if (e->type()==QEvent::AccelOverride) {
+		kdDebug() << "AccelOverride EVENT" << endl;
+	}
+	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
+		kdDebug() << "Focus EVENT" << endl;
+	}
 	//keep focus in main window:
 	if (obj==d->nav) {
 //		kdDebug() << "NAV" << endl;
 		if (e->type()==QEvent::FocusIn) {
-			return false;
+			return true;
+		} else if (e->type()==QEvent::FocusOut) {
+			//activate current child:
+			if (d->curDialog) {
+				d->curDialog->activate();
+				return true;
+			}
 		} else if (e->type()==QEvent::Hide) {
 			setFocus();
 			return false;
