@@ -343,11 +343,12 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.append(QString("<"));
     delimiter.append(QString("/"));
     delimiter.append(QString("\\"));
+    delimiter.append(QString("|"));
+    delimiter.append(QString(" "));
     delimiter.append(QString(")"));
     delimiter.append(QString("]"));
     delimiter.append(QString("}"));
     delimiter.append(QString(">"));
-    delimiter.append(QString("|"));
     impl->leftBracket = new KSelectAction(i18n("Left delimiter"),
                                     0, this, SLOT(delimiterLeft()),
                                     collection, "formula_typeleft");
@@ -361,11 +362,12 @@ void KFormulaDocument::createActions(KActionCollection* collection)
     delimiter.append(QString(">"));
     delimiter.append(QString("/"));
     delimiter.append(QString("\\"));
+    delimiter.append(QString("|"));
+    delimiter.append(QString(" "));
     delimiter.append(QString("("));
     delimiter.append(QString("["));
     delimiter.append(QString("{"));
     delimiter.append(QString("<"));
-    delimiter.append(QString("|"));
     impl->rightBracket = new KSelectAction(i18n("Right delimiter"),
                                      0, this, SLOT(delimiterRight()),
                                      collection, "formula_typeright");
@@ -559,6 +561,7 @@ void KFormulaDocument::toggleSyntaxHighlighting()
 
     KFormulaContainer* f;
     for (f=impl->formulae.first(); f != 0; f=impl->formulae.next()) {
+        // Only to notify all views. We don't expect to get new values.
         f->recalc();
     }
 }

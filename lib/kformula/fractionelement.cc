@@ -414,6 +414,11 @@ QString FractionElement::toLatex()
     QString num,den,fra;
     den=denominator->toLatex();
     num=numerator->toLatex();
-    fra="\\frac{"+num+"}{"+den+"}";
+    if ( withLine ) {
+        fra="\\frac{"+num+"}{"+den+"}";
+    }
+    else {
+        fra = "{" + num + "\\atop " + den + "}";
+    }
     return fra;
 }
