@@ -3099,7 +3099,7 @@ void KPresenterView::setupActions()
                                    this, SLOT( zoomPageHeight() ),
                                    actionCollection(), "zoom_page_height" );
 
-    actionZoomAllObject= new KAction( i18n( "Zoom All Object" ), 0,
+    actionZoomAllObject= new KAction( i18n( "Zoom All Objects" ), 0,
                                    this, SLOT( zoomAllObject() ),
                                    actionCollection(), "zoom_all_object" );
 ;
@@ -3116,7 +3116,7 @@ void KPresenterView::setupActions()
                                        this, SLOT( duplicateObj() ),
                                        actionCollection(), "duplicate_obj" );
 
-    actionApplyAutoFormat= new KAction( i18n( "Apply autoFormat" ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
 

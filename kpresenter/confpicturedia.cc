@@ -345,7 +345,7 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     m_verticalMirrorPicture = new QRadioButton( i18n( "Vertical Mirror" ), mirrorGroup );
     connect( m_verticalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotVerticalMirrorPicture() ) );
 
-    m_horizontalAndVerticalMirrorPicture = new QRadioButton( i18n( "Horizontal And Vertical Mirror" ), mirrorGroup );
+    m_horizontalAndVerticalMirrorPicture = new QRadioButton( i18n( "Horizontal and Vertical Mirror" ), mirrorGroup );
     connect( m_horizontalAndVerticalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotHorizontalAndVerticalMirrorPicture() ) );
 
     QButtonGroup *depthGroup = new QVButtonGroup( i18n( "Depth" ), gSettings );
