@@ -423,6 +423,10 @@ public:
     QString picturePath()const { return m_picturePath; }
     void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
 
+    bool insertDirectCursor() const { return m_bInsertDirectCursor; }
+    void setInsertDirectCursor(bool _b){ m_bInsertDirectCursor=_b; }
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -585,6 +589,7 @@ private:
     KoStyleCollection *m_styleColl;
     KPObject *bgObjSpellChecked;
     QString m_picturePath;
+    bool  m_bInsertDirectCursor;
 };
 
 #endif

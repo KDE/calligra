@@ -722,6 +722,11 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
+
+    m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
+    m_directInsertCursor->setChecked(doc->insertDirectCursor());
+    m_directInsertCursor->setEnabled( false );
+
 }
 
 ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
@@ -758,6 +763,13 @@ KCommand *ConfigureDefaultDocPage::apply()
         m_pView->kPresenterDoc()->setCursorInProtectedArea( state );
     }
 
+    state = m_directInsertCursor->isChecked();
+    if ( state != doc->insertDirectCursor() )
+    {
+        config->writeEntry( "InsertDirectCursor", state );
+        doc->setInsertDirectCursor( state );
+    }
+
     KMacroCommand *macro = 0L;
     int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
@@ -788,6 +800,7 @@ void ConfigureDefaultDocPage::slotDefault()
     m_cursorInProtectedArea->setChecked(true);
     m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
     m_createBackupFile->setChecked( true );
+    m_directInsertCursor->setChecked( true );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

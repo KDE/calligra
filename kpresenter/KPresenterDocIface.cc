@@ -867,3 +867,14 @@ bool KPresenterDocIface::backupFile()const
     return doc->backupFile();
 }
 
+
+bool KPresenterDocIface::insertDirectCursor() const
+{
+    return doc->insertDirectCursor();
+}
+
+void KPresenterDocIface::setInsertDirectCursor(bool _b)
+{
+    doc->setInsertDirectCursor( _b );
+}
+

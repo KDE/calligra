@@ -244,6 +244,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
     m_stickyPage=new KPrPage(this);
+    m_bInsertDirectCursor = false;
 
     objStartY = 0;
     setPageLayout( m_pageLayout );
@@ -348,6 +349,8 @@ void KPresenterDoc::initConfig()
         setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 10.0 ) ));
 
         setHelpLineToFront( config->readBoolEntry( "HelpLineToFront" , false ));
+        m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
+
     }
     else
         zoom=100;

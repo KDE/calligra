@@ -128,6 +128,7 @@ private:
     KDoubleNumInput *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
+    QCheckBox *m_directInsertCursor;
 };
 
 class ConfigureToolsPage : public QObject
