@@ -95,7 +95,7 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
   m_pFileMenu->setItemEnabled (m_idMenuFile_Save, false);
   
   m_idMenuFile_SaveAs = 
-    m_pFileMenu->insertItem (i18n ("&Save as..."), this, 
+    m_pFileMenu->insertItem (i18n ("S&ave as..."), this, 
 			     SLOT (slotFileSaveAs ()));
   m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, false);
 
@@ -295,7 +295,7 @@ void KIllustratorShell::slotFileNew () {
   if (! newDocument ())
     QMessageBox::critical (this, i18n ("KIllustrator Error"), 
 			   i18n ("Could not create new document"), 
-			   i18n ("Ok"));
+			   i18n ("OK"));
 }
 
 void KIllustratorShell::slotFileOpen () {
