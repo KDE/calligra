@@ -1139,7 +1139,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
           }
           if ( cell != m_pDefaultCell )
           {
-            kdDebug() << "not default" << endl;
+            // kdDebug() << "not default" << endl;
             worker.doWork( cell, true, x, y );
           }
         }
@@ -2199,7 +2199,7 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    for( int i=0; i<=nbCol; i++ )
+    for( int i = 0; i <= nbCol; ++i )
     {
         // Recalculate range max (minus size of removed column)
         m_dSizeMaxX -= columnFormat( col )->dblWidth();
@@ -2709,7 +2709,9 @@ void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
     for ( int x = selection.left(); x <= selection.right(); ++x )
     {
       cell = nonDefaultCell( x, y );
-      cell->setBottomBorderPen(pen);
+      if ( cell->isObscuringForced() )
+        cell = cell->obscuringCells().first();
+      cell->setBottomBorderPen( pen );
     }
     emit sig_updateView( this, selection );
   }
@@ -2765,6 +2767,8 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
         for(int i = selection.left(); i <= selection.right(); i++)
         {
           cell = nonDefaultCell( i, rw->row() );
+          if ( cell->isObscuringForced() )
+            cell = cell->obscuringCells().first();
           cell->setRightBorderPen(pen);
         }
       }
@@ -2788,6 +2792,8 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
     for ( int y = selection.top(); y <= selection.bottom(); y++ )
     {
       cell = nonDefaultCell( x, y );
+      if ( cell->isObscuringForced() )
+        cell = cell->obscuringCells().first();
       cell->setRightBorderPen(pen);
     }
     emit sig_updateView( this, selection );
@@ -2837,6 +2843,8 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
         for(int i = selection.left(); i <= selection.right(); ++i)
         {
           cell = nonDefaultCell( i,  rw->row() );
+          if ( cell->isObscuringForced() )
+            continue;
           cell->setLeftBorderPen(pen);
         }
       }
@@ -2859,6 +2867,8 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
     for ( int y = selection.top(); y <= selection.bottom(); y++ )
     {
       cell = nonDefaultCell( x, y );
+      if ( cell->isObscuringForced() )
+        continue;
       cell->setLeftBorderPen(pen);
     }
     emit sig_updateView( this, selection );
@@ -2917,6 +2927,8 @@ void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
     for ( int x = selection.left(); x <= selection.right(); x++ )
     {
       cell = nonDefaultCell( x, y );
+      if ( cell->isObscuringForced() )
+        continue;
       cell->setTopBorderPen(pen);
     }
     emit sig_updateView( this, selection );
@@ -2936,7 +2948,7 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
     m_pDoc->undoBuffer()->appendUndo( undo );
   }
 
-  QPen pen( _color, 1, SolidLine);
+  QPen pen( _color, 1, SolidLine );
 
   // Complete rows selected ?
   if ( util_isRowSelected(selection) )
@@ -2971,7 +2983,9 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
     for ( int y = selection.top(); y <= bottom; ++y )
     {
       cell = nonDefaultCell( left, y );
-      cell->setLeftBorderPen(pen);
+      if ( cell->isObscuringForced() )
+        continue;
+      cell->setLeftBorderPen( pen );
     }
     emit sig_updateView( this );
     return;
@@ -3007,22 +3021,37 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
     for ( int x = selection.left(); x <= selection.right(); x++ )
     {
       cell = nonDefaultCell( x, selection.top() );
-      cell->setTopBorderPen(pen);
+      if ( cell->isObscuringForced() )
+        continue;
+      cell->setTopBorderPen( pen );
     }
     emit sig_updateView( this );
     return;
   }
   else
   {
+    KSpreadCell* cell;
     for ( int x = selection.left(); x <= selection.right(); x++ )
     {
-      nonDefaultCell( x, selection.top() )->setTopBorderPen(pen);
-      nonDefaultCell( x, selection.bottom() )->setBottomBorderPen(pen);
+      cell = nonDefaultCell( x, selection.top() );
+      if ( !cell->isObscuringForced() )
+        cell->setTopBorderPen( pen );
+
+      cell = nonDefaultCell( x, selection.bottom() );
+      if ( cell->isObscuringForced() )
+        cell = cell->obscuringCells().first();
+      cell->setBottomBorderPen( pen );
     }
     for ( int y = selection.top(); y <= selection.bottom(); y++ )
     {
-      nonDefaultCell( selection.left(), y )->setLeftBorderPen(pen);
-      nonDefaultCell( selection.right(), y )->setRightBorderPen(pen);
+      cell = nonDefaultCell( selection.left(), y );
+      if ( !cell->isObscuringForced() )
+        cell->setLeftBorderPen( pen );
+
+      cell = nonDefaultCell( selection.right(), y );
+      if ( cell->isObscuringForced() )
+        cell = cell->obscuringCells().first();
+      cell->setRightBorderPen( pen );
     }
     emit sig_updateView( this, selection );
   }
@@ -3062,7 +3091,8 @@ struct SetSelectionBorderAllWorker : public KSpreadSheet::CellWorkerTypeA {
 	c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
     }
 
-    bool testCondition(KSpreadCell */*cell*/) { return true; }
+  bool testCondition( KSpreadCell */* cell*/ ) { return true; }
+
     void doWork( KSpreadCell* cell, bool, int, int ) {
 	//if ( cellRegion )
 	//    cell->setDisplayDirtyFlag();
@@ -3075,11 +3105,18 @@ struct SetSelectionBorderAllWorker : public KSpreadSheet::CellWorkerTypeA {
     }
 };
 
-void KSpreadSheet::borderAll( KSpreadSelection* selectionInfo,
-                              const QColor &_color )
+void KSpreadSheet::borderAll( KSpreadSelection * selectionInfo,
+                              const QColor & _color )
 {
+  if ( selectionInfo->singleCellSelection() )
+  {
+    borderOutline( selectionInfo, _color );
+  }
+  else
+  {
     SetSelectionBorderAllWorker w( _color );
     workOnCells( selectionInfo, w );
+  }
 }
 
 struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {

@@ -3375,7 +3375,7 @@ void KSpreadCanvas::paintUpdates()
   clipoutChildren( painter, matrix );
 
   KoRect unzoomedRect = doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
-//  unzoomedRect.moveBy( xOffset(), yOffset() );
+  // unzoomedRect.moveBy( xOffset(), yOffset() );
 
 
   /* paint any visible cell that has the paintDirty flag */
@@ -3386,8 +3386,7 @@ void KSpreadCanvas::paintUpdates()
   double topPos = activeTable()->dblRowPos(range.top());
   double leftPos = activeTable()->dblColumnPos(range.left());
 
-  KoPoint dblCorner = KoPoint( leftPos  - xOffset(),
-                               topPos - yOffset() );
+  KoPoint dblCorner( leftPos  - xOffset(), topPos - yOffset() );
 
   int x;
   int y;
@@ -3400,7 +3399,7 @@ void KSpreadCanvas::paintUpdates()
   {
     for ( y = range.top(); y <= bottom; ++y )
     {
-      if ( activeTable()->cellIsPaintDirty( QPoint( x, y ) ) )
+      if ( sheet->cellIsPaintDirty( QPoint( x, y ) ) )
       {
         cell = sheet->cellAt( x, y );
         cell->calc();
@@ -3492,10 +3491,10 @@ void KSpreadCanvas::paintUpdates()
                          rightPen, bottomPen, leftPen, topPen );
 
       }
-      dblCorner.setY( dblCorner.y() + activeTable()->rowFormat( y )->dblHeight( ) );
+      dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight( ) );
     }
     dblCorner.setY( topPos - yOffset() );
-    dblCorner.setX( dblCorner.x() + activeTable()->columnFormat( x )->dblWidth( ) );
+    dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth( ) );
   }
 
   /* now paint the selection and choose selection */

@@ -4252,6 +4252,8 @@ void CellFormatPageBorder::applyTopOutline()
     for ( int x = dlg->left; x <= dlg->right; x++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, dlg->top );
+      if ( obj->isObscuringForced() && dlg->isSingleCell() )
+        continue;
       obj->setTopBorderPen( tmpPen );
     }
   }
@@ -4284,6 +4286,8 @@ void CellFormatPageBorder::applyBottomOutline()
     for ( int x = dlg->left; x <= dlg->right; x++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, dlg->bottom );
+      if ( obj->isObscuringForced() && dlg->isSingleCell() )
+        obj = obj->obscuringCells().first();
       obj->setBottomBorderPen( tmpPen );
     }
   }
@@ -4314,6 +4318,8 @@ void CellFormatPageBorder::applyLeftOutline()
     for ( int y = dlg->top; y <= dlg->bottom; y++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( dlg->left, y );
+      if ( obj->isObscuringForced() && dlg->isSingleCell() )
+        continue;
       obj->setLeftBorderPen( tmpPen );
     }
   }
@@ -4339,6 +4345,8 @@ void CellFormatPageBorder::applyLeftOutline()
         {
           KSpreadCell *cell =
             dlg->getTable()->nonDefaultCell( i, rw->row() );
+          if ( cell->isObscuringForced() && dlg->isSingleCell() )
+            continue;
           cell->setLeftBorderPen( tmpPen );
         }
       }
@@ -4357,8 +4365,10 @@ void CellFormatPageBorder::applyRightOutline()
   {
     for ( int y = dlg->top; y <= dlg->bottom; y++ )
     {
-      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( dlg->right, y );
-      obj->setRightBorderPen(tmpPen);
+      KSpreadCell * obj = dlg->getTable()->nonDefaultCell( dlg->right, y );
+      if ( obj->isObscuringForced() && dlg->isSingleCell() )
+        obj = obj->obscuringCells().first();
+      obj->setRightBorderPen( tmpPen );
     }
   }
   else if (  dlg->isColumnSelected )
@@ -4384,7 +4394,9 @@ void CellFormatPageBorder::applyRightOutline()
         {
           KSpreadCell *cell =
             dlg->getTable()->nonDefaultCell( i, rw->row() );
-          cell->setRightBorderPen(tmpPen);
+          if ( cell->isObscuringForced() && dlg->isSingleCell() )
+            cell = cell->obscuringCells().first();
+          cell->setRightBorderPen( tmpPen );
         }
       }
     }
@@ -4459,6 +4471,8 @@ void CellFormatPageBorder::applyDiagonalOutline()
         {
           KSpreadCell *cell =
             dlg->getTable()->nonDefaultCell( i, rw->row() );
+          if ( cell->isObscuringForced() && dlg->isSingleCell() )
+            continue;
           cell->setFallDiagonalPen( tmpPenFall );
           cell->setGoUpDiagonalPen( tmpPenGoUp );
         }

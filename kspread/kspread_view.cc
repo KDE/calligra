@@ -5515,8 +5515,17 @@ void KSpreadView::layoutDlg()
 {
   QRect selection( m_selectionInfo->selection() );
 
-  CellFormatDlg dlg( this, m_pTable, selection.left(), selection.top(),
-                     selection.right(), selection.bottom() );
+  kdDebug() << "Left: " << selection.left() << "; right: " << selection.right() << endl;
+
+  if ( m_selectionInfo->singleCellSelection() )
+  {
+    kdDebug() << "Single cell" << endl;
+    CellFormatDlg dlg( this, m_pTable, selection.left(), selection.top(),
+                       selection.left(), selection.top() );
+  }
+  else
+    CellFormatDlg dlg( this, m_pTable, selection.left(), selection.top(),
+                       selection.right(), selection.bottom() );
 }
 
 void KSpreadView::styleDialog()
