@@ -1,7 +1,74 @@
-Please put your name in "(...)" to the bug/feature you work on or you want to work on.
-For bugs: look into the KBugBuster if somebody else is working on it.
+This file describes the tasks at hand for making KSpread a better product.
 
-If you find a bug in KBugBuster for bugs listed here, please add the bug number.
+Legend
+======
+
+Status field
+
+----	No work has been done on this task yet.
+--	No work has been done on this subtask yet.
+DONE    Task is all done
+done    This subtask is done
+
+INGE	Inge is working on this task
+inge	Inge is working on this subtask
+RAPH	Raphael is working on this task
+raph	Raphael is working on this subtask
+TOMA	Tomas is working on this task
+toma	Tomas is working on this subtask
+
+...fill in your signatures here.
+
+
+Prio field
+
+S	Involves string changes.  Must be done before the freeze.
+1	Important task.  Should definitely be fixed.
+2	Semi-important task.  Should be fixed if possible, but can be 
+	moved to 1.4.1 if necessary.
+3	Nice to have.  Should be fixed if there is time. (yeah, right)
+
+
+
+Things to do before the release of KOffice 1.4
+==============================================
+
+
+Item                                                               Prio Status
+------------------------------------------------------------------------------
+
+* General bugs
+  + Painting
+    - 59068: Error show text on cell with right align with text	      1	----
+	     overlapped left cell.
+    - 61452: drawing problem when text overflow the right border      1 ----
+
+  + Printing
+  + Cut&Paste
+  + Miscellaneous
+    - 52575:1 The Open File dialog does not accept files opened	      1 ----
+              with "fish:/username@server".
+
+    - 59510: Handles large spreadsheets "extremely" poorly.	      2 ----
+	This is perhaps already (partly) fixed, but might be
+	very difficult to fix quickly if it isn't.
+
+    - 60458: Inserting a row always creates cell with default number  2 ----
+	     format.
+* Filter bugs
+
+
+
+
+
+
+
+Please put your name in "(...)" to the bug/feature you work on or you
+want to work on.  For bugs: look into the KBugBuster if somebody else
+is working on it.
+
+If you find a bug in KBugBuster for bugs listed here, please add the
+bug number.
 
 
 Things to be done BEFORE KOFFICE 1.4:
