@@ -126,7 +126,6 @@ class KoShellGUIClient : public KXMLGUIClient
 {
 public:
 	KoShellGUIClient( KoShellWindow *window );
-	~KoShellGUIClient();
 protected:
 	KToggleAction *sidebar;
 };

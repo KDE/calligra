@@ -548,9 +548,4 @@ KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 	sidebar->setChecked( true );
 }
 
-KoShellGUIClient::~KoShellGUIClient()
-{
-	delete sidebar;
-}
-
 #include "koshell_shell.moc"
