@@ -67,6 +67,7 @@ private:
         const FormatData& formatOrigin, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
     bool makeImage(const FrameAnchor& anchor);
+    bool makeClipart(const FrameAnchor& anchor);
 protected:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;

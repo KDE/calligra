@@ -24,6 +24,7 @@
 #include <qregexp.h>
 #include <qtextcodec.h>
 #include <qfile.h>
+#include <qpicture.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -64,7 +65,7 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
         *m_streamOut << "<td>\n";
         
         if (!doFullAllParagraphs(*(*itCell).paraList))
-        {   
+        {
             return false;
         }
 
@@ -109,7 +110,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         file.close();
 
         *m_streamOut << "<img "; // This is an emüty element!
-        *m_streamOut << "src=\"" << strImageName << "\" ";
+        *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
         *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
         *m_streamOut << (isXML()?"/>":">") << "\n";
     }
@@ -120,6 +121,65 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     return true;
 }
+
+bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
+{
+    kdDebug(30506) << "New clipart: " << anchor.picture.koStoreName
+        << " , " << anchor.picture.key <<endl;
+
+    QString strImageName=m_fileName;
+    strImageName+='.';
+    const int result=anchor.picture.koStoreName.findRev("/");
+    if (result>=0)
+    {
+        strImageName+=anchor.picture.koStoreName.mid(result+1);
+    }
+    else
+    {
+        strImageName+=anchor.picture.koStoreName;
+    }
+    // TODO: remove the extension of the KoStore name
+    strImageName+=".svg";
+
+    const double height=anchor.bottom - anchor.top;
+    const double width =anchor.right  - anchor.left;
+
+    QPicture picture;
+
+    QIODevice* io=getSubFileDevice(anchor.picture.koStoreName);
+    if (!io)
+    {
+        // NO message error, as there must be already one
+        return false;
+    }
+
+    if (picture.load(io))
+    {
+
+        // Save picture as SVG
+        *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
+        *m_streamOut << " type=\"image/svg+xml\"";
+        *m_streamOut << " height=\"" << height << "\" width=\"" << width << "\">\n";
+        *m_streamOut << "</object>\n"; // <object> is *not* an empty element in HTML!
+        // TODO: other props for image
+
+        kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
+        if (!picture.save(strImageName,"svg"))
+        {
+            kdError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
+                << " to " << strImageName << endl;
+            return false;
+        }
+
+    }
+    else
+    {
+        kdWarning(30506) << "Unable to load clipart: " << anchor.picture.koStoreName << endl;
+        return false;
+    }
+    return true;
+}
+
 
 void HtmlWorker::formatTextParagraph(const QString& strText,
  const FormatData& formatOrigin, const FormatData& format)
@@ -211,6 +271,10 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 else if (2==(*paraFormatDataIt).frameAnchor.type)
                 {
                     makeImage((*paraFormatDataIt).frameAnchor);
+                }
+                else if (5==(*paraFormatDataIt).frameAnchor.type)
+                {
+                    makeClipart((*paraFormatDataIt).frameAnchor);
                 }
                 else
                 {

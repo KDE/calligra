@@ -37,6 +37,7 @@
 #include <qiodevice.h>
 #include <qbuffer.h>
 #include <qimage.h>
+#include <qpicture.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
@@ -95,14 +96,17 @@ private:
     QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
         const LayoutData& layout, const bool force) const;
     QString escapeAbiWordText(const QString& strText) const;
-    bool makeImage(const FrameAnchor& anchor);
+    bool makeImage(const FrameAnchor& anchor, const bool isImage);
     bool convertUnknownImage(const QString& name, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
+    void writeImageData(const QString& koStoreName, const QString& keyName);
+    void writeClipartData(const QString& koStoreName, const QString& keyName);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
-    QMap<QString,QString> m_mapData;
+    QMap<QString,QString> m_mapImageData;
+    QMap<QString,QString> m_mapClipartData;
     StyleMap m_styleMap;
 };
 
@@ -115,8 +119,8 @@ QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
 
 bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
-    kdDebug(30506) << "AbiWordWorker::doOpenFile with file: "
-        << filenameOut << endl;
+    kdDebug(30506) << "Opening file: " << filenameOut
+        << " (in AbiWordWorker::doOpenFile)" << endl;
     //Find the last extension
     QString strExt;
     const int result=filenameOut.findRev('.');
@@ -259,68 +263,116 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
     return true;
 }
 
+void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& keyName)
+{
+    QByteArray image;
+
+    QString strExtension(koStoreName);
+    const int result=koStoreName.findRev(".");
+    if (result>=0)
+    {
+        strExtension=koStoreName.mid(result+1);
+    }
+
+    bool isImageLoaded=false;
+
+    QString strMime;
+    if (strExtension=="png")
+    {
+        strMime="image/png";
+        isImageLoaded=loadKoStoreFile(koStoreName,image);
+    }
+    else
+    {
+        // All other imahe types must be converted to PNG
+        //   (yes, even JPEG!)
+        strMime="image/png";
+        isImageLoaded=convertUnknownImage(koStoreName,image);
+    }
+
+    kdDebug(30506) << "Image " << koStoreName << " Type: " << strMime << endl;
+
+    if (isImageLoaded)
+    {
+        *m_streamOut << "<d name=\"" << keyName << "\""
+            << " base64=\"yes\""
+            << " mime=\"" << strMime << "\">\n";
+
+        QCString base64=KCodecs::base64Encode(image,true);
+
+        *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
+
+        *m_streamOut << "</d>\n";
+    }
+    else
+    {
+        kdWarning(30506) << "Unable to load image: " << koStoreName << endl;
+    }
+}
+
+void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& keyName)
+{
+    // We must always convert the image to SVG
+    QString strMime="image/svg-xml"; // Yes, it is - not +
+
+    kdDebug(30506) << "Clipart " << koStoreName << endl;
+
+    QPicture picture;
+
+    QIODevice* io=getSubFileDevice(koStoreName);
+    if (!io)
+    {
+        // NO message error, as there must be already one
+        return;
+    }
+
+    if (picture.load(io))
+    {
+        *m_streamOut << "<d name=\"" << keyName << "\""
+            << " base64=\"no\""
+            << " mime=\"" << strMime << "\">\n"
+            << "![CDATA[\n"; // Open CDATA section
+
+        // Save picture as SVG
+
+        // Not sure what is better: call the QIODevice directly or through QTextStream::device()?
+        // QPicture::save saves in UTF-8, so we have no problem!
+        if (!picture.save(m_streamOut->device(),"svg"))
+        {
+            kdWarning(30506) << "Could not save clipart: "  << koStoreName << endl;
+        }
+
+        *m_streamOut << "\n]]>\n" << "</d>\n";
+    }
+    else
+    {
+        kdWarning(30506) << "Unable to load clipart: " << koStoreName << endl;
+    }
+}
+
 bool AbiWordWorker::doCloseDocument(void)
 {
     // Before writing the <data> element,
     //  we must be sure that we have data and that we can retrieve it.
 
-    if (m_kwordLeader && (!m_mapData.isEmpty()))
+    if (m_kwordLeader && (!m_mapImageData.isEmpty() || !m_mapClipartData.isEmpty()))
     {
         *m_streamOut << "<data>\n";
 
         QMap<QString,QString>::ConstIterator it;
 
-        for (it=m_mapData.begin(); it!=m_mapData.end(); it++)
+        // all images first
+        for (it=m_mapImageData.begin(); it!=m_mapImageData.end(); it++)
         {
-            QByteArray image;
+            // Warning: do not mix up KWord's key and the iterator's key!
+            writeImageData(it.key(),it.data());
+        }
 
-            QString strExtension=it.key();
-            const int result=it.key().findRev(".");
-            if (result>=0)
-            {
-                strExtension=it.key().mid(result+1);
-            }
-
-            bool isImageLoaded=false;
-
-            QString strMime;
-            if (strExtension=="png")
-            {
-                strMime="image/png";
-                isImageLoaded=loadKoStoreFile(it.key(),image);
-            }
-            else if ((strExtension=="jpg") || (strExtension=="jpeg"))
-            {
-                strMime="image/jpeg";
-                isImageLoaded=loadKoStoreFile(it.key(),image);
-            }
-            // TODO: mathml and svg
-            else
-            {
-                // TODO: convert image to PNG with QImageIO
-                kdWarning(30506) << "Unknown extension! Image type unknown!" << endl;
-                strMime="image/png";
-                isImageLoaded=convertUnknownImage(it.key(),image);
-            }
-
-            kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
-
-            if (isImageLoaded)
-            {
-                *m_streamOut << "<d name=\"" << it.data() << "\""
-                    << " base64=\"yes\"" // For now, we always encode (TODO: not for mathml and svg)
-                    << " mime=\"" << strMime << "\">\n";
-
-                QCString base64=KCodecs::base64Encode(image,true);
-
-                *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
-
-                *m_streamOut << "</d>\n";
-            }
-            else
-            {
-                kdWarning(30506) << "Unable to load image: " << it.key() << endl;
-            }
+        // then all cliparts
+        for (it=m_mapClipartData.begin(); it!=m_mapClipartData.end(); it++)
+        {
+            // Warning: do not mix up KWord's key and the iterator's key!
+            writeClipartData(it.key(),it.data());
         }
 
         *m_streamOut << "</data>\n";
@@ -483,20 +535,27 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     return strElement;
 }
 
-bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
+bool AbiWordWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
 {
-    kdDebug(30506) << "New image: " << anchor.picture.koStoreName
-        << " , " << anchor.picture.key << endl;
+    kdDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
+        << " , " << anchor.picture.key << " (is image:" << isImage << ")" <<endl;
 
-    double height=anchor.bottom - anchor.top;
-    double width =anchor.right  - anchor.left;
+    const double height=anchor.bottom - anchor.top;
+    const double width =anchor.right  - anchor.left;
 
     *m_streamOut << "<image dataid=\"" << anchor.picture.key << "\"";
     *m_streamOut << " props= \"height:" << height << "pt;width:" << width << "pt\"";
     *m_streamOut << "/>"; // NO end of line!
     // TODO: other props for image
 
-    m_mapData[anchor.picture.koStoreName]=anchor.picture.key;
+    if (isImage)
+    {
+        m_mapImageData[anchor.picture.koStoreName]=anchor.picture.key;
+    }
+    else
+    {
+        m_mapClipartData[anchor.picture.koStoreName]=anchor.picture.key;
+    }
 
     return true;
 }
@@ -596,8 +655,12 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
                 // We have an image or a table
                 // However, AbiWord does not support tables
                 if (2==(*paraFormatDataIt).frameAnchor.type)
-                {
-                    makeImage((*paraFormatDataIt).frameAnchor);
+                {   // <IMAGE>
+                    makeImage((*paraFormatDataIt).frameAnchor,true);
+                }
+                else if (5==(*paraFormatDataIt).frameAnchor.type)
+                {   // <CLIPART>
+                    makeImage((*paraFormatDataIt).frameAnchor,false);
                 }
                 else
                 {
