@@ -32,18 +32,6 @@
 class KIllustratorView;
 class GDocument;
 
-/**
- * This tab bar is used by @ref KivioView. It is used to choose between all
- * available pages.
- *
- * Adding, removing or renaming of tabs does not automatically add, rename or
- * remove KivioPage objects. The tabbar is just a GUI element.
- *
- * But activating a tab emits a signal which in turn will show this page
- * in the associated KivioView.
- *
- * @short A bar with tabs and scroll buttons.
- */
 class TabBar : public QWidget {
   Q_OBJECT
 public:
@@ -67,8 +55,7 @@ public:
 
 signals:
     /**
-     * Emitted if the active tab changed. This will cause the
-     * KivioView to change its active page, too.
+     * Emitted if the active tab changed.
      */
     void tabChanged( int );
 

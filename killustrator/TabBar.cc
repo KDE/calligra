@@ -61,7 +61,7 @@ void TabBar::moveTab( int _from, int _to, bool _before )
 {
   doc->movePage(_from, _to, _before);
   if(_from < _to)
-    activeTab = _to - 1;
+    activeTab = _to - 2;
   repaint();
 }
 
@@ -80,7 +80,7 @@ void TabBar::scrollRight()
   if ( m_rightTab == static_cast<int>(doc->getPages().count()) )
     return;
 
-  if ( (unsigned int )leftTab == doc->getPages().count() )
+  if ( leftTab == static_cast<int>(doc->getPages().count()) )
     return;
 
   leftTab++;
@@ -232,7 +232,7 @@ void TabBar::openPopupMenu( const QPoint &_global )
 {
   if(!doc->document()->isReadWrite())
     return;
-
+  
   if ( m_pPopupMenu != 0L )
     delete m_pPopupMenu;
   m_pPopupMenu = new QPopupMenu();

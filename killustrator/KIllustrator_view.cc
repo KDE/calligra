@@ -323,9 +323,7 @@ void KIllustratorView::createMyGUI()
     m_showGrid->setChecked(canvas->showGrid());
     m_alignToGrid->setChecked(canvas->snapToGrid());
     m_selectTool->setChecked( true );
-    kdDebug(0) << "<bug>" << endl;
     tcontroller->toolSelected( Tool::ToolSelect);
-    kdDebug(0) << "</bug>" << endl;
     setUndoStatus (false, false);
     connect (&cmdHistory, SIGNAL(changed(bool, bool)),SLOT(setUndoStatus(bool, bool)));
     // Disable node actions
