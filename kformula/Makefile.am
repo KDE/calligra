@@ -24,6 +24,7 @@ METASOURCES = kformula_main.moc kformula_view.moc kformula_doc.moc \
 	kformula_shell.moc matrixwidget.moc formula_container.moc
 
 idl_DATA = kformula.idl
+kformula.h : $(top_builddir)/lib/kofficecore/koffice.idl
 
 kde_icon_DATA = kformula.xpm
 
