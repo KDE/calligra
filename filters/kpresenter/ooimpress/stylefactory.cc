@@ -496,7 +496,7 @@ MarkerStyle::MarkerStyle( int style )
     case 1:
         m_name = "Arrow";
         m_viewBox = "0 0 20 30";
-        m_d = "m10 0-10 30h20";
+        m_d = "m10 0-10 30h20z";
         break;
     case 2:
         m_name = "Square";

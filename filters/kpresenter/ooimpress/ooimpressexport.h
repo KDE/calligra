@@ -54,6 +54,9 @@ private:
     void appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject = false );
     void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false );
     void setLineGeometry( QDomElement & source, QDomElement & target );
+    void appendPolygon( QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target);
+
 
     int m_currentPage;
     float m_pageHeight;

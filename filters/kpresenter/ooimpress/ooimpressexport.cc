@@ -425,8 +425,10 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 appendEllipse( doccontent, o, drawPage, true );
                 break;
             case 12: // polyline
+                appendPolyline( doccontent, o, drawPage );
                 break;
             case 15: // polygon
+                appendPolygon( doccontent, o, drawPage );
                 break;
             }
         }
@@ -559,6 +561,36 @@ void OoImpressExport::appendRectangle( QDomDocument & doc, QDomElement & source,
 
     target.appendChild( rectangle );
 }
+
+void OoImpressExport::appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target)
+{
+    QDomElement polyline = doc.createElement( "draw:polyline" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    polyline.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
+    set2DGeometry( source, polyline );
+
+    target.appendChild( polyline );
+}
+
+
+void OoImpressExport::appendPolygon( QDomDocument & doc, QDomElement & source, QDomElement & target)
+{
+    QDomElement polygon = doc.createElement( "draw:polygon" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    polygon.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
+    set2DGeometry( source, polygon );
+
+    target.appendChild( polygon );
+}
+
 
 void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject )
 {
