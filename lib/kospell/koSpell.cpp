@@ -522,6 +522,9 @@ void KOSpell::dialog2 (int result)
         offset+=replacement().length()-dlgorigword.length();
         newbuffer.replace (lastpos + offset, replacement().length(), replacement() );
         break;
+    case KS_ADDAUTOCORRECT:
+        //todo add new word ????
+        emit addAutoCorrect (dlgorigword , replacement());
     case KS_REPLACE:
         emit corrected (dlgorigword ,  replacement(), lastpos+offset-dlgorigword.length());
         offset+=replacement().length()-dlgorigword.length();
@@ -535,10 +538,6 @@ void KOSpell::dialog2 (int result)
     case KS_CHECKAGAIN:
         spellCheckReplaceWord( dlgreplacement);
         testNextWord = false;
-        break;
-    case KS_ADDAUTOCORRECT:
-        //todo add new word ????
-        emit addAutoCorrect (dlgorigword , replacement());
         break;
     case KS_STOP:
         testNextWord = false;
