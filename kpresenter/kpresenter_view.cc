@@ -329,9 +329,10 @@ KPresenterView::~KPresenterView()
 
     if(m_spell.kspell)
     {
-        KPTextObject * objtxt = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+        KPTextObject * objtxt = 0L;
         if(m_spell.spellCurrTextObjNum !=-1)
         {
+            objtxt =m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
             Q_ASSERT( objtxt );
             if ( objtxt )
                 objtxt->removeHighlight();
@@ -4172,10 +4173,14 @@ void KPresenterView::spellCheckerCorrected( QString old, QString corr, unsigned 
 
 void KPresenterView::spellCheckerDone( const QString & )
 {
-    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
-    Q_ASSERT( textobj );
-    if ( textobj )
-        textobj->removeHighlight();
+    KPTextObject * textobj = 0L;
+    if(m_spell.spellCurrTextObjNum!=-1 )
+    {
+        textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+        Q_ASSERT( textobj );
+        if ( textobj )
+            textobj->removeHighlight();
+    }
 
     int result = m_spell.kspell->dlgResult();
 
@@ -4214,9 +4219,10 @@ void KPresenterView::spellCheckerFinished()
     {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
-    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+    KPTextObject * textobj = 0L;
     if( m_spell.spellCurrTextObjNum!=-1 )
     {
+        textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
         Q_ASSERT( textobj );
         if ( textobj )
             textobj->removeHighlight();
