@@ -3429,11 +3429,15 @@ void KWDocument::addIgnoreWordAll( const QString & word)
 {
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
+    m_bgSpellCheck->addIgnoreWordAll( word );
+
 }
 
 void KWDocument::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
+    m_bgSpellCheck->clearIgnoreWordAll();
+
 }
 
 
