@@ -600,6 +600,11 @@ KoMainWindow * KoView::shell() const
     return dynamic_cast<KoMainWindow *>( topLevelWidget() );
 }
 
+KMainWindow * KoView::mainWindow() const
+{
+    return dynamic_cast<KMainWindow *>( topLevelWidget() );
+}
+
 KStatusBar * KoView::statusBar() const
 {
     KoMainWindow *mw = shell();

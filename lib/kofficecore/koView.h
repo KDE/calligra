@@ -31,6 +31,7 @@ class KActionCollection;
 class QCustomEvent;
 class KoDocument;
 class KoMainWindow;
+class KMainWindow;
 class KoViewPrivate;
 class KoViewChild;
 class KoFrame;
@@ -260,14 +261,20 @@ public:
 
   /**
    * @return the KoMainWindow in which this view is currently.
-   * NOTE: this could be 0L, if the main window isn't a koffice main window.
+   * WARNING: this could be 0L, if the main window isn't a koffice main window.
    * (e.g. it can be any KParts application).
    */
   KoMainWindow * shell() const;
 
   /**
+   * @return the KMainWindow in which this view is currently.
+   * This one should never return 0L, in a KDE app.
+   */
+  KMainWindow* mainWindow() const;
+
+  /**
    * @return the statusbar of the KoMainWindow in which this view is currently.
-   * NOTE: this could be 0L, if the main window isn't a koffice main window.
+   * WARNING: this could be 0L, if the main window isn't a koffice main window.
    * (e.g. it can be any KParts application).
    */
   KStatusBar * statusBar() const;
@@ -298,21 +305,21 @@ public:
 
    /**
     * Check to see if the view is currently in the middle of an operation which means
-    * that there will be no screen refreshes until a signal from the document hits 
+    * that there will be no screen refreshes until a signal from the document hits
     * the endOperation slot
     */
   bool isInOperation() const;
-   
+
 public slots:
 
     virtual void newView();
-   
+
     /*
      * Slot to allow code to signal the beginning of an operation where the screen should
      * not update until it is done (see @ref KoView::endOperation)
      */
     virtual void beginOperation();
-   
+
     /*
      * Slot to allow code to signal the end of an operation where the screen should
      * not have been updating.  So now it will update. (see @ref KoView::beginOperation)
@@ -373,7 +380,7 @@ private:
   KAction *actionNewView;
   virtual void setupGlobalActions( void );
   KoViewPrivate *d;
-   
+
 };
 
 class KoViewChild : public KoChild
