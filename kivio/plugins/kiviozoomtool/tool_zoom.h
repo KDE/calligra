@@ -35,18 +35,18 @@ class QCursor;
 class ZoomTool : public Tool
 { Q_OBJECT
 public:
-  ZoomTool( KivioView* view );
+  ZoomTool(KivioView* view);
   virtual ~ZoomTool();
 
-  virtual void processEvent( QEvent* e );
+  virtual void processEvent(QEvent*);
   virtual void activate();
   virtual void deactivate();
   virtual void configure();
 
-  virtual void activateGUI( KXMLGUIFactory* );
-  virtual void deactivateGUI( KXMLGUIFactory* );
+  virtual void activateGUI(KXMLGUIFactory*);
+  virtual void deactivateGUI(KXMLGUIFactory*);
 
-  void zoomRect( QRect );
+  void zoomRect(QRect);
 
 public slots:
   void zoomActivated();
@@ -62,7 +62,7 @@ public slots:
 
 protected:
   void buildMenu();
-  void showPopupMenu( QPoint );
+  void showPopupMenu(QPoint);
 
 signals:
   void operationDone();

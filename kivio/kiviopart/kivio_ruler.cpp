@@ -17,33 +17,34 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_ruler.h"
-
 #include <stdlib.h>
+#include <math.h>
 
 #define MARKER_WIDTH 1
 #define MARKER_HEIGHT 20
 
 #define RULER_SIZE 20
 
-KivioRuler::KivioRuler(Orientation o, MeasurementUnit mu, QWidget *parent, const char *name)
-: QFrame (parent, name)
+KivioRuler::KivioRuler(Orientation o, QWidget *parent, const char *name)
+: QFrame(parent, name, WRepaintNoErase, WResizeNoErase)
 {
-  setFrameStyle(Box | Raised);
+  setBackgroundMode(NoBackground);
+  setFrameStyle(Box | Sunken/*Raised*/);
   setLineWidth(1);
   setMidLineWidth(0);
   orientation = o;
-  munit = mu;
-  m_pZoom = 100;
+  munit = UnitPoint;
+  m_pZoom = 1.0;
   firstVisible = 0;
   buffer = 0L;
   currentPosition = -1;
 
   if (orientation == Horizontal) {
-    setFixedHeight (RULER_SIZE);
-    initMarker (MARKER_WIDTH, MARKER_HEIGHT);
+    setFixedHeight(RULER_SIZE);
+    initMarker(MARKER_WIDTH, MARKER_HEIGHT);
   } else {
-    setFixedWidth (RULER_SIZE);
-    initMarker (MARKER_HEIGHT, MARKER_WIDTH);
+    setFixedWidth(RULER_SIZE);
+    initMarker(MARKER_HEIGHT, MARKER_WIDTH);
   }
 
   const char* nums[] = {
@@ -73,7 +74,7 @@ KivioRuler::~KivioRuler()
 void KivioRuler::initMarker(int w, int h)
 {
   QPainter p;
-  marker = new QPixmap (w, h);
+  marker = new QPixmap(w,h);
   p.begin(marker);
   p.setPen(blue);
   p.eraseRect(0, 0, w, h);
@@ -109,13 +110,13 @@ int KivioRuler::unit()
 
 void KivioRuler::setUnit(int u)
 {
-  munit = (MeasurementUnit)u;
+  munit = u;
   drawKivioRuler();
   updatePointer(currentPosition,currentPosition);
   repaint();
 }
 
-void KivioRuler::setZoom(int zoom)
+void KivioRuler::setZoom(float zoom)
 {
   m_pZoom = zoom;
   recalculateSize(0L);
@@ -129,30 +130,21 @@ void KivioRuler::updatePointer(int x, int y )
   if (! buffer)
     return;
 
-  QRect r;
-  int pos = 0;
-
   if (orientation == Horizontal) {
     if (currentPosition != -1) {
-      pos = currentPosition;
-      r = QRect (pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
-      repaint(r);
+      repaint(QRect(currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT));
     }
     if (x != -1) {
-      pos = x;
-      bitBlt (this, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
-      currentPosition = pos;
+      bitBlt(this, x, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+      currentPosition = x;
     }
   } else {
     if (currentPosition != -1) {
-      pos = currentPosition;
-      r = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
-      repaint(r);
+      repaint(QRect (1, currentPosition, MARKER_HEIGHT, MARKER_WIDTH));
     }
     if (y != -1) {
-      pos = y;
-      bitBlt (this, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
-      currentPosition = pos;
+      bitBlt(this, 1, y, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+      currentPosition = y;
     }
   }
 }
@@ -174,18 +166,15 @@ void KivioRuler::paintEvent( QPaintEvent* e )
   if (!buffer)
     return;
 
-  const QRect& rect = e->rect ();
+  const QRect& rect = e->rect();
 
   if (orientation == Horizontal) {
-      bitBlt (this, rect.x (), rect.y (), buffer,
-	      rect.x (), rect.y (),
-	      rect.width (), rect.height ());
+      bitBlt(this, rect.topLeft(), buffer, rect);
   } else {
-      bitBlt (this, rect.x (), rect.y (), buffer,
-	      rect.x (), rect.y (),
-	      rect.width (), rect.height ());
+      bitBlt(this, rect.topLeft(), buffer, rect);
   }
-  QFrame::paintEvent (e);
+
+  QFrame::paintEvent(e);
 }
 
 void KivioRuler::drawKivioRuler()
@@ -205,7 +194,7 @@ void KivioRuler::drawKivioRuler()
   p.begin(buffer);
   p.setPen(QColor(0x70,0x70,0x70));
   p.setBackgroundColor(colorGroup().background());
-  buffer->fill(backgroundColor());
+  p.eraseRect(0, 0, buffer->width(), buffer->height());
 
   switch (munit) {
     case UnitPoint:
@@ -233,17 +222,17 @@ void KivioRuler::drawKivioRuler()
 
   if (orientation == Horizontal) {
     int pos = 0;
-    bool s1 = cvtUnitToPt(munit,st1)*(m_pZoom/100.0) > 3.0;
-    bool s2 = cvtUnitToPt(munit,st2)*(m_pZoom/100.0) > 3.0;
-    bool s3 = cvtUnitToPt(munit,st3)*(m_pZoom/100.0) > 3.0;
-    bool s4 = cvtUnitToPt(munit,st4)*(m_pZoom/100.0) > 3.0;
+    bool s1 = cvtUnitToPt(munit,st1)*m_pZoom > 3.0;
+    bool s2 = cvtUnitToPt(munit,st2)*m_pZoom > 3.0;
+    bool s3 = cvtUnitToPt(munit,st3)*m_pZoom > 3.0;
+    bool s4 = cvtUnitToPt(munit,st4)*m_pZoom > 3.0;
 
-    float cx = cvtPtToUnit(munit,7*4)/(m_pZoom/100.0);
+    float cx = cvtPtToUnit(munit,7*4)/m_pZoom;
     int step = ((int)(cx/(float)stt)+1)*stt;
-    int start = (int)(cvtPtToUnit(munit,firstVisible)/(m_pZoom/100.0));
+    int start = (int)(cvtPtToUnit(munit,firstVisible)/m_pZoom);
 
     do {
-      pos = (int)(cvtUnitToPt(munit,start)*(m_pZoom/100.0) - firstVisible);
+      pos = (int)(cvtUnitToPt(munit,start)*m_pZoom - firstVisible);
 
       if ( !s3 && s4 && start % st4 == 0 )
         p.drawLine(pos,RULER_SIZE-9,pos,RULER_SIZE);
@@ -267,17 +256,17 @@ void KivioRuler::drawKivioRuler()
 
   } else {
     int pos = 0;
-    bool s1 = cvtUnitToPt(munit,st1)*(m_pZoom/100.0) > 3.0;
-    bool s2 = cvtUnitToPt(munit,st2)*(m_pZoom/100.0) > 3.0;
-    bool s3 = cvtUnitToPt(munit,st3)*(m_pZoom/100.0) > 3.0;
-    bool s4 = cvtUnitToPt(munit,st4)*(m_pZoom/100.0) > 3.0;
+    bool s1 = cvtUnitToPt(munit,st1)*m_pZoom > 3.0;
+    bool s2 = cvtUnitToPt(munit,st2)*m_pZoom > 3.0;
+    bool s3 = cvtUnitToPt(munit,st3)*m_pZoom > 3.0;
+    bool s4 = cvtUnitToPt(munit,st4)*m_pZoom > 3.0;
 
-    float cx = cvtPtToUnit(munit,8*4)/(m_pZoom/100.0);
+    float cx = cvtPtToUnit(munit,8*4)/m_pZoom;
     int step = ((int)(cx/(float)stt)+1)*stt;
-    int start = (int)(cvtPtToUnit(munit,firstVisible)/(m_pZoom/100.0));
+    int start = (int)(cvtPtToUnit(munit,firstVisible)/m_pZoom);
 
     do {
-      pos = (int)(cvtUnitToPt(munit,start)*(m_pZoom/100.0) - firstVisible);
+      pos = (int)(cvtUnitToPt(munit,start)*m_pZoom - firstVisible);
 
       if ( !s3 && s4 && start % st4 == 0 )
         p.drawLine(RULER_SIZE-9,pos,RULER_SIZE,pos);
@@ -302,7 +291,7 @@ void KivioRuler::drawKivioRuler()
   p.end();
 }
 
-void KivioRuler::resizeEvent ( QResizeEvent* e )
+void KivioRuler::resizeEvent(QResizeEvent* e)
 {
   recalculateSize(e);
 }
@@ -327,7 +316,7 @@ void KivioRuler::hide()
     setFixedWidth(1);
 }
 
-void KivioRuler::drawNums( QPainter* p, int x, int y, QString& num,  bool orientationHoriz )
+void KivioRuler::drawNums(QPainter* p, int x, int y, QString& num,  bool orientationHoriz)
 {
   if (orientationHoriz)
     x -= 7;
@@ -343,4 +332,3 @@ void KivioRuler::drawNums( QPainter* p, int x, int y, QString& num,  bool orient
       y += 8;
   }
 }
-#include "kivio_ruler.moc"

@@ -17,12 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <stdio.h>
+#include <kdebug.h>
 #include "kivio_common.h"
 #include "kivio_fill_style.h"
 #include "kivio_line_style.h"
 #include "kivio_point.h"
 #include "kivio_shape.h"
-#include <kdebug.h>
 
 /**
  * Default constructor
@@ -89,7 +89,7 @@ bool KivioShape::loadXML( const QDomElement &e )
     if( m_shapeData.name() == "" ||
         m_shapeData.shapeType() == -1 )
     {
-        kdDebug() << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
+       kdDebug() << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted.";
         return false;
     }
 
@@ -136,7 +136,7 @@ QDomElement KivioShape::saveXML( QDomDocument &doc )
  *
  * FIXME: implement this
  */
-KivioShape *KivioShape::loadShapeArc( const QDomElement &/*e*/ )
+KivioShape *KivioShape::loadShapeArc( const QDomElement & )
 {
     return NULL;
 }
@@ -154,11 +154,11 @@ KivioShape *KivioShape::loadShapeClosedPath( const QDomElement &e )
     KivioPoint *pPoint = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstClosedPath;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
@@ -168,7 +168,7 @@ KivioShape *KivioShape::loadShapeClosedPath( const QDomElement &e )
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // The line array  is made up of pairs of points
         if( nodeName == "KivioPoint" )
         {
@@ -186,10 +186,10 @@ KivioShape *KivioShape::loadShapeClosedPath( const QDomElement &e )
         {
             pShape->m_shapeData.m_pLineStyle->loadXML( node.toElement() );
         }
-
+    
         node = node.nextSibling();
     }
-
+        
     return pShape;
 }
 
@@ -206,11 +206,11 @@ KivioShape *KivioShape::loadShapeBezier( const QDomElement &e )
     KivioPoint *pPoint = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstBezier;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
@@ -220,7 +220,7 @@ KivioShape *KivioShape::loadShapeBezier( const QDomElement &e )
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // The line array  is made up of pairs of points
         if( nodeName == "KivioPoint" )
         {
@@ -229,7 +229,7 @@ KivioShape *KivioShape::loadShapeBezier( const QDomElement &e )
             pPoint->loadXML( node.toElement() );
             if( pPoint->pointType() != KivioPoint::kptBezier )
             {
-                kdDebug() << "KivioShape::loadShapeBezier() - Non-bezier point found.  Aborting shape." << endl;
+	       kdDebug() << "KivioShape::loadShapeBezier() - Non-bezier point found.  Aborting shape.";
                 delete pPoint;
                 delete pShape;
                 return NULL;
@@ -244,14 +244,14 @@ KivioShape *KivioShape::loadShapeBezier( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+    
     if( pShape->m_shapeData.m_pOriginalPointList->count() != 4 )
     {
-        kdDebug() << "KivioShape::loadShapeBezier() - Wrong number of points loaded, should be 4, shape aborted" << endl;
+       kdDebug() << "KivioShape::loadShapeBezier() - Wrong number of points loaded, should be 4, shape aborted";
         delete pShape;
         return NULL;
     }
-
+    
     return pShape;
 }
 
@@ -267,24 +267,24 @@ KivioShape *KivioShape::loadShapeEllipse( const QDomElement &e )
     KivioShape *pShape = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstEllipse;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
 
     pShape->m_shapeData.m_position.set( XmlReadFloat( e, "x", 0.0f ), XmlReadFloat( e, "y", 0.0f ) );
     pShape->m_shapeData.m_dimensions.set( XmlReadFloat( e, "w", 0.0f ), XmlReadFloat( e, "h", 0.0f ) );
-
+        
     // Iterate through the nodes loading the various items
     node = e.firstChild();
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         if( nodeName == "KivioFillStyle" )
         {
             pShape->m_shapeData.m_pFillStyle->loadXML( node.toElement() );
@@ -296,7 +296,7 @@ KivioShape *KivioShape::loadShapeEllipse( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+    
     return pShape;
 }
 
@@ -314,11 +314,11 @@ KivioShape *KivioShape::loadShapeLineArray( const QDomElement &e )
     QDomNode node;
     QString nodeName;
     QDomElement lineElement;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstLineArray;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
@@ -328,7 +328,7 @@ KivioShape *KivioShape::loadShapeLineArray( const QDomElement &e )
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // The line array  is made up of pairs of points
         if( nodeName == "Line" )
         {
@@ -365,11 +365,11 @@ KivioShape *KivioShape::loadShapeOpenPath( const QDomElement &e )
     KivioPoint *pPoint = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstOpenPath;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
@@ -379,7 +379,7 @@ KivioShape *KivioShape::loadShapeOpenPath( const QDomElement &e )
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // The line array  is made up of pairs of points
         if( nodeName == "KivioPoint" )
         {
@@ -396,7 +396,7 @@ KivioShape *KivioShape::loadShapeOpenPath( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+        
     return pShape;
 }
 
@@ -409,7 +409,7 @@ KivioShape *KivioShape::loadShapeOpenPath( const QDomElement &e )
  *
  * FIXME: Implement this
  */
-KivioShape *KivioShape::loadShapePie( const QDomElement &/*e*/ )
+KivioShape *KivioShape::loadShapePie( const QDomElement & )
 {
     return NULL;
 }
@@ -427,11 +427,11 @@ KivioShape *KivioShape::loadShapePolygon( const QDomElement &e )
     KivioPoint *pPoint = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstPolygon;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
@@ -441,7 +441,7 @@ KivioShape *KivioShape::loadShapePolygon( const QDomElement &e )
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // The polygon is made up of a series of points
         if( nodeName == "KivioPoint" )
         {
@@ -462,7 +462,7 @@ KivioShape *KivioShape::loadShapePolygon( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+    
     return pShape;
 }
 
@@ -479,11 +479,11 @@ KivioShape *KivioShape::loadShapePolyline( const QDomElement &e )
     KivioPoint *pPoint = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstPolyline;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
@@ -493,7 +493,7 @@ KivioShape *KivioShape::loadShapePolyline( const QDomElement &e )
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // The polygon is made up of a series of points
         if( nodeName == "KivioPoint" )
         {
@@ -510,7 +510,7 @@ KivioShape *KivioShape::loadShapePolyline( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+    
     return pShape;
 }
 
@@ -526,24 +526,24 @@ KivioShape *KivioShape::loadShapeRectangle( const QDomElement &e )
     KivioShape *pShape = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstRectangle;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
 
     pShape->m_shapeData.m_position.set( XmlReadFloat( e, "x", 0.0f ), XmlReadFloat( e, "y", 0.0f ) );
     pShape->m_shapeData.m_dimensions.set( XmlReadFloat( e, "w", 72.0f ), XmlReadFloat( e, "h", 72.0f ) );
-
+    
     // Iterate through the nodes loading the various items
     node = e.firstChild();
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // Read the fill style
         if( nodeName == "KivioFillStyle" )
         {
@@ -556,7 +556,7 @@ KivioShape *KivioShape::loadShapeRectangle( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+    
     return pShape;
 }
 
@@ -574,29 +574,29 @@ KivioShape *KivioShape::loadShapeRoundRectangle( const QDomElement &e )
     KivioPoint *pPoint = NULL;
     QDomNode node;
     QString nodeName;
-
+    
 
     // Create the new shape to load into
     pShape = new KivioShape();
-
+    
     // Load the type, name, and lineWidth properties
     pShape->m_shapeData.m_shapeType = KivioShapeData::kstRoundRectangle;
     pShape->m_shapeData.m_name = XmlReadString( e, "name", "" );
 
     pShape->m_shapeData.m_position.set( XmlReadFloat( e, "x", 0.0f ), XmlReadFloat( e, "y", 0.0f ) );
     pShape->m_shapeData.m_dimensions.set( XmlReadFloat( e, "w", 72.0f ), XmlReadFloat( e, "h", 72.0f ) );
-
+    
     // Read and store the radii of the curves
     pPoint = new KivioPoint(0.0f, 0.0f);
     pPoint->set( XmlReadFloat( e, "r1", 1.0f ), XmlReadFloat( e, "r2", 1.0f ) );
     pShape->m_shapeData.m_pOriginalPointList->append( pPoint );
-
+    
     // Iterate through the nodes loading the various items
     node = e.firstChild();
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-
+        
         // Read the fill style
         if( nodeName == "KivioFillStyle" )
         {
@@ -609,7 +609,7 @@ KivioShape *KivioShape::loadShapeRoundRectangle( const QDomElement &e )
 
         node = node.nextSibling();
     }
-
+    
     return pShape;
 }
 

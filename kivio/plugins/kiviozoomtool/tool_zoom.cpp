@@ -34,7 +34,7 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
-ZoomTool::ZoomTool( KivioView* view )
+ZoomTool::ZoomTool(KivioView* view)
 :Tool(view,"Zoom")
 {
   setSortNum(1);
@@ -95,7 +95,7 @@ ZoomTool::~ZoomTool()
   delete m_handCursor;
 }
 
-void ZoomTool::processEvent( QEvent* e )
+void ZoomTool::processEvent(QEvent* e)
 {
   if ( !m_bHandMode )
     switch (e->type()) {
@@ -128,14 +128,14 @@ void ZoomTool::processEvent( QEvent* e )
         }
         break;
       case QEvent::MouseButtonRelease:
-            m_pCanvas->endRectDraw();
+  	    m_pCanvas->endRectDraw();
         m_bDrawRubber = false;
         m_bLockKeyboard = false;
         zoomRect(m_pCanvas->rect());
         break;
       case QEvent::MouseMove:
-            if (m_bDrawRubber)
-            m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+  	    if (m_bDrawRubber)
+    	    m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
         break;
       default:
         break;
@@ -165,7 +165,7 @@ void ZoomTool::processEvent( QEvent* e )
     }
 }
 
-void ZoomTool::activateGUI( KXMLGUIFactory* factory )
+void ZoomTool::activateGUI(KXMLGUIFactory* factory)
 {
   m_pToolBar = (KToolBar*)factory->container("ZoomToolBar",this);
   if (m_pToolBar)
@@ -187,7 +187,7 @@ void ZoomTool::activate()
 
 void ZoomTool::deactivate()
 {
-  kdDebug() << "ZoomTool DeActivate" << endl;
+   kdDebug() << "ZoomTool DeActivate";
   if (m_pToolBar)
    m_pToolBar->hide();
 
@@ -260,15 +260,14 @@ void ZoomTool::zoomWidth()
 {
   setOverride();
 
-  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
-
   int cw = QMAX(10,m_pCanvas->width()-20);
+  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
   float w = cvtMmToPt(pl.mmWidth);
-  int zw = (int)(cw/w*100.0);
+  float z = cw/w;
 
   m_pCanvas->setUpdatesEnabled(false);
   m_pCanvas->centerPage();
-  m_pCanvas->setZoom(zw);
+  m_pCanvas->setZoom(z);
   m_pCanvas->setUpdatesEnabled(true);
 
   removeOverride();
@@ -278,16 +277,14 @@ void ZoomTool::zoomHeight()
 {
   setOverride();
 
-  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
-
   int ch = QMAX(10,m_pCanvas->height()-20);
+  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
   float h = cvtMmToPt(pl.mmHeight);
-
-  int zh = (int)(ch/h*100.0);
+  float zh = ch/h;
 
   m_pCanvas->setUpdatesEnabled(false);
-  m_pCanvas->centerPage();
   m_pCanvas->setZoom(zh);
+  m_pCanvas->centerPage();
   m_pCanvas->setUpdatesEnabled(true);
 
   removeOverride();
@@ -297,19 +294,18 @@ void ZoomTool::zoomPage()
 {
   setOverride();
 
-  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
-
   int cw = QMAX(10,m_pCanvas->width()-20);
   int ch = QMAX(10,m_pCanvas->height()-20);
+
+  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
   float w = cvtMmToPt(pl.mmWidth);
   float h = cvtMmToPt(pl.mmHeight);
 
-  int zw = (int)(cw/w*100.0);
-  int zh = (int)(ch/h*100.0);
+  float z = QMIN(cw/w,ch/h);
 
   m_pCanvas->setUpdatesEnabled(false);
   m_pCanvas->centerPage();
-  m_pCanvas->setZoom(QMIN(zw,zh));
+  m_pCanvas->setZoom(z);
   m_pCanvas->setUpdatesEnabled(true);
 
   removeOverride();
@@ -317,17 +313,17 @@ void ZoomTool::zoomPage()
 
 void ZoomTool::buildMenu()
 {
-    m_pMenu->insert( m_pPlus );
-    m_pMenu->insert( m_pMinus );
-    m_pMenu->popupMenu()->insertSeparator();
+  m_pMenu->insert( m_pPlus );
+  m_pMenu->insert( m_pMinus );
+  m_pMenu->popupMenu()->insertSeparator();
 
-    m_pMenu->insert( m_pZoomWidth );
-    m_pMenu->insert( m_pZoomHeight );
-    m_pMenu->insert( m_pZoomPage );
-    m_pMenu->popupMenu()->insertSeparator();
+  m_pMenu->insert( m_pZoomWidth );
+  m_pMenu->insert( m_pZoomHeight );
+  m_pMenu->insert( m_pZoomPage );
+  m_pMenu->popupMenu()->insertSeparator();
 
-    m_pMenu->insert( m_pZoomSelected );
-    m_pMenu->insert( m_pZoomAllObjects );
+  m_pMenu->insert( m_pZoomSelected );
+  m_pMenu->insert( m_pZoomAllObjects );
 }
 
 void ZoomTool::showPopupMenu( QPoint p )
@@ -355,7 +351,7 @@ void ZoomTool::zoomAllobjects()
   removeOverride();
 }
 
-void ZoomTool::zoomRect( QRect r )
+void ZoomTool::zoomRect(QRect r)
 {
   if (r.isEmpty()) {
     m_pCanvas->zoomIn(r.topLeft());
@@ -363,6 +359,5 @@ void ZoomTool::zoomRect( QRect r )
   }
 
   TKPoint p0 = m_pCanvas->mapFromScreen(r.topLeft());
-  m_pCanvas->setVisibleArea(KivioRect(p0.x, p0.y, r.width()*100/m_pCanvas->zoom(), r.height()*100/m_pCanvas->zoom()));
+  m_pCanvas->setVisibleArea(KivioRect(p0.x, p0.y, r.width()/m_pCanvas->zoom(), r.height()/m_pCanvas->zoom()));
 }
-#include "tool_zoom.moc"

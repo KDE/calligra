@@ -85,16 +85,16 @@ void TextTool::processEvent( QEvent* e )
 
 void TextTool::activate()
 {
-    kdDebug() << "TextTool activate" << endl;
+   kdDebug() << "TextTool activate";
     m_pCanvas->setCursor(*m_pTextCursor);
     m_mode = stmNone;
-
+    
     KivioPage *pPage =m_pView->activePage();
     KivioStencil *pStencil = pPage->selectedStencils()->first();
 
     if( !pStencil )
         return;
-
+    
     setStencilText();
 
     controller()->activateDefault();
@@ -140,29 +140,26 @@ void TextTool::text(QRect r)
     TKPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
     TKPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
-
-    float x, y, w, h;
-
     // Calculate the x,y position of the textion box
-    x = startPoint.x < releasePoint.x ? startPoint.x : releasePoint.x;
-    y = startPoint.y < releasePoint.y ? startPoint.y : releasePoint.y;
+    float x = startPoint.x < releasePoint.x ? startPoint.x : releasePoint.x;
+    float y = startPoint.y < releasePoint.y ? startPoint.y : releasePoint.y;
 
     // Calculate the w/h of the textion box
-    w = releasePoint.x - startPoint.x;
-    if( w < 0.0f )
-        w *= -1.0f;
+    float w = releasePoint.x - startPoint.x;
+    if( w < 0.0 )
+        w *= -1.0;
 
-    h = releasePoint.y - startPoint.y;
-    if( h < 0.0f )
-        h *= -1.0f;
+    float h = releasePoint.y - startPoint.y;
+    if( h < 0.0 )
+        h *= -1.0;
 
     KivioDoc* doc = m_pView->doc();
     KivioPage* page = m_pCanvas->activePage();
-
+    
     KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Text");
     if (!ss)
         return;
-
+        
     KivioStencil* stencil = ss->newStencil();
     stencil->setPosition(x,y);
     stencil->setDimensions(w,h);
@@ -170,11 +167,11 @@ void TextTool::text(QRect r)
     page->unselectAllStencils();
     page->addStencil(stencil);
     page->selectStencil(stencil);
-
+    
     doc->updateView(page,false);
 
     setStencilText();
-
+    
     if (stencil->text().isEmpty()) {
         page->deleteSelectedStencils();
         doc->updateView(page,false);
@@ -208,7 +205,7 @@ void TextTool::mouseMove( QMouseEvent * e )
         case stmDrawRubber:
             continueRubberBanding(e);
             break;
-
+        
         default:
             break;
     }
@@ -229,13 +226,13 @@ void TextTool::mouseRelease( QMouseEvent *e )
             endRubberBanding(e);
             break;
     }
-
-        m_mode = stmNone;
+	
+  	m_mode = stmNone;
 
     m_pCanvas->repaint();
 }
 
-void TextTool::endRubberBanding(QMouseEvent *)
+void TextTool::endRubberBanding(QMouseEvent *e)
 {
     // End the rubber-band drawing
     m_pCanvas->endRectDraw();
@@ -246,4 +243,3 @@ void TextTool::endRubberBanding(QMouseEvent *)
         text(m_pCanvas->rect());
     }
 }
-#include "tool_text.moc"

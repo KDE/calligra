@@ -102,6 +102,10 @@ KivioViewItem::KivioViewItem(QListView* parent, ViewItemData* d)
   update();
 }
 
+KivioViewItem::~KivioViewItem()
+{
+}
+
 void KivioViewItem::update()
 {
   setPixmap(0, data->isZoom ? BarIcon("zoom_enabled"):BarIcon("zoom_disabled"));
@@ -131,11 +135,11 @@ KivioViewManagerPanel::KivioViewManagerPanel(KivioView* view, QWidget* parent, c
   KToolBar* bar = new KToolBar(this);
   bar->setFullSize(true);
 
-  actNew = new KAction( i18n("Add current view"), "item_add", 0, this, SLOT(addItem()), this, "addViewItem" );
-  actDel = new KAction( i18n("Remove item"), "item_remove", 0, this, SLOT(removeItem()), this, "removeViewItem" );
-  actRename = new KAction( i18n("Rename item"), "item_rename", 0, this, SLOT(renameItem()), this, "renameViewItem" );
-  actUp = new KAction( i18n("Move item Up"), "up", 0, this, SLOT(upItem()), this, "upViewItem" );
-  actDown = new KAction( i18n("Move item Down"), "down", 0, this, SLOT(downItem()), this, "downViewItem" );
+  actNew = new KAction( i18n("Add current view"), "item_add", 0, this, SLOT(addItem()), this);
+  actDel = new KAction( i18n("Remove item"), "item_remove", 0, this, SLOT(removeItem()), this);
+  actRename = new KAction( i18n("Rename item"), "item_rename", 0, this, SLOT(renameItem()), this);
+  actUp = new KAction( i18n("Move item Up"), "up", 0, this, SLOT(upItem()), this);
+  actDown = new KAction( i18n("Move item Down"), "down", 0, this, SLOT(downItem()), this);
 
   actNew->plug(bar);
   actDel->plug(bar);
@@ -177,7 +181,7 @@ bool KivioViewManagerPanel::eventFilter(QObject* o, QEvent* ev)
 void KivioViewManagerPanel::addItem()
 {
   ViewItemData* d = new ViewItemData;
-  d->name = QString("%1-%2%").arg(m_pView->activePage()->pageName()).arg(m_pView->canvasWidget()->zoom());
+  d->name = QString("%1-%2%").arg(m_pView->activePage()->pageName()).arg((int)(m_pView->canvasWidget()->zoom()*100.1f));
   d->pageId = m_pView->activePage()->id();
   d->rect = m_pView->canvasWidget()->visibleArea();
   d->isZoom = true;
@@ -201,7 +205,7 @@ void KivioViewManagerPanel::renameItem()
   if (!i)
     return;
 
-  ViewItemRenameDialog* dlg = new ViewItemRenameDialog(this);
+  ViewItemRenameDialog* dlg = new ViewItemRenameDialog(i18n("Rename View Item"), i18n("View item name:"), this);
   dlg->setText(i->data->name);
 
   if( dlg->exec() == QDialog::Accepted )
@@ -216,7 +220,12 @@ void KivioViewManagerPanel::renameItem()
 void KivioViewManagerPanel::upItem()
 {
   QListViewItem* item = list->currentItem();
+  if (!item)
+    return;
+
   QListViewItem* above = item->itemAbove();
+  if (!above)
+    return;
 
   QString t = above->text(3);
   above->setText(3,item->text(3));
@@ -230,7 +239,12 @@ void KivioViewManagerPanel::upItem()
 void KivioViewManagerPanel::downItem()
 {
   QListViewItem* item = list->currentItem();
+  if (!item)
+    return;
+
   QListViewItem* below = item->itemBelow();
+  if (!below)
+    return;
 
   QString t = below->text(3);
   below->setText(3,item->text(3));
@@ -285,7 +299,6 @@ void KivioViewManagerPanel::itemAdd(ViewItemData* d)
   KivioViewItem* i = new KivioViewItem(list, d);
   list->sort();
   list->setCurrentItem(i);
-  updateButtons(i);
 }
 
 void KivioViewManagerPanel::itemRemoved(ViewItemData* d)
@@ -299,8 +312,6 @@ void KivioViewManagerPanel::itemRemoved(ViewItemData* d)
 
   if (item)
     delete item;
-
-  updateButtons(list->currentItem());
 }
 
 void KivioViewManagerPanel::itemChanged(ViewItemData* d)
@@ -327,4 +338,3 @@ void KivioViewManagerPanel::reset()
   updateButtons(list->currentItem());
 }
 
-#include "kivio_viewmanager_panel.moc"

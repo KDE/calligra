@@ -526,4 +526,3 @@ void TKToolBarButton::setIconMode( TK::IconMode m )
   modeChange();
   repaint();
 }
-#include "tktoolbarbutton.moc"

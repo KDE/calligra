@@ -66,7 +66,7 @@ int TKFloatSpinBoxAction::plug( QWidget* widget, int index )
   int id_ = KAction::getToolButtonID();
 
   TKFloatSpinBox* fsb = new TKFloatSpinBox();
-  connect(fsb,SIGNAL(valueChanged(double)),SLOT(slotActivated(double)));
+  connect(fsb,SIGNAL(valueChanged(float)),SLOT(slotActivated(float)));
 
   QWidget* base = createLayout(widget,fsb);
 
@@ -92,7 +92,7 @@ int TKFloatSpinBoxAction::plug( QWidget* widget, int index )
   return containerCount() - 1;
 }
 
-void TKFloatSpinBoxAction::slotActivated(double value)
+void TKFloatSpinBoxAction::slotActivated(float value)
 {
   if ( m_value == value )
     return;
@@ -128,7 +128,7 @@ void TKFloatSpinBoxAction::slotActivated(double value)
     }                                                                           \
   }
 
-void TKFloatSpinBoxAction::setValue(double value)
+void TKFloatSpinBoxAction::setValue(float value)
 {
   SETVALUE(m_value,setValue)
 }
@@ -149,19 +149,19 @@ void TKFloatSpinBoxAction::setWrapping( bool value )
   SETVALUE(m_wrapping,setWrapping)
 }
 
-void TKFloatSpinBoxAction::setMinValue( double value )
+void TKFloatSpinBoxAction::setMinValue( float value )
 {
   SETVALUE(m_minvalue,setMinValue)
   void updateLayout();
 }
 
-void TKFloatSpinBoxAction::setMaxValue( double value )
+void TKFloatSpinBoxAction::setMaxValue( float value )
 {
   SETVALUE(m_maxvalue,setMaxValue)
   void updateLayout();
 }
 
-void TKFloatSpinBoxAction::setLineStep( double value )
+void TKFloatSpinBoxAction::setLineStep( float value )
 {
   SETVALUE(m_linestep,setLineStep)
 }
@@ -204,24 +204,23 @@ TKUFloatSpinBoxAction::~TKUFloatSpinBoxAction()
 void TKUFloatSpinBoxAction::setUnit(int unit)
 {
   blockSignals(true);
-  setSuffix(unitToString((MeasurementUnit)unit));
-  double v = cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,m_value));
-  setMinValue( cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,m_minvalue)) );
-  setMaxValue( cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,m_maxvalue)) );
+  setSuffix(unitToString(unit));
+  float v = cvtPtToUnit(unit,cvtUnitToPt(m_unit,m_value));
+  setMinValue( cvtPtToUnit(unit,cvtUnitToPt(m_unit,m_minvalue)) );
+  setMaxValue( cvtPtToUnit(unit,cvtUnitToPt(m_unit,m_maxvalue)) );
   TKFloatSpinBoxAction::setValue( v );
 
-  m_unit = (MeasurementUnit)unit;
+  m_unit = unit;
   blockSignals(false);
 }
 
-double TKUFloatSpinBoxAction::value(int unit)
+float TKUFloatSpinBoxAction::value(int unit)
 {
-  return cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,m_value));
+  return cvtPtToUnit(unit,cvtUnitToPt(m_unit,m_value));
 }
 
-void TKUFloatSpinBoxAction::setValue(double value,int unit)
+void TKUFloatSpinBoxAction::setValue(float value,int unit)
 {
-  TKFloatSpinBoxAction::setValue( cvtPtToUnit(m_unit,cvtUnitToPt((MeasurementUnit)unit,value)) );
+  TKFloatSpinBoxAction::setValue( cvtPtToUnit(m_unit,cvtUnitToPt(unit,value)) );
 }
 
-#include "tkfloatspinboxaction.moc"

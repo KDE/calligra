@@ -232,4 +232,3 @@ void GuidesTwoPositionPage::slotSelectAllButton()
   m_pCanvas->updateGuides();
   updateListView(false);
 }
-#include "guides2page.moc"

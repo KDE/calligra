@@ -28,6 +28,7 @@
 #include "kivio_shape.h"
 #include "kivio_shape_data.h"
 #include "kivio_sml_stencil.h"
+#include "kivio_sml_stencil_spawner.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_stencil_spawner_set.h"
@@ -37,7 +38,6 @@
 #include <qbrush.h>
 #include <qcolor.h>
 #include <kdebug.h>
-
 #include <math.h>
 
 /**
@@ -57,8 +57,8 @@ KivioSMLStencil::KivioSMLStencil()
     m_pConnectorTargets = new QList<KivioConnectorTarget>;
     m_pConnectorTargets->setAutoDelete(true);
 
-    m_pOriginalConnectorTargets = new QList<KivioConnectorTarget>;
-    m_pOriginalConnectorTargets->setAutoDelete(true);
+//    m_pOriginalConnectorTargets = new QList<KivioConnectorTarget>;
+//    m_pOriginalConnectorTargets->setAutoDelete(true);
 }
 
 
@@ -80,12 +80,12 @@ KivioSMLStencil::~KivioSMLStencil()
         delete m_pConnectorTargets;
         m_pConnectorTargets = NULL;
     }
-
-    if( m_pOriginalConnectorTargets )
-    {
-        delete m_pOriginalConnectorTargets;
-        m_pOriginalConnectorTargets = NULL;
-    }
+    
+//    if( m_pOriginalConnectorTargets )
+//    {
+//        delete m_pOriginalConnectorTargets;
+//        m_pOriginalConnectorTargets = NULL;
+//    }
 
     m_pSubSelection = NULL;
 }
@@ -142,20 +142,20 @@ void KivioSMLStencil::loadConnectorTargetListXML( const QDomElement &e )
     QDomElement ele;
     QString nodeName;
     KivioConnectorTarget *pTarget;
-
+    
     pTarget = m_pConnectorTargets->first();
     node = e.firstChild();
     while( !node.isNull() && pTarget)
     {
         nodeName = node.nodeName();
         ele = node.toElement();
-
+        
         if( nodeName == "KivioConnectorTarget" )
         {
             pTarget->loadXML( ele );
         }
 
-        pTarget = m_pConnectorTargets->next();
+        pTarget = m_pConnectorTargets->next();    
         node = node.nextSibling();
     }
 }
@@ -191,7 +191,6 @@ KivioShape *KivioSMLStencil::locateShape( const QString &name )
  */
 QDomElement KivioSMLStencil::saveXML( QDomDocument &doc )
 {
-    kdDebug() << "+SAVE KivioSMLStencil" << endl;
     QDomElement e = doc.createElement("KivioSMLStencil");
 
     XmlWriteString( e, "title", m_pSpawner->info()->title() );
@@ -209,7 +208,7 @@ QDomElement KivioSMLStencil::saveXML( QDomDocument &doc )
     XmlWriteFloat( dimE, "w", m_w );
     XmlWriteFloat( dimE, "h", m_h );
     e.appendChild( dimE );
-
+    
     // Save the target list
     QDomElement clE = doc.createElement("KivioConnectorTargetList");
     QDomElement targetE;
@@ -218,7 +217,7 @@ QDomElement KivioSMLStencil::saveXML( QDomDocument &doc )
     {
         targetE = pTarget->saveXML( doc );
         clE.appendChild( targetE );
-
+    
         pTarget = m_pConnectorTargets->next();
     }
     e.appendChild( clE );
@@ -268,14 +267,15 @@ KivioStencil *KivioSMLStencil::duplicate()
 
     // Copy the Connector Targets
     KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
-    KivioConnectorTarget *pOriginal = m_pOriginalConnectorTargets->first();
-    while( pTarget && pOriginal )
+//    KivioConnectorTarget *pOriginal = pOriginalConnectorTargets->first();
+    while( pTarget ) //&& pOriginal )
     {
         pNewStencil->m_pConnectorTargets->append( pTarget->duplicate() );
-        pNewStencil->m_pOriginalConnectorTargets->append( pOriginal->duplicate() );
+
+//        pNewStencil->m_pOriginalConnectorTargets->append( pOriginal->duplicate() );
 
         pTarget = m_pConnectorTargets->next();
-        pOriginal = m_pOriginalConnectorTargets->next();
+//        pOriginal = m_pOriginalConnectorTargets->next();
     }
 
     pReturn = pNewStencil;
@@ -354,7 +354,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
             case KivioShapeData::kstNone:
             default:
-                kdDebug() << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
+	       kdDebug() << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!";
                 break;
         }
 
@@ -411,18 +411,18 @@ void KivioSMLStencil::drawOutlineBezier( KivioShape *pShape, KivioIntraStencilDa
     float defHeight = m_pSpawner->defHeight();
 
 
-        painter = pData->painter;
-        pShapeData = pShape->shapeData();
+	painter = pData->painter;
+	pShapeData = pShape->shapeData();
 
-        KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
-        QList <KivioPoint> *pPointList = pShapeData->pointList();
-        QPointArray controlPoints( 4 );
+	KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
+	QList <KivioPoint> *pPointList = pShapeData->pointList();
+	QPointArray controlPoints( 4 );
 
 
-        pPoint = pPointList->first();
-        pPoint2 = pPointList->next();
-        pPoint3 = pPointList->next();
-        pPoint4 = pPointList->next();
+	pPoint = pPointList->first();
+	pPoint2 = pPointList->next();
+	pPoint3 = pPointList->next();
+	pPoint4 = pPointList->next();
 
 
     controlPoints.setPoint( 0, _xoff + ((pPoint->x() / defWidth)*m_w)*_scale, _yoff + ((pPoint->y()/defHeight)*m_h)*_scale );
@@ -811,14 +811,14 @@ void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
     QPixmap *targetPic;
     KivioPainter *painter;
     float x, y;
-
+    
     // We don't draw these if we are selected!!!
     if( isSelected() == true )
       return;
-
+    
     // Obtain the graphic used for KivioConnectorTargets
     targetPic = KivioConfig::config()->connectorTargetPixmap();
-
+    
 
     _scale = pData->scale;
     painter = pData->painter;
@@ -829,7 +829,7 @@ void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
     {
         x = pTarget->x() * _scale;
         y = pTarget->y() * _scale;
-
+        
         painter->drawPixmap( x-3, y-3, *targetPic );
 
         pTarget = m_pConnectorTargets->next();
@@ -881,7 +881,7 @@ void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData 
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            kdDebug() << "KivioSMLStenciL::drawArc() - gradient fill unimplemented" << endl;
+	   kdDebug() << "KivioSMLStenciL::drawArc() - gradient fill unimplemented";
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -899,18 +899,18 @@ void KivioSMLStencil::drawBezier( KivioShape *pShape, KivioIntraStencilData *pDa
     float defHeight = m_pSpawner->defHeight();
 
 
-        painter = pData->painter;
-        pShapeData = pShape->shapeData();
+	painter = pData->painter;
+	pShapeData = pShape->shapeData();
 
-        KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
-        QList <KivioPoint> *pPointList = pShapeData->pointList();
-        QPointArray controlPoints( 4 );
+	KivioPoint *pPoint, *pPoint2, *pPoint3, *pPoint4;
+	QList <KivioPoint> *pPointList = pShapeData->pointList();
+	QPointArray controlPoints( 4 );
 
 
-        pPoint = pPointList->first();
-        pPoint2 = pPointList->next();
-        pPoint3 = pPointList->next();
-        pPoint4 = pPointList->next();
+	pPoint = pPointList->first();
+	pPoint2 = pPointList->next();
+	pPoint3 = pPointList->next();
+	pPoint4 = pPointList->next();
 
 
     controlPoints.setPoint( 0, _xoff + ((pPoint->x() / defWidth)*m_w)*_scale, _yoff + ((pPoint->y()/defHeight)*m_h)*_scale );
@@ -1003,7 +1003,7 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            kdDebug() << "KivioSMLStencil::drawClosedPath() - gradient fill unimplemented" << endl;
+	   kdDebug() << "KivioSMLStencil::drawClosedPath() - gradient fill unimplemented";
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1056,7 +1056,7 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            kdDebug() << "KivioSMLStencil::drawEllipse() - gradient fill unimplemented" << endl;
+	   kdDebug() << "KivioSMLStencil::drawEllipse() - gradient fill unimplemented";
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1198,7 +1198,7 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            kdDebug() << "KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented" << endl;
+	   kdDebug() << "KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented";
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1259,7 +1259,7 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
             break;
 
         case KivioFillStyle::kcsGradient:               // Gradient
-            kdDebug() << "KivioSMLStenciL::drawPolygon() - gradient fill unimplemented" << endl;
+	   kdDebug() << "KivioSMLStenciL::drawPolygon() - gradient fill unimplemented";
             break;
 
         case KivioFillStyle::kcsPixmap:
@@ -1362,7 +1362,7 @@ void KivioSMLStencil::setFGColor( QColor c )
 }
 
 
-/**
+/** 
  * Set the bg color of this stencil.
  */
 void KivioSMLStencil::setBGColor( QColor c )
@@ -1476,7 +1476,7 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
  *
  * This function is called during loads, *ONLY* loads.
  */
-KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, int /*targetID*/ )
+KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, int targetID )
 {
     int id = p->targetId();
 
@@ -1486,7 +1486,7 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
         if( pTarget->id() == id )
         {
             p->setTarget(pTarget);
-
+            
             return pTarget;
         }
 
@@ -1512,8 +1512,9 @@ void KivioSMLStencil::updateGeometry()
     defWidth = m_pSpawner->defWidth();
     defHeight = m_pSpawner->defHeight();
 
+    QList<KivioConnectorTarget> *pOriginalTargets = ((KivioSMLStencilSpawner*)m_pSpawner)->targets();
     pTarget = m_pConnectorTargets->first();
-    pOriginal = m_pOriginalConnectorTargets->first();
+    pOriginal = pOriginalTargets->first();
 
     while( pTarget && pOriginal )
     {
@@ -1523,7 +1524,7 @@ void KivioSMLStencil::updateGeometry()
         pTarget->setPosition( _x, _y );
 
         pTarget = m_pConnectorTargets->next();
-        pOriginal = m_pOriginalConnectorTargets->next();
+        pOriginal = pOriginalTargets->next();
     }
 }
 
@@ -1734,7 +1735,7 @@ int KivioSMLStencil::generateIds( int nextAvailable )
         {
             // Set it's id to the next available id
             pTarget->setId( nextAvailable );
-
+            
             // Increment the next available id
             nextAvailable++;
         }
@@ -1743,10 +1744,10 @@ int KivioSMLStencil::generateIds( int nextAvailable )
             // Otherwise mark it as unused (-1)
             pTarget->setId( -1 );
         }
-
+    
         pTarget = m_pConnectorTargets->next();
     }
-
+    
     // Return the next availabe id
     return nextAvailable;
 }
@@ -1769,8 +1770,8 @@ KivioCollisionType KivioSMLStencil::checkForCollision( KivioPoint *pPoint, float
     }
 
     return kctBody;
-*/
-
+*/    
+    
     float px = pPoint->x();
     float py = pPoint->y();
 
@@ -1781,12 +1782,12 @@ KivioCollisionType KivioSMLStencil::checkForCollision( KivioPoint *pPoint, float
     {
         return kctNone;
     }
-
+    
     return kctBody;
     /*
 
     KivioShape *pShape;
-
+    
     pShape = m_pShapeList->last();
     while( pShape )
     {
@@ -1857,11 +1858,11 @@ KivioCollisionType KivioSMLStencil::checkForCollision( KivioPoint *pPoint, float
             default:
                 break;
         }
-
+    
         pShape = m_pShapeList->prev();
     }
 
-
+    
     return kctNone;
     */
 }
@@ -1918,7 +1919,7 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KivioPoint *pCh
     KivioShapeData *pShapeData;
     QList<KivioPoint> *pList;
     KivioPoint *pPoints;
-
+    
 
     pShapeData = pShape->shapeData();
 
@@ -1949,9 +1950,9 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KivioPoint *pCh
         delete [] pPoints;
         return true;
     }
-
+    
     delete [] pPoints;
-
+        
     return false;
 }
 
@@ -1973,4 +1974,3 @@ int KivioSMLStencil::resizeHandlePositions()
 {
     return KIVIO_RESIZE_HANDLE_POSITION_ALL;
 }
-

@@ -27,7 +27,6 @@
 #include <qcursor.h>
 #include <qvaluelist.h>
 #include <kdebug.h>
-#include <klocale.h>
 
 StencilBarDockManager::StencilBarDockManager( QWidget* parent, const char* name )
 : QWidget(parent,name)
@@ -91,7 +90,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
   switch (pos) {
     case OnDesktop:
       bar = new KivioStackBar(0L);
-      bar->setCaption( i18n("Stencil Sets") );
+      bar->setCaption("StencilSets");
       m_pTopLevelBars.append(bar);
       connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));
       connect(bar,SIGNAL(finishDragPage(DragBarButton*)),SLOT(slotFinishDragPage(DragBarButton*)));
@@ -266,7 +265,7 @@ void StencilBarDockManager::slotMoving()
   dragPos = OnDesktop;
 }
 
-void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget */*pPage*/, KivioStackBar *pBar )
+void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget *, KivioStackBar *pBar )
 {
   pBar->deletePageAndButton(pBtn);
 
@@ -291,11 +290,10 @@ void StencilBarDockManager::setDoc( KivioDoc *p )
 {
     if( m_pDoc )
     {
-        kdDebug() << "StencilBarDockManager::setDoc() - This should never be called twice - error!!" << endl;
+       kdDebug() << "StencilBarDockManager::setDoc() - This should never be called twice - error!!";
         return;
     }
     m_pDoc = p;
 
     connect(m_pDoc, SIGNAL(sig_deleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)), this, SLOT(slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* )));
 }
-#include "stencilbardockmanager.moc"

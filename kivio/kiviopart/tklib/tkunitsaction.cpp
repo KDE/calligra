@@ -33,10 +33,9 @@ TKUnitsAction::TKUnitsAction(QObject* parent, const char* name)
 : TKSelectAction(parent,name)
 {
   setItems(unitsLongNamesList());
-  setCurrentItem((int)UnitPoint);
+  setCurrentItem(UnitPoint);
 }
 
 TKUnitsAction::~TKUnitsAction()
 {
 }
-#include "tkunitsaction.moc"

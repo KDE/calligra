@@ -101,11 +101,11 @@ class KivioStencil
 {
 protected:
     // Dimensions, size
-    float m_x, m_y, m_w, m_h;
-
+    float m_x, m_y, m_w, m_h;    
+    
     // The spawner that created this stencil
-    KivioStencilSpawner *m_pSpawner;
-
+    KivioStencilSpawner *m_pSpawner;    
+    
 
     // Indicates if this stencil is selected
     bool m_selected;
@@ -113,23 +113,23 @@ protected:
     // The protection bits of the stencil
     QBitArray *m_pProtection;
     QBitArray *m_pCanProtect;
-
+    
 public:
     KivioStencil();
     virtual ~KivioStencil();
 
     virtual KivioStencil *duplicate() { return NULL; }
-
-
+    
+    
     virtual float x() { return m_x; }
     virtual void setX( float f ) { m_x=f; updateGeometry(); }
-
+    
     virtual float y() { return m_y; }
     virtual void setY( float f ) { m_y=f; updateGeometry(); }
-
+    
     virtual float w() { return m_w; }
     virtual void setW( float f ) { if( f > 0 ) { m_w=f;  updateGeometry(); } }
-
+    
     virtual float h() { return m_h; }
     virtual void setH( float f ) { if( f > 0 ) { m_h=f;  updateGeometry(); } }
 
@@ -141,7 +141,7 @@ public:
     virtual QColor fgColor() { return QColor(0,0,0); }
     virtual void setFGColor( QColor ) { ; }
 
-    virtual void setBGColor( QColor /*c*/ ) { ; }
+    virtual void setBGColor( QColor ) { ; }
     virtual QColor bgColor() { return QColor(0,0,0); }
 
     virtual KivioFillStyle *fillStyle() { return NULL; }
@@ -195,11 +195,11 @@ public:
 
     // This attempts to connect based on position
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );
-
+    
     // This attempts to connect based on a targetID.  This should  ***ONLY*** be used
     // right after a load
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
-
+    
     virtual void searchForConnections( KivioPage * );
 
     virtual int generateIds( int );

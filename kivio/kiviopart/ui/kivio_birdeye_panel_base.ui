@@ -75,6 +75,10 @@
                         <name>frameShape</name>
                         <enum>Box</enum>
                     </property>
+                    <property stdset="1">
+                        <name>mouseTracking</name>
+                        <bool>true</bool>
+                    </property>
                 </widget>
                 <widget row="1"  column="0" >
                     <class>QSlider</class>
@@ -154,14 +158,8 @@
     <connection>
         <sender>zoomBox</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>slider</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-    <connection>
-        <sender>slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>zoomBox</receiver>
-        <slot>setValue(int)</slot>
+        <receiver>KivioBirdEyePanelBase</receiver>
+        <slot>zoomChanged(int)</slot>
     </connection>
     <slot access="public">zoomChanged(int)</slot>
     <slot access="public">zoomMinus()</slot>

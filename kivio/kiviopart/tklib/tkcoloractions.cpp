@@ -436,4 +436,3 @@ void TKColorPanelButton::mouseReleaseEvent( QMouseEvent* )
 {
   emit selected(m_Color);
 }
-#include "tkcoloractions.moc"

@@ -78,7 +78,8 @@ public:
   KivioView* view() { return m_pView; }
   KivioDoc* doc() { return m_pDoc; }
 
-  int zoom();
+  float zoom();
+
   QSize actualSize();
 
   virtual bool event(QEvent*);
@@ -115,24 +116,26 @@ public:
 
   KivioRect visibleArea();
   void setVisibleArea(KivioRect, int margin = 0);
+  void setVisibleAreaByWidth(KivioRect, int margin = 0);
+  void setVisibleAreaByHeight(KivioRect, int margin = 0);
 
 signals:
-  void zoomChanges(int);
+  void zoomChanges(float);
   void visibleAreaChanged();
 
 public slots:
-  virtual void setUpdatesEnabled( bool );
+  virtual void setUpdatesEnabled(bool);
 
-  void toggleShowRulers( bool );
-  void setZoom( int );
+  void toggleShowRulers(bool);
+  void setZoom(float);
   void zoomIn(QPoint);
   void zoomOut(QPoint);
 
-  void scrollDx( int dx );
-  void scrollDy( int dy );
+  void scrollDx(int dx);
+  void scrollDy(int dy);
 
-  void scrollV( int value );
-  void scrollH( int value );
+  void scrollV(int value);
+  void scrollH(int value);
 
   void updateGuides();
 
@@ -192,7 +195,7 @@ private:
   int m_pScrollY;
   QPointArray gridLines;
 
-  int m_pZoom;
+  float m_pZoom;
 
   bool oldRectValid;
   QRect currRect;

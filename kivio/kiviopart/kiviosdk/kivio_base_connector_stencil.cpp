@@ -52,7 +52,6 @@
 
 #include <kdebug.h>
 
-
 /**
  * Default constructor.
  *
@@ -187,7 +186,7 @@ void KivioBaseConnectorStencil::setStartPoint( float /*x*/, float /*y*/ )
 }
 
 
-void KivioBaseConnectorStencil::setEndPoint( float /*x*/, float /*y*/ )
+void KivioBaseConnectorStencil::setEndPoint( float x, float y )
 {
     /* Derived class must implement this function */
     // m_end.setPosition( x, y, false );
@@ -282,7 +281,8 @@ void KivioBaseConnectorStencil::customDrag( KivioCustomDragData *pData )
 
     if( !p )
     {
-        kdDebug() << "KivioBaseConnectorStencil::customDrag() - KivioConnectorPoint id: " << id - (kctCustom+1) << ", not found" << endl;
+       kdDebug() << "KivioBaseConnectorStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n";
+       return;
     }
 
     p->setPosition( _x, _y, true );

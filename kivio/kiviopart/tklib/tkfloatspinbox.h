@@ -31,55 +31,55 @@ class TKFloatRangeControl
 {
 public:
   TKFloatRangeControl();
-  TKFloatRangeControl( double minValue, double maxValue, double lineStep, double pageStep, double value );
+  TKFloatRangeControl( float minValue, float maxValue, float lineStep, float pageStep, float value );
 
-  double value() const;
-  void setValue( double );
+  float value() const;
+  void setValue( float );
   void addPage();
   void subtractPage();
   void addLine();
   void subtractLine();
 
-  double minValue() const;
-  double maxValue() const;
-  void setRange( double minValue, double maxValue );
+  float minValue() const;
+  float maxValue() const;
+  void setRange( float minValue, float maxValue );
 
-  double lineStep() const;
-  double pageStep() const;
-  void setSteps( double line, double page );
+  float lineStep() const;
+  float pageStep() const;
+  void setSteps( float line, float page );
 
-  double bound( double ) const;
+  float bound( float ) const;
 
 protected:
-  void directSetValue( double val );
-  double prevValue() const;
+  void directSetValue( float val );
+  float prevValue() const;
 
   virtual void valueChange();
   virtual void rangeChange();
   virtual void stepChange();
 
 private:
-  double minVal, maxVal;
-  double line, page;
-  double val, prevVal;
+  float minVal, maxVal;
+  float line, page;
+  float val, prevVal;
 };
 
-inline double TKFloatRangeControl::value() const
+inline float TKFloatRangeControl::value() const
 { return val; }
 
-inline double TKFloatRangeControl::prevValue() const
+inline float TKFloatRangeControl::prevValue() const
 { return prevVal; }
 
-inline double TKFloatRangeControl::minValue() const
+inline float TKFloatRangeControl::minValue() const
 { return minVal; }
 
-inline double TKFloatRangeControl::maxValue() const
+inline float TKFloatRangeControl::maxValue() const
 { return maxVal; }
 
-inline double TKFloatRangeControl::lineStep() const
+inline float TKFloatRangeControl::lineStep() const
 { return line; }
 
-inline double TKFloatRangeControl::pageStep() const
+inline float TKFloatRangeControl::pageStep() const
 { return page; }
 
 /************************************************************************/
@@ -88,7 +88,7 @@ class TKFloatSpinBox: public QFrame, public TKFloatRangeControl
 { Q_OBJECT
 public:
   TKFloatSpinBox( QWidget* parent = 0, const char *name = 0 );
-  TKFloatSpinBox( double minValue, double maxValue, double step = 1.0, int decimal = 2, QWidget* parent = 0, const char* name = 0 );
+  TKFloatSpinBox( float minValue, float maxValue, float step = 1.0, int decimal = 2, QWidget* parent = 0, const char* name = 0 );
   ~TKFloatSpinBox();
 
   enum ButtonSymbols { UpDownArrows, PlusMinus };
@@ -105,10 +105,10 @@ public:
   ButtonSymbols buttonSymbols() const;
 
   int decimals() { return m_decimal; }
-  double minValue() const;
-  double maxValue() const;
-  double lineStep() const;
-  double value();
+  float minValue() const;
+  float maxValue() const;
+  float lineStep() const;
+  float value();
 
   void setValidator( const QValidator* );
   const QValidator* validator() const;
@@ -118,10 +118,10 @@ public:
 public slots:
   void setDecimals( int );
   void setWrapping( bool );
-  void setValue( double );
-  void setMinValue( double );
-  void setMaxValue( double );
-  void setLineStep( double );
+  void setValue( float );
+  void setMinValue( float );
+  void setMaxValue( float );
+  void setLineStep( float );
   void setPrefix( const QString &text );
   void setSuffix( const QString &text );
   void stepUp();
@@ -131,11 +131,11 @@ public slots:
   void setMinimumStyle(bool);
 
 signals:
-  void valueChanged( double );
+  void valueChanged( float );
 
 protected:
-  QString mapValueToText( double );
-  double mapTextToValue( bool* ok );
+  QString mapValueToText( float );
+  float mapTextToValue( bool* ok );
   QString currentValueText();
 
   void updateDisplay();
@@ -180,20 +180,19 @@ class TKUFloatSpinBox: public TKFloatSpinBox
 { Q_OBJECT
 public:
   TKUFloatSpinBox( QWidget* parent = 0, const char *name = 0 );
-  TKUFloatSpinBox( double minValue, double maxValue, double step = 1.0, int decimal = 2, QWidget* parent = 0, const char* name = 0 );
+  TKUFloatSpinBox( float minValue, float maxValue, float step = 1.0, int decimal = 2, QWidget* parent = 0, const char* name = 0 );
   ~TKUFloatSpinBox();
 
-  int unit() { return (int)m_unit; }
+  int unit() { return m_unit; }
 
-  double value(int unit = (int)UnitPoint);
-  void setValue(double,int unit = (int)UnitPoint);
+  float value(int unit = UnitPoint);
+  void setValue(float,int unit = UnitPoint);
 
 public slots:
   void setUnit(int);
 
 private:
-  MeasurementUnit m_unit;
-
+  int m_unit;
 };
 
 #endif

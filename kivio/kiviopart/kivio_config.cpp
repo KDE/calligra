@@ -20,7 +20,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-static const char * connectorTarget_xpm[] = {
+static char * connectorTarget_xpm[] = {
 "7 7 3 1",
 "       c None",
 ".      c #FFFFFF",
@@ -31,7 +31,7 @@ static const char * connectorTarget_xpm[] = {
 "  .+.  ",
 " .+.+. ",
 ".+. .+.",
-" .   . "};
+" .   . "}; 
 
 KivioConfig *KivioConfig::s_config=0L;
 
@@ -47,7 +47,7 @@ KivioConfig *KivioConfig::s_config=0L;
 KivioConfig::KivioConfig( const QString &fileName )
     : KSimpleConfig( fileName, false )
 {
-    kdDebug() << "KivioConfig - created" << endl;
+   kdDebug() << "KivioConfig - created";
 
     QColor *defColor = new QColor(0x4BD2FF/* 154, 250, 154 */);
     m_stencilBGType  = (KivioConfig::StencilBGType)readNumEntry( "StencilBackgroundType", (int)sbgtColor );
@@ -70,19 +70,20 @@ KivioConfig::KivioConfig( const QString &fileName )
                 m_pStencilBGPixmap = NULL;
             }
             m_stencilBGType = sbgtColor;
-            kdDebug() << "KivioConfig - Unable to load " << m_stencilBGFile << endl;
+            kdDebug() << "KivioConfig - Unable to load " << m_stencilBGFile;
         }
         else
         {
-            kdDebug() << "KivioConfig - loaded background" << endl;
+	   kdDebug() << "KivioConfig::KivioConfig() - loaded background";
         }
     }
-
+    
     m_pConnectorTargetPixmap = new QPixmap( (const char **)connectorTarget_xpm);
 
-    kdDebug() << "KivioConfig - StencilBackgroundType: " << m_stencilBGType << endl;
-    kdDebug() << "KivioConfig - StencilBackgroundFile: " << m_stencilBGFile << endl;
-    kdDebug() << "KivioConfig - StencilBackgroundColor: " << m_stencilBGColor.red() << " " << m_stencilBGColor.green() << " " << m_stencilBGColor.blue() << endl;
+    kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundType: " <<  m_stencilBGType;
+    kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundFile: " << m_stencilBGFile;
+    kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundColor: " << m_stencilBGColor.red()
+	      << " " << m_stencilBGColor.green() << " " <<  m_stencilBGColor.blue();
 
     writeConfig();
 }
@@ -101,13 +102,14 @@ KivioConfig::~KivioConfig()
         delete m_pStencilBGPixmap;
         m_pStencilBGPixmap = NULL;
     }
-
+    
     if( m_pConnectorTargetPixmap )
     {
         delete m_pConnectorTargetPixmap;
         m_pConnectorTargetPixmap = NULL;
     }
-    kdDebug() << "KivioConfig - deleted" << endl;
+
+    kdDebug() << "KivioConfig::~KivioConfig() - deleted";
 }
 
 
@@ -159,6 +161,3 @@ bool KivioConfig::readUserConfig()
 
     return true;
 }
-
-#include "kivio_config.moc"
-

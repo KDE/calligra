@@ -38,7 +38,7 @@ TKFloatSpinBox::TKFloatSpinBox( QWidget * parent , const char *name )
   initSpinBox();
 }
 
-TKFloatSpinBox::TKFloatSpinBox( double minValue, double maxValue, double step, int decimal, QWidget* parent, const char* name )
+TKFloatSpinBox::TKFloatSpinBox( float minValue, float maxValue, float step, int decimal, QWidget* parent, const char* name )
 : QFrame( parent, name ), TKFloatRangeControl( minValue, maxValue, step, step, minValue )
 {
   m_decimal = decimal;
@@ -247,7 +247,7 @@ void TKFloatSpinBox::arrangeWidgets()
 	}
 }
 
-void TKFloatSpinBox::setValue( double value )
+void TKFloatSpinBox::setValue( float value )
 {
   directSetValue( value );
   updateDisplay();
@@ -311,7 +311,7 @@ void TKFloatSpinBox::resizeEvent( QResizeEvent* )
 void TKFloatSpinBox::wheelEvent( QWheelEvent* e )
 {
   e->accept();
-  static double offset = 0;
+  static float offset = 0;
   static TKFloatSpinBox* offset_owner = 0;
   if (offset_owner != this) {
     offset_owner = this;
@@ -322,7 +322,7 @@ void TKFloatSpinBox::wheelEvent( QWheelEvent* e )
   if (QABS(offset) < 1)
     return;
 
-  double ioff = offset;
+  float ioff = offset;
   for (int i=0; i<QABS(ioff); i++)
     offset > 0 ? stepDown() : stepUp();
 
@@ -364,7 +364,7 @@ void TKFloatSpinBox::updateDisplay()
 void TKFloatSpinBox::interpretText()
 {
   bool ok = true;
-  double newVal = mapTextToValue( &ok );
+  float newVal = mapTextToValue( &ok );
   if ( ok )
     TKFloatRangeControl::setValue( newVal );
 
@@ -391,16 +391,16 @@ void TKFloatSpinBox::textChanged()
   edited = true;
 }
 
-QString TKFloatSpinBox::mapValueToText( double v )
+QString TKFloatSpinBox::mapValueToText( float v )
 {
   QString s = QString::number(v,'f',m_decimal);
   return s;
 }
 
-double TKFloatSpinBox::mapTextToValue( bool* ok )
+float TKFloatSpinBox::mapTextToValue( bool* ok )
 {
   QString s = text();
-  double newVal = s.toDouble( ok );
+  float newVal = s.toDouble( ok );
   if ( !(*ok) && !( !prefix() && !suffix() ) ) {
     s = cleanText();
     newVal = s.toDouble( ok );
@@ -522,37 +522,37 @@ void TKFloatSpinBox::updateButtonSymbols()
   up->setPixmap( upBm );
 }
 
-double TKFloatSpinBox::minValue() const
+float TKFloatSpinBox::minValue() const
 {
   return TKFloatRangeControl::minValue();
 }
 
-double TKFloatSpinBox::maxValue() const
+float TKFloatSpinBox::maxValue() const
 {
   return TKFloatRangeControl::maxValue();
 }
 
-void TKFloatSpinBox::setMinValue( double i )
+void TKFloatSpinBox::setMinValue( float i )
 {
   setRange( i, maxValue() );
 }
 
-void TKFloatSpinBox::setMaxValue( double i )
+void TKFloatSpinBox::setMaxValue( float i )
 {
   setRange( minValue(), i );
 }
 
-double TKFloatSpinBox::lineStep() const
+float TKFloatSpinBox::lineStep() const
 {
   return TKFloatRangeControl::lineStep();
 }
 
-void TKFloatSpinBox::setLineStep( double i )
+void TKFloatSpinBox::setLineStep( float i )
 {
   setSteps( i, pageStep() );
 }
 
-double TKFloatSpinBox::value()
+float TKFloatSpinBox::value()
 {
   if (edited) {
     edited = false;
@@ -572,7 +572,7 @@ TKFloatRangeControl::TKFloatRangeControl()
   val    = prevVal = 0.0;
 }
 
-TKFloatRangeControl::TKFloatRangeControl( double minValue, double maxValue, double lineStep, double pageStep, double value )
+TKFloatRangeControl::TKFloatRangeControl( float minValue, float maxValue, float lineStep, float pageStep, float value )
 {
   minVal = minValue;
   maxVal = maxValue;
@@ -581,14 +581,14 @@ TKFloatRangeControl::TKFloatRangeControl( double minValue, double maxValue, doub
   val    = prevVal = bound( value );
 }
 
-void TKFloatRangeControl::setValue(double value)
+void TKFloatRangeControl::setValue(float value)
 {
   directSetValue( value );
   if ( prevVal != val )
     valueChange();
 }
 
-void TKFloatRangeControl::directSetValue(double value)
+void TKFloatRangeControl::directSetValue(float value)
 {
   prevVal = val;
   val = bound( value );
@@ -620,7 +620,7 @@ void TKFloatRangeControl::subtractLine()
   setValue( value() - lineStep() );
 }
 
-void TKFloatRangeControl::setRange(double minValue, double maxValue)
+void TKFloatRangeControl::setRange(float minValue, float maxValue)
 {
   if ( minValue == minVal && maxValue == maxVal )
     return;
@@ -630,7 +630,7 @@ void TKFloatRangeControl::setRange(double minValue, double maxValue)
     minVal = minValue;
     maxVal = maxValue;
   }
-  double tmp = bound( val );
+  float tmp = bound( val );
   rangeChange();
   if ( tmp != val ) {
     prevVal = tmp;
@@ -639,7 +639,7 @@ void TKFloatRangeControl::setRange(double minValue, double maxValue)
   }
 }
 
-void TKFloatRangeControl::setSteps(double lineStep,double pageStep)
+void TKFloatRangeControl::setSteps(float lineStep,float pageStep)
 {
   if (lineStep != line || pageStep != page) {
     line = QABS(lineStep);
@@ -660,7 +660,7 @@ void TKFloatRangeControl::stepChange()
 {
 }
 
-double TKFloatRangeControl::bound(double v) const
+float TKFloatRangeControl::bound(float v) const
 {
   if ( v - minVal < 1.0e-05 )
     return minVal;
@@ -675,7 +675,7 @@ TKUFloatSpinBox::TKUFloatSpinBox( QWidget* parent, const char* name)
   setUnit((int)UnitPoint);
 }
 
-TKUFloatSpinBox::TKUFloatSpinBox( double minValue, double maxValue, double step, int decimal, QWidget* parent, const char* name)
+TKUFloatSpinBox::TKUFloatSpinBox( float minValue, float maxValue, float step, int decimal, QWidget* parent, const char* name)
 : TKFloatSpinBox(minValue,maxValue,step,decimal,parent,name)
 {
   setUnit((int)UnitPoint);
@@ -688,23 +688,22 @@ TKUFloatSpinBox::~TKUFloatSpinBox()
 void TKUFloatSpinBox::setUnit(int unit)
 {
   blockSignals(true);
-  setSuffix(unitToString((MeasurementUnit)unit));
-  double v = cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,TKFloatSpinBox::value()));
-  setMinValue( cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,minValue())) );
-  setMaxValue( cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,maxValue())) );
+  setSuffix(unitToString(unit));
+  float v = cvtPtToUnit(unit,cvtUnitToPt(m_unit,TKFloatSpinBox::value()));
+  setMinValue( cvtPtToUnit(unit,cvtUnitToPt(m_unit,minValue())) );
+  setMaxValue( cvtPtToUnit(unit,cvtUnitToPt(m_unit,maxValue())) );
   TKFloatSpinBox::setValue( v );
 
-  m_unit = (MeasurementUnit)unit;
+  m_unit = unit;
   blockSignals(false);
 }
 
-double TKUFloatSpinBox::value(int unit)
+float TKUFloatSpinBox::value(int unit)
 {
-  return cvtPtToUnit((MeasurementUnit)unit,cvtUnitToPt(m_unit,TKFloatSpinBox::value()));
+  return cvtPtToUnit(unit,cvtUnitToPt(m_unit,TKFloatSpinBox::value()));
 }
 
-void TKUFloatSpinBox::setValue(double value,int unit)
+void TKUFloatSpinBox::setValue(float value,int unit)
 {
-  TKFloatSpinBox::setValue( cvtPtToUnit(m_unit,cvtUnitToPt((MeasurementUnit)unit,value)) );
+  TKFloatSpinBox::setValue( cvtPtToUnit(m_unit,cvtUnitToPt(unit,value)) );
 }
-#include "tkfloatspinbox.moc"

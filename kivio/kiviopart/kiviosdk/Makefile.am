@@ -37,7 +37,8 @@ libkiviosdk_la_SOURCES = \
 		kivio_base_connector_stencil.cpp\
 		kivio_rect.cpp\
 		kivio_line_style.cpp\
-		kivio_text_style.cpp
+		kivio_text_style.cpp\
+		kivio_base_target_stencil.cpp
 EXTRA_DIST = \
 		kivio_common.cpp\
 		kivio_common.h\
@@ -92,7 +93,9 @@ EXTRA_DIST = \
 		kivio_line_style.cpp\
 		kivio_line_style.h\
 		kivio_text_style.cpp\
-		kivio_text_style.h
+		kivio_text_style.h\
+		kivio_base_target_stencil.cpp\
+		kivio_base_target_stencil.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

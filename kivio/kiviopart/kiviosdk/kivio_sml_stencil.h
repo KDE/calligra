@@ -40,7 +40,7 @@ protected:
     QList<KivioShape> *m_pShapeList;
     KivioShape *m_pSubSelection;
     QList<KivioConnectorTarget> *m_pConnectorTargets;
-    QList<KivioConnectorTarget> *m_pOriginalConnectorTargets;
+//    QList<KivioConnectorTarget> *m_pOriginalConnectorTargets;
 
     // Offsets and scale which get reused in between
     // various drawing routines.  To save time and

@@ -55,6 +55,7 @@ class KivioViewItem: public QListViewItem
 friend class KivioViewManagerPanel;
 public:
   KivioViewItem(QListView* parent, ViewItemData*);
+  ~KivioViewItem();
 
 protected:
   void update();

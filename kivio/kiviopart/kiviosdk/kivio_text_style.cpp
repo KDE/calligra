@@ -81,5 +81,4 @@ bool KivioTextStyle::loadXML( const QDomElement &e )
 
         innerNode = innerNode.nextSibling();
     }
-    return true;
 }

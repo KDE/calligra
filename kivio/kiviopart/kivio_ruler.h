@@ -30,13 +30,13 @@ class KivioRuler : public QFrame
 public:
   enum Orientation { Horizontal, Vertical };
 
-  KivioRuler(Orientation o, MeasurementUnit mu = UnitPoint, QWidget* parent=0, const char* name=0);
+  KivioRuler(Orientation, QWidget* parent=0, const char* name=0);
   ~KivioRuler();
 
   int unit();
 
 public slots:
-  void setZoom(int);
+  void setZoom(float);
   void updatePointer(int x, int y);
   void updateVisibleArea(int xpos, int ypos);
 
@@ -46,18 +46,18 @@ public slots:
   void show();
 
 protected:
-  void paintEvent(QPaintEvent *e);
-  void resizeEvent(QResizeEvent *e);
+  void paintEvent(QPaintEvent*);
+  void resizeEvent(QResizeEvent*);
 
-  void recalculateSize(QResizeEvent *e);
+  void recalculateSize(QResizeEvent*);
   void drawKivioRuler();
 
   void initMarker(int w, int h);
   void drawNums(QPainter*, int x, int y, QString& num, bool orientationHoriz);
 
 private:
-  int m_pZoom;
-  MeasurementUnit munit;
+  float m_pZoom;
+  int munit;
   Orientation orientation;
   QPixmap *buffer;
   int firstVisible;

@@ -88,7 +88,7 @@ KivioShapeData::KivioShapeData()
     m_name = "";
 //    m_lineWidth = 1.0f;
 
-    m_pTextData = NULL;
+    m_pTextData = NULL;    
 
     m_position.set( 0.0f, 0.0f );
     m_dimensions.set( 72.0f, 72.0f );
@@ -110,7 +110,7 @@ KivioShapeData::KivioShapeData( const KivioShapeData &source )
         m_pOriginalPointList->append( new KivioPoint( *pPoint ) );
         pPoint = source.m_pOriginalPointList->next();
     }
-
+    
     // Copy the fill/line styles
     m_pFillStyle = new KivioFillStyle( *(source.m_pFillStyle) );
     m_pLineStyle = new KivioLineStyle( *(source.m_pLineStyle) );
@@ -122,7 +122,7 @@ KivioShapeData::KivioShapeData( const KivioShapeData &source )
     m_shapeType = source.m_shapeType;
     m_name      = QString(source.m_name);
     //m_lineWidth = source.m_lineWidth;
-
+    
     // Copy the position and size
     source.m_position.copyInto( &m_position );
     source.m_dimensions.copyInto( &m_dimensions );
@@ -144,7 +144,7 @@ KivioShapeData::KivioShapeData( const KivioShapeData &source )
     }
     else
         m_pTextData = NULL;
-
+    
 }
 
 
@@ -155,7 +155,7 @@ KivioShapeData::~KivioShapeData()
         delete m_pOriginalPointList;
         m_pOriginalPointList = NULL;
     }
-
+    
     if( m_pFillStyle )
     {
         delete m_pFillStyle;
@@ -167,7 +167,7 @@ KivioShapeData::~KivioShapeData()
         delete m_pLineStyle;
         m_pLineStyle = NULL;
     }
-
+    
     if( m_pTextData )
     {
         delete m_pTextData;
@@ -182,7 +182,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
 
     if( !pTarget )
         return;
-
+    
     // Delete the old point list
     if( pTarget->m_pOriginalPointList )
     {
@@ -190,9 +190,9 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         pTarget->m_pOriginalPointList = NULL;
     }
 
-    // Create a new point list and copy it over
+    // Create a new point list and copy it over    
     pTarget->m_pOriginalPointList = new QList<KivioPoint>;
-    pTarget->m_pOriginalPointList->setAutoDelete(true);
+    pTarget->m_pOriginalPointList->setAutoDelete(true);  
     pPoint = m_pOriginalPointList->first();
     while( pPoint )
     {
@@ -206,16 +206,16 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
 
     // Copy the fg color
     //pTarget->m_fgColor = m_fgColor;
-
+    
     // Copy the rest
     pTarget->m_shapeType = m_shapeType;
     pTarget->m_name = QString(m_name);
     //pTarget->m_lineWidth = m_lineWidth;
-
+    
     m_position.copyInto( &(pTarget->m_position) );
     m_dimensions.copyInto( &(pTarget->m_dimensions) );
 
-
+    
     // If this is a textbox, allocate & copy
     if( m_shapeType == kstTextBox )
     {
@@ -223,14 +223,14 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         {
             pTarget->m_pTextData = new KivioTextStyle();
         }
-
+        
         if( m_pTextData )
         {
             m_pTextData->copyInto( pTarget->m_pTextData );
         }
         else
         {
-            kdDebug() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
+	   kdDebug() << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist.";
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);
@@ -259,7 +259,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
     QDomNode node;
     QDomElement ele;
 
-    kdDebug() << "-LOAD KivioShapeData::loadXML()" << endl;
+    kdDebug() << "-LOAD KivioShapeData::loadXML()";
 
     // Maintain backwards compatibility with the eariler betas. They saved
     // fg color and line style in this node.
@@ -275,18 +275,18 @@ bool KivioShapeData::loadXML( const QDomElement &e )
 
         if( nodeName == "KivioLineStyle" )
         {
-            kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioLineStyle" << endl;
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioLineStyle";
             m_pLineStyle->loadXML( ele );
         }
         else if( nodeName == "KivioFillStyle" )
         {
-            kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioFillStyle" << endl;
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioFillStyle";
             m_pFillStyle->loadXML( ele );
         }
         else if( nodeName == "KivioTextStyle" )
         {
-            kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText" << endl;
-
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText";
+            
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
             {
@@ -300,7 +300,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
         }
         else if( nodeName == "KivioText" )
         {
-            kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText - deprecated" << endl;
+	   kdDebug() << "-LOAD KivioShapeData::loadXML() - KivioText - deprecated";
 
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
@@ -348,7 +348,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
             } // end if m_shapeType==kstTextBox
             else
             {
-                kdDebug() << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!" << endl;
+	       kdDebug() << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!";
             }
         }
 
@@ -364,7 +364,6 @@ bool KivioShapeData::loadXML( const QDomElement &e )
  */
 QDomElement KivioShapeData::saveXML( QDomDocument &doc )
 {
-    kdDebug() << "+SAVE KivioShapeData" << endl;
     QDomElement e = doc.createElement("KivioShapeData");
 
     // FIXME: Do we need to save m_pOriginalPointList
@@ -405,7 +404,7 @@ QDomElement KivioShapeData::saveXML( QDomDocument &doc )
             XmlWriteInt( textE, "isHtml", m_pTextData->m_isHtml );
             XmlWriteInt( textE, "hTextAlign", m_pTextData->m_hTextAlign );
             XmlWriteInt( textE, "vTextAlign", m_pTextData->m_vTextAlign );
-
+        
             // Text font & color
             QDomElement innerTextE = doc.createElement("TextFont");
             XmlWriteString( innerTextE, "family", m_pTextData->m_textFont.family() );
@@ -416,7 +415,7 @@ QDomElement KivioShapeData::saveXML( QDomDocument &doc )
             XmlWriteInt( innerTextE, "underline", m_pTextData->m_textFont.underline() );
             XmlWriteInt( innerTextE, "strikeOut", m_pTextData->m_textFont.strikeOut() );
             XmlWriteInt( innerTextE, "fixedPitch", m_pTextData->m_textFont.fixedPitch() );
-
+      
             textE.appendChild( innerTextE );
             e.appendChild( textE );
         */
@@ -442,16 +441,16 @@ KivioShapeData::KivioShapeType KivioShapeData::shapeTypeFromString( const QStrin
     for( int i=0; i<numShapeInfo; i++ )
     {
         if( str.compare( shapeInfo[i].name )==0 )
-            return shapeInfo[i].type;
+            return shapeInfo[i].type; 
     }
-
+    
     return kstNone;
 }
 
 void KivioShapeData::setShapeType( KivioShapeType st )
 {
     m_shapeType = st;
-
+    
     // If it is a text box, make sure we have text data
     if( st == kstTextBox )
     {
@@ -473,7 +472,7 @@ QString KivioShapeData::text()
 {
     if( m_pTextData )
         return m_pTextData->text();
-
+        
     return QString("");
 }
 
@@ -489,7 +488,7 @@ bool KivioShapeData::isHtml() const
 {
     if( m_pTextData )
         return m_pTextData->isHtml();
-
+        
     return false;
 }
 
@@ -497,60 +496,60 @@ void KivioShapeData::setIsHtml( bool b )
 {
     if( m_pTextData )
         m_pTextData->setIsHtml(b);
-}
-
-int KivioShapeData::hTextAlign() const
-{
+}    
+    
+int KivioShapeData::hTextAlign() const 
+{ 
     if( m_pTextData )
         return m_pTextData->hTextAlign();
-
+        
     return Qt::AlignHCenter;
 }
-
-void KivioShapeData::setHTextAlign( int i )
-{
+        
+void KivioShapeData::setHTextAlign( int i ) 
+{ 
     if( m_pTextData )
         m_pTextData->setHTextAlign(i);
 }
-
+        
 int KivioShapeData::vTextAlign() const
-{
+{ 
     if( m_pTextData )
         return m_pTextData->vTextAlign();
-
+        
     return Qt::AlignVCenter;
 }
 
-void KivioShapeData::setVTextAlign( int i )
-{
+void KivioShapeData::setVTextAlign( int i ) 
+{ 
     if( m_pTextData )
         m_pTextData->setVTextAlign(i);
 }
-
-QFont KivioShapeData::textFont()
-{
+    
+QFont KivioShapeData::textFont() 
+{ 
     if( m_pTextData )
         return m_pTextData->font();
-
+        
     return QFont("Times");
 }
-
-void KivioShapeData::setTextFont( const QFont &f )
-{
+    
+void KivioShapeData::setTextFont( const QFont &f ) 
+{ 
     if( m_pTextData )
         m_pTextData->setFont(f);
 }
 
-QColor KivioShapeData::textColor()
-{
+QColor KivioShapeData::textColor() 
+{ 
     if( m_pTextData )
         return m_pTextData->color();
-
+        
     return QColor(0,0,0);
 }
-
-void KivioShapeData::setTextColor( QColor c )
-{
+    
+void KivioShapeData::setTextColor( QColor c ) 
+{ 
     if( m_pTextData )
         m_pTextData->setColor(c);
 }

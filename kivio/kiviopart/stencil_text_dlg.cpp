@@ -42,4 +42,3 @@ QString KivioStencilTextDlg::text()
     return m_text->text();
 }
 
-#include "stencil_text_dlg.moc"

@@ -22,6 +22,7 @@
 #include "kivio_point.h"
 
 #include <math.h>
+#include <kdebug.h>
 
 KivioArrowHead::KivioArrowHead()
 {

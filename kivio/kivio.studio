@@ -1,5 +1,5 @@
 [BookmarkGlobal]
-Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item line="241" projectName="kiviopart" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item line="1021" projectName="kiviopart" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="1054" projectName="kiviopart" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="437" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item projectName="kiviosdk" line="85" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
+Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item projectName="kiviopart" line="241" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1020" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1053" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="437" projectName="kiviopart" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item line="85" projectName="kiviosdk" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
 [Editor Options]
 ConfigFlags=1051
 TabWidth=4
@@ -23,7 +23,7 @@ AddToIncludePath=
 ConvenienceList=tools,tklib,kiviosdk,ui
 DebugInfo=true
 DefaultUsesLibrary=LIB_KDECORE,LIB_KDEUI,LIB_QT,LIB_X11
-File=main.cpp,kivio_canvas.cpp,kivio_canvas.h,kivio_doc.cpp,kivio_doc.h,kivio_factory.cpp,kivio_factory.h,kivio_shell.cpp,kivio_shell.h,kivio_tabbar.cpp,kivio_tabbar.h,kivio_view.cpp,kivio_view.h,kivio_map.cpp,kivio_map.h,kivio_page.cpp,kivio_page.h,kivio_dlg_pagename.cpp,kivio_dlg_pagename.h,kivio.desktop,x-kivio.desktop,kivio.rc,kivio_dlg_pageshow.cpp,kivio_dlg_pageshow.h,kivio_ruler.cpp,kivio_ruler.h,kivio_zoomaction.cpp,kivio_zoomaction.h,add_spawner_set_dlg.cpp,add_spawner_set_dlg.h,kivio_icon_view.cpp,kivio_icon_view.h,kivio_config.cpp,kivio_config.h,kivio_spawner_drag.cpp,kivio_spawner_drag.h,kivio_intra_stencil_data.cpp,kivio_intra_stencil_data.h,toolbarseparator.cpp,toolbarseparator.h,kivio_stackbar.cpp,kivio_stackbar.h,stencilbarbutton.cpp,stencilbarbutton.h,stencilbardockmanager.cpp,stencilbardockmanager.h,stencilbarmovemanager.cpp,stencilbarmovemanager.h,kivio_lineendsaction.cpp,kivio_lineendsaction.h,tooldockbase.cpp,tooldockbase.h,tooldockmanager.cpp,tooldockmanager.h,kivio_lineendspix.h,kivio_paragraph_action.h,kivio_paragraph_action.cpp,stencil_text_dlg.cpp,stencil_text_dlg.h,lo16-app-kivio.png,lo22-app-kivio.png,lo32-app-kivio.png,hi48-app-kivio.png,hi16-app-kivio.png,hi22-app-kivio.png,hi32-app-kivio.png,kivio_grid_data.cpp,kivio_grid_data.h,kivio_guidelines.cpp,kivio_guidelines.h,kivio_stencil_geometry_panel.cpp,kivio_stencil_geometry_panel.h,kivio_viewmanager_panel.cpp,kivio_viewmanager_panel.h,kivio_layer_panel.cpp,kivio_layer_panel.h,kivio_dlg_layername.cpp,kivio_dlg_layername.h
+File=main.cpp,kivio_canvas.cpp,kivio_canvas.h,kivio_doc.cpp,kivio_doc.h,kivio_factory.cpp,kivio_factory.h,kivio_shell.cpp,kivio_shell.h,kivio_tabbar.cpp,kivio_tabbar.h,kivio_view.cpp,kivio_view.h,kivio_map.cpp,kivio_map.h,kivio_page.cpp,kivio_page.h,kivio_dlg_pagename.cpp,kivio_dlg_pagename.h,kivio.desktop,x-kivio.desktop,kivio.rc,kivio_dlg_pageshow.cpp,kivio_dlg_pageshow.h,kivio_ruler.cpp,kivio_ruler.h,kivio_zoomaction.cpp,kivio_zoomaction.h,add_spawner_set_dlg.cpp,add_spawner_set_dlg.h,kivio_icon_view.cpp,kivio_icon_view.h,kivio_config.cpp,kivio_config.h,kivio_spawner_drag.cpp,kivio_spawner_drag.h,kivio_intra_stencil_data.cpp,kivio_intra_stencil_data.h,toolbarseparator.cpp,toolbarseparator.h,kivio_stackbar.cpp,kivio_stackbar.h,stencilbarbutton.cpp,stencilbarbutton.h,stencilbardockmanager.cpp,stencilbardockmanager.h,stencilbarmovemanager.cpp,stencilbarmovemanager.h,kivio_lineendsaction.cpp,kivio_lineendsaction.h,tooldockbase.cpp,tooldockbase.h,tooldockmanager.cpp,tooldockmanager.h,kivio_lineendspix.h,kivio_paragraph_action.h,kivio_paragraph_action.cpp,stencil_text_dlg.cpp,stencil_text_dlg.h,lo16-app-kivio.png,lo22-app-kivio.png,lo32-app-kivio.png,hi48-app-kivio.png,hi16-app-kivio.png,hi22-app-kivio.png,hi32-app-kivio.png,kivio_grid_data.cpp,kivio_grid_data.h,kivio_guidelines.cpp,kivio_guidelines.h,kivio_stencil_geometry_panel.cpp,kivio_stencil_geometry_panel.h,kivio_viewmanager_panel.cpp,kivio_viewmanager_panel.h
 Group=ui,kiviosdk,tklib,tools,pics,tiles,stencils
 InstallBinPath=
 InstallHeaderPath=
@@ -61,7 +61,7 @@ Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=false
 [kivio/kiviopart/pics]
-File=arrow_back.xpm,arrow_first.xpm,arrow_forward.xpm,arrow_last.xpm,view_grid.xpm,view_guidelines.xpm,view_margins.xpm,view_pageborder.xpm,view_ruler.xpm,add_stencil.xpm,remove_stencil.xpm,pencolor.xpm,textcolor.xpm,fillcolor.xpm,copy_stencil.xpm,paste_stencil.xpm,cut_stencil.xpm,group_stencils.xpm,ungroup_stencils.xpm,font_bold.xpm,font_italic.xpm,font_under.xpm,linewidth.xpm,open_stencilset.png,font_names.xpm,font_size.xpm,bring_stencil_to_front.xpm,send_stencil_to_back.xpm,guides_horizontal.xpm,guides_vertical.xpm,view_manager.xpm,page_disabled.xpm,page_enabled.xpm,zoom_disabled.xpm,zoom_enabled.xpm,item_rename.xpm,item_add.xpm,item_remove.xpm,view_page.xpm
+File=arrow_back.xpm,arrow_first.xpm,arrow_forward.xpm,arrow_last.xpm,view_grid.xpm,view_guidelines.xpm,view_margins.xpm,view_pageborder.xpm,view_ruler.xpm,add_stencil.xpm,remove_stencil.xpm,pencolor.xpm,textcolor.xpm,fillcolor.xpm,copy_stencil.xpm,paste_stencil.xpm,cut_stencil.xpm,group_stencils.xpm,ungroup_stencils.xpm,font_bold.xpm,font_italic.xpm,font_under.xpm,linewidth.xpm,open_stencilset.png,font_names.xpm,font_size.xpm,bring_stencil_to_front.xpm,send_stencil_to_back.xpm,guides_horizontal.xpm,guides_vertical.xpm,view_manager.xpm,page_disabled.xpm,page_enabled.xpm,zoom_disabled.xpm,zoom_enabled.xpm,item_rename.xpm,item_add.xpm,item_remove.xpm,view_page.xpm,layer_add.xpm,layer_editable.xpm,layer_noeditable.xpm,layer_noprint.xpm,layer_novisible.xpm,layer_print.xpm,layer_remove.xpm,layer_visible.xpm,layer_connect.xpm,layer_noconnect.xpm
 Group=
 InstallDataPath=$(kde_datadir)/kivio/icons/locolor/16x16/actions
 Memo=
@@ -71,7 +71,7 @@ Version=
 isDataInstallProcess=true
 [kivio/kiviopart/stencils]
 File=
-Group=Flowcharting
+Group=TestStencil1,Flowcharting
 InstallDataPath=$(kde_datadir)/kivio/stencils
 Memo=
 Type=8
@@ -92,8 +92,27 @@ InstallDataPath=$(kde_datadir)/kivio/stencils/Flowcharting/BasicFlowcharting
 Memo=
 TargetName=BasicFlowcharting
 Type=8
-Version=
+Version=1
 isDataInstallProcess=true
+[kivio/kiviopart/stencils/TestStencil1]
+AddCompileOptions=
+AddToIncludePath=
+ConvenienceList=
+DebugInfo=true
+File=TestStencil1.cpp,TestStencil1.h
+Group=
+InstallHeaderPath=
+InstallLibPath=$(kde_datadir)/kivio/stencils/Flowcharting
+Memo=
+NotInIncludePath=po,ui,tools,pics,tiles,stencils,Flowcharting,BasicFlowcharting,plugins,kivioconnectortool,straight_connector,kiviotexttool,kiviozoomtool,zoom_pics,kivioselecttool,select_pics
+Optimize=true
+RemoveSymbolTable=false
+ShowWarnings=true
+TargetName=TestStencil1
+Type=2
+Version=1
+isHeaderInstallProcess=false
+isLibInstallProcess=true
 [kivio/kiviopart/tiles]
 File=tile_scissors1.xpm,tile_skulls1.xpm,tile_yellow_swirl.xpm
 Group=
@@ -146,7 +165,7 @@ AddCompileOptions=
 AddToIncludePath=
 ConvenienceList=
 DebugInfo=false
-File=guidessetupdialogbase.ui,guidessetupdialog.cpp,guidessetupdialog.h,guides1pagebase.ui,guides2pagebase.ui,guides1page.cpp,guides1page.h,guides2page.cpp,guides2page.h,aligndialog.ui,gridsetupdialog.ui,kiviooptionsdialogbase.ui,kiviooptionsdialog.cpp,kiviooptionsdialog.h,enternamedialogbase.ui,viewitemrenamedialog.cpp,viewitemrenamedialog.h,kivio_birdeye_panel.cpp,kivio_birdeye_panel.h,kivio_birdeye_panel_base.ui
+File=guidessetupdialogbase.ui,guidessetupdialog.cpp,guidessetupdialog.h,guides1pagebase.ui,guides2pagebase.ui,guides1page.cpp,guides1page.h,guides2page.cpp,guides2page.h,aligndialog.ui,gridsetupdialog.ui,kiviooptionsdialogbase.ui,kiviooptionsdialog.cpp,kiviooptionsdialog.h,enternamedialogbase.ui,viewitemrenamedialog.cpp,viewitemrenamedialog.h,kivio_birdeye_panel.cpp,kivio_birdeye_panel.h,kivio_birdeye_panel_base.ui,kivio_layer_panel_base.ui,kivio_layer_panel.cpp,kivio_layer_panel.h
 Group=
 InstallHeaderPath=
 InstallLibPath=

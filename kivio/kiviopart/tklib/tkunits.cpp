@@ -34,7 +34,7 @@ const char* unitLongNames[] = {
   I18N_NOOP("milimetre"),
   I18N_NOOP("inch"),
   I18N_NOOP("pica"),
-  I18N_NOOP("centimetre"),
+  I18N_NOOP("cantimetre"),
   I18N_NOOP("didot"),
   I18N_NOOP("cicero")
 };
@@ -52,7 +52,7 @@ TKUnitsLabel::~TKUnitsLabel()
 void TKUnitsLabel::setUnit(int u)
 {
   m_unit = u;
-  setText(isLong ? unitToLongString((MeasurementUnit)m_unit) : unitToString((MeasurementUnit)m_unit));
+  setText(isLong ? unitToLongString(m_unit) : unitToString(m_unit));
 }
 
 void TKUnitsLabel::useLongNames(bool b)
@@ -89,60 +89,73 @@ void TKUnitsBox::setUnit(int u)
 /**********************************************************************************************************/
 
 /*
- * Functions for converting Point <-> Inch <-> Millimeter
- * <-> Pica <-> Centimetre  <-> Didot <-> Cicero
+ * Functions for converting
+ * Point <-> Inch <-> Millimeter<-> Pica <-> Centimetre  <-> Didot <-> Cicero
  * 1 Inch = 72 pt = 6 pica = 25.4 mm = 67.54151050 dd =  5.628459208 cc
  */
 
-float cvtPtToMm(float value) {
+float cvtPtToMm(float value)
+{
   return 25.4 * value / 72.0;
 }
 
-float cvtPtToCm(float value) {
+float cvtPtToCm(float value)
+{
   return 2.54 * value / 72.0;
 }
 
-float cvtPtToPica(float value) {
+float cvtPtToPica(float value)
+{
   return value / 12.0;
 }
 
-float cvtPicaToPt(float value) {
+float cvtPicaToPt(float value)
+{
   return value * 12.0;
 }
 
-float cvtPtToInch(float value) {
+float cvtPtToInch(float value)
+{
   return value / 72.0;
 }
 
-float cvtPtToDidot(float value) {
+float cvtPtToDidot(float value)
+{
   return value * 1238.0 / 1157.0; // 1157 dd = 1238 pt
 }
 
-float cvtPtToCicero(float value) {
+float cvtPtToCicero(float value)
+{
   return value * 1238.0 / (1157.0 * 12.0); // 1 cc = 12 dd
 }
 
-float cvtInchToPt(float value) {
+float cvtInchToPt(float value)
+{
   return value * 72.0;
 }
 
-float cvtMmToPt(float value) {
+float cvtMmToPt(float value)
+{
   return value / 25.4 * 72.0;
 }
 
-float cvtCmToPt(float value) {
+float cvtCmToPt(float value)
+{
   return value / 2.54 * 72.0;
 }
 
-float cvtDidotToPt(float value) {
+float cvtDidotToPt(float value)
+{
   return value * 1157.0 / 1238.0;
 }
 
-float cvtCiceroToPt(float value) {
+float cvtCiceroToPt(float value)
+{
   return value * (1157.0 * 12.0) / 1238.0;
 }
 
-float cvtPtToUnit(MeasurementUnit unit, float value) {
+float cvtPtToUnit(int unit, float value)
+{
   switch (unit) {
   case UnitMillimeter:
     return cvtPtToMm (value);
@@ -167,7 +180,8 @@ float cvtPtToUnit(MeasurementUnit unit, float value) {
   }
 }
 
-float cvtUnitToPt(MeasurementUnit unit, float value) {
+float cvtUnitToPt(int unit, float value)
+{
   switch (unit) {
   case UnitMillimeter:
     return cvtMmToPt (value);
@@ -192,80 +206,81 @@ float cvtUnitToPt(MeasurementUnit unit, float value) {
   }
 }
 
-QString unitToString(MeasurementUnit unit)
+QString unitToString(int unit)
 {
   return i18n(unitNames[unit]);
 }
 
-QString unitToLongString(MeasurementUnit unit)
+QString unitToLongString(int unit)
 {
   return i18n(unitLongNames[unit]);
 }
 
-void TKSize::set(double _w, double _h, MeasurementUnit _u )
+void TKSize::set(float _w, float _h, int u)
 {
   w = _w;
   h = _h;
-  unit = _u;
+  unit = u;
 }
 
-double TKSize::widthToPt()
+float TKSize::widthToPt()
 {
   return cvtUnitToPt(unit,w);
 }
 
-double TKSize::heightToPt()
+float TKSize::heightToPt()
 {
   return cvtUnitToPt(unit,h);
 }
 
-void TKSize::convertToPt( int zoom )
+void TKSize::convertToPt(float zoom)
 {
-  w = widthToPt()*zoom/100.0;
-  h = heightToPt()*zoom/100.0;
+  w = widthToPt()*zoom;
+  h = heightToPt()*zoom;
   unit = UnitPoint;
 }
 
-double TKSize::widthToUnit( MeasurementUnit _u )
+float TKSize::widthToUnit(int u)
 {
-  return cvtPtToUnit(_u,widthToPt());
+  return cvtPtToUnit(u,widthToPt());
 }
 
-double TKSize::heightToUnit( MeasurementUnit _u )
+float TKSize::heightToUnit(int u)
 {
-  return cvtPtToUnit(_u,heightToPt());
+  return cvtPtToUnit(u,heightToPt());
 }
 
-void TKPoint::set(double _x, double _y, MeasurementUnit _u )
+void TKPoint::set(float _x, float _y, int u)
 {
   x = _x;
   y = _y;
-  unit = _u;
+  unit = u;
 }
 
-double TKPoint::xToPt()
+float TKPoint::xToPt()
 {
   return cvtUnitToPt(unit,x);
 }
 
-double TKPoint::yToPt()
+float TKPoint::yToPt()
 {
   return cvtUnitToPt(unit,y);
 }
 
-double TKPoint::xToUnit( MeasurementUnit _u )
+float TKPoint::xToUnit(int u)
 {
-  return cvtPtToUnit(_u,xToPt());
+  return cvtPtToUnit(u,xToPt());
 }
 
-double TKPoint::yToUnit( MeasurementUnit _u )
+float TKPoint::yToUnit(int u)
 {
-  return cvtPtToUnit(_u,yToPt());
+  return cvtPtToUnit(u,yToPt());
 }
-void TKPoint::convertToPt( int zoom )
+
+void TKPoint::convertToPt(float zoom)
 {
-  x = xToPt()*zoom/100.0;
-  y = yToPt()*zoom/100.0;
+  x = xToPt()*zoom;
+  y = yToPt()*zoom;
   unit = UnitPoint;
 }
 
@@ -278,7 +293,7 @@ void TKSize::save(QDomElement& element, const QString& name)
 
 void TKSize::load(QDomElement& element, const QString& name, TKSize def)
 {
-  unit = (MeasurementUnit)element.attribute(name+"Unit",QString().setNum((int)def.unit)).toInt();
+  unit = element.attribute(name+"Unit",QString().setNum(def.unit)).toInt();
   if( element.hasAttribute(name+"Width") ) {
     w = def.w;
   } else {
@@ -301,7 +316,7 @@ void TKPoint::save(QDomElement& element, const QString& name)
 
 void TKPoint::load(QDomElement& element, const QString& name, TKPoint def)
 {
-  unit = (MeasurementUnit)element.attribute(name+"Unit",QString().setNum((int)def.unit)).toInt();
+  unit = element.attribute(name+"Unit",QString().setNum(def.unit)).toInt();
   if( element.hasAttribute(name+"X") ) {
     x = def.x;
   } else {
@@ -342,4 +357,3 @@ QStringList unitsNamesList()
 
   return items;
 }
-#include "tkunits.moc"

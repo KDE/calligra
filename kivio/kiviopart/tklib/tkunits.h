@@ -71,17 +71,17 @@ private:
 
 struct TKSize
 {
-  double w;
-  double h;
-  MeasurementUnit unit;
+  float w;
+  float h;
+  int unit;
 
-  void set( double _w, double _h, MeasurementUnit );
-  void convertToPt( int zoom );
-  double widthToPt();
-  double heightToPt();
+  void set( float _w, float _h, int);
+  void convertToPt(float zoom = 1.0f);
+  float widthToPt();
+  float heightToPt();
 
-  double widthToUnit( MeasurementUnit );
-  double heightToUnit( MeasurementUnit );
+  float widthToUnit(int);
+  float heightToUnit(int);
 
   void save(QDomElement&, const QString&);
   void load(QDomElement&, const QString&, TKSize def);
@@ -89,17 +89,17 @@ struct TKSize
 
 struct TKPoint
 {
-  double x;
-  double y;
-  MeasurementUnit unit;
+  float x;
+  float y;
+  int unit;
 
-  void set( double _x, double _y, MeasurementUnit _u );
-  void convertToPt( int zoom );
-  double xToPt();
-  double yToPt();
+  void set( float , float, int);
+  void convertToPt(float zoom = 1.0f);
+  float xToPt();
+  float yToPt();
 
-  double xToUnit( MeasurementUnit );
-  double yToUnit( MeasurementUnit );
+  float xToUnit(int);
+  float yToUnit(int);
 
   void save(QDomElement&, const QString&);
   void load(QDomElement&, const QString&, TKPoint def);
@@ -118,11 +118,11 @@ float cvtPicaToPt(float value);
 float cvtDidotToPt(float value);
 float cvtCiceroToPt(float value);
 
-float cvtPtToUnit(MeasurementUnit unit, float value);
-float cvtUnitToPt(MeasurementUnit unit, float value);
+float cvtPtToUnit(int, float value);
+float cvtUnitToPt(int, float value);
 
-QString unitToString(MeasurementUnit unit);
-QString unitToLongString(MeasurementUnit unit);
+QString unitToString(int);
+QString unitToLongString(int);
 
 QStringList unitsLongNamesList();
 QStringList unitsNamesList();

@@ -1,5 +1,5 @@
 /* XPM */
-static const char *magick[] = {
+static char *magick[] = {
 "16 16 6 1",
 "  c Gray0",
 ". c #939393",

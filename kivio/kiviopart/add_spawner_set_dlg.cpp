@@ -32,13 +32,13 @@
 #include <qdir.h>
 #include <qfile.h>
 
-static const char * default_plug_xpm[] = {
+static char * default_plug_xpm[] = {
 "16 16 5 1",
-"       c None",
-".      c #000000",
-"+      c #C4C7FF",
-"@      c #5961FF",
-"#      c #FFFFFF",
+" 	c None",
+".	c #000000",
+"+	c #C4C7FF",
+"@	c #5961FF",
+"#	c #FFFFFF",
 "                ",
 "                ",
 " ...            ",
@@ -57,7 +57,7 @@ static const char * default_plug_xpm[] = {
 "  ##############"};
 
 
-AddSpawnerSetAction::AddSpawnerSetAction( const QString& text, const QString& icon, int /*accel*/, QObject* parent, const char* name )
+AddSpawnerSetAction::AddSpawnerSetAction( const QString& text, const QString& icon, int accel, QObject* parent, const char* name )
 : TKAction(parent,name)
 {
   setText(text);
@@ -194,10 +194,10 @@ void AddSpawnerSetAction::slotActivated(int id)
 }
 /************************************************************************************************/
 
-AddSpawnerSetDlg::AddSpawnerSetDlg( QWidget *par, const char *name, QString /*rdir*/ )
+AddSpawnerSetDlg::AddSpawnerSetDlg( QWidget *par, const char *name, QString rdir )
     : QDialog( par, name, true )
 {
-    setCaption(i18n("Load Stencil Set"));
+    setCaption("Load Stencil Set");
 
     m_rootDir = "/";
 
@@ -210,7 +210,7 @@ AddSpawnerSetDlg::AddSpawnerSetDlg( QWidget *par, const char *name, QString /*rd
     QListView *pListView = new QListView(this, "spawner list");
     QObject::connect( pListView, SIGNAL(selectionChanged(QListViewItem*)),
                     this, SLOT(itemSelected(QListViewItem*)));
-    pListView->addColumn( i18n("Set Name"), 250 );
+    pListView->addColumn( "Set Name", 250 );
     pListView->setRootIsDecorated(true);
 
 
@@ -284,7 +284,7 @@ void AddSpawnerSetDlg::loadCollections( QListView *pListView, QString &rootDirSt
     }
 }
 
-void AddSpawnerSetDlg::loadSet( QListView */*pListView*/, QListViewItem *pParentItem, const QString &rootDirStr )
+void AddSpawnerSetDlg::loadSet( QListView *pListView, QListViewItem *pParentItem, const QString &rootDirStr )
 {
     QDir rootDir( rootDirStr );
     QListViewItem *pSetItem;
@@ -381,4 +381,3 @@ void AddSpawnerSetDlg::itemSelected( QListViewItem *pItem )
         m_ok->setEnabled(false);
     }
 }
-#include "add_spawner_set_dlg.moc"

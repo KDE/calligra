@@ -22,6 +22,7 @@
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qdom.h>
+#include <kdebug.h>
 
 class KivioGradient;
 

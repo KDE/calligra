@@ -39,28 +39,28 @@ public:
         kgtConicalAsymmetric,
         kgtLast
     } KivioGradientType;
-
+    
 protected:
     QList <QColor> *m_pColors;              // A list of the colors in the gradient
     QList <KivioPoint> *m_pPoints;         // A list of the points for each color
     KivioGradientType m_gradientType;       // The type of gradient
-
-
+    
+    
 public:
     KivioGradient();
     KivioGradient( const KivioGradient & );
     virtual ~KivioGradient();
-
+    
     void copyInto( KivioGradient *pTarget ) const;
-
+    
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
-
-
+    
+    
     QList<QColor> *colors() const { return m_pColors; }
-
+    
     QList<KivioPoint> *points() const { return m_pPoints; }
-
+    
     KivioGradientType gradientType() const { return m_gradientType; }
     void setGradientType( KivioGradientType t ) { m_gradientType=t; }
 };

@@ -26,7 +26,7 @@ GuidesListViewItem::~GuidesListViewItem()
 
 void GuidesListViewItem::setUnit(int u)
 {
-  QString s = QString::number(cvtPtToUnit((MeasurementUnit)u,d->position()),'f',3);
+  QString s = QString::number(cvtPtToUnit(u,d->position()),'f',3);
   if (twoColumn) {
     setText(1,d->orientation() == Qt::Vertical ? s:QString::null);
     setText(2,d->orientation() == Qt::Vertical ? QString::null:s);
@@ -48,4 +48,3 @@ GuidesSetupDialog::GuidesSetupDialog(KivioView* view, QWidget* parent, const cha
 GuidesSetupDialog::~GuidesSetupDialog()
 {
 }
-#include "guidessetupdialog.moc"

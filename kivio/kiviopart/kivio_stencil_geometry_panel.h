@@ -12,21 +12,21 @@ protected:
 
 public slots:
     void setUnit(int);
-    void setPosition( double, double );
-    void setSize( double, double );
+    void setPosition(float, float);
+    void setSize(float, float);
 
 protected slots:
-    void xChange( double );
-    void yChange( double );
-    void wChange( double );
-    void hChange( double );
+    void xChange(float);
+    void yChange(float);
+    void wChange(float);
+    void hChange(float);
 
 signals:
-    void positionChanged( double, double );
-    void sizeChanged( double, double );
+    void positionChanged(float, float);
+    void sizeChanged(float, float);
 
 public:
-    KivioStencilGeometryPanel( QWidget *parent );
+    KivioStencilGeometryPanel(QWidget* parent);
     virtual ~KivioStencilGeometryPanel();
 };
 

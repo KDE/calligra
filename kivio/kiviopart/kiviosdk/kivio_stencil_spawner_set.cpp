@@ -31,7 +31,7 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
 {
     m_dir = "";
     m_name = name.isEmpty() ? QString("Untitled") : name;
-
+    
     m_pSpawners = new QList<KivioStencilSpawner>;
     m_pSpawners->setAutoDelete(true);
 }
@@ -43,7 +43,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
         delete m_pSpawners;
         m_pSpawners = NULL;
     }
-    kdDebug() << "* StencilSpawnerSet " << m_name << " deleted\n" << endl;
+    kdDebug() << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted";
 }
 
 
@@ -75,7 +75,6 @@ bool KivioStencilSpawnerSet::loadXML( const QDomElement & )
  */
 QDomElement KivioStencilSpawnerSet::saveXML( QDomDocument &doc )
 {
-    kdDebug() << "+SAVE KivioStencilSpawnerSet" << endl;
     QDomElement spawnE = doc.createElement("KivioStencilSpawnerSet");
 
     XmlWriteString( spawnE, "desc", m_name );
@@ -116,16 +115,15 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     for (KivioStencilSpawner* ss = m_pSpawners->first(); ss; ss = m_pSpawners->next() )
         if (ss->fileName() == fileName)
             return ss;
-
+    
     KivioStencilSpawner *pSpawner;
-
+    
     if( fileName.contains( ".sml", false ) )
     {
         pSpawner = new KivioSMLStencilSpawner(this);
     }
     else if( fileName.contains( ".ksp", false ) )
     {
-        kdDebug() << "-LOAD KivioStencilSpawnerSet::loadDir() - Found a PLUGIN! " << fileName << endl;
         pSpawner = new KivioPluginStencilSpawner(this);
     }
     else
@@ -140,7 +138,7 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
         delete pSpawner;
         return 0;
     }
-
+    
     return pSpawner;
 }
 
@@ -174,14 +172,15 @@ KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& title)
     while( pSpawner )
     {
         // If the title matches, this is it!
-        kdDebug() << "FIND " << title << " - " << pSpawner->info()->title() << endl;
+//        debug(QString("FIND %1 - %2").arg(title).arg(pSpawner->info()->title()));
         if( pSpawner->info()->title() == title )
         {
             return pSpawner;
         }
-
+    
         pSpawner = m_pSpawners->next();
     }
-
+    
     return NULL;
 }
+

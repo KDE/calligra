@@ -31,41 +31,41 @@ void KivioOptionsDialog::apply()
 
 void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
 {
-  QCString pname = i->text(1).latin1(); // ### latin1() breaks unicode!!! (Simon)
+  QString pname = i->text(1);
   QWidget* page = 0;
 
-  page = (QWidget*)stack->child(pname);
+  page = (QWidget*)stack->child(pname.ascii());
   if (page) {
     stack->raiseWidget(page);
   } else {
 
     if (pname == "_page_") {
-      page = new GuidesSetupDialog(m_pView, page, pname);
+      page = new GuidesSetupDialog(m_pView, page, pname.ascii());
     }
 
     if (pname == "_pagesize_") {
-      page = new GuidesSetupDialog(m_pView, page, pname);
+      page = new GuidesSetupDialog(m_pView, page, pname.ascii());
     }
 
     if (pname == "_pagegrid_") {
-      page = new GridSetupDialog(page, pname);
+      page = new GridSetupDialog(page, pname.ascii());
 //      page = new GridSetupDialog(m_pView, page, pname);
     }
 
     if (pname == "_guides_") {
-      page = new GuidesSetupDialog(m_pView, page, pname);
+      page = new GuidesSetupDialog(m_pView, page, pname.ascii());
     }
 
     if (pname == "_allguides_") {
-      page = new GuidesTwoPositionPage(m_pView, page, pname);
+      page = new GuidesTwoPositionPage(m_pView, page, pname.ascii());
     }
 
     if (pname == "_guidehorizontal_") {
-      page = new GuidesOnePositionPage(Horizontal, m_pView, page, pname);
+      page = new GuidesOnePositionPage(Horizontal, m_pView, page, pname.ascii());
     }
 
     if (pname == "_guidevertical_") {
-      page = new GuidesOnePositionPage(Vertical, m_pView, page, pname);
+      page = new GuidesOnePositionPage(Vertical, m_pView, page, pname.ascii());
     }
 
     if (page)
@@ -84,4 +84,3 @@ void KivioOptionsDialog::slotOk()
   accept();
 }
 
-#include "kiviooptionsdialog.moc"

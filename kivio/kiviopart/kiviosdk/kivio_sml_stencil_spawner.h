@@ -20,6 +20,7 @@
 #define KIVIO_SML_STENCIL_SPAWNER_H
 
 #include <qdom.h>
+#include <qlist.h>
 #include <qstring.h>
 
 #include "kivio_stencil_spawner.h"
@@ -27,6 +28,7 @@
 class KivioStencilSpawnerSet;
 class KivioStencil;
 class KivioSMLStencil;
+class KivioConnectorTarget;
 class QPainter;
 class QPixmap;
 class QRect;
@@ -36,6 +38,9 @@ class KivioSMLStencilSpawner : public KivioStencilSpawner
 protected:
     KivioSMLStencil *m_pStencil;
     QString m_filename;
+
+    // Target list
+    QList<KivioConnectorTarget>*m_pTargets;
 
 protected:
     void loadShape( QDomNode & );
@@ -52,6 +57,8 @@ public:
     virtual QString &filename() { return m_filename; }
 
     virtual KivioStencil *newStencil();
+
+    QList <KivioConnectorTarget> *targets() { return m_pTargets; }
 };
 
 #endif

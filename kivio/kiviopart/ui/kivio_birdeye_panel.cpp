@@ -16,6 +16,7 @@
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qframe.h>
+#include <qcursor.h>
 
 #include <koPageLayoutDia.h>
 
@@ -24,11 +25,13 @@
 KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const char* name)
 : KivioBirdEyePanelBase(parent, name), m_pView(view), m_pCanvas(view->canvasWidget()), m_pDoc(view->doc())
 {
+  handlePress = false;
   m_buffer = new QPixmap();
   canvas->installEventFilter(this);
 
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*)), SLOT(slotUpdateView(KivioPage*)) );
-  connect( m_pCanvas, SIGNAL(zoomChanges(int)), SLOT(canvasZoomChanged(int)));
+  connect( m_pCanvas, SIGNAL(zoomChanges(float)), SLOT(canvasZoomChanged(float)));
+  connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateVisibleArea()));
 
   zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
   zoomOut = new KAction( i18n("Zoom Out"), "kivio_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
@@ -60,7 +63,8 @@ KivioBirdEyePanel::~KivioBirdEyePanel()
 
 void KivioBirdEyePanel::zoomChanged(int z)
 {
-  m_pCanvas->setZoom(z);
+//  debug(QString("zoomChanged %1 %2").arg(z).arg((float)(z/100.0)));
+  m_pCanvas->setZoom((float)(z/100.0));
 }
 
 void KivioBirdEyePanel::zoomMinus()
@@ -73,8 +77,14 @@ void KivioBirdEyePanel::zoomPlus()
   m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
 }
 
-void KivioBirdEyePanel::canvasZoomChanged(int z)
+void KivioBirdEyePanel::canvasZoomChanged(float z)
 {
+  int iz = (int)(z*100.1f);
+/*
+<<<<<<< kivio_birdeye_panel.cpp
+  int iz = (int)(z*100.1f);
+
+=======
   if(z<=5)
         zoomOut->setEnabled(false);
   else
@@ -84,10 +94,16 @@ void KivioBirdEyePanel::canvasZoomChanged(int z)
   else
         zoomIn->setEnabled(true);
 
+>>>>>>> 1.3
+*/
   slider->blockSignals(true);
-  slider->setMaxValue(QMAX(z,500));
-  slider->setValue(z);
-  zoomBox->setValue(z);
+  zoomBox->blockSignals(true);
+
+  zoomBox->setValue(iz);
+  slider->setMaxValue(QMAX(iz,500));
+  slider->setValue(iz);
+
+  zoomBox->blockSignals(false);
   slider->blockSignals(false);
 
   slotUpdateView(m_pView->activePage());
@@ -113,7 +129,26 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
   }
 
   if (o == canvas && ev->type() == QEvent::Paint) {
-    bitBlt(canvas,0,0,m_buffer);
+    updateVisibleArea();
+    return true;
+  }
+
+  if (o == canvas && ev->type() == QEvent::MouseMove) {
+    QMouseEvent* me = (QMouseEvent*)ev;
+    if (me->state() == LeftButton)
+      handleMouseMoveAction(me->pos());
+    else
+      handleMouseMove(me->pos());
+
+    lastPos = me->pos();
+    return true;
+  }
+
+  if (o == canvas && ev->type() == QEvent::MouseButtonPress) {
+    QMouseEvent* me = (QMouseEvent*)ev;
+    if (me->button() == LeftButton)
+      handleMousePress(me->pos());
+
     return true;
   }
 
@@ -122,7 +157,7 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
 void KivioBirdEyePanel::updateView()
 {
-  float zc = m_pCanvas->zoom()/100.0;
+  float zc = m_pCanvas->zoom();
   QSize s1 = canvas->size();
   QSize s2;
   if (m_bPageOnly) {
@@ -137,7 +172,8 @@ void KivioBirdEyePanel::updateView()
   float zx = s1.width()/(float)s2.width();
   float zy = s1.height()/(float)s2.height();
   float zxy = QMIN(zx,zy);
-  float zoom = zc*zxy;
+
+  zoom = zc*zxy;
 
   KoPageLayout pl = m_pView->activePage()->paperLayout();
   int pw = (int)(cvtMmToPt(pl.mmWidth)*zoom);
@@ -172,24 +208,7 @@ void KivioBirdEyePanel::updateView()
   m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, zoom);
   kpainter.stop();
 
-  bitBlt(canvas,0,0,m_buffer);
-
-  QPainter painter(this,this);
-  KivioRect vr = m_pCanvas->visibleArea();
-/*
-  QPoint p0 = actualPaperOrigin();
-
-  int pw = (int)actualPaperSizePt().w;
-  int ph = (int)actualPaperSizePt().h;
-  int px0 = (width()-pw)/2;
-  int py0 = (height()-ph)/2;
-*/
-
-  int x = (int)(vr.x()*zoom + px0);
-  int y = (int)(vr.y()*zoom + py0);
-  painter.setPen(red);
-  painter.drawRect(x, y, vr.w()*zoom, vr.h()*zoom);
-  painter.end();
+  updateVisibleArea();
 }
 
 void KivioBirdEyePanel::togglePageBorder(bool b)
@@ -224,4 +243,139 @@ void KivioBirdEyePanel::show()
   doAutoResizeMax();
 }
 
-#include "kivio_birdeye_panel.moc"
+void KivioBirdEyePanel::updateVisibleArea()
+{
+  bitBlt(canvas,0,0,m_buffer);
+
+  KivioRect vr = m_pCanvas->visibleArea();
+  QSize s1 = canvas->size();
+  KoPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(cvtMmToPt(pl.mmWidth)*zoom);
+  int ph = (int)(cvtMmToPt(pl.mmHeight)*zoom);
+  int px0 = (s1.width()-pw)/2;
+  int py0 = (s1.height()-ph)/2;
+
+  int x = (int)(vr.x()*zoom + px0);
+  int y = (int)(vr.y()*zoom + py0);
+  int w = (int)(vr.w()*zoom);
+  int h = (int)(vr.h()*zoom);
+
+  QPainter painter(canvas,canvas);
+  painter.setPen(red);
+  painter.drawRect(x, y, w, h);
+  painter.setPen(red.light());
+  painter.drawRect(x-1, y-1, w+2, h+2);
+  painter.end();
+
+  varea.setRect(x,y,w,h);
+}
+
+void KivioBirdEyePanel::handleMouseMove(QPoint p)
+{
+  handlePress = true;
+
+  QRect r1 = QRect(varea.x()-1, varea.y()-1, 3, varea.height()+2);
+  if (r1.contains(p)) {
+    canvas->setCursor(sizeHorCursor);
+    apos = AlignLeft;
+    return;
+  }
+
+  r1.moveBy(varea.width(),0);
+  if (r1.contains(p)) {
+    canvas->setCursor(sizeHorCursor);
+    apos = AlignRight;
+    return;
+  }
+
+  QRect r2 = QRect(varea.x()-1, varea.y()-1, varea.width()+2, 3);
+  if (r2.contains(p)) {
+    canvas->setCursor(sizeVerCursor);
+    apos = AlignTop;
+    return;
+  }
+
+  r2.moveBy(0, varea.height());
+  if (r2.contains(p)) {
+    canvas->setCursor(sizeVerCursor);
+    apos = AlignBottom;
+    return;
+  }
+
+  if (varea.contains(p)) {
+    canvas->setCursor(sizeAllCursor);
+    apos = AlignCenter;
+    return;
+  }
+
+  canvas->setCursor(arrowCursor);
+  handlePress = false;
+}
+
+void KivioBirdEyePanel::handleMouseMoveAction(QPoint p)
+{
+  if (!handlePress)
+    return;
+
+  p -= lastPos;
+
+  if (apos == AlignCenter) {
+    float z = m_pCanvas->zoom()/zoom;
+    m_pCanvas->setUpdatesEnabled(false);
+    m_pCanvas->scrollDx(-(int)(p.x()*z));
+    m_pCanvas->scrollDy(-(int)(p.y()*z));
+    m_pCanvas->setUpdatesEnabled(true);
+    return;
+  }
+
+  float dx = p.x() / zoom;
+  float dy = p.y() / zoom;
+
+  if (apos == AlignRight) {
+    KivioRect vr = m_pCanvas->visibleArea();
+    vr.setW(QMAX(10.0, vr.w() + dx));
+    m_pCanvas->setVisibleAreaByWidth(vr);
+    return;
+  }
+
+  if (apos == AlignLeft) {
+    KivioRect vr = m_pCanvas->visibleArea();
+    vr.setX(vr.x() + dx);
+    vr.setW(QMAX(10.0, vr.w() - dx));
+    m_pCanvas->setVisibleAreaByWidth(vr);
+    return;
+  }
+
+  if (apos == AlignTop) {
+    KivioRect vr = m_pCanvas->visibleArea();
+    vr.setY(vr.y() + dy);
+    vr.setH(QMAX(10.0 ,vr.h() - dy));
+    m_pCanvas->setVisibleAreaByHeight(vr);
+    return;
+  }
+
+  if (apos == AlignBottom) {
+    KivioRect vr = m_pCanvas->visibleArea();
+    vr.setH(QMAX(10.0 ,vr.h() + dy));
+    m_pCanvas->setVisibleAreaByHeight(vr);
+    return;
+  }
+}
+
+void KivioBirdEyePanel::handleMousePress(QPoint p)
+{
+  if (handlePress)
+    return;
+
+  QSize s1 = canvas->size();
+  KoPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(cvtMmToPt(pl.mmWidth)*zoom);
+  int ph = (int)(cvtMmToPt(pl.mmHeight)*zoom);
+  int px0 = (s1.width()-pw)/2;
+  int py0 = (s1.height()-ph)/2;
+
+  float x = (p.x() - px0) / zoom;
+  float y = (p.y() - py0) / zoom;
+
+  m_pCanvas->setViewCenterPoint(KivioPoint(x,y));
+}

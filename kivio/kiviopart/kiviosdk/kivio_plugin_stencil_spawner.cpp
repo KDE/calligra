@@ -53,21 +53,21 @@ bool KivioPluginStencilSpawner::load( const QString &f )
 
     if( strstr( f.ascii(), ".ksp" )==NULL )
     {
-        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a KSP file" << endl;
+       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a KSP file";
         return false;
     }
 
     m_handle = dlopen( f.ascii(), RTLD_NOW | RTLD_GLOBAL );
     if( !m_handle )
     {
-        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a dll" << endl;
+       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a dll";
         return false;
     }
 
     pNewStencil = pNewStencil = (NewStencilFunc)dlsym( m_handle, "NewStencil" );
     if( (error=dlerror())!=NULL )
     {
-        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for NewStencil(): " << error << endl;
+       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for NewStencil(): " << error;
         dlclose(m_handle);
         m_handle = NULL;
         return false;
@@ -76,7 +76,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
     pGetIcon = pGetIcon = (GetIconFunc)dlsym( m_handle, "GetIcon" );
     if( (error=dlerror())!=NULL )
     {
-        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error << endl;
+       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error;
         dlclose(m_handle);
         m_handle = NULL;
         return false;
@@ -85,7 +85,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
     pGetSpawnerInfo = (GetSpawnerInfoFunc)dlsym( m_handle, "GetSpawnerInfo" );
     if( (error=dlerror())!=NULL )
     {
-        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetSpawnerInfo(): " << error << endl;
+       kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error;
         dlclose(m_handle);
         m_handle = NULL;
         return false;
@@ -106,13 +106,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
 
 QDomElement KivioPluginStencilSpawner::saveXML( QDomDocument &doc )
 {
-    kdDebug() << "+SAVE KivioPluginStencilSpawner " << m_filename << endl;
     QDomElement spawnE = doc.createElement("KivioPluginStencilSpawner");
-
-    if( spawnE.isNull() )
-    {
-        kdDebug() << "SPAWN ELEMENT IS NULL" << endl;
-    }
 
     XmlWriteString( spawnE, "filename", m_filename );
 

@@ -155,8 +155,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
   // Ruler's
-  vRuler = new KivioRuler(KivioRuler::Vertical,UnitMillimeter,pRightSide);
-  hRuler = new KivioRuler(KivioRuler::Horizontal,UnitMillimeter,pRightSide);
+  vRuler = new KivioRuler(KivioRuler::Vertical,pRightSide);
+  hRuler = new KivioRuler(KivioRuler::Horizontal,pRightSide);
 
   // Tab Bar Button
   m_pTabBarFirst = newIconButton("arrow_first", false, pRightSide);
@@ -196,9 +196,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   canvasBase->addWidget(m_pCanvas,0);
   canvasBase->raiseWidget(m_pCanvas);
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
-  connect( m_pCanvas,
-           SIGNAL(zoomChanges(int)),
-           SLOT(canvasZoomChanged(int)));
+  connect(m_pCanvas, SIGNAL(zoomChanges(float)), SLOT(canvasZoomChanged(float)));
 
   QGridLayout* layout = new QGridLayout(pRightSide);
   layout->addWidget(hRuler,0,1);
@@ -256,8 +254,8 @@ void KivioView::createGeometryDock()
     ToolDockBase* stencilGeometryBase = toolDockManager()->createToolDock(m_pStencilGeometryPanel,i18n("Geometry"));
     stencilGeometryBase->move(0,0);
 
-    connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double,double)) );
-    connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double,double)) );
+    connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(float, float)), this, SLOT(slotChangeStencilPosition(float,float)) );
+    connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(float, float)), this, SLOT(slotChangeStencilSize(float,float)) );
     connect( m_pDoc, SIGNAL(unitsChanged(int)), m_pStencilGeometryPanel, SLOT(setUnit(int)) );
 
     KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), "stencil_geometry", 0, actionCollection(), "stencilGeometry" );
@@ -289,11 +287,11 @@ void KivioView::createBirdEyeDock()
 
 void KivioView::createLayerDock()
 {
-    m_pLayersPanel = new KivioLayerPanel( this, this, m_pCanvas );
+    m_pLayersPanel = new KivioLayerPanel( this, this);
     ToolDockBase* layersBase = toolDockManager()->createToolDock(m_pLayersPanel,i18n("Layers"));
     layersBase->move(0,0);
 
-    KToggleAction* showLayers = new KToggleAction( i18n("Layers Panel"), "layers_panel", CTRL+Key_L, actionCollection(), "layersPanel" );
+    KToggleAction* showLayers = new KToggleAction( i18n("Layers Manager"), CTRL+Key_L, actionCollection(), "layersPanel" );
     connect( showLayers, SIGNAL(toggled(bool)), layersBase, SLOT(makeVisible(bool)));
     connect( layersBase, SIGNAL(visibleChange(bool)), SLOT(toggleLayersPanel(bool)));
 }
@@ -430,7 +428,7 @@ void KivioView::initActions()
   toggleShowGuides(true);
   toggleSnapGuides(true);
 
-  viewZoom(m_pCanvas->zoom());
+  viewZoom((int)(m_pCanvas->zoom()*100.1f));
   m_unitAct->setCurrentItem(m_pDoc->units());
   m_unitAct->activate(m_pDoc->units());
 }
@@ -502,10 +500,7 @@ void KivioView::setActivePage( KivioPage* page )
 
   updateToolBars();
 
-#ifdef __GNUC__
-#warning TODO: make it update as signal/slot
-#endif
-  m_pLayersPanel->updateView();
+  m_pLayersPanel->reset();
 
   m_pDoc->updateView(m_pActivePage);
 }
@@ -530,7 +525,7 @@ void KivioView::changePage( const QString& name )
 
   KivioPage *t = m_pDoc->map()->findPage(name);
   if (!t)
-        return;
+  	return;
 
   setActivePage( t );
 }
@@ -618,7 +613,7 @@ void KivioView::slotUpdateView( KivioPage* page )
   m_pCanvas->update();
 }
 
-void KivioView::paintContent( KivioPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
+void KivioView::paintContent( KivioPainter&, const QRect&, bool)
 {
 //  m_pDoc->paintContent( painter, rect, transparent, m_pActivePage );
 //  temporary
@@ -701,15 +696,16 @@ void KivioView::print(QPrinter& ptr)
 //  return;
 }
 
-void KivioView::viewZoom( int zoom )
-{                                   
-  m_pCanvas->setZoom(zoom);
-  m_viewZoom->insertItem(m_pCanvas->zoom());
+
+void KivioView::viewZoom(int zoom)
+{
+  m_pCanvas->setZoom(((float)zoom)/100.0f);
+  m_viewZoom->insertItem((int)(m_pCanvas->zoom()*100.1f));
 }
 
-void KivioView::canvasZoomChanged( int zoom )
+void KivioView::canvasZoomChanged(float zoom)
 {
-  m_viewZoom->setEditZoom(zoom);
+  m_viewZoom->setEditZoom((int)(zoom*100.1f));
 }
 
 KivioPage* KivioView::activePage()
@@ -719,9 +715,6 @@ KivioPage* KivioView::activePage()
 
 void KivioView::togglePageBorders(bool b)
 {
-//  if ( b == m_bShowPageBorders )
-//    return;
-
   TOGGLE_ACTION("showPageBorders")->setChecked(b);
   m_bShowPageBorders = b;
 
@@ -730,9 +723,6 @@ void KivioView::togglePageBorders(bool b)
 
 void KivioView::togglePageMargins(bool b)
 {
-//  if ( b == m_bShowPageMargins )
-//    return;
-
   TOGGLE_ACTION("showPageMargins")->setChecked(b);
   m_bShowPageMargins = b;
 
@@ -741,9 +731,6 @@ void KivioView::togglePageMargins(bool b)
 
 void KivioView::toggleShowRulers(bool b)
 {
-  if ( b == m_bShowRulers )
-    return;
-
   TOGGLE_ACTION("showRulers")->setChecked(b);
   m_bShowRulers = b;
 
@@ -752,9 +739,6 @@ void KivioView::toggleShowRulers(bool b)
 
 void KivioView::toggleShowGuides(bool b)
 {
-  if ( b == m_bShowGuides )
-    return;
-
   TOGGLE_ACTION("showGuides")->setChecked(b);
   m_bShowGuides = b;
 
@@ -804,7 +788,7 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
     if( !pSpawner )
     {
-        kdDebug() << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
+       kdDebug() << "KivioView::addSpawnerToStackBar() - NULL pSpawner";
         return;
     }
 
@@ -877,8 +861,6 @@ void KivioView::groupStencils()
     m_pActivePage->groupSelectedStencils();
     KivioRect r = m_pActivePage->getRectForAllStencils();
 
-    kdDebug() << "RECT: " << r.x() << " " << r.y() << " "
-              << r.w() << " " << r.h() << endl;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1076,8 +1058,6 @@ void KivioView::slotSetStartArrow( int i )
         pStencil = m_pActivePage->selectedStencils()->next();
     }
     m_pDoc->updateView(m_pActivePage);
-
-    kdDebug() << "Selected start arrow " << i << endl;
 }
 
 void KivioView::slotSetEndArrow( int i )
@@ -1092,8 +1072,6 @@ void KivioView::slotSetEndArrow( int i )
         pStencil = m_pActivePage->selectedStencils()->next();
     }
     m_pDoc->updateView(m_pActivePage);
-
-    kdDebug() << "Selected end arrow " << i << endl;
 }
 
 void KivioView::slotSetStartArrowSize()
@@ -1102,7 +1080,7 @@ void KivioView::slotSetStartArrowSize()
     if (!pStencil)
       return;
 
-    double w,h;
+    float w,h;
     m_setStartArrowSize->size(w,h);
     while( pStencil )
     {
@@ -1119,7 +1097,7 @@ void KivioView::slotSetEndArrowSize()
     if (!pStencil)
       return;
 
-    double w,h;
+    float w,h;
     m_setEndArrowSize->size(w,h);
     while( pStencil )
     {
@@ -1188,7 +1166,7 @@ void KivioView::pasteStencil()
     m_pDoc->updateView(m_pActivePage);
 }
 
-void KivioView::slotChangeStencilSize(double newW, double newH)
+void KivioView::slotChangeStencilSize(float newW, float newH)
 {
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if ( pStencil )
@@ -1198,7 +1176,7 @@ void KivioView::slotChangeStencilSize(double newW, double newH)
     }
 }
 
-void KivioView::slotChangeStencilPosition(double newW, double newH)
+void KivioView::slotChangeStencilPosition(float newW, float newH)
 {
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if ( pStencil )
@@ -1263,8 +1241,8 @@ void KivioView::gridSetup()
     d.color = dlg->gridColor->color();
     d.isShow =  dlg->showGrid->isChecked();
     d.isSnap =  dlg->snapGrid->isChecked();
-    d.freq.set(dlg->freqX->value(unit),dlg->freqY->value(unit),(MeasurementUnit)unit);
-    d.snap.set(dlg->distX->value(unit),dlg->distY->value(unit),(MeasurementUnit)unit);
+    d.freq.set(dlg->freqX->value(unit),dlg->freqY->value(unit),unit);
+    d.snap.set(dlg->distX->value(unit),dlg->distY->value(unit),unit);
 
     m_pDoc->setGrid(d);
     updateToolBars();
@@ -1380,4 +1358,3 @@ void KivioView::setupPrinter(QPrinter &p)
     p.setMinMax(1, m_pDoc->map()->pageList().count());
     p.setFromTo(1, m_pDoc->map()->pageList().count());
 }
-#include "kivio_view.moc"

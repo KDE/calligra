@@ -34,7 +34,7 @@ KivioSpawnerDrag::KivioSpawnerDrag( KivioIconView *view, QWidget *parent, const 
 KivioSpawnerDrag::~KivioSpawnerDrag()
 {
     m_pView->clearCurrentDrag();
-    kdDebug() << "KivioSpawnerDrag - this destroyed" << endl;
+    kdDebug() << "KivioSpawnerDrag - this destroyed";
 }
 
 const char *KivioSpawnerDrag::format( int i ) const
@@ -77,8 +77,8 @@ void KivioSpawnerDrag::append( const QIconDragItem &item, const QRect &pr,
     QIconDrag::append( item, pr, tr );
 
     QString full = spawner.set()->dir() + "/" + spawner.info()->title();
-    kdDebug() << "KivioSpawnerDrag::append() - Adding " << full << endl;
+    
+    kdDebug() << "KivioSpawnerDrag::append() - Adding " << full;
 
     m_spawners << full;
 }
-

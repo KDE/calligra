@@ -26,7 +26,8 @@ public slots:
   void zoomPlus();
 
 protected slots:
-  void canvasZoomChanged(int);
+  void updateVisibleArea();
+  void canvasZoomChanged(float);
   void slotUpdateView(KivioPage*);
   void togglePageBorder(bool);
   void togglePageOnly(bool);
@@ -35,6 +36,9 @@ protected slots:
 
 protected:
   void updateView();
+  void handleMouseMove(QPoint);
+  void handleMouseMoveAction(QPoint);
+  void handleMousePress(QPoint);
 
 private:
   KivioView* m_pView;
@@ -49,6 +53,12 @@ private:
 
   QSize cMinSize;
   QSize cMaxSize;
+
+  float zoom;
+  QRect varea;
+  AlignmentFlags apos;
+  bool handlePress;
+  QPoint lastPos;
 };
 
 #endif

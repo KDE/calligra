@@ -28,8 +28,6 @@
 #include <qbrush.h>
 #include <qpalette.h>
 #include <kdebug.h>
-#include <klocale.h>
-
 
 KivioStencilSpawner* KivioIconView::m_pCurDrag = 0L;
 /**********************************************************************
@@ -41,7 +39,7 @@ KivioIconViewItem::KivioIconViewItem( QIconView *parent )
     : QIconViewItem( parent )
 {
     m_pSpawner = NULL;
-    setText(i18n("stencil"));
+    setText("stencil");
 }
 
 KivioIconViewItem::~KivioIconViewItem()
@@ -57,7 +55,7 @@ void KivioIconViewItem::setStencilSpawner( KivioStencilSpawner *pSpawn )
 
     if( !m_pSpawner )
     {
-        setText( i18n("Untitled") );
+        setText( "Untitled" );
     }
     else
     {
@@ -103,7 +101,7 @@ KivioIconView::KivioIconView( QWidget *parent, const char *name )
     setArrangement(LeftToRight);
     setAcceptDrops(false);
     viewport()->setAcceptDrops(false);
-
+    
     QObject::connect( this, SIGNAL(doubleClicked(QIconViewItem *)), this, SLOT(slotDoubleClicked(QIconViewItem*)) );
 }
 
@@ -129,12 +127,9 @@ void KivioIconView::setStencilSpawnerSet( KivioStencilSpawnerSet *pSet )
         pItem->setKey(pSpawner->info()->title());
         pItem->setStencilSpawner(pSpawner);
 
-        kdDebug() << "* " << pSpawner->info()->title() << endl;
-
         pSpawner = pSet->spawners()->next();
 
     }
-    kdDebug() << "Leaving" << endl;
 }
 
 void KivioIconView::drawBackground( QPainter *p, const QRect &r )
@@ -173,7 +168,8 @@ QDragObject *KivioIconView::dragObject()
     QIconDragItem id;
     QString full;
     full = item->spawner()->set()->dir() + "/" + item->spawner()->info()->title();
-    id.setData( QCString(full.latin1())); // ### unicode fixme !!! (Simon)
+    id.setData( QCString(full.ascii()));
+
     drag->append( id,
         QRect( item->pixmapRect(FALSE).x() - orig.x(),
                item->pixmapRect(FALSE).y() - orig.y(),
@@ -205,17 +201,16 @@ void KivioIconView::clearCurrentDrag()
 void KivioIconView::slotDoubleClicked( QIconViewItem *pQtItem )
 {
     KivioStencilSpawner *pSpawner;
-
+    
     KivioIconViewItem *pItem = dynamic_cast<KivioIconViewItem *>(pQtItem);
-
+    
     if( !pItem )
     {
-        kdDebug() << "KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!" << endl;
+       kdDebug() << "KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!";
         return;
     }
-
+    
     pSpawner = pItem->spawner();
 
     emit createNewStencil( pSpawner );
 }
-#include "kivio_icon_view.moc"

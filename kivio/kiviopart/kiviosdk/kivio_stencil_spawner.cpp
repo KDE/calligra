@@ -27,6 +27,8 @@ KivioStencilSpawner::KivioStencilSpawner( KivioStencilSpawnerSet *p )
     m_pInfo = new KivioStencilSpawnerInfo();
     m_pSet = p;
     m_fileName = "";
+    m_defWidth = 72.0f;
+    m_defHeight = 72.0f;
 }
 
 KivioStencilSpawner::~KivioStencilSpawner()

@@ -39,10 +39,10 @@
 #include <qmime.h>
 #include <qsortedlist.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <koPageLayoutDia.h>
 #include <kglobal.h>
-#include <kdebug.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -103,7 +103,7 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
 
 KivioPage::~KivioPage()
 {
-  kdDebug() << "AHHHHH PAGE DYING!" << endl;
+   kdDebug() << "AHHHHH PAGE DYING!";
   delete gLines;
   s_mapPages->remove(m_id);
 }
@@ -129,18 +129,16 @@ void KivioPage::print( KivioPSPrinter *printer )
     }
 }
 
-void KivioPage::print( QPainter &/*painter*/, QPrinter */*_printer*/ )
+void KivioPage::print( QPainter &painter, QPrinter *_printer )
 {
 }
 
-void KivioPage::printPage( QPainter &/*_painter*/, const QRect& /*page_range*/, const QRect& /*view*/ )
+void KivioPage::printPage( QPainter &_painter, const QRect& page_range, const QRect& view )
 {
 }
 
 QDomElement KivioPage::save( QDomDocument& doc )
 {
-    kdDebug() << "+SAVE KivioPage" << endl;
-
     // Write the name and 'hide' flag first as attributes
     QDomElement page = doc.createElement( "page" );
     page.setAttribute( "name", m_strName );
@@ -159,14 +157,15 @@ QDomElement KivioPage::save( QDomDocument& doc )
     KivioLayer *pLayer = m_lstLayers.first();
     while( pLayer )
     {
-        kdDebug() << "+SAVE calling save layer" << endl;
         QDomElement layerE = pLayer->saveXML(doc);
         if( layerE.isNull() )
         {
-            kdDebug() << "********** HOLY SHIT ***********" << endl;
+	   kdDebug() << "KivioPage::save() - Oh shit.  KivioLayer::saveXML() returned a bad element!";
         }
-
-        page.appendChild( layerE );
+	else
+	{
+	   page.appendChild( layerE );
+	}
 
         pLayer = m_lstLayers.next();
     }
@@ -243,68 +242,66 @@ bool KivioPage::loadXML( const QDomElement& pageE )
     if (m_strName.isEmpty())
         return false;
 
-    kdDebug() << "-LOAD KivioPage" << endl;
 
-        m_bPageHide = (int)pageE.attribute("hide").toInt();
-
-        // Clear the layer list
-        KivioLayer *pLayer;
-        m_lstLayers.clear();
-
-        QDomNode node = pageE.firstChild();
-        while( !node.isNull() )
-        {
-            if( node.nodeName() == "KivioLayer" )
-            {
-                kdDebug() << "-LOAD About to load kivio layer" << endl;
-                pLayer = new KivioLayer(this);
-                if( pLayer->loadXML( node.toElement() )==false )
-                {
-                    delete pLayer;
-                    pLayer = NULL;
-                }
-                else
-                {
-                    m_lstLayers.append( pLayer );
-                    pLayer = NULL;
-                }
-            }
-            else if( node.nodeName() == "PageLayout" )
-            {
-                loadLayout( node.toElement() );
-            }
-            else if ( node.nodeName() == "GuidesLayout" ) {
+	m_bPageHide = (int)pageE.attribute("hide").toInt();
+	
+	// Clear the layer list
+	KivioLayer *pLayer;
+	m_lstLayers.clear();
+	
+	QDomNode node = pageE.firstChild();
+	while( !node.isNull() )
+	{
+	    if( node.nodeName() == "KivioLayer" )
+	    {
+	        pLayer = new KivioLayer(this);
+	        if( pLayer->loadXML( node.toElement() )==false )
+	        {
+	            delete pLayer;
+	            pLayer = NULL;
+	        }
+	        else
+	        {
+	            m_lstLayers.append( pLayer );
+	            pLayer = NULL;
+	        }
+	    }
+	    else if( node.nodeName() == "PageLayout" )
+	    {
+	        loadLayout( node.toElement() );
+	    }
+	    else if ( node.nodeName() == "GuidesLayout" ) {
         gLines->load(node.toElement());
-            }
-            else
-            {
-                kdDebug() << "-LOAD KivioLayer::loadXML() - unknown node found, " << node.nodeName() << endl;
-            }
-
-            node = node.nextSibling();
-        }
-
-        m_pCurLayer = m_lstLayers.first();
-        if( !m_pCurLayer )
-        {
-            kdDebug() << "KivioLayer::loadXML() - No layers loaded!! BIGGGGG PROBLEMS!" << endl;
-        }
-
-        // Now that we are done loading, fix all the connections
-        KivioLayer *pLayerBak;
-
-        pLayer = m_lstLayers.first();
-        while( pLayer )
-        {
-            pLayerBak = pLayer;
-
-            kdDebug() << "KivioLayer::loadXML() - loading layer connections" << endl;
-            pLayer->searchForConnections(this);
-
-            m_lstLayers.find( pLayerBak );
-
-            pLayer = m_lstLayers.next();
-        }
+	    }
+	    else
+	    {
+	       kdDebug() << "KivioLayer::loadXML() - unknown node found, " <<  node.nodeName();
+	    }
+	
+	    node = node.nextSibling();
+	}
+	
+	m_pCurLayer = m_lstLayers.first();
+	if( !m_pCurLayer )
+	{
+	   kdDebug() << "KivioLayer::loadXML() - No layers loaded!! BIGGGGG PROBLEMS!";
+	}
+	
+	// Now that we are done loading, fix all the connections
+	KivioLayer *pLayerBak;
+	
+	pLayer = m_lstLayers.first();
+	while( pLayer )
+	{
+	    pLayerBak = pLayer;
+	        
+	    kdDebug() << "KivioLayer::loadXML() - loading layer connections";
+	    pLayer->searchForConnections(this);
+	    
+	    m_lstLayers.find( pLayerBak );
+	
+	    pLayer = m_lstLayers.next();
+	}
 
   return true;
 }
@@ -418,13 +415,13 @@ bool KivioPage::addStencil( KivioStencil *pStencil )
 {
     if( !pStencil )
     {
-        kdDebug() << "KivioPage::addStencil() - Null stencil passed" << endl;
+       kdDebug() << "KivioPage::addStencil() - Null stencil passed";
         return false;
     }
 
     if( !m_pCurLayer )
     {
-        kdDebug() << "KivioPage::addStencil() - NULL current layer" << endl;
+       kdDebug() << "KivioPage::addStencil() - NULL current layer";
         return false;
     }
 
@@ -498,7 +495,7 @@ void KivioPage::selectStencil( KivioStencil *pStencil )
 {
     if( !pStencil )
     {
-        kdDebug() << "KivioPage::selectStencil - AHHHH! NULL STENCIL!" << endl;
+       kdDebug() << "KivioPage::selectStencil - AHHHH! NULL STENCIL!";
         return;
     }
 
@@ -506,7 +503,7 @@ void KivioPage::selectStencil( KivioStencil *pStencil )
     if( m_lstSelection.findRef( pStencil ) != -1 )
         return;
 
-    kdDebug() << "KivioPage::selectStencil - Selecting stencil" << endl;
+    kdDebug() <<"KivioPage::selectStencil - Selecting stencil";
     pStencil->select();
     m_lstSelection.append( pStencil );
 
@@ -660,7 +657,7 @@ void KivioPage::deleteSelectedStencils()
 
         if( m_pCurLayer->removeStencil( pStencil ) == false )
         {
-            kdDebug() << "KivioPage::deleteSelectedStencils() - Failed to locate a selected stencil in the current layer" << endl;
+	   kdDebug() << "KivioPage::deleteSelectedStencils() - Failed to locate a selected stencil in the current layer";
         }
 
         pStencil = m_lstSelection.take();
@@ -674,7 +671,6 @@ void KivioPage::groupSelectedStencils()
     KivioStencil *pStencil;
 
 
-    kdDebug() << "*GROUP* About to group" << endl;
     // Can't group 0 or 1 stencils
     if( m_lstSelection.count() <= 1 )
         return;
@@ -687,14 +683,11 @@ void KivioPage::groupSelectedStencils()
     pStencil = m_lstSelection.first();
     while( pStencil )
     {
-
-        kdDebug() << "*GROUP* Duplicating 1" << endl;
-
         // Take the stencil out of it's layer
         pTake = m_pCurLayer->takeStencil( pStencil );
         if( !pTake )
         {
-            kdDebug() << "KivioPage::groupSelectedStencil() - Failed to take() one of the selected stencils. CRAP!" << endl;
+	   kdDebug() << "KivioPage::groupSelectedStencil() - Failed to take() one of the selected stencils. CRAP!";
         }
         else
         {
@@ -725,7 +718,7 @@ void KivioPage::groupSelectedStencils()
     KivioStencil *pStencil;
 
 
-    kdDebug() << "*GROUP* About to group" << endl;
+    debug("*GROUP* About to group");
     // Can't group 0 or 1 stencils
     if( m_lstSelection.count() <= 1 )
         return;
@@ -739,8 +732,8 @@ void KivioPage::groupSelectedStencils()
     while( pStencil )
     {
 
-        kdDebug() << "*GROUP* Duplicating 1" << endl;
-
+        debug("*GROUP* Duplicating 1");
+        
         // Dup the stencil & group it
         pTake  = pStencil->duplicate();
 
@@ -804,14 +797,14 @@ void KivioPage::ungroupSelectedStencils()
                 pLayer = m_lstLayers.next();
             }
             */
-
+            
             // Remove the current stencil from the selection list(the group we just disassembled)
             m_lstSelection.take();
 
             // Remove it permanently from the layer
             if( m_pCurLayer->removeStencil( pSelStencil )==false )
             {
-                kdDebug() << "KivioPage::ungroupSelectedStencil() - Failed to locate the group shell for deletion" << endl;
+	       kdDebug() << "KivioPage::ungroupSelectedStencil() - Failed to locate the group shell for deletion";
             }
         }
 
@@ -942,7 +935,6 @@ void KivioPage::copy()
     if( m_lstSelection.count() <= 0 )
         return;
 
-    kdDebug() << "Copy" << endl;
     pLayer = m_pCurLayer;
 
     pStencil = pLayer->firstStencil();
@@ -968,7 +960,6 @@ void KivioPage::cut()
     if( m_lstSelection.count() <= 0 )
         return;
 
-    kdDebug() << "Cut" << endl;
     pLayer = m_pCurLayer;
 
     pStencil = pLayer->firstStencil();
@@ -1003,8 +994,6 @@ void KivioPage::paste()
         return;
     }
 
-    kdDebug() << "Paste" << endl;
-
     // If there is a list, it is a group stencil
     pList = pGroup->groupList();
     if( pList )
@@ -1016,8 +1005,8 @@ void KivioPage::paste()
 
             // FIXME: Make this offset configurable
             pDup->setPosition( pDup->x() + 10.0f, pDup->y() + 10.0f );
-
-
+            
+            
             addStencil( pDup );
 
             pSelectThese->append( pDup );
@@ -1045,16 +1034,16 @@ void KivioPage::paste()
 int KivioPage::generateStencilIds(int next)
 {
     KivioLayer *pLayer;
-
+    
     pLayer = m_lstLayers.first();
     while( pLayer )
     {
-
+    
         next = pLayer->generateStencilIds( next );
-
+        
         pLayer = m_lstLayers.next();
     }
-
+    
     return next;
 }
 
@@ -1092,7 +1081,7 @@ bool KivioPage::removeCurrentLayer()
     {
         if( m_lstLayers.find( m_pCurLayer )==false )
         {
-            kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find current layer in the list. Bad!" << endl;
+	   kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find current layer in the list. Bad!";
             return false;
         }
     }
@@ -1106,13 +1095,13 @@ bool KivioPage::removeCurrentLayer()
 
     if( !pLayer )
     {
-        kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find a next layer." << endl;
+       kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find a next layer.";
         return false;
     }
 
     if( m_lstLayers.remove( m_pCurLayer )==false )
     {
-        kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find current layer in the list. Bad!" << endl;
+       kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find current layer in the list. Bad!";
         return false;
     }
 
@@ -1486,5 +1475,3 @@ KivioRect KivioPage::getRectForAllStencils()
 
     return rTotal;
 }
-#include "kivio_page.moc"
-

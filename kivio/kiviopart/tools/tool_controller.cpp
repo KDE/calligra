@@ -283,4 +283,3 @@ Tool* ToolController::findTool(const QString& name)
   return 0;
 }
 
-#include "tool_controller.moc"

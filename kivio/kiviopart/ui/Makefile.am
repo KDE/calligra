@@ -25,7 +25,10 @@ libui_la_SOURCES = \
 		enternamedialogbase.ui\
 		viewitemrenamedialog.cpp\
 		kivio_birdeye_panel.cpp\
-		kivio_birdeye_panel_base.ui
+		kivio_birdeye_panel_base.ui\
+		kivio_layer_panel_base.ui\
+		kivio_layer_panel.cpp\
+		kivio_layer_panel.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

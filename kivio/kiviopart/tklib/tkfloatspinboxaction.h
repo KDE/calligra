@@ -30,7 +30,7 @@ public:
   TKFloatSpinBoxAction( const QString& text, int accel, QObject* parent, const char* name = 0 );
   ~TKFloatSpinBoxAction();
 
-  double value() { return m_value; }
+  float value() { return m_value; }
 
   QString prefix() const { return m_prefix; }
   QString suffix() const { return m_suffix; }
@@ -41,37 +41,37 @@ public:
   TKFloatSpinBox::ButtonSymbols buttonSymbols() const { return m_buttonSymbol; }
 
   int decimals() { return m_decimal; }
-  double minValue() const { return m_minvalue; }
-  double maxValue() const { return m_maxvalue; }
-  double lineStep() const { return m_linestep; }
+  float minValue() const { return m_minvalue; }
+  float maxValue() const { return m_maxvalue; }
+  float lineStep() const { return m_linestep; }
 
   int plug( QWidget* widget, int index = -1 );
 
 public slots:
   void setDecimals( int );
   void setWrapping( bool );
-  void setMinValue( double );
-  void setMaxValue( double );
-  void setLineStep( double );
+  void setMinValue( float );
+  void setMaxValue( float );
+  void setLineStep( float );
   void setPrefix( const QString& );
   void setSuffix( const QString& );
-  
-  void setValue(double);
+
+  void setValue(float);
 
   void setMinimumStyle(bool);
 
 signals:
-  void activated(double);
-  void activated(double,int unit);
+  void activated(float);
+  void activated(float,int unit);
 
 protected slots:
-  void slotActivated(double);
+  void slotActivated(float);
 
 protected:
-  double m_value;
-  double m_minvalue;
-  double m_maxvalue;
-  double m_linestep;
+  float m_value;
+  float m_minvalue;
+  float m_maxvalue;
+  float m_linestep;
   int m_decimal;
   TKFloatSpinBox::ButtonSymbols m_buttonSymbol;
   bool m_wrapping;
@@ -87,15 +87,15 @@ public:
   TKUFloatSpinBoxAction( const QString& text, int accel, QObject* parent, const char* name = 0 );
   ~TKUFloatSpinBoxAction();
 
-  int unit() { return (int)m_unit; }
-  
-  double value(int unit = (int)UnitPoint);
-  void setValue(double,int unit = (int)UnitPoint);
+  int unit() { return m_unit; }
+
+  float value(int unit = UnitPoint);
+  void setValue(float,int unit = UnitPoint);
 
 public slots:
   void setUnit(int);
 
 private:  
-  MeasurementUnit m_unit;
+  int m_unit;
 };
 #endif

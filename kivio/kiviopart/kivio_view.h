@@ -150,7 +150,7 @@ public slots:
   void removePage();
   void hidePage();
   void showPage();
-  void viewZoom( int );
+  void viewZoom(int);
 
   void groupStencils();
   void ungroupStencils();
@@ -203,10 +203,10 @@ protected slots:
   void slotSetStartArrowSize();
   void slotSetEndArrowSize();
 
-  void slotChangeStencilPosition(double, double);
-  void slotChangeStencilSize(double, double);
+  void slotChangeStencilPosition(float, float);
+  void slotChangeStencilSize(float, float);
 
-  void canvasZoomChanged( int );
+  void canvasZoomChanged(float);
 
   void addSpawnerToStackBar( KivioStencilSpawnerSet * );
   void addStencilSet( const QString& );

@@ -306,7 +306,6 @@ bool KivioStraightConnector::loadArrowHeads( const QDomElement &e )
 
 QDomElement KivioStraightConnector::saveXML( QDomDocument &doc )
 {
-    kdDebug() << "+SAVE KivioStraightConnector" << endl;
     QDomElement e = doc.createElement("KivioPluginStencil");
 
     XmlWriteString( e, "title", m_pSpawner->info()->title() );
@@ -351,7 +350,7 @@ bool KivioStraightConnector::loadXML( const QDomElement &e )
 
     if( !m_pStart || !m_pEnd )
     {
-        kdDebug() << "KivioStraightConnector::loadXML() - missing m_start or m_end... gonna crash soon" << endl;
+       kdDebug() << "KivioStraightConnector::loadXML() - missing m_start or m_end... gonna crash soon";
         return false;
     }
 

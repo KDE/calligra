@@ -51,7 +51,7 @@ KivioLayer::KivioLayer( KivioPage *pPage )
 
 KivioLayer::~KivioLayer()
 {
-    kdDebug() << "KivioLayer() - In the end there can be only one" << endl;
+   kdDebug() << "KivioLayer() - In the end there can be only one";
 
     if( m_pStencilList )
     {
@@ -97,14 +97,13 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
         title.length() == 0 )
         return NULL;
 
-    kdDebug() << "-LOAD KivioLayer::loadSMLStencil() " << setName << " " << title << endl;
+    kdDebug() << "KivioLayer::loadSMLStencil() " << setName << " " << title;
 
     // Locate the spawner set
     KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
     if( pSpawner )
     {
         KivioStencil *pStencil = pSpawner->newStencil();
-        kdDebug() << "-LOAD KivioLayer::loadSMLStencil() - Calling pStencil->loadXML( stencilE );" << endl;
         pStencil->loadXML( stencilE );
 
         return pStencil;
@@ -127,10 +126,9 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
  */
 KivioStencil *KivioLayer::loadGroupStencil( const QDomElement &stencilE )
 {
-    kdDebug() << "-LOAD KivioLayer::loadSMLStencil()" << endl;
+   kdDebug() << "KivioLayer::loadGroupStencil()";
 
     KivioGroupStencil *pStencil = new KivioGroupStencil();
-    kdDebug() << "-LOAD KivioLayer::loadGroupStencil() - Calling pStencil->loadXML( stencilE );" << endl;
 
     if(pStencil->loadXML( stencilE, this )==false)
     {
@@ -153,26 +151,23 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
         title.length() == 0 )
         return NULL;
 
-    kdDebug() << "-LOAD KivioLayer::loadPluginStencil() " << setName << " " << title << endl;
-
+    kdDebug() << "KivioLayer::loadPluginStencil() " << setName.ascii() << " " <<  title;
+    
     // Locate the spawner set
     KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
     if( pSpawner )
     {
         KivioStencil *pStencil = pSpawner->newStencil();
-        kdDebug() << "-LOAD KivioLayer::loadSMLStencil() - Calling pStencil->loadXML( stencilE );" << endl;
         pStencil->loadXML( stencilE );
 
         return pStencil;
     }
-
+    
     return NULL;
 }
 
 bool KivioLayer::loadXML( const QDomElement &layerE )
 {
-    kdDebug() << "-LOAD KivioLayer" << endl;
-
     m_flags = XmlReadInt( layerE, "flags", 1 );
     m_name = XmlReadString( layerE, "name", "layerX" );
 
@@ -191,9 +186,10 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-                kdDebug() << "-LOAD KivioLayer - Unknown KivioSMLStencil (title="
-                          << XmlReadString( node.toElement(), "title", "" ) << " set="
-                          << XmlReadString( node.toElement(), "setName", "" ) << ") found" << endl;
+	       kdDebug() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (title=%s set=%s) found",
+		  kdDebug() << "KivioLayer::loadXML() - Unknown KivioSMLStencil (title=" <<
+		  XmlReadString( node.toElement(), "title", "" ) << " set=" <<  
+		  XmlReadString( node.toElement(), "setName", "" ) << ") found.";
             }
         }
         else if( name == "KivioGroupStencil" )
@@ -205,7 +201,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-                kdDebug() << "-LOAD KivioLayer - Unable to load KivioGroupStencil" << endl;
+	       kdDebug() << "KivioLayer::loadXML() - Unable to load KivioGroupStencil";
             }
         }
         else if( name == "KivioPluginStencil" )
@@ -217,7 +213,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-                kdDebug() << "-LOAD KivioLayer - Unable to load KivioPluginStencil" << endl;
+	       kdDebug() << "KivioLayer - Unable to load KivioPluginStencil";
             }
         }
 
@@ -229,7 +225,6 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
 
 QDomElement KivioLayer::saveXML( QDomDocument &doc )
 {
-    kdDebug() << "+SAVE KivioLayer" << endl;
     QDomElement e = doc.createElement("KivioLayer");
 
     XmlWriteInt( e, "flags", m_flags );
@@ -246,7 +241,7 @@ QDomElement KivioLayer::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioLayer::paintContent( KivioPainter& painter, const QRect&/*rect*/, bool /*transparent*/, QPoint /*p0*/, float zoom )
+void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoint , float zoom )
 {
     KivioStencil *pStencil = m_pStencilList->first();
     KivioIntraStencilData data;
@@ -283,7 +278,7 @@ void KivioLayer::printContent( KivioPainter& painter )
     }
 }
 
-void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&/*rect*/, bool /*transparent*/, QPoint /*p0*/, float zoom )
+void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint, float zoom )
 {
     KivioIntraStencilData data;
 
@@ -301,7 +296,7 @@ void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&/*rec
     }
 }
 
-void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&/*rect*/, bool /*transparent*/, QPoint /*p0*/, float zoom )
+void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, bool, QPoint, float zoom )
 {
     KivioIntraStencilData data;
 
@@ -309,7 +304,7 @@ void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&/*rec
 
     data.painter = &painter;
     data.scale = zoom;
-
+    
     KivioStencil *pStencil = m_pStencilList->first();
     while( pStencil )
     {
@@ -370,15 +365,15 @@ void KivioLayer::setConnectable( bool f )
 int KivioLayer::generateStencilIds( int next )
 {
     KivioStencil *pStencil;
-
+    
     pStencil = m_pStencilList->first();
     while( pStencil )
     {
         next = pStencil->generateIds( next );
-
+    
         pStencil = m_pStencilList->next();
     }
-
+    
     return next;
 }
 
@@ -386,19 +381,18 @@ void KivioLayer::searchForConnections( KivioPage *p )
 {
     KivioStencil *pStencil;
     KivioStencil *pCur;
-
+    
     pStencil = m_pStencilList->first();
     while( pStencil )
     {
         // Backup the current list position
         pCur = pStencil;
-
-        kdDebug() << " ... layer connection search" << endl;
+        
         pStencil->searchForConnections( p );
-
+        
         // Restore it
         m_pStencilList->find( pCur );
-
+    
         pStencil = m_pStencilList->next();
     }
 }
@@ -406,7 +400,7 @@ void KivioLayer::searchForConnections( KivioPage *p )
 KivioStencil *KivioLayer::takeStencil( KivioStencil *p )
 {
     m_pStencilList->find( p );
-
+    
     return m_pStencilList->take();
 }
 

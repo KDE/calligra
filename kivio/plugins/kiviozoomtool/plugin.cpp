@@ -48,7 +48,7 @@ ZoomToolFactory::~ZoomToolFactory()
   delete s_global;
 }
 
-QObject* ZoomToolFactory::create( QObject* parent, const char*, const char*, const QStringList& )
+QObject* ZoomToolFactory::create( QObject* parent, const char* name, const char*, const QStringList& )
 {
   if ( !parent->inherits("KivioView") )
     return 0;
@@ -62,4 +62,3 @@ KInstance* ZoomToolFactory::global()
 {
   return s_global;
 }
-#include "plugin.moc"

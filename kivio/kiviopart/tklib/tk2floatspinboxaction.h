@@ -71,8 +71,8 @@ public:
   TKSizeAction( QObject* parent, const char* name );
   ~TKSizeAction();
 
-  void size(double&, double&, int unit = (int)UnitPoint);
-  void setSize(double, double, int unit = (int)UnitPoint);
+  void size(float&, float&, int unit = (int)UnitPoint);
+  void setSize(float, float, int unit = (int)UnitPoint);
 };
 /****************************************************************/
 class TKPositionAction : public TK2UFloatSpinBoxAction
@@ -81,8 +81,8 @@ public:
   TKPositionAction( QObject* parent, const char* name );
   ~TKPositionAction();
 
-  void pos(double&, double&, int unit = (int)UnitPoint);
-  void setPos(double, double, int unit = (int)UnitPoint);
+  void pos(float&, float&, int unit = (int)UnitPoint);
+  void setPos(float, float, int unit = (int)UnitPoint);
 };
 
 #endif

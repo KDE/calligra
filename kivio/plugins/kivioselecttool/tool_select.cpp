@@ -109,7 +109,7 @@ void SelectTool::processEvent( QEvent* e )
 
 void SelectTool::activate()
 {
-    kdDebug() << "SelectTool activate" << endl;
+   kdDebug() << "SelectTool activate";
     m_pCanvas->setCursor(arrowCursor);
     m_mode = stmNone;
 }
@@ -141,12 +141,12 @@ void SelectTool::select(QRect r)
 
     // Calculate the w/h of the selection box
     w = releasePoint.x - startPoint.x;
-    if( w < 0.0f )
-        w *= -1.0f;
+    if( w < 0.0 )
+        w *= -1.0;
 
     h = releasePoint.y - startPoint.y;
-    if( h < 0.0f )
-        h *= -1.0f;
+    if( h < 0.0 )
+        h *= -1.0;
 
     // Tell the page to select all stencils in this box
     m_pView->activePage()->selectStencils( x, y, w, h );
@@ -222,7 +222,7 @@ bool SelectTool::startDragging(QPoint pos)
     int colType;
 
     // Figure out how big 4 pixels is in terms of points
-    float threshhold =  ( 4.0f / 100.0f ) * float(m_pCanvas->zoom());
+    float threshhold =  4.0*m_pCanvas->zoom();
 
     TKPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
@@ -294,7 +294,7 @@ bool SelectTool::startCustomDragging(QPoint pos)
 
     kPoint.set( pagePoint.x, pagePoint.y );
 
-    pStencil = pPage->checkForStencil( &kPoint, &colType, 0.0f );
+    pStencil = pPage->checkForStencil( &kPoint, &colType, 0.0 );
 
     if( !pStencil || colType < kctCustom )
         return false;
@@ -362,7 +362,7 @@ bool SelectTool::startResizing(QPoint pos)
                     break;
 
                 case 2:
-                    m_origPoint.set( (pStencil->x() + pStencil->w())/2.0f, pStencil->y(), UnitPoint );
+                    m_origPoint.set( (pStencil->x() + pStencil->w())/2.0, pStencil->y(), UnitPoint );
                     break;
 
                 case 3:
@@ -370,7 +370,7 @@ bool SelectTool::startResizing(QPoint pos)
                     break;
 
                 case 4:
-                    m_origPoint.set( pStencil->x() + pStencil->w(), (pStencil->y()+pStencil->h())/2.0f, UnitPoint );
+                    m_origPoint.set( pStencil->x() + pStencil->w(), (pStencil->y()+pStencil->h())/2.0, UnitPoint );
                     break;
 
                 case 5:
@@ -378,7 +378,7 @@ bool SelectTool::startResizing(QPoint pos)
                     break;
 
                 case 6:
-                    m_origPoint.set( (pStencil->x()+pStencil->w())/2.0f, pStencil->y()+pStencil->h(), UnitPoint );
+                    m_origPoint.set( (pStencil->x()+pStencil->w())/2.0, pStencil->y()+pStencil->h(), UnitPoint );
                     break;
 
                 case 7:
@@ -386,7 +386,7 @@ bool SelectTool::startResizing(QPoint pos)
                     break;
 
                 case 8:
-                    m_origPoint.set( pStencil->x(), (pStencil->y()+pStencil->h())/2.0f, UnitPoint );
+                    m_origPoint.set( pStencil->x(), (pStencil->y()+pStencil->h())/2.0, UnitPoint );
                     break;
             }
 
@@ -500,7 +500,7 @@ void SelectTool::continueCustomDragging(QPoint pos)
     data.x = pagePoint.x;
     data.y = pagePoint.y;
     data.id = m_customDragID;
-    data.scale = m_pCanvas->view()->zoom() / 100.0f;
+    data.scale = m_pCanvas->zoom();
 
 
     // Undraw the old stencils
@@ -524,7 +524,7 @@ void SelectTool::continueResizing(QPoint pos)
 
     if( !pData )
     {
-        kdDebug() << "SelectTool::continueResizing() - Original geometry not found" << endl;
+       kdDebug() << "SelectTool::continueResizing() - Original geometry not found";
         return;
     }
 
@@ -634,7 +634,7 @@ void SelectTool::continueResizing(QPoint pos)
              break;
 
         default:
-            kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " << m_resizeHandle << endl;
+	   kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle;
             break;
     }
 
@@ -698,7 +698,7 @@ void SelectTool::changeMouseCursor(QPoint pos)
                 KivioPoint col;
 
                 // Figure out how big 4 pixels is in terms of points
-                float threshhold =  400.0f / float(m_pCanvas->zoom());
+                float threshhold =  4.0 / m_pCanvas->zoom();
 
                 col.set(x,y);
                 if( pStencil->checkForCollision( &col, threshhold )==true )
@@ -732,7 +732,7 @@ y <= by+three_pixels
  */
 int SelectTool::isOverResizeHandle( KivioStencil *pStencil, float x, float y )
 {
-    float three_pixels = 4.0f;
+    float three_pixels = 4.0;
     float newX, newY, newW, newH;
 
     int available;
@@ -816,8 +816,8 @@ void SelectTool::mouseRelease(QPoint pos)
             endResizing(pos);
             break;
     }
-
-        m_mode = stmNone;
+	
+  	m_mode = stmNone;
 
     m_pView->doc()->updateView(m_pView->activePage());
 }
@@ -901,23 +901,22 @@ void SelectTool::showPopupMenu( QPoint pos )
 
 
 /**
- * Handles what happens when a left-button double click occurs.
+ * Handles what happens when a left-button float click occurs.
  *
  * If there are no stencils selected, this function returns.  Otherwise
  * it launches the text tool on the selected stencils and switches back
  * to this tool when it's done.
  */
-void SelectTool::leftDoubleClick( QPoint /*p*/ )
+void SelectTool::leftDoubleClick( QPoint p )
 {
-    // werner: always false!
-    //if( m_pView->activePage()->selectedStencils()->count() < 0 )
-    //    return;
+    if( m_pView->activePage()->selectedStencils()->count() < 0 )
+        return;
 
     // Locate the text tool.  If not found, bail with an error
     Tool *t = controller()->findTool("Text");
     if( !t )
     {
-        kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+       kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool";
         return;
     }
 
@@ -927,5 +926,3 @@ void SelectTool::leftDoubleClick( QPoint /*p*/ )
     // Reselect this tool so we are back in selection mode
     controller()->selectTool(this);
 }
-#include "tool_select.moc"
-

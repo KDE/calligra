@@ -19,9 +19,9 @@
 #include "stencilbarbutton.h"
 
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <qapplication.h>
 #include <qpixmap.h>
+#include <kdebug.h>
 #include "qdrawutil.h"
 
 DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* name )
@@ -35,23 +35,23 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
 
   const char* stencil_xpm[] = {
   "12 12 17 1",
-  ".    c #08009A",
-  "+    c #9A9C10",
-  "@    c None",
-  "#    c #0800A1",
-  "$    c #FAFD00",
-  "%    c #080092",
-  "&    c #F9FC07",
-  "*    c #F9FC00",
-  "=    c #070094",
-  "-    c #F4F70C",
-  ";    c #F6F900",
-  ">    c #08008D",
-  ",    c #F7FA00",
-  "'    c #C00101",
-  ")    c #C20904",
-  "!    c #C90000",
-  "~    c #BC0000",
+  ".	c #08009A",
+  "+	c #9A9C10",
+  "@	c None",
+  "#	c #0800A1",
+  "$	c #FAFD00",
+  "%	c #080092",
+  "&	c #F9FC07",
+  "*	c #F9FC00",
+  "=	c #070094",
+  "-	c #F4F70C",
+  ";	c #F6F900",
+  ">	c #08008D",
+  ",	c #F7FA00",
+  "'	c #C00101",
+  ")	c #C20904",
+  "!	c #C90000",
+  "~	c #BC0000",
   ".......+++@@",
   "..#...$$$$+@",
   "..%..&$***$+",
@@ -78,7 +78,7 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
   const char* close_xpm[] = {
   "8 7 2 1",
   "x c None",
-  (const char*)line.latin1(), // ### unicode fixme !!! (Simon)
+  (const char*)line.ascii(),
   "xxxxxxxx",
   "x..xx..x",
   "xx....xx",
@@ -96,7 +96,7 @@ DragBarButton::~DragBarButton()
   if (m_pIcon)
     delete m_pIcon;
 
-  kdDebug() << "DragBarButton - AHHHHHH I'M DYING!" << endl;
+  kdDebug() << "DragBarButton - AHHHHHH I'M DYING!";
 }
 
 void DragBarButton::drawButton( QPainter* paint )
@@ -203,7 +203,7 @@ void DragBarButton::mouseReleaseEvent( QMouseEvent* ev )
     QRect closeRect(width()-20,0,m_pClosePix->width(),height());
     if ( closeRect.contains(ev->pos()))
     {
-        kdDebug() << "Emitting closeRequest" << endl;
+       kdDebug() << "DragBarButton::mouseReleaseEvent() - Emitting closeRequest";
         emit closeRequired(this);
     }
     return;
@@ -243,4 +243,3 @@ void DragBarButton::leaveEvent( QEvent* ev )
   m_bMouseOn = false;
   repaint();
 }
-#include "stencilbarbutton.moc"

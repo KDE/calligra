@@ -88,4 +88,3 @@ void KivioPageShow::slotClose()
 {
   reject();
 }
-#include "kivio_dlg_pageshow.moc"

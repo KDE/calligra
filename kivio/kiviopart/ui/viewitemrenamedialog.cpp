@@ -4,11 +4,11 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 
-ViewItemRenameDialog::ViewItemRenameDialog( QWidget* parent,  const char* name)
+ViewItemRenameDialog::ViewItemRenameDialog(const QString& caption, const QString& prompt, QWidget* parent,  const char* name)
 : EnterNameDialogBase(parent, name, true)
 {
-  setCaption(i18n("Rename View Item"));
-  label->setText(i18n("View item name:"));
+  setCaption(caption);
+  label->setText(prompt);
   edit->setFocus();
 }
 
@@ -32,4 +32,3 @@ QString ViewItemRenameDialog::text()
   return edit->text();
 }
 
-#include "viewitemrenamedialog.moc"

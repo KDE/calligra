@@ -81,4 +81,3 @@ void ZoomAction::setEditZoom( int zoom )
   QString zt = QString("%1%").arg(zoom);
   setEditText(zt);
 }
-#include "kivio_zoomaction.moc"

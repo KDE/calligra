@@ -18,11 +18,13 @@
  */
 #include "kivio_point.h"
 #include "kivio_common.h"
+
 #include <kdebug.h>
+
 
 /*
  * Names for the different point types. invalid
- * and last are not used for any real point type,
+ * and last are not used for any real point type, 
  * and only serve as bounds checking devices.
  */
 static const char *KivioPointTypeNames[]={
@@ -110,7 +112,7 @@ void KivioPoint::copyInto( KivioPoint *pTarget ) const
 KivioPoint::KivioPointType KivioPoint::pointTypeFromString( const QString &str )
 {
     int i;
-
+    
     // Iterate through all the possible enums
     for( i=(int)kptNone+1; i<(int)kptLast; i++ )
     {
@@ -120,7 +122,7 @@ KivioPoint::KivioPointType KivioPoint::pointTypeFromString( const QString &str )
             return (KivioPointType)i;
         }
     }
-
+    
     // Otherwise return an invalid type
     return kptNone;
 }
@@ -137,14 +139,14 @@ bool KivioPoint::loadXML( const QDomElement &e )
 {
     if( e.tagName().compare( "KivioPoint" ) != 0 )
     {
-        kdDebug() << "Attempted to load KivioPoint from non-KivioPoint element" << endl;
+       kdDebug() << "Attempted to load KivioPoint from non-KivioPoint element";
         return false;
     }
 
     m_x = XmlReadFloat( e, "x", 1.0f );
     m_y = XmlReadFloat( e, "y", 1.0f );
     m_pointType = (KivioPointType)pointTypeFromString( XmlReadString( e, "type", "normal" ) );
-
+    
 
     return true;
 }
@@ -160,11 +162,10 @@ bool KivioPoint::loadXML( const QDomElement &e )
 QDomElement KivioPoint::saveXML( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("KivioPoint");
-
+    
 
     XmlWriteFloat( e, QString("x"), m_x );
     XmlWriteFloat( e, QString("y"), m_y );
     XmlWriteString( e, QString("type"), QString(KivioPointTypeNames[m_pointType]) );
     return e;
 }
-

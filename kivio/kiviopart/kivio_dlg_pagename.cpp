@@ -87,4 +87,3 @@ void KivioPageName::slotClose()
 {
   reject();
 }
-#include "kivio_dlg_pagename.moc"
