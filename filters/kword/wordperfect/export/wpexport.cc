@@ -55,8 +55,13 @@ WPExport::convert( const QCString& from,
   if( to!= "application/wordperfect" || from != "application/x-kword" )
      return KoFilter::NotImplemented;
 
-  // TODO ask user for version 5.x or 6/7/8/9
-  int version = 6;
+  // document version is determined using file extension, 
+  // "WP" is for WP 5.x, "WPD" or else is for WP 6/7
+  // e.g /home/ariya/test.wp is a WP 5 document
+  // TODO ask user with a dialog box
+  QString outfile = m_chain->outputFile();
+  QString extension = QFileInfo( outfile ).extension().lower();
+  int version = ( extension == "wp" ) ? 5 : 6 ;
 
   KWEFBaseWorker* worker;
   if( version == 5 ) worker = new WPFiveWorker();
