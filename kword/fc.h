@@ -157,7 +157,7 @@ public:
     unsigned int getLineHeight();
 
     void apply( KWFormat &_format );
-    
+
 protected:
     void calcTextLen();
 

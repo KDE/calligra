@@ -63,12 +63,14 @@ unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
 /*================================================================*/
-void KWPage::recalcCursor()
+void KWPage::recalcCursor(bool _repaint = true,int _pos = -1)
 {
   QPainter _painter;
   _painter.begin(this);
 
   unsigned int pos = fc->getTextPos();
+  if (_pos != -1) pos = static_cast<unsigned int>(_pos);
+
   fc->init(fc->getParag(),_painter,false);
 
   fc->gotoStartOfParag(_painter);
@@ -78,9 +80,12 @@ void KWPage::recalcCursor()
 
   _painter.end();
 
-  paint_directly = false;
-  buffer.fill(white);
-  repaint(false);
+  if (_repaint)
+    {
+      paint_directly = false;
+      buffer.fill(white);
+      repaint(false);
+    }
 }
 
 /*================================================================*/
@@ -286,6 +291,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	unsigned int tmpTextPos = fc->getTextPos();
 	bool del = fc->getParag()->deleteText(tmpTextPos,1); 
+	bool recalc = false;
+	bool goNext = false;
+	unsigned int lineEndPos;
 
 	if (!del && fc->getParag()->getTextLen() == 0 && fc->getParag()->getNext())
 	  {
@@ -297,8 +305,18 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	else if (!del && fc->getParag()->getTextLen() > 0)
 	  doc->joinParag(fc->getParag(),fc->getParag()->getNext());
 	  
-	fc->makeLineLayout(painter);
+	lineEndPos = fc->getLineEndPos();
 	KWFormatContext paintfc(doc);
+
+	if (!fc->isCursorInFirstLine())
+	  {
+	    goNext = true;
+	    fc->cursorGotoPrevLine(painter);
+	    fc->makeLineLayout(painter);
+	  }
+	else
+	  fc->makeLineLayout(painter);
+
 	paintfc = *fc;
 	bool bend = false;
 
@@ -326,7 +344,14 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     QBrush(white));
 	  }
 
-	fc->cursorGotoPos(tmpTextPos,painter);
+	if (goNext)
+	  fc->cursorGotoNextLine(painter);
+	recalc = lineEndPos != fc->getLineEndPos();
+	
+	if (recalc && goNext)
+	  recalcCursor(false,tmpTextPos);
+	else
+	  fc->cursorGotoPos(tmpTextPos,painter);
       } break;
     case Key_Backspace:
       {
@@ -363,6 +388,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	unsigned int paraLen = (fc->getParag()->getPrev() ? fc->getParag()->getPrev()->getTextLen() : 0);
 	bool del = fc->getParag()->deleteText(tmpTextPos,1); 
 	bool joined = false;
+	bool recalc = false;
+	bool goNext = false;
+	unsigned int lineEndPos;
 
 	if (!del && fc->getParag()->getTextLen() == 0)
 	  {
@@ -383,8 +411,18 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    joined = p ? true : false;
 	  }
 
-	fc->makeLineLayout(painter);
+	lineEndPos = fc->getLineEndPos();
 	KWFormatContext paintfc(doc);
+
+	if (!fc->isCursorInFirstLine())
+	  {
+	    goNext = true;
+	    fc->cursorGotoPrevLine(painter);
+	    fc->makeLineLayout(painter);
+	  }
+	else
+	  fc->makeLineLayout(painter);
+
 	paintfc = *fc;
 	bool bend = false;
 
@@ -412,9 +450,28 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     QBrush(white));
 	  }
 
-	if (!joined)
+	if (goNext)
+	  fc->cursorGotoNextLine(painter);
+	recalc = lineEndPos != fc->getLineEndPos();
+	
+	if (recalc && goNext)
+	  recalcCursor(false,tmpTextPos);
+	else
 	  {
-	    if (!del)
+	    if (!joined)
+	      {
+		if (!del)
+		  {
+		    // HACK
+		    fc->gotoStartOfParag(painter);
+		    fc->cursorGotoLineStart(painter);
+		    for (unsigned int i = 0;i < paraLen;i++)
+		      fc->cursorGotoRight(painter);
+		  }
+		else
+		  fc->cursorGotoPos(tmpTextPos,painter);
+	      }
+	    else
 	      {
 		// HACK
 		fc->gotoStartOfParag(painter);
@@ -422,16 +479,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		for (unsigned int i = 0;i < paraLen;i++)
 		  fc->cursorGotoRight(painter);
 	      }
-	    else
-	      fc->cursorGotoPos(tmpTextPos,painter);
-	  }
-	else
-	  {
-	    // HACK
-	    fc->gotoStartOfParag(painter);
-	    fc->cursorGotoLineStart(painter);
-	    for (unsigned int i = 0;i < paraLen;i++)
-	      fc->cursorGotoRight(painter);
 	  }
       } break;
     case Key_Shift: case Key_Control: case Key_Alt: case Key_Meta:

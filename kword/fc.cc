@@ -576,7 +576,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     
     unsigned left = 0;
     unsigned int right = 0;
-    
+
     KWChar *text = parag->getText();
 
     makeCounterLayout(_painter); // !!! HACK !!!
@@ -669,7 +669,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     while( ptPos < xShift + document->getPTColumnWidth() - indent  && textPos < parag->getTextLen() )
     {
 	char c = text[ textPos ].c;
-	
+
 	if ( c != 0 && text[ textPos ].attrib )
 	{
 	  // Handle font formats here.
@@ -678,6 +678,18 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	  apply( *f->getFormat() );
 	}
 	
+	// if we will not fit into the line anymore, let us leave the loop
+	if (c != 0)
+	  {
+	    if (ptPos + font->getPTWidth(c) >= xShift + document->getPTColumnWidth() - indent)
+	      break;
+	  }
+	else
+	  {
+	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= xShift + document->getPTColumnWidth() - indent)
+	      break;
+	  }
+
 	// Is it a space character
 	if ( c == ' ' )
 	{
@@ -709,9 +721,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	else // A usual character ...
 	{ 
 	    // Go right ...
-	    ptPos += font->getPTWidth( c );
+	    ptPos += font->getPTWidth(c);
 	    // Increase the lines width
-	    tmpPTWidth += font->getPTWidth( c );
+	    tmpPTWidth += font->getPTWidth(c);
 	    // One more character
 	    textPos++;
 	}

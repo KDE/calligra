@@ -125,3 +125,10 @@ Reggie, 24.9.1998:
 Reggie, 25.9.1998:
 ------------------
 - More work on pictures as characters
+
+Reggie, 26.9.1998:
+------------------
+- Fixed some problems with deleting Text (Key_Delete/Key_Backspace) and
+  linebreaking
+- Improved KFormatContext::makeLineLayout() to make the linebreaking more
+  precise and to make it work correctly with special characters (like pictures)

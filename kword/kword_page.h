@@ -105,7 +105,7 @@ public:
     { return fc->getParag()->getParagLayout()->getPTLineSpacing(); }
 
 
-  void recalcCursor();
+  void recalcCursor(bool _repaint = true,int _pos = -1);
 
   int getVertRulerPos();
 
