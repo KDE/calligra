@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+it's<?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
 <!ENTITY kappname "&kspread;">
 <!ENTITY % addindex "IGNORE">
@@ -63,7 +63,7 @@ Environment.</para>
 <member>&kword; (text processing and desktop publishing)</member>
 <member>&kpresenter; (presentation creator)</member>
 <member>&kontour; (a vector drawing program)</member>
-<member>&krayon; (a bitmap image editor)</member>
+
 <member>&kformula; (formula editor)</member>
 <member>&kchart; (for charts/graphs)</member>
 </simplelist>
