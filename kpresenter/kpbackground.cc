@@ -455,7 +455,7 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         switch ( backView )
         {
         case BV_ZOOM:
-            backPix=backImage.generatePixmap( _origSize );
+            backPix=backImage.generatePixmap( ext );
             _painter->drawPixmap( QRect( 0, 0, ext.width(), ext.height() ), backPix );
             break;
         case BV_TILED:
