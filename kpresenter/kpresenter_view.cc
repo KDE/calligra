@@ -884,22 +884,22 @@ void KPresenterView::extraPenBrush()
         delete styleDia;
         styleDia = 0;
     }
-
-    styleDia = new StyleDia( this, "StyleDia", m_canvas->activePage()->getPenBrushFlags() );
-    styleDia->setPen( m_canvas->activePage()->getPen( pen ) );
-    styleDia->setBrush( m_canvas->activePage()->getBrush( brush ) );
-    styleDia->setLineBegin( m_canvas->activePage()->getLineBegin( lineBegin ) );
-    styleDia->setLineEnd( m_canvas->activePage()->getLineEnd( lineEnd ) );
-    styleDia->setFillType( m_canvas->activePage()->getFillType( fillType ) );
-    styleDia->setGradient( m_canvas->activePage()->getGColor1( gColor1 ),
-			   m_canvas->activePage()->getGColor2( gColor2 ),
-			   m_canvas->activePage()->getGType( gType ),
-			   m_canvas->activePage()->getGUnbalanced( gUnbalanced ),
-			   m_canvas->activePage()->getGXFactor( gXFactor ),
-			   m_canvas->activePage()->getGYFactor( gYFactor ) );
+    KPrPage * page=m_canvas->activePage();
+    styleDia = new StyleDia( this, "StyleDia", page->getPenBrushFlags() );
+    styleDia->setPen( page->getPen( pen ) );
+    styleDia->setBrush( page->getBrush( brush ) );
+    styleDia->setLineBegin( page->getLineBegin( lineBegin ) );
+    styleDia->setLineEnd( page->getLineEnd( lineEnd ) );
+    styleDia->setFillType( page->getFillType( fillType ) );
+    styleDia->setGradient( page->getGColor1( gColor1 ),
+			   page->getGColor2( gColor2 ),
+			   page->getGType( gType ),
+			   page->getGUnbalanced( gUnbalanced ),
+			   page->getGXFactor( gXFactor ),
+			   page->getGYFactor( gYFactor ) );
 
     //now all sticky object are stored in sticky page
-    styleDia->setSticky( m_pKPresenterDoc->stickyPage()->getSticky( sticky ) );
+    styleDia->setSticky( stickyPage()->getSticky( sticky ) );
 
     styleDia->setCaption( i18n( "KPresenter - Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
@@ -1072,19 +1072,20 @@ void KPresenterView::extraBackground()
 	delete backDia;
 	backDia = 0;
     }
-    backDia = new BackDia( this, "InfoDia", m_canvas->activePage()->getBackType(  ),
-			   m_canvas->activePage()->getBackColor1(  ),
-			   m_canvas->activePage()->getBackColor2(  ),
-			   m_canvas->activePage()->getBackColorType(  ),
-			   m_canvas->activePage()->getBackPixKey(  ).filename(),
-                           m_canvas->activePage()->getBackPixKey(  ).lastModified(),
-			   m_canvas->activePage()->getBackClipKey().filename(),
-			   m_canvas->activePage()->getBackClipKey().lastModified(),
-			   m_canvas->activePage()->getBackView(),
-			   m_canvas->activePage()->getBackUnbalanced(),
-			   m_canvas->activePage()->getBackXFactor(),
-			   m_canvas->activePage()->getBackYFactor( ),
-			   m_canvas->activePage() );
+    KPrPage *page=m_canvas->activePage();
+    backDia = new BackDia( this, "InfoDia", page->getBackType(  ),
+			  page->getBackColor1(  ),
+			   page->getBackColor2(  ),
+			   page->getBackColorType(  ),
+			   page->getBackPixKey(  ).filename(),
+                           page->getBackPixKey(  ).lastModified(),
+			   page->getBackClipKey().filename(),
+			   page->getBackClipKey().lastModified(),
+			   page->getBackView(),
+			   page->getBackUnbalanced(),
+			   page->getBackXFactor(),
+			   page->getBackYFactor( ),
+			   page );
     backDia->setCaption( i18n( "KPresenter - Page Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
     backDia->exec();
@@ -1237,14 +1238,16 @@ void KPresenterView::screenConfigPages()
         delete pgConfDia;
         pgConfDia = 0;
     }
-
-    pgConfDia = new PgConfDia( this, "PageConfig", kPresenterDoc()->spInfinitLoop(),
-			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
-			       m_canvas->activePage()->getPageEffect(),
+    KPrPage *page=m_canvas->activePage();
+    pgConfDia = new PgConfDia( this, "PageConfig",
+                               kPresenterDoc()->spInfinitLoop(),
+			       kPresenterDoc()->spManualSwitch(),
+                               getCurrPgNum(),
+			       page->getPageEffect(),
 			       kPresenterDoc()->getPresSpeed(),
-			       m_canvas->activePage()->getPageTimer(),
-			       m_canvas->activePage()->getPageSoundEffect(),
-			       m_canvas->activePage()->getPageSoundFileName(),
+			       page->getPageTimer(),
+			       page->getPageSoundEffect(),
+			       page->getPageSoundFileName(),
                                kPresenterDoc()->presentationDuration() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
@@ -1664,7 +1667,6 @@ void KPresenterView::mtextFont()
                                         textIface->textColor(), col );
     fontDia->exec();
     int flags = fontDia->changedFlags();
-    kdDebug() << "changedFlags = " << flags << endl;
     if ( flags )
     {
         // The "change all the format" call
@@ -3086,6 +3088,7 @@ void KPresenterView::objectSelectedChanged()
 /*=========== take changes for backgr dialog =====================*/
 void KPresenterView::backOk( bool takeGlobal )
 {
+    KPrPage *page=m_canvas->activePage();
     SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ), backDia->getBackColor1(),
 					     backDia->getBackColor2(), backDia->getBackColorType(),
 					     backDia->getBackUnbalanced(),
@@ -3095,17 +3098,17 @@ void KPresenterView::backOk( bool takeGlobal )
                                              KPClipartKey( backDia->getBackClipFilename(),
                                                            backDia->getBackClipLastModified() ),
 					     backDia->getBackView(), backDia->getBackType(),
-					     m_canvas->activePage()->getBackColor1(  ),
-					     m_canvas->activePage()->getBackColor2(  ),
-					     m_canvas->activePage()->getBackColorType(  ),
-					     m_canvas->activePage()->getBackUnbalanced( ),
-					     m_canvas->activePage()->getBackXFactor(  ),
-					     m_canvas->activePage()->getBackYFactor(  ),
-					     m_canvas->activePage()->getBackPixKey(  ),
-					     m_canvas->activePage()->getBackClipKey( ),
-					     m_canvas->activePage()->getBackView(  ),
-					     m_canvas->activePage()->getBackType(  ),
-					     takeGlobal, m_pKPresenterDoc,m_canvas->activePage() );
+					     page->getBackColor1(  ),
+					     page->getBackColor2(  ),
+					     page->getBackColorType(  ),
+					     page->getBackUnbalanced( ),
+					     page->getBackXFactor(  ),
+					     page->getBackYFactor(  ),
+					     page->getBackPixKey(  ),
+					     page->getBackClipKey( ),
+					     page->getBackView(  ),
+					     page->getBackType(  ),
+					     takeGlobal, m_pKPresenterDoc,page);
     setBackCmd->execute();
     m_pKPresenterDoc->addCommand( setBackCmd );
 }
@@ -3197,6 +3200,7 @@ void KPresenterView::styleOk()
 /*=================== page configuration ok ======================*/
 void KPresenterView::pgConfOk()
 {
+    KPrPage *page=m_canvas->activePage();
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screen Presentations" ),
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfinitLoop(),
 					  pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
@@ -3206,13 +3210,13 @@ void KPresenterView::pgConfOk()
                                           pgConfDia->getPresentationDuration(),
 					  kPresenterDoc()->spManualSwitch(),
 					  kPresenterDoc()->spInfinitLoop(),
-					  m_canvas->activePage()->getPageEffect(),
+					  page->getPageEffect(),
 					  kPresenterDoc()->getPresSpeed(),
-					  m_canvas->activePage()->getPageTimer(),
-					  m_canvas->activePage()->getPageSoundEffect(),
-					  m_canvas->activePage()->getPageSoundFileName(),
+					  page->getPageTimer(),
+					  page->getPageSoundEffect(),
+					  page->getPageSoundFileName(),
                                           kPresenterDoc()->presentationDuration(),
-					  kPresenterDoc(), m_canvas->activePage() );
+					  kPresenterDoc(), page );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
 }
@@ -3890,7 +3894,6 @@ void KPresenterView::skipToPage( int num )
         sidebar->setCurrentPage( currPg );
     m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(currPg));
     if ( notebar ) {
-        kdDebug() << "Current Page: " << currPg << endl;
         QString text = m_pKPresenterDoc->pageList().at(currPg)->noteText( );
         notebar->setCurrentNoteText( text );
     }
@@ -4091,7 +4094,7 @@ void KPresenterView::nextPage()
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
  	return;
 
-    kdDebug()<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
+    //kdDebug()<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
     skipToPage( currPg+1 );
 }
 

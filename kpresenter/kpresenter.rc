@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="27">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="28">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -470,6 +470,7 @@
 </Menu>
 <Menu name="sidebarmenu_popup">
   <Action name="insert_page"/>
+  <Action name="screen_configpages"/>
   <Action name="extra_defaulttemplate"/>
   <Action name="edit_duplicatepage"/>
   <Action name="edit_delpage"/>
