@@ -94,6 +94,8 @@ class MySqlDB : public KexiDB
 		 
 		unsigned long	insertID();
 		unsigned long	affectedRows();
+		
+		unsigned long	lastAuto();
 
 	protected:
 		int		reconnect();

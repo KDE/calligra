@@ -75,12 +75,11 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 	{
 		if((*it).record == record && (*it).done == false)
 		{
-			kdDebug() << "MySqlRecord::commit(): escaping (" << (*it).value.toString() << endl;
 			QString value = m_db->escape((*it).value.toString());
-			kdDebug() << "MySqlRecord::commit(): escaped" << endl;
 			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
 			
-			if(!(*it).insertItem)
+			int index = m_insertList.findIndex(record);
+			if(!insertBuffer)
 			{
 				kdDebug() << "MySqlRecord::commit: committing update" << endl;
 				QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
@@ -88,11 +87,28 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				m_db->query(statement);
 				(*it).done = true;
 			}
-			else
+			else if(insertBuffer && index != -1)
 			{
 				kdDebug() << "MySqlRecord::commit: committing suicide" << endl;
 				QString statement("insert into " + m_table + " set " + (*it).field + " = '" + value + "'");
-				kdDebug() << "MySqlRecord::commit(id, true): " << statement << endl;
+				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
+				m_db->query(statement);
+				m_insertList.remove(m_insertList.at(index));
+				(*it).done = true;
+				
+				// hopefully asign magic data (no metter how :)
+				if(!m_keyBuffer.contains(record))
+				{
+					if((*it).field == m_keyField)
+					{
+						m_keyBuffer.insert(record, QVariant(value));
+					}
+					if(fieldInfo(m_keyField)->auto_increment())
+					{
+						m_keyBuffer.insert(record, QVariant((unsigned int)m_db->lastAuto()));
+					}
+					// else, maybe we should wait, and don't insert it by now...
+				}
 			}
 		}
 	}
@@ -189,6 +205,8 @@ MySqlRecord::insert()
 		return -1;
 
 	m_lastItem++;
+	
+	m_insertList.append(m_lastItem);
 	return m_lastItem;
 }
 

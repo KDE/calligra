@@ -74,7 +74,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 
 	m_pColumnTypes = new QMemArray<QVariant::Type>;
 
-	m_pColumnModes = new QMemArray<bool>;
+	m_pColumnModes = new QMemArray<int>;
 	m_deletionPolicy = NoDelete;
 	m_additionPolicy = NoAdd;
 
@@ -110,14 +110,20 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 }
 
 
-void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, int width/*=100*/)
+void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, int width, bool autoinc)
 {
 	m_numCols++;
 	m_pColumnTypes->resize(m_numCols);
 	m_pColumnModes->resize(m_numCols);
 
 	m_pColumnTypes->at(m_numCols-1)		= type;
-	m_pColumnModes->at(m_numCols-1)		= editable;
+
+	if(editable)
+		m_pColumnModes->at(m_numCols-1) = ColumnEditable;
+	else if(editable && autoinc)
+		m_pColumnModes->at(m_numCols-1) = ColumnEditable | ColumnAutoIncrement;
+	else
+		m_pColumnModes->at(m_numCols-1) = ColumnReadOnly;
 
 	m_pTopHeader->addLabel(name, width);
 
@@ -491,7 +497,14 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //			if(num < 0)
 //				p->setPen(red);
 //			p->drawText(x - (x+x) - 2, 2, w, h, AlignRight, QString::number(num));
-			p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, QString::number(num));
+			if(item->isInsertItem() && m_pColumnModes->at(col) & ColumnAutoIncrement)
+			{
+				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
+			}
+			else
+			{
+				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, QString::number(num));
+			}
 //			p->drawRect(x - 1, 1, w - (x+x) - 1, h + 1);
 			break;
 		}

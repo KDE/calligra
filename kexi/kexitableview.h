@@ -68,7 +68,15 @@ public:
 		TypeDate
 	};
 */
-	virtual void addColumn(QString name, QVariant::Type type, bool editable, int width=100);
+
+	enum ColumnModes
+	{
+		ColumnReadOnly = 1,
+		ColumnEditable = 2,
+		ColumnAutoIncrement = 4
+	};
+
+	virtual void addColumn(QString name, QVariant::Type type, bool editable, int width=100, bool autoinc=false);
 
 	void setSorting(int col, bool ascending=true);
 
@@ -213,7 +221,7 @@ protected:
 
 	KexiTableList		m_contents;
 	QMemArray<QVariant::Type>	*m_pColumnTypes;
-	QMemArray<bool>		*m_pColumnModes;
+	QMemArray<int>		*m_pColumnModes;
 
 	bool			m_needAutoScroll;
 	QTimer			*m_scrollTimer;

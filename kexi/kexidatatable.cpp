@@ -76,7 +76,10 @@ KexiDataTable::executeQuery(QString queryStatement)
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
 		kdDebug() << "KexiDataTable::executeQuery(): adding columns" << endl;
-		m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), false);
+		if(!m_record->fieldInfo(i)->auto_increment())
+			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), true);
+		else
+			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), true, 100, true);
 	}
 
 	int record = 0;
@@ -110,6 +113,7 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 	{
 		i->setInsertItem(false);
 		i->setHint(QVariant(m_record->insert()));
+		m_record->update(i->getHint().toInt(), col, i->getValue(col));
 		m_record->commit(i->getHint().toInt(), true);
 		KexiTableItem *newinsert = new KexiTableItem(m_tableView);
 		newinsert->setHint(QVariant(i->getHint().toInt() + 1));

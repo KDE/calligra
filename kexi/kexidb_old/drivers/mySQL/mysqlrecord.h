@@ -43,11 +43,10 @@ typedef struct UpdateItem
 	unsigned int record;
 	QString field;
 	QVariant value;
-	bool insertItem;
 	bool done;
 };
 
-typedef QPtrList<MySqlRecord> InsertList;
+typedef QValueList<int> InsertList;
 typedef QValueList<UpdateItem> UpdateBuffer;
 typedef QMap<QString , QVariant> ContentBuffer;
 typedef QValueVector<QString> FieldName;

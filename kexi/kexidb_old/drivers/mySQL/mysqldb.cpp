@@ -256,6 +256,12 @@ MySqlDB::escape(const QString &str)
 	return rval;
 }
 
+unsigned long
+MySqlDB::lastAuto()
+{
+	return (unsigned long)mysql_insert_id(m_mysql);
+}
+
 MySqlDB::~MySqlDB()
 {
 	if(m_connected)

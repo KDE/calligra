@@ -3,6 +3,10 @@
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
   </Menu>
+  <Menu name="project">
+   <text>&amp;Project</text>
+   <Action name="project_props"/>
+  </Menu>
 </MenuBar>
 
 </kpartgui>
