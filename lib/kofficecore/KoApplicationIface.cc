@@ -20,10 +20,12 @@
 #include "KoApplicationIface.h"
 #include "koApplication.h"
 #include "koDocument.h"
+#include "koMainWindow.h"
 #include "koView.h"
 #include "koQueryTrader.h"
 #include "KoDocumentIface.h"
 #include <dcopclient.h>
+#include <kmainwindow.h>
 #include <kdebug.h>
 #include <stdlib.h>
 
@@ -78,3 +80,16 @@ QValueList<DCOPRef> KoApplicationIface::getViews()
     return lst;
 }
 
+QValueList<DCOPRef> KoApplicationIface::getWindows()
+{
+    QValueList<DCOPRef> lst;
+    QList<KMainWindow> *mainWindows = KMainWindow::memberList;
+    if ( mainWindows )
+    {
+      QListIterator<KMainWindow> it( *mainWindows );
+      for (; it.current(); ++it )
+        lst.append( DCOPRef( kapp->dcopClient()->appId(),
+                             static_cast<KoMainWindow *>(it.current())->dcopObject()->objId() ) );
+    }
+    return lst;
+}

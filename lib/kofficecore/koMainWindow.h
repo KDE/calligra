@@ -28,6 +28,7 @@ class KoMainWindowPrivate;
 class KURL;
 class KRecentFilesAction;
 class KoFilterManager;
+class DCOPObject;
 
 namespace KParts
 {
@@ -112,6 +113,8 @@ public:
      * @return TRUE on success.
      */
     virtual bool openDocument( const KURL & url );
+
+    virtual DCOPObject * dcopObject();
 
 signals:
     /**

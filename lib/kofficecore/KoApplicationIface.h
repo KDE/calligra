@@ -55,6 +55,11 @@ k_dcop:
    */
   QValueList<DCOPRef> getViews();
 
+  /**
+   * @return a list of references to all the windows
+   * (see KoMainWindowIface)
+   */
+  QValueList<DCOPRef> getWindows();
 };
 
 #endif

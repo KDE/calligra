@@ -28,6 +28,7 @@
 #include <koDocumentInfoDlg.h>
 #include <koQueryTrader.h>
 #include <koPrintPreview.h>
+#include "KoMainWindowIface.h"
 
 #include <qkeycode.h>
 #include <qfile.h>
@@ -103,9 +104,11 @@ public:
     m_paPrint = 0;
     m_paPrintPreview = 0;
     statusBarLabel = 0L;
+    m_dcopObject = 0;
   }
   ~KoMainWindowPrivate()
   {
+    delete m_dcopObject;
   }
 
   KoDocument *m_rootDoc;
@@ -125,6 +128,7 @@ public:
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
+  KoMainWindowIface *m_dcopObject;
 
   QList <KAction> m_toolbarList;
 
@@ -1130,6 +1134,16 @@ QString KoMainWindow::nativeFormatPattern()
 void KoMainWindow::setMaxRecentItems(uint _number)
 {
         m_recent->setMaxItems( _number );
+}
+
+DCOPObject * KoMainWindow::dcopObject()
+{
+    if ( !d->m_dcopObject )
+    {
+        d->m_dcopObject = new KoMainWindowIface( this );
+    }
+
+    return d->m_dcopObject;
 }
 
 #include <koMainWindow.moc>
