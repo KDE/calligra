@@ -200,10 +200,10 @@ void KPPresStructView::setupSlideList()
     slides->setSorting( -1 );
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-        KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
+	KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
 	item->setPage( doc->backgroundList()->at( i ), i );
-        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) ) );
+	item->setText( 0, QString( "%1" ).arg( i + 1 ) );
+	item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) ) );
 	for ( int j = doc->objNums() - 1; j >= 0; --j ) {
 	    if ( doc->getPageOfObj( j, 0, 0 ) == (int)i + 1 ) {
 		KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );

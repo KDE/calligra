@@ -1447,7 +1447,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 
     KURL u = m_url;
     QString f = m_file;
-    
+
     ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 					"application/x-kpresenter", "*.kpr",
 					"KPresenter", KoTemplateChooseDia::Everything,
@@ -3372,7 +3372,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     KURL u = m_url;
     QString f = m_file;
-    
+
     if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
 				       0L, 0L, 0L, KoTemplateChooseDia::OnlyTemplates,
 				       "kpresenter_template") != KoTemplateChooseDia::Cancel ) {
@@ -3825,16 +3825,16 @@ int KPresenterDoc::getPenBrushFlags()
 }
 
 /*================================================================*/
-QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title )
+QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, float fakt )
 {
     QList<KPObject> objs;
     objs.setAutoDelete( false );
 
-    QRect rect = getPageSize( pgNum, 0, 0 );
+    QRect rect = getPageSize( pgNum, 0, 0, fakt );
 
     KPObject *kpobject = 0L, *obj = 0L;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
-	if ( kpobject->getType() == OT_TEXT && rect.intersects( kpobject->getBoundingRect( 0, 0 ) ) &&
+	if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) &&
 	     dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->lines() > 0 )
 	    objs.append( kpobject );
 

@@ -1711,7 +1711,9 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 	    static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
 			   1.0;
 	_presFakt = min(_presFaktW,_presFaktH);
-    } else _presFakt = 1.0;
+    } else {
+	_presFakt = 1.0;
+    }
 
     KPBackGround *kpbackground = 0;
 
@@ -3531,7 +3533,7 @@ void Page::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = currPresPage;
-    pg = KPGotoPage::gotoPage( slideList, pg, this );
+    pg = KPGotoPage::gotoPage( view->kPresenterDoc(), _presFakt, slideList, pg, this );
 
     if ( pg != static_cast<int>( currPresPage ) ) {
 	currPresPage = pg;

@@ -293,7 +293,7 @@ public:
 
     void setUnit( KoUnit _unit, QString __unit );
 
-    QString getPageTitle( unsigned int pgNum, const QString &_title );
+    QString getPageTitle( unsigned int pgNum, const QString &_title, float fakt = 1.0 );
 
     KPTextObject *header() { return _header; }
     KPTextObject *footer() { return _footer; }
