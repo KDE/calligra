@@ -929,3 +929,12 @@ Montel laurent <montell@club-internet.fr>
 * Bug fix in kspread_dlg_series
 * Undo works when I clear and used "find and replace" on entire row/col
 * Undo works again when I changed table name
+
+Summary 2000-08-22 -> 2000-08-25
+Montel laurent <montell@club-internet.fr>
+-----------------------------------------
+* Implemented Undo When you used "Check Spelling"
+* Fix bug when you used "Split View" :
+-"Preference" works
+-"Show table" works
+-"Hide table" works

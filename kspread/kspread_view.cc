@@ -1168,6 +1168,10 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
                       this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
+    QObject::connect( _t, SIGNAL( sigTableHidden( KSpreadTable* ) ),
+                      this, SLOT( slotTableHidden( KSpreadTable* ) ) );
+    QObject::connect( _t, SIGNAL( sigTableShown( KSpreadTable* ) ),
+                      this, SLOT( slotTableShown( KSpreadTable* ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
@@ -1230,6 +1234,15 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
 void KSpreadView::slotTableRenamed( KSpreadTable* table, const QString& old_name )
 {
     m_pTabBar->renameTab( old_name, table->tableName() );
+}
+
+void KSpreadView::slotTableHidden( KSpreadTable* table )
+{
+    m_pTabBar->hideTable( table->tableName() );
+}
+void KSpreadView::slotTableShown( KSpreadTable* table )
+{
+    m_pTabBar->displayTable( table->tableName() );
 }
 
 void KSpreadView::changeTable( const QString& _name )

@@ -5065,6 +5065,15 @@ DCOPObject* KSpreadTable::dcopObject()
     return m_dcop;
 }
 
+void KSpreadTable::hideTable(bool _hide)
+{
+    setHidden(_hide);
+    if(_hide)
+        emit sigTableHidden(this);
+    else
+        emit sigTableShown(this);
+}
+
 bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
 {
     if ( map()->findTable( name ) )

@@ -86,7 +86,6 @@ void KSpreadshow::slotOk()
 	{
 	text=list->text(list->currentItem());
         m_pView->tabBar()->showTable(text);
-        m_pView->changeTable(text);
         }
   accept();
 }

@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include <qmessagebox.h>
 #include <qapplication.h>
 #include <qpointarray.h>
 #include <qstring.h>
@@ -601,25 +600,31 @@ void KSpreadTabBar::hideTable()
     }
     else
     {
-        KSpreadTable* table = m_pView->activeTable();
-        m_pView->activeTable()->setHidden(true);
-        QString activeName = table->tableName();
-        removeTab( activeName );
-        tablehide.append( activeName );
-        // m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
-
-        emit tabChanged( tabsList.first() );
+        m_pView->activeTable()->hideTable(true);
     }
 }
 
+void KSpreadTabBar::hideTable(const QString& tableName )
+{
+  removeTab( tableName );
+  tablehide.append( tableName );
+  emit tabChanged( tabsList.first() );
+}
+
+
 void KSpreadTabBar::showTable(const QString& text)
+{
+    KSpreadTable *table;
+    table=m_pView->doc()->map()->findTable( text);
+    table->hideTable(false);
+}
+
+void KSpreadTabBar::displayTable(const QString& text)
 {
     tablehide.remove( text );
     addTab( text );
-
-    m_pView->activeTable()->setHidden( false );
+    emit tabChanged( text );
 }
-
 void KSpreadTabBar::addHiddenTab(const QString & text)
 {
     tablehide.append( text );

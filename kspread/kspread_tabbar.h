@@ -66,9 +66,9 @@ public:
      * Renames a tab.
      */
     void renameTab( const QString& old_name, const QString& new_name );
-    
+
     /**
-     * Moves the tab with number _from befor tab number _to if @param _before is 
+     * Moves the tab with number _from befor tab number _to if @param _before is
      * true _from is inserted before _to. If false it is inserted after.
      */
     void moveTab( int _from, int _to, bool _before = true );
@@ -98,7 +98,9 @@ public:
     * and highlights first name in tabList
     */
     void hideTable();
-    
+    void hideTable(const QString& tableName );
+
+
     /**
      * Shows the table. This makes only sense if
      * the table was hiddem before.
@@ -106,7 +108,9 @@ public:
      * The table does not become automatically the active one.
      */
     void showTable(const QString& _text);
-    
+
+    void displayTable(const QString& _text);
+
     /**
      * @return the name of all visible tables.
      */

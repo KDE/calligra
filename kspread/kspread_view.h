@@ -330,6 +330,8 @@ public slots:
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
     void slotTableRenamed( KSpreadTable* table, const QString& old_name );
+    void slotTableHidden( KSpreadTable*_table );
+    void slotTableShown( KSpreadTable*_table );
 
     virtual int leftBorder() const;
     virtual int rightBorder() const;

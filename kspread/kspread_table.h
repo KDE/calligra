@@ -511,6 +511,8 @@ public:
 
     void refreshPreference() ;
 
+    void hideTable(bool _hide);
+
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
@@ -747,6 +749,10 @@ signals:
      * That is for example the case when a new child is inserted.
      */
     void sig_polygonInvalidated( const QPointArray& );
+
+    void sigTableHidden( KSpreadTable* table);
+    void sigTableShown( KSpreadTable* table);
+
 
 protected:
     /**
