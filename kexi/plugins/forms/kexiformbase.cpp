@@ -191,7 +191,7 @@ void KexiFormBase::slotWidgetLineEdit()
 
 void KexiFormBase::slotWidgetPushButton()
 {
-	topLevelEditor->addInteractive(new QPushButton(i18n("Push button"),topLevelEditor));
+	topLevelEditor->addInteractive(new QPushButton(i18n("Push Button"),topLevelEditor));
 }
 
 void KexiFormBase::slotWidgetFrame()

@@ -2715,7 +2715,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         if ( !textframeSet->textObject()->protectContent() )
             m_currentCell->keyPressEvent( e );
         else
-            KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted"));
+            KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted."));
     }
 }
 

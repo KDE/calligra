@@ -86,7 +86,7 @@ public:
      * Adds a command to the history. Call this for each @p command you create.
      * Unless you set @p execute to false, this will also execute the command.
      * This means, most of the application's code will look like
-     *    MyCommand * cmd = new MyCommand(i18n("The name"), parameters);
+     *    MyCommand * cmd = new MyCommand(i18n("The Name"), parameters);
      *    m_historyCommand.addCommand( cmd );
      */
     void addCommand(KCommand *command, bool execute=true);

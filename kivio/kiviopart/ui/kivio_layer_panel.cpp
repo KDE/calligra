@@ -46,11 +46,11 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
 : KivioLayerPanelBase(parent, name), m_pView(view)
 {
   list->header()->hide();
-  list->addColumn(i18n("view"),15);
-  list->addColumn(i18n("print"),15);
-  list->addColumn(i18n("editable"),15);
-  list->addColumn(i18n("connect"),15);
-  list->addColumn(i18n("name"),-1);
+  list->addColumn(i18n("Vview"),15);
+  list->addColumn(i18n("Print"),15);
+  list->addColumn(i18n("Editable"),15);
+  list->addColumn(i18n("Connect"),15);
+  list->addColumn(i18n("Name"),-1);
   list->setSorting(5,true);
   list->installEventFilter(this);
 

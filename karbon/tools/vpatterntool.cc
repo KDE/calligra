@@ -86,7 +86,7 @@ VPattern* VPatternWidget::selectedPattern()
 
 void VPatternWidget::importPattern()
 {
-	VPattern* pattern = KarbonFactory::rServer()->addPattern( KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", this, i18n( "Choose the pattern to add" ) ) );
+	VPattern* pattern = KarbonFactory::rServer()->addPattern( KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", this, i18n( "Choose Pattern to Add" ) ) );
 	if( pattern )
 		m_patternChooser->addItem( pattern );
 } // VPatternWidget::importPattern

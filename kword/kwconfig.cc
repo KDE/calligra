@@ -132,7 +132,7 @@ void KWConfig::slotApply()
     if ( cmd )
     {
         if ( !macro )
-            macro = new KMacroCommand( i18n("Change config"));
+            macro = new KMacroCommand( i18n("Change Config"));
         macro->addCommand(cmd);
     }
 
@@ -140,7 +140,7 @@ void KWConfig::slotApply()
     if ( cmd )
     {
         if ( !macro )
-            macro = new KMacroCommand( i18n("Change config"));
+            macro = new KMacroCommand( i18n("Change Config"));
 
         macro->addCommand( cmd );
     }

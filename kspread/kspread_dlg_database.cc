@@ -219,7 +219,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   m_columnView = new KListView( Frame5_2_2, "m_columnView" );
   m_columnView->addColumn( i18n( "Column" ) );
   m_columnView->addColumn( i18n( "Table" ) );
-  m_columnView->addColumn( i18n( "Data type" ) );
+  m_columnView->addColumn( i18n( "Data Type" ) );
   m_columnView->setRootIsDecorated( FALSE );
 
   Frame5_2_2Layout->addWidget( m_columnView, 1, 0 );
@@ -356,7 +356,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   Frame17_4->setFrameShadow( QFrame::Plain );
 
   m_optionsLayout->addWidget( Frame17_4, 0, 0 );
-  addPage( m_options, i18n( "Query options" ) );
+  addPage( m_options, i18n( "Query Options" ) );
 
   // result page
 

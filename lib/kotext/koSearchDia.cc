@@ -460,7 +460,7 @@ KMacroCommand* KoFindReplace::macroCommand()
 {
     // Create on demand, to avoid making an empty command
     if(!m_macroCmd)
-        m_macroCmd = new KMacroCommand(i18n("Replace text"));
+        m_macroCmd = new KMacroCommand(i18n("Replace Text"));
     return m_macroCmd;
 }
 

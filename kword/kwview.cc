@@ -582,7 +582,7 @@ void KWView::setupActions()
                                      actionCollection(), "remove_comment");
     actionRemoveComment->setToolTip( i18n( "Remove the selected document comment." ) );
     actionRemoveComment->setWhatsThis( i18n( "Remove the selected document comment." ) );
-    actionCopyTextOfComment = new KAction( i18n("Copy Text Of Comment..."), 0,
+    actionCopyTextOfComment = new KAction( i18n("Copy Text of Comment..."), 0,
                                   this,SLOT(copyTextOfComment()),
                                   actionCollection(), "copy_text_comment");
 
@@ -4493,7 +4493,7 @@ void KWView::textStrikeOut()
         if ( cmd )
         {
             if ( !macroCmd )
-                macroCmd = new KMacroCommand( i18n("Strike out Text") );
+                macroCmd = new KMacroCommand( i18n("Strike Out Text") );
             macroCmd->addCommand( cmd );
         }
     }
@@ -4540,7 +4540,7 @@ void KWView::textAlignLeft()
             if (cmd)
             {
                 if ( !macroCmd)
-                    macroCmd = new KMacroCommand( i18n("Left-align Text") );
+                    macroCmd = new KMacroCommand( i18n("Left-Align Text") );
                 macroCmd->addCommand( cmd );
             }
         }
@@ -4588,7 +4588,7 @@ void KWView::textAlignRight()
             if ( cmd )
             {
                 if (!macroCmd )
-                    macroCmd = new KMacroCommand( i18n("Right-align Text") );
+                    macroCmd = new KMacroCommand( i18n("Right-Align Text") );
                 macroCmd->addCommand( cmd );
             }
         }
@@ -5339,7 +5339,7 @@ void KWView::spellCheckerReady()
     {
         KMessageBox::information(this,
                                  i18n("SpellCheck selection finished."),
-                                 i18n("Spell checking"));
+                                 i18n("Spell Checking"));
     }
     //m_doc->setReadWrite(true);
     clearSpellChecker();
@@ -5864,7 +5864,7 @@ void KWView::savePicture()
             if( url.isEmpty() )
             {
                 KMessageBox::sorry( this,
-                                    i18n("File name is empty"),
+                                    i18n("File name is empty."),
                                     i18n("Save Picture"));
                 return;
             }
@@ -5874,7 +5874,7 @@ void KWView::savePicture()
                 file.close();
             } else {
                 KMessageBox::error(this,
-                                   i18n("Error during saving"),
+                                   i18n("Error during saving."),
                                    i18n("Save Picture"));
             }
         }
@@ -6414,7 +6414,7 @@ void KWView::insertFile()
     if( url.isEmpty() )
     {
         KMessageBox::sorry( this,
-                            i18n("File name is empty"),
+                            i18n("File name is empty."),
                             i18n("Insert File"));
         return;
     }
@@ -6456,7 +6456,7 @@ void KWView::insertFile(const QString & path)
         if ( !b )
         {
             KMessageBox::sorry( this,
-                                i18n("File name is not a KWord file!."),
+                                i18n("File name is not a KWord file!"),
                                 i18n("Insert File"));
             delete store;
             return;
@@ -6884,7 +6884,7 @@ void KWView::convertTableToText()
             KWTextFrameSet *frameset= table->anchorFrameset();
             KoTextParag *parag = anchor->paragraph();
             int pos = anchor->index();
-            KMacroCommand *macro = new KMacroCommand(i18n("Convert table to text"));
+            KMacroCommand *macro = new KMacroCommand(i18n("Convert Table to Text"));
             KCommand *cmd =table->anchorFrameset()->deleteAnchoredFrame( anchor );
             if ( cmd )
                 macro->addCommand( cmd);
@@ -6927,14 +6927,14 @@ void KWView::convertToTextBox()
         if ( cmd )
         {
             if ( ! macro )
-                macro = new KMacroCommand( i18n("Convert to text box"));
+                macro = new KMacroCommand( i18n("Convert to Text Box"));
             macro->addCommand( cmd );
         }
         cmd = m_gui->canvasWidget()->createTextBox(KoRect(30,30,30,30) );
         if ( cmd )
         {
             if ( ! macro )
-                macro = new KMacroCommand( i18n("Convert to text box"));
+                macro = new KMacroCommand( i18n("Convert to Text Box"));
             macro->addCommand( cmd );
         }
 
@@ -6952,7 +6952,7 @@ void KWView::convertToTextBox()
                     if ( cmd )
                     {
                         if ( ! macro )
-                            macro = new KMacroCommand( i18n("Convert to text box"));
+                            macro = new KMacroCommand( i18n("Convert to Text Box"));
                         macro->addCommand( cmd );
                     }
                 }

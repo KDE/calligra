@@ -39,7 +39,7 @@
 
 /*TEXGRAPHExportDia::TEXGRAPHExportDia(QWidget *parent, const char *name) :
 			KDialogBase(parent, name, true,
-			i18n("Latex export filter parameters"), Ok|Cancel)
+			i18n("Latex Export Filter Parameters"), Ok|Cancel)
 {
 	kapp->restoreOverrideCursor();
 	createDialog();
@@ -47,7 +47,7 @@
 
 TEXGRAPHExportDia::TEXGRAPHExportDia(KoStoreDevice* in, QWidget *parent, const char *name) :
 			KDialogBase(parent, name, true,
-			i18n("Latex export filter parameters"), Ok|Cancel), _in(in)
+			i18n("Latex Export Filter Parameters"), Ok|Cancel), _in(in)
 {
 	kapp->restoreOverrideCursor();
 	createDialog();

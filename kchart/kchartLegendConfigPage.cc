@@ -36,17 +36,17 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   QGridLayout *grid1 = new QGridLayout( gb->layout(), 3, 3 );
 
-  lTopLeft  = addButton( grid1, gb, i18n("Top-left"),  "chart_legend_topleft",  0, 0 );
+  lTopLeft  = addButton( grid1, gb, i18n("Top-Left"),  "chart_legend_topleft",  0, 0 );
   lTop      = addButton( grid1, gb, i18n("Top"),       "chart_legend_top",      0, 1 );
-  lTopRight = addButton( grid1, gb, i18n("Top-right"), "chart_legend_topright", 0, 2 );
+  lTopRight = addButton( grid1, gb, i18n("Top-Right"), "chart_legend_topright", 0, 2 );
 
   lLeft    = addButton( grid1, gb, i18n("Left"),      "chart_legend_left",     1, 0 );
-  noLegend = addButton( grid1, gb, i18n("No legend"), "chart_legend_nolegend", 1, 1 );
+  noLegend = addButton( grid1, gb, i18n("No Legend"), "chart_legend_nolegend", 1, 1 );
   lRight   = addButton( grid1, gb, i18n("Right"),     "chart_legend_right",    1, 2 );
 
-  lBottomLeft  = addButton( grid1, gb, i18n("Bottom-left"),  "chart_legend_bottomleft",  2, 0 );
+  lBottomLeft  = addButton( grid1, gb, i18n("Bottom-Left"),  "chart_legend_bottomleft",  2, 0 );
   lBottom      = addButton( grid1, gb, i18n("Bottom"),       "chart_legend_bottom",      2, 1 );
-  lBottomRight = addButton( grid1, gb, i18n("Bottom-right"), "chart_legend_bottomright", 2, 2 );
+  lBottomRight = addButton( grid1, gb, i18n("Bottom-Right"), "chart_legend_bottomright", 2, 2 );
 
   gb->setAlignment( Qt::AlignLeft );
   layout->addWidget( gb, 0, 0 );

@@ -136,7 +136,7 @@ bool  CqlDB::commitWork() {
 	}
 	catch(CqlException& ex)
 	{
-		m_error.setup(2,i18n("Commit Workk failed"));
+		m_error.setup(2,i18n("Commit Work failed"));
 //		throw new KexiDBError(0, i18n("Query failed"));
 		return false;
 		cerr << ex << endl;

@@ -2727,7 +2727,7 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _ora
         _objects.append( kpobject );
     }
 
-    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new Options" ), _diffs, _objects, m_doc->getGridX(),
+    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set New Options" ), _diffs, _objects, m_doc->getGridX(),
                                                       m_doc->getGridY(),_orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
     if ( createUndoRedo )
         return setOptionsCmd;

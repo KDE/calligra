@@ -701,7 +701,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
         url = fd.selectedURL();
         if( url.isEmpty() )
         {
-            KMessageBox::sorry( this, i18n("File name is empty"),
+            KMessageBox::sorry( this, i18n("File name is empty."),
                                 i18n("Save Picture"));
             return;
         }
@@ -711,7 +711,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
             file.close();
         }
         else
-            KMessageBox::error(this, i18n("Error during saving"),
+            KMessageBox::error(this, i18n("Error during saving."),
                                i18n("Save Picture"));
     }
 }
@@ -4223,12 +4223,12 @@ void KPresenterView::setupScrollbars()
     pgNext = new QToolButton( pageBase );
     pgNext->setPixmap( QPixmap( pagedown_xpm ) );
     pgNext->setAutoRepeat( TRUE );
-    QToolTip::add( pgNext, i18n( "Next Slide" ) );
+    QToolTip::add( pgNext, i18n( "Next slide" ) );
     connect( pgNext, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
     pgPrev = new QToolButton( pageBase );
     pgPrev->setPixmap( QPixmap( pageup_xpm ) );
     pgPrev->setAutoRepeat( TRUE );
-    QToolTip::add( pgPrev, i18n( "Previous Slide" ) );
+    QToolTip::add( pgPrev, i18n( "Previous slide" ) );
     connect( pgPrev, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
 }
 
@@ -5179,7 +5179,7 @@ void KPresenterView::spellCheckerDone( const QString & )
         {
             KMessageBox::information(this,
                                      i18n("SpellCheck selection finished."),
-                                     i18n("Spell checking"));
+                                     i18n("Spell Checking"));
             m_pKPresenterDoc->setReadWrite(true);
 
 #if 0
@@ -6969,7 +6969,7 @@ void KPresenterView::insertFile(  )
         if( url.isEmpty() )
         {
             KMessageBox::sorry( this,
-                                i18n("File name is empty"),
+                                i18n("File name is empty."),
                                 i18n("Insert File"));
             return;
         }

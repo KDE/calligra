@@ -181,7 +181,7 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 
 		if ((!m_record->writeOut(urec))) //i->getHint().toInt(), true))
 		{
-			KMessageBox::detailedError(this, i18n("Error occurred while updating table"), m_record->latestError()->message(),
+			KMessageBox::detailedError(this, i18n("Error occurred while updating table."), m_record->latestError()->message(),
 			 i18n("Database Error"));
 //			err.toUser(this);
 			return;

@@ -582,7 +582,7 @@ VLayersTab::renameItem( QListViewItem* item, const QPoint&, int col )
 		{
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 			VObject *obj = objectItem->object();
-			QString name = QInputDialog::getText( i18n( "Current object" ), i18n( "Change the name of the object:" ),
+			QString name = QInputDialog::getText( i18n( "Current Object" ), i18n( "Change the name of the object:" ),
 																	QLineEdit::Normal, obj->name(), &ok, this );
 			if( ok )
 			{

@@ -227,7 +227,7 @@ KexiBlobTableEdit::menu()
 	menu->insertItem(i18n("Open With..."), this, SLOT(openWith()));
 	menu->insertSeparator();
 	menu->insertItem(i18n("Load From File..."), this, SLOT(loadFile()));
-	menu->insertItem(i18n("Save To File..."), this, SLOT(saveFile()));
+	menu->insertItem(i18n("Save to File..."), this, SLOT(saveFile()));
 
 	QPoint pos = mapToGlobal(m_view->pos());
 	pos.setY(pos.y() + m_view->height());

@@ -1161,7 +1161,7 @@ void KSpreadView::initializeTableActions()
   m_insertTable = new KAction( i18n("Insert Sheet"),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "insertTable" );
-  m_insertTable->setToolTip(i18n("Insert a new sheet."));
+  m_insertTable->setToolTip(i18n("Insert a new sheet"));
 
   /* basically the same action here, but it's in the insert menu so we don't
      want to also have 'insert' in the caption
@@ -4070,7 +4070,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
    QCString passwd;
    if ( mode )
    {
-     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect document" ) );
+     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Document" ) );
      if ( result != KPasswordDialog::Accepted )
      {
        m_protectDoc->setChecked( false );
@@ -4085,7 +4085,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
    }
    else
    {
-     int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect document" ) );
+     int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Document" ) );
      if ( result != KPasswordDialog::Accepted )
      {
        m_protectDoc->setChecked( true );
@@ -4143,7 +4143,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
    QCString passwd;
    if ( mode )
    {
-     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect sheet" ) );
+     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Sheet" ) );
      if ( result != KPasswordDialog::Accepted )
      {
        m_protectSheet->setChecked( false );
@@ -4159,7 +4159,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
    }
    else
    {
-     int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect sheet" ) );
+     int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Sheet" ) );
      if ( result != KPasswordDialog::Accepted )
      {
        m_protectSheet->setChecked( true );
@@ -4359,7 +4359,7 @@ void KSpreadView::toggleProtectChanges( bool mode )
    if ( mode )
    {
      QCString passwd;
-     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect recorded changes" ) );
+     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Recorded Changes" ) );
      if ( result != KPasswordDialog::Accepted )
      {
        m_protectChanges->setChecked( false );
@@ -4388,7 +4388,7 @@ bool KSpreadView::checkChangeRecordPassword()
     return true;
   }
 
-  int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect recorded changes" ) );
+  int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Recorded Changes" ) );
   if ( result != KPasswordDialog::Accepted )
   {
     m_protectChanges->setChecked( true );

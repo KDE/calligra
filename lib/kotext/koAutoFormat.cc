@@ -1033,17 +1033,17 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 if (!it->formatEntryContext() || !m_bAutoCorrectionWithFormat)
                     cmd = txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
                                                            KoTextObject::HighlightSelection,
-                                                           i18n("Autocorrect word") );
+                                                           i18n("Autocorrect Word") );
                 else
                 {
                     int flags = 0;
                     KoTextFormat * lastFormat = parag->at( start )->format();
                     KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
                     changeTextFormat(it->formatEntryContext(), newFormat, flags );
-                    KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect word with format"));
+                    KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect Word with Format"));
                     KCommand *cmd2=txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
                                                                     KoTextObject::HighlightSelection,
-                                                                    i18n("Autocorrect word") );
+                                                                    i18n("Autocorrect Word") );
                     if ( cmd2 )
                         macro->addCommand(cmd2);
                     KoTextCursor cursor( parag->document() );
@@ -1181,7 +1181,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
                 QString replacement = word[1].lower();
-                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (Convert two Upper Case letters to one Upper Case and one Lower Case letter.)") );
+                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (Convert two upper case letters to one upper case and one lower case letter.)") );
 
                 bNeedMove = true;
             }
@@ -1356,7 +1356,7 @@ KCommand * KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTex
         QString replacement=word.mid(1,word.length()-2);
         int start = index - word.length();
         KoTextDocument * textdoc = parag->textDocument();
-        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection: Change Format."));
+        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection: Change Format"));
         KoTextCursor cursor( parag->document() );
 
         cursor.setParag( parag );
@@ -1366,7 +1366,7 @@ KCommand * KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTex
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
         macro->addCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                            KoTextObject::HighlightSelection,
-                                                           i18n("Autocorrect word") ));
+                                                           i18n("Autocorrect Word") ));
 
         KoTextFormat * lastFormat = parag->at( start )->format();
         KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
@@ -1633,7 +1633,7 @@ KCommand *KoAutoFormat::doCapitalizeNameOfDays( KoTextCursor* textEditCursor, Ko
         cursor.setIndex( start + length );
         QString replacement = replaceStr.at(0).upper() + replaceStr.right( length-1 );
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-        QString cmdName=i18n("Capitalize name of days");
+        QString cmdName=i18n("Capitalize Name of Days");
         KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                            KoTextObject::HighlightSelection,
                                                                 cmdName );

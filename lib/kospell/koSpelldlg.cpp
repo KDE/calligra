@@ -43,7 +43,7 @@ KOSpellDlg::KOSpellDlg(
   bool _modal,
   bool _autocorrect
 )
-  : KDialogBase(parent, name, _modal, i18n("Check spelling"), Help|Cancel|User1, Cancel, true, i18n("&Stop"))
+  : KDialogBase(parent, name, _modal, i18n("Check Spelling"), Help|Cancel|User1, Cancel, true, i18n("&Stop"))
 {
     QWidget * w = new QWidget(this);
     setMainWidget(w);

@@ -81,7 +81,7 @@ void KSpreadPaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     KSpreadSheetPrint* print = m_pSheet->print();
 
-    QGroupBox *group = new QGroupBox( i18n("General options"), tab );
+    QGroupBox *group = new QGroupBox( i18n("General Options"), tab );
     vbox->addWidget( group );
 
     QVBoxLayout *optionsVbox = new QVBoxLayout( group,
@@ -156,7 +156,7 @@ void KSpreadPaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     KSpreadSheetPrint* print = m_pSheet->print();
 
-    QButtonGroup *zoomGroup = new QButtonGroup( i18n("Scale printout"), tab );
+    QButtonGroup *zoomGroup = new QButtonGroup( i18n("Scale Printout"), tab );
     vbox->addWidget( zoomGroup );
 
     QGridLayout *grid = new QGridLayout( zoomGroup, 2, 6,

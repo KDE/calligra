@@ -2269,7 +2269,7 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
         if(cmd && createUndoRedo)
         {
             if ( !macroCmd)
-                macroCmd = new KMacroCommand( i18n("Set new Options") );
+                macroCmd = new KMacroCommand( i18n("Set New Options") );
             macroCmd->addCommand(cmd);
         }
         else
@@ -3216,7 +3216,7 @@ void KPresenterDoc::insertFile(const QString & file )
     bool ok = loadNativeFormat(file );
     if ( !ok )
     {
-        KMessageBox::error(0L, i18n("Error during Insert File"), i18n("Insert File"));
+        KMessageBox::error(0L, i18n("Error during file insertion."), i18n("Insert File"));
         return;
     }
     KMacroCommand *macro = 0L;

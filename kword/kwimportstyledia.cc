@@ -57,7 +57,7 @@ void KWImportStyleDia::loadFile()
     if( url.isEmpty() )
     {
         KMessageBox::sorry( this,
-                            i18n("File name is empty"),
+                            i18n("File name is empty."),
                             i18n("Import Style"));
         return;
     }
@@ -197,7 +197,7 @@ void KWImportFrameTableStyleDia::loadFile()
     if( url.isEmpty() )
     {
         KMessageBox::sorry( this,
-                            i18n("File name is empty"),
+                            i18n("File name is empty."),
                             i18n("Import Style"));
         return;
     }

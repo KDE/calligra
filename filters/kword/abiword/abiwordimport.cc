@@ -1598,7 +1598,7 @@ bool StructureParser::fatalError (const QXmlParseException& exception)
     m_fatalerror=true;
     KMessageBox::error(NULL, i18n("An error has occured while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
         .arg(exception.lineNumber()).arg(exception.columnNumber()).arg(i18n(exception.message().utf8())),
-        i18n("KWord's AbiWord Import Filter"),0);
+        i18n("AbiWord Import Filter"),0);
     return false; // Stop parsing now, we do not need further errors.
 }
 
@@ -1617,7 +1617,7 @@ void StructureParser :: createDocument(void)
     QDomElement elementDoc;
     elementDoc=mainDocument.createElement("DOC");
     elementDoc.setAttribute("xmlns","http://www.koffice.org/DTD/kword");
-    elementDoc.setAttribute("editor","KWord's AbiWord Import Filter");
+    elementDoc.setAttribute("editor","AbiWord Import Filter");
     elementDoc.setAttribute("mime","application/x-kword");
     elementDoc.setAttribute("syntaxVersion",2);
     mainDocument.appendChild(elementDoc);
@@ -1778,7 +1778,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
         {
             // As the parsing was stopped for something else than a fatal error, we have not yet get an error message. (Can it really happen?)
             KMessageBox::error(NULL, i18n("An error occured during the load of the AbiWord file: %1").arg(from),
-                i18n("KWord's AbiWord Import Filter"),0);
+                i18n("AbiWord Import Filter"),0);
         }
         return KoFilter::ParsingError;
     }
@@ -1792,7 +1792,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     if(!out)
     {
         kdError(30506) << "AbiWord Import unable to open output file! (Documentinfo)" << endl;
-        KMessageBox::error(NULL, i18n("Unable to save document information"),i18n("KWord's AbiWord Import Filter"),0);
+        KMessageBox::error(NULL, i18n("Unable to save document information."),i18n("AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
 
@@ -1806,7 +1806,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     if(!out)
     {
         kdError(30506) << "AbiWord Import unable to open output file! (Root)" << endl;
-        KMessageBox::error(NULL, i18n("Unable to save main document"),i18n("KWord's AbiWord Import Filter"),0);
+        KMessageBox::error(NULL, i18n("Unable to save main document."),i18n("AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
 

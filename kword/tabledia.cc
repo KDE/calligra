@@ -241,14 +241,14 @@ void KWTableDia::slotOk()
             int rowsDiff = nRows->value()-oldRowCount;
             if ( rowsDiff!=0 )
             {
-                macroCmd = new KMacroCommand( (rowsDiff>0 ) ? i18n("Add new rows to table") : i18n("Remove rows from table") );
+                macroCmd = new KMacroCommand( (rowsDiff>0 ) ? i18n("Add New Rows to Table") : i18n("Remove Rows From Table") );
                 for ( int i = 0 ; i < abs( rowsDiff ) ; i++ )
                 {
                     if ( rowsDiff < 0 )
-                        cmd = new KWRemoveRowCommand( i18n("Remove row"), table, oldRowCount-i-1 );
+                        cmd = new KWRemoveRowCommand( i18n("Remove Row"), table, oldRowCount-i-1 );
                     else
                     {
-                        cmd = new KWInsertRowCommand( i18n("Insert row"), table, oldRowCount+i );
+                        cmd = new KWInsertRowCommand( i18n("Insert Row"), table, oldRowCount+i );
                     }
 
                     if (cmd)
@@ -274,10 +274,10 @@ void KWTableDia::slotOk()
                 for ( int i = 0 ; i < abs( colsDiff ) ; i++ )
                 {
                     if ( colsDiff < 0 )
-                        cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, oldColCount-i-1 );
+                        cmd = new KWRemoveColumnCommand( i18n("Remove Column"), table, oldColCount-i-1 );
                     else
                     {
-                        cmd = new KWInsertColumnCommand( i18n("Insert column"), table, oldColCount+i,  maxRightOffset);
+                        cmd = new KWInsertColumnCommand( i18n("Insert Column"), table, oldColCount+i,  maxRightOffset);
                     }
 
                     if (cmd)
@@ -290,8 +290,8 @@ void KWTableDia::slotOk()
             if ( tableTemplateSelector->getTableTemplate() && (( oldTemplateName!=tableTemplateSelector->getTableTemplate()->name() ) || (cbReapplyTemplate1->isChecked()) ))
             {
                 if ( !macroCmd )
-                    macroCmd = new KMacroCommand( i18n("Apply template to table") );
-                KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( i18n("Apply template to table"), table, tableTemplateSelector->getTableTemplate() );
+                    macroCmd = new KMacroCommand( i18n("Apply Template to Table") );
+                KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( i18n("Apply Template to Table"), table, tableTemplateSelector->getTableTemplate() );
                 macroCmd->addCommand( ttCmd );
                 canvas->setTableTemplateName( tableTemplateSelector->getTableTemplate()->name() );
             }

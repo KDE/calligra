@@ -67,11 +67,11 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &t, QWidget *p, const char *n)
     constraintsLayout->addWidget(b, 1, 0);
     b = new QRadioButton(i18n("ALAP"), constraints);
     constraintsLayout->addWidget(b, 2, 0);
-    b = new QRadioButton(i18n("Start Not Earlier Than"), constraints);
+    b = new QRadioButton(i18n("Start not earlier than"), constraints);
     constraintsLayout->addWidget(b, 3, 0);
-    b = new QRadioButton(i18n("Finish Not Later Than"), constraints);
+    b = new QRadioButton(i18n("Finish not later than"), constraints);
     constraintsLayout->addWidget(b, 4, 0);
-    b = new QRadioButton(i18n("Must Start On"), constraints);
+    b = new QRadioButton(i18n("Must start on"), constraints);
     constraintsLayout->addWidget(b, 5, 0);
     
     constraints->setButton(task.constraint());

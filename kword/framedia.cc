@@ -1998,9 +1998,9 @@ bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
     bool isEmpty = parag->next() == 0L && parag->length() == 1;
     if ( !isEmpty ) {
         int result = KMessageBox::warningContinueCancel(this,
-           i18n( "You are about to reconnect the last Frame of the "
-           "Frameset '%1'. "
-           "The contents of this Frameset will be deleted.\n"
+           i18n( "You are about to reconnect the last frame of the "
+           "frameset '%1'. "
+           "The contents of this frameset will be deleted.\n"
            "Are you sure you want to do that?").arg(fs->getName()),
            i18n("Reconnect Frame"), i18n("&Reconnect"));
         if (result != KMessageBox::Continue)

@@ -95,7 +95,7 @@ void KWQTSQLMailMergeOpen::slotSave()
 {
 	QString value;
 	bool ok;
-	value=KLineEditDlg::getText(i18n("Store settings"),i18n("Name:"),
+	value=KLineEditDlg::getText(i18n("Store Settings"),i18n("Name:"),
 		QString::null, &ok,this);
 	if (!ok) kdDebug()<<"Cancel was pressed"<<endl;
 	if (value.isEmpty()) kdDebug()<<"Name value was empty"<<endl;

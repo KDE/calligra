@@ -531,7 +531,7 @@ void KWDocStructRootItem::setupFormulaFrames()
         if ( frameset->type() == FT_FORMULA &&
             frameset->getNumFrames()>0  )
         {
-            _name=i18n("Formula frame %1").arg(QString::number(i+1));
+            _name=i18n("Formula Frame %1").arg(QString::number(i+1));
             child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );

@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 KPTDurationDialog::KPTDurationDialog(QWidget *parent, KPTDuration *d)
-    : KDialogBase( Swallow, i18n("Adjust duration"), Help|Ok|Cancel, Ok, parent, 0, true, true) {
+    : KDialogBase( Swallow, i18n("Adjust Duration"), Help|Ok|Cancel, Ok, parent, 0, true, true) {
     duration = d;
 
     dia = new KPTDurationPanel(this, duration);

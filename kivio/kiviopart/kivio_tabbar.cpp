@@ -588,7 +588,7 @@ void KivioTabBar::hidePage()
         removeTab( activeName );
         pagehide.append( activeName );
         // m_pView->setActivePage( m_pView->doc()->map()->findPage( tabsList.first()) );
-        KivioHidePageCommand * cmd = new KivioHidePageCommand(i18n("Hide page"), page);
+        KivioHidePageCommand * cmd = new KivioHidePageCommand(i18n("Hide Page"), page);
         m_pView->doc()->addCommand( cmd );
         emit tabChanged( tabsList.first() );
     }

@@ -84,8 +84,8 @@ KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 	{
 	kdDebug() << "KexiDBConnection::connectDB()" << endl;
 
-		KMessageBox::detailedError(0, i18n("Error in database connection"),
-                                   i18n("kexi couldn't determine engine type"), i18n("Database Connection"));
+		KMessageBox::detailedError(0, i18n("Error in database connection."),
+                                   i18n("kexi couldn't determine engine type."), i18n("Database Connection"));
 		return 0;
 	}
 
@@ -103,7 +103,7 @@ KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 			}
 			else
 			{
-				KMessageBox::detailedError(0, i18n("Error in database connection"),addDB->latestError()->message(), i18n("Database Connection"));
+				KMessageBox::detailedError(0, i18n("Error in database connection."),addDB->latestError()->message(), i18n("Database Connection"));
 				delete addDB;
 				return 0;
 			}
@@ -146,7 +146,7 @@ KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 		}
 		default:
 		{
-			KMessageBox::detailedError(0, i18n("Error in database connection"), i18n("kexi couldn't determine engine type"),
+			KMessageBox::detailedError(0, i18n("Error in database connection."), i18n("kexi couldn't determine engine type."),
                                        i18n("Database Connection"));
 			return 0;
 		}

@@ -28,7 +28,7 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
 
     // First page: select the range
     //     _selectdatapage = new KChartWizardSelectDataPage( this );
-    //     addPage( _selectdatapage, i18n( "Select data" ) );
+    //     addPage( _selectdatapage, i18n( "Select Data" ) );
 
     // Second page: select the major chart type
     _selectcharttypepage =  new KChartWizardSelectChartTypePage( this, _chart );
@@ -46,7 +46,7 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
 
     // Fifth page: labels/legends setup
     _labelslegendpage = new KChartWizardLabelsLegendPage( this, _chart );
-    addPage( _labelslegendpage, i18n( "Labels and Legend" ) );
+    addPage( _labelslegendpage, i18n( "Labels & Legend" ) );
 
     // Sixth page: axes setup
     _axespage = new KChartWizardSetupAxesPage( this, _chart );

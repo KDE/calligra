@@ -1725,7 +1725,7 @@ void KivioView::setupPrinter(KPrinter &p)
 void KivioView::exportPage()
 {
    // First build a filter list
-   QString extList = i18n("Image Files: (");
+   QString extList = i18n("Image files: (");
    char *pStr;
    QStrList strList;
    ExportPageDialog dlg(this, "Export Page Dialog");

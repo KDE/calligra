@@ -590,7 +590,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if (inlineCreated)
                     m_frameInline=false;
                 else
-                    KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted"));
+                    KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted."));
             }
         } else if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW ) {
 
@@ -1369,7 +1369,7 @@ void KWCanvas::mrCreatePixmap()
         frame->setSelected(TRUE);
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a Picture Frame"), frame );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Picture Frame"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
     }
@@ -1396,7 +1396,7 @@ void KWCanvas::mrCreateFormula()
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         frameset->addFrame( frame, false );
         m_doc->addFrameSet( frameset );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a Formula Frame"), frame );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Formula Frame"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
     }

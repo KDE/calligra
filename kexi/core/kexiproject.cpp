@@ -354,7 +354,7 @@ KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 	else
 	{
 		kdDebug() << "KexiProject::initDBConnection(): faild" << endl;
-//		KMessageBox::error(0, i18n("connection to database faild"), i18n("Database Connection"));
+//		KMessageBox::error(0, i18n("Connection to database failed."), i18n("Database Connection"));
 		return false;
 	}
 }

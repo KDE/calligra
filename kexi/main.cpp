@@ -29,7 +29,7 @@
 
 static KCmdLineOptions options[] =
 {
-  { "+[File]", I18N_NOOP("file to open"), 0 },
+  { "+[File]", I18N_NOOP("File to open"), 0 },
   KCmdLineLastOption
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };

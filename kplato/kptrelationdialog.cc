@@ -76,7 +76,7 @@ void KPTRelationDialog::init()
     layout->addWidget(l, 1, 0);
 
     //layout->addMultiCellWidget(relationType = new QButtonGroup(box), 0, 5, 0, 1);
-    relationType = new QButtonGroup(i18n("Relation type"),page);
+    relationType = new QButtonGroup(i18n("Relation Type"),page);
     layout->addWidget(relationType, 2, 0);
     
     QGridLayout *relationTypeLayout = new QGridLayout(relationType, 6, 1, marginHint()+5, spacingHint());
@@ -88,7 +88,7 @@ void KPTRelationDialog::init()
     b = new QRadioButton(QString("Start-Start"), relationType);
     relationTypeLayout->addWidget(b, 2, 0);
     
-    timingType = new QButtonGroup(i18n("Timing type"),page);
+    timingType = new QButtonGroup(i18n("Timing Type"),page);
     layout->addWidget(timingType, 2, 1);
     
     QGridLayout *timingTypeLayout = new QGridLayout(timingType, 6, 1, marginHint()+5, spacingHint());

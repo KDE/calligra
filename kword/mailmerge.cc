@@ -118,7 +118,7 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type)
 	{
 		//Sorry no suitable plugins found
 		kdDebug()<<"No plugins found"<<endl;
-		KMessageBox::sorry(0,i18n("No plugins supporting the requested action were found"));
+		KMessageBox::sorry(0,i18n("No plugins supporting the requested action were found."));
 	}
 	else
 	{

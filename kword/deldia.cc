@@ -55,7 +55,7 @@ void KWDeleteDia::setupTab1()
 {
     tab1 = plainPage();
     grid1 = new QGridLayout( tab1, 4, 1, 0, spacingHint() );
-    QString message =type == ROW ? i18n( "Delete Rows:" ) : i18n( "Delete Columns:" );
+    QString message =type == ROW ? i18n( "Delete rows:" ) : i18n( "Delete columns:" );
     bool firstSelectedCell = true; // used to know whether to add a ", " to the message string.
 
     uint max = (type == ROW) ? table->getRows() : table->getCols(); // max row/col to loop up to
@@ -101,19 +101,19 @@ bool KWDeleteDia::doDelete()
     {   // we will just delete some row/cols
         if ( type == ROW )
         {
-            globalCommand = new KMacroCommand(i18n("Remove rows"));
+            globalCommand = new KMacroCommand(i18n("Remove Rows"));
             for (uint i=0;i<m_toRemove.count();i++)
             {
-                KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove row"), table, m_toRemove[i] );
+                KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove Row"), table, m_toRemove[i] );
                 globalCommand->addCommand(cmd);
             }
         }
         else
         {
-            globalCommand = new KMacroCommand(i18n("Remove columns"));
+            globalCommand = new KMacroCommand(i18n("Remove Columns"));
             for (uint i=0;i<m_toRemove.count();i++)
             {
-                KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, m_toRemove[i] );
+                KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove Column"), table, m_toRemove[i] );
                 globalCommand->addCommand(cmd);
             }
         }

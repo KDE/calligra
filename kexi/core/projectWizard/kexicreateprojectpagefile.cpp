@@ -48,7 +48,7 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 	QButtonGroup *buttonBase = new QButtonGroup(this);
 	buttonBase->hide();
 //	QCheckBox *bpers = new QCheckBox(i18n(), this);
-	m_btnEmbedd = new QRadioButton(i18n("Embed Database into Projectfile\nWARNING: You will lose transactional and\nintegrity protection."), this);
+	m_btnEmbedd = new QRadioButton(i18n("Embed database into projectfile\nWARNING: You will lose transactional and\nintegrity protection."), this);
 	m_btnEmbedd->toggle();
 	m_btnExtern = new QRadioButton(i18n("Database is persistent"), this);
 	connect(m_btnExtern, SIGNAL(toggled(bool)), this, SLOT(slotExternToggle(bool)));

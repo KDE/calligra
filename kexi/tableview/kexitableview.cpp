@@ -1350,9 +1350,9 @@ void KexiTableView::updateContextMenu()
 	{
 		m_pContextMenu = new QPopupMenu(this);
 		if(m_additionPolicy != NoAdd)
-			m_pContextMenu->insertItem(i18n("Add record"), this, SLOT(addRecord()), ALT+Key_Insert);
+			m_pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), ALT+Key_Insert);
 		if(m_deletionPolicy != NoDelete)
-			m_pContextMenu->insertItem(i18n("Remove record"), this, SLOT(removeRecord()), ALT+Key_Delete);
+			m_pContextMenu->insertItem(i18n("Remove Record"), this, SLOT(removeRecord()), ALT+Key_Delete);
 	}
 }
 

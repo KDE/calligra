@@ -58,7 +58,7 @@ void
 KexiScriptHandlerProxy::slotCreate()
 {
 	bool ok;
-	QString name = KLineEditDlg::getText(i18n("New Code"), i18n("Sourcefile name:"), "", &ok, kexiView());
+	QString name = KLineEditDlg::getText(i18n("New Code"), i18n("Source file name:"), "", &ok, kexiView());
 	if(ok)
 	{
 		KexiProjectHandlerItem *i = new KexiProjectHandlerItem(part(), name + ".qs", "kexi/script", name + ".qs");
