@@ -21,7 +21,7 @@
 #include "kexidialogbase.h"
 #include "kapplication.h"
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
- : KMdiChildView(title, parent), KXMLGUIClient()
+ : KMdiChildView(title, parent), KXMLGUIClient(),m_isRegistered(false)
 {
 	m_parentWindow=parent;
 	setInstance(parent->instance());
@@ -35,8 +35,16 @@ void KexiDialogBase::registerDialog() {
 	m_parentWindow->registerChild(this);
 	m_parentWindow->addWindow((KMdiChildView *)this);
 	show();
-	m_parentWindow->activeWindowChanged(0);
+	m_isRegistered=true;
 	m_parentWindow->activeWindowChanged(this);
+}
+
+bool KexiDialogBase::isRegistered(){
+	return m_isRegistered;
+}
+
+KXMLGUIClient *KexiDialogBase::guiClient() {
+	return this;
 }
 
 #include "kexidialogbase.moc"

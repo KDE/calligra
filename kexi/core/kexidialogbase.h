@@ -33,10 +33,13 @@ class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 	public:
 		KexiDialogBase(KexiMainWindow *parent, const QString &title);
 		~KexiDialogBase();
+		bool isRegistered();
+		virtual KXMLGUIClient* guiClient();
 	protected:
 		void registerDialog();
 	private:
 		KexiMainWindow *m_parentWindow;
+		bool m_isRegistered;
 };
 
 #endif

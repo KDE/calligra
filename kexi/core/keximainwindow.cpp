@@ -80,12 +80,11 @@ KexiMainWindow::KexiMainWindow()
 	m_browser = 0;
 	m_project = 0;	
 	setXMLFile("kexiui.rc");
-	setStandardMDIMenuEnabled();
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
+	setStandardMDIMenuEnabled();
 
 	initActions();
 	createShellGUI(true);
-//	createGUI(0);
 
 //	initBrowser();
 	//TODO:new KexiProject();
@@ -425,8 +424,10 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 {
 	kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	KXMLGUIClient *client=dynamic_cast<KXMLGUIClient*>(dlg);
 	kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
+
+	if (dlg && (!dlg->isRegistered())) return;
+	KXMLGUIClient *client=dlg->guiClient();
 	if (client!=m_currentDocumentGUIClient) {
 		if (m_currentDocumentGUIClient) guiFactory()->removeClient(m_currentDocumentGUIClient);
 		if (client) guiFactory()->addClient(client);
