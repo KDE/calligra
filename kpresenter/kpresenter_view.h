@@ -339,6 +339,7 @@ public slots:
 
     void slotAllowAutoFormat();
 
+    void slotAutoComplete();
 
 public:
     // create GUI

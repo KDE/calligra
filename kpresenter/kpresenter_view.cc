@@ -2953,6 +2953,11 @@ void KPresenterView::setupActions()
                                           actionCollection(), "view_allowAutoFormat" );
 
 
+    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), CTRL+Key_T,
+                                            this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
+
+    // Necessary for the actions that are not plugged anywhere
+    actAutoComplete->plugAccel( accel );
 }
 
 void KPresenterView::textSubScript()
@@ -5604,6 +5609,13 @@ void KPresenterView::slotAllowAutoFormat()
 {
     bool state = actionAllowAutoFormat->isChecked();
     m_pKPresenterDoc->setAllowAutoFormat( state );
+}
+
+void KPresenterView::slotAutoComplete()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if(edit)
+        edit->autoCompletion();
 }
 
 
