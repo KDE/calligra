@@ -309,19 +309,38 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
   int i = 1;
 
   // TODO: handle empty sheets
-  for ( ; i <= maxCols; ++i )
+  while ( i <= maxCols )
   {
     ColumnFormat const * const column = sheet->columnFormat( i );
     ColumnStyle cs;
     cs.breakB = Style::automatic;
     cs.size   = column->mmWidth() / 10;
+    bool hide = column->isHide();
+
+    int j        = i + 1;
+    int repeated = 1;
+    while ( j <= maxCols )
+    {
+      ColumnFormat const * const c = sheet->columnFormat( j );
+      ColumnStyle cs1;
+      cs1.breakB = Style::automatic;
+      cs1.size   = column->mmWidth() / 10;
+      if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->isHide() ) )
+        ++repeated;
+      else
+        break;
+      ++j;
+    }
 
     QDomElement colElem = doc.createElement( "table:table-column" );
     colElem.setAttribute( "table:style-name", m_styles.columnStyle( cs ) );
     colElem.setAttribute( "table:default-cell-style-name", "Default" );
-    // TODO: colElem.setAttribute( "table:number-columns-repeated", x );
+
+    if ( repeated > 1 )
+      colElem.setAttribute( "table:number-columns-repeated", QString::number( repeated ) );
 
     tabElem.appendChild( colElem );
+    i += repeated;
   }
 
   for ( i = 1; i <= maxRows; ++i )
@@ -344,24 +363,40 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
                                   KSpreadSheet const * const sheet, int row, int maxCols )
 {
   int i = 1;
-  for ( ; i <= maxCols; ++i )
+  while ( i <= maxCols )
   {
+    int repeated = 1;
     KSpreadCell const * const cell = sheet->cellAt( i, row );
     QDomElement cellElem = doc.createElement( "table:table-cell" );
 
     KSpreadValue const value( cell->value() );
 
-    QFont font = cell->font();
+    QFont font = cell->textFont( i, row );
     m_styles.addFont( font );
     CellStyle c;
-    c.font    = font;
-
-    if ( cell->hasProperty( KSpreadFormat::PTextPen ) )
-      c.color   = cell->textColor( cell->column(), cell->row() );
-    if ( cell->hasProperty( KSpreadFormat::PBackgroundColor ) )
-      c.bgColor = cell->bgColor( cell->column(), cell->row() );
+    CellStyle::loadData( c, cell ); // TODO: number style    
 
     cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
+
+    if ( cell->isEmpty() ) // group empty cells with the same style
+    {
+      int j = i + 1;
+      while ( j <= maxCols )
+      {
+        KSpreadCell const * const cell1 = sheet->cellAt( j, row );
+
+        CellStyle c1;
+        CellStyle::loadData( c1, cell1 ); // TODO: number style
+
+        if ( cell1->isEmpty() && CellStyle::isEqual( &c, c1 ) )
+          ++repeated;
+        else
+          break;
+        ++j;
+      }
+      if ( repeated > 1 )
+        cellElem.setAttribute( "table:number-columns-repeated", QString::number( repeated ) );
+    }
 
     if ( value.isBoolean() )
     {
@@ -401,10 +436,12 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       textElem.appendChild( doc.createTextNode( cell->strOutText() ) );
 
       cellElem.appendChild( textElem );
+      kdDebug() << "Cell StrOut: " << cell->strOutText() << endl;
     }
-    kdDebug() << "Cell StrOut: " << cell->strOutText() << endl;
 
     rowElem.appendChild( cellElem );
+
+    i += repeated;
   }
 }
 

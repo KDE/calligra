@@ -26,6 +26,8 @@
 #include <qptrlist.h>
 #include <qstring.h>
 
+class KSpreadCell;
+
 class QDomDocument;
 class QDomElement;
 
@@ -76,6 +78,9 @@ class CellStyle
 
   void copyData( CellStyle const & ts );
   static bool isEqual( CellStyle const * const t1, CellStyle const & t2 );
+
+  // all except the number style
+  static void loadData( CellStyle & cs, KSpreadCell const * const cell );
 
   QString     name;
 

@@ -19,6 +19,11 @@
 
 #include <opencalcstyleexport.h>
 
+#include <koGlobal.h>
+
+#include <kspread_cell.h>
+#include <kspread_format.h>
+
 #include <qdom.h>
 
 OpenCalcStyles::OpenCalcStyles()
@@ -316,6 +321,19 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
     return true;
 
   return false;
+}
+
+// all except the number style
+void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
+{
+  int col = cell->column();
+  int row = cell->row();
+  if ( cell->hasProperty( KSpreadFormat::PFont ) )
+    cs.font    = cell->textFont( col, row );
+  if ( cell->hasProperty( KSpreadFormat::PTextPen ) )
+    cs.color   = cell->textColor( col, row );
+  if ( cell->hasProperty( KSpreadFormat::PBackgroundColor ) )
+    cs.bgColor = cell->bgColor( col, row );  
 }
 
 bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )
