@@ -165,7 +165,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text, true );
-                        cell->setFormatType( Number_format );
                     }
                     else
                     {
@@ -187,7 +186,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text, true );
-                        cell->setFormatType( Number_format );
                     }
                     else
                     {
@@ -209,7 +207,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text,  true );
-                        cell->setFormatType( Number_format );
                     }
                     else
                     {
