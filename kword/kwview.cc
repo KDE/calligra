@@ -1609,6 +1609,9 @@ void KWView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
+	if( lst.contains( i18n( "Zoom to width" ) ) == 0 )
+	    lst << i18n( "Zoom to width" );
+
         QValueList<int> list;
         QString z;
         int val;
@@ -1635,6 +1638,7 @@ void KWView::changeZoomMenu( int zoom )
     }
     else
     {
+          lst << i18n( "Zoom to width" );
           lst << "33%";
           lst << "50%";
           lst << "75%";
@@ -1791,10 +1795,20 @@ void KWView::viewZoom( const QString &s )
 {
     QString z( s );
     bool ok=false;
+    KWCanvas * canvas = m_gui->canvasWidget();
+    int zoom;
 
-    z = z.replace( QRegExp( "%" ), "" );
-    z = z.simplifyWhiteSpace();
-    int zoom = z.toInt(&ok);
+    if( z != i18n( "Zoom to width" ) )
+    {
+    	z = z.replace( QRegExp( "%" ), "" );
+    	z = z.simplifyWhiteSpace();
+    	zoom = z.toInt(&ok);
+    }
+    else
+    {
+        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
+        ok = true;
+    }
     //bad value
     if(!ok)
         zoom=m_doc->zoom();
