@@ -317,6 +317,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 ">"			return T_GREATER_THAN_SIGN;
 "."			return T_MEMBER;
 "+="			return T_PLUS_ASSIGN;
+"-="			return T_MINUS_ASSIGN;
 "$_"			return T_LINE;
 "$"			return T_DOLLAR;
 

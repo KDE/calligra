@@ -63,7 +63,7 @@
     return false;                       \
   }                                     \
 
-// Try to reuse one of the KSValue objects or l or r
+// Try to reuse one of the KSValue objects l or r
 // and assign it to ctx. This is faster than the default
 // behaviour of creating a new KSValue object all the time.
 #define FILL_VALUE( ctx, l, r )                  \
@@ -249,18 +249,39 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
     return false;
   }
 
+  // Binary operator
   EVAL_OPS( context, l, r, false );
 
-  // If we have double and int, then always convert to double
-  if ( l.value()->type() == KSValue::DoubleType )
+  if ( l.value()->type() == KSValue::TimeType )
   {
-    if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
-      return false;
+      if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+	  return false;
+      QTime t = l.value()->timeValue();
+      t = t.addSecs( r.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( t );
+      return TRUE;
+  }
+  else if ( l.value()->type() == KSValue::DateType )
+  {
+      if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+	  return false;
+      QDate d = l.value()->dateValue();
+      d = d.addDays( r.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( d );
+      return TRUE;
+  }
+  // If we have double and int, then always convert to double
+  else if ( l.value()->type() == KSValue::DoubleType )
+  {
+      if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
+	  return false;
   }
   else
   {
-    if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
-      return false;
+      if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+	  return false;
   }
 
   switch( l.value()->type() )
@@ -308,6 +329,10 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
 	return true;
       }
       break;
+    case KSValue::DateType:
+    case KSValue::TimeType:
+	// Handled above
+	return true;
     default:
       QString tmp( i18n("Operator + not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
@@ -343,8 +368,46 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
 
   EVAL_OPS( context, l, r, false );
 
+  if ( l.value()->type() == KSValue::TimeType )
+  {
+      if ( KSUtil::checkType( context, r.value(), KSValue::TimeType, false ) )
+      {
+	  QTime d = r.value()->timeValue();
+	  int diff = d.secsTo( l.value()->timeValue() );
+	  FILL_VALUE( context, l, r );
+	  context.value()->setValue( (KScript::Long) diff );
+	  return TRUE;
+      }
+
+      if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+	  return false;
+      QTime t = l.value()->timeValue();
+      t = t.addSecs( -r.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( t );
+      return TRUE;
+  }
+  else if ( l.value()->type() == KSValue::DateType )
+  {
+      if ( KSUtil::checkType( context, r.value(), KSValue::DateType, false ) )
+      {
+	  QDate d = r.value()->dateValue();
+	  int diff = d.daysTo( l.value()->dateValue() );
+	  FILL_VALUE( context, l, r );
+	  context.value()->setValue( (KScript::Long)diff );
+	  return TRUE;
+      }
+      
+      if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+	  return false;
+      QDate d = l.value()->dateValue();
+      d = d.addDays( -r.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( d );
+      return TRUE;
+  }  
   // If we have double and int, then always convert to double
-  if ( l.value()->type() == KSValue::DoubleType )
+  else if ( l.value()->type() == KSValue::DoubleType )
   {
     if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
       return false;
@@ -1152,7 +1215,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
   KSSubScope* scope = context.scope()->popLocalScope();
   KSModule* module = context.scope()->popModule();
 
-  bool b;
+  bool b = FALSE;;
   if ( l.value()->cast( KSValue::FunctionType ) )
   {
     context.scope()->pushModule( l.value()->functionValue()->module() );
@@ -1231,7 +1294,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 	KSSubScope* scope = l.scope()->popLocalScope();
 	KSModule* module = l.scope()->popModule();
 
-	bool b;
+	bool b = FALSE;
 	if ( func.value()->type() == KSValue::FunctionType )
         {
 	    l.scope()->pushModule( l.value()->functionValue()->module() );
@@ -2412,7 +2475,23 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
 	return false;
     }
 
-    if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+    if ( l.value()->type() == KSValue::TimeType )
+    {
+	if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+	    return false;
+	QTime t = l.value()->timeValue();
+	t = t.addSecs( r.value()->intValue() );
+	l.value()->setValue( t );
+    }
+    else if ( l.value()->type() == KSValue::DateType )
+    {
+	if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+	    return false;
+	QDate d = l.value()->dateValue();
+	d = d.addDays( r.value()->intValue() );
+	l.value()->setValue( d );
+    }
+    else if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
 	return false;
 
     switch( l.value()->type() )
@@ -2438,12 +2517,105 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
 		map.insert( it.key(), it.data() );
 	}
 	break;
+    case KSValue::TimeType:
+    case KSValue::DateType:
+	// Handled above
+	break;
     default:
       QString tmp( i18n("Operator += not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
 
+    l.value()->setMode( KSValue::LeftExpr );
+
+    context.setValue( l.shareValue() );
+
+    return TRUE;
+}
+
+bool KSEval_minus_assign( KSParseNode* node, KSContext& context )
+{
+    EVAL_OPS( context, l, r, true );
+
+    if ( l.value()->mode() != KSValue::LeftExpr )
+    {
+	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
+	return false;
+    }
+    
+    if ( l.value()->type() == KSValue::TimeType )
+    {
+	if ( KSUtil::checkType( context, r.value(), KSValue::TimeType, false ) )
+        {
+	    QTime d = r.value()->timeValue();
+	    int diff = d.secsTo( l.value()->timeValue() );
+	    l.value()->setValue( (KScript::Long)diff );
+	}
+	else
+        {
+	    if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+		return false;
+	    QTime t = l.value()->timeValue();
+	    t = t.addSecs( -r.value()->intValue() );
+	    l.value()->setValue( t );
+	}
+    }
+    else if ( l.value()->type() == KSValue::DateType )
+    {
+	if ( KSUtil::checkType( context, r.value(), KSValue::DateType, false ) )
+        {
+	    QDate d = r.value()->dateValue();
+	    int diff = d.daysTo( l.value()->dateValue() );
+	    l.value()->setValue( (KScript::Long)diff );
+	}
+	else
+        {
+	    if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+		return false;
+	    QDate d = l.value()->dateValue();
+	    d = d.addDays( -r.value()->intValue() );
+	    l.value()->setValue( d );
+	}
+    }
+    else if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+	return false;
+    else
+    {
+	switch( l.value()->type() )
+        {
+	case KSValue::IntType:
+	    l.value()->setValue( r.value()->intValue() + l.value()->intValue() );
+	    break;
+	case KSValue::DoubleType:
+	    l.value()->setValue( r.value()->doubleValue() + l.value()->doubleValue() );
+	    break;
+	case KSValue::StringType:
+	    l.value()->setValue( l.value()->stringValue() + r.value()->stringValue() );
+	    break;
+	case KSValue::ListType:
+	    l.value()->setValue( l.value()->listValue() + r.value()->listValue() );
+	    break;
+	case KSValue::MapType:
+	{
+	    QMap<QString,KSValue::Ptr>& map = l.value()->mapValue();
+	    QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
+	    QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
+	    for( ; it != end; ++it )
+		map.insert( it.key(), it.data() );
+	}
+	break;
+	case KSValue::TimeType:
+	case KSValue::DateType:
+	    // Handled above
+	    break;
+	default:
+	    QString tmp( i18n("Operator += not defined for type %1") );
+	    context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
+	    return false;
+	}
+    }
+    
     l.value()->setMode( KSValue::LeftExpr );
 
     context.setValue( l.shareValue() );

@@ -8,8 +8,9 @@
 
 #include <kapp.h>
 #include <dcopclient.h>
-
 #include <klocale.h>
+#include <kglobal.h>
+
 #include <iostream.h>
 
 bool KSScriptFunction::call( KSContext& context )
@@ -50,6 +51,44 @@ static bool ksfunc_mid( KSContext& context )
 
     QString tmp = args[0]->stringValue().mid( pos, len );
     context.setValue( new KSValue(tmp)); 	
+    return true;
+}
+
+static bool ksfunc_time( KSContext& context )
+{
+    KSUtil::checkArgs( context, "s", "time", TRUE );
+    
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+      
+    QTime t = KGlobal::locale()->readTime( args[0]->stringValue() );
+    if ( !t.isValid() )
+    {
+	QString tmp( i18n("Non valid time format: %1") );
+	context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
+	return false;
+    }
+    
+    context.setValue( new KSValue( t ) );
+    
+    return true;
+}
+
+static bool ksfunc_date( KSContext& context )
+{
+    KSUtil::checkArgs( context, "s", "date", TRUE );
+    
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+      
+    QDate t = KGlobal::locale()->readDate( args[0]->stringValue() );
+    if ( !t.isValid() )
+    {
+	QString tmp( i18n("Non valid date format: %1") );
+	context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
+	return false;
+    }
+    
+    context.setValue( new KSValue( t ) );
+    
     return true;
 }
 
@@ -234,28 +273,28 @@ static bool ksfunc_arg( KSContext& context )
 
 static bool ksfunc_stringListSplit( KSContext &context )
 {
-  QValueList<KSValue::Ptr> &args = context.value()->listValue(); 
-  
+  QValueList<KSValue::Ptr> &args = context.value()->listValue();
+
   if ( !KSUtil::checkArgumentsCount( context, 2, "arg", true ) );
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType, TRUE ) )
     return false;
-  
+
   QString sep = args[0]->stringValue();
   QString str = args[1]->stringValue();
-  
+
   QStringList strLst = QStringList::split( sep, str );
-  
+
   KSValue *v = new KSValue( KSValue::ListType );
-  
+
   QStringList::ConstIterator it = strLst.begin();
   QStringList::ConstIterator end = strLst.end();
   for (; it != end; ++it )
     v->listValue().append( new KSValue( *it ) );
-  
+
   context.setValue( v );
   return true;
-} 
+}
 
 static bool ksfunc_connect( KSContext& context )
 {
@@ -384,13 +423,13 @@ static bool ksfunc_startApplication( KSContext& context )
 static bool ksfunc_dcopCall( KSContext &context )
 {
   QValueList<KSValue::Ptr> &args = context.value()->listValue();
-  
+
   if ( args.count() < 3 )
   {
     KSUtil::tooFewArgumentsError( context, "dcopCall" );
     return false;
   }
-  
+
   if ( args.count() > 4 )
   {
     KSUtil::tooManyArgumentsError( context, "dcopCall" );
@@ -399,11 +438,11 @@ static bool ksfunc_dcopCall( KSContext &context )
 
   //  if ( !KSUtil::checkArgs( context, args, "sss", "dcopCall" ) )
   //    return false;
-  
+
   QCString app = args[0]->stringValue().latin1();
   QCString obj = args[1]->stringValue().latin1();
   QCString fun = args[2]->stringValue().latin1();
-  
+
   QByteArray data;
   QDataStream str( data, IO_WriteOnly );
   /*
@@ -428,22 +467,24 @@ static bool ksfunc_dcopCall( KSContext &context )
       if ( context.exception() )
         return false;
     }
-    
+
     KSProxy::pack( context, str, args[3] );
     if ( context.exception() )
       return false;
   }
-  
+
   QByteArray replyData;
   QCString replyType;
-  
+
   return kapp->dcopClient()->call( app, obj, fun, data, replyType, replyData );
-} 
+}
 
 KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kscript" );
 
+  module->addObject( "time", new KSValue( new KSBuiltinFunction( module, "time", ksfunc_time ) ) );
+  module->addObject( "date", new KSValue( new KSBuiltinFunction( module, "date", ksfunc_date ) ) );
   module->addObject( "print", new KSValue( new KSBuiltinFunction( module, "print", ksfunc_print ) ) );
   module->addObject( "println", new KSValue( new KSBuiltinFunction( module, "println", ksfunc_println ) ) );
   module->addObject( "connect", new KSValue( new KSBuiltinFunction( module, "connect", ksfunc_connect ) ) );

@@ -108,6 +108,7 @@ void yyerror( const char *s )
 %token <_str> T_CELL
 %token T_FROM
 %token T_PLUS_ASSIGN
+%token T_MINUS_ASSIGN
 %token T_AND
 %token T_OR
 %token T_DOLLAR
@@ -326,6 +327,10 @@ assign_expr
 	| bool_or T_PLUS_ASSIGN assign_expr
 	  {
 	    $$ = new KSParseNode( plus_assign, $1, $3 );
+	  }
+	| bool_or T_MINUS_ASSIGN assign_expr
+	  {
+	    $$ = new KSParseNode( minus_assign, $1, $3 );
 	  }
 	| bool_or
 	  {

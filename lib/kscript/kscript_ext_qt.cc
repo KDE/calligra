@@ -410,6 +410,8 @@ bool KS_Qt_Object::pack( KSContext& context, QVariant& var, const KSValue::Ptr& 
     case KSValue::BuiltinMethodType:
     case KSValue::ProxyBuiltinMethodType:
     case KSValue::StructBuiltinMethodType:
+    case KSValue::DateType:
+    case KSValue::TimeType:
     case KSValue::Empty:
       // TODO: Give error
       break;

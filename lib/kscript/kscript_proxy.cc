@@ -151,6 +151,12 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
 {
     switch( v->type() )
     {
+    case KSValue::TimeType:
+	str << v->timeValue();
+	return "QTime";
+    case KSValue::DateType:
+	str << v->timeValue();
+	return "QDate";
     case KSValue::StringType:
 	str << v->stringValue();
 	return "QString";
@@ -265,6 +271,18 @@ QString KSProxy::pack( KSContext& context, QDataStream& str, KSValue::Ptr& v )
 
 KSValue::Ptr KSProxy::unpack( KSContext& context, QDataStream& str, const QCString& type )
 {
+    if ( type == "QDate" )
+    {
+	QDate x;
+	str >> x;
+	return KSValue::Ptr( new KSValue( x ) );
+    }
+    if ( type == "QTime" )
+    {
+	QTime x;
+	str >> x;
+	return KSValue::Ptr( new KSValue( x ) );
+    }
     if ( type == "QString" )
     {
 	QString x;

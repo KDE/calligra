@@ -94,7 +94,8 @@ str += " in the year 2000";
 For most operations KScript features the same operators as C++:
 <ul>
 <li> =  : assignment (all types)
-<li> += : add and assignment (numerical,string,list,map)
+<li> += : add and assignment (numerical,string,list,map,date+int,time+int)
+<li> -= : add and assignment (numerical,date-date,date-int,time-time,time-int)
 <li> == : test equal (all types)
 <li> != : test unequal (all types)
 <li> >  : greater (numerical)
@@ -103,8 +104,8 @@ For most operations KScript features the same operators as C++:
 <li> <= : less or equal (numerical)
 <li> << : shift left (numerical)
 <li> >> : shift right (numerical)
-<li> +  : addition or positive sign (numerical,string,list,map)
-<li> -  : subtraction or negative sign (numerical)
+<li> +  : addition or positive sign (numerical,string,list,map,date+int,time+int)
+<li> -  : subtraction or negative sign (numerical,date-date,date-int,time-time,time-int)
 <li> /  : division (numerical)
 <li> *  : multiplication (numerical)
 <li> %  : modulo (numerical)

@@ -5,6 +5,7 @@
 #include <qvaluelist.h>
 #include <qmap.h>
 #include <qshared.h>
+#include <qdatetime.h>
 
 #include "kscript_ptr.h"
 #include "kscript_types.h"
@@ -58,6 +59,8 @@ public:
       ProxyType,
       ProxyBuiltinMethodType,
       QObjectType,
+      DateType,
+      TimeType,
       NTypes
     };
 
@@ -94,7 +97,9 @@ public:
     KSValue( KSProxy* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSProxyBuiltinMethod _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSQObject* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-
+    KSValue( const QTime& t ) { m_mode = Temp; typ = Empty; setValue( t ); }
+    KSValue( const QDate& d ) { m_mode = Temp; typ = Empty; setValue( d ); }
+    
     KSValue& operator= ( const KSValue& );
 
     void setValue( const QString& );
@@ -119,7 +124,9 @@ public:
     void setValue( KSProxy* );
     void setValue( KSProxyBuiltinMethod );
     void setValue( KSQObject* );
-
+    void setValue( const QDate& );
+    void setValue( const QTime& );
+    
     void suck( KSValue* );
 
     Mode mode() const { return m_mode; }
@@ -129,6 +136,12 @@ public:
     virtual QString typeName() const;
 
     bool isEmpty() const { return ( typ == Empty ); }
+
+    const QDate& dateValue() const { ASSERT( typ == DateType ); return *((QDate*)val.ptr); }
+    QDate& dateValue() { ASSERT( typ == DateType ); return *((QDate*)val.ptr); }
+
+    const QTime& timeValue() const { ASSERT( typ == TimeType ); return *((QTime*)val.ptr); }
+    QTime& timeValue() { ASSERT( typ == TimeType ); return *((QTime*)val.ptr); }
 
     const QString& stringValue() const { ASSERT( typ == StringType ); return *((QString*)val.ptr); }
     QString& stringValue() { ASSERT( typ == StringType ); return *((QString*)val.ptr); }
@@ -209,14 +222,16 @@ protected:
     Type typ;
     union
     {
-      KScript::Long i;
-      KScript::Boolean b;
-      KScript::Double d;
-      ushort c;
-      void *ptr;
-      KSBuiltinMethod m;
-      KSStructBuiltinMethod sm;
-      KSProxyBuiltinMethod pm;
+	KScript::Long i;
+	KScript::Boolean b;
+	KScript::Double d;
+	ushort c;
+	void *ptr;
+	KSBuiltinMethod m;
+	KSStructBuiltinMethod sm;
+	KSProxyBuiltinMethod pm;
+	QDate* date;
+	QTime* time;
     } val;
 
 private:

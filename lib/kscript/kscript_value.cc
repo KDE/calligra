@@ -7,6 +7,9 @@
 #include "kscript_proxy.h"
 #include "kscript_qobject.h"
 
+#include <klocale.h>
+#include <kglobal.h>
+
 KSValue* KSValue::s_null = 0;
 
 KSValue::KSValue()
@@ -22,6 +25,12 @@ KSValue::KSValue( Type _type )
 
   switch( typ )
     {
+    case DateType:
+      val.ptr = new QDate;
+      break;
+    case TimeType:
+      val.ptr = new QTime;
+      break;
     case StringType:
       val.ptr = new QString;
       break;
@@ -88,6 +97,12 @@ KSValue& KSValue::operator= ( const KSValue& p )
     {
     case Empty:
       break;
+    case DateType:
+      val.ptr = new QDate( p.dateValue() );
+      break;
+    case TimeType:
+      val.ptr = new QTime( p.timeValue() );
+      break;
     case StringType:
       val.ptr = new QString( p.stringValue() );
       break;
@@ -149,6 +164,20 @@ KSValue& KSValue::operator= ( const KSValue& p )
 QString KSValue::typeName() const
 {
   return typeToName( typ );
+}
+
+void KSValue::setValue( const QDate& _value )
+{
+  clear();
+  typ = DateType;
+  val.ptr = new QDate( _value );
+}
+
+void KSValue::setValue( const QTime& _value )
+{
+  clear();
+  typ = TimeType;
+  val.ptr = new QTime( _value );
 }
 
 void KSValue::setValue( const QString& _value )
@@ -374,6 +403,12 @@ void KSValue::clear()
     case StringType:
       delete (QString*)val.ptr;
       break;
+    case DateType:
+      delete (QDate*)val.ptr;
+      break;
+    case TimeType:
+      delete (QTime*)val.ptr;
+      break;
     case ListType:
       delete (QValueList<Ptr>*)val.ptr;
       break;
@@ -421,6 +456,8 @@ void KSValue::initTypeNameMap()
     typ_to_name[(int)ProxyType] = QString::fromLatin1("Proxy");
     typ_to_name[(int)ProxyBuiltinMethodType] = QString::fromLatin1("ProxyBuiltinMethod");
     typ_to_name[(int)QObjectType] = QString::fromLatin1("QObject");
+    typ_to_name[(int)DateType] = QString::fromLatin1("Date");
+    typ_to_name[(int)TimeType] = QString::fromLatin1("Time");
 }
 
 QString KSValue::typeToName( KSValue::Type _typ )
@@ -500,6 +537,8 @@ bool KSValue::cast( Type _typ )
 	*this = *v;
       }
       break; */
+    case DateType:
+    case TimeType:
     case ListType:
     case MapType:
     case CharType:
@@ -540,6 +579,10 @@ QString KSValue::toString( KSContext& context )
     case PropertyType:
       return QString( "<property>" );
       break;
+    case TimeType:
+	return KGlobal::locale()->formatTime( timeValue(), true );
+    case DateType:
+	return KGlobal::locale()->formatDate( dateValue(), true );
     case ClassType:
       return ( QString( "<class " ) + classValue()->name() + ">" );
       break;
@@ -710,6 +753,10 @@ bool KSValue::cmp( const KSValue& v ) const
       return true;
     case StringType:
       return ( stringValue() == v.stringValue() );
+    case DateType:
+      return ( dateValue() == v.dateValue() );
+    case TimeType:
+      return ( timeValue() == v.timeValue() );
     case KSValue::IntType:
       return ( val.i == v.val.i );
     case BoolType:
@@ -789,6 +836,8 @@ bool KSValue::implicitCast( Type _typ ) const
     case CharRefType:
 	if ( _typ == CharType )
 	    return TRUE;
+    case DateType:
+    case TimeType:
     case PropertyType:
     case ListType:
     case MapType:

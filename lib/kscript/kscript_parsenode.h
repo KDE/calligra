@@ -95,6 +95,7 @@ typedef enum
   t_range,
   from,
   plus_assign,
+  minus_assign,
   bool_or,
   bool_and,
   t_regexp_group,
