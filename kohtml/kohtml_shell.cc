@@ -42,10 +42,10 @@ KoHTMLShell::KoHTMLShell()
 {
   m_pDoc = 0L;
   m_pView = 0L;
-  
+
   if (s_lstShells == 0L)
      s_lstShells = new QList<KoHTMLShell>;
-     
+
   s_lstShells->append(this);
 }
 
@@ -60,7 +60,7 @@ bool KoHTMLShell::isModified()
 {
   if (m_pDoc)
      return (bool)m_pDoc->isModified();
-     
+
   return false;
 }
 
@@ -68,20 +68,20 @@ bool KoHTMLShell::requestClose()
 {
   int res = QMessageBox::warning( 0L, i18n("Warning"), i18n("The document has been modified\nDo you want to save it ?" ),
 				  i18n("Yes"), i18n("No"), i18n("Cancel") );
-				  
+				
   if ( res == 0 )
     return saveDocument( "", "" );
-  
+
   if ( res == 1 )
     return true;
-  
+
   return false;
 }
 
 void KoHTMLShell::cleanUp()
 {
   releaseDocument();
-  
+
   KoMainWindow::cleanUp();
 }
 
@@ -89,16 +89,16 @@ void KoHTMLShell::setDocument(KoHTMLDoc *_doc)
 {
   if (m_pDoc)
      releaseDocument();
-     
+
   m_pDoc = _doc;
   m_pDoc->_ref();
   m_pView = _doc->createKoHTMLView();
   m_pView->incRef();
   m_pView->setMode(KOffice::View::RootMode);
   m_pView->setMainWindow(interface());
-  
+
   setRootPart(m_pView->id());
-  
+
   interface()->setActivePart(m_pView->id());
 
   if (m_pFileMenu)
@@ -108,8 +108,8 @@ void KoHTMLShell::setDocument(KoHTMLDoc *_doc)
        m_pFileMenu->setItemEnabled(m_idMenuFile_Close, true);
        m_pFileMenu->setItemEnabled(m_idMenuFile_Quit, true);
      }
-     
-  opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);     
+
+  opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);
   opToolBar()->setItemEnabled(TOOLBAR_SAVE, true);
 }
 
@@ -123,22 +123,22 @@ bool KoHTMLShell::newDocument()
        s->newDocument();
        return true;
      }
-     
+
   m_pDoc = new KoHTMLDoc;
-  
+
   if (!m_pDoc->init())
      {
        cerr << "ERROR: Could not initialize document" << endl;
        return false;
      }
-     
+
   m_pView = m_pDoc->createKoHTMLView();
   m_pView->incRef();
   m_pView->setMode(KOffice::View::RootMode);
   m_pView->setMainWindow(interface());
 
   setRootPart(m_pView->id());
-  
+
   interface()->setActivePart(m_pView->id());
 
   if (m_pFileMenu)
@@ -148,10 +148,10 @@ bool KoHTMLShell::newDocument()
        m_pFileMenu->setItemEnabled(m_idMenuFile_Close, true);
        m_pFileMenu->setItemEnabled(m_idMenuFile_Quit, true);
      }
-     
-  opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);     
+
+  opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);
   opToolBar()->setItemEnabled(TOOLBAR_SAVE, true);
-  
+
   return true;
 }
 
@@ -159,7 +159,7 @@ bool KoHTMLShell::openDocument(const char *filename, const char *format)
 {
   if (format == 0L || *format == 0)
      format = MIME_TYPE;
-     
+
   if (m_pDoc && m_pDoc->isEmpty())
      releaseDocument();
   else if (m_pDoc && !m_pDoc->isEmpty())
@@ -167,8 +167,8 @@ bool KoHTMLShell::openDocument(const char *filename, const char *format)
        KoHTMLShell *s = new KoHTMLShell();
        s->show();
        return s->openDocument(filename, format);
-     }          
-     
+     }
+
   m_pDoc = new KoHTMLDoc;
 
   if (!m_pDoc->loadFromURL(filename, format))
@@ -178,10 +178,10 @@ bool KoHTMLShell::openDocument(const char *filename, const char *format)
   m_pView->incRef();
   m_pView->setMode(KOffice::View::RootMode);
   m_pView->setMainWindow(interface());
-  
+
   setRootPart(m_pView->id());
   interface()->setActivePart(m_pView->id());
-  
+
   if (m_pFileMenu)
      {
        m_pFileMenu->setItemEnabled(m_idMenuFile_Save, true);
@@ -189,49 +189,49 @@ bool KoHTMLShell::openDocument(const char *filename, const char *format)
        m_pFileMenu->setItemEnabled(m_idMenuFile_Close, true);
        m_pFileMenu->setItemEnabled(m_idMenuFile_Quit, true);
      }
-     
-  opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);     
+
+  opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);
   opToolBar()->setItemEnabled(TOOLBAR_SAVE, true);
 
 //  m_pDoc->setURL(filename);
-  
+
   return true;
 }
 
 bool KoHTMLShell::saveDocument(const char *filename, const char *format)
 {
   assert( m_pDoc != 0L );
- 
+
   CORBA::String_var url;
   if (filename == 0L || *filename == 0)
      {
        url = m_pDoc->url();
        filename = url.in();
      }
-     
+
   QString file;
-  
+
   if (filename == 0L || *filename == 0)
      {
        file = KFileDialog::getSaveFileName( getenv("HOME") );
-       
+
        if (file.isNull())
           return false;
-	  
+	
        filename = file.data();
-       m_pDoc->setURL(filename);	  
-     }     
-     
+       m_pDoc->setURL(filename);	
+     }
+
   if (format == 0L || *format == 0)
      format = MIME_TYPE;
-     
-  return m_pDoc->saveToURL(filename, format);          
+
+  return m_pDoc->saveToURL(filename, format);
 }
 
 bool KoHTMLShell::printDlg()
 {
   assert(m_pView != 0L);
-  
+
   return m_pView->printDlg();
 }
 
@@ -246,7 +246,7 @@ bool KoHTMLShell::closeDocument()
     if (!requestClose())
        return false;
   }
-  
+
   return true;
 }
 
@@ -272,23 +272,23 @@ int KoHTMLShell::documentCount()
 void KoHTMLShell::releaseDocument()
 {
   int views = 0;
-  
+
   if (m_pDoc)
      views = m_pDoc->viewCount();
-     
-  setRootPart(0);
-  
+
+  setRootPart((unsigned long int)(OpenParts::Id)0);
+
   interface()->setActivePart(0);
-  
+
   if (m_pView)
      m_pView->decRef();
-     
+
   if (m_pDoc && views <= 1)
      m_pDoc->cleanUp();
-     
+
   if (m_pDoc)
      CORBA::release(m_pDoc);
-     
+
   m_pView = 0L;
   m_pDoc = 0L;
 }
@@ -302,10 +302,10 @@ void KoHTMLShell::slotFileNew()
 void KoHTMLShell::slotFileOpen()
 {
   QString file = KFileDialog::getOpenFileName( getenv("HOME") );
-  
+
   if (file.isNull())
      return;
-     
+
   if (!openDocument(file, ""))
   {
     QString msg;
@@ -317,15 +317,15 @@ void KoHTMLShell::slotFileOpen()
 void KoHTMLShell::slotFileSave()
 {
   assert(m_pDoc != 0L);
-  
+
   CORBA::String_var url = m_pDoc->url();
- 
+
   if (strlen(url.in()) == 0)
   {
     slotFileSaveAs();
     return;
   }
-  
+
   if (!saveDocument(url.in(), ""))
   {
     QString msg;
@@ -347,18 +347,18 @@ void KoHTMLShell::slotFileClose()
     slotFileQuit();
     return;
   }
-  
+
   if (isModified())
      if (!requestClose())
        return;
-       
-  delete this;       
+
+  delete this;
 }
 
 void KoHTMLShell::slotFilePrint()
 {
   assert(m_pView);
-  
+
   m_pView->printDlg();
 }
 
@@ -366,7 +366,7 @@ void KoHTMLShell::slotFileQuit()
 {
   if (!closeAllDocuments())
      return;
-     
+
   delete this;
   kapp->exit();
 }

@@ -456,7 +456,7 @@ void KIllustratorShell::releaseDocument () {
   int views = 0;
   if (m_pDoc)
     views = m_pDoc->viewCount();
-  setRootPart( (OpenParts::Id)0 );
+  setRootPart( (unsigned long int)(OpenParts::Id)0 );
   interface ()->setActivePart (0);
   if (m_pView)
     m_pView->decRef ();
@@ -473,7 +473,7 @@ void KIllustratorShell::releaseDocument () {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
   }
- 
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
 }
