@@ -2012,19 +2012,19 @@ QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
     {
       double x = pShape->shapeData()->x();
       double y = pShape->shapeData()->y();
-      double w = pShape->shapeData()->w();
-      double h = pShape->shapeData()->h();
+      double x2 = pShape->shapeData()->w() + x;
+      double y2 = pShape->shapeData()->h() + y;
       
       // Create the rotated rectangle
       KoPoint pPoints[4];
       pPoints[0].setX(x * m.m11() + y * m.m21() + m.dx());
       pPoints[0].setY(x * m.m12() + y * m.m22() + m.dy());
-      pPoints[1].setX(w * m.m11() + y * m.m21() + m.dx());
-      pPoints[1].setY(w * m.m12() + y * m.m22() + m.dy());
-      pPoints[2].setX(w * m.m11() + h * m.m21() + m.dx());
-      pPoints[2].setY(w * m.m12() + h * m.m22() + m.dy());
-      pPoints[3].setX(x * m.m11() + h * m.m21() + m.dx());
-      pPoints[3].setY(x * m.m12() + h * m.m22() + m.dy());
+      pPoints[1].setX(x2 * m.m11() + y * m.m21() + m.dx());
+      pPoints[1].setY(x2 * m.m12() + y * m.m22() + m.dy());
+      pPoints[2].setX(x2 * m.m11() + y2 * m.m21() + m.dx());
+      pPoints[2].setY(x2 * m.m12() + y2 * m.m22() + m.dy());
+      pPoints[3].setX(x * m.m11() + y2 * m.m21() + m.dx());
+      pPoints[3].setY(x * m.m12() + y2 * m.m22() + m.dy());
     
       if(PointInPoly(pPoints, 4, &pos)) {
         return pShape->shapeData()->name();

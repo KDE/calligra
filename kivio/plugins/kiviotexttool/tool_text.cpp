@@ -157,11 +157,9 @@ void TextTool::mousePress( QMouseEvent *e )
 {
   if(e->button() == LeftButton) {
     KoPoint pagePoint = view()->canvasWidget()->mapFromScreen(e->pos());
-    // Figure out how big 4 pixels is in terms of points
-    double threshold =  view()->zoomHandler()->unzoomItY(4);
     int colType;
     KivioPage *page = view()->activePage();
-    KivioStencil* stencil = page->checkForStencil( &pagePoint, &colType, threshold, false);
+    KivioStencil* stencil = page->checkForStencil( &pagePoint, &colType, 0.0, false);
     
     if(stencil) {
       applyToolAction(stencil, pagePoint);
