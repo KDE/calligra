@@ -642,13 +642,9 @@ void KWView::setupActions()
                                      this, SLOT( configureHeaderFooter() ),
                                      actionCollection(), "configure_headerfooter" );
 
-    actionInlineFrame=new KAction( i18n( "Inline Frame" ), 0,
-                                     this, SLOT( inlineFrame() ),
-                                     actionCollection(), "inline_frame" );
-
-    actionNonInlineFrame=new KAction( i18n( "Non Inline Frame" ), 0,
-                                     this, SLOT( nonInlineFrame() ),
-                                     actionCollection(), "non_inline_frame" );
+    actionInlineFrame = new KToggleAction( i18n( "Inline Frame" ), 0,
+                                            this, SLOT( inlineFrame() ),
+                                            actionCollection(), "inline_frame" );
 
 }
 
@@ -3077,7 +3073,6 @@ void KWView::updatePopupMenuChangeAction()
     actionEditDelFrame->setEnabled(true );
 
     actionInlineFrame->setEnabled(true);
-    actionNonInlineFrame->setEnabled(true);
 
     // if text frame,
     if(frame && frame->getFrameSet() && frame->getFrameSet()->type() == FT_TEXT)
@@ -3087,7 +3082,6 @@ void KWView::updatePopupMenuChangeAction()
                 {
                     actionEditDelFrame->setEnabled(false);
                     actionInlineFrame->setEnabled(false);
-                    actionNonInlineFrame->setEnabled(false);
                 }
         }
 }
@@ -3131,10 +3125,8 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
             {
                 actionList.append(separator2);
                 KWFrameSet * parentFs = frameSet->getGroupManager() ? frameSet->getGroupManager() : frameSet;
-                if( parentFs->isFloating())
-                    actionList.append(actionNonInlineFrame);
-                else
-                    actionList.append(actionInlineFrame);
+                actionInlineFrame->setChecked(parentFs->isFloating());
+                actionList.append(actionInlineFrame);
             }
         }
         plugActionList( "picture_action", actionList );
@@ -3427,7 +3419,6 @@ void KWView::frameSelectedChanged()
     {
         actionEditDelFrame->setEnabled( false );
         actionInlineFrame->setEnabled(false);
-        actionNonInlineFrame->setEnabled(false);
         actionEditCut->setEnabled( false );
     }
     bool frameDifferentOfPart=false;
@@ -3595,40 +3586,42 @@ void KWView::inlineFrame()
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWFrameSet * fs = frame->getFrameSet();
     KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
-    QList<FrameIndex> frameindexList;
-    QList<FrameResizeStruct> frameindexMove;
 
-    FrameIndex *index=new FrameIndex( frame );
-    FrameResizeStruct *move=new FrameResizeStruct;
+    if(actionInlineFrame->isChecked())
+    {
 
-    move->sizeOfBegin=frame->normalize();
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
+        QList<FrameIndex> frameindexList;
+        QList<FrameResizeStruct> frameindexMove;
 
-    // turn non-floating frame into floating frame
-    KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
-    cmd->execute();
+        FrameIndex *index=new FrameIndex( frame );
+        FrameResizeStruct *move=new FrameResizeStruct;
 
-    move->sizeOfEnd=frame->normalize();
+        move->sizeOfBegin=frame->normalize();
 
-    frameindexList.append(index);
-    frameindexMove.append(move);
+        // turn non-floating frame into floating frame
+        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
+        cmd->execute();
 
-    KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+        move->sizeOfEnd=frame->normalize();
 
-    macroCmd->addCommand(cmdMoveFrame);
-    macroCmd->addCommand(cmd);
-    m_doc->addCommand(cmd);
+        frameindexList.append(index);
+        frameindexMove.append(move);
+
+        KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+
+        macroCmd->addCommand(cmdMoveFrame);
+        macroCmd->addCommand(cmd);
+        m_doc->addCommand(cmd);
+    }
+    else
+    {
+        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+        m_doc->addCommand(cmd);
+        cmd->execute();
+    }
 }
 
-void KWView::nonInlineFrame()
-{
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
-    KWFrameSet * fs = frame->getFrameSet();
-    KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
-    KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
-    m_doc->addCommand(cmd);
-    cmd->execute();
-}
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

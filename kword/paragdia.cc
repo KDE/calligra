@@ -1374,6 +1374,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     }
     eTabPos->setValidator( new KFloatValidator( 0,frameWidth,eTabPos ) );
     grid->addWidget( eTabPos, 1, 0 );
+    connect(eTabPos,SIGNAL(returnPressed () ),this,SLOT(addClicked()));
 
     QString unitDescription = KWUnit::unitDescription( m_unit );
     lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1").arg(unitDescription)+length);

@@ -287,7 +287,6 @@ public slots:
     void configureHeaderFooter();
 
     void inlineFrame();
-    void nonInlineFrame();
 
 protected:
     void addVariableActions( int type, const QStringList & texts,
@@ -426,9 +425,7 @@ private:
     KAction *actionChangePicture;
     KAction *actionChangeClipart;
     KAction *actionConfigureHeaderFooter;
-    KAction *actionInlineFrame;
-    KAction *actionNonInlineFrame;
-
+    KToggleAction *actionInlineFrame;
 
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
