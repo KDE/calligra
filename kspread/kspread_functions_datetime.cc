@@ -36,7 +36,7 @@
 #include <kspread_functions_helper.h>
 #include <kspread_util.h>
 
-// prototypes
+// prototypes, sorted
 bool kspreadfunc_currentDate( KSContext& context );
 bool kspreadfunc_currentDateTime( KSContext& context );
 bool kspreadfunc_currentTime( KSContext& context );
@@ -49,6 +49,7 @@ bool kspreadfunc_days( KSContext& context );
 bool kspreadfunc_days360( KSContext& context );
 bool kspreadfunc_daysInMonth( KSContext& context );
 bool kspreadfunc_daysInYear ( KSContext& context );
+bool kspreadfunc_easterSunday( KSContext& context );
 bool kspreadfunc_edate( KSContext& context );
 bool kspreadfunc_eomonth( KSContext& context );
 bool kspreadfunc_hour( KSContext& context );
@@ -111,6 +112,7 @@ void KSpreadRegisterDateTimeFunctions()
   repo->registerFunction( "WEEKSINYEAR",  kspreadfunc_weeksInYear );
   repo->registerFunction( "YEAR",   kspreadfunc_year );
   repo->registerFunction( "YEARS",  kspreadfunc_years );
+  repo->registerFunction( "EASTERSUNDAY",  kspreadfunc_easterSunday );
 }
 
 // Function: EDATE
@@ -1172,4 +1174,37 @@ bool kspreadfunc_weeksInYear( KSContext& context )
   context.setValue( new KSValue(result));
 
   return true;
+}
+
+bool kspreadfunc_easterSunday( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    if ( !KSUtil::checkArgumentsCount( context,1,"easterSunday",true ) )
+        return false;
+    if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+        return false;
+
+    int nDay, nMonth;
+    int nYear = args[0]->intValue();
+
+    int B,C,D,E,F,G,H,I,K,L,M,N,O;
+    N = nYear % 19;
+    B = int(nYear / 100);
+    C = nYear % 100;
+    D = int(B / 4);
+    E = B % 4;
+    F = int((B + 8) / 25);
+    G = int((B - F + 1) / 3);
+    H = (19 * N + B - D - G + 15) % 30;
+    I = int(C / 4);
+    K = C % 4;
+    L = (32 + 2 * E + 2 * I - H - K) % 7;
+    M = int((N + 11 * H + 22 * L) / 451);
+    O = H + L - 7 * M + 114;
+    nDay = O % 31 + 1;
+    nMonth = int(O / 31);
+
+    context.setValue( new KSValue( KGlobal::locale()->formatDate( QDate(nYear, nMonth, nDay) ) ) );
+
+    return true;
 }
