@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kexidb/index.h>
+#include <kexidb/indexschema.h>
 
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>

@@ -26,7 +26,7 @@
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
-#include <kexidb/index.h>
+#include <kexidb/indexschema.h>
 
 namespace KexiDB {
 
