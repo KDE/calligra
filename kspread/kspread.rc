@@ -55,10 +55,12 @@
  <Menu name="Folder"><text>Folder</text>
   <Menu name="Row"><text>Row</text>
     <Action name="resizeRow"/>
+    <Action name="equalizeRow"/>
   </Menu>
   <Separator/>
   <Menu name="Column"><text>Column</text>
     <Action name="resizeCol"/>
+    <Action name="equalizeCol"/>
   </Menu>
   <Separator/>
   <Action name="insertTable"/>

@@ -45,17 +45,37 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
   tmpCheck=i18n("Default");
+  RowLayout *rl;
+  ColumnLayout *cl;
+  bool equals=true;
+  int i;
+  QRect selection( m_pView->activeTable()->selectionRect() ); 
   switch(type)
 	{
 	case resize_row:
 		setCaption( i18n("Resize row") );
-		size=20;
+		if(selection.top()==0)
+			rl = m_pView->activeTable()->rowLayout( m_pView->canvasWidget()->markerRow());
+		else
+			rl = m_pView->activeTable()->rowLayout(selection.top());
+		size=rl->height(m_pView->canvasWidget());
+		for(i=selection.top()+1;i<=selection.bottom();i++)
+			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
+			equals=false;
 		label=i18n("Height");
 		tmpCheck+=" (20)";
 		break;
 	case resize_column:
 		setCaption( i18n("Resize column") );
-		size=60;
+		if(selection.left()==0)
+			cl = m_pView->activeTable()->columnLayout( m_pView->canvasWidget()->markerColumn());
+		else
+			cl = m_pView->activeTable()->columnLayout(selection.left());
+		size=cl->width(m_pView->canvasWidget());
+		for(i=selection.left()+1;i<=selection.right();i++)
+			if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
+			equals=false;
+		
 		label=i18n("Width");
 		tmpCheck+=" (60)";
 		break;
@@ -65,6 +85,16 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 	}
 
   
+  if(!equals)
+  	switch(type)
+	{
+	case resize_row:
+			size=20;
+			break;
+	case resize_column:
+			size=60;
+			break;
+	}
 
   m_pSize2=new KIntNumInput(size, this, 10);
   m_pSize2->setRange(20, 400, 1);

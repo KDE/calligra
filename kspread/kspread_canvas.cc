@@ -1813,7 +1813,7 @@ void KSpreadCanvas::adjustArea()
     vBorderWidget()->adjustRow(markerRow());
     hBorderWidget()->adjustColumn(markerColumn());
   }
-  // Selection of a rectangualar area
+  // Selection of a rectangular area
   else
   {
     for (int x=selection.left(); x <= selection.right(); x++ )
@@ -1827,6 +1827,41 @@ void KSpreadCanvas::adjustArea()
   }
 }
 
+void KSpreadCanvas::equalizeRow()
+{
+QRect selection( activeTable()->selectionRect() );
+bool selected = ( selection.left() != 0 );
+RowLayout *rl;
+int size;
+if(selected)
+	{
+	rl = m_pView->activeTable()->rowLayout(selection.top());
+	size=rl->height(this);
+	for(int i=selection.top()+1;i<=selection.bottom();i++)
+		size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
+	for(int i=selection.top()+1;i<=selection.bottom();i++)
+		m_pView->vBorderWidget()->resizeRow(size,i );
+	}  
+  
+}
+
+void KSpreadCanvas::equalizeColumn()
+{
+ColumnLayout *cl;
+QRect selection( activeTable()->selectionRect() );
+bool selected = ( selection.left() != 0 );
+int size;
+if(selected)
+	{
+	cl = m_pView->activeTable()->columnLayout(selection.left());
+	size=cl->width(this);
+	for(int i=selection.left()+1;i<=selection.right();i++)
+		size=QMAX(m_pView->activeTable()->columnLayout(i)->width(this),size);
+	for(int i=selection.left()+1;i<=selection.right();i++)
+		m_pView->hBorderWidget()->resizeColumn(size,i );
+	}  
+
+}
 /****************************************************************
  *
  * KSpreadVBorder
@@ -2446,7 +2481,6 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
                        XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
 
-    int len = painter.fontMetrics().width( table->columnLabel(x) );
 
     if ( selected )
       painter.setPen( white );

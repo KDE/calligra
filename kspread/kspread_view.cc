@@ -246,8 +246,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_areaName = new KAction( i18n("Area name"), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
     m_showArea = new KAction( i18n("Show area..."), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
-    m_resizeRow = new KAction( i18n("Resize row..."),"adjustrow", 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
-    m_resizeColumn = new KAction( i18n("Resize column..."),"adjustcol", 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
+    m_resizeRow = new KAction( i18n("Resize row..."),"resizerow", 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
+    m_resizeColumn = new KAction( i18n("Resize column..."),"resizecol", 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
+    m_equalizeRow = new KAction( i18n("Equalize row"),"adjustrow", 0, this, SLOT( equalizeRow() ), actionCollection(), "equalizeRow" );
+    m_equalizeColumn = new KAction( i18n("Equalize column"),"adjustcol", 0, this, SLOT( equalizeColumn() ), actionCollection(), "equalizeCol" );
+
     m_fontSizeUp = new KAction( i18n("Increase font size"),"fontsizeup", 0, this, SLOT( increaseFontSize() ), actionCollection(), "increaseFontSize" );
     m_fontSizeDown = new KAction( i18n("Decrease font size"),"fontsizedown", 0, this, SLOT( decreaseFontSize() ), actionCollection(), "decreaseFontSize" );
     m_upper = new KAction( i18n("Upper case"),"upper", 0, this, SLOT( upper() ), actionCollection(), "upper" );
@@ -2258,6 +2261,28 @@ void KSpreadView::resizeColumn()
     	{	
 	KSpreadresize2* dlg = new KSpreadresize2( this, "Resize column", KSpreadresize2::resize_column );
     	dlg->show();
+    	}
+}
+
+void KSpreadView::equalizeRow()
+{
+    QRect selection( activeTable()->selectionRect() ); 
+    if(selection.bottom()==0x7FFF)
+    	KMessageBox::error( this, i18n("Area too large!"));
+    else
+    	{	
+	canvasWidget()->equalizeRow();    	
+    	}
+}
+
+void KSpreadView::equalizeColumn()
+{
+    QRect selection( activeTable()->selectionRect() ); 
+    if(selection.right()==0x7FFF)
+    	KMessageBox::error( this, i18n("Area too large!"));
+    else
+    	{	
+	canvasWidget()->equalizeColumn();
     	}
 }
 

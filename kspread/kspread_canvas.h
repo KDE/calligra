@@ -265,6 +265,9 @@ public:
     * Adjust a area in height and width
     */
     void adjustArea();
+    
+    void equalizeRow();
+    void equalizeColumn();
 
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.

@@ -487,3 +487,5 @@ Replace all QMessageBox by KMessageBox
 -----------------------------------------------------
 -Now you can show column number
 =>replace A B C ... by 1 2 3 ... 
+-Add function equalize row and equalize column
+=>used width ou height max
