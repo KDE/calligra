@@ -1,0 +1,3 @@
+-	add "purge history":
+	empty command-history, remove all objects with state "deleted"
+
