@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,29 +26,19 @@
 #include <qstring.h>
 #include <qiodevice.h>
 
-#include <KWEFStructures.h>
+#include "KWEFStructures.h"
+#include "KWEFKWordLeader.h"
 
-class KWEFKWordLeader;
 
-class KWEFBaseWorker
+class KWEFBaseWorker : public KWEFKWordLeader
 {
     public:
-        KWEFBaseWorker(void) : m_kwordLeader(NULL) {}
+        KWEFBaseWorker(void) {}
         virtual ~KWEFBaseWorker(void) {}
-    public:
-        void registerKWordLeader(KWEFKWordLeader* leader);
-    public: // callbacks to Leader
-        bool loadSubFile(const QString& fileName, QByteArray& array) const;
-        QIODevice* getSubFileDevice(const QString& fileName) const;
     public: // indirect callbacks to Leader:
         QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
         bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
     public: // leader/worker functions
-        virtual bool doOpenFile (const QString& filenameOut, const QString& to);
-        virtual bool doCloseFile (void); // Close file in normal conditions
-        virtual bool doAbortFile (void); // Close file after errors
-        virtual bool doOpenDocument (void); // Like HTML's <html>
-        virtual bool doCloseDocument (void); // Like HTML's </html>
         virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
         virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
@@ -74,8 +64,6 @@ class KWEFBaseWorker
         virtual bool doOpenSpellCheckIgnoreList (void); // like AbiWord's <ignorewords> and KWord's <SPELLCHECKIGNORELIST>
         virtual bool doCloseSpellCheckIgnoreList (void); // like AbiWord's </ignorewords> and Kwords </SPELLCHECKIGNORELIST>
         virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); // like AbiWord's <iw> and Kwords </SPELLCHECKIGNOREWORD>
-    protected:
-        KWEFKWordLeader* m_kwordLeader;
 };
 
 #endif /* KWEF_BASEWORKER_H */

@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -46,8 +46,8 @@
 #include "KWEFStructures.h"
 #include "TagProcessing.h"
 #include "ProcessDocument.h"
-#include "KWEFBaseWorker.h"
 #include "KWEFKWordLeader.h"
+#include "KWEFBaseWorker.h"
 
 
 static FrameAnchor *findAnchor ( const KoPictureKey& key,
@@ -830,48 +830,20 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     //kdDebug (30508) << "Exiting ProcessDocTag" << endl;
 }
 
-
-void KWEFKWordLeader::setWorker ( KWEFBaseWorker *newWorker )
+bool KWEFKWordLeader::doAbortFile(void)
 {
-    m_worker = newWorker;
-
-    if (newWorker)
-        newWorker->registerKWordLeader(this);
+    // Mostly, aborting is the same than closing the file!
+    return doCloseFile();
 }
-
-
-KWEFBaseWorker *KWEFKWordLeader::getWorker(void) const
-{
-    return m_worker;
-}
-
 
 // Short simple definition for methods with void parameter
 #define DO_VOID_DEFINITION(string) \
     bool KWEFKWordLeader::string() \
     {\
-        if (m_worker) \
-            return m_worker->string(); \
-        return false; \
+        return true; \
     }
 
 
-bool KWEFKWordLeader::doOpenFile ( const QString &filenameOut, const QString &to )
-{
-    if ( m_worker )
-        return m_worker->doOpenFile (filenameOut, to);
-
-    // As it would be the first method to be called, warn if worker is NULL
-    kdError (30508) << "No Worker! (in KWEFKWordLeader::doOpenFile)" << endl;
-
-    return false;
-}
-
-
-DO_VOID_DEFINITION (doCloseFile)
-DO_VOID_DEFINITION (doAbortFile)
-DO_VOID_DEFINITION (doOpenDocument)
-DO_VOID_DEFINITION (doCloseDocument)
 DO_VOID_DEFINITION (doOpenStyles)
 DO_VOID_DEFINITION (doCloseStyles)
 DO_VOID_DEFINITION (doOpenHead)
@@ -883,83 +855,53 @@ DO_VOID_DEFINITION (doCloseSpellCheckIgnoreList)
 
 bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 {
-    if ( m_worker )
-        return m_worker->doFullDocumentInfo (docInfo);
-
     return false;
 }
 
 
 bool KWEFKWordLeader::doVariableSettings (const VariableSettingsData &varSettings)
 {
-    if ( m_worker )
-        return m_worker->doVariableSettings (varSettings);
-
     return false;
 }
 
 
 bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
 {
-    if ( m_worker )
-        return m_worker->doFullDocument (paraList);
-
     return false;
 }
 
 bool KWEFKWordLeader::doPageInfo ( const int headerType, const int footerType )
 {
-    if ( m_worker )
-        return m_worker->doPageInfo ( headerType, footerType );
-
     return false;
 }
 
 bool KWEFKWordLeader::doFullPaperFormat ( const int format, const double width, const double height, const int orientation )
 {
-    if ( m_worker )
-        return m_worker->doFullPaperFormat (format, width, height, orientation);
-
     return false;
 }
 
 bool KWEFKWordLeader::doFullPaperBorders (const double top, const double left, const double bottom, const double right)
 {
-    if ( m_worker )
-        return m_worker->doFullPaperBorders (top, left, bottom, right);
-
     return false;
 }
 
 bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 {
-    if ( m_worker )
-        return m_worker->doFullDefineStyle (layout);
-
     return false;
 }
 
 bool KWEFKWordLeader::doFullSpellCheckIgnoreWord (const QString& ignoreword)
 {
-    if ( m_worker )
-        return m_worker->doFullSpellCheckIgnoreWord (ignoreword);
-
     return false;
 }
 
 bool KWEFKWordLeader::doHeader ( const HeaderData& header )
 {
-    if ( m_worker )
-        return m_worker->doHeader (header);
-
     return false;
 }
 
 bool KWEFKWordLeader::doFooter ( const FooterData& footer )
 {
-    if ( m_worker )
-        return m_worker->doFooter (footer);
-
     return false;
 }
 
@@ -1014,7 +956,7 @@ static bool ProcessStoreFile ( QIODevice* subFile,
     return false;
 }
 
-QIODevice* KWEFKWordLeader::getSubFileDevice(const QString& fileName)
+QIODevice* KWEFKWordLeader::getSubFileDevice(const QString& fileName) const
 {
     KoStoreDevice* subFile;
 

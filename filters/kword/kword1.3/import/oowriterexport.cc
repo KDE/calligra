@@ -1,7 +1,7 @@
-// $Header$
+//
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,8 +43,8 @@
 
 class OOWRITERExportFactory : KGenericFactory<OOWRITERExport, KoFilter>
 {
-public:
-    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport, KoFilter> ("kwordoowriterexport")
+public: // ### TODO: load correct .po file
+    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport, KoFilter> ("kwordkword1dot3export")
     {}
 };
 
@@ -56,7 +56,8 @@ OOWRITERExport::OOWRITERExport(KoFilter */*parent*/, const char */*name*/, const
 
 KoFilter::ConversionStatus OOWRITERExport::convert( const QCString& from, const QCString& to )
 {
-    if ( to != "application/vnd.sun.xml.writer" || from != "application/x-kword" )
+    if ( to != "application/vnd.sun.xml.writer"  // ### TODO: OASIS
+        || from != "application/x-kword" )
     {
         return KoFilter::NotImplemented;
     }
@@ -72,18 +73,8 @@ KoFilter::ConversionStatus OOWRITERExport::convert( const QCString& from, const 
         return KoFilter::StupidError;
     }
 
-    KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
+    KoFilter::ConversionStatus result=worker->convert(m_chain,from,to);
 
-    if (!leader)
-    {
-        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
-        delete worker;
-        return KoFilter::StupidError;
-    }
-
-    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
-
-    delete leader;
     delete worker;
 
     return result;
