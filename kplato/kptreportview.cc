@@ -162,6 +162,8 @@ KPTReportView::KPTReportView(KPTView *view, QWidget *parent)
 
 
  KPTReportView::~KPTReportView() {
+   //safe
+   delete m_reportTags;
 }
 
 void KPTReportView::draw(const QString &report) {
@@ -174,6 +176,7 @@ void KPTReportView::draw(const QString &report) {
     m_reportview->renderReport();
     m_reportview->show();
     delete m_reportTags;
+    m_reportTags=0L;
 }
 
 void KPTReportView::print(KPrinter &printer) {
