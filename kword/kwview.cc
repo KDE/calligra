@@ -55,7 +55,7 @@
 #include "tabledia.h"
 #include "variable.h"
 #include "variabledlgs.h"
-#include "kwinsertlink.h"
+#include "koInsertLink.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -2020,7 +2020,7 @@ void KWView::insertLink()
         return;
     QString link;
     QString ref;
-    if(KWInsertLinkDia::createLinkDia(link, ref))
+    if(KoInsertLinkDia::createLinkDia(link, ref))
     {
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
