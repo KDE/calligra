@@ -132,7 +132,10 @@ VToolBox::addButton( const char* iconName, QString tooltip )
 void
 VToolBox::setOrientation ( Qt::Orientation o )
 {
-	QBoxLayout::Direction d = orientation() == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
+	if( barPos() == Floating ) { // when floating, make it a standing toolbox.
+		o = o==Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
+	}
+	QBoxLayout::Direction d = o == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	columnsLayouter->setDirection( d );
 	d = o == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	leftLayout->setDirection( d );
