@@ -70,16 +70,31 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return list of database names for opened connection. */
 		QStringList databaseNames();
 
-		/*! \return true if database \a dbName exists. */
-		bool databaseExists( const QString &dbName );
+		/*! \return true if database \a dbName exists.
+		 If \a ignoreErrors if true, error flag of connection 
+		  won't be modified for any errors (it will quietly return),
+		  else (ignoreErrors == false) we can check why db does 
+		  not exist using error() and/or errorMsg(). */
+		bool databaseExists( const QString &dbName, bool ignoreErrors = true );
 
 		/*! Creates new database with name \a dbName, using this connection.
-			If database with \a dbName already exists, or other error occured,
-			false is returned. */
-		bool createDatabase( const QString &dbName );
+		 If database with \a dbName already exists, or other error occured,
+		 false is returned. 
+		 If \a dbName is empty, first database name 
+		 found on the databaseNames() list will be used.
+		 If this list is empty, method fails. 
+		 Omitting the parameter is convenient only for file-based drivers,
+		 like SQLite, when we know that dbName is the same as database file name.
+		 \sa useDatabase() */
+		bool createDatabase( const QString &dbName = QString::null );
 
-		/*! Opens existing database \a dbName using this connection. */
-		bool useDatabase( const QString &dbName );
+		/*! Opens existing database \a dbName using this connection.
+		 If \a dbName is empty, first database name 
+		 found on the databaseNames() list will be used.
+		 If this list is empty, method fails. 
+		 Omitting the parameter is convenient e.g. for file-based drivers,
+		 like SQLite, when we know that dbName is the same as database file name. */
+		bool useDatabase( const QString &dbName = QString::null );
 
 		/*! Closes currently used database for this connection */
 		bool closeDatabase();
@@ -148,22 +163,26 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual bool drv_disconnect() = 0;
 
 		/*! For reimplemenation: loads list of databases' names available for this connection
-			and adds these names to \a list. If your server is not able to offer such a list,
-			consider reimplementing drv_databaseExists() instead. 
-			The mehod should return true only if there was no error on getting database names 
-			list from the server.
-			Default implementation puts empty liost into \a list and returns true. */
+		 and adds these names to \a list. If your server is not able to offer such a list,
+		 consider reimplementing drv_databaseExists() instead. 
+		 The mehod should return true only if there was no error on getting database names 
+		 list from the server.
+		 Default implementation puts empty liost into \a list and returns true. */
 		virtual bool drv_getDatabasesList( QStringList &list );
 
 		/*! For optional reimplemenation: asks server if database \a dbName exists.
-			This method is used internally in databaseExists(). The default  implementation
-			calls databaseNames and checks if that list contains \a dbName. If you need to
-			ask the server specifically if a database exists, eg. if you can't retrieve a list
-			of all available database names, please reimplement this method and do all needed checks
+		 This method is used internally in databaseExists(). The default  implementation
+		 calls databaseNames and checks if that list contains \a dbName. If you need to
+		 ask the server specifically if a database exists, eg. if you can't retrieve a list
+		 of all available database names, please reimplement this method and do all 
+		 needed checks.
+			
+		 See databaseExists() description for details about ignoreErrors argument. 
+		 You should use this appropriately in your implementation.
 
-			Note: This method should also work if there is already database used (with useDatabase());
-			in this situation no changes should be made in current database selection. */
-		virtual bool drv_databaseExists( const QString &dbName );
+		 Note: This method should also work if there is already database used (with useDatabase());
+		 in this situation no changes should be made in current database selection. */
+		virtual bool drv_databaseExists( const QString &dbName, bool ignoreErrors = true );
 
 		/*! For reimplemenation: creates new database using connection */
 		virtual bool drv_createDatabase( const QString &dbName = QString::null ) = 0;

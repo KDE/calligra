@@ -130,7 +130,7 @@ bool Connection::drv_getDatabasesList( QStringList &list )
 	return true;
 }
 
-bool Connection::drv_databaseExists( const QString &dbName )
+bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 {
 	QStringList list = databaseNames();
 	if (error()) {
@@ -138,14 +138,15 @@ bool Connection::drv_databaseExists( const QString &dbName )
 	}
 
 	if (list.find( dbName )==list.end()) {
-		setError(ERR_OBJECT_NOT_EXISTING, i18n("The database '%1' does not exist.").arg(dbName));
+		if (!ignoreErrors)
+			setError(ERR_OBJECT_NOT_EXISTING, i18n("The database '%1' does not exist.").arg(dbName));
 		return false;
 	}
 
 	return true;
 }
 
-bool Connection::databaseExists( const QString &dbName )
+bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 {
 	if (!checkConnected())
 		return false;
@@ -156,28 +157,36 @@ bool Connection::databaseExists( const QString &dbName )
 //js: moved from useDatabase():
 		QFileInfo file(dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
-			setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
+			if (!ignoreErrors)
+				setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
 			return false;
 		}
 		if (!file.isReadable()) {
-			setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
+			if (!ignoreErrors)
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
 			return false;
 		}
 		if (!file.isWritable()) {
-			setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
+			if (!ignoreErrors)
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
 			return false;
 		}
 	}
 
-	return drv_databaseExists(dbName);
+	return drv_databaseExists(dbName, ignoreErrors);
 }
 
 bool Connection::createDatabase( const QString &dbName )
 {
 	if (!checkConnected())
 		return false;
+	
+	QString my_dbName = dbName;
+	const QStringList& db_lst = databaseNames();
+	if (my_dbName.isEmpty() && !db_lst.isEmpty())
+		my_dbName = db_lst.first();
 
-	if (databaseExists( dbName )) {
+	if (databaseExists( my_dbName )) {
 		setError(ERR_OBJECT_EXISTS, i18n("Database '%1' already exists.").arg(dbName) );
 		return false;
 	}
@@ -230,41 +239,30 @@ bool Connection::createDatabase( const QString &dbName )
 
 bool Connection::useDatabase( const QString &dbName )
 {
-	if (!checkConnected() || dbName.isEmpty())
+	if (!checkConnected())
+		return false;
+	
+	QString my_dbName = dbName;
+	const QStringList& db_lst = databaseNames();
+	if (my_dbName.isEmpty() && !db_lst.isEmpty())
+		my_dbName = db_lst.first();
+	if (my_dbName.isEmpty())
 		return false;
 
-	if (m_usedDatabase == dbName)
+	if (m_usedDatabase == my_dbName)
 		return true; //already used
 
-	if (!databaseExists(dbName))
+	if (!databaseExists(my_dbName))
 		return false; //database must exist
 
 	if (!m_usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
 		return false;
 
-/*js: moved to databaseExists(), now changing dbName is not allowed for single-db-engines
-	if (m_driver->isFileDriver()) {
-		//for file-based db: file must exists and be accessible
-		QFileInfo file(dbName);
-		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
-			setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
-			return false;
-		}
-		if (!file.isReadable()) {
-			setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
-			return false;
-		}
-		if (!file.isWritable()) {
-			setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
-			return false;
-		}
-		//update connection data if filename differs
-//REMOVED:		m_data.setFileName( dbName );
-	}
-	*/
-	bool ok = drv_useDatabase( dbName );
+	bool ok = drv_useDatabase( my_dbName );
 	if (ok)
-		m_usedDatabase = dbName;
+		m_usedDatabase = my_dbName;
+	else
+		m_usedDatabase = "";
 	return ok;
 }
 

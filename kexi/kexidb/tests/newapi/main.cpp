@@ -8,18 +8,22 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-void usage(const QCString a)
+QCString prgname;
+
+void usage()
 {
-	kdDebug() << "usage: " << a << " <driver_name> <test_name>" << endl;
-	kdDebug() << "test names can be: cursors, schema" << endl;
+	kdDebug() << "usage: " << prgname << " <driver_name> cursors" << endl;
+	kdDebug() << prgname << " <driver_name> schema" << endl;
+	kdDebug() << prgname << " <driver_name> dbcreation <new_db_name>" << endl;
 }
 
 int main(int argc, char** argv)
 {
 	QFileInfo info=QFileInfo(argv[0]);
-	KInstance instance( info.baseName().latin1() );
+	prgname = info.baseName().latin1();
+	KInstance instance( prgname );
 	if (argc<=2) {
-		usage(instance.instanceName());
+		usage();
 		return 0;
 	}
 	QCString drv_name(argv[1]);
@@ -53,9 +57,12 @@ int main(int argc, char** argv)
 	else if (test_name == "schema") {
 #include "schema_test.h"
 	}
+	else if (test_name == "dbcreation") {
+#include "dbcreation_test.h"
+	}
 	else {
 		kdDebug() << "No such test: " << test_name << endl;
-		usage(instance.instanceName());
+		usage();
 		return 1;
 	}
 

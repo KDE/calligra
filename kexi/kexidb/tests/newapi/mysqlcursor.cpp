@@ -57,7 +57,9 @@ int main(int /*argc*/, char */*argv[]*/)
 
 	QStringList l=conn->databaseNames();
 	if (l.isEmpty()) kdDebug()<<conn->errorMsg()<<endl;
-	kdDebug()<<"Databases:"<<l<<endl;
+	kdDebug()<<"Databases:"<<endl;
+	for (QStringList::iterator it = l.begin(); it != l.end() ; ++it)
+		kdDebug() << *it << endl;
 
 	while (c->moveNext()) {
 		kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
