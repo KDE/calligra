@@ -44,14 +44,18 @@ KexiMainWindow::KexiMainWindow()
 {
 	m_browser = 0;
 	m_project = new KexiProject();
+	setManagedDockPositionModeEnabled(true);
 	setStandardMDIMenuEnabled();
 	setXMLFile("kexiui.rc");
+
 	initActions();
 	createGUI(0);
-	restoreSettings();
 
 	initBrowser();
 	connect(m_project, SIGNAL(dbAvailable()), this, SLOT(initBrowser()));
+
+	restoreSettings();
+
 
 	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
 }
@@ -101,7 +105,6 @@ KexiMainWindow::initBrowser()
 	{
 		m_browser = new KexiBrowser(this, "kexi/db", 0);
 		addToolWindow(m_browser, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
-//		addToolWindow(m_browser, KDockWidget::DockLeft, m_pMdi, 20/*, lv, 35, "2"*/);
 	}
 
 
