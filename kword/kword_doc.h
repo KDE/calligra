@@ -122,7 +122,7 @@ public:
     virtual QStrList outputFormats();
     virtual QStrList inputFormats();
 
-    virtual void addView( KWordView *_view );
+    virtual void addView( KoView *_view );
     virtual void removeView( KWordView *_view );
 
     virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );

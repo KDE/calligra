@@ -1692,9 +1692,10 @@ QStrList KWordDocument::inputFormats()
 }
 
 /*================================================================*/
-void KWordDocument::addView( KWordView *_view )
+void KWordDocument::addView( KoView *_view )
 {
-    m_lstViews.append( _view );
+    qDebug( "addView" );
+    m_lstViews.append( (KWordView*)_view );
     KoDocument::addView( _view );
 }
 
@@ -2426,7 +2427,8 @@ void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
 	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
 	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() ) {
 		if ( viewPtr != _view ) {
-		    if ( _clear ) viewPtr->getGUI()->getPaperWidget()->clear();
+		    if ( _clear ) 
+			viewPtr->getGUI()->getPaperWidget()->clear();
 		    viewPtr->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 		}
 	    }

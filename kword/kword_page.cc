@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -271,14 +271,13 @@ void KWPage::vmmEdit( int mx, int my )
 
     // only if we are in the _same_ frameset as before!!
     if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 &&
-	 doc->getFrameSet( frameset )->getFrameType() == FT_TEXT )
-    {
-	doSelect(mx, my);
-	if ( scrollTimer.isActive() )
-	    return;
+	 doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) {
+	    doSelect(mx, my);
+	    if ( scrollTimer.isActive() )
+		return;
 
-	scrollTimer.start( 100, FALSE );
-    }
+	    scrollTimer.start( 100, FALSE );
+	}
 }
 
 /*================================================================*/
@@ -618,10 +617,10 @@ void KWPage::vmmCreate( int mx, int my )
 	 * static_cast<int>( ptPaperHeight() ) ||
 	 insRect.normalize().right() + static_cast<int>( contentsX() ) > static_cast<int>( ptPaperWidth() ) ||
 	 insRect.normalize().bottom() + static_cast<int>( contentsY() ) > ( getPageOfRect(
-	     QRect( insRect.normalize().x() +
-		    static_cast<int>( contentsX() ),
-		    insRect.normalize().y() + static_cast<int>( contentsY() ),
-		    insRect.normalize().width(), insRect.normalize().height() ) ) + 1 ) *
+											  QRect( insRect.normalize().x() +
+												 static_cast<int>( contentsX() ),
+												 insRect.normalize().y() + static_cast<int>( contentsY() ),
+												 insRect.normalize().width(), insRect.normalize().height() ) ) + 1 ) *
 	 static_cast<int>( ptPaperHeight() ) ) {
 	insRect.setWidth( insRect.width() - ( mx - oldMx ) );
 	insRect.setHeight( insRect.height() - ( my - oldMy ) );
@@ -725,7 +724,7 @@ bool KWPage::vmpEdit( int mx, int my )
 	    return FALSE;
 	} else {
 	    if ( doc->has_selection() ) {
-	        QPainter _painter;
+		QPainter _painter;
 		_painter.begin( viewport() );
 		doc->drawSelection( _painter, contentsX(), contentsY() );
 		doc->setSelection( FALSE );
@@ -763,7 +762,7 @@ bool KWPage::vmpEdit( int mx, int my )
 	    gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
 	}
     } else {
-        showCursor( true );
+	showCursor( true );
     }
 
     return TRUE;
@@ -966,9 +965,9 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 	    break;
 	default: break;
 	}
-        // The "edit" modes don't modify the doc. The "create" ones do.
-        if ( mouseMode != MM_EDIT && mouseMode != MM_EDIT_FRAME )
-          doc->setModified( TRUE );
+	// The "edit" modes don't modify the doc. The "create" ones do.
+	if ( mouseMode != MM_EDIT && mouseMode != MM_EDIT_FRAME )
+	    doc->setModified( TRUE );
     } break;
     case MidButton:
 	vmpMidButton();
@@ -1059,9 +1058,9 @@ void KWPage::vmrCreateText()
 	}
 
 	frameDia = new KWFrameDia( this, frame,doc,FT_TEXT);
-        //frameDia->setPage(this);
+	//frameDia->setPage(this);
 	connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
-        frameDia->setCaption(i18n("Connect frame"));
+	frameDia->setCaption(i18n("Connect frame"));
 	frameDia->show();
     }
 }
@@ -1077,7 +1076,7 @@ void KWPage::vmrCreatePixmap()
 	frameset->setFileName( pixmap_name, QSize( insRect.width(), insRect.height() ) );
 	insRect = insRect.normalize();
 	KWFrame *frame = new KWFrame(frameset, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
-				      insRect.height() );
+				     insRect.height() );
 	frameset->addFrame( frame );
 	doc->addFrameSet( frameset );
 	repaintScreen( FALSE );
@@ -1107,7 +1106,7 @@ void KWPage::vmrCreateFormula()
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
 	KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, this );
 	KWFrame *frame = new KWFrame(frameset, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(),
-				      insRect.height() );
+				     insRect.height() );
 	frameset->addFrame( frame );
 	doc->addFrameSet( frameset );
 	repaintScreen( FALSE );
@@ -1123,10 +1122,10 @@ void KWPage::vmrCreateTable()
     insRect = insRect.normalize();
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
 	if ( tcols * 70 + insRect.x() > doc->getPTPaperWidth() )
-	{
-	    KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
-	                               "is not enough space available."));
-	}
+	    {
+		KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
+					   "is not enough space available."));
+	    }
 	else {
 	    KWGroupManager *grpMgr = new KWGroupManager( doc );
 	    QString _name;
@@ -1138,7 +1137,7 @@ void KWPage::vmrCreateTable()
 		    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 		    KWFrame *frame = new KWFrame(_frameSet, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 		    _frameSet->addFrame( frame );
-            frame->setFrameBehaviour(AutoExtendFrame);
+		    frame->setFrameBehaviour(AutoExtendFrame);
 		    _frameSet->setGroupManager( grpMgr );
 		    grpMgr->addFrameSet( _frameSet, i, j );
 		}
@@ -1201,19 +1200,19 @@ void KWPage::viewportMouseReleaseEvent( QMouseEvent *e )
 void KWPage::vmdEdit( int mx, int my )
 {
     if ( doc->has_selection() )
-    {
-        QPainter _painter;
-        _painter.begin( viewport() );
-	doc->drawSelection( _painter, contentsX(), contentsY() );
-	doc->setSelection( FALSE );
-	_painter.end();
-    }
+	{
+	    QPainter _painter;
+	    _painter.begin( viewport() );
+	    doc->drawSelection( _painter, contentsX(), contentsY() );
+	    doc->setSelection( FALSE );
+	    _painter.end();
+	}
 
     int frameset = doc->getFrameSet( mx, my );
 
     if ( (frameset != -1) &&
-         (doc->getFrameSet( frameset )->getFrameType() == FT_TEXT) ) {
-        showCursor(false);
+	 (doc->getFrameSet( frameset )->getFrameType() == FT_TEXT) ) {
+	showCursor(false);
 
 	fc->setFrameSet( frameset + 1 );
 
@@ -1222,15 +1221,15 @@ void KWPage::vmdEdit( int mx, int my )
 
 	KWFormatContext fc1( doc, fc->getFrameSet() ), fc2( doc, fc->getFrameSet() );
 	if ( fc->selectWord( fc1, fc2 ) ) {
-            showCursor( true );
+	    showCursor( true );
 
 	    doc->setSelStart( fc1 );
 	    doc->setSelEnd( fc2 );
 	    doc->setSelection( TRUE );
-            QPainter _painter;
-            _painter.begin( viewport() );
+	    QPainter _painter;
+	    _painter.begin( viewport() );
 	    doc->drawSelection( _painter, contentsX(), contentsY() );
-            _painter.end();
+	    _painter.end();
 	} else {
 	    showCursor( true );
 	}
@@ -1417,8 +1416,8 @@ void KWPage::editDeleteFrame()
 {
     if ( mouseMode != MM_EDIT_FRAME ) {
 	KMessageBox::sorry( this, i18n( "Please switch to the frame edit tool and\n"
-	                                "select the frame you want to delete." ),
-				  i18n( "Delete Frame" ) );
+					"select the frame you want to delete." ),
+			    i18n( "Delete Frame" ) );
 	return;
     }
 
@@ -1431,8 +1430,8 @@ void KWPage::editDeleteFrame()
 	    if ( _f->isSelected() ) {
 		if ( frame ) {
 		    KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
-		                                    "You can only delete one frame at the time." ),
-					      i18n( "Delete Frame" ) );
+						    "You can only delete one frame at the time." ),
+					i18n( "Delete Frame" ) );
 		    return;
 		}
 		frame = _f;
@@ -1443,8 +1442,8 @@ void KWPage::editDeleteFrame()
 
     if ( !frame || !fs ) {
 	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
-	                                "You need to select a frame first in order to delete it."),
-				  i18n( "Delete Frame" ) );
+					"You need to select a frame first in order to delete it."),
+			    i18n( "Delete Frame" ) );
 	return;
     }
 
@@ -1458,13 +1457,13 @@ void KWPage::editDeleteFrame()
 	    return;
 	int result;
 	result = KMessageBox::warningContinueCancel(this,
-			i18n( "You are about to delete the last Frame of the\n"
-			      "Frameset '%1'.\n"
-			      "Doing so will delete this Frameset and all the\n"
-			      "text contained in it as well!\n\n"
-			      "Are you sure you want to do that?").arg(fs->getName()),
-			      i18n("Delete Frame"), i18n("&Delete"));
-        if (result != KMessageBox::Continue)
+						    i18n( "You are about to delete the last Frame of the\n"
+							  "Frameset '%1'.\n"
+							  "Doing so will delete this Frameset and all the\n"
+							  "text contained in it as well!\n\n"
+							  "Are you sure you want to do that?").arg(fs->getName()),
+						    i18n("Delete Frame"), i18n("&Delete"));
+	if (result != KMessageBox::Continue)
 	    return;
     }
 
@@ -1535,8 +1534,8 @@ void KWPage::editReconnectFrame()
     // This is ugly please rethink. (TZ)
     if ( mouseMode != MM_EDIT_FRAME ) {
 	KMessageBox::sorry( this, i18n( "Please switch to the frame edit tool and\n"
-	                                "select the frame you want to reconnect." ),
-				  i18n( "Reconnect Frame" ) );
+					"select the frame you want to reconnect." ),
+			    i18n( "Reconnect Frame" ) );
 	return;
     }
 
@@ -1549,8 +1548,8 @@ void KWPage::editReconnectFrame()
 	    if ( _f->isSelected() ) {
 		if ( frame ) {
 		    KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
-		                                    "You can only reconnect one frame at the time." ),
-					      i18n( "Reconnect Frame" ) );
+						    "You can only reconnect one frame at the time." ),
+					i18n( "Reconnect Frame" ) );
 		    return;
 		}
 		frame = _f;
@@ -1561,8 +1560,8 @@ void KWPage::editReconnectFrame()
 
     if ( !frame || !fs ) {
 	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
-	                                "You need to select a frame first in order to reconnect it."),
-				  i18n( "Reconnect Frame" ) );
+					"You need to select a frame first in order to reconnect it."),
+			    i18n( "Reconnect Frame" ) );
 	return;
     }
 
@@ -1574,13 +1573,13 @@ void KWPage::editReconnectFrame()
 	    return;
 	int result;
 	result = KMessageBox::warningContinueCancel(this,
-			i18n( "You are about to reconnect the last Frame of the\n"
-			      "Frameset '%1'.\n"
-			      "Doing so will delete the Frameset and all the\n"
-			      "text contained in it!\n\n"
-			      "Are you sure you want to do that?").arg(fs->getName()),
-			      i18n("Reconnect Frame"), i18n("&Delete"));
-        if (result != KMessageBox::Continue)
+						    i18n( "You are about to reconnect the last Frame of the\n"
+							  "Frameset '%1'.\n"
+							  "Doing so will delete the Frameset and all the\n"
+							  "text contained in it!\n\n"
+							  "Are you sure you want to do that?").arg(fs->getName()),
+						    i18n("Reconnect Frame"), i18n("&Delete"));
+	if (result != KMessageBox::Continue)
 	    return;
     }
 
@@ -1650,22 +1649,22 @@ void KWPage::recalcWholeText( bool _cursor, bool )
     recalcingText = TRUE;
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ )
-    {
-	if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 )
-	    continue;
-	KWFormatContext _fc( doc, i + 1 );
-	_fc.init( doc->getFirstParag( i ) );
-
-	bool bend = FALSE;
-
-	while ( !bend )
 	{
-	    bend = !_fc.makeNextLineLayout();
-	    if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
-		 static_cast<int>( contentsY() + height() + height() / 2 ) )
-		bend = TRUE;
+	    if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 )
+		continue;
+	    KWFormatContext _fc( doc, i + 1 );
+	    _fc.init( doc->getFirstParag( i ) );
+
+	    bool bend = FALSE;
+
+	    while ( !bend )
+		{
+		    bend = !_fc.makeNextLineLayout();
+		    if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
+			 static_cast<int>( contentsY() + height() + height() / 2 ) )
+			bend = TRUE;
+		}
 	}
-    }
 
     if ( _cursor ) recalcCursor();
     recalcingText = FALSE;
@@ -1697,12 +1696,12 @@ void KWPage::recalcWholeText( KWParag *start, unsigned int fs )
     bool bend = FALSE;
 
     while ( !bend )
-    {
-	bend = !_fc.makeNextLineLayout();
-	if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
-	     static_cast<int>( contentsY() + height() + height() / 2 ) )
-	    bend = TRUE;
-    }
+	{
+	    bend = !_fc.makeNextLineLayout();
+	    if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
+		 static_cast<int>( contentsY() + height() + height() / 2 ) )
+		bend = TRUE;
+	}
 
     recalcingText = FALSE;
 
@@ -1718,25 +1717,25 @@ void KWPage::footerHeaderDisappeared()
 {
     if ( isAHeader( doc->getFrameSet( fc->getFrameSet() - 1 )->getFrameInfo() ) ||
 	 isAFooter( doc->getFrameSet( fc->getFrameSet() - 1 )->getFrameInfo() ) )
-    {
-	fc->setFrameSet( 1 );
-	fc->init( doc->getFirstParag( 0 ), FALSE );
+	{
+	    fc->setFrameSet( 1 );
+	    fc->init( doc->getFirstParag( 0 ), FALSE );
 
-	gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
-	gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
-	gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
-	gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
-	gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
-					 fc->getParag()->getParagLayout()->getRightBorder(),
-					 fc->getParag()->getParagLayout()->getTopBorder(),
-					 fc->getParag()->getParagLayout()->getBottomBorder() );
-	setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
-	setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
-	gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
-					    getFrame( fc->getFrame() - 1 )->x() );
-	gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
-	format = *( ( KWFormat* )fc );
-    }
+	    gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
+	    gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
+	    gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+	    gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+	    gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+					     fc->getParag()->getParagLayout()->getRightBorder(),
+					     fc->getParag()->getParagLayout()->getTopBorder(),
+					     fc->getParag()->getParagLayout()->getBottomBorder() );
+	    setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
+	    setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
+	    gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
+						getFrame( fc->getFrame() - 1 )->x() );
+	    gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
+	    format = *( ( KWFormat* )fc );
+	}
 }
 
 /*================================================================*/
@@ -1873,7 +1872,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	p = doc->findFirstParagOfRect( e->rect().y() + contentsY(), firstVisiblePage, i );
 
 	if ( p ) {
- 	    paintfc->setFrameSet( i + 1 );
+	    paintfc->setFrameSet( i + 1 );
 	    paintfc->init( p, recalcAll );
 
 	    QRegion emptyRegion = paintfc->getEmptyRegion();
@@ -1982,7 +1981,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	    QRect fr = *fs->getFrame( paintfc->getFrame() - 1 );
 	    fr.moveBy( -contentsX(), -contentsY() );
 	    painter.fillRect( fr, QBrush( fs->getFrame( 0 )->getBackgroundColor() ) );
-	    	
+		
 	    bool bend = FALSE;
 	    while ( !bend ) {
 		if ( allowBreak1( paintfc, i ) )
@@ -2006,7 +2005,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 }
 
 /*================================================================*/
-void KWPage::finishPainting( QPaintEvent */*e*/, QPainter &painter )
+void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
 {
     KWFormatContext _fc( doc, fc->getFrameSet() );
     _fc = *fc;
@@ -2015,9 +2014,6 @@ void KWPage::finishPainting( QPaintEvent */*e*/, QPainter &painter )
     unsigned int _x = frame->x() - contentsX();
     unsigned int _wid = frame->width();
 
-#if 0
-    // WABA: What is this doing? Why would you want to paint outside the
-    // e->rect() ?
     if ( e->rect().intersects( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->
 				      getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
 				      _fc.getPTY() - contentsY(),
@@ -2027,20 +2023,20 @@ void KWPage::finishPainting( QPaintEvent */*e*/, QPainter &painter )
 				      getRightIndent( _fc.getPTY(),
 						      _fc.getLineHeight() ),
 				      _fc.getLineHeight() ) ) )
-    {
-	if ( !e->rect().contains( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->
-					 getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
-					 _fc.getPTY() - contentsY(),
-					 _wid - frameSet->getFrame( _fc.getFrame() - 1 )->
-					 getLeftIndent( _fc.getPTY(), _fc.getLineHeight() )
-					 - frameSet->getFrame( _fc.getFrame() - 1 )->
-					 getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
-					 _fc.getLineHeight() ) ) )
-        {					
-	    painter.setClipping( FALSE );
+	{
+	    if ( !e->rect().contains( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->
+					     getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
+					     _fc.getPTY() - contentsY(),
+					     _wid - frameSet->getFrame( _fc.getFrame() - 1 )->
+					     getLeftIndent( _fc.getPTY(), _fc.getLineHeight() )
+					     - frameSet->getFrame( _fc.getFrame() - 1 )->
+					     getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
+					     _fc.getLineHeight() ) ) )
+		{					
+		    painter.setClipping( FALSE );
+		}
 	}
-    }
-#endif
+
     QRect fr( _x + frame->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
 	      _fc.getPTY() - contentsY(),
 	      _wid - frame->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ) -
@@ -2052,14 +2048,14 @@ void KWPage::finishPainting( QPaintEvent */*e*/, QPainter &painter )
     drawFrameBorder( painter, frame );
 
     if ( doc->has_selection() )
-    {
-	doc->drawSelection( painter, contentsX(), contentsY() );
-    }
+	{
+	    doc->drawSelection( painter, contentsX(), contentsY() );
+	}
 
     if ( cursorIsVisible )
-    {
-       doc->drawMarker( *fc, &painter, contentsX(), contentsY() );
-    }
+	{
+	    doc->drawMarker( *fc, &painter, contentsX(), contentsY() );
+	}
 }
 
 /*================================================================*/
@@ -2147,7 +2143,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
     bool lookInCache = paintfc.getParag() == cachedParag;
     cachedParag = paintfc.getParag();
 
-    QStringList  tmpCachedLines;
+    QStringList tmpCachedLines;
     QStringList::Iterator it = cachedLines.begin();
 
     KWFrame *frame = frameSet->getFrame( paintfc.getFrame() - 1 );
@@ -2172,14 +2168,14 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 	    r.setHeight( paintfc.getPTY() - r.y() );
 	    emptyRegion = emptyRegion.subtract( r );
 	}
-	 	
+		
 	if ( paintfc.getParag() != fc->getParag() )
 	    forceDraw = TRUE;
 	if ( paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() &&
 	     fc->getParag()->getPTYEnd() == ptYEnd && exitASAP ) {
-	     QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
-	     r.setY( paintfc.getPTY() );
-	     emptyRegion = emptyRegion.subtract( r );
+	    QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
+	    r.setY( paintfc.getPTY() );
+	    emptyRegion = emptyRegion.subtract( r );
 	    break;
 	}
 	if ( frameSet->getFrame( currFrameNum )->isMostRight() &&
@@ -2208,11 +2204,11 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 	    it = cachedLines.find( it, str );
 	    if ( it != cachedLines.end() ) {
 		drawIt = FALSE;
-// 		qDebug( "cached: %s", ( *it ).latin1() );
+		//		qDebug( "cached: %s", ( *it ).latin1() );
 	    } else {
-// 		qDebug( "%d %d", it != cachedLines.end() , *it == (int)paintfc.getPTY() );
-// 		if ( *it != (int)paintfc.getPTY() )
-// 		    qDebug( "it: %d, pty: %d", *it, paintfc.getPTY() );
+		//		qDebug( "%d %d", it != cachedLines.end() , *it == (int)paintfc.getPTY() );
+		//		if ( *it != (int)paintfc.getPTY() )
+		//		    qDebug( "it: %d, pty: %d", *it, paintfc.getPTY() );
 	    }
 	}
 
@@ -2221,16 +2217,16 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 	emptyRegion = emptyRegion.subtract( QRect( _x + li, paintfc.getPTY(), _wid - li - re,
 						   paintfc.getLineHeight() ) );
 	if ( drawIt || forceDraw ) {
-// 	    qDebug( "draw: %s", str.latin1() );
+	    //	    qDebug( "draw: %s", str.latin1() );
 	    doc->printLine( paintfc, painter, contentsX(), contentsY(), width(), height(),
 			    gui->getView()->getViewFormattingChars(), TRUE,
 			    _x + li, paintfc.getPTY() - contentsY(), _wid - li - re, paintfc.getLineHeight(),
 			    QBrush( frame->getBackgroundColor() ) );
 	}
-// 	qDebug( "append: %d %s", pty, str.latin1() );
+	//	qDebug( "append: %d %s", pty, str.latin1() );
 	tmpCachedLines.append( str );
 
-// 	qDebug( "----------------------" );
+	//	qDebug( "----------------------" );
 	
 	bend = !paintfc.makeNextLineLayout();
 
@@ -2344,24 +2340,24 @@ bool KWPage::kContinueSelection( QKeyEvent *e )
 	 ( e->key() == Key_Left || e->key() == Key_Right ||
 	   e->key() == Key_Up || e->key() == Key_Down  ||
 	   e->key() == Key_End || e->key() == Key_Home ) )
-    {	
-	continueSelection = TRUE;
-    }
-    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() )
-    {
-	doc->setSelection( FALSE );
-	doc->drawSelection( painter, contentsX(), contentsY() );
-	painter.end();
-	if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
-	     e->key() == Key_Enter || e->ascii() >= 32 )
-	{
-	    doc->deleteSelectedText( fc );
-	    recalcCursor();
-	    if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
-		 e->key() == Key_Enter )
-		return FALSE;
+	{	
+	    continueSelection = TRUE;
 	}
-    }
+    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() )
+	{
+	    doc->setSelection( FALSE );
+	    doc->drawSelection( painter, contentsX(), contentsY() );
+	    painter.end();
+	    if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
+		 e->key() == Key_Enter || e->ascii() >= 32 )
+		{
+		    doc->deleteSelectedText( fc );
+		    recalcCursor();
+		    if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
+			 e->key() == Key_Enter )
+			return FALSE;
+		}
+	}
 
     return TRUE;
 }
@@ -2835,7 +2831,6 @@ bool KWPage::kDefault( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet *frameS
     doc->setNeedRedraw( FALSE );
     if ( !doc->isModified() )
 	doc->setModified( TRUE );
-
     return TRUE;
 }
 
@@ -2930,22 +2925,22 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 	    STOP;
 	break;
     default: {
-	if ( e->text().length() &&
-	     ( !e->ascii() || e->ascii() >= 32) ) {
-	    if ( !kDefault( e, oldPage, oldFrame, oldParag, frameSet ) )
-		STOP;
-	} else if ( e->state() & ControlButton ) {
-	    switch( e->key() ) {
-	    case Key_E:
-		if ( !kEnd( e, oldPage, oldFrame, oldParag, frameSet ) )
+	    if ( e->text().length() &&
+		 ( !e->ascii() || e->ascii() >= 32) ) {
+		if ( !kDefault( e, oldPage, oldFrame, oldParag, frameSet ) )
 		    STOP;
-		break;
-	    case Key_A:
-		if ( !kHome( e, oldPage, oldFrame, oldParag, frameSet ) )
-		    STOP;
-		break;
+	    } else if ( e->state() & ControlButton ) {
+		switch( e->key() ) {
+		case Key_E:
+		    if ( !kEnd( e, oldPage, oldFrame, oldParag, frameSet ) )
+			STOP;
+		    break;
+		case Key_A:
+		    if ( !kHome( e, oldPage, oldFrame, oldParag, frameSet ) )
+			STOP;
+		    break;
+		}
 	    }
-	}
 	} break;
     }
 
@@ -2954,21 +2949,21 @@ void KWPage::keyPressEvent( QKeyEvent *e )
     if ( oldPage != fc->getPage() )
 	gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
     if ( oldParag != fc->getParag() && fc->getParag() )
-    {
-	gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName() );
-	setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
-	setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
-	gui->getView()->setFormat( *( ( KWFormat* )fc ) );
-	gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
-	gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
-	gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
-					 fc->getParag()->getParagLayout()->getRightBorder(),
-					 fc->getParag()->getParagLayout()->getTopBorder(),
-					 fc->getParag()->getParagLayout()->getBottomBorder() );
-	gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
-					    getFrame( fc->getFrame() - 1 )->x() );
-	gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
-    }
+	{
+	    gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName() );
+	    setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
+	    setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
+	    gui->getView()->setFormat( *( ( KWFormat* )fc ) );
+	    gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+	    gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+	    gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+					     fc->getParag()->getParagLayout()->getRightBorder(),
+					     fc->getParag()->getParagLayout()->getTopBorder(),
+					     fc->getParag()->getParagLayout()->getBottomBorder() );
+	    gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
+						getFrame( fc->getFrame() - 1 )->x() );
+	    gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
+	}
     if ( doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame() )
 	setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
 
@@ -3023,7 +3018,7 @@ void KWPage::scrollToParag( KWParag *_parag )
     scrollToCursor();
 
     if ( blinking )
-        startBlinkCursor();
+	startBlinkCursor();
 }
 
 /*================================================================*/
@@ -3036,7 +3031,7 @@ void KWPage::scrollToOffset( int _x, int _y )
     setContentsPos( _x, _y );
 
     if ( blinking )
-        startBlinkCursor();
+	startBlinkCursor();
 }
 
 /*================================================================*/
@@ -3253,8 +3248,8 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
     for ( int k = 0; k < doc->getPages(); k++ ) {
 	QRect tmp2 = QRect( -contentsX(), ( k * doc->getPTPaperHeight() ) - contentsY(), doc->getPTPaperWidth(),
 			    doc->getPTPaperHeight() );
- 	if ( v_area.intersects( tmp2 ) )
- 	    _painter.drawRect( tmp2 );
+	if ( v_area.intersects( tmp2 ) )
+	    _painter.drawRect( tmp2 );
     }
 
     _painter.restore();
@@ -3364,19 +3359,19 @@ void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame )
 
     unsigned int page = 0;
     for ( int i = 0; i < doc->getPages(); i++ )
-    {
-	if ( frame->intersects( QRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() ) ) )
 	{
-	    page = i;
-	    break;
+	    if ( frame->intersects( QRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() ) ) )
+		{
+		    page = i;
+		    break;
+		}
 	}
-    }
 
     _layout.mmLeft = POINT_TO_MM( frame->left() );
     _layout.mmTop = POINT_TO_MM( frame->top() ) - page * doc->getMMPaperHeight();
     _layout.mmRight = _layout.mmWidth - POINT_TO_MM( frame->right() );
     _layout.mmBottom = _layout.mmHeight - POINT_TO_MM( frame->bottom() )
-		     + page * doc->getMMPaperHeight();
+	+ page * doc->getMMPaperHeight();
     _layout.ptLeft = frame->left();
     _layout.inchLeft = POINT_TO_INCH( frame->left() );
     _layout.inchTop = POINT_TO_INCH( frame->top() ) - page * doc->getINCHPaperHeight();
@@ -3537,12 +3532,12 @@ void KWPage::femProps()
     //repaintScreen( FALSE );
     int iFrameset;
     for ( iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
-        for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
-            if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected()) {
-                frame=doc->getFrameSet(iFrameset)->getFrame(j);
-                break;
-            }
-        }
+	for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
+	    if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected()) {
+		frame=doc->getFrameSet(iFrameset)->getFrame(j);
+		break;
+	    }
+	}
     }
     frameDia = new KWFrameDia( this, frame);
     //frameDia->setPage(this);
@@ -4088,11 +4083,11 @@ void KWPage::selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet */
     doc->setSelEnd( fc2 );
 
     if ( _select ) {
-        QPainter p;
-        p.begin( viewport() );
+	QPainter p;
+	p.begin( viewport() );
 	doc->setSelection( TRUE );
 	doc->drawSelection( p, contentsX(), contentsY() );
-        p.end();
+	p.end();
     }
 
     scrollToCursor();
@@ -4104,11 +4099,11 @@ void KWPage::selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet */
 void KWPage::removeSelection()
 {
     if ( doc->has_selection() ) {
-        QPainter p;
-        p.begin( viewport() );
+	QPainter p;
+	p.begin( viewport() );
 	doc->drawSelection( p, contentsX(), contentsY() );
 	doc->setSelection( FALSE );
-        p.end();
+	p.end();
     }
 }
 
@@ -4514,7 +4509,7 @@ void KWPage::viewportDragEnterEvent( QDragEnterEvent *e )
     if ( KWordDrag::canDecode( e ) ||
 	 QTextDrag::canDecode( e ) ||
 	 QImageDrag::canDecode( e ) ||
-	QUriDrag::canDecode( e ) )
+	 QUriDrag::canDecode( e ) )
 	e->accept();//Action();
 }
 
@@ -4524,14 +4519,14 @@ void KWPage::viewportDragMoveEvent( QDragMoveEvent *e )
     if ( KWordDrag::canDecode( e ) ||
 	 QTextDrag::canDecode(e ) ||
 	 QImageDrag::canDecode( e ) ||
-	QUriDrag::canDecode( e ) ) {
+	 QUriDrag::canDecode( e ) ) {
 	if ( mouseMode != MM_EDIT )
 	    setMouseMode( MM_EDIT );
 
 	unsigned int mx = e->pos().x() + contentsX();
 	unsigned int my = e->pos().y() + contentsY();
 
-        showCursor( false );
+	showCursor( false );
 
 	int frameset = doc->getFrameSet( mx, my );
 
@@ -4544,7 +4539,7 @@ void KWPage::viewportDragMoveEvent( QDragMoveEvent *e )
 
 	    scrollToCursor();
 
-            showCursor( true );
+	    showCursor( true );
 
 	    if ( doc->getProcessingType() == KWordDocument::DTP ) {
 		int frame = doc->getFrameSet( frameset )->getFrame( mx, my );
@@ -4649,7 +4644,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
 	frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
 	KWFrame *frame = new KWFrame(frameset, e->pos().x() + contentsX(), e->pos().y() + contentsY(), pix.width(),
-				      pix.height() );
+				     pix.height() );
 	frameset->addFrame( frame );
 	doc->addFrameSet( frameset );
 	repaintScreen( FALSE );
@@ -4679,16 +4674,16 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		    KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
 		    frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
 		    KWFrame *frame = new KWFrame(frameset, e->pos().x() + contentsX(), e->pos().y() + contentsY(),
-						  pix.width(), pix.height() );
+						 pix.width(), pix.height() );
 		    frameset->addFrame( frame );
 		    doc->addFrameSet( frameset );
 		    repaintScreen( FALSE );
 		    continue;
 		}
-    	    }
+	    }
 
-//		open any non-picture as text
-//		in the future we should open specific mime types with "their" programms and embed them
+	    //		open any non-picture as text
+	    //		in the future we should open specific mime types with "their" programms and embed them
 	    QFile f( filename );
 	    QTextStream t( &f );
 	    QString text = "", tmp;
@@ -4700,12 +4695,12 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		    text.append( tmp );
 		}
 		f.close();
-    	    }
+	    }
 	    doc->getAutoFormat().setEnabled( TRUE );
 	    doc->paste( fc, text, this );
 	    repaintScreen( FALSE );
 	    doc->getAutoFormat().setEnabled( FALSE );
-    	}
+	}
 	e->accept();
     } else if ( QTextDrag::canDecode( e ) ) {
 	QString s;
@@ -4782,15 +4777,15 @@ void KWPage::stopBlinkCursor( bool visible )
 /*================================================================*/
 void KWPage::showCursor( bool visible )
 {
-   if (visible == cursorIsVisible)
-      return;
+    if (visible == cursorIsVisible)
+	return;
 
-   cursorIsVisible = !cursorIsVisible;
+    cursorIsVisible = !cursorIsVisible;
 
-   QPainter p;
-   p.begin( viewport() );
-   doc->drawMarker( *fc, &p, contentsX(), contentsY() );
-   p.end();
+    QPainter p;
+    p.begin( viewport() );
+    doc->drawMarker( *fc, &p, contentsX(), contentsY() );
+    p.end();
 }
 
 
@@ -4930,10 +4925,10 @@ void KWPage::doAutoScroll()
     int my = pos.y() + contentsY();
 
     if ( pos.y() < 0 || pos.y() > viewport()->height() )
-    {
-	ensureVisible( contentsX(), my, 0, 5 );
-	doSelect(mx, my);
-    }
+	{
+	    ensureVisible( contentsX(), my, 0, 5 );
+	    doSelect(mx, my);
+	}
 }
 
 /*================================================================*/
@@ -5226,7 +5221,7 @@ void KWPage::verticalSliderMoved( int value )
 }
 
 /******************************************************************/
-/* Class: KWResizeHandle                                          */
+/* Class: KWResizeHandle					  */
 /******************************************************************/
 
 /*================================================================*/
@@ -5365,15 +5360,15 @@ void KWResizeHandle::updateGeometry()
 	break;
     case Right:
 	page->moveChild( this, frame->x() + frame->width() - 6,
-		     frame->y() + frame->height() / 2 - 3 );
+			 frame->y() + frame->height() / 2 - 3 );
 	break;
     case RightDown:
 	page->moveChild( this, frame->x() + frame->width() - 6,
-		     frame->y() + frame->height() - 6 );
+			 frame->y() + frame->height() - 6 );
 	break;
     case Down:
 	page->moveChild( this, frame->x() + frame->width() / 2 - 3,
-		     frame->y() + frame->height() - 5 );
+			 frame->y() + frame->height() - 5 );
 	break;
     case LeftDown:
 	page->moveChild( this, frame->x(), frame->y() + frame->height() - 6 );

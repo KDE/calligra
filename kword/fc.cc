@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -758,9 +758,9 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
     init( _p );
 
     if ( (ptY <= my) && (ptY + getLineHeight() >= my) &&
-	 (ptLeft <= mx) && (ptLeft + ptWidth >= mx) ) 
+	 (ptLeft <= mx) && (ptLeft + ptWidth >= mx) )
     {
-        init( _p, FALSE );
+	init( _p, FALSE );
 	textPos = lineStartPos;
 	cursorGotoLineStart();
 	return;
@@ -777,7 +777,7 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
     unsigned int pg = page;
     while ( makeNextLineLayout() ) {
 	if ( (ptY <= my) && (ptY + getLineHeight() >= my) &&
-	     (ptLeft <= mx) && (ptLeft + ptWidth >= mx) ) 
+	     (ptLeft <= mx) && (ptLeft + ptWidth >= mx) )
 	{
 	    found = TRUE;
 	    break;
@@ -786,7 +786,7 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
 	    break;
     }
 
-    if ( !found ) 
+    if ( !found )
     {
        ptY -= getLineHeight();
     }
@@ -1325,7 +1325,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	    ptY = pFrame->top() + pFrame->getBTop().pt();
 	    return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	} else { // append a page or resize frame
-            if ( pFrame->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
+	    if ( pFrame->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
 		int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
 							 pFrame->getBBottom().pt() );
 
@@ -1487,7 +1487,7 @@ void KWFormatContext::setFrameSet( unsigned int _frameSet )
 	pFrameSet = 0;
 
 //     if ( !pFrameSet )
-// 	qWarning( "KWFormatContext::setFrameSet: pFrameSet is NULL, KWord will crash soon or at least behave strange!" );
+//	qWarning( "KWFormatContext::setFrameSet: pFrameSet is NULL, KWord will crash soon or at least behave strange!" );
 
     setFrame( 1 );
 }
@@ -1507,7 +1507,7 @@ void KWFormatContext::setFrame( unsigned int _frame )
 	pFrame = 0;
 
 //     if ( !pFrame )
-// 	qWarning( "KWFormatContext::setFrame: pFrame is NULL, KWord will crash soon or at least behave strange!" );
+//	qWarning( "KWFormatContext::setFrame: pFrame is NULL, KWord will crash soon or at least behave strange!" );
 }
 
 /*================================================================*/
