@@ -671,9 +671,11 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool
 
     oldRect=KoRect();
 
-    // allways create a pen- & brush-dialog or rewrite KPrPage::setPenBrush :-)
-    setupTabPen();
-    setupTabBrush();
+    if (flags & SdPen)
+        setupTabPen();
+
+    if (flags & SdBrush)
+        setupTabBrush();
 
     if (stickyObj)
         setupTabGeneral();
@@ -737,10 +739,7 @@ void StyleDia::setupTabPen()
     m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_doc->getKPresenterView()->getLineEnd()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPenDia, SLOT( slotReset() ) );
-    if (flags & SdPen)
-        addTab( m_confPenDia, i18n( "&Pen" ) );
-    else
-        m_confPenDia->hide();
+    addTab( m_confPenDia, i18n( "&Pen" ) );
 }
 
 void StyleDia::setupTabBrush()
@@ -756,10 +755,7 @@ void StyleDia::setupTabBrush()
                                 m_canvas->getGYFactor(m_doc->getKPresenterView()->getGYFactor()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confBrushDia, SLOT( slotReset() ) );
-    if (flags & SdBrush)
-        addTab( m_confBrushDia, i18n( "&Brush" ) );
-    else
-        m_confBrushDia->hide();
+    addTab( m_confBrushDia, i18n( "&Brush" ) );
 }
 
 void StyleDia::setupTabGeneral()

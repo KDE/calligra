@@ -585,10 +585,12 @@ protected slots:
     void extraLineBeginArrow();
     void extraLineBeginRect();
     void extraLineBeginCircle();
+    void setExtraLineBegin(LineEnd lb);
     void extraLineEndNormal();
     void extraLineEndArrow();
     void extraLineEndRect();
     void extraLineEndCircle();
+    void setExtraLineEnd(LineEnd le);
 
     void extraPenStyleSolid();
     void extraPenStyleDash();

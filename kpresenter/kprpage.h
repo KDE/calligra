@@ -126,8 +126,6 @@ public:
     QBrush getBrush( const QBrush &brush )const;
     LineEnd getLineEnd( LineEnd le );
     LineEnd getLineBegin( LineEnd lb );
-    bool setLineEnd( LineEnd le );
-    bool setLineBegin( LineEnd lb );
 
     bool getProtect( bool p );
     bool differentProtect( bool p);
@@ -137,8 +135,9 @@ public:
 
     bool getProtectContent(bool prot) const;
 
-    KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
-			   BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);
+    KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> list);
+    KCommand* setBrush( const QBrush &brush, FillType ft,const  QColor& g1, const QColor &g2,
+                        BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);
 
     QPen getPen( const QPen & pen );
 
@@ -176,7 +175,6 @@ public:
     KCommand* setRectSettings( int _rx, int _ry );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
     KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright );
-    KCommand* setPenColor( const QColor &c, bool fill );
     KCommand* setBrushColor( const QColor &c, bool fill );
 
     void slotRepaintVariable();

@@ -1790,17 +1790,21 @@ void KPresenterView::penChosen()
     QColor c = actionPenColor->color();
     if ( !m_canvas->currentTextObjectView() )
     {
-	bool fill = true;
-        KMacroCommand *macro= new KMacroCommand(i18n( "Change Pen Color" ));
+        KPrPage *page = m_canvas->activePage();
+        QPen e_pen = QPen(c, page->getPen(pen).width(), page->getPen(pen).style());
+
         bool createMacro=false;
-        KCommand *cmd=0L;
-        cmd=m_canvas->activePage()->setPenColor( c, fill );
+        KMacroCommand *macro= new KMacroCommand(i18n( "Change Pen Color" ));
+
+        KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
+                                    PenCmd::Color, page->objectList() );
         if(cmd)
         {
             macro->addCommand(cmd);
             createMacro=true;
         }
-        cmd=stickyPage()->setPenColor( c, fill );
+        cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
+                          PenCmd::Color, page->objectList() );
         if(cmd)
         {
             macro->addCommand(cmd);
@@ -1810,10 +1814,7 @@ void KPresenterView::penChosen()
             m_pKPresenterDoc->addCommand(macro);
         else
         {
-	    if ( fill )
-		pen.setColor( c );
-	    else
-		pen = NoPen;
+            pen.setColor( c );
             delete macro;
 	}
     }
@@ -1904,57 +1905,113 @@ void KPresenterView::extraAlignObjBottom()
 /*===============================================================*/
 void KPresenterView::extraLineBeginNormal()
 {
-    if ( !m_canvas->activePage()->setLineBegin( L_NORMAL ) )
-	lineBegin = L_NORMAL;
+    setExtraLineBegin(L_NORMAL);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineBeginArrow()
 {
-    if ( !m_canvas->activePage()->setLineBegin( L_ARROW ) )
-	lineBegin = L_ARROW;
+    setExtraLineBegin(L_ARROW);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineBeginRect()
 {
-    if ( !m_canvas->activePage()->setLineBegin( L_SQUARE ) )
-	lineBegin = L_SQUARE;
+    setExtraLineBegin(L_SQUARE);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineBeginCircle()
 {
-    if ( !m_canvas->activePage()->setLineBegin( L_CIRCLE ) )
-	lineBegin = L_CIRCLE;
+    setExtraLineBegin(L_CIRCLE);
+}
+
+/*===============================================================*/
+void KPresenterView::setExtraLineBegin(LineEnd lb)
+{
+    KPrPage *page=m_canvas->activePage();
+    QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), page->getPen(pen).style());
+
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n("Change Line Begin"));
+
+    KCommand *cmd=page->setPen( e_pen, lb, page->getLineEnd( lineEnd ),
+                                PenCmd::LineBegin, page->objectList() );
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPen( e_pen, lb, page->getLineEnd( lineEnd ),
+                              PenCmd::LineBegin, stickyPage()->objectList() );
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
+
+    if ( !createMacro )
+        lineBegin = lb;
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineEndNormal()
 {
-    if ( !m_canvas->activePage()->setLineEnd( L_NORMAL ) )
-	lineEnd = L_NORMAL;
+    setExtraLineEnd(L_NORMAL);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineEndArrow()
 {
-    if ( !m_canvas->activePage()->setLineEnd( L_ARROW ) )
-	lineEnd = L_ARROW;
+    setExtraLineEnd(L_ARROW);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineEndRect()
 {
-    if ( !m_canvas->activePage()->setLineEnd( L_SQUARE ) )
-	lineEnd = L_SQUARE;
+    setExtraLineEnd(L_SQUARE);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLineEndCircle()
 {
-    if ( !m_canvas->activePage()->setLineEnd( L_CIRCLE ) )
-	lineEnd = L_CIRCLE;
+    setExtraLineEnd(L_CIRCLE);
+}
+
+/*===============================================================*/
+void KPresenterView::setExtraLineEnd(LineEnd le)
+{
+    KPrPage *page=m_canvas->activePage();
+    QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), page->getPen(pen).style());
+
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n("Change Line End"));
+
+    KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), le,
+                                PenCmd::LineEnd, page->objectList() );
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), le,
+                              PenCmd::LineEnd, stickyPage()->objectList() );
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
+
+    if ( !createMacro )
+        lineEnd = le;
 }
 
 /*===============================================================*/
@@ -1997,31 +2054,21 @@ void KPresenterView::extraPenStyleNoPen()
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
     KPrPage *page = m_canvas->activePage();
-    QPen e_pen = QPen( (page->getPen( pen )).color(), (page->getPen( pen )).width(), style );
+    QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), style );
 
     bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Styles" ) );
+    KMacroCommand *macro=new KMacroCommand(i18n("Change Pen Style"));
 
-    KCommand *cmd=m_canvas->activePage()->setPenBrush( e_pen,
-                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
-                      page->getLineEnd( lineEnd ),page->getFillType( fillType ),
-                      page->getGColor1( gColor1 ),
-                      page->getGColor2( gColor2 ), page->getGType( gType ),
-                      page->getGUnbalanced( gUnbalanced ),
-                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) ,m_canvas->activePage()->objectList());
-    if( cmd)
+    KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
+                                PenCmd::Style, page->objectList() );
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
     }
-    cmd=stickyPage()->setPenBrush( e_pen,
-                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
-                      page->getLineEnd( lineEnd ),page->getFillType( fillType ),
-                      page->getGColor1( gColor1 ),
-                      page->getGColor2( gColor2 ), page->getGType( gType ),
-                      page->getGUnbalanced( gUnbalanced ),
-                                   page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),stickyPage()->objectList() );
-    if( cmd)
+    cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
+                              PenCmd::Style, stickyPage()->objectList() );
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
@@ -2099,32 +2146,21 @@ void KPresenterView::extraPenWidth10()
 void KPresenterView::setExtraPenWidth( unsigned int width )
 {
     KPrPage *page=m_canvas->activePage();
-    QPen e_pen = QPen( (page->getPen( pen )).color(), width,
-                       (page->getPen( pen )).style() );
+    QPen e_pen = QPen(page->getPen(pen).color(), width, page->getPen(pen).style());
 
     bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Styles" ) );
+    KMacroCommand *macro=new KMacroCommand(i18n("Change Pen Width"));
 
-    KCommand *cmd=m_canvas->activePage()->setPenBrush(e_pen,
-                                                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
-                                                      page->getLineEnd( lineEnd ), page->getFillType( fillType ),
-                                                      page->getGColor1( gColor1 ),
-                                                      page->getGColor2( gColor2 ), page->getGType( gType ),
-                                                      page->getGUnbalanced( gUnbalanced ),
-                                                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),m_canvas->activePage()->objectList() );
-    if( cmd)
+    KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
+                                PenCmd::Width, page->objectList() );
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
     }
-    cmd=stickyPage()->setPenBrush( e_pen,
-                                   page->getBrush( brush ), page->getLineBegin( lineBegin ),
-                                   page->getLineEnd( lineEnd ), page->getFillType( fillType ),
-                                   page->getGColor1( gColor1 ),
-                                   page->getGColor2( gColor2 ), page->getGType( gType ),
-                                   page->getGUnbalanced( gUnbalanced ),
-                                   page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),stickyPage()->objectList() );
-    if( cmd)
+    cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
+                              PenCmd::Width, stickyPage()->objectList() );
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
@@ -3170,8 +3206,10 @@ void KPresenterView::slotAfchooseCanceled()
 /*=========== take changes for style dialog =====================*/
 void KPresenterView::styleOk()
 {
+    ConfPenDia *confPenDia;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
+    ConfBrushDia *confBrushDia;
     ConfPictureDia *confPictureDia;
     ConfPolygonDia *confPolygonDia;
 
@@ -3179,22 +3217,52 @@ void KPresenterView::styleOk()
     KCommand *cmd;
     KMacroCommand *macro=new KMacroCommand(i18n( "Apply Properties" ) );
 
-    ConfPenDia *confPenDia = styleDia->getConfPenDia();
-    ConfBrushDia *confBrushDia = styleDia->getConfBrushDia();
-
-    cmd=m_canvas->activePage()->setPenBrush(
-        confPenDia->getPen(), confBrushDia->getBrush(), confPenDia->getLineBegin(),
-        confPenDia->getLineEnd(), confBrushDia->getFillType(),
-        confBrushDia->getGColor1(),
-        confBrushDia->getGColor2(), confBrushDia->getGType(),
-        confBrushDia->getGUnbalanced(),
-        confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-        m_canvas->activePage()->objectList() );
-
-    if(cmd)
+    if ((confPenDia = styleDia->getConfPenDia()))
     {
-        macro->addCommand(cmd);
-        createMacro=true;
+        cmd=m_canvas->activePage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
+                                           PenCmd::All, m_canvas->activePage()->objectList());
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+
+        cmd=stickyPage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
+                                 PenCmd::All, stickyPage()->objectList());
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+    }
+
+    if ((confBrushDia = styleDia->getConfBrushDia()))
+    {
+        cmd=m_canvas->activePage()->setBrush(confBrushDia->getBrush(), confBrushDia->getFillType(),
+                                             confBrushDia->getGColor1(), confBrushDia->getGColor2(),
+                                             confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
+                                             confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
+                                             m_canvas->activePage()->objectList());
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+
+        cmd=stickyPage()->setBrush(confBrushDia->getBrush(), confBrushDia->getFillType(),
+                                   confBrushDia->getGColor1(), confBrushDia->getGColor2(),
+                                   confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
+                                   confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
+                                   stickyPage()->objectList());
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
     }
 
     if ( !styleDia->protectNoChange() )
@@ -3258,20 +3326,6 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
             createMacro=true;
         }
-    }
-
-    cmd=stickyPage()->setPenBrush(
-        confPenDia->getPen(), confBrushDia->getBrush(), confPenDia->getLineBegin(),
-        confPenDia->getLineEnd(), confBrushDia->getFillType(),
-        confBrushDia->getGColor1(),
-        confBrushDia->getGColor2(), confBrushDia->getGType(),
-        confBrushDia->getGUnbalanced(),
-        confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),stickyPage()->objectList() );
-
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
     }
 
     if ((confPieDia = styleDia->getConfPieDia()))

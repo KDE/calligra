@@ -436,10 +436,10 @@ protected:
 };
 
 /******************************************************************/
-/* Class: PenBrushCmd						  */
+/* Class: PenCmd						  */
 /******************************************************************/
 
-class PenBrushCmd : public KNamedCommand
+class PenCmd : public KNamedCommand
 {
 public:
     struct Pen {
@@ -454,6 +454,39 @@ public:
 	}
     };
 
+    // the flags indicate what has changed
+    enum PenConfigChange {
+        LineBegin = 1,
+        LineEnd = 2,
+        Color = 4,
+        Width = 8,
+        Style = 16,
+        All = LineBegin | LineEnd | Color | Width | Style
+    };
+
+    PenCmd(const QString &_name, QPtrList<Pen> &_oldPen, Pen _newPen,
+           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0);
+    ~PenCmd();
+    void applyPen(KPObject *kpobject, Pen *tmpPen);
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KPresenterDoc *doc;
+    QPtrList<Pen> oldPen;
+    QPtrList<KPObject> objects;
+    Pen newPen;
+    int flags;
+};
+
+/******************************************************************/
+/* Class: BrushCmd						  */
+/******************************************************************/
+
+class BrushCmd : public KNamedCommand
+{
+public:
     struct Brush {
 	QBrush brush;
 	QColor gColor1;
@@ -476,29 +509,20 @@ public:
 	}
     };
 
-    static const int LB_ONLY;
-    static const int LE_ONLY;
-    static const int PEN_ONLY;
-    static const int BRUSH_ONLY;
-
-    PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
-		 Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );
-    ~PenBrushCmd();
-    void applyPenBrush(KPObject *kpobject,Pen *tmpPen,Brush *tmpBrush );
+    BrushCmd(const QString &_name, QPtrList<Brush> &_oldBrush, Brush _newBrush,
+             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0);
+    ~BrushCmd();
+    void applyBrush(KPObject *kpobject, Brush *tmpBrush);
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-
     KPresenterDoc *doc;
-    QPtrList<Pen> oldPen;
     QPtrList<Brush> oldBrush;
     QPtrList<KPObject> objects;
-    Pen newPen;
     Brush newBrush;
     int flags;
-
 };
 
 /******************************************************************/
