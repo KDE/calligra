@@ -601,18 +601,17 @@ void KSpreadCSVDialog::accept()
   if (numRows == 0)
     ++numRows;
 
-  if (m_mode != Column)
+  if ( (numCols > m_targetRect.width()) && (m_targetRect.width() > 1) )
   {
-    if ( numCols > m_targetRect.width() && m_targetRect.width() > 1 )
-      numCols = m_targetRect.width();
-    else
-      m_targetRect.setRight( m_targetRect.left() + numCols );
-    
-    if ( numRows > m_targetRect.height() && m_targetRect.height() > 1 )
-      numRows = m_targetRect.height();
-    else
-      m_targetRect.setBottom( m_targetRect.top() + numRows );
+    numCols = m_targetRect.width();
   }
+  else
+    m_targetRect.setRight( m_targetRect.left() + numCols );
+  
+  if ( (numRows > m_targetRect.height()) && (m_targetRect.height() > 1) )
+    numRows = m_targetRect.height();
+  else
+    m_targetRect.setBottom( m_targetRect.top() + numRows );
 
   if ( numRows == 1 && numCols == 1)
   {

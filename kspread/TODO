@@ -44,6 +44,8 @@ Other things: (please add the things you are working on!)
         String2Int, CurrentMonth, CurrentYear, CurrentDay,
 - Insert pictures
 - Insert basic drawings, autoforms        
+- Insert widgets like buttons, drop down lists,... + having the possibily to
+  define action if pressed, or selection changes,...
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas with something like "=x+5" ("='x'+5" works already)
 - formula result: fit the precision to the width of the cell
