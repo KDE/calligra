@@ -785,23 +785,138 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
+#undef ALLOW_TABLE
+
+QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
-#if 0
-    *m_streamOut << "</abiword:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
-    *m_streamOut << "<table:table>\n";
-    // ### TODO: table:column
-    // ### TODO: automatic styles
+#ifdef ALLOW_TABLE
+    const FrameData& frame = cell.frame;
+    QString properties;
 
-    QValueList<TableCell>::ConstIterator itCell;
-
-    for (itCell=anchor.table.cellList.begin();
-        itCell!=anchor.table.cellList.end(); itCell++)
+    key += "!L"; // left border
+    key += frame.lColor.name();
+    key += ",";
+    key += QString::number( frame.lWidth );
+    properties += " fo:border-left=\"";
+    if ( frame.lColor.isValid() && frame.lWidth > 0.0 )
     {
-        // ### TODO: rowspan, colspan
+        properties += QString::number( frame.lWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.lColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
 
-        // AbiWord seems to work by attaching to the cell borders
-        *m_streamOut << "<table:table-cell Table:value-type=\"string\">\n";
+    key += "!R"; // right border
+    key += frame.rColor.name();
+    key += ",";
+    key += QString::number( frame.rWidth );
+    properties += " fo:border-right=\"";
+    if ( frame.rColor.isValid() && frame.rWidth > 0.0 )
+    {
+        properties += QString::number( frame.rWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.rColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!T"; // top border
+    key += frame.tColor.name();
+    key += ",";
+    key += QString::number( frame.tWidth );
+    properties += " fo:border-top=\"";
+    if ( frame.tColor.isValid() && frame.tWidth > 0.0 )
+    {
+        properties += QString::number( frame.tWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.tColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    key += "!B"; // bottom border
+    key += frame.bColor.name();
+    key += ",";
+    key += QString::number( frame.bWidth );
+    properties += " fo:border-bottom=\"";
+    if ( frame.bColor.isValid() && frame.bWidth > 0.0 )
+    {
+        properties += QString::number( frame.bWidth );
+        properties += "pt";
+        properties += " solid "; // ### TODO
+        properties += frame.bColor.name();
+    }
+    else
+    {
+        properties += "0pt none #000000";
+    }
+    properties += "\"";
+
+    return properties;
+#else
+    return QString::null;
+#endif
+}
+
+bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table )
+{
+    *m_streamOut << "<table:table-row>\n";
+    int rowCurrent = 0;
+
+    ulong cellNumber = 0L;
+
+    QMap<QString,QString> mapCellStyleKeys;
+
+    for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
+        itCell != table.cellList.end(); ++itCell)
+    {
+        if ( rowCurrent != (*itCell).row )
+        {
+            rowCurrent = (*itCell).row;
+            *m_streamOut << "</table:table-row>\n";
+            *m_streamOut << "<table:table-row>\n";
+        }
+
+        QString key;
+        const QString props ( cellToProperties( (*itCell), key ) );
+
+        QString automaticCellStyle;
+        QMap<QString,QString>::ConstIterator it ( mapCellStyleKeys.find( key ) );
+        if ( it == mapCellStyleKeys.end() )
+        {
+            automaticCellStyle = makeAutomaticStyleName( tableName + ".Cell", cellNumber );
+            mapCellStyleKeys [ key ] = automaticCellStyle;
+            kdDebug(30518) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            m_contentAutomaticStyles += "  <style:style";
+            m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+            m_contentAutomaticStyles += " style:family=\"table-cell\"";
+            m_contentAutomaticStyles += ">\n";
+            m_contentAutomaticStyles += "   <style:properties ";
+            m_contentAutomaticStyles += props;
+            m_contentAutomaticStyles += "/>\n";
+            m_contentAutomaticStyles += "  </style:style>\n";
+        }
+        else
+        {
+            automaticCellStyle = it.data();
+            kdDebug(30518) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+        }
+
+        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
+            << escapeOOText( automaticCellStyle) << "\">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
@@ -811,8 +926,81 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
         *m_streamOut << "</table:table-cell>\n";
     }
 
+    *m_streamOut << "</table:table-row>\n";
+    return true;
+}
+
+bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
+{
+#ifdef ALLOW_TABLE
+    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
+    const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
+
+    kdDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
+
+    kdDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+
+    *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<table:table table:name=\""
+        << escapeOOText( tableName )
+        << "\" table:style-name=\""
+        << escapeOOText( automaticTableStyle )
+        << "\" >\n";
+
+    ulong columnNumber = 0L;
+    double tableWidth = 0.0; // total width of table
+    QString delayedAutomaticStyles; // Automatic styles for the columns
+
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell=anchor.table.cellList.begin();
+        itCell!=anchor.table.cellList.end(); ++itCell )
+    {
+        kdDebug(30518) << "Column: " << (*itCell).col << endl;
+        if ( (*itCell).row )
+            break; // We have finished the first row
+
+        const double width = (*itCell).frame.right - (*itCell).frame.left;
+        tableWidth += width; // ###TODO any modifier needed?
+
+        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
+        kdDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
+
+        delayedAutomaticStyles += "  <style:style";
+        delayedAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
+        delayedAutomaticStyles += " style:family=\"table-column\"";
+        delayedAutomaticStyles += ">\n";
+        delayedAutomaticStyles += "   <style:properties ";
+        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
+        //  and/or the relative variant: style:rel-column-width
+        delayedAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
+        delayedAutomaticStyles += "/>\n";
+        delayedAutomaticStyles += "  </style:style>\n";
+
+        // ### TODO: find a way how to use table:number-columns-repeated > 1
+        *m_streamOut << "<table:table-column table:style-name=\""
+            << escapeOOText( automaticColumnStyle )
+            << "\" table:number-columns-repeated=\"1\"/>\n";
+    }
+
+    // Now that we have processed the columns, we can write out the automatic style for the table
+    m_contentAutomaticStyles += "  <style:style";
+    m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
+    m_contentAutomaticStyles += " style:family=\"table\"";
+    m_contentAutomaticStyles += ">\n";
+    m_contentAutomaticStyles += "   <style:properties ";
+    m_contentAutomaticStyles += " style:width=\"" + QString::number( tableWidth ) + "pt\" ";
+    m_contentAutomaticStyles += "/>\n";
+    m_contentAutomaticStyles += "  </style:style>\n";
+
+    // Now that the automatic style for the table is written, we can write the column's ones
+    m_contentAutomaticStyles += delayedAutomaticStyles;
+    delayedAutomaticStyles = QString::null; // Release memory
+
+    makeTableRows( tableName, anchor.table );
+
     *m_streamOut << "</table:table>\n";
-    *m_streamOut << "<abiword:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
 #endif
     return true;
 }
