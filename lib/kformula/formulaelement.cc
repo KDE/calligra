@@ -91,6 +91,11 @@ void FormulaElement::moveOutRight( FormulaCursor* cursor )
     document->moveOutRight( cursor );
 }
 
+void FormulaElement::tell( const QString& msg )
+{
+    document->tell( msg );
+}
+
 void FormulaElement::removeFormula( FormulaCursor* cursor )
 {
     document->removeFormula( cursor );

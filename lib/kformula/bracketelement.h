@@ -170,6 +170,12 @@ public:
     virtual TokenType getTokenType() const { return BRACKET; }
 
     /**
+     * The cursor has entered one of our child sequences.
+     * This is a good point to tell the user where he is.
+     */
+    virtual void entered( SequenceElement* child );
+
+    /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
      * This is needed because only the innermost matching element
@@ -260,6 +266,12 @@ public:
     }
 
     /**
+     * The cursor has entered one of our child sequences.
+     * This is a good point to tell the user where he is.
+     */
+    virtual void entered( SequenceElement* child );
+
+    /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
@@ -313,6 +325,12 @@ public:
     virtual UnderlineElement* clone() {
         return new UnderlineElement( *this );
     }
+
+    /**
+     * The cursor has entered one of our child sequences.
+     * This is a good point to tell the user where he is.
+     */
+    virtual void entered( SequenceElement* child );
 
     /**
      * Calculates our width and height and

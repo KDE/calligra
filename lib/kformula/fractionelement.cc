@@ -21,6 +21,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "formulaelement.h"
 #include "formulacursor.h"
@@ -50,6 +51,17 @@ FractionElement::FractionElement( const FractionElement& other )
     denominator = new SequenceElement( *( other.denominator ) );
     numerator->setParent( this );
     denominator->setParent( this );
+}
+
+
+void FractionElement::entered( SequenceElement* child )
+{
+    if ( child == numerator ) {
+        formula()->tell( i18n( "Numerator" ) );
+    }
+    else {
+        formula()->tell( i18n( "Denominator" ) );
+    }
 }
 
 

@@ -87,6 +87,11 @@ public:
     void moveOutRight( FormulaCursor* );
 
     /**
+     * Tell the user something has happened.
+     */
+    void tell( const QString& msg );
+
+    /**
      * Gets called when the formula wants to vanish. The one who
      * holds it should create an appropriate command and execute it.
      */

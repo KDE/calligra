@@ -224,6 +224,11 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
+    /**
+     * The cursor has entered one of our child sequences.
+     * This is a good point to tell the user where he is.
+     */
+    virtual void entered( SequenceElement* /*child*/ );
 
     // children
 

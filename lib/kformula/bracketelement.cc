@@ -24,6 +24,7 @@
 #include <qpointarray.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "artwork.h"
 #include "bracketelement.h"
@@ -212,6 +213,11 @@ BracketElement::BracketElement( const BracketElement& other )
     left = createBracket( other.left->getType() );
 }
 
+
+void BracketElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( i18n( "Delimiter" ) );
+}
 
 BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
@@ -466,6 +472,10 @@ OverlineElement::OverlineElement( const OverlineElement& other )
 {
 }
 
+void OverlineElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( i18n( "Overline" ) );
+}
 
 void OverlineElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
@@ -550,6 +560,12 @@ UnderlineElement::~UnderlineElement()
 UnderlineElement::UnderlineElement( const UnderlineElement& other )
     : SingleContentElement( other )
 {
+}
+
+
+void UnderlineElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( i18n( "Underline" ) );
 }
 
 

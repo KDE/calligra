@@ -73,6 +73,7 @@ public:
     virtual void cursorHasMoved( FormulaCursor* ) = 0;
     virtual void moveOutLeft( FormulaCursor* ) = 0;
     virtual void moveOutRight( FormulaCursor* ) = 0;
+    virtual void tell( const QString& /*msg*/ ) {}
     virtual void removeFormula( FormulaCursor* ) {}
     virtual void baseSizeChanged( int, bool ) {}
     virtual const SymbolTable& getSymbolTable() const = 0;
@@ -131,6 +132,7 @@ public:
 
     void moveOutLeft( FormulaCursor* );
     void moveOutRight( FormulaCursor* );
+    void tell( const QString& msg );
     void removeFormula( FormulaCursor* );
 
     /**
@@ -270,6 +272,11 @@ signals:
      */
     void formulaChanged( int width, int height );
     void formulaChanged( double width, double height );
+
+    /**
+     * A message that might be a useful hint. Meant for the statusbar.
+     */
+    void statusMsg( const QString& msg );
 
     /**
      * The element is going to leave the formula with and all its children.

@@ -22,6 +22,7 @@
 #include <qpen.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -109,6 +110,17 @@ RootElement::RootElement( const RootElement& other )
     }
     else {
         index = 0;
+    }
+}
+
+
+void RootElement::entered( SequenceElement* child )
+{
+    if ( child == content ) {
+        formula()->tell( i18n( "Main list of root" ) );
+    }
+    else {
+        formula()->tell( i18n( "Index" ) );
     }
 }
 

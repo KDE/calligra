@@ -24,6 +24,7 @@
 #include "contextstyle.h"
 #include "basicelement.h"
 #include "formulacursor.h"
+#include "formulaelement.h"
 #include "sequenceelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -101,6 +102,12 @@ void BasicElement::goInside(FormulaCursor* cursor)
     if (mainChild != 0) {
         mainChild->goInside(cursor);
     }
+}
+
+
+void BasicElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( "" );
 }
 
 

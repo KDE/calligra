@@ -309,6 +309,12 @@ MatrixElement::MatrixElement( const MatrixElement& other )
 }
 
 
+void MatrixElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( i18n( "Matrix element" ) );
+}
+
+
 BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
                                       const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -928,7 +934,14 @@ public:
 
     BasicElement* tab( uint i ) { return tabs.at( i ); }
 
+    /// Change the width of tab i and move all elements after it.
     void moveTabTo( uint i, luPixel pos );
+
+    /// Return the greatest tab number less than pos.
+    int tabBefore( uint pos );
+
+    /// Return the position of tab i.
+    int tabPos( uint i );
 
     virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
@@ -936,90 +949,6 @@ private:
 
     QPtrList<BasicElement> tabs;
 };
-
-
-
-// /**
-//  * An element that may only occur inside a MultilineSequenceElement.
-//  */
-// class TabMarker : public BasicElement {
-// public:
-
-//     TabMarker( BasicElement* parent = 0 );
-
-//     virtual BasicElement* clone() {
-//         return new TabMarker( *this );
-//     }
-
-//     /**
-//      * Calculates our width and height and
-//      * our children's parentPosition.
-//      */
-//     virtual void calcSizes( const ContextStyle& context,
-//                             ContextStyle::TextStyle tstyle,
-//                             ContextStyle::IndexStyle istyle );
-
-//     /**
-//      * Draws the whole element including its children.
-//      * The `parentOrigin' is the point this element's parent starts.
-//      * We can use our parentPosition to get our own origin then.
-//      */
-//     virtual void draw( QPainter& painter, const LuPixelRect& r,
-//                        const ContextStyle& context,
-//                        ContextStyle::TextStyle tstyle,
-//                        ContextStyle::IndexStyle istyle,
-//                        const LuPixelPoint& parentOrigin );
-
-//     virtual void writeMathML( QDomDocument doc, QDomNode parent );
-
-// protected:
-
-//     virtual QString getTagName() const { return "TAB"; }
-
-//     MultilineElement* multilineElement();
-// };
-
-
-// TabMarker::TabMarker( BasicElement* parent )
-//     : BasicElement( parent )
-// {
-// }
-
-
-// void TabMarker::calcSizes( const ContextStyle& /*context*/,
-//                            ContextStyle::TextStyle /*tstyle*/,
-//                            ContextStyle::IndexStyle /*istyle*/ )
-// {
-//     setWidth( 0 );
-//     setHeight( 0 );
-//     static_cast<MultilineSequenceElement*>( getParent() )->addTabMarker( this );
-// }
-
-
-// void TabMarker::draw( QPainter& /*painter*/, const LuPixelRect& /*r*/,
-//                       const ContextStyle& /*context*/,
-//                       ContextStyle::TextStyle /*tstyle*/,
-//                       ContextStyle::IndexStyle /*istyle*/,
-//                       const LuPixelPoint& /*parentOrigin*/ )
-// {
-// }
-
-
-// MultilineElement* TabMarker::multilineElement()
-// {
-//     return static_cast<MultilineElement*>( getParent()->getParent() );
-// }
-
-// void TabMarker::writeMathML( QDomDocument doc, QDomNode parent )
-// {
-//     /* There is no representation of a TabMarker in as a tag in
-//        MathML, it marks the end of a cell (mtd) instead.
-//        Thus, this method doesn't create MathML we will really write
-//        to a file, but rather a tag that we will filter later
-//        (MultilineSequenceElement::writeMathML). */
-
-//     parent.appendChild( doc.createElement( "TAB" ) );
-// }
 
 
 // Split the line at position pos.
@@ -1240,6 +1169,34 @@ void MultilineSequenceElement::moveTabTo( uint i, luPixel pos )
 }
 
 
+int MultilineSequenceElement::tabBefore( uint pos )
+{
+    if ( tabs.isEmpty() ) {
+        return -1;
+    }
+    uint tabNum = 0;
+    for ( uint i=0; i<pos; ++i ) {
+        BasicElement* child = getChild( i );
+        if ( tabs.at( tabNum ) == child ) {
+            if ( tabNum+1 == tabs.count() ) {
+                return tabNum;
+            }
+            ++tabNum;
+        }
+    }
+    return static_cast<int>( tabNum )-1;
+}
+
+
+int MultilineSequenceElement::tabPos( uint i )
+{
+    if ( i < tabs.count() ) {
+        return childPos( tabs.at( i ) );
+    }
+    return -1;
+}
+
+
 void MultilineSequenceElement::writeMathML( QDomDocument doc,
                                             QDomNode parent )
 {
@@ -1295,6 +1252,12 @@ MultilineElement::MultilineElement( const MultilineElement& other )
         line->setParent( this );
         content.append( line );
     }
+}
+
+
+void MultilineElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( i18n( "Multi line element" ) );
 }
 
 
@@ -1411,9 +1374,33 @@ void MultilineElement::moveUp( FormulaCursor* cursor, BasicElement* from )
                     //content.at( pos-1 )->moveLeft( cursor, this );
                     // This is rather hackish.
                     // But we know what elements we have here.
-                    cursor->setTo( content.at( pos-1 ),
-                                   QMIN( cursor->getPos(),
-                                         content.at( pos-1 )->countChildren() ) );
+                    int cursorPos = cursor->getPos();
+                    MultilineSequenceElement* current = content.at( pos );
+                    MultilineSequenceElement* newLine = content.at( pos-1 );
+                    int tabNum = current->tabBefore( cursorPos );
+                    if ( tabNum > -1 ) {
+                        int oldTabPos = current->tabPos( tabNum );
+                        int newTabPos = newLine->tabPos( tabNum );
+                        if ( newTabPos > -1 ) {
+                            cursorPos += newTabPos-oldTabPos;
+                            int nextNewTabPos = newLine->tabPos( tabNum+1 );
+                            if ( nextNewTabPos > -1 ) {
+                                cursorPos = QMIN( cursorPos, nextNewTabPos );
+                            }
+                        }
+                        else {
+                            cursorPos = newLine->countChildren();
+                        }
+                    }
+                    else {
+                        int nextNewTabPos = newLine->tabPos( 0 );
+                        if ( nextNewTabPos > -1 ) {
+                            cursorPos = QMIN( cursorPos, nextNewTabPos );
+                        }
+                    }
+                    cursor->setTo( newLine,
+                                   QMIN( cursorPos,
+                                         newLine->countChildren() ) );
                 }
                 else {
                     getParent()->moveLeft(cursor, this);
@@ -1445,9 +1432,33 @@ void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
                         //content.at( upos+1 )->moveRight( cursor, this );
                         // This is rather hackish.
                         // But we know what elements we have here.
-                        cursor->setTo( content.at( upos+1 ),
-                                       QMIN( cursor->getPos(),
-                                             content.at( upos+1 )->countChildren() ) );
+                        int cursorPos = cursor->getPos();
+                        MultilineSequenceElement* current = content.at( upos );
+                        MultilineSequenceElement* newLine = content.at( upos+1 );
+                        int tabNum = current->tabBefore( cursorPos );
+                        if ( tabNum > -1 ) {
+                            int oldTabPos = current->tabPos( tabNum );
+                            int newTabPos = newLine->tabPos( tabNum );
+                            if ( newTabPos > -1 ) {
+                                cursorPos += newTabPos-oldTabPos;
+                                int nextNewTabPos = newLine->tabPos( tabNum+1 );
+                                if ( nextNewTabPos > -1 ) {
+                                    cursorPos = QMIN( cursorPos, nextNewTabPos );
+                                }
+                            }
+                            else {
+                                cursorPos = newLine->countChildren();
+                            }
+                        }
+                        else {
+                            int nextNewTabPos = newLine->tabPos( 0 );
+                            if ( nextNewTabPos > -1 ) {
+                                cursorPos = QMIN( cursorPos, nextNewTabPos );
+                            }
+                        }
+                        cursor->setTo( newLine,
+                                       QMIN( cursorPos,
+                                             newLine->countChildren() ) );
                     }
                     else {
                         getParent()->moveRight(cursor, this);

@@ -391,6 +391,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, children.count());
+        from->entered( this );
     }
 
     // We already owned the cursor. Ask next child then.
@@ -432,6 +433,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         if (from->isInvisible()) {
             moveLeft(cursor, this);
         }
+        formula()->tell( "" );
     }
 }
 
@@ -445,6 +447,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, 0);
+        from->entered( this );
     }
 
     // We already owned the cursor. Ask next child then.
@@ -487,6 +490,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         if (from->isInvisible()) {
             moveRight(cursor, this);
         }
+        formula()->tell( "" );
     }
 }
 
@@ -1363,6 +1367,7 @@ NameSequence::NameSequence( BasicElement* parent )
     : SequenceElement( parent )
 {
 }
+
 
 void NameSequence::calcCursorSize( const ContextStyle& context,
                                    FormulaCursor* cursor, bool smallCursor )

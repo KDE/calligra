@@ -165,6 +165,11 @@ void Container::moveOutRight( FormulaCursor* cursor )
     emit leaveFormula( cursor, EXIT_RIGHT );
 }
 
+void Container::tell( const QString& msg )
+{
+    emit statusMsg( msg );
+}
+
 void Container::removeFormula( FormulaCursor* cursor )
 {
     emit leaveFormula( cursor, REMOVE_FORMULA );

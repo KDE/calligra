@@ -21,6 +21,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "indexelement.h"
 #include "formulacursor.h"
@@ -155,6 +156,17 @@ IndexElement::IndexElement( const IndexElement& other )
     }
     else {
         lowerRight = 0;
+    }
+}
+
+
+void IndexElement::entered( SequenceElement* child )
+{
+    if ( child == content ) {
+        formula()->tell( i18n( "Indexed list" ) );
+    }
+    else {
+        formula()->tell( i18n( "Index" ) );
     }
 }
 

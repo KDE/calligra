@@ -137,6 +137,9 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     // notify on cursor change
     connect(formulaWidget, SIGNAL(cursorChanged(bool, bool)),
             this, SLOT(cursorChanged(bool, bool)));
+
+    connect( formula, SIGNAL( statusMsg( const QString& ) ),
+             this, SLOT( slotActionStatusText( const QString& ) ) );
 }
 
 
@@ -214,8 +217,10 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
         scrollview->ensureVisible(x, y);
     }
 
+    KFormula::Document* doc = document()->getDocument();
+    doc->getFormatBoldAction()->setEnabled( selecting );
+    doc->getFormatItalicAction()->setChecked( selecting );
     if ( !selecting ) {
-        KFormula::Document* doc = document()->getDocument();
         doc->getFormatBoldAction()->setChecked( false );
         doc->getFormatItalicAction()->setChecked( false );
     }
