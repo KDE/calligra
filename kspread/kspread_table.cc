@@ -661,16 +661,6 @@ void KSpreadSheet::recalc()
 }
 
 /*
-void KSpreadTable::calc()
-{
-  KSpreadCell* c = m_cells.firstCell();
-  for( ; c; c = c->nextCell() )
-  {
-     c->calc();
-  }
-}
-*/
-/*
  Methods working on selections:
 
  TYPE A:
@@ -1064,8 +1054,6 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
   }
 
   m_pDoc->emitEndOperation();
-//  m_pDoc->clearCalculationDelay();
-//  updateCellArea(r);
 
   if (worker.emit_signal)
   {
@@ -1823,8 +1811,8 @@ void KSpreadSheet::refreshChangeAreaName(const QString & _areaName)
           kdError(36001) << "ERROR: Syntax ERROR" << endl;
         else
         {
+          /* setting a cell calc dirty also sets it paint dirty */
           c->setCalcDirtyFlag();
-          c->update();
         }
       }
     }
@@ -5524,7 +5512,8 @@ void KSpreadSheet::deleteCells( const QRect& rect )
       KSpreadCell * cell = cellStack.pop();
 
       m_cells.remove( cell->column(), cell->row() );
-      cell->updateDepending();
+      cell->setCalcDirtyFlag();
+      setRegionPaintDirty(cell->cellRect());
 
       delete cell;
     }

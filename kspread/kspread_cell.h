@@ -131,6 +131,7 @@ public:
      */
     ~KSpreadCell();
 
+    KSpreadSheet* sheet();
     KSpreadCell* previousCell()const { return m_previousCell; }
     KSpreadCell* nextCell()const { return m_nextCell; }
     void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
@@ -192,7 +193,7 @@ public:
     void copyAll( KSpreadCell *cell);
 
     enum PaintCellBorder{
-    /* 
+    /*
       If we paint a cell, then the background erases even the border of the right and bottom cell,
       if this border has a width > 1 pixel. To not redraw all borders all the time,
       we can switch the drawing of the bottom/right border on and off.
@@ -260,6 +261,11 @@ public:
      * @return the height of this cell as double
      */
     double dblHeight( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
+
+  /**
+   * @return a QRect for this cell (i.e., a 1x1 rect)
+   */
+  QRect cellRect();
 
     /**
      * @reimp
@@ -458,20 +464,6 @@ public:
     double textWidth() const { return m_dOutTextWidth; }
     double textHeight() const { return m_dOutTextHeight; }
 
-    /**
-     * Like @ref updateDepending, but the cells content will be refreshed
-     * on all views.
-     */
-    void update();
-    /**
-     * If the contents of this cell changed, then this function has
-     * to be called so that all depending cells/charts etc.
-     * become updated. This does even work if the cell was already
-     * removed from the table.
-     *
-     * The cells content is not redisplayed and no flag of this cell is altered.
-     */
-    void updateDepending();
 
     /**
     * Refreshing chart
@@ -773,7 +765,7 @@ public:
    * in the reverse direction.
    * @see updateDependancies()
    *
-   * DisplayDirty
+   * DisplayDirty - TODO - is this unused now??
    * If this flag is set, then it is known that this cell has to be updated
    * on the display. This means that somewhere in the calling stack there is a
    * function which will call @ref KSpreadSheet::updateCell once it retains
@@ -1043,7 +1035,7 @@ private:
     void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect );
     void paintDefaultBorders( QPainter& painter, const KoRect &rect,
                               const KoRect &cellRect, const QPoint &cellRef );
-    void paintBackground( QPainter& painter, const KoRect &cellRect, 
+    void paintBackground( QPainter& painter, const KoRect &cellRect,
                           const QPoint &cellRef, bool selected );
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
                              KSpreadView* view, const KoRect &cellRect,

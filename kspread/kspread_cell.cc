@@ -36,8 +36,6 @@
 
 #include <kdebug.h>
 
-#define DO_UPDATE m_pTable->updateCell( this, m_iColumn, m_iRow )
-
 QChar KSpreadCell::decimal_point = '\0';
 
 /*****************************************************************************
@@ -83,6 +81,11 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, int _column, int _row )
   m_Validity=0;
 
   clearAllErrors();
+}
+
+KSpreadSheet* KSpreadCell::sheet()
+{
+  return m_pTable;
 }
 
 int KSpreadCell::row() const
@@ -368,14 +371,14 @@ void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
     m_ObscuringCells.append(cell);
   }
   setFlag(Flag_LayoutDirty);
-  updateDepending();
+  m_pTable->setRegionPaintDirty(cellRect());
 }
 
 void KSpreadCell::unobscure( KSpreadCell *cell )
 {
   m_ObscuringCells.remove(cell);
   setFlag(Flag_LayoutDirty);
-  updateDepending();
+  m_pTable->setRegionPaintDirty(cellRect());
 }
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
@@ -885,7 +888,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             do
             {
                 pos = o.find( ' ', pos );
-                double width = m_pTable->doc()->unzoomItX( fm.width( m_strOutText.mid( start, (pos1-start) ) + 
+                double width = m_pTable->doc()->unzoomItX( fm.width( m_strOutText.mid( start, (pos1-start) ) +
                                                                      o.mid( pos1, (pos-pos1) ) ) );
 
                 if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
@@ -1295,8 +1298,8 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     {
         case KSpreadCell::Top:
             if( tmpAngle == 0 )
-                m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE + 
-                           (double)m_fmAscent / 
+                m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                           (double)m_fmAscent /
                            m_pTable->doc()->zoomedResolutionY();
             else
             {
@@ -1345,13 +1348,13 @@ void KSpreadCell::offsetAlign( int _col, int _row )
                                bottomBorderWidth( _col, _row );
                 else
                     m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
-                               (double)m_fmAscent / 
+                               (double)m_fmAscent /
                                m_pTable->doc()->zoomedResolutionY();
             }
             else
                 if( h - BORDER_SPACE - m_dOutTextHeight - bottomBorderWidth( _col, _row ) > 0 )
                     m_dTextY = h - BORDER_SPACE - m_dOutTextHeight -
-                               bottomBorderWidth( _col, _row ) + 
+                               bottomBorderWidth( _col, _row ) +
                                (double)m_fmAscent /
                                m_pTable->doc()->zoomedResolutionY();
                 else
@@ -1535,7 +1538,6 @@ bool KSpreadCell::makeFormula()
     m_dataType = StringData; // correct?
     m_dValue = 0.0;
     setFlag(Flag_LayoutDirty);
-    DO_UPDATE;
     if (m_pTable->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
@@ -1566,13 +1568,7 @@ bool KSpreadCell::calc(bool delay)
 {
   if ( testFlag(Flag_Progress) )
   {
-    /* This may not be a circular error - if we're calculating a dependancy,
-       then when that dependancy finishes, it recalculates the cells that
-       are depending on it -- this cell!  So it'll fail here but when the
-       stack unwinds the original call to this cell's calc() will finish
-       normally.
     kdError(36001) << "ERROR: Circle" << endl;
-    */
     setFlag(Flag_CircularCalculation);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
@@ -1582,7 +1578,6 @@ bool KSpreadCell::calc(bool delay)
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
         s->parse( m_strFormulaOut );
     }
-//    DO_UPDATE;
     return false;
   }
 
@@ -1602,7 +1597,6 @@ bool KSpreadCell::calc(bool delay)
 
   if ( !isFormula() )
   {
-    DO_UPDATE;
     return true;
   }
 
@@ -1630,6 +1624,7 @@ bool KSpreadCell::calc(bool delay)
   }
   setFlag(Flag_Progress);
 
+  /* calculate any dependancies */
   KSpreadDependency *dep;
   for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
   {
@@ -1651,7 +1646,6 @@ bool KSpreadCell::calc(bool delay)
 	  }
 	  setFlag(Flag_LayoutDirty);
           clearFlag(Flag_CalcDirty);
-	  DO_UPDATE;
 	  return false;
 	}
       }
@@ -1684,7 +1678,6 @@ bool KSpreadCell::calc(bool delay)
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
         s->parse( m_strFormulaOut );
     }
-    DO_UPDATE;
     return false;
   }
   else if ( context.value()->type() == KSValue::DoubleType )
@@ -1761,7 +1754,7 @@ bool KSpreadCell::calc(bool delay)
   }
   else
   {
-      delete m_pQML;
+    delete m_pQML;
 
     m_pQML = 0;
     clearAllErrors();
@@ -1788,50 +1781,6 @@ bool KSpreadCell::calc(bool delay)
   clearFlag(Flag_CalcDirty);
   setFlag(Flag_LayoutDirty);
   clearFlag(Flag_Progress);
-
-  // if our value changed the cells that depend on us need to be updated
-  if ( m_strFormulaOut != m_strOutText )
-  {
-    setFlag(Flag_UpdatingDeps);
-
-    KSpreadDependency * d = 0;
-    KSpreadCell *cell = 0;
-    // Every cell that references us must calculate with this new value
-
-    // first set them all calcdirty
-    for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
-    {
-      for (int c = d->Left(); c <= d->Right(); c++)
-      {
-        for (int r = d->Top(); r <= d->Bottom(); r++)
-        {
-            cell = d->Table()->cellAt( c, r );
-            cell->clearAllErrors();
-            cell->setFlag( Flag_CalcDirty );
-        }
-      }
-    }
-
-    // then calculate them all
-    /* setting calcdirty and calculation is done as a separate step to
-       help prevent massive amounts of duplicated calculation
-    */
-    for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
-    {
-      for (int c = d->Left(); c <= d->Right(); c++)
-      {
-        for (int r = d->Top(); r <= d->Bottom(); r++)
-        {
-            cell = d->Table()->cellAt( c, r );
-            cell->calc();
-        }
-      }
-    }
-
-    clearFlag(Flag_UpdatingDeps);
-  }
-
-  DO_UPDATE;
 
   return true;
 }
@@ -2535,15 +2484,15 @@ void KSpreadCell::paintText( QPainter& painter,
     painter.rotate( angle );
     double x;
     if( angle > 0 )
-      x = indent + cellRect.x() + m_dTextX;
+      x = indent + (int)(cellRect.x()) + m_dTextX;
     else
       x = indent + cellRect.x() + m_dTextX -
                      ( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 );
     double y;
     if( angle > 0 )
-      y = cellRect.y() + m_dTextY;
+      y = (int)(cellRect.y()) + m_dTextY;
     else
-      y = cellRect.y() + m_dTextY + m_dOutTextHeight;
+      y = (int)(cellRect.y()) + m_dTextY + m_dOutTextHeight;
     painter.drawText( doc->zoomItX( x * cos( angle * M_PI / 180 ) +
                                     y * sin( angle * M_PI / 180 ) ),
                       doc->zoomItY( -x * sin( angle * M_PI / 180 ) +
@@ -2581,11 +2530,11 @@ void KSpreadCell::paintText( QPainter& painter,
         m_dTextX = leftBorderWidth( cellRef.x(), cellRef.y() ) + BORDER_SPACE;
         break;
       case KSpreadCell::Right:
-        m_dTextX = cellRect.width() - BORDER_SPACE - fm.width( t )
-                   - rightBorderWidth( cellRef.x(), cellRef.y() );
+        m_dTextX = (int)(cellRect.width() - BORDER_SPACE - fm.width( t )
+                         - rightBorderWidth( cellRef.x(), cellRef.y() ));
         break;
       case KSpreadCell::Center:
-        m_dTextX = ( cellRect.width() - fm.width( t ) ) / 2;
+        m_dTextX = (int)(( cellRect.width() - fm.width( t ) ) / 2);
       }
       painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX + dx ),
                         doc->zoomItY( cellRect.y() + m_dTextY + dy ), t );
@@ -3441,7 +3390,9 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
 void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 {
-    clearAllErrors();
+
+  m_pTable->doc()->emitBeginOperation(false);
+  clearAllErrors();
   m_strText = _text;
 
   // Free all content data
@@ -3492,9 +3443,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
    */
   if ( m_style == ST_Select && !m_pTable->isLoading() )
   {
-      if ( testFlag(Flag_CalcDirty) )
-          calc();
-
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       if ( m_content == Formula )
           s->parse( m_strFormulaOut );
@@ -3517,9 +3465,18 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
       cell->setLayoutDirtyFlag();
     }
   }
+
+  /* this call will recursively set cells that reference us as dirty,
+     both calc dirty and paint dirty*/
   setCalcDirtyFlag();
-  if ( updateDepends )
-      update();
+
+  /* TODO - is this a good place for this? */
+  updateChart(true);
+
+
+  m_pTable->doc()->emitEndOperation();
+
+
 }
 
 bool KSpreadCell::testValidity() const
@@ -3717,9 +3674,8 @@ void KSpreadCell::setValue( bool _b )
     setFlag(Flag_LayoutDirty);
     m_content = Text;
 
-    // Do not update formulas and stuff here
-    if ( !m_pTable->isLoading() )
-        update();
+    m_pTable->setRegionPaintDirty(cellRect());
+
 }
 
 void KSpreadCell::setValue( QDate _date )
@@ -3738,9 +3694,8 @@ void KSpreadCell::setValue( QDate _date )
     setFlag(Flag_LayoutDirty);
     m_content = Text;
 
-    // Do not update formulas and stuff here
-    if ( !m_pTable->isLoading() )
-        update();
+    m_pTable->setRegionPaintDirty(cellRect());
+
 }
 
 void KSpreadCell::setValue( QTime _time )
@@ -3759,9 +3714,7 @@ void KSpreadCell::setValue( QTime _time )
     setFlag(Flag_LayoutDirty);
     m_content = Text;
 
-    // Do not update formulas and stuff here
-    if ( !m_pTable->isLoading() )
-        update();
+    m_pTable->setRegionPaintDirty(cellRect());
 }
 
 void KSpreadCell::setValue( double _d )
@@ -3781,9 +3734,7 @@ void KSpreadCell::setValue( double _d )
     setFlag(Flag_LayoutDirty);
     m_content = Text;
 
-    // Do not update formulas and stuff here
-    if ( !m_pTable->isLoading() )
-        update();
+    m_pTable->setRegionPaintDirty(cellRect());
 }
 
 void KSpreadCell::setDate( QDate const & date, FormatType type )
@@ -3804,9 +3755,7 @@ void KSpreadCell::setDate( QDate const & date, FormatType type )
     setFlag(Flag_LayoutDirty);
     m_content = Text;
 
-    // Do not update formulas and stuff here
-    if ( !m_pTable->isLoading() )
-        update();
+    m_pTable->setRegionPaintDirty(cellRect());
 }
 
 void KSpreadCell::setTime( QTime const & time, FormatType type )
@@ -3826,76 +3775,8 @@ void KSpreadCell::setTime( QTime const & time, FormatType type )
     m_dataType = TimeData;
     setFlag(Flag_LayoutDirty);
     m_content = Text;
+    m_pTable->setRegionPaintDirty(cellRect());
 
-    // Do not update formulas and stuff here
-    if ( !m_pTable->isLoading() )
-        update();
-}
-
-void KSpreadCell::update()
-{
-    if (m_pTable->isLoading())
-    {
-        return;
-    }
-    kdDebug(36001) << name() << " update" << endl;
-    if ( !isObscured() )
-    {
-        QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
-        QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
-
-        for ( ; it != end; ++it )
-        {
-            KSpreadCell* cell = *it;
-            cell->setLayoutDirtyFlag();
-            cell->setDisplayDirtyFlag();
-            m_pTable->updateCell( cell, cell->column(), cell->row() );
-        }
-    }
-    setFlag(Flag_DisplayDirty);
-    updateDepending();
-
-    if ( testFlag(Flag_DisplayDirty) )
-        m_pTable->updateCell( this, m_iColumn, m_iRow );
-}
-
-void KSpreadCell::updateDepending()
-{
-  if ( testFlag(Flag_UpdatingDeps) || (!m_pTable->getAutoCalc()) )
-  {
-    return;
-  }
-
-  calc();
-
-  kdDebug(36001) << name() << " updateDepending" << endl;
-
-  KSpreadDependency* d = NULL;
-
-  setFlag(Flag_UpdatingDeps);
-
-  KSpreadCell * cell;
-  // Every cell that references us must calculate with this new value
-  for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
-  {
-    for (int c = d->Left(); c <= d->Right(); c++)
-    {
-      for (int r = d->Top(); r <= d->Bottom(); r++)
-      {
-        kdDebug() << "Cell: " << c << ", " << r << endl;
-        cell = d->Table()->cellAt( c, r );
-        cell->setCalcDirtyFlag();
-        cell->calc();
-      }
-    }
-  }
-
-  calc();
-
-  kdDebug(36001) << name() << " updateDepending done" << endl;
-
-  clearFlag(Flag_UpdatingDeps);
-  updateChart();
 }
 
 void KSpreadCell::setCalcDirtyFlag()
@@ -3909,6 +3790,7 @@ void KSpreadCell::setCalcDirtyFlag()
   }
 
   setFlag(Flag_CalcDirty);
+  m_pTable->setRegionPaintDirty(cellRect());
 
   /* if this cell is dirty, every cell that references this one is dirty */
   for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
@@ -3924,8 +3806,8 @@ void KSpreadCell::setCalcDirtyFlag()
 
   if ( m_content != Formula )
   {
-    /* we set it temporarily to true to handle recursion (although that shouldn't happen if it's not a
-       formula - we might as well be safe).
+    /* we set it temporarily to true to handle recursion (although that
+       shouldn't happen if it's not a formula - we might as well be safe).
     */
     clearFlag(Flag_CalcDirty);
   }
@@ -4353,7 +4235,6 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         // are position independent.
         if ( isFormula() )
         {
-            // calc();
             QDomElement text = doc.createElement( "text" );
             text.appendChild( doc.createTextNode( encodeFormula() ) );
             cell.appendChild( text );
@@ -4971,8 +4852,7 @@ void KSpreadCell::setStyle( Style _s )
   checkTextInput(); // is this necessary?
   setFlag(Flag_LayoutDirty);
 
-  if ( !m_pTable->isLoading() )
-      update();
+  m_pTable->setRegionPaintDirty(cellRect());
 }
 
 QString KSpreadCell::testAnchor( int _x, int _y ) const
@@ -5082,6 +4962,12 @@ bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
   }
   else
     return valueString().compare(cell.valueString()) < 0;
+}
+
+QRect KSpreadCell::cellRect()
+{
+  Q_ASSERT(!isDefault());
+  return QRect(QPoint(m_iColumn, m_iRow), QPoint(m_iColumn, m_iRow));
 }
 
 bool KSpreadCell::isDefault() const
@@ -5232,9 +5118,8 @@ void SelectPrivate::slotItemSelected( int _id )
 
     m_pCell->setLayoutDirtyFlag();
     m_pCell->checkTextInput(); // is this necessary ?
-    m_pCell->update();
 
-    m_pCell->table()->updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
+    m_pCell->m_pTable->setRegionPaintDirty(m_pCell->cellRect());
 }
 
 QString SelectPrivate::text() const

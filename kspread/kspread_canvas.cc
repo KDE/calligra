@@ -611,7 +611,6 @@ void KSpreadCanvas::replace( const QString &newText, int /*index*/, int /*replac
     cell->setDisplayDirtyFlag();
     cell->setCellText( newText );
     cell->clearDisplayDirtyFlag();
-    activeTable()->updateCell( cell, cellRect.left(), cellRect.top() );
 }
 
 void KSpreadCanvas::slotScrollHorz( int _value )
@@ -1050,7 +1049,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       {
           selectionInfo()->setMarker( QPoint( col, row ), table );
           table->paste( QRect(marker(), marker()) );
-          table->cellAt( marker() )->update();
+          table->setRegionPaintDirty(QRect(marker(), marker()));
       }
   }
 

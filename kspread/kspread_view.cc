@@ -4951,7 +4951,8 @@ void KSpreadView::slotUpdateView( KSpreadSheet *_table )
 
     m_pDoc->emitBeginOperation(false);
 
-    m_pCanvas->update();
+    m_pTable->setRegionPaintDirty(QRect(QPoint(0,0),
+                                        QPoint(KS_colMax, KS_rowMax)));
 
     m_pDoc->emitEndOperation();
 }

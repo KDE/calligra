@@ -152,7 +152,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
   // Allow the user to select cells on the spreadsheet.
   m_pView->canvasWidget()->startChoose();
-  
+
   qApp->installEventFilter( this );
 
   // signals and slots connections
@@ -191,10 +191,10 @@ bool KSpreadGoalSeekDlg::eventFilter( QObject* obj, QEvent* ev )
     m_focus = m_sourceEdit;
   else
     return FALSE;
-  
+
   if ( m_focus )
     m_pView->canvasWidget()->startChoose();
-  
+
   return FALSE;
 }
 
@@ -210,7 +210,7 @@ void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRec
 
   if ( _selection.left() <= 0 )
     return;
-  
+
   if ( _selection.left() >= _selection.right() && _selection.top() >= _selection.bottom() )
   {
     int dx = _selection.right();
@@ -308,8 +308,8 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   {
     if ( !pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoSetText * undo 
-        = new KSpreadUndoSetText( pDoc, m_pView->activeTable(), QString::number(m_oldSource), 
+      KSpreadUndoSetText * undo
+        = new KSpreadUndoSetText( pDoc, m_pView->activeTable(), QString::number(m_oldSource),
                                   m_sourceCell->column(), m_sourceCell->row(),
                                   m_sourceCell->formatType() );
 
@@ -318,7 +318,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
     m_restored = true;
   }
-  chooseCleanup();  
+  chooseCleanup();
 
   accept();
 
@@ -336,7 +336,7 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
     m_restored = true;
   }
 
-  chooseCleanup();  
+  chooseCleanup();
   reject();
 }
 
@@ -355,7 +355,7 @@ void KSpreadGoalSeekDlg::chooseCleanup()
   }
   else
     table = m_pView->activeTable();
-  
+
   // Revert the marker to its original position
   m_pView->selectionInfo()->setSelection( m_marker, m_anchor, table );
 }
@@ -449,7 +449,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
   {
     m_sourceCell->setValue( startA );
     m_sourceCell->setCalcDirtyFlag();
-    m_sourceCell->updateDepending();
+    m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
     //    m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
 
@@ -462,8 +462,8 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
   {
     // restore the old value
     m_sourceCell->setValue( m_oldSource );
-    m_sourceCell->updateDepending();
     m_targetCell->setCalcDirtyFlag();
+    m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
     m_targetCell->calc( false );
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution." ).arg( m_sourceEdit->text() ) );
     m_newValue->setText( "" );
