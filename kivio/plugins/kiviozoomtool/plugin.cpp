@@ -48,13 +48,12 @@ ZoomToolFactory::~ZoomToolFactory()
   delete s_global;
 }
 
-QObject* ZoomToolFactory::create( QObject* parent, const char* name, const char*, const QStringList& )
+QObject* ZoomToolFactory::createObject( QObject* parent, const char* name, const char*, const QStringList& )
 {
   if ( !parent->inherits("KivioView") )
     return 0;
 
   QObject* obj = new ZoomTool( (KivioView*)parent );
-  emit objectCreated( obj );
   return obj;
 }
 

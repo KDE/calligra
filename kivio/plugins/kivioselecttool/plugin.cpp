@@ -48,13 +48,12 @@ SelectToolFactory::~SelectToolFactory()
   delete s_global;
 }
 
-QObject* SelectToolFactory::create( QObject* parent, const char* name, const char*, const QStringList& )
+QObject* SelectToolFactory::createObject( QObject* parent, const char* name, const char*, const QStringList& )
 {
   if ( !parent->inherits("KivioView") )
     return 0;
 
   QObject *obj = new SelectTool( (KivioView*)parent );
-  emit objectCreated( obj );
   return obj;
 }
 

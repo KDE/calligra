@@ -48,13 +48,12 @@ TextToolFactory::~TextToolFactory()
   delete s_global;
 }
 
-QObject* TextToolFactory::create( QObject* parent, const char* name, const char*, const QStringList& )
+QObject* TextToolFactory::createObject( QObject* parent, const char* name, const char*, const QStringList& )
 {
   if ( !parent->inherits("KivioView") )
     return 0;
 
   QObject *obj = new TextTool( (KivioView*)parent );
-  emit objectCreated( obj );
   return obj;
 }
 
