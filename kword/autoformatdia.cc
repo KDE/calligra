@@ -21,7 +21,7 @@
 #include "autoformatdia.h"
 #include "autoformatdia.moc"
 #include "autoformat.h"
-#include "kcharselectdia.h"
+#include <koCharSelectDia.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -361,7 +361,7 @@ void KWAutoFormatDia::chooseSpecialChar1()
 {
     QString f = font().family();
     QChar c = ' ';
-    if ( KCharSelectDia::selectChar( f, c, false ) )
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
         m_find->setText( c );
 }
 
@@ -370,7 +370,7 @@ void KWAutoFormatDia::chooseSpecialChar2()
 {
     QString f = font().family();
     QChar c = ' ';
-    if ( KCharSelectDia::selectChar( f, c, false ) )
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
         m_replace->setText( c );
 }
 
@@ -428,7 +428,7 @@ void KWAutoFormatDia::chooseQuote1()
 {
     QString f = font().family();
     QChar c = oBegin;
-    if ( KCharSelectDia::selectChar( f, c, false ) )
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
     {
         pbQuote1->setText( c );
     }
@@ -438,7 +438,7 @@ void KWAutoFormatDia::chooseQuote2()
 {
     QString f = font().family();
     QChar c = oEnd;
-    if ( KCharSelectDia::selectChar( f, c, false ) )
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
     {
         pbQuote2->setText( c );
     }

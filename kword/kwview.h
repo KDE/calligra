@@ -58,7 +58,7 @@ class KFontAction;
 class KWTextFrameSetEdit;
 class TKSelectColorAction;
 class KoPartSelectAction;
-class KCharSelectDia;
+class KoCharSelectDia;
 class KWTextFrameset;
 class KMacroCommand;
 
@@ -451,7 +451,7 @@ private:
 
     KAction *actionOpenLink;
 
-    KCharSelectDia *m_specialCharDlg;
+    KoCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
 
     DCOPObject *dcop;

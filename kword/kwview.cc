@@ -36,7 +36,7 @@
 
 #include "footnotedia.h"
 #include "insdia.h"
-#include "kcharselectdia.h"
+#include <koCharSelectDia.h>
 #include "kwchangecasedia.h"
 #include "kwcommand.h"
 #include "kwconfig.h"
@@ -1981,7 +1981,7 @@ void KWView::insertSpecialChar()
     QChar c=' ';
     if (m_specialCharDlg==0)
     {
-        m_specialCharDlg = new KCharSelectDia( this, "insert special char", f, c, false );
+        m_specialCharDlg = new KoCharSelectDia( this, "insert special char", f, c, false );
         connect( m_specialCharDlg, SIGNAL(insertChar(QChar,const QString &)),
                  this, SLOT(slotSpecialChar(QChar,const QString &)));
         connect( m_specialCharDlg, SIGNAL( finished() ),

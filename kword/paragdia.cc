@@ -29,7 +29,7 @@
 #include <qradiobutton.h>
 #include <qvbox.h>
 
-#include <kcharselectdia.h>
+#include <koCharSelectDia.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -1218,7 +1218,7 @@ void KWParagCounterWidget::selectCustomBullet() {
         f = "symbol";
     QChar c = m_counter.customBulletCharacter();
 
-    if ( KCharSelectDia::selectChar( f, c ) ) {
+    if ( KoCharSelectDia::selectChar( f, c ) ) {
         m_counter.setCustomBulletFont( f );
         m_counter.setCustomBulletCharacter( c );
         bCustom->setText( c );
