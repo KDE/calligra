@@ -1048,8 +1048,8 @@ KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
 
-    //active new bg spell
-    txtObj->textObject()->setBeedSpellCheck(true);
+    //activate new bg spell
+    txtObj->textObject()->setNeedSpellCheck(true);
     m_kptextobj->kPresenterDocument()->startBackgroundSpellCheck();
 
 }

@@ -3453,7 +3453,7 @@ void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
     {
         if(oIt.current()->getType()==OT_TEXT)
         {
-            static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
+            static_cast<KPTextObject*>( oIt.current() )->textObject()->setNeedSpellCheck(true);
             if(refreshTextObj)
                 m_doc->repaint( oIt.current() );
         }

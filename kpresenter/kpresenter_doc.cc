@@ -2644,16 +2644,16 @@ void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
 
 KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
 {
-    bool actif=false;
+    bool active=false;
     if(m_kpresenterView && m_kpresenterView->getCanvas())
     {
         KPTextView * edit = m_kpresenterView->getCanvas()->currentTextObjectView();
         if(edit)
         {
             if(edit->kpTextObject()!=obj)
-                obj->textObject()->setBeedSpellCheck(false);
+                obj->textObject()->setNeedSpellCheck(false);
             else
-                actif=true;
+                active=true;
         }
 
         QPtrList<KPTextObject> objlist;
@@ -2676,7 +2676,7 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
         {
             KPTextObject *frm=0L;
             for ( frm=objlist.at(pos); frm != 0; frm=objlist.next() ){
-                if(frm->textObject()->beedSpellCheck())
+                if(frm->textObject()->needSpellCheck())
                     return frm;
             }
         }
@@ -2685,12 +2685,12 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
             //return to 0
             KPTextObject *frm=0L;
             for ( frm=objlist.first(); frm != 0; frm=objlist.next() ){
-                if(frm->textObject()->beedSpellCheck())
+                if(frm->textObject()->needSpellCheck())
                     return frm;
             }
         }
     }
-    if(actif)
+    if(active)
         return obj;
     return 0L;
 }
