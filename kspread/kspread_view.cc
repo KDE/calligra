@@ -352,9 +352,6 @@ public:
     // Insert special character dialog
     KoCharSelectDia* specialCharDlg;
 
-    // Global scripts dialogs
-    static KSpreadScripts* globalScriptsDlg;
-
     // Holds a guarded pointer to the transformation toolbox.
     QGuardedPtr<KoTransformToolBox> transformToolBox;
 
@@ -405,8 +402,6 @@ public:
     void updateButton( KSpreadCell *cell, int column, int row);
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 };
-
-KSpreadScripts* ViewPrivate::globalScriptsDlg = 0L;
 
 class ViewActions
 {
@@ -563,12 +558,6 @@ public:
     KToggleAction* calcAverage;
     KToggleAction* calcCount;
     KToggleAction* calcSum;
-
-    // scripts
-    KActionMenu* scripts;
-    KAction* editGlobalScripts;
-    KAction* editLocalScripts;
-    KAction* reloadScripts;
 
     // revision control
     KToggleAction* recordChanges;
@@ -1216,20 +1205,6 @@ void ViewPrivate::initActions()
   actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count."));
 
-  // -- script actions --
-
-  actions->editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0,
-      view, SLOT( editGlobalScripts() ),ac, "editGlobalScripts" );
-  actions->editGlobalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
-
-  actions->editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0,
-      view, SLOT( editLocalScripts() ), ac, "editLocalScripts" );
-  actions->editLocalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
-
-  actions->reloadScripts = new KAction( i18n("Reload Scripts"), 0,
-     view, SLOT( reloadScripts() ), ac, "reloadScripts" );
-  actions->reloadScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
-
   // -- running calculation actions --
 
   actions->recordChanges = new KToggleAction( i18n( "&Record Changes" ),
@@ -1354,7 +1329,6 @@ void ViewPrivate::adjustActions( bool mode )
   actions->borderColor->setEnabled( mode );
   actions->removeSheet->setEnabled( mode );
   actions->autoSum->setEnabled( mode );
-  //   actions->scripts->setEnabled( mode );
   actions->defaultFormat->setEnabled( mode );
   actions->areaName->setEnabled( mode );
   actions->resizeRow->setEnabled( mode );
@@ -3267,33 +3241,6 @@ void KSpreadView::sortDec()
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::reloadScripts()
-{
-  // TODO
-}
-
-void KSpreadView::runLocalScript()
-{
-  // TODO
-}
-
-void KSpreadView::editGlobalScripts()
-{
-  if ( KSpreadView::d->globalScriptsDlg == 0L )
-    KSpreadView::d->globalScriptsDlg = new KSpreadScripts();
-  KSpreadView::d->globalScriptsDlg->show();
-  KSpreadView::d->globalScriptsDlg->raise();
-}
-
-void KSpreadView::editLocalScripts()
-{
-  // TODO
-  /* if ( !d->doc->editPythonCode() )
-     {
-     KMessageBox::error( i18n( "Could not start editor" ) );
-     return;
-     } */
-}
 
 void KSpreadView::borderBottom()
 {

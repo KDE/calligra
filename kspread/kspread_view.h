@@ -282,10 +282,6 @@ public slots:
     void insertFromTextfile();
     void insertFromClipboard();
     void insertSpecialChar();
-    void editGlobalScripts();
-    void editLocalScripts();
-    void reloadScripts();
-    void runLocalScript();
     void togglePageBorders( bool );
     void toggleProtectSheet( bool );
     void toggleProtectDoc( bool );
