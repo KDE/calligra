@@ -83,7 +83,7 @@ class TextFormatting
 
         // As doubled underlined was introduced late in KWord, we must use a compatibe way
         // First with "underline", we check if an underline is wanted or not.
-        // Then with "underIsDouble", we check the type of the underline (simple or double.)
+        // Then with "underValue", we check the type of the underline (simple, double...)
         bool    underline;       // underline? (If true, we do not know if simple or double or what else)
         bool    strikeout;
 
@@ -94,6 +94,8 @@ class TextFormatting
         QColor  fgColor;
         QColor  bgColor;
         int     verticalAlignment;
+        
+        QString fontAttribute;
 
         bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
 };
