@@ -96,6 +96,7 @@ public:
     KSpreadLocationEditWidget* posWidget()const { return m_pPosWidget; }
 
     KSpreadDoc* doc()const { return m_pDoc; }
+    void changeZoomMenu( int zoom );
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
     void addTable( KSpreadSheet *_t );

@@ -794,30 +794,13 @@ void KSpreadView::initializeGlobalOperationActions()
 
   connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
            this, SLOT( viewZoom( const QString & ) ) );
-
-
   m_viewZoom->setEditable(true);
-
-  QStringList lst;
-  lst << i18n("%1%").arg("33");
-  lst << i18n("%1%").arg("50");
-  lst << i18n("%1%").arg("75");
-  lst << i18n("%1%").arg("100");
-  lst << i18n("%1%").arg("125");
-  lst << i18n("%1%").arg("150");
-  lst << i18n("%1%").arg("200");
-  lst << i18n("%1%").arg("250");
-  lst << i18n("%1%").arg("350");
-  lst << i18n("%1%").arg("400");
-  lst << i18n("%1%").arg("450");
-  lst << i18n("%1%").arg("500");
-
-  m_viewZoom->setItems( lst );
+  changeZoomMenu( m_pDoc->zoom() );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
   m_formulaSelection->setToolTip(i18n("Insert a function."));
-  lst.clear();
+  QStringList lst;
   lst.append( "SUM");
   lst.append( "AVERAGE");
   lst.append( "IF");
@@ -4497,6 +4480,56 @@ void KSpreadView::togglePageBorders( bool mode )
   m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
+void KSpreadView::changeZoomMenu( int zoom )
+{
+  if( m_viewZoom->items().isEmpty() )
+  {
+    QStringList lst;
+    lst << i18n("%1%").arg("33");
+    lst << i18n("%1%").arg("50");
+    lst << i18n("%1%").arg("75");
+    lst << i18n("%1%").arg("100");
+    lst << i18n("%1%").arg("125");
+    lst << i18n("%1%").arg("150");
+    lst << i18n("%1%").arg("200");
+    lst << i18n("%1%").arg("250");
+    lst << i18n("%1%").arg("350");
+    lst << i18n("%1%").arg("400");
+    lst << i18n("%1%").arg("450");
+    lst << i18n("%1%").arg("500");
+    m_viewZoom->setItems( lst );
+  }
+
+  if( zoom>0 )
+  {
+    QValueList<int> list;
+    bool ok;
+    const QStringList itemsList( m_viewZoom->items() );
+    QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+
+    for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+    {
+      regexp.search(*it);
+      const int val=regexp.cap(1).toInt(&ok);
+      //zoom : limit inferior=10
+      if( ok && val>9 && list.contains(val)==0 )
+        list.append( val );
+
+      //necessary at the beginning when we read config
+      //this value is not in combo list
+      if(list.contains(zoom)==0)
+        list.append( zoom );
+
+      qHeapSort( list );
+
+      QStringList lst;
+      for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+        lst.append( i18n("%1%").arg(*it) );
+      m_viewZoom->setItems( lst );
+    }
+  }
+}
+
 void KSpreadView::viewZoom( const QString & s )
 {
   int oldZoom = m_pDoc->zoom();
@@ -4514,6 +4547,10 @@ void KSpreadView::viewZoom( const QString & s )
 
   if ( newZoom != oldZoom )
   {
+    changeZoomMenu( newZoom );
+    QString zoomStr( i18n("%1%").arg( newZoom ) );
+    m_viewZoom->setCurrentItem( m_viewZoom->items().findIndex( zoomStr ) );
+
     m_pDoc->emitBeginOperation( false );
 
     m_pCanvas->closeEditor();
