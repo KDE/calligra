@@ -27,4 +27,49 @@
 				<Text>Good night</Text>
 			</Expression>
 	</Type>
+        <Type>
+    		<TypeName>Email:</TypeName>	
+			<Expression>
+				<Text>To:</Text>
+			</Expression>
+			<Expression>
+				<Text>From:</Text>
+			</Expression>
+			<Expression>
+				<Text>Subject:</Text>
+			</Expression>
+                        <Expression>
+				<Text>CC:</Text>
+			</Expression>
+                        <Expression>
+				<Text>BCC:</Text>
+			</Expression>
+                        <Expression>
+				<Text>Fwd:</Text>
+			</Expression>
+	</Type>
+        <Type>
+    		<TypeName>Closing:</TypeName>	
+			<Expression>
+				<Text>Best regards,</Text>
+			</Expression>
+			<Expression>
+				<Text>Best wishes</Text>
+			</Expression>
+			<Expression>
+				<Text>Cordially,</Text>
+			</Expression>
+                        <Expression>
+				<Text>Love,</Text>
+			</Expression>
+                        <Expression>
+				<Text>Regards,</Text>
+			</Expression>
+                        <Expression>
+				<Text>Thank you,</Text>
+			</Expression>
+                        <Expression>
+				<Text>Thanks,</Text>
+			</Expression>
+	</Type>
 </KWordExpression>
