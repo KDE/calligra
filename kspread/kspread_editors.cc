@@ -48,7 +48,6 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   setPalettePropagation( AllChildren );
 
   connect( m_pEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
-
   // A choose should always start at the edited cell
   canvas()->setChooseMarkerRow( canvas()->markerRow() );
   canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
@@ -66,6 +65,17 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
     // if ( canvas->chooseCursorPosition() >= 0 )
     // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
     checkChoose();
+
+  if(cell()->getFormatNumber(cell()->column(),cell()->row()==KSpreadCell::Percentage))
+        {
+        if((t.length()==1) && t[0].isDigit())
+                {
+                QString tmp=t;
+                tmp=t+"%";
+                m_pEdit->setText(tmp);
+                m_pEdit->setCursorPosition(1);
+                }
+        }
 
     canvas()->view()->editWidget()->setText( t );
     // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
