@@ -23,6 +23,13 @@ public:
   void setDataArea( QString area ); 
   QString dataArea() const;
 
+  enum RowCol { Row, Col };
+
+signals:
+  // valid values for rowcol: Row: data is in rows, Col: data is in cols
+  void needNewData( const char* area, int rowcol, bool firstRowIsLegend,
+					bool firstColIsLabel );
+
 private:
   KChartWizardSelectDataPage* selectDataPage() const {
 	return (KChartWizardSelectDataPage*)_selectdatapage->w;
