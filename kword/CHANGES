@@ -2,6 +2,7 @@ Changes between 1.3 and 1.3.1
 =============================
 - Fixed "add bookmark" for the case where there's no selection
 - Keep bookmark valid after deleting its paragraph
+- Usability improvements in "select bookmark" dialog
 
 Last changes for KWord-1.3
 ==========================
