@@ -332,7 +332,7 @@ QDomDocument KChartPart::saveXML()
 
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
-    bool return=_params->loadXML( doc );
+    bool result=_params->loadXML( doc );
     if(!result)
     {
         //try to load old file format
