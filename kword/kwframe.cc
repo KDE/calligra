@@ -1439,24 +1439,25 @@ KWordFrameSetIface* KWPictureFrameSet::dcopObject()
 
 void KWPictureFrameSet::loadImage( const QString & fileName, const QSize &_imgSize )
 {
-    KWImageCollection *collection = m_doc->imageCollection();
+    KoPictureCollection *collection = m_doc->imageCollection();
 
-    m_image = collection->loadImage( fileName );
+    m_image = collection->loadPicture( fileName );
 
-    m_image = m_image.scale( _imgSize );
+    m_image.setSize( _imgSize );
 }
 
 void KWPictureFrameSet::setSize( const QSize & _imgSize )
 {
-    m_image = m_image.scale( _imgSize );
+    m_image.setSize( _imgSize );
 }
 
 void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
     KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
     QSize newSize = kWordDocument()->zoomSize( frame->size() );
-    m_image = m_image.scale( newSize, !finalSize /* finalSize==false -> fast mode=true */ );
-                                                                            }
+    m_image.setSize( newSize );
+    // TODO: !finalSize /* finalSize==false -> fast mode=true */ );
+}
 
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
@@ -1472,7 +1473,7 @@ QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
     imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
-    m_image.key().saveAttributes( elem );
+    m_image.getKey().saveAttributes( elem );
     return framesetElem;
 }
 
@@ -1488,9 +1489,10 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
         QDomElement keyElement = image.namedItem( "KEY" ).toElement();
         if ( !keyElement.isNull() )
         {
-            KoImageKey key;
+            KoPictureKey key;
             key.loadAttributes( keyElement, QDate(), QTime() );
-            m_image = KWImage( key, QImage() );
+            m_image.clear();
+            m_image.setKey( key );
             m_doc->addImageRequest( this );
         }
         else
@@ -1500,7 +1502,8 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             if ( !filenameElement.isNull() )
             {
                 QString filename = filenameElement.attribute( "value" );
-                m_image = KWImage( KoImageKey( filename, QDateTime::currentDateTime() ), QImage() );
+                m_image.clear();
+                m_image.setKey( KoPictureKey( filename, QDateTime::currentDateTime() ) );
                 m_doc->addImageRequest( this );
             }
             else
@@ -1541,9 +1544,13 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     KWFrameSet::printDebug( frame );
     if ( !isDeleted() )
     {
+#if 1
+        kdDebug() << "Image: key=" << m_image.getKey().toString() << endl;
+#else
         kdDebug() << "KoImage: key=" << m_image.key().toString()
                   << " hasRawData=" << !m_image.rawData().isNull()
                   << " image size=" << m_image.size().width() << "x" << m_image.size().height() << endl;
+#endif
     }
 }
 #endif
@@ -1562,8 +1569,9 @@ KWClipartFrameSet::KWClipartFrameSet( KWDocument *_doc, const QString & name )
 
 void KWClipartFrameSet::loadClipart( const QString & fileName )
 {
-    KoClipartCollection *collection = m_doc->clipartCollection();
-    m_clipart = collection->loadClipart( fileName );
+    kdDebug() << "KWClipartFrameSet::loadClipart " << fileName << endl;
+    KoPictureCollection *collection = m_doc->clipartCollection();
+    m_clipart = collection->loadPicture( fileName );
 }
 
 QDomElement KWClipartFrameSet::save( QDomElement & parentElem, bool saveFrames )
@@ -1579,7 +1587,7 @@ QDomElement KWClipartFrameSet::save( QDomElement & parentElem, bool saveFrames )
     framesetElem.appendChild( imageElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
-    m_clipart.key().saveAttributes( elem );
+    m_clipart.getKey().saveAttributes( elem );
     return framesetElem;
 }
 
@@ -1594,9 +1602,10 @@ void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
         QDomElement keyElement = image.namedItem( "KEY" ).toElement();
         if ( !keyElement.isNull() )
         {
-            KoClipartKey key;
+            KoPictureKey key;
             key.loadAttributes( keyElement, QDate(), QTime() );
-            m_clipart = KoClipart( key, QPicture() );
+            m_clipart.clear();
+            m_clipart.setKey( key );
             m_doc->addClipartRequest( this );
         }
         else
@@ -1605,20 +1614,19 @@ void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
         kdError(32001) << "Missing CLIPART tag in FRAMESET" << endl;
 }
 
-void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &,
+void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
     if ( m_clipart.isNull() )
-        return;
-    QSize s ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
-    painter->save();
-    // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
-    QRect br = m_clipart.picture()->boundingRect();
-    //kdDebug() << "KWClipartFrameSet::drawFrame boundingRect: " << br.width() << "x" << br.height() << endl;
-    if ( br.width() && br.height() )
-        painter->scale( (double)s.width() / (double)br.width(), (double)s.height() / (double)br.height() );
-    painter->drawPicture( *m_clipart.picture() );
-    painter->restore();
+    {
+        kdWarning() << "Clipart " << &m_clipart << " is Null! (KWClipartFrameSet::drawFrame)" << endl;
+    }
+    else
+    {
+        kdDebug() << "Trying to draw Clipart " << &m_clipart << endl;
+    }
+    m_clipart.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ),
+                    crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
 KWFrame *KWClipartFrameSet::frameByBorder( const QPoint & nPoint )

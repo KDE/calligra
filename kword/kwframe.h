@@ -20,9 +20,10 @@
 #ifndef frame_h
 #define frame_h
 
+#include <qdom.h>
+
 #include "defs.h"
-#include "kwimage.h"
-#include <koClipart.h>
+#include <koPicture.h>
 #include <koRect.h>
 #include <qbrush.h>
 #include <qptrlist.h>
@@ -648,10 +649,10 @@ public:
      */
     virtual FrameSetType type() { return FT_PICTURE; }
 
-    void setImage( const KWImage &image ) { m_image = image; }
-    KWImage image() const { return m_image; }
+    void setImage( const KoPicture &image ) { m_image = image; }
+    KoPicture image() const { return m_image; }
 
-    KoImageKey key() const { return m_image.key(); }
+    KoPictureKey key() const { return m_image.getKey(); }
 
     void loadImage( const QString &fileName, const QSize &_imgSize );
     void setSize( const QSize & _imgSize );
@@ -677,7 +678,7 @@ public:
     bool keepAspectRatio() const { return m_keepAspectRatio; }
     void setKeepAspectRatio( bool b ) { m_keepAspectRatio = b; }
 protected:
-    KWImage m_image;
+    KoPicture m_image;
     bool m_keepAspectRatio;
 };
 
@@ -695,10 +696,10 @@ public:
      */
     virtual FrameSetType type() { return FT_CLIPART; }
 
-    void setClipart( const KoClipart &clipart ) { m_clipart = clipart; }
-    KoClipart clipart() const { return m_clipart; }
+    void setClipart( const KoPicture &clipart ) { m_clipart = clipart; }
+    KoPicture clipart() const { return m_clipart; }
 
-    KoClipartKey key() const { return m_clipart.key(); }
+    KoPictureKey key() const { return m_clipart.getKey(); }
 
     void loadClipart( const QString &fileName );
     //void setSize( const QSize & _imgSize );
@@ -715,7 +716,7 @@ public:
 
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
 protected:
-    KoClipart m_clipart;
+    KoPicture m_clipart;
 };
 
 /******************************************************************/

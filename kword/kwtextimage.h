@@ -20,7 +20,9 @@
 #ifndef kwtextimage_h
 #define kwtextimage_h
 
-#include <kwimage.h>
+#include <koPictureKey.h>
+#include <koPicture.h>
+
 #include <kwtextdocument.h>
 
 /**
@@ -46,8 +48,8 @@ public:
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
 
-    void setImage( const KWImage &image );
-    KWImage image() const { return m_image; }
+    void setImage( const KoPicture &image );
+    KoPicture image() const { return m_image; }
 
     virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset );
 
@@ -59,7 +61,8 @@ public:
 
 private:
     Placement place;
-    KWImage m_image;
+    KoPicture m_image;
+    QSize m_size; // Size of image
 };
 
 #endif

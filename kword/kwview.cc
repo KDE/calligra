@@ -18,7 +18,6 @@
    Boston, MA 02111-1307, USA
 */
 
-#include "kwcanvas.h"
 #undef Unsorted
 #include <kaccel.h>
 #include <kmessagebox.h>
@@ -30,6 +29,7 @@
 #include <qgroupbox.h>
 
 #include <koAutoFormatDia.h>
+#include "kwcanvas.h"
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
@@ -4048,7 +4048,7 @@ void KWView::changePicture()
     QString file,oldFile;
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    oldFile=frameset->image().key().filename();
+    oldFile=frameset->image().getKey().filename();
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage , oldFile ) )
     {
          KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change picture"), FrameIndex(frame), oldFile, file, true ) ;

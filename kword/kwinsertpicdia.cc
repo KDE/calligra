@@ -71,7 +71,16 @@ public:
     {
         m_type = IPD_CLIPART;
         m_pixmap = QPixmap();
-        bool ret = KoClipartCollection::loadFromFile( filename, &m_picture );
+        
+        // We open the file by "hand" and not by KoPicture, as it would be too complicate
+        QFile file( filename );
+        bool ret;
+        const int pos = filename.findRev( '.' );
+        const QString extension = filename.mid( pos+1 ).lower(); // We do not mind if pos==-1
+        if ( extension == "svg" )
+            ret = m_picture.load ( &file, "svg" );
+        else
+            ret = m_picture.load ( &file, NULL ); // Probably in QPicture format
         repaint(false);
         return ret;
     }

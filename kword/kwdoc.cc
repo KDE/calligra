@@ -1205,14 +1205,14 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
     {
-        m_pixmapMap = new QMap<KoImageKey, QString>( m_imageCollection.readXML( pixmapsElem, defaultDateTime ) );
+        m_pixmapMap = new QMap<KoPictureKey, QString>( m_imageCollection.readXML( pixmapsElem, defaultDateTime ) );
     }
 
     // <CLIPARTS>
     QDomElement clipartsElem = word.namedItem( "CLIPARTS" ).toElement();
     if ( !clipartsElem.isNull() )
     {
-        m_clipartMap = new QMap<KoClipartKey, QString>( m_clipartCollection.readXML( clipartsElem, defaultDateTime ) );
+        m_clipartMap = new QMap<KoPictureKey, QString>( m_clipartCollection.readXML( clipartsElem, defaultDateTime ) );
     }
 
     emit sigProgress(90);
@@ -1682,22 +1682,22 @@ bool KWDocument::completeLoading( KoStore *_store )
 
 void KWDocument::processImageRequests()
 {
-    QMapIterator<KoImageKey,KWTextImage *> it2 = m_imageRequests.begin();
+    QMapIterator<KoPictureKey,KWTextImage *> it2 = m_imageRequests.begin();
     for ( ; it2 != m_imageRequests.end(); ++it2 )
     {
         kdDebug(32001) << "KWDocument::completeLoading loading image " << it2.key().toString() << endl;
-        it2.data()->setImage( m_imageCollection.findImage( it2.key() ) );
+        it2.data()->setImage( m_imageCollection.findPicture( it2.key() ) );
     }
     m_imageRequests.clear();
 
     QPtrListIterator<KWPictureFrameSet> it3( m_imageRequests2 );
-    for ( ; it3.current(); ++it3 )
-        it3.current()->setImage( m_imageCollection.findImage( it3.current()->key() ) );
+    for ( ; it3.current() ; ++it3 )
+        it3.current()->setImage( m_imageCollection.findPicture( it3.current()->key() ) );
     m_imageRequests2.clear();
 
     QPtrListIterator<KWClipartFrameSet> it4( m_clipartRequests );
-    for ( ; it4.current(); ++it4 )
-        it4.current()->setClipart( m_clipartCollection.findClipart( it4.current()->key() ) );
+    for ( ; it4.current() ; ++it4 )
+        it4.current()->setClipart( m_clipartCollection.findPicture( it4.current()->key() ) );
     m_clipartRequests.clear();
 }
 
@@ -1902,8 +1902,8 @@ QDomDocument KWDocument::saveXML()
     QDomElement framesets = doc.createElement( "FRAMESETS" );
     kwdoc.appendChild( framesets );
 
-    QValueList<KoImageKey> saveImages;
-    QValueList<KoClipartKey> saveCliparts;
+    QValueList<KoPictureKey> saveImages;
+    QValueList<KoPictureKey> saveCliparts;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1921,13 +1921,13 @@ QDomDocument KWDocument::saveXML()
         // If picture frameset, make a note of the image it needs.
         if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
         {
-            KoImageKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            KoPictureKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
             if ( !saveImages.contains( key ) )
                 saveImages.append( key );
         }
         if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
         {
-            KoClipartKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
+            KoPictureKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
             if ( !saveCliparts.contains( key ) )
                 saveCliparts.append( key );
         }
@@ -1940,9 +1940,9 @@ QDomDocument KWDocument::saveXML()
 
     // Save the PIXMAPS list
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-    QDomElement pixmaps = m_imageCollection.saveXML( doc, saveImages, prefix );
+    QDomElement pixmaps = m_imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, saveImages, prefix );
     kwdoc.appendChild( pixmaps );
-    QDomElement cliparts = m_clipartCollection.saveXML( doc, saveCliparts, prefix );
+    QDomElement cliparts = m_clipartCollection.saveXML(KoPictureCollection::CollectionClipart, doc, saveCliparts, prefix );
     kwdoc.appendChild( cliparts );
 
     // Not needed anymore
@@ -2014,8 +2014,8 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QString u = KURL( url() ).path();
 
-    QValueList<KoImageKey> saveImages;
-    QValueList<KoClipartKey> saveCliparts;
+    QValueList<KoPictureKey> saveImages;
+    QValueList<KoPictureKey> saveCliparts;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -2023,20 +2023,20 @@ bool KWDocument::completeSaving( KoStore *_store )
         // If picture frameset, make a note of the image it needs.
         if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
         {
-            KoImageKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            KoPictureKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
             if ( !saveImages.contains( key ) )
                 saveImages.append( key );
         }
         if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
         {
-            KoClipartKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
+            KoPictureKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
             if ( !saveCliparts.contains( key ) )
                 saveCliparts.append( key );
         }
     }
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-    m_imageCollection.saveToStore( _store, saveImages, prefix );
-    m_clipartCollection.saveToStore( _store, saveCliparts, prefix );
+    m_imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, saveImages, prefix );
+    m_clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, saveCliparts, prefix );
     return TRUE;
 }
 
@@ -2704,7 +2704,7 @@ void KWDocument::setFrameMargins( double l, double r, double t, double b )
     setModified(TRUE);
 }
 
-void KWDocument::addImageRequest( const KoImageKey &key, KWTextImage *img )
+void KWDocument::addImageRequest( const KoPictureKey &key, KWTextImage *img )
 {
     m_imageRequests.insert( key, img );
 }

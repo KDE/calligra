@@ -17,9 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
+// TODO: delete file!
+
 #include "kwimage.h"
 #include <kdebug.h>
 
+#if 0
 KWImage KWImageCollection::image( const QString & fileName )
 {
     KWImage i = findImage( fileName );
@@ -34,3 +37,4 @@ KWImage KWImageCollection::image( const QString & fileName )
     }
     return i;
 }
+#endif

@@ -63,7 +63,7 @@ namespace Qt3 { class QTextParag; }
 #include <koDocument.h>
 #include <koGlobal.h>
 #include <koDocumentChild.h>
-#include <koClipartCollection.h>
+#include <koPictureCollection.h>
 #include <kozoomhandler.h>
 #include "kwimage.h"
 #include "kwanchorpos.h"
@@ -264,8 +264,8 @@ public:
 
     int getPages() const { return m_pages; }
 
-    KWImageCollection *imageCollection() { return &m_imageCollection; }
-    KoClipartCollection *clipartCollection() { return &m_clipartCollection; }
+    KoPictureCollection *imageCollection() { return &m_imageCollection; }
+    KoPictureCollection *clipartCollection() { return &m_clipartCollection; }
     KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
@@ -329,7 +329,7 @@ public:
 
     // This is used upon loading, to delay certain things until completeLoading.
     // For KWTextImage
-    void addImageRequest( const KoImageKey &key, KWTextImage *img );
+    void addImageRequest( const KoPictureKey &key, KWTextImage *img );
     // For KWPictureFrameSet
     void addImageRequest( KWPictureFrameSet *fs );
     // For KWClipartFrameSet
@@ -561,8 +561,8 @@ private:
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
 
-    KWImageCollection m_imageCollection;
-    KoClipartCollection m_clipartCollection;
+    KoPictureCollection m_imageCollection;
+    KoPictureCollection m_clipartCollection;
     QPtrList<KWFrameSet> m_lstFrameSet;
     QPtrList<KWStyle> m_styleList;
     QPtrList<KWStyle> m_deletedStyles;
@@ -586,10 +586,10 @@ private:
     // Shared between loadXML and loadComplete
     QString m_urlIntern;
 
-    QMap<KoImageKey, QString> * m_pixmapMap;
-    QMap<KoClipartKey, QString> * m_clipartMap;
+    QMap<KoPictureKey, QString> * m_pixmapMap;
+    QMap<KoPictureKey, QString> * m_clipartMap;
 
-    QMap<KoImageKey, KWTextImage *> m_imageRequests; // to be removed
+    QMap<KoPictureKey, KWTextImage *> m_imageRequests; // to be removed
     QPtrList<KWPictureFrameSet> m_imageRequests2;
     QPtrList<KWClipartFrameSet> m_clipartRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;

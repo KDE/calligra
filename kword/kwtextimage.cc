@@ -29,13 +29,13 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     if ( !filename.isEmpty() )
     {
-        m_image = doc->imageCollection()->loadImage( filename );
+        m_image = doc->imageCollection()->loadPicture( filename );
         Q_ASSERT( !m_image.isNull() );
         resize(); // Zoom if necessary
     }
 }
 
-void KWTextImage::setImage( const KWImage &image )
+void KWTextImage::setImage( const KoPicture &image )
 {
     m_image = image;
     resize();
@@ -47,13 +47,13 @@ void KWTextImage::resize()
         return;
     if ( !m_image.isNull() ) {
         KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-        width = m_image.originalSize().width();
+        width = m_image.getOriginalSize().width();
         width = (int)( doc->zoomItX( (double)width ) / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-        height = m_image.originalSize().height();
+        height = m_image.getOriginalSize().height();
         height = (int)( doc->zoomItY( (double)height ) / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         //kdDebug() << "KWTextImage::resize scaling to " << width << ", " << height << endl;
-        m_image = m_image.scale( QSize( width, height ) );
+        m_image.setSize( QSize( width, height ) );
     }
 }
 
@@ -70,15 +70,25 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
         return;
     }
 
-    if ( !QRect( x, y, m_image.size().width(), m_image.size().height() ).intersects( QRect( cx, cy, cw, ch ) ) )
+    QRect rect( QPoint(x, y) , m_image.getSize() );
+    if ( !rect.intersects( QRect( cx, cy, cw, ch ) ) )
         return;
+#if 1
+    KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+    // TODO: someone with knowledge should verify this!
+    if ( placement() == PlaceInline )
+        m_image.draw( *p, x, y, doc->zoomItX( width ), doc->zoomItY( height ), 0, 0, 0, 0 );
+    else
+        m_image.draw( *p, x, y, doc->zoomItX( width ), doc->zoomItY( height ), cx-x, cy-y, cw, ch );
+#else
     if ( placement() == PlaceInline )
         p->drawPixmap( x, y, m_image.pixmap() );
     else
-        p->drawPixmap( cx, cy, m_image.pixmap(), cx - x, cy - y, cw, ch );
+        p->drawPixmap( cx, cy, m_image.pixmap(), cx - x, cy - y, cw, ch ); // TODO: Why are cx,cy first the params and not x,y ?
+#endif
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
-	p->fillRect( QRect( QPoint( x, y ), m_image.size() ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        p->fillRect( rect , QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }
 }
 
@@ -88,7 +98,7 @@ void KWTextImage::save( QDomElement & parentElem )
     parentElem.appendChild( imageElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
-    elem.setAttribute( "value", image().key().filename() );
+    elem.setAttribute( "value", image().getKey().filename() );
 }
 
 void KWTextImage::load( QDomElement & parentElem )
@@ -102,7 +112,7 @@ void KWTextImage::load( QDomElement & parentElem )
         {
             QString filename = filenameElement.attribute( "value" );
             KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-            doc->addImageRequest( KoImageKey( filename, QDateTime::currentDateTime() ), this );
+            doc->addImageRequest( KoPictureKey( filename, QDateTime::currentDateTime() ), this );
         }
         else
             kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;

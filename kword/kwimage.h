@@ -17,13 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
+// TODO: delete file!
+
 #ifndef __kwimage_h__
 #define __kwimage_h__
-
+#if 0
 #include <koImage.h>
 #include <koImageCollection.h>
 
 typedef KoImage KWImage;
 typedef KoImageCollection KWImageCollection;
-
+#endif
 #endif
