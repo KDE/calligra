@@ -40,7 +40,7 @@ class PartMoveHandlerPrivate;
  * This design pattern helps you to keep your event filters
  * and your mousePressEvent, mouseMoveEvent etc. methods clean.
  */
-class EventHandler : public QObject
+class KDE_EXPORT EventHandler : public QObject
 {
     Q_OBJECT
 public:
@@ -106,7 +106,7 @@ private:
  * @see PartMoveHandlerPrivate
  * @see PartResizeHandlerPrivate
  */
-class ContainerHandler : public EventHandler
+class KDE_EXPORT ContainerHandler : public EventHandler
 {
     Q_OBJECT
 public:

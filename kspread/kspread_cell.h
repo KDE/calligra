@@ -107,7 +107,7 @@ class CellPrivate;
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSpreadCell : public KSpreadFormat
+class KDE_EXPORT KSpreadCell : public KSpreadFormat
 {
   friend class SelectPrivate;
   friend class KSpreadConditions;

@@ -233,7 +233,7 @@ class SheetPrivate;
 
 /**
  */
-class KSpreadSheet : public QObject
+class KDE_EXPORT KSpreadSheet : public QObject
 {
     friend class KSpreadCell;
 

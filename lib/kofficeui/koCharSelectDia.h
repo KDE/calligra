@@ -33,7 +33,7 @@ class KButtonBox;
 /* class KoCharSelectDia                                           */
 /******************************************************************/
 
-class KoCharSelectDia : public KDialogBase
+class KDE_EXPORT KoCharSelectDia : public KDialogBase
 {
     Q_OBJECT
 

@@ -133,7 +133,7 @@ public:
         const QDomElement m_element;
     };
 
-    class IndexedMap : public Map
+    class KDE_EXPORT IndexedMap : public Map
     {
         friend class Items;
         IndexedMap( const QDomElement& elem ) : Map( elem ) {}
@@ -142,7 +142,7 @@ public:
         Items entry( int entryIndex ) const;
     };
 
-    class NamedMap : public Map
+    class KDE_EXPORT NamedMap : public Map
     {
         friend class Items;
         NamedMap( const QDomElement& elem ) : Map( elem ) {}

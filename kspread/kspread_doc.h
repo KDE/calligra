@@ -97,7 +97,7 @@ class DocPrivate;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSpreadDoc : public KoDocument, public KoZoomHandler
+class KDE_EXPORT KSpreadDoc : public KoDocument, public KoZoomHandler
 {
   Q_OBJECT
   Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )

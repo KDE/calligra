@@ -36,7 +36,7 @@ class KDCOPActionProxy;
  * In this case, don't look here... (unless the DCOP interface for the document
  * inherits KoDocumentIface, which is a good thing to do)
  */
-class KoDocumentIface : public DCOPObject
+class KDE_EXPORT KoDocumentIface : public DCOPObject
 {
     K_DCOP
 public:

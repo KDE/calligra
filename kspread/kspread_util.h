@@ -184,8 +184,8 @@ bool formatIsFraction (FormatType fmt);
 
 
 
-QString util_rangeName( const QRect &_area );
-QString util_rangeName( KSpreadSheet *_table, const QRect &_area );
+KDE_EXPORT QString util_rangeName( const QRect &_area );
+KDE_EXPORT QString util_rangeName( KSpreadSheet *_table, const QRect &_area );
 QString util_rangeColumnName( const QRect &_area);
 QString util_rangeRowName( const QRect &_area);
 
