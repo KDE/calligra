@@ -333,6 +333,11 @@ public:
 
   bool loaded() { return _loaded; }
 
+  bool hasHead() { return _head; }
+  bool hasFoot() { return _foot; }
+  void setHead(bool h) { _head = h; recalcFrames(); }
+  void setFoot(bool f) { _foot = f; recalcFrames(); }
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -416,6 +421,8 @@ protected:
   bool _loaded;
 
   QPixmap ret_pix;
+
+  bool _head,_foot;
   
 };
 

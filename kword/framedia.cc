@@ -288,7 +288,7 @@ void KWFrameDia::connectListSelected(int _num)
 
   if (static_cast<unsigned int>(_num) < doc->getNumFrameSets())
     {
-      if (doc->getFrameSet(_num)->getFrameType() != FT_TEXT)
+      if (doc->getFrameSet(_num)->getFrameType() != FT_TEXT || doc->getFrameSet(_num)->getFrameInfo() != FI_BODY)
 	{
 	  lFrameSList->setCurrentItem(lFrameSList->count() - 1);
 	  page->setHilitFrameSet(-1);

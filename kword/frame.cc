@@ -183,6 +183,7 @@ KWFrameSet::KWFrameSet(KWordDocument *_doc)
 { 
   doc = _doc; 
   frames.setAutoDelete(true); 
+  frameInfo = FI_BODY;
 }
 
 /*================================================================*/

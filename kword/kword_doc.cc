@@ -85,6 +85,8 @@ KWordDocument::KWordDocument()
   applyStyleTemplate = 0;
   applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN | U_TABS;
   _loaded = false;
+  _head = false;
+  _foot = false;
 }
 
 /*================================================================*/
@@ -202,6 +204,18 @@ void KWordDocument::recalcFrames()
 
   ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
     / pageColumns.columns;
+
+  int headOffset = 0,footOffset = 0;
+//   if (hasHead() || hasFoot())
+//     {
+//       for (unsigned int k = 0;k < getNumFrameSets();k++)
+// 	{
+// 	  if (getFrameSet(k)->getFrameInfo() == FI_HEAD)
+// 	    headOffset = 20 + getFrameSet(k)->gerFrame(0)->height(); 
+// 	  if (getFrameSet(k)->getFrameInfo() == FI_FOOT)
+// 	    footOffset = 20 + getFrameSet(k)->gerFrame(0)->height(); 
+// 	}
+//     }
  
   for (unsigned int j = 0;j < static_cast<unsigned int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));j++)
     {
@@ -211,18 +225,21 @@ void KWordDocument::recalcFrames()
 	    {
 	      frameset->getFrame(j * pageColumns.columns + i)->setRect(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
 								       j * getPTPaperHeight() + getPTTopBorder(),ptColumnWidth,
-								       getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder());
+								       getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
+								       headOffset - footOffset);
 	    }
 	  else
 	    {
 	      frameset->addFrame(new KWFrame(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
 					     j * getPTPaperHeight() + getPTTopBorder(),
-					     ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder()));
+					     ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
+					     headOffset - footOffset));
 	    }
 	}
     }
 
   pages = static_cast<int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));
+
   recalcWholeText();
   updateAllRanges();
 }

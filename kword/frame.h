@@ -40,6 +40,7 @@ class KWordChild;
 class KWordFrame;
 
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
+enum FrameInfo {FI_BODY = 0,FI_HEAD = 1,FI_FOOT = 2};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
 
 /******************************************************************/
@@ -113,6 +114,9 @@ public:
 
   virtual FrameType getFrameType()
     { return FT_BASE; }
+  virtual FrameInfo getFrameInfo()
+    { return frameInfo; }
+  void setFrameInfo(FrameInfo fi) { frameInfo = fi; }
 
   virtual void addFrame(KWFrame _frame);
   virtual void addFrame(KWFrame *_frame);
@@ -152,6 +156,8 @@ protected:
 
   // frames
   QList<KWFrame> frames;
+
+  FrameInfo frameInfo;
 
 };
 

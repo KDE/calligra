@@ -824,7 +824,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	_left = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getLeftIndent(ptY,getLineHeight());
 	_right = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getRightIndent(ptY,getLineHeight());
       }
-
+    
     compare_formats = false;
     unsigned int _ptTextLen = ptTextLen;
     ptTextLen = 0;

@@ -515,3 +515,7 @@ Reggie, 16.12.1998:
 - Started with centered tabulator (already works)
 - More work on embedding parts (creating, saving/loading, moving/resizing and activating/deactivating works now)
 - Implemented printing embedded parts
+
+Reggie, 17.12.1998:
+-------------------
+- Internal work and lots of fixes

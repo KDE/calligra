@@ -2101,10 +2101,9 @@ void KWPage::formatChanged(KWFormat &_format,bool _redraw = true)
       p.begin(this);
       doc->drawSelection(p,xOffset,yOffset);
       p.end();
-
+      
       doc->setSelection(false);
       doc->setFormat(format);
-
       KWFormatContext fc1(doc,doc->getSelStart()->getFrameSet() - 1),fc2(doc,doc->getSelEnd()->getFrameSet() - 1);
       fc1 = *doc->getSelStart();
       fc2 = *doc->getSelEnd();

@@ -180,6 +180,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
   
   for (unsigned int i = 0;i < _len;i++)
     {
+      if (text.data()[_pos + i].c == 0) continue;
       freeChar(text.data()[_pos + i]);
       KWFormat *format = document->getFormatCollection()->getFormat(_format);
       KWCharFormat *f = new KWCharFormat(format);
@@ -197,6 +198,7 @@ void KWParag::save(ostream &out)
   paragLayout->save(out);
   out << etag << "</LAYOUT>" << endl;
 }
+
 void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
