@@ -36,7 +36,7 @@ VHandle::draw( QPainter& painter, const double zoomFactor )
 	painter.setPen( Qt::blue.light() );
 
 	// for now I think this is enough, maybe we need something else when
-	// handle is rotated ? Then again, this is just a simple tect.
+	// handle is rotated ? Then again, this is just a simple rect.
 	painter.scale( zoomFactor, zoomFactor );
 
 	// Draw selection handle

@@ -661,9 +661,8 @@ VPath::draw( QPainter& painter, const QRect& rect,
 			// draw boxes:
 			painter.setPen( Qt::NoPen );
 			painter.setBrush( Qt::blue.light() );
-			drawBox( painter,
-				qRound( zoomFactor * itr.current()->p3()->x() ),
-				qRound( zoomFactor * itr.current()->p3()->y() ), 3 );
+			drawBox( painter, qRound( zoomFactor * itr.current()->p3()->x() ),
+							  qRound( zoomFactor * itr.current()->p3()->y() ), 3 * zoomFactor );
 		}
 
 	}
@@ -675,9 +674,8 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		{
 			// draw boxes:
 			painter.setPen( Qt::black );
-			drawBox( painter,
-				qRound( zoomFactor * itr.current()->p3()->x() ),
-				qRound( zoomFactor * itr.current()->p3()->y() ) );
+			drawBox( painter, qRound( zoomFactor * itr.current()->p3()->x() ),
+							  qRound( zoomFactor * itr.current()->p3()->y() ) );
 		}
 	}
 
