@@ -359,15 +359,21 @@ VPath::save( QDomElement& element ) const
 void
 VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
-	docWriter->startElement( "draw:path" );
+	if( state() != deleted )
+	{
+		docWriter->startElement( "draw:path" );
 
-	QString d;
-	saveSvgPath( d );
-	docWriter->addAttribute( "svg:d", d );
+		QString d;
+		saveSvgPath( d );
+		docWriter->addAttribute( "svg:d", d );
 
-	VObject::saveOasis( store, docWriter, mainStyles );
+		// save fill rule if necessary:
+		if( !( m_fillRule == evenOdd ) )
+			docWriter->addAttribute( "svg:fill-rule", "winding" );
+		VObject::saveOasis( store, docWriter, mainStyles );
 
-	docWriter->endElement();
+		docWriter->endElement();
+	}
 }
 
 bool
@@ -380,6 +386,8 @@ VPath::loadOasis( const QDomElement &element, KoOasisContext &context )
 	{
 		loadSvgPath( data );
 	}
+
+	m_fillRule = element.attribute( "svg:fill-rule" ) == "winding" ? winding : evenOdd;
 
 	QString trafo = element.attribute( "draw:transform" );
 	if( !trafo.isEmpty() )
