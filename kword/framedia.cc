@@ -231,9 +231,9 @@ void KWFrameDia::setupTab2TextFrame()
 
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM: str.sprintf( "%g", frame ? frame->getRunAroundGap().mm() : doc->getRunAroundGap().mm() );
+    case U_MM: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().mm() : doc->getRunAroundGap().mm() );
 	break;
-    case U_INCH: str.sprintf( "%g", frame ? frame->getRunAroundGap().inch() : doc->getRunAroundGap().inch() );
+    case U_INCH: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().inch() : doc->getRunAroundGap().inch() );
 	break;
     case U_PT: str.sprintf( "%d", frame ? frame->getRunAroundGap().pt() : doc->getRunAroundGap().pt() );
 	break;
@@ -516,23 +516,23 @@ void KWFrameDia::setupTab4Geometry()
     if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
 					    ( doc->getProcessingType() == KWordDocument::WP &&
 					      doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-	unsigned int x, y, w, h;//, _num;
+	unsigned int x, y, w, h, _num;
 
-	//KWFrameSet *frms = doc->getFrameCoords( x, y, w, h, _num );
+	doc->getFrameCoords( x, y, w, h, _num );
 	QString _x, _y, _w, _h;
 
 	switch ( KWUnit::unitType( doc->getUnit() ) ) {
 	case U_MM:
-	    _x.sprintf( "%g", POINT_TO_MM( x ) );
-	    _y.sprintf( "%g", POINT_TO_MM( y ) );
-	    _w.sprintf( "%g", POINT_TO_MM( w ) );
-	    _h.sprintf( "%g", POINT_TO_MM( h ) );
+	    _x.sprintf( "%.2f", POINT_TO_MM( x ) );
+	    _y.sprintf( "%.2f", POINT_TO_MM( y ) );
+	    _w.sprintf( "%.2f", POINT_TO_MM( w ) );
+	    _h.sprintf( "%.2f", POINT_TO_MM( h ) );
 	    break;
 	case U_INCH:
-	    _x.sprintf( "%g", POINT_TO_INCH( x ) );
-	    _y.sprintf( "%g", POINT_TO_INCH( y ) );
-	    _w.sprintf( "%g", POINT_TO_INCH( w ) );
-	    _h.sprintf( "%g", POINT_TO_INCH( h ) );
+	    _x.sprintf( "%.2f", POINT_TO_INCH( x ) );
+	    _y.sprintf( "%.2f", POINT_TO_INCH( y ) );
+	    _w.sprintf( "%.2f", POINT_TO_INCH( w ) );
+	    _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
 	    break;
 	case U_PT:
 	    _x.sprintf( "%d", x );
@@ -760,19 +760,4 @@ void KWFrameDia::connectListSelected( QListViewItem *item )
 	eFrameSetName->setEnabled( TRUE );
     } else
 	eFrameSetName->setEnabled( FALSE );
-
-    //int num = str.toInt();
-
-//     if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() )
-//     {
-//	   if ( doc->getFrameSet( _num )->getFrameType() != FT_TEXT || doc->getFrameSet( _num )->getFrameInfo() != FI_BODY )
-//	   {
-//	       lFrameSList->setCurrentItem( lFrameSList->count() - 1 );
-//	       page->setHilitFrameSet( -1 );
-//	   }
-//	   else
-//	       page->setHilitFrameSet( _num );
-//     }
-//     else
-//	   page->setHilitFrameSet( -1 );
 }

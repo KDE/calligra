@@ -645,18 +645,6 @@ void KWPage::viewportMouseMoveEvent( QMouseEvent *e )
 	    case SizeAllCursor:
 		vmmEditFrameSizeAll( mx, my );
 		break;
-	    case SizeVerCursor:
-		vmmEditFrameSizeVert( mx, my );
-		break;
-	    case SizeHorCursor:
-		vmmEditFrameSizeHorz( mx, my );
-		break;
-	    case SizeFDiagCursor:
-		vmmEditFrameFDiag( mx, my );
-		break;
-	    case SizeBDiagCursor:
-		vmmEditFrameBDiag( mx, my );
-		break;
 	    default: break;
 	    }
 	    deleteMovingRect = TRUE;
@@ -1043,15 +1031,7 @@ void KWPage::vmrEditFrame( int mx, int my )
     selectedFrame = frame;
     selectedFrameSet = frameset;
     if ( mouseMoved ) {
-	for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-	    for ( unsigned int j = 0; j < doc->getFrameSet( i )->getNumFrames(); ++j ) {
-		if ( doc->getFrameSet( i )->getFrame( j )->isSelected() ) {
-		    for ( unsigned int k = 0; k < 8; ++k )
-			doc->getFrameSet( i )->getFrame( j )->handles[ k ]->updateGeometry();
-		}
-	    }
-	}
-		    
+	updateSelections();
 	doc->recalcFrames();
 	doc->updateAllFrames();
 	recalcAll = TRUE;
@@ -4964,6 +4944,22 @@ bool KWPage::formulaIsActive() const
 {
     return ( editNum != -1 &&
 	     doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA );
+}
+
+/*================================================================*/
+void KWPage::updateSelections()
+{
+    if ( mouseMode != MM_EDIT_FRAME )
+	return;
+    
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
+	for ( unsigned int j = 0; j < doc->getFrameSet( i )->getNumFrames(); ++j ) {
+	    if ( doc->getFrameSet( i )->getFrame( j )->isSelected() ) {
+		for ( unsigned int k = 0; k < 8; ++k )
+		    doc->getFrameSet( i )->getFrame( j )->handles[ k ]->updateGeometry();
+	    }
+	}
+    }
 }
 
 /******************************************************************/

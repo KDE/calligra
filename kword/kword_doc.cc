@@ -2306,6 +2306,19 @@ void KWordDocument::updateAllViewportSizes()
 }
 
 /*================================================================*/
+void KWordDocument::updateAllSelections()
+{
+    KWordView *viewPtr;
+
+    if ( !m_lstViews.isEmpty() ) {
+	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
+		viewPtr->getGUI()->getPaperWidget()->updateSelections();
+	}
+    }
+}
+
+/*================================================================*/
 void KWordDocument::setUnitToAll()
 {
     if ( unit == "mm" )
@@ -3611,7 +3624,8 @@ bool KWordDocument::isOnlyOneFrameSelected()
 }
 
 /*================================================================*/
-KWFrameSet *KWordDocument::getFrameCoords( unsigned int &x, unsigned int &y, unsigned int &w, unsigned int &h, unsigned int &num )
+KWFrameSet *KWordDocument::getFrameCoords( unsigned int &x, unsigned int &y, 
+					   unsigned int &w, unsigned int &h, unsigned int &num )
 {
     x = y = w = h = 0;
 
@@ -3671,6 +3685,7 @@ void KWordDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int
 	    }
 	}
     }
+    updateAllSelections();
 }
 
 /*================================================================*/

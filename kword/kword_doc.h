@@ -216,6 +216,7 @@ public:
 
     void updateAllViews( KWordView *_view, bool _clear = false );
     void updateAllViewportSizes();
+    void updateAllSelections();
     void setUnitToAll();
     void updateAllCursors();
     void drawAllBorders( bool back = true);
@@ -386,7 +387,7 @@ public:
     KWContents *getContents() {
 	return contents;
     }
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -476,7 +477,7 @@ protected:
 
     bool spellCheck;
     KWContents *contents;
-    
+
 };
 
 #endif

@@ -222,7 +222,8 @@ public:
     void selectAll();
     void insertFormulaChar( int c );
     bool formulaIsActive() const;
-
+    void updateSelections();
+    
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );
