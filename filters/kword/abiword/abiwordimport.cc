@@ -1206,10 +1206,11 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 
     QDomElement frameElementOut(mainDocument.createElement("FRAME"));
     //frameElementOut.setAttribute("left",28);
-    //frameElementOut.setAttribute("top",42);
-    //frameElementOut.setAttribute("bottom",566);
     //frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("top",0);
+    frameElementOut.setAttribute("bottom",0);
     frameElementOut.setAttribute("runaround",1);
+    frameElementOut.setAttribute("autoCreateNewFrame",0); // Very important for cell growing!
     // ### TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
     
