@@ -50,7 +50,7 @@ ExampleFactory::~ExampleFactory()
     s_global = 0L;
 }
 
-KParts::Part* ExampleFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* ExampleFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and single view.
@@ -61,9 +61,6 @@ KParts::Part* ExampleFactory::createPart( QWidget *parentWidget, const char *wid
 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
-
-    // Tell the factory base class that we created the object (mandatory)
-    emit objectCreated(part);
 
     return part;
 }
